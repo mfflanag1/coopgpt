@@ -1,0 +1,412 @@
+%% ===================================================================
+%% sections_theory.tex  --- plain LaTeX fragments (no preamble).
+%% Assumes the paper-1 preamble: amsmath/amssymb/amsthm, booktabs,
+%% enumitem, natbib; theorem-like envs {theorem,lemma,proposition,
+%% corollary,definition,example,remark}; macros \R, \core.
+%% Player i = index i (1-indexed).  §1 Introduction supplied separately.
+%% ===================================================================
+
+\section{Preliminaries and the egalitarian procedure}\label{sec:prelim}
+
+A \emph{transferable-utility (TU) game} is a pair $(N,v)$ with $N=\{1,\dots,n\}$
+and $v\colon 2^{N}\to\R$, $v(\emptyset)=0$; we write $v$ for the game and
+$x(S)=\sum_{i\in S}x_i$ for $x\in\R^{N}$. The \emph{core} is
+\[
+  \core(v)=\bigl\{x\in\R^{N}\;:\;x(N)=v(N),\ x(S)\ge v(S)\ \forall S\subseteq N\bigr\},
+\]
+and $v$ is \emph{balanced} when $\core(v)\neq\emptyset$. The game is
+\emph{superadditive} if $v(S\cup T)\ge v(S)+v(T)$ for disjoint $S,T$,
+\emph{monotone} if $v(S)\le v(T)$ for $S\subseteq T$, and \emph{convex} if
+$v(S\cup T)+v(S\cap T)\ge v(S)+v(T)$ for all $S,T$. Following
+\citet{Schmeidler1972}, $v$ is \emph{exact} if for every $S\subseteq N$ there is
+a core element attaining $v(S)$, equivalently
+\[
+  \min_{x\in\core(v)} x(S)=v(S)\qquad\text{for all }S\subseteq N .
+\]
+The core is \emph{large} \citep{Sharkey1982} if every $x\in\R^{N}$ with
+$x(S)\ge v(S)$ for all $S$ dominates a core element from below. One has
+$\text{convex}\subseteq\text{large core}\subseteq\text{exact}\subseteq
+\text{totally balanced}$, with all inclusions strict for $n\ge5$.
+
+Exactness admits a convenient finite generator, which we use to build and
+certify witnesses. It is the finite specialization of Schmeidler's
+lower-envelope description of exact games (an exact game is the lower envelope
+of its own core); we record it explicitly.
+
+\begin{lemma}[finite generators of exact games]\label{lem:generator}
+Let $P\subseteq\R^{N}$ be a nonempty finite set of vectors sharing a common sum
+$\tau$, and define $v(S)=\min_{x\in P}x(S)$. Then $v(N)=\tau$, every $x\in P$
+lies in $\core(v)$, and $v$ is exact.
+\end{lemma}
+
+\begin{proof}
+Every $x\in P$ has $x(N)=\tau=v(N)$ and $x(S)\ge\min_{y\in P}y(S)=v(S)$ for all
+$S$, so $x\in\core(v)$; in particular $\core(v)\neq\emptyset$. Fix $S$ and pick
+$x^{\ast}\in\arg\min_{x\in P}x(S)$. Then $x^{\ast}\in\core(v)$ and
+$x^{\ast}(S)=v(S)$, so $\min_{x\in\core(v)}x(S)\le v(S)$; the reverse inequality
+holds because every core element satisfies $x(S)\ge v(S)$. Hence
+$\min_{\core(v)}x(S)=v(S)$ for all $S$.
+\end{proof}
+
+\paragraph{The egalitarian procedure.}
+We recall the procedure underlying the \emph{procedural egalitarian solution}
+\citep{DBH2017,Dietzenbacher2021}. Set $P^{v,0}=\emptyset$. For $k\ge1$ and
+$S\neq\emptyset$ define $\chi^{v,k}(S)\in\R^{S}$ by
+\[
+  \chi^{v,k}_i(S)=
+  \begin{cases}
+    \gamma^{v,k-1}_i, & i\in S\cap P^{v,k-1},\\[4pt]
+    \dfrac{v(S)-\sum_{j\in S\cap P^{v,k-1}}\gamma^{v,k-1}_j}
+          {\lvert S\setminus P^{v,k-1}\rvert}, & i\in S\setminus P^{v,k-1},
+  \end{cases}
+\]
+i.e.\ already-fixed members keep their payoff and the residual worth of $S$ is
+split equally among the rest. The \emph{egalitarian admissible} collection of
+round $k$ is
+\[
+  A^{v,k}=\Bigl\{S\;:\;\textstyle\sum_{i\in S}\chi^{v,k}_i(S)=v(S)\ \text{ and }\
+  \forall i\in S\ \forall T\ni i:\ \chi^{v,k}_i(T)\le\chi^{v,k}_i(S)\Bigr\},
+\]
+so $S$ is admissible when it is efficient for $\chi^{v,k}$ and gives each of its
+members their pointwise-largest $\chi^{v,k}$-value. Put
+$P^{v,k}=\bigcup_{S\in A^{v,k}}S$ and $\gamma^{v,k}_i=\chi^{v,k}_i(S)$ for
+$i\in P^{v,k}$, $S\in A^{v,k}\ni i$. The procedure terminates at
+$n_v=\min\{k:P^{v,k}=N\}$; the \emph{egalitarian claims} vector is
+$\widehat\gamma^{\,v}=\gamma^{v,n_v}$ and $\widehat A^{v}=A^{v,n_v}$.
+
+The claims vector is always an \emph{aspiration} \citep{Bennett1983}:
+$\widehat\gamma^{\,v}(S)\ge v(S)$ for all $S$, and for each $i\in N$ there is
+$S\ni i$ with $\widehat\gamma^{\,v}(S)=v(S)$ and
+$\widehat\gamma^{\,v}_i\le\widehat\gamma^{\,v}_j$ for all $j\in S$. A game is
+\emph{egalitarian stable} (ES) if $N\in\widehat A^{v}$; equivalently, the
+procedural egalitarian solution then selects from the core. Convex and
+large-core games are ES \citep{Dietzenbacher2021}. Since exact games with
+$n\le4$ have large cores \citep{Biswas1999}, they are ES; whether every exact
+game is ES was left open \citep[][Sec.~4]{Dietzenbacher2021}. We resolve it
+negatively.
+
+
+\section{ES equals membership of the claims vector in the core}\label{sec:lemma1}
+
+The following characterization reduces egalitarian stability of any balanced
+game to a single membership test and organizes everything below. Write
+$g(S)=\widehat\gamma^{\,v}(S)-v(S)\ge 0$ for the aspiration gap. A collection of
+weights $\lambda=(\lambda_S)_{S\subsetneq N}$, $\lambda_S\ge0$, is a
+\emph{fractional cover} if $\sum_{S\ni i}\lambda_S\ge1$ for every $i\in N$.
+
+\begin{lemma}\label{lem:esiff}
+Let $v$ be balanced with egalitarian claims $\widehat\gamma=\widehat\gamma^{\,v}$.
+The following are equivalent:
+\begin{enumerate}[label=\textup{(\roman*)},leftmargin=2.4em]
+\item $v$ is egalitarian stable;
+\item $\widehat\gamma\in\core(v)$;
+\item $\sum_{i\in N}\widehat\gamma_i=v(N)$;
+\item $\widehat\gamma$ dominates a core element from below;
+\item $g(N)\le\min\bigl\{\sum_{S\subsetneq N}\lambda_S\,g(S)\;:\;\lambda
+      \text{ a fractional cover}\bigr\}$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+$\widehat\gamma$ is an aspiration, so $\widehat\gamma(S)\ge v(S)$ for all $S$ and
+$\sum_{i\in N}\widehat\gamma_i\ge v(N)$ always.
+
+(i)$\Rightarrow$(iii). If $v$ is ES then $N\in\widehat A^{v}$, and the efficiency
+requirement in the definition of $A^{v,n_v}$ gives
+$\sum_{i\in N}\chi^{v,n_v}_i(N)=v(N)$; at the terminal round every player is
+fixed, so $\chi^{v,n_v}_i(N)=\widehat\gamma_i$ and $\sum_i\widehat\gamma_i=v(N)$.
+
+(iii)$\Rightarrow$(ii). With $\sum_i\widehat\gamma_i=v(N)$ and
+$\widehat\gamma(S)\ge v(S)$ for all $S$, $\widehat\gamma$ is efficient and
+satisfies every core inequality, i.e.\ $\widehat\gamma\in\core(v)$.
+
+(ii)$\Rightarrow$(iv) is trivial. (iv)$\Rightarrow$(i): let $y\in\core(v)$ with
+$y\le\widehat\gamma$. For every $S\in\widehat A^{v}$,
+$y(S)\le\widehat\gamma(S)=v(S)\le y(S)$, so $y(S)=\widehat\gamma(S)$ and, as
+$y\le\widehat\gamma$, $y_i=\widehat\gamma_i$ for $i\in S$. The admissible
+coalitions cover $N$, so $y=\widehat\gamma\in\core(v)$; at the terminal round
+$N$ is then admissible, i.e.\ $v$ is ES.
+
+(iv)$\Leftrightarrow$(v). With $y=\widehat\gamma-t$, domination of a core element
+is feasibility of $t\ge0$, $t(N)=g(N)$, $t(S)\le g(S)$ ($S\subsetneq N$); this
+holds iff $\max\{t(N):t\ge0,\ t(S)\le g(S)\}\ge g(N)$, and LP duality identifies
+the maximum with $\min\{\sum_S\lambda_S g(S):\lambda\text{ a fractional cover}\}$.
+\end{proof}
+
+\begin{remark}\label{rem:overcover}
+By Bondareva--Shapley, every fractional \emph{partition} (one with
+$\sum_{S\ni i}\lambda_S=1$) obeys $\sum_S\lambda_S v(S)\le v(N)$, and hence
+$\sum_S\lambda_S g(S)\ge g(N)$. A failure of \textup{(v)} must therefore be
+certified by a \emph{strict over-cover}, one in which some player is covered with
+total weight exceeding~$1$. This is the analytic signature of the witnesses
+below: the egalitarian claims inflate precisely because one pivotal player is
+over-covered by the tight coalitions that fix the claims.
+\end{remark}
+
+
+\section{A five-player exact game that is not egalitarian stable}
+\label{sec:witness}
+
+\begin{theorem}\label{thm:witness}
+There is an exact five-player game that is not egalitarian stable. Consequently
+the implication ``exact $\Rightarrow$ ES,'' valid for $n\le4$, fails at $n=5$.
+\end{theorem}
+
+\begin{proof}
+Let $N=\{1,2,3,4,5\}$ and take the two allocations
+\[
+  x^{1}=(0,0,1,1,2),\qquad x^{2}=(1,1,0,2,0),
+\]
+both with total $4$, and set $v(S)=\min\{x^{1}(S),x^{2}(S)\}$ for all $S$. By
+Lemma~\ref{lem:generator}, $v$ is exact, with $x^{1},x^{2}\in\core(v)$ and
+$v(N)=4$; the game is monotone and superadditive but not convex, and its full
+coalition function is listed in the supplement. In fact $x^{1}$ and $x^{2}$ are
+the \emph{only} vertices of $\core(v)$, so the core is the one-dimensional
+segment $\operatorname{conv}\{x^{1},x^{2}\}$---the thinnest nondegenerate core,
+and exactly the regime in which non-egalitarian-stability concentrates
+(Remark~\ref{rem:frequency}).
+
+\emph{The procedure.} The maximum average worth is
+$\max_{S}v(S)/\lvert S\rvert=1$, attained exactly on
+\[
+  \widehat A^{v}=\bigl\{\{4\},\{3,4\},\{4,5\},\{1,4,5\},\{2,4,5\}\bigr\},
+\]
+each of which routes through the pivot player $4$ (see the single-round trace,
+Table~\ref{tab:trace}). Every player attains its own maximum average, $1$, on one
+of these coalitions, so all five are egalitarian admissible in the first round;
+thus $n_v=1$ and
+\[
+  \widehat\gamma^{\,v}=(1,1,1,1,1),\qquad \sum_{i\in N}\widehat\gamma_i=5>4=v(N).
+\]
+By Lemma~\ref{lem:esiff} the game is not egalitarian stable: the grand coalition
+would give each player only $v(N)/5=\tfrac45<1$, so $N\notin\widehat A^{v}$.
+\end{proof}
+
+\begin{table}[t]
+\centering
+\caption{Egalitarian procedure for the primary witness (single round, cf.\
+\citealp{Dietzenbacher2021}, Ex.~2). Entries are $\chi^{v,1}_i(S)$ over
+$i=1,\dots,5$, ``$\cdot$'' for $i\notin S$; the last column is $N$.}
+\label{tab:trace}
+\begin{tabular}{lcccccc}
+\toprule
+$S$ & $\{4\}$ & $\{3,4\}$ & $\{4,5\}$ & $\{1,4,5\}$ & $\{2,4,5\}$ & $N$\\
+$v(S)$ & $1$ & $2$ & $2$ & $3$ & $3$ & $4$\\
+\midrule
+$\chi^{v,1}(S)$
+ & $(\cdot,\cdot,\cdot,1,\cdot)$
+ & $(\cdot,\cdot,1,1,\cdot)$
+ & $(\cdot,\cdot,\cdot,1,1)$
+ & $(1,\cdot,\cdot,1,1)$
+ & $(\cdot,1,\cdot,1,1)$
+ & $(\tfrac45,\tfrac45,\tfrac45,\tfrac45,\tfrac45)$\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Here the egalitarian claims are \emph{symmetric}, yet the game is not ES: what
+inflates them is not an unequal claim but the fact that every tight coalition is
+routed through the single pivot $4$ (the over-cover of
+Remark~\ref{rem:overcover}). The inclusion-maximal admissible coalitions
+$\{3,4\},\{1,4,5\},\{2,4,5\}$ have $\{4\}$ as their only common member, so the
+strong egalitarian claimants are $D^{v}=\{4\}$ and the procedural egalitarian
+solution equalizes the rest down to $\lambda=\tfrac34$,
+\[
+  PES(v)=\bigl(\tfrac34,\tfrac34,\tfrac34,1,\tfrac34\bigr),
+\]
+which leaves the core, violating $\{3,4\}$ and $\{4,5\}$ by $\tfrac14$ and
+$\{1,4,5\}$ and $\{2,4,5\}$ by $\tfrac12$. A core allocation attaining $v(S)$ for
+each of the $30$ proper coalitions (the exactness certificate) is provided in the
+supplement.
+
+\begin{remark}[a minimal-mass variant]\label{rem:minmass}
+The grand-coalition worth $v(N)=4$ is minimal over two-point generators, and the
+five tight coalitions that drive the procedure keep their worths under
+coalitionwise reduction. Greedily lowering the non-tight worths yields a variant of
+total worth-mass $41$ (from $46$) that is again exact, monotone and superadditive,
+has the identical procedure trace (Table~\ref{tab:trace}), the same claims, and the
+same $\PES$ with the same four core violations, and is locally minimal---no single
+worth admits a further decrease preserving these properties (supplement). Its core
+has seven vertices, so the two-point generator and the segment core are particular
+to the reference game above.
+\end{remark}
+
+\begin{remark}\label{rem:notlarge}
+By Lemma~\ref{lem:esiff} the witness is exact but \emph{not} large-core, so it
+lies in the gap between exact and large-core games---empty for $n\le4$, first
+opening at $n=5$ \citep{Biswas1999}. Two further, independently located witnesses confirm
+the phenomenon and its two modes: an exact game with worths at most $6$ and an
+\emph{asymmetric} pivot claim, $\widehat\gamma=(1,1,3,1,1)$, where pivot player
+$3$ carries claim $3$ and $\sum_i\widehat\gamma_i=7>6=v(N)$; and an exact game
+whose claims $\tfrac12(2,7,3,7,2)$ sum to $\tfrac{21}{2}>10=v(N)$. All three were
+mutually cross-verified across independent implementations; their data are in the
+supplement.
+\end{remark}
+
+
+\section{An infinite family: exact non-ES games for every $n\ge5$}
+\label{sec:family}
+
+We upgrade Theorem~\ref{thm:witness} to a family covering all $n\ge5$ by a
+padding operation that provably preserves both exactness and non-ES.
+
+\begin{definition}\label{def:pad}
+Let $v$ be a game on $N$ and $c\ge0$. The \emph{$c$-padding} of $v$ is the game
+$v^{+}$ on $N\cup\{p\}$ ($p\notin N$) with $v^{+}(S)=v(S)$ for $S\subseteq N$ and
+$v^{+}(S\cup\{p\})=v(S)+c$. For $c=0$, $p$ is a \emph{null} player; for $c\ge1$,
+$p$ is essential.
+\end{definition}
+
+\begin{lemma}[padding preserves exactness]\label{lem:padexact}
+If $v$ is exact then so is every $c$-padding $v^{+}$ ($c\ge0$).
+\end{lemma}
+
+\begin{proof}
+Let $x\in\core(v^{+})$. From $x(N)\ge v(N)$, $x_p\ge v^{+}(\{p\})=c$ and
+$x(N)+x_p=v^{+}(N)=v(N)+c$ we get $x(N)=v(N)$ and $x_p=c$; conversely any
+$(y,c)$ with $y\in\core(v)$ lies in $\core(v^{+})$. Hence
+$\core(v^{+})=\core(v)\times\{c\}$, and
+$\min_{\core(v^{+})}x(S)=\min_{\core(v)}y(S\setminus\{p\})+c\,[p\in S]
+=v(S\setminus\{p\})+c\,[p\in S]=v^{+}(S)$ for every $S$.
+\end{proof}
+
+\begin{lemma}[null players are inert]\label{lem:inert}
+Let $v$ be nonnegative and $v^{+}$ its $0$-padding by a null player $p$. Then the
+egalitarian procedure on $v^{+}$ fixes each $i\in N$ in the same round and at the
+same value as on $v$, and fixes $p$ last at value $0$; in particular
+$\widehat\gamma^{\,v^{+}}=(\widehat\gamma^{\,v},0)$.
+\end{lemma}
+
+\begin{proof}
+By induction on $k$: $P^{v^{+},k}\setminus\{p\}=P^{v,k}$, $\gamma^{v^{+},k}$
+agrees with $\gamma^{v,k}$ on $P^{v,k}$, and $p\notin P^{v^{+},k}$ while
+$P^{v,k}\neq N$. The base is trivial. Assume it for $k-1$, with $Q=P^{v,k-1}$,
+claims $\gamma$, and $p$ free. For $S\subseteq N$ the data defining
+$\chi^{v^{+},k}(S)$ and $\chi^{v,k}(S)$ coincide, so they are equal. For
+$R=S\cup\{p\}$ with $f=\gamma(Q\cap S)$: if $S\setminus Q\neq\emptyset$, each free
+member of $R$ gets $\sigma=(v(S)-f)/(|S\setminus Q|+1)$, whereas
+$\chi^{v^{+},k}_i(S)=(v(S)-f)/|S\setminus Q|$ for $i\in S\setminus Q$; if
+$v(S)-f\ge0$ then $\sigma\le\chi^{v^{+},k}_i(S)$, and if $v(S)-f<0$ then
+$\sigma<0\le v(\{i\})\le\max_{T\ni i}\chi^{v^{+},k}_i(T)$ (nonnegativity, with
+$\{i\}$ available). Either way no original free member attains a new maximum at
+$R$, so no such $R$ is admissible in round $k$; the only admissible coalitions
+containing $p$ have all original members already in $Q$, and they fix $p$ alone.
+Hence the newly fixed original players match those of $v$, proving the step. At
+termination $\widehat\gamma^{\,v^{+}}_p=\max_{S\subseteq
+N}(v(S)-\widehat\gamma^{\,v}(S))\le0$ (aspiration) and $\ge v^{+}(\{p\})=0$, so
+$=0$.
+\end{proof}
+
+\begin{theorem}\label{thm:family}
+For every $n\ge5$ there is an exact game on $n$ players that is not egalitarian
+stable. Concretely, padding the primary witness of Theorem~\ref{thm:witness}
+with $n-5$ null players yields such a game.
+\end{theorem}
+
+\begin{proof}
+The witness $v$ ($n=5$) is exact, nonnegative, and non-ES with
+$\sum_i\widehat\gamma^{\,v}_i=5>4=v(N)$. Adjoin a null player: by
+Lemma~\ref{lem:padexact} the padding $v^{+}$ is exact, and by
+Lemma~\ref{lem:inert} $\widehat\gamma^{\,v^{+}}=(\widehat\gamma^{\,v},0)$, so
+$\sum_i\widehat\gamma^{\,v^{+}}_i=5>4=v^{+}(N)$; by Lemma~\ref{lem:esiff}
+$v^{+}$ is not ES. Nonnegativity and both properties are preserved, so iterating
+$n-5$ times gives an exact non-ES game for each $n\ge5$.
+\end{proof}
+
+Null players are convenient for the proof but degenerate. Padding with
+\emph{essential} players ($c\ge1$) gives non-degenerate examples with the same
+inflation; we verified (supplement) that for $c=1$ the padded player receives
+claim $c$, all other claims are unchanged, and the games remain exact and non-ES
+through $n=9$, with every player essential.
+
+\begin{corollary}[sharp threshold]\label{cor:threshold}
+Every exact game with $n\le4$ is egalitarian stable, and for every $n\ge5$ there
+is an exact game that is not. The threshold $n=5$ coincides with the onset of the
+exact/large-core gap.
+\end{corollary}
+
+\begin{proof}
+For $n\le4$, exact games have large cores \citep{Biswas1999} and large-core games
+are ES \citep{Dietzenbacher2021}. For $n\ge5$, Theorem~\ref{thm:family}.
+\end{proof}
+
+
+\section{The mechanism, and why the question stayed open}\label{sec:mechanism}
+
+Lemma~\ref{lem:esiff} and Remark~\ref{rem:overcover} isolate the combinatorial
+cause of non-ES. We record it as a sufficient condition covering both observed
+modes, then explain why a naive symmetric family cannot realize it and why the
+phenomenon eluded random sampling.
+
+\begin{proposition}[pivot over-cover]\label{prop:hub}
+Let $v$ be exact, and suppose there is a player $h$ and tight coalitions
+$T_1,\dots,T_r\ni h$ (each $\widehat\gamma(T_j)=v(T_j)$) that cover $N$, are
+each fixed by the egalitarian procedure, and each spend $h$'s full claim
+$\widehat\gamma_h$. Then $\{T_j\}$ is a strict over-cover of $N$ at $h$, whence
+$\sum_i\widehat\gamma_i>v(N)$ and $v$ is not egalitarian stable.
+\end{proposition}
+
+\begin{proof}
+Each $T_j$ is tight, so unit weights on the $T_j$ give a fractional cover with
+$\sum_j g(T_j)=0$; as every $T_j$ contains $h$, the cover assigns $h$ total
+weight $\ge2$, i.e.\ it is strict, and Lemma~\ref{lem:esiff}\,(v) fails once
+$g(N)>0$. Equivalently, summing $\widehat\gamma(T_j)=v(T_j)$ double-counts
+$\widehat\gamma_h$, forcing $\sum_i\widehat\gamma_i>v(N)$.
+\end{proof}
+
+Proposition~\ref{prop:hub} unifies the two modes seen in
+Remark~\ref{rem:notlarge}. In the \emph{asymmetric} mode (the hub witness) the
+pivot $h=3$ additionally carries an inflated claim $\widehat\gamma_h=3$. In the
+\emph{symmetric} mode (the primary witness) all claims equal $1$, yet the five
+tight coalitions still route through the single pivot $h=4$; the symmetric mode
+is exactly the special case of equal claims. In both, exactness survives because
+``absorber'' players let the core attain the pivot's small-coalition worths (for
+the primary witness, $x^{1}$ and $x^{2}$ attain the relevant worths from opposite
+sides): the tight coalitions certifying the claims are pairwise
+incompatible---all require the pivot---yet each individual worth remains
+core-attainable.
+
+\begin{remark}[symmetric scaling collapses to ES]\label{rem:obstruction}
+A tempting symmetric scaling---a hub $h$ with $v(\{h\})=m$, one absorber $D$, and
+$k$ leaves, with $v(S)=m+2$ for $h,D\in S$ and $\ge1$ leaf, $v(\{h,D\})=m+1$,
+$v(N)=m+3$---is non-ES for all $k\ge3$ (claims $(m,1,\dots,1)$, sum $m+1+k>m+3$)
+but is \emph{not exact}: $\min_{\core}x(\{h,D\})=m+2>m+1$, since
+$x(\{h,D,\text{leaf}\})\ge m+2$ with $x(N)=m+3$ pins every leaf to $0$. Raising
+$v(\{h,D\})$ to its core-minimum---the exactification forced by exactness---hands
+the surplus to the absorber (claim $\tfrac32$, leaves $\tfrac12$) and the game
+becomes ES; its $n=4$ member is exact \emph{and} ES, as
+Corollary~\ref{cor:threshold} requires. A genuine exact non-ES game must
+therefore be asymmetric---several satellites and absorbers, as in the
+witnesses---which is why padding an existing witness, not scaling a symmetric
+template, is the robust route to Theorem~\ref{thm:family}.
+\end{remark}
+
+\begin{remark}[why the question stayed open]\label{rem:frequency}
+Non-ES exact games are not pathological once one looks in the right place, but
+they are nearly invisible to the natural sampling scheme. Exactifying random
+balanced games essentially never leaves the large-core class (in our sampling,
+$3$ of $499$ exactified games were even non-large-core, and a random-aspiration
+probe detected non-largeness in none), so such a search almost never produces a
+non-ES game. By contrast, drawing exact games as lower envelopes of a few points
+(Lemma~\ref{lem:generator}) lands on the thin-core frontier where the phenomenon
+concentrates: among $18{,}507$ point-generated exact five-player games, $493$
+($2.66\%$) were not egalitarian stable. Within these, the symmetric-claims mode of
+the reference witness is itself rare---only $2$ of the $493$ have all claims
+equal---and the claim inflation $\sum_i\widehat\gamma_i-v(N)$ concentrates at the
+values $1$ and $\tfrac12$. The offending aspiration is always the egalitarian
+claims vector itself, which generic aspiration sampling misses; this mismatch
+between the natural sampling scheme and the location of the counterexamples is, we
+suspect, why the question remained open.
+\end{remark}
+
+%% Verification note (fold into the assembled methods section): all quantitative
+%% claims are certified in exact rational arithmetic. The machine-readable
+%% supplement (supplement_data.json) records, for the primary witness, the
+%% coalition function and its two generator points, a core allocation attaining
+%% v(S) for each of the 30 proper coalitions (exactness certificate), the
+%% procedure trace, the egalitarian claims, admissible collection, strong
+%% claimants, PES and its four core violations; and the analogous data for the two
+%% secondary witnesses. The egalitarian procedure was implemented independently by
+%% three authors, validated on Examples 2 and 3 of Dietzenbacher (2021), and the
+%% three witnesses mutually cross-verified; the family and inertness statements
+%% were checked through n=9.

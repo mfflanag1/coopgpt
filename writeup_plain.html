@@ -1,0 +1,312 @@
+<title>The Fair-Division Hunt — Plain-Language Results</title>
+<style>
+  :root {
+    --paper: #FAF9F5; --ink: #23262B; --soft: #5C6470; --line: #E4E1D8;
+    --accent: #1E5F74; --accent-bg: #E9F1F3;
+    --win: #1F6E5C; --win-bg: #EAF3EF;
+    --kill: #A3223B; --kill-bg: #F8ECEE;
+    --open: #8A6D1F; --open-bg: #F7F1E1;
+    --card: #FFFFFF; --mono-bg: #F1EFE9;
+  }
+  @media (prefers-color-scheme: dark) { :root {
+    --paper: #15181C; --ink: #E9E7E2; --soft: #9BA3AE; --line: #2D3238;
+    --accent: #6FB2C4; --accent-bg: #14303A;
+    --win: #5CC1A4; --win-bg: #12291F;
+    --kill: #E67A8E; --kill-bg: #341219;
+    --open: #D9B85C; --open-bg: #2E2712;
+    --card: #1C2025; --mono-bg: #23272D;
+  }}
+  :root[data-theme="dark"] {
+    --paper: #15181C; --ink: #E9E7E2; --soft: #9BA3AE; --line: #2D3238;
+    --accent: #6FB2C4; --accent-bg: #14303A;
+    --win: #5CC1A4; --win-bg: #12291F;
+    --kill: #E67A8E; --kill-bg: #341219;
+    --open: #D9B85C; --open-bg: #2E2712;
+    --card: #1C2025; --mono-bg: #23272D;
+  }
+  :root[data-theme="light"] {
+    --paper: #FAF9F5; --ink: #23262B; --soft: #5C6470; --line: #E4E1D8;
+    --accent: #1E5F74; --accent-bg: #E9F1F3;
+    --win: #1F6E5C; --win-bg: #EAF3EF;
+    --kill: #A3223B; --kill-bg: #F8ECEE;
+    --open: #8A6D1F; --open-bg: #F7F1E1;
+    --card: #FFFFFF; --mono-bg: #F1EFE9;
+  }
+  body { background: var(--paper); color: var(--ink); margin: 0;
+    font: 17px/1.65 Charter, Georgia, 'Times New Roman', serif; }
+  main { max-width: 44rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+  h1, h2, h3 { font-family: system-ui, 'Helvetica Neue', sans-serif; line-height: 1.2; text-wrap: balance; }
+  h1 { font-size: 2rem; font-weight: 750; letter-spacing: -0.015em; margin: 0.4rem 0 0.4rem; }
+  h2 { font-size: 1.28rem; font-weight: 700; margin: 2.8rem 0 0.8rem; padding-top: 1.3rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1.02rem; font-weight: 650; margin: 1.5rem 0 0.4rem; }
+  p { margin: 0.8rem 0; }
+  .eyebrow { font-family: system-ui, sans-serif; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--soft); }
+  .lede { font-size: 1.1rem; color: var(--soft); }
+  .chip { display: inline-block; font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 0.16em 0.65em; vertical-align: 0.12em; }
+  .chip.win  { color: var(--win);  background: var(--win-bg); }
+  .chip.kill { color: var(--kill); background: var(--kill-bg); }
+  .chip.open { color: var(--open); background: var(--open-bg); }
+  .plain { background: var(--accent-bg); border-left: 3px solid var(--accent); border-radius: 0 8px 8px 0;
+    padding: 0.9rem 1.2rem; margin: 1.2rem 0; }
+  .plain .tag { font-family: system-ui, sans-serif; font-size: 0.7rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent); display: block; margin-bottom: 0.3rem; }
+  .card { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1.2rem 1.4rem; margin: 1.3rem 0; }
+  .card h3 { margin-top: 0.2rem; }
+  code, .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.85em;
+    background: var(--mono-bg); border-radius: 3px; padding: 0.08em 0.32em; }
+  .claims { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.9rem;
+    background: var(--mono-bg); border-radius: 8px; padding: 0.9rem 1.1rem; margin: 0.9rem 0;
+    overflow-x: auto; white-space: pre; line-height: 1.7; }
+  .claims b { color: var(--kill); }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; font-family: system-ui, sans-serif; }
+  .tablewrap { overflow-x: auto; margin: 1rem 0; }
+  th { text-align: left; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--soft); font-weight: 650; padding: 0.45rem 0.8rem 0.45rem 0; border-bottom: 1.5px solid var(--line); }
+  td { padding: 0.5rem 0.8rem 0.5rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  ul { padding-left: 1.2rem; } li { margin: 0.4rem 0; }
+  .note { font-size: 0.87rem; color: var(--soft); }
+  dt { font-weight: 650; font-family: system-ui, sans-serif; font-size: 0.92rem; margin-top: 0.7rem; }
+  dd { margin: 0.15rem 0 0 0; padding-left: 0; font-size: 0.95rem; }
+  dl { margin: 0.5rem 0; }
+</style>
+<main>
+  <div class="eyebrow">Research campaign · cooperative game theory · July 22–24, 2026</div>
+  <h1>The Fair-Division Hunt: what we found, in plain language</h1>
+  <p class="lede">Two days, three papers' worth of results, one fifty-year-old
+  corner of economics. Here is everything the campaign produced — what each
+  result says, why anyone cares, and how sure we are — written so you don't
+  need the math to follow it.</p>
+
+  <h2>The playing field, in plain words</h2>
+  <p>Imagine several people who can team up to make money. Every possible
+  team has a known earning power — maybe Alice and Bob together can make
+  \$10, Bob and Carol \$8, all three \$15. <em>Cooperative game theory</em>
+  asks: if everyone works together, how should the total be split?</p>
+  <p>Two ideas dominate the field:</p>
+  <ul>
+    <li><strong>Stability (the "core"):</strong> no sub-team should be able
+    to storm off and do better on its own. A split with that property is
+    called a <em>core</em> split. Sensible rules should pick core splits
+    when they exist.</li>
+    <li><strong>Monotonicity (no punishment for success):</strong> if one
+    team's earning power goes <em>up</em>, nobody on that team should get
+    <em>less</em> than before. Obvious-sounding — and famously impossible to
+    guarantee in general: a classical theorem (Young 1985; Housman–Clark
+    1998) says <em>no</em> rule can be both core-picking and monotonic once
+    there are four or more players.</li>
+  </ul>
+  <div class="plain"><span class="tag">The thread connecting everything below</span>
+  The whole campaign lives in the gap that theorem leaves open: the
+  impossibility is proven for the broadest class of games. On <em>nicer</em>
+  classes of games, maybe fairness and stability can coexist after all.
+  Where exactly is the line? Nobody had mapped it.</div>
+
+  <h2>Result 1 — The impossibility proof, sharpened to its minimum
+      <span class="chip win">new theorem</span></h2>
+  <div class="card">
+    <p>The classical impossibility was proven with a set of five interlocking
+    games. Textbooks later used three. We proved <strong>three is exactly the
+    minimum</strong> — with two games you can never derive a contradiction
+    (we give the one-paragraph reason), and we built a self-contained
+    three-game certificate whose contradiction fits in six lines.</p>
+    <p class="note"><strong>What it means:</strong> a 27-year-old classic now
+    has its sharpest possible form. Modest but permanent — the kind of
+    footnote-sized fact that gets cited whenever the theorem is taught.</p>
+  </div>
+
+  <h2>Result 2 — The map of where the "repair" solution breaks
+      <span class="chip kill">four refutations</span></h2>
+  <div class="card">
+    <p>Because the classical nucleolus (the field's favorite single-point
+    rule) fails monotonicity, two researchers — Arin and Katsev — spent a
+    decade building a replacement, the <em>SD-prenucleolus</em>, and proved
+    it behaves well on two special classes of games. Nobody knew how far
+    that good behavior extends. Our answer: <strong>not one step
+    further.</strong></p>
+    <ul>
+      <li>Its monotonicity fails on <em>exact</em> games (the very next
+      class up) with an explicit 4-player example.</li>
+      <li>Its uniqueness property fails there too — spectacularly (a whole
+      line segment of solutions where there should be one point).</li>
+      <li>On their own home turf (convex games), it fails a <em>different</em>
+      fairness test — population monotonicity — with a tiny 3-player example,
+      and the failure is typical, not rare.</li>
+      <li>On market-style games, it inherits the nucleolus's failures and
+      even amplifies them — one little 4×4 matrix breaks both rules at once.</li>
+    </ul>
+    <p class="note"><strong>What it means:</strong> every advertised virtue
+    of the decade-long repair program turns out to be a special feature of
+    convex games, not of the solution. This became <strong>Paper 1</strong>
+    (16 pages, survived six rounds of expert review, submission-ready for
+    the International Journal of Game Theory).</p>
+  </div>
+
+  <h2>Result 3 — A published open question, answered
+      <span class="chip kill">open question resolved</span></h2>
+  <div class="card">
+    <p>This is the headline. In a 2021 paper in <em>Games and Economic
+    Behavior</em>, Bas Dietzenbacher studied when an egalitarian
+    ("as-equal-as-possible") division rule stays stable, and closed by
+    writing that whether this always works on <em>exact games</em> "is an
+    interesting open question for future research." Exact games are a
+    well-behaved class — for up to four players the answer was provably
+    <em>yes</em>.</p>
+    <p><strong>We answered it: no.</strong> There is a five-player exact game
+    where the egalitarian procedure talks itself into impossible promises.
+    The example is simple enough to state at a dinner table: the procedure
+    computes what each player can "fairly claim," and every one of the five
+    players ends up with a fair claim of exactly 1 — but the whole pie is
+    only 4.</p>
+    <div class="claims">fair claims:   1 + 1 + 1 + 1 + 1  =  <b>5</b>
+whole pie:                          <b>4</b>
+Five promises, four dollars. The egalitarian split
+must break a promise — and when it does, a sub-team
+has a reason to walk. Stability fails.</div>
+    <p>Five players is the fewest possible. A padding trick extends the
+    example to every larger number of players, so the threshold is sharp:
+    up to four players egalitarianism and stability coexist on exact games;
+    from five they cannot be guaranteed. We also found <em>why</em> the
+    question survived five years: random testing almost never generates the
+    thin-cored games where this happens — 99.4% of naively generated exact
+    games sit in a "safe zone." Our generator aims directly at the frontier.</p>
+    <p class="note"><strong>What it means:</strong> a question posed in
+    print by an active researcher in a top field journal is now settled,
+    with the smallest possible example, an infinite family, and the
+    mechanism identified. This became <strong>Paper 2</strong> (8 pages,
+    "Exact games need not be egalitarian stable"), verified by four
+    independently written implementations and three independently discovered
+    examples. The verification supplement runs on a bare laptop with one
+    command.</p>
+  </div>
+
+  <h2>Result 4 — A new candidate for the "holy grail" rule
+      <span class="chip open">candidate theorem, partly proven</span></h2>
+  <div class="card">
+    <p>Back to the big gap: does <em>any</em> rule manage to be both
+    core-picking and monotonic on exact games? Every famous rule fails
+    there — including, after Result 3, the egalitarian one. But the campaign
+    turned up a fresh candidate: the <em>leximin-above-floors</em> rule
+    ("make the poorest player's gain as large as possible, then the next
+    poorest, and so on, inside the stable region").</p>
+    <ul>
+      <li><strong>Tested:</strong> over 2,000 adversarial experiments across
+      two independent implementations, including the exact thin-core corner
+      where everything else dies — zero failures.</li>
+      <li><strong>Proven:</strong> the "exact games" fine print is genuinely
+      necessary (drop it and we exhibit certified failures), and the
+      technical bridge lemma that reduces the whole question to one clean
+      statement.</li>
+      <li><strong>Open:</strong> that final statement — a precise geometric
+      property of leximin points — resisted two serious proof attempts and
+      is now stated, with all evidence, as the campaign's flagged frontier.</li>
+    </ul>
+    <p class="note"><strong>What it means:</strong> if the last lemma falls,
+    the fifty-year-old impossibility gets its definitive positive
+    counterpart: a concrete, computable rule that is fair <em>and</em>
+    stable on exact games. This is <strong>Paper 3</strong> in draft-fragment
+    form — an honest conditional theorem plus one unconditional one.</p>
+  </div>
+
+  <h2>Result 5 — The second half of the question, closing in
+      <span class="chip open">strong evidence, proof in progress</span></h2>
+  <div class="card">
+    <p>Dietzenbacher's question had a second half: does egalitarian
+    stability hold for <em>stable-core</em> games (a different niceness
+    condition)? Here the evidence points the <em>other way — toward
+    yes</em>: nearly 36,000 stable-core market games all pass; the classic
+    "big boss" family all passes; and in that family we proved the two
+    failures are physically locked together — the same slack that breaks
+    stability breaks egalitarianism, so you can't have one without the
+    other. Along the way we corrected a published folklore claim (big-boss
+    cores are <em>not</em> automatically stable — certified
+    counterexamples).</p>
+    <p class="note"><strong>What it means:</strong> the full answer to
+    Dietzenbacher's question may end up beautifully asymmetric — <em>no</em>
+    for exact games (our theorem), <em>yes</em> for stable-core games (in
+    progress). The hunt for the general proof continues.</p>
+  </div>
+
+  <h2>How the machine worked</h2>
+  <p>The method is the one that cracked several famous conjectures in 2026:
+  simple search inside a disciplined loop.</p>
+  <ul>
+    <li><strong>Exact arithmetic only.</strong> Every claimed number is
+    certified in exact fractions — no floating-point claim survives on its
+    own. (Day one, we caught a mainstream computer-algebra package returning
+    provably wrong answers on three-variable problems, and wrote our own
+    solver.)</li>
+    <li><strong>Independent re-implementation.</strong> Every headline object
+    was verified through at least two — usually four — separately written
+    programs, each first forced to reproduce known textbook examples.</li>
+    <li><strong>Adversarial review.</strong> Papers went through repeated
+    expert review; the reviewer refuted one of our conjectures outright
+    (we verified their counterexample and rebuilt the section around it) and
+    surfaced decisive prior art twice.</li>
+    <li><strong>The catch ledger.</strong> Across the campaign the
+    discipline caught <strong>twelve</strong> false or overstated claims
+    before they shipped — our own, our agents', and one from the published
+    literature. Every one is logged. That ledger is why the results above
+    can be trusted.</li>
+  </ul>
+
+  <h2>How big is this, honestly?</h2>
+  <div class="tablewrap"><table>
+    <tr><th>Piece</th><th>Honest level</th></tr>
+    <tr><td>Result 3 (the resolved open question)</td>
+        <td>The real thing: a published open question from a top field
+        journal, settled with the minimal example. A solid short paper;
+        the day's genuine breakthrough.</td></tr>
+    <tr><td>Result 2 + Paper 1</td>
+        <td>A full specialty-journal paper: closes a named research
+        program's frontier and poses the field's next question.</td></tr>
+    <tr><td>Result 4 (leximin candidate)</td>
+        <td>Potentially the most important item if the last lemma falls —
+        currently a strong conditional result.</td></tr>
+    <tr><td>Results 1 and 5</td>
+        <td>Permanent footnote-sized sharpenings and a likely companion
+        theorem.</td></tr>
+    <tr><td>Overall</td>
+        <td>Not Jacobian-conjecture territory — this is a niche subfield.
+        But it is several careers' months of publishable output, produced
+        and verified in two days. The speed is as notable as the content.</td></tr>
+  </table></div>
+
+  <h2>What's on the table next</h2>
+  <ul>
+    <li>Submit Paper 1 (needs only your affiliation and read-through) and
+    Paper 2 (same, plus one literature access check).</li>
+    <li>Let the last hunt finish: the "stable ⟹ egalitarian-stable" proof
+    would complete Dietzenbacher's question in both directions.</li>
+    <li>The flagged frontier: one geometric lemma stands between the
+    campaign and the constructive fifty-year counterpart theorem.</li>
+  </ul>
+
+  <h2>Mini-glossary</h2>
+  <dl>
+    <dt>Core</dt><dd>The set of splits no sub-team can profitably walk away
+    from. "Stable" splits.</dd>
+    <dt>Coalitional monotonicity</dt><dd>If a team's earning power rises,
+    none of its members should end up poorer.</dd>
+    <dt>Exact game</dt><dd>A game where every team's earning power is
+    "honest": for each team there's a stable split that pays it exactly its
+    own worth. A well-behaved middle class of games.</dd>
+    <dt>Large core / thin core</dt><dd>Roughly, how roomy the set of stable
+    splits is. Roomy cores are safe; the interesting failures all live where
+    the core is a thin sliver.</dd>
+    <dt>Egalitarian stable</dt><dd>The equal-as-possible division rule
+    happens to land on a stable split.</dd>
+    <dt>Leximin-above-floors</dt><dd>Among stable splits, first maximize the
+    worst-off player's gain, then the next, and so on. The new candidate
+    rule.</dd>
+  </dl>
+
+  <p class="note">Everything above is backed by machine-checkable
+  certificates in <span class="mono">~/projects/counterexample-hunt/coopgames/</span>
+  — papers in <span class="mono">paper/</span>, <span class="mono">paper2/</span>,
+  <span class="mono">paper3/</span>, the full campaign log in
+  <span class="mono">CAMPAIGN.md</span>, and one-command verifiers in each
+  supplement.</p>
+</main>

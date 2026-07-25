@@ -1,0 +1,1186 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1.1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage[round]{natbib}
+\setcitestyle{aysep={}}
+\usepackage{xcolor}
+\definecolor{linknavy}{RGB}{25,55,120}
+\usepackage[colorlinks=true,linkcolor=linknavy,citecolor=linknavy,urlcolor=linknavy,
+pdftitle={Coalitional monotonicity and the core: minimal impossibility, an
+exact-games escape, and the boundary of surplus-distributor solutions},
+pdfauthor={Maxwell Flanagan}]{hyperref}
+
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{observation}[theorem]{Observation}
+
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\core}{\operatorname{Core}}
+\newcommand{\SD}{\operatorname{SD}}
+
+\title{Coalitional monotonicity and the core:\\
+minimal impossibility, an exact-games escape,\\
+and the boundary of surplus-distributor solutions}
+
+\author{Maxwell Flanagan\\[2pt]
+\normalsize [Affiliation, City, Country --- to be completed]\\
+\normalsize Corresponding author: \texttt{maxwell.flanagan@gmail.com}%
+\thanks{A machine-readable certificate supplement with a standalone
+one-command verifier accompanies this paper as Online Resource~1; see
+Section~\ref{sec:methods} for the verification methodology and the
+disclosure of AI assistance.}}
+
+\date{July 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We study coalitional monotonicity of single-valued core selections in
+transferable-utility (TU) games. First, we pin down the minimal size of an
+impossibility certificate for the classical incompatibility of core
+selection and coalitional monotonicity: three-game certificates (a base
+game and two single-coalition increases) appear already in the textbook
+proof of Peleg and Sudh\"olter, and we record the complementary elementary
+fact that two-game families are always feasible---so three is exactly
+minimal---together with a self-contained three-game certificate admitting a
+six-line proof. Second, we map
+the monotonicity boundary of the Arin--Katsev surplus-distributor (SD)
+prenucleolus: coalitional monotonicity fails already on \emph{exact} games
+($n=4$, a minimized witness), the SD-prekernel is multi-valued on exact
+games, population monotonicity fails even on convex games ($n=3$, minimal),
+and on permutation games the SD solution amplifies the nucleolus's failure
+of pairwise monotonicity, whereas on assignment games extensive searches
+support monotonicity of both solutions. Third, we study whether the
+impossibility descends to exact games. For $n\le4$ it does not: by known
+results on large cores and egalitarian solutions, a coalitionally monotonic
+core selection exists on four-player exact games. The
+Housman--Clark mechanism is provably unavailable on exact games of any size,
+common-core intersection of bumped exact games can nevertheless fail (a
+four-arm example whose family remains feasible), and by a compactness
+argument existence for each $n$ is \emph{equivalent} to feasibility of all
+finite bump families, which we conjecture for $n\ge5$.
+\end{abstract}
+
+\medskip
+\noindent\textbf{Keywords:} cooperative games; core; coalitional
+monotonicity; nucleolus; SD-prenucleolus; exact games.
+
+
+\section{Introduction}
+
+A transferable-utility (TU) cooperative game assigns to each coalition the
+worth it can guarantee on its own; a single-valued solution recommends one
+division of $v(N)$. Two desiderata have organized much of the literature on
+such solutions. \emph{Core selection}: the recommendation should be stable
+against coalitional deviation whenever stability is possible.
+\emph{Coalitional monotonicity} \citep{Young85}: if exactly one
+coalition's worth rises, no member of that coalition should receive less.
+
+The two desiderata are incompatible. \citet{Young85} proved that for
+$|N|\ge 5$ no core selection is coalitionally monotonic; \citet{HousmanClark98} extended the impossibility to $|N|\ge 4$ and showed it
+is tight ($n=3$ admits an infinite family of monotonic core selections). The
+nucleolus fails coalitional monotonicity even on four-player convex games
+\citep{Hokari2000}, as do the per-capita nucleolus \citep{Arin2013}
+and the core-center \citep{MirasCalvo2021}. Against this background,
+\citet{ArinKatsev2011,ArinKatsev2014,ArinKatsev2016,ArinKatsev2018}
+introduced the \emph{surplus-distributor prenucleolus}
+($\SD$-prenucleolus),%
+\footnote{The literature uses both ``SD-nucleolus'' (e.g.\ the survey of \citealp{Inarra2020}) and ``SD-prenucleolus'' (the titles of
+\citealp{ArinKatsev2011,ArinKatsev2014}) for the Arin--Katsev construction; we
+follow the latter. See Section~\ref{sec:sd-def}.}
+a lexicographic core selection that \emph{is} coalitionally monotonic on
+convex games and on monotonic games with veto players. On the domain of
+convex games alone, egalitarian solutions in the tradition of \citet{DuttaRay89} are
+also coalitionally monotonic core selections \citep{Dietzenbacher2021}; what
+distinguishes the SD-prenucleolus is that it selects from the core on
+\emph{all} balanced games while retaining monotonicity on both the convex
+and the monotonic-veto domains. How far that good behavior extends beyond
+these two classes was, to our knowledge, open.
+
+This paper answers that question and, in doing so, isolates what we believe
+is the right open problem in this area. Our contributions:
+
+\begin{enumerate}[leftmargin=2em]
+\item \textbf{Minimal impossibility (Section~\ref{sec:minimal}).}
+Three-game impossibility families (a base and two bumps) are already
+present in the literature: the textbook proof of
+\citet[Theorem~8.2.3]{PelegSudholter2003} has exactly this shape, and the
+contradiction in the construction of \citet{Arin2013} likewise uses only a
+base and two of its bumps. What appears not to have been recorded is
+optimality: we prove that two-game families are always feasible, so three
+is \emph{exactly} the minimal size of an impossibility certificate, and we
+give a self-contained three-game certificate whose infeasibility admits a
+six-line proof.
+
+\item \textbf{The SD boundary (Sections~\ref{sec:sd-def}--\ref{sec:sd-results}).}
+The coalitional monotonicity of the SD-prenucleolus does not extend one step
+beyond convexity: it fails on \emph{exact} games at $n=4$ (convex
+$\subsetneq$ exact $\subsetneq$ totally balanced $\subsetneq$ balanced), with
+a minimized integer witness. Three companion results complete the map: the
+SD-prekernel is multi-valued on exact games (containing a positive-dimensional
+core segment, so the convex-domain uniqueness theorem of \citet{ArinKatsev2018}
+is tight); the SD-prenucleolus is \emph{not} population monotonic even on
+convex games (witness at the minimal size $n=3$, with a short hand proof);
+and on permutation games the SD-prenucleolus fails pairwise monotonicity on
+the same witness as the classical nucleolus, with a larger violation.
+Certificates for the computational theorems appear in
+Appendix~\ref{app:certs}.
+
+\item \textbf{The exact-games question (Section~\ref{sec:escape}).}
+The Young/Housman--Clark impossibility does not descend to exact games with
+at most four players: combining the large-core result of \citet{Biswas99} with Dietzenbacher's monotonic egalitarian core
+selection on PES-stable games \citep{Dietzenbacher2021} yields a
+coalitionally monotonic core selection on $\mathcal{E}_4$
+(Proposition~\ref{prop:n4}). For general $n$ the question is open, and we
+show the known impossibility mechanisms cannot decide it: the singleton-core
+pinning mechanism cannot exist on exact games (Lemma~\ref{lem:singleton});
+face bounds of groups are tight and invariant along monotonicity chains of
+proper bumps (Theorem~\ref{thm:pin}); overlapping two-arm families always
+admit a common core point (Lemma~\ref{lem:vescape}); yet common-core
+intersection can fail at $m=n=4$ arms (Proposition~\ref{prop:cx}) while the
+associated family remains feasible---so family feasibility, not core
+intersection, is the right invariant. A compactness argument
+(Proposition~\ref{prop:compact}) shows that for each $n$, existence of a
+coalitionally monotonic core selection on exact games is \emph{equivalent}
+to the feasibility of all finite bump families, which we conjecture for
+$n\ge5$ (Conjecture~\ref{conj:existence}); by \citet{Dietzenbacher2021} it
+would follow for all $n$ if every exact game is PES-stable, a question
+Dietzenbacher raises.
+
+\item \textbf{Market games (Section~\ref{sec:markets}).}
+The nucleolus is \emph{not} pairwise monotonic on permutation games: raising
+a single entry of the underlying value matrix can strictly lower the payoff
+of an agent named by that entry (smallest witness found: $n=4$, integer
+matrix of total mass 20). In contrast, on assignment games---the two-sided
+special case---we found no violation for the nucleolus or the
+SD-prenucleolus in an extensive float-screened search that includes one
+fully exact component, an exhaustive certified sweep of a $2\times2$ grid. For the nucleolus this independently
+supports a theorem announced in the 2008 OTKA project report of Solymosi,
+Forg\'o and Pint\'er \citep{SFP2008}, whose proof we have not been able to
+access; for the SD-prenucleolus the statement appears new and we pose it as a
+conjecture. The permutation witness shows any proof must use two-sidedness
+itself.
+\end{enumerate}
+
+All positive computational claims in this paper (witnesses, solution
+values, class memberships) are certified in exact rational arithmetic;
+lexicographic solutions are certified by Kohlberg-type balancedness criteria
+and, for headline witnesses, re-derived by an algorithmically independent
+exact solver. Negative search outcomes are float-screened, as detailed in
+Section~\ref{sec:methods}; Appendix~\ref{app:certs} lists human-checkable
+certificates, reproducible with the supplement's standalone verifier.
+
+\section{Preliminaries}\label{sec:prelim}
+
+A \emph{TU game} is a pair $(N,v)$ with $N=\{1,\dots,n\}$ and
+$v:2^N\to\R$, $v(\emptyset)=0$. For $x\in\R^N$ and $S\subseteq N$ write
+$x(S)=\sum_{i\in S}x_i$. The \emph{core} is
+$\core(v)=\{x:\ x(N)=v(N),\ x(S)\ge v(S)\ \forall S\}$; $v$ is
+\emph{balanced} if $\core(v)\neq\emptyset$, \emph{totally balanced} if every
+subgame is balanced, \emph{exact} \citep{Schmeidler72} if for every $S$ there is
+$x\in\core(v)$ with $x(S)=v(S)$, and \emph{convex} if
+$v(S\cup T)+v(S\cap T)\ge v(S)+v(T)$ for all $S,T$. It is standard that
+convex $\Rightarrow$ exact $\Rightarrow$ totally balanced $\Rightarrow$
+balanced, all inclusions strict for $n\ge 4$ (respectively $n\ge 3$ for the
+last).
+
+A collection $\mathcal{B}$ of nonempty proper coalitions is \emph{balanced}
+if there are strictly positive weights $(\lambda_S)_{S\in\mathcal{B}}$ with
+$\sum_{S\in\mathcal{B}}\lambda_S\mathbf{1}_S=\mathbf{1}_N$. A
+\emph{core selection} on a class $\mathcal{C}$ of balanced games is a map
+$\theta$ with $\theta(v)\in\core(v)$ for all $v\in\mathcal{C}$.
+
+\begin{definition}[Coalitional monotonicity \citep{Young85,HousmanClark98}]
+\label{def:cmon}
+A single-valued solution $\theta$ is \emph{coalitionally monotonic} on
+$\mathcal{C}$ if for all $u,v\in\mathcal{C}$ with $u(T)\le v(T)$ for some
+coalition $T$ and $u(S)=v(S)$ for all $S\neq T$, we have
+$\theta_i(u)\le\theta_i(v)$ for all $i\in T$.
+\end{definition}
+
+Aggregate monotonicity is the special case $T=N$. \emph{Population
+monotonicity} on a class closed under subgames requires
+$\theta_i(v|_S)\le\theta_i(v|_T)$ for all $i\in S\subseteq T$; it suffices to
+check $|T\setminus S|=1$.
+
+Throughout, a \emph{bump} of $v$ at $(S,d)$, $d>0$, with
+$\emptyset\neq S\subseteq N$, is the game $v+d\cdot e_S$ agreeing with $v$
+everywhere except $(v+d\cdot e_S)(S)=v(S)+d$; the bump is \emph{proper} if
+$S\neq N$. A \emph{(bump) family} is a finite set of games
+together with bump relations between them; a family is \emph{feasible} if
+one can choose a core element for each game satisfying all the monotonicity
+inequalities of Definition~\ref{def:cmon} along the bump relations. The
+existence of a monotonic core selection on a class immediately implies every
+family inside the class is feasible; Proposition~\ref{prop:compact} states
+the converse.
+
+We will use repeatedly the following elementary consequence of exactness.
+
+\begin{lemma}\label{lem:facebound}
+Let $v$ be exact and $T\subseteq N$ nonempty. Then
+$\max_{x\in\core(v)}x(T)=v(N)-v(N\setminus T)$. Moreover, for any partition
+$\{T_1,\dots,T_m\}$ of $N$ with $m\ge 2$,
+$\sum_k\bigl(v(N)-v(N\setminus T_k)\bigr)\ge v(N)$; for $m=1$ the same
+inequality holds trivially with equality.
+\end{lemma}
+
+\begin{proof}
+For $x\in\core(v)$, $x(T)=v(N)-x(N\setminus T)$, so maximizing $x(T)$ is
+minimizing $x(N\setminus T)$; by exactness the minimum equals
+$v(N\setminus T)$. For the second claim with $m\ge2$, the collection
+$\{N\setminus T_k\}_k$ is balanced with weights $1/(m-1)$, so balancedness
+of $v$ gives $\sum_k v(N\setminus T_k)\le(m-1)\,v(N)$, which rearranges to
+the claim.
+\end{proof}
+
+\section{Minimal impossibility on balanced games}\label{sec:minimal}
+
+\citet{HousmanClark98} prove that no core selection on four-player
+balanced games is coalitionally monotonic, using a family of five games (a
+base and four bumps). Certificates with three games are in fact already
+present in the literature: the textbook proof of
+\citet[Theorem~8.2.3]{PelegSudholter2003} uses precisely a four-player base
+game with two single-coalition increases, and the contradiction in the
+construction of \citet{Arin2013} also needs only a base and two of its
+bumps. The observation that appears to be new here is the matching lower
+bound: three games cannot be improved upon.
+
+\begin{lemma}\label{lem:twogames}
+Every two-game family $\{v,\,v+d\cdot e_S\}$ of balanced games is feasible.
+\end{lemma}
+
+\begin{proof}
+If $S\neq N$, then $\core(v+d\cdot e_S)\subseteq\core(v)$, since the bump
+only tightens the constraint at $S$; pick any $x\in\core(v+d\cdot e_S)$ and
+assign it to both games. If $S=N$, pick $x\in\core(v)$ and assign
+$x+\tfrac{d}{n}\mathbf{1}$ to the bumped game: it is efficient for it,
+satisfies every core constraint (each $x(T)$ only increases), and dominates
+$x$ coordinatewise. In both cases all monotonicity inequalities hold.
+\end{proof}
+
+\begin{theorem}\label{thm:threegame}
+Let $N=\{1,2,3,4\}$ and define the balanced game $v$ by
+\[
+v(\{1,3\})=v(\{2,3\})=v(\{1,4\})=v(\{2,4\})=v(\{3,4\})=3,
+\]
+\[
+v(\{1,2,3\})=v(\{1,2,4\})=v(\{1,3,4\})=1,\quad v(\{2,3,4\})=5,\quad v(N)=6,
+\]
+all other coalitions $0$. Let $v_A=v+3\cdot e_{\{1,2,3\}}$ and
+$v_B=v+1\cdot e_{\{2,3,4\}}$; all three games are balanced, as witnessed by
+$(1,1,2,2)\in\core(v)\cap\core(v_A)$ and $(0,0,3,3)\in\core(v_B)$. Then the
+family $\{v,v_A,v_B\}$ is infeasible: no choice of core elements
+$x\in\core(v)$, $y\in\core(v_A)$, $z\in\core(v_B)$ satisfies
+$x_i\le y_i$ $(i\in\{1,2,3\})$ and $x_i\le z_i$ $(i\in\{2,3,4\})$.
+Consequently no coalitionally monotonic core selection exists on any class
+of games containing these three games; by Lemma~\ref{lem:twogames}, three
+is the minimal possible size of such a certificate.
+\end{theorem}
+
+\begin{proof}
+In $\core(v_A)$: adding $y(\{1,2,3\})\ge 4$, $y(\{1,4\})\ge 3$ and
+$y(\{2,4\})\ge 3$ gives $2y_1+2y_2+y_3+2y_4\ge 10$, i.e.\
+$2\,v_A(N)-y_3\ge 10$, so $y_3\le 2$. In $\core(v_B)$: adding
+$z(\{1,3\})\ge 3$, $z(\{1,4\})\ge 3$ and $z(\{2,3,4\})\ge 6$ gives
+$2z_1+z_2+2z_3+2z_4\ge 12$, so $z_2\le 0$. Monotonicity then forces
+$x_3\le y_3\le 2$ and $x_2\le z_2\le 0$, whence
+$x(\{2,3\})\le 2<3=v(\{2,3\})$, contradicting $x\in\core(v)$. Minimality
+follows from Lemma~\ref{lem:twogames}.
+\end{proof}
+
+\begin{remark}
+The proof is a rearrangement of an exact Farkas certificate with eleven
+multipliers (nine core and monotonicity constraints with weight $1$; the two
+efficiency identities with weight $2$), found by linear programming over
+the family (Section~\ref{sec:methods}; the multiplier table is in the
+supplement). None of the three games is exact, consistent with the
+obstructions of Section~\ref{sec:escape}.
+\end{remark}
+
+\section{The SD-prenucleolus}\label{sec:sd-def}
+
+\subsection{Definition}
+
+Fix $(N,v)$ and an efficient $x$ ($x(N)=v(N)$). The SD-prenucleolus of
+Arin--Katsev \citep{ArinKatsev2011,ArinKatsev2014} is defined through a
+recursive \emph{satisfaction} vector, as follows. Let
+$\mathcal{C}=2^N\setminus\{\emptyset,N\}$. Maintain a set
+$H\subseteq\mathcal{C}$ of coalitions whose satisfactions $F(T;x)$ have been
+fixed. For $S\notin H$ let
+$H(S)=\bigcup\{T\in H:\ T\subseteq S\}$ (a set of \emph{players}) and, for
+$i\in H(S)$,
+\[
+f(i,S)\;=\;\min\{F(T;x):\ T\in H,\ i\in T\subseteq S\}.
+\]
+The current candidate satisfaction of $S$ is
+\[
+F_H(S)=
+\begin{cases}
+\dfrac{x(S)-v(S)-\sum_{i\in H(S)}f(i,S)}{|S|-|H(S)|}, & H(S)\neq S,\\[1.4em]
+x(S)-v(S)-\sum_{i\in S}f(i,S)+\max_{i\in S}f(i,S), & H(S)=S.
+\end{cases}
+\]
+Starting from $H=\emptyset$ (all candidates are then per-capita
+satisfactions $(x(S)-v(S))/|S|$), repeatedly fix \emph{all} coalitions
+attaining the minimal current candidate at that value and update; the
+procedure terminates with the satisfaction vector $F(\cdot\,;x)$. The
+\emph{SD-prenucleolus} $\SD(N,v)$ is the efficient $x$ whose non-decreasingly
+sorted satisfaction vector is lexicographically maximal. It is single-valued,
+continuous, covariant, a core selection on balanced games, strongly aggregate
+monotonic, and coalitionally monotonic on convex games and on monotonic veto
+games \citep{ArinKatsev2011,ArinKatsev2014,ArinKatsev2016,ArinKatsev2018}.
+
+The solution admits a characterization in the style of
+\citet{Kohlberg71} \citep{ArinKatsev2011,ArinKatsev2018}: an efficient $x$ equals $\SD(N,v)$ if
+and only if for every threshold $\alpha\in\R$ the lower level set
+$\{S\in\mathcal{C}:\ F(S;x)\le\alpha\}$ is empty or balanced. We use this as
+the certification instrument throughout.
+
+\subsection{Implementation and validation}\label{sec:sd-impl}
+
+We compute $\SD(N,v)$ by a Maschler-type successive linear-programming
+scheme (at each stage the candidate satisfactions of unfixed coalitions are
+affine in $x$, because fixed satisfactions are constants), with every output
+certified by (i) an exact evaluation of the recursion above at the candidate
+point and (ii) the Kohlberg-type criterion, with balancedness of each level
+set established by an exact linear program producing strictly positive
+weights. As additional regression checks (not proofs), headline witnesses
+were probed for lexicographic optimality along hundreds of exact rational
+perturbation directions.
+
+The implementation reproduces exactly: the worked example of
+\citet{ArinKatsev2018}; the prenucleolus on two-player games; the serial rule
+on random monotonic veto games (Theorem 14.3 of \citealp{ArinKatsev2018}, using
+the explicit serial-rule formula of \citealp{ArinFeltkamp2012}); the
+minimal-overlap division on the bankruptcy game
+$(E;c)=(200;100,200,300)$, namely $(100/3,\,250/3,\,250/3)$ (Theorem 14.4 of
+\citealp{ArinKatsev2018}), which differs from the Talmud/nucleolus division
+$(50,75,75)$; strict strong aggregate monotonicity on $150$ random games; and
+coalitional monotonicity along $8$ random convex bumps. On the five-player
+benchmark game of Arin--I\~narra reported in \citet{Inarra2020} our classical
+nucleolus solver reproduces the published value
+$(16/9,16/9,16/9,4/3,4/3)$ exactly.
+
+\section{The boundary of the SD-prenucleolus}\label{sec:sd-results}
+
+\subsection{Coalitional monotonicity fails on exact games}
+
+\begin{theorem}\label{thm:sdexact}
+The SD-prenucleolus is not coalitionally monotonic on the class of exact
+games, already for $n=4$. Witness: let $v$ be
+\[
+v(\{2,3\})=1,\ v(\{1,2,3\})=1,\ v(\{2,4\})=13,\ v(\{1,2,4\})=15,
+\]
+\[
+v(\{1,3,4\})=14,\ v(\{2,3,4\})=13,\ v(N)=30,
+\]
+all other coalitions $0$, and let $v'=v+1\cdot e_{\{1,3,4\}}$. Both games are
+exact (hence totally balanced; neither is convex). Then
+\[
+\SD(v)=\Bigl(\tfrac{53}{12},\ \tfrac{19}{4},\ \tfrac{15}{4},\ \tfrac{205}{12}\Bigr),
+\qquad
+\SD(v')=\Bigl(\tfrac{35}{8},\ \tfrac{33}{8},\ \tfrac{33}{8},\ \tfrac{139}{8}\Bigr),
+\]
+so player $1\in\{1,3,4\}$ loses $1/24$ when the worth of a coalition
+containing her rises.
+\end{theorem}
+
+\begin{proof}[Proof (computer-assisted)]
+Exactness of each game is certified by $2^n-2$ exact linear programs
+exhibiting, for every coalition $S$, a core element with $x(S)=v(S)$. That
+the displayed points are the SD-prenucleoli follows from the Kohlberg-type
+criterion of Section~\ref{sec:sd-def}: the full satisfaction level structure
+of both points and strictly positive balancing weights for the lower level
+sets are listed in Appendix~\ref{app:certs} and can be checked by hand. The
+payoff comparison is exact rational arithmetic.
+\end{proof}
+
+The witness was found by search and greedily minimized (total mass $87$,
+seven nonzero values); both games are moreover superadditive, so the failure
+holds on exact (hence totally balanced) superadditive games. Since
+Arin--Katsev prove monotonicity
+on convex games, the boundary along
+convex $\subsetneq$ exact $\subsetneq$ totally balanced $\subsetneq$ balanced
+is \emph{convexity itself}.
+
+\begin{corollary}
+Exactness does not imply SD-relevance, the domain hypothesis of the general
+monotonicity theorem of \citet{ArinKatsev2018}.\footnote{We refer to
+\citet{ArinKatsev2018} for the definition of SD-relevant games; here we use
+only the fact that their theorem establishes coalitional monotonicity of the
+SD-prenucleolus on that class, which by Theorem~\ref{thm:sdexact} therefore
+cannot contain both witness games.}
+\end{corollary}
+
+\subsection{The SD-prekernel is multi-valued on exact games}
+
+\citet{ArinKatsev2016b,ArinKatsev2018} define the SD-prekernel
+through bilateral complaints
+$s_{ij}(x)=\min\{F(S;x):\ i\in S,\ j\notin S\}$: it is the set of efficient
+$x$ with $s_{ij}(x)=s_{ji}(x)$ for all $i\neq j$. It contains the
+SD-prenucleolus, and on convex games it equals it (a singleton).
+
+\begin{theorem}\label{thm:sdpk}
+The SD-prekernel can be multi-valued---indeed positive-dimensional---on
+exact games. For the exact, totally balanced, non-convex game
+\[
+\begin{aligned}
+&v(\{1\})=5,\ v(\{2\})=6,\ v(\{3\})=2,\ v(\{4\})=5,\\
+&v(\{1,2\})=20,\ v(\{1,3\})=10,\ v(\{2,3\})=8,\ v(\{1,4\})=12,\
+ v(\{2,4\})=14,\ v(\{3,4\})=12,\\
+&v(\{1,2,3\})=22,\ v(\{1,2,4\})=25,\ v(\{1,3,4\})=17,\ v(\{2,3,4\})=18,\quad
+ v(N)=32,
+\end{aligned}
+\]
+the SD-prekernel contains the segment
+$\SD(v)+t\,(1,-1,-1,1)$, $t\in[-1/2,1/2]$, where
+$\SD(v)=(19/2,\,21/2,\,9/2,\,15/2)$; every point of the segment lies in the
+core and equalizes all six bilateral complaints exactly.
+\end{theorem}
+
+\begin{proof}
+Write $x^t=\SD(v)+t\,(1,-1,-1,1)$ for $t\in[-1/2,1/2]$. Core membership of
+$x^t$ reduces to that of the endpoints $(9,11,5,7)$ and $(10,10,4,8)$, which
+is a direct check against the fifteen constraints. Evaluating the recursion
+of Section~\ref{sec:sd-def} at $x^t$ gives, for every $t\in[-1/2,1/2]$,
+\[
+F_{\{1,2\}}=F_{\{3,4\}}=0,\qquad F_{\{1,3\}}=F_{\{2,4\}}=2,
+\]
+\[
+F_{\{3\}}=F_{\{1,2,3\}}=\tfrac52-t,\qquad
+F_{\{4\}}=F_{\{1,4\}}=F_{\{1,2,4\}}=\tfrac52+t,
+\]
+\[
+F_{\{2\}}=F_{\{2,3\}}=F_{\{2,3,4\}}=\tfrac92-t,\qquad
+F_{\{1\}}=F_{\{1,3,4\}}=\tfrac92+t
+\]
+The displayed functions are proved by running the recursion symbolically,
+stage by stage, on each open half-interval; the fixing order is constant on
+each. For $t\in(-\tfrac12,0)$ the stages are
+\[
+\{12,34\};\ \{13,24\};\ \{4,14,124\};\ \{3,123\};\ \{1,134\};\
+\{2,23,234\}
+\]
+at levels $0,\,2,\,\tfrac52+t,\,\tfrac52-t,\,\tfrac92+t,\,\tfrac92-t$
+respectively, and for $t\in(0,\tfrac12)$ they are
+\[
+\{12,34\};\ \{13,24\};\ \{3,123\};\ \{4,14,124\};\ \{2,23,234\};\
+\{1,134\}
+\]
+at levels $0,\,2,\,\tfrac52-t,\,\tfrac52+t,\,\tfrac92-t,\,\tfrac92+t$. At
+each stage, direct substitution of $x^t$ into the two-case formula of
+Section~\ref{sec:sd-def}, using the already-fixed values, yields exactly the
+displayed candidates and confirms that the stated minimizers are fixed next
+(the required inequalities, e.g.\ $2\le\tfrac52\mp t$ and
+$\tfrac52+t<\tfrac52-t$ for $t<0$, hold strictly on the open
+half-intervals). The boundary values $t\in\{-\tfrac12,0,\tfrac12\}$ are
+verified separately by direct exact computation (supplement), where some
+stages merge but the resulting satisfaction values still obey the displayed
+formulas. Reading off the bilateral complaints
+$s_{ij}=\min\{F_S:\ i\in S\not\ni j\}$: for $|t|\le\tfrac12$,
+$s_{12}=s_{21}=2$ (attained at $\{1,3\}$ resp.\ $\{2,4\}$),
+$s_{34}=s_{43}=2$, and all other ordered pairs have $s_{ij}=0$ (attained at
+$\{1,2\}$ or $\{3,4\}$). All six equalities $s_{ij}=s_{ji}$ therefore hold
+along the segment. That the midpoint is $\SD(v)$ is certified by the
+Kohlberg-type criterion (Appendix~\ref{app:certs}).
+\end{proof}
+
+Thus the uniqueness theorem for convex games is tight, with the same
+boundary as Theorem~\ref{thm:sdexact}. (Perturbed control points off the
+segment fail the equalities, confirming the checker discriminates.)
+
+\subsection{Population monotonicity fails on convex games}
+
+\begin{theorem}\label{thm:sdpm}
+The SD-prenucleolus is not population monotonic on convex games, already at
+$n=3$, which is minimal: for $n\le 2$ every core selection is population
+monotonic, since individual rationality gives
+$\theta_i(v|_{\{i\}})=v(\{i\})\le\theta_i(v|_T)$ for any $T\ni i$. For the
+convex, exact game
+$v(\{1,2\})=v(\{2,3\})=1$, $v(N)=2$ (all else $0$):
+\[
+\SD\bigl(v|_{\{2,3\}}\bigr)=\bigl(\tfrac12,\tfrac12\bigr),\qquad
+\SD(v)=\bigl(\tfrac13,\ \tfrac43,\ \tfrac13\bigr),
+\]
+so player $3$ falls from $1/2$ to $1/3$ when player $1$ joins.
+\end{theorem}
+
+\begin{proof}
+Convexity is immediate. The two-player subgame on $\{2,3\}$ has
+$v(\{2\})=v(\{3\})=0$, $v(\{2,3\})=1$; the SD-prenucleolus coincides with
+the prenucleolus on two-player games, giving the equal split $(1/2,1/2)$.
+
+For the full game we verify $x=(1/3,4/3,1/3)$ by the Kohlberg-type
+criterion. The recursion finishes in two stages (the five coalitions at the
+minimal level are fixed first, then $\{2\}$): the per-capita satisfactions
+are $F(\{1\})=F(\{3\})=1/3$;
+$F(\{1,2\})=F(\{2,3\})=(x(S)-1)/2=1/3$; $F(\{1,3\})=x(\{1,3\})/2=1/3$;
+$F(\{2\})=4/3$. The lower level sets are: for $\alpha\in[1/3,4/3)$,
+$\mathcal{B}_1=\{\{1\},\{3\},\{1,2\},\{2,3\},\{1,3\}\}$, balanced with
+strictly positive weights
+$\lambda_{\{1,2\}}=\lambda_{\{2,3\}}=\tfrac12$,
+$\lambda_{\{1,3\}}=\tfrac13$, $\lambda_{\{1\}}=\lambda_{\{3\}}=\tfrac16$
+(player $1$: $\tfrac12+\tfrac13+\tfrac16=1$; player $2$:
+$\tfrac12+\tfrac12=1$; player $3$: $\tfrac13+\tfrac12+\tfrac16=1$); for
+$\alpha\ge 4/3$, the set of all proper coalitions, which is balanced. Hence
+every lower level set is empty or balanced and $x=\SD(v)$. Finally
+$1/2>1/3$.
+\end{proof}
+
+In exploratory float-screened sampling of convex games (integer-valued
+supermodular games generated as nonnegative integer combinations of
+unanimity games), violations appeared in roughly half of the instances at
+$n=4$ and more at $n=5$; we report these frequencies as indicative only,
+since the exploratory counting runs were not preserved as seeded scripts.
+The phenomenon is in any case common under such sampling, not exceptional. The SD-prenucleolus therefore
+separates the two monotonicities on its home class: it is coalitionally
+monotonic there \citep{ArinKatsev2016} but not population monotonic---in
+contrast with the egalitarian solution of \citet{DuttaRay89}, which is
+population monotonic on convex games.
+
+\section{Market games: pairwise monotonicity}\label{sec:markets}
+
+An \emph{assignment game} \citep{NunezRafels2002} is generated by a
+nonnegative matrix $A=(a_{ij})$ over two disjoint sides $M$ (rows) and $M'$
+(columns): the player set is $M\cup M'$ and $v(S)$ is the maximum weight of
+a matching between $S\cap M$ and $S\cap M'$ with weights $a_{ij}$. A
+\emph{permutation game} \citep{TijsEtAl84} is generated by a square matrix
+$K=(k_{ij})$ over a single player set:
+$v(S)=\max_\pi\sum_{i\in S}k_{i\pi(i)}$, the maximum over permutations
+$\pi$ of $S$. Assignment games embed into permutation games
+\citep{CurielTijs86}; both classes are totally balanced.
+
+\emph{Pairwise monotonicity} \citep{NunezRafels2002} is
+the natural monotonicity axiom for such games: if one entry of the matrix
+rises, neither of the two agents named by that entry may lose. The
+buyers-optimal, sellers-optimal and $\tau$-value rules satisfy it on
+assignment games \citep{NunezRafels2002,vdBNunezRobles2021}; \citet{Miquel2009} constructs a bespoke pairwise-monotonic core selection for
+permutation games.%
+\footnote{We could not access the body of \citet{Miquel2009}; its abstract
+states a positive result for a merged-$\tau$-value rule and makes no claim
+about the nucleolus. Whether an explicit nucleolus counterexample appears in
+its introduction is a caveat for the novelty (not the correctness) of
+Theorem~\ref{thm:permutation}.}
+For the nucleolus on assignment games, the 2008 OTKA project report of
+Solymosi, Forg\'o and Pint\'er \citep{SFP2008} announces: ``We proved that
+the nucleolus is pairwise-monotonic on assignment games''; the project's
+2012 final report attributes the result to an unpublished manuscript,
+``Pairwise monotonicity of the nucleolus in assignment games'' by
+T.~Solymosi, M.~Brugueras and T.~E.~S.~Raghavan (2012), with a simplified
+proof in a revised version.\footnote{OTKA final report,
+\url{https://real.mtak.hu/12261/1/72856_ZJ1.pdf}.} We have not been able to
+access either manuscript; our computations below independently support the
+statement.
+
+\begin{theorem}\label{thm:permutation}
+The nucleolus is not pairwise monotonic on permutation games. Let $K$ be the
+value matrix (rows: owners; columns: recipients)
+\[
+K=\begin{pmatrix}0&7&0&0\\ 1&0&0&1\\ 1&0&0&0\\ 0&9&1&0\end{pmatrix},
+\]
+and raise $K_{43}$ from $1$ to $2$ (which raises only
+$v(\{3,4\})$ and $v(\{1,3,4\})$, each by one, and fixes $v(N)=11$). The
+nucleolus moves from
+$(\tfrac12,\ \tfrac{33}{4},\ \tfrac12,\ \tfrac74)$ to
+$(\tfrac23,\ \tfrac{23}{3},\ \tfrac13,\ \tfrac73)$: player $3$, a member of
+both improved coalitions, falls from $1/2$ to $1/3$. Both games are totally
+balanced and both nucleoli lie in the core. Moreover the SD-prenucleolus
+fails on the same instance, falling from $1/2$ to $1/4$ for the same player.
+\end{theorem}
+
+\begin{proof}[Proof (computer-assisted)]
+Both nucleolus claims are certified by Kohlberg's criterion in exact
+arithmetic; Appendix~\ref{app:certs} lists the excess level structure and
+balancing weights at the top level for both games, and the machine-readable
+supplement contains the full level data. The SD claims are certified as in
+Section~\ref{sec:sd-impl}.
+\end{proof}
+
+The witness is greedily minimized (integer matrix, total mass $20$); a
+float-screened $n=3$ sweep of $36{,}000$ bumps found no candidate
+violation, so $n=4$ is the smallest size at which we found the phenomenon. In this instance the improving pair's
+\emph{joint} payoff rises ($9/4\to 8/3$ for the nucleolus), so the witness
+does not violate Sasaki's weak (joint) pairwise monotonicity \citep{Sasaki95};
+the bump's surplus is redistributed \emph{within} the improving pair.
+
+On assignment games, by contrast, an extensive search---float-screened
+random and tie-targeted $3\times3$, $4\times3$, $4\times4$ markets and
+hill-climbing on the violation margin, together with one fully exact
+component, an exhaustive Kohlberg-certified sweep of all $2\times2$ markets
+with entries in $\{0,\dots,4\}$ (2{,}500 bumps, zero violations, zero
+certification failures)---found no violation for either solution. For the nucleolus this is consistent with \citep{SFP2008}; for the
+SD-prenucleolus we know of no prior statement:
+
+\begin{conjecture}\label{conj:assign}
+The SD-prenucleolus is pairwise monotonic on assignment games.
+\end{conjecture}
+
+\begin{conjecture}\label{conj:mcst}
+The nucleolus of minimum-cost spanning tree games is cost monotonic in the
+sense of \citet{DuttaKar2004} (raising one edge's cost never
+lowers an incident player's cost share).
+\end{conjecture}
+
+Conjecture~\ref{conj:mcst} is supported by $1{,}450$ float-screened tests
+(with exact certification awaiting any candidate violation; none arose) at
+$n\in\{4,5,6\}$ including large bumps in the core-moving regime of
+\citet{TanCaoZou2025}; the nucleolus is known to be monotonic on the
+fixed-tree subclass \citep{MPR2010}, and Dutta--Kar's violating rule is
+Bird's, not the nucleolus. Theorem~\ref{thm:permutation} shows any proof of
+the assignment-game statements must use two-sidedness: the property fails
+one class up.
+
+\section{Do exact games escape the impossibility?}\label{sec:escape}
+
+The certificate games of Theorem~\ref{thm:threegame}, like those of
+\citet{HousmanClark98}, are not exact. This section first records that for
+$n\le4$ the existence question on exact games is settled affirmatively by
+known results (Proposition~\ref{prop:n4}), then shows that the pinning and
+two-arm mechanisms underlying the known impossibility proofs are
+unavailable on exact games of any size, delimits the techniques by an
+explicit counterexample to a natural strengthening, and reduces the
+existence question to finite-family feasibility.
+
+\subsection{The pinning mechanism is unavailable}
+
+The Housman--Clark proof pins players via bumps whose cores collapse to
+singletons.
+
+\begin{lemma}\label{lem:singleton}
+An exact game whose core is a singleton is additive. Consequently no exact
+game family can pin a player through a singleton core except trivially.
+\end{lemma}
+
+\begin{proof}
+If $\core(v)=\{x\}$, exactness gives, for each $S$, a core element attaining
+$x(S)=v(S)$; but the core element is unique, so $x(S)=v(S)$ for every $S$,
+i.e.\ $v$ is additive with $v(S)=\sum_{i\in S}x_i$.
+\end{proof}
+
+More generally, pinning arguments transmit \emph{face bounds}
+$\max_{x\in\core}x(T)$ along monotonicity chains. On exact games these
+bounds cannot contract under proper bumps:
+
+\begin{theorem}[Pin invariance under proper bumps]\label{thm:pin}
+Let all games below be exact and let all bumps be proper. Fix a nonempty
+group $T\subseteq N$. Along any monotonicity chain that constrains
+$T$---i.e.\ any sequence of proper bumps at coalitions $S\supseteq T$---the
+face bound of Lemma~\ref{lem:facebound} satisfies
+$\max_{x\in\core}x(T)=v(N)-v(N\setminus T)$ in every game of the chain, with
+both $v(N)$ and $v(N\setminus T)$ unaltered by every bump in the chain. In
+particular, since face bounds over any partition sum to at least $v(N)$
+(Lemma~\ref{lem:facebound}), no contradiction with efficiency can be derived
+from partition-aggregated face bounds, at any chain depth and for groups of
+any arity; we do not claim the analogue for arbitrary balanced collections
+of groups. (A bump at $S=N$ raises every face bound by $d$ and is likewise
+harmless.)
+\end{theorem}
+
+\begin{proof}
+A proper bump at $S$ constrains $T$ only if $T\subseteq S$; since
+$T\cap(N\setminus T)=\emptyset$ and $S\neq N$, no such $S$ equals
+$N\setminus T$ or $N$, so neither $v(N\setminus T)$ nor $v(N)$---and with
+them the face bound, by Lemma~\ref{lem:facebound} applied in each (exact)
+game---changes along the chain.
+\end{proof}
+
+\subsection{Two-arm families: positive results and their limits}
+
+\begin{lemma}[Overlapping arms]\label{lem:vescape}
+Let $b$ be exact and let $t_A=b+d_A e_A$, $t_B=b+d_B e_B$ be exact, where
+$A\neq B$ are nonempty proper coalitions with $A\cap B\neq\emptyset$. Then
+$M=b+d_Ae_A+d_Be_B$ is balanced, and any $x^*\in\core(t_A)$ maximizing
+$x(B)$ lies in
+$\core(M)\subseteq\core(b)\cap\core(t_A)\cap\core(t_B)$; assigning $x^*$ to
+all three games shows the family $\{b,t_A,t_B\}$ is feasible.
+\end{lemma}
+
+\begin{proof}
+By exactness of $t_A$ at $N\setminus B$ and $A\not\subseteq N\setminus B$
+(as $A\cap B\neq\emptyset$),
+\[
+\max_{x\in\core(t_A)}x(B)
+= t_A(N)-t_A(N\setminus B)
+= b(N)-b(N\setminus B)
+= \max_{x\in\core(b)}x(B)\;\ge\; b(B)+d_B,
+\]
+the last inequality because $\core(t_B)\neq\emptyset$ forces some core
+element of $b$ with $x(B)\ge b(B)+d_B$. The maximizer $x^*$ then satisfies
+every constraint of $M$.
+\end{proof}
+
+\begin{proposition}[Disjoint arms: exactness chaining]\label{prop:disjoint}
+Let $b$ be exact and $t_A=b+d_Ae_A$, $t_B=b+d_Be_B$ exact, where $A,B$ are
+nonempty proper coalitions with $A\cap B=\emptyset$ and
+$R:=N\setminus(A\cup B)\neq\emptyset$. Then
+\[
+b(N)\ \ge\ b(A)+d_A+b(B)+d_B+b(R),
+\]
+i.e.\ the partition Farkas obstruction $\{A,B,R\}$ to the balancedness of
+$M=b+d_Ae_A+d_Be_B$ vanishes. (This is one obstruction among many; the
+proposition does not by itself establish balancedness of $M$ or feasibility
+of the family.)
+\end{proposition}
+
+\begin{proof}
+\emph{Step 1.} Every $x\in\core(t_B)$ has
+$x(N\setminus A)=x(B)+x(R)\ge b(B)+d_B+b(R)$; since $t_B$ is exact at
+$N\setminus A$ and $t_B(N\setminus A)=b(N\setminus A)$ (here
+$B\subsetneq N\setminus A$ because $R\neq\emptyset$, so the bump at $B$ does
+not change the worth of $N\setminus A$), taking the minimum gives
+$b(N\setminus A)\ge b(B)+d_B+b(R)$.
+\emph{Step 2.} By exactness of $t_A$ at $N\setminus A$ there is
+$x^*\in\core(t_A)$ with $x^*(N\setminus A)=b(N\setminus A)$, hence
+$x^*(A)=b(N)-b(N\setminus A)$; but $x^*(A)\ge b(A)+d_A$, so
+$b(N)\ge b(A)+d_A+b(N\setminus A)$. Chaining the two steps gives the claim.
+\end{proof}
+
+These techniques have a genuine limit, which the following example (due to a
+reviewer of an earlier draft) makes precise: common-core intersection of
+bumped games---the conclusion of Lemma~\ref{lem:vescape}---can fail when
+$m=n=4$ arms are bumped, even though the associated monotonicity family
+remains feasible.
+
+\begin{proposition}[Core intersection can fail at $m=n=4$; feasibility
+survives]\label{prop:cx}
+Let $n=4$, $b(N)=5$ and $b(S)=0$ for all proper $S$. For $k\in N$ let
+$t_k=b+4\,e_{N\setminus\{k\}}$. Then $b$ and each $t_k$ are exact, and
+$\core(t_k)=\{x\ge 0:\ x(N)=5,\ x_k\le 1\}$, so
+$\bigcap_{k}\core(t_k)=\emptyset$ (four inequalities $x_k\le1$ would force
+$x(N)\le4$); equivalently, the all-arm game
+$b+\sum_k 4\,e_{N\setminus\{k\}}$ is unbalanced. Nevertheless the star
+family $\{b,t_1,\dots,t_4\}$ is feasible: take $\theta(b)=(2,1,1,1)$,
+$\theta(t_1)=(1,\tfrac43,\tfrac43,\tfrac43)$, and for $k\neq 1$ the point of
+$\core(t_k)$ obtained from $(2,1,1,1)$ by moving one unit from player $k$ to
+player $1$ (e.g.\ $\theta(t_2)=(3,0,1,1)$), which dominates $\theta(b)$ on
+$N\setminus\{k\}$.
+\end{proposition}
+
+\begin{proof}
+Exactness of $b$ is clear (all mass can be placed on any single player).
+For $t_k$: the core is as displayed. For a proper $S\ni k$, the point with
+$x_k=0$ and mass $5$ on a player outside $S$ attains $x(S)=0=t_k(S)$. For a
+proper $S\not\ni k$ with $S\neq N\setminus\{k\}$, there is a player
+$j\notin S\cup\{k\}$; the point with $x_k=1$, $x_j=4$ attains
+$x(S)=0=t_k(S)$. Finally the minimum of $x(N\setminus\{k\})=5-x_k$ over the
+core is $4=t_k(N\setminus\{k\})$. So $t_k$ is exact. Emptiness of the
+intersection and unbalancedness (the collection $\{N\setminus\{k\}\}_k$ with
+weights $1/3$ gives $\tfrac{16}3>5$) are immediate. Feasibility: each
+displayed $\theta(t_k)$ lies in $\core(t_k)$ and dominates
+$\theta(b)=(2,1,1,1)$ on every coordinate of $N\setminus\{k\}$.
+\end{proof}
+
+Proposition~\ref{prop:cx} corrects a conjecture we advertised in an earlier
+draft (that the all-arm game of exact single bumps is always balanced): the
+common-point method cannot decide the exact-games question, because family
+feasibility is strictly weaker than core intersection. Computationally,
+across more than $10^6$ family-feasibility linear programs built from over
+$7{,}500$ exact four-player bases (two- and three-arm stars and depth-two
+lattices), floating-point screening flagged \emph{no infeasible family of
+exact games}. The pipeline certifies any flagged infeasibility by an exact
+Farkas certificate (validated on the Housman--Clark family and on
+Theorem~\ref{thm:threegame}); the negative outcome itself is
+float-screen-level, and float screening can in principle produce false
+negatives near degeneracy. In light of Proposition~\ref{prop:n4} below, the
+four-player census outcome is in fact implied by the existence of a
+monotonic selection on $\mathcal{E}_4$, so we present it as validation of
+the feasibility pipeline rather than as evidence at the open frontier,
+which begins at $n=5$.
+
+\subsection{Equivalence, and the state of the question}
+
+\begin{proposition}\label{prop:compact}
+Fix $n$ and let $\mathcal{E}_n$ be the class of exact $n$-player games. A
+coalitionally monotonic core selection exists on $\mathcal{E}_n$ if and only
+if every finite bump family within $\mathcal{E}_n$ is feasible.
+\end{proposition}
+
+\begin{proof}
+Necessity is immediate. For sufficiency, consider the product
+$P=\prod_{v\in\mathcal{E}_n}\core(v)$, compact in the product topology by
+Tychonoff's theorem, since each core is a nonempty compact subset of
+$\R^n$. For each bump pair $(u,v)$ in $\mathcal{E}_n$ let
+$C_{u,v}\subseteq P$ be the set of selections satisfying the (finitely many,
+closed) monotonicity inequalities of Definition~\ref{def:cmon} for that
+pair; $C_{u,v}$ is closed and depends on two coordinates only. A finite
+intersection of such sets involves finitely many games; feasibility of the
+corresponding finite family provides a point (extending arbitrarily
+elsewhere). By the finite intersection property the full intersection is
+nonempty, and any of its points is a coalitionally monotonic core selection.
+\end{proof}
+
+For $n\le 4$ the existence question is in fact already settled in the
+affirmative by combining two known results:
+
+Recall that the core of $v$ is \emph{large} \citep{Sharkey82} if for
+every $y\in\R^N$ with $y(S)\ge v(S)$ for all $S$ there is
+$x\in\core(v)$ with $x\le y$, and call a game \emph{PES-stable} if the
+procedural egalitarian solution of \citet{Dietzenbacher2021} selects a
+core allocation of it.
+
+\begin{proposition}[\citealp{Dietzenbacher2021}, with \citealp{Biswas99}]
+\label{prop:n4}
+A coalitionally monotonic core selection exists on the class
+$\mathcal{E}_4$ of exact four-player games (hence also on $\mathcal{E}_n$,
+$n\le 4$).
+\end{proposition}
+
+\begin{proof}
+Every exact game with at most four players has a large core
+\citep{Biswas99}. Large-core games are PES-stable, and on PES-stable games
+the procedural egalitarian solution is a single-valued core selection
+satisfying coalitional monotonicity \citep{Dietzenbacher2021}; the
+combination is observed in \citet{Dietzenbacher2021}. (As a consistency
+check, we verified by exact vertex enumeration that all eight exact
+four-player games directly certified in this paper have large cores.)
+\end{proof}
+
+Proposition~\ref{prop:compact} frames both sides of the general ledger: the
+impossibility on balanced games \emph{is} one infeasible finite family
+(Theorem~\ref{thm:threegame}); the results above are partial progress
+toward feasibility of all finite exact families for general $n$. The
+solutions studied in this paper fail coalitional monotonicity on exact
+games individually---the nucleolus (already on convex games
+\citep{Hokari2000}), the per-capita nucleolus \citep{Arin2013}, the
+core-center \citep{MirasCalvo2021} (and, in our tests, a coordinate-extreme
+variant, in $136$ of $1{,}059$ exact bumps), and the SD-prenucleolus
+(Theorem~\ref{thm:sdexact})---while Proposition~\ref{prop:n4} shows that
+for $n\le4$ a different, egalitarian-type formula succeeds. For $n\ge5$ no
+selection is known to work: whether Dietzenbacher's solution remains a core
+selection on $\mathcal{E}_n$ is precisely the question, raised in
+\citet{Dietzenbacher2021}, of whether every exact game is PES-stable. The
+recent follow-up of \citet{DietzDogan2025} develops egalitarianism under
+monotonicity constraints further but does not settle exact games.
+
+\begin{conjecture}\label{conj:existence}
+For every fixed $n\ge5$, a coalitionally monotonic core selection exists on
+the class $\mathcal{E}_n$ of exact $n$-player games.
+\end{conjecture}
+
+By Proposition~\ref{prop:compact}, Conjecture~\ref{conj:existence} is
+equivalent to feasibility of all finite exact families for the given $n$.
+The pinning-based and partition-aggregated obstruction mechanisms are
+unavailable at any $n$ (Lemma~\ref{lem:singleton}, Theorem~\ref{thm:pin});
+what is missing is a
+feasibility proof for arbitrary finite families---or a refuting family.
+Proposition~\ref{prop:cx} shows that one natural route to refutation, empty
+common intersection of bumped cores, is by itself insufficient. An
+affirmative answer to Dietzenbacher's PES-stability question would settle
+the conjecture for all $n$ at once.
+
+\section{Verification methodology}\label{sec:methods}
+
+All results were produced by a search-then-certify discipline. Screening
+uses floating-point successive linear programs; every reported object is
+then reconstructed in exact rational arithmetic and certified independently
+of the search path: nucleolus and SD points by Kohlberg-type
+balanced-collection criteria evaluated by an exact rational simplex method
+(written for this project after we found that a current computer-algebra
+system's exact linear-programming routine returns infeasible points as
+optima on three-variable instances; our solver is fuzz-tested against a
+standard floating-point solver with exact feasibility assertions), class
+memberships (balancedness, total balancedness, exactness, convexity) by
+exact linear programs, family infeasibility by exact Farkas certificates
+re-verified under constraint reordering, and headline witnesses additionally
+re-derived by an algorithmically independent exact successive-LP solver.
+Negative search outcomes (no violation found, no infeasible family found)
+are reported at the float-screen level: exact certification in those
+campaigns is triggered by candidate positives, and none arose; the sole
+fully exact negative sweep is the exhaustive $2\times2$ assignment grid.
+Known values from the literature (Talmud division, serial rule,
+minimal-overlap rule, a published five-player nucleolus, Hokari-type
+failures at their known minimal sizes, and the Housman--Clark family itself)
+are reproduced as anchors. The discipline caught nine false or overstated
+candidate results before any claim was circulated, including two
+floating-point artifacts near the exactness boundary and the overreaching
+core-intersection conjecture corrected in Proposition~\ref{prop:cx}; we
+accordingly treat direct exact LP oracles as authoritative over derived
+closed forms. The computational search, the verification tooling, and the
+drafting of this paper made substantial use of large-language-model
+assistance; every mathematical claim was verified by the certification
+pipeline described here, and all text was reviewed by the author.
+Computations used Python 3.10 with exact arithmetic via the
+standard \texttt{fractions} module and floating-point screening via
+NumPy~2.2/SciPy~1.15 (HiGHS). A machine-readable supplement
+(\texttt{certificates.json}) contains, for every computational theorem, the
+full game tables, per-coalition exactness witnesses, complete
+satisfaction/excess tables, and strictly positive balancing weights for
+every cumulative level set, together with a one-command verifier
+(\texttt{verify\_paper.py}) that re-checks all of it in exact arithmetic
+using only the Python standard library (it recomputes every satisfaction
+and excess table from scratch, checks that every stored level set equals
+the recomputed one, and validates the supplied balancing weights by pure
+rational arithmetic), and an environment manifest; together these form
+Online Resource~1.
+
+\section{Open problems}\label{sec:open}
+
+\begin{enumerate}[leftmargin=2em]
+\item Prove (or refute) feasibility of every finite bump family of exact
+$n$-player games for $n\ge5$; by Proposition~\ref{prop:compact} this
+settles Conjecture~\ref{conj:existence}. Proposition~\ref{prop:cx} shows
+the common-core-point method cannot decide it. A stronger sufficient route
+is an affirmative answer to Dietzenbacher's question
+\citep{Dietzenbacher2021} whether every exact game is PES-stable.
+\item Recover the unpublished Solymosi--Brugueras--Raghavan proof
+(see Section~\ref{sec:markets}) that the nucleolus is pairwise monotonic on
+assignment games, and prove
+Conjecture~\ref{conj:assign} for the SD-prenucleolus.
+Theorem~\ref{thm:permutation} shows two-sidedness must be used.
+\item Prove Conjecture~\ref{conj:mcst} (Dutta--Kar cost monotonicity of the
+nucleolus on MCST games), known on the fixed-tree subclass \citep{MPR2010}.
+\item Characterize SD-relevance \citep{ArinKatsev2018} within the exact
+games; Theorem~\ref{thm:sdexact} shows exactness is insufficient.
+\item Determine whether the witness of Theorem~\ref{thm:permutation} is
+pre-empted by an example in the introduction of \citet{Miquel2009}.
+\end{enumerate}
+
+\subsection*{Statements and Declarations}
+\small
+\textbf{Funding:} none.
+\textbf{Data and code availability:} a machine-readable certificate
+supplement accompanies this paper as Online Resource~1
+(\texttt{certificates.json}; \texttt{verify\_paper.py};
+\texttt{environment.txt}); the verifier is self-contained and uses only
+the Python standard library.
+\textbf{Use of AI assistance:} see Section~\ref{sec:methods}.
+\textbf{Competing interests:} none.
+\normalsize
+
+\appendix
+
+\section{Certificates}\label{app:certs}
+
+All certificates below are exact rational data; balancing weights are
+strictly positive multipliers $\lambda$ with
+$\sum_S\lambda_S\mathbf{1}_S=\mathbf{1}_N$. This appendix displays the key
+tables; the \emph{complete} certificate package---per-coalition exactness
+witnesses for the eight games claimed exact by direct certification (the
+convex game of Theorem~\ref{thm:sdpm} is exact by convexity), full
+satisfaction and excess tables, and balancing weights for \emph{every}
+cumulative level set of every solution point claimed (including the SD
+points of the permutation games and the two-player subgame of
+Theorem~\ref{thm:sdpm})---is in the machine-readable supplement
+(\texttt{certificates.json}), re-verifiable in exact arithmetic, using only
+the Python standard library, with the single command
+\texttt{python3 verify\_paper.py}.
+
+\subsection*{Theorem~\ref{thm:sdexact}}
+
+Satisfaction levels of $\SD(v)$ (ascending; coalitions at each level):
+\[
+\begin{array}{ll}
+\alpha=15/4:& \{3\},\ \{2,3\},\ \{1,2,4\},\ \{1,3,4\}\\
+\alpha=53/12:& \{1\},\ \{1,3\},\ \{1,2,3\},\ \{2,4\}\\
+\alpha=19/4:& \{2\},\ \{1,2\}\\
+\alpha=61/12:& \{2,3,4\}\\
+\alpha=205/12:& \{4\},\ \{1,4\},\ \{3,4\}
+\end{array}
+\]
+The minimal level set is balanced with weights
+$\lambda_{\{3\}}=\tfrac13$, $\lambda_{\{2,3\}}=\tfrac13$,
+$\lambda_{\{1,2,4\}}=\tfrac23$, $\lambda_{\{1,3,4\}}=\tfrac13$. For
+$\SD(v')$ the levels are
+\[
+\begin{array}{ll}
+\alpha=29/8:& \{2,3\},\ \{1,2,4\},\ \{1,3,4\}\\
+\alpha=33/8:& \{2\},\ \{3\}\\
+\alpha=35/8:& \{1\},\ \{1,2\},\ \{1,3\},\ \{1,2,3\},\ \{2,4\}\\
+\alpha=43/8:& \{2,3,4\}\\
+\alpha=139/8:& \{4\},\ \{1,4\},\ \{3,4\}
+\end{array}
+\]
+with minimal level set balanced by
+$\lambda_{\{2,3\}}=\lambda_{\{1,2,4\}}=\lambda_{\{1,3,4\}}=\tfrac12$.
+Cumulative lower level sets are balanced at every threshold (weights in the
+supplement), certifying both points by the criterion of
+Section~\ref{sec:sd-def}.
+
+\subsection*{Theorem~\ref{thm:sdpk}}
+
+At every sampled point of the segment ($t=-\tfrac12,-\tfrac13,-\tfrac14,
+0,\tfrac14,\tfrac13,\tfrac12$, all in the supplement) the bilateral
+complaints are
+\[
+s_{12}=s_{21}=2,\qquad s_{34}=s_{43}=2,\qquad
+s_{ij}=0\ \text{for all other ordered pairs},
+\]
+and the two half-interval stage orders displayed in the proof of
+Theorem~\ref{thm:sdpk} extend these equalities to the whole segment.
+
+\subsection*{Theorem~\ref{thm:permutation}}
+
+For the base game $K$: the nucleolus
+$(\tfrac12,\tfrac{33}4,\tfrac12,\tfrac74)$ has maximal excess $0$, attained
+exactly by the collection $\{\{1,3\},\{2,4\}\}$, balanced with weights
+$\lambda=1,1$ (a partition). For the bumped game $K'$: the nucleolus
+$(\tfrac23,\tfrac{23}3,\tfrac13,\tfrac73)$ likewise has maximal excess $0$
+attained by the partition $\{\{1,3\},\{2,4\}\}$. Kohlberg's criterion
+requires every cumulative upper excess set to be balanced; the supplement
+lists all eight (resp.\ seven) thresholds with strictly positive weights for
+both games, together with the complete SD certificates for the SD subclaim.
+
+\begin{thebibliography}{99}
+
+\bibitem[Arin(2013)]{Arin2013}
+Arin J (2013) Monotonic core solutions: beyond Young's theorem.
+Int J Game Theory 42:325--337.
+\url{https://doi.org/10.1007/s00182-013-0368-8}
+
+\bibitem[Arin and Feltkamp(2012)]{ArinFeltkamp2012}
+Arin J, Feltkamp V (2012) Coalitional games: monotonicity and core.
+Eur J Oper Res 216:208--213.
+\url{https://doi.org/10.1016/j.ejor.2011.07.025}
+
+\bibitem[Arin and Katsev(2011)]{ArinKatsev2011}
+Arin J, Katsev I (2011) The SD-prenucleolus for TU games.
+IKERLANAK Working Paper IL~56/11, University of the Basque Country
+
+\bibitem[Arin and Katsev(2014)]{ArinKatsev2014}
+Arin J, Katsev I (2014) The SD-prenucleolus for TU games.
+Math Methods Oper Res 80:307--327.
+\url{https://doi.org/10.1007/s00186-014-0482-9}
+
+\bibitem[Arin and Katsev(2016a)]{ArinKatsev2016}
+Arin J, Katsev I (2016a) A monotonic core solution for convex TU games.
+Int J Game Theory 45:1013--1029.
+\url{https://doi.org/10.1007/s00182-015-0500-z}
+
+\bibitem[Arin and Katsev(2016b)]{ArinKatsev2016b}
+Arin J, Katsev I (2016b) The SD-prekernel for TU games.
+IKERLANAK Working Paper IL~96/16, University of the Basque Country
+
+\bibitem[Arin and Katsev(2018)]{ArinKatsev2018}
+Arin J, Katsev I (2018) The SD-prenucleolus for TU-games: coalitional
+monotonicity and core stability. In: Mueller D, Trost R (eds) Game Theory
+in Management Accounting. Springer, Cham, pp 301--321
+
+\bibitem[Biswas et al.(1999)]{Biswas99}
+Biswas AK, Parthasarathy T, Potters JAM, Voorneveld M (1999) Large cores
+and exactness. Games Econ Behav 28:1--12.
+\url{https://doi.org/10.1006/game.1998.0686}
+
+\bibitem[Curiel and Tijs(1986)]{CurielTijs86}
+Curiel I, Tijs S (1986) Assignment games and permutation games.
+Methods Oper Res 54:323--334
+
+\bibitem[Dietzenbacher(2021)]{Dietzenbacher2021}
+Dietzenbacher B (2021) Monotonicity and egalitarianism.
+Games Econ Behav 127:194--205.
+\url{https://doi.org/10.1016/j.geb.2021.03.006}
+
+\bibitem[Dietzenbacher and Do\u{g}an(2025)]{DietzDogan2025}
+Dietzenbacher B, Do\u{g}an E (2025) Population monotonicity and
+egalitarianism. Int J Game Theory 54:42.
+\url{https://doi.org/10.1007/s00182-025-00966-y}
+
+\bibitem[Dutta and Kar(2004)]{DuttaKar2004}
+Dutta B, Kar A (2004) Cost monotonicity, consistency and minimum cost
+spanning tree games. Games Econ Behav 48:223--248.
+\url{https://doi.org/10.1016/j.geb.2003.09.008}
+
+\bibitem[Dutta and Ray(1989)]{DuttaRay89}
+Dutta B, Ray D (1989) A concept of egalitarianism under participation
+constraints. Econometrica 57:615--635.
+\url{https://doi.org/10.2307/1911055}
+
+\bibitem[Hokari(2000)]{Hokari2000}
+Hokari T (2000) The nucleolus is not aggregate-monotonic on the domain of
+convex games. Int J Game Theory 29:133--137.
+\url{https://doi.org/10.1007/s001829900030}
+
+\bibitem[Housman and Clark(1998)]{HousmanClark98}
+Housman D, Clark L (1998) Note: core and monotonic allocation methods.
+Int J Game Theory 27:611--616.
+\url{https://doi.org/10.1007/s001820050093}
+
+\bibitem[I\~narra et al.(2020)]{Inarra2020}
+I\~narra E, Serrano R, Shimomura KI (2020) The nucleolus, the kernel, and
+the bargaining set: an update. Rev \'Econ 71:225--266.
+\url{https://doi.org/10.3917/reco.712.0225}
+
+\bibitem[Kohlberg(1971)]{Kohlberg71}
+Kohlberg E (1971) On the nucleolus of a characteristic function game.
+SIAM J Appl Math 20:62--66.
+\url{https://doi.org/10.1137/0120009}
+
+\bibitem[Maschler et al.(2010)]{MPR2010}
+Maschler M, Potters J, Reijnierse H (2010) The nucleolus of a standard
+tree game revisited: a study of its monotonicity and computational
+properties. Int J Game Theory 39:89--104.
+\url{https://doi.org/10.1007/s00182-009-0176-3}
+
+\bibitem[Miquel(2009)]{Miquel2009}
+Miquel S (2009) A pairwise-monotonic core selection for permutation games.
+Math Methods Oper Res 70:465--475.
+\url{https://doi.org/10.1007/s00186-008-0281-2}
+
+\bibitem[Mir\'as Calvo et al.(2021)]{MirasCalvo2021}
+Mir\'as Calvo MA, Quinteiro Sandomingo C, S\'anchez-Rodr\'iguez E (2021)
+Considerations on the aggregate monotonicity of the nucleolus and the
+core-center. Math Methods Oper Res 93:291--325.
+\url{https://doi.org/10.1007/s00186-020-00733-7}
+
+\bibitem[Peleg and Sudh\"olter(2003)]{PelegSudholter2003}
+Peleg B, Sudh\"olter P (2003) Introduction to the Theory of Cooperative
+Games. Kluwer Academic Publishers, Boston.
+\url{https://doi.org/10.1007/978-1-4615-0308-8}
+
+\bibitem[N\'u\~nez and Rafels(2003)]{NunezRafels2002}
+N\'u\~nez M, Rafels C (2003) The assignment game: the $\tau$-value.
+Int J Game Theory 31:411--422.
+\url{https://doi.org/10.1007/s001820300127}
+
+\bibitem[Sasaki(1995)]{Sasaki95}
+Sasaki H (1995) Consistency and monotonicity in assignment problems.
+Int J Game Theory 24:373--397.
+\url{https://doi.org/10.1007/BF01243039}
+
+\bibitem[Schmeidler(1972)]{Schmeidler72}
+Schmeidler D (1972) Cores of exact games, I.
+J Math Anal Appl 40:214--225.
+\url{https://doi.org/10.1016/0022-247X(72)90045-5}
+
+\bibitem[Sharkey(1982)]{Sharkey82}
+Sharkey WW (1982) Cooperative games with large cores.
+Int J Game Theory 11:175--182.
+\url{https://doi.org/10.1007/BF01755727}
+
+\bibitem[Solymosi et al.(2008)]{SFP2008}
+Solymosi T, Forg\'o F, Pint\'er M (2008) J\'at\'ekelm\'elet [Game theory].
+OTKA project report. \url{https://real.mtak.hu/1330/}
+
+\bibitem[Tan et al.(2025)]{TanCaoZou2025}
+Tan Z, Cao Z, Zou Z (2025) Comparative statics of minimum-cost spanning
+tree games. Games Econ Behav 151:162--182.
+\url{https://doi.org/10.1016/j.geb.2025.03.005}
+
+\bibitem[Tijs et al.(1984)]{TijsEtAl84}
+Tijs SH, Parthasarathy T, Potters JAM, Rajendra Prasad V (1984)
+Permutation games: another class of totally balanced games.
+OR Spektrum 6:119--123.
+\url{https://doi.org/10.1007/BF01721088}
+
+\bibitem[van den Brink et al.(2021)]{vdBNunezRobles2021}
+van den Brink R, N\'u\~nez M, Robles F (2021) Valuation monotonicity,
+fairness and stability in assignment problems.
+J Econ Theory 195:105277.
+\url{https://doi.org/10.1016/j.jet.2021.105277}
+
+\bibitem[Young(1985)]{Young85}
+Young HP (1985) Monotonic solutions of cooperative games.
+Int J Game Theory 14:65--72.
+\url{https://doi.org/10.1007/BF01769885}
+
+\end{thebibliography}
+
+\end{document}

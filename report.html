@@ -1,0 +1,311 @@
+<title>Nucleolus Hunt — Cooperative Game Counterexample Campaign</title>
+<style>
+  :root {
+    --paper: #FBFAF7; --ink: #20242A; --ink-soft: #5A6069; --line: #E3E1DA;
+    --hold: #1F6E5C; --hold-bg: #EAF3EF; --kill: #A3223B; --kill-bg: #F8ECEE;
+    --open: #8A6D1F; --open-bg: #F7F1E1; --card: #FFFFFF; --mono-bg: #F2F1EC;
+  }
+  @media (prefers-color-scheme: dark) { :root {
+    --paper: #16181C; --ink: #E8E6E1; --ink-soft: #9BA1AA; --line: #2E3238;
+    --hold: #5CC1A4; --hold-bg: #12291F; --kill: #E67A8E; --kill-bg: #341219;
+    --open: #D9B85C; --open-bg: #2E2712; --card: #1D2025; --mono-bg: #22252B;
+  }}
+  :root[data-theme="dark"] {
+    --paper: #16181C; --ink: #E8E6E1; --ink-soft: #9BA1AA; --line: #2E3238;
+    --hold: #5CC1A4; --hold-bg: #12291F; --kill: #E67A8E; --kill-bg: #341219;
+    --open: #D9B85C; --open-bg: #2E2712; --card: #1D2025; --mono-bg: #22252B;
+  }
+  :root[data-theme="light"] {
+    --paper: #FBFAF7; --ink: #20242A; --ink-soft: #5A6069; --line: #E3E1DA;
+    --hold: #1F6E5C; --hold-bg: #EAF3EF; --kill: #A3223B; --kill-bg: #F8ECEE;
+    --open: #8A6D1F; --open-bg: #F7F1E1; --card: #FFFFFF; --mono-bg: #F2F1EC;
+  }
+  body { background: var(--paper); color: var(--ink); margin: 0;
+    font: 17px/1.62 Charter, Georgia, 'Times New Roman', serif; }
+  main { max-width: 46rem; margin: 0 auto; padding: 3rem 1.25rem 5rem; }
+  h1, h2, h3 { font-family: system-ui, 'Helvetica Neue', sans-serif; line-height: 1.2; text-wrap: balance; }
+  h1 { font-size: 1.9rem; font-weight: 750; letter-spacing: -0.015em; margin: 0.4rem 0 0.3rem; }
+  h2 { font-size: 1.22rem; font-weight: 700; margin: 2.6rem 0 0.8rem; padding-top: 1.2rem; border-top: 1px solid var(--line); }
+  h3 { font-size: 1rem; font-weight: 650; margin: 1.5rem 0 0.4rem; }
+  p { margin: 0.75rem 0; }
+  .eyebrow { font-family: system-ui, sans-serif; font-size: 0.72rem; font-weight: 600;
+    letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-soft); }
+  .lede { font-size: 1.06rem; color: var(--ink-soft); margin-top: 0.2rem; }
+  code, .mono { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.86em;
+    background: var(--mono-bg); border-radius: 3px; padding: 0.08em 0.32em; }
+  .chip { display: inline-block; font-family: system-ui, sans-serif; font-size: 0.68rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 0.14em 0.6em; vertical-align: 0.12em; }
+  .chip.kill { color: var(--kill); background: var(--kill-bg); }
+  .chip.hold { color: var(--hold); background: var(--hold-bg); }
+  .chip.open { color: var(--open); background: var(--open-bg); }
+  .specimen { background: var(--card); border: 1px solid var(--line); border-radius: 10px;
+    padding: 1.3rem 1.5rem; margin: 1.4rem 0; }
+  .specimen .matrix { display: flex; gap: 2.2rem; flex-wrap: wrap; align-items: center; margin: 0.9rem 0; }
+  .matgrid { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 1rem; line-height: 1.7;
+    background: var(--mono-bg); padding: 0.7rem 1.1rem; border-radius: 6px; white-space: pre;
+    font-variant-numeric: tabular-nums; }
+  .matgrid b { color: var(--kill); font-weight: 700; }
+  .payoffs { font-family: ui-monospace, 'SF Mono', Menlo, monospace; font-size: 0.88rem;
+    font-variant-numeric: tabular-nums; }
+  .payoffs .drop { color: var(--kill); font-weight: 700; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.88rem; font-family: system-ui, sans-serif; }
+  .tablewrap { overflow-x: auto; margin: 1rem 0; }
+  th { text-align: left; font-size: 0.7rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--ink-soft); font-weight: 650; padding: 0.45rem 0.8rem 0.45rem 0; border-bottom: 1.5px solid var(--line); }
+  td { padding: 0.5rem 0.8rem 0.5rem 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  td:first-child { font-weight: 600; }
+  .note { font-size: 0.86rem; color: var(--ink-soft); }
+  ul { padding-left: 1.2rem; } li { margin: 0.35rem 0; }
+</style>
+<main>
+  <div class="eyebrow">Counterexample campaign · TU cooperative games · 2026-07-23</div>
+  <h1>The nucleolus is not pairwise monotonic on permutation games</h1>
+  <p class="lede">A disciplined exact-verifier hunt over nucleolus monotonicity claims — one certified
+  new witness at the exact boundary where permutation games outgrow assignment games, two
+  literature-unstated regularities that survived every attack, and a full rediscovery sweep of the
+  known impossibility landscape.</p>
+
+  <h2>Headline witness <span class="chip kill">certified</span></h2>
+  <div class="specimen">
+    <p style="margin-top:0">Four players; permutation game <span class="mono">v(S) = max weight
+    assignment of S's items within S</span>. Raise the single valuation
+    <span class="mono">K[3][2]: 1 → 2</span> — which raises only
+    <span class="mono">v({2,3})</span> and <span class="mono">v({0,2,3})</span>, both coalitions
+    containing player&nbsp;2 — and player&nbsp;2's nucleolus payoff <em>falls</em>.</p>
+    <div class="matrix">
+      <div class="matgrid">K =  0  7  0  0
+     1  0  0  1
+     1  0  0  0
+     0  9  <b>1</b>  0   ← bump the 1 to 2</div>
+      <div class="payoffs">
+        ν(K)&nbsp;&nbsp;= ( 1/2,&nbsp; 33/4,&nbsp; <span class="drop">1/2</span>,&nbsp; 7/4 )<br>
+        ν(K′)&nbsp;= ( 2/3,&nbsp; 23/3,&nbsp; <span class="drop">1/3</span>,&nbsp; 7/3 )<br><br>
+        <span class="drop">player 2: 1/2 → 1/3</span>&nbsp; (−1/6)
+      </div>
+    </div>
+    <p class="note">v(N) = 11 unchanged; both games totally balanced; both nucleoli lie in the core.
+    Verified three independent ways: float successive-LP → exact rationalization → Kohlberg
+    criterion (exact balanced-collection LPs); full recomputation; and a pure exact-rational
+    successive-LP solver sharing no code path with the screening pipeline. Greedily minimized:
+    integer matrix, total mass 20, seven nonzero entries.</p>
+  </div>
+  <p>The property violated is <strong>pairwise monotonicity</strong> (Núñez–Rafels 2002): if one
+  valuation rises, neither of the two agents it names may lose. The literature proves the
+  buyers-optimal, sellers-optimal, and τ-value rules satisfy it on assignment games; Miquel (MMOR
+  2009) constructs a bespoke pairwise-monotonic core selection for permutation games. Whether the
+  nucleolus satisfies it was, in every source we could read, unstated. On permutation games the
+  answer is now <strong>no, from n&nbsp;=&nbsp;4</strong> — and the completed n&nbsp;=&nbsp;3 sweep
+  shows no violation in 36,000 bump tests, strongly supporting 4 as minimal.</p>
+  <p>The witness is sharp in a second way: the improved pair's <em>joint</em> payoff rises
+  (9/4&nbsp;→&nbsp;8/3) while player&nbsp;2 individually falls — so Sasaki's weak (joint)
+  pairwise monotonicity survives and exactly the strong individual version breaks. The bump's
+  surplus is redistributed <em>within</em> the improving pair, expropriating one member.</p>
+  <p class="note"><strong>Novelty status:</strong> Núñez–Rafels 2002 (τ-value paper) and Sasaki 1995
+  (core, joint version) confirmed silent on the nucleolus. The one unresolved risk is the
+  paywalled introduction of Miquel (2009), whose motivation plausibly involves the nucleolus
+  failing this property — no accessible source shows whether she exhibits an explicit example.
+  Her theorem concerns her merged-τ-value rule and does not contradict this witness either way.</p>
+
+  <h2>Second headline: the SD-prenucleolus monotonicity boundary <span class="chip kill">certified</span></h2>
+  <div class="specimen">
+    <p style="margin-top:0">The SD-prenucleolus (Arin–Katsev) is the only known continuous core
+    selection that is coalitionally monotonic on convex and veto games — the centerpiece of their
+    program to reconcile core stability with monotonicity. With the recursive definition finally
+    extracted from the 2018 chapter (implementation validated on five independent anchors: the
+    chapter's worked example, 2-player = prenucleolus, serial rule on veto games, Minimal Overlap
+    on bankruptcy games — reproduced without ever implementing MO — and the convex-monotonicity
+    self-test), the hunt located its boundary in one round:</p>
+    <p><strong>The SD-prenucleolus is not coalitionally monotonic on exact games, n = 4.</strong>
+    Minimized witness (seven nonzero values, mass 87): <span class="mono">v({1,2})=1,
+    v({0,1,2})=1, v({1,3})=13, v({0,1,3})=15, v({0,2,3})=14, v({1,2,3})=13, v(N)=30</span>,
+    all other coalitions 0; bump <span class="mono">v({0,2,3}): 14 → 15</span>. SD payoffs go
+    <span class="payoffs">(53/12, 19/4, 15/4, 205/12) → (35/8, 33/8, 33/8, 139/8)</span>:
+    player 0 — a member of the improved coalition — <span class="payoffs drop">drops by
+    1/24</span>. Both games are exact (hence totally balanced) by exact-LP verification; both SD
+    points are core allocations, certified by the SD-Kohlberg balancedness criterion and by
+    first-principles lexicographic-optimality probes over 400 exact rational directions (run on
+    both the original and the minimized pair).
+    A companion witness does the same on totally balanced superadditive games.</p>
+    <p class="note">Since convex ⊂ exact ⊂ totally balanced ⊂ balanced and Arin–Katsev prove
+    monotonicity on convex games, the boundary along this chain is <em>convexity itself</em> —
+    their theorem extends not one step. Corollary: exactness does not imply SD-relevance (the
+    domain of their Theorem 14.5), which no explicit example previously showed. Files:
+    <span class="mono">results/WITNESS_sd_exact.json</span>, <span class="mono">src/sd.py</span>.</p>
+  </div>
+
+  <h2>Round three: the SD program's boundary, mapped <span class="chip kill">3 new certified results</span></h2>
+  <div class="specimen">
+    <p style="margin-top:0">With the solver validated, a parallel agent fleet mapped the rest of the
+    Surplus-Distributor program's frontier. Every lane returned a certified result, and they tell
+    one story: <strong>the SD solution's good behavior is a convexity phenomenon, full stop.</strong></p>
+    <p><strong>1. SD is not population monotonic even on convex games — minimal witness, n = 3.</strong>
+    Hub-and-spokes game <span class="mono">v({0,1}) = v({1,2}) = 1, v(N) = 2</span> (convex, exact):
+    alone with hub 1, spoke 2 gets <span class="payoffs">1/2</span>; when spoke 0 joins,
+    <span class="payoffs">SD(N) = (1/3, 4/3, 1/3)</span> and spoke 2
+    <span class="payoffs drop">drops to 1/3</span>. Violations are generic (52% of random convex
+    games at n=4, 70% at n=5). So on their home class the SD solution is coalitionally monotonic
+    (their theorem) but not population monotonic — a sharp separation, contrasting with Dutta–Ray.</p>
+    <p><strong>2. The SD-prekernel is multi-valued on exact games — positive-dimensionally.</strong>
+    Arin–Katsev prove SD-PK = SD (a single point) on convex games. Witness (exact, totally
+    balanced, not convex): <span class="mono">v = (0,5,6,20, 2,10,8,22, 5,12,14,25, 12,17,18,32)</span>
+    — the SD-prekernel contains the entire core segment <span class="mono">SD ± t·(1,−1,−1,1),
+    t ∈ [−1/2, 1/2]</span>, every point exactly equalizing all six bilateral SD-complaints
+    (integer endpoints (9,11,5,7) and (10,10,4,8); perturbed control points correctly fail).
+    Same boundary as monotonicity: convexity itself.</p>
+    <p><strong>3. Strong aggregate monotonicity confirmed strictly</strong> (150/150 games, every
+    player strictly gains when v(N) rises) — the one SD property that does survive beyond convexity,
+    and a sixth validation anchor for the solver. A seventh: the SD point equalized all bilateral
+    complaints in 10/10 gate games (their SD ⊆ SD-PK theorem, reproduced).</p>
+    <p><strong>4. On market games, SD mirrors the nucleolus exactly — including the failure.</strong>
+    On the campaign's own permutation witness (the mass-20 matrix), the SD-prenucleolus drops the
+    same player <em>further</em> than the nucleolus did: <span class="payoffs">1/2 →
+    <span class="drop">1/4</span></span> (nucleolus: 1/2 → 1/3). One matrix now refutes pairwise
+    monotonicity for both canonical core selections simultaneously; the "repair" amplifies this
+    failure rather than fixing it. Meanwhile SD shows zero violations on assignment games (~700
+    trials + exhaustive 2×2 grid) and MCST cost monotonicity (0/400) — the bipartite dichotomy is
+    solution-independent.</p>
+    <p class="note">Independently re-verified in this session's own toolkit (not the agents'
+    scripts): witnesses certified via SD-Kohlberg + exact class checks + discriminating controls.
+    Files: <span class="mono">results/agent_sd_pm_witness.json</span>,
+    <span class="mono">results/agent_sdpk_witness_exact.json</span>,
+    <span class="mono">results/agent_sd_markets_witness_Q1.json</span>.</p>
+  </div>
+
+  <h2>The dichotomy: bipartite structure is load-bearing</h2>
+  <p>The identical hunt on <strong>assignment games</strong> (the bipartite special case) finds
+  <em>nothing</em>: ~2,700 random instances across 3×3, 4×3, 4×4 markets with entries to 40;
+  1,000+ targeted instances at optimal-matching ties where the nucleolus kinks (18,000+ certified-
+  or-screened bumps, zero candidates); hill-climbing on the violation margin (plateaus at exactly
+  0); a float-exhaustive 2×2 sweep — 9,604 bumps, worst margin 0 to machine precision; and a
+  <strong>completed</strong> exhaustive Kohlberg-certified exact 2×2 sweep — all 625 grid matrices
+  (entries 0–4), all 2,500 single-entry bumps, zero violations, zero certification failures. On
+  that grid the 2×2 case is now a finite-checked exact fact, not sampling evidence. <span class="chip open">conjecture</span>&nbsp;
+  <em>The nucleolus of assignment games is pairwise monotonic.</em> The witness above says any proof
+  must use bipartiteness itself, not just total balancedness.</p>
+
+  <h2>Second unstated regularity: MCST cost monotonicity</h2>
+  <p>For minimum-cost spanning tree games, Dutta–Kar (2004) cost monotonicity — raising one edge's
+  cost may not lower an incident player's share — is <em>not</em> known for the nucleolus (their
+  violating rule is Bird's; Shapley satisfies it; the nucleolus is never analyzed). Our hunt:
+  <strong>zero violations</strong> in 500 random 5-player games, systematic +1 bumps
+  (93 shares rose / 99 unchanged / 0 dropped), hill-climbs plateauing at exactly 0, and a completed
+  large-delta campaign in the core-moving regime (Tan–Cao–Zou) — 0 violations in 550 further trials
+  at n&nbsp;=&nbsp;5,&nbsp;6.
+  <span class="chip open">conjecture</span> <em>The nucleolus of MCST games is cost monotonic
+  in the Dutta–Kar pair-incident sense.</em> (Known true on the fixed-tree subclass,
+  Maschler–Potters–Reijnierse 2010; the complete-graph case appears unexamined.)</p>
+
+  <h2>Kill-board <span class="note">(all exact-rational, Kohlberg-certified both sides)</span></h2>
+  <div class="tablewrap"><table>
+    <tr><th>Claim about the nucleolus</th><th>Class</th><th>Result</th><th>Status vs literature</th></tr>
+    <tr><td>Coalitional monotonicity, SD-prenucleolus</td><td>exact games, n=4</td>
+      <td><span class="chip kill">violated</span></td><td><strong>New — resolves the open boundary of the Arin–Katsev program</strong></td></tr>
+    <tr><td>Coalitional monotonicity, SD-prenucleolus</td><td>totally balanced, n=4</td>
+      <td><span class="chip kill">violated</span></td><td><strong>New</strong> (companion witness)</td></tr>
+    <tr><td>Pairwise monotonicity</td><td>permutation, n=4</td>
+      <td><span class="chip kill">violated</span></td><td><strong>New witness</strong> (novelty check on MMOR 2009 pending)</td></tr>
+    <tr><td>Coalitional monotonicity</td><td>balanced superadditive, n=5</td>
+      <td><span class="chip kill">violated</span></td><td>Rediscovery (Young 1985)</td></tr>
+    <tr><td>Aggregate monotonicity</td><td>convex, n=4</td>
+      <td><span class="chip kill">violated</span></td><td>Rediscovery — matches Hokari 2000's minimal size</td></tr>
+    <tr><td>Population monotonicity</td><td>convex, n=5</td>
+      <td><span class="chip kill">violated</span></td><td>Rediscovery (Hokari 2000)</td></tr>
+    <tr><td>Coalitional monotonicity</td><td>veto balanced, n=5</td>
+      <td><span class="chip kill">violated</span></td><td>Rediscovery (Arin–Feltkamp school)</td></tr>
+    <tr><td>Aggregate monotonicity</td><td>veto balanced, n=5</td>
+      <td><span class="chip kill">violated</span></td><td>Rediscovery (Arin–Feltkamp–Montero 2012) — the veto player loses when v(N) grows; the serial rule is the known monotone repair</td></tr>
+    <tr><td>Coalitional monotonicity, per-capita nucleolus</td><td>balanced, n=4</td>
+      <td><span class="chip kill">violated</span></td><td>Known to fail even on convex games</td></tr>
+    <tr><td>Aggregate monotonicity, n=3</td><td>all games</td>
+      <td><span class="chip hold">holds — 0/400</span></td><td>Matches theorem (calibration)</td></tr>
+    <tr><td>Aggregate monotonicity, per-capita nucleolus</td><td>general, n=4–5</td>
+      <td><span class="chip hold">holds — 0/500</span></td><td>Consistent with known positive result (coalitional version: 35 certified violations in the same runs)</td></tr>
+    <tr><td>Pairwise monotonicity</td><td>assignment (bipartite)</td>
+      <td><span class="chip hold">holds — 0/~2,700 + exhaustive 2×2</span></td><td><strong>Unstated — open conjecture</strong></td></tr>
+    <tr><td>Cost monotonicity (Dutta–Kar)</td><td>MCST, n=4–6</td>
+      <td><span class="chip hold">holds — 0/900+</span></td><td><strong>Unstated — open conjecture</strong></td></tr>
+  </table></div>
+
+  <h2>What the literature adjudicated as closed</h2>
+  <ul>
+    <li><strong>Housman–Clark boundary is sharp:</strong> no core selection is coalitionally
+    monotonic for n ≥ 4; possible at n = 3. Core selection + aggregate monotonicity is compatible
+    at every n — not refutable.</li>
+    <li><strong>Convex-game failures are at their known minimum</strong> (Hokari 2000, n = 4), and
+    convexity ⇒ exactness and large core (Sharkey), so every class above convex is dead for these
+    claims.</li>
+    <li><strong>Core-stability chain</strong> (large ⇒ extendable ⇒ exact, converses refuted at
+    n = 5) closed; stable cores characterized by nested balancedness (Grabisch–Sudhölter 2024).</li>
+    <li><strong>Live precedent:</strong> Sprumont's 30-year PMAS question fell in March 2026 to a
+    single explicit quasi-convex game — this field's conjectures do die by witness.</li>
+  </ul>
+
+  <h2>Method</h2>
+  <p>The Rybin/DGG recipe, transplanted: simple search moves inside a disciplined loop — an exact
+  verifier first, no-go records between rounds, and every candidate witness attacked before being
+  believed. Screening runs float successive LPs (scipy/HiGHS); anything interesting is
+  reconstructed in rationals and certified by the <strong>Kohlberg criterion</strong> in exact
+  arithmetic — a certificate independent of the search path. Headline objects additionally get a
+  fully independent exact successive-LP recomputation.</p>
+  <p>One infrastructure find worth flagging: <strong>sympy 1.14's exact simplex
+  (<span class="mono">lpmin</span>/<span class="mono">linprog</span>) returns infeasible points as
+  optima</strong> on LPs as small as three variables (<span class="mono">min x+y+z</span>, pairwise
+  sums ≥ 1 → reports 1 at (0,1,0); truth 3/2). The campaign's verifier is a from-scratch two-phase
+  rational simplex with Bland's rule, fuzzed 400/400 against HiGHS with exact feasibility asserts.</p>
+
+  <h2>The crown jewel: exact games escape Housman–Clark <span class="chip kill">2 new results</span></h2>
+  <p><strong>First, a sharpening of the classic impossibility itself.</strong> The hunt found a
+  <strong>3-game infeasible family on balanced games</strong> — base
+  <span class="mono">v = (0,0,0,0, 0,3,3,1, 0,3,3,1, 3,1,5,6)</span> plus two overlapping-triple
+  bumps ({0,1,2}+3, {1,2,3}+1) — certified infeasible by exact Farkas certificate and by an
+  independent re-formulation in this session. Since 2-game families are always feasible (a bump
+  shrinks the core; any point of the smaller core serves both games), <strong>three games is the
+  provably minimal size of any coalitional-monotonicity impossibility certificate</strong> —
+  Housman–Clark's own 5-game construction was not minimal.</p>
+  <p><strong>Second, the escape theorem.</strong> The V-mechanism that powers the balanced-domain
+  impossibility is <em>provably defeated by exactness</em> (n-independent, hand-proved, machine-
+  verified on explicit instances): if the base and both single-coalition bumps are exact games with
+  overlapping bumped coalitions, the pointwise-max game is balanced and a single core point of it
+  serves all three games — monotonicity holds with equality. Combined with the <strong>pin-invariance theorem</strong> (for every group T, the face bound
+  max<sub>core</sub> x(T) = v(N) − v(N∖T) is invariant along every monotonicity chain at every
+  depth — chains constraining T bump only supersets of T, never N∖T — so no aggregated-pin
+  contradiction of any arity can ever arise on exact games) and a conclusive census —
+  <strong>over 1,000,000 exact families across 7,500 exact bases, zero infeasible LPs, with the
+  relevant slacks touching exactly 0 but never crossing</strong> —
+  the picture is: <em>the family-level obstruction that forbids all monotonic core selections on
+  balanced games is absent from exact games.</em> For disjoint bumped coalitions the pointwise-max
+  was balanced in all 79,954 exact pairs tested (empirical, not proven); a decoupling mechanism
+  explains why even unbalanced maxima need not break feasibility there — illustrated on a
+  near-exact instance (this session's audit: that instance's arms are not themselves exact, so
+  the disjoint case remains empirical). The question now has an exact mathematical form via a
+  <strong>compactness reduction</strong>: a coalitionally monotonic core selection exists on exact
+  games <em>if and only if every finite bump family is feasible</em> (cores are compact; a
+  selection is a point of their Tychonoff product; monotonicity constraints are closed and
+  finitely supported, so the finite intersection property applies). Housman–Clark's impossibility
+  is precisely one infeasible finite family — their five games, or this campaign's minimal three.
+  On the exact-games side, feasibility is proven for all pin-style shapes at all depths, for
+  overlapping-arm V-families, and for the disjoint-pair partition collection (exactness chaining),
+  and holds empirically across 1.1M+ families with slacks touching but never crossing zero. The
+  reduction also explains the campaign's oddest finding: every canonical selection (nucleolus,
+  per-capita, core-center, SD) fails individually on exact games, yet no obstruction exists —
+  because the selection, if it exists, arises from a global simultaneous choice, not a formula.
+  The stated open theorem: finite-family feasibility for arbitrary finite bump-DAGs of exact
+  games, with exactness chaining as the candidate engine. Honest scope: multi-base DAGs,
+  v(N)-bumps, and n ≥ 5 remain unproven.</p>
+
+  <h2>Remaining open threads</h2>
+  <ul>
+    <li><strong>SD-relevance</strong> — witnesses prove exact games can fail SD-relevance; the
+    verbatim definition would let us certify that directly.</li>
+    <li><strong>Miquel (2009) introduction</strong> — the single unresolved novelty risk for the
+    permutation witness; needs institutional access.</li>
+    <li><strong>Proof attempts</strong>: 2×2 assignment pairwise monotonicity from the closed-form
+    nucleolus; MCST via Tan–Cao–Zou core comparative statics; both conjectures are stated
+    precisely enough to hand to a human coauthor.</li>
+  </ul>
+
+  <p class="note">Repository: <span class="mono">~/projects/counterexample-hunt/coopgames/</span> —
+  verifier stack in <span class="mono">src/</span>, certified witnesses in
+  <span class="mono">results/</span>, campaign log in <span class="mono">CAMPAIGN.md</span>.
+  All fractions exact; no claim rests on floating point.</p>
+</main>

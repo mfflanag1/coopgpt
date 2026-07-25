@@ -1,0 +1,187 @@
+STABLE-CORE non-ES HUNT (2nd half of Dietzenbacher 2021 open question) — agent hunt-stable
+==========================================================================================
+
+PART A. Assignment-game route (Solymosi-Raghavan): NO counterexample; strong positive signal.
+-----------------------------------------------------------------------------------------------
+Characterization (confirmed from literature):
+  * assignment game core is vNM-stable  <=>  matrix has DOMINANT diagonal
+        a_ii >= a_ij and a_ii >= a_ji for all i,j  (optimal matching = diagonal)
+  * large core = exact = extendable  <=>  dominant AND DOUBLY-dominant diagonal
+        a_ii + a_jk >= a_ik + a_ji for all i,j,k
+  * large => stable strictly; large => ES (Dietzenbacher). So the ONLY candidates for a
+    stable-core non-ES assignment game are dominant-but-NOT-doubly-dominant matrices
+    (strictly stable, non-large). Filtered to exactly that regime (pure matrix check).
+
+RESULT (src/hunt_stable_final.py): 35,854 strictly-stable non-large assignment games, ALL ES.
+  3x3     (6 players): 7,171 tested -> all ES
+  3x3wide (6 players): 6,553 tested -> all ES
+  3x3hub  (6 players): 9,840 tested -> all ES
+  4x4     (8 players): 5,748 tested -> all ES
+  4x4hub  (8 players): 6,542 tested -> all ES
+  + ~12,000 from earlier broad sweeps; 250 cross-checked with BOTH validated ES
+    implementations (eshunt + es_check_main): zero disagreement, zero non-ES.
+
+Likely THEOREM (explains 100% ES): Llerena-Nunez-Rafels (UB WP 246, 2010) — for
+dominant-diagonal assignment games the Dutta-Ray constrained-egalitarian solution is
+well-defined and equals the unique Lorenz-maximal CORE allocation (lies in the core).
+Dietzenbacher's ES = "egalitarian solution in the core", so stable-core assignment games
+are ES essentially by theorem => the assignment route CANNOT produce a counterexample.
+(Caveat: not verified that Dietzenbacher's procedure literally equals Dutta-Ray here.)
+Scope: SQUARE matrices, where dominant-diagonal <=> stable is unambiguous.
+
+
+PART B. Our exact non-ES witnesses and their n=6 padded versions: cores are NOT vNM-stable.
+-----------------------------------------------------------------------------------------------
+Two exact non-ES n=5 bases:
+  witness_vN4  v(N)=4  claims (1,1,1,1,1)   [results/WITNESS_exact_not_ES.json]
+  base_vN6     v(N)=6  claims (1,1,3,1,1)   [src/es_family.py BASE]
+
+(1) Both DEFINITIVELY NON-LARGE  (src/largeness_exact.py — deterministic full basis
+    enumeration of vertices of U={y:y(S)>=v(S)}, exact certification):
+      vN4 non-large vertex y=(0,1,1,2,1) on basis {1,5,17,19,25}
+      vN6 non-large vertex y=(1,1,3,1,1) on basis {4,12,20,21,22}
+    Confirms non-ES => non-large (contrapositive of large => ES).
+
+(2) Cores NOT vNM-STABLE — certified via explicit undominated imputations outside the core
+    (src/escape_enumerate.py deterministic arrangement-vertex enumeration; src/core_stability.py
+    exact domination LP over all coalitions). Random sampling missed these (thin region);
+    deterministic enumeration found them:
+      vN4: escaping imputation y=(0,1,1,2,0), sum=4=v(N), outside core (blocked by
+           {0,4},{0,1,4},{0,3,4}), UNDOMINATED by every core element via every coalition.
+      vN6: escaping imputation y=(1,1,3,1,0), outside core (blocked by {2,4},{0,2,4},{1,2,4}),
+           UNDOMINATED.
+    Mechanism: two players are shut out (payoff 0); the coalitions that would object cannot be
+    simultaneously satisfied and strictly improved by any single tight core element.
+
+(3) n=6 PADDED versions are also NOT vNM-stable — LIFT LEMMA (proof, needs only the n=5 escape):
+    Let (N,v) have imputation y* undominated by core(v) and outside core(v). Pad by player p:
+    v'(S)=v(S), v'(S∪p)=v(S)+c for all S⊆N (c>=0; c=0 null, c>=1 all-essential). Then
+    y'=(y*,c) is an imputation of v' outside core(v')=core(v)×{c}, undominated by core(v').
+    Proof: (a) core(v')=core(v)×{c} since v'(N')-v'(N'\p)=c and v'({p})=c force x_p=c.
+    (b) y' is an imputation (sum=v(N)+c=v'(N'); y'_i>=v'({i})). (c) A core element is x'=(x,c),
+    x in core(v). Domination via S' needs x'(S')=v'(S') and x'_i>y'_i on S'. If p in S':
+    x'_p=c=y'_p, so x'_p>y'_p is false — no domination. If p not in S' (S' subset N):
+    reduces to x in core(v), x(S')=v(S'), x>y* on S' = domination of y* in (N,v), impossible.
+    Hence y' undominated & outside core => core(v') NOT vNM-stable.  QED.
+    => BOTH null-padded and additive-padded n=6 witnesses have non-stable cores, for every n>=6
+    in the padded family (lift iterates). Computationally confirmed (src/lift_verify.py).
+
+CONCLUSION: The padded exact-non-ES family does NOT yield stable cores — the escaping
+imputation of the n=5 base lifts through every padding. So this family cannot resolve the
+2nd (stable-core) half of Dietzenbacher's question. Combined with Part A, the two cheap
+routes we have (assignment dominant-diagonal; padding our exact witnesses) both fail to
+produce a stable-core non-ES game. The stable-core half remains OPEN; a counterexample, if
+one exists, needs genuinely n>=6 non-assignment structure whose core is a vNM-stable set but
+is not large.
+
+Files: src/hunt_stablecore.py, src/hunt_stable_final.py, src/core_stability.py,
+       src/largeness_exact.py, src/escape_enumerate.py, src/lift_verify.py.
+
+PART C. Big boss / clan games (non-assignment stable-core route). NO counterexample.
+-----------------------------------------------------------------------------------------------
+Big boss game (Muto-Nakayama-Potters-Tijs 1988): boss b; B1 monotone; B2 veto v(S)=0 if
+b not in S; B3 union v(N)-v(S) >= sum_{i not in S} M_i, M_i=v(N)-v(N\{i}). Core = box
+{ x : sum x=v(N), 0<=x_i<=M_i (non-boss) } (MNPT parallelotope). src/bigboss.py.
+
+CORRECTION to the plan premise: big boss cores are NOT unconditionally vNM-stable. Loose
+sources say "the core of a big boss game is a stable set", but that is FALSE in general.
+Rigorous counterexamples (exact, hand-verified):
+  * M=[0,2,0,0,0,6], v(N)=6: imputation y=(1,1,1,1,1,1) is outside the box and UNDOMINATED
+    by the core (core points are (0,t,0,0,0,6-t); only players 1,5 can exceed y_i=1, but
+    x({1,5})=6 > v({1,5})=2 so no domination). Core NOT stable.
+  * M=[3,2,2,1,1], v(N)=12, interior slack theta=1/4 (non-convex big boss): imputation
+    y=(1/2,1/4,27/4,1,0,7/2) is outside the box, UNDOMINATED (the only objecting coalition
+    N\{2} would need x_3>y_3=1=M_3, impossible in the box). Core NOT stable.
+
+What IS true: CONVEX big boss games have stable cores (convex => large => stable) and are ES.
+The union-tight family v(S)=c+sum_{i in S, non-boss} M_i (B3 tight everywhere) is CONVEX,
+hence stable AND ES. Introducing interior slack (theta>0) makes the game NON-convex; that
+slack simultaneously (i) lets egalitarian claims overflow the box => NON-ES, and (ii) creates
+undominated over-box imputations => NON-stable. The two failures track together.
+
+EMPIRICAL: across submodular random big boss games and a fixed-box interior-slack scan
+(src/bigboss_scan.py, src/bigboss_stable2.py reliable escape finder = broad float search +
+exact box-domination certificate), every NON-convex big boss game found is NON-stable, and
+every STABLE one is convex hence ES. NO stable + non-ES big boss game found.
+  Structural lemma (big boss): ES <=> egalitarian claims fit the box (gamma_i<=M_i all i)
+  <=> claims efficient. Non-ES <=> some claim overflows its marginal.
+CONJECTURE (positive companion): stable-core big boss games are egalitarian stable. Mechanism:
+stability forces enough union-tightness (toward convexity) that claims stay within the box.
+This explains why big boss games (classical since 1988) do NOT resolve Dietzenbacher's 2nd
+half — consistent with it being open.
+
+METHODS NOTE (recurring): structured/canonical candidate escapes and random imputation
+sampling BOTH miss real escaping imputations (thin, lower-dimensional regions). Reliable
+detection needs either deterministic arrangement-vertex enumeration (n=5) or broad float
+search with exact certification (n=6 big boss). A canonical-only checker gave FALSE "stable"
+verdicts that broad search + exact certification overturned.
+
+Files added: src/bigboss.py, src/bigboss_wide.py, src/bigboss_stability.py,
+             src/bigboss_stable2.py, src/bigboss_scan.py.
+
+PART D. Toward the GENERAL theorem: stable core => ES (i.e. non-ES => core not vNM-stable).
+-----------------------------------------------------------------------------------------------
+Empirical (all consistent, ZERO counterexamples across every class tried):
+  * assignment dominant-diagonal stable-core: 35,854 all ES
+  * big boss stable-core: all ES (stable ones are convex); slack scan + 400 random
+  * n=6 ARBITRARY random monotone balanced non-ES games: every one has a NON-stable core
+    (batch tests, escapes exact-certified). This is the real test (n>=6, stable<=>large fails).
+
+PROVEN lemmas:
+  LEMMA A (aspiration property of egalitarian claims). For any game, the egalitarian
+    claims gamma satisfy gamma(S) >= v(S) for every coalition S. PROOF: for coalition S let
+    i* be its LAST-fixed member (highest round). At that round every other j in S is already
+    fixed, so chi[S][i*] = v(S) - sum_{j in S\i*} gamma_j, and chi[S][i*] <= maxval[i*] = gamma_{i*}
+    (i* is fixed to its per-round max). Hence v(S) <= gamma(S). (If several members share the
+    last round, the equal-share chi value is <= each of their gammas, same conclusion.)
+    Verified: 493/493 random non-ES n=5 games + both witnesses.
+  LEMMA B (core ceiling). Every core element x has x_i <= M_i := v(N)-v(N\{i}) (from
+    x(N\i) >= v(N\i)). Standard.
+  LEMMA 1 (reduced-player necessity). Let the escape y be gamma with the excess
+    e=gamma(N)-v(N)>0 absorbed by lowering some players (y<=gamma, y(N)=v(N)). Any core
+    element dominating y must do so via a coalition S that CONTAINS a lowered player.
+    PROOF: if S avoids lowered players then y_i=gamma_i on S; domination needs x_i>gamma_i on
+    S, so x(S) > gamma(S) >= v(S) (Lemma A); but x in core, x(S)=v(S) for a dominating tight
+    coalition -- contradiction.
+  CEILING MECHANISM. If y_i = M_i (player at core ceiling) then no core x has x_i>y_i, so any
+    dominating coalition must AVOID i. In the certified escapes, enough players sit at gamma_i=M_i
+    to force the dominating coalition into a small residual set, which core feasibility then blocks.
+
+ESCAPE CONSTRUCTION (reproduces both n=5 witnesses' escapes EXACTLY): take gamma, keep the
+  strong claimants D at full claim, absorb the excess by lowering NON-strong players to a
+  simplex vertex (to 0). vN4 gamma=(1,1,1,1,1)->(1,1,1,1,0); vN6 gamma=(1,1,3,1,1)->(1,1,3,1,0).
+  Batch (n=6): construction alone yields a certified undominated escape on ~95% of non-ES games;
+  the rest need a broader vertex (investigation ongoing) -- the construction is not yet universal,
+  which is the residual gap to the full proof.
+
+STATUS: strong evidence the theorem is TRUE; Lemmas A,B,1 + ceiling mechanism are a real
+skeleton; the open step is proving the RIGHT vertex (choice of lowered players / possibly
+players pushed above claim) always exists and is undominated. Files: src/theorem_test.py,
+src/investigate_fail.py.
+
+PART E. STRIP-SELECTION RULE — settled empirically (single-strip escape construction).
+-----------------------------------------------------------------------------------------------
+Single-strip y^j := gamma with player j lowered by the excess e=gamma(N)-v(N) (y^j_j=gamma_j-e,
+others at claim); efficient, needs gamma_j>=e. Converges with prove-stES's single-strip route.
+
+RULE (from exact per-player tests): strip a CAPPED player j (gamma_j>lambda) with gamma_j >= e and
+gamma_j != M_j (NOT exactly at its core-max ceiling M_j=v(N)-v(N\{j})).
+  - gamma_j < M_j (below ceiling): strip ALWAYS undominated (n=5 early: 57/57 True/False=0).
+  - gamma_j > M_j (above ceiling): strip ALWAYS undominated (n=5 early: 33/33).
+  - gamma_j = M_j (EXACTLY at ceiling): strip may be DOMINATED. Decisive case = witness vN4:
+    gamma=(1,1,1,1,1), M=(1,1,1,2,2), e=1. Strips of players 0,1,2 (gamma=M=1, at ceiling) are all
+    DOMINATED; only player 4 (gamma_4=1<M_4=2, below ceiling) gives the escape (1,1,1,1,0).
+    (Earlier I mis-read all_escapes — it only enumerates arrangement vertices and MISSES non-vertex
+    escapes; direct exact domination is the right test.)
+Existence: every non-ES game sampled has >=1 working single-strip (no_strip=0 so far). Closing the
+earlier "5% gap": theorem_test only stripped NON-strong players greedily-to-0; the fix is to allow
+stripping ANY capped player (incl. strong / above-ceiling), lowered by exactly e. rule_finder does this.
+
+WHY at-ceiling fails (matches prove-stES sec.2 domination reduction): domination of y^p needs a core
+point tight on a p-coalition Q, sitting above gamma off p and in (gamma_p-e, gamma_p-g(Q)) on p. When
+gamma_p=M_p the core-max ceiling coincides with the claim so such a tight point is reachable; when
+gamma_p != M_p there is a gap that blocks it.
+
+STATUS: rule stated + certified on the emerging batch (rule_finder.py, results/rf_n5.out, rf_n6.out).
+This IS the missing selection lemma stated empirically. Remaining: (i) confirm at scale n=5 AND n=6
+(running); (ii) prove existence of a capped j with gamma_j != M_j (with the proof it's undominated).

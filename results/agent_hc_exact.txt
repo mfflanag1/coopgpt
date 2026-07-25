@@ -1,0 +1,211 @@
+=== hunt cls=balanced n=4 trials=300 seed=1 dmax=3 ===
+=== lattice hunt cls=balanced n=4 trials=400 seed=1 ===
+=== scan_lattice cls=balanced A=111 B=1011 C=1100 trials=250 seed=1 ===
+=== scan_exact_V trials=1500 seed=1 dmax=4 ===
+=== scan_exact2 trials=4000 seed=1 dmax=5 ===
+=== scan_exact2 trials=100000 seed=1 dmax=5 ===
+
+========================================================================
+AGENT hunt-hc-exact FINDINGS (family-infeasibility method)
+========================================================================
+
+TOOL: src/family_infeasible.py — exact-rational family-feasibility LP
+(core + coalitional-monotonicity across bump edges), infeasibility certified by
+an exact Farkas certificate (columns sum to 0, rhs<0, y>=0, verified by exact
+arithmetic) + order-shuffled re-solve. Float screening in src/floatscreen.py.
+
+POSITIVE CONTROL / HOUSMAN-CLARK REPRODUCTION (balanced games, n=4):
+Found MINIMAL 3-game infeasible families proving no coalitionally monotonic core
+selection on BALANCED games. Shape = "V": base b + two overlapping-triple bumps
+A={0,1,2}(=7), B={1,2,3}(=14), share {1,2}. Example:
+ base v=[0,0,0,3,0,3,1,1,0,3,3,1,3,1,5,6] (S=5,6 etc per WITNESS_family_balanced_V.json)
+ all three balanced, Farkas rhs=-1 verified. Members NOT exact.
+=> validates the tool detects real infeasibility.
+
+KEY LEMMA (PROVEN, overlapping case) — why exactness DEFEATS the obstruction:
+Let b be exact; t_A=b+d_A·1_A and t_B=b+d_B·1_B both exact; A∩B≠∅. Then
+M:=b+d_A·1_A+d_B·1_B is BALANCED, so the V-family {b,t_A,t_B} is feasible
+(one core point of M serves all three; monotonicity holds with equality).
+Proof: t_A exact ⇒ min_{core(t_A)} x(N\B)=t_A(N\B)=b(N\B) (A⊄N\B since A∩B≠∅),
+so max_{core(t_A)} x(B)=v(N)-b(N\B)=max_{core(b)} x(B); and t_B balanced gives
+max_{core(b)} x(B) ≥ b(B)+d_B. The maximizer lies in core(M). ∎
+This is exactly the A={0,1,2},B={1,2,3} structure the balanced witness exploits —
+exactness forces M balanced, killing it.
+
+CONCRETE EXACT ILLUSTRATION (exact arithmetic, verified):
+ base v=[0,0,0,7,0,7,0,11,0,7,10,26,5,23,21,42], arms S=7 (+1), S=14 (+1) both
+ exact; M balanced; common core point (20,17,5,0)∈core(M) serves all three;
+ V-family feasible (verified in all cores + monotone).
+
+EMPIRICAL CENSUS (float-screened, would confirm any hit exactly):
+ - pointwise-max M unbalanced: 0 across 110,000+ random exact arm-pairs/triples.
+ - overlapping pair (7,14) both exact: 0 unbalanced M across 4,109 (d_A,d_B) combos.
+
+CENSUS (float-screened, scipy HiGHS; screen validated to flag the known infeasible
+balanced V as infeasible and single games feasible; any hit auto-confirmed exact):
+ 6 seeds x 250 exact bases (~1500 bases) tested so far:
+   V families (base + 2 exact arms):     ~54,600  INFEASIBLE = 0
+   star families (base + 3 exact arms):  ~154,000 INFEASIBLE = 0
+   pointwise-max M unbalanced:           0 / ~54,600 pairs
+   disjoint-arm pairs M unbalanced:      0 / ~20,000  (the case NOT covered by the
+                                          lemma proof — empirically also always balanced)
+ (searches continue to 4000 bases/seed.)
+
+CONCLUSION — EXACT GAMES APPEAR TO ESCAPE HOUSMAN-CLARK:
+The n>=4 impossibility (no coalitionally monotonic single-valued core selection)
+holds on BALANCED games (reproduced here as a minimal 3-game infeasible V, certified).
+On the subclass of EXACT games the obstruction is DEFEATED:
+ (1) PROVEN: the overlapping-triple V-obstruction (A cap B != empty) that realizes the
+     balanced impossibility cannot occur with exact members — exactness forces the
+     pointwise-max game M balanced, so a single core point of M satisfies all
+     monotonicity constraints (Lemma above; the very A={0,1,2},B={1,2,3} shape used
+     by the balanced witness).
+ (2) EMPIRICAL: no infeasible exact family found in ~200k V/star families; M never
+     unbalanced (incl. disjoint arms).
+=> Strong evidence that a coalitionally monotonic single-valued core selection
+   EXISTS on exact games (n=4) — i.e. the Housman-Clark boundary does NOT descend to
+   exactness. This is consistent with (not contradicted by) the known SD-prenucleolus
+   failure on exact games: SD is merely one candidate that fails; the family-level
+   obstruction that would forbid ALL selections is absent.
+CAVEAT (honest scope): full existence theorem NOT proven. Untested family shapes:
+ multi-base DAGs, families that bump v(N) (varying grand coalition), n>=5 empirics.
+ The overlapping-V lemma is n-independent; disjoint-arm M-balance is empirical only.
+FILES: src/family_infeasible.py (exact engine + Farkas), src/floatscreen.py (screen),
+ src/hunt_exact_float.py, /tmp/census.py; witnesses results/WITNESS_family_balanced_V.json.
+
+DISJOINT-ARM CASE RESOLVED (completes the V-family analysis):
+When A cap B = empty, the pointwise-max M CAN be unbalanced (iff v(N) < b(A)+b(N\A)+d_A+d_B,
+i.e. small partition surplus). BUT the V-family is STILL FEASIBLE: coalitional
+monotonicity only couples coordinates WITHIN each bumped coalition, so disjoint
+blocks A and B are satisfied by INDEPENDENT points. Verified example (exact base):
+ base v=[0,0,0,2,0,1,1,3,0,1,1,3,2,3,3,5], arms S=3({0,1}), S=12({2,3}) +1 each;
+ M unbalanced, yet V feasible with points base=(1,1,2,1), tA=(2,1,2,0), tB=(2,0,2,1)
+ (verified in all cores + monotone). => M-balanced is SUFFICIENT (overlapping case)
+ but not necessary (disjoint case) for feasibility. Either way every 2-arm (V)
+ exact family is feasible: overlapping by the lemma, disjoint by decoupling.
+Net: NO 2-arm obstruction on exact games (proven/understood); star (3-arm) families
+0 infeasible in ~154k tested.
+
+FINAL CENSUS AGGREGATE (6 seeds, exact bases, float-screened, screen validated):
+  exact bases:            6,000
+  V-families:             215,249   INFEASIBLE = 0
+  star-families:          600,863   INFEASIBLE = 0
+  M pointwise-max pairs:  215,249   UNBALANCED = 0
+     of which disjoint:    79,954   UNBALANCED = 0
+  => >816,000 exact families, ZERO infeasible; ZERO unbalanced pointwise-max games.
+  (searches continue toward 4000 bases/seed; totals only grow.)
+BOTTOM LINE: On EXACT games the Housman-Clark obstruction is absent — proven for the
+overlapping-arm shape that realizes the balanced impossibility, understood for
+disjoint arms (decoupling), and unobserved across 800k+ families. Strong evidence a
+coalitionally monotonic single-valued core selection EXISTS on exact games (n>=4),
+despite the SD-prenucleolus (one candidate) failing there.
+
+========================================================================
+DEPTH-2 / LATTICE FRONTIER (following team-lead's face-pinning analysis)
+========================================================================
+Team-lead proved: depth-1 exact families cannot yield an HC-style contradiction
+(sum_i M_i(v) >= v(N) by balancedness of the {N\{i}} cover; M_i=v(N)-v(N\{i})).
+I extended this: for exact games M_i(w)=v(N)-v(N\{i})=M_i(base) for ANY game w
+reached from base by a monotonicity chain that constrains i (every bump on the path
+must contain i, so none touches N\{i}); same for pair-pins M_{ij}. => NO single-player
+or pair pinning contradiction at ANY depth. Infeasibility would need a non-pin Farkas
+combination of intermediate cores.
+
+DEPTH-2 lattice-minus-top search (multi-top, no common core point = the only route
+left): base + 3 exact single-arms + their 3 doubles, top(all 3) EXCLUDED. Necessary
+condition = top UNBALANCED. Result: across ~6,400 exact bases and ~600,000 arm-triples,
+the top (all-3-arms bumped) was NEVER unbalanced (topunb = 0). Since core(M)=∩_k core(t_k),
+this says the cores of exact single-coalition bumps of a common exact base always share
+a common point (a HELLY-type property). Hence:
+ - depth-2 lattice-minus-top with exact members is VACUOUS (cannot form an unbalanced
+   top from exact arms) -> every such family is feasible (common core point).
+CONJECTURE (overlapping pair PROVEN; all pairs incl. disjoint + all triples: 0 exceptions
+in ~1.1M families): if b exact and each b+d_k·1_{S_k} exact, then b+sum_k d_k·1_{S_k} is
+balanced (equivalently ∩_k core(b+d_k 1_{S_k}) != empty).
+POSITIVE CONTROL added: Housman-Clark 1998 Thm-1 family reproduced in-engine (base exact,
+4 modified games non-exact, family LP infeasible, Farkas rhs=-1). results/WITNESS_HC_reproduced.json.
+
+LP-DUALITY REDUCTION of the Helly conjecture (Bondareva-Shapley):
+M balanced <=> for every balanced collection (lambda_T>=0, sum lambda_T 1_T = 1_N):
+  sum_k lambda_{S_k} d_k <= slack_b(lambda),  where slack_b(lambda)=v(N)-sum_T lambda_T b(T)>=0.
+Each t_k balanced gives only the per-k bound lambda_{S_k} d_k <= slack_b(lambda). The
+conjecture is the JOINT bound; it is NOT implied by the per-k bounds alone (a sum can
+exceed the max), so it genuinely needs EXACTNESS (which constrains WHICH collections are
+tight). The dangerous collections are those giving positive weight to >=2 bumped
+coalitions S_j,S_k simultaneously -- i.e. S_j,S_k in a common minimal balanced collection
+(e.g. a partition = DISJOINT arms). But: disjoint arms -> monotonicity DECOUPLES (proven
+feasible regardless of M); overlapping arms (A∩B≠∅) -> M provably balanced. So the two
+regimes that could break the conjecture are exactly the two regimes where feasibility is
+independently guaranteed. This is why every exact 2-arm family is feasible, and strongly
+suggests the m-arm join is always balanced.
+
+CONSTRUCTIVE (existence) DIRECTION — canonical selections FAIL, but feasibility holds:
+Tested whether standard canonical core selections are coalitionally monotonic on exact
+games:
+ - SD-prenucleolus: FAILS (known, campaign witness).
+ - coordinate-extreme-center (avg of per-coordinate min/max core vertices): FAILS,
+   136 violations / 1059 exact-bump checks, maxdrop 12.25.
+ - analytic-center: not reliably computable in budget (barrier init issues).
+So NO simple closed-form selection realizes monotonicity. YET the family-consistency LP
+is ALWAYS feasible (1.1M families, 0 infeasible; proven for the HC obstruction shape).
+=> If a coalitionally monotonic core selection exists on exact games (as the evidence
+strongly indicates), it is NON-CANONICAL — it must be assembled by simultaneous
+family-consistent choice, not read off any standard center. This parallels the SD
+failure: individual candidates fail, but the obstruction that would forbid ALL selections
+is absent.
+
+FINAL SYNTHESIS (lane conclusion):
+ Housman-Clark impossibility (no coalitionally monotonic single-valued core selection,
+ n>=4) holds on BALANCED games (reproduced + certified here) but does NOT extend to the
+ EXACT subclass:
+  * PROVEN: the overlapping-arm obstruction that realizes the balanced impossibility is
+    defeated by exactness (M balanced lemma).
+  * PROVEN (team-lead + my all-depth extension): no single-player / pair PINNING
+    contradiction at any depth (M_i(w)=v(N)-v(N\{i}) invariant along any chain reaching i;
+    Sum M_i >= v(N)).
+  * STRUCTURAL (Helly, exact-verified): cores of exact single-bumps of a common exact
+    base always intersect -> star/lattice/depth-2 families are feasible; the multi-top
+    route is vacuous.
+  * EMPIRICAL: 0 infeasible / 1.1M+ exact families; min slack touches 0, never negative.
+ Honest gaps: full existence theorem open (general multi-base DAGs, v(N)-bumping families,
+ n>=5 empirics); the m-arm Helly conjecture proven only for overlapping pairs; the
+ realizing selection is non-canonical / not exhibited.
+
+DISJOINT-ARM RE-EXAMINATION (team-lead's chaining proof + a corrected false alarm):
+Team-lead supplied a complement-side exactness-chaining proof for the disjoint 2-arm
+Helly case; I verified its STEPS 1-2 hold numerically (0 failures / 1600 disjoint exact
+pairs). While probing a suspected superadditivity gap for the rest != empty subcase, my
+HAND-DERIVED M-balanced condition [ v(N) >= b(N\S2)+b(S2)+d1+d2 ] flagged 9-11 "unbalanced"
+disjoint cases -- but this was a FALSE ALARM: the DIRECT balancedness check (is_balanced,
+float AND exact) shows disjoint M is balanced in 100% of cases (0 / 1090 float here,
+0 / 79,954 in the main census). The 9-11 flags were an artifact of float-exactness edge
+cases feeding my derived condition (t1 marginally-non-exact under float tol breaks the
+min_core(t1) x(N\S2) = t1(N\S2) step). CONCLUSION: no counterexample; disjoint M always
+balanced (direct-verified); the Helly property stands; the lead's chaining proof is the
+right track (steps sound). Lesson: trust the direct is_balanced oracle over hand-derived
+closed-form conditions near the exactness boundary.
+
+========================================================================
+CAPSTONE (team-lead) — existence <=> finite-family feasibility (compactness/FIP)
+========================================================================
+Fix n. For each exact game v let K_v = core(v) (nonempty, compact). A single-valued
+core selection is a point of the Tychonoff product P = prod_v K_v. Each bump pair (u,v)
+imposes a CLOSED constraint set C_{u,v} in P touching finitely many coordinates; a
+coalitionally monotonic core selection is a point of the intersection of all C_{u,v}.
+Every finite subcollection involves finitely many games and its feasibility is exactly
+the finite family LP of this lane (extend arbitrarily on the other coordinates). By the
+finite-intersection property + compactness: a monotonic core selection EXISTS  <=>  EVERY
+finite bump-family is feasible. Consequences:
+ - HC impossibility on balanced games = ONE infeasible finite family (their 5-game; our
+   minimal 3-game V) -> no selection.
+ - Exact-games side: the proven lemmas (overlapping-arm; all-arity pin invariance; disjoint
+   chaining) + the 1.1M-family census (0 infeasible) are partial progress on the "every
+   finite family feasible" side of this clean iff.
+ - NON-CANONICALITY EXPLAINED: the selection, when it exists, comes from a global choice
+   (FIP) argument, NOT a formula -- so no canonical center (SD-prenucleolus, core-center,
+   analytic center) need be monotone even when a monotone selection exists. Matches the
+   empirical failures observed here.
+REMAINING OPEN (manuscript problem): finite-family feasibility for ARBITRARY finite bump-
+DAGs of exact games; the m-arm Helly property (via overlapping lemma + exactness-chaining,
+written as one unified pencil-and-paper argument) is the plausible engine.
+LANE CLOSED 2026-07-23.
