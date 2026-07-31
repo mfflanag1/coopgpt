@@ -31,7 +31,6 @@ minimal impossibility, an exact-games escape,\\
 and the boundary of surplus-distributor solutions}
 
 \author{Maxwell Flanagan\\[2pt]
-\normalsize [Affiliation, City, Country --- to be completed]\\
 \normalsize Corresponding author: \texttt{maxwell.flanagan@gmail.com}%
 \thanks{A machine-readable certificate supplement with a standalone
 one-command verifier accompanies this paper as Online Resource~1; see
@@ -148,13 +147,17 @@ proper bumps (Theorem~\ref{thm:pin}); overlapping two-arm families always
 admit a common core point (Lemma~\ref{lem:vescape}); yet common-core
 intersection can fail at $m=n=4$ arms (Proposition~\ref{prop:cx}) while the
 associated family remains feasible---so family feasibility, not core
-intersection, is the right invariant. A compactness argument
+intersection, is the right invariant. Exact bump edges contain whole exact
+one-parameter arcs (Lemma~\ref{lem:exact-arcs}), and every minimal infeasible
+family must be a connected acyclic labeled graph with a sparse Helly--Farkas
+witness (Proposition~\ref{prop:minimal-structure}). A compactness argument
 (Proposition~\ref{prop:compact}) shows that for each $n$, existence of a
 coalitionally monotonic core selection on exact games is \emph{equivalent}
 to the feasibility of all finite bump families, which we conjecture for
-$n\ge5$ (Conjecture~\ref{conj:existence}); by \citet{Dietzenbacher2021} it
-would follow for all $n$ if every exact game is PES-stable, a question
-Dietzenbacher raises.
+$n\ge5$ (Conjecture~\ref{conj:existence}). The procedural egalitarian route
+cannot establish this conjecture on all exact games:
+\citet[][Example~5]{Mauri2017} already gives an exact five-player game that
+is not PES-stable.
 
 \item \textbf{Market games (Section~\ref{sec:markets}).}
 The nucleolus is \emph{not} pairwise monotonic on permutation games: raising
@@ -241,6 +244,36 @@ $\{N\setminus T_k\}_k$ is balanced with weights $1/(m-1)$, so balancedness
 of $v$ gives $\sum_k v(N\setminus T_k)\le(m-1)\,v(N)$, which rearranges to
 the claim.
 \end{proof}
+
+\begin{lemma}[exact bump arcs]\label{lem:exact-arcs}
+Let $v$ be exact and let $S$ be nonempty. If $S\subsetneq N$ and
+$v'=v+d e_S$ is exact for some $d>0$, then $v+t e_S$ is exact for every
+$0\leq t\leq d$. If $S=N$, then $v+t e_N$ is exact for every $t\geq0$.
+\end{lemma}
+
+\begin{proof}
+First let $S\subsetneq N$ and write
+$C_t=\core(v)\cap\{x:x(S)\geq v(S)+t\}$. This is the core of
+$v+t e_S$ and contains $\core(v')$. Exactness of $v$ supplies a point of
+its core with $x(S)=v(S)$, while any point of $\core(v')$ has
+$x(S)\geq v(S)+d$. Convexity therefore gives a point of $C_t$ tight at
+$S$. For $T\neq S$, the function
+\[
+ f_T(t)=\min_{x\in C_t}x(T)
+\]
+is nondecreasing, is at least $v(T)$, and equals $v(T)$ at both endpoints
+by exactness of $v$ and $v'$. Hence it is identically $v(T)$.
+
+Now let $S=N$. For each proper $T$, choose
+$x^T\in\core(v)$ with $x^T(T)=v(T)$ and a player $j\notin T$.
+Then $x^T+t e_j$ belongs to the core of $v+t e_N$ and remains tight at
+$T$. Efficiency handles $N$ itself.
+\end{proof}
+
+Thus every bump edge inside the exact class represents a whole exact
+one-parameter arc, not merely a relation between two isolated games. This
+permits local or parametric selection arguments to be integrated along the
+same edges that define the finite-family feasibility problem.
 
 \section{Minimal impossibility on balanced games}\label{sec:minimal}
 
@@ -818,6 +851,49 @@ elsewhere). By the finite intersection property the full intersection is
 nonempty, and any of its points is a coalitionally monotonic core selection.
 \end{proof}
 
+\begin{proposition}[structure of a minimal finite obstruction]
+\label{prop:minimal-structure}
+Suppose a finite bump family on $q$ games is infeasible and is
+inclusion-minimal with respect to its games and bump relations. Label each
+directed bump edge by its bumped coalition. Then:
+\begin{enumerate}[label=(\roman*),leftmargin=2em]
+\item the underlying undirected graph is connected and the directed graph is
+acyclic;
+\item for every edge $u\to w$ labeled $S$, some $i\in S$ has no alternative
+directed path from $u$ to $w$ all of whose edge labels contain $i$;
+\item infeasibility is witnessed by at most $q(n-1)+1$ core or monotonicity
+halfspaces, after the $q$ efficiency equalities are imposed. For rational
+games, the corresponding sparse Farkas certificate may be chosen rational.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+If the undirected graph were disconnected, feasible selections for its
+components could be combined, contrary to minimal infeasibility. Along every
+directed edge exactly one coalition worth strictly increases, so the sum of
+all coalition worths is a strictly increasing potential; directed cycles are
+impossible.
+
+For (ii), suppose instead that for every $i\in S$ there were such an
+alternative path. Transitivity of the monotonicity inequalities along that
+path would imply $\theta_i(u)\leq\theta_i(w)$. Thus every inequality attached
+to the edge $u\to w$ would follow from the remaining edges, contradicting
+minimality.
+
+Finally restrict the $qn$ allocation variables to the product of the $q$
+efficiency hyperplanes, an affine space of dimension $q(n-1)$. Family
+feasibility is the intersection there of finitely many core and monotonicity
+halfspaces. Helly's theorem gives an empty subintersection of at most
+$q(n-1)+1$ halfspaces. With rational coefficients, the usual rational form
+of Farkas' lemma supplies rational multipliers on such a subfamily.
+\end{proof}
+
+Proposition~\ref{prop:minimal-structure} turns the search for a refuting exact
+family into a sparse labeled-DAG problem. In particular, disconnected stars,
+directed cycles, transitively redundant bump labels, and certificates whose
+support exceeds the Helly bound need not be searched when mining minimal
+obstructions.
+
 For $n\le 4$ the existence question is in fact already settled in the
 affirmative by combining two known results:
 
@@ -855,11 +931,13 @@ core-center \citep{MirasCalvo2021} (and, in our tests, a coordinate-extreme
 variant, in $136$ of $1{,}059$ exact bumps), and the SD-prenucleolus
 (Theorem~\ref{thm:sdexact})---while Proposition~\ref{prop:n4} shows that
 for $n\le4$ a different, egalitarian-type formula succeeds. For $n\ge5$ no
-selection is known to work: whether Dietzenbacher's solution remains a core
-selection on $\mathcal{E}_n$ is precisely the question, raised in
-\citet{Dietzenbacher2021}, of whether every exact game is PES-stable. The
-recent follow-up of \citet{DietzDogan2025} develops egalitarianism under
-monotonicity constraints further but does not settle exact games.
+selection is known to work. Dietzenbacher's particular procedural
+egalitarian solution cannot supply one on all exact games:
+\citet[][Example~5]{Mauri2017} applies the same maximum-average procedure to
+an exact five-player game, obtains the zero vector, and observes that it lies
+outside the core. The recent follow-up of \citet{DietzDogan2025} develops
+egalitarianism under monotonicity constraints further but does not settle the
+existence of a different selection on exact games.
 
 \begin{conjecture}\label{conj:existence}
 For every fixed $n\ge5$, a coalitionally monotonic core selection exists on
@@ -874,8 +952,8 @@ what is missing is a
 feasibility proof for arbitrary finite families---or a refuting family.
 Proposition~\ref{prop:cx} shows that one natural route to refutation, empty
 common intersection of bumped cores, is by itself insufficient. An
-affirmative answer to Dietzenbacher's PES-stability question would settle
-the conjecture for all $n$ at once.
+argument for arbitrary finite families---or a new finite obstruction---is
+therefore still required.
 
 \section{Verification methodology}\label{sec:methods}
 
@@ -928,9 +1006,8 @@ Online Resource~1.
 \item Prove (or refute) feasibility of every finite bump family of exact
 $n$-player games for $n\ge5$; by Proposition~\ref{prop:compact} this
 settles Conjecture~\ref{conj:existence}. Proposition~\ref{prop:cx} shows
-the common-core-point method cannot decide it. A stronger sufficient route
-is an affirmative answer to Dietzenbacher's question
-\citep{Dietzenbacher2021} whether every exact game is PES-stable.
+the common-core-point method cannot decide it, and the procedural egalitarian
+route is closed by the exact counterexample of \citet[][Example~5]{Mauri2017}.
 \item Recover the unpublished Solymosi--Brugueras--Raghavan proof
 (see Section~\ref{sec:markets}) that the nucleolus is pairwise monotonic on
 assignment games, and prove
@@ -1062,7 +1139,8 @@ IKERLANAK Working Paper IL~96/16, University of the Basque Country
 \bibitem[Arin and Katsev(2018)]{ArinKatsev2018}
 Arin J, Katsev I (2018) The SD-prenucleolus for TU-games: coalitional
 monotonicity and core stability. In: Mueller D, Trost R (eds) Game Theory
-in Management Accounting. Springer, Cham, pp 301--321
+in Management Accounting. Springer, Cham, pp 301--321.
+\url{https://doi.org/10.1007/978-3-319-61603-2_14}
 
 \bibitem[Biswas et al.(1999)]{Biswas99}
 Biswas AK, Parthasarathy T, Potters JAM, Voorneveld M (1999) Large cores
@@ -1118,6 +1196,11 @@ Maschler M, Potters J, Reijnierse H (2010) The nucleolus of a standard
 tree game revisited: a study of its monotonicity and computational
 properties. Int J Game Theory 39:89--104.
 \url{https://doi.org/10.1007/s00182-009-0176-3}
+
+\bibitem[Mauri Masdeu(2017)]{Mauri2017}
+Mauri Masdeu L (2017) Essays on egalitarianism-based solution concepts for
+cooperative TU-games. Doctoral dissertation, Universitat Rovira i Virgili.
+\url{http://hdl.handle.net/10803/460900}
 
 \bibitem[Miquel(2009)]{Miquel2009}
 Miquel S (2009) A pairwise-monotonic core selection for permutation games.

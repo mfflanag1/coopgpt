@@ -26,7 +26,6 @@ pdfauthor={Maxwell Flanagan}]{hyperref}
 a sharp six-player counterexample}
 
 \author{Maxwell Flanagan\\[2pt]
-\normalsize [Affiliation, City, Country --- to be completed]\\
 \normalsize Corresponding author: \texttt{maxwell.flanagan@gmail.com}%
 \thanks{Online Resource 1 contains machine-readable witness data and
 standalone exact-arithmetic verifiers.}}
@@ -50,7 +49,10 @@ of two tight triples eliminates either sign. The player bound is sharp,
 because core stability and core largeness coincide for at most five players,
 and large-core games are egalitarian stable. The construction also shows that
 egalitarian stability is not invariant under player-specific additive
-transformations. The exact-game half of Dietzenbacher's question had already
+transformations. In fact, a one-parameter additive ray is egalitarian stable
+only at its unperturbed endpoint, with three explicit affine claim regimes.
+We also extend the segment arrangement check to a finite certificate for any
+polyhedral core via parametric linear-program duality. The exact-game half of Dietzenbacher's question had already
 been exhibited by \citet{Mauri2017}.
 \end{abstract}
 
@@ -111,12 +113,13 @@ possible number of players. The example also shows that the inclusion of
 large-core games in stable-core games is strict even after intersecting with
 the class of exact, monotone, superadditive games.
 
-Core stability has a general finite characterization through nested
-balancedness \citep{GrabischSudholter2024}. Our main proof does not require
-that machinery. For reproducibility, however, Appendix~\ref{app:arrangement}
-gives a specialized exact arrangement test for segment cores. A standalone
-verifier checks all $20{,}349$ candidate bases in rational arithmetic and
-independently confirms the hand proof.
+Core stability has general finite characterizations and algorithms through
+nested and minimal balanced collections
+\citep{GrabischSudholter2024,LaplaceMermoud2023}. Our main proof does not
+require that machinery. For reproducibility, however,
+Appendix~\ref{app:arrangement} gives a specialized exact arrangement test for
+segment cores. A standalone verifier checks all $20{,}349$ candidate bases in
+rational arithmetic and independently confirms the hand proof.
 
 \input{sections_theory}
 
@@ -124,12 +127,13 @@ independently confirms the hand proof.
 
 The main result is proved analytically in
 Theorem~\ref{thm:main}; computation is not part of its logical basis. Online
-Resource~1 supplies two independent standard-library Python verifiers and
+Resource~1 supplies three independent standard-library Python verifiers and
 coalition data in exact rational form.
 \texttt{verify\_paper2.py} reconstructs each game, recomputes the terminal
 egalitarian claims and admissible collection, checks the two-round trace of
 the main example, and verifies the generator representation and tight
-affine-line system.
+affine-line system, the stated class properties, and the exact transformation
+to the alternate regression normalization.
 \texttt{verify\_stability.py} implements the optional certificate of
 Appendix~\ref{app:arrangement}. For the reported game and an equivalent
 alternate normalization retained as a regression check, it constructs the
@@ -140,6 +144,9 @@ deterministic counts are $230$ distinct intersections, $104$ imputations,
 $2$ core vertices, and $102$ exactly dominated outside-core vertices in
 each normalization. No floating-point classification, external solver, or
 unpreserved checkpoint is used.
+\texttt{verify\_additive\_ray.py} symbolically checks every affine
+maximization inequality and breakpoint in Proposition~\ref{prop:additive-ray},
+again using exact fractions only.
 
 The perturbation was found computationally. The prior-art identification,
 final proofs, coalition data, and verification scripts were then checked
@@ -192,6 +199,12 @@ core. Games Econ Behav 76:160--180.
 Grabisch M, Sudh\"olter P (2024) Characterization of TU games with stable
 cores by nested balancedness. Math Program 203:801--826.
 \url{https://doi.org/10.1007/s10107-021-01716-0}
+
+\bibitem[Laplace Mermoud et al.(2023)]{LaplaceMermoud2023}
+Laplace Mermoud D, Grabisch M, Sudh\"olter P (2023) Minimal balanced
+collections and their application to core stability and other topics of game
+theory. Discrete Appl Math 341:60--81.
+\url{https://doi.org/10.1016/j.dam.2023.07.025}
 
 \bibitem[Mauri Masdeu(2017)]{Mauri2017}
 Mauri Masdeu L (2017) Essays on egalitarianism-based solution concepts for

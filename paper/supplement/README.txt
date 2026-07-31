@@ -5,7 +5,7 @@ Article:  Coalitional monotonicity and the core: minimal impossibility, an
           exact-games escape, and the boundary of surplus-distributor
           solutions
 Journal:  International Journal of Game Theory (submitted)
-Author:   Maxwell Flanagan [Affiliation, City, Country - to be completed]
+Author:   Maxwell Flanagan
 Contact:  maxwell.flanagan@gmail.com
 
 Caption:  Machine-readable exact-rational certificates for all computational

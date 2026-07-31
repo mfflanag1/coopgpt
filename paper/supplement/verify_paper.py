@@ -139,6 +139,7 @@ def verify_levels(entry_list, values, n, kind, label):
 
 def verify_sd(v, cert, n, label):
     x = pt(cert["point"])
+    check(f"{label}: stated point lies in the core", in_core(v, x, n))
     Fx = sd_satisfactions(v, x, n)
     check(f"{label}: SD satisfaction table recomputed from scratch",
           all(F(cert["satisfactions"][coname(S, n)]) == val for S, val in Fx.items())
@@ -315,7 +316,7 @@ for k in range(4):
     Msum += b[S] + 4          # all-arm game's value at N\{k}
 check("  empty intersection: sum of certified face caps " + str(sum(caps)) +
       " < b(N) = " + str(b[15]), sum(caps) < b[15])
-check("  all-arm game unbalanced: sum_k M(N\{k}) = " + str(Msum) +
+check(r"  all-arm game unbalanced: sum_k M(N\{k}) = " + str(Msum) +
       " > 3 M(N) = " + str(3 * b[15]), Msum > 3 * b[15])
 
 print()

@@ -66,17 +66,22 @@ If $\widehat\gamma(N)>v(N)$, then $v$ is not egalitarian stable.
 \end{lemma}
 
 \begin{proof}
-At the terminal round every player is fixed, so
-$\chi_i(N)=\widehat\gamma_i$ for all $i$. Membership of $N$ in the terminal
-admissible collection requires
-$\sum_i\chi_i(N)=v(N)$, which fails when
+Suppose instead that $N$ belongs to the terminal admissible collection. Every
+player fixed before that round has $\chi_i(N)=\widehat\gamma_i$, while every
+player newly fixed in that round receives the value $\chi_i(N)$ because that
+player belongs to $N$. Hence $\chi_i(N)=\widehat\gamma_i$ for every $i$ under
+this supposition. Admissibility of $N$ also requires
+$\sum_i\chi_i(N)=v(N)$, and therefore $\widehat\gamma(N)=v(N)$, contrary to
 $\widehat\gamma(N)>v(N)$.
 \end{proof}
 
 \subsection{A lower-envelope generator}
 
 Both the prior-work observation and the new witness use the following
-standard finite form of the lower-envelope description of exact games.
+standard finite form of the lower-envelope description of exact games. It is
+also the elementary finite version of the min-of-additive representation used
+in the totally balanced and stable-core literature; see, for example,
+\citet{Shellshear2009}.
 
 \begin{lemma}[finite lower envelopes]\label{lem:generator}
 Let $Q\subset\R^N$ be a nonempty finite set whose vectors have common sum
@@ -281,6 +286,65 @@ admits the grand coalition. Thus $w$ is egalitarian stable, with claims
 \]
 The additively transformed game $v=w+c$ is not egalitarian stable by
 Equation~\eqref{eq:claims}.
+\end{proof}
+
+The reported vector is one point in a continuous family.  The next result
+classifies the simplest ray through it and shows that the failure is not an
+isolated tie phenomenon.
+
+\begin{proposition}[an additive phase transition]\label{prop:additive-ray}
+For $t\geq0$, put
+\[
+ c(t)=(t,0,0,0,t,0),\qquad v_t=w+c(t).
+\]
+Every $v_t$ is monotone, superadditive, exact, and has a stable core.  Its
+terminal egalitarian claims are
+\[
+\widehat\gamma(t)=
+\begin{cases}
+ (\frac12+\frac34t,\frac12+\frac14t,
+  \frac12+\frac34t,\frac12+\frac14t,1+\frac12t,1+\frac12t),
+   &0\leq t\leq\frac23,\\[2pt]
+ (\frac32t,1-\frac12t,1,1-\frac12t,
+  1+\frac12t,1+\frac12t),
+   &\frac23\leq t\leq1,\\[2pt]
+ (t+\frac12,\frac12,1,\frac12,t+\frac12,\frac32),
+   &1\leq t.
+\end{cases}
+\]
+The adjacent formulas agree at the two breakpoints.  Consequently, $v_t$ is
+egalitarian stable if and only if $t=0$.
+\end{proposition}
+
+\begin{proof}
+The preservation claims follow from Lemma~\ref{lem:additive}; monotonicity is
+also preserved here because the two nonzero additive coordinates are
+nonnegative, while superadditivity is invariant under every additive
+transformation.
+
+For the procedural calculation, substitute $v_t(S)=w(S)+c(t)(S)$ into the
+equal-share maximizations.  On the three open parameter intervals, the newly
+fixed player strata are, respectively,
+\[
+ 56\mid13\mid24,\qquad
+ 56\mid1\mid234,\qquad
+ 15\mid36\mid24.
+\]
+Induction over these strata gives the three displayed affine claim vectors.
+At $t=2/3$ and $t=1$ additional maximizing ties occur, but direct substitution
+gives the common adjacent formula.  At $t=0$ the grand coalition is admissible.
+Finally, since $v_t(N)=4+2t$, the excess of the claim sum over the grand worth is
+\[
+ \widehat\gamma(t)(N)-v_t(N)=
+ \begin{cases}
+ t,&0\leq t\leq\frac23,\\
+ 1-\frac12t,&\frac23\leq t\leq1,\\
+ \frac12,&1\leq t.
+ \end{cases}
+\]
+It is zero only at $t=0$.  The online resource's
+\texttt{verify\_additive\_ray.py} checks the affine maximization inequalities
+over all three intervals in exact rational arithmetic.
 \end{proof}
 
 
@@ -505,6 +569,65 @@ $n-1$ independent hyperplanes from ${\cal H}$, together with efficiency,
 determine the point, so it is an arrangement vertex. The converse is
 immediate.
 \end{proof}
+
+The finiteness mechanism is not peculiar to a segment.  What is special in
+the one-dimensional case is that Lemma~\ref{lem:domformula} writes all of the
+needed hyperplanes down without solving auxiliary linear programs.
+
+\begin{proposition}[finite polyhedral-core certificate]
+\label{prop:polyhedral-arrangement}
+Let $C=\core(v)$ be any nonempty polytope.  For each proper nonempty
+coalition $S$, put
+\[
+ F_S=\{x\in C:x(S)=v(S)\}
+\]
+and, when $F_S\ne\emptyset$, define on the efficiency space
+\[
+ \theta_S(y)=
+ \max\{q:x\in F_S,\ x_i-y_i\geq q\text{ for every }i\in S\}.
+\]
+Then there is a finite family ${\cal L}_S$ of affine functions such that
+\[
+ \theta_S(y)=\min_{\ell\in{\cal L}_S}\ell(y).
+\]
+Let ${\cal H}_C$ contain the individual-rationality boundary hyperplanes and
+all hyperplanes $\ell(y)=0$ for $\ell\in{\cal L}_S$ and all $S$ with
+$F_S\ne\emptyset$.  The core is stable if and only if every vertex of the
+${\cal H}_C$-arrangement that lies in $I\setminus C$ is dominated by a core
+point.
+\end{proposition}
+
+\begin{proof}
+The hypograph of $\theta_S$ is the projection onto $(y,q)$ of the polyhedron
+\[
+ \{(y,q,x):x\in F_S,\ q\leq x_i-y_i\ (i\in S)\}.
+\]
+It is therefore a polyhedron.  Thus $\theta_S$ is a concave polyhedral
+function, and every such function is the minimum of finitely many affine
+functions.  Equivalently, ${\cal L}_S$ can be read from the extreme optimal
+solutions of the dual of the displayed max--min linear program.
+
+A point $y$ is dominated through $S$ exactly when $\theta_S(y)>0$.
+Consequently,
+\[
+ \{y:\theta_S(y)\leq0\}
+   =\bigcup_{\ell\in{\cal L}_S}\{y:\ell(y)\leq0\}.
+\]
+Intersecting these finite unions over the coalitions and with $I$ expresses
+the undominated set as a finite union of compact polytopes whose facet
+hyperplanes belong to ${\cal H}_C$.  Since $C$ is convex and contained in the
+undominated set, the same vertex argument used in
+Proposition~\ref{prop:arrangement} shows that an undominated point outside
+$C$ exists if and only if an arrangement vertex with that property exists.
+\end{proof}
+
+Proposition~\ref{prop:polyhedral-arrangement} gives a complete exact test for
+every fixed-dimensional polyhedral core: compute the exposed faces $F_S$,
+enumerate the relevant dual affine pieces, and test the resulting arrangement
+vertices.  Its cost can grow rapidly with the number of faces and dual pieces.
+For a segment, Lemma~\ref{lem:domformula} collapses those pieces to endpoint
+coordinate and pairwise support forms, recovering the much smaller family in
+Proposition~\ref{prop:arrangement}.
 
 For the perturbed game, all six entries of $d$ are nonzero, with three
 positive and three negative. The individual-rationality floor for each player

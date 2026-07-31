@@ -23,6 +23,73 @@ from tugame import Game, exact_lp_min
 from exactlp import exact_linprog
 
 
+def obstruction_shape_diagnostics(num_games, edges):
+    """Graph-theoretic necessary conditions for an inclusion-minimal obstruction.
+
+    Returns connectivity, acyclicity, and edges whose entire labeled
+    monotonicity system is implied by alternative directed paths.  An edge
+    (u,w,S) is redundant when, for every i in S, there is an alternative
+    u-to-w path all of whose labels contain i.
+    """
+    undirected = [set() for _ in range(num_games)]
+    outgoing = [[] for _ in range(num_games)]
+    for edge_index, (u, w, S) in enumerate(edges):
+        undirected[u].add(w)
+        undirected[w].add(u)
+        outgoing[u].append((w, S, edge_index))
+
+    seen = set()
+    stack = [0] if num_games else []
+    while stack:
+        u = stack.pop()
+        if u in seen:
+            continue
+        seen.add(u)
+        stack.extend(undirected[u] - seen)
+    connected = len(seen) == num_games
+
+    color = [0] * num_games
+
+    def visit(u):
+        color[u] = 1
+        for w, _S, _idx in outgoing[u]:
+            if color[w] == 1:
+                return False
+            if color[w] == 0 and not visit(w):
+                return False
+        color[u] = 2
+        return True
+
+    acyclic = all(color[u] != 0 or visit(u) for u in range(num_games))
+
+    def labeled_path(start, target, player, excluded):
+        reachable = {start}
+        stack = [start]
+        while stack:
+            u = stack.pop()
+            for w, S, edge_index in outgoing[u]:
+                if edge_index == excluded or not (S >> player & 1):
+                    continue
+                if w == target:
+                    return True
+                if w not in reachable:
+                    reachable.add(w)
+                    stack.append(w)
+        return False
+
+    redundant = []
+    for edge_index, (u, w, S) in enumerate(edges):
+        players = [i for i in range(S.bit_length()) if S >> i & 1]
+        if players and all(labeled_path(u, w, i, edge_index) for i in players):
+            redundant.append(edge_index)
+    return {
+        "connected": connected,
+        "acyclic": acyclic,
+        "transitively_redundant_edges": redundant,
+        "minimal_obstruction_shape": connected and acyclic and not redundant,
+    }
+
+
 def build_constraints(games, edges):
     """Return (nvars, A_ub, b_ub, A_eq, b_eq, rowmeta) for the family LP.
 

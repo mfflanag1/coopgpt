@@ -240,8 +240,12 @@ for block in ["stable_witness_1", "stable_witness_2"]:
               base_es and [base_claims[i] for i in range(n)] ==
               [F("1/2")] * 4 + [F(1), F(1)])
     ft = [parse_set(s) for s in t["fully_tight_coalitions"]]
+    actual_ft = {
+        S for S in range(1, N)
+        if xS(A, S, n) == v[S] == xS(B, S, n)
+    }
     check("  12 fully-tight coalitions (tight at A and B)",
-          len(ft) == 12 and all(xS(A, S, n) == v[S] == xS(B, S, n) for S in ft))
+          len(ft) == len(set(ft)) == 12 and set(ft) == actual_ft)
     # Segment core: the tight equalities force an affine line, then all core
     # inequalities restrict its exact parameter interval to [0,1].
     rows = [[F(1)] * n] + [[F(1) if S >> i & 1 else F(0) for i in range(n)]
@@ -275,8 +279,31 @@ for block in ["stable_witness_1", "stable_witness_2"]:
     check("  segment core: rank-5 line and exact parameter interval [0,1]",
           rank == 5 and A != B and interval_ok)
     check("  is_monotone = " + str(t["is_monotone"]), is_monotone(v, n) == t["is_monotone"])
+    check("  is_superadditive = " + str(t["is_superadditive"]),
+          is_superadditive(v, n) == t["is_superadditive"])
     print("  note  core stability has a hand proof in the article; the independent")
     print("        exact arrangement check is re-run by verify_stability.py.")
+
+# The alternate regression witness is a player permutation followed by an
+# additive transformation of the reported witness. Check both generators and
+# the complete coalition table, so "equivalent normalization" is certified
+# rather than merely asserted.
+t1, t2 = D["stable_witness_1"], D["stable_witness_2"]
+eq = t2["equivalence_to_stable_witness_1"]
+order = [i - 1 for i in eq["old_player_order"]]
+shift = [F(u) for u in eq["additive_shift"]]
+pairs1 = [[F(u) for u in t1["generator_points"][key]] for key in ("A", "B")]
+pairs2 = [[F(u) for u in t2["generator_points"][key]] for key in ("A", "B")]
+mapped = [[point[i] + shift[j] for j, i in enumerate(order)] for point in pairs1]
+if eq["endpoint_swap"]:
+    mapped.reverse()
+v1, v2 = parse_game(t1["game_v"], n), parse_game(t2["game_v"], n)
+table_ok = True
+for S in range(1, 1 << n):
+    old_S = sum(1 << order[j] for j in range(n) if S >> j & 1)
+    table_ok &= v2[S] == v1[old_S] + xS(shift, S, n)
+check("alternate normalization: stated permutation + additive shift maps generators and game",
+      sorted(order) == list(range(n)) and mapped == pairs2 and table_ok)
 
 print()
 if FAIL:

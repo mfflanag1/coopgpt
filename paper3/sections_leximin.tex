@@ -28,7 +28,115 @@ the core; on convex games it is the constrained egalitarian solution of
 We ask whether $\phi$ is \emph{coalitionally monotonic}: if $v'=v+d\,\mathbf 1_S$
 for a single coalition $S$ and $d>0$, is $\phi_i(v')\ge\phi_i(v)$ for every
 $i\in S$? A positive answer on exact games would exhibit an explicit coalitionally
-monotonic core selection on that class.
+monotonic core selection on that class. The reduction in
+Section~\ref{sec:lx-reduction} addresses only proper nonsingleton coalitions.
+Singleton bumps change the floors defining $\phi$, and a grand-coalition bump
+changes the efficiency hyperplane.  The singleton case is resolved next; the
+grand-coalition case requires a separate resource-monotonicity argument and
+remains open in this fragment.
+
+
+\section{Singleton bumps are monotone}\label{sec:lx-singleton}
+
+We first isolate an elementary property of the leximin order.  Write
+$a\succ_{\rm lx}b$ when the ascending rearrangement of $a$ is
+lexicographically larger than that of $b$.
+
+\begin{lemma}[one-coordinate translation]\label{lem:lx-translation}
+If $a\succ_{\rm lx}b$, $a_i<b_i$, and $d>0$, then
+$a+d e_i\succ_{\rm lx}b+d e_i$.
+\end{lemma}
+
+\begin{proof}
+For a finite vector $z$, put $L_\lambda(z)=\sum_j e^{-\lambda z_j}$.
+The first unequal coordinate of the ascending rearrangements dominates this
+sum as $\lambda\to\infty$; hence
+$a\succ_{\rm lx}b$ if and only if
+$L_\lambda(a)<L_\lambda(b)$ for all sufficiently large $\lambda$.
+Moreover,
+\begin{align*}
+ L_\lambda(b+d e_i)-L_\lambda(a+d e_i)
+ ={}&L_\lambda(b)-L_\lambda(a)\\
+ &+(1-e^{-\lambda d})(e^{-\lambda a_i}-e^{-\lambda b_i}).
+\end{align*}
+Both terms on the right are positive for all sufficiently large $\lambda$,
+because $a_i<b_i$.  The same characterization gives the claim.
+\end{proof}
+
+\begin{theorem}[singleton coalitional monotonicity]
+\label{thm:lx-singleton}
+Let $v$ and $v'=v+d\,\mathbf 1_{\{i\}}$ be balanced games, with $d>0$.
+Then
+\[
+ \phi_i(v')\geq\phi_i(v).
+\]
+Thus singleton bumps are monotone even without exactness.
+\end{theorem}
+
+\begin{proof}
+Let $m_j=v(\{j\})$ and express the old core in gain coordinates
+\[
+ G=\{(x_j-m_j)_{j\in N}:x\in\core(v)\}.
+\]
+If the singleton floor of player $i$ is raised by $d$, the new feasible gain
+set is
+\[
+ H=\{g-d e_i:g\in G,\ g_i\geq d\}.
+\]
+Let $z$ be the leximin point of $G$ and $h$ the leximin point of $H$.
+The desired inequality is $h_i+d\geq z_i$.  If $z_i<d$, this is immediate
+from $h_i\geq0$.  Suppose $z_i\geq d$.  Then $b=z-d e_i$ belongs to $H$, so
+$h$ is either $b$ or $h\succ_{\rm lx}b$.  If, contrary to the claim,
+$h_i+d<z_i$, then $h_i<b_i$ and the equality case is impossible.
+Lemma~\ref{lem:lx-translation} gives
+\[
+ h+d e_i\succ_{\rm lx}b+d e_i=z.
+\]
+But $h+d e_i\in G$, contradicting the definition of $z$ as the leximin point
+of $G$.
+\end{proof}
+
+
+\section{Grand-coalition bumps stay exact}\label{sec:lx-grand}
+
+The grand-coalition case also has an exact path, but its geometry differs from
+the nested-core path of Section~\ref{sec:lx-reduction}.
+
+\begin{lemma}[grand-bump exact path]\label{lem:lx-grand-path}
+Let $v$ be exact and, for $r\geq0$, let $v^r$ agree with $v$ on every proper
+coalition and satisfy $v^r(N)=v(N)+r$.  Then $v^r$ is exact for every $r\geq0$.
+Moreover,
+\[
+ \core(v)+r\Delta_N\subseteq\core(v^r),
+ \qquad
+ \Delta_N=\{a\in\R^N_+:a(N)=1\}.
+\]
+\end{lemma}
+
+\begin{proof}
+If $x\in\core(v)$ and $a\in r\Delta_N$, then $x+a$ has total
+$v(N)+r$ and weakly raises every coalition sum, proving the inclusion and
+balancedness.  Fix a proper coalition $T$.  Exactness of $v$ supplies
+$x^T\in\core(v)$ with $x^T(T)=v(T)$.  Choose $j\notin T$.  Then
+$x^T+r e_j\in\core(v^r)$ by the inclusion and remains tight at $T$.
+Thus
+\[
+ \min_{x\in\core(v^r)}x(T)=v(T)=v^r(T).
+\]
+The grand coalition is tight throughout its core by efficiency, so $v^r$ is
+exact at every coalition.
+\end{proof}
+
+Lemma~\ref{lem:lx-grand-path} removes exactness preservation from the grand
+case entirely: the remaining question is the resource-monotonicity statement
+\[
+ r\longmapsto\phi_i(v^r)\quad\text{is nondecreasing for every }i.
+\]
+The inclusion in the lemma supplies the feasible monotone comparison point
+$\phi(v)+r a$ for every $a\in\Delta_N$, but leximin dominance of such points
+does not by itself imply coordinatewise dominance with player labels.  Thus
+the unresolved content is a labeled resource-monotonicity theorem for these
+exact-core slices, not another bump-exactness lemma.
 
 
 \section{Exactness is necessary}\label{sec:lx-necessity}
@@ -76,7 +184,7 @@ Both examples are certified in exact rational arithmetic ($\phi$ in the core on
 both sides, the drop exact); see the supplement and \texttt{src/hunt\_leximin\_nonexact.py}.
 
 
-\section{Reduction on exact games}\label{sec:lx-reduction}
+\section{Reduction for proper nonsingleton bumps on exact games}\label{sec:lx-reduction}
 
 Fix an exact $v$, a proper coalition $S$ with $|S|\ge 2$, and $d>0$ with
 $v'=v+d\,\mathbf 1_S$ exact. Since $|S|\ge2$ the floors are unchanged, and
@@ -93,8 +201,12 @@ Every $v_\tau$, $\tau\in[v(S),v(S)+d]$, is exact.
 \begin{proof}
 $\core(v_\tau)\supseteq\core(v')\neq\emptyset$, so $v_\tau$ is balanced.
 Exactness needs $\min_{\core(v_\tau)}x(T)=v_\tau(T)$ for all $T$.
-For $T=S$: $\min_{\core(v_\tau)}x(S)=\max\{\tau,\min_{\core(v)}x(S)\}
-=\max\{\tau,v(S)\}=\tau$.
+For $T=S$, exactness of $v$ supplies $x^0\in\core(v)$ with
+$x^0(S)=v(S)$, while any $x^1\in\core(v')$ satisfies
+$x^1(S)\ge v(S)+d$. The core of $v$ is convex, so the segment
+$[x^0,x^1]$ contains a point $x^\tau\in\core(v)$ with $x^\tau(S)=\tau$.
+This point belongs to $\core(v_\tau)$, proving
+$\min_{\core(v_\tau)}x(S)=\tau$.
 For $T\neq S$: put $f_T(\tau)=\min_{\core(v_\tau)}x(T)$. As $\tau$ grows
 $\core(v_\tau)$ shrinks, so $f_T$ is nondecreasing; and $\core(v_\tau)\subseteq
 \core(v)$ gives $f_T(\tau)\ge\min_{\core(v)}x(T)=v(T)$. At the endpoints
@@ -103,12 +215,44 @@ $v(T)$ at both endpoints and $\ge v(T)$ between is $\equiv v(T)$. Hence
 $f_T(\tau)=v(T)=v_\tau(T)$.
 \end{proof}
 
+The entire exact-bump range can be read from exposed core faces. For
+$T\subseteq N$, write
+$F_T=\{x\in\core(v):x(T)=v(T)\}$ (with $F_N=\core(v)$), and define
+\[
+ d^*_v(S)=\min_{T\neq S}
+ \left(\max_{x\in F_T}x(S)-v(S)\right).
+\]
+
+\begin{proposition}[exact bump capacity]\label{prop:lx-capacity}
+For an exact game $v$ and a proper coalition $S$, the bumped game
+$v+d\mathbf 1_S$ is exact if and only if $0\leq d\leq d^*_v(S)$.
+If $\sigma_S=\phi(v)(S)-v(S)$, then every exact bump at $S$ is
+non-binding if and only if $d^*_v(S)\leq\sigma_S$; a binding exact bump
+exists if and only if $d^*_v(S)>\sigma_S$.
+\end{proposition}
+
+\begin{proof}
+The bumped core is
+$K_d=\core(v)\cap\{x:x(S)\geq v(S)+d\}$. For $T\neq S$, exactness at
+$T$ is equivalent to $F_T\cap K_d\neq\emptyset$, which is equivalent to
+\[
+ d\leq \max_{x\in F_T}x(S)-v(S).
+\]
+Taking the minimum over $T\neq S$ gives all the higher-coalition exactness
+conditions; the term $T=N$ also gives nonemptiness of $K_d$. Exactness at
+$S$ follows by interpolating between a point of $F_S$ and a point of $K_d$,
+as in Lemma~\ref{lem:lx-interval}. This proves the first statement. The
+last two statements compare the exact capacity with the largest bump still
+satisfied by the old selection, namely $\sigma_S$.
+\end{proof}
+
 So the bump is realized by a continuous path of \emph{exact} games in which only
-the lower bound $\tau$ on $x(S)$ rises. This isolates the role of exactness: for a
-merely balanced $v$ the interior of the path leaves exactness (Lemma
-\ref{lem:lx-interval} fails), and that is precisely the room inhabited by the
-counterexamples of Section~\ref{sec:lx-necessity}. Coalitional monotonicity on
-exact games is therefore equivalent to the one-parameter statement:
+the lower bound $\tau$ on $x(S)$ rises. This isolates the role of exactness: if
+endpoint exactness is weakened to balancedness, the analogous interior path
+need not be exact, and that is precisely the room inhabited by the
+counterexamples of Section~\ref{sec:lx-necessity}. For proper nonsingleton
+bumps on exact games, coalitional monotonicity is therefore equivalent to the
+one-parameter statement:
 
 \begin{lemma}[monotone path --- \textsc{open}]\label{lem:lx-C}
 Along the exact path $v_\tau$, the map $\tau\mapsto\phi_i(v_\tau)$ is nondecreasing
@@ -153,18 +297,19 @@ the whole path, not merely $(\star_S)$ at one endpoint.
 
 \begin{table}[t]
 \centering
+\small
 \caption{Computational evidence (float LP, exact-certifiable) for the reduction.
 $(\star_S)$ evaluated at $\phi$ of the base game; ``binding'' bumps only.}
 \label{tab:lx-evidence}
-\begin{tabular}{lcc}
+\begin{tabular}{@{}p{0.52\linewidth}p{0.22\linewidth}p{0.16\linewidth}@{}}
 \toprule
 statement & sample & violations\\
 \midrule
-$\phi$ coalitionally monotone on exact games & $2000+$ bumps, $n\le6$ & $0$\\
+$\phi$ monotone for sampled proper exact bumps (mixed sizes) & $2000+$ bumps, $n\le6$ & $0$\\
 (D) exact $\Rightarrow(\star_S)$ at $\phi$ & $39/39$, $13/13$ & $0$\\
 monotone $\Rightarrow(\star_S)$ & all balanced & $0$\\
 $(\star_S)$ along the path $\Rightarrow$ monotone & $600$ & $0$\\
-$(\star_S)$ at one endpoint $\Rightarrow$ monotone & $1696$ balanced & $22$ (all non-exact)\\
+$(\star_S)$ at one endpoint $\Rightarrow$ monotone & $1696$ balanced & $22$ non-exact\\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -180,9 +325,12 @@ tight-cone part of $(\star_S)$ automatically; hence
 \end{align*}
 Dualizing (verified in $200/200$ random balanced cases, exact-certifiable):
 \begin{quote}
-$(\star_S)$ \emph{fails} at $\phi(v)$ if and only if $\phi(v)$ \emph{maximizes some
-positive-$S$-weighted sum} $\sum_{k\in S}r_k\,x_k$ (with weights $r_k\ge1$ for
-$k\in S$ and $0$ otherwise) over $\core(v)$.
+$(\star_S)$ \emph{fails} at $\phi(v)$ if and only if $\phi(v)$ maximizes
+\[
+  \sum_{k\in S}r_k\,x_k
+\]
+over $\core(v)$ for some weights $r_k\ge1$ on $S$ and zero weights outside
+$S$.
 \end{quote}
 Equivalently, the tight coalitions $\{T:\phi(T)=v(T)\}$ carry nonnegative weights and
 a $\beta\ge1$ covering each $k\notin S$ exactly $\beta$ and each $k\in S$ at most
@@ -197,9 +345,9 @@ fails there and a member of $S$ drops. (A corner scan for a deficient $S$-member
 pinned at its core-maximum found no occurrence in any exact binding case, $0/16^+$.)
 
 \paragraph{The natural certificate is provably wrong.} Where $(\star_S)$
-\emph{does} fail, one would like to certify that $S$ is not exactly bumpable ---
-$d^*(S):=\min_{C\neq S}\bigl(\max\{x(S):x\in\core(v),\,x(C)=v(C)\}-v(S)\bigr)=0$
---- directly from the failure certificate: take the cover
+\emph{does} fail, one would like to prove $d^*_v(S)=0$ and thereby certify
+directly that $S$ is not exactly bumpable. This target is
+false. From the failure certificate, take the cover
 $\{\lambda_U\}$ dual to the failure, $W=\bigcup\{U:\lambda_U>0\}$, and propose
 $C=W\cap S$. This route is closed by a six-player exact game (supplement,
 \texttt{WITNESS\_KEY\_FALSE\_n6}): $(\star_S)$ fails at $S=\{1,3,4,5\}$ with cover
@@ -212,8 +360,8 @@ why sampling first suggested the cover certificate was universal. In every
 observed failure, however, the operative bound survives: there is a coalition $C$
 with $M^{(C)}:=\max\{x(S):x\in\core(v),\,x(C)=v(C)\}\le\phi(S)$, so that $S$
 cannot be bumped past $\phi(S)$ while preserving exactness (in a $\approx0.2\%$
-minority $d^*(S)>0$ --- exact six-player witnesses with $d^*=1$ and $d^*=2$ are
-included in the supplement --- but always $d^*(S)\le\phi(S)-v(S)$). Empirically the
+minority $d^*_v(S)>0$ --- exact six-player witnesses with $d^*=1$ and $d^*=2$ are
+included in the supplement --- but always $d^*_v(S)\le\phi(S)-v(S)$). Empirically the
 certificate has sharp structure: $C$ can always be taken as a subset of $S$
 contained in a \emph{single stratum} of the leximin computation --- almost always
 a singleton --- and it is provably never $\phi$-tight (a $\phi$-tight certificate
@@ -229,20 +377,40 @@ exhibiting nonnegative weights on $\phi$-tight coalitions with coverage $\beta$
 on $N\setminus S$, $\beta-1$ on $S\setminus\{k\}$, and at least $\beta-1$ on
 $k$; weights supported inside $S$ suffice in only about two thirds of cases, so
 a proof must construct this dual cover from $\phi$-tight coalitions
-\emph{crossing} $S$. Equivalently, for a minimum-residual $k$ the claim reduces
-to the single inequality
+\emph{crossing} $S$. Equivalently, for a minimum-residual $k$ the open claim
+reduces to the single inequality
 $\sum_{i\in S\setminus\{k\}}(r_i-1)\,(x_i-\phi_i)\le 0$
 for every core $x$ with $x_k=v(\{k\})$: flooring the most-covered member must
-push the less-covered members of $S$, in the $(r_i-1)$-weighting, to or above
-their leximin values. This inequality --- which the residual weights alone do
-not force --- is the precise frontier at which we leave the problem.
+leave the weighted displacement of the less-covered members of $S$ at or below
+zero relative to their leximin values. This inequality --- which the residual
+weights alone do not force --- is the precise frontier at which we leave the
+problem.
+
+Proposition~\ref{prop:lx-capacity} removes the frequency language from the
+logical frontier. Every pair $(v,S)$ falls into the exact dichotomy
+\[
+ d^*_v(S)\leq\sigma_S
+ \quad\text{or}\quad
+ d^*_v(S)>\sigma_S.
+\]
+The first side admits no binding exact bump and is finished by
+Lemma~\ref{lem:lx-nonbinding}. On the second side a binding exact bump exists,
+and the missing structural statement is precisely
+\[
+ d^*_v(S)>\sigma_S\quad\Longrightarrow\quad(\star_S).
+\]
+Thus the singleton/pair certificate statistics motivate how to prove this
+implication, but neither their observed percentages nor sampling rarity enters
+the conditional theorem.
 
 \begin{remark}
 Lemma~\ref{lem:lx-C} is a leximin parametric-monotonicity statement; its cousin the
 nucleolus is \emph{not} coalitionally monotone, so exactness (Lemma
 \ref{lem:lx-interval}) is doing real work and the ``self-defeating within-$S$
 transfer'' heuristic is not by itself a proof. We leave (D), (E$'$) open and record
-the conditional theorem: \emph{on exact games, $\phi$ is coalitionally monotone
-provided Lemma~\ref{lem:lx-C} holds}; the necessity direction
+the conditional theorem: \emph{on exact games, $\phi$ is monotone under proper
+nonsingleton bumps provided Lemma~\ref{lem:lx-C} holds}; singleton and
+grand-coalition bumps remain outside this reduction, but the singleton case is
+settled unconditionally by Theorem~\ref{thm:lx-singleton}; the necessity direction
 (Theorem~\ref{thm:lx-necessity}) is unconditional.
 \end{remark}
