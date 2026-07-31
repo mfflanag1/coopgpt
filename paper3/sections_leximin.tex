@@ -31,9 +31,9 @@ $i\in S$? A positive answer on exact games would exhibit an explicit coalitional
 monotonic core selection on that class. The reduction in
 Section~\ref{sec:lx-reduction} addresses only proper nonsingleton coalitions.
 Singleton bumps change the floors defining $\phi$, and a grand-coalition bump
-changes the efficiency hyperplane.  The singleton case is resolved next; the
-grand-coalition case requires a separate resource-monotonicity argument and
-remains open in this fragment.
+changes the efficiency hyperplane.  The singleton case is resolved next.  The
+grand-coalition case has a negative answer even on a simple exact five-player
+game (Theorem~\ref{thm:lx-grand-fails}).
 
 
 \section{Singleton bumps are monotone}\label{sec:lx-singleton}
@@ -97,7 +97,8 @@ of $G$.
 \end{proof}
 
 
-\section{Grand-coalition bumps stay exact}\label{sec:lx-grand}
+\section{Grand-coalition bumps: an exact path but no resource monotonicity}
+\label{sec:lx-grand}
 
 The grand-coalition case also has an exact path, but its geometry differs from
 the nested-core path of Section~\ref{sec:lx-reduction}.
@@ -127,16 +128,64 @@ The grand coalition is tight throughout its core by efficiency, so $v^r$ is
 exact at every coalition.
 \end{proof}
 
-Lemma~\ref{lem:lx-grand-path} removes exactness preservation from the grand
-case entirely: the remaining question is the resource-monotonicity statement
+The exact path does not rescue labeled resource monotonicity.
+
+\begin{theorem}[grand resource monotonicity fails on exact games]
+\label{thm:lx-grand-fails}
+There is an exact five-player game $v$ such that, when only $v(N)$ is raised,
+one player's leximin-above-floors payoff strictly falls.  Indeed, let
 \[
- r\longmapsto\phi_i(v^r)\quad\text{is nondecreasing for every }i.
+ p=(0,0,7,0,7),\qquad q=(2,10,0,2,0),
 \]
-The inclusion in the lemma supplies the feasible monotone comparison point
-$\phi(v)+r a$ for every $a\in\Delta_N$, but leximin dominance of such points
-does not by itself imply coordinatewise dominance with player labels.  Thus
-the unresolved content is a labeled resource-monotonicity theorem for these
-exact-core slices, not another bump-exactness lemma.
+put $v(N)=14$, and for every proper $T$ put
+$v(T)=\min\{p(T),q(T)\}$.  If $v^r(N)=14+r$ and $v^r(T)=v(T)$ for
+$T\subsetneq N$, then for $0\leq\varepsilon\leq3/2$,
+\[
+ \phi(v^{2+\varepsilon})
+ =\left(3+\frac{\varepsilon}{3},
+          4-\frac{\varepsilon}{3},
+          3+\frac{\varepsilon}{3},
+          3+\frac{\varepsilon}{3},
+          3+\frac{\varepsilon}{3}\right).
+\]
+Thus player $2$ falls at rate $1/3$ while the grand worth rises.  For example,
+raising the grand worth from $16$ to $129/8$ changes that player's payoff from
+$4$ to $95/24$.
+\end{theorem}
+
+\begin{proof}
+Both $p$ and $q$ have total $14$ and belong to $\core(v)$.  At every proper
+coalition one of them attains $v(T)$, so $v$ is exact; every $v^r$ is exact by
+Lemma~\ref{lem:lx-grand-path}.  All singleton worths are zero.
+
+Write $s=3+\varepsilon/3$ and
+$z=(s,7-s,s,s,s)$.  Direct substitution in the lower-envelope definition of
+$v$ shows that $z\in\core(v^{2+\varepsilon})$ throughout the stated
+interval.  (At $\varepsilon=0$ every core slack is nonnegative; the only
+coalition sum with negative slope is the singleton of player $2$, whose slack
+remains positive.  Every other slope is nonnegative.)
+
+It remains to identify the leximin point.  The two pair constraints
+\[
+ x_2+x_3\geq7,\qquad x_2+x_5\geq7
+\]
+belong to the core.  If every coordinate of a core point is at least $t$, then
+efficiency and the first constraint give
+$16+\varepsilon=x(N)\geq7+3t$, hence $t\leq s$.
+So $z$ attains the largest possible minimum coordinate.  On that
+level-optimal face put $d_i=x_i-s\geq0$ and
+$D=1-2\varepsilon/3\geq0$.  Efficiency gives $\sum_i d_i=D$, while the two
+displayed constraints give $d_2+d_3\geq D$ and $d_2+d_5\geq D$.
+Nonnegativity forces $d_2=D$ and every other $d_i=0$.  Hence the
+level-optimal face is the singleton $\{z\}$, proving the formula and the
+strict drop.
+\end{proof}
+
+The counterexample pinpoints the failure mechanism: four players form the
+lowest leximin stratum, and additional total resource raises them jointly only
+by taking payoff from a higher-stratum player pinned to two cross-stratum pair
+constraints.  The feasible comparison points supplied by
+$\core(v)+r\Delta_N$ therefore do not control labeled coordinates.
 
 
 \section{Exactness is necessary}\label{sec:lx-necessity}
@@ -244,6 +293,47 @@ $S$ follows by interpolating between a point of $F_S$ and a point of $K_d$,
 as in Lemma~\ref{lem:lx-interval}. This proves the first statement. The
 last two statements compare the exact capacity with the largest bump still
 satisfied by the old selection, namely $\sigma_S$.
+\end{proof}
+
+The capacity implication can already be proved without qualification when the
+bumped coalition has two members.
+
+\begin{proposition}[the capacity implication for pairs]
+\label{prop:lx-pair-capacity}
+Let $v$ be exact, let $S=\{i,j\}$ be proper, and put
+$\sigma_S=\phi(v)(S)-v(S)$.  If $(\star_S)$ fails at $\phi(v)$, then
+\[
+ d_v^*(S)\leq\sigma_S.
+\]
+Equivalently, $d_v^*(S)>\sigma_S$ implies $(\star_S)$ for every
+two-player coalition.
+\end{proposition}
+
+\begin{proof}
+Failure of $(\star_S)$ has the dual form recorded below: after a positive
+normalization, $\phi=\phi(v)$ maximizes
+$r_i x_i+r_jx_j$ over $\core(v)$ for some $r_i,r_j\geq1$ with
+$\min\{r_i,r_j\}=1$.  If $r_i=r_j=1$, then $\phi(S)=\max_{\core(v)}x(S)$,
+which immediately gives $d_v^*(S)\leq\sigma_S$.
+
+Otherwise relabel so that $r_i>1=r_j$.  Exactness at the singleton $\{j\}$
+guarantees the nonempty face
+$F_j=\{x\in\core(v):x_j=v(\{j\})\}$.  For $x\in F_j$, maximality of
+$\phi$ gives, with $g_j=\phi_j-v(\{j\})\geq0$,
+\[
+ r_i(x_i-\phi_i)+(x_j-\phi_j)\leq0,
+ \qquad\text{so}\qquad
+ x_i-\phi_i\leq \frac{g_j}{r_i}.
+\]
+Consequently
+\[
+ x(S)-\phi(S)
+ =(x_i-\phi_i)-g_j
+ \leq g_j\left(\frac1{r_i}-1\right)\leq0.
+\]
+Thus $\max_{x\in F_j}x(S)\leq\phi(S)$.  Since the definition of
+$d_v^*(S)$ takes the minimum over all exact faces, including $F_j$,
+$d_v^*(S)\leq\phi(S)-v(S)=\sigma_S$.
 \end{proof}
 
 So the bump is realized by a continuous path of \emph{exact} games in which only
@@ -399,18 +489,21 @@ and the missing structural statement is precisely
 \[
  d^*_v(S)>\sigma_S\quad\Longrightarrow\quad(\star_S).
 \]
-Thus the singleton/pair certificate statistics motivate how to prove this
-implication, but neither their observed percentages nor sampling rarity enters
-the conditional theorem.
+Proposition~\ref{prop:lx-pair-capacity} proves this implication for
+$|S|=2$.  For $|S|\geq3$, the singleton/pair certificate statistics motivate
+how to prove it, but neither their observed percentages nor sampling rarity
+enters the conditional theorem.
 
 \begin{remark}
 Lemma~\ref{lem:lx-C} is a leximin parametric-monotonicity statement; its cousin the
 nucleolus is \emph{not} coalitionally monotone, so exactness (Lemma
 \ref{lem:lx-interval}) is doing real work and the ``self-defeating within-$S$
-transfer'' heuristic is not by itself a proof. We leave (D), (E$'$) open and record
+transfer'' heuristic is not by itself a proof. For proper coalitions of size at
+least three we leave (D), (E$'$) open and record
 the conditional theorem: \emph{on exact games, $\phi$ is monotone under proper
 nonsingleton bumps provided Lemma~\ref{lem:lx-C} holds}; singleton and
-grand-coalition bumps remain outside this reduction, but the singleton case is
-settled unconditionally by Theorem~\ref{thm:lx-singleton}; the necessity direction
-(Theorem~\ref{thm:lx-necessity}) is unconditional.
+grand-coalition bumps remain outside this reduction.  The singleton case is
+settled positively by Theorem~\ref{thm:lx-singleton}, while the grand case is
+settled negatively by Theorem~\ref{thm:lx-grand-fails}; the necessity direction
+(Theorem~\ref{thm:lx-necessity}) is also unconditional.
 \end{remark}
