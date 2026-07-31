@@ -153,7 +153,7 @@ out["theorem_6_1"] = {
     "SD_Kprime": sd_certificate(gK2, sd_K2),
 }
 
-# ---- Theorem 3.2 / Prop 7.5 data ----
+# ---- Theorem 3.2 / Proposition 7.8 data ----
 base = [F(u) for u in "0 0 0 0 0 3 3 1 0 3 3 1 3 1 5 6".split()]
 out["theorem_3_2"] = {
     "base": game_table(Game(4, base)),

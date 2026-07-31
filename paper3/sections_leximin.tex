@@ -295,45 +295,64 @@ last two statements compare the exact capacity with the largest bump still
 satisfied by the old selection, namely $\sigma_S$.
 \end{proof}
 
-The capacity implication can already be proved without qualification when the
-bumped coalition has two members.
+The capacity implication can be proved for every star-failure dual with at
+most two residual levels.  This includes every two-player coalition and also
+explains the same-stratum pair certificates found in the computation.
 
-\begin{proposition}[the capacity implication for pairs]
-\label{prop:lx-pair-capacity}
-Let $v$ be exact, let $S=\{i,j\}$ be proper, and put
-$\sigma_S=\phi(v)(S)-v(S)$.  If $(\star_S)$ fails at $\phi(v)$, then
+\begin{proposition}[two-level dual certificate]
+\label{prop:lx-two-level-capacity}
+Let $v$ be exact, $S$ proper, $\phi=\phi(v)$, and
+$\sigma_S=\phi(S)-v(S)$.  Suppose $(\star_S)$ fails and its dual maximal
+face can be represented by weights taking at most two values on $S$: after
+normalization, for some $\emptyset\neq C\subsetneq S$ and $R>1$,
 \[
+ \phi\in\arg\max_{x\in\core(v)}
+ \left(x(C)+R x(S\setminus C)\right).
+\]
+Then
+\[
+ \max_{x\in F_C}x(S)\leq\phi(S)
+ \quad\text{and hence}\quad
  d_v^*(S)\leq\sigma_S.
 \]
-Equivalently, $d_v^*(S)>\sigma_S$ implies $(\star_S)$ for every
-two-player coalition.
+The same conclusion holds in the one-level case where $\phi$ maximizes
+$x(S)$.
 \end{proposition}
 
 \begin{proof}
-Failure of $(\star_S)$ has the dual form recorded below: after a positive
-normalization, $\phi=\phi(v)$ maximizes
-$r_i x_i+r_jx_j$ over $\core(v)$ for some $r_i,r_j\geq1$ with
-$\min\{r_i,r_j\}=1$.  If $r_i=r_j=1$, then $\phi(S)=\max_{\core(v)}x(S)$,
-which immediately gives $d_v^*(S)\leq\sigma_S$.
-
-Otherwise relabel so that $r_i>1=r_j$.  Exactness at the singleton $\{j\}$
-guarantees the nonempty face
-$F_j=\{x\in\core(v):x_j=v(\{j\})\}$.  For $x\in F_j$, maximality of
-$\phi$ gives, with $g_j=\phi_j-v(\{j\})\geq0$,
+Put $H=S\setminus C$ and $h=\phi(C)-v(C)\geq0$.  Exactness makes
+$F_C=\{x\in\core(v):x(C)=v(C)\}$ nonempty.  For $x\in F_C$, maximality
+of $\phi$ gives
 \[
- r_i(x_i-\phi_i)+(x_j-\phi_j)\leq0,
- \qquad\text{so}\qquad
- x_i-\phi_i\leq \frac{g_j}{r_i}.
+ (x(C)-\phi(C))+R(x(H)-\phi(H))\leq0.
 \]
-Consequently
+The first parenthesis is $-h$, so
+$x(H)-\phi(H)\leq h/R$.  Therefore
 \[
  x(S)-\phi(S)
- =(x_i-\phi_i)-g_j
- \leq g_j\left(\frac1{r_i}-1\right)\leq0.
+ =-h+x(H)-\phi(H)
+ \leq-h\left(1-\frac1R\right)\leq0.
 \]
-Thus $\max_{x\in F_j}x(S)\leq\phi(S)$.  Since the definition of
-$d_v^*(S)$ takes the minimum over all exact faces, including $F_j$,
-$d_v^*(S)\leq\phi(S)-v(S)=\sigma_S$.
+Thus $F_C$ certifies the required bound:
+\[
+ d_v^*(S)\leq\phi(S)-v(S)=\sigma_S.
+\]
+In the one-level case, $\phi(S)=\max_{\core(v)}x(S)$, so the conclusion is
+immediate.
+\end{proof}
+
+\begin{corollary}[the capacity implication for pairs]
+\label{prop:lx-pair-capacity}
+If $v$ is exact and $S$ is a proper two-player coalition, then
+\[
+ d_v^*(S)>\sigma_S\quad\Longrightarrow\quad(\star_S).
+\]
+\end{corollary}
+
+\begin{proof}
+When $(\star_S)$ fails, its positive dual weights on the two members of $S$
+have either one value or two.  Normalize the smaller value to one and apply
+Proposition~\ref{prop:lx-two-level-capacity}.
 \end{proof}
 
 So the bump is realized by a continuous path of \emph{exact} games in which only
@@ -476,6 +495,15 @@ zero relative to their leximin values. This inequality --- which the residual
 weights alone do not force --- is the precise frontier at which we leave the
 problem.
 
+Proposition~\ref{prop:lx-two-level-capacity} explains an important part of
+this structure exactly.  If the residuals have only the levels $1$ and
+$R>1$, the entire minimum-residual class
+$C=\{i\in S:r_i=1\}$ is itself the required face certificate; no
+crossing-cover construction is needed.  The rare same-stratum pair exceptions
+to singleton certification are examples with $|C|=2$.  Accordingly, all
+unresolved certificate geometry lies in duals with at least three distinct
+residual levels.
+
 Proposition~\ref{prop:lx-capacity} removes the frequency language from the
 logical frontier. Every pair $(v,S)$ falls into the exact dichotomy
 \[
@@ -489,10 +517,13 @@ and the missing structural statement is precisely
 \[
  d^*_v(S)>\sigma_S\quad\Longrightarrow\quad(\star_S).
 \]
-Proposition~\ref{prop:lx-pair-capacity} proves this implication for
-$|S|=2$.  For $|S|\geq3$, the singleton/pair certificate statistics motivate
-how to prove it, but neither their observed percentages nor sampling rarity
-enters the conditional theorem.
+Proposition~\ref{prop:lx-two-level-capacity} proves this implication whenever
+the failure dual has at most two residual levels, and
+Corollary~\ref{prop:lx-pair-capacity} covers every $|S|=2$.  The remaining
+capacity frontier therefore requires both $|S|\geq3$ and a genuinely
+three-or-more-level dual.  The singleton/pair certificate statistics motivate
+how to attack those cases, but neither their observed percentages nor sampling
+rarity enters the conditional theorem.
 
 \begin{remark}
 Lemma~\ref{lem:lx-C} is a leximin parametric-monotonicity statement; its cousin the

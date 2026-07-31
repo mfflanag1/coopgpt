@@ -18,6 +18,7 @@ import argparse
 import json
 from fractions import Fraction as F
 
+from hunt_exact_points import game_from_points
 from lemD import residual_cover, star_holds, tight_coalitions, xS
 from leximin import leximin_core_exact
 from tugame import Game, exact_lp_min
@@ -30,6 +31,11 @@ PAIR_WITNESS_V = [
     1, 5, 8, 12, 2, 6, 9, 13, 8, 12, 15, 19, 16, 21, 22, 28,
 ]
 PAIR_WITNESS_S = (1 << 0) | (1 << 2) | (1 << 3)
+PAIR_WITNESS_POINTS = [
+    (4, 7, 1, 15, 0, 1),
+    (6, 6, 6, 7, 1, 2),
+    (4, 7, 9, 7, 0, 1),
+]
 
 
 def members(mask, n):
@@ -143,7 +149,16 @@ def extract(game, target):
     ]
 
     cover_payload = None
+    residual_levels = []
+    minimum_residual_class = []
     if cover is not None:
+        residual_levels = sorted(set(cover["r"].values()))
+        minimum_residual = residual_levels[0]
+        minimum_residual_class = [
+            player + 1
+            for player, residual in cover["r"].items()
+            if residual == minimum_residual
+        ]
         cover_payload = {
             "mu": cover["mu"],
             "weights": [
@@ -158,6 +173,20 @@ def extract(game, target):
             "residuals_on_S": {
                 str(player + 1): residual for player, residual in cover["r"].items()
             },
+            "residual_levels": residual_levels,
+            "minimum_residual_class": minimum_residual_class,
+        }
+
+    two_level_face = None
+    if cover is not None and len(residual_levels) <= 2:
+        predicted_mask = sum(1 << (player - 1) for player in minimum_residual_class)
+        predicted = next(item for item in faces if item["mask"] == predicted_mask)
+        two_level_face = {
+            "coalition": minimum_residual_class,
+            "mask": predicted_mask,
+            "max_xS": predicted["max_xS"],
+            "certifies": predicted["certifies"],
+            "theorem": "Proposition two-level dual certificate",
         }
 
     return stringify(
@@ -173,6 +202,8 @@ def extract(game, target):
             "star_holds": holds,
             "star_max": star_value,
             "residual_cover": cover_payload,
+            "residual_level_count": len(residual_levels),
+            "two_level_predicted_face": two_level_face,
             "tight_coalitions": tight_data,
             "capacity_dstar": capacity,
             "capacity_minus_slack": capacity - slack,
@@ -209,6 +240,7 @@ if __name__ == "__main__":
         selected_game = load_game(args.game_json)
         selected_coalition = args.coalition
     else:
-        selected_game = Game(6, [F(value) for value in PAIR_WITNESS_V])
+        selected_game = game_from_points(6, PAIR_WITNESS_POINTS)
+        assert selected_game.v == [F(value) for value in PAIR_WITNESS_V]
         selected_coalition = PAIR_WITNESS_S
     print(json.dumps(extract(selected_game, selected_coalition), indent=2))

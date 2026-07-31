@@ -286,8 +286,8 @@ for name, lam_s in mults.items():
 check("  stored Farkas multipliers aggregate to 0 . w >= " + str(rhs_agg) +
       " > 0 (refutation)", okF and all(a == 0 for a in agg) and rhs_agg > 0)
 
-# ============================ PROPOSITION 7.5 ============================
-print("Proposition 7.5 (core intersection can fail at m=n=4; family feasible)")
+# ============================ PROPOSITION 7.8 ============================
+print("Proposition 7.8 (core intersection can fail at m=n=4; family feasible)")
 t = C["proposition_7_5"]
 b = parse_game(t["base"], 4)
 verify_exactness(b, t["exactness_witnesses_base"], 4, "  base")
@@ -325,7 +325,7 @@ if FAIL:
     for f in FAIL: print("   -", f)
     sys.exit(1)
 print("ALL CHECKS PASSED. Every certificate-backed claim of Theorems 3.2, "
-      "5.1, 5.3, 5.4, 6.1 and Proposition 7.5 is verified here in exact "
+      "5.1, 5.3, 5.4, 6.1 and Proposition 7.8 is verified here in exact "
       "rational arithmetic using only the Python standard library. (Prose "
       "side-claims that require linear programming -- non-exactness of the "
       "Theorem 3.2 games and largeness of the eight cores -- are established "
