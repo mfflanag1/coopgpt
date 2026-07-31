@@ -222,14 +222,121 @@ search failure: "stable => ES" looks TRUE, with the coupled thin-core mechanism 
 The remaining gap is the general PROOF that stability forces the admissible over-cover to pack
 into a core point <= gamma-hat (sec 0b crux).
 
-## 7. PROOF STATUS (honest).
-- PROVEN: reduction (0b), Lemma A (1), subgame-core (0c), over-cover characterization (0d),
-  the single-strip domination-reduction (2), two SOUND (LP-free) sufficient conditions for
-  single-strip undomination (ceiling: some j in Q\{p} has gamma-hat_j=M_j; coalition-marginal:
-  gamma-hat(Q\p) >= v(N)-v(N\(Q\p))). Each is sound but individually covers few games, so they
-  do NOT yield the general theorem.
-- OPEN CRUX (unchanged, now sharply localized): does core stability force a core point <= gamma-hat
-  (equivalently, force the admissible over-cover 0d to "pack")? The escape construction produces
-  the witness for the contrapositive in every game tested (n=5 complete; n=6 running) but a
-  GENERAL undomination proof — where stability must substitute for largeness/extendability — is
-  not closed. No counterexample found anywhere; the theorem appears TRUE.
+## 6e. SEGMENT-CORE COMPLETENESS THEOREM (the certificate that surv=0 => STABLE) — PROOF.
+Setup: core(v) is the segment [A,B] (2 vertices, affine dim 1). For a coalition S let
+F_S = {x in core : x(S)=v(S)} and opt_S(y) = max_{x in F_S} min_{i in S}(x_i - y_i); y is
+dominated via S iff opt_S(y) > 0, and y is undominated iff opt_S(y) <= 0 for ALL S.
+U := {imputations y : opt_S(y) <= 0 for all S} is the set of undominated imputations; core C ⊆ U;
+STABLE <=> U = C.
+
+Lemma 1 (domination sources). Since A(S), B(S) >= v(S) for the core points A,B and x_t(S)=
+(1-t)A(S)+tB(S) is affine in t, F_S is exactly: the whole segment if A(S)=B(S)=v(S)
+("fully-tight"); {A} if only A(S)=v(S); {B} if only B(S)=v(S); empty otherwise. So the only
+dominating core points are A, B, and interior x_t on fully-tight coalitions. (Proof: min over
+the segment of x_t(S) is at an endpoint; =v(S) forces that endpoint tight.)
+
+Lemma 2 (opt_S is concave PWL; its affine pieces). min_{i in S}(x_t,i - y_i) is jointly concave
+in (t,y) (min of affine) and F_S convex, so opt_S is CONCAVE in y, hence a MIN of affine
+functions. Its affine pieces are: (i) y -> A_i - y_i and y -> B_i - y_i (endpoint/coordinate
+pieces, boundaries y_i=A_i, y_i=B_i); (ii) for a fully-tight S the interior-t optimum, where
+two coordinates i,j in S tie x_t,i - y_i = x_t,j - y_j = opt_S at the same t in [0,1]: solving
+the tie gives t=(y_i - y_j -(A_i-A_j))/((B_i-B_j)-(A_i-A_j)) and opt_S = [Dj y_i - Di y_j]/
+(Di-Dj)+const with Di=B_i-A_i, whose zero locus is the PAIRWISE plane Dj(y_i-A_i)=Di(y_j-A_j),
+i.e. (y_i-A_i)(B_j-A_j)=(y_j-A_j)(B_i-A_i). (Verified concretely: cand1 fully-tight S={0,1},
+A|S=(1,1),B|S=(2,0): the interior-t domination boundary is y_0+y_1=2, exactly the pairwise
+plane.) A 3-way interior tie is the intersection of two such pairwise planes, so pairwise
+planes suffice.
+
+Theorem (completeness). {opt_S<=0} = union over affine pieces l of {l(y)<=0} (sublevel of a
+min-of-affines = union of halfspaces). Hence U = intersection_S (that union) ∩ simplex is a
+finite UNION OF POLYTOPES, each cut out only by planes from
+  P := { coalition y(S)=v(S), floor y_i=v({i}), efficiency, coordinate y_i in {A_i,B_i},
+          pairwise (y_i-A_i)(B_j-A_j)=(y_j-A_j)(B_i-A_i) }.
+If U ⊋ C, pick y0 in U\C; it lies in some polytope piece Pc ⊆ U with Pc ⊄ C. Because C is
+CONVEX and cut by linear y(S)>=v(S), Pc ⊄ C implies some VERTEX w of Pc is outside C (else
+Pc=conv(vertices) ⊆ C). w in U (Pc ⊆ U), w not in C: an undominated imputation outside the
+core at a VERTEX of the arrangement of P. Therefore: **enumerating all vertices of the P-
+arrangement and finding NO undominated one certifies U=C, i.e. the core is STABLE.** QED.
+(reenum4 enumerates exactly this arrangement; the pairwise class = 15 planes for all pairs is a
+superset of what's needed, which only adds candidate vertices, never removes the escape vertex.)
+
+LATTICE-GAP LEMMA (closes the outside-core/imputation classification skip — the last gate).
+For cand1/cand2 ALL data are integers: v(S) integer (point-generated from integer vectors), and
+the endpoints A,B are integer. Every arrangement plane row is integer (coalition/floor/coordinate
+0/1; pairwise entries B_i-A_i in [-2,2]; efficiency all 1) and every rhs is integer. So each 6x6
+basis matrix M is INTEGER; if non-singular, det(M) is a NON-ZERO INTEGER, |det(M)| in {1,...,D}.
+D bound: Hadamard gives |det| <= 173 (empirical max over 500k random bases: 24 for cand1, 32 for
+cand2). By Cramer each vertex coordinate is (integer)/det(M), denominator <= D, so every classifier
+value y(S)-v(S), y_i-v({i}) is either 0 or has magnitude >= 1/D >= 1/173 ≈ 5.8e-3. The float solve
+of a non-singular integer system is accurate to ~1e-12 (cond·eps·||y||; the |det|>=1 filter excludes
+singular bases, so no ill-conditioning), and the classifier tolerance is 1e-7. Since
+  lattice spacing (>= 5.8e-3)  >>  tolerance (1e-7)  >>  float error (~1e-12),
+a strict exact violation can never float as non-violation and vice versa: the float
+inside-core / not-an-imputation / blocking classification is EXACT on the entire vertex set.
+Hence NO vertex is wrongly discarded before the exact stage; combined with the domination-skip
+guarantee below, reenum4's "surv=0" is fully rigorous. (src verifying D: one-off det sweep.)
+
+No-false-negative guarantee of the DOMINATION skip: a vertex is SKIPPED only when exact_dom_ok verifies
+an exact rational core point x* with x*(S)=v(S), x*_i>y_i for all i in S (a genuine exact
+dominator) — so every skip is exactly justified; borderline float margins (<=1e-4) fail the
+>MARG test and go to full exact certify_undominated. Hence a true escape is never skipped.
+Validated: reenum4 re-finds cand0's escape and (n=5 acid test, src/stES_validate_n5.py) the
+canonical segment-core NON-STABLE witness's escape (0,1,1,2,0).
+
+## 6f. VERDICT — RESOLVED NEGATIVELY (joint verification PASSED; published in paper2 v2).
+reenum4 COMPLETE pass, full arrangement (89 planes, 41,507,642 vertices enumerated to the last
+ordinal, 20.8M non-singular, 4.5M outside-core each): SURVIVORS=0, ESCAPES=0 for BOTH cand1,cand2.
+By the completeness theorem 6e (+ lattice-gap lemma + no-false-negative screen), this RIGOROUSLY
+certifies core(cand1), core(cand2) are vNM-STABLE. Both are exact and non-ES (two independent
+egalitarian-procedure implementations agree; gamma-hat sums 13/2, 17/2 > v(N)=6, 8).
+=> **"stable core => egalitarian stable" is FALSE. Dietzenbacher (2021) second open question
+resolved NEGATIVELY.** Joint independent verification with team-lead PASSED (my side: completeness
+theorem + lattice lemma + reenum4 + battery; team-lead side: non-ES, exactness via the two-point
+generator lemma v=min(A,B), segment geometry, Estévez-Fernández n=6 minimality). Claim published:
+paper2 extended to "Exact and stable games need not be egalitarian stable" (v2). Witnesses:
+results/WITNESS_STABLE_NONES_cand{1,2}.json.
+
+## 7. STATUS OF BOTH HALVES OF DIETZENBACHER'S QUESTION.
+- EXACT half: NO (exact ⇏ ES), resolved earlier this campaign (certified n=5 witnesses; sec 3, theory_es_notes).
+- STABLE-CORE half: **NO (stable core ⇏ ES)**, resolved here (cand1/cand2, n=6, minimal per Estévez-Fernández).
+Both halves NEGATIVE. The proven partial theory (reduction 0b, Lemma A, subgame-core 0c,
+over-cover 0d, domination geometry 0e) stands as the structural backbone; the earlier
+"theorem appears TRUE" reading was OVERTURNED by the segment-core witnesses — thin 1-D cores are
+exactly where a non-ES game can still be stable, because a segment core, while unable to be
+LARGE, CAN be externally stable (it dominates the outside region coalition-by-coalition even
+though no single core point lies below gamma-hat). The coupled-failure heuristic (6d) is thus
+FALSE in general: non-ES and non-stable do NOT always fail together — cand1/cand2 are non-ES yet
+stable. Lesson logged.
+
+## 8. TERMINAL SUMMARY (lane closed).
+HEADLINE: **stable core ⇏ egalitarian stable** — Dietzenbacher (2021) second open question
+resolved NEGATIVELY by two certified n=6 witnesses (cand1, cand2), the campaign's biggest result.
+Both are exact, balanced, non-ES, with a 1-DIMENSIONAL (segment) core that is nonetheless
+vNM-STABLE.
+
+How it was found (route + method, for the record):
+1. Reframed the frontier to n>=6 (n<=5 known via Estévez-Fernández large<=>stable + Dietzenbacher
+   large=>ES). Built the escape construction (single-strip; hub-boost) and proved the reduction
+   stable=>ES <=> [stable => ∃ core point <= gamma-hat] (0b), Lemma A (1), subgame-core (0c),
+   over-cover characterization (0d), domination-region geometry (0e).
+2. Biased point-generation (min of few integer vectors => thin cores) surfaced non-ES n=6 games
+   that resisted all escape search; the standing methods-lesson (float sampling misses thin
+   escapes; deterministic enumeration needed) forced the exhaustive arrangement enumeration.
+3. Key structural discovery: their cores are SEGMENTS (affine dim 1, 12 fully-tight coalitions).
+   That collapsed external stability to a COMPLETE finite test (6e): domination sources are only
+   A, B, and interior x_t on fully-tight coalitions => the undominated set U is a union of
+   polytopes cut by {coalition, floor, endpoint-coordinate, pairwise segment-support} planes;
+   C convex => U!=C forces an arrangement-vertex escape. Enumerating all such vertices with a
+   no-false-negative conservative-margin screen and the integer-lattice classification lemma
+   gives a RIGOROUS stability certificate at float speed. 0 escapes => STABLE.
+4. Validated end-to-end: reenum4 re-finds cand0's escape; the n=5 acid test re-finds the
+   canonical segment-core NON-stable witness's escape; pairwise-plane formula = actual
+   domination boundary; lattice lemma closes the classification skip; full 41.5M-vertex coverage
+   confirmed from checkpoints.
+
+Reusable assets: src/stES_reenum4.py (complete segment-core stability certifier),
+src/stES_validate_n5.py (acid test), src/stES_corevx2.py (affine-hull core-vertex reduction),
+src/stES_verify_witness.py (battery), results/WITNESS_STABLE_NONES_cand{1,2}.json.
+Correction trail (honest): retracted a wrong "U convex" claim (U is non-convex; D_S convex);
+one over-broad pkill damaged other lanes (fixed discipline: kill by exact script name only).
+Both halves of Dietzenbacher's question are now NEGATIVE. Lane CLOSED.

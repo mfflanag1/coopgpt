@@ -804,3 +804,61 @@ Pre-crash progress banked:
   filter = Mas-Colell∖core points (classical membership FALSE on all anchors).
   Bankables: ê_x + k* + BS oracles (src/bargaining_set.py etc.), certified
   Mas-Colell⊋core on exact games, no-go map. LANE CLOSED; CPU freed for stES.
+
+## 2026-07-25 — STABLE ⟹ ES RESOLVED NEGATIVELY (pending final write-up): TWO CERTIFIED CANDIDATES
+- reenum4 (provably-complete arrangement for segment cores: coalition + floor +
+  endpoint-coordinate + 15 pairwise segment-support planes; gated by re-finding
+  cand0's known escape) COMPLETED on cand1 AND cand2: 41.5M ordinals/candidate,
+  ~20.8M non-singular vertices tested each, ~4.5M outside-core each, EVERY one
+  exactly dominated (conservative-margin screen, skip only on exact-verified
+  domination witness). SURVIVORS = 0, ESCAPES = 0, both games.
+- ⟹ under the segment-core completeness theorem: U = core, cores are STABLE.
+  Both games exact + non-ES ⟹ 'stable core ⟹ egalitarian stable' is FALSE at
+  n=6; Dietzenbacher (GEB 2021) open question resolved negatively in BOTH
+  halves (exact half = paper 2; stable half = here).
+- MAIN-SESSION INDEPENDENT VERIFICATION PASSED (bwfuqtrtd): both games exact
+  (62 exact LPs each, own pipeline), non-ES (own egalitarian implementation:
+  claims (3/2,1/2,1,1/2,3/2,3/2) sum 13/2>6; (3/2,1,3/2,3/2,3/2,3/2) sum
+  17/2>8), segment geometry (endpoints in core, 12 fully-tight coalitions,
+  rank 5 ⟹ dim 1).
+- REMAINING before claim: prove-stES's rigorous write-up of the completeness
+  theorem (interior-t/pairwise-plane lemma), tolerance-gap statement for the
+  float outside-core classification (coordinates are small-denominator
+  rationals; float error ≪ 1e-7 tolerance — state the determinant bound),
+  witness JSONs. Ordered; in progress.
+
+## 2026-07-25 — PAPER 2 EXTENDED: "Exact and stable games need not be egalitarian stable" (v2)
+- Max directive: extend paper 2 with the stable half; external audit to follow.
+- KEY PRESENTATION FIND: cand1/cand2 are TWO-POINT GENERATOR games —
+  v = min(A,B) verified (cand1: A=(1,1,0,1,3,0), B=(2,0,1,0,1,2), τ=6;
+  cand2: (3,0,2,2,1,0)/(1,1,1,1,2,2), τ=8). Exactness free via the paper's
+  Lemma 2.1; unifies both halves under one device.
+- CITATION PINNED (Tinbergen open PDF, abstract verbatim): Estévez-Fernández
+  2012 "equivalence between largeness of the core and stability of the core
+  for games with at most 5 players" ⟹ stable(n≤5) ⟹ large ⟹ ES ⟹ our n=6
+  witnesses are MINIMAL. Sharp thresholds: n=5 (exact), n=6 (stable).
+- New §6 in sections_theory.tex: stable-set defs (vNM 1944 added to bib),
+  Theorem 6.1 (both witnesses), Lemma 6.2 (segment domination sources),
+  Lemma 6.3 (plane family), Prop 6.4 (finite stability certificate for
+  segment cores — union-of-polytopes vertex argument), computer-assisted
+  stability proof with both soundness guarantees (exact domination witnesses;
+  lattice-gap: Hadamard det ≤7000 ⟹ nonzero constraint values ≥1.4e-4 ≫
+  tolerance 1e-7 ≫ float error), Corollary 6.5 (full resolution), Remark 6.6
+  (coupled failure). main.tex: new title, abstract, intro bullet, methods
+  (enumeration + independent-toolchain dual verification), vNM bib entry.
+- Supplement: stable_witness_1/2 blocks (game, generators, claims, Ahat,
+  12 fully-tight, segment, stability_certificate stats+gates); verifier
+  extended (generator check, claims/ES/Ahat recompute, fully-tight, exact
+  rank-5 Gaussian elimination); 52 checks ALL PASS standalone from the zip.
+  README updated. 11pp PDF compiles clean, no undefined refs.
+- versions/v2/: paper2_main_v2.pdf, sources, zip, SHA256SUMS_v2.
+
+## 2026-07-25 — prove-stES lane CLOSED (terminal summary complete)
+- Post-crash resume delivered the final items: LATTICE-GAP LEMMA in notes
+  (computed bound: lattice spacing ≥ 5.8e-3 ≫ 1e-7 tolerance ≫ ~1e-12 float
+  error — tighter than the paper's conservative Hadamard ≤7000/1.4e-4, both
+  valid), verification battery run, WITNESS_STABLE_NONES_cand{1,2}.json,
+  §8 terminal summary with honest correction trail (retracted "U convex";
+  pkill incident owned). Reusable assets: stES_reenum4.py (complete
+  segment-core stability certifier), stES_validate_n5.py, stES_corevx2.py,
+  stES_verify_witness.py. ALL FOUR BREAKTHROUGH LANES NOW CLOSED.

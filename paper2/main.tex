@@ -8,7 +8,7 @@
 \usepackage{xcolor}
 \definecolor{linknavy}{RGB}{25,55,120}
 \usepackage[colorlinks=true,linkcolor=linknavy,citecolor=linknavy,urlcolor=linknavy,
-pdftitle={Exact games need not be egalitarian stable},
+pdftitle={Core stability does not imply egalitarian stability},
 pdfauthor={Maxwell Flanagan}]{hyperref}
 
 \newtheorem{theorem}{Theorem}[section]
@@ -21,139 +21,152 @@ pdfauthor={Maxwell Flanagan}]{hyperref}
 
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\core}{\operatorname{Core}}
-\newcommand{\PES}{\operatorname{PES}}
 
-\title{Exact games need not be egalitarian stable}
+\title{Core stability does not imply egalitarian stability:\\
+a sharp six-player counterexample}
 
 \author{Maxwell Flanagan\\[2pt]
 \normalsize [Affiliation, City, Country --- to be completed]\\
 \normalsize Corresponding author: \texttt{maxwell.flanagan@gmail.com}%
-\thanks{A machine-readable certificate supplement with a standalone verifier
-accompanies this paper; see the verification section for methodology and the
-disclosure of AI assistance.}}
+\thanks{Online Resource 1 contains machine-readable witness data and
+standalone exact-arithmetic verifiers.}}
 
-\date{July 2026 --- draft}
+\date{July 2026}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Dietzenbacher (Games and Economic Behavior 127, 2021) asked whether every
-exact transferable-utility game is egalitarian stable, that is, whether the
-procedural egalitarian solution of an exact game always selects a core
-allocation; by results of Biswas et al.\ (1999) this holds for games with at
-most four players. We answer the question in the negative: there is a
-five-player exact game --- monotone, superadditive, with grand-coalition
-worth $4$ --- whose egalitarian claims all equal $1$, so that the claims sum
-to $5>4$ and the procedural egalitarian solution leaves the core. The
-witness arises from a simple device: the pointwise minimum of finitely many
-efficient vectors always defines an exact game. A padding construction turns
-the witness into an exact non--egalitarian-stable game for every $n\ge 5$,
-so the threshold is sharp: exactness implies egalitarian stability precisely
-up to four players. We further isolate the mechanism (a strict over-cover of
-the claims at a single player) and explain why random sampling is unlikely
-to find such games: exactifications of random balanced games almost always
-have large cores, where egalitarian stability is guaranteed.
+\citet{Dietzenbacher2021} asked whether every transferable-utility game whose
+core is a von Neumann--Morgenstern stable set is egalitarian stable, meaning
+that the procedural egalitarian solution selects a core allocation. We answer
+no by applying a player-specific additive perturbation to a classical
+six-player stable-core game. The perturbation translates the core and
+preserves domination, exactness, monotonicity, and superadditivity, but its
+egalitarian claims sum to $13/2$, exceeding the grand-coalition worth $6$.
+We give a self-contained stability proof: five tight pairs reduce every
+imputation not dominated by the core to a one-parameter discrepancy, and one
+of two tight triples eliminates either sign. The player bound is sharp,
+because core stability and core largeness coincide for at most five players,
+and large-core games are egalitarian stable. The construction also shows that
+egalitarian stability is not invariant under player-specific additive
+transformations. The exact-game half of Dietzenbacher's question had already
+been exhibited by \citet{Mauri2017}.
 \end{abstract}
 
 \medskip
-\noindent\textbf{Keywords:} cooperative games; core; exact games;
-egalitarian stability; procedural egalitarian solution.
+\noindent\textbf{Keywords:} transferable-utility games; stable core; stable
+set; procedural egalitarian solution; exact games.
 
 \section{Introduction}\label{sec:intro}
 
-Egalitarianism and core stability interact delicately in
-transferable-utility (TU) games. The procedural egalitarian solution
-\citep{DBH2017} extends the constrained egalitarian solution of
-\citet{DuttaRay89} from convex games to all TU games through an iterative
-procedure of intercoalitional equal division; \citet{Dietzenbacher2021}
-showed that this solution selects a core allocation exactly on the class of
-\emph{egalitarian stable} games, proved that all games with a large core
-\citep{Sharkey1982} are egalitarian stable, and---noting that by
-\citet{Biswas1999} every exact game \citep{Schmeidler1972} with at most four
-players has a large core---posed the following question: ``Whether all exact
-games and all stable core games with an arbitrary number of players are
-egalitarian stable is an interesting open question for future research.''
+The procedural egalitarian solution extends the constrained egalitarian
+solution of \citet{DuttaRay89} beyond convex games \citep{DBH2017}. Its
+natural domain is the class of
+\emph{egalitarian stable} games: those on which the procedure selects from the
+core \citep{Dietzenbacher2021}. This class contains all games with a large core.
+Two familiar classes therefore supplied unresolved boundary questions.
+\citet{Dietzenbacher2021} asked whether every exact game is egalitarian stable
+and whether the same is true whenever the core is a von
+Neumann--Morgenstern stable set.
 
-This note answers the exact-games half of the question in the negative, at
-the smallest possible size.
+The two halves have different prior-art histories.
+\citet[][Example~5]{Mauri2017} applied the relevant maximum-average procedure
+to the five-player exact game of \citet{Biswas1999}, obtained the zero vector,
+and observed that it lies outside the core. In the later terminology of
+\citet{Dietzenbacher2021}, that example is not egalitarian stable. We recall
+this point in Section~\ref{sec:exact-prior} but claim no novelty for the
+exact-game half.
 
-\begin{itemize}[leftmargin=2em]
-\item \textbf{A five-player counterexample (Section~\ref{sec:witness}).}
-There is an exact, monotone, superadditive five-player game with
-$v(N)=4$ whose egalitarian claims are $(1,1,1,1,1)$: every player's claim is
-locked at $1$ by the procedure, yet the grand coalition can only pay $4$.
-The game is generated by a device of independent interest: the pointwise
-minimum of finitely many efficient payoff vectors is always an exact game
-(Lemma~\ref{lem:generator}). Two further, structurally different witnesses
-found by independent searches are reported alongside.
-\item \textbf{A sharp threshold (Section~\ref{sec:family}).} A padding
-operation produces from any witness an exact non--egalitarian-stable game
-with any number $n\ge5$ of players, with a complete proof for null padding.
-Combined with the positive result for $n\le4$, exactness implies egalitarian
-stability if and only if $n\le 4$.
-\item \textbf{Mechanism and method (Section~\ref{sec:mechanism}).} A game is
-egalitarian stable if and only if its claims vector lies in the core
-(Lemma~\ref{lem:esiff}); failure requires a strict over-cover of the claims,
-which in all known witnesses over-counts a single player. We also explain
-why the question resisted sampling: exactified random games almost never
-leave the large-core region, where stability is guaranteed; the witnesses
-live on the thin-core frontier that the minimum-of-points generator
-produces directly.
-\end{itemize}
+For the stable-core half, we start from a classical six-player orthogonal
+game. Six-player stable-but-not-large examples go back at least to
+\citet{Biswas2001}; the precise segment-core game used here is recorded by
+\citet[][Example~4.3]{Shellshear2009}. We add the nonuniform additive vector
+$c=(1,0,0,0,1,0)$. After a permutation of the classical game, the perturbed
+game is generated by
+\[
+ A=(1,1,0,1,3,0),\qquad B=(2,0,1,0,1,2),\qquad
+ v(S)=\min\{A(S),B(S)\}.
+\]
+Its core is exactly the segment $[A,B]$, and its egalitarian claims are
+\[
+ \widehat\gamma
+   =\left(\tfrac32,\tfrac12,1,\tfrac12,\tfrac32,\tfrac32\right),
+ \qquad
+ \widehat\gamma(N)=\tfrac{13}{2}>6=v(N).
+\]
+Thus the perturbed game is not egalitarian stable. Additive transformations
+translate imputations and cores and preserve the dominance relation, so its
+stable core is inherited from the classical game. We also give a short,
+self-contained proof in the perturbed coordinates: five tight pairs and two
+tight triples suffice to dominate every imputation outside the segment. The
+new ingredient is therefore not the underlying core geometry, but the fact
+that this particular perturbation preserves that geometry while destroying
+egalitarian stability.
 
-All claims are certified in exact rational arithmetic; the procedure
-implementations were validated against the worked examples of
-\citet{Dietzenbacher2021}, and every witness was verified through several
-independently written implementations
-(Section~\ref{sec:methods}).
+The result is sharp. \citet{Estevez2012} proved that core stability and core
+largeness coincide for games with at most five players, while large-core games
+are egalitarian stable \citep{Dietzenbacher2021}. Hence six is the first
+possible number of players. The example also shows that the inclusion of
+large-core games in stable-core games is strict even after intersecting with
+the class of exact, monotone, superadditive games.
+
+Core stability has a general finite characterization through nested
+balancedness \citep{GrabischSudholter2024}. Our main proof does not require
+that machinery. For reproducibility, however, Appendix~\ref{app:arrangement}
+gives a specialized exact arrangement test for segment cores. A standalone
+verifier checks all $20{,}349$ candidate bases in rational arithmetic and
+independently confirms the hand proof.
 
 \input{sections_theory}
 
-\section{Verification methodology}\label{sec:methods}
+\section{Verification and reproducibility}\label{sec:methods}
 
-All numerical claims are certified in exact rational arithmetic. The
-egalitarian procedure was implemented four times, independently, by
-different authorship processes; each implementation was gated on exact
-reproduction of Examples~2 and~3 of \citet{Dietzenbacher2021} (claims,
-admissible collections, strong claimants, and solution values) before any
-search was run, and one implementation was additionally calibrated on $235$
-random exact four-player games, all of which are egalitarian stable as
-required by the results of \citet{Biswas1999} and \citet{Dietzenbacher2021}.
-The three witnesses reported here were each discovered independently and
-cross-verified through all implementations; exactness is certified by
-exhibiting, for every proper coalition, a core allocation attaining its
-worth (linear programs solved in exact rational arithmetic by a solver
-fuzz-tested against a standard floating-point implementation). A
-machine-readable supplement contains the full certificate data ---
-coalition functions, procedure traces, claims, admissible collections,
-solution values, core violations, and per-coalition exactness
-witnesses --- together with a self-contained verifier using only the Python
-standard library. The computational search, the verification tooling, and
-the drafting of this paper made substantial use of large-language-model
-assistance; every mathematical claim was verified by the certification
-pipeline described here, and all text was reviewed by the author.
+The main result is proved analytically in
+Theorem~\ref{thm:main}; computation is not part of its logical basis. Online
+Resource~1 supplies two independent standard-library Python verifiers and
+coalition data in exact rational form.
+\texttt{verify\_paper2.py} reconstructs each game, recomputes the terminal
+egalitarian claims and admissible collection, checks the two-round trace of
+the main example, and verifies the generator representation and tight
+affine-line system.
+\texttt{verify\_stability.py} implements the optional certificate of
+Appendix~\ref{app:arrangement}. For the reported game and an equivalent
+alternate normalization retained as a regression check, it constructs the
+$21$ relevant hyperplanes, solves all
+$\binom{21}{5}=20{,}349$ bases using exact fractions, and checks an explicit
+segment-core dominator for each outside-core imputation vertex. The
+deterministic counts are $230$ distinct intersections, $104$ imputations,
+$2$ core vertices, and $102$ exactly dominated outside-core vertices in
+each normalization. No floating-point classification, external solver, or
+unpreserved checkpoint is used.
+
+The perturbation was found computationally. The prior-art identification,
+final proofs, coalition data, and verification scripts were then checked
+independently in exact arithmetic. Large-language-model systems assisted
+with search, literature discovery, verification code, proof criticism, and
+drafting. All mathematical claims were reviewed by the author; the correction
+history and method of discovery are retained in the project provenance log.
 
 \subsection*{Statements and Declarations}
 \small
 \textbf{Funding:} none.
-\textbf{Data and code availability:} certificate supplement and verifier
-accompany the paper.
+\textbf{Data and code availability:} Online Resource 1 contains the data and
+standalone verifiers described above.
 \textbf{Competing interests:} none.
 \normalsize
 
 \begin{thebibliography}{99}
 
-\bibitem[Bennett(1983)]{Bennett1983}
-Bennett E (1983) The aspiration approach to predicting coalition formation
-and payoff distribution in sidepayment games.
-Int J Game Theory 12:1--28.
-\url{https://doi.org/10.1007/BF01756101}
-
 \bibitem[Biswas et al.(1999)]{Biswas1999}
 Biswas AK, Parthasarathy T, Potters JAM, Voorneveld M (1999) Large cores
 and exactness. Games Econ Behav 28:1--12.
 \url{https://doi.org/10.1006/game.1998.0686}
+
+\bibitem[Biswas et al.(2001)]{Biswas2001}
+Biswas AK, Parthasarathy T, Ravindran G (2001) Stability and largeness of
+the core. Games Econ Behav 34:227--237.
+\url{https://doi.org/10.1006/game.2000.0804}
 
 \bibitem[Dietzenbacher(2021)]{Dietzenbacher2021}
 Dietzenbacher B (2021) Monotonicity and egalitarianism.
@@ -175,6 +188,16 @@ Est\'evez-Fern\'andez A (2012) New characterizations for largeness of the
 core. Games Econ Behav 76:160--180.
 \url{https://doi.org/10.1016/j.geb.2012.04.003}
 
+\bibitem[Grabisch and Sudh\"olter(2024)]{GrabischSudholter2024}
+Grabisch M, Sudh\"olter P (2024) Characterization of TU games with stable
+cores by nested balancedness. Math Program 203:801--826.
+\url{https://doi.org/10.1007/s10107-021-01716-0}
+
+\bibitem[Mauri Masdeu(2017)]{Mauri2017}
+Mauri Masdeu L (2017) Essays on egalitarianism-based solution concepts for
+cooperative TU-games. Doctoral dissertation, Universitat Rovira i Virgili.
+\url{http://hdl.handle.net/10803/460900}
+
 \bibitem[Schmeidler(1972)]{Schmeidler1972}
 Schmeidler D (1972) Cores of exact games, I.
 J Math Anal Appl 40:214--225.
@@ -184,6 +207,15 @@ J Math Anal Appl 40:214--225.
 Sharkey WW (1982) Cooperative games with large cores.
 Int J Game Theory 11:175--182.
 \url{https://doi.org/10.1007/BF01755727}
+
+\bibitem[Shellshear and Sudh\"olter(2009)]{Shellshear2009}
+Shellshear E, Sudh\"olter P (2009) On core stability, vital coalitions, and
+extendability. Games Econ Behav 67:633--644.
+\url{https://doi.org/10.1016/j.geb.2009.01.005}
+
+\bibitem[von Neumann and Morgenstern(1944)]{vNM1944}
+von Neumann J, Morgenstern O (1944) Theory of Games and Economic Behavior.
+Princeton University Press, Princeton
 
 \end{thebibliography}
 

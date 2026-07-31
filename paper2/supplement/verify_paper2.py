@@ -1,5 +1,5 @@
-"""One-command exact verification of the computational claims of
-"Exact games need not be egalitarian stable".
+"""One-command exact verification of the witness data for
+"Core stability does not imply egalitarian stability".
 
     python3 verify_paper2.py
 
@@ -8,8 +8,8 @@ Implements the egalitarian procedure of Dietzenbacher et al. (2017) /
 Dietzenbacher (2021) inline, gates it on the two worked examples of
 Dietzenbacher (2021), then verifies, for every witness block in
 supplement_data.json:
-  - the stated class flags that are LP-free (monotone, superadditive,
-    convexity/non-convexity, balancedness via a supplied core point),
+  - the stated class flags that are recomputed here (monotone,
+    superadditive, and convexity/non-convexity),
   - exactness where per-coalition witnesses are supplied (coverage of all
     proper coalitions, core membership, attainment),
   - the generator representation v = min(x1, x2) for the primary witness and
@@ -24,7 +24,12 @@ from fractions import Fraction as F
 HERE = os.path.dirname(os.path.abspath(__file__))
 _p1 = os.path.join(HERE, "supplement_data.json")
 _p2 = os.path.join(HERE, "..", "supplement_data.json")
-D = json.load(open(_p1 if os.path.exists(_p1) else _p2))
+with open(_p1 if os.path.exists(_p1) else _p2, encoding="utf-8") as stream:
+    D = json.load(stream)
+if os.path.exists(_p1) and os.path.exists(_p2):
+    with open(_p2, encoding="utf-8") as stream:
+        if D != json.load(stream):
+            raise ValueError("the two supplement_data.json copies differ")
 FAIL = []
 
 def check(label, cond):
@@ -54,9 +59,9 @@ def in_core(v, x, n):
     N = (1 << n) - 1
     return sum(x) == v[N] and all(xS(x, S, n) >= v[S] for S in range(1, N))
 
-def egalitarian_procedure(n, v):
+def egalitarian_procedure(n, v, with_history=False):
     N = (1 << n) - 1
-    fixed, A = {}, []
+    fixed, A, history = {}, [], []
     for _ in range(n + 1):
         if len(fixed) == n:
             break
@@ -81,7 +86,11 @@ def egalitarian_procedure(n, v):
             for i in members(S, n):
                 if i not in fixed:
                     fixed[i] = chi[S][i]
-    return fixed, A, (N in A)
+        maxima = tuple(max(chi[S][i] for S in range(1, N + 1)
+                           if S >> i & 1) for i in range(n))
+        history.append((tuple(A), dict(fixed), maxima))
+    result = (fixed, A, (N in A))
+    return result + (history,) if with_history else result
 
 def is_monotone(v, n):
     N = (1 << n) - 1
@@ -181,14 +190,101 @@ for block in ["primary_witness_vN4", "minimized_variant_mass41",
     if "is_convex" in t:
         check("  is_convex = " + str(t["is_convex"]), is_convex(v, n) == t["is_convex"])
 
+n = 6
+for block in ["stable_witness_1", "stable_witness_2"]:
+    t = D[block]
+    print(block)
+    v = parse_game(t["game_v"], n)
+    N = 63
+    check("  coalition table has all 63 nonempty entries",
+          len(t["game_v"]) == N and
+          {parse_set(name) for name in t["game_v"]} == set(range(1, N + 1)))
+    A = [F(u) for u in t["generator_points"]["A"]]
+    B = [F(u) for u in t["generator_points"]["B"]]
+    check("  generator: v = min(A,B); A,B in core",
+          all(v[S] == min(xS(A, S, n), xS(B, S, n)) for S in range(1, N + 1))
+          and in_core(v, A, n) and in_core(v, B, n))
+    if block == "stable_witness_1":
+        claims, Ah, es, history = egalitarian_procedure(n, v, with_history=True)
+    else:
+        claims, Ah, es = egalitarian_procedure(n, v)
+    stated = [F(u) for u in t["egalitarian_claims"]]
+    check("  claims recomputed = stated", [claims[i] for i in range(n)] == stated)
+    check("  claims sum " + str(sum(stated)) + " > v(N) = " + str(v[N]),
+          sum(stated) > v[N] and F(t["claims_sum"]) == sum(stated))
+    check("  NOT egalitarian stable (recomputed)",
+          not es and t["egalitarian_stable"] is False)
+    check("  admissible collection matches",
+          sorted(Ah) == sorted(parse_set(s) for s in t["admissible_collection_Ahat"]))
+    if block == "stable_witness_1":
+        round_one = {parse_set("{1,5}"), parse_set("{5,6}")}
+        round_one_fixed = {0: F("3/2"), 4: F("3/2"), 5: F("3/2")}
+        round_one_maxima = (
+            F("3/2"), F("5/4"), F("4/3"),
+            F("5/4"), F("3/2"), F("3/2"),
+        )
+        check("  two-round trace (round 1 collection, maxima, fixed claims)",
+              len(history) == 2 and set(history[0][0]) == round_one and
+              history[0][1] == round_one_fixed and
+              history[0][2] == round_one_maxima and
+              set(history[1][0]) == set(Ah) and
+              history[1][1] == claims)
+        shift = [F(1), F(0), F(0), F(0), F(1), F(0)]
+        base_A = [A[i] - shift[i] for i in range(n)]
+        base_B = [B[i] - shift[i] for i in range(n)]
+        base_v = [F(0)] * (1 << n)
+        for S in range(1, N + 1):
+            base_v[S] = min(xS(base_A, S, n), xS(base_B, S, n))
+        base_claims, _, base_es = egalitarian_procedure(n, base_v)
+        check("  unperturbed classical game is egalitarian stable",
+              base_es and [base_claims[i] for i in range(n)] ==
+              [F("1/2")] * 4 + [F(1), F(1)])
+    ft = [parse_set(s) for s in t["fully_tight_coalitions"]]
+    check("  12 fully-tight coalitions (tight at A and B)",
+          len(ft) == 12 and all(xS(A, S, n) == v[S] == xS(B, S, n) for S in ft))
+    # Segment core: the tight equalities force an affine line, then all core
+    # inequalities restrict its exact parameter interval to [0,1].
+    rows = [[F(1)] * n] + [[F(1) if S >> i & 1 else F(0) for i in range(n)]
+                           for S in ft]
+    M = [r[:] for r in rows]
+    rank = 0
+    for col in range(n):
+        piv = next((r for r in range(rank, len(M)) if M[r][col] != 0), None)
+        if piv is None:
+            continue
+        M[rank], M[piv] = M[piv], M[rank]
+        pr = M[rank]
+        for r in range(len(M)):
+            if r != rank and M[r][col] != 0:
+                f = M[r][col] / pr[col]
+                M[r] = [a - f * b for a, b in zip(M[r], pr)]
+        rank += 1
+    direction = [B[i] - A[i] for i in range(n)]
+    lower_bounds, upper_bounds = [], []
+    for S in range(1, N):
+        slope = xS(direction, S, n)
+        offset = v[S] - xS(A, S, n)
+        if slope > 0:
+            lower_bounds.append(offset / slope)
+        elif slope < 0:
+            upper_bounds.append(offset / slope)
+    interval_ok = (
+        lower_bounds and upper_bounds and
+        max(lower_bounds) == 0 and min(upper_bounds) == 1
+    )
+    check("  segment core: rank-5 line and exact parameter interval [0,1]",
+          rank == 5 and A != B and interval_ok)
+    check("  is_monotone = " + str(t["is_monotone"]), is_monotone(v, n) == t["is_monotone"])
+    print("  note  core stability has a hand proof in the article; the independent")
+    print("        exact arrangement check is re-run by verify_stability.py.")
+
 print()
 if FAIL:
     print(f"*** {len(FAIL)} FAILURES ***")
     for f in FAIL:
         print("   -", f)
     sys.exit(1)
-print("ALL CHECKS PASSED. Every certificate-backed claim of the paper is "
-      "verified in exact rational arithmetic using only the Python standard "
-      "library. (Exactness of the three non-primary witnesses and balancedness "
-      "flags rest on the exact-LP pipeline described in the paper where "
-      "per-coalition witnesses are not included in this supplement.)")
+print("ALL CHECKS PASSED. Witness tables, procedural claims, generator "
+      "representations, and segment-core systems were verified in exact "
+      "rational arithmetic using only the Python standard library. Run "
+      "verify_stability.py for the independent exact arrangement check.")
