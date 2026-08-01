@@ -355,6 +355,386 @@ have either one value or two.  Normalize the smaller value to one and apply
 Proposition~\ref{prop:lx-two-level-capacity}.
 \end{proof}
 
+There is a second exact certificate, independent of the number of residual
+levels.  It compares the slack of a coalition carrying the whole complement
+of $S$ with the slack of its trace inside $S$.
+
+\begin{proposition}[off-side slack-domination certificate]
+\label{prop:lx-carrier-capacity}
+Let $v$ be exact, $S$ proper, $\phi=\phi(v)$, and $P=N\setminus S$.
+Suppose $C$ is a nonempty proper subset of $S$, put $T=P\cup C$, and assume
+\[
+ \phi(T)-v(T)\leq\phi(C)-v(C).
+\]
+Then
+\[
+ \max_{x\in F_C}x(S)\leq\phi(S),
+ \qquad\text{so}\qquad
+ d_v^*(S)\leq\phi(S)-v(S).
+\]
+In particular, the conclusion holds whenever $T$ is $\phi$-tight.
+\end{proposition}
+
+\begin{proof}
+Because $S\cup T=N$ and $S\cap T=C$, modularity gives
+$x(S)+x(T)=x(N)+x(C)$ for every allocation $x$.  If $x\in F_C$, then
+core feasibility at $T$ and efficiency imply
+\[
+ x(S)=v(N)+v(C)-x(T)
+ \leq v(N)+v(C)-v(T).
+\]
+Moreover,
+\[
+ v(N)+v(C)-v(T)
+ =\phi(S)+\bigl(\phi(T)-v(T)\bigr)
+              -\bigl(\phi(C)-v(C)\bigr)
+ \leq\phi(S).
+\]
+Exactness makes $F_C$ nonempty, so this face occurs in the minimum defining
+$d_v^*(S)$ and proves the claim.
+\end{proof}
+
+The carrier comparison has a useful normal form that removes both slack
+expressions.  It also converts failure of every candidate into a single
+finite-dimensional separation problem.
+
+\begin{proposition}[carrier marginal and face separation]
+\label{prop:lx-carrier-separation}
+Let $v$ be exact, $\phi=\phi(v)$, $S$ proper, and $P=N\setminus S$.
+For every $k\in S$,
+\[
+ \begin{split}
+ &[\phi(P\cup\{k\})-v(P\cup\{k\})]
+   -[\phi_k-v(\{k\})]\\
+ &\hspace{5em}=\phi(P)-[v(P\cup\{k\})-v(\{k\})].
+ \end{split}
+\]
+Consequently $k$ satisfies the carrier inequality if and only if
+\[
+ v(P\cup\{k\})-v(\{k\})\geq\phi(P).
+ \tag{M}\label{eq:lx-carrier-marginal}
+\]
+Let $K\subseteq S$ be nonempty.  If \eqref{eq:lx-carrier-marginal} fails
+strictly for every $k\in K$, then every point of the exact face
+$F_{P\cup\{k\}}$ satisfies $x(S)>\phi(S)$.  If, in addition,
+$(\star_S)$ fails, there is a nonzero $w\in\R^S_+$ such that
+\[
+ \max_{k\in K}\ \max_{x\in F_{P\cup\{k\}}}
+       \sum_{i\in S}w_i(x_i-\phi_i)<0.
+ \tag{Sep}\label{eq:lx-carrier-separator}
+\]
+\end{proposition}
+
+\begin{proof}
+Because $P$ and $\{k\}$ are disjoint,
+$\phi(P\cup\{k\})=\phi(P)+\phi_k$, which proves the identity and
+\eqref{eq:lx-carrier-marginal}.  Now suppose the latter fails for $k$ and
+take $x\in F_{P\cup\{k\}}$.  Core feasibility at $\{k\}$ gives
+\[
+ x(P)=v(P\cup\{k\})-x_k
+ \leq v(P\cup\{k\})-v(\{k\})<\phi(P).
+\]
+Efficiency therefore gives $x(S)>\phi(S)$.
+
+Let $Z$ be the convex hull of the union of the faces
+$F_{P\cup\{k\}}$, $k\in K$.  It is a compact subset of the core, and every
+point of $Z$ has $S$-sum strictly larger than $\phi(S)$.  Hence failure of
+$(\star_S)$ implies that $Z$ is disjoint from
+$\phi_S+\R^S_+$ after projection onto the $S$-coordinates.  Strong
+separation gives a strict separating normal $w$.  Its coordinates must be
+nonnegative, since otherwise its infimum on
+$\phi_S+\R^S_+$ would be $-\infty$.  Translating by $\phi_S$ gives
+\eqref{eq:lx-carrier-separator}.
+\end{proof}
+
+The separator is in fact forced by the star-failure cover; it is not an
+independent normal that can be eliminated against that cover.
+
+\begin{proposition}[residual-gap separator]
+\label{prop:lx-residual-gap-separator}
+Suppose failure of $(\star_S)$ has a tight-coalition certificate
+\[
+ r^S=\mu\mathbf1_N-\sum_T\lambda_T\mathbf1_T,
+ \qquad \lambda_T\geq0,\quad
+ \phi(T)=v(T)\ \text{if }\lambda_T>0,
+\]
+where $r_i\geq1$ on $S$.  Put
+\[
+ r_0=\min_{i\in S}r_i,\qquad
+ K=\{i\in S:r_i=r_0\},\qquad
+ H=S\setminus K,\qquad
+ D=\sum_{i\in H}(r_i-r_0).
+\]
+Assume $H\neq\emptyset$.  If the carrier marginal fails at
+$k\in K$ by
+\[
+ \gamma_k=[\phi(P\cup\{k\})-v(P\cup\{k\})]
+           -[\phi_k-v(\{k\})]>0,
+\]
+then, for every $x\in F_{P\cup\{k\}}$,
+\[
+ \sum_{i\in H}\frac{r_i-r_0}{D}(x_i-\phi_i)
+ \leq-\frac{r_0}{D}\gamma_k<0.
+ \tag{RG}\label{eq:lx-residual-gap-separator}
+\]
+Consequently the normalized residual gap is a common strict separator for
+every failed candidate in $K$, supported entirely on the higher-residual
+class $H$.
+\end{proposition}
+
+\begin{proof}
+For any $x\in\core(v)$ put $d=x-\phi$.  Efficiency gives $d(N)=0$, and
+core feasibility plus tightness gives $d(T)\geq0$ whenever
+$\lambda_T>0$.  Taking the scalar product of the cover identity with $d$
+therefore yields
+\[
+ \sum_{i\in S}r_i d_i=-\sum_T\lambda_Td(T)\leq0.
+\]
+Splitting off the minimum residual gives
+\[
+ r_0d(S)+\sum_{i\in H}(r_i-r_0)d_i\leq0.
+\]
+For $x\in F_{P\cup\{k\}}$, the carrier calculation in
+Proposition~\ref{prop:lx-carrier-separation} gives
+$d(S)\geq\gamma_k>0$.  Substitution and division by $D$ prove
+\eqref{eq:lx-residual-gap-separator}.
+\end{proof}
+
+\begin{corollary}[residual-gap escape criterion]
+\label{cor:lx-residual-gap-escape}
+Under the hypotheses of Proposition~\ref{prop:lx-residual-gap-separator}, if
+some $k\in K$ satisfies
+\[
+ \max_{x\in F_{P\cup\{k\}}}
+ \sum_{i\in H}\frac{r_i-r_0}{D}(x_i-\phi_i)\geq0,
+ \tag{E}\label{eq:lx-residual-gap-escape}
+\]
+then $k$ satisfies the carrier inequality
+\[
+ [\phi(P\cup\{k\})-v(P\cup\{k\})]
+ \leq[\phi_k-v(\{k\})].
+\]
+Thus existence of a minimum-residual carrier is reduced to escape from one
+explicit scalar separator; no coordinatewise choice of a member of $K$ is
+required.
+\end{corollary}
+
+\begin{proof}
+The contrapositive is exactly inequality~\eqref{eq:lx-residual-gap-separator}.
+\end{proof}
+
+The strict separator also has a finite dual form.  This removes the
+quantification over all points of the carrier-tight faces and exposes the
+precise slack identity induced by the residual cover.
+
+\begin{proposition}[dual form of the carrier-face separator]
+\label{prop:lx-carrier-separator-dual}
+Use the hypotheses and notation of
+Proposition~\ref{prop:lx-carrier-separation}, and put
+$T_k=P\cup\{k\}$.  A vector $w\in\R^S_+$ satisfies
+\eqref{eq:lx-carrier-separator} if and only if, for every $k\in K$, there
+are multipliers $\theta^k_U\geq0$ on the nonempty proper coalitions and
+$a_k,b_k\in\R$ such that
+\[
+ w^S=a_k\mathbf1_N+b_k\mathbf1_{T_k}
+          -\sum_{\emptyset\ne U\subsetneq N}
+             \theta^k_U\mathbf1_U,
+ \tag{D1}\label{eq:lx-separator-stationarity}
+\]
+where $w^S$ is $w$ on $S$ and zero on $P$, and
+\[
+ \sum_U\theta^k_U\,[\phi(U)-v(U)]
+   < b_k[\phi(T_k)-v(T_k)].
+ \tag{D2}\label{eq:lx-separator-slack}
+\]
+Whenever the carrier marginal fails at $k$, the right-hand slack in
+\eqref{eq:lx-separator-slack} is positive and every such certificate has
+$b_k>0$.
+\end{proposition}
+
+\begin{proof}
+Fix $k$ and maximize $w^S\!\cdot x$ over the core subject to
+$x(T_k)=v(T_k)$.  In the convention $-x(U)\leq-v(U)$ for the core
+inequalities, the linear-programming dual has nonnegative multipliers
+$\theta^k_U$, free multipliers $a_k,b_k$ on efficiency and the face
+equality, and stationarity exactly
+\eqref{eq:lx-separator-stationarity}.  Its objective is
+\[
+ -\sum_U\theta^k_Uv(U)+a_kv(N)+b_kv(T_k).
+\]
+Taking the scalar product of
+\eqref{eq:lx-separator-stationarity} with $\phi$ shows that this objective
+is strictly below $w\cdot\phi_S$ exactly when
+\eqref{eq:lx-separator-slack} holds.  Strong duality therefore proves the
+equivalence, simultaneously for all $k$ because the same $w$ occurs in
+each stationarity identity.
+
+If the carrier marginal fails, then
+$\phi(T_k)-v(T_k)>\phi_k-v(\{k\})\geq0$.  The left side of
+\eqref{eq:lx-separator-slack} is nonnegative, so strictness forces
+$b_k>0$.
+\end{proof}
+
+\begin{corollary}[aggregated separator identity]
+\label{cor:lx-aggregated-separator}
+If the carrier marginal fails for every $k\in K$, then the separator in
+Proposition~\ref{prop:lx-carrier-separation} supplies
+$c>0$, $A\in\R$, a collection $\eta_U\geq0$, and a nonzero
+$w\in\R^S_+$ such that
+\[
+ \mathbf1_K
+ =c w^S-A\mathbf1_N-|K|\mathbf1_P
+       +\sum_U\eta_U\mathbf1_U,
+ \tag{AD1}\label{eq:lx-aggregate-separator}
+\]
+and
+\[
+ \sum_U\eta_U[\phi(U)-v(U)]
+   <\sum_{k\in K}[\phi(P\cup\{k\})-v(P\cup\{k\})].
+ \tag{AD2}\label{eq:lx-aggregate-separator-slack}
+\]
+More precisely, one may take
+\[
+ c=\sum_{k\in K}\frac1{b_k},\qquad
+ A=\sum_{k\in K}\frac{a_k}{b_k},\qquad
+ \eta_U=\sum_{k\in K}\frac{\theta_U^k}{b_k}.
+\]
+\end{corollary}
+
+\begin{proof}
+Proposition~\ref{prop:lx-carrier-separator-dual} gives $b_k>0$ for every
+$k\in K$.  Divide \eqref{eq:lx-separator-stationarity} and
+\eqref{eq:lx-separator-slack} by $b_k$ and sum over $k$.  Since
+$\mathbf1_{P\cup\{k\}}=\mathbf1_P+e_k$ and
+$\sum_{k\in K}e_k=\mathbf1_K$, the stationarity sum rearranges to
+\eqref{eq:lx-aggregate-separator}; the strict slack inequalities sum to
+\eqref{eq:lx-aggregate-separator-slack}.
+\end{proof}
+
+The same comparison has a quantitative converse at the level of total
+$S$-payoff.  For a core point $\psi$, define
+\begin{align*}
+ \gamma_S(\psi)
+  &=\min_{\emptyset\ne C\subsetneq S}
+    \{[\psi(P\cup C)-v(P\cup C)]-[\psi(C)-v(C)]\},\\
+ \eta_S(\psi)
+  &=\max\{x(S)-\psi(S):x\in\core(v),\ x_i\geq\psi_i\ (i\in S)\}.
+\end{align*}
+Thus $(\star_S)$ at $\psi$ is equivalent to $\eta_S(\psi)>0$.
+
+\begin{lemma}[exact carrier lift]
+\label{lem:lx-carrier-lift}
+If $v$ is exact, then for every nonempty proper $C\subset S$ there is a
+$z^C\in\core(v)$ such that
+\[
+ z^C(S)-\psi(S)\geq
+ [\psi(P\cup C)-v(P\cup C)]-[\psi(C)-v(C)].
+\]
+\end{lemma}
+
+\begin{proof}
+Choose $z^C$ tight at $P\cup C$.  Core feasibility at $C$ gives
+$z^C(P)\leq v(P\cup C)-v(C)$.  Efficiency and the identity
+$\psi(P)=v(N)-\psi(S)$ now give the displayed inequality.
+\end{proof}
+
+The only possible obstruction is coordinatewise: the carrier-tight points
+raise the total payoff of $S$, but different members of $S$ may fall at
+different points.  For a pair, convexity removes that obstruction without
+loss.
+
+\begin{proposition}[sharp quantitative pair bound]
+\label{prop:lx-quantitative-pair}
+If $v$ is exact, $\psi\in\core(v)$, and $S$ is a proper two-player
+coalition, then
+\[
+ \eta_S(\psi)\geq\gamma_S(\psi).
+\]
+The coefficient one is sharp.
+\end{proposition}
+
+\begin{proof}
+The claim is immediate if $\gamma_S(\psi)\leq0$.  Write $S=\{i,j\}$ and
+suppose $\gamma_S(\psi)>0$.  Exactness supplies core points $a,b$ tight at
+$N\setminus\{j\}$ and $N\setminus\{i\}$, respectively.  Tightness makes
+$a_j=\max_{x\in\core(v)}x_j\geq\psi_j$ and
+$b_i=\max_{x\in\core(v)}x_i\geq\psi_i$, while
+Lemma~\ref{lem:lx-carrier-lift} gives
+\[
+ a(S)-\psi(S)\geq\gamma_S(\psi),\qquad
+ b(S)-\psi(S)\geq\gamma_S(\psi).
+\]
+If either point dominates $\psi$ on both coordinates, it proves the claim.
+Otherwise $a_i<\psi_i$ and $b_j<\psi_j$.  The segment $[a,b]$ meets the
+northeast orthant based at $(\psi_i,\psi_j)$: writing the two displacements as
+$(u_i,u_j)$ and $(w_i,w_j)$, positive total gives
+$u_j>-u_i>0$ and $w_i>-w_j>0$, hence
+$u_jw_i>(-u_i)(-w_j)$, exactly the condition that the two intervals of mixing
+weights making each coordinate nonnegative overlap.  Every point
+on the segment has $S$-displacement at least $\gamma_S(\psi)$.  The
+intersection point is therefore feasible in the definition of
+$\eta_S(\psi)$ and proves the bound.  Exact lower-envelope examples attain
+equality.
+\end{proof}
+
+The slack certificate is automatic on the most important thin-core model
+class used by the searches.
+
+\begin{proposition}[two-generator lower envelopes]
+\label{prop:lx-two-generator}
+Let $p,q\in\mathbb R^N$ have the same total, and define the exact game
+\[
+ v(T)=\min\{p(T),q(T)\}\quad(T\subsetneq N),
+ \qquad v(N)=p(N)=q(N).
+\]
+Let $S$ be proper.  If $\max_{x\in\core(v)}x(S)>\phi(S)$ and
+$(\star_S)$ fails at $\phi$, then there is a nonempty proper $C\subset S$
+satisfying the hypothesis of
+Proposition~\ref{prop:lx-carrier-capacity}.  Consequently
+$d_v^*(S)\leq\phi(S)-v(S)$.
+\end{proposition}
+
+\begin{proof}
+Both $p$ and $q$ belong to $\core(v)$, and one of them attains $v(T)$ at
+every proper $T$, so $v$ is exact.  Put $P=N\setminus S$.  Exactness at $P$ gives
+\[
+ \max_{x\in\core(v)}x(S)=v(N)-v(P)=\max\{p(S),q(S)\}.
+\]
+After interchanging $p$ and $q$, binding therefore gives
+$p(S)>\phi(S)$.  The two generator sums on $S$ cannot tie, since then
+$v(S)=\max_{x\in\core(v)}x(S)$; hence $p(S)>q(S)$ and $p(P)<q(P)$.  Define
+\[
+ C=\{i\in S:p_i>\phi_i\}.
+\]
+This set is nonempty because $p(S)>\phi(S)$, and it is proper because
+otherwise $p\in\core(v)$ would itself witness $(\star_S)$.  For $i\in C$,
+core feasibility at the singleton gives
+\[
+ p_i>\phi_i\geq v(\{i\})=\min\{p_i,q_i\},
+\]
+so $q_i\leq\phi_i<p_i$.  Hence
+\[
+ p(C)-q(C)
+ \geq p(C)-\phi(C)
+ \geq p(S)-\phi(S)
+ =\phi(P)-p(P).
+\]
+In particular $q(C)<p(C)$, and therefore
+\[
+ \begin{aligned}
+ v(P\cup C)-v(C)
+ &=\min\{p(P)+p(C),q(P)+q(C)\}-q(C)\\
+ &=\min\{p(P)+p(C)-q(C),q(P)\}\\
+ &\geq\phi(P).
+ \end{aligned}
+\]
+The last inequality also uses
+$\phi(P)\leq v(N)-v(S)=q(P)$, since $q(S)<p(S)$.
+Equivalently,
+$\phi(P\cup C)-v(P\cup C)\leq\phi(C)-v(C)$, which is precisely the
+off-side slack-domination hypothesis.
+\end{proof}
+
 So the bump is realized by a continuous path of \emph{exact} games in which only
 the lower bound $\tau$ on $x(S)$ rises. This isolates the role of exactness: if
 endpoint exactness is weakened to balancedness, the analogous interior path
@@ -473,8 +853,9 @@ minority $d^*_v(S)>0$ --- exact six-player witnesses with $d^*=1$ and $d^*=2$ ar
 included in the supplement --- but always $d^*_v(S)\le\phi(S)-v(S)$). Empirically the
 certificate has sharp structure: $C$ can always be taken as a subset of $S$
 contained in a \emph{single stratum} of the leximin computation --- almost always
-a singleton --- and it is provably never $\phi$-tight (a $\phi$-tight certificate
-would force $\phi(S)=v(S)$, contradicting positive slack). The open problem is
+a singleton.  If $C$ is $\phi$-tight, then $\phi\in F_C$, so a certificate can
+only be boundary-sharp, $M^{(C)}=\phi(S)$; exact boundary cases of this kind do
+occur, while every strict certificate is necessarily non-tight. The open problem is
 thus sharpened: produce, from the structure of a $(\star_S)$-failure at the
 leximin point of an exact game, a single-stratum $C\subseteq S$ with
 $M^{(C)}\le\phi(S)$. Empirically the certificate is pinned further: writing $r$
@@ -486,14 +867,156 @@ exhibiting nonnegative weights on $\phi$-tight coalitions with coverage $\beta$
 on $N\setminus S$, $\beta-1$ on $S\setminus\{k\}$, and at least $\beta-1$ on
 $k$; weights supported inside $S$ suffice in only about two thirds of cases, so
 a proof must construct this dual cover from $\phi$-tight coalitions
-\emph{crossing} $S$. Equivalently, for a minimum-residual $k$ the open claim
-reduces to the single inequality
-$\sum_{i\in S\setminus\{k\}}(r_i-1)\,(x_i-\phi_i)\le 0$
-for every core $x$ with $x_k=v(\{k\})$: flooring the most-covered member must
-leave the weighted displacement of the less-covered members of $S$ at or below
-zero relative to their leximin values. This inequality --- which the residual
-weights alone do not force --- is the precise frontier at which we leave the
-problem.
+\emph{crossing} $S$.  The residual normal gives a possible stronger route, but
+not an equivalent reformulation.  For a minimum-residual $k$, normalized by
+$r_k=1$, and any core $x$ with $x_k=v(\{k\})$, maximality of $\phi$ gives
+\[
+ [x(S)-\phi(S)]
+ +\sum_{i\in S\setminus\{k\}}(r_i-1)(x_i-\phi_i)\leq0.
+\]
+Consequently the singleton face certificate would follow from the sufficient
+inequality
+\[
+ \sum_{i\in S\setminus\{k\}}(r_i-1)(x_i-\phi_i)\geq0
+\]
+throughout that face.  The sign is essential; the opposite inequality gives
+no upper bound on $x(S)-\phi(S)$.  Whether this stronger face inequality is
+forced by the leximin strata is a separate question from the carrier route.
+An exact audit answers that stronger question negatively.  A highest-gain
+minimum-residual player satisfies the nonnegative-correction condition in
+$139/141$ saved multilevel failures, but not in two seven-player cases.  In
+one of them
+(\texttt{WITNESS\_KEY\_CX\_n7\_s303\_1491}) the correction is identically
+$-3/2$ on each of the two highest-gain singleton faces, although both faces
+certify and both carrier inequalities hold.  Thus the residual normal alone
+cannot prove the multilevel branch; a proof must use additional exactness
+geometry such as the off-side carrier comparison.
+
+A new proof-producing exact audit isolates a still sharper target on the saved
+hard frontier.  It covers all $141$ stored three-or-more-level failures
+($106$ at $n=6$ and $35$ at $n=7$). In every case some minimum-residual
+singleton certifies, and, more strongly, some minimum-residual $k$ satisfies
+the elementary carrier inequality
+\[
+ [\phi(P\cup\{k\})-v(P\cup\{k\})]
+ \leq [\phi(\{k\})-v(\{k\})].
+\]
+Across the $367$ individual minimum-residual candidates, $282$ singleton
+faces certify and the carrier inequality explains $280$ of them; it never
+produces a false certificate.  The remaining two seven-player singleton
+certificates require a richer face dual, but another minimum-residual player
+in the same case has the carrier certificate.  This is exact finite evidence,
+not a theorem.  Nor can it be promoted to an unconditional singleton-carrier
+conjecture: the exact two-level witness above has no certifying singleton; its
+minimum-residual pair is essential.  At this stage the apparent frontier was a dichotomy.
+A failure dual with at most two residual levels is already handled by
+Proposition~\ref{prop:lx-two-level-capacity}.  On the genuinely
+three-or-more-level branch, these data first suggested proving the displayed
+singleton inequality.  The whole-class audit below supersedes that target with
+a canonical coalition $K$ and removes the singleton-selection problem.
+The saved corpus initially suggested a canonical gain selector: in all $141$
+cases a carrier-certifying $k$ could be chosen to maximize
+$\phi_i-v(\{i\})$ inside the minimum-residual class.  That refinement is
+false.  A seeded mutation audit produced $534$ further exactly certified
+multilevel records ($505$ distinct game--coalition pairs).  Some
+minimum-residual carrier still exists in all $534$ records, but a
+highest-gain carrier exists in only $520$, and a highest-gain
+singleton face certifies in only $533$.
+
+Here is the sharp selector counterexample.  Let the exact six-player game be
+the lower envelope of the four common-sum points
+\[
+\begin{aligned}
+ p&=(-6,4,18,-4,11,-10),&q&=(-1,4,24,-4,0,-10),\\
+ a&=(-1,-2,19,-4,6,-5),&b&=(-6,0,20,0,9,-10),
+\end{aligned}
+\]
+and take $S=\{1,2,3,4,6\}$.  Its leximin point is
+$\phi=(-3,0,20,-2,6,-8)$, the normalized failure cover has three residual
+levels and minimum-residual class $K=\{1,2,3\}$, and the singleton gains on
+$K$ are $(3,2,2)$.  Thus player $1$ is the unique highest-gain candidate.
+Nevertheless its carrier slack is $4>3$, and more strongly
+\[
+ \max\{x(S):x\in\core(v),\ x_1=v(\{1\})\}=8>7=\phi(S),
+\]
+so even its singleton face fails.  Players $2$ and $3$ both satisfy the
+carrier inequality with equality and certify.  Tight-hypergraph centrality
+and cover-weighted adjacency refinements also fail on exact mutations.  The
+Any singleton route must therefore remain existential: select \emph{some}
+minimum-residual player, without imposing a gain ranking.  After adding fresh
+three-, four-, and five-generator screens and deduplicating all corpora, this
+existential carrier statement holds for all $669$ distinct exact multilevel
+game--coalition pairs ($702$ certified records).  The whole-class carrier
+statement below supersedes the need to solve this singleton-selection problem.
+
+Proposition~\ref{prop:lx-carrier-separation} sharpens what remains to be
+proved.  With $K=\{k\in S:r_k=1\}$, a counterexample would produce
+simultaneously the positive-$S$ failure normal $r$ and carrier failure at
+every member of $K$.  Proposition~\ref{prop:lx-residual-gap-separator} shows
+that the resulting common separator is not a second obstruction to eliminate:
+it is automatically the normalized residual gap on $S\setminus K$.  Thus
+mere coexistence of the two normals cannot yield a contradiction.  A tempting
+coordinatewise strengthening is also false: exactness and the leximin strata
+need not permit a convex combination of the carrier-tight faces whose average
+displacement is nonnegative at every higher-residual coordinate.  In the exact
+six-player instance \texttt{WITNESS\_KEY\_CX\_n6\_s201\_10919}, the best common
+coordinatewise margin over all such mixtures is $-1/20$, although players $4$
+and $5$ both satisfy the carrier inequality (each with margin $-3/4$).
+
+The scalar condition in Corollary~\ref{cor:lx-residual-gap-escape} is the
+minimal sufficient statement for a \emph{fixed} failure cover, and it initially
+survives all $141$ saved hard multilevel failures.  Across their $367$
+minimum-residual faces, $277$ escape; all $87$ failed carriers are strictly
+negative, while three valid carriers do not escape but another candidate does
+in the same record.
+
+Adversarial mutation shows that even this fixed-cover target is not universal.
+Among $505$ distinct exact mutation cases, all have a minimum-residual carrier
+but only $123$ have an escape face for the cover returned by the exact failure
+dual.  Already trial $0$ of the first seeded face-selector mutation audit has
+$K=\{1,2,3\}$ and normalized residual-gap weights $(2/3,1/3)$ on players
+$5,6$.  Players $1$ and $2$ satisfy the carrier inequality, with margins
+$-2$ and $0$, yet their face maxima are both $-1/3$; player $3$ fails the
+carrier inequality and has maximum $-4/3$.  Consequently neither
+coordinatewise neutralization nor escape for an arbitrarily chosen failure
+cover can be the missing theorem.  A residual-based proof would have to select
+a favorable cover from the full dual face jointly with the carrier candidate;
+otherwise it must return to a cover-independent exactness exchange.
+
+The cover-independent audit reveals a substantially simpler target.  It uses
+the full minimum-residual class at once.
+
+\begin{conjecture}[minimum-residual-class carrier]
+\label{conj:lx-class-carrier}
+Let $v$ be exact and let $(\star_S)$ fail at $\phi$.  If the failure is not
+already covered by Proposition~\ref{prop:lx-two-level-capacity}, then there is
+a failure cover with minimum-residual class
+$K=\{i\in S:r_i=r_0\}$ and $P=N\setminus S$ such that
+\[
+ [\phi(P\cup K)-v(P\cup K)]
+ \leq[\phi(K)-v(K)],
+ \tag{KC}\label{eq:lx-class-carrier}
+\]
+or equivalently
+\[
+ v(P\cup K)-v(K)\geq\phi(P).
+\]
+\end{conjecture}
+
+This single inequality would close the multilevel capacity branch immediately:
+apply Proposition~\ref{prop:lx-carrier-capacity} with $C=K$.  It requires no
+singleton selector and is insensitive to how payoffs are ranked inside $K$.
+A deduplicated exact audit verifies \eqref{eq:lx-class-carrier} for all $669$
+stored multilevel game--coalition pairs ($702$ records): $644$ inequalities
+are strict and $25$ are equalities, with margins ranging from $-28$ to $0$.
+This includes all $505$ adversarial mutation pairs on which the fixed-cover
+escape test mostly fails.  Thus \eqref{eq:lx-class-carrier}, rather than a
+singleton rule or residual-gap escape, is now the sharp computational theorem
+target.  A separate targeted screen of $3{,}000$ four-generator
+lower-envelope games found $1{,}123$ star failures and $25$ genuinely
+multilevel failures, with no positive class-carrier margin; the closest
+boundary case was recomputed exactly and has margin zero.  The broader screen
+is discovery evidence only, whereas the $669$-pair audit is fully exact.
 
 Proposition~\ref{prop:lx-two-level-capacity} explains an important part of
 this structure exactly.  If the residuals have only the levels $1$ and
@@ -502,7 +1025,13 @@ $C=\{i\in S:r_i=1\}$ is itself the required face certificate; no
 crossing-cover construction is needed.  The rare same-stratum pair exceptions
 to singleton certification are examples with $|C|=2$.  Accordingly, all
 unresolved certificate geometry lies in duals with at least three distinct
-residual levels.
+residual levels.  Proposition~\ref{prop:lx-carrier-capacity} removes a second
+large class: it is enough that an off-side carrier have no more slack than its
+trace inside $S$; tightness of the carrier is a particularly simple sufficient
+condition.  In particular, the
+three-level witness \texttt{WITNESS\_KEY\_FALSE\_n6} is certified by
+$T=\{1,2,6\}$ and $C=\{1\}$ (player labels one-indexed), even though the
+union-of-cover certificate described above fails.
 
 Proposition~\ref{prop:lx-capacity} removes the frequency language from the
 logical frontier. Every pair $(v,S)$ falls into the exact dichotomy
@@ -521,9 +1050,65 @@ Proposition~\ref{prop:lx-two-level-capacity} proves this implication whenever
 the failure dual has at most two residual levels, and
 Corollary~\ref{prop:lx-pair-capacity} covers every $|S|=2$.  The remaining
 capacity frontier therefore requires both $|S|\geq3$ and a genuinely
-three-or-more-level dual.  The singleton/pair certificate statistics motivate
-how to attack those cases, but neither their observed percentages nor sampling
-rarity enters the conditional theorem.
+three-or-more-level dual.  After
+Proposition~\ref{prop:lx-carrier-capacity}, a counterexample to the capacity
+implication must additionally have no off-side slack-dominating carrier.  The
+singleton/pair certificate statistics motivate how to attack those cases, but
+neither their observed percentages nor sampling rarity enters the conditional
+theorem.
+
+The sharpened computational target is correspondingly narrow.  The broad
+slack-domination condition covered all $141$ saved hard star-failure cases at
+$n=6,7$ and all $744$ fresh binding star failures in a screen of exact
+lower-envelope games at $n=4,5,6$, with no exception.  The new class-carrier
+audit identifies the canonical coalition in the genuinely multilevel branch:
+the full minimum-residual class $K$ works in all $669$ distinct exact pairs.
+This remains evidence, not a theorem, but proving
+Conjecture~\ref{conj:lx-class-carrier} would close that branch with a single
+application of Proposition~\ref{prop:lx-carrier-capacity}.
+Proposition~\ref{prop:lx-two-generator} proves the broader existence of some
+slack-dominating carrier for every two-generator lower-envelope game.  Thus
+within the finite lower-envelope
+model class, any counterexample must use at least three genuinely active
+generators; this is a structural restriction, not a sampling observation.
+
+The obvious three-generator escape from the sharp two-generator boundary is
+itself blocked, but for an instructive reason.  In the exact equality fixture,
+let $S=\{1,2,3,4,6\}$ and transfer $a=1/10$ from the off-side player~5 of the
+second generator equally among the five members of $S$, retaining both original
+generators.  All three generators are genuinely active.  The leximin point
+remains $(1,4,3,5,7,4)$ and the minimum off-side slack comparison becomes
+$1/50>0$, so the carrier condition has indeed been crossed.  However,
+$(\star_S)$ is simultaneously restored: the core point
+\[
+ (26/25,4,153/50,253/50,171/25,4)
+\]
+dominates $\phi$ on $S$ and has $S$-sum $429/25>17$.  Thus the star opening is
+$4/25$, eight times the carrier escape.  This is an exact boundary calculation,
+not a general theorem; a finite simplex-grid deformation screen found the same
+coupling throughout the tested local family.  It suggests proving the carrier
+conjecture contrapositively: show that escaping every off-side carrier inequality
+constructs a core direction nonnegative on $S$, rather than trying to track one
+distinguished minimizing generator.
+
+The carrier lift suggests a sharp quantitative form of that contrapositive:
+\begin{equation}
+ \eta_S(\phi)\geq\gamma_S(\phi).
+ \tag{Q}\label{eq:lx-quantitative-carrier}
+\end{equation}
+We leave (Q) as a conjecture for exact games.
+Proposition~\ref{prop:lx-quantitative-pair} proves it for $|S|=2$, and the
+coefficient one is already sharp there.  In six exact lower-envelope screens
+covering $3{,}650$ games and $35{,}629$ binding pairs $(v,S)$, all $746$ cases
+with $\gamma_S(\phi)>0$ satisfied (Q); the minimum in every screen was
+recomputed exactly and equalled one.  These counts are evidence only.  The
+exactness hypothesis is load-bearing even for the coefficient: a balanced
+non-exact five-player game has leximin point
+$(-3/2,10,6,17/2,-10)$ and, at $S=\{2,3,4\}$,
+$\gamma_S=7/2$ but $\eta_S=1/2$.  Thus the theorem target is a
+convex-combination statement for the carrier-tight points supplied by
+Lemma~\ref{lem:lx-carrier-lift}, not an inequality valid on arbitrary
+balanced cores.
 
 \begin{remark}
 Lemma~\ref{lem:lx-C} is a leximin parametric-monotonicity statement; its cousin the
