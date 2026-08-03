@@ -61,7 +61,12 @@ of pairwise monotonicity, whereas on assignment games extensive searches
 support monotonicity of both solutions. Third, we study whether the
 impossibility descends to exact games. For $n\le4$ it does not: by known
 results on large cores and egalitarian solutions, a coalitionally monotonic
-core selection exists on four-player exact games. The
+core selection exists on four-player exact games. We then prove by an exact
+positive-circuit classification that every three-game star of exact games is
+feasible through five players: the two genuinely open five-player arm
+geometries comprise $609$ symmetry orbits ($5{,}670$ labeled circuit
+supports), all neutralized by balancedness, bump nonnegativity, or endpoint
+exactness. The
 Housman--Clark mechanism is provably unavailable on exact games of any size,
 common-core intersection of bumped exact games can nevertheless fail (a
 four-arm example whose family remains feasible), and by a compactness
@@ -157,7 +162,9 @@ to the feasibility of all finite bump families, which we conjecture for
 $n\ge5$ (Conjecture~\ref{conj:existence}). The procedural egalitarian route
 cannot establish this conjecture on all exact games:
 \citet[][Example~5]{Mauri2017} already gives an exact five-player game that
-is not PES-stable.
+is not PES-stable. At the minimal open size, however, an exhaustive exact
+classification proves that every base-plus-two-bump family is feasible
+(Proposition~\ref{prop:n5-two-arm}).
 
 \item \textbf{Market games (Section~\ref{sec:markets}).}
 The nucleolus is \emph{not} pairwise monotonic on permutation games: raising
@@ -813,6 +820,932 @@ The same purported certificate would therefore prove a feasible system
 infeasible, a contradiction.  The argument for the $A$-row is symmetric.
 \end{proof}
 
+\begin{lemma}[positive-circuit formulation]
+\label{lem:family-circuits}
+Fix the player set and the two labeled arms.  Let $H$ be the inequality
+matrix of the three-game family LP, choose a reference player $r$, and form
+$D$ by replacing, within each game block, the stationarity equation for
+player $i\neq r$ by its difference from the equation for $r$.  Then the
+projection of the Farkas cone onto its nonnegative inequality multipliers is
+\[
+ \{\lambda\geq0:D\lambda=0\}.
+\]
+Its extreme rays are exactly the support-minimal positive circuits of $D$.
+Consequently, if no positive circuit contains both changed-worth core rows,
+then every balanced three-game star with those arm labels is feasible.
+\end{lemma}
+
+\begin{proof}
+The only equality rows in the family LP are the three efficiency equations.
+For a fixed game, a free efficiency multiplier completes stationarity if and
+only if the inequality-row combination has the same coefficient on every
+player.  Subtracting the reference-player coefficient gives exactly
+$D\lambda=0$, and then the efficiency multiplier is uniquely recovered.
+Thus the displayed cone is linearly isomorphic to the full Farkas cone.
+Extreme rays of a nonnegative kernel cone are precisely its nonzero
+support-minimal nonnegative dependencies, i.e. its positive circuits.
+
+If the family were infeasible, a Farkas certificate with negative right-hand
+side would decompose into extreme rays, at least one of which would still have
+negative right-hand side.  Proposition~\ref{prop:both-sensitive} forces that
+ray to use both changed-worth rows.  The corresponding positive circuit would
+therefore contain both distinguished columns, a contradiction.
+\end{proof}
+
+Two exact support reductions further sharpen the target.  A both-sensitive
+positive circuit must use a monotonicity column from each arm: if, say, no
+$A$-edge column were used, stationarity in the $t_A$ block would make its
+supported core columns alone a nonzero positive dependency, contradicting
+support minimality.  Also, it cannot contain both core columns $T$ and
+$N\setminus T$ in one game block, because those two columns sum to zero and
+already form a positive circuit.
+
+This formulation permits a direct search that is less likely to miss a ray
+with a small normal cone than random optimization over a normalized section.
+The exactified overlapping-arm positive control is recovered as a nullity-one
+positive circuit.  A sparse-support search also corrects the initial lesson
+from $600{,}000$ targeted bases, none of which found a disjoint circuit:
+both-sensitive circuits do exist for disjoint arms at $n=5$.  For example,
+with $A=\{1,2,3\}$ and $B=\{4,5\}$ there is a nullity-one unit circuit on
+the base core row $\{3,5\}$; the $t_A$ rows
+$A,\{1,4,5\},\{2,4,5\}$; the $t_B$ rows
+$\{1,3\},\{2,3\},\{1,2,4\},B$; and the monotonicity rows for player $3$
+on the $A$-arm and player $5$ on the $B$-arm.  Its efficiency weights are
+$(0,2,2)$.
+
+Thus the no-common-circuit route is false.  The relevant circuit inequality is
+nevertheless forced by exactness:
+\begin{align*}
+4b(N)\ \geq\ &b(\{3,5\})+b(A)+d_A+b(\{1,4,5\})+b(\{2,4,5\})\\
+&+b(\{1,3\})+b(\{2,3\})+b(\{1,2,4\})+b(B)+d_B.
+\end{align*}
+Indeed, exactness of both bumped games at the single coalition $\{1\}$ gives
+\begin{align*}
+ t_A(A)+t_A(\{1,4,5\})
+ &\leq t_A(N)+t_A(\{1\}),\\
+ t_B(\{1,3\})+t_B(\{2,3\})+t_B(\{1,2,4\})
+ +t_B(\{3,5\})+t_B(B)+t_B(\{2,4,5\})
+ &\leq 3t_B(N)-t_B(\{1\}).
+\end{align*}
+The first collection covers player $1$ twice and every other player once;
+the second covers player $1$ twice and every other player three times.
+Because the bump coalitions are $A$ and $B$, all other displayed worths are
+base worths. Adding cancels $b(\{1\})$ and proves the circuit inequality.
+In contrast, dropping endpoint exactness makes the circuit inequality
+violable and gives a rational balanced disjoint-arm family with Farkas
+right-hand side $-1$. The central question is therefore whether \emph{every}
+both-sensitive disjoint circuit inequality is implied by endpoint exactness,
+not whether such circuits are absent.
+
+The first circuit generates six distinct supports under permutations within
+$A$ and $B$.  Blocking that entire orbit exposes a second ten-row unit-circuit
+type (with a twelve-support orbit): base row $\{1,5\}$; $t_A$ rows
+$A,\{2,4,5\},\{3,4,5\}$; $t_B$ rows
+$\{1,2\},\{2,3\},\{1,3,4\},B$; and monotonicity rows for players $1$ and
+$5$.  This second type is already neutralized by balancedness.  In $t_A$, the
+rows
+\[
+\tfrac12\{1,2\},\ A,\ \tfrac12\{1,3,4\},\
+\tfrac12\{1,5\},\ \{2,4,5\},\ \{3,4,5\}
+\]
+form a balanced collection of total weight $5/2$; in $t_B$, the rows
+\[
+\tfrac12\{1,2\},\ \{2,3\},\ \tfrac12\{1,3,4\},\
+\tfrac12\{1,5\},\ B
+\]
+form one of total weight $3/2$.  Summing their balancedness inequalities is
+exactly the circuit inequality.
+
+Exactness first supplies a small extension of the usual balancedness
+inequality.
+
+\begin{lemma}[two-level exactness inequality]
+\label{lem:two-level-exactness}
+Let $v$ be exact, fix a proper coalition $U$, and let $w_S\geq0$ satisfy
+\[
+ \sum_{S\ni i}w_S=\alpha+\delta\mathbf 1_{\{i\in U\}}
+ \qquad(i\in N)
+\]
+for constants $\alpha,\delta$ (with the displayed coverage nonnegative).
+Then
+\[
+ \sum_Sw_Sv(S)\leq \alpha v(N)+\delta v(U).
+\]
+\end{lemma}
+
+\begin{proof}
+Choose $x\in\core(v)$ with $x(U)=v(U)$. Summing the core inequalities with
+weights $w_S$ gives
+\[
+ \sum_Sw_Sv(S)\leq\sum_i
+ (\alpha+\delta\mathbf 1_{\{i\in U\}})x_i
+ =\alpha v(N)+\delta v(U).
+\]
+\end{proof}
+
+Balancedness is the special case $\delta=0$. The mechanism behind the
+recoloring certificate has a second useful formulation that also does not
+depend on five players. Write $\lambda_{g,S}$ for the core-row multipliers of
+a positive circuit, where $g=0,1,2$ denotes $b,t_A,t_B$, and write $a_g$ for
+its efficiency weights.
+
+\begin{lemma}[balanced recoloring criterion]
+\label{lem:recoloring}
+Put $q_S=\sum_g\lambda_{g,S}$. Then $q$ is a balanced collection of total
+weight $\sum_g a_g$. Suppose it can be decomposed as
+$q_S=\sum_g\mu_{g,S}$ so that each $\mu_g$ is balanced, and
+\[
+ \mu_{1,A}\geq\lambda_{1,A},\qquad
+ \mu_{2,B}\geq\lambda_{2,B}.
+\]
+Then the circuit inequality is valid for every balanced
+base-plus-two-bump triple with $d_A,d_B\geq0$.
+\end{lemma}
+
+\begin{proof}
+Sum the circuit stationarity equations over the three game blocks. Every
+monotonicity row cancels between its source and target, leaving
+\[
+ \sum_{S\ni i}q_S=\sum_g a_g\qquad(i\in N),
+\]
+which proves the first claim. Let $\beta_g$ be the total weight of
+$\mu_g$. Balancedness of the three games and their common grand worth give
+\begin{align*}
+ \Big(\sum_g a_g\Big)b(N)
+ &=\sum_g\beta_g v_g(N)\\
+ &\geq \sum_{g,S}\mu_{g,S}v_g(S)\\
+ &=\sum_Sq_Sb(S)+\mu_{1,A}d_A+\mu_{2,B}d_B\\
+ &\geq\sum_{g,S}\lambda_{g,S}v_g(S).
+\end{align*}
+This is precisely nonnegativity of the circuit's Farkas right-hand side.
+\end{proof}
+
+There is a one-witness extension that isolates the role of exactness while
+retaining the coloring interpretation.
+
+\begin{lemma}[single-witness recoloring criterion]
+\label{lem:single-witness-recoloring}
+Fix a proper coalition $U$. Suppose there are weights $\mu_{g,S}\geq0$ and
+scalars $\alpha_g,\delta_g$ such that
+\[
+ \sum_{S\ni i}\mu_{g,S}
+ =\alpha_g+\delta_g\mathbf1_{\{i\in U\}}
+ \qquad(g=0,1,2;\ i\in N).
+\]
+Put $\Delta=\sum_g\delta_g$ and suppose
+\begin{align*}
+ \sum_g\mu_{g,S}&=q_S+\Delta\mathbf1_{\{S=U\}},\\
+ \sum_g\alpha_g&=\sum_g a_g,\\
+ \mu_{1,A}-\delta_1\mathbf1_{\{U=A\}}&\geq\lambda_{1,A},\qquad
+ \mu_{2,B}-\delta_2\mathbf1_{\{U=B\}}\geq\lambda_{2,B}.
+\end{align*}
+Then the circuit inequality is valid for every exact endpoint triple.
+\end{lemma}
+
+\begin{proof}
+Apply Lemma~\ref{lem:two-level-exactness} to each color and sum:
+\[
+ \sum_{g,S}\mu_{g,S}v_g(S)
+ \leq\Big(\sum_g\alpha_g\Big)b(N)+\sum_g\delta_gv_g(U).
+\]
+The aggregate identity makes the base-worth part of the left side
+$\sum_Sq_Sb(S)+\Delta b(U)$, while the right side contains the same
+$\Delta b(U)$. These terms cancel. The only remaining nonbase terms on the
+right are $\delta_1d_A$ if $U=A$ and $\delta_2d_B$ if $U=B$; the adjusted
+retention inequalities therefore leave at least
+$\lambda_{1,A}d_A+\lambda_{2,B}d_B$ on the left. The efficiency identity
+then gives exactly the circuit bound.
+\end{proof}
+
+Lemma~\ref{lem:recoloring} is the special case $\delta_g=0$. The advantage of
+the extension is that a failed balanced coloring can be repaired by one
+coalition-tight witness, provided the aggregate row inserted at $U$ is
+exactly offset by the three coverage defects.
+
+An especially useful specialization removes the base color and the aggregate
+insertion altogether.
+
+\begin{corollary}[two-color transfer criterion]
+\label{cor:two-color-transfer}
+Fix a proper coalition $U$. Suppose there are weights
+$0\leq w_S\leq q_S$ and scalars $\alpha,\delta$ such that
+\[
+ \sum_{S\ni i}w_S=\alpha+\delta\mathbf1_{\{i\in U\}}
+ \qquad(i\in N),
+\]
+and
+\begin{align*}
+ w_A-\delta\mathbf1_{\{U=A\}}&\geq\lambda_{1,A},\\
+ q_B-w_B+\delta\mathbf1_{\{U=B\}}&\geq\lambda_{2,B}.
+\end{align*}
+Then the circuit inequality is valid for every exact endpoint triple.
+\end{corollary}
+
+\begin{proof}
+Put $a=\sum_ga_g$. In
+Lemma~\ref{lem:single-witness-recoloring}, set
+\[
+ \mu_{0,S}=0,\qquad \mu_{1,S}=w_S,\qquad
+ \mu_{2,S}=q_S-w_S,
+\]
+and take $(\alpha_0,\delta_0)=(0,0)$,
+$(\alpha_1,\delta_1)=(\alpha,\delta)$, and
+$(\alpha_2,\delta_2)=(a-\alpha,-\delta)$. Since $q$ is balanced of total
+weight $a$, the second colored collection has coverage
+$(a-\alpha)\mathbf1-\delta\mathbf1_U$. Thus all hypotheses of that lemma
+hold with $\Delta=0$.
+\end{proof}
+
+The corollary converts the repair problem into a box-constrained degree
+problem: find a subcollection $w$ of the aggregate balanced collection whose
+degree vector lies in $\operatorname{span}\{\mathbf1,\mathbf1_U\}$ while
+retaining the two distinguished rows. This one-color formulation is the
+natural starting point for a cut or zonotope proof.
+
+\begin{lemma}[base-color elimination]
+\label{lem:base-color-elimination}
+The recoloring capacity equals the largest $\rho$ for which there are
+$0\leq w_S\leq q_S$ and $\alpha$ satisfying
+\[
+ \sum_{S\ni i}w_S=\alpha\quad(i\in N),\qquad
+ w_A\geq\rho\lambda_{1,A},\qquad
+ q_B-w_B\geq\rho\lambda_{2,B}.
+\]
+Thus the unbumped color is redundant in the capacity problem.
+\end{lemma}
+
+\begin{proof}
+The displayed system gives the coloring
+$(\mu_0,\mu_1,\mu_2)=(0,w,q-w)$. Conversely, from any balanced coloring
+$(\mu_0,\mu_1,\mu_2)$ put
+$w=\mu_1+\theta\mu_0$ for any $0\leq\theta\leq1$. Then $w$ and $q-w$ are
+balanced, while
+\[
+ w_A\geq\mu_{1,A},\qquad
+ q_B-w_B=\mu_{2,B}+(1-\theta)\mu_{0,B}\geq\mu_{2,B}.
+\]
+Hence no retained mass is lost.
+\end{proof}
+
+For a proper $U$, let $\tau_U$ be the largest common retained fraction when
+the two-color transfer system is used: replace the two right sides in
+Corollary~\ref{cor:two-color-transfer} by
+$\tau_U\lambda_{1,A}$ and $\tau_U\lambda_{2,B}$. Write
+$z(S)=\sum_{i\in S}z_i$ and $[x]_+=\max\{x,0\}$.
+
+\begin{proposition}[box-capacity separation]
+\label{prop:box-capacity-dual}
+Put
+\[
+ \Phi(r_A,r_B,z)=r_Bq_B+
+ \sum_Sq_S\bigl[z(S)+r_A\mathbf1_{\{S=A\}}
+                         -r_B\mathbf1_{\{S=B\}}\bigr]_+.
+\]
+Then
+\[
+ \rho=\min\ \Phi(r_A,r_B,z),
+\]
+where the minimum is over
+\[
+ r_A,r_B\geq0,\qquad
+ r_A\lambda_{1,A}+r_B\lambda_{2,B}=1,\qquad z(N)=0.
+\]
+Moreover,
+\[
+ \tau_U=\min\ \Phi(r_A,r_B,z)
+\]
+over the same set with the additional equation
+\[
+ z(U)+r_A\mathbf1_{\{U=A\}}-r_B\mathbf1_{\{U=B\}}=0.
+\]
+In particular, $\tau_U\geq\rho$.
+\end{proposition}
+
+\begin{proof}
+Use the reduced primal of Lemma~\ref{lem:base-color-elimination}, adding the
+free two-level defect $\delta$ for the fixed-$U$ problem. Let $-r_A,-r_B$
+be the dual multipliers of the two retention inequalities and let $z_i$ be
+the multiplier of player $i$'s coverage equation. Stationarity of the free
+variables $\alpha,\delta,$ and $\tau_U$ gives, respectively,
+\[
+ z(N)=0,\qquad
+ z(U)+r_A\mathbf1_{\{U=A\}}-r_B\mathbf1_{\{U=B\}}=0,\qquad
+ r_A\lambda_{1,A}+r_B\lambda_{2,B}=1.
+\]
+For each box variable $0\leq w_S\leq q_S$, eliminating its two bound
+multipliers contributes
+$q_S[z(S)+r_A\mathbf1_{\{S=A\}}-r_B\mathbf1_{\{S=B\}}]_+$ to the dual
+objective. The constant $q_B$ in the second retention inequality contributes
+$r_Bq_B$. Strong LP duality gives the formula for $\tau_U$; omitting
+$\delta$ and its stationarity equation gives the formula for $\rho$.
+\end{proof}
+
+Define the support-nullspace
+\[
+ K(q)=\{h\in\mathbb R^N:h(N)=0,
+                 \ h(S)=0\text{ whenever }q_S>0\}.
+\]
+
+\begin{lemma}[support-nullspace degeneracy]
+\label{lem:support-nullspace}
+If some $h\in K(q)$ has $h(U)\neq0$, then $\tau_U=\rho$. Equivalently, a
+fixed witness can improve capacity only if
+\[
+ \mathbf1_U\in\operatorname{span}
+ \bigl(\{\mathbf1_N\}\cup\{\mathbf1_S:q_S>0\}\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+Let $(r_A,r_B,z)$ minimize the ordinary formula in
+Proposition~\ref{prop:box-capacity-dual}. For $h\in K(q)$, replacing $z$ by
+$z+th$ preserves $z(N)=0$ and leaves every positive-weight summand in
+$\Phi$ unchanged. If $h(U)\neq0$, choose $t$ so that
+\[
+ (z+th)(U)+r_A\mathbf1_{\{U=A\}}-r_B\mathbf1_{\{U=B\}}=0.
+\]
+This gives a feasible fixed-$U$ dual with value $\rho$. Since
+$\tau_U\geq\rho$, equality follows. The equivalent span condition is the
+finite-dimensional orthogonal-complement theorem.
+\end{proof}
+
+Call players $i,j$ \emph{support twins} if
+$\mathbf1_{\{i\in S\}}=\mathbf1_{\{j\in S\}}$ for every $S$ with $q_S>0$.
+
+\begin{lemma}[twin quotient]
+\label{lem:twin-quotient}
+Suppose $K(q)$ is spanned by the differences $e_i-e_j$ of support twins. If
+$z\perp K(q)$, then every coordinate level set of $z$ is support-rigid.
+\end{lemma}
+
+\begin{proof}
+Orthogonality gives $z_i=z_j$ for every pair of support twins, so every level
+set is a union of whole twin classes. Every generator $e_i-e_j$ has sum zero
+on such a union; hence $h(U)=0$ for every $h\in K(q)$. Apply the equivalent
+span condition in Lemma~\ref{lem:support-nullspace}.
+\end{proof}
+
+Because $\Phi$ is constant along $K(q)$, orthogonal projection onto
+$K(q)^\perp$ sends every ordinary minimizer to an ordinary minimizer. Call
+the result its \emph{support-orthogonal representative}. This removes exactly
+the gauge freedom in Lemma~\ref{lem:support-nullspace}.
+
+Proposition~\ref{prop:box-capacity-dual} now isolates a canonical conjecture.
+For an optimal support-orthogonal potential $z$, put
+\[
+ P^+=\operatorname{argmax}_{i\in N}z_i,\qquad
+ P^-=\operatorname{argmin}_{i\in N}z_i.
+\]
+
+\begin{conjecture}[two-extreme-set repair]
+\label{conj:two-extreme-repair}
+For every both-sensitive positive circuit with disjoint arms and $\rho<1$,
+there is an optimal support-orthogonal minimizer with nonconstant $z$ such that
+\[
+ \min\{\tau_{P^+},\tau_{P^-}\}\geq1.
+\]
+\end{conjecture}
+
+The value one in this conjecture is not an arbitrary normalization.  The box
+constraints give the following immediate ceiling, which becomes sharp on the
+entire deficient frontier found below.
+
+\begin{lemma}[exclusive-arm ceiling]
+\label{lem:exclusive-arm-ceiling}
+For every proper $U$,
+\[
+ U\ne A\implies\tau_U\leq \frac{q_A}{\lambda_{1,A}},
+ \qquad
+ U\ne B\implies\tau_U\leq \frac{q_B}{\lambda_{2,B}}.
+\]
+In particular, if $q_A=\lambda_{1,A}$ and $U\ne A$ (or symmetrically for
+$B$), then any successful full-bump repair has $\tau_U=1$ exactly.
+\end{lemma}
+
+\begin{proof}
+If $U\ne A$, the first retention inequality in the two-color transfer
+system is $w_A\geq\tau_U\lambda_{1,A}$. Since $w_A\leq q_A$, the first
+bound follows.  If $U\ne B$, the second retention inequality is
+$q_B-w_B\geq\tau_U\lambda_{2,B}$; use $w_B\geq0$.  The last claim combines
+the relevant upper bound with $\tau_U\geq1$.
+\end{proof}
+
+This formulation is intrinsic to the reduced capacity problem: it uses the
+two extreme coordinate classes of one zero-sum obstruction potential, rather
+than level sets from a three-color dual with redundant gauge freedom.
+Lemma~\ref{lem:support-nullspace} suggests a two-part proof: show that the two
+extreme sets of a support-orthogonal optimal potential are
+support-rigid, and then show that every such rigid extreme forces
+$\tau_U\geq1$ for a positive circuit.
+By Lemma~\ref{lem:twin-quotient}, the first part reduces further to proving
+that the support nullspace of a positive circuit is generated by support-twin
+differences.
+
+The same argument gives a universal quantitative bound even when full
+recoloring fails. Define the \emph{recoloring capacity} of a circuit to be the
+largest $\rho$ for which the aggregate collection $q$ can be decomposed into
+balanced colors with
+\[
+ \mu_{1,A}\geq\rho\lambda_{1,A},\qquad
+ \mu_{2,B}\geq\rho\lambda_{2,B}.
+\]
+
+\begin{corollary}[universal half-recoloring]
+\label{cor:half-recoloring}
+Every positive circuit in a three-game star has recoloring capacity at least
+\[
+ \rho_0:=\frac{q_Aq_B}
+ {\lambda_{1,A}q_B+\lambda_{2,B}q_A}\geq\frac12,
+\]
+and the constant $1/2$ is sharp. Moreover, on every balanced endpoint triple
+its Farkas margin $M_C$ obeys the sharper bound
+\[
+ M_C\geq(\rho_0-1)
+ \bigl(\lambda_{1,A}d_A+\lambda_{2,B}d_B\bigr).
+\]
+\end{corollary}
+
+\begin{proof}
+The aggregate $q$ is balanced by Lemma~\ref{lem:recoloring}. One valid
+coloring assigns all of $q$ to game $1$, and another assigns all of it to game
+$2$. Put $a=q_A/\lambda_{1,A}$ and
+$b=q_B/\lambda_{2,B}$, and mix the first coloring with weight
+$b/(a+b)$. The retained fraction in each distinguished color is then
+\[
+ \frac{b}{a+b}a=\frac{a}{a+b}b
+ =\frac{ab}{a+b}=\rho_0.
+\]
+Since $q_A\geq\lambda_{1,A}$ and $q_B\geq\lambda_{2,B}$, we have
+$a,b\geq1$ and hence $\rho_0\geq1/2$. Summing balancedness for these two
+colors yields
+\[
+ M_C\geq(\rho_0-1)\lambda_{1,A}d_A
+       +(\rho_0-1)\lambda_{2,B}d_B,
+\]
+which is the stated bound.
+For sharpness, use the Type-I orbit representative with $A=7$, $B=24$, and
+unit aggregate weights on
+$Q=\{5,6,7,12,19,24,25,26\}$. Put
+\[
+ \pi_5=\pi_7=\pi_{25}=-\tfrac12,quad
+ \pi_6=\pi_{26}=\tfrac12
+\]
+(all other $\pi_S=0$), and
+\[
+ u_0=u_1=(\tfrac12,-\tfrac12,0,0,0),\qquad
+ u_2=(1,0,-\tfrac12,\tfrac12,-1).
+\]
+These potentials have zero coordinate sum, and direct inspection gives
+\[
+ \pi_S+u_g(S)+\tfrac12\mathbf1_{\{(g,S)=(1,A)\text{ or }(2,B)\}}\leq0
+ \quad(g=0,1,2, S\in Q),
+\]
+while $\sum_{S\in Q}\pi_S=-1/2$. Multiplying by any recoloring weights and
+summing gives $\mu_{1,A}+\mu_{2,B}\leq1$. Since both distinguished masses
+equal one, their common retained fraction is at most $1/2$.
+\end{proof}
+
+The two-level inequality and recoloring criterion in fact describe the full
+certificate class for a fixed circuit.
+
+\begin{proposition}[two-level certificate characterization]
+\label{prop:two-level-characterization}
+Fix the player set, two arms, and a both-sensitive positive circuit. Its
+Farkas right-hand side is nonnegative on every exact base-plus-two-bump triple
+if and only if its circuit inequality can be obtained by summing finitely many
+instances of Lemma~\ref{lem:two-level-exactness}, applied separately to the
+three games, together with nonnegative multiples of $d_A\geq0$ and
+$d_B\geq0$, after identifying their common base worths.
+\end{proposition}
+
+\begin{proof}
+The reverse implication follows by summing the valid inequalities. For the
+forward implication, add a common additive game to normalize the grand worth
+to one; this preserves exactness, the two bump sizes, and the circuit margin
+by stationarity. Introduce, for
+each game $g$ and proper coalition $U$, a core allocation $x^{g,U}$ tight at
+$U$. These variables and the base worths form a finite linear system whose
+projection is exactly the set of exact endpoint triples. Maximize the
+circuit-supported worth over this system. By hypothesis its optimum is at
+most the circuit efficiency total. Linear-programming duality supplies a
+dual optimum. Group its nonnegative core-inequality multipliers by the witness
+$x^{g,U}$. Cancellation of that witness's player coordinates against its
+efficiency and tightness equalities forces the group's coverage vector to be
+\[
+ \alpha_{g,U}\mathbf 1+\delta_{g,U}\mathbf 1_U.
+\]
+Thus each group is an instance of Lemma~\ref{lem:two-level-exactness}; the
+only remaining bound multipliers are nonnegative multiples of the two bump
+inequalities. Their coefficient identity is the desired decomposition.
+\end{proof}
+
+An exact enumeration in Boolean linear rational arithmetic now replaces the
+earlier floating-point diagnostic.  Here $D$ has rank $12$, so every
+circuit has at most $13$ rows.  Moreover, primitive circuit coefficients are
+minors of a $\{-1,0,1\}$ matrix; Hadamard's bound implies that, after
+normalizing their sum to one, every positive coefficient is at least
+$1/(13\cdot12^6)=1/38{,}817{,}792$.  Imposing this rational floor therefore
+loses no circuit. Exact single-game subcircuit cuts, arm-preserving orbit
+blocking, and terminal unsatisfiability at support $13$ give the following
+finite result.
+
+\begin{proposition}[five-player two-arm theorem]
+\label{prop:n5-two-arm}
+Every three-game star $\{b,b+d_Ae_A,b+d_Be_B\}$ of exact games on at most
+five players is feasible.
+\end{proposition}
+
+\begin{proof}
+Corollary~\ref{cor:two-arm-reduction} and Proposition~\ref{prop:n4} leave,
+up to relabeling and interchange of the arms, only the disjoint five-player
+shapes
+\[
+ (|A|,|B|,|N\setminus(A\cup B)|)=(3,2,0)\quad\hbox{and}\quad(2,2,1).
+\]
+For the first shape, exact enumeration through the rank bound yields $420$
+both-sensitive circuit orbits, or $4{,}914$ labeled supports. Their support
+breakdown is
+\[
+\begin{array}{c|rrrr}
+\text{support size}&10&11&12&13\\ \hline
+\text{orbits}&2&24&83&311\\
+\text{labeled supports}&18&270&954&3{,}672.
+\end{array}
+\]
+Of these, $411$ orbits ($4{,}812$ supports) have an exact balanced recoloring
+with equality at the two distinguished rows. Eight more orbits ($96$
+supports) have a recoloring with strict excess at one distinguished row, so
+Lemma~\ref{lem:recoloring} uses $d_A,d_B\geq0$. The sole remaining orbit
+is the six-support Type-I orbit displayed above; the two singleton-tight
+exactness inequalities given there prove its circuit inequality for every
+exact endpoint triple.
+
+For the second shape, terminal unsatisfiability occurs after $189$ orbits
+($756$ labeled supports): $9,27,153$ orbits of support $11,12,13$,
+respectively. Exact balanced recolorings neutralize $117$ orbits
+($468$ supports) with equality and the other $72$ ($288$ supports) using
+bump nonnegativity. No exactness-specific exception occurs.
+
+Every reported support has exact nullity one and a strictly positive rational
+kernel vector; every symmetry orbit and every neutralization identity is
+rechecked over $\mathbb Q$ by the standalone supplement. The determinant
+floor above and the terminal exact unsatisfiability queries establish that no
+positive circuit has been omitted. Hence every extreme Farkas ray using both
+changed-worth rows has nonnegative right-hand side.
+Proposition~\ref{prop:both-sensitive} and Lemma~\ref{lem:family-circuits}
+then rule out infeasibility.
+\end{proof}
+
+The same certificate architecture persists in a nonexhaustive six-player
+frontier. Representative searches over all four disjoint shapes
+$(2,2,2)$, $(3,3,0)$, $(3,2,1)$, and $(4,2,0)$ expose $62$ distinct exact
+circuit orbits, comprising $1{,}127$ labeled supports. Their exact
+recoloring capacities range over $1/2,2/3,3/4,1$. Every orbit with capacity
+below one nevertheless has endpoint optimum zero and a coefficientwise
+rational decomposition of the form in
+Proposition~\ref{prop:two-level-characterization}. This is discovery
+evidence, not an exhaustive $n=6$ classification: its value is that no new
+certificate mechanism appears after the complete five-player theorem.
+
+A second representative sweep covers all six disjoint arm shapes on seven
+players. It exposes $24$ exact circuit orbits ($1{,}365$ labeled supports),
+of which $15$ have recoloring capacity below one. Combining these with the
+five-player Type-I orbit and the $15$ deficient six-player representatives
+gives $31$ exact obstructions. In every case the reduced two-color capacity
+equals the original three-color capacity exactly. If $z$ is the computed
+optimal potential in Proposition~\ref{prop:box-capacity-dual}, then
+Corollary~\ref{cor:two-color-transfer} applies with
+\[
+ U=P^+=\operatorname{argmax}_i z_i
+ \quad\hbox{or}\quad
+ U=P^-=\operatorname{argmin}_i z_i.
+\]
+Before quotienting the gauge, the maximum set succeeds in $29$ cases and the
+minimum set in $29$; the four failures stay exactly at $\rho$ and are exactly
+the support-flexible coalitions identified by
+Lemma~\ref{lem:support-nullspace}. After projecting each potential onto
+$K(q)^\perp$, all four disappear: both canonical extreme sets have capacity
+exactly one in all $31$ cases, or $62/62$ individual checks. Every maximum-set
+repair has $\delta<0$, and every minimum-set repair has $\delta>0$, matching
+the dual coordinate order. Thus the
+empirical existence problem has collapsed from arbitrary exactness
+decompositions to Conjecture~\ref{conj:two-extreme-repair}, a canonical
+two-cut statement for a box-constrained degree zonotope. This remains
+discovery evidence, not a proof or an exhaustive seven-player classification.
+An independent exact rank audit supports the first proposed proof step:
+all $609$ circuits in the exhaustive five-player census and all $108$
+representative or glued six- and seven-player circuits have twin-generated
+support nullspace. Fourteen have nonzero nullspace, always of dimension one;
+no non-twin direction occurs among the $717$ circuits.
+The original census also suggested a sharp arm-ratio pattern.  The scalar
+coloring $w=tq$ alone certifies capacity at least one for $97$ circuits with
+neither arm exclusive: $73$ lie exactly on its boundary and $24$ satisfy it
+strictly.  If $x=\lambda_{1,A}$, $y=\lambda_{2,B}$,
+$U=q_A-x$, and $V=q_B-y$, then the scalar condition is the product inequality
+$UV\geq xy$.  All $97$ additionally satisfy the stronger linear bounds
+$U\geq y$ and $V\geq x$.
+
+\begin{lemma}[One-row circuits glue local circuits]
+\label{lem:local-circuit-gluing}
+Suppose a support-minimal positive circuit contains exactly one
+monotonicity column on the $A$-edge and exactly one on the $B$-edge.  In
+each of the three game blocks, the incident supported columns form a
+nullity-one local circuit.
+\end{lemma}
+
+\begin{proof}
+Write the two monotonicity columns as
+\[
+ m_A=(e_a,-e_a,0),\qquad m_B=(e_b,0,-e_b)
+\]
+in the three game blocks, and let $C_g$ be the matrix of supported core
+columns internal to block $g$.  Each $C_g$ has independent columns:
+otherwise a kernel vector supported only on those core columns would be a
+second global kernel direction.  The positive global circuit restricts in
+the two leaf blocks to dependencies of
+$[C_1,-e_a]$ and $[C_2,-e_b]$.  Adding one column to an independent set
+and obtaining a dependency makes each leaf nullity exactly one.
+
+It remains to treat the root matrix $L_0=[C_0,e_a,e_b]$.  Every vector in
+$\ker L_0$ specifies two coefficients on $e_a,e_b$.  The unique leaf
+relations can be scaled, with arbitrary real signs, to match those two
+coefficients, producing a unique global kernel vector.  Conversely every
+global kernel vector restricts to one in $\ker L_0$.  Hence the global
+kernel is linearly isomorphic to $\ker L_0$.  Its dimension is one by
+support minimality, so the root local support is also nullity one.
+\end{proof}
+
+Every circuit in the enlarged $717$-record audit uses exactly one
+monotonicity row per arm, so Lemma~\ref{lem:local-circuit-gluing} puts the
+entire observed frontier into this three-local-ray normal form.
+
+Neither pattern is dimension-free.  A targeted block-gluing construction
+produces the following exact six-player circuit outside the original
+representative sweep.
+
+\begin{proposition}[The scalar arm dichotomy fails]\label{prop:forbidden-ratio}
+There is a support-minimal positive circuit with disjoint arms
+$A=\{1,2,3\}$ and $B=\{4,5\}$ for which
+\[
+ (x,y,U,V)=(1,2,1,1).
+\]
+Thus $U-y=-1$ and $UV-xy=-1$, so neither the linear cross-arm bounds nor the
+scalar product condition holds.  Nevertheless its exact reduced two-color
+recoloring capacity is one.
+\end{proposition}
+
+\begin{proof}
+Use one monotonicity column on each edge, for player $1$ on the $A$-edge and
+player $4$ on the $B$-edge.  The core-row supports in games $0,1,2$ are,
+in bit-mask notation,
+\[
+ \{24,3,45\},\qquad
+ \{7,58,60\},\qquad
+ \{7,24,35,37,54\},
+\]
+respectively.  Give every row weight one except the game-$2$ row for
+coalition $24=B$, which has weight two.  In each game block the incident
+core and monotonicity columns form a nullity-one positive circuit, of
+support sizes $5,4,6$.  Their shared monotonicity weights agree, so gluing
+the three local relations gives a $13$-column global dependence.  Direct
+rank calculation gives rank $12$, hence the positive dependence is a
+circuit.  Reading the four arm coefficients gives the displayed tuple.
+
+The aggregate balanced collection has weights
+\[
+ q_3=1,\ q_7=2,\ q_{24}=3,\ q_{35}=q_{37}=q_{45}
+ =q_{54}=q_{58}=q_{60}=1.
+\]
+The subcollection
+\[
+ w_7=w_{24}=w_{37}=w_{58}=1
+\]
+has degree two at every player, while $q-w$ is balanced of degree four.
+It retains one copy of $A$ and two copies of $B$, so it repairs both full
+bumps at capacity one.  The companion exact LP dual gives the matching
+upper bound.  All ranks, stationarity equations, and primal--dual identities
+are checked by the supplement verifier.
+\end{proof}
+
+The original $31$ deficient circuits all have an exclusive arm, and their
+$62$ canonical extreme witnesses attain the matching ceiling one.  The
+local-gluing normal form makes it possible to search beyond that frontier
+systematically.  It also falsifies the stronger direct-recoloring target.
+
+\begin{proposition}[Nonexclusive balanced recoloring can fail]
+\label{prop:nonexclusive-deficient}
+There is a support-minimal positive circuit with
+$A=\{1,2,3\}$ and $B=\{4,5\}$, neither arm exclusive, whose ordinary
+recoloring capacity is $3/4$.  For an optimal support-orthogonal potential,
+however, its maximum and minimum coordinate sets have fixed-witness
+capacities $5/4$ and $3/2$, respectively.
+\end{proposition}
+
+\begin{proof}
+Use the same two monotonicity columns as in
+Proposition~\ref{prop:forbidden-ratio}, with weights two on the $A$-edge and
+one on the $B$-edge.  The three core supports and weights are
+\[
+\begin{array}{c|l}
+0&(3,1),(5,1),(24,1),(41,1)\\
+1&(7,2),(26,2),(28,2),(32,4)\\
+2&(7,1),(24,2),(35,1),(37,1),(54,1).
+\end{array}
+\]
+Each block is a local circuit and the shared edge weights match.
+The global support has $15$ columns and rank $14$, so it is a positive
+circuit.  Its arm masses are
+\[
+ (x,y,U,V)=(2,2,1,1).
+\]
+Exact primal--dual solution of the reduced box system gives
+$\rho=3/4$.  One dual optimum has
+\[
+ z=\frac14(1,-1,-1,-1,2,0),
+\]
+whose maximum and minimum sets are $\{5\}$ and $\{2,3,4\}$, with masks
+$16$ and $14$.  Imposing those sets in the fixed-witness system gives
+exact primal--dual values $5/4$ and $3/2$.  The machine-readable support,
+subcollections, potentials, and bound identities are supplied in the
+supplement.
+\end{proof}
+
+The expanded curated audit now contains $717$ circuits: $52$ have ordinary
+capacity below one, of which $21$ are nonexclusive glued circuits.  The
+factorized search exactly solves $5{,}035$ selected capacity problems, and
+both canonical extreme witnesses repair all $21$ deficient cases.  Their
+ordinary capacities are $3/4$, $5/6$, $7/8$, or $11/12$, while their
+fixed-witness capacities range from $11/10$ to $3/2$.  Thus
+exactness-specific two-level repair is genuinely indispensable, and
+Conjecture~\ref{conj:two-extreme-repair} survives a substantially more
+adversarial frontier than balanced recoloring alone.
+
+A further exact audit fixes the same singleton witness $\{5\}$ (mask 16)
+across all $59{,}304$ product-forbidden gluings in this factorized local
+pattern, rather than only the $21$ deficient circuits in the selected
+ordinary-capacity screen. Every fixed-witness capacity is strictly above
+one, and the sharp bound is $9/8$, attained by $45$ circuits. The spectrum
+has $21$ values; the returned exact optima use $19$ projective dual rays and
+$18$ potential weak-order types, with the solver selecting two rays on the
+minimum frontier. An independent exact enumeration of the complete dual
+hyperplane arrangement gives $87$ feasible projective rays. Four are sharp,
+in three symmetry orbits, and all
+$87\cdot59{,}304=5{,}159{,}448$ ray--circuit evaluations satisfy the $9/8$
+bound. Arrangement minimization reproduces the complete LP capacity
+histogram exactly. The
+local enumeration uses exact rank modulo $61$---valid because Hadamard's
+bound puts every local minor below $56$ in absolute value---followed by
+signed-integer-cofactor kernels. Thus the $9/8$ statement is exhaustive for
+this specified gluing pattern. The exhaustive table also factors locally.
+For each arrangement ray, the cross-multiplied margin is a root score plus
+the two matched root weights times independently minimized leaf rates.
+Checking the $626$ first leaves, three second leaves, and $56$ roots for all
+$87$ rays requires $59{,}595$ exact local comparisons; no local margin is
+negative, and the only four zero rows are the globally sharp rays. Because
+the local and arrangement coalition universes coincide, this proves the same
+$9/8$ bound for all $56\cdot626\cdot3=105{,}168$ raw gluing triples in the
+pattern, not only the product-forbidden subfamily. Positive-part
+subadditivity compresses the evaluation stage further: the first leaf has a
+closed degree-only bound, and the roots have only $12$ relevant mass types.
+These bounds prove $86$ of the $87$ rays; the remaining ray needs exact
+incidence checks at only three roots, with margins $10,2,2$. Thus the final
+local evaluation uses $87\cdot12+3=1{,}047$ comparisons. It remains a
+finite-pattern theorem, not a proof of
+Conjecture~\ref{conj:two-extreme-repair} outside that pattern.
+
+A natural attempt to remove the finite first-leaf enumeration is false.
+The bound $q_A\leq |A|m_A$, where $m_A$ is the matched singleton
+coefficient, holds for all $2{,}315$ local circuits through six players but
+fails under the standard new-player construction for minimal balanced
+collections \citep{LaplaceMermoud2025}.  A complete implementation starts
+from all $1{,}292$ five-player minimal balanced collections and reproduces
+the published total of $200{,}214$ six-player collections.  Extending those
+sources yields $1{,}320$ seven-player leaves with a three-player arm ratio
+five.  One representative is
+\[
+\begin{gathered}
+(\{1,2\},\{1,3\},\{2,3,4\},\{1,4,5\},\{1,4,6\},
+  \{7\},\{5,6,7\}),\\
+6\lambda=(2,2,4,1,1,1,5).
+\end{gathered}
+\]
+Its incidence columns have rank seven, so it is minimal, and
+$q_{\{5,6,7\}}/m_{\{7\}}=5$.  Gluing this leaf to lifted copies of all $56$
+roots and all three second leaves gives $168$ exact nullity-one circuits;
+$21$ have fixed-$\{3\}$ capacity below $9/8$, with exact minimum $13/12$.
+The $1{,}320$ leaves form four distinguished-arm symmetry orbits.  Auditing
+one canonical representative of each checks $672$ global circuits: every
+orbit breaks $9/8$, but none breaks one.  Hence the fixed six-player $9/8$
+theorem has no dimension-free extension.  The unit repair threshold relevant
+to Conjecture~\ref{conj:two-extreme-repair} survives this stronger frontier.
+
+The survival has a structural explanation that removes the first-leaf
+enumeration entirely.  Write $q^0,q^1,q^2$ for the root and two leaf core
+collections after matching coefficients $m_A,m_B>0$, and let $a,b$ be the
+selected players.  Thus
+\[
+ \deg(q^0)=\alpha_0\mathbf1+m_Ae_a+m_Be_b,
+ \quad \deg(q^1)=\alpha_1\mathbf1-m_Ae_a,
+ \quad \deg(q^2)=\alpha_2\mathbf1-m_Be_b.
+\]
+
+\begin{proposition}[Unit root absorption]\label{prop:unit-root-absorption}
+Fix a proper witness $U$.  If there is a subcollection $z\le q^0+q^2$ with
+\[
+ \deg(z)=\beta\mathbf1+m_Ae_a+\delta\mathbf1_U,
+ \qquad z_B\le q^0_B,
+\]
+then the fixed-$U$ capacity of the glued circuit is at least one, for every
+compatible first leaf $q^1$ and without any bound on $q^1_A/m_A$.
+\end{proposition}
+
+\begin{proof}
+Put $w=q^1+z$.  Then $0\le w\le q^0+q^1+q^2$ and
+$\deg(w)=(\alpha_1+\beta)\mathbf1+\delta\mathbf1_U$.  It retains the full
+first requirement because $w_A\ge q^1_A$, while
+\[
+ (q-w)_B=q^0_B+q^2_B-z_B\ge q^2_B,
+\]
+which retains the full second requirement.
+\end{proof}
+
+For the lifted pattern above, all $56\cdot3=168$ root--second-leaf pairs
+admit such a subcollection in exact rational arithmetic.  For a dual ray
+$(r_A,r_B,z)$ from Proposition~\ref{prop:box-capacity-dual}, let
+\[
+ R=r_Bq^0_B+\sum_T(q^0_T+q^2_T)
+ [z(T)+r_A\mathbf1_{\{T=A\}}-r_B\mathbf1_{\{T=B\}}]_+-m_Az_a.
+\]
+An independent dual audit gives the stronger reserve
+\[
+ R(q^0,q^2)\ge\frac13(m_Ar_A+m_Br_B)
+\]
+for every feasible fixed-witness dual ray.  Since the three second leaves
+have $q^2_B/m_B=2$, this implies the first-leaf-uniform estimate
+\[
+ \tau_U\ge 1+\frac{1}{3\max\{q^1_A/m_A,2\}}.
+\]
+In particular the ratio-five leaves satisfy $\tau_U\ge16/15$.  This is
+weaker than their exact minimum $13/12$, but it proves capacity one for
+arbitrary compatible first leaves, not only the four enumerated orbits.  The
+remaining finite input has moved entirely to the root--second-leaf pair.
+As an exact stress test, all four Peleg constructions from the $56$
+regularized roots produce $604$ distinct seven-player roots.  All
+$604\cdot3=1{,}812$ pairings with the second leaves admit absorbers, and the
+normalized dual reserve still has minimum $1/3$ in every Peleg case.  This
+points to Peleg-closure of root absorption as the next structural lemma.
+The first Peleg case can already be closed.  If $I$ is its marked
+subcollection, the interpolation equations
+$v(T)=\mathbf1_{\{T\in I\}}$ on the regularized root imply
+$v(N)=1$ and $v_a=v_b=v_u=0$: use $\lambda(I)=1$, the two marked
+cosingletons, and the unmarked coalition $B=\{b,u\}$.  A root-only absorber
+therefore lifts directly, because its marked mass is exactly its baseline
+degree.  This covers $93$ markings.  For the remaining $66$, arising from
+the $23$ non-root-only parents, the interpolation potentials have only five
+types and are nonnegative on the complete second-leaf support.  Hence
+$[x+sv(T)]_+\le[x]_++v(T)[s]_+$ transports the parent dual remainder to the
+child; all $159$ admissible case-1 markings preserve unit absorption, and the
+adversarial $66$ preserve the $1/3$ reserve.  Case 2 also closes.  If
+$\kappa$ is the new-singleton weight, the corrected potential
+$\widetilde v=v+\kappa(e_a+e_b-e_u)$ satisfies
+$\widetilde v(N)=1$ and
+$\widetilde v_a=\widetilde v_b=\widetilde v_u=0$.  Its correction has total
+root mass one and total second-leaf mass $\alpha_2$, so the two new singleton
+hinges pay the positive-part errors exactly.  The required support signs hold
+in all $113$ admissible emissions.  Case 3 also closes, but requires a
+role-specific split argument.  For split coalition $D$, weight
+$\lambda_D$, and $\theta=\kappa/\lambda_D$, assign interpolation value
+$\theta$ to $D$, one to marked columns, and zero otherwise.  Convexity then
+transports the split column exactly.  The $104$ emissions divide into $21$
+$\bar a$-splits, $62$ $\bar b$-splits, and $21$ $B$-splits.  The
+$\bar a$ role has a nonnegative second-support potential and its changed
+coefficient leaves the hinge
+$(m_A-\kappa)([z(\bar a)]_+-z(\bar a))\ge0$.  For the $B$ role, the witness
+correction $\widetilde w=w+\theta(e_b-e_u)$ is nonnegative on both relevant
+supports; the sole split-hinge loss is at most $\kappa r_B$, and exact
+primal--dual certificates prove the sharp parent inequality
+$R\ge\kappa r_B$ in all $21$ parent--second pairings.  Finally, $50$ of the
+$62$ $\bar b$-split children absorb from the root alone.  For the remaining
+$12$, a split-aware absorber keeps root and second allocations separate and
+uses the private new singleton to make the new-player degree equal the old
+baseline; all $12\cdot3=36$ exact systems are feasible.  Hence cases 1--3
+preserve unit root absorption on the certified family.  Case 4 now closes by
+the same split-aware primal principle.  If
+$\omega=(1-t)\mu+t\nu$ is its mixed parent collection and
+$\omega(I)=1$, keep source-root and second-leaf allocations $z^0,z^2$
+separate and choose private-singleton mass $s$ with
+\[
+ \deg(z^0+z^2)=\beta\mathbf1+m_Ae_a+\delta e_u,
+ \qquad z^0(I)+s=\beta,
+ \qquad (z^0+z^2)_B\le q^\omega_B.
+\]
+Marking $z^0$, retaining $z^2$, and adding $s$ of the new singleton then
+gives the child absorber: the new-player degree is exactly $\beta$.  Among
+324 rank-one parent unions, 201 pairs yield 228 distinct decoded emissions.
+All $228\cdot3=684$ source systems are feasible in exact rational arithmetic,
+and all mapped child certificates verify coefficientwise.  Thus all four
+Peleg constructions preserve unit root absorption on the certified family.
+
 \begin{proposition}[Disjoint arms: exactness chaining]\label{prop:disjoint}
 Let $b$ be exact and $t_A=b+d_Ae_A$, $t_B=b+d_Be_B$ exact, where $A,B$ are
 nonempty proper coalitions with $A\cap B=\emptyset$ and
@@ -1070,6 +2003,10 @@ $n$-player games for $n\ge5$; by Proposition~\ref{prop:compact} this
 settles Conjecture~\ref{conj:existence}. Proposition~\ref{prop:cx} shows
 the common-core-point method cannot decide it, and the procedural egalitarian
 route is closed by the exact counterexample of \citet[][Example~5]{Mauri2017}.
+For the disjoint two-bump frontier, the sharp intermediate target is to prove
+Conjecture~\ref{conj:two-extreme-repair}: both extreme coordinate classes of
+a support-orthogonal optimal potential must make the box system in
+Corollary~\ref{cor:two-color-transfer} feasible.
 \item Recover the unpublished Solymosi--Brugueras--Raghavan proof
 (see Section~\ref{sec:markets}) that the nucleolus is pairwise monotonic on
 assignment games, and prove
@@ -1252,6 +2189,12 @@ the bargaining set: an update. Rev \'Econ 71:225--266.
 Kohlberg E (1971) On the nucleolus of a characteristic function game.
 SIAM J Appl Math 20:62--66.
 \url{https://doi.org/10.1137/0120009}
+
+\bibitem[Laplace Mermoud et al.(2025)]{LaplaceMermoud2025}
+Laplace Mermoud D, Grabisch M, Sudh\"olter P (2025) Minimal balanced
+collections and their applications to core stability and other topics of
+game theory. arXiv:2507.05898.
+\url{https://arxiv.org/abs/2507.05898}
 
 \bibitem[Maschler et al.(2010)]{MPR2010}
 Maschler M, Potters J, Reijnierse H (2010) The nucleolus of a standard
