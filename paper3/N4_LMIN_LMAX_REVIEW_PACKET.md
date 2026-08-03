@@ -1,0 +1,275 @@
+# Reviewer packet: the exact four-player Lmin--Lmax bridge
+
+Prepared 2026-08-03.  This packet covers material that postdates the external
+hostile audit in `review_findings.md`.  It is a request for review, not a claim
+of independent validation.
+
+## Result under review
+
+Let `v` be an exact TU game with at most four players and normalize its
+singleton values to zero.  If `phi=Lmin(v)` and its payoff strata, from poor to
+rich, are `B_1,...,B_k`, then every richer suffix
+
+```text
+H_j = B_(j+1) union ... union B_k
+```
+
+is tight at every strict payoff gap: `phi(H_j)=v(H_j)`.  Hence `phi`
+Lorenz-dominates the core and equals `Lmax(v)`.  Published results then give
+`Lmax=PES` and coalitional monotonicity on this domain.  Together with the
+five-player exact Lmin counterexample, this makes dimension five sharp.
+
+The manuscript currently labels the suffix-tightness lemma
+**computer-assisted**.  No clean human proof of the four-player case has yet
+been obtained.
+
+## Dependency map
+
+```text
+exactness + zero singleton values + Lmin stage optimality
+                         |
+                         v
+       richer-player suffixes are tight (new finite lemma)
+                         |
+                         v
+         upper-tail inequalities at stratum boundaries
+                         |
+             concavity across tied payoff blocks
+                         v
+           Lmin Lorenz-dominates Core(v), so Lmin=Lmax
+                         |
+        exact n<=4 -> large core              (Biswas et al. 1999)
+        large core -> egalitarian stable      (Dietzenbacher 2021)
+        PES=Lmax and PES coalitionally monotone on that domain
+                         |
+                         v
+       normalized Lmin coalitionally monotone through n=4
+                         |
+             exact five-player counterexample
+                         v
+                dimension five is sharp
+```
+
+Singleton bumps use the manuscript's separate translation lemma and theorem;
+all other one-coalition bumps leave the singleton normalization vector fixed.
+
+## Encoding A: symbolic KKT/exact-face certificate
+
+File: `src/verify_n4_exact_lmin_pes_bridge.py`.
+
+Write `s(T)=phi(T)-v(T)`.  Exactness is encoded from its definition: for every
+proper coalition `C`, a displacement `d^C` satisfies
+
+```text
+d^C(N)=0,
+d^C(C)=-s(C),
+d^C(T)>=-s(T) for every proper T.
+```
+
+At each progressive Lmin stage, the verifier includes the dual of the common-
+level program and the dual of the individual pin program for every player in
+the current stratum.
+
+### KKT sign audit
+
+For the common-level maximization, write it as minimization of `-t`, with
+constraints
+
+```text
+v(T)-x(T) <= 0,          multiplier lambda_T >= 0,
+t-x_i <= 0,              multiplier mu_i >= 0,
+x(N)=v(N),               free multiplier nu,
+x_i=phi_i (earlier pins), free multiplier pi_i.
+```
+
+The Lagrangian derivatives are
+
+```text
+dL/dt   = -1 + sum_i mu_i = 0,
+dL/dx_i = -sum_(T contains i) lambda_T - mu_i + nu + pi_i = 0.
+```
+
+For individual pin `i`, the objective is `-x_i`, the stage level is a fixed
+constant, and stationarity becomes
+
+```text
+-1_(h=i) - sum_(T contains h) lambda_T - mu_h + nu + pi_h = 0.
+```
+
+These signs match the implementation.  Core complementarity is
+`lambda_T=0 or s(T)=0`.  A later-stratum floor is strictly inactive and its
+`mu` is set to zero; current-stratum floors are active and their nonnegative
+multipliers remain free.  Earlier coordinates are equality-pinned.
+
+### Normalization audit
+
+- Modular translation by singleton values sends `Core(v)` to `Core(v)-m` and
+  preserves exactness.
+- Every strict payoff gap can be scaled to at least one because the complete
+  feasibility system is positively homogeneous.
+- In Encoding A, positive suffix slack remains a strict exact-rational query;
+  no floating tolerance is used.
+- The script aborts under `python -O`.
+
+For each of the four realizable stratum patterns,
+`src/verify_n4_exact_lmin_pes_bridge_cores.py` extracts an unsatisfiable subset
+of the original suffix-slack query, greedily reduces it to local
+irreducibility, rechecks the reduced unlabelled formula, and verifies that
+every single-assertion deletion is satisfiable.  The retained sizes are 15,
+59, 40, and 64 assertions, from full formulas containing 158, 470, 472, and
+510 assertions.  These are compact solver-checkable cores, not Farkas
+linear-combination proofs.
+
+## Encoding B: independent primal tangent enumeration
+
+File: `src/verify_n4_exact_lmin_pes_bridge_primal.py`.
+
+This verifier uses no KKT multiplier and no complementarity constraint.  It
+enumerates the tight proper-coalition set `A`.  At `phi`, its exact tangent
+cone is
+
+```text
+d(N)=0,  d(T)>=0 for T in A.
+```
+
+At a stratum `B_j`, after earlier strata are fixed, a lexicographic
+improvement exists exactly when some tangent direction satisfies
+
+```text
+d_i=0 for every earlier player,
+d_i>=0 for every i in B_j,
+d_h>0 for at least one h in B_j.
+```
+
+Convexity proves the equivalence: a better core point supplies its displacement
+from `phi`; conversely, a sufficiently small positive multiple of any such
+direction preserves every inactive inequality because its slack is positive.
+Homogeneity replaces `d_h>0` by `d_h>=1`.
+
+For each tangent pattern that passes these primal tests, a separate exact
+linear system asks whether slacks and definition-level exact-face witnesses
+realize it.  Singleton tightness has only two possibilities: the entire first
+payoff block is at level zero, or no singleton is tight.  This reduces the
+four-player enumeration to exactly `2*2^10=2048` active sets per composition.
+
+The two encodings agree:
+
+| players | composition | status |
+|---:|:---:|:---|
+| 2 | `1+1` | impossible |
+| 3 | `2+1` | impossible |
+| 3 | `1+2` | realizable; suffix tight |
+| 3 | `1+1+1` | impossible |
+| 4 | `3+1` | impossible |
+| 4 | `2+2` | realizable; suffix tight |
+| 4 | `2+1+1` | impossible |
+| 4 | `1+3` | realizable; suffix tight |
+| 4 | `1+2+1` | impossible |
+| 4 | `1+1+2` | realizable; both suffixes tight |
+| 4 | `1+1+1+1` | impossible |
+
+The seven impossible patterns are exactly the patterns with a unique richest
+player.  This observation is suggestive but is **not** currently used as an
+unproved hand lemma.
+
+## Concrete realizability witnesses
+
+Encoding B emits a small integer game for every realizable pattern.  A third
+program, `src/verify_n4_exact_lmin_pes_bridge_witnesses.py`, independently:
+
+1. minimizes every proper coalition over the core and confirms exactness;
+2. recomputes Lmin with the project's exact rational Maschler implementation;
+3. checks every richer-suffix equality.
+
+The resulting Lmin vectors are:
+
+```text
+n=3, 1+2:     (1,2,2)
+n=4, 2+2:     (1,1,2,2)
+n=4, 1+3:     (1,2,2,2)
+n=4, 1+1+2:   (1,2,3,3)
+```
+
+All coalition values are included in
+`results/n4_exact_lmin_pes_bridge_primal.json`.
+
+## Suffix tightness implies Lorenz dominance
+
+This deduction is not computer-assisted.  At a boundary where `H` comprises
+the `r` richest coordinates of `phi`, every `x` in the core satisfies
+
+```text
+sum_(i=1)^r x_i^down >= x(H) >= v(H) = phi(H)
+                       = sum_(i=1)^r phi_i^down.
+```
+
+Between consecutive stratum boundaries, the cumulative sum of the decreasing
+rearrangement of `x` is concave in `r`, while the corresponding cumulative sum
+for `phi` is linear across its tied block.  The boundary inequalities therefore
+imply every intermediate upper-tail inequality.  Equal totals convert these
+upper-tail inequalities into Lorenz dominance.  In particular, `phi` is the
+unique lexicographic minimizer of descending payoffs, namely Lmax.
+
+## Exact reproduction commands
+
+Run from `coopgames/`:
+
+```sh
+python src/verify_n4_exact_lmin_pes_bridge.py
+python src/verify_n4_exact_lmin_pes_bridge_cores.py \
+  --output results/n4_exact_lmin_pes_bridge_cores.json
+python src/verify_n4_exact_lmin_pes_bridge_primal.py \
+  --output results/n4_exact_lmin_pes_bridge_primal.json
+python src/verify_n4_exact_lmin_pes_bridge_witnesses.py \
+  --output results/n4_exact_lmin_pes_bridge_witnesses.json
+python src/verify_n5_exact_leximin_monotonicity_counterexample.py
+```
+
+Expected failure-safety check:
+
+```sh
+python -O src/verify_n4_exact_lmin_pes_bridge.py
+python -O src/verify_n4_exact_lmin_pes_bridge_cores.py
+python -O src/verify_n4_exact_lmin_pes_bridge_primal.py
+python -O src/verify_n4_exact_lmin_pes_bridge_witnesses.py
+```
+
+Each optimized-mode command must fail immediately.
+
+## Known limitations
+
+1. No concise human proof of suffix tightness has yet replaced the finite
+   theorem.  Encoding B makes the case split much more transparent but is
+   still computer-assisted.
+2. Both exhaustive encodings use Z3's exact linear-rational engine, although
+   they formulate Lmin optimality differently.  The concrete witnesses are
+   replayed by the project's separate exact-LP implementation.
+3. The reduced unsatisfiable cores and Z3's internal proof objects are not
+   standalone Farkas certificates.  Three four-player cores retain 40--64
+   assertions because complementarity branches heavily.  The exhaustive
+   2048-tight-set primal enumeration and its per-case counts are an independent
+   formulation and audit artifact, not a compact hand proof.
+4. The theorem and its claimed novelty have not been externally reviewed.
+5. The focused literature search found no prior `Lmin=Lmax` theorem on exact
+   games through four players, but MathSciNet/zbMATH and expert citation-chain
+   review remain outstanding.
+
+## Questions for the external reviewer
+
+1. Is the tangent-cone characterization of a completed Lmin stratum stated
+   with the correct weak/strict signs?
+2. Does the active-set enumeration cover degeneracy, including players with
+   equal final payoffs that might appear to pin at different algorithmic
+   substeps?
+3. Is definition-level exactness fully captured by the displacement systems
+   for every proper coalition?
+4. Is positive homogeneity sufficient for every unit normalization used in
+   both encodings?
+5. Does suffix tightness imply all upper-tail inequalities exactly as stated,
+   including indices inside tied blocks?
+6. Does the published chain `exact n<=4 -> large core -> egalitarian stable ->
+   PES=Lmax and coalitional monotonicity` have any missing domain-closure
+   hypothesis when two exact games differ at one coalition?
+7. Is an equivalent `Lmin=Lmax` statement already known under the terms
+   lexicographically minimal/maximal, Lorenz-stable, exact-partition, or
+   large-core game?

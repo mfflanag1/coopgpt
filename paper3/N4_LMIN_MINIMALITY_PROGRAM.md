@@ -30,14 +30,23 @@ arithmetic:
 > most four players, `Lmin = PES = Lmax`.
 
 The distinction remains load-bearing: Lmin and Lmax can differ on general
-egalitarian-stable games, so largeness alone does not identify them.  The new
-verifier `src/verify_n4_exact_lmin_pes_bridge.py` establishes the bridge by
-showing that every richer-player suffix at a strict Lmin payoff gap is tight.
-It checks all 1, 3, and 7 nonconstant ordered payoff-stratum compositions for
-two, three, and four players.  Seven patterns are impossible already; in the
-other four the positive-suffix-slack query is nonvacuously infeasible.
-Removing either the exact-face witnesses or the individual-pinning dual
-programs opens satisfiable negative-control cases.
+egalitarian-stable games, so largeness alone does not identify them.  The
+primary verifier `src/verify_n4_exact_lmin_pes_bridge.py` establishes the
+bridge by showing that every richer-player suffix at a strict Lmin payoff gap
+is tight.  It checks all 1, 3, and 7 nonconstant ordered payoff-stratum
+compositions for two, three, and four players.  Seven patterns are impossible
+already; in the other four the positive-suffix-slack query is nonvacuously
+infeasible.  Removing either the exact-face witnesses or the
+individual-pinning dual programs opens satisfiable negative-control cases.
+
+The independent verifier
+`src/verify_n4_exact_lmin_pes_bridge_primal.py` uses no KKT multipliers or
+complementarity.  It enumerates the tight-coalition set, excludes primal
+leximin-improving tangent directions at every stratum, and then asks whether
+the remaining pattern has a definition-level exact realization.  It gives the
+same eleven-case classification.  A third exact-LP checker,
+`src/verify_n4_exact_lmin_pes_bridge_witnesses.py`, independently replays a
+small integer exact game for every realizable stratum pattern.
 
 The bridge is dimension-sharp on the known witness.  For the five-player base
 game,
@@ -71,8 +80,9 @@ drop.  In a separate exact-rational check of 100 randomly generated,
 singleton-normalized exact four-player games, Lmin and PES agreed in every
 case.
 
-These remain discovery evidence and independent stress tests, not the proof.
-The theorem evidence is the symbolic KKT/exact-face certificate above.
+These random campaigns remain discovery evidence, not the proof.  The theorem
+evidence is now two exhaustive exact encodings: the symbolic KKT/exact-face
+certificate and the independent primal tight-set enumeration above.
 
 ## Structural clue from trying to compress the witness
 
@@ -109,9 +119,19 @@ drop forces precisely these two tight coalitions (up to relabeling).
    patterns; deduce Lorenz dominance and `Lmin=Lmax`.
 4. Completed: combine the bridge with Biswas et al. and Dietzenbacher to prove
    monotonicity through four players and sharpness at five.
-5. Remaining: obtain an independent hostile audit of the symbolic encoding and
-   the literature bridge; ideally extract small Farkas certificates for the
-   eleven infeasible systems.
+5. Completed internally: re-audit every KKT sign, complementarity condition,
+   homogeneity normalization, and the suffix-tightness-to-Lorenz deduction;
+   add an independent primal tight-set verifier, explicit witness replay, and
+   locally irreducible unsatisfiable cores for the four nonvacuous suffix-slack
+   cases (15, 59, 40, and 64 assertions, down from 158--510).
+6. Remaining: obtain an external specialist audit of both encodings and the
+   literature bridge.  The reduced cores are solver-checkable subsets of the
+   original assertions, not standalone Farkas linear-combination proofs; the
+   reviewer packet states that limitation explicitly.
+
+The self-contained reviewer packet is
+`paper3/N4_LMIN_LMAX_REVIEW_PACKET.md`.  The theorem remains explicitly
+computer-assisted; no concise hand proof has been obtained.
 
 No claim is made that the five-player failure extends to every higher
 dimension by null players: a naive null extension changes several coalitions,

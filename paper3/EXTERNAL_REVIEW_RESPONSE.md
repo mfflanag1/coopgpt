@@ -42,15 +42,20 @@ it.
 A still later computer-assisted bridge now proves that this five-player
 failure is dimension-minimal.  For every singleton-normalized exact game with
 at most four players, an exact symbolic KKT/exact-face certificate forces every
-richer-player suffix at a strict Lmin payoff gap to be tight.  The resulting
+richer-player suffix at a strict Lmin payoff gap to be tight.  A second
+exhaustive encoding independently obtains the same classification by
+enumerating tight-coalition sets and primal tangent directions, without KKT
+multipliers or complementarity; a third exact-LP checker replays explicit
+integer witnesses for all realizable payoff-stratum patterns.  The resulting
 hand argument shows that Lmin Lorenz-dominates the core and equals Lmax/PES;
 Biswas et al. (1999) and Dietzenbacher (2021) then imply coalitional
 monotonicity through four players.  This bridge checks all eleven nonconstant
 ordered stratum patterns for two through four players and includes two
 load-bearing negative controls.  Seven patterns are impossible outright and
 the suffix result is nonvacuous in all four realizable patterns.  The bridge
-also postdates the hostile audit and
-must not be described as externally reviewed.
+also postdates the hostile audit and must not be described as externally
+reviewed.  Its scope, reproduction commands, limitations, and review questions
+are collected in `N4_LMIN_LMAX_REVIEW_PACKET.md`.
 
 A post-review literature correction also changes the nomenclature.  The
 leximin-above-singleton-floors selector is exactly `m + Lmin(v^0)`, where
