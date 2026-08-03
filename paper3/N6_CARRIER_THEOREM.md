@@ -16,6 +16,8 @@ game has `(gamma_S,eta_S)=(3/4,0)` at its exact leximin point and `(1,0)` at
 the core reference zero; see
 [`N7_EXACT_CARRIER_COUNTEREXAMPLE.md`](N7_EXACT_CARRIER_COUNTEREXAMPLE.md) and
 the two `src/verify_n7_exact_carrier_counterexample*.py` verifiers.
+Null-player extension gives a counterexample in every dimension `n>=7`, so
+the six/seven boundary is the complete dimension threshold.
 
 ## Structural reduction
 

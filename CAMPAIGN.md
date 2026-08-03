@@ -880,3 +880,26 @@ Pre-crash progress banked:
   primal LP also returns eta zero.  A second exact-rational verifier computes
   the leximin point and all six `3/4` differences.  The paper fragment and PDF
   now state the sharp positive-through-six/negative-at-seven theorem.
+- The leximin point now has a hand-checkable three-stage Maschler certificate:
+  gain strata `{3,4,6,7}` at `3/4`, `{5}` at `3/2`, and `{1,2}` at `9/4`.
+  Appending null players preserves the exact core, leximin coordinates,
+  carrier differences, and eta obstruction.  Hence the inequality holds
+  universally exactly for `n<=6` and fails for every `n>=7`.
+- STRUCTURE: eight zero-valued coalitions form a degree-four balanced
+  rank-five face and force `Core(v)=conv{0,a,b}`.  Coalitions `1`, `2`, and
+  `123` uniquely require `a`, `b`, and zero, so three lower-envelope
+  generators are minimal.  The family `min{0,a,theta*b}`, `1/4<theta<=1`,
+  keeps `phi=a/4` and has `(gamma,eta)=(theta-1/4,0)`, proving nonuniqueness
+  and perturbation robustness within a nontrivial exact family.
+- MONOTONICITY CONNECTION: the failure target `S=123` has exact bump capacity
+  zero throughout the family.  Coalition `135` is uniquely tight at zero, so
+  its face blocks every positive exact bump of `123`.  Thus this carrier
+  failure does not itself refute proper-coalition monotonicity; a future
+  counterexample must be binding-bumpable.
+- PRIOR-ART AUDIT: general minimal-balanced enumeration through n=7 is not
+  new (Laplace Mermoud--Grabisch--Sudhölter, arXiv:2507.05898), and the exact
+  cone already has a facet theory via minimal semi-balanced systems
+  (Studený--Kratochvíl, MMOR 2022).  No matching prior statement was located
+  for the eta/carrier inequality, its sharp 6/7 threshold, or the triangular
+  family.  Novelty language remains “we are not aware” pending MathSciNet/
+  zbMATH and expert review; see paper3/PRIOR_ART_CARRIER.md.

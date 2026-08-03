@@ -22,6 +22,26 @@ The exact leximin point is
 phi = a/4 = (-3/4, 1/4, 3/4, -1/4, 1/2, -1/4, -1/4).
 ```
 
+It has a three-stage hand certificate. The singleton floors are
+
+```text
+m = (-3,-2,0,-1,-1,-1,-1),
+```
+
+and the successive gain strata are
+
+```text
+level 3/4: players 3,4,6,7
+level 3/2: player 5
+level 9/4: players 1,2.
+```
+
+Indeed, `v(125)=0` and efficiency force `x(3467)<=0`, giving the first
+level and fixing players 3,4,6,7. On that face, `v(13)=v(27)=0` bounds
+players 1 and 2 and forces `x5<=1/2`, giving the second level. Efficiency
+then fixes `x1+x2=-1/2`, giving the final level. Thus no optimizer output is
+needed to recognize `phi` as the leximin point.
+
 For target `S={1,2,3}` and outside set `P={4,5,6,7}`, each of the six
 nonempty proper `C` contained in `S` satisfies
 
@@ -77,3 +97,58 @@ second independently computes the leximin point in exact rational arithmetic.
 Together they establish that the complete computer-assisted theorem through
 six players is dimension-sharp and resolve the unrestricted quantitative
 carrier conjecture negatively.
+
+## Every higher dimension
+
+Appending any number of null players preserves the counterexample. Extend all
+three generators by zero. The enlarged core is exactly the old core times
+fixed zero coordinates, so the old leximin point, carrier differences, and
+eta value are unchanged. Consequently the inequality holds universally
+exactly through six players and fails at every dimension `n>=7`.
+
+The extension identities can be replayed through any desired finite cutoff:
+
+```sh
+python src/verify_n7_exact_carrier_dummy_extensions.py --max-n 12
+```
+
+## Structure and nonuniqueness
+
+Eight zero-valued coalitions form a degree-four balanced collection of
+incidence rank five. They force the entire core into `span{a,b}`; the core
+constraints at `3`, `13`, and `4` then give
+
+```text
+Core(v) = conv{0,a,b}.
+```
+
+Each vertex uniquely minimizes one of `1`, `2`, and `123`, so all three
+generators are indispensable.
+
+The example belongs to a nontrivial family. For every rational or real
+`1/4 < theta <= 1`,
+
+```text
+v_theta(T) = min{0,a(T),theta*b(T)}
+```
+
+has the same leximin point `a/4` and
+
+```text
+gamma_S = theta - 1/4,   eta_S = 0.
+```
+
+Thus the counterexample is not unique up to permutation and scaling and is
+robust along a genuine generator-perturbation interval. Replay the structural
+and family certificates with:
+
+```sh
+python src/verify_n7_exact_carrier_structure.py
+python src/verify_n7_exact_carrier_family.py
+```
+
+The family does **not** directly refute proper-coalition monotonicity.
+Coalition `135` is uniquely tight at the zero vertex and has the same
+`123`-sum as `v(123)`. Therefore the exact bump capacity at the failure target
+is zero: no positive exact bump of `123` exists. A monotonicity counterexample
+would require a different, binding-bumpable carrier obstruction.

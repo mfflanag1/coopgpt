@@ -27,6 +27,13 @@ EXPECTED_LEXIMIN = (
     F(-1, 4),
     F(-1, 4),
 )
+EXPECTED_FLOORS = (F(-3), F(-2), F(0), F(-1), F(-1), F(-1), F(-1))
+EXPECTED_GAINS = (F(9, 4), F(9, 4), F(3, 4), F(3, 4), F(3, 2), F(3, 4), F(3, 4))
+EXPECTED_STRATA = (
+    (F(3, 4), (3, 4, 6, 7)),
+    (F(3, 2), (5,)),
+    (F(9, 4), (1, 2)),
+)
 
 
 def main():
@@ -38,6 +45,41 @@ def main():
     phi = tuple(leximin_core_exact(game))
     assert phi == EXPECTED_LEXIMIN
     assert game.in_core(phi)
+
+    # Hand-checkable three-stage Maschler certificate.
+    floors = tuple(value[1 << player] for player in range(N))
+    gains = tuple(phi[player] - floors[player] for player in range(N))
+    assert floors == EXPECTED_FLOORS
+    assert gains == EXPECTED_GAINS
+
+    # Stage 1.  The coalition 125 has value zero, so efficiency gives
+    # x(3467) <= 0.  If all gains are at least t, then
+    # x(3467) >= m_3+m_4+m_6+m_7+4t = -3+4t.  Hence t<=3/4.
+    coalition_125 = (1 << 0) | (1 << 1) | (1 << 4)
+    coalition_3467 = FULL ^ coalition_125
+    assert value[coalition_125] == 0
+    assert sum(EXPECTED_FLOORS[player] for player in (2, 3, 5, 6)) == -3
+    assert payoff(phi, coalition_3467) == 0
+    assert all(gains[player] == F(3, 4) for player in (2, 3, 5, 6))
+
+    # Stage 2.  Once 3,4,6,7 are fixed, their sum is zero.  Tight core
+    # constraints 13 and 27 imply x_1>=-3/4 and x_2>=1/4.  Efficiency then
+    # gives x_5<=1/2, so its gain is at most 3/2.
+    coalition_13 = (1 << 0) | (1 << 2)
+    coalition_27 = (1 << 1) | (1 << 6)
+    assert value[coalition_13] == value[coalition_27] == 0
+    assert sum(phi[player] for player in (2, 3, 5, 6)) == 0
+    assert phi[0] == -phi[2] == F(-3, 4)
+    assert phi[1] == -phi[6] == F(1, 4)
+    assert phi[4] == F(1, 2)
+    assert gains[4] == F(3, 2)
+
+    # Stage 3.  After player 5 is fixed, efficiency gives x_1+x_2=-1/2.
+    # If their two gains are at least u, then -1/2>=m_1+m_2+2u=-5+2u,
+    # so u<=9/4, attained by phi.
+    assert sum(phi[player] for player in range(2, N)) == F(1, 2)
+    assert phi[0] + phi[1] == F(-1, 2)
+    assert gains[0] == gains[1] == F(9, 4)
 
     slack = [
         payoff(phi, coalition) - value[coalition]
@@ -68,6 +110,12 @@ def main():
         "status": "exact-rational leximin counterexample verified",
         "n": N,
         "leximin": [str(value) for value in phi],
+        "floors": [str(value) for value in floors],
+        "gains": [str(value) for value in gains],
+        "maschler_strata": [
+            {"level": str(level), "players": list(players)}
+            for level, players in EXPECTED_STRATA
+        ],
         "S": members(S),
         "P": members(P),
         "carrier_differences": {
