@@ -1,6 +1,7 @@
 # Six-player quantitative carrier theorem
 
-The current paper proves, by a complete exact computation, that
+The current paper proves, by a two-level separation theorem and focused
+rank-six incidence classification, that
 
 \[
 \eta_S(\psi) \geq \gamma_S(\psi)
@@ -8,8 +9,8 @@ The current paper proves, by a complete exact computation, that
 
 for every exact cooperative game with at most six players, every core
 reference point `psi`, and every proper nonsingleton target coalition `S`.
-The rendered paper is [`wrapper.pdf`](wrapper.pdf); Proposition 5.22 contains
-the theorem and Lemma 5.19 gives the structural reduction.
+The rendered paper is [`wrapper.pdf`](wrapper.pdf).  A larger complete exact
+computation is retained only as independent redundancy.
 
 The threshold is sharp.  A seven-player three-generator lower-envelope exact
 game has `(gamma_S,eta_S)=(3/4,0)` at its exact leximin point and `(1,0)` at
@@ -20,6 +21,28 @@ Null-player extension gives a counterexample in every dimension `n>=7`, so
 the six/seven boundary is the complete dimension threshold.
 
 ## Structural reduction
+
+The main proof no longer requires optimizing all 1,489 eta-dual orbits.
+If `eta<gamma`, the target-floor multipliers in an optimal dual strictly
+separate the high-total core slice from the nonnegative orthant.  The
+two-level separator theorem forces at least three distinct multiplier levels.
+A focused rank-six incidence classification then leaves no such support in
+the `3+3` split and one orbit in the `4+2` split:
+
+```text
+1_S + e_1 + 2 e_2 + 1_35 + 1_136 + 2 1_456 = 3 1_N.
+```
+
+Its objective is `s(35)+s(136)+2s(456)`, which is at least `2*gamma` directly
+from the carrier inequality for `C={4}`.  The focused exact verifier checks
+65,133 small incidence supports and replaces the former exact-cone census as
+the logical proof.  The larger 1,489-orbit audit remains as independent
+redundancy.
+
+```sh
+python src/verify_n6_three_level_eta_duals.py \
+  --output results/n6_three_level_eta_duals.json
+```
 
 After deleting eta-dual columns dominated by the zero-cost target floor
 variables, adjoining `S` with coefficient one identifies every relevant

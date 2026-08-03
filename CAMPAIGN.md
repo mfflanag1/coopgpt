@@ -894,11 +894,15 @@ Pre-crash progress banked:
   `(gamma,eta)=(theta-2*kappa-1/4,0)`.  Its relatively open parameter wedge
   proves nonuniqueness and genuine two-parameter perturbation robustness.
   The known target size three and total player count seven are globally
-  minimal.  Outside-set minimality remains open: 100-restart global-witness
-  exact-cone searches for the two unresolved seven-player splits
-  `(|S|,|P|)=(5,2),(4,3)` found no violation and reached the sharp boundary
-  `eta/gamma=1`; see `results/n7_exact_cone_outside_small_screen.json`.
-  This is finite evidence, not an absence theorem.
+  minimal.  At arbitrary core references, the minimum outside-set size at
+  `n=7` is now exactly three.  The exact lower-envelope game
+  `min{0,A,B}`, with `A=(-4,1,2,2,-3,1,1)` and
+  `B=(2,-1,0,0,1,-1,-1)`, has `S=1234`, `P=567`, and
+  `(gamma_S(0),eta_S(0))=(1,0)`.  The degree-five rank-seven identity
+  `1_S+e1+3e2+1_235+2*1_456+2*1_457+3*1_1367=5*1_N` is a hand
+  certificate.  This particular game's exact leximin point has all carrier
+  margins zero, so the leximin-specific minimum remains open between three
+  and four outside players.
 - MONOTONICITY CONNECTION: the failure target `S=123` has exact bump capacity
   zero throughout the family.  Coalition `135` is uniquely tight at zero, so
   its face blocks every positive exact bump of `123`.  Thus this carrier
@@ -916,3 +920,20 @@ Pre-crash progress banked:
   for the eta/carrier inequality, its sharp 6/7 threshold, or the triangular
   family.  Novelty language remains “we are not aware” pending MathSciNet/
   zbMATH and expert review; see paper3/PRIOR_ART_CARRIER.md.
+- THRESHOLD BREAKTHROUGH: the complete n=6 theorem no longer logically needs
+  1,489 exact-cone orbit optimizations.  Any violation supplies an eta-dual
+  floor separator with at least three coordinate levels.  A focused
+  rank-six classification checks only 65,133 small incidence supports:
+  there are none for `3+3` and one orbit for `4+2`, namely
+  `1_S+e1+2e2+1_35+1_136+2*1_456=3*1_N`.  Its objective is at least
+  `2*gamma` from the single `C={4}` carrier inequality.  Thus the large
+  census is now independent redundancy rather than the proof's foundation.
+- SEVEN-PLAYER OUTSIDE CLASSIFICATION: a focused determinant census checks
+  `9,086,132` supports for `4+3` and `8,798,030` for `5+2`.  After the
+  two-level separator theorem and direct carrier-mass bounds, only 34 and 5
+  symmetry orbits remain.  Exact global-witness cone values are
+  `{0:14,1:12,2:8}` for `4+3` and `{3:5}` for `5+2`; every rational lower
+  bound replays without optimization.  Hence outside pairs are impossible at
+  `n=7`, while the explicit outside-triple game is sharp.  The earlier
+  alternating screen missed the `4+3` obstruction and is retained only as a
+  documented false-negative diagnostic.

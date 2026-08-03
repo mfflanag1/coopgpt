@@ -165,3 +165,60 @@ feasibility therefore forces `x(123)=0`.  The exact bump capacity at the
 failure target is zero: no positive exact bump of `123` exists.  Any
 deformation preserving these zero faces remains blocked, so a monotonicity
 counterexample requires a genuinely different, binding-bumpable obstruction.
+
+## Outside-set classification at seven players
+
+Four outside players are needed by the leximin counterexample above, but only
+three are needed at an arbitrary core reference.  Put `S=1234`, `P=567`, and
+
+```text
+A = (-4, 1, 2, 2, -3, 1, 1)
+B = ( 2,-1, 0, 0,  1,-1,-1).
+```
+
+For `v(T)=min{0,A(T),B(T)}` at `psi=0`, all fourteen carrier differences
+are one.  The zero-valued faces in
+
+```text
+1_S + e_1 + 3 e_2 + 1_235 + 2 1_456 + 2 1_457
+    + 3 1_1367 = 5 1_N
+```
+
+force every core point nonnegative on `S` to have `S`-sum zero.  Hence
+`(gamma,eta)=(1,0)`.  The certificate is solver-free:
+
+```sh
+python src/verify_n7_exact_carrier_outside_triple_counterexample.py
+```
+
+At this game's exact leximin point all fourteen carrier differences are zero,
+so it is not a leximin-specific counterexample.  That scope check is:
+
+```sh
+python src/verify_n7_exact_carrier_outside_triple_leximin.py
+```
+
+Three is sharp among arbitrary-reference seven-player obstructions.  The
+two-level separator theorem reduces any putative `5+2` failure to a
+three-level eta-dual support.  A focused determinant census checks 8,798,030
+supports and leaves five symmetry orbits after direct carrier bounds; all
+five have exact global-witness cone value three.  For comparison, the `4+3`
+census leaves 34 orbits with value distribution `0:14, 1:12, 2:8`.
+The rational lower bounds replay without optimization:
+
+```sh
+c++ -O3 -std=c++17 src/enumerate_n7_three_level_eta_duals.cpp \
+  -o /tmp/enumerate_n7_three_level_eta_duals
+/tmp/enumerate_n7_three_level_eta_duals \
+  results/n7_three_level_eta_duals.json
+python src/audit_n7_three_level_eta_duals.py \
+  --census results/n7_three_level_eta_duals.json \
+  --output results/n7_three_level_eta_dual_audit.json
+python src/verify_n7_three_level_eta_dual_audit.py \
+  --audit results/n7_three_level_eta_dual_audit.json \
+  --output results/n7_three_level_eta_dual_replay.json
+```
+
+Thus the outside-set minimum at seven is exactly three for arbitrary core
+references.  For leximin references it remains open whether three suffice;
+the known bound is three or four.

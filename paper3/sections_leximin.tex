@@ -1027,7 +1027,7 @@ $5,45,1456$, respectively.  The incidence identities
  \mathbf1_5+\mathbf1_{2345}+\mathbf1_{146}
    &=\mathbf1_N+\mathbf1_{45},\\
  \mathbf1_1+\mathbf1_{45}+\mathbf1_{146}+\mathbf1_{56}
-   &=2\mathbf1_{1456}
+   &=2\,\mathbf1_{1456}
 \end{align*}
 and core feasibility give
 \begin{align*}
@@ -1073,8 +1073,68 @@ certificates in \path{results/n6_unit_triple_eta_duals.json}.
 \end{proof}
 
 The preceding layer is the sharp boundary of a complete six-player theorem.
+The full census below was the discovery proof, but the separator geometry
+reduces it to a much smaller rank classification.
 
-\begin{proposition}[computer-assisted six-player carrier theorem]
+\begin{lemma}[rank-six three-level classification]
+\label{lem:lx-n6-three-level-classification}
+Consider an undominated eta-dual vertex for one of the two unresolved
+six-player splits.  If its target-floor multipliers $w_i$ have at least three
+distinct values, then, up to permutations preserving $S$ and $P$, necessarily
+$|S|=4$ and the associated normalized minimal balanced collection is
+\[
+ \mathbf1_S+e_1+2e_2+\mathbf1_{35}+\mathbf1_{136}
+     +2\,\mathbf1_{456}=3\,\mathbf1_N.             \tag{TL}
+ \label{eq:lx-n6-exceptional-three-level}
+\]
+In particular its eta objective is
+\[
+ s(35)+s(136)+2s(456)\geq2\gamma_S.
+ \tag{TC}\label{eq:lx-n6-exceptional-cost}
+\]
+There is no three-level vertex in the $3+3$ split.
+\end{lemma}
+
+\begin{proof}
+By Lemma~\ref{lem:lx-eta-minimal-balanced}, adjoining $S$ and the positive
+target-singleton columns gives a minimal balanced collection with at most six
+members.  Let $q$ be the number of positive $w_i$.  The collection cannot
+contain $S$ and all target singletons, since their incidence columns are
+linearly dependent.  Thus at least one $w_i$ is zero.  Three distinct levels
+therefore require at least two distinct positive singleton coefficients, so
+\[
+ 2\leq q\leq |S|-1.
+\]
+After $S$ and these $q$ singleton columns are fixed, the rank-six bound leaves
+at most $5-q\leq3$ further coalition columns.  This is a small finite
+$0$--$1$ incidence problem, not an exact-game cone optimization.  Exact
+determinant elimination gives
+\[
+\begin{array}{c|r|r|r}
+(|S|,|P|)&\text{supports checked}&\text{three-level supports}
+ &\text{symmetry orbits}\\ \hline
+(3,3)&32{,}567&0&0\\
+(4,2)&32{,}566&8&1.
+\end{array}
+\]
+The unique orbit is \eqref{eq:lx-n6-exceptional-three-level}.  These counts,
+positivity of the balancing weights, column independence, and orbit uniqueness
+are replayed in exact integer arithmetic by
+\path{src/verify_n6_three_level_eta_duals.py}, with output
+\path{results/n6_three_level_eta_duals.json}.
+
+For the exceptional orbit, the carrier inequality with $C=\{4\}$ is
+$s(456)-s(4)\geq\gamma_S$.  Slack nonnegativity therefore gives
+\[
+ s(35)+s(136)+2s(456)
+ \geq2s(456)
+ \geq2\gamma_S+2s(4)
+ \geq2\gamma_S,
+\]
+which proves \eqref{eq:lx-n6-exceptional-cost}.
+\end{proof}
+
+\begin{proposition}[rank-reduced six-player carrier theorem]
 \label{prop:lx-quantitative-through-six}
 For every exact game with $|N|\leq6$, every core point $\psi$, and every
 proper nonsingleton $S$,
@@ -1087,33 +1147,41 @@ proper nonsingleton $S$,
 Corollary~\ref{cor:lx-quantitative-through-four},
 Proposition~\ref{prop:lx-quantitative-through-five}, and the general cases
 $|S|=2$ and $|P|=1$ leave only the six-player splits
-$(|S|,|P|)=(3,3)$ and $(4,2)$.  Translate $\psi$ to zero and, when
-$\gamma_S(\psi)>0$, scale to $\gamma_S(\psi)=1$.  The global-witness version
-of \eqref{eq:lx-five-exact-cone}, together with slack nonnegativity and the
-carrier inequalities \eqref{eq:lx-five-carrier-cone}, is a rational
-polyhedron containing every such normalized exact game.
+$(|S|,|P|)=(3,3)$ and $(4,2)$.  Suppose, to the contrary, that
+$\gamma=\gamma_S(\psi)>0$ and $\eta_S(\psi)<\gamma$.  Translate $\psi$ to
+zero and choose an optimal eta-dual vertex on the undominated face from
+Lemma~\ref{lem:lx-eta-minimal-balanced}; denote its target-floor multipliers
+by $w_i$ and its value by $L=\sum_T\lambda_Ts(T)=\eta_S(\psi)$.
 
-By Lemma~\ref{lem:lx-eta-minimal-balanced}, it suffices to inspect the
-minimal balanced collections containing the canonical $S$.  Such a
-collection has at most six members.  For each split, the enumerator therefore
-checks exactly
+Put
 \[
- \sum_{k=2}^{6}\binom{61}{k-1}=6{,}508{,}883
+ K=\{d_S:d\in D,\ d(S)\geq\gamma\}.
 \]
-supports: $S$ is fixed and the other members are chosen from the remaining
-$61$ nonempty proper coalitions.  Exact determinant tests find $21{,}695$
-minimal balanced collections for the $3+3$ split and $19{,}501$ for the
-$4+2$ split.  Quotienting by $S_3\times S_3$ and $S_4\times S_2$ leaves,
-respectively, $870$ and $619$ orbits.
+The dual degree equations, dotted with any $d\in D$, give
+\[
+ d(S)+\sum_{i\in S}w_i d_i
+ =-\sum_T\lambda_Td(T)
+ \leq\sum_T\lambda_Ts(T)=L.
+\]
+Hence for every $d_S\in K$,
+\[
+ \sum_{i\in S}w_i d_i\leq L-d(S)<0.
+\]
+Thus $w\geq0$ strictly separates $K$ from the nonnegative orthant.  If $w$
+had at most two coordinate levels, it would have the form
+$a\mathbf1_S+b\mathbf1_A$ with $a,b\geq0$, contradicting
+Proposition~\ref{prop:lx-two-level-orthant-separator}.  Therefore $w$ has at
+least three levels.
 
-For every one of these $1{,}489$ orbit representatives, the corresponding
-eta objective is minimized over the global exact-witness polyhedron.
-Independently replayed rational primal and dual certificates prove that all
-optima are at least one.  The exact minimum is one in both splits, attained
-by seven $3+3$ orbits and two $4+2$ orbits.  This proves
-$\eta_S\geq1=\gamma_S$ in the only remaining cases.
+Lemma~\ref{lem:lx-n6-three-level-classification} now excludes the $3+3$
+split and leaves only the exceptional $4+2$ orbit, whose dual value is at
+least $2\gamma$, again contradicting $L<\gamma$.  This proves the theorem.
 
-The C++ census is
+For independent redundancy, the original exhaustive audit remains available.
+Its C++ census checks $6{,}508{,}883$ supports per split, finds $21{,}695$ and
+$19{,}501$ target-conditioned minimal balanced collections, and reduces them
+to $870$ and $619$ symmetry orbits.  All $1{,}489$ exact-cone optima are at
+least one by replayable rational certificates.  The C++ census is
 \path{src/enumerate_n6_eta_dual_vertices.cpp}; its exact output and independent
 structural verification are
 \path{results/n6_eta_dual_vertex_census.json} and
@@ -1125,7 +1193,8 @@ LP verifier and its full rational certificates are
 \path{results/n6_eta_dual_vertex_audit.json}.  Finally,
 \path{src/verify_n6_eta_dual_vertex_audit.py} replays all $1{,}489$ saved
 lower-bound identities in exact arithmetic without calling an optimizer; its
-summary is \path{results/n6_eta_dual_vertex_audit_verification.json}.
+summary is \path{results/n6_eta_dual_vertex_audit_verification.json}.  None of
+this larger audit is needed for the rank-reduced proof above.
 \end{proof}
 
 The six-player threshold is exact.
@@ -1183,7 +1252,7 @@ It remains to calculate $\eta_S(0)$.  The four coalitions
 all have value zero, and their incidence vectors satisfy
 \[
  \mathbf1_S+\sum_{j=1}^4\mathbf1_{Q_j}+e_1+2e_2
- =3\mathbf1_N.
+ =3\,\mathbf1_N.
  \tag{N7}\label{eq:lx-n7-sharp-identity}
 \]
 If $x\in\core(v)$ and $x_i\geq0$ for $i\in S$, then
@@ -1250,6 +1319,111 @@ leximin calculation and the six $3/4$ differences are independently replayed
 by \path{src/verify_n7_exact_carrier_counterexample_leximin.py}.
 \end{proof}
 
+The leximin example has four outside players.  At an arbitrary core reference,
+three already suffice.
+
+\begin{proposition}[exact outside-triple obstruction]
+\label{prop:lx-n7-outside-triple}
+There is an exact seven-player game, a core point $\psi$, and a target
+$S$ with $|S|=4$ and $|N\setminus S|=3$ such that
+\[
+ \gamma_S(\psi)=1,
+ \qquad
+ \eta_S(\psi)=0.
+\]
+This example is not a leximin carrier counterexample: at its leximin point
+all fourteen carrier differences are zero.
+\end{proposition}
+
+\begin{proof}
+Let $S=1234$, $P=567$, and define
+\[
+ A=(-4,1,2,2,-3,1,1),
+ \qquad
+ B=(2,-1,0,0,1,-1,-1),
+\]
+and $v(T)=\min\{0,A(T),B(T)\}$.  As before, the three generators are
+efficient core allocations and one is tight at every coalition, so $v$ is
+exact and $\psi=0$ lies in its core.  Direct evaluation gives
+\[
+ s(P\cup C)-s(C)=1
+ \qquad(\emptyset\ne C\subsetneq S),
+\]
+and hence $\gamma_S(0)=1$.
+
+The four coalitions $235,456,457,1367$ have value zero, and
+\[
+ \mathbf1_S+e_1+3e_2+\mathbf1_{235}
+ +2\,\mathbf1_{456}+2\,\mathbf1_{457}+3\,\mathbf1_{1367}
+ =5\,\mathbf1_N.                                    \tag{OT}
+ \label{eq:lx-n7-outside-triple-identity}
+\]
+If $x\in\core(v)$ and $x_i\geq0$ for $i\in S$, every term obtained by
+pairing the left side with $x$ is nonnegative.  Their sum is $5x(N)=0$,
+so $x(S)=0$.  The zero allocation is feasible, proving $\eta_S(0)=0$.
+All lower-envelope values, the fourteen unit carrier differences, the
+degree-five identity, and its rank-seven support are checked without an
+optimizer by
+\path{src/verify_n7_exact_carrier_outside_triple_counterexample.py}.
+An accompanying exact-rational verifier gives the leximin point
+\[
+ (-2,1/3,4/3,4/3,-5/3,1/3,1/3)
+\]
+and zero for all fourteen carrier differences.
+\end{proof}
+
+The preceding construction is minimal in outside-set size among
+seven-player obstructions at arbitrary core references.
+
+\begin{proposition}[seven-player outside-pair theorem]
+\label{prop:lx-n7-outside-pair}
+For every exact seven-player game, every core point $\psi$, and every proper
+nonsingleton $S$ with $|N\setminus S|\leq2$,
+\[
+ \eta_S(\psi)\geq\gamma_S(\psi).
+\]
+Consequently three is the minimum number of outside players in a
+seven-player arbitrary-reference obstruction.  For leximin references, the
+known minimum remains between three and four.
+\end{proposition}
+
+\begin{proof}
+The codimension-one case is
+Proposition~\ref{prop:lx-codimension-one-uniform-lift}, so only the split
+$(|S|,|P|)=(5,2)$ remains.  If a violation existed, the proof of
+Proposition~\ref{prop:lx-quantitative-through-six} would produce an
+undominated eta-dual vertex whose target-floor multiplier has at least three
+levels.  After adjoining $S$, its support is a minimal balanced collection
+of at most seven columns.  If $q$ positive target-singleton columns occur,
+three levels force $2\leq q\leq4$, leaving at most $6-q$ other coalition
+columns.
+
+Exact determinant enumeration of precisely these supports checks
+$8{,}798{,}030$ candidates.  It finds $2{,}196$ three-level supports.  The
+carrier inequalities and slack nonnegativity directly bound all but $96$ of
+them; quotienting the latter by $S_5\times S_2$ leaves five orbits.  For each
+orbit, minimization over the global exact-witness slack cone has exact value
+$3$, with independently replayable rational dual certificates.  Hence no
+three-level vertex has cost below the normalization
+$\gamma_S(\psi)=1$, a contradiction.
+
+For comparison, the same focused census in the $4+3$ split checks
+$9{,}086{,}132$ supports and leaves $34$ orbits after the direct carrier
+bound.  Their exact-value distribution is
+\[
+ 14\text{ at }0,
+ \qquad 12\text{ at }1,
+ \qquad 8\text{ at }2.
+\]
+Thus the outside-triple example reflects several inequivalent rank-seven
+obstruction mechanisms rather than a numerical accident.  The
+accompanying integer census, exact cone audit, and optimizer-free replay are
+all listed in the supplementary artifact; the replay checks every saved
+rational lower-bound identity without calling an optimizer.
+Proposition~\ref{prop:lx-n7-outside-triple} supplies the matching failure at
+outside size three.
+\end{proof}
+
 The sharp counterexample propagates to every higher dimension.
 
 \begin{corollary}[complete dimension threshold]
@@ -1298,7 +1472,7 @@ The eight coalitions
  \mathcal R=\{1234,125,1236,13456,27,457,3467,567\}
 \]
 all have value zero and satisfy
-$\sum_{R\in\mathcal R}\mathbf1_R=4\mathbf1_N$.  Hence every core point is
+$\sum_{R\in\mathcal R}\mathbf1_R=4\,\mathbf1_N$.  Hence every core point is
 tight on every member of $\mathcal R$: all eight core inequalities are
 nonnegative, while their sum is four times efficiency.  Their incidence
 matrix has rank five.  Both $a$ and $b$ lie in its kernel and are linearly
@@ -1389,9 +1563,9 @@ This is forced by the same zero-cost face geometry, not merely by unique
 attainment at one vertex.  Three of the four coalitions in
 \eqref{eq:lx-n7-sharp-identity} satisfy the incidence identity
 \[
- \mathbf1_{135}-2\mathbf1_{123}
+ \mathbf1_{135}-2\,\mathbf1_{123}
  =\mathbf1_{13456}+\mathbf1_{457}+\mathbf1_{567}
-   -2\mathbf1_N.                                      \tag{NB}
+   -2\,\mathbf1_N.                                    \tag{NB}
 \]
 All three coalitions on the right have value zero throughout the family.
 Hence every core point $x$ obeys
@@ -1412,13 +1586,18 @@ tight balanced certificate: any deformation preserving these three
 zero-valued faces and $v(123)=v(135)=0$ remains blocked.
 \end{proof}
 
-The negative mechanism also exposes a rank threshold.  After adjoining $S$,
-the zero-cost eta support in \eqref{eq:lx-n7-sharp-identity} is a minimal
-balanced collection of seven linearly independent incidence columns.  Such a
-collection cannot occur on six players.  This explains why this particular
-obstruction first appears at seven, although the positive six-player theorem
-still uses the complete enumeration to exclude all other minimal-balanced
-supports of rank at most six.
+The negative mechanism also exposes the rank threshold.  After adjoining
+$S$, the zero-cost eta support in \eqref{eq:lx-n7-sharp-identity} is a minimal
+balanced collection of seven linearly independent incidence columns.  The
+outside-triple identity \eqref{eq:lx-n7-outside-triple-identity} has the same
+rank-seven feature.  Six players permit at most six independent columns;
+combined with the two-level separator theorem, this leaves only the single
+rank-six three-level orbit in
+\eqref{eq:lx-n6-exceptional-three-level}, which one carrier inequality
+defeats.  Seven players are the first dimension in which multiple residual
+three-level orbits survive that rank squeeze, and fourteen of them have zero
+cost on the exact-game cone.  This is the conceptual six/seven transition;
+the larger $1{,}489$-orbit audit is only independent redundancy.
 
 The slack certificate is automatic on the most important thin-core model
 class used by the searches.
