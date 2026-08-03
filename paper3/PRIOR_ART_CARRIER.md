@@ -13,6 +13,7 @@ coalitional monotonicity. The closest sources located were:
 - Laplace Mermoud, Grabisch, and Sudhölter (2025), [*Minimal balanced collections and their applications to core stability and other topics of game theory*](https://arxiv.org/abs/2507.05898).
 - Mirás Calvo, Quinteiro Sandomingo, and Sánchez Rodríguez (2020), [*The boundary of the core of a balanced game: face games*](https://doi.org/10.1007/s00182-019-00703-2).
 - Dietzenbacher (2021), [*Monotonicity and egalitarianism*](https://doi.org/10.1016/j.geb.2021.03.006).
+- Arin and Iñarra (2001), [*Egalitarian solutions in the core*](https://doi.org/10.1007/s001820100073).
 - Arin and Feltkamp (2012), [*Coalitional games: Monotonicity and core*](https://doi.org/10.1016/j.ejor.2011.07.025).
 - Young (1985), [*Monotonic solutions of cooperative games*](https://doi.org/10.1007/BF01769885).
 - Housman and Clark (1998), *Note: Core and monotonic allocation methods*,
@@ -34,10 +35,22 @@ coalitional monotonicity. The closest sources located were:
    convenient exact representation for this problem, not as a new general
    description of exact games.
 
-3. **The nearby monotonicity literature uses different selectors and
-   domains.** Dietzenbacher studies the Lmax selector on the PES-stable domain;
-   Arin and Feltkamp study monotonic core solutions on veto-balanced games.
-   These papers are directly relevant context but do not state the carrier
+3. **The selector has standard antecedents and must be named accordingly.**
+   Arin and Iñarra (2001) introduced the Lmin solution, the core allocation
+   that lexicographically maximizes sorted payoffs.  If
+   `m_i=v({i})` and `v^0(T)=v(T)-sum_{i in T}m_i`, then the present selector is
+   exactly `m+Lmin(v^0)`.  It should therefore be called the *normalized Lmin*
+   solution, not presented as a new egalitarian selector.  In every theorem
+   below with zero singleton values, including the five-player
+   proper-coalition counterexample, it coincides directly with ordinary Lmin.
+
+   Dietzenbacher (2021) explicitly compares Lmin and Lmax.  Lmin is already
+   known to fail aggregate monotonicity on the broader egalitarian-stable
+   domain, while Lmax is coalitionally monotonic there.  Dietzenbacher's
+   displayed failure is not an exact-game proper-coalition pair, and the paper
+   leaves important questions about the exact-game domain open.  Arin and
+   Feltkamp study monotonic core solutions on veto-balanced games.  These
+   sources are directly relevant context but do not state the carrier
    inequality used here.
 
    Arin, Kuipers, and Vermeulen (2003), [*Some characterizations of
@@ -46,17 +59,18 @@ coalitional monotonicity. The closest sources located were:
    lexicographically maximal core allocation on large-core games and uses
    monotonicity in the worth of the grand coalition. Dietzenbacher's result is
    closer in axiom---its Lmax solution is coalitionally monotone---but its
-   selector lexicographically minimizes maximal payoffs, whereas the present
-   selector lexicographically maximizes gains above endogenous singleton
-   floors. Moreover PES-stable games form a proper subdomain of balanced
-   games and are not identified with the class of exact games.
+   selector lexicographically minimizes maximal payoffs, whereas normalized
+   Lmin lexicographically maximizes payoffs after canonical singleton
+   normalization. Moreover PES-stable games form a proper subdomain of
+   balanced games and are not identified with the class of exact games.
 
 4. **No matching prior theorem was located** for the quantities gamma_S and
    eta_S, their inequality for every exact core, the complete six/seven
-   threshold, or the displayed triangular seven-player family. Searches also
-   found no treatment of the leximin-above-singleton-floors selector on the
-   full class of exact games. This is evidence of novelty, not proof of
-   novelty.
+   threshold, or the displayed triangular seven-player family.  The Lmin
+   selector itself is established prior art; the narrower claim supported by
+   the search is that no prior treatment was located of its proper-coalition
+   monotonicity on the full exact-game class. This is evidence of novelty, not
+   proof of novelty.
 
 5. **Required external follow-up.** Before submission, a game-theory expert
    should search MathSciNet, zbMATH, and citation chains from the six sources
@@ -80,11 +94,14 @@ coalitional monotonicity. The closest sources located were:
 7. **The five-player proper-coalition counterexample changes the main
    monotonicity conclusion.**  The game pair raises one proper coalition in
    an exact game while two members of that coalition lose under the
-   leximin-above-singleton-floors selection.  Dietzenbacher's positive
+   normalized Lmin selection.  Since both games have zero singleton values,
+   this is directly an ordinary-Lmin counterexample.  Dietzenbacher's positive
    coalitional-monotonicity theorem is not contradicted: it concerns the Lmax
-   selector on the PES-stable domain, not this translated-gain selector on all
-   exact games.  Arin--Kuipers--Vermeulen likewise concern ordinary Lmax on
-   large-core games.  More broadly, Young (1985) is foundational for
+   selector on the PES-stable domain.  The same paper already shows that Lmin
+   fails aggregate monotonicity on that broader domain, but its example does
+   not establish the present exact-game proper-coalition result.
+   Arin--Kuipers--Vermeulen likewise concern Lmax on large-core games.  More
+   broadly, Young (1985) is foundational for
    monotonic solution concepts, and Housman--Clark (1998) prove that no core
    allocation method is coalitionally monotonic on the full balanced-game
    domain for four or more players.  That impossibility does not by itself
@@ -92,7 +109,7 @@ coalitional monotonicity. The closest sources located were:
    focused searches located no earlier counterexample for the present
    selector on exact games.  The defensible formulation is: "We are not aware
    of an earlier exact-game counterexample to proper-coalition monotonicity of
-   the leximin-above-singleton-floors core selection."  An expert database and
+   the Lmin solution."  An expert database and
    citation-chain search remains required before claiming priority.  The
    present five-player construction also does not prove that five is the
    minimum possible dimension.
@@ -105,7 +122,8 @@ coalitional monotonicity. The closest sources located were:
 > family disproves the inequality from seven players onward. We are not aware
 > of an earlier statement of this inequality or its sharp dimension threshold.
 > Separately, an exact five-player lower-envelope pair disproves
-> proper-coalition monotonicity of the leximin-above-singleton-floors selector.
+> proper-coalition monotonicity of Lmin (equivalently normalized Lmin here,
+> because the witness has zero singleton values).
 
 Do not replace “we are not aware” by “first” until the external search is
 completed.

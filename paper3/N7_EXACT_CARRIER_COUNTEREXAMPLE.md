@@ -16,7 +16,7 @@ and define the exact three-generator lower-envelope game
 v(T)=\min\{0,a(T),b(T)\}.
 \]
 
-The exact leximin point is
+The exact normalized-Lmin point (leximin above singleton floors) is
 
 ```text
 phi = a/4 = (-3/4, 1/4, 3/4, -1/4, 1/2, -1/4, -1/4).
@@ -40,7 +40,9 @@ Indeed, `v(125)=0` and efficiency force `x(3467)<=0`, giving the first
 level and fixing players 3,4,6,7. On that face, `v(13)=v(27)=0` bounds
 players 1 and 2 and forces `x5<=1/2`, giving the second level. Efficiency
 then fixes `x1+x2=-1/2`, giving the final level. Thus no optimizer output is
-needed to recognize `phi` as the leximin point.
+needed to recognize `phi` as the normalized-Lmin point.  In standard
+nomenclature, `phi(v)=m+Lmin(v^0)` for the singleton-normalized game `v^0`;
+see Arin--Iñarra (2001) for ordinary Lmin.
 
 For target `S={1,2,3}` and outside set `P={4,5,6,7}`, each of the six
 nonempty proper `C` contained in `S` satisfies
@@ -52,7 +54,7 @@ s_\phi(P\cup C)-s_\phi(C)=\frac34,
 so `gamma_S(phi)=3/4`. All four coalitions below are tight at `phi`. Applying
 the displayed incidence identity to `x-phi` proves that every core point
 dominating `phi` on `S` has the same `S`-sum. Thus `eta_S(phi)=0`, directly
-disproving the leximin-specific quantitative carrier inequality.
+disproving the normalized-Lmin quantitative carrier inequality.
 
 The same construction has a stronger normalized gap at the reference core
 point `psi=0`: each of the six differences satisfies

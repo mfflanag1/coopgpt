@@ -961,6 +961,13 @@ Pre-crash progress banked:
   for the eta/carrier inequality, its sharp 6/7 threshold, or the triangular
   family.  Novelty language remains “we are not aware” pending MathSciNet/
   zbMATH and expert review; see paper3/PRIOR_ART_CARRIER.md.
+- LMIN NAMING CORRECTION: the leximin-above-floors selector is exactly
+  `m+Lmin(v^0)` after canonical singleton normalization.  Arin--Iñarra (2001)
+  introduced ordinary Lmin; Dietzenbacher (2021) already gives broader-domain
+  aggregate-monotonicity failures for Lmin.  The n=5 witness has zero floors,
+  so it is directly a proper-coalition monotonicity counterexample for Lmin on
+  exact games.  Novelty is the exact-game/proper-coalition theorem and compact
+  certificate, not the selector itself.
 - THRESHOLD BREAKTHROUGH: the complete n=6 theorem no longer logically needs
   any coalition-support census.  Any violation supplies an eta-dual floor
   separator with at least three coordinate levels.  After quotienting by

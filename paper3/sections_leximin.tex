@@ -6,7 +6,7 @@
 %% Companion machine-readable certificate: supplement_leximin.json.
 %% ===================================================================
 
-\section{The leximin-above-floors core selection}\label{sec:lx-def}
+\section{The normalized Lmin core selection}\label{sec:lx-def}
 
 \begin{definition}[games, cores, exactness, and balanced collections]
 A transferable-utility game is a set function $v:2^N\to\mathbb R$ with
@@ -33,7 +33,26 @@ lexicographically largest. It is single-valued (leximin over a polytope) and is
 computed by the Maschler-type scheme over player coordinates: repeatedly raise a
 common lower level $s$ of the free players' gains as far as the core allows, fix
 (``pin'') every free player whose payoff cannot exceed $m_i+s$ on the level-optimal
-face, and recurse on the rest. On \emph{exact} games $m_i=\min_{\core}x_i$, so
+face, and recurse on the rest.
+
+This is a normalized version of the standard Lmin solution of
+\citet{ArinInarra2001}, not a new unnamed egalitarian selector.  Put
+\[
+ v^0(T)=v(T)-\sum_{i\in T}m_i,
+ \qquad m=(m_i)_{i\in N}.
+ \tag{LN}\label{eq:lx-normalized-lmin}
+\]
+Then $\core(v^0)=\core(v)-m$ and therefore
+\[
+ \phi(v)=m+\operatorname{Lmin}(v^0).              \tag{L0}
+\]
+Thus we call $\phi$ the \emph{normalized Lmin} selection.  Whenever the
+singleton values are zero---as in the exact proper-coalition counterexample
+below---$\phi$ is precisely the ordinary Lmin solution.  The normalization
+makes the individually rational gains invariant under additive translations
+of the game.
+
+On \emph{exact} games $m_i=\min_{\core}x_i$, so
 $g_i\ge 0$ and $\phi$ egalitarianly distributes the surplus $x_i-v(\{i\})$ inside
 the core; on convex games it is the constrained egalitarian solution of
 \citet{DuttaRay89}. Implementation (exact rational + float) in
@@ -2069,6 +2088,8 @@ Nevertheless
  \tag{PM}\label{eq:lx-proper-exact-counterexample}
 \]
 Thus target players $3$ and $5$ each lose $1/2$.
+Because both games have zero singleton values, this is also a direct failure
+of proper-coalition monotonicity for the ordinary Lmin solution.
 
 More precisely, if $v^\tau$ agrees with $v$ off $S$ and
 $v^\tau(S)=\tau$, then every $v^\tau$, $18\leq\tau\leq20$, is exact and
@@ -2137,14 +2158,15 @@ selector.
 
 This negative result should be read against the classical impossibility
 literature, not as an unrestricted first impossibility theorem.
-\citet{Young1985} initiated the modern monotonic-solution program, and
-\citet{HousmanClark1998} prove that no core allocation method can be
-coalitionally monotonic on the full balanced-game domain once there are at
-least four players.  Their domain theorem does not itself imply failure on
-the exact-game subclass, nor does it identify the present
-leximin-above-singleton-floors selector.  Theorem~\ref{thm:lx-proper-exact-fails}
-supplies that more specific conclusion with a five-player rational
-certificate.  We do not claim that five is the minimum possible dimension.
+\citet{ArinInarra2001} introduced Lmin, and \citet{Dietzenbacher2021}
+already shows that Lmin can fail aggregate monotonicity on the broader
+egalitarian-stable domain while Lmax is coalitionally monotonic there.
+Moreover, \citet{HousmanClark1998} prove that no core allocation method can
+be coalitionally monotonic on the full balanced-game domain once there are at
+least four players.  None of these results itself supplies an exact-game
+proper-coalition counterexample for Lmin.  Theorem~\ref{thm:lx-proper-exact-fails}
+does so with a five-player rational certificate.  We do not claim that five
+is the minimum possible dimension.
 
 The common nonbinding case remains elementary:
 

@@ -39,6 +39,16 @@ generators and proves the complete affine path.  This theorem requires a new
 external audit; none of the review verdicts above should be read as covering
 it.
 
+A post-review literature correction also changes the nomenclature.  The
+leximin-above-singleton-floors selector is exactly `m + Lmin(v^0)`, where
+`m_i=v({i})` and `v^0` is the singleton-normalized game.  Arin--Iñarra (2001)
+introduced Lmin, so the manuscript now calls the selector *normalized Lmin*
+rather than presenting it as unnamed.  Because the five-player witness has
+zero singleton values, its theorem is directly an ordinary-Lmin result.
+Dietzenbacher (2021) already records broader-domain failures of Lmin aggregate
+monotonicity, but not this exact-game proper-coalition certificate.  This
+correction affects novelty framing, not any calculation in the theorem.
+
 ## Write-up findings
 
 All sixteen write-up findings were accepted.
