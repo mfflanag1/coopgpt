@@ -156,9 +156,9 @@ def exact_optimum(template, objective_exact):
     }
 
 
-def audit_shape(shape):
+def audit_shape(shape, witness_mode):
     s_size = int(shape["S_size"])
-    template = build_balanced_cone(N, s_size, witness_mode="global")
+    template = build_balanced_cone(N, s_size, witness_mode=witness_mode)
     records = []
     distribution = Counter()
     minimum = None
@@ -204,10 +204,23 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--census", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--witness-mode", choices=("global", "subgame"), default="global"
+    )
+    parser.add_argument(
+        "--s-size", type=int, action="append",
+        help="audit only these target sizes (repeatable)",
+    )
     args = parser.parse_args()
     census = json.loads(args.census.read_text())
     assert census["n"] == N and len(census["shapes"]) == 2
-    shapes = [audit_shape(shape) for shape in census["shapes"]]
+    selected = [
+        shape for shape in census["shapes"]
+        if args.s_size is None or int(shape["S_size"]) in args.s_size
+    ]
+    if not selected:
+        raise ValueError("no census shape selected")
+    shapes = [audit_shape(shape, args.witness_mode) for shape in selected]
     payload = {
         "status": "complete exact audit of all undominated n=6 eta-dual vertex orbits",
         "n": N,
@@ -215,7 +228,7 @@ def main():
             "minimal balanced collections containing S, normalized to give S "
             "coefficient one; target singletons are zero-cost floor variables"
         ),
-        "witness_mode": "global exact-game witnesses",
+        "witness_mode": args.witness_mode,
         "shapes": shapes,
         "minimum": str(min(F(shape["minimum"]) for shape in shapes)),
         "carrier_bound_violated": False,

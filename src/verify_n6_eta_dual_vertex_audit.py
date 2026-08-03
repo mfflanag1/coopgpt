@@ -16,9 +16,9 @@ from audit_n6_eta_dual_vertices import N, objective_from_orbit
 from hunt_balanced_cone_carrier_ratio import build_balanced_cone
 
 
-def replay_shape(shape):
+def replay_shape(shape, witness_mode):
     s_size = int(shape["S_size"])
-    template = build_balanced_cone(N, s_size, witness_mode="global")
+    template = build_balanced_cone(N, s_size, witness_mode=witness_mode)
     inequality_rows = {
         name: row for row, name in enumerate(template["inequality_names"])
     }
@@ -85,9 +85,14 @@ def main():
     args = parser.parse_args()
     audit = json.loads(args.audit.read_text())
     assert audit["n"] == N and not audit["carrier_bound_violated"]
-    shapes = [replay_shape(shape) for shape in audit["shapes"]]
+    witness_mode = {
+        "global exact-game witnesses": "global",
+    }.get(audit["witness_mode"], audit["witness_mode"])
+    assert witness_mode in {"global", "subgame"}
+    shapes = [replay_shape(shape, witness_mode) for shape in audit["shapes"]]
     payload = {
         "status": "all saved exact rational lower-bound certificates replayed without optimization",
+        "witness_mode": witness_mode,
         "checks": [
             "nonnegative inequality multipliers",
             "exact stationarity in every cone coordinate",
