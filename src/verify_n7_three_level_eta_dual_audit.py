@@ -13,12 +13,21 @@ from collections import Counter
 from fractions import Fraction as F
 from pathlib import Path
 
+if not __debug__:
+    raise RuntimeError("certificate verification must not run with Python -O")
+
 from audit_n7_three_level_eta_duals import N, objective_from_orbit
 from hunt_balanced_cone_carrier_ratio import build_balanced_cone
 
 
 def replay_shape(shape, witness_mode):
     s_size = int(shape["S_size"])
+    expected_orbits = {4: 34, 5: 5}[s_size]
+    if len(shape["orbits"]) != expected_orbits:
+        raise ValueError(
+            f"truncated n=7 audit for S-size {s_size}: "
+            f"expected {expected_orbits} orbits, got {len(shape['orbits'])}"
+        )
     template = build_balanced_cone(N, s_size, witness_mode=witness_mode)
     inequality_rows = {
         name: row for row, name in enumerate(template["inequality_names"])
@@ -96,6 +105,8 @@ def main():
     assert witness_mode == "global"
     shapes = [replay_shape(shape, witness_mode) for shape in audit["shapes"]]
     by_size = {shape["S_size"]: shape for shape in shapes}
+    if set(by_size) != {4, 5}:
+        raise ValueError("n=7 audit must contain exactly the 4+3 and 5+2 splits")
     assert by_size[4]["exact_lower_bound_distribution"] == {
         "0": 14,
         "1": 12,

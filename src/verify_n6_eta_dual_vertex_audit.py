@@ -12,12 +12,21 @@ from collections import Counter
 from fractions import Fraction as F
 from pathlib import Path
 
+if not __debug__:
+    raise RuntimeError("certificate verification must not run with Python -O")
+
 from audit_n6_eta_dual_vertices import N, objective_from_orbit
 from hunt_balanced_cone_carrier_ratio import build_balanced_cone
 
 
 def replay_shape(shape, witness_mode):
     s_size = int(shape["S_size"])
+    expected_orbits = {3: 870, 4: 619}[s_size]
+    if len(shape["orbits"]) != expected_orbits:
+        raise ValueError(
+            f"truncated n=6 audit for S-size {s_size}: "
+            f"expected {expected_orbits} orbits, got {len(shape['orbits'])}"
+        )
     template = build_balanced_cone(N, s_size, witness_mode=witness_mode)
     inequality_rows = {
         name: row for row, name in enumerate(template["inequality_names"])
@@ -90,6 +99,8 @@ def main():
     }.get(audit["witness_mode"], audit["witness_mode"])
     assert witness_mode in {"global", "subgame"}
     shapes = [replay_shape(shape, witness_mode) for shape in audit["shapes"]]
+    if {shape["S_size"] for shape in shapes} != {3, 4}:
+        raise ValueError("n=6 audit must contain exactly the 3+3 and 4+2 splits")
     payload = {
         "status": "all saved exact rational lower-bound certificates replayed without optimization",
         "witness_mode": witness_mode,

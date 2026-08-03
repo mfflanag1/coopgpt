@@ -8,6 +8,20 @@
 
 \section{The leximin-above-floors core selection}\label{sec:lx-def}
 
+\begin{definition}[games, cores, exactness, and balanced collections]
+A transferable-utility game is a set function $v:2^N\to\mathbb R$ with
+$v(\emptyset)=0$.  Its core is
+\[
+ \core(v)=\{x\in\mathbb R^N:x(N)=v(N),\ x(T)\geq v(T)
+                  \text{ for every }T\subsetneq N\}.
+\]
+The game is \emph{balanced} when its core is nonempty and \emph{exact} when,
+for every coalition $T$, some $x\in\core(v)$ satisfies $x(T)=v(T)$.
+A \emph{balanced collection} is a family of coalitions with positive weights
+$\alpha_T$ satisfying $\sum_T\alpha_T\mathbf1_T=\mathbf1_N$; it is
+\emph{minimal} when no proper subfamily is balanced.
+\end{definition}
+
 Let $(N,v)$ be a balanced TU game, $M=v(N)$, and floors $m_i:=v(\{i\})$. For
 $x\in\R^N$ write the \emph{gains} $g_i(x)=x_i-m_i$. The
 \emph{leximin-above-floors} selection is
@@ -18,7 +32,7 @@ the unique core allocation whose ascending-sorted gain vector is
 lexicographically largest. It is single-valued (leximin over a polytope) and is
 computed by the Maschler-type scheme over player coordinates: repeatedly raise a
 common lower level $s$ of the free players' gains as far as the core allows, fix
-(``pin'') every free player whose gain cannot exceed $m_i+s$ on the level-optimal
+(``pin'') every free player whose payoff cannot exceed $m_i+s$ on the level-optimal
 face, and recurse on the rest. On \emph{exact} games $m_i=\min_{\core}x_i$, so
 $g_i\ge 0$ and $\phi$ egalitarianly distributes the surplus $x_i-v(\{i\})$ inside
 the core; on convex games it is the constrained egalitarian solution of
@@ -622,6 +636,26 @@ $S$-payoff.  For a core point $\psi$, define
 \end{align*}
 Thus $(\star_S)$ at $\psi$ is equivalent to $\eta_S(\psi)>0$.
 
+\begin{lemma}[translation and positive scaling]
+\label{lem:lx-carrier-normalization}
+For $\psi\in\core(v)$ define $\bar v(T)=v(T)-\psi(T)$, so that
+$0\in\core(\bar v)$.  If $v$ is exact, then $\bar v$ is exact, and
+\[
+ \gamma_S^{\bar v}(0)=\gamma_S^v(\psi),\qquad
+ \eta_S^{\bar v}(0)=\eta_S^v(\psi).
+\]
+For every $c>0$, the game $c\bar v$ is exact and both quantities are
+multiplied by $c$.  Thus every case with positive $\gamma_S$ may be
+normalized to $\psi=0$ and $\gamma_S=1$ without loss.
+\end{lemma}
+
+\begin{proof}
+The identity $\core(\bar v)=\core(v)-\psi$ proves preservation of exactness
+and the two translation identities by direct substitution.  Likewise
+$\core(c\bar v)=c\core(\bar v)$, and slacks and feasible displacements scale
+by $c$.
+\end{proof}
+
 \begin{lemma}[exact carrier lift]
 \label{lem:lx-carrier-lift}
 If $v$ is exact, then for every nonempty proper $C\subset S$ there is a
@@ -779,7 +813,7 @@ the form $a\mathbf1_S+b\mathbf1_A$, contradicting the first part.
 
 \begin{proposition}[codimension-one uniform carrier lift]
 \label{prop:lx-codimension-one-uniform-lift}
-Let $v$ be exact, let $\psi\in\core(v)$, and let
+Let $v$ be exact, let $\psi\in\core(v)$, let $|S|\geq2$, and let
 $P=N\setminus S=\{p\}$ be a singleton.  Put $m=|S|$.  Then
 \[
  x_i=\psi_i+\frac{\gamma_S(\psi)}m\quad(i\in S),
@@ -840,8 +874,11 @@ $\gamma=\gamma_S(\psi)>0$.  Let
 \[
  K=\{d_S:d\in D,\ d(S)\geq\gamma\}.
 \]
-If $K$ did not meet $(\gamma/2)\mathbf1_S+\mathbb R^S_+$, strong
-separation would supply a nonzero $w\geq0$ such that
+By the exact carrier lift, $K$ is nonempty; it is compact because it is a
+closed subset of the translated core.  If $K$ did not meet the closed upper
+orthant $(\gamma/2)\mathbf1_S+\mathbb R^S_+$, strong separation of a compact
+set from an upper set would supply a nonzero normal $w\geq0$ (a negative
+coordinate could be driven to $-\infty$ along the upper set) such that
 \[
  \max_{d_S\in K}w\cdot d_S
  <\frac\gamma2\sum_{i\in S}w_i.
@@ -997,7 +1034,10 @@ two such rays gives a convex decomposition after normalization, while a
 nonzero ray with zero $S$-coefficient gives a recession direction and again
 precludes extremality.  The extreme rays of the balanced-collection cone are
 the minimal balanced collections.  Their positive incidence columns are
-linearly independent, so there are at most $|N|$ of them.  Finally, in the
+linearly independent: otherwise a nonzero dependence permits perturbing the
+positive balancing weights in one of its two signs until a coefficient first
+reaches zero, preserving balance and contradicting minimality.  Hence there
+are at most $|N|$ columns.  Finally, in the
 reverse construction the normalized coefficient of $S$ is at most one
 because every member of $S$ has total balanced degree one; hence
 $\rho\geq0$ as required.
@@ -1062,12 +1102,16 @@ dual layer satisfies the quantitative carrier bound.
 \end{proposition}
 
 \begin{proof}
-Each target player chooses its unique supporting coalition, while each
-outside player chooses the unique coalition from which it is absent.
-Enumerating these two maps and quotienting by $S_3\times S_3$ gives exactly
-$16$ support orbits.  Minimization over the global exact-witness cone gives
+Each target player chooses its unique supporting slot, while each outside
+player chooses the unique slot from which it is absent.  The implementation
+deliberately retains a harmless superset before quotienting by
+$S_3\times S_3$: thirteen orbits literally contain three proper distinct
+coalitions, while one has a repeated coalition and two contain a dominated
+target-singleton column.  Bounding those three degeneracies as well is
+stronger and gives $16$ support orbits in total.  Minimization over the global exact-witness cone gives
 exact values one for seven orbits and two for nine.  Every value is certified
-by independently replayed rational primal and dual solutions.  The complete
+by a replayed rational dual lower bound; the saved rational primal points
+record matching attainment.  The complete
 enumeration is in \path{src/audit_n6_unit_triple_eta_duals.py}, with the
 certificates in \path{results/n6_unit_triple_eta_duals.json}.
 \end{proof}
@@ -1148,10 +1192,15 @@ Corollary~\ref{cor:lx-quantitative-through-four},
 Proposition~\ref{prop:lx-quantitative-through-five}, and the general cases
 $|S|=2$ and $|P|=1$ leave only the six-player splits
 $(|S|,|P|)=(3,3)$ and $(4,2)$.  Suppose, to the contrary, that
-$\gamma=\gamma_S(\psi)>0$ and $\eta_S(\psi)<\gamma$.  Translate $\psi$ to
-zero and choose an optimal eta-dual vertex on the undominated face from
+$\eta_S(\psi)<\gamma_S(\psi)$.  Since $\psi$ itself is feasible in the eta
+program, $\eta_S(\psi)\geq0$, so necessarily
+$\gamma=\gamma_S(\psi)>0$.  Translate $\psi$ to zero using
+Lemma~\ref{lem:lx-carrier-normalization} and choose an optimal eta-dual vertex on the undominated face from
 Lemma~\ref{lem:lx-eta-minimal-balanced}; denote its target-floor multipliers
 by $w_i$ and its value by $L=\sum_T\lambda_Ts(T)=\eta_S(\psi)$.
+The adjoined $S$ column and target-singleton columns represented by the $w_i$
+have zero slack cost; the eta objective is precisely the displayed sum over
+the remaining coalition columns.
 
 Put
 \[
@@ -1319,26 +1368,26 @@ leximin calculation and the six $3/4$ differences are independently replayed
 by \path{src/verify_n7_exact_carrier_counterexample_leximin.py}.
 \end{proof}
 
-The leximin example has four outside players.  At an arbitrary core reference,
-three already suffice.
+The preceding example minimizes target size.  A complementary leximin
+counterexample minimizes outside-set size.
 
-\begin{proposition}[exact outside-triple obstruction]
+\begin{proposition}[sharp outside-triple leximin obstruction]
 \label{prop:lx-n7-outside-triple}
-There is an exact seven-player game, a core point $\psi$, and a target
-$S$ with $|S|=4$ and $|N\setminus S|=3$ such that
+There is an exact seven-player game whose leximin point $\phi$ and a target
+$S$ with $|S|=4$ and $|N\setminus S|=3$ satisfy
 \[
- \gamma_S(\psi)=1,
+ \gamma_S(\phi)=\frac23,
  \qquad
- \eta_S(\psi)=0.
+ \eta_S(\phi)=0.
 \]
-This example is not a leximin carrier counterexample: at its leximin point
-all fourteen carrier differences are zero.
+At the core reference zero the same game has
+$(\gamma_S(0),\eta_S(0))=(1,0)$.
 \end{proposition}
 
 \begin{proof}
 Let $S=1234$, $P=567$, and define
 \[
- A=(-4,1,2,2,-3,1,1),
+ A=(-4,1,2,2,-1,1,-1),
  \qquad
  B=(2,-1,0,0,1,-1,-1),
 \]
@@ -1351,29 +1400,119 @@ exact and $\psi=0$ lies in its core.  Direct evaluation gives
 \]
 and hence $\gamma_S(0)=1$.
 
-The four coalitions $235,456,457,1367$ have value zero, and
+The leximin point has a short three-stage certificate.  The singleton floors
+are
 \[
- \mathbf1_S+e_1+3e_2+\mathbf1_{235}
- +2\,\mathbf1_{456}+2\,\mathbf1_{457}+3\,\mathbf1_{1367}
- =5\,\mathbf1_N.                                    \tag{OT}
+ m=(-4,-1,0,0,-1,-1,-1).
+\]
+The coalitions $1246$ and $1236$ have value zero.  Efficiency therefore gives
+$x(357)\leq0$ and $x(457)\leq0$ for every core point.  If every gain is at
+least $t$, then both of these three-player sums are at least $-2+3t$, so
+$t\leq2/3$.  Equality in the two overlapping triples fixes players
+$3,4,5,7$ at $(2/3,2/3,-1/3,-1/3)$.
+
+These four fixed coordinates sum to $2/3$.  Since $v(134)=0$, core
+feasibility gives $x_1\geq-4/3$, while efficiency gives
+$x_1+x_2+x_6=-2/3$ and hence $x_2+x_6\leq2/3$.  If the gains of players
+$2$ and $6$ are both at least $u$, then
+\[
+ x_2+x_6\geq-2+2u,
+\]
+so $u\leq4/3$.  Equality fixes both coordinates at $1/3$, after which
+efficiency fixes player~1 at $-4/3$, with gain $8/3$.  All bounds are attained
+by
+\[
+ \phi=\frac13A
+ =(-4/3,1/3,2/3,2/3,-1/3,1/3,-1/3).
+\]
+Thus the successive gain strata are
+\[
+ \{3,4,5,7\}\text{ at }\frac23,
+ \qquad \{2,6\}\text{ at }\frac43,
+ \qquad \{1\}\text{ at }\frac83,
+\]
+which proves the leximin assertion without an optimization oracle.  Direct
+evaluation gives
+\[
+ s_\phi(P\cup C)-s_\phi(C)=\frac23
+ \qquad(\emptyset\ne C\subsetneq S),
+\]
+so $\gamma_S(\phi)=2/3$.
+
+The four coalitions $56,357,457,13467$ have value zero and are $\phi$-tight.
+Their incidence vectors satisfy
+\[
+ \mathbf1_S+e_1+3e_2+2\,\mathbf1_{56}
+ +\mathbf1_{357}+\mathbf1_{457}+2\,\mathbf1_{13467}
+ =4\,\mathbf1_N.                                    \tag{OT}
  \label{eq:lx-n7-outside-triple-identity}
 \]
-If $x\in\core(v)$ and $x_i\geq0$ for $i\in S$, every term obtained by
-pairing the left side with $x$ is nonnegative.  Their sum is $5x(N)=0$,
-so $x(S)=0$.  The zero allocation is feasible, proving $\eta_S(0)=0$.
+If $x\in\core(v)$ dominates $\phi$ on $S$, put $d=x-\phi$.  Pairing the
+identity with $d$ gives a sum of nonnegative terms equal to $4d(N)=0$:
+the coordinate terms are nonnegative by domination and the four coalition
+terms by $\phi$-tightness.  Hence $d(S)=0$, and $x=\phi$ is feasible, proving
+$\eta_S(\phi)=0$.  Applying the same identity directly to a core point
+nonnegative on $S$ proves $\eta_S(0)=0$ as well.
+
 All lower-envelope values, the fourteen unit carrier differences, the
-degree-five identity, and its rank-seven support are checked without an
+degree-four identity, and its rank-seven support are checked without an
 optimizer by
 \path{src/verify_n7_exact_carrier_outside_triple_counterexample.py}.
-An accompanying exact-rational verifier gives the leximin point
+The hand Maschler stages and all fourteen $2/3$ leximin carrier differences
+are independently replayed in exact rational arithmetic by the companion
+leximin verifier.
+\end{proof}
+
+\begin{proposition}[outside-triple open family]
+\label{prop:lx-n7-outside-triple-family}
+For
 \[
- (-2,1/3,4/3,4/3,-5/3,1/3,1/3)
+ \kappa\geq0,\qquad \theta-3\kappa>\frac13,
+ \qquad \kappa+\theta\leq1,
 \]
-and zero for all fourteen carrier differences.
+define
+\[
+ v_{\kappa,\theta}(T)
+  =\min\{0,A(T),(\kappa A+\theta B)(T)\},
+\]
+where $A,B$ are the vectors in
+Proposition~\ref{prop:lx-n7-outside-triple}.  Then $v_{\kappa,\theta}$ is
+exact, has the same leximin point $\phi=A/3$, and for $S=1234$ satisfies
+\[
+ \gamma_S(\phi)=\theta-3\kappa-\frac13>0,
+ \qquad \eta_S(\phi)=0.
+\]
+In particular, the sharp outside-triple obstruction persists on a relatively
+open two-dimensional wedge and is not an isolated game.
+\end{proposition}
+
+\begin{proof}
+All three generators have total zero, so the lower-envelope game is exact.
+Its singleton floors are
+\[
+ (-4,\kappa-\theta,0,0,-1,\kappa-\theta,-1).
+\]
+The zero-valued constraints at $1246$ and $1236$ give the same first-stage
+bound $t\leq2/3$ and pin $3,4,5,7$ as before.  On that face, the constraint
+at $134$ and efficiency give $x_2+x_6\leq2/3$.  Requiring their two gains
+to exceed $u$ gives
+\[
+ 2(\kappa-\theta)+2u\leq\frac23,
+\]
+so $u\leq\theta-\kappa+1/3$, attained by $A/3$.  The parameter restrictions
+put this strictly above the first level and below player~1's gain $8/3$;
+efficiency then pins player~1.  Thus $A/3$ is leximin.
+
+Direct evaluation of the fourteen carrier differences has minimum
+$\theta-3\kappa-1/3$.  The four faces in
+\eqref{eq:lx-n7-outside-triple-identity} remain zero-valued and
+$\phi$-tight, so the same balanced identity proves $\eta_S(\phi)=0$.
+Exact rational checks, including interior parameter points, are in
+\path{src/verify_n7_exact_carrier_outside_triple_family.py}.
 \end{proof}
 
 The preceding construction is minimal in outside-set size among
-seven-player obstructions at arbitrary core references.
+seven-player obstructions, including those evaluated at the leximin point.
 
 \begin{proposition}[seven-player outside-pair theorem]
 \label{prop:lx-n7-outside-pair}
@@ -1383,8 +1522,8 @@ nonsingleton $S$ with $|N\setminus S|\leq2$,
  \eta_S(\psi)\geq\gamma_S(\psi).
 \]
 Consequently three is the minimum number of outside players in a
-seven-player arbitrary-reference obstruction.  For leximin references, the
-known minimum remains between three and four.
+seven-player obstruction, both for arbitrary core references and for the
+leximin reference.
 \end{proposition}
 
 \begin{proof}
@@ -1609,7 +1748,7 @@ Let $p,q\in\mathbb R^N$ have the same total, and define the exact game
  v(T)=\min\{p(T),q(T)\}\quad(T\subsetneq N),
  \qquad v(N)=p(N)=q(N).
 \]
-Let $S$ be proper.  If $\max_{x\in\core(v)}x(S)>\phi(S)$ and
+Let $S$ be proper and nonsingleton.  If $\max_{x\in\core(v)}x(S)>\phi(S)$ and
 $(\star_S)$ fails at $\phi$, then there is a nonempty proper $C\subset S$
 satisfying the hypothesis of
 Proposition~\ref{prop:lx-carrier-capacity}.  Consequently
@@ -1667,10 +1806,12 @@ $a(P\cup C)=v(P\cup C)$; such an $a$ exists by exactness.  Then
  =[a(P)-\psi(P)]+[a(C)-v(C)].
  \tag{GC}\label{eq:lx-generator-compensation}
 \]
-In particular, $a(P)\geq\psi(P)$ is sufficient for the off-side carrier
-inequality at $C$; otherwise the only missing quantity is the nonnegative
-trace compensation $a(C)-v(C)$.  Thus the identity is not restricted to a
-finite lower-envelope representation.
+In particular, $a(P)\geq\psi(P)$ is a sufficient one-way screen for
+$v(P\cup C)-v(C)\geq\psi(P)$.  When $\psi=\phi$, this is the off-side
+hypothesis used in Proposition~\ref{prop:lx-carrier-capacity}; it is not an
+equivalent characterization, because the nonnegative trace compensation
+$a(C)-v(C)$ may rescue cases with $a(P)<\psi(P)$.  The algebraic identity
+itself is not restricted to a finite lower-envelope representation.
 \end{lemma}
 
 \begin{proof}
@@ -2152,13 +2293,13 @@ Let $v$ be the lower envelope of the three common-sum allocations
  18& -6& 6&-17&6&13&12
  \end{pmatrix}.
 \]
-Then $v$ is an exact seven-player game.  For $S=\{2,3,5\}$ its leximin
-point is
+Then $v$ is an exact seven-player game.  The game's leximin point is
 \[
  \phi=\left(\frac{47}{3},-9,\frac{29}{3},-\frac{49}{3},
               \frac{23}{3},\frac{41}{3},\frac{32}{3}\right).
 \]
-The coalition is binding by $5/3$, $(\star_S)$ fails, and every failure cover
+For $S=\{2,3,5\}$ the core-expansion margin
+$\max_{x\in\core(v)}x(S)-\phi(S)$ is $5/3$, $(\star_S)$ fails, and every failure cover
 has three distinct residuals in the order
 \[
  r_5<r_3<r_2.
@@ -2196,6 +2337,8 @@ price zero, and face price $-3$ certify $23$.  A coordinate dual certifies
 $M_2^A=-10$: its core weights on masks $25,49,69,80,104$ are respectively
 $2,2,1,1,3$, with grand price $-1$ and face price $-4$.  Direct substitution
 gives the two margins in the statement.
+Mask $80=57$ need not be $\phi$-tight: complementary slackness here is with
+the displayed optimizer on the face $F_A$, not with the leximin point.
 The restricted $A$-core has the same $P$-maximum $23$, proving zero trace
 gap, while the singleton and carrier slacks give $-4/3$.
 \end{proof}

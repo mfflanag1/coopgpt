@@ -10,6 +10,13 @@ Written from scratch because sympy 1.14's exact simplex returned infeasible
 """
 from fractions import Fraction
 
+
+def _exact(value):
+    """Convert an exact scalar while rejecting accidental binary floats."""
+    if isinstance(value, float):
+        raise TypeError("exact_linprog rejects float input; use Fraction or integer")
+    return Fraction(value)
+
 def _simplex_core(T, basis, m, ncols):
     """Simplex on tableau T (m constraint rows + 1 objective row, ncols cols incl RHS).
     Objective row is T[m], minimization, reduced costs in T[m][:ncols-1], obj value = T[m][-1].
@@ -43,15 +50,15 @@ def _simplex_core(T, basis, m, ncols):
 
 def exact_linprog(c, A_ub=None, b_ub=None, A_eq=None, b_eq=None):
     F = Fraction
-    c = [F(x) for x in c]
+    c = [_exact(x) for x in c]
     nv = len(c)
     rows = []   # (coeffs, rhs, is_eq)
     if A_ub:
         for r, b in zip(A_ub, b_ub):
-            rows.append(([F(x) for x in r], F(b), False))
+            rows.append(([_exact(x) for x in r], _exact(b), False))
     if A_eq:
         for r, b in zip(A_eq, b_eq):
-            rows.append(([F(x) for x in r], F(b), True))
+            rows.append(([_exact(x) for x in r], _exact(b), True))
     m = len(rows)
     nslack = sum(0 if eq else 1 for _, _, eq in rows)
     # columns: xp(nv) xm(nv) slacks(nslack) artificials(m) | rhs

@@ -36,6 +36,13 @@ def rand_point_sum(n, c, rng):
 
 
 def game_from_points(n, pts):
+    if not pts:
+        raise ValueError("at least one generator is required")
+    if any(len(point) != n for point in pts):
+        raise ValueError("every generator must have exactly n coordinates")
+    totals = {sum(point) for point in pts}
+    if len(totals) != 1:
+        raise ValueError("lower-envelope generators must have a common total")
     N = (1 << n) - 1
     c = sum(pts[0])
     v = [0] * (1 << n)

@@ -8,8 +8,13 @@ import math
 from fractions import Fraction as F
 from pathlib import Path
 
+if not __debug__:
+    raise RuntimeError("certificate verification must not run with Python -O")
+
 
 N = 6
+EXPECTED_RAW_COUNTS = {3: 21_695, 4: 19_501}
+EXPECTED_ORBIT_COUNTS = {3: 870, 4: 619}
 
 
 def player_permutations(s_size):
@@ -75,6 +80,10 @@ def verify_shape(shape, sample_path):
     assert sum(shape["raw_count_by_support_size"].values()) == (
         shape["raw_minimal_balanced_collections"]
     )
+    if shape["raw_minimal_balanced_collections"] != EXPECTED_RAW_COUNTS[s_size]:
+        raise ValueError("raw minimal-balanced count differs from the pinned census")
+    if shape["orbit_count"] != EXPECTED_ORBIT_COUNTS[s_size]:
+        raise ValueError("orbit count differs from the pinned census")
 
     census_keys = set()
     for orbit in shape["orbits"]:
@@ -118,9 +127,7 @@ def verify_shape(shape, sample_path):
     return {
         "S_size": s_size,
         "supports_checked": expected_checked,
-        "raw_minimal_balanced_collections": (
-            shape["raw_minimal_balanced_collections"]
-        ),
+        "pinned_raw_minimal_balanced_collections": EXPECTED_RAW_COUNTS[s_size],
         "verified_orbit_count": len(census_keys),
         "previous_sample_orbits_all_recovered": len(sample_keys),
     }
@@ -134,6 +141,8 @@ def main():
     args = parser.parse_args()
     census = json.loads(args.census.read_text())
     assert census["n"] == N
+    if {int(shape["S_size"]) for shape in census["shapes"]} != {3, 4}:
+        raise ValueError("census must contain exactly the 3+3 and 4+2 splits")
     records = []
     for shape in census["shapes"]:
         s_size = int(shape["S_size"])

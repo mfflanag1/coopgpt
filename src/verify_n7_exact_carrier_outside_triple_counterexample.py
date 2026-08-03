@@ -2,14 +2,16 @@
 four target players and three outside players.
 
 The game is the lower envelope of three integer allocations.  At the core
-reference zero it has gamma=1 and eta=0.  This complements the leximin
-counterexample of shape 3+4 and proves that an outside set of size four is not
-minimal among seven-player arbitrary-reference obstructions.
+reference zero it has gamma=1 and eta=0.  At its leximin point it has
+gamma=2/3 and eta=0, checked by the companion exact-rational verifier.
 """
 from __future__ import annotations
 
 import json
 from fractions import Fraction as F
+
+if not __debug__:
+    raise RuntimeError("certificate verification must not run with Python -O")
 
 
 N = 7
@@ -17,7 +19,7 @@ FULL = (1 << N) - 1
 S = (1 << 4) - 1
 P = FULL ^ S
 ZERO = (0, 0, 0, 0, 0, 0, 0)
-A = (-4, 1, 2, 2, -3, 1, 1)
+A = (-4, 1, 2, 2, -1, 1, -1)
 B = (2, -1, 0, 0, 1, -1, -1)
 GENERATORS = (ZERO, A, B)
 
@@ -27,10 +29,10 @@ ETA_SUPPORT = {
     S: 1,
     1: 1,
     2: 3,
-    22: 1,   # 235
-    56: 2,   # 456
-    88: 2,   # 457
-    101: 3,  # 1367
+    48: 2,   # 56
+    84: 1,   # 357
+    88: 1,   # 457
+    109: 2,  # 13467
 }
 
 
@@ -108,21 +110,25 @@ def main():
         )
         for player in range(N)
     ]
-    assert degree == [5] * N
+    assert degree == [4] * N
     assert incidence_rank(ETA_SUPPORT) == N
     assert value[S] == 0
-    zero_faces = (22, 56, 88, 101)
+    zero_faces = (48, 84, 88, 109)
     assert all(value[coalition] == 0 for coalition in zero_faces)
 
     # For any core point x with x_i>=0 on S, every term in the balanced
-    # identity is nonnegative.  Its weighted sum equals 5*x(N)=0, hence x(S)=0.
-    # The zero generator is feasible, so eta=0.
-    eta = 0
-    assert sum(
+    # identity is nonnegative.  Its weighted sum equals 4*x(N)=0, hence x(S)=0.
+    # The certificate's coalition cost is an exact upper bound on eta; the
+    # feasible zero generator gives the matching lower bound.
+    eta_upper_bound = sum(
         weight * slack[coalition]
         for coalition, weight in ETA_SUPPORT.items()
         if coalition not in (S, 1, 2)
-    ) == 0
+    )
+    assert eta_upper_bound == 0
+    eta_lower_bound = payoff(ZERO, S)
+    assert eta_lower_bound == eta_upper_bound
+    eta = eta_upper_bound
 
     print(json.dumps({
         "status": "solver-free exact outside-triple carrier counterexample verified",

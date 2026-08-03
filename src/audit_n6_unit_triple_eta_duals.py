@@ -10,6 +10,7 @@ dual solutions.
 from __future__ import annotations
 
 import itertools
+import argparse
 import json
 from collections import Counter
 from fractions import Fraction as F
@@ -20,6 +21,9 @@ from scipy.optimize import linprog
 
 from hunt_balanced_cone_carrier_ratio import build_balanced_cone, members
 from sample_eta_dual_orbits import permute_mask, player_permutations
+
+if not __debug__:
+    raise RuntimeError("certificate generation must not run with Python -O")
 
 
 N = 6
@@ -141,7 +145,9 @@ def exact_optimum(template, support):
 
 
 def main():
-    root = Path(__file__).resolve().parents[1]
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
     representatives = enumerate_orbits()
     assert len(representatives) == 16
     template = build_balanced_cone(N, S_SIZE, witness_mode="global")
@@ -166,8 +172,7 @@ def main():
         "carrier_bound_violated": False,
         "orbits": records,
     }
-    output = root / "results/n6_unit_triple_eta_duals.json"
-    output.write_text(json.dumps(payload, indent=2) + "\n")
+    args.output.write_text(json.dumps(payload, indent=2) + "\n")
     print(json.dumps({key: value for key, value in payload.items() if key != "orbits"}, indent=2))
 
 

@@ -168,37 +168,69 @@ counterexample requires a genuinely different, binding-bumpable obstruction.
 
 ## Outside-set classification at seven players
 
-Four outside players are needed by the leximin counterexample above, but only
-three are needed at an arbitrary core reference.  Put `S=1234`, `P=567`, and
+The first counterexample minimizes target size.  A complementary example
+shows that three outside players already suffice at the leximin reference.
+Put `S=1234`, `P=567`, and
 
 ```text
-A = (-4, 1, 2, 2, -3, 1, 1)
-B = ( 2,-1, 0, 0,  1,-1,-1).
+A = (-4, 1, 2, 2, -1, 1,-1)
+B = ( 2,-1, 0, 0,  1,-1,-1)
 ```
 
-For `v(T)=min{0,A(T),B(T)}` at `psi=0`, all fourteen carrier differences
-are one.  The zero-valued faces in
+For `v(T)=min{0,A(T),B(T)}`, the exact leximin point is `phi=A/3`.  Its
+successive gain strata are
 
 ```text
-1_S + e_1 + 3 e_2 + 1_235 + 2 1_456 + 2 1_457
-    + 3 1_1367 = 5 1_N
+level 2/3: players 3,4,5,7
+level 4/3: players 2,6
+level 8/3: player 1.
 ```
 
-force every core point nonnegative on `S` to have `S`-sum zero.  Hence
-`(gamma,eta)=(1,0)`.  The certificate is solver-free:
+The constraints at `1246`, `1236`, and `134`, together with efficiency,
+give these three levels by hand.  All fourteen carrier differences at `phi`
+equal `2/3`.  The four zero-valued, `phi`-tight faces in
+
+```text
+1_S + e_1 + 3 e_2 + 2 1_56 + 1_357 + 1_457
+    + 2 1_13467 = 4 1_N
+```
+
+force every core displacement nonnegative on `S` to have `S`-sum zero.
+Hence `(gamma_S(phi),eta_S(phi))=(2/3,0)`.  At the zero reference the pair
+is `(1,0)`.  The zero-reference certificate is solver-free:
 
 ```sh
 python src/verify_n7_exact_carrier_outside_triple_counterexample.py
 ```
 
-At this game's exact leximin point all fourteen carrier differences are zero,
-so it is not a leximin-specific counterexample.  That scope check is:
+The exact leximin calculation and hand Maschler stages replay with:
 
 ```sh
 python src/verify_n7_exact_carrier_outside_triple_leximin.py
 ```
 
-Three is sharp among arbitrary-reference seven-player obstructions.  The
+This outside-triple obstruction also persists on an open two-parameter
+wedge.  For
+
+```text
+kappa >= 0,  theta - 3*kappa > 1/3,  kappa + theta <= 1,
+```
+
+the exact game `min{0,A,kappa*A+theta*B}` has the same leximin point `A/3`
+and
+
+```text
+gamma_S = theta - 3*kappa - 1/3,  eta_S = 0.
+```
+
+Replay representative exact rational points with:
+
+```sh
+python src/verify_n7_exact_carrier_outside_triple_family.py
+```
+
+Three is sharp among both arbitrary-reference and leximin seven-player
+obstructions.  The
 two-level separator theorem reduces any putative `5+2` failure to a
 three-level eta-dual support.  A focused determinant census checks 8,798,030
 supports and leaves five symmetry orbits after direct carrier bounds; all
@@ -219,6 +251,5 @@ python src/verify_n7_three_level_eta_dual_audit.py \
   --output results/n7_three_level_eta_dual_replay.json
 ```
 
-Thus the outside-set minimum at seven is exactly three for arbitrary core
-references.  For leximin references it remains open whether three suffice;
-the known bound is three or four.
+Thus the outside-set minimum at seven is exactly three, including at the
+leximin reference.

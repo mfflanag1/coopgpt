@@ -8,10 +8,11 @@ totally balanced game `v`, with reference core point zero, for which
 \]
 
 Thus total balancedness does **not** suffice for the quantitative carrier
-bound whenever `|P|=2`.  Combined with the complete six-player audit, this
-makes the six-player totally balanced outside-pair theorem dimension-sharp.
-The example is not exact, so the dimension-free exact-game conjecture remains
-open.
+bound in dimension seven, even when `|P|=2`.  Combined with the complete
+six-player audit, this makes the six-player totally balanced outside-pair
+theorem dimension-sharp.  The example is not exact, so it neither contradicts
+the exact seven-player outside-pair theorem nor settles the exact `|P|=2`
+question in higher dimensions.
 
 ## Exact construction
 

@@ -13,7 +13,12 @@ def members(S, n):
 
 class Game:
     def __init__(self, n, v):
-        assert len(v) == 1 << n and v[0] == 0
+        if not isinstance(n, int) or n < 1:
+            raise ValueError("n must be a positive integer")
+        if len(v) != 1 << n:
+            raise ValueError(f"expected {1 << n} coalition values, got {len(v)}")
+        if v[0] != 0:
+            raise ValueError("the empty-coalition value must be zero")
         self.n = n
         self.v = [Fraction(x) for x in v]
         self.N = (1 << n) - 1
@@ -97,6 +102,8 @@ def is_balanced_game(game):
     """Core nonempty? Exact: min x(N) s.t. x(S) >= v(S) for all proper S; core
     nonempty iff opt <= v(N)."""
     n, N = game.n, game.N
+    if n == 1:
+        return True
     A_ub, b_ub = [], []
     for S in range(1, N):
         A_ub.append([-1 if S >> i & 1 else 0 for i in range(n)])

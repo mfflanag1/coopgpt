@@ -17,6 +17,9 @@ import math
 from pathlib import Path
 from fractions import Fraction as F
 
+if not __debug__:
+    raise RuntimeError("certificate verification must not run with Python -O")
+
 
 N = 6
 FULL = (1 << N) - 1
