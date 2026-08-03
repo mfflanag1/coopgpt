@@ -7,6 +7,7 @@ one exact pair (v,S), it emits only proof-relevant symbolic data:
   * the exact star test and a residual-cover dual when star fails;
   * exact capacity d*(S), every limiting face, and all capacity certificates;
   * whether the smallest certificate is a singleton or a same-stratum pair.
+  * off-side slack comparisons and the face bound each carrier induces.
 
 The default instance is the six-player lower-envelope game that disproves the
 tempting stronger claim that a singleton in S always certifies.  Its canonical
@@ -17,6 +18,7 @@ from __future__ import annotations
 import argparse
 import json
 from fractions import Fraction as F
+from pathlib import Path
 
 from hunt_exact_points import game_from_points
 from lemD import residual_cover, star_holds, tight_coalitions, xS
@@ -60,6 +62,69 @@ def face_max(game, objective, face):
     if optimum is None or optimum == "unbounded":
         return None
     return -optimum
+
+
+def face_upper_dual(game, objective, face, phi_tights):
+    """Exact dual certificate for max_{core, x(face)=v(face)} x(objective).
+
+    It finds alpha_T >= 0 and free beta,gamma with
+
+      1_objective = beta 1_N + gamma 1_face - sum_T alpha_T 1_T.
+
+    Hence x(objective) <= beta v(N)+gamma v(face)-sum_T alpha_T v(T).
+    """
+    n, grand, worths = game.n, game.N, game.v
+    coalitions = list(range(1, grand))
+    p = len(coalitions)
+    beta_index = p
+    gamma_index = p + 1
+    variable_count = p + 2
+
+    a_eq = []
+    b_eq = []
+    for player in range(n):
+        row = [F(0)] * variable_count
+        for index, coalition in enumerate(coalitions):
+            if coalition >> player & 1:
+                row[index] = F(-1)
+        row[beta_index] = F(1)
+        if face >> player & 1:
+            row[gamma_index] = F(1)
+        a_eq.append(row)
+        b_eq.append(F(1) if objective >> player & 1 else F(0))
+
+    a_ub = []
+    b_ub = []
+    for index in range(p):
+        row = [F(0)] * variable_count
+        row[index] = F(-1)
+        a_ub.append(row)
+        b_ub.append(F(0))
+
+    cost = [-worths[coalition] for coalition in coalitions]
+    cost.extend([worths[grand], worths[face]])
+    optimum, solution = exact_lp_min(cost, a_ub, b_ub, a_eq, b_eq)
+    if optimum is None or optimum == "unbounded":
+        return None
+
+    support = []
+    for index, coalition in enumerate(coalitions):
+        if solution[index] != 0:
+            support.append(
+                {
+                    "coalition": members(coalition, n),
+                    "mask": coalition,
+                    "weight": solution[index],
+                    "phi_tight": coalition in phi_tights,
+                    "type": crossing_type(coalition, objective),
+                }
+            )
+    return {
+        "bound": optimum,
+        "beta": solution[beta_index],
+        "gamma": solution[gamma_index],
+        "support": support,
+    }
 
 
 def gain_strata(game, phi):
@@ -107,6 +172,30 @@ def extract(game, target):
     cover = None if holds else residual_cover(game, phi, target)
 
     tights = tight_coalitions(game, phi)
+    off_side = game.N ^ target
+    carrier_comparisons = []
+    for carrier_face in range(1, game.N):
+        if carrier_face & target != carrier_face or carrier_face == target:
+            continue
+        carrier = off_side | carrier_face
+        face_slack = xS(phi, carrier_face, game.n) - game.v[carrier_face]
+        carrier_slack = xS(phi, carrier, game.n) - game.v[carrier]
+        bound = game.v[game.N] + game.v[carrier_face] - game.v[carrier]
+        carrier_comparisons.append(
+            {
+                "carrier": members(carrier, game.n),
+                "carrier_mask": carrier,
+                "face": members(carrier_face, game.n),
+                "face_mask": carrier_face,
+                "carrier_slack": carrier_slack,
+                "face_slack": face_slack,
+                "slack_difference": carrier_slack - face_slack,
+                "carrier_is_phi_tight": carrier in tights,
+                "bound": bound,
+                "phiS": phi_target,
+                "certifies": bound <= phi_target,
+            }
+        )
     tight_data = [
         {
             "coalition": members(coalition, game.n),
@@ -147,6 +236,10 @@ def extract(game, target):
     smallest_in_target = [
         item for item in in_target if len(item["coalition"]) == minimum_in_target_size
     ]
+    for item in smallest_in_target:
+        item["upper_bound_dual"] = face_upper_dual(
+            game, target, item["mask"], set(tights)
+        )
 
     cover_payload = None
     residual_levels = []
@@ -205,6 +298,8 @@ def extract(game, target):
             "residual_level_count": len(residual_levels),
             "two_level_predicted_face": two_level_face,
             "tight_coalitions": tight_data,
+            "off_side": members(off_side, game.n),
+            "off_side_carrier_comparisons": carrier_comparisons,
             "capacity_dstar": capacity,
             "capacity_minus_slack": capacity - slack,
             "limiting_faces": limiters,
@@ -218,8 +313,7 @@ def extract(game, target):
 
 
 def load_game(path):
-    with open(path) as handle:
-        payload = json.load(handle)
+    payload = json.loads(path.read_text())
     worths = payload["v"] if isinstance(payload, dict) else payload
     n = (len(worths)).bit_length() - 1
     return Game(n, [F(value) for value in worths])
@@ -227,8 +321,9 @@ def load_game(path):
 
 def parse_args():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--game-json")
+    parser.add_argument("--game-json", type=Path)
     parser.add_argument("--coalition", type=lambda value: int(value, 0))
+    parser.add_argument("--output", type=Path)
     return parser.parse_args()
 
 
@@ -243,4 +338,8 @@ if __name__ == "__main__":
         selected_game = game_from_points(6, PAIR_WITNESS_POINTS)
         assert selected_game.v == [F(value) for value in PAIR_WITNESS_V]
         selected_coalition = PAIR_WITNESS_S
-    print(json.dumps(extract(selected_game, selected_coalition), indent=2))
+    rendered = json.dumps(extract(selected_game, selected_coalition), indent=2) + "\n"
+    if args.output:
+        args.output.write_text(rendered)
+    else:
+        print(rendered, end="")

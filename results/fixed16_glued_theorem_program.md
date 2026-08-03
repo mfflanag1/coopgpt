@@ -1,0 +1,393 @@
+# Fixed-witness theorem program for the glued \((3,2,1)\) frontier
+
+All claims below separate the proved finite result from the remaining
+dimension-free theorem.
+
+## Exact finite theorem
+
+Fix six players,
+\[
+A=\{1,2,3\},\qquad B=\{4,5\},
+\]
+and use the monotonicity columns for player 1 on the \(A\)-arm and player 4
+on the \(B\)-arm.  Consider the factorized local pattern in which the root
+contains \(B\), while the second leaf contains both \(A\) and \(B\), with
+the crossed-\(A\) coefficient smaller than the distinguished-\(B\)
+coefficient.
+
+The local enumeration is now exact.  Every local matrix is at most
+\(5\times6\) with entries in \(\{-1,0,1\}\).  Hadamard's inequality bounds
+every square minor by
+\[
+5^{5/2}<56.
+\]
+Consequently rational rank is exactly rank modulo 61.  For every support of
+rank one below its width, the primitive kernel is recovered from signed
+integer cofactors and checked against every row before positivity is
+accepted.  There is no numerical rank or sign gate.
+
+This gives exactly 56 root rays, 626 first-leaf rays, and three admissible
+second-leaf rays.  Exact gluing and deduplication give 59,304
+product-forbidden global circuits with 57,425 distinct aggregate supports.
+Every aggregate support has full player rank.
+
+For the fixed witness
+\[
+U=\{5\},
+\]
+all 59,304 box capacities have exact rational primal and dual certificates.
+Their minimum is
+\[
+\boxed{\tau_U=\frac98}.
+\]
+There are 45 minimizers, no capacity at or below one, 21 distinct capacity
+values, 19 projective optimal dual rays, and 18 potential weak-order types.
+The LP solver selected exactly two projective rays on the 45-record minimum
+frontier:
+\[
+(r_A,r_B;\gamma)
+=(1,1;1,-1,-1,1,0,0)
+\]
+and
+\[
+(r_A,r_B;\gamma)
+=(2,1;0,-1,-1,1,0,1).
+\]
+Among the minimizers only six root rays and three first-leaf rays occur; all
+three second-leaf rays are symmetry variants of the same degree pattern.
+The complete certificate audit is
+`results/glued_product_forbidden_fixed16_audit_n6_321.json`.
+
+The complete dual arrangement contains 87 feasible projective rays, not only
+the 19 rays selected by the LP solver.  Exact evaluation of all
+\(87\cdot59{,}304=5{,}159{,}448\) ray--circuit pairs finds no value below
+\(9/8\), and minimizing over the arrangement reproduces the full 21-value LP
+capacity histogram exactly.  Four arrangement rays attain \(9/8\), in three
+orbits under the swap of players 2 and 3.  The additional sharp orbit was
+hidden by dual ties in the returned LP optima.  See
+`results/glued_fixed16_dual_arrangement_n6_321.json`.
+
+This is an exhaustive theorem for the stated factorized pattern.  It is not
+yet the dimension-free support-rigid extreme-set theorem.
+
+## Canonical dual
+
+Let \(q_T\) be the aggregate circuit weight, let \(x\) and \(y\) be the two
+distinguished arm coefficients, and let \(w\) be the first-color
+subcollection.  Fixed-witness capacity maximizes \(\sigma\) subject to
+\[
+0\le w\le q,\qquad
+\deg(w)=\alpha\mathbf1+\delta\mathbf1_U,
+\]
+\[
+w_A\ge \sigma x,\qquad q_B-w_B\ge \sigma y.
+\]
+Its exact dual is
+\[
+\tau_U=\min
+\left\{
+r_Bq_B+
+\sum_Tq_T
+\left[
+\gamma(T)+r_A\mathbf1_{T=A}-r_B\mathbf1_{T=B}
+\right]_+
+\right\},
+\]
+where
+\[
+r_A,r_B\ge0,\qquad r_Ax+r_By=1,
+\qquad \sum_i\gamma_i=0,
+\qquad \gamma(U)=0.
+\]
+This form makes the proof target a homogeneous piecewise-linear inequality.
+
+For one sharp ray, put
+\(\gamma=(1,-1,-1,1,0,0)\).  The sharp inequality is
+\[
+8\left(
+q_B+
+\sum_Tq_T
+[\gamma(T)+\mathbf1_{T=A}-\mathbf1_{T=B}]_+
+\right)
+\ge 9(x+y).
+\]
+For a second sharp ray, put
+\(\gamma=(0,-1,-1,1,0,1)\).  The sharp inequality is
+\[
+8\left(
+q_B+
+\sum_Tq_T
+[\gamma(T)+2\mathbf1_{T=A}-\mathbf1_{T=B}]_+
+\right)
+\ge 9(2x+y).
+\]
+The third sharp orbit has representative
+\[
+(r_A,r_B;\gamma)=(1,1;0,-1,0,1,0,0),
+\]
+with its player-2/player-3 swap, and obeys the corresponding inequality
+\[
+8\left(
+q_B+
+\sum_Tq_T
+[\gamma(T)+\mathbf1_{T=A}-\mathbf1_{T=B}]_+
+\right)
+\ge 9(x+y).
+\]
+All three orbit inequalities are equalities on part of the 45-record
+frontier.
+
+## Exact arrangement proof
+
+After imposing \(\gamma_5=0\) and \(\sum_i\gamma_i=0\), use the six reduced
+coordinates
+\[
+(r_A,r_B,\gamma_1,\gamma_2,\gamma_3,\gamma_4),
+\qquad
+\gamma_6=-(\gamma_1+\gamma_2+\gamma_3+\gamma_4).
+\]
+The 54 coalition masks appearing in the glued family induce only 31 distinct
+nonzero kink hyperplanes.  Together with \(r_A=0\) and \(r_B=0\), there are
+33 hyperplanes.
+
+For a fixed circuit, normalize by \(r_Ax+r_By=1\).  The arrangement divides
+the feasible dual into polyhedra on which the objective is linear.  Because
+the aggregate coalition support has full player rank, the dual has no
+nonzero \(\gamma\)-lineality after \(\sum_i\gamma_i=\gamma_5=0\).  An optimal
+cell therefore has an extreme point.  Besides the normalization, five
+independent boundary or kink hyperplanes are active there.  Projectively,
+every capacity optimum is consequently generated by the intersection of
+five of the 33 homogeneous hyperplanes.  Refining a circuit's support
+arrangement by the full coalition universe cannot remove an optimum.
+
+There are \(\binom{33}{5}=237{,}336\) candidate intersections.  Exact rank
+modulo 61 leaves 69,023 rank-five intersections; 61,660 admit an orientation
+with \(r_A,r_B\ge0\).  Primitive cofactor normalization collapses these to 87
+distinct feasible projective rays, or 57 orbits under the player-2/player-3
+swap.  Of these, 21 rays (15 symmetry orbits) are optimal for at least one
+admissible circuit, but all 87 must be bounded to prove the theorem.
+
+For every ray the dual objective is an integer ratio
+\[
+\frac{
+r_Bq_B+\sum_Tq_T
+[\gamma(T)+r_A\mathbf1_{T=A}-r_B\mathbf1_{T=B}]_+
+}{r_Ax+r_By}.
+\]
+Direct exact evaluation of this ratio on every admissible glued circuit gives
+zero violations of \(8L\ge9D\).  Minimizing the 87 ratios circuit by circuit
+recovers exactly the independently generated LP histogram, including 45
+instances at \(9/8\).  This proves the finite \(9/8\) theorem without relying
+on the LP solver's choice among tied dual optima.
+
+## Local factorization proof
+
+The global table admits a much smaller proof.  For a ray \(r\), define
+\[
+h_r(T)=r_B\mathbf1_{T=B}+
+[\gamma(T)+r_A\mathbf1_{T=A}-r_B\mathbf1_{T=B}]_+,
+\qquad H_r(q)=\sum_Tq_T h_r(T).
+\]
+Let \(m_A,m_B\) be the two monotonicity coefficients in a root local ray.
+For a first-leaf ray with matched coefficient \(a_1\), and a second-leaf ray
+with matched coefficient \(b_2\), put
+\[
+\ell_A^r(q^1)=\frac{8H_r(q^1)-9r_Aq^1_A}{a_1},
+\qquad
+\ell_B^r(q^2)=\frac{8H_r(q^2)-9r_Bq^2_B}{b_2}.
+\]
+Scaling the leaves to the root coefficients gives the exact identity
+\[
+8L_r(q)-9D_r
+=8H_r(q^0)+m_A\ell_A^r(q^1)+m_B\ell_B^r(q^2).
+\]
+
+The two leaf families can therefore be minimized independently.  For each
+of the 87 arrangement rays, let \(a_r\) be the minimum of \(\ell_A^r\)
+over the 626 first leaves and let \(b_r\) be the minimum of \(\ell_B^r\)
+over the three second leaves.  Exact evaluation gives
+\[
+8H_r(q^0)+m_Aa_r+m_Bb_r\ge0
+\]
+for every one of the 56 roots and every arrangement ray.  There are no
+negative rows.  Exactly four rays have zero minimum, and they are precisely
+the four globally sharp rays in the three symmetry orbits above.
+
+This replaces \(5{,}159{,}448\) global evaluations by
+\(87(626+3+56)=59{,}595\) exact local comparisons.  The 54-coalition
+universe of the local families equals the arrangement universe, so the proof
+covers all \(56\cdot626\cdot3=105{,}168\) raw local gluing triples, not only
+the 59,304 product-forbidden distinct gluings.  The full certificate is
+`results/glued_fixed16_local_factorization_n6_321.json`, generated by
+`src/audit_glued_fixed16_local_factorization.py`.
+
+On the sharp rays, the swapped first orbit has
+\((a_r,b_r)=(-3,-2)\), the second orbit has \((-11,-2)\), and the third has
+\((-6,-2)\).  Thus equality is already concentrated in three leaf-rate pairs
+and finitely many root identities.
+
+### Dimension-free gluing lemma
+
+The factorization itself does not use six players or the enumerated supports.
+For any target \(c>0\), any root relation with matched coefficients
+\(m_A,m_B\), and any two leaf relations with edge coefficients \(a_1,b_2\),
+define
+\[
+\ell_{A,c}^r(q^1)=
+\frac{H_r(q^1)-c r_Aq^1_A}{a_1},\qquad
+\ell_{B,c}^r(q^2)=
+\frac{H_r(q^2)-c r_Bq^2_B}{b_2}.
+\]
+After gluing,
+\[
+H_r(q)-c(r_Ax+r_By)
+=H_r(q^0)+m_A\ell_{A,c}^r(q^1)
+ +m_B\ell_{B,c}^r(q^2).
+\]
+This is a dimension-free local-to-global reduction.  The remaining universal
+problem is to bound the two leaf rates using only their degree identities and
+then absorb those bounds in the root relation.  The finite \(9/8\) theorem is
+the case \(c=9/8\), multiplied by eight.
+
+The second leaf already collapses without enumeration.  Its three core
+collections are
+\[
+\begin{aligned}
+ &(7)+(2)(24)+(35)+(37)+(54),\\
+ &(7)+(2)(24)+(35)+(38)+(53),\\
+ &(7)+(2)(24)+(37)+(38)+(51).
+\end{aligned}
+\]
+Because \(\gamma(U)=0\) for \(U=\{5\}\), masks 54, 53, and 51 have the
+same potentials as masks 38, 37, and 35, respectively.  Each line therefore
+has exactly the same multiset of hinge values, so all three second-leaf rates
+are identical for every feasible ray.  The unresolved local inequality is
+concentrated entirely in the first leaf and root.
+
+### Degree-only analytic compression
+
+Positive-part subadditivity gives, for every local collection,
+\[
+H_r(q)\ge r_Bq_B+
+\left[\sum_Tq_T\gamma(T)+r_Aq_A-r_Bq_B\right]_+.
+\]
+For a first leaf, \(\deg(q)=\alpha\mathbf1-m_Ae_1\), so the gamma sum is
+\(-m_A\gamma_1\).  Put \(u=q_A/m_A\), \(v=q_B/m_A\).  Its resulting bound is
+\[
+f_r(u,v)=8r_Bv+8[-\gamma_1+r_Au-r_Bv]_+-9r_Au.
+\]
+For fixed \(u\), this is minimized at \(v=0\); there it is nonincreasing in
+\(u\).  The exact first-leaf cone has only 18 normalized mass pairs, all with
+\(0\le u\le3\), and contains \((3,0)\).  Hence every first leaf obeys
+\[
+\ell_A^r\ge \widehat a_r
+=8[-\gamma_1+3r_A]_+-27r_A.
+\]
+
+For a root, the same argument gives
+\[
+H_r(q^0)\ge r_Bq^0_B+
+[m_A\gamma_1+m_B\gamma_4+r_Aq^0_A-r_Bq^0_B]_+.
+\]
+The 56 roots have only 12 tuples \((m_A,m_B,q^0_A,q^0_B)\).  Combining this
+bound with \(\widehat a_r\) and the symbolic second-leaf rate proves 86 of
+the 87 arrangement rays.  The sole exception is
+\[
+(r_A,r_B;\gamma)=(2,1;0,-1,-1,1,0,1).
+\]
+Its degree-only margin is \(-6\) only at root mass type \((2,1,0,1)\).
+That type occurs at roots 15, 19, and 27; their exact incidence margins are
+\(10,2,2\).  Every other mass type has coarse margin at least zero.  Thus the
+proof uses \(87\cdot12+3=1{,}047\) root comparisons, with one explicit
+three-root correction, instead of 59,595 local or 5,159,448 global
+comparisons.  See
+`results/glued_fixed16_analytic_compression_n6_321.json` and
+`src/audit_glued_fixed16_analytic_compression.py`.
+
+The only first-leaf fact used by this finite compression is the enumerated
+ceiling \(q_A\le3m_A\).  Its initially plausible dimension-free extension
+\(q_A\le |A|m_A\) is **false**.  Peleg's second construction gives the
+seven-player minimal balanced collection
+\[
+\begin{array}{c|rrrrrrr}
+T&\{7\}&\{1,7\}&\{1,2,3\}&\{2,4\}&\{3,4,5\}&\{3,4,6\}&\{2,5,6\}\\
+5\lambda_T&1&4&1&1&2&2&3,
+\end{array}
+\]
+whose incidence columns have rank seven.  Taking \(\{7\}\) as the artificial
+singleton and \(A=\{1,7\}\) gives \(q_A/m_A=4>2\).  The exact audit finds
+186 such violations among 76,354 second-case arm tests; all 186 have a
+two-player arm, with ratios three or four.  Peleg's first construction then
+lifts \(\{1,7\}\) and \(\{1,2,3\}\) through player eight.  The resulting
+minimal collection has the three-player arm \(\{1,7,8\}\), the same ratio
+four, and incidence rank seven.  Thus even the cardinality used in the fixed
+\((3,2,1)\) theorem has no universal coefficient-three bound.  See
+`results/peleg_coefficient_ceiling_escape_n7.json`.
+
+That first falsification landed exactly at \(9/8\), but it did not cover
+six-player minimal balanced collections without a singleton.  A complete
+Peleg generation from all 1,292 five-player collections recovers exactly the
+published 200,214 six-player total.  Peleg's fourth, two-parent case supplies
+172,776 of them.  Extending this complete source family produces 1,320 exact
+seven-player leaves with a three-player arm ratio five.  A representative is
+\[
+\begin{array}{c|rrrrrrr}
+T&\{1,2\}&\{1,3\}&\{2,3,4\}&\{1,4,5\}&\{1,4,6\}&\{7\}&\{5,6,7\}\\
+6\lambda_T&2&2&4&1&1&1&5.
+\end{array}
+\]
+Its seven incidence columns are independent, and
+\(q_{\{5,6,7\}}/m_{\{7\}}=5\).
+
+This ratio-five leaf **does break the dimension-free \(9/8\) extension**.
+Gluing it to lifted copies of all 56 roots and all three second leaves gives
+168 exact rank-18, support-19 global circuits.  Twenty-one have fixed-
+\(\{3\}\) capacity below \(9/8\), and the exact minimum is \(13/12\).
+All four distinguished-arm symmetry orbits of the 1,320 leaves break
+\(9/8\); 672 canonical-orbit gluings give the same minimum \(13/12\).
+No tested circuit has capacity below one, so this refutes the stronger
+dimension-free constant but not the unit-repair conjecture.  See
+`results/full_n5_peleg_escape_n7.json`,
+`results/ratio5_bad_leaf_gluing_n7.json`, and
+`results/ratio5_leaf_orbit_gluings_n7.json`.
+
+## Three-local-ray identities
+
+Write \(q^0,q^1,q^2\) for the root and two leaf core collections after the
+shared monotonicity coefficients have been matched, and write \(m_A,m_B\)
+for those matched coefficients.  The local circuit equations give
+\[
+\deg(q^0)=\alpha_0\mathbf1+m_Ae_1+m_Be_4,
+\]
+\[
+\deg(q^1)=\alpha_1\mathbf1-m_Ae_1,
+\qquad
+\deg(q^2)=\alpha_2\mathbf1-m_Be_4.
+\]
+In the selected second-leaf pattern,
+\[
+q^2_A=m_B,\qquad q^2_B=2m_B.
+\]
+The aggregate \(q=q^0+q^1+q^2\) is balanced.  Applying only
+\([\sum a_j]_+\le\sum[a_j]_+\) to these three degree identities recovers the
+ordinary scalar lower bound, but not the \(9/8\) improvement.  Any hand proof
+must additionally use \(\gamma_5=0\) and the coalition-incidence pattern of
+the local rays.  This identifies exactly where fixed-witness exactness enters.
+
+## Remaining proof steps
+
+1. **Completed adversarial lift.**  The universal \(|A|\)-bound and the
+   dimension-free \(9/8\) extension are both disproved by the ratio-five
+   leaf.  The fixed six-player \(9/8\) theorem remains intact.
+
+2. **Unit root absorption.**  Explain why the ratio-five circuits still have
+   capacity at least one, or continue the complete-source construction until
+   a capacity-below-one circuit appears.  This is the relevant threshold for
+   Conjecture 7.16; \(9/8\) is no longer a viable universal target.
+
+3. **Dimension-free lift.**  Combine those local lemmas with the already
+   dimension-free gluing identity and extreme-set rigidity.
+
+The finite arrangement theorem and its local-factorization strengthening are
+closed.  The desired dimension-free breakthrough is now the unit threshold
+in Step 2.
