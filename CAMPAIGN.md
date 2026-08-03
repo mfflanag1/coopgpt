@@ -968,6 +968,22 @@ Pre-crash progress banked:
   so it is directly a proper-coalition monotonicity counterexample for Lmin on
   exact games.  Novelty is the exact-game/proper-coalition theorem and compact
   certificate, not the selector itself.
+- N=4 MINIMALITY LEAD (NOT YET A THEOREM): after singleton normalization,
+  normalized Lmin agreed exactly with PES/Lmax on 100 random exact
+  four-player games.  This suggests a sharp literature bridge: Biswas et al.
+  (1999) prove exact games have large cores through four players, and
+  Dietzenbacher (2021) proves PES=Lmax is coalitionally monotone on the
+  resulting egalitarian-stable domain.  The missing step is to prove
+  `Lmin=PES` for singleton-normalized exact games at n<=4; largeness alone
+  must not be cited as supplying that equality.  Targeted direct-pair screens
+  found zero drops among 545 binding two-generator endpoints and 1,948
+  binding endpoints with two through six generators.  Every observed target
+  sign pattern was either `+++` or had exactly one `+` and two zeros.  A
+  prospective hand proof is now localized: any four-player drop appears to
+  force two old-Lmin tight coalitions `ac` and `bc`; exact attainment of the
+  singleton face `c=0` would violate efficiency when `phi_c>phi_p`.  See
+  `paper3/N4_LMIN_MINIMALITY_PROGRAM.md` and
+  `src/audit_n4_exact_lmin_minimality.py`.
 - THRESHOLD BREAKTHROUGH: the complete n=6 theorem no longer logically needs
   any coalition-support census.  Any violation supplies an eta-dual floor
   separator with at least three coordinate levels.  After quotienting by
