@@ -14,6 +14,9 @@ coalitional monotonicity. The closest sources located were:
 - Mirás Calvo, Quinteiro Sandomingo, and Sánchez Rodríguez (2020), [*The boundary of the core of a balanced game: face games*](https://doi.org/10.1007/s00182-019-00703-2).
 - Dietzenbacher (2021), [*Monotonicity and egalitarianism*](https://doi.org/10.1016/j.geb.2021.03.006).
 - Arin and Feltkamp (2012), [*Coalitional games: Monotonicity and core*](https://doi.org/10.1016/j.ejor.2011.07.025).
+- Young (1985), [*Monotonic solutions of cooperative games*](https://doi.org/10.1007/BF01769885).
+- Housman and Clark (1998), *Note: Core and monotonic allocation methods*,
+  *International Journal of Game Theory* 27:611--616.
 
 ## Findings and claim discipline
 
@@ -74,6 +77,26 @@ coalitional monotonicity. The closest sources located were:
    certified monotone leximin-above-floors path." This statement still
    requires MathSciNet/zbMATH and expert citation-chain review.
 
+7. **The five-player proper-coalition counterexample changes the main
+   monotonicity conclusion.**  The game pair raises one proper coalition in
+   an exact game while two members of that coalition lose under the
+   leximin-above-singleton-floors selection.  Dietzenbacher's positive
+   coalitional-monotonicity theorem is not contradicted: it concerns the Lmax
+   selector on the PES-stable domain, not this translated-gain selector on all
+   exact games.  Arin--Kuipers--Vermeulen likewise concern ordinary Lmax on
+   large-core games.  More broadly, Young (1985) is foundational for
+   monotonic solution concepts, and Housman--Clark (1998) prove that no core
+   allocation method is coalitionally monotonic on the full balanced-game
+   domain for four or more players.  That impossibility does not by itself
+   imply failure on the exact-game subclass or identify this selector.  The
+   focused searches located no earlier counterexample for the present
+   selector on exact games.  The defensible formulation is: "We are not aware
+   of an earlier exact-game counterexample to proper-coalition monotonicity of
+   the leximin-above-singleton-floors core selection."  An expert database and
+   citation-chain search remains required before claiming priority.  The
+   present five-player construction also does not prove that five is the
+   minimum possible dimension.
+
 ## Defensible current novelty statement
 
 > We derive a target-conditioned eta-dual correspondence with minimal balanced
@@ -81,6 +104,8 @@ coalitional monotonicity. The closest sources located were:
 > carrier inequality through six players. A triangular three-generator exact
 > family disproves the inequality from seven players onward. We are not aware
 > of an earlier statement of this inequality or its sharp dimension threshold.
+> Separately, an exact five-player lower-envelope pair disproves
+> proper-coalition monotonicity of the leximin-above-singleton-floors selector.
 
 Do not replace “we are not aware” by “first” until the external search is
 completed.

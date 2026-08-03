@@ -929,6 +929,21 @@ Pre-crash progress banked:
   certificates replay without an optimizer.  This proves the carrier bound is
   not necessary for monotonicity and sharply localizes what a true
   counterexample must do.
+- ★ PROPER-COALITION MONOTONICITY REFUTED ON EXACT GAMES: a direct
+  exact-pair construction found a five-player counterexample with zero
+  singleton floors.  The base game is the lower envelope of
+  `A=(2,0,12,6,0)`, `B=(0,0,0,0,20)`, and `P=(0,2,10,4,4)`; the endpoint
+  removes `P`.  Both games are exact, have common total `20`, and differ only
+  at `S=1345`, whose worth rises `18 -> 20`.  Nevertheless
+  `phi_base=(1,1,13/2,5,13/2)` and `phi_end=(2,0,6,6,6)`, so target players
+  3 and 5 each lose `1/2`.  The full path is constant through `tau=19` and
+  equals `(tau-18,20-tau,16-tau/2,tau-14,16-tau/2)` on `[19,20]`.
+  A four-stage hand certificate proves the formula, and the star condition
+  holds at every binding interior point.  Thus the former E' implication is
+  false even along an exact path: the existence of an all-target-improving
+  direction does not force leximin to select it.  An independent direct-pair
+  screen found no drop in 476 binding four-player pairs, but minimum dimension
+  remains unproved.
 - MONOTONICITY CONNECTION: the failure target `S=123` has exact bump capacity
   zero throughout the family.  Coalition `135` is uniquely tight at zero, so
   its face blocks every positive exact bump of `123`.  Thus this carrier

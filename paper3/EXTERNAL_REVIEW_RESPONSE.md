@@ -29,6 +29,15 @@ bump capacity `d*=10>sigma=9`, yet computes the entire admissible leximin path
 and proves it coalitionally monotone.  This result was not within the external
 review's scope and should be audited separately.
 
+The monotonicity question has since been settled negatively by a still newer
+result, also outside the audit's scope.  A five-player exact lower-envelope
+pair differs only by the bump `v(1345):18 -> 20`, but its leximin points are
+`(1,1,13/2,5,13/2)` and `(2,0,6,6,6)`: target players 3 and 5 each lose
+`1/2`.  A solver-free verifier checks both games from their common-total
+generators and proves the complete affine path.  This theorem requires a new
+external audit; none of the review verdicts above should be read as covering
+it.
+
 ## Write-up findings
 
 All sixteen write-up findings were accepted.
@@ -108,6 +117,8 @@ correct steps and verification assumptions were too implicit.  Those points
 have now been made explicit, while the current proof has also reduced its
 dependence on the large computation.
 
-This is still not journal peer review.  The next appropriate review is a
-domain referee checking the new rank-reduced proof and the seven-player
-outside-triple family, since both postdate the external audit.
+This is still not journal peer review.  The highest-priority next review is a
+domain referee checking the new five-player monotonicity counterexample and
+its Maschler-stage proof.  The rank-reduced six-player proof and seven-player
+outside-triple family should also be checked, since all three results postdate
+the external audit.

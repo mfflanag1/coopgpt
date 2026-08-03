@@ -1968,20 +1968,109 @@ Since $a(P\cup C)=v(P\cup C)$ and $P\cap C=\varnothing$, the identity is
 algebraic.  Core feasibility gives $a(C)-v(C)\geq0$.
 \end{proof}
 
-So the bump is realized by a continuous path of \emph{exact} games in which only
-the lower bound $\tau$ on $x(S)$ rises. This isolates the role of exactness: if
-endpoint exactness is weakened to balancedness, the analogous interior path
-need not be exact, and that is precisely the room inhabited by the
-counterexamples of Section~\ref{sec:lx-necessity}. For proper nonsingleton
-bumps on exact games, coalitional monotonicity is therefore equivalent to the
-one-parameter statement:
+The exact interval does not rescue proper-coalition monotonicity.  In fact the
+failure already occurs with five players, zero singleton floors, and a
+two-generator endpoint.
 
-\begin{lemma}[monotone path --- \textsc{open}]\label{lem:lx-C}
-Along the exact path $v_\tau$, the map $\tau\mapsto\phi_i(v_\tau)$ is nondecreasing
-for every $i\in S$ (and, empirically, nonincreasing for $i\notin S$).
-\end{lemma}
+\begin{theorem}[proper-coalition monotonicity fails on exact games]
+\label{thm:lx-proper-exact-fails}
+Let $N=\{1,2,3,4,5\}$, $S=\{1,3,4,5\}$, and let $v$ and $w$ be the
+lower-envelope games generated respectively by
+\[
+ A=(2,0,12,6,0),\qquad B=(0,0,0,0,20),\qquad
+ P=(0,2,10,4,4)
+\]
+and by $A,B$ alone.  Then both games are exact, all singleton values are zero,
+and they differ only at $S$, where
+\[
+ v(S)=18<20=w(S).
+\]
+Nevertheless
+\[
+ \phi(v)=\left(1,1,\frac{13}{2},5,\frac{13}{2}\right),
+ \qquad
+ \phi(w)=(2,0,6,6,6).
+ \tag{PM}\label{eq:lx-proper-exact-counterexample}
+\]
+Thus target players $3$ and $5$ each lose $1/2$.
 
-Two reductions cut the work down further. First, the common case is trivial:
+More precisely, if $v^\tau$ agrees with $v$ off $S$ and
+$v^\tau(S)=\tau$, then every $v^\tau$, $18\leq\tau\leq20$, is exact and
+\[
+ \phi(v^\tau)=
+ \begin{cases}
+  \phi(v),&18\leq\tau\leq19,\\[2mm]
+  (\tau-18,\ 20-\tau,\ 16-\tau/2,\ \tau-14,\ 16-\tau/2),
+       &19\leq\tau\leq20.
+ \end{cases}
+ \tag{PP}\label{eq:lx-proper-exact-path}
+\]
+The losses therefore begin immediately when the bump becomes binding.
+\end{theorem}
+
+\begin{proof}
+The three displayed allocations have common total $20$.  The additional
+generator $P$ lowers only $S$.  Indeed, if $5\notin T$, then
+$B(T)=0\leq P(T)$.  If $5\in T$, then
+\[
+ P(T)-A(T)=4+2\mathbf1_{\{2\in T\}}
+       -2|T\cap\{1,3,4\}|,
+\]
+which is negative only when $T=S$.  At that coalition $P(S)=18$ while
+$A(S)=B(S)=20$.  Thus $v$ and $w$ agree off $S$.  Every generator belongs
+to the corresponding core and attains the coalitions on which it is minimal,
+so both lower-envelope games are exact.  Directly, their common singleton
+floors are zero.
+
+Here is a hand certificate for the first point in
+\eqref{eq:lx-proper-exact-counterexample}.  In the base game
+$v(345)=18$, so efficiency gives $x_1+x_2\leq2$.  Hence the first common
+gain is at most one, and equality pins players $1,2$.  On that face the
+remaining total is $18$, while $v(135)=14$ gives
+$x_3+x_5\geq13$ and therefore $x_4\leq5$.  This pins player~4; efficiency
+leaves $x_3+x_5=13$, which the last stage equalizes.  The resulting point is
+the displayed $\phi(v)$ and direct substitution places it in the core.
+
+For the endpoint, $w(S)=20$ and efficiency pin player~2 at zero.  Next
+$w(345)=18$ gives $x_1\leq2$.  After player~1 is pinned at two, the remaining
+total is $18$ and $w(35)=12$ gives $x_4\leq6$; the last pair is equalized.
+This gives $\phi(w)=(2,0,6,6,6)$, again core-feasible by direct substitution.
+
+For the path, $\phi(v)(S)=19$, so the nonbinding part is constant.  Suppose
+$19\leq\tau\leq20$.  The target constraint and efficiency first give
+$x_2\leq20-\tau$.  Once player~2 is pinned, $v(345)=18$ gives
+$x_1\leq\tau-18$.  On the resulting face $x(345)=18$; using
+$v(135)=14$ gives $x_4\leq\tau-14$.  Finally
+$x_3+x_5=32-\tau$, so the last stage equalizes them.  These four bounds give
+\eqref{eq:lx-proper-exact-path}.  Every coordinate is affine, and direct
+core feasibility at $\tau=19,20$ proves feasibility throughout the segment.
+Exactness throughout is Lemma~\ref{lem:lx-interval}.
+\end{proof}
+
+The example also closes the proposed cone route.  For every
+$19\leq\tau<20$, the core point
+\[
+ y^\tau=(2,0,16-\tau/2,\tau-14,16-\tau/2)
+\]
+weakly dominates $\phi(v^\tau)$ on $S$ and has $y^\tau(S)=20>\tau$.
+Thus $(\star_S)$ holds along the entire binding interior, even while players
+$3$ and $5$ decrease.  The implication ``$(\star_S)$ along an exact path
+implies coordinatewise monotonicity'' is therefore false; the carrier
+program controls exact bump capacity but cannot prove monotonicity of this
+selector.
+
+This negative result should be read against the classical impossibility
+literature, not as an unrestricted first impossibility theorem.
+\citet{Young1985} initiated the modern monotonic-solution program, and
+\citet{HousmanClark1998} prove that no core allocation method can be
+coalitionally monotonic on the full balanced-game domain once there are at
+least four players.  Their domain theorem does not itself imply failure on
+the exact-game subclass, nor does it identify the present
+leximin-above-singleton-floors selector.  Theorem~\ref{thm:lx-proper-exact-fails}
+supplies that more specific conclusion with a five-player rational
+certificate.  We do not claim that five is the minimum possible dimension.
+
+The common nonbinding case remains elementary:
 
 \begin{lemma}[non-binding]\label{lem:lx-nonbinding}
 If $\phi(v)(S)\ge v(S)+d$ then $\phi(v')=\phi(v)$.
@@ -1992,79 +2081,18 @@ $\core(v')$, hence is the leximin point of the smaller set too; $\phi$ is
 single-valued.
 \end{proof}
 
-\noindent Binding ($\phi(v)(S)<v(S)+d$) requires $\phi(v)(S)<\max_{\core}x(S)$ and
-is empirically rare. In every binding case observed (thousands of exact-preserving
-bumps at $n\le6$, zero violations) one finds $\phi(v')(S)=v(S)+d$ and the two-sided
-pattern $\phi_i(v')\ge\phi_i(v)$ for $i\in S$, $\le$ for $i\notin S$.
-
-\paragraph{A cone criterion.} For $x=\phi(w)$ with tight set
-$\mathcal T(x)=\{T:x(T)=w(T)\}$, say $(\star_S)$ holds if there is $e\in\R^N$ with
-\[
-  e(N)=0,\quad e(S)>0,\quad e_i\ge0\ \ (i\in S),\quad e(T)\ge0\ \ (T\in\mathcal T(x)):
-\]
-a first-order direction raising $x(S)$ without lowering any member of $S$ or
-breaking a tight core constraint. Empirically $(\star_S)$ is \emph{necessary} for
-the bump to be monotone (it fails at $\phi(v)$ in Example~\ref{ex:lx-n5}, which is
-why player $2$ must drop), and exactness supplies it. This suggests the skeleton
-\begin{enumerate}[label=(\Alph*),leftmargin=2.3em]
-\setcounter{enumi}{3}
-\item[(A)] Lemma~\ref{lem:lx-interval}: the bump path is exact;
-\item[(D)] each exact $v_\tau$ satisfies $(\star_S)$ at $\phi(v_\tau)$;
-\item[(E$'$)] $(\star_S)$ along the whole path implies Lemma~\ref{lem:lx-C},
-\end{enumerate}
-whose composition is the theorem. The supporting evidence is summarized in
-Table~\ref{tab:lx-evidence}; (D) and (E$'$) remain open, and $(\star_S)$ alone is
-\emph{not} sufficient (the last row), so a proof of (E$'$) must use exactness along
-the whole path, not merely $(\star_S)$ at one endpoint.
-
-\begin{table}[t]
-\centering
-\small
-\caption{Computational evidence (float LP, exact-certifiable) for the reduction.
-$(\star_S)$ evaluated at $\phi$ of the base game; ``binding'' bumps only.}
-\label{tab:lx-evidence}
-\begin{tabular}{@{}p{0.52\linewidth}p{0.22\linewidth}p{0.16\linewidth}@{}}
-\toprule
-statement & sample & violations\\
-\midrule
-$\phi$ monotone for sampled proper exact bumps (mixed sizes) & $2000+$ bumps, $n\le6$ & $0$\\
-(D) exact $\Rightarrow(\star_S)$ at $\phi$ & $39/39$, $13/13$ & $0$\\
-monotone $\Rightarrow(\star_S)$ & all balanced & $0$\\
-$(\star_S)$ along the path $\Rightarrow$ monotone & $600$ & $0$\\
-$(\star_S)$ at one endpoint $\Rightarrow$ monotone & $1696$ balanced & $22$ non-exact\\
-\bottomrule
-\end{tabular}
-\end{table}
-
-\paragraph{The open problem, sharply.} A Farkas dual turns (D) into a statement
-about a single maximal face of the core. For a core point $y$ written as a mixture
-of core points, $y(T)\ge v(T)=\phi(T)$ at every tight $T$, so $e=y-\phi$ meets the
-tight-cone part of $(\star_S)$ automatically; hence
-\begin{align*}
-  (\star_S)\ &\Longleftrightarrow\ \exists\,y\in\core(v):\ y_i\ge\phi_i\ (i\in S)
-   \ \text{and}\ y(S)>\phi(S)\\
-  &\Longleftrightarrow\ \max\{y(S):y\in\core(v),\,y_i\ge\phi_i\ (i\in S)\}>\phi(S).
-\end{align*}
-Dualizing (verified in $200/200$ random balanced cases, exact-certifiable):
-\begin{quote}
-$(\star_S)$ \emph{fails} at $\phi(v)$ if and only if $\phi(v)$ maximizes
-\[
-  \sum_{k\in S}r_k\,x_k
-\]
-over $\core(v)$ for some weights $r_k\ge1$ on $S$ and zero weights outside
-$S$.
-\end{quote}
-Equivalently, the tight coalitions $\{T:\phi(T)=v(T)\}$ carry nonnegative weights and
-a $\beta\ge1$ covering each $k\notin S$ exactly $\beta$ and each $k\in S$ at most
-$\beta-1$. Thus \textbf{Lemma~\ref{lem:lx-C}'s hypothesis (D) is exactly the assertion
-that an exact game's leximin point never lies on a positive-$S$-weighted maximal face
-of its core at a binding-bumpable $S$.} Uniform weights $r_k\equiv c$ are already
-excluded, since maximizing $c\,x(S)$ would force $\phi(S)=\max_{\core}x(S)$, contrary
-to binding-bumpability; \emph{the entire open content is that exactness excludes the
-non-uniform such faces.} The non-exact counterexamples of
-Section~\ref{sec:lx-necessity} realize exactly such faces---this is why $(\star_S)$
-fails there and a member of $S$ drops. (A corner scan for a deficient $S$-member
-pinned at its core-maximum found no occurrence in any exact binding case, $0/16^+$.)
+\paragraph{The separate star-failure capacity question.}
+For a core point $x=\phi(v)$, condition $(\star_S)$ means that some
+$y\in\core(v)$ weakly raises every coordinate in $S$ and strictly raises
+$y(S)$.  Its Farkas dual says that failure is equivalent to $\phi(v)$
+maximizing a positive weighted sum $\sum_{k\in S}r_kx_k$ over the core.
+Theorem~\ref{thm:lx-proper-exact-fails} has $(\star_S)$ throughout its
+binding interior, so it does not challenge the capacity results below.
+Instead it shows that capacity and coordinatewise monotonicity are different
+questions: a feasible direction that raises every target member need not be
+the direction selected by the next leximin stages.  The remaining
+star-failure analysis therefore concerns when an exact bump can become
+binding, not whether the selector is monotone once it does.
 
 \paragraph{The natural certificate is provably wrong.} Where $(\star_S)$
 \emph{does} fail, one would like to prove $d^*_v(S)=0$ and thereby certify
@@ -3559,15 +3587,16 @@ $(\gamma,\eta)=(3/4,0)$ at its leximin point, so this finite theorem is
 dimension-sharp.
 
 \begin{remark}
-Lemma~\ref{lem:lx-C} is a leximin parametric-monotonicity statement; its cousin the
-nucleolus is \emph{not} coalitionally monotone, so exactness (Lemma
-\ref{lem:lx-interval}) is doing real work and the ``self-defeating within-$S$
-transfer'' heuristic is not by itself a proof. For proper coalitions of size at
-least three we leave (D), (E$'$) open and record
-the conditional theorem: \emph{on exact games, $\phi$ is monotone under proper
-nonsingleton bumps provided Lemma~\ref{lem:lx-C} holds}; singleton and
-grand-coalition bumps remain outside this reduction.  The singleton case is
-settled positively by Theorem~\ref{thm:lx-singleton}, while the grand case is
-settled negatively by Theorem~\ref{thm:lx-grand-fails}; the necessity direction
-(Theorem~\ref{thm:lx-necessity}) is also unconditional.
+The monotonicity picture is now complete in sign, though not in minimum
+dimension.  Singleton bumps are monotone by
+Theorem~\ref{thm:lx-singleton}; grand-coalition resource monotonicity fails by
+Theorem~\ref{thm:lx-grand-fails}; and proper nonsingleton coalitional
+monotonicity fails on exact five-player games by
+Theorem~\ref{thm:lx-proper-exact-fails}.  A direct randomized screen found no
+proper exact failure among $476$ binding four-player pairs, but this is finite
+evidence rather than a four-player theorem.  The exact counterexample also
+shows why the earlier cone heuristic failed: an all-target-improving feasible
+direction exists throughout the binding path, but leximin re-equalization
+selects a different direction that lowers two previously advantaged target
+players.
 \end{remark}

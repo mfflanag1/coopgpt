@@ -288,9 +288,47 @@ python src/verify_n7_binding_carrier_monotone_path.py
 ```
 
 This example proves that the quantitative carrier inequality is not necessary
-for proper-coalition monotonicity.  A genuine monotonicity counterexample must
-cross the capacity boundary and also make at least one target coordinate fall;
-this first bumpable carrier obstruction does neither.
+for proper-coalition monotonicity.  It does not itself make a target coordinate
+fall.  The separate five-player construction below now shows that such a fall
+is possible even though the carrier inequality remains valid in that
+dimension.
+
+## Proper-coalition monotonicity actually fails at five players
+
+After translating singleton floors to zero, let
+
+```text
+A = (2,0,12,6,0)
+B = (0,0,0,0,20)
+P = (0,2,10,4,4)
+S = 1345.
+```
+
+Let the base game be the lower envelope of `A,B,P` and the endpoint game the
+lower envelope of `A,B`.  Both are exact common-total lower envelopes and
+differ only at `S`, where the worth rises from `18` to `20`.  Yet
+
+```text
+phi(base)     = (1,1,13/2,5,13/2)
+phi(endpoint) = (2,0,6,6,6).
+```
+
+Target players 3 and 5 each lose `1/2`.  The complete binding path is
+
+```text
+(tau-18, 20-tau, 16-tau/2, tau-14, 16-tau/2),  19 <= tau <= 20.
+```
+
+Thus the losses start immediately at the binding threshold.  Moreover the
+star condition holds at every interior point: a core witness weakly raises
+all target members and raises the target total to `20`.  This refutes the
+previously conjectured implication from an all-target-improving feasible
+direction to the direction selected by leximin.  Replay the solver-free
+certificate with:
+
+```sh
+python src/verify_n5_exact_leximin_monotonicity_counterexample.py
+```
 
 Three is sharp among both arbitrary-reference and leximin seven-player
 obstructions.  The
