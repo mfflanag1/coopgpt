@@ -2165,8 +2165,98 @@ Moreover, \citet{HousmanClark1998} prove that no core allocation method can
 be coalitionally monotonic on the full balanced-game domain once there are at
 least four players.  None of these results itself supplies an exact-game
 proper-coalition counterexample for Lmin.  Theorem~\ref{thm:lx-proper-exact-fails}
-does so with a five-player rational certificate.  We do not claim that five
-is the minimum possible dimension.
+does so with a five-player rational certificate.  The next result shows that
+five is the minimum possible dimension.
+
+\begin{lemma}[richer-suffix tightness through four players]
+\label{lem:lx-richer-suffix}
+Let $v$ be an exact game with $|N|\leq4$ and $v(\{i\})=0$ for every player.
+Order the payoff strata of $\operatorname{Lmin}(v)$ as
+$B_1,\ldots,B_k$ from lowest to highest.  At every strict gap, the richer
+suffix is tight:
+\[
+ H_j:=B_{j+1}\cup\cdots\cup B_k,
+ \qquad
+ \operatorname{Lmin}(v)(H_j)=v(H_j)
+ \quad (j<k).
+ \tag{RST}\label{eq:lx-richer-suffix}
+\]
+Consequently $\operatorname{Lmin}(v)$ Lorenz-dominates the core and equals
+$\operatorname{Lmax}(v)$.
+\end{lemma}
+
+\begin{proof}[Computer-assisted proof]
+Put $\phi=\operatorname{Lmin}(v)$ and
+$s(T)=\phi(T)-v(T)$.  Exactness has the following definition-level linear
+encoding.  For every nonempty proper coalition $C$ there is a displacement
+$d^C$ such that
+\[
+ d^C(N)=0,\qquad d^C(C)=-s(C),\qquad
+ d^C(T)\geq-s(T)\quad(\emptyset\ne T\subsetneq N).
+ \tag{EF}\label{eq:lx-exact-face-encoding}
+\]
+At Maschler stage $j$, maximize the common floor of the players not yet
+pinned, subject to the core constraints and the earlier pins.  On the
+level-optimal face, maximize each coordinate in $B_j$ separately; its optimum
+is still that stage's level, since precisely those players are pinned.  Exact
+KKT multipliers for these linear programs, together with
+\eqref{eq:lx-exact-face-encoding}, give a rational linear feasibility system.
+
+There are respectively $1$, $3$, and $7$ nonconstant ordered payoff-stratum
+compositions for two, three, and four players.  Seven patterns are already
+infeasible under exactness and the Lmin pin conditions.  In each of the four
+remaining, realizable patterns, adjoining
+\[
+ \bigvee_{j<k}s(H_j)>0
+\]
+is infeasible in exact linear rational arithmetic.  Thus every nominal case
+is closed, and the suffix-slack contradiction is nonvacuous whenever its
+stratum pattern is realizable.  Strict adjacent payoff
+gaps may be normalized to at least one because the entire system is positively
+homogeneous.  The verifier constructs every system directly; it and its
+machine-readable output are, respectively,
+\begin{center}
+\small\path{src/verify_n4_exact_lmin_pes_bridge.py},\\[-2pt]
+\small\path{results/n4_exact_lmin_pes_bridge.json}.
+\end{center}
+As load-bearing negative
+controls, deleting either all exact-face witnesses or all individual-pinning
+programs makes some systems feasible.  This proves
+\eqref{eq:lx-richer-suffix}.  The one-stratum case is immediate.
+
+For the final implication, take any $x\in\core(v)$ and let $H$ consist of the
+$r$ richest coordinates of $\phi$, at a stratum boundary.  Then
+\[
+ \sum_{i=1}^{r}x_i^{\downarrow}\geq x(H)\geq v(H)=\phi(H)
+   =\sum_{i=1}^{r}\phi_i^{\downarrow}.
+\]
+Between consecutive boundaries the same inequality follows by linear
+interpolation across the tied block.  Thus every upper-tail sum of $\phi$ is
+weakly smaller than the corresponding upper-tail sum of every core point.
+Since totals agree, $\phi$ Lorenz-dominates the core and hence is Lmax.
+\end{proof}
+
+\begin{theorem}[the five-player failure is dimension-minimal]
+\label{thm:lx-proper-minimum-dimension}
+Normalized Lmin is coalitionally monotonic on exact games with at most four
+players.  Proper-coalition monotonicity fails at five players by
+Theorem~\ref{thm:lx-proper-exact-fails}; hence five is the minimum possible
+dimension.
+\end{theorem}
+
+\begin{proof}
+Translate an exact game by its singleton vector as in
+\eqref{eq:lx-normalized-lmin}; exactness and the large-core property are
+preserved.  Exact games with at most four players have large cores
+\citep{Biswas1999}, and large-core games are egalitarian stable
+\citep{Dietzenbacher2021}.  On the latter domain the procedural egalitarian
+solution equals Lmax and is coalitionally monotonic
+\citep{Dietzenbacher2021}.  Lemma~\ref{lem:lx-richer-suffix} identifies Lmin
+with that solution after normalization.  This proves every bump that leaves
+the singleton vector fixed; singleton bumps are covered independently by
+Theorem~\ref{thm:lx-singleton}.  The five-player counterexample supplies the
+sharp lower bound.
+\end{proof}
 
 The common nonbinding case remains elementary:
 
@@ -3685,14 +3775,12 @@ $(\gamma,\eta)=(3/4,0)$ at its leximin point, so this finite theorem is
 dimension-sharp.
 
 \begin{remark}
-The monotonicity picture is now complete in sign, though not in minimum
-dimension.  Singleton bumps are monotone by
+The monotonicity picture is now sharp in minimum dimension.  Singleton bumps are monotone by
 Theorem~\ref{thm:lx-singleton}; grand-coalition resource monotonicity fails by
 Theorem~\ref{thm:lx-grand-fails}; and proper nonsingleton coalitional
 monotonicity fails on exact five-player games by
-Theorem~\ref{thm:lx-proper-exact-fails}.  A direct randomized screen found no
-proper exact failure among $476$ binding four-player pairs, but this is finite
-evidence rather than a four-player theorem.  The exact counterexample also
+Theorem~\ref{thm:lx-proper-exact-fails}, at the minimum possible size by
+Theorem~\ref{thm:lx-proper-minimum-dimension}.  The exact counterexample also
 shows why the earlier cone heuristic failed: an all-target-improving feasible
 direction exists throughout the binding path, but leximin re-equalization
 selects a different direction that lowers two previously advantaged target

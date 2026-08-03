@@ -1,9 +1,9 @@
 # Four-player Lmin minimality program
 
-## Candidate sharp theorem
+## Sharp theorem (exact symbolic certificate)
 
-The five-player exact lower-envelope pair in the manuscript may be
-dimension-minimal:
+The five-player exact lower-envelope pair in the manuscript is
+dimension-minimal, subject to external review of the new symbolic lemma:
 
 > If `|N| <= 4`, normalized Lmin is coalitionally monotone on every pair of
 > exact games that differ by increasing the worth of one coalition.
@@ -14,7 +14,7 @@ the manuscript.  The only unresolved shape is therefore `|S|=3`, `|P|=1`.
 By efficiency, raising `v(S)` is exactly the operation of tightening an upper
 bound on the one outside player's payoff.
 
-## A promising literature bridge, and its precise missing link
+## Literature bridge and the new missing-link theorem
 
 After translating singleton values to zero, the manuscript's selector is the
 ordinary Lmin solution.  Biswas, Parthasarathy, Potters, and Voorneveld (1999,
@@ -23,15 +23,21 @@ core.  Dietzenbacher (2021, Lemmas 3.2--3.3 and Theorem 3.5) proves that large
 core games are egalitarian stable and that PES=Lmax is coalitionally
 monotone on the egalitarian-stable domain.
 
-This does **not** yet prove the candidate theorem.  The missing statement is
+The formerly missing statement is now verified in exact linear rational
+arithmetic:
 
 > **Four-player bridge.** On every singleton-normalized exact game with at
 > most four players, `Lmin = PES = Lmax`.
 
-The distinction is load-bearing: Lmin and Lmax can differ on general
-egalitarian-stable games, and largeness by itself has not been shown here to
-identify them.  The current manuscript must not cite the two known theorems
-as a proof until this bridge is established.
+The distinction remains load-bearing: Lmin and Lmax can differ on general
+egalitarian-stable games, so largeness alone does not identify them.  The new
+verifier `src/verify_n4_exact_lmin_pes_bridge.py` establishes the bridge by
+showing that every richer-player suffix at a strict Lmin payoff gap is tight.
+It checks all 1, 3, and 7 nonconstant ordered payoff-stratum compositions for
+two, three, and four players.  Seven patterns are impossible already; in the
+other four the positive-suffix-slack query is nonvacuously infeasible.
+Removing either the exact-face witnesses or the individual-pinning dual
+programs opens satisfiable negative-control cases.
 
 The bridge is dimension-sharp on the known witness.  For the five-player base
 game,
@@ -65,8 +71,8 @@ drop.  In a separate exact-rational check of 100 randomly generated,
 singleton-normalized exact four-player games, Lmin and PES agreed in every
 case.
 
-These are discovery facts, not theorem evidence.  The screen deliberately
-labels itself finite and sends any floating drop flag to an exact replay.
+These remain discovery evidence and independent stress tests, not the proof.
+The theorem evidence is the symbolic KKT/exact-face certificate above.
 
 ## Structural clue from trying to compress the witness
 
@@ -93,15 +99,43 @@ obvious four-player compression is incompatible with exactness and suggests
 the final proof: show from the two Maschler stage sequences that any target
 drop forces precisely these two tight coalitions (up to relabeling).
 
-## Proof tasks
+## Completed proof route and remaining audit tasks
 
-1. Derive the complete four-player Maschler active-set alternatives after the
-   outside-player cap becomes binding.
-2. Show that every alternative containing a target decrease forces the
-   `ac`/`bc` configuration above, or an equivalent exactness contradiction.
-3. Alternatively, prove the four-player bridge `Lmin=PES` directly from the
-   exactness inequalities used in Biswas et al.'s Theorem 3.
-4. Once proved, combine it with Dietzenbacher's coalitional monotonicity of
-   PES/Lmax to state the sharp dichotomy: valid through four players and false
-   from five players onward (the latter by null-player extension of the
-   five-player witness).
+1. Completed: encode exactness definitionally by a core displacement attaining
+   every proper face.
+2. Completed: encode every progressive Lmin common-level program and every
+   individual pin by exact KKT multipliers.
+3. Completed: prove all richer-player suffixes tight in all eleven stratum
+   patterns; deduce Lorenz dominance and `Lmin=Lmax`.
+4. Completed: combine the bridge with Biswas et al. and Dietzenbacher to prove
+   monotonicity through four players and sharpness at five.
+5. Remaining: obtain an independent hostile audit of the symbolic encoding and
+   the literature bridge; ideally extract small Farkas certificates for the
+   eleven infeasible systems.
+
+No claim is made that the five-player failure extends to every higher
+dimension by null players: a naive null extension changes several coalitions,
+not a single coalition, and therefore does not preserve the required bump
+pair.
+
+## Focused novelty check (2026-08-03)
+
+Exact-phrase and terminology searches for `exact games + Lmin + Lmax`, `Lmin
+solution + exact games + four players`, and `leximin stable allocation + exact
+game` located the standard defining and neighboring papers but no statement of
+the bridge above.  The closest results inspected were:
+
+- Arin--Iñarra (2001), introducing Lmin on balanced games;
+- Arin--Kuipers--Vermeulen (2003), defining Lmax and characterizing it on
+  large-core games;
+- Llerena--Mauri (2016), a reduced-game route to Lmax on a class containing
+  large-core games;
+- Dietzenbacher (2021), proving PES=Lmax and coalitional monotonicity on the
+  egalitarian-stable domain and explicitly observing that exact games through
+  four players lie in that domain.
+
+None of those sources identifies Lmin with Lmax on four-player exact games.
+This is a focused search, not a definitive MathSciNet/zbMATH novelty opinion;
+the manuscript should retain cautious language until a specialist referee has
+checked adjacent terminology such as lexicographically minimal/maximal,
+Lorenz-stable, and exact-partition games.

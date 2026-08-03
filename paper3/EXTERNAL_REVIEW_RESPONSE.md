@@ -39,6 +39,19 @@ generators and proves the complete affine path.  This theorem requires a new
 external audit; none of the review verdicts above should be read as covering
 it.
 
+A still later computer-assisted bridge now proves that this five-player
+failure is dimension-minimal.  For every singleton-normalized exact game with
+at most four players, an exact symbolic KKT/exact-face certificate forces every
+richer-player suffix at a strict Lmin payoff gap to be tight.  The resulting
+hand argument shows that Lmin Lorenz-dominates the core and equals Lmax/PES;
+Biswas et al. (1999) and Dietzenbacher (2021) then imply coalitional
+monotonicity through four players.  This bridge checks all eleven nonconstant
+ordered stratum patterns for two through four players and includes two
+load-bearing negative controls.  Seven patterns are impossible outright and
+the suffix result is nonvacuous in all four realizable patterns.  The bridge
+also postdates the hostile audit and
+must not be described as externally reviewed.
+
 A post-review literature correction also changes the nomenclature.  The
 leximin-above-singleton-floors selector is exactly `m + Lmin(v^0)`, where
 `m_i=v({i})` and `v^0` is the singleton-normalized game.  Arin--Iñarra (2001)
@@ -129,7 +142,7 @@ have now been made explicit, while the current proof has also reduced its
 dependence on the large computation.
 
 This is still not journal peer review.  The highest-priority next review is a
-domain referee checking the new five-player monotonicity counterexample and
-its Maschler-stage proof.  The rank-reduced six-player proof and seven-player
-outside-triple family should also be checked, since all three results postdate
-the external audit.
+domain referee checking the new five-player monotonicity counterexample, its
+Maschler-stage proof, and the symbolic minimum-dimension bridge.  The
+rank-reduced six-player proof and seven-player outside-triple family should
+also be checked, since all four results postdate the external audit.

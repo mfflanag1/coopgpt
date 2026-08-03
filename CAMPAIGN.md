@@ -942,8 +942,8 @@ Pre-crash progress banked:
   holds at every binding interior point.  Thus the former E' implication is
   false even along an exact path: the existence of an all-target-improving
   direction does not force leximin to select it.  An independent direct-pair
-  screen found no drop in 476 binding four-player pairs, but minimum dimension
-  remains unproved.
+  screen found no drop in 476 binding four-player pairs; the later exact
+  suffix-tightness theorem now proves minimum dimension five.
 - MONOTONICITY CONNECTION: the failure target `S=123` has exact bump capacity
   zero throughout the family.  Coalition `135` is uniquely tight at zero, so
   its face blocks every positive exact bump of `123`.  Thus this carrier
@@ -968,7 +968,22 @@ Pre-crash progress banked:
   so it is directly a proper-coalition monotonicity counterexample for Lmin on
   exact games.  Novelty is the exact-game/proper-coalition theorem and compact
   certificate, not the selector itself.
-- N=4 MINIMALITY LEAD (NOT YET A THEOREM): after singleton normalization,
+- ★ N=5 LMIN FAILURE IS DIMENSION-MINIMAL (NEW COMPUTER-ASSISTED THEOREM):
+  an exact symbolic certificate proves that every richer-player suffix at a
+  strict Lmin payoff gap is tight in every singleton-normalized exact game
+  with two, three, or four players.  It exhausts the 1, 3, and 7 nonconstant
+  ordered stratum compositions using definition-level exact-face witnesses
+  and exact KKT duals for both common-level and individual-pinning programs.
+  Seven nominal patterns are themselves impossible; all four realizable
+  patterns nonvacuously force tight richer suffixes.
+  Hence Lmin Lorenz-dominates the core and equals Lmax/PES through n=4.
+  Biswas et al. (1999) plus Dietzenbacher (2021) then give coalitional
+  monotonicity through four players, while the exact five-player witness above
+  is sharp.  Negative controls become satisfiable after deleting either
+  exactness or individual pins.  External review of this new bridge remains
+  required; see `src/verify_n4_exact_lmin_pes_bridge.py` and
+  `paper3/N4_LMIN_MINIMALITY_PROGRAM.md`.
+- N=4 MINIMALITY SCREEN (NOW INDEPENDENT SUPPORT): after singleton normalization,
   normalized Lmin agreed exactly with PES/Lmax on 100 random exact
   four-player games.  This suggests a sharp literature bridge: Biswas et al.
   (1999) prove exact games have large cores through four players, and
