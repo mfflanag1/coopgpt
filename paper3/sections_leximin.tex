@@ -1142,30 +1142,102 @@ There is no three-level vertex in the $3+3$ split.
 \begin{proof}
 By Lemma~\ref{lem:lx-eta-minimal-balanced}, adjoining $S$ and the positive
 target-singleton columns gives a minimal balanced collection with at most six
-members.  Let $q$ be the number of positive $w_i$.  The collection cannot
-contain $S$ and all target singletons, since their incidence columns are
-linearly dependent.  Thus at least one $w_i$ is zero.  Three distinct levels
-therefore require at least two distinct positive singleton coefficients, so
+members.  Let $q$ be the number of positive $w_i$ and $r$ the number of
+remaining coalition columns.  The collection cannot contain $S$ and all
+target singletons, since those incidence columns are dependent.  Thus at
+least one $w_i$ is zero, and three levels require
 \[
- 2\leq q\leq |S|-1.
+ 2\leq q\leq |S|-1,
+ \qquad r\leq5-q\leq3.                         \tag{R}
 \]
-After $S$ and these $q$ singleton columns are fixed, the rank-six bound leaves
-at most $5-q\leq3$ further coalition columns.  This is a small finite
-$0$--$1$ incidence problem, not an exact-game cone optimization.  Exact
-determinant elimination gives
+
+There is a compact way to classify these residual columns.  Write their
+positive coefficients as $\lambda_1,\ldots,\lambda_r$, let $\beta$ be the
+common balanced degree, and put $z_j=\lambda_j/\beta$.  If
+$a_i\in\{0,1\}^r$ is the trace row of target player $i$, balance gives
 \[
-\begin{array}{c|r|r|r}
-(|S|,|P|)&\text{supports checked}&\text{three-level supports}
- &\text{symmetry orbits}\\ \hline
-(3,3)&32{,}567&0&0\\
-(4,2)&32{,}566&8&1.
-\end{array}
+ a_i\mathbin{\cdot}z=h-\frac{w_i}{\beta},
+ \qquad h:=1-\frac1\beta.                       \tag{H}
+ \label{eq:lx-n6-subset-height}
 \]
-The unique orbit is \eqref{eq:lx-n6-exceptional-three-level}.  These counts,
-positivity of the balancing weights, column independence, and orbit uniqueness
-are replayed in exact integer arithmetic by
-\path{src/verify_n6_three_level_eta_duals.py}, with output
-\path{results/n6_three_level_eta_duals.json}.
+Every zero-floor target row therefore has subset-sum height $h<1$, every
+positive-floor row has smaller height, and every outside trace row has height
+one.  Three floor levels require at least two distinct subset-sum heights
+strictly below $h$.
+
+First take the $3+3$ split.  Necessarily $q=2$.  Modulo
+$\mathbf1_S,e_1,e_2$, the residual columns are exactly their three outside
+traces and remain independent.  For $r=1,2,3$, the full-column-rank binary
+matrices whose rows all have $z$-height one reduce, up to row and column
+permutations, to
+\[
+ \begin{array}{c|c}
+ r&z\\ \hline
+ 1&(1)\\
+ 2&(1,1)\\
+ 3&(1,1,1)\quad\hbox{or}\quad(1/2,1/2,1/2).
+ \end{array}                                      \tag{M3}
+ \label{eq:lx-n6-reduced-matrices}
+\]
+Indeed, for $r=3$, an invertible binary matrix $R$ with
+$Rz=\mathbf1$ either has a row of weight one, which reduces inductively to a
+permutation matrix, or every row has weight two, which forces
+$R=J-I$; a weight-three row would make every row identical.  The cases
+$r<3$ are the same argument with fewer columns.  In every row of
+\eqref{eq:lx-n6-reduced-matrices}, a subset sum $h<1$ has at most one distinct subset-sum value below
+it.  Hence the $3+3$ split cannot have three floor levels.
+
+Now take the $4+2$ split.  If $q=3$, quotienting by
+$\mathbf1_S,e_1,e_2,e_3$ leaves at most two independent outside columns.
+Their normalized weights are $(1)$ or $(1,1)$, so a zero-floor height below
+one has no smaller nonnegative subset sum; this is impossible with positive
+floors.  Thus $q=2$.  Quotient by $\mathbf1_S,e_1,e_2$ using the coordinates
+\[
+ x\longmapsto(x_3-x_4,x_5,x_6).                  \tag{Q}
+ \label{eq:lx-n6-quotient-map}
+\]
+If $r\leq2$, equal heights for the two zero-floor rows either make their
+traces equal, forcing the outside traces to have full column rank and weights
+$(1)$ or $(1,1)$, or force the two weights to be equal.  In the latter case
+outside balance makes that common weight $1$ or $1/2$.  Again there is at
+most one subset-sum height below $h$.  Therefore $r=3$.
+
+Let $a_3,a_4$ be the zero-floor trace rows and $b_5,b_6$ the outside trace
+rows.  The three quotient columns in \eqref{eq:lx-n6-quotient-map} are independent, so
+\[
+ (a_3-a_4)\mathbin{\cdot}z=0,
+ \qquad (b_5-b_6)\mathbin{\cdot}z=0              \tag{E}
+\]
+are independent relations.  After common coordinates are cancelled, every
+equality between distinct subsets of three positive numbers has one of only
+two forms:
+\[
+ z_i=z_j \quad\text{or}\quad z_i+z_j=z_k.        \tag{ES}
+\]
+Two independent sum-type relations are incompatible with positivity.  Two
+equality-type relations make all three weights equal; outside degree then
+sets the common weight to $1$ or $1/2$, leaving at most one height below
+$h<1$.  In the mixed case write the weights as $(t,t,2t)$.  If the zero-floor
+relation is the equality type, the outside sum relation gives $t=1/2$ and
+$h=t$ or $3t$, again impossible.  Hence the zero-floor relation is
+$2t=t+t$, so $h=2t$.  The outside equality relation either has no common
+coordinate, giving $t=1$ and $h>1$, or shares the coordinate of weight $2t$,
+giving
+\[
+ 3t=1,\qquad z=(1/3,1/3,2/3),\qquad h=2/3.     \tag{U}
+\]
+The only two lower heights are $0$ and $1/3$.  Equation~\eqref{eq:lx-n6-subset-height} now gives
+$\beta=3$, residual coefficients $(1,1,2)$, and positive floor coefficients
+$2$ and $1$.  Reconstructing the traces, up to target and outside
+permutations, gives exactly
+\eqref{eq:lx-n6-exceptional-three-level}.
+
+Thus the classification is a three-weight subset-sum argument rather than a
+coalition census.  A solver-free exact replay of the reduced matrices is in
+\path{src/verify_n6_three_level_matrix_classification.py}, with output
+\path{results/n6_three_level_matrix_classification.json}.  The earlier
+$65{,}133$-support determinant scan remains as independent redundancy and is
+indexed in the supplement.
 
 For the exceptional orbit, the carrier inequality with $C=\{4\}$ is
 $s(456)-s(4)\geq\gamma_S$.  Slack nonnegativity therefore gives
@@ -1879,13 +1951,17 @@ $S$, the zero-cost eta support in \eqref{eq:lx-n7-sharp-identity} is a minimal
 balanced collection of seven linearly independent incidence columns.  The
 outside-triple identity \eqref{eq:lx-n7-outside-triple-identity} has the same
 rank-seven feature.  Six players permit at most six independent columns;
-combined with the two-level separator theorem, this leaves only the single
+after the target and its positive singleton columns are removed, at most
+three positive residual weights remain.  The two-level separator theorem
+forces two independent equal-subset-sum relations among those weights, and
+the elementary alternatives $z_i=z_j$ and $z_i+z_j=z_k$ leave only the single
 rank-six three-level orbit in
 \eqref{eq:lx-n6-exceptional-three-level}, which one carrier inequality
-defeats.  Seven players are the first dimension in which multiple residual
-three-level orbits survive that rank squeeze, and fourteen of them have zero
-cost on the exact-game cone.  This is the conceptual six/seven transition;
-the larger $1{,}489$-orbit audit is only independent redundancy.
+defeats.  Seven players are the first dimension permitting a fourth residual
+weight; the two three-weight relation types no longer exhaust the geometry.
+Multiple three-level orbits survive, and fourteen have zero cost on the
+exact-game cone.  This is the conceptual six/seven transition; the support
+censuses and the larger $1{,}489$-orbit audit are independent redundancy.
 
 The slack certificate is automatic on the most important thin-core model
 class used by the searches.

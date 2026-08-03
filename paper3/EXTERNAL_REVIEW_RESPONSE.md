@@ -16,9 +16,10 @@ the leximin calculation.  No counterexample or invalid inference was found in
 the commissioned theorem chain.
 
 The current paper is stronger than the audited revision.  Its six-player
-theorem now follows from the two-level separator theorem and a focused
-rank-six classification of 65,133 supports; the 1,489-orbit computation is
-retained only as independent redundancy.  At seven players the paper now
+theorem now follows from the two-level separator theorem and a hand-checkable
+classification of two equal-subset-sum relations among three positive
+weights; the 65,133-support scan and 1,489-orbit computation are retained only
+as independent redundancy.  At seven players the paper now
 gives an exact leximin counterexample with three outside players, proves that
 two outside players are impossible at seven, and embeds the obstruction in a
 relatively open two-parameter family.

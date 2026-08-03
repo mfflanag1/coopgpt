@@ -330,6 +330,17 @@ certificate with:
 python src/verify_n5_exact_leximin_monotonicity_counterexample.py
 ```
 
+The six/seven transition now has a census-free primary explanation.  At six
+players, quotienting an eta-dual support by `S` and its positive target
+singletons leaves at most three positive residual weights.  Equal balanced
+degrees give two independent subset-sum relations, each necessarily of type
+`z_i=z_j` or `z_i+z_j=z_k`.  These relations yield no three-level support in
+the `3+3` split and the single `4+2` identity
+`1_S+e1+2e2+1_35+1_136+2*1_456=3*1_N`, whose cost is defeated by one carrier
+inequality.  The compact exact replay is
+`src/verify_n6_three_level_matrix_classification.py`; the larger support
+censuses are independent redundancy.
+
 Three is sharp among both arbitrary-reference and leximin seven-player
 obstructions.  The
 two-level separator theorem reduces any putative `5+2` failure to a

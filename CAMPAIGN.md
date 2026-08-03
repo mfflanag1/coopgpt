@@ -962,13 +962,16 @@ Pre-crash progress banked:
   family.  Novelty language remains “we are not aware” pending MathSciNet/
   zbMATH and expert review; see paper3/PRIOR_ART_CARRIER.md.
 - THRESHOLD BREAKTHROUGH: the complete n=6 theorem no longer logically needs
-  1,489 exact-cone orbit optimizations.  Any violation supplies an eta-dual
-  floor separator with at least three coordinate levels.  A focused
-  rank-six classification checks only 65,133 small incidence supports:
-  there are none for `3+3` and one orbit for `4+2`, namely
+  any coalition-support census.  Any violation supplies an eta-dual floor
+  separator with at least three coordinate levels.  After quotienting by
+  `S` and its positive singleton columns, balance becomes two independent
+  equal-subset-sum relations among at most three positive weights.  Every
+  such relation is either `z_i=z_j` or `z_i+z_j=z_k`.  This gives no
+  three-level pattern for `3+3` and exactly one for `4+2`, namely
   `1_S+e1+2e2+1_35+1_136+2*1_456=3*1_N`.  Its objective is at least
-  `2*gamma` from the single `C={4}` carrier inequality.  Thus the large
-  census is now independent redundancy rather than the proof's foundation.
+  `2*gamma` from the single `C={4}` carrier inequality.  A tiny reduced-matrix
+  verifier checks the subset-sum classification; both the 65,133-support scan
+  and the 1,489-orbit exact-cone audit are now independent redundancy.
 - SEVEN-PLAYER OUTSIDE CLASSIFICATION: a focused determinant census checks
   `9,086,132` supports for `4+3` and `8,798,030` for `5+2`.  After the
   two-level separator theorem and direct carrier-mass bounds, only 34 and 5
