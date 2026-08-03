@@ -125,30 +125,43 @@ Core(v) = conv{0,a,b}.
 Each vertex uniquely minimizes one of `1`, `2`, and `123`, so all three
 generators are indispensable.
 
-The example belongs to a nontrivial family. For every rational or real
-`1/4 < theta <= 1`,
+The example belongs to a nontrivial two-parameter family.  For every rational
+or real pair satisfying
 
 ```text
-v_theta(T) = min{0,a(T),theta*b(T)}
+kappa >= 0,   theta - 2*kappa > 1/4,   kappa + theta <= 1,
+```
+
+```text
+v_(kappa,theta)(T) = min{0,a(T),(kappa*a + theta*b)(T)}
 ```
 
 has the same leximin point `a/4` and
 
 ```text
-gamma_S = theta - 1/4,   eta_S = 0.
+gamma_S = theta - 2*kappa - 1/4,   eta_S = 0.
 ```
 
 Thus the counterexample is not unique up to permutation and scaling and is
-robust along a genuine generator-perturbation interval. Replay the structural
-and family certificates with:
+robust on a relatively open two-dimensional generator-perturbation wedge.
+Replay the structural and family certificates with:
 
 ```sh
 python src/verify_n7_exact_carrier_structure.py
 python src/verify_n7_exact_carrier_family.py
 ```
 
-The family does **not** directly refute proper-coalition monotonicity.
-Coalition `135` is uniquely tight at the zero vertex and has the same
-`123`-sum as `v(123)`. Therefore the exact bump capacity at the failure target
-is zero: no positive exact bump of `123` exists. A monotonicity counterexample
-would require a different, binding-bumpable carrier obstruction.
+The family does **not** directly refute proper-coalition monotonicity.  This is
+intrinsic to the tight-face certificate, rather than an accident of unique
+attainment at the zero vertex.  The incidence identity
+
+```text
+1_135 - 2*1_123 = 1_13456 + 1_457 + 1_567 - 2*1_N
+```
+
+implies `x(135) >= 2*x(123)` at every core point, because the three coalitions
+on the right have value zero.  On the zero-valued face `F_135`, core
+feasibility therefore forces `x(123)=0`.  The exact bump capacity at the
+failure target is zero: no positive exact bump of `123` exists.  Any
+deformation preserving these zero faces remains blocked, so a monotonicity
+counterexample requires a genuinely different, binding-bumpable obstruction.

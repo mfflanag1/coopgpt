@@ -82,6 +82,22 @@ def main():
     assert value[target] == 0
     assert tuple(payoff(vertex, coalition_135) for vertex in vertices) == (2, 2, 0)
 
+    # The blocking face is forced by the tight balanced geometry.  In
+    # incidence-vector form,
+    #   1_135 - 2*1_123 = 1_13456 + 1_457 + 1_567 - 2*1_N.
+    # Thus every efficient allocation nonnegative on the three zero-valued
+    # right-hand faces satisfies x(135)>=2*x(123).  A point of F_135 has both
+    # sides zero, so it cannot support a positive bump of 123.
+    robust_blocking_faces = (61, 88, 112)  # 13456, 457, 567
+    for player in range(N):
+        left = int(coalition_135 >> player & 1) - 2 * int(target >> player & 1)
+        right = (
+            sum(int(coalition >> player & 1) for coalition in robust_blocking_faces)
+            - 2
+        )
+        assert left == right
+    assert all(value[coalition] == 0 for coalition in robust_blocking_faces)
+
     print(json.dumps({
         "status": "solver-free structural classification verified",
         "balanced_zero_face": [members(mask) for mask in BALANCED_FACE],
@@ -92,6 +108,10 @@ def main():
         "minimum_lower_envelope_generator_count": 3,
         "exact_bump_capacity_at_S_123": 0,
         "capacity_blocking_face": members(coalition_135),
+        "certificate_intrinsic_blocking_faces": [
+            members(coalition) for coalition in robust_blocking_faces
+        ],
+        "blocking_inequality": "x(135) >= 2*x(123) for every core point",
         "indispensable_generator_coalitions": {
             label: members(mask) for label, mask in unique_coalitions.items()
         },

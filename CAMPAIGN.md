@@ -888,14 +888,27 @@ Pre-crash progress banked:
 - STRUCTURE: eight zero-valued coalitions form a degree-four balanced
   rank-five face and force `Core(v)=conv{0,a,b}`.  Coalitions `1`, `2`, and
   `123` uniquely require `a`, `b`, and zero, so three lower-envelope
-  generators are minimal.  The family `min{0,a,theta*b}`, `1/4<theta<=1`,
-  keeps `phi=a/4` and has `(gamma,eta)=(theta-1/4,0)`, proving nonuniqueness
-  and perturbation robustness within a nontrivial exact family.
+  generators are minimal.  The two-parameter family
+  `min{0,a,kappa*a+theta*b}`, with `kappa>=0`,
+  `theta-2*kappa>1/4`, and `kappa+theta<=1`, keeps `phi=a/4` and has
+  `(gamma,eta)=(theta-2*kappa-1/4,0)`.  Its relatively open parameter wedge
+  proves nonuniqueness and genuine two-parameter perturbation robustness.
+  The known target size three and total player count seven are globally
+  minimal.  Outside-set minimality remains open: 100-restart global-witness
+  exact-cone searches for the two unresolved seven-player splits
+  `(|S|,|P|)=(5,2),(4,3)` found no violation and reached the sharp boundary
+  `eta/gamma=1`; see `results/n7_exact_cone_outside_small_screen.json`.
+  This is finite evidence, not an absence theorem.
 - MONOTONICITY CONNECTION: the failure target `S=123` has exact bump capacity
   zero throughout the family.  Coalition `135` is uniquely tight at zero, so
   its face blocks every positive exact bump of `123`.  Thus this carrier
   failure does not itself refute proper-coalition monotonicity; a future
   counterexample must be binding-bumpable.
+  This is now certificate-intrinsic: the exact incidence identity
+  `1_135-2*1_123=1_13456+1_457+1_567-2*1_N` gives
+  `x(135)>=2*x(123)` throughout the core.  Hence every deformation preserving
+  those zero faces remains unbumpable; merely adding generators to the
+  triangular core cannot convert this obstruction.
 - PRIOR-ART AUDIT: general minimal-balanced enumeration through n=7 is not
   new (Laplace Mermoud--Grabisch--Sudhölter, arXiv:2507.05898), and the exact
   cone already has a facet theory via minimal semi-balanced systems

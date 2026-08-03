@@ -1317,15 +1317,22 @@ The rank, degree, core, and unique-attainment calculations are replayed by
 \path{src/verify_n7_exact_carrier_structure.py}.
 \end{proof}
 
-\begin{proposition}[nonisolated one-parameter family]
+\begin{proposition}[nonisolated two-parameter family]
 \label{prop:lx-n7-carrier-family}
-For every $1/4<\theta\leq1$, the exact game
+Let
 \[
- v_\theta(T)=\min\{0,a(T),\theta b(T)\}
+ \kappa\geq0,
+ \qquad \theta-2\kappa>\frac14,
+ \qquad \kappa+\theta\leq1.
+\]
+Then the exact game
+\[
+ v_{\kappa,\theta}(T)
+ =\min\{0,a(T),(\kappa a+\theta b)(T)\}
 \]
 has leximin point $\phi=a/4$ and, for $S=123$,
 \[
- \gamma_S(\phi)=\theta-\frac14>0,
+ \gamma_S(\phi)=\theta-2\kappa-\frac14>0,
  \qquad \eta_S(\phi)=0.
 \]
 Consequently the seven-player counterexample is neither isolated nor unique
@@ -1334,30 +1341,36 @@ up to permutation and common positive scaling.
 
 \begin{proof}
 Exactness again follows from the equal-total lower-envelope construction, and
-$a/4$ is a core point.  For $1/4<\theta\leq1$, the singleton floors are
+$a/4$ is a core point.  The singleton floors are
 \[
- (-3,-2\theta,0,-1,-\theta,-1,-1).
+ (-3,\kappa-2\theta,0,-1,2\kappa-\theta,-1,-1).
 \]
 The first leximin stage is unchanged: $v_\theta(125)=0$ forces
 $x(3467)\leq0$, so the first common gain is at most $3/4$ and fixes
 $3,4,6,7$ at the coordinates of $a/4$.  On that face the constraints at
 $13$ and $27$ give $x_1\geq-3/4$ and $x_2\geq1/4$, whence efficiency gives
 $x_5\leq1/2$.  The next gain is therefore at most
-$1/2+\theta$, attained by $a/4$ and no larger than either other free gain
-because $1/4<\theta\leq1$.
+$1/2-2\kappa+\theta$, attained by $a/4$.  It is strictly below the gain of
+player~2 because $\kappa+\theta>1/4$, and below the gain of player~1 because
+$\kappa+\theta\leq1$.
 
 After fixing player~5, efficiency gives $x_1+x_2=-1/2$.  The preceding
 bound on $x_1$ gives $x_2\leq1/4$, so the next gain is at most
-$1/4+2\theta$, again attained by $a/4$; the remaining coordinate is then
-fixed.  This proves the leximin assertion directly.  Evaluation of the six
-carrier differences gives $3/4$ for the three $C$ containing player~1 and
-$\theta-1/4$ for the other three.  The four coalitions in
+$1/4-\kappa+2\theta$, again attained by $a/4$ and at most $9/4$; the
+remaining coordinate is then fixed.  This proves the leximin assertion
+directly.  Evaluation of the six carrier differences gives $3/4$ for the
+three $C$ containing player~1, $\kappa+\theta-1/4$ for $C=2,23$, and
+$\theta-2\kappa-1/4$ for $C=3$.  The last quantity is the minimum under the
+parameter restrictions.  The four coalitions in
 \eqref{eq:lx-n7-sharp-identity} remain zero-valued and $\phi$-tight, so the
 same identity proves $\eta_S(\phi)=0$.
 
-For example, $\theta=1$ and $\theta=4/5$ have singleton-floor multisets that
-are not proportional under any permutation, proving inequivalence.  Exact
-family checks are in \path{src/verify_n7_exact_carrier_family.py}.
+The region contains a relatively open two-dimensional wedge (take
+$\kappa>0$ and both remaining inequalities strict), giving genuine
+two-parameter robustness.  The slice $\kappa=0$ includes the earlier
+$\theta=1$ and $\theta=4/5$ examples, whose singleton-floor multisets are not
+proportional under any permutation.  Exact family checks are in
+\path{src/verify_n7_exact_carrier_family.py}.
 \end{proof}
 
 \begin{corollary}[the carrier failure is not bumpable]
@@ -1372,15 +1385,31 @@ produce a counterexample to proper-coalition monotonicity.
 \end{corollary}
 
 \begin{proof}
-The coalition $135$ has payoffs $0$, $2$, and $2\theta$ at the three
-generators $0,a,\theta b$.  It is therefore uniquely tight at zero.  Since
-$v_\theta(123)=0$ as well,
+This is forced by the same zero-cost face geometry, not merely by unique
+attainment at one vertex.  Three of the four coalitions in
+\eqref{eq:lx-n7-sharp-identity} satisfy the incidence identity
+\[
+ \mathbf1_{135}-2\mathbf1_{123}
+ =\mathbf1_{13456}+\mathbf1_{457}+\mathbf1_{567}
+   -2\mathbf1_N.                                      \tag{NB}
+\]
+All three coalitions on the right have value zero throughout the family.
+Hence every core point $x$ obeys
+\[
+ x(135)-2x(123)
+ =x(13456)+x(457)+x(567)\geq0.
+\]
+The coalition $135$ also has value zero (its three generator payoffs are
+$0,2,2(\kappa+\theta)$).  Thus every $x\in F_{135}$ has $x(123)\leq0$, while core
+feasibility at $123$ gives the reverse inequality.  Consequently
 \[
  \max_{x\in F_{135}}x(123)-v_\theta(123)=0.
 \]
 This term occurs in the minimum defining $d^*_{v_\theta}(123)$, while bump
 capacity is nonnegative, proving equality.  Thus no positive exact bump at
-this target exists.
+this target exists.  In particular, the unbumpability is intrinsic to the
+tight balanced certificate: any deformation preserving these three
+zero-valued faces and $v(123)=v(135)=0$ remains blocked.
 \end{proof}
 
 The negative mechanism also exposes a rank threshold.  After adjoining $S$,
