@@ -11,6 +11,12 @@ reference point `psi`, and every proper nonsingleton target coalition `S`.
 The rendered paper is [`wrapper.pdf`](wrapper.pdf); Proposition 5.22 contains
 the theorem and Lemma 5.19 gives the structural reduction.
 
+The threshold is sharp.  A seven-player three-generator lower-envelope exact
+game has `(gamma_S,eta_S)=(3/4,0)` at its exact leximin point and `(1,0)` at
+the core reference zero; see
+[`N7_EXACT_CARRIER_COUNTEREXAMPLE.md`](N7_EXACT_CARRIER_COUNTEREXAMPLE.md) and
+the two `src/verify_n7_exact_carrier_counterexample*.py` verifiers.
+
 ## Structural reduction
 
 After deleting eta-dual columns dominated by the zero-cost target floor

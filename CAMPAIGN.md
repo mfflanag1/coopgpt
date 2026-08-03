@@ -862,3 +862,21 @@ Pre-crash progress banked:
   pkill incident owned). Reusable assets: stES_reenum4.py (complete
   segment-core stability certifier), stES_validate_n5.py, stES_corevx2.py,
   stES_verify_witness.py. ALL FOUR BREAKTHROUGH LANES NOW CLOSED.
+
+## 2026-08-02 — QUANTITATIVE CARRIER CONJECTURE RESOLVED SHARPLY AT n=7
+- The complete exact theorem through `n=6` is dimension-sharp.  For
+  `N={1,...,7}` and `S={1,2,3}`, the exact
+  three-generator lower-envelope game `v(T)=min{0,a(T),b(T)}` with
+  `a=(-3,1,3,-1,2,-1,-1)` and `b=(3,-2,0,-1,-1,-1,2)` has exact leximin
+  point `phi=a/4` and `(gamma_S(phi),eta_S(phi))=(3/4,0)`.  At the reference
+  point zero the pair is `(1,0)`.
+- All six carrier differences are exactly one.  The four zero-valued
+  coalitions `13456,457,3467,567` satisfy the degree-three identity
+  `1_S + sum 1_Q + e_1 + 2e_2 = 3 1_N`, forcing every core point
+  nonnegative on `S` to have `S`-sum zero.
+- The solver-free integer verifier checks all 128 lower-envelope/core
+  identities, exactness, carrier differences, eta degrees, zero dual cost,
+  and rank-seven minimal balanced support.  An independently formulated
+  primal LP also returns eta zero.  A second exact-rational verifier computes
+  the leximin point and all six `3/4` differences.  The paper fragment and PDF
+  now state the sharp positive-through-six/negative-at-seven theorem.

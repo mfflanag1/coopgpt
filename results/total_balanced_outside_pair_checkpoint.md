@@ -52,3 +52,22 @@ full core.  The solver-free integer certificate is
 This establishes that the six-player totally balanced outside-pair result is
 dimension-sharp.  The counterexample is not an exact game, so it neither
 disproves nor proves sharpness of the unrestricted exact-game theorem.
+
+## Exact-game sharpness
+
+A separate three-generator lower-envelope construction resolves that remaining
+question.  At `n = 7`, `S = {1,2,3}`, and `P = {4,5,6,7}`, the exact game
+
+```text
+v(T) = min{0, a(T), b(T)},
+a = (-3,1,3,-1,2,-1,-1),
+b = (3,-2,0,-1,-1,-1,2)
+```
+
+has exact leximin point `phi=a/4` with `gamma_S(phi) = 3/4` and
+`eta_S(phi) = 0`.  At the reference point zero it has
+`(gamma_S(0),eta_S(0))=(1,0)`.  Hence the leximin-specific unrestricted
+quantitative carrier conjecture is false, and the exact theorem through six
+players is dimension-sharp.  The solver-free structural certificate is
+`src/verify_n7_exact_carrier_counterexample.py`; the exact-rational leximin
+replay is `src/verify_n7_exact_carrier_counterexample_leximin.py`.

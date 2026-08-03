@@ -666,7 +666,7 @@ whereas
  \eta_S(\psi)=\max\{d(S):d\in D,\ d_i\geq0\ (i\in S)\}.
  \tag{CE}\label{eq:lx-convex-eta}
 \]
-Thus the quantitative carrier conjecture is an inequality about every
+Thus the quantitative carrier inequality is a statement about every
 translated exact core, not specifically about a leximin point.
 \end{proposition}
 
@@ -748,7 +748,7 @@ can strictly separate
  \{d_S:d\in D,\ d(S)\geq\gamma_S(\psi)\}
  \quad\hbox{from}\quad\mathbb R^S_+.
 \]
-Thus any failure of the quantitative carrier conjecture admits a strictly
+Thus any failure of the quantitative carrier inequality admits a strictly
 positive separator, but every such separator must have at least three distinct
 coordinate levels.
 \end{proposition}
@@ -1118,6 +1118,99 @@ LP verifier and its full rational certificates are
 \path{src/verify_n6_eta_dual_vertex_audit.py} replays all $1{,}489$ saved
 lower-bound identities in exact arithmetic without calling an optimizer; its
 summary is \path{results/n6_eta_dual_vertex_audit_verification.json}.
+\end{proof}
+
+The six-player threshold is exact.
+
+\begin{proposition}[sharp seven-player exact counterexample]
+\label{prop:lx-quantitative-n7-counterexample}
+There is an exact seven-player game whose leximin point $\phi$ and a proper
+coalition $S$ satisfy
+\[
+ \gamma_S(\phi)=\frac34,
+ \qquad
+ \eta_S(\phi)=0.
+\]
+For the same game the core reference $\psi=0$ satisfies
+$(\gamma_S(\psi),\eta_S(\psi))=(1,0)$.
+Consequently the quantitative carrier inequality is false in unrestricted
+dimension, and Proposition~\ref{prop:lx-quantitative-through-six} is sharp in
+the number of players.
+\end{proposition}
+
+\begin{proof}
+Let $N=\{1,\ldots,7\}$, $S=\{1,2,3\}$, $P=\{4,5,6,7\}$, and put
+\[
+ a=(-3,1,3,-1,2,-1,-1),
+ \qquad
+ b=(3,-2,0,-1,-1,-1,2).
+\]
+Both vectors have total zero.  Define the lower-envelope game
+\[
+ v(T)=\min\{0,a(T),b(T)\}
+ \qquad(T\subseteq N),
+\]
+and take $\psi=0$.  Each of $0,a,b$ belongs to $\core(v)$, and at least one
+of them is tight at every coalition.  Hence $v$ is exact and
+$\psi\in\core(v)$.
+
+Writing $s(T)=-v(T)$, direct evaluation gives
+\[
+\begin{array}{c|rrrrrr}
+ C&1&2&3&12&13&23\\ \hline
+ s(C)&3&2&0&2&0&2\\
+ s(P\cup C)&4&3&1&3&1&3
+\end{array}
+\]
+and therefore every one of the six carrier differences equals one.  Thus
+$\gamma_S(0)=1$.
+
+It remains to calculate $\eta_S(0)$.  The four coalitions
+\[
+ Q_1=13456,
+ \quad Q_2=457,
+ \quad Q_3=3467,
+ \quad Q_4=567
+\]
+all have value zero, and their incidence vectors satisfy
+\[
+ \mathbf1_S+\sum_{j=1}^4\mathbf1_{Q_j}+e_1+2e_2
+ =3\mathbf1_N.
+ \tag{N7}\label{eq:lx-n7-sharp-identity}
+\]
+If $x\in\core(v)$ and $x_i\geq0$ for $i\in S$, then
+$x(Q_j)\geq v(Q_j)=0$ for every $j$.  Taking the scalar product of
+\eqref{eq:lx-n7-sharp-identity} with $x$ yields
+\[
+ x(S)+\sum_{j=1}^4x(Q_j)+x_1+2x_2=3x(N)=0.
+\]
+Every term on the left is nonnegative, so $x(S)=0$.  Since $x=0$ is
+feasible, $\eta_S(0)=0$.
+
+The exact leximin calculation for this game gives
+\[
+ \phi=\frac14a
+ =\left(-\frac34,\frac14,\frac34,-\frac14,
+          \frac12,-\frac14,-\frac14\right).
+\]
+Direct evaluation of $s_\phi(T)=\phi(T)-v(T)$ gives
+$s_\phi(P\cup C)-s_\phi(C)=3/4$ for all six nonempty proper
+$C\subset S$, so $\gamma_S(\phi)=3/4$.  Moreover each $Q_j$ above is
+$\phi$-tight.  If $x\in\core(v)$ dominates $\phi$ on $S$, put
+$d=x-\phi$.  Taking the scalar product of
+\eqref{eq:lx-n7-sharp-identity} with $d$ gives
+\[
+ d(S)+\sum_{j=1}^4d(Q_j)+d_1+2d_2=3d(N)=0.
+\]
+Every term on the left is nonnegative: the coordinate terms by domination,
+and the coalition terms because $x(Q_j)\geq v(Q_j)=\phi(Q_j)$.  Hence
+$d(S)=0$, while $x=\phi$ is feasible, proving $\eta_S(\phi)=0$.
+
+The construction and all $128$ lower-envelope, core, carrier, degree, and
+zero-cost identities are replayed in integer arithmetic by
+\path{src/verify_n7_exact_carrier_counterexample.py}.  The exact rational
+leximin calculation and the six $3/4$ differences are independently replayed
+by \path{src/verify_n7_exact_carrier_counterexample_leximin.py}.
 \end{proof}
 
 The slack certificate is automatic on the most important thin-core model
@@ -2706,11 +2799,11 @@ The carrier lift suggests a sharp quantitative form of that contrapositive:
  \eta_S(\phi)\geq\gamma_S(\phi).
  \tag{Q}\label{eq:lx-quantitative-carrier}
 \end{equation}
-In unrestricted dimension, (Q) remains a conjecture for exact games; the
-results here prove it through six players.  In view of
-Proposition~\ref{prop:lx-exact-core-closure}, the natural and now proved
-finite-dimensional form asks for every $\psi\in\core(v)$, not only for
-$\psi=\phi$.
+Proposition~\ref{prop:lx-quantitative-n7-counterexample} disproves (Q) in
+unrestricted dimension, while Proposition~\ref{prop:lx-quantitative-through-six}
+proves it through six players.  In view of
+Proposition~\ref{prop:lx-exact-core-closure}, this sharp finite-dimensional
+theorem applies to every $\psi\in\core(v)$, not only to $\psi=\phi$.
 Proposition~\ref{prop:lx-quantitative-pair} proves it for $|S|=2$, and the
 coefficient one is already sharp there.  Proposition~\ref{prop:lx-codimension-one-uniform-lift}
 proves the stronger uniform lift when $|N\setminus S|=1$; hence
@@ -2720,8 +2813,11 @@ Proposition~\ref{prop:lx-quantitative-through-five} closes the remaining
 three-versus-two case by exact dual enumeration, even under the weaker
 assumption of total balancedness.  Finally,
 Proposition~\ref{prop:lx-quantitative-through-six} closes both new
-six-player splits by complete minimal-balanced enumeration.  Thus (Q) is
-proved through six players, and any counterexample requires at least seven.
+six-player splits by complete minimal-balanced enumeration.  The
+three-generator lower envelope in
+Proposition~\ref{prop:lx-quantitative-n7-counterexample} then violates (Q) at
+seven players at its leximin point with $(\gamma,\eta)=(3/4,0)$ (and at the
+core reference zero with $(1,0)$), making the six-player theorem sharp.
 Earlier, six exact lower-envelope screens
 covering $3{,}650$ games and $35{,}629$ binding pairs $(v,S)$, all $746$ cases
 with $\gamma_S(\phi)>0$ satisfied (Q); the minimum in every screen was
@@ -2778,7 +2874,11 @@ $1{,}489$ symmetry orbits and certifying every exact-cone optimum proves the
 quantitative carrier inequality for every exact game through six players
 (Proposition~\ref{prop:lx-quantitative-through-six}).  The earlier direct
 sample of $505$ orbits is recovered in full by the census and now serves as
-an independent cross-check rather than merely finite evidence.
+an independent cross-check rather than merely finite evidence.  The
+three-generator exact game in
+Proposition~\ref{prop:lx-quantitative-n7-counterexample} has
+$(\gamma,\eta)=(3/4,0)$ at its leximin point, so this finite theorem is
+dimension-sharp.
 
 \begin{remark}
 Lemma~\ref{lem:lx-C} is a leximin parametric-monotonicity statement; its cousin the
