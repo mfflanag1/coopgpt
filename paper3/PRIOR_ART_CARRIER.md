@@ -111,8 +111,15 @@ coalitional monotonicity. The closest sources located were:
    of an earlier exact-game counterexample to proper-coalition monotonicity of
    the Lmin solution."  An expert database and
    citation-chain search remains required before claiming priority.  The
-   present five-player construction also does not prove that five is the
-   minimum possible dimension.
+   A later exact symbolic bridge now proves that five is the minimum possible
+   dimension: on singleton-normalized exact games through four players, every
+   richer-player suffix at a strict Lmin payoff gap is tight, so Lmin
+   Lorenz-dominates the core and equals Lmax/PES.  Combining this with Biswas
+   et al. (1999) and Dietzenbacher (2021) yields coalitional monotonicity
+   through four players.  Focused searches for `exact games + Lmin + Lmax`,
+   `Lmin solution + exact games + four players`, and `leximin stable allocation
+   + exact game` located no matching statement.  This new bridge postdates the
+   external hostile audit and still requires a specialist novelty check.
 
 ## Defensible current novelty statement
 
@@ -123,7 +130,8 @@ coalitional monotonicity. The closest sources located were:
 > of an earlier statement of this inequality or its sharp dimension threshold.
 > Separately, an exact five-player lower-envelope pair disproves
 > proper-coalition monotonicity of Lmin (equivalently normalized Lmin here,
-> because the witness has zero singleton values).
+> because the witness has zero singleton values), and an exact symbolic
+> four-player bridge proves that this failure is dimension-minimal.
 
 Do not replace “we are not aware” by “first” until the external search is
 completed.
