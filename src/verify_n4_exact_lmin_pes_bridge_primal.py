@@ -72,7 +72,6 @@ def richer_suffixes(blocks):
 
 def direction_exists(player_count, active, earlier, current, raised):
     """Whether a local core direction lexicographically improves one player."""
-    full = (1 << player_count) - 1
     direction = [z3.Real(f"direction_{i}") for i in range(player_count)]
     solver = z3.Solver()
     solver.add(z3.Sum(direction) == 0)
@@ -251,11 +250,16 @@ def main():
     args = parser.parse_args()
     results = []
     for player_count in range(2, 5):
-        cases = [
-            verify_case(player_count, composition)
-            for composition in compositions(player_count)
-            if len(composition) > 1
-        ]
+        cases = []
+        for composition in compositions(player_count):
+            if len(composition) == 1:
+                continue
+            print(
+                f"checking n={player_count}, composition={composition}",
+                file=sys.stderr,
+                flush=True,
+            )
+            cases.append(verify_case(player_count, composition))
         results.append({"player_count": player_count, "cases": cases})
     payload = {
         "status": "independent primal-direction Lmin/Lmax bridge verified",

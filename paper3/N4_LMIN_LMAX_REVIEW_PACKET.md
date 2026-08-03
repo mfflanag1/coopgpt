@@ -1,8 +1,12 @@
 # Reviewer packet: the exact four-player Lmin--Lmax bridge
 
-Prepared 2026-08-03.  This packet covers material that postdates the external
-hostile audit in `review_findings.md`.  It is a request for review, not a claim
-of independent validation.
+Prepared 2026-08-03 and revised after a hostile external review of commit
+`5376a76`.  That review returned "verified with qualifications," reproduced
+the finite theorem from scratch, and found no mathematical error.  The
+qualifications concerned prior-art attribution, reproducibility, and
+exposition; this packet incorporates those corrections.  This remains one
+external technical review, not journal peer review or a definitive novelty
+opinion.
 
 ## Result under review
 
@@ -14,10 +18,16 @@ rich, are `B_1,...,B_k`, then every richer suffix
 H_j = B_(j+1) union ... union B_k
 ```
 
-is tight at every strict payoff gap: `phi(H_j)=v(H_j)`.  Hence `phi`
-Lorenz-dominates the core and equals `Lmax(v)`.  Published results then give
+is tight at every strict payoff gap: `phi(H_j)=v(H_j)`.  This says exactly that
+`v` is an exact partition game in the sense of Llerena--Mauri (2017), witnessed
+at `phi`.  Their published theory gives the Lorenz-dominating core allocation;
+in the present notation `phi=Lmax(v)`.  Published results then give
 `Lmax=PES` and coalitional monotonicity on this domain.  Together with the
 five-player exact Lmin counterexample, this makes dimension five sharp.
+
+The contribution under review is the exhaustive classification "exact and
+`n<=4` implies exact partition at Lmin" and its sharp failure at five.  Neither
+the exact-partition definition nor its Lorenz consequence is claimed as new.
 
 The manuscript currently labels the suffix-tightness lemma
 **computer-assisted**.  No clean human proof of the four-player case has yet
@@ -29,14 +39,12 @@ been obtained.
 exactness + zero singleton values + Lmin stage optimality
                          |
                          v
-       richer-player suffixes are tight (new finite lemma)
+       exact n<=4 is exact partition at Lmin (new finite classification)
                          |
                          v
-         upper-tail inequalities at stratum boundaries
-                         |
-             concavity across tied payoff blocks
+       Dutta--Ray exact-partition theory      (Llerena--Mauri 2017)
                          v
-           Lmin Lorenz-dominates Core(v), so Lmin=Lmax
+           Lmin Lorenz-dominates Core(v), hence Lmin=Lmax
                          |
         exact n<=4 -> large core              (Biswas et al. 1999)
         large core -> egalitarian stable      (Dietzenbacher 2021)
@@ -117,15 +125,18 @@ of the original suffix-slack query, greedily reduces it to local
 irreducibility, rechecks the reduced unlabelled formula, and verifies that
 every single-assertion deletion is satisfiable.  The retained sizes are 15,
 59, 40, and 64 assertions, from full formulas containing 158, 470, 472, and
-510 assertions.  These are compact solver-checkable cores, not Farkas
-linear-combination proofs.
+510 assertions.  These are audit conveniences using the same Z3 query.  They
+are not Farkas linear-combination proofs, hand-checkable certificates, or an
+independent source of verification.
 
-## Encoding B: independent primal tangent enumeration
+## Encoding B: independently formulated Lmin-optimality test
 
 File: `src/verify_n4_exact_lmin_pes_bridge_primal.py`.
 
-This verifier uses no KKT multiplier and no complementarity constraint.  It
-enumerates the tight proper-coalition set `A`.  At `phi`, its exact tangent
+This verifier uses no KKT multiplier and no complementarity constraint for
+Lmin optimality.  It shares Encoding A's definition-level exact-face system,
+singleton normalization, gap normalization, and Z3 engine.  It enumerates the
+tight proper-coalition set `A`.  At `phi`, its exact tangent
 cone is
 
 ```text
@@ -169,8 +180,10 @@ The two encodings agree:
 | 4 | `1+1+1+1` | impossible |
 
 The seven impossible patterns are exactly the patterns with a unique richest
-player.  This observation is suggestive but is **not** currently used as an
-unproved hand lemma.
+player.  This is a corollary of the theorem, not separate evidence: if the
+unique richest player were `r`, exact-partition tightness would give
+`phi_r=v({r})=0`, contradicting a strictly positive richest level in a
+nonconstant singleton-normalized allocation.
 
 ## Concrete realizability witnesses
 
@@ -193,9 +206,12 @@ n=4, 1+1+2:   (1,2,3,3)
 All coalition values are included in
 `results/n4_exact_lmin_pes_bridge_primal.json`.
 
-## Suffix tightness implies Lorenz dominance
+## Published exact-partition consequence
 
-This deduction is not computer-assisted.  At a boundary where `H` comprises
+Llerena--Mauri (2017) prove that the Dutta--Ray allocation of an exact
+partition game is its Lorenz-dominating core element.  The following short
+argument only translates their consequence into the manuscript's upper-tail
+convention.  At a boundary where `H` comprises
 the `r` richest coordinates of `phi`, every `x` in the core satisfies
 
 ```text
@@ -215,14 +231,19 @@ unique lexicographic minimizer of descending payoffs, namely Lmax.
 Run from `coopgames/`:
 
 ```sh
-python src/verify_n4_exact_lmin_pes_bridge.py
+python src/verify_n4_exact_lmin_pes_bridge.py \
+  --output results/n4_exact_lmin_pes_bridge.json
 python src/verify_n4_exact_lmin_pes_bridge_cores.py \
   --output results/n4_exact_lmin_pes_bridge_cores.json
 python src/verify_n4_exact_lmin_pes_bridge_primal.py \
   --output results/n4_exact_lmin_pes_bridge_primal.json
 python src/verify_n4_exact_lmin_pes_bridge_witnesses.py \
   --output results/n4_exact_lmin_pes_bridge_witnesses.json
-python src/verify_n5_exact_leximin_monotonicity_counterexample.py
+python src/verify_n4_exact_lmin_pes_artifacts.py
+python src/verify_n5_exact_leximin_monotonicity_counterexample.py \
+  --output results/n5_exact_leximin_monotonicity_counterexample.json
+python src/verify_n5_exact_lmin_lmax_large_core.py \
+  --output results/n5_exact_lmin_lmax_large_core.json
 ```
 
 Expected failure-safety check:
@@ -234,7 +255,8 @@ python -O src/verify_n4_exact_lmin_pes_bridge_primal.py
 python -O src/verify_n4_exact_lmin_pes_bridge_witnesses.py
 ```
 
-Each optimized-mode command must fail immediately.
+Each optimized-mode command fails immediately.  This is defensive execution
+policy; these programs do not currently rely on Python `assert` statements.
 
 ## Known limitations
 
@@ -247,12 +269,14 @@ Each optimized-mode command must fail immediately.
 3. The reduced unsatisfiable cores and Z3's internal proof objects are not
    standalone Farkas certificates.  Three four-player cores retain 40--64
    assertions because complementarity branches heavily.  The exhaustive
-   2048-tight-set primal enumeration and its per-case counts are an independent
-   formulation and audit artifact, not a compact hand proof.
-4. The theorem and its claimed novelty have not been externally reviewed.
-5. The focused literature search found no prior `Lmin=Lmax` theorem on exact
-   games through four players, but MathSciNet/zbMATH and expert citation-chain
-   review remain outstanding.
+   2048-tight-set primal enumeration independently formulates Lmin optimality,
+   but shares the exactness system and solver and is not a compact hand proof.
+4. One hostile external review found no mathematical error and independently
+   reproduced the claims.  It is not a substitute for peer review.
+5. Exact-partition games and their Lorenz-dominating Dutta--Ray allocation are
+   prior art.  The narrower classification of exact games through four players
+   appears new, but MathSciNet/zbMATH and expert citation-chain review remain
+   outstanding.
 
 ## Questions for the external reviewer
 
@@ -270,6 +294,6 @@ Each optimized-mode command must fail immediately.
 6. Does the published chain `exact n<=4 -> large core -> egalitarian stable ->
    PES=Lmax and coalitional monotonicity` have any missing domain-closure
    hypothesis when two exact games differ at one coalition?
-7. Is an equivalent `Lmin=Lmax` statement already known under the terms
-   lexicographically minimal/maximal, Lorenz-stable, exact-partition, or
-   large-core game?
+7. Is the narrower inclusion "exact games through four players are exact
+   partition games at Lmin" already known in the exact-partition or
+   Lorenz-stable literature?

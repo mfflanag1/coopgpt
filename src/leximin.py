@@ -128,7 +128,7 @@ def leximin_core_exact(g):
     free = list(range(n)); guard = 0
     while free and guard < n + 2:
         guard += 1
-        opt, x = solve_level(free)
+        opt, _ = solve_level(free)
         if opt is None or opt == 'unbounded':
             return None
         s = -opt
@@ -140,9 +140,90 @@ def leximin_core_exact(g):
             if mx == m[i] + s:
                 pinned.append(i)
         if not pinned:
-            i0 = min(free, key=lambda i: x[i] - m[i])
-            pinned = [i0]
+            raise RuntimeError("exact Lmin stage found no mathematically pinned player")
         for i in pinned:
             fixed[i] = m[i] + s
             free.remove(i)
     return [fixed[i] for i in range(n)]
+
+
+def leximax_core_exact(g):
+    """Lexicographically minimize descending core payoffs in exact arithmetic.
+
+    This is the ordinary Lmax allocation.  At each stage, minimize a common
+    ceiling for the unpinned players; pin exactly those coordinates that cannot
+    fall below the optimal ceiling on that face.
+    """
+    n, N, v = g.n, g.N, g.v
+    fixed = {}
+
+    def solve_ceiling(free):
+        nv = n + 1
+        ceiling = n
+        A, b = [], []
+        for coalition in range(1, N):
+            row = [F(0)] * nv
+            for player in range(n):
+                if coalition >> player & 1:
+                    row[player] = F(-1)
+            A.append(row)
+            b.append(-v[coalition])
+        for player in free:
+            row = [F(0)] * nv
+            row[player] = F(1)
+            row[ceiling] = F(-1)
+            A.append(row)
+            b.append(F(0))
+        Aeq = [[F(1)] * n + [F(0)]]
+        beq = [v[N]]
+        for player, value in fixed.items():
+            row = [F(0)] * nv
+            row[player] = F(1)
+            Aeq.append(row)
+            beq.append(value)
+        objective = [F(0)] * nv
+        objective[ceiling] = F(1)
+        return exact_lp_min(objective, A, b, Aeq, beq)
+
+    def min_player(player, free, ceiling):
+        A, b = [], []
+        for coalition in range(1, N):
+            A.append([
+                F(-1) if coalition >> other & 1 else F(0)
+                for other in range(n)
+            ])
+            b.append(-v[coalition])
+        for other in free:
+            row = [F(0)] * n
+            row[other] = F(1)
+            A.append(row)
+            b.append(ceiling)
+        Aeq = [[F(1)] * n]
+        beq = [v[N]]
+        for other, value in fixed.items():
+            row = [F(0)] * n
+            row[other] = F(1)
+            Aeq.append(row)
+            beq.append(value)
+        objective = [F(0)] * n
+        objective[player] = F(1)
+        optimum, _ = exact_lp_min(objective, A, b, Aeq, beq)
+        return optimum
+
+    free = list(range(n))
+    while free:
+        optimum, _ = solve_ceiling(free)
+        if optimum is None or optimum == "unbounded":
+            return None
+        ceiling = optimum
+        pinned = [
+            player
+            for player in free
+            if min_player(player, free, ceiling) == ceiling
+        ]
+        if not pinned:
+            raise RuntimeError("exact Lmax stage found no mathematically pinned player")
+        for player in pinned:
+            fixed[player] = ceiling
+            free.remove(player)
+    return [fixed[player] for player in range(n)]

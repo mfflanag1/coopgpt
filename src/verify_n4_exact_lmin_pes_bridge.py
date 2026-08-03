@@ -23,9 +23,11 @@ or removing the individual-pinning duals makes at least one query satisfiable.
 """
 from __future__ import annotations
 
+import argparse
 import itertools
 import json
 import sys
+from pathlib import Path
 
 import z3
 
@@ -208,6 +210,9 @@ def build_query(
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
     theorem_results = []
     compositions_by_size = {}
     for player_count in range(2, 5):
@@ -265,7 +270,7 @@ def main():
             raise RuntimeError(f"negative control {name} did not open any case")
         controls[name] = satisfiable
 
-    print(json.dumps({
+    payload = {
         "status": "exact symbolic Lmin/PES bridge verified through four players",
         "solver": f"z3 {z3.get_version_string()} exact linear rational arithmetic",
         "theorem": (
@@ -281,7 +286,11 @@ def main():
             "monotonicity of PES/Lmax, the five-player exact Lmin counterexample "
             "has minimum possible dimension"
         ),
-    }, indent=2))
+    }
+    rendered = json.dumps(payload, indent=2) + "\n"
+    if args.output is not None:
+        args.output.write_text(rendered)
+    print(rendered, end="")
 
 
 if __name__ == "__main__":

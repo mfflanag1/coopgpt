@@ -2142,6 +2142,49 @@ $x_3+x_5=32-\tau$, so the last stage equalizes them.  These four bounds give
 \eqref{eq:lx-proper-exact-path}.  Every coordinate is affine, and direct
 core feasibility at $\tau=19,20$ proves feasibility throughout the segment.
 Exactness throughout is Lemma~\ref{lem:lx-interval}.
+
+The exact rational verifier recomputes both endpoint Lmin allocations by a
+staged Maschler LP, rather than merely checking the displayed stage bounds:
+\begin{center}
+\small\path{src/verify_n5_exact_leximin_monotonicity_counterexample.py},\\[-2pt]
+\small\path{results/n5_exact_leximin_monotonicity_counterexample.json}.
+\end{center}
+\end{proof}
+
+\begin{proposition}[a large-core Lmin--Lmax separation]
+\label{prop:lx-five-large-core-separation}
+Both five-player games $v,w$ in
+Theorem~\ref{thm:lx-proper-exact-fails} have large cores, and
+\[
+ \operatorname{Lmax}(v)=\operatorname{Lmax}(w)=(2,0,6,6,6).
+\]
+Thus Lmax is coalitionally monotonic across this bump while Lmin is not.  In
+the base game the richest Lmin stratum is $\{3,5\}$ and
+\[
+ \operatorname{Lmin}(v)(\{3,5\})=13>12=v(\{3,5\}).
+\]
+Consequently largeness alone does not imply the exact-partition property at
+Lmin, and the through-four-player classification below is sharp at five.
+\end{proposition}
+
+\begin{proof}[Computer-assisted proof]
+For each game, enumerate every vertex of Sharkey's acceptable-payoff
+polyhedron
+\[
+ U(v)=\{y\in\mathbb R^N:y(T)\geq v(T)\text{ for every nonempty }T\subseteq N\}.
+\]
+There are $\binom{31}{5}=169{,}911$ candidate tight bases, of which $104{,}286$
+are independent.  Exact rational elimination gives $12$ distinct acceptable
+vertices for $v$ and $8$ for $w$.  An exact core LP finds, for every such
+vertex $y$, an $x\in\core(v)$ or $x\in\core(w)$ with $x\leq y$.
+Since $U(v)$ is pointed with nonnegative recession cone, convexity extends
+vertex domination to all of $U(v)$; this is the large-core property.  Separate
+exact staged LPs compute the two Lmax allocations, and direct substitution
+checks the displayed strict suffix slack.  The verifier and output are
+\begin{center}
+\small\path{src/verify_n5_exact_lmin_lmax_large_core.py},\\[-2pt]
+\small\path{results/n5_exact_lmin_lmax_large_core.json}.
+\end{center}
 \end{proof}
 
 The example also closes the proposed cone route.  For every
@@ -2167,8 +2210,16 @@ least four players.  None of these results itself supplies an exact-game
 proper-coalition counterexample for Lmin.  Theorem~\ref{thm:lx-proper-exact-fails}
 does so with a five-player rational certificate.  The next result shows that
 five is the minimum possible dimension.
+The condition needed next is established terminology.  Following
+\citet{LlerenaMauri2017}, a balanced game is an \emph{exact partition game} if
+it has a core allocation at which every cumulative union of richest payoff
+strata is tight.  On this class the Dutta--Ray solution is the unique such
+allocation and Lorenz-dominates the core
+\citep{LlerenaMauri2017,DietzenbacherYanovskaya2020}.  The new contribution is
+the following sharp low-dimensional classification, not the definition or its
+Lorenz consequence.
 
-\begin{lemma}[richer-suffix tightness through four players]
+\begin{lemma}[exact-partition classification through four players]
 \label{lem:lx-richer-suffix}
 Let $v$ be an exact game with $|N|\leq4$ and $v(\{i\})=0$ for every player.
 Order the payoff strata of $\operatorname{Lmin}(v)$ as
@@ -2181,8 +2232,9 @@ suffix is tight:
  \quad (j<k).
  \tag{RST}\label{eq:lx-richer-suffix}
 \]
-Consequently $\operatorname{Lmin}(v)$ Lorenz-dominates the core and equals
-$\operatorname{Lmax}(v)$.
+Equivalently, $v$ is an exact partition game witnessed at its Lmin allocation.
+Consequently $\operatorname{Lmin}(v)$ is the Lorenz-dominating core allocation
+and equals $\operatorname{Lmax}(v)$.
 \end{lemma}
 
 \begin{proof}[Computer-assisted proof]
@@ -2213,47 +2265,60 @@ is infeasible in exact linear rational arithmetic.  Thus every nominal case
 is closed, and the suffix-slack contradiction is nonvacuous whenever its
 stratum pattern is realizable.  Strict adjacent payoff
 gaps may be normalized to at least one because the entire system is positively
-homogeneous.  The primary verifier constructs every system directly.  An
-independent verifier avoids KKT multipliers and complementarity altogether:
-it enumerates the tight-coalition set, excludes primal tangent directions that
-would improve the current payoff stratum after earlier strata are fixed, and
-then tests definition-level exact realizability.  The two encodings give the
-same classification of all eleven compositions.  A third exact-LP replay
+homogeneous.  The primary verifier constructs every system directly.  A
+second verifier formulates only Lmin optimality independently: it avoids KKT
+multipliers and complementarity by enumerating the tight-coalition set and
+excluding primal tangent directions that improve the current payoff stratum
+after earlier strata are fixed.  It shares the definition-level exact-face
+system, normalization, and Z3 exact-rational engine with the primary verifier.
+The two formulations give the same classification of all eleven compositions.
+A separate exact-LP replay
 verifies small integer games for each of the four realizable patterns.  The
 programs and machine-readable outputs are
 \begin{center}
 \small\path{src/verify_n4_exact_lmin_pes_bridge.py},\\[-2pt]
-\small\path{src/verify_n4_exact_lmin_pes_bridge_cores.py},\\[-2pt]
 \small\path{src/verify_n4_exact_lmin_pes_bridge_primal.py},\\[-2pt]
 \small\path{src/verify_n4_exact_lmin_pes_bridge_witnesses.py},\\[-2pt]
 \small\path{results/n4_exact_lmin_pes_bridge.json},\\[-2pt]
-\small\path{results/n4_exact_lmin_pes_bridge_cores.json},\\[-2pt]
 \small\path{results/n4_exact_lmin_pes_bridge_primal.json},\\[-2pt]
 \small\path{results/n4_exact_lmin_pes_bridge_witnesses.json}.
 \end{center}
+The additional audit script
+\begin{center}
+\small\path{src/verify_n4_exact_lmin_pes_bridge_cores.py}
+\end{center}
+extracts reduced solver-checkable assertion subsets.  These are audit conveniences using the
+same Z3 query, not Farkas certificates or independent proof evidence.
 As load-bearing negative
 controls, deleting either all exact-face witnesses or all individual-pinning
 programs makes some systems feasible.  This proves
 \eqref{eq:lx-richer-suffix}.  The one-stratum case is immediate.
 
-For the final implication, take any $x\in\core(v)$ and let $H$ consist of the
-$r$ richest coordinates of $\phi$, at a stratum boundary.  Then
+For completeness, here is the connection with the published exact-partition
+result in the present ordering convention.  Take any $x\in\core(v)$ and let
+$H$ consist of the $r$ richest coordinates of $\phi$, at a stratum boundary.
+Then
 \[
  \sum_{i=1}^{r}x_i^{\downarrow}\geq x(H)\geq v(H)=\phi(H)
    =\sum_{i=1}^{r}\phi_i^{\downarrow}.
 \]
-Between consecutive boundaries the same inequality follows by linear
-interpolation across the tied block.  Thus every upper-tail sum of $\phi$ is
-weakly smaller than the corresponding upper-tail sum of every core point.
-Since totals agree, $\phi$ Lorenz-dominates the core and hence is Lmax.
+Write $U_x(r)=\sum_{i=1}^r x_i^\downarrow$.  Between consecutive boundaries,
+$U_x$ is concave in $r$, whereas $U_\phi$ is affine because the intervening
+coordinates of $\phi$ are tied.  Endpoint dominance therefore gives
+$U_x(r)\geq U_\phi(r)$ throughout the block.  Thus $\phi$ Lorenz-dominates the
+core, as in \citet{LlerenaMauri2017}.  If $y$ denotes Lmax, Lorenz dominance
+and leximax minimality force $y^\downarrow=\phi^\downarrow$; uniqueness of the
+leximax-minimal point of the compact convex core then gives $y=\phi$.
 \end{proof}
 
 \begin{theorem}[the five-player failure is dimension-minimal]
 \label{thm:lx-proper-minimum-dimension}
-Normalized Lmin is coalitionally monotonic on exact games with at most four
-players.  Proper-coalition monotonicity fails at five players by
+Let $v,v'$ be exact games on the same player set $N$, $|N|\leq4$, with
+$v'=v+d\mathbf1_S$ for one coalition $S$ and some $d>0$.  Then normalized
+Lmin satisfies $\phi_i(v')\geq\phi_i(v)$ for every $i\in S$.
+Proper-coalition monotonicity fails at five players by
 Theorem~\ref{thm:lx-proper-exact-fails}; hence five is the minimum possible
-dimension.
+dimension for such a failure.
 \end{theorem}
 
 \begin{proof}

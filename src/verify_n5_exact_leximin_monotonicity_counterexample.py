@@ -7,8 +7,13 @@ leximin path and the strict losses of target players 3 and 5.
 """
 from __future__ import annotations
 
+import argparse
 import json
 from fractions import Fraction as F
+from pathlib import Path
+
+from leximin import leximin_core_exact
+from tugame import Game
 
 
 if not __debug__:
@@ -69,6 +74,9 @@ def path(tau):
 
 
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
     require(all(sum(point) == 20 for point in BASE_GENERATORS),
             "generators do not have common total 20")
     base = lower_envelope(BASE_GENERATORS)
@@ -110,6 +118,16 @@ def main():
     require(in_core(base, PHI_BASE), "base leximin candidate is infeasible")
     require(in_core(endpoint, PHI_ENDPOINT),
             "endpoint leximin candidate is infeasible")
+
+    # Recompute both headline allocations with the project's independent exact
+    # rational Maschler implementation; the hand stage certificates below are
+    # retained for transparency rather than used as substitutes for this test.
+    computed_base = tuple(leximin_core_exact(Game(N, base)))
+    computed_endpoint = tuple(leximin_core_exact(Game(N, endpoint)))
+    require(computed_base == PHI_BASE,
+            f"recomputed base Lmin is {computed_base}, expected {PHI_BASE}")
+    require(computed_endpoint == PHI_ENDPOINT,
+            "recomputed endpoint Lmin disagrees with the displayed vector")
 
     # Base Maschler certificate.  v(345)=18 implies x1+x2<=2, so the first
     # common gain is at most 1 and pins 1,2.  Then v(135)=14 forces x4<=5;
@@ -172,7 +190,8 @@ def main():
     require(drops == {3: F(1, 2), 5: F(1, 2)}, "wrong target losses")
 
     report = {
-        "status": "solver-free exact proper-coalition monotonicity counterexample verified",
+        "status": "exact proper-coalition monotonicity counterexample verified",
+        "lmin_verification": "exact rational staged Maschler LP recomputation",
         "n": N,
         "target": members(S),
         "base_generators": [list(point) for point in BASE_GENERATORS],
@@ -194,7 +213,10 @@ def main():
             "on exact games; star along the exact path is not sufficient"
         ),
     }
-    print(json.dumps(report, indent=2))
+    rendered = json.dumps(report, indent=2) + "\n"
+    if args.output is not None:
+        args.output.write_text(rendered)
+    print(rendered, end="")
 
 
 if __name__ == "__main__":

@@ -34,28 +34,33 @@ The monotonicity question has since been settled negatively by a still newer
 result, also outside the audit's scope.  A five-player exact lower-envelope
 pair differs only by the bump `v(1345):18 -> 20`, but its leximin points are
 `(1,1,13/2,5,13/2)` and `(2,0,6,6,6)`: target players 3 and 5 each lose
-`1/2`.  A solver-free verifier checks both games from their common-total
-generators and proves the complete affine path.  This theorem requires a new
-external audit; none of the review verdicts above should be read as covering
-it.
+`1/2`.  An exact verifier checks both games from their common-total generators,
+recomputes both Lmin allocations by staged rational LP, and proves the complete
+affine path.
 
 A still later computer-assisted bridge now proves that this five-player
 failure is dimension-minimal.  For every singleton-normalized exact game with
 at most four players, an exact symbolic KKT/exact-face certificate forces every
 richer-player suffix at a strict Lmin payoff gap to be tight.  A second
-exhaustive encoding independently obtains the same classification by
-enumerating tight-coalition sets and primal tangent directions, without KKT
-multipliers or complementarity; a third exact-LP checker replays explicit
-integer witnesses for all realizable payoff-stratum patterns.  The resulting
+exhaustive encoding obtains the same classification by formulating Lmin
+optimality through tight-coalition sets and primal tangent directions, without
+KKT multipliers or complementarity.  It shares the exactness system,
+normalization, and solver with the first encoding; a third exact-LP checker
+replays explicit integer witnesses for all realizable payoff-stratum patterns.  The resulting
 hand argument shows that Lmin Lorenz-dominates the core and equals Lmax/PES;
 Biswas et al. (1999) and Dietzenbacher (2021) then imply coalitional
 monotonicity through four players.  This bridge checks all eleven nonconstant
 ordered stratum patterns for two through four players and includes two
 load-bearing negative controls.  Seven patterns are impossible outright and
 the suffix result is nonvacuous in all four realizable patterns.  The bridge
-also postdates the hostile audit and must not be described as externally
-reviewed.  Its scope, reproduction commands, limitations, and review questions
-are collected in `N4_LMIN_LMAX_REVIEW_PACKET.md`.
+subsequently received a separate hostile external review at commit `5376a76`.
+The reviewer independently reproduced every mathematical claim and found no
+mathematical error, returning "verified with qualifications."  The
+qualifications required recognizing suffix tightness as the published
+exact-partition condition of Llerena--Mauri (2017), recasting novelty as the
+sharp through-four-player classification, repairing reproducibility and
+exposition, and adding the five-player large-core/Lmax separation.  These
+changes are recorded in `N4_LMIN_LMAX_EXTERNAL_REVIEW_RESPONSE.md`.
 
 A post-review literature correction also changes the nomenclature.  The
 leximin-above-singleton-floors selector is exactly `m + Lmin(v^0)`, where
