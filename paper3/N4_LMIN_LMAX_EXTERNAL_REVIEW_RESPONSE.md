@@ -7,6 +7,13 @@ eleven-case classification, all four witnesses, the five-player counterexample,
 and the sharp dimension threshold.  This response does not turn that review
 into a novelty certification or journal peer review.
 
+**Post-review update.**  A later revision replaces the finite classification
+as the theorem proof by a structural human argument based on LP-dual
+protector coalitions and exact singleton witnesses.  The reviewed encodings
+remain independent audits.  The new proof is recorded in
+`N4_LMIN_LMAX_HUMAN_PROOF.md` and has not yet been externally reviewed; the
+historical limitation below describes the state of commit `5376a76`.
+
 ## Central correction
 
 The manuscript no longer presents richer-suffix tightness as an unnamed new
@@ -77,7 +84,9 @@ The bibliography now cites:
 
 ## Remaining limitations
 
-- No concise hand proof replaces the finite computer-assisted classification.
+- At the reviewed commit, no concise hand proof replaced the finite
+  computer-assisted classification.  That limitation is now superseded by
+  the unreviewed protector-coalition proof noted above.
 - The two exhaustive encodings share the definition-level exactness system and
   Z3, although their Lmin-optimality formulations differ.
 - The finite-classification novelty claim still requires MathSciNet/zbMATH and

@@ -25,13 +25,14 @@ in the present notation `phi=Lmax(v)`.  Published results then give
 `Lmax=PES` and coalitional monotonicity on this domain.  Together with the
 five-player exact Lmin counterexample, this makes dimension five sharp.
 
-The contribution under review is the exhaustive classification "exact and
+The contribution under review is the sharp classification "exact and
 `n<=4` implies exact partition at Lmin" and its sharp failure at five.  Neither
 the exact-partition definition nor its Lorenz consequence is claimed as new.
 
-The manuscript currently labels the suffix-tightness lemma
-**computer-assisted**.  No clean human proof of the four-player case has yet
-been obtained.
+The manuscript now gives a structural human proof.  The two exact-rational
+encodings remain independent audits of the conclusion and sign conventions;
+they are no longer the proof of the classification.  The new argument has not
+yet received external review.
 
 ## Dependency map
 
@@ -39,7 +40,7 @@ been obtained.
 exactness + zero singleton values + Lmin stage optimality
                          |
                          v
-       exact n<=4 is exact partition at Lmin (new finite classification)
+       exact n<=4 is exact partition at Lmin (new sharp classification)
                          |
                          v
        Dutta--Ray exact-partition theory      (Llerena--Mauri 2017)
@@ -60,6 +61,40 @@ exactness + zero singleton values + Lmin stage optimality
 
 Singleton bumps use the manuscript's separate translation lemma and theorem;
 all other one-coalition bumps leave the singleton normalization vector fixed.
+
+## Structural proof: protector coalitions
+
+At a completed Lmin stratum, fix the poorer coordinates and retain the current
+floor constraints.  If `i` is in the current stratum and `h` is richer, the
+dual of `max x_i` on this stage face has tight-coalition coverages satisfying
+
+```text
+coverage(h)-coverage(i)=1+floor_multiplier(i)>0.
+```
+
+Hence some tight **protector coalition** contains `h` and omits `i`.  Combining
+these protectors with the exact core point that attains a singleton value zero
+closes the low-dimensional geometry:
+
+1. A unique richest player would give, for each poorer player `i`, a nonempty
+   protector `{r} union Q_i` omitting `i`.  At the exact witness with `z_r=0`,
+   the displacements satisfy `a(L)=phi_r` but `a(Q_i)>=phi_r`.  An elementary
+   three-vertex argument shows this is impossible when there are at most three
+   poorer players.
+2. A unique poorest player globally maximizes its coordinate at Lmin, so its
+   complement is tight by exactness.
+3. The only remaining four-player boundary is `2|2`.  Protector coalitions
+   either force both poor-player complements, force a complement plus a cross
+   pair (which overallocates an exact singleton witness), or force all four
+   cross pairs (which creates a core segment raising both poorest players).
+
+This exhausts the geometry without enumerating payoff compositions or tight
+sets.  The five-player base witness escapes in a `3|2` boundary: its tight
+coalitions `{3,4,5}` and `{1,3,5}` protect the three poorer players while
+leaving the richer pair `{3,5}` slack.
+
+The full proof is in `paper3/sections_leximin.tex`; an expanded proof audit is
+in `paper3/N4_LMIN_LMAX_HUMAN_PROOF.md`.
 
 ## Encoding A: symbolic KKT/exact-face certificate
 
@@ -260,9 +295,10 @@ policy; these programs do not currently rely on Python `assert` statements.
 
 ## Known limitations
 
-1. No concise human proof of suffix tightness has yet replaced the finite
-   theorem.  Encoding B makes the case split much more transparent but is
-   still computer-assisted.
+1. The protector-coalition proof is new in this revision and has not yet been
+   checked by an external human reviewer.  Its load-bearing points are the
+   stage-face pinning claim, the LP-dual coverage sign, and the exact-singleton
+   contradictions in the `2|2` case.
 2. Both exhaustive encodings use Z3's exact linear-rational engine, although
    they formulate Lmin optimality differently.  The concrete witnesses are
    replayed by the project's separate exact-LP implementation.
@@ -280,15 +316,17 @@ policy; these programs do not currently rely on Python `assert` statements.
 
 ## Questions for the external reviewer
 
-1. Is the tangent-cone characterization of a completed Lmin stratum stated
-   with the correct weak/strict signs?
-2. Does the active-set enumeration cover degeneracy, including players with
-   equal final payoffs that might appear to pin at different algorithmic
-   substeps?
-3. Is definition-level exactness fully captured by the displacement systems
-   for every proper coalition?
-4. Is positive homogeneity sufficient for every unit normalization used in
-   both encodings?
+1. On the Maschler-stage face, does final membership `i in B_j` indeed imply
+   `max x_i=phi_i`, including degenerate faces?  Is the short-segment argument
+   sufficient?
+2. With the manuscript's minimization convention, is the protector identity
+   `w_h-w_i=1+mu_i>0` signed correctly, and does complementary slackness yield
+   a tight coalition containing `h` and omitting `i`?
+3. Is the three-player displacement argument excluding a unique richest
+   player complete for every choice of nonempty `Q_i subseteq L\{i}`?
+4. In the tied `2|2` case, do the protector disjunctions cover every coalition,
+   and do the all-cross-pairs equalities really produce the displayed
+   max-min-improving segment?
 5. Does suffix tightness imply all upper-tail inequalities exactly as stated,
    including indices inside tied blocks?
 6. Does the published chain `exact n<=4 -> large core -> egalitarian stable ->

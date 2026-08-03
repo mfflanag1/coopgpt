@@ -968,20 +968,22 @@ Pre-crash progress banked:
   so it is directly a proper-coalition monotonicity counterexample for Lmin on
   exact games.  Novelty is the exact-game/proper-coalition theorem and compact
   certificate, not the selector itself.
-- ★ N=5 LMIN FAILURE IS DIMENSION-MINIMAL (NEW COMPUTER-ASSISTED THEOREM):
-  an exact symbolic certificate proves that every richer-player suffix at a
-  strict Lmin payoff gap is tight in every singleton-normalized exact game
-  with two, three, or four players.  It exhausts the 1, 3, and 7 nonconstant
-  ordered stratum compositions using definition-level exact-face witnesses
-  and exact KKT duals for both common-level and individual-pinning programs.
-  Seven nominal patterns are themselves impossible; all four realizable
-  patterns nonvacuously force tight richer suffixes.
+- ★ N=5 LMIN FAILURE IS DIMENSION-MINIMAL (NEW STRUCTURAL THEOREM): a human
+  protector-coalition proof shows that every richer-player suffix at a strict
+  Lmin payoff gap is tight in every singleton-normalized exact game through
+  four players.  The dual of a completed Lmin coordinate stage forces a tight
+  coalition containing each richer player and omitting the pinned player.
+  Exact singleton witnesses then exclude a unique richest player, force a
+  singleton poorest complement, and close the sole remaining `2|2` geometry.
+  The previous exact KKT and primal-tangent encodings remain independent
+  audits rather than the theorem proof.
   Hence Lmin Lorenz-dominates the core and equals Lmax/PES through n=4.
   Biswas et al. (1999) plus Dietzenbacher (2021) then give coalitional
   monotonicity through four players, while the exact five-player witness above
   is sharp.  Negative controls become satisfiable after deleting either
-  exactness or individual pins.  External review of this new bridge remains
-  required; see `src/verify_n4_exact_lmin_pes_bridge.py` and
+  exactness or individual pins.  The finite theorem received a favorable
+  hostile review; the new human proof still requires separate external review.
+  See `paper3/N4_LMIN_LMAX_HUMAN_PROOF.md` and
   `paper3/N4_LMIN_MINIMALITY_PROGRAM.md`.
 - N=4 MINIMALITY SCREEN (NOW INDEPENDENT SUPPORT): after singleton normalization,
   normalized Lmin agreed exactly with PES/Lmax on 100 random exact

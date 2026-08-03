@@ -129,6 +129,22 @@ def main():
     require(computed_endpoint == PHI_ENDPOINT,
             "recomputed endpoint Lmin disagrees with the displayed vector")
 
+    # Structural escape from the four-player protector proof.  The base
+    # allocation has strata 2+1+2.  Its only tight nontrivial proper
+    # coalitions protect the three poorer players, while the richer pair
+    # {3,5} remains strictly slack.
+    base_tight_proper = [
+        coalition for coalition in range(1, FULL)
+        if payoff(PHI_BASE, coalition) == base[coalition]
+    ]
+    require(base_tight_proper == [21, 28],
+            "unexpected tight-coalition geometry at the base Lmin point")
+    richer_pair = 20  # {3,5}
+    require(
+        (base[richer_pair], payoff(PHI_BASE, richer_pair)) == (12, 13),
+        "the 3|2 exact-partition obstruction is not the displayed unit slack",
+    )
+
     # Base Maschler certificate.  v(345)=18 implies x1+x2<=2, so the first
     # common gain is at most 1 and pins 1,2.  Then v(135)=14 forces x4<=5;
     # efficiency leaves x3+x5=13, which is equalized.
@@ -201,6 +217,18 @@ def main():
         "nonbinding_threshold": str(payoff(PHI_BASE, S)),
         "base_leximin": [str(value) for value in PHI_BASE],
         "endpoint_leximin": [str(value) for value in PHI_ENDPOINT],
+        "base_payoff_strata": [[1, 2], [4], [3, 5]],
+        "base_tight_nontrivial_proper_coalitions": {
+            "135": str(base[21]),
+            "345": str(base[28]),
+        },
+        "failed_exact_partition_boundary": {
+            "poorer_side": [1, 2, 4],
+            "richer_side": [3, 5],
+            "richer_pair_value": str(base[richer_pair]),
+            "richer_pair_lmin_sum": str(payoff(PHI_BASE, richer_pair)),
+            "slack": str(payoff(PHI_BASE, richer_pair) - base[richer_pair]),
+        },
         "target_player_losses": {str(player): str(loss)
                                   for player, loss in drops.items()},
         "binding_path": [

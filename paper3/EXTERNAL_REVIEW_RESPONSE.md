@@ -38,10 +38,11 @@ pair differs only by the bump `v(1345):18 -> 20`, but its leximin points are
 recomputes both Lmin allocations by staged rational LP, and proves the complete
 affine path.
 
-A still later computer-assisted bridge now proves that this five-player
-failure is dimension-minimal.  For every singleton-normalized exact game with
-at most four players, an exact symbolic KKT/exact-face certificate forces every
-richer-player suffix at a strict Lmin payoff gap to be tight.  A second
+A still later bridge now proves that this five-player failure is
+dimension-minimal.  For every singleton-normalized exact game with at most
+four players, a structural protector-coalition proof forces every richer-player
+suffix at a strict Lmin payoff gap to be tight.  The original exact symbolic
+KKT/exact-face certificate remains an independent audit.  A second
 exhaustive encoding obtains the same classification by formulating Lmin
 optimality through tight-coalition sets and primal tangent directions, without
 KKT multipliers or complementarity.  It shares the exactness system,

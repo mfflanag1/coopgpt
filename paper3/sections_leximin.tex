@@ -2219,6 +2219,51 @@ allocation and Lorenz-dominates the core
 the following sharp low-dimensional classification, not the definition or its
 Lorenz consequence.
 
+The following elementary dual consequence of the progressive Lmin procedure
+will replace the finite stratum enumeration used in an earlier version.  We
+use ``protector coalition'' as a descriptive label for the coalition it
+produces, not as established terminology.
+
+\begin{lemma}[protector coalition]\label{lem:lx-protector}
+Let $\phi=\operatorname{Lmin}(v)$, and order its payoff strata
+$B_1,\ldots,B_k$ from lowest to highest.  If $i\in B_j$ and
+$h\in B_{j+1}\cup\cdots\cup B_k$, then some coalition $T$ is tight at
+$\phi$ and satisfies
+\[
+ h\in T,\qquad i\notin T.
+ \tag{PC}\label{eq:lx-protector}
+\]
+\end{lemma}
+
+\begin{proof}
+Put $\alpha=\phi_i$ and $P=B_1\cup\cdots\cup B_{j-1}$.  On the Maschler-stage
+face
+\[
+ F=\{x\in\core(v):x_p=\phi_p\ (p\in P),\quad
+                    x_\ell\geq\alpha\ (\ell\notin P)\},
+\]
+the maximum of $x_i$ is $\alpha$.  Indeed, if $x_i>\alpha$ at some
+$x\in F$, then a sufficiently short segment from $\phi$ toward $x$ keeps
+every richer coordinate strictly above $\alpha$, keeps all coordinates in
+$B_j$ at least $\alpha$, and raises coordinate $i$.  This lexicographically
+improves $\phi$.
+
+Apply LP duality to $\max_{x\in F}x_i$.  Let $\lambda_S\geq0$ multiply
+$v(S)-x(S)\leq0$, let $\mu_\ell\geq0$ multiply
+$\alpha-x_\ell\leq0$, and write
+$w_q=\sum_{S\ni q}\lambda_S$.  Stationarity at a coordinate outside $P$ is
+\[
+ -\mathbf1_{\{q=i\}}-w_q-\mu_q+\nu=0.
+\]
+The floor of the richer player $h$ is strictly inactive, so $\mu_h=0$.
+Consequently
+\[
+ w_h-w_i=1+\mu_i>0.
+\]
+Some positive-multiplier coalition contains $h$ and omits $i$; complementary
+slackness makes it tight at $\phi$.
+\end{proof}
+
 \begin{lemma}[exact-partition classification through four players]
 \label{lem:lx-richer-suffix}
 Let $v$ be an exact game with $|N|\leq4$ and $v(\{i\})=0$ for every player.
@@ -2237,61 +2282,115 @@ Consequently $\operatorname{Lmin}(v)$ is the Lorenz-dominating core allocation
 and equals $\operatorname{Lmax}(v)$.
 \end{lemma}
 
-\begin{proof}[Computer-assisted proof]
-Put $\phi=\operatorname{Lmin}(v)$ and
-$s(T)=\phi(T)-v(T)$.  Exactness has the following definition-level linear
-encoding.  For every nonempty proper coalition $C$ there is a displacement
-$d^C$ such that
+\begin{proof}
+Put $\phi=\operatorname{Lmin}(v)$ and $V=v(N)$.  Exactness will be used in
+the form
 \[
- d^C(N)=0,\qquad d^C(C)=-s(C),\qquad
- d^C(T)\geq-s(T)\quad(\emptyset\ne T\subsetneq N).
- \tag{EF}\label{eq:lx-exact-face-encoding}
+ v(S)=\min_{x\in\core(v)}x(S)                         \tag{E}
 \]
-At Maschler stage $j$, maximize the common floor of the players not yet
-pinned, subject to the core constraints and the earlier pins.  On the
-level-optimal face, maximize each coordinate in $B_j$ separately; its optimum
-is still that stage's level, since precisely those players are pinned.  Exact
-KKT multipliers for these linear programs, together with
-\eqref{eq:lx-exact-face-encoding}, give a rational linear feasibility system.
+for every $S$.  In particular, for each player $r$ there is
+$z^r\in\core(v)$ with $z^r_r=0$.
 
-There are respectively $1$, $3$, and $7$ nonconstant ordered payoff-stratum
-compositions for two, three, and four players.  Seven patterns are already
-infeasible under exactness and the Lmin pin conditions.  In each of the four
-remaining, realizable patterns, adjoining
+We first exclude a unique richest player when $|N|\leq4$.  Suppose $r$ is
+unique richest, put $L=N\setminus\{r\}$,
+$\gamma=\phi_r$, and $q_i=\phi_i$ for $i\in L$.  Thus
+$0\leq q_i<\gamma$.  Lemma~\ref{lem:lx-protector}, applied at the stratum of
+each $i\in L$, gives a tight coalition
 \[
- \bigvee_{j<k}s(H_j)>0
+ T_i=\{r\}\cup Q_i,\qquad
+ \emptyset\ne Q_i\subseteq L\setminus\{i\}.           \tag{5}
 \]
-is infeasible in exact linear rational arithmetic.  Thus every nominal case
-is closed, and the suffix-slack contradiction is nonvacuous whenever its
-stratum pattern is realizable.  Strict adjacent payoff
-gaps may be normalized to at least one because the entire system is positively
-homogeneous.  The primary verifier constructs every system directly.  A
-second verifier formulates only Lmin optimality independently: it avoids KKT
-multipliers and complementarity by enumerating the tight-coalition set and
-excluding primal tangent directions that improve the current payoff stratum
-after earlier strata are fixed.  It shares the definition-level exact-face
-system, normalization, and Z3 exact-rational engine with the primary verifier.
-The two formulations give the same classification of all eleven compositions.
-A separate exact-LP replay
-verifies small integer games for each of the four realizable patterns.  The
-programs and machine-readable outputs are
-\begin{center}
-\small\path{src/verify_n4_exact_lmin_pes_bridge.py},\\[-2pt]
-\small\path{src/verify_n4_exact_lmin_pes_bridge_primal.py},\\[-2pt]
-\small\path{src/verify_n4_exact_lmin_pes_bridge_witnesses.py},\\[-2pt]
-\small\path{results/n4_exact_lmin_pes_bridge.json},\\[-2pt]
-\small\path{results/n4_exact_lmin_pes_bridge_primal.json},\\[-2pt]
-\small\path{results/n4_exact_lmin_pes_bridge_witnesses.json}.
-\end{center}
-The additional audit script
-\begin{center}
-\small\path{src/verify_n4_exact_lmin_pes_bridge_cores.py}
-\end{center}
-extracts reduced solver-checkable assertion subsets.  These are audit conveniences using the
-same Z3 query, not Farkas certificates or independent proof evidence.
-As load-bearing negative
-controls, deleting either all exact-face witnesses or all individual-pinning
-programs makes some systems feasible.  This proves
+The set $Q_i$ is nonempty because $\{r\}$ is slack.  At the exact singleton
+witness $z=z^r$, set $a_i=z_i-q_i$.  Efficiency and (5) give
+\[
+ a(L)=\gamma,\qquad a(Q_i)\geq\gamma,
+ \qquad a_i\geq-q_i>-\gamma.                          \tag{6}
+\]
+These relations are impossible for $|L|\leq3$.  For $|L|=1$ no $Q_i$
+exists.  For $|L|=2$ the two inequalities in (6) give
+$a_1,a_2\geq\gamma$.  Let $|L|=3$.  If some $Q_i=\{j\}$, then
+$a_j\geq\gamma$, while the nonempty set $Q_j\subseteq L\setminus\{j\}$
+is disjoint from $\{j\}$ and has $a(Q_j)\geq\gamma$.  If their union is
+$L$, this gives $a(L)\geq2\gamma$; otherwise the remaining coordinate is
+strictly greater than $-\gamma$, and again $a(L)>\gamma$.  If no $Q_i$ is
+a singleton, then $Q_i=L\setminus\{i\}$ for all $i$.  Equations (6) give
+$a_i\leq0$ for every $i$, contradicting $a(L)=\gamma>0$.  Thus the richest
+stratum is not a singleton.
+
+Second, if the poorest stratum is the singleton $\{a\}$, then
+\[
+ x_a\leq\phi_a\quad\hbox{for every }x\in\core(v).      \tag{7}
+\]
+Otherwise a sufficiently short segment from $\phi$ toward a point with a
+larger $a$ coordinate raises the minimum payoff, because every other
+coordinate of $\phi$ is strictly larger.  By (E), (7) says exactly that
+$N\setminus\{a\}$ is tight at $\phi$.
+
+It remains to treat a payoff boundary with two poorer and two richer players.
+Write the poorer set as $\{a,b\}$ and the richer set as $\{c,d\}$.
+First suppose
+\[
+ \phi_a=\alpha<\phi_b=\beta<\phi_c=\gamma
+       \leq\phi_d=\delta.
+\]
+The coalition $N\setminus\{a\}$ is tight by (7).  Assume that $\{c,d\}$
+is slack.  Then $N\setminus\{b\}$ cannot be tight: the two complement
+inequalities would give $x_a\leq\alpha$ and $x_b\leq\beta$ throughout the
+core, and (E) would make $\{c,d\}$ tight.  A protector for $b$ against $c$
+can only be one of
+\[
+ \{c\},\quad\{a,c\},\quad\{c,d\},\quad
+ \{a,c,d\}=N\setminus\{b\}.
+\]
+All but $\{a,c\}$ are slack, so $\{a,c\}$ is tight.  At the exact singleton
+witness $z=z^c$,
+\[
+ z_b+z_d\geq\beta+\gamma+\delta,
+ \qquad z_a\geq\alpha+\gamma.
+\]
+This gives $z(N)\geq V+\gamma$, contrary to efficiency.
+
+Finally suppose
+\[
+ \phi_a=\phi_b=\alpha<\phi_c=\gamma\leq\phi_d=\delta
+\]
+and again assume that $\{c,d\}$ is slack.  The four protector applications
+give
+\[
+ \begin{split}
+ N\setminus\{a\}\text{ tight}&\quad\text{or}\quad
+       \{b,c\},\{b,d\}\text{ both tight},\\
+ N\setminus\{b\}\text{ tight}&\quad\text{or}\quad
+       \{a,c\},\{a,d\}\text{ both tight}.
+ \end{split}                                             \tag{8}
+\]
+If both complements are tight, (E) makes $\{c,d\}$ tight.  If exactly one is
+tight, say $N\setminus\{a\}$, then (8) makes $\{a,c\}$ tight.  At $z^c$,
+\[
+ z_b+z_d\geq\alpha+\gamma+\delta,
+ \qquad z_a\geq\alpha+\gamma,
+\]
+again exceeding $V$ by $\gamma$; the other case is symmetric.
+
+If neither complement is tight, (8) makes all four cross pairs tight.  Since
+\[
+ v(\{a,c\})+v(\{b,d\})
+   =(\alpha+\gamma)+(\alpha+\delta)=V,
+\]
+both corresponding core inequalities are equalities throughout the core;
+the same holds for $\{a,d\}$ and $\{b,c\}$.  At $z^c$ these equalities force
+\[
+ z^c=(\alpha+\gamma,\alpha+\gamma,0,\delta-\gamma).
+\]
+For sufficiently small $t>0$, the core point
+$(1-t)\phi+t z^c$ raises both poorest coordinates above $\alpha$, while the
+two richer coordinates remain above them.  This contradicts max--min
+optimality.  Hence the richer pair is tight.
+
+Now take any strict payoff boundary with $|N|\leq4$.  Its richer side is not
+a singleton by the first part of the proof, so its poorer side has at most two
+players.  A singleton poorer side is covered by (7), and a two-player poorer
+side reduces to the two-by-two argument above.  This proves
 \eqref{eq:lx-richer-suffix}.  The one-stratum case is immediate.
 
 For completeness, here is the connection with the published exact-partition
@@ -2310,6 +2409,25 @@ core, as in \citet{LlerenaMauri2017}.  If $y$ denotes Lmax, Lorenz dominance
 and leximax minimality force $y^\downarrow=\phi^\downarrow$; uniqueness of the
 leximax-minimal point of the compact convex core then gives $y=\phi$.
 \end{proof}
+
+The earlier computer-assisted proof remains as an independent audit rather
+than a dependency of Lemma~\ref{lem:lx-richer-suffix}.  One exact-rational
+encoding uses definition-level exact-face witnesses and stagewise KKT
+multipliers; a second independently formulates Lmin optimality through primal
+tangent cones.  They agree on every payoff-stratum pattern through four
+players, and an exact-LP replay checks integer witnesses for every realizable
+pattern.  The files are
+\begin{center}
+\small\path{src/verify_n4_exact_lmin_pes_bridge.py},\\[-2pt]
+\small\path{src/verify_n4_exact_lmin_pes_bridge_primal.py},\\[-2pt]
+\small\path{src/verify_n4_exact_lmin_pes_bridge_witnesses.py},\\[-2pt]
+\small\path{results/n4_exact_lmin_pes_bridge.json},\\[-2pt]
+\small\path{results/n4_exact_lmin_pes_bridge_primal.json},\\[-2pt]
+\small\path{results/n4_exact_lmin_pes_bridge_witnesses.json}.
+\end{center}
+The reduced unsatisfiable cores produced by
+\path{src/verify_n4_exact_lmin_pes_bridge_cores.py} remain same-solver audit
+conveniences, not independent proof evidence.
 
 \begin{theorem}[the five-player failure is dimension-minimal]
 \label{thm:lx-proper-minimum-dimension}

@@ -16,7 +16,7 @@ the manuscript.  The only unresolved shape is therefore `|S|=3`, `|P|=1`.
 By efficiency, raising `v(S)` is exactly the operation of tightening an upper
 bound on the one outside player's payoff.
 
-## Prior-art correction and the new finite classification
+## Prior-art correction and the sharp classification
 
 After translating singleton values to zero, the manuscript's selector is the
 ordinary Lmin solution.  Biswas, Parthasarathy, Potters, and Voorneveld (1999,
@@ -35,7 +35,7 @@ prior art.
 The formerly missing statement is now verified in exact linear rational
 arithmetic:
 
-> **New finite classification.** Every singleton-normalized exact game with at
+> **New sharp classification.** Every singleton-normalized exact game with at
 > most four players is an exact partition game witnessed at Lmin.  Consequently
 > `Lmin = PES = Lmax` on that domain.
 
@@ -131,9 +131,10 @@ drop forces precisely these two tight coalitions (up to relabeling).
    every proper face.
 2. Completed: encode every progressive Lmin common-level program and every
    individual pin by exact KKT multipliers.
-3. Completed: prove all richer-player suffixes tight in all eleven stratum
-   patterns; identify this as exact-partition structure and invoke the
-   Llerena--Mauri Lorenz theorem to obtain `Lmin=Lmax`.
+3. Completed: prove all richer-player suffixes tight, first by exact finite
+   encodings and now by a structural protector-coalition argument; identify
+   this as exact-partition structure and invoke the Llerena--Mauri Lorenz
+   theorem to obtain `Lmin=Lmax`.
 4. Completed: combine the bridge with Biswas et al. and Dietzenbacher to prove
    monotonicity through four players and sharpness at five.
 5. Completed internally: re-audit every KKT sign, complementarity condition,
@@ -146,13 +147,18 @@ drop forces precisely these two tight coalitions (up to relabeling).
    Lmax, the eleven-case classification, witnesses, and five-player sharpness.
    It found no mathematical error and required the attribution and
    reproducibility changes recorded here.
-7. Remaining: complete MathSciNet/zbMATH and expert citation-chain review of
-   the narrower finite-classification claim.  Reduced cores remain same-solver
-   audit conveniences, not standalone Farkas proofs.
+7. Completed internally: replace the finite enumeration as the theorem proof
+   by a human argument using LP-dual protector coalitions, exact singleton
+   witnesses, and the three possible four-player boundary geometries.
+8. Remaining: obtain hostile external review of the new human proof and
+   complete MathSciNet/zbMATH and expert citation-chain review of the narrower
+   classification claim.  Reduced cores remain same-solver audit conveniences,
+   not standalone Farkas proofs.
 
 The self-contained reviewer packet is
-`paper3/N4_LMIN_LMAX_REVIEW_PACKET.md`.  The theorem remains explicitly
-computer-assisted; no concise hand proof has been obtained.
+`paper3/N4_LMIN_LMAX_REVIEW_PACKET.md`.  The theorem now has a structural
+human proof; the prior computer-assisted classification remains as an
+independent exact-rational audit.
 
 No claim is made that the five-player failure extends to every higher
 dimension by null players: a naive null extension changes several coalitions,
@@ -180,3 +186,11 @@ The exact-partition condition and its Lorenz consequence are therefore not
 new.  None of the inspected sources states the narrower inclusion that every
 exact game through four players is exact partition at Lmin.  This remains a
 focused search, not a definitive MathSciNet/zbMATH novelty opinion.
+
+After obtaining the protector proof, additional exact-phrase searches for
+`Lmin + exact partition`, `Lmin solution + exact games + four players`,
+`leximin + protector coalition`, and `exact game + unique richest + Lmin`
+again returned the standard exact-partition/antiduality and monotonicity papers,
+but no protector lemma or structural proof of the four/five threshold.  This
+raises the plausibility that the proof mechanism is new; it still does not
+replace expert citation-chain, MathSciNet, or zbMATH review.
