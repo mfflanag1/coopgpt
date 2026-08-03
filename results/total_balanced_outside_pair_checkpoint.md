@@ -41,7 +41,14 @@ not exhaustive certificates:
   violation in the larger total-balanced cone.  This is a boundary control for
   the outside-pair conjecture, not a counterexample to the `|P| = 2` claim.
 
-Exact `n = 7` searches for target sizes 3, 4, and 5 were stopped before
-completion at this checkpoint and produced no result artifacts.  Accordingly,
-there is no exact seven-player theorem or seven-player outside-pair
-counterexample claimed here.
+The broad exact `n = 7` searches for target sizes 3, 4, and 5 were stopped
+before completion and produced no result artifacts.  A subsequent structural
+test of the outside-pair matching reduction did, however, isolate an exact
+integer counterexample to the *totally balanced* extension at `n = 7`,
+`|S| = 5`, and `|P| = 2`.  It has `gamma_S = 1`, `eta_S = 0`, and singleton
+full core.  The solver-free integer certificate is
+`src/verify_n7_total_balanced_outside_pair_counterexample.py`.
+
+This establishes that the six-player totally balanced outside-pair result is
+dimension-sharp.  The counterexample is not an exact game, so it neither
+disproves nor proves sharpness of the unrestricted exact-game theorem.
