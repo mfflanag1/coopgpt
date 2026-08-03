@@ -21,6 +21,8 @@ from verify_n7_exact_carrier_outside_triple_counterexample import (
 
 PHI = tuple(F(coordinate, 3) for coordinate in A)
 ZERO_FACES = (48, 84, 88, 109)  # 56,357,457,13467
+CAPACITY_FACE = 20  # 35
+CAPACITY_SUPPORT = (48, 84)  # 56,357
 
 
 def verify(kappa, theta):
@@ -84,6 +86,21 @@ def verify(kappa, theta):
     # The degree-four identity from the base example is unchanged and all its
     # coalition faces remain phi-tight, hence eta=0.
     eta = F(0)
+
+    # The family is intrinsically unbumpable at S.  The incidence identity
+    #   1_N + 1_35 = 1_S + 1_56 + 1_357
+    # and zero worth of all three proper coalitions imply that every point of
+    # F_35 has x(S)=0.  Since v(S)=0, the exact bump capacity is zero.
+    assert value[S] == value[CAPACITY_FACE] == 0
+    assert all(value[coalition] == 0 for coalition in CAPACITY_SUPPORT)
+    for player in range(N):
+        assert (
+            int(FULL >> player & 1)
+            + int(CAPACITY_FACE >> player & 1)
+            == int(S >> player & 1)
+            + sum(int(coalition >> player & 1) for coalition in CAPACITY_SUPPORT)
+        )
+    capacity = F(0)
     return {
         "kappa": str(kappa),
         "theta": str(theta),
@@ -91,6 +108,8 @@ def verify(kappa, theta):
         "floors": [str(value) for value in floors],
         "gamma": str(gamma),
         "eta": str(eta),
+        "exact_bump_capacity": str(capacity),
+        "capacity_blocking_face": "35",
         "violated": eta < gamma,
         "carrier_difference_values": sorted({str(value) for value in differences}),
     }
@@ -113,6 +132,8 @@ def main():
         "leximin": [str(value) for value in PHI],
         "gamma_formula": "theta-3*kappa-1/3",
         "eta": "0",
+        "exact_bump_capacity": "0",
+        "capacity_identity": "1_N+1_35=1_S+1_56+1_357",
         "interpretation": (
             "a relatively open two-dimensional wedge of exact seven-player "
             "leximin counterexamples with three outside players"

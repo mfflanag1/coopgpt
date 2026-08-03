@@ -37,6 +37,17 @@ coalitional monotonicity. The closest sources located were:
    These papers are directly relevant context but do not state the carrier
    inequality used here.
 
+   Arin, Kuipers, and Vermeulen (2003), [*Some characterizations of
+   egalitarian solutions on classes of TU-games*](https://doi.org/10.1016/S0165-4896(03)00051-9),
+   is also close in language but not in result: it characterizes the ordinary
+   lexicographically maximal core allocation on large-core games and uses
+   monotonicity in the worth of the grand coalition. Dietzenbacher's result is
+   closer in axiom---its Lmax solution is coalitionally monotone---but its
+   selector lexicographically minimizes maximal payoffs, whereas the present
+   selector lexicographically maximizes gains above endogenous singleton
+   floors. Moreover PES-stable games form a proper subdomain of balanced
+   games and are not identified with the class of exact games.
+
 4. **No matching prior theorem was located** for the quantities gamma_S and
    eta_S, their inequality for every exact core, the complete six/seven
    threshold, or the displayed triangular seven-player family. Searches also
@@ -48,6 +59,20 @@ coalitional monotonicity. The closest sources located were:
    should search MathSciNet, zbMATH, and citation chains from the six sources
    above; the six-player census should also be cross-checked against the
    published minimal-balanced catalogs if the underlying data can be obtained.
+
+6. **The new monotone-path separation appears distinct from the closest
+   results.** The post-audit seven-player example has
+   `eta_S(phi) < gamma_S(phi)` and binding exact-bump capacity
+   `d*_v(S) > phi(S)-v(S)`, yet its complete admissible bump path is monotone
+   for every member of `S`. Thus the quantitative carrier inequality is not
+   necessary for monotonicity of this selector. The sources above establish
+   monotonicity of other egalitarian selectors on other domains; they do not
+   appear to give this internal separation between a carrier certificate and
+   the behavior it was meant to prove. A defensible claim is therefore: "We
+   are not aware of a prior exact-game example combining a failed quantitative
+   carrier inequality, a binding exact coalition bump, and an explicitly
+   certified monotone leximin-above-floors path." This statement still
+   requires MathSciNet/zbMATH and expert citation-chain review.
 
 ## Defensible current novelty statement
 

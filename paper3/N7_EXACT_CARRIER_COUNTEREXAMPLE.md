@@ -223,11 +223,74 @@ and
 gamma_S = theta - 3*kappa - 1/3,  eta_S = 0.
 ```
 
+The whole wedge is intrinsically unbumpable at `S=1234`.  The zero-valued
+coalitions satisfy
+
+```text
+1_N + 1_35 = 1_1234 + 1_56 + 1_357.
+```
+
+On the exact face `F_35`, core feasibility forces all three terms on the
+right to vanish.  Hence `x(1234)=0` throughout that face and
+`d*_v(1234)=0`.  This family therefore cannot itself produce a binding exact
+bump or a proper-coalition monotonicity counterexample.
+
 Replay representative exact rational points with:
 
 ```sh
 python src/verify_n7_exact_carrier_outside_triple_family.py
 ```
+
+## A binding-bumpable failure whose leximin path remains monotone
+
+The unbumpability of the preceding families is not forced by carrier failure
+alone.  Let
+
+```text
+A = (-215, 53,104,103,-56, 51,-40)
+B = ( 108,-55, -4, -1, 50,-60,-38)
+v(T) = min{0,A(T),B(T)},   S=1234.
+```
+
+Then
+
+```text
+phi   = (-75,17,32,35,-20,15,-4)
+gamma = 36
+eta   = 35
+sigma = phi(S)-v(S) = 9
+d*    = 10.
+```
+
+Thus the quantitative carrier inequality fails and binding exact bumps exist.
+Nevertheless the complete exact leximin path is
+
+```text
+phi(v_tau) = phi                              for 0 <= tau <= 9
+phi(v_tau) = phi + (tau-9)*(e_1-e_6)          for 9 <= tau <= 10.
+```
+
+Every target coordinate is nondecreasing.  The endpoint `v_10` is itself the
+lower envelope of
+
+```text
+A,
+B,
+( 10, 0, 0, 0,  0,-10,  0),
+(-72,18,36,28,-18, 18,-10),
+```
+
+which proves endpoint exactness and hence `d*=10`.  Replay the complete
+solver-free certificate with:
+
+```sh
+python src/verify_n7_binding_carrier_monotone_path.py
+```
+
+This example proves that the quantitative carrier inequality is not necessary
+for proper-coalition monotonicity.  A genuine monotonicity counterexample must
+cross the capacity boundary and also make at least one target coordinate fall;
+this first bumpable carrier obstruction does neither.
 
 Three is sharp among both arbitrary-reference and leximin seven-player
 obstructions.  The

@@ -908,6 +908,27 @@ Pre-crash progress banked:
   `min{0,A,kappa*A+theta*B}` keeps `phi=A/3` and has
   `(gamma,eta)=(theta-3*kappa-1/3,0)`.  Thus the outside-triple finding is an
   open two-parameter wedge, not a single enumerated example.
+  The wedge is nevertheless intrinsically unbumpable.  The zero-valued-face
+  identity `1_N+1_35=1_1234+1_56+1_357` forces `x(1234)=0` on `F_35`, so
+  `d*(1234)=0` throughout the family.  A broader floating capacity screen of
+  all 34 residual `4+3` canonical games finds no binding-capable target; all
+  three leximin carrier violations have zero exact bump capacity.
+- MONOTONICITY-BRIDGE BREAKTHROUGH: a nearby exact three-generator game
+  crosses that boundary while remaining exactly solvable.  For
+  `A=(-215,53,104,103,-56,51,-40)` and
+  `B=(108,-55,-4,-1,50,-60,-38)`, the game `min{0,A,B}` at `S=1234` has
+  integer leximin point `(-75,17,32,35,-20,15,-4)`,
+  `(gamma,eta)=(36,35)`, selection slack `sigma=9`, and exact bump capacity
+  `d*=10`.  Thus the quantitative carrier inequality fails in a genuinely
+  binding-bumpable exact game.  Yet the complete admissible path is
+  `phi_tau=phi` through `tau=9` and
+  `phi_tau=phi+(tau-9)(e1-e6)` on `[9,10]`: player 1 gains, the other target
+  players remain fixed, and proper-coalition monotonicity survives.  The
+  endpoint game is the lower envelope of four displayed integer allocations,
+  and the four-stage Maschler, eta, capacity, endpoint-exactness, and path
+  certificates replay without an optimizer.  This proves the carrier bound is
+  not necessary for monotonicity and sharply localizes what a true
+  counterexample must do.
 - MONOTONICITY CONNECTION: the failure target `S=123` has exact bump capacity
   zero throughout the family.  Coalition `135` is uniquely tight at zero, so
   its face blocks every positive exact bump of `123`.  Thus this carrier

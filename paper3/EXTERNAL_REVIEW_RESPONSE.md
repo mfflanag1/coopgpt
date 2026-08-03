@@ -23,6 +23,12 @@ gives an exact leximin counterexample with three outside players, proves that
 two outside players are impossible at seven, and embeds the obstruction in a
 relatively open two-parameter family.
 
+The post-review revision also contains a new monotonicity-bridge theorem.  It
+exhibits an exact seven-player game with `gamma=36>35=eta` and binding exact
+bump capacity `d*=10>sigma=9`, yet computes the entire admissible leximin path
+and proves it coalitionally monotone.  This result was not within the external
+review's scope and should be audited separately.
+
 ## Write-up findings
 
 All sixteen write-up findings were accepted.
