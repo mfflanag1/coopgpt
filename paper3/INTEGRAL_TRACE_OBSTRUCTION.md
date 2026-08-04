@@ -145,6 +145,20 @@ Thus every slack `2|4` boundary has all four co-singletons as active traces.
 See [`H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`](H4_FIRST_OBSTRUCTION_CLASSIFICATION.md)
 and Theorem `thm:lx-four-rich-trace-classification`.
 
+The next canonical rank-three incidence system is also constrained by
+exactness. For a projective-plane packet of order `q`, simple-point counting
+and a pencil rounding rule out every poor-label pattern satisfying
+
+```text
+|B|(q+2-|B|) > binom(|A|,2).
+```
+
+In particular all such packets through order six are impossible, while the
+argument deliberately leaves the extremal order-seven count `(6,7)` open.
+See
+[`PROJECTIVE_PLANE_TRACE_EXCLUSION.md`](PROJECTIVE_PLANE_TRACE_EXCLUSION.md)
+and Theorem `thm:lx-projective-plane-trace-exclusion`.
+
 ## How it explains the sharp threshold
 
 - For `|H|<=2`, every minimal balanced trace packet is a set partition, so

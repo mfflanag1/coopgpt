@@ -240,6 +240,25 @@ weight `1/3` on each `H\{h}`. Hence every slack `2|4` boundary activates all
 four co-singletons, exactly as in the sharp family. The human classification
 is in `paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`.
 
+A second human rounding principle handles a canonical higher-rank class.
+Suppose an underloading trace vertex is the line-incidence system of a finite
+projective plane of order `q`, with every line weighted `1/(q+1)`. Let `A`
+and `B` be the packet lines carrying the losing and gaining poor players.
+Transport gives `1<=|B|<=q` and `|A|<|B|`. There are at least
+
+```text
+|B|(q+2-|B|)
+```
+
+points lying on exactly one `B`-line. If this exceeds `binom(|A|,2)`, one of
+those points `d` lies on at most one `A`-line. The pencil through `d` is then
+a safe star rounding with rich load `1_H+q e_d`, gaining-poor load one, and
+losing-poor load at most one. Exactifying `d` again contradicts efficiency.
+This excludes every projective-plane packet with `|B|<=6`, hence every such
+packet of order at most six. At order seven it leaves only the extremal count
+`(|A|,|B|)=(6,7)`, which remains open. The proof is in
+`paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`.
+
 For the internal-sacrifice family, all co-singletons `H\{x}` are active
 traces.  Weighting them by `1/(h-1)` gives a fractional exact cover; its
 support matrix `J-I` is nonsingular, so the point is a fractional vertex.

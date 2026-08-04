@@ -13,7 +13,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `thm:lx-balanced-trace-transport`,
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
   `thm:lx-rank-two-trace-exclusion`,
-  `thm:lx-four-rich-trace-classification`, and
+  `thm:lx-four-rich-trace-classification`,
+  `thm:lx-projective-plane-trace-exclusion`, and
   `thm:lx-small-poorer-threshold`.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
@@ -34,6 +35,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   proof that graph-like active traces cannot realize a two-poorer failure.
 - `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`: human
   classification proving uniqueness of the first surviving obstruction.
+- `coopgames/paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`: human
+  simple-point counting and star-rounding exclusion for projective-plane
+  incidence packets.
 - `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`: standalone
   statement and proof of the complete cardinality phase diagram.
 - `coopgames/paper3/COMPLETE_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`: focused
@@ -136,6 +140,12 @@ falsification searches.  Please do not count their no-hit output as proof.
    without trusting a search, and check every safe root rounding and the
    type-D poor-label argument. Confirm that slack really forces the
    four-co-singleton `1/3` vertex, not merely the presence of its columns.
+   Finally audit the projective-plane density barrier: verify the two
+   incidence identities, the lower bound `n_1>=b(q+2-b)`, the injection of
+   simple points into pairs of `A`-lines under failure of safe rounding, and
+   the load `1_H+q e_d` from the pencil through `d`. Check especially that
+   exactifying only singleton `d` suffices when its multiplicity is `q`, and
+   that the order-seven `(a,b)=(6,7)` case is explicitly left open.
 10. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove
@@ -192,6 +202,9 @@ core literature:
   two-poorer failure requires an active trace of size at least three;
 - the uniqueness of the four-co-singleton `1/3` packet at the first feasible
   `2|4` obstruction;
+- the projective-plane simple-point density barrier and safe-star exclusion,
+  including whether this exact-face application is already known in the
+  finite-geometry, balanced-hypergraph, or cooperative-game literature;
 - the fixed six-player integer lower-envelope construction.
 - the integral `m>=2,h>=4` internal-sacrifice family, the internal/external
   sacrifice dichotomy, and the observation that exact partition is not
