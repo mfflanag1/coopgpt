@@ -39,9 +39,11 @@ special attention to:
    with minimal semi-balanced/oriented-matroid circuits.  Separate prior art
    for conformal decomposition and exact-game facets from any prior art for
    this Lmin-selected reduction.
-8. The manuscript explicitly does **not** claim that the selected atom is
-   indecomposable/facet-defining.  Is that calibration correct, and can a
-   counterexample show that indecomposability need not be preserved?
+8. Audit the stronger facet-avoidance corollary: does the costly singleton
+   always make `E=H union {i}` a proper coalition outside the atom, and does
+   `1_H+1_{i}-1_E=0` prove decomposability under the exact published
+   definition?  Does the cited facet theorem then justify the conclusion
+   that no selected atom is facet-defining?
 
 Please report fatal errors first, then repairable gaps, then novelty risks.
 State whether the result is (a) correct as written, (b) correct after named

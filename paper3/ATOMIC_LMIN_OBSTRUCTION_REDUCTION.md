@@ -81,9 +81,35 @@ support is restricted to Lmin-tight protectors and costly poorer-side
 singletons.
 
 Minimal semi-balanced is not the same as *indecomposable* in the stronger
-sense of Studeny and Kratochvil.  No claim of facet-inducing
-indecomposability is made here.  Determining when the Lmin-selected atom can
-be chosen indecomposable is the next structural question.
+sense of Studeny and Kratochvil.  In fact, the Lmin-selected atoms here are
+always decomposable in that stronger sense; the next section proves this.
+
+## Facet avoidance theorem
+
+Every atom selected by a slack Lmin boundary is decomposable in the sense of
+Studeny and Kratochvil, and therefore its exact-game inequality is not
+facet-defining.
+
+Choose the positive-slack deficit singleton `{i}` guaranteed by the atomic
+reduction.  There is another poorer player: if `L={i}`, then
+`beta=max_{j in L} c_j=c_i`, so there can be no deficit singleton.  Therefore
+`E=H union {i}` is a nonempty proper coalition.  It cannot already belong to
+the atom, because
+
+```text
+1_H + 1_{i} - 1_E = 0
+```
+
+would then be a dependence on a proper subsupport, contradicting circuit
+minimality.  The displayed identity says exactly that the new coalition `E`
+is exceptional in the atom enlarged by `E`.  By the published definition,
+`E` decomposes the atom.
+
+Thus the facet classification of the exact-game cone cannot directly
+classify Lmin failures: the Lmin orientation systematically places its atoms
+on decomposable intersections.  The appropriate next object is a *relative*
+notion that preserves the distinguished exceptional suffix and the labels
+"tight protector" versus "costly poorer completion."
 
 ## Consequences for the research program
 
@@ -131,3 +157,14 @@ checks the signed incidence identities with exact rationals, and verifies
 that every proper subsupport is independent in the quotient incidence
 configuration.  It checks the displayed examples only and is not a proof of
 the conformal reduction.
+
+The stronger exact-cone decomposition can be reproduced with
+
+```bash
+PYTHONPATH=src python src/probe_lmin_atom_indecomposability.py \
+  --output results/lmin_atom_indecomposability_probe.json
+```
+
+The probe applies the published exceptional-set definition directly and
+finds decompositions of both displayed atoms.  The facet-avoidance theorem
+explains why this must happen for every Lmin-selected atom.
