@@ -211,10 +211,12 @@ their odd-cycle submatrix is realizable.
 This result turns the finite-looking threshold into a general hypergraph
 obstruction.  It does **not** classify all nonintegral active trace
 hypergraphs, nor does nonintegrality by itself guarantee realizability by an
-exact game.  The next major target is a converse or minor theorem describing
-whether every higher-dimensional failure contains this four-co-singleton
-packet as a trace minor, or whether new irreducible rank-three and higher
-obstructions occur.
+exact game.  The proposed universal-minor strengthening is false: the exact
+family in [`THREE_TRACE_HALF_INTEGRAL_OBSTRUCTION.md`](THREE_TRACE_HALF_INTEGRAL_OBSTRUCTION.md)
+has five or more rich players, only three active trace columns, and the unique
+half-integral cover `(1/2,1/2,1/2)`.  Hence it cannot contain the four-column
+co-singleton packet under row/column deletion or contraction.  The next major
+target is a classification of the multiple irreducible realizable classes.
 
 Classical prior art retained explicitly:
 

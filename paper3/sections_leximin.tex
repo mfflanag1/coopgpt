@@ -4843,6 +4843,130 @@ not merely have enough players: it realizes exactly the nonintegral trace
 geometry forced by every two-poorer failure.
 \end{proof}
 
+The co-singleton packet is the unique first obstruction, but it is not a
+universal minor of all larger failures.  The following family gives a second
+support-minimal active-trace shape with constant support.
+
+\begin{theorem}[three-trace half-integral obstruction]
+\label{thm:lx-three-trace-obstruction}
+Let $u,w\geq2$.  There is a singleton-normalized exact game with two poorer
+players $a,b$ and richer suffix
+\[
+ H=\{c\}\mathbin{\dot\cup}A\mathbin{\dot\cup}B,
+ \qquad |A|=u,\quad |B|=w,
+\]
+such that
+\[
+ \operatorname{Lmin}(v)=\operatorname{Lmax}(v)
+ =(1,1,2,\ldots,2),
+ \qquad v(H)=2|H|-1<2|H|.
+\]
+At this common solution the only proper tight coalitions are
+\[
+ \{c\}\cup A,\qquad \{c\}\cup B,
+ \qquad \{b\}\cup A\cup B.                         \tag{HT}
+ \label{eq:lx-three-trace-tight}
+\]
+Their rich traces have the unique fractional exact cover
+$(1/2,1/2,1/2)$.  In particular, beginning with five rich players there are
+slack two-poorer boundaries whose active trace system has only three columns;
+such a system cannot contain the four-column co-singleton packet under
+row/column deletion or contraction.  Multiplying all worths and allocations
+by two gives an integral exact game with the same trace geometry.
+\end{theorem}
+
+\begin{proof}
+Put $h=1+u+w$ and let $P$ be the polytope of nonnegative allocations with
+total $2+2h$ satisfying
+\[
+\begin{aligned}
+ x(\{c\}\cup A)&\geq2(u+1),\\
+ x(\{c\}\cup B)&\geq2(w+1),\\
+ x(\{b\}\cup A\cup B)&\geq2h-1.
+\end{aligned}                                                   \tag{HP}
+\label{eq:lx-three-trace-polytope}
+\]
+Define $v(S)=\min_{x\in P}x(S)$.  The point with
+$x_a=x_b=x_c=0$, $x(A)=2u+2$, and $x(B)=2w+2$ is feasible; because both
+blocks have at least two members, it can also zero any prescribed member of
+$A$ or $B$.  Hence every singleton has value zero.  The defining coalition
+constraints give $\core(v)\subseteq P$, while the lower-envelope definition
+gives the reverse inclusion.  Every coalition minimum is attained on the
+compact polytope, so $v$ is exact.
+
+At a vertex, at most one coordinate in each of the exchangeable blocks $A$
+and $B$ is positive.  After zero coordinates are removed, the remaining
+constraint columns are among the five player types $a,b,c,A,B$; every
+nonsingular subdeterminant of their total-plus-three-coalition incidence
+matrix has absolute value one or two.  Thus every vertex of $P$ is
+half-integral, proving the integral scaling claim.
+
+The point $\phi=(1,1,2,\ldots,2)$ lies in $P$ and makes all three inequalities
+tight.  Adding them and using efficiency gives
+\[
+ 2x(H)+x_b\geq4h+1,
+ \qquad 2x_a+x_b\leq3.                              \tag{HG}
+\label{eq:lx-three-trace-gate}
+\]
+Thus no core point gives every player more than one.  On the face where all
+players receive at least one, \eqref{eq:lx-three-trace-gate} forces
+$x_a=x_b=1$; the richer block then has total $2h$, whose largest common
+lower level is two.  This proves the Lmin formula.
+
+The feasible point
+\[
+ z_a=0,\quad z_b=z_c=3,
+ \qquad z(A)=2u-1,\quad z(B)=2w-1
+\]
+attains equality in all three defining constraints and has $z(H)=2h-1$.
+Conversely, \eqref{eq:lx-three-trace-gate} gives $x_a+x_b\leq3$ and hence
+$x(H)\geq2h-1$.  Therefore the displayed suffix value and unit slack are
+exact.
+
+For Lmax, the first coalition in \eqref{eq:lx-three-trace-tight} has average
+two, so every core point has a coordinate at least two.  On the face where
+all coordinates are at most two, the first two constraints force every
+member of $H$ to equal two.  Efficiency leaves $x_a+x_b=2$, and the third
+constraint gives $x_b\geq1$.  Leximax minimization therefore equalizes the
+two remaining coordinates at one, proving $\operatorname{Lmax}(v)=\phi$.
+
+It remains to identify the active traces.  Since $\phi$ is strictly positive,
+the nonnegativity constraints are inactive there.  If a proper coalition
+$S$ is tight, LP duality writes
+\[
+ \mathbf1_S=\mu\mathbf1_N
+ +\lambda_1\mathbf1_{\{c\}\cup A}
+ +\lambda_2\mathbf1_{\{c\}\cup B}
+ +\lambda_3\mathbf1_{\{b\}\cup A\cup B},
+ \qquad \lambda_j\geq0.
+\]
+The $a$ coordinate makes $\mu\in\{0,1\}$.  The value one gives only $N$;
+with $\mu=0$, comparing the $b,c,A,B$ coordinates of the zero--one vector
+leaves exactly the three unit choices for $\lambda$.  Thus
+\eqref{eq:lx-three-trace-tight} is the complete proper tight list.
+
+Writing the three trace weights as $\beta_1,\beta_2,\beta_3$, the equations at
+$c$, at any member of $A$, and at any member of $B$ are
+\[
+ \beta_1+\beta_2=1,
+ \qquad\beta_1+\beta_3=1,
+ \qquad\beta_2+\beta_3=1.
+\]
+Hence their unique exact cover is $(1/2,1/2,1/2)$.  The saturated
+exact-balanced identity is
+\[
+ \mathbf1_{\{c\}\cup A}+\mathbf1_{\{c\}\cup B}
+ +\mathbf1_{\{b\}\cup A\cup B}+\mathbf1_{\{a\}}
+ -\mathbf1_H=\mathbf1_N.                             \tag{HC}
+\label{eq:lx-three-trace-circuit}
+\]
+The three nontrivial positive terms are tight, while singleton $a$ and the
+negative suffix both have slack one.  The exact vertex audit, complete tight
+list, and generic staged replay of the seven-player base case are in
+\path{src/verify_three_trace_half_integral_family.py} and
+\path{results/three_trace_half_integral_family.json}.
+\end{proof}
+
 There is a second external-sacrifice family.  It extends the three-poorer,
 two-richer geometry of the five-player example simultaneously in both block
 sizes and closes the region between the two preceding families.

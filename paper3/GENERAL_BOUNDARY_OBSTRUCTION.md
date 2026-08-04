@@ -759,6 +759,23 @@ following without dimension enumeration:
 Those would turn the present sharp finite theorem into a general theory of how
 exact-balanced slack is transported across egalitarian payoff boundaries.
 
+The first proposed universal-minor route has now been decided negatively.
+For every split `H={c} disjoint-union A disjoint-union B` with
+`|A|,|B|>=2`, a new exact family has only three proper Lmin-tight coalitions.
+Their rich traces
+
+```text
+{c} union A,  {c} union B,  A union B
+```
+
+have the unique exact cover `(1/2,1/2,1/2)`.  The game has
+`Lmin=Lmax=(1,1,2,...,2)` and suffix slack one.  Because the active system has
+only three columns, it cannot contain the four-column co-singleton packet by
+row/column deletion or contraction.  See
+`paper3/THREE_TRACE_HALF_INTEGRAL_OBSTRUCTION.md`.  The structural target is
+therefore a multi-class circuit classification, not reduction to one
+universal packet.
+
 ## Primary literature checked
 
 - I. Arin and E. Iñarra (2001), *Egalitarian solutions in the core*.
