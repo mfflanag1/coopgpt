@@ -93,6 +93,9 @@ with `u=3` have pairwise disjoint primal row supports, so there are at most
 `r-5` label-free traces of the forced type `(1,3),(3,0)`.  See
 `FOUR_LABEL_SIMPLE_ROW_PACKING.md`.  The next obstruction is therefore a
 global companion-congestion bound rather than another local load census.
+Before that packing step, a divisibility argument shows that all rows with
+`u>=2` are exactly one canonical column of `B`; this majority-column rigidity
+rules out every dual-cubic (`s=3`) core and forces `s>=4`.
 
 The natural stronger conjecture is that every positive Lehman pair has the
 two-label property without a density hypothesis: whenever

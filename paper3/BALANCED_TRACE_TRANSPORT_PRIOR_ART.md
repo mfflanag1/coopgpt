@@ -50,6 +50,8 @@ or any of the following sharp consequences:
 - the classical triple-intersection bound packs the three-losing-label rows
   into disjoint primal supports and forces at least `r-5` opposite-sign
   companion traces around every four-label-simple row;
+- a global incidence divisibility argument identifies all heavy losing-label
+  rows with one canonical dual column and excludes every dual-cubic thin core;
 - without the label-density hypothesis, averaging dual rows still exposes a
   canonical proper internal rich face governed by the exact-face overload
   budget, suggesting a recursive minor-lifting invariant;
@@ -217,7 +219,8 @@ Lehman-matrix paper and the classical minimally-nonideal theorem it records.
 That source supplies the matrix identity and regularity, not the poor-label
 density argument; the two-sided label residual and its local transport and
 subset face budgets; the three-column capacity-parity separation; the
-four-label local normal form and its labeled simple-row packing; or the bridge to exact-game tight
+four-label local normal form, canonical heavy column, and labeled simple-row
+packing; or the bridge to exact-game tight
 faces.  Király--Pap's full primary paper was also checked: its
 minor-compatible pair-of-clutters theorem and ideal set functions do not
 state the two-label interpolation or the residual conservation law, although

@@ -3,6 +3,10 @@
 This note strengthens the thin four-label residual normal form by using the
 classical triple-intersection property of a Lehman pair.
 
+The preceding rigidity theorem in `FOUR_LABEL_HEAVY_COLUMN_RIGIDITY.md`
+shows that all rows of losing load at least two form one canonical `B`-column.
+The present note then controls the load-three subfamily inside that column.
+
 ## Packing lemma
 
 Continue with `k=1`, `|V|=4`, `|U|=3`, `|U intersect V|<=1`, and assume both

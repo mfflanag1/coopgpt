@@ -322,9 +322,14 @@ The classical triple-intersection bound further makes all three-losing-label
 rows a packing of disjoint primal supports.  Each four-label-simple row then
 forces at least `r-5` neutral traces of one specific tile, reducing the open
 problem to congestion of their opposite-sign companions.
+Before that step, global incidence divisibility identifies every row with at
+least two losing labels as one canonical column of the Lehman dual.  This
+majority-column rigidity excludes the full dual-cubic branch and forces both
+Lehman degrees into the noncubic range `r>=6,s>=4`.
 See `paper3/SUBSET_LEHMAN_FACE_BUDGET.md`,
 `paper3/LEHMAN_RESIDUAL_TRANSPORT.md`,
 `paper3/FOUR_COLUMN_RESIDUAL_NORMAL_FORM.md`,
+`paper3/FOUR_LABEL_HEAVY_COLUMN_RIGIDITY.md`,
 `paper3/FOUR_LABEL_SIMPLE_ROW_PACKING.md`,
 `paper3/THREE_COLUMN_LEHMAN_SEPARATION.md`, and
 `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift

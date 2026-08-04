@@ -74,4 +74,7 @@ incompatibility.  It is a structural human reduction, not finite enumeration,
 and its novelty remains subject to specialist review.  The follow-up packing
 lemma in `FOUR_LABEL_SIMPLE_ROW_PACKING.md` shows that every `(1,3)` row has
 an `A`-support disjoint from every other `u=3` row and anchors at least `r-5`
-forced type-2 neutral traces.
+forced type-2 neutral traces.  Before that packing step,
+`FOUR_LABEL_HEAVY_COLUMN_RIGIDITY.md` proves that all rows with `u>=2` are
+exactly one canonical column of `B` and excludes the entire dual-cubic branch,
+so every survivor also requires `s>=4`.

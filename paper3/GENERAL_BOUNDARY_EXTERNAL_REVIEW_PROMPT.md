@@ -23,6 +23,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `lem:lx-three-column-lehman-separation`,
   `lem:lx-four-column-odd-lehman-separation`,
   `prop:lx-thin-four-label-normal-form`,
+  `prop:lx-four-label-heavy-column`,
+  `cor:lx-four-label-dual-cubic-exclusion`,
   `prop:lx-four-label-simple-row-star`,
   `cor:lx-three-gaining-column-exclusion`,
   `cor:lx-subset-lehman-face-budget`,
@@ -70,6 +72,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/FOUR_LABEL_SIMPLE_ROW_PACKING.md`: disjoint-support
   packing of the negative-extreme rows and the forced companion star around
   each four-label-simple row.
+- `coopgames/paper3/FOUR_LABEL_HEAVY_COLUMN_RIGIDITY.md`: global
+  identification of all `u>=2` rows with one canonical `B`-column and the
+  resulting exclusion of the dual-cubic branch.
 - `coopgames/paper3/SUBSET_LEHMAN_FACE_BUDGET.md`: multi-row extension that
   converts aggregate label residual into a quantitative internal-face slack
   bound.
@@ -254,6 +259,14 @@ falsification searches.  Please do not count their no-hit output as proof.
    a `(w,u)=(1,3)` row's `A`-support in both overlap cases, and that every
    remaining neutral trace has the unique `(3,0)` completion.  Confirm that
    this is a packing/forced-star lemma, not yet a global congestion theorem.
+   Independently audit the heavy-column rigidity before using the packing
+   lemma.  Check that every non-`U` trace contains exactly one `u>=2` row,
+   including the `V setminus U` case; that every `U` trace contains one or
+   two; and that `r|H_U|=rs-1+t`, `0<=t<=3`, `r>=6` forces `t=1` and
+   `|H_U|=s`.  Verify the nonsingularity step identifying
+   `1_(H_U)=B1_{a_*}`.  In the `s=3` corollary, check the forced one-label
+   overlap, uniqueness of the `u=3` row, exclusion of `w=3,4` on the two
+   remaining heavy rows, and the identical-column contradiction.
    Audit the subset residual face budget separately.  For a row set `D`,
    recompute the averaged rich load `1_H+(k/|D|)1_D`; verify the two
    interpolation parameters and the identities
@@ -440,6 +453,8 @@ core literature:
   including whether comparable local configurations occur in Lehman theory;
 - the disjoint-support packing of three-losing-label rows and its forced
   `(1,3)`--`(3,0)` neutral companion stars;
+- the heavy-row canonical-column theorem and its dimension-free exclusion of
+  all dual-cubic thin cores;
 - the subset Lehman residual face budget, its unification of the singleton
   bands and canonical internal face, and whether its proposed recursive
   interpretation is genuinely new;
