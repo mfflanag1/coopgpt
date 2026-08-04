@@ -143,7 +143,9 @@ falsification searches.  Please do not count their no-hit output as proof.
    four-co-singleton `1/3` vertex, not merely the presence of its columns.
    Finally audit the projective-plane density barrier: verify the two
    incidence identities, the lower bound `n_1>=b(q+2-b)`, the injection of
-   simple points into pairs of `A`-lines under failure of safe rounding, and
+   simple points into `C x D` or pairs of `D=A setminus B` under failure of
+   safe rounding, and the local deduction `|D|>=2(q+2-|B|)` from a line in
+   `B setminus A`. Then verify
    the load `1_H+q e_d` from the pencil through `d`. Check especially that
    exactifying only singleton `d` suffices when its multiplicity is `q`.
    For the order-seven `(a,b)=(6,7)` case, check the exact simple-point

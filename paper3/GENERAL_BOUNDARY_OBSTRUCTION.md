@@ -243,16 +243,18 @@ is in `paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`.
 A second human rounding principle handles a canonical higher-rank class.
 Suppose an underloading trace vertex is the line-incidence system of a finite
 projective plane of order `q`, with every line weighted `1/(q+1)`. Let `A`
-and `B` be the packet lines carrying the losing and gaining poor players.
+and `B` be the packet lines carrying the losing and gaining poor players, and
+put `C=A intersect B`, `D=A setminus B`.
 Transport gives `1<=|B|<=q` and `|A|<|B|`. There are at least
 
 ```text
 |B|(q+2-|B|)
 ```
 
-points lying on exactly one `B`-line. If this exceeds `binom(|A|,2)`, one of
-those points `d` lies on at most one `A`-line. The pencil through `d` is then
-a safe star rounding with rich load `1_H+q e_d`, gaining-poor load one, and
+points lying on exactly one `B`-line. If this exceeds
+`|C||D|+binom(|D|,2)`, one of those points `d` lies on at most one `A`-line.
+The same conclusion follows locally if `|D|<2(q+2-|B|)`. The pencil through
+`d` is then a safe star rounding with rich load `1_H+q e_d`, gaining-poor load one, and
 losing-poor load at most one. Exactifying `d` again contradicts efficiency.
 This excludes every projective-plane packet with `|B|<=6`, hence every such
 packet of order at most six. At order seven it leaves only the extremal count

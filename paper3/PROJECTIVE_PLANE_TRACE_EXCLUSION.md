@@ -13,16 +13,24 @@ A = lines whose lifted tight coalition contains a,
 B = lines whose lifted tight coalition contains b.
 ```
 
+Put `C=A intersect B` and `D=A setminus B`.
+
 Balanced-trace transport gives
 
 ```text
 1 <= |B| <= q,                 |A| < |B|.
 ```
 
-Such a packet is impossible whenever
+Such a packet is impossible whenever either
 
 ```text
-|B|(q+2-|B|) > binom(|A|,2).                       (PP)
+|B|(q+2-|B|) > |C||D| + binom(|D|,2),              (PP)
+```
+
+or
+
+```text
+|D| < 2(q+2-|B|).                                  (PP-L)
 ```
 
 Consequently:
@@ -33,8 +41,9 @@ Consequently:
   count `(|A|,|B|)=(6,7)`; a separate arc argument below eliminates this
   final pattern in the Desarguesian plane `PG(2,7)`.
 
-The last pattern is explicitly left open here.  The theorem is a human
-counting argument, not a finite-search claim.
+The extremal pattern remains open here only for arbitrary non-Desarguesian
+incidence systems. The theorem is a human counting argument, not a
+finite-search claim.
 
 ## Simple-point count
 
@@ -53,11 +62,25 @@ satisfies
 n_1 >= b0(q+1)-2 binom(b0,2) = b0(q+2-b0).
 ```
 
-If every `B`-simple point lay on at least two lines of `A`, each such point
-would consume a distinct pair of `A`-lines: two projective-plane lines meet
-at only one point.  Hence `n_1 <= binom(a0,2)`, contradicting `(PP)`.
-Therefore some point `d` lies on exactly one `B`-line and at most one
-`A`-line.
+Suppose every `B`-simple point lay on at least two lines of `A`. At most one
+of those lines belongs to `C`, since each `C`-line is also a `B`-line. If the
+unique incident `B`-line is in `C`, map the point to one incident pair in
+`C x D`; otherwise map it to a pair of incident `D`-lines. Distinct points
+give distinct line pairs, so
+
+```text
+n_1 <= |C||D| + binom(|D|,2),
+```
+
+contradicting `(PP)`.
+
+For the local bound, choose `ell in B setminus A`, which exists because
+`|A|<|B|`. At least `q+2-|B|` points of `ell` are `B`-simple. Avoiding a safe
+star at each requires at least two `D`-lines, and one `D`-line cannot meet
+`ell` at two points. Hence `|D|>=2(q+2-|B|)`, contradicting `(PP-L)`.
+
+Under either condition some point `d` therefore lies on exactly one `B`-line
+and at most one `A`-line.
 
 ## Safe star rounding
 
@@ -82,7 +105,13 @@ either poor player.
 
 ## Cardinality corollaries
 
-Because `a0<b0`, condition `(PP)` follows from
+Because
+
+```text
+|C||D|+binom(|D|,2) <= binom(a0,2)
+```
+
+and `a0<b0`, condition `(PP)` follows from
 
 ```text
 b0(q+2-b0) > binom(b0-1,2).
