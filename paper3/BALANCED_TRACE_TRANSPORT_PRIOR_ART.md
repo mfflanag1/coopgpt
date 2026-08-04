@@ -53,6 +53,9 @@ or any of the following sharp consequences:
 - alternatively, scaling rich incidence above the active-column count makes
   one noncore excess cost more than the entire remaining unit gap, so a
   cost-preserving Lehman lift is automatically exact on every rich row;
+- standard clutter parallelization converts that weighted gap exactly into
+  an unweighted cardinality gap, but an arbitrary MNI minor of the
+  parallelization need not retain the original global threshold after lift;
 - at the first feasible four-player richer suffix, every failure has the
   four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - projective-plane incidence packets satisfying the overlap-sensitive bound

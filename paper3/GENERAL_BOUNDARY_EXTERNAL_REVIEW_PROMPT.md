@@ -53,6 +53,10 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   requires a Lehman dual selector to hit every noncore MNI row exactly once.
 - `coopgames/paper3/SCALE_SEPARATED_MNI_BRIDGE.md`: big-M refinement under
   which preservation of one objective gap forces exactness on all rich rows.
+- `coopgames/paper3/PARALLELIZED_RELATIVE_MNI.md`: exact conversion of the
+  weighted gap to an unweighted clone parallelization, together with the
+  denominator and row-geometry reasons this shortcut does not lift Lehman
+  structure back to the exact game.
 - `coopgames/paper3/UNIT_GAP_MNI_BRIDGE.md`: explicit integral-cost set-cover
   gap whose strict unit threshold is equivalent to the gaining-player deficit.
 - `coopgames/paper3/DEGENERATE_MNI_TRACE_EXCLUSION.md`: human elimination of
@@ -214,6 +218,13 @@ falsification searches.  Please do not count their no-hit output as proof.
    labels and that the original scaled costs survive the proposed lift.
    Determine whether a standard MNI/minor-compatible theorem actually
    preserves this objective; the manuscript does not claim that it does.
+   Check the parallelization identities for both integer and fractional
+   covering numbers, including the clone-symmetrization argument. Then audit
+   the stated failure of the shortcut: MNI core rows are clone-variant
+   clutter members rather than rich players, and clone averaging introduces
+   denominators `c_T r`. Determine whether some stronger symmetry-preserving
+   minor theorem avoids this loss; do not infer it from an arbitrary MNI
+   minor.
    Compare this carefully with Király--Pap (2016), DOI
    `10.1016/j.dam.2015.07.035`: determine whether their minor-compatible
    covering/packing pairs or ideal unit-increasing set functions already
