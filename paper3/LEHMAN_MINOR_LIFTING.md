@@ -63,19 +63,20 @@ The second statement remains strict because the uncontracted rows outside
 `D` gain strictly, while the contracted tight coalitions are poor-label-free
 and have nonnegative displacement.
 
-The remaining reduction problem is therefore narrower but has two precise
-parts. One must prove that an underloaded extreme packet admits a positive
-Lehman minor whose lifted fractional core
+The unscaled formulation therefore has two requirements: preserve the
+gaining-player deficit and cover every uncontracted rich row exactly once.
+A classical MNI matrix can have noncore rows that its uniform Lehman vertex
+covers strictly more than once.
 
-1. still has gaining-player load below one, and
-2. covers every uncontracted rich row exactly once.
-
-The second condition matters because a classical MNI matrix can have
-noncore rows that its uniform Lehman vertex covers strictly more than once.
-Alternatively, those residual excess loads must be converted into their own
-exact-face contradiction. No separate two-label invariant is needed once an
-exact-cover lift preserves the scalar deficit, but the rich-row excess issue
-does remain.
+The scale-separated cost in `SCALE_SEPARATED_MNI_BRIDGE.md` collapses those
+requirements. Give rich incidence an integer weight `Lambda` larger than the
+number of active columns. Any noncore excess is at least `1/r`, where the
+Lehman row sum `r` is no larger than that column count, so one overcovered
+row adds more than one unit of scaled cost. Thus preservation of the single
+strict scaled objective gap automatically forces both exact coverage and
+gaining-player load below one. The remaining reduction problem is whether a
+classical or minor-compatible cost-aware reduction preserves this particular
+objective gap.
 
 The manuscript statement and full proof are Corollary
 `cor:lx-deficit-preserving-lehman-minor` in

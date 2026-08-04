@@ -313,6 +313,16 @@ noncore support exactly once as well as meeting the gaining labels once and
 losing labels at most once. This yields a full rooted cover without assuming
 noncore rows away. See `paper3/NONCORE_LEHMAN_LIFTING.md`.
 
+There is also a scale-separated way to remove the noncore condition. Weight
+each unit of rich incidence by an integer `Lambda` larger than the number of
+active columns, while keeping the gaining-poor label at unit cost. The
+underloaded exact packet still lies below `Lambda|H|+1`. In any positive
+Lehman lift, one overcovered noncore row contributes at least `Lambda/r>1`,
+so a lift retaining the strict cost bound is automatically exact on every
+rich row and has gaining-player load below one. Thus both lifting invariants
+reduce to preservation of one scaled objective gap. See
+`paper3/SCALE_SEPARATED_MNI_BRIDGE.md`.
+
 That scalar has an ordinary set-cover interpretation. Assign each lifted
 tight column the integral cost `|T intersect H|+1_{b in T}`, where `b` is the
 gaining poor player. An underloaded fractional packet costs strictly less

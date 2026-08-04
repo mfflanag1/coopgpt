@@ -3065,6 +3065,57 @@ $c^\top y\geq|H|+1$.  Finally, any exact-cover point has total rich
 incidence $|H|$, so \eqref{eq:lx-unit-gap-cost} gives the last assertion.
 \end{proof}
 
+The rich-incidence term can be separated from the poor label by a large
+integer scale.  This makes exactness of a cost-preserving Lehman lift a
+consequence rather than an additional hypothesis.
+
+\begin{corollary}[scale-separated exactness]
+\label{cor:lx-scale-separated-exactness}
+Under the hypotheses of Theorem~\ref{thm:lx-unit-gap-set-cover}, let $q$ be
+the number of active lifted columns, retaining duplicates, and choose an
+integer $\Lambda>q$.  Give each column the cost
+\[
+ c_T^{(\Lambda)}:=\Lambda|T\cap H|+
+                    \mathbf1_{\{b\in T\}}.          \tag{UG-M1}
+ \label{eq:lx-scaled-unit-gap-cost}
+\]
+Then the fractional optimum is below $\Lambda|H|+1$, while every integral
+cover costs at least $\Lambda|H|+1$.
+
+Suppose a set-cover minor has a positive Lehman core with column sum $r$,
+its uniform point is feasible for every row of the minor, and that point is
+lifted by adjoining unit-weight contracted columns.
+Assume those columns partition the contracted rich rows and surviving
+columns avoid those rows.  If this lifted point, evaluated with the original
+costs \eqref{eq:lx-scaled-unit-gap-cost}, still costs less than
+$\Lambda|H|+1$, then it covers every uncontracted rich row exactly once and
+has gaining-player load below one.  In particular, a reduction preserving
+this one scaled objective gap automatically preserves both exact rich
+coverage and the scalar gaining-player deficit.
+\end{corollary}
+
+\begin{proof}
+The first claim repeats the proof of Theorem~\ref{thm:lx-unit-gap-set-cover}.
+The given fractional packet costs $\Lambda|H|+r_b$.  An integral cover with
+more than $|H|$ units of rich incidence costs at least
+$\Lambda(|H|+1)>\Lambda|H|+1$; one with exactly $|H|$ units is a partition
+and has integral $b$-load at least one.
+
+For the lifted minor point, the contracted rows have unit load and the
+Lehman core rows have unit load under the uniform weight $1/r$.  Every
+remaining rich row is covered at least once.  If one is overcovered, its
+zero--one support contains at least $r+1$ surviving columns, so its excess
+is at least $1/r$.  Hence the total cost is at least
+\[
+ \Lambda|H|+\frac{\Lambda}{r}.
+\]
+The Lehman core uses at most the original $q$ columns, so
+$r\leq q<\Lambda$ and this is strictly greater than
+$\Lambda|H|+1$, a contradiction.  Thus every rich row has unit load.  The
+cost is then $\Lambda|H|$ plus the nonnegative $b$-load, which must be below
+one.
+\end{proof}
+
 There is also a label-preserving balanced-matrix formulation.  Instead of
 trying to carry the poor labels alongside a rich-side minor, make them rows
 of the matrix before taking any obstruction.
@@ -3368,7 +3419,11 @@ problem has a useful one-sided resolution.  It is enough to preserve the
 gaining-player deficit; the transport inequality then removes both poor
 labels from every contracted column automatically.  A general MNI minor may
 also have noncore rich rows overcovered by its Lehman fractional vertex; the
-corollary does not suppress that separate excess-row issue.
+corollary does not suppress that separate excess-row issue.  If instead a
+minor lift preserves the scaled gap of
+Corollary~\ref{cor:lx-scale-separated-exactness}, even one such excess is
+already too expensive, so exact coverage and the gaining-player deficit
+follow simultaneously.
 
 \begin{corollary}[deficit-preserving Lehman-minor lift]
 \label{cor:lx-deficit-preserving-lehman-minor}

@@ -137,6 +137,11 @@ is not needed once those conditions hold. See
 `LEHMAN_MINOR_LIFTING.md` for the standalone statement and
 Corollary `cor:lx-deficit-preserving-lehman-minor` for the proof.
 
+Equivalently, the scale-separated formulation in
+`SCALE_SEPARATED_MNI_BRIDGE.md` reduces both requirements to preservation of
+one weighted objective gap: any noncore excess then costs more than the
+available unit margin.
+
 If a classical MNI lift has noncore rows, they can be included in the density
 test rather than discarded. Blocker-core rows meet every noncore clutter row
 at least once, and the total excess `s|W|-n=s(|W|-r)+k` bounds the number
@@ -173,9 +178,9 @@ This is a genuine structural distinction, not a classification yet.  Two
 steps remain before one can claim a dimension-free characterization:
 
 1. reduce an arbitrary underloaded active exact-cover packet to a positive
-   Lehman core while preserving its scalar gaining-player deficit below one
-   and either preserving exact coverage on every residual rich row or
-   controlling the noncore-row excess;
+   Lehman core while preserving the scale-separated objective gap (or,
+   equivalently in the unscaled formulation, preserving the scalar
+   gaining-player deficit and controlling noncore-row excess);
 2. settle the two-label selection problem when (LH-D) fails.
 
 The classical source is Cornuéjols, Guenin, and Tunçel, *Lehman matrices*,

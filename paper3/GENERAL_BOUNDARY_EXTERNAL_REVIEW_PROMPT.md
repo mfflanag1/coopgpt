@@ -51,6 +51,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   contracted column and lifts the Lehman conclusions to the original suffix.
 - `coopgames/paper3/NONCORE_LEHMAN_LIFTING.md`: union-bound refinement that
   requires a Lehman dual selector to hit every noncore MNI row exactly once.
+- `coopgames/paper3/SCALE_SEPARATED_MNI_BRIDGE.md`: big-M refinement under
+  which preservation of one objective gap forces exactness on all rich rows.
 - `coopgames/paper3/UNIT_GAP_MNI_BRIDGE.md`: explicit integral-cost set-cover
   gap whose strict unit threshold is equivalent to the gaining-player deficit.
 - `coopgames/paper3/DEGENERATE_MNI_TRACE_EXCLUSION.md`: human elimination of
@@ -204,6 +206,12 @@ falsification searches.  Please do not count their no-hit output as proof.
    the gaining player. Assess whether standard cost-aware MNI reductions
    preserve this particular gap or whether a new relative-minor theorem is
    still required.
+   Audit the scale-separated refinement independently. Check that choosing
+   `Lambda` above the original active-column count implies `Lambda/r>1` for
+   every surviving Lehman core, that one noncore overcoverage is at least
+   `1/r`, and that the original scaled costs survive the proposed lift.
+   Determine whether a standard MNI/minor-compatible theorem actually
+   preserves this objective; the manuscript does not claim that it does.
    Compare this carefully with Király--Pap (2016), DOI
    `10.1016/j.dam.2015.07.035`: determine whether their minor-compatible
    covering/packing pairs or ideal unit-increasing set functions already
