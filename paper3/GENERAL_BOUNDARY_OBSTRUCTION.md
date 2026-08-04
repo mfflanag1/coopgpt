@@ -354,6 +354,15 @@ nonbalanced separately, producing an odd-cycle channel on `H union {a}` and
 another on `H union {b}`. See
 `paper3/LABELED_ODD_CYCLE_OBSTRUCTION.md`.
 
+The packet can be chosen extreme on the rich trace polytope. Its positive
+trace columns are then linearly independent, and adjoining the poor dummy
+columns preserves independence. Hence the extended fractional cover is
+itself a vertex on the original player rows; its support together with the
+all-ones right-hand side is a linear circuit. The same holds in each
+one-label augmentation. This gives an unconditional, support-minimal labeled
+obstruction without taking an MNI minor; see
+`paper3/CANONICAL_LABELED_CIRCUIT.md`.
+
 The graph-like case can be eliminated completely. If every active trace on
 `H` has size at most two, each extreme exact cover is a disjoint union of
 singleton blocks, isolated edges, and half-weight odd cycles. A packet with

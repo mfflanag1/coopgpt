@@ -14,6 +14,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `thm:lx-balanced-trace-transport`,
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
   `thm:lx-rooted-semigroup-obstruction`,
+  `thm:lx-labeled-odd-cycle`,
+  `cor:lx-unconditional-labeled-obstruction`,
   `thm:lx-positive-lehman-trace-exclusion`,
   `cor:lx-lehman-internal-face`,
   `thm:lx-rank-two-trace-exclusion`,
@@ -63,6 +65,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   the exceptional degenerate-projective-plane branch of Lehman's MNI theorem.
 - `coopgames/paper3/LABELED_ODD_CYCLE_OBSTRUCTION.md`: augmented balanced-
   matrix proof retaining poor labels as rows rather than side annotations.
+- `coopgames/paper3/CANONICAL_LABELED_CIRCUIT.md`: proof that the same
+  original-row packet is a fractional vertex and a support-minimal linear
+  circuit, without an MNI reduction.
 - `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`: human
   classification proving uniqueness of the first surviving obstruction.
 - `coopgames/paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`: human
@@ -241,6 +246,13 @@ falsification searches.  Please do not count their no-hit output as proof.
    precisely what label or spanning information the resulting cycle may
    still omit. Then audit the two one-label strengthenings separately,
    especially the convex-decomposition argument for the losing-row matrix.
+   For the circuit strengthening, verify that minimal balanced support makes
+   the rich trace columns linearly independent, that lifting and adding dummy
+   columns preserve independence, that every coefficient in the all-ones
+   representation is strictly positive, and hence that adjoining the right-
+   hand side gives a minimally dependent set. Distinguish this linear-circuit
+   minimality from minimally nonideal, facet, and deletion/contraction
+   minimality; the manuscript claims none of the latter.
    Assess whether this certificate is strong enough to support a recursive
    minor-lifting theorem or is only a weak necessary inequality.
    Then audit the rank-two trace exclusion: prove the extreme-point support
@@ -320,6 +332,9 @@ core literature:
   tight through five players but can be slack at six;
 - the dimension-free necessity of a nonintegral active trace polytope and odd
   balanced-matrix obstruction at every two-poorer failure;
+- the canonical original-row labeled-cover circuit, including whether its
+  support-minimal vertex formulation has a known antecedent in balanced
+  hypergraphs, oriented matroids, or exact-game tight-coalition systems;
 - the exact-face rooted-semigroup obstruction and its interpretation as a
   family of forbidden integer fibres, including prior terminology from
   normal hypergraphs, Hilbert bases, and affine semigroups;
