@@ -5,27 +5,17 @@
 Let `v` be a singleton-normalized exact game, `phi=Lmin(v)`, and let a strict
 payoff boundary split the players into exactly two poorer players
 `L={a,b}` and a richer suffix `H`. If the boundary is slack, every
-underloaded extreme packet forced by balanced-trace transport satisfies one
-of two alternatives:
+underloaded extreme packet forced by balanced-trace transport contains a
+**proper** rich trace `R` satisfying
 
 ```text
-(i)  it contains a proper trace R with 3 <= |R| <= |H|-1; or
-(ii) its rank-one/two support contains at least two disjoint odd cycles.
-```
-
-In alternative (ii), transport forces `r_b=1/2`, `r_a=0`, and exactly one
-edge to carry `b`. Alternating every cycle, with the labeled edge selected,
-duplicates one vertex from each component. For every resulting transversal
-`D` of cycle vertices,
-
-```text
-s_phi(D) <= phi_a.
+3 <= |R| <= |H|-1.
 ```
 
 Such an underloaded packet always exists. Consequently every slack
-two-poorer boundary has `|H|>=4`; a failure using only rank-one and rank-two
-traces needs at least six rich players. The statement is dimension-free and
-uses no finite enumeration.
+two-poorer boundary has `|H|>=4`, and a boundary whose proper active traces
+all have size at most two is tight. The statement is dimension-free and uses
+no finite enumeration.
 
 ## Why rank two is special
 
@@ -118,37 +108,34 @@ Equivalently, the alternating edges form a safe rooted tight cover with root
 impossible is the exact-face rooted-semigroup theorem in
 [`ROOTED_SEMIGROUP_OBSTRUCTION.md`](ROOTED_SEMIGROUP_OBSTRUCTION.md).
 
-If there is only one odd-cycle component, this is the forbidden safe rooted
-cover above. With several odd cycles, however, all of them must be rounded:
-leaving any at half weight would not give an integer cover. Choose an
-alternating near-perfect cover on every cycle. On the distinguished cycle,
-choose the orientation containing the unique `b`-edge. If `D` contains the
-one duplicated vertex from each cycle, the selected tight coalitions have
+Round the distinguished cycle containing the unique `b`-edge and leave every
+other component at its original exact-cover weights. This includes weight
+`1/2` on any other odd-cycle component. The resulting tight-coalition
+combination has
 
 ```text
-rich load = 1_H + 1_D,
+rich load = 1_H + e_d,
 poor load = e_b.
 ```
 
-The exact-face overload budget therefore gives `s_phi(D)<=phi_a`. If there
-were only one cycle, `D={d}` and singleton normalization would give
-`s_phi(D)=phi_d>phi_a`, a contradiction. Hence a rank-two underloaded packet
-must have at least two odd-cycle components, using at least six rich players.
-
-This corrects an earlier draft shortcut that rounded the labeled cycle while
-silently leaving other odd cycles at half weight. The singleton-root
-conclusion is valid only in the one-cycle case.
+The exact-face overload budget accepts nonnegative real weights, so it gives
+`phi_d<=phi_a`, contradicting the strict boundary. This remains valid with
+multiple odd-cycle components precisely because they need not be rounded.
+What fails in that case is only the stronger interpretation as an integer
+semigroup fibre: the untouched cycles still have half weights. Thus every
+underloaded packet must contain the claimed proper rank-three-or-higher
+trace.
 
 ## Significance
 
 The earlier odd-cycle theorem says that a slack two-poorer boundary must make
 the active trace matrix non-balanced. The present theorem is stronger in a
-different direction: a graph-like obstruction cannot consist of one odd
-cycle. It needs at least two disjoint odd cycles, and every simultaneous
-alternating rounding must land on a low-slack transversal face.
+different direction: no graph-like underloaded packet is realizable. The
+proof uses a real tight-cover overload, not necessarily an integer rooted
+fibre.
 
-This explains the sharp family structurally. Below four rich players neither
-a proper rank-three trace nor two disjoint odd cycles can exist. At four rich
+This explains the sharp family structurally. A failure requires a proper
+rank-three trace, so four is the first possible rich-side size. At four rich
 players the active co-singletons are proper triples; the smallest realizable
 obstruction is not the bare triangle on three vertices but a triangle
 submatrix whose columns can use an additional rich player. The remaining

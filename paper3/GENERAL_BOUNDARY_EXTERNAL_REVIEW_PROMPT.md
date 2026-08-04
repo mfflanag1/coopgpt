@@ -40,8 +40,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   every two-poorer failure forces a nonintegral active trace hypergraph and an
   odd balanced-matrix obstruction.
 - `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`: corrected dimension-free
-  packet dichotomy for graph-like traces, including the multi-cycle
-  transversal-face budget and the retraction of the one-cycle shortcut.
+  exclusion for graph-like packets, using a real overload when untouched
+  odd-cycle components retain half weights.
 - `coopgames/paper3/ROOTED_SEMIGROUP_OBSTRUCTION.md`: standalone
   dimension-free theorem forbidding safe rooted integer fibres of tight
   coalition semigroups.
@@ -267,15 +267,14 @@ falsification searches.  Please do not count their no-hit output as proof.
    load, `F={r_2,k_2}`, and the equality `s_phi(F)=phi_{p_2}`. Decide whether
    this genuinely explains the `2|3` versus `2|4` transition or merely
    restates the existing four-row classification.
-   Then audit the corrected rank-two packet dichotomy: prove the extreme-point support
+   Then audit the corrected rank-two trace exclusion: prove the extreme-point support
    decomposition into singleton blocks, isolated edges, and half-weight odd
    cycles; check the half-integer poor-load argument; and verify that
-   all odd-cycle components must be rounded. Check the full load
-   `1_H+1_D+e_b`, the face budget `s_phi(D)<=phi_a`, the contradiction only
-   when `D` is a singleton, and the corrected conclusion that a pure
-   rank-two packet needs at least two cycles and six rich players. Confirm
-   that the prior claim obtained by leaving other cycles at half weight has
-   been removed everywhere.
+   only the uniquely labeled odd-cycle component is rounded while all other
+   components retain their original exact-cover weights. Check the resulting
+   real load `1_H+e_d+e_b` and the singleton budget contradiction
+   `phi_d<=phi_a`. Confirm that this is not called an integer semigroup fibre
+   when untouched odd cycles retain half weights.
    Also audit the `|H|=4` first-obstruction theorem: independently derive the
    five fractional vertex types in `(FO-2)`, verify that the list is exhaustive
    without trusting a search, and check every safe root rounding and the
@@ -358,9 +357,8 @@ core literature:
   the unique-richest threshold with the trace-rounding hierarchy;
 - the positive-Lehman trace exclusion and the proposed positive-versus-
   negative structural divide;
-- the dimension-free rank-two packet dichotomy: a proper rank-three-or-higher
-  trace versus at least two odd cycles satisfying all transversal-face
-  budgets;
+- the dimension-free rank-two trace exclusion via a real tight-cover
+  overload, including the distinction from an integer rooted fibre;
 - the uniqueness of the four-co-singleton `1/3` packet at the first feasible
   `2|4` obstruction;
 - the projective-plane simple-point density barrier and safe-star exclusion,

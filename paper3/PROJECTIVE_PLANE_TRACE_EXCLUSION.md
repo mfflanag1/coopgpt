@@ -167,7 +167,7 @@ four-rich classification:
 
 ```text
 integral traces are impossible;
-a rank-two packet needs at least two odd cycles and a transversal-face budget;
+rank-two fractional packets are impossible by a real-valued overload budget;
 the first four-rich obstruction is uniquely co-singleton;
 projective-plane incidence packets are impossible below a sharp density gate.
 ```

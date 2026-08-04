@@ -62,13 +62,13 @@ Review the commit identified in the accompanying pull request, especially:
    `{c,d}`, `{c,e}`, `{b,d,e}`, and that exactness of singleton `{d}` yields
    the stated strict efficiency contradiction using only singleton
    normalization and the strict payoff boundary.
-8. Audit the corrected dimension-free rank-two packet dichotomy. Check the
+8. Audit the corrected dimension-free rank-two trace exclusion. Check the
    extreme-point support classification for singleton/pair traces, including
    singleton columns and disconnected or multiple odd-cycle components.
-   Verify the deduction `r_b=1/2,r_a=0`, simultaneous alternating rounding of
-   every odd cycle, the load `1_H+1_D+e_b`, and the budget
-   `s_phi(D)<=phi_a`. Check that one cycle gives the singleton contradiction,
-   while multiple cycles are retained as a genuine surviving alternative.
+   Verify the deduction `r_b=1/2,r_a=0`, alternating only the uniquely labeled
+   cycle, and retaining all other components at their original weights.
+   Check the real load `1_H+e_d+e_b` and the budget contradiction
+   `phi_d<=phi_a`; do not treat it as an integer fibre with multiple cycles.
 9. Independently derive the five fractional exact-cover vertices on four
    rich players and audit the first-obstruction uniqueness theorem. Treat the
    list in `(FO-2)` as untrusted; verify exhaustiveness by hand, all safe root

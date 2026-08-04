@@ -172,12 +172,12 @@ and Theorem `thm:lx-projective-plane-trace-exclusion`.
 
 ## How it explains the sharp threshold
 
-- Every underloaded minimal packet at a slack two-poorer boundary either
-  contains a proper trace `R` with `3<=|R|<=|H|-1`, or its rank-one/two
-  support contains at least two disjoint odd cycles.  Indeed, the full trace
-  cannot occur in a nontrivial minimal balanced support. A single remaining
-  odd cycle alternates to a forbidden singleton-root cover; multiple cycles
-  yield a low-slack transversal-face constraint instead. Therefore slack is
+- Every underloaded minimal packet at a slack two-poorer boundary contains a
+  proper trace `R` with `3<=|R|<=|H|-1`.  Indeed, the full trace cannot occur
+  in a nontrivial minimal balanced support. If all remaining traces had size
+  at most two, alternate the unique poor-labeled odd cycle and leave all other
+  components at their original weights. The real overload budget then gives
+  the forbidden singleton inequality `phi_d<=phi_a`. Therefore slack is
   impossible whenever `|H|<=3`, without enumerating the three-player
   exact-cover vertices.
 - For every `|H|=h>=4`, the internal-sacrifice family has all co-singleton

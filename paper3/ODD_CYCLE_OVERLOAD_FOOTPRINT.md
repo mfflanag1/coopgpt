@@ -23,6 +23,16 @@ s_phi(F) <= sum of the payoffs of omitted poor players.
 Thus loading both poor players forces `F` to be tight. Loading only one poor
 player requires the omitted player to pay for the entire face slack of `F`.
 
+The weights outside the alternated cycle need not be integral. In a
+rank-two extreme packet with several disjoint odd cycles, keep every other
+cycle at its original half weights. Those components still cover their rich
+rows exactly once and, after transport identifies the unique poor-labeled
+edge, carry no poor player. Alternating only the labeled cycle therefore has
+footprint `F={d}` and full real load `1_H+e_d+e_b`. The overload budget gives
+`phi_d<=phi_a`, impossible at a strict boundary. This proves the
+dimension-free rank-two exclusion, but it is not an integer semigroup-fibre
+argument unless there is only one odd cycle.
+
 ## Why three and four rich players differ
 
 If the odd cycle spans all rich rows, there are no external rows and

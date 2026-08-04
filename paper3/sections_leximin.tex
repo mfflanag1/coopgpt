@@ -3756,33 +3756,23 @@ Core feasibility gives $v(D)\leq z(D)$, so
 $s_\phi(D)\geq\phi(D)-z(D)=-\Delta(D)>\sigma$, as required.
 \end{proof}
 
-\begin{theorem}[rank-two packet dichotomy]
+\begin{theorem}[proper-hyperedge obstruction]
 \label{thm:lx-rank-two-trace-exclusion}
 Let $v$ be a singleton-normalized exact game, let
 $\phi=\operatorname{Lmin}(v)$, and let $H$ be a cumulative richer suffix at
 a strict payoff boundary with exactly two poorer players
 $L=\{a,b\}$.  If $H$ is slack at $\phi$, label the poor players by the
-exact-face displacement $\Delta_a<0<\Delta_b$.  Let $q$ be any lifted
-extreme packet from Theorem~\ref{thm:lx-balanced-trace-transport} whose
-gaining-player load satisfies $r_b^q<1$; at least one such packet exists.
-Then either
-\begin{enumerate}[label=\textup{(\roman*)},nosep]
-\item the packet contains a positive proper rich trace $R$ with
-      $3\leq |R|\leq |H|-1$; or
-\item its rank-one and rank-two support contains at least two vertex-disjoint
-      odd-cycle components.  It has $r_b^q=1/2$, $r_a^q=0$, and exactly one
-      supported edge carries $b$.  For every alternating rounding of all
-      cycle components that includes that edge, if $D$ is the set containing
-      one duplicated rich vertex from each component, then
-      \[
-       s_\phi(D)\leq\phi_a.                         \tag{GH}
-       \label{eq:lx-genuine-hypergraph-trace}
-      \]
-\end{enumerate}
-Consequently every slack two-poorer boundary has $|H|\geq4$; in particular,
-if $|H|\leq3$, then $H$ is tight.  A slack boundary supported entirely by
-rank-one and rank-two traces requires at least six rich players and the
-transversal-face budget \eqref{eq:lx-genuine-hypergraph-trace}.
+exact-face displacement $\Delta_a<0<\Delta_b$.  Every lifted extreme packet
+from Theorem~\ref{thm:lx-balanced-trace-transport} whose gaining-player load
+satisfies $r_b<1$ contains a positive proper rich trace $R$ with
+\[
+ 3\leq |R|\leq |H|-1.                                \tag{GH}
+ \label{eq:lx-genuine-hypergraph-trace}
+\]
+Such a packet always exists.  Consequently every slack two-poorer boundary
+has $|H|\geq4$; in particular, if $|H|\leq3$, then $H$ is tight.  More
+generally, $H$ is tight whenever every proper active rich trace has
+cardinality at most two.
 \end{theorem}
 
 \begin{proof}
@@ -3793,9 +3783,9 @@ that
  \Delta_a<0<\Delta_b,\qquad \Delta_a+\Delta_b=s.
  \tag{RT-1}\label{eq:lx-rank-two-signs}
 \]
-Fix any positive-weight lifted extreme packet with $r_b<1$.  If it contains
-a proper trace of cardinality at least three, alternative (i) holds.  Suppose
-otherwise.  Its minimal balanced trace support cannot contain $H$: the singleton
+Fix any positive-weight lifted extreme packet with $r_b<1$ and suppose,
+toward a contradiction, that it has no proper trace of cardinality at least
+three.  Its minimal balanced trace support cannot contain $H$: the singleton
 collection $\{H\}$ is already balanced, so minimality would force it to be
 the whole support with weight one; then $r_b<1$ would give $r_b=0$, and the
 packet inequality $-s+r_a\Delta_a\geq0$ would be impossible.  Hence every
@@ -3833,32 +3823,37 @@ $r_a\geq1/2$ and
  \leq -s+\tfrac12(\Delta_a+\Delta_b)=-\tfrac12s<0.
 \]
 Thus $r_a=0$.  Consequently exactly one half-weight edge coalition on one odd
-cycle contains $b$, and no supported coalition contains $a$.  Call that
-cycle $C_1$ and list all odd-cycle components as $C_1,\ldots,C_t$.
+cycle contains $b$, and no supported coalition contains $a$.
 
-Write $C_1$ as
+Write that labeled odd cycle as
 $e_0,e_1,\ldots,e_{2k}$ in cyclic order, with the unique $b$-carrying
 coalition over $e_0$.  Replace the half weights on this component by unit
 weights on the alternating edges
 \[
  e_0,e_2,\ldots,e_{2k}.
 \]
-These edges cover every vertex of $C_1$ once except their common endpoint,
-which they cover twice.  On every other odd cycle choose any alternating
-near-perfect cover, and leave the singleton and isolated-edge components at
-their unit weights.  If $D$ is the set of the $t$ duplicated cycle vertices,
-the resulting nonnegative integer combination of proper $\phi$-tight
-coalitions has rich load $\mathbf1_H+\mathbf1_D$ and poor load $e_b$.
-Corollary~\ref{cor:lx-exact-face-overload}, with $q=1$, gives
-$s_\phi(D)\leq\phi_a$.
+These edges cover every vertex of the labeled cycle once except their common
+endpoint $d=e_0\cap e_{2k}$, which they cover twice.  Leave every other
+packet component at its original exact-cover weights, including weight
+$1/2$ on any other odd cycle.  Because no other supported coalition carries
+a poor player, the resulting nonnegative \emph{real} combination of proper
+$\phi$-tight coalitions has rich load $\mathbf1_H+e_d$ and poor load $e_b$.
+Corollary~\ref{cor:lx-exact-face-overload}, with overload set $\{d\}$ and
+$q=1$, gives $\phi_d=s_\phi(\{d\})\leq\phi_a$, contradicting the strict
+boundary.
 
-If $t=1$, then $D=\{d\}$ and singleton normalization gives
-$s_\phi(D)=\phi_d>\phi_a$, a contradiction.  Hence $t\geq2$, proving
-alternative (ii).  Finally, \eqref{eq:lx-transport-average} makes the
-mixture's average $b$-load strictly less than one, so at least one underloaded
-packet exists.  If $|H|\leq3$, alternative (i) is impossible because its
-trace is proper, while alternative (ii) needs at least six vertices.  Thus
-$H$ is tight.  The same vertex count proves the final rank-two assertion.
+The use of the real-valued overload budget is essential when the packet has
+additional odd-cycle components: leaving those components at half weight is
+not an integer semigroup fibre.  Thus the argument proves the trace
+exclusion, but only a one-cycle packet directly yields the safe rooted
+\emph{integer} cover of Theorem~\ref{thm:lx-rooted-semigroup-obstruction}.
+
+Hence every underloaded extreme packet contains a proper trace satisfying
+\eqref{eq:lx-genuine-hypergraph-trace}.  Finally,
+\eqref{eq:lx-transport-average} makes the mixture's average $b$-load strictly
+less than one, so at least one such packet exists.  Its proper trace has size
+at least three, forcing $|H|\geq4$.  The last assertion follows because a
+proper active trace of size at least three has just been shown necessary.
 \end{proof}
 
 \begin{theorem}[uniqueness of the first hypergraphic obstruction]
@@ -4107,10 +4102,8 @@ The conclusion is sharp: it fails when $|L|=2$ and $|H|=4$.
 If $|L|=1$, slack would contradict
 \eqref{eq:lx-transport-signs}.  Now put $|L|=2$.  If $H$ were slack,
 Theorem~\ref{thm:lx-rank-two-trace-exclusion} would furnish an underloaded
-minimal balanced packet that either contains a proper rich trace of size at
-least three or has at least two disjoint odd-cycle components.  The first
-alternative requires at least four rich players and the second at least six.
-Both contradict $|H|\leq3$.
+minimal balanced packet containing a proper rich trace $R$ with
+$3\leq|R|\leq|H|-1$.  Hence $|H|\geq4$, contradicting the hypothesis.
 This proves the lower bound without a payoff-stratum case split or a finite
 classification of three-player trace packets.
 

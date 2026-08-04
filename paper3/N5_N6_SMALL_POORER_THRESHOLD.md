@@ -157,21 +157,20 @@ once, so the strict average underload supplies a fractional extreme packet
 with `b`-load below one.
 
 The packet-local rank-two theorem now gives the lower bound without listing
-the three-player vertices. Every such underloaded packet either contains a
-proper rich trace `R` with
+the three-player vertices. Every such underloaded packet contains a proper
+rich trace `R` with
 
 ```text
 3 <= |R| <= |H|-1.
 ```
 
-or its rank-one/two support contains at least two disjoint odd cycles. The
-proof is structural: a minimal balanced packet cannot contain the full trace
-`H`; a support using only smaller rank-one/two traces decomposes into integral
-blocks and half-weight odd cycles. Transport forces exactly one
-gaining-labeled edge. One cycle alternates to the forbidden singleton-root
-load; with multiple cycles, simultaneous rounding instead yields a
-transversal-face slack budget. The first alternative needs at least four rich
-players and the second at least six. Thus every two-poorer boundary with
+The proof is structural: a minimal balanced packet cannot contain the full
+trace `H`; a support using only smaller rank-one/two traces decomposes into
+integral blocks and half-weight odd cycles. Transport forces exactly one
+gaining-labeled edge. Alternate that cycle and leave all other components at
+their original exact-cover weights. The resulting real tight cover has load
+`1_H+e_d+e_b`, and the exact-face overload budget contradicts
+`phi_d>phi_a`. Hence slack forces `|H|>=4`, so every two-poorer boundary with
 `|H|<=3` is tight.
 The old 16 exact-rational queries remain a definition-level audit, not proof
 evidence on which the theorem depends.

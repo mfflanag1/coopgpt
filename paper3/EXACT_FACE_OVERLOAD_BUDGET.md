@@ -89,6 +89,15 @@ Thus the same budget identifies the exact geometric transition from the
 unrealizable three-rich triangle to the realizable four-rich co-singleton
 packet.
 
+The real-valued hypothesis matters for disconnected rank-two packets. One
+may alternate the unique poor-labeled odd cycle while leaving every other
+odd-cycle component at weight one half. The untouched components still load
+their rows exactly once, so the complete overload footprint is the singleton
+root of the labeled cycle. This rules out all rank-two underloaded packets.
+It does not put the selected vector in the integer tight-coalition semigroup
+when other half-weight cycles remain; the integer rooted-fibre interpretation
+is strictly stronger and applies directly only in the one-cycle case.
+
 ## Next structural target
 
 For a supported fractional exact cover, seek a real or integral rounding

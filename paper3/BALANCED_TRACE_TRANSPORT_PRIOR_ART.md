@@ -22,9 +22,8 @@ or any of the following sharp consequences:
 - with exactly two poorer players, a slack richer suffix is impossible for at
   most three richer players and possible for every richer-block size at least
   four;
-- every underloaded two-poorer packet either has a proper rich-side trace of
-  cardinality at least three or at least two disjoint odd cycles satisfying
-  a transversal-face slack budget;
+- every underloaded two-poorer packet has a proper rich-side trace of
+  cardinality at least three, via a real-valued odd-cycle overload;
 - every safe rooted integer fibre of a tight trace semigroup is forbidden by
   an exact singleton face, a dimension-free mechanism unifying the rounding
   exclusions below;
@@ -194,8 +193,8 @@ antiduality paper, the 2021 monotonicity paper, the 2012 minimal
 exact-balancedness paper, the 2025 minimal-balanced-collection survey, and
 Berge's classical balanced-matrix paper.  No source found in this search
 forces nonintegrality or an odd trace cycle from a slack Lmin boundary, or
-states the corrected rank-two packet dichotomy obtained by simultaneous
-odd-cycle rounding and exact-face budgets.
+rules out rank-two packets by combining one-cycle alternating rounding with
+the real-valued exact-face budget.
 
 The later targeted search inspected Cornuéjols--Guenin--Tunçel's primary
 Lehman-matrix paper and the classical minimally-nonideal theorem it records.
@@ -225,9 +224,9 @@ Pending expert review, the strongest defensible formulation is:
 > yields a human exact-partition classification through four players and a
 > sharp `2|3` versus `2|4` richer-side threshold.  Every two-poorer failure
 > moreover forces a nonintegral active trace hypergraph, hence an odd
-> balanced-matrix obstruction. A graph-like underloaded packet either has at
-> least two odd-cycle components obeying a transversal-face budget or is
-> impossible. Exact singleton faces more generally forbid every safe rooted
+> balanced-matrix obstruction, and graph-like underloaded packets are ruled
+> out by a real-valued singleton overload. Exact singleton faces more
+> generally forbid every safe rooted
 > integer fibre of the supported tight-coalition semigroup, unifying the
 > subsequent rounding arguments. Positive Lehman cores canonically generate
 > those fibres, and a two-label density test subsumes the odd-cycle and coarse
