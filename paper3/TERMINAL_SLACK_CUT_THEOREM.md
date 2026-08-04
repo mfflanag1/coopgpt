@@ -60,6 +60,23 @@ maximal slack continuation is a punctured suffix: it contains a losing
 poorer player while excluding a weakly richer gaining poorer player.  Its
 slack is financed by a weighted singleton-sacrifice budget.
 
+The terminal value also has the cover-free core-geometric formula
+
+```text
+s_phi(C)
+ = max_(z in Core(v)) sum_(i in L)(z_i-phi_i)_+.
+```
+
+Every maximizing `z` generates terminal coalitions by including precisely
+the poorer coordinates it lowers, excluding those it raises, and choosing
+arbitrarily among its zero coordinates.  Conversely, every exactifier of a
+terminal coalition maximizes this positive-variation problem and has the
+corresponding sign pattern.  See
+`paper3/LEXIMIN_FACE_ASCENT_GEOMETRY.md`.
+Since positive variation is convex and piecewise linear, a maximizing
+exactifier—and hence at least one terminal coalition—can be chosen at a core
+vertex.
+
 ## Proof
 
 The universal slack-ascent theorem gives an `i in L` for which

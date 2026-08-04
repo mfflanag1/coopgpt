@@ -16,27 +16,25 @@ one adjacent edge of the coalition lattice. Equivalently, no slack Lmin
 suffix is an upper local maximum of the core-slack function.
 
 The theorem is dimension-free, applies to both the pure-star and
-trace-coupled obstruction branches, and uses no enumeration or classification
-of minimal balanced collections.
+trace-coupled obstruction branches, and is an instance of a theorem for
+arbitrary compact convex efficient allocation sets.  It uses no strict-cover
+duality, enumeration, or classification of minimal balanced collections.
 
-## Two-line displacement proof
-
-The strict richer-side cover lemma supplies nonnegative weights on proper
-`phi`-tight coalitions whose common load on `H` is positive and whose load on
-every player of `L` is strictly smaller. Normalize the rich load to one and
-write the poor loads as `c_i<1`.
+## Cover-free displacement proof
 
 Exactify `H` at a core point `z`, write `Delta=z-phi`, and put
 `s=s_phi(H)>0`. Then
 
 ```text
-Delta(H)=-s,       Delta(L)=s,
-0 <= sum_T lambda_T Delta(T) = -s+sum_i c_i Delta_i.
+Delta(H)=-s,       Delta(L)=s.
 ```
 
-If every poorer displacement were nonnegative, `c_i<1` and
-`sum_i Delta_i=s>0` would give `sum_i c_i Delta_i<s`, contradicting the last
-inequality. Hence some `Delta_i<0`. Core feasibility on `H union {i}` gives
+If every poorer displacement were nonnegative, at least one would be
+positive.  Along a sufficiently short segment from `phi` toward `z`, the
+strict poorer/richer payoff gap is preserved, every poorer coordinate weakly
+increases, and one strictly increases.  The increasingly sorted payoff vector
+would lexicographically improve, contradicting `phi=Lmin(v)`.  Hence some
+`Delta_i<0`. Core feasibility on `H union {i}` gives
 
 ```text
 s_phi(H union {i}) >= s-Delta_i > s.
@@ -52,9 +50,35 @@ s_phi(H union {i})-s_phi(H)
 
 which proves the marginal statement.
 
+This is the exact-game specialization of
+`paper3/LEXIMIN_FACE_ASCENT_GEOMETRY.md`.  For a compact convex efficient set
+`K`, define
+
+```text
+sigma_phi(A)=phi(A)-min_(x in K)x(A).
+```
+
+The same segment proof shows that every slack richer face ascends.  Exactness
+identifies `sigma_phi` with ordinary game slack.
+
+The entire interval above `H` has the exact formula
+
+```text
+max_(H subseteq C subseteq N) s_phi(C)
+ = max_(z in Core(v)) sum_(i in L)(z_i-phi_i)_+.
+```
+
+Thus the terminal slack is the maximum one-sided total variation of the
+poorer-side core projection.  Its maximizing coalitions are precisely the
+sign cells that include the poorer coordinates decreased by a maximizing
+core point and exclude those increased by it, with zero coordinates optional.
+When the suffix is slack, this variation is strictly larger than
+`s_phi(H)`, which is the maximum aggregate displacement of the poorer block.
+A maximizing exactifier may be chosen at a core vertex.
+
 ## Quantitative canonical completion
 
-The same strict cover gives more than existence. Put
+A strict Lmin cover is needed only for a sharper quantitative statement. Put
 
 ```text
 b       = max_i c_i,

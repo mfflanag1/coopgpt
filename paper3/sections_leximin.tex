@@ -2796,6 +2796,105 @@ one completion spoke in the circuit to have positive slack.  The circuit
 bound is Corollary~\ref{cor:lx-rooted-atomic-reduction}.
 \end{proof}
 
+The existence mechanism is more general than the preceding cover theory.
+Let $K\subseteq\{x\in\mathbb R^N:x(N)=c\}$ be nonempty, compact, and
+convex, and for $\phi\in K$ define the face deficit
+\[
+ \sigma_{K,\phi}(A):=\phi(A)-\min_{x\in K}x(A).
+\]
+
+\begin{theorem}[leximin face ascent and positive variation]
+\label{thm:lx-face-ascent-geometry}
+Fix a split $N=H\mathbin{\dot\cup}L$.  For every $\phi\in K$,
+\[
+ \max_{H\subseteq C\subseteq N}\sigma_{K,\phi}(C)
+ =\max_{z\in K}\sum_{i\in L}(z_i-\phi_i)_+.        \tag{PV}
+ \label{eq:lx-positive-variation-duality}
+\]
+Let $M$ denote this common value.  A point $z$ maximizes the right side if
+and only if, with
+\[
+ D_-(z)=\{i\in L:z_i<\phi_i\},\qquad
+ Z(z)=\{i\in L:z_i=\phi_i\},
+\]
+every $C=H\cup D$ satisfying
+$D_-(z)\subseteq D\subseteq D_-(z)\cup Z(z)$ maximizes the left side and
+$z(C)=\min_{x\in K}x(C)$.  Conversely, every face minimizer of every
+left-side maximizer has this sign-cell form and maximizes the right side.
+
+If, in addition, $\phi$ is the leximin point of $K$, every coordinate in
+$H$ is strictly larger than every coordinate in $L$, and
+$\sigma_{K,\phi}(H)>0$, then there is an $i\in L$ such that
+\[
+ \sigma_{K,\phi}(H\cup\{i\})>\sigma_{K,\phi}(H),   \tag{FA}
+ \label{eq:lx-face-ascent}
+\]
+and $H\cup\{i\}$ is proper.  Equivalently,
+\[
+ \max_{z\in K}\sum_{i\in L}(z_i-\phi_i)_+
+ >\sigma_{K,\phi}(H)
+ =\max_{z\in K}\sum_{i\in L}(z_i-\phi_i)>0.       \tag{VG}
+ \label{eq:lx-variation-gap}
+\]
+If $K$ is a polytope, a positive-variation maximizer, and hence an
+exactifier of some interval-maximizing coalition, can be chosen at a vertex.
+\end{theorem}
+
+\begin{proof}
+Write $C=H\cup D$ with $D\subseteq L$ and put $a=\phi-z$.  Efficiency
+gives $a(N)=0$.  Compactness and finiteness allow the maxima to be exchanged,
+so
+\begin{align*}
+ \max_D\sigma_{K,\phi}(H\cup D)
+ &=\max_{z\in K}\max_{D\subseteq L}a(H\cup D)\\
+ &=\max_{z\in K}\max_{D\subseteq L}\{-a(L)+a(D)\}\\
+ &=\max_{z\in K}\sum_{i\in L}(-a_i)_+
+ =\max_{z\in K}\sum_{i\in L}(z_i-\phi_i)_+.
+\end{align*}
+For fixed $z$, the inner maximum is attained exactly when $D$ contains every
+index with $a_i>0$ and may choose freely among the zero indices.  If $z$
+also maximizes the outer problem, the resulting coalition attains $M$ and
+$z$ attains its face minimum.  Conversely, let $C=H\cup D$ attain $M$ and
+let $z$ minimize $z(C)$.  For $e\in L\setminus D$, maximality and feasibility
+give
+\[
+ M\geq\sigma_{K,\phi}(C\cup\{e\})
+ \geq\phi(C\cup\{e\})-z(C\cup\{e\})
+ =M+\phi_e-z_e,
+\]
+so $z_e\geq\phi_e$; deletion gives $z_d\leq\phi_d$ for $d\in D$.
+Consequently $D$ is a maximizing sign set for this $z$, proving the reverse
+correspondence and \eqref{eq:lx-positive-variation-duality}.
+
+For ascent, choose $z\in K$ minimizing $z(H)$, put $\Delta=z-\phi$, and
+write $s=\sigma_{K,\phi}(H)>0$.  Then
+$\Delta(H)=-s$ and $\Delta(L)=s$.  If every $\Delta_i$ on $L$ were
+nonnegative, at least one would be positive.  For all sufficiently small
+$t>0$, convexity keeps $\phi+t\Delta$ in $K$ and the strict $L$--$H$ payoff
+gap is preserved.  Every poorer coordinate weakly increases and one strictly
+increases, so the increasingly sorted payoff vector lexicographically
+improves, contrary to leximin optimality.  Thus $\Delta_i<0$ for some
+$i\in L$, and
+\[
+ \sigma_{K,\phi}(H\cup\{i\})
+ \geq\phi(H\cup\{i\})-z(H\cup\{i\})
+ =s-\Delta_i>s.
+\]
+Since $\Delta(L)=s>0$, a distinct poorer coordinate is positive, making the
+extension proper.
+The strict variation gap follows from
+\eqref{eq:lx-positive-variation-duality} and the ascent.  Finally, a convex
+function on a polytope attains its maximum at some vertex: decompose any
+maximizer into vertices and use convexity of the positive-variation
+objective.
+\end{proof}
+
+This theorem is a support-function statement about arbitrary convex
+efficient allocation sets.  Exactness is precisely what identifies its face
+deficit with ordinary coalition slack.  The proof uses no balanced
+collection, strict cover, or finite classification.  The next result retains
+the strict cover only because it gives a sharper cover-dependent factor.
+
 \begin{theorem}[strict-cover slack transfer]
 \label{thm:lx-strict-cover-slack-transfer}
 Let $v$ be exact, let $\phi\in\core(v)$, and write
@@ -2858,30 +2957,18 @@ slack Lmin suffix is an upper local maximum of the slack function.
 \end{corollary}
 
 \begin{proof}
-Lemma~\ref{lem:lx-strict-richer-cover} supplies a strict tight cover at the
-boundary; normalize its common rich load to one and write its poorer loads
-as $c_i<1$. Exactify $H$ at $z\in\core(v)$, put $\Delta=z-\phi$, and write
-$s=s_\phi(H)>0$. Then
-\[
- \Delta(H)=-s,\qquad \Delta(L)=s,\qquad
- 0\leq\sum_T\lambda_T\Delta(T)
-   =-s+\sum_{i\in L}c_i\Delta_i.                   \tag{UA-D}
- \label{eq:lx-universal-lmin-slack-direct}
-\]
-If every $\Delta_i$ were nonnegative, strict underloading would give
-$\sum_i c_i\Delta_i<\sum_i\Delta_i=s$, contradicting the last inequality.
-Thus $\Delta_i<0$ for some $i\in L$. Core feasibility at $H\cup\{i\}$ gives
-\[
- s_\phi(H\cup\{i\})\geq s-\Delta_i>s.
-\]
-Since $\Delta(L)=s>0$, some distinct poorer player gains, so the amplified
-coalition is proper. Finally, the slack identity
+Take $K=\core(v)$.  Exactness gives
+$v(A)=\min_{x\in K}x(A)$ for every coalition $A$, so
+$s_\phi(A)=\sigma_{K,\phi}(A)$.  Theorem~\ref{thm:lx-face-ascent-geometry}
+therefore gives a proper one-player extension with strictly larger slack.
+Finally, the slack identity
 \[
  s_\phi(H\cup\{i\})-s_\phi(H)
  =\phi_i-\bigl(v(H\cup\{i\})-v(H)\bigr)
 \]
-gives the equivalent marginal inequality. Theorem~\ref{thm:lx-strict-cover-slack-transfer}
-supplies the quantitative cover-dependent strengthening.
+gives the equivalent marginal inequality.
+Theorem~\ref{thm:lx-strict-cover-slack-transfer} supplies the separate
+quantitative cover-dependent strengthening.
 \end{proof}
 
 The ascent cannot simply be iterated: after adjoining one poorer player the
@@ -2902,6 +2989,14 @@ $\varnothing\ne D\subsetneq L$, $C$ is proper, and
 \]
 For every $z\in\core(v)$ exact on $C$, put $\Delta=z-\phi$ and
 $S=s_\phi(C)$.  Then
+\[
+ S=\max_{y\in\core(v)}\sum_{i\in L}(y_i-\phi_i)_+, \qquad
+ \{i\in L:\Delta_i<0\}\subseteq D
+ \subseteq\{i\in L:\Delta_i\leq0\}.               \tag{TC-0}
+ \label{eq:lx-terminal-sign-cell}
+\]
+At least one terminal coalition and exactifier can be chosen with the
+exactifier a core vertex.  Moreover,
 \begin{align}
  \Delta_d&\leq0 &&(d\in D),&
  \Delta_e&\geq0 &&(e\in E),&
@@ -2941,6 +3036,9 @@ Corollary~\ref{cor:lx-universal-lmin-slack-ascent} gives an $i\in L$ with
 $s_\phi(H\cup\{i\})>s_\phi(H)$.  Since $s_\phi(N)=0$, every interval
 maximizer has the asserted form with nonempty proper $D\subset L$, and its
 slack $S$ is strictly larger than the root slack.
+Theorem~\ref{thm:lx-face-ascent-geometry}, applied to $K=\core(v)$, gives
+\eqref{eq:lx-terminal-sign-cell} and the core-vertex choice because exactness
+identifies face deficit with coalition slack.
 
 For $d\in D$ and $e\in E$, interval maximality gives
 $s_\phi(C\setminus\{d\})\leq S$ and
