@@ -23,6 +23,15 @@ results/credal_four_five_threshold.json
 paper3/sections_leximin.tex
 ```
 
+The separate dimension-free extension beyond global 2-monotonicity is in:
+
+```text
+paper3/CREDAL_BINDING_EVENT_SELECTOR_THEOREM.md
+paper3/CREDAL_BINDING_EVENT_EXTERNAL_REVIEW_PROMPT.md
+src/verify_lmin_uncrossing_domain.py
+results/lmin_uncrossing_domain.json
+```
+
 Please answer hostilely:
 
 1. Is every credal set on at most three states exactly the stated coordinate

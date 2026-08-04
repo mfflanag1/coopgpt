@@ -292,3 +292,31 @@ entropy as an alternative but does not state a Lorenz, majorization, or
 simultaneous Schur-concave optimum. This does not establish novelty, but it
 clarifies that the water-filled universal representative is not being claimed
 as the only selection rule for probability intervals.
+
+### Dimension-free binding-event extension
+
+The phase diagram is finite-dimensional, but the exact-face uncrossing result
+also transfers to an all-dimensional credal theorem. At the increasingly
+maximal distribution, supermodularity only for pairs of binding events forces
+the binding family to be closed under union and intersection. The Lmin
+strict-cover theorem then makes every richer suffix binding, so the canonical
+distribution is a universal Schur-concave maximizer. Conversely, every
+failure exposes crossing binding events with a positive supermodularity
+defect equal to the sum of the two derived-event slacks.
+
+This does not claim the globally 2-monotone case. Fujishige (1980) and Frank
+and Murota (2022) already place that case in base-polyhedral theory. Abellan
+and Moral (2003), *Maximum of Entropy for Credal Sets*, compute the maximum-
+Shannon-entropy point for probability intervals, and Vu, Destercke, and
+Pichon (2026), *Upper Entropy for 2-Monotone Lower Probabilities*, give a
+current strongly polynomial treatment on the full 2-monotone class. Those
+results concern established global structure or one entropy objective.
+
+The candidate novelty is narrowly the binding-only condition, which is
+strictly weaker than global 2-monotonicity, together with the necessary local
+broken-diamond certificate. A five-state lower envelope in the manuscript
+satisfies the binding-only condition despite 30 global supermodularity
+violations; a second five-state envelope realizes the positive certificate.
+No exact antecedent was found in the focused search, but this negative result
+is not a novelty proof. Review by specialists in imprecise probability and
+submodular optimization remains mandatory.

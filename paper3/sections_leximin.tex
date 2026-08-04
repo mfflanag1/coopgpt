@@ -4170,6 +4170,84 @@ of coherent lower probabilities and probability intervals is studied by
 probability representative for interval credal sets.  Neither source states
 this universal selector threshold.
 
+\begin{theorem}[binding-event universal selector]
+\label{thm:lx-credal-binding-event-selector}
+Let $\underline P$ be an atom-vacuous coherent lower probability on an
+arbitrary finite state space, let $K$ be its induced credal set, and let
+$\phi$ be the increasingly maximal distribution in $K$.  Call $A$ binding
+when $\phi(A)=\underline P(A)$.  If every pair of binding events satisfies
+\[
+ \underline P(A)+\underline P(B)
+ \leq \underline P(A\cap B)+\underline P(A\cup B),       \tag{BES}
+ \label{eq:lx-binding-event-supermodularity}
+\]
+then $\phi$ Lorenz-dominates every distribution in $K$ and is therefore a
+universal maximum uncertainty representative.  Conversely, if $K$ has no
+universal maximum uncertainty representative, then some crossing binding
+events $A,B$ satisfy
+\[
+ \underline P(A)+\underline P(B)
+ -\underline P(A\cap B)-\underline P(A\cup B)
+ =s_\phi(A\cap B)+s_\phi(A\cup B)>0,                     \tag{BD}
+ \label{eq:lx-credal-broken-diamond}
+\]
+where $s_\phi(C)=\phi(C)-\underline P(C)$.
+\end{theorem}
+
+\begin{proof}
+The exact-game correspondence of \citet{StudenyKratochvil2017} identifies
+$\underline P$ with a singleton-normalized exact game, $K$ with its core,
+and $\phi$ with its Lmin allocation.  For binding $A,B$, core feasibility,
+\eqref{eq:lx-binding-event-supermodularity}, and modularity of $\phi$ give
+\[
+ \underline P(A)+\underline P(B)
+ \leq\underline P(A\cap B)+\underline P(A\cup B)
+ \leq\phi(A\cap B)+\phi(A\cup B)
+ =\phi(A)+\phi(B).
+\]
+The endpoints are equal, so $A\cap B$ and $A\cup B$ are binding.  Thus the
+binding family is closed under uncrossing.  Corollary
+\ref{cor:lx-local-supermodular-lmin} now makes $\phi$ an exact-partition
+allocation.  The published exact-partition Lorenz theorem and Corollary
+\ref{cor:lx-credal-universal-uncertainty} give the first conclusion.
+
+If there is no universal representative, Corollary
+\ref{cor:lx-credal-universal-uncertainty} says that $\phi$ is not
+Lorenz-dominating, so it cannot be exact partition.  Some strict richer
+suffix is therefore slack.  The converse in Theorem
+\ref{thm:lx-local-supermodular-domain}, transported through the same
+correspondence, supplies the crossing pair and identity
+\eqref{eq:lx-credal-broken-diamond}.
+\end{proof}
+
+This theorem is dimension-free and is strictly broader than the established
+globally $2$-monotone domain.  Normalize by $15$ the lower envelope of
+\[
+ (0,4,6,5,0),\ (5,0,2,7,1),\ (3,0,0,11,1),\ (2,2,6,0,5).
+\]
+Its only nonempty proper event binding at
+$\phi=(1/6,1/6,2/9,2/9,2/9)$ is $\{3,4,5\}$, so
+\eqref{eq:lx-binding-event-supermodularity} holds and $\phi$ is universal.
+Nevertheless the lower probability has $30$ global supermodularity
+violations, with maximum defect $4/15$.  In the sharp five-state failure,
+the binding pair $\{1,3,5\},\{3,4,5\}$ has positive defect $1/10$ after
+normalization, exactly the sum of the two derived-event slacks.
+
+Global $2$-monotonicity and its base-polyhedral selector are prior art
+\citep{Fujishige1980,FrankMurota2022}.  Maximum Shannon entropy for
+probability intervals was already treated by \citet{AbellanMoral2003}, and
+\citet{VuDesterckePichon2026} gives a current algorithmic treatment for all
+$2$-monotone lower probabilities.  The candidate new content is only the
+binding-event extension beyond global $2$-monotonicity and the necessary
+local defect certificate.  A standalone proof, exact audit, and hostile
+review request are
+\begin{center}
+\small\path{paper3/CREDAL_BINDING_EVENT_SELECTOR_THEOREM.md},\\[-2pt]
+\small\path{src/verify_lmin_uncrossing_domain.py},\\[-2pt]
+\small\path{results/lmin_uncrossing_domain.json},\\[-2pt]
+\small\path{paper3/CREDAL_BINDING_EVENT_EXTERNAL_REVIEW_PROMPT.md}.
+\end{center}
+
 The first row fails precisely when genuinely coupled two-state event
 inequalities first appear.  The second row shows that vanishing atom floors
 buy exactly one additional state.  The candidate cross-field contribution is

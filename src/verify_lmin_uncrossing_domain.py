@@ -7,7 +7,7 @@ import json
 from fractions import Fraction as F
 from pathlib import Path
 
-from leximin import leximin_core_exact
+from leximin import leximax_core_exact, leximin_core_exact
 from tugame import Game
 from verify_n5_exact_leximin_monotonicity_counterexample import (
     BASE_GENERATORS,
@@ -40,6 +40,15 @@ def is_supermodular(values, left, right):
         values[left] + values[right]
         <= values[left & right] + values[left | right]
     )
+
+
+def lorenz_cumulative(point):
+    total = F(0)
+    result = []
+    for value in sorted(point):
+        total += value
+        result.append(total)
+    return tuple(result)
 
 
 def audit_energy(max_n=9):
@@ -91,8 +100,20 @@ def audit_five_player_defect():
         raise AssertionError("unexpected sharp uncrossing defect")
     if defect != slacks[intersection] + slacks[union]:
         raise AssertionError("defect is not the sum of derived-set slacks")
+    decmin = tuple(leximax_core_exact(game))
+    inc_curve = lorenz_cumulative(phi)
+    dec_curve = lorenz_cumulative(decmin)
+    if not (inc_curve[0] > dec_curve[0] and inc_curve[2] < dec_curve[2]):
+        raise AssertionError("sharp obstruction no longer has crossing Lorenz curves")
+    total = F(sum(phi))
     return {
         "lmin": [str(x) for x in phi],
+        "decreasingly_minimal": [str(x) for x in decmin],
+        "normalized_credal_incmax": [str(x / total) for x in phi],
+        "normalized_credal_decmin": [str(x / total) for x in decmin],
+        "incmax_lorenz_cumulative": [str(x / total) for x in inc_curve],
+        "decmin_lorenz_cumulative": [str(x / total) for x in dec_curve],
+        "universal_uncertainty_selector_exists": False,
         "tight_pair": [[1, 3, 5], [3, 4, 5]],
         "intersection": [3, 5],
         "union": [1, 3, 4, 5],
@@ -119,6 +140,9 @@ def audit_nonconvex_positive_domain():
     expected = (F(5, 2), F(5, 2), F(10, 3), F(10, 3), F(10, 3))
     if phi != expected:
         raise AssertionError("nonconvex domain example has unexpected Lmin")
+    decmin = tuple(leximax_core_exact(game))
+    if decmin != phi:
+        raise AssertionError("positive-domain inc-max and dec-min differ")
     full = (1 << 5) - 1
     tight = [
         coalition for coalition in range(1, full)
@@ -145,9 +169,13 @@ def audit_nonconvex_positive_domain():
     for coalition in range(1, full + 1):
         if not any(payoff(point, coalition) == values[coalition] for point in points):
             raise AssertionError("lower-envelope game is not exactly attained")
+    total = F(sum(phi))
     return {
         "generators": [list(point) for point in points],
         "lmin": [str(x) for x in phi],
+        "decreasingly_minimal": [str(x) for x in decmin],
+        "normalized_credal_universal_selector": [str(x / total) for x in phi],
+        "universal_uncertainty_selector_exists": True,
         "proper_lmin_tight_coalitions": [[3, 4, 5]],
         "richer_suffix_tight": True,
         "exact_by_attained_lower_envelope": True,
