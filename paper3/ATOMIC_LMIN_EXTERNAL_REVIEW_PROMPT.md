@@ -14,8 +14,12 @@ special attention to:
   and Corollary `circuit proof of the four/five threshold`
 - `paper3/TWO_COLUMN_LMIN_OBSTRUCTION.md`
 - `paper3/TIGHT_DEFICIT_COMPLETION_THEOREM.md`
+- `paper3/MARGINAL_CORE_FACTORIZATION.md`
+- `paper3/ROOTED_DEFICIT_COMPLETION.md`
 - `src/verify_atomic_lmin_obstruction.py`
+- `src/verify_rooted_deficit_completion.py`
 - `results/atomic_lmin_obstruction.json`
+- `results/rooted_deficit_completion.json`
 - `paper3/wrapper.pdf`
 
 ## Questions requiring explicit answers
@@ -44,6 +48,23 @@ special attention to:
    `1_H+1_{i}-1_E=0` prove decomposability under the exact published
    definition?  Does the cited facet theorem then justify the conclusion
    that no selected atom is facet-defining?
+9. Audit the marginal-core factorization.  Does exactifying `H` really imply
+   that `w_H(Q)=v(H union Q)-v(H)` is balanced, and is
+   `H tight at phi` equivalent to `phi_L in Core(w_H)` with no omitted
+   normalization, monotonicity, or superadditivity hypothesis?
+10. Is rooted deficit completion strictly the earlier exact-balanced
+    incidence inequality after the substitution
+    `1_Q=1_{H union Q}-1_H`?  Check every coefficient, the marginal-slack
+    identity, finiteness of the rooted LP, and the claim that its optimum is
+    bounded above by the unrooted completion cost.
+11. Check the rooted atomic reduction, especially why all rooted singletons
+    are proper and why at least one must be slack.  Confirm independently
+    that the five-player rooted system is indecomposable while the
+    seven-player rooted system has the displayed residual decomposition.
+12. Search marginal-game, reduced-game, exactness, balancedness, and
+    fractional-cover literature for the combined equivalence and rooted
+    functional.  Treat the marginal-contribution operation itself as prior
+    art and assess novelty only for the exact-face/Lmin assembly.
 
 Please report fatal errors first, then repairable gaps, then novelty risks.
 State whether the result is (a) correct as written, (b) correct after named

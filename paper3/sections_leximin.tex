@@ -2478,18 +2478,168 @@ published definition.  The facet conclusion follows from the
 indecomposability criterion of \citet{StudenyKratochvil2022}.
 \end{proof}
 
-Thus exact-cone facets are not the right atoms for Lmin failure: the
-egalitarian orientation forces every obstruction onto a decomposable
-intersection.  A useful next notion must preserve the distinguished
-exceptional suffix $H$ and the tight-versus-costly labeling, rather than use
-unrestricted exact-cone indecomposability.  The standalone proof, scope
-calibration, and exact probe are in
+The rooted construction has an intrinsic game-theoretic meaning that does
+not depend on Lmin.  It turns exactness of a face into balancedness on the
+complement.
+
+\begin{theorem}[marginal-core factorization]
+\label{thm:lx-marginal-core-factorization}
+Let $v$ be exact, let $\phi\in\core(v)$, fix
+$\varnothing\ne H\subsetneq N$, and put $L=N\setminus H$.  Define the
+$H$-marginal game on $L$ by
+\[
+ w_H(Q):=v(H\cup Q)-v(H),\qquad Q\subseteq L.
+\]
+Then $w_H$ is balanced.  For every $Q\subseteq L$,
+\[
+ \phi(Q)-w_H(Q)=s_\phi(H\cup Q)-s_\phi(H),          \tag{MF1}
+ \label{eq:lx-marginal-factor-slack}
+\]
+and
+\[
+ \phi(L)=w_H(L)-s_\phi(H).                         \tag{MF2}
+ \label{eq:lx-marginal-factor-total}
+\]
+Consequently
+\[
+ H\text{ is tight at }\phi
+ \quad\Longleftrightarrow\quad
+ \phi_L\in\core(w_H).                              \tag{MF3}
+ \label{eq:lx-marginal-core-equivalence}
+\]
+\end{theorem}
+
+\begin{proof}
+Exactify $H$: choose $z\in\core(v)$ with $z(H)=v(H)$.  Then
+$z(L)=v(N)-v(H)=w_H(L)$, while for $Q\subseteq L$,
+\[
+ z(Q)=z(H\cup Q)-z(H)\geq v(H\cup Q)-v(H)=w_H(Q).
+\]
+Thus $z_L\in\core(w_H)$ and $w_H$ is balanced.
+Equations \eqref{eq:lx-marginal-factor-slack} and
+\eqref{eq:lx-marginal-factor-total} follow by expansion and efficiency.  If
+$H$ is tight, core feasibility of $\phi$ gives
+$\phi(Q)\geq w_H(Q)$ and \eqref{eq:lx-marginal-factor-total} gives efficiency,
+so $\phi_L\in\core(w_H)$.  Conversely, efficiency in that marginal core and
+\eqref{eq:lx-marginal-factor-total} force $s_\phi(H)=0$.
+\end{proof}
+
+Thus exact partition at a core point is equivalent to compatibility of its
+restrictions with a canonical family of balanced marginal games.  At a slack
+Lmin boundary, $\phi_L$ lies exactly $s_\phi(H)$ below the efficiency
+hyperplane of the balanced game $w_H$.  The obstruction is therefore not an
+unstructured failure of an exact face: it is a weighted fractional-cover gap
+inside a balanced marginal game.
+
+The forced decomposition can be absorbed rather than discarded.  Rooting a
+poorer coalition $Q$ at $H$ replaces it by $H\cup Q$ and charges its marginal
+slack.  This strengthens the completion invariant.
+
+\begin{theorem}[rooted deficit completion]
+\label{thm:lx-rooted-deficit-completion}
+Under the hypotheses and notation of
+Theorem~\ref{thm:lx-tight-deficit-completion}, let
+$\tau:=\sum_Q\nu_Q$.  Then
+\[
+ (\alpha-\beta+\tau)s_\phi(H)
+ \leq\sum_Q\nu_Qs_\phi(H\cup Q),                   \tag{RDC}
+ \label{eq:lx-rooted-deficit-completion}
+\]
+or equivalently
+\[
+ (\alpha-\beta)s_\phi(H)
+ \leq\sum_Q\nu_Q\{s_\phi(H\cup Q)-s_\phi(H)\}.
+                                                               \tag{RMC}
+ \label{eq:lx-rooted-marginal-completion}
+\]
+For disjoint $H,Q$, the rooted marginal cost is
+\[
+ s_\phi(H\cup Q)-s_\phi(H)
+ =s_\phi(Q)-\{v(H\cup Q)-v(H)-v(Q)\}.              \tag{RMS}
+ \label{eq:lx-rooted-marginal-surplus}
+\]
+Thus \eqref{eq:lx-rooted-marginal-completion} improves the unrooted bound by
+the weighted superadditivity surplus.
+\end{theorem}
+
+\begin{proof}
+For every $Q\subseteq L$,
+$\mathbf1_Q=\mathbf1_{H\cup Q}-\mathbf1_H$.  Substitute this into the
+deficit-completion identity to obtain
+\[
+ \sum_T\lambda_T\mathbf1_T+\sum_Q\nu_Q\mathbf1_{H\cup Q}
+ -(\alpha-\beta+\tau)\mathbf1_H=\beta\mathbf1_N.
+\]
+Exact balancedness and tightness of the protectors give
+\eqref{eq:lx-rooted-deficit-completion}; rearrangement gives
+\eqref{eq:lx-rooted-marginal-completion}.  Expanding the three slacks proves
+\eqref{eq:lx-rooted-marginal-surplus}.  Exact games are totally balanced and
+hence superadditive on disjoint coalitions, so the surplus in braces is
+nonnegative.
+\end{proof}
+
+Minimizing the right side of
+\eqref{eq:lx-rooted-marginal-completion} over exact covers of $d$ defines the
+finite rooted functional
+\[
+ \kappa^H_{\phi,L}(d):=min_{\nu\geq0}
+ \left\{\sum_Q\nu_Q[s_\phi(H\cup Q)-s_\phi(H)]:
+              \sum_Q\nu_Q\mathbf1_Q=d\right\}.
+\]
+It satisfies
+\[
+ (\alpha-\beta)s_\phi(H)\leq\kappa^H_{\phi,L}(d)
+ \leq\kappa_{\phi,L}(d),                            \tag{RK}
+ \label{eq:lx-rooted-kappa}
+\]
+and has the marginal-worth gap form
+\[
+ \kappa^H_{\phi,L}(d)=d\mathbin{\cdot}\phi_L-
+ \max_{\nu\geq0}\left\{
+   \sum_Q\nu_Q[v(H\cup Q)-v(H)]:
+   \sum_Q\nu_Q\mathbf1_Q=d\right\}.               \tag{RG}
+ \label{eq:lx-rooted-gap}
+\]
+Hence a nonpositive rooted completion cost forces $H$ tight.  Unlike the
+individual marginal costs, their optimum is nonnegative whenever it is
+selected by a strict tight cover, by \eqref{eq:lx-rooted-kappa}.
+
+\begin{corollary}[rooted atomic reduction]
+\label{cor:lx-rooted-atomic-reduction}
+Every slack richer Lmin suffix $H$ selects a pure minimal semi-balanced
+circuit with exceptional set $H$, at most $|N|$ coalitions, and positive
+support consisting only of Lmin-tight protectors and proper rooted
+singletons $H\cup\{i\}$.  At least one rooted singleton is not tight.
+\end{corollary}
+
+\begin{proof}
+Use singleton completion in the rooted identity above.  The existence of a
+deficit singleton implies $|L|\geq2$, so every $H\cup\{i\}$ used is proper.
+Apply the same conformal circuit decomposition as in
+Theorem~\ref{thm:lx-atomic-obstruction} and choose a constituent with $H$ as
+its negative element.  Circuit minimality gives the support bound.  If all
+its positive coalitions were tight, exact balancedness would force $H$
+tight, a contradiction.
+\end{proof}
+
+Thus raw exact-cone facets are not the right atoms for Lmin failure: the
+egalitarian orientation first forces a decomposable singleton completion.
+Rooting quotients out that forced triangle while preserving the distinguished
+suffix.  In the five-player broken diamond the resulting rooted circuit is
+indecomposable; in the seven-player three-trace family it has exactly one
+further decomposition.  Thus rooting is a genuine bridge to the facet theory
+but not a universal facet correspondence.  The standalone proof, scope
+calibration, and exact probes are in
 \begin{center}
 \small\path{paper3/ATOMIC_LMIN_OBSTRUCTION_REDUCTION.md},\\[-2pt]
+\small\path{paper3/MARGINAL_CORE_FACTORIZATION.md},\\[-2pt]
+\small\path{paper3/ROOTED_DEFICIT_COMPLETION.md},\\[-2pt]
 \small\path{src/verify_atomic_lmin_obstruction.py},\\[-2pt]
 \small\path{results/atomic_lmin_obstruction.json},\\[-2pt]
 \small\path{src/probe_lmin_atom_indecomposability.py},\\[-2pt]
-\small\path{results/lmin_atom_indecomposability_probe.json}.
+\small\path{results/lmin_atom_indecomposability_probe.json},\\[-2pt]
+\small\path{src/verify_rooted_deficit_completion.py},\\[-2pt]
+\small\path{results/rooted_deficit_completion.json}.
 \end{center}
 
 The same inequality has a useful internal-face specialization.  It is the

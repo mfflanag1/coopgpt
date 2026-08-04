@@ -71,7 +71,14 @@ def cases():
     traces = [mask(coalition) for coalition, _ in constraints]
     target7 = mask(range(2, 7))
     support7 = traces + [1 << poor_a, target7]
-    return [("five_player_broken_diamond", 5, support5), ("seven_player_three_trace", 7, support7)]
+    rooted5 = [left, right, target5 | exterior, target5]
+    rooted7 = traces + [target7 | (1 << poor_a), target7]
+    return [
+        ("five_player_broken_diamond", 5, support5),
+        ("five_player_rooted_atom", 5, rooted5),
+        ("seven_player_three_trace", 7, support7),
+        ("seven_player_rooted_atom", 7, rooted7),
+    ]
 
 
 def main():
