@@ -2680,6 +2680,106 @@ supported.  If all peripheral blocks are included, $E=N$.  No new proper
 exceptional set exists, proving indecomposability.
 \end{proof}
 
+The block star is the zero-kernel case of a general two-sided normal form.
+It exposes the correct object for classifying rooted atoms without enumerating
+games.
+
+\begin{theorem}[two-sided trace-coupling normal form]
+\label{thm:lx-two-sided-trace-coupling}
+Fix $N=H\mathbin{\dot\cup}L$.  Let $\mathcal P$ be a family of positive
+coalitions other than the rooted spokes $H\cup\{i\}$, and write
+$R_T=T\cap H$, $Q_T=T\cap L$.  For nonnegative $\lambda_T,u_i$ and positive
+$\gamma$, the rooted identity
+\[
+ \sum_{T\in\mathcal P}\lambda_T\mathbf1_T
+ +\sum_{i\in L}u_i\mathbf1_{H\cup\{i\}}
+ -\gamma\mathbf1_H=\beta\mathbf1_N                 \tag{TC}
+ \label{eq:lx-two-sided-trace-coupling}
+\]
+holds if and only if, with $\tau=\sum_i u_i$, there is $\alpha\geq0$ such
+that
+\begin{align}
+ \sum_{T\in\mathcal P}\lambda_T\mathbf1_{R_T}
+   &=\alpha\mathbf1_H,                              \tag{TC-H}
+   \label{eq:lx-two-sided-rich-cover}\\
+ \sum_{T\in\mathcal P}\lambda_T\mathbf1_{Q_T}
+   +\sum_{i\in L}u_i e_i
+   &=\beta\mathbf1_L,                               \tag{TC-L}
+   \label{eq:lx-two-sided-poor-cover}\\
+ \gamma&=\alpha-\beta+\tau.                        \tag{TC-S}
+   \label{eq:lx-two-sided-scalar}
+\end{align}
+This is a linear isomorphism between the corresponding nonnegative rooted
+relation and coupling cones, and therefore preserves extreme rays.  In
+particular, every rooted circuit maps to an extreme coupling ray.
+
+If $\mathcal P=\varnothing$, then $u_i=\beta$ for every $i\in L$ and
+$\gamma=(|L|-1)\beta$, so the identity is precisely the block star.  If
+$\mathcal P\ne\varnothing$ and $\alpha>0$, its normalized rich traces form a
+balanced packet on $H$; if $\alpha=0$, every member of $\mathcal P$ with
+positive coefficient is disjoint from $H$ and the residual geometry lies
+entirely on $L$.
+\end{theorem}
+
+\begin{proof}
+Restrict \eqref{eq:lx-two-sided-trace-coupling} to the coordinates in $L$ to
+obtain \eqref{eq:lx-two-sided-poor-cover}.  Every rooted spoke contains all
+of $H$, so restriction to $H$ gives
+\[
+ \sum_T\lambda_T\mathbf1_{R_T}+(\tau-\gamma)\mathbf1_H
+ =\beta\mathbf1_H.
+\]
+This is \eqref{eq:lx-two-sided-rich-cover} with
+$\alpha=\beta+\gamma-\tau\geq0$ and is equivalent to
+\eqref{eq:lx-two-sided-scalar}.  Adding the two block equations proves the
+converse.  The correspondence and its inverse are linear.  A ray of the
+nonnegative relation cone is nonextreme exactly when its coupling is a
+nontrivial sum of two such couplings, proving the extreme-ray assertion.  A
+support-minimal fixed-sign dependence is extreme, which gives the circuit
+statement.  The final alternatives follow directly from the two cover
+equations.
+\end{proof}
+
+\begin{corollary}[Lmin star-or-trace dichotomy]
+\label{cor:lx-star-or-trace-dichotomy}
+Every slack richer Lmin suffix selects a rooted circuit with at most $|N|$
+coalitions of one of two types:
+\begin{enumerate}[label=(\roman*)]
+\item a pure block star on the poorer singleton blocks;
+\item a trace-coupled atom with $\alpha>0$, whose normalized non-spoke rich
+traces form a balanced exact cover of $H$ and hence a convex mixture of
+minimal balanced packets.
+\end{enumerate}
+No poorer-side-only coupling is needed.
+\end{corollary}
+
+\begin{proof}
+In the strict Lmin cover, first delete every positive-weight tight coalition
+disjoint from $H$.  This leaves the common load on $H$ unchanged and can only
+decrease the loads on $L$, so strictness is preserved.  Apply rooted deficit
+completion and the conformal circuit reduction to this pruned cover.  Every
+non-spoke positive coalition in the selected circuit now has nonempty rich
+trace.  If none exists, Theorem~\ref{thm:lx-two-sided-trace-coupling} gives
+the block star.  Otherwise the rich-cover equation has $\alpha>0$ and,
+after normalization, is a balanced exact cover.  The standard decomposition
+of a balanced cover into minimal balanced packets proves (ii).  The circuit
+bound is Corollary~\ref{cor:lx-rooted-atomic-reduction}.
+\end{proof}
+
+Thus the general object is not a bare list of exact-cone facets.  It is the
+polyhedral cone coupling a balanced rich-trace packet to a
+singleton-completed poor-trace packet.  The three-trace atom is rich-active:
+its non-spoke traces form the internal triangle.  The rooted broken diamond
+and the universal block-star identities have empty coupling kernel.  A
+dimension-free classification or forbidden-minor theorem for extreme
+coupling rays is the remaining general-theory target.  A standalone proof
+and exact audit are
+\begin{center}
+\small\path{paper3/TWO_SIDED_TRACE_COUPLING.md},\\[-2pt]
+\small\path{src/verify_two_sided_trace_coupling.py},\\[-2pt]
+\small\path{results/two_sided_trace_coupling.json}.
+\end{center}
+
 Thus raw exact-cone facets are not the right atoms for Lmin failure: the
 egalitarian orientation first forces a decomposable singleton completion.
 Rooting quotients out that forced triangle while preserving the distinguished

@@ -17,12 +17,15 @@ special attention to:
 - `paper3/MARGINAL_CORE_FACTORIZATION.md`
 - `paper3/ROOTED_DEFICIT_COMPLETION.md`
 - `paper3/BLOCK_STAR_FACET_THEOREM.md`
+- `paper3/TWO_SIDED_TRACE_COUPLING.md`
 - `src/verify_atomic_lmin_obstruction.py`
 - `src/verify_rooted_deficit_completion.py`
 - `src/verify_block_star_facet.py`
+- `src/verify_two_sided_trace_coupling.py`
 - `results/atomic_lmin_obstruction.json`
 - `results/rooted_deficit_completion.json`
 - `results/block_star_facet.json`
+- `results/two_sided_trace_coupling.json`
 - `paper3/wrapper.pdf`
 
 ## Questions requiring explicit answers
@@ -91,6 +94,25 @@ special attention to:
     atom factors into block stars and lifted internal balanced facets---only
     as an open conjecture.  Look aggressively for a counterexample before
     recommending that it be promoted to a theorem.
+18. Audit the two-sided trace-coupling normal form coordinate by coordinate.
+    Check that the treatment of coalitions coinciding with rooted spokes is
+    unambiguous, that `alpha>=0` follows without an omitted coverage
+    hypothesis, and that the claimed linear bijection really identifies the
+    extreme rays of the nonnegative rooted-relation cone with extreme
+    coupling rays.  Look for degeneracies at `alpha=0`, `beta=0`, empty rich
+    traces, and repeated coalition columns.
+19. Search balanced-hypergraph, exact-cover, oriented-matroid, and
+    exact-game literature for an equivalent two-block coupling formulation.
+    The coordinate split itself is elementary; assess novelty only for the
+    Lmin-selected obstruction cone and any later classification of its
+    extreme rays.
+20. Audit the Lmin star-or-trace dichotomy.  Check that deleting every
+    `H`-disjoint tight coalition preserves a strict cover, that conformal
+    circuit reduction cannot reintroduce a deleted coalition, and that every
+    remaining non-spoke term has a nonempty rich trace.  Verify that the
+    `alpha=0` branch then collapses exactly to the block star, including
+    degeneracies caused by a coalition serving simultaneously as a tight
+    protector and a rooted completion spoke.
 
 Please report fatal errors first, then repairable gaps, then novelty risks.
 State whether the result is (a) correct as written, (b) correct after named
