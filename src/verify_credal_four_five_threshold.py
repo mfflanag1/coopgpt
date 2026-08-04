@@ -4,7 +4,9 @@ The theorem is proved structurally in the accompanying note.  This script
 reconstructs the five-state coherent lower probability from four rational
 probability distributions, recomputes both lexicographic selections from the
 induced core, and checks the crossing of their Lorenz curves.  It is a
-bug-detecting audit, not a substitute for the proof.
+bug-detecting audit, not a substitute for the proof.  The first-stage
+lexicographic optima also audit failure of a universal Schur-concave
+uncertainty maximizer.
 """
 from __future__ import annotations
 
@@ -148,6 +150,8 @@ def main():
     ]
     if not better_lmin or not better_lmax:
         raise AssertionError("the two Lorenz curves do not cross")
+    if lmin_curve[0] != F(1, 6) or lmax_curve[3] != F(3, 4):
+        raise AssertionError("the elementary uncertainty optima changed")
 
     # The richer suffix {5} at Lmin is slack: this is the exact-partition
     # obstruction transported into the atom-vacuous credal formulation.
@@ -192,11 +196,21 @@ def main():
         "strict_ranks_favoring_leximin": better_lmin,
         "strict_ranks_favoring_decreasingly_minimal": better_lmax,
         "lorenz_curves_cross": True,
+        "universal_uncertainty_obstruction": {
+            "max_L1": "1/6",
+            "unique_L1_maximizer": strings(LMIN),
+            "L1_maximizer_largest_coordinate": "1/3",
+            "max_L4": "3/4",
+            "an_L4_maximizer": strings(LMAX),
+            "L4_maximizer_largest_coordinate": "1/4",
+            "maximizer_sets_disjoint": True,
+        },
         "richest_singleton_slack_at_leximin": str(richest_slack),
         "conclusion": (
             "the induced five-state credal set has no Lorenz-dominating "
-            "distribution; combined with the structural through-four theorem, "
-            "the state-space threshold is sharp"
+            "or universally uncertainty-maximizing distribution; combined "
+            "with the structural through-four theorem, the state-space "
+            "threshold is sharp"
         ),
     }
     rendered = json.dumps(payload, indent=2) + "\n"

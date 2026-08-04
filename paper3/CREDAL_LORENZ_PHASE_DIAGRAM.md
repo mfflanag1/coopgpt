@@ -63,10 +63,11 @@ x_i < p_i* <= lambda <= p_j* < x_j.
 
 Transfer mass from `j` to `i` until one of the two discrepancies is removed.
 This stays inside the coordinate box and is a Pigou--Dalton equalizing
-transfer. Repetition reaches `p*`, so `p*` Lorenz-dominates `x`. Uniqueness
-follows because distinct fixed-sum vectors cannot Lorenz-dominate each other
-in both directions. This is the elementary box-slice form of Fujishige's
-lexicographically optimal-base theorem.
+transfer. Repetition reaches `p*`, so `p*` Lorenz-dominates `x`. The displayed
+water-filling formula uniquely specifies `p*`; equivalently, uniqueness also
+follows from strict concavity of Shannon entropy on the convex credal set.
+This is the elementary box-slice form of Fujishige's lexicographically
+optimal-base theorem.
 
 This proof is structural and contains no finite enumeration. The reason the
 argument stops at four states is exact: two-state events are then no longer
@@ -148,6 +149,49 @@ arbitrary coherent lower probabilities    |Omega| <= 3     |Omega| = 4
 atom-vacuous coherent lower probabilities |Omega| <= 4     |Omega| = 5
 ```
 
+## Universal uncertainty interpretation
+
+For a probability vector `p`, let
+
+```text
+L_k(p)=sum of the k smallest coordinates of p,   1<=k<|Omega|.
+```
+
+Each `L_k` is a nonnegative Schur-concave functional, invariant under state
+relabeling and zero at a point mass. These are therefore uncertainty measures
+under the monotonicity-under-random-relabeling convention of Friedland,
+Gheorghiu, and Gour (2013). More generally, a distribution `p*` Lorenz-
+dominates every point of a credal set `K` if and only if it simultaneously
+maximizes every Schur-concave functional on `K`. The forward implication is
+the definition of Schur concavity. Conversely, simultaneous maximization of
+the particular family `L_1,...,L_{n-1}` is exactly the system of Lorenz
+inequalities.
+
+Consequently the phase diagram is also a sharp phase diagram for a
+*universal maximum-uncertainty representative*:
+
+```text
+class                                      universal representative  first failure
+arbitrary coherent lower probabilities    |Omega| <= 3              |Omega| = 4
+atom-vacuous coherent lower probabilities |Omega| <= 4              |Omega| = 5
+```
+
+At the four-state witness, maximizing `L_1=min_i p_i` forces
+`p_1>=3/8`, whereas maximizing `L_3=1-max_i p_i` forces
+`max_i p_i=1/3`; their maximizing sets are disjoint. At the atom-vacuous
+five-state witness, `L_1` is uniquely maximized by `phi`, whose maximum
+coordinate is `1/3`, while `L_4` is maximized at value `3/4` by `psi`, whose
+maximum coordinate is `1/4`. Thus failure is already witnessed by two
+elementary uncertainty indices, not merely by an abstract separating
+functional.
+
+This does not say that a maximum-entropy distribution fails to exist. Shannon
+entropy is strictly concave, so every nonempty compact convex credal set has a
+unique Shannon maximizer. The sharp statement is simultaneous optimality for
+*all* Schur-concave uncertainty measures. Majorization as a universal
+uncertainty order is prior art; the candidate new contribution is the sharp
+credal-set threshold.
+
 ## Verification and scope
 
 The four-state arithmetic is replayed exactly by
@@ -182,3 +226,12 @@ Primary adjacent sources:
 - E. Quaeghebeur and G. de Cooman (2008), *Extreme Lower Probabilities*,
   Fuzzy Sets and Systems 159:2163--2175,
   <https://doi.org/10.1016/j.fss.2007.11.020>.
+- S. Friedland, V. Gheorghiu, and G. Gour (2013), *Universal Uncertainty
+  Relations*, Physical Review Letters 111:230401,
+  <https://doi.org/10.1103/PhysRevLett.111.230401>.
+- D. Skulj (2022), *Normal Cones Corresponding to Credal Sets of Lower
+  Probabilities*, arXiv:2201.10161, <https://arxiv.org/abs/2201.10161>.
+- F. Cuzzolin (2022), *The Intersection Probability: Betting with Probability
+  Intervals*, arXiv:2201.01729, <https://arxiv.org/abs/2201.01729>. This is a
+  distinct proposed representative for interval credal sets, not a universal
+  Schur-concave maximizer.

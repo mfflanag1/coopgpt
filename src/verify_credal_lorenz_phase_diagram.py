@@ -5,7 +5,8 @@ three states has a Lorenz-dominating induced distribution because its credal
 set is a box-slice base polytope.  This script checks the sharp four-state
 lower-envelope witness, including hand certificates for its ordinary
 increasingly maximal and decreasingly minimal distributions.  It is a
-bug-detecting audit, not proof evidence.
+bug-detecting audit, not proof evidence.  The same two first-stage optima
+audit failure of a universal Schur-concave uncertainty maximizer.
 """
 from __future__ import annotations
 
@@ -198,6 +199,13 @@ def main():
     dec_curve = lorenz_cumulative(computed_decmin)
     if not (inc_curve[0] > dec_curve[0] and inc_curve[2] < dec_curve[2]):
         raise AssertionError("the four-state Lorenz curves do not cross")
+    if inc_curve[0] != F(1, 6) or dec_curve[2] != F(2, 3):
+        raise AssertionError("the elementary uncertainty optima changed")
+    # Every L_1 maximizer has p2=p3=1/6, hence p1>=3/8 from the
+    # {1,2} bound.  Every L_3 maximizer has max_i p_i=1/3.  These
+    # requirements are incompatible.
+    if not (F(3, 8) > F(1, 3)):
+        raise AssertionError("uncertainty-separation arithmetic changed")
 
     payload = {
         "status": "sharp four-state general credal Lorenz obstruction verified",
@@ -225,9 +233,17 @@ def main():
             ),
         },
         "lorenz_curves_cross": True,
+        "universal_uncertainty_obstruction": {
+            "max_L1": "1/6",
+            "L1_maximizer_requirement": "p1>=3/8",
+            "max_L3": "2/3",
+            "L3_maximizer_requirement": "max_i(p_i)=1/3",
+            "maximizer_sets_disjoint": True,
+        },
         "conclusion": (
             "arbitrary coherent lower probabilities can first lack a "
-            "Lorenz-dominating induced distribution on four states"
+            "Lorenz-dominating, universally uncertainty-maximizing induced "
+            "distribution on four states"
         ),
     }
     rendered = json.dumps(payload, indent=2) + "\n"

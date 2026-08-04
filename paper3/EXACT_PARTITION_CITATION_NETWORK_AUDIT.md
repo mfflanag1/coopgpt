@@ -258,3 +258,37 @@ adjacent prior art and makes the four-state boundary less accidental, but it
 does not establish novelty of the selection theorem. The combined `3/4` and
 `4/5` Lorenz phase diagram remains a candidate contribution requiring an
 imprecise-probability specialist's review.
+
+### Universal uncertainty interpretation
+
+Friedland, Gheorghiu, and Gour (2013), *Universal Uncertainty Relations*
+(Physical Review Letters 111:230401), define uncertainty measures using
+monotonicity under random relabeling and identify the resulting class with
+nonnegative Schur-concave functions. This establishes the interpretation of
+majorization as simultaneous comparison by all such uncertainty measures; it
+is prior art and is not claimed here.
+
+Applied to a credal set, the new candidate phase statement is that a single
+distribution simultaneously maximizes every Schur-concave uncertainty
+functional for every arbitrary coherent lower probability through three
+states (sharp at four), and for every atom-vacuous coherent lower probability
+through four states (sharp at five). The converse needs no abstract separation
+theorem: the sums of the `k` smallest coordinates are themselves admissible
+Schur-concave functionals and reproduce the Lorenz inequalities.
+
+Skulj (2022), *Normal Cones Corresponding to Credal Sets of Lower
+Probabilities* (arXiv:2201.10161), is a close primary source on credal-polytope
+geometry, including probability intervals. Full-text search found no
+`majoriz`, `Lorenz`, `lexic`, or `entropy` occurrence. This is negative search
+evidence only, not a novelty certificate. Specialist review must determine
+whether the sharp universal-selector thresholds already appear under another
+name in credal-set, robust-Bayesian, or maximum-entropy work.
+
+Cuzzolin (2022), *The Intersection Probability: Betting with Probability
+Intervals* (arXiv:2201.01729), is closer selector literature: it proposes a
+single probability transform for interval models, motivated by homogeneous
+use of interval width and a focus-of-simplices geometry. It mentions maximum
+entropy as an alternative but does not state a Lorenz, majorization, or
+simultaneous Schur-concave optimum. This does not establish novelty, but it
+clarifies that the water-filled universal representative is not being claimed
+as the only selection rule for probability intervals.
