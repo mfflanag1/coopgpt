@@ -156,3 +156,9 @@ The conservation law shows precisely what a survivor must do: positive
 residuals must jump over the interval `[0,k(r-ell)]`, with compensating large
 negative residuals.  Ruling out that polarization for general positive
 Lehman matrices is the next concrete combinatorial question.
+
+The multi-row extension in
+[`SUBSET_LEHMAN_FACE_BUDGET.md`](SUBSET_LEHMAN_FACE_BUDGET.md) turns the same
+residual into a quantitative bound on any uniformly overloaded rich face. It
+contains both singleton bands and the canonical internal-face certificate as
+special cases and is the current route toward a recursive classification.

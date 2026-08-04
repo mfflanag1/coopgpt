@@ -3618,12 +3618,84 @@ If $w_d=0$, then
 $F_d=p-\ell-(r-\ell)u_d<0$, proving the last assertion.
 \end{proof}
 
+The same interpolation works for an arbitrary set of dual rows.  Unlike a
+general convex combination, their uniform average overloads a rich coalition
+by a constant amount, so exactness can evaluate that entire face.
+
+\begin{corollary}[subset Lehman residual face budget]
+\label{cor:lx-subset-lehman-face-budget}
+Under the hypotheses and notation of
+Corollary~\ref{cor:lx-convex-lehman-row}, let $D$ be a nonempty set of rows
+of $B$, identifying row indices with the corresponding rich players in
+$H$.  Put $d=|D|$ and write
+\[
+ U_D:=\sum_{j\in D}u_j,\qquad
+ W_D:=\sum_{j\in D}w_j,\qquad
+ F(D):=\sum_{j\in D}F_j.
+\]
+If $W_D\geq d$ and $F(D)\geq0$, then
+\[
+ k(r-\ell)s_\phi(D)\leq F(D)\phi_a.                \tag{LH-B${}_+$}
+ \label{eq:lx-subset-lehman-positive-budget}
+\]
+If $U_D\geq d$ and $F(D)\leq0$, then
+\[
+ k(r-p)s_\phi(D)\leq-F(D)\phi_b.                  \tag{LH-B${}_-$}
+ \label{eq:lx-subset-lehman-negative-budget}
+\]
+In particular, under either average-load hypothesis, $F(D)=0$ forces $D$ to
+be tight at $\phi$.
+\end{corollary}
+
+\begin{proof}
+Average the zero--one selectors given by the rows in $D$.  The Lehman
+identity makes its rich load
+\[
+ \mathbf1_H+\frac{k}{d}\mathbf1_D,
+\]
+and its poor loads are $U_D/d$ and $W_D/d$.
+
+First suppose $W_D\geq d$.  Interpolate this average with the uniform packet
+using
+\[
+ t:=\frac{d(r-\ell)}{rW_D-d\ell}\in(0,1].
+\]
+The gaining-poor load becomes one, the rich overload on $D$ is
+\[
+ q=\frac{tk}{d}=\frac{k(r-\ell)}{rW_D-d\ell},
+\]
+and direct simplification gives losing-poor deficit
+\[
+ 1-a_D=\frac{F(D)}{rW_D-d\ell}.
+\]
+Thus $F(D)\geq0$ makes both poor loads at most one.  Apply
+Corollary~\ref{cor:lx-exact-face-overload} and clear the positive denominator
+to obtain \eqref{eq:lx-subset-lehman-positive-budget}.
+
+If $U_D\geq d$, interpolate instead with
+\[
+ \widehat t:=\frac{d(r-p)}{rU_D-dp}\in(0,1].
+\]
+The losing-poor load becomes one, the rich overload is
+$k(r-p)/(rU_D-dp)$ on $D$, and the gaining-poor deficit is
+$-F(D)/(rU_D-dp)$.  The hypothesis $F(D)\leq0$ and the same overload budget
+give \eqref{eq:lx-subset-lehman-negative-budget}.  If $F(D)=0$, either right
+side is zero, so $s_\phi(D)=0$.
+\end{proof}
+
+The corollary does not assert that every surviving labeled Lehman packet has
+a zero-residual set satisfying an average-load hypothesis, nor that a tight
+set obtained this way inherits a smaller positive Lehman packet.  Those are
+the unresolved existence and recursion steps required for a dimension-free
+classification.
+
 Equation~\eqref{eq:lx-lehman-pair} and its role as the core identity for
 nondegenerate minimally nonideal matrices are classical
 \citep{CornuejolsGueninTuncel2009}.  The new claim here is only the
-two-poor-label exclusion obtained by combining that identity with the
-exact-face obstruction.  The alternating selection on an odd trace cycle is
-the $r=2$ instance.  For a self-dual projective-plane matrix, the linear
+candidate two-poor-label exclusion and face-budget mechanism obtained by
+combining that identity with the exact-face obstruction.  The alternating
+selection on an odd trace cycle is the $r=2$ instance.  For a self-dual
+projective-plane matrix, the linear
 bound \eqref{eq:lx-linear-lehman-density} is the coarse global density bound
 used below.  By contrast, the surviving co-singleton support $J-I$ satisfies
 the opposite-sign identity $(J-I)I=J-I$, not a positive Lehman identity;
@@ -3836,16 +3908,15 @@ set $D$ of exactly $T$ rows.  Every row outside $D$ has zero $V$-load, so
 On the other hand,
 $u(D)\leq s|U|<s|V|=T$.
 
-Average the rows of $B$ indexed by $D$ and use them as real weights on the
-lifted tight coalitions.  Equation~\eqref{eq:lx-lehman-pair} gives rich load
+For this row set, $W_D=T=|D|$ and
 \[
- \frac1T AB^\top\mathbf1_D
- =\mathbf1_H+\frac{k}{T}\mathbf1_D.
+ F(D)=(r-\ell)(T-u(D))\geq0.
 \]
-The gaining-poor load is one and the losing-poor load is $u(D)/T<1$.
-Corollary~\ref{cor:lx-exact-face-overload}, with overload $q=k/T$, gives
-the weak upper inequality in \eqref{eq:lx-lehman-internal-face} after
-multiplication by $T$.
+The positive subset budget
+\eqref{eq:lx-subset-lehman-positive-budget} therefore gives the weak upper
+inequality in \eqref{eq:lx-lehman-internal-face}.  Equivalently, this is the
+average-dual-row construction with gaining-poor load one, losing-poor load
+$u(D)/T$, and rich overload $(k/T)\mathbf1_D$.
 
 It remains to prove the strict lower inequality.  Use the core point $z$ and
 displacement $\Delta=z-\phi$ attached to the lifted packet by

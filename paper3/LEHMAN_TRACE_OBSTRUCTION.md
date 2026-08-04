@@ -137,6 +137,26 @@ one of the `ell<=q` gaining lines.  Its residual is
 band applies when `u>=2`.  Consequently every finite projective-plane packet
 is excluded, in every order and without a Desarguesian assumption.
 
+## Subset residual face budget
+
+The row interpolation extends to any nonempty dual-row set `D`.  Put
+`d=|D|`, `U_D=sum_(j in D)u_j`, `W_D=sum_(j in D)w_j`, and
+`F(D)=sum_(j in D)F_j`.  Averaging its dual selectors gives rich load
+`1_H+(k/d)1_D`.  Interpolating with the uniform packet yields
+
+```text
+W_D>=d, F(D)>=0
+  => k(r-ell)[phi(D)-v(D)] <= F(D) phi_a,
+
+U_D>=d, F(D)<=0
+  => k(r-p)[phi(D)-v(D)] <= -F(D) phi_b.
+```
+
+Thus a zero-residual set with the relevant average poor load at least one is
+forced tight.  Singleton sets recover the two row bands.  Taking all rows
+meeting `V` and padding to `d=s ell` rows recovers the canonical internal-face
+bound below.  See `SUBSET_LEHMAN_FACE_BUDGET.md`.
+
 ## Canonical internal face without the density hypothesis
 
 There is an unconditional substitute for a single safe row. Put

@@ -288,7 +288,19 @@ Interpolating until the gaining load reaches one excludes
 every order: choose a point on exactly one gaining line and apply the positive
 or negative band according as at most one or at least two losing lines pass
 through it.
-See `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
+The same calculation has a subset form.  For a dual-row set `D`, aggregate
+its residual to `F(D)`.  If its average gaining load is at least one and
+`F(D)>=0`, then
+
+```text
+k(r-ell)[phi(D)-v(D)] <= F(D) phi_a,
+```
+
+with the symmetric bound using `k(r-p)`, `-F(D)`, and `phi_b`.  Zero residual
+therefore forces the rich face `D` tight.  This single theorem contains the
+singleton row bands and the canonical internal-face upper bound below.
+See `paper3/SUBSET_LEHMAN_FACE_BUDGET.md` and
+`paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
 Lehman's minimally-nonideal minor reduction without losing the poor labels.
 Even when the displayed density test fails, averaging exactly `s|V|` dual
 rows containing every positive `V`-row produces a proper internal rich face

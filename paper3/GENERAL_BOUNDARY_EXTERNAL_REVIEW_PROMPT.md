@@ -19,6 +19,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `cor:lx-unconditional-labeled-obstruction`,
   `thm:lx-positive-lehman-trace-exclusion`,
   `cor:lx-convex-lehman-row`,
+  `cor:lx-subset-lehman-face-budget`,
   `cor:lx-lehman-internal-face`,
   `thm:lx-rank-two-trace-exclusion`,
   `thm:lx-four-rich-trace-classification`,
@@ -53,6 +54,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   dual rows to rooted covers and the new two-poor-label density criterion.
 - `coopgames/paper3/CONVEX_LEHMAN_ROW.md`: real-valued interpolation between
   the uniform packet and a dual row, yielding the two-sided Lehman row band.
+- `coopgames/paper3/SUBSET_LEHMAN_FACE_BUDGET.md`: multi-row extension that
+  converts aggregate label residual into a quantitative internal-face slack
+  bound.
 - `coopgames/paper3/LEHMAN_MINOR_LIFTING.md`: proof that preserving only the
   gaining-player deficit automatically removes both poor labels from every
   contracted column and lifts the Lehman conclusions to the original suffix.
@@ -205,6 +209,15 @@ falsification searches.  Please do not count their no-hit output as proof.
    conservation identity `sum_d F_d=k(ell-p)` and its overshoot consequence.
    Determine whether either interpolation has an antecedent in Lehman-matrix
    or blocking-polyhedra literature.
+   Audit the subset residual face budget separately.  For a row set `D`,
+   recompute the averaged rich load `1_H+(k/|D|)1_D`; verify the two
+   interpolation parameters and the identities
+   `1-a_D=F(D)/(rW_D-|D|ell)` and
+   `1-b_D=-F(D)/(rU_D-|D|p)`.  Check both cleared-denominator face bounds,
+   all positivity conditions, and the assertion that zero residual forces
+   `D` tight.  Confirm that singleton `D` recovers the two row bands and that
+   the canonical `|D|=s ell` construction recovers `(LH-F)` without a missing
+   factor of `r-ell`.
    Audit the canonical internal-face corollary separately: check
    `k+1<=s`, the strict count `s|V|<|H|`, construction of the row set `D`,
    both poor loads after averaging, and every factor of `|D|` in `(LH-F)`.
@@ -374,6 +387,9 @@ core literature:
   negative structural divide;
 - the convex Lehman-row interpolation, including whether the two-sided band
   or its exact-face application is already known;
+- the subset Lehman residual face budget, its unification of the singleton
+  bands and canonical internal face, and whether its proposed recursive
+  interpretation is genuinely new;
 - the dimension-free rank-two trace exclusion via a real tight-cover
   overload, including the distinction from an integer rooted fibre;
 - the uniqueness of the four-co-singleton `1/3` packet at the first feasible

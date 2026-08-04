@@ -35,6 +35,9 @@ or any of the following sharp consequences:
   classical identity `A B^T=J+kI`; a new two-label density test rules out
   such packets and unifies the odd-cycle and coarse projective-plane
   roundings, while the co-singleton survivor has the opposite sign;
+- the two-sided Lehman label residual extends from singleton rows to arbitrary
+  dual-row subsets, where its aggregate value gives a quantitative slack
+  budget for the corresponding rich face;
 - without the label-density hypothesis, averaging dual rows still exposes a
   canonical proper internal rich face governed by the exact-face overload
   budget, suggesting a recursive minor-lifting invariant;
@@ -200,8 +203,8 @@ the real-valued exact-face budget.
 The later targeted search inspected Cornuéjols--Guenin--Tunçel's primary
 Lehman-matrix paper and the classical minimally-nonideal theorem it records.
 That source supplies the matrix identity and regularity, not the poor-label
-density argument, the two-sided label residual, or the bridge to exact-game
-tight faces.  Király--Pap's full primary paper was also checked: its
+density argument, the two-sided label residual, its subset face budget, or
+the bridge to exact-game tight faces.  Király--Pap's full primary paper was also checked: its
 minor-compatible pair-of-clutters theorem and ideal set functions do not
 state the two-label interpolation or the residual conservation law, although
 their framework may still be relevant to the unresolved cost-aware minor
@@ -235,7 +238,10 @@ Pending expert review, the strongest defensible formulation is:
 > generally forbid every safe rooted
 > integer fibre of the supported tight-coalition semigroup, unifying the
 > subsequent rounding arguments. Positive Lehman cores canonically generate
-> those fibres, and a two-label density test subsumes the odd-cycle and coarse
+> those fibres.  A two-sided label residual extends to arbitrary dual-row
+> subsets and converts aggregate residual into a quantitative rich-face slack
+> budget; it contains both singleton exclusions and canonical internal-face
+> amplification.  A two-label density test subsumes the odd-cycle and coarse
 > projective-plane roundings; the co-singleton survivor lies on the
 > opposite-sign side. At four rich players the unique surviving
 > fractional packet is
