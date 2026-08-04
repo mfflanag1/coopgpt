@@ -86,6 +86,27 @@ and then intersecting their equality supports, gives `y_i=0` for every
 poorer player and `y_r=m-3`.  Thus the max-min face is the displayed point.
 But `v({r})=0`, making the unique richest suffix slack by `m-2`.
 
+The same family has a closed-form Lmax.  Put
+
+```text
+a = (m-1)/(2(m-2)),   c = (m-1)/2.
+```
+
+Then Lmax equals `c` on players `3,4,r` and `a` on every other player.
+Indeed, the two pair constraints force every core point's largest coordinate
+to be at least `c`.  The point
+
+```text
+z = a g4 + (1-a) g2
+```
+
+is in the core and has exactly those coordinates, so it attains the optimal
+ceiling.  On that ceiling face the pair constraints force
+`x3=x4=xr=c`; the other `m-2` coordinates have a fixed total and their next
+leximax ceiling is minimized uniquely by setting all of them to their average
+`a`.  Therefore Lmin and Lmax differ for every `n>=5`, while the manuscript's
+classification proves equality through four players.
+
 The exact-balanced circuit is
 
 ```text
@@ -126,12 +147,13 @@ From `coopgames/`:
 python src/verify_n5_unique_richest_boundary.py \
   --output results/n5_unique_richest_boundary.json
 python src/verify_unique_richest_family.py \
-  --max-players 12 --exact-lmin-through 7 \
+  --max-players 12 --exact-lmin-through 7 --exact-lmax-through 6 \
   --output results/unique_richest_family.json
 ```
 
 The first verifier checks the fixed five-player generators, recomputes all 30
 proper coalition faces by exact LP, recomputes Lmin by the independent exact
 staged algorithm, and checks the incidence/slack circuit.  The family verifier
-checks the parametric identities through the requested dimension and performs
-an independent exact staged-Lmin replay through the requested smaller bound.
+checks the parametric identities and closed-form Lmax proof through the
+requested dimension and performs independent exact staged Lmin/Lmax replays
+through the requested smaller bounds.

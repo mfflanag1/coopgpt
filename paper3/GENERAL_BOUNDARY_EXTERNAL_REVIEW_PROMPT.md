@@ -57,7 +57,10 @@ falsification searches.  Please do not count their no-hit output as proof.
    define an exact lower-envelope game?  Do the four displayed coalition
    values force `Lmin=(1^m,m-2)`?  Does the circuit
    `1_{3r}+1_{4r}+sum_{i in P\{3,4}}1_i-1_r=1_N` attain the slack budget at
-   equality?  Check the endpoint `m=4` separately, where the coefficient of
+   equality?  Do the two pair inequalities, the convex combination
+   `a*g4+(1-a)*g2`, and the averaging step prove the claimed closed-form Lmax
+   and hence Lmin--Lmax separation in every dimension?  Check the endpoint
+   `m=4` separately, where the coefficient of
    `e5=er` in `(m-4)e5` is zero.
 7. For the five-player small-poorer lower bound, inspect whether the imported
    definition-level exact-face and stagewise KKT encoding genuinely covers all
@@ -81,7 +84,8 @@ core literature:
 - the canonical boundary-defect LP `(BD)`;
 - the sacrifice-budget interpretation and sharp unique-richest threshold;
 - the four-generator integral family with `Lmin=(1^m,m-2)` for every `m>=4`,
-  including whether it is merely a padding or replication of a known example;
+  its closed-form Lmax, and whether it is merely a padding or replication of a
+  known example;
 - the sharp result that a richer Lmin suffix with at most two poorer players is
   tight through five players but can be slack at six;
 - the fixed six-player integer lower-envelope construction.
@@ -102,7 +106,7 @@ python src/verify_n5_small_poorer_suffix.py \
 python src/verify_n5_unique_richest_boundary.py \
   --output results/n5_unique_richest_boundary.json
 python src/verify_unique_richest_family.py \
-  --max-players 12 --exact-lmin-through 7 \
+  --max-players 12 --exact-lmin-through 7 --exact-lmax-through 6 \
   --output results/unique_richest_family.json
 python src/verify_n6_two_poorer_suffix_counterexample.py \
   --output results/n6_two_poorer_suffix_counterexample.json

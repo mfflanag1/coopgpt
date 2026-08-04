@@ -217,7 +217,18 @@ Every generator has total `2m-2`, so the lower envelope is exact.  Its Lmin
 point is `phi=g4`, proved by the four values
 `v(N\{1})=v(N\{2})=2m-3` and
 `v({3,r})=v({4,r})=m-1`, while `v({r})=0<m-2=phi_r`.  The
-exact-balanced circuit
+same pair constraints give the closed formula
+
+```text
+Lmax_i = (m-1)/2          for i in {3,4,r},
+Lmax_i = (m-1)/(2(m-2))  otherwise.
+```
+
+The formula is attained by the core point
+`a*g4+(1-a)*g2`, where `a=(m-1)/(2(m-2))`; pair forcing followed by averaging
+proves it is the unique Lmax.  Thus this is an Lmin--Lmax separation in every
+dimension from five onward, matching the equality theorem through four.
+The exact-balanced circuit
 
 ```text
 1_{3r}+1_{4r}+sum_{i in P\{3,4}}1_i-1_r=1_N
