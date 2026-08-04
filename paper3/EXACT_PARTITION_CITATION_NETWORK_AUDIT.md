@@ -320,3 +320,31 @@ violations; a second five-state envelope realizes the positive certificate.
 No exact antecedent was found in the focused search, but this negative result
 is not a novelty proof. Review by specialists in imprecise probability and
 submodular optimization remains mandatory.
+
+### Quantitative approximate-majorization bridge
+
+The exact selector theorem has a robust extension. If `epsilon` is the
+largest slack of a cumulative richer coordinate stratum at a candidate
+distribution, concavity of upper Lorenz curves bounds every lower Lorenz
+coordinate's regret by `epsilon`. Established approximate-majorization theory
+then places every feasible distribution within `2 epsilon` in `l1` of one
+Lorenz-dominated by the candidate. Every `M`-Lipschitz Schur-concave
+functional consequently has regret at most `2 M epsilon`.
+
+Horodecki, Oppenheim, and Sparaciari (2018), *Extremal Distributions under
+Approximate Majorization*, already establish steepest and flattest
+approximations and the relevant `l1` majorization-distance formula. Massri,
+Bellomo, Holik, and Bosyk (2020) further study approximate majorization through
+the majorization lattice. Neither approximate majorization nor its distance
+formula is claimed here.
+
+The candidate contribution is the two-stage bridge: canonical richer-face
+slack controls approximate majorization, and the exact-game uncrossing-defect
+budget controls that slack using binding events. The sharp five-state
+obstruction attains both the Lorenz-coordinate constant `epsilon` and the
+distance constant `2 epsilon`. A separate atom-vacuous example shows that a
+raw positive binding defect can coexist with a uniform universal selector;
+only defects accumulated while uncrossing a strict boundary cover carry the
+claimed stability meaning. Specialist review must determine whether this
+face-slack/defect formulation already appears in approximate majorization,
+cooperative games, or robust credal selection.

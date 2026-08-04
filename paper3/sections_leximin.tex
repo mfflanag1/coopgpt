@@ -4248,6 +4248,109 @@ review request are
 \small\path{paper3/CREDAL_BINDING_EVENT_EXTERNAL_REVIEW_PROMPT.md}.
 \end{center}
 
+The same defect geometry has a quantitative consequence even when exact
+selection fails.  For a probability vector $p$, write
+$U_p(r)=\sum_{i=1}^r p_i^\downarrow$ and
+$L_p(k)=\sum_{i=1}^k p_i^\uparrow$.
+
+\begin{theorem}[defect-to-uncertainty stability]
+\label{thm:lx-credal-defect-stability}
+Let $K$ be a nonempty compact set of distributions and let $\phi\in K$.
+For every strict descending-coordinate boundary of $\phi$, let $H_j$ be the
+cumulative richer suffix, and put
+\[
+ \epsilon=\max_j\left\{\phi(H_j)-\min_{p\in K}p(H_j)\right\},             \tag{US}
+ \label{eq:lx-uncertainty-slack-radius}
+\]
+with $\epsilon=0$ when $\phi$ has one coordinate stratum.  Then, for every
+$p\in K$ and $1\leq k<n$,
+\[
+ L_p(k)\leq L_\phi(k)+\epsilon.                         \tag{LR}
+ \label{eq:lx-lorenz-regret}
+\]
+There is also a distribution $q$ Lorenz-dominated by $\phi$ with
+\[
+ \lVert p-q\rVert_1\leq2\epsilon.                       \tag{AM}
+ \label{eq:lx-approximate-majorization-radius}
+\]
+Consequently every Schur-concave functional $F$ that is $M$-Lipschitz in
+$\ell^1$ satisfies
+\[
+ \sup_{p\in K}F(p)\leq F(\phi)+2M\epsilon.               \tag{UR}
+ \label{eq:lx-universal-uncertainty-regret}
+\]
+\end{theorem}
+
+\begin{proof}
+At a richer boundary of cardinality $r_j$,
+\[
+ U_p(r_j)\geq p(H_j)
+ \geq\min_{x\in K}x(H_j)=U_\phi(r_j)-s_j,
+ \qquad s_j\leq\epsilon.
+\]
+Adjoin the endpoints $r=0,n$ with zero slack.
+The integer graph of $U_p$ is concave because its increments are the
+decreasingly ordered coordinates of $p$.  Between consecutive stratum
+boundaries, $U_\phi$ is affine.  Interpolation therefore gives
+$U_p(r)\geq U_\phi(r)-\epsilon$ at every integer $r$.  Since
+$L_p(k)=1-U_p(n-k)$, this is \eqref{eq:lx-lorenz-regret}.
+
+Put $\eta(p)=\max_r[U_\phi(r)-U_p(r)]_+\leq\epsilon$.
+The established $\ell^1$ approximate-majorization formula gives a
+distribution $q$ conventionally majorizing $\phi$ at distance
+$2\eta(p)$ from $p$ \citep{HorodeckiOppenheimSparaciari2018}.  In the present
+order convention, $\phi$ Lorenz-dominates $q$, proving
+\eqref{eq:lx-approximate-majorization-radius}.  Hence Schur-concavity gives
+$F(q)\leq F(\phi)$, while Lipschitz continuity gives
+$F(p)\leq F(q)+M\lVert p-q\rVert_1$.  This proves
+\eqref{eq:lx-universal-uncertainty-regret}.
+\end{proof}
+
+For an atom-vacuous coherent lower probability and its inc-max $\phi$, the
+terms in \eqref{eq:lx-uncertainty-slack-radius} are exactly
+$s_\phi(H_j)=\phi(H_j)-\underline P(H_j)$.  Scale a rational Lmin strict
+cover at boundary $j$ to integer multiplicities, uncross it, and retain the
+notation $\delta_t,m_j$ of Theorem~\ref{thm:lx-uncrossing-defect-budget}.
+That theorem gives
+\[
+ s_\phi(H_j)\leq
+ \frac1{m_j}\sum_t\delta_tD_\phi(A_t,B_t).             \tag{DBU}
+ \label{eq:lx-defect-bound-uncertainty}
+\]
+Thus the maximum right side of
+\eqref{eq:lx-defect-bound-uncertainty} may replace $\epsilon$ in all three
+conclusions.  This is a dimension-free robust extension: zero cumulative
+defect recovers an exact universal selector, while small cumulative defect
+bounds simultaneous uncertainty regret.
+
+Both constants are sharp in the five-state obstruction.  Its maximum
+normalized richer-suffix slack is $\epsilon=1/20$, and its dec-min $\psi$
+satisfies
+\[
+ L_\psi(3)-L_\phi(3)=2/5-7/20=1/20.
+\]
+The nearest steepening needed for $\phi$ to Lorenz-dominate the result has
+$\ell^1$ distance $1/10=2\epsilon$.  The defect bound must use a boundary
+cover rather than the largest raw binding-pair defect.  An atom-vacuous
+five-state lower envelope with the uniform universal selector nevertheless
+has a binding broken diamond of defect $2/5$; it is inert because there is no
+strict payoff boundary to finance.  The generators, sharp replay, and
+review packet are
+\begin{center}
+\small\path{paper3/CREDAL_DEFECT_STABILITY_THEOREM.md},\\[-2pt]
+\small\path{src/verify_credal_defect_stability.py},\\[-2pt]
+\small\path{results/credal_defect_stability.json},\\[-2pt]
+\small\path{paper3/CREDAL_DEFECT_STABILITY_EXTERNAL_REVIEW_PROMPT.md}.
+\end{center}
+
+\begingroup\sloppy
+Approximate majorization itself, including the exact $\ell^1$ distance
+formula, is prior art \citep{HorodeckiOppenheimSparaciari2018}.  The candidate
+new contribution is the bridge from canonical richer-face slack to
+approximate majorization and from binding-event defect budgets to that slack,
+not the smoothing construction.
+\par\endgroup
+
 The first row fails precisely when genuinely coupled two-state event
 inequalities first appear.  The second row shows that vanishing atom floors
 buy exactly one additional state.  The candidate cross-field contribution is

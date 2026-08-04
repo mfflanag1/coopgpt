@@ -14,6 +14,16 @@ src/verify_lmin_uncrossing_domain.py
 results/lmin_uncrossing_domain.json
 ```
 
+The quantitative stability extension and its separate hostile-review packet
+are:
+
+```text
+paper3/CREDAL_DEFECT_STABILITY_THEOREM.md
+paper3/CREDAL_DEFECT_STABILITY_EXTERNAL_REVIEW_PROMPT.md
+src/verify_credal_defect_stability.py
+results/credal_defect_stability.json
+```
+
 Please answer hostilely:
 
 1. Under atom-vacuity, is the ordinary increasingly maximal credal
