@@ -231,6 +231,15 @@ has a proper tight coalition whose rich trace has size at least three. This is
 the dimension-free **rank-two trace exclusion** proved in
 `paper3/RANK_TWO_TRACE_EXCLUSION.md`.
 
+When `|H|=4`, one can go further. Up to relabeling, the four-row exact-cover
+polytope has five fractional vertex types. Four have a safe root rounding:
+their supported tight coalitions can be selected with rich load `1_H+e_d`,
+zero-one poor loads, and at least one poor player loaded. Exactifying `d`
+contradicts efficiency. The unique survivor is the co-singleton vertex with
+weight `1/3` on each `H\{h}`. Hence every slack `2|4` boundary activates all
+four co-singletons, exactly as in the sharp family. The human classification
+is in `paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`.
+
 For the internal-sacrifice family, all co-singletons `H\{x}` are active
 traces.  Weighting them by `1/(h-1)` gives a fractional exact cover; its
 support matrix `J-I` is nonsingular, so the point is a fractional vertex.

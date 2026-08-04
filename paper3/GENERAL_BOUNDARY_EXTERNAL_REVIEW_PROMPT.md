@@ -12,7 +12,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `cor:lx-boundary-defect`, `lem:lx-strict-richer-cover`,
   `thm:lx-balanced-trace-transport`,
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
-  `thm:lx-rank-two-trace-exclusion`, and
+  `thm:lx-rank-two-trace-exclusion`,
+  `thm:lx-four-rich-trace-classification`, and
   `thm:lx-small-poorer-threshold`.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
@@ -31,6 +32,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   odd balanced-matrix obstruction.
 - `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`: standalone dimension-free
   proof that graph-like active traces cannot realize a two-poorer failure.
+- `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`: human
+  classification proving uniqueness of the first surviving obstruction.
 - `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`: standalone
   statement and proof of the complete cardinality phase diagram.
 - `coopgames/paper3/COMPLETE_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`: focused
@@ -128,6 +131,11 @@ falsification searches.  Please do not count their no-hit output as proof.
    singleton/efficiency contradiction. Look for a hidden problem caused by
    multiple odd-cycle components or by lifting duplicate traces to original
    coalitions.
+   Also audit the `|H|=4` first-obstruction theorem: independently derive the
+   five fractional vertex types in `(FO-2)`, verify that the list is exhaustive
+   without trusting a search, and check every safe root rounding and the
+   type-D poor-label argument. Confirm that slack really forces the
+   four-co-singleton `1/3` vertex, not merely the presence of its columns.
 10. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove
@@ -182,6 +190,8 @@ core literature:
   balanced-matrix obstruction at every two-poorer failure;
 - the dimension-free rank-two trace exclusion, equivalently that every
   two-poorer failure requires an active trace of size at least three;
+- the uniqueness of the four-co-singleton `1/3` packet at the first feasible
+  `2|4` obstruction;
 - the fixed six-player integer lower-envelope construction.
 - the integral `m>=2,h>=4` internal-sacrifice family, the internal/external
   sacrifice dichotomy, and the observation that exact partition is not

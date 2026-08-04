@@ -132,6 +132,19 @@ The full proof is in [`RANK_TWO_TRACE_EXCLUSION.md`](RANK_TWO_TRACE_EXCLUSION.md
 and Theorem `thm:lx-rank-two-trace-exclusion` of the manuscript. Hence the
 necessary obstruction is genuinely hypergraphic, not a bare graph odd cycle.
 
+At the first feasible rich-side size, the obstruction is unique. A human
+classification of the five fractional exact-cover vertex types on four
+players shows that four admit a safe root rounding and are eliminated by the
+same exact-singleton argument. The sole survivor is
+
+```text
+beta_(H\{h})=1/3 for every h in H.
+```
+
+Thus every slack `2|4` boundary has all four co-singletons as active traces.
+See [`H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`](H4_FIRST_OBSTRUCTION_CLASSIFICATION.md)
+and Theorem `thm:lx-four-rich-trace-classification`.
+
 ## How it explains the sharp threshold
 
 - For `|H|<=2`, every minimal balanced trace packet is a set partition, so
@@ -169,8 +182,9 @@ This result turns the finite-looking threshold into a general hypergraph
 obstruction.  It does **not** classify all nonintegral active trace
 hypergraphs, nor does nonintegrality by itself guarantee realizability by an
 exact game.  The next major target is a converse or minor theorem describing
-which rank-three and higher odd trace obstructions survive the exact-face and
-Lmin constraints.
+whether every higher-dimensional failure contains this four-co-singleton
+packet as a trace minor, or whether new irreducible rank-three and higher
+obstructions occur.
 
 Classical prior art retained explicitly:
 

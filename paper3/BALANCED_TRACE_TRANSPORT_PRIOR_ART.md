@@ -24,6 +24,8 @@ or any of the following sharp consequences:
   four;
 - every two-poorer slack boundary is genuinely hypergraphic: some active
   rich-side trace has cardinality at least three;
+- at the first feasible four-player richer suffix, every failure has the
+  four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - the complete boundary-cardinality phase diagram
   `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
 
@@ -145,7 +147,8 @@ Pending expert review, the strongest defensible formulation is:
 > sharp `2|3` versus `2|4` richer-side threshold.  Every two-poorer failure
 > moreover forces a nonintegral active trace hypergraph, hence an odd
 > balanced-matrix obstruction, and graph-like trace systems are ruled out
-> entirely. Three explicit universal
+> entirely. At four rich players the unique surviving fractional packet is
+> the co-singleton `1/3` cover. Three explicit universal
 > families then give a complete classification of the boundary-side
 > cardinalities compatible with slack.  We do not claim the Lmin solution,
 > exact partition games, their published Lorenz consequence, exact

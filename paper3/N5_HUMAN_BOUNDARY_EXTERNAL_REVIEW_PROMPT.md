@@ -18,6 +18,7 @@ Review the commit identified in the accompanying pull request, especially:
 - `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`;
 - `coopgames/paper3/PROPERTY_I_STRICT_COVER_AUDIT.md`;
 - `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`;
+- `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`;
 - `coopgames/src/verify_n5_small_poorer_suffix.py` and
   `coopgames/results/n5_small_poorer_suffix.json` only as an independent
   computational audit;
@@ -68,14 +69,19 @@ Review the commit identified in the accompanying pull request, especially:
    cycle containing the gaining-poor edge, and that untouched components
    preserve exact rich load and add no poor load. Then check the exact
    singleton efficiency contradiction.
-9. Confirm the scope: the theorem handles one poorer player in every
+9. Independently derive the five fractional exact-cover vertices on four
+   rich players and audit the first-obstruction uniqueness theorem. Treat the
+   list in `(FO-2)` as untrusted; verify exhaustiveness by hand, all safe root
+   roundings, and the type-D scaled poor-load case split. Confirm that the
+   theorem forces the four-co-singleton `1/3` vertex itself.
+10. Confirm the scope: the theorem handles one poorer player in every
    dimension and exactly two poorer players with at most three richer players;
    it does not settle the strips with three or more poorer players.
-10. Search the exact-game, Lorenz/Lmin, exact-partition, and minimal-balanced-
+11. Search the exact-game, Lorenz/Lmin, exact-partition, and minimal-balanced-
    collection literature for this particular sharp rich-side threshold or an
    argument that subsumes it.  Do not credit the manuscript with inventing
    minimal balanced collections.
-11. Replay both exact-rational verifiers and compare their JSON output byte for
+12. Replay both exact-rational verifiers and compare their JSON output byte for
     byte, but treat those results as audit conveniences rather than independent
     proof evidence.
 

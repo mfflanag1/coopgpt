@@ -25,6 +25,7 @@ Primary files:
 - `coopgames/paper3/INTEGRAL_TRACE_OBSTRUCTION.md`.
 - `coopgames/paper3/PROPERTY_I_STRICT_COVER_AUDIT.md`.
 - `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`.
+- `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`.
 
 The broader dependency chain is the strict-cover lemma, balanced-trace
 transport theorem, unique-richest theorem, human two-poorer theorem, and
@@ -92,6 +93,12 @@ paper.  Audit those dependencies if any cited implication is unclear.
     alternating rounding of only the cycle containing the unique `b` edge,
     and the exact-singleton efficiency contradiction. Check that untouched
     fractional components retain unit rich load and introduce no poor load.
+11. Independently derive the five four-player fractional exact-cover vertex
+    types in `(FO-2)` and check the first-obstruction uniqueness theorem. Do
+    not accept the classification from an enumeration. Verify types A--C,
+    the scaled-load case split for type D, every safe root rounding, and the
+    conclusion that only the four-co-singleton `1/3` vertex can underload the
+    gaining poor player without contradicting exact singleton faces.
 
 ## Independent reproduction
 
@@ -129,6 +136,8 @@ any prior source contains:
   exact-cover polytope and hence an odd balanced-matrix obstruction.
 - the theorem that every two-poorer failure requires an active trace of
   cardinality at least three.
+- the theorem that the first feasible `2|4` failure necessarily contains the
+  four-co-singleton `1/3` exact-cover vertex.
 
 Treat property I and its antidual Lmin form as established prior art. Decide
 separately whether the simultaneous strict-cover certificate is merely a

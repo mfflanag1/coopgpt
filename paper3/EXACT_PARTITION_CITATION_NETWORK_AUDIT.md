@@ -75,6 +75,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Hierarchical dual covers plus exact-face witnesses yield balanced-trace transport | Not found | Present as the apparent new proof mechanism, pending terminology review. |
 | Every two-poorer failure forces a nonintegral active trace polytope/odd trace cycle | Not found; Berge's matrix-integrality theorem is classical | Present only as a new bridge from Lmin geometry to known balanced-matrix theory. |
 | Every two-poorer failure has an active trace of size at least three | Not found; half-integrality of graph exact covers is standard | Present as a candidate new exact-game realizability exclusion, pending specialist review. |
+| At `|H|=4`, every two-poorer failure has the four-co-singleton `1/3` vertex | Not found; four-row exact-cover classification is elementary | Present as a candidate first-obstruction uniqueness theorem, pending specialist review. |
 | Complete boundary staircase `4,3,3,2` | Not found | Present as apparent new classification. |
 | Universal indecomposable family for every `m>=3,h>=2` | Not found | Present as apparent new sharpness construction. |
 | Closed-form Lmax and distance `4h/(h+1)` for that family | Not found | Present as an additional explicit result, not the core novelty claim. |
