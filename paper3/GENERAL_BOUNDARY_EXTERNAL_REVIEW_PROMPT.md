@@ -22,6 +22,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   prior-art boundary, and cautious novelty statement.
 - `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`: standalone
   statement and proof of the complete cardinality phase diagram.
+- `coopgames/paper3/COMPLETE_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`: focused
+  hostile checklist for the new universal family, Lmax, and phase theorem.
 
 ## Exact verification files
 
