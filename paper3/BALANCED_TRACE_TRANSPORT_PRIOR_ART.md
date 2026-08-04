@@ -27,6 +27,14 @@ or any of the following sharp consequences:
 - every safe rooted integer fibre of a tight trace semigroup is forbidden by
   an exact singleton face, a dimension-free mechanism unifying the rounding
   exclusions below;
+- more generally, a real tight cover with rich overload `q 1_D` charges the
+  slack of the internal exact face `D` to uncovered poorer-player payoff;
+  its singleton specialization is also the protector-packing budget behind
+  the sharp unique-richest four/five threshold;
+- positive Lehman trace packets carry canonical rooted fibres through the
+  classical identity `A B^T=J+kI`; a new two-label density test rules out
+  such packets and unifies the odd-cycle and coarse projective-plane
+  roundings, while the co-singleton survivor has the opposite sign;
 - at the first feasible four-player richer suffix, every failure has the
   four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - projective-plane incidence packets satisfying the overlap-sensitive bound
@@ -95,7 +103,15 @@ remains required.
    zero--one matrices.  The paper cites this result; the candidate new bridge
    is that a slack two-poorer Lmin boundary forces the active trace matrix to
    violate balancedness.
-9. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
+9. **Minimally nonideal matrices and Lehman pairs.** Cornuéjols, Guenin, and
+   Tunçel (2009),
+   [*Lehman matrices*](https://doi.org/10.1016/j.jctb.2008.06.009), study
+   square zero--one pairs satisfying `A B^T=J+kI` and explain their classical
+   role as cores of nondegenerate minimally nonideal matrices. The manuscript
+   now cites this identity as prior art. Its candidate new contribution is
+   the two-poor labeling count and the observation that each positive dual
+   row becomes a forbidden exact-game rooted cover.
+10. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
    [*Monotonicity and egalitarianism*](https://doi.org/10.1016/j.geb.2021.03.006),
    compares Lmin, Lmax, and PES on broader domains and records prior
    monotonicity failures.  It does not state the exact-game boundary-transport
@@ -124,6 +140,9 @@ cooperative game "transport" "minimal balanced collection" egalitarian
 "egalitarian solution" "balanced matrix" cooperative game
 "Lmin" hypergraph cooperative game balanced
 "exact partition game" hypergraph "balanced matrix"
+"Lehman matrix" egalitarian cooperative game
+"minimally nonideal" Lmin exact game
+"Lehman matrix" two labels rooted cover
 "minimal balanced collection" "set partitioning" egalitarian
 "property I" Lmin Lmax tight coalitions
 "property I" egalitarian TU-games
@@ -144,6 +163,12 @@ Berge's classical balanced-matrix paper.  No source found in this search
 forces nonintegrality or an odd trace cycle from a slack Lmin boundary, or
 rules out every rank-two active trace system by combining odd-cycle rounding
 with exact singleton faces.
+
+The later targeted search inspected Cornuéjols--Guenin--Tunçel's primary
+Lehman-matrix paper and the classical minimally-nonideal theorem it records.
+That source supplies the matrix identity and regularity, not the poor-label
+density argument or the bridge to exact-game tight faces. This is still an
+absence finding rather than a definitive novelty determination.
 
 A targeted finite-geometry search found adjacent theory of semiarcs, tangent
 blocking, and secant-avoidance. In particular, Csajbók--Héger--Kiss study
@@ -170,7 +195,10 @@ Pending expert review, the strongest defensible formulation is:
 > balanced-matrix obstruction, and graph-like trace systems are ruled out
 > entirely. Exact singleton faces more generally forbid every safe rooted
 > integer fibre of the supported tight-coalition semigroup, unifying the
-> subsequent rounding arguments. At four rich players the unique surviving
+> subsequent rounding arguments. Positive Lehman cores canonically generate
+> those fibres, and a two-label density test subsumes the odd-cycle and coarse
+> projective-plane roundings; the co-singleton survivor lies on the
+> opposite-sign side. At four rich players the unique surviving
 > fractional packet is
 > the co-singleton `1/3` cover. A projective-plane star-rounding argument
 > further excludes every incidence packet satisfying a simple-point density

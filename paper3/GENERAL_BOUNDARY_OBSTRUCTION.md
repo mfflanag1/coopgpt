@@ -235,6 +235,48 @@ This **rooted-semigroup obstruction** unifies odd-cycle alternating rounding,
 the four-rich safe-root classification, and projective-plane star rounding.
 The standalone proof is in `paper3/ROOTED_SEMIGROUP_OBSTRUCTION.md`.
 
+The integer statement is itself a specialization of a real-valued
+**exact-face overload budget**. If tight coalitions have rich load
+`1_H+q 1_D` for any nonempty `D subset H`, and load every poorer player by
+`c_i<=1`, exactifying `D` gives
+
+```text
+q [phi(D)-v(D)] <= sum_(i in L) (1-c_i) phi_i.
+```
+
+This is also exactly the fractional protector-packing inequality when
+`H=D` is a unique richest singleton. Hence the human four/five threshold and
+the higher-rank trace roundings are two instances of one internal-face slack
+budget. The standalone derivation is in
+`paper3/EXACT_FACE_OVERLOAD_BUDGET.md`.
+
+There is now a standard matrix-theoretic source of rooted fibres. A positive
+Lehman pair satisfies
+
+```text
+A B^T = J + k I,       k>=1.
+```
+
+Thus every row of the dual matrix `B` selects trace columns with precisely
+the forbidden rich load `1_H+k e_d`. If `U,V` are the losing- and
+gaining-poor label sets and
+
+```text
+Pi_B(Z)=sum_d binom(|row_d(B) intersect Z|,2),
+```
+
+the packet is impossible whenever
+
+```text
+s|V|-2 Pi_B(V) > Pi_B(U),
+```
+
+where `s` is the dual row size. This one theorem contains the odd-cycle
+alternating rounding and the coarse projective-plane density argument. The
+sharp co-singleton support `J-I` lies on the opposite-sign side instead.
+See `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
+Lehman's minimally-nonideal minor reduction without losing the poor labels.
+
 The graph-like case can be eliminated completely. If every active trace on
 `H` has size at most two, each extreme exact cover is a disjoint union of
 singleton blocks, isolated edges, and half-weight odd cycles. A packet with

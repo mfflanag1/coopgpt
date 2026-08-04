@@ -22,6 +22,17 @@ This statement is independent of the number of rich players, the ranks or
 sizes of the tight traces, and the particular fractional exact-cover vertex
 from which the coalitions were obtained.
 
+It is the discrete singleton specialization of the stronger real-valued
+[`EXACT_FACE_OVERLOAD_BUDGET.md`](EXACT_FACE_OVERLOAD_BUDGET.md): with root
+`D={d}`, that inequality says
+
+```text
+k phi_d <= payoff of the omitted poor players.
+```
+
+The strict two-poorer boundary makes this impossible whenever the zero--one
+poor load is nonzero.
+
 ## Proof
 
 Exactify singleton `d`: exactness gives a core point `x` with `x_d=0`.

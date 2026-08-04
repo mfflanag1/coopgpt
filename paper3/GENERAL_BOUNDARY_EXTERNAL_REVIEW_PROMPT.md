@@ -10,9 +10,11 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/sections_leximin.tex`: source labels
   `lem:lx-exact-balanced-slack`, `lem:lx-boundary-cover`,
   `cor:lx-boundary-defect`, `lem:lx-strict-richer-cover`,
+  `cor:lx-exact-face-overload`,
   `thm:lx-balanced-trace-transport`,
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
   `thm:lx-rooted-semigroup-obstruction`,
+  `thm:lx-positive-lehman-trace-exclusion`,
   `thm:lx-rank-two-trace-exclusion`,
   `thm:lx-four-rich-trace-classification`,
   `thm:lx-projective-plane-trace-exclusion`,
@@ -38,6 +40,11 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/ROOTED_SEMIGROUP_OBSTRUCTION.md`: standalone
   dimension-free theorem forbidding safe rooted integer fibres of tight
   coalition semigroups.
+- `coopgames/paper3/EXACT_FACE_OVERLOAD_BUDGET.md`: real-valued internal-face
+  inequality proposed as the common budget behind the four/five
+  unique-richest threshold and the later rooted trace roundings.
+- `coopgames/paper3/LEHMAN_TRACE_OBSTRUCTION.md`: reduction of positive Lehman
+  dual rows to rooted covers and the new two-poor-label density criterion.
 - `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`: human
   classification proving uniqueness of the first surviving obstruction.
 - `coopgames/paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`: human
@@ -141,6 +148,20 @@ falsification searches.  Please do not count their no-hit output as proof.
    not claim these fibres are semigroup holes without a saturation proof), and whether the
    theorem is a genuinely useful general obstruction rather than a renamed
    repetition of the exact-singleton argument.
+   First audit the stronger exact-face overload budget: derive it both from
+   the boundary-cover inequality and by exactifying an arbitrary nonempty
+   `D subset H`; check all inequality directions when poorer loads are raised
+   to one. Verify that the fractional protector-packing inequality and the
+   safe rooted theorem are genuinely specializations. Assess whether this
+   unification is mathematically informative or only a repackaging of the
+   already stated boundary-cover inequality.
+   Then audit the positive-Lehman theorem. Check the orientation of
+   `A B^T=J+kI`, row/column regularity, the lower bound on dual rows meeting
+   `V` exactly once, the upper bound forced by two `U` labels, and the
+   column-linear corollary. Confirm independently that odd cycles and
+   self-dual projective planes are instances, while `J-I` has the opposite
+   sign. Determine whether the labeled density argument or its exact-game
+   use already appears in the Lehman/minimally-nonideal literature.
    Then audit the rank-two trace exclusion: prove the extreme-point support
    decomposition into singleton blocks, isolated edges, and half-weight odd
    cycles; check the half-integer poor-load argument; and verify that
@@ -221,6 +242,10 @@ core literature:
 - the exact-face rooted-semigroup obstruction and its interpretation as a
   family of forbidden integer fibres, including prior terminology from
   normal hypergraphs, Hilbert bases, and affine semigroups;
+- the real-valued exact-face overload budget and its claimed unification of
+  the unique-richest threshold with the trace-rounding hierarchy;
+- the positive-Lehman trace exclusion and the proposed positive-versus-
+  negative structural divide;
 - the dimension-free rank-two trace exclusion, equivalently that every
   two-poorer failure requires an active trace of size at least three;
 - the uniqueness of the four-co-singleton `1/3` packet at the first feasible

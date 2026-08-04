@@ -2311,6 +2311,47 @@ same inequality.  Thus \eqref{eq:lx-boundary-cover} is a quantitative
 protector-completion form of published exact balancedness, not a new
 characterization of exact games.
 
+The same inequality has a useful internal-face specialization.  It is the
+common budget law behind both the unique-richest threshold and the later
+trace-rounding exclusions.
+
+\begin{corollary}[exact-face overload budget]
+\label{cor:lx-exact-face-overload}
+Let $v$ be a singleton-normalized exact game, let $\phi\in\core(v)$, and let
+$\varnothing\ne D\subseteq H\subsetneq N$.  Suppose nonnegative real weights
+on proper $\phi$-tight coalitions have incidence loads
+\[
+ c_h=1+q\mathbf1_{\{h\in D\}}\quad(h\in H),
+ \qquad 0\leq c_i\leq1\quad(i\in L:=N\setminus H)       \tag{OF}
+ \label{eq:lx-exact-face-overload}
+\]
+for some $q>0$.  Then
+\[
+ q\,s_\phi(D)
+ \leq\sum_{i\in L}(1-c_i)\phi_i.                       \tag{OB}
+ \label{eq:lx-exact-face-overload-budget}
+\]
+In particular, if the cover loads every player outside $H$ once, then $D$
+is tight at $\phi$.
+\end{corollary}
+
+\begin{proof}
+Apply Lemma~\ref{lem:lx-boundary-cover} with target coalition $D$,
+$\alpha=1+q$, and $\beta=1$.  The players in $H\setminus D$ have load one,
+the players in $L$ have load at most one, and the completion terms on $D$
+and $H\setminus D$ vanish.  The resulting inequality is
+\eqref{eq:lx-exact-face-overload-budget}.  If every poorer load is one, its
+right side is zero; core feasibility gives $s_\phi(D)\geq0$.
+\end{proof}
+
+Equivalently, exactify $D$ at a core point $x$.  Summing the tight-coalition
+inequalities gives $x(H)+qv(D)+\sum_{i\in L}c_ix_i$ on the left.  Singleton
+normalization makes $x_i\geq0$, so replacing the poorer loads by one can
+only increase that side; efficiency then gives
+\eqref{eq:lx-exact-face-overload-budget}.  This direct proof emphasizes that
+the overloaded set may be any rich coalition, not merely one player, and
+that the cover weights need not be integral.
+
 For a fixed family $\mathcal T$ of $\phi$-tight coalitions, normalize
 $\alpha-\beta=1$ in \eqref{eq:lx-boundary-cover} and minimize its right side
 over $\lambda_T\geq0$ and $\beta\geq0$, subject to
@@ -2416,12 +2457,10 @@ then
 If $\Lambda\leq1$, the left side of
 \eqref{eq:lx-fractional-packing} is nonpositive and the right side is
 nonnegative.  If $\Lambda>1$, apply
-Lemma~\ref{lem:lx-boundary-cover} with $H=\{r\}$,
-$\alpha=\Lambda$, $\beta=1$, and the weighted tight protectors
-$T_i=\{r\}\cup Q_i$.  Their load on $r$ is $\Lambda$, their loads on the
-poorer players are the $c_j$, and
-$s_\phi(\{r\})=\phi_r-v(\{r\})=\gamma$.  Inequality
-\eqref{eq:lx-boundary-cover} is therefore exactly
+Corollary~\ref{cor:lx-exact-face-overload} with
+$H=D=\{r\}$, $q=\Lambda-1$, and the weighted tight protectors
+$T_i=\{r\}\cup Q_i$.  Their poorer loads are the $c_j$, while
+$s_\phi(\{r\})=\phi_r-v(\{r\})=\gamma$.  The overload budget is exactly
 \eqref{eq:lx-fractional-packing}.
 \end{proof}
 
@@ -2961,25 +3000,96 @@ $\phi$-tight coalitions admits a safe rooted tight cover.
 \end{theorem}
 
 \begin{proof}
-Suppose \eqref{eq:lx-safe-rooted-tight-cover} holds, rooted at $d$ with
-multiplicity $k$.  Exactness of singleton $\{d\}$ supplies
-$x\in\core(v)$ with $x_d=v(\{d\})=0$.  Sum at $x$ the core inequalities of
-the tight coalitions with multiplicities $y_T$.  Their incidence loads give
-\[
- x(H)+\sum_{i\in L}p_i x_i
- \geq \phi(H)+k\phi_d+\sum_{i\in L}p_i\phi_i.
- \tag{SRC-1}\label{eq:lx-rooted-semigroup-inequality}
-\]
-For each omitted poor player add its singleton inequality $x_i\geq0$.
-If $p=(1,1)$, efficiency now gives
-$\phi(N)=x(N)\geq\phi(N)+k\phi_d>\phi(N)$.  If exactly one poor player is
-loaded and $j$ is omitted, it gives
-\[
- \phi(N)=x(N)\geq\phi(N)+k\phi_d-\phi_j>\phi(N),
-\]
-because the boundary is strict, so $\phi_d>\phi_j\geq0$.  Both cases are
-impossible.
+Apply Corollary~\ref{cor:lx-exact-face-overload} with $D=\{d\}$ and $q=k$.
+Singleton normalization makes $s_\phi(\{d\})=\phi_d$.  If both poor players
+are loaded, its right side is zero.  If exactly one is loaded and $j$ is
+omitted, its right side is $\phi_j$.  The strict boundary gives
+$k\phi_d>\phi_j\geq0$ in either case, a contradiction.
 \end{proof}
+
+\begin{theorem}[positive-Lehman trace exclusion]
+\label{thm:lx-positive-lehman-trace-exclusion}
+Let $v$ be a singleton-normalized exact game, let
+$\phi=\operatorname{Lmin}(v)$, and let $H$ be a slack cumulative richer
+suffix at a strict payoff boundary with exactly two poorer players.  Suppose
+a lifted extreme packet furnished by
+Theorem~\ref{thm:lx-balanced-trace-transport} has gaining-poor load below
+one, has a square rich trace-incidence matrix $A$, and gives every positive
+trace weight $1/r$.  Suppose $A$ has a zero--one Lehman dual $B$ satisfying
+\[
+ AB^\top=J+kI,\qquad k\geq1,                        \tag{LH}
+ \label{eq:lx-lehman-pair}
+\]
+where $A$ is $r$-regular and $B$ is $s$-regular.  Let $U$ and $V$ be the
+sets of packet columns whose lifted tight coalitions contain respectively
+the losing and gaining poor players.  For a column set $Z$, put
+\[
+ \Pi_B(Z):=\sum_{d}\binom{|\operatorname{row}_d(B)\cap Z|}{2}.
+ \tag{LH-P}\label{eq:lx-lehman-pair-count}
+\]
+The packet is impossible whenever
+\[
+ s|V|-2\Pi_B(V)>\Pi_B(U).                            \tag{LH-D}
+ \label{eq:lx-lehman-density}
+\]
+In particular, if any two columns of $B$ occur together in at most one row,
+it is enough that
+\[
+ |V|(s-|V|+1)>\binom{|U|}{2}.                        \tag{LH-L}
+ \label{eq:lx-linear-lehman-density}
+\]
+The packet is also impossible, without either displayed density hypothesis,
+whenever $|V|\leq2$.
+\end{theorem}
+
+\begin{proof}
+The packet transport inequality gives
+$0\leq |U|<|V|<r$, because its poor loads are $|U|/r$ and $|V|/r$.
+For each row $d$ of $B$, write
+$u_d=|\operatorname{row}_d(B)\cap U|$ and
+$w_d=|\operatorname{row}_d(B)\cap V|$, and let $n_1$ count the rows with
+$w_d=1$.  Column regularity of $B$ gives $\sum_dw_d=s|V|$.  Since
+$t\leq2\binom t2$ for every integer $t\geq2$,
+\[
+ n_1=s|V|-\sum_{d:w_d\geq2}w_d
+ \geq s|V|-2\Pi_B(V).                               \tag{LH-1}
+ \label{eq:lx-lehman-simple-rows}
+\]
+If every row counted by $n_1$ had $u_d\geq2$, each would contribute at least
+one to $\Pi_B(U)$, contradicting
+\eqref{eq:lx-lehman-density}.  Hence some row $d$ has
+$w_d=1$ and $u_d\leq1$.
+
+Use that row of $B$ as a zero--one selector of the lifted tight coalitions.
+Equation~\eqref{eq:lx-lehman-pair} says that its rich incidence load is
+$\mathbf1_H+k e_d$; its gaining-poor load is one and its losing-poor load is
+at most one.  It is therefore a safe rooted tight cover, forbidden by
+Theorem~\ref{thm:lx-rooted-semigroup-obstruction}.
+
+If $B$ is column-linear, every pair of columns contributes at most one to
+\eqref{eq:lx-lehman-pair-count}.  Thus
+$\Pi_B(Z)\leq\binom{|Z|}{2}$, and
+\eqref{eq:lx-linear-lehman-density} implies
+\eqref{eq:lx-lehman-density}.
+
+Finally, the density condition is automatic when $|V|\leq2$.  For
+$|V|=1$, $\Pi_B(V)=0$ and $|U|=0$.  For $|V|=2$, one has $|U|\leq1$ and
+$\Pi_B(U)=0$.  The two columns of $B$ are distinct because
+\eqref{eq:lx-lehman-pair} is nonsingular, so their codegree is at most
+$s-1$.  Hence
+$s|V|-2\Pi_B(V)\geq2>0$.
+\end{proof}
+
+Equation~\eqref{eq:lx-lehman-pair} and its role as the core identity for
+nondegenerate minimally nonideal matrices are classical
+\citep{CornuejolsGueninTuncel2009}.  The new claim here is only the
+two-poor-label exclusion obtained by combining that identity with the
+exact-face obstruction.  The alternating selection on an odd trace cycle is
+the $r=2$ instance.  For a self-dual projective-plane matrix, the linear
+bound \eqref{eq:lx-linear-lehman-density} is the coarse global density bound
+used below.  By contrast, the surviving co-singleton support $J-I$ satisfies
+the opposite-sign identity $(J-I)I=J-I$, not a positive Lehman identity;
+this locates the sharp family on the other side of the structural divide.
 
 \begin{theorem}[rank-two trace exclusion]
 \label{thm:lx-rank-two-trace-exclusion}
