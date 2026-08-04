@@ -106,6 +106,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Every rooted Lmin relation is linearly equivalent to a coupling of a uniform rich-trace cover and a singleton-completed uniform poor-trace cover, with exceptional coefficient `gamma=alpha-beta+tau`; support-minimal relations become extreme coupling rays | Not found as a named Lmin obstruction cone; the coordinate restriction and general polyhedral extreme-ray correspondence are elementary | Present the normal form as a structural reduction, not a difficult standalone theorem.  Claim broader significance only if the resulting coupling rays receive a nontrivial classification or forbidden-minor theorem. |
 | Every slack Lmin boundary selects either a pure block star or one rooted circuit whose non-spoke rich traces are exactly a single minimal balanced collection; the convex canonical excess `delta(r)` eliminates mixtures | Not found in the inspected exact-partition, egalitarian-core, or minimal-balanced-system literature; exact-cover extreme-point decomposition and Jensen's inequality are classical | Present the Lmin-specific pruning, canonical rooted completion, and single-packet reduction as the candidate contribution.  Require hostile review of repeated-trace degeneracies and a specialist search before calling it a new general theory. |
 | Every slack richer Lmin suffix in every exact game has a one-player extension with strictly larger slack, equivalently a strict marginal deficit on an adjacent coalition-lattice edge; with two poorer players a selected packet gives factor `(1-r_a)/(r_b-r_a)>1` | Not found; the semi-balanced inequality is classical, but the simultaneous strict cover from Lmin and its universal canonical completion were not found as a slack-ascent theorem | Present the dimension-free universal ascent and local-witness theorem as candidate new content, applying to both star and trace branches; require hostile review of the exact-balancedness orientation and a search for equivalent exact-game or egalitarian slack-gradient results. |
+| Maximizing slack on the Boolean interval above any failed Lmin suffix produces a proper payoff-inverted punctured suffix; every exactifier weakly lowers its included poorer players, weakly raises its excluded poorer players, obeys a deficit-weighted transport budget, and satisfies `q_E s_phi(C)<=sum_D q_d s_phi({d})` | Not found in the inspected exact-partition thesis/paper, exact-cone facet paper, or citation network. Interval neighbor signs are elementary once the maximizer is chosen; the Lmin-selected terminal cut, strict-cover budget, and forced payoff inversion are the candidate contribution. | Present as a structural corollary of universal ascent plus exactness, not as a new exact-balancedness inequality. Require hostile review of the tied-stratum leximin argument and specialist terminology search. |
 
 ## Why the known four-player theorem does not subsume this one
 
@@ -141,6 +142,8 @@ Lmin; Lmax; Lorenz maximal; ordered payoff partition
 richer players; poorer players; rich coalition; rich core
 minimal balanced collection; exact balancedness; balanced hypergraph
 transport; trace; normal cone; Kohlberg criterion
+terminal slack coalition; slack maximizer; punctured suffix; payoff inversion
+adjacent marginal deficit; exactifying displacement; singleton sacrifice budget
 dimension; cardinality; indecomposable; replication
 balanced matrix; set partitioning; active trace; odd cycle
 property I; hierarchical tight-coalition criterion; complement-tight coalition
@@ -156,6 +159,14 @@ simultaneous strict cover, the active-trace polytope, or the odd-cycle
 necessity theorem. The other full texts inspected were the consistency, antiduality, NTU,
 population-monotonicity, convex-game axiomatization, welfare-egalitarianism,
 discrete-side-payment, and characteristic-function papers listed above.
+The exact-partition section of Mauri's thesis was re-inspected specifically
+for terminal coalitions, slack maxima, marginal-deficit edges, sign-separated
+exactifiers, and sacrifice budgets.  It gives the ordered-partition
+definition, marginal-game construction, and Lorenz argument, but no matching
+terminal-cut statement was located.  Studený--Kratochvíl's full-text exact-cone
+paper was also searched for `slack`, `terminal`, `leximin`, and `marginal`;
+no matching selector-specific theorem was located.  These negative keyword
+results narrow the comparison but remain weaker than specialist review.
 
 ## Limits and reviewer gate
 

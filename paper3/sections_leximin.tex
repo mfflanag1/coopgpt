@@ -2884,6 +2884,120 @@ gives the equivalent marginal inequality. Theorem~\ref{thm:lx-strict-cover-slack
 supplies the quantitative cover-dependent strengthening.
 \end{proof}
 
+The ascent cannot simply be iterated: after adjoining one poorer player the
+coalition need not remain a payoff suffix, so Lmin duality need not supply a
+new strict cover.  Maximizing over the whole Boolean interval above the
+failed suffix bypasses that obstruction and gives a structural terminal
+object.
+
+\begin{theorem}[terminal punctured-suffix theorem]
+\label{thm:lx-terminal-slack-cut}
+Under the hypotheses of
+Corollary~\ref{cor:lx-universal-lmin-slack-ascent}, suppose $H$ is slack.
+Choose $C=H\mathbin{\dot\cup}D$ maximizing $s_\phi$ over
+$[H,N]=\{H\cup Q:Q\subseteq L\}$, and put $E=L\setminus D$.  Then
+$\varnothing\ne D\subsetneq L$, $C$ is proper, and
+\[
+ s_\phi(C)>s_\phi(H).
+\]
+For every $z\in\core(v)$ exact on $C$, put $\Delta=z-\phi$ and
+$S=s_\phi(C)$.  Then
+\begin{align}
+ \Delta_d&\leq0 &&(d\in D),&
+ \Delta_e&\geq0 &&(e\in E),&
+ \Delta(E)&=S,                                      \tag{TC-1}
+ \label{eq:lx-terminal-cut-signs}\\
+ v(C)-v(C\setminus\{d\})&\leq\phi_d &&(d\in D),&
+ v(C\cup\{e\})-v(C)&\geq\phi_e &&(e\in E).       \tag{TC-2}
+ \label{eq:lx-terminal-cut-marginals}
+\end{align}
+Normalize any strict Lmin cover of $H$ to rich load one, write its poorer
+loads as $c_i<1$, and put $q_i=1-c_i$.  Every such exactifier satisfies
+\[
+ \sum_{d\in D}q_d(-\Delta_d)
+ \geq\sum_{e\in E}q_e\Delta_e>0.                   \tag{TC-3}
+ \label{eq:lx-terminal-cut-budget}
+\]
+Writing $q_E=\min_{e\in E}q_e$, one consequently has the terminal
+singleton-sacrifice budget
+\[
+ q_Es_\phi(C)
+ \leq\sum_{d\in D}q_d s_\phi(\{d\}).               \tag{TC-4}
+ \label{eq:lx-terminal-singleton-budget}
+\]
+In particular, there are $d\in D$ and $e\in E$ such that
+\[
+ \Delta_d<0<\Delta_e,
+ \qquad \phi_d\leq\phi_e.                          \tag{TC-5}
+ \label{eq:lx-terminal-cut-inversion}
+\]
+Thus the terminal slack continuation of a failed suffix is payoff-inverted:
+it contains a losing poorer player while excluding a weakly richer gaining
+poorer player.
+\end{theorem}
+
+\begin{proof}
+Corollary~\ref{cor:lx-universal-lmin-slack-ascent} gives an $i\in L$ with
+$s_\phi(H\cup\{i\})>s_\phi(H)$.  Since $s_\phi(N)=0$, every interval
+maximizer has the asserted form with nonempty proper $D\subset L$, and its
+slack $S$ is strictly larger than the root slack.
+
+For $d\in D$ and $e\in E$, interval maximality gives
+$s_\phi(C\setminus\{d\})\leq S$ and
+$s_\phi(C\cup\{e\})\leq S$.  Expanding the two slack differences proves
+\eqref{eq:lx-terminal-cut-marginals}.  Exactness supplies a core point $z$
+with $z(C)=v(C)$.  Core feasibility on the two neighboring coalitions gives
+\[
+ z_d=z(C)-z(C\setminus\{d\})
+ \leq v(C)-v(C\setminus\{d\})\leq\phi_d,
+\]
+and
+\[
+ z_e=z(C\cup\{e\})-z(C)
+ \geq v(C\cup\{e\})-v(C)\geq\phi_e.
+\]
+Also $\Delta(C)=-S$ and efficiency gives $\Delta(E)=S>0$, proving
+\eqref{eq:lx-terminal-cut-signs} and a strict gain in $E$.
+
+Let $\lambda$ be any normalized strict cover of $H$.  Every supported
+coalition is tight at $\phi$, so $\Delta(T)\geq0$.  Summing and using
+efficiency gives
+\[
+ 0\leq\sum_T\lambda_T\Delta(T)
+ =\Delta(H)+\sum_{i\in L}c_i\Delta_i
+ =-\sum_{i\in L}q_i\Delta_i.
+\]
+Separating $D$ and $E$ proves
+\eqref{eq:lx-terminal-cut-budget}; its right side is positive because every
+$q_e>0$ and some $\Delta_e>0$.  Hence some member of $D$ loses strictly.
+Moreover, $\Delta(E)=S$ makes the weighted gain at least $q_ES$, while
+singleton core feasibility gives
+$-\Delta_d\leq\phi_d-v(\{d\})=s_\phi(\{d\})$.
+Substitution in \eqref{eq:lx-terminal-cut-budget} proves
+\eqref{eq:lx-terminal-singleton-budget} without a normalization assumption.
+
+Finally, if every losing member of $D$ had strictly larger Lmin payoff than
+every gaining member of $E$, then along a sufficiently short segment from
+$\phi$ toward $z$ all strict payoff-stratum gaps would be preserved.  The
+first affected payoff stratum would contain a gain and no loss, so its sorted
+payoff vector would lexicographically improve, contrary to
+$\phi=\operatorname{Lmin}(v)$.  This proves
+\eqref{eq:lx-terminal-cut-inversion}.
+\end{proof}
+
+The theorem does not classify all terminal cuts, but it replaces an invalid
+iteration heuristic by a dimension-free exact-face object with a forced
+sign pattern, a cover-deficit budget, and a payoff inversion.  The pure-star,
+three-trace, and four-co-singleton mechanisms saturate
+\eqref{eq:lx-terminal-cut-budget}.  A standalone proof, hostile-review
+prompt, and exact audit are
+\begin{center}
+\small\path{paper3/TERMINAL_SLACK_CUT_THEOREM.md},\\[-2pt]
+\small\path{paper3/TERMINAL_SLACK_CUT_EXTERNAL_REVIEW_PROMPT.md},\\[-2pt]
+\small\path{src/verify_terminal_slack_cut.py},\\[-2pt]
+\small\path{results/terminal_slack_cut.json}.
+\end{center}
+
 \begin{corollary}[two-poorer canonical slack amplifier]
 \label{cor:lx-two-poorer-slack-amplifier}
 At a slack Lmin boundary with exactly two poorer players, label them so that
