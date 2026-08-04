@@ -30,6 +30,15 @@ evidence of apparent novelty, not proof of novelty.  One directly relevant
 2023 paper is closed access, bibliographic databases are incomplete, and a
 specialist must still check terminology and uncited antecedents.
 
+The subsequent Lmin uncrossing theorem adds a different dimension-free
+claim: supermodularity restricted only to pairs of coalitions tight at Lmin
+forces exact partition, while every failure produces a crossing tight pair
+with a strict local supermodularity defect.  Focused searches on 2026-08-04
+for combinations of `exact partition game`, `Lmin`, `tight coalitions`,
+`supermodular`, `uncrossing`, and `laminar` found the established convex-game
+domain and standard egalitarian-solution literature, but no local-at-Lmin
+statement.  This is preliminary negative evidence only.
+
 ## Reproducible citation query
 
 The 2017 paper has DOI
@@ -89,6 +98,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Complete boundary staircase `4,3,3,2` | Not found | Present as apparent new classification. |
 | Universal indecomposable family for every `m>=3,h>=2` | Not found | Present as apparent new sharpness construction. |
 | Closed-form Lmax and distance `4h/(h+1)` for that family | Not found | Present as an additional explicit result, not the core novelty claim. |
+| Supermodularity only on Lmin-tight pairs forces exact partition; every failure has a minimum-energy crossing pair with positive uncrossing defect | Not found; uncrossing and convex-game egalitarian results are classical | Present the local-at-Lmin domain and converse defect as candidate new; do not claim uncrossing, supermodularity, or the convex-game consequence themselves. |
 
 ## Why the known four-player theorem does not subsume this one
 
@@ -128,6 +138,8 @@ dimension; cardinality; indecomposable; replication
 balanced matrix; set partitioning; active trace; odd cycle
 property I; hierarchical tight-coalition criterion; complement-tight coalition
 fractional matching; rank-two trace; graph exact cover; odd-cycle rounding
+uncrossing tight coalitions; laminar core constraints; local supermodularity
+supermodular only on binding coalitions; lattice of tight coalitions
 ```
 
 The full texts inspected include Arin--Kuipers--Vermeulen (2008), Definition 3
@@ -152,6 +164,9 @@ discrete-side-payment, and characteristic-function papers listed above.
 4. The mathematical proof and verifier have internal checks, but no independent
    external correctness verdict has yet been incorporated for the complete
    phase theorem.
+5. The uncrossing theorem especially needs a cooperative-game or submodular
+   optimization specialist to decide whether its local-tight-set formulation
+   is implicit in a known lattice/uncrossing theorem.
 
 Accordingly, the defensible current claim is **a credible, apparently new
 structural classification in a specialized part of cooperative game theory**.

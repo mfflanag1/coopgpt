@@ -2857,6 +2857,107 @@ coalitions.  A standalone proof and finite audit are
 \small\path{results/laminar_lmin_domain.json}.
 \end{center}
 
+The laminar condition admits a substantially broader uncrossing form.  Say
+that $v$ is \emph{Lmin-locally supermodular} if, for
+$\phi=\operatorname{Lmin}(v)$, every pair $A,B$ tight at $\phi$ satisfies
+\[
+ v(A)+v(B)\leq v(A\cap B)+v(A\cup B).                \tag{LSM}
+ \label{eq:lx-local-supermodularity}
+\]
+Unlike convexity, this condition is imposed only on coalitions binding at one
+canonical core allocation.
+
+\begin{theorem}[Lmin uncrossing domain]
+\label{thm:lx-local-supermodular-domain}
+Every singleton-normalized exact Lmin-locally supermodular game is an exact
+partition game witnessed at Lmin.  Conversely, if a cumulative richer suffix
+$H$ is slack at Lmin, there are crossing Lmin-tight coalitions $A,B$ with
+\[
+ v(A)+v(B)-v(A\cap B)-v(A\cup B)
+ =s_\phi(A\cap B)+s_\phi(A\cup B)>0.                 \tag{UD}
+ \label{eq:lx-uncrossing-defect}
+\]
+The pair may be chosen from a minimum-energy representation of a strict
+richer-side cover at that boundary.
+\end{theorem}
+
+\begin{proof}
+First observe that if tight $A,B$ satisfy
+\eqref{eq:lx-local-supermodularity}, then both $A\cap B$ and $A\cup B$ are
+tight.  Indeed,
+\[
+ v(A)+v(B)\leq v(A\cap B)+v(A\cup B)
+ \leq\phi(A\cap B)+\phi(A\cup B)
+ =\phi(A)+\phi(B)=v(A)+v(B),
+\]
+so all inequalities are equalities and both nonnegative slacks vanish.
+
+Fix a strict boundary $(L,H)$ and a strict cover from
+Lemma~\ref{lem:lx-strict-richer-cover}; retain its complete player-load vector
+$c$.  Among all nonnegative representations of $c$ by nonempty
+$\phi$-tight coalitions, now allowing $N$, minimize
+\[
+ \mathcal E(\lambda):=\sum_S\lambda_S|S|(n-|S|).      \tag{UE}
+ \label{eq:lx-uncrossing-energy}
+\]
+The representation set is nonempty and compact: after the empty coalition is
+discarded, every coefficient is bounded by a coordinate of $c$.
+
+If positive-support coalitions $A,B$ cross, put
+$\delta=\min\{\lambda_A,\lambda_B\}$.  Subtract $\delta$ from their weights
+and add it to $A\cap B$ and $A\cup B$, discarding an empty intersection.
+The incidence identity
+$\mathbf1_A+\mathbf1_B=\mathbf1_{A\cap B}+\mathbf1_{A\cup B}$ preserves
+$c$, while tight-pair closure preserves feasibility.  But the energy falls by
+\[
+ 2\delta|A\setminus B|\,|B\setminus A|>0,             \tag{UE-D}
+ \label{eq:lx-uncrossing-energy-drop}
+\]
+a contradiction.  Thus the minimizing support is laminar.  If it contains
+$N$ with weight $\gamma$, remove that term.  Every load is at least $\gamma$;
+the residual rich load is positive because each poorer load was strictly
+below the original rich load, and all rich--poor gaps are unchanged.  The
+remaining proper support is a laminar strict cover, so
+Theorem~\ref{thm:lx-laminar-strict-cover} makes $H$ tight.  Applying this at
+every boundary proves the first assertion.
+
+For the converse, minimize \eqref{eq:lx-uncrossing-energy} without assuming
+\eqref{eq:lx-local-supermodularity}.  If $H$ is slack, the minimizing support
+cannot be laminar, by Theorem~\ref{thm:lx-laminar-strict-cover}; choose a
+crossing positive pair $A,B$.  Their intersection and union cannot both be
+tight, or the same uncrossing move would lower the energy.  Modularity of
+$\phi$ and tightness of $A,B$ give the equality in
+\eqref{eq:lx-uncrossing-defect}; at least one derived-set slack is positive.
+\end{proof}
+
+The theorem subsumes the laminar domain and the established convex-game
+domain but is stated only in terms of local behavior on the Lmin-tight
+skeleton.  The inclusion beyond convex games is strict.  For example, take
+the lower envelope of the four common-total allocations
+\[
+ (0,4,6,5,0),\quad(5,0,2,7,1),\quad
+ (3,0,0,11,1),\quad(2,2,6,0,5).
+\]
+It is singleton-normalized and exact, has
+$\operatorname{Lmin}(v)=(5/2,5/2,10/3,10/3,10/3)$, and its only nonempty
+proper Lmin-tight coalition is the richer suffix $\{3,4,5\}$.  Hence it is
+Lmin-locally supermodular and exact partition.  It is not convex: the pair
+$\{1,2,5\},\{1,3,5\}$ violates supermodularity by four.
+
+In the sharp five-player failure, the tight protectors
+$\{1,3,5\}$ and $\{3,4,5\}$ have intersection $\{3,5\}$ and union
+$\{1,3,4,5\}$, each with slack one, so their defect in
+\eqref{eq:lx-uncrossing-defect} is exactly two.  Their support has only two
+columns and is therefore balanced and totally balanced; this disproves any
+extension based only on balanced incidence.  A standalone proof, hostile
+review prompt, and exact audit are
+\begin{center}
+\small\path{paper3/LMIN_UNCROSSING_DOMAIN_THEOREM.md},\\[-2pt]
+\small\path{paper3/LMIN_UNCROSSING_EXTERNAL_REVIEW_PROMPT.md},\\[-2pt]
+\small\path{src/verify_lmin_uncrossing_domain.py},\\[-2pt]
+\small\path{results/lmin_uncrossing_domain.json}.
+\end{center}
+
 The preceding certificates also show that the entire characteristic function
 away from the Lmin-tight coalitions is dispensable.  This gives a canonical
 support-independent reduction before any trace classification is attempted.
