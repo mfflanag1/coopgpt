@@ -363,16 +363,17 @@ one-label augmentation. This gives an unconditional, support-minimal labeled
 obstruction without taking an MNI minor; see
 `paper3/CANONICAL_LABELED_CIRCUIT.md`.
 
-The graph-like case can be eliminated completely. If every active trace on
-`H` has size at most two, each extreme exact cover is a disjoint union of
+The graph-like case has a sharp packet-level dichotomy. If an underloaded
+packet has only traces of size at most two, its support is a disjoint union of
 singleton blocks, isolated edges, and half-weight odd cycles. A packet with
 gaining-poor load below one must put that poor player on exactly one
-half-weight cycle edge and put the losing poor player on none. Alternating
-rounding of that odd cycle gives a tight-coalition combination with load
-`1_H+e_d+e_b`. Exactifying the duplicated rich singleton `d` contradicts
-efficiency because `phi_d>phi_a`. Therefore every two-poorer slack boundary
-has a proper tight coalition whose rich trace has size at least three. This is
-the dimension-free **rank-two trace exclusion** proved in
+half-weight cycle edge and put the losing poor player on none. A single odd
+cycle alternates to the forbidden load `1_H+e_d+e_b`. With several odd
+cycles they must all be rounded: the result has load `1_H+1_D+e_b`, where
+`D` selects one duplicated vertex per cycle, and exactness forces
+`s_phi(D)<=phi_a`. Thus a pure rank-two failure needs at least two disjoint
+odd cycles and six rich players; otherwise the packet contains a proper trace
+of size at least three. This corrected **rank-two packet dichotomy** is proved in
 `paper3/RANK_TWO_TRACE_EXCLUSION.md`.
 
 When `|H|=4`, one can go further. Up to relabeling, the four-row exact-cover
@@ -602,11 +603,12 @@ sharp:
 
 The five-player lower bound now has a structural human proof.  Stagewise Lmin
 duality produces a tight-coalition cover that is regular on the richer side
-and strictly undercovers both poor players.  On at most three rich players,
-minimal balanced traces are partitions plus the unique three-pair triangle.
-An exact suffix witness eliminates the partitions; the forced triangle and an
-exact rich-singleton witness then contradict efficiency.  The earlier 16
-ordered-stratum queries remain an independent audit.  The six-player upper
+and strictly undercovers both poor players.  Balanced-trace transport and
+odd-cycle rounding give a dichotomy: an underloaded minimal packet either
+contains a proper trace of size at least three or contains at least two
+disjoint odd cycles.  These alternatives require respectively four or six
+rich players, proving the lower bound without classifying three-player packets.
+The earlier 16 ordered-stratum queries remain an independent audit.  The six-player upper
 bound is a fixed lower envelope of six common-total integer allocations with
 
 ```text

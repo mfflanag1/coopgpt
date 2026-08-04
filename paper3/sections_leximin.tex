@@ -3756,19 +3756,33 @@ Core feasibility gives $v(D)\leq z(D)$, so
 $s_\phi(D)\geq\phi(D)-z(D)=-\Delta(D)>\sigma$, as required.
 \end{proof}
 
-\begin{theorem}[rank-two trace exclusion]
+\begin{theorem}[rank-two packet dichotomy]
 \label{thm:lx-rank-two-trace-exclusion}
 Let $v$ be a singleton-normalized exact game, let
 $\phi=\operatorname{Lmin}(v)$, and let $H$ be a cumulative richer suffix at
 a strict payoff boundary with exactly two poorer players
-$L=\{a,b\}$.  If every nonempty $H$-trace of a proper $\phi$-tight coalition
-has cardinality at most two, then $H$ is tight at $\phi$.
-Equivalently, every slack two-poorer Lmin boundary has a proper tight
-coalition $T$ with
-\[
- |T\cap H|\geq3.                                      \tag{GH}
- \label{eq:lx-genuine-hypergraph-trace}
-\]
+$L=\{a,b\}$.  If $H$ is slack at $\phi$, label the poor players by the
+exact-face displacement $\Delta_a<0<\Delta_b$.  Let $q$ be any lifted
+extreme packet from Theorem~\ref{thm:lx-balanced-trace-transport} whose
+gaining-player load satisfies $r_b^q<1$; at least one such packet exists.
+Then either
+\begin{enumerate}[label=\textup{(\roman*)},nosep]
+\item the packet contains a positive proper rich trace $R$ with
+      $3\leq |R|\leq |H|-1$; or
+\item its rank-one and rank-two support contains at least two vertex-disjoint
+      odd-cycle components.  It has $r_b^q=1/2$, $r_a^q=0$, and exactly one
+      supported edge carries $b$.  For every alternating rounding of all
+      cycle components that includes that edge, if $D$ is the set containing
+      one duplicated rich vertex from each component, then
+      \[
+       s_\phi(D)\leq\phi_a.                         \tag{GH}
+       \label{eq:lx-genuine-hypergraph-trace}
+      \]
+\end{enumerate}
+Consequently every slack two-poorer boundary has $|H|\geq4$; in particular,
+if $|H|\leq3$, then $H$ is tight.  A slack boundary supported entirely by
+rank-one and rank-two traces requires at least six rich players and the
+transversal-face budget \eqref{eq:lx-genuine-hypergraph-trace}.
 \end{theorem}
 
 \begin{proof}
@@ -3779,10 +3793,17 @@ that
  \Delta_a<0<\Delta_b,\qquad \Delta_a+\Delta_b=s.
  \tag{RT-1}\label{eq:lx-rank-two-signs}
 \]
-Under the rank-two hypothesis, every extreme point of the active trace
-exact-cover polytope is a disjoint union of singleton traces and pair traces
-of weight one, together with vertex-disjoint odd cycles whose pair traces
-have weight one half.  Here is the elementary argument.  The positive
+Fix any positive-weight lifted extreme packet with $r_b<1$.  If it contains
+a proper trace of cardinality at least three, alternative (i) holds.  Suppose
+otherwise.  Its minimal balanced trace support cannot contain $H$: the singleton
+collection $\{H\}$ is already balanced, so minimality would force it to be
+the whole support with weight one; then $r_b<1$ would give $r_b=0$, and the
+packet inequality $-s+r_a\Delta_a\geq0$ would be impossible.  Hence every
+positive trace of the fixed packet has size at most two.
+
+Its support is therefore a disjoint union of singleton traces and pair
+traces of weight one, together with vertex-disjoint odd cycles whose pair
+traces have weight one half.  Here is the elementary argument.  The positive
 incidence columns at an extreme point are linearly independent.  Consider a
 connected pair-graph component on $n$ vertices, with $e$ pair columns and $q$
 singleton columns.  Independence gives $e+q\leq n$.  If $q>0$ and $n>1$,
@@ -3797,10 +3818,9 @@ edge.  A unicyclic component cannot have an attached tree, again by the leaf
 argument, so it is a cycle.  An even cycle has dependent incidence columns;
 an odd cycle is nonsingular and its cover equations force weight one half.
 
-Every integral packet has integer load on $b$, and its transport inequality
-forces that load to be at least one.  Since the packet mixture has average
-$b$-load strictly below one, choose a fractional lifted packet with
-$r_b<1$.  All its coefficients are in $\{1,1/2\}$, so $r_b$ is a
+An integral packet has integer load on $b$, and its transport inequality
+forces that load to be at least one.  Thus the fixed packet is fractional.
+All its coefficients are in $\{1,1/2\}$, so $r_b$ is a
 nonnegative half-integer.  Its transport inequality
 \[
  -s+r_a\Delta_a+r_b\Delta_b\geq0                 \tag{RT-2}
@@ -3813,25 +3833,32 @@ $r_a\geq1/2$ and
  \leq -s+\tfrac12(\Delta_a+\Delta_b)=-\tfrac12s<0.
 \]
 Thus $r_a=0$.  Consequently exactly one half-weight edge coalition on one odd
-cycle contains $b$, and no supported coalition contains $a$.
+cycle contains $b$, and no supported coalition contains $a$.  Call that
+cycle $C_1$ and list all odd-cycle components as $C_1,\ldots,C_t$.
 
-Write that odd cycle as
+Write $C_1$ as
 $e_0,e_1,\ldots,e_{2k}$ in cyclic order, with the unique $b$-carrying
 coalition over $e_0$.  Replace the half weights on this component by unit
 weights on the alternating edges
 \[
  e_0,e_2,\ldots,e_{2k}.
 \]
-These edges cover every cycle vertex once except their common endpoint
-$d=e_0\cap e_{2k}$, which they cover twice.  Leave all other packet
-components at their original weights.  The resulting nonnegative combination
-of proper $\phi$-tight coalitions has incidence load
-\[
- \mathbf1_H+e_d+e_b.                              \tag{RT-3}
- \label{eq:lx-rank-two-rounded-cycle}
-\]
-This is a safe rooted tight cover with root $d$, multiplicity one, and poor
-load $e_b$.  Theorem~\ref{thm:lx-rooted-semigroup-obstruction} rules it out.
+These edges cover every vertex of $C_1$ once except their common endpoint,
+which they cover twice.  On every other odd cycle choose any alternating
+near-perfect cover, and leave the singleton and isolated-edge components at
+their unit weights.  If $D$ is the set of the $t$ duplicated cycle vertices,
+the resulting nonnegative integer combination of proper $\phi$-tight
+coalitions has rich load $\mathbf1_H+\mathbf1_D$ and poor load $e_b$.
+Corollary~\ref{cor:lx-exact-face-overload}, with $q=1$, gives
+$s_\phi(D)\leq\phi_a$.
+
+If $t=1$, then $D=\{d\}$ and singleton normalization gives
+$s_\phi(D)=\phi_d>\phi_a$, a contradiction.  Hence $t\geq2$, proving
+alternative (ii).  Finally, \eqref{eq:lx-transport-average} makes the
+mixture's average $b$-load strictly less than one, so at least one underloaded
+packet exists.  If $|H|\leq3$, alternative (i) is impossible because its
+trace is proper, while alternative (ii) needs at least six vertices.  Thus
+$H$ is tight.  The same vertex count proves the final rank-two assertion.
 \end{proof}
 
 \begin{theorem}[uniqueness of the first hypergraphic obstruction]
@@ -4078,60 +4105,14 @@ The conclusion is sharp: it fails when $|L|=2$ and $|H|=4$.
 
 \begin{proof}
 If $|L|=1$, slack would contradict
-\eqref{eq:lx-transport-signs}.  Now put $L=\{a,b\}$, suppose toward a
-contradiction that $s:=\phi(H)-v(H)>0$, and apply
-Theorem~\ref{thm:lx-balanced-trace-transport}.  Relabel the two poorer
-players so that
-\[
- \Delta_a<0<\Delta_b=s-\Delta_a.                  \tag{TP-1}
- \label{eq:lx-trace-packet-signs}
-\]
-
-Corollary~\ref{cor:lx-odd-trace-cycle} already rules out $|H|\leq2$, since
-every minimal balanced packet is then a set partition.  It remains to treat
-$H=\{c,d,e\}$.  Use the lifted packet mixture supplied by
-Theorem~\ref{thm:lx-balanced-trace-transport}.  The only nonpartition packet is
-\[
- \tfrac12\{\{c,d\},\{c,e\},\{d,e\}\}.        \tag{TP-2}
- \label{eq:lx-rich-trace-triangle}
-\]
-For one packet write $r_a,r_b$ for its poorer-player loads; by
-\eqref{eq:lx-transport-packet},
-\[
- -s+r_a\Delta_a+r_b\Delta_b\geq0.                 \tag{TP-3}
- \label{eq:lx-trace-packet-carrier}
-\]
-For a partition packet the coalition weights are one, hence
-\eqref{eq:lx-trace-packet-carrier} forces its integer load on $b$ to be at
-least one.  Since the average load on $b$ is strictly below one, some triangle
-packet in \eqref{eq:lx-rich-trace-triangle} has
-$r_b<1$.  Write $r_i=k_i/2$, where $k_i$ counts the triangle coalitions
-carrying poorer player $i$.  Inequality \eqref{eq:lx-trace-packet-carrier}
-first rules out $k_b=0$, so $k_b=1$.  If $k_a\geq1$, its left side is at most
-\[
- -s+\tfrac12\Delta_a+\tfrac12\Delta_b=-\tfrac12s<0,
-\]
-again impossible.  Thus $k_a=0$.  Relabeling $c,d,e$ if necessary, the packet
-therefore consists of the three $\phi$-tight coalitions
-\[
- \{c,d\},\qquad \{c,e\},\qquad \{b,d,e\}.     \tag{TP-4}
- \label{eq:lx-forced-rich-triangle}
-\]
-
-Exactness of singleton $\{d\}$ supplies $x\in\core(v)$ with $x_d=0$.
-The first and third tight coalitions in
-\eqref{eq:lx-forced-rich-triangle} imply
-\[
- x_c\geq\phi_c+\phi_d,\qquad
- x_b+x_e\geq\phi_b+\phi_d+\phi_e.
-\]
-Using $x_a\geq0$ and efficiency gives
-\[
- v(N)=x(N)\geq\phi_b+\phi_c+\phi_e+2\phi_d
-      >\phi_a+\phi_b+\phi_c+\phi_d+\phi_e=v(N),
-\]
-where the strict inequality is $\phi_d>\phi_a$.  This contradiction proves
-the human lower bound.
+\eqref{eq:lx-transport-signs}.  Now put $|L|=2$.  If $H$ were slack,
+Theorem~\ref{thm:lx-rank-two-trace-exclusion} would furnish an underloaded
+minimal balanced packet that either contains a proper rich trace of size at
+least three or has at least two disjoint odd-cycle components.  The first
+alternative requires at least four rich players and the second at least six.
+Both contradict $|H|\leq3$.
+This proves the lower bound without a payoff-stratum case split or a finite
+classification of three-player trace packets.
 
 The earlier 16-query exact-rational classification remains an independent
 audit rather than a proof dependency:

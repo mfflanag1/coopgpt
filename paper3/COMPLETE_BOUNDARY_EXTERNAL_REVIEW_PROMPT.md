@@ -87,12 +87,14 @@ paper.  Audit those dependencies if any cited implication is unclear.
    Confirm that every co-singleton is an active trace in the `m=2,h>=4`
    family and that its symbolic `3x3` odd cycle supplies the required
    nonintegrality in every dimension.
-10. Check the rank-two trace exclusion in arbitrary dimension. In particular,
+10. Check the corrected rank-two packet dichotomy in arbitrary dimension. In particular,
     verify the support-component classification for the graph exact-cover
     polytope, the selection of a packet with poor load `r_b=1/2,r_a=0`, the
-    alternating rounding of only the cycle containing the unique `b` edge,
-    and the exact-singleton efficiency contradiction. Check that untouched
-    fractional components retain unit rich load and introduce no poor load.
+    need to round every odd-cycle component, and the resulting load
+    `1_H+1_D+e_b`. Verify `s_phi(D)<=phi_a`, the singleton contradiction when
+    there is one cycle, and the conclusion that a pure rank-two obstruction
+    needs at least two cycles and six rich players. The earlier one-cycle-only
+    shortcut has been retracted.
 11. Independently derive the five four-player fractional exact-cover vertex
     types in `(FO-2)` and check the first-obstruction uniqueness theorem. Do
     not accept the classification from an enumeration. Verify types A--C,
@@ -134,8 +136,9 @@ any prior source contains:
 - the balanced-trace transport bridge used for the lower bounds.
 - the theorem that every two-poorer failure forces a nonintegral active trace
   exact-cover polytope and hence an odd balanced-matrix obstruction.
-- the theorem that every two-poorer failure requires an active trace of
-  cardinality at least three.
+- the corrected rank-two dichotomy: every underloaded packet either has a
+  proper trace of cardinality at least three or at least two odd-cycle
+  components satisfying the transversal-face slack budget.
 - the theorem that the first feasible `2|4` failure necessarily contains the
   four-co-singleton `1/3` exact-cover vertex.
 

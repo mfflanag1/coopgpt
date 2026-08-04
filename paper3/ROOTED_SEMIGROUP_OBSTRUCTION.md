@@ -86,7 +86,8 @@ separates three layers:
 
 The existing human theorems are now instances of this one mechanism:
 
-- rank-two traces: alternating an odd cycle produces `1_H+e_d+e_b`;
+- a one-cycle rank-two packet: alternating its odd cycle produces
+  `1_H+e_d+e_b` (multiple odd cycles instead produce a block-root overload);
 - the four-rich classification: four of the five fractional vertex types
   have a multiplicity-one rooted cover;
 - projective-plane packets: a pencil through a safe point produces

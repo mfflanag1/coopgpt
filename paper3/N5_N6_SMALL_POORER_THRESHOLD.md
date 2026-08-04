@@ -152,42 +152,29 @@ displacements.  Their sum is positive, so they have opposite signs; write
 This is the general balanced-trace transport theorem: project the strict
 tight-coalition cover onto its traces on `H`, decompose it into normalized
 minimal balanced packets, and lift those packets back to original tight
-coalitions.  For at most three rich players, every packet is a set partition
-except for the unique three-pair triangle
+coalitions. Every integral packet must load the gaining player `b` at least
+once, so the strict average underload supplies a fractional extreme packet
+with `b`-load below one.
+
+The packet-local rank-two theorem now gives the lower bound without listing
+the three-player vertices. Every such underloaded packet either contains a
+proper rich trace `R` with
 
 ```text
-1/2 * ({c,d}, {c,e}, {d,e}).
+3 <= |R| <= |H|-1.
 ```
 
-If a packet loads the poor players by `r_a,r_b`, summing its tight coalition
-inequalities at `z` gives
-
-```text
--s + r_a Delta_a + r_b Delta_b >= 0.
-```
-
-Partition packets have integer poor loads, so each must load the gaining
-player `b` at least once.  This contradicts strict undercoverage when
-`|H|<=2`.  For `|H|=3`, some triangle packet must load `b` less than once.
-Its half-integral loads force `b` onto exactly one triangle edge and `a` onto
-none.  After relabeling, the tight coalitions are
-
-```text
-{c,d},  {c,e},  {b,d,e}.
-```
-
-Exactness of singleton `d` supplies a core point with `x_d=0`.  The first and
-third tight inequalities then give
-
-```text
-x_c >= phi_c+phi_d,
-x_b+x_e >= phi_b+phi_d+phi_e,
-```
-
-which exceeds the grand total by `phi_d-phi_a>0`.  This proves the lower
-bound without payoff-stratum enumeration.  The old 16 exact-rational queries
-remain a definition-level audit, not proof evidence on which the theorem
-depends.
+or its rank-one/two support contains at least two disjoint odd cycles. The
+proof is structural: a minimal balanced packet cannot contain the full trace
+`H`; a support using only smaller rank-one/two traces decomposes into integral
+blocks and half-weight odd cycles. Transport forces exactly one
+gaining-labeled edge. One cycle alternates to the forbidden singleton-root
+load; with multiple cycles, simultaneous rounding instead yields a
+transversal-face slack budget. The first alternative needs at least four rich
+players and the second at least six. Thus every two-poorer boundary with
+`|H|<=3` is tight.
+The old 16 exact-rational queries remain a definition-level audit, not proof
+evidence on which the theorem depends.
 
 There is also a dimension-free hypergraph formulation.  Let the active trace
 polytope consist of nonnegative exact covers of `H` by traces of proper

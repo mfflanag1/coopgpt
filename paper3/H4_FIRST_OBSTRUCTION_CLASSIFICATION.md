@@ -92,11 +92,12 @@ sharp six-player internal-sacrifice family.
 
 ## Significance and limit
 
-Together with rank-two trace exclusion, this gives a structural progression:
+Together with the corrected rank-two packet dichotomy, this gives a structural progression:
 
 ```text
 nonintegrality is necessary;
-graph-like odd cycles are impossible;
+a single graph-like odd cycle is impossible, while a pure rank-two packet
+needs at least two disjoint odd cycles and six rich players;
 at the first feasible rich-side size, the co-singleton 1/3 packet is unique.
 ```
 

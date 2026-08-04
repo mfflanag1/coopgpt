@@ -172,11 +172,14 @@ and Theorem `thm:lx-projective-plane-trace-exclusion`.
 
 ## How it explains the sharp threshold
 
-- For `|H|<=2`, every minimal balanced trace packet is a set partition, so
-  the active exact-cover polytope is integral.  Slack is impossible.
-- For `|H|=3`, the only nonintegral minimal packet is the half-integral
-  triangle.  The exact-singleton argument in the human two-poorer theorem
-  eliminates precisely this remaining odd trace cycle.
+- Every underloaded minimal packet at a slack two-poorer boundary either
+  contains a proper trace `R` with `3<=|R|<=|H|-1`, or its rank-one/two
+  support contains at least two disjoint odd cycles.  Indeed, the full trace
+  cannot occur in a nontrivial minimal balanced support. A single remaining
+  odd cycle alternates to a forbidden singleton-root cover; multiple cycles
+  yield a low-slack transversal-face constraint instead. Therefore slack is
+  impossible whenever `|H|<=3`, without enumerating the three-player
+  exact-cover vertices.
 - For every `|H|=h>=4`, the internal-sacrifice family has all co-singleton
   traces `H\{x}` active.  The three rows indexed by distinct
   `x_1,x_2,x_3` and the three columns
@@ -197,9 +200,10 @@ and Theorem `thm:lx-projective-plane-trace-exclusion`.
   the theorem.
 
 The `2|3` versus `2|4` threshold is therefore the first realizability
-transition for an odd active-trace cycle: the triangle exists at three rich
-players but is incompatible with exact singleton faces; the co-singleton
-cycle is realizable from four rich players onward.
+transition for a **proper rank-three trace**.  At three rich players a
+rank-three trace is the full trace and cannot belong to the required
+fractional minimal packet.  At four, the co-singleton triples are proper and
+their odd-cycle submatrix is realizable.
 
 ## Significance and limits
 
