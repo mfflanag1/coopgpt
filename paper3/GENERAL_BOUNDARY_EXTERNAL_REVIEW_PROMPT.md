@@ -18,6 +18,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `thm:lx-labeled-odd-cycle`,
   `cor:lx-unconditional-labeled-obstruction`,
   `thm:lx-positive-lehman-trace-exclusion`,
+  `cor:lx-convex-lehman-row`,
   `cor:lx-lehman-internal-face`,
   `thm:lx-rank-two-trace-exclusion`,
   `thm:lx-four-rich-trace-classification`,
@@ -50,6 +51,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   unique-richest threshold and the later rooted trace roundings.
 - `coopgames/paper3/LEHMAN_TRACE_OBSTRUCTION.md`: reduction of positive Lehman
   dual rows to rooted covers and the new two-poor-label density criterion.
+- `coopgames/paper3/CONVEX_LEHMAN_ROW.md`: real-valued interpolation between
+  the uniform packet and a dual row, yielding the two-sided Lehman row band.
 - `coopgames/paper3/LEHMAN_MINOR_LIFTING.md`: proof that preserving only the
   gaining-player deficit automatically removes both poor labels from every
   contracted column and lifts the Lehman conclusions to the original suffix.
@@ -190,6 +193,13 @@ falsification searches.  Please do not count their no-hit output as proof.
    self-dual projective planes are instances, while `J-I` has the opposite
    sign. Determine whether the labeled density argument or its exact-game
    use already appears in the Lehman/minimally-nonideal literature.
+   Audit the convex Lehman-row corollary separately.  Recompute
+   `t=(r-ell)/(r w_d-ell)`, the losing load
+   `[p(w_d-1)+u_d(r-ell)]/(r w_d-ell)`, and both equivalences between
+   `(LH-C)` and `a_d<=1`, `t k>=1-a_d`.  Check the endpoint `a_d=1` and the
+   reduction to the safe-row case `w_d=1,u_d<=1`.  Determine whether this
+   real interpolation has an antecedent in Lehman-matrix or blocking-polyhedra
+   literature.
    Audit the canonical internal-face corollary separately: check
    `k+1<=s`, the strict count `s|V|<|H|`, construction of the row set `D`,
    both poor loads after averaging, and every factor of `|D|` in `(LH-F)`.
@@ -287,12 +297,14 @@ falsification searches.  Please do not count their no-hit output as proof.
    `B setminus A`. Then verify
    the load `1_H+q e_d` from the pencil through `d`. Check especially that
    exactifying only singleton `d` suffices when its multiplicity is `q`.
-   For the order-seven `(a,b)=(6,7)` case, check the exact simple-point
-   identity, the deductions that both line families are in general position,
-   the dual tangent/secant translation, the use of Segre's `q`-arc extension
-   theorem, and the bound of five (or three) concurrent secants of a six-arc.
-   Confirm that this closes only `PG(2,7)` and does not silently assume an
-   arbitrary projective plane is Desarguesian.
+   For the order-seven `(a,b)=(6,7)` case, verify that `(LH-C)` becomes
+   `2w(P)-8<=u(P)<=2w(P)-1`.  Under failure of the band, check the injection
+   giving `n_1<=15`, the identity
+   `n_1=14+sum_{j>=3}j(j-2)n_j`, the deduction that all 21 pairs of `B`-lines
+   meet at distinct double points, and the contradiction between their
+   required `u(P)>=4` loads and
+   `sum_P binom(u(P),2)=binom(6,2)`.  Confirm that this is valid in every
+   finite projective plane of order seven and uses no Desarguesian theorem.
 10. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove
@@ -357,13 +369,16 @@ core literature:
   the unique-richest threshold with the trace-rounding hierarchy;
 - the positive-Lehman trace exclusion and the proposed positive-versus-
   negative structural divide;
+- the convex Lehman-row interpolation, including whether the two-sided band
+  or its exact-face application is already known;
 - the dimension-free rank-two trace exclusion via a real tight-cover
   overload, including the distinction from an integer rooted fibre;
 - the uniqueness of the four-co-singleton `1/3` packet at the first feasible
   `2|4` obstruction;
 - the projective-plane simple-point density barrier and safe-star exclusion,
-  including whether this exact-face application is already known in the
-  finite-geometry, balanced-hypergraph, or cooperative-game literature;
+  the incidence-theoretic order-seven closure, and whether this exact-face
+  application is already known in finite geometry, balanced hypergraphs, or
+  cooperative games;
 - the fixed six-player integer lower-envelope construction.
 - the integral `m>=2,h>=4` internal-sacrifice family, the internal/external
   sacrifice dichotomy, and the observation that exact partition is not

@@ -163,9 +163,10 @@ and a pencil rounding rule out every poor-label pattern satisfying
 ```
 
 In particular all such packets through order six are impossible, while the
-counting argument leaves only the extremal order-seven count `(6,7)`.
-Segre's arc-extension theorem eliminates that last count in `PG(2,7)`; it
-remains open here only for arbitrary non-Desarguesian incidence systems.
+counting argument leaves only the extremal order-seven count `(6,7)`.  A
+convex Lehman-row interpolation and a second pair count eliminate that last
+count in every finite projective plane of order seven, without assuming
+Desarguesian coordinates.
 See
 [`PROJECTIVE_PLANE_TRACE_EXCLUSION.md`](PROJECTIVE_PLANE_TRACE_EXCLUSION.md)
 and Theorem `thm:lx-projective-plane-trace-exclusion`.

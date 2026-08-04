@@ -62,8 +62,9 @@ or any of the following sharp consequences:
   `b(q+2-b)>cd+binom(d,2)` or the local bound `d<2(q+2-b)` are eliminated by
   a safe star rounding, where `c=|A intersect B|` and
   `d=|A setminus B|`; this includes
-  every such packet of order at most six; the only remaining order-seven
-  count is also eliminated in `PG(2,7)` by Segre's arc-extension theorem;
+  every such packet of order at most six; a convex Lehman-row interpolation
+  and pair count eliminate the only remaining order-seven count in every
+  finite projective plane, without a Desarguesian assumption;
 - the complete boundary-cardinality phase diagram
   `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
 
@@ -203,16 +204,15 @@ density argument or the bridge to exact-game tight faces. This is still an
 absence finding rather than a definitive novelty determination.
 
 A targeted finite-geometry search found adjacent theory of semiarcs, tangent
-blocking, and secant-avoidance. In particular, Csajbók--Héger--Kiss study
-small point sets whose tangents lie in a small number of pencils
-(https://arxiv.org/abs/1310.7207), and Thas gives a short proof that every
-odd-order `q`-arc in `PG(2,q)` extends to a `(q+1)`-arc
-(https://doi.org/10.1016/0021-8693(87)90007-X). The manuscript therefore
-claims neither the projective-plane incidence counts nor Segre's arc theorem
-as new. The candidate contribution is their exact-face use to rule out
-Lmin trace packets. No source found in this pass states the two-set
-tangent-versus-secant condition in the form needed here; that absence is not
-a definitive novelty result.
+blocking, and secant-avoidance.  Earlier drafts used Segre's arc-extension
+theorem for the Desarguesian order-seven case.  The current proof no longer
+depends on that theorem: a convex Lehman-row interpolation and elementary
+line-pair counts close every finite projective plane of order seven.  The
+manuscript claims neither the projective-plane incidence identities nor
+positive Lehman matrices as new.  The candidate contribution is the
+exact-face interpolation and its labeled-packet exclusion.  No source found
+in this pass states that combination; the absence is not a definitive
+novelty result.
 
 ## Defensible novelty statement
 
@@ -235,8 +235,9 @@ Pending expert review, the strongest defensible formulation is:
 > fractional packet is
 > the co-singleton `1/3` cover. A projective-plane star-rounding argument
 > further excludes every incidence packet satisfying a simple-point density
-> inequality, including every such packet of order at most six; a dual-arc
-> argument closes the final extremal count in `PG(2,7)`. Three
+> inequality, including every such packet of order at most six; a convex
+> Lehman-row interpolation and pair count close the final extremal count in
+> every finite projective plane of order seven. Three
 > explicit universal families then give a complete classification of the
 > boundary-side cardinalities compatible with slack.  We do not claim the Lmin solution,
 > exact partition games, their published Lorenz consequence, exact

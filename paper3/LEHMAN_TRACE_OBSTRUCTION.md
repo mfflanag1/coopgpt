@@ -74,6 +74,43 @@ two-label property without a density hypothesis: whenever
 `|U|<|V|<r`, some dual row meets `V` once and `U` at most once. This has been
 checked only on small classical examples and is not used as a theorem.
 
+## Convex dual-row criterion
+
+The real overload budget gives a stronger sufficient test that does not
+require a zero--one safe selector.  Put `p=|U|`, `ell=|V|`, and for a dual
+row `d` write `u_d=|row_d(B) intersect U|` and
+`w_d=|row_d(B) intersect V|`.  The packet is impossible if `w_d>=1` and
+
+```text
+r w_d-ell-k(r-ell)
+ <= p(w_d-1)+u_d(r-ell)
+ <= r w_d-ell.                                      (LH-C)
+```
+
+Indeed, interpolate the uniform packet with row `d` using
+
+```text
+t=(r-ell)/(r w_d-ell).
+```
+
+The resulting rich load is `1_H+t k e_d`, its gaining-poor load is exactly
+one, and its losing-poor load is
+
+```text
+a_d=[p(w_d-1)+u_d(r-ell)]/(r w_d-ell).
+```
+
+The upper band says `a_d<=1`; the lower says `t k>=1-a_d`.  The exact-face
+overload budget would then give `t k phi_d<=(1-a_d)phi_a`, contradicting
+`phi_d>phi_a`.  When `w_d=1,u_d<=1`, this specializes to the earlier safe
+dual-row conclusion, but the proof and conclusion are genuinely
+real-valued.
+
+For a projective plane of order seven, `(r,k,p,ell)=(8,7,6,7)`, so the band
+reduces to `2w-8<=u<=2w-1`.  Elementary pair counting forces a point in this
+band and thereby excludes the final `(6,7)` label pattern in every order-seven
+plane, without a Desarguesian assumption.
+
 ## Canonical internal face without the density hypothesis
 
 There is an unconditional substitute for a single safe row. Put

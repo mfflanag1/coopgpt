@@ -38,12 +38,12 @@ Consequently:
 - all projective-plane packets of orders at most `6` are impossible;
 - more generally, every packet with `|B|<=6` is impossible, in every order;
 - at order `7`, the only pattern not excluded by this theorem is the extremal
-  count `(|A|,|B|)=(6,7)`; a separate arc argument below eliminates this
-  final pattern in the Desarguesian plane `PG(2,7)`.
+  count `(|A|,|B|)=(6,7)`; a separate convex-row argument below eliminates
+  this final pattern in every finite projective plane of order seven.
 
-The extremal pattern remains open here only for arbitrary non-Desarguesian
-incidence systems. The theorem is a human counting argument, not a
-finite-search claim.
+The order-seven closure is incidence-theoretic: it does not assume
+Desarguesian coordinates or use finite enumeration. The theorem is a human
+counting argument.
 
 ## Simple-point count
 
@@ -126,34 +126,43 @@ larger than `binom(b0-1,2)`.  This proves the dimension-free `|B|<=6`
 exclusion.  If `q<=6`, transport already gives `b0<=q<=6`, so every packet
 is excluded.  For `q=7`, only `b0=7,a0=6` escapes the same count.
 
-## Closing the extremal case in `PG(2,7)`
+## Closing the extremal order-seven case
 
-Assume `a0=6,b0=7` and no safe star exists. The exact simple-point identity
-is
+Assume `q=7`, `a0=6`, and `b0=7`.  View the line-incidence matrix as the
+self-dual positive Lehman pair with `r=8` and `k=7`.  At a point `P`, let
+`u(P)` and `w(P)` count the incident `A`- and `B`-lines.  The convex
+Lehman-row band becomes
+
+```text
+2w(P)-8 <= u(P) <= 2w(P)-1.                         (PG7-C)
+```
+
+If some point satisfies this band, interpolate the uniform line packet with
+the pencil through that point.  The gaining-poor load becomes exactly one,
+the losing-poor load is at most one, and the rich overload is large enough
+for the real exact-face overload budget to contradict the strict payoff
+boundary.  See [`CONVEX_LEHMAN_ROW.md`](CONVEX_LEHMAN_ROW.md).
+
+Suppose no point satisfies the band.  Every point on exactly one `B`-line
+then lies on at least two `A`-lines and injects into one of the fifteen pairs
+of `A`-lines, so `n_1<=15`.  The exact identity for seven `B`-lines is
 
 ```text
 n_1 = 14 + sum_(k>=3) k(k-2)n_k.
 ```
 
-Every simple point lies on at least two `A`-lines and therefore injects into
-one of the 15 pairs of `A`-lines. Hence `n_1<=15`, so no three `B`-lines are
-concurrent and `n_1=14`. Those 14 simple points already consume 14 distinct
-pairs of `A`-lines. Three concurrent `A`-lines would consume three pairs at
-one point and leave too few pairs for the remaining simple points. Thus the
-six `A`-lines are also in general position.
+Every positive summand is at least three, so `n_1<=15` forces `n_k=0` for
+all `k>=3`.  The 21 pairs of `B`-lines therefore meet at 21 distinct points
+with `w(P)=2`.  At each such point, failure of `(PG7-C)` forces `u(P)>=4`.
+But the six `A`-lines have only fifteen pairs in total:
 
-Dualize. The `B`-lines become a seven-arc `B*`, the `A`-lines become a
-six-arc `A*`, and the 14 simple points become all 14 tangents of `B*`. Every
-one of those tangents is a secant of `A*`. Segre's `q`-arc theorem extends
-`B*` to an eight-point oval, hence a conic in odd Desarguesian order; Thas
-(1987) gives a short proof. If `R` is the missing conic point, the seven
-lines `RP`, `P in B*`, are concurrent tangents of the seven-arc. They would
-therefore be seven concurrent secants of the six-arc `A*`.
+```text
+sum_P binom(u(P),2) = binom(6,2) = 15,
+```
 
-That is impossible. Through a point of `A*` there are only five secants;
-through a point outside `A*`, distinct secants use disjoint pairs of its six
-points, so there are at most three. This contradiction eliminates the final
-pattern in `PG(2,7)`.
+whereas those 21 points alone contribute at least `21 binom(4,2)>15`.
+This contradiction closes the extremal pattern in every finite projective
+plane of order seven.
 
 In particular, the Fano plane (`q=2`) cannot be the required underloading
 witness, even though its seven-line incidence vertex is fractional,
@@ -169,11 +178,10 @@ four-rich classification:
 integral traces are impossible;
 rank-two fractional packets are impossible by a real-valued overload budget;
 the first four-rich obstruction is uniquely co-singleton;
-projective-plane incidence packets are impossible below a sharp density gate.
+projective-plane incidence packets are impossible through order seven.
 ```
 
 It does **not** prove that every higher-dimensional failure contains a
-four-co-singleton minor. The simple counting theorem does not settle the
-extremal pattern for arbitrary non-Desarguesian incidence systems; the arc
-argument closes it specifically in `PG(2,7)`. Correctness and novelty still
-require hostile specialist review.
+four-co-singleton minor.  Orders eight and above retain poor-label patterns
+not settled by the present density estimates or convex row band. Correctness
+and novelty still require hostile specialist review.

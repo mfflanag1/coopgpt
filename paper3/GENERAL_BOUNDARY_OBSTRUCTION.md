@@ -402,11 +402,12 @@ The same conclusion follows locally if `|D|<2(q+2-|B|)`. The pencil through
 losing-poor load at most one. Exactifying `d` again contradicts efficiency.
 This excludes every projective-plane packet with `|B|<=6`, hence every such
 packet of order at most six. At order seven it leaves only the extremal count
-`(|A|,|B|)=(6,7)`. In `PG(2,7)`, dual arc extension closes that last case:
-the seven-arc extends to a conic, whose missing point creates seven concurrent
-tangents, whereas a six-arc has at most five concurrent secants. The extremal
-count remains open only for arbitrary non-Desarguesian incidence systems. The
-proof is in
+`(|A|,|B|)=(6,7)`.  A convex interpolation between the uniform line packet
+and a point-pencil turns the Lehman identity into a real overload test.  If
+no point passes that test, the seven `B`-lines would create 21 double points,
+each incident with at least four of the six `A`-lines, exceeding the 15
+available `A`-line pairs.  Thus every projective-plane packet through order
+seven is excluded, with no Desarguesian assumption. The proof is in
 `paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`.
 
 For the internal-sacrifice family, all co-singletons `H\{x}` are active
