@@ -2391,6 +2391,77 @@ completion in a normalized game, and it is strictly cheaper whenever an
 optimal completion uses positive total coalition worth. The invariant is a
 fractional exact-cover value gap, not merely a renamed uncovered-payoff sum.
 
+The cover can in fact be reduced to one signed incidence circuit.  This
+removes arbitrary support size from the obstruction theory.
+
+\begin{theorem}[atomic Lmin obstruction reduction]
+\label{thm:lx-atomic-obstruction}
+Let $v$ be exact, $\phi\in\core(v)$, and
+$N=H\mathbin{\dot\cup}L$, with $\varnothing\ne H\subsetneq N$.
+Suppose nonempty proper $\phi$-tight coalitions with weights $\lambda_T\geq0$ have common
+load $\alpha$ on $H$ and loads $c_i<\alpha$ on $i\in L$.  If
+$s_\phi(H)>0$, then among the positive-support tight coalitions, $H$, and
+the deficit singletons
+\[
+ \{\{i\}:i\in L,\ c_i<\beta\},
+ \qquad \beta:=\max_{i\in L}c_i,
+\]
+there is a pure minimal semi-balanced subsystem $\mathcal A$ with exceptional
+coalition $H$.  It has coefficients $a_S>0$ for $S\ne H$, $\gamma>0$, and
+$r\in\mathbb R$ satisfying
+\[
+ \sum_{S\in\mathcal A\setminus\{H\}}a_S\mathbf1_S
+ -\gamma\mathbf1_H=r\mathbf1_N,                     \tag{AC}
+ \label{eq:lx-atomic-circuit}
+\]
+and $|\mathcal A|\leq |N|$.  Moreover $\mathcal A$ contains a deficit
+singleton whose $\phi$-slack is strictly positive.
+
+Consequently every slack richer-payoff suffix at Lmin has such an atomic
+certificate.
+\end{theorem}
+
+\begin{proof}
+Put $d_i=\beta-c_i$.  Singleton completion gives
+\[
+ \sum_T\lambda_T\mathbf1_T+\sum_{i\in L}d_i\mathbf1_{\{i\}}
+ -(\alpha-\beta)\mathbf1_H=\beta\mathbf1_N.          \tag{AC0}
+\]
+Project incidence vectors to
+$\mathbb R^N/\operatorname{span}\{\mathbf1_N\}$.  This is a dependence
+whose only negative coordinate is the one indexed by $H$.  The conformal
+circuit decomposition theorem writes it as a positive sum of circuit
+dependences without introducing a new sign
+\citep[see, e.g.,][]{BjornerEtAl1999}.  Because the coefficient of $H$ in
+\eqref{eq:lx-atomic-circuit} is negative, one constituent circuit has $H$
+as its unique negative element.  Lifting that circuit from the quotient
+gives \eqref{eq:lx-atomic-circuit}.
+
+Circuit minimality makes $\mathcal A$ a minimal semi-balanced system; its
+unique negative sign makes it pure and makes $H$ exceptional.  The quotient
+has dimension at most $|N|-1$, so a circuit has at most $|N|$ elements.
+Finally exact balancedness applied to \eqref{eq:lx-atomic-circuit} gives
+\[
+ \gamma s_\phi(H)\leq
+ \sum_{\substack{\{i\}\in\mathcal A\\c_i<\beta}}
+ a_{\{i\}}s_\phi(\{i\}),
+\]
+because every other positive-support coalition is $\phi$-tight.  The left
+side is positive, so at least one displayed singleton has positive slack.
+The Lmin conclusion follows from the strict tight-cover lemma.
+\end{proof}
+
+The conformal decomposition and minimal semi-balanced terminology are prior
+art; the candidate new point is their Lmin-selected orientation and support
+restriction.  Minimal semi-balanced does not imply the stronger
+``indecomposable'' condition of \citet{StudenyKratochvil2022}, so no facet
+claim is made.  The standalone proof and scope calibration are in
+\begin{center}
+\small\path{paper3/ATOMIC_LMIN_OBSTRUCTION_REDUCTION.md},\\[-2pt]
+\small\path{src/verify_atomic_lmin_obstruction.py},\\[-2pt]
+\small\path{results/atomic_lmin_obstruction.json}.
+\end{center}
+
 The same inequality has a useful internal-face specialization.  It is the
 common budget law behind both the unique-richest threshold and the later
 trace-rounding exclusions.
@@ -3206,6 +3277,41 @@ $\phi(H)\leq\phi(R)$, contradicting the strict payoff boundary. At five
 players, placing the extra member in an arm leaves $H,R$ singleton and gives
 the same contradiction. Hence only a second member of $H$ or of $R$ can
 occur at the threshold; the displayed levels realize both possibilities.
+\end{proof}
+
+The atomic reduction now makes the lower side of the threshold nearly
+formal and removes the earlier payoff-stratum case split.
+
+\begin{corollary}[circuit proof of the four/five threshold]
+\label{cor:lx-circuit-four-five-threshold}
+Every singleton-normalized exact game on at most four players is an exact
+partition game witnessed at Lmin.  The bound is sharp at five players.
+\end{corollary}
+
+\begin{proof}
+Suppose a richer Lmin suffix $H$ were slack.  By
+Theorem~\ref{thm:lx-atomic-obstruction}, it would have an atom containing
+$H$, at least one positive-slack poorer singleton, and some tight protector
+coalitions.  There must be at least two protectors: a single positive
+protector with strictly larger common load on $H$ than outside would have to
+contain every member of $H$ and no member outside it, making it the slack
+coalition $H$ itself.  Hence the atom has at least four members.
+
+For $|N|\leq3$ this contradicts the circuit bound
+$|\mathcal A|\leq|N|$.  For $|N|=4$ equality is forced: the atom has exactly
+two tight protectors and one poorer singleton besides $H$.  Removing the
+singleton term from \eqref{eq:lx-atomic-circuit} leaves protector load
+$r+\gamma$ on $H$, load $r$ on every other outside player, and load strictly
+below $r$ on that singleton.  It is therefore a strict two-column tight
+cover of $H$.  Theorem~\ref{thm:lx-two-column-normal-form} then gives
+four nonempty Venn blocks $H,X,Y,R$, so all are singletons, and
+\[
+ 0<s_\phi(H)\leq s_\phi(R).
+\]
+Singleton normalization turns this into $\phi_h\leq\phi_r$, contradicting
+that $H$ lies strictly above its poorer complement.  Therefore every richer
+suffix is tight.  The five-player realization in
+Theorem~\ref{thm:lx-binary-diamond-realization} proves sharpness.
 \end{proof}
 
 Thus the four/five threshold is a slack-financing threshold: crossing needs
