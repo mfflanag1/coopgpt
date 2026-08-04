@@ -1,0 +1,581 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,enumitem,hyperref,natbib}
+\hypersetup{
+ colorlinks=true,
+ linkcolor=blue,
+ citecolor=blue,
+ urlcolor=blue,
+ pdftitle={Exact-partition failure at the egalitarian core},
+ pdfauthor={Maxwell Flanagan}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\core}{\operatorname{Core}}
+\newcommand{\Lmin}{\operatorname{Lmin}}
+\newcommand{\Lmax}{\operatorname{Lmax}}
+\newcommand{\one}{\mathbf 1}
+
+\title{Exact-partition failure at the egalitarian core:\\
+a complete boundary phase diagram}
+\author{Maxwell Flanagan}
+\date{Draft of August 4, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For a transferable-utility game, exact partition at an allocation means that
+every cumulative union of its richest payoff strata is tight.  This condition
+and its Lorenz consequence are established.  We determine exactly when the
+condition can fail at the leximin core allocation of a singleton-normalized
+exact game.  If a strict payoff boundary has $m$ cumulative poorer players
+and $h$ richer players, then a slack richer suffix exists if and only if
+\[
+ m\ge m_{\min}(h),\qquad
+ m_{\min}(1)=4,\quad m_{\min}(2)=m_{\min}(3)=3,
+ \quad m_{\min}(h)=2\ (h\ge4).
+\]
+The lower bounds are structural.  Leximin optimality gives a strict cover by
+tight coalitions; exactifying the failed suffix turns that cover into a
+transport problem through minimal balanced hypergraphs.  One poorer player
+cannot support the required opposing signs.  A unique richest player needs
+four poorer players by a fractional sacrifice budget.  With two poorer
+players, every failure needs a proper active hyperedge of size at least
+three, hence at least four richer players.  Three explicit dimension-free
+lower-envelope families attain every remaining pair.  The familiar
+four-player guarantee and sharp five-player failure are immediate corollaries
+of this two-parameter theorem.  No finite enumeration is used in the proof.
+\end{abstract}
+
+\section{Introduction and prior-art boundary}
+
+Let $(N,v)$ be a transferable-utility game and
+\[
+ \core(v)=\{x\in\mathbb R^N:x(N)=v(N),\ x(S)\ge v(S)
+                   \text{ for every }S\subseteq N\}.
+\]
+The game is \emph{exact} if every coalition inequality is attained by some
+core allocation.  Write $\phi=\Lmin(v)$ for the unique core allocation whose
+increasing rearrangement is lexicographically maximal.  At a strict payoff
+boundary of $\phi$, let $L$ be the cumulative poorer side and let
+$H=N\setminus L$ be the richer suffix.
+
+The exact-partition condition and its implications for Dutta--Ray and Lorenz
+selection are prior art \citep{LlerenaMauri2017,
+SanchezSorianoBranzeiLlorcaTijs2010}.  Property I and its antidual
+form provide established qualitative tight-coalition descriptions of the
+egalitarian selections \citep{ArinKuipersVermeulen2008,Mauri2018}.  Exact
+balancedness is also established \citep{CsokaHeringsKoczy2011,
+LohmannBormHerings2012}.  Our candidate contribution is the sharp
+two-parameter classification, its transport proof, and the realizing
+families.  The closest published low-dimensional result known to us is that
+exact games through four players are PES stable \citep{Dietzenbacher2021};
+that does not itself assert exact partition at $\Lmin$.
+
+The main theorem is stated now.  All games below are
+singleton-normalized, meaning $v(\{i\})=0$ for every player.
+
+\begin{theorem}[boundary phase diagram]\label{thm:phase}
+At a strict payoff boundary of $\phi=\Lmin(v)$ in a singleton-normalized
+exact game, put $m=|L|$ and $h=|H|$.  It is possible that
+$v(H)<\phi(H)$ exactly for
+\[
+ m\ge m_{\min}(h),\qquad
+ m_{\min}(h)=
+ \begin{cases}
+ 4,&h=1,\\
+ 3,&h=2\text{ or }3,\\
+ 2,&h\ge4.
+ \end{cases}                                      \tag{1}
+\]
+Every admitted pair is realized by an integral indecomposable exact game.
+The poorer side may contain several payoff strata.
+\end{theorem}
+
+The proof separates a general lower-bound mechanism from three universal
+constructions.  This makes the four/five threshold a corollary rather than
+the theorem's organizing principle.
+
+\section{Strict covers and balanced-trace transport}
+
+For $\phi\in\core(v)$ write
+\[
+ s_\phi(S)=\phi(S)-v(S).
+\]
+A coalition is $\phi$-tight when its slack is zero.
+
+\begin{lemma}[strict richer cover]\label{lem:cover}
+Let $\phi=\Lmin(v)$ and let $N=L\mathbin{\dot\cup}H$ be a strict payoff
+boundary.  There are nonnegative weights on proper $\phi$-tight coalitions
+whose incidence load is a common positive number on $H$ and is strictly
+smaller at every player in $L$.
+\end{lemma}
+
+\begin{proof}
+This is the Farkas-dual form of the established transfer-blocking/property-I
+description of the egalitarian core.  For completeness, if no such cover
+exists, separation gives an efficient tangent direction that raises the
+first affected richer-side cumulative level without lowering an earlier
+payoff stratum.  A sufficiently short step from $\phi$ remains in the core
+and lexicographically improves its increasing rearrangement, contradicting
+the definition of $\Lmin$.
+\end{proof}
+
+Normalize the common rich load in Lemma~\ref{lem:cover} to one and remove
+coalitions disjoint from $H$.  Project every remaining tight coalition to
+its nonempty trace on $H$.  The projected weights lie in the exact-cover
+polytope
+\[
+ \mathcal P_H=\left\{\beta\ge0:
+   \sum_{\emptyset\ne R\subseteq H}\beta_R\one_R=\one_H\right\}.
+                                                               \tag{2}
+\]
+Its vertices are the unique normalized weights of minimal balanced
+collections on $H$; this is standard balanced-collection geometry
+\citep{LohmannBormHerings2012,LaplaceMermoudEtAl2025}.
+
+\begin{theorem}[balanced-trace transport]\label{thm:transport}
+Suppose $s=s_\phi(H)>0$.  There are a core point $z$, a displacement
+$\Delta=z-\phi$, and a finite convex mixture of lifted vertices of
+$\mathcal P_H$ with poor-load vectors $r^q\in\mathbb R_+^L$ such that
+\begin{align}
+ \Delta(H)&=-s,&\Delta(L)&=s,                                      \tag{3a}\\
+ \min_{i\in L}\Delta_i&<0<\max_{i\in L}\Delta_i,                  \tag{3b}\\
+ -s+\sum_{i\in L}r_i^q\Delta_i&\ge0&&\text{for every }q,           \tag{3c}\\
+ \sum_q\theta_qr_i^q&<1&&\text{for every }i\in L.                 \tag{3d}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+Exactness supplies $z\in\core(v)$ with $z(H)=v(H)$, proving (3a).
+Let $c_i<1$ be the poorer loads of a normalized cover from
+Lemma~\ref{lem:cover}.  Every supported coalition is tight at $\phi$ and
+feasible at $z$, hence
+\[
+ 0\le\sum_T\lambda_T\Delta(T)
+   =-s+\sum_{i\in L}c_i\Delta_i.                    \tag{4}
+\]
+If every poorer displacement were nonnegative, the right side would be
+strictly smaller than $-s+\Delta(L)=0$.  Since $\Delta(L)=s>0$, both signs
+occur, proving (3b).
+
+Decompose the projected cover in (2) into vertices.  For each trace, split
+its weight among the original tight coalitions having that trace; taking the
+product of these conditional choices gives a finite mixture of lifted
+packets.  Summing the tight-coalition inequalities at $z$ inside one packet
+gives (3c), while averaging the lifted packets recovers the original poorer
+loads $c_i<1$, proving (3d).
+\end{proof}
+
+The first exclusion is immediate.
+
+\begin{corollary}\label{cor:m1}
+A slack boundary cannot have $m=1$.
+\end{corollary}
+
+\begin{proof}
+Equation (3b) requires both a positive and a negative displacement on $L$.
+\end{proof}
+
+\section{The two remaining lower bounds}
+
+\subsection{A unique richest player}
+
+Assume $H=\{r\}$, write $\phi_r=\gamma$, and put
+$q_i=\phi_i<\gamma$ for $i\in L$.  The transfer-blocking characterization
+gives, for each $i\in L$, a tight protector
+\[
+ T_i=\{r\}\cup Q_i,\qquad
+ \emptyset\ne Q_i\subseteq L\setminus\{i\}.          \tag{5}
+\]
+The nonemptiness follows because the normalized singleton $\{r\}$ is slack.
+
+\begin{lemma}[sacrifice budget]\label{lem:sacrifice}
+For weights $\lambda_i\ge0$ satisfying
+\[
+ c_j:=\sum_{i:j\in Q_i}\lambda_i\le1,\qquad
+ \Lambda:=\sum_i\lambda_i,
+\]
+one has
+\[
+ \gamma(\Lambda-1)\le\sum_{j\in L}(1-c_j)q_j.        \tag{6}
+\]
+\end{lemma}
+
+\begin{proof}
+Exactify $\{r\}$ at a core point $z$ and put $d=z-\phi$.  Summing the
+tight protector inequalities with the displayed weights, using efficiency
+and the singleton lower bounds $z_j\ge0$, gives (6).  Equivalently, complete
+the uncovered poorer loads by singleton coalitions; together with negative
+weight $\Lambda-1$ on $\{r\}$, the incidence vector is exact-balanced, and
+the exact-balanced slack inequality is exactly (6).
+\end{proof}
+
+\begin{proposition}\label{prop:h1}
+If $h=1$ and the suffix is slack, then $m\ge4$.
+\end{proposition}
+
+\begin{proof}
+For $m=1$ no protector in (5) exists.  For $m=2$, both protector traces are
+the opposite singleton; weight both by one in (6), obtaining
+$\gamma\le0$.
+
+Let $m=3$.  If some $Q_i=\{j\}$, weight the protectors indexed by $i$ and
+$j$ by one.  Their traces are disjoint and leave at most one player $u$
+uncovered, so (6) gives either $\gamma\le0$ or
+$\gamma\le q_u<\gamma$.  If no $Q_i$ is a singleton, then
+$Q_i=L\setminus\{i\}$ for all $i$.  Weight all three protectors by $1/2$;
+every poorer player has load one and (6) gives $\gamma/2\le0$.
+\end{proof}
+
+\subsection{Exactly two poorer players}
+
+We first isolate the exact-face inequality used in the rounding argument.
+
+\begin{lemma}[exact-face overload]\label{lem:overload}
+Let $v$ be singleton-normalized and exact, let $\phi\in\core(v)$, and
+let $D\subseteq H\subsetneq N$. Suppose nonnegative weights on proper
+$\phi$-tight coalitions have load $1+q$ on $D$, load one on $H\setminus D$,
+and loads $0\le c_i\le1$ on $i\in N\setminus H$, where $q>0$. Then
+\[
+ q s_\phi(D)\le\sum_{i\notin H}(1-c_i)\phi_i.       \tag{7}
+\]
+\end{lemma}
+
+\begin{proof}
+Choose $x\in\core(v)$ with $x(D)=v(D)$ and put $d=x-\phi$.
+Summing the supported tight-coalition inequalities at $x$ gives
+\[
+ 0\le d(H)+q d(D)+\sum_{i\notin H}c_i d_i.
+\]
+Efficiency replaces $d(H)$ by $-\sum_{i\notin H}d_i$. Hence
+\[
+ q s_\phi(D)=-q d(D)
+ \le\sum_{i\notin H}(1-c_i)(-d_i)
+ \le\sum_{i\notin H}(1-c_i)\phi_i,
+\]
+where the last inequality uses $x_i\ge v(\{i\})=0$.
+\end{proof}
+
+Put $L=\{a,b\}$ and label the displacement in
+Theorem~\ref{thm:transport} so that $\Delta_a<0<\Delta_b$.  By (3d), some
+lifted extreme packet has $r_b<1$.
+
+\begin{lemma}[proper-hyperedge obstruction]\label{lem:rankthree}
+Every such underloaded packet contains a proper rich trace $R$ with
+\[
+ 3\le |R|\le |H|-1.                                  \tag{8}
+\]
+\end{lemma}
+
+\begin{proof}
+Suppose instead that every proper supported trace has size at most two.
+The positive incidence columns of a vertex of (2) are independent.  Its
+rank-two components are therefore isolated singletons of weight one,
+isolated edges of weight one, and vertex-disjoint odd cycles whose edges
+have weight $1/2$.  This follows by the usual leaf deletion: a positive
+singleton cannot share a nontrivial component; a tree reduces to one edge;
+an even cycle is dependent; and an odd cycle has the unique half cover.
+
+An integral packet has integer $b$-load, and (3c) forces that load to be at
+least one.  Hence the selected packet is fractional.  Its poor loads are
+half-integers.  From
+\[
+ -s+r_a\Delta_a+r_b\Delta_b\ge0,\qquad
+ \Delta_a+\Delta_b=s,
+\]
+and $r_b<1$, one obtains $r_b=1/2$ and $r_a=0$.  Exactly one half-weight
+edge on one odd cycle therefore carries $b$, and no supported coalition
+carries $a$.
+
+Round that labeled odd cycle alternately, starting with the labeled edge,
+and leave every other component at its original weight.  The resulting
+nonnegative combination of proper $\phi$-tight coalitions has rich load
+$\one_H+e_d$ for one rich player $d$, poor load $e_b$, and no load on $a$.
+Exactify singleton $d$.  Summing the selected tight inequalities and adding
+the omitted singleton $a$ gives the exact-face overload inequality
+$\phi_d\le\phi_a$, contradicting the strict boundary. Indeed,
+Lemma~\ref{lem:overload} has $D=\{d\}$, $c_b=1$, and $c_a=0$.
+Thus (8) holds.
+\end{proof}
+
+\begin{proposition}\label{prop:m2}
+If $m=2$ and the suffix is slack, then $h\ge4$.
+\end{proposition}
+
+\begin{proof}
+Lemma~\ref{lem:rankthree} requires a proper trace of size at least three.
+\end{proof}
+
+The proof so far yields every forbidden pair in (1) without enumerating
+games or payoff-stratum patterns.
+
+\section{Three universal realizing families}
+
+We use a standard lower-envelope observation.
+
+\begin{lemma}[lower-envelope realization]\label{lem:envelope}
+Let $G$ be a finite family of nonnegative allocations with common total
+$T$, and define $v(S)=\min_{g\in G}g(S)$.  Then every $g\in G$ belongs to
+$\core(v)$, every coalition attains its worth, and $v$ is exact.  If every
+coordinate is zero in some row, then $v$ is singleton-normalized.
+\end{lemma}
+
+\begin{proof}
+The defining inequality gives $g(S)\ge v(S)$ for every $g,S$, so every row
+is a core allocation.  Conversely every coalition minimum is attained at a
+row.  The last assertion is immediate.
+\end{proof}
+
+We record the families compactly.  The displayed face inequalities give
+short progressive leximin proofs; no search is involved.
+
+\begin{proposition}[unique-richest family]\label{prop:family1}
+For every $m\ge4$ there is an integral indecomposable exact game with
+$m$ poorer players $P=\{1,\ldots,m\}$, one richer player $r$, and
+\[
+ \Lmin(v)=\one_P+(m-2)e_r,\qquad v(\{r\})=0.
+\]
+\end{proposition}
+
+\begin{proof}
+Apply Lemma~\ref{lem:envelope} to the four common-total rows
+\begin{align*}
+ g^1&=(m-1)(e_4+e_r),\\
+ g^2&=(m-1)(e_3+e_4),\\
+ g^3&=e_1+e_2+e_3+(m-4)e_5+(m-1)e_r,\\
+ g^4&=\one_P+(m-2)e_r,
+\end{align*}
+where the zero $e_5$ term is omitted at $m=4$.
+Every coordinate vanishes in a row.  The four attained faces
+\[
+ v(N\setminus\{1\})=v(N\setminus\{2\})=2m-3,\qquad
+ v(\{3,r\})=v(\{4,r\})=m-1
+\]
+show that any core point giving everyone at least one fixes players $1,2$
+at one; subtracting $\one_N$ and comparing the two pair inequalities with
+efficiency then fixes every poorer player at one.  The remaining total gives
+$x_r=m-2$.  Hence $g^4=\Lmin(v)$.  Row $g^2$ proves $v(\{r\})=0$.
+For indecomposability, observe that
+\[
+ v(\{1,4\})=v(\{2,4\})=v(\{3,4\})=1,
+ \qquad v(\{3,r\})=v(\{4,r\})=m-1,
+\]
+and, when $m\ge5$, $v(\{4,5\})>0$.  These positive pair worths place
+players $1,\ldots,5,r$ in one direct-sum component.  If $m=6$, the coalition
+$T=\{3,4,5,r\}$ satisfies $v(T)=7<v(T\cup\{6\})=8$.  If $m\ge7$, put
+$T=\{4,5\}$; then $v(T)=2<v(T\cup\{j\})=3$ for every $j\ge6$.
+Since every remaining singleton has value zero, these strict interactions
+attach every remaining player to the same component.
+\end{proof}
+
+\begin{proposition}[two-poorer internal-sacrifice family]
+\label{prop:family2}
+For every $m\ge2$ and $h\ge4$ there is an integral indecomposable exact game
+with a poorer block $P$ of size $m$, a richer suffix $H$ of size $h$, and
+\[
+ \Lmin(v)=D\one_P+2D\one_H,\qquad
+ v(H)=2D(h-1),\qquad D=(h-2)(h-3).
+\]
+\end{proposition}
+
+\begin{proof}
+Put $r=h-2$, write $P=\{p_1,p_2\}\mathbin{\dot\cup}Q$ and
+$H=\{a,b\}\mathbin{\dot\cup}K$, $|K|=r$.  Use the common-total rows
+\begin{align*}
+ u&=D e_{p_2}+D\one_Q+3D(e_a+e_b)
+       +(2r-1)(r-1)\one_K,\\
+ z&=4D e_{p_1}+D\one_Q+2(r^2-1)\one_K,\\
+ w^k&=D e_{p_1}+D\one_Q+3D(e_a+e_b)
+       +r(2r-1)\one_{K\setminus\{k\}}\quad(k\in K),\\
+ \phi&=D\one_P+2D\one_H,\\
+ q^j&=\phi+D(e_{p_1}-e_j)\quad(j\in Q).
+\end{align*}
+Lemma~\ref{lem:envelope} gives a normalized integral exact game.  Direct
+substitution yields
+\begin{align*}
+ v(N\setminus\{p_2\})&=D(m+2h)-D,\\
+ v(H\setminus\{a\})=v(H\setminus\{b\})&=2D(h-1),\\
+ v(\{p_1,a,b\}\cup(K\setminus\{k\}))&=D(2h-1),\\
+ v(H)&=2D(h-1).
+\end{align*}
+At a core point $x$ above the floor $D$, the complement face first fixes
+$x_{p_2}=D$. Write $y=x-D\one_N$, $E=y(Q)$, and $t=y(K)$. Then
+$y\ge0$, $y_{p_2}=0$, and $y(N)=hD$. The two co-singleton faces give
+\[
+ y_a+t\ge(h-1)D,\qquad y_b+t\ge(h-1)D.             \tag{9}
+\]
+The $r=h-2$ remaining faces give, for every $k\in K$,
+\[
+ y_{p_1}+y_a+y_b+t-y_k\ge(h-1)D.
+\]
+Summing them and substituting
+$y_{p_1}+E+y_a+y_b+t=hD$ yields $t+rE\le rD$. On the other hand,
+(9) and efficiency imply
+\[
+ y_{p_1}+E\le t-rD\le-rE.
+\]
+Nonnegativity forces $y_{p_1}=E=0$. Hence all of $P$ is pinned at level
+$D$; efficiency
+leaves total $2Dh$ on $H$, equalized by $\phi$.  Thus $\phi=\Lmin(v)$ and
+its richer suffix has slack $2D$.  The same construction is indecomposable.
+Indeed, $p_1$ has positive pair worth with every other player:
+\[
+ v(\{p_1,p_2\})=v(\{p_1,j\})=v(\{p_1,k\})=D
+ \quad(j\in Q,k\in K),
+ \qquad
+ v(\{p_1,a\})=v(\{p_1,b\})=3D.
+\]
+Thus the positive-pair graph is connected.
+\end{proof}
+
+\begin{proposition}[three-poorer escape family]\label{prop:family3}
+For every $m\ge3$ and $h\ge2$ there is an integral indecomposable exact game
+with $m$ cumulative poorer players and richer suffix $H$, $|H|=h$, such that
+\[
+ \Lmin(v)=\one_{\{p_1,p_2\}\cup Q}+2e_{p_3}+3\one_H,\qquad
+ v(H)=3h-1,\qquad |Q|=m-3.
+\]
+\end{proposition}
+
+\begin{proof}
+Write $H=\{r_1,\ldots,r_h\}$ and take the lower envelope of
+\begin{align*}
+ a&=2e_{p_1}+3e_{p_3}+\one_Q+5e_{r_1}
+       +3\one_{H\setminus\{r_1,r_h\}},\\
+ b&=2e_{p_2}+e_{p_3}+\one_Q+4e_{r_1}
+       +3\one_{H\setminus\{r_1\}},\\
+ c&=\one_Q+(3h+4)e_{r_h},\\
+ \phi&=e_{p_1}+e_{p_2}+2e_{p_3}+\one_Q+3\one_H,\\
+ q^j&=\phi+e_{p_1}-e_j\quad(j\in Q).
+\end{align*}
+All rows have total $m+3h+1$, and every coordinate vanishes in a row, so
+Lemma~\ref{lem:envelope} applies.  The attained values
+\begin{align*}
+ v(N\setminus\{j\})&=m+3h\quad(j\in Q),\\
+ v(H\cup\{p_3\})&=3h+2,\\
+ v(H\cup\{p_1\})&=3h+1,\\
+ v(H)&=3h-1
+\end{align*}
+give the progressive proof.  On the face where every player receives at
+least one, the complement faces fix $Q$, the second face fixes $p_1,p_2$ at
+one, and the third fixes $p_3$ at two.  Efficiency leaves total $3h$ on
+$H$, equalized at three by $\phi$.  Thus $\phi=\Lmin(v)$ and $s_\phi(H)=1$.
+When $Q\ne\emptyset$, one member of $Q$ has positive pair worth with every
+other player.  When $Q=\emptyset$, the positive-pair graph connects all but
+$p_2$, and
+\[
+ v(\{p_1,p_3,r_h\})=4<5=v(\{p_1,p_2,p_3,r_h\})
+\]
+attaches $p_2$.  Hence the game is indecomposable.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:phase}]
+Corollary~\ref{cor:m1} excludes $m=1$ for every $h$.
+Proposition~\ref{prop:h1} excludes $m\le3$ when $h=1$, and
+Proposition~\ref{prop:family1} realizes every $m\ge4$.
+Proposition~\ref{prop:m2} excludes $h\le3$ when $m=2$, and
+Proposition~\ref{prop:family2} realizes every $m\ge2,h\ge4$.
+All remaining pairs have $m\ge3,h\ge2$ and are realized by
+Proposition~\ref{prop:family3}.
+\end{proof}
+
+\section{The four/five threshold and its mechanism}
+
+\begin{corollary}[sharp player threshold]\label{cor:fourfive}
+Every singleton-normalized exact game on at most four players is exact
+partition at $\Lmin$.  Five players suffice for failure.
+\end{corollary}
+
+\begin{proof}
+Every pair $(m,h)$ with $m+h\le4$ is forbidden by (1).  The pair
+$(m,h)=(3,2)$ is realized by Proposition~\ref{prop:family3} on five players.
+Alternatively, $(4,1)$ is realized by Proposition~\ref{prop:family1}.
+\end{proof}
+
+The theorem gives two distinct first mechanisms.  The $(4,1)$ obstruction
+is an exterior sacrifice: the fourth poorer player supplies the first
+positive singleton budget capable of financing a slack richest singleton.
+The $(3,2)$ obstruction is a mixed block-star mechanism.  Two-poorer
+failures do not yet exist on five players: their active balanced packet must
+contain a proper rank-three trace, which first fits at $(2,4)$ on six
+players.  Thus ``five'' is not an unexplained output of enumeration; it is
+the first total size at which either of the two admissible boundary regions
+in (1) is entered.
+
+\section{What the theorem does and does not establish}
+
+The phase theorem is dimension-free in the sense relevant to the original
+problem: it classifies every possible pair of boundary-side cardinalities,
+and its lower bounds are symbolic transport arguments.  It does not classify
+all support-minimal balanced packets or all extreme rays of the associated
+two-sided coupling cone.  Distinct irreducible packet classes already occur:
+the co-singleton class $J-I$ and a blown-up three-cycle class are not related
+by a single universal minor.  A full obstruction theory would therefore
+need a multi-class circuit or coupling characterization rather than a claim
+that every failure contains one fixed small configuration.
+
+The theorem's novelty remains conditional on specialist review.  Exact
+partition, its Lorenz consequence, property I, exact balancedness, minimal
+balanced collections, and lower-envelope exactification are not claimed.
+The candidate new content is the Lmin-selected transport bridge, the sharp
+staircase (1), and the three dimension-free indecomposable realizing
+families.
+
+\section*{Reproducibility note}
+
+The proof above is human and does not depend on finite enumeration.  Exact
+rational programs in the companion repository independently reconstruct the
+smallest family members, all coalition values, and staged Lmin solutions.
+They are bug audits, not proof evidence.
+
+\begin{thebibliography}{99}
+
+\bibitem[Arin and I\~narra(2001)]{ArinInarra2001}
+Arin J, I\~narra E (2001) Egalitarian solutions in the core.
+International Journal of Game Theory 30:187--193.
+
+\bibitem[Arin et al.(2008)]{ArinKuipersVermeulen2008}
+Arin J, Kuipers J, Vermeulen D (2008) An axiomatic approach to
+egalitarianism in TU-games. International Journal of Game Theory 37:565--580.
+\url{https://doi.org/10.1007/s00182-008-0133-6}
+
+\bibitem[Cs\'oka et al.(2011)]{CsokaHeringsKoczy2011}
+Cs\'oka P, Herings PJJ, K\'oczy L\'A (2011) Balancedness conditions for exact
+games. Mathematical Methods of Operations Research 74:41--52.
+
+\bibitem[Dietzenbacher(2021)]{Dietzenbacher2021}
+Dietzenbacher B (2021) Procedural values for cooperative games.
+Doctoral thesis, Tilburg University.
+
+\bibitem[Llerena and Mauri(2017)]{LlerenaMauri2017}
+Llerena F, Mauri L (2017) On the existence of the Dutta--Ray's egalitarian
+solution. Mathematical Social Sciences 89:92--99.
+\url{https://doi.org/10.1016/j.mathsocsci.2017.07.002}
+
+\bibitem[Laplace Mermoud et al.(2025)]{LaplaceMermoudEtAl2025}
+Laplace Mermoud L, Grabisch M, Sudh\"olter P (2025) Minimal balanced
+collections and their applications to core stability and other topics of
+game theory. Working paper.
+
+\bibitem[Lohmann et al.(2012)]{LohmannBormHerings2012}
+Lohmann E, Borm P, Herings PJJ (2012) Minimal exact balancedness.
+Mathematical Social Sciences 64:127--135.
+
+\bibitem[Mauri(2018)]{Mauri2018}
+Mauri Masdeu L (2018) Essays on egalitarianism-based solution concepts for
+cooperative TU-games. Doctoral thesis, Universitat Rovira i Virgili.
+
+\bibitem[S\'anchez-Soriano et al.(2010)]{SanchezSorianoBranzeiLlorcaTijs2010}
+S\'anchez-Soriano J, Br\^anzei R, Llorca N, Tijs SH (2010) A technical note
+on Lorenz dominance in cooperative games. CentER Discussion Paper 2010--101.
+\url{https://pure.uvt.nl/ws/files/1269376/2010-101.pdf}
+
+\end{thebibliography}
+
+\end{document}
