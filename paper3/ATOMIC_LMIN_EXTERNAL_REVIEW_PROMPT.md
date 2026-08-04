@@ -122,6 +122,17 @@ special attention to:
     a conformal circuit's non-spoke traces form a balanced subcollection and
     minimality forces the entire packet, including repeated-trace and
     full-trace degeneracies.
+22. Audit the canonical packet slack-transfer theorem. Starting from the
+    completed packet relation, verify the direction of the exact-balancedness
+    inequality and every sign in
+    `delta s(H) <= sum_i (b-r_i)s(H union {i})`. Check that `b<1` forces a
+    strictly larger completion slack, and that the two-poorer specialization
+    has the exact factor `(1-r_a)/(r_b-r_a)`. Independently recompute the
+    saturated factors `2` and `3/2` in the three-column and four-co-singleton
+    examples. Verify the equivalent marginal-deficit formula and its strict
+    sign. Assess whether this invariant or an equivalent slack-ascent
+    lemma already appears in exact-balanced, exact-partition, or egalitarian
+    solution theory.
 
 Please report fatal errors first, then repairable gaps, then novelty risks.
 State whether the result is (a) correct as written, (b) correct after named

@@ -2796,6 +2796,103 @@ one completion spoke in the circuit to have positive slack.  The circuit
 bound is Corollary~\ref{cor:lx-rooted-atomic-reduction}.
 \end{proof}
 
+\begin{theorem}[canonical packet slack transfer]
+\label{thm:lx-canonical-packet-slack-transfer}
+Let $v$ be exact, let $\phi\in\core(v)$, and write
+$N=H\mathbin{\dot\cup}L$. Suppose a normalized minimal balanced packet of
+nonempty rich traces is lifted to proper $\phi$-tight coalitions with poorer
+load vector $r\in\mathbb R_+^L$. Put
+\[
+ b=\max_{i\in L}r_i,\qquad d_i=b-r_i,
+ \qquad \delta=1-b+\sum_{i\in L}d_i.
+\]
+If $\delta>0$, then
+\[
+ \delta s_\phi(H)
+ \leq\sum_{i\in L}d_i s_\phi(H\cup\{i\}).          \tag{ST}
+ \label{eq:lx-canonical-packet-slack-transfer}
+\]
+If additionally $b<1$ and $s_\phi(H)>0$, then
+$\sum_i d_i>0$ and
+\[
+ \max_{i:d_i>0}\frac{s_\phi(H\cup\{i\})}{s_\phi(H)}
+ \geq\frac{\delta}{\sum_i d_i}
+ =1+\frac{1-b}{\sum_i d_i}>1.                       \tag{SA}
+ \label{eq:lx-canonical-packet-slack-amplification}
+\]
+Thus every underloaded trace packet transfers the suffix slack strictly to
+a larger proper coalition.
+\end{theorem}
+
+\begin{proof}
+With the notation of the theorem, the canonical completion identity is
+\[
+ \sum_T\lambda_T\mathbf1_T
+ +\sum_{i\in L}d_i\mathbf1_{H\cup\{i\}}
+ -\delta\mathbf1_H=b\mathbf1_N;
+\]
+this is \eqref{eq:lx-single-packet-completion}. Apply exact balancedness to
+this relation. Every packet coalition $T$ is tight at $\phi$, so subtracting
+the worth inequality from the identical incidence equality at $\phi$ gives
+\eqref{eq:lx-canonical-packet-slack-transfer}. If $b<1$, then
+$\delta=1-b+\sum_i d_i$. When $H$ is slack, the slack-transfer inequality
+rules out $\sum_i d_i=0$. Dividing by the positive sum and taking the
+largest completion slack proves \eqref{eq:lx-canonical-packet-slack-amplification}.
+\end{proof}
+
+\begin{corollary}[two-poorer canonical slack amplifier]
+\label{cor:lx-two-poorer-slack-amplifier}
+At a slack Lmin boundary with exactly two poorer players, label them so that
+balanced-trace transport selects a lifted minimal packet with
+$0\leq r_a<r_b<1$. Then
+\[
+ s_\phi(H\cup\{a\})
+ \geq\frac{1-r_a}{r_b-r_a}s_\phi(H)>s_\phi(H).       \tag{2P}
+ \label{eq:lx-two-poorer-slack-amplifier}
+\]
+The amplified coalition adjoins the losing poorer player and omits the
+unique gaining poorer player.
+\end{corollary}
+
+\begin{proof}
+Here $d_a=r_b-r_a$, $d_b=0$, and $\delta=1-r_a$, so the claim is the
+specialization of
+Theorem~\ref{thm:lx-canonical-packet-slack-transfer}. Equivalently, exactify
+$H$ at $z\in\core(v)$ and write $\Delta=z-\phi$. Balanced-trace transport
+gives $\Delta_a<0<\Delta_b$ and
+$\Delta_a+\Delta_b=s_\phi(H)$. Hence
+\[
+ z(H\cup\{a\})=\phi(H\cup\{a\})-\Delta_b,
+\]
+so core feasibility already yields
+$s_\phi(H\cup\{a\})\geq\Delta_b>s_\phi(H)$; the packet relation gives the
+displayed quantitative factor.
+\end{proof}
+
+\begin{corollary}[local marginal-deficit witness]
+\label{cor:lx-two-poorer-marginal-deficit}
+Under the hypotheses of
+Corollary~\ref{cor:lx-two-poorer-slack-amplifier},
+\[
+ v(H\cup\{a\})-v(H)
+ \leq \phi_a-\frac{1-r_b}{r_b-r_a}s_\phi(H)<\phi_a. \tag{MD}
+ \label{eq:lx-two-poorer-marginal-deficit}
+\]
+Thus every two-poorer trace obstruction has a local witness on the adjacent
+coalition-lattice edge from $H$ to $H\cup\{a\}$.
+\end{corollary}
+
+\begin{proof}
+The slack difference on that edge is
+\[
+ s_\phi(H\cup\{a\})-s_\phi(H)
+ =\phi_a-\bigl(v(H\cup\{a\})-v(H)\bigr).
+\]
+Subtracting one from the amplification factor in
+\eqref{eq:lx-two-poorer-slack-amplifier} gives
+$(1-r_b)/(r_b-r_a)$ and proves the claim.
+\end{proof}
+
 Thus the general object is not a bare list of exact-cone facets.  It is the
 polyhedral cone coupling a balanced rich-trace packet to a
 singleton-completed poor-trace packet.  The three-trace atom is rich-active:
@@ -2806,6 +2903,7 @@ coupling rays is the remaining general-theory target.  A standalone proof
 and exact audit are
 \begin{center}
 \small\path{paper3/TWO_SIDED_TRACE_COUPLING.md},\\[-2pt]
+\small\path{paper3/CANONICAL_PACKET_SLACK_TRANSFER.md},\\[-2pt]
 \small\path{src/verify_two_sided_trace_coupling.py},\\[-2pt]
 \small\path{results/two_sided_trace_coupling.json}.
 \end{center}

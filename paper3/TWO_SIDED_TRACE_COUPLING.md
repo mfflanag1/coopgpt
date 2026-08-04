@@ -119,6 +119,42 @@ minimal balanced-transport mechanism.  Mixtures are unnecessary.  This
 dichotomy is dimension-free and applies before any classification by player
 count.
 
+## Canonical slack transfer
+
+The canonical completion also supplies a scalar invariant. For a selected
+packet with poorer loads `r`, put `b=max_i r_i`, `d_i=b-r_i`, and
+`delta=1-b+sum_i d_i`. Exact balancedness applied to the completed packet
+gives
+
+```text
+delta s_phi(H) <= sum_i d_i s_phi(H union {i}).
+```
+
+If `b<1`, some completion coalition has strictly greater slack than `H`.
+With exactly two poorer players, transport labels their packet loads as
+`r_a<r_b<1`, so only the losing-player completion remains and
+
+```text
+s_phi(H union {a})
+  >= (1-r_a)/(r_b-r_a) s_phi(H)
+  > s_phi(H).
+```
+
+Equivalently,
+
+```text
+v(H union {a})-v(H)
+  <= phi_a-(1-r_b)/(r_b-r_a) s_phi(H)
+  < phi_a.
+```
+
+Hence the global suffix failure has a local marginal-deficit witness on one
+adjacent edge of the coalition lattice.
+
+The trace-coupled branch therefore has forced strict slack ascent; no
+analogous conclusion follows from the pure block-star identity. The full statement and sharp examples are in
+`paper3/CANONICAL_PACKET_SLACK_TRANSFER.md`.
+
 ## Consequence for the breakthrough program
 
 The earlier conjecture that every rooted atom should be assembled only from

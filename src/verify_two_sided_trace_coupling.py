@@ -11,7 +11,18 @@ import json
 from fractions import Fraction as F
 from pathlib import Path
 
-from verify_three_trace_half_integral_family import defining_coalitions, mask
+from verify_three_trace_half_integral_family import (
+    coalition_sum as three_coalition_sum,
+    defining_coalitions,
+    lower_envelope as three_lower_envelope,
+    mask,
+    vertices as three_vertices,
+)
+from verify_two_poorer_rich_family import (
+    coalition_sum as internal_coalition_sum,
+    generators as internal_generators,
+    lower_envelope as internal_lower_envelope,
+)
 
 
 def vector(n, coalition):
@@ -30,7 +41,7 @@ def members(n, coalition):
     return [i + 1 for i in range(n) if coalition >> i & 1]
 
 
-def canonical_packet(name, poor_loads):
+def canonical_packet(name, poor_loads, root_slack=None, completion_slacks=None):
     loads = tuple(F(value) for value in poor_loads)
     maximum = max(loads)
     completion = tuple(maximum - value for value in loads)
@@ -39,13 +50,113 @@ def canonical_packet(name, poor_loads):
         raise AssertionError(f"{name}: canonical excess identity failed")
     if excess <= 0:
         raise AssertionError(f"{name}: packet does not have positive excess")
-    return {
+    result = {
         "name": name,
         "poor_loads": [str(value) for value in loads],
         "maximum_poor_load": str(maximum),
         "canonical_completion": [str(value) for value in completion],
         "canonical_rooted_excess": str(excess),
     }
+    completion_mass = sum(completion, F(0))
+    if maximum < 1:
+        if completion_mass <= 0:
+            raise AssertionError(f"{name}: underloaded packet cannot transfer slack")
+        result["strict_slack_amplification_factor"] = str(excess / completion_mass)
+    if root_slack is not None or completion_slacks is not None:
+        if root_slack is None or completion_slacks is None:
+            raise AssertionError(f"{name}: incomplete slack-transfer audit")
+        root_slack = F(root_slack)
+        completion_slacks = tuple(F(value) for value in completion_slacks)
+        if len(completion_slacks) != len(loads):
+            raise AssertionError(f"{name}: wrong completion-slack dimension")
+        weighted = sum(
+            weight * slack
+            for weight, slack in zip(completion, completion_slacks)
+        )
+        required = excess * root_slack
+        if weighted < required:
+            raise AssertionError(f"{name}: exact-balanced slack transfer failed")
+        result["root_slack"] = str(root_slack)
+        result["completion_slacks"] = [str(value) for value in completion_slacks]
+        result["weighted_completion_slack"] = str(weighted)
+        result["required_rooted_slack"] = str(required)
+        result["slack_transfer_saturated"] = weighted == required
+    return result
+
+
+def realized_slack_transfer_audits():
+    """Recompute the sharp packet slacks from the two exact-game families."""
+    three_points = three_vertices(1, 2, 2)
+    three_game = three_lower_envelope(three_points)
+    three_phi = tuple([F(1), F(1)] + [F(2)] * 5)
+    three_root = mask(range(2, 7))
+    three_root_slack = (
+        three_coalition_sum(three_phi, three_root) - three_game.v[three_root]
+    )
+    three_completion = three_root | 1
+    three_completion_slack = (
+        three_coalition_sum(three_phi, three_completion)
+        - three_game.v[three_completion]
+    )
+
+    m, h = 2, 4
+    scale = (h - 2) * (h - 3)
+    internal_points = internal_generators(m, h)
+    internal_values = internal_lower_envelope(internal_points)
+    internal_phi = tuple([scale] * m + [2 * scale] * h)
+    internal_root = mask(range(m, m + h))
+    internal_root_slack = (
+        internal_coalition_sum(internal_phi, internal_root)
+        - internal_values[internal_root]
+    )
+    # Player 2 is absent from every gaining-labeled co-singleton and is the
+    # unique losing-player completion in the canonical packet.
+    internal_completion = internal_root | (1 << 1)
+    internal_completion_slack = (
+        internal_coalition_sum(internal_phi, internal_completion)
+        - internal_values[internal_completion]
+    )
+
+    three_audit = canonical_packet(
+        "three_trace_minimal_packet",
+        (0, F(1, 2)),
+        root_slack=three_root_slack,
+        completion_slacks=(three_completion_slack, 0),
+    )
+    three_marginal = three_game.v[three_completion] - three_game.v[three_root]
+    three_bound = F(1) - (1 - F(1, 2)) / F(1, 2) * three_root_slack
+    if three_marginal > three_bound:
+        raise AssertionError("three-trace marginal-deficit bound failed")
+    three_audit.update(
+        {
+            "losing_poorer_payoff": "1",
+            "coalition_marginal": str(three_marginal),
+            "marginal_deficit_upper_bound": str(three_bound),
+            "marginal_deficit_saturated": three_marginal == three_bound,
+        }
+    )
+
+    internal_audit = canonical_packet(
+        "four_cosingleton_minimal_packet",
+        (0, F(2, 3)),
+        root_slack=internal_root_slack,
+        completion_slacks=(internal_completion_slack, 0),
+    )
+    internal_marginal = (
+        internal_values[internal_completion] - internal_values[internal_root]
+    )
+    internal_bound = F(scale) - (1 - F(2, 3)) / F(2, 3) * internal_root_slack
+    if internal_marginal > internal_bound:
+        raise AssertionError("co-singleton marginal-deficit bound failed")
+    internal_audit.update(
+        {
+            "losing_poorer_payoff": str(scale),
+            "coalition_marginal": str(internal_marginal),
+            "marginal_deficit_upper_bound": str(internal_bound),
+            "marginal_deficit_saturated": internal_marginal == internal_bound,
+        }
+    )
+    return [three_audit, internal_audit]
 
 
 def audit(name, n, root, positive, gamma, beta):
@@ -194,7 +305,7 @@ def main():
         "case_count": len(cases),
         "cases": cases,
         "single_packet_excess_audits": [
-            canonical_packet("three_trace_minimal_packet", (0, F(1, 2))),
+            *realized_slack_transfer_audits(),
             canonical_packet("synthetic_partition_packet", (1, 2, 1)),
         ],
     }
