@@ -22,6 +22,7 @@ Primary files:
 - `coopgames/src/verify_three_poorer_boundary_family.py`;
 - `coopgames/results/three_poorer_boundary_family.json`.
 - `coopgames/paper3/EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`.
+- `coopgames/paper3/INTEGRAL_TRACE_OBSTRUCTION.md`.
 
 The broader dependency chain is the strict-cover lemma, balanced-trace
 transport theorem, unique-richest theorem, human two-poorer theorem, and
@@ -76,6 +77,13 @@ paper.  Audit those dependencies if any cited implication is unclear.
    unique-richest theorem excludes exactly the remaining `h=1,m<=3`; the
    human two-poorer theorem excludes exactly `m=2,h<=3`; and the three
    indecomposable families cover every admitted pair.
+9. Independently check the new integral-trace obstruction.  Verify the
+   exact-cover-polytope decomposition and lift, the integer-load
+   contradiction for a unique gaining poor coordinate, the automatic
+   two-poorer corollary, and the balanced-matrix/odd-submatrix implication.
+   Confirm that every co-singleton is an active trace in the `m=2,h>=4`
+   family and that its symbolic `3x3` odd cycle supplies the required
+   nonintegrality in every dimension.
 
 ## Independent reproduction
 
@@ -109,6 +117,8 @@ any prior source contains:
 - the universal indecomposable `m>=3,h>=2` family;
 - its closed-form Lmax;
 - the balanced-trace transport bridge used for the lower bounds.
+- the theorem that every two-poorer failure forces a nonintegral active trace
+  exact-cover polytope and hence an odd balanced-matrix obstruction.
 
 Do not credit novelty merely because keyword search fails.  The paper already
 acknowledges as prior art the exact-partition condition, its Lorenz

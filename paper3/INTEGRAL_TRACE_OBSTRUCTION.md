@@ -1,0 +1,156 @@
+# Integral-trace obstruction for slack Lmin boundaries
+
+## Status
+
+This note extracts a dimension-free forbidden-pattern theorem from the
+balanced-trace transport proof.  It uses no finite enumeration.  The only
+external combinatorial input is the classical theorem that a balanced
+zero-one matrix has an integral set-partitioning polytope (Berge, 1972).
+Correctness and novelty still require hostile external review.
+
+## Active rich-side trace hypergraph
+
+Let `v` be an exact singleton-normalized TU game, let `phi=Lmin(v)`, and fix a
+strict payoff boundary with cumulative poorer side `L` and richer suffix `H`.
+Define the active trace hypergraph
+
+```text
+A_phi(H) = { T cap H : T is a proper phi-tight coalition,
+                         T cap H is nonempty }.
+```
+
+Its fractional exact-cover polytope is
+
+```text
+Q_phi(H) = { beta >= 0 :
+             sum_(R in A_phi(H)) beta_R 1_R = 1_H }.
+```
+
+The strict richer-side cover lemma makes this polytope nonempty.  It is
+bounded because every trace is nonempty.  Call the boundary **trace-integral**
+if every vertex of `Q_phi(H)` is integral.  An integral point of this polytope
+is exactly a set partition of `H`: every positive coefficient is one and the
+selected traces are pairwise disjoint.
+
+## The theorem
+
+> **Integral-trace obstruction.** Suppose the exact `H`-face contains a core
+> point `z` for which at most one poorer player gains relative to `phi`:
+>
+> ```text
+> z(H)=v(H),
+> |{i in L : z_i>phi_i}| <= 1.
+> ```
+>
+> If `Q_phi(H)` is integral, then `phi(H)=v(H)`.
+
+### Proof
+
+Assume instead that
+
+```text
+s = phi(H)-v(H) > 0,
+Delta = z-phi.
+```
+
+Efficiency gives `Delta(H)=-s` and `Delta(L)=s`.  Normalize the strict
+tight-coalition cover to load every member of `H` once; its load `c_i` on
+every `i in L` is strictly below one.  Summing its tight inequalities at `z`
+shows that not all poor displacements are nonnegative.  Since their sum is
+positive and at most one is positive, there is a unique gaining player `b`
+and every other poor displacement is nonpositive.
+
+Project the strict cover to `Q_phi(H)`.  By trace integrality, decompose that
+point into a convex mixture of set partitions of `H`.  Lift each partition
+back to deterministic original tight coalitions by choosing, independently
+for each trace, one original coalition with that trace according to its
+conditional cover weight.  In every lifted partition packet, the poor load
+`r_i` is a nonnegative integer: it counts selected coalitions containing `i`.
+The packet's rich traces partition `H`, so its tight inequalities at `z` give
+
+```text
+-s + sum_(i in L) r_i Delta_i >= 0.
+```
+
+If `r_b=0`, the left side is at most `-s`, impossible.  Hence every packet
+loads `b` at least once.  Averaging the lifted packets gives `c_b>=1`,
+contradicting the strict cover inequality `c_b<1`.  Therefore `H` is tight.
+
+## Two-poorer forbidden-pattern corollary
+
+If `L={a,b}` and `H` were slack, exactness would supply `z` exact on `H`.
+Applying the normalized strict cover to this chosen `z` forces
+
+```text
+Delta_a < 0 < Delta_b
+```
+
+after relabeling.  Thus the theorem applies automatically:
+
+> **Every slack Lmin suffix above exactly two poorer players has a
+> nonintegral active trace exact-cover polytope.**
+
+More generally, the contrapositive of the theorem gives a sign-complexity
+law: at a trace-integral slack boundary, **every** core point exact on `H` has
+at least two gaining poorer coordinates, while balanced-trace transport also
+forces at least one losing poorer coordinate.  Hence trace-integral slack
+requires at least three poorer players, regardless of the size of `H`.
+
+Berge's balanced-matrix theorem now gives a concrete forbidden pattern.  Let
+`A` be the player-by-trace incidence matrix of `A_phi(H)`.  If `A` were a
+balanced zero-one matrix, its set-partitioning polytope would be integral.
+Consequently:
+
+> **Every two-poorer slack boundary contains an odd trace cycle:** an
+> odd-order square submatrix with exactly two ones in each row and each
+> column.
+
+This is a dimension-free necessary condition on the actual tight-coalition
+geometry of the game, not merely on the cardinalities `(|L|,|H|)`.
+
+## How it explains the sharp threshold
+
+- For `|H|<=2`, every minimal balanced trace packet is a set partition, so
+  the active exact-cover polytope is integral.  Slack is impossible.
+- For `|H|=3`, the only nonintegral minimal packet is the half-integral
+  triangle.  The exact-singleton argument in the human two-poorer theorem
+  eliminates precisely this remaining odd trace cycle.
+- For every `|H|=h>=4`, the internal-sacrifice family has all co-singleton
+  traces `H\{x}` active.  The three rows indexed by distinct
+  `x_1,x_2,x_3` and the three columns
+  `H\{x_1},H\{x_2},H\{x_3}` contain
+
+  ```text
+  0 1 1
+  1 0 1
+  1 1 0,
+  ```
+
+  the smallest odd trace cycle.  More globally, assigning weight `1/(h-1)`
+  to every co-singleton is a fractional exact cover of `H`.  Its support
+  matrix is `J-I`, which is nonsingular, so this point is a fractional vertex
+  of the full active-trace polytope, not merely a fractional convex
+  combination.  Thus the
+  universal sharpness family crosses exactly the integrality gate required by
+  the theorem.
+
+The `2|3` versus `2|4` threshold is therefore the first realizability
+transition for an odd active-trace cycle: the triangle exists at three rich
+players but is incompatible with exact singleton faces; the co-singleton
+cycle is realizable from four rich players onward.
+
+## Significance and limits
+
+This result turns the finite-looking threshold into a general hypergraph
+obstruction.  It does **not** classify all nonintegral active trace
+hypergraphs, nor does nonintegrality by itself guarantee realizability by an
+exact game.  The next major target is a converse or minor theorem describing
+which odd trace cycles survive the exact-face and Lmin constraints.
+
+Classical prior art retained explicitly:
+
+- C. Berge (1972), *Balanced matrices*, Mathematical Programming 2, 19--31,
+  DOI [`10.1007/BF01584535`](https://doi.org/10.1007/BF01584535).
+- Minimal balanced collections and the set-partitioning polytope are standard;
+  the candidate new contribution is forcing their **nonintegrality** from a
+  slack two-poorer Lmin boundary in an exact game.

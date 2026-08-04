@@ -192,6 +192,50 @@ gains and losses.  The theorem uses standard minimal balanced collections;
 the claimed new content is their forced appearance as traces of Lmin dual
 covers in exact games.
 
+### Integral traces and odd-cycle necessity
+
+Let `A_phi(H)` be the hypergraph of nonempty traces on `H` of proper
+coalitions tight at `phi`, and let
+
+```text
+Q_phi(H) = {beta>=0 : sum_R beta_R 1_R = 1_H}.
+```
+
+If an exact `H`-face witness has at most one gaining poorer coordinate and
+`Q_phi(H)` is integral, then `H` must be tight.  Decompose the strict cover
+into integral exact covers, hence set partitions.  In each lifted partition
+packet the load on the unique gaining poor player is an integer; the packet
+transport inequality forces it to be at least one.  Averaging contradicts
+strict undercoverage.
+
+With exactly two poorer players, the opposing-sign conclusion makes the
+unique-gainer hypothesis automatic.  Therefore every slack two-poorer
+boundary has a nonintegral active trace polytope.  By Berge's classical
+balanced-matrix theorem, its incidence matrix must contain an odd-order
+square submatrix with exactly two ones in each row and column.  The full proof
+is in `paper3/INTEGRAL_TRACE_OBSTRUCTION.md`.
+
+Equivalently, trace-integral slack forces every exact suffix witness to have
+at least two gaining and at least one losing poorer coordinate.  It therefore
+requires at least three poorer players in every dimension.
+
+For the internal-sacrifice family, all co-singletons `H\{x}` are active
+traces.  Weighting them by `1/(h-1)` gives a fractional exact cover; its
+support matrix `J-I` is nonsingular, so the point is a fractional vertex.
+Any
+three selected player rows and corresponding co-singleton columns give
+
+```text
+0 1 1
+1 0 1
+1 1 0.
+```
+
+Thus the `2|3` versus `2|4` threshold is the first realizability transition
+for an odd active-trace cycle: the three-rich triangle is killed by exact
+singleton faces, while the co-singleton cycle survives from four rich players
+onward.
+
 ## 3. The existing fractional-packing lemma is a specialization
 
 Suppose `r` is uniquely richest at Lmin, with `phi_r=gamma`, and choose for

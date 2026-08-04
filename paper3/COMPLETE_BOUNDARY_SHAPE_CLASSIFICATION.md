@@ -37,6 +37,16 @@ This is a classification of arbitrary strict Lmin boundaries.  The poorer
 side may contain more than one payoff stratum; no two-stratum hypothesis is
 used.
 
+The `m=2` boundary has a stronger, dimension-free structural reading.  For
+any richer-side size, a slack suffix above exactly two poorer players forces
+the active rich-trace exact-cover polytope to be nonintegral; hence its
+incidence matrix contains an odd balanced-matrix obstruction.  The `h=3`
+triangle is the only small fractional packet and is eliminated by exact
+singleton faces.  The `h>=4` realizing family activates every co-singleton
+trace and therefore contains the symbolic odd-cycle matrix
+`[[0,1,1],[1,0,1],[1,1,0]]`.  See
+`paper3/INTEGRAL_TRACE_OBSTRUCTION.md`.
+
 ## Universal three-poorer family
 
 Write the poorer side as `{p1,p2,p3} disjoint-union Q`, where `|Q|=m-3`,

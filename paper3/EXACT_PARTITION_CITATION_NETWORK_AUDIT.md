@@ -72,6 +72,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Exact games with at most four players are PES stable | Established prior art (Dietzenbacher 2021) | State as the closest known low-dimensional result. |
 | Every exact game with at most four players is exact partition at Lmin | Not found | Present as apparent new strengthening, pending specialist review. |
 | Hierarchical dual covers plus exact-face witnesses yield balanced-trace transport | Not found | Present as the apparent new proof mechanism, pending terminology review. |
+| Every two-poorer failure forces a nonintegral active trace polytope/odd trace cycle | Not found; Berge's matrix-integrality theorem is classical | Present only as a new bridge from Lmin geometry to known balanced-matrix theory. |
 | Complete boundary staircase `4,3,3,2` | Not found | Present as apparent new classification. |
 | Universal indecomposable family for every `m>=3,h>=2` | Not found | Present as apparent new sharpness construction. |
 | Closed-form Lmax and distance `4h/(h+1)` for that family | Not found | Present as an additional explicit result, not the core novelty claim. |
@@ -111,6 +112,7 @@ richer players; poorer players; rich coalition; rich core
 minimal balanced collection; exact balancedness; balanced hypergraph
 transport; trace; normal cone; Kohlberg criterion
 dimension; cardinality; indecomposable; replication
+balanced matrix; set partitioning; active trace; odd cycle
 ```
 
 The full texts inspected were the consistency, antiduality, NTU,
@@ -133,5 +135,9 @@ discrete-side-payment, and characteristic-function papers listed above.
 
 Accordingly, the defensible current claim is **a credible, apparently new
 structural classification in a specialized part of cooperative game theory**.
+The integral-trace theorem broadens the contribution beyond the staircase: it
+gives a dimension-free forbidden-pattern result for the tight-coalition
+hypergraph of every two-poorer failure.  That strengthens the general-theory
+case, but does not remove the need for specialist review.
 “Major field breakthrough” remains premature until correctness and novelty
 survive hostile specialist review.

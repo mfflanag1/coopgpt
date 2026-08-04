@@ -62,7 +62,13 @@ remains required.
    other topics of game theory*](https://arxiv.org/abs/2507.05898), give a
    modern enumeration and applications.  The present paper does not claim to
    invent these packets or their three-player classification.
-7. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
+7. **Balanced matrices.** Berge (1972),
+   [*Balanced matrices*](https://doi.org/10.1007/BF01584535), proves the
+   classical integrality theorem for set-partitioning polytopes of balanced
+   zero--one matrices.  The paper cites this result; the candidate new bridge
+   is that a slack two-poorer Lmin boundary forces the active trace matrix to
+   violate balancedness.
+8. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
    [*Monotonicity and egalitarianism*](https://doi.org/10.1016/j.geb.2021.03.006),
    compares Lmin, Lmax, and PES on broader domains and records prior
    monotonicity failures.  It does not state the exact-game boundary-transport
@@ -88,12 +94,18 @@ cooperative game "transport" "minimal balanced collection" egalitarian
 "exact partition games" egalitarian solution richer coalition tight suffix
 "exact partition" "Lmin" cooperative games
 "egalitarian solution" exact games payoff classes coalition union
+"egalitarian solution" "balanced matrix" cooperative game
+"Lmin" hypergraph cooperative game balanced
+"exact partition game" hypergraph "balanced matrix"
+"minimal balanced collection" "set partitioning" egalitarian
 ```
 
 The searches were followed through the references and discussion sections of
 the papers above, including the 2017 exact-partition paper, the 2020
 antiduality paper, the 2021 monotonicity paper, the 2012 minimal
-exact-balancedness paper, and the 2025 minimal-balanced-collection survey.
+exact-balancedness paper, the 2025 minimal-balanced-collection survey, and
+Berge's classical balanced-matrix paper.  No source found in this search
+forces nonintegrality or an odd trace cycle from a slack Lmin boundary.
 
 ## Defensible novelty statement
 
@@ -103,7 +115,9 @@ Pending expert review, the strongest defensible formulation is:
 > show that every slack richer suffix in an exact game induces a minimal
 > balanced trace-transport certificate.  This dimension-free obstruction
 > yields a human exact-partition classification through four players and a
-> sharp `2|3` versus `2|4` richer-side threshold.  Three explicit universal
+> sharp `2|3` versus `2|4` richer-side threshold.  Every two-poorer failure
+> moreover forces a nonintegral active trace hypergraph, hence an odd
+> balanced-matrix obstruction.  Three explicit universal
 > families then give a complete classification of the boundary-side
 > cardinalities compatible with slack.  We do not claim the Lmin solution,
 > exact partition games, their published Lorenz consequence, exact

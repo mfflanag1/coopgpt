@@ -10,7 +10,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/sections_leximin.tex`: source labels
   `lem:lx-exact-balanced-slack`, `lem:lx-boundary-cover`,
   `cor:lx-boundary-defect`, `lem:lx-strict-richer-cover`,
-  `thm:lx-balanced-trace-transport`, and
+  `thm:lx-balanced-trace-transport`,
+  `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`, and
   `thm:lx-small-poorer-threshold`.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
@@ -22,6 +23,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   prior-art boundary, and cautious novelty statement.
 - `coopgames/paper3/EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`: reproducible
   forward-citation audit and claim-by-claim novelty matrix.
+- `coopgames/paper3/INTEGRAL_TRACE_OBSTRUCTION.md`: standalone proof that
+  every two-poorer failure forces a nonintegral active trace hypergraph and an
+  odd balanced-matrix obstruction.
 - `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`: standalone
   statement and proof of the complete cardinality phase diagram.
 - `coopgames/paper3/COMPLETE_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`: focused
@@ -97,13 +101,23 @@ falsification searches.  Please do not count their no-hit output as proof.
    16-query verifier is now only an audit and that no payoff-stratum case
    enumeration remains in the proof dependency.  A focused checklist is in
    `coopgames/paper3/N5_HUMAN_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`.
-9. For the six-player upper bound, verify directly that the six displayed
+9. Audit the integral-trace theorem without relying on the small-cardinality
+   classification.  Check that the restricted active-trace polytope is
+   nonempty and bounded; that integrality makes every packet a set partition;
+   that the conditional product lift preserves the original cover; and that
+   a unique gaining poor coordinate forces integer packet load at least one,
+   contradicting strict undercoverage.  For two poorer players, verify that
+   the unique-gainer hypothesis is automatic and that Berge's balanced-matrix
+   theorem really yields the stated odd submatrix.  In the `h>=4` family,
+   verify symbolically that every co-singleton trace is active and that the
+   displayed `3x3` odd-cycle submatrix is present.
+10. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove
    `Lmin=(1,1,2,2,2,2)` without an unstated assumption.
-10. Confirm that `v({3,4,5,6})=6<8=Lmin({3,4,5,6})`, establishing sharp failure
+11. Confirm that `v({3,4,5,6})=6<8=Lmin({3,4,5,6})`, establishing sharp failure
    of the small-poorer conclusion at six.
-11. Audit the dimension-free internal-sacrifice family for every `m>=2` and
+12. Audit the dimension-free internal-sacrifice family for every `m>=2` and
     `h>=4`: common generator totals, singleton normalization, all displayed
     worths, the summed Lmin argument (including the aggregate excess on the
     additional poorer players), the Lmax ceiling argument, and the internal
@@ -111,7 +125,7 @@ falsification searches.  Please do not count their no-hit output as proof.
     particular, confirm that the richer suffix is slack although Lmin=Lmax,
     and assess whether this is already known as a replication construction or
     as a counterexample to necessity of the exact-partition condition.
-12. Audit the universal three-poorer family for every `m>=3,h>=2`: common
+13. Audit the universal three-poorer family for every `m>=3,h>=2`: common
     totals, singleton normalization (including the endpoint `h=2`), the four
     displayed load-bearing values, and each progressive Lmin pinning step.
     Confirm that the proof establishes the claimed `(m-1,1,h)` strata and
@@ -123,7 +137,7 @@ falsification searches.  Please do not count their no-hit output as proof.
     the indecomposability proof separately for `Q` nonempty and for the
     endpoint `m=3`, including the strict four-player interaction attaching
     `p2`.
-13. Check the complete boundary-cardinality phase diagram:
+14. Check the complete boundary-cardinality phase diagram:
     `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
     Verify that the lower bounds cover every excluded pair, the three
     dimension-free families cover every admitted pair, and the theorem is
@@ -147,6 +161,8 @@ core literature:
   and the extent to which these are consequences of known replication theory;
 - the sharp result that a richer Lmin suffix with at most two poorer players is
   tight through five players but can be slack at six;
+- the dimension-free necessity of a nonintegral active trace polytope and odd
+  balanced-matrix obstruction at every two-poorer failure;
 - the fixed six-player integer lower-envelope construction.
 - the integral `m>=2,h>=4` internal-sacrifice family, the internal/external
   sacrifice dichotomy, and the observation that exact partition is not

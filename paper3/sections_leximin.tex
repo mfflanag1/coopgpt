@@ -2825,6 +2825,98 @@ $z(T)-\phi(T)\geq0$ with its packet weights proves
 original poorer loads $c_i<1$, which is \eqref{eq:lx-transport-average}.
 \end{proof}
 
+The preceding theorem forces a fractional hypergraph obstruction whenever the
+poor-side transport has a unique gaining coordinate.  This gives a
+dimension-free condition on the actual tight-coalition geometry, rather than
+only on the number of players.
+
+\begin{definition}[active trace polytope]
+\label{def:lx-active-trace-polytope}
+At a strict Lmin boundary $(L,H)$, let
+\[
+ \mathcal A_\phi(H):=\{T\cap H:\ T\subsetneq N,\
+   \ \phi(T)=v(T),\ T\cap H\ne\varnothing\}
+\]
+and define its fractional exact-cover polytope
+\[
+ \mathcal Q_\phi(H):=
+ \left\{\beta\in\mathbb R_+^{\mathcal A_\phi(H)}:
+   \sum_{R\in\mathcal A_\phi(H)}\beta_R\mathbf1_R
+      =\mathbf1_H\right\}.                         \tag{AT}
+ \label{eq:lx-active-trace-polytope}
+\]
+Call the boundary \emph{trace-integral} if every vertex of
+$\mathcal Q_\phi(H)$ is integral.  An integral point of
+\eqref{eq:lx-active-trace-polytope} is a set partition of $H$.
+\end{definition}
+
+Lemma~\ref{lem:lx-strict-richer-cover} makes
+$\mathcal Q_\phi(H)$ nonempty, and it is bounded because every trace is
+nonempty.
+
+\begin{theorem}[integral-trace obstruction]
+\label{thm:lx-integral-trace-obstruction}
+Let $v$ be exact, let $\phi=\operatorname{Lmin}(v)$, and let $(L,H)$ be a
+strict payoff boundary.  Suppose the exact $H$-face contains a point
+$z\in\core(v)$ such that
+\[
+ z(H)=v(H),\qquad
+ \bigl|\{i\in L:z_i>\phi_i\}\bigr|\leq1.            \tag{IT}
+ \label{eq:lx-integral-trace-witness}
+\]
+If the boundary is trace-integral, then $H$ is tight at $\phi$.
+\end{theorem}
+
+\begin{proof}
+Suppose instead that $s:=\phi(H)-v(H)>0$ and put $\Delta=z-\phi$.
+Normalize the cover from Lemma~\ref{lem:lx-strict-richer-cover} to unit load
+on $H$, discard coalitions disjoint from $H$, and write $c_i<1$ for its loads
+on $L$.  The argument proving \eqref{eq:lx-transport-signs}, applied to this
+chosen $z$, shows that $\Delta_L$ has both signs.  Since
+$\Delta(L)=s>0$, condition \eqref{eq:lx-integral-trace-witness} therefore
+gives a unique $b\in L$ with $\Delta_b>0$, while
+$\Delta_i\leq0$ for $i\ne b$.
+
+The projected cover lies in $\mathcal Q_\phi(H)$.  Trace integrality
+decomposes it into a convex mixture of integral points, hence set partitions
+of $H$.  Lift every partition to deterministic original tight coalitions by
+the same conditional product construction used in
+Theorem~\ref{thm:lx-balanced-trace-transport}.  In a lifted partition packet
+the poorer-player loads $r_i$ are nonnegative integers, and its tight
+coalition inequalities at $z$ give
+\[
+ -s+\sum_{i\in L}r_i\Delta_i\geq0.                  \tag{IT-P}
+ \label{eq:lx-integral-trace-packet}
+\]
+If $r_b=0$, the left side is at most $-s$, so every packet has $r_b\geq1$.
+Averaging gives $c_b\geq1$, contradicting $c_b<1$.
+\end{proof}
+
+Equivalently, if a trace-integral boundary is slack, then every core point
+exact on $H$ has at least two gaining poorer coordinates; the sign argument
+also gives at least one losing poorer coordinate.  Thus trace-integral slack
+requires at least three poorer players.  This sign-complexity statement is
+independent of $|H|$.
+
+\begin{corollary}[odd-trace-cycle necessity]
+\label{cor:lx-odd-trace-cycle}
+With exactly two poorer players, every slack richer Lmin suffix has a
+nonintegral active trace polytope.  Consequently its player-by-trace incidence
+matrix is not balanced and contains an odd-order square submatrix with exactly
+two ones in every row and column.
+\end{corollary}
+
+\begin{proof}
+Exactness supplies $z$ exact on $H$.  Under slack,
+applying the normalized strict cover to this $z$, exactly as in the proof of
+\eqref{eq:lx-transport-signs}, makes its two poor displacements have opposite
+signs.  Thus \eqref{eq:lx-integral-trace-witness} holds.  Theorem
+\ref{thm:lx-integral-trace-obstruction} rules out integrality.  A balanced
+zero--one matrix has an integral set-partitioning polytope
+\citep{Berge1972}; taking the contrapositive and the defining forbidden
+submatrix characterization of balanced matrices gives the odd trace cycle.
+\end{proof}
+
 \begin{theorem}[human two-poorer boundary threshold]
 \label{thm:lx-small-poorer-threshold}
 Let $v$ be a singleton-normalized exact game, let
@@ -2845,9 +2937,10 @@ players so that
  \label{eq:lx-trace-packet-signs}
 \]
 
-Use the lifted packet mixture supplied by that theorem.  When $|H|\leq2$,
-every minimal balanced packet is a set partition.  When $H=\{c,d,e\}$, the
-only additional packet is
+Corollary~\ref{cor:lx-odd-trace-cycle} already rules out $|H|\leq2$, since
+every minimal balanced packet is then a set partition.  It remains to treat
+$H=\{c,d,e\}$.  Use the lifted packet mixture supplied by
+Theorem~\ref{thm:lx-balanced-trace-transport}.  The only nonpartition packet is
 \[
  \tfrac12\{\{c,d\},\{c,e\},\{d,e\}\}.        \tag{TP-2}
  \label{eq:lx-rich-trace-triangle}
@@ -2858,14 +2951,10 @@ For one packet write $r_a,r_b$ for its poorer-player loads; by
  -s+r_a\Delta_a+r_b\Delta_b\geq0.                 \tag{TP-3}
  \label{eq:lx-trace-packet-carrier}
 \]
-For a partition packet the coalition weights are one, hence $r_a,r_b$ are
-nonnegative integers.  Equation \eqref{eq:lx-trace-packet-carrier} and
-$\Delta_a<0$ rule out $r_b=0$; every partition packet therefore loads $b$ at
-least once.  If $|H|\leq2$, averaging contradicts
-\eqref{eq:lx-transport-average}.
-
-It remains to treat $|H|=3$.  Since the total load on $b$ is strictly below
-one, some triangle packet in \eqref{eq:lx-rich-trace-triangle} has
+For a partition packet the coalition weights are one, hence
+\eqref{eq:lx-trace-packet-carrier} forces its integer load on $b$ to be at
+least one.  Since the average load on $b$ is strictly below one, some triangle
+packet in \eqref{eq:lx-rich-trace-triangle} has
 $r_b<1$.  Write $r_i=k_i/2$, where $k_i$ counts the triangle coalitions
 carrying poorer player $i$.  Inequality \eqref{eq:lx-trace-packet-carrier}
 first rules out $k_b=0$, so $k_b=1$.  If $k_a\geq1$, its left side is at most
@@ -3053,6 +3142,22 @@ richer block, in contrast with the poorer-singleton funding in
 and generic staged replay at $(m,h)=(2,4)$ are
 \path{src/verify_two_poorer_rich_family.py} and
 \path{results/two_poorer_rich_family.json}.
+
+This family also meets the necessary hypergraph obstruction in
+Corollary~\ref{cor:lx-odd-trace-cycle} symbolically.  The coalitions in
+\eqref{eq:lx-two-poorer-family-tight} have every co-singleton
+$H\setminus\{x\}$ as an active rich trace.  Weighting all $h$ co-singletons
+by $1/(h-1)$ gives a fractional exact cover.  Its support matrix is $J-I$,
+which is nonsingular, so it is a fractional vertex of the full active-trace
+polytope.  For any three distinct
+$x_1,x_2,x_3\in H$, restricting the three corresponding trace columns to
+the same three player rows gives
+\[
+ \begin{pmatrix}0&1&1\\1&0&1\\1&1&0\end{pmatrix},
+\]
+the smallest odd balanced-matrix obstruction.  Thus the sharpness family does
+not merely have enough players: it realizes exactly the nonintegral trace
+geometry forced by every two-poorer failure.
 \end{proof}
 
 There is a second external-sacrifice family.  It extends the three-poorer,

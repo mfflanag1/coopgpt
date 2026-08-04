@@ -189,6 +189,17 @@ bound without payoff-stratum enumeration.  The old 16 exact-rational queries
 remain a definition-level audit, not proof evidence on which the theorem
 depends.
 
+There is also a dimension-free hypergraph formulation.  Let the active trace
+polytope consist of nonnegative exact covers of `H` by traces of proper
+`phi`-tight coalitions.  With two poorer players, slack forces this polytope
+to be nonintegral: if it were integral, every lifted packet would be a set
+partition, whose integer load on the unique gaining poor player must be at
+least one, contradicting strict undercoverage.  Berge's balanced-matrix
+theorem then implies that every two-poorer failure in every dimension contains
+an odd active-trace cycle.  The complete proof and the symbolic co-singleton
+cycle in the `h>=4` family are in
+`paper3/INTEGRAL_TRACE_OBSTRUCTION.md`.
+
 ## Reproduction
 
 The first command replays the superseded finite lower-bound audit; the second
