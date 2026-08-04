@@ -17,6 +17,7 @@ Review the commit identified in the accompanying pull request, especially:
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`;
 - `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`;
 - `coopgames/paper3/PROPERTY_I_STRICT_COVER_AUDIT.md`;
+- `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`;
 - `coopgames/src/verify_n5_small_poorer_suffix.py` and
   `coopgames/results/n5_small_poorer_suffix.json` only as an independent
   computational audit;
@@ -60,14 +61,21 @@ Review the commit identified in the accompanying pull request, especially:
    `{c,d}`, `{c,e}`, `{b,d,e}`, and that exactness of singleton `{d}` yields
    the stated strict efficiency contradiction using only singleton
    normalization and the strict payoff boundary.
-8. Confirm the scope: the theorem handles one poorer player in every
+8. Audit the dimension-free rank-two trace exclusion. Check the
+   extreme-point support classification for singleton/pair traces, including
+   singleton columns and disconnected or multiple odd-cycle components.
+   Verify the deduction `r_b=1/2,r_a=0`, the alternating rounding of the one
+   cycle containing the gaining-poor edge, and that untouched components
+   preserve exact rich load and add no poor load. Then check the exact
+   singleton efficiency contradiction.
+9. Confirm the scope: the theorem handles one poorer player in every
    dimension and exactly two poorer players with at most three richer players;
    it does not settle the strips with three or more poorer players.
-9. Search the exact-game, Lorenz/Lmin, exact-partition, and minimal-balanced-
+10. Search the exact-game, Lorenz/Lmin, exact-partition, and minimal-balanced-
    collection literature for this particular sharp rich-side threshold or an
    argument that subsumes it.  Do not credit the manuscript with inventing
    minimal balanced collections.
-10. Replay both exact-rational verifiers and compare their JSON output byte for
+11. Replay both exact-rational verifiers and compare their JSON output byte for
     byte, but treat those results as audit conveniences rather than independent
     proof evidence.
 

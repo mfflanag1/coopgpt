@@ -74,6 +74,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Every exact game with at most four players is exact partition at Lmin | Not found | Present as apparent new strengthening, pending specialist review. |
 | Hierarchical dual covers plus exact-face witnesses yield balanced-trace transport | Not found | Present as the apparent new proof mechanism, pending terminology review. |
 | Every two-poorer failure forces a nonintegral active trace polytope/odd trace cycle | Not found; Berge's matrix-integrality theorem is classical | Present only as a new bridge from Lmin geometry to known balanced-matrix theory. |
+| Every two-poorer failure has an active trace of size at least three | Not found; half-integrality of graph exact covers is standard | Present as a candidate new exact-game realizability exclusion, pending specialist review. |
 | Complete boundary staircase `4,3,3,2` | Not found | Present as apparent new classification. |
 | Universal indecomposable family for every `m>=3,h>=2` | Not found | Present as apparent new sharpness construction. |
 | Closed-form Lmax and distance `4h/(h+1)` for that family | Not found | Present as an additional explicit result, not the core novelty claim. |
@@ -115,6 +116,7 @@ transport; trace; normal cone; Kohlberg criterion
 dimension; cardinality; indecomposable; replication
 balanced matrix; set partitioning; active trace; odd cycle
 property I; hierarchical tight-coalition criterion; complement-tight coalition
+fractional matching; rank-two trace; graph exact cover; odd-cycle rounding
 ```
 
 The full texts inspected include Arin--Kuipers--Vermeulen (2008), Definition 3

@@ -22,6 +22,8 @@ or any of the following sharp consequences:
 - with exactly two poorer players, a slack richer suffix is impossible for at
   most three richer players and possible for every richer-block size at least
   four;
+- every two-poorer slack boundary is genuinely hypergraphic: some active
+  rich-side trace has cardinality at least three;
 - the complete boundary-cardinality phase diagram
   `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
 
@@ -115,6 +117,10 @@ cooperative game "transport" "minimal balanced collection" egalitarian
 "property I" Lmin Lmax tight coalitions
 "property I" egalitarian TU-games
 "complement tight" Lmin lexmin
+"Lmin" "odd cycle" cooperative game exact
+"lexmin" "fractional matching" cooperative game
+"egalitarian" "balanced matrix" TU game
+"exact partition game" hypergraph trace
 ```
 
 The primary texts inspected include Arin--Kuipers--Vermeulen (2008), especially
@@ -124,7 +130,9 @@ the papers above, including the 2017 exact-partition paper, the 2020
 antiduality paper, the 2021 monotonicity paper, the 2012 minimal
 exact-balancedness paper, the 2025 minimal-balanced-collection survey, and
 Berge's classical balanced-matrix paper.  No source found in this search
-forces nonintegrality or an odd trace cycle from a slack Lmin boundary.
+forces nonintegrality or an odd trace cycle from a slack Lmin boundary, or
+rules out every rank-two active trace system by combining odd-cycle rounding
+with exact singleton faces.
 
 ## Defensible novelty statement
 
@@ -136,7 +144,8 @@ Pending expert review, the strongest defensible formulation is:
 > yields a human exact-partition classification through four players and a
 > sharp `2|3` versus `2|4` richer-side threshold.  Every two-poorer failure
 > moreover forces a nonintegral active trace hypergraph, hence an odd
-> balanced-matrix obstruction.  Three explicit universal
+> balanced-matrix obstruction, and graph-like trace systems are ruled out
+> entirely. Three explicit universal
 > families then give a complete classification of the boundary-side
 > cardinalities compatible with slack.  We do not claim the Lmin solution,
 > exact partition games, their published Lorenz consequence, exact

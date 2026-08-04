@@ -24,6 +24,7 @@ Primary files:
 - `coopgames/paper3/EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`.
 - `coopgames/paper3/INTEGRAL_TRACE_OBSTRUCTION.md`.
 - `coopgames/paper3/PROPERTY_I_STRICT_COVER_AUDIT.md`.
+- `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`.
 
 The broader dependency chain is the strict-cover lemma, balanced-trace
 transport theorem, unique-richest theorem, human two-poorer theorem, and
@@ -85,6 +86,12 @@ paper.  Audit those dependencies if any cited implication is unclear.
    Confirm that every co-singleton is an active trace in the `m=2,h>=4`
    family and that its symbolic `3x3` odd cycle supplies the required
    nonintegrality in every dimension.
+10. Check the rank-two trace exclusion in arbitrary dimension. In particular,
+    verify the support-component classification for the graph exact-cover
+    polytope, the selection of a packet with poor load `r_b=1/2,r_a=0`, the
+    alternating rounding of only the cycle containing the unique `b` edge,
+    and the exact-singleton efficiency contradiction. Check that untouched
+    fractional components retain unit rich load and introduce no poor load.
 
 ## Independent reproduction
 
@@ -120,6 +127,8 @@ any prior source contains:
 - the balanced-trace transport bridge used for the lower bounds.
 - the theorem that every two-poorer failure forces a nonintegral active trace
   exact-cover polytope and hence an odd balanced-matrix obstruction.
+- the theorem that every two-poorer failure requires an active trace of
+  cardinality at least three.
 
 Treat property I and its antidual Lmin form as established prior art. Decide
 separately whether the simultaneous strict-cover certificate is merely a

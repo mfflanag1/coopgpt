@@ -117,6 +117,21 @@ Consequently:
 This is a dimension-free necessary condition on the actual tight-coalition
 geometry of the game, not merely on the cardinalities `(|L|,|H|)`.
 
+There is a further dimension-free exclusion. If every active trace has size
+at most two, every extreme exact cover is a union of singleton blocks,
+isolated edges, and half-weight odd cycles. In the packet whose gaining-poor
+load is below one, transport forces exactly one odd-cycle edge to carry that
+poor player and no edge to carry the losing poor player. Alternating-rounding
+that odd cycle duplicates one rich vertex; exactifying its singleton then
+contradicts efficiency. Thus:
+
+> **Every slack two-poorer boundary has an active trace of size at least
+> three.**
+
+The full proof is in [`RANK_TWO_TRACE_EXCLUSION.md`](RANK_TWO_TRACE_EXCLUSION.md)
+and Theorem `thm:lx-rank-two-trace-exclusion` of the manuscript. Hence the
+necessary obstruction is genuinely hypergraphic, not a bare graph odd cycle.
+
 ## How it explains the sharp threshold
 
 - For `|H|<=2`, every minimal balanced trace packet is a set partition, so
@@ -154,7 +169,8 @@ This result turns the finite-looking threshold into a general hypergraph
 obstruction.  It does **not** classify all nonintegral active trace
 hypergraphs, nor does nonintegrality by itself guarantee realizability by an
 exact game.  The next major target is a converse or minor theorem describing
-which odd trace cycles survive the exact-face and Lmin constraints.
+which rank-three and higher odd trace obstructions survive the exact-face and
+Lmin constraints.
 
 Classical prior art retained explicitly:
 

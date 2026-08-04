@@ -219,6 +219,18 @@ Equivalently, trace-integral slack forces every exact suffix witness to have
 at least two gaining and at least one losing poorer coordinate.  It therefore
 requires at least three poorer players in every dimension.
 
+The graph-like case can be eliminated completely. If every active trace on
+`H` has size at most two, each extreme exact cover is a disjoint union of
+singleton blocks, isolated edges, and half-weight odd cycles. A packet with
+gaining-poor load below one must put that poor player on exactly one
+half-weight cycle edge and put the losing poor player on none. Alternating
+rounding of that odd cycle gives a tight-coalition combination with load
+`1_H+e_d+e_b`. Exactifying the duplicated rich singleton `d` contradicts
+efficiency because `phi_d>phi_a`. Therefore every two-poorer slack boundary
+has a proper tight coalition whose rich trace has size at least three. This is
+the dimension-free **rank-two trace exclusion** proved in
+`paper3/RANK_TWO_TRACE_EXCLUSION.md`.
+
 For the internal-sacrifice family, all co-singletons `H\{x}` are active
 traces.  Weighting them by `1/(h-1)` gives a fractional exact cover; its
 support matrix `J-I` is nonsingular, so the point is a fractional vertex.

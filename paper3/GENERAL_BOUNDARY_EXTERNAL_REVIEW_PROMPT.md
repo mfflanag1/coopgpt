@@ -11,7 +11,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `lem:lx-exact-balanced-slack`, `lem:lx-boundary-cover`,
   `cor:lx-boundary-defect`, `lem:lx-strict-richer-cover`,
   `thm:lx-balanced-trace-transport`,
-  `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`, and
+  `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
+  `thm:lx-rank-two-trace-exclusion`, and
   `thm:lx-small-poorer-threshold`.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
@@ -28,6 +29,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/INTEGRAL_TRACE_OBSTRUCTION.md`: standalone proof that
   every two-poorer failure forces a nonintegral active trace hypergraph and an
   odd balanced-matrix obstruction.
+- `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`: standalone dimension-free
+  proof that graph-like active traces cannot realize a two-poorer failure.
 - `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`: standalone
   statement and proof of the complete cardinality phase diagram.
 - `coopgames/paper3/COMPLETE_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`: focused
@@ -118,6 +121,13 @@ falsification searches.  Please do not count their no-hit output as proof.
    theorem really yields the stated odd submatrix.  In the `h>=4` family,
    verify symbolically that every co-singleton trace is active and that the
    displayed `3x3` odd-cycle submatrix is present.
+   Then audit the rank-two trace exclusion: prove the extreme-point support
+   decomposition into singleton blocks, isolated edges, and half-weight odd
+   cycles; check the half-integer poor-load argument; and verify that
+   alternating rounding really gives load `1_H+e_d+e_b` before the exact
+   singleton/efficiency contradiction. Look for a hidden problem caused by
+   multiple odd-cycle components or by lifting duplicate traces to original
+   coalitions.
 10. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove
@@ -170,6 +180,8 @@ core literature:
   tight through five players but can be slack at six;
 - the dimension-free necessity of a nonintegral active trace polytope and odd
   balanced-matrix obstruction at every two-poorer failure;
+- the dimension-free rank-two trace exclusion, equivalently that every
+  two-poorer failure requires an active trace of size at least three;
 - the fixed six-player integer lower-envelope construction.
 - the integral `m>=2,h>=4` internal-sacrifice family, the internal/external
   sacrifice dichotomy, and the observation that exact partition is not
