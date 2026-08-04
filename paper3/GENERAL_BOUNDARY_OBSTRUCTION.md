@@ -281,11 +281,13 @@ rows containing every positive `V`-row produces a proper internal rich face
 `D` with
 
 ```text
-k [phi(D)-v(D)] <= [s|V|-u(D)] phi_a.
+phi(H)-v(H) < phi(D)-v(D) <= [s|V|-u(D)] phi_a/k.
 ```
 
 Thus every positive Lehman packet has a canonical recursive face certificate,
-not merely the packets caught by a safe singleton root.
+not merely the packets caught by a safe singleton root. In particular, a
+positive Lehman obstruction strictly amplifies slack onto a proper internal
+rich coalition; it cannot be a terminal obstruction.
 
 The graph-like case can be eliminated completely. If every active trace on
 `H` has size at most two, each extreme exact cover is a disjoint union of

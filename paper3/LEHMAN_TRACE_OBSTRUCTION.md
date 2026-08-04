@@ -91,13 +91,21 @@ losing-poor load = u(D)/T < 1.
 The exact-face overload budget therefore forces
 
 ```text
-k [phi(D)-v(D)] <= [T-u(D)] phi_a,                  (LH-F)
+phi(H)-v(H) < phi(D)-v(D) <= [T-u(D)] phi_a/k.      (LH-F)
 ```
 
-where `a` is the losing poor player. Thus every positive Lehman packet,
-including any packet outside the density theorem, canonically exposes a
-proper internal rich face with a quantitative slack budget. This is the
-candidate recursive invariant for lifting minimally-nonideal contractions.
+For the strict inequality, evaluate each dual row outside `D` at the core
+point exact on `H`. Such a row carries no gaining-poor label, so its rooted
+tight-coalition sum forces the corresponding rich displacement to be
+positive. Every rich player outside `D` therefore gains, while `H` loses its
+total suffix slack. The displacement of `D` is consequently more negative
+than that total slack, and core feasibility converts this into the strict
+lower bound above.
+
+Thus every positive Lehman packet, including any packet outside the density
+theorem, canonically amplifies the suffix slack onto a proper internal rich
+face. This is the candidate recursive invariant for lifting
+minimally-nonideal contractions.
 
 ## Structural significance
 

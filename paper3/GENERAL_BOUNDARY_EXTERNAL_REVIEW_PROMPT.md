@@ -166,6 +166,10 @@ falsification searches.  Please do not count their no-hit output as proof.
    Audit the canonical internal-face corollary separately: check
    `k+1<=s`, the strict count `s|V|<|H|`, construction of the row set `D`,
    both poor loads after averaging, and every factor of `|D|` in `(LH-F)`.
+   Then check the new strict lower bound: for every dual row outside `D`,
+   verify the displacement inequality, positivity of its root coordinate,
+   strict negativity of `Delta(D)`, and the conversion
+   `v(D)<=z(D)` into slack amplification.
    Assess whether this certificate is strong enough to support a recursive
    minor-lifting theorem or is only a weak necessary inequality.
    Then audit the rank-two trace exclusion: prove the extreme-point support
