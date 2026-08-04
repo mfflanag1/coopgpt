@@ -11,6 +11,9 @@ commit supplied with this packet.
 - `paper3/LAMINAR_LMIN_DOMAIN_THEOREM.md` — laminar endpoint of uncrossing.
 - `src/verify_lmin_uncrossing_domain.py` — exact audit.
 - `results/lmin_uncrossing_domain.json` — reproducible output.
+- `paper3/UNCROSSING_DEFECT_BUDGET.md` — quantitative conservation theorem.
+- `src/verify_uncrossing_defect_budget.py` and
+  `results/uncrossing_defect_budget.json` — exact two-family audit.
 - `paper3/wrapper.pdf` — compiled paper.
 
 ## Central claim
@@ -44,12 +47,22 @@ only to pairs tight at `phi=Lmin(v)` implies exact partition at Lmin.
    unnecessary once the strict cover is assumed.
 9. Assess whether the result is genuinely broader than the known convex-game
    domain and whether the supplied nonconvex example demonstrates that point.
+10. Audit the quantitative uncrossing-defect budget separately.  Verify the
+    termination argument, extraction of the final partition, exact-balanced
+    partition inequality, telescoping signed-defect identity, multiplicity
+    factor `m`, and the claim that any strict real cover can be replaced by a
+    rational one and scaled to the integer theorem.
+11. Search for the quantitative conservation identity in submodular-function,
+    skew-supermodular uncrossing, cooperative-game exactness, and core-face
+    literature.  The algebra may be standard even if this application is not.
 
 ## Reproduction
 
 ```bash
 python src/verify_lmin_uncrossing_domain.py \
   --output results/lmin_uncrossing_domain.json
+python src/verify_uncrossing_defect_budget.py \
+  --output results/uncrossing_defect_budget.json
 cd paper3
 pdflatex -interaction=nonstopmode -halt-on-error wrapper.tex
 pdflatex -interaction=nonstopmode -halt-on-error wrapper.tex

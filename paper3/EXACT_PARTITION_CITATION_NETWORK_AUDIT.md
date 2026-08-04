@@ -99,6 +99,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Universal indecomposable family for every `m>=3,h>=2` | Not found | Present as apparent new sharpness construction. |
 | Closed-form Lmax and distance `4h/(h+1)` for that family | Not found | Present as an additional explicit result, not the core novelty claim. |
 | Supermodularity only on Lmin-tight pairs forces exact partition; every failure has a minimum-energy crossing pair with positive uncrossing defect | Not found; uncrossing and convex-game egalitarian results are classical | Present the local-at-Lmin domain and converse defect as candidate new; do not claim uncrossing, supermodularity, or the convex-game consequence themselves. |
+| Along an integral uncrossing, signed local supermodularity defects telescope exactly to final weighted core slack and quantitatively bound target-face slack | Not found; slack telescoping and uncrossing energy are elementary/classical mechanisms | Present the exact-face defect budget as a candidate new bridge, not a new uncrossing identity, pending submodular-optimization and exact-game review. |
 
 ## Why the known four-player theorem does not subsume this one
 

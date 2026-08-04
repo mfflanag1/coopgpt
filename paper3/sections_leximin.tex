@@ -2940,6 +2940,71 @@ $\phi$ and tightness of $A,B$ give the equality in
 \eqref{eq:lx-uncrossing-defect}; at least one derived-set slack is positive.
 \end{proof}
 
+The broken-diamond obstruction has a quantitative conservation law.  For a
+core point $\phi$, write
+\[
+ D_\phi(A,B):=v(A)+v(B)-v(A\cap B)-v(A\cup B).
+\]
+
+\begin{theorem}[uncrossing-defect budget]
+\label{thm:lx-uncrossing-defect-budget}
+Let $v$ be exact, let $\phi\in\core(v)$, and let
+$\varnothing\ne H\subsetneq N$.  Suppose an integer multiset of proper
+$\phi$-tight coalitions has common load $k>0$ on $H$ and load at most $k-1$
+on $N\setminus H$.  Repeatedly uncross a positive pair $A_t,B_t$, with
+$\delta_t$ equal to the smaller multiplicity, until the support is laminar.
+From the final multiplicities $\mu$, extract the partition $\mathcal P$ of
+$H$ formed by the maximal minimal supported sets containing its players, and
+put $m=\min_{B\in\mathcal P}\mu_B$.  Then
+\[
+ 0\leq m s_\phi(H)
+ \leq \sum_S\mu_Ss_\phi(S)
+ =\sum_t\delta_tD_\phi(A_t,B_t).                     \tag{UDB}
+ \label{eq:lx-uncrossing-defect-budget}
+\]
+The procedure terminates after finitely many steps.
+\end{theorem}
+
+\begin{proof}
+Each uncrossing preserves player loads and lowers the integer energy
+$\sum_S\lambda_S|S|(n-|S|)$ by
+$2\delta_t|A_t\setminus B_t|\,|B_t\setminus A_t|>0$.
+Thus the procedure terminates with laminar support.  The minimal-set argument
+from Theorem~\ref{thm:lx-laminar-strict-cover} applies without tightness of
+the final sets: if a minimal set containing $h\in H$ also contained
+$i\notin H$, laminarity would make the final load of $i$ at least $k$.
+Hence the maximal minimal sets form a partition $\mathcal P$ of $H$.
+
+Initially the weighted slack is zero.  One uncrossing changes it by
+\[
+ \delta_t\{s_\phi(A_t\cap B_t)+s_\phi(A_t\cup B_t)
+            -s_\phi(A_t)-s_\phi(B_t)\}
+ =\delta_tD_\phi(A_t,B_t),
+\]
+so telescoping proves the equality in
+\eqref{eq:lx-uncrossing-defect-budget}.  Final slacks are nonnegative and
+every block of $\mathcal P$ has multiplicity at least $m$.  Exact balancedness
+applied with weight one on the partition blocks, minus one on $H$, and plus
+one on $N$ gives
+$v(H)\geq\sum_{B\in\mathcal P}v(B)$, hence
+$s_\phi(H)\leq\sum_{B\in\mathcal P}s_\phi(B)$.  Multiplying by $m$ proves
+the inequalities.
+\end{proof}
+
+Thus local supermodularity defects do not merely witness failure: their signed
+cumulative total exactly equals the weighted slack created by uncrossing and
+must finance the target-face slack.  Any rational strict cover can be scaled
+to the integer form above; in particular, the strict-cover polyhedron at an
+Lmin boundary is rational.  The sharp five-player cover has cumulative defect
+two and target slack one.  The three-column seven-player cover uncrosses in
+two steps with defects $3$ and $3/2$, again funding unit target slack.  A
+standalone proof and exact audit are
+\begin{center}
+\small\path{paper3/UNCROSSING_DEFECT_BUDGET.md},\\[-2pt]
+\small\path{src/verify_uncrossing_defect_budget.py},\\[-2pt]
+\small\path{results/uncrossing_defect_budget.json}.
+\end{center}
+
 \begin{corollary}[Lmin local-supermodularity domain]
 \label{cor:lx-local-supermodular-lmin}
 Every singleton-normalized exact Lmin-locally supermodular game is an exact
