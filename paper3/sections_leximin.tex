@@ -4056,10 +4056,96 @@ The classification has a direct interpretation in imprecise probability.
 The correspondence itself is established prior art: a coherent lower
 probability on a finite state space is a normalized nonnegative exact game,
 and its induced credal set is the game core
-\citep{StudenyKratochvil2017}.  The following sharp selection consequence is
-the candidate cross-field contribution.
+\citep{StudenyKratochvil2017}.  Together with the low-dimensional geometry of
+credal sets, the structural theorem gives a two-row phase diagram.
 
-\begin{corollary}[sharp credal Lorenz threshold]
+\begin{theorem}[finite-state credal Lorenz phase diagram]
+\label{thm:lx-credal-lorenz-phase-diagram}
+Every coherent lower probability on at most three states has a unique
+Lorenz-dominating distribution in its induced credal set, and four states are
+sharp.  If all singleton lower probabilities vanish, the guarantee extends
+through four states, and five states are sharp.
+\end{theorem}
+
+\begin{proof}
+For the first claim put
+$\ell_i=\underline P(\{i\})$ and
+$u_i=1-\underline P(\Omega\setminus\{i\})$.  Through three states every
+nontrivial event is a singleton or a singleton complement, so the credal set
+is exactly
+\[
+ K=\{p:\ p(\Omega)=1,\ \ell_i\leq p_i\leq u_i\ \ (i\in\Omega)\}.
+ \tag{BS}\label{eq:lx-credal-box-slice}
+\]
+Choose $\lambda$ so that
+$p_i^*=\min\{u_i,\max\{\ell_i,\lambda\}\}$ sums to one.  For any
+$p\in K\setminus\{p^*\}$, efficiency supplies $i,j$ with
+$p_i<p_i^*$ and $p_j>p_j^*$.  The box projection gives
+\[
+ p_i<p_i^*\leq\lambda\leq p_j^*<p_j.
+\]
+Transferring mass from $j$ to $i$ until one discrepancy disappears stays in
+$K$ and is a Pigou--Dalton equalizing transfer.  Repetition reaches $p^*$,
+which therefore Lorenz-dominates every $p\in K$.  This box slice is also the
+base polytope of the submodular function
+\[
+ f(A)=\ell(A)+\min\{(u-\ell)(A),1-\ell(\Omega)\},
+\]
+connecting the argument to the established lexicographically optimal-base
+theory \citep{Fujishige1980,FrankMurota2022}.
+
+For sharpness at four states, take the coherent lower envelope of
+\[
+ g^1=\frac1{48}(23,7,9,9),\qquad
+ g^2=\frac1{48}(13,13,2,20).
+ \tag{CLP4}\label{eq:lx-credal-four-generators}
+\]
+Its inequalities include
+$p_1+p_2\geq13/24$ and $p_1+p_4\geq2/3$, the latter equivalently giving
+$p_2+p_3\leq1/3$.  Direct substitution verifies feasibility of
+\[
+ \phi=(3/8,1/6,1/6,7/24),\qquad
+ \psi=(1/3,5/24,1/8,1/3).
+\]
+The upper bound on $p_2+p_3$ first pins the largest possible minimum at
+$1/6$; the first displayed lower bound then gives $p_4\leq7/24$, pinning the
+next increasing stage at $p_4=7/24$ and hence $p_1=3/8$, so
+$\phi$ is uniquely increasingly maximal.  The bound on $p_1+p_4$ pins the
+smallest possible maximum at $1/3$; the first lower bound pins the next
+decreasing stage, so $\psi$ is uniquely decreasingly minimal.  Their
+increasing cumulative sums are
+\[
+ (1/6,1/3,5/8,1),\qquad (1/8,1/3,2/3,1),
+\]
+and therefore cross.  No Lorenz-dominating point exists.
+
+The atom-vacuous through-four assertion is Corollary
+\ref{cor:lx-circuit-four-five-threshold} under the exact-game correspondence;
+the five-state witness is proved in Corollary
+\ref{cor:lx-credal-four-five-threshold} below.
+\end{proof}
+
+The first row fails precisely when genuinely coupled two-state event
+inequalities first appear.  The second row shows that vanishing atom floors
+buy exactly one additional state.  The candidate cross-field contribution is
+this combined sharp phase diagram, not the established correspondence or
+base-polyhedron theorem.  An independent $3/4$ structural transition is known
+for extreme coherent lower previsions: their geometry changes sharply from
+three states to four \citep{DeBockDeCooman2015}.  Extreme coherent lower
+probabilities have also been classified polyhedrally
+\citep{QuaeghebeurDeCooman2008}; neither source states a Lorenz selector or
+the two thresholds above.  The coincidence makes the boundary more
+structurally credible, but is not itself novelty evidence.
+
+The standalone proof, exact four-state replay, and hostile-review request are
+\begin{center}
+\small\path{paper3/CREDAL_LORENZ_PHASE_DIAGRAM.md},\\[-2pt]
+\small\path{src/verify_credal_lorenz_phase_diagram.py},\\[-2pt]
+\small\path{results/credal_lorenz_phase_diagram.json},\\[-2pt]
+\small\path{paper3/CREDAL_LORENZ_PHASE_DIAGRAM_EXTERNAL_REVIEW_PROMPT.md}.
+\end{center}
+
+\begin{corollary}[sharp atom-vacuous credal Lorenz threshold]
 \label{cor:lx-credal-four-five-threshold}
 Let $\underline P$ be a coherent lower probability on a state space $\Omega$
 with $|\Omega|\leq4$ and

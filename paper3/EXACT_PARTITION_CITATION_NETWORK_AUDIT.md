@@ -237,3 +237,24 @@ five-state model need not. Negative keyword evidence is not a novelty proof.
 The manuscript therefore claims only a candidate cross-field corollary of the
 new structural four-player theorem and explicitly requests review by an
 imprecise-probability or polymatroid specialist.
+
+### Two-threshold phase diagram
+
+The stronger synthesis separates two universal statements. Arbitrary
+coherent lower probabilities have a Lorenz-dominating induced probability
+through three states, with sharp failure at four. Atom-vacuous coherent lower
+probabilities extend the guarantee through four, with sharp failure at five.
+The lower row follows from the new cooperative-game classification. The upper
+row follows structurally because through three states every event constraint
+is a singleton bound or its complementary upper bound, making the credal set
+a box-slice base polytope; coupled pair-event constraints first appear at
+four.
+
+De Bock and de Cooman (2015) establish a different sharp `3/4` transition for
+the extremal geometry of coherent lower previsions, and Quaeghebeur and de
+Cooman (2008) classify extreme lower probabilities. Full-text searches of
+both found no `Lorenz`, `lexic`, or `majoriz` terminology. This is meaningful
+adjacent prior art and makes the four-state boundary less accidental, but it
+does not establish novelty of the selection theorem. The combined `3/4` and
+`4/5` Lorenz phase diagram remains a candidate contribution requiring an
+imprecise-probability specialist's review.
