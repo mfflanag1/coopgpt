@@ -1,8 +1,9 @@
-"""Exact audit of the two-sided trace-coupling normal form.
+"""Exact audit of two-sided coupling and universal slack ascent.
 
-The theorem is a coordinatewise identity.  This script checks its forward
-and reverse forms on symbolic obstruction families; it is not independent
-proof evidence.
+The theorems are coordinatewise identities plus exact-balancedness. This
+script checks their forward and reverse forms on symbolic obstruction
+families and reconstructs the sharp slacks from three exact games; it is not
+independent proof evidence.
 """
 from __future__ import annotations
 
@@ -23,6 +24,11 @@ from verify_two_poorer_rich_family import (
     generators as internal_generators,
     lower_envelope as internal_lower_envelope,
 )
+from verify_n5_exact_leximin_monotonicity_counterexample import (
+    BASE_GENERATORS,
+    PHI_BASE,
+    lower_envelope as five_lower_envelope,
+)
 
 
 def vector(n, coalition):
@@ -41,7 +47,7 @@ def members(n, coalition):
     return [i + 1 for i in range(n) if coalition >> i & 1]
 
 
-def canonical_packet(name, poor_loads, root_slack=None, completion_slacks=None):
+def canonical_cover(name, poor_loads, root_slack=None, completion_slacks=None):
     loads = tuple(F(value) for value in poor_loads)
     maximum = max(loads)
     completion = tuple(maximum - value for value in loads)
@@ -49,7 +55,7 @@ def canonical_packet(name, poor_loads, root_slack=None, completion_slacks=None):
     if excess != F(1) - maximum + sum(completion, F(0)):
         raise AssertionError(f"{name}: canonical excess identity failed")
     if excess <= 0:
-        raise AssertionError(f"{name}: packet does not have positive excess")
+        raise AssertionError(f"{name}: cover does not have positive excess")
     result = {
         "name": name,
         "poor_loads": [str(value) for value in loads],
@@ -60,7 +66,7 @@ def canonical_packet(name, poor_loads, root_slack=None, completion_slacks=None):
     completion_mass = sum(completion, F(0))
     if maximum < 1:
         if completion_mass <= 0:
-            raise AssertionError(f"{name}: underloaded packet cannot transfer slack")
+            raise AssertionError(f"{name}: underloaded cover cannot transfer slack")
         result["strict_slack_amplification_factor"] = str(excess / completion_mass)
     if root_slack is not None or completion_slacks is not None:
         if root_slack is None or completion_slacks is None:
@@ -85,7 +91,7 @@ def canonical_packet(name, poor_loads, root_slack=None, completion_slacks=None):
 
 
 def realized_slack_transfer_audits():
-    """Recompute the sharp packet slacks from the two exact-game families."""
+    """Recompute sharp cover slacks from three defining exact games."""
     three_points = three_vertices(1, 2, 2)
     three_game = three_lower_envelope(three_points)
     three_phi = tuple([F(1), F(1)] + [F(2)] * 5)
@@ -117,7 +123,41 @@ def realized_slack_transfer_audits():
         - internal_values[internal_completion]
     )
 
-    three_audit = canonical_packet(
+    five_values = five_lower_envelope(BASE_GENERATORS)
+    five_phi = tuple(PHI_BASE)
+    five_root = mask((2, 4))
+    five_root_slack = (
+        five_phi[2] + five_phi[4] - five_values[five_root]
+    )
+    five_poor = (0, 1, 3)
+    five_completion_slacks = tuple(
+        sum(
+            five_phi[player]
+            for player in range(5)
+            if (five_root | (1 << i)) >> player & 1
+        )
+        - five_values[five_root | (1 << i)]
+        for i in five_poor
+    )
+    five_audit = canonical_cover(
+        "five_player_pure_star_strict_cover",
+        (F(1, 2), 0, F(1, 2)),
+        root_slack=five_root_slack,
+        completion_slacks=five_completion_slacks,
+    )
+    five_marginal = five_values[five_root | (1 << 1)] - five_values[five_root]
+    if five_marginal >= five_phi[1]:
+        raise AssertionError("five-player universal marginal witness failed")
+    five_audit.update(
+        {
+            "selected_poorer_player": 2,
+            "selected_poorer_payoff": str(five_phi[1]),
+            "coalition_marginal": str(five_marginal),
+            "strict_marginal_deficit": True,
+        }
+    )
+
+    three_audit = canonical_cover(
         "three_trace_minimal_packet",
         (0, F(1, 2)),
         root_slack=three_root_slack,
@@ -136,7 +176,7 @@ def realized_slack_transfer_audits():
         }
     )
 
-    internal_audit = canonical_packet(
+    internal_audit = canonical_cover(
         "four_cosingleton_minimal_packet",
         (0, F(2, 3)),
         root_slack=internal_root_slack,
@@ -156,7 +196,7 @@ def realized_slack_transfer_audits():
             "marginal_deficit_saturated": internal_marginal == internal_bound,
         }
     )
-    return [three_audit, internal_audit]
+    return [five_audit, three_audit, internal_audit]
 
 
 def audit(name, n, root, positive, gamma, beta):
@@ -299,14 +339,14 @@ def main():
         for h in range(1, args.max_richer_side + 1)
     )
     payload = {
-        "status": "two-sided trace-coupling normal form audited",
+        "status": "two-sided coupling and universal Lmin slack ascent audited",
         "arithmetic": "exact rational",
         "finite_audit_is_not_proof": True,
         "case_count": len(cases),
         "cases": cases,
-        "single_packet_excess_audits": [
+        "canonical_slack_transfer_audits": [
             *realized_slack_transfer_audits(),
-            canonical_packet("synthetic_partition_packet", (1, 2, 1)),
+            canonical_cover("synthetic_nonunderloaded_cover", (1, 2, 1)),
         ],
     }
     rendered = json.dumps(payload, indent=2) + "\n"

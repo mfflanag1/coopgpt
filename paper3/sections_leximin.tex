@@ -2796,32 +2796,29 @@ one completion spoke in the circuit to have positive slack.  The circuit
 bound is Corollary~\ref{cor:lx-rooted-atomic-reduction}.
 \end{proof}
 
-\begin{theorem}[canonical packet slack transfer]
-\label{thm:lx-canonical-packet-slack-transfer}
+\begin{theorem}[strict-cover slack transfer]
+\label{thm:lx-strict-cover-slack-transfer}
 Let $v$ be exact, let $\phi\in\core(v)$, and write
-$N=H\mathbin{\dot\cup}L$. Suppose a normalized minimal balanced packet of
-nonempty rich traces is lifted to proper $\phi$-tight coalitions with poorer
-load vector $r\in\mathbb R_+^L$. Put
+$N=H\mathbin{\dot\cup}L$. Suppose nonnegative weights on proper
+$\phi$-tight coalitions have common load one on $H$ and loads
+$c_i<1$ on $i\in L$. Put
 \[
- b=\max_{i\in L}r_i,\qquad d_i=b-r_i,
+ b=\max_{i\in L}c_i,\qquad d_i=b-c_i,
  \qquad \delta=1-b+\sum_{i\in L}d_i.
 \]
-If $\delta>0$, then
+Then
 \[
  \delta s_\phi(H)
  \leq\sum_{i\in L}d_i s_\phi(H\cup\{i\}).          \tag{ST}
- \label{eq:lx-canonical-packet-slack-transfer}
+ \label{eq:lx-strict-cover-slack-transfer}
 \]
-If additionally $b<1$ and $s_\phi(H)>0$, then
-$\sum_i d_i>0$ and
+If $s_\phi(H)>0$, then $\sum_i d_i>0$ and
 \[
  \max_{i:d_i>0}\frac{s_\phi(H\cup\{i\})}{s_\phi(H)}
  \geq\frac{\delta}{\sum_i d_i}
  =1+\frac{1-b}{\sum_i d_i}>1.                       \tag{SA}
- \label{eq:lx-canonical-packet-slack-amplification}
+ \label{eq:lx-strict-cover-slack-amplification}
 \]
-Thus every underloaded trace packet transfers the suffix slack strictly to
-a larger proper coalition.
 \end{theorem}
 
 \begin{proof}
@@ -2831,13 +2828,60 @@ With the notation of the theorem, the canonical completion identity is
  +\sum_{i\in L}d_i\mathbf1_{H\cup\{i\}}
  -\delta\mathbf1_H=b\mathbf1_N;
 \]
-this is \eqref{eq:lx-single-packet-completion}. Apply exact balancedness to
-this relation. Every packet coalition $T$ is tight at $\phi$, so subtracting
+indeed both sides load every player by $b$. Apply exact balancedness to
+this relation; if $b=0$, first add any positive common grand-coalition
+coefficient and rescale, which changes no slack. Every cover coalition $T$
+is tight at $\phi$, so subtracting
 the worth inequality from the identical incidence equality at $\phi$ gives
-\eqref{eq:lx-canonical-packet-slack-transfer}. If $b<1$, then
+\eqref{eq:lx-strict-cover-slack-transfer}. Since $b<1$,
 $\delta=1-b+\sum_i d_i$. When $H$ is slack, the slack-transfer inequality
 rules out $\sum_i d_i=0$. Dividing by the positive sum and taking the
-largest completion slack proves \eqref{eq:lx-canonical-packet-slack-amplification}.
+largest completion slack proves \eqref{eq:lx-strict-cover-slack-amplification}.
+For the selected $i$, the inequality $d_i>0$ leaves a distinct maximally
+loaded poorer player outside $H\cup\{i\}$, so that completion is proper.
+\end{proof}
+
+\begin{corollary}[universal Lmin slack ascent]
+\label{cor:lx-universal-lmin-slack-ascent}
+Let $v$ be exact and $\phi=\operatorname{Lmin}(v)$. At every strict payoff
+boundary with poorer side $L$ and richer suffix $H$, either $H$ is tight or
+there is an $i\in L$ such that
+\[
+ s_\phi(H\cup\{i\})>s_\phi(H),
+ \qquad
+ v(H\cup\{i\})-v(H)<\phi_i.                         \tag{UA}
+ \label{eq:lx-universal-lmin-slack-ascent}
+\]
+Thus every exact-partition failure has a strict local marginal-deficit
+witness on an adjacent edge of the coalition lattice. In particular, no
+slack Lmin suffix is an upper local maximum of the slack function.
+\end{corollary}
+
+\begin{proof}
+Lemma~\ref{lem:lx-strict-richer-cover} supplies a strict tight cover at the
+boundary; normalize its common rich load to one and write its poorer loads
+as $c_i<1$. Exactify $H$ at $z\in\core(v)$, put $\Delta=z-\phi$, and write
+$s=s_\phi(H)>0$. Then
+\[
+ \Delta(H)=-s,\qquad \Delta(L)=s,\qquad
+ 0\leq\sum_T\lambda_T\Delta(T)
+   =-s+\sum_{i\in L}c_i\Delta_i.                   \tag{UA-D}
+ \label{eq:lx-universal-lmin-slack-direct}
+\]
+If every $\Delta_i$ were nonnegative, strict underloading would give
+$\sum_i c_i\Delta_i<\sum_i\Delta_i=s$, contradicting the last inequality.
+Thus $\Delta_i<0$ for some $i\in L$. Core feasibility at $H\cup\{i\}$ gives
+\[
+ s_\phi(H\cup\{i\})\geq s-\Delta_i>s.
+\]
+Since $\Delta(L)=s>0$, some distinct poorer player gains, so the amplified
+coalition is proper. Finally, the slack identity
+\[
+ s_\phi(H\cup\{i\})-s_\phi(H)
+ =\phi_i-\bigl(v(H\cup\{i\})-v(H)\bigr)
+\]
+gives the equivalent marginal inequality. Theorem~\ref{thm:lx-strict-cover-slack-transfer}
+supplies the quantitative cover-dependent strengthening.
 \end{proof}
 
 \begin{corollary}[two-poorer canonical slack amplifier]
@@ -2857,7 +2901,7 @@ unique gaining poorer player.
 \begin{proof}
 Here $d_a=r_b-r_a$, $d_b=0$, and $\delta=1-r_a$, so the claim is the
 specialization of
-Theorem~\ref{thm:lx-canonical-packet-slack-transfer}. Equivalently, exactify
+Theorem~\ref{thm:lx-strict-cover-slack-transfer}. Equivalently, exactify
 $H$ at $z\in\core(v)$ and write $\Delta=z-\phi$. Balanced-trace transport
 gives $\Delta_a<0<\Delta_b$ and
 $\Delta_a+\Delta_b=s_\phi(H)$. Hence
@@ -2878,8 +2922,8 @@ Corollary~\ref{cor:lx-two-poorer-slack-amplifier},
  \leq \phi_a-\frac{1-r_b}{r_b-r_a}s_\phi(H)<\phi_a. \tag{MD}
  \label{eq:lx-two-poorer-marginal-deficit}
 \]
-Thus every two-poorer trace obstruction has a local witness on the adjacent
-coalition-lattice edge from $H$ to $H\cup\{a\}$.
+Thus the universal local witness has the displayed sharp packet-dependent
+margin when there are exactly two poorer players.
 \end{corollary}
 
 \begin{proof}
@@ -2903,7 +2947,8 @@ coupling rays is the remaining general-theory target.  A standalone proof
 and exact audit are
 \begin{center}
 \small\path{paper3/TWO_SIDED_TRACE_COUPLING.md},\\[-2pt]
-\small\path{paper3/CANONICAL_PACKET_SLACK_TRANSFER.md},\\[-2pt]
+\small\path{paper3/UNIVERSAL_LMIN_SLACK_ASCENT.md},\\[-2pt]
+\small\path{paper3/UNIVERSAL_LMIN_SLACK_ASCENT_EXTERNAL_REVIEW_PROMPT.md},\\[-2pt]
 \small\path{src/verify_two_sided_trace_coupling.py},\\[-2pt]
 \small\path{results/two_sided_trace_coupling.json}.
 \end{center}

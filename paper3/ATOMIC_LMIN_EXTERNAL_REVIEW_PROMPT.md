@@ -122,15 +122,24 @@ special attention to:
     a conformal circuit's non-spoke traces form a balanced subcollection and
     minimality forces the entire packet, including repeated-trace and
     full-trace degeneracies.
-22. Audit the canonical packet slack-transfer theorem. Starting from the
-    completed packet relation, verify the direction of the exact-balancedness
-    inequality and every sign in
-    `delta s(H) <= sum_i (b-r_i)s(H union {i})`. Check that `b<1` forces a
-    strictly larger completion slack, and that the two-poorer specialization
+22. Audit the universal Lmin slack-ascent theorem. Starting from the
+    normalized strict richer-side cover—not an extreme packet—verify the
+    two-line displacement proof: every exact `H`-face point has poorer
+    displacements summing to the suffix slack, while tightness and strict
+    underloading force at least one displacement to be negative. Check the
+    conversion of that negative displacement into strict slack ascent and a
+    marginal deficit. Separately verify the
+    canonical completion coordinatewise, the direction of the exact-balancedness
+    inequality, and every sign in
+    `delta s(H) <= sum_i (b-c_i)s(H union {i})`. Check that simultaneous
+    strict undercoverage makes `b<1`, that slack forces some `d_i>0`, and
+    that the resulting factor is strictly greater than one in every
+    dimension and in both star/trace branches. Verify the equivalent strict
+    marginal-deficit witness. Then check that the two-poorer specialization
     has the exact factor `(1-r_a)/(r_b-r_a)`. Independently recompute the
-    saturated factors `2` and `3/2` in the three-column and four-co-singleton
-    examples. Verify the equivalent marginal-deficit formula and its strict
-    sign. Assess whether this invariant or an equivalent slack-ascent
+    saturated factors `2`, `2`, and `3/2` in the five-player pure-star,
+    three-column, and four-co-singleton examples. Assess whether this
+    universal invariant or an equivalent slack-ascent
     lemma already appears in exact-balanced, exact-partition, or egalitarian
     solution theory.
 
