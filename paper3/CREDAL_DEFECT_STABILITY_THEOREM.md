@@ -155,17 +155,30 @@ there is no strict payoff boundary for it to finance.
 
 ## Prior art and novelty boundary
 
+Sanchez-Soriano, Branzei, Llorca, and Tijs (2010), Proposition 2, already
+prove the exact cooperative-game block-prefix implication: a block-constant
+allocation Lorenz-dominates every efficient allocation satisfying the
+corresponding cumulative block inequalities. Their application covers
+Dutta--Ray and equal-split-off allocations. Thus the zero-slack endpoint or
+block interpolation is prior art, not a contribution of this theorem.
+
 Approximate majorization in `l1`, including steepest/flattest distributions
 and the exact distance formula, is established by Horodecki, Oppenheim, and
 Sparaciari (2018). Majorization as simultaneous comparison of Schur-concave
 uncertainty measures is also established prior art.
 
-The candidate contribution is the bridge from canonical richer-suffix face
-slacks to approximate majorization, followed by the bridge from local
-binding-event uncrossing defects to those slacks. It turns the exact-partition
-selector theorem into a sharp quantitative stability theorem. This needs
-hostile review by specialists in approximate majorization, imprecise
-probability, and cooperative games.
+The candidate contribution begins with the uniform additive error: canonical
+richer-suffix face slacks bound every Lorenz-coordinate regret and give the
+exact `2 epsilon` approximate-majorization radius. The second candidate bridge
+controls those slacks by local binding-event uncrossing defects. Together they
+turn the exact selector statement into a sharp quantitative stability theorem.
+This needs hostile review by specialists in approximate majorization,
+imprecise probability, and cooperative games.
+
+Primary antecedent: J. Sanchez-Soriano, R. Branzei, N. Llorca, and S.H. Tijs,
+*A Technical Note on Lorenz Dominance in Cooperative Games*, CentER Discussion
+Paper 2010-101, Proposition 2 and Theorems 1 and 3:
+<https://pure.uvt.nl/ws/files/1269376/2010-101.pdf>.
 
 ## Exact audit
 

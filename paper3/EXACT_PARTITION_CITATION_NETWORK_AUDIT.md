@@ -338,9 +338,20 @@ Bellomo, Holik, and Bosyk (2020) further study approximate majorization through
 the majorization lattice. Neither approximate majorization nor its distance
 formula is claimed here.
 
-The candidate contribution is the two-stage bridge: canonical richer-face
-slack controls approximate majorization, and the exact-game uncrossing-defect
-budget controls that slack using binding events. The sharp five-state
+There is also a direct cooperative-game antecedent that must delimit the
+claim. Sanchez-Soriano, Branzei, Llorca, and Tijs (2010), *A Technical Note on
+Lorenz Dominance in Cooperative Games*, Proposition 2, prove that a
+block-constant allocation Lorenz-dominates every efficient allocation obeying
+the corresponding cumulative block inequalities; their Theorems 1 and 3
+apply it to Dutta--Ray and equal-split-off allocations. This is the exact
+zero-slack block-prefix argument used upstream here. It was inspected in full
+from the [primary CentER PDF](https://pure.uvt.nl/ws/files/1269376/2010-101.pdf)
+on 2026-08-04.
+
+The candidate contribution therefore begins with the additive error: canonical
+richer-face slack controls every Lorenz-coordinate regret and the exact
+`2 epsilon` approximate-majorization radius; the exact-game uncrossing-defect
+budget then controls that slack using binding events. The sharp five-state
 obstruction attains both the Lorenz-coordinate constant `epsilon` and the
 distance constant `2 epsilon`. A separate atom-vacuous example shows that a
 raw positive binding defect can coexist with a uniform universal selector;

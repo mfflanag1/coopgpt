@@ -45,6 +45,9 @@ Please answer the following questions hostilely.
    with an uncrossing-defect budget, already known in cooperative games,
    credal sets, approximate majorization, or robust uncertainty selection?
    Give the closest exact theorem and citation.
+10. Compare the proof line by line with Proposition 2 of Sanchez-Soriano,
+    Branzei, Llorca, and Tijs (2010). Is anything before the additive
+    `epsilon` error genuinely stronger than their exact block-prefix theorem?
 
 Reproduce from the `coopgames` directory:
 
@@ -58,6 +61,9 @@ cmp /tmp/credal-defect-stability.json \
 
 Treat approximate majorization, Schur concavity, Lorenz curves, coherent
 lower probabilities, exact games, and set-family uncrossing as prior art.
+Also treat the exact block-prefix-to-Lorenz implication as prior art under
+Sanchez-Soriano et al. (2010), Proposition 2:
+<https://pure.uvt.nl/ws/files/1269376/2010-101.pdf>.
 The candidate novelty is only the quantitative bridge among canonical
 suffix slacks, binding-event defect budgets, and simultaneous uncertainty
 regret. The 51,989-pair rational grid is a bug audit, not proof evidence.
