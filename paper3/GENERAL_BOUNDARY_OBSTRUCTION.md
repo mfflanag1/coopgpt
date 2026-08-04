@@ -809,3 +809,29 @@ universal packet.
 The focused searches found no source explicitly linking egalitarian-core
 transfer blockers to exact-balanced slack budgets.  This is not a definitive
 MathSciNet/zbMATH novelty opinion.
+
+## Binary broken diamonds: a direct four/five capacity mechanism
+
+The uncrossing converse can now be realized by one explicit four-cell family.
+Write a crossing pair as
+
+```text
+A = C union X,  B = C union Y,
+N = C disjoint-union X disjoint-union Y disjoint-union R,
+```
+
+give payoff two on `C` and one elsewhere, and take the lower-envelope exact
+game of the nonnegative efficient polytope cut out by tightness of `A` and
+`B`.  Singleton exactness holds exactly under the simple capacity condition
+`|C|+|R|>=3`.  The intersection and union then have positive slacks
+`min(2|C|,|R|)` and `min(|X|,|Y|)`, respectively, while the two tight sets
+pin Lmin to the prescribed binary payoff.
+
+This gives a human explanation of the sharp player count.  A broken diamond
+needs the four nonempty Venn cells `C,X,Y,R`; if there are only four players,
+exactness of the singleton `C` contradicts nonnegativity at the lower-payoff
+player in `R`.  A fifth player supplies the missing capacity, either in `C`
+or in `R`, and both shapes are realized.  See
+`paper3/BINARY_BROKEN_DIAMOND_REALIZATION.md`.  The next nonlocal question is
+whether arbitrary minimal positive-defect Lmin failures admit a reduction to
+binary broken diamonds or require genuinely higher circuit types.

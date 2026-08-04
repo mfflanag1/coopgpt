@@ -100,6 +100,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Closed-form Lmax and distance `4h/(h+1)` for that family | Not found | Present as an additional explicit result, not the core novelty claim. |
 | Supermodularity only on Lmin-tight pairs forces exact partition; every failure has a minimum-energy crossing pair with positive uncrossing defect | Not found; uncrossing and convex-game egalitarian results are classical | Present the local-at-Lmin domain and converse defect as candidate new; do not claim uncrossing, supermodularity, or the convex-game consequence themselves. |
 | Along an integral uncrossing, signed local supermodularity defects telescope exactly to final weighted core slack and quantitatively bound target-face slack | Not found; slack telescoping and uncrossing energy are elementary/classical mechanisms | Present the exact-face defect budget as a candidate new bridge, not a new uncrossing identity, pending submodular-optimization and exact-game review. |
+| Every nontrivial payoff-oriented broken tight diamond needs five players in a singleton-normalized exact game, and both minimal four-cell shapes admit one binary lower-envelope realization | Not found; tight-set lattices, lower envelopes of core polytopes, and uncrossing are classical | Present the sharp capacity argument and universal realization as a candidate structural explanation of the four/five threshold, pending exact-game and lattice-specialist review. |
 
 ## Why the known four-player theorem does not subsume this one
 
@@ -168,6 +169,10 @@ discrete-side-payment, and characteristic-function papers listed above.
 5. The uncrossing theorem especially needs a cooperative-game or submodular
    optimization specialist to decide whether its local-tight-set formulation
    is implicit in a known lattice/uncrossing theorem.
+6. The binary broken-diamond result has a short elementary proof.  That makes
+   it readily checkable, not automatically novel; a specialist must search
+   for the same four-cell capacity argument under core-polytope, tight-set,
+   balanced-hypergraph, or exact-balancedness terminology.
 
 Accordingly, the defensible current claim is **a credible, apparently new
 structural classification in a specialized part of cooperative game theory**.

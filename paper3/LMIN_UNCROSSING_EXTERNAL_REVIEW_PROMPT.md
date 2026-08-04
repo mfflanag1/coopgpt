@@ -14,6 +14,11 @@ commit supplied with this packet.
 - `paper3/UNCROSSING_DEFECT_BUDGET.md` — quantitative conservation theorem.
 - `src/verify_uncrossing_defect_budget.py` and
   `results/uncrossing_defect_budget.json` — exact two-family audit.
+- `paper3/BINARY_BROKEN_DIAMOND_REALIZATION.md` — explicit realization and
+  sharp four/five-player capacity proof.
+- `src/verify_binary_broken_diamond_realization.py` and
+  `results/binary_broken_diamond_realization.json` — exact parameter-grid
+  audit with independent generic Lmin replay through six players.
 - `paper3/wrapper.pdf` — compiled paper.
 
 ## Central claim
@@ -55,6 +60,18 @@ only to pairs tight at `phi=Lmin(v)` implies exact partition at Lmin.
 11. Search for the quantitative conservation identity in submodular-function,
     skew-supermodular uncrossing, cooperative-game exactness, and core-face
     literature.  The algebra may be standard even if this application is not.
+12. Hostilely audit the binary broken-diamond theorem.  In particular, check
+    `Core(v)=K` for the lower-envelope construction, every case in the
+    singleton-zeroing argument, the closed forms for the intersection and
+    union slacks, and the lexicographic max--min argument identifying Lmin.
+13. Check the sharp-order argument independently: a broken diamond must have
+    all four Venn cells nonempty; with four players the only shape has one
+    player per cell; and exactness of the intersection singleton contradicts
+    nonnegativity when its Lmin payoff strictly exceeds the other three.
+14. Search specifically for prior versions of this four-cell capacity
+    obstruction or lower-envelope realization in exact-game, exact-partition,
+    core-polytope, lattice-of-tight-sets, and balanced-hypergraph literature.
+    Do not infer novelty from the elementary nature of the proof.
 
 ## Reproduction
 
@@ -63,6 +80,8 @@ python src/verify_lmin_uncrossing_domain.py \
   --output results/lmin_uncrossing_domain.json
 python src/verify_uncrossing_defect_budget.py \
   --output results/uncrossing_defect_budget.json
+python src/verify_binary_broken_diamond_realization.py \
+  --output results/binary_broken_diamond_realization.json
 cd paper3
 pdflatex -interaction=nonstopmode -halt-on-error wrapper.tex
 pdflatex -interaction=nonstopmode -halt-on-error wrapper.tex
