@@ -348,3 +348,29 @@ only defects accumulated while uncrossing a strict boundary cover carry the
 claimed stability meaning. Specialist review must determine whether this
 face-slack/defect formulation already appears in approximate majorization,
 cooperative games, or robust credal selection.
+
+### Shannon upper-entropy specialization
+
+Shannon entropy is not globally Lipschitz at the simplex boundary, so the
+generic Lipschitz-Schur-concave corollary does not cover it directly. The
+sharp Fannes--Audenaert inequality converts the same approximate-majorization
+radius into
+
+```text
+sup_K H-H(phi) <= h(tau)+tau log(n-1),
+tau=min{epsilon,1-1/n}.
+```
+
+Audenaert (2007) establishes the sharp continuity inequality, including the
+classical Shannon case. That inequality and its constants are prior art. The
+candidate new contribution is only the route from canonical binding-event
+uncrossing defects to the radius `epsilon`, and therefore to a simultaneous
+upper-entropy guarantee.
+
+The sharp five-state obstruction admits an exact upper-entropy point over
+`Q(sqrt(43))`. Its actual natural-log regret over inc-max is approximately
+`0.0007547483`, well below the worst-case theorem bound `0.2678299614`. A
+separate two-point family attains the global continuity constant, but its
+reference point is explicitly not the inc-max distribution. The composed
+credal result requires information-theory and imprecise-probability review;
+the established continuity theorem must not be presented as new.

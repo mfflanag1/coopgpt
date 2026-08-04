@@ -14,6 +14,15 @@ src/verify_credal_defect_stability.py
 results/credal_defect_stability.json
 ```
 
+The Shannon-entropy specialization and its separate hostile review are:
+
+```text
+paper3/CREDAL_SHANNON_DEFECT_BOUND.md
+paper3/CREDAL_SHANNON_DEFECT_EXTERNAL_REVIEW_PROMPT.md
+src/verify_credal_shannon_stability.py
+results/credal_shannon_stability.json
+```
+
 Please answer the following questions hostilely.
 
 1. Does concavity of the upper Lorenz curve interpolate the richer-stratum
