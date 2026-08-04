@@ -330,10 +330,14 @@ sharp:
 |N|  = 6 and |L|  = 2  =>  a slack richer suffix exists.
 ```
 
-The five-player lower bound is currently an exact symbolic theorem: all 16
-ordered-stratum boundary queries are unsatisfiable.  The six-player upper
-bound is stronger evidence—a fixed lower envelope of six common-total integer
-allocations has
+The five-player lower bound now has a structural human proof.  Stagewise Lmin
+duality produces a tight-coalition cover that is regular on the richer side
+and strictly undercovers both poor players.  On at most three rich players,
+minimal balanced traces are partitions plus the unique three-pair triangle.
+An exact suffix witness eliminates the partitions; the forced triangle and an
+exact rich-singleton witness then contradict efficiency.  The earlier 16
+ordered-stratum queries remain an independent audit.  The six-player upper
+bound is a fixed lower envelope of six common-total integer allocations with
 
 ```text
 Lmin = (1,1,2,2,2,2),
@@ -397,14 +401,12 @@ phase diagram, not merely a collection of finite examples.
 The bridge becomes substantially broader if one can prove any of the
 following without dimension enumeration:
 
-1. a short human incidence/exact-balancedness proof of the five-player
-   small-poorer lower bound, replacing its 16 symbolic queries;
-2. a structural classification of minimal positive-defect patterns containing
+1. a structural classification of minimal positive-defect patterns containing
    both the five-player equality (E5) and the six-player `2|4` construction;
-3. a domain theorem showing that a broad established class (for example a
+2. a domain theorem showing that a broad established class (for example a
    nontrivial subclass of totally balanced or large-core games) always has
    zero-defect completions and is therefore exact partition;
-4. a lift or converse construction realizing the six-player obstruction, and
+3. a lift or converse construction realizing the six-player obstruction, and
    every irreducible positive slack budget, in a controlled infinite family.
 
 Those would turn the present sharp finite theorem into a general theory of how

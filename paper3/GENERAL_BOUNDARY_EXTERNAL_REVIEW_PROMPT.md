@@ -75,10 +75,15 @@ falsification searches.  Please do not count their no-hit output as proof.
    later poorer players.  Assess whether an indecomposable exact family with
    normalized `h=1` separation `(m-3)/(m-1) -> 1` is already known; do not
    treat large tied blocks alone as novel because direct sums supply them.
-8. For the five-player small-poorer lower bound, inspect whether the imported
-   definition-level exact-face and stagewise KKT encoding genuinely covers all
-   ordered stratum compositions and every boundary after one or two cumulative
-   poorer players.  Do not infer this from the previous n=4 review alone.
+8. Hostilely audit the new human two-poorer threshold proof.  Check the
+   individual-pinning dual derivation of the strict richer-side cover in both
+   the tied and successive-poor cases; the decomposition into minimal balanced
+   trace packets; the integer/half-integer carrier argument; the forced tight
+   triangle `{c,d}`, `{c,e}`, `{b,d,e}`; and the final exact-singleton
+   efficiency contradiction.  Confirm that the old 16-query verifier is now
+   only an audit and that no payoff-stratum case enumeration remains in the
+   proof dependency.  A focused checklist is in
+   `coopgames/paper3/N5_HUMAN_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`.
 9. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove

@@ -2,12 +2,11 @@
 
 ## Status
 
-This note records a newly found structural threshold.  The six-player upper
-bound has a short human proof.  The five-player lower bound is currently an
-exact-rational computer-assisted theorem using the same definition-level
-exactness and Lmin KKT encoding that was externally reviewed for the
-four-player classification.  The combined result has not yet received an
-external novelty or correctness review.
+This note records a newly found structural threshold with human proofs on
+both sides.  The lower bound now follows from a strict Lmin cover and the
+classification of minimal balanced traces on at most three richer players;
+the earlier exact-rational 16-query theorem remains only an independent audit.
+The new human proof has not yet received external correctness or novelty review.
 
 ## Statement
 
@@ -22,7 +21,9 @@ The new threshold is:
    `|L|=2` and `|H|=4`.
 
 Thus six is the minimum dimension of a slack Lmin richer suffix having only
-two poorer players.  The lower bound at five is computer-assisted at present.
+two poorer players.  More structurally, with exactly two poorer players,
+slack is impossible for at most three richer players and possible for every
+richer-block size at least four.
 
 The six-player obstruction is the smallest member of a dimension-free
 half-plane: for every poorer-block size `m>=2` and richer-block size `h>=4`,
@@ -119,26 +120,77 @@ phi(H)=8.
 
 The richer suffix therefore has slack two despite only two poorer players.
 
-## The five-player lower bound
+## The human lower bound
 
-`src/verify_n5_small_poorer_suffix.py` checks all ordered payoff-stratum
-compositions of five players.  At each strict boundary after one or two
-cumulative poorer players, it imposes positive richer-suffix slack.
+At a boundary with poorer side `L={a,b}`, stagewise Lmin duality gives a
+nonnegative cover by coalitions tight at `phi`: every member of the richer
+suffix has the same cover load, while both `a` and `b` have strictly smaller
+loads.  This follows by adding the two individual-pinning duals when the poor
+players are tied.  When their levels are successive, a large multiple of the
+first player's dual absorbs the unrestricted earlier-coordinate load in the
+second player's dual.
 
-The encoding contains:
+Assume the richer suffix `H` is slack.  Exactness gives a core point `z` tight
+on `H`.  Its displacement `Delta=z-phi` satisfies
 
-- nonnegative singleton-normalized payoffs and coalition slacks;
-- a definition-level exact core-face witness for every proper coalition;
-- exact stagewise KKT conditions for the common Lmin level;
-- exact individual-pinning KKT conditions for every player in each stratum.
+```text
+Delta(H)=-s,  Delta_a+Delta_b=s>0.
+```
 
-All 16 boundary queries are unsatisfiable in Z3's exact linear-rational
-arithmetic.  This extends the already externally reviewed through-four
-classification only for the restricted `|L|<=2` boundary property.  It does
-not claim that every five-player exact game is exact partition—the existing
-five-player counterexample has a failed boundary with three poorer players.
+After normalizing the cover's rich load to one and discarding empty rich
+traces, summing its tight inequalities at `z` gives
+
+```text
+-s + c_a Delta_a + c_b Delta_b >= 0,  c_a,c_b<1.
+```
+
+Together with `Delta_a+Delta_b=s`, this rules out two nonnegative poor
+displacements.  Their sum is positive, so they have opposite signs; write
+`Delta_a<0<Delta_b`.
+
+Project the strict tight-coalition cover onto its traces on `H`.  For at most
+three rich players, every normalized minimal balanced trace packet is a set
+partition except for the unique three-pair triangle
+
+```text
+1/2 * ({c,d}, {c,e}, {d,e}).
+```
+
+If a packet loads the poor players by `r_a,r_b`, summing its tight coalition
+inequalities at `z` gives
+
+```text
+-s + r_a Delta_a + r_b Delta_b >= 0.
+```
+
+Partition packets have integer poor loads, so each must load the gaining
+player `b` at least once.  This contradicts strict undercoverage when
+`|H|<=2`.  For `|H|=3`, some triangle packet must load `b` less than once.
+Its half-integral loads force `b` onto exactly one triangle edge and `a` onto
+none.  After relabeling, the tight coalitions are
+
+```text
+{c,d},  {c,e},  {b,d,e}.
+```
+
+Exactness of singleton `d` supplies a core point with `x_d=0`.  The first and
+third tight inequalities then give
+
+```text
+x_c >= phi_c+phi_d,
+x_b+x_e >= phi_b+phi_d+phi_e,
+```
+
+which exceeds the grand total by `phi_d-phi_a>0`.  This proves the lower
+bound without payoff-stratum enumeration.  The old 16 exact-rational queries
+remain a definition-level audit, not proof evidence on which the theorem
+depends.
 
 ## Reproduction
+
+The first command replays the superseded finite lower-bound audit; the second
+checks the fixed sharpness example.  Neither command substitutes for checking
+the human balanced-trace proof above.
 
 From `coopgames/` run:
 
@@ -182,9 +234,10 @@ players cease to force suffix tightness at six, then continues that obstruction
 throughout the half-plane with at least two poorer and at least four richer
 players.  The family is integral and human-checkable.
 
-It is not yet a major field breakthrough.  The five-player lower bound still
-depends on a finite symbolic classification, and a focused literature review
-has not established novelty.  The result becomes materially stronger if the
-five-player unsatisfiability can be replaced by a short incidence or
-exact-balancedness proof, or if the six-player generator pattern extends to a
-classification of all minimal positive boundary-defect obstructions.
+This removes the principal finite-enumeration limitation: the sharp `2|3`
+versus `2|4` threshold now has a dimension-structural explanation through
+balanced trace packets.  A focused literature review has not yet established
+novelty, and the new proof needs hostile external review.  The result would
+become broader still through a classification of all minimal positive
+boundary-defect obstructions or a comparable theorem for the unresolved
+`h=2,3` strips with three or more poorer players.

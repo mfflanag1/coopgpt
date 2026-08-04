@@ -2755,25 +2755,157 @@ rich side.  This explains the sharp example's escape without claiming that
 every higher-dimensional obstruction has this form.
 
 The number of players below a failed boundary has its own sharp threshold.
+The first step is a local dual consequence of the progressive Lmin stages.
 
-\begin{theorem}[small-poorer boundary threshold]
+\begin{lemma}[strict richer-side cover]
+\label{lem:lx-two-poorer-strict-cover}
+Let $\phi=\operatorname{Lmin}(v)$ and let a strict payoff boundary have
+poorer side $L=\{a,b\}$ and richer suffix $H$.  There are nonnegative
+weights $\lambda_T$ on proper coalitions tight at $\phi$ and a number
+$\alpha>0$ such that, with
+\[
+ c_i:=\sum_{T\ni i}\lambda_T,
+\]
+one has
+\[
+ c_h=\alpha\quad(h\in H),\qquad
+ c_a<\alpha,\quad c_b<\alpha.                    \tag{SC}
+ \label{eq:lx-strict-richer-cover}
+\]
+\end{lemma}
+
+\begin{proof}
+At a progressive Lmin stage, hold all earlier coordinates fixed, retain the
+common floor on the current and later players, and maximize one player $i$ in
+the current stratum.  Because $i$ is finalized at that level, the optimum is
+$\phi_i$.  LP duality supplies nonnegative multipliers on $\phi$-tight core
+inequalities.  Their player loads are a common number $\nu_i$ on every later
+player, at most $\nu_i-1$ on the target $i$, and at most $\nu_i$ on every
+other player in the current stratum.  Earlier coordinates carry unrestricted
+equality multipliers and impose no load restriction.  This is the same
+stationarity calculation used in Lemma~\ref{lem:lx-protector-packing}, now
+retaining the complete dual cover.
+
+If $a$ and $b$ are tied, add their two individual-pinning duals.  Every member
+of $H$ then has common load $\alpha=\nu_a+\nu_b$, while each poorer player
+has load at most $\alpha-1$.
+
+If $\phi_a<\phi_b$, the dual for the $a$ stage has load $\nu_a$ on
+$\{b\}\cup H$ and load at most $\nu_a-1$ on $a$.  The dual for the later
+$b$ stage has common load $\nu_b$ on $H$, load at most $\nu_b-1$ on $b$,
+and some finite coalition-weight load $r$ on the earlier player $a$ (the
+stationarity equation there also contains an unrestricted equality
+multiplier).  Add the latter dual to $M>0$ times the former.  The common rich
+load is $\alpha=M\nu_a+\nu_b$, the load on $b$ is at most $\alpha-1$, and
+the load on $a$ is at most $M(\nu_a-1)+r$.  Its deficit is therefore at
+least $M+\nu_b-r>0$ for all sufficiently large $M$.  This proves
+\eqref{eq:lx-strict-richer-cover}.
+\end{proof}
+
+\begin{theorem}[human two-poorer boundary threshold]
 \label{thm:lx-small-poorer-threshold}
-Let $v$ be a singleton-normalized exact game with $|N|\leq5$, let
-$\phi=\operatorname{Lmin}(v)$, and let $H$ be a cumulative richer suffix at a
-strict payoff boundary.  If $|N\setminus H|\leq2$, then $H$ is tight at
-$\phi$.  This conclusion fails at six players, even when $\phi$ has exactly
-two payoff strata of sizes $2$ and $4$.
+Let $v$ be a singleton-normalized exact game, let
+$\phi=\operatorname{Lmin}(v)$, and let $H$ be a cumulative richer suffix at
+a strict payoff boundary, with poorer side $L=N\setminus H$.
+If $|L|=1$, or if $|L|=2$ and $|H|\leq3$, then $H$ is tight at $\phi$.
+The conclusion is sharp: it fails when $|L|=2$ and $|H|=4$.
 \end{theorem}
 
 \begin{proof}
-The through-four statement is Lemma~\ref{lem:lx-richer-suffix}.  At five
-players, the definition-level exact-face and stagewise Lmin KKT encoding used
-in the earlier finite audit was run on every ordered payoff-stratum
-composition, separately requiring positive suffix slack after one or two
-cumulative poorer players.  All 16 exact linear-rational queries are
-unsatisfiable.  The complete query list and replay are
-\path{src/verify_n5_small_poorer_suffix.py} and
-\path{results/n5_small_poorer_suffix.json}.
+The singleton case is \eqref{eq:lx-singleton-poor-complement}.  Now put
+$L=\{a,b\}$ and suppose, toward a contradiction, that
+\[
+ s:=\phi(H)-v(H)>0.
+\]
+Exactness of $H$ gives $z\in\core(v)$ with $z(H)=v(H)$.  For
+$\Delta=z-\phi$,
+\[
+ \Delta(H)=-s,\qquad \Delta_a+\Delta_b=s.         \tag{TP-1}
+ \label{eq:lx-trace-packet-direction}
+\]
+
+Apply Lemma~\ref{lem:lx-two-poorer-strict-cover}, scale its common richer
+load to one, and discard cover weight on coalitions disjoint from $H$.  The
+remaining cover still has unit load on $H$ and loads $c_a,c_b<1$ on the two
+poorer players.  Summing $z(T)-\phi(T)\geq0$ over its tight coalitions gives
+\[
+ -s+c_a\Delta_a+c_b\Delta_b\geq0.                 \tag{TP-2}
+ \label{eq:lx-trace-cover-sign}
+\]
+If both poor displacements were nonnegative, the left side would be strictly
+less than $-s+\Delta_a+\Delta_b=0$.  Their sum is positive by
+\eqref{eq:lx-trace-packet-direction}, so the two displacements have opposite
+signs.  Relabel them so that
+\[
+ \Delta_a<0<\Delta_b=s-\Delta_a.                  \tag{TP-3}
+ \label{eq:lx-trace-packet-signs}
+\]
+
+Project each remaining tight coalition to its trace on $H$.  The resulting
+fractional collection is balanced on $H$.  Decompose it into normalized
+minimal balanced packets; this standard decomposition and terminology are
+reviewed by \citet{LaplaceMermoudEtAl2025}.  When $|H|\leq2$, every packet is
+a set partition.  When $H=\{c,d,e\}$, the only additional packet is
+\[
+ \tfrac12\{\{c,d\},\{c,e\},\{d,e\}\},        \tag{TP-4}
+ \label{eq:lx-rich-trace-triangle}
+\]
+the unique nonpartition minimal balanced collection on three players.
+Splitting weights among coalitions with the same rich trace, and then taking
+the product decomposition across trace slots, refines this into deterministic
+packets of the original tight coalitions: each partition slot selects one
+coalition, while each triangle edge retains weight $1/2$.
+
+For one such packet let $r_a,r_b$ be its loads on the two poorer players.
+Sum $z(T)-\phi(T)\geq0$ with the packet weights.  Its rich trace has unit
+load, so \eqref{eq:lx-trace-packet-direction} gives
+\[
+ -s+r_a\Delta_a+r_b\Delta_b\geq0.                 \tag{TP-5}
+ \label{eq:lx-trace-packet-carrier}
+\]
+For a partition packet the coalition weights are one, hence $r_a,r_b$ are
+nonnegative integers.  Equation \eqref{eq:lx-trace-packet-carrier} and
+$\Delta_a<0$ rule out $r_b=0$; every partition packet therefore loads $b$ at
+least once.  If $|H|\leq2$, averaging the packets would give total cover load
+at least one on $b$, contrary to the strict underload in
+\eqref{eq:lx-strict-richer-cover}.
+
+It remains to treat $|H|=3$.  Since the total load on $b$ is strictly below
+one, some triangle packet in \eqref{eq:lx-rich-trace-triangle} has
+$r_b<1$.  Write $r_i=k_i/2$, where $k_i$ counts the triangle coalitions
+carrying poorer player $i$.  Inequality \eqref{eq:lx-trace-packet-carrier}
+first rules out $k_b=0$, so $k_b=1$.  If $k_a\geq1$, its left side is at most
+\[
+ -s+\tfrac12\Delta_a+\tfrac12\Delta_b=-\tfrac12s<0,
+\]
+again impossible.  Thus $k_a=0$.  Relabeling $c,d,e$ if necessary, the packet
+therefore consists of the three $\phi$-tight coalitions
+\[
+ \{c,d\},\qquad \{c,e\},\qquad \{b,d,e\}.     \tag{TP-6}
+ \label{eq:lx-forced-rich-triangle}
+\]
+
+Exactness of singleton $\{d\}$ supplies $x\in\core(v)$ with $x_d=0$.
+The first and third tight coalitions in
+\eqref{eq:lx-forced-rich-triangle} imply
+\[
+ x_c\geq\phi_c+\phi_d,\qquad
+ x_b+x_e\geq\phi_b+\phi_d+\phi_e.
+\]
+Using $x_a\geq0$ and efficiency gives
+\[
+ v(N)=x(N)\geq\phi_b+\phi_c+\phi_e+2\phi_d
+      >\phi_a+\phi_b+\phi_c+\phi_d+\phi_e=v(N),
+\]
+where the strict inequality is $\phi_d>\phi_a$.  This contradiction proves
+the human lower bound.
+
+The earlier 16-query exact-rational classification remains an independent
+audit rather than a proof dependency:
+\begin{center}
+\small\path{src/verify_n5_small_poorer_suffix.py},\\[-2pt]
+\small\path{results/n5_small_poorer_suffix.json}.
+\end{center}
 
 For sharpness, take the lower envelope of the following six common-total
 allocations:
@@ -2956,10 +3088,12 @@ The same family, including its additional poorer-player rows $q^j$, proves
 (iv) for every $m\geq2$.
 \end{proof}
 
-The lower-bound half of Theorem~\ref{thm:lx-small-poorer-threshold} remains
-computer-assisted.  Its contribution is narrower than the through-four exact
-partition theorem: five-player slack boundaries do exist, but the example
-above shows that they require at least three cumulative poorer players.
+Theorem~\ref{thm:lx-small-poorer-threshold} is now fully human.  Its strict
+cover and three-player balanced-trace decomposition explain why three richer
+players cannot transport the slack budget, while the four-player richer block
+supports the internal triangle-like circuit of
+Theorem~\ref{thm:lx-two-poorer-family}.  Five-player slack boundaries do
+exist, but they require at least three cumulative poorer players.
 
 The earlier computer-assisted proof remains as an independent audit rather
 than a dependency of Lemma~\ref{lem:lx-richer-suffix}.  One exact-rational
