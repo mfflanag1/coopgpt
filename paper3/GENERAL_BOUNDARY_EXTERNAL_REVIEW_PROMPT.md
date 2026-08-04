@@ -12,6 +12,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `cor:lx-boundary-defect`, `lem:lx-strict-richer-cover`,
   `thm:lx-balanced-trace-transport`,
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
+  `thm:lx-rooted-semigroup-obstruction`,
   `thm:lx-rank-two-trace-exclusion`,
   `thm:lx-four-rich-trace-classification`,
   `thm:lx-projective-plane-trace-exclusion`,
@@ -34,6 +35,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   odd balanced-matrix obstruction.
 - `coopgames/paper3/RANK_TWO_TRACE_EXCLUSION.md`: standalone dimension-free
   proof that graph-like active traces cannot realize a two-poorer failure.
+- `coopgames/paper3/ROOTED_SEMIGROUP_OBSTRUCTION.md`: standalone
+  dimension-free theorem forbidding safe rooted integer fibres of tight
+  coalition semigroups.
 - `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`: human
   classification proving uniqueness of the first surviving obstruction.
 - `coopgames/paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`: human
@@ -129,6 +133,14 @@ falsification searches.  Please do not count their no-hit output as proof.
    theorem really yields the stated odd submatrix.  In the `h>=4` family,
    verify symbolically that every co-singleton trace is active and that the
    displayed `3x3` odd-cycle submatrix is present.
+   Audit the rooted-semigroup theorem independently of all three applications:
+   check the incidence identity `(SRC)`, exactification of the root singleton,
+   both possible nonzero zero-one poor-load vectors, and the strict inequality
+   `k phi_d>phi_j`. Decide whether “rooted fibre” or an established
+   affine-semigroup term is the correct language (the draft deliberately does
+   not claim these fibres are semigroup holes without a saturation proof), and whether the
+   theorem is a genuinely useful general obstruction rather than a renamed
+   repetition of the exact-singleton argument.
    Then audit the rank-two trace exclusion: prove the extreme-point support
    decomposition into singleton blocks, isolated edges, and half-weight odd
    cycles; check the half-integer poor-load argument; and verify that
@@ -206,6 +218,9 @@ core literature:
   tight through five players but can be slack at six;
 - the dimension-free necessity of a nonintegral active trace polytope and odd
   balanced-matrix obstruction at every two-poorer failure;
+- the exact-face rooted-semigroup obstruction and its interpretation as a
+  family of forbidden integer fibres, including prior terminology from
+  normal hypergraphs, Hilbert bases, and affine semigroups;
 - the dimension-free rank-two trace exclusion, equivalently that every
   two-poorer failure requires an active trace of size at least three;
 - the uniqueness of the four-co-singleton `1/3` packet at the first feasible

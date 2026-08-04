@@ -83,6 +83,10 @@ player. If neither poor player is omitted, the right side exceeds efficiency
 by `phi_d>0`; if one is omitted, it exceeds efficiency by
 `phi_d-phi_i>0`. Thus safe root roundings are impossible.
 
+These are precisely multiplicity-one safe rooted tight covers, so all four
+contradictions are instances of the dimension-free theorem in
+[`ROOTED_SEMIGROUP_OBSTRUCTION.md`](ROOTED_SEMIGROUP_OBSTRUCTION.md).
+
 Only type E remains. It is exactly the four-co-singleton vertex used by the
 sharp six-player internal-sacrifice family.
 

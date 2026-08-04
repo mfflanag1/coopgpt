@@ -24,6 +24,9 @@ or any of the following sharp consequences:
   four;
 - every two-poorer slack boundary is genuinely hypergraphic: some active
   rich-side trace has cardinality at least three;
+- every safe rooted integer fibre of a tight trace semigroup is forbidden by
+  an exact singleton face, a dimension-free mechanism unifying the rounding
+  exclusions below;
 - at the first feasible four-player richer suffix, every failure has the
   four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - projective-plane incidence packets satisfying the overlap-sensitive bound
@@ -165,7 +168,10 @@ Pending expert review, the strongest defensible formulation is:
 > sharp `2|3` versus `2|4` richer-side threshold.  Every two-poorer failure
 > moreover forces a nonintegral active trace hypergraph, hence an odd
 > balanced-matrix obstruction, and graph-like trace systems are ruled out
-> entirely. At four rich players the unique surviving fractional packet is
+> entirely. Exact singleton faces more generally forbid every safe rooted
+> integer fibre of the supported tight-coalition semigroup, unifying the
+> subsequent rounding arguments. At four rich players the unique surviving
+> fractional packet is
 > the co-singleton `1/3` cover. A projective-plane star-rounding argument
 > further excludes every incidence packet satisfying a simple-point density
 > inequality, including every such packet of order at most six; a dual-arc

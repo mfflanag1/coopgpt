@@ -219,6 +219,22 @@ Equivalently, trace-integral slack forces every exact suffix witness to have
 at least two gaining and at least one losing poorer coordinate.  It therefore
 requires at least three poorer players in every dimension.
 
+The exact-face contradiction has a dimension-free semigroup form. For any
+family of proper tight coalitions at a strict two-poorer boundary, exactness
+forbids a nonnegative integer combination with rich load
+
+```text
+1_H + k e_d,       k>=1,
+```
+
+and nonzero zero-one poor load. Exactifying singleton `d` turns such a rooted
+cover directly into an efficiency contradiction. Thus a realizable
+underloading fractional packet needs more than a fractional exact-cover
+vertex: its supported affine semigroup must avoid every safe rooted fibre.
+This **rooted-semigroup obstruction** unifies odd-cycle alternating rounding,
+the four-rich safe-root classification, and projective-plane star rounding.
+The standalone proof is in `paper3/ROOTED_SEMIGROUP_OBSTRUCTION.md`.
+
 The graph-like case can be eliminated completely. If every active trace on
 `H` has size at most two, each extreme exact cover is a disjoint union of
 singleton blocks, isolated edges, and half-weight odd cycles. A packet with

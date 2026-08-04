@@ -73,6 +73,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Exact games with at most four players are PES stable | Established prior art (Dietzenbacher 2021) | State as the closest known low-dimensional result. |
 | Every exact game with at most four players is exact partition at Lmin | Not found | Present as apparent new strengthening, pending specialist review. |
 | Hierarchical dual covers plus exact-face witnesses yield balanced-trace transport | Not found | Present as the apparent new proof mechanism, pending terminology review. |
+| Exact singleton faces forbid safe rooted integer fibres of tight trace semigroups | Not found; affine-semigroup, normality, and Hilbert-basis theory are classical | Present only the bridge to exact-game tight packets as a candidate new general mechanism, pending specialist review. |
 | Every two-poorer failure forces a nonintegral active trace polytope/odd trace cycle | Not found; Berge's matrix-integrality theorem is classical | Present only as a new bridge from Lmin geometry to known balanced-matrix theory. |
 | Every two-poorer failure has an active trace of size at least three | Not found; half-integrality of graph exact covers is standard | Present as a candidate new exact-game realizability exclusion, pending specialist review. |
 | At `|H|=4`, every two-poorer failure has the four-co-singleton `1/3` vertex | Not found; four-row exact-cover classification is elementary | Present as a candidate first-obstruction uniqueness theorem, pending specialist review. |

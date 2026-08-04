@@ -117,6 +117,15 @@ Consequently:
 This is a dimension-free necessary condition on the actual tight-coalition
 geometry of the game, not merely on the cardinalities `(|L|,|H|)`.
 
+There is a stronger integer-semigroup layer beyond nonintegrality. Exact
+singleton faces prohibit every nonnegative integer combination of proper
+tight coalitions with rich incidence `1_H+k e_d`, `k>=1`, and nonzero
+zero-one poor incidence. See
+[`ROOTED_SEMIGROUP_OBSTRUCTION.md`](ROOTED_SEMIGROUP_OBSTRUCTION.md) and
+Theorem `thm:lx-rooted-semigroup-obstruction`. The rank-two, four-rich, and
+projective-plane exclusions are three rounding routes into this same
+forbidden rooted fibre.
+
 There is a further dimension-free exclusion. If every active trace has size
 at most two, every extreme exact cover is a union of singleton blocks,
 isolated edges, and half-weight odd cycles. In the packet whose gaining-poor

@@ -96,6 +96,10 @@ all `q+1`.  The selected coalitions load `b` exactly once and `a` at most
 once.  Thus this is a safe star rounding, allowing a duplicated rich
 singleton with arbitrary multiplicity `q`, not merely multiplicity one.
 
+It is therefore a safe rooted tight cover in the sense of
+[`ROOTED_SEMIGROUP_OBSTRUCTION.md`](ROOTED_SEMIGROUP_OBSTRUCTION.md), which
+supplies the general exact-face contradiction.
+
 Exactify singleton `d`, so a core point `x` has `x_d=0`, and sum the selected
 tight-coalition inequalities.  Add singleton inequalities for an omitted
 poor player.  If both poor players are present, the right side exceeds

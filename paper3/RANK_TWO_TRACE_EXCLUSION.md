@@ -95,6 +95,11 @@ phi(N)=x(N)
 
 a contradiction.
 
+Equivalently, the alternating edges form a safe rooted tight cover with root
+`d`, multiplicity one, and poor load `e_b`. The general reason it is
+impossible is the exact-face rooted-semigroup theorem in
+[`ROOTED_SEMIGROUP_OBSTRUCTION.md`](ROOTED_SEMIGROUP_OBSTRUCTION.md).
+
 ## Significance
 
 The earlier odd-cycle theorem says that a slack two-poorer boundary must make
