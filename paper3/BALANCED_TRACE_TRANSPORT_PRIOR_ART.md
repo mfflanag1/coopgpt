@@ -35,6 +35,9 @@ or any of the following sharp consequences:
   classical identity `A B^T=J+kI`; a new two-label density test rules out
   such packets and unifies the odd-cycle and coarse projective-plane
   roundings, while the co-singleton survivor has the opposite sign;
+- without the label-density hypothesis, averaging dual rows still exposes a
+  canonical proper internal rich face governed by the exact-face overload
+  budget, suggesting a recursive minor-lifting invariant;
 - at the first feasible four-player richer suffix, every failure has the
   four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - projective-plane incidence packets satisfying the overlap-sensitive bound

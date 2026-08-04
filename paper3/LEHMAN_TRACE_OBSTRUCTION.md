@@ -74,6 +74,31 @@ two-label property without a density hypothesis: whenever
 `|U|<|V|<r`, some dual row meets `V` once and `U` at most once. This has been
 checked only on small classical examples and is not used as a theorem.
 
+## Canonical internal face without the density hypothesis
+
+There is an unconditional substitute for a single safe row. Put
+`T=s|V|`. The Lehman diagonal gives `k+1<=s`, so `T<n` because `|V|<r` and
+`rs=n+k`. Take every dual row meeting `V` and add arbitrary zero-`V` rows
+until there are exactly `T` rows; call their index set `D`. Averaging these
+rows gives
+
+```text
+rich load = 1_H + (k/T) 1_D,
+gaining-poor load = 1,
+losing-poor load = u(D)/T < 1.
+```
+
+The exact-face overload budget therefore forces
+
+```text
+k [phi(D)-v(D)] <= [T-u(D)] phi_a,                  (LH-F)
+```
+
+where `a` is the losing poor player. Thus every positive Lehman packet,
+including any packet outside the density theorem, canonically exposes a
+proper internal rich face with a quantitative slack budget. This is the
+candidate recursive invariant for lifting minimally-nonideal contractions.
+
 ## Structural significance
 
 This theorem places the earlier arguments in a standard combinatorial

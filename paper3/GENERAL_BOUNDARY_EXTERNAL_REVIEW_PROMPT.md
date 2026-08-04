@@ -15,6 +15,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
   `thm:lx-rooted-semigroup-obstruction`,
   `thm:lx-positive-lehman-trace-exclusion`,
+  `cor:lx-lehman-internal-face`,
   `thm:lx-rank-two-trace-exclusion`,
   `thm:lx-four-rich-trace-classification`,
   `thm:lx-projective-plane-trace-exclusion`,
@@ -162,6 +163,11 @@ falsification searches.  Please do not count their no-hit output as proof.
    self-dual projective planes are instances, while `J-I` has the opposite
    sign. Determine whether the labeled density argument or its exact-game
    use already appears in the Lehman/minimally-nonideal literature.
+   Audit the canonical internal-face corollary separately: check
+   `k+1<=s`, the strict count `s|V|<|H|`, construction of the row set `D`,
+   both poor loads after averaging, and every factor of `|D|` in `(LH-F)`.
+   Assess whether this certificate is strong enough to support a recursive
+   minor-lifting theorem or is only a weak necessary inequality.
    Then audit the rank-two trace exclusion: prove the extreme-point support
    decomposition into singleton blocks, isolated edges, and half-weight odd
    cycles; check the half-integer poor-load argument; and verify that

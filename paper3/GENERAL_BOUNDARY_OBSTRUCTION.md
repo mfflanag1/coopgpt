@@ -276,6 +276,16 @@ alternating rounding and the coarse projective-plane density argument. The
 sharp co-singleton support `J-I` lies on the opposite-sign side instead.
 See `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
 Lehman's minimally-nonideal minor reduction without losing the poor labels.
+Even when the displayed density test fails, averaging exactly `s|V|` dual
+rows containing every positive `V`-row produces a proper internal rich face
+`D` with
+
+```text
+k [phi(D)-v(D)] <= [s|V|-u(D)] phi_a.
+```
+
+Thus every positive Lehman packet has a canonical recursive face certificate,
+not merely the packets caught by a safe singleton root.
 
 The graph-like case can be eliminated completely. If every active trace on
 `H` has size at most two, each extreme exact cover is a disjoint union of
