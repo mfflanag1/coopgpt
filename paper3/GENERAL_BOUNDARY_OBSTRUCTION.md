@@ -414,36 +414,55 @@ slack without using either poorer player.  This contrasts with the external
 sacrifice circuit of the unique-richest/rich-block family.  It also proves
 that exact partition at Lmin is not necessary for Lmin--Lmax equality.
 
-Together the results identify two dimension-free regions of a boundary-shape
-phase diagram: external sacrifice for `m>=h+3`, and internal sacrifice
-throughout `m>=2,h>=4`.  The principal unresolved strips are now `h=2,3`
-with `m>=3` (subject to the already settled low-dimensional cases).
-
-Three extremal rays are already classified exactly for two-stratum Lmin
-allocations:
+The five-player external-sacrifice geometry admits a different universal
+extension.  For every `m>=3,h>=2`, a common-total integral lower envelope has
 
 ```text
-m=1:  slack is impossible for every h;
-h=1:  slack is possible iff m>=4;
-m=2:  slack is possible iff h>=4.
-m>=2,h>=4: slack is possible, even with Lmin=Lmax.
+Lmin = 1 on m-1 poorer players, 2 on one poorer player, 3 on H,
+v(H) = 3h-1 < 3h = Lmin(H).
 ```
 
-The lower directions use the singleton-poorest, unique-richest, and
-five-player small-poorer impossibility arguments; the upper directions are
-realized by the two explicit dimension-free families.  This is a partial
-phase diagram, not merely a collection of finite examples.
+It also has a closed-form distinct Lmax: with `epsilon=1/(h+1)`, the payoffs
+are `2-epsilon` on the first poorer player, `epsilon` on the second,
+`3-epsilon` on the intermediate poorer player and every rich player, and one
+on every additional poorer player.  The exact L1 distance is `4h/(h+1)`.
+
+The construction uses four base rows plus one row for each additional poorer
+singleton.  Two rich-plus-poor faces successively pin the first two Lmin
+levels, and efficiency equalizes the richer suffix.  The family is
+indecomposable: a positive-pair bridge connects all players when `m>=4`, and
+a strict higher-order interaction attaches the only pair-isolated player at
+`m=3`.  Its full symbolic proof is in
+`paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`.
+
+Combining this family with the external unique-richest family, the internal
+two-poorer family, and the two human impossibility arguments gives a complete
+classification of arbitrary strict Lmin boundary cardinalities:
+
+```text
+m_min(h) = 4  for h=1,
+m_min(h) = 3  for h=2 or h=3,
+m_min(h) = 2  for h>=4.
+```
+
+Here `m_min(h)` is the minimum number of cumulative poorer players compatible
+with a slack richer suffix of size `h`.  No two-stratum hypothesis is needed.
+The excluded region follows from the opposing-sign transport condition, the
+unique-richest packing theorem, and the two-poorer packet theorem.  Every
+admitted pair is realized by one of the three explicit dimension-free
+families.  Thus the original four/five threshold is the first corner of a
+global boundary-cardinality phase transition, not an isolated finite fact.
 
 The bridge becomes substantially broader if one can prove any of the
 following without dimension enumeration:
 
-1. a structural classification of minimal positive-defect patterns containing
-   both the five-player equality (E5) and the six-player `2|4` construction;
+1. a structural classification of minimal positive-defect patterns refining
+   the now-complete cardinality phase diagram into circuit types;
 2. a domain theorem showing that a broad established class (for example a
    nontrivial subclass of totally balanced or large-core games) always has
    zero-defect completions and is therefore exact partition;
-3. a lift or converse construction realizing the six-player obstruction, and
-   every irreducible positive slack budget, in a controlled infinite family.
+3. a converse realization theorem for irreducible positive slack budgets,
+   beyond the three universal families used in the phase diagram.
 
 Those would turn the present sharp finite theorem into a general theory of how
 exact-balanced slack is transported across egalitarian payoff boundaries.

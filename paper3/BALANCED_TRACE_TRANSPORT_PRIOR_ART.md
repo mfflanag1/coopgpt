@@ -12,12 +12,14 @@ slack through the poorer side, and the average poor load is coordinatewise
 strictly below one.
 
 The search found each ingredient separately, but no source stating this bridge
-or either sharp consequence:
+or any of the following sharp consequences:
 
 - exact games through four players are exact partition at Lmin;
 - with exactly two poorer players, a slack richer suffix is impossible for at
   most three richer players and possible for every richer-block size at least
-  four.
+  four;
+- the complete boundary-cardinality phase diagram
+  `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
 
 This is evidence of apparent novelty, not a definitive novelty opinion.
 Citation-chain review by specialists in exact games and egalitarian solutions
@@ -75,6 +77,9 @@ cooperative game "balanced trace" coalition
 cooperative game "transport" "minimal balanced collection" egalitarian
 "minimal balanced collection" "egalitarian core"
 "exact balanced" Lmin Lorenz
+"exact partition games" egalitarian solution richer coalition tight suffix
+"exact partition" "Lmin" cooperative games
+"egalitarian solution" exact games payoff classes coalition union
 ```
 
 The searches were followed through the references and discussion sections of
@@ -90,9 +95,11 @@ Pending expert review, the strongest defensible formulation is:
 > show that every slack richer suffix in an exact game induces a minimal
 > balanced trace-transport certificate.  This dimension-free obstruction
 > yields a human exact-partition classification through four players and a
-> sharp `2|3` versus `2|4` richer-side threshold.  We do not claim the Lmin
-> solution, exact partition games, exact balancedness, or minimal balanced
-> collections as new.
+> sharp `2|3` versus `2|4` richer-side threshold.  Three explicit universal
+> families then give a complete classification of the boundary-side
+> cardinalities compatible with slack.  We do not claim the Lmin solution,
+> exact partition games, their published Lorenz consequence, exact
+> balancedness, or minimal balanced collections as new.
 
 ## Remaining novelty gate
 
@@ -101,4 +108,8 @@ Llerena--Mauri, and exact-balancedness literatures.  Ask specifically whether
 the hierarchical dual-cover lemma or the projection of its tight coalitions
 to minimal balanced rich-side packets appears under different terminology
 (normal cones, balanced hypergraphs, Kohlberg-type criteria, or reduced-game
-consistency).  Absence from keyword search alone is not enough.
+consistency).  Also ask whether any paper classifies failure of the exact
+partition condition by the cardinalities of the cumulative poorer and richer
+sides.  The available exact-partition sources define the condition and derive
+solution-theoretic consequences, but this search found no such phase theorem.
+Absence from keyword search alone is not enough.

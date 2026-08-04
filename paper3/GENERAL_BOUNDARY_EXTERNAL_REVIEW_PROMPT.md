@@ -20,6 +20,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   human proof of the six-player construction.
 - `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`: focused search log,
   prior-art boundary, and cautious novelty statement.
+- `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`: standalone
+  statement and proof of the complete cardinality phase diagram.
 
 ## Exact verification files
 
@@ -38,6 +40,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/results/n6_two_poorer_suffix_counterexample.json`
 - `coopgames/src/verify_two_poorer_rich_family.py`
 - `coopgames/results/two_poorer_rich_family.json`
+- `coopgames/src/verify_three_poorer_boundary_family.py`
+- `coopgames/results/three_poorer_boundary_family.json`
 
 The two `hunt_*small*boundary.py` scripts and their results are discovery-only
 falsification searches.  Please do not count their no-hit output as proof.
@@ -103,11 +107,24 @@ falsification searches.  Please do not count their no-hit output as proof.
     particular, confirm that the richer suffix is slack although Lmin=Lmax,
     and assess whether this is already known as a replication construction or
     as a counterexample to necessity of the exact-partition condition.
-12. Check the partial two-stratum boundary-shape phase diagram: `m=1` never,
-    `h=1` iff `m>=4`, `m=2` iff `h>=4`, and existence throughout
-    `m>=2,h>=4`.  Confirm that every impossibility and construction cited
-    really has the required universal or existential
-    quantifier and that no normalization assumption is lost.
+12. Audit the universal three-poorer family for every `m>=3,h>=2`: common
+    totals, singleton normalization (including the endpoint `h=2`), the four
+    displayed load-bearing values, and each progressive Lmin pinning step.
+    Confirm that the proof establishes the claimed `(m-1,1,h)` strata and
+    unit richer-suffix slack without relying on the finite verifier.  Check
+    the dimension-free core-feasibility argument for the displayed Lmax,
+    including both coalition-difference formulas and the endpoint `h=2`.
+    Check every successive Lmax forcing face and the `4h/(h+1)` distance.
+    Check
+    the indecomposability proof separately for `Q` nonempty and for the
+    endpoint `m=3`, including the strict four-player interaction attaching
+    `p2`.
+13. Check the complete boundary-cardinality phase diagram:
+    `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
+    Verify that the lower bounds cover every excluded pair, the three
+    dimension-free families cover every admitted pair, and the theorem is
+    about an arbitrary strict Lmin boundary rather than only two-stratum
+    allocations.  Check that no normalization or quantifier is lost.
 
 ## Novelty questions
 
@@ -130,7 +147,9 @@ core literature:
 - the integral `m>=2,h>=4` internal-sacrifice family, the internal/external
   sacrifice dichotomy, and the observation that exact partition is not
   necessary for Lmin--Lmax equality.
-- the three exact extremal rays in the partial boundary-shape phase diagram.
+- the universal `m>=3,h>=2` family and the synthesis of all three mechanisms
+  into the complete boundary-cardinality phase diagram, including its
+  closed-form Lmax and dimension-free Lmin--Lmax separation.
 
 The manuscript already treats the exact-balancedness characterization and the
 Arin--Iñarra transfer-blocking property as prior art.  Please flag any remaining
@@ -159,6 +178,10 @@ python src/verify_n6_two_poorer_suffix_counterexample.py \
 python src/verify_two_poorer_rich_family.py \
   --max-poorer-block 5 --max-rich-block 10 --exact-replay-m2-h4 \
   --output results/two_poorer_rich_family.json
+python src/verify_three_poorer_boundary_family.py \
+  --max-poorer-side 6 --max-richer-suffix 6 \
+  --exact-replay-through-players 6 \
+  --output results/three_poorer_boundary_family.json
 cd paper3
 latexmk -pdf -interaction=nonstopmode -halt-on-error wrapper.tex
 ```

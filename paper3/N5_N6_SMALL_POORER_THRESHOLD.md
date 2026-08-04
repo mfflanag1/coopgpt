@@ -239,8 +239,9 @@ players.  The family is integral and human-checkable.
 
 This removes the principal finite-enumeration limitation: the sharp `2|3`
 versus `2|4` threshold now has a dimension-structural explanation through
-balanced trace packets.  A focused literature review has not yet established
-novelty, and the new proof needs hostile external review.  The result would
-become broader still through a classification of all minimal positive
-boundary-defect obstructions or a comparable theorem for the unresolved
-`h=2,3` strips with three or more poorer players.
+balanced trace packets.  The subsequent universal three-poorer family closes
+the former `h=2,3` strips and, together with the unique-richest and internal
+families, yields the complete boundary-cardinality phase diagram recorded in
+`paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`.  A focused literature
+review has not yet established novelty, and both the transport proof and the
+complete classification need hostile external review.
