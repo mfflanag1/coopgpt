@@ -31,6 +31,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/results/rich_block_family.json`
 - `coopgames/src/verify_n6_two_poorer_suffix_counterexample.py`
 - `coopgames/results/n6_two_poorer_suffix_counterexample.json`
+- `coopgames/src/verify_two_poorer_rich_family.py`
+- `coopgames/results/two_poorer_rich_family.json`
 
 The two `hunt_*small*boundary.py` scripts and their results are discovery-only
 falsification searches.  Please do not count their no-hit output as proof.
@@ -79,6 +81,19 @@ falsification searches.  Please do not count their no-hit output as proof.
    `Lmin=(1,1,2,2,2,2)` without an unstated assumption.
 10. Confirm that `v({3,4,5,6})=6<8=Lmin({3,4,5,6})`, establishing sharp failure
    of the small-poorer conclusion at six.
+11. Audit the dimension-free internal-sacrifice family for every `m>=2` and
+    `h>=4`: common generator totals, singleton normalization, all displayed
+    worths, the summed Lmin argument (including the aggregate excess on the
+    additional poorer players), the Lmax ceiling argument, and the internal
+    circuit.  In
+    particular, confirm that the richer suffix is slack although Lmin=Lmax,
+    and assess whether this is already known as a replication construction or
+    as a counterexample to necessity of the exact-partition condition.
+12. Check the partial two-stratum boundary-shape phase diagram: `m=1` never,
+    `h=1` iff `m>=4`, `m=2` iff `h>=4`, and existence throughout
+    `m>=2,h>=4`.  Confirm that every impossibility and construction cited
+    really has the required universal or existential
+    quantifier and that no normalization assumption is lost.
 
 ## Novelty questions
 
@@ -98,6 +113,10 @@ core literature:
 - the sharp result that a richer Lmin suffix with at most two poorer players is
   tight through five players but can be slack at six;
 - the fixed six-player integer lower-envelope construction.
+- the integral `m>=2,h>=4` internal-sacrifice family, the internal/external
+  sacrifice dichotomy, and the observation that exact partition is not
+  necessary for Lmin--Lmax equality.
+- the three exact extremal rays in the partial boundary-shape phase diagram.
 
 The manuscript already treats the exact-balancedness characterization and the
 Arin--Iñarra transfer-blocking property as prior art.  Please flag any remaining
@@ -123,6 +142,9 @@ python src/verify_rich_block_family.py \
   --output results/rich_block_family.json
 python src/verify_n6_two_poorer_suffix_counterexample.py \
   --output results/n6_two_poorer_suffix_counterexample.json
+python src/verify_two_poorer_rich_family.py \
+  --max-poorer-block 5 --max-rich-block 10 --exact-replay-m2-h4 \
+  --output results/two_poorer_rich_family.json
 cd paper3
 latexmk -pdf -interaction=nonstopmode -halt-on-error wrapper.tex
 ```

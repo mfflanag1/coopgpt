@@ -344,6 +344,47 @@ a zero-defect cover once the target suffix itself is excluded.
 
 ## 7. What would make this a larger theorem
 
+The second escape mechanism is now also dimension-free.  For every `m>=2`
+and `h>=4`, there is an integral exact game with `m` poorer players and `h`
+tied richer players for which
+
+```text
+Lmin = Lmax = (D repeated m times, 2D repeated h times),
+D=(h-2)(h-3),
+v(H) = 2D(h-1) < 2Dh = Lmin(H).
+```
+
+Its saturated circuit is internal:
+
+```text
+1_{H\{4}} + 1_{4} - 1_H = 0.
+```
+
+The tight coalition `H\{4}` and the slack rich singleton fund the suffix
+slack without using either poorer player.  This contrasts with the external
+sacrifice circuit of the unique-richest/rich-block family.  It also proves
+that exact partition at Lmin is not necessary for Lmin--Lmax equality.
+
+Together the results identify two dimension-free regions of a boundary-shape
+phase diagram: external sacrifice for `m>=h+3`, and internal sacrifice
+throughout `m>=2,h>=4`.  The principal unresolved strips are now `h=2,3`
+with `m>=3` (subject to the already settled low-dimensional cases).
+
+Three extremal rays are already classified exactly for two-stratum Lmin
+allocations:
+
+```text
+m=1:  slack is impossible for every h;
+h=1:  slack is possible iff m>=4;
+m=2:  slack is possible iff h>=4.
+m>=2,h>=4: slack is possible, even with Lmin=Lmax.
+```
+
+The lower directions use the singleton-poorest, unique-richest, and
+five-player small-poorer impossibility arguments; the upper directions are
+realized by the two explicit dimension-free families.  This is a partial
+phase diagram, not merely a collection of finite examples.
+
 The bridge becomes substantially broader if one can prove any of the
 following without dimension enumeration:
 

@@ -24,6 +24,22 @@ The new threshold is:
 Thus six is the minimum dimension of a slack Lmin richer suffix having only
 two poorer players.  The lower bound at five is computer-assisted at present.
 
+The six-player obstruction is the smallest member of a dimension-free
+half-plane: for every poorer-block size `m>=2` and richer-block size `h>=4`,
+an integral exact game on `m+h` players has a slack tied richest suffix and
+
+```text
+Lmin = Lmax = (D repeated m times, 2D repeated h times),
+D=(h-2)(h-3).
+```
+
+Thus failure of suffix tightness persists throughout `m>=2,h>=4`.  It does
+not by itself force Lmin and Lmax to differ.
+
+Combining this family with the through-five lower bound gives an exact
+classification on the `m=2` ray: with exactly two poorer players, a slack
+tied richest suffix is possible if and only if it has at least four players.
+
 ## The six-player exact game
 
 All six vectors below have total ten:
@@ -146,12 +162,25 @@ src/hunt_structured_two_poorer_boundary.py
 
 Their no-hit results are not proof evidence and should not be cited as such.
 
+The dimension-free continuation is reproduced by
+
+```bash
+python src/verify_two_poorer_rich_family.py \
+  --max-poorer-block 5 --max-rich-block 10 --exact-replay-m2-h4 \
+  --output results/two_poorer_rich_family.json
+```
+
+Its manuscript proof uses an explicit common-total generator family, a
+symbolic Lmin argument, and a two-line Lmax argument.  The finite parameter
+grid is only an audit of the universal formulas.
+
 ## Significance and limits
 
-This is a real structural advance over the four/five exact-partition result:
-it identifies a different minimal obstruction geometry and shows sharply that
-two poorer players cease to force suffix tightness at six.  The six-player
-example is small, integral, and human-checkable.
+This is a structural advance over the four/five exact-partition result: it
+identifies a different obstruction geometry and shows sharply that two poorer
+players cease to force suffix tightness at six, then continues that obstruction
+throughout the half-plane with at least two poorer and at least four richer
+players.  The family is integral and human-checkable.
 
 It is not yet a major field breakthrough.  The five-player lower bound still
 depends on a finite symbolic classification, and a focused literature review

@@ -2594,6 +2594,7 @@ Theorem~\ref{thm:lx-unique-richest-threshold}.
 Second, if the poorest stratum is the singleton $\{a\}$, then
 \[
  x_a\leq\phi_a\quad\hbox{for every }x\in\core(v).      \tag{7}
+ \label{eq:lx-singleton-poor-complement}
 \]
 Otherwise a sufficiently short segment from $\phi$ toward a point with a
 larger $a$ coordinate raises the minimum payoff, because every other
@@ -2782,6 +2783,138 @@ The fixed generator certificate, all 62 independently recomputed exact faces,
 and an independent exact staged-Lmin replay are in
 \path{src/verify_n6_two_poorer_suffix_counterexample.py} and
 \path{results/n6_two_poorer_suffix_counterexample.json}.
+\end{proof}
+
+The six-player escape extends across an entire boundary-shape half-plane and
+also separates suffix tightness from equality of the two lexicographic selections.
+
+\begin{theorem}[internal-sacrifice half-plane]
+\label{thm:lx-two-poorer-family}
+For every $m\geq2$ and $h\geq4$, there is a singleton-normalized integral
+exact game on a poorer block $P$ of size $m$ and a tied richest suffix $H$ of
+size $h$ such that
+\[
+ \operatorname{Lmin}(v)=\operatorname{Lmax}(v)
+ =D\mathbf1_P+2D\mathbf1_H,
+ \qquad D=(h-2)(h-3),
+\]
+but
+\[
+ v(H)=2D(h-1)<2Dh=\operatorname{Lmin}(v)(H).
+\]
+Consequently the exact-partition condition at Lmin is sufficient but not
+necessary for Lmin--Lmax equality, even within exact games.
+\end{theorem}
+
+\begin{proof}
+Put $r=h-2$, $D=r(r-1)$, write
+$P=\{p_1,p_2\}\mathbin{\dot\cup}Q$ and
+$H=\{a,b\}\mathbin{\dot\cup}K$, where $|Q|=m-2$ and $|K|=r$.  Define the
+following common-total integral allocations:
+\[
+\begin{aligned}
+u&=D e_{p_2}+D\mathbf1_Q+3D(e_a+e_b)
+       +(2r-1)(r-1)\mathbf1_K,\\
+z&=4D e_{p_1}+D\mathbf1_Q+2(r^2-1)\mathbf1_K,\\
+w^k&=D e_{p_1}+D\mathbf1_Q+3D(e_a+e_b)
+       +r(2r-1)\mathbf1_{K\setminus\{k\}}\quad(k\in K),\\
+\phi&=D\mathbf1_P+2D\mathbf1_H,\\
+q^j&=\phi+D(e_{p_1}-e_j)\quad(j\in Q),\\
+v(S)&:=\min\{u(S),z(S),w^k(S)\ (k\in K),
+                    \phi(S),q^j(S)\ (j\in Q)\}.
+\end{aligned}                                                   \tag{TF}
+\label{eq:lx-two-poorer-family}
+\]
+Every displayed allocation has total $D(m+2h)$.  Hence all of them
+belong to the core of their lower envelope, and each coalition attains its
+worth at one of them; the game is exact.  Player $p_1$ is zero at $u$;
+players $p_2,a,b$ are zero at $z$; each $k\in K$ is zero at $w^k$; and each
+$j\in Q$ is zero at $q^j$.  Thus the game is singleton-normalized.
+
+Direct substitution gives
+\[
+\begin{gathered}
+v(N\setminus\{p_2\})=D(m+2h)-D,\\
+v(H\setminus\{b\})=v(H\setminus\{a\})=2D(h-1),\\
+v(\{p_1,a,b\}\cup(K\setminus\{k\}))=D(2h-1)\quad(k\in K),\\
+v(H)=2D(h-1).                                      \tag{TF-T}
+\label{eq:lx-two-poorer-family-tight}
+\end{gathered}
+\]
+The candidate $\phi$ gives every player at least $D$.  At any core point $x$
+with this property, the first constraint and efficiency force $x_{p_2}=D$.
+Write $y=x-D\mathbf1_N$, $E=y(Q)$, and $t=y(K)$.  Then
+$y\geq0$, $y_{p_2}=0$, and $y(N)=hD$.  The next two constraints give
+\[
+ y_a+t\geq(h-1)D,\qquad y_b+t\geq(h-1)D.           \tag{TF-1}
+ \label{eq:lx-two-poorer-family-first}
+\]
+The $r$ remaining constraints give
+\[
+ y_{p_1}+y_a+y_b+t-y_k\geq(h-1)D\quad(k\in K).
+\]
+Summing them and using $r=h-2$ and
+$y_{p_1}+E+y_a+y_b+t=hD$ yields
+$t+rE\leq rD$.  Combining this with
+\eqref{eq:lx-two-poorer-family-first} gives
+\[
+hD=y_{p_1}+E+y_a+y_b+t
+ \geq y_{p_1}+E+2(h-1)D-t,
+\]
+so $y_{p_1}+E\leq t-rD\leq-rE$.  Nonnegativity forces
+$y_{p_1}=E=0$, hence $y_j=0$ for every $j\in Q$.  Thus the entire poorer block
+is pinned at the first Lmin level $D$.  The richer block has fixed total
+$2Dh$, so its next common level is at most $2D$, attained by $\phi$.  This
+proves the Lmin formula, while the last line of
+\eqref{eq:lx-two-poorer-family-tight} gives suffix slack $2D$.
+
+For Lmax, the coalition $H\setminus\{b\}$ has $h-1$ members and worth
+$2D(h-1)$, so every core point has a coordinate at least $2D$.  The point
+$\phi$ attains this ceiling.  On the face where every coordinate is at most
+$2D$, the two richer-coalition constraints force every coordinate of $H$ to
+equal $2D$.  The remaining $m$ coordinates have fixed total $mD$, and their
+next common ceiling is at least $D$, attained by $\phi$.  Hence Lmax also
+equals $\phi$.
+
+Finally, the saturated internal-sacrifice circuit is
+\[
+ \mathbf1_{H\setminus\{b\}}+\mathbf1_{\{b\}}
+ -\mathbf1_H=0.                                      \tag{TF-C}
+\]
+The first coalition is tight, singleton $b$ has slack $2D$, and the negative
+suffix has slack $2D$.  Thus this obstruction is funded entirely inside the
+richer block, in contrast with the poorer-singleton funding in
+\eqref{eq:lx-unique-richest-family-circuit}.  The exact parameter-grid audit
+and generic staged replay at $(m,h)=(2,4)$ are
+\path{src/verify_two_poorer_rich_family.py} and
+\path{results/two_poorer_rich_family.json}.
+\end{proof}
+
+The two dimension-free families and the impossibility arguments give exact
+boundary-shape classifications along three extremal rays.
+
+\begin{corollary}[partial boundary-shape phase diagram]
+\label{cor:lx-boundary-shape-phase}
+Consider two-stratum Lmin allocations of singleton-normalized exact games,
+with $m$ poorer players and a richer suffix of size $h$.
+\begin{enumerate}[label=(\roman*)]
+\item If $m=1$, the richer suffix is always tight.
+\item If $h=1$, a slack richer suffix is possible if and only if $m\geq4$.
+\item If $m=2$, a slack richer suffix is possible if and only if $h\geq4$.
+\item Throughout the half-plane $m\geq2$, $h\geq4$, a slack richer suffix is
+possible, even with Lmin equal to Lmax.
+\end{enumerate}
+\end{corollary}
+
+\begin{proof}
+If the poorest stratum is a singleton, the max--min argument in
+\eqref{eq:lx-singleton-poor-complement} makes its complement tight; this
+proves (i).  For (ii), Theorem~\ref{thm:lx-unique-richest-threshold} rules out
+$m\leq3$, while its $h=1$ family realizes every $m\geq4$.  For (iii),
+Theorem~\ref{thm:lx-small-poorer-threshold} rules out $h\leq3$, and
+Theorem~\ref{thm:lx-two-poorer-family} realizes every $h\geq4$.
+The same family, including its additional poorer-player rows $q^j$, proves
+(iv) for every $m\geq2$.
 \end{proof}
 
 The lower-bound half of Theorem~\ref{thm:lx-small-poorer-threshold} remains
