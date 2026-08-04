@@ -66,6 +66,29 @@ Consequently the low-dimensional threshold and the higher-rank rounding
 theorems are governed by one exact-face budget, rather than unrelated
 arguments.
 
+There is a precise odd-cycle specialization. Alternating around an odd trace
+cycle duplicates one cycle row. If the selected columns cover every external
+rich row once or twice, their full rich load is
+
+```text
+1_H + 1_D,
+```
+
+where `D` consists of the duplicated cycle row and the twice-covered external
+rows. With safe nonzero zero-one poor load, (OB) becomes
+
+```text
+s_phi(D) <= payoff of the omitted poor players.
+```
+
+When the cycle spans all rich rows, `D` is a singleton and the strict payoff
+boundary makes this impossible. At the first `2|4` co-singleton obstruction,
+the external fourth row joins the duplicated cycle row, so `D` is a pair; in
+the sharp integral family its face slack equals the omitted poor payoff.
+Thus the same budget identifies the exact geometric transition from the
+unrealizable three-rich triangle to the realizable four-rich co-singleton
+packet.
+
 ## Next structural target
 
 For a supported fractional exact cover, seek a real or integral rounding

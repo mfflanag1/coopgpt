@@ -14,6 +14,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `thm:lx-balanced-trace-transport`,
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
   `thm:lx-rooted-semigroup-obstruction`,
+  `lem:lx-odd-cycle-overload-footprint`,
   `thm:lx-labeled-odd-cycle`,
   `cor:lx-unconditional-labeled-obstruction`,
   `thm:lx-positive-lehman-trace-exclusion`,
@@ -68,6 +69,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/CANONICAL_LABELED_CIRCUIT.md`: proof that the same
   original-row packet is a fractional vertex and a support-minimal linear
   circuit, without an MNI reduction.
+- `coopgames/paper3/ODD_CYCLE_OVERLOAD_FOOTPRINT.md`: exact-face budget for
+  alternating odd-cycle roundings and the singleton-to-pair transition at
+  the sharp `2|3` versus `2|4` boundary.
 - `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`: human
   classification proving uniqueness of the first surviving obstruction.
 - `coopgames/paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`: human
@@ -255,6 +259,13 @@ falsification searches.  Please do not count their no-hit output as proof.
    minimality; the manuscript claims none of the latter.
    Assess whether this certificate is strong enough to support a recursive
    minor-lifting theorem or is only a weak necessary inequality.
+   Audit the odd-cycle overload footprint separately: verify the alternating
+   load on the cycle rows, the construction of the full footprint from
+   external rows, and the specialization of the exact-face budget. For the
+   `h=4` family, recompute the selected two co-singletons, their safe poor
+   load, `F={r_2,k_2}`, and the equality `s_phi(F)=phi_{p_2}`. Decide whether
+   this genuinely explains the `2|3` versus `2|4` transition or merely
+   restates the existing four-row classification.
    Then audit the rank-two trace exclusion: prove the extreme-point support
    decomposition into singleton blocks, isolated edges, and half-weight odd
    cycles; check the half-integer poor-load argument; and verify that
@@ -335,6 +346,8 @@ core literature:
 - the canonical original-row labeled-cover circuit, including whether its
   support-minimal vertex formulation has a known antecedent in balanced
   hypergraphs, oriented matroids, or exact-game tight-coalition systems;
+- the odd-cycle overload-footprint budget and its interpretation of the first
+  feasible obstruction as a singleton-to-pair internal-face transition;
 - the exact-face rooted-semigroup obstruction and its interpretation as a
   family of forbidden integer fibres, including prior terminology from
   normal hypergraphs, Hilbert bases, and affine semigroups;
