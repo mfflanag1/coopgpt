@@ -10,10 +10,12 @@ balanced collections and not the earlier finite verifier.
 
 Review the commit identified in the accompanying pull request, especially:
 
-- `coopgames/paper3/sections_leximin.tex`, Lemma “strict richer-side cover”
-  and Theorem “human two-poorer boundary threshold”;
+- `coopgames/paper3/sections_leximin.tex`, Lemma “strict richer-side cover,”
+  Theorem “balanced-trace transport obstruction,” and Theorem “human
+  two-poorer boundary threshold”;
 - `coopgames/paper3/N5_N6_SMALL_POORER_THRESHOLD.md`;
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`;
+- `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`;
 - `coopgames/src/verify_n5_small_poorer_suffix.py` and
   `coopgames/results/n5_small_poorer_suffix.json` only as an independent
   computational audit;
@@ -24,20 +26,24 @@ Review the commit identified in the accompanying pull request, especially:
 ## Claims to attack
 
 1. Derive the individual-pinning LP dual from scratch and verify every sign
-   and coefficient in the strict richer-side cover, separately for tied poor
-   players and successive poor levels.  In the successive case, check that
-   the large-`M` combination really controls the earlier player's coalition
-   load without silently constraining its equality multiplier.
+   and coefficient in the dimension-free strict richer-side cover.  Check the
+   displayed primal and stationarity equation `(SC-D)`, including the sign of
+   the efficiency multiplier and the complementary-slackness support.  Check the
+   backward large-coefficient induction across arbitrary poorer payoff strata,
+   including that it controls earlier coalition loads without silently
+   constraining their equality multipliers and preserves later deficits.
 2. Check that the aggregate strict-cover inequality really rules out two
    nonnegative poor-player displacements, including after normalization and
    deletion of coalitions with empty rich trace.
-3. Check that deleting coalitions with empty rich trace, normalizing the rich
-   load, and decomposing the resulting balanced collection into minimal
-   balanced packets preserves the strict poor-player undercoverage needed by
-   the proof.
+3. Check the full balanced-trace transport theorem: deleting coalitions with
+   empty rich trace, normalizing the rich load, decomposing into normalized
+   minimal balanced packets, and recovering coordinatewise strict average
+   poor-player undercoverage.
 4. Verify the refinement from trace packets to deterministic packets of
    original tight coalitions.  Look specifically for a hidden convexity or
-   coupling gap in the product decomposition across trace slots.
+   coupling gap in the product decomposition across trace slots.  Also verify
+   that the extreme points of the displayed bounded polytope `P_H` are exactly
+   normalized minimal balanced collections.
 5. Independently classify normalized minimal balanced collections on one,
    two, and three players.  Confirm that the only nonpartition case on three
    players is the half-weight pair triangle.

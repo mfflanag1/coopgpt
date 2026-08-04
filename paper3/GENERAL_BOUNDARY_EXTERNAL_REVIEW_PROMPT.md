@@ -1,4 +1,4 @@
-# Hostile external-review prompt: slack budgets and the sharp five/six threshold
+# Hostile external-review prompt: balanced-trace transport and sharp thresholds
 
 Please conduct a hostile mathematical and novelty review of the new
 exact-balanced boundary framework and the sharp small-poorer boundary result.
@@ -9,13 +9,17 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   Lemma 5.39 through Theorem 5.45 (numbers may shift after edits).
 - `coopgames/paper3/sections_leximin.tex`: source labels
   `lem:lx-exact-balanced-slack`, `lem:lx-boundary-cover`,
-  `cor:lx-boundary-defect`, and `thm:lx-small-poorer-threshold`.
+  `cor:lx-boundary-defect`, `lem:lx-strict-richer-cover`,
+  `thm:lx-balanced-trace-transport`, and
+  `thm:lx-small-poorer-threshold`.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
 - `coopgames/paper3/N4_N5_STRUCTURAL_THRESHOLD.md`: standalone sacrifice-budget
   proof and four-generator obstruction family for every dimension at least five.
 - `coopgames/paper3/N5_N6_SMALL_POORER_THRESHOLD.md`: standalone statement and
   human proof of the six-player construction.
+- `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`: focused search log,
+  prior-art boundary, and cautious novelty statement.
 
 ## Exact verification files
 
@@ -76,13 +80,14 @@ falsification searches.  Please do not count their no-hit output as proof.
    normalized `h=1` separation `(m-3)/(m-1) -> 1` is already known; do not
    treat large tied blocks alone as novel because direct sums supply them.
 8. Hostilely audit the new human two-poorer threshold proof.  Check the
-   individual-pinning dual derivation of the strict richer-side cover in both
-   the tied and successive-poor cases; the decomposition into minimal balanced
-   trace packets; the integer/half-integer carrier argument; the forced tight
-   triangle `{c,d}`, `{c,e}`, `{b,d,e}`; and the final exact-singleton
-   efficiency contradiction.  Confirm that the old 16-query verifier is now
-   only an audit and that no payoff-stratum case enumeration remains in the
-   proof dependency.  A focused checklist is in
+   individual-pinning dual derivation of the dimension-free strict richer-side
+   cover, including the backward large-coefficient induction across arbitrary
+   poorer payoff strata; the balanced-trace transport theorem and its product
+   lift to original coalitions; the integer/half-integer two-poor carrier
+   argument; the forced tight triangle `{c,d}`, `{c,e}`, `{b,d,e}`; and the
+   final exact-singleton efficiency contradiction.  Confirm that the old
+   16-query verifier is now only an audit and that no payoff-stratum case
+   enumeration remains in the proof dependency.  A focused checklist is in
    `coopgames/paper3/N5_HUMAN_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`.
 9. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,

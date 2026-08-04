@@ -2619,93 +2619,16 @@ and equals $\operatorname{Lmax}(v)$.
 \end{lemma}
 
 \begin{proof}
-Put $\phi=\operatorname{Lmin}(v)$ and $V=v(N)$.  Exactness will be used in
-the form
-\[
- v(S)=\min_{x\in\core(v)}x(S)                         \tag{E}
-\]
-for every $S$.  In particular, for each player $r$ there is
-$z^r\in\core(v)$ with $z^r_r=0$.
-
-The richest stratum is not a singleton by
-Theorem~\ref{thm:lx-unique-richest-threshold}.
-
-Second, if the poorest stratum is the singleton $\{a\}$, then
-\[
- x_a\leq\phi_a\quad\hbox{for every }x\in\core(v).      \tag{7}
- \label{eq:lx-singleton-poor-complement}
-\]
-Otherwise a sufficiently short segment from $\phi$ toward a point with a
-larger $a$ coordinate raises the minimum payoff, because every other
-coordinate of $\phi$ is strictly larger.  By (E), (7) says exactly that
-$N\setminus\{a\}$ is tight at $\phi$.
-
-It remains to treat a payoff boundary with two poorer and two richer players.
-Write the poorer set as $\{a,b\}$ and the richer set as $\{c,d\}$.
-First suppose
-\[
- \phi_a=\alpha<\phi_b=\beta<\phi_c=\gamma
-       \leq\phi_d=\delta.
-\]
-The coalition $N\setminus\{a\}$ is tight by (7).  Assume that $\{c,d\}$
-is slack.  Then $N\setminus\{b\}$ cannot be tight: the two complement
-inequalities would give $x_a\leq\alpha$ and $x_b\leq\beta$ throughout the
-core, and (E) would make $\{c,d\}$ tight.  A protector for $b$ against $c$
-can only be one of
-\[
- \{c\},\quad\{a,c\},\quad\{c,d\},\quad
- \{a,c,d\}=N\setminus\{b\}.
-\]
-All but $\{a,c\}$ are slack, so $\{a,c\}$ is tight.  At the exact singleton
-witness $z=z^c$,
-\[
- z_b+z_d\geq\beta+\gamma+\delta,
- \qquad z_a\geq\alpha+\gamma.
-\]
-This gives $z(N)\geq V+\gamma$, contrary to efficiency.
-
-Finally suppose
-\[
- \phi_a=\phi_b=\alpha<\phi_c=\gamma\leq\phi_d=\delta
-\]
-and again assume that $\{c,d\}$ is slack.  The four protector applications
-give
-\[
- \begin{split}
- N\setminus\{a\}\text{ tight}&\quad\text{or}\quad
-       \{b,c\},\{b,d\}\text{ both tight},\\
- N\setminus\{b\}\text{ tight}&\quad\text{or}\quad
-       \{a,c\},\{a,d\}\text{ both tight}.
- \end{split}                                             \tag{8}
-\]
-If both complements are tight, (E) makes $\{c,d\}$ tight.  If exactly one is
-tight, say $N\setminus\{a\}$, then (8) makes $\{a,c\}$ tight.  At $z^c$,
-\[
- z_b+z_d\geq\alpha+\gamma+\delta,
- \qquad z_a\geq\alpha+\gamma,
-\]
-again exceeding $V$ by $\gamma$; the other case is symmetric.
-
-If neither complement is tight, (8) makes all four cross pairs tight.  Since
-\[
- v(\{a,c\})+v(\{b,d\})
-   =(\alpha+\gamma)+(\alpha+\delta)=V,
-\]
-both corresponding core inequalities are equalities throughout the core;
-the same holds for $\{a,d\}$ and $\{b,c\}$.  At $z^c$ these equalities force
-\[
- z^c=(\alpha+\gamma,\alpha+\gamma,0,\delta-\gamma).
-\]
-For sufficiently small $t>0$, the core point
-$(1-t)\phi+t z^c$ raises both poorest coordinates above $\alpha$, while the
-two richer coordinates remain above them.  This contradicts max--min
-optimality.  Hence the richer pair is tight.
-
-Now take any strict payoff boundary with $|N|\leq4$.  Its richer side is not
-a singleton by the first part of the proof, so its poorer side has at most two
-players.  A singleton poorer side is covered by (7), and a two-player poorer
-side reduces to the two-by-two argument above.  This proves
-\eqref{eq:lx-richer-suffix}.  The one-stratum case is immediate.
+Put $\phi=\operatorname{Lmin}(v)$ and consider a strict payoff boundary with
+richer suffix $H$ and poorer side $L=N\setminus H$.  If $|H|=1$, its member
+is the unique richest player, impossible through four players by
+Theorem~\ref{thm:lx-unique-richest-threshold}.  Hence $|H|\geq2$, so
+$|L|\leq2$.  The human two-poorer boundary theorem proved below,
+Theorem~\ref{thm:lx-small-poorer-threshold}, now makes $H$ tight (and also
+covers $|L|=1$).  This proves \eqref{eq:lx-richer-suffix}; the one-stratum
+case is immediate.  Thus the dimension-free balanced-trace transport
+obstruction, rather than a four-player payoff-stratum case split, explains
+the exact-partition threshold.
 
 For completeness, here is the connection with the published exact-partition
 result in the present ordering convention.  Take any $x\in\core(v)$ and let
@@ -2758,9 +2681,9 @@ The number of players below a failed boundary has its own sharp threshold.
 The first step is a local dual consequence of the progressive Lmin stages.
 
 \begin{lemma}[strict richer-side cover]
-\label{lem:lx-two-poorer-strict-cover}
+\label{lem:lx-strict-richer-cover}
 Let $\phi=\operatorname{Lmin}(v)$ and let a strict payoff boundary have
-poorer side $L=\{a,b\}$ and richer suffix $H$.  There are nonnegative
+nonempty poorer side $L$ and richer suffix $H$.  There are nonnegative
 weights $\lambda_T$ on proper coalitions tight at $\phi$ and a number
 $\alpha>0$ such that, with
 \[
@@ -2769,7 +2692,7 @@ $\alpha>0$ such that, with
 one has
 \[
  c_h=\alpha\quad(h\in H),\qquad
- c_a<\alpha,\quad c_b<\alpha.                    \tag{SC}
+ c_i<\alpha\quad(i\in L).                        \tag{SC}
  \label{eq:lx-strict-richer-cover}
 \]
 \end{lemma}
@@ -2778,28 +2701,120 @@ one has
 At a progressive Lmin stage, hold all earlier coordinates fixed, retain the
 common floor on the current and later players, and maximize one player $i$ in
 the current stratum.  Because $i$ is finalized at that level, the optimum is
-$\phi_i$.  LP duality supplies nonnegative multipliers on $\phi$-tight core
-inequalities.  Their player loads are a common number $\nu_i$ on every later
-player, at most $\nu_i-1$ on the target $i$, and at most $\nu_i$ on every
-other player in the current stratum.  Earlier coordinates carry unrestricted
-equality multipliers and impose no load restriction.  This is the same
-stationarity calculation used in Lemma~\ref{lem:lx-protector-packing}, now
-retaining the complete dual cover.
+$\phi_i$: if a feasible point raised $i$, a short segment from $\phi$ toward
+it would keep every later stratum strictly above the current level and would
+lexicographically improve the current tied block.
 
-If $a$ and $b$ are tied, add their two individual-pinning duals.  Every member
-of $H$ then has common load $\alpha=\nu_a+\nu_b$, while each poorer player
-has load at most $\alpha-1$.
+Here is the dual calculation explicitly.  Put $P$ for the earlier players,
+$\ell=\phi_i$, and minimize $-x_i$ subject to
+\[
+ v(S)-x(S)\leq0\quad(\emptyset\ne S\subsetneq N),
+ \qquad \ell-x_q\leq0\quad(q\notin P),
+\]
+together with $x_p=\phi_p$ for $p\in P$ and $x(N)=v(N)$.  Let
+$\lambda_S,\mu_q\geq0$ be the two families of inequality multipliers, let
+$\nu_i$ be the free efficiency multiplier, and put
+$w_q=\sum_{S\ni q}\lambda_S$.  Stationarity at $q\notin P$ is
+\[
+ -\mathbf1_{\{q=i\}}-w_q-\mu_q+\nu_i=0.             \tag{SC-D}
+ \label{eq:lx-strict-cover-dual}
+\]
+Every later player's floor is strictly inactive at $\phi$, hence
+$w_q=\nu_i$ there.  At the target,
+$w_i=\nu_i-1-\mu_i\leq\nu_i-1$, and every other player in the current
+stratum has $w_q=\nu_i-\mu_q\leq\nu_i$.  Complementary slackness restricts
+positive $\lambda_S$ to $\phi$-tight coalitions.  Earlier coordinates carry
+free equality multipliers and impose no load restriction.  Finally
+$w_i\geq0$ implies $\nu_i\geq1$.
 
-If $\phi_a<\phi_b$, the dual for the $a$ stage has load $\nu_a$ on
-$\{b\}\cup H$ and load at most $\nu_a-1$ on $a$.  The dual for the later
-$b$ stage has common load $\nu_b$ on $H$, load at most $\nu_b-1$ on $b$,
-and some finite coalition-weight load $r$ on the earlier player $a$ (the
-stationarity equation there also contains an unrestricted equality
-multiplier).  Add the latter dual to $M>0$ times the former.  The common rich
-load is $\alpha=M\nu_a+\nu_b$, the load on $b$ is at most $\alpha-1$, and
-the load on $a$ is at most $M(\nu_a-1)+r$.  Its deficit is therefore at
-least $M+\nu_b-r>0$ for all sufficiently large $M$.  This proves
-\eqref{eq:lx-strict-richer-cover}.
+Write the poorer payoff strata as $B_1,\ldots,B_j$, from lowest to highest.
+For each $t$, add the individual-pinning duals of all $i\in B_t$ and call the
+resulting cover $D_t$.  It has a common load $\eta_t$ on every later player,
+and every $i\in B_t$ has load at most $\eta_t-1$: its own dual contributes
+the unit deficit and every other dual in the stratum contributes at most its
+common later load.  Loads on earlier strata are finite but unrestricted.
+
+Combine the $D_t$ backwards.  Start with any positive multiple of $D_j$.
+Suppose a combination of $D_{t+1},\ldots,D_j$ has common load $A$ on $H$
+and finite loads $r_i$ on $B_t$.  Adding $M D_t$ changes the common rich load
+to $A+M\eta_t$, while the load on $i\in B_t$ is at most
+$r_i+M(\eta_t-1)$.  Its rich-side deficit is at least
+$A-r_i+M>0$ for all sufficiently large $M$.  Players in later poorer strata
+receive the same added load as $H$, so their already strict deficits are
+preserved.  Backward induction gives one cover satisfying
+\eqref{eq:lx-strict-richer-cover}.  Since every target load is nonnegative
+and at most $\nu_i-1$, each $\nu_i\geq1$, so the final $\alpha$ is positive.
+\end{proof}
+
+\begin{theorem}[balanced-trace transport obstruction]
+\label{thm:lx-balanced-trace-transport}
+Let $v$ be exact, let $\phi=\operatorname{Lmin}(v)$, and let $H$ be a
+cumulative richer suffix at a strict payoff boundary, with
+$L=N\setminus H\ne\emptyset$.  If
+\[
+ s:=\phi(H)-v(H)>0,
+\]
+then there are a core point $z$, a displacement $\Delta=z-\phi$, and a
+finite convex mixture of lifted normalized minimal balanced packets on $H$
+with weights $\theta_q>0$ and poorer-player load vectors
+$r^q\in\mathbb R_+^L$ such that
+\begin{align}
+ \Delta(H)&=-s,& \Delta(L)&=s,                         \tag{BT-1}\label{eq:lx-transport-direction}\\
+ \min_{i\in L}\Delta_i&<0<&\max_{i\in L}\Delta_i,    \tag{BT-2}\label{eq:lx-transport-signs}\\
+ -s+\sum_{i\in L}r_i^q\Delta_i&\geq0
+     &&\text{for every packet }q,                     \tag{BT-3}\label{eq:lx-transport-packet}\\
+ \sum_q\theta_q r_i^q&<1
+     &&(i\in L),\qquad \sum_q\theta_q=1.             \tag{BT-4}\label{eq:lx-transport-average}
+\end{align}
+Thus every slack Lmin boundary requires a minimal balanced rich-side circuit
+that transports the suffix slack through opposing gains and losses on the
+poorer side.
+\end{theorem}
+
+\begin{proof}
+Choose $z\in\core(v)$ exact on $H$.  Efficiency gives
+\eqref{eq:lx-transport-direction}.  Apply
+Lemma~\ref{lem:lx-strict-richer-cover}, normalize its rich load to one, and
+discard cover weight on coalitions disjoint from $H$.  The remaining cover
+still has unit load on every member of $H$ and has loads $c_i<1$ on $L$.
+Summing $z(T)-\phi(T)\geq0$ over its tight coalitions gives
+\[
+ -s+\sum_{i\in L}c_i\Delta_i\geq0.                   \tag{BT-C}
+ \label{eq:lx-transport-cover}
+\]
+If every $\Delta_i$ on $L$ were nonnegative, the left side would be strictly
+less than $-s+\Delta(L)=0$.  Since $\Delta(L)=s>0$, there is also a positive
+entry.  This proves \eqref{eq:lx-transport-signs}.
+
+Project the remaining tight coalitions to their nonempty traces on $H$.
+Their weights form a point of the bounded polytope
+\[
+ \mathcal P_H=\left\{\beta\geq0:
+       \sum_{\emptyset\ne R\subseteq H}\beta_R\mathbf1_R
+       =\mathbf1_H\right\}.
+\]
+(Boundedness follows from $\sum_R\beta_R\leq|H|$.)  Its extreme points are
+exactly the unique normalized balancing weights on minimal balanced
+collections: a nonminimal support contains a balanced subcollection and
+admits a nontrivial feasible perturbation, while a minimal balanced support
+has unique weights.  Thus the projected cover is a convex combination of
+normalized minimal balanced packets; see also
+\citet{LaplaceMermoudEtAl2025}.
+
+For each trace $R$ in a packet, split among the original coalitions having
+that trace using their conditional cover weights.  Taking the product
+distribution across the finitely many trace slots refines the decomposition
+into a finite convex mixture of lifted deterministic packets.  Indeed, after
+averaging first over the product choices and then over packets, the weight of
+an original coalition $T$ is its trace weight times its conditional share,
+hence exactly the original $\lambda_T$.  The lift therefore preserves the
+entire average cover, not only its rich projection.
+
+For a lifted packet $q$, let $r_i^q$ be its total packet weight on coalitions
+containing poorer player $i$.  Its rich trace has unit load, so summing
+$z(T)-\phi(T)\geq0$ with its packet weights proves
+\eqref{eq:lx-transport-packet}.  Averaging the lifted packets recovers the
+original poorer loads $c_i<1$, which is \eqref{eq:lx-transport-average}.
 \end{proof}
 
 \begin{theorem}[human two-poorer boundary threshold]
@@ -2812,63 +2827,34 @@ The conclusion is sharp: it fails when $|L|=2$ and $|H|=4$.
 \end{theorem}
 
 \begin{proof}
-The singleton case is \eqref{eq:lx-singleton-poor-complement}.  Now put
-$L=\{a,b\}$ and suppose, toward a contradiction, that
+If $|L|=1$, slack would contradict
+\eqref{eq:lx-transport-signs}.  Now put $L=\{a,b\}$, suppose toward a
+contradiction that $s:=\phi(H)-v(H)>0$, and apply
+Theorem~\ref{thm:lx-balanced-trace-transport}.  Relabel the two poorer
+players so that
 \[
- s:=\phi(H)-v(H)>0.
-\]
-Exactness of $H$ gives $z\in\core(v)$ with $z(H)=v(H)$.  For
-$\Delta=z-\phi$,
-\[
- \Delta(H)=-s,\qquad \Delta_a+\Delta_b=s.         \tag{TP-1}
- \label{eq:lx-trace-packet-direction}
-\]
-
-Apply Lemma~\ref{lem:lx-two-poorer-strict-cover}, scale its common richer
-load to one, and discard cover weight on coalitions disjoint from $H$.  The
-remaining cover still has unit load on $H$ and loads $c_a,c_b<1$ on the two
-poorer players.  Summing $z(T)-\phi(T)\geq0$ over its tight coalitions gives
-\[
- -s+c_a\Delta_a+c_b\Delta_b\geq0.                 \tag{TP-2}
- \label{eq:lx-trace-cover-sign}
-\]
-If both poor displacements were nonnegative, the left side would be strictly
-less than $-s+\Delta_a+\Delta_b=0$.  Their sum is positive by
-\eqref{eq:lx-trace-packet-direction}, so the two displacements have opposite
-signs.  Relabel them so that
-\[
- \Delta_a<0<\Delta_b=s-\Delta_a.                  \tag{TP-3}
+ \Delta_a<0<\Delta_b=s-\Delta_a.                  \tag{TP-1}
  \label{eq:lx-trace-packet-signs}
 \]
 
-Project each remaining tight coalition to its trace on $H$.  The resulting
-fractional collection is balanced on $H$.  Decompose it into normalized
-minimal balanced packets; this standard decomposition and terminology are
-reviewed by \citet{LaplaceMermoudEtAl2025}.  When $|H|\leq2$, every packet is
-a set partition.  When $H=\{c,d,e\}$, the only additional packet is
+Use the lifted packet mixture supplied by that theorem.  When $|H|\leq2$,
+every minimal balanced packet is a set partition.  When $H=\{c,d,e\}$, the
+only additional packet is
 \[
- \tfrac12\{\{c,d\},\{c,e\},\{d,e\}\},        \tag{TP-4}
+ \tfrac12\{\{c,d\},\{c,e\},\{d,e\}\}.        \tag{TP-2}
  \label{eq:lx-rich-trace-triangle}
 \]
-the unique nonpartition minimal balanced collection on three players.
-Splitting weights among coalitions with the same rich trace, and then taking
-the product decomposition across trace slots, refines this into deterministic
-packets of the original tight coalitions: each partition slot selects one
-coalition, while each triangle edge retains weight $1/2$.
-
-For one such packet let $r_a,r_b$ be its loads on the two poorer players.
-Sum $z(T)-\phi(T)\geq0$ with the packet weights.  Its rich trace has unit
-load, so \eqref{eq:lx-trace-packet-direction} gives
+For one packet write $r_a,r_b$ for its poorer-player loads; by
+\eqref{eq:lx-transport-packet},
 \[
- -s+r_a\Delta_a+r_b\Delta_b\geq0.                 \tag{TP-5}
+ -s+r_a\Delta_a+r_b\Delta_b\geq0.                 \tag{TP-3}
  \label{eq:lx-trace-packet-carrier}
 \]
 For a partition packet the coalition weights are one, hence $r_a,r_b$ are
 nonnegative integers.  Equation \eqref{eq:lx-trace-packet-carrier} and
 $\Delta_a<0$ rule out $r_b=0$; every partition packet therefore loads $b$ at
-least once.  If $|H|\leq2$, averaging the packets would give total cover load
-at least one on $b$, contrary to the strict underload in
-\eqref{eq:lx-strict-richer-cover}.
+least once.  If $|H|\leq2$, averaging contradicts
+\eqref{eq:lx-transport-average}.
 
 It remains to treat $|H|=3$.  Since the total load on $b$ is strictly below
 one, some triangle packet in \eqref{eq:lx-rich-trace-triangle} has
@@ -2881,7 +2867,7 @@ first rules out $k_b=0$, so $k_b=1$.  If $k_a\geq1$, its left side is at most
 again impossible.  Thus $k_a=0$.  Relabeling $c,d,e$ if necessary, the packet
 therefore consists of the three $\phi$-tight coalitions
 \[
- \{c,d\},\qquad \{c,e\},\qquad \{b,d,e\}.     \tag{TP-6}
+ \{c,d\},\qquad \{c,e\},\qquad \{b,d,e\}.     \tag{TP-4}
  \label{eq:lx-forced-rich-triangle}
 \]
 
@@ -3078,9 +3064,10 @@ possible, even with Lmin equal to Lmax.
 \end{corollary}
 
 \begin{proof}
-If the poorest stratum is a singleton, the max--min argument in
-\eqref{eq:lx-singleton-poor-complement} makes its complement tight; this
-proves (i).  For (ii), Theorem~\ref{thm:lx-unique-richest-threshold} rules out
+Part (i) follows directly from
+Theorem~\ref{thm:lx-balanced-trace-transport}, whose opposing-sign condition
+is impossible on a one-player poorer side.  For (ii),
+Theorem~\ref{thm:lx-unique-richest-threshold} rules out
 $m\leq3$, while its $h=1$ family realizes every $m\geq4$.  For (iii),
 Theorem~\ref{thm:lx-small-poorer-threshold} rules out $h\leq3$, and
 Theorem~\ref{thm:lx-two-poorer-family} realizes every $h\geq4$.

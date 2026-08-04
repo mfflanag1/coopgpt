@@ -2,9 +2,9 @@
 
 ## Status
 
-This is a research note, not yet part of the manuscript theorem chain.  Every
-identity below has a short human proof.  The conceptual ingredients have prior
-art:
+The principal results are now integrated into the manuscript theorem chain.
+Every identity below has a short human proof.  The conceptual ingredients have
+prior art:
 
 - Arin--Iñarra (2001): the egalitarian-core transfer-blocking property used to
   obtain tight coalitions separating richer from poorer players;
@@ -12,10 +12,10 @@ art:
 - Lohmann--Borm--Herings (2012): the structure of minimal exact-balanced
   collections.
 
-The candidate new contribution is the **protector-completion bridge** between
-these theories and its use to explain the sharp Lmin threshold.  No claim of
-novelty is made until the relevant citation chains have been checked by an
-expert.
+The candidate new contribution is the **protector-completion and
+balanced-trace transport bridge** between these theories and its use to explain
+the sharp Lmin thresholds.  No claim of novelty is made until the relevant
+citation chains have been checked by an expert.
 
 ## 1. Slack-budget law
 
@@ -155,6 +155,42 @@ published Lorenz consequence applies.  This packages the dimension-free
 research problem into a precise covering invariant: classify when egalitarian
 transfer blockers have zero defect, and classify the positive-defect equality
 cases when they do not.
+
+## 2.1 Dimension-free balanced-trace transport
+
+The progressive Lmin duals yield more than individual protector coalitions.
+At any strict payoff boundary, sum the individual-pinning duals within each
+poorer payoff stratum.  The sum is regular on every later player and has a
+unit deficit on every member of its own stratum.  Combining these stratum
+covers backwards with successively large coefficients absorbs the finite,
+unrestricted loads placed on earlier strata.  The result is a tight-coalition
+cover with load one on every rich player and load strictly below one on every
+poor player.
+
+If the richer suffix `H` is slack, exactness supplies a core point `z` tight
+on `H`.  Put `Delta=z-phi` and `s=phi(H)-v(H)`.  Then
+
+```text
+Delta(H)=-s,  Delta(L)=s.
+```
+
+Summing the tight cover inequalities at `z` shows that the poor displacement
+has both signs.  Projecting the cover to its nonempty traces on `H` gives a
+balanced collection.  Decompose it into normalized minimal balanced packets
+and lift each packet back to deterministic original tight coalitions.  Every
+lifted packet with poor load vector `r` satisfies
+
+```text
+-s + r dot Delta_L >= 0,
+```
+
+while the convex average of these carrier vectors is strictly below one in
+every poor coordinate.  This is the dimension-free **balanced-trace transport
+obstruction**: a slack Lmin suffix is possible only if a minimal balanced
+rich-side circuit can transport its entire slack through opposing poor-side
+gains and losses.  The theorem uses standard minimal balanced collections;
+the claimed new content is their forced appearance as traces of Lmin dual
+covers in exact games.
 
 ## 3. The existing fractional-packing lemma is a specialization
 

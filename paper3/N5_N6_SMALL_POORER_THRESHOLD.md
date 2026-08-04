@@ -122,13 +122,14 @@ The richer suffix therefore has slack two despite only two poorer players.
 
 ## The human lower bound
 
-At a boundary with poorer side `L={a,b}`, stagewise Lmin duality gives a
-nonnegative cover by coalitions tight at `phi`: every member of the richer
-suffix has the same cover load, while both `a` and `b` have strictly smaller
-loads.  This follows by adding the two individual-pinning duals when the poor
-players are tied.  When their levels are successive, a large multiple of the
-first player's dual absorbs the unrestricted earlier-coordinate load in the
-second player's dual.
+At every strict boundary, not only the two-poor case, stagewise Lmin duality
+gives a nonnegative cover by coalitions tight at `phi`: every member of the
+richer suffix has the same cover load, while every poorer player has strictly
+smaller load.  Sum the individual-pinning duals within each poorer payoff
+stratum, then combine the stratum covers backwards with successively large
+coefficients.  Each earlier cover absorbs the finite unrestricted loads placed
+on its stratum by all later stages without destroying deficits already secured
+on later poor strata.
 
 Assume the richer suffix `H` is slack.  Exactness gives a core point `z` tight
 on `H`.  Its displacement `Delta=z-phi` satisfies
@@ -148,9 +149,11 @@ Together with `Delta_a+Delta_b=s`, this rules out two nonnegative poor
 displacements.  Their sum is positive, so they have opposite signs; write
 `Delta_a<0<Delta_b`.
 
-Project the strict tight-coalition cover onto its traces on `H`.  For at most
-three rich players, every normalized minimal balanced trace packet is a set
-partition except for the unique three-pair triangle
+This is the general balanced-trace transport theorem: project the strict
+tight-coalition cover onto its traces on `H`, decompose it into normalized
+minimal balanced packets, and lift those packets back to original tight
+coalitions.  For at most three rich players, every packet is a set partition
+except for the unique three-pair triangle
 
 ```text
 1/2 * ({c,d}, {c,e}, {d,e}).
