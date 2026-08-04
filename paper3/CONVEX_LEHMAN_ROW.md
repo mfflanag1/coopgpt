@@ -162,3 +162,10 @@ The multi-row extension in
 residual into a quantitative bound on any uniformly overloaded rich face. It
 contains both singleton bands and the canonical internal-face certificate as
 special cases and is the current route toward a recursive classification.
+
+The separate capacity-parity argument in
+[`THREE_COLUMN_LEHMAN_SEPARATION.md`](THREE_COLUMN_LEHMAN_SEPARATION.md)
+proves that every three gaining columns have a dual row meeting them exactly
+once.  On that row the residual bands exclude all possible losing-label
+counts.  Hence the polarized regime can begin only at four gaining columns
+and trace degree at least five.

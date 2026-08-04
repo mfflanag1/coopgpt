@@ -38,6 +38,9 @@ or any of the following sharp consequences:
 - the two-sided Lehman label residual extends from singleton rows to arbitrary
   dual-row subsets, where its aggregate value gives a quantitative slack
   budget for the corresponding rich face;
+- a capacity-parity consequence of the transpose Lehman identity separates
+  every three dual columns and, with the residual bands, excludes every
+  packet having at most three gaining-label columns;
 - without the label-density hypothesis, averaging dual rows still exposes a
   canonical proper internal rich face governed by the exact-face overload
   budget, suggesting a recursive minor-lifting invariant;
@@ -203,8 +206,9 @@ the real-valued exact-face budget.
 The later targeted search inspected Cornuéjols--Guenin--Tunçel's primary
 Lehman-matrix paper and the classical minimally-nonideal theorem it records.
 That source supplies the matrix identity and regularity, not the poor-label
-density argument, the two-sided label residual, its subset face budget, or
-the bridge to exact-game tight faces.  Király--Pap's full primary paper was also checked: its
+density argument, the two-sided label residual, its subset face budget, the
+three-column capacity-parity separation, or the bridge to exact-game tight
+faces.  Király--Pap's full primary paper was also checked: its
 minor-compatible pair-of-clutters theorem and ideal set functions do not
 state the two-label interpolation or the residual conservation law, although
 their framework may still be relevant to the unresolved cost-aware minor
@@ -241,7 +245,9 @@ Pending expert review, the strongest defensible formulation is:
 > those fibres.  A two-sided label residual extends to arbitrary dual-row
 > subsets and converts aggregate residual into a quantitative rich-face slack
 > budget; it contains both singleton exclusions and canonical internal-face
-> amplification.  A two-label density test subsumes the odd-cycle and coarse
+> amplification.  A capacity-parity argument separates every three dual
+> columns, pushing any survivor to at least four gaining columns and Lehman
+> degree five.  A two-label density test subsumes the odd-cycle and coarse
 > projective-plane roundings; the co-singleton survivor lies on the
 > opposite-sign side. At four rich players the unique surviving
 > fractional packet is

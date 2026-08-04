@@ -299,7 +299,13 @@ k(r-ell)[phi(D)-v(D)] <= F(D) phi_a,
 with the symmetric bound using `k(r-p)`, `-F(D)`, and `phi_b`.  Zero residual
 therefore forces the rich face `D` tight.  This single theorem contains the
 singleton row bands and the canonical internal-face upper bound below.
-See `paper3/SUBSET_LEHMAN_FACE_BUDGET.md` and
+In addition, a dimension-free capacity-parity lemma shows that every three
+columns of a positive Lehman dual have a row meeting them exactly once.  The
+two residual bands then exclude every packet with at most three gaining-label
+columns, forcing any survivor to have at least four such columns and Lehman
+trace degree at least five.
+See `paper3/SUBSET_LEHMAN_FACE_BUDGET.md`,
+`paper3/THREE_COLUMN_LEHMAN_SEPARATION.md`, and
 `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
 Lehman's minimally-nonideal minor reduction without losing the poor labels.
 Even when the displayed density test fails, averaging exactly `s|V|` dual

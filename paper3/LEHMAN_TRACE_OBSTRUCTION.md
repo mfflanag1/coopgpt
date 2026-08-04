@@ -69,6 +69,17 @@ there are no losing columns. With two gaining columns there is at most one
 losing column, while nonsingularity makes the two dual columns distinct and
 their codegree at most `s-1`.
 
+There is a dimension-free extension to `|V|=3`.  For any three columns of
+`B`, suppose no row meets them exactly once.  Their row-load vector then has
+values only `0,2,3`.  If `x` rows have load three, the transpose identity
+forces every column of `A` outside the chosen triple to meet exactly one of
+those `x` rows.  Capacity gives `x>=s-1`; parity of the remaining total
+incidence `3(s-x)` forces `x=s`, which would make the three columns identical.
+Thus a simple row exists.  Its residual is `(r-3)(1-u)`, and the positive or
+negative band excludes all `u<=|U|<=2`.  Consequently every survivor must
+have `|V|>=4` and `r>=5`.  See
+`THREE_COLUMN_LEHMAN_SEPARATION.md`.
+
 The natural stronger conjecture is that every positive Lehman pair has the
 two-label property without a density hypothesis: whenever
 `|U|<|V|<r`, some dual row meets `V` once and `U` at most once. This has been
@@ -266,7 +277,8 @@ steps remain before one can claim a dimension-free characterization:
    equivalently in the unscaled formulation, preserving the scalar
    gaining-player deficit and controlling noncore-row excess);
 2. rule out the residual polarization required when both convex bands fail
-   on a general positive Lehman core.
+   on a general positive Lehman core.  The first still-open label cardinality
+   is now `|V|=4`.
 
 The classical source is Cornuéjols, Guenin, and Tunçel, *Lehman matrices*,
 Journal of Combinatorial Theory B 99 (2009), 531--556,
