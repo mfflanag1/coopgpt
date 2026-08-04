@@ -1,12 +1,11 @@
 # Reviewer packet: the exact four-player Lmin--Lmax bridge
 
-Prepared 2026-08-03 and revised after a hostile external review of commit
-`5376a76`.  That review returned "verified with qualifications," reproduced
-the finite theorem from scratch, and found no mathematical error.  The
-qualifications concerned prior-art attribution, reproducibility, and
-exposition; this packet incorporates those corrections.  This remains one
-external technical review, not journal peer review or a definitive novelty
-opinion.
+Prepared 2026-08-03 and revised after hostile external reviews of commits
+`5376a76` and `163ad4c`.  The first returned "verified with qualifications"
+for the finite theorem.  The second returned "verified" for the structural
+proof, checking it by hand and with adversarial computations, including the
+fractional packing boundary at five players.  Neither review is journal peer
+review or a definitive novelty opinion.
 
 ## Result under review
 
@@ -29,10 +28,9 @@ The contribution under review is the sharp classification "exact and
 `n<=4` implies exact partition at Lmin" and its sharp failure at five.  Neither
 the exact-partition definition nor its Lorenz consequence is claimed as new.
 
-The manuscript now gives a structural human proof.  The two exact-rational
-encodings remain independent audits of the conclusion and sign conventions;
-they are no longer the proof of the classification.  The new argument has not
-yet received external review.
+The manuscript now gives an externally reviewed structural human proof.  The
+two exact-rational encodings remain independent audits of the conclusion and
+sign conventions; they are no longer the proof of the classification.
 
 ## Dependency map
 
@@ -98,8 +96,9 @@ points that attain singleton values, closing the low-dimensional geometry:
    pair (which overallocates an exact singleton witness), or force all four
    cross pairs (which creates a core segment raising both poorest players).
 
-This exhausts the geometry without enumerating payoff compositions or tight
-sets.  The five-player base witness escapes in a `3|2` boundary: its tight
+This replaces exhaustive payoff-composition and tight-lattice enumeration by
+a human-scale, mechanism-driven case analysis.  The five-player base witness
+escapes in a `3|2` boundary: its tight
 coalitions `{3,4,5}` and `{1,3,5}` protect the three poorer players while
 leaving the richer pair `{3,5}` slack.  Inequality (FP) is a unique-richest
 obstruction; with two rich players, exactness of a singleton can zero only one
@@ -107,6 +106,23 @@ of them, so the witness is outside its hypothesis.
 
 The full proof is in `paper3/sections_leximin.tex`; an expanded proof audit is
 in `paper3/N4_LMIN_LMAX_HUMAN_PROOF.md`.
+
+## Strong five-player separation
+
+Both games in the five-player bump pair have large cores.  The base game is
+stronger than merely failing the exact-partition equalities at Lmin: exact
+linear-rational queries for all 541 ordered payoff partitions show that no
+core allocation witnesses the exact-partition property.  Moreover,
+
+```text
+Lmin(base) = (1,1,13/2,5,13/2)
+Lmax(base) = (2,0,6,6,6),
+```
+
+so its core has no Lorenz-dominating element.  The endpoint is exact partition,
+witnessed at its common Lmin--Lmax point `(2,0,6,6,6)` with strata
+`{2} < {1} < {3,4,5}`.  Thus largeness alone guarantees neither exact
+partition nor a Lorenz-dominating core allocation.
 
 ## Encoding A: symbolic KKT/exact-face certificate
 
@@ -311,8 +327,8 @@ policy; these programs do not currently rely on Python `assert` statements.
    transfer-blocking characterization of the egalitarian core, applied to
    Lmin.  The proposed new contribution is the use of that property with exact
    singleton witnesses to prove the through-four classification.  That new
-   structural proof has not yet been checked by an external human reviewer.
-   Its load-bearing new points are the displacement argument and the
+   structural proof was verified by the hostile review of `163ad4c`.
+   Its load-bearing new points are the fractional-packing argument and the
    exact-singleton contradictions in the `2|2` case.  The included LP dual is
    only a self-contained convention check.
 2. Both exhaustive encodings use Z3's exact linear-rational engine, although
@@ -323,16 +339,18 @@ policy; these programs do not currently rely on Python `assert` statements.
    assertions because complementarity branches heavily.  The exhaustive
    2048-tight-set primal enumeration independently formulates Lmin optimality,
    but shares the exactness system and solver and is not a compact hand proof.
-4. One hostile external review found no mathematical error and independently
-   reproduced the claims.  It is not a substitute for peer review.
+4. Two hostile external reviews found no mathematical error.  The second
+   verified the structural proof by hand and with adversarial computations.
+   These reviews are not substitutes for peer review.
 5. Exact-partition games and their Lorenz-dominating Dutta--Ray allocation are
    prior art.  The narrower classification of exact games through four players
    appears new, but MathSciNet/zbMATH and expert citation-chain review remain
    outstanding.
 6. The fractional protector-packing inequality is a dimension-free algebraic
    consequence of exactness and the published transfer-blocking property.  Its
-   correctness and novelty, especially relative to hypergraph-packing and
-   balanced-collection formulations, remain external-review questions.
+   correctness was externally verified and its tightness at four poorer
+   players was adversarially checked.  Its novelty, especially relative to
+   hypergraph-packing and balanced-collection formulations, remains open.
 
 ## Questions for the external reviewer
 

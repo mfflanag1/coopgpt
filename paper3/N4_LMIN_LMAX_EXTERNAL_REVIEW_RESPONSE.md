@@ -8,11 +8,37 @@ and the sharp dimension threshold.  This response does not turn that review
 into a novelty certification or journal peer review.
 
 **Post-review update.**  A later revision replaces the finite classification
-as the theorem proof by a structural human argument based on LP-dual
-protector coalitions and exact singleton witnesses.  The reviewed encodings
-remain independent audits.  The new proof is recorded in
-`N4_LMIN_LMAX_HUMAN_PROOF.md` and has not yet been externally reviewed; the
-historical limitation below describes the state of commit `5376a76`.
+as the theorem proof by a structural human argument based on the published
+egalitarian-core transfer-blocking property, a fractional protector-packing
+inequality, and exact singleton witnesses.  A second hostile review of commit
+`163ad4c` returned **verified**, checked every proof step by hand, and ran
+adversarial computational tests.  The reviewed encodings remain independent
+audits.  The historical findings below describe the state of commit
+`5376a76`.
+
+## Resolution of the structural-proof review (`163ad4c`)
+
+The second reviewer found no fatal or mathematical issue.  The revision after
+that review:
+
+1. strengthens the five-player proposition: all 541 ordered payoff partitions
+   are checked in exact linear-rational arithmetic, proving that the base game
+   is not an exact partition game at any core allocation;
+2. records the corollary that the base core has no Lorenz-dominating element,
+   since its Lmin and Lmax allocations differ;
+3. confirms that large-core progress is emitted on standard error, leaving
+   standard output as valid JSON;
+4. replaces the standalone note's absolute "no enumeration" wording by the
+   accurate claim of a human-scale, mechanism-driven case analysis;
+5. explains that the protector face is indexed by final payoff strata, so
+   degenerate algorithmic pinning substeps do not affect the proof;
+6. states that pinned coordinates carry free multipliers in the LP dual and
+   folds nonempty protector existence into the packing lemma; and
+7. updates the PR and reviewer materials to point to the reviewed SHA.
+
+The only substantive pre-submission gate left by that reviewer is a definitive
+MathSciNet/zbMATH and expert citation-chain novelty check for the through-four
+exact-partition classification.
 
 ## Central correction
 
@@ -84,12 +110,13 @@ The bibliography now cites:
 
 ## Remaining limitations
 
-- At the reviewed commit, no concise hand proof replaced the finite
-  computer-assisted classification.  That limitation is now superseded by
-  the unreviewed protector-coalition proof noted above.
+- At the first reviewed commit, no concise hand proof replaced the finite
+  computer-assisted classification.  That limitation is now superseded by the
+  externally verified structural proof noted above.
 - The two exhaustive encodings share the definition-level exactness system and
   Z3, although their Lmin-optimality formulations differ.
 - The finite-classification novelty claim still requires MathSciNet/zbMATH and
   expert citation-chain review focused on exact-partition and Lorenz-stable
   games.
-- The result has one favorable hostile external review, not journal acceptance.
+- The result has two favorable hostile external reviews, not journal
+  acceptance or a definitive novelty opinion.

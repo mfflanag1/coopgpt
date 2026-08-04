@@ -74,7 +74,12 @@ whereas at the two-generator endpoint both selections equal
 Lmin/PES disagreement to agreement.  Lmax remains `(2,0,6,6,6)` across the
 bump, and the base Lmin point has strict richer-suffix slack
 `phi({3,5})=13>12=v({3,5})`.  Largeness alone therefore does not imply the
-exact-partition property, and sharpness holds for the classification itself.
+exact-partition property.  More strongly, exact rational checks of all 541
+ordered payoff partitions show that the base game is not exact partition at
+any core allocation.  Since its Lmin and Lmax points differ, its core has no
+Lorenz-dominating element.  The endpoint is exact partition, witnessed by the
+common allocation above.  Sharpness therefore holds for the classification
+itself.
 
 ## Exact and targeted evidence
 

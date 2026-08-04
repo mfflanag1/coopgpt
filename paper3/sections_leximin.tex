@@ -2151,7 +2151,7 @@ staged Maschler LP, rather than merely checking the displayed stage bounds:
 \end{center}
 \end{proof}
 
-\begin{proposition}[a large-core Lmin--Lmax separation]
+\begin{proposition}[a large core without a Lorenz-dominating element]
 \label{prop:lx-five-large-core-separation}
 Both five-player games $v,w$ in
 Theorem~\ref{thm:lx-proper-exact-fails} have large cores, and
@@ -2163,8 +2163,12 @@ the base game the richest Lmin stratum is $\{3,5\}$ and
 \[
  \operatorname{Lmin}(v)(\{3,5\})=13>12=v(\{3,5\}).
 \]
-Consequently largeness alone does not imply the exact-partition property at
-Lmin, and the through-four-player classification below is sharp at five.
+The base game is not an exact partition game at any core allocation and its
+core has no Lorenz-dominating element.  The endpoint game is an exact partition
+game, witnessed by its common Lmin--Lmax allocation with ordered strata
+$\{2\}\prec\{1\}\prec\{3,4,5\}$.  Consequently largeness alone implies
+neither the exact-partition property nor existence of a Lorenz-dominating core
+element, and the through-four-player classification below is sharp at five.
 \end{proposition}
 
 \begin{proof}[Computer-assisted proof]
@@ -2180,7 +2184,19 @@ vertex $y$, an $x\in\core(v)$ or $x\in\core(w)$ with $x\leq y$.
 Since $U(v)$ is pointed with nonnegative recession cone, convexity extends
 vertex domination to all of $U(v)$; this is the large-core property.  Separate
 exact staged LPs compute the two Lmax allocations, and direct substitution
-checks the displayed strict suffix slack.  The verifier and output are
+checks the displayed strict suffix slack.
+
+To test the exact-partition property independently of Lmin, enumerate all
+$541$ ordered set partitions $B_1\prec\cdots\prec B_k$ of five players.  For
+each chain, an exact rational linear-arithmetic query imposes core feasibility,
+equal payoffs within each block, strict payoff inequalities between adjacent
+blocks, and tightness of every richer suffix
+$B_{j+1}\cup\cdots\cup B_k$.  All $541$ base-game queries are infeasible.  For
+the endpoint, the displayed three-block chain is feasible exactly at
+$(2,0,6,6,6)$.  Finally, any core allocation that Lorenz-dominated the whole
+core would be both its leximin and leximax point.  The displayed inequality
+$\operatorname{Lmin}(v)\ne\operatorname{Lmax}(v)$ therefore excludes such an
+allocation in the base game.  The verifier and output are
 \begin{center}
 \small\path{src/verify_n5_exact_lmin_lmax_large_core.py},\\[-2pt]
 \small\path{results/n5_exact_lmin_lmax_large_core.json}.
@@ -2240,9 +2256,10 @@ $\phi$ and satisfies
 The claim follows directly from the transfer-blocking characterization of the
 egalitarian core in \citet{ArinInarra2001}, since Lmin belongs to that set.
 For completeness, the following LP-dual derivation also checks the paper's
-inequality conventions.
-Put $\alpha=\phi_i$ and $P=B_1\cup\cdots\cup B_{j-1}$.  On the Maschler-stage
-face
+inequality conventions.  The face is indexed by final payoff strata rather
+than by possibly finer algorithmic pinning substeps; tied players that pin at
+different degenerate substeps therefore cause no ambiguity.
+Put $\alpha=\phi_i$ and $P=B_1\cup\cdots\cup B_{j-1}$.  On the stratum face
 \[
  F=\{x\in\core(v):x_p=\phi_p\ (p\in P),\quad
                     x_\ell\geq\alpha\ (\ell\notin P)\},
@@ -2260,6 +2277,8 @@ $w_q=\sum_{S\ni q}\lambda_S$.  Stationarity at a coordinate outside $P$ is
 \[
  -\mathbf1_{\{q=i\}}-w_q-\mu_q+\nu=0.
 \]
+Coordinates in $P$ instead carry free equality multipliers and impose no
+additional restriction on this coverage comparison.
 The floor of the richer player $h$ is strictly inactive, so $\mu_h=0$.
 Consequently
 \[
@@ -2274,9 +2293,11 @@ slackness makes it tight at $\phi$.
 Let $v$ be a normalized exact game and let
 $\phi=\operatorname{Lmin}(v)$ have a unique richest player $r$, with
 $\phi_r=\gamma$.  Put $L=N\setminus\{r\}$ and $q_i=\phi_i$ for $i\in L$.
-For each $i\in L$, choose a tight protector
-$\{r\}\cup Q_i$ omitting $i$, where
-$\emptyset\ne Q_i\subseteq L\setminus\{i\}$.  If $\lambda_i\geq0$ and
+For each $i\in L$, Lemma~\ref{lem:lx-protector} supplies a tight protector
+$\{r\}\cup Q_i$ omitting $i$.  It has
+$\emptyset\ne Q_i\subseteq L\setminus\{i\}$ because
+$\gamma>0=v(\{r\})$, so the singleton $\{r\}$ is slack.  Fix any such
+choices.  If $\lambda_i\geq0$ and
 \[
  c_j:=\sum_{i:j\in Q_i}\lambda_i\leq1\quad(j\in L),
  \qquad \Lambda:=\sum_{i\in L}\lambda_i,

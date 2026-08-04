@@ -6,8 +6,10 @@ Let `v` be an exact game, normalize `v({i})=0`, and write
 `phi=Lmin(v)`.  If `|N|<=4`, every cumulative richer payoff suffix of
 `phi` is tight.  Thus `v` is an exact partition game at `phi`.
 
-The proof below does not enumerate payoff compositions, tight-set patterns,
-or games.  Its key input is the published transfer-blocking characterization
+The proof below replaces exhaustive machine enumeration by a human-scale,
+mechanism-driven case analysis.  Section 4 still separates a few possible
+tight protectors and complement patterns; it does not enumerate games or the
+full tight-set lattice.  Its key input is the published transfer-blocking characterization
 of the egalitarian core due to Arin--Iñarra: whenever one player receives
 strictly more than another, a tight coalition contains the former and omits
 the latter.  We call such a coalition a **protector coalition** descriptively.
@@ -39,7 +41,10 @@ h in T,   i not in T.                                  (P)
 
 This is the Arin--Iñarra characterization of membership in the egalitarian
 core, applied to Lmin.  For a self-contained check of conventions, it also
-follows from the following LP-dual argument.  Consider the Maschler-stage face
+follows from the following LP-dual argument.  The face is defined by final
+payoff strata, not by potentially finer algorithmic pinning substeps; tied
+players that pin at different degenerate substeps therefore cause no issue.
+Consider the stratum face
 
 ```text
 F = {x in C : x_p=phi_p (p in P), x_l>=alpha (l not in P)}.
@@ -64,6 +69,9 @@ Stationarity at a nonprevious coordinate `q` is
 ```text
 -1[q=i] - w_q - mu_q + nu = 0.
 ```
+
+Previous coordinates have free equality multipliers, so their stationarity
+equations impose no restriction on the coverage comparison below.
 
 Since `phi_h>alpha`, complementary slackness gives `mu_h=0`.  Hence
 
