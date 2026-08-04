@@ -4052,6 +4052,97 @@ suffix is tight.  The five-player realization in
 Theorem~\ref{thm:lx-binary-diamond-realization} proves sharpness.
 \end{proof}
 
+The classification has a direct interpretation in imprecise probability.
+The correspondence itself is established prior art: a coherent lower
+probability on a finite state space is a normalized nonnegative exact game,
+and its induced credal set is the game core
+\citep{StudenyKratochvil2017}.  The following sharp selection consequence is
+the candidate cross-field contribution.
+
+\begin{corollary}[sharp credal Lorenz threshold]
+\label{cor:lx-credal-four-five-threshold}
+Let $\underline P$ be a coherent lower probability on a state space $\Omega$
+with $|\Omega|\leq4$ and
+$\underline P(\{i\})=0$ for every state.  Its induced credal set contains a
+unique probability distribution that Lorenz-dominates every other induced
+distribution.  The cardinality bound is sharp: the conclusion can fail on
+five states, still with all singleton lower probabilities zero.
+\end{corollary}
+
+\begin{proof}
+Under the exact-game correspondence, Corollary
+\ref{cor:lx-circuit-four-five-threshold} makes Lmin an exact-partition
+allocation.  The Lorenz argument in Lemma~\ref{lem:lx-richer-suffix} gives the
+first assertion.  For sharpness, on five states take the lower envelope of
+the four probability distributions
+\[
+ \frac1{6}(0,0,0,3,3),\quad
+ \frac1{6}(0,0,3,3,0),\quad
+ \frac1{6}(1,1,1,0,3),\quad
+ \frac1{6}(1,1,1,1,2).
+ \tag{CLP5}\label{eq:lx-credal-five-generators}
+\]
+Every generator belongs to the induced credal set and one attains the lower
+probability of every event, so the lower envelope is coherent; its singleton
+values are zero.  The envelope constraints for the complements of states
+$1,2$ give $p_1,p_2\leq1/6$, while those for $\{3,5\}$ and $\{4,5\}$ give
+$p_3+p_5,p_4+p_5\geq1/2$.  These inequalities and efficiency first pin the
+unique increasingly maximal distribution and then the unique decreasingly
+minimal distribution as
+\[
+ \phi=(1/6,1/6,1/6,1/6,1/3),\qquad
+\psi=(1/8,1/8,1/4,1/4,1/4).
+\]
+Indeed, $\phi$ is the fourth generator in
+\eqref{eq:lx-credal-five-generators}; the upper bounds on $p_1,p_2$ cap the
+minimum at $1/6$, and equality plus the two pair constraints pins all five
+coordinates.  Also
+$\psi=\tfrac14g^2+\tfrac34g^4$ is feasible; the two pair constraints cap the
+smallest possible maximum at $1/4$, pin $p_3=p_4=p_5=1/4$, and decreasing
+lexicographic minimization uniquely equalizes the remaining mass between
+$p_1,p_2$.
+Their increasing-order cumulative sums are, respectively,
+\[
+ (1/6,1/3,1/2,2/3,1),\qquad
+ (1/8,1/4,1/2,3/4,1).
+\]
+The Lorenz curves cross.  Any Lorenz-dominating point would have to be the
+unique increasingly maximal point $\phi$, but $\phi$ does not dominate
+$\psi$.  Hence no Lorenz-dominating distribution exists.
+\end{proof}
+
+More generally, put $\ell_i=\underline P(\{i\})$ and
+$R=1-\sum_i\ell_i$.  If $R>0$, then
+\[
+ \underline Q(A)=
+ \frac{\underline P(A)-\sum_{i\in A}\ell_i}{R}
+ \quad\hbox{and}\quad q\longmapsto \ell+Rq
+ \tag{AN}\label{eq:lx-credal-atom-normalization}
+\]
+give an atom-vacuous coherent lower probability and an affine bijection from
+its credal set to that of $\underline P$; if $R=0$, the original credal set is
+the singleton $\{\ell\}$.  Thus the corollary also gives a residual-Lorenz
+selection theorem, applied to $(p_i-\ell_i)/R$, for every coherent lower
+probability through four states.  This residual formulation is not asserted
+to imply ordinary Lorenz dominance after unequal atom floors are restored.
+
+The full affine proof, five-state arithmetic, and hostile-review questions
+are recorded in
+\begin{center}
+\small\path{paper3/COHERENT_LOWER_PROBABILITY_THRESHOLD.md},\\[-2pt]
+\small\path{src/verify_credal_four_five_threshold.py},\\[-2pt]
+\small\path{results/credal_four_five_threshold.json},\\[-2pt]
+\small\path{paper3/COHERENT_LOWER_PROBABILITY_EXTERNAL_REVIEW_PROMPT.md}.
+\end{center}
+This threshold should not be confused with the established all-dimensional
+base-polyhedron theorem: increasingly maximal and decreasingly minimal bases
+coincide for supermodular (equivalently, $2$-monotone) lower probabilities
+\citep{Fujishige1980,FrankMurota2022}.  The new candidate concerns arbitrary
+coherent lower probabilities.  Existing exact-capacity selection work also
+studies Shapley, vertex-average, incenter, and contraction centroids, rather
+than the Lorenz selector used here \citep{MirandaMontes2023}.  The sharp
+threshold still requires specialist novelty review.
+
 Thus the four/five threshold is a slack-financing threshold: crossing needs
 the three cells $C,X,Y$, exact balancedness requires the exterior cell $R$,
 and singleton exactness requires one further unit of target-or-exterior

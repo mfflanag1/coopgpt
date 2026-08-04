@@ -210,3 +210,30 @@ hypergraph of every two-poorer failure.  That strengthens the general-theory
 case, but does not remove the need for specialist review.
 “Major field breakthrough” remains premature until correctness and novelty
 survive hostile specialist review.
+
+## Credal-set transfer audit
+
+Studený and Kratochvíl (2017), *Linear Core-Based Criterion for Testing
+Extreme Exact Games*, explicitly identify finite coherent lower probabilities
+with normalized nonnegative exact games and induced credal sets with cores.
+That correspondence is prior art. Fujishige (1980), and the continuous-case
+summary in Frank and Murota (2022), establish the unique coincidence of
+increasingly maximal and decreasingly minimal points for base polyhedra; via
+the standard correspondence, this covers supermodular/2-monotone lower
+probabilities in every dimension.
+
+Miranda and Montes (2023), *Centroids of the core of exact capacities: a
+comparative study*, is the closest primary cross-field selection paper found.
+It studies the Shapley value, average of extreme points, total-variation
+incenter, and contraction centroid for exact capacities, and explicitly
+frames the task as selecting one probability from a credal set. Full-text
+searches found no occurrence of `Lorenz`, `lexic`, `egalitarian`, `minimum
+norm`, or `Dutta`; its selection criteria are adjacent rather than the same.
+
+No primary source located in the focused searches states the candidate sharp
+threshold for arbitrary coherent lower probabilities: atom-vacuous models on
+at most four states have a Lorenz-dominating induced distribution, while a
+five-state model need not. Negative keyword evidence is not a novelty proof.
+The manuscript therefore claims only a candidate cross-field corollary of the
+new structural four-player theorem and explicitly requests review by an
+imprecise-probability or polymatroid specialist.
