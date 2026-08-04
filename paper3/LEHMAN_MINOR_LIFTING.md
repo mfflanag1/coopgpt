@@ -63,10 +63,19 @@ The second statement remains strict because the uncontracted rows outside
 `D` gain strictly, while the contracted tight coalitions are poor-label-free
 and have nonnegative displacement.
 
-The remaining reduction problem is therefore narrower and precise: prove
-that an underloaded extreme packet admits a positive Lehman minor whose
-**lifted fractional core still has gaining-player load below one**. No
-separate two-label invariant is needed once this scalar deficit survives.
+The remaining reduction problem is therefore narrower but has two precise
+parts. One must prove that an underloaded extreme packet admits a positive
+Lehman minor whose lifted fractional core
+
+1. still has gaining-player load below one, and
+2. covers every uncontracted rich row exactly once.
+
+The second condition matters because a classical MNI matrix can have
+noncore rows that its uniform Lehman vertex covers strictly more than once.
+Alternatively, those residual excess loads must be converted into their own
+exact-face contradiction. No separate two-label invariant is needed once an
+exact-cover lift preserves the scalar deficit, but the rich-row excess issue
+does remain.
 
 The manuscript statement and full proof are Corollary
 `cor:lx-deficit-preserving-lehman-minor` in

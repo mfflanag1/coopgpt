@@ -127,13 +127,27 @@ r t_a + |U| < |V|.
 ```
 
 Hence `t_a=t_b=0` and `|U|<|V|<r`: every contracted column is automatically
-poor-label-free. Adding those neutral columns to a safe Lehman dual row gives
+poor-label-free in an exact-cover lift. Adding those neutral columns to a safe Lehman dual row gives
 the same rooted cover of the original suffix, and adding them to the averaged
 dual rows preserves the strict internal-face amplification. The unresolved
-minor step is therefore only preservation of the scalar gaining-player load
-below one, not separate preservation of two label sets. See
+minor step is preservation of the scalar gaining-player load below one
+together with exact coverage of all residual rich rows; classical noncore
+rows may otherwise be overcovered. Separate preservation of two label sets
+is not needed once those conditions hold. See
 `LEHMAN_MINOR_LIFTING.md` for the standalone statement and
 Corollary `cor:lx-deficit-preserving-lehman-minor` for the proof.
+
+If a classical MNI lift has noncore rows, they can be included in the density
+test rather than discarded. Blocker-core rows meet every noncore clutter row
+at least once, and the total excess `s|W|-n=s(|W|-r)+k` bounds the number
+meeting a fixed support `W` twice. Thus the strengthened sufficient condition
+
+```text
+s|V|-2 Pi_B(V) > Pi_B(U) + sum_W [s|W|-n]
+```
+
+produces a dual selector exact on every noncore row. See
+`NONCORE_LEHMAN_LIFTING.md`.
 
 ## Structural significance
 
@@ -159,7 +173,9 @@ This is a genuine structural distinction, not a classification yet.  Two
 steps remain before one can claim a dimension-free characterization:
 
 1. reduce an arbitrary underloaded active exact-cover packet to a positive
-   Lehman core while preserving its scalar gaining-player deficit below one;
+   Lehman core while preserving its scalar gaining-player deficit below one
+   and either preserving exact coverage on every residual rich row or
+   controlling the noncore-row excess;
 2. settle the two-label selection problem when (LH-D) fails.
 
 The classical source is Cornuéjols, Guenin, and Tunçel, *Lehman matrices*,

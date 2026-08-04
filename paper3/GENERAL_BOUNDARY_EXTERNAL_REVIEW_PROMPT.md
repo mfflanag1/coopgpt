@@ -49,6 +49,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/LEHMAN_MINOR_LIFTING.md`: proof that preserving only the
   gaining-player deficit automatically removes both poor labels from every
   contracted column and lifts the Lehman conclusions to the original suffix.
+- `coopgames/paper3/NONCORE_LEHMAN_LIFTING.md`: union-bound refinement that
+  requires a Lehman dual selector to hit every noncore MNI row exactly once.
 - `coopgames/paper3/UNIT_GAP_MNI_BRIDGE.md`: explicit integral-cost set-cover
   gap whose strict unit threshold is equivalent to the gaining-player deficit.
 - `coopgames/paper3/DEGENERATE_MNI_TRACE_EXCLUSION.md`: human elimination of
@@ -185,12 +187,28 @@ falsification searches.  Please do not count their no-hit output as proof.
    that their tightness and disjoint traces suffice for the strict lower
    bound in (LM-3). Decide whether reducing label preservation to one scalar
    deficit is genuinely useful or merely repackages the unresolved step.
+   Explicitly distinguish an exact-cover Lehman lift from a general MNI
+   minor whose uniform fractional core may overcover noncore rich rows. Check
+   that no current statement silently assumes those rows away, and assess
+   whether their aggregate excess can be controlled by the unit-gap objective
+   or exact-face overload budget.
+   Audit the noncore-aware criterion: verify that blocker-core rows really
+   meet every retained noncore clutter row, that `s|W|-n` bounds every
+   double-hit event, including the identity `n=rs-k`, and that the union
+   bound yields unit load on all rich rows after contraction lifting.
+   Identify any domination or matrix-
+   orientation issue when transferring this statement to active traces.
    Audit the unit-gap bridge: verify the fractional cost identity, the split
    between overlapping integral covers and exact partitions, and the use of
    the displacement inequality to force every integral partition to contain
    the gaining player. Assess whether standard cost-aware MNI reductions
    preserve this particular gap or whether a new relative-minor theorem is
    still required.
+   Compare this carefully with Király--Pap (2016), DOI
+   `10.1016/j.dam.2015.07.035`: determine whether their minor-compatible
+   covering/packing pairs or ideal unit-increasing set functions already
+   encode the unit-gap or one-label augmented systems, and whether their MNI
+   theorem supplies the missing cost-preserving reduction.
    Audit the degenerate-MNI exclusion: verify the unique fractional weights,
    the deduction `r_a<r_b<1`, both cases `v_0=0,1`, and that the chosen pair
    `R_0,R_i` always has exactly one duplicated rich row and safe nonzero poor

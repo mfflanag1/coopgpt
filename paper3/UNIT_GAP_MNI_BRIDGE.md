@@ -39,11 +39,13 @@ from an informal two-label problem into a cost-aware minimally-nonideal
 reduction problem:
 
 > Does every such unit-gap active matrix have a positive Lehman minor whose
-> lifted fractional core still has cost below `|H|+1`?
+> lifted fractional core still has cost below `|H|+1` and covers every
+> uncontracted rich row exactly once?
 
 If yes, contracted columns are automatically poor-label-free and the Lehman
 rooted-cover or strict slack-amplification conclusions lift to the original
-suffix.
+suffix. Otherwise the excess on classical noncore MNI rows needs a separate
+structural treatment.
 
 The manuscript theorem is `thm:lx-unit-gap-set-cover` in
 `paper3/sections_leximin.tex`.

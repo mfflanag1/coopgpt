@@ -289,16 +289,29 @@ not merely the packets caught by a safe singleton root. In particular, a
 positive Lehman obstruction strictly amplifies slack onto a proper internal
 rich coalition; it cannot be a terminal obstruction.
 
-The classical minor-lifting bottleneck can now be reduced to one scalar
-invariant. If contracted trace columns are adjoined with unit weight to a
-positive Lehman core and the lifted packet still loads the gaining poor
+One part of the classical minor-lifting bottleneck can now be reduced to one
+scalar invariant. If contracted trace columns are adjoined with unit weight
+to an exact-cover positive Lehman core and the lifted packet still loads the gaining poor
 player by less than one, its transport inequality forces every contracted
 column to contain neither poor player and forces the core labels to satisfy
 `|U|<|V|<r`. Consequently both the safe-root exclusion and the strict
-internal-face amplification lift through all such contractions. The only
-remaining minor question is whether the gaining-player deficit itself can
-always be preserved; separate preservation of both label sets is unnecessary.
+internal-face amplification lift through all such contractions. The remaining
+minor questions are whether the gaining-player deficit can be preserved and
+whether every uncontracted rich row remains exactly covered. A classical MNI
+matrix may have noncore rows overcovered by its uniform Lehman vertex;
+separate preservation of both poor label sets, however, is unnecessary once
+an exact-cover lift preserves the deficit.
 See `paper3/LEHMAN_MINOR_LIFTING.md`.
+
+Noncore rows can also be retained in the Lehman density argument. Every
+blocker-core row transverses every noncore MNI row, so it never misses such a
+row; the only bad event is a double hit. At most
+`s|W|-n=s(|W|-r)+k` dual rows double-hit a fixed support `W`. Adding these
+linear excess penalties to the right side of the label-density bound
+guarantees one dual row that meets every
+noncore support exactly once as well as meeting the gaining labels once and
+losing labels at most once. This yields a full rooted cover without assuming
+noncore rows away. See `paper3/NONCORE_LEHMAN_LIFTING.md`.
 
 That scalar has an ordinary set-cover interpretation. Assign each lifted
 tight column the integral cost `|T intersect H|+1_{b in T}`, where `b` is the
@@ -314,7 +327,7 @@ The exceptional degenerate-projective-plane branch of Lehman's MNI theorem
 is eliminated outright. Its unique fractional cover has weights
 `(t-1)/t,1/t,...,1/t`; the transport inequality forces losing load strictly
 below gaining load, and a two-case label count always finds columns `R_0,R_i`
-with rich load `1_H+e_i` and safe nonzero poor load. Thus any
+with rich load `1_H+e_i` and safe nonzero poor load. Thus any exact-cover,
 deficit-preserving MNI reduction must enter the positive Lehman branch. See
 `paper3/DEGENERATE_MNI_TRACE_EXCLUSION.md`.
 

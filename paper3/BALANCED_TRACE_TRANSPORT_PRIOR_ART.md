@@ -47,6 +47,9 @@ or any of the following sharp consequences:
   required poor-load ordering, while a positive Lehman minor lift needs only
   preserve the scalar gaining-player deficit: that condition automatically
   makes every contracted column poor-label-free;
+- noncore MNI rows can be retained in the dual-row density test because every
+  blocker-core row transverses them; the linear total-excess penalty
+  `s|W|-n` bounds selectors that hit such a row more than once;
 - at the first feasible four-player richer suffix, every failure has the
   four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - projective-plane incidence packets satisfying the overlap-sensitive bound
@@ -126,6 +129,14 @@ remains required.
    deficit-preserving calculations should likewise be treated as proposed
    bridges to this classical theory, not as extensions of Lehman's theorem
    unless specialist review confirms that characterization.
+   Király and Pap (2016),
+   [*An extension of Lehman's theorem and ideal set functions*](https://doi.org/10.1016/j.dam.2015.07.035),
+   give a minor-compatible extension combining covering and packing
+   inequalities and a separate theory of ideal unit-increasing set
+   functions. Their framework is a serious candidate antecedent or tool for
+   the present cost/label augmentation; no claim of separation from it should
+   be made until a specialist checks whether the unit-gap system embeds in
+   their pair or set-function constructions.
 10. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
    [*Monotonicity and egalitarianism*](https://doi.org/10.1016/j.geb.2021.03.006),
    compares Lmin, Lmax, and PES on broader domains and records prior

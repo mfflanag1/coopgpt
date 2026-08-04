@@ -43,9 +43,11 @@ and a nonzero zero-one poor load. This is a forbidden safe rooted tight
 cover. Hence no lifted degenerate-projective-plane packet can carry the
 required underload.
 
-This removes the exceptional branch of the classical MNI theorem. A
-deficit-preserving MNI reduction must therefore reach a positive Lehman core,
-where `LEHMAN_MINOR_LIFTING.md` applies.
+This removes the exceptional branch of the classical MNI theorem for an
+exact-cover, deficit-preserving lift. Such a reduction must therefore reach a
+positive Lehman core, where `LEHMAN_MINOR_LIFTING.md` applies. General MNI
+minors may still have overcovered noncore rich rows; this note does not remove
+that separate issue.
 
 The manuscript proof is Theorem `thm:lx-degenerate-mni-exclusion` in
 `paper3/sections_leximin.tex`.
