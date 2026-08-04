@@ -27,6 +27,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/results/n5_unique_richest_boundary.json`
 - `coopgames/src/verify_unique_richest_family.py`
 - `coopgames/results/unique_richest_family.json`
+- `coopgames/src/verify_rich_block_family.py`
+- `coopgames/results/rich_block_family.json`
 - `coopgames/src/verify_n6_two_poorer_suffix_counterexample.py`
 - `coopgames/results/n6_two_poorer_suffix_counterexample.json`
 
@@ -62,15 +64,20 @@ falsification searches.  Please do not count their no-hit output as proof.
    and hence Lmin--Lmax separation in every dimension?  Check the endpoint
    `m=4` separately, where the coefficient of
    `e5=er` in `(m-4)e5` is zero.
-7. For the five-player small-poorer lower bound, inspect whether the imported
+7. Audit the two-parameter rich-block amplification for every `h>=1` and
+   `m>=h+3`.  Check the common totals, four load-bearing values, two-stage
+   Lmin proof, Lmax ceiling and convex combination, saturated circuit, and
+   L1-distance formula.  Is this amplification a standard player-replication
+   construction, and if so which claims remain nontrivial after attribution?
+8. For the five-player small-poorer lower bound, inspect whether the imported
    definition-level exact-face and stagewise KKT encoding genuinely covers all
    ordered stratum compositions and every boundary after one or two cumulative
    poorer players.  Do not infer this from the previous n=4 review alone.
-8. For the six-player upper bound, verify directly that the six displayed
+9. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove
    `Lmin=(1,1,2,2,2,2)` without an unstated assumption.
-9. Confirm that `v({3,4,5,6})=6<8=Lmin({3,4,5,6})`, establishing sharp failure
+10. Confirm that `v({3,4,5,6})=6<8=Lmin({3,4,5,6})`, establishing sharp failure
    of the small-poorer conclusion at six.
 
 ## Novelty questions
@@ -86,6 +93,8 @@ core literature:
 - the four-generator integral family with `Lmin=(1^m,m-2)` for every `m>=4`,
   its closed-form Lmax, and whether it is merely a padding or replication of a
   known example;
+- the arbitrary-richest-block amplification, its asymptotic Lmin--Lmax gap,
+  and the extent to which these are consequences of known replication theory;
 - the sharp result that a richer Lmin suffix with at most two poorer players is
   tight through five players but can be slack at six;
 - the fixed six-player integer lower-envelope construction.
@@ -108,6 +117,10 @@ python src/verify_n5_unique_richest_boundary.py \
 python src/verify_unique_richest_family.py \
   --max-players 12 --exact-lmin-through 7 --exact-lmax-through 6 \
   --output results/unique_richest_family.json
+python src/verify_rich_block_family.py \
+  --max-rich-block 4 --extra-poorer 4 \
+  --exact-replay-smallest-nontrivial \
+  --output results/rich_block_family.json
 python src/verify_n6_two_poorer_suffix_counterexample.py \
   --output results/n6_two_poorer_suffix_counterexample.json
 cd paper3

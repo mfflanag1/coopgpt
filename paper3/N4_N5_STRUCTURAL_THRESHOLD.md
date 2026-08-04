@@ -126,6 +126,44 @@ each additional poorer player then contributes one unit simultaneously to
 the positive sacrifice budget and to the permitted richest-singleton slack.
 The five-player witness is the first member of an infinite obstruction family.
 
+## Arbitrarily large richest strata
+
+The construction has a two-parameter amplification.  Let `P` have `m`
+players, let `R` have `h` players, and assume `m>=h+3`.  After multiplying by
+`h`, replace the old richest coordinate uniformly by the block `R`:
+
+```text
+g1 = h(m-1)e4 + (m-1)1_R
+g2 = h(m-1)(e3+e4)
+g3 = h(e1+e2+e3) + h(m-4)e5 + (m-1)1_R
+g4 = h1_P + (m-2)1_R.
+```
+
+The resulting integral exact game has
+
+```text
+Lmin_i = h      on P,
+Lmin_i = m-2    on R,
+v(R) = 0.
+```
+
+The same complement and rich-block constraints prove this formula in two
+Lmin stages.  Its Lmax is `c=h(m-1)/(h+1)` on `R union {3,4}` and
+`a=h^2(m-1)/((h+1)(m-2))` elsewhere, attained by the convex combination
+`t*g4+(1-t)*g2`, where `t=h(m-1)/((h+1)(m-2))`.
+
+Consequently the richest-stratum obstruction is not tied to a singleton:
+both the richest block and the ambient dimension can grow.  The exact
+distance formula is
+
+```text
+||Lmin-Lmax||_1 = 4h(m-h-2)/(h+1).
+```
+
+For each fixed `h`, after normalizing by `v(N)=2h(m-1)`, this tends to
+`2/(h+1)` as `m` grows.  Thus exactness does not make the two egalitarian
+selections asymptotically close, even inside a four-generator family.
+
 ## What is and is not new
 
 The exact-partition condition is established terminology, and its implication
@@ -149,6 +187,10 @@ python src/verify_n5_unique_richest_boundary.py \
 python src/verify_unique_richest_family.py \
   --max-players 12 --exact-lmin-through 7 --exact-lmax-through 6 \
   --output results/unique_richest_family.json
+python src/verify_rich_block_family.py \
+  --max-rich-block 4 --extra-poorer 4 \
+  --exact-replay-smallest-nontrivial \
+  --output results/rich_block_family.json
 ```
 
 The first verifier checks the fixed five-player generators, recomputes all 30
@@ -156,4 +198,6 @@ proper coalition faces by exact LP, recomputes Lmin by the independent exact
 staged algorithm, and checks the incidence/slack circuit.  The family verifier
 checks the parametric identities and closed-form Lmax proof through the
 requested dimension and performs independent exact staged Lmin/Lmax replays
-through the requested smaller bounds.
+through the requested smaller bounds.  The rich-block verifier audits the
+dimension-free formulas over a two-parameter exact-rational grid; the human
+symbolic proof, not the finite grid, carries the universal quantifiers.

@@ -240,6 +240,24 @@ poorer player adds one unit to both sides.  This is the sacrifice-budget
 explanation of both the sharp threshold and its persistence.  The complete
 human proof and exact replay are in `paper3/N4_N5_STRUCTURAL_THRESHOLD.md`.
 
+The same mechanism is not confined to a unique richest player.  For every
+richest-block size `h>=1` and poorer-block size `m>=h+3`, an integral scaling
+and uniform rich-block amplification of the four generators has
+
+```text
+Lmin = h on P and m-2 on R,       v(R)=0,
+Lmax = h(m-1)/(h+1) on R union {3,4},
+       h^2(m-1)/((h+1)(m-2)) elsewhere.
+```
+
+The proof uses the same two complement constraints, two rich-block
+constraints, and one convex combination.  The exact distance is
+`4h(m-h-2)/(h+1)`.  For fixed `h`, the normalized distance tends to
+`2/(h+1)`, so exactness does not asymptotically reconcile Lmin and Lmax even
+for four-generator games.  This is a two-parameter obstruction phase,
+although an expert must still assess whether its block amplification is known
+under a replication construction.
+
 ## 5. The five-player monotonicity escape saturates the slack budget
 
 For the base five-player game,

@@ -2428,28 +2428,41 @@ $s_\phi(\{r\})=\phi_r-v(\{r\})=\gamma$.  Inequality
 The packing inequality isolates a sharp sacrifice-budget threshold that is
 already visible before the full exact-partition classification.
 
-\begin{theorem}[unique-richest threshold and obstruction family]
+\begin{theorem}[unique-richest threshold and rich-block family]
 \label{thm:lx-unique-richest-threshold}
 In a singleton-normalized exact game with $2\leq|N|\leq4$, Lmin cannot have a
-unique richest player.  Conversely, for every $n=m+1\geq5$ there is a
-four-generator exact game with
+unique richest player.  More generally, fix integers $h\geq1$ and
+$m\geq h+3$.  There is a four-generator integral exact game on a poorer block
+$P$ of size $m$ and a richer block $R$ of size $h$ with
 \[
- \operatorname{Lmin}(v)=(\underbrace{1,\ldots,1}_{m},m-2)
+ \operatorname{Lmin}(v)_i=
+ \begin{cases}
+ h,&i\in P,\\
+ m-2,&i\in R,
+ \end{cases}
+ \qquad v(R)=0.
 \]
-and richest-singleton slack $m-2$.  For the same game, putting
+For the same game, putting
 \[
- a=\frac{m-1}{2(m-2)},\qquad c=\frac{m-1}{2},
+ a=\frac{h^2(m-1)}{(h+1)(m-2)},\qquad
+ c=\frac{h(m-1)}{h+1},
 \]
 one has
 \[
  \operatorname{Lmax}(v)_i=
  \begin{cases}
- c,&i\in\{3,4,r\},\\
- a,&i\notin\{3,4,r\}.
+ c,&i\in R\cup\{3,4\},\\
+ a,&i\in P\setminus\{3,4\}.
  \end{cases}
 \]
-In particular Lmin and Lmax differ for every $n\geq5$.  Thus five is the
-sharp threshold, and the obstruction persists in every higher dimension.
+Their $\ell^1$ distance is
+\[
+ \lVert\operatorname{Lmin}(v)-\operatorname{Lmax}(v)\rVert_1
+ =\frac{4h(m-h-2)}{h+1}.
+\]
+Taking $h=1$ shows that a unique-richest Lmin obstruction exists in every
+dimension $n=m+1\geq5$.  Thus five is the sharp unique-richest threshold;
+the separation also persists for arbitrarily large tied richest strata.
 \end{theorem}
 
 \begin{proof}
@@ -2468,72 +2481,84 @@ $Q_i=L\setminus\{i\}$ for all $i$; weight all three by $1/2$.  Every poorer
 load is one and $\Lambda=3/2$, forcing $\gamma/2\leq0$.  This proves the
 four-player bound.
 
-For the family, let $P=\{1,\ldots,m\}$, $r=m+1$, and let $e_i$ denote the
-$i$th unit vector.  Take the lower envelope of the four allocations
+For the family, let $P=\{1,\ldots,m\}$ and let $R$ be a disjoint set of
+$h$ players.  Write $e_i$ for unit vectors and
+$\mathbf1_R=\sum_{r\in R}e_r$.  Take the lower envelope of
 \[
 \begin{aligned}
-g^1&=(m-1)(e_4+e_r),\\
-g^2&=(m-1)(e_3+e_4),\\
-g^3&=e_1+e_2+e_3+(m-4)e_5+(m-1)e_r,\\
-g^4&=\sum_{i\in P}e_i+(m-2)e_r,
+g^1&=h(m-1)e_4+(m-1)\mathbf1_R,\\
+g^2&=h(m-1)(e_3+e_4),\\
+g^3&=h(e_1+e_2+e_3)+h(m-4)e_5+(m-1)\mathbf1_R,\\
+g^4&=h\mathbf1_P+(m-2)\mathbf1_R,
 \qquad
 v(S):=\min_{1\leq k\leq4}g^k(S).
 \end{aligned}                                        \tag{UF}
 \label{eq:lx-unique-richest-family}
 \]
-Here the $(m-4)e_5$ term is zero when $m=4$ (where player~5 is $r$).
-Every row has total $2m-2$ and is a core allocation of the lower-envelope game;
+Every row has total $2h(m-1)$ and is a core allocation of the lower-envelope game;
 every coalition attains its worth at a row.  Hence $v$ is exact directly from
 the definition.  Put $\phi=g^4$.  The four rows give
 \[
- v(N\setminus\{1\})=v(N\setminus\{2\})=2m-3,
- \qquad v(\{3,r\})=v(\{4,r\})=m-1.                \tag{UF-T}
+ v(N\setminus\{1\})=v(N\setminus\{2\})=2h(m-1)-h,
+ \qquad v(R\cup\{3\})=v(R\cup\{4\})=h(m-1).   \tag{UF-T}
  \label{eq:lx-unique-richest-family-tight}
 \]
-The point $\phi$ gives every player at least one.  At any core point with all
-coordinates at least one, the first two displayed constraints and efficiency
-force $x_1=x_2=1$.  Write $y=x-\mathbf1_N$.  Then
-$y\geq0$, $y_1=y_2=0$, and $\sum_i y_i=m-3$.  The last two constraints give
-$y_3+y_r\geq m-3$ and $y_4+y_r\geq m-3$.  Comparing each with the total
-forces $y_i=0$ for every $i\in P$ and $y_r=m-3$.
-Thus the first max--min face is the singleton $\phi$, proving the displayed
-Lmin formula.  Since $g^2_r=0$, $v(\{r\})=0<m-2=\phi_r$, so the unique
-richest suffix is slack.
+The point $\phi$ gives every player at least $h$.  At any core point with all
+coordinates at least $h$, the first two displayed constraints and efficiency
+force $x_1=x_2=h$.  Write $y=x-h\mathbf1_N$.  Then
+$y\geq0$, $y_1=y_2=0$, and $y(N)=h(m-h-2)$.  The last two constraints give
+\[
+ y_3+y(R)\geq h(m-h-2),\qquad
+ y_4+y(R)\geq h(m-h-2).
+\]
+Comparing each with the total forces $y_i=0$ for every $i\in P$.  Thus the
+poorer block is pinned at the first Lmin level $h$.  The richer block has
+fixed total $h(m-2)$, so its next common level is at most $m-2$, attained by
+$\phi$.  This proves the Lmin formula.  Since $g^2(R)=0$, the richest suffix
+$R$ has slack $h(m-2)$.
 
 It remains to identify Lmax.  Every core point satisfies
-$x_3+x_r\geq m-1$ and $x_4+x_r\geq m-1$ by
+$x_3+x(R)\geq h(m-1)$ and $x_4+x(R)\geq h(m-1)$ by
 \eqref{eq:lx-unique-richest-family-tight}.  Hence its largest coordinate is
-at least $c=(m-1)/2$.  On the other hand, the core point
+at least $c=h(m-1)/(h+1)$.  Put
 \[
- z=a g^4+(1-a)g^2
+ t=\frac{h(m-1)}{(h+1)(m-2)}.
 \]
-has coordinates $z_3=z_4=z_r=c$ and $z_i=a$ otherwise.  Thus $c$ is the
+The hypothesis $m\geq h+3$ gives $0<t<1$.  The core point
+\[
+ z=t g^4+(1-t)g^2
+\]
+has coordinates $z_i=c$ on $R\cup\{3,4\}$ and $z_i=a$ otherwise.  Thus $c$ is the
 minimum possible largest coordinate.  On the face where every coordinate is
-at most $c$, the two pair inequalities force
-$x_3=x_4=x_r=c$.  The remaining $m-2$ coordinates have fixed total
-$2m-2-3c=(m-1)/2$, so their smallest possible common ceiling is their average
-$a$; the displayed point attains it.  This proves the Lmax formula and its
-uniqueness.  Since $a<1$ while every coordinate of Lmin is at least one, the
-two allocations differ.
+at most $c$, the two displayed inequalities force every coordinate in
+$R\cup\{3,4\}$ to equal $c$.  The remaining $m-2$ coordinates have fixed
+total and average $a$; the displayed point attains that common ceiling.  This
+proves the Lmax formula and its uniqueness.  Direct subtraction gives the
+displayed $\ell^1$ distance.
 
 The escape saturates the exact-balanced circuit
 \[
- \mathbf1_{\{3,r\}}+\mathbf1_{\{4,r\}}
+ \mathbf1_{R\cup\{3\}}+\mathbf1_{R\cup\{4\}}
  +\sum_{i\in P\setminus\{3,4\}}\mathbf1_{\{i\}}
- -\mathbf1_{\{r\}}=\mathbf1_N.                     \tag{UF-C}
+ -\mathbf1_R=\mathbf1_N.                            \tag{UF-C}
  \label{eq:lx-unique-richest-family-circuit}
 \]
 The two tight protector slacks are zero, the $m-2$ uncovered poorer singleton
-slacks are one each, and the negative richest-singleton slack is $m-2$.
-Equivalently, \eqref{eq:lx-fractional-packing} is attained at equality.
-With only three poorer players, the same two-protector packing leaves at most
-one uncovered payoff, strictly less than $\gamma$; from five players onward,
-the family supplies exactly the sacrifice budget needed for equality.  The
-parametric Lmin--Lmax verifier and the fixed five-player replay are
-\path{src/verify_unique_richest_family.py},
-\path{results/unique_richest_family.json},
-\path{src/verify_n5_unique_richest_boundary.py} and
-\path{results/n5_unique_richest_boundary.json}.
+slacks are $h$ each, and the negative richest-suffix slack is $h(m-2)$.
+When $h=1$, this is equivalently equality in
+\eqref{eq:lx-fractional-packing}.  In that case, only three poorer players
+leave at most one uncovered payoff,
+strictly less than the unique richest payoff; from five players onward, the
+family supplies exactly the sacrifice budget needed for equality.  The
+two-parameter audit, unique-richest verifier, and fixed five-player replay are
+recorded in the following paired scripts and artifacts:
+\begin{itemize}[nosep]
+\item \path{src/verify_rich_block_family.py} and
+      \path{results/rich_block_family.json};
+\item \path{src/verify_unique_richest_family.py} and
+      \path{results/unique_richest_family.json};
+\end{itemize}
+The fixed five-player replay is indexed in the accompanying structural note.
 \end{proof}
 
 \begin{lemma}[exact-partition classification through four players]
