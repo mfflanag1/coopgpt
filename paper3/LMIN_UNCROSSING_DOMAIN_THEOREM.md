@@ -1,6 +1,26 @@
 # Lmin uncrossing and the local-supermodularity obstruction
 
-## Theorem
+## Exact-face theorem
+
+Let `v` be any exact game, let `phi` be any core allocation, and fix a proper
+nonempty coalition `H`.  Suppose nonnegative weights on proper coalitions
+tight at `phi` give a common positive load on `H` and strictly smaller load on
+every player outside `H`.  If the `phi`-tight family is closed under union and
+intersection, then `H` is tight at `phi`.
+
+Conversely, if `H` is slack, a minimum-energy representation of the given
+load vector contains crossing tight coalitions `A,B` with
+
+```text
+v(A)+v(B)-v(A intersection B)-v(A union B)
+ = s_phi(A intersection B)+s_phi(A union B) > 0.
+```
+
+Thus every failed exact face with a strict tight cover contains a canonical
+broken diamond in the Boolean coalition lattice.  This statement needs
+neither singleton normalization nor an egalitarian solution.
+
+## Lmin corollary
 
 Let `v` be a singleton-normalized exact game and let `phi=Lmin(v)`.  Call `v`
 **Lmin-locally supermodular** if, for every pair `A,B` tight at `phi`,
@@ -9,10 +29,11 @@ Let `v` be a singleton-normalized exact game and let `phi=Lmin(v)`.  Call `v`
 v(A)+v(B) <= v(A intersection B)+v(A union B).
 ```
 
-Then `v` is an exact partition game witnessed at `phi`.  Hence `phi`
+Then `v` is an exact partition game witnessed at `phi`, because Lmin
+optimality supplies the strict cover at every payoff boundary.  Hence `phi`
 Lorenz-dominates the core by the published exact-partition theorem.
 
-Equivalently, every failure of exact partition at Lmin has two crossing
+Every failure of exact partition at Lmin therefore has two crossing
 Lmin-tight coalitions `A,B` with the strict defect
 
 ```text
@@ -49,10 +70,9 @@ uncrossing closure needed below.
 
 ## Minimum-energy uncrossing proof
 
-Fix a strict payoff boundary `(L,H)`.  The strict richer-side cover lemma
-gives nonnegative weights on proper Lmin-tight coalitions, with common load
-`alpha>0` on `H` and load strictly below `alpha` on every player of `L`.
-Fix this entire player-load vector `c`.
+Fix the player-load vector `c` of the cover in the exact-face theorem.  In the
+Lmin application, the strict richer-side cover lemma gives such weights at
+every strict payoff boundary.
 
 Among all nonnegative representations of `c` by nonempty `phi`-tight
 coalitions, allowing `N`, choose one minimizing
@@ -85,9 +105,9 @@ contradicting minimality.  The minimizing support is therefore laminar.
 If it contains `N` with weight `gamma`, remove that term.  Every load was at
 least `gamma`; the new rich load is `alpha-gamma>0` because every poorer load
 was strictly below `alpha`, and all rich-minus-poor gaps are unchanged.
-We now have a strict richer-side cover on proper tight coalitions with
+We now have a strict cover on proper tight coalitions with
 laminar support.  The laminar strict-cover theorem forces `H` tight.  Applying
-this to every payoff boundary proves exact partition.
+this exact-face theorem to every Lmin payoff boundary proves exact partition.
 
 ## Canonical obstruction form
 

@@ -2811,14 +2811,11 @@ and at most $\nu_i-1$, each $\nu_i\geq1$, so the final $\alpha$ is positive.
 
 \begin{theorem}[laminar strict-cover domain]
 \label{thm:lx-laminar-strict-cover}
-Let $v$ be singleton-normalized and exact, let
-$\phi=\operatorname{Lmin}(v)$, and let $(L,H)$ be a strict payoff boundary.
-If some strict richer-side cover from
-Lemma~\ref{lem:lx-strict-richer-cover} has laminar positive support, then
-$H$ is tight at $\phi$.  Consequently, if such a laminar cover exists at
-every strict boundary, $v$ is an exact partition game witnessed at $\phi$.
-In particular, this conclusion holds when the complete family of proper
-$\phi$-tight coalitions is laminar.
+Let $v$ be exact, let $\phi\in\core(v)$, and let
+$\varnothing\ne H\subsetneq N$.  Suppose nonnegative weights on proper
+$\phi$-tight coalitions have a common positive load on $H$, strictly smaller
+load on every player in $N\setminus H$, and laminar positive support.  Then
+$H$ is tight at $\phi$.
 \end{theorem}
 
 \begin{proof}
@@ -2840,10 +2837,20 @@ $\mathbf1_N$, with $H$ the only negative term, so exact balancedness yields
  \sum_{B\in\mathcal P}v(B)-v(H)+v(N)\leq v(N).
 \]
 Tightness of the blocks gives $\phi(H)\leq v(H)$, while core feasibility
-gives the reverse inequality.  Thus $H$ is tight.  Apply this at every
-boundary.  The final assertion uses the unrestricted strict cover supplied
-by Lemma~\ref{lem:lx-strict-richer-cover}, whose support is then automatically
+gives the reverse inequality.  Thus $H$ is tight.
+\end{proof}
+
+\begin{corollary}[laminar Lmin domain]
+If a singleton-normalized exact game admits a laminar strict richer-side
+cover at every strict Lmin boundary, it is exact partition witnessed at Lmin.
+In particular, this holds when its complete proper Lmin-tight family is
 laminar.
+\end{corollary}
+
+\begin{proof}
+Apply Lemma~\ref{lem:lx-strict-richer-cover} and
+Theorem~\ref{thm:lx-laminar-strict-cover} at every boundary.  If the complete
+tight family is laminar, the lemma's cover has laminar support.
 \end{proof}
 
 Thus every slack Lmin suffix forces crossing coalitions in the support of
@@ -2867,18 +2874,22 @@ $\phi=\operatorname{Lmin}(v)$, every pair $A,B$ tight at $\phi$ satisfies
 Unlike convexity, this condition is imposed only on coalitions binding at one
 canonical core allocation.
 
-\begin{theorem}[Lmin uncrossing domain]
+\begin{theorem}[exact-face uncrossing]
 \label{thm:lx-local-supermodular-domain}
-Every singleton-normalized exact Lmin-locally supermodular game is an exact
-partition game witnessed at Lmin.  Conversely, if a cumulative richer suffix
-$H$ is slack at Lmin, there are crossing Lmin-tight coalitions $A,B$ with
+Let $v$ be exact, let $\phi\in\core(v)$, and let
+$\varnothing\ne H\subsetneq N$.  Suppose nonnegative weights on proper
+$\phi$-tight coalitions have a common positive load on $H$ and strictly
+smaller load on every player outside $H$.  If the $\phi$-tight family is
+closed under union and intersection, then $H$ is tight at $\phi$.
+Conversely, if $H$ is slack, there are crossing $\phi$-tight coalitions $A,B$
+with
 \[
  v(A)+v(B)-v(A\cap B)-v(A\cup B)
  =s_\phi(A\cap B)+s_\phi(A\cup B)>0.                 \tag{UD}
  \label{eq:lx-uncrossing-defect}
 \]
 The pair may be chosen from a minimum-energy representation of a strict
-richer-side cover at that boundary.
+cover with the prescribed player loads.
 \end{theorem}
 
 \begin{proof}
@@ -2892,9 +2903,8 @@ tight.  Indeed,
 \]
 so all inequalities are equalities and both nonnegative slacks vanish.
 
-Fix a strict boundary $(L,H)$ and a strict cover from
-Lemma~\ref{lem:lx-strict-richer-cover}; retain its complete player-load vector
-$c$.  Among all nonnegative representations of $c$ by nonempty
+Retain the complete player-load vector $c$ of the assumed cover.  Among all
+nonnegative representations of $c$ by nonempty
 $\phi$-tight coalitions, now allowing $N$, minimize
 \[
  \mathcal E(\lambda):=\sum_S\lambda_S|S|(n-|S|).      \tag{UE}
@@ -2922,7 +2932,7 @@ Theorem~\ref{thm:lx-laminar-strict-cover} makes $H$ tight.  Applying this at
 every boundary proves the first assertion.
 
 For the converse, minimize \eqref{eq:lx-uncrossing-energy} without assuming
-\eqref{eq:lx-local-supermodularity}.  If $H$ is slack, the minimizing support
+uncrossing closure.  If $H$ is slack, the minimizing support
 cannot be laminar, by Theorem~\ref{thm:lx-laminar-strict-cover}; choose a
 crossing positive pair $A,B$.  Their intersection and union cannot both be
 tight, or the same uncrossing move would lower the energy.  Modularity of
@@ -2930,9 +2940,28 @@ $\phi$ and tightness of $A,B$ give the equality in
 \eqref{eq:lx-uncrossing-defect}; at least one derived-set slack is positive.
 \end{proof}
 
-The theorem subsumes the laminar domain and the established convex-game
-domain but is stated only in terms of local behavior on the Lmin-tight
-skeleton.  The inclusion beyond convex games is strict.  For example, take
+\begin{corollary}[Lmin local-supermodularity domain]
+\label{cor:lx-local-supermodular-lmin}
+Every singleton-normalized exact Lmin-locally supermodular game is an exact
+partition game witnessed at Lmin.  Conversely, every slack cumulative richer
+suffix at Lmin yields a broken tight diamond satisfying
+\eqref{eq:lx-uncrossing-defect}.
+\end{corollary}
+
+\begin{proof}
+At every strict Lmin boundary,
+Lemma~\ref{lem:lx-strict-richer-cover} supplies the cover required by
+Theorem~\ref{thm:lx-local-supermodular-domain}.  As observed before the
+theorem, local supermodularity makes the tight family closed under union and
+intersection.  Apply the theorem at every boundary.  Its converse gives the
+final assertion.
+\end{proof}
+
+The exact-face theorem does not require normalization or an egalitarian
+allocation; these enter only to generate its cover automatically.  Its Lmin
+corollary subsumes the laminar domain and the established convex-game domain
+but is stated only in terms of local behavior on the Lmin-tight skeleton.
+The inclusion beyond convex games is strict.  For example, take
 the lower envelope of the four common-total allocations
 \[
  (0,4,6,5,0),\quad(5,0,2,7,1),\quad

@@ -17,12 +17,12 @@ novelty.
 
 ## Claim to audit
 
-At a strict payoff boundary `(L,H)` of `phi=Lmin(v)` in a
-singleton-normalized exact game, suppose one strict richer-side cover has
-laminar positive support: common positive incidence load on `H` and strictly
-smaller load on every player of `L`.  Then `H` is tight at `phi`.  Hence a
-laminar supported cover at every boundary implies exact partition at Lmin;
-in particular, a laminar complete Lmin-tight family suffices.
+For any core point `phi` of any exact game, suppose a cover by proper
+`phi`-tight coalitions has laminar positive support, common positive incidence
+load on `H`, and strictly smaller load on every player outside `H`.  Then `H`
+is tight at `phi`.  Hence, at Lmin, a laminar supported cover at every boundary
+implies exact partition; in particular, a laminar complete Lmin-tight family
+suffices.
 
 ## Required hostile checks
 
@@ -35,9 +35,8 @@ in particular, a laminar complete Lmin-tight family suffices.
    blocks, `-1` on `H`, and `+1` on `N`; confirm that the convention allowing
    the grand coalition is consistent with the cited exactness
    characterization.  If not, determine the correct equivalent formulation.
-4. Check that singleton normalization is used only through the strict-cover
-   dependency, and whether the theorem can be stated directly for an
-   arbitrary exact game whenever the cover is given.
+4. Check the strengthened statement that singleton normalization and Lmin are
+   used only to generate the strict cover, not by the exact-face theorem.
 5. Search specifically for prior results combining laminar tight/core
    systems, egalitarian-core transfer blockers, exact-balanced collections,
    and exact-partition games.  Distinguish an established laminar-hypergraph

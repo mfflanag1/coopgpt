@@ -15,11 +15,12 @@ commit supplied with this packet.
 
 ## Central claim
 
-For a singleton-normalized exact game, supermodularity restricted only to
-pairs of coalitions tight at `phi=Lmin(v)` implies that `v` is exact partition
-witnessed at `phi`.  Conversely, every slack Lmin suffix yields crossing
-tight coalitions with a strict supermodularity defect; they can be selected
-from a minimum-uncrossing-energy strict cover.
+For any exact game and any core point `phi`, a proper coalition `H` is forced
+tight whenever a strict tight-coalition cover loads `H` uniformly, underloads
+every outside player, and the `phi`-tight family is closed under uncrossing.
+If `H` is slack, a minimum-energy cover contains a broken tight diamond with
+positive supermodularity defect.  As a corollary, supermodularity restricted
+only to pairs tight at `phi=Lmin(v)` implies exact partition at Lmin.
 
 ## Hostile checks
 
@@ -39,8 +40,8 @@ from a minimum-uncrossing-energy strict cover.
 7. Search the cooperative-game, polymatroid, uncrossing, balanced-family,
    exact-game, and exact-partition literatures for this local-at-Lmin theorem.
    Separate standard uncrossing machinery from the claimed application.
-8. Determine whether singleton normalization is needed once the strict cover
-   is assumed, and state the strongest correct boundary-local version.
+8. Verify the strengthened claim that singleton normalization and Lmin are
+   unnecessary once the strict cover is assumed.
 9. Assess whether the result is genuinely broader than the known convex-game
    domain and whether the supplied nonconvex example demonstrates that point.
 

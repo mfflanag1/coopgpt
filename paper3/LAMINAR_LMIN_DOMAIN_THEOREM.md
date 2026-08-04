@@ -1,21 +1,22 @@
 # A laminar domain theorem for exact partition at Lmin
 
-## Boundary-local theorem
+## Exact-face boundary theorem
 
-Let `v` be a singleton-normalized exact game, let `phi=Lmin(v)`, and let
-`(L,H)` be a strict payoff boundary, with `H` the cumulative richer suffix.
-Suppose there are nonnegative weights on proper coalitions tight at `phi`
-whose positive support is laminar, whose incidence load is a common
-`alpha>0` on every player of `H`, and whose load is strictly below `alpha`
-on every player of `L`.  Then `H` is tight at `phi`.
+Let `v` be any exact game, let `phi` be any core allocation, and let `H` be
+proper and nonempty.  Suppose there are nonnegative weights on proper
+coalitions tight at `phi` whose positive support is laminar, whose incidence
+load is a common `alpha>0` on every player of `H`, and whose load is strictly
+below `alpha` on every player outside `H`.  Then `H` is tight at `phi`.
 
-Consequently, if such a laminar strict richer-side cover exists at every
-strict payoff boundary, the game is an exact partition game witnessed at
-Lmin.  In particular, this holds whenever the complete family of proper
-coalitions tight at Lmin is laminar.
+Consequently, for singleton-normalized exact games, if such a laminar strict
+richer-side cover exists at every Lmin payoff boundary, the game is exact
+partition witnessed at Lmin.  In particular, this holds whenever the
+complete family of proper coalitions tight at Lmin is laminar, because Lmin
+optimality supplies the required strict covers.
 
-This is dimension-free and boundary-local: the full tight family need not be
-laminar if one suitable laminar cover can be selected at each boundary.
+The exact-face theorem needs neither normalization nor Lmin.  Its Lmin
+corollary is dimension-free and boundary-local: the full tight family need
+not be laminar if one suitable laminar cover can be selected at each boundary.
 
 ## Proof
 
