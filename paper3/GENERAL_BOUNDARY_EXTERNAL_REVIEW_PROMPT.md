@@ -20,6 +20,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   human proof of the six-player construction.
 - `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`: focused search log,
   prior-art boundary, and cautious novelty statement.
+- `coopgames/paper3/EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`: reproducible
+  forward-citation audit and claim-by-claim novelty matrix.
 - `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`: standalone
   statement and proof of the complete cardinality phase diagram.
 - `coopgames/paper3/COMPLETE_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`: focused
@@ -156,6 +158,10 @@ core literature:
 The manuscript already treats the exact-balancedness characterization and the
 Arin--Iñarra transfer-blocking property as prior art.  Please flag any remaining
 novelty overstatement.
+It also records the known theorem that exact games with at most four players
+are PES stable.  Check whether the new exact-partition-at-Lmin result is truly
+a stronger statement and whether that strengthening already appears under
+different terminology.
 
 ## Reproduction
 

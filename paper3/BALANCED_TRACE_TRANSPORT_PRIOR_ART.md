@@ -4,6 +4,10 @@
 
 Search date: 2026-08-04.
 
+For the reproducible forward-citation audit of the 2017 exact-partition paper,
+including all 12 OpenAlex citing records and the closest known four-player
+result, see [`EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`](EXACT_PARTITION_CITATION_NETWORK_AUDIT.md).
+
 This audit targets the dimension-free theorem now called the **balanced-trace
 transport obstruction**: at any slack richer suffix of Lmin in an exact game,
 stagewise Lmin dual covers project to a convex mixture of minimal balanced
@@ -39,6 +43,10 @@ remains required.
    [*On the existence of the Dutta--Ray's egalitarian solution*](https://doi.org/10.1016/j.mathsocsci.2017.07.002),
    introduce exact partition games and prove the Lorenz conclusion.  The
    condition and implication are prior art.
+   Dietzenbacher (2021) also proved that exact games with at most four players
+   are PES stable.  That is the closest published low-dimensional result found;
+   it is weaker than proving that Lmin itself satisfies the exact-partition
+   tightness conditions.
 4. **Antiduality and later exact-partition theory.** Dietzenbacher and
    Yanovskaya (2020),
    [*Antiduality in exact partition games*](https://doi.org/10.1016/j.mathsocsci.2020.04.006),

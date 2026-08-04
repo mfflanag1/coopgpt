@@ -8,7 +8,9 @@ new complete boundary-cardinality classification on draft PR #11.
 - Repository: `mfflanag1/counterexample-hunt`
 - PR: `https://github.com/mfflanag1/counterexample-hunt/pull/11`
 - Branch: `codex/human-n5-boundary-proof`
-- Commit: `c097e2f`
+- Theorem-introduction commit: `c097e2f`
+- Reviewer-packet commit: `f321e9a`
+- Review the current PR head, including later proof and prior-art hardening.
 
 Primary files:
 
@@ -19,6 +21,7 @@ Primary files:
 - `coopgames/paper3/COMPLETE_BOUNDARY_SHAPE_CLASSIFICATION.md`;
 - `coopgames/src/verify_three_poorer_boundary_family.py`;
 - `coopgames/results/three_poorer_boundary_family.json`.
+- `coopgames/paper3/EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`.
 
 The broader dependency chain is the strict-cover lemma, balanced-trace
 transport theorem, unique-richest theorem, human two-poorer theorem, and
@@ -110,6 +113,9 @@ any prior source contains:
 Do not credit novelty merely because keyword search fails.  The paper already
 acknowledges as prior art the exact-partition condition, its Lorenz
 consequence, Lmin/Lmax, exact balancedness, and minimal balanced collections.
+It also acknowledges the closest known low-dimensional result: exact games
+with at most four players are PES stable.  Decide independently whether the
+new exact-partition-at-Lmin theorem is a strict, nontrivial strengthening.
 
 ## Requested verdict
 
