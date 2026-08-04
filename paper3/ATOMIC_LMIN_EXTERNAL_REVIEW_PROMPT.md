@@ -65,6 +65,13 @@ special attention to:
     fractional-cover literature for the combined equivalence and rooted
     functional.  Treat the marginal-contribution operation itself as prior
     art and assess novelty only for the exact-face/Lmin assembly.
+13. Audit the claim that selector recursion fails: independently recompute
+    ordinary and normalized Lmin of both marginal games and compare them
+    with the uniformly efficiency-repaired restriction.
+14. Audit the two-facet factorization of the full three-trace family,
+    including both incidence identities, the block-pattern proofs of
+    indecomposability, the appeal to the exact-cone facet theorem, and the
+    slack sandwich forcing both factors to be saturated.
 
 Please report fatal errors first, then repairable gaps, then novelty risks.
 State whether the result is (a) correct as written, (b) correct after named

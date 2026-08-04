@@ -64,12 +64,33 @@ def marginal_factorization(game, phi, target):
             raise AssertionError("marginal slack factorization failed")
     if marginal.in_core(restricted_phi):
         raise AssertionError("slack target unexpectedly gave a marginal-core allocation")
+    marginal_lmin = tuple(leximin_core_exact(marginal))
+    floors = tuple(marginal.v[1 << i] for i in range(marginal.n))
+    residual_values = [
+        marginal.v[coalition]
+        - sum(floors[i] for i in range(marginal.n) if coalition >> i & 1)
+        for coalition in range(1 << marginal.n)
+    ]
+    residual_lmin = tuple(leximin_core_exact(Game(marginal.n, residual_values)))
+    normalized_marginal_lmin = tuple(
+        floors[i] + residual_lmin[i] for i in range(marginal.n)
+    )
+    uniform_repair = tuple(
+        value + target_slack / len(outside) for value in restricted_phi
+    )
     return {
         "marginal_players": len(outside),
         "marginal_game_balanced": True,
         "efficiency_deficit": str(target_slack),
         "slack_factorization_all_coalitions": True,
         "restricted_lmin_in_marginal_core": False,
+        "marginal_lmin": [str(value) for value in marginal_lmin],
+        "normalized_marginal_lmin": [str(value) for value in normalized_marginal_lmin],
+        "uniform_efficiency_repair": [str(value) for value in uniform_repair],
+        "uniform_repair_equals_marginal_lmin": uniform_repair == marginal_lmin,
+        "uniform_repair_equals_normalized_marginal_lmin": (
+            uniform_repair == normalized_marginal_lmin
+        ),
     }
 
 
@@ -111,7 +132,7 @@ def five_player_case():
 
 def seven_player_case():
     t, u, w = 1, 2, 2
-    (poor_a, _), _, _, _, constraints = defining_coalitions(t, u, w)
+    (poor_a, _), _, A, B, constraints = defining_coalitions(t, u, w)
     game = three_trace_envelope(vertices(t, u, w))
     phi = tuple([F(1), F(1)] + [F(2)] * (t + u + w))
     if tuple(leximin_core_exact(game)) != phi:
@@ -133,6 +154,20 @@ def seven_player_case():
     witnesses = decompositions(7, support)
     if len(witnesses) != 1:
         raise AssertionError("seven-player rooted decomposition count changed")
+    middle = mask(A + B)
+    middle_slack = slack(game, phi, middle)
+    internal_support = [traces[0], traces[1], middle, target]
+    internal_circuit = audit_circuit(
+        7, internal_support, [F(1), F(1), F(1), F(-2)], target
+    )
+    complementary_support = [traces[2], rooted, middle]
+    complementary_circuit = audit_circuit(
+        7, complementary_support, [F(1), F(1), F(-1)], middle
+    )
+    if middle_slack != 2:
+        raise AssertionError("seven-player middle-face slack changed")
+    if decompositions(7, internal_support) or decompositions(7, complementary_support):
+        raise AssertionError("seven-player facet factor became decomposable")
     return {
         **circuit,
         "marginal_core_factorization": marginal_factorization(game, phi, target),
@@ -144,6 +179,13 @@ def seven_player_case():
         "indecomposable": False,
         "decomposition_count": 1,
         "decomposition": witnesses[0],
+        "middle_face_slack": str(middle_slack),
+        "two_facet_slack_sandwich": "2*s(H) <= s(A union B) <= s(rooted extension)",
+        "internal_triangle_factor": {**internal_circuit, "indecomposable": True},
+        "complementary_diamond_factor": {
+            **complementary_circuit,
+            "indecomposable": True,
+        },
     }
 
 

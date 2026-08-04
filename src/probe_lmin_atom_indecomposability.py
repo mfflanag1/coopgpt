@@ -67,17 +67,21 @@ def cases():
     exterior = ((1 << 5) - 1) & ~(left | right)
     support5 = [left, right, exterior, target5]
 
-    (poor_a, _), _, _, _, constraints = defining_coalitions(1, 2, 2)
+    (poor_a, _), C, A, B, constraints = defining_coalitions(1, 2, 2)
     traces = [mask(coalition) for coalition, _ in constraints]
     target7 = mask(range(2, 7))
     support7 = traces + [1 << poor_a, target7]
     rooted5 = [left, right, target5 | exterior, target5]
     rooted7 = traces + [target7 | (1 << poor_a), target7]
+    internal = [traces[0], traces[1], mask(A + B), target7]
+    complementary = [traces[2], target7 | (1 << poor_a), mask(A + B)]
     return [
         ("five_player_broken_diamond", 5, support5),
         ("five_player_rooted_atom", 5, rooted5),
         ("seven_player_three_trace", 7, support7),
         ("seven_player_rooted_atom", 7, rooted7),
+        ("seven_player_internal_triangle_factor", 7, internal),
+        ("seven_player_complementary_diamond_factor", 7, complementary),
     ]
 
 

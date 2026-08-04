@@ -2531,6 +2531,14 @@ hyperplane of the balanced game $w_H$.  The obstruction is therefore not an
 unstructured failure of an exact face: it is a weighted fractional-cover gap
 inside a balanced marginal game.
 
+This factorization is not a recursive identity for the selector.  In both
+the five-player and seven-player obstruction families, adding the missing
+total $s_\phi(H)$ uniformly to $\phi_L$ gives neither ordinary Lmin nor
+normalized Lmin of $w_H$.  Thus the valid recursion is at the level of core
+compatibility and fractional-cover geometry, not at the level of the selected
+allocation itself; the exact counterchecks are recorded in
+\path{results/rooted_deficit_completion.json}.
+
 The forced decomposition can be absorbed rather than discarded.  Rooting a
 poorer coalition $Q$ at $H$ replaces it by $H\cup Q$ and charges its marginal
 slack.  This strengthens the completion invariant.
@@ -2628,7 +2636,9 @@ Rooting quotients out that forced triangle while preserving the distinguished
 suffix.  In the five-player broken diamond the resulting rooted circuit is
 indecomposable; in the seven-player three-trace family it has exactly one
 further decomposition.  Thus rooting is a genuine bridge to the facet theory
-but not a universal facet correspondence.  The standalone proof, scope
+but not a universal facet correspondence.  The later
+Theorem~\ref{thm:lx-three-trace-facet-factorization} shows that the residual
+is exactly a sum of two saturated indecomposable facets.  The standalone proof, scope
 calibration, and exact probes are in
 \begin{center}
 \small\path{paper3/ATOMIC_LMIN_OBSTRUCTION_REDUCTION.md},\\[-2pt]
@@ -5907,6 +5917,82 @@ list, and generic staged replay of the seven-player base case are in
 \path{src/verify_three_trace_half_integral_family.py} and
 \path{results/three_trace_half_integral_family.json}.
 \end{proof}
+
+The rooted residual in this family has an exact two-facet factorization.  It
+is not an unexplained failure of the facet bridge.
+
+\begin{theorem}[two-facet factorization of the three-trace family]
+\label{thm:lx-three-trace-facet-factorization}
+In Theorem~\ref{thm:lx-three-trace-obstruction}, put
+\[
+ T_1=C\cup A,\quad T_2=C\cup B,\quad
+ T_3=\{b\}\cup A\cup B,\quad U=H\cup\{a\},\quad D=A\cup B.
+\]
+The rooted obstruction identity factors as
+\[
+ \underbrace{\mathbf1_{T_3}+\mathbf1_U-\mathbf1_D
+              =\mathbf1_N}_{\text{complementary diamond}},
+ \qquad
+ \underbrace{\mathbf1_{T_1}+\mathbf1_{T_2}+\mathbf1_D
+              -2\mathbf1_H=0}_{\text{internal triangle}}.       \tag{TF}
+ \label{eq:lx-three-trace-facet-factorization}
+\]
+Both displayed proper-coalition systems are indecomposable minimal
+semi-balanced systems and hence define facets of the exact-game cone.  Their
+slack inequalities give the sharp sandwich
+\[
+ 2s_\phi(H)\leq s_\phi(D)\leq s_\phi(U).
+\]
+Throughout the family all three quantities equal two.  Thus the rooted atom
+is exactly the sum of two saturated facet atoms.
+\end{theorem}
+
+\begin{proof}
+Adding the two identities in \eqref{eq:lx-three-trace-facet-factorization}
+and eliminating $D$ gives
+\[
+ \mathbf1_{T_1}+\mathbf1_{T_2}+\mathbf1_{T_3}+\mathbf1_U
+ -2\mathbf1_H=\mathbf1_N,
+\]
+the rooted form of \eqref{eq:lx-three-trace-circuit}.  Since $T_1,T_2,T_3$
+are tight, exact balancedness applied to the two factors gives the displayed
+slack sandwich.  The construction has $s_\phi(H)=1$.  Moreover
+\eqref{eq:lx-three-trace-gate} gives $x_b\leq3$, attained by the exactifier
+displayed in the proof above, so
+$v(U)=v(N)-3=2|H|-1$ and $s_\phi(U)=2$.  The sandwich forces
+$s_\phi(D)=2$.
+
+It remains to check indecomposability without enumerating players.  Within
+each of the nonempty blocks $C,A,B$ all incidence rows of the internal
+system coincide.  Any new exceptional coalition must therefore be a union
+of whole blocks.  Players $a,b$ lie outside every supported set, forcing the
+constant to be zero and excluding them from that coalition.  On the three
+block types the supported sets are the three edges
+$C\cup A,C\cup B,A\cup B$ and their union $H$.  The row equations have the
+unique signed dependence $(1,1,1,-2)$; checking the three remaining singleton
+block unions shows that none is exceptional.  Hence the internal triangle is
+indecomposable.
+
+For the complementary diamond, the three incidence row types are
+\[
+ X=\{a\}\cup C:(0,1,0),\qquad
+ Y=\{b\}:(1,0,0),\qquad
+ Z=A\cup B:(1,1,1)
+\]
+in the columns $(T_3,U,D)$.  A new exceptional set must be a union of
+$X,Y,Z$.  If it excludes $Z$, nonnegativity forces the empty set.  If it
+includes $Z$, the four choices on $X,Y$ give respectively
+$D,U,T_3,N$, all already supported or improper.  Thus no decomposition
+exists.  The facet conclusion is the indecomposability theorem of
+\citet{StudenyKratochvil2022}.
+\end{proof}
+
+A standalone derivation and exact base-case audit are in
+\begin{center}
+\small\path{paper3/THREE_TRACE_FACET_FACTORIZATION.md},\\[-2pt]
+\small\path{src/verify_rooted_deficit_completion.py},\\[-2pt]
+\small\path{results/rooted_deficit_completion.json}.
+\end{center}
 
 There is a second external-sacrifice family.  It extends the three-poorer,
 two-richer geometry of the five-player example simultaneously in both block

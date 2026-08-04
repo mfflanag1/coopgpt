@@ -71,3 +71,18 @@ its use at Lmin payoff boundaries, and the identification of rooted
 completion cost as the marginal game's weighted fractional-cover gap.
 Focused searches did not locate this combined statement; specialist review
 is still required before any novelty claim.
+
+## A recursion that does not hold
+
+The factorization does **not** imply that repairing the missing efficiency
+uniformly recovers Lmin of the marginal game.  In both known obstruction
+families,
+
+```text
+phi_L + [s_phi(H)/|L|] 1_L
+```
+
+differs from both ordinary Lmin and normalized Lmin of `w_H`.  Exact values
+are recorded in `results/rooted_deficit_completion.json`.  Therefore any
+recursive theory must transport the fractional-cover/tight-set data, not
+merely the selected payoff vector.
