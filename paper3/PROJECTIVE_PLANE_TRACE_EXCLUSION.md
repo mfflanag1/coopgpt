@@ -30,7 +30,8 @@ Consequently:
 - all projective-plane packets of orders at most `6` are impossible;
 - more generally, every packet with `|B|<=6` is impossible, in every order;
 - at order `7`, the only pattern not excluded by this theorem is the extremal
-  count `(|A|,|B|)=(6,7)`.
+  count `(|A|,|B|)=(6,7)`; a separate arc argument below eliminates this
+  final pattern in the Desarguesian plane `PG(2,7)`.
 
 The last pattern is explicitly left open here.  The theorem is a human
 counting argument, not a finite-search claim.
@@ -92,6 +93,35 @@ larger than `binom(b0-1,2)`.  This proves the dimension-free `|B|<=6`
 exclusion.  If `q<=6`, transport already gives `b0<=q<=6`, so every packet
 is excluded.  For `q=7`, only `b0=7,a0=6` escapes the same count.
 
+## Closing the extremal case in `PG(2,7)`
+
+Assume `a0=6,b0=7` and no safe star exists. The exact simple-point identity
+is
+
+```text
+n_1 = 14 + sum_(k>=3) k(k-2)n_k.
+```
+
+Every simple point lies on at least two `A`-lines and therefore injects into
+one of the 15 pairs of `A`-lines. Hence `n_1<=15`, so no three `B`-lines are
+concurrent and `n_1=14`. Those 14 simple points already consume 14 distinct
+pairs of `A`-lines. Three concurrent `A`-lines would consume three pairs at
+one point and leave too few pairs for the remaining simple points. Thus the
+six `A`-lines are also in general position.
+
+Dualize. The `B`-lines become a seven-arc `B*`, the `A`-lines become a
+six-arc `A*`, and the 14 simple points become all 14 tangents of `B*`. Every
+one of those tangents is a secant of `A*`. Segre's `q`-arc theorem extends
+`B*` to an eight-point oval, hence a conic in odd Desarguesian order; Thas
+(1987) gives a short proof. If `R` is the missing conic point, the seven
+lines `RP`, `P in B*`, are concurrent tangents of the seven-arc. They would
+therefore be seven concurrent secants of the six-arc `A*`.
+
+That is impossible. Through a point of `A*` there are only five secants;
+through a point outside `A*`, distinct secants use disjoint pairs of its six
+points, so there are at most three. This contradiction eliminates the final
+pattern in `PG(2,7)`.
+
 In particular, the Fano plane (`q=2`) cannot be the required underloading
 witness, even though its seven-line incidence vertex is fractional,
 nonsingular, and contains no four-co-singleton incidence submatrix. Exact
@@ -110,6 +140,7 @@ projective-plane incidence packets are impossible below a sharp density gate.
 ```
 
 It does **not** prove that every higher-dimensional failure contains a
-four-co-singleton minor, and it does not settle the extremal order-seven
-incidence pattern.  Correctness and novelty still require hostile specialist
-review.
+four-co-singleton minor. The simple counting theorem does not settle the
+extremal pattern for arbitrary non-Desarguesian incidence systems; the arc
+argument closes it specifically in `PG(2,7)`. Correctness and novelty still
+require hostile specialist review.

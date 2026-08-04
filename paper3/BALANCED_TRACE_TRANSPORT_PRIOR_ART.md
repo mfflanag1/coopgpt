@@ -28,7 +28,8 @@ or any of the following sharp consequences:
   four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - projective-plane incidence packets satisfying
   `b(q+2-b)>binom(a,2)` are eliminated by a safe star rounding, including
-  every such packet of order at most six;
+  every such packet of order at most six; the only remaining order-seven
+  count is also eliminated in `PG(2,7)` by Segre's arc-extension theorem;
 - the complete boundary-cardinality phase diagram
   `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
 
@@ -153,7 +154,8 @@ Pending expert review, the strongest defensible formulation is:
 > entirely. At four rich players the unique surviving fractional packet is
 > the co-singleton `1/3` cover. A projective-plane star-rounding argument
 > further excludes every incidence packet satisfying a simple-point density
-> inequality, including every such packet of order at most six. Three
+> inequality, including every such packet of order at most six; a dual-arc
+> argument closes the final extremal count in `PG(2,7)`. Three
 > explicit universal families then give a complete classification of the
 > boundary-side cardinalities compatible with slack.  We do not claim the Lmin solution,
 > exact partition games, their published Lorenz consequence, exact

@@ -256,7 +256,11 @@ a safe star rounding with rich load `1_H+q e_d`, gaining-poor load one, and
 losing-poor load at most one. Exactifying `d` again contradicts efficiency.
 This excludes every projective-plane packet with `|B|<=6`, hence every such
 packet of order at most six. At order seven it leaves only the extremal count
-`(|A|,|B|)=(6,7)`, which remains open. The proof is in
+`(|A|,|B|)=(6,7)`. In `PG(2,7)`, dual arc extension closes that last case:
+the seven-arc extends to a conic, whose missing point creates seven concurrent
+tangents, whereas a six-arc has at most five concurrent secants. The extremal
+count remains open only for arbitrary non-Desarguesian incidence systems. The
+proof is in
 `paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`.
 
 For the internal-sacrifice family, all co-singletons `H\{x}` are active

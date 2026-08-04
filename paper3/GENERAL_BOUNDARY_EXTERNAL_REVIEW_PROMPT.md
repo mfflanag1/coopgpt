@@ -14,7 +14,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `thm:lx-integral-trace-obstruction`, `cor:lx-odd-trace-cycle`,
   `thm:lx-rank-two-trace-exclusion`,
   `thm:lx-four-rich-trace-classification`,
-  `thm:lx-projective-plane-trace-exclusion`, and
+  `thm:lx-projective-plane-trace-exclusion`,
+  `cor:lx-pg27-trace-exclusion`, and
   `thm:lx-small-poorer-threshold`.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
@@ -144,8 +145,13 @@ falsification searches.  Please do not count their no-hit output as proof.
    incidence identities, the lower bound `n_1>=b(q+2-b)`, the injection of
    simple points into pairs of `A`-lines under failure of safe rounding, and
    the load `1_H+q e_d` from the pencil through `d`. Check especially that
-   exactifying only singleton `d` suffices when its multiplicity is `q`, and
-   that the order-seven `(a,b)=(6,7)` case is explicitly left open.
+   exactifying only singleton `d` suffices when its multiplicity is `q`.
+   For the order-seven `(a,b)=(6,7)` case, check the exact simple-point
+   identity, the deductions that both line families are in general position,
+   the dual tangent/secant translation, the use of Segre's `q`-arc extension
+   theorem, and the bound of five (or three) concurrent secants of a six-arc.
+   Confirm that this closes only `PG(2,7)` and does not silently assume an
+   arbitrary projective plane is Desarguesian.
 10. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove

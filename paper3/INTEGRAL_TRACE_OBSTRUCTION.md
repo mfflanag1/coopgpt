@@ -154,7 +154,9 @@ and a pencil rounding rule out every poor-label pattern satisfying
 ```
 
 In particular all such packets through order six are impossible, while the
-argument deliberately leaves the extremal order-seven count `(6,7)` open.
+counting argument leaves only the extremal order-seven count `(6,7)`.
+Segre's arc-extension theorem eliminates that last count in `PG(2,7)`; it
+remains open here only for arbitrary non-Desarguesian incidence systems.
 See
 [`PROJECTIVE_PLANE_TRACE_EXCLUSION.md`](PROJECTIVE_PLANE_TRACE_EXCLUSION.md)
 and Theorem `thm:lx-projective-plane-trace-exclusion`.
