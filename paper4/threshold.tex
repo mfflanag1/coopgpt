@@ -6,7 +6,7 @@
  linkcolor=blue,
  citecolor=blue,
  urlcolor=blue,
- pdftitle={Exact-partition failure at the egalitarian core},
+ pdftitle={Balanced transport at the egalitarian core},
  pdfauthor={Maxwell Flanagan}
 }
 
@@ -20,7 +20,7 @@
 \newcommand{\Lmax}{\operatorname{Lmax}}
 \newcommand{\one}{\mathbf 1}
 
-\title{Exact-partition failure at the egalitarian core:\\
+\title{Balanced transport at the egalitarian core:\\
 a complete boundary phase diagram}
 \author{Maxwell Flanagan}
 \date{Draft of August 4, 2026}
@@ -40,16 +40,19 @@ and $h$ richer players, then a slack richer suffix exists if and only if
  m_{\min}(1)=4,\quad m_{\min}(2)=m_{\min}(3)=3,
  \quad m_{\min}(h)=2\ (h\ge4).
 \]
-The lower bounds are structural.  Leximin optimality gives a strict cover by
-tight coalitions; exactifying the failed suffix turns that cover into a
-transport problem through minimal balanced hypergraphs.  One poorer player
-cannot support the required opposing signs.  A unique richest player needs
-four poorer players by a fractional sacrifice budget.  With two poorer
-players, every failure needs a proper active hyperedge of size at least
-three, hence at least four richer players.  Three explicit dimension-free
-lower-envelope families attain every remaining pair.  The familiar
-four-player guarantee and sharp five-player failure are immediate corollaries
-of this two-parameter theorem.  No finite enumeration is used in the proof.
+The lower bounds are structural.  A normal-cone theorem turns leximin
+optimality into one simultaneous strict cover by tight coalitions.  Projecting
+the cover to the richer side and applying a convex defect functional shows
+more generally that every failure selects one lifted minimal balanced packet
+with a positive rooted semi-balanced obstruction; mixtures are unnecessary.
+The resulting certificate uses at most $|N|$ positive coalitions.
+One poorer player cannot support the required opposing signs.  A unique
+richest player needs four poorer players by a fractional sacrifice budget.
+With two poorer players, every failure needs a proper active hyperedge of size
+at least three, hence at least four richer players.  Three explicit
+dimension-free lower-envelope families attain every remaining pair.  The
+familiar four-player guarantee and sharp five-player failure are immediate
+corollaries.  No finite enumeration is used in the proof.
 \end{abstract}
 
 \section{Introduction and prior-art boundary}
@@ -70,12 +73,17 @@ selection are prior art \citep{LlerenaMauri2017,
 SanchezSorianoBranzeiLlorcaTijs2010}.  Property I and its antidual
 form provide established qualitative tight-coalition descriptions of the
 egalitarian selections \citep{ArinKuipersVermeulen2008,Mauri2018}.  Exact
-balancedness is also established \citep{CsokaHeringsKoczy2011,
-LohmannBormHerings2012}.  Our candidate contribution is the sharp
-two-parameter classification, its transport proof, and the realizing
-families.  The closest published low-dimensional result known to us is that
-exact games through four players are PES stable \citep{Dietzenbacher2021};
-that does not itself assert exact partition at $\Lmin$.
+balancedness and semi-balanced facet systems are also established
+\citep{CsokaHeringsKoczy2011,LohmannBormHerings2012,
+StudenyKratochvil2022}.  In particular, the latter authors already obtain
+purely minimal semi-balanced systems from minimal balanced systems by
+complementing the exceptional coalition.  Our candidate contribution is not
+that full-set correspondence, but the Lmin-selected normal cover and its
+projection to one minimal balanced packet on the richer suffix, together with
+the sharp two-parameter classification and realizing families.  The closest
+published low-dimensional result known to us is that exact games through four players are PES stable
+\citep{Dietzenbacher2021}; that does not itself assert exact partition at
+$\Lmin$.
 
 The main theorem is stated now.  All games below are
 singleton-normalized, meaning $v(\{i\})=0$ for every player.
@@ -117,13 +125,25 @@ smaller at every player in $L$.
 \end{lemma}
 
 \begin{proof}
-This is the Farkas-dual form of the established transfer-blocking/property-I
-description of the egalitarian core.  For completeness, if no such cover
-exists, separation gives an efficient tangent direction that raises the
-first affected richer-side cumulative level without lowering an earlier
-payoff stratum.  A sufficiently short step from $\phi$ remains in the core
-and lexicographically improves its increasing rearrangement, contradicting
-the definition of $\Lmin$.
+Let $\mathcal D$ be the tangent cone of the core at $\phi$.  There is no
+$d\in\mathcal D$ with $d_i\ge0$ for every $i\in L$ and one of these
+inequalities strict: a sufficiently short segment $\phi+td$ remains in the
+core, preserves the strict gap between $L$ and $H$, and improves the first
+poorer payoff stratum on which $d$ is nonzero.
+
+The projection of the polyhedral cone $\mathcal D$ to $\mathbb R^L$ is
+closed and meets $\mathbb R_+^L$ only at zero.  Strict polyhedral separation
+therefore gives $w_i>0$ on $L$ such that
+$\sum_{i\in L}w_i d_i\le0$ for all $d\in\mathcal D$.  Extend $w$ by zero on
+$H$.  The polar representation of the core's tangent cone writes
+\[
+ w=\mu\one_N-\sum_T\lambda_T\one_T,
+ \qquad \lambda_T\ge0,                              \tag{NC}
+\]
+where $T$ ranges over proper $\phi$-tight coalitions.  Thus the weighted
+incidence load is $\mu$ on $H$ and $\mu-w_i<\mu$ at $i\in L$.  Nonnegativity
+of the load and positivity of $w_L$ imply $\mu>0$.  Deleting coalitions
+disjoint from $H$ preserves the richer load and only lowers poorer loads.
 \end{proof}
 
 Normalize the common rich load in Lemma~\ref{lem:cover} to one and remove
@@ -171,6 +191,76 @@ packets.  Summing the tight-coalition inequalities at $z$ inside one packet
 gives (3c), while averaging the lifted packets recovers the original poorer
 loads $c_i<1$, proving (3d).
 \end{proof}
+
+The mixture in Theorem~\ref{thm:transport} always contains one packet that
+already carries a positive rooted obstruction.  This gives a general
+dimension-free reduction before the cardinality arguments begin.
+
+\begin{theorem}[one-packet reduction]\label{thm:packet}
+At every slack strict boundary there is a lifted vertex of
+$\mathcal P_H$, with poorer load vector $r\ge0$, such that, on putting
+\[
+ b=\max_{i\in L}r_i,\qquad u_i=b-r_i,
+ \qquad \delta=1+\sum_{i\in L}u_i-b,
+\]
+one has $\delta>0$ and
+\[
+ \sum_T\lambda_T\one_T
+ +\sum_{i\in L}u_i\one_{H\cup\{i\}}
+ -\delta\one_H=b\one_N.                            \tag{P}
+\]
+Here the $T$ are proper $\phi$-tight coalitions and their traces form one
+minimal balanced collection on $H$.  Moreover,
+\[
+ \delta s_\phi(H)
+ \le\sum_{i\in L}u_i s_\phi(H\cup\{i\}),           \tag{PB}
+\]
+so at least one $u_i$ is positive.  The trace collection is either the
+full-trace packet $\{H\}$ or consists entirely of proper subsets of $H$.
+The identity uses at most $|H|$ packet coalitions and $|L|$ spokes, hence at
+most $|N|$ positive coalitions.
+\end{theorem}
+
+\begin{proof}
+Let $c_i=\sum_q\theta_qr_i^q<1$ be the average loads in (3d).  For a
+nonnegative vector $a$ define
+\[
+ F(a)=1+(|L|-1)\max_i a_i-\sum_i a_i.
+\]
+This function is convex, and
+$F(c)\ge1-\max_i c_i>0$.  Jensen's inequality therefore gives a lifted
+vertex with $F(r)>0$; this is exactly the displayed $\delta$.  Its rich load
+is one.  In (P), poor player $i$ has load $r_i+u_i=b$, while every rich
+player has load $1+\sum_i u_i-\delta=b$.
+
+The positive incidence columns at a vertex of $\mathcal P_H$ are linearly
+independent: otherwise a sufficiently small signed kernel perturbation would
+remain nonnegative in both directions.  Thus the packet has at most $|H|$
+traces.  The pure lift uses one coalition per trace and the completion has at
+most $|L|$ positive spokes, proving the sparsity bound.
+
+Choose $z\in\core(v)$ exact on $H$.  Evaluate (P) at $z$ and at $\phi$.
+Writing $\Delta=z-\phi$, the packet terms satisfy $\Delta(T)\ge0$, the
+spokes satisfy
+$\Delta(H\cup\{i\})\ge-s_\phi(H\cup\{i\})$, and
+$\Delta(H)=-s_\phi(H)$.  The displacement form of (P) is therefore
+\[
+ 0=\sum_T\lambda_T\Delta(T)
+   +\sum_i u_i\Delta(H\cup\{i\})-\delta\Delta(H)
+ \ge-\sum_i u_i s_\phi(H\cup\{i\})+\delta s_\phi(H),
+\]
+which is (PB).  If every $u_i$ were zero, (PB) would contradict
+$\delta s_\phi(H)>0$.  Finally, a minimal balanced collection containing $H$
+must be the singleton collection $\{H\}$; otherwise all its traces are proper.
+\end{proof}
+
+Thus every failure has an exterior full-trace packet or an internal minimal
+balanced-transport packet.  The incidence identity is an established
+semi-balanced system with exceptional coalition $H$; the new point proposed
+here is that the Lmin normal certificate and the convex functional $F$
+select one minimal balanced packet on $H$ from an arbitrary failure.  This is
+different from the established complement-of-the-exceptional-set
+correspondence, which operates on the full player set.
 
 The first exclusion is immediate.
 
@@ -510,20 +600,22 @@ in (1) is entered.
 
 \section{What the theorem does and does not establish}
 
-The phase theorem is dimension-free in the sense relevant to the original
-problem: it classifies every possible pair of boundary-side cardinalities,
-and its lower bounds are symbolic transport arguments.  It does not classify
-all support-minimal balanced packets or all extreme rays of the associated
-two-sided coupling cone.  Distinct irreducible packet classes already occur:
-the co-singleton class $J-I$ and a blown-up three-cycle class are not related
-by a single universal minor.  A full obstruction theory would therefore
-need a multi-class circuit or coupling characterization rather than a claim
-that every failure contains one fixed small configuration.
+The normal-cover and one-packet theorems are dimension-free: every failure is
+reduced to a single minimal balanced rich-trace packet and its poorer-side
+completion budget.  The phase theorem then classifies every possible pair of
+boundary-side cardinalities.  It does not classify all minimal balanced
+packets or all extreme rays of the associated two-sided coupling cone.
+Distinct irreducible packet classes already occur: the co-singleton class
+$J-I$ and a blown-up three-cycle class are not related by a single universal
+minor.  A complete catalogue would therefore be multi-class, not a theorem
+that every failure contains one fixed finite configuration.
 
 The theorem's novelty remains conditional on specialist review.  Exact
-partition, its Lorenz consequence, property I, exact balancedness, minimal
-balanced collections, and lower-envelope exactification are not claimed.
-The candidate new content is the Lmin-selected transport bridge, the sharp
+partition, its Lorenz consequence, property I, semi-balanced inequalities,
+the semi-balanced/minimal-balanced correspondence, minimal balanced
+collections, and lower-envelope exactification are not claimed.  The
+candidate new content is the simultaneous Lmin normal cover, the richer-side
+one-packet selection and linear-size certificate theorem, the sharp
 staircase (1), and the three dimension-free indecomposable realizing
 families.
 
@@ -570,6 +662,11 @@ Mathematical Social Sciences 64:127--135.
 \bibitem[Mauri(2018)]{Mauri2018}
 Mauri Masdeu L (2018) Essays on egalitarianism-based solution concepts for
 cooperative TU-games. Doctoral thesis, Universitat Rovira i Virgili.
+
+\bibitem[Studen\'y and Kratochv\'il(2022)]{StudenyKratochvil2022}
+Studen\'y M, Kratochv\'il V (2022) Facets of the cone of exact games.
+Mathematical Methods of Operations Research 95:35--80.
+\url{https://doi.org/10.1007/s00186-022-00770-4}
 
 \bibitem[S\'anchez-Soriano et al.(2010)]{SanchezSorianoBranzeiLlorcaTijs2010}
 S\'anchez-Soriano J, Br\^anzei R, Llorca N, Tijs SH (2010) A technical note

@@ -1,8 +1,10 @@
-# Structural phase paper
+# Balanced-transport and structural phase paper
 
 This directory contains the concise standalone version of the central
-dimension-free result. The 118-page `paper3` manuscript remains the technical
-archive; `threshold.tex` is organized around one theorem:
+dimension-free result. The 120-page `paper3` manuscript remains the technical
+archive. `threshold.tex` now has two layers: a dimension-free one-packet
+obstruction theorem for every failed Lmin suffix, followed by the complete
+cardinality phase theorem:
 
 ```text
 m_min(1)=4,
