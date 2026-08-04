@@ -35,15 +35,13 @@ or
 
 Consequently:
 
-- all projective-plane packets of orders at most `6` are impossible;
-- more generally, every packet with `|B|<=6` is impossible, in every order;
-- at order `7`, the only pattern not excluded by this theorem is the extremal
-  count `(|A|,|B|)=(6,7)`; a separate convex-row argument below eliminates
-  this final pattern in every finite projective plane of order seven.
+- the simple-point density theorem excludes every packet with `|B|<=6` and
+  hence every plane of order at most six;
+- a two-sided convex Lehman-row argument strengthens this to every finite
+  projective plane, in every order.
 
-The order-seven closure is incidence-theoretic: it does not assume
-Desarguesian coordinates or use finite enumeration. The theorem is a human
-counting argument.
+The all-orders closure is incidence-theoretic: it does not assume
+Desarguesian coordinates or use finite enumeration.
 
 ## Simple-point count
 
@@ -126,43 +124,41 @@ larger than `binom(b0-1,2)`.  This proves the dimension-free `|B|<=6`
 exclusion.  If `q<=6`, transport already gives `b0<=q<=6`, so every packet
 is excluded.  For `q=7`, only `b0=7,a0=6` escapes the same count.
 
-## Closing the extremal order-seven case
+## All-orders closure from the two-sided row band
 
-Assume `q=7`, `a0=6`, and `b0=7`.  View the line-incidence matrix as the
-self-dual positive Lehman pair with `r=8` and `k=7`.  At a point `P`, let
-`u(P)` and `w(P)` count the incident `A`- and `B`-lines.  The convex
-Lehman-row band becomes
+The line-incidence matrix is a self-dual positive Lehman matrix with
 
 ```text
-2w(P)-8 <= u(P) <= 2w(P)-1.                         (PG7-C)
+r=q+1,             k=q.
 ```
 
-If some point satisfies this band, interpolate the uniform line packet with
-the pencil through that point.  The gaining-poor load becomes exactly one,
-the losing-poor load is at most one, and the rich overload is large enough
-for the real exact-face overload budget to contradict the strict payoff
-boundary.  See [`CONVEX_LEHMAN_ROW.md`](CONVEX_LEHMAN_ROW.md).
-
-Suppose no point satisfies the band.  Every point on exactly one `B`-line
-then lies on at least two `A`-lines and injects into one of the fifteen pairs
-of `A`-lines, so `n_1<=15`.  The exact identity for seven `B`-lines is
+Put `p=|A|` and `ell=|B|`. Transport gives
+`0<=p<ell<r`, so `1<=ell<=q`.  The simple-point bound already proved above
+gives
 
 ```text
-n_1 = 14 + sum_(k>=3) k(k-2)n_k.
+n_1 >= ell(q+2-ell) > 0.
 ```
 
-Every positive summand is at least three, so `n_1<=15` forces `n_k=0` for
-all `k>=3`.  The 21 pairs of `B`-lines therefore meet at 21 distinct points
-with `w(P)=2`.  At each such point, failure of `(PG7-C)` forces `u(P)>=4`.
-But the six `A`-lines have only fifteen pairs in total:
+Choose a point `P` on exactly one `B`-line and let `u` be the number of
+`A`-lines through it.  Its Lehman label residual is
 
 ```text
-sum_P binom(u(P),2) = binom(6,2) = 15,
+F=(r-ell)(1-u).
 ```
 
-whereas those 21 points alone contribute at least `21 binom(4,2)>15`.
-This contradiction closes the extremal pattern in every finite projective
-plane of order seven.
+If `u<=1`, then `0<=F<=k(r-ell)`, so the positive convex row band excludes
+the packet.  If `u>=2`, then `u<=p` and
+
+```text
+0<=-F=(r-ell)(u-1)
+     <=(r-ell)(p-1)
+     <=q(r-p)=k(r-p).
+```
+
+The negative convex row band excludes the packet.  This proves the
+all-orders result. See
+[`CONVEX_LEHMAN_ROW.md`](CONVEX_LEHMAN_ROW.md).
 
 In particular, the Fano plane (`q=2`) cannot be the required underloading
 witness, even though its seven-line incidence vertex is fractional,
@@ -178,10 +174,11 @@ four-rich classification:
 integral traces are impossible;
 rank-two fractional packets are impossible by a real-valued overload budget;
 the first four-rich obstruction is uniquely co-singleton;
-projective-plane incidence packets are impossible through order seven.
+projective-plane incidence packets are impossible in every order.
 ```
 
 It does **not** prove that every higher-dimensional failure contains a
-four-co-singleton minor.  Orders eight and above retain poor-label patterns
-not settled by the present density estimates or convex row band. Correctness
-and novelty still require hostile specialist review.
+four-co-singleton minor. General positive Lehman cores need not be
+self-dual projective-plane designs, and the scaled-gap minor-lifting step
+remains unresolved. Correctness and novelty still require hostile specialist
+review.

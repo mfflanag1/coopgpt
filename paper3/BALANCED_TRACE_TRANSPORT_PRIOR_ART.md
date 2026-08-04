@@ -62,9 +62,9 @@ or any of the following sharp consequences:
   `b(q+2-b)>cd+binom(d,2)` or the local bound `d<2(q+2-b)` are eliminated by
   a safe star rounding, where `c=|A intersect B|` and
   `d=|A setminus B|`; this includes
-  every such packet of order at most six; a convex Lehman-row interpolation
-  and pair count eliminate the only remaining order-seven count in every
-  finite projective plane, without a Desarguesian assumption;
+  every such packet of order at most six; a two-sided convex Lehman-row
+  interpolation eliminates every finite projective-plane packet in every
+  order, without a Desarguesian assumption;
 - the complete boundary-cardinality phase diagram
   `m_min(1)=4`, `m_min(2)=m_min(3)=3`, and `m_min(h)=2` for `h>=4`.
 
@@ -200,18 +200,24 @@ the real-valued exact-face budget.
 The later targeted search inspected Cornuéjols--Guenin--Tunçel's primary
 Lehman-matrix paper and the classical minimally-nonideal theorem it records.
 That source supplies the matrix identity and regularity, not the poor-label
-density argument or the bridge to exact-game tight faces. This is still an
-absence finding rather than a definitive novelty determination.
+density argument, the two-sided label residual, or the bridge to exact-game
+tight faces.  Király--Pap's full primary paper was also checked: its
+minor-compatible pair-of-clutters theorem and ideal set functions do not
+state the two-label interpolation or the residual conservation law, although
+their framework may still be relevant to the unresolved cost-aware minor
+lift.  These are absence findings rather than a definitive novelty
+determination.
 
 A targeted finite-geometry search found adjacent theory of semiarcs, tangent
 blocking, and secant-avoidance.  Earlier drafts used Segre's arc-extension
 theorem for the Desarguesian order-seven case.  The current proof no longer
-depends on that theorem: a convex Lehman-row interpolation and elementary
-line-pair counts close every finite projective plane of order seven.  The
-manuscript claims neither the projective-plane incidence identities nor
-positive Lehman matrices as new.  The candidate contribution is the
-exact-face interpolation and its labeled-packet exclusion.  No source found
-in this pass states that combination; the absence is not a definitive
+depends on that theorem: at a point on exactly one gaining line, a two-sided
+Lehman interpolation normalizes whichever poor load yields the applicable
+exact-face inequality.  This closes every finite projective plane in every
+order.  The manuscript claims neither the projective-plane incidence
+identities nor positive Lehman matrices as new.  The candidate contribution
+is the exact-face interpolation and its labeled-packet exclusion.  No source
+found in this pass states that combination; the absence is not a definitive
 novelty result.
 
 ## Defensible novelty statement
@@ -235,9 +241,9 @@ Pending expert review, the strongest defensible formulation is:
 > fractional packet is
 > the co-singleton `1/3` cover. A projective-plane star-rounding argument
 > further excludes every incidence packet satisfying a simple-point density
-> inequality, including every such packet of order at most six; a convex
-> Lehman-row interpolation and pair count close the final extremal count in
-> every finite projective plane of order seven. Three
+> inequality, including every such packet of order at most six; a two-sided
+> Lehman-row interpolation excludes every finite projective-plane packet in
+> every order. Three
 > explicit universal families then give a complete classification of the
 > boundary-side cardinalities compatible with slack.  We do not claim the Lmin solution,
 > exact partition games, their published Lorenz consequence, exact

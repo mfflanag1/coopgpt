@@ -162,11 +162,11 @@ and a pencil rounding rule out every poor-label pattern satisfying
 |B|(q+2-|B|) > binom(|A|,2).
 ```
 
-In particular all such packets through order six are impossible, while the
-counting argument leaves only the extremal order-seven count `(6,7)`.  A
-convex Lehman-row interpolation and a second pair count eliminate that last
-count in every finite projective plane of order seven, without assuming
-Desarguesian coordinates.
+In particular all such packets through order six are impossible.  A
+two-sided convex Lehman-row interpolation is stronger: at a point on exactly
+one gaining line, it normalizes either the gaining or the losing poor load.
+This eliminates projective-plane packets in every finite order, without
+assuming Desarguesian coordinates.
 See
 [`PROJECTIVE_PLANE_TRACE_EXCLUSION.md`](PROJECTIVE_PLANE_TRACE_EXCLUSION.md)
 and Theorem `thm:lx-projective-plane-trace-exclusion`.

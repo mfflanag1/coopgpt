@@ -74,17 +74,22 @@ two-label property without a density hypothesis: whenever
 `|U|<|V|<r`, some dual row meets `V` once and `U` at most once. This has been
 checked only on small classical examples and is not used as a theorem.
 
-## Convex dual-row criterion
+## Two-sided convex dual-row criterion
 
 The real overload budget gives a stronger sufficient test that does not
 require a zero--one safe selector.  Put `p=|U|`, `ell=|V|`, and for a dual
 row `d` write `u_d=|row_d(B) intersect U|` and
-`w_d=|row_d(B) intersect V|`.  The packet is impossible if `w_d>=1` and
+`w_d=|row_d(B) intersect V|`.  Define
 
 ```text
-r w_d-ell-k(r-ell)
- <= p(w_d-1)+u_d(r-ell)
- <= r w_d-ell.                                      (LH-C)
+F_d=(r-p)w_d+p-ell-(r-ell)u_d.                       (LH-R)
+```
+
+The packet is impossible under either band
+
+```text
+w_d>=1,   0<=F_d<=k(r-ell),                          (LH-C+)
+u_d>=1,  -k(r-p)<=F_d<=0.                            (LH-C-)
 ```
 
 Indeed, interpolate the uniform packet with row `d` using
@@ -100,16 +105,37 @@ one, and its losing-poor load is
 a_d=[p(w_d-1)+u_d(r-ell)]/(r w_d-ell).
 ```
 
-The upper band says `a_d<=1`; the lower says `t k>=1-a_d`.  The exact-face
+The positive band says `a_d<=1` and `t k>=1-a_d`.  The exact-face
 overload budget would then give `t k phi_d<=(1-a_d)phi_a`, contradicting
 `phi_d>phi_a`.  When `w_d=1,u_d<=1`, this specializes to the earlier safe
 dual-row conclusion, but the proof and conclusion are genuinely
 real-valued.
 
-For a projective plane of order seven, `(r,k,p,ell)=(8,7,6,7)`, so the band
-reduces to `2w-8<=u<=2w-1`.  Elementary pair counting forces a point in this
-band and thereby excludes the final `(6,7)` label pattern in every order-seven
-plane, without a Desarguesian assumption.
+For the negative band, interpolate instead with weight
+`t_hat=(r-p)/(r u_d-p)`.  The losing load becomes one and the gaining load is
+
+```text
+b_d=[ell(u_d-1)+w_d(r-p)]/(r u_d-p).
+```
+
+Now `F_d<=0` says `b_d<=1`, while `F_d>=-k(r-p)` says
+`t_hat k>=1-b_d`; the overload budget contradicts `phi_d>phi_b`.
+
+Regularity also gives the exact conservation law
+
+```text
+sum_d F_d=k(ell-p)>0.                                (LH-S)
+```
+
+Since every zero-`V` row has negative residual, some gaining-bearing row has
+positive residual.  Thus a surviving packet must have a genuine overshoot
+`F_d>k(r-ell)` rather than merely fail an unnamed safe-row search.
+
+In a projective plane of order `q`, one can always choose a point on exactly
+one of the `ell<=q` gaining lines.  Its residual is
+`F=(q+1-ell)(1-u)`.  The positive band applies when `u<=1`, and the negative
+band applies when `u>=2`.  Consequently every finite projective-plane packet
+is excluded, in every order and without a Desarguesian assumption.
 
 ## Canonical internal face without the density hypothesis
 
@@ -198,8 +224,9 @@ framework:
 
 - an odd trace cycle is the `r=2` thin-Lehman case, and its dual row is the
   alternating rounding;
-- a projective plane is a self-dual, column-linear positive Lehman matrix,
-  and (LH-L) recovers its coarse simple-point density bound;
+- a projective plane is a self-dual, column-linear positive Lehman matrix;
+  the two-sided residual theorem eliminates this entire family in every
+  order, while (LH-L) is only its coarse one-sided density bound;
 - the sharp co-singleton support `J-I` instead satisfies the opposite-sign
   identity `(J-I)I=J-I`, so it is not eliminated by the positive theorem.
 
@@ -218,7 +245,8 @@ steps remain before one can claim a dimension-free characterization:
    Lehman core while preserving the scale-separated objective gap (or,
    equivalently in the unscaled formulation, preserving the scalar
    gaining-player deficit and controlling noncore-row excess);
-2. settle the two-label selection problem when (LH-D) fails.
+2. rule out the residual polarization required when both convex bands fail
+   on a general positive Lehman core.
 
 The classical source is Cornuéjols, Guenin, and Tunçel, *Lehman matrices*,
 Journal of Combinatorial Theory B 99 (2009), 531--556,

@@ -23,7 +23,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `thm:lx-rank-two-trace-exclusion`,
   `thm:lx-four-rich-trace-classification`,
   `thm:lx-projective-plane-trace-exclusion`,
-  `cor:lx-pg27-trace-exclusion`, and
+  `cor:lx-projective-plane-all-orders`, and
   `thm:lx-small-poorer-threshold`.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
@@ -193,13 +193,18 @@ falsification searches.  Please do not count their no-hit output as proof.
    self-dual projective planes are instances, while `J-I` has the opposite
    sign. Determine whether the labeled density argument or its exact-game
    use already appears in the Lehman/minimally-nonideal literature.
-   Audit the convex Lehman-row corollary separately.  Recompute
+   Audit the two-sided convex Lehman-row corollary separately.  Recompute
+   `F_d=(r-p)w_d+p-ell-(r-ell)u_d`.  For the positive band, check
    `t=(r-ell)/(r w_d-ell)`, the losing load
-   `[p(w_d-1)+u_d(r-ell)]/(r w_d-ell)`, and both equivalences between
-   `(LH-C)` and `a_d<=1`, `t k>=1-a_d`.  Check the endpoint `a_d=1` and the
-   reduction to the safe-row case `w_d=1,u_d<=1`.  Determine whether this
-   real interpolation has an antecedent in Lehman-matrix or blocking-polyhedra
-   literature.
+   `[p(w_d-1)+u_d(r-ell)]/(r w_d-ell)`, and the equivalences with
+   `a_d<=1`, `t k>=1-a_d`.  For the negative band, check
+   `t_hat=(r-p)/(r u_d-p)`, the gaining load
+   `[ell(u_d-1)+w_d(r-p)]/(r u_d-p)`, and the equivalences with
+   `b_d<=1`, `t_hat k>=1-b_d`.  Check both equality endpoints and the
+   strict comparisons `phi_d>phi_a,phi_b`.  Independently derive the residual
+   conservation identity `sum_d F_d=k(ell-p)` and its overshoot consequence.
+   Determine whether either interpolation has an antecedent in Lehman-matrix
+   or blocking-polyhedra literature.
    Audit the canonical internal-face corollary separately: check
    `k+1<=s`, the strict count `s|V|<|H|`, construction of the row set `D`,
    both poor loads after averaging, and every factor of `|D|` in `(LH-F)`.
@@ -297,14 +302,12 @@ falsification searches.  Please do not count their no-hit output as proof.
    `B setminus A`. Then verify
    the load `1_H+q e_d` from the pencil through `d`. Check especially that
    exactifying only singleton `d` suffices when its multiplicity is `q`.
-   For the order-seven `(a,b)=(6,7)` case, verify that `(LH-C)` becomes
-   `2w(P)-8<=u(P)<=2w(P)-1`.  Under failure of the band, check the injection
-   giving `n_1<=15`, the identity
-   `n_1=14+sum_{j>=3}j(j-2)n_j`, the deduction that all 21 pairs of `B`-lines
-   meet at distinct double points, and the contradiction between their
-   required `u(P)>=4` loads and
-   `sum_P binom(u(P),2)=binom(6,2)`.  Confirm that this is valid in every
-   finite projective plane of order seven and uses no Desarguesian theorem.
+   Then audit the all-orders projective-plane corollary.  Check that
+   `1<=ell<=q` forces a point on exactly one gaining line, that its residual
+   is `(q+1-ell)(1-u)`, and that `u<=1` invokes the positive band while
+   `u>=2` invokes the negative band through
+   `(q+1-ell)(u-1)<=q(q+1-p)`.  Confirm that this covers every finite order,
+   every overlap between the two line sets, and uses no Desarguesian theorem.
 10. For the six-player upper bound, verify directly that the six displayed
    integer allocations have common total, that their lower envelope is exact,
    and that the five displayed coalition inequalities prove
@@ -376,7 +379,7 @@ core literature:
 - the uniqueness of the four-co-singleton `1/3` packet at the first feasible
   `2|4` obstruction;
 - the projective-plane simple-point density barrier and safe-star exclusion,
-  the incidence-theoretic order-seven closure, and whether this exact-face
+  the incidence-theoretic all-orders closure, and whether this exact-face
   application is already known in finite geometry, balanced hypergraphs, or
   cooperative games;
 - the fixed six-player integer lower-envelope construction.

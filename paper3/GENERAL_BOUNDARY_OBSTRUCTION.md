@@ -274,6 +274,20 @@ s|V|-2 Pi_B(V) > Pi_B(U),
 where `s` is the dual row size. This one theorem contains the odd-cycle
 alternating rounding and the coarse projective-plane density argument. The
 sharp co-singleton support `J-I` lies on the opposite-sign side instead.
+The real overload budget gives a stronger two-sided test.  With
+`p=|U|`, `ell=|V|`, and row counts `u_d,w_d`, put
+
+```text
+F_d=(r-p)w_d+p-ell-(r-ell)u_d.
+```
+
+Interpolating until the gaining load reaches one excludes
+`0<=F_d<=k(r-ell)`; interpolating until the losing load reaches one excludes
+`-k(r-p)<=F_d<=0`.  Regularity gives the conservation law
+`sum_d F_d=k(ell-p)>0`.  This eliminates every projective-plane packet in
+every order: choose a point on exactly one gaining line and apply the positive
+or negative band according as at most one or at least two losing lines pass
+through it.
 See `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
 Lehman's minimally-nonideal minor reduction without losing the poor labels.
 Even when the displayed density test fails, averaging exactly `s|V|` dual
@@ -401,13 +415,12 @@ The same conclusion follows locally if `|D|<2(q+2-|B|)`. The pencil through
 `d` is then a safe star rounding with rich load `1_H+q e_d`, gaining-poor load one, and
 losing-poor load at most one. Exactifying `d` again contradicts efficiency.
 This excludes every projective-plane packet with `|B|<=6`, hence every such
-packet of order at most six. At order seven it leaves only the extremal count
-`(|A|,|B|)=(6,7)`.  A convex interpolation between the uniform line packet
-and a point-pencil turns the Lehman identity into a real overload test.  If
-no point passes that test, the seven `B`-lines would create 21 double points,
-each incident with at least four of the six `A`-lines, exceeding the 15
-available `A`-line pairs.  Thus every projective-plane packet through order
-seven is excluded, with no Desarguesian assumption. The proof is in
+packet of order at most six.  A two-sided convex interpolation is stronger.
+At a point on exactly one gaining line, normalize the gaining load when at
+most one losing line is present and normalize the losing load otherwise.
+The corresponding Lehman residual lies in one of the two exact-face overload
+bands in every order.  Thus every finite projective-plane packet is excluded,
+with no Desarguesian assumption. The proof is in
 `paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`.
 
 For the internal-sacrifice family, all co-singletons `H\{x}` are active
