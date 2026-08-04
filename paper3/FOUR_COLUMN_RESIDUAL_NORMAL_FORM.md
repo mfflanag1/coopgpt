@@ -71,4 +71,7 @@ these local tiles, with overlap zero or one.  A complete exclusion would show
 that the tiles cannot be assembled consistently across all columns and rows
 of a positive Lehman pair.  The current result does not prove that global
 incompatibility.  It is a structural human reduction, not finite enumeration,
-and its novelty remains subject to specialist review.
+and its novelty remains subject to specialist review.  The follow-up packing
+lemma in `FOUR_LABEL_SIMPLE_ROW_PACKING.md` shows that every `(1,3)` row has
+an `A`-support disjoint from every other `u=3` row and anchors at least `r-5`
+forced type-2 neutral traces.

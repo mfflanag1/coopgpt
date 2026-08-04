@@ -318,9 +318,14 @@ still supplies a simple row.  The residual bands force three losing labels,
 degree at least six, label overlap at most one, and one of six local load
 tiles on every label-free trace.  The unresolved problem is now global
 compatibility of those six tiles rather than an unrestricted labeling search.
+The classical triple-intersection bound further makes all three-losing-label
+rows a packing of disjoint primal supports.  Each four-label-simple row then
+forces at least `r-5` neutral traces of one specific tile, reducing the open
+problem to congestion of their opposite-sign companions.
 See `paper3/SUBSET_LEHMAN_FACE_BUDGET.md`,
 `paper3/LEHMAN_RESIDUAL_TRANSPORT.md`,
 `paper3/FOUR_COLUMN_RESIDUAL_NORMAL_FORM.md`,
+`paper3/FOUR_LABEL_SIMPLE_ROW_PACKING.md`,
 `paper3/THREE_COLUMN_LEHMAN_SEPARATION.md`, and
 `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
 Lehman's minimally-nonideal minor reduction without losing the poor labels.

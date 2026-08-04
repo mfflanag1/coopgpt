@@ -23,6 +23,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `lem:lx-three-column-lehman-separation`,
   `lem:lx-four-column-odd-lehman-separation`,
   `prop:lx-thin-four-label-normal-form`,
+  `prop:lx-four-label-simple-row-star`,
   `cor:lx-three-gaining-column-exclusion`,
   `cor:lx-subset-lehman-face-budget`,
   `cor:lx-lehman-internal-face`,
@@ -66,6 +67,9 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   the resulting exclusion through three gaining labels.
 - `coopgames/paper3/FOUR_COLUMN_RESIDUAL_NORMAL_FORM.md`: reduction of the
   first open thin label cardinality to six local neutral-trace tiles.
+- `coopgames/paper3/FOUR_LABEL_SIMPLE_ROW_PACKING.md`: disjoint-support
+  packing of the negative-extreme rows and the forced companion star around
+  each four-label-simple row.
 - `coopgames/paper3/SUBSET_LEHMAN_FACE_BUDGET.md`: multi-row extension that
   converts aggregate label residual into a quantitative internal-face slack
   bound.
@@ -242,6 +246,14 @@ falsification searches.  Please do not count their no-hit output as proof.
    neutral-trace totals `(4,3)`, every allowed row type, and exhaustiveness of
    the six displayed tiles.  Confirm that the result is only a local normal
    form and does not assert global incompatibility.
+   Audit the simple-row packing separately.  Derive the column
+   triple-intersection bound directly from `B^T A=J+I`, including the case
+   where the tested `A`-column is one of the fixed `U` labels.  Check that
+   `u=3` rows have disjoint `A`-supports, that `n=rs-1` gives `|Q|<=s-1`,
+   that the diagonal intersection bound leaves at most five label columns in
+   a `(w,u)=(1,3)` row's `A`-support in both overlap cases, and that every
+   remaining neutral trace has the unique `(3,0)` completion.  Confirm that
+   this is a packing/forced-star lemma, not yet a global congestion theorem.
    Audit the subset residual face budget separately.  For a row set `D`,
    recompute the averaged rich load `1_H+(k/|D|)1_D`; verify the two
    interpolation parameters and the identities
@@ -426,6 +438,8 @@ core literature:
   including whether the incidence lemma is already known for Lehman pairs;
 - the odd-multiplier four-column separation and six-tile thin normal form,
   including whether comparable local configurations occur in Lehman theory;
+- the disjoint-support packing of three-losing-label rows and its forced
+  `(1,3)`--`(3,0)` neutral companion stars;
 - the subset Lehman residual face budget, its unification of the singleton
   bands and canonical internal face, and whether its proposed recursive
   interpretation is genuinely new;

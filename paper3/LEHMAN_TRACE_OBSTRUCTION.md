@@ -87,6 +87,13 @@ each label-free trace to one of six explicit `(V-load,U-load)` tiles.  See
 `FOUR_COLUMN_RESIDUAL_NORMAL_FORM.md`.  This is a normal form, not yet an
 exclusion of all six tiles.
 
+The triple-intersection property sharpens this normal form.  All dual rows
+with `u=3` have pairwise disjoint primal row supports, so there are at most
+`s-1` of them.  Every `w=1` row lies in this packing and anchors at least
+`r-5` label-free traces of the forced type `(1,3),(3,0)`.  See
+`FOUR_LABEL_SIMPLE_ROW_PACKING.md`.  The next obstruction is therefore a
+global companion-congestion bound rather than another local load census.
+
 The natural stronger conjecture is that every positive Lehman pair has the
 two-label property without a density hypothesis: whenever
 `|U|<|V|<r`, some dual row meets `V` once and `U` at most once. This has been
