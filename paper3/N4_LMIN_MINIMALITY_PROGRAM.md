@@ -148,8 +148,10 @@ drop forces precisely these two tight coalitions (up to relabeling).
    It found no mathematical error and required the attribution and
    reproducibility changes recorded here.
 7. Completed internally: replace the finite enumeration as the theorem proof
-   by a human argument using LP-dual protector coalitions, exact singleton
-   witnesses, and the three possible four-player boundary geometries.
+   by a human argument using the published egalitarian-core transfer-blocking
+   property, a dimension-free fractional protector-packing inequality, exact
+   singleton witnesses, and the three possible four-player boundary
+   geometries.
 8. Remaining: obtain hostile external review of the new human proof and
    complete MathSciNet/zbMATH and expert citation-chain review of the narrower
    classification claim.  Reduced cores remain same-solver audit conveniences,
@@ -187,10 +189,20 @@ new.  None of the inspected sources states the narrower inclusion that every
 exact game through four players is exact partition at Lmin.  This remains a
 focused search, not a definitive MathSciNet/zbMATH novelty opinion.
 
-After obtaining the protector proof, additional exact-phrase searches for
+After obtaining the structural proof, a direct citation check identified the
+protector property as prior art: it is the transfer-blocking characterization
+of the egalitarian core in Arin--Iñarra (2001), applied here to Lmin.
+Additional exact-phrase searches for
 `Lmin + exact partition`, `Lmin solution + exact games + four players`,
 `leximin + protector coalition`, and `exact game + unique richest + Lmin`
 again returned the standard exact-partition/antiduality and monotonicity papers,
-but no protector lemma or structural proof of the four/five threshold.  This
-raises the plausibility that the proof mechanism is new; it still does not
+but no structural proof of the four/five threshold or combination with exact
+singleton witnesses.  This raises only the plausibility that the
+low-dimensional classification and proof mechanism are new; it still does not
 replace expert citation-chain, MathSciNet, or zbMATH review.
+
+The fractional protector-packing inequality (FP) was derived after that
+search.  Its algebra is dimension-free, but its novelty has not been checked
+against the hypergraph-packing, balanced-collection, or egalitarian-core
+literatures.  It must therefore be presented as a candidate structural tool,
+not as an established new theorem of independent significance.

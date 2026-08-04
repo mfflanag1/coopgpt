@@ -64,23 +64,33 @@ all other one-coalition bumps leave the singleton normalization vector fixed.
 
 ## Structural proof: protector coalitions
 
-At a completed Lmin stratum, fix the poorer coordinates and retain the current
-floor constraints.  If `i` is in the current stratum and `h` is richer, the
-dual of `max x_i` on this stage face has tight-coalition coverages satisfying
+The underlying tight-coalition property is prior art, not a new lemma: by the
+Arin--Iñarra (2001) transfer-blocking characterization of the egalitarian
+core, if `h` receives more than `i` at Lmin, some tight coalition contains `h`
+and omits `i`.  The paper calls this a **protector coalition** descriptively.
+For a redundant self-contained convention check, the dual of `max x_i` on the
+completed Lmin stage face has tight-coalition coverages satisfying
 
 ```text
 coverage(h)-coverage(i)=1+floor_multiplier(i)>0.
 ```
 
-Hence some tight **protector coalition** contains `h` and omits `i`.  Combining
-these protectors with the exact core point that attains a singleton value zero
-closes the low-dimensional geometry:
+The proposed new step is combining these known protectors with exact core
+points that attain singleton values, closing the low-dimensional geometry:
 
-1. A unique richest player would give, for each poorer player `i`, a nonempty
+1. A unique richest player gives, for each poorer player `i`, a nonempty
    protector `{r} union Q_i` omitting `i`.  At the exact witness with `z_r=0`,
-   the displacements satisfy `a(L)=phi_r` but `a(Q_i)>=phi_r`.  An elementary
-   three-vertex argument shows this is impossible when there are at most three
-   poorer players.
+   every fractional packing of the `Q_i`, with weights `lambda_i`, total
+   weight `Lambda`, and vertex loads `c_j<=1`, must satisfy
+
+   ```text
+   phi_r (Lambda-1) <= sum_j (1-c_j) phi_j.             (FP)
+   ```
+
+   This is a dimension-free necessary condition.  When there are at most
+   three poorer players, either two disjoint protectors have total weight two,
+   or the three two-element protectors have weight `1/2` each; (FP) gives an
+   immediate contradiction.
 2. A unique poorest player globally maximizes its coordinate at Lmin, so its
    complement is tight by exactness.
 3. The only remaining four-player boundary is `2|2`.  Protector coalitions
@@ -91,7 +101,9 @@ closes the low-dimensional geometry:
 This exhausts the geometry without enumerating payoff compositions or tight
 sets.  The five-player base witness escapes in a `3|2` boundary: its tight
 coalitions `{3,4,5}` and `{1,3,5}` protect the three poorer players while
-leaving the richer pair `{3,5}` slack.
+leaving the richer pair `{3,5}` slack.  Inequality (FP) is a unique-richest
+obstruction; with two rich players, exactness of a singleton can zero only one
+of them, so the witness is outside its hypothesis.
 
 The full proof is in `paper3/sections_leximin.tex`; an expanded proof audit is
 in `paper3/N4_LMIN_LMAX_HUMAN_PROOF.md`.
@@ -295,10 +307,14 @@ policy; these programs do not currently rely on Python `assert` statements.
 
 ## Known limitations
 
-1. The protector-coalition proof is new in this revision and has not yet been
-   checked by an external human reviewer.  Its load-bearing points are the
-   stage-face pinning claim, the LP-dual coverage sign, and the exact-singleton
-   contradictions in the `2|2` case.
+1. The protector property is prior art: it is the Arin--Iñarra (2001)
+   transfer-blocking characterization of the egalitarian core, applied to
+   Lmin.  The proposed new contribution is the use of that property with exact
+   singleton witnesses to prove the through-four classification.  That new
+   structural proof has not yet been checked by an external human reviewer.
+   Its load-bearing new points are the displacement argument and the
+   exact-singleton contradictions in the `2|2` case.  The included LP dual is
+   only a self-contained convention check.
 2. Both exhaustive encodings use Z3's exact linear-rational engine, although
    they formulate Lmin optimality differently.  The concrete witnesses are
    replayed by the project's separate exact-LP implementation.
@@ -313,17 +329,21 @@ policy; these programs do not currently rely on Python `assert` statements.
    prior art.  The narrower classification of exact games through four players
    appears new, but MathSciNet/zbMATH and expert citation-chain review remain
    outstanding.
+6. The fractional protector-packing inequality is a dimension-free algebraic
+   consequence of exactness and the published transfer-blocking property.  Its
+   correctness and novelty, especially relative to hypergraph-packing and
+   balanced-collection formulations, remain external-review questions.
 
 ## Questions for the external reviewer
 
-1. On the Maschler-stage face, does final membership `i in B_j` indeed imply
-   `max x_i=phi_i`, including degenerate faces?  Is the short-segment argument
-   sufficient?
-2. With the manuscript's minimization convention, is the protector identity
-   `w_h-w_i=1+mu_i>0` signed correctly, and does complementary slackness yield
-   a tight coalition containing `h` and omitting `i`?
-3. Is the three-player displacement argument excluding a unique richest
-   player complete for every choice of nonempty `Q_i subseteq L\{i}`?
+1. Does the stated protector property match the transfer-blocking
+   characterization of the egalitarian core in Arin--Iñarra (2001), and is it
+   legitimate to apply it to Lmin with the paper's ordering convention?
+2. As a redundant self-contained derivation, is the identity
+   `w_h-w_i=1+mu_i>0` signed correctly, including on degenerate stage faces?
+3. Is the fractional protector-packing inequality (FP) valid for arbitrary
+   nonnegative weights with loads at most one, and do the displayed packings
+   exhaust the `|L|<=3` cases?
 4. In the tied `2|2` case, do the protector disjunctions cover every coalition,
    and do the all-cross-pairs equalities really produce the displayed
    max-min-improving segment?
@@ -332,6 +352,7 @@ policy; these programs do not currently rely on Python `assert` statements.
 6. Does the published chain `exact n<=4 -> large core -> egalitarian stable ->
    PES=Lmax and coalitional monotonicity` have any missing domain-closure
    hypothesis when two exact games differ at one coalition?
-7. Is the narrower inclusion "exact games through four players are exact
-   partition games at Lmin" already known in the exact-partition or
-   Lorenz-stable literature?
+7. Given that the protector property is known, is the narrower inclusion
+   "exact games through four players are exact partition games at Lmin," or
+   its exact-singleton proof mechanism, already known in the exact-partition
+   or Lorenz-stable literature?

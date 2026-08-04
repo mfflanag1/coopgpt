@@ -28,15 +28,17 @@ consulting their outputs.
 
 ## Load-bearing questions
 
-1. On the completed Maschler-stage face, is it correct that every player in
-   the current final payoff stratum individually has maximum equal to the
-   stratum level?  Does the short-segment argument handle all degeneracy?
-2. In the dual of that coordinate-maximization LP, are the stationarity signs
-   correct, giving `w_h-w_i=1+mu_i>0` for a richer `h` and current `i`?
-3. Does positive coverage difference plus complementary slackness really
-   force a tight coalition containing `h` and omitting `i`?
-4. In the unique-richest argument, is the displacement contradiction complete
-   for every nonempty choice `Q_i subseteq L\{i}` when `|L|<=3`?
+1. Does the protector property used here match the published Arin--Iñarra
+   transfer-blocking characterization of the egalitarian core, and does it
+   apply to Lmin with these ordering conventions?
+2. In the redundant LP derivation, are the stationarity signs correct, giving
+   `w_h-w_i=1+mu_i>0`, including on degenerate stage faces?
+3. Does positive coverage difference plus complementary slackness reproduce
+   the published tight-coalition property under the manuscript's conventions?
+4. Is the dimension-free fractional protector-packing inequality (FP) valid
+   for arbitrary nonnegative weights with vertex loads at most one?  Do the
+   two displayed packing constructions exhaust every protector hypergraph on
+   at most three poorer players?
 5. In the ordered `2|2` case, do complement tightness, the forced cross pair,
    and the exact singleton witness yield the stated strict efficiency
    contradiction?
@@ -45,9 +47,10 @@ consulting their outputs.
    point and a genuine max-min-improving core segment?
 7. Does the final reduction cover every strict payoff boundary for `|N|<=4`
    without silently enumerating or excluding a stratum type?
-8. Is any part of the protector lemma, the through-four inclusion, or this
-   proof strategy already present in the exact-partition, Lmin/Lmax,
-   egalitarian-stability, or Lorenz-core literature?
+8. Treating the protector property as known, is (FP), the through-four
+   inclusion, or their combination with exact singleton witnesses already
+   present in the exact-partition, Lmin/Lmax, egalitarian-stability,
+   hypergraph-packing, or Lorenz-core literature?
 
 ## Requested verdict
 

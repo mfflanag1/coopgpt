@@ -7,8 +7,12 @@ Let `v` be an exact game, normalize `v({i})=0`, and write
 `phi` is tight.  Thus `v` is an exact partition game at `phi`.
 
 The proof below does not enumerate payoff compositions, tight-set patterns,
-or games.  Its key object is a **protector coalition** forced by the dual of
-one ordinary linear program.  It also explains the sharp threshold: through
+or games.  Its key input is the published transfer-blocking characterization
+of the egalitarian core due to Arin--Iñarra: whenever one player receives
+strictly more than another, a tight coalition contains the former and omits
+the latter.  We call such a coalition a **protector coalition** descriptively.
+The new step is to combine that known property with exact-game singleton
+witnesses.  This explains the sharp threshold: through
 four players every possible boundary reduces to one of three small geometric
 configurations, whereas the known five-player example escapes them in a
 `3|2` configuration.
@@ -23,7 +27,7 @@ v(S) = min { x(S) : x in C }
 for every coalition `S`.  In particular, for every player `i` there is a
 point `z^i in C` with `z^i_i=0`.
 
-## 1. Protector lemma
+## 1. Published transfer-blocking property
 
 Let `B` be a payoff stratum of `phi`, at level `alpha`, let `P` be the union
 of the poorer strata, and let `R` be the union of the richer strata.  For
@@ -33,7 +37,9 @@ every `i in B` and `h in R`, there is a tight coalition `T` such that
 h in T,   i not in T.                                  (P)
 ```
 
-To see this, consider the Maschler-stage face
+This is the Arin--Iñarra characterization of membership in the egalitarian
+core, applied to Lmin.  For a self-contained check of conventions, it also
+follows from the following LP-dual argument.  Consider the Maschler-stage face
 
 ```text
 F = {x in C : x_p=phi_p (p in P), x_l>=alpha (l not in P)}.
@@ -68,7 +74,7 @@ w_h - w_i = 1 + mu_i > 0.
 Some positive-multiplier coalition therefore contains `h` and omits `i`.
 Complementary slackness makes that coalition tight, proving (P).
 
-## 2. A unique richest player is impossible through four players
+## 2. A dimension-free fractional-packing obstruction
 
 Suppose `r` is the unique richest player, with `phi_r=gamma`, and put
 `L=N\{r}` and `q_i=phi_i` for `i in L`.  Thus
@@ -87,37 +93,47 @@ empty != Q_i subseteq L\{i}.
 The set `Q_i` is nonempty because the singleton `{r}` is slack:
 `phi_r=gamma>0=v({r})`.
 
-Use exactness of `{r}` to take `z in C` with `z_r=0`, and set
-`a_i=z_i-q_i`.  Efficiency gives
+Use exactness of `{r}` to take `z in C` with `z_r=0`.  For arbitrary
+nonnegative weights `lambda_i`, define the load of a poorer player `j` by
 
 ```text
-a(L)=gamma.                                             (1)
+c_j = sum { lambda_i : j in Q_i },
+Lambda = sum_i lambda_i.
 ```
 
-The tight protector inequality gives
+If every load is at most one, then nonnegativity of `z` and tightness of the
+protectors give
 
 ```text
-a(Q_i) >= gamma                                         (2)
+gamma + q(L) = z(L)
+             >= sum_j c_j z_j
+              = sum_i lambda_i z(Q_i)
+             >= gamma Lambda + sum_j c_j q_j.
 ```
 
-for every `i`.  Also `z_i>=0`, so
+Consequently every fractional packing of the protector sets must satisfy the
+dimension-free inequality
 
 ```text
-a_i >= -q_i > -gamma.                                  (3)
+gamma (Lambda-1) <= sum_j (1-c_j) q_j.                 (FP)
 ```
 
-Equations (1)--(3) are impossible when `|L|<=3`:
+This is a general necessary condition, not a finite enumeration.  It says
+that a high-weight packing of protectors is incompatible with the exact
+singleton witness unless enough low-payoff mass remains uncovered.
+
+It immediately excludes a unique richest player when `|L|<=3`:
 
 - For `|L|=1`, no nonempty `Q_i subseteq L\{i}` exists.
-- For `|L|=2`, the two protectors give `a_1>=gamma` and
-  `a_2>=gamma`, contradicting (1).
-- Let `|L|=3`.  If some `Q_i={j}` is a singleton, then
-  `a_j>=gamma`.  The protector for `j` supplies a disjoint nonempty
-  `Q_j` with `a(Q_j)>=gamma`.  If these sets cover `L`, then
-  `a(L)>=2gamma`; otherwise the remaining coordinate is greater than
-  `-gamma` by (3), so again `a(L)>gamma`.  If no `Q_i` is a singleton,
-  then every `Q_i=L\{i}`.  From (1)--(2), every `a_i<=0`, contradicting
-  `a(L)=gamma>0`.
+- For `|L|=2`, put weight one on both singleton protectors.  Then
+  `Lambda=2` and every load is one, so (FP) says `gamma<=0`.
+- Let `|L|=3`.  If some `Q_i={j}`, put weight one on `Q_i` and on
+  `Q_j`.  These sets are disjoint, so this is a fractional packing with
+  `Lambda=2`.  It leaves at most one player uncovered; hence (FP) says
+  `gamma<=q_u<gamma` (or `gamma<=0` if none is uncovered).  If no
+  `Q_i` is a singleton, then `Q_i=L\{i}` for all `i`.  Weighting all
+  three sets by `1/2` gives `Lambda=3/2` and unit load everywhere, so
+  (FP) says `gamma/2<=0`.
 
 Thus an Lmin allocation of a normalized exact game on at most four players
 cannot have a singleton richest stratum.
@@ -258,7 +274,10 @@ coalitions are
 The first protects the initial block `{1,2}` and the second protects player
 `4`, while the richer pair `{3,5}` retains one unit of slack.  The third poor
 player lets these protectors overlap without triggering either of the
-four-player singleton-witness contradictions.  This is a structural account
+four-player singleton-witness contradictions.  In particular, (FP) is a
+unique-richest obstruction and does not apply to this failed boundary: an
+exact singleton witness can zero one of the two rich players, but not the
+entire rich side.  This is a structural account
 of how the sharp example escapes the proof, not a claim that every
 higher-dimensional slack boundary must have the same `3|2` shape.
 
@@ -268,8 +287,13 @@ proves sharp failure.
 
 ## Audit boundary
 
-The genuinely new ingredient in this proof is the protector-coalition use of
-stagewise Lmin duality together with exact singleton witnesses.  It does not
+The protector property itself is prior art: it is the transfer-blocking
+characterization of the egalitarian core in Arin--Iñarra (2001).  The proposed
+new contribution is its use together with exact singleton witnesses, including
+the dimension-free fractional-packing obstruction (FP), to prove the sharp
+low-dimensional inclusion ``exact through four implies exact partition at
+Lmin.''  Neither the novelty of (FP) nor that of the classification has yet
+been established by a definitive literature review.  The argument does not
 claim that the exact-partition condition or its Lorenz consequence is new.
 The existing two exact-rational encodings remain useful as independent checks
 of the theorem and of all sign conventions, but they are no longer the proof
