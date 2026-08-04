@@ -16,10 +16,13 @@ special attention to:
 - `paper3/TIGHT_DEFICIT_COMPLETION_THEOREM.md`
 - `paper3/MARGINAL_CORE_FACTORIZATION.md`
 - `paper3/ROOTED_DEFICIT_COMPLETION.md`
+- `paper3/BLOCK_STAR_FACET_THEOREM.md`
 - `src/verify_atomic_lmin_obstruction.py`
 - `src/verify_rooted_deficit_completion.py`
+- `src/verify_block_star_facet.py`
 - `results/atomic_lmin_obstruction.json`
 - `results/rooted_deficit_completion.json`
+- `results/block_star_facet.json`
 - `paper3/wrapper.pdf`
 
 ## Questions requiring explicit answers
@@ -72,6 +75,22 @@ special attention to:
     including both incidence identities, the block-pattern proofs of
     indecomposability, the appeal to the exact-cone facet theorem, and the
     slack sandwich forcing both factors to be saturated.
+15. Audit the dimension-free block-star theorem.  In particular, check the
+    unique-dependence/minimality argument, the claim that a prospective new
+    exceptional coalition must be a union of whole incidence-row blocks,
+    every case in equation `(BSD)`, and the appeal from indecomposability to
+    an exact-cone facet.  Check whether this system or equivalent terminology
+    already appears explicitly in the exact-game literature.
+16. Independently recompute the block-star slack equality in the complete
+    two-column family and the universal three-poorer family.  Assess whether
+    identifying the same saturated exterior facet in those two families and
+    the complementary factor of the three-trace family is a substantive
+    Lmin-specific structural contribution or merely a relabeling of a
+    standard exact-game facet.
+17. Treat the proposed next statement---that every saturated rooted Lmin
+    atom factors into block stars and lifted internal balanced facets---only
+    as an open conjecture.  Look aggressively for a counterexample before
+    recommending that it be promoted to a theorem.
 
 Please report fatal errors first, then repairable gaps, then novelty risks.
 State whether the result is (a) correct as written, (b) correct after named

@@ -2630,6 +2630,56 @@ its positive coalitions were tight, exact balancedness would force $H$
 tight, a contradiction.
 \end{proof}
 
+The rooted two-column atom, the universal three-poorer atom, and one factor
+of the three-trace atom share a single dimension-free exterior facet.
+
+\begin{theorem}[block-star exact-cone facet]
+\label{thm:lx-block-star-facet}
+Let
+\[
+ N=H\mathbin{\dot\cup}P_1\mathbin{\dot\cup}\cdots
+       \mathbin{\dot\cup}P_k,\qquad k\geq2,
+\]
+with every displayed block nonempty, and put $S_j=H\cup P_j$.  Then
+\[
+ \sum_{j=1}^k\mathbf1_{S_j}-(k-1)\mathbf1_H=\mathbf1_N.       \tag{BS}
+ \label{eq:lx-block-star-facet}
+\]
+The system with positive coalitions $S_1,\ldots,S_k$ and exceptional
+coalition $H$ is a pure indecomposable minimal semi-balanced system.  Hence,
+by the exact-cone criterion of \citet{StudenyKratochvil2022}, it defines a
+facet of the cone of exact games.
+\end{theorem}
+
+\begin{proof}
+The incidence rows are constant on every displayed block.  The row of
+$P_j$ occurs only in $S_j$, so any relation modulo $\mathbf1_N$ forces all
+spoke coefficients to be equal; the $H$ row then forces the coefficient of
+$H$.  Thus \eqref{eq:lx-block-star-facet} is the unique relation up to scale,
+and deleting any supported coalition destroys it.  The system is pure and
+minimal.
+
+For indecomposability, suppose that a proper coalition $E$ outside the
+displayed support could be a new exceptional set.  Normalize its coefficient
+to $-1$, let $a_j\geq0$ be the coefficient on $S_j$, let $b\geq0$ be that on
+$H$, and let $r$ be the common load.  Equal supported incidence rows first
+force $E$ to be a union of entire blocks.  Write $e_H,e_j\in\{0,1\}$ for
+membership of $H,P_j$ in $E$, and put $q=\sum_j e_j$.  The peripheral and
+root rows give
+\[
+ a_j=r+e_j,\qquad (k-1)r+q+b-e_H=0.                \tag{BSD}
+ \label{eq:lx-block-star-decomposition}
+\]
+If $e_H=0$ and some peripheral block is excluded, then $r\geq0$, so
+\eqref{eq:lx-block-star-decomposition} forces $r=q=b=0$ and $E=\varnothing$.
+If all peripheral blocks are included, $r\geq-1$ and the left side is at
+least one.  If $e_H=1$ and some peripheral block is excluded, then $r\geq0$;
+if $q=0$ then $E=H$, if $q=1$ then the equation forces $b=r=0$ and
+$E=S_j$, and $q\geq2$ is impossible.  The first two sets are already
+supported.  If all peripheral blocks are included, $E=N$.  No new proper
+exceptional set exists, proving indecomposability.
+\end{proof}
+
 Thus raw exact-cone facets are not the right atoms for Lmin failure: the
 egalitarian orientation first forces a decomposable singleton completion.
 Rooting quotients out that forced triangle while preserving the distinguished
@@ -2649,7 +2699,10 @@ calibration, and exact probes are in
 \small\path{src/probe_lmin_atom_indecomposability.py},\\[-2pt]
 \small\path{results/lmin_atom_indecomposability_probe.json},\\[-2pt]
 \small\path{src/verify_rooted_deficit_completion.py},\\[-2pt]
-\small\path{results/rooted_deficit_completion.json}.
+\small\path{results/rooted_deficit_completion.json},\\[-2pt]
+\small\path{paper3/BLOCK_STAR_FACET_THEOREM.md},\\[-2pt]
+\small\path{src/verify_block_star_facet.py},\\[-2pt]
+\small\path{results/block_star_facet.json}.
 \end{center}
 
 The same inequality has a useful internal-face specialization.  It is the
@@ -3393,6 +3446,16 @@ $R\ne\emptyset$. This is the slack form of the exact-balanced identity
  \mathbf1_A+\mathbf1_B+\mathbf1_R-\mathbf1_H=\mathbf1_N. \qedhere
 \]
 \end{proof}
+
+Replacing the exterior term $R$ in the last identity by its rooted spoke
+$H\cup R$ gives
+\[
+ \mathbf1_{H\cup X}+\mathbf1_{H\cup Y}+\mathbf1_{H\cup R}
+ -2\mathbf1_H=\mathbf1_N.
+\]
+Thus the entire rooted two-column obstruction, in every block size, is the
+$k=3$ block-star facet of Theorem~\ref{thm:lx-block-star-facet}, rather than
+only an isolated five-player facet.
 
 The normal form has a sharp converse. Let
 $N=C\mathbin{\dot\cup}X\mathbin{\dot\cup}Y\mathbin{\dot\cup}R$, with all
@@ -5987,6 +6050,11 @@ exists.  The facet conclusion is the indecomposability theorem of
 \citet{StudenyKratochvil2022}.
 \end{proof}
 
+Equivalently, the complementary diamond is already the $k=2$ instance of
+Theorem~\ref{thm:lx-block-star-facet}: take root $D$ and peripheral blocks
+$\{a\}\cup C$ and $\{b\}$.  Only the internal triangle is an additional
+facet type.
+
 A standalone derivation and exact base-case audit are in
 \begin{center}
 \small\path{paper3/THREE_TRACE_FACET_FACTORIZATION.md},\\[-2pt]
@@ -6138,6 +6206,22 @@ replays of the smallest distinct shapes are in
 \path{src/verify_three_poorer_boundary_family.py} and
 \path{results/three_poorer_boundary_family.json}.
 \end{proof}
+
+This whole family saturates one block-star facet.  Partition $N\setminus H$
+into its $m$ singleton poorer blocks and use the spokes $H\cup\{p\}$.  From
+\eqref{eq:lx-three-poorer-family}, their slacks in the order
+$p_1,p_2,p_3,Q$ are
+\[
+ 0,\ 2,\ 0,\ \underbrace{1,\ldots,1}_{m-3},
+\]
+whereas $s_\phi(H)=1$.  Consequently
+\[
+ \sum_{p\notin H}s_\phi(H\cup\{p\})=(m-1)s_\phi(H),
+\]
+which is equality in the exact-game facet inequality induced by
+Theorem~\ref{thm:lx-block-star-facet}.  The five-player broken diamond and
+every member of this dimension-free family therefore share the same
+exterior facet mechanism.
 
 The three dimension-free families and the two human impossibility arguments
 now give a complete cardinality classification, rather than only extremal
