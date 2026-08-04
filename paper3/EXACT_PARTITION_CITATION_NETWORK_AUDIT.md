@@ -69,6 +69,7 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Lorenz/Dutta--Ray consequence of exact partition | Established prior art | Cite; do not claim. |
 | ESOS/core intersection characterization and consistency | Established prior art | Cite Dietzenbacher--Yanovskaya. |
 | Antiduality and self-antiduality theory | Established prior art | Cite; distinguish from the present obstruction. |
+| Property-I characterization of Lmax, and its antidual Lmin form | Established prior art (Arin--Kuipers--Vermeulen 2008; Mauri 2018) | Cite prominently; do not claim the qualitative tight-coalition criterion. |
 | Exact games with at most four players are PES stable | Established prior art (Dietzenbacher 2021) | State as the closest known low-dimensional result. |
 | Every exact game with at most four players is exact partition at Lmin | Not found | Present as apparent new strengthening, pending specialist review. |
 | Hierarchical dual covers plus exact-face witnesses yield balanced-trace transport | Not found | Present as the apparent new proof mechanism, pending terminology review. |
@@ -113,9 +114,14 @@ minimal balanced collection; exact balancedness; balanced hypergraph
 transport; trace; normal cone; Kohlberg criterion
 dimension; cardinality; indecomposable; replication
 balanced matrix; set partitioning; active trace; odd cycle
+property I; hierarchical tight-coalition criterion; complement-tight coalition
 ```
 
-The full texts inspected were the consistency, antiduality, NTU,
+The full texts inspected include Arin--Kuipers--Vermeulen (2008), Definition 3
+and Lemma 1, and Mauri's 2018 thesis, Definitions 11--12 and Lemma 3. They
+establish the qualitative property-I criterion but do not state the
+simultaneous strict cover, the active-trace polytope, or the odd-cycle
+necessity theorem. The other full texts inspected were the consistency, antiduality, NTU,
 population-monotonicity, convex-game axiomatization, welfare-egalitarianism,
 discrete-side-payment, and characteristic-function papers listed above.
 
@@ -127,8 +133,9 @@ discrete-side-payment, and characteristic-function papers listed above.
 2. Citation indexing can omit books, working papers, non-English sources, and
    papers that use different terminology without citing the 2017 paper.
 3. Keyword absence is weak evidence.  A specialist should check whether the
-   balanced-trace transport lemma is implicit in normal-cone, balanced
-   hypergraph, exact-balancedness, or Kohlberg-type arguments.
+   simultaneous strict-cover lemma is merely a theorem-equivalent dual form of
+   property I and whether balanced-trace transport is implicit in normal-cone,
+   balanced hypergraph, exact-balancedness, or Kohlberg-type arguments.
 4. The mathematical proof and verifier have internal checks, but no independent
    external correctness verdict has yet been incorporated for the complete
    phase theorem.

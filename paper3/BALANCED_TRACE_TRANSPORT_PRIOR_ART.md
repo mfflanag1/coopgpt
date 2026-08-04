@@ -34,12 +34,26 @@ remains required.
 1. **Lmin and egalitarian-core blocking.** Arin and Iñarra (2001),
    *Egalitarian solutions in the core*, introduce Lmin and characterize the
    relevant tight-coalition blocking structure.
-2. **Low-dimensional large cores.** Biswas, Parthasarathy, Potters, and
+2. **Property I is the known qualitative optimality criterion.** Arin,
+   Kuipers, and Vermeulen (2008), [*An axiomatic approach to egalitarianism in
+   TU-games*](https://doi.org/10.1007/s00182-008-0133-6), Lemma 1 characterize
+   Lmax by uniqueness of the zero direction in a hierarchical system formed
+   from its payoff partition and tight coalitions. Mauri (2018),
+   [*Essays on egalitarianism-based solution concepts for cooperative
+   TU-games*](https://repositori.urv.cat/estatic/TDX0011/en_TDX2707.html),
+   Lemma 3 explicitly transports this result by antiduality to Lmin, the
+   reversed payoff partition, and complement-tight coalitions. The present
+   strict-cover lemma must therefore be described as a quantitative LP-dual
+   consequence/refinement of this known optimality structure, not as a new
+   tight-coalition characterization of Lmin. Neither source states the single
+   cover regular on all of `H` and strictly deficient on every member of `L`,
+   nor its projection to an active-trace exact-cover polytope.
+3. **Low-dimensional large cores.** Biswas, Parthasarathy, Potters, and
    Voorneveld (1999), *Large cores and exactness*, prove that exact games with
    at most four players have large cores.  Dietzenbacher's egalitarian-stability
    paper explicitly records the consequence that these games are egalitarian
    stable; this is weaker than exact partition at Lmin.
-3. **Exact partition games.** Llerena and Mauri (2017),
+4. **Exact partition games.** Llerena and Mauri (2017),
    [*On the existence of the Dutta--Ray's egalitarian solution*](https://doi.org/10.1016/j.mathsocsci.2017.07.002),
    introduce exact partition games and prove the Lorenz conclusion.  The
    condition and implication are prior art.
@@ -47,28 +61,28 @@ remains required.
    are PES stable.  That is the closest published low-dimensional result found;
    it is weaker than proving that Lmin itself satisfies the exact-partition
    tightness conditions.
-4. **Antiduality and later exact-partition theory.** Dietzenbacher and
+5. **Antiduality and later exact-partition theory.** Dietzenbacher and
    Yanovskaya (2020),
    [*Antiduality in exact partition games*](https://doi.org/10.1016/j.mathsocsci.2020.04.006),
    extend the theory; they do not supply the dimensional classification here.
-5. **Exact balancedness.** Csóka, Herings, and Kóczy (2011) characterize exact
+6. **Exact balancedness.** Csóka, Herings, and Kóczy (2011) characterize exact
    games by exact balancedness.  Lohmann, Borm, and Herings (2012),
    [*Minimal exact balancedness*](https://doi.org/10.1016/j.mathsocsci.2012.01.002),
    classify minimal exact-balanced collections.
-6. **Minimal balanced collections.** Peleg's generation theory and the
+7. **Minimal balanced collections.** Peleg's generation theory and the
    Bondareva--Shapley role of minimal balanced collections are classical.
    Laplace Mermoud, Grabisch, and Sudhölter (2025),
    [*Minimal balanced collections and their applications to core stability and
    other topics of game theory*](https://arxiv.org/abs/2507.05898), give a
    modern enumeration and applications.  The present paper does not claim to
    invent these packets or their three-player classification.
-7. **Balanced matrices.** Berge (1972),
+8. **Balanced matrices.** Berge (1972),
    [*Balanced matrices*](https://doi.org/10.1007/BF01584535), proves the
    classical integrality theorem for set-partitioning polytopes of balanced
    zero--one matrices.  The paper cites this result; the candidate new bridge
    is that a slack two-poorer Lmin boundary forces the active trace matrix to
    violate balancedness.
-8. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
+9. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
    [*Monotonicity and egalitarianism*](https://doi.org/10.1016/j.geb.2021.03.006),
    compares Lmin, Lmax, and PES on broader domains and records prior
    monotonicity failures.  It does not state the exact-game boundary-transport
@@ -98,9 +112,14 @@ cooperative game "transport" "minimal balanced collection" egalitarian
 "Lmin" hypergraph cooperative game balanced
 "exact partition game" hypergraph "balanced matrix"
 "minimal balanced collection" "set partitioning" egalitarian
+"property I" Lmin Lmax tight coalitions
+"property I" egalitarian TU-games
+"complement tight" Lmin lexmin
 ```
 
-The searches were followed through the references and discussion sections of
+The primary texts inspected include Arin--Kuipers--Vermeulen (2008), especially
+Definition 3 and Lemma 1, and Mauri's 2018 thesis, especially Definitions
+11--12 and Lemma 3. The searches were also followed through the references and discussion sections of
 the papers above, including the 2017 exact-partition paper, the 2020
 antiduality paper, the 2021 monotonicity paper, the 2012 minimal
 exact-balancedness paper, the 2025 minimal-balanced-collection survey, and
@@ -123,11 +142,18 @@ Pending expert review, the strongest defensible formulation is:
 > exact partition games, their published Lorenz consequence, exact
 > balancedness, or minimal balanced collections as new.
 
+This statement also does not claim the qualitative property-I characterization
+of Lmin/Lmax. The candidate new mechanism begins with the simultaneous strict
+cover, then projects it to trace packets and combines it with exact-face
+witnesses.
+
 ## Remaining novelty gate
 
 Send the theorem and proof to researchers familiar with the Arin--Iñarra,
-Llerena--Mauri, and exact-balancedness literatures.  Ask specifically whether
-the hierarchical dual-cover lemma or the projection of its tight coalitions
+Arin--Kuipers--Vermeulen, Llerena--Mauri, and exact-balancedness literatures.
+Ask specifically whether the simultaneous strict-cover lemma is already an
+explicit theorem-equivalent reformulation of property I, or only a derived
+quantitative certificate, and whether the projection of its tight coalitions
 to minimal balanced rich-side packets appears under different terminology
 (normal cones, balanced hypergraphs, Kohlberg-type criteria, or reduced-game
 consistency).  Also ask whether any paper classifies failure of the exact

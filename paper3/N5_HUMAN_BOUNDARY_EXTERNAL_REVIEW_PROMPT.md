@@ -16,6 +16,7 @@ Review the commit identified in the accompanying pull request, especially:
 - `coopgames/paper3/N5_N6_SMALL_POORER_THRESHOLD.md`;
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`;
 - `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`;
+- `coopgames/paper3/PROPERTY_I_STRICT_COVER_AUDIT.md`;
 - `coopgames/src/verify_n5_small_poorer_suffix.py` and
   `coopgames/results/n5_small_poorer_suffix.json` only as an independent
   computational audit;
@@ -32,6 +33,11 @@ Review the commit identified in the accompanying pull request, especially:
    backward large-coefficient induction across arbitrary poorer payoff strata,
    including that it controls earlier coalition loads without silently
    constraining their equality multipliers and preserves later deficits.
+   Compare the result explicitly with property I in Arin--Kuipers--Vermeulen
+   (2008), Lemma 1, and its antidual Lmin form in Mauri (2018), Lemma 3.
+   Determine whether the simultaneous strict cover is a standard equivalent
+   dual formulation or an additional quantitative consequence; do not count
+   the qualitative tight-coalition criterion as new.
 2. Check that the aggregate strict-cover inequality really rules out two
    nonnegative poor-player displacements, including after normalization and
    deletion of coalitions with empty rich trace.

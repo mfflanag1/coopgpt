@@ -25,7 +25,9 @@ a defect in the theorem.
    positive-gap claim is made as `h -> infinity`.
 5. `src/verify_rich_block_family.py` now invokes the generic exact staged
    Lmax implementation, as well as staged Lmin, for every case up to a
-   caller-selected player bound.  The artifact reports the exact replay count.
+   caller-selected player bound. The committed artifact replays both solutions
+   in all four cases through seven players, including the first two-rich-player
+   instance `(m,h)=(5,2)`, and reports that scope explicitly.
 6. The `m=4` implementation now omits the formal zero
    `h(m-4)e_5` assignment instead of temporarily indexing a rich player.
 

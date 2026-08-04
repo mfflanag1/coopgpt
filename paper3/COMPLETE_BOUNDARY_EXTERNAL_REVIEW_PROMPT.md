@@ -23,6 +23,7 @@ Primary files:
 - `coopgames/results/three_poorer_boundary_family.json`.
 - `coopgames/paper3/EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`.
 - `coopgames/paper3/INTEGRAL_TRACE_OBSTRUCTION.md`.
+- `coopgames/paper3/PROPERTY_I_STRICT_COVER_AUDIT.md`.
 
 The broader dependency chain is the strict-cover lemma, balanced-trace
 transport theorem, unique-richest theorem, human two-poorer theorem, and
@@ -119,6 +120,11 @@ any prior source contains:
 - the balanced-trace transport bridge used for the lower bounds.
 - the theorem that every two-poorer failure forces a nonintegral active trace
   exact-cover polytope and hence an odd balanced-matrix obstruction.
+
+Treat property I and its antidual Lmin form as established prior art. Decide
+separately whether the simultaneous strict-cover certificate is merely a
+standard theorem-equivalent Farkas dual of property I, and whether the
+exact-face projection/integrality obstruction appears elsewhere.
 
 Do not credit novelty merely because keyword search fails.  The paper already
 acknowledges as prior art the exact-partition condition, its Lorenz

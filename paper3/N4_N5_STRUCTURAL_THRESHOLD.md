@@ -193,7 +193,7 @@ python src/verify_unique_richest_family.py \
   --output results/unique_richest_family.json
 python src/verify_rich_block_family.py \
   --max-rich-block 4 --extra-poorer 4 \
-  --exact-replay-through-players 6 \
+  --exact-replay-through-players 7 \
   --output results/rich_block_family.json
 ```
 

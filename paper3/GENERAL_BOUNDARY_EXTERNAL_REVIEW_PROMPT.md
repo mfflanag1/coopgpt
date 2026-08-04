@@ -21,6 +21,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   human proof of the six-player construction.
 - `coopgames/paper3/BALANCED_TRACE_TRANSPORT_PRIOR_ART.md`: focused search log,
   prior-art boundary, and cautious novelty statement.
+- `coopgames/paper3/PROPERTY_I_STRICT_COVER_AUDIT.md`: primary-source comparison
+  of the known property-I criterion with the quantitative strict cover.
 - `coopgames/paper3/EXACT_PARTITION_CITATION_NETWORK_AUDIT.md`: reproducible
   forward-citation audit and claim-by-claim novelty matrix.
 - `coopgames/paper3/INTEGRAL_TRACE_OBSTRUCTION.md`: standalone proof that
@@ -101,6 +103,11 @@ falsification searches.  Please do not count their no-hit output as proof.
    16-query verifier is now only an audit and that no payoff-stratum case
    enumeration remains in the proof dependency.  A focused checklist is in
    `coopgames/paper3/N5_HUMAN_BOUNDARY_EXTERNAL_REVIEW_PROMPT.md`.
+   First decide whether the strict cover is merely a standard Farkas-dual
+   reformulation of Arin--Kuipers--Vermeulen property I (and Mauri's antidual
+   Lmin form), or whether simultaneous strict undercoverage of every poorer
+   player is an additional quantitative consequence. Do not credit the
+   qualitative tight-coalition characterization as new.
 9. Audit the integral-trace theorem without relying on the small-cardinality
    classification.  Check that the restricted active-trace polytope is
    nonempty and bounded; that integrality makes every packet a set partition;
@@ -171,8 +178,9 @@ core literature:
   into the complete boundary-cardinality phase diagram, including its
   closed-form Lmax and dimension-free Lmin--Lmax separation.
 
-The manuscript already treats the exact-balancedness characterization and the
-Arin--Iñarra transfer-blocking property as prior art.  Please flag any remaining
+The manuscript already treats the exact-balancedness characterization, the
+Arin--Iñarra transfer-blocking property, and the Arin--Kuipers--Vermeulen
+property-I criterion (including Mauri's Lmin form) as prior art. Please flag any remaining
 novelty overstatement.
 It also records the known theorem that exact games with at most four players
 are PES stable.  Check whether the new exact-partition-at-Lmin result is truly
@@ -195,7 +203,7 @@ python src/verify_unique_richest_family.py \
   --output results/unique_richest_family.json
 python src/verify_rich_block_family.py \
   --max-rich-block 4 --extra-poorer 4 \
-  --exact-replay-through-players 6 \
+  --exact-replay-through-players 7 \
   --output results/rich_block_family.json
 python src/verify_n6_two_poorer_suffix_counterexample.py \
   --output results/n6_two_poorer_suffix_counterexample.json

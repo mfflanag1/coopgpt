@@ -8,6 +8,15 @@ external combinatorial input is the classical theorem that a balanced
 zero-one matrix has an integral set-partitioning polytope (Berge, 1972).
 Correctness and novelty still require hostile external review.
 
+The qualitative tight-coalition criterion for Lmin/Lmax is also prior art:
+Arin, Kuipers, and Vermeulen (2008) introduced property I for Lmax, and Mauri
+(2018, Lemma 3) stated its antidual Lmin form using complement-tight
+coalitions. The strict richer-side cover used below is presented as an
+explicit quantitative LP-dual consequence/refinement of that known
+optimality structure. The candidate new content begins with the simultaneous
+strict-deficit certificate and, especially, its projection to the active
+trace exact-cover polytope and the integrality contradiction.
+
 ## Active rich-side trace hypergraph
 
 Let `v` be an exact singleton-normalized TU game, let `phi=Lmin(v)`, and fix a
@@ -149,6 +158,13 @@ which odd trace cycles survive the exact-face and Lmin constraints.
 
 Classical prior art retained explicitly:
 
+- J. Arin, J. Kuipers, and A. J. Vermeulen (2008), *An axiomatic approach to
+  egalitarianism in TU-games*, International Journal of Game Theory 37,
+  565--580, DOI
+  [`10.1007/s00182-008-0133-6`](https://doi.org/10.1007/s00182-008-0133-6).
+- L. Mauri Masdeu (2018), *Essays on egalitarianism-based solution concepts
+  for cooperative TU-games*, doctoral thesis, Universitat Rovira i Virgili,
+  especially Lemma 3.
 - C. Berge (1972), *Balanced matrices*, Mathematical Programming 2, 19--31,
   DOI [`10.1007/BF01584535`](https://doi.org/10.1007/BF01584535).
 - Minimal balanced collections and the set-partitioning polytope are standard;
