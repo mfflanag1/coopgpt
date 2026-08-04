@@ -80,6 +80,13 @@ negative band excludes all `u<=|U|<=2`.  Consequently every survivor must
 have `|V|>=4` and `r>=5`.  See
 `THREE_COLUMN_LEHMAN_SEPARATION.md`.
 
+At the first open value `|V|=4`, an odd-multiplier parity lemma still forces a
+simple row.  In the thin case `k=1`, any survivor is consequently restricted
+to `r>=6`, `|U|=3`, and `|U intersect V|<=1`.  The local transport law reduces
+each label-free trace to one of six explicit `(V-load,U-load)` tiles.  See
+`FOUR_COLUMN_RESIDUAL_NORMAL_FORM.md`.  This is a normal form, not yet an
+exclusion of all six tiles.
+
 The natural stronger conjecture is that every positive Lehman pair has the
 two-label property without a density hypothesis: whenever
 `|U|<|V|<r`, some dual row meets `V` once and `U` at most once. This has been
@@ -137,6 +144,15 @@ Regularity also gives the exact conservation law
 ```text
 sum_d F_d=k(ell-p)>0.                                (LH-S)
 ```
+
+This scalar law is the sum of the stronger local transport identity
+
+```text
+A^T F=k[(r-p)1_V-(r-ell)1_U].                        (LH-T)
+```
+
+Every trace column carrying neither poor label therefore contains residuals
+whose sum is exactly zero.  See `LEHMAN_RESIDUAL_TRANSPORT.md`.
 
 Since every zero-`V` row has negative residual, some gaining-bearing row has
 positive residual.  Thus a surviving packet must have a genuine overshoot
@@ -278,7 +294,8 @@ steps remain before one can claim a dimension-free characterization:
    gaining-player deficit and controlling noncore-row excess);
 2. rule out the residual polarization required when both convex bands fail
    on a general positive Lehman core.  The first still-open label cardinality
-   is now `|V|=4`.
+   is now `|V|=4`, where the residual transport identity imposes exact local
+   cancellation on every label-free trace.
 
 The classical source is Cornuéjols, Guenin, and Tunçel, *Lehman matrices*,
 Journal of Combinatorial Theory B 99 (2009), 531--556,

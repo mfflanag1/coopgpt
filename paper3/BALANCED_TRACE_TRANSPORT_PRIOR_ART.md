@@ -38,9 +38,15 @@ or any of the following sharp consequences:
 - the two-sided Lehman label residual extends from singleton rows to arbitrary
   dual-row subsets, where its aggregate value gives a quantitative slack
   budget for the corresponding rich face;
+- the residual satisfies an exact local transport identity through the
+  transpose Lehman matrix, forcing zero signed residual on every label-free
+  trace column;
 - a capacity-parity consequence of the transpose Lehman identity separates
   every three dual columns and, with the residual bands, excludes every
   packet having at most three gaining-label columns;
+- at four gaining labels, odd-multiplier parity and local residual transport
+  reduce every thin survivor to six neutral-trace tiles with at most one label
+  overlap;
 - without the label-density hypothesis, averaging dual rows still exposes a
   canonical proper internal rich face governed by the exact-face overload
   budget, suggesting a recursive minor-lifting invariant;
@@ -206,8 +212,9 @@ the real-valued exact-face budget.
 The later targeted search inspected Cornuéjols--Guenin--Tunçel's primary
 Lehman-matrix paper and the classical minimally-nonideal theorem it records.
 That source supplies the matrix identity and regularity, not the poor-label
-density argument, the two-sided label residual, its subset face budget, the
-three-column capacity-parity separation, or the bridge to exact-game tight
+density argument; the two-sided label residual and its local transport and
+subset face budgets; the three-column capacity-parity separation; the
+four-label local normal form; or the bridge to exact-game tight
 faces.  Király--Pap's full primary paper was also checked: its
 minor-compatible pair-of-clutters theorem and ideal set functions do not
 state the two-label interpolation or the residual conservation law, although
@@ -245,9 +252,12 @@ Pending expert review, the strongest defensible formulation is:
 > those fibres.  A two-sided label residual extends to arbitrary dual-row
 > subsets and converts aggregate residual into a quantitative rich-face slack
 > budget; it contains both singleton exclusions and canonical internal-face
-> amplification.  A capacity-parity argument separates every three dual
+> amplification.  Its transpose transport law forces exact residual
+> cancellation on every label-free trace.  A capacity-parity argument
+> separates every three dual
 > columns, pushing any survivor to at least four gaining columns and Lehman
-> degree five.  A two-label density test subsumes the odd-cycle and coarse
+> degree five; the first thin four-label case reduces further to six local
+> trace tiles.  A two-label density test subsumes the odd-cycle and coarse
 > projective-plane roundings; the co-singleton survivor lies on the
 > opposite-sign side. At four rich players the unique surviving
 > fractional packet is

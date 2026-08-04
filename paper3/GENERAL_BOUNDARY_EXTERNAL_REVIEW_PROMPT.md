@@ -19,7 +19,10 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   `cor:lx-unconditional-labeled-obstruction`,
   `thm:lx-positive-lehman-trace-exclusion`,
   `cor:lx-convex-lehman-row`,
+  `eq:lx-lehman-residual-transport`,
   `lem:lx-three-column-lehman-separation`,
+  `lem:lx-four-column-odd-lehman-separation`,
+  `prop:lx-thin-four-label-normal-form`,
   `cor:lx-three-gaining-column-exclusion`,
   `cor:lx-subset-lehman-face-budget`,
   `cor:lx-lehman-internal-face`,
@@ -56,9 +59,13 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   dual rows to rooted covers and the new two-poor-label density criterion.
 - `coopgames/paper3/CONVEX_LEHMAN_ROW.md`: real-valued interpolation between
   the uniform packet and a dual row, yielding the two-sided Lehman row band.
+- `coopgames/paper3/LEHMAN_RESIDUAL_TRANSPORT.md`: exact transpose transport
+  of the label-residual vector and zero local balance on neutral traces.
 - `coopgames/paper3/THREE_COLUMN_LEHMAN_SEPARATION.md`: dimension-free
   capacity-parity proof that every three dual columns have a simple row and
   the resulting exclusion through three gaining labels.
+- `coopgames/paper3/FOUR_COLUMN_RESIDUAL_NORMAL_FORM.md`: reduction of the
+  first open thin label cardinality to six local neutral-trace tiles.
 - `coopgames/paper3/SUBSET_LEHMAN_FACE_BUDGET.md`: multi-row extension that
   converts aggregate label residual into a quantitative internal-face slack
   bound.
@@ -212,6 +219,10 @@ falsification searches.  Please do not count their no-hit output as proof.
    `b_d<=1`, `t_hat k>=1-b_d`.  Check both equality endpoints and the
    strict comparisons `phi_d>phi_a,phi_b`.  Independently derive the residual
    conservation identity `sum_d F_d=k(ell-p)` and its overshoot consequence.
+   Before summing, audit the stronger vector identity
+   `A^T F=k[(r-p)1_V-(r-ell)1_U]`: check the cancellation of the all-ones
+   coefficient, every overlap case `U intersect V`, the neutral-column zero
+   balance, and the derivation of the scalar law by left multiplication.
    Determine whether either interpolation has an antecedent in Lehman-matrix
    or blocking-polyhedra literature.
    Audit the three-column separation lemma independently.  Assuming no row
@@ -223,6 +234,14 @@ falsification searches.  Please do not count their no-hit output as proof.
    in `F=(r-3)(1-u)` and the conclusion that survivors require
    `|V|>=4,r>=5`.  Search specifically for an antecedent in the Lehman-matrix
    and regular-covering-design literature.
+   Then audit the odd-multiplier four-column lemma: under the no-simple-row
+   assumption, check why a load-three row cannot place all `r>=5` entries of
+   its `A`-row inside `V`, and why the resulting even load vector contradicts
+   `4+k` on a labeled column.  For `k=1,ell=4`, recompute the parameter
+   reduction `r>=6,p=3,|U intersect V|<=1`, both simple-row implications, the
+   neutral-trace totals `(4,3)`, every allowed row type, and exhaustiveness of
+   the six displayed tiles.  Confirm that the result is only a local normal
+   form and does not assert global incompatibility.
    Audit the subset residual face budget separately.  For a row set `D`,
    recompute the averaged rich load `1_H+(k/|D|)1_D`; verify the two
    interpolation parameters and the identities
@@ -401,8 +420,12 @@ core literature:
   negative structural divide;
 - the convex Lehman-row interpolation, including whether the two-sided band
   or its exact-face application is already known;
+- the local residual transport identity, including whether this labeled
+  formulation or its use on neutral traces already occurs in Lehman theory;
 - the three-column capacity-parity separation and its exact-game consequence,
   including whether the incidence lemma is already known for Lehman pairs;
+- the odd-multiplier four-column separation and six-tile thin normal form,
+  including whether comparable local configurations occur in Lehman theory;
 - the subset Lehman residual face budget, its unification of the singleton
   bands and canonical internal face, and whether its proposed recursive
   interpretation is genuinely new;

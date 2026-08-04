@@ -288,6 +288,15 @@ Interpolating until the gaining load reaches one excludes
 every order: choose a point on exactly one gaining line and apply the positive
 or negative band according as at most one or at least two losing lines pass
 through it.
+More strongly, the residual vector obeys
+
+```text
+A^T F=k[(r-p)1_V-(r-ell)1_U].
+```
+
+Thus every label-free trace column has total residual zero.  Any surviving
+polarization must cancel locally throughout the original trace hypergraph,
+not just satisfy the global conservation sum.
 The same calculation has a subset form.  For a dual-row set `D`, aggregate
 its residual to `F(D)`.  If its average gaining load is at least one and
 `F(D)>=0`, then
@@ -304,7 +313,14 @@ columns of a positive Lehman dual have a row meeting them exactly once.  The
 two residual bands then exclude every packet with at most three gaining-label
 columns, forcing any survivor to have at least four such columns and Lehman
 trace degree at least five.
+For the first open thin case with four gaining labels, odd-multiplier parity
+still supplies a simple row.  The residual bands force three losing labels,
+degree at least six, label overlap at most one, and one of six local load
+tiles on every label-free trace.  The unresolved problem is now global
+compatibility of those six tiles rather than an unrestricted labeling search.
 See `paper3/SUBSET_LEHMAN_FACE_BUDGET.md`,
+`paper3/LEHMAN_RESIDUAL_TRANSPORT.md`,
+`paper3/FOUR_COLUMN_RESIDUAL_NORMAL_FORM.md`,
 `paper3/THREE_COLUMN_LEHMAN_SEPARATION.md`, and
 `paper3/LEHMAN_TRACE_OBSTRUCTION.md`. The remaining hard step is to lift
 Lehman's minimally-nonideal minor reduction without losing the poor labels.

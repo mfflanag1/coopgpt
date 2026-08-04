@@ -157,6 +157,18 @@ residuals must jump over the interval `[0,k(r-ell)]`, with compensating large
 negative residuals.  Ruling out that polarization for general positive
 Lehman matrices is the next concrete combinatorial question.
 
+The scalar law is the sum of the stronger local identity
+
+```text
+A^T F=k[(r-p)1_V-(r-ell)1_U].
+```
+
+Thus every label-free trace column of `A` contains residuals summing exactly
+to zero.  See
+[`LEHMAN_RESIDUAL_TRANSPORT.md`](LEHMAN_RESIDUAL_TRANSPORT.md).  The surviving
+polarization must therefore balance on every neutral trace, not merely in the
+aggregate.
+
 The multi-row extension in
 [`SUBSET_LEHMAN_FACE_BUDGET.md`](SUBSET_LEHMAN_FACE_BUDGET.md) turns the same
 residual into a quantitative bound on any uniformly overloaded rich face. It
