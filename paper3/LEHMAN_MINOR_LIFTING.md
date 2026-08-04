@@ -73,8 +73,9 @@ requirements. Give rich incidence an integer weight `Lambda` larger than the
 number of active columns. Any noncore excess is at least `1/r`, where the
 Lehman row sum `r` is no larger than that column count, so one overcovered
 row adds more than one unit of scaled cost. Thus preservation of the single
-strict scaled objective gap automatically forces both exact coverage and
-gaining-player load below one. The remaining reduction problem is whether a
+strict scaled objective gap automatically forces exact coverage, disjoint
+contracted traces, survivor avoidance, gaining-player underload, and both
+contracted poor labels to vanish. The remaining reduction problem is whether a
 classical or minor-compatible cost-aware reduction preserves this particular
 objective gap.
 

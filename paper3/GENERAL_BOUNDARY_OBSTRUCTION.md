@@ -317,10 +317,11 @@ There is also a scale-separated way to remove the noncore condition. Weight
 each unit of rich incidence by an integer `Lambda` larger than the number of
 active columns, while keeping the gaining-poor label at unit cost. The
 underloaded exact packet still lies below `Lambda|H|+1`. In any positive
-Lehman lift, one overcovered noncore row contributes at least `Lambda/r>1`,
-so a lift retaining the strict cost bound is automatically exact on every
-rich row and has gaining-player load below one. Thus both lifting invariants
-reduce to preservation of one scaled objective gap. See
+Lehman lift, every positive rich excess is at least `1/r` and contributes
+more than one unit of scaled cost. A lift retaining the strict bound is
+therefore exact on every rich row; disjoint contracted traces, survivor
+avoidance, gaining-player underload, and poor-label-neutral contractions all
+follow. Thus the full lift reduces to preservation of one scaled objective gap. See
 `paper3/SCALE_SEPARATED_MNI_BRIDGE.md`.
 
 That scalar has an ordinary set-cover interpretation. Assign each lifted

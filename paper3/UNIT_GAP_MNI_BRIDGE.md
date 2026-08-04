@@ -56,12 +56,14 @@ c_T = Lambda |T intersect H| + 1_{b in T}.
 
 The same packet has cost `Lambda|H|+r_b<Lambda|H|+1`, and every integral
 cover costs at least `Lambda|H|+1`. Now suppose a positive Lehman core with
-row sum `r` is lifted through neutral contractions and retains this strict
-cost bound. Any noncore rich row overcovered by the uniform point has excess
-at least `1/r`. Since `r<=q<Lambda`, that one row alone adds more than one
-unit of scaled cost, contradicting the retained bound. Thus all rich rows
-are automatically exact, after which the remaining cost below the threshold
-is exactly the gaining-player load below one.
+row sum `r` is lifted through unit-weight contractions and retains this
+strict cost bound. Any rich-row overcoverage—whether from overlapping
+contractions, a surviving column hitting a contracted row, or a noncore
+row—has size at least `1/r`. Since `r<=q<Lambda`, that one excess alone adds
+more than one unit of scaled cost. Thus all rich rows are automatically
+exact; disjointness and survivor avoidance follow. The remaining cost is the
+gaining-player load below one, so contracted columns have no gaining label,
+and transport removes their losing labels too.
 
 Accordingly, a reduction preserving the single scaled objective gap would
 simultaneously solve both lifting requirements. What remains open is whether

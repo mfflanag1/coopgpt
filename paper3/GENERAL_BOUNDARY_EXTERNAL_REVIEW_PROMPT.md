@@ -208,8 +208,10 @@ falsification searches.  Please do not count their no-hit output as proof.
    still required.
    Audit the scale-separated refinement independently. Check that choosing
    `Lambda` above the original active-column count implies `Lambda/r>1` for
-   every surviving Lehman core, that one noncore overcoverage is at least
-   `1/r`, and that the original scaled costs survive the proposed lift.
+   every surviving Lehman core, that any positive overcoverage is at least
+   `1/r`, and that exactness really forces disjoint contractions and survivor
+   avoidance. Check the transport step eliminating both contracted poor
+   labels and that the original scaled costs survive the proposed lift.
    Determine whether a standard MNI/minor-compatible theorem actually
    preserves this objective; the manuscript does not claim that it does.
    Compare this carefully with Király--Pap (2016), DOI
