@@ -2425,6 +2425,83 @@ $s_\phi(\{r\})=\phi_r-v(\{r\})=\gamma$.  Inequality
 \eqref{eq:lx-fractional-packing}.
 \end{proof}
 
+The packing inequality isolates a sharp sacrifice-budget threshold that is
+already visible before the full exact-partition classification.
+
+\begin{theorem}[unique-richest four/five threshold]
+\label{thm:lx-unique-richest-threshold}
+In a singleton-normalized exact game with $2\leq|N|\leq4$, Lmin cannot have a
+unique richest player.  The bound is sharp: a five-player exact game can have
+\[
+ \operatorname{Lmin}(v)=(1,1,1,1,2)
+\]
+with player~5 uniquely richest and its singleton coalition slack by two.
+\end{theorem}
+
+\begin{proof}
+Suppose $r$ is uniquely richest, put $L=N\setminus\{r\}$,
+$\gamma=\phi_r$, and $q_i=\phi_i<\gamma$.  Choose the protectors in
+Lemma~\ref{lem:lx-protector-packing}.  If $|L|=1$, no nonempty $Q_i$ exists.
+If $|L|=2$, both $Q_i$ are the opposite singleton; weight both by one in
+\eqref{eq:lx-fractional-packing}, giving $\gamma\leq0$.
+
+Let $|L|=3$.  If some $Q_i=\{j\}$, weight the protectors indexed by $i$ and
+$j$ by one.  The sets $Q_i$ and $Q_j$ are nonempty and disjoint, so their
+union leaves at most one player $u$ uncovered.  Inequality
+\eqref{eq:lx-fractional-packing} gives either $\gamma\leq0$ or
+$\gamma\leq q_u<\gamma$.  If no $Q_i$ is a singleton, then
+$Q_i=L\setminus\{i\}$ for all $i$; weight all three by $1/2$.  Every poorer
+load is one and $\Lambda=3/2$, forcing $\gamma/2\leq0$.  This proves the
+four-player bound.
+
+For sharpness, take the lower envelope of the following four common-total
+allocations:
+\[
+\begin{array}{c|rrrrr}
+ &1&2&3&4&5\\ \hline
+g^1&0&0&0&3&3\\
+g^2&0&0&3&3&0\\
+g^3&1&1&1&0&3\\
+g^4&1&1&1&1&2
+\end{array}
+\qquad
+v(S):=\min_{1\leq k\leq4}g^k(S).
+\tag{U5}\label{eq:lx-unique-richest-five}
+\]
+Every row has total six and is a core allocation of the lower-envelope game;
+every coalition attains its worth at a row.  Hence $v$ is exact directly from
+the definition.  Put $\phi=g^4$.  The table gives
+\[
+ v(N\setminus\{1\})=v(N\setminus\{2\})=5,
+ \qquad v(\{3,5\})=v(\{4,5\})=3.                    \tag{U5-T}
+ \label{eq:lx-unique-richest-five-tight}
+\]
+The point $\phi$ gives every player at least one.  At any core point with all
+coordinates at least one, the first two displayed constraints and efficiency
+force $x_1=x_2=1$.  Write $y=x-\mathbf1_N$.  Then
+$y\geq0$, $y_1=y_2=0$, and $y_3+y_4+y_5=1$.  The last two constraints give
+$y_3+y_5\geq1$ and $y_4+y_5\geq1$, hence $y_3=y_4=0$ and $y_5=1$.
+Thus the first max--min face is the singleton $\phi$, proving the displayed
+Lmin formula.  Since $v(\{5\})=0<2=\phi_5$, its richest suffix is slack.
+
+The escape saturates the exact-balanced circuit
+\[
+ \mathbf1_{\{3,5\}}+\mathbf1_{\{4,5\}}
+ +\mathbf1_{\{1\}}+\mathbf1_{\{2\}}-\mathbf1_{\{5\}}
+ =\mathbf1_N.                                        \tag{U5-C}
+ \label{eq:lx-unique-richest-circuit}
+\]
+The two tight protector slacks are zero, the two uncovered singleton slacks
+are one each, and the negative richest-singleton slack is two.  Equivalently,
+\eqref{eq:lx-fractional-packing} is attained at equality
+$2=1+1$.  With only three poorer players, the same two-protector packing
+leaves at most one uncovered payoff, strictly less than $\gamma$; the fifth
+player supplies the second unit of sacrifice budget that makes equality
+possible.  The fixed certificate and exact replay are
+\path{src/verify_n5_unique_richest_boundary.py} and
+\path{results/n5_unique_richest_boundary.json}.
+\end{proof}
+
 \begin{lemma}[exact-partition classification through four players]
 \label{lem:lx-richer-suffix}
 Let $v$ be an exact game with $|N|\leq4$ and $v(\{i\})=0$ for every player.
@@ -2452,27 +2529,8 @@ the form
 for every $S$.  In particular, for each player $r$ there is
 $z^r\in\core(v)$ with $z^r_r=0$.
 
-We first exclude a unique richest player when $|N|\leq4$.  Suppose $r$ is
-unique richest, put $L=N\setminus\{r\}$,
-$\gamma=\phi_r$, and $q_i=\phi_i$ for $i\in L$.  Thus
-$0\leq q_i<\gamma$.  Lemma~\ref{lem:lx-protector}, applied at the stratum of
-each $i\in L$, gives a tight coalition
-\[
- T_i=\{r\}\cup Q_i,\qquad
- \emptyset\ne Q_i\subseteq L\setminus\{i\}.           \tag{5}
-\]
-The set $Q_i$ is nonempty because $\{r\}$ is slack.  We now use the
-dimension-free inequality \eqref{eq:lx-fractional-packing}.  If $|L|=1$ no
-$Q_i$ exists.  If $|L|=2$, assign weight one to both (necessarily singleton)
-protectors.  Then $\Lambda=2$ and every load is one, forcing $\gamma\leq0$.
-Let $|L|=3$.  If some $Q_i=\{j\}$, assign weight one to $Q_i$ and $Q_j$.
-They are disjoint, so this is a fractional packing of weight two leaving at
-most one player $u$ uncovered.  Inequality
-\eqref{eq:lx-fractional-packing} gives either $\gamma\leq0$ or
-$\gamma\leq q_u<\gamma$.  If no $Q_i$ is a singleton, then
-$Q_i=L\setminus\{i\}$ for all $i$; assigning weight $1/2$ to each gives
-$\Lambda=3/2$ and unit load everywhere, forcing $\gamma/2\leq0$.  Thus the
-richest stratum is not a singleton.
+The richest stratum is not a singleton by
+Theorem~\ref{thm:lx-unique-richest-threshold}.
 
 Second, if the poorest stratum is the singleton $\{a\}$, then
 \[

@@ -193,7 +193,38 @@ The proof through four players therefore combines a published Lmin
 transfer-blocking theorem with a published exactness characterization; the
 new content is the completion argument and its sharp low-dimensional use.
 
-## 4. The five-player escape saturates the slack budget
+## 4. The unique-richest four/five sacrifice threshold
+
+The fractional packing inequality gives a direct structural explanation for
+one sharp branch of the four/five threshold.  With at most three poorer
+players, either two disjoint protector parts leave at most one uncovered
+payoff—strictly smaller than the unique richest payoff—or the three
+two-element protector parts admit a half-integral perfect cover.  In either
+case (FP) is impossible.
+
+At five players the following exact lower-envelope game attains (FP) at
+equality:
+
+```text
+g1 = (0,0,0,3,3)
+g2 = (0,0,3,3,0)
+g3 = (1,1,1,0,3)
+g4 = (1,1,1,1,2)
+```
+
+Its Lmin point is `phi=g4`, proved by four coalition inequalities, and
+`v({5})=0<2=phi_5`.  The exact-balanced circuit
+
+```text
+1_{35}+1_{45}+1_{1}+1_{2}-1_{5}=1_N
+```
+
+has slack budget `0+0+1+1-2=0`.  The fourth poorer player supplies the second
+uncovered unit that cannot exist at four players.  This is the sought
+``sacrifice budget'' explanation of the threshold.  The complete human proof
+and exact replay are in `paper3/N4_N5_STRUCTURAL_THRESHOLD.md`.
+
+## 5. The five-player monotonicity escape saturates the slack budget
 
 For the base five-player game,
 
@@ -244,7 +275,7 @@ checking the displayed cover.  Its optimum is one.  Since (BD) supplies the
 matching lower bound from `s_phi(H)=1`, the five-player cover is globally
 optimal within this boundary-cover relaxation.
 
-## 5. A second sharp threshold found from this framework
+## 6. A second sharp threshold found from this framework
 
 The first attempt to generalize the four-player proof suggested that every
 Lmin boundary with at most two cumulative poorer players might be tight in
@@ -277,7 +308,7 @@ threshold.  It also shows that the boundary-cover LP is a bound rather than a
 universal zero-defect mechanism: many tight five-player suffixes do not admit
 a zero-defect cover once the target suffix itself is excluded.
 
-## 6. What would make this a larger theorem
+## 7. What would make this a larger theorem
 
 The bridge becomes substantially broader if one can prove any of the
 following without dimension enumeration:
