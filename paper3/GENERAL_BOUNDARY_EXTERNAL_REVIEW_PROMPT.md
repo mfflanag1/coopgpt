@@ -29,6 +29,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/results/unique_richest_family.json`
 - `coopgames/src/verify_rich_block_family.py`
 - `coopgames/results/rich_block_family.json`
+- `coopgames/paper3/RICH_BLOCK_HOSTILE_REVIEW_RESPONSE.md`
 - `coopgames/src/verify_n6_two_poorer_suffix_counterexample.py`
 - `coopgames/results/n6_two_poorer_suffix_counterexample.json`
 - `coopgames/src/verify_two_poorer_rich_family.py`
@@ -69,8 +70,11 @@ falsification searches.  Please do not count their no-hit output as proof.
 7. Audit the two-parameter rich-block amplification for every `h>=1` and
    `m>=h+3`.  Check the common totals, four load-bearing values, two-stage
    Lmin proof, Lmax ceiling and convex combination, saturated circuit, and
-   L1-distance formula.  Is this amplification a standard player-replication
-   construction, and if so which claims remain nontrivial after attribution?
+   L1-distance formula.  Check the new indecomposability argument, including
+   the exceptional `m=4,5,6` cases and the coalition interactions attaching
+   later poorer players.  Assess whether an indecomposable exact family with
+   normalized `h=1` separation `(m-3)/(m-1) -> 1` is already known; do not
+   treat large tied blocks alone as novel because direct sums supply them.
 8. For the five-player small-poorer lower bound, inspect whether the imported
    definition-level exact-face and stagewise KKT encoding genuinely covers all
    ordered stratum compositions and every boundary after one or two cumulative
@@ -138,7 +142,7 @@ python src/verify_unique_richest_family.py \
   --output results/unique_richest_family.json
 python src/verify_rich_block_family.py \
   --max-rich-block 4 --extra-poorer 4 \
-  --exact-replay-smallest-nontrivial \
+  --exact-replay-through-players 6 \
   --output results/rich_block_family.json
 python src/verify_n6_two_poorer_suffix_counterexample.py \
   --output results/n6_two_poorer_suffix_counterexample.json

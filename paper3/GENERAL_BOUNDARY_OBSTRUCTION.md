@@ -253,10 +253,19 @@ Lmax = h(m-1)/(h+1) on R union {3,4},
 The proof uses the same two complement constraints, two rich-block
 constraints, and one convex combination.  The exact distance is
 `4h(m-h-2)/(h+1)`.  For fixed `h`, the normalized distance tends to
-`2/(h+1)`, so exactness does not asymptotically reconcile Lmin and Lmax even
-for four-generator games.  This is a two-parameter obstruction phase,
-although an expert must still assess whether its block amplification is known
-under a replication construction.
+`2/(h+1)`.  In particular, the `h=1` family has normalized distance
+`(m-3)/(m-1) -> 1`.  These games are indecomposable: a connected set of
+positive pair worths contains the first five poorer/rich players, and explicit
+higher-coalition interactions attach every additional poorer player.
+
+This is the substantive asymptotic claim.  Null-player padding gives
+dimensional existence but keeps the five-player normalized gap at `1/3`.
+A direct sum of `h` five-player copies likewise gives `h` tied richest
+players at normalized gap `1/3`; it can even beat the present family's
+`2/(h+1)` limit for large `h`, but it is decomposable.  Accordingly the
+rich-block axis is secondary, and no uniform separation claim is made as
+`h -> infinity`.  The remaining novelty question is whether an
+indecomposable exact family with the growing `h=1` separation is known.
 
 ## 5. The five-player monotonicity escape saturates the slack budget
 

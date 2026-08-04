@@ -3,9 +3,11 @@
 For every h>=1 and m>=h+3, four common-total integral allocations on a
 poorer block of size m and a tied richer block of size h define an exact
 lower-envelope game.  The script checks the closed-form Lmin and Lmax forcing
-identities, the Lmax convex combination, and the saturated slack circuit over
-a requested parameter grid.  The dimension-free proof is in the manuscript;
-finite grid agreement is an audit, not its logical basis.
+identities, the Lmax convex combination, indecomposability certificates, and
+the saturated slack circuit over a requested parameter grid.  Selected cases
+can also be passed through the generic exact staged Lmin and Lmax solvers.
+The dimension-free proof is in the manuscript; finite grid agreement is an
+audit, not its logical basis.
 """
 from __future__ import annotations
 
@@ -15,7 +17,7 @@ import sys
 from fractions import Fraction
 from pathlib import Path
 
-from leximin import leximin_core_exact
+from leximin import leximax_core_exact, leximin_core_exact
 from tugame import Game
 
 
@@ -39,7 +41,10 @@ def generators(m: int, h: int):
 
     third = [0] * n
     third[0] = third[1] = third[2] = h
-    third[4] = h * (m - 4)
+    # At the endpoint m=4 the formal coefficient h(m-4)e_5 is zero and
+    # player 5 already belongs to the rich block, so omit the assignment.
+    if m >= 5:
+        third[4] = h * (m - 4)
     for player in rich:
         third[player] = m - 1
 
@@ -71,7 +76,7 @@ def as_string(value):
     return str(value)
 
 
-def verify_case(m: int, h: int, exact_lmin_replay: bool = False):
+def verify_case(m: int, h: int, exact_replay: bool = False):
     n = m + h
     full = (1 << n) - 1
     rich_mask = sum(1 << player for player in range(m, n))
@@ -87,6 +92,40 @@ def verify_case(m: int, h: int, exact_lmin_replay: bool = False):
         raise RuntimeError(f"(m,h)=({m},{h}): generator outside core")
     if any(game.v[1 << player] != 0 for player in range(n)):
         raise RuntimeError(f"(m,h)=({m},{h}): singleton normalization failed")
+
+    # Indecomposability certificate used in the manuscript.  Positive pair
+    # worths connect players 1,...,5 and R; the displayed higher-order
+    # interactions attach every remaining poorer player.
+    main_pairs = ((0, 3), (1, 3), (2, 3))
+    if any(
+        game.v[(1 << left) | (1 << right)] != h
+        for left, right in main_pairs
+    ):
+        raise RuntimeError(f"(m,h)=({m},{h}): poorer pair connection failed")
+    if any(
+        game.v[(1 << poor) | (1 << rich)] != m - 1
+        for poor in (2, 3)
+        for rich in range(m, n)
+    ):
+        raise RuntimeError(f"(m,h)=({m},{h}): rich pair connection failed")
+    if m >= 5 and game.v[(1 << 3) | (1 << 4)] <= 0:
+        raise RuntimeError(f"(m,h)=({m},{h}): player-5 connection failed")
+    if m == 6:
+        attachment = (1 << 2) | (1 << 3) | (1 << 4) | rich_mask
+        if (
+            game.v[attachment] != 7 * h
+            or game.v[attachment | (1 << 5)] != 8 * h
+        ):
+            raise RuntimeError(f"(m,h)=({m},{h}): player-6 attachment failed")
+    elif m >= 7:
+        attachment = (1 << 3) | (1 << 4)
+        if game.v[attachment] != 2 * h or any(
+            game.v[attachment | (1 << player)] != 3 * h
+            for player in range(5, m)
+        ):
+            raise RuntimeError(
+                f"(m,h)=({m},{h}): later-player attachment failed"
+            )
 
     rich_3 = rich_mask | (1 << 2)
     rich_4 = rich_mask | (1 << 3)
@@ -113,7 +152,7 @@ def verify_case(m: int, h: int, exact_lmin_replay: bool = False):
     if sum(phi[m:]) != h * (m - 2):
         raise RuntimeError(f"(m,h)=({m},{h}): second Lmin level failed")
     replayed_lmin = None
-    if exact_lmin_replay:
+    if exact_replay:
         replayed_lmin = tuple(leximin_core_exact(game))
         if replayed_lmin != phi:
             raise RuntimeError(f"(m,h)=({m},{h}): exact Lmin replay failed")
@@ -141,6 +180,11 @@ def verify_case(m: int, h: int, exact_lmin_replay: bool = False):
         or coalition_sum(lmax_formula, rich_4) != h * (m - 1)
     ):
         raise RuntimeError(f"(m,h)=({m},{h}): Lmax forcing face failed")
+    replayed_lmax = None
+    if exact_replay:
+        replayed_lmax = tuple(leximax_core_exact(game))
+        if replayed_lmax != lmax_formula:
+            raise RuntimeError(f"(m,h)=({m},{h}): exact Lmax replay failed")
 
     circuit = {rich_3: 1, rich_4: 1, rich_mask: -1}
     for player in range(m):
@@ -176,9 +220,10 @@ def verify_case(m: int, h: int, exact_lmin_replay: bool = False):
         "poorer_block_size": m,
         "richer_block_size": h,
         "player_count": n,
+        "indecomposable_certificate_checked": True,
         "generators": [list(point) for point in points],
         "lmin_formula": list(phi),
-        "exact_lmin_replayed": exact_lmin_replay,
+        "exact_lmin_replayed": exact_replay,
         "exact_lmin_replay": (
             [as_string(value) for value in replayed_lmin]
             if replayed_lmin is not None
@@ -187,6 +232,12 @@ def verify_case(m: int, h: int, exact_lmin_replay: bool = False):
         "richer_suffix_value": "0",
         "richer_suffix_slack": str(h * (m - 2)),
         "lmax_formula": [as_string(value) for value in lmax_formula],
+        "exact_lmax_replayed": exact_replay,
+        "exact_lmax_replay": (
+            [as_string(value) for value in replayed_lmax]
+            if replayed_lmax is not None
+            else None
+        ),
         "lmax_convex_combination": {
             "g4_weight": as_string(blend_weight),
             "g2_weight": as_string(1 - blend_weight),
@@ -205,19 +256,30 @@ def main():
     parser.add_argument(
         "--exact-replay-smallest-nontrivial",
         action="store_true",
-        help="independently replay Lmin for the h=2,m=5 case",
+        help="independently replay Lmin and Lmax for the h=2,m=5 case",
+    )
+    parser.add_argument(
+        "--exact-replay-through-players",
+        type=int,
+        default=0,
+        help="independently replay staged Lmin and Lmax for every case up to n",
     )
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    if args.max_rich_block < 1 or args.extra_poorer < 0:
+    if (
+        args.max_rich_block < 1
+        or args.extra_poorer < 0
+        or args.exact_replay_through_players < 0
+    ):
         raise ValueError("parameter bounds must be nonnegative and nonempty")
 
     cases = [
         verify_case(
             m,
             h,
-            exact_lmin_replay=(
-                args.exact_replay_smallest_nontrivial and h == 2 and m == 5
+            exact_replay=(
+                (args.exact_replay_smallest_nontrivial and h == 2 and m == 5)
+                or m + h <= args.exact_replay_through_players
             ),
         )
         for h in range(1, args.max_rich_block + 1)
@@ -227,18 +289,27 @@ def main():
         "status": "two-parameter rich-block obstruction family verified",
         "theorem": (
             "for every h>=1 and m>=h+3, a four-generator integral exact "
-            "game has a slack h-player richest suffix and distinct closed-form "
-            "Lmin and Lmax allocations"
+            "indecomposable game has a slack h-player richest suffix and "
+            "distinct closed-form Lmin and Lmax allocations"
         ),
         "proof_scope": (
             "the manuscript proof is symbolic and dimension-free; this exact "
-            "grid audit checks all identities over the reported parameter range"
+            "grid audit checks all identities over the reported parameter "
+            "range, with generic exact staged Lmin/Lmax replay only where "
+            "explicitly reported"
         ),
         "max_rich_block": args.max_rich_block,
         "extra_poorer_values_per_rich_block": args.extra_poorer,
         "case_count": len(cases),
         "smallest_nontrivial_exact_lmin_replayed": (
             args.exact_replay_smallest_nontrivial
+        ),
+        "exact_lmin_lmax_replay_through_players": (
+            args.exact_replay_through_players
+        ),
+        "exact_lmin_lmax_replayed_case_count": sum(
+            case["exact_lmin_replayed"] and case["exact_lmax_replayed"]
+            for case in cases
         ),
         "cases": cases,
     }

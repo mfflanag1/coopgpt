@@ -160,9 +160,13 @@ distance formula is
 ||Lmin-Lmax||_1 = 4h(m-h-2)/(h+1).
 ```
 
-For each fixed `h`, after normalizing by `v(N)=2h(m-1)`, this tends to
-`2/(h+1)` as `m` grows.  Thus exactness does not make the two egalitarian
-selections asymptotically close, even inside a four-generator family.
+Every game in the family is indecomposable.  For each fixed `h`, after
+normalizing by `v(N)=2h(m-1)`, the distance tends to `2/(h+1)` as `m`
+grows.  The strongest axis is `h=1`, where the exact normalized distance is
+`(m-3)/(m-1) -> 1`.  Null-player padding preserves only the five-player
+value `1/3`, while a direct sum can create a large tied rich block but is
+decomposable.  Thus the growing indecomposable separation, not dimensional
+existence or the tied-block size by itself, is the content.
 
 ## What is and is not new
 
@@ -189,7 +193,7 @@ python src/verify_unique_richest_family.py \
   --output results/unique_richest_family.json
 python src/verify_rich_block_family.py \
   --max-rich-block 4 --extra-poorer 4 \
-  --exact-replay-smallest-nontrivial \
+  --exact-replay-through-players 6 \
   --output results/rich_block_family.json
 ```
 
@@ -198,6 +202,6 @@ proper coalition faces by exact LP, recomputes Lmin by the independent exact
 staged algorithm, and checks the incidence/slack circuit.  The family verifier
 checks the parametric identities and closed-form Lmax proof through the
 requested dimension and performs independent exact staged Lmin/Lmax replays
-through the requested smaller bounds.  The rich-block verifier audits the
+through the requested player bound.  The rich-block verifier audits the
 dimension-free formulas over a two-parameter exact-rational grid; the human
 symbolic proof, not the finite grid, carries the universal quantifiers.
