@@ -106,13 +106,22 @@ special attention to:
     The coordinate split itself is elementary; assess novelty only for the
     Lmin-selected obstruction cone and any later classification of its
     extreme rays.
-20. Audit the Lmin star-or-trace dichotomy.  Check that deleting every
+20. Audit the single-packet Lmin star-or-trace reduction.  Check that deleting every
     `H`-disjoint tight coalition preserves a strict cover, that conformal
     circuit reduction cannot reintroduce a deleted coalition, and that every
     remaining non-spoke term has a nonempty rich trace.  Verify that the
     `alpha=0` branch then collapses exactly to the block star, including
     degeneracies caused by a coalition serving simultaneously as a tight
     protector and a rooted completion spoke.
+21. Check the canonical rooted-excess argument independently.  Verify
+    boundedness of the nonempty-trace exact-cover polytope, the lifted extreme
+    packet decomposition, convexity of
+    `delta(r)=1+(m-1)max_i r_i-sum_i r_i`, strict positivity at the averaged
+    poorer load, every coefficient in the canonical completion identity, and
+    the Jensen step selecting one positive-excess packet.  Finally check that
+    a conformal circuit's non-spoke traces form a balanced subcollection and
+    minimality forces the entire packet, including repeated-trace and
+    full-trace degeneracies.
 
 Please report fatal errors first, then repairable gaps, then novelty risks.
 State whether the result is (a) correct as written, (b) correct after named

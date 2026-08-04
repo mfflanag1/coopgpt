@@ -2740,29 +2740,59 @@ statement.  The final alternatives follow directly from the two cover
 equations.
 \end{proof}
 
-\begin{corollary}[Lmin star-or-trace dichotomy]
+\begin{corollary}[single-packet star-or-trace reduction]
 \label{cor:lx-star-or-trace-dichotomy}
 Every slack richer Lmin suffix selects a rooted circuit with at most $|N|$
 coalitions of one of two types:
 \begin{enumerate}[label=(\roman*)]
 \item a pure block star on the poorer singleton blocks;
 \item a trace-coupled atom with $\alpha>0$, whose normalized non-spoke rich
-traces form a balanced exact cover of $H$ and hence a convex mixture of
-minimal balanced packets.
+traces are exactly one minimal balanced collection on $H$.
 \end{enumerate}
-No poorer-side-only coupling is needed.
+Thus neither a poorer-side-only coupling nor a mixture of rich packets is
+needed.
 \end{corollary}
 
 \begin{proof}
 In the strict Lmin cover, first delete every positive-weight tight coalition
 disjoint from $H$.  This leaves the common load on $H$ unchanged and can only
-decrease the loads on $L$, so strictness is preserved.  Apply rooted deficit
-completion and the conformal circuit reduction to this pruned cover.  Every
-non-spoke positive coalition in the selected circuit now has nonempty rich
-trace.  If none exists, Theorem~\ref{thm:lx-two-sided-trace-coupling} gives
-the block star.  Otherwise the rich-cover equation has $\alpha>0$ and,
-after normalization, is a balanced exact cover.  The standard decomposition
-of a balanced cover into minimal balanced packets proves (ii).  The circuit
+decrease the loads on $L$, so strictness is preserved.  Normalize its common
+rich load to one.  Its weights lie in the bounded exact-cover polytope of the
+nonempty rich traces, and hence decompose into extreme points $q$ with
+coefficients $\theta_q$.  Each extreme point is a normalized minimal balanced
+packet.  Lift it using its original tight coalitions and denote its poorer
+load vector by $r^q\in\mathbb R_+^L$.  Their average $c=\sum_q\theta_qr^q$
+satisfies $c_i<1$ for every $i\in L$.
+
+For $m=|L|$ define the canonical rooted excess
+\[
+ \delta(r):=1+(m-1)\max_i r_i-\sum_i r_i.           \tag{CRE}
+ \label{eq:lx-canonical-rooted-excess}
+\]
+This function is convex.  With $\beta=\max_i c_i<1$,
+\[
+ \delta(c)=1+(m-1)\beta-\sum_i c_i\geq1-\beta>0.
+\]
+Jensen's inequality therefore gives $\delta(r^q)>0$ for some packet $q$.
+Put $b=\max_i r_i^q$ and $d_i=b-r_i^q$.  The packet and its canonical
+singleton completion satisfy
+\[
+ \sum_T\lambda_T^q\mathbf1_T
+ +\sum_{i\in L}d_i\mathbf1_{H\cup\{i\}}
+ -\delta(r^q)\mathbf1_H=b\mathbf1_N.               \tag{CP}
+ \label{eq:lx-single-packet-completion}
+\]
+This follows directly from Theorem~\ref{thm:lx-two-sided-trace-coupling}:
+the two cover loads are $\alpha=1$ and $\beta=b$, while
+$\sum_i d_i=mb-\sum_i r_i^q$.
+
+Apply conformal circuit decomposition to
+\eqref{eq:lx-single-packet-completion} and choose a constituent containing
+$H$ negatively.  If it has no non-spoke term, it is the block star.  Otherwise
+its non-spoke rich traces form a nonempty balanced subcollection of the
+minimal balanced support of packet $q$, and therefore equal that full support.
+This proves (ii).  Exact balancedness and $s_\phi(H)>0$ also force at least
+one completion spoke in the circuit to have positive slack.  The circuit
 bound is Corollary~\ref{cor:lx-rooted-atomic-reduction}.
 \end{proof}
 

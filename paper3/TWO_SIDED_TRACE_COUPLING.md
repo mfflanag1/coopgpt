@@ -75,7 +75,7 @@ trace of the third coalition couples that packet to the two poorer players.
 The five-player broken diamond and the universal one-/three-poorer escape
 identities have no non-spoke terms after rooting and are pure block stars.
 
-## Lmin star-or-trace dichotomy
+## Lmin single-packet star-or-trace reduction
 
 The poorer-side residual case can be removed for Lmin-selected atoms.  Start
 with the strict tight cover supplied at a slack richer suffix and delete every
@@ -84,18 +84,40 @@ unchanged and all poorer loads only decrease, so the cover remains strict.
 Apply rooted completion and conformal circuit reduction to this pruned cover.
 Every surviving non-spoke coalition then has a nonempty rich trace.
 
+Normalize the pruned cover's rich load to one and decompose it into extreme
+points of its bounded exact-cover polytope.  These are lifted minimal balanced
+packets.  If `r` is a packet's poorer load vector and `m=|L|`, define
+
+```text
+delta(r) = 1 + (m-1) max_i r_i - sum_i r_i.
+```
+
+The function `delta` is convex.  The average poorer load `c` is strictly
+below one coordinatewise, so, with `beta=max_i c_i`,
+
+```text
+delta(c) >= 1-beta > 0.
+```
+
+Jensen's inequality forces `delta(r)>0` for at least one minimal packet.
+Completing that packet by rooted spokes of weights
+`max_j r_j-r_i` gives a rooted relation with exceptional coefficient exactly
+`delta(r)`.  A conformal circuit containing the root either uses no
+non-spoke term, or its rich traces are a balanced subcollection of the
+minimal packet and hence the whole packet.
+
 Consequently every slack Lmin boundary selects a rooted circuit with at most
 `|N|` coalitions of exactly one of the following two types:
 
 1. **star type:** there are no non-spoke coalitions, and the circuit is the
    pure block star on all poorer singleton blocks;
 2. **trace-coupled type:** `alpha>0`, and the normalized non-spoke rich traces
-   form a balanced exact cover of `H` (equivalently, a convex combination of
-   minimal balanced packets).
+   are exactly one minimal balanced collection on `H`.
 
 Thus every failure is forced into an exterior-sacrifice star or an internal
-balanced-transport mechanism.  This dichotomy is dimension-free and applies
-before any classification by player count.
+minimal balanced-transport mechanism.  Mixtures are unnecessary.  This
+dichotomy is dimension-free and applies before any classification by player
+count.
 
 ## Consequence for the breakthrough program
 

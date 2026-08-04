@@ -30,6 +30,24 @@ def members(n, coalition):
     return [i + 1 for i in range(n) if coalition >> i & 1]
 
 
+def canonical_packet(name, poor_loads):
+    loads = tuple(F(value) for value in poor_loads)
+    maximum = max(loads)
+    completion = tuple(maximum - value for value in loads)
+    excess = F(1) + (len(loads) - 1) * maximum - sum(loads, F(0))
+    if excess != F(1) - maximum + sum(completion, F(0)):
+        raise AssertionError(f"{name}: canonical excess identity failed")
+    if excess <= 0:
+        raise AssertionError(f"{name}: packet does not have positive excess")
+    return {
+        "name": name,
+        "poor_loads": [str(value) for value in loads],
+        "maximum_poor_load": str(maximum),
+        "canonical_completion": [str(value) for value in completion],
+        "canonical_rooted_excess": str(excess),
+    }
+
+
 def audit(name, n, root, positive, gamma, beta):
     """Audit one identity and recover its two trace covers exactly."""
     full = (1 << n) - 1
@@ -175,6 +193,10 @@ def main():
         "finite_audit_is_not_proof": True,
         "case_count": len(cases),
         "cases": cases,
+        "single_packet_excess_audits": [
+            canonical_packet("three_trace_minimal_packet", (0, F(1, 2))),
+            canonical_packet("synthetic_partition_packet", (1, 2, 1)),
+        ],
     }
     rendered = json.dumps(payload, indent=2) + "\n"
     args.output.parent.mkdir(parents=True, exist_ok=True)
