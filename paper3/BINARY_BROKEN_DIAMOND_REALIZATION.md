@@ -1,5 +1,9 @@
 # Binary broken-diamond realization and the structural four/five threshold
 
+This note records the integer-level specialization `a=2,b=1`.  The complete
+two-column normal form, exterior-slack budget, and arbitrary-level converse
+are in `paper3/TWO_COLUMN_LMIN_OBSTRUCTION.md`.
+
 ## Universal realization theorem
 
 Partition the player set into four nonempty blocks

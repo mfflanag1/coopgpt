@@ -2289,7 +2289,7 @@ $c_i\leq\beta$ for $i\in L$, then
 Exactness of $H$ provides $z\in\core(v)$ with $z(H)=v(H)$.  For
 $d=z-\phi$,
 \[
- d(H)=-s,\qquad d(L)=s,qquad d_j\geq-\phi_j,
+ d(H)=-s,\qquad d(L)=s,\qquad d_j\geq-\phi_j,
  \qquad d(T)\geq0
 \]
 for every coalition $T$ tight at $\phi$.  Therefore
@@ -2310,6 +2310,86 @@ $\beta=0$ and rescaling, Lemma~\ref{lem:lx-exact-balanced-slack} gives the
 same inequality.  Thus \eqref{eq:lx-boundary-cover} is a quantitative
 protector-completion form of published exact balancedness, not a new
 characterization of exact games.
+
+Singleton completion can be sharpened to an intrinsic coalition-slack cost.
+This form needs no normalization once the tight cover is given.
+
+\begin{theorem}[tight deficit completion]
+\label{thm:lx-tight-deficit-completion}
+Let $v$ be exact, $\phi\in\core(v)$, and
+$N=H\mathbin{\dot\cup}L$. Suppose weights $\lambda_T\geq0$ on
+$\phi$-tight coalitions have common load $\alpha$ on $H$ and loads
+$c_i\leq\beta<\alpha$ on $i\in L$. Put $d_i=\beta-c_i$. If weights
+$\nu_Q\geq0$ on nonempty coalitions $Q\subseteq L$ satisfy
+\[
+ \sum_{Q\subseteq L}\nu_Q\mathbf1_Q=d,
+\]
+then
+\[
+ (\alpha-\beta)s_\phi(H)\leq
+ \sum_{Q\subseteq L}\nu_Qs_\phi(Q).                 \tag{DC}
+ \label{eq:lx-tight-deficit-completion}
+\]
+Consequently, if $d$ lies in the incidence cone of $\phi$-tight coalitions
+contained in $L$, then $H$ is tight.
+\end{theorem}
+
+\begin{proof}
+The cover and completion give
+\[
+ \sum_T\lambda_T\mathbf1_T+\sum_Q\nu_Q\mathbf1_Q
+ -(\alpha-\beta)\mathbf1_H=\beta\mathbf1_N.
+\]
+After rescaling when $\beta>0$, this is exact-balanced. If $\beta=0$, first
+add any positive common grand-coalition coefficient; its slack is zero.
+Lemma~\ref{lem:lx-exact-balanced-slack}, tightness of every $T$, and
+$s_\phi(N)=0$ now give \eqref{eq:lx-tight-deficit-completion}.
+\end{proof}
+
+The displayed incidence system is a semi-balanced system with exceptional
+set $H$ in the terminology of \citet{StudenyKratochvil2022}; its associated
+exact-game inequality is prior art. The candidate new object below is the
+restricted optimization selected by an Lmin tight cover, not the
+semi-balanced inequality itself.
+
+Minimizing the right side over all completions defines a canonical LP value
+$\kappa_{\phi,L}(d)$. Singleton coalitions make the LP feasible, while
+nonnegative slack makes its optimum nonnegative and attained. Thus
+\[
+ (\alpha-\beta)s_\phi(H)\leq\kappa_{\phi,L}(d),
+ \qquad
+ \kappa_{\phi,L}(d)=0
+ \Longleftrightarrow
+ d\in\operatorname{cone}\{\mathbf1_Q:Q\subseteq L,\ s_\phi(Q)=0\}.
+ \tag{DC-K}\label{eq:lx-completion-cost}
+\]
+This turns every slack boundary into a positive-cost ray of a poorer-side
+tight-set cone. The five-player two-column family and the seven-player
+three-trace family both attain equality: their respective parameters are
+$(\alpha,\beta)=(2,1)$ with completion $\mathbf1_R$, and
+$(1,1/2)$ with completion $\tfrac12\mathbf1_{\{a\}}$. A standalone proof and
+exact audit are
+\begin{center}
+\small\path{paper3/TIGHT_DEFICIT_COMPLETION_THEOREM.md},\\[-2pt]
+\small\path{src/verify_tight_deficit_completion.py},\\[-2pt]
+\small\path{results/tight_deficit_completion.json}.
+\end{center}
+
+Equivalently, define the fractional exact-cover worth
+\[
+ \omega_{v,L}(d):=\max\left\{
+   \sum_Q\nu_Qv(Q):\nu_Q\geq0,
+   \ \sum_Q\nu_Q\mathbf1_Q=d,\ \emptyset\ne Q\subseteq L\right\}.
+\]
+Modularity of $\phi$ gives the exact gap identity
+\[
+ \kappa_{\phi,L}(d)=d\mathbin{\cdot}\phi_L-\omega_{v,L}(d). \tag{DC-G}
+ \label{eq:lx-completion-gap}
+\]
+Thus coalitional completion is never more expensive than singleton
+completion in a normalized game, and it is strictly cheaper whenever an
+optimal completion uses positive total coalition worth. The invariant is a
+fractional exact-cover value gap, not merely a renamed uncovered-payoff sum.
 
 The same inequality has a useful internal-face specialization.  It is the
 common budget law behind both the unique-richest threshold and the later
@@ -3005,15 +3085,68 @@ standalone proof and exact audit are
 \small\path{results/uncrossing_defect_budget.json}.
 \end{center}
 
-The obstruction also has a sharp four-cell realization.  Let
+The entire two-column obstruction tier has a normal form and a sharp slack
+budget.
+
+\begin{theorem}[two-column exterior budget]
+\label{thm:lx-two-column-normal-form}
+Let $v$ be singleton-normalized and exact, let
+$\phi=\operatorname{Lmin}(v)$, and let $H$ be a slack cumulative richer
+suffix. Suppose a strict $\phi$-tight cover of $H$ has exactly two
+positive-support proper coalitions. Then there are nonempty, pairwise
+disjoint $X,Y,R$ such that
+\[
+ N=H\mathbin{\dot\cup}X\mathbin{\dot\cup}Y\mathbin{\dot\cup}R,
+ \qquad A=H\cup X,\qquad B=H\cup Y,
+\]
+where $A,B$ are the two support coalitions. Moreover
+\[
+ 0<s_\phi(H)\leq s_\phi(R).                         \tag{ESB}
+ \label{eq:lx-exterior-slack-budget}
+\]
+Thus every two-column failure is an oriented broken diamond, and its exterior
+coalition finances the failed exact face.
+\end{theorem}
+
+\begin{proof}
+Write the two positive weights as $\lambda,\mu$ and their common load on
+$H$ as $\alpha$. Since $H$ is slack, Theorem~\ref{thm:lx-local-supermodular-domain}
+and its laminar endpoint imply that the support coalitions cross. Their four
+Venn-cell loads are $\lambda+\mu,\lambda,\mu,0$. Since $\alpha$ is one of
+these four loads, $\alpha\leq\lambda+\mu$. The nonempty intersection cannot
+therefore contain an outside player, whose load must be strictly below
+$\alpha$. Hence it lies in and meets $H$, so $\alpha=\lambda+\mu$. Equality of the loads on
+$H$ and strict inequality outside now force $A\cap B=H$; crossing gives
+nonempty arms $X,Y$ outside $H$.
+
+Put $s=s_\phi(H)$ and choose, by exactness, $z\in\core(v)$ with
+$z(H)=v(H)$. For $d=z-\phi$, tightness of $A,B$ gives
+$d(X),d(Y)\geq s$. Efficiency yields
+\[
+ d(R)=s-d(X)-d(Y)\leq-s.
+\]
+Core feasibility gives $z(R)\geq v(R)$, equivalently
+$d(R)\geq-s_\phi(R)$, proving \eqref{eq:lx-exterior-slack-budget} and also
+$R\ne\emptyset$. This is the slack form of the exact-balanced identity
+\[
+ \mathbf1_A+\mathbf1_B+\mathbf1_R-\mathbf1_H=\mathbf1_N. \qedhere
+\]
+\end{proof}
+
+The normal form has a sharp converse. Let
 $N=C\mathbin{\dot\cup}X\mathbin{\dot\cup}Y\mathbin{\dot\cup}R$, with all
 four blocks nonempty, put $A=C\cup X$, $B=C\cup Y$, and write
 $c=|C|$, $x=|X|$, $y=|Y|$, $r=|R|$.
 
 \begin{theorem}[binary broken-diamond realization]
 \label{thm:lx-binary-diamond-realization}
-Suppose $c+r\geq3$. Give members of $C$ payoff two and all other players
-payoff one, obtaining $\phi$. Let
+Choose payoff levels $\rho>\sigma>0$ and suppose
+\[
+ c\geq2\qquad\hbox{or}\qquad \sigma r\geq\rho.      \tag{CAP}
+ \label{eq:lx-binary-capacity}
+\]
+Give members of $C$ payoff $\rho$ and all other players payoff $\sigma$,
+obtaining $\phi$. Let
 \[
  K=\{z\geq0:z(N)=\phi(N),\ z(A)\geq\phi(A),\ z(B)\geq\phi(B)\},
  \qquad v(S)=\min_{z\in K}z(S).
@@ -3021,60 +3154,69 @@ payoff one, obtaining $\phi$. Let
 Then $v$ is singleton-normalized and exact, $\core(v)=K$, and
 $\operatorname{Lmin}(v)=\phi$. Coalitions $A,B$ are tight, while
 \[
- s_\phi(C)=\min\{2c,r\}>0,
+ s_\phi(C)=\min\{\rho c,\sigma r\}>0,
  \qquad
- s_\phi(A\cup B)=\min\{x,y\}>0.                    \tag{BDR}
+ s_\phi(A\cup B)=\sigma\min\{x,y\}>0.              \tag{BDR}
  \label{eq:lx-binary-diamond-slacks}
 \]
 
-Conversely, a broken tight diamond in an exact game has
-$R=N\setminus(A\cup B)\ne\varnothing$. If the game is
-singleton-normalized, $C=\{h\}$ and $R=\{q\}$, then it cannot have
-$\phi_h>\phi_q$. Hence the first payoff-oriented broken tight diamond has
-five players, attained by the shapes
+For this lower-envelope family, condition \eqref{eq:lx-binary-capacity} is
+also necessary for singleton normalization when $c=1$. Across all exact
+games, the first two-column Lmin failure has five players, attained at
+$\rho=2,\sigma=1$ by exactly the shapes
 $(c,x,y,r)=(2,1,1,1)$ and $(1,1,1,2)$.
 \end{theorem}
 
 \begin{proof}
 The point $\phi$ is feasible and makes both displayed constraints tight.
 The lower-envelope two-inclusion argument gives $\core(v)=K$ and exactness.
-Every coordinate has minimum zero. A unit on a player in $X,Y$, or $R$ can
-be moved to $C$. A member of $C$ can transfer its two units to another member
-when $c\geq2$. If $c=1$, then $r\geq2$; zeroing the member of $C$, adding two
-units to each of $X,Y$, and removing two units in total from $R$ is feasible.
+Every coordinate has minimum zero. The $\sigma$ units on a player in $X,Y$,
+or $R$ can be moved to $C$. A member of $C$ can transfer its $\rho$ units to
+another member when $c\geq2$. If $c=1$, zeroing the member of $C$, adding
+$\rho$ units in total to each of $X,Y$, and removing $\rho$ units in total
+from $R$ is feasible exactly when $\sigma r\geq\rho$.
 Thus singleton values are zero.
 
 The unit weights on $A,B$ load $C$ twice, $X\cup Y$ once, and $R$ zero
-times. The resulting strict-cover gate pins all payoff-one players at the
-first progressive Lmin stage; efficiency then gives total $2c$ to $C$, whose
-max-min allocation is two per player. Hence Lmin is $\phi$.
+times. More directly, if a core point has every coordinate at least $\sigma$,
+write it as $\sigma\mathbf1_N+w$ with $w\geq0$. The two inequalities and
+efficiency give
+\[
+ w(C)+w(X),\ w(C)+w(Y)\geq(\rho-\sigma)c,
+ \qquad w(N)=(\rho-\sigma)c.
+\]
+Hence $w$ vanishes on $X\cup Y\cup R$. The remaining total on $C$ is
+max--min equalized at $\rho$ per player, proving $\operatorname{Lmin}(v)=\phi$.
 
 At the block-aggregate level the constraints are
-$z(C)+z(X)\geq2c+x$ and $z(C)+z(Y)\geq2c+y$. Efficiency gives
+$z(C)+z(X)\geq\rho c+\sigma x$ and
+$z(C)+z(Y)\geq\rho c+\sigma y$. Efficiency gives
 \[
- v(C)=\max\{0,2c-r\},\qquad
- v(C\cup X\cup Y)=2c+\max\{x,y\},
+ v(C)=\max\{0,\rho c-\sigma r\},\qquad
+ v(C\cup X\cup Y)=\rho c+\sigma\max\{x,y\},
 \]
 which proves \eqref{eq:lx-binary-diamond-slacks}.
 
-For necessity, if $A\cup B=N$, the exact-balanced identity
-$\mathbf1_A+\mathbf1_B-\mathbf1_{A\cap B}=\mathbf1_N$ and tightness of
-$A,B$ force $A\cap B$ tight, so the diamond is not broken. Thus $R$ is
-nonempty. In the remaining four-player oriented shape, let
-$C=\{h\}$, $R=\{q\}$, and $\phi_h>\phi_q$. Exactness of the normalized
-singleton $\{h\}$ gives $z\in\core(v)$ with $z_h=0$. For $d=z-\phi$,
-tightness of $A,B$ gives $d(X),d(Y)\geq\phi_h$. Efficiency yields
-$d_q\leq-\phi_h$, hence $z_q\leq\phi_q-\phi_h<0$, contradicting
-$z_q\geq0$. The two five-player shapes satisfy the capacity condition.
+If $c=1$, any feasible point zeroing $C$ must increase each arm total by at
+least $\rho$. Efficiency therefore decreases $R$ by at least $\rho$, proving
+necessity of $\sigma r\geq\rho$. For the general lower bound, four players in
+Theorem~\ref{thm:lx-two-column-normal-form} make both $H$ and $R$ singletons.
+Normalization turns \eqref{eq:lx-exterior-slack-budget} into
+$\phi(H)\leq\phi(R)$, contradicting the strict payoff boundary. At five
+players, placing the extra member in an arm leaves $H,R$ singleton and gives
+the same contradiction. Hence only a second member of $H$ or of $R$ can
+occur at the threshold; the displayed levels realize both possibilities.
 \end{proof}
 
-Thus the four/five threshold is the first possible oriented Boolean-lattice
-diamond: crossing needs the three cells $C,X,Y$, exact balancedness requires
-the exterior cell $R$, and singleton exactness requires one further unit of
-intersection-or-exterior capacity to orient the meet strictly above the
-exterior. The proof is human and dimension-free. A standalone version and
-exact parameter audit are
+Thus the four/five threshold is a slack-financing threshold: crossing needs
+the three cells $C,X,Y$, exact balancedness requires the exterior cell $R$,
+and singleton exactness requires one further unit of target-or-exterior
+capacity. The proof is human and dimension-free. Standalone versions and
+exact parameter audits are
 \begin{center}
+\small\path{paper3/TWO_COLUMN_LMIN_OBSTRUCTION.md},\\[-2pt]
+\small\path{src/verify_two_column_lmin_obstruction.py},\\[-2pt]
+\small\path{results/two_column_lmin_obstruction.json},\\[-2pt]
 \small\path{paper3/BINARY_BROKEN_DIAMOND_REALIZATION.md},\\[-2pt]
 \small\path{src/verify_binary_broken_diamond_realization.py},\\[-2pt]
 \small\path{results/binary_broken_diamond_realization.json}.

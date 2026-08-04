@@ -21,16 +21,23 @@ def payoff(point, coalition):
     return sum(point[i] for i in range(len(point)) if coalition >> i & 1)
 
 
-def instance(c, x, y, r):
-    if min(c, x, y, r) < 1 or c + r < 3:
-        raise ValueError("requires four nonempty blocks and c+r>=3")
+def instance(c, x, y, r, rich_payoff=F(2), poor_payoff=F(1)):
+    rich_payoff, poor_payoff = F(rich_payoff), F(poor_payoff)
+    if min(c, x, y, r) < 1:
+        raise ValueError("requires four nonempty blocks")
+    if not rich_payoff > poor_payoff > 0:
+        raise ValueError("requires rich_payoff > poor_payoff > 0")
+    if c == 1 and poor_payoff * r < rich_payoff:
+        raise ValueError("singleton intersection lacks exterior payoff capacity")
     n = c + x + y + r
     C = tuple(range(c))
     X = tuple(range(c, c + x))
     Y = tuple(range(c + x, c + x + y))
     R = tuple(range(c + x + y, n))
     A, B = mask(C + X), mask(C + Y)
-    phi = tuple([F(2)] * c + [F(1)] * (x + y + r))
+    phi = tuple(
+        [rich_payoff] * c + [poor_payoff] * (x + y + r)
+    )
     total = sum(phi)
     active = [("zero", player) for player in range(n)] + [("set", A), ("set", B)]
     points = set()
@@ -63,7 +70,7 @@ def instance(c, x, y, r):
         values[coalition] = min(payoff(point, coalition) for point in points)
     values[full] = total
     game = Game(n, values)
-    C_mask, U = mask(C), A | B
+    C_mask, R_mask, U = mask(C), mask(R), A | B
 
     if any(values[1 << player] != 0 for player in range(n)):
         raise AssertionError("singleton normalization failed")
@@ -71,13 +78,15 @@ def instance(c, x, y, r):
         raise AssertionError("a vertex left the lower-envelope core")
     if values[A] != payoff(phi, A) or values[B] != payoff(phi, B):
         raise AssertionError("protector pair is not tight")
-    expected_c_value = max(F(0), F(2 * c - r))
-    expected_u_value = F(2 * c + max(x, y))
+    expected_c_value = max(F(0), rich_payoff * c - poor_payoff * r)
+    expected_u_value = rich_payoff * c + poor_payoff * max(x, y)
     if values[C_mask] != expected_c_value or values[U] != expected_u_value:
         raise AssertionError("broken-diamond formula failed")
-    if payoff(phi, C_mask) - values[C_mask] != min(2 * c, r):
+    if payoff(phi, C_mask) - values[C_mask] != min(
+        rich_payoff * c, poor_payoff * r
+    ):
         raise AssertionError("intersection slack formula failed")
-    if payoff(phi, U) - values[U] != min(x, y):
+    if payoff(phi, U) - values[U] != poor_payoff * min(x, y):
         raise AssertionError("union slack formula failed")
 
     replay = None
@@ -88,6 +97,10 @@ def instance(c, x, y, r):
 
     return {
         "block_sizes": {"C": c, "X": x, "Y": y, "R": r},
+        "payoff_levels": {
+            "intersection": str(rich_payoff),
+            "outside": str(poor_payoff),
+        },
         "player_count": n,
         "vertex_count": len(points),
         "lmin_formula": [str(value) for value in phi],
@@ -97,6 +110,8 @@ def instance(c, x, y, r):
         "intersection_slack": str(payoff(phi, C_mask) - values[C_mask]),
         "union_value": str(values[U]),
         "union_slack": str(payoff(phi, U) - values[U]),
+        "exterior_value": str(values[R_mask]),
+        "exterior_slack": str(payoff(phi, R_mask) - values[R_mask]),
         "strict_cover_loads": {"C": 2, "X": 1, "Y": 1, "R": 0},
         "singleton_normalized": True,
         "exact_lower_envelope": True,
@@ -115,7 +130,7 @@ def main():
         for x in range(1, args.max_block_size + 1)
         for y in range(1, args.max_block_size + 1)
         for r in range(1, args.max_block_size + 1)
-        if c + r >= 3
+        if c >= 2 or r >= 2
     ]
     five_player_shapes = [
         case["block_sizes"] for case in cases if case["player_count"] == 5

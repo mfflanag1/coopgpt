@@ -19,6 +19,16 @@ commit supplied with this packet.
 - `src/verify_binary_broken_diamond_realization.py` and
   `results/binary_broken_diamond_realization.json` — exact parameter-grid
   audit with independent generic Lmin replay through six players.
+- `paper3/TWO_COLUMN_LMIN_OBSTRUCTION.md` — complete two-column normal form,
+  exterior-slack conservation law, and arbitrary-level sharp converse.
+- `src/verify_two_column_lmin_obstruction.py` and
+  `results/two_column_lmin_obstruction.json` — abstract load-pattern,
+  five-player budget, and generalized realization audit.
+- `paper3/TIGHT_DEFICIT_COMPLETION_THEOREM.md` — coalitional completion-cost
+  invariant and zero-cost tight-cone criterion.
+- `src/verify_tight_deficit_completion.py` and
+  `results/tight_deficit_completion.json` — exact equality-case audit for the
+  five- and seven-player obstruction families.
 - `paper3/wrapper.pdf` — compiled paper.
 
 ## Central claim
@@ -72,6 +82,28 @@ only to pairs tight at `phi=Lmin(v)` implies exact partition at Lmin.
     obstruction or lower-envelope realization in exact-game, exact-partition,
     core-polytope, lattice-of-tight-sets, and balanced-hypergraph literature.
     Do not infer novelty from the elementary nature of the proof.
+15. Verify the stronger two-column normal form.  Does uniform target load and
+    strict outside underload force the meet of the two crossing support
+    coalitions to equal the target suffix?  Does exactness of the target face
+    imply `s_phi(H)<=s_phi(R)` without an unstated positivity assumption?
+16. Audit necessity and sufficiency of the arbitrary-level capacity condition
+    `|C|>=2 or b|R|>=a`, the generalized slack formulas, and the Lmin proof
+    after subtracting the lower payoff floor.
+17. Determine whether the two-column normal form or exterior-slack inequality
+    is already a named corollary of exact balancedness, minimal exact-balanced
+    collections, or a published tight-set lattice theorem.
+18. Audit the deficit-completion theorem at `beta=0`, the attainment and
+    zero-cost characterization of `kappa`, and the claim that arbitrary
+    poorer-side coalition completion can strictly improve singleton
+    completion. Verify the exact gap formula
+    `kappa=d dot phi_L-omega_v,L(d)`. Separate the elementary exact-balanced
+    inequality from the proposed Lmin obstruction invariant. Treat the
+    displayed identity explicitly as a Studený--Kratochvíl semi-balanced
+    system with exceptional set `H`, not as a new type of inequality.
+19. Check both asserted equality cases from the original game data, including
+    all cover loads, completion coefficients, target slack, and completion
+    coalition slack. Search for an equivalent covering functional in exact
+    balancedness, core-face, blocker, and set-cover literature.
 
 ## Reproduction
 
@@ -82,6 +114,10 @@ python src/verify_uncrossing_defect_budget.py \
   --output results/uncrossing_defect_budget.json
 python src/verify_binary_broken_diamond_realization.py \
   --output results/binary_broken_diamond_realization.json
+PYTHONPATH=src python src/verify_two_column_lmin_obstruction.py \
+  --output results/two_column_lmin_obstruction.json
+PYTHONPATH=src python src/verify_tight_deficit_completion.py \
+  --output results/tight_deficit_completion.json
 cd paper3
 pdflatex -interaction=nonstopmode -halt-on-error wrapper.tex
 pdflatex -interaction=nonstopmode -halt-on-error wrapper.tex

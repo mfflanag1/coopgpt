@@ -101,6 +101,8 @@ version.  The count is a database snapshot, not an exhaustive citation count.
 | Supermodularity only on Lmin-tight pairs forces exact partition; every failure has a minimum-energy crossing pair with positive uncrossing defect | Not found; uncrossing and convex-game egalitarian results are classical | Present the local-at-Lmin domain and converse defect as candidate new; do not claim uncrossing, supermodularity, or the convex-game consequence themselves. |
 | Along an integral uncrossing, signed local supermodularity defects telescope exactly to final weighted core slack and quantitatively bound target-face slack | Not found; slack telescoping and uncrossing energy are elementary/classical mechanisms | Present the exact-face defect budget as a candidate new bridge, not a new uncrossing identity, pending submodular-optimization and exact-game review. |
 | Every nontrivial payoff-oriented broken tight diamond needs five players in a singleton-normalized exact game, and both minimal four-cell shapes admit one binary lower-envelope realization | Not found; tight-set lattices, lower envelopes of core polytopes, and uncrossing are classical | Present the sharp capacity argument and universal realization as a candidate structural explanation of the four/five threshold, pending exact-game and lattice-specialist review. |
+| Every two-column strict Lmin failure has meet exactly equal to the failed suffix and obeys the exterior-slack budget `s_phi(H)<=s_phi(R)`; the arbitrary-level lower-envelope converse is sharp | Not found; the incidence identity is an elementary exact-balanced collection | Present the normal form, its Lmin interpretation, and sharp converse as the candidate contribution; do not claim the underlying exact-balanced identity as new. |
+| The minimum poorer-side coalition-slack cost of completing a strict Lmin cover's deficit bounds target slack; zero completion cost is equivalent to membership in the poorer tight-set cone; the support-two and support-three families saturate the bound | The incidence identity and inequality are established semi-balanced/exact-balanced theory (Studený--Kratochvíl 2022; Lohmann--Borm--Herings 2012). The Lmin-selected restricted functional and equality-case unification were not found. | Claim only the Lmin selection, minimum-cost invariant, cone criterion, and unification of equality cases as candidates; explicitly attribute the semi-balanced inequality and standard covering LP. |
 
 ## Why the known four-player theorem does not subsume this one
 
@@ -173,6 +175,15 @@ discrete-side-payment, and characteristic-function papers listed above.
    it readily checkable, not automatically novel; a specialist must search
    for the same four-cell capacity argument under core-polytope, tight-set,
    balanced-hypergraph, or exact-balancedness terminology.
+7. The two-column exterior budget is algebraically close to published exact
+   balancedness. A specialist must distinguish any novelty in the oriented
+   Lmin normal form and sharp converse from the elementary slack inequality
+   once the four-cell identity has been written down.
+8. The deficit-completion inequality itself is elementary after its incidence
+   identity is displayed and is encompassed by published semi-balanced-system
+   theory. Any significance must come from the Lmin-selected restricted LP,
+   its zero-cost domain, and a nontrivial classification of its positive-cost
+   extreme rays—not from repackaging exact balancedness.
 
 Accordingly, the defensible current claim is **a credible, apparently new
 structural classification in a specialized part of cooperative game theory**.

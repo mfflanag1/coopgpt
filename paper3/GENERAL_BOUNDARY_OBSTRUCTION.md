@@ -835,3 +835,43 @@ or in `R`, and both shapes are realized.  See
 `paper3/BINARY_BROKEN_DIAMOND_REALIZATION.md`.  The next nonlocal question is
 whether arbitrary minimal positive-defect Lmin failures admit a reduction to
 binary broken diamonds or require genuinely higher circuit types.
+
+The two-column case is now completely classified, not merely realized.  If a
+strict tight cover of a slack richer suffix `H` uses two coalitions, their
+intersection is forced to equal `H`; their two difference arms and exterior
+form the other three nonempty Venn cells.  Exactness gives the conservation
+inequality
+
+```text
+0 < s_phi(H) <= s_phi(R),
+```
+
+where `R` is the exterior coalition.  Conversely, at arbitrary payoff levels
+`a>b>0`, the two-constraint lower envelope is singleton-normalized exactly
+when the intersection contains at least two players or the exterior payoff
+mass satisfies `b|R|>=a`.  This yields a complete dimension-free normal form
+and sharp converse for support two.  Together with the complete support-three
+half-integral tier, it shifts the open problem from finding examples to
+classifying minimal balanced packets by support and their associated slack
+budgets.  See `paper3/TWO_COLUMN_LMIN_OBSTRUCTION.md`.
+
+The singleton completion budget also admits a strictly sharper coalitional
+form.  Given a strict tight cover with rich load `alpha`, choose
+`beta<alpha` above every poor load and complete the poor deficit vector
+`d_i=beta-c_i` by arbitrary coalitions contained in the poor side.  Exact
+balancedness gives
+
+```text
+(alpha-beta)s_phi(H)
+    <= minimum completion sum_Q nu_Q s_phi(Q).
+```
+
+The minimum is zero exactly when the deficit lies in the incidence cone of
+poor-side coalitions tight at Lmin.  This defines a canonical obstruction
+invariant: every failure is a positive-cost ray of a tight-set completion
+cone.  The five-player two-column family and seven-player three-trace family
+both saturate it, with costs `1` and `1/2`.  This is the first theorem in the
+program that places distinct circuit families under one variational object;
+see `paper3/TIGHT_DEFICIT_COMPLETION_THEOREM.md`.  Its algebra is an immediate
+exact-balanced slack calculation, so novelty attaches only to the Lmin
+completion invariant and its structural use.
