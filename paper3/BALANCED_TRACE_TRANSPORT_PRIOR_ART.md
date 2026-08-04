@@ -38,6 +38,15 @@ or any of the following sharp consequences:
 - without the label-density hypothesis, averaging dual rows still exposes a
   canonical proper internal rich face governed by the exact-face overload
   budget, suggesting a recursive minor-lifting invariant;
+- an underloaded packet violates an explicit integral set-cover objective at
+  the unit threshold, with column cost `|T intersect H|+1_{b in T}`;
+- after adjoining the two poor incidences as rows and singleton dummy
+  columns, the packet gives a nonintegral set-partitioning point and hence a
+  label-aware odd balanced-matrix obstruction;
+- the degenerate-projective-plane MNI exception is incompatible with the
+  required poor-load ordering, while a positive Lehman minor lift needs only
+  preserve the scalar gaining-player deficit: that condition automatically
+  makes every contracted column poor-label-free;
 - at the first feasible four-player richer suffix, every failure has the
   four-co-singleton `1/3` vertex, the unique surviving fractional packet;
 - projective-plane incidence packets satisfying the overlap-sensitive bound
@@ -113,7 +122,10 @@ remains required.
    role as cores of nondegenerate minimally nonideal matrices. The manuscript
    now cites this identity as prior art. Its candidate new contribution is
    the two-poor labeling count and the observation that each positive dual
-   row becomes a forbidden exact-game rooted cover.
+   row becomes a forbidden exact-game rooted cover. The unit-gap and
+   deficit-preserving calculations should likewise be treated as proposed
+   bridges to this classical theory, not as extensions of Lehman's theorem
+   unless specialist review confirms that characterization.
 10. **Lmin/Lmax comparisons and monotonicity.** Dietzenbacher (2021),
    [*Monotonicity and egalitarianism*](https://doi.org/10.1016/j.geb.2021.03.006),
    compares Lmin, Lmax, and PES on broader domains and records prior

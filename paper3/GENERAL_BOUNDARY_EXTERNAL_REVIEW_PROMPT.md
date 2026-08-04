@@ -46,6 +46,15 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
   unique-richest threshold and the later rooted trace roundings.
 - `coopgames/paper3/LEHMAN_TRACE_OBSTRUCTION.md`: reduction of positive Lehman
   dual rows to rooted covers and the new two-poor-label density criterion.
+- `coopgames/paper3/LEHMAN_MINOR_LIFTING.md`: proof that preserving only the
+  gaining-player deficit automatically removes both poor labels from every
+  contracted column and lifts the Lehman conclusions to the original suffix.
+- `coopgames/paper3/UNIT_GAP_MNI_BRIDGE.md`: explicit integral-cost set-cover
+  gap whose strict unit threshold is equivalent to the gaining-player deficit.
+- `coopgames/paper3/DEGENERATE_MNI_TRACE_EXCLUSION.md`: human elimination of
+  the exceptional degenerate-projective-plane branch of Lehman's MNI theorem.
+- `coopgames/paper3/LABELED_ODD_CYCLE_OBSTRUCTION.md`: augmented balanced-
+  matrix proof retaining poor labels as rows rather than side annotations.
 - `coopgames/paper3/H4_FIRST_OBSTRUCTION_CLASSIFICATION.md`: human
   classification proving uniqueness of the first surviving obstruction.
 - `coopgames/paper3/PROJECTIVE_PLANE_TRACE_EXCLUSION.md`: human
@@ -170,6 +179,29 @@ falsification searches.  Please do not count their no-hit output as proof.
    verify the displacement inequality, positivity of its root coordinate,
    strict negativity of `Delta(D)`, and the conversion
    `v(D)<=z(D)` into slack amplification.
+   Audit the deficit-preserving minor lift separately. Check the algebra
+   from (LM-1) and (LM-4) to `t_a=t_b=0` and `|U|<|V|<r`; check that adding
+   the contracted columns produces exactly the claimed rich load; and check
+   that their tightness and disjoint traces suffice for the strict lower
+   bound in (LM-3). Decide whether reducing label preservation to one scalar
+   deficit is genuinely useful or merely repackages the unresolved step.
+   Audit the unit-gap bridge: verify the fractional cost identity, the split
+   between overlapping integral covers and exact partitions, and the use of
+   the displacement inequality to force every integral partition to contain
+   the gaining player. Assess whether standard cost-aware MNI reductions
+   preserve this particular gap or whether a new relative-minor theorem is
+   still required.
+   Audit the degenerate-MNI exclusion: verify the unique fractional weights,
+   the deduction `r_a<r_b<1`, both cases `v_0=0,1`, and that the chosen pair
+   `R_0,R_i` always has exactly one duplicated rich row and safe nonzero poor
+   load. Confirm the matrix orientation agrees with the classical exception.
+   Audit the labeled odd-cycle theorem: check `r_a<r_b<1`, feasibility of the
+   two dummy weights, the claim that every integral exact cover has gaining
+   dummy coordinate zero, and the balanced-matrix contrapositive. Check that
+   dummy columns truly cannot enter the forbidden odd submatrix, and identify
+   precisely what label or spanning information the resulting cycle may
+   still omit. Then audit the two one-label strengthenings separately,
+   especially the convex-decomposition argument for the losing-row matrix.
    Assess whether this certificate is strong enough to support a recursive
    minor-lifting theorem or is only a weak necessary inequality.
    Then audit the rank-two trace exclusion: prove the extreme-point support

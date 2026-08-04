@@ -107,6 +107,34 @@ theorem, canonically amplifies the suffix slack onto a proper internal rich
 face. This is the candidate recursive invariant for lifting
 minimally-nonideal contractions.
 
+## Contractions need only preserve one scalar deficit
+
+Suppose a classical minor lift adjoins unit-weight contracted columns whose
+disjoint traces partition the rich rows outside a positive Lehman core. Let
+`t_a,t_b` count their losing- and gaining-poor labels. The combined tight
+packet satisfies
+
+```text
+-sigma + (t_a+|U|/r) Delta_a
+       + (t_b+|V|/r) Delta_b >= 0.
+```
+
+If its total gaining load is below one, then `t_b=0`, `|V|<r`, and substitution
+of `Delta_b=sigma-Delta_a` forces
+
+```text
+r t_a + |U| < |V|.
+```
+
+Hence `t_a=t_b=0` and `|U|<|V|<r`: every contracted column is automatically
+poor-label-free. Adding those neutral columns to a safe Lehman dual row gives
+the same rooted cover of the original suffix, and adding them to the averaged
+dual rows preserves the strict internal-face amplification. The unresolved
+minor step is therefore only preservation of the scalar gaining-player load
+below one, not separate preservation of two label sets. See
+`LEHMAN_MINOR_LIFTING.md` for the standalone statement and
+Corollary `cor:lx-deficit-preserving-lehman-minor` for the proof.
+
 ## Structural significance
 
 This theorem places the earlier arguments in a standard combinatorial
@@ -119,11 +147,19 @@ framework:
 - the sharp co-singleton support `J-I` instead satisfies the opposite-sign
   identity `(J-I)I=J-I`, so it is not eliminated by the positive theorem.
 
+The other classical branch of the minimally-nonideal theorem, a degenerate
+projective plane, is eliminated directly by
+`DEGENERATE_MNI_TRACE_EXCLUSION.md`. Its unique nonuniform fractional cover
+always yields a safe two-column rooted rounding under the required poor-load
+ordering. The explicit objective in `UNIT_GAP_MNI_BRIDGE.md` proves that an
+underloaded active trace matrix is nonideal and identifies the scalar
+underload with a strict unit set-cover gap.
+
 This is a genuine structural distinction, not a classification yet.  Two
 steps remain before one can claim a dimension-free characterization:
 
-1. reduce an arbitrary nonintegral active exact-cover packet to a Lehman core
-   while preserving the two poor labels through deletions and contractions;
+1. reduce an arbitrary underloaded active exact-cover packet to a positive
+   Lehman core while preserving its scalar gaining-player deficit below one;
 2. settle the two-label selection problem when (LH-D) fails.
 
 The classical source is Cornuéjols, Guenin, and Tunçel, *Lehman matrices*,

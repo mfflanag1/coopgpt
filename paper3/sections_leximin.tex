@@ -3007,6 +3007,217 @@ omitted, its right side is $\phi_j$.  The strict boundary gives
 $k\phi_d>\phi_j\geq0$ in either case, a contradiction.
 \end{proof}
 
+The underloaded packet also gives a cost-sensitive bridge to the classical
+set-covering polyhedron, rather than only a qualitative nonintegrality
+statement.
+
+\begin{theorem}[unit-gap set-cover bridge]
+\label{thm:lx-unit-gap-set-cover}
+Let $v$ be singleton-normalized and exact, let
+$\phi=\operatorname{Lmin}(v)$, and let $H$ be a slack cumulative richer
+suffix at a strict boundary with poorer side $\{a,b\}$.  Choose a core point
+$z$ exact on $H$ and label the poor players so that, for
+$\Delta=z-\phi$,
+\[
+ \Delta_a<0<\Delta_b.
+\]
+Suppose a lifted exact-cover packet of proper $\phi$-tight coalitions has
+unit rich incidence on $H$ and gaining-player load $r_b<1$.
+
+Let $M$ be its rich trace-incidence matrix, retaining duplicate lifted
+columns, and give a column $T$ the integral cost
+\[
+ c_T:=|T\cap H|+\mathbf1_{\{b\in T\}}.             \tag{UG-1}
+ \label{eq:lx-unit-gap-cost}
+\]
+Then
+\[
+ \min\{c^\top x:Mx\geq\mathbf1_H,\ x\geq0\}
+ <|H|+1
+ \leq
+ \min\{c^\top y:My\geq\mathbf1_H,\ y\in\mathbb Z_+^{\mathcal T}\}.
+                                                               \tag{UG-2}
+ \label{eq:lx-unit-gap}
+\]
+In particular, $M$ is nonideal.  For every lifted exact-cover point $x$,
+its cost is exactly $|H|+r_b(x)$; hence preservation of the strict unit gap
+after lifting a minor point back to $H$ with the original costs is equivalent
+to preservation of gaining-player load below one.
+\end{theorem}
+
+\begin{proof}
+The given fractional packet has total rich incidence $|H|$, so its cost is
+$|H|+r_b<|H|+1$.  Now take an integral cover $y$ and let
+\[
+ m:=\sum_T|T\cap H|y_T.
+\]
+Since every rich row is covered, $m\geq|H|$.  If $m>|H|$, integrality gives
+$m\geq|H|+1$, and the claimed cost bound follows.  If $m=|H|$, every rich
+row is covered exactly once.  Were its $b$-load zero, summing at $z$ the
+tight-coalition inequalities selected by $y$ would give
+\[
+ 0\leq\sum_Ty_T\Delta(T)
+   =\Delta(H)+r_a(y)\Delta_a
+   =-\bigl(\phi(H)-v(H)\bigr)+r_a(y)\Delta_a<0,
+\]
+which is impossible.  Thus its integral $b$-load is at least one and again
+$c^\top y\geq|H|+1$.  Finally, any exact-cover point has total rich
+incidence $|H|$, so \eqref{eq:lx-unit-gap-cost} gives the last assertion.
+\end{proof}
+
+There is also a label-preserving balanced-matrix formulation.  Instead of
+trying to carry the poor labels alongside a rich-side minor, make them rows
+of the matrix before taking any obstruction.
+
+\begin{theorem}[labeled odd-cycle necessity]
+\label{thm:lx-labeled-odd-cycle}
+In the setting of Theorem~\ref{thm:lx-unit-gap-set-cover}, let a lifted
+packet have poor loads $r_a,r_b$ with $r_b<1$.  Form the zero--one matrix
+$\widehat M$ whose rows are $H\cup\{a,b\}$ and whose original columns are
+the full player-incidence vectors of the lifted tight coalitions.  Adjoin
+two dummy columns $e_a,e_b$, supported only on their named poor rows.
+Then the exact-cover polytope
+\[
+ \{x\geq0:\widehat Mx=\mathbf1_{H\cup\{a,b\}}\}   \tag{LO-1}
+ \label{eq:lx-labeled-exact-cover}
+\]
+is nonintegral.  Consequently $\widehat M$ is not balanced and contains an
+odd-order square submatrix with exactly two ones in every row and column.
+Neither dummy column belongs to such a submatrix, so the odd cycle uses only
+original lifted tight coalitions while retaining whichever poor-label rows
+it meets.
+\end{theorem}
+
+\begin{proof}
+The packet inequality and $r_b<1$ imply $r_a<r_b$: indeed, with
+$\sigma=\phi(H)-v(H)$ and $\Delta_b=\sigma-\Delta_a$,
+\[
+ 0\leq-\sigma+r_a\Delta_a+r_b\Delta_b
+   =(r_b-1)\sigma+(r_a-r_b)\Delta_a,
+\]
+where the first term is negative and $\Delta_a<0$.  Thus both poor loads
+are below one.  Extend the packet by assigning dummy weights $1-r_a$ and
+$1-r_b$.  This gives a feasible point of
+\eqref{eq:lx-labeled-exact-cover} with strictly positive $e_b$ coordinate.
+
+In any integral point of \eqref{eq:lx-labeled-exact-cover}, the selected
+original columns partition $H$ and load each poor row at most once.  If the
+$e_b$ dummy were selected, no original selected coalition would contain
+$b$.  Summing their tight-coalition inequalities at $z$ would then give
+\[
+ 0\leq\Delta(H)+q_a\Delta_a=-\sigma+q_a\Delta_a<0,
+\]
+where $q_a\in\{0,1\}$, a contradiction.  Hence every integral point has
+$e_b$ coordinate zero.  The displayed fractional point cannot lie in the
+convex hull of the integral points, proving nonintegrality.
+
+Balanced zero--one matrices have integral set-partitioning polytopes
+\citep{Berge1972}; the contrapositive and the forbidden-submatrix
+characterization give the odd cycle.  A dummy column has only one nonzero
+entry in the entire matrix, so it cannot occur in a submatrix having two
+ones in every column.
+\end{proof}
+
+\begin{corollary}[two one-label odd-cycle obstructions]
+\label{cor:lx-two-one-label-cycles}
+Under the hypotheses of Theorem~\ref{thm:lx-labeled-odd-cycle}, form
+$\widehat M_a$ from the original lifted columns restricted to
+$H\cup\{a\}$ and a dummy singleton column $e_a$.  Define
+$\widehat M_b$ analogously on $H\cup\{b\}$.  The exact-cover polytope of
+each matrix is nonintegral.  Hence each matrix contains an odd-order square
+submatrix with two ones in every row and column, using only original lifted
+tight coalitions.  Thus one odd-cycle obstruction lives on rows contained in
+$H\cup\{a\}$ and a second lives on rows contained in $H\cup\{b\}$.
+\end{corollary}
+
+\begin{proof}
+For $\widehat M_b$, extend the packet by dummy weight $1-r_b>0$.  In every
+integral exact cover the original columns partition $H$.  Selecting $e_b$
+would make their $b$-load zero, and their displacement sum would be
+$-\sigma+q_a\Delta_a<0$, impossible.  Thus every integral point has dummy
+coordinate zero, whereas the displayed fractional point does not.
+
+For $\widehat M_a$, extend the packet by dummy weight $1-r_a>0$.  If its
+exact-cover polytope were integral, this point would be a convex combination
+of integral exact covers.  Every such cover partitions $H$ and has
+$a$-load at most one.  Its integer $b$-load cannot be zero, again because
+$-\sigma+q_a\Delta_a<0$.  Hence every integral point has $b$-load at least
+one, while their convex combination has $b$-load $r_b<1$, a contradiction.
+
+Both matrices are therefore nonbalanced.  Their dummy columns have only one
+nonzero entry and cannot belong to the corresponding forbidden odd
+submatrices.
+\end{proof}
+
+\begin{corollary}[unconditional labeled obstruction]
+\label{cor:lx-unconditional-labeled-obstruction}
+Every slack cumulative richer suffix at a strict Lmin boundary with exactly
+two poorer players furnishes an extreme lifted packet whose rich trace matrix
+has the strict unit gap \eqref{eq:lx-unit-gap} and whose poor-row-augmented
+incidence matrix contains the labeled odd cycle of
+Theorem~\ref{thm:lx-labeled-odd-cycle}; moreover, both one-label augmented
+matrices have the odd-cycle obstructions of
+Corollary~\ref{cor:lx-two-one-label-cycles}.
+\end{corollary}
+
+\begin{proof}
+Use the packet mixture in
+Theorem~\ref{thm:lx-balanced-trace-transport} and label its common exact-face
+displacement by $\Delta_a<0<\Delta_b$.  Its average $b$-load is below one,
+so some positive-weight extreme packet has $r_b<1$.  Apply
+Theorems~\ref{thm:lx-unit-gap-set-cover} and
+\ref{thm:lx-labeled-odd-cycle}, and then
+Corollary~\ref{cor:lx-two-one-label-cycles}, to that packet.
+\end{proof}
+
+The exceptional minimally-nonideal family in Lehman's theorem is incompatible
+with this underload, independently of the positive Lehman equation.
+
+\begin{theorem}[degenerate-MNI trace exclusion]
+\label{thm:lx-degenerate-mni-exclusion}
+In the setting of Theorem~\ref{thm:lx-unit-gap-set-cover}, an underloaded
+packet cannot have the trace support of a degenerate projective plane.
+Explicitly, let its rich rows be $h_0,h_1,\ldots,h_t$, $t\geq2$, and its
+columns be
+\[
+ R_0=\{h_1,\ldots,h_t\},
+ \qquad R_i=\{h_0,h_i\}\quad(1\leq i\leq t),       \tag{DP-1}
+ \label{eq:lx-degenerate-mni}
+\]
+with their unique fractional exact-cover weights
+$(t-1)/t,1/t,\ldots,1/t$.  No lifting of these columns to proper
+$\phi$-tight coalitions can have gaining-player load below one and satisfy
+the packet transport inequality.
+\end{theorem}
+
+\begin{proof}
+Let $u_0,v_0\in\{0,1\}$ record whether the lift of $R_0$ contains $a,b$,
+and let $u,v$ count the leaf columns $R_i$ containing $a,b$.  The poor loads
+are
+\[
+ r_a=\frac{(t-1)u_0+u}{t},
+ \qquad
+ r_b=\frac{(t-1)v_0+v}{t}.
+\]
+The packet inequality, $\Delta_b=\sigma-\Delta_a$, $r_b<1$, and
+$\Delta_a<0$ give
+\[
+ 0\leq(r_b-1)\sigma+(r_a-r_b)\Delta_a,
+\]
+so necessarily $r_a<r_b$.
+
+If $v_0=0$, then $1\leq v\leq t-1$.  The strict load inequality forces
+$u_0=0$ and $u<v$, so some $i$ has $R_i$ labeled by $b$ but not by $a$.
+Select the lifts of $R_0$ and $R_i$.  If $v_0=1$, underload forces $v=0$,
+while $r_a<r_b=(t-1)/t$ forces $u_0=0$ and $u\leq t-2$; choose a leaf
+$R_i$ not labeled by $a$.  In this case select the same two lifted columns.
+
+In either case their rich incidence is
+$\mathbf1_H+e_{h_i}$, and their poor incidence is nonzero and zero--one.
+They form a safe rooted tight cover, contradicting
+Theorem~\ref{thm:lx-rooted-semigroup-obstruction}.
+\end{proof}
+
 \begin{theorem}[positive-Lehman trace exclusion]
 \label{thm:lx-positive-lehman-trace-exclusion}
 Let $v$ be a singleton-normalized exact game, let
@@ -3090,6 +3301,113 @@ bound \eqref{eq:lx-linear-lehman-density} is the coarse global density bound
 used below.  By contrast, the surviving co-singleton support $J-I$ satisfies
 the opposite-sign identity $(J-I)I=J-I$, not a positive Lehman identity;
 this locates the sharp family on the other side of the structural divide.
+
+The apparent label-preservation problem in lifting a Lehman minor has a
+useful one-sided resolution.  It is enough to preserve the gaining-player
+deficit; the transport inequality then removes both poor labels from every
+contracted column automatically.
+
+\begin{corollary}[deficit-preserving Lehman-minor lift]
+\label{cor:lx-deficit-preserving-lehman-minor}
+Let $v$ be singleton-normalized and exact, let
+$\phi=\operatorname{Lmin}(v)$, and let $H$ be a slack cumulative richer
+suffix at a strict boundary with poorer side $\{a,b\}$.  Let $z$ be a core
+point exact on $H$, put $\Delta=z-\phi$, and label the poor players so that
+$\Delta_a<0<\Delta_b$.  Let
+$\mathcal F$ be lifted proper $\phi$-tight coalitions, taken with unit
+weight, whose pairwise disjoint rich traces partition $H\setminus K$ for
+some nonempty $K\subseteq H$.  On the remaining rows $K$, suppose lifted
+tight coalitions have rich traces contained in $K$, square trace matrix $A$,
+uniform weight $1/r$, and a positive Lehman dual $B$ satisfying
+\[
+ AB^\top=J+kI,
+\]
+with $A$ $r$-regular and $B$ $s$-regular.  Let $U,V$ label the core
+columns containing respectively $a,b$, and let $t_a,t_b$ count the members
+of $\mathcal F$ containing respectively $a,b$.
+
+If the combined lifted packet has gaining-player load below one,
+\[
+ t_b+\frac{|V|}{r}<1,                              \tag{LM-1}
+ \label{eq:lx-lehman-minor-deficit}
+\]
+then
+\[
+ t_a=t_b=0,
+ \qquad 0\leq |U|<|V|<r.                           \tag{LM-2}
+ \label{eq:lx-lehman-minor-labels}
+\]
+Consequently the combined packet is impossible whenever
+\eqref{eq:lx-lehman-density} holds (or under either of its sufficient
+conditions in Theorem~\ref{thm:lx-positive-lehman-trace-exclusion}).
+
+Without a density hypothesis, put $T=s|V|$.  There is a nonempty proper
+$D\subset K$ with $|D|=T$ and, writing
+\[
+ u(D):=\sum_{d\in D}|\operatorname{row}_d(B)\cap U|,
+\]
+one has $u(D)<T$ and
+\[
+ \phi(H)-v(H)<s_\phi(D)
+ \leq\frac{T-u(D)}{k}\phi_a.                       \tag{LM-3}
+ \label{eq:lx-lehman-minor-face}
+\]
+\end{corollary}
+
+\begin{proof}
+Write $\sigma=\phi(H)-v(H)>0$.  Summing at the exact point $z$ all
+tight-coalition inequalities in the combined packet gives
+\[
+ -\sigma+
+ \left(t_a+\frac{|U|}{r}\right)\Delta_a+
+ \left(t_b+\frac{|V|}{r}\right)\Delta_b\geq0.      \tag{LM-4}
+ \label{eq:lx-lehman-minor-transport}
+\]
+Condition~\eqref{eq:lx-lehman-minor-deficit} first gives $t_b=0$ and
+$|V|<r$.  Since $\Delta_b=\sigma-\Delta_a$, the left side of
+\eqref{eq:lx-lehman-minor-transport} is
+\[
+ \left(\frac{|V|}{r}-1\right)\sigma+
+ \left(t_a+\frac{|U|-|V|}{r}\right)\Delta_a.
+\]
+The first term is strictly negative and $\Delta_a<0$.  Hence the second
+coefficient is negative, so $rt_a+|U|<|V|$.  This proves
+\eqref{eq:lx-lehman-minor-labels}.  In particular every member of
+$\mathcal F$ is poor-label-free.
+
+Under the density condition, the counting argument in
+Theorem~\ref{thm:lx-positive-lehman-trace-exclusion} supplies a row $d$ of
+$B$ meeting $V$ once and $U$ at most once.  Select that dual row together
+with every member of $\mathcal F$.  The latter cover $H\setminus K$ once,
+and the Lehman identity gives load $\mathbf1_K+k e_d$ on $K$.  The total
+rich load is therefore $\mathbf1_H+k e_d$, while the poor load is nonzero
+and zero--one.  This is a safe rooted tight cover, contradicting
+Theorem~\ref{thm:lx-rooted-semigroup-obstruction}.
+
+For the final assertion, let $P$ be the dual rows meeting $V$.  Since
+$|P|\leq s|V|=T$, extend $P$ to a row set $D$ of size $T$.  This is a
+proper subset of $K$ because $1+k\leq s$, $|V|<r$, and
+$T\leq s(r-1)=|K|+k-s<|K|$; moreover
+$u(D)\leq s|U|<s|V|=T$.  Average those rows
+and add every member of $\mathcal F$ with unit weight.  The resulting rich
+load is $\mathbf1_H+(k/T)\mathbf1_D$, its $b$-load is one, and its $a$-load
+is $u(D)/T<1$.  Corollary~\ref{cor:lx-exact-face-overload} gives the weak
+upper bound in \eqref{eq:lx-lehman-minor-face}.
+
+For $d\in K\setminus D$, select the $d$th dual row together with
+$\mathcal F$.  Its displacement inequality is
+\[
+ -\sigma+k\Delta_d+u_d\Delta_a\geq0,
+ \qquad u_d:=|\operatorname{row}_d(B)\cap U|,
+\]
+so $\Delta_d>0$.  Every member of $\mathcal F$ is now a coalition contained
+in $H$ and is tight at $\phi$, hence its displacement at $z$ is
+nonnegative.  Their disjoint traces partition $H\setminus K$, so
+$\Delta(H\setminus K)\geq0$.  Since $K\setminus D$ is nonempty,
+$\Delta(H\setminus D)>0$.  Therefore
+$\Delta(D)=-\sigma-\Delta(H\setminus D)<-\sigma$, and core feasibility on
+$D$ gives $s_\phi(D)>\sigma$, as claimed.
+\end{proof}
 
 Even when the density test does not produce one safe dual row, positive
 Lehman duality still forces a nontrivial internal exact-face certificate.

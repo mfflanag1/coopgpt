@@ -289,6 +289,47 @@ not merely the packets caught by a safe singleton root. In particular, a
 positive Lehman obstruction strictly amplifies slack onto a proper internal
 rich coalition; it cannot be a terminal obstruction.
 
+The classical minor-lifting bottleneck can now be reduced to one scalar
+invariant. If contracted trace columns are adjoined with unit weight to a
+positive Lehman core and the lifted packet still loads the gaining poor
+player by less than one, its transport inequality forces every contracted
+column to contain neither poor player and forces the core labels to satisfy
+`|U|<|V|<r`. Consequently both the safe-root exclusion and the strict
+internal-face amplification lift through all such contractions. The only
+remaining minor question is whether the gaining-player deficit itself can
+always be preserved; separate preservation of both label sets is unnecessary.
+See `paper3/LEHMAN_MINOR_LIFTING.md`.
+
+That scalar has an ordinary set-cover interpretation. Assign each lifted
+tight column the integral cost `|T intersect H|+1_{b in T}`, where `b` is the
+gaining poor player. An underloaded fractional packet costs strictly less
+than `|H|+1`, while every integral set cover costs at least `|H|+1`: an
+integral cover with no incidence overlap is a partition, and the transport
+inequality forces every such partition to use `b`. Thus the active matrix is
+nonideal for an explicit integral objective, and preserving the unit cost gap
+is exactly equivalent to preserving gaining load below one. See
+`paper3/UNIT_GAP_MNI_BRIDGE.md`.
+
+The exceptional degenerate-projective-plane branch of Lehman's MNI theorem
+is eliminated outright. Its unique fractional cover has weights
+`(t-1)/t,1/t,...,1/t`; the transport inequality forces losing load strictly
+below gaining load, and a two-case label count always finds columns `R_0,R_i`
+with rich load `1_H+e_i` and safe nonzero poor load. Thus any
+deficit-preserving MNI reduction must enter the positive Lehman branch. See
+`paper3/DEGENERATE_MNI_TRACE_EXCLUSION.md`.
+
+There is also a label-aware odd-cycle theorem. Append the two poor-player
+incidences as matrix rows and add singleton dummy columns for them. The
+underloaded packet extends to a fractional exact cover with positive gaining
+dummy weight, whereas every integral exact cover must have gaining dummy
+weight zero by the transport inequality. The augmented matrix is therefore
+nonbalanced and contains an odd cycle made entirely of original tight
+coalitions. Unlike the rich-only odd cycle, this certificate retains any poor
+rows that it meets. More strongly, both one-label augmentations are
+nonbalanced separately, producing an odd-cycle channel on `H union {a}` and
+another on `H union {b}`. See
+`paper3/LABELED_ODD_CYCLE_OBSTRUCTION.md`.
+
 The graph-like case can be eliminated completely. If every active trace on
 `H` has size at most two, each extreme exact cover is a disjoint union of
 singleton blocks, isolated edges, and half-weight odd cycles. A packet with
