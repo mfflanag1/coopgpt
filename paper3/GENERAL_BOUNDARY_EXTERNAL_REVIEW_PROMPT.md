@@ -13,7 +13,7 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/paper3/GENERAL_BOUNDARY_OBSTRUCTION.md`: expanded derivation,
   prior-art boundary, and research interpretation.
 - `coopgames/paper3/N4_N5_STRUCTURAL_THRESHOLD.md`: standalone sacrifice-budget
-  proof and minimal integral five-player witness.
+  proof and four-generator obstruction family for every dimension at least five.
 - `coopgames/paper3/N5_N6_SMALL_POORER_THRESHOLD.md`: standalone statement and
   human proof of the six-player construction.
 
@@ -25,6 +25,8 @@ exact-balanced boundary framework and the sharp small-poorer boundary result.
 - `coopgames/results/n5_small_poorer_suffix.json`
 - `coopgames/src/verify_n5_unique_richest_boundary.py`
 - `coopgames/results/n5_unique_richest_boundary.json`
+- `coopgames/src/verify_unique_richest_family.py`
+- `coopgames/results/unique_richest_family.json`
 - `coopgames/src/verify_n6_two_poorer_suffix_counterexample.py`
 - `coopgames/results/n6_two_poorer_suffix_counterexample.json`
 
@@ -49,11 +51,14 @@ falsification searches.  Please do not count their no-hit output as proof.
 5. In the five-player monotonicity example, verify
    `1_135 + 1_345 + 1_2 - 1_35 = 1_N`, the four coalition slacks, and the claim
    that the exact boundary-defect optimum is one.
-6. Audit the human unique-richest four/five theorem.  Does the protector
+6. Audit the human unique-richest threshold theorem.  Does the protector
    packing exhaust all one-, two-, and three-poorer-player configurations?
-   In the five-player lower envelope, do the four displayed coalition values
-   prove `Lmin=(1,1,1,1,2)` and does
-   `1_35+1_45+1_1+1_2-1_5=1_N` attain the slack budget at equality?
+   For every `m>=4`, do the four parametric generators have common total and
+   define an exact lower-envelope game?  Do the four displayed coalition
+   values force `Lmin=(1^m,m-2)`?  Does the circuit
+   `1_{3r}+1_{4r}+sum_{i in P\{3,4}}1_i-1_r=1_N` attain the slack budget at
+   equality?  Check the endpoint `m=4` separately, where the coefficient of
+   `e5=er` in `(m-4)e5` is zero.
 7. For the five-player small-poorer lower bound, inspect whether the imported
    definition-level exact-face and stagewise KKT encoding genuinely covers all
    ordered stratum compositions and every boundary after one or two cumulative
@@ -74,9 +79,9 @@ core literature:
 - the quantitative slack-budget reading `(SB-H)`;
 - the protector-completion/boundary-cover inequality `(BC)`;
 - the canonical boundary-defect LP `(BD)`;
-- the sacrifice-budget interpretation and sharp unique-richest four/five
-  threshold;
-- the four-generator integral game with `Lmin=(1,1,1,1,2)`;
+- the sacrifice-budget interpretation and sharp unique-richest threshold;
+- the four-generator integral family with `Lmin=(1^m,m-2)` for every `m>=4`,
+  including whether it is merely a padding or replication of a known example;
 - the sharp result that a richer Lmin suffix with at most two poorer players is
   tight through five players but can be slack at six;
 - the fixed six-player integer lower-envelope construction.
@@ -96,6 +101,9 @@ python src/verify_n5_small_poorer_suffix.py \
   --output results/n5_small_poorer_suffix.json
 python src/verify_n5_unique_richest_boundary.py \
   --output results/n5_unique_richest_boundary.json
+python src/verify_unique_richest_family.py \
+  --max-players 12 --exact-lmin-through 7 \
+  --output results/unique_richest_family.json
 python src/verify_n6_two_poorer_suffix_counterexample.py \
   --output results/n6_two_poorer_suffix_counterexample.json
 cd paper3

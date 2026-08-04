@@ -193,7 +193,7 @@ The proof through four players therefore combines a published Lmin
 transfer-blocking theorem with a published exactness characterization; the
 new content is the completion argument and its sharp low-dimensional use.
 
-## 4. The unique-richest four/five sacrifice threshold
+## 4. The unique-richest threshold and infinite obstruction family
 
 The fractional packing inequality gives a direct structural explanation for
 one sharp branch of the four/five threshold.  With at most three poorer
@@ -202,27 +202,32 @@ payoff—strictly smaller than the unique richest payoff—or the three
 two-element protector parts admit a half-integral perfect cover.  In either
 case (FP) is impossible.
 
-At five players the following exact lower-envelope game attains (FP) at
-equality:
+At five players a four-generator exact lower-envelope game attains (FP) at
+equality.  More strongly, it is the first member of a family for every
+`n=m+1>=5`.  With poorer set `P={1,...,m}` and richest player `r=m+1`, take
 
 ```text
-g1 = (0,0,0,3,3)
-g2 = (0,0,3,3,0)
-g3 = (1,1,1,0,3)
-g4 = (1,1,1,1,2)
+g1 = (m-1)(e4+er)
+g2 = (m-1)(e3+e4)
+g3 = e1+e2+e3+(m-4)e5+(m-1)er
+g4 = sum_{i in P} ei + (m-2)er.
 ```
 
-Its Lmin point is `phi=g4`, proved by four coalition inequalities, and
-`v({5})=0<2=phi_5`.  The exact-balanced circuit
+Every generator has total `2m-2`, so the lower envelope is exact.  Its Lmin
+point is `phi=g4`, proved by the four values
+`v(N\{1})=v(N\{2})=2m-3` and
+`v({3,r})=v({4,r})=m-1`, while `v({r})=0<m-2=phi_r`.  The
+exact-balanced circuit
 
 ```text
-1_{35}+1_{45}+1_{1}+1_{2}-1_{5}=1_N
+1_{3r}+1_{4r}+sum_{i in P\{3,4}}1_i-1_r=1_N
 ```
 
-has slack budget `0+0+1+1-2=0`.  The fourth poorer player supplies the second
-uncovered unit that cannot exist at four players.  This is the sought
-``sacrifice budget'' explanation of the threshold.  The complete human proof
-and exact replay are in `paper3/N4_N5_STRUCTURAL_THRESHOLD.md`.
+has slack budget `0+0+(m-2)-(m-2)=0`.  The fourth poorer player supplies the
+second uncovered unit that cannot exist at four players, and each additional
+poorer player adds one unit to both sides.  This is the sacrifice-budget
+explanation of both the sharp threshold and its persistence.  The complete
+human proof and exact replay are in `paper3/N4_N5_STRUCTURAL_THRESHOLD.md`.
 
 ## 5. The five-player monotonicity escape saturates the slack budget
 

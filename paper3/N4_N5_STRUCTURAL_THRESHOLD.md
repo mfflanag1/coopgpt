@@ -47,67 +47,72 @@ suffix is tight through four players.  The remaining branches—singleton
 poorer side and the `2|2` boundary—are handled by exact witnesses and the
 all-cross-pairs Lmin-improving segment in the manuscript.
 
-## Why five succeeds
+## Why five succeeds, and why the obstruction persists
 
-Take the lower envelope of
+More generally, let the poorer players be `P={1,...,m}`, let `r=m+1`, and
+write `e_i` for the unit vectors.  For every `m>=4`, take the lower envelope
+of the four common-total allocations
 
 ```text
-g1 = (0,0,0,3,3)
-g2 = (0,0,3,3,0)
-g3 = (1,1,1,0,3)
-g4 = (1,1,1,1,2).
+g1 = (m-1)(e4+er)
+g2 = (m-1)(e3+e4)
+g3 = e1+e2+e3+(m-4)e5+(m-1)er
+g4 = sum_{i in P} ei + (m-2)er.
 ```
 
-All rows have total six.  Therefore every row is a core allocation of the
+For `m=4`, the coefficient of `e5=er` in the middle term is zero.  All rows
+have total `2m-2`.  Therefore every row is a core allocation of the
 lower-envelope game and every coalition attains its worth at a row: the game
 is exact directly from the definition.
 
 The four coalition values
 
 ```text
-v(N\{1}) = v(N\{2}) = 5,
-v({3,5}) = v({4,5}) = 3
+v(N\{1}) = v(N\{2}) = 2m-3,
+v({3,r}) = v({4,r}) = m-1
 ```
 
 give a complete hand proof that
 
 ```text
-Lmin(v) = (1,1,1,1,2).
+Lmin(v) = (1,...,1,m-2).
 ```
 
 Indeed, any core allocation giving everyone at least one must have
 `x1=x2=1`.  Writing `y=x-1_N`, efficiency gives
-`y3+y4+y5=1`, while the last two constraints give
-`y3+y5>=1` and `y4+y5>=1`.  Hence `y3=y4=0`, `y5=1`, so the max-min face is
-the displayed point.  But `v({5})=0`, making the unique richest suffix slack
-by two.
+`sum_i y_i=m-3`, while the last two constraints give
+`y3+yr>=m-3` and `y4+yr>=m-3`.  Comparing either inequality with the total,
+and then intersecting their equality supports, gives `y_i=0` for every
+poorer player and `y_r=m-3`.  Thus the max-min face is the displayed point.
+But `v({r})=0`, making the unique richest suffix slack by `m-2`.
 
 The exact-balanced circuit is
 
 ```text
-1_{35} + 1_{45} + 1_{1} + 1_{2} - 1_{5} = 1_N.       (U5-C)
+1_{3r} + 1_{4r} + sum_{i in P\{3,4}} 1_{i} - 1_{r} = 1_N.  (UF-C)
 ```
 
-The protector slacks are zero, singleton slacks 1 and 2 are one each, and the
-negative singleton-5 slack is two.  Thus the slack budget is exactly
+The protector slacks are zero, the `m-2` positive poorer-singleton slacks are
+one each, and the negative richest-singleton slack is `m-2`.  Thus the slack
+budget is exactly
 
 ```text
-0 + 0 + 1 + 1 - 2 = 0,
+0 + 0 + (m-2) - (m-2) = 0,
 ```
 
-or `(FP)` at equality `2=1+1`.  The fourth poorer player is decisive: two
-uncovered poorer singleton payoffs can jointly fund the richest-singleton
-slack.  With only three poorer players, the same packing leaves at most one
-payoff, which is strictly smaller than `gamma`.
+or `(FP)` at equality.  The fourth poorer player is decisive at the threshold;
+each additional poorer player then contributes one unit simultaneously to
+the positive sacrifice budget and to the permitted richest-singleton slack.
+The five-player witness is the first member of an infinite obstruction family.
 
 ## What is and is not new
 
 The exact-partition condition is established terminology, and its implication
 to the Dutta--Ray/Lorenz conclusion is published.  Exact balancedness and the
 egalitarian transfer-blocking property are also prior art.  The proposed new
-contribution is their combination into the sacrifice-budget inequality and
-the sharp human four/five threshold, together with the minimal integral
-five-player witness above.
+contribution is their combination into the sacrifice-budget inequality, the
+sharp human four/five threshold, and the four-generator obstruction family in
+every dimension at least five.
 
 This materially strengthens the mathematical narrative, but a definitive
 novelty opinion still requires expert review of the exact-partition,
@@ -120,8 +125,13 @@ From `coopgames/`:
 ```bash
 python src/verify_n5_unique_richest_boundary.py \
   --output results/n5_unique_richest_boundary.json
+python src/verify_unique_richest_family.py \
+  --max-players 12 --exact-lmin-through 7 \
+  --output results/unique_richest_family.json
 ```
 
-The verifier checks the fixed generators, recomputes all 30 proper coalition
-faces by exact LP, recomputes Lmin by the independent exact staged algorithm,
-and checks the incidence/slack circuit.
+The first verifier checks the fixed five-player generators, recomputes all 30
+proper coalition faces by exact LP, recomputes Lmin by the independent exact
+staged algorithm, and checks the incidence/slack circuit.  The family verifier
+checks the parametric identities through the requested dimension and performs
+an independent exact staged-Lmin replay through the requested smaller bound.
