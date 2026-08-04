@@ -759,13 +759,19 @@ following without dimension enumeration:
 Those would turn the present sharp finite theorem into a general theory of how
 exact-balanced slack is transported across egalitarian payoff boundaries.
 
-The first proposed universal-minor route has now been decided negatively.
-For every split `H={c} disjoint-union A disjoint-union B` with
-`|A|,|B|>=2`, a new exact family has only three proper Lmin-tight coalitions.
+The first proposed universal-minor route has now been decided negatively,
+and the complete support-three tier is classified.  Every fractional
+three-column extreme packet is, up to relabeling, a blown-up triangle.  At a
+two-poorer underloaded boundary its gaining label is unique, the losing label
+is absent, and exact singleton faces force the two atoms adjacent to the
+gaining column to have size at least two.  Conversely, for every split
+`H=C disjoint-union A disjoint-union B` with
+`|C|>=1,|A|,|B|>=2`, a new exact family has only three proper Lmin-tight
+coalitions.
 Their rich traces
 
 ```text
-{c} union A,  {c} union B,  A union B
+C union A,  C union B,  A union B
 ```
 
 have the unique exact cover `(1/2,1/2,1/2)`.  The game has

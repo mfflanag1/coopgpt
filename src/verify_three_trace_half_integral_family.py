@@ -1,12 +1,13 @@
 """Exact audit of the three-trace half-integral obstruction family.
 
-For two poorer players a,b and a richer block H={c} disjoint-union A
-disjoint-union B, with |A|,|B| >= 2, consider the compact polytope
+For two poorer players a,b and a richer block H=C disjoint-union A
+disjoint-union B, with |C| >= 1 and |A|,|B| >= 2, consider the compact
+polytope
 
     x >= 0,  x(N)=2+2|H|,
-    x(c union A) >= 2(|A|+1),
-    x(c union B) >= 2(|B|+1),
-    x({b} union A union B) >= 2|H|-1.
+    x(C union A) >= 2(|C|+|A|),
+    x(C union B) >= 2(|C|+|B|),
+    x({b} union A union B) >= 1+2(|A|+|B|).
 
 The lower envelope of its vertices is an exact game whose Lmin and Lmax are
 (1,1,2,...,2), while H has slack one.  At that point the only proper tight
@@ -39,26 +40,27 @@ if sys.flags.optimize:
 F = Fraction
 
 
-def defining_coalitions(u: int, w: int):
-    if u < 2 or w < 2:
-        raise ValueError("the family requires |A|,|B| >= 2")
-    # Player order: a,b,c,A...,B...
-    a, b, c = 0, 1, 2
-    A = tuple(range(3, 3 + u))
-    B = tuple(range(3 + u, 3 + u + w))
-    h = 1 + u + w
+def defining_coalitions(t: int, u: int, w: int):
+    if t < 1 or u < 2 or w < 2:
+        raise ValueError("the family requires |C|>=1 and |A|,|B|>=2")
+    # Player order: a,b,C...,A...,B...
+    a, b = 0, 1
+    C = tuple(range(2, 2 + t))
+    A = tuple(range(2 + t, 2 + t + u))
+    B = tuple(range(2 + t + u, 2 + t + u + w))
+    h = t + u + w
     constraints = (
-        ((c,) + A, F(2 * (u + 1))),
-        ((c,) + B, F(2 * (w + 1))),
-        ((b,) + A + B, F(2 * h - 1)),
+        (C + A, F(2 * (t + u))),
+        (C + B, F(2 * (t + w))),
+        ((b,) + A + B, F(1 + 2 * (u + w))),
     )
-    return (a, b, c), A, B, constraints
+    return (a, b), C, A, B, constraints
 
 
-def vertices(u: int, w: int):
-    players, A, B, constraints = defining_coalitions(u, w)
-    n = 3 + u + w
-    total = F(2 + 2 * (1 + u + w))
+def vertices(t: int, u: int, w: int):
+    players, C, A, B, constraints = defining_coalitions(t, u, w)
+    n = 2 + t + u + w
+    total = F(2 + 2 * (t + u + w))
     active_rows = [("zero", i) for i in range(n)]
     active_rows += [("coalition", j) for j in range(3)]
     found = set()
@@ -116,11 +118,11 @@ def mask(players):
     return sum(1 << player for player in players)
 
 
-def verify_case(u: int, w: int, staged_replay: bool):
-    (a, b, c), A, B, constraints = defining_coalitions(u, w)
-    n = 3 + u + w
-    h = 1 + u + w
-    points = vertices(u, w)
+def verify_case(t: int, u: int, w: int, staged_replay: bool):
+    (a, b), C, A, B, constraints = defining_coalitions(t, u, w)
+    n = 2 + t + u + w
+    h = t + u + w
+    points = vertices(t, u, w)
     game = lower_envelope(points)
     phi = tuple([F(1), F(1)] + [F(2)] * h)
     full = (1 << n) - 1
@@ -179,6 +181,7 @@ def verify_case(u: int, w: int, staged_replay: bool):
             raise RuntimeError("generic exact staged replay failed")
 
     return {
+        "C_size": t,
         "A_size": u,
         "B_size": w,
         "player_count": n,
@@ -202,18 +205,73 @@ def verify_case(u: int, w: int, staged_replay: bool):
     }
 
 
+def audit_three_column_classification():
+    """Enumerate row types, not games, to audit the human support theorem."""
+    row_types = tuple(range(1, 8))
+    fractional_systems = []
+    for support_size in range(1, len(row_types) + 1):
+        for types in itertools.combinations(row_types, support_size):
+            matrix = sp.Matrix(
+                [[int(row_type >> column & 1) for column in range(3)]
+                 for row_type in types]
+            )
+            if matrix.rank() != 3:
+                continue
+            solution_set = sp.linsolve((matrix, sp.ones(len(types), 1)))
+            if solution_set is sp.EmptySet:
+                continue
+            solutions = list(solution_set)
+            if len(solutions) != 1:
+                continue
+            beta = tuple(F(int(x.p), int(x.q)) for x in solutions[0])
+            if any(x <= 0 for x in beta):
+                continue
+            if any(x.denominator > 1 for x in beta):
+                fractional_systems.append((types, beta))
+
+    expected_types = (0b011, 0b101, 0b110)
+    if fractional_systems != [(expected_types, (F(1, 2),) * 3)]:
+        raise RuntimeError(
+            f"unexpected fractional three-column systems: {fractional_systems}"
+        )
+
+    feasible_labels = []
+    beta = (F(1, 2),) * 3
+    # Label states: bit 0 is losing poor player a; bit 1 is gaining b.
+    for labels in itertools.product(range(4), repeat=3):
+        r_a = sum(beta[j] for j, label in enumerate(labels) if label & 1)
+        r_b = sum(beta[j] for j, label in enumerate(labels) if label & 2)
+        if r_a < r_b < 1:
+            feasible_labels.append(labels)
+    expected_labels = [(0, 0, 2), (0, 2, 0), (2, 0, 0)]
+    if feasible_labels != expected_labels:
+        raise RuntimeError(f"unexpected underloaded labelings: {feasible_labels}")
+    return {
+        "fractional_vertex_count_up_to_row_type_repetition": 1,
+        "unique_row_types_binary": ["011", "101", "110"],
+        "unique_cover": ["1/2", "1/2", "1/2"],
+        "underloaded_labelings_up_to_column_permutation": 1,
+        "canonical_labels": ["none", "none", "gaining-b"],
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("--max-central-block", type=int, default=2)
     parser.add_argument("--max-block", type=int, default=4)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     cases = []
-    for u in range(2, args.max_block + 1):
-        for w in range(2, args.max_block + 1):
-            cases.append(verify_case(u, w, staged_replay=(u == w == 2)))
+    for t in range(1, args.max_central_block + 1):
+        for u in range(2, args.max_block + 1):
+            for w in range(2, args.max_block + 1):
+                cases.append(
+                    verify_case(t, u, w, staged_replay=(t == 1 and u == w == 2))
+                )
     result = {
         "status": "verified",
-        "theorem": "three-trace half-integral obstruction family",
+        "theorem": "three-column obstruction classification and realization",
+        "abstract_classification": audit_three_column_classification(),
         "cases": cases,
     }
     rendered = json.dumps(result, indent=2, sort_keys=True) + "\n"

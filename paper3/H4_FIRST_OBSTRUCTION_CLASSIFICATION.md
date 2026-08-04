@@ -103,8 +103,9 @@ at the first feasible rich-side size, the co-singleton 1/3 packet is unique.
 This is a human local-minor theorem, not a dimension-free converse for all
 larger suffixes.  The latter converse is now disproved by
 [`THREE_TRACE_HALF_INTEGRAL_OBSTRUCTION.md`](THREE_TRACE_HALF_INTEGRAL_OBSTRUCTION.md):
-from five rich players onward an exact family has only three active trace
-columns and a unique half-integral cover.  Thus genuinely new irreducible
-hypergraphs occur immediately one rich-side dimension later.
+the entire three-column tier is a blown-up triangle with a unique
+half-integral cover, its exact realizability begins sharply at five rich
+players, and every admissible atom triple is realized.  Thus a genuinely new
+support-minimal class occurs immediately one rich-side dimension later.
 
 Correctness and novelty still require hostile specialist review.
