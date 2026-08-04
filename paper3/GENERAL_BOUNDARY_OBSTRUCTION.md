@@ -759,6 +759,17 @@ following without dimension enumeration:
 Those would turn the present sharp finite theorem into a general theory of how
 exact-balanced slack is transported across egalitarian payoff boundaries.
 
+A support-independent reduction is now available.  The Lmin-tight-skeleton
+retraction replaces any singleton-normalized exact game by the exact lower
+envelope of efficiency, nonnegativity, and only the coalitions tight at Lmin.
+It preserves Lmin and the tight/slack status of every coalition, and is
+idempotent.  Thus the full exact-partition problem can be reduced without loss
+to labeled tight hypergraphs; the remaining breakthrough question is a
+structural classification or domain theorem on those skeletons, not another
+search through arbitrary characteristic functions.  See
+`paper3/LMIN_TIGHT_SKELETON_RETRACTION.md`.  The operation's novelty is not
+yet externally established.
+
 The first proposed universal-minor route has now been decided negatively,
 and the complete support-three tier is classified.  Every fractional
 three-column extreme packet is, up to relabeling, a blown-up triangle.  At a

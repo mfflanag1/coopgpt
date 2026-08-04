@@ -2809,6 +2809,151 @@ preserved.  Backward induction gives one cover satisfying
 and at most $\nu_i-1$, each $\nu_i\geq1$, so the final $\alpha$ is positive.
 \end{proof}
 
+The preceding certificates also show that the entire characteristic function
+away from the Lmin-tight coalitions is dispensable.  This gives a canonical
+support-independent reduction before any trace classification is attempted.
+
+\begin{theorem}[Lmin-tight-skeleton retraction]
+\label{thm:lx-tight-skeleton-retraction}
+Let $v$ be a singleton-normalized exact game, put
+$\phi=\operatorname{Lmin}(v)$, and let
+\[
+ \mathcal T_\phi:=\{S:\varnothing\ne S\subsetneq N,
+                    \ v(S)=\phi(S)\}.
+\]
+Define
+\[
+ K_\phi:=\{x\in\mathbb R_+^N:x(N)=v(N),\quad
+                 x(S)\geq\phi(S)\ (S\in\mathcal T_\phi)\},       \tag{SK-1}
+ \label{eq:lx-tight-skeleton-polytope}
+\]
+and let
+\[
+ (R_\phi v)(A):=\min_{x\in K_\phi}x(A).                         \tag{SK-2}
+ \label{eq:lx-tight-skeleton-game}
+\]
+Then $R_\phi v$ is singleton-normalized and exact,
+$\core(R_\phi v)=K_\phi$, and
+\[
+ R_\phi v\leq v,\qquad
+ \operatorname{Lmin}(R_\phi v)=\phi,\qquad
+ (R_\phi v)(A)=\phi(A)\Longleftrightarrow v(A)=\phi(A).          \tag{SK-3}
+ \label{eq:lx-tight-skeleton-properties}
+\]
+Thus the complete Lmin-tight/slack pattern, including exact-partition
+status at every cumulative richer suffix, is preserved.  The operation is
+idempotent.  For rational input, a common positive scaling makes
+$R_\phi v$ integral.
+\end{theorem}
+
+\begin{proof}
+Exactness and singleton normalization give $\core(v)\subseteq K_\phi$.
+Consequently, for every coalition $A$,
+\[
+ (R_\phi v)(A)\leq\min_{x\in\core(v)}x(A)=v(A).                  \tag{SK-4}
+ \label{eq:lx-tight-skeleton-domination}
+\]
+If $A\in\mathcal T_\phi$, its defining inequality and the feasible point
+$\phi$ give $(R_\phi v)(A)=\phi(A)=v(A)$.  For a singleton,
+\eqref{eq:lx-tight-skeleton-domination} and nonnegativity give value zero;
+efficiency handles $N$.  If a proper $A$ is not in $\mathcal T_\phi$, then
+$(R_\phi v)(A)\leq v(A)<\phi(A)$.  This proves the last equivalence in
+\eqref{eq:lx-tight-skeleton-properties}.
+
+Every point of $K_\phi$ satisfies all inequalities of its lower envelope,
+so it lies in $\core(R_\phi v)$.  Conversely, a core point of $R_\phi v$ is
+efficient, is nonnegative because the new singleton values are zero, and
+satisfies the inequalities indexed by $\mathcal T_\phi$ at their just-proved
+values $\phi(S)$.  It lies in $K_\phi$.  Hence the two sets coincide.
+Every coalition minimum is attained on the compact polytope, proving
+exactness.
+
+Write the payoff strata of $\phi$ as $B_1,\ldots,B_k$, with increasing
+levels.  For $j<k$, put
+$L_j=B_1\mathbin{\dot\cup}\cdots\mathbin{\dot\cup}B_j$ and
+$H_j=N\setminus L_j$.  Lemma~\ref{lem:lx-strict-richer-cover} supplies
+weights on $\mathcal T_\phi$ with common load $\alpha_j>0$ on $H_j$ and
+loads $d_i<\alpha_j$ on $L_j$.  Summing their defining inequalities in
+$K_\phi$ and eliminating $x(H_j)$ by efficiency gives
+\[
+ \sum_{i\in L_j}(\alpha_j-d_i)(x_i-\phi_i)\leq0.                \tag{SK-5}
+ \label{eq:lx-tight-skeleton-gate}
+\]
+All coefficients are positive.  At the first progressive leximin stage,
+\eqref{eq:lx-tight-skeleton-gate} for $j=1$ pins every member of $B_1$ at
+its value in $\phi$.  Inductively, after the earlier blocks are fixed, the
+$j$th inequality reduces to a positive weighted sum over $B_j$ and pins that
+block.  Efficiency pins the last block.  Therefore $\phi$ remains Lmin.
+
+The tight set and total are now unchanged, so a second application uses the
+same polytope and lower envelope; this proves idempotence.  Rational data
+define a rational polytope and rational coalition minima, whose finitely many
+denominators can be cleared.
+\end{proof}
+
+\begin{corollary}[certificate-only hypergraph realization]
+\label{cor:lx-tight-skeleton-realization}
+Let $\phi\in\mathbb R_+^N$, let $\mathcal T$ be any family of proper
+nonempty coalitions, and define
+\[
+ K(\mathcal T,\phi):=\{x\in\mathbb R_+^N:x(N)=\phi(N),\quad
+                         x(T)\geq\phi(T)\ (T\in\mathcal T)\}.
+\]
+Write the increasing payoff strata of $\phi$ as $B_1,\ldots,B_k$.  Suppose
+
+\begin{enumerate}[label=(\roman*)]
+\item $\min_{x\in K(\mathcal T,\phi)}x_i=0$ for every player $i$;
+\item for every $j<k$, nonnegative weights on $\mathcal T$ have common
+load $\alpha_j>0$ on
+$H_j=N\setminus(B_1\mathbin{\dot\cup}\cdots\mathbin{\dot\cup}B_j)$
+and load strictly below $\alpha_j$ on every player outside $H_j$.
+\end{enumerate}
+Then the lower envelope of $K(\mathcal T,\phi)$ is a
+singleton-normalized exact game with Lmin $\phi$, and every member of
+$\mathcal T$ is tight at $\phi$.  Its proper tight set is exactly
+$\mathcal T$ if and only if
+\[
+ \min_{x\in K(\mathcal T,\phi)}x(A)<\phi(A)
+ \quad\text{for every proper }A\notin\mathcal T.                 \tag{SK-6}
+ \label{eq:lx-tight-skeleton-no-new-tight}
+\]
+Conversely, the complete Lmin-tight family of every
+singleton-normalized exact game satisfies (i), (ii), and
+\eqref{eq:lx-tight-skeleton-no-new-tight}.  Thus normalized exact Lmin
+skeletons have a certificate-only characterization involving no unspecified
+coalition values.
+\end{corollary}
+
+\begin{proof}
+Condition (i), the listed inequalities, and the feasible point $\phi$ prove
+that the lower envelope has singleton values zero and has
+$w(T)=\phi(T)$ for $T\in\mathcal T$.  The two-inclusion argument of
+Theorem~\ref{thm:lx-tight-skeleton-retraction} gives
+$\core(w)=K(\mathcal T,\phi)$ and exactness.  Condition (ii) gives
+\eqref{eq:lx-tight-skeleton-gate} at every payoff boundary, so the same
+progressive induction proves $\operatorname{Lmin}(w)=\phi$.
+Condition~\eqref{eq:lx-tight-skeleton-no-new-tight} is exactly the assertion
+that no omitted proper coalition is tight.  For the converse, apply
+exactness to every singleton, Lemma~\ref{lem:lx-strict-richer-cover} to every
+strict payoff boundary, and the definition of the complete tight family.
+\end{proof}
+
+The strict-cover ingredient follows from the published Lmin optimality
+structure discussed above.  The map sending a balanced game to the unique
+exact game with the same core is already known as its lower envelope or exact
+cover; see, for example,
+\citet{Schmeidler1972,StudenyKratochvil2022}.  The candidate new
+claim is their exact idempotent combination: deleting every Lmin-slack
+coalition constraint, then exactifying, preserves Lmin and the entire
+coalitionwise tightness pattern.  We do not claim novelty for either
+ingredient separately.  The standalone proof and an exact audit on three
+unrelated families are
+\begin{center}
+\small\path{paper3/LMIN_TIGHT_SKELETON_RETRACTION.md},\\[-2pt]
+\small\path{src/verify_lmin_tight_skeleton_retraction.py},\\[-2pt]
+\small\path{results/lmin_tight_skeleton_retraction.json}.
+\end{center}
+
 \begin{theorem}[balanced-trace transport obstruction]
 \label{thm:lx-balanced-trace-transport}
 Let $v$ be exact, let $\phi=\operatorname{Lmin}(v)$, and let $H$ be a

@@ -89,6 +89,16 @@ This is evidence of apparent novelty, not a definitive novelty opinion.
 Citation-chain review by specialists in exact games and egalitarian solutions
 remains required.
 
+The later Lmin-tight-skeleton retraction is subject to the same caution.  Its
+ingredients include the known lower-envelope/exact-cover operation (the
+unique exact game with a balanced game's core) and the
+property-I-derived strict covers already calibrated below.  The candidate new
+statement is that deleting every Lmin-slack coalition inequality and
+exactifying the remainder preserves Lmin and the complete coalitionwise
+tight/slack pattern, yielding an idempotent reduction to the labeled tight
+hypergraph.  Focused phrase searches found no direct statement, but that
+absence is not a definitive novelty determination.
+
 ## Established ingredients that must not be claimed as new
 
 1. **Lmin and egalitarian-core blocking.** Arin and Iñarra (2001),
