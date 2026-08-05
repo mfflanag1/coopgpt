@@ -172,3 +172,91 @@ index, and the CSV row order is not a published numbering.  Cite the systems
 explicitly, not row numbers.  Note also that the CSV includes a column for
 the grand coalition; forgetting to drop it corrupts the sign split that
 identifies the exceptional coalition.
+
+## Fourth pass, 2026-08-05: the remaining two corner pairs, and a correction
+
+The third pass located only the `(m,h)=(4,1)` obstruction in the catalogue.
+This pass covers the other two minimal pairs of the staircase, `(3,2)` on five
+players and `(2,4)` on six, and in doing so corrects the wording committed in
+`3ba5194`.
+
+### The correction
+
+Remark 5 previously opened with "the systems (P) are exactly the objects
+catalogued by Studeny and Kratochvil".  That is false.  The catalogue lists
+the *indecomposable* min-semi-balanced systems, which are exactly those
+indexing facets of the exact cone; a system (P) is min-semi-balanced with
+exceptional coalition `H` but need not be indecomposable.  At the `(2,4)`
+boundary, two of the three packet types are minimal semi-balanced and
+decomposable, hence absent from the catalogue:
+
+```text
+1_ac + 1_def + 1_bcdef - 1_cdef                       = 1_N   (E = c)
+1_acde + 1_acdf + 1_cef + 1_def + 2*1_bcdef - 3*1_cdef = 2*1_N (E = cde)
+```
+
+The consequence for the manuscript is that the certificate produced by the
+one-packet theorem is a valid inequality for the exact cone but need not be a
+facet of it.  Remark 5 now says so, and separates the set-system notion of
+indecomposability from direct-sum indecomposability of a game, which the paper
+also uses.
+
+A trap to avoid here: the decomposing witness `1_ac + 1_bcdef - 1_c = 1_N` is
+a statement about set systems only.  `bcdef` carries slack 6 at this Lmin
+point, so the decomposition does *not* exhibit a sharper certificate at the
+boundary, and must not be reported as one.  Spokes `H + {i}` enter (P) through
+the slack budget (PB), not through tightness.
+
+### Results
+
+| (m,h) | n | family | packet types | facet-defining |
+|---|---|---|---|---|
+| (4,1) | 5 | unique-richest | 3 | 3 |
+| (3,2) | 5 | three-poorer escape | 1 | 1 |
+| (5,1) | 6 | unique-richest | 4 | 4 |
+| (3,3) | 6 | three-poorer escape | 1 | 1 |
+| (4,2) | 6 | three-poorer escape | 3 | 3 |
+| (2,4) | 6 | two-poorer sacrifice | 3 | 1 |
+| (6,1) | 7 | unique-richest | 5 | 5 |
+| (4,3) | 7 | three-poorer escape | 3 | 3 |
+| (3,4) | 7 | two-poorer sacrifice | 7 | 3 |
+
+Every packet system in the table is minimal semi-balanced.  Non-facet
+certificates arose only in the two-poorer family, at both parameter values
+tested.  Whether that is systematic is open.
+
+At `(3,2)` the only tight proper coalitions are `ade` and `cde`, so every
+packet is the *full-trace* packet on `H`.  That is the case the R2 repair
+added to Lemma 8; the family shows it is not vacuous.
+
+### Reproduction
+
+`src/verify_packet_catalogue.py` rebuilds each game from the displayed
+generator rows, recomputes Lmin with the project's exact staged solver,
+enumerates the lifted packets, and classifies each system (P) as minimal /
+decomposable / indecomposable directly from the definitions on the catalogue's
+own page, via exact rational feasibility in z3.  With `--catalogue-dir` it
+also cross-checks against the published permutational types and aborts if the
+intrinsic classification and the catalogue lookup disagree.  Without the flag
+the intrinsic classification still runs.
+
+Two validations of the pipeline:
+
+- Run against all 75 catalogued rows for n = 4, 5, 6, the intrinsic classifier
+  returns "indecomposable min-semi-balanced" for every one.
+- The `(4,1)` output reproduces the three systems already displayed in
+  Remark 5, and the tight-coalition list `ce, de, cde, acde, bcde`.
+
+A second, fully independent implementation that imports no project code was
+run alongside and agrees case by case.
+
+Saved output: `results/verify_packet_catalogue.json` (nine cases, six non-facet
+types, catalogue consulted).  Reproduce with
+
+```bash
+python3 src/verify_packet_catalogue.py --catalogue-dir PATH/TO/CATALOGUE/CSVS \
+    --output results/verify_packet_catalogue.json
+```
+
+which takes about five minutes; the cost is the minimality search, which tests
+every proper subsystem for semi-balancedness.
