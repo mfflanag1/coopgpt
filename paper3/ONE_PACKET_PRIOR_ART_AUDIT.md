@@ -74,3 +74,41 @@ above before any priority claim.
   novelty; not externally verified.
 - Complete boundary staircase and parametric realizations: plausible
   substantive novelty; not externally verified.
+
+## Second pass, 2026-08-05 (post-review)
+
+A further focused search was run over: Kohlberg-criterion and nucleolus
+balancedness; Studeny--Kratochvil and the exact-game facet literature;
+coherent lower probabilities and credal sets; minimal balanced collections;
+exact partition games and Dutta--Ray existence; and Arin--Kuipers--Vermeulen
+and its citation neighbourhood.  Nothing found states the richer-side
+one-packet selection theorem or the boundary staircase.
+
+Three corrections came out of it.
+
+1. `Arin--Kuipers--Vermeulen (2008)` was cited for "property I".  That paper
+   (IJGT 37:565--580) is about independence of irrelevant core allocations
+   and the equal-share-distance solution.  The Lmax-on-large-core-games
+   content is in Arin--Kuipers--Vermeulen (2003), Math Soc Sci 46:327--345.
+   The manuscript now cites Arin--Inarra (2001) for transfer blocking, which
+   is the property actually used, and AKV (2003) for Lmax.  Note also that
+   the protector property is the `H={r}` case of the cover lemma, so the
+   argument does not depend on the citation.
+2. `Biswas et al. (1999)` was missing entirely, although it supplies the
+   four-player large-core bound behind the only stated low-dimensional
+   comparison.  Added.
+3. `Dietzenbacher (2021)` was cited as a Tilburg thesis; the PES/Lmax and
+   egalitarian-stable results are in the GEB paper, 127:194--205.  Corrected.
+
+One calibration, not a correction: the linear-size sparsity bound is the
+standard basic-solution support bound and is not claimed as new.  An earlier
+draft of this note attributed a matching `n-1` bound to Benedek, Fliege and
+Nguyen (Math Program, 2020); that is wrong.  Their improvement bounds the
+*number* of balancedness checks in the Kohlberg criterion by `n-1`, not the
+size of each collection.  The manuscript now makes the weaker, correct point
+without the citation.
+
+Still outstanding: MathSciNet and zbMATH, and a direct inspection of the
+Studeny--Kratochvil electronic catalogue of indecomposable min-semi-balanced
+systems on at most six variables, which is the most likely place for an
+unnoticed collision with the packet classes.
