@@ -1,0 +1,1207 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,enumitem,hyperref,natbib}
+\hypersetup{
+ colorlinks=true,
+ linkcolor=blue,
+ citecolor=blue,
+ urlcolor=blue,
+ pdftitle={Maximal divergence of the leximin and leximax core selections in exact games},
+ pdfauthor={Maxwell Flanagan}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\core}{\operatorname{Core}}
+\newcommand{\Lmin}{\operatorname{Lmin}}
+\newcommand{\Lmax}{\operatorname{Lmax}}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\supp}{\operatorname{supp}}
+
+\title{Maximal divergence of the leximin and leximax\\
+core selections in exact games}
+\author{Maxwell Flanagan}
+\date{Draft of August 6, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+A singleton-normalized exact transferable-utility game carries two canonical
+egalitarian core selections: the leximin allocation $\Lmin$ and the
+leximax-min allocation $\Lmax$.  They coincide on every exact game with at
+most four players.  We measure their separation by
+$\rho(v)=\|\Lmin(v)-\Lmax(v)\|_1/v(N)$, which never exceeds $2$, and show
+that $2$ is the exact supremum.  The witnesses form an explicit two-parameter
+family $G(p,k)$ of two-generator lower-envelope games with
+$\rho(G(p,k))=2(p(k-1)-1)/(k(p+1))$ and the deficit identity
+$2-\rho(G(p,k))=2n/(k(p+1))$, $n=p+1+k$; the balanced split gives
+$\rho\ge 2-8n/(n^2-(n\bmod 2))$ at every $n\ge6$, so the ratio exceeds $1$
+from eight players on.  The mechanism is a single family of tight
+$(p+1)$-player caps that both selections saturate: leximin reads a cap as a
+ceiling and piles the residual onto one player, leximax-min reads it as a
+budget and spreads the residual over half the players, so the two supports
+become asymptotically disjoint.  The concentrating selection is the leximin
+one.  On the two-generator class we prove a dual description of the core,
+$\core(v)=\{x\ge0:x(N)=T,\ x(S)\le\max(g(S),h(S))\}$, deduce a one-coalition
+upper bound on the leximin floor, and exhibit the smallest game at which the
+mirror bound for the leximax-min ceiling fails.  At $n=5$ the family formula
+is not sharp: the true two-generator maximum is $1/2$, proved here by hand
+from four core vertices.  We also close one natural route to a matching upper
+bound, by a seven-player game in which smoothing a generator toward
+uniformity collapses $\rho$ from $1/5$ to $0$.
+\end{abstract}
+
+\section{Introduction}
+
+Let $(N,v)$ be a transferable-utility game on $N=\{1,\dots,n\}$ with
+\[
+ \core(v)=\{x\in\mathbb R^N: x(N)=v(N),\ x(S)\ge v(S)\ \text{for all}\ S\subseteq N\},
+\]
+where $x(S)=\sum_{i\in S}x_i$.  The game is \emph{exact} if every coalition
+inequality is attained by some core allocation, and \emph{singleton-normalized}
+if $v(\{i\})=0$ for every $i$; on that domain every core allocation is
+nonnegative.  Exact games are the natural home for egalitarian core
+selections, and two such selections are canonical.  The \emph{leximin}
+allocation $\Lmin(v)$ maximizes the increasing rearrangement of $x$
+lexicographically over the core; the \emph{leximax-min} allocation
+$\Lmax(v)$ minimizes the decreasing rearrangement lexicographically over the
+core.  Both are single-valued on a nonempty compact convex set.  The first
+raises the poorest as far as possible, the second lowers the richest as far
+as possible.
+
+On small games the two agree.  The companion paper \citep{Flanagan2026}
+proves that every singleton-normalized exact game on at most four players is
+an exact partition game at $\Lmin$; by the established implication from exact
+partition to Lorenz domination \citep{LlerenaMauri2017}, $\Lmin$ then
+Lorenz-dominates every core allocation, and a Lorenz-greatest core point is
+simultaneously leximin- and leximax-optimal, so
+$\Lmin(v)=\Lmax(v)$ for every singleton-normalized exact game with $n\le4$.
+Our complete enumerations at $n\le4$ reconfirm this rigidity as a control
+(Section~\ref{sec:fixedn}).  The adjacent large-core chain --- exact games on
+at most four players have large cores \citep{Biswas1999}, and on large-core
+games the procedural egalitarian solution coincides with $\Lmax$
+\citep{Dietzenbacher2021,ArinKuipersVermeulen2003} --- pins only the $\Lmax$
+side: it does not deliver the coincidence, and indeed the companion
+repository exhibits a five-player exact game with a large core on which
+$\Lmin\ne\Lmax$.  The companion's lower-envelope realization technique is
+used again here.
+
+The question of this paper is what happens after the rigidity breaks.  Write
+\[
+ \rho(v)=\frac{\|\Lmin(v)-\Lmax(v)\|_1}{v(N)},
+ \qquad
+ s(n)=\sup\bigl\{\rho(v):\ v\ \text{exact on $n$ players},\ v(N)>0\bigr\},
+\]
+the supremum running over singleton-normalized games.
+Since $\Lmin(v)$ and $\Lmax(v)$ are nonnegative with the same total $v(N)$,
+we have $\rho\le2$ always, and $\rho=2$ would mean disjoint supports.  The
+rigidity says $s(n)=0$ for $n\le4$.  How large can $s(n)$ get?
+
+\paragraph{Results.}
+The answer is: as large as arithmetically possible.
+
+\begin{itemize}[nosep]
+\item $\sup_n s(n)=2$, and at fixed $n$, $s(n)\ge 2-8n/(n^2-(n\bmod2))$,
+      which is $2-8/n$ for even $n$ (Theorem~\ref{thm:sup}); in particular
+      $s(n)>1$ from $n=8$ on, and the bound is attained on the two-generator
+      class at $n=6,7,8$ by complete enumeration.
+\item The witnesses form a two-parameter family $G(p,k)$ whose two
+      allocations are computed in closed form (Theorem~\ref{thm:family}),
+      with the deficit identity $2-\rho(G(p,k))=2n/(k(p+1))$
+      (Corollary~\ref{cor:deficit}).
+\item On the two-generator class the core has a dual description as a system
+      of upper caps (Theorem~\ref{thm:duality}), from which the leximin floor
+      inherits a one-coalition certificate (Theorem~\ref{thm:floor}); the
+      mirror statement for the leximax-min ceiling is false, and we give the
+      smallest counterexample (Observation~\ref{obs:Mside}).
+\item $n=5$ is anomalous: the family formula gives $1/3$ but the true
+      two-generator maximum is $1/2$, proved by hand
+      (Theorem~\ref{thm:n5}), and the $n=5$ extremal class is qualitatively
+      unlike the $n\ge6$ one.
+\end{itemize}
+
+\paragraph{The mechanism, in one sentence.}
+In $G(p,k)$ a single family of tight caps forces $p+1$ players to share only
+$p$; leximin reads each cap as a ceiling, so the floor sticks at $p/(p+1)$
+and the entire residual piles onto one player, while leximax-min reads the
+same cap as a budget, loading half the players up to $p(k-1)/k$ and thereby
+squeezing the capped players down to $1/k$ --- so the two supports become
+asymptotically disjoint and $\rho\to2$.  It is worth stating the direction
+explicitly, because it inverts the usual reading: the \emph{concentrating}
+selection is the leximin one.  In $G(p,k)$ the leximin allocation gives one
+player a share $p(k-1)/((p+1)k)\to1$ of $v(N)$ while everyone else sits just
+below $1$; it is nevertheless leximin-optimal, because nothing better is
+feasible for the poorest.  Both selections are driven into extreme shapes by
+the same constraint, in opposite directions.
+
+\paragraph{What is not proved.}
+An upper bound matching Theorem~\ref{thm:sup} at fixed $n$ is open, and
+Section~\ref{sec:obstruction} shows that one natural route to it is closed.
+Section~\ref{sec:scope} separates the proved statements from the enumerated
+and the conjectured ones, and lists the open problems.
+
+\section{Preliminaries}\label{sec:prelim}
+
+Throughout, $N=\{1,\dots,n\}$, all games are singleton-normalized, and
+$T:=v(N)>0$.  Vectors are indexed by $N$, and $\supp(x)=\{i:x_i\ne0\}$.
+
+\subsection{Exact games as lower envelopes}
+
+The following generation fact is the only construction used in this paper.
+It is standard; see \citet{CsokaHeringsKoczy2011} and
+\citet{StudenyKratochvil2022} for the surrounding theory of the exact cone,
+and \citet{Flanagan2026} for the same statement in the companion.
+
+\begin{lemma}[lower-envelope generation]\label{lem:envelope}
+Let $g_1,\dots,g_r\in\mathbb R_+^N$ have a common total
+$g_1(N)=\dots=g_r(N)=T$, and set $v(S)=\min_{j}g_j(S)$.  Then $v$ is exact,
+$v(N)=T$, every $g_j$ lies in $\core(v)$, and $v$ is singleton-normalized as
+soon as every coordinate vanishes in some $g_j$.  Conversely, every exact
+singleton-normalized game is of this form: one may take $g_1,\dots,g_r$ to be
+the vertices of $\core(v)$.
+\end{lemma}
+
+\begin{proof}
+Each $g_j$ satisfies $g_j(S)\ge v(S)$ by definition of the minimum and
+$g_j(N)=T=v(N)$, so $g_j\in\core(v)$; and the inequality at $S$ is attained
+by whichever $g_j$ realizes the minimum, so $v$ is exact.  The singleton
+statement is immediate from $v(\{i\})=\min_j (g_j)_i$.  Conversely, if $v$ is
+exact then $v(S)=\min_{x\in\core(v)}x(S)$ for every $S$, and the minimum of a
+linear functional over the polytope $\core(v)$ is attained at a vertex; the
+vertices are nonnegative because $v$ is singleton-normalized, and all have
+total $T$.
+\end{proof}
+
+We call a game generated as in Lemma~\ref{lem:envelope} by $r$ allocations an
+\emph{$r$-generator} game.  Part of what follows is specific to $r=2$.
+
+\subsection{The two selections}
+
+For $x\in\mathbb R^N_+$ let $x^\uparrow$ be its increasing and
+$x^\downarrow$ its decreasing rearrangement.
+
+\begin{definition}
+$\Lmin(v)$ is the allocation in $\core(v)$ whose increasing rearrangement is
+lexicographically largest; $\Lmax(v)$ is the allocation in $\core(v)$ whose
+decreasing rearrangement is lexicographically smallest.
+\end{definition}
+
+Both exist and are unique on a nonempty compact convex set: existence is
+compactness applied stage by stage, and uniqueness follows by comparing two
+putative optima with their midpoint, which is feasible by convexity and
+strictly better at the first stage where they differ.  We write
+$\mu(v)=\min_i\Lmin(v)_i$ for the \emph{leximin floor} and
+$M(v)=\max_i\Lmax(v)_i$ for the \emph{leximax-min ceiling}; equivalently
+$\mu=\max_{x\in\core}\min_i x_i$ and $M=\min_{x\in\core}\max_i x_i$.
+
+\subsection{Normalization and the ratio}
+
+Two conventions have to be stated honestly, because neither selection is
+translation-equivariant: both are applied to the raw payoff vector $x$, not
+to $x-(v(\{i\}))_{i\in N}$, and on a game that is not singleton-normalized
+these are different objects --- the leximax-min allocation in particular
+changes under the shift.  We therefore fix the domain once and for all: all
+games are singleton-normalized, and both selections are computed on the
+normalized game.  No claim below asserts invariance of $\Lmin$ or $\Lmax$
+under adding singleton values.
+
+Scaling, by contrast, is harmless: $\core(cv)=c\core(v)$ for $c>0$ and both
+selections are positively homogeneous, so $\Lmin(cv)=c\Lmin(v)$ and
+$\Lmax(cv)=c\Lmax(v)$.  Hence $\rho(v)=\|\Lmin(v)-\Lmax(v)\|_1/v(N)$ is
+scale-invariant, which is what makes it comparable across games of different
+size.  We record the trivial ceiling and the form of the deficit.
+
+\begin{lemma}[ceiling and overlap]\label{lem:ceiling}
+For any singleton-normalized exact $v$ with $T=v(N)>0$,
+\[
+ \rho(v)=2\Bigl(1-\frac1T\sum_{i\in N}\min\bigl(\Lmin(v)_i,\Lmax(v)_i\bigr)\Bigr)
+ \ \le\ 2,
+\]
+with $\rho(v)=2$ if and only if $\Lmin(v)$ and $\Lmax(v)$ have disjoint
+supports.
+\end{lemma}
+
+\begin{proof}
+For nonnegative $x,y$ with $x(N)=y(N)=T$ one has
+$|x_i-y_i|=x_i+y_i-2\min(x_i,y_i)$, and summing gives
+$\|x-y\|_1=2T-2\sum_i\min(x_i,y_i)$.  The overlap term is nonnegative and
+vanishes exactly when no coordinate is positive in both.
+\end{proof}
+
+So $\rho\to2$ is precisely asymptotic support disjointness of the two
+egalitarian selections, and the whole content of the paper is that this can
+be forced.
+
+\section{The two-generator class}\label{sec:twogen}
+
+Throughout this section $v$ is the lower envelope of exactly two nonnegative
+allocations $g,h$ with common total $T$, so that $v(S)=\min(g(S),h(S))$ for
+every $S$ (including $S=N$, where both sides equal $T$).
+
+\begin{lemma}[support disjointness]\label{lem:disjoint}
+If $v$ is singleton-normalized then $A:=\supp(g)$ and $B:=\supp(h)$ are
+disjoint, and every player outside $A\cup B$ is null, receiving $0$ in every
+core allocation.  Deleting null players changes neither $\Lmin$, $\Lmax$, nor
+$T$, so we may and do assume $A\cup B=N$ and $A\cap B=\emptyset$.
+\end{lemma}
+
+\begin{proof}
+$v(\{i\})=\min(g_i,h_i)=0$ forces $g_i=0$ or $h_i=0$, which is exactly
+$A\cap B=\emptyset$.  If $i\notin A\cup B$ then $g_i=h_i=0$, so
+$v(N\setminus\{i\})=\min\bigl(g(N\setminus\{i\}),h(N\setminus\{i\})\bigr)=T$;
+any $x\in\core(v)$ has $x(N\setminus\{i\})\ge T$ and $x(N)=T$ with $x\ge0$,
+hence $x_i=0$.  Both selections assign a null player $0$, so deletion is
+harmless.
+\end{proof}
+
+\begin{definition}
+For $S\subseteq N$ put $f(S):=\max\bigl(g(S),h(S)\bigr)=\max\bigl(g(S\cap A),h(S\cap B)\bigr)$.
+\end{definition}
+
+\subsection{A dual description of the core}
+
+\begin{theorem}[two-generator core duality]\label{thm:duality}
+\[
+ \core(v)=\bigl\{x\ge0:\ x(N)=T\ \text{and}\ x(S)\le f(S)\ \text{for all }S\subseteq N\bigr\}.
+\]
+\end{theorem}
+
+\begin{proof}
+For $x$ with $x(N)=T$ and any $S$, the inequality $x(S)\ge v(S)$ is
+equivalent to $x(N\setminus S)\le T-v(S)$.  It therefore suffices to prove
+\[
+ T-v(S)=f(N\setminus S)\qquad\text{for every }S\subseteq N.  \tag{1}
+\]
+Since $g$ and $h$ are modular with $g(N)=h(N)=T$,
+\[
+ T-v(S)=T-\min\bigl(g(S),h(S)\bigr)
+ =\max\bigl(T-g(S),\,T-h(S)\bigr)
+ =\max\bigl(g(N\setminus S),\,h(N\setminus S)\bigr)
+ =f(N\setminus S).
+\]
+Replacing $S$ by $N\setminus S$ in (1) turns the family
+$\{x(S)\ge v(S)\}$ into the family $\{x(S)\le f(S)\}$.  Finally $x\ge0$ is
+exactly the family of singleton inequalities $x(\{i\})\ge v(\{i\})=0$.
+\end{proof}
+
+Identity (1) uses only modularity and the common total; the disjointness of
+Lemma~\ref{lem:disjoint} is not needed for it, and enters only to normalize
+the presentation of $f$.  Note also that $S=N$ gives $f(N)=T$, so the cap at
+$N$ is implied by efficiency, and $S=\emptyset$ gives $f(\emptyset)=0$.
+
+\subsection{The leximin floor}
+
+\begin{theorem}[leximin floor: the easy direction]\label{thm:floor}
+Let
+\[
+ \lambda:=\min_{\emptyset\ne S\subseteq N}\frac{f(S)}{|S|}
+ =\min_{(A',B')\ne(\emptyset,\emptyset)}
+   \frac{\max\bigl(g(A'),h(B')\bigr)}{|A'|+|B'|},
+\]
+the second minimum running over $A'\subseteq A$, $B'\subseteq B$.  Then
+$\mu\le\lambda$.
+\end{theorem}
+
+\begin{proof}
+$\Lmin(v)$ is a core allocation, so by Theorem~\ref{thm:duality}, for every
+nonempty $S$,
+$|S|\,\mu\le\Lmin(v)(S)\le f(S)$, i.e.\ $\mu\le f(S)/|S|$.  Take the minimum
+over $S$.
+\end{proof}
+
+The bound is a \emph{one-coalition certificate}: a single tightest cap
+already pins the floor from above.  Empirically it is also exact.
+
+\begin{conjecture}[leximin floor formula]\label{conj:floor}
+$\mu=\lambda$ for every singleton-normalized two-generator exact game.
+\end{conjecture}
+
+\paragraph{Evidence and reduction.}
+Conjecture~\ref{conj:floor} holds in $586$ of $586$ random two-generator
+games at $n=4,5,6,7$ (sample sizes $120$, $218$, $165$, $83$), with all
+arithmetic exact.  What remains to prove is a clean linear-programming
+statement.  Equality means that the system
+\[
+ y\ge0,\qquad y(N)=T-n\lambda,\qquad y(S)\le f'(S):=f(S)-\lambda|S|
+\]
+is feasible; indeed, given such $y$, the allocation $x=y+\lambda\one$
+satisfies $x(N)=T$, $x\ge\lambda\one\ge0$ and $x(S)\le f(S)$, hence lies in
+the core with floor at least $\lambda$.  Note $f'\ge0$ by definition of
+$\lambda$.  By linear-programming duality,
+\[
+ \max\{y(N):\ y\ge0,\ y(S)\le f'(S)\ \forall S\}
+ =\min\Bigl\{\textstyle\sum_S w_Sf'(S):\ w\ge0,\ \sum_{S\ni i}w_S\ge1\ \forall i\Bigr\},
+\]
+the minimum running over fractional covers.  Taking $w=\one_{\{S=N\}}$ shows
+the minimum is at most $f'(N)=T-n\lambda$, so Conjecture~\ref{conj:floor} is
+exactly the assertion
+\[
+ \sum_S w_Sf'(S)\ \ge\ f'(N)\qquad\text{for every fractional cover }w. \tag{2}
+\]
+
+\begin{proposition}[balanced covers]\label{prop:balanced}
+Inequality (2) holds for every exact (balanced) cover, i.e.\ whenever
+$\sum_{S\ni i}w_S=1$ for all $i$.
+\end{proposition}
+
+\begin{proof}
+Balancedness gives $\sum_Sw_S|S|=\sum_i\sum_{S\ni i}w_S=n$, so, using
+$f\ge g$ and the modularity of $g$,
+\[
+ \sum_Sw_Sf'(S)=\sum_Sw_Sf(S)-\lambda n
+ \ \ge\ \sum_Sw_Sg(S)-\lambda n
+ =\sum_i g_i\sum_{S\ni i}w_S-\lambda n
+ =g(N)-\lambda n=f'(N),
+\]
+the last step because $g(N)=T$ and $f'(N)=T-\lambda n$.
+The same computation works with $h$ in place of $g$.
+\end{proof}
+
+What is missing is the case of covers that strictly over-cover some players.
+Writing $e_i:=\sum_{S\ni i}w_S-1\ge0$, the same computation gives
+\[
+ \sum_Sw_Sf'(S)\ \ge\ f'(N)
+ +\max\Bigl(\sum_{i\in A}g_ie_i,\ \sum_{i\in B}h_ie_i\Bigr)
+ -\lambda\sum_{i\in N}e_i,
+\]
+and since $\lambda\le f(\{i\})$, which equals $g_i$ for $i\in A$ and $h_i$
+for $i\in B$, each inner sum dominates $\lambda$ times its \emph{own} block's
+excess but not the other block's.  Closing that gap, or constructing the
+attaining core allocation directly, is the remaining work.
+
+\subsection{The leximax-min ceiling is not dual}
+
+The mirror-image statement is an inequality but not an identity, and this is
+the first place where the two selections part company.
+
+\begin{observation}[$M$-side asymmetry]\label{obs:Mside}
+For every core allocation, and in particular for $\Lmax(v)$,
+\[
+ M\ \ge\ \max_{\substack{P\subseteq A,\ Q\subseteq B\\ (P,Q)\ne(\emptyset,\emptyset)}}
+ \frac{\min\bigl(g(P),h(Q)\bigr)}{|P|+|Q|}. \tag{3}
+\]
+Inequality (3) is not an identity: it fails strictly already at $n=6$.
+\end{observation}
+
+\begin{proof}[Proof of the inequality]
+Let $x\in\core(v)$ and put $S=P\cup Q$.  Then $g(S)=g(P)$ and $h(S)=h(Q)$
+because $g$ vanishes on $B$ and $h$ on $A$, so
+\[
+ \max_i x_i\ \ge\ \frac{x(S)}{|S|}\ \ge\ \frac{v(S)}{|S|}
+ =\frac{\min\bigl(g(P),h(Q)\bigr)}{|P|+|Q|}.
+\]
+Apply this to $x=\Lmax(v)$.  Equivalently, (3) is Theorem~\ref{thm:duality}
+read on complements.
+\end{proof}
+
+\paragraph{How to read (3).}
+The maximum runs over pairs $(P,Q)$ other than $(\emptyset,\emptyset)$, with
+the convention $g(\emptyset)=h(\emptyset)=0$.  There is no infinity
+convention: a pair with an empty part contributes $\min(\cdot,0)=0$ and is
+simply inactive, so only pairs with \emph{both} parts nonempty can bind.
+This is visible in the proof, where an empty part makes $v(S)$ the minimum of
+something and $0$.  Reading an empty part as $+\infty$ instead would reduce
+(3) to a maximum over singletons and give a different --- and wrong --- value;
+the misreading is easy enough that we spell the convention out.
+
+\paragraph{The smallest counterexample.}
+Scanning the complete two-generator enumeration in increasing $T$, no
+counterexample to equality in (3) exists at $n\le5$ for any $T$, nor at $n=6$
+for $T\le4$.  At $n=6$, $T=5$:
+\[
+ g=(3,2,0,0,0,0),\qquad h=(0,0,2,1,1,1),
+\]
+\[
+ \Lmin(v)=\Bigl(1,\tfrac23,\tfrac43,\tfrac23,\tfrac23,\tfrac23\Bigr),
+ \qquad
+ \Lmax(v)=\Bigl(\tfrac65,\tfrac45,\tfrac65,\tfrac35,\tfrac35,\tfrac35\Bigr),
+\]
+so $M=6/5$, whereas the right-hand side of (3) equals $1$, attained for
+instance at $P=\{1\},Q=\{3\}$ with $\min(3,2)/2=1$.  The gap is $1/5$.  Two
+further counterexamples occur at $n=6$, $T=5$, with $g=(3,1,1)$, $h=(2,2,1)$
+and with $g=(2,2,1)$, $h=(3,1,1)$ on the respective supports; all have
+$M=6/5$ against a bound of $1$.  Over the same random samples used for
+Conjecture~\ref{conj:floor}, (3) is tight in $120/120$ games at $n=4$,
+$218/218$ at $n=5$, $160/165$ at $n=6$ and $74/83$ at $n=7$.
+
+\begin{remark}[diagnosis]\label{rem:asymmetry}
+Theorem~\ref{thm:floor} bounds the floor using only the upper caps
+$x(S)\le f(S)$, and a single tightest cap can be saturated on its own, which
+is why one coalition certifies the optimum.  Bounding the ceiling instead
+requires the lower bounds $x(N\setminus S)\ge T-f(S)$, and \emph{minimizing}
+a maximum must respect several of them simultaneously; no single one
+certifies the optimum.  This is a genuine asymmetry between the two
+selections, and it is the reason $\Lmax$ is the harder object throughout.
+\end{remark}
+
+\section{The master family}\label{sec:family}
+
+\begin{definition}\label{def:family}
+For integers $p\ge1$ and $k\ge2$ put $n=p+1+k$ and $T=pk$, and let $G(p,k)$
+be the lower envelope of
+\[
+ g=\bigl(p(k-1),\ \underbrace{1,\dots,1}_{p},\ \underbrace{0,\dots,0}_{k}\bigr),
+ \qquad
+ h=\bigl(\underbrace{0,\dots,0}_{p+1},\ \underbrace{p,\dots,p}_{k}\bigr).
+\]
+We index the players $0,1,\dots,p+k$ and call player $0$ the \emph{head},
+$O:=\{1,\dots,p\}$ the \emph{ones}, and $B:=\{p+1,\dots,p+k\}$; so
+$A=\{0\}\cup O$ has $p+1$ elements and $|B|=k$.
+\end{definition}
+
+Both generators are nonnegative with total $p(k-1)+p=pk=T$, their supports
+are disjoint, and every coordinate vanishes in one of them; by
+Lemma~\ref{lem:envelope}, $G(p,k)$ is exact and singleton-normalized.
+
+\begin{theorem}[closed forms]\label{thm:family}
+For all $p\ge1$, $k\ge2$,
+\begin{align*}
+ \Lmin\bigl(G(p,k)\bigr)&=\Bigl(\tfrac{p^2(k-1)}{p+1},\ \bigl[\tfrac{p}{p+1}\bigr]^{p+k}\Bigr),\\
+ \Lmax\bigl(G(p,k)\bigr)&=\Bigl(\tfrac{p(k-1)}{k},\ \bigl[\tfrac1k\bigr]^{p},\ \bigl[\tfrac{p(k-1)}{k}\bigr]^{k}\Bigr),\\
+ \bigl\|\Lmin-\Lmax\bigr\|_1&=\frac{2p\bigl(p(k-1)-1\bigr)}{p+1},
+ \qquad
+ \rho\bigl(G(p,k)\bigr)=\frac{2\bigl(p(k-1)-1\bigr)}{k(p+1)},
+\end{align*}
+where the exponents indicate the number of coordinates, listed in the order
+head, ones, $B$.
+\end{theorem}
+
+The proof occupies Sections~\ref{sec:keycap}--\ref{sec:gap}: a key cap, the
+two optimizations, a membership check, and the arithmetic of the gap.
+
+\subsection{The key cap}\label{sec:keycap}
+
+For each $b\in B$,
+\[
+ f\bigl(O\cup\{b\}\bigr)=\max\bigl(g(O),h(\{b\})\bigr)=\max(p,p)=p,
+\]
+so by Theorem~\ref{thm:duality} every core allocation $x$ satisfies
+\[
+ x_1+\dots+x_p+x_b\ \le\ p\qquad\text{for every }b\in B. \tag{KC}
+\]
+That single family of $(p+1)$-player caps drives everything below.  Note that
+the two generators \emph{tie} at these coalitions: the maximum defining $f$
+is attained on both sides.
+
+\subsection{Leximin}
+
+Let $x\in\core(G(p,k))$ and $m:=\min_ix_i$.  Applying (KC) with any fixed $b$
+gives $(p+1)m\le p$, so
+\[
+ m\le\frac{p}{p+1},\qquad\text{hence}\qquad \mu\le\frac{p}{p+1}.
+\]
+Suppose $m=p/(p+1)$.  Then in (KC) the $p+1$ numbers $x_1,\dots,x_p,x_b$ are
+each at least $p/(p+1)$ and sum to at most $p=(p+1)\cdot p/(p+1)$, so all of
+them equal $p/(p+1)$.  This holds for \emph{every} $b\in B$, hence
+\[
+ x_1=\dots=x_p=x_{p+1}=\dots=x_{p+k}=\frac{p}{p+1},
+\]
+and efficiency forces the head to
+\[
+ x_0=T-(p+k)\frac{p}{p+1}=pk-\frac{p(p+k)}{p+1}=\frac{p^2(k-1)}{p+1},
+\]
+using $k-(p+k)/(p+1)=(kp+k-p-k)/(p+1)=p(k-1)/(p+1)$.  Thus the max-min
+allocation is \emph{unique}, and a unique max-min allocation is a fortiori
+the leximin allocation.  Since $p(k-1)\ge1$, the head's coordinate is at
+least $p/(p+1)$, so the floor of this allocation is indeed $p/(p+1)$.  It
+remains to check that this point is in the core, which is done in
+Section~\ref{sec:membership}.
+
+\subsection{Leximax-min}
+
+Let $x\in\core(G(p,k))$, $M:=\max_ix_i$ and $s:=x_1+\dots+x_p$.  By (KC),
+$x_b\le p-s$ for every $b\in B$, and trivially $x_b\le M$ and $x_0\le M$.
+Efficiency gives
+\[
+ pk=x_0+s+\sum_{b\in B}x_b\ \le\ M+s+k\min(M,\,p-s). \tag{4}
+\]
+
+\emph{Case A: $M\le p-s$.}  Then (4) reads $pk\le(k+1)M+s$.  The case
+hypothesis is $s\le p-M$, so $pk\le(k+1)M+p-M=kM+p$, i.e.
+$M\ge p(k-1)/k$.
+
+\emph{Case B: $M>p-s$.}  Then (4) reads $pk\le M+s+k(p-s)$, i.e.
+$(k-1)s\le M$, so $s\le M/(k-1)$.  The case hypothesis then gives
+$M>p-s\ge p-M/(k-1)$, i.e.\ $Mk/(k-1)>p$, i.e.\ $M>p(k-1)/k$.
+
+In both cases $M\ge p(k-1)/k$, so the leximax-min ceiling is at least
+$p(k-1)/k$.  Equality can occur only in Case A with every inequality used
+tight, that is with $x_0=M$, with $x_b=M$ for all $b\in B$, and with
+\[
+ s=pk-(k+1)M=pk-(k+1)\frac{p(k-1)}{k}=\frac{p\bigl(k^2-(k+1)(k-1)\bigr)}{k}=\frac pk .
+\]
+(Consistency: $p-s=p-p/k=p(k-1)/k=M$, so Case A holds with equality, as it
+must.)  Thus at the min-max level the head and all of $B$ are pinned at
+$p(k-1)/k$ and the ones share exactly $p/k$; since $p/k\le p(k-1)/k$ for
+$k\ge2$, the ones occupy the last $p$ positions of the decreasing
+rearrangement.  The next leximax stage minimizes their maximum subject to
+their sum being $p/k$, whose unique optimum is $1/k$ each.  Hence $\Lmax$ is
+as claimed, again modulo membership.
+
+\subsection{Membership}\label{sec:membership}
+
+This step is load-bearing: the two optimizations above determine the optima
+only conditionally on the described allocations being feasible.
+
+Index as in Definition~\ref{def:family} and, for $S\subseteq N$, put
+\[
+ \varepsilon:=[\,0\in S\,],\qquad i:=|S\cap O|,\qquad j:=|S\cap B|,
+\]
+so that $0\le i\le p$, $0\le j\le k$ and
+\[
+ g(S)=\varepsilon\,p(k-1)+i,\qquad h(S)=jp,\qquad
+ f(S)=\max\bigl(\varepsilon\,p(k-1)+i,\ jp\bigr). \tag{5}
+\]
+
+\begin{lemma}\label{lem:membership}
+Both allocations of Theorem~\ref{thm:family} lie in $\core(G(p,k))$ for all
+$p\ge1$, $k\ge2$.  Moreover, for both of them the tight coalitions are
+exactly
+\[
+\begin{array}{ll}
+ \text{(T1)}\quad S=O\cup\{b\},\ b\in B, & f(S)=\max(p,p)=p,\\[2pt]
+ \text{(T2)}\quad S=\{0\}\cup B',\ |B'|=k-1, & f(S)=\max\bigl(p(k-1),(k-1)p\bigr)=p(k-1),\\[2pt]
+ \text{(T3)}\quad S=N, & f(N)=T.
+\end{array}
+\]
+\end{lemma}
+
+\begin{proof}
+\emph{The leximin allocation.}  Write $q:=p/(p+1)$ and
+$H:=p^2(k-1)/(p+1)=p(k-1)q$, so $x^*=(H,q,\dots,q)$ with $p+k$ copies of $q$.
+Efficiency:
+\[
+ H+(p+k)q=q\bigl(p(k-1)+p+k\bigr)=q(pk+k)=k(p+1)\frac{p}{p+1}=pk=T,
+\]
+and $x^*>0$.  It remains to check $x^*(S)=\varepsilon H+(i+j)q\le f(S)$.
+
+$\varepsilon=0$, $j=0$: $S$ is a subset of $O$, and $x^*(S)=iq<i=f(S)$ for
+$i\ge1$ because $q<1$; for $i=0$, $S=\emptyset$.  Strict.
+
+$\varepsilon=0$, $j\ge1$: bound $f(S)\ge jp$ and use $i\le p$:
+\[
+ x^*(S)=(i+j)\frac{p}{p+1}\le(p+j)\frac{p}{p+1}\le jp
+ \iff p+j\le j(p+1)\iff p\le jp,
+\]
+which holds since $j\ge1$.  Equality throughout requires $i=p$ and $j=1$,
+i.e.\ $S=O\cup\{b\}$, which is (T1).
+
+$\varepsilon=1$, $j\le k-1$: put $G_0:=p(k-1)+i=g(S)$, so $x^*(S)=q(G_0+j)$
+and
+\[
+ x^*(S)\le G_0\iff p(G_0+j)\le(p+1)G_0\iff jp\le G_0=p(k-1)+i,
+\]
+which holds because $jp\le(k-1)p$.  Hence $x^*(S)\le g(S)\le f(S)$, with
+equality exactly when $j=k-1$ and $i=0$, i.e.\ $S=\{0\}\cup B'$ with
+$|B'|=k-1$, which is (T2).
+
+$\varepsilon=1$, $j=k$: then $h(S)=kp=T$, so $f(S)\ge T\ge x^*(S)$, with
+equality only for $S=N$ since $x^*>0$; this is (T3).
+
+\emph{The leximax-min allocation.}  Write $L:=p(k-1)/k$ and $r:=1/k$, so
+$y^*=(L,r,\dots,r,L,\dots,L)$ with $p$ copies of $r$ and $k$ copies of $L$.
+Efficiency:
+\[
+ L+pr+kL=(k+1)L+\frac pk=\frac{p\bigl[(k+1)(k-1)+1\bigr]}{k}=\frac{pk^2}{k}=pk=T,
+\]
+and $y^*>0$.  Now $y^*(S)=\varepsilon L+ir+jL$.
+
+$\varepsilon=0$, $j=0$: $y^*(S)=i/k\le i=f(S)$ since $k\ge2$, strictly for
+$i\ge1$.
+
+$\varepsilon=0$, $j\ge1$: comparing with the $h$-side,
+\[
+ \frac{i+jp(k-1)}{k}\le jp\iff i+jp(k-1)\le jpk\iff i\le jp,
+\]
+which holds since $i\le p\le jp$, with equality exactly when $i=p$ and $j=1$,
+i.e.\ (T1).
+
+$\varepsilon=1$, $j\le k-1$: $y^*(S)=(j+1)L+i/k$, and multiplying by $k>0$,
+\[
+ y^*(S)\le p(k-1)+i
+ \iff (j+1)p(k-1)+i\le kp(k-1)+ki
+ \iff p(j+1-k)\le i,
+\]
+after dividing by $k-1\ge1$; the left-hand side is at most $0\le i$, with
+equality exactly when $j=k-1$ and $i=0$, i.e.\ (T2).
+
+$\varepsilon=1$, $j=k$: as before $f(S)\ge h(S)=kp=T\ge y^*(S)$, with
+equality only at $S=N$.
+\end{proof}
+
+\subsection{The hinge: both selections saturate the same caps}
+
+Lemma~\ref{lem:membership} contains the expository point of the paper.  The
+active constraints are the same for $\Lmin$ and $\Lmax$: the two families
+(T1) and (T2), plus efficiency.  Both are coalitions at which the two
+generators \emph{tie}, which is the structural reason they are the active
+ones --- there is no slack on either side to give.  What differs is only how
+the two selections distribute mass \emph{inside} a tight coalition.  On
+$S=O\cup\{b\}$, which has total exactly $p$:
+\[
+\begin{array}{lcc}
+ & \text{each of the }p\text{ ones} & \text{the single }b\in B\\[2pt]
+ \Lmin: & \dfrac{p}{p+1} & \dfrac{p}{p+1}\\[10pt]
+ \Lmax: & \dfrac1k & \dfrac{p(k-1)}{k}
+\end{array}
+\]
+Leximin splits the budget $p$ evenly over all $p+1$ members; leximax-min
+gives the ones the least it can and puts the whole remainder on the one
+member of $B$, because loading $B$ is how it lowers the global maximum.  The
+divergence is visible in this one coalition.  Everything else is bookkeeping:
+leximin's even split leaves the residual $T-(p+k)p/(p+1)$ with nowhere to go
+but the head, while leximax-min's loading of every $b\in B$ up to
+$p(k-1)/k$ consumes almost all of $T$ across $B$.
+
+\subsection{The gap}\label{sec:gap}
+
+\begin{proof}[Proof of Theorem~\ref{thm:family}, conclusion]
+Put $D:=p(k-1)-1\ge0$.  Coordinatewise,
+\begin{align*}
+ \text{head:}&& \frac{p^2(k-1)}{p+1}-\frac{p(k-1)}{k}&=\frac{p(k-1)D}{k(p+1)},\\
+ \text{each of the $p$ ones:}&& \frac{p}{p+1}-\frac1k&=\frac{D}{k(p+1)},\\
+ \text{each of the $k$ members of $B$:}&& \frac{p(k-1)}{k}-\frac{p}{p+1}&=\frac{pD}{k(p+1)},
+\end{align*}
+all three nonnegative.  Hence
+\[
+ \|\Lmin-\Lmax\|_1=\frac{p(k-1)D+pD+kpD}{k(p+1)}
+ =\frac{D\bigl(p(k-1)+p+kp\bigr)}{k(p+1)}
+ =\frac{2pkD}{k(p+1)}=\frac{2pD}{p+1},
+\]
+and $\rho=2pD/\bigl((p+1)pk\bigr)=2D/\bigl(k(p+1)\bigr)$.
+\end{proof}
+
+\begin{corollary}[deficit identity]\label{cor:deficit}
+$\displaystyle 2-\rho\bigl(G(p,k)\bigr)=\frac{2n}{k(p+1)}$, where $n=p+1+k$.
+\end{corollary}
+
+\begin{proof}
+$2-\dfrac{2\bigl(p(k-1)-1\bigr)}{k(p+1)}
+ =\dfrac{2\bigl[k(p+1)-p(k-1)+1\bigr]}{k(p+1)}
+ =\dfrac{2(kp+k-pk+p+1)}{k(p+1)}=\dfrac{2(k+p+1)}{k(p+1)}$.
+\end{proof}
+
+\begin{remark}[the deficit is twice the overlap]\label{rem:overlap}
+Corollary~\ref{cor:deficit} also follows from Lemma~\ref{lem:ceiling}.  In
+$G(p,k)$ the coordinatewise minima of the two allocations are $p(k-1)/k$ at
+the head, $1/k$ at each one, and $p/(p+1)$ at each member of $B$, so
+\[
+ \sum_i\min\bigl(\Lmin_i,\Lmax_i\bigr)
+ =\frac{p(k-1)}{k}+\frac pk+\frac{kp}{p+1}=p+\frac{kp}{p+1}<p+k=n-1,
+\]
+and $2\cdot\bigl(p+kp/(p+1)\bigr)/(pk)=2(p+1+k)/\bigl(k(p+1)\bigr)$.  The
+overlap between the two selections is thus bounded by $n$ while $T=pk$ grows
+quadratically: this is the precise sense in which their supports become
+asymptotically disjoint.
+\end{remark}
+
+\subsection{The supremum}
+
+\begin{theorem}[value of the supremum]\label{thm:sup}
+For every $n\ge4$,
+\[
+ s(n)\ \ge\ 2-\frac{8n}{n^2-(n\bmod2)}
+ =\begin{cases}
+   2-\dfrac8n,& n\text{ even},\\[6pt]
+   2-\dfrac{8n}{n^2-1},& n\text{ odd},
+  \end{cases}
+\]
+attained on the two-generator class by $G(p,k)$ with the balanced split
+$k=\lceil n/2\rceil$, $p+1=\lfloor n/2\rfloor$.  Consequently
+$\sup_n s(n)=2$.
+\end{theorem}
+
+\begin{proof}
+By Corollary~\ref{cor:deficit} the deficit of $G(p,k)$ is $2n/(k(p+1))$ with
+$k+(p+1)=n$, $k\ge2$ and $p+1\ge2$.  Minimizing the deficit means maximizing
+the product $k(p+1)$ of two positive integers with fixed sum $n$, whose
+maximum is $\lfloor n/2\rfloor\lceil n/2\rceil$, equal to $n^2/4$ for even
+$n$ and $(n^2-1)/4$ for odd $n$, attained at the balanced split (for $n\ge4$
+this split satisfies the constraints $k\ge2$, $p\ge1$).  Substituting gives
+the displayed bound.  For the last claim, $\rho\le2$ always by
+Lemma~\ref{lem:ceiling}, and $2-8/n\to2$.
+\end{proof}
+
+Table~\ref{tab:values} lists the resulting values.  The ratio crosses $1$ at
+$n=8$: from eight players on, the two egalitarian core selections can differ
+by more than the entire worth of the grand coalition.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{@{}rlll@{}}
+\toprule
+$n$ & $(p,k)$ & lower bound on $s(n)$ & decimal\\
+\midrule
+ 6 & $(2,3)$ & $2/3$ & $0.6667$\\
+ 7 & $(2,4)$ & $5/6$ & $0.8333$\\
+ 8 & $(3,4)$ & $1$ & $1.0000$\\
+ 9 & $(3,5)$ & $11/10$ & $1.1000$\\
+10 & $(4,5)$ & $6/5$ & $1.2000$\\
+11 & $(4,6)$ & $19/15$ & $1.2667$\\
+12 & $(5,6)$ & $4/3$ & $1.3333$\\
+16 & $(7,8)$ & $3/2$ & $1.5000$\\
+20 & $(9,10)$ & $8/5$ & $1.6000$\\
+100 & $(49,50)$ & $48/25$ & $1.9200$\\
+\bottomrule
+\end{tabular}
+\caption{The bound of Theorem~\ref{thm:sup} at the balanced split.  All
+entries are exact; decimals are rounded.}
+\label{tab:values}
+\end{table}
+
+\begin{remark}[the degenerate corner]\label{rem:degenerate}
+$G(1,2)$ has $n=4$, $T=2$, $g=(1,1,0,0)$, $h=(0,0,1,1)$ and
+$\rho=2(1\cdot1-1)/(2\cdot2)=0$, consistent with the four-player rigidity;
+the deficit identity reads $2-0=2n/(k(p+1))=8/4=2$.
+\end{remark}
+
+\begin{remark}[there is nothing special about $|B|=4$]\label{rem:notfour}
+An earlier version of this family fixed $k=|B|=4$, giving
+$\rho=(3p-1)/\bigl(2(p+1)\bigr)\to3/2$.  Corollary~\ref{cor:deficit} shows
+that $k$ is a free parameter and that the optimum is $k\approx n/2$, so the
+limit $3/2$ was an artifact of the fixed block size; the $k=4$ slice is
+already beaten from $n=10$ on ($7/6$ against $6/5$).  The number $4$ that
+appears as $|\supp(\Lmax)|$ in the $n=5$ extremal class
+(Section~\ref{sec:fixedn}) is a small-$n$ phenomenon and not a feature of the
+asymptotics: in $G(p,k)$ every coordinate of $\Lmax$ is strictly positive, so
+$|\supp(\Lmax)|=n$ and no player is starved at all.
+\end{remark}
+
+\section{Fixed $n$: enumeration, certificates, and the $n=5$ anomaly}
+\label{sec:fixedn}
+
+\subsection{Complete two-generator enumeration}
+
+Write $s_2(n)$ for the supremum of $\rho$ over singleton-normalized
+two-generator exact games on $n$ players.  Table~\ref{tab:enum} reports
+complete enumerations, up to player permutation, generator swap and scaling,
+of all integer generator pairs with common total in the stated range.  All
+arithmetic is exact rational.
+
+\begin{table}[t]
+\centering
+\begin{tabular}{@{}rrrll@{}}
+\toprule
+$n$ & totals & games & enumerated max $\rho$ & Theorem~\ref{thm:sup}\\
+\midrule
+3 & $2$--$30$ & $225$ & $0$ & ---\\
+4 & $2$--$30$ & $3{,}040$ & $0$ & $0$\\
+5 & $2$--$24$ & $4{,}357$ & $1/2$ & $1/3$\\
+6 & $2$--$20$ & $8{,}213$ & $2/3$ & $2/3$\\
+7 & $2$--$14$ & $1{,}609$ & $5/6$ & $5/6$\\
+8 & $2$--$12$ & $1{,}049$ & $1$ & $1$\\
+\bottomrule
+\end{tabular}
+\caption{Complete two-generator enumerations.  The rows $n=3,4$ are controls:
+they reproduce the four-player rigidity.  The last column is the value of the
+balanced-split family bound.}
+\label{tab:enum}
+\end{table}
+
+Two readings must be kept apart.
+
+\paragraph{What is complete.}
+Because $\rho$ is scale-invariant, every two-generator game with rational
+generators has a unique primitive integer representative, and enumeration to
+total $T_{\max}$ is exactly complete for the games whose primitive
+representative has total at most $T_{\max}$ --- equivalently, for rational
+shapes of denominator at most $T_{\max}$.  It says nothing about finer
+denominators or about irrational generators, so enumeration-to-$T$ is a
+lower-bound method for $s_2(n)$: the entries of Table~\ref{tab:enum} are
+maxima over the enumerated range, not values of $s_2$.  As a partial probe of
+the excluded region, shape hill-climbing at fine resolution was run from the
+known witnesses (resolution $1/60$ at $n=5$; $1/56$ and $1/60$ at $n=6$;
+$1/64$ at $n=7$).  None improved on the tabulated maximum; at $n=7$ the climb
+from the $5/6$ witness stalled after $42$ steps, and a second start from a
+base of $2/3$ climbed only to $3/4$.
+
+\paragraph{What agrees.}
+The enumerated maxima agree exactly with Theorem~\ref{thm:sup} at $n=6,7,8$,
+so on the two-generator class that bound is attained there, and
+\[
+ s_2(n)\ \stackrel{?}{=}\ 2-\frac{8n}{n^2-(n\bmod2)}\qquad(n\ge6)
+\]
+is a live candidate, currently confirmed at three values of $n$.  At $n=5$
+the two disagree, and the enumeration is the correct one; see
+Section~\ref{sec:n5}.
+
+\subsection{Searching the full exact class}
+
+The two-generator restriction is not innocuous.  Adding a generator
+\emph{lowers} the envelope and hence \emph{grows} the core, so it is not
+automatic that two generators are extremal.  The following observation lets
+one search the entire exact class rather than a bounded-generator slice.
+
+\begin{lemma}[core closing]\label{lem:closing}
+Fix $T>0$ and a vector $c=(c_S)$ indexed by the proper coalitions, and put
+$P(c)=\{x: x(N)=T,\ x(S)\ge c_S\ \text{for all proper }S\}$.  If
+$P(c)\ne\emptyset$, then the game $v$ defined by $v(S)=\min_{x\in P(c)}x(S)$
+for proper $S$ and $v(N)=T$ is exact, and $\core(v)=P(c)$.
+\end{lemma}
+
+\begin{proof}
+Every $x\in P(c)$ satisfies $x(S)\ge v(S)$ by definition of $v$ and
+$x(N)=T$, so $P(c)\subseteq\core(v)$; and each minimum is attained, so $v$ is
+exact.  Conversely, $v(S)\ge c_S$ for every proper $S$ because every point of
+$P(c)$ satisfies $x(S)\ge c_S$; hence $x\in\core(v)$ implies $x(S)\ge
+v(S)\ge c_S$ and $x(N)=T$, i.e.\ $x\in P(c)$.
+\end{proof}
+
+Perturbing $c$ and re-closing therefore moves within the exact class and
+reaches cores with arbitrarily many vertices.  Hill climbing in this
+``$c$-space'', \emph{seeded at the extremal two-generator game} of
+Table~\ref{tab:enum}, produced no improvement at $n=5$ ($240$ steps, stays at
+$1/2$), $n=6$ ($496$ steps, stays at $2/3$) or $n=7$ ($301$ steps, stays at
+$5/6$).  Since the search is over all exact games, this certifies the
+two-generator optimum as a \emph{local} optimum in the full exact class at
+those three values of $n$.  Independently, from the known extremal at each of
+$n=5,6,7,8$, about $200$ structured and random third generators at fixed
+common total were added: zero improvements.
+
+One limitation must be stated.  Unseeded $c$-space restarts reach only $1/3$
+at $n=6$, far below the known $2/3$; that variant of the search is
+under-powered for $n\ge6$ and certifies nothing.  Only the seeded runs
+support the local-optimality claim, and none of these runs bears on global
+optimality.
+
+\subsection{The $n=5$ anomaly}\label{sec:n5}
+
+At $n=5$ the balanced-split family gives only $1/3$, but the truth is $1/2$,
+and the witness has a non-uniform $h$-block.  The proof is by hand from the
+four core vertices; no linear program is used.
+
+\begin{theorem}[$n=5$]\label{thm:n5}
+Let $w$ be the lower envelope of $g^1=(1,0,0,1,2)$ and $g^2=(0,1,3,0,0)$.
+Then $w$ is exact and singleton-normalized with $w(N)=4$, and
+\[
+ \Lmin(w)=\Bigl(\tfrac12,\tfrac12,\tfrac54,\tfrac12,\tfrac54\Bigr),\qquad
+ \Lmax(w)=(1,0,1,1,1),\qquad
+ \|\Lmin-\Lmax\|_1=2,\qquad \rho(w)=\tfrac12 .
+\]
+In particular $s(5)\ge1/2>1/3$.
+\end{theorem}
+
+\begin{proof}
+Exactness and normalization are immediate from Lemma~\ref{lem:envelope}, each
+coordinate vanishing in one generator.  Exact rational vertex enumeration
+gives
+\[
+ \core(w)=\operatorname{conv}\{V_1,V_2,V_3,V_4\},
+\]
+\[
+ V_1=(0,1,2,0,1),\quad V_2=(0,1,3,0,0),\quad V_3=(1,0,0,1,2),\quad V_4=(1,0,1,1,1).
+\]
+Write $x=aV_1+bV_2+cV_3+dV_4$ with $a+b+c+d=1$, $a,b,c,d\ge0$, and put
+$s:=c+d\in[0,1]$.  Then
+\[
+ x_1=x_4=s,\qquad x_2=1-s,\qquad x_3+x_5=3-s. \tag{6}
+\]
+
+\emph{Leximin.}  By (6), $\min_ix_i\le\min(s,1-s)\le1/2$, with equality
+forcing $s=1/2$ and hence $x_1=x_2=x_4=1/2$.  Then $x_3+x_5=5/2$, and the
+leximin continuation splits this evenly, giving $5/4$ each.  The resulting
+allocation is attained: $(a,b,c,d)=(1/4,1/4,1/2,0)$ gives $s=1/2$ and
+$x=(1/2,1/2,5/4,1/2,5/4)$ exactly.  Hence $\Lmin(w)$ is as claimed.
+
+\emph{Leximax-min.}  By (6), $\max_ix_i\ge(x_3+x_5)/2=(3-s)/2\ge1$ since
+$s\le1$.  Equality forces $s=1$, hence $a=b=0$, and $x_3=x_5=1$.  Among
+$c+d=1$ the condition $x_3=d=1$ forces $d=1$, $c=0$, i.e.\ $x=V_4$, uniquely.
+Hence $\Lmax(w)=(1,0,1,1,1)$.
+
+Finally $\|\Lmin-\Lmax\|_1=\tfrac12+\tfrac12+\tfrac14+\tfrac12+\tfrac14=2$
+and $\rho=2/4=1/2$.
+\end{proof}
+
+Four independent methods agree on this game: the hand argument above, exact
+rational core-vertex enumeration, a staged exact solver over linear real
+arithmetic, and a from-scratch exact-rational two-phase simplex with Bland's
+rule.
+
+\begin{conjecture}[$n=5$ supremum]\label{conj:n5}
+$s(5)=1/2$.
+\end{conjecture}
+
+\paragraph{Evidence.}
+Roughly $4\times10^4$ distinct exact five-player games were evaluated in
+exact rational arithmetic with nothing above $1/2$: the complete
+two-generator enumeration of Table~\ref{tab:enum} ($4{,}357$ games, maximum
+$1/2$); complete three-generator enumerations at totals $4,5,6,7$ ($335$,
+$1{,}175$, $3{,}747$ and $9{,}923$ games, maxima $1/2$, $2/5$, $1/3$,
+$8/21$); $c$-space hill climbing in the sense of Lemma~\ref{lem:closing}
+($68$ restarts, about $6{,}600$ evaluations), which plateaus at $1/2$; and
+fine-denominator shape climbing from the extremal witness scaled to total
+$60$, which does not improve.  The controls at $n=3,4$ in
+Table~\ref{tab:enum} return maximum $0$ from the same pipeline.
+
+\paragraph{Structure of the extremal class.}
+The following are computational findings over $360$ distinct profiled games
+at $n=5$, of which $199$ have $\rho>1/3$ and $107$ attain $\rho=1/2$.  Among
+the $107$ extremal games, without exception:
+\begin{itemize}[nosep]
+\item $\Lmin$ has stratum composition $(3,2)$, and $\Lmax$ has stratum
+      composition $(1,4)$;
+\item $\Lmax$ has exactly one zero coordinate, so $|\supp(\Lmax)|=4$;
+\item normalized to $T=4$ the pair is unique up to permutation:
+      $\Lmin\sim(\tfrac12,\tfrac12,\tfrac12,\tfrac54,\tfrac54)$ and
+      $\Lmax\sim(0,1,1,1,1)$ --- that is, exactly the pair of
+      Theorem~\ref{thm:n5}.
+\end{itemize}
+Among the $199$ games above $1/3$, the $\Lmin$ strata are $(3,2)$ in $196$
+cases and $(2,1,2)$ in $3$; the pattern $(4,1)$ never occurs above $1/3$, and
+$\Lmax$ is never the uniform allocation.
+
+One tempting invariant is refuted.  Call $S$ a \emph{flat split} if
+$v(S)+v(N\setminus S)=v(N)$; then $x(S)$ is constant on the core, which is
+the affine seesaw visible in (6) --- in the game of Theorem~\ref{thm:n5},
+$w(\{1,2\})+w(\{3,4,5\})=1+3=4$.  Only $76$ of the $107$ extremal games have
+any flat split, and $31$ attain exactly $1/2$ with none, so the seesaw is a
+feature of the particular presentation in Theorem~\ref{thm:n5} and not an
+invariant of extremality.  When a flat split does exist its sizes are always
+$\{2,3\}$, and the $\Lmax$-starved player lies on the size-$2$ side in all
+$76$ cases.
+
+\paragraph{Two regimes.}
+Theorem~\ref{thm:sup} gives only $1/3$ at $n=5$ because the family $G(p,k)$
+has a uniform $h$-block and the available splits $(k,p+1)\in\{(2,3),(3,2)\}$
+are too coarse; the extremal five-player game has a non-uniform $h$-block.
+The crossover to the $G$-family shape happens at $n=6$.  The two regimes
+differ qualitatively and not just numerically: at $n=5$ the extremal $\Lmax$
+starves one player to $0$ and has support of size $4$, whereas in $G(p,k)$
+the extremal $\Lmax$ is strictly positive everywhere.  Explaining the
+crossover is open (Section~\ref{sec:scope}).
+
+\section{Obstructions to an upper bound}\label{sec:obstruction}
+
+\subsection{No constant below $2$}
+
+Theorem~\ref{thm:sup} already rules out one shape of answer.  Any bound of
+the form $\|\Lmin(v)-\Lmax(v)\|_1\le c\cdot v(N)$ with a constant $c<2$,
+valid for all $n$, is false: choose $n$ even with $2-8/n>c$.  So the only
+possible clean upper bound is dimension-dependent, and the right target is
+the finite-$n$ statement
+\[
+ s_2(n)=2-\frac{8n}{n^2-(n\bmod2)}\qquad(n\ge6),
+\]
+currently confirmed by complete enumeration only at $n=6,7,8$, together with
+the question of whether $s(n)=s_2(n)$.
+
+\subsection{No bound linear in the leximin floor}
+
+A second shape is also excluded, and this one was a live candidate.  The
+inequality
+\[
+ \|\Lmin(v)-\Lmax(v)\|_1\ \le\ 4(n-4)\,\mu(v),\qquad \mu(v)=\min_i\Lmin(v)_i,
+\]
+holds with no violations in $900$ fresh random five-player games and is tight
+both on the $n=5$ extremal class and on $G(3,4)$ at $n=8$, where both sides
+equal $12$.  It fails from $n=9$ on:
+\begin{center}
+\begin{tabular}{@{}llll@{}}
+\toprule
+game & $n$ & $\|\Lmin-\Lmax\|_1$ & $4(n-4)\mu$\\
+\midrule
+$G(4,4)$ & 9 & $88/5$ & $16$\\
+$G(3,5)$ & 9 & $33/2$ & $15$\\
+$G(4,5)$ & 10 & $24$ & $96/5$\\
+$G(5,5)$ & 11 & $95/3$ & $70/3$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The reason is structural rather than accidental: in $G(p,k)$ one has
+$\mu=p/(p+1)<1$, bounded, while the gap grows like $2T$.  No bound of the
+form $C(n)\mu(v)$ can track the divergence, whatever $C$ is.
+
+\subsection{Non-monotonicity under majorization}
+
+The most natural route to an upper bound on the two-generator class is to
+argue that a uniform $h$-block is without loss of generality --- the extremal
+family $G(p,k)$ has one --- and then to optimize over $g$ alone using the
+floor formula of Conjecture~\ref{conj:floor}.  That route is closed.
+
+Define a \emph{smoothing step} as a Robin Hood transfer of one unit from a
+larger to a smaller $h$-coordinate, so that $h$ moves down in the
+majorization order, toward uniform.  The premise that a smoothing step never
+decreases $\rho$ is false, and not only for small blocks:
+\begin{center}
+\begin{tabular}{@{}lrrrr@{}}
+\toprule
+$|B|$ & $2$ & $3$ & $4$ & $5$\\
+\midrule
+smoothing steps tested & $40$ & $76$ & $84$ & $84$\\
+violations & $18$ & $27$ & $11$ & $21$\\
+rate & $45\%$ & $36\%$ & $13\%$ & $25\%$\\
+\bottomrule
+\end{tabular}
+\end{center}
+In particular it fails for $|B|\ge4$, so the block-size threshold one might
+guess from the $n=5$ anomaly does not exist.  An explicit verified
+counterexample at $|B|=4$, with $n=7$ and $T=10$, both allocations confirmed
+in the core:
+\[
+ g=(0,5,0,3,2,0,0),\qquad h=(1,0,2,0,0,5,2),
+\]
+\[
+ \Lmin=(1,2,1,1,1,3,1),\qquad
+ \Lmax=\Bigl(\tfrac56,\tfrac52,\tfrac56,\tfrac43,\tfrac76,\tfrac52,\tfrac56\Bigr),
+ \qquad \rho=\tfrac15 .
+\]
+Smoothing the $h$-block $(5,2)\mapsto(4,3)$, i.e.\ replacing $h$ by
+$(1,0,2,0,0,4,3)$, gives
+\[
+ \Lmin=\Lmax=(1,2,1,1,1,2,2),\qquad \rho=0 .
+\]
+So a single Robin Hood step inside one generator collapses the ratio from
+$1/5$ to $0$, and $\rho$ is not monotone under majorization of $h$.
+
+The two facts sit together uncomfortably and both are true: smoothing makes a
+game more symmetric and tends to \emph{collapse} the two selections onto each
+other, yet the extremal family has a perfectly uniform $h$.  The dependence
+is therefore genuinely non-monotone, and any upper-bound proof must handle
+general $h$ directly rather than reducing to the uniform case.
+
+\section{What the results do and do not establish}\label{sec:scope}
+
+\paragraph{Proved.}
+Lemma~\ref{lem:envelope} (lower-envelope generation and its converse);
+Lemma~\ref{lem:ceiling} (ceiling and overlap identity);
+Lemma~\ref{lem:disjoint} (support disjointness); Theorem~\ref{thm:duality}
+(two-generator core duality, with identity (1) valid without disjointness);
+Theorem~\ref{thm:floor} ($\mu\le\lambda$); Proposition~\ref{prop:balanced}
+(the cover inequality (2) for balanced covers); the validity half of
+Observation~\ref{obs:Mside}; Theorem~\ref{thm:family} with
+Lemma~\ref{lem:membership} (closed forms for $G(p,k)$, including membership
+for all $p\ge1$, $k\ge2$ and the exact list of tight coalitions);
+Corollary~\ref{cor:deficit} and Remark~\ref{rem:overlap} (the deficit
+identity, twice);  Theorem~\ref{thm:sup} ($s(n)\ge2-8n/(n^2-(n\bmod2))$ and
+$\sup_ns(n)=2$); Lemma~\ref{lem:closing} (core closing);
+Theorem~\ref{thm:n5} ($\rho=1/2$ at $n=5$, by hand).  The failure of the
+$4(n-4)\mu$ bound from $n=9$, and the non-monotonicity of $\rho$ under
+majorization of $h$, are proved by the explicit games displayed in
+Section~\ref{sec:obstruction}: each is a finite exact-rational computation on
+a named game, and each is a refutation, so a single instance suffices.
+
+\paragraph{Enumerated, not proved.}
+The entries of Table~\ref{tab:enum} are maxima over the stated integer
+ranges, hence complete only for rational shapes whose primitive integer
+representative has total in that range; they are lower bounds for $s_2(n)$,
+not its value.  The strict failure of equality in (3) is established by the
+displayed six-player game, but the claim that this is the \emph{smallest}
+such failure rests on the enumeration.  The tightness rates for (3) and for
+Conjecture~\ref{conj:floor} are sample statistics over $586$ random games.
+The structural findings about the $n=5$ extremal class in
+Section~\ref{sec:n5} --- unique solution pair up to permutation, $(3,2)$ and
+$(1,4)$ stratum compositions, $|\supp(\Lmax)|=4$, the refutation of the
+seesaw hypothesis --- are computational, over $360$ profiled games, and none
+of them is proved.  The local-optimality certificates from seeded $c$-space
+climbing at $n=5,6,7$ are numerical searches over the full exact class; the
+unseeded variant is under-powered at $n\ge6$ and certifies nothing.
+
+\paragraph{Conjectured.}
+Five problems remain open.
+\begin{enumerate}[label=(\arabic*),nosep]
+\item \textbf{Conjecture~\ref{conj:floor}}, equality in the leximin floor
+      formula.  Reduced by linear-programming duality to the fractional-cover
+      inequality (2); proved for balanced covers
+      (Proposition~\ref{prop:balanced}); the over-covering case is open.
+      Verified in $586/586$ random two-generator games at $n=4,\dots,7$.
+\item \textbf{An upper bound.}  Theorem~\ref{thm:sup} forces any true bound
+      to be asymptotically $2$, so every bound $c\cdot v(N)$ with $c<2$ is
+      false for large $n$.  The right target is
+      $s_2(n)=2-8n/(n^2-(n\bmod2))$ for $n\ge6$, confirmed by complete
+      enumeration at $n=6,7,8$ only.  Section~\ref{sec:obstruction} closes
+      the majorization route and the $C(n)\mu$ route.
+\item \textbf{Is the two-generator class extremal?}  Adding a generator
+      lowers the envelope and grows the core, so this is not automatic.  All
+      evidence is negative for a counterexample: zero improvements from about
+      $200$ third generators at each of $n=5,6,7,8$, and no improvement from
+      seeded $c$-space climbing over the full exact class at $n=5,6,7$.  Open
+      globally.
+\item \textbf{Conjecture~\ref{conj:n5}}, $s(5)=1/2$, together with the
+      two-regime picture suggested by the extremal-class structure: $(3,2)$
+      $\Lmin$-strata above $1/3$, and $(4,1)$ never exceeding $1/3$.
+\item \textbf{A structural explanation of the $n=5$ versus $n\ge6$ regime
+      change}: a starved $\Lmax$ with $|\supp(\Lmax)|=4$ at $n=5$ against a
+      strictly positive $\Lmax$ in $G(p,k)$.
+\end{enumerate}
+
+\paragraph{Not claimed.}
+Exactness theory, lower-envelope exactification, and the characterizations of
+the egalitarian selections are prior art
+\citep{ArinInarra2001,ArinKuipersVermeulen2003,Biswas1999,Dietzenbacher2021,
+LlerenaMauri2017,CsokaHeringsKoczy2011,StudenyKratochvil2022}; the
+four-player rigidity is the companion paper's classification
+\citep{Flanagan2026} combined with the Lorenz implication of
+\citet{LlerenaMauri2017}.  The candidate
+new content is the two-generator core duality and its one-sided
+floor certificate, the family $G(p,k)$ with its closed forms and deficit
+identity, the resulting evaluation $\sup_n s(n)=2$, the identification of the
+$n=5$ anomaly with a proof by hand, and the two closed routes of
+Section~\ref{sec:obstruction}.  Novelty remains conditional on specialist
+review.
+
+\section*{Reproducibility note}
+
+Every theorem above has a hand proof, and no statement labelled ``proved''
+depends on a program.  Exact rational programs in the companion repository
+independently reconstruct all displayed games and coalition values, the
+closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full
+coalition-inequality check and the tight-set prediction of
+Lemma~\ref{lem:membership} for every $(p,k)$ with $1\le p\le7$, $2\le k\le7$
+and $n\le13$, and the four-way agreement on the game of
+Theorem~\ref{thm:n5}.  They are bug audits, not proof dependencies.  All
+arithmetic is exact rational; no floating-point value appears in any stated
+result.  Reported optima come from a from-scratch exact-rational two-phase
+simplex with Bland's rule, from a staged exact solver over linear real
+arithmetic, or from exact vertex enumeration, with at least two methods
+agreeing on every displayed allocation; one library simplex implementation
+cycles on these degenerate programs and was not used for any reported number.
+
+\begin{thebibliography}{99}
+
+\bibitem[Arin and I\~narra(2001)]{ArinInarra2001}
+Arin J, I\~narra E (2001) Egalitarian solutions in the core.
+International Journal of Game Theory 30:187--193.
+
+\bibitem[Arin et al.(2003)]{ArinKuipersVermeulen2003}
+Arin J, Kuipers J, Vermeulen D (2003) Some characterizations of egalitarian
+solutions on classes of TU-games. Mathematical Social Sciences 46:327--345.
+\url{https://doi.org/10.1016/S0165-4896(03)00048-6}
+
+\bibitem[Biswas et al.(1999)]{Biswas1999}
+Biswas AK, Parthasarathy T, Potters JAM, Voorneveld M (1999) Large cores and
+exactness. Games and Economic Behavior 28:1--12.
+\url{https://doi.org/10.1006/game.1998.0683}
+
+\bibitem[Cs\'oka et al.(2011)]{CsokaHeringsKoczy2011}
+Cs\'oka P, Herings PJJ, K\'oczy L\'A (2011) Balancedness conditions for exact
+games. Mathematical Methods of Operations Research 74:41--52.
+
+\bibitem[Dietzenbacher(2021)]{Dietzenbacher2021}
+Dietzenbacher B (2021) Monotonicity and egalitarianism.
+Games and Economic Behavior 127:194--205.
+\url{https://doi.org/10.1016/j.geb.2021.03.006}
+
+\bibitem[Flanagan(2026)]{Flanagan2026}
+Flanagan M (2026) Balanced transport at the egalitarian core: a complete
+boundary phase diagram. Preprint; companion paper.
+
+\bibitem[Llerena and Mauri(2017)]{LlerenaMauri2017}
+Llerena F, Mauri L (2017) On the existence of the Dutta--Ray's egalitarian
+solution. Mathematical Social Sciences 89:92--99.
+\url{https://doi.org/10.1016/j.mathsocsci.2017.07.002}
+
+\bibitem[Studen\'y and Kratochv\'il(2022)]{StudenyKratochvil2022}
+Studen\'y M, Kratochv\'il V (2022) Facets of the cone of exact games.
+Mathematical Methods of Operations Research 95:35--80.
+\url{https://doi.org/10.1007/s00186-022-00770-4}
+
+\end{thebibliography}
+
+\end{document}
