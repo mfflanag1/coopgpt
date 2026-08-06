@@ -15,6 +15,8 @@
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
 \newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
 \newcommand{\core}{\operatorname{Core}}
 \newcommand{\Lmin}{\operatorname{Lmin}}
 \newcommand{\Lmax}{\operatorname{Lmax}}
@@ -778,17 +780,417 @@ players.  Thus ``five'' is not an unexplained output of enumeration; it is
 the first total size at which either of the two admissible boundary regions
 in (1) is entered.
 
+\section{Which system the selection produces}
+\label{sec:selection}
+
+Theorem~\ref{thm:packet} produces a system (P) but says nothing about which
+system.  This section answers that question completely on five players and
+partially in general.  Throughout, $v$ is singleton-normalized and exact,
+$\phi=\Lmin(v)$, $N=L\mathbin{\dot\cup}H$ is a strict payoff boundary with
+$s=s_\phi(H)>0$, $m=|L|$ and $h=|H|$.  Two conventions are used repeatedly and
+recorded once.  Core allocations of a normalized game are nonnegative, so
+$\phi_i\ge0$ for every $i$ and hence $\phi_j>0$ for $j\in H$; consequently no
+singleton $\{j\}$ with $j\in H$ is $\phi$-tight, and $H$ itself is not
+$\phi$-tight.  In (P) the coefficient of $H$ is $-\delta<0$ and every other
+coefficient is nonnegative, so $H$ is the unique exceptional set of the system
+and the catalogue's constant $r$ is the quantity $b$.
+
+It is convenient to name the objects that Theorem~\ref{thm:transport} produces
+before Theorem~\ref{thm:packet} selects among them.
+
+\begin{definition}[normal certificate]\label{sel:def:normal}
+A \emph{normal certificate} at the boundary $L|H$ is a nonnegative weighting
+$\lambda$ of proper $\phi$-tight coalitions, each meeting $H$, whose incidence
+load equals one at every $j\in H$; writing $c_i$ for the load at $i\in L$,
+$b=\max_i c_i$, $u_i=b-c_i$ and $\delta=1+\sum_iu_i-b$, one requires
+$\delta>0$.  Its \emph{system} is
+\[
+ \Lambda=\sum_T\lambda_T\one_T+\sum_{i\in L}u_i\one_{H\cup\{i\}}-\delta\one_H
+        =b\,\one_N .
+\]
+\end{definition}
+
+The normalized cover of Lemma~\ref{lem:cover} is a normal certificate, because
+its poorer loads satisfy $c_i<1$ and therefore
+$\delta=F(c)\ge1-\max_ic_i>0$; and the packet of Theorem~\ref{thm:packet} is
+the special normal certificate whose $\lambda$ is a lifted vertex of
+$\mathcal P_H$.  An exclusion proved for normal certificates is thus
+\emph{robust}: it survives both the mixture of Theorem~\ref{thm:transport} and
+the Jensen selection.
+
+\subsection{Three elementary lemmas}
+
+The first is the qualitative content of the slack budget (PB).
+
+\begin{lemma}[positive load]\label{sel:lem:spoke}
+Every normal certificate at a slack boundary has $u_i>0$ for at least one
+$i\in L$.  Equivalently its system carries a strictly positive coefficient on
+some \emph{spoke} $H\cup\{i\}$, $i\in L$; in particular $b>0$.
+\end{lemma}
+
+\begin{proof}
+Choose $z\in\core(v)$ with $z(H)=v(H)$ and put $\Delta=z-\phi$.  Each supported
+$T$ is tight and feasible, so $\Delta(T)\ge0$; each spoke satisfies
+$\Delta(H\cup\{i\})\ge-s_\phi(H\cup\{i\})$; and $\Delta(H)=-s$.  Evaluating
+$\Lambda=b\one_N$ at $\Delta$ and using $\Delta(N)=0$ gives (PB).  If $u=0$,
+(PB) reads $\delta s\le0$, contradicting $\delta>0<s$.  Finally $u_i>0$ forces
+$b>c_i\ge0$.
+\end{proof}
+
+\begin{corollary}\label{sel:cor:spoke}
+Let a permutational type have exceptional set $E$ and no positive set of the
+form $E\cup\{i\}$.  Then it is the type of no normal certificate at a slack
+boundary, hence of no packet and of no mixture.  Every type with $r=0$ has this
+property: if $r=0$ and $i\notin E$ then the load at $i$ vanishes while every
+set containing $i$ has nonnegative coefficient, so every positive set lies
+inside $E$.
+\end{corollary}
+
+The second lemma is an uncrossing inequality for tight coalitions.  It was
+obtained independently in the companion five- and six-player computations, and
+is stated here once.
+
+\begin{lemma}[crossing budget]\label{sel:lem:crossing}
+Let $v$ be exact and singleton-normalized and let $\phi\in\core(v)$.  If $S_1$
+and $S_2$ are $\phi$-tight then
+\[
+ s_\phi(S_1\cap S_2)\ \le\ \phi\bigl(N\setminus(S_1\cup S_2)\bigr).
+\]
+\end{lemma}
+
+\begin{proof}
+Put $C=S_1\cap S_2$, $U=S_1\cup S_2$ and $R=N\setminus U$.  Exactness supplies
+$z\in\core(v)$ with $z(C)=v(C)$, whence
+\[
+ \phi(S_1)+\phi(S_2)=v(S_1)+v(S_2)\le z(S_1)+z(S_2)=z(U)+z(C)
+   =\phi(N)-z(R)+v(C).
+\]
+Since $\phi(S_1)+\phi(S_2)=\phi(U)+\phi(C)$ and $\phi(U)=\phi(N)-\phi(R)$, this
+is $s_\phi(C)\le\phi(R)-z(R)\le\phi(R)$, the last step by $z\ge0$.
+\end{proof}
+
+Two specializations are used.  If $S_1\cup S_2=N$ then $S_1\cap S_2$ is tight.
+If $S_1\cap S_2=\{j\}$ then $\phi_j\le\phi(N\setminus(S_1\cup S_2))$; taking
+$j\in H$ and $S_1\cup S_2=N\setminus\{i\}$ with $i\in L$ contradicts the strict
+boundary.  The four-player arguments of the companion note are the case
+$S_1\cup S_2=N$.
+
+The third lemma is the exact dual of singleton normalization and sharpens
+Lemma~\ref{lem:overload} at a singleton face.
+
+\begin{lemma}[zeroing obstruction]\label{sel:lem:zero}
+Let $v$ be exact and singleton-normalized, $\phi\in\core(v)$, and let
+$\lambda\ge0$ be weights on proper $\phi$-tight coalitions whose loads satisfy
+$c_k\le1$ for every $k\ne j$.  Then $\sum_kc_k\phi_k\le\phi(N)$; equivalently,
+with $c_j=1+\theta$,
+\[
+ \theta\,\phi_j\ \le\ \sum_{k\ne j}(1-c_k)\phi_k .
+\]
+\end{lemma}
+
+\begin{proof}
+Exactness at $\{j\}$ gives $z\in\core(v)$ with $z_j=v(\{j\})=0$.  Then
+$\sum_T\lambda_T\phi(T)=\sum_T\lambda_Tv(T)\le\sum_T\lambda_Tz(T)
+=\sum_kc_kz_k=\sum_{k\ne j}c_kz_k\le\sum_{k\ne j}z_k=\phi(N)$,
+and the left side is $\sum_kc_k\phi_k$.
+\end{proof}
+
+\begin{corollary}\label{sel:cor:zero}
+If $j$ is a richest player and $\sum_T\lambda_T|T|\ge|N|$, then $\phi_k=\phi_j$
+for every $k$ with $c_k<1$.  In particular the configuration is impossible as
+soon as some $k$ with $c_k<1$ has $\phi_k<\phi_j$.
+\end{corollary}
+
+By linear-programming duality, Lemma~\ref{sel:lem:zero} is not merely necessary:
+a core allocation vanishing at $j$ fails to exist precisely when some such
+$\lambda$ has $\sum_kc_k\phi_k>\phi(N)$.  It is the only obstruction that is
+ever active in the classification below.
+
+\subsection{Full-trace packets are stars, and stars are facets}
+
+\begin{definition}[star system]\label{sel:def:star}
+For $\emptyset\ne H\subsetneq N$, $L=N\setminus H$ and $\emptyset\ne
+Q\subsetneq L$, put
+\[
+ \mathrm{St}(H,Q):\qquad
+ \one_{H\cup Q}+\sum_{i\in L\setminus Q}\one_{H\cup\{i\}}
+   -(|L|-|Q|)\,\one_H=\one_N .
+\]
+\end{definition}
+
+\begin{lemma}[star normal form]\label{sel:lem:star}
+Let the boundary be slack.
+\begin{enumerate}[nosep,label=(\roman*)]
+\item If $h=1$ then $\mathcal P_H$ has the single vertex $\beta_H=1$, so every
+      packet has exactly one lift $T$; $T$ is proper and $T\ne H$, hence
+      $T=H\cup Q$ with $\emptyset\ne Q\subsetneq L$, and the system is
+      $\mathrm{St}(H,Q)$, with $b=1$ and $\delta=m-|Q|$.
+\item For arbitrary $h$, every \emph{full-trace} packet has one lift
+      $T\supseteq H$, again proper and $\ne H$, so its system is
+      $\mathrm{St}(H,T\cap L)$.
+\end{enumerate}
+In either case every positive coefficient equals one and $b=1$.
+\end{lemma}
+
+\begin{proposition}[stars are facets]\label{sel:prop:starfacet}
+$\mathrm{St}(H,Q)$ is a minimal semi-balanced system with exceptional set $H$,
+and it is indecomposable.  Its permutational type depends only on
+$(h,q)=(|H|,|Q|)$, and the admissible pairs are $h\ge1$, $q\ge1$,
+$h+q\le n-1$, so there are $\binom{n-1}{2}$ star types on $n$ players.
+\end{proposition}
+
+\begin{proof}
+Write $\mathcal S=\{H\}\cup\{H\cup\{i\}:i\in L\setminus Q\}\cup\{H\cup Q\}$,
+$m=|L|$, $q=|Q|$, and note $1\le q\le m-1$, so $L\setminus Q\ne\emptyset$ and
+$H\cup Q\ne N$.  For $k\in H$ every member of $\mathcal S$ contains $k$; for
+$k\in Q$ the only member containing $k$ is $H\cup Q$; for $k\in L\setminus Q$
+the only member containing $k$ is $H\cup\{k\}$.  The displayed coefficients are
+all nonzero with exactly one negative and give load one everywhere, so the
+system is semi-balanced with $r=1$.
+
+\emph{Minimality.}  Let $\emptyset\ne\mathcal S'\subsetneq\mathcal S$ carry
+nonzero coefficients $\mu$, at most one negative, with constant load $r'$.
+Reading the load at a player of $Q$ and at a player of $L\setminus Q$ shows
+that $\mu_{H\cup Q}=r'$ if $H\cup Q\in\mathcal S'$ and $r'=0$ otherwise, and
+likewise $\mu_{H\cup\{i\}}=r'$ if $H\cup\{i\}\in\mathcal S'$ and $r'=0$
+otherwise.  If $r'=0$ then no set other than $H$ can lie in $\mathcal S'$
+without a vanishing coefficient, so $\mathcal S'=\{H\}$ and the load at $H$
+gives $\mu_H=0$, excluded.  If $r'\ne0$ then $H\cup Q$ and every
+$H\cup\{i\}$ lies in $\mathcal S'$ with coefficient $r'$, so
+$\mathcal S'=\mathcal S\setminus\{H\}$ by properness, and the load at a player
+of $H$ gives $(m-q+1)r'=r'$, i.e.\ $r'=0$ since $q<m$.  Contradiction.
+
+\emph{Indecomposability.}  Suppose $E$ is a proper nonempty set with
+$E\notin\mathcal S$ and there are $\sigma\ge0$ on $\mathcal S$ and $t>0$ with
+$\sum_{S\in\mathcal S}\sigma_S\one_S-t\one_E=r\one_N$.  Write
+$x=\sigma_H$, $y_i=\sigma_{H\cup\{i\}}$, $z=\sigma_{H\cup Q}$,
+$\Sigma=x+\sum_iy_i+z$ and $\varepsilon_k=[k\in E]$.  The three families of
+load equations read
+\[
+ \Sigma-t\varepsilon_k=r\ (k\in H),\qquad
+ z-t\varepsilon_k=r\ (k\in Q),\qquad
+ y_k-t\varepsilon_k=r\ (k\in L\setminus Q).
+\]
+The first shows $\varepsilon$ is constant on $H$, and the second that it
+is constant on $Q$; so $E\cap H\in\{\emptyset,H\}$ and
+$E\cap Q\in\{\emptyset,Q\}$.
+
+If $E\cap H=\emptyset$ then $r=\Sigma$.  For $k\in Q$ we get
+$z-t\varepsilon_k=\Sigma\ge z$, so $\varepsilon_k=0$ and $z=\Sigma$, whence
+$x=0$ and every $y_i=0$.  Then for $k\in L\setminus Q$,
+$-t\varepsilon_k=r=z$; positivity of $t$ forces $z=0$ and
+$\varepsilon_k=0$, so $E=\emptyset$, a contradiction.
+
+If $H\subseteq E$ then $r=\Sigma-t$.  Suppose first $Q\subseteq E$.  Then
+$z=\Sigma$, so $x=0$ and every $y_i=0$; for $k\in L\setminus Q$,
+$-t\varepsilon_k=z-t$.  If some $\varepsilon_k=1$ then $z=0$, all $\sigma$
+vanish and $-t\one_E=r\one_N$ forces $E\in\{\emptyset,N\}$, excluded; so every
+$\varepsilon_k=0$ and $E=H\cup Q\in\mathcal S$, excluded.  Suppose instead
+$Q\cap E=\emptyset$.  Then $z=\Sigma-t$, i.e.\ $x+\sum_iy_i=t>0$.  If
+$\varepsilon_k=1$ for some $k\in L\setminus Q$ then $y_k=\Sigma$, so all other
+weights vanish, hence $\varepsilon_i=0$ and $y_i=r=0$ for $i\ne k$, and
+$E=H\cup\{k\}\in\mathcal S$, excluded.  If $\varepsilon_k=0$ for every
+$k\in L\setminus Q$ then $E=H\in\mathcal S$, excluded.
+
+The remaining assertions are clear: relabelling identifies any two stars with
+the same $(h,q)$, and $q\le m-1=n-h-1$.
+\end{proof}
+
+\subsection{The five-player classification}
+
+At $n=5$ Theorem~\ref{thm:phase} admits only $(m,h)=(4,1)$ and $(3,2)$.  For
+those two shapes one may enumerate, with no game and no payoffs, every system
+(P) with $\delta>0$ that Theorem~\ref{thm:packet} can produce: the traces range
+over the minimal balanced collections on $H$ and each lift over every proper set
+with the prescribed trace that is not $H$ and not a singleton inside $H$.  There
+are three types at $(4,1)$, all full-trace, and eight at $(3,2)$, of which two
+are full-trace and six are split.
+
+\begin{theorem}[five-player selection]\label{sel:thm:n5}
+Let $v$ be a singleton-normalized exact five-player game with a slack strict
+boundary $L|H$ at $\phi=\Lmin(v)$.  Then a system (P) is a facet of the cone of
+exact games---equivalently an indecomposable minimal semi-balanced system,
+equivalently a member of the catalogue---if and only if its packet is
+full-trace, in which case it is the star $\mathrm{St}(H,T\cap L)$.  The
+facet-defining types that occur are exactly
+\[
+ \begin{array}{llll}
+  (h,q)=(1,1)\to\text{row }16, &(1,2)\to\text{row }14, &(1,3)\to\text{row }11,\\
+  (h,q)=(2,1)\to\text{row }13, &(2,2)\to\text{row }10, &
+ \end{array}
+\]
+and all five are realized by integral exact games.  Systems (P) that are not
+facets also occur; see Example~\ref{sel:ex:split}.
+\end{theorem}
+
+The eleven excluded rows fall into three groups of visibly different depth.
+
+\begin{itemize}[nosep]
+\item Rows $1$--$8$ and row $12$ are excluded by Corollary~\ref{sel:cor:spoke}:
+      none of them carries a positive spoke over its exceptional set.  Rows
+      $1$--$8$ have $r=0$; row $12$ is $-a+abc+ade$, whose exceptional set is
+      $\{a\}$ and which has no positive set of size two containing $a$.  This
+      exclusion is robust: those types are the systems of no normal
+      certificate, hence of no mixture either.
+\item Row $9$ is excluded by Theorem~\ref{thm:phase} alone.  It is the star with
+      $(h,q)=(3,1)$, and as such is a perfectly legitimate packet shape; it
+      needs $(m,h)=(2,3)$, which $m_{\min}(3)=3$ forbids on five players.
+\item Row $15$ is excluded by Lemma~\ref{sel:lem:star}(i): an $h=1$ packet has
+      $b=1$ and unit positive coefficients, whereas row $15$ has $r=2$ and a
+      coefficient $2$.
+\end{itemize}
+
+\begin{remark}[what the selection, rather than the geometry, excludes]
+\label{sel:rem:mixture}
+The exclusions of rows $12$ and $15$ are both statements about systems (P), and
+both are correct, but they are not equally deep.  Row $15$ \emph{is} the system
+of a normal certificate: at $h=1$ every $\phi$-tight coalition has trace $H$, so
+a cover may support several lifts of the one trace, and
+$\lambda_{acd}=\lambda_{ace}=\lambda_{ade}=\tfrac13$ has rich load one and
+poorer loads $(0,\tfrac23,\tfrac23,\tfrac23)$, all below one, giving
+$b=\tfrac23$, $u_b=\tfrac23$, $\delta=1$ and exactly the row-$15$ system.  What
+the one-packet theorem then does is replace that cover by one of its three
+lifts, reporting a row-$14$ star.  Row $12$ admits no such certificate, by
+Corollary~\ref{sel:cor:spoke}.  In short: row $12$ is excluded by the geometry,
+row $15$ only by the selection.
+\end{remark}
+
+\subsection{Split packets, and a threshold in the number of poorer players}
+
+The full-trace conclusion does \emph{not} extend to split packets, even on five
+players.
+
+\begin{example}[a split packet with $\delta>0$]\label{sel:ex:split}
+Apply Lemma~\ref{lem:envelope} to the five common-total rows
+\[
+ (0,1,0,3,3),\quad(1,0,0,3,3),\quad(1,1,1,2,2),\quad
+ (2,2,0,0,3),\quad(2,2,0,3,0),
+\]
+equivalently take the core polytope
+$\{x\ge0:\ x(N)=7,\ x(abe)\ge4,\ x(abd)\ge4,\ x(ade)\ge5,\ x(bde)\ge5\}$.
+The game is exact and singleton-normalized, $\Lmin(v)=(1,1,1,2,2)$, the strict
+boundary is $L=\{a,b,c\}$, $H=\{d,e\}$, and $v(H)=3<4=\phi(H)$, so $s=1$.  The
+proper $\phi$-tight coalitions are $abd$, $abe$, $ade$, $bde$, $abde$, whose
+traces on $H$ are $\{d\}$, $\{e\}$ and $\{d,e\}$: \emph{both} proper traces
+occur.  The split vertex lifted by $T_1=abd$ and $T_2=abe$ has
+$r=(2,2,0)$, $b=2$, $u_c=2$ and $\delta=1>0$, with system
+\[
+ \one_{abd}+\one_{abe}+2\,\one_{cde}-\one_{de}=2\,\one_N .
+\]
+This system is minimal semi-balanced but decomposable, by $E=\{d\}$:
+$\one_{abd}+\one_{cde}-\one_d=\one_N$.  The same boundary also carries the
+full-trace packets of types row~$13$ and row~$10$.
+\end{example}
+
+Split packets are nevertheless invisible to the catalogue as long as the poorer
+side is small.  The next statement is a finite check on set systems: it
+enumerates every abstract system (P) with $\delta>0$ for the stated $(m,h)$ and
+classifies each permutational type, and therefore applies at every boundary of
+every exact game.
+
+By Proposition~\ref{prop:m2} an $h=2$ boundary needs $m\ge3$, so the statement
+below starts where Lemma~\ref{lem:rankthree} stops.
+
+\begin{theorem}[split packets and the poorer-side threshold]\label{sel:thm:mthr}
+Let $h=2$.  If $m\le4$ then every split packet system is minimal but
+decomposable; consequently every facet-defining packet at an $h=2$ boundary
+with $m\le4$ is a full-trace star.  This fails at $m=5$.  Precisely:
+\begin{center}
+\begin{tabular}{lrrrr}
+\toprule
+ & packets & full-trace types & split types & split facets\\
+\midrule
+$m=3$ ($n=5$) &  42 & 2 &  6 & 0\\
+$m=4$ ($n=6$) & 216 & 3 & 13 & 0\\
+$m=5$ ($n=7$) & 950 & 4 & 24 & 2\\
+\bottomrule
+\end{tabular}
+\end{center}
+The two exceptions at $m=5$ are
+$af-5\,fg+bfg+cfg+2\,dfg+2\,efg+abcg$ and
+$-5\,fg+abf+acg+bfg+cfg+2\,dfg+2\,efg$.
+Equivalently, no catalogued type with a doubleton exceptional set has
+split-packet shape when $m\le4$: on five players the doubleton rows are
+$1,10,13$, of which $10$ and $13$ are stars and $1$ has no spoke; on six players
+they are $1,25,28,29,33,34,39$, of which $28,33,39$ are stars and none is split.
+\end{theorem}
+
+The same finite check explains the analogous phenomenon one dimension up.
+
+\begin{theorem}[which trace collections carry facets at $h=3$]\label{sel:thm:h3}
+Let $(m,h)=(3,3)$, so $n=6$.  Among the $811$ abstract packets with
+$\delta>0$, sorted by the minimal balanced collection their traces form:
+\begin{center}
+\begin{tabular}{lrrl}
+\toprule
+collection on $H$ & types & facets & rows\\
+\midrule
+$\{H\}$ (full trace)       &  2 & 2 & $32,\ 27$\\
+three pairs (the 2-cover)   & 31 & 5 & $7,\ 24,\ 51,\ 52,\ 53$\\
+a singleton and a pair      & 10 & 0 & ---\\
+three singletons            & 12 & 0 & ---\\
+\bottomrule
+\end{tabular}
+\end{center}
+Only the full trace and the two-cover carry facet-defining systems.
+\end{theorem}
+
+Theorems~\ref{sel:thm:mthr} and~\ref{sel:thm:h3} share one mechanism: the
+partition-type minimal balanced collections generate decomposable systems, so
+they can certify a failure but never a facet of the exact cone.  The
+five-player classification is the case where that mechanism is complete.
+
+\subsection{What is proved, what is checked, and what is verified}
+
+\begin{center}
+\begin{tabular}{lp{0.62\textwidth}}
+\toprule
+\textbf{status} & \textbf{statement}\\
+\midrule
+proved &
+ Lemma~\ref{sel:lem:spoke} and Corollary~\ref{sel:cor:spoke};
+ Lemma~\ref{sel:lem:crossing}; Lemma~\ref{sel:lem:zero} and
+ Corollary~\ref{sel:cor:zero}; Lemma~\ref{sel:lem:star};
+ Proposition~\ref{sel:prop:starfacet}; the exclusion of rows $1$--$8$, $9$,
+ $12$, $15$ on five players; Remark~\ref{sel:rem:mixture}.\\
+finite check &
+ the list of eleven abstract packet shapes on five players;
+ Theorem~\ref{sel:thm:mthr}; Theorem~\ref{sel:thm:h3}.  Each enumerates set
+ systems only, so each holds at every boundary of every exact game.\\
+verified &
+ Example~\ref{sel:ex:split} and the five realizing games of
+ Theorem~\ref{sel:thm:n5}, by exact rational recomputation of the envelope, of
+ $\Lmin$, of the tight family and of every packet.  That exactly one of the six
+ split shapes on five players is realizable rests on a search over tight
+ families of at most $|N|+2$ coalitions, which is exhaustive when the poorer
+ side is a single payoff stratum and a broad search otherwise.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Two caveats are owed.  First, the claim that the split shape of
+Example~\ref{sel:ex:split} is the \emph{only} realizable one is the one
+statement above that is not a theorem; the five excluded shapes survive the
+tangent-cone conditions of Lemma~\ref{lem:cover} and are killed only by
+singleton normalization, i.e.\ by Lemma~\ref{sel:lem:zero}, and we have no
+human proof of that.  Second, earlier random harvests reported no split packets
+at all on five players; Example~\ref{sel:ex:split} shows that this was a
+sampling artefact, and the same caution applies to any statement of the form
+``collection $\mathcal R$ is never selected'' that rests on random exact games
+rather than on a finite check.
+
 \section{What the theorem does and does not establish}
 
 The normal-cover and one-packet theorems are dimension-free: every failure is
 reduced to a single minimal balanced rich-trace packet and its poorer-side
 completion budget.  The phase theorem then classifies every possible pair of
-boundary-side cardinalities.  It does not classify all minimal balanced
-packets or all extreme rays of the associated two-sided coupling cone.
-Distinct irreducible packet classes already occur: the co-singleton class
-$J-I$ and a blown-up three-cycle class are not related by a single universal
-minor.  A complete catalogue would therefore be multi-class, not a theorem
-that every failure contains one fixed finite configuration.
+boundary-side cardinalities, and Section~\ref{sec:selection} classifies the
+selected systems completely on five players and by finite check for
+$(m,h)\le(4,2)$ and $(3,3)$.  What remains unclassified is the general
+dimension: distinct irreducible packet classes occur (full-trace stars, the
+two-cover class of Theorem~\ref{sel:thm:h3}, and from $m=5$ on, facet-defining
+split classes), so a complete catalogue is multi-class, not a theorem that
+every failure contains one fixed finite configuration.
 
 One calibration is owed to the reader.  The linear-size bound in
 Corollary~\ref{cor:certificate}(i) is not itself new: it is the standard fact
@@ -805,8 +1207,11 @@ the semi-balanced/minimal-balanced correspondence, minimal balanced
 collections, and lower-envelope exactification are not claimed.  The
 candidate new content is the simultaneous Lmin normal cover, the richer-side
 one-packet selection with its linear-size witness and slack-propagation
-corollary, the sharp staircase (1), and the three dimension-free
-indecomposable realizing families.
+corollary, the sharp staircase (1), the three dimension-free
+indecomposable realizing families, and the selection results of
+Section~\ref{sec:selection}: the positive-load, crossing-budget and zeroing
+lemmas, the star normal form with its facet proposition, the five-player
+selection theorem, and the poorer-side threshold for split facets.
 
 \section*{Reproducibility note}
 
