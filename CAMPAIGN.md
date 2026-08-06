@@ -1025,10 +1025,11 @@ Pre-crash progress banked:
 
 ## 2026-08-06 — multi-agent campaign: selection, monotonicity, divergence
 
-Six-agent parallel campaign (three research routes, then rolling waves), all
-headline claims re-verified on a coordinating thread before use.  Ten commits;
-`paper4/threshold.tex` grew from 12 to 22 pages, `paper5/divergence.tex` (18
-pages) is new.
+Seven-agent parallel campaign (three research routes, then rolling waves;
+two hostile-audit agents added afterwards), all headline claims re-verified
+on a coordinating thread before use.  Twelve commits through `a6a7850`,
+plus audit amendments after; `paper4/threshold.tex` grew from 12 to 22
+pages, `paper5/divergence.tex` (19 pages) is new.
 
 ### Proved this campaign (in the papers)
 - Selection Section (paper4 §8): positive-load, crossing-budget (pairwise and
