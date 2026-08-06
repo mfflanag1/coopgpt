@@ -1060,11 +1060,14 @@ losers=one-stratum (C-B), SC1, frozen-above; smoothing/majorization route;
 localization of exactness; "|B|=4 is special".
 
 ### Open ledger (sharpest known obstruction each)
-- (*) f({j}) ≥ T/8 for the Lmax-starved player (CFG case of s(5)=1/2);
-  task: finite-check via the A3 pipeline.  [in flight]
-- C-C containment proof; whether failures occur at exact-partition bases.
-  [in flight]
-- ZP profiles (4,0),(2,2) at n=7 h=2; j≠e branch.  [in flight]
+- s(5) = 1/2 in full: the CFG case is CLOSED ((*) proved by finite check,
+  10,974 exact LPs, minimal hypotheses = both solution vectors in core +
+  poor-stratum pinning); remaining are the (1,2,2)/(1,1,3) Lmax shapes and
+  the (4,1) boundary.
+- C-C containment proof (task #12); exact-partition impossibility
+  (conjectured; 10,239-bump zero-failure search; rigidity proposition
+  proved).
+- ZP profiles (4,0),(2,2) at n=7 h=2; j≠e branch.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
