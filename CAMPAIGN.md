@@ -1022,3 +1022,63 @@ Pre-crash progress banked:
   leximin references.  The earlier
   alternating screen missed the `4+3` obstruction and is retained only as a
   documented false-negative diagnostic.
+
+## 2026-08-06 — multi-agent campaign: selection, monotonicity, divergence
+
+Six-agent parallel campaign (three research routes, then rolling waves), all
+headline claims re-verified on a coordinating thread before use.  Ten commits;
+`paper4/threshold.tex` grew from 12 to 22 pages, `paper5/divergence.tex` (18
+pages) is new.
+
+### Proved this campaign (in the papers)
+- Selection Section (paper4 §8): positive-load, crossing-budget (pairwise and
+  k-fold sunflower), and zeroing lemmas; star normal form; every star St(H,Q)
+  is a facet (binom(n-1,2) types); five-player selection theorem — a system
+  (P) is a facet iff its packet is full-trace, realized types = rows
+  16,14,11,13,10; poorer-side threshold at h=2 (split facets first at m=5, by
+  finite shape check); h=3 collection theorem (only {H} and the 2-cover carry
+  facets).
+- Monotonicity Section (paper4 §9): reduction lemma, loss-bounded-by-slack,
+  exactness pushback with prefilter g(S) > s_phi(S), shields proposition;
+  two six-player examples retiring "losers = slack suffix" and "losers = one
+  stratum"; containment conjecture W ⊆ H* ⊆ S (1041/1041, two sampling
+  regions).
+- Divergence paper (paper5): two-generator core duality (general form);
+  master family G(p,k) with closed forms and membership for all parameters;
+  deficit identity 2−ρ = 2n/(k(p+1)); sup_n s(n) = 2, s(n) ≥ 2−8/n; overlap
+  identity; n=5 maximum 1/2 (2-generator, hand proof); M-side asymmetry with
+  smallest counterexample; majorization non-monotonicity; covering
+  obstruction; ONE-COALITION CERTIFICATE THEOREM at n=5 (mu=lambda, M=nu),
+  proved by finite exact check against the 280 permuted facet inequalities —
+  the facet catalogue used as a proof engine.
+
+### Retired this campaign (each replaced by something sharper)
+ratio bounds (n−4)/(n−2), (n−4)/(n−3), fit (n−2)/6; lemma gap ≤ 4(n−4)·mu;
+h=2 full-trace conjecture (twice recalibrated → m-indexed + facet form);
+"no split packets at n=5" (sampling artifact, twice); losers=H (C-A),
+losers=one-stratum (C-B), SC1, frozen-above; smoothing/majorization route;
+localization of exactness; "|B|=4 is special".
+
+### Open ledger (sharpest known obstruction each)
+- (*) f({j}) ≥ T/8 for the Lmax-starved player (CFG case of s(5)=1/2);
+  task: finite-check via the A3 pipeline.  [in flight]
+- C-C containment proof; whether failures occur at exact-partition bases.
+  [in flight]
+- ZP profiles (4,0),(2,2) at n=7 h=2; j≠e branch.  [in flight]
+- s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
+- General facet dichotomy (packet facet iff full-trace).
+- h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
+
+### Method laws (validated hard this campaign)
+1. Random-harvest "never occurs" claims are sampling artifacts until a finite
+   check or design search confirms: split packets "absent" in 58k+239k games
+   existed; two loser-set laws perfect on all data died on region change.
+2. Tune generators, not volume: two-row envelopes give 56% slack-bearing
+   games vs 17% mixed; unseeded c-space search certifies nothing at n≥6.
+3. "Characterize what the hill-climb plateaus at" converts resistance into
+   lemmas (rich-overlap found this way; ZP configuration likewise).
+4. Complete-enumeration-to-total-T is complete only up to denominator T:
+   a lower-bound method, never a sup determination.
+5. Every subagent headline re-verified centrally before use: caught a wrong
+   empty-set convention, a membership gap in a "proved for all (p,k)" claim,
+   and an attribution error that our own large-core result refutes.
