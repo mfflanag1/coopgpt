@@ -1,21 +1,44 @@
-# Hostile review — one-packet obstruction and boundary phase theorem
+# Hostile review — balanced transport at the egalitarian core
 
-Please review the concise standalone manuscript:
+Please review the standalone manuscript:
 
 ```text
-paper4/threshold.pdf
+paper4/threshold.pdf     (22 pages)
 paper4/threshold.tex
 ```
 
-The long technical archive is `paper3/wrapper.pdf`, but the ten-page
-`paper4` manuscript is intended to contain a complete human proof of the
-central theorem without finite enumeration.
+Repository commit: `3587e55`, branch `codex/credal-local-universal-selector`.
+The long technical archive is `paper3/wrapper.pdf`; it is background only and
+is not part of what you are asked to certify.
 
-The revision adds a general theorem before the phase classification. At any
-failed strict Lmin boundary, a normal-cone certificate gives one simultaneous
-strict tight cover. Projection and a convex defect functional then select a
-single lifted minimal balanced packet with positive rooted defect; mixtures
-are unnecessary. The associated rooted identity gives an exact slack budget.
+Take an adversarial stance throughout. The author's own assessment is that
+this is specialist work whose novelty is conditional on review, not a
+breakthrough; treat every "new" claim as a claim to be broken.
+
+## What the paper now is
+
+The manuscript has grown from a single-theorem note into **three movements**
+that share one geometric object (the tangent cone of the core at the leximin
+allocation and the covers it forces). Please review all three, and please
+review the joins between them.
+
+1. **Phase diagram (§§1–5).** Lemma 2 (strict richer cover) →
+   Theorem 3 (balanced-trace transport) → Theorem 4 (one-packet reduction)
+   → the two cardinality exclusions (Propositions 9 and 12) → three realizing
+   families (Propositions 14, 15, 16) → Theorem 1 (the staircase) and
+   Corollary 17 (the four/five threshold).
+2. **Selection (§6).** Which system (P) the reduction actually produces:
+   Definition 18 (normal certificate), Lemmas 19/21/22 with Corollaries
+   20/23, Lemma 25 (star normal form), Proposition 26 (stars are facets),
+   Theorem 27 (five-player selection), Example 29, Theorems 30 and 31
+   (finite checks).
+3. **Monotonicity (§7).** Failure of coalitional monotonicity of Lmin on the
+   exact domain: Lemma 34, Theorems 35 and 36, Corollary 37, Proposition 38,
+   Examples 40 and 41, Conjecture 42, Remarks 43 and 44.
+
+§8 is the paper's own statement of what it does and does not establish, and
+§6 and §7 each carry a proved / finite check / verified / conjectured status
+table. Those tables are themselves under review; see item 6 below.
 
 ## Main claim
 
@@ -33,58 +56,269 @@ m_min(h)=2 for h>=4.
 Every admitted pair is claimed to have an explicit integral indecomposable
 lower-envelope realization.
 
-## Questions to answer hostilely
+## Priority targets
 
-1. Audit the strict richer-cover lemma from first principles. In particular,
-   does the absence of a nonzero tangent direction whose poorer coordinates
-   are all nonnegative imply, by a strict polyhedral alternative, a normal
-   vector positive on every poorer coordinate and zero on every richer
-   coordinate? Is the subsequent polar-cone sign convention correct?
-2. Is the balanced-trace transport proof complete, especially the lift from
-   a convex decomposition of rich traces back to original tight coalitions?
-3. Audit the new one-packet theorem. Check convexity of
-   `F(r)=1+(m-1)max(r)-sum(r)`, the Jensen direction, every coefficient in the
-   rooted incidence identity, and the exactifier derivation of the slack
-   budget. Does it genuinely eliminate mixtures for every failure? Is the
-   claimed `|N|` bound on positive coalitions valid for degenerate vertices?
-4. Search specifically for an equivalent Lmin-selected one-packet reduction
-   in property-I, exact-balanced, semi-balanced-system, coherent-lower-
-   probability, and minimal-balanced-collection literature. Treat the
-   semi-balanced incidence inequality itself and the Studeny--Kratochvil
-   complement-of-the-exceptional-set correspondence as prior art. Determine
-   whether projection to a packet on the richer suffix is genuinely distinct.
-5. Does exactifying a slack suffix force both positive and negative
-   displacement coordinates on the poorer side, thereby excluding `m=1`?
-6. Is the sacrifice-budget inequality correct, and does the three-case
-   protector argument exclude every unique-richest boundary with `m<=3`?
-7. In the two-poorer proof, is the rank-two exact-cover component
-   classification complete? Check the half-integral poor loads and the
-   alternating odd-cycle rounding carefully.
-8. Does the exact-face overload contradiction really give
-   `phi_d<=phi_a`, contrary to the strict payoff boundary?
-9. Independently verify every row total, singleton zero, displayed coalition
-   value, and progressive Lmin step for all three parametric constructions.
-10. Check the added indecomposability proof for the internal-sacrifice family:
-   does `p1` have the displayed positive pair worth with every player for all
-   `m>=2,h>=4`?
-11. Does the final case split cover every positive integer pair `(m,h)` once,
-   with no hidden assumption that the poorer side is one payoff stratum?
-12. Is exact partition at Lmin genuinely stronger than the known statement
+These six are where the author most expects to be wrong. Spend your effort
+here before anything else.
+
+### 1. The normal-cover polar argument (Lemma 2)
+
+The proof deliberately avoids ordinary separation, which would give a
+nonnegative separating vector that may vanish on some poorer coordinates, and
+argues instead by polarity. Audit every step from first principles:
+
+- Is `K = proj_L(D)` genuinely a polyhedral cone, and is
+  `K ∩ R_+^L = {0}` correctly derived from leximin optimality? The tangent
+  argument asserts that a short move `phi + td` stays in the core, preserves
+  the strict payoff gap between `L` and `H`, and improves the first poorer
+  stratum on which `d` is nonzero. Check each of those three claims,
+  including the case where `d` is nonzero only on a *non-poorest* poorer
+  stratum, and the case of a degenerate vertex.
+- The identity `(K ∩ R_+^L)^o = cl(K^o + R_-^L)` and the removal of the
+  closure by "a sum of finitely many polyhedral cones is polyhedral, hence
+  closed". Is the polar of a polyhedral cone here taken with the sign
+  convention the paper uses throughout, and is the sum-is-closed step applied
+  to cones that are actually polyhedral (as opposed to merely closed convex)?
+- The decomposition `1_L = w + p`, `w ∈ K^o`, `p ≤ 0`, hence `w ≥ 1_L > 0`.
+- **The generation step (NC).** The proof asserts that the polar of
+  `D = {d : d(N)=0, d(T) ≥ 0 for every proper phi-tight T}` is generated by
+  `±1_N` and the `-1_T`. This is a Farkas/Minkowski statement about a
+  particular inequality description. Is it valid when the description is
+  redundant, when `D` is not full-dimensional, and when `phi` is a degenerate
+  vertex of the core? Does the argument secretly need the tight family to be
+  irredundant?
+- The final sentence: "Deleting coalitions disjoint from `H` preserves the
+  richer load and only lowers poorer loads." Check both halves, including the
+  effect on `mu`.
+
+If the polar argument fails, say precisely which of Theorems 3, 4, 1 and
+which parts of §§6–7 fall with it.
+
+### 2. The one-packet reduction (Theorem 4)
+
+- Convexity of `F(a) = 1 + (|L|-1) max_i a_i - sum_i a_i`, and the
+  **direction** of the Jensen step. The proof needs a lifted vertex with
+  `F(r) > 0` from `F(c) > 0` where `c` is the average. Verify that the
+  inequality used is `E[F(r)] >= F(E[r])` and that it yields the existence
+  claimed (and not the reverse).
+- Every coefficient of the rooted incidence identity (P): the poorer load
+  `r_i + u_i = b`, the richer load `1 + sum_i u_i - delta = b`, and the
+  definition `delta = 1 + sum_i u_i - b`.
+- The exactifier derivation of the slack budget (PB), including the sign of
+  the spoke inequality `Delta(H ∪ {i}) >= -s_phi(H ∪ {i})` and the use of
+  `Delta(H) = -s_phi(H)`.
+- The sparsity claim: at most `|H|` packet coalitions, at most `|L|-1`
+  spokes, hence at most `|N|-1` positive coalitions. The independence of the
+  positive incidence columns at a vertex of `P_H` is argued by a signed
+  kernel perturbation — check it, and check that the "at most `|L|-1`
+  spokes" step (some `i` attains the maximum `b`, so `u_i = 0`) is valid when
+  the maximum is attained by several players or by none in the intended sense.
+- "A minimal balanced collection containing `H` must be the singleton
+  collection `{H}`" — is this used correctly to get the full-trace/proper
+  dichotomy?
+- Does the reduction genuinely eliminate mixtures for **every** failure, or
+  only for the mixture that Theorem 3 happens to construct? Theorem 3 builds
+  a specific product measure over sections; does Theorem 4's conclusion
+  depend on that particular construction?
+- Is the `|N|` bound valid at degenerate vertices, where the tight family is
+  larger than the dimension count suggests?
+
+### 3. The star-facet proposition (Proposition 26)
+
+This is the longest pure case analysis in the paper.
+
+- **Minimality.** The argument reads the load at a player of `Q` and at a
+  player of `L\Q`, then splits on `r' = 0` versus `r' ≠ 0`. Check that the
+  standing constraints `1 <= q <= m-1`, `L\Q ≠ ∅`, `H ∪ Q ≠ N` are all
+  actually available where used, and that the case `r' ≠ 0` correctly forces
+  `S' = S \ {H}` "by properness".
+- **Indecomposability.** The three load families force `E ∩ H ∈ {∅, H}` and
+  `E ∩ Q ∈ {∅, Q}`, and the proof then treats `E ∩ H = ∅`, and
+  `H ⊆ E` split into `Q ⊆ E` and `Q ∩ E = ∅`. **Verify that this is a
+  partition of the possibilities and that no case is silently merged.** In
+  particular check the sub-branches where all `sigma` weights vanish and the
+  conclusion `E ∈ {∅, N}` is drawn, and the branch where
+  `epsilon_k = 1` for some `k ∈ L\Q`.
+- The definition of decomposability being used (a proper nonempty `E ∉ S`
+  with `sigma >= 0`, `t > 0`, `sum sigma_S 1_S - t 1_E = rho 1_N`) — is it
+  the same notion as Studený–Kratochvíl's, under which the catalogue is
+  built? A mismatch here would invalidate every "is/is not catalogued"
+  statement in Remark 5, Theorem 27, Theorems 30 and 31.
+- The count `binom(n-1,2)` of star types on `n` players.
+
+### 4. The two finite-check theorems and their scope claims (Theorems 30, 31)
+
+The §6 status table asserts: *"Each enumerates set systems only, so each
+holds at every boundary of every exact game."* **That inference is legitimate
+only if the enumeration really ranges over abstract shapes and consumes no
+game data. Please check that, specifically:**
+
+- What exactly is enumerated? The text says the traces range over the minimal
+  balanced collections on `H` and each lift over every proper set with the
+  prescribed trace that is not `H` and not a singleton inside `H`. Are those
+  exclusions *derived* (from the conventions recorded at the start of §6:
+  core allocations of a normalized game are nonnegative, so `phi_j > 0` for
+  `j ∈ H`, so no singleton inside `H` is tight; and `H` is not tight by
+  slackness) or *assumed*? If derived, the scope claim survives; if any
+  exclusion is a convenience, the scope claim is false and the theorems are
+  statements about a sub-family only.
+- Does the enumeration impose `delta > 0` only, or does it also impose
+  conditions that a real boundary need not satisfy (for instance that the
+  poorer side is one payoff stratum, or that all lifts are distinct)?
+- Are the enumerated objects closed under the relabelling used to count
+  "permutational types", and is the type count consistent with the catalogue?
+- Theorem 30's table (42 / 216 / 950 packets at `m = 3,4,5`; 2 / 3 / 4
+  full-trace types; 6 / 13 / 24 split types; 0 / 0 / 2 split facets) and its
+  two displayed `m = 5` exceptions.
+- Theorem 30's closing sentence is an **equivalence** between two different
+  enumerations ("no catalogued type with a doubleton exceptional set has
+  split-packet shape when `m <= 4`", with the five- and six-player row lists).
+  Check the equivalence, not just each side.
+- Theorem 31: the 811 abstract packets at `(m,h) = (3,3)` and the row
+  assignments (32, 27; 7, 24, 51, 52, 53).
+- The same scope question applies to the "eleven abstract packet shapes on
+  five players" (three at `(4,1)`, eight at `(3,2)`) that Theorem 27 rests on.
+
+Where a scope claim does not survive, say what the theorem *does* prove.
+
+### 5. The monotonicity theorems' minimal hypotheses (§7)
+
+The section advertises that its theorems need no boundary hypothesis and no
+cardinality bound. Test that advertisement.
+
+- **Lemma 34(i).** Uniqueness of the leximin optimum over a convex set, and
+  the inference `phi ∈ Core(v') ⊆ Core(v)` and `phi` leximin-maximal on the
+  larger set implies leximin-maximal on the smaller. Is the "leximin optimum
+  over a convex set is unique" step used at the right level of generality?
+- **Theorem 35.** Does it use exactness at all, or only `phi' (T) >= v'(T)`?
+  If it uses nothing, say so — the paper would then be understating one of
+  its own results.
+- **Theorem 36 (exactness pushback).** The statement says "suppose **only**
+  that `v'(T)` is attained on `Core(v')` for every `T` strictly containing
+  `S`". The proof, however, opens by deriving superadditivity of `v` from
+  exactness of `v`, which is a standing hypothesis of the section but is not
+  in the theorem's "only". **Is the word "only" honest?** Determine the true
+  minimal hypothesis set for (i), (ii), (iii) separately.
+- **Proposition 38 (shields)** and Remark 39 (totals, not members). The
+  proposition is one line; check that Remark 39's restriction — the statement
+  is about totals of tight sets and nothing finer — is respected by every
+  later use, in particular by the reading of Examples 40 and 41.
+- **Corollary 37** as a combinatorial prefilter: `g(S) > s_phi(S)` and
+  `phi_j >= alpha - s_phi(S) > 0` for `j ∉ S`.
+- **Conjecture 42 and Remark 43.** Remark 43 argues that whatever proves the
+  conjecture must use exactness of `v'` at coalitions not containing `S`,
+  from a non-correlation measurement (34.4% vs 36.2% against a base rate of
+  34.6%). Is that a legitimate inference, or is the sample structured in a
+  way that makes the comparison uninformative?
+- Examples 40 and 41: independently recompute the envelope, `Lmin(v)`,
+  `Lmin(v')`, exactness of both the base game and the bumped game coalition
+  by coalition, and the claimed loser sets `W = {d}` and `W = {b,d}`. In Example 41 verify the
+  displayed internal redistribution inside the tight top stratum
+  (`phi'_b + phi'_e = 15`).
+
+### 6. The status tables' honesty
+
+Three tables classify statements as **proved / finite check / verified /
+conjectured** (§6, §7, and the prose of §8). For each row, decide whether the
+label is the correct one, and flag any statement that is:
+
+- labelled *proved* but depends on a computation;
+- labelled *finite check* but whose enumeration is not exhaustive over the
+  claimed domain (see item 4);
+- labelled *verified* but is really a search result whose exhaustiveness is
+  asserted rather than certified — in particular the §6 claim that exactly
+  one of the six split shapes on five players is realizable, which the paper
+  itself concedes "rests on a search... exhaustive when the poorer side is a
+  single payoff stratum and a broad search otherwise", with the complete
+  bound `k|N|+2` "which the runs do not reach";
+- labelled *conjectured* but in fact refuted or provable;
+- absent from the tables entirely.
+
+Also check the two caveat paragraphs (end of §6; Remarks 43 and 44) and §8
+against the body: does the paper anywhere claim more than these caveats
+allow? Pay particular attention to the Reproducibility note's characterization
+of the programs against §6's own "finite check" row.
+
+## Further questions to answer hostilely
+
+7. Is the balanced-trace transport proof (Theorem 3) complete, especially the
+   lift from a convex decomposition of rich traces back to original tight
+   coalitions, and the product-measure averaging that gives (3d)?
+8. Does exactifying a slack suffix force both positive and negative
+   displacement coordinates on the poorer side, thereby excluding `m=1`
+   (Corollary 7)?
+9. Is the sacrifice-budget inequality (Lemma 8) correct, and does the
+   three-case protector argument (Proposition 9) exclude every unique-richest
+   boundary with `m<=3`?
+10. In the two-poorer proof (Lemma 11), is the rank-two exact-cover component
+    classification complete? Check the leaf-deletion argument, the exclusion
+    of even cycles, the half-integral poor loads, and the alternating odd-cycle
+    rounding.
+11. Does the exact-face overload contradiction (Lemma 10) really give
+    `phi_d <= phi_a`, contrary to the strict payoff boundary?
+12. Independently verify every row total, singleton zero, displayed coalition
+    value, progressive Lmin step, and indecomposability argument for all
+    three parametric constructions (Propositions 14, 15, 16), including the
+    `m=4` degeneracy in Proposition 14 (the omitted `e_5` term) and the
+    `Q = ∅` case in Proposition 16.
+13. Does the final case split (proof of Theorem 1) cover every positive
+    integer pair `(m,h)` exactly once, with no hidden assumption that the
+    poorer side is one payoff stratum?
+14. Is exact partition at Lmin genuinely stronger than the known statement
     that exact games through four players are PES stable?
-13. Search for the exact staircase or an equivalent boundary-cardinality
-    theorem under exact-partition, egalitarian-core, minimal balanced
-    collection, semi-balanced system, or exact-game terminology.
+15. Remark 5 claims three of the five singleton-exceptional five-player
+    catalogue types have the required form and that the other two "are never
+    systems (P) at any boundary of any exact five-player game". Check that
+    claim and the three displayed decomposability certificates.
+16. Theorem 27 and Remark 28: is the dichotomy "facet iff full-trace" correct
+    on five players, and is Remark 28's distinction between exclusion by the
+    geometry (row 12) and exclusion only by the selection (row 15) sound?
 
-Treat as prior art: exact partition, its Lorenz consequence, Lmin/property I,
-exact balancedness, semi-balanced facet inequalities, minimal balanced
-collections, the full-set semi-balanced/minimal-balanced correspondence,
-lower-envelope exact games, and the graph description of rank-two exact-cover
-vertices. The candidate new content is the simultaneous Lmin normal cover,
-richer-side one-packet selection, complete staircase, and realizing families.
+## Prior art
+
+Treat as prior art, and do not credit the paper with any of it: exact
+partition and its Lorenz consequence; Lmin / property I; exact balancedness;
+semi-balanced facet inequalities; minimal balanced collections; the full-set
+semi-balanced/minimal-balanced correspondence (Studený–Kratochvíl's
+complement-of-the-exceptional-set construction); lower-envelope exact games;
+the graph description of rank-two exact-cover vertices; the standard fact
+that a basic solution of an equality system has support at most the number of
+rows (which §8 already concedes covers Corollary 6(i)).
+
+**Search specifically for:**
+
+- an equivalent Lmin-selected one-packet reduction in the property-I,
+  exact-balanced, semi-balanced-system, coherent-lower-probability, and
+  minimal-balanced-collection literatures. Is projection to a packet on the
+  richer suffix genuinely distinct from the established full-set
+  correspondence?
+- the staircase (1) or an equivalent boundary-cardinality theorem under
+  exact-partition, egalitarian-core, minimal balanced collection,
+  semi-balanced system, or exact-game terminology.
+- **the star family `St(H,Q)`** (Definition 24): is this family of facets of
+  the cone of exact games already named or catalogued as a family, rather
+  than merely appearing row by row in the six-player catalogue?
+- **the monotonicity content of §7**: is the failure of coalitional
+  monotonicity for Lmin on the exact domain already known? Check
+  Dietzenbacher (2021) *Monotonicity and egalitarianism*, Arin–Iñarra,
+  Arin–Kuipers–Vermeulen, Hokari's work on monotonicity of Dutta–Ray, and the
+  literature on coalitional/population monotonic allocation schemes. If the
+  failure itself is known, is the slack bound (Theorem 35) or the pushback
+  (Theorem 36) known with it?
+
+The candidate new content, as the paper states it, is: the simultaneous Lmin
+normal cover; the richer-side one-packet selection with its linear-size
+witness and slack-propagation corollary; the staircase (1); the three
+dimension-free indecomposable realizing families; the §6 selection results
+(positive-load, crossing-budget and zeroing lemmas, star normal form and
+facet proposition, five-player selection theorem, poorer-side threshold for
+split facets); and the §7 monotonicity results (slack bound, exactness
+pushback with prefilter, shields, containment conjecture with its two
+retiring examples).
 
 ## Exact reproduction
 
-From `coopgames/`:
+From `coopgames/` at commit `3587e55`:
 
 ```bash
 python src/verify_unique_richest_family.py \
@@ -103,25 +337,55 @@ python src/verify_three_poorer_boundary_family.py \
   --output /tmp/three-poorer.json
 cmp /tmp/three-poorer.json results/three_poorer_boundary_family.json
 
+python src/verify_packet_catalogue.py           # Remark 5 classifications
+
 cd paper4
 pdflatex -interaction=nonstopmode -halt-on-error threshold.tex
 pdflatex -interaction=nonstopmode -halt-on-error threshold.tex
 ```
 
-The programs are bug audits, not proof evidence. Please rederive the symbolic
-arguments and implement at least the smallest `(m,h)=(4,1),(3,2),(2,4)`
-instances independently.
+**Status of the programs.** Everything in `../src` and `../results` is a bug
+audit, not proof evidence — **except** where a proof or a status table says
+"finite check". Those are proof dependencies, and you should treat them as
+such: the abstract-shape enumerations behind Theorem 27's eleven shapes and
+behind Theorems 30 and 31, and the searches behind the §6 "verified" row and
+the §7 conjecture evidence. Their drivers are supplied with this packet as a
+separate archive; if any is missing, say so in your report and downgrade the
+corresponding statement rather than assuming it.
+
+Please rederive the symbolic arguments independently and implement at least
+the smallest `(m,h) = (4,1), (3,2), (2,4)` instances from scratch. For §6,
+re-enumerate the eleven five-player shapes independently of the author's
+code. For §7, recompute Examples 40 and 41 from the displayed rows.
+
+## What to deliver
 
 Return separate verdicts for:
 
-1. simultaneous normal-cover theorem;
-2. one-packet selection and rooted slack budget;
-3. lower-bound transport theorem;
-4. unique-richest exclusion;
-5. two-poorer exclusion;
-6. each of the three constructions;
-7. exhaustive phase classification;
-8. novelty and field significance.
+1. simultaneous normal-cover theorem (Lemma 2);
+2. one-packet selection and rooted slack budget (Theorems 3 and 4,
+   Corollary 6);
+3. unique-richest exclusion (Lemma 8, Proposition 9);
+4. two-poorer exclusion (Lemmas 10, 11, Proposition 12);
+5. each of the three constructions (Propositions 14, 15, 16);
+6. exhaustive phase classification (Theorem 1, Corollary 17);
+7. the selection section: star normal form and facet proposition
+   (Lemma 25, Proposition 26), five-player selection (Theorem 27), and the
+   two finite-check theorems **with their scope claims** (Theorems 30, 31);
+8. the monotonicity section: Theorems 35 and 36 **with their minimal
+   hypotheses**, Proposition 38, and the standing of Conjecture 42;
+9. the honesty of the three status tables and of §8;
+10. novelty and field significance.
 
-Use `verified`, `verified with qualifications`, or `not verified`. Classify
-every issue as fatal, repairable, or expository and cite exact file lines.
+Use `verified`, `verified with qualifications`, or `not verified` for each.
+Classify every issue as **fatal**, **repairable**, or **expository**, and
+cite exact file lines (`threshold.tex:NNN`). Where you find a repairable
+error, state the repair. Where you find a fatal one, state what survives.
+
+Finally: two structural questions.
+
+- Should this be one paper or two (phase + selection, monotonicity note; or
+  phase, selection + monotonicity)? Say which and why, from a referee's point
+  of view.
+- Is the paper's own self-assessment in §8 calibrated, over-claimed, or
+  under-claimed?
