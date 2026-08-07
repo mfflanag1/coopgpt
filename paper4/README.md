@@ -19,9 +19,11 @@ pdflatex -interaction=nonstopmode -halt-on-error threshold.tex
 pdflatex -interaction=nonstopmode -halt-on-error threshold.tex
 ```
 
-The proof is human and dimension-free. The exact programs in `../src` and
-saved outputs in `../results` are independent bug audits, not proof
-dependencies.
+The phase-diagram proof is human and dimension-free.  The finite-check
+theorems of the selection section have their drivers archived in
+`../verifiers` (proof dependencies, with a theorem-to-driver map in its
+README); the exact programs in `../src` and saved outputs in `../results`
+are independent bug audits, not proof dependencies.
 
 For an independent audit, send `EXTERNAL_REVIEW_PROMPT.md` together with the
 PDF and repository commit.

@@ -1,0 +1,295 @@
+================================================================================
+TOWARD  s(5) = 1/2 :  THE n = 5 UPPER BOUND
+Partial proof + a single precise obstruction
+================================================================================
+
+VERDICT UP FRONT.  I did not close s(5) = 1/2.  What I did get:
+
+  * three general lemmas, one of them (the core duality) fully proved for ALL
+    games, not just two-generator ones;
+  * a new n = 5 phenomenon -- BOTH egalitarian levels have one-coalition closed
+    forms at n = 5, and the ceiling one provably fails from n = 6 -- which is of
+    independent interest and is what makes an n = 5 proof plausible at all;
+  * a complete proof of the extremal-configuration theorem MODULO ONE
+    INEQUALITY, namely  f({j}) >= v(N)/8  where j is the player starved by Lmax;
+  * that single inequality is the whole remaining gap, verified in 95/95
+    configuration games, and it has a one-line English meaning.
+
+Notation throughout: n = 5, N = {1..5}, v singleton-normalized exact,
+T := v(N) > 0, x := Lmin(v), z := Lmax(v), mu := min_i x_i, M := max_i z_i.
+For S subset N put
+
+        f(S) := T - v(N \ S).
+
+================================================================================
+PART A.  GENERAL LEMMAS
+================================================================================
+
+--------------------------------------------------------------------------------
+LEMMA A1 (core duality, ANY game).  PROVED.
+--------------------------------------------------------------------------------
+        Core(v) = { x >= 0 : x(N) = T,  x(S) <= f(S) for all S subset N }.
+
+PROOF.  For x with x(N) = T, the inequality x(S) >= v(S) is equivalent to
+x(N\S) <= T - v(S) = f(N\S).  As S ranges over all coalitions so does N\S, so
+the family {x(S) >= v(S)} is literally the family {x(S) <= f(S)}.  The
+constraints x >= 0 are the singleton inequalities x_i >= v({i}) = 0.        []
+
+This is the general form of THEOREMS.txt Theorem 1: there f was computed to be
+max(g(S),h(S)) in the two-generator case, but the duality itself needs no
+structure at all.
+
+--------------------------------------------------------------------------------
+LEMMA A2 (the two egalitarian levels are bracketed).  PROVED.
+--------------------------------------------------------------------------------
+Put   lambda := min over nonempty S of f(S)/|S|,
+      nu     := max over nonempty S of v(S)/|S|.
+Then           mu <= lambda        and        M >= nu.
+
+PROOF.  x is a core point, so |S| * mu <= x(S) <= f(S) by A1, for every nonempty
+S; take the min.  Dually z is a core point, so |S| * M >= z(S) >= v(S); take the
+max.                                                                        []
+
+--------------------------------------------------------------------------------
+LEMMA A3 (n = 5 CLOSED FORMS).  VERIFIED, NOT PROVED.
+--------------------------------------------------------------------------------
+        At n = 5:      mu = lambda      and      M = nu.
+
+EVIDENCE.  100% tight, 0 violations, over 1,199 random exact 5-player games
+generated as lower envelopes of k = 2..7 common-total allocations (500 in one
+batch, 699 in another), plus the 586-game two-generator sample of THEOREMS.txt.
+All exact rational.
+
+SCOPE -- THIS IS GENUINELY AN n = 5 FACT.  The M-side identity is FALSE from
+n = 6.  Smallest counterexample (THEOREMS.txt Observation 3): n = 6, T = 5,
+g = (3,2,0,0,0,0), h = (0,0,2,1,1,1) gives M = 6/5 while nu = 1.  Tightness
+rates for M = nu were 100% at n = 4,5 but 97% at n = 6 and 89% at n = 7.
+So any proof that leans on A3 is intrinsically a small-n proof, and CANNOT
+generalize -- which is consistent with the fact that s(n) behaves completely
+differently for n >= 6 (it exceeds 1 by n = 8 and tends to 2).
+
+REMARK.  The mu-side of A3 is the general-game version of Conjecture 2' in
+THEOREMS.txt.  Both reduce to the same question -- whether a single coalition
+certifies the optimum, or whether one needs a genuine fractional cover.  That is
+also, as it turns out, exactly where the proof below stops (Part D).
+
+================================================================================
+PART B.  REDUCTION TO A BOUNDARY CASE
+================================================================================
+
+--------------------------------------------------------------------------------
+OBSERVATION B1.  ratio > 0  =>  Lmin has a slack boundary.  VERIFIED.
+--------------------------------------------------------------------------------
+Call a boundary between consecutive Lmin strata SLACK if the richer suffix H
+satisfies x(H) > v(H).  Over 699 random exact 5-player games (45 with positive
+ratio, 654 with ratio 0): zero games had positive ratio and no slack boundary.
+This is the computational confirmation of the chain the companion paper cites
+(no slack boundary => exact partition at Lmin => Lorenz domination => Lmin=Lmax).
+Consequently any positive-ratio game has a slack boundary, and at n = 5 the only
+boundary shapes are (4,1) and (3,2), giving a two-case split.
+
+--------------------------------------------------------------------------------
+OBSERVATION B2 (configuration census).  From 360 distinct games profiled
+earlier: among the 199 with ratio > 1/3, the Lmin strata are (3,2) 196 times and
+(2,1,2) 3 times -- (4,1) NEVER exceeds 1/3.  Among the 107 with ratio exactly
+1/2, the configuration is 107/107:
+        Lmin strata (3,2),  Lmax strata (1,4),  exactly one ZERO in Lmax.
+Call this configuration CFG.
+
+CAUTION (a wrong turn I made and corrected).  Lmax stratum shape (1,4) does NOT
+imply that the small stratum is 0.  Games with Lmin (3,2) and Lmax (1,4) but
+min Lmax > 0 exist and have all sorts of ratios (2/9, 1/12, 8/21, 4/13, ...).
+The vanishing of the small stratum is a genuinely extra hypothesis, and CFG must
+be stated with it.  With it, the ratio is pinned:
+
+        over 6,000 random exact games, every one of the 53 in configuration CFG
+        had ratio EXACTLY 1/2, mu exactly T/8 and M exactly T/4.
+
+================================================================================
+PART C.  THE CONFIGURATION THEOREM
+================================================================================
+
+THEOREM C (conditional).  Let v be a singleton-normalized exact 5-player game in
+configuration CFG: x = Lmin has strata (3,2) -- a poor set L of three players at
+level mu and a rich pair R at level rho -- and z = Lmax has strata (1,4) with
+z_j = 0 for exactly one player j and z_i = M for the other four.  Assume A3.
+Assume additionally the inequality (*) of Part D.  Then
+
+        M = T/4,     mu = T/8,     rho = 5T/16,     ||x - z||_1 = T/2,
+
+so the ratio is exactly 1/2.  In particular the bound 1/2 is attained, not
+merely approached, and CFG cannot exceed it.
+
+PROOF, in steps.  Steps C1-C5 are unconditional; C6 is where (*) enters.
+
+C1.  M = T/4.   PROVED.  z has one coordinate 0 and four equal to M, and
+z(N) = T, so 4M = T.
+
+C2.  THE SIZE LEMMA.  PROVED.  For every S subset N with S != {j},
+
+                f(S) / |S|  >=  T/8.                                      (C.1)
+
+PROOF.  f(S) = T - v(N\S) and v(N\S) <= z(N\S) because z is a core point.  Now
+z(N\S) = (number of players of N\S other than j) * T/4.  Enumerate by |S| and by
+whether j lies in S:
+
+    |S|=1, j not in S : N\S has 4 players incl. j, z(N\S)=3T/4, f >= T/4,
+                        f/|S| >= T/4.
+    |S|=2, j in S     : N\S has 3 players, none is j, z(N\S)=3T/4, f >= T/4,
+                        f/|S| >= T/8.          <-- the binding case
+    |S|=2, j not in S : N\S has 3 incl. j, z(N\S)=T/2, f >= T/2, f/|S| >= T/4.
+    |S|=3, j in S     : N\S has 2, none is j, z(N\S)=T/2, f >= T/2,
+                        f/|S| >= T/6.
+    |S|=3, j not in S : N\S has 2 incl. j, z(N\S)=T/4, f >= 3T/4, f/|S| >= T/4.
+    |S|=4             : N\S is a single player, v = 0 by normalization, f = T,
+                        f/|S| = T/4.
+    |S|=5             : f(N) = T, f/|S| = T/5.
+Every entry is >= T/8.  The excluded case is exactly S = {j}, |S| = 1, where
+N\S = N\{j} contains no j-free bound: z(N\{j}) = T and the argument gives only
+f({j}) >= 0.                                                                []
+
+C3.  nu = T/4 is attained on a set S* with j not in S* and |S*| in {2,3}.
+PROVED.  By A3, nu = M = T/4, so some S* has v(S*) = |S*| T/4.  Since z is a
+core point, z(S*) >= v(S*) = |S*| T/4; but if j in S* then z(S*) = (|S*|-1)T/4,
+strictly smaller -- contradiction.  So j not in S*.  Singletons are excluded
+(v = 0 by normalization).  If |S*| = 4 then S* = N\{j} and v(N\{j}) = T, i.e.
+x_j = 0 in EVERY core point, i.e. j is a null player; deleting it leaves a
+4-player exact game, where the n <= 4 rigidity theorem gives Lmin = Lmax, hence
+ratio 0, contradicting CFG.  So |S*| in {2,3}.
+    (Note where the four-player theorem enters: it is what forbids |S*| = 4.)
+
+C4.  j lies in the POOR set L, and mu <= T/6.   PROVED.
+Write L = {j?, ...} pending; first the bound.  Since x is a core point,
+x(N \ S*) <= T - v(S*) = T - |S*|T/4.
+  If |S*| = 3:  N\S* = {j, u} for one further player u, so mu + x_u <= T/4
+     (using x_j >= mu).  If u were rich, x_u = rho = (T-3mu)/2 and
+     mu + (T-3mu)/2 <= T/4 forces mu >= T/2, impossible since mu <= T/5.  So u
+     is poor, x_u = mu, giving 2mu <= T/4, i.e. mu <= T/8.
+  If |S*| = 2:  N\S* has 3 players including j, and x(N\S*) <= T/2.  If all
+     three were poor then 3mu <= T/2; if S* meets L then, since S* is disjoint
+     from {j}, x(S*) >= T/2 with at least one poor member gives
+     mu + rho >= T/2, i.e. (T-mu)/2 >= T/2, i.e. mu <= 0; and if S* = R then
+     2rho = T - 3mu >= T/2 gives mu <= T/6.
+In every case mu <= T/6, hence rho = (T-3mu)/2 >= T/4 = M.
+For "j is poor": if j were rich, then x_j = rho >= T/4, so
+f({j}) = max over core of x_j >= T/4, and by C2 every other S has
+f(S)/|S| >= T/8; hence mu = lambda >= T/8 by A3, and the gap computation of C5
+(sub-case rich) gives ||x-z||_1 = 2(2 rho - T/4) only when rho > T/4, which
+combined with mu >= T/8 yields rho = (T-3mu)/2 <= 5T/16 and
+||x-z||_1 <= 2(5T/8 - T/4) = 3T/4.  This sub-case is NOT excluded by the
+argument -- see Part E.  Empirically j is poor in 56/56 and 12/12 CFG games.
+
+C5.  THE GAP FORMULA.   PROVED given j poor.
+Since mu <= T/6 < T/4 = M, the two poor players other than j have
+(x_i - z_i)^+ = (mu - T/4)^+ = 0; the starved player contributes mu - 0 = mu;
+each rich player contributes rho - T/4 >= 0.  Hence
+        sum_i (x_i - z_i)^+ = mu + 2(rho - T/4) = mu + (T - 3mu) - T/2
+                            = T/2 - 2mu,
+        ||x - z||_1 = 2 * (T/2 - 2mu) = T - 4mu.                          (C.2)
+
+C6.  mu = T/8, hence ratio = 1/2.
+  UPPER BOUND mu <= T/8: proved in C4 when |S*| = 3.
+  LOWER BOUND mu >= T/8: by A3, mu = lambda = min over S of f(S)/|S|.  The
+  minimum is over S = {j} and over all other S.  By the Size Lemma C2 every
+  other S contributes at least T/8.  Therefore
+
+        mu >= T/8      if and only if      f({j}) >= T/8,                   (*)
+
+  which is the inequality assumed in the statement.  Given (*), mu = T/8 and
+  (C.2) gives ||x - z||_1 = T - T/2 = T/2.                                  []
+
+================================================================================
+PART D.  THE OBSTRUCTION, STATED EXACTLY
+================================================================================
+The entire remaining gap in Theorem C is the single inequality
+
+        (*)     f({j}) = T - v(N \ {j})  >=  T/8,
+
+where j is the player that Lmax starves.  Because f({j}) = max over the core of
+x_j (immediately from A1), (*) says in words:
+
+        THE PLAYER THAT THE LEXIMAX-MIN SOLUTION STARVES COMPLETELY CAN STILL
+        COLLECT AT LEAST AN EIGHTH OF v(N) SOMEWHERE IN THE CORE.
+
+Equivalently v(N\{j}) <= 7T/8: the complement of the starved player cannot be
+worth more than seven eighths of the grand coalition.
+
+STATUS.  Verified in every configuration game found: 56/56 in one sweep and
+39/39 in another (95/95 overall), always with f({j}) >= T/8.  Never violated.
+
+WHY THE OBVIOUS ROUTES FAIL.
+ (i) f({j}) >= x_j = mu is trivially true but circular -- it is the inequality
+     we are trying to bound from below.
+ (ii) z gives no information here: z(N\{j}) = T, so the core-point bound
+     v(N\{j}) <= z(N\{j}) degenerates to v(N\{j}) <= T.  This is exactly why
+     S = {j} is the one case the Size Lemma cannot cover: every OTHER coalition
+     inherits a bound from the four coordinates of z that equal T/4, but the
+     complement of j sees all four of them and the bound goes slack.
+ (iii) Trying to force it from the leximin side: the (3,2) structure says the
+     two poor players besides j are PINNED at mu, and pinning ought to produce a
+     tight cap S containing them with f(S) = |S| mu, which by C2 would give
+     mu >= T/8 directly.  The step that does not go through is that an LP
+     optimum can be certified by a nonnegative COMBINATION of caps rather than
+     by one cap.  Chasing it, the surviving case is a tight cap containing one
+     rich player, where the numerology is consistent and no contradiction
+     appears.
+ (iv) A promising-looking argument -- the "balanced" point
+     x~ = (mu at j, (T-mu)/4 elsewhere) would have max < T/4 and so contradict
+     M = T/4, hence x~ must violate some cap -- does constrain things: I checked
+     that no cap with j not in S can be the violated one, so the violated cap
+     contains j and has size >= 2.  But every inequality this yields is
+     consistent with mu < T/8; it does not close.
+
+So (*) is not a formality: it is the same one-coalition-versus-fractional-cover
+phenomenon as Conjecture 2' and as Lemma A3 itself.  I would attack A3 first --
+proving mu = lambda in general would very likely also deliver (*), since (*) is
+about whether the minimum defining lambda can hide at the single coalition {j}.
+
+================================================================================
+PART E.  WHAT IS NOT COVERED (honest scope)
+================================================================================
+Even with (*), Theorem C covers only configuration CFG.  A complete proof of
+s(5) = 1/2 additionally needs:
+
+ (E1) The other Lmax stratum shapes.  Among the 199 profiled games with
+      ratio > 1/3 the Lmax strata were (1,4) 141 times, (1,2,2) 55 times and
+      (1,1,3) 3 times.  Only the (1,4)-with-a-zero case is treated above.  None
+      of the others was ever seen to reach 1/2, but none is proved.
+ (E2) The (4,1) Lmin boundary.  Empirically it never exceeds 1/3 -- which if
+      proved would give the nice two-regime theorem (4,1) <= 1/3 < (3,2) <= 1/2 --
+      but I did not prove it.
+ (E3) The sub-case of C4 in which the starved player j is Lmin-RICH.  My
+      argument does not exclude it; it merely never occurs in 68/68 observed
+      configuration games.  In that sub-case the gap formula changes and the
+      bound obtained is only 3T/4.
+ (E4) Observation B1 (positive ratio => slack boundary) is verified, not proved
+      here; it is quoted from the companion chain.
+
+INDEPENDENT SUPPORT FOR s(5) = 1/2 (unchanged from earlier rounds, restated so
+this file stands alone): complete two-generator enumeration over totals 2..24
+(4,357 games, max 1/2); complete three-generator enumeration at totals 4,5,6,7
+(15,180 games, maxima 1/2, 2/5, 1/3, 8/21); seeded core-polytope climbing, which
+searches ALL exact games, started at the extremal game and finding no
+improvement in 240 steps; fine-denominator shape climbing at resolution 1/60
+finding no improvement; and the controls at n = 3, 4 returning 0.
+
+================================================================================
+SUMMARY OF STATUS
+================================================================================
+  A1  core duality, any game .................... PROVED
+  A2  mu <= lambda, M >= nu ..................... PROVED
+  A3  mu = lambda and M = nu at n = 5 ........... VERIFIED (1,199 games), and
+                                                  PROVABLY FALSE (M-side) n >= 6
+  B1  positive ratio => slack boundary .......... VERIFIED (699 games)
+  C1  M = T/4 in CFG ............................ PROVED
+  C2  Size Lemma f(S)/|S| >= T/8, S != {j} ...... PROVED
+  C3  nu attained off j, |S*| in {2,3} .......... PROVED (uses n<=4 rigidity)
+  C4  mu <= T/6; mu <= T/8 when |S*| = 3 ........ PROVED
+  C5  gap = T - 4 mu ............................ PROVED (given j poor)
+  C6  mu = T/8, ratio = 1/2 in CFG .............. PROVED MODULO (*)
+  (*) f({j}) >= T/8 ............................. OPEN; verified 95/95
+  s(5) = 1/2 in full ............................ OPEN (see Part E)
+
+All arithmetic exact (fractions.Fraction).  Scripts: gen5.py, s5probe.py,
+lib.py, and the earlier route1 toolchain.
+================================================================================

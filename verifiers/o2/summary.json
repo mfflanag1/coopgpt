@@ -1,0 +1,55 @@
+{
+ "verdict": "(*) f({j}) >= T/8 PROVED in CFG at n=5. route1 Theorem C becomes unconditional; the CFG case of s(5)=1/2 is closed.",
+ "theorem": "v singleton-normalized exact 5-player in CFG (Lmin strata (3,2); Lmax strata (1,4) with the small stratum at 0 at player j) => f({j}) = T - v(N\\{j}) >= T/8.",
+ "byproducts": {
+  "j_is_Lmin_poor": "two-line argument under the failure hypothesis: j rich => f({j}) >= rho, so rho < 1/8, so mu < rho < 1/8, so rho=(1-3mu)/2 > 5/16 > 1/8, contradiction. Closes route1 Part E's open sub-case where it matters.",
+  "catalogue_not_needed": "minimal sufficient hypothesis set is {z0 in Core} + {x0 in Core} + {L pinned} + failure. The 280 exact-cone inequalities and nu = 1/4 are both dispensable; a hand proof follows."
+ },
+ "encoding": {
+  "pinning": "max{x(L) : x in Core, x >= mu*1} = 3mu, dualized; certificate = vertex of D_L = {(alpha,beta>=0): alpha + sum_{S ni k} beta_S >= [k in L]}; 354 vertices, |supp(beta)| <= 4; the 3 single-cap vertices are route1's remark (iii)",
+  "linearity": "rho=(1-3mu)/2 linear in mu, so every hypothesis and the failure inequality are linear in (v,mu); T=1 free by homogeneity"
+ },
+ "main_result": {
+  "programs": 10974,
+  "feasible": 0,
+  "solver": "z3 exact rational, lazy cone cuts, sat/unsat asserted"
+ },
+ "minimal_sufficient": {
+  "pinning only": 10850,
+  "pinning+nu": 4204,
+  "pinning+x0": 5394,
+  "pinning+z0": 62,
+  "pinning+z0+x0": 0
+ },
+ "ablation_drop_one": {
+  "full": 0,
+  "drop cone": 0,
+  "drop nu": 0,
+  "drop x0": 0,
+  "drop z0": 0,
+  "drop PINNING": "8 of 31 feasible"
+ },
+ "controls": {
+  "pinning_encoding_not_vacuous": "8/8 harvested CFG games: pinning true by direct LP AND a certifying vertex found among the 354, best objective exactly 0",
+  "drop_pinning_restores_feasibility": "8 of 31 S* feasible; the extracted models are GENUINE exact games with f({j})=1/16 < 1/8 whose Lmin strata are (1,2,2) or (1,1,3), not (3,2) -- so not CFG (in all three Lmin = Lmax, ratio 0)",
+  "unsat_core": "for alpha=-1, beta=1_{abcd}+1_{abce} the core is {failure, pinning}: f(abcd)=f(abce)=1 by singleton normalization, objective = 1-3mu <= 0 only if mu >= 1/3"
+ },
+ "warmup": {
+  "games": 2096,
+  "cfg": 21,
+  "star_violations": 0,
+  "all_have": "mu=T/8, M=T/4, ratio=1/2, j poor"
+ },
+ "hand_proof": "in REPORT.txt section 4; six steps, forced to A=1, V=2, W0=0 and then to a support in {{j},{1,2,3},{1,2,4},{j,1,2,3},{j,1,2,4}}, each contradictory. Stated as the mechanism the computation exhibits; steps 3-4 want independent re-derivation before publication.",
+ "not_closed": [
+  "s(5)=1/2 in full (route1 O3: Lmax shapes (1,2,2) and (1,1,3); the (4,1) Lmin boundary; whether CFG with an Lmin-rich starved player can occur at all)",
+  "the secondary ZP item at n=7 was not attempted -- the main target consumed the budget"
+ ],
+ "files": {
+  "report": "sel/o2/REPORT.txt",
+  "main": "o2main.py/.log/.json",
+  "pinning": "pinvert.py/pinverts.json",
+  "controls": "pincontrol.py/.json, ablate.py/.log, minimal.py/.log, core.py/.json, extract.py/.json",
+  "warmup": "warmup.py, warmup_{5,6,7}.json"
+ }
+}

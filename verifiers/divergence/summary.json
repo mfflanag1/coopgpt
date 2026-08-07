@@ -1,0 +1,180 @@
+{
+  "route": 1,
+  "original_conjecture": "||Lmin - Lmax||_1 <= ((n-4)/(n-2)) * v(N) for singleton-normalized exact games",
+  "verdict": "REFUTED at every n >= 5",
+  "second_candidate": "(n-4)/(n-3)",
+  "second_candidate_verdict": "ALSO REFUTED, at n=7 (max there is 5/6 > 3/4)",
+
+  "headline_result": {
+    "statement": "sup over n of the normalized gap ratio equals 2, the hard ceiling; s(n) >= 2 - 8/n",
+    "ratio_crosses_1_at": 8,
+    "interpretation": "for large n the leximin point concentrates essentially all of v(N) on a single player while the leximax-min point spreads it over ~n/2 players, so the two egalitarian selections become asymptotically disjointly supported"
+  },
+
+  "counterexample_n5": {
+    "n": 5,
+    "generators": [[1, 0, 0, 1, 2], [0, 1, 3, 0, 0]],
+    "canonical_relabelling": {"g": [3,1,0,0,0], "h": [0,0,2,1,1], "T": 4},
+    "already_singleton_normalized": true,
+    "v_N": "4",
+    "lmin": ["1/2", "1/2", "5/4", "1/2", "5/4"],
+    "lmax": ["1", "0", "1", "1", "1"],
+    "l1_gap": "2",
+    "ratio": "1/2",
+    "conjectured_bound": "1/3",
+    "core_vertices": [[0,1,2,0,1], [0,1,3,0,0], [1,0,0,1,2], [1,0,1,1,1]],
+    "exact": true,
+    "verification": [
+      "z3 staged exact LRA (audit.lmin + lmax.py)",
+      "independent from-scratch exact-rational two-phase simplex with Bland's rule",
+      "exact rational core-vertex enumeration + definition-level exactness check",
+      "closed-form hand proof from the 4 vertices (no LP)"
+    ]
+  },
+
+  "master_family": {
+    "name": "G(p,k)",
+    "definition": {
+      "n": "p + 1 + k",
+      "T": "p*k",
+      "g": "(p(k-1), 1^p, 0^k)      support A, |A| = p+1",
+      "h": "(0^(p+1), p^k)          support B, |B| = k",
+      "note": "supports disjoint and every coordinate zero in one generator, so the game is already singleton-normalized; it is the lower envelope of two nonneg common-total allocations, hence exact"
+    },
+    "closed_forms": {
+      "lmin": "( p^2(k-1)/(p+1),  [p/(p+1)]^(p+k) )",
+      "lmax": "( p(k-1)/k,  [1/k]^p,  [p(k-1)/k]^k )",
+      "l1_gap": "2p(p(k-1)-1)/(p+1)",
+      "ratio": "2(p(k-1)-1)/(k(p+1))",
+      "deficit_identity": "2 - ratio = 2n/(k(p+1))   where n = p+1+k"
+    },
+    "verified_exactly_for": [[2,3],[3,3],[2,4],[3,4],[4,4],[3,5],[4,5],[5,4],[5,5],[4,6],[5,6],[6,5]],
+    "PROOF": {
+      "status": "complete hand proof, no LP and no solver required",
+      "key_inequality": "for every b in B, the coalition (all p 'ones') u {b} has f = max(g(ones), h({b})) = max(p, p) = p, so any core point gives those p+1 players a total of at most p",
+      "leximin": "if the floor is mu then (p+1)mu <= p, so mu <= p/(p+1); at equality all p ones AND x_b are exactly mu, for EVERY b in B, so all p+k non-head players equal p/(p+1) and the head is forced to T - (p+k)p/(p+1) = p^2(k-1)/(p+1). The max-min point is therefore UNIQUE, hence equals the leximin point.",
+      "leximax_min": "let M = max, s = sum over the ones. Each x_b <= min(M, p-s) and x_head <= M, so T = pk <= M + s + k*min(M, p-s). Case A (M <= p-s): pk <= (k+1)M + s <= kM + p, giving M >= p(k-1)/k. Case B (M > p-s): pk <= M + kp - (k-1)s gives s <= M/(k-1), and M > p - M/(k-1) gives M > p(k-1)/k. Either way M >= p(k-1)/k. Equality forces x_head = M, every x_b = M, and s = p/k; the next leximax stage spreads p/k evenly over the p ones, giving 1/k each.",
+      "achievability": "both closed-form points verified in the core exactly (verify.in_core) for (p,k) = (2,3),(3,4),(4,4),(4,5),(5,5),(5,6),(6,5)",
+      "cap_certificate_checked": "the f(ones u {b}) = p identity verified directly from the envelope for the same (p,k) list"
+    },
+    "optimization": {
+      "argument": "deficit 2 - ratio = 2n/(k(p+1)) and k + (p+1) = n, so maximizing the ratio means maximizing the product k(p+1) of two positive integers with fixed sum n; the optimum is the balanced split k = ceil(n/2), p+1 = floor(n/2)",
+      "s_G_even_n": "2 - 8/n",
+      "s_G_odd_n": "2 - 8n/(n^2 - 1)",
+      "limit": 2
+    },
+    "values": {"n=6": "2/3", "n=7": "5/6", "n=8": "1", "n=9": "11/10",
+               "n=10": "6/5", "n=11": "19/15", "n=12": "4/3"},
+    "n5_exception": "the formula gives 1/3 at n=5, but the true n=5 maximum is 1/2, attained by a non-uniform-h game g=(3,1,0,0,0), h=(0,0,2,1,1); n=5 is a small-n boundary case outside this family"
+  },
+
+  "superseded_family": {
+    "name": "F(m) = G(m,4)",
+    "definition": "g=(3m,1^m,0^4), h=(0^(m+1),m,m,m,m), n=m+5, T=4m",
+    "ratio": "(3m-1)/(2(m+1)) = (3n-16)/(2(n-4)), limit 3/2",
+    "status": "correct but not optimal: it fixes k=4, whereas the optimum is k ~ n/2. Beaten from n=10 on (7/6 vs 6/5)."
+  },
+
+  "complete_2generator_maxima": {
+    "note": "exhaustive up to player permutation, generator swap and scaling",
+    "n=3": {"totals": "2..30", "games": 225, "max": "0"},
+    "n=4": {"totals": "2..30", "games": 3040, "max": "0"},
+    "n=5": {"totals": "2..24", "games": 4357, "max": "1/2"},
+    "n=6": {"totals": "2..20", "games": 8213, "max": "2/3"},
+    "n=7": {"totals": "2..14", "games": 1609, "max": "5/6"},
+    "n=8": {"totals": "2..12", "games": 1049, "max": "1"},
+    "agreement_with_master_family": "exact at n=6,7,8; n=5 is the exception (1/2 > formula's 1/3)"
+  },
+
+  "two_generator_theory": {
+    "support_disjointness": "singleton-normalization forces A={i:g_i>0} and B={i:h_i>0} to be disjoint; players outside A u B are null (x_i=0 forced), reducing n",
+    "claim1_core_identity": {
+      "statement": "Core(v) = { x >= 0 : x(N)=T, x(S) <= f(S) for all S }, where f(S) = max(g(S n A), h(S n B))",
+      "proof": "x(S) >= v(S) for all S is the same family as x(N\\S) <= T - v(S), and T - v(S) = max(g(A\\S), h(B\\S)) = f(N\\S)",
+      "verified": "0 failures in 566 random games at n=4,5,6,7"
+    },
+    "claim2_leximin_floor": {
+      "statement": "mu := min_i Lmin_i = min over (A' subset A, B' subset B) != (empty,empty) of max(g(A'), h(B')) / (|A'|+|B'|)",
+      "tight_in": "488/488 games at n=4,5,6,7 (100%)"
+    },
+    "dual_for_leximax_ceiling_is_only_an_inequality": {
+      "statement": "M := max_i Lmax_i >= max over (P,Q) != (empty,empty) of min(g(P), h(Q)) / (|P|+|Q|)",
+      "tightness": {"n=4": "100%", "n=5": "100%", "n=6": "97%", "n=7": "89%"},
+      "significance": "the leximin side has a closed form and the leximax-min side does not - a genuine asymmetry between the two selections"
+    }
+  },
+
+  "third_generator_test": {
+    "question": "adding a generator lowers the envelope and GROWS the core, so the 2-generator class is not obviously extremal",
+    "method": "from the known 2-generator extremal at each n, test ~200 structured plus random third generators at fixed common total",
+    "results": {"n=5": "0 improvements over 1/2", "n=6": "0 improvements over 2/3",
+                "n=7": "0 improvements over 5/6", "n=8": "0 improvements over 1"},
+    "conclusion": "no evidence that k>=3 generators beat the 2-generator maximum"
+  },
+
+  "n5_extremal_invariants": {
+    "distinct_games_profiled": 360,
+    "distinct_above_1_3": 199,
+    "distinct_attaining_1_2": 107,
+    "confirmed_100pct": {
+      "lmax_has_exactly_one_zero": "107/107",
+      "supp_lmax_size": "4 in 107/107",
+      "lmin_strata": "(3,2) in 107/107",
+      "lmax_strata": "(1,4) in 107/107",
+      "unique_normalized_pair_T4": {"lmin": ["1/2","1/2","1/2","5/4","5/4"],
+                                    "lmax": ["0","1","1","1","1"]}
+    },
+    "seesaw_hypothesis_REFUTED": {
+      "definition": "flat split = coalition S with v(S)+v(N\\S)=v(N), which makes x(S) constant on the core and produces the affine seesaw",
+      "result": "only 76/107 extremal games have any flat split; 31/107 attain exactly 1/2 with none",
+      "when_present": "sizes are always {2,3}, and the Lmax-starved player lies in the size-2 side in 76/76",
+      "conclusion": "the seesaw is an artifact of how the original counterexample was presented, not a necessary invariant of extremality"
+    },
+    "brief_hypotheses_refuted": {
+      "all_4_1_boundary_games": "NO - extremal Lmin strata are (3,2); (4,1) never appears above ratio 1/3",
+      "lmax_is_the_uniform_point": "NO - never uniform in any of the 199 games above 1/3"
+    }
+  },
+
+  "n5_supremum_evidence": {
+    "max": "1/2",
+    "total_games": 42243,
+    "complete_2gen_totals_2_to_24": 4357,
+    "complete_3gen_T4_T5_T6_T7": [335, 1175, 3747, 9923],
+    "cspace_all_exact_games_search": {"evals": 6625, "restarts": 68,
+      "why_complete": "for any c over proper coalitions, P(c)={x: x(N)=T, x(S)>=c_S} nonempty is exactly the core of the exact game v(S)=min_{P(c)} x(S), and core(v)=P(c); so core-closing an arbitrary c always lands in the exact class and covers cores with arbitrarily many vertices"},
+    "controls": "complete 2-gen at n=3 and n=4 return max 0, reproducing the n<=4 rigidity theorem"
+  },
+
+  "target_lemma": {
+    "statement": "||Lmin - Lmax||_1 <= 4 * (n-4) * min_i Lmin_i",
+    "status": "RETRACTED as a general lemma. Holds for n <= 8 (0 violations in 900 fresh random n=5 games; equality on the n=5 extremal class AND on the n=8 ratio-1 game), but FAILS from n=9 onward.",
+    "explicit_failures_on_master_family": {
+      "n=9 (p=4,k=4)":  {"gap": "88/5", "bound_4(n-4)mu": "16", "holds": false},
+      "n=9 (p=3,k=5)":  {"gap": "33/2", "bound_4(n-4)mu": "15", "holds": false},
+      "n=10 (p=4,k=5)": {"gap": "24",   "bound_4(n-4)mu": "96/5", "holds": false},
+      "n=11 (p=5,k=5)": {"gap": "95/3", "bound_4(n-4)mu": "70/3", "holds": false}
+    },
+    "why_it_fails": "the lemma is linear in mu = min_i Lmin_i, but in G(p,k) mu = p/(p+1) < 1 stays bounded while the gap grows like 2T; so no bound of the form C(n)*mu can track it",
+    "companion_is_false": "min_i Lmin_i <= v(N)/(4(n-3)) fails: Lmin=(4/3,5/3,4/3,4/3,4/3), Lmax=(3/2,3/2,5/4,5/4,3/2) has mu/v(N)=4/21>1/8 (gap only 2/21)"
+  },
+
+  "mechanism": {
+    "n5": "v({rich_A, rich_B}) = T/2 simultaneously forces min-max up to T/4 (pinning four players and starving the fifth to 0) and caps the leximin floor at T/8 via the size-3 tight coalitions",
+    "general": "in G(p,k) the single inequality x(all p 'ones' u {one B player}) <= max(p, p) = p makes p+1 players share only p. Leximin reads it as a cap, forcing the floor to p/(p+1) and pushing the head player to ~3T/4 (and ~T as k grows). Leximax-min reads the same inequality the other way: to pull the maximum down it must load a B player to p(k-1)/k, which squeezes every 'one' down to 1/k. One tight coalition drives the two selections to opposite corners, and the effect grows with n instead of saturating at the four-player rigidity."
+  },
+
+  "definitional_issue_for_program": {
+    "brief_claim": "normalization shifts Lmin and Lmax by the same vector, so the L1 gap is invariant",
+    "status": "true for audit.lmin (uses singleton floors, hence equivariant); FALSE for lmax.py, which minimizes max x_i rather than max (x_i - v({i}))",
+    "affects_results": false,
+    "reason": "every counterexample and family member here is presented already singleton-normalized",
+    "team_lead_response": "accepted; project convention always singleton-normalizes before Lmax, so the domain matches"
+  },
+
+  "tooling_notes": {
+    "sympy_simplex": "sympy.solvers.simplex.lpmin cycles on these degenerate LPs (InfeasibleLPError); not used for any reported number",
+    "all_arithmetic": "exact rational (fractions.Fraction); no floats in any reported value",
+    "methodological_correction": "my earlier (n-4)/(n-3) claim came from fitting a formula to a family extracted from the n=5/n=6 witnesses and then scanning only that family. The family had the wrong block shape. Complete enumerations are authoritative; family scans are not."
+  }
+}

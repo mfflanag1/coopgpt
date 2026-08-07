@@ -1,0 +1,154 @@
+{
+ "conjecture": "C-A: strict losers in a bumped coalition S form exactly the richer suffix of a slack strict payoff boundary of Lmin(v)",
+ "verdict": {
+  "part_b_loss_le_slack": "PROVED (Theorem A, stronger suffix-free form)",
+  "part_a": "NOT REFUTED on its stated domain; reduced to two open sub-claims SC1,SC2; open",
+  "part_a_without_exactness_of_bumped_game": "REFUTED (n=5 and n=7 witnesses)"
+ },
+ "proved": {
+  "Prop0": "leximin = lex-max of the partial-sum ladder Sigma_1..Sigma_n; leximin optimum over a convex set is unique",
+  "Prop1": "phi' != phi  =>  d > s_phi(S)   (violation needs the bump to overshoot S's slack)",
+  "Prop2": "Delta = phi'-phi lies in the tangent cone D of Core(v) at phi, and Delta(S) >= d - s_phi(S) > 0",
+  "Cor2a": "every violation has a strict loser OUTSIDE S",
+  "Prop3": "W is a proper subset of S (W = S impossible)",
+  "TheoremA": "for any T != S with phi'(T) < phi(T): 0 < phi(T)-phi'(T) <= s_phi(T); with T=W this gives s_phi(W)>0 and loss <= s_phi(W); equality iff W is phi'-tight in v'",
+  "Prop4": "leximin first-order condition on D (the leximin input to Lemma 1 of threshold.tex); poorest non-constant stratum of Delta contains a loser",
+  "TheoremB": "exact games are superadditive; if v' is exact then v(T) >= v(S)+d+v(T\\S) for T strictly containing S; hence d <= g(S)=min_{j not in S}(v(S+j)-v(S)), every outsider has phi_j >= d-s_phi(S) > 0, and s_phi(N\\S) >= d-s_phi(S)"
+ },
+ "reduction": {
+  "c": "min payoff of a loser in S",
+  "H_c": "{i : phi_i >= c}, the richer suffix at that level",
+  "SC1": "W = H_c intersect S  (losing is upward closed inside S)   -- OPEN",
+  "SC2": "H_c is contained in S (no outsider as rich as the poorest loser) -- OPEN; this is exactly what exactness of v' buys",
+  "equivalence": "C-A(a) <=> SC1 and SC2; slackness of H_c is then automatic from Theorem A"
+ },
+ "counterexamples_without_exactness_of_v_prime": {
+  "n7_sharp": {
+   "n": 7,
+   "construction": "n=5 witness (envelope of (2,0,12,6,0),(0,0,0,0,20),(0,2,10,4,4)) direct-summed with a 2-player component of value 20",
+   "S": "{a,c,d,e}",
+   "d": 2,
+   "phi": [
+    "1",
+    "1",
+    "13/2",
+    "5",
+    "13/2",
+    "10",
+    "10"
+   ],
+   "phi_prime": [
+    "2",
+    "0",
+    "6",
+    "6",
+    "6",
+    "10",
+    "10"
+   ],
+   "W": "{c,e}",
+   "richer_suffixes": [
+    [
+     "{c,d,e,f,g}",
+     "0"
+    ],
+    [
+     "{c,e,f,g}",
+     "1"
+    ],
+    [
+     "{f,g}",
+     "0"
+    ]
+   ],
+   "why": "W is not a suffix: f,g are richer and untouched. v' fails exactness at {a,c,d,e,f}. SC1 still holds (W = H int S), only SC2 fails.",
+   "verified": [
+    "staged z3 leximin",
+    "independent Sigma_m ladder + z3 uniqueness UNSAT",
+    "full exact-rational exactness certification of v and v'"
+   ]
+  },
+  "n5_minimal": {
+   "n": 5,
+   "v_masks": [
+    "0",
+    "0",
+    "0",
+    "1",
+    "0",
+    "0",
+    "1",
+    "1",
+    "0",
+    "1",
+    "0",
+    "1",
+    "1",
+    "1",
+    "2",
+    "2",
+    "0",
+    "1",
+    "0",
+    "1",
+    "4",
+    "4",
+    "5",
+    "5",
+    "0",
+    "1",
+    "0",
+    "1",
+    "5",
+    "5",
+    "5",
+    "6"
+   ],
+   "S": "{1,2,3,5}",
+   "d": 1,
+   "phi": [
+    "1/2",
+    "1/2",
+    "9/4",
+    "1/2",
+    "9/4"
+   ],
+   "phi_prime": [
+    "1",
+    "0",
+    "5/2",
+    "0",
+    "5/2"
+   ],
+   "W": "{2}",
+   "slack_boundary": [
+    [
+     "{3,5}",
+     "1/2"
+    ]
+   ],
+   "why": "W is a poorest-stratum player; the rich pair gains. SC1, SC2 and W=H int S all fail. v' not exact."
+  }
+ },
+ "refinement_conjecture": {
+  "C_A_prime": "W is the SMALLEST (innermost) slack richer suffix of phi",
+  "evidence": "20/20 exact-domain violations over base games with two slack boundaries, but only 5 distinct base games; not decided by slack size (one case has equal slacks, one has the inner suffix carrying the larger slack)"
+ },
+ "statistics": {
+  "exact_base_games": 43375,
+  "with_slack_boundary": 3184,
+  "with_two_or_more_slack_boundaries": 494,
+  "candidates_passing_TheoremB_prefilter": 10965,
+  "nonempty_violating_windows": 183,
+  "bumps_evaluated": 14600,
+  "violations_exact_domain": 279,
+  "CA_holds_exact_domain": 279,
+  "violations_inexact_bump": 4089,
+  "CA_holds_inexact_bump": 1663,
+  "multi_slack_exact_violations": 20,
+  "inherited_route3_violations_reverified": 24,
+  "total_exact_domain_violations_all_sources": 303,
+  "proposition_audit": "197 stored violation records (126 exact + 71 inexact): no proved proposition ever failed"
+ },
+ "placement": "a section of paper4 ('monotonicity failures are boundary phenomena'), with Theorem A + Theorem B + the SC1/SC2 reduction as the theorem, C-A(a) stated as a conjecture with 303-case evidence, and counterexample C-1 as the proof that exactness of the bumped game cannot be dropped"
+}

@@ -1,0 +1,582 @@
+================================================================================
+ROUTE 1 — THEOREMS ON THE Lmin / Lmax SEPARATION IN EXACT GAMES
+================================================================================
+
+Setting.  N = {1,...,n}.  A TU game v is EXACT if every coalition inequality
+x(S) >= v(S) is attained by some core point.  v is SINGLETON-NORMALIZED if
+v({i}) = 0 for all i; then every core point is nonnegative.  Lmin(v) is the
+leximin core point (maximize the increasing rearrangement lexicographically);
+Lmax(v) is the leximax-min core point (minimize the decreasing rearrangement
+lexicographically).  Write T = v(N) and
+
+        rho(v) := ||Lmin(v) - Lmax(v)||_1 / v(N).
+
+GENERATION FACT (used throughout).  If g_1,...,g_r >= 0 all have the same total
+T, then v(S) = min_j g_j(S) for S != N, v(N) = T, is exact: each g_j lies in the
+core, and each inequality is attained by whichever generator realizes the min.
+Conversely every exact game is the lower envelope of its own core.  So "exact
+game" = "lower envelope of a common-total set of nonnegative allocations".
+
+
+================================================================================
+PART I.  THE TWO-GENERATOR CLASS
+================================================================================
+
+Throughout Part I, v is the lower envelope of exactly two nonnegative
+allocations g, h with common total T.
+
+--------------------------------------------------------------------------------
+LEMMA 0 (support disjointness).
+--------------------------------------------------------------------------------
+If v is singleton-normalized then A := {i : g_i > 0} and B := {i : h_i > 0} are
+disjoint, and every player outside A u B is null (forced to 0 in every core
+point), so the game reduces to the (A u B)-game.  Hence we may and do assume
+A u B = N and A n B = empty.
+
+PROOF.  v({i}) = min(g_i, h_i) = 0 forces g_i = 0 or h_i = 0, which is exactly
+A n B = empty.  If i is in neither, then g and h both vanish at i, so
+v(N \ {i}) = min(g(N\{i}), h(N\{i})) = min(T, T) = T; any core point x has
+x(N \ {i}) >= T and x(N) = T with x >= 0, hence x_i = 0.  Deleting a null player
+changes neither Lmin, Lmax (both give it 0) nor T.                            []
+
+NOTATION.  For S subset N put
+
+        f(S) := max( g(S n A), h(S n B) ) = max( g(S), h(S) ).
+
+--------------------------------------------------------------------------------
+THEOREM 1 (dual description of the core).  PROVED.
+--------------------------------------------------------------------------------
+        Core(v)  =  { x >= 0 : x(N) = T  and  x(S) <= f(S) for all S subset N }.
+
+PROOF.  For x with x(N) = T and any S, the inequality x(S) >= v(S) is equivalent
+to x(N \ S) <= T - v(S).  So it suffices to prove the identity
+
+        T - v(S)  =  f(N \ S)          for every S.                        (1.1)
+
+Compute, using that g and h are modular with g(N) = h(N) = T:
+
+  T - v(S) = T - min( g(S), h(S) )
+           = max( T - g(S), T - h(S) )
+           = max( g(N \ S), h(N \ S) )
+           = f(N \ S),
+
+the last step by the definition of f.  (No disjointness is needed for (1.1);
+Lemma 0 is only used to normalize the presentation.)  Replacing S by N \ S in
+(1.1) turns the family {x(S) >= v(S)} into the family {x(S) <= f(S)}.  Finally
+x >= 0 is exactly the family of singleton inequalities x({i}) >= v({i}) = 0. []
+
+VERIFICATION.  Identity (1.1) was checked coordinatewise on 586 random
+two-generator games at n = 4,5,6,7:  0 failures.
+
+--------------------------------------------------------------------------------
+THEOREM 2 (leximin floor: the easy direction).  PROVED.
+--------------------------------------------------------------------------------
+Let mu := min_i Lmin(v)_i be the leximin floor, and put
+
+        lambda := min over nonempty S of  f(S)/|S|
+                = min over (A' subset A, B' subset B) != (empty,empty) of
+                        max( g(A'), h(B') ) / ( |A'| + |B'| ).
+
+Then  mu <= lambda.
+
+PROOF.  Lmin is a core point, so by Theorem 1, for every nonempty S,
+|S| * min_i Lmin_i <= Lmin(S) <= f(S), i.e. mu <= f(S)/|S|.  Take the min. []
+
+--------------------------------------------------------------------------------
+CONJECTURE 2' (leximin floor: equality).  VERIFIED 586/586, NOT PROVED.
+--------------------------------------------------------------------------------
+        mu = lambda.
+
+STATUS.  Tight in 586 of 586 random two-generator games at n = 4,5,6,7 (100%).
+Reduction of what remains.  Equality means the system
+
+        y >= 0,   y(N) = T - n*lambda,   y(S) <= f'(S) := f(S) - lambda*|S|
+
+is feasible (put y = x - lambda*1; note f' >= 0 by definition of lambda).  By LP
+duality, max{ y(N) : y >= 0, y(S) <= f'(S) } equals the minimum of
+sum_S w_S f'(S) over fractional covers w (w >= 0, sum_{S ni i} w_S >= 1 for all
+i).  Taking w = 1_{S=N} shows the min is <= f'(N) = T - n*lambda, so the claim
+is exactly:
+
+        for every fractional cover w,   sum_S w_S f'(S)  >=  f'(N).      (2.1)
+
+PARTIAL PROOF of (2.1): it HOLDS for every EXACT (balanced) cover, i.e. whenever
+sum_{S ni i} w_S = 1 for all i.  Indeed then sum_S w_S |S| = n, so
+
+  sum_S w_S f'(S) = sum_S w_S f(S) - lambda * n
+                 >= sum_S w_S g(S)  - lambda * n        (since f >= g)
+                  = sum_i g_i * sum_{S ni i} w_S - lambda*n
+                  = g(N) - lambda*n  =  T - lambda*n  =  f'(N),
+
+using modularity of g.  (The same works with h.)  What is missing is the case of
+covers that strictly over-cover some players.  Writing e_i := sum_{S ni i} w_S - 1
+>= 0, the same computation gives
+    sum_S w_S f'(S) >= f'(N) + max( sum_{i in A} g_i e_i , sum_{i in B} h_i e_i )
+                                 - lambda * sum_i e_i,
+and since lambda <= f({i}) = g_i (i in A) resp. h_i (i in B), each of the two
+inner sums dominates lambda times its OWN block's excess but not the other
+block's.  Closing this gap (or constructing the attaining core point directly)
+is the remaining work.
+
+--------------------------------------------------------------------------------
+OBSERVATION 3 (the dual statement for Lmax is FALSE).  SETTLED.
+--------------------------------------------------------------------------------
+Let M := max_i Lmax(v)_i.  The mirror-image bound
+
+        M  >=  max over (P,Q) != (empty,empty) of  min( g(P), h(Q) ) / (|P|+|Q|)
+                                                                          (3.1)
+is VALID (it is Theorem 1 read on complements: x(N\S) >= T - f(S)), but unlike
+Theorem 2 it is NOT an identity.
+
+READING (3.1) CORRECTLY.  P ranges over subsets of A and Q over subsets of B, and
+the max is over pairs (P,Q) other than (empty,empty).  There is NO infinity
+convention: g(empty) = h(empty) = 0, so any pair with an empty part contributes
+min(.,0) = 0 and is simply inactive.  In particular only pairs with BOTH parts
+nonempty can be binding.  (Reading an empty part as +infinity instead would turn
+(3.1) into max_i over singletons and give a different, wrong, value; this is an
+easy misreading and should be spelled out in the paper.)
+
+Tightness rates over the same random samples (586 games, n = 4,5,6,7):
+        n = 4 : 120/120 = 100%      n = 5 : 218/218 = 100%
+        n = 6 : 160/165 =  97%      n = 7 :  74/83  =  89%.
+
+SMALLEST COUNTEREXAMPLE (n = 6, common total T = 5, found by scanning the
+complete 2-generator enumeration in increasing T; no counterexample exists for
+T <= 4 at n = 6, nor at any T for n <= 5):
+
+        g = (3, 2, 0, 0, 0, 0)        h = (0, 0, 2, 1, 1, 1)      T = 5
+        Lmin = (1, 2/3, 4/3, 2/3, 2/3, 2/3)
+        Lmax = (6/5, 4/5, 6/5, 3/5, 3/5, 3/5)
+        M = 6/5    but the right-hand side of (3.1) equals 1.   Strict gap 1/5.
+
+(Two further T = 5 counterexamples at n = 6 occur, with g = (3,1,1), h = (2,2,1)
+and g = (2,2,1), h = (3,1,1); all have M = 6/5 against a bound of 1.)
+
+DIAGNOSIS.  Theorem 2 bounds the floor using only UPPER caps x(S) <= f(S), and a
+single tightest cap S can be saturated on its own.  Bounding the ceiling instead
+needs LOWER bounds x(N\S) >= T - f(S), and minimizing the maximum must respect
+SEVERAL such lower bounds at once; a single one no longer certifies the optimum.
+This is a genuine asymmetry between the two selections: the leximin floor has a
+one-coalition certificate, the leximax-min ceiling does not.  It is the same
+asymmetry that makes Lmax the harder object throughout this program.
+
+
+================================================================================
+PART II.  THE MASTER FAMILY G(p,k) AND THE VALUE OF THE SUPREMUM
+================================================================================
+
+--------------------------------------------------------------------------------
+DEFINITION.  For integers p >= 1, k >= 2 let n = p + 1 + k, T = p*k, and
+--------------------------------------------------------------------------------
+        g = ( p(k-1),  1, 1, ..., 1,   0, ..., 0 )      p ones ; |A| = p+1
+        h = ( 0, ..., 0,             p, p, ..., p )     k copies of p ; |B| = k
+
+with A = {0,1,...,p} (player 0 = the HEAD, players 1..p = the ONES) and
+B = {p+1,...,p+k}.  Both are nonnegative with total  p(k-1) + p = pk = T  and
+p*k = T.  Supports are disjoint and every coordinate vanishes in one generator,
+so G(p,k) := lower envelope of {g,h} is exact and singleton-normalized.
+
+--------------------------------------------------------------------------------
+THEOREM 4 (closed forms).  PROVED.
+--------------------------------------------------------------------------------
+        Lmin(G(p,k)) = ( p^2(k-1)/(p+1) ,  [ p/(p+1) ]^{p+k} )
+        Lmax(G(p,k)) = ( p(k-1)/k ,  [ 1/k ]^p ,  [ p(k-1)/k ]^k )
+        ||Lmin - Lmax||_1 = 2p( p(k-1) - 1 ) / (p+1)
+        rho(G(p,k))       = 2( p(k-1) - 1 ) / ( k(p+1) ).
+
+PROOF.
+
+THE KEY CAP.  Let O := {1,...,p} be the set of ones.  For each b in B,
+
+        f(O u {b}) = max( g(O), h({b}) ) = max( p*1, p ) = p.               (4.1)
+
+So by Theorem 1, EVERY core point x satisfies
+
+        x_1 + ... + x_p + x_b  <=  p        for every b in B.               (4.2)
+
+That single family of p+1-player caps drives everything below.
+
+(a) LEXIMIN.  Let x be any core point and m := min_i x_i.  Applying (4.2) with
+any fixed b gives (p+1)m <= p, so
+
+        m <= p/(p+1),    hence   mu := max over core of min_i x_i <= p/(p+1).
+
+Suppose m = p/(p+1).  Then in (4.2) the p+1 numbers x_1,...,x_p,x_b are each
+>= p/(p+1) and sum to at most p = (p+1)*p/(p+1); so ALL of them equal p/(p+1).
+This holds for EVERY b in B, hence
+
+        x_1 = ... = x_p = x_{p+1} = ... = x_{p+k} = p/(p+1),
+
+and efficiency forces the head to
+        x_0 = T - (p+k)*p/(p+1) = pk - p(p+k)/(p+1) = p^2(k-1)/(p+1),
+using  k - (p+k)/(p+1) = (kp + k - p - k)/(p+1) = p(k-1)/(p+1).
+Thus the max-min point is UNIQUE.  A unique max-min point is a fortiori the
+leximin point, so Lmin is as claimed — provided this point is in the core, which
+is verified below.
+
+(b) LEXIMAX-MIN.  Let x be a core point, M := max_i x_i, and s := x_1+...+x_p.
+By (4.2), x_b <= p - s for each b in B, and trivially x_b <= M and x_0 <= M.
+Efficiency gives
+
+        pk = x_0 + s + sum_{b in B} x_b  <=  M + s + k * min(M, p - s).      (4.3)
+
+  CASE A:  M <= p - s.  Then (4.3) reads pk <= (k+1)M + s.  Also
+  s <= p - M by the case hypothesis, so pk <= (k+1)M + p - M = kM + p, i.e.
+
+        M >= p(k-1)/k.
+
+  CASE B:  M > p - s.  Then (4.3) reads pk <= M + s + k(p-s) = M + kp - (k-1)s,
+  so (k-1)s <= M, i.e. s <= M/(k-1).  The case hypothesis then gives
+  M > p - s >= p - M/(k-1), i.e. M*(1 + 1/(k-1)) > p, i.e. M*k/(k-1) > p, i.e.
+
+        M > p(k-1)/k.
+
+In both cases M >= p(k-1)/k, so the leximax-min ceiling is at least p(k-1)/k.
+Equality can only occur in Case A with every inequality used tight: x_0 = M,
+x_b = M for all b in B, and s = pk - (k+1)M = pk - (k+1)p(k-1)/k
+= p( k^2 - (k+1)(k-1) )/k = p/k.  (Consistency: p - s = p - p/k = p(k-1)/k = M,
+so Case A holds with equality, as it must.)  Thus at the min-max level the head
+and all of B are pinned at p(k-1)/k and the ones share exactly p/k.  The next
+leximax stage minimizes the maximum of the p ones subject to their sum being
+p/k, whose unique optimum is 1/k each.  Hence Lmax is as claimed.
+
+(c) MEMBERSHIP.  PROVED for all p >= 1, k >= 2.  This step is load-bearing: (a)
+and (b) determine the optima only CONDITIONALLY on the described points being
+feasible, so without it Theorem 6 and the sup = 2 headline would not stand.
+
+Notation for this part.  Index the head 0, the ones O = {1,...,p}, and
+B = {p+1,...,p+k}.  For S subset N put
+        eps := 1 if 0 in S else 0,      i := |S n O|,      j := |S n B|,
+so that, since g = (p(k-1), 1^p, 0^k) and h = (0^{p+1}, p^k),
+
+        g(S) = eps*p(k-1) + i,     h(S) = j*p,
+        f(S) = max( eps*p(k-1) + i,  j*p ).                                (4.4)
+
+Note 0 <= i <= p and 0 <= j <= k throughout, and k - 1 >= 1.
+
+(c1) THE LEXIMIN POINT.  Write q := p/(p+1) and H := p^2(k-1)/(p+1) = p(k-1)q,
+so x* = (H, q, ..., q) with p+k copies of q.  First, efficiency:
+        H + (p+k)q = q( p(k-1) + p + k ) = q( pk + k ) = k(p+1) * p/(p+1) = pk = T.
+Also x* > 0.  It remains to check x*(S) <= f(S) for every S, where
+x*(S) = eps*H + (i+j)q.
+
+  CASE eps = 0 (head not in S), so x*(S) = (i+j)q and f(S) = max(i, jp).
+    - j = 0.  Then S is a nonempty subset of O, so i >= 1 and
+      x*(S) = iq < i = f(S), since q < 1.  Strict.
+    - j >= 1.  Bound f(S) >= jp and use i <= p:
+          x*(S) = (i+j)p/(p+1) <= (p+j)p/(p+1),
+      and (p+j)p/(p+1) <= jp  <=>  p + j <= j(p+1) = jp + j  <=>  p <= jp,
+      which holds because j >= 1.  So x*(S) <= jp <= f(S).
+
+  CASE eps = 1 (head in S), so x*(S) = q( p(k-1) + i + j ).  Put G0 := p(k-1)+i,
+  which is the g-value g(S).
+    - j <= k-1.  Compare against the g-side of (4.4):
+          x*(S) <= G0
+            <=>  ( G0 + j ) * p <= (p+1) * G0        [multiply by (p+1)/1... i.e.
+                                                      clear the denominator p+1]
+            <=>  G0*p + jp <= G0*p + G0
+            <=>  jp <= G0 = p(k-1) + i,
+      and indeed jp <= (k-1)p <= p(k-1) + i.  So x*(S) <= g(S) <= f(S).
+    - j = k.  Then h(S) = kp = T, so f(S) >= T, while x*(S) <= x*(N) = T because
+      x* >= 0.  So x*(S) <= f(S).
+  Hence x* is in the core.
+
+(c2) THE LEXIMAX-MIN POINT.  Write L := p(k-1)/k and r := 1/k, so
+y* = (L, r, ..., r, L, ..., L) with p copies of r and k copies of L.  Efficiency:
+        L + pr + kL = (k+1)L + p/k = p[ (k+1)(k-1) + 1 ]/k = p*k^2/k = pk = T.
+Also y* > 0, so in particular NO coordinate of y* vanishes.  Now
+y*(S) = eps*L + i*r + j*L.
+
+  CASE eps = 0.  y*(S) = ( i + j*p(k-1) ) / k  and f(S) = max(i, jp).
+    - j = 0.  y*(S) = i/k <= i = f(S) since k >= 2.
+    - j >= 1.  Compare against the h-side jp:
+          ( i + jp(k-1) ) / k <= jp   <=>   i + jp(k-1) <= jpk   <=>   i <= jp,
+      which holds since i <= p <= jp.  So y*(S) <= jp <= f(S).
+
+  CASE eps = 1.  y*(S) = (j+1)L + i/k.
+    - j <= k-1.  Compare against the g-side p(k-1)+i; multiplying by k > 0,
+          y*(S) <= p(k-1) + i
+            <=>  (j+1)p(k-1) + i <= k*p(k-1) + k*i
+            <=>  p(k-1)( j + 1 - k ) <= (k-1) i
+            <=>  p( j + 1 - k ) <= i          [divide by k-1 >= 1],
+      and the left side is <= 0 <= i because j <= k-1.  So y*(S) <= f(S).
+    - j = k.  As before f(S) >= h(S) = kp = T >= y*(S).
+  Hence y* is in the core.                                                   []
+
+(c3) WHICH CAPS ARE TIGHT (for the paper's exposition of the mechanism).
+Tracking the equality cases above, for BOTH x* and y* the tight coalitions are
+exactly the same two families, together with S = N:
+
+  (T1)  S = O u {b}  for a single b in B      f(S) = max(p, p) = p
+        [eps=0 branch, equality needs i = p and j = 1]
+  (T2)  S = {head} u B'  with |B'| = k-1      f(S) = max(p(k-1), (k-1)p) = p(k-1)
+        [eps=1 branch, equality needs j = k-1 and i = 0]
+  (T3)  S = N                                 f(N) = T.
+
+Family (T1) is exactly the KEY CAP (4.1)/(4.2).  Both f-values in (T1) and (T2)
+are attained SIMULTANEOUSLY by the g-side and the h-side -- the two generators
+tie there -- which is the structural reason those coalitions are the active ones.
+
+The exposition point is that Lmin and Lmax saturate the SAME caps; they differ
+only in how they distribute mass inside them.  On (T1) the leximin point puts
+p/(p+1) on each of the p+1 members, while the leximax-min point puts 1/k on each
+one and the whole remainder p(k-1)/k on the single B-player.  That is the
+divergence, visible in one coalition.
+
+(c4) NUMERICAL CONFIRMATION of (c1)-(c3).  All 2^n - 1 coalition inequalities of
+Theorem 1, plus the exact tight-set prediction of (c3), were checked in exact
+rational arithmetic for every (p,k) with 1 <= p <= 7, 2 <= k <= 7 and n <= 13:
+zero membership violations and zero tight-set mismatches.  Independently, the
+leximin / leximax-min values produced by two independent exact solvers (staged
+z3 LRA, and a from-scratch exact-rational Bland simplex) agree with the closed
+forms coordinatewise for (p,k) = (2,3), (3,3), (2,4), (3,4), (4,4), (3,5),
+(4,5), (5,4), (5,5), (4,6), (5,6), (6,5).
+
+(c5) DEGENERATE CORNER.  p = 1, k = 2 gives n = 4, T = 2, g = (1,1,0,0),
+h = (0,0,1,1) and ratio 2(p(k-1)-1)/(k(p+1)) = 0, consistent with the n <= 4
+rigidity theorem; the deficit identity reads 2 - 0 = 2n/(k(p+1)) = 8/4 = 2.
+
+(d) THE GAP.  With  D := p(k-1) - 1  one computes, all three differences having
+the sign shown,
+        head:  p^2(k-1)/(p+1) - p(k-1)/k   =  p(k-1)D / (k(p+1))
+        ones:  p/(p+1) - 1/k               =  D / (k(p+1))          [p of them]
+        B   :  p(k-1)/k - p/(p+1)          =  p D / (k(p+1))        [k of them]
+so
+  ||Lmin - Lmax||_1 = [ p(k-1)D + p*D + k*p*D ] / (k(p+1))
+                    = D * ( p(k-1) + p + kp ) / (k(p+1))
+                    = D * 2pk / (k(p+1))  =  2pD/(p+1),
+and rho = 2pD/((p+1)*pk) = 2D/(k(p+1)) = 2(p(k-1)-1)/(k(p+1)).              []
+
+--------------------------------------------------------------------------------
+COROLLARY 5 (deficit identity).  PROVED.
+--------------------------------------------------------------------------------
+        2 - rho(G(p,k))  =  2n / ( k (p+1) ),      where n = p + 1 + k.
+
+PROOF.  2 - 2(p(k-1)-1)/(k(p+1)) = 2[ k(p+1) - p(k-1) + 1 ] / (k(p+1))
+       = 2[ kp + k - pk + p + 1 ] / (k(p+1)) = 2(k + p + 1)/(k(p+1)).       []
+
+--------------------------------------------------------------------------------
+THEOREM 6 (the lower bound on the supremum).  PROVED.
+--------------------------------------------------------------------------------
+Let s(n) := sup rho(v) over singleton-normalized exact n-player games with
+v(N) > 0.  Then
+
+        s(n)  >=  2 - 8/n              if n is even,
+        s(n)  >=  2 - 8n/(n^2 - 1)     if n is odd,
+
+and consequently   sup over all n of s(n) = 2,   the trivial ceiling.
+
+PROOF.  By Corollary 5 the deficit is 2n/(k(p+1)) with k + (p+1) = n and
+k >= 2, p + 1 >= 2.  Minimizing the deficit means maximizing the product
+k(p+1) of two positive integers with fixed sum n, whose maximum is
+floor(n/2)*ceil(n/2) = n^2/4 for n even and (n^2-1)/4 for n odd, attained at the
+balanced split k = ceil(n/2), p+1 = floor(n/2).  Substituting gives the two
+displayed bounds.  For the last claim, rho <= 2 always, because Lmin and Lmax
+are nonnegative with the same total T, whence
+||Lmin - Lmax||_1 <= ||Lmin||_1 + ||Lmax||_1 = 2T; and 2 - 8/n -> 2.        []
+
+Values (all verified exactly):
+        n :    5     6     7     8     9    10     11    12    16    20
+   bound :   1/3   2/3   5/6    1   11/10  6/5  19/15   4/3   3/2   8/5
+
+REMARK 6.1 (agreement with exhaustive search).  Complete two-generator
+enumerations (exhaustive up to player permutation, generator swap and scaling)
+give maxima 2/3 at n = 6, 5/6 at n = 7 and 1 at n = 8 — exactly the values of
+Theorem 6.  So on the two-generator class the bound of Theorem 6 is attained at
+n = 6,7,8, and s_2(n) = 2 - 8n/(n^2 - (n mod 2)) is a live candidate for n >= 6.
+
+REMARK 6.2 (n = 5 is exceptional).  Theorem 6 gives only 1/3 at n = 5, but the
+true value is s(5) = 1/2 (see Part III), attained by a game with a NON-UNIFORM
+h-block.  The family G(p,k) has a uniform h-block, and at n = 5 the available
+splits (k, p+1) in {(2,3),(3,2)} are too coarse.  So Theorem 6 is not sharp at
+n = 5, and the crossover to the G-family shape happens at n = 6.
+
+REMARK 6.3 (there is nothing special about |B| = 4).  An earlier version of this
+family fixed k = |B| = 4, giving rho = (3m-1)/(2(m+1)) -> 3/2.  Corollary 5
+shows k is a free parameter and the optimum is k ~ n/2, so the 3/2 limit was an
+artifact of the fixed block size; the k = 4 slice is already beaten from n = 10
+on (7/6 versus 6/5).  The number 4 that appears as |supp(Lmax)| in the n = 5
+extremal class is a small-n phenomenon, not a feature of the asymptotics — in
+G(p,k) every coordinate of Lmax is strictly positive, so |supp(Lmax)| = n there
+and no player is starved at all.  Two different regimes.
+
+--------------------------------------------------------------------------------
+INTERPRETATION (the mechanism, stated once).
+--------------------------------------------------------------------------------
+The single inequality (4.2) is read in opposite directions by the two
+selections.  Leximin reads it as a CAP: p+1 players can share only p, so the
+floor is stuck at p/(p+1) and the entire residual piles onto the head, which
+therefore holds p^2(k-1)/(p+1) -> ~T.  Leximax-min reads the same inequality as
+a BUDGET: to pull the maximum down it must load each B-player up to p(k-1)/k,
+and (4.2) then squeezes every one down to 1/k.  So one tight coalition drives
+the two egalitarian selections to opposite corners, and the effect GROWS with n
+rather than saturating at the four-player rigidity.
+
+Note in particular that Lmin here is extremely inegalitarian in the max sense —
+one player holds about three quarters of v(N) while everyone else sits just
+below 1 — even though it is leximin-optimal.  The divergence is NOT "Lmin
+egalitarian, Lmax not".  BOTH selections are forced into extreme shapes by the
+same constraint, in opposite directions.  Asymptotically their supports become
+disjoint, which is exactly why rho -> 2.
+
+
+================================================================================
+PART III.  n = 5
+================================================================================
+
+--------------------------------------------------------------------------------
+THEOREM 7 (the original conjecture is false).  PROVED.
+--------------------------------------------------------------------------------
+Let w be the lower envelope of  g1 = (1,0,0,1,2),  g2 = (0,1,3,0,0)  (total 4).
+Then w is exact and singleton-normalized, w(N) = 4, and
+
+        Lmin(w) = (1/2, 1/2, 5/4, 1/2, 5/4),   Lmax(w) = (1, 0, 1, 1, 1),
+        ||Lmin - Lmax||_1 = 2,     rho(w) = 1/2  >  1/3 = (n-4)/(n-2).
+
+PROOF.  Exactness and normalization are immediate (generation fact; each
+coordinate vanishes in one generator).  Exact rational vertex enumeration gives
+Core(w) = conv{ (0,1,2,0,1), (0,1,3,0,0), (1,0,0,1,2), (1,0,1,1,1) } =: conv{V1..V4}.
+Writing x = aV1 + bV2 + cV3 + dV4 with a+b+c+d = 1, a,b,c,d >= 0 and s := c+d,
+
+        x_0 = x_3 = s,     x_1 = 1 - s,     x_2 + x_4 = 3 - s.             (7.1)
+
+LEXIMIN.  By (7.1), min_i x_i <= min(s, 1-s) <= 1/2, with equality forcing
+s = 1/2 and hence x_0 = x_1 = x_3 = 1/2.  Then x_2 + x_4 = 5/2 and the leximin
+continuation splits it evenly, giving 5/4 each.  This is attained: taking
+(a,b,c,d) = (1/4, 1/4, 1/2, 0) gives s = 1/2 and
+x = (1/2, 1/2, 5/4, 1/2, 5/4) exactly.  Hence Lmin is as claimed.
+
+LEXIMAX-MIN.  By (7.1), max_i x_i >= (x_2 + x_4)/2 = (3-s)/2 >= 1, since s <= 1.
+Equality forces s = 1, hence a = b = 0 and x_2 = x_4 = 1; among c+d = 1 the
+condition x_2 = d = 1 forces d = 1, c = 0, i.e. x = V4 = (1,0,1,1,1), uniquely.
+Hence Lmax is as claimed.
+
+The L1 computation is 1/2 + 1/2 + 1/4 + 1/2 + 1/4 = 2, and 2/4 = 1/2 > 1/3.  []
+
+REMARK.  No LP or solver is used in this proof.  Independently, four methods
+agree on this game: z3 staged exact LRA, a from-scratch exact-rational two-phase
+simplex with Bland's rule, the vertex enumeration above, and the hand argument.
+
+--------------------------------------------------------------------------------
+CONJECTURE 8 (n = 5 supremum).  s(5) = 1/2.  NOT PROVED.
+--------------------------------------------------------------------------------
+EVIDENCE (about 42,000 exact games, all exact rational, nothing above 1/2):
+ * COMPLETE two-generator enumeration, totals 2..24, up to player permutation,
+   generator swap and scaling (4,357 games): max 1/2.
+ * COMPLETE three-generator enumeration at totals 4,5,6,7 (335 / 1,175 / 3,747 /
+   9,923 games): maxima 1/2, 2/5, 1/3, 8/21.
+ * Core-polytope ("c-space") hill-climbing, 68 restarts, ~6,600 evaluations.
+   This searches ALL exact games, not a bounded-generator slice: for any vector c
+   over the proper coalitions, P(c) = {x : x(N)=T, x(S) >= c_S}, when nonempty,
+   is exactly the core of the exact game v(S) = min_{P(c)} x(S), and
+   core(v) = P(c).  So core-closing an arbitrary c always lands in the exact
+   class, reaching cores with arbitrarily many vertices.  Plateaus at 1/2.
+ * Fine-denominator shape climbing from the extremal witness scaled to total 60
+   (so a unit move is a 1/60 shape perturbation): no improvement.
+ * CONTROLS: complete two-generator enumerations at n = 3 and n = 4 (225 and
+   3,040 games, totals 2..30) return maximum 0, reproducing the known n <= 4
+   rigidity theorem.  The same pipeline returns 1/2 at n = 5.
+
+--------------------------------------------------------------------------------
+PROPOSITION 9 (structure of the n = 5 extremal class).  ESTABLISHED
+EMPIRICALLY over 360 distinct games (199 above 1/3, 107 attaining 1/2).
+--------------------------------------------------------------------------------
+Among the 107 distinct games with rho = 1/2, without exception (107/107):
+        Lmin has stratum composition (3,2);
+        Lmax has stratum composition (1,4);
+        Lmax has EXACTLY ONE zero coordinate, so |supp(Lmax)| = 4;
+        and, normalized to T = 4, the pair is unique up to permutation:
+                Lmin ~ (1/2,1/2,1/2,5/4,5/4),   Lmax ~ (0,1,1,1,1).
+Above 1/3 (199 games): Lmin strata are (3,2) 196 times and (2,1,2) 3 times —
+the (4,1) pattern NEVER occurs above 1/3.  Lmax is never the uniform point.
+
+REFUTED SUB-HYPOTHESIS ("seesaw").  Call S a FLAT SPLIT if
+v(S) + v(N \ S) = v(N); then x(S) is constant on the core, which is the affine
+seesaw visible in (7.1).  Only 76 of the 107 extremal games have any flat split;
+31 attain exactly 1/2 with NONE.  So the seesaw is a feature of the particular
+presentation of the game in Theorem 7, not an invariant of extremality.  When a
+flat split exists its sizes are always {2,3}, and the Lmax-starved player lies
+in the size-2 side in 76 of 76 cases.
+
+--------------------------------------------------------------------------------
+CONJECTURE 10 (target lemma).  RETRACTED as stated; TRUE for n <= 8.
+--------------------------------------------------------------------------------
+        ||Lmin - Lmax||_1  <=  4 (n-4) * min_i Lmin_i.
+
+Holds with 0 violations in 900 fresh random n = 5 games, and is TIGHT both on
+the n = 5 extremal class and on the n = 8 game G(3,4) (where both sides are 12).
+But it FAILS from n = 9 on, on the master family:
+
+        G(4,4), n=9  :  gap 88/5 = 17.6   vs bound 16
+        G(3,5), n=9  :  gap 33/2 = 16.5   vs bound 15
+        G(4,5), n=10 :  gap 24            vs bound 96/5 = 19.2
+        G(5,5), n=11 :  gap 95/3 = 31.67  vs bound 70/3 = 23.33
+
+REASON (structural, not accidental).  The bound is linear in mu = min_i Lmin_i,
+but in G(p,k) one has mu = p/(p+1) < 1, bounded, while the gap grows like 2T.
+No bound of the form C(n) * min_i Lmin_i can track the divergence.  The lemma
+should be restricted to n <= 8 or abandoned.
+
+
+================================================================================
+PART IV.  WHAT IS OPEN
+================================================================================
+(1) Conjecture 2' — equality in the leximin-floor formula.  Reduced to the
+    fractional-cover inequality (2.1); proved for balanced covers.
+(2) An upper bound.  Theorem 6 forces any true bound to be asymptotically 2, so
+    every bound of the form c*v(N) with c < 2 is false for large n.  The right
+    target is the finite-n statement s_2(n) = 2 - 8n/(n^2 - (n mod 2)) for
+    n >= 6, currently confirmed by complete enumeration at n = 6,7,8 only.
+
+    ONE ROUTE IS NOW CLOSED.  The natural strategy "prove uniform-h is WLOG by a
+    majorization / smoothing argument, then optimize over g alone using the mu
+    formula" DOES NOT WORK.  Define a smoothing step as a Robin-Hood transfer of
+    one unit from a larger to a smaller h-coordinate (so h moves down in the
+    majorization order, toward uniform).  The premise "a smoothing step never
+    decreases the ratio" is FALSE, and not only in small blocks:
+
+        |B| :      2        3        4        5
+        steps:    40       76       84       84
+        viol.:    18       27       11       21
+        rate :   45%      36%      13%      25%
+
+    In particular it fails for |B| >= 4, so the size threshold guessed for the
+    n = 5 anomaly does not exist.  Verified counterexample at |B| = 4 (n = 7,
+    T = 10, exact, both points confirmed in the core):
+
+        g = (0,5,0,3,2,0,0),  h = (1,0,2,0,0,5,2)
+             Lmin = (1,2,1,1,1,3,1)
+             Lmax = (5/6, 5/2, 5/6, 4/3, 7/6, 5/2, 5/6)      ratio 1/5
+        smoothing the h-block (5,2) -> (4,3), i.e. h = (1,0,2,0,0,4,3):
+             Lmin = Lmax = (1,2,1,1,1,2,2)                   ratio 0.
+
+    The ratio is therefore NOT monotone under majorization of h.  Intuitively,
+    smoothing makes the game more symmetric and tends to COLLAPSE the two
+    selections onto each other -- yet the extremal family G(p,k) has a perfectly
+    uniform h.  Both facts are true, so the dependence is genuinely non-monotone
+    and any upper-bound proof must handle general h directly.
+(3) Is the two-generator class extremal?  Adding a generator LOWERS the envelope
+    and hence GROWS the core, so this is not automatic.  Evidence, all negative
+    for a counterexample:
+      - from the known extremal at each of n = 5,6,7,8, about 200 structured plus
+        random third generators at fixed total: ZERO improvements;
+      - SEEDED core-polytope ("c-space") hill-climbing started AT the extremal
+        game's value vector and perturbing coalition values with core-closing --
+        which searches ALL exact games, not a bounded-generator slice --
+        found no improvement at n = 5 (240 steps, stays 1/2), n = 6 (496 steps,
+        stays 2/3) and n = 7 (301 steps, stays 5/6).
+    So the two-generator optimum is a certified LOCAL optimum in the full exact
+    class at n = 5,6,7.  Still a conjecture globally.
+    (Caution: UNSEEDED c-space restarts reach only 1/3 at n = 6, far below the
+    known 2/3, so that variant is under-powered at n >= 6 and certifies nothing.)
+(4) Conjecture 8 — s(5) = 1/2, together with the two-regime picture suggested by
+    Proposition 9 ((3,2) boundaries above 1/3, (4,1) never exceeding 1/3).
+(5) A structural explanation of the n = 5 / n >= 6 regime change (starved Lmax
+    with |supp| = 4 versus fully-supported Lmax in G(p,k)).
+
+================================================================================
+Scripts: lib.py, simplex.py, lexsimplex.py, verify.py, twogen.py, exhaust2.py,
+exhaust2n.py, exhaust3.py, cspace.py, cspacen.py, scan2block.py, probe8.py,
+addgen.py, finestarts.py, seesaw.py, structure.py, family.py, family2.py.
+All arithmetic exact (fractions.Fraction); no floats in any stated value.
+================================================================================

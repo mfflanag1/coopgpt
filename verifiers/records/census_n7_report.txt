@@ -1,0 +1,167 @@
+==============================================================================
+n = 7 FOUR-CRITERIA COMPLETENESS CHECK
+Do phase / shape / PB / RO predict the realized Lmin packet types at n=7?
+==============================================================================
+
+There is no published catalogue on seven players, so everything here is
+intrinsic: shapes are enumerated from the one-packet theorem, types are
+compared up to permutations preserving the exceptional coalition H (which
+is intrinsic, being the unique negative coefficient), and all arithmetic is
+exact (Fraction / z3 LRA).
+
+------------------------------------------------------------------------------
+VERDICT
+------------------------------------------------------------------------------
+
+  NOT REFUTED.  0 realized types fail any of the
+  four criteria, over 226,502 packets from 78,921 random exact games plus
+  the targeted family probes.  Every realized type is an enumerated (P)
+  shape with u != 0 and no rich-overlap configuration.
+
+  A FIFTH MECHANISM is NOT established.  The one candidate configuration
+  (below) is realized twice, so it is not an obstruction by itself; what
+  actually resists is a proper sub-case of it, at h=2 only, and is
+  characterised but unproved.
+
+------------------------------------------------------------------------------
+(1) THE SHAPE SCREEN — complete, no truncation
+------------------------------------------------------------------------------
+
+Phase-admissible (m,h) at n=7 are (6,1), (5,2), (4,3), (3,4), (2,5);
+(1,6) is phase-excluded (m=1 < m_min=2) and indeed never slack in the
+harvest (21698 h=6 boundaries, 0 slack).
+
+ h  m    types  admissible  PB-excl  RO-excl  k-fold only
+ 1  6        5           5        0        0            0
+ 2  5       28          28        0        0            0
+ 3  4      158         135        5       20            0
+ 4  3      877         637       36      215            8
+ 5  2     3317        1803      466     1218           60
+          4385        2608      507     1453           68
+
+Criteria are applied SHAPE BY SHAPE: a type is admissible iff one single
+shape of it passes everything at once.  (Re-running the n=6 census with
+this stricter per-shape rule reproduces the same answer there: predicted =
+realized = rows {26,27,28,30,32,33,35,39,44,48,53}.)
+
+------------------------------------------------------------------------------
+(2) THE k-FOLD RICH-OVERLAP LEMMA — open item 3, ANSWERED YES
+------------------------------------------------------------------------------
+
+Lemma (k-fold RO).  Let T_1..T_k be phi-tight and form a SUNFLOWER with
+kernel R (all pairwise intersections equal R).  Then
+
+      sum_{i not in T_1 u .. u T_k} phi_i  >=  (k-1) * s_phi(R).
+
+Proof.  Exactness gives z in core(v) with z(R) = v(R).  For a sunflower,
+z(u T_j) = sum_j z(T_j) - (k-1) z(R), and the same identity holds for phi,
+so z(u T_j) >= phi(u T_j) + (k-1) s_phi(R).  Subtract from z(N) = phi(N)
+and use z >= 0 on the complement.  k=2 is the pairwise lemma.  []
+
+Used as a criterion with R = {j} a rich singleton (s_phi({j}) = phi_j in a
+normalized game): a sunflower of k lifts with rich-singleton kernel and at
+most k-1 players outside its union, all poorer, is impossible.
+
+At n=7 the k-fold version kills 68 types that pairwise RO misses
+(8 at h=4, 60 at h=5) — so the generalization has real extra power and is
+worth proving in the paper.  At n=6 it kills only shapes already killed by
+(PB) (four shapes of row 9), and it kills NO realized type at either n,
+which is the consistency check that matters.
+
+------------------------------------------------------------------------------
+(3) THE HARVEST
+------------------------------------------------------------------------------
+
+  random exact games        : 78921
+  slack strict boundaries   : 36239
+  packets (delta > 0)       : 226502
+  distinct realized types   : 150
+  rich-singleton lifts (C3) : 0
+
+  h  m  boundaries   slack    rate   packets  split
+  1  6        9772    9772  1.000     85362      0
+  2  5       22023   11470  0.521     71847   7920
+  3  4       23936    9493  0.397     41314   8581
+  4  3       25141    3982  0.158     22536  13395
+  5  2       21764    1522  0.070      5443   4065
+  6  1       21698       0  0.000         0      0
+
+  coverage of the admissible set:
+   h  m  admissible  realized  coverage
+   1  6           5         5   100.0%
+   2  5          28        26    92.9%
+   3  4         135        79    58.5%
+   4  3         637        32     5.0%
+   5  2        1803         8     0.4%
+
+  Coverage falls off with h because the admissible set grows much faster
+  than the search does, not because of an obstruction: h=5 has 1,803
+  admissible types and the harvest hit 8.  Only h=1 (5/5) and h=2 (26/28)
+  are covered densely enough for an unrealized type to mean anything.
+
+------------------------------------------------------------------------------
+(4) WHAT RESISTS, AND THE FIFTH-MECHANISM CANDIDATE
+------------------------------------------------------------------------------
+
+Exactly two admissible types were never realized at h=2:
+
+   +1*eg -3*fg +1*afg +1*bfg +1*cfg +1*dfg +1*abcdef   lifts abcdef, eg
+   -3*fg +1*afg +1*bfg +1*cfg +1*dfg +1*cdef +1*abeg   lifts cdef, abeg
+
+Both have two lifts whose UNION IS ALL OF N and whose INTERSECTION IS A
+SINGLE POORER PLAYER e.  The k-fold RO lemma with kernel R = {e} then has
+an empty outside, so it degenerates to
+      0  >=  (k-1) * s_phi({e})  =  (k-1) * phi_e ,
+forcing phi_e = 0.  Call this the ZERO-PAYOFF (ZP) configuration.  Its
+consequences in an exact normalized game:
+   (i)   the leximin stage-1 level is 0, so no core point is strictly
+         positive;
+   (ii)  a convex set covered by finitely many hyperplanes lies in one of
+         them, so x_j = 0 identically on the core for a single player j,
+         and phi_j = 0 makes j poorer;
+   (iii) if j = e and one lift is {e} u R with R rich, exactness gives
+         v({e} u R) = min_core x(R) = v(R) while tightness gives
+         v({e} u R) = phi(R); hence s_phi(R) = 0, and for R = {g} a rich
+         singleton that reads phi_g = v({g}) = 0, contradicting phi_g > 0.
+
+So the first resisting type (lift {e,g}) is PROVED impossible whenever the
+identically-zero core player is e itself; the case j != e is open, and the
+second resisting type has no proof at all.
+
+IMPORTANT NEGATIVE RESULT: ZP is NOT an obstruction on its own.
+  Of 21 ZP-configured admissible types across all h, 2 ARE realized:
+    h=2  -3*fg +1*aeg +1*afg +1*bfg +1*cfg +1*dfg +1*bcdef   lifts ['bcdef', 'aeg']
+    h=3  -2*efg +1*adef +1*bcdg +1*aefg +1*befg +1*cefg   lifts ['bcdg', 'adef']
+  The realized h=2 one has poorer-part profile (3,1); the two resisting
+  ones have profiles (4,0) and (2,2).  So the obstruction, if real, is
+  finer than the ZP configuration and turns on the profile.
+
+TARGETED EFFORT SPENT on the two resisters (all failed):
+  - hill climbing on integer generator matrices scored by traces, a
+    zero-payoff poorer player, and the exact pair configuration and
+    profile: 38,069 evaluations, best score reached the (3,1) profile and
+    never (4,0) or (2,2);
+  - constrained construction with phi itself as a generator, where the two
+    tightness conditions collapse to 0 <= g(S1) - phi(S1) <= g_e and
+    generators are sampled with prescribed zeros to keep the game
+    singleton-normalized: 17,037 admissible games built, 0 hits.
+  The hill climb plateaus exactly at the profile boundary, the same
+  signature that preceded the RO lemma at n=6.
+
+------------------------------------------------------------------------------
+(5) OPEN ITEMS
+------------------------------------------------------------------------------
+
+  1. Close the ZP sub-case: prove or refute that profiles (4,0) and (2,2)
+     are unrealizable at an h=2 boundary while (3,1) is realizable.  The
+     j != e branch of (iii) is the missing step.
+  2. Prove the k-fold RO lemma in the paper and adopt it as the criterion;
+     it strictly dominates the pairwise version (68 extra types killed at
+     n=7) and costs nothing extra to state.
+  3. Coverage at h=4 and h=5 is 5% and 0.4%.  A completeness claim there
+     needs a fundamentally better search (targeted per-type construction),
+     not more random games.
+  4. The whole check is about (P)-shape admissibility, which is criterion-
+     level and n-independent.  Nothing here needed the catalogue, so the
+     same pipeline runs at n=8 if the shape enumeration is bounded.
+

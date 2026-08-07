@@ -1,0 +1,83 @@
+{
+ "verdict": "A3 PROVED at n=5, both sides. No remaining gap of the kind route1 flagged.",
+ "theorem": "For every singleton-normalized exact 5-player game, min_i Lmin_i = lambda = min_S f(S)/|S| and max_i Lmax_i = nu = max_S v(S)/|S|.",
+ "exact_cone_description": {
+  "citation": "Studeny & Kratochvil, Facets of the cone of exact games, MMOR 95 (2022) 35-80; catalogue front page, quoted verbatim in REPORT.txt section 1",
+  "form": "v exact <=> v(empty)=0 and sum_S lambda_S v(S) <= r v(N) for every indecomposable min-semi-balanced system, all permutations",
+  "n_inequalities_n5": 280,
+  "validation": {
+   "exact_games_no_violation": "1999/1999",
+   "nonexact_games_certified": "150/150",
+   "minimal_balanced_implied": "1292/1292 (so nonempty core is entailed; no separate Bondareva-Shapley needed)"
+  }
+ },
+ "reduction": {
+  "source": "route1 P9 (LP duality), re-derived",
+  "M_side": "M=nu iff min over fractional covers w of sum_S w_S h(S) >= h(N), h(S)=nu|S|-v(S)>=0",
+  "mu_side": "mu=lambda iff the same with f'(S)=f(S)-lambda|S|",
+  "finiteness": [
+   "objective >=0 on a pointed polyhedron with recession cone the nonneg orthant, so the min is attained at a VERTEX; vertices have support <= n = 5",
+   "fixing the anchor coalition attaining nu (resp. lambda) makes everything linear in v",
+   "v(N)=1 is free by homogeneity; T=0 forces v==0 and A3 holds trivially"
+  ]
+ },
+ "enumeration": {
+  "cover_vertices_n5": 2287,
+  "balanced": 1292,
+  "strictly_overcovering": 995,
+  "classes_overcovering_only": 473,
+  "classes_all_vertices": 1142,
+  "M_side_feasible": 0,
+  "mu_side_feasible": 0,
+  "self_contained": "the 1142-class run includes the balanced vertices, so route1's P10 is not relied on",
+  "solver": "z3 exact rational, lazy cut generation; every call asserted to return sat or unsat (guarded rerun allverts2.log)"
+ },
+ "positive_controls": {
+  "drop_the_cone": {
+   "M": "361/473 classes feasible",
+   "mu": "339/473 classes feasible",
+   "meaning": "the encoding can express a failure; exactness is what forbids it"
+  },
+  "n6_known_failure": {
+   "game": "lower envelope of (3,2,0,0,0,0) and (0,0,2,1,1,1), T=5",
+   "nu": 1,
+   "hN": 1,
+   "cover": [
+    "bc",
+    "acd",
+    "ace",
+    "acf"
+   ],
+   "cover_value": 0,
+   "beats_trivial": true,
+   "Lmax": [
+    "6/5",
+    "4/5",
+    "6/5",
+    "3/5",
+    "3/5",
+    "3/5"
+   ],
+   "M": "6/5 > nu=1"
+  },
+  "random_positive": "60/60 random exact 5-player games satisfy M=nu and mu=lambda"
+ },
+ "closes": [
+  "paper5 Conjecture (one-coalition certificates at five players) becomes a theorem",
+  "route1 O1",
+  "the covering-vs-full-LP gap: the check quantifies over every cover vertex, not over nu-tight covering families"
+ ],
+ "does_not_close": [
+  "(*) / route1 O2 (f({j}) >= T/8 for the Lmax-starved player) does NOT follow formally from A3 -- it is a statement about a different functional; route1's expectation that O2 falls out of O1 should be re-examined, not assumed",
+  "anything at n>=6 (the M-side is false there)",
+  "the Studeny-Kratochvil facet theorem is used as a validated citation, not re-proved"
+ ],
+ "files": {
+  "report": "sel/a3check/REPORT.txt",
+  "cone": "cone.py/.json/.log",
+  "vertices": "coververt.py, coververts.json",
+  "main": "a3lp.py, a3lp.log/.json",
+  "self_contained": "allverts.py, allverts.log, allverts2.log, allverts.json",
+  "controls": "controls.py/.json"
+ }
+}

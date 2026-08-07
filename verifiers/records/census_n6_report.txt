@@ -1,0 +1,471 @@
+==============================================================================
+n = 6 PACKET-TYPE CENSUS: which of the 53 catalogued indecomposable
+min-semi-balanced systems arise as Lmin slack-boundary obstructions
+==============================================================================
+
+All arithmetic exact (Fraction / z3 LRA).  Games are lower envelopes of
+common-total nonnegative allocations, hence exact by construction; phi =
+Lmin via staged exact optimisation (audit.lmin); packets enumerated from
+the statement of the one-packet theorem (pack.packets); permutational types
+via catalogue.canon (720 permutations); minimality/indecomposability via an
+independent z3 classifier (sbcheck).
+
+------------------------------------------------------------------------------
+HEADLINE
+------------------------------------------------------------------------------
+  realized catalogue rows      : 11 of 53  [26, 27, 28, 30, 32, 33, 35, 39, 44, 48, 53]
+  predicted realizable (theory): 11  [26, 27, 28, 30, 32, 33, 35, 39, 44, 48, 53]
+  prediction == realization    : True
+  uncatalogued (non-facet) packet types found: 16, all minimal-but-decomposable
+
+------------------------------------------------------------------------------
+(a) SCREEN TABLE OVER THE 53 ROWS
+------------------------------------------------------------------------------
+h = |exceptional set T|, m = 6-h = size of the poorer side.
+phase  : m >= m_min(h) with m_min(1)=4, m_min(2)=m_min(3)=3, m_min(>=4)=2.
+shape  : the row's permutational type occurs among the exhaustively
+         enumerated systems (P) (one lift per trace of a minimal balanced
+         collection on H, plus spokes H+i, delta>0, lifts proper and never
+         the exceptional singleton).
+PB     : some (P) shape of the type has u != 0 (else (PB) of the one-packet
+         theorem gives delta*s(H) <= 0, contradicting slackness).
+RO     : NOT killed by the rich-overlap lemma (see section (c)).
+
+row  h  m phase shape   PB   RO  real  reason / system
+  1  2  4   yes    NO    -    -    NO  +1*a +1*b -1*ab
+                                  [C3] only reachable if a rich singleton could be a lift (v({j})=0 forbids it)
+  2  3  3   yes    NO    -    -    NO  +1*a +1*bc -1*abc
+                                  [C3] only reachable if a rich singleton could be a lift (v({j})=0 forbids it)
+  3  4  2   yes    NO    -    -    NO  +1*a +1*bcd -1*abcd
+                                  [C3] only reachable if a rich singleton could be a lift (v({j})=0 forbids it)
+  4  4  2   yes   yes   NO  yes    NO  +1*ab +1*cd -1*abcd
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has u == 0; (PB) of the one-packet theorem then gives delta*s(H) <= 0, contradicting s(H) > 0
+  5  5  1    NO    NO    -    -    NO  +1*a +1*bcde -1*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+  6  5  1    NO    NO    -    -    NO  +1*ab +1*cde -1*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+  7  3  3   yes   yes   NO  yes    NO  +1*ab +1*ac +1*bc -2*abc
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has u == 0; (PB) of the one-packet theorem then gives delta*s(H) <= 0, contradicting s(H) > 0
+  8  4  2   yes   yes   NO  yes    NO  +1*ab +1*acd +1*bcd -2*abcd
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has u == 0; (PB) of the one-packet theorem then gives delta*s(H) <= 0, contradicting s(H) > 0
+  9  4  2   yes   yes   NO  yes    NO  +1*ab +1*bc +1*bd +2*acd -3*abcd
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has u == 0; (PB) of the one-packet theorem then gives delta*s(H) <= 0, contradicting s(H) > 0
+ 10  5  1    NO    NO    -    -    NO  +1*ab +1*acde +1*bcde -2*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 11  5  1    NO    NO    -    -    NO  +1*abc +1*cde +1*abde -2*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 12  5  1    NO    NO    -    -    NO  +1*ab +1*bc +1*bde +2*acde -3*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 13  5  1    NO    NO    -    -    NO  +1*ab +1*bc +1*bd +1*be +3*acde -4*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 14  4  2   yes   yes   NO  yes    NO  +1*abc +1*abd +1*acd +1*bcd -3*abcd
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has u == 0; (PB) of the one-packet theorem then gives delta*s(H) <= 0, contradicting s(H) > 0
+ 15  5  1    NO    NO    -    -    NO  +2*abc +1*ade +1*bde +1*cde -3*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 16  5  1    NO    NO    -    -    NO  +1*ab +1*bc +2*acd +2*ace +3*bde -5*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 17  5  1    NO    NO    -    -    NO  +1*ab +1*acd +1*bce +1*bde +1*acde -3*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 18  5  1    NO    NO    -    -    NO  +2*ab +1*bcd +1*bce +1*bde +3*acde -5*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 19  5  1    NO    NO    -    -    NO  +1*abc +1*abde +1*acde +1*bcde -3*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 20  5  1    NO    NO    -    -    NO  +1*abc +1*abd +1*ace +1*bde +1*cde -3*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 21  5  1    NO    NO    -    -    NO  +1*ab +1*bcd +1*bde +1*abce +2*acde -4*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 22  5  1    NO    NO    -    -    NO  +1*abc +1*bcd +1*bce +2*abde +2*acde -5*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 23  5  1    NO    NO    -    -    NO  +1*abcd +1*abce +1*abde +1*acde +1*bcde -4*abcde
+                                  [PHASE] m=1 < m_min(5)=2: the phase theorem forbids slack
+ 24  3  3   yes   yes  yes   NO    NO  -3*abc +1*abd +1*acd +1*bce +1*abce +2*abcf
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has two lifts meeting in a single rich player j with exactly one poorer player i outside their union; (RO) forces phi_i >= phi_j, contradicting the strict boundary
+ 25  2  4   yes    NO    -    -    NO  -3*ab +1*ac +1*bcd +1*abe +2*abf +1*abde
+                                  [C] split traces ['a', 'b'] coexist with the non-spoke set abde
+ 26  4  2   yes   yes  yes  yes   yes  -1*abcd +1*abcde +1*abcdf
+ 27  3  3   yes   yes  yes  yes   yes  -1*abc +1*abcd +1*abcef
+ 28  2  4   yes   yes  yes  yes   yes  -1*ab +1*abc +1*abdef
+ 29  2  4   yes    NO    -    -    NO  -1*ab +1*abcd +1*abef
+                                  [C] 2 positive sets contain T with >=2 extra players (abcd, abef); a packet has at most one non-spoke lift
+ 30  1  5   yes   yes  yes  yes   yes  -1*a +1*ab +1*acdef
+ 31  1  5   yes    NO    -    -    NO  -1*a +1*abc +1*adef
+                                  [C] 2 positive sets contain T with >=2 extra players (abc, adef); a packet has at most one non-spoke lift
+ 32  3  3   yes   yes  yes  yes   yes  -2*abc +1*abcd +1*abce +1*abcf
+ 33  2  4   yes   yes  yes  yes   yes  -2*ab +1*abc +1*abd +1*abef
+ 34  2  4   yes    NO    -    -    NO  -3*ab +2*abc +1*abde +1*abdf +1*abef
+                                  [C] 3 positive sets contain T with >=2 extra players (abde, abdf, abef); a packet has at most one non-spoke lift
+ 35  1  5   yes   yes  yes  yes   yes  -2*a +1*ab +1*ac +1*adef
+ 36  1  5   yes    NO    -    -    NO  -2*a +1*ab +1*acd +1*aef
+                                  [C] 2 positive sets contain T with >=2 extra players (acd, aef); a packet has at most one non-spoke lift
+ 37  1  5   yes    NO    -    -    NO  -3*a +2*ab +1*acd +1*acef +1*adef
+                                  [C] 3 positive sets contain T with >=2 extra players (acd, acef, adef); a packet has at most one non-spoke lift
+ 38  1  5   yes    NO    -    -    NO  -4*a +3*ab +1*acde +1*acdf +1*acef +1*adef
+                                  [C] 4 positive sets contain T with >=2 extra players (acde, acdf, acef, adef); a packet has at most one non-spoke lift
+ 39  2  4   yes   yes  yes  yes   yes  -3*ab +1*abc +1*abd +1*abe +1*abf
+ 40  1  5   yes    NO    -    -    NO  -3*a +1*abc +1*abd +1*acd +2*aef
+                                  [C] 4 positive sets contain T with >=2 extra players (abc, abd, acd, aef); a packet has at most one non-spoke lift
+ 41  1  5   yes    NO    -    -    NO  -5*a +2*abc +2*acd +3*aef +1*abde +1*abdf
+                                  [C] 5 positive sets contain T with >=2 extra players (abc, acd, aef, abde, abdf); a packet has at most one non-spoke lift
+ 42  1  5   yes    NO    -    -    NO  -3*a +1*ab +1*acd +1*ade +1*abf +1*acef
+                                  [C] 4 positive sets contain T with >=2 extra players (abf, acd, ade, acef); a packet has at most one non-spoke lift
+ 43  1  5   yes    NO    -    -    NO  -5*a +3*ab +1*acd +1*ade +1*adf +2*acef
+                                  [C] 4 positive sets contain T with >=2 extra players (acd, ade, adf, acef); a packet has at most one non-spoke lift
+ 44  1  5   yes   yes  yes  yes   yes  -3*a +1*ab +1*ac +1*ad +1*aef
+ 45  1  5   yes    NO    -    -    NO  -3*a +1*abc +1*abd +1*ace +1*adf +1*aef
+                                  [C] 5 positive sets contain T with >=2 extra players (abc, abd, ace, adf, aef); a packet has at most one non-spoke lift
+ 46  1  5   yes    NO    -    -    NO  -4*a +1*ab +2*ac +1*ade +1*aef +1*abdf
+                                  [C] 3 positive sets contain T with >=2 extra players (ade, aef, abdf); a packet has at most one non-spoke lift
+ 47  1  5   yes    NO    -    -    NO  -5*a +2*ab +2*ac +1*ade +1*adf +1*aef
+                                  [C] 3 positive sets contain T with >=2 extra players (ade, adf, aef); a packet has at most one non-spoke lift
+ 48  1  5   yes   yes  yes  yes   yes  -4*a +1*ab +1*ac +1*ad +1*ae +1*af
+ 49  3  3   yes    NO    -    -    NO  +1*ab +2*bc -3*abc +1*abd +1*ace +1*acf
+                                  [A] two positive sets (ab, abd) share the proper trace ab
+ 50  4  2   yes    NO    -    -    NO  +1*ab +1*abc +2*bcd +1*ade -3*abcd +1*acdf
+                                  [D] traces ['ab', 'abc', 'ad', 'acd', 'bcd'] are not a minimal balanced collection on abcd
+ 51  3  3   yes   yes   NO   NO    NO  -1*abc +1*abd +1*bce +1*acf
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has u == 0; (PB) of the one-packet theorem then gives delta*s(H) <= 0, contradicting s(H) > 0 AND every (P) shape of this type has two lifts meeting in a single rich player j with exactly one poorer player i outside their union; (RO) forces phi_i >= phi_j, contradicting the strict boundary
+ 52  3  3   yes   yes  yes   NO    NO  +1*ab -2*abc +1*bcd +1*ace +1*abcf
+                                  [-] realisable as a (P) shape
+                                  PROOF: every (P) shape of this type has two lifts meeting in a single rich player j with exactly one poorer player i outside their union; (RO) forces phi_i >= phi_j, contradicting the strict boundary
+ 53  3  3   yes   yes  yes  yes   yes  +1*ab +1*ac -3*abc +1*bcd +1*abce +1*abcf
+
+exclusion-reason counts over the 53 rows (shape level):
+  realisable shape (-)            : 19
+  PHASE  cardinality (h=5, m=1)   : 15
+  C      star-sparsity            : 14
+  C3     rich-singleton lift only : 3
+  A      repeated proper trace    : 1
+  D      traces not min balanced  : 1
+of the shape-compatible rows:
+  (PB) u==0 excluded : [4, 7, 8, 9, 14, 51]
+  (RO) excluded      : [24, 51, 52]
+  survive both       : [26, 27, 28, 30, 32, 33, 35, 39, 44, 48, 53]
+
+------------------------------------------------------------------------------
+(b) REALIZED ROWS WITH WITNESSES
+------------------------------------------------------------------------------
+Generators are integer allocation rows of a common total; the game is their
+lower envelope.  phi is the (already singleton-normalized) Lmin point.
+
+row 26  h=4 m=2   -1*abcd +1*abcde +1*abcdf
+   packet   : -1*cdef +1*acdef +1*bcdef
+   gens     : [[0, 2, 6, 6, 3, 3], [8, 0, 0, 0, 6, 6], [2, 0, 6, 6, 0, 6], [2, 0, 6, 6, 6, 0], [2, 2, 4, 4, 4, 4], [5, 0, 3, 0, 6, 6]]
+   phi      : ['2', '2', '4', '4', '4', '4']      H = cdef   delta = 1
+   traces   : ['cdef']   lifts: ['acdef']   (FULL-trace)
+   occurrences in the harvest: 1995  (source famper)
+
+row 27  h=3 m=3   -1*abc +1*abcd +1*abcef
+   packet   : -1*abd +1*abdf +1*abcde
+   gens     : [[3, 1, 0, 7, 2, 2], [0, 3, 4, 3, 5, 0], [9, 2, 2, 0, 1, 1], [1, 7, 3, 1, 2, 1]]
+   phi      : ['7/3', '7/3', '2', '7/3', '2', '2']      H = abd   delta = 1
+   traces   : ['abd']   lifts: ['abcde']   (FULL-trace)
+   occurrences in the harvest: 1522  (source uniform)
+
+row 28  h=2 m=4   -1*ab +1*abc +1*abdef
+   packet   : -1*bc +1*bcf +1*abcde
+   gens     : [[1, 0, 3, 1, 1, 2], [2, 4, 0, 0, 0, 2]]
+   phi      : ['1/2', '7/4', '7/4', '1/2', '1/2', '0']      H = bc   delta = 1
+   traces   : ['bc']   lifts: ['abcde']   (FULL-trace)
+   occurrences in the harvest: 18277  (source uniform)
+
+row 30  h=1 m=5   -1*a +1*ab +1*acdef
+   packet   : -1*b +1*bd +1*abcef
+   gens     : [[0, 0, 1, 0, 3, 3], [0, 1, 4, 0, 0, 2], [1, 5, 0, 1, 0, 0], [0, 4, 0, 0, 0, 3], [1, 3, 0, 0, 1, 2]]
+   phi      : ['1', '2', '1', '1', '1', '1']      H = b   delta = 1
+   traces   : ['b']   lifts: ['abcef']   (FULL-trace)
+   occurrences in the harvest: 21912  (source uniform)
+
+row 32  h=3 m=3   -2*abc +1*abcd +1*abce +1*abcf
+   packet   : -2*abf +1*abcf +1*abdf +1*abef
+   gens     : [[0, 1, 3, 0, 5, 3], [5, 0, 0, 2, 2, 3], [0, 8, 0, 2, 2, 0]]
+   phi      : ['11/6', '11/6', '3/2', '3/2', '3/2', '11/6']      H = abf   delta = 2
+   traces   : ['abf']   lifts: ['abcf']   (FULL-trace)
+   occurrences in the harvest: 27132  (source uniform)
+
+row 33  h=2 m=4   -2*ab +1*abc +1*abd +1*abef
+   packet   : -2*bc +1*abc +1*bce +1*bcdf
+   gens     : [[1, 0, 3, 1, 1, 2], [2, 4, 0, 0, 0, 2]]
+   phi      : ['1/2', '7/4', '7/4', '1/2', '1/2', '0']      H = bc   delta = 2
+   traces   : ['bc']   lifts: ['bcdf']   (FULL-trace)
+   occurrences in the harvest: 38821  (source uniform)
+
+row 35  h=1 m=5   -2*a +1*ab +1*ac +1*adef
+   packet   : -2*b +1*ab +1*bd +1*bcef
+   gens     : [[0, 0, 1, 0, 3, 3], [0, 1, 4, 0, 0, 2], [1, 5, 0, 1, 0, 0], [0, 4, 0, 0, 0, 3], [1, 3, 0, 0, 1, 2]]
+   phi      : ['1', '2', '1', '1', '1', '1']      H = b   delta = 2
+   traces   : ['b']   lifts: ['bcef']   (FULL-trace)
+   occurrences in the harvest: 26265  (source uniform)
+
+row 39  h=2 m=4   -3*ab +1*abc +1*abd +1*abe +1*abf
+   packet   : -3*bc +1*abc +1*bcd +1*bce +1*bcf
+   gens     : [[1, 0, 3, 1, 1, 2], [2, 4, 0, 0, 0, 2]]
+   phi      : ['1/2', '7/4', '7/4', '1/2', '1/2', '0']      H = bc   delta = 3
+   traces   : ['bc']   lifts: ['bcd']   (FULL-trace)
+   occurrences in the harvest: 48558  (source uniform)
+
+row 44  h=1 m=5   -3*a +1*ab +1*ac +1*ad +1*aef
+   packet   : -3*b +1*ab +1*bd +1*bf +1*bce
+   gens     : [[0, 0, 1, 0, 3, 3], [0, 1, 4, 0, 0, 2], [1, 5, 0, 1, 0, 0], [0, 4, 0, 0, 0, 3], [1, 3, 0, 0, 1, 2]]
+   phi      : ['1', '2', '1', '1', '1', '1']      H = b   delta = 3
+   traces   : ['b']   lifts: ['bce']   (FULL-trace)
+   occurrences in the harvest: 26303  (source uniform)
+
+row 48  h=1 m=5   -4*a +1*ab +1*ac +1*ad +1*ae +1*af
+   packet   : -4*b +1*ab +1*bc +1*bd +1*be +1*bf
+   gens     : [[0, 0, 1, 0, 3, 3], [0, 1, 4, 0, 0, 2], [1, 5, 0, 1, 0, 0], [0, 4, 0, 0, 0, 3], [1, 3, 0, 0, 1, 2]]
+   phi      : ['1', '2', '1', '1', '1', '1']      H = b   delta = 4
+   traces   : ['b']   lifts: ['bf']   (FULL-trace)
+   occurrences in the harvest: 19164  (source uniform)
+
+row 53  h=3 m=3   +1*ab +1*ac -3*abc +1*bcd +1*abce +1*abcf
+   packet   : +1*ac +1*af -3*acf +1*cdf +1*abcf +1*acef
+   gens     : [[0, 5, 12, 0, 1, 12], [5, 5, 7, 1, 4, 8], [11, 2, 2, 12, 1, 2]]
+   phi      : ['27/5', '14/5', '23/5', '14/5', '14/5', '23/5']      H = acf   delta = 3/2
+   traces   : ['ac', 'af', 'cf']   lifts: ['ac', 'af', 'cdf']   (SPLIT (3 traces))
+   occurrences in the harvest: 2  (source uniform)
+
+UNREALIZED rows: all 42 are excluded by one of the four mechanisms above;
+the eight shape-compatible ones (4, 7, 8, 9, 14, 24, 51, 52) are excluded by
+PROOF, not merely by absence of a witness.
+
+------------------------------------------------------------------------------
+(c) INVARIANT TESTS
+------------------------------------------------------------------------------
+
+(a) star-sparsity / shape confinement.
+   226082 packets over 57731 slack boundaries in 239269 random exact games.
+   packet types realised outside the exhaustive shape screen: 0
+   packets using a rich singleton as a lift (constraint C3): 0
+   => every realized type is a screened (P) shape; no shape-incompatible
+      catalogue row was ever realized.
+
+(b) h=2 full-trace conjecture:  FALSE at n=6 (it held at n=5).
+   h=2 slack boundaries            : 27723
+   ... with a proper-trace tight set: 4219
+   split (2-trace) packets at h=2   : 1547
+   Two split h=2 packets were re-verified 5x from stored generators
+   (census6/split_h2_verified.json), including a core-membership and
+   400-sample leximin cross-check.  Both are decomposable.
+   REFINED CONJECTURE (holds on all data): at an h=2 slack boundary every
+   INDECOMPOSABLE (facet) packet is full-trace; split packets exist but are
+   always decomposable.
+   split packets by h: {"2": 1547, "3": 126, "4": 5184}
+
+(c) row-1 analogue (u == 0 forced).  Rows 4, 7, 8, 9, 14, 51 are shape-
+   compatible but every (P) shape of their type has u == 0, so (PB) gives
+   delta*s(H) <= 0 against s(H) > 0.  None was ever realized.  This is the
+   n=6 analogue of the n=5 row-1 exclusion, now covering six rows.
+
+   NEW at n=6 - the RICH-OVERLAP lemma (RO).  For an exact singleton-
+   normalized game, a core point phi and phi-tight S1, S2,
+        sum_{i not in S1 u S2} phi_i  >=  s_phi(S1 ^ S2).
+   Proof: exactness gives z in core with z(S1^S2) = v(S1^S2); modularity of
+   z gives z(S1 u S2) = z(S1)+z(S2)-z(S1^S2) >= phi(S1 u S2)+s_phi(S1^S2);
+   subtract from z(N) = phi(N) and use z >= 0.
+   Consequence: if two lifts meet in a single RICH player j and exactly one
+   POORER player i lies outside their union, then phi_i >= phi_j, which
+   contradicts the strict boundary.  Every (P) shape of rows 24, 51, 52 has
+   that configuration, so those three rows are unrealizable.
+   (RO) tested exactly on 279 tight pairs from the
+   coverage witnesses and on 367,291 tight pairs over 30,214 further random
+   games: 0 violations.
+   Re-checked shape by shape rather than class by class: rows 24, 51, 52
+   have 18, 6, 18 enumerated (P) shapes respectively and EVERY one carries
+   the killing configuration; no shape of any realized row does.
+
+   WHAT RESISTED (targeted constructions, section 3 of the brief).
+   Before the lemma was found, rows 24 and 52 were attacked with (i) the
+   paper's three families plus 400 perturbations each, (ii) 83,332 hill-
+   climbing evaluations over integer generator matrices scored by how many
+   pair-traces of H are tight, (iii) 197,186 constructions in which phi
+   itself is a generator, so that tightness of the required lifts is a
+   linear condition on the difference vectors.  All failed, which is now
+   explained: they are impossible.  The hill climb plateaued exactly at the
+   configuration (RO) forbids.
+
+(d) decomposable (non-facet) certificates: NOT confined to the m=2 family.
+   (m,h) = (4,2): 10 distinct decomposable packet types
+   (m,h) = (3,3): 4 distinct decomposable packet types
+   (m,h) = (2,4): 2 distinct decomposable packet types
+   All 16 are 'minimal but decomposable' (independent z3 classifier).
+   All 16 use a SPLIT trace collection; no full-trace packet was ever
+   uncatalogued, over 153k full-trace packets.
+   Conversely, exactly one split packet type is a facet: row 53 (h=3),
+   realized twice.  So split-trace is nearly, but not exactly, equivalent
+   to non-facet.
+   NO uncatalogued INDECOMPOSABLE system was found: no tension with the
+   Studeny-Kratochvil completeness claim.
+
+------------------------------------------------------------------------------
+(c2) THE STAR FAMILY, AND THE ONE EXCEPTION
+------------------------------------------------------------------------------
+
+For a boundary H with poorer side L and nonempty proper A of L, the
+full-trace STAR is
+     1_{H u A} + sum_{i in L\A} 1_{H u {i}} - (|L|-|A|) 1_H = 1_N,
+i.e. the (P) packet with the trivial collection {H}, lift H u A, spokes
+over L\A, b = 1, delta = |L|-|A|.  At n=6 there are ten stars, all
+catalogued:
+   h=1: |A|=1,2,3,4 -> rows 48, 44, 35, 30
+   h=2: |A|=1,2,3   -> rows 39, 33, 28
+   h=3: |A|=1,2     -> rows 32, 27
+   h=4: |A|=1       -> row 26
+
+Every one of the ten is realized, and at h=1, 2, 4 the realized set is
+EXACTLY the stars.  At h=3 there is exactly one extra realized type:
+
+   row 53  +1*ac +1*af -3*acf +1*cdf +1*abce +1*acef = 2*1_N
+   gens [[0,5,12,0,1,12],[5,5,7,1,4,8],[11,2,2,12,1,2]]  (3 generators)
+   floors (0,2,2,0,1,2); phi = (27/5, 14/5, 23/5, 14/5, 14/5, 23/5)
+   strata bde | cf | a;  H = acf (h=3, m=3), v(H)=11, s(H)=18/5
+   traces {ac},{af},{cf} - the 2-cover with weights 1/2 - lifts ac, af,
+   cdf; delta = 3/2.  It is the ONLY packet at that boundary.
+   Alert-grade recheck: 5 identical Lmin recomputations, core membership,
+   400 random extreme core points with none leximin-better, tightness of
+   all three lifts, minimal balancedness of the collection, delta>0, and an
+   independent z3 verdict of indecomposable min-semi-balanced.
+
+So the census has a clean closed form:
+     realized types  =  the ten full-trace stars  +  row 53.
+
+The companion prediction that proper-trace packets occur only at (m,h) =
+(2,4) is false: proper-trace packets by h are 0 / 1645 / 139 / 5815 for
+h = 1,2,3,4.  (h=1 is structurally impossible: |H|=1 admits only {H}.)
+
+------------------------------------------------------------------------------
+(c3) COLLECTION-TYPE TABULATION AND THE m-STAIRCASE
+------------------------------------------------------------------------------
+
+Packet-level counts by (h, trace collection, facet?).  The signature
+counter was added for the third harvest round, so this table covers that
+round's 73,049 games / 79,518 packets rather than the full campaign; the
+facet/non-facet split is identical in the type-level data over all rounds.
+   h1|full|sizes1|facet                           33340
+   h2|full|sizes2|facet                           33303
+   h2|proper|sizes11|nonfacet                       423
+   h3|full|sizes3|facet                            9306
+   h3|proper|sizes12|nonfacet                        35
+   h3|proper|sizes222|nonfacet                        6
+   h4|full|sizes4|facet                             791
+   h4|proper|sizes13|nonfacet                      1502
+   h4|proper|sizes3333|nonfacet                     812
+
+At h=3 the singleton-partition collection {a},{b},{c} is NEVER selected,
+and the all-pairs 2-cover is the only collection that ever yields a facet
+proper-trace packet (row 53, twice).
+
+facet-split packets by h at n=6: h=2: 0, h=3: 2 (both row 53), h=4: 0.
+So 'facet => full-trace' holds at h=2 but FAILS at h=3.
+
+n=7 PROBE (outside the census, from the family extension).  Perturbing
+family2(2,5) the same way produced SIX indecomposable proper-trace packets
+at h=2 boundaries with m=5, e.g.
+   gens [[0,6,18,18,10,10,10],[24,0,0,0,16,16,16],[6,0,18,18,0,15,15],
+         [6,0,18,18,15,0,15],[6,0,18,18,15,15,0],[6,6,12,12,12,12,12],
+         [6,10,12,12,12,12,8]]
+   phi = (26/3,26/3,32/3,32/3,12,12,28/3), H = ef (h=2, m=5), s(H) = 9
+   -5*ef +2*aef +2*bef +1*cef +1*def +1*ceg +1*dfg = 2*1_N,  delta = 5
+Indecomposability is certified, not merely solver-asserted: for each of the
+119 candidate exceptional sets E outside the system an explicit Farkas
+vector y (y.1_S >= 0 on system sets, y.1_N = 0, y.1_E < 0) was extracted
+and verified in exact Fraction arithmetic outside z3.  Six packets, 119
+certificates each.  No tension with Studeny-Kratochvil: their catalogue
+stops at six players.
+
+The three data points therefore index on m, not on h:
+   (m,h) = (3,2), n=5 : no split packets at all (58k games, route 2)
+   (m,h) = (4,2), n=6 : split packets common (1547), ALL non-facet
+   (m,h) = (5,2), n=7 : facet split packets exist
+
+------------------------------------------------------------------------------
+(c4) THE W1 FAMILY (split packets at h=2)
+------------------------------------------------------------------------------
+
+Provenance: W1 = family2(2,4) plus one extra generator = the family's own
+phi row (2,2,4,4,4,4) with one unit moved from p1 to the last K player,
+giving (1,2,4,4,4,5).  W2 = the same base plus the u row with one unit
+moved from a K player to p2.  A sweep of every single transfer
+row + t(e_j - e_i), t <= 4, of every base row produces W1's type from 27
+distinct perturbations and W2's from 2, so neither is a fluke.
+
+W1's set system generalises.  With H = {x,y} the top pair, L the poorer
+side and b in L distinguished:
+
+   1_{(L\b) u {x}} + 1_{(L\b) u {y}} + 2*1_{H u {b}} - 1*1_H = 2*1_N
+
+(traces {x},{y} with weights 1,1; lifts (L\b)u{x} and (L\b)u{y}; r = 2 on
+L\b, r_b = 0, b_max = 2, u_b = 2, delta = 1).  It is a valid semi-balanced
+system for every m >= 2 - in particular it EXISTS at n=5 - but at n=5 it is
+never realized.  The m-staircase is therefore a statement about which
+games can realise an existing shape, not about which shapes exist.
+
+------------------------------------------------------------------------------
+(d) THE n=6 SELECTION-THEOREM CANDIDATE
+------------------------------------------------------------------------------
+
+  A catalogued type arises as an Lmin one-packet obstruction at n=6 if and
+  only if it is
+     (i)   phase-admissible : m = 6-|T| >= m_min(|T|)         [kills 15]
+     (ii)  shape-compatible : it is a system (P) - one lift per trace of a
+           minimal balanced collection on T plus spokes, no rich-singleton
+           lift                                                [kills 19]
+     (iii) PB-admissible    : some (P) shape has u != 0        [kills 6]
+     (iv)  RO-admissible    : some (P) shape avoids the rich-overlap
+           configuration                                       [kills 2 more]
+  leaving exactly
+     {26, 27, 28, 30, 32, 33, 35, 39, 44, 48, 53}   (11 of 53),
+  which is exactly the realized set, and equals the ten full-trace stars
+  plus row 53.  Plus, as a new phenomenon at n=6, a
+  family of NON-catalogued certificates: minimal-but-decomposable systems,
+  all of them split-trace, occurring at (m,h) = (4,2), (3,3) and (2,4).
+
+  Comparison with n=5 (16 rows, realized {10,11,13,14,16}):
+    - n=5 had three exclusion mechanisms (cardinality, slack budget,
+      lift-sparsity); n=6 needs a FOURTH, the rich-overlap lemma.
+    - n=5 had no decomposable certificates and no split packets at all;
+      n=6 has 16 decomposable types and split packets at h=2,3,4.
+    - the realized fraction falls from 5/16 to 11/53.
+
+------------------------------------------------------------------------------
+(e) HARVEST STATISTICS AND OPEN ITEMS
+------------------------------------------------------------------------------
+
+  random exact games        : 239269
+  slack strict boundaries   : 57731
+  packets (delta > 0)       : 226082
+  packets of uncatalogued type: 6856
+
+  h  m   boundaries    slack   rate    packets  split
+  1  5       15292    15292  1.000      90001      0
+  2  4       68237    27723  0.406     101791   1547
+  3  3       69399    12893  0.186      27327    126
+  4  2       68245     1823  0.027       6963   5184
+  5  1       68510        0  0.000          0      0
+
+  h=1 boundaries are slack with probability 1 (v({richest})=0 < phi), h=4
+  slack occurs only near the designed two-poorer family, and h=5 (m=1)
+  never - matching the phase theorem.
+
+  OPEN ITEMS
+  1. Retarget the h=2 lemma on m, not h: 'facet => full-trace at h=2' holds
+     at n=6 (m=4, 0 facet-splits in 239k games) but FAILS at n=7 (m=5, six
+     certified counterexamples), and 'no split packets at all' holds at m=3.
+     The conjecture worth proving is the m-indexed one.
+  2. Characterise the decomposable certificate family intrinsically; is
+     'split-trace and not row-53-like' the right description?
+  3. (RO) is stated for pairs of tight coalitions.  A k-fold version
+     (balanced families of tight sets) may subsume both (PB) and (RO) and
+     give a dimension-free selection theorem.
+  4. Rows 24, 51, 52 are excluded by proof; rows 4, 7, 8, 9, 14 by (PB).
+     Both arguments are shape-level and n-independent - worth pushing to a
+     general-n selection theorem.
+  5. h=4 slack was only produced near the designed family; a random-search
+     route to (2,4) boundaries would strengthen the census.
+

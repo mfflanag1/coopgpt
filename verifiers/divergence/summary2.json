@@ -1,0 +1,448 @@
+{
+ "deliverable": "route1 theorems round",
+ "companion_file": "route1/THEOREMS.txt (full proofs; harness blocks .md so this is .txt)",
+ "theorems_proved": {
+  "lemma0_support_disjointness": {
+   "statement": "For a singleton-normalized 2-generator exact game, A={i:g_i>0} and B={i:h_i>0} are disjoint, and players outside A u B are null; so WLOG A u B = N.",
+   "status": "PROVED"
+  },
+  "theorem1_core_duality": {
+   "statement": "Core(v) = { x >= 0 : x(N)=T, x(S) <= f(S) for all S }, with f(S) = max(g(S), h(S)).",
+   "key_step": "T - v(S) = T - min(g(S),h(S)) = max(T-g(S), T-h(S)) = max(g(N\\S), h(N\\S)) = f(N\\S); combine with x(S) >= v(S) <=> x(N\\S) <= T - v(S)",
+   "status": "PROVED (two lines from modularity of g,h; no disjointness needed for the identity itself)",
+   "numeric_check": "586 random 2-generator games at n=4,5,6,7 (120/218/165/83), zero failures"
+  },
+  "theorem2_leximin_floor_upper": {
+   "statement": "min_i Lmin_i <= lambda := min over nonempty S of f(S)/|S|",
+   "status": "PROVED (immediate from Theorem 1)"
+  },
+  "theorem4_family_closed_forms": {
+   "family": "G(p,k): g=(p(k-1), 1^p, 0^k), h=(0^(p+1), p^k), n=p+1+k, T=pk",
+   "lmin": "( p^2(k-1)/(p+1), [p/(p+1)]^(p+k) )",
+   "lmax": "( p(k-1)/k, [1/k]^p, [p(k-1)/k]^k )",
+   "gap": "2p(p(k-1)-1)/(p+1)",
+   "ratio": "2(p(k-1)-1)/(k(p+1))",
+   "status": "PROVED",
+   "engine": "the single cap f(O u {b}) = max(p,p) = p for every b in B, where O is the set of p 'ones' -- so p+1 players share at most p",
+   "leximin_argument": "(p+1)m <= p gives m <= p/(p+1); equality forces ALL p ones and x_b to equal p/(p+1) for EVERY b, pinning the head by efficiency; the max-min point is unique hence is the leximin point",
+   "leximax_argument": "with M=max, s=sum of ones: pk <= M + s + k*min(M, p-s); Case A (M<=p-s) gives pk <= kM+p; Case B (M>p-s) gives s<=M/(k-1) then M>p(k-1)/k. Either way M >= p(k-1)/k; equality pins head and all B at M and leaves the ones sharing p/k, spread to 1/k each by the next stage",
+   "membership_verified_for_pk": [
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     4
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     5
+    ]
+   ],
+   "closed_forms_matched_for_pk": [
+    [
+     2,
+     3
+    ],
+    [
+     3,
+     3
+    ],
+    [
+     2,
+     4
+    ],
+    [
+     3,
+     4
+    ],
+    [
+     4,
+     4
+    ],
+    [
+     3,
+     5
+    ],
+    [
+     4,
+     5
+    ],
+    [
+     5,
+     4
+    ],
+    [
+     5,
+     5
+    ],
+    [
+     4,
+     6
+    ],
+    [
+     5,
+     6
+    ],
+    [
+     6,
+     5
+    ]
+   ],
+   "membership_part_c": {
+    "status": "NOW PROVED for all p>=1, k>=2 (was finite verification; flagged in review as load-bearing)",
+    "method": "parametrize S by eps=[head in S], i=|S n O|, j=|S n B|; then g(S)=eps*p(k-1)+i, h(S)=jp, f(S)=max of the two. Four short case checks for each point.",
+    "lmin_cases": "eps=0,j=0: iq<i. eps=0,j>=1: (i+j)p/(p+1) <= (p+j)p/(p+1) <= jp <=> p<=jp. eps=1,j<=k-1: reduces to jp <= p(k-1)+i, true. eps=1,j=k: f>=h(S)=kp=T>=x*(S).",
+    "lmax_cases": "eps=0,j=0: i/k<=i. eps=0,j>=1: reduces to i<=jp, true since i<=p<=jp. eps=1,j<=k-1: reduces to p(j+1-k)<=i, LHS<=0. eps=1,j=k: f>=T>=y*(S).",
+    "tight_caps": "for BOTH points exactly (T1) S=O u {b} with f=p, (T2) S={head} u B' with |B'|=k-1 and f=p(k-1), and (T3) S=N. At (T1) and (T2) the g-side and h-side of f TIE, which is why those coalitions are active.",
+    "exposition_point": "Lmin and Lmax saturate the SAME caps and differ only in how they distribute mass inside them: on (T1) leximin puts p/(p+1) on each of the p+1 members, leximax-min puts 1/k on each one and the whole remainder p(k-1)/k on the single B-player.",
+    "numeric_confirmation": "all 2^n-1 coalition inequalities AND the exact tight-set prediction checked for every (p,k) with 1<=p<=7, 2<=k<=7, n<=13: zero violations, zero tight-set mismatches",
+    "degenerate_corner": "G(1,2) is n=4, ratio 0, consistent with the n<=4 rigidity theorem"
+   }
+  },
+  "corollary5_deficit_identity": {
+   "statement": "2 - ratio(G(p,k)) = 2n/(k(p+1)) with n = p+1+k",
+   "status": "PROVED",
+   "significance": "reduces the extremal problem to maximizing a product of two integers with fixed sum n"
+  },
+  "theorem6_supremum_lower_bound": {
+   "statement": "s(n) >= 2 - 8/n (n even), 2 - 8n/(n^2-1) (n odd); hence sup over n of s(n) = 2",
+   "status": "PROVED",
+   "optimizer": "balanced split k = ceil(n/2), p+1 = floor(n/2)",
+   "ceiling_argument": "Lmin, Lmax >= 0 with equal total T, so ||Lmin-Lmax||_1 <= 2T always",
+   "values": {
+    "n=5": "1/3 (not sharp)",
+    "n=6": "2/3",
+    "n=7": "5/6",
+    "n=8": "1",
+    "n=9": "11/10",
+    "n=10": "6/5",
+    "n=11": "19/15",
+    "n=12": "4/3",
+    "n=16": "3/2",
+    "n=20": "8/5"
+   }
+  },
+  "theorem7_n5_refutation": {
+   "statement": "g1=(1,0,0,1,2), g2=(0,1,3,0,0) gives ratio 1/2 > 1/3",
+   "status": "PROVED by hand from the 4 core vertices; no LP",
+   "core_affine_structure": "x0 = x3 = s, x1 = 1-s, x2+x4 = 3-s",
+   "lmin_witness_barycentric": "(a,b,c,d) = (1/4, 1/4, 1/2, 0) on the four vertices, giving (1/2,1/2,5/4,1/2,5/4) exactly"
+  }
+ },
+ "settled_negatively": {
+  "observation3_M_side_identity_is_false": {
+   "valid_inequality": "max_i Lmax_i >= max over (P,Q) != (empty,empty) of min(g(P),h(Q))/(|P|+|Q|)",
+   "tightness": {
+    "n=4": "100%",
+    "n=5": "100%",
+    "n=6": "97%",
+    "n=7": "89%"
+   },
+   "smallest_counterexample": {
+    "n": 6,
+    "T": 5,
+    "g": [
+     3,
+     2,
+     0,
+     0,
+     0,
+     0
+    ],
+    "h": [
+     0,
+     0,
+     2,
+     1,
+     1,
+     1
+    ],
+    "lmin": [
+     "1",
+     "2/3",
+     "4/3",
+     "2/3",
+     "2/3",
+     "2/3"
+    ],
+    "lmax": [
+     "6/5",
+     "4/5",
+     "6/5",
+     "3/5",
+     "3/5",
+     "3/5"
+    ],
+    "M": "6/5",
+    "dual_bound": "1",
+    "strict_gap": "1/5",
+    "minimality": "found by scanning the complete 2-generator enumeration in increasing T; none exists at T<=4 for n=6, nor at any T for n<=5"
+   },
+   "diagnosis": "the leximin floor has a ONE-COALITION certificate (a single tightest upper cap can be saturated alone); the leximax-min ceiling must respect several lower bounds simultaneously, so no single coalition certifies the optimum. This is the structural asymmetry that makes Lmax the harder selection.",
+   "sample_sizes": {
+    "n=4": 120,
+    "n=5": 218,
+    "n=6": 165,
+    "n=7": 83,
+    "total": 586
+   },
+   "M_tight_counts": {
+    "n=4": "120/120",
+    "n=5": "218/218",
+    "n=6": "160/165",
+    "n=7": "74/83",
+    "total": "572/586"
+   },
+   "reading_note": "In (3.1) P ranges over subsets of A and Q over subsets of B, max over pairs other than (empty,empty). There is NO infinity convention: g(empty)=h(empty)=0, so a pair with an empty part contributes min(.,0)=0 and is inactive; only both-nonempty pairs can bind. Reading an empty part as +infinity gives a different, wrong value."
+  },
+  "why_B_equals_4_is_NOT_special": {
+   "question_from_lead": "does |B|=4 strictly dominate |B|=3 and |B|=5?",
+   "answer": "NO. k = |B| is a free parameter in G(p,k) and Corollary 5 shows the optimum is k ~ n/2. The earlier k=4 slice (ratio -> 3/2) was an artifact of fixing the block size; it is beaten from n=10 on (7/6 vs 6/5). The 3/2 limit was NOT final -- the true limit is 2.",
+   "supp_lmax_remark": "in G(p,k) every Lmax coordinate is 1/k or p(k-1)/k, all strictly positive, so |supp(Lmax)| = n and NO player is starved. The |supp(Lmax)|=4 invariant is an n=5 phenomenon, not an asymptotic one -- there are two distinct regimes."
+  },
+  "conjecture10_target_lemma_RETRACTED": {
+   "statement": "||Lmin-Lmax||_1 <= 4(n-4)*min_i Lmin_i",
+   "true_for": "n <= 8 (tight on the n=5 extremal class AND on G(3,4) at n=8, where both sides equal 12)",
+   "fails_from": 9,
+   "explicit_failures": {
+    "G(4,4) n=9": {
+     "gap": "88/5",
+     "bound": "16"
+    },
+    "G(3,5) n=9": {
+     "gap": "33/2",
+     "bound": "15"
+    },
+    "G(4,5) n=10": {
+     "gap": "24",
+     "bound": "96/5"
+    },
+    "G(5,5) n=11": {
+     "gap": "95/3",
+     "bound": "70/3"
+    }
+   },
+   "structural_reason": "the bound is linear in mu = min_i Lmin_i, but in G(p,k) mu = p/(p+1) < 1 stays bounded while the gap grows like 2T; no bound of the form C(n)*mu can track the divergence"
+  },
+  "smoothing_route_to_upper_bound_is_CLOSED": {
+   "premise_tested": "a Robin-Hood transfer of one unit within the h-block (moving h toward uniform in the majorization order) never decreases the ratio",
+   "verdict": "FALSE, including for |B|>=4, so the guessed block-size threshold does not exist",
+   "violation_rates": {
+    "|B|=2": "18/40 = 45%",
+    "|B|=3": "27/76 = 36%",
+    "|B|=4": "11/84 = 13%",
+    "|B|=5": "21/84 = 25%"
+   },
+   "verified_counterexample": {
+    "n": 7,
+    "T": 10,
+    "g": [
+     0,
+     5,
+     0,
+     3,
+     2,
+     0,
+     0
+    ],
+    "h_before": [
+     1,
+     0,
+     2,
+     0,
+     0,
+     5,
+     2
+    ],
+    "ratio_before": "1/5",
+    "lmin_before": [
+     "1",
+     "2",
+     "1",
+     "1",
+     "1",
+     "3",
+     "1"
+    ],
+    "lmax_before": [
+     "5/6",
+     "5/2",
+     "5/6",
+     "4/3",
+     "7/6",
+     "5/2",
+     "5/6"
+    ],
+    "h_after": [
+     1,
+     0,
+     2,
+     0,
+     0,
+     4,
+     3
+    ],
+    "ratio_after": "0",
+    "lmin_after_equals_lmax_after": [
+     "1",
+     "2",
+     "1",
+     "1",
+     "1",
+     "2",
+     "2"
+    ],
+    "note": "both points confirmed in the core; the game is singleton-normalized with disjoint supports and |B|=4"
+   },
+   "consequence": "the ratio is NOT monotone under majorization of h. Smoothing tends to symmetrize the game and COLLAPSE the two selections, yet the extremal family G(p,k) has perfectly uniform h. Any upper-bound proof must handle general h directly."
+  }
+ },
+ "completeness_caveat_response": {
+  "lead_point": "integer enumeration to total T covers only rational shapes with denominator <= T, so exhaustive-to-T is a lower-bound method",
+  "accepted": true,
+  "tests_run": {
+   "fine_denominator_climb_n5": {
+    "resolution": "1/60",
+    "start": "extremal scaled to T=60",
+    "result": "no improvement, max stays 1/2"
+   },
+   "fine_denominator_climb_n6": {
+    "resolution": "1/56 and 1/60",
+    "starts": "both known 2/3 witnesses scaled up",
+    "result": "no improvement, max stays 2/3"
+   },
+   "fine_denominator_climb_n7": {
+    "resolution": "1/64",
+    "result": "no improvement, max stays 5/6",
+    "detail": "climb from the 5/6 witness stalled after 42 steps with no improvement; a second start at base 2/3 climbed only to 3/4"
+   },
+   "seeded_cspace_climb_n5": {
+    "steps": 240,
+    "result": "no improvement over 1/2",
+    "significance": "this searches the FULL exact class from the extremal game, so 1/2 is a certified local optimum among ALL exact 5-player games, not just 2-generator ones"
+   },
+   "seeded_cspace_climb_n6": {
+    "steps": 496,
+    "result": "no improvement over 2/3",
+    "significance": "2/3 is a certified LOCAL optimum among ALL exact 6-player games, not just 2-generator ones -- this answers the lead's question (c) about the 2-generator class being sub-extremal at n>=6"
+   },
+   "seeded_cspace_climb_n7": {
+    "steps": 301,
+    "result": "no improvement over 5/6"
+   }
+  },
+  "honest_limitation": "unseeded c-space restarts at n=6 reached only 1/3, far below the known 2/3 -- that search is under-powered at n>=6 and certifies nothing. The SEEDED variant is the meaningful test, and it confirms local optimality of the 2-generator extremal at n=5 (240 steps) and n=6 (496 steps)."
+ },
+ "third_generator_extremality_check": {
+  "why_it_matters": "adding a generator LOWERS the envelope and hence GROWS the core, so 2-generator extremality is not automatic",
+  "method": "from the known extremal at each n, ~200 structured plus random third generators at fixed common total",
+  "results": {
+   "n=5": "0 improvements over 1/2",
+   "n=6": "0 improvements over 2/3",
+   "n=7": "0 improvements over 5/6",
+   "n=8": "0 improvements over 1"
+  },
+  "status": "suggestive, not proof",
+  "seeded_cspace_full_exact_class": {
+   "n=5": "240 steps, stays 1/2",
+   "n=6": "496 steps, stays 2/3",
+   "n=7": "301 steps, stays 5/6",
+   "meaning": "the 2-generator optimum is a certified LOCAL optimum among ALL exact games at n=5,6,7"
+  }
+ },
+ "complete_2generator_maxima": {
+  "n=3": {
+   "totals": "2..30",
+   "games": 225,
+   "max": "0"
+  },
+  "n=4": {
+   "totals": "2..30",
+   "games": 3040,
+   "max": "0"
+  },
+  "n=5": {
+   "totals": "2..24",
+   "games": 4357,
+   "max": "1/2"
+  },
+  "n=6": {
+   "totals": "2..20",
+   "games": 8213,
+   "max": "2/3"
+  },
+  "n=7": {
+   "totals": "2..14",
+   "games": 1609,
+   "max": "5/6"
+  },
+  "n=8": {
+   "totals": "2..12",
+   "games": 1049,
+   "max": "1"
+  },
+  "agreement": "Theorem 6 is attained exactly at n=6,7,8; n=5 is the exception (1/2 vs the formula's 1/3)"
+ },
+ "n5_extremal_structure": {
+  "distinct_games": 360,
+  "above_1_3": 199,
+  "attaining_1_2": 107,
+  "invariants_107_of_107": {
+   "lmin_strata": "(3,2)",
+   "lmax_strata": "(1,4)",
+   "zeros_in_lmax": 1,
+   "supp_lmax": 4,
+   "unique_pair_at_T4": {
+    "lmin": [
+     "1/2",
+     "1/2",
+     "1/2",
+     "5/4",
+     "5/4"
+    ],
+    "lmax": [
+     "0",
+     "1",
+     "1",
+     "1",
+     "1"
+    ]
+   }
+  },
+  "seesaw_hypothesis_REFUTED": {
+   "flat_split_definition": "S with v(S)+v(N\\S)=v(N), making x(S) constant on the core",
+   "result": "only 76/107 extremal games have one; 31/107 attain 1/2 with none",
+   "when_present": "sizes always {2,3}; the Lmax-starved player is in the size-2 side 76/76"
+  },
+  "also_refuted": {
+   "all_4_1_boundary": "(4,1) never occurs above ratio 1/3",
+   "lmax_uniform": "never uniform in any of the 199 games above 1/3"
+  }
+ },
+ "open": [
+  "Upper bound. Theorem 6 forces any true bound to be asymptotically 2, so every bound c*v(N) with c<2 is false for large n. The right target is the finite-n statement s_2(n) = 2 - 8n/(n^2 - (n mod 2)) for n>=6, confirmed by complete enumeration only at n=6,7,8.",
+  "Is the 2-generator class extremal? Zero improvements from third generators at n=5..8, but no proof.",
+  "Conjecture 8: s(5) = 1/2. Now supported by a seeded full-exact-class local-optimality check.",
+  "Structural explanation of the n=5 vs n>=6 regime change: starved Lmax with |supp|=4 at n=5, fully-supported Lmax in G(p,k).",
+  "Conjecture 2' (equality in the leximin-floor formula): reduced by LP duality to the fractional-cover inequality; PROVED for balanced covers, over-covering case open."
+ ],
+ "mu_conjecture_evidence": "mu bound tight in 586/586 (was mis-stated as 488/488 in an earlier message; the correct total is 120+218+165+83 = 586)"
+}
