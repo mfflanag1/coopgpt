@@ -24,6 +24,7 @@ Two tiers, matching the papers' status tables.
 | paper4 §7 examples, C-C evidence, exact-partition search | `monotonicity/` — `refute.py`/`refute2.py` (the two retiring examples), `survive.py` (the 1041-record tally), `inexact_cc.py` (localization non-correlation), `hunt7.py`/`family_ep.py` (exact-partition search), `ce5.py`/`ce7.py` (inexactness examples), `family.py` (the 197-member family) |
 | paper5 enumeration table, extremal class, searches | `divergence/` — `exhaust2n.py`/`exhaust3.py` (complete 2- and 3-generator enumerations), `twogen.py` (duality/floor checks), `cspace.py` (seeded core-space climbing), `seesaw.py`/`structure.py` (extremal-class profiling), `scan2block.py`, `simplex.py`/`lexsimplex.py` (independent exact solvers) |
 | n=5/n=6/n=7 packet censuses and the campaign theorem files | `records/` — census reports, `THEOREMS.txt`, `FINAL.txt`, `S5PROOF.txt` |
+| ZP descent: profile (4,0) impossibility at n=7 (proved), the PART(p,q) conjecture | `zp/` — `PROOF.txt` (the null-player descent chain L1–T8), `REPORT.txt`, harvest and validation scripts |
 
 Earlier verifiers for the phase-diagram core remain in `../src` with saved
 outputs in `../results`, as described in the papers' reproducibility notes.

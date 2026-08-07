@@ -1,0 +1,183 @@
+================================================================================
+THE ZERO-PAYOFF RESIDUE: PROVED STATEMENTS
+================================================================================
+
+SETUP.  All games are exact and singleton-normalized (v({i}) = 0), phi = Lmin(v),
+H is a strict richer-suffix boundary of phi, L = N \ H the poorer side,
+m = |L|, h = |H|, and s_phi(S) = phi(S) - v(S).  Throughout h = 2, H = {f,g}.
+Strictness of the boundary means max_{i in L} phi_i < min_{i in H} phi_i; with
+phi >= 0 this gives phi_f, phi_g > 0.
+
+DEFINITIONS.  Let S1, S2 be phi-tight with S1 & H = {f} and S2 & H = {g}.
+
+  ZP(p,q)   : S1 ^ S2 = {e} for a single e in L, S1 u S2 = N,
+              p = |S1 ^ L \ {e}|, q = |S2 ^ L \ {e}|,  p + q = m - 1.
+  PART(p,q) : S1 ^ S2 = empty, S1 u S2 = N,
+              p = |S1 ^ L|, q = |S2 ^ L|,  p + q = m.
+
+INPUTS FROM THE PROGRAM.
+  (PH)  Phase theorem (paper4 Thm 2.1): a strict boundary can be slack only if
+        m >= m_min(h), with m_min(2) = 3.
+  (RO)  k-fold rich-overlap lemma (paper4 section 6): if T_1..T_k are phi-tight
+        and form a sunflower with kernel R then
+            sum_{i not in T_1 u .. u T_k} phi_i >= (k-1) * s_phi(R).
+
+--------------------------------------------------------------------------------
+LEMMA 1 (zero payoff).  In a ZP(p,q) configuration, phi_e = 0.
+--------------------------------------------------------------------------------
+Apply (RO) with k = 2, T_1 = S1, T_2 = S2, kernel R = {e}.  The union is N, so
+the left-hand side is an empty sum and 0 >= s_phi({e}) = phi_e - v({e}) = phi_e.
+With phi_e >= 0 this forces phi_e = 0.                                       []
+
+--------------------------------------------------------------------------------
+LEMMA 2 (common zero).  If min_i phi_i = 0 then there is a single player j with
+x_j = 0 for EVERY x in core(v); moreover phi_j = 0 and j is null, meaning
+v(S u {j}) = v(S) for every S.
+--------------------------------------------------------------------------------
+The leximin stage-1 value is min_i phi_i = 0, so no core point has all
+coordinates positive; core points are nonnegative, hence
+core(v) is contained in the union of the hyperplanes {x_i = 0}.  A convex set
+covered by finitely many hyperplanes is contained in one of them (a point of
+its relative interior would otherwise avoid all of them, by Baire applied to
+the finitely many relatively nowhere dense slices).  So core(v) is contained in
+{x_j = 0} for one j.  Then phi_j = 0 since phi is in the core, and by exactness
+v(S u {j}) = min_{core} x(S u {j}) = min_{core} x(S) = v(S).                 []
+
+  MACHINE-VERIFIED: verify_lemma.py, n=5, 116/116 games with min phi = 0 had a
+  common zero player, and it was null in every case.
+
+--------------------------------------------------------------------------------
+LEMMA 3 (deletion).  If j is null then v' = v restricted to N' = N \ {j}
+satisfies: v' is exact and singleton-normalized; core(v') = core(v) restricted
+to N'; Lmin(v') = phi restricted to N'; every phi-tight S gives a phi'-tight
+S \ {j}; and a slack strict boundary H not containing j remains one, with the
+same slack and with m' = m - 1.
+--------------------------------------------------------------------------------
+Core equality: if x is in core(v) then x_j = 0, x(N') = v(N) = v(N') and
+x(T) >= v(T) for T inside N'.  Conversely, extend x' in core(v') by x_j = 0;
+for T containing j, x(T) = x'(T \ j) >= v(T \ j) = v(T) by nullity.
+Exactness transfers because the two cores agree coordinatewise.  Leximin: every
+core point has the same entry 0 in coordinate j, so the sorted vectors of x and
+of x restricted to N' differ by one leading 0 and the leximin order is
+unchanged.  Tightness: v(S \ j) = v(S) and phi(S \ j) = phi(S) since phi_j = 0.
+The strata of phi' are those of phi with j removed, so a richer suffix avoiding
+j is still one, and its slack is unchanged.                                  []
+
+  MACHINE-VERIFIED: verify_lemma.py, 116/116 deletions preserved exactness,
+  Lmin, tightness of every tight set, and the slack of every surviving
+  boundary.
+
+--------------------------------------------------------------------------------
+LEMMA 4 (suspension, converse of Lemma 3).  If v' on N' has a PART(p,q)
+configuration at a slack boundary H, then adjoining a null player e, i.e.
+v(S) := v'(S \ {e}), gives an exact singleton-normalized game with a ZP(p,q)
+configuration at the same boundary, with m = m' + 1.
+--------------------------------------------------------------------------------
+Exactness and normalization are immediate, Lmin(v) = (Lmin(v'), 0) as in
+Lemma 3, and e joins the poorest stratum so H is still the top strict suffix.
+The sets S1' u {e} and S2' u {e} are tight because
+v(S_i' u {e}) = v'(S_i') = phi'(S_i') = phi(S_i' u {e}); they meet exactly in
+{e} and cover N.                                                             []
+
+--------------------------------------------------------------------------------
+THEOREM 5 (rich singleton).  No PART(p,0) configuration exists, and likewise
+no PART(0,q).
+--------------------------------------------------------------------------------
+q = 0 means S2 = {g}, so tightness reads v({g}) = phi_g.  But v({g}) = 0 by
+normalization while phi_g > 0 because the boundary is strict.               []
+
+--------------------------------------------------------------------------------
+THEOREM 6 (descent).  A ZP(p,q) configuration yields, in a game with one fewer
+poorer player, either a PART(p,q) configuration (when the common zero player of
+Lemma 2 is e) or a ZP(p-1,q) or ZP(p,q-1) configuration (when it is not).
+--------------------------------------------------------------------------------
+Lemma 1 gives phi_e = 0, so Lemma 2 applies and yields a null j with phi_j = 0;
+since phi > 0 on H, j lies in L.  Delete j by Lemma 3.  If j = e, both S1 and
+S2 lose e, so they become disjoint and still cover N \ {e}: a PART(p,q).
+If j is not e it lies in exactly one of S1 \ {e}, S2 \ {e}; deleting it leaves
+the intersection {e} and the union N \ {j}, a ZP configuration with that one
+coordinate reduced.                                                          []
+
+--------------------------------------------------------------------------------
+COROLLARY 7 (m = 3).  No ZP configuration of any profile exists when m = 3.
+--------------------------------------------------------------------------------
+By Theorem 6 it produces a configuration at a still-slack h = 2 boundary with
+m = 2, contradicting (PH), which requires m >= m_min(2) = 3.                 []
+
+--------------------------------------------------------------------------------
+THEOREM 8 (profile (p,0) is impossible at every m).  No ZP(p,0) configuration
+exists, for any m.   >>> THIS REFUTES THE n=7 RESISTING TYPE (4,0). <<<
+--------------------------------------------------------------------------------
+Descend by Theorem 6.  The branch j = e gives PART(p,0), impossible by
+Theorem 5.  The branch j != e keeps q = 0, because the only poorer element of
+S2 is e, and gives ZP(p-1,0) with m reduced by one.  By (PH) the boundary stays
+slack only while m >= 3, so the second branch can be taken at most m - 3 times;
+after that only the first branch remains, and it is contradictory.           []
+
+  This is the j != e branch that was open at the end of task #10: it is closed
+  not by analysing j != e directly but by showing that it cannot recur
+  indefinitely, the phase theorem supplying the well-founded descent.
+
+--------------------------------------------------------------------------------
+COROLLARY 9 (reduction of the whole question).  For p,q >= 1,
+      PART(p,q) at m-1  ==>  ZP(p,q) at m                        (Lemma 4)
+      ZP(p,q) at m      ==>  PART(p,q) at m-1, or ZP(p-1,q) / ZP(p,q-1)
+                             at m-1                              (Theorem 6)
+and ZP is impossible at m = 3 (Corollary 7).  Hence every ZP question is a
+PARTITION question one level down, and the descent terminates.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+CONJECTURE 10 (the residue).  PART(p,q) is realizable exactly when p,q >= 1 and
+max(p,q) >= 3.
+--------------------------------------------------------------------------------
+The half "p,q >= 1" is Theorem 5.  The half "max(p,q) >= 3" is OPEN and is the
+entire remaining content of the ZP question.
+
+WHAT IT WOULD BUY.  Type B, the n=7 resisting profile (2,2), descends as
+    ZP(2,2) at m=5 -> PART(2,2) at m=4          [max = 2, excluded]
+                   or ZP(1,2) / ZP(2,1) at m=4
+                        -> PART(1,2) / PART(2,1) at m=3  [max = 2, excluded]
+                        or ZP at m=3                     [Corollary 7]
+so Conjecture 10 implies TYPE B IS IMPOSSIBLE, and with Theorem 8 the whole ZP
+residue would be closed.
+
+EVIDENCE (all counts are h=2 slack boundaries in exact games, exact arithmetic):
+    m=3 : no PART configuration of any split, and no ZP configuration
+          (6,920 random boundaries; targeted slice search as well)
+    m=4 : PART(1,3) and PART(3,1) occur; PART(2,2) NEVER
+          (8,431 random + 11,396 targeted boundaries, 139,422 targeted games)
+    m=5 : PART(1,4), PART(2,3), PART(3,2), PART(4,1) all occur
+    and the realized ZP profiles at m=5 are exactly (1,3) and (3,1), matching
+    the PART splits at m=4 as Corollary 9 predicts.
+
+WHY THE THRESHOLD 3 IS PLAUSIBLE.  If the game were the direct sum of its two
+sides then each side would be an exact game in which the rich player is the
+unique richest and {f} is slack, so the phase theorem at h=1 would force
+p >= m_min(1) = 4 on each side.  Partition configurations are not direct sums
+(the core is strictly inside the product), which is why the observed threshold
+is 3 and not 4; making that comparison quantitative is the natural route to a
+proof.
+
+--------------------------------------------------------------------------------
+WHAT DOES NOT WORK, AND WHY (recorded so it is not retried)
+--------------------------------------------------------------------------------
+Finite feasibility over the exact cone.  On n <= 6 the cone of exact games is
+cut out by the catalogue: v is exact iff sum_{S proper} lambda_S v(S) <= r v(N)
+for every permuted min-semi-balanced system (280 inequalities at n=5, 7,006 at
+n=6; validated in exactcone.py, both directions at n=5 and the forward
+direction at n=6).  Encoding PART(p,q) as an LP over v and phi is therefore
+exact for everything EXCEPT the requirement phi = Lmin.  Three successively
+stronger relaxations were tried:
+    (i)   exact cone + phi in core + tightness + slack + strict stratification
+    (ii)  (i) + leximin stage 1, as a quantified linear condition
+    (iii) (ii) + the one-packet theorem as a disjunction over all delta>0
+          packet certificates
+All three are SATISFIABLE for PART(1,2) at n=5, and every model fails the
+reality check: rebuilding the game from the model's v and recomputing Lmin
+gives a different leximin point at which H is not even a strict boundary.  So
+the obstruction is genuinely the multi-stage leximin condition, not the
+exactness or the packet structure.  A decisive LP needs the full leximin
+encoding, which means fixing the stratification of the poorer side and adding
+one quantified pinning condition per stage.  That is the recommended next step
+for this route.

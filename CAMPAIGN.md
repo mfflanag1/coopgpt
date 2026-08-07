@@ -1068,7 +1068,15 @@ localization of exactness; "|B|=4 is special".
 - C-C containment proof (task #12); exact-partition impossibility
   (conjectured; 10,239-bump zero-failure search; rigidity proposition
   proved).
-- ZP profiles (4,0),(2,2) at n=7 h=2; j≠e branch.
+- ZP residue RESOLVED to one conjecture (2026-08-07): the j≠e branch and
+  profile (4,0) are PROVED impossible by a well-founded null-player descent
+  (verifiers/zp/PROOF.txt: k-fold RO forces the kernel player to zero; a
+  common zero player is null; deletion descends; the phase theorem floors
+  the descent).  Profile (2,2) is equivalent to the open half of:
+  CONJECTURE PART(p,q) realizable iff p,q >= 1 and max(p,q) >= 3
+  (descent-correspondence evidence across 380k games; the m=5 ZP profiles
+  are exactly the m=4 PART splits).  Decisive-LP route blocked exactly by
+  the multi-stage leximin encoding, recorded for continuation.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
