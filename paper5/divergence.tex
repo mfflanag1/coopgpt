@@ -1095,11 +1095,27 @@ reduction detects that failure.  The theorem is therefore the formal content
 of the regime change of Section~\ref{sec:n5}: at five players both
 selections are governed by single bottleneck coalitions, while from six
 players the ceiling requires genuinely fractional covers --- which is
-precisely where $s(n)$ begins its climb toward~$2$.  The theorem does
-\emph{not} by itself deliver the starvation bound needed to close
-$s(5)=\tfrac12$; that bound is a statement about a different functional and
-requires its own argument, which the next theorem supplies in the extremal
-configuration.
+precisely where $s(n)$ begins its climb toward~$2$.  One consequence localizes all the difficulty of $s(5)$.
+
+\begin{corollary}[floor from ceiling]\label{cor:floorceiling}
+For every singleton-normalized exact five-player game,
+$\mu\ge\min_i\Lmax(v)_i$.
+\end{corollary}
+
+\begin{proof}
+$\Lmax$ is a core point, so $f(S)=T-v(N\setminus S)\ge
+T-\Lmax(N\setminus S)=\Lmax(S)$ for every $S$; hence
+$\lambda\ge\min_S\Lmax(S)/|S|\ge\min_i\Lmax_i$, and $\mu=\lambda$ by
+Theorem~\ref{thm:n5closed}.
+\end{proof}
+
+If $\Lmax$ has no zero coordinate, the leximin floor is therefore bounded
+below for free and elementary gap arithmetic bounds the ratio; every
+genuinely hard configuration for $s(5)$ has a \emph{zero} in $\Lmax$.  The
+theorem does \emph{not} by itself deliver the starvation bound needed for
+those configurations; that bound is a statement about a different functional
+and requires its own argument, which the next theorem supplies in the
+extremal one.
 
 \begin{theorem}[the extremal configuration is pinned]\label{thm:cfg}
 Let $v$ be a singleton-normalized exact five-player game whose $\Lmin$
@@ -1159,6 +1175,41 @@ $(1,4)$ $\Lmax$ pattern never produced an $\Lmin$-rich starved player
 $\Lmin$-poor property is derived from the failure assumption, which is all
 that theorem needs; whether either hypothesis can fail in the configuration
 at all is open and recorded in Section~\ref{sec:scope}.
+
+For the ratio \emph{bound}, as opposed to the pinned pair, both hypotheses
+can in fact be dispensed with.
+
+\begin{theorem}[unconditional configuration bound]\label{thm:cfgbound}
+In the configuration of Theorem~\ref{thm:cfg}, $\rho(v)\le\tfrac12$.
+\end{theorem}
+
+\begin{proof}[Proof, by gap arithmetic and one further finite check]
+Normalize $T=1$; the $\Lmax$ pattern gives $M=1/4$ and the $(3,2)$ pattern
+gives $\Lmin=(\mu,\mu,\mu,\varrho,\varrho)$ with
+$\varrho=(1-3\mu)/2$.  If the starved player is $\Lmin$-poor, the
+coordinatewise gap is $1-4\mu$ for $\mu\le1/6$ and $2\mu$ otherwise, and
+Theorem~\ref{thm:cfg} gives $\mu\ge1/8$, so both branches are at most
+$\tfrac12$.  If the starved player is $\Lmin$-rich, the gap is $3/2-6\mu$
+for $\mu\le1/6$ and $1-3\mu$ otherwise, so the bound holds exactly when
+$\mu\ge1/6$ --- and a finite check of the same design as
+Theorem~\ref{thm:cfg} (the rich relabelling of the pinning polyhedron;
+$31\times354$ exact programs, all infeasible, with the drop-the-pinning
+control restoring feasibility) shows $\mu<1/6$ is impossible in that
+branch.
+\end{proof}
+
+Two calibrations.  First, the finite check is not removable in favour of
+soft arguments: from Theorem~\ref{thm:n5closed} and core membership of both
+allocation vectors alone --- everything that is game-free --- the best
+obtainable bound on $\rho$ at five players is exactly $\tfrac32$, so every
+configuration needs a lower bound on the floor of the strength of
+Theorem~\ref{thm:cfg}.  Second, the attempted refutation of the
+$\nu$-triple hypothesis produced, once again, a certificate whose audited
+model is a genuine exact game \emph{outside} the configuration (a
+$(1,4)$-shaped $\Lmax$ with minimum $1/30$, ratio $5/12$) --- the third
+certificate-not-realizable instance of this program, and the reason
+hypotheses are retired here only by finite checks, never by feasible
+certificates alone.
 
 The configuration hypothesis is essential, not decorative: dropping the
 $(3,2)$ pinning makes the same programs satisfiable, and their models are
@@ -1286,7 +1337,9 @@ a named game, and each is a refutation, so a single instance suffices.
 Theorem~\ref{thm:n5closed} ($\mu=\lambda$ and $M=\nu$ for every exact
 five-player game; $1142$ symmetry classes, each infeasible in exact rational
 arithmetic) and Theorem~\ref{thm:cfg} with Corollary~\ref{cor:cfg}
-($f(\{j\})\ge T/8$ in the extremal configuration; $10{,}974$ programs).
+($f(\{j\})\ge T/8$ in the extremal configuration; $10{,}974$ programs);
+Theorem~\ref{thm:cfgbound}'s rich-branch floor bound ($\mu\ge T/6$;
+another $10{,}974$ programs).
 The checks are proof dependencies; the corollary's two additional
 hypotheses are open in general and listed under (4) below.
 
@@ -1331,9 +1384,15 @@ Five problems remain open.
 \item \textbf{Conjecture~\ref{conj:n5}}, $s(5)=1/2$, together with the
       two-regime picture suggested by the extremal-class structure: $(3,2)$
       $\Lmin$-strata above $1/3$, and $(4,1)$ never exceeding $1/3$.  The
-      extremal configuration itself is closed by Corollary~\ref{cor:cfg}
-      modulo its two hypotheses; open are those hypotheses in general, the
-      $(1,2,2)$ and $(1,1,3)$ shapes, and the $(4,1)$ boundary.
+      extremal configuration is closed unconditionally for the bound
+      (Theorem~\ref{thm:cfgbound}); its two hypotheses survive only in the
+      sharper pinned-pair statement of Corollary~\ref{cor:cfg}.  By
+      Corollary~\ref{cor:floorceiling} the remaining hard cases are exactly
+      the configurations whose $\Lmax$ has a zero coordinate --- the
+      $(1,2,2)$, $(1,1,3)$ and $(2,1,2)$ shapes with vanishing bottom
+      stratum --- together with the $(4,1)$ $\Lmin$ regime, whose analysis
+      needs ceiling-side second-stage certificates that have been sketched
+      but not built (the derivation is archived with the verifiers).
 \item \textbf{A structural explanation of the $n=5$ versus $n\ge6$ regime
       change}: a starved $\Lmax$ with $|\supp(\Lmax)|=4$ at $n=5$ against a
       strictly positive $\Lmax$ in $G(p,k)$.

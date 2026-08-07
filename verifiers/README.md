@@ -15,6 +15,7 @@ Two tiers, matching the papers' status tables.
 | paper5 Thm + Cor (CFG starvation bound f({j}) ≥ T/8) | `o2/` — `pinvert.py` (354 pinning-dual vertices), `o2main.py` (31 × 354 programs, all infeasible), `pincontrol.py`, `ablate.py`/`minimal.py` (minimal hypothesis set), `extract.py` (the T/16 essentiality models), `core.py` (unsat cores) |
 | paper4 Thm (h=2 split threshold, m≤4) and Thm (h=3 collections) | `selection/` — `m5.py` (42/216/950 abstract packets, the two m=5 split facets), `facet_test.py` (h=3 breakdown 2/31/10/12), `enum_packets.py`, `starproof.py` (34 star types re-classified) |
 | paper4 §7 large-core statements for the four example games | `large_core_qe.py` (quantifier-elimination, no enumeration) |
+| paper5 Thm (unconditional configuration bound): rich-branch μ ≥ T/6 | `s5full/jrich.py` (31 × 354 programs), `s5full/checks2.py` (controls), `s5full/arith*.py` (the game-free 3/2 ceiling), `s5full/REPORT.txt` (incl. the ceiling second-stage derivation sketch) |
 
 ## Bug audits and computational evidence (not proof dependencies)
 

@@ -1,0 +1,208 @@
+================================================================================
+TOWARD s(5) = 1/2 IN FULL  --  task #20, PARTIAL with exact stuck points
+================================================================================
+Directory: scratchpad/sel/s5full/
+Files: arith.py/arith3.py + arith*_n{4,5,6}.json (the arithmetic ceiling),
+       jrich.py/.log/.json (the j-rich CFG case), checks2.py/.log/.json
+       (control + Corollary-23 hypothesis 2), audit_b.py (its end-to-end audit).
+
+--------------------------------------------------------------------------------
+0.  WHAT THIS TASK SETTLED, AND WHAT IT DID NOT
+--------------------------------------------------------------------------------
+SETTLED
+ (1) CFG IMPLIES ratio <= 1/2 UNCONDITIONALLY.  The Lmin-rich starved-player
+     case -- one of the three leftovers -- is closed by a new finite check, and
+     with it the FIRST extra hypothesis of Corollary~\ref{cor:cfg} disappears
+     from the BOUND.  (Section 2.)
+ (2) A PRECISE OBSTRUCTION.  From Theorem~\ref{thm:n5closed} (A3) plus core
+     membership of both allocation vectors -- i.e. from everything that is
+     game-free -- the best possible bound on the ratio is exactly 3/2 at n = 5
+     (4/3 at n = 4, 8/5 at n = 6).  So no amount of A3-style reasoning can
+     reach 1/2: every configuration needs a LOWER BOUND ON THE LEXIMIN FLOOR mu,
+     and supplying one is exactly what Theorem~\ref{thm:cfg} does for CFG.
+     (Section 3.)
+ (3) WHERE THE DIFFICULTY LIVES.  mu >= min_i Lmax_i, with a one-line proof
+     (Section 4).  So a configuration is hard only when Lmax has a ZERO
+     coordinate; otherwise the floor is bounded below for free.
+NOT SETTLED
+ * Target A (the (4,1) regime, ratio <= 1/3) -- not attempted; the ceiling-side
+   second-stage certificates were not built.
+ * Target B for the Lmax shapes other than CFG.
+ * The SECOND hypothesis of Corollary~\ref{cor:cfg} (a nu-attaining triple).
+   My attempt to refute it produced a certificate that is NOT realizable
+   (Section 5); its status is unchanged.
+
+--------------------------------------------------------------------------------
+1.  THE ANCHOR LEMMA (no computation; write-up for the tree)
+--------------------------------------------------------------------------------
+LEMMA 0.  If Lmin has no slack strict boundary then rho(v) = 0.
+PROOF.  No slack boundary means every cumulative richer suffix of Lmin is tight,
+i.e. v is exact partition at Lmin.  Exact partition at an allocation makes that
+allocation Lorenz-greatest in the core (the prior-art chain cited in paper4),
+and the Lorenz-greatest point of the core is simultaneously the leximin-maximal
+and the leximax-minimal one, so Lmin = Lmax.                                  []
+Together with the phase theorem this reduces s(5) to games whose slack boundary
+has shape (4,1) or (3,2).
+
+--------------------------------------------------------------------------------
+2.  CFG IS CLOSED:  ratio <= 1/2 WITHOUT THE Lmin-POOR HYPOTHESIS
+--------------------------------------------------------------------------------
+Normalise T = 1; CFG gives M = 1/4 and Lmin = (mu,mu,mu,rho,rho),
+rho = (1-3mu)/2, and mu < 1/5.  Lmax = z0 has a single zero, at j.
+
+GAP ARITHMETIC (elementary, both branches).
+ j POOR:   x - z = (mu-0, mu-1/4, mu-1/4, rho-1/4, rho-1/4).  Since mu < 1/4 the
+           middle terms are negative and rho >= 1/4 iff mu <= 1/6, so
+              ratio = 1 - 4mu   (mu <= 1/6),      ratio = 2mu   (mu > 1/6).
+           Theorem~\ref{thm:cfg} gives mu >= 1/8, so both branches are <= 1/2.
+           (The first branch needs mu >= 1/8; the second is <= 2/5 outright.)
+ j RICH:   x - z = (rho-0, mu-1/4, mu-1/4, mu-1/4, rho-1/4), so
+              ratio = 3/2 - 6mu (mu <= 1/6),      ratio = 1 - 3mu (mu > 1/6),
+           and therefore  ratio > 1/2  <=>  mu < 1/6.
+
+So the j-rich branch is not decoration: if CFG could occur with an Lmin-rich
+starved player and mu < 1/6, s(5) = 1/2 would be FALSE (at mu = 1/8 the ratio
+would be 3/4).
+
+FINITE CHECK (jrich.py).  Encode: z0 in Core; x = (rho,mu,mu,mu,rho) in Core
+with j rich; mu = lambda (f(S) >= mu|S| for all S); nu = 1/4 attained at an
+anchor; the poor triple L = {1,2,3} pinned at mu, via the 354 vertices of its
+dual polyhedron D_L (recomputed for this labelling); and the failure hypothesis
+mu < 1/6.  All 31 x 354 = 10,974 exact programs are INFEASIBLE (z3, exact
+rational, lazy cone cuts, every call asserted sat or unsat).
+
+  => in the j-rich branch mu >= 1/6, hence ratio <= 1/2.
+
+CONTROL.  Dropping the pinning restores feasibility: 3 of 31 anchors, e.g. with
+mu = 0.  So the encoding can express a failure and it is the pinning that
+forbids it, exactly as in task #16.
+
+CONCLUSION.  CFG => ratio <= 1/2, with no side hypotheses.  Corollary
+\ref{cor:cfg}'s first extra hypothesis is therefore unnecessary FOR THE BOUND;
+it (and the second) survive only in the sharper statement that pins the ratio at
+exactly 1/2 and the two allocations.
+
+--------------------------------------------------------------------------------
+3.  THE ARITHMETIC CEILING:  WHY A3 ALONE CANNOT REACH 1/2
+--------------------------------------------------------------------------------
+Both anchors of A3 are TIGHT on one side, which is stronger than it first looks:
+  nu = M attained at S0: z in Core gives z(S0) >= v(S0) = M|S0| while z_i <= M
+       forces z(S0) <= M|S0|, so z is CONSTANT = M on S0, i.e. S0 lies in the
+       top stratum of Lmax; and x in Core gives x(S0) >= M|S0|.
+  lambda = mu attained at S1: x in Core gives x(S1) <= f(S1) = mu|S1| while
+       x_i >= mu forces x(S1) >= mu|S1|, so x is CONSTANT = mu on S1, i.e. S1
+       lies in the bottom stratum of Lmin; and z(S1) <= f(S1) = mu|S1|.
+Maximising ||x-z||_1 over all pairs of vectors obeying only these (x,z >= 0,
+x(N)=z(N)=1, x >= mu, z <= M) gives, EXACTLY:
+
+        n = 4 : 4/3        n = 5 : 3/2        n = 6 : 8/5
+
+with maximiser x = (0,1,0,0,0), z = (0,1/4,1/4,1/4,1/4) at n = 5.  The
+maximiser is not a real configuration -- z is leximin-better than x, so x
+cannot be Lmin -- which is precisely the point: what the arithmetic misses is
+the OPTIMALITY of the two selections, and in particular any lower bound on mu.
+Adding the leximin/leximax dominance relations would cut this down, but the
+lower bound on mu is not a consequence of them either: in CFG the anchor
+conditions bound mu from ABOVE (mu <= 1/6, and mu <= 1/8 when a nu-attaining
+triple exists), never from below.  The lower bound is the whole content of
+Theorem~\ref{thm:cfg}, and every remaining configuration will need its own.
+
+--------------------------------------------------------------------------------
+4.  WHERE THE HARD CASES ARE
+--------------------------------------------------------------------------------
+LEMMA.  mu >= min_i Lmax_i.
+PROOF.  Lmax is a core point, so f(S) = T - v(N\\S) >= T - Lmax(N\\S) = Lmax(S)
+for every S.  Hence lambda = min_S f(S)/|S| >= min_S Lmax(S)/|S| >= min_i Lmax_i,
+and mu = lambda by A3.                                                        []
+(Equivalently: Lmin is leximin-maximal and Lmax is a core point.)
+
+So if Lmax has no zero coordinate the floor is bounded below for free, and the
+gap arithmetic closes the case.  Every genuinely hard configuration has a ZERO
+in Lmax -- which is why CFG, the shape with a zero and the largest possible
+gap, was the extremal one, and why the remaining shapes to check are exactly
+those whose Lmax vanishes somewhere: (1,4) with zero (= CFG, now closed),
+(1,2,2), (1,1,3) and (2,1,2) with a vanishing bottom stratum, and the (4,1)
+Lmin regime.
+
+--------------------------------------------------------------------------------
+5.  COROLLARY 23's SECOND HYPOTHESIS:  ATTEMPTED, STILL OPEN
+--------------------------------------------------------------------------------
+Encoding CFG (j poor) together with "no three-player coalition attains nu"
+produced 2 feasible certificates out of 354, with mu = 11/80.  Audited end to
+end (audit_b.py), the model IS a genuine exact singleton-normalized game --
+   v with Lmin = (11/80,11/80,11/80,47/160,47/160), Lmax = (1/30, 29/120 x4),
+   nu = M = 29/120, ratio = 5/12 --
+but it is NOT in CFG: its Lmax minimum is 1/30, not 0.  And in the real game
+two triples do attain nu.  So this is the same certificate-not-realizable
+phenomenon as the T/16 games of task #16, for the third time in this campaign;
+the hypothesis is not refuted and its status is unchanged.  (The game is a
+legitimate instance of the "(1,4) with nonzero minimum" shape, and it obeys the
+bound with room to spare.)
+
+--------------------------------------------------------------------------------
+6.  THE STUCK POINT, PRECISELY
+--------------------------------------------------------------------------------
+The pipeline needs, for each remaining configuration, a LOWER bound on mu of
+the strength of Theorem~\ref{thm:cfg}.  For CFG that bound came from pinning the
+whole poor stratum, which is available because the (3,2) shape pins three
+players at once and its dual polyhedron has only 354 vertices.  For the
+remaining shapes:
+ * (1,2,2), (1,1,3), (2,1,2): the Lmin bottom stratum may have only ONE or TWO
+   players, so the pinning certificate is weaker and the analogue of
+   Theorem~\ref{thm:cfg} is a different (and larger) dual polyhedron.  These are
+   mechanical to set up with pinvert.py, which takes the pinned set as a
+   parameter -- I did exactly that for the j-rich relabelling in jrich.py.
+ * The (4,1) regime needs the CEILING-side second-stage certificates, which do
+   not exist yet.  The mirror is available in principle: the ceiling pinning
+   "player i sits at M in Lmax" dualizes exactly like the floor pinning, with
+   h(S) = M|S| - v(S) in place of f'(S) and c_M = 5M - T in place of 1 - 5mu
+   (both derivations are in section 2 of the task-16 report).  What is missing
+   is the SECOND stage: after the top stratum is pinned, Lmax's remaining
+   coordinates are determined by a leximax problem on a face, and I did not
+   derive its finite certificate structure.  That is the single piece of new
+   machinery the rest of the tree needs, and it is where I stopped.
+
+
+--------------------------------------------------------------------------------
+7.  THE CEILING SECOND STAGE:  DERIVATION SKETCH FOR WHOEVER CONTINUES
+--------------------------------------------------------------------------------
+The blocker named in section 6 is derivable; what follows is the structure, not
+a finished encoding, and it is recorded so the next attempt does not restart.
+
+STAGE 1 (mirrors the floor exactly).  M = nu by A3.  "Player i sits at M in
+Lmax" is  min{ x_i : x in Core, x <= M*1 } = M.  Substituting u = M*1 - x >= 0
+gives u(N) = c_M := 5M - T and u(S) <= h(S) := M|S| - v(S), so the condition is
+max{ u_i : u in U } = 0 with U = {u >= 0 : u(N) = c_M, u(S) <= h(S)} -- formally
+identical to the floor-side pinning with (h, c_M) in place of (f', 1-5mu).  The
+dual polyhedron is game-free and its vertices enumerate exactly as in
+pinvert.py, which takes the pinned set as a parameter.
+
+STAGE 2 (the part that is genuinely new).  Let D1 be the stage-1 pinned set and
+F = N \ D1 the free players.  On P2 = {x in Core : x <= M*1, x_i = M on D1} the
+constraints collapse to a REDUCED GAME on F:  for A subset F,
+        x(A) >= v2(A) := max { v(S) - M|S cap D1| : S cap F = A },
+together with x(F) = T - |D1| M.  So P2 = Core(v2), and the stage-2 level is
+M2 = min over Core(v2) of max_{i in F} x_i.
+
+Two warnings.  (a) A3 does NOT recurse: v2 is a game on |F| < 5 players and need
+not be exact, so M2 = nu(v2) may fail and the stage-2 level has to be carried as
+a variable with its own certificate rather than read off an anchor.  (b) The
+caps v2(A) are a MAX over the preimages S, so each cap carries a disjunction
+over which S attains it -- that extra combinatorial layer is what makes the
+ceiling messier than the floor, and it is where the vertex enumeration must be
+organised carefully rather than copied.
+
+The stage-2 certificate itself is a max-min: writing x_i = M2 - u_i on F, the
+statement "the level cannot be lowered" is  max{ min_{i in F} u_i : u in U2 } = 0
+with U2 = {u >= 0 on F : u(F) = |F| M2 - T + |D1| M, u(A) <= h2(A)},
+h2(A) = M|S cap D1| + M2|A| - v(S) minimised over the preimages S.  Its Farkas
+certificate is again a nonnegative combination with bounded support, hence again
+a game-free vertex enumeration once the preimage choices are fixed.
+
+I did not build this, and I did not want to hand over a half-controlled version
+of it: by this campaign's own discipline it would need its own drop-the-hypothesis
+control and its own known-game positive control before any verdict it produced
+could be believed.
+
+NO REFUTATION was found: every feasible model produced in this task was audited
+and none is a genuine game above the bound.
