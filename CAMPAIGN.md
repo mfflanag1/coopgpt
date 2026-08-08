@@ -1166,6 +1166,16 @@ localization of exactness; "|B|=4 is special".
   chased.  n>=6 open; family generator for window-bearing exact-partition
   bases archived (method, not yet weight).  Final d18 corpus: 6,246
   certified n=6 danger-class violations, 1,815 C-C-left failures, 0 C-C^.
+  ROUND-2 SHARPENINGS (d27): THE INVERSION — at exact partition the
+  "dangerous shape" (losers slack-but-not-a-suffix) occurs in EVERY
+  certified exact bump (200/200 n=5, 80/80 + 2,224 total n=6), always
+  with losers strictly OUTSIDE S, ~75% with intra-stratum redistribution
+  (S financed by its own stratum-mates outside it); the conjecture is
+  about loser LOCATION, not occurrence — now printed in paper4.  Lead's
+  route-3 briefing was BACKWARDS and is retracted: at exact partition the
+  guaranteed suffix certificate makes (MA) trivially = Prop D; a decisive
+  ablation (system minus cert2 is SAT) shows the entire proving force is
+  on the phi'-side certificate (223 of 302 irredundant assertions).
   (b) PART characterization unified (verifiers/part/PROOF_GENERAL.txt): ONE
   inequality (KEY: tight T over H omitting P forces |Q\T| >= 2) drives both
   halves.  Lemmas N*/I*/E*/X* generalize the m=3 frame to all (p,q);

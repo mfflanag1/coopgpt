@@ -146,3 +146,73 @@ mono:thm:cchat, rather than treating it as awaiting a hand proof.
   d2_lab.py       extended with group "expart" and targets exists/bumpexists
   outputs: ep_6_31.json, ep_7_41.json, ep6.log, ep7.log
 ================================================================================
+
+--------------------------------------------------------------------------------
+5.  THE phi-SIDE MACHINERY CANNOT CLOSE THIS CASE (a correction to route 3)
+--------------------------------------------------------------------------------
+The natural suggestion is that at exact partition the master inequality (MA) is
+unusually strong, because every richer suffix is tight and so Lemma-L
+certificates exist with suffix support and nu = 1.  It is the other way round.
+
+At exact partition the GUARANTEED certificate at cut j is exactly
+lambda = 1_{H_j}, nu = 1 (Lemma EP1), and its (MA) instance reads
+      sum_i cover_i Delta_i >= 0   with cover = 1_{H_j},   i.e.   Delta(H_j) >= 0,
+which is literally Proposition D.  So at exact partition (MA) carries NO
+information beyond Prop D: the very tightness that makes the certificate exist
+also makes it trivial.
+
+Decisive check: the whole system MINUS cert2 -- that is, core + superadditivity
++ exactness of v + exactness of v' + Lemma L for phi + "worse" + exact
+partition -- is SAT at gaps=(1,), (2,3) and (1,2,3).  No combination of the
+phi-side tools (Prop D, MA, L-out, Lemma WIN, Theorem A) can therefore prove
+the conjecture; the entire force sits on the phi' side.  That matches the
+minimal core exactly: 223 of its 302 irredundant assertions are cert2.
+
+--------------------------------------------------------------------------------
+6.  THE "UN-EXCLUDED SHAPE" IS NOT RARE -- IT IS UNIVERSAL (route 2, sharpened)
+--------------------------------------------------------------------------------
+paper4 notes that Theorem A rules out a loser set that is a richer suffix but
+not one that is "slack without being a suffix, which is the shape of
+Example mono:ex:notstratum" -- the tight top stratum redistributing internally.
+Lemma EP2 already says the top stratum always has >= 2 players at exact
+partition, so the mechanism is structurally available everywhere.  Driver
+d27_epredist.py measures how often it actually fires, over certified exact
+bumps of exact-partition bases:
+
+                                        n = 5        n = 6
+   certified exact bumps                  200           80
+   Delta identically zero                   0            0
+   some player strictly loses             200           80
+   ... a loser INSIDE S                     0            0
+   a stratum redistributes internally     144           64
+   loser set IS a richer suffix             0            0
+   loser set slack-but-NOT-a-suffix       200           80
+
+So the reading has to be inverted.  The dangerous shape is not a rare loophole
+that the search failed to reach: at exact partition it is what happens EVERY
+time.  Every admissible exact bump moves phi, every one of them produces strict
+losers, the loser set is ALWAYS slack-but-not-a-suffix, and in about 75% of
+them a stratum redistributes internally.  What never happens is the one thing
+the conjecture forbids: a loser inside S.  The correct statement of the
+phenomenon is therefore not "the un-excluded shape does not occur" but "the
+un-excluded shape occurs always, and always outside the bumped coalition".
+
+A typical instance (n = 5): rows (6,0,3,8,7), (0,0,5,19,0), (2,18,0,0,4),
+(0,12,0,12,0); phi = (9/2, 5, 9/2, 5, 5) at exact partition; S = {2,4},
+alpha = 17/8; phi' = (9/2, 81/16, 9/2, 81/16, 39/8).  The stratum {2,4,5}
+redistributes internally: 2 and 4 (both in S) gain 1/16 each and 5 (outside S,
+same stratum) pays 1/8.  The bump's gain to S is financed by the members of S's
+own stratum that lie outside S.
+
+--------------------------------------------------------------------------------
+7.  UPDATED n >= 6 EVIDENCE (designed)
+--------------------------------------------------------------------------------
+  d24_ep.py    n=6  2,626 games -> 1,800 exact-partition bases -> 66 windows
+                    -> 528 exact bumps -> 0 failures
+  d25_epfam.py n=6  family trick: 23 window-bearing seed bases, 253
+                    exact-partition perturbations -> 212 windows -> 1,696
+                    exact bumps -> 0 failures
+Together 2,224 certified exact bumps of exact-partition bases at n = 6 with no
+failure, of which the family route supplies three quarters -- which is the
+point of the family generator: random search produced 66 windows where the
+families produced 212 in a fraction of the games.
