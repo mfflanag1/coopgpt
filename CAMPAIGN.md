@@ -1189,6 +1189,18 @@ localization of exactness; "|B|=4 is special".
   BACKWARDS from the intended leximin proof (pick phi, pick the pins,
   solve the row arithmetic); that is why Family B is 4 rows independent
   of q and why the (KEY) budgets surface as row constraints.
+- paper6 DRAFTED (task #30, coopgames/paper6/partition.tex, 12pp clean):
+  the ZP/PART program as a standalone note, "boundary partition" naming
+  for print, both directions closed-form, methods section = existential
+  exactness + Farkas certificates with full proofs, status table with ONE
+  machine dependency (G4).  En route r23 caught + corrected an overclaim
+  in Lemma I*'s statement (the claimed converse of the indicator form is
+  FALSE — blocking indicators doesn't block cross-block mixtures; nothing
+  load-bearing used it; dated correction in PROOF_GENERAL.txt).  Lead
+  review: pruned the bibliography to cited+verified entries (the from-
+  memory Llerena-Mauri entry was invented — deleted), prior-art
+  positioning pass PENDING and marked in the tex.  NOT submission-ready:
+  needs the positioning pass + a hostile audit round.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).

@@ -1,0 +1,914 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,enumitem,hyperref,natbib}
+\hypersetup{
+ colorlinks=true,
+ linkcolor=blue,
+ citecolor=blue,
+ urlcolor=blue,
+ pdftitle={Boundary partitions at the leximin core},
+ pdfauthor={Maxwell Flanagan}
+}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{example}[theorem]{Example}
+\newcommand{\core}{\operatorname{Core}}
+\newcommand{\Lmin}{\operatorname{Lmin}}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\PART}{\mathrm{BP}}
+\newcommand{\TODO}[1]{\textbf{[TODO: #1]}}
+
+\title{Boundary partitions at the leximin core:\\
+a two-parameter characterization}
+\author{Maxwell Flanagan}
+\date{Draft of August 8, 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+At a slack strict payoff boundary of the leximin core allocation of a
+singleton-normalized exact game, the two richer players may each carry a tight
+coalition, and those two coalitions may partition the player set.  We
+characterize exactly when: writing $p$ and $q$ for the number of poorer players
+on the two sides, such a \emph{boundary partition} exists if and only if
+$p,q\ge1$ and $p+q\ge4$.  Both directions are proved in closed form.  The
+obstruction and the construction turn out to be the same inequality read in
+opposite directions: a tight coalition that contains the boundary and omits one
+side's poorer players costs two spare players on the other side.  The
+characterization settles a residual question about zero-payoff configurations
+on seven players, in the affirmative rather than, as we had conjectured, the
+negative.  Two methodological ingredients are of independent use: exactness of
+a game is an existential linear condition, needing no semi-balanced catalogue
+and no vertex enumeration; and, at a fixed payoff stratification, leximin
+optimality is a Farkas certificate supported on the tight coalitions, hence
+quantifier-free.
+\end{abstract}
+
+\section{Introduction}
+
+Let $v$ be a transferable-utility game on a finite player set $N$ that is
+\emph{exact}, meaning $v(S)=\min_{x\in\core(v)}x(S)$ for every coalition, and
+\emph{singleton-normalized}, meaning $v(\{i\})=0$ for every player.  Let
+$\phi=\Lmin(v)$ be its leximin core allocation, and let $N=L\mathbin{\dot\cup}H$
+be a strict payoff boundary: $H$ is a union of the richest payoff strata of
+$\phi$ and $\max_{i\in L}\phi_i<\min_{j\in H}\phi_j$.  The boundary is
+\emph{slack} when $v(H)<\phi(H)$.  A companion paper \citep{Flanagan2026phase}
+determines exactly which pairs $(|L|,|H|)$ admit a slack boundary.
+
+This note answers a finer question at the smallest interesting richer side,
+$|H|=2$.  Write $H=\{f,g\}$.
+
+\begin{definition}[boundary partition]\label{def:bp}
+A \emph{boundary partition of type $(p,q)$} at a slack strict boundary
+$L\mathbin{\dot\cup}H$ with $H=\{f,g\}$ is a pair of $\phi$-tight coalitions
+\[
+ S_1=P\cup\{f\},\qquad S_2=Q\cup\{g\},\qquad
+ P\mathbin{\dot\cup}Q=L,\quad p=|P|,\ q=|Q|,
+\]
+so that $S_1$ and $S_2$ are disjoint, cover $N$, and meet $H$ in one player
+each.  We write $\PART(p,q)$ for the type, and $m=p+q=|L|$, $n=m+2=|N|$.
+\end{definition}
+
+The configuration is the extreme case of the failure of exact partition: not
+only is the richer suffix $H$ not tight, but the two richer players separately
+anchor a partition of $N$ into tight blocks.  Our main result is that this is
+possible exactly on a two-parameter staircase.
+
+\begin{theorem}[characterization]\label{thm:main}
+A boundary partition of type $(p,q)$ exists if and only if
+\[
+ p\ge1,\qquad q\ge1,\qquad p+q\ge4 .
+\]
+\end{theorem}
+
+Necessity is Theorem~\ref{thm:necessity}; sufficiency is
+Theorem~\ref{thm:sufficiency}, by two explicit families of games.  Neither
+direction uses a solver.
+
+Three features of the proof are worth advertising.
+
+\paragraph{One inequality, read twice.}
+Everything turns on a single consequence of the uncrossing budget for tight
+coalitions (Lemma~\ref{lem:cross}): if $T$ is $\phi$-tight, contains $H$, and
+omits every player of $P$, then
+\begin{equation}\label{eq:key}
+ |Q\setminus T|\ \ge\ 2 .
+\end{equation}
+Read as a prohibition, \eqref{eq:key} kills every type with $p+q\le3$.  Read as
+a design constraint, it dictates the two realizing families and their ranges.
+The threshold is therefore not two facts that happen to meet at $m=4$; it is
+one inequality that first becomes satisfiable there.
+
+\paragraph{A three-line normal form.}
+Because $S_1$ and $S_2$ are complementary tight coalitions, \emph{every} core
+point is tight on both (Lemma~\ref{lem:rigid}).  The core therefore collapses
+to a polytope in $|L|$ variables, and the $2^{n}$ coalition functionals
+collapse onto a short explicit list whose facet normals can never separate two
+players lying in the same block (Lemma~\ref{lem:normal}).  That last sentence
+is the combinatorial content of the configuration and is what the necessity
+proof consumes.
+
+\paragraph{A correction.}
+An earlier round of this program conjectured that a boundary partition requires
+$\max(p,q)\ge3$, on the strength of a census in which type $\PART(2,2)$ never
+appeared among some twenty thousand sampled boundaries.  That conjecture is
+false: $\PART(2,2)$ is realizable, and Section~\ref{sec:zp} exhibits a
+six-player game carrying it.  The correct threshold is on $m=p+q$, not on
+$\max(p,q)$.  We record this because the failure mode is a general hazard:
+absence from a random census is evidence about sampling, not about
+realizability, and the same caution is raised in \citep{Flanagan2026phase}
+for a different configuration.  The consequence for the seven-player
+zero-payoff question of Section~\ref{sec:zp} is that it resolves in the
+opposite direction from the one we expected.
+
+\paragraph{Prior art.}\label{sec:intro-priorart}
+\TODO{prior-art positioning; the lead runs the citation verification pass and
+no reference below has been invented.}  Citations are needed for: the
+egalitarian core and its transfer-blocking characterization, which is where the
+protector Lemma~\ref{lem:prot} sits in the literature; exact games and large
+cores, for the standing hypotheses of Section~\ref{sec:prelim}; Dutta--Ray
+egalitarianism and Lorenz domination, which is the context in which exact
+partition at $\Lmin$ is normally discussed; and any prior appearance of an
+existential characterization of exactness in the spirit of
+Theorem~\ref{thm:exact}, which we believe to be folklore but have not traced.
+The companion paper \citep{Flanagan2026phase} carries the corresponding
+positioning for the phase diagram and is the right place to start.
+
+\medskip
+Sections~\ref{sec:prelim} and~\ref{sec:descent} fix notation and record the
+descent that reduces zero-payoff configurations to boundary partitions.
+Section~\ref{sec:methods} isolates the two encoding theorems.
+Section~\ref{sec:frame} sets up the normal form, Section~\ref{sec:nec} proves
+necessity, Section~\ref{sec:suf} gives the families.  Section~\ref{sec:frontier}
+describes what happens exactly at the threshold, and Section~\ref{sec:zp} draws
+the seven-player consequence.  Sections~\ref{sec:status}
+and~\ref{sec:scope} state the status of every claim and the limits of the
+result.
+
+\section{Preliminaries}\label{sec:prelim}
+
+All games are on a finite set $N$, exact, and singleton-normalized; core
+allocations are then nonnegative.  For $\phi\in\core(v)$ write
+$s_\phi(S)=\phi(S)-v(S)$ for the slack, and call $S$ \emph{$\phi$-tight} when
+$s_\phi(S)=0$.  We use $\Lmin(v)$ for the leximin-maximal core allocation,
+computed in the usual stages: at each stage one maximizes the common lower
+bound on the payoffs of the not-yet-pinned players subject to the pinned ones
+being fixed, and pins those players whose payoff cannot exceed that bound.  The
+payoff strata of $\phi$ are its level sets, ordered $B_1\prec\cdots\prec B_k$
+from poorest to richest, and a \emph{richer suffix} is a union
+$B_{j+1}\cup\cdots\cup B_k$.
+
+We use two facts from the companion paper.  The first is the uncrossing budget.
+
+\begin{lemma}[crossing budget]\label{lem:cross}
+Let $v$ be exact and singleton-normalized and $\phi\in\core(v)$.  If $S_1$ and
+$S_2$ are $\phi$-tight then
+\[
+ s_\phi(S_1\cap S_2)\ \le\ \phi\bigl(N\setminus(S_1\cup S_2)\bigr).
+\]
+\end{lemma}
+
+The second is the existence of protectors, which we restate with a direct proof
+because it is used repeatedly.
+
+\begin{lemma}[protectors]\label{lem:prot}
+Let $\phi=\Lmin(v)$.  If $\phi_i<\phi_j$ then some proper $\phi$-tight
+coalition contains $j$ and omits $i$.
+\end{lemma}
+
+\begin{proof}
+Otherwise $d=e_i-e_j$ satisfies $d(T)=[i\in T]-[j\in T]\ge0$ for every
+$\phi$-tight $T$, the value $-1$ occurring only when $j\in T$ and $i\notin T$.
+Also $d(N)=0$, so $\phi+td\in\core(v)$ for all small $t>0$.  Choose
+$0<t<(\phi_j-\phi_i)/2$.  The sorted payoff vector then changes only by
+replacing $\phi_i$ with $\phi_i+t$ and $\phi_j$ with $\phi_j-t$, and
+$\phi_j-t>\phi_i+t$, so no coordinate falls to or below $\phi_i$: the first
+position at which the two sorted vectors differ is strictly larger for
+$\phi+td$, contradicting leximin-maximality.
+\end{proof}
+
+Finally we use the standard lower-envelope construction.
+
+\begin{lemma}[envelope]\label{lem:env}
+Let $G$ be a finite family of nonnegative allocations with a common total $T$,
+and set $v(S)=\min_{g\in G}g(S)$.  Then $v$ is exact and every $g\in G$ lies in
+$\core(v)$; and $v$ is singleton-normalized as soon as every coordinate
+vanishes in some row of $G$.
+\end{lemma}
+
+\section{Zero-payoff configurations and the descent}\label{sec:descent}
+
+Boundary partitions arose from a neighbouring question.  Keep $H=\{f,g\}$ and
+let $S_1,S_2$ be $\phi$-tight with $S_1\cap H=\{f\}$ and $S_2\cap H=\{g\}$.  A
+\emph{zero-payoff configuration} of type $\mathrm{ZP}(p,q)$ has
+$S_1\cap S_2=\{e\}$ for a single $e\in L$ and $S_1\cup S_2=N$, with
+$p=|S_1\cap L\setminus\{e\}|$ and $q=|S_2\cap L\setminus\{e\}|$.  Boundary
+partitions are the degenerate case $S_1\cap S_2=\emptyset$.
+
+The two are linked by deletion and suspension of a null player.  We record the
+chain; the arguments are short and are given in full in the archived proof file
+cited in Section~\ref{sec:status}.
+
+\begin{proposition}[descent]\label{prop:descent}
+Let $v$ be exact and singleton-normalized with $\phi=\Lmin(v)$ and a slack
+strict boundary $H=\{f,g\}$.
+\begin{enumerate}[nosep,label=(\roman*)]
+\item In a $\mathrm{ZP}(p,q)$ configuration, $\phi_e=0$.
+\item If $\min_i\phi_i=0$ then a single player $j$ has $x_j=0$ for every
+      $x\in\core(v)$, and $j$ is null.
+\item Deleting a null player preserves exactness, normalization, the core, the
+      leximin point, the tightness of every tight coalition, and the slack of
+      every boundary avoiding it.
+\item Conversely, adjoining a null player to a game with a boundary partition
+      of type $(p,q)$ yields a $\mathrm{ZP}(p,q)$ configuration with one more
+      poorer player.
+\item Hence every $\mathrm{ZP}(p,q)$ configuration descends, one poorer player
+      at a time, either to a boundary partition of type $(p,q)$ or to a
+      zero-payoff configuration of type $(p-1,q)$ or $(p,q-1)$.
+\end{enumerate}
+\end{proposition}
+
+Two immediate consequences will be used.  First, no boundary partition has
+$q=0$: that would make the rich singleton $\{g\}$ tight, forcing
+$\phi_g=v(\{g\})=0$ against strictness.  So $p,q\ge1$, which is the easy half
+of Theorem~\ref{thm:main}.  Second, by (ii)--(iii) we may assume throughout
+that no poorer player is null:
+
+\begin{lemma}[no null poorer player]\label{lem:nonull}
+If a boundary partition of type $(p,q)$ exists with $\min_{i\in L}\phi_i=0$,
+then one of type $(p-1,q)$ or $(p,q-1)$ exists.  Consequently, in a boundary
+partition with $m$ minimal, $\phi_i>0$ for every $i\in L$ and no singleton is
+$\phi$-tight.
+\end{lemma}
+
+\section{Two encodings that decide}\label{sec:methods}
+
+The results below are proved by hand, but the route to them ran through finite
+checks, and the two encoding theorems that made those checks decisive are of
+independent interest.  Both replace an apparently intractable condition by an
+exactly equivalent linear one.
+
+\begin{theorem}[exactness is existential]\label{thm:exact}
+A game $v$ is exact if and only if for every coalition $S$ there is
+$z^S\in\core(v)$ with $z^S(S)=v(S)$.
+\end{theorem}
+
+\begin{proof}
+Immediate from $v(S)=\min_{x\in\core(v)}x(S)$: the minimum is attained exactly
+when such a $z^S$ exists, and every core point satisfies $x(S)\ge v(S)$.
+\end{proof}
+
+The content is what this buys.  Exactness is usually imposed either by
+enumerating core vertices, which is exponential, or through the facet
+description of the cone of exact games by indecomposable min-semi-balanced
+systems \citep{StudenyKratochvil2022,LohmannBormHerings2012}, which is
+available only up to six players and whose sufficiency direction is delicate to
+validate.  Theorem~\ref{thm:exact} instead adjoins one allocation vector per
+coalition subject to linear constraints: no catalogue, no enumeration, no
+completeness hypothesis, and no restriction on $n$.
+
+The second theorem removes the quantifier in ``$\phi$ is the leximin point''.
+
+\begin{theorem}[leximin is a Farkas certificate]\label{thm:farkas}
+Let $v$ be a game, $\phi\in\core(v)$, and let $B_1\prec\cdots\prec B_k$ be the
+payoff strata of $\phi$, with common values $\mu_1<\cdots<\mu_k$.  Write
+$\mathcal T$ for the family of proper $\phi$-tight coalitions.  Then
+$\phi=\Lmin(v)$ if and only if for every stage $t$ and every $i\in B_t$ there
+are reals $y_A\ge0$ ($A$ proper), $\eta$, $\rho_l$ for
+$l\in B_1\cup\cdots\cup B_{t-1}$, and $\sigma_c\ge0$ for $c\in B_t$, such that
+\begin{equation}\label{eq:support}
+ y_A=0\quad\text{for every }A\notin\mathcal T,
+\end{equation}
+and, for every player $j$,
+\begin{equation}\label{eq:identity}
+ -\sum_{A\ni j}y_A+\eta+[\,j\in B_{<t}\,]\rho_j-[\,j\in B_t\,]\sigma_j
+  =[\,j=i\,].
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+By the staged definition, $\phi=\Lmin(v)$ with these strata if and only if for
+every $t$ and every $i\in B_t$,
+\begin{equation}\label{eq:stage}
+ \max\{x_i:\ x\in\core(v),\ x_l=\phi_l\ (l\in B_{<t}),\
+      x_c\ge\mu_t\ (c\in B_{\ge t})\}=\phi_i .
+\end{equation}
+Necessity is the definition.  For sufficiency, \eqref{eq:stage} at stage $t$
+forces the stage level to be exactly $\mu_t$ --- a core point with every
+unpinned coordinate above $\mu_t$ would exceed $\mu_t$ at $i\in B_t$ --- and
+forces the pinned set to be exactly $B_t$, since for $i$ in a later stratum
+$\phi$ itself gives $x_i=\phi_i>\mu_t$; induct on $t$.
+
+Now dualize \eqref{eq:stage}.  Its feasible set is a polyhedron containing
+$\phi$, whose constraints are efficiency; $x(A)\ge v(A)$ for proper $A$, active
+exactly on $\mathcal T$; the pins $x_l=\phi_l$; and $x_c\ge\mu_t$, active
+exactly for $c\in B_t$, because $\phi_c>\mu_t$ for $c$ in a later stratum.
+Nonnegativity is the singleton case of $x(A)\ge v(A)$.  The tangent cone at
+$\phi$ is therefore
+\[
+ \mathcal D_t=\{d:\ d(N)=0,\ d(T)\ge0\ (T\in\mathcal T),\
+   d_l=0\ (l\in B_{<t}),\ d_c\ge0\ (c\in B_t)\},
+\]
+and \eqref{eq:stage} says $d_i\le0$ on $\mathcal D_t$, i.e.\ $e_i$ lies in the
+polar cone.  That polar is generated by $-\one_T$ for $T\in\mathcal T$, by
+$-e_c$ for $c\in B_t$, and by the lines through $\one_N$ and through $e_l$ for
+$l\in B_{<t}$; membership of $e_i$ in it is exactly \eqref{eq:identity} with
+\eqref{eq:support}.  Conversely, given such multipliers, for any
+$d\in\mathcal D_t$,
+$d_i=-\sum_Ay_Ad(A)+\eta\,d(N)+\sum_l\rho_ld_l-\sum_c\sigma_cd_c\le0$,
+each term being non-positive.
+\end{proof}
+
+\begin{remark}
+The naive dual of \eqref{eq:stage} carries products $y_Av(A)$, which are
+bilinear in the unknowns when the game is itself unknown.  Complementary
+slackness at the optimum $\phi$ removes them: $y_A>0$ forces $A$ tight, so
+$\sum_Ay_Av(A)=\sum_Ay_A\phi(A)$, and pairing \eqref{eq:identity} with $\phi$
+reproduces the numerical half of the dual automatically.  What survives is
+\eqref{eq:support}, a disjunction rather than a product.  This is why the
+condition is decidable in linear arithmetic with Boolean structure.
+\end{remark}
+
+\section{The block-polytope normal form}\label{sec:frame}
+
+Fix a boundary partition of type $(p,q)$ with the notation of
+Definition~\ref{def:bp}.
+
+\begin{lemma}[block rigidity]\label{lem:rigid}
+Every $x\in\core(v)$ satisfies $x(S_1)=v(S_1)$ and $x(S_2)=v(S_2)$.  In
+particular $v(S_1)+v(S_2)=v(N)$, and the core lies in a face of codimension
+one.
+\end{lemma}
+
+\begin{proof}
+Tightness at $\phi$ and efficiency give
+$v(S_1)+v(S_2)=\phi(S_1)+\phi(S_2)=\phi(N)=v(N)$.  For $x\in\core(v)$,
+$x(S_1)\ge v(S_1)$ and $x(S_2)\ge v(S_2)$ while
+$x(S_1)+x(S_2)=x(N)=v(S_1)+v(S_2)$.  Two inequalities summing to an equality
+are equalities.
+\end{proof}
+
+Lemma~\ref{lem:rigid} is the precise sense in which a boundary partition is
+close to a direct sum: the core is confined to the product of the two block
+faces.  It is not a direct sum --- the core is in general strictly inside that
+product --- and the gap is exactly what makes the threshold $4$ rather than
+something read off one block at a time.
+
+Write $u_i=x_i-\phi_i$ for $i\in L$ and $U_P=\sum_{i\in P}u_i$,
+$U_Q=\sum_{i\in Q}u_i$.
+
+\begin{lemma}[normal form]\label{lem:normal}
+Under Lemma~\ref{lem:rigid} the core is a polytope $K\subseteq\mathbb R^L$
+containing the origin, with $x_f-\phi_f=-U_P$ and $x_g-\phi_g=-U_Q$.  For a
+coalition $T$ put $\varepsilon_f=[f\in T]$ and $\varepsilon_g=[g\in T]$.  Then
+the displacement functional $d(T)$ is the linear form on $\mathbb R^L$ with
+coefficients
+\[
+ \nu_i=[i\in T]-\varepsilon_f\ (i\in P),\qquad
+ \nu_i=[i\in T]-\varepsilon_g\ (i\in Q).
+\]
+Consequently, within each block the coefficients lie all in $\{0,1\}$ or all in
+$\{-1,0\}$: \emph{no facet normal separates two players of the same block with
+opposite signs}.  Among proper nonempty coalitions the zero form is attained
+exactly at $T=S_1$ and $T=S_2$.
+\end{lemma}
+
+\begin{proof}
+Solving $x(S_1)=v(S_1)$ for $x_f$ and $x(S_2)=v(S_2)$ for $x_g$ gives the
+substitutions.  Then
+$d(T)=\sum_{i\in T\cap L}u_i-\varepsilon_fU_P-\varepsilon_gU_Q$, and
+collecting the coefficient of $u_i$ gives the display.  For $i\in P$ that
+coefficient is $[i\in T]-\varepsilon_f$, which ranges over $\{0,1\}$ when
+$\varepsilon_f=0$ and over $\{-1,0\}$ when $\varepsilon_f=1$; likewise on $Q$.
+\end{proof}
+
+The tangent cone of the core at $\phi$ is
+$\mathcal D=\{d\in\mathbb R^L:\nu_T\cdot d\ge0$ for every $\phi$-tight $T\}$.
+
+\begin{lemma}[improving directions]\label{lem:improve}
+$\mathcal D\cap\mathbb R^L_{\ge0}=\{0\}$.  Consequently, for every nonempty
+$S\subseteq L$ there is a $\phi$-tight $T$ with
+\begin{equation}\label{eq:istar}
+ |T\cap S|\ <\ \varepsilon_f\,|P\cap S|+\varepsilon_g\,|Q\cap S| .
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let $d\in\mathcal D$ be nonnegative on $L$ and nonzero.  The boundary is
+strict, so every stratum of $L$ precedes every stratum meeting $H$; let $B_j$
+be the first stratum on which $d$ is nonzero.  Since $d\ne0$ somewhere on $L$,
+$B_j$ is a stratum of $L$, so $d|_{B_j}\ge0$ and $d|_{B_j}\ne0$.  Then
+$\phi+td$ lies in the core for small $t>0$ and raises the sorted payoff vector
+at the first position where it changes, contradicting $\phi=\Lmin(v)$.  For the
+second assertion, apply the first to $d=\one_S$, which is nonnegative and
+nonzero, so $\one_S\notin\mathcal D$; by Lemma~\ref{lem:normal},
+$\nu_T\cdot\one_S=|T\cap S|-\varepsilon_f|P\cap S|-\varepsilon_g|Q\cap S|$ for
+every $T$, and some $\phi$-tight $T$ makes it negative.
+\end{proof}
+
+\begin{remark}\label{rem:noconverse}
+We claim only the stated direction.  Condition \eqref{eq:istar} for every $S$
+does \emph{not} in general force $\mathcal D\cap\mathbb R^L_{\ge0}=\{0\}$:
+lying outside a convex cone is not preserved under nonnegative combinations, so
+excluding every indicator $\one_S$ from $\mathcal D$ excludes no other
+nonnegative vector by itself.  Concretely, a normal that is $+1$ on part of $P$
+and $-1$ on part of $Q$ can satisfy $\nu\cdot\one_S<0$ while $\nu\cdot d\ge0$
+for a nonnegative $d$ weighted towards $P$.  Everything below uses only the
+implication as stated; where the cone condition itself is needed --- in the
+constructions of Section~\ref{sec:suf} --- it is imposed directly.
+\end{remark}
+
+The case $S=\{i\}$ of \eqref{eq:istar} recovers Lemma~\ref{lem:prot} in the
+form we need: for $i\in P$ there is a tight $T$ with $f\in T$ and $i\notin T$.
+
+\begin{lemma}[exactness directions]\label{lem:edir}
+There is $d^\ast\in\mathcal D$ with $\sum_{i\in P}d^\ast_i=\phi_f>0$, and
+symmetrically one with $\sum_{i\in Q}d_i=\phi_g>0$.
+\end{lemma}
+
+\begin{proof}
+Exactness at $\{f\}$ gives $z\in\core(v)$ with $z_f=v(\{f\})=0$;
+Lemma~\ref{lem:rigid} gives $z(P)+z_f=v(S_1)=\phi(P)+\phi_f$, so
+$\sum_{i\in P}(z_i-\phi_i)=\phi_f$.  Put $d^\ast=z-\phi$, which lies in
+$\mathcal D$ because $z$ is a core point.
+\end{proof}
+
+When $p=1$ this pins the whole of $\phi_f$ onto a single poorer player.  When
+$p\ge2$ it says only that some member of $P$ gains, and that slack is exactly
+what the constructions of Section~\ref{sec:suf} exploit.
+
+\begin{lemma}[crossing exclusion]\label{lem:xstar}
+Let $T$ be $\phi$-tight.
+\begin{enumerate}[nosep,label=(\roman*)]
+\item If $f\in T$ then
+ $s_\phi\bigl((P\cap T)\cup\{f\}\bigr)\le\phi(Q\setminus T)+[g\notin T]\,\phi_g$.
+\item If $g\in T$ then
+ $s_\phi\bigl((Q\cap T)\cup\{g\}\bigr)\le\phi(P\setminus T)+[f\notin T]\,\phi_f$.
+\end{enumerate}
+In particular, if $T\supseteq H$ and $P\cap T=\emptyset$ then
+$\phi_f\le\phi(Q\setminus T)$, and since every $\phi_i$ with $i\in L$ is
+strictly below $\phi_f$ this forces \eqref{eq:key}: $|Q\setminus T|\ge2$.
+Symmetrically, if $T\supseteq H$ and $Q\cap T=\emptyset$ then
+$|P\setminus T|\ge2$.
+\end{lemma}
+
+\begin{proof}
+Cross $T$ with $S_1$ in Lemma~\ref{lem:cross}: here
+$S_1\cap T=(P\cap T)\cup\{f\}$ and
+$N\setminus(S_1\cup T)=(Q\setminus T)\cup(\{g\}\setminus T)$, which is (i);
+(ii) is the mirror.  For the last part, $P\cap T=\emptyset$ makes the left side
+$s_\phi(\{f\})=\phi_f$, and $g\in T$ deletes the $\phi_g$ term.  If
+$|Q\setminus T|=0$ we get $\phi_f\le0$, false; if $|Q\setminus T|=1$ we get
+$\phi_f\le\phi_i<\phi_f$, false.
+\end{proof}
+
+\section{Necessity}\label{sec:nec}
+
+By the $f/g$ symmetry, which exchanges $(f,P,S_1)$ with $(g,Q,S_2)$ and carries
+type $(p,q)$ to type $(q,p)$, it suffices to bound one side.
+
+\begin{theorem}\label{thm:g1}
+If $p=1$ then $q\ge3$.
+\end{theorem}
+
+\begin{proof}
+Write $P=\{a\}$ and suppose $q\le2$.  By Lemma~\ref{lem:nonull} we may assume
+$\phi_i>0$ on $L$, so no singleton is tight.
+
+\emph{Step 1.}  Lemma~\ref{lem:improve} at $S=\{a\}$ requires a $\phi$-tight
+$T$ with $|T\cap\{a\}|<\varepsilon_f$, hence $f\in T$ and $a\notin T$.
+
+\emph{Step 2: $g\notin T$.}  If $g\in T$ then $T\supseteq H$ and
+$P\cap T=\emptyset$, so \eqref{eq:key} gives $|Q\setminus T|\ge2$, forcing
+$q=2$ and $T\cap Q=\emptyset$, i.e.\ $T\subseteq H$.  But $\{f\}$ is not tight
+and $H$ is slack.  So $T\subseteq Q\cup\{f\}$, and $R:=T\cap Q\ne\emptyset$
+because $\{f\}$ is not tight.
+
+\emph{Step 3.}  Let $d^\ast$ be as in Lemma~\ref{lem:edir}; since $p=1$,
+$d^\ast_a=\phi_f>0$.  The normal of $T=R\cup\{f\}$ has $\nu_a=-1$ and
+$\nu_j=[j\in R]$ for $j\in Q$, so $\nu_T\cdot d^\ast\ge0$ reads
+$\sum_{j\in R}d^\ast_j\ge d^\ast_a=\phi_f>0$; some $j\in R$ has
+$d^\ast_j>0$.
+
+\emph{Case $q=1$.}  Then $R=Q=\{b\}$ and $d^\ast_b>0$, so $d^\ast$ is strictly
+positive on all of $L$: a nonzero nonnegative element of $\mathcal D$,
+contradicting Lemma~\ref{lem:improve}.
+
+\emph{Case $q=2$.}  Write $Q=\{b,c\}$ and, relabelling $b$ and $c$ if
+necessary, take $d^\ast_b>0$.  If $d^\ast_c\ge0$ then again $d^\ast$
+contradicts Lemma~\ref{lem:improve}, so $d^\ast_c<0$.  Apply
+Lemma~\ref{lem:improve} at $S=\{a,b\}$: some $\phi$-tight $T'$ has
+$|T'\cap\{a,b\}|<\varepsilon_f+\varepsilon_g$.  Enumerate by
+$(\varepsilon_f,\varepsilon_g)$.
+\begin{itemize}[nosep]
+\item $(0,0)$: the right side is $0$, impossible.
+\item $(1,0)$: $a,b\notin T'$ and $f\in T'$, so $T'\subseteq\{c,f\}$ and
+      $T'\ne\{f\}$, whence $T'=\{c,f\}$, with $\nu_a=-1$, $\nu_b=0$,
+      $\nu_c=1$.  Then $\nu\cdot d^\ast\ge0$ gives
+      $d^\ast_c\ge d^\ast_a=\phi_f>0$, against $d^\ast_c<0$.
+\item $(0,1)$: $a,b\notin T'$ and $g\in T'$, so $T'=\{c,g\}$, with $\nu_a=0$,
+      $\nu_b=-1$, $\nu_c=0$.  Then $\nu\cdot d^\ast\ge0$ gives
+      $d^\ast_b\le0$, against $d^\ast_b>0$.
+\item $(1,1)$: $T'\supseteq H$ and $T'$ omits $a$ or $b$.  If $a\notin T'$,
+      Step 2 already excluded it.  If $a\in T'$ and $b\notin T'$ then
+      $\nu_a=0$, $\nu_b=-1$ and $\nu_c=[c\in T']-1$.  When $c\in T'$,
+      $\nu\cdot d^\ast\ge0$ gives $d^\ast_b\le0$, again a contradiction; when
+      $c\notin T'$ we have $T'=H\cup\{a\}$, and crossing that with $S_2$ gives
+      $T'\cap S_2=\{g\}$ and $T'\cup S_2=N$, hence $\phi_g\le0$, false.
+\end{itemize}
+Every case is contradictory.
+\end{proof}
+
+\begin{theorem}[necessity]\label{thm:necessity}
+A boundary partition of type $(p,q)$ requires $p,q\ge1$ and $p+q\ge4$.
+\end{theorem}
+
+\begin{proof}
+$p,q\ge1$ was noted after Proposition~\ref{prop:descent}.
+Theorem~\ref{thm:g1} gives $p=1\Rightarrow q\ge3$ and, by the $f/g$ symmetry,
+$q=1\Rightarrow p\ge3$.  If $p,q\ge2$ then $p+q\ge4$ directly.  In all three
+cases $p+q\ge4$.
+\end{proof}
+
+\section{Sufficiency: two closed-form families}\label{sec:suf}
+
+Both families are lower envelopes, so exactness and normalization are free by
+Lemma~\ref{lem:env}.  The leximin verification factors through a single lemma.
+
+\begin{lemma}[pinning]\label{lem:pin}
+Let $v$ be exact and singleton-normalized on $N$, let $c>1$, and put
+$\phi=\one_L+c\,\one_H$, so $v(N)=m+2c$.  Suppose
+\begin{enumerate}[nosep,label=(\alph*)]
+\item $v(S_1)=\phi(S_1)$ and $v(S_2)=\phi(S_2)$, and these sum to $v(N)$;
+\item the only $x\in\core(v)$ with $x\ge\one_N$ is $\phi$ itself.
+\end{enumerate}
+Then $\phi=\Lmin(v)$, its strata are exactly $L$ at level $1$ and then $H$ at
+level $c$, the boundary is strict, and $S_1,S_2$ are $\phi$-tight.
+\end{lemma}
+
+\begin{proof}
+By (a) and Lemma~\ref{lem:rigid}, $x(P)+x_f=p+c$ and $x(Q)+x_g=q+c$ throughout
+the core.  Stage $1$ maximizes $\lambda$ such that some core point has all
+coordinates at least $\lambda$; $\phi$ gives $\lambda\ge1$, and $\lambda>1$
+would produce a core point strictly above $\one_N$, excluded by (b).  So
+$\mu_1=1$, and the feasible set at that level is the single point $\phi$, whose
+coordinates equal $1$ exactly on $L$; hence $B_1=L$.  At stage $2$ the players
+of $L$ are fixed at $1$, so $x_f+x_g=(m+2c)-m=2c$, the largest common lower
+bound is $c$, and it is attained only at $x_f=x_g=c$.  Strictness is $1<c$ and
+tightness of $S_1,S_2$ is (a).
+\end{proof}
+
+Lemma~\ref{lem:pin} is Lemma~\ref{lem:improve} in constructive form: for a
+two-stratum shape $L\prec H$ the first leximin stage is the only one that is
+not automatic, so a construction need only control it.
+
+\subsection{Family A: both sides large}
+
+Let $p,q\ge2$ and $c=2$; the common total is $m+4$.  Order the coordinates
+$x_1,\dots,x_p\mid y_1,\dots,y_q\mid f,g$, and write
+\[
+ \Pi=(2,2,1^{p-2}),\qquad \Sigma_a=(0,2,1^{q-2}),\qquad
+ \Sigma_b=(0,4,1^{q-2}),
+\]
+which sum to $p+2$, $q$ and $q+2$ respectively, every entry of $\Pi$ being at
+most $2$.  The family consists of
+\[
+\begin{array}{llll}
+ A_0     &(\one^p            &\mid \one^q &\mid 2,2)\ =\ \phi,\\
+ A_1     &(\Pi               &\mid \Sigma_a &\mid 0,2),\\
+ A_2     &(\Pi               &\mid \Sigma_b &\mid 0,0),\\
+ A_3^x   &(0\text{ at }x,\ 2\text{ at one other},\ 1\text{ elsewhere}
+          &\mid \Sigma_a &\mid 2,2)\quad (x\in P),\\
+ A_4^j   &(\Pi &\mid 0\text{ at }y_1,y_j,\ 1\text{ elsewhere} &\mid 0,4)
+          \quad (j=2,\dots,q).
+\end{array}
+\]
+
+\begin{proposition}\label{prop:famA}
+For all $p,q\ge2$ the family above realizes a boundary partition of type
+$(p,q)$, with $\Lmin(v)=\one_L+2\,\one_H$ and $s_\phi(H)=4$.
+\end{proposition}
+
+\begin{proof}
+All entries are nonnegative and every row totals $m+4$.  Each coordinate
+vanishes in some row --- $x\in P$ in $A_3^x$, $y_1$ in $A_1$, $y_j$ in $A_4^j$,
+$f$ in $A_1$, $g$ in $A_2$ --- so Lemma~\ref{lem:env} gives an exact
+singleton-normalized game.
+
+\emph{Rigidity.}  Every row has $g(P)+g_f=p+2$ and $g(Q)+g_g=q+2$: for $A_0$
+these are $p+2$ and $q+2$; for $A_1$, $(p+2)+0$ and $q+2$; for $A_2$,
+$(p+2)+0$ and $(q+2)+0$; for $A_3^x$, $g(P)=0+2+(p-2)=p$ and $q+2$; for
+$A_4^j$, $(p+2)+0$ and $(q-2)+4$.  Hence $v(S_1)=p+2$, $v(S_2)=q+2$, summing to
+$v(N)$, which is hypothesis (a) of Lemma~\ref{lem:pin}.
+
+\emph{Two pins.}  First, $\max_g(g_{y_1}+g_x)=2$ for each $x\in P$: row $A_0$
+attains $2$, and every other row has $g_{y_1}=0$ with $g_x\le2$.  Hence
+$v(N\setminus\{y_1,x\})=m+2$ and every core point obeys $x_{y_1}+x_x\le2$.
+Second, every row has $g_g\ge g_f$ (namely $2\ge2$, $2\ge0$, $0\ge0$, $2\ge2$,
+$4\ge0$) with equality at $A_0$, so $v(\{g\}\cup P)=p+2$ and every core point
+obeys $x_g\ge x_f$.
+
+\emph{Uniqueness above $\one_N$.}  Let $x\in\core(v)$ with $x\ge\one_N$.  The
+first pin and $x_{y_1},x_x\ge1$ give $x_{y_1}=1$ and $x_x=1$ for all $x\in P$;
+then rigidity gives $x_f=2$, the second pin gives $x_g\ge2$, and rigidity gives
+$x(Q)=q+2-x_g\le q$.  But $x(Q)\ge q$, so $x(Q)=q$, every $x_{y_j}=1$ and
+$x_g=2$.  Hence $x=\phi$, which is hypothesis (b).
+
+\emph{Slack.}  $v(H)=\min_g(g_f+g_g)=0$, attained at $A_2$, while $\phi(H)=4$.
+
+Lemma~\ref{lem:pin} now applies with $c=2$, and $S_1,S_2$ are tight, disjoint,
+covering, with traces $\{f\}$ and $\{g\}$.
+\end{proof}
+
+The two hypotheses $p\ge2$ and $q\ge2$ are visible in the construction.  $\Pi$
+must fit $p+2$ into $p$ entries each at most $2$, which needs $p+2\le2p$; and
+that ceiling of $2$ is exactly the first pin.  At $q=1$ the row normalizing $g$
+would need $g_{y_1}=q+2=3$ against the same ceiling, forcing $g(P)=0$ against
+$g(P)=p+2$.  These are the two readings of \eqref{eq:key}.
+
+\subsection{Family B: one side a singleton}
+
+Let $p=1$, $q\ge3$, and $c=q-1\ge2$; the common total is $3q-1$.  Order the
+coordinates $a\mid y_1,\dots,y_q\mid f,g$.  Four rows suffice, for every $q$:
+\[
+\begin{array}{llll}
+ B_0 &(1     &\mid \one^q                &\mid c,\ c)\ =\ \phi,\\
+ B_1 &(0     &\mid q,\ q-1,\ 0^{q-2}     &\mid 1+c,\ 0),\\
+ B_2 &(1+c   &\mid 0,\ q-1,\ 0^{q-2}     &\mid 0,\ q),\\
+ B_3 &(1     &\mid 1,\ 0,\ 1^{q-2}       &\mid c,\ q).
+\end{array}
+\]
+
+\begin{proposition}\label{prop:famB}
+For all $q\ge3$ the family above realizes a boundary partition of type
+$(1,q)$, with $\Lmin(v)=\one_L+(q-1)\one_H$ and $s_\phi(H)=q-2$.
+\end{proposition}
+
+\begin{proof}
+Every row totals $3q-1$, and coordinates vanish: $a$ in $B_1$, $y_1$ in $B_2$,
+$y_2$ in $B_3$, $y_k$ ($k\ge3$) in $B_1$, $f$ in $B_2$, $g$ in $B_1$.  So
+Lemma~\ref{lem:env} applies.
+
+\emph{Rigidity.}  Every row has $g_a+g_f=1+c=q$ and $g(Q)+g_g=q+c=2q-1$; this
+is checked row by row.  Hence hypothesis (a) of Lemma~\ref{lem:pin}.
+
+\emph{Two pins.}  Using rigidity, tightness of $\{a,y_1\}\cup H$ is equivalent
+to $\max_g\,g(Q\setminus\{y_1\})=q-1$, which holds: the four rows give $q-1$,
+$q-1$, $q-1$ and $q-2$.  So every core point obeys $x(Q\setminus\{y_1\})\le
+q-1$.  Likewise tightness of $\{y_2\}\cup H$ is equivalent to
+$\max_g\,(g_a+g(Q\setminus\{y_2\}))=q$, which holds: the four rows give
+$1+(q-1)$, $0+q$, $(1+c)+0$ and $1+1+(q-2)$.  So every core point obeys
+$x_a+x(Q\setminus\{y_2\})\le q$.
+
+\emph{Uniqueness above $\one_N$.}  Let $x\in\core(v)$ with $x\ge\one_N$.  The
+first pin bounds a sum of $q-1$ terms each at least $1$ by $q-1$, so
+$x_{y_j}=1$ for $j\ge2$.  The second bounds a sum of $q$ terms each at least
+$1$ by $q$, so $x_a=1$ and $x_{y_j}=1$ for $j\ne2$; in particular
+$x_{y_1}=1$.  Rigidity then gives $x_f=(1+c)-1=c$ and $x_g=(q+c)-q=c$, so
+$x=\phi$.
+
+\emph{Slack.}  $v(H)=\min_g(g_f+g_g)=\min\{2c,\ q,\ q,\ c+q\}=q$, while
+$\phi(H)=2c=2q-2$; the slack is $q-2$, positive exactly for $q\ge3$.
+
+Lemma~\ref{lem:pin} applies with $c=q-1$.
+\end{proof}
+
+At $q=2$ the same four rows still define an exact game, but two things fail at
+once: the slack $q-2$ vanishes, and $c=q-1=1$ makes $\phi$ constant, so $H$ is
+not a strict richer suffix.  Instantiating them gives rows $(1,1,1,1,1)$,
+$(0,2,1,2,0)$, $(2,0,1,0,2)$, $(1,1,0,1,2)$ with $\Lmin=(1,1,1,1,1)$ and
+$v(H)=\phi(H)=2$.  This is the constructive shadow of Theorem~\ref{thm:g1}: at
+$q=2$ the coalition $\{y_2\}\cup H$ used in the second pin would have to
+satisfy \eqref{eq:key} with $|Q\setminus T|=1$.
+
+\begin{theorem}[sufficiency]\label{thm:sufficiency}
+For every $p,q\ge1$ with $p+q\ge4$ there is an explicit exact
+singleton-normalized game carrying a boundary partition of type $(p,q)$.
+\end{theorem}
+
+\begin{proof}
+If $p,q\ge2$ use Family A.  If $p=1$ then $p+q\ge4$ forces $q\ge3$, so Family B
+applies; if $q=1$ then $p\ge3$ and the mirror of Family B applies.  The three
+ranges are disjoint and exhaust the hypothesis.
+\end{proof}
+
+Theorems~\ref{thm:necessity} and~\ref{thm:sufficiency} together are
+Theorem~\ref{thm:main}.
+
+\section{At the threshold}\label{sec:frontier}
+
+Step 2 of Theorem~\ref{thm:g1} shows that when $q\le2$ no $\phi$-tight
+coalition contains $H$ and omits $P$.  At $q=3$ the opposite holds.
+
+\begin{theorem}[frontier dichotomy]\label{thm:g4}
+In every boundary partition of type $(1,3)$ there is a $\phi$-tight $T$ with
+$H\subseteq T$ and $a\notin T$; necessarily $T=H\cup\{j\}$ for a single
+$j\in Q$.
+\end{theorem}
+
+The shape of $T$ is forced by \eqref{eq:key}, which requires
+$|Q\setminus T|\ge2$, together with slackness of $H$, which excludes
+$|Q\setminus T|=3$.  Existence is established by an exhaustive finite check
+over the payoff stratifications, described in Section~\ref{sec:status}; we have
+no human proof of it.  Together with Step 2 of Theorem~\ref{thm:g1} the
+dichotomy reads:
+\[
+ q\le2:\ \text{such a }T\text{ is impossible};\qquad
+ q=3:\ \text{such a }T\text{ is mandatory}.
+\]
+That is the sense in which the threshold is sharp.  The object the obstruction
+forbids does not become gradually easier to build as $q$ grows; it passes from
+unavailable to unavoidable at a single step.
+
+\begin{remark}[a claim we withdraw]\label{rem:withdraw}
+The crossing budget behind \eqref{eq:key} reads
+$\phi_f\le\phi(Q\setminus T)$, and in the first type-$(1,3)$ witness we
+harvested it held with equality.  We had recorded that as evidence that the
+threshold is sharp in a second, quantitative sense.  It is not: the budget is
+in general strict.  A search over all stratifications returns $74$
+type-$(1,3)$ configurations, each audited end to end, in which it is strict ---
+for instance
+$\phi=(25/24,1,49/48,17/16,13/12,13/12)$ on $(a,b,c,d,f,g)$, with
+$\max_L\phi=17/16<13/12=\min_H\phi$, $T=\{c\}\cup H$ tight, and
+$\phi_f=13/12<33/16=\phi_b+\phi_d$, a gap of $47/48$.  Moreover the same search
+with the strictness dropped is satisfiable on exactly the same $74$
+stratification--$j$ pairs, so strictness costs nothing.  Theorem~\ref{thm:g4}
+is the correct sharpness statement and the equality claim is withdrawn.
+\end{remark}
+
+\section{The seven-player consequence}\label{sec:zp}
+
+We can now settle the zero-payoff question that motivated
+Definition~\ref{def:bp}.  A census of seven-player games had left one
+admissible profile undecided, namely $\mathrm{ZP}(2,2)$ with five poorer
+players; by Proposition~\ref{prop:descent}(v) it descends either to a boundary
+partition of type $(2,2)$ or to $\mathrm{ZP}(1,2)$ or $\mathrm{ZP}(2,1)$, and
+those descend in turn to boundary partitions of type $(1,2)$ or $(2,1)$.  We
+had conjectured all three types impossible, which would have refuted the
+profile.  Theorem~\ref{thm:main} says otherwise: types $(1,2)$ and $(2,1)$ are
+indeed impossible, but $(2,2)$ is not.
+
+\begin{example}[a type-$(2,2)$ game]\label{ex:22}
+On $N=\{a,\dots,f\}$ take the lower envelope of the five allocations of common
+total $8$
+\[
+ (0,0,1,4,2,1),\quad(0,0,4,4,0,0),\quad(4,0,0,0,2,2),\quad
+ (1,0,2,3,0,2),\quad(0,1,2,3,1,1).
+\]
+Then $v$ is exact and singleton-normalized, $\Lmin(v)=(1,1,2,2,1,1)$ with
+strata $\{a,b,e,f\}\prec\{c,d\}$, so $H=\{c,d\}$ is a strict richer suffix with
+$m=4$; $v(cd)=0$, so the boundary is slack with $s_\phi(H)=4$; the proper
+tight coalitions are $ad$, $abd$, $ade$, $acde$, $adf$, $acdf$, $cef$, $def$,
+$acdef$; and $S_1=cef$, $S_2=abd$ are tight, disjoint, cover $N$, and meet $H$
+in $\{c\}$ and $\{d\}$.  Their poorer parts are $\{e,f\}$ and $\{a,b\}$, so the
+type is $(2,2)$.
+\end{example}
+
+\begin{corollary}\label{cor:zp7}
+There is a seven-player exact singleton-normalized game carrying a
+$\mathrm{ZP}(2,2)$ configuration with five poorer players.
+\end{corollary}
+
+\begin{proof}
+Adjoin a null player $g$ to Example~\ref{ex:22} --- concretely, append a
+seventh coordinate $0$ to each of the five rows.  By
+Proposition~\ref{prop:descent}(iv) the result is exact and singleton-normalized
+with $\Lmin=(1,1,2,2,1,1,0)$, strata $\{g\}\prec\{a,b,e,f\}\prec\{c,d\}$, the
+same boundary $H=\{c,d\}$ with slack $4$, and tight sets $cefg$ and $abdg$
+meeting in $\{g\}$ and covering $N$; the poorer parts are $\{e,f\}$ and
+$\{a,b\}$.
+\end{proof}
+
+Family A of Section~\ref{sec:suf} gives an alternative, uniform witness at
+$(2,2)$, with $\Lmin=\one_L+2\one_H$; Example~\ref{ex:22} is retained because
+it is the game that refuted the conjecture and because its tight family is
+visibly different, which is a useful reminder that the families of
+Section~\ref{sec:suf} are constructions and not normal forms.
+
+\begin{remark}[why the census missed it]
+Type $(2,2)$ was absent from a census of some $20{,}000$ sampled slack
+boundaries with $m=4$; a later targeted harvest found it once in $15{,}967$
+games, against six of type $(1,3)$ and seven of type $(3,1)$.  It is rare, not
+absent.  The general lesson --- that ``configuration $X$ never occurs'' is a
+statement about a sampler until it is a statement about set systems --- is
+recorded for the same reason in \citep{Flanagan2026phase}.
+\end{remark}
+
+\section{What is proved, what is checked, what is verified}\label{sec:status}
+
+\begin{center}
+\begin{tabular}{lp{0.62\textwidth}}
+\toprule
+\textbf{status} & \textbf{statement}\\
+\midrule
+proved &
+ Theorems~\ref{thm:exact} and~\ref{thm:farkas};
+ Lemmas~\ref{lem:prot}, \ref{lem:rigid}, \ref{lem:normal}, \ref{lem:improve},
+ \ref{lem:edir}, \ref{lem:xstar}, \ref{lem:nonull}, \ref{lem:pin};
+ Proposition~\ref{prop:descent}; Theorems~\ref{thm:g1}
+ and~\ref{thm:necessity}; Propositions~\ref{prop:famA}
+ and~\ref{prop:famB} and Theorem~\ref{thm:sufficiency}; hence
+ Theorem~\ref{thm:main}.  None of these consults a machine.\\
+finite check &
+ Theorem~\ref{thm:g4}: unsatisfiable over all $60$ payoff stratifications of
+ type $(1,3)$, using the encoding of Theorems~\ref{thm:exact}
+ and~\ref{thm:farkas}, with a satisfiable control confirming the encoding is
+ not vacuous.\\
+verified &
+ Example~\ref{ex:22} and Corollary~\ref{cor:zp7}, by exact rational
+ recomputation of the envelope, of exactness at definition level, of $\Lmin$,
+ of the tight family and of the configuration; the $74$ strict-budget
+ configurations of Remark~\ref{rem:withdraw}, each audited the same way; and
+ the two families of Section~\ref{sec:suf} at all $18$ instances with
+ $n\le9$.\\
+\bottomrule
+\end{tabular}
+\end{center}
+
+An earlier route to Theorem~\ref{thm:necessity} was a finite check --- $48$
+unsatisfiable instances at $m=3$ over the encoding of
+Section~\ref{sec:methods}, cross-checked by an independent enumeration of tight
+families --- and it is retained in the repository as a control on the hand
+proof rather than as a dependency.  Likewise the padding construction that
+first established sufficiency (adjoin a null player and place it on either side
+of the partition) remains true but is no longer load-bearing, having been
+superseded by Section~\ref{sec:suf}.
+
+\section{Scope}\label{sec:scope}
+
+Four limitations are worth stating plainly.
+
+First, the characterization is specific to $|H|=2$.  For $|H|\ge3$ a
+``boundary partition'' would have to be defined with more than two blocks, and
+Lemma~\ref{lem:rigid} would still apply, but neither the necessity argument nor
+the families have been examined in that setting.
+
+Second, Theorem~\ref{thm:g4} is a finite check, not a theorem with a human
+proof.  It is not used anywhere else in this note; nothing in
+Theorem~\ref{thm:main} depends on it.
+
+Third, the families of Section~\ref{sec:suf} carry no minimality claim.
+Family A uses $m+2$ rows and Family B uses four, but we prove no lower bound on
+the number of generators, and Family A's uniform shape --- payoffs $1$ and $2$,
+slack $4$ independent of $p$ and $q$ --- is a property of that construction
+rather than of the configuration.  Example~\ref{ex:22} and the configurations of
+Remark~\ref{rem:withdraw} look nothing like it.
+
+Fourth, we characterize which types occur, not how often or in what
+proportion of the exact cone.  The census figures quoted in
+Section~\ref{sec:zp} are descriptive of a sampler.
+
+\section*{Reproducibility note}
+
+Theorem~\ref{thm:main} and everything it rests on are proved by hand; the
+families of Section~\ref{sec:suf} are finite verifications of row arithmetic,
+uniform in $(p,q)$.  The one proof dependency that is a machine result is
+Theorem~\ref{thm:g4}, and it is used nowhere else.  Exact rational programs
+archived in \texttt{../verifiers/part} reconstruct, independently of the text:
+the game of Example~\ref{ex:22} and its seven-player suspension, including
+exactness at definition level by linear programming over the core rather than
+by vertex enumeration; the two families at every instance with $n\le9$; the
+finite check behind Theorem~\ref{thm:g4} together with its control; the
+withdrawn-equality search of Remark~\ref{rem:withdraw}; and the superseded
+$m=3$ finite check with its independent cross-check.  All arithmetic is exact;
+every solver call is asserted satisfiable or unsatisfiable, and no call
+returned an indeterminate result.  No core-vertex enumeration is performed at
+any $n$.
+
+% NOTE (lead, 2026-08-08): bibliography pruned to entries that are (a) cited
+% in the text and (b) verified against the companion papers' bibliographies.
+% A prior-art positioning pass (with web-verified metadata, as done for the
+% companion papers) is PENDING before this note goes anywhere; expected
+% additions include the egalitarian-selection literature cited in the
+% companions (Arin--I\~narra, Dutta--Ray, Llerena--Mauri, Dietzenbacher) once
+% the positioning paragraphs that cite them are written.
+
+\begin{thebibliography}{99}
+
+\emph{Draft note.}  This list contains only the works actually cited above.
+Every entry is carried over verbatim from the companion paper's bibliography
+and still requires the editorial verification pass; no reference here was
+reconstructed from memory.  See \TODO{prior-art positioning} in
+Section~\ref{sec:intro-priorart} for the citations this note still needs.
+
+\bibitem[Flanagan(2026)]{Flanagan2026phase}
+Flanagan M (2026) Balanced transport at the egalitarian core: a complete
+boundary phase diagram. Companion manuscript.
+
+\bibitem[Lohmann et al.(2012)]{LohmannBormHerings2012}
+Lohmann E, Borm P, Herings PJJ (2012) Minimal exact balancedness.
+Mathematical Social Sciences 64:127--135.
+
+\bibitem[Studen\'y and Kratochv\'il(2022)]{StudenyKratochvil2022}
+Studen\'y M, Kratochv\'il V (2022) Facets of the cone of exact games.
+Mathematical Methods of Operations Research 95:35--80.
+
+\end{thebibliography}
+
+\end{document}
