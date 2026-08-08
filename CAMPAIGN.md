@@ -1248,6 +1248,20 @@ localization of exactness; "|B|=4 is special".
   the lead; twelve A3-free lemmas; residue 132 = 27 (hand-A3 core, future
   task) + 105 (proved beyond level-only reasoning); the barrier = no
   second canonical core point in the stage-1 face.
+- AUDIT #31 ROUND 2 (REPORT_AUDIT2.txt in verifiers/cc/): all seven
+  round-1 fixes verified (S7 checked for circularity — clean); paper6
+  CLEAN including both external references verified against the
+  literature per the invented-bibitem law, and the Lemma-I* correction
+  faithfully carried (no leak).  Four new findings, all fixed: R1 the
+  multi-slack figures now use both sweeps (~10,000 bases, 30 violations
+  — strengthening the argument); R2 the inversion's four properties
+  re-attributed to the measured corpus (200+80), the larger sweeps
+  separated; R3 the unarchived 2,224 removed from print (interim
+  snapshot only — a printed count with no artifact is what
+  reproducibility notes exist to prevent; r12's own runs, never
+  finished); R4 paper6's 74 are stratification-j PAIRS, not
+  configurations.  Checklist phantom resolved: "97 family checks" = the
+  97 OK lines of families_closed.log, real but never printed.
 - PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
   whose converse is never invoked, a declared reference never cited, a

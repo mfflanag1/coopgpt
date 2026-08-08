@@ -1,0 +1,183 @@
+================================================================================
+r12 / task #31 ROUND 2  --  FIX VERIFICATION + INVERSION PARAGRAPH + paper6
+range: c3e0d1f..56a28dc (fixes), bb6b86c (inversion), paper6/partition.tex
+work dir: /private/tmp/claude-501/-Users-maxf/f0530d27-effc-4967-b154-48a9b65ca708/scratchpad/r12
+Papers NOT edited.  Line anchors against current HEAD (56a28dc).
+================================================================================
+
+SUMMARY.  All seven round-1 fixes land correctly.  Four new findings, none
+FATAL: one residual undercount inside the S1 fix, one corpus conflation in the
+new inversion paragraph, one archive/reproducibility gap behind a printed
+number, one terminology slip in paper6.  paper6 is otherwise clean, including
+the item the campaign law flags hardest -- the bibliography and the corrected
+Lemma I*.
+
+--------------------------------------------------------------------------------
+(i) VERIFICATION OF THE SEVEN FIXES -- all correct
+--------------------------------------------------------------------------------
+S1  FIXED (paper4 1615-1622).  Now: the harvest "did meet multi-slack bases
+    ... but in every one of those the losers stayed inside the innermost
+    suffix ... what the sampling never produced is not a multi-slack base but a
+    multi-slack violation whose loser escapes H*".  That is the true mechanism.
+    Residual undercount -> finding R1 below.
+S2  FIXED (1644-1647).  "the 15 strict/tie patterns of phi with at least one
+    strict inequality, each paired with each of its own strict cuts as the
+    slack one, give 32 shapes" -- exactly right, and the derivation is now
+    stated rather than asserted.  thm:expart's proof likewise reads "patterns
+    with ... one payoff boundary".
+S3  FIXED (1662-1666).  "essential hypotheses are confined to exactness of the
+    bumped game and the leximin certificates --- on the shapes tested for the
+    displayed targets, only the bumped allocation's certificate is essential".
+    Correctly scoped; no longer claims both certificates in general.
+S4  FIXED (1761-1766).  The constant-phi pattern is now handled explicitly as
+    "a separate program of the same design (exactness of both games, both core
+    memberships, the certificate of phi', a loser in S asserted), which is
+    likewise infeasible".  Matches d28_k1.py exactly.
+S5  FIXED (1766-1772).  "feasible on all 7 patterns consistent with exact
+    partition (of the 15 with a boundary)".  The self-contradiction is gone.
+S6  FIXED (1776-1780).  "A minimal (not necessarily minimum) unsatisfiable core
+    of the system, computed at one representative pattern and bumped
+    coalition, retains 302 irredundant assertions, 223 of them from the phi'
+    certificate".  Both qualifiers present; the 302/223 figures match
+    d26_epcore.py.
+S7  FIXED (paper5 1179-1198), and I checked it for the failure mode the fix
+    could have introduced.  thm:cfgbound's header is now "Proof, by gap
+    arithmetic"; the Lmin-rich branch is closed by forward reference to
+    cor:poorstarved, annotated "(a two-line consequence of Lemma lem:anchors,
+    independent of this theorem)"; the superseded 31x354 check is described as
+    archived independent confirmation.  NO CIRCULARITY: cor:poorstarved sits at
+    line 1262, its proof uses only lem:anchors(b) (line 1228) and mu <= T/5,
+    and never thm:cfgbound.  The residual dependence on a finite check is
+    transitive through thm:cfg, which IS still declared in sec:scope.  Clean.
+
+--------------------------------------------------------------------------------
+R1  LOW-MODERATE -- the S1 replacement undercounts, by using round-1 figures only
+    paper4 lines 1616-1617
+--------------------------------------------------------------------------------
+The new text reads "($494$ of them, carrying $20$ of the $1041$ violations)".
+Both numbers come from verifiers/monotonicity/summary.json, i.e. from the FIRST
+sweep only.  summary2.json's sweep_statistics records a second sweep:
+      "games": 101705,  "slack_bases": 47714,  "multi_bases": 9508,
+      "viol_exact": 15, "multi_viol": 10, "BT_viol": 5
+So across the record there are about 10,002 multi-slack bases (494 + 9,508) and
+30 multi-slack violations (20 + 10), not 494 and 20.  The correction's ARGUMENT
+is unaffected -- indeed it is strengthened, since the harvest met twenty times
+more multi-slack bases than the sentence admits -- but the figures as printed
+are the round-1 slice.  Suggested: "(about ten thousand of them across the two
+sweeps, carrying 30 of the 1041 violations)", or cite the two sweeps separately.
+
+--------------------------------------------------------------------------------
+R2  MODERATE -- CORPUS CONFLATION in the new inversion paragraph
+    paper4, the paragraph added at bb6b86c ("What the statement asserts also
+    deserves a sharper reading")
+--------------------------------------------------------------------------------
+The paragraph reads: "On certified exact bumps of exact-partition bases ($200$
+at $n=5$, and $2{,}224$ at $n=6$ from a designed generator together with the
+random search), the bump ALWAYS moves phi, ALWAYS produces strict losers, and
+the loser set is ALWAYS slack without being a richer suffix ... with an
+individual stratum redistributing internally in about three quarters of the
+cases".
+
+Those four properties were measured by ONE driver, d27_epredist.py, whose
+corpora are 200 exact bumps at n=5 (epredist_5_7.json) and 80 at n=6
+(epredist_6_9.json).  Its recorded keys are exactly delta_zero, any_loser,
+loser_inside_S, internal_redistribution, loser_set_is_suffix,
+loser_set_slack_not_suffix, top_stratum_moves.
+
+The 2,224 figure is a different corpus: d24_ep.py (528) plus d25_epfam.py
+(1,696).  Neither of those drivers records ANY of the four properties -- their
+stat dictionaries carry only games/expart/(prefilter)/windows/bumps/
+exact_bumps/viol.  They establish "0 failures", nothing else.
+
+So the paragraph attributes to 2,224 bumps a set of measurements taken on 80.
+The claims are true on what was measured; the attribution is not.  Suggested:
+"(200 at n=5 and 80 at n=6)" for the four properties, keeping 2,224 where it
+belongs -- as the corpus on which no failure occurred.  The "about three
+quarters" figure is 144/200 and 64/80, i.e. 74% of 280, and should be attached
+to the same 280.
+
+--------------------------------------------------------------------------------
+R3  LOW-MODERATE -- the 2,224 figure has no archived artifact, and is stale
+--------------------------------------------------------------------------------
+2,224 = 528 + 1,696 was read off mid-run LOG SNAPSHOTS (ep6.log, epfam6.log).
+The JSON outputs those drivers write at completion, ep_6_31.json and
+epfam_6_51.json, DO NOT EXIST -- the runs were still going when the number was
+reported and were never allowed to finish.  Two consequences:
+  * nothing in the archive reproduces the printed figure (the drivers are
+    archived in verifiers/cc/, their outputs are not);
+  * the number is stale in the safe direction: the same runs' later snapshots
+    read exact_bumps 736 (d24) and bumps 4,848 (d25), i.e. over 5,500.
+Either re-run to completion and cite the JSONs, or print it as an explicit
+snapshot ("at least 2,224 ... at the time of writing").  I flag this mainly
+because a printed count with no archived artifact is exactly what the
+reproducibility notes exist to prevent.
+
+--------------------------------------------------------------------------------
+(iii) paper6/partition.tex
+--------------------------------------------------------------------------------
+BIBLIOGRAPHY -- the flagged risk area -- CLEAN, and externally verified.
+  * 3 bibitems, 3 distinct cite keys: no cited-but-unlisted, no
+    listed-but-uncited, no duplicates.
+  * Lohmann E, Borm P, Herings PJJ (2012) "Minimal exact balancedness",
+    Mathematical Social Sciences 64:127--135 -- VERIFIED against the
+    literature: MSS, September 2012, volume 64, issue 2, pages 127-135.  Exact
+    match including pages.
+  * Studeny M, Kratochvil V (2022) "Facets of the cone of exact games",
+    Mathematical Methods of Operations Research 95:35--80 -- VERIFIED:
+    MMOR 95(1):35-80, February 2022.  Exact match.
+  * Metadata agrees with the corresponding entries in paper4 and paper5.
+    Cosmetic only: paper5's Studeny-Kratochvil entry carries a DOI URL,
+    paper6's does not.
+  * No invented bibitem.  (Given the campaign law, I checked all three against
+    external sources rather than only for internal consistency.)
+
+CROSS-REFERENCES.  41 labels, 40 refs, zero unresolved, zero duplicates.  One
+label is defined and never referenced: rem:noconverse (line 415).  Benign for a
+remark, but note the irony -- it is the "unused half" remark itself.
+
+THEOREM RESTATEMENTS vs verifiers/part/.
+  * thm:main ("a boundary partition of type (p,q) exists iff p>=1, q>=1,
+    p+q>=4") matches PROOF_GENERAL.txt's verdict line exactly.
+  * lem:improve (Lemma I*) is stated in the CORRECTED, FORWARD-ONLY form:
+    "D n R^L_{>=0} = {0}.  Consequently, for every nonempty S ... there is a
+    phi-tight T with (I*)".  No equivalence is asserted.  rem:noconverse then
+    reproduces the archive's 2026-08-08 correction faithfully -- the false
+    converse, the correct reason ("lying outside a convex cone is not preserved
+    under nonnegative combinations"), and the concrete +1-on-P/-1-on-Q
+    counterexample -- and states where the cone condition is imposed directly
+    instead.  The overclaim did NOT leak into the paper.  This was the item
+    most at risk and it is clean.
+  * thm:g4 matches Theorem G4 of PROOF_GENERAL.txt, including the forced shape
+    T = H u {j} and the honest "we have no human proof of it".
+  * rem:withdraw matches the archive's withdrawal, including the 74 figure, the
+    control being satisfiable on exactly the same pairs, and the worked
+    stratification.
+  * sec:status: "60 payoff stratifications of type (1,3)" matches
+    PROOF_GENERAL.txt's finite check; "74 strict-budget configurations" matches;
+    "the two families ... at all 18 instances with n<=9" matches
+    PROOF_FAMILY.txt line 211 and families_closed.log ("ALL CHECKS PASSED").
+
+--------------------------------------------------------------------------------
+R4  LOW -- terminology slip in paper6: 74 "configurations" vs 74 PAIRS
+    paper6 rem:withdraw (line ~735) and sec:status
+--------------------------------------------------------------------------------
+rem:withdraw says "A search over all stratifications returns $74$ type-$(1,3)$
+CONFIGURATIONS", and sec:status says "the $74$ strict-budget CONFIGURATIONS".
+PROOF_GENERAL.txt consistently calls them stratification--$j$ PAIRS ("SAT on
+exactly the same 74 pairs and UNSAT on the same 106"), and paper6 itself uses
+the correct term later in the same remark ("the same $74$ stratification--$j$
+pairs").  A configuration and a stratification--$j$ pair are different objects;
+as written, a reader will think there are 74 distinct PART(1,3) configurations.
+Use "pairs" in both places.
+
+--------------------------------------------------------------------------------
+CHECKLIST RECONCILIATION (closing my round-1 note)
+--------------------------------------------------------------------------------
+"74 strict-budget witnesses" DOES exist -- in paper6 (rem:withdraw and
+sec:status), not in paper5.  My round-1 statement that it is absent from paper5
+was correct but incomplete; it was a paper6 item all along.
+"97 family checks" appears in NO paper (paper4, paper5, paper6) and nowhere in
+verifiers/part/.  I can find no object it could denote; the family verification
+is 18 instances with n<=9.  Either the figure is from another agent's report or
+it is a phantom checklist entry.
+================================================================================
