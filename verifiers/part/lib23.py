@@ -21,7 +21,7 @@ from fractions import Fraction as F
 
 import z3
 
-LETTERS = "abcdefgh"
+LETTERS = "abcdefghijkl"
 
 
 def nm(n, mask):

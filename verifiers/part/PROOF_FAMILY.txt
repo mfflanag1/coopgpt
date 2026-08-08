@@ -1,0 +1,245 @@
+================================================================================
+CLOSED-FORM REALIZING FAMILIES FOR PART(p,q)
+sufficiency without padding, proved by progressive leximin
+================================================================================
+
+VERDICT.  COMPLETE.  Two explicit lower-envelope families, uniform in (p,q),
+realize every admissible profile:
+
+        FAMILY A   covers  p >= 2 and q >= 2      (m + 2 rows)
+        FAMILY B   covers  p = 1 and q >= 3       (FOUR rows, any q)
+        mirror B   covers  q = 1 and p >= 3       (four rows)
+
+Those three ranges are disjoint and their union is exactly
+{(p,q) : p,q >= 1, p+q >= 4}.  Each family is proved realizing by the
+progressive-leximin method of paper4's three families -- no solver in the
+proof, no search, no padding.
+
+CONSEQUENCE.  Theorem G3 of PROOF_GENERAL.txt is upgraded from "five audited
+instances plus the padding lemma" to a closed-form sufficiency theorem, and
+PROOF.txt Lemma 9 (padding) RETIRES from load-bearing duty: it remains true and
+remains the cheapest way to move between profiles, but no statement in the
+campaign now depends on it.
+
+Notation as in PROOF_GENERAL.txt: N = L u H, L = P u Q, H = {f,g},
+S1 = P u {f}, S2 = Q u {g}, p = |P|, q = |Q|, m = p + q, n = m + 2.  Player
+order in every displayed row is  x_1..x_p | y_1..y_q | f, g.
+
+--------------------------------------------------------------------------------
+THE TWO INGREDIENTS
+--------------------------------------------------------------------------------
+ENVELOPE LEMMA (paper4).  If G is a finite family of nonnegative allocations
+with a common total T and v(S) = min_{g in G} g(S), then v is exact, every
+g in G lies in core(v), and v is singleton-normalized as soon as every
+coordinate vanishes in some row.
+
+PINNING LEMMA (the leximin engine, proved once and used by both families).
+Suppose v is exact and singleton-normalized on N, that
+
+  (R)  v(S1) = phi(S1) and v(S2) = phi(S2) with v(S1) + v(S2) = v(N),
+
+for the candidate phi = 1_L + c 1_H (c > 1, so v(N) = m + 2c), and that the
+only core point x with x >= 1_N is phi itself.  Then phi = Lmin(v), its strata
+are exactly L (at 1) then H (at c), H is a strict richer suffix, and S1, S2 are
+phi-tight.
+
+PROOF.  (R) makes every core point tight on S1 and S2 (two core inequalities
+summing to an equality), so x(P) + x_f = p + c and x(Q) + x_g = q + c
+throughout the core.  Stage 1 of the leximin computation maximizes lambda
+subject to some core point having every coordinate at least lambda; phi shows
+lambda >= 1, and lambda > 1 would produce a core point strictly above 1_N,
+which by hypothesis does not exist.  So mu_1 = 1, and the pinned set at stage 1
+is {i : max x_i = 1 over core points with x >= 1_N} = L, since that feasible
+set is the single point phi and phi_i = 1 exactly on L.  At stage 2 the players
+of L are fixed at 1, so x_f + x_g = (m + 2c) - m = 2c; the largest common lower
+bound is c, attained only at x_f = x_g = c.  Hence phi = Lmin(v) with strata
+L < H.  Strictness is 1 < c, and tightness of S1, S2 is (R).                []
+
+Both families below are built so that (R) holds row by row and so that the
+"unique core point above 1_N" hypothesis follows from two or three tight
+coalitions.  Note the shape of the argument: it is exactly Lemma I* of
+PROOF_GENERAL.txt in constructive form -- for the two-stratum shape L < H the
+first stage is the only non-automatic one.
+
+================================================================================
+FAMILY A  (p >= 2, q >= 2)
+================================================================================
+Common total m + 4; candidate phi = 1_L + 2*1_H (so c = 2).  Write
+   Pmid = (2, 2, 1^{p-2})   [sums to p+2, every entry <= 2]
+   Qa   = (0, 2, 1^{q-2})   [sums to q]
+   Qb   = (0, 4, 1^{q-2})   [sums to q+2]
+
+    A0     ( 1^p                       | 1^q  | 2, 2 )     = phi
+    A1     ( Pmid                      | Qa   | 0, 2 )
+    A2     ( Pmid                      | Qb   | 0, 0 )
+    A3_x   ( 0 at x, 2 at one other x', 1 elsewhere | Qa | 2, 2 )   x in P
+    A4_j   ( Pmid   | 0 at y_1 and y_j, 1 elsewhere | 0, 4 )        j = 2..q
+
+All entries are nonnegative for p, q >= 2, and each row totals m + 4.
+
+--------------------------------------------------------------------------------
+THEOREM G5.  For every p, q >= 2 the family A realizes PART(p,q).
+--------------------------------------------------------------------------------
+PROOF.
+(a) EXACT AND NORMALIZED.  Envelope lemma.  Each coordinate vanishes in a row:
+x in P in A3_x; y_1 in A1; y_j (j >= 2) in A4_j; f in A1; g in A2.
+
+(b) BLOCK RIGIDITY (R).  Every row has g(P) + g_f = p + 2 and
+g(Q) + g_g = q + 2:  A0 gives p + 2 and q + 2; A1 gives (p+2) + 0 and q + 2;
+A2 gives (p+2) + 0 and (q+2) + 0; A3_x has g(P) = 0 + 2 + (p-2) = p, so
+p + 2, and q + 2; A4_j has (p+2) + 0 and (q-2) + 4 = q + 2.  Hence
+v(S1) = p + 2, v(S2) = q + 2, and they sum to m + 4 = v(N).
+
+(c) THE PIN v(N \ {y_1, x}) = m + 2 for every x in P.  Equivalently
+max_G (g_{y_1} + g_x) = 2.  Row A0 attains 2.  No row exceeds it: A0 gives
+1 + 1; every other row has g_{y_1} = 0 and g_x <= 2 by construction of Pmid and
+of A3_x.  So every core point satisfies x_{y_1} + x_x <= 2.
+
+(d) THE PIN v({g} u P) = p + 2.  By (b), g_g + g(P) = g_g + (p + 2 - g_f), so
+the claim is min_G (g_g - g_f) = 0.  Every row has g_g >= g_f (2>=2, 2>=0,
+0>=0, 2>=2, 4>=0) and A0 attains equality.  So every core point has
+x_g >= x_f.
+
+(e) SLACK.  v(H) = min_G (g_f + g_g) = 0, attained at A2, while
+phi(H) = 4.  So s_phi(H) = 4 > 0.
+
+(f) UNIQUENESS ABOVE 1_N.  Let x be a core point with x >= 1_N.  By (c),
+x_{y_1} + x_x <= 2 with both terms at least 1, so x_{y_1} = 1 and x_x = 1 for
+every x in P.  Then x(P) = p and (b) gives x_f = 2.  By (d), x_g >= 2, so (b)
+gives x(Q) = q + 2 - x_g <= q; but x(Q) >= q since each of the q terms is at
+least 1.  Hence x(Q) = q, every x_{y_j} = 1, and x_g = 2.  So x = phi.
+
+(g) Apply the pinning lemma with c = 2: phi = Lmin(v), strata L < H, S1 and S2
+tight.  They are disjoint, cover N, and meet H in {f} and {g}.  That is a
+PART(p,q) configuration.                                                    []
+
+WHY p >= 2 AND q >= 2 ARE BOTH NEEDED, in the construction itself.  Pmid has
+p entries summing to p + 2 with every entry at most 2, which needs p + 2 <= 2p,
+i.e. p >= 2 -- and that ceiling of 2 is exactly what (c) demands.  Qa and Qb
+place their mass on y_2, which exists only when q >= 2; at q = 1 the row A2
+that normalizes g would need g_{y_1} = q + 2 = 3 while (c) caps
+g_{y_1} + g_x at 2, forcing g(P) = 0 against g(P) = p + 2.  These are the two
+readings of (KEY) from PROOF_GENERAL.txt, seen from the constructive side.
+
+================================================================================
+FAMILY B  (p = 1, q >= 3)
+================================================================================
+Write P = {a}, c = q - 1 (so c >= 2), common total 3q - 1, candidate
+phi = 1_L + c*1_H.  FOUR rows suffice, for every q:
+
+    B0   ( 1    | 1^q                     | c,    c )     = phi
+    B1   ( 0    | q, q-1, 0^{q-2}         | 1+c,  0 )
+    B2   ( 1+c  | 0, q-1, 0^{q-2}         | 0,    q )
+    B3   ( 1    | 1, 0, 1^{q-2}           | c,    q )
+
+--------------------------------------------------------------------------------
+THEOREM G6.  For every q >= 3 the family B realizes PART(1,q).
+--------------------------------------------------------------------------------
+PROOF.
+(a) EXACT AND NORMALIZED.  Envelope lemma; totals are 1 + q + 2c = 3q - 1 for
+B0, (2q-1) + q = 3q - 1 for B1, q + (q-1) + q = 3q - 1 for B2, and
+1 + (q-1) + c + q = 3q - 1 for B3.  Coordinates vanish: a in B1; y_1 in B2;
+y_2 in B3; y_k (k >= 3) in B1; f in B2; g in B1.
+
+(b) BLOCK RIGIDITY (R).  Every row has g_a + g_f = 1 + c = q and
+g(Q) + g_g = q + c = 2q - 1.  Check: B0 gives 1 + c and q + c; B1 gives
+0 + (1+c) and (2q-1) + 0; B2 gives (1+c) + 0 and (q-1) + q; B3 gives 1 + c and
+(q-1) + q.  So v(S1) = 1 + c, v(S2) = q + c, summing to v(N).
+
+(c) THE PIN v({a, y_1} u H) = 2 + 2c.  Using (b) this is equivalent to
+max_G g(Q \ {y_1}) = q - 1, and it holds: B0 gives q - 1, B1 gives
+(q-1) + 0, B2 gives (q-1) + 0, B3 gives 0 + (q-2).  Hence every core point
+satisfies x(Q \ {y_1}) <= q - 1.
+
+(d) THE PIN v({y_2} u H) = 1 + 2c.  Using (b) this is equivalent to
+max_G (g_a + g(Q \ {y_2})) = q, and it holds: B0 gives 1 + (q-1); B1 gives
+0 + q; B2 gives (1+c) + 0 = q; B3 gives 1 + 1 + (q-2).  Hence every core point
+satisfies x_a + x(Q \ {y_2}) <= q.
+
+(e) SLACK.  v(H) = min_G (g_f + g_g) = min(2c, q, q, c + q) = q, while
+phi(H) = 2c = 2q - 2.  So s_phi(H) = q - 2, which is positive exactly when
+q >= 3.
+
+(f) UNIQUENESS ABOVE 1_N.  Let x be a core point with x >= 1_N.  By (c),
+x(Q \ {y_1}) <= q - 1 is a sum of q - 1 terms each at least 1, so every
+x_{y_j} = 1 for j >= 2.  By (d), x_a + x(Q \ {y_2}) <= q is a sum of q terms
+each at least 1, so x_a = 1 and x_{y_j} = 1 for every j != 2 -- in particular
+x_{y_1} = 1.  So x is 1 on all of L; then (b) gives x_f = (1+c) - 1 = c and
+x_g = (q+c) - q = c.  So x = phi.
+
+(g) The pinning lemma applies with this c, giving phi = Lmin(v) with strata
+L < H, and S1 = {a,f}, S2 = Q u {g} tight, disjoint, covering, with traces
+{f} and {g}.  That is a PART(1,q) configuration.                            []
+
+WHY q >= 3 IS NEEDED, in the construction itself.  Two things fail together at
+q = 2, and both are visible in c = q - 1.  The slack computed in (e) is exactly
+q - 2, so it vanishes; and c = 1 makes phi = 1_N constant, so H is not a strict
+richer suffix either.  Instantiating the four rows at q = 2 confirms both at
+once: the rows are (1,1,1,1,1), (0,2,1,2,0), (2,0,1,0,2), (1,1,0,1,2), the game
+is exact with Lmin = (1,1,1,1,1), v(H) = phi(H) = 2, slack 0, and no strict
+boundary.  That is the constructive shadow of Theorem G1: at q = 2 the frontier
+coalition {y_2} u H used in (d) would have to satisfy (KEY) with |Q \ T| = 1,
+and cannot.  (Checked in families_closed.py's companion run; the degenerate
+instance is recorded here rather than silently excluded.)
+
+MIRROR.  Interchanging the two blocks (and f with g) turns family B into a
+family realizing PART(p,1) for every p >= 3.
+
+================================================================================
+THEOREM G7 (CLOSED-FORM SUFFICIENCY).  For every p, q >= 1 with p + q >= 4
+there is an explicit exact singleton-normalized game carrying a PART(p,q)
+configuration, given by family A, family B or mirror B.
+================================================================================
+PROOF.  If p, q >= 2 use family A (Theorem G5).  If p = 1 then p + q >= 4
+gives q >= 3, so family B applies (Theorem G6).  If q = 1 then p >= 3 and the
+mirror applies.  The three cases are exhaustive and mutually exclusive.    []
+
+Combined with Theorem G2 (necessity), this closes the characterization with
+explicit families on both sides:
+
+        PART(p,q) exists  <==>  p, q >= 1  and  p + q >= 4.
+
+--------------------------------------------------------------------------------
+MACHINE VALIDATION
+--------------------------------------------------------------------------------
+families_closed.py builds each family from the closed form and re-derives
+everything from the rows alone, in exact rational arithmetic: singleton
+normalization, exactness at DEFINITION level by exact LP over the core (run at
+n <= 7; at n = 8, 9 exactness is already a theorem via the envelope lemma and
+is not re-run), Lmin by staged exact optimization, the strata, the slack, the
+tightness of both blocks and the split.  ALL CHECKS PASSED, zero failures, over
+all 18 instances with n <= 9:
+
+  family A : (2,2) (2,3) (3,2) (3,3) (2,4) (4,2) (2,5) (5,2) (3,4) (4,3)
+             every one with Lmin = 1 on L, 2 on H, and s = 4
+  family B : (1,3) (1,4) (1,5) (1,6)
+             Lmin = 1 on L, q-1 on H, and s = q-2  (1, 2, 3, 4 respectively)
+  mirror B : (3,1) (4,1) (5,1) (6,1)   same values with the blocks swapped
+
+Family A's slack is constant at 4 and its payoffs never move with (p,q); family
+B's grow linearly in q.  Both are visible in the table and both are what the
+proofs predict.
+
+--------------------------------------------------------------------------------
+STATUS, AND WHAT IS AND IS NOT CLAIMED
+--------------------------------------------------------------------------------
+  Envelope lemma ............................... paper4, PROVED there
+  Pinning lemma ................................ PROVED here, used twice
+  Thm G5   family A realizes PART(p,q), p,q>=2 . PROVED (no solver)
+  Thm G6   family B realizes PART(1,q), q>=3 ... PROVED (no solver)
+  Thm G7   closed-form sufficiency, all (p,q) .. PROVED
+  padding lemma (PROOF.txt Lemma 9) ............ still true, no longer needed
+
+The proofs of G5 and G6 are finite verifications of row arithmetic plus the two
+lemmas; every step is uniform in (p, q) and none of them consults a machine.
+The machine runs above are cross-checks.
+
+NOT CLAIMED.  The families are not canonical and make no minimality claim: A
+uses m + 2 rows and B uses four, but no lower bound on the number of rows is
+proved, and no claim is made that these are the "natural" witnesses.  Family
+A's uniform shape (payoffs 1 and 2, slack 4 independent of p and q) is a
+property of this construction, not of PART(p,q) configurations in general --
+the harvested n = 6 witness of PROOF.txt Theorem E has a different tight family
+and a different slack, and the 74 strict-budget witnesses of PROOF_GENERAL.txt
+Part IV are different again.
+================================================================================
