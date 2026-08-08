@@ -1,0 +1,311 @@
+================================================================================
+THEOREM D BY HAND:  NO PART CONFIGURATION EXISTS AT m = 3
+================================================================================
+
+VERDICT.  COMPLETE.  Theorem D is upgraded from finite-check status to a hand
+theorem.  The proof is four pages of linear algebra in THREE variables, with no
+case tree over stratifications, no enumeration of tight families, and no solver.
+The finite checks of the previous round (48 UNSAT in decisive.py, 3,161 CEGAR
+nodes in families.py) and the cone enumeration of normalform.py are now
+CROSS-CHECKS, not premises.  Nothing below rests on a machine result.
+
+The mechanism also answers the second open question of the previous round:
+it identifies WHY the threshold sits where it does, and exactly which step
+stops working at m = 4.
+
+--------------------------------------------------------------------------------
+STATEMENT
+--------------------------------------------------------------------------------
+THEOREM D.  Let v be exact and singleton-normalized, phi = Lmin(v), and let
+H = {f,g} be a strict richer-suffix boundary with s_phi(H) > 0 and |L| = 3.
+Then there is no PART configuration at H.  Equivalently, PART(1,2) and
+PART(2,1) do not exist.
+
+--------------------------------------------------------------------------------
+NOTATION AND TWO REDUCTIONS
+--------------------------------------------------------------------------------
+N = L u H, H = {f,g}, |L| = 3.  A PART configuration is a pair of phi-tight
+coalitions S1 = P u {f} and S2 = Q u {g} with P, Q partitioning L.  By
+Theorem 5' of PROOF.txt (no PART(p,0)) both P and Q are nonempty, so
+{|P|,|Q|} = {1,2}.
+
+REDUCTION 1 (the f/g symmetry).  Interchanging the labels (f,P,S1) with
+(g,Q,S2) is a relabelling of the same structure and carries a PART(p,q)
+configuration to a PART(q,p) one.  So it suffices to treat |P| = 1.  Write
+
+        P = {a},   Q = {b,c},   S1 = af,   S2 = bcg.
+
+Interchanging b and c is likewise a game isomorphism fixing the configuration,
+and is used once, explicitly flagged.
+
+REDUCTION 2 (no null poorer player).  If min_{i in L} phi_i = 0 then Lemma 6 of
+PROOF.txt drops the configuration to a PART(0,2) or PART(1,1) at m = 2, which
+are impossible by Theorem 5' and Theorem 7 respectively.  So from here on
+
+        phi_i > 0 for every i in L,  and phi_f, phi_g > 0,
+
+and consequently NO SINGLETON IS phi-TIGHT.
+
+--------------------------------------------------------------------------------
+LEMMA N (THE THREE-DIMENSIONAL NORMAL FORM)
+--------------------------------------------------------------------------------
+Every core point x satisfies x(S1) = v(S1) and x(S2) = v(S2).  Writing
+
+        u = x_a - phi_a,   v_b = x_b - phi_b,   v_c = x_c - phi_c,
+
+the core is a polytope K in the three variables (u, v_b, v_c) containing the
+origin, with
+
+        x_f - phi_f = -u,        x_g - phi_g = -(v_b + v_c).
+
+Under d = (u, v_b, v_c, -u, -(v_b+v_c)) the thirty coalition functionals d(T)
+collapse onto twenty-one linear forms: the zero form, attained exactly at
+T = af and T = bcg, and ten forms up to sign,
+
+    +-u,  +-v_b,  +-v_c,  +-(v_b+v_c),  +-(u+v_b),  +-(u+v_c),
+    +-(u+v_b+v_c),  +-(u-v_b),  +-(u-v_c),  +-(u-v_b-v_c).
+
+The forms that never occur are exactly the three separating b from c with
+opposite signs: v_b - v_c, u + v_b - v_c, u - v_b + v_c.
+
+PROOF.  Block rigidity is Theorem 1 of PROOF.txt: v(S1) + v(S2) = phi(S1) +
+phi(S2) = phi(N) = v(N), and two core inequalities summing to an equality are
+equalities.  So x(af) = v(af) and x(bcg) = v(bcg) on the whole core; solving
+for x_f and x_g gives the displayed substitutions, and d(af) = u - u = 0,
+d(bcg) = v_b + v_c - (v_b + v_c) = 0.  The remaining twenty-eight forms are read
+off coalition by coalition.  The absent forms are absent because b and c enter
+d only through v_b, v_c with coefficient +1 (membership) and through g with the
+common coefficient -1, so no coalition can give them opposite signs.        []
+
+The last sentence is the combinatorial fingerprint of S2: holding b and c
+together in one tight block is exactly what removes the three separating forms,
+and it is what the whole proof exploits.
+
+--------------------------------------------------------------------------------
+LEMMA X (THE EXCLUSION LIST)
+--------------------------------------------------------------------------------
+Of the thirty proper coalitions, THIRTEEN cannot be phi-tight:
+
+    a, b, c        phi_i > 0                              (Reduction 2)
+    f, g           phi_f, phi_g > 0                       (strict boundary)
+    fg             H is slack
+    bfg, cfg, bcfg Lemma 3 of PROOF.txt
+    afg            crossing budget with S2
+    abf, acf       crossing budget with S2
+    abcg           crossing budget with S1
+
+Seventeen remain, carrying TWELVE distinct nonzero normals (af and bcg carry
+the zero normal; bc and abcf share one, bg and abfg share one, cg and acfg
+share one):
+
+    id  coalition(s)  normal (u, v_b, v_c)   numeric consequence if tight
+     1  ab            ( 1,  1,  0)           --
+     2  ac            ( 1,  0,  1)           --
+     3  bc | abcf     ( 0,  1,  1)           --
+     4  abc           ( 1,  1,  1)           --
+     5  bf            (-1,  1,  0)           phi_b <= phi_a
+     6  cf            (-1,  0,  1)           phi_c <= phi_a
+     7  bcf           (-1,  1,  1)           phi_f <= phi_g
+     8  ag            ( 1, -1, -1)           phi_a <= phi_b + phi_c
+     9  bg | abfg     ( 0,  0, -1)           --
+    10  cg | acfg     ( 0, -1,  0)           --
+    11  abg           ( 1,  0, -1)           phi_a <= phi_c
+    12  acg           ( 1, -1,  0)           phi_a <= phi_b
+
+PROOF.  Singletons: a tight singleton {i} means phi_i = v({i}) = 0, excluded by
+Reduction 2 and by strictness at f, g.  H itself is slack by hypothesis.
+
+Lemma 3 of PROOF.txt: no phi-tight T contains H and omits a.  For such a T,
+S1 n T = {f}, and the crossing budget s_phi(S1 n T) <= phi(N \ (S1 u T)) gives
+phi_f <= phi(Q \ T).  T = fg is slack; T = bfg gives phi_f <= phi_c; T = cfg
+gives phi_f <= phi_b; T = bcfg gives phi_f <= 0.  Each contradicts phi_f >
+max_L phi >= 0.  (THIS IS THE STEP THAT NEEDS |Q| = 2 -- see the last section.)
+
+afg: crossing with S2 has S2 n afg = {g} and S2 u afg = N, so phi_g <= 0.
+abf: crossing with S2 has S2 n abf = {b} and S2 u abf = N, so s_phi({b}) <= 0,
+     making {b} tight and phi_b = 0.  Likewise acf forces phi_c = 0.
+abcg: crossing with S1 has S1 n abcg = {a} and S1 u abcg = N, so phi_a <= 0. []
+
+Since the tangent cone of the core at phi is
+D = { d : d(T) >= 0 for every phi-tight T }, Lemma X says D is cut out by a
+SUBSET of the twelve normals above -- and by nothing else.
+
+--------------------------------------------------------------------------------
+LEMMA I (THREE IMPROVING DIRECTIONS)
+--------------------------------------------------------------------------------
+In normal-form coordinates the three directions
+
+        e1 = (1, 0, 0),     e2 = (1, 1, 0),     e3 = (1, 0, 1)
+
+are leximin-improving whenever they lie in D -- for EVERY stratification of L.
+Consequently, since phi = Lmin(v), none of them lies in D, and therefore
+
+    (L4)  bf, cf or bcf is phi-tight;                       [ids 5, 6, 7]
+    (P2)  cf, cg or acfg is phi-tight;                      [ids 6, 10]
+    (P3)  bf, bg or abfg is phi-tight.                      [ids 5, 9]
+
+PROOF.  Each e has all three L-coordinates >= 0.  Let B_1 < ... < B_k be the
+strata of phi; every stratum of L precedes every stratum meeting H, because the
+boundary is strict.  Let B_j be the first stratum on which e is nonzero.  Since
+e is nonnegative on L and nonzero there, and since e vanishes on the strata
+before B_j, B_j is a stratum of L, e|B_j >= 0 and e|B_j is nonzero.  Moving
+from phi along e therefore raises the sorted payoff vector at the first position
+where it changes, so phi + t e leximin-dominates phi for small t > 0; as
+phi + t e lies in the core for e in D, this contradicts phi = Lmin(v).  Hence
+e is not in D, i.e. some phi-tight T has e . nu_T < 0.
+
+It remains to read off which of the twelve normals are negative on each e:
+
+    on e1 = (1,0,0):  only ids 5, 6, 7   (the normals with u-coefficient -1)
+    on e2 = (1,1,0):  only ids 6, 10
+    on e3 = (1,0,1):  only ids 5,  9
+
+For e1 this is immediate: nu . e1 is the u-coefficient, which is -1 for
+ids 5,6,7, 0 for ids 3, 9, 10 and +1 for ids 1,2,4,8,11,12.  For e2, nu . e2 =
+nu_u + nu_b, which is 2,1,1,2,0,-1,0,0,0,-1,1,0 for ids 1..12, negative exactly
+at 6 and 10.  For e3, nu . e3 = nu_u + nu_c = 1,2,1,2,-1,0,0,0,-1,0,0,1,
+negative exactly at 5 and 9.                                                 []
+
+(L4) is Lemma 4 of PROOF.txt, recovered here as one instance of a single
+mechanism.  Note what makes (P2) and (P3) sharp: the normals that could have
+rescued e2 by being negative on it -- the ones separating b from c -- are
+exactly the three forms Lemma N says do not exist.
+
+--------------------------------------------------------------------------------
+LEMMA E (THE EXACTNESS DIRECTION)
+--------------------------------------------------------------------------------
+There is d* in D whose normal-form coordinates satisfy u(d*) = phi_f > 0.
+
+PROOF.  Exactness at the coalition {f} supplies a core point z with
+z_f = v({f}) = 0.  Block rigidity gives z_a + z_f = v(af) = phi_a + phi_f,
+so z_a = phi_a + phi_f and u(d*) = z_a - phi_a = phi_f, where d* = z - phi.
+d* lies in D because z is in the core: d*(N) = 0 and d*(T) = z(T) - v(T) >= 0
+for every phi-tight T.  Finally phi_f > 0 by strictness.                     []
+
+This is the crux, and it is where |P| = 1 is used: because S1 is a PAIR, the
+whole of phi_f released by exactifying {f} lands on the single player a.
+
+--------------------------------------------------------------------------------
+PROOF OF THEOREM D
+--------------------------------------------------------------------------------
+Write (u, v_b, v_c) for the coordinates of the direction d* of Lemma E, so
+
+        u = phi_f > 0.                                              (*)
+
+Since d* lies in D, every phi-tight coalition's normal is nonnegative on it.
+Combine (P2) and (P3) of Lemma I; there are four cases.
+
+CASE 1:  cf tight and bf tight.
+  id 6 gives v_c - u >= 0 and id 5 gives v_b - u >= 0, so by (*)
+  v_b >= phi_f > 0 and v_c >= phi_f > 0.  Thus d* is STRICTLY POSITIVE on all
+  three coordinates of L.  By the argument of Lemma I -- d* is nonnegative on L
+  and nonzero on the first stratum it meets, that stratum being a stratum of L --
+  d* is leximin-improving, contradicting phi = Lmin(v).
+
+CASE 2:  cf tight and (bg or abfg) tight.
+  id 6 gives v_c >= u = phi_f > 0; id 9 gives -v_c >= 0, i.e. v_c <= 0.
+  Contradiction.
+
+CASE 3:  (cg or acfg) tight and bf tight.
+  id 10 gives v_b <= 0; id 5 gives v_b >= u = phi_f > 0.  Contradiction.
+
+CASE 4:  (cg or acfg) tight and (bg or abfg) tight.
+  ids 10 and 9 give v_b <= 0 and v_c <= 0.  Now apply (L4).  If bf is tight
+  then v_b >= u = phi_f > 0; if cf is tight then v_c >= phi_f > 0; if bcf is
+  tight then v_b + v_c >= phi_f > 0.  Each contradicts v_b, v_c <= 0.
+
+The four cases are exhaustive and each is contradictory, so no PART
+configuration exists at m = 3.  By Reduction 1 this covers PART(1,2) and
+PART(2,1) alike.                                                             []
+
+--------------------------------------------------------------------------------
+WHAT THE PROOF SAYS ABOUT THE THRESHOLD
+--------------------------------------------------------------------------------
+The previous round left open "a structural reason why the threshold is 4".  The
+proof above supplies the lower-bound mechanism and localizes precisely where it
+stops.
+
+The engine is Lemma E: exactifying the rich singleton {f} pushes the entire
+amount phi_f onto the poorer side of S1, producing a tangent direction that
+strictly enriches a poorer player.  Leximin must block it, and Lemma I says the
+only blockers available are tight coalitions of the shapes bf, cf, bcf (against
+e1), cf, cg (against e2) and bf, bg (against e3).  Every such blocker forces a
+sign on v_b or v_c at d*, and the signs are jointly unsatisfiable.
+
+The step that fails first as m grows is LEMMA 3, inside Lemma X.  Its proof
+reads phi_f <= phi(Q \ T) and needs |Q \ T| <= 1 to contradict phi_f >
+max_L phi.  With |Q| = 2 that is automatic.  With |Q| = 3 -- i.e. already at
+PART(1,3), m = 4 -- the coalition T = H u {b} leaves |Q \ T| = 2 and yields only
+phi_f <= phi_c + phi_d, no contradiction.  Tight coalitions containing H but
+omitting a then become available, the exclusion list of Lemma X shrinks, new
+normals appear that ARE negative on e2 and e3, and the four-case table loses its
+exhaustiveness.  That is exactly the frontier: PART(1,3) and PART(2,2) are both
+realizable at m = 4.
+
+So the threshold is not a coincidence of the constant 4 = m_min(1).  It is the
+point at which the poorer side of the OTHER block first has enough players to
+finance a tight coalition over H, and both readings of "enough" -- three players
+in Q with |P| = 1, or two and two -- arrive together at m = 4.
+
+THE DIAGNOSIS IS CONFIRMED AT THE FRONTIER, AND IT IS RAZOR-THIN.
+frontier_check.py inspects the harvested PART(1,3) and PART(3,1) witnesses at
+m = 4.  In both, Lemma 3 does fail, and by exactly the predicted route: the
+coalition cef is phi-tight, contains H, and omits the unique poorer member a of
+the singleton side.  Its crossing budget reads
+
+        phi_f = 7/4  <=  phi(Q \ cef) = 7/4,
+
+an EQUALITY.  So at m = 4 the very inequality that kills every candidate at
+m = 3 survives with nothing to spare -- had the two remaining players of Q been
+worth any less, the m = 3 argument would have carried over and PART(1,3) would
+not exist either.  The threshold is sharp in the strongest sense available: the
+obstruction does not weaken gradually, it expires exactly at m = 4.
+
+--------------------------------------------------------------------------------
+WHAT RESTS ON A FINITE CHECK
+--------------------------------------------------------------------------------
+NOTHING in the proof above.  Lemmas N, X, I, E and the four-case table are hand
+arguments; the only inputs from elsewhere are Theorem 1 (block rigidity),
+Theorem 5', Theorem 7, Lemma 2 (protectors), Lemma 3 and Lemma 6 of PROOF.txt,
+all of which are themselves hand-proved there, together with paper4's crossing
+budget.
+
+Three machine cross-checks were run, and all agree.  They are guards, not
+premises:
+
+  verify_m3_proof.py  re-derives every step mechanically: the normal-form
+      identities and the 21-form collapse (V1, V2); the exclusion list and the
+      count of twelve admissible normals (V3); the sign computation behind
+      Lemma I (V4); that e2 and e3 are leximin-improving for all 39
+      stratifications, including the non-canonical orderings of L (V5); that
+      each of the four cases is unsatisfiable (V6); and consistency with the
+      cone enumeration (V7).  ALL CHECKS PASSED.
+
+  normalform.py  enumerates, for each of the 24 stratifications, every minimal
+      subset of the twelve normals for which the leximin cone conditions hold.
+      The answer is the SAME eight sets in all 24 cases -- which is the
+      enumeration's way of saying what Lemma I proves, that the stratification
+      never enters.  The eight are
+          {bf,cf,ag}   {bf,ag,cg}   {bf,bg,cg}   {bf,cg,abg}
+          {cf,ag,bg}   {cf,bg,cg}   {cf,bg,acg}  {bcf,bg,cg}
+      Each satisfies (L4), (P2) and (P3), and each falls into one of the four
+      cases of the theorem: the four containing both bf and cf or bf and cg go
+      to Cases 1 and 3, those with cf and bg to Case 2, and {bcf,bg,cg} to
+      Case 4.
+
+  frontier_check.py  confirms the diagnosis of the previous section against the
+      harvested m = 4 witnesses: Lemma 3 fails there exactly as predicted, via
+      the tight coalition cef, with the crossing budget holding as an equality.
+
+  The earlier decisive.py (48 UNSAT) and families.py (3,161 CEGAR nodes, zero
+      surviving candidates) verdicts are unchanged and now redundant.
+
+HONEST RESIDUE.  Two items from the previous round's list are affected:
+  * item 1, "a human proof that no PART exists at m = 3" -- CLOSED by this file.
+  * item 2, "a structural reason for the threshold 4" -- the lower-bound
+    mechanism is now identified and localized (previous section).  What is
+    still not available is a single argument covering all m at once: the proof
+    here is specific to |Q| = 2, and the realizability side at m >= 4 is by
+    explicit games plus the padding lemma rather than by a matching general
+    construction principle.
+================================================================================

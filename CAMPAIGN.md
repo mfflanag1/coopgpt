@@ -1105,6 +1105,17 @@ localization of exactness; "|B|=4 is special".
   does NOT transport Lmin (T1/T2 refuted — recorded so it is not retried);
   padding lemma.  The "PART(2,2) never" evidence was a sampling artefact
   (hit rate ~1/16k), the campaign's third.
+  → Theorem D UPGRADED 2026-08-08 (task #24, verifiers/part/PROOF_M3.txt):
+  "no PART at m=3" is now a HAND theorem — block rigidity collapses the
+  core to 3 variables where the b/c-separating facet normals cannot exist;
+  three universally-improving directions force blocking disjunctions; the
+  exactness-at-{f} direction contradicts all four combinations, two lines
+  each.  No stratification case tree; the 48-UNSAT and CEGAR runs are now
+  cross-checks.  The threshold mechanism is identified: Lemma 3's crossing
+  budget needs |Q\T| <= 1 and expires exactly at m=4, where the harvested
+  witnesses realize it as an EQUALITY (phi_f = 7/4 <= 7/4) — razor-thin.
+  Reusable frame for all m: a PART core is a polytope in |L| variables
+  whose facet normals cannot separate same-block players.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
