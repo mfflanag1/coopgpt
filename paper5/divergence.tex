@@ -53,8 +53,10 @@ $\core(v)=\{x\ge0:x(N)=T,\ x(S)\le\max(g(S),h(S))\}$, deduce a one-coalition
 upper bound on the leximin floor, and exhibit the smallest game in a
 complete enumeration at which the mirror bound for the leximax-min ceiling
 fails.  At $n=5$ the family formula is not sharp: a five-player game
-analysed by hand attains $1/2$, the two-generator enumeration --- complete
-for small denominators --- finds nothing above it, and we prove that at five
+analysed by hand attains $1/2$, and a configuration-complete exact finite
+check --- run twice, through two pipelines sharing no machinery --- proves
+it extremal: $s(5)=1/2$, with the sharper bound $1/3$ when the leximin
+strata form the pattern $(4,1)$, both attained.  We also prove that at five
 players \emph{both} egalitarian
 levels are certified by single coalitions --- the property whose failure
 from six players on accompanies the climb of $s(n)$.  We also close one natural route to a matching upper
@@ -146,9 +148,10 @@ The answer is: as large as arithmetically possible.
       mirror statement for the leximax-min ceiling is false, and we give the
       smallest counterexample (Observation~\ref{obs:Mside}).
 \item $n=5$ is anomalous: the family formula gives $1/3$, a game analysed
-      by hand attains $1/2$ (Theorem~\ref{thm:n5}), the two-generator
-      enumeration (complete for small denominators) finds nothing above it,
-      and the $n=5$
+      by hand attains $1/2$ (Theorem~\ref{thm:n5}), and the value is the
+      supremum --- $s(5)=1/2$, with $\rho\le1/3$ in the $(4,1)$ leximin
+      regime (Theorems~\ref{thm:s5} and~\ref{thm:regime41}, by
+      configuration-complete finite check, twice over) --- while the $n=5$
       extremal class is qualitatively unlike the $n\ge6$ one.
 \end{itemize}
 
@@ -962,21 +965,16 @@ rational core-vertex enumeration, a staged exact solver over linear real
 arithmetic, and a from-scratch exact-rational two-phase simplex with Bland's
 rule.
 
-\begin{conjecture}[$n=5$ supremum]\label{conj:n5}
-$s(5)=1/2$.
-\end{conjecture}
-
-\paragraph{Evidence.}
-Roughly $4\times10^4$ distinct exact five-player games were evaluated in
-exact rational arithmetic with nothing above $1/2$: the complete
-two-generator enumeration of Table~\ref{tab:enum} ($4{,}357$ games, maximum
-$1/2$); complete three-generator enumerations at totals $4,5,6,7$ ($335$,
-$1{,}175$, $3{,}747$ and $9{,}923$ games, maxima $1/2$, $2/5$, $1/3$,
-$8/21$); $c$-space hill climbing in the sense of Lemma~\ref{lem:closing}
-($68$ restarts, about $6{,}600$ evaluations), which plateaus at $1/2$; and
-fine-denominator shape climbing from the extremal witness scaled to total
-$60$, which does not improve.  The controls at $n=3,4$ in
-Table~\ref{tab:enum} return maximum $0$ from the same pipeline.
+The value $\tfrac12$ is in fact the supremum: $s(5)=\tfrac12$
+(Theorem~\ref{thm:s5} below, by a configuration-complete exact finite
+check).  Before that machinery, the searches already pointed there: roughly
+$4\times10^4$ distinct exact five-player games evaluated in
+exact rational arithmetic produced nothing above $1/2$ --- the complete
+two-generator enumeration of Table~\ref{tab:enum}, complete three-generator
+enumerations at totals $4$--$7$, $c$-space hill climbing in the sense of
+Lemma~\ref{lem:closing}, and fine-denominator shape climbing from the
+extremal witness --- with the $n=3,4$ controls returning maximum $0$ from
+the same pipeline.
 
 \paragraph{Structure of the extremal class.}
 The following are computational findings over $360$ distinct profiled games
@@ -1168,13 +1166,12 @@ $\|\Lmin-\Lmax\|_1=T-4\mu=T/2$, and the two displayed allocations are
 the unique ones consistent with the strata, the floor and the totals.
 \end{proof}
 
-Both additional hypotheses hold in every configuration game in the
-combined harvests ($53$ of $53$), and a wider profiling of games with the
-$(1,4)$ $\Lmax$ pattern never produced an $\Lmin$-rich starved player
-($0$ of $68$).  Inside the proof of Theorem~\ref{thm:cfg} the
-$\Lmin$-poor property is derived from the failure assumption, which is all
-that theorem needs; whether either hypothesis can fail in the configuration
-at all is open and recorded in Section~\ref{sec:scope}.
+The first additional hypothesis is automatic:
+Corollary~\ref{cor:poorstarved} below proves, in two lines, that the
+starved player is always $\Lmin$-poor.  The second --- a three-player
+coalition attaining $\nu$ --- holds in every configuration game in the
+combined harvests ($53$ of $53$) but remains open in general, and is
+recorded in Section~\ref{sec:scope}.
 
 For the ratio \emph{bound}, as opposed to the pinned pair, both hypotheses
 can in fact be dispensed with.
@@ -1215,12 +1212,185 @@ The configuration hypothesis is essential, not decorative: dropping the
 $(3,2)$ pinning makes the same programs satisfiable, and their models are
 genuine exact five-player games with $T-v(N\setminus\{i\})=T/16$ for some
 player $i$ --- half the bound --- but with $\Lmin=\Lmax$, hence no
-separation at all.  What remains open for $s(5)=\tfrac12$ in
-full are the cases outside Corollary~\ref{cor:cfg}: the $\Lmax$ stratum
-shapes $(1,2,2)$ and $(1,1,3)$; the $(4,1)$ $\Lmin$ boundary; and whether
-the configuration can occur with an $\Lmin$-rich starved player (never
-observed, $0$ of $68$).  In the enumerations the first two never attain
-$\tfrac12$ and the boundary case never exceeds $\tfrac13$.
+separation at all.  The cases outside Corollary~\ref{cor:cfg} --- the
+$\Lmax$ stratum shapes $(1,2,2)$ and $(1,1,3)$, the $(4,1)$ $\Lmin$
+boundary, and the $\Lmin$-rich starved player --- are closed in the next
+subsection, which settles the supremum in full.
+
+\subsection{The five-player supremum in full}\label{sec:s5full}
+
+Three localization lemmas come first; all are consequences of
+Theorem~\ref{thm:n5closed} together with core membership of the two
+allocation vectors, and none needs a computation.
+
+\begin{lemma}[anchor localization]\label{lem:anchors}
+Let $v$ be a singleton-normalized exact five-player game, $S_0$ a coalition
+attaining $\nu$ and $S_*$ a coalition attaining $\lambda$ (both exist by
+Theorem~\ref{thm:n5closed}).  Then
+\begin{enumerate}[nosep,label=(\alph*)]
+\item $|S_0|\ge2$, and $\Lmax_i=M$ for every $i\in S_0$; consequently the
+      $\Lmax$ top stratum contains at least two players;
+\item $\Lmin_i=\mu$ for every $i\in S_*$, and $\Lmax(S_*)\le\mu|S_*|$;
+      consequently
+      $\mu\ \ge\ \min_{i\in P}\Lmax_i$, where $P$ is the $\Lmin$ bottom
+      stratum;
+\item $2M+3\mu\le T$.
+\end{enumerate}
+\end{lemma}
+
+\begin{proof}
+(a) If $S_0=\{i\}$ then $M=\nu=v(\{i\})=0$, but $\Lmax(N)=T>0$ forces
+$M\ge T/5$.  For the second claim, $\Lmax(S_0)\ge v(S_0)=M|S_0|$ by core
+membership while $\Lmax_i\le M$ throughout, so $\Lmax$ is constant~$M$
+on~$S_0$.
+(b) Core membership gives $\Lmin(S_*)\le f(S_*)=\mu|S_*|$ while
+$\Lmin_i\ge\mu$ gives the reverse, so $\Lmin=\mu$ on $S_*$; the same cap
+applied to $\Lmax$ gives $\Lmax(S_*)\le\mu|S_*|$, whence
+$\mu\ge\Lmax(S_*)/|S_*|\ge\min_{i\in S_*}\Lmax_i\ge\min_{i\in P}\Lmax_i$.
+(c) By the floor side, $f(N\setminus S_0)\ge\mu(5-|S_0|)$, i.e.\
+$M|S_0|+\mu(5-|S_0|)\le T$; since $M\ge T/5\ge\mu$ the left side is
+nondecreasing in $|S_0|$, and $|S_0|=2$ is admissible by (a).
+\end{proof}
+
+Part (b) sharpens Corollary~\ref{cor:floorceiling}: the minimum ranges over
+the $\Lmin$-\emph{poor} players only.  Combined with the trivial
+$\mu\le T/5$ it closes, by two lines, the hypothesis that resisted the
+configuration analysis.
+
+\begin{corollary}[the starved player is $\Lmin$-poor]\label{cor:poorstarved}
+In the configuration of Theorem~\ref{thm:cfg} --- $\Lmax$ strata $(1,4)$
+with the singleton at zero, at player $j$ --- the player $j$ lies in the
+$\Lmin$ bottom stratum.
+\end{corollary}
+
+\begin{proof}
+The stratum pattern forces $4M=T$.  If $j\notin P$ then $\Lmax_i=M=T/4$
+for every $i\in P$, so Lemma~\ref{lem:anchors}(b) gives $\mu\ge T/4$,
+contradicting $\mu\le T/5$.
+\end{proof}
+
+In particular the $\Lmin$-rich branch of Theorem~\ref{thm:cfgbound}'s proof
+is vacuous, the first additional hypothesis of Corollary~\ref{cor:cfg} is
+automatic, and the corresponding finite check ($31\times354$ programs) is
+superseded by the two lines above.
+
+The second ingredient is an exact certificate form for the two selections,
+replacing anchors and pinnings by linear identities.
+
+\begin{lemma}[staged Farkas certificates]\label{lem:staged}
+Let $v$ be a game with nonempty core, $\phi$ a core point with level sets
+$B_1\prec\cdots\prec B_k$ in increasing order of payoff.  Then
+$\phi=\Lmin(v)$ if and only if for every stage $t$ and every $i\in B_t$
+there exist multipliers $y_A\ge0$ supported on proper $\phi$-tight
+coalitions, $\eta\in\mathbb R$, $\rho_l\in\mathbb R$ for
+$l\in B_1\cup\cdots\cup B_{t-1}$ and $\sigma_c\ge0$ for $c\in B_t$ with,
+for every player $j$,
+\[
+ -\sum_{A\ni j}y_A+\eta+[\,j\in B_{<t}\,]\rho_j-[\,j\in B_t\,]\sigma_j
+ \ =\ [\,j=i\,].
+\]
+The mirror statement characterizes $\Lmax$, with the level sets taken in
+decreasing order, $\sigma$ entering with a plus sign, and right-hand side
+$-[\,j=i\,]$.
+\end{lemma}
+
+\begin{proof}[Proof sketch]
+Leximin is computed stagewise: with the earlier strata pinned, the level
+$\mu_t$ is the largest uniform lower bound on the unpinned players, and
+$B_t$ collects the players whose maximum subject to that equals $\mu_t$.
+$\phi=\Lmin(v)$ is equivalent to the family of stage conditions
+$\max\{x_i:x\in\core(v),\ x_l=\phi_l\ (l\in B_{<t}),\ x_c\ge\mu_t\
+(c\in B_{\ge t})\}=\phi_i$ for $i\in B_t$.  Each is a linear program whose
+feasible set contains $\phi$; the constraints active at $\phi$ are
+efficiency, the $\phi$-tight coalitions, the pinned equalities, and the
+level bounds on $B_t$ itself.  Dualizing over the tangent cone at $\phi$
+and computing the polar cone gives exactly the displayed identity;
+complementary slackness confines the support of $y$ to tight coalitions
+and eliminates the bilinear terms $y_Av(A)$, which is what makes the
+certificate linear in $(v,\phi,y)$ jointly.  The converse direction is the
+same computation read backwards.  The certificate was derived independently
+twice within the program (once per player and stage as displayed, once per
+payoff cut) and the two forms verified against each other in both
+directions on $30$ games and $6$ non-optimal core points; the mirror was
+re-derived from scratch and validated on $1050$ games ($10{,}500$
+certificates, no failures), with negative controls rejecting a false
+$\Lmax$ claim and the core midpoint $261/261$ times each.
+\end{proof}
+
+With these in place the supremum closes.  Recall that a \emph{configuration}
+is a triple: the $\Lmin$ stratum composition, the $\Lmax$ stratum
+composition, and the table of overlaps between the two stratifications.
+At $n=5$ there are $2961$.
+
+\begin{theorem}[the $(4,1)$ regime]\label{thm:regime41}
+Every singleton-normalized exact five-player game whose $\Lmin$ strata form
+the pattern $(4,1)$ satisfies $\rho(v)\le\tfrac13$, and the bound is
+attained.
+\end{theorem}
+
+\begin{theorem}[five-player supremum]\label{thm:s5}
+Every singleton-normalized exact five-player game satisfies
+$\rho(v)\le\tfrac12$.  With Theorem~\ref{thm:n5}, $s(5)=\tfrac12$.
+\end{theorem}
+
+\begin{proof}[Proof of both, by configuration-complete finite check]
+Relabelling players reduces every game to the canonical layout of its
+configuration, so it suffices to exclude $\rho>\tfrac12$ (resp.\
+$\rho>\tfrac13$ on the $(4,1)$ class) in each configuration.  This was done
+by two pipelines sharing no machinery, with machine-audited coverage:
+every one of the $2961$ configurations lands in exactly one bucket, no run
+errored, and none was left feasible.
+
+The first pipeline is structural: $1953$ configurations are impossible by
+Lemma~\ref{lem:anchors}(a) alone ($\Lmax$ composition ending in a
+singleton); $800$ are excluded by one game-free exact program each ---
+levels, orderings, totals and the anchor conditions of
+Lemma~\ref{lem:anchors} against $\rho>\tfrac12$; $100$ fall to a finite
+check with $v$ free, both core memberships, the certificates of
+Theorem~\ref{thm:n5closed}, the floor and ceiling stage-one pinnings
+(dualized as in Theorem~\ref{thm:cfg}), and the exact-cone facet
+inequalities as lazy cuts; and the remaining $108$ fall to the same check
+with the complete multi-stage pinning ladders --- every $\Lmin$ stratum
+pinned given the strata below it, every $\Lmax$ stratum pinned given the
+strata above it, the reduced-game caps encoded exactly as minima over
+preimages.  All programs are infeasible in exact rational arithmetic with
+no indeterminate verdicts.
+
+The second pipeline re-proves the same verdicts from a minimal hypothesis
+basis: singleton normalization and scale; core membership of both vectors;
+exactness imposed \emph{existentially} (for each proper coalition $S$, an
+attaining core point $w^S$ with $w^S(S)=v(S)$ --- the definition of
+exactness, linear, with no appeal to the facet description); and
+$\Lmin$/$\Lmax$ imposed through Lemma~\ref{lem:staged} and its mirror.
+All $2961$ programs are again infeasible --- so the theorems depend neither
+on Theorem~\ref{thm:n5closed} nor on the facet catalogue.  The two
+pipelines agree configuration by configuration.
+
+Soundness controls, both pipelines: dropping the pinning ladders (resp.\
+certificates) restores feasibility wherever the configuration is possible
+at all; the hypothesis sets hold, in exact arithmetic, on $1050$ profiled
+random exact games spanning $21$ configurations ($2874$ stage
+certificates, no failures); and on all eight configurations for which a
+game above some target ratio is known, the same programs run at that
+target return feasible models that \emph{audit end-to-end} as genuine
+exact games in the assumed configuration --- including the extremal
+configuration at ratio exactly $\tfrac12$ and the $(4,1)$ regime at
+exactly $\tfrac13$.  The configurations declared possible include every
+configuration any harvest has produced.  Attainment in
+Theorem~\ref{thm:regime41} is by explicit games ($64$ harvested at exactly
+$\tfrac13$).  All drivers, logs and the coverage audit are archived with
+the verifiers.
+\end{proof}
+
+The two-regime picture is therefore a theorem: $\Lmin$ strata $(4,1)$
+force $\rho\le\tfrac13$ while $(3,2)$ allows $\tfrac12$, both attained.
+One calibration deserves record: under the single-stage hypothesis set the
+final $108$ configurations are all \emph{satisfiable}, and every one of the
+$108$ models audits as a genuine exact game --- in the wrong configuration.
+The complete ladders are what make the encoding decisive rather than
+merely stronger; this is the fourth, and largest, instance of the
+certificate-not-realizable phenomenon in this program, and the reason
+every feasible model here is audited before it is believed.
 
 \section{Obstructions to an upper bound}\label{sec:obstruction}
 
@@ -1336,12 +1506,16 @@ a named game, and each is a refutation, so a single instance suffices.
 \paragraph{Proved by exhaustive finite check.}
 Theorem~\ref{thm:n5closed} ($\mu=\lambda$ and $M=\nu$ for every exact
 five-player game; $1142$ symmetry classes, each infeasible in exact rational
-arithmetic) and Theorem~\ref{thm:cfg} with Corollary~\ref{cor:cfg}
+arithmetic); Theorem~\ref{thm:cfg} with Corollary~\ref{cor:cfg}
 ($f(\{j\})\ge T/8$ in the extremal configuration; $10{,}974$ programs);
-Theorem~\ref{thm:cfgbound}'s rich-branch floor bound ($\mu\ge T/6$;
-another $10{,}974$ programs).
-The checks are proof dependencies; the corollary's two additional
-hypotheses are open in general and listed under (4) below.
+and Theorems~\ref{thm:s5} and~\ref{thm:regime41} ($s(5)=1/2$ and the
+$(4,1)$ bound $1/3$; $2961$ configurations, two independent pipelines,
+machine-audited coverage).  Lemma~\ref{lem:anchors} and
+Corollary~\ref{cor:poorstarved} are hand results; Lemma~\ref{lem:staged} is
+a hand result derived independently twice within the program.
+The checks are proof dependencies; the corollary's remaining additional
+hypothesis (the $\nu$-attaining triple) is open in general and noted
+under (4) below.
 
 \paragraph{Enumerated, not proved.}
 The entries of Table~\ref{tab:enum} are maxima over the stated integer
@@ -1354,13 +1528,14 @@ Conjecture~\ref{conj:floor} are sample statistics over $586$ random games.
 The structural findings about the $n=5$ extremal class in
 Section~\ref{sec:n5} --- unique solution pair up to permutation, $(3,2)$ and
 $(1,4)$ stratum compositions, $|\supp(\Lmax)|=4$, the refutation of the
-seesaw hypothesis --- are computational, over $360$ profiled games, and none
-of them is proved.  The local-optimality certificates from seeded $c$-space
+seesaw hypothesis --- are computational, over $360$ profiled games; of
+these only the two-regime split is now proved
+(Theorem~\ref{thm:regime41}), the rest remaining sample statistics.  The local-optimality certificates from seeded $c$-space
 climbing at $n=5,6,7$ are numerical searches over the full exact class; the
 unseeded variant is under-powered at $n\ge6$ and certifies nothing.
 
 \paragraph{Conjectured.}
-Five problems remain open.
+Four problems remain open.
 \begin{enumerate}[label=(\arabic*),nosep]
 \item \textbf{Conjecture~\ref{conj:floor}}, equality in the leximin floor
       formula.  Reduced by linear-programming duality to the fractional-cover
@@ -1369,36 +1544,33 @@ Five problems remain open.
       general.  At five players Theorem~\ref{thm:n5closed} \emph{proves}
       the equality, for every exact game and not only two-generator ones.
       Verified in $586/586$ random two-generator games at $n=4,\dots,7$.
-\item \textbf{An upper bound.}  Theorem~\ref{thm:sup} forces any true bound
+\item \textbf{An upper bound for $n\ge6$.}  Theorem~\ref{thm:sup} forces any
+      true bound
       to be asymptotically $2$, so every bound $c\cdot v(N)$ with $c<2$ is
       false for large $n$.  The right target is
       $s_2(n)=2-8n/(n^2-(n\bmod2))$ for $n\ge6$, confirmed by complete
       enumeration at $n=6,7,8$ only.  Section~\ref{sec:obstruction} closes
-      the majorization route and the $C(n)\mu$ route.
+      the majorization route and the $C(n)\mu$ route.  $n=5$ is settled
+      (Theorem~\ref{thm:s5}); the second pipeline of its proof is
+      dimension-independent in its machinery, but the configuration universe
+      grows quickly and $s(6)$ has not been attempted.
 \item \textbf{Is the two-generator class extremal?}  Adding a generator
       lowers the envelope and grows the core, so this is not automatic.  All
       evidence is negative for a counterexample: zero improvements from about
       $200$ third generators at each of $n=5,6,7,8$, and no improvement from
       seeded $c$-space climbing over the full exact class at $n=5,6,7$.  Open
-      globally.
-\item \textbf{Conjecture~\ref{conj:n5}}, $s(5)=1/2$, together with the
-      two-regime picture suggested by the extremal-class structure: $(3,2)$
-      $\Lmin$-strata above $1/3$, and $(4,1)$ never exceeding $1/3$.  The
-      extremal configuration is closed unconditionally for the bound
-      (Theorem~\ref{thm:cfgbound}); its two hypotheses survive only in the
-      sharper pinned-pair statement of Corollary~\ref{cor:cfg}.  By
-      Corollary~\ref{cor:floorceiling} the remaining hard cases are exactly
-      the configurations whose $\Lmax$ has a zero coordinate --- the
-      $(1,2,2)$, $(1,1,3)$ and $(2,1,2)$ shapes with vanishing bottom
-      stratum --- together with the $(4,1)$ $\Lmin$ regime, whose analysis
-      needs ceiling-side second-stage certificates that have been sketched
-      but not built (the derivation is archived with the verifiers).
+      globally; settled affirmatively at $n=5$, where the two-generator
+      maximum $\tfrac12$ equals $s(5)$.
 \item \textbf{A structural explanation of the $n=5$ versus $n\ge6$ regime
       change}: a starved $\Lmax$ with $|\supp(\Lmax)|=4$ at $n=5$ against a
       strictly positive $\Lmax$ in $G(p,k)$.
       Theorem~\ref{thm:n5closed} gives the change its formal shape ---
       one-coalition certificates live and die at the threshold --- but the
-      question of \emph{why five} remains open.
+      question of \emph{why five} remains open.  Related residues: a hand
+      proof of Theorem~\ref{thm:n5closed} itself (no longer load-bearing
+      for $s(5)$, but the mechanism question stands), a hand proof
+      distilling the $2961$-configuration check of Theorem~\ref{thm:s5},
+      and Corollary~\ref{cor:cfg}'s $\nu$-attaining-triple hypothesis.
 \end{enumerate}
 
 \paragraph{Not claimed.}
@@ -1413,17 +1585,21 @@ new content is the two-generator core duality and its one-sided
 floor certificate, the family $G(p,k)$ with its closed forms and deficit
 identity, the resulting evaluation $\sup_n s(n)=2$, the identification of the
 $n=5$ anomaly with a proof by hand, the one-coalition certificate theorem
-and the pinned extremal configuration at five players, and the two closed
+and the pinned extremal configuration at five players, the evaluation
+$s(5)=\tfrac12$ with the $(4,1)$-regime bound $\tfrac13$, and the two closed
 routes of Section~\ref{sec:obstruction}.  Novelty remains conditional on specialist
 review.
 
 \section*{Reproducibility note}
 
 Sections~2--4 and~6 are proved by hand and depend on no program.
-Theorems~\ref{thm:n5closed} and~\ref{thm:cfg} are proved by exhaustive
+Theorems~\ref{thm:n5closed}, \ref{thm:cfg}, \ref{thm:regime41}
+and~\ref{thm:s5} are proved by exhaustive
 finite exact-rational checks, described in their proofs; those checks are
 proof dependencies, archived in \texttt{../verifiers} with the
-theorem-to-driver map in its README.  The remaining
+theorem-to-driver map in its README (for Theorems~\ref{thm:regime41}
+and~\ref{thm:s5}, both pipelines, the coverage audit, and the full control
+suite).  The remaining
 programs are bug audits, not proof dependencies.  Exact rational programs in the companion repository
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full

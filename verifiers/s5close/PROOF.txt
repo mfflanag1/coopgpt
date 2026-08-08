@@ -1,0 +1,426 @@
+================================================================================
+TOWARD s(5) = 1/2 : THE CEILING SECOND STAGE, AND THE TWO-STRATUM Lmin THEOREM
+Task #22.  Human-readable proofs.
+================================================================================
+
+STANDING CONVENTIONS.  n = 5, N = {1..5}; v is a singleton-normalized exact
+game with T := v(N) > 0, normalized to T = 1 wherever convenient;
+x := Lmin(v), z := Lmax(v); mu := min_i x_i, M := max_i z_i;
+f(S) := T - v(N\S);  lambda := min_{S != empty} f(S)/|S|;
+nu := max_{S != empty} v(S)/|S|.
+P := the Lmin BOTTOM stratum {i : x_i = mu};
+D1 := the Lmax TOP stratum {i : z_i = M}.
+rho(v) := ||x - z||_1 / T  is the ratio.
+
+FACTS QUOTED FROM THE PROGRAM (not reproved here):
+ (A1) core duality: Core(v) = {y >= 0 : y(N) = T, y(S) <= f(S) for all S}.
+      [paper5 Lemma A1; proved for all games.]
+ (A3) at n = 5, mu = lambda and M = nu.
+      [paper5 Theorem thm:n5closed, proved there by finite exact check.
+      Reconfirmed here on 1050 fresh random exact games: 0 failures on each
+      side -- lemmas.py, lemmas.json.]
+ (R4) the n <= 4 rigidity theorem: Lmin = Lmax for exact games on <= 4 players.
+ Both Lmin and Lmax are core points, by construction.
+
+--------------------------------------------------------------------------------
+L1.  CEILING ANCHOR LOCALIZATION, AND THE SIZE OF THE Lmax TOP STRATUM
+--------------------------------------------------------------------------------
+LEMMA L1.  Let S0 attain nu, i.e. v(S0) = nu|S0| = M|S0| (such S0 exists by A3).
+Then (a) |S0| >= 2, and (b) z_i = M for every i in S0, i.e. S0 is contained in
+the Lmax top stratum D1.
+
+PROOF.  (a) If S0 = {i} then M = v({i}) = 0 by singleton-normalization; but
+z(N) = T > 0 forces M >= T/5 > 0.  (b) z is a core point, so
+z(S0) >= v(S0) = M|S0|; every coordinate obeys z_i <= M; a sum of |S0| numbers
+each at most M that is at least M|S0| has all of them equal to M.            []
+
+COROLLARY L1'.  |D1| >= 2:  the Lmax top stratum always contains at least two
+players.  Equivalently, no exact five-player game has an Lmax stratum
+composition ending in 1.
+
+CONSEQUENCE (counted in l2filter.py / l2filter.json).  Of the 2961 triples
+(Lmin stratum composition, Lmax stratum composition, overlap table) that are
+combinatorially available at n = 5, exactly 1953 are excluded by L1' alone.
+
+--------------------------------------------------------------------------------
+L2.  FLOOR ANCHOR LOCALIZATION.  A SHARPENING OF cor:floorceiling
+--------------------------------------------------------------------------------
+LEMMA L2.  Let S* attain lambda, i.e. f(S*) = lambda|S*| = mu|S*| (such S*
+exists by A3).  Then
+   (a) x_i = mu for every i in S*, i.e. S* is contained in the Lmin bottom
+       stratum P;
+   (b) z(S*) <= mu|S*|;
+   (c) consequently   mu >= min_{i in P} z_i .
+
+PROOF.  x is a core point, so by A1 x(S*) <= f(S*) = mu|S*|; and x_i >= mu for
+every i gives x(S*) >= mu|S*|.  Hence equality throughout and x_i = mu on S*,
+which is (a).  z is also a core point, so by A1 z(S*) <= f(S*) = mu|S*|, which
+is (b).  For (c), mu >= z(S*)/|S*| >= min_{i in S*} z_i >= min_{i in P} z_i,
+using (a) in the last step.                                                  []
+
+REMARK.  cor:floorceiling of paper5 is the weaker mu >= min_{i in N} z_i.  L2(c)
+restricts the minimum to the Lmin-poor stratum, which is what makes it bite:
+combined with the universal bound mu <= T/5 (mu is the least of five
+coordinates summing to T) it says
+
+   THE Lmin BOTTOM STRATUM ALWAYS CONTAINS A PLAYER WHOSE Lmax PAYOFF IS AT
+   MOST T/5.
+
+COROLLARY L2' (THE STARVED PLAYER IS Lmin-POOR).  Suppose Lmax has stratum
+composition (1,4) with the singleton stratum at zero, at player j -- the
+configuration CFG of paper5 Theorem thm:cfg.  Then j lies in the Lmin bottom
+stratum P.
+
+PROOF.  The composition forces 4M = T, i.e. M = T/4.  If j were not in P then
+every i in P would have z_i = M = T/4, so L2(c) would give mu >= T/4.  But
+mu <= T/5 < T/4.  Contradiction.                                             []
+
+STATUS OF L2'.  This settles, unconditionally and without any computation, the
+hypothesis recorded as OPEN in records/S5PROOF.txt Part E item (E3)
+("the sub-case of C4 in which the starved player j is Lmin-RICH ... my argument
+does not exclude it; it merely never occurs in 68/68 observed games") and in
+paper5 as the last clause of the sec:scope list ("whether the configuration can
+occur with an Lmin-rich starved player (never observed, 0 of 68)").  It is
+strictly stronger than what the 10,974-program check of s5full/jrich.py
+established for the same branch (there: mu >= 1/6, hence the bound; here: the
+branch is empty).  Machine confirmation that the argument reaches every Lmin
+shape and not only (3,2): l2filter.py eliminates all 32 (1,4)-Lmax
+configurations with the zero outside the Lmin bottom stratum.
+
+L2 alone eliminates 640 of the 2961 configurations; L1' and L2 together
+eliminate 2312.
+
+--------------------------------------------------------------------------------
+L3.  A UNIVERSAL LINEAR RELATION BETWEEN THE TWO LEVELS
+--------------------------------------------------------------------------------
+LEMMA L3.  2M + 3mu <= T.
+
+PROOF.  Take S0 as in L1, so |S0| >= 2 and v(S0) = M|S0|.  A3 on the floor side
+gives f(N\S0) >= mu|N\S0|, i.e. T - v(S0) >= mu(5 - |S0|), i.e.
+   M|S0| + mu(5 - |S0|) <= T .
+Since M >= T/5 >= mu, the left-hand side is nondecreasing in |S0|, so the
+weakest instance is |S0| = 2.                                                 []
+
+--------------------------------------------------------------------------------
+L4.  A GAP BOUND IN TERMS OF THE TWO LEVELS
+--------------------------------------------------------------------------------
+LEMMA L4.  Let Abar := {i : z_i > x_i}.  Then ||x - z||_1 <= 2|Abar|(M - mu).
+
+PROOF.  x and z have the same total, so
+||x - z||_1 = 2 sum_i (z_i - x_i)^+ = 2( z(Abar) - x(Abar) )
+           <= 2( M|Abar| - mu|Abar| ).                                        []
+
+L3 and L4 are the sharp form of the "arithmetic ceiling" of
+s5full/REPORT.txt section 3: at CFG they give exactly
+||x-z||_1 <= 2*2*(1/4 - 1/8) = 1/2, tight.
+
+VERIFICATION OF L1-L4.  lemmas.py evaluates all four, plus both sides of A3, on
+every one of the 1050 harvested genuine exact games: 0 violations of any kind
+(lemmas.json).
+
+--------------------------------------------------------------------------------
+S.  THE STAGE LADDERS:  PINNING CERTIFICATES AT EVERY STRATUM
+--------------------------------------------------------------------------------
+This is the machinery s5full/REPORT.txt section 6 named as missing and
+section 7 sketched.  Full derivation, with both of that section's warnings
+addressed, is the module docstring of stages.py; the statement is:
+
+PROPOSITION S (ceiling stage l).  Fix an Lmax stratum index l, let Dhigh be the
+players in strata above l and F = N \ Dhigh, and put
+
+   v_l(A) := max_{B subset Dhigh} ( v(A u B) - z(B) )     for A subset F,
+   T_l    := T - z(Dhigh),
+   h_l(A) := M_l |A| - v_l(A),
+   c_l    := |F| M_l - T_l .
+
+Then {x in Core(v) : x_i = z_i on Dhigh}, restricted to F, is exactly
+Core(v_l); and the leximax assertion "stratum l sits at level M_l" is
+
+   max { u(D_l) : u >= 0, u(F) = c_l, u(A) <= h_l(A) for proper nonempty A } = 0,
+
+which by LP duality holds if and only if some vertex (alpha, beta) of the
+game-free polyhedron
+
+   D = { (alpha, beta >= 0) : alpha + sum_{A ni k} beta_A >= [k in D_l],
+                              k in F,  A proper nonempty subset of F }
+
+satisfies  alpha*c_l + sum_A beta_A h_l(A) <= 0.
+
+The floor side is the mirror image with Dlow, G, w_k, f_k and y = x - m_k*1.
+Taking l = B-1 (Dhigh empty) recovers the ceiling stage-1 pinning; taking
+k = 0 recovers the floor pinning used by paper5 Theorem thm:cfg.
+
+WARNING (a) OF REPORT SECTION 7 IS RESPECTED.  A3 does not recurse: v_l need
+not be exact, and nowhere is M_l read off an anchor of v_l.  M_l enters only as
+the free level variable of the configuration and carries its own certificate.
+The certificate also delivers, for free, that the level cannot be lowered: a
+point of Core(v_l) with max_F x < M_l would be feasible with x(D_l) < |D_l|M_l.
+
+WARNING (b) OF REPORT SECTION 7 IS RESPECTED.  h_l(A) is a MINIMUM over the
+preimages B of A, and it is encoded exactly -- one fresh variable per A with
+"<= every preimage value" together with "== one of them" -- so no preimage is
+silently fixed and no relaxation is introduced.  This keeps the extra
+combinatorics additive (2^|Dhigh| per A) rather than multiplicative over the
+support of beta, which is what makes the encoding tractable.
+
+REGRESSIONS ON THE MACHINERY.
+ * pinvert.py, the pinned-set-parametric vertex enumerator, reproduces the 354
+   stored vertices of paper5 Theorem thm:cfg exactly (verifiers/o2/pinverts.json,
+   set-for-set and coefficient-for-coefficient).  Vertex counts on the full
+   ground set: |D| = 1: 259, |D| = 2: 372, |D| = 3: 354, |D| = 4: 209,
+   |D| = 5: 1.
+ * stages.pinverts_ground, the arbitrary-ground-set version, agrees with
+   pinvert.pinverts on the full ground set for every pinned-set size.
+ * POSITIVE CONTROL (poscontrol.py).  All 1050 harvested genuine exact games,
+   spanning 21 configurations, were relabelled into the canonical layout and
+   every hypothesis of the encoding -- core memberships, the A3 bounds, both
+   anchor existence statements, and all 2874 stage certificates of both
+   ladders -- was evaluated on them in exact rational arithmetic.
+   0 failures.  The ladders are therefore true of real games, and any UNSAT
+   verdict below is not vacuous.
+
+--------------------------------------------------------------------------------
+T1.  THE MAIN THEOREM OF THIS TASK
+--------------------------------------------------------------------------------
+THEOREM T1.  Let v be a singleton-normalized exact five-player game whose Lmin
+has AT MOST TWO STRATA -- i.e. Lmin takes at most two distinct values, so the
+Lmin stratum composition is one of (5), (1,4), (2,3), (3,2), (4,1).  Then
+
+        rho(v) <= 1/2 .
+
+In particular the whole (3,2) regime and the whole (4,1) regime obey the bound,
+for EVERY Lmax stratum shape -- including the three shapes (1,2,2), (1,1,3),
+(2,1,2) that paper5 sec:scope lists as open, and including every position of
+the Lmax zeros.
+
+PROOF.  Split by configuration: the triple (Lmin composition, Lmax composition,
+overlap table).  With an Lmin composition of at most two parts there are 264
+such triples.
+
+ (i) 156 of them have an Lmax composition ending in 1 and are IMPOSSIBLE by
+     Corollary L1'.
+ (ii) 91 of them are infeasible already for the game-free reasons collected in
+     arith22.py: the level equations and orderings, the ceiling anchor
+     conditions of L1 (x(S0) >= M|S0| and M|S0| <= T - mu(5-|S0|)) and the
+     floor anchor conditions of L2 (z(S*) <= mu|S*|, 0 <= T - mu|S*| <=
+     M(5-|S*|)), together with ||x - z||_1 >= T/2.  Each is one exact LP,
+     reported UNSAT by z3 over the rationals (arith22_1_2.json, verdict
+     "closed").
+ (iii) the remaining 17 are each closed by one exact-rational finite check
+     (closecfg.py, driven by batch.py).  The check adds to (ii): v as a free
+     vector with v(empty) = v({i}) = 0, v(N) = T, v >= 0; core membership of
+     both Lmin and Lmax; the two A3 inequalities for every coalition; the two
+     anchor disjunctions; the floor pinning of the Lmin bottom stratum and the
+     ceiling pinning of the Lmax top stratum, each as a disjunction over the
+     vertices of its game-free dual polyhedron; and the 280 exact-cone facet
+     inequalities of Studeny-Kratochvil, added lazily as separating cuts until
+     no inequality is violated.  All 17 programs are UNSAT.                  []
+
+The per-configuration data (which anchors, how many pinning vertices, both
+control outcomes, runtimes) is in batch_1_2_*.json; the 17 lines are
+reproduced in REPORT.txt section 3.
+
+CALIBRATION OF T1 AGAINST WHAT WAS ALREADY KNOWN.
+ * The configuration CFG -- Lmin (3,2), Lmax (1,4) with the zero at a poor
+   player, table [[1,2],[0,2]] -- is one of the 17, and the driver returns
+   UNSAT for it.  This is an independent re-derivation of paper5
+   Theorem thm:cfgbound from a differently organized encoding.
+ * The arithmetic triage returns, for that configuration, the threshold
+   mu_hi = 1/8: ratio >= 1/2 is possible only if mu <= T/8.  That is exactly
+   the constant of paper5 Theorem thm:cfg, recovered independently.
+ * For Lmin (4,1) with Lmax (1,4) and the zero at a poor player the same triage
+   returns mu_hi = 1/6, i.e. that configuration would carry ratio 3/2 - 6mu > 1/2
+   for any mu < 1/6.  It is one of the 17 and is UNSAT, so it cannot occur with
+   mu < 1/6; the harvest never produced it at all.
+
+CONTROLS FOR (iii), AND A REFINEMENT THEY EXPOSE.  Every one of the 17 was run
+with both:
+ (C-drop) delete the two pinning disjunctions -- if the configuration is
+          possible at all, the program must become SAT, showing the encoding
+          can express a failure and that it is the pinning that forbids it;
+ (C-pos)  replace "ratio > 1/2" by "ratio <= 1/2" -- SAT means the hypothesis
+          set is consistent, so the UNSAT verdict is a genuine bound.
+Run under the FULL multi-stage ladders (run2strat.py; UNSAT under the weaker
+single-stage hypothesis set already implies UNSAT here, so T1 does not depend
+on this rerun -- its purpose is the classification), the outcome splits the 17
+in two, and the split is itself a result:
+
+  * 4 configurations have (C-pos) SAT: consistent with every necessary
+    condition encoded, so they can occur, and the finite check proves the
+    BOUND.  All 4 have (C-drop) SAT, so the pinning is what does the work:
+      Lmin (3,2) x Lmax (1,4)   [[1,2],[0,2]]      <- CFG
+      Lmin (3,2) x Lmax (1,2,2) [[1,2,0],[0,0,2]]
+      Lmin (4,1) x Lmax (1,4)   [[1,3],[0,1]]
+      Lmin (4,1) x Lmax (2,3)   [[2,2],[0,1]]
+  * 13 configurations have (C-pos) UNSAT: the hypothesis set is contradictory
+    WITHOUT any failure hypothesis, so the finite check proves the strictly
+    stronger statement that THE CONFIGURATION CANNOT OCCUR AT ALL.  (C-drop)
+    is SAT for 12 of them; it is UNSAT only for Lmin (2,3) x Lmax (1,4)
+    [[1,1],[0,3]], which is therefore killed by the non-pinning hypotheses
+    alone.
+
+THIS SPLIT IS A CALIBRATION, NOT A TECHNICALITY.  The 4 configurations the
+encoding declares possible are EXACTLY the 4 configurations with at most two
+Lmin strata that the harvest of 4000 draws actually produced with positive
+ratio, and their observed maxima are 1/2, 4/9, 1/3, 1/3 respectively.  The
+encoding therefore separates possible from impossible in perfect agreement with
+observation on this class: it is not so weak that everything survives, and not
+so strong that a real configuration is wrongly excluded.
+
+Either way T1's conclusion follows; the distinction is recorded because a
+"bound" verdict and an "impossible" verdict are different theorems and should
+not be conflated.  The external positive control on genuine games -- the one
+that shows the hypothesis set is true of reality and not merely consistent --
+is the poscontrol.py run described in section S, and the sharper one that
+shows the encoding FINDS real games when they exist is completeness2.py:
+run at target 4/9 on CFG it returns SAT with a witness that audits as a genuine
+exact game in CFG of ratio 29/63, and at target 2/5 on Lmin (3,2) x Lmax
+(1,2,2) a genuine game of ratio 77/190.
+
+--------------------------------------------------------------------------------
+T2.  THE (4,1) REGIME AT THE SHARPER TARGET
+--------------------------------------------------------------------------------
+THEOREM T2.  Let v be a singleton-normalized exact five-player game whose Lmin
+has stratum composition (4,1) -- four players at mu and one strictly above.
+Then rho(v) <= 1/3, and the bound is attained.
+
+PROOF.  Same split at target R = 1/3.  The arithmetic triage at 1/3 leaves 7
+configurations with Lmin (4,1) open; all others in that Lmin class are either
+impossible by L1' or infeasible for game-free reasons (arith22_1_3.json).  Each
+of the 7 is one exact program with the FULL multi-stage ladders, and all 7 are
+UNSAT (run41.py, run41_*.json; the table is REPORT.txt section 4).
+Attainment: two of the seven configurations, Lmax (1,4) [[1,3],[0,1]] and
+Lmax (2,3) [[2,2],[0,1]], have (C-pos) SAT and are produced by the harvest at
+ratio exactly 1/3.                                                            []
+
+This is the two-regime picture paper5 sec:scope asked for:
+        Lmin (4,1)  =>  rho <= 1/3   <   Lmin (3,2)  =>  rho <= 1/2,
+both attained.
+
+--------------------------------------------------------------------------------
+T0.  THE FULL BOUND
+--------------------------------------------------------------------------------
+THEOREM T0.  Every singleton-normalized exact five-player game satisfies
+||Lmin(v) - Lmax(v)||_1 <= v(N)/2.  The bound is attained, so s(5) = 1/2.
+No hypothesis beyond the definitions: A3 is NOT assumed (see T0-BIS), and the
+Studeny-Kratochvil facet description is not used either.
+
+The proof below is the A3-DEPENDENT one, kept because its case split is the
+informative object.  The unconditional version is T0-BIS.
+
+PROOF.  Every game determines a configuration -- the triple (Lmin stratum
+composition, Lmax stratum composition, overlap table) -- and relabelling
+players lets us assume the canonical layout, so it suffices to exclude
+ratio > 1/2 in each of the 2961 configurations.  They are exhausted as follows,
+each configuration in exactly one bucket (verified mechanically by coverage.py,
+which also checks that each pass was run on exactly the set the previous pass
+left over, that no run errored, and that nothing was left feasible):
+
+  1953  IMPOSSIBLE.  The Lmax composition ends in 1, contradicting L1'.
+   800  CLOSED BY THE GAME-FREE ARITHMETIC.  Levels, orderings, totals and the
+        two anchor conditions of L1 and L2 are already inconsistent with
+        ||x-z||_1 >= 1/2 (arith22.py; one exact LP each, all UNSAT).
+   100  CLOSED BY THE SINGLE-STAGE FINITE CHECK.  Add v as a free vector, both
+        core memberships, the A3 inequalities, the two anchor disjunctions, the
+        floor pinning of the Lmin bottom stratum, the ceiling stage-1 pinning
+        of the Lmax top stratum, and the 280 exact-cone facet inequalities as
+        lazy separating cuts (closecfg.py; all UNSAT).
+   108  CLOSED BY THE MULTI-STAGE FINITE CHECK.  Replace the two single
+        pinnings by the complete ladders of Proposition S -- every Lmin
+        stratum pinned given the strata below it, every Lmax stratum pinned
+        given the strata above it, the ceiling second stage among them
+        (closecfg2.py; all 108 UNSAT, 0 errors).
+  ----
+  2961
+
+Every hypothesis used is a necessary consequence of the configuration, so each
+UNSAT excludes its configuration above the bound.  Attainment is witnessed by
+paper5's extremal game and by 54 games at exactly 1/2 in an independent
+6000-draw sweep run here.                                                     []
+
+WHY THE 108 NEEDED THE NEW MACHINERY, CONCRETELY.  Under the single-stage
+hypothesis set all 108 are SATISFIABLE, and all 108 models are GENUINE EXACT
+GAMES -- they were rebuilt and re-profiled from scratch (audit22.py): 108
+NOT-REALIZABLE, 0 NOT-A-GAME.  What fails in every case is that the model's
+true Lmin/Lmax strata are not the ones assumed.  The missing hypotheses were
+exactly the pinnings of the strata ABOVE the extreme one, i.e. the stage
+ladders.  That is the sense in which the ceiling second stage was the blocker:
+not that it improves a bound, but that without it the configuration is not
+determined by the encoding at all.
+
+WHY THE LADDER SUFFICES.  The leximin of v is computed by precisely this
+recursion: level, pin, recurse on the face.  Asserting, for every k, that
+stratum k is pinned at m_k given the strata below, together with x in Core(v)
+and m_0 < m_1 < ... , is therefore not merely necessary but SUFFICIENT for
+x = Lmin(v) with those strata: the pinning of a nonempty D_k already forbids a
+feasible point at any higher level (such a point would give x(D_k) > |D_k|m_k),
+and x itself witnesses that no player above stratum k is pinned at m_k.  The
+same argument on the other side gives z = Lmax(v).  So the multi-stage
+hypothesis set characterizes the configuration exactly, which is why it is
+decisive rather than merely stronger -- and why the SAT verdicts it does return
+(the eight completeness controls) are realizable, as audited.
+
+--------------------------------------------------------------------------------
+T0-BIS.  THE SAME BOUND WITHOUT A3 AND WITHOUT THE FACET CATALOGUE
+--------------------------------------------------------------------------------
+THEOREM T0-BIS.  Every singleton-normalized exact five-player game satisfies
+||Lmin(v) - Lmax(v)||_1 <= v(N)/2.
+
+PROOF.  Same 2961-configuration split, but each configuration is now excluded by
+a single exact program (closecfg3.py) whose hypotheses are only:
+
+  (i)   v(empty) = v({i}) = 0 and v(N) = 1  (singleton normalization and scale);
+  (ii)  Lmin and Lmax are core points, with the configuration's level variables;
+  (iii) EXACTNESS, via Theorem A of task #23: for each of the 30 proper nonempty
+        coalitions S a vector w^S with w^S(N) = 1, w^S(A) >= v(A) for all proper
+        A, and w^S(S) = v(S).  This is the definition of exactness made
+        existential; it needs no catalogue and no completeness theorem.  (It
+        also delivers v >= 0 for free, since w^S_i >= v({i}) = 0.)
+  (iv)  x = Lmin, via Theorem B: for every stage t and every i in B_t,
+        multipliers y >= 0 supported on the x-tight proper coalitions, eta,
+        rho, sigma >= 0 with
+          - sum_{A ni j} y_A + eta + [j in B_<t] rho_j - [j in B_t] sigma_j
+                = [j = i]   for every player j;
+  (v)   z = Lmax, via the MIRROR of Theorem B, derived in farkas.py: the same
+        with the level sets taken in decreasing order, sigma entering with a
+        PLUS sign, and right-hand side -[j = i];
+  (vi)  the failure hypothesis sum_i |x_i - z_i| > 1/2.
+
+Every one of the 2961 programs is UNSAT (batch3.py --no-anchors; 2961 run,
+0 errors, 0 feasible).  Since (i)-(v) are necessary -- (iii) is the definition
+of exactness and (iv), (v) are exact characterizations of the two selections --
+no game realizes any configuration above the bound.                          []
+
+Nothing in (i)-(vi) mentions lambda, nu, or a one-coalition certificate, so T0
+does not depend on A3; and nothing mentions the exact cone's facets, so it does
+not depend on the Studeny-Kratochvil description either.  The same run at target
+1/3 restricted to Lmin (4,1) gives T2 on the same footing (48 configurations,
+all UNSAT).
+
+WHY THIS IS BELIEVABLE AND NOT AN ARTEFACT OF AN OVER-STRONG ENCODING.
+ * The mirror in (v) was re-derived here rather than assumed, and validated
+   pointwise on 1050 genuine games: 5250 floor and 5250 ceiling certificates,
+   0 failures.  Its negative controls fire: a claimed Lmax that is really the
+   Lmin is rejected 261/261, and so is the midpoint (Lmin+Lmax)/2 -- a core
+   point that is neither selection -- on both sides.
+ * End to end, the A3-free encoding still FINDS games: on all eight
+   configurations with a known game above a target it returns SAT with an
+   audited genuine game in that very configuration, at true ratios up to
+   exactly 1/2 (CFG) and exactly 1/3 (Lmin (4,1) x Lmax (1,4)).
+ * It calls 33 configurations possible, and all 21 that the two harvests
+   actually produced are among them, so it excludes nothing real.
+ * Independently of all that, it agrees with the first pipeline -- which shares
+   none of its machinery -- on all 2961 configurations (compare3.py: 1008 both
+   UNSAT, 1953 both excluded, 0 disagreements).
+
+--------------------------------------------------------------------------------
+SCOPE
+--------------------------------------------------------------------------------
+T0/T0-BIS, T1 and T2 hold unconditionally.  A3 (mu = lambda and M = nu at
+n = 5) is still only VERIFIED, not proved by hand, but it is no longer a
+dependency of the bound: it survives in this file only as the source of the
+structural lemmas L1-L4 and of the informative case split, and of corollary L2'
+(the starved player is Lmin-poor).  A hand proof of A3 -- records/S5PROOF.txt
+Part D's deepest gap -- would upgrade that structural story too; it would no
+longer change the status of s(5) = 1/2.
+================================================================================

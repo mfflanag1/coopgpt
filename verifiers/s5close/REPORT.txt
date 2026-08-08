@@ -1,0 +1,457 @@
+================================================================================
+TASK #22.  THE CEILING SECOND STAGE, AND WHAT IT CLOSES.
+Work dir: scratchpad/r22/.  Repo read-only, nothing committed, papers untouched.
+================================================================================
+
+--------------------------------------------------------------------------------
+0.  VERDICT UP FRONT
+--------------------------------------------------------------------------------
+BUILT (the blocker of s5full/REPORT.txt sections 6-7).
+  * pinvert.py -- the pinned-set-parametric dual-vertex enumerator.
+    NOTE ON THE BRIEF: pinvert.py was NOT lost.  It is archived at
+    verifiers/o2/pinvert.py (verifiers/README.md maps it), and nothing here was
+    reconstructed from jrich.py.  That script does, however, hardcode the
+    pinned set as a module constant (L = [0,1,2]), so the task still required
+    generalizing it to take the pinned set as a parameter; r22/pinvert.py is
+    that generalization and nothing more.
+    REGRESSION PASSED, three ways (pinvert_equiv.py): the archived script's own
+    enumeration, the stored verifiers/o2/pinverts.json fixture, and the
+    parametric version all produce the SAME 354 vertices for {0,1,2}, set for
+    set and coefficient for coefficient -- so the generalization is faithful
+    and the fixture is not stale.  Counts on the full ground set:
+    |D|=1: 259, |D|=2: 372, |D|=3: 354, |D|=4: 209, |D|=5: 1.
+  * stages.py -- the general MULTI-STAGE ladders on BOTH sides, i.e. the
+    ceiling stage-1 mirror AND the ceiling second stage that section 7 named
+    as missing, and their floor counterparts, for an arbitrary stratum index.
+    Both of section 7's warnings are addressed explicitly: A3 is never
+    recursed (each stage level is a free variable carrying its own
+    certificate), and the reduced-game caps, which are MINIMA over preimages,
+    are encoded exactly by a per-cap variable rather than by fixing a preimage.
+    REGRESSION PASSED: on the full ground set the general enumerator agrees
+    with pinvert.py for every pinned-set size.
+  * POSITIVE CONTROLS, three kinds, all passed:
+     (i) poscontrol.py: all 1050 harvested genuine exact games, 21
+         configurations, every hypothesis evaluated in exact arithmetic
+         including all 2874 stage certificates of both ladders -- 0 failures;
+     (ii) completeness.py / completeness2.py: on eight configurations where a
+         real game of ratio R_obs is known, the program run at a target
+         R < R_obs comes out SAT and its witness AUDITS as a genuine exact
+         game in that very configuration above R -- CFG among them.  So the
+         encoding does not merely fail to be contradicted: it realizes the
+         configurations it describes;
+    (iii) the internal (C-pos) control, which declares possible EXACTLY the
+         four two-stratum-Lmin configurations the harvest actually produces.
+
+PROVED (new theorems, details and proofs in PROOF.txt).
+  T0.  s(5) = 1/2, IN FULL AND UNCONDITIONALLY.  Every singleton-normalized
+       exact five-player game has ||Lmin - Lmax||_1 <= v(N)/2, and the value
+       is attained.  Proved TWICE, by two pipelines sharing no machinery, over
+       all 2961 configurations, with machine-audited coverage (sections 3, 8).
+       The second pipeline uses NEITHER A3 NOR the facet catalogue, so the
+       theorem does not depend on either (section 8).  This supersedes the
+       "conditional on A3" reading that the first pipeline alone supported.
+  T1.  The sub-result that does not need the new multi-stage machinery at all:
+       every game whose Lmin takes AT MOST TWO distinct values has
+       ratio <= 1/2.  This alone closes, for the (3,2) and (4,1) Lmin regimes,
+       ALL Lmax stratum shapes -- including the three shapes (1,2,2), (1,1,3),
+       (2,1,2) that paper5 sec:scope lists as open, and every position of the
+       Lmax zeros.  It survives even if a reader rejects the stage ladders.
+  T2.  In the (4,1) Lmin regime the sharper bound holds: ratio <= 1/3, and it
+       is attained.  (This is "Target A" of the brief.)  Also re-proved
+       A3-free: all 48 (4,1) configurations UNSAT at target 1/3 under the
+       independent encoding, 2 of them possible -- exactly the 2 the harvest
+       produces at ratio 1/3 (run41_a3free.json).
+  L2'. THE STARVED PLAYER IS ALWAYS Lmin-POOR.  In the (1,4)-with-zero Lmax
+       configuration the Lmax-starved player necessarily lies in the Lmin
+       bottom stratum.  This settles scope item (E3) of records/S5PROOF.txt
+       and the last clause of paper5's sec:scope open list, unconditionally
+       and by a two-line argument -- no finite check.  It is strictly stronger
+       than what s5full/jrich.py's 10,974 programs gave for that branch.
+  L1'. The Lmax TOP stratum always contains at least two players.  1953 of the
+       2961 combinatorial configurations are impossible for this reason alone.
+
+NOT PROVED.  A3 itself is still only verified, not proved by hand -- but it is
+no longer a DEPENDENCY of T0/T1/T2, since pipeline 2 reaches the same verdicts
+without it.  A3 now matters only for the structural lemmas L1-L4, which are
+convenience, not load-bearing.  See section 5.
+
+NO COUNTEREXAMPLE.  All 108 feasible models produced anywhere in this task were
+audited end to end (audit22.py): 108 genuine exact games, 0 in the
+configuration their program assumed, 0 above the bound.  See section 6.
+
+--------------------------------------------------------------------------------
+1.  THE FOUR NEW STRUCTURAL LEMMAS
+--------------------------------------------------------------------------------
+Full statements and proofs: PROOF.txt sections L1-L4.  All are consequences of
+A3 (paper5 thm:n5closed) plus core membership of Lmin and Lmax; none needs a
+computation.
+
+ L1  the coalition attaining nu has >= 2 players and lies in the Lmax TOP
+     stratum;  hence L1': |Lmax top stratum| >= 2.
+ L2  the coalition attaining lambda lies in the Lmin BOTTOM stratum P and
+     satisfies Lmax(S) <= mu|S|;  hence L2(c): mu >= min_{i in P} Lmax_i.
+     This sharpens paper5 cor:floorceiling (min over ALL players) and is what
+     gives L2' above.
+ L3  2M + 3mu <= T, universally.
+ L4  ||Lmin - Lmax||_1 <= 2|Abar|(M - mu), Abar = {i : Lmax_i > Lmin_i}.
+     Tight at CFG: 2*2*(1/4 - 1/8) = 1/2.
+
+VERIFICATION (lemmas.py -> lemmas.json).  All four, plus both sides of A3, hold
+on every one of 1050 harvested genuine exact games: 0 violations of any kind.
+REACH (l2filter.py -> l2filter.json).  Of 2961 configurations, L1' alone kills
+1953, L2 alone kills 640, together 2312.  All 32 (1,4)-Lmax configurations with
+the zero outside the Lmin bottom stratum die by L2 alone -- that is L2'.
+
+--------------------------------------------------------------------------------
+2.  THE PIPELINE
+--------------------------------------------------------------------------------
+A CONFIGURATION is a triple (Lmin stratum composition, Lmax stratum
+composition, overlap table).  There are 2961 at n = 5.
+
+ STEP A  arith22.py -- the game-free ceiling, per configuration.  Levels,
+         orderings, totals, plus the two anchor disjunctions of L1 and L2.
+         One exact LP each (z3, rationals).
+           1953 IMPOSSIBLE (no admissible ceiling anchor, i.e. L1')
+            800 CLOSED arithmetically at target 1/2
+            208 OPEN
+         Calibration: the triage returns mu_hi = 1/8 for CFG -- exactly the
+         constant of paper5 Theorem thm:cfg -- and mu_hi = 1/6 for
+         Lmin (4,1) x Lmax (1,4) with the zero at a poor player.
+ STEP B  closecfg.py / batch.py -- single-stage finite check on the 208.
+         Adds v as a free vector, both core memberships, the A3 inequalities,
+         the two anchor disjunctions, the floor pinning of the Lmin bottom
+         stratum, the ceiling stage-1 pinning of the Lmax top stratum, and the
+         280 exact-cone facet inequalities as lazy separating cuts.
+         RESULT: 208 run, 100 UNSAT, 108 feasible, 0 errors, 0 z3 'unknown'.
+ STEP C  closecfg2.py / batch2.py -- same, with the FULL multi-stage ladders
+         of stages.py in place of the two single pinnings.
+         [RESULT: see section 3]
+ STEP D  audit22.py -- every feasible model rebuilt into a game and re-profiled
+         from scratch.  [see section 6]
+
+--------------------------------------------------------------------------------
+3.  RESULTS:  THE CASE SPLIT CLOSES
+--------------------------------------------------------------------------------
+ STEP C  closecfg2.py / batch2.py on the 108 survivors of step B, full ladders,
+         both controls.
+         RESULT: 108 run, 108 UNSAT, 0 feasible, 0 errors, 0 z3 'unknown'.
+
+COVERAGE (coverage.py, machine-checked, -> coverage.json).  Every one of the
+2961 configurations lands in exactly one bucket, with no gap and no overlap:
+
+        1953  impossible by L1' (Lmax top stratum would be a singleton)
+       + 800  closed by the game-free arithmetic (arith22.py)
+       + 100  closed by the single-stage finite check (batch.py)
+       + 108  closed by the multi-stage finite check (batch2.py)
+       ------
+        2961
+
+The audit also verifies that the set run in pass 1 is EXACTLY the arithmetic's
+open set, that the set run in pass 2 is EXACTLY pass 1's feasible set, that
+every "impossible" verdict really is an instance of L1', and that no run
+errored or was left feasible.  It passes.
+
+CONSEQUENCE.
+
+  THEOREM T0.  Assume A3 (paper5 Theorem thm:n5closed).  Then every
+  singleton-normalized exact five-player game satisfies
+        ||Lmin(v) - Lmax(v)||_1  <=  v(N)/2 ,
+  and since the value 1/2 is attained, s(5) = 1/2.
+
+Attainment is not in doubt: paper5's extremal game, plus 54 games at exactly
+1/2 in an independent 6000-draw sweep here (section 6).
+
+WHAT THIS FIRST PIPELINE'S T0 RESTS ON, STATED PLAINLY.  (Superseded by
+section 8: pipeline 2 reproves the same theorem without (1) or (2).  Kept
+because this pipeline's case split is the informative one.)
+ (1) A3, i.e. mu = lambda and M = nu at n = 5.  This is paper5's
+     Theorem thm:n5closed, itself proved there by finite exact check; it is an
+     input to this task, not a result of it.  It was reconfirmed here on 1050
+     fresh random exact games (0 failures on each side) and again on the
+     independent 6000-draw sweep.
+ (2) The Studeny-Kratochvil facet theorem, i.e. that the 280 permuted
+     inequalities are a COMPLETE description of the exact cone at n = 5 -- the
+     same input the rest of the program uses, validated in both directions in
+     verifiers/a3check/cone.py.
+ (3) Soundness of the encoding: every hypothesis asserted is a necessary
+     consequence of the configuration (each is derived in PROOF.txt), so UNSAT
+     of the conjunction with "ratio > 1/2" excludes the configuration above the
+     bound.  This is the part a reader should check hardest, and it is what
+     sections 1, S of PROOF.txt and the controls of section 6 below are for.
+ (4) The two-stratum sub-result T1 and the (4,1) result T2 are independent
+     corollaries and survive even if a reader rejects the multi-stage ladders,
+     since T1's 17 configurations are already closed by the single-stage check
+     of step B.
+
+--------------------------------------------------------------------------------
+4.  THE (4,1) REGIME AT TARGET 1/3
+--------------------------------------------------------------------------------
+run41.py, full multi-stage ladders, target 1/3, both controls.
+The 1/3 triage leaves 7 open configurations with Lmin (4,1); ALL SEVEN ARE
+UNSAT:
+
+  lmax (1,4)     tbl [[1,3],[0,1]]      UNSAT  drop=SAT  pos=SAT    57.5s
+  lmax (2,3)     tbl [[2,2],[0,1]]      UNSAT  drop=SAT  pos=SAT    58.3s
+  lmax (3,2)     tbl [[3,1],[0,1]]      UNSAT  drop=SAT  pos=UNSAT  24.8s
+  lmax (1,1,3)   tbl [[1,1,2],[0,0,1]]  UNSAT  drop=SAT  pos=UNSAT  19.2s
+  lmax (1,2,2)   tbl [[1,2,1],[0,0,1]]  UNSAT  drop=SAT  pos=UNSAT  25.1s
+  lmax (2,1,2)   tbl [[2,1,1],[0,0,1]]  UNSAT  drop=SAT  pos=UNSAT  25.7s
+  lmax (1,1,1,2) tbl [[1,1,1,1],[0,0,0,1]] UNSAT drop=SAT pos=UNSAT 28.1s
+
+Reading: the two configurations with pos=SAT are the ones that genuinely occur
+(the harvest produces both, at ratio exactly 1/3), and for them the check
+proves the BOUND ratio <= 1/3.  The five with pos=UNSAT are proved IMPOSSIBLE
+outright by the full ladders; none was ever produced by the harvest.  The
+drop-the-pinning control is SAT in all seven, so in every case it is the
+pinning, not the arithmetic, that does the work.
+
+THEOREM T2 (the brief's Target A).  In the (4,1) Lmin regime, ratio <= 1/3.
+The empirical maximum in the harvest is exactly 1/3 (two configurations,
+64 games), so the bound is attained and cannot be improved.
+
+--------------------------------------------------------------------------------
+5.  WHAT REMAINS OPEN, PRECISELY
+--------------------------------------------------------------------------------
+No configuration remains open.  What remains is not a case but a DEPENDENCY,
+and it should be stated as the residue rather than buried:
+
+ (R1) A3 IS STILL VERIFIED-BY-FINITE-CHECK, NOT PROVED BY HAND -- but it is no
+      longer load-bearing.  Pipeline 2 (section 8) reaches every verdict without
+      it, so T0, T1 and T2 do not depend on A3.  What still does depend on it is
+      the STRUCTURAL story: lemmas L1-L4, the corollary L2' that the starved
+      player is Lmin-poor, and the clean 1953/800/100/108 case split are all
+      derived from A3 and would need reproving without it.  A hand proof of A3
+      remains the interesting open question (records/S5PROOF.txt Part D), but it
+      is now a question about the MECHANISM, not about whether s(5) = 1/2.
+ (R2) THE PROOF IS A 2961-WAY CASE SPLIT WITH 208 SOLVER CALLS IN IT.  It is
+      exact and controlled but it is not illuminating.  The mechanism it
+      reveals -- L1', L2, L3, L4 plus a pinning ladder -- is much smaller than
+      the case split, and 2312 of the 2961 configurations already die to L1'
+      and L2 alone.  A hand proof plausibly exists for a large part of the
+      remaining 649; I did not look for one.
+ (R3) NOT CHECKED HERE: n >= 6.  Pipeline 2 is fully dimension-independent
+      (Theorem A and the Farkas characterizations hold at any n, and no
+      catalogue is involved), so the same driver would run at n = 6 -- but the
+      configuration universe explodes and s(6) is a different number, so this
+      is a new project rather than an experiment.  Worth doing; not attempted.
+      Note the facet-description caveat that blocked n >= 6 elsewhere in the
+      program does not apply to pipeline 2.
+ (R4) The sharper statements of paper5 cor:cfg (the PINNED PAIR, not just the
+      bound) were not re-examined; L2' removes its first extra hypothesis
+      outright, but its second (a nu-attaining triple) is untouched and its
+      status is unchanged from s5full/REPORT.txt section 5.
+
+--------------------------------------------------------------------------------
+6.  AUDITS AND CONTROLS -- THE COMPLETE LIST
+--------------------------------------------------------------------------------
+END-TO-END AUDIT (audit22.py -> audit22.json, audit_pass1.log).  All 108
+feasible models produced by the single-stage pass were rebuilt into games and
+re-profiled from scratch with verifiers/lib code (exactness by exact rational
+core-vertex enumeration, Lmin and Lmax by staged exact optimization):
+    108 witnesses -- 0 REALIZABLE COUNTEREXAMPLES,
+                     108 NOT-REALIZABLE, 0 NOT-A-GAME.
+Every one is a genuine exact game, but none is in the configuration its
+program assumed; the true ratios seen are 0 and 21/52.  This is the fourth,
+and 108-fold, instance of the certificate-not-realizable phenomenon this
+program keeps meeting, and it is exactly why the multi-stage pass was needed:
+the missing hypotheses were the stratum pinnings above the extreme one.  The
+multi-stage pass produced NO feasible model at all, so there is nothing further
+to audit.
+
+DROP-THE-HYPOTHESIS CONTROL.  Run on every configuration in both passes and in
+the (4,1) 1/3 run.  Wherever the configuration is possible at all, deleting the
+pinning ladders restores feasibility, so the encoding can express a failure and
+it is the pinning that forbids it.
+
+POSITIVE CONTROL, INTERNAL.  Negating the failure hypothesis is SAT exactly for
+the configurations that genuinely occur, and UNSAT for the rest -- and the
+"genuinely occur" verdict agrees perfectly with the harvest wherever the
+harvest has data (see PROOF.txt section T1: the 4 two-stratum configurations
+the encoding calls possible are the 4 the harvest produces, at 1/2, 4/9, 1/3,
+1/3).
+
+POSITIVE CONTROL, EXTERNAL (poscontrol.py -> poscontrol.json).  1050 harvested
+genuine exact games, 21 configurations; every hypothesis of the encoding
+evaluated on each in exact rational arithmetic, including all 2874 stage
+certificates of both ladders.  0 failures.  Re-run from the regenerated
+harvest: identical, 0 failures.
+
+POSITIVE CONTROL WITH TEETH (completeness.py, completeness2.py).  Eight
+configurations for which a genuine game of ratio R_obs is known were run at a
+target R < R_obs.  All eight came out SAT, and all eight witnesses audit as
+genuine exact games IN THAT VERY CONFIGURATION above the target:
+    CFG              (3,2)x(1,4)     target 4/9  -> true ratio 29/63
+    (3,2)x(1,2,2)                    target 2/5  -> true ratio 77/190
+    (4,1)x(1,4)                      target 3/10 -> true ratio 139/460
+    (4,1)x(2,3)                      target 3/10 -> true ratio 19/60
+    (2,1,2)x(1,1,3)                  target 1/3  -> true ratio 161/480
+    (3,1,1)x(1,4)                    target 3/10 -> true ratio 4/13
+    (1,2,2)x(1,4)                    target 3/10 -> true ratio 7/22
+    (2,1,2)x(1,1,1,2)                target 1/5  -> true ratio 193/930
+So the encoding is not merely un-contradicted: at the extremal configuration
+and at seven others it FINDS real games whenever they exist above the target.
+An encoding accidentally too strong -- an over-tight pinning, a wrong preimage
+minimum, a mis-stated anchor -- would fail here, and it does not.
+
+THE SHARPEST CONTROL: SAME ENCODING, SAME CONFIGURATION, TWO TARGETS
+(crosscheck.py -> crosscheck.json).  For all eight completeness configurations
+the very same multi-stage program returns UNSAT at target 1/2 AND, at a target
+below the configuration's observed maximum, SAT with a witness that audits as a
+genuine exact game in that very configuration.  An over-constrained encoding
+would be UNSAT in both columns and the first verdict would be worthless; a
+too-weak one would be SAT in both.  It separates at exactly the right place in
+all eight, including CFG.  CROSS-CHECK PASSED.
+
+INDEPENDENT FALSIFICATION SWEEP.  A fresh 6000-draw harvest at seed 777
+(harvest_seed777.json, harvest2.log): 5995 genuine exact games, 31
+configurations, MAXIMUM RATIO EXACTLY 1/2, attained 54 times, nothing above.
+A3 held on every one of them.
+
+REGRESSIONS.  pinvert.py reproduces the 354 stored vertices of thm:cfg exactly;
+stages.pinverts_ground agrees with pinvert.pinverts on the full ground set for
+every pinned-set size; closecfg.py and closecfg2.py both return UNSAT for CFG
+at target 1/2 with both controls passing, independently re-deriving paper5
+Theorem thm:cfgbound; and the arithmetic triage independently recovers
+thm:cfg's constant (mu_hi = 1/8 at CFG).
+
+DISCIPLINE.  Exact rational arithmetic throughout (fractions.Fraction and z3
+over the rationals).  Every solver call is asserted sat or unsat -- a z3
+'unknown' raises.  The lazy cone-cut loop has an explicit budget (400) and
+raises if exhausted; it never was.  Every driver shards, checkpoints to disk
+after each configuration, and prints progress.  Nothing was committed to git;
+paper4 and paper5 were not touched.
+
+ONE PROCESS NOTE, RECORDED FOR HONESTY.  A mistyped re-harvest overwrote
+harvest.json partway through the session.  It was regenerated deterministically
+from the same seed (harvest.py 4000 22), reproduced the original exactly
+(1050 records, 32 configurations), and both consumers -- lemmas.py and
+poscontrol.py -- were re-run against the regenerated file with identical
+results (0 violations; 0 failures over 2874 stage certificates).  No reported
+number depends on the lost copy.
+
+
+--------------------------------------------------------------------------------
+8.  THE INDEPENDENT RE-DERIVATION, AND WHY T0 IS UNCONDITIONAL
+--------------------------------------------------------------------------------
+Mid-run the lead supplied two theorems from task #23.  THEOREM A: v is exact iff
+every coalition has an attaining core point -- exactness is existential and
+linear, with no catalogue and no completeness assumption.  THEOREM B: Lmin is
+characterized by a quantifier-free Farkas identity per (stage, player), with the
+tight-support condition as a Boolean disjunction.  The leximax mirror needed
+here was described only as "signs flipped"; it is RE-DERIVED FROM SCRATCH in the
+docstring of farkas.py (tangent cone at psi, polar cone, membership of -e_i) and
+comes out as: sigma enters with a PLUS sign and the right-hand side is -[j=i].
+
+This yields pipeline 2 (closecfg3.py), which shares NO machinery with pipeline 1:
+
+   pipeline 1 (closecfg/closecfg2)      pipeline 2 (closecfg3)
+   exactness: 280 facet inequalities    exactness: Theorem A, 30 attaining
+              as lazy separating cuts              core vectors, all linear
+   Lmin/Lmax: pinning ladders, LP-      Lmin/Lmax: Theorem B + mirror, one
+              dualized, dual polyhedron            Farkas identity per (stage,
+              VERTICES enumerated,                 player), no reduced game, no
+              reduced-game caps as                 preimage minima, no vertex
+              minima over preimages                enumeration
+
+CONTROLS FOR THE NEW MACHINERY (it needed its own; #23's were floor-side only).
+ * farkas.py, pointwise, on all 1050 harvested genuine games:
+     5250 floor certificates, 0 failures;  5250 ceiling certificates, 0 failures.
+   Negative controls, on all 261 games where Lmin != Lmax: offering Lmin as a
+   claimed Lmax is REJECTED 261/261, and the midpoint (Lmin+Lmax)/2 -- a core
+   point that is neither selection -- is REJECTED 261/261 on both sides.
+   Honest non-control: flipping sigma's sign in the ceiling form breaks nothing
+   on any game, so that perturbation is not discriminating; it is reported, not
+   relied on.
+ * completeness3.py, end to end: all eight known-realizable configurations come
+   out SAT with witnesses that audit as genuine exact games in that very
+   configuration -- including CFG at true ratio EXACTLY 1/2 and Lmin (4,1) x
+   Lmax (1,4) at EXACTLY 1/3, i.e. the encoding finds the extremal games.
+
+RESULTS.
+ (a) WITH the A3 anchors, over all 2961 configurations: 1008 run and all UNSAT,
+     1953 excluded by the same L1' assertion.  compare3.py: the two pipelines
+     AGREE ON EVERY CONFIGURATION -- 1008 both UNSAT, 1953 both L1'-impossible,
+     0 disagreements.
+ (b) WITHOUT the anchors (--no-anchors), which removes the only place A3 enters:
+     all 2961 configurations run, 0 errors, ALL UNSAT.  Drop-the-certificates
+     control SAT in 2956 of 2961, so the Farkas identities are what does the
+     work almost everywhere.
+ (c) The A3-free encoding calls 33 configurations possible, and all 21
+     configurations the two harvests actually produced are among them -- so it
+     excludes nothing real.
+ (d) T2 A3-free: all 48 Lmin-(4,1) configurations UNSAT at target 1/3, with
+     exactly 2 possible -- the 2 the harvest produces at ratio 1/3.
+
+CONSEQUENCE.  Pipeline 2 with --no-anchors uses only: singleton normalization;
+v(N) = T; core membership of Lmin and Lmax; Theorem A (the DEFINITION of
+exactness, made existential); and Theorems B/mirror (exact characterizations of
+leximin/leximax, proved unconditionally).  No A3, no Studeny-Kratochvil facet
+description, no vertex enumeration.  Every hypothesis is a necessary condition,
+and all 2961 programs are UNSAT.  THEREFORE T0 IS UNCONDITIONAL: s(5) = 1/2.
+
+Note that this also retires, for these results, the n>=6 caveat that the facet
+description carried -- the machinery of pipeline 2 is dimension-independent,
+though A3's M-side failure from n = 6 means the CONFIGURATION analysis, not the
+encoding, is what stops generalizing.
+
+--------------------------------------------------------------------------------
+7.  FILE INDEX
+--------------------------------------------------------------------------------
+ lib/                 copies of verifiers/lib (audit.py, lmax.py, catalogue.py,
+                      pack.py, cat/) + cone.py (the 280 facet inequalities,
+                      dead scratchpad paths removed) + pinverts_L012.json
+                      (the stored 354 vertices, used only as a regression
+                      fixture).
+ pinvert.py           parametric dual-vertex enumerator + the thm:cfg
+                      regression.  -> pinverts_D*.json, pinvert_counts.json
+ pinvert_equiv.py     three-way check: archived verifiers/o2/pinvert.py vs the
+                      stored fixture vs the parametric version.
+                      -> pinvert_equiv.json
+ stages.py            the multi-stage ladders, both sides; derivation in the
+                      module docstring.  -> stage_vertex_counts.json
+ harvest.py           configuration census of random exact games.
+                      -> harvest.json, harvest.log
+ lemmas.py            L1-L4 + A3 verified on every harvested game.
+                      -> lemmas.json
+ l2filter.py          how many configurations L1' and L2 kill on their own.
+                      -> l2filter.json, l2filter.log
+ arith22.py           per-configuration game-free triage.
+                      -> arith22_1_2.json, arith22_1_3.json + .log
+ closecfg.py          single-stage finite check (one configuration).
+ batch.py             sharded driver for it.  -> batch_1_2_*.json,
+                      batch_half_*.log
+ closecfg2.py         full multi-stage finite check.
+ batch2.py            sharded driver for it.  -> batch2_1_2_*.json, batch2_*.log
+ run41.py             the (4,1) regime at target 1/3.  -> run41_*.json/.log
+ run2strat.py         the two-stratum-Lmin configurations under the full
+                      ladders (classification).  -> run2strat_*.json/.log
+ poscontrol.py        external positive control on genuine games.
+                      -> poscontrol.json
+ completeness.py      positive control with teeth (3+-stratum Lmin cases).
+                      -> completeness.json, completeness.log
+ completeness2.py     the same at the EXTREMAL configurations, CFG included.
+                      -> completeness2.json, completeness2.log
+ crosscheck.py        UNSAT-at-1/2 versus audited-SAT-below, side by side.
+                      -> crosscheck.json
+ coverage.py          machine audit that all 2961 configurations are covered
+                      exactly once with no errors.  -> coverage.json
+ harvest_seed22.json  the 4000-draw harvest (1050 records) used by lemmas.py
+                      and poscontrol.py; harvest.json is a copy of it.
+ harvest_seed777.json the independent 6000-draw falsification sweep.
+ audit22.py           end-to-end audit of every feasible model.
+                      -> audit22.json, audit_pass1.log
+ summarize.py         final tally.  -> summary.json
+ farkas.py            Theorem B + the LEXIMAX MIRROR re-derived, with its
+                      pointwise positive and negative controls on 1050 games.
+                      -> farkas_validate.json, farkas_validate.log
+ closecfg3.py         pipeline 2: Theorem A exactness + Farkas leximin/leximax.
+ batch3.py            it over all 2961 configurations, with and without the
+                      A3 anchors.  -> batch3_1_2_*.json, batch3_1_2_noanch_*.json
+ completeness3.py     teeth control for pipeline 2.  -> completeness3.json,
+                      completeness3_noanchor.json
+ compare3.py          verdict agreement between the two pipelines.
+                      -> compare3.json
+ run41_a3free.json    T2 re-proved without A3.
+ PROOF.txt            human-readable proofs.
+ REPORT.txt           this file.
+================================================================================

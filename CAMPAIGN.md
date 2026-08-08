@@ -1116,6 +1116,24 @@ localization of exactness; "|B|=4 is special".
   witnesses realize it as an EQUALITY (phi_f = 7/4 <= 7/4) — razor-thin.
   Reusable frame for all m: a PART core is a polytope in |L| variables
   whose facet normals cannot separate same-block players.
+- s(5) = 1/2 PROVED IN FULL, UNCONDITIONALLY (2026-08-08, task #22,
+  verifiers/s5close/, paper5 thm:s5): 2961-configuration split, TWO
+  pipelines sharing no machinery — (1) anchor lemmas L1'-L2 + game-free
+  triage + single/multi-stage pinning ladders (the ceiling second stage
+  BUILT per the archived sketch); (2) existential exactness (Theorem A) +
+  staged Farkas certificates for both selections (Theorem B + re-derived
+  leximax mirror), needing neither A3 nor the facet catalogue — so the
+  theorem is unconditional.  Perfect pipeline agreement, machine-audited
+  coverage, the certificate-not-realizable phenomenon hit its 4th and
+  largest instance (108 single-stage models, all genuine games in the
+  wrong configuration).  Also: (4,1) regime <= 1/3 attained (thm:regime41);
+  starved player always Lmin-poor (cor:poorstarved, 2-line hand proof,
+  closes S5PROOF E3 and kills the jrich branch); L1' (Lmax top stratum
+  >= 2); 2M + 3mu <= T.  Lead verified independently: 400-game own-code
+  falsification sweep 0 violations, coverage/agreement re-run, proof-file
+  line audit.  Paper5 updated (new sec:s5full, abstract, scope now 4 open
+  problems).  Residues: hand proof of A3 (mechanism only), hand
+  distillation of the 649 solver-closed configurations, s(6).
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
