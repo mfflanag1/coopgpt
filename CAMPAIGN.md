@@ -1170,7 +1170,11 @@ localization of exactness; "|B|=4 is special".
   Machine-validated 18 instances n<=9, 97 checks 0 failures; lead verified
   3 instances independently.  Padding lemma retires from load-bearing
   duty; Theorem G7 = closed-form sufficiency.  PART program: nothing
-  outstanding.
+  outstanding.  Method law (r23): do NOT reverse-engineer envelope rows
+  from SAT-model v-vectors (needs vertex enumeration) — design rows
+  BACKWARDS from the intended leximin proof (pick phi, pick the pins,
+  solve the row arithmetic); that is why Family B is 4 rows independent
+  of q and why the (KEY) budgets surface as row constraints.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
