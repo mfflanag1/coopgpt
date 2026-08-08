@@ -1,0 +1,148 @@
+================================================================================
+r12 / task #28  --  THE EXACT-PARTITION IMPOSSIBILITY CONJECTURE
+work dir: /private/tmp/claude-501/-Users-maxf/f0530d27-effc-4967-b154-48a9b65ca708/scratchpad/r12
+(reads on top of REPORT.txt / PROOF.txt / REPORT2.txt)
+================================================================================
+
+CONJECTURE (paper4, end of the monotonicity section).  No monotonicity failure
+occurs at an exact-partition phi -- one where every cumulative union of the
+richest payoff strata is tight, i.e. every richer suffix H_j has
+phi(H_j) = v(H_j), so no slack richer suffix and no Hhat exists.
+
+HEADLINE
+--------
+PROVED AT n = 5, and non-vacuously so.  All 15 gap patterns UNSAT under the
+complete encoding, while 7 of those 15 shapes do admit admissible exact bumps
+at exact partition -- so there is something to decide and the decision is
+"no failure".  Two structural lemmas about exact partition fall out for free
+and explain the shape pattern.  n >= 6 is open; designed searches running.
+
+COROLLARY (n = 5).  Every five-player exact-domain monotonicity failure has a
+slack richer suffix.  Combined with Theorem 3 of task #12 this closes the
+five-player story: Hhat always exists at a failure and W subset Hhat subset S
+always holds.  It also discharges, at n = 5, the hypothesis paper4 needed in
+order to apply the four/five threshold to ALL failures rather than only to
+those with a slack boundary.
+
+--------------------------------------------------------------------------------
+1.  THE DECISION
+--------------------------------------------------------------------------------
+Driver d23_expart.py, group "expart" (every richer suffix tight) in place of
+hstar/hmin, target "exists" (some i in S has phi'_i < phi_i).  Same complete
+encoding as the C-C decisions: Lemma L is necessary AND sufficient for leximin
+maximality, S is a variable one-hot coalition, all 31 nonempty gap patterns are
+enumerated, exact rational LRA throughout.
+
+  target exists    (a failure at exact partition)   0 sat / 15 unsat / 0 unknown
+  target bumpexists(an admissible exact bump only)  7 sat /  8 unsat / 0 unknown
+
+The second line is the non-vacuity control and it is the one that makes the
+first line worth stating: exact-partition bases DO admit exact bumps with
+alpha > s_phi(S) at n = 5, in 7 of the 15 shapes; they simply never produce a
+loser inside S.  Without that control the UNSAT could have meant "no instances".
+
+The 8 shapes where even a bump is impossible are exactly the gap patterns
+containing the cut n-1 -- and Lemma EP2 below explains why: those shapes have a
+singleton top stratum and cannot be at exact partition at all.
+
+MINIMAL HYPOTHESES (leave-one-out over three shapes, all agreeing):
+     core, exv2, cert2, expart           unsat      <-- minimal
+     core, cert2, expart                 SAT        (exactness of v' needed)
+     core, exv2, expart                  SAT        (Lemma L for phi' needed)
+     core, worse, expart                 SAT
+     core, expart                        SAT
+So the theorem needs: core membership of both allocations, exactness of the
+BUMPED game, Lemma L for phi', and exact partition.  It does NOT need exactness
+of the base game, superadditivity, or a certificate for phi -- the last because
+of Lemma EP1, which makes phi's leximin-maximality free at exact partition.
+This is a strictly smaller hypothesis set than either half of C-C needed.
+
+SOLVER ROBUSTNESS: three representative shapes re-solved with four z3 random
+seeds each and a randomly permuted assertion list (a completely different
+search).  All 12 runs agreed unsat: gaps=(1,) 19-23 s, gaps=(2,3) 13-184 s,
+gaps=(1,2,3) 9-280 s.
+
+--------------------------------------------------------------------------------
+2.  TWO FREE STRUCTURAL LEMMAS ABOUT EXACT PARTITION
+--------------------------------------------------------------------------------
+LEMMA EP1.  If x in core(v) and every richer suffix of x is x-tight, then x is
+the leximin-maximal element of core(v).
+
+PROOF.  Apply Lemma L (PROOF.txt Part I), whose certificate condition is
+sufficient as well as necessary.  At cut j take lambda = 1_{H_j} and nu = 1:
+H_j is proper and x-tight, so the support condition holds; the cover is 1 = nu
+at every i in H_j and 0 <= nu - 1 = 0 at every i in B_j.  At the top cut take
+lambda = 0, nu = 1.  Every cut therefore has a certificate.              []
+
+Consequence: at exact partition "phi = Lmin(v)" is not an extra hypothesis --
+it follows from phi in core(v) plus tightness of the suffixes.  This is why the
+group "cert" is not in the minimal set above, and it means any hand proof of
+the conjecture may treat the base side as given.
+
+LEMMA EP2.  Let v({i}) = 0 for all i and let phi be at exact partition with
+k >= 2 strata.  Then the top stratum B_k has at least two players.
+
+PROOF.  H_{k-1} = B_k is tight, so phi(B_k) = v(B_k).  If B_k = {r} then
+phi_r = v({r}) = 0.  But for i in B_{k-1} we have phi_r > phi_i >= v({i}) = 0,
+so phi_r > 0 -- a contradiction.                                          []
+
+Consequence: exact partition is incompatible with a strict payoff gap at the
+last cut.  That is precisely the 8 UNSAT rows of the bumpexists control, so the
+control's shape pattern is fully explained rather than mysterious.
+
+VERIFICATION (d24_ep.py part a): 400 random exact games, of which 355 are at
+exact partition; EP1 holds 355/355 (a Lemma-L certificate exists at every cut)
+and EP2 holds 355/355 (top stratum has >= 2 players).  Note in passing how
+COMMON exact partition is -- 355 of 400 -- which is the right way to read
+paper4's 15,824 exact-partition bases: they are cheap to sample, and it is the
+admissible bump windows inside them that are scarce.
+
+--------------------------------------------------------------------------------
+3.  WHY THE PREVIOUS EVIDENCE WAS WEAK, AND WHAT IS STILL OPEN
+--------------------------------------------------------------------------------
+paper4's evidence was 15,824 exact-partition bases, 1,613 admissible bump
+windows and 10,239 exact bumps with no failure, "against the two hundred
+expected at the rate observed on slack-bearing bases".  That framing is now
+sharper in two ways.  First, at n = 5 the answer is not a rate at all: it is
+zero by decision.  Second, the expected-count argument was never sound, because
+Lemma EP1/EP2 show exact-partition bases are a structurally different
+population, not a random sub-sample of slack-bearing ones -- the rate observed
+on slack-bearing bases is not the right null.
+
+OPEN: n >= 6.  The lab does not scale (the C-C round established that: unknown
+at a 300 s timeout on the first n=6 shape).  Designed searches are running:
+  d24_ep.py n=6  1,729 games -> 1,200 exact-partition bases -> 40 windows
+                 -> 320 exact bumps -> 0 failures   [snapshot]
+  d24_ep.py n=7    346 games ->   200 exact-partition bases ->  2 windows
+                 ->  16 exact bumps -> 0 failures   [snapshot]
+  d25_epfam.py    the family trick applied here too: phase 1 collected 22+
+                 window-bearing exact-partition bases at n=6, phase 2 perturbs
+                 them (results in epfam_6_51.json)
+Honest note on volume: paper4's existing random evidence at exact partition
+(1,613 windows, 10,239 exact bumps) is still far larger than what these runs
+have accumulated, so at n >= 6 this round adds method, not yet weight -- the
+contribution at n >= 6 is the family generator, which is the only way seen so
+far to manufacture window-bearing exact-partition bases in bulk.
+NO SHORT HAND PROOF EITHER (d26_epcore.py).  The small hypothesis VOCABULARY
+turns out not to mean a small proof.  Minimizing the core of the shape
+gaps=(1,), S={1,2} greedily takes 1384 assertions -> 482 (z3) -> 302
+IRREDUNDANT, each of which alone restores satisfiability.  Composition:
+    223  cert2   (the Lemma-L certificate machinery for phi')
+     44  exv2    (exactness witnesses of v')
+     20  core_phi,  2 core_phi2,  1 expart,  and the shape/normalization rows
+So exact partition enters through exactly one equation (there is a single cut
+in this shape) and essentially the whole proof burden sits in phi's leximin
+certificate.  That is a LARGER irredundant core than the C-C two-strata case
+(302 vs 72), so a hand proof looks less plausible here, not more -- the
+opposite of what the small hypothesis set suggested.  Recommendation: record
+the exact-partition statement at n=5 with finite-check status, as was done for
+mono:thm:cchat, rather than treating it as awaiting a hand proof.
+
+--------------------------------------------------------------------------------
+4.  FILE POINTERS
+--------------------------------------------------------------------------------
+  d23_expart.py   the decision: group "expart", targets "exists"/"bumpexists"
+  d24_ep.py       (a) EP1/EP2 verification  (b) designed n=5/6/7 search
+  d2_lab.py       extended with group "expart" and targets exists/bumpexists
+  outputs: ep_6_31.json, ep_7_41.json, ep6.log, ep7.log
+================================================================================

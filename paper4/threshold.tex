@@ -1674,8 +1674,8 @@ is the location of $W$, not the threshold.  Beyond $n=5$ the conjecture has
 been tested exactly where it is most exposed: a designed six-player
 multi-slack corpus --- generators tuned to produce bases with two or more
 slack richer suffixes, the class that killed~\eqref{mono:eq:ccfalse} ---
-yielding roughly $2{,}800$ certified exact-domain violations on which the
-left inclusion of~\eqref{mono:eq:ccfalse} fails about $28\%$ of the time
+yielding $6{,}246$ certified exact-domain violations on which the
+left inclusion of~\eqref{mono:eq:ccfalse} fails $1{,}815$ times
 and the repaired containment never fails, in either half.  The left
 inclusion's failure is not a five-player accident: two audited six-player
 multi-slack games repeat it, one of them with tight and slack suffixes
@@ -1709,16 +1709,75 @@ $\Delta(H_j)\ge0$ at every cut: no cumulative richer suffix can lose and
 every cumulative poorer side weakly loses.  Theorem~\ref{mono:thm:loss}
 then rules out a loser set that is a richer suffix, but not one that is
 slack without being a suffix, which is the shape of
-Example~\ref{mono:ex:notstratum}.  A dedicated search found no such
-failure: $15{,}824$ exact-partition bases, $1{,}613$ admissible bump
-windows and $10{,}239$ exact bumps produced none, against the two
-hundred expected at the rate observed on slack-bearing bases, and a
-search aimed at the internal-redistribution mechanism inside the family
-of Example~\ref{mono:ex:notstratum} also produced none.  Whether a
-monotonicity failure can occur at exact partition is therefore open, and
-we conjecture that it cannot; granting that, every monotonicity failure
-has a slack richer suffix, and the four/five threshold above applies to all
-failures.
+Example~\ref{mono:ex:notstratum}.  On five players the question is settled.
+Two hand lemmas prepare it.
+
+\begin{lemma}[suffix tightness certifies leximin]\label{mono:lem:ep1}
+If $x\in\core(v)$ and every richer suffix of $x$ is $x$-tight, then
+$x=\Lmin(v)$.
+\end{lemma}
+
+\begin{proof}
+At each payoff cut $j$ the tight suffix $H_j$ supplies a leximin-optimality
+certificate in the sense used by the decision procedures of this section
+(multipliers $1$ on $H_j$ alone): every player of $H_j$ is covered exactly
+once and every player of $B_j$ not at all, which is the certificate
+inequality, and the certificate condition is sufficient as well as
+necessary.  So at exact partition, leximin-maximality is not a hypothesis
+--- it follows from core membership and suffix tightness.
+\end{proof}
+
+\begin{lemma}[no singleton top stratum at exact partition]
+\label{mono:lem:ep2}
+A singleton-normalized game with $k\ge2$ payoff strata whose $\phi$ is
+exact-partition has $|B_k|\ge2$.
+\end{lemma}
+
+\begin{proof}
+$B_k=H_{k-1}$ is $\phi$-tight; a singleton $B_k=\{r\}$ would give
+$\phi_r=v(\{r\})=0$, contradicting $\phi_r>\phi_i\ge0$.
+\end{proof}
+
+\begin{theorem}[no failure at exact partition, $n=5$]\label{mono:thm:expart}
+Let $n=5$, let $v$ be singleton-normalized with $\phi=\Lmin(v)$
+exact-partition, and let $v'=v^{S,\alpha}$ be an exact bump.  Then the bump
+is not a monotonicity failure: $W=\emptyset$.
+\end{theorem}
+
+\begin{proof}[Proof, by finite exact check]
+The decision laboratory of Theorem~\ref{mono:thm:cchat}, with the slack-cut
+group replaced by ``every richer suffix tight'' and the target ``some
+member of $S$ strictly loses'': all $31$ stratum patterns return
+infeasible, in exact rational arithmetic with no indeterminate verdicts.
+The verdict is not vacuous: the control target ``an admissible exact bump
+exists'' is feasible on $7$ of the $15$ patterns consistent with exact
+partition --- exact-partition bases do admit exact bumps at $n=5$; they
+never produce a loser --- and the $8$ infeasible control patterns are
+exactly those with a singleton top stratum, which
+Lemma~\ref{mono:lem:ep2} excludes from exact partition outright.  By
+Lemma~\ref{mono:lem:ep1} no optimality certificate for $\phi$ is consumed:
+the minimal hypothesis set is core membership, exactness of the bumped
+game, the leximin certificate of $\phi'$, and exact partition itself.
+\end{proof}
+
+\begin{corollary}\label{mono:cor:allfail}
+Every five-player exact-domain monotonicity failure has a slack richer
+suffix.  Consequently, at $n=5$, $\widehat H$ exists at every failure,
+$W\subseteq\widehat H\subseteq S$ always holds
+(Theorem~\ref{mono:thm:cchat}), and the four/five threshold above applies
+to \emph{all} failures, not only the slack-bearing ones.
+\end{corollary}
+
+For $n\ge6$ the statement remains a conjecture.  The earlier random
+evidence ($15{,}824$ exact-partition bases, $1{,}613$ admissible windows,
+$10{,}239$ exact bumps, no failure) should be read with
+Lemma~\ref{mono:lem:ep1} in mind: exact-partition bases are a
+structurally different population from slack-bearing ones, so no
+``expected count'' transferred from the slack-bearing failure rate is a
+sound null; what the search shows is only that no failure was found.  A
+designed generator that manufactures window-bearing exact-partition bases
+in bulk now exists and is archived with the verifiers; scaling it at
+$n\ge6$ is the open direction.
 
 \subsection{Two remarks}
 
@@ -1781,12 +1840,14 @@ proved &
  Theorem~\ref{mono:thm:push} with
  Corollaries~\ref{mono:cor:prefilter} and~\ref{mono:cor:lout};
  Proposition~\ref{mono:prop:shield} and Remark~\ref{mono:rem:totals};
- Proposition~\ref{mono:prop:window} and Lemma~\ref{mono:lem:null}.  None
+ Proposition~\ref{mono:prop:window} and Lemma~\ref{mono:lem:null};
+ Lemmas~\ref{mono:lem:ep1} and~\ref{mono:lem:ep2}.  None
  uses a boundary hypothesis or a cardinality bound.\\
 finite check &
- Theorem~\ref{mono:thm:cchat}, by the exact five-player decision procedure
- described in its proof, archived with the verifier drivers; on the same
- footing as Theorems~\ref{sel:thm:mthr} and~\ref{sel:thm:h3}.\\
+ Theorems~\ref{mono:thm:cchat} and~\ref{mono:thm:expart} with
+ Corollary~\ref{mono:cor:allfail}, by the exact five-player decision
+ procedure described in their proofs, archived with the verifier drivers;
+ on the same footing as Theorems~\ref{sel:thm:mthr} and~\ref{sel:thm:h3}.\\
 verified &
  Examples~\ref{mono:ex:notsuffix}, \ref{mono:ex:notstratum}
  and~\ref{mono:ex:multislack}, and the
@@ -1805,10 +1866,10 @@ refuted &
 conjectured &
  Conjecture~\ref{mono:conj:cc} for $n\ge6$, together with the two
  observational regularities recorded after it.  Whether a failure can occur
- with no slack richer suffix at all is conjectured impossible and remains
- open; a dedicated search over
- $15{,}824$ exact-partition bases and $10{,}239$ exact bumps produced
- none.\\
+ at exact partition is settled negatively at $n=5$
+ (Theorem~\ref{mono:thm:expart}) and conjectured impossible for $n\ge6$,
+ where the evidence is the searches described after
+ Corollary~\ref{mono:cor:allfail}.\\
 \bottomrule
 \end{tabular}
 \end{center}

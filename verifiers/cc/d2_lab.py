@@ -183,14 +183,27 @@ def build(n, gaps, cstar, target, groups):
         for c in cuts:
             if c > cstar:
                 s.add(tot(phi, Hof[c]) == v[Hof[c]])
+    if "expart" in groups:               # EXACT PARTITION: every richer suffix tight
+        for c in cuts:
+            s.add(tot(phi, Hof[c]) == v[Hof[c]])
     if "hmin" in groups:                       # cstar = j_min, the OUTERMOST slack cut
         s.add(tot(phi, Hs) > v[Hs])
         for c in cuts:
             if c < cstar:
                 s.add(tot(phi, Hof[c]) == v[Hof[c]])
 
-    # ---- the monotonicity failure: W = {i in S : phi'_i < phi_i} nonempty
-    s.add(z3.Or([z3.And(inS[i], ph2[i] < phi[i]) for i in range(n)]))
+    # ---- the monotonicity failure: W = {i in S : phi'_i < phi_i} nonempty.
+    # The *_nofail targets drop this and require only an admissible exact bump
+    # (alpha > s_phi(S)), to test whether the containment is really a statement
+    # about failures or already one about exact bumps.
+    nofail = target.endswith("_nofail") or target == "bumpexists"
+    if nofail:
+        target = "exists" if target == "bumpexists" else target[:-len("_nofail")]
+        s.add(tot(ph2, FULL) == v2[FULL])
+        for T in cand:                       # alpha > s_phi(S), i.e. phi not in core(v')
+            s.add(z3.Implies(isS[T], al > tot(phi, T) - v[T]))
+    else:
+        s.add(z3.Or([z3.And(inS[i], ph2[i] < phi[i]) for i in range(n)]))
 
     if target == "right":                       # negate H* subset S
         s.add(z3.Or([z3.Not(inS[i]) for i in bits(n, Hs)]))
@@ -207,6 +220,8 @@ def build(n, gaps, cstar, target, groups):
         for i in range(n):
             if not Hs >> i & 1:
                 s.add(z3.Not(z3.And(inS[i], ph2[i] < phi[i])))
+    elif target == "exists":
+        pass                      # only "some i in S strictly loses" is asserted
     elif target == "control":                   # assert C-C; expect SAT
         s.add(z3.And([inS[i] for i in bits(n, Hs)]))
         for i in range(n):

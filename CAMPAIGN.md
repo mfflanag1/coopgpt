@@ -1152,6 +1152,20 @@ localization of exactness; "|B|=4 is special".
   and exactness of v' at non-supersets of S provably irreplaceable (L-out
   alone flips UNSAT->SAT).  Data-loss law: d14_n6multi.py hardcodes its
   output name — rename per seed or earlier runs are destroyed.
+  (a2) EXACT-PARTITION IMPOSSIBILITY PROVED AT n=5 (task #28,
+  verifiers/cc/ d23-d26, paper4 thm:expart + cor:allfail): same decision
+  lab, 31 patterns UNSAT, non-vacuous (7/15 patterns admit exact bumps —
+  they just never produce a loser; the 8 dead control patterns are exactly
+  EP2's exclusion).  Free hand lemmas: EP1 (suffix-tight core point IS the
+  leximin — certificate 1_{H_j}) and EP2 (no singleton top stratum at
+  exact partition).  Consequence: at n=5, EVERY failure has a slack
+  suffix, Ĥ always exists, W ⊆ Ĥ ⊆ S always, four/five threshold applies
+  to all failures.  paper4's old "two hundred expected" null retracted as
+  unsound (structurally different population).  No short hand proof: 302
+  irredundant assertions (vs 72 for two-strata C-C) — recorded, not
+  chased.  n>=6 open; family generator for window-bearing exact-partition
+  bases archived (method, not yet weight).  Final d18 corpus: 6,246
+  certified n=6 danger-class violations, 1,815 C-C-left failures, 0 C-C^.
   (b) PART characterization unified (verifiers/part/PROOF_GENERAL.txt): ONE
   inequality (KEY: tight T over H omitting P forces |Q\T| >= 2) drives both
   halves.  Lemmas N*/I*/E*/X* generalize the m=3 frame to all (p,q);
