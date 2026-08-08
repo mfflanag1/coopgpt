@@ -1,0 +1,240 @@
+================================================================================
+r12 / task #31  --  HOSTILE AUDIT OF THE PAPER SPLICES (bf9ec2d..HEAD)
+targets: paper4/threshold.tex, paper5/divergence.tex
+work dir: /private/tmp/claude-501/-Users-maxf/f0530d27-effc-4967-b154-48a9b65ca708/scratchpad/r12
+Papers NOT edited.  Line anchors are against the current HEAD files.
+================================================================================
+
+SUMMARY: 7 findings -- 2 HIGH, 3 MODERATE, 2 LOW.  No FATAL.  Every theorem
+STATEMENT restated from verifiers/cc/ is faithful; every defect is in
+surrounding narrative, counts, or scope attribution.  All cross-references
+resolve.  The law holds again: the mathematics survived, the splices did not.
+
+--------------------------------------------------------------------------------
+S1  HIGH -- FALSE EVIDENCE CLAIM, contradicted by the campaign's own archive
+    paper4 line 1616 (primary), line 1280 (same error, different wording)
+--------------------------------------------------------------------------------
+Line 1616 reads "In every one of the $1041$ recorded failures exactly one
+suffix was slack, so $H^*=\widehat H$ there and the choice of end in
+Definition~\ref{mono:def:hstar} was invisible".  This is false.
+
+verifiers/monotonicity/summary.json, statistics:
+      "with_two_or_more_slack_boundaries": 494
+      "multi_slack_exact_violations": 20
+and its refinement_conjecture entry: "20/20 exact-domain violations over base
+games with two slack boundaries, but only 5 distinct base games".
+verifiers/monotonicity/summary2.json, sweep_statistics: "multi_viol": 10.
+
+So at least 20 of the 1041 recorded failures sat on multi-slack bases, where
+$H^*\ne\widehat H$ and the choice of end was NOT invisible.  The continuation
+"multi-slack bases are rare under the harvest generators, which is why so much
+sampling never met one" is wrong the same way: the harvest met 494 multi-slack
+bases and produced 20 violations on them.
+
+The true mechanism is different and worth stating correctly, because it is a
+better cautionary tale: multi-slack violations DID occur, and in every one of
+them $W$ still lay inside $H^*$ -- indeed the retired conjecture C-A' ("$W$ is
+the innermost slack suffix") was tested on exactly those 20 and held 20/20.
+What had never been sampled is not a multi-slack base but a multi-slack
+violation whose loser ESCAPES the innermost suffix.  Suggested replacement:
+"Multi-slack bases were sampled -- 494 of them, carrying 20 of the 1041
+failures -- but in every one the loser set still lay inside $H^*$, so the two
+readings of Definition~\ref{mono:def:hstar} were never separated by the data."
+
+Line 1280 carries the same error in the definition's discussion ("the regime,
+it will turn out, of every recorded failure but one").  It is additionally
+inconsistent INTERNALLY with the paper's own line 1691, which reports 1,815
+failures of the left inclusion in the n=6 corpus -- every one of which
+necessarily has $H^*\ne\widehat H$.  "Every recorded failure but one" is off by
+more than three orders of magnitude against the paper's own later count.
+
+NOTE: this error has also propagated into the campaign memory file
+(project_lmin_lmax_campaign.md, "4th sampling artifact -- all 1041 records
+single-slack"); worth correcting there too.
+
+--------------------------------------------------------------------------------
+S2  HIGH -- WRONG COUNT, twice: paper4 lines 1641-1642 and line 1750
+--------------------------------------------------------------------------------
+Line 1641-1642: "the $31$ strict/tie patterns of $\phi$ with the choice of
+slack cut give $32$ shapes".
+
+At $n=5$ there are 4 adjacent pairs in the sorted payoff vector, so there are
+$2^4=16$ strict/tie patterns and $15$ with at least one strict inequality
+(a cut is needed for $H^*$/$\widehat H$ to exist).  The number is 15, not 31.
+31 is $2^5-1$, the count of nonempty player subsets -- a different object.
+
+The derived "32 shapes" is CORRECT but does not follow from 31: the shape count
+is $\sum_{r=1}^{4} r\binom{4}{r} = 4+12+12+4 = 32$, i.e. each of the 15 gap
+patterns paired with each of its own cuts.  Driver d2_lab.py enumerates exactly
+this (`for r in range(1,n): for gaps in combinations(range(1,n), r): for cstar
+in gaps`), and lab5b_right.txt/lab5_leftmin.txt each record 32 rows.
+
+Line 1750 repeats the error in thm:expart's proof: "all $31$ stratum patterns
+return infeasible".  The exact-partition run has NO cut choice (the group
+constrains every suffix at once), so it ranges over the 15 gap patterns, and
+lab output d23_expart.py records exactly 15 rows: {"sat": 0, "unsat": 15,
+"unknown": 0}.  The number is 15, not 31.
+
+--------------------------------------------------------------------------------
+S3  MODERATE -- ABLATION ATTRIBUTED TO THE WRONG TARGETS
+    paper4 lines 1658-1660
+--------------------------------------------------------------------------------
+"ablation shows the hypotheses actually consumed are exactness of the
+\emph{bumped} game and the two leximin certificates --- exactness of the base
+game and superadditivity are not needed."
+
+The archived ablation (verifiers/cc/d5_ablate.py, outputs ablate_13_3.txt and
+ablate_4_4.txt) was run on the H*-targets `right` and `left`, i.e. on the
+REFUTED containment, not on thm:cchat's $\widehat H$-targets.  The sentence
+attributes it to thm:cchat.
+
+I ran the missing ablation (leave-one-out on both $\widehat H$ targets, shape
+gaps=(3,4), c*=4; output ablate_hat.txt):
+      target rightmin: FULL unsat; -sup unsat; -exv unsat; -worse unsat;
+                       -cert UNSAT ;  -exv2 sat ; -cert2 sat
+      target leftmin : FULL unsat; -sup unsat; -exv unsat; -worse unsat;
+                       -cert UNSAT ;  -exv2 sat ; -cert2 sat
+So on the tested shape BOTH halves of thm:cchat survive the removal of `cert`
+(Lemma L for $\phi$): the essential set is {exv2, cert2} only.  The paper's
+"the two leximin certificates" overstates -- one certificate ($\phi'$'s) is
+consumed, not two.
+
+Suggested fix: "exactness of the bumped game and the leximin certificate of
+$\phi'$", or, if the general claim is wanted, qualify it as shape-dependent
+(the H*-target ablation on shape (1,3) c*=3 DID consume `cert` for the right
+inclusion, so the honest statement is that the consumed set varies by shape and
+is contained in {exv2, cert, cert2}).
+
+--------------------------------------------------------------------------------
+S4  MODERATE -- PROOF-SCOPE GAP at k=1 (thm:expart, and hence cor:allfail)
+    paper4 lines 1745-1760 (proof), 1770ff (corollary)
+--------------------------------------------------------------------------------
+thm:expart quantifies over exact-partition $\phi$.  A CONSTANT $\phi$ -- one
+payoff stratum, $k=1$ -- has no richer suffixes at all, so it satisfies "every
+richer suffix is tight" VACUOUSLY, and it has no slack richer suffix.  The
+decision procedure did not cover it: it enumerates only NONEMPTY gap patterns,
+i.e. $k\ge2$ (that is exactly why the count is 15 and not 16).  So as recorded,
+neither thm:expart nor cor:allfail covers $k=1$, and cor:allfail ("every
+five-player exact-domain monotonicity failure has a slack richer suffix") would
+be FALSE if a failure existed there.
+
+I closed the gap rather than only reporting it (driver d28_k1.py): the same
+complete encoding with all five payoffs tied, exactness of $v$ and $v'$,
+superadditivity, both core memberships, Lemma L for $\phi'$, and a strict loser
+inside $S$ asserted, returns UNSAT.  So the conclusion stands; the proof needs
+one added sentence, e.g. "the constant-$\phi$ case, vacuously exact-partition
+and outside the gap-pattern enumeration, is infeasible by the same encoding
+with all payoffs tied."
+
+--------------------------------------------------------------------------------
+S5  LOW -- INTERNAL INCONSISTENCY IN TWO CONSECUTIVE SENTENCES
+    paper4 lines 1752-1757
+--------------------------------------------------------------------------------
+"the control target ... is feasible on $7$ of the $15$ patterns consistent with
+exact partition ... and the $8$ infeasible control patterns are exactly those
+with a singleton top stratum, which Lemma~\ref{mono:lem:ep2} excludes from
+exact partition outright."
+
+If Lemma ep2 excludes those 8 from exact partition, then only 7 of the 15
+patterns are consistent with exact partition -- so "7 of the 15 patterns
+consistent with exact partition" contradicts the following clause.  Should read
+"feasible on all $7$ patterns consistent with exact partition (of $15$ in
+total)".  The underlying numbers are right: d23_expart.py bumpexists gives
+{"sat": 7, "unsat": 8}, and the 8 unsat are exactly the gap patterns containing
+cut 4.
+
+--------------------------------------------------------------------------------
+S6  LOW -- SCOPE OF THE 72-ASSERTION FIGURE; AND A MISSING COMPANION FIGURE
+    paper4 line 1697
+--------------------------------------------------------------------------------
+"a minimal unsatisfiable core of even this reduced system retains $72$
+irredundant assertions".  The figure is correct as computed (d22_mincore.py)
+but was computed for ONE shape and ONE bumped coalition (the two-stratum shape,
+S={1,2}); "even this reduced system" reads as if it were the system as such.
+Also worth a half-sentence: greedy minimization yields a MINIMAL (irredundant)
+core, not a MINIMUM one, so 72 bounds the shortest such list from above rather
+than being it.
+
+Separately: the companion figure for thm:expart -- the 302-assertion irredundant
+core (d26_epcore.py), which was the stated reason for settling that theorem's
+finite-check status too -- does not appear anywhere in paper4.  Only 72 appears.
+If the intent was to record both, one is missing.
+
+--------------------------------------------------------------------------------
+VERIFIED CLEAN (checked and found correct)
+--------------------------------------------------------------------------------
+* CROSS-REFERENCES.  paper4: 57 labels, 53 refs, zero unresolved, zero
+  duplicates.  paper5: 44 labels, 37 refs, zero unresolved, zero duplicates.
+* mono:ex:multislack (lines ~1592-1615): every value of the 5-player game, and
+  phi=(121,121,121,146,151), the strata, both suffix slacks (121 and 151),
+  S={1,3,4,5}, s_phi(S)=5, alpha=alpha_ex=20, phi'=(136,106,136,141,141),
+  W={4,5}, losers {2,4,5}, gainers {1,3}, and "16 of 24 sampled alpha across
+  (5,20]" all match d11_audit.py and d12_window.py exactly.
+* mono:cor:lout: statement and two-line proof match L-out exactly, including
+  the hypothesis scope (exactness of v' only at supersets of S).
+* mono:prop:window: matches Lemma WIN, including alpha_ex <= g(S) and the
+  segment argument for automatic exactness at S.
+* mono:lem:null: matches Theorem 1b, all three cases (p outside S, S u p = N,
+  p inside S) present and correct.
+* mono:lem:ep1 / mono:lem:ep2: match EP1/EP2, proofs correct as written.
+* thm:cchat STATEMENT: matches my Theorem 3 exactly (hypotheses, direction,
+  both inclusions).  The "16 of the 32 shapes" faithfulness figure matches
+  lab5_controlmin.txt.  "Since H* subset Hhat, the theorem contains H* subset S"
+  is correct (suffixes are nested decreasing).
+* n=6 corpus figures: "6,246 certified exact-domain violations", "1,815"
+  left-inclusion failures, "never fails, in either half" all match fam6.json
+  final stats exactly ({"viol": 6246, "cc_left_fail": 1815, "cc_right_fail": 0,
+  "cchat_left_fail": 0, "cchat_right_fail": 0}).  "two audited six-player
+  multi-slack games ... one of them with tight and slack suffixes interleaving"
+  matches d17_audit6.py Case A (slacks 0, 7/2, 0, 23/2).
+* paper5 thm:s5 proof arithmetic: 1953 + 800 + 100 + 108 = 2961.  Consistent.
+* paper5 line 1387-1389 ("the final 108 configurations are all satisfiable"):
+  NOT a contradiction with line 1352 ("the remaining 108 fall to the same
+  check"), because the antecedent "under the single-stage hypothesis set" is
+  present and scopes it correctly.  I flag it only as a place a referee will
+  stumble; the logic is sound as written.
+
+--------------------------------------------------------------------------------
+S7  MODERATE -- A LIVE FINITE-CHECK DEPENDENCY WAS DELETED FROM THE
+    FINITE-CHECK DECLARATION.  paper5 lines 1506-1513 (splice), 1179 (theorem)
+--------------------------------------------------------------------------------
+The splice rewrote the "Proved by exhaustive finite check" paragraph of
+sec:scope.  The pre-splice text listed three items; the post-splice text lists
+Theorem~\ref{thm:n5closed}, Theorem~\ref{thm:cfg}+Corollary~\ref{cor:cfg}, and
+the new Theorems~\ref{thm:s5}/\ref{thm:regime41}.  The deleted line was
+
+    -Theorem~\ref{thm:cfgbound}'s rich-branch floor bound ($\mu\ge T/6$;
+    -another $10{,}974$ programs).
+
+But Theorem~\ref{thm:cfgbound} is STILL in the paper, at line 1179
+("unconditional configuration bound: in the configuration of
+Theorem~\ref{thm:cfg}, $\rho(v)\le\tfrac12$"), and its proof at line 1183 is
+explicitly headed "Proof, by gap arithmetic and one further finite check", and
+it is still referred to at line 1272.  So the paper now contains a live
+theorem whose own proof announces a finite check, while the section that
+declares which results rest on finite checks no longer lists it.
+
+This is the same defect class the previous audit round caught ("reproducibility
+note false after theorem upgrades").  Two consistent repairs: either restore
+the entry, or -- if cor:poorstarved genuinely retires the rich-branch check --
+say so at thm:cfgbound itself and rewrite its proof header, because as it
+stands the proof still claims the check.  Someone who owns verifiers/s5close/
+should decide which; I flag only the inconsistency, which is visible from
+paper5 alone.
+
+--------------------------------------------------------------------------------
+NOT AUDITED (flagging for whoever owns the s5close archive)
+--------------------------------------------------------------------------------
+paper5's lem:staged proof sketch, thm:s5's pipeline narrative, thm:regime41
+attainment and cor:poorstarved were checked for internal consistency, arithmetic
+and cross-reference integrity only, NOT line by line against
+verifiers/s5close/PROOF.txt -- that archive is r22's and the restatements should
+be verified by whoever owns it.
+Of the numbers the assignment named for that side: $10{,}974$ IS present (lines
+1136 and 1510) and its splice is the subject of S7 above; "$74$ strict-budget
+witnesses" and "$97$ family checks" appear NOWHERE in paper5 (the only nearby
+tokens are "$74/83$ at $n=7$" at line 475, a different statistic, and "$2874$
+stage certificates" at line 1372).  If those two figures were meant to be
+spliced in, they are missing; if they belong to another agent's report, the
+assignment's checklist was over-inclusive.
+================================================================================

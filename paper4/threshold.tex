@@ -1276,9 +1276,9 @@ slack suffix}: the smallest richer suffix that is not $\phi$-tight.
 Dually, put $j_{\min}=\min\{j:s_\phi(H_j)>0\}$ and call
 $\widehat H=H_{j_{\min}}$ the \emph{outermost slack suffix}: the largest
 richer suffix that is not $\phi$-tight.  Since the suffixes are nested,
-$H^*\subseteq\widehat H$, with equality exactly when one suffix is slack ---
-the regime, it will turn out, of every recorded failure but one, and the
-reason the distinction matters.
+$H^*\subseteq\widehat H$, with equality exactly when one suffix is slack.
+The two ends come apart on \emph{multi-slack} bases, and which end the
+containment law lives at is the subject of the refutation below.
 \end{definition}
 
 \subsection{First reductions}
@@ -1612,11 +1612,14 @@ example is not a knife edge: $16$ of $24$ sampled $\alpha$ across the
 admissible window $(5,20]$ fail the left inclusion of~\eqref{mono:eq:ccfalse}.
 The mechanism is that the base game is \emph{multi-slack}: no richer suffix
 is $\phi$-tight at all, so Proposition~\ref{mono:prop:shield} bars nothing
-and the loss can climb past the innermost slack cut.  In every one of the
-$1041$ recorded failures exactly one suffix was slack, so $H^*=\widehat H$
-there and the choice of end in Definition~\ref{mono:def:hstar} was
-invisible; multi-slack bases are rare under the harvest generators, which
-is why so much sampling never met one.  The witness also satisfies the
+and the loss can climb past the innermost slack cut.  The recorded harvest
+did meet multi-slack bases ($494$ of them, carrying $20$ of the $1041$
+violations) --- but in every one of those $20$ the losers stayed inside
+the \emph{innermost} suffix, so the two ends of
+Definition~\ref{mono:def:hstar} never separated on a violation.  What the
+sampling never produced is not a multi-slack base but a multi-slack
+violation whose loser escapes $H^*$, and that is the event the present
+example realizes.  The witness also satisfies the
 suffix identification retired by Example~\ref{mono:ex:notsuffix} ($W$ here
 \emph{is} a slack richer suffix --- the outer one), so that identification
 and the left inclusion of~\eqref{mono:eq:ccfalse} are logically
@@ -1638,8 +1641,9 @@ that is a monotonicity failure.  Then
 \begin{proof}
 By exhaustive exact finite check, archived with the verifier drivers.  The
 encoding is a complete description of a counterexample, not a relaxation:
-after normalizing $v(N)=1$ and ordering the players by $\phi$, the $31$
-strict/tie patterns of $\phi$ with the choice of slack cut give $32$
+after normalizing $v(N)=1$ and ordering the players by $\phi$, the $15$
+strict/tie patterns of $\phi$ with at least one strict inequality, each
+paired with each of its own strict cuts as the slack one, give $32$
 shapes; within each, the bumped coalition ranges over all proper $S$ with
 $|S|\ge2$, exactness of $v$ and of $v'$ is imposed existentially (one
 attaining core witness per coalition), and leximin optimality of $\phi$
@@ -1655,8 +1659,10 @@ identical encoding pointed at the left inclusion of~\eqref{mono:eq:ccfalse}
 returned a feasible model that realizes as the game of
 Example~\ref{mono:ex:multislack}.  Since
 $H^*\subseteq\widehat H$, the theorem contains $H^*\subseteq S$; ablation
-shows the hypotheses actually consumed are exactness of the \emph{bumped}
-game and the two leximin certificates --- exactness of the base game and
+shows the essential hypotheses are confined to exactness of the
+\emph{bumped} game and the leximin certificates --- on the shapes tested
+for the displayed targets, only the bumped allocation's certificate is
+essential --- while exactness of the base game and
 superadditivity are not needed.
 \end{proof}
 
@@ -1693,9 +1699,11 @@ On the prospects for a human proof of Theorem~\ref{mono:thm:cchat}, one
 negative finding is worth recording so it is not retried na\"ively.
 Restricted to a two-stratum $\phi$, the right inclusion reduces to a
 statement free of $\phi'$ altogether (only exactness of the bumped game and
-the leximin certificate of the base game are consumed); but a minimal
-unsatisfiable core of even this reduced system retains $72$ irredundant
-assertions --- among them exactness witnesses of $v'$ at coalitions
+the leximin certificate of the base game are consumed); but a minimal (not
+necessarily minimum) unsatisfiable core of even this reduced system,
+computed at one representative shape and bumped coalition, retains $72$
+irredundant assertions --- among them exactness witnesses of $v'$ at
+coalitions
 \emph{not} containing $S$, which Corollary~\ref{mono:cor:lout} provably
 cannot supply.  A short hand proof in the natural hypothesis vocabulary
 therefore appears unlikely, and the finite-check status of
@@ -1747,17 +1755,29 @@ is not a monotonicity failure: $W=\emptyset$.
 \begin{proof}[Proof, by finite exact check]
 The decision laboratory of Theorem~\ref{mono:thm:cchat}, with the slack-cut
 group replaced by ``every richer suffix tight'' and the target ``some
-member of $S$ strictly loses'': all $31$ stratum patterns return
+member of $S$ strictly loses'': all $15$ stratum patterns with at least
+one payoff boundary return
 infeasible, in exact rational arithmetic with no indeterminate verdicts.
+The remaining pattern --- a constant $\phi$, which is exact-partition
+vacuously and has no richer suffix at all --- is covered by a separate
+program of the same design (exactness of both games, both core
+memberships, the certificate of $\phi'$, a loser in $S$ asserted), which
+is likewise infeasible.
 The verdict is not vacuous: the control target ``an admissible exact bump
-exists'' is feasible on $7$ of the $15$ patterns consistent with exact
-partition --- exact-partition bases do admit exact bumps at $n=5$; they
+exists'' is feasible on all $7$ patterns consistent with exact
+partition (of the $15$ with a boundary) --- exact-partition bases do
+admit exact bumps at $n=5$; they
 never produce a loser --- and the $8$ infeasible control patterns are
 exactly those with a singleton top stratum, which
 Lemma~\ref{mono:lem:ep2} excludes from exact partition outright.  By
 Lemma~\ref{mono:lem:ep1} no optimality certificate for $\phi$ is consumed:
 the minimal hypothesis set is core membership, exactness of the bumped
 game, the leximin certificate of $\phi'$, and exact partition itself.
+A minimal (not necessarily minimum) unsatisfiable core of the system,
+computed at one representative pattern and bumped coalition, retains
+$302$ irredundant assertions, $223$ of them from the $\phi'$ certificate
+--- which is why, as with Theorem~\ref{mono:thm:cchat}, the finite-check
+status is recorded as the settled outcome.
 \end{proof}
 
 \begin{corollary}\label{mono:cor:allfail}
