@@ -1,0 +1,261 @@
+================================================================================
+TASK #23 -- THE PART(p,q) CONJECTURE
+================================================================================
+
+VERDICT UP FRONT
+--------------------------------------------------------------------------------
+Conjecture 10 of verifiers/zp/PROOF.txt -- "PART(p,q) is realizable exactly
+when p,q >= 1 and max(p,q) >= 3" -- is FALSE.  PART(2,2) IS realizable at
+m = 4.  The threshold is on m, not on max(p,q):
+
+        PART(p,q) is realizable  <==>  p,q >= 1  and  p + q >= 4.
+
+BOTH halves are proved, with no residue.  Necessity: PART(1,1) by the n <= 4
+rigidity, PART(1,2) and PART(2,1) by a decisive finite check.  Sufficiency:
+three explicit games at m = 4, lifted to every larger m by a padding lemma
+(adjoin a null player and put it on either side of the partition).
+
+The ZP residue is therefore closed -- in the POSITIVE direction.  Suspending a
+null player over the PART(2,2) witness (Lemma 4 of verifiers/zp/PROOF.txt)
+produces an explicit seven-player exact game carrying a ZP(2,2) configuration
+at m = 5.  The n = 7 resisting type B is REALIZABLE, not impossible.
+
+
+PER-PROFILE VERDICT
+--------------------------------------------------------------------------------
+  PART(1,1)   m=2, n=4   IMPOSSIBLE   proved by hand (paper4 Cor 'fourfive':
+                                      no slack boundary on <= 4 players);
+                                      finite check agrees, 9/9 UNSAT
+  PART(1,2)   m=3, n=5   IMPOSSIBLE   finite check, 24/24 UNSAT,
+                                      cross-checked 1,265 CEGAR nodes
+  PART(2,1)   m=3, n=5   IMPOSSIBLE   finite check, 24/24 UNSAT,
+                                      cross-checked 1,896 CEGAR nodes
+  PART(2,2)   m=4, n=6   REALIZABLE   explicit witness, audited end to end;
+                                      58/78 stratifications SAT
+  PART(1,3)   m=4, n=6   REALIZABLE   (control) 32/60 stratifications SAT
+
+  ZP(2,2)     m=5, n=7   REALIZABLE   explicit witness by suspension
+  PART(p,q), all p,q>=1, p+q>=4       REALIZABLE   padding Lemma 9, by
+                                      induction from the three m=4 games
+                                      (checked to m=6 at n=8)
+
+
+THE WITNESS (the whole refutation, in six numbers per row)
+--------------------------------------------------------------------------------
+n = 6.  Lower envelope of five common-total allocations, total 8:
+
+        (0,0,1,4,2,1)   (0,0,4,4,0,0)   (4,0,0,0,2,2)
+        (1,0,2,3,0,2)   (0,1,2,3,1,1)
+
+Recomputed from those rows alone, in exact rational arithmetic:
+        exact at DEFINITION level (min over the core of x(S) = v(S) for all
+          62 proper S, by exact LP; no vertex enumeration at any n)
+        singleton-normalized
+        Lmin = (1,1,2,2,1,1),  strata {a,b,e,f} < {c,d}
+        H = {c,d} is the strict richer suffix, m = 4
+        v(cd) = 0, so the boundary is SLACK with s = 4
+        Lmin-tight proper coalitions:
+          ad, abd, ade, acde, adf, acdf, cef, def, acdef
+        S1 = cef, S2 = abd: tight, disjoint, covering, traces {c} and {d}
+        p = |{e,f}| = 2,  q = |{a,b}| = 2
+
+Adjoining a null player g (same rows with a seventh coordinate 0) gives the
+n = 7 game with Lmin = (1,1,2,2,1,1,0), the same H = {c,d} with s = 4, and the
+ZP(2,2) configuration S1 = cefg, S2 = abdg, S1 n S2 = {g}, phi_g = 0.
+
+Why the archive missed it: the census reported "PART(2,2) NEVER" over 8,431
+random plus 11,396 targeted m=4 boundaries.  The present harvest hit it once in
+15,967 games (1 hit against 6 of split (1,3) and 7 of split (3,1)).  It is a
+rare configuration, not an absent one -- the same sampling artefact that
+paper4 already warns about for split packets on five players.
+
+
+HOW THE TWO BLOCKERS OF verifiers/zp/REPORT.txt WERE REMOVED
+--------------------------------------------------------------------------------
+The previous attempt stalled because exactness needed the min-semi-balanced
+catalogue (converse unvalidated at n = 6) and because no relaxation captured
+the leximin condition -- all three tried relaxations returned models that were
+not realized at their own Lmin.  Both are now exact.
+
+(1) EXACTNESS IS EXISTENTIAL.  v is exact iff every coalition S has a core
+    point z^S attaining v(S).  One extra allocation vector per coalition; all
+    linear; no catalogue, no vertex enumeration, no completeness assumption, at
+    any n.  The n = 6 caveat in the brief simply does not arise: the n = 6 and
+    n = 7 results here are unconditional.
+
+(2) LEXIMIN IS A FARKAS CERTIFICATE.  Fix the stratification.  Stage t pins
+    player i iff max{x_i} over the core, with earlier strata pinned and the
+    free players held at or above the stage level, equals phi_i.  At phi the
+    active constraints are exactly efficiency, the phi-TIGHT coalitions, the
+    earlier pins, and the level bound on B_t only (it is slack on B_>t).  So
+    the condition is "d_i <= 0 on the tangent cone", and Farkas turns it into
+    an EXISTENTIAL certificate: nonnegative multipliers y supported on tight
+    coalitions, satisfying one vector identity.  Complementary slackness kills
+    the bilinear terms y_A v(A) that would otherwise appear, leaving the
+    support requirement as a DISJUNCTION "y_A = 0 or phi(A) = v(A)".  Linear
+    arithmetic plus Boolean structure -- decided exactly.
+
+Both directions of both statements are proved in PROOF.txt (Theorems A and B),
+so the encoding is an EQUIVALENCE.  UNSAT over every stratification is a proof
+of impossibility; SAT is a candidate, and every SAT model here was audited end
+to end.
+
+
+ENCODING SIZES AND SOLVER OUTCOMES
+--------------------------------------------------------------------------------
+  n=5: 31 v-variables, 30 attaining core points (150 vars), 5 phi, 5 Farkas
+       bundles with 150 y-variables and 150 support disjunctions;
+       about 960 linear constraints for exactness alone.
+  n=6: 63 v, 62 attaining core points (372 vars), 6 phi, 6 Farkas bundles
+       with 372 y and 372 disjunctions; about 4,000 constraints.
+
+  profile      stratifications   sat   unsat   unknown
+  PART(1,1) n=4        9           0      9        0
+  PART(1,2) n=5       24           0     24        0
+  PART(2,1) n=5       24           0     24        0
+  PART(1,3) n=6       60          32     28        0
+  PART(2,2) n=6       78          58     20        0
+
+  Every one of the 90 SAT models passed the end-to-end audit ("GENUINE
+  WITNESS"): rebuild v, re-derive exactness by LP, recompute Lmin from scratch,
+  re-check that H is a strict slack suffix and that S1, S2 are tight.
+  No solver call returned unknown, at any point in the campaign.
+
+  Stratifications are enumerated up to the symmetry that permutes P internally
+  and Q internally -- a genuine game isomorphism preserving the configuration.
+  Every ordered set partition of L is covered, followed by H as one block or as
+  two singleton blocks in either order; that exhausts the ways H can be a
+  strict richer suffix.
+
+
+CONTROLS  (mandatory; the previous attempt failed precisely by faking models)
+--------------------------------------------------------------------------------
+  L+  leximin block ACCEPTS the true Lmin        40/40 (n=4), 40/40 (n=5)
+  L-  leximin block REJECTS other core points   120/120 (n=4), 120/120 (n=5)
+  X+  exactness block ACCEPTS exact games        25/25 (n=5)
+  X-  exactness block REJECTS non-exact games    23/23 (n=5)
+  P+  FULL encoding pinned at the genuine PART(2,2) witness            SAT
+  DROP-THE-HYPOTHESIS  same encoding on realizable PART(1,3), n=6      SAT
+                       (32 stratifications, all audited genuine)
+  CEGAR cross-check    independent method, PART(1,2) and PART(2,1)
+                       return zero candidate tight families
+  CEGAR POSITIVE CONTROL, same n=5, same code path: requiring only "H is a
+                       slack strict richer suffix" and dropping BOTH tightness
+                       hypotheses, the search returns candidate tight families
+                       -- 5 on the very first stratification, 10 over the first
+                       five -- and one of them, ['ade','cde','acde'], contains
+                       the pair {ade, cde} that paper4 records as the complete
+                       tight family of the (m,h)=(3,2) member of its
+                       three-poorer escape family (phi = (1,1,2,3,3), H = de).
+                       Containment rather than equality is expected: the
+                       numeric LP only requires the listed sets to be tight.
+                       So the CEGAR reaches a real five-player realization
+                       through the same LP that returns nothing for
+                       PART(1,2)/(2,1).  (Run stopped after five
+                       stratifications; the control's purpose is discharged by
+                       the first.)
+  All failure counts are 0.
+
+  A BY-PRODUCT, stronger than Theorem D needs.  Dropping only S2 -- keeping
+  "H slack" and "S1 = {a,f} tight", one poorer player plus one richer -- also
+  returns zero candidates, on all 24 stratifications.  So at n = 5 no exact
+  singleton-normalized game has a slack strict h = 2 boundary together with an
+  Lmin-tight coalition made of exactly one poorer and one richer player.  That
+  is consistent with paper4's two five-player realizations of a slack h = 2
+  boundary, whose tight families are {abd, abe, ade, bde, abde} and {ade, cde}
+  -- neither contains a poor-plus-rich pair.  (Run cegar_control_n5.log.  Note
+  this run is NOT a positive control: it returns 0 on both settings, which is
+  why the slack-only run above is the control that matters.)
+
+The drop-the-hypothesis control is what makes the n = 5 UNSATs meaningful: the
+same code, the same exactness and leximin blocks, returns audited genuine
+witnesses on the realizable profiles and nothing on the impossible ones.
+
+
+ROUTE A (structural): WHAT IT GAVE AND WHERE IT STOPPED
+--------------------------------------------------------------------------------
+PROVED, and new as far as this campaign records:
+
+  BLOCK RIGIDITY.  In a PART configuration S1 and S2 are tight at EVERY core
+  point, not just at phi -- because v(S1) + v(S2) = v(N) and two core
+  inequalities summing to an equality must both be equalities.  The core is
+  confined to the product of the two block faces.  This is the exact sense in
+  which a PART configuration is "close to a direct sum", and it is the engine
+  of the hand lemmas below.
+
+  RICH-PAIR MERGE.  Contracting H = {f,g} to a single player r and
+  renormalizing yields an exact singleton-normalized game w' whose core
+  contains the image psi = (phi|_L, s) of phi.  Exactness of the contraction
+  (M1) holds for ANY coalition of ANY exact game.
+
+REFUTED, and recorded so it is not retried:
+
+  The merge does NOT transport Lmin.  The two links needed to import the h = 1
+  phase bound m_min(1) = 4 both fail at genuine PART configurations:
+  (T1) s > max_L phi fails 5 times in 7 tested configurations -- at the
+  harvested PART(1,3) witness s = 1/2 while max_L phi = 5/4, so r is not even
+  the richest player of the merged game; (T2) psi = Lmin(w') fails 3 times in
+  7, including at the PART(2,2) witness itself.  The negative control behaves
+  correctly: at the (m,h) = (3,2) member of paper4's three-poorer escape family
+  -- a slack h = 2 boundary with no PART pair, living at m = 3 -- (T1) fails, as
+  it must.
+
+  So the coincidence "PART threshold = m_min(1) = 4" is real but UNEXPLAINED.
+  That is the sharpest remaining structural question, and it is a better
+  question than the one the task started from, because the answer is now known
+  to be 4 rather than conjectured to be 3.
+
+ALSO PROVED BY HAND, confining the m = 3 case (but not closing it):
+  * protectors: phi_i < phi_j gives a tight T with j in T, i not in T;
+  * with |P| = 1, no tight set contains H and omits the single member a of P;
+  * there is a tight T0 = R u {f} with R a nonempty subset of Q, and
+    s_phi(R) <= phi_a;
+  * null-player descent: a zero payoff in L drops a PART(p,q) at m to a
+    PART(p-1,q) or PART(p,q-1) at m-1, so in a minimal PART configuration
+    every poorer payoff is positive and no singleton is tight.
+
+
+WHAT IS LEFT OPEN
+--------------------------------------------------------------------------------
+1.  A HUMAN PROOF that no PART configuration exists at m = 3.  The finite check
+    settles it (48 UNSAT, two independent methods), and that is the same status
+    class paper4 already uses for Theorems 'mthr' and 'h3'.  The hand lemmas
+    above reduce the case to the interaction of the tight-set constraints with
+    the leximin pinning conditions across 24 stratifications; the CEGAR shows
+    the true case tree is small (25 to 155 nodes per stratification), so a
+    human proof looks reachable but was not obtained.
+
+2.  A STRUCTURAL REASON for the threshold 4.  The merge route is closed
+    (Theorem 8).  What is wanted is a transfer that survives the fact that
+    core(v) is strictly inside the product of the two block faces.
+
+3.  DOWNSTREAM.  verifiers/zp/PROOF.txt Conjecture 10 and the paragraph "WHY
+    THE THRESHOLD 3 IS PLAUSIBLE" are wrong and should be replaced; the n = 7
+    census line "resisting type (2,2), OPEN" becomes "realized, explicit
+    witness"; REPORT.txt's claim that the finite-feasibility route stops should
+    be replaced by Theorems A and B, which are what unstick it.  (No repo file
+    was edited by this task.)
+
+
+FILE POINTERS  (all under .../scratchpad/r23/)
+--------------------------------------------------------------------------------
+  PROOF.txt              statements and proofs, with the status of each
+  REPORT.txt             this file
+  lib23.py               exact primitives: envelope, Lmin, strata, tight family,
+                         definition-level exactness by LP (no vertex enumeration)
+  decisive.py            the decisive encoding (Theorems A and B) + audit
+  families.py            independent tight-family CEGAR cross-check
+  controls.py            controls L+, L-, X+, X-, P+
+  harvest.py             the search that found the PART(2,2) witness
+  audit_witness.py       end-to-end audit of the witness and the n=7 suspension
+  merge.py               Route A: the merge lemma and the refutation of T1, T2
+  verify_lmin_independent.py  third, LP-only re-derivation of the witness Lmin
+  padding.py             the padding lemma, checked to n=8
+  cegar_control_n5.py    CEGAR drop-the-hypothesis control at n=5
+
+  logs/data: part_4_1_1.json, part_5_1_2.log/.json, part_5_2_1.log/.json,
+             part_6_1_3.log/.json, part_6_2_2.log/.json,
+             families_5_1_2.log/.json, families_5_2_1.log/.json,
+             witness_n6.json, audit_witness.json, merge.json,
+             control_accept_22.log, cegar_control_n5.log
+================================================================================

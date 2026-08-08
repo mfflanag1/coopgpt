@@ -1,0 +1,468 @@
+================================================================================
+TASK #23 -- THE PART(p,q) QUESTION: STATEMENTS AND PROOFS
+================================================================================
+
+HEADLINE.  Conjecture 10 of verifiers/zp/PROOF.txt is FALSE.  PART(2,2) IS
+realizable at m = 4.  The correct threshold is not on max(p,q) but on m:
+
+      PART(p,q) is realizable  <==>  p,q >= 1  and  p + q >= 4.
+
+BOTH halves are proved here in full: necessity by Theorems 5', 7 and D,
+sufficiency by three explicit m = 4 games plus the padding Lemma 9.
+
+CONSEQUENCE FOR THE ZP RESIDUE.  Since PART(2,2) at m = 4 exists, Lemma 4 of
+verifiers/zp/PROOF.txt (null-player suspension) produces a ZP(2,2)
+configuration at m = 5.  The n = 7 resisting type B is therefore REALIZABLE,
+not impossible; an explicit seven-player game is exhibited in Theorem 6.  The
+ZP residue is closed in the positive direction.
+
+SETUP AND NOTATION (as in verifiers/zp/PROOF.txt).  v is exact and
+singleton-normalized on N, phi = Lmin(v), H = {f,g} is a strict richer-suffix
+boundary, L = N \ H, m = |L|, s = s_phi(H) = phi(H) - v(H) > 0.  A PART(p,q)
+configuration is a pair of phi-tight coalitions
+
+      S1 = P u {f},   S2 = Q u {g},   P u Q = L,  P n Q = empty,
+      p = |P| >= 0,   q = |Q| >= 0,   p + q = m,
+
+so S1 n S2 = empty and S1 u S2 = N.  Strictness gives phi_i < min(phi_f,phi_g)
+for every i in L, and phi >= 0 gives phi_f, phi_g > 0.
+
+================================================================================
+PART I.  STRUCTURE PROVED BY HAND
+================================================================================
+
+--------------------------------------------------------------------------------
+THEOREM 1 (BLOCK RIGIDITY).  In a PART configuration, S1 and S2 are tight at
+EVERY core point, not merely at phi:  x(S1) = v(S1) and x(S2) = v(S2) for every
+x in core(v).  Consequently core(v) lies in the face x(S1) = v(S1), and
+v(S1) + v(S2) = v(N).
+--------------------------------------------------------------------------------
+PROOF.  Tightness at phi and efficiency give
+v(S1) + v(S2) = phi(S1) + phi(S2) = phi(N) = v(N).  For any x in core(v),
+x(S1) >= v(S1) and x(S2) >= v(S2), while x(S1) + x(S2) = x(N) = v(N)
+= v(S1) + v(S2).  Two inequalities summing to an equality are equalities.  []
+
+This is the engine of everything below and is the precise sense in which a
+PART configuration is "close to a direct sum": the core is confined to the
+product of the two block faces (though, as Theorem 8 records, it is in general
+strictly smaller than that product, which is why the naive per-side transfer
+fails).
+
+--------------------------------------------------------------------------------
+LEMMA 2 (PROTECTORS).  If phi_i < phi_j then some proper phi-tight T has
+j in T and i not in T.
+--------------------------------------------------------------------------------
+PROOF.  Otherwise d = e_i - e_j satisfies d(T) = [i in T] - [j in T] >= 0 for
+every phi-tight T, since the value -1 occurs only when j in T and i not in T.
+Also d(N) = 0.  Hence phi + t d lies in core(v) for all small t > 0.  Choose
+0 < t < (phi_j - phi_i)/2.  The sorted payoff vector then changes only by
+replacing phi_i with phi_i + t and phi_j with phi_j - t, and phi_j - t >
+phi_i + t, so no coordinate falls to or below phi_i; the first position at
+which the sorted vectors differ is strictly larger for phi + td.  That
+contradicts leximin-maximality of phi.  []
+
+--------------------------------------------------------------------------------
+LEMMA 3 (NO TIGHT SET OVER H MISSES P, WHEN |P| = 1).  Let P = {a}.  Then no
+phi-tight T contains H and omits a.
+--------------------------------------------------------------------------------
+PROOF.  Such a T satisfies S1 n T = {f} because S1 = {a,f}.  The crossing
+budget (paper4 Lemma 'crossing': s_phi(S1 n T) <= phi(N \ (S1 u T)) for tight
+S1, T) gives, since v({f}) = 0,
+
+      phi_f  <=  phi(N \ (S1 u T))  =  phi(Q \ T),
+
+using g in T.  Now T is proper and T subset Q u H, so Q \ T is a proper subset
+of Q of size |Q| - |T n Q|.  If T n Q = Q then Q \ T is empty and phi_f <= 0,
+contradicting phi_f > 0.  Otherwise Q \ T is nonempty and every element i of it
+has phi_i < phi_f; if |Q \ T| = 1 we get phi_f <= phi_i < phi_f, a
+contradiction.  For m = 3, |Q| = 2, so |Q \ T| is 0 or 1 (the case T n Q = empty
+forces T = H, which is not tight because H is slack), and both are
+contradictory.  []
+
+--------------------------------------------------------------------------------
+LEMMA 4 (THE POORER PROTECTOR OF f).  Let P = {a} and m = 3.  There is a
+phi-tight T0 = R u {f} with R a nonempty subset of Q.
+--------------------------------------------------------------------------------
+PROOF.  phi_a < phi_f, so Lemma 2 gives a tight T with f in T and a not in T.
+By Lemma 3, g is not in T, so T is contained in Q u {f}.  T is not {f}, since
+v({f}) = 0 < phi_f.  Put R = T n Q.  []
+
+--------------------------------------------------------------------------------
+LEMMA 5 (SLACK TRANSFER ACROSS THE PARTITION).  With T0 = R u {f} as in
+Lemma 4, s_phi(R) <= phi(P \ T0) = phi_a.
+--------------------------------------------------------------------------------
+PROOF.  Crossing budget applied to the tight pair T0, S2:  T0 n S2 = R and
+T0 u S2 = Q u {f,g} = N \ {a}, so s_phi(R) <= phi({a}) = phi_a.  []
+
+--------------------------------------------------------------------------------
+LEMMA 6 (NULL-PLAYER DESCENT; NO POOR PLAYER IS NULL).  If min_{i in L} phi_i
+= 0 then a PART(p,q) configuration at m yields a PART(p-1,q) or PART(p,q-1)
+configuration at m-1.  Consequently, in a PART configuration of minimal m,
+phi_i > 0 for every i in L, and no singleton is phi-tight.
+--------------------------------------------------------------------------------
+PROOF.  phi_f, phi_g > 0, so a zero payoff occurs in L.  By Lemma 2 of
+verifiers/zp/PROOF.txt there is then a player j with x_j = 0 on the whole core,
+and j is null; j lies in L.  Delete j by Lemma 3 of that file: the reduced game
+is exact and singleton-normalized, its Lmin is phi restricted, every phi-tight
+set stays tight after removing j, and H is still a strict slack boundary, now
+with m - 1 poorer players.  S1 \ {j} and S2 \ {j} are still tight, still
+disjoint, still cover N \ {j}, and still have traces {f} and {g} on H.  Their
+poorer parts are (P \ {j}, Q) or (P, Q \ {j}).  []
+
+--------------------------------------------------------------------------------
+THEOREM 7 (PART(1,1) IS IMPOSSIBLE).
+--------------------------------------------------------------------------------
+PROOF.  p = q = 1 forces m = 2 and n = 4.  Corollary 'fourfive' of paper4:
+every singleton-normalized exact game on at most four players is exact
+partition at Lmin, so no boundary is slack.  Equivalently, the phase theorem
+gives m_min(2) = 3 > 2.  []
+
+================================================================================
+PART II.  THE DECISIVE ENCODING (why the finite check below is a proof)
+================================================================================
+
+verifiers/zp/REPORT.txt identified two blockers: exactness could only be
+imposed through the min-semi-balanced catalogue (whose converse was unvalidated
+at n = 6), and the leximin condition was a quantifier that no relaxation
+captured.  Both are removed exactly.
+
+--------------------------------------------------------------------------------
+THEOREM A (EXACTNESS IS EXISTENTIAL AND LINEAR).  A game v is exact if and only
+if for every coalition S there is z^S in core(v) with z^S(S) = v(S).
+--------------------------------------------------------------------------------
+PROOF.  Immediate from the definition v(S) = min over core(v) of x(S): the
+minimum is attained precisely when such a z^S exists, and every core point
+satisfies x(S) >= v(S).  []
+
+CONSEQUENCE.  Exactness is encoded by adjoining one allocation vector per
+coalition, subject only to linear constraints.  No catalogue, no vertex
+enumeration, no completeness assumption, at any n.  The n = 6 caveat of
+verifiers/zp/REPORT.txt disappears: the results below at n = 6 and n = 7 are
+unconditional.  (At n = 5 the catalogue cone of verifiers/zp/exactcone.py is
+retained as an optional independent cross-check.)
+
+--------------------------------------------------------------------------------
+THEOREM B (LEXIMIN IS A FARKAS CERTIFICATE, QUANTIFIER-FREE AND LINEAR).
+Let v be a game, phi in core(v), and let B_1 < ... < B_k be the level sets of
+phi in increasing order of payoff, with common values mu_1 < ... < mu_k.  Write
+Tt for the family of proper phi-tight coalitions.  Then phi = Lmin(v) if and
+only if for every stage t and every i in B_t there exist reals
+
+      y_A >= 0  (A proper),  eta,  rho_l  (l in B_1 u ... u B_{t-1}),
+      sigma_c >= 0  (c in B_t)
+
+with        y_A = 0 for every A not in Tt                              (SUPPORT)
+and, for every player j,
+
+   - sum_{A: j in A} y_A + eta + [j in B_<t] rho_j - [j in B_t] sigma_j
+                                                        = [j = i].     (IDENTITY)
+--------------------------------------------------------------------------------
+PROOF.  Leximin is computed in stages (the definition used by
+verifiers/lib/audit.py): at stage t the players of B_1 u ... u B_{t-1} are
+pinned at their values, the level mu_t is the largest lambda for which some
+core point gives every unpinned player at least lambda, and the players pinned
+at stage t are those whose maximum, subject to that, equals mu_t.  Hence
+phi = Lmin(v) with these level sets if and only if, for every t and every
+i in B_t,
+
+  max { x_i : x in core(v), x_l = phi_l (l in B_<t), x_c >= mu_t (c in B_>=t) }
+        =  phi_i.                                                        (STAGE)
+
+(=>) is the definition.  (<=): (STAGE) at stage t forces the stage level to be
+exactly mu_t -- a core point with every unpinned coordinate above mu_t would
+in particular exceed mu_t at i in B_t -- and forces the pinned set to be
+exactly B_t, since for i in B_>t the point phi itself already gives x_i =
+phi_i > mu_t.  Induction on t.
+
+Now dualize (STAGE).  The feasible set is a polyhedron containing phi.  Its
+constraints and their status at phi are: efficiency x(N) = v(N) (equality);
+x(A) >= v(A) for proper A, ACTIVE exactly for A in Tt; x_l = phi_l for
+l in B_<t (equality); x_c >= mu_t for c in B_>=t, ACTIVE exactly for c in B_t,
+because phi_c > mu_t whenever c in B_>t.  Nonnegativity is the singleton case
+of x(A) >= v(A).  Therefore the tangent cone at phi is
+
+   C = { d : d(N) = 0,  d(T) >= 0 (T in Tt),  d_l = 0 (l in B_<t),
+             d_c >= 0 (c in B_t) },
+
+and, the feasible set being a polyhedron, (STAGE) holds iff d_i <= 0 for every
+d in C.  That says e_i lies in the polar cone of C, which for a polyhedral cone
+given by those generators is
+
+   C^o = cone{ -1_T : T in Tt } + cone{ -e_c : c in B_t }
+                                 + span{ 1_N } + span{ e_l : l in B_<t },
+
+and membership of e_i in C^o is exactly (IDENTITY) with (SUPPORT), the
+multipliers y and sigma being the nonnegative ones.  Conversely, given such
+multipliers, for any d in C
+
+   d_i = <e_i, d> = - sum_A y_A d(A) + eta d(N) + sum_l rho_l d_l
+                    - sum_c sigma_c d_c  <=  0,
+
+each term being non-positive; so (STAGE) holds.  []
+
+REMARK (why this is linear and the earlier attempts were not).  The naive dual
+of (STAGE) carries products y_A v(A), which are bilinear in the unknowns.
+Complementary slackness at the optimum phi removes them: y_A > 0 forces A to be
+tight, so sum_A y_A v(A) = sum_A y_A phi(A), and dotting (IDENTITY) with phi
+then reproduces the numerical part of the dual automatically.  What is left is
+(SUPPORT), a DISJUNCTION "y_A = 0 or phi(A) = v(A)" -- linear arithmetic plus
+Boolean structure, which is decided exactly.
+
+COROLLARY C (the finite check is decisive).  For a fixed profile (p,q) there
+are finitely many stratifications of L compatible with H being a strict richer
+suffix -- every ordered set partition of L, followed by H as one block or as
+two singleton blocks in either order.  Adjoining, for each, the linear
+constraints of Theorems A and B together with the configuration constraints
+yields a formula that is satisfiable if and only if a PART(p,q) configuration
+with that stratification exists.  UNSAT for every stratification is therefore a
+PROOF of impossibility, and SAT yields a candidate to be audited.
+
+The whole system is homogeneous of degree one in (v, phi, z, y, ...), so
+normalizing s_phi(H) = 1 is without loss of generality.
+
+================================================================================
+PART III.  THE VERDICTS
+================================================================================
+
+--------------------------------------------------------------------------------
+THEOREM 5' (PART(p,0) is impossible).  Unchanged: Theorem 5 of
+verifiers/zp/PROOF.txt.  q = 0 makes the rich singleton {g} tight, forcing
+phi_g = v({g}) = 0 against strictness.
+--------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------
+THEOREM D (NO PART CONFIGURATION AT m = 3).  PART(1,2) and PART(2,1) are
+impossible.
+--------------------------------------------------------------------------------
+FINITE CHECK.  decisive.py, n = 5, exactness by Theorem A (30 attaining core
+points, 960 linear constraints), leximin by Theorem B (5 Farkas bundles, 150
+disjunctions).  All 24 stratifications of PART(1,2) UNSAT; all 24 of PART(2,1)
+UNSAT.  Zero "unknown".  Logs part_5_1_2.log, part_5_2_1.log.
+
+INDEPENDENT CROSS-CHECK.  families.py runs a logically different argument --
+tight families made explicit, leximin decided combinatorially on the tangent
+cone, numeric feasibility a separate LP, the two joined by a CEGAR that is
+complete because leximin is monotone increasing and numeric feasibility
+monotone decreasing in the tight family.  PART(1,2): 1,265 nodes, 0 surviving
+candidate families.  PART(2,1): see families_5_2_1.log.  Logs agree with
+decisive.py.
+
+PARTIAL HAND PROOF.  Lemmas 3-6 above already confine the m = 3 case sharply:
+no poor player is null, so no singleton is tight; every tight set over H
+contains the unique member a of P; there is a tight T0 = R u {f} with R a
+nonempty subset of Q; and s_phi(R) <= phi_a.  A complete human proof was not
+obtained; the residue is the interaction of these with the leximin pinning
+conditions across the 24 stratifications.
+
+--------------------------------------------------------------------------------
+THEOREM E (PART(2,2) IS REALIZABLE AT m = 4).  CONJECTURE 10 IS FALSE.
+--------------------------------------------------------------------------------
+WITNESS.  n = 6, players a..f.  Take the lower envelope (paper4
+Lemma 'envelope', so the game is exact and singleton-normalized by
+construction) of the five common-total allocations, total 8:
+
+      (0,0,1,4,2,1),  (0,0,4,4,0,0),  (4,0,0,0,2,2),
+      (1,0,2,3,0,2),  (0,1,2,3,1,1).
+
+Then, recomputed from scratch in exact rational arithmetic:
+
+      v is exact at DEFINITION level (min over the core of x(S) equals v(S)
+        for all 62 proper S, by exact LP -- no vertex enumeration);
+      v({i}) = 0 for every i;
+      Lmin(v) = (1,1,2,2,1,1);
+      strata: {a,b,e,f} at 1, then {c,d} at 2, so H = {c,d} is the strict
+        richer suffix with m = 4;
+      v(cd) = 0, so s_phi(H) = 4 > 0: the boundary is SLACK;
+      the proper Lmin-tight coalitions are
+        ad, abd, ade, acde, adf, acdf, cef, def, acdef;
+      S1 = cef and S2 = abd are tight, disjoint, cover N, and meet H in {c}
+        and {d} respectively;
+      p = |{e,f}| = 2 and q = |{a,b}| = 2.
+
+That is a PART(2,2) configuration at m = 4.  Verified by audit_witness.py.
+
+CONFIRMED INDEPENDENTLY by decisive.py: PART(2,2) at n = 6 is SAT on 58 of the
+78 stratifications, and every SAT model passes the end-to-end audit (rebuild v,
+re-derive exactness, recompute Lmin from scratch, re-check the configuration).
+Log part_6_2_2.log.
+
+--------------------------------------------------------------------------------
+THEOREM 6 (THE n = 7 ZP TYPE B IS REALIZABLE).  There is a seven-player exact
+singleton-normalized game with a ZP(2,2) configuration at m = 5.
+--------------------------------------------------------------------------------
+PROOF.  Apply Lemma 4 of verifiers/zp/PROOF.txt (suspension) to the game of
+Theorem E: adjoin a null player g by v'(S) = v(S \ {g}).  Concretely, take the
+same five rows with a sixth coordinate 0.  Recomputed from scratch:
+
+      the adjoined player is null (v'(S u {g}) = v'(S) for every S);
+      v' is exact at definition level and singleton-normalized;
+      Lmin(v') = (1,1,2,2,1,1,0);
+      strata: {g} at 0, {a,b,e,f} at 1, {c,d} at 2;
+      H = {c,d} is still the strict richer suffix, now with m = 5, s = 4 > 0;
+      S1 = cefg and S2 = abdg are tight, S1 n S2 = {g} with g in L, and
+        S1 u S2 = N;
+      p = |{e,f}| = 2, q = |{a,b}| = 2, and phi_g = 0 as Lemma 1 requires.
+
+That is precisely the resisting profile (2,2) of the n = 7 census.  Verified by
+audit_witness.py.  []
+
+--------------------------------------------------------------------------------
+LEMMA 9 (PADDING).  If PART(p,q) is realizable then so are PART(p+1,q) and
+PART(p,q+1).
+--------------------------------------------------------------------------------
+PROOF.  Let v on N carry a PART(p,q) configuration at the slack strict boundary
+H = {f,g}, with S1 = P u {f} and S2 = Q u {g}.  Adjoin a null player x:
+v'(S) := v(S \ {x}) on N' = N u {x}.  By the first half of Lemma 4 of
+verifiers/zp/PROOF.txt, v' is exact and singleton-normalized,
+Lmin(v') = (Lmin(v), 0), the new player joins the poorest stratum, and H is
+still the strict richer suffix with the same slack s > 0.  Put
+
+        S1' = S1 u {x},        S2' = S2.
+
+S1' is phi'-tight: v'(S1 u {x}) = v(S1) = phi(S1) = phi'(S1 u {x}), the last
+equality because phi'_x = 0.  S2' is tight because v' and phi' restrict to v
+and phi on it.  S1' and S2' are disjoint, cover N', and meet H in {f} and {g}.
+Their poorer parts are P u {x} and Q, so this is a PART(p+1,q) configuration at
+m + 1.  Putting x into S2 instead gives PART(p,q+1).  []
+
+  MACHINE-VERIFIED end to end: padding.py adjoins null players to the witness
+  of Theorem E and re-derives everything from scratch at each step --
+  n = 7 yields PART(3,2) and PART(2,3) at m = 5; n = 8 yields PART(4,2),
+  PART(3,3) and PART(2,4) at m = 6; exactness and Lmin recomputed each time.
+
+--------------------------------------------------------------------------------
+THEOREM F (THE CORRECTED CHARACTERIZATION).  A PART(p,q) configuration exists
+if and only if p, q >= 1 and p + q >= 4.
+--------------------------------------------------------------------------------
+PROOF.  NECESSITY.  p,q >= 1 is Theorem 5'.  m = p + q = 2 forces (1,1),
+impossible by Theorem 7.  m = 3 forces (1,2) or (2,1), impossible by
+Theorem D.  Hence m >= 4.
+
+SUFFICIENCY.  At m = 4 the three admissible splits are all realized by explicit
+exact games: (1,3) and (3,1) from the archive census, and (2,2) by Theorem E.
+Let (p,q) have p,q >= 1 and p + q >= 5.  Then one of (p-1,q), (p,q-1) still has
+both parts >= 1 and sum p+q-1 >= 4; by induction on p+q it is realizable, and
+Lemma 9 lifts it to (p,q).  []
+
+So both halves are now proved, with no residue.  (The archive census
+independently exhibits (1,4), (2,3), (3,2) and (4,1) at m = 5, agreeing with
+the induction.)
+
+Note the numerology: the true threshold m >= 4 coincides with m_min(1) = 4, the
+h = 1 entry of the phase diagram -- not with m_min(2) = 3, the entry for the
+boundary's own h.  A PART configuration at an h = 2 boundary is therefore as
+expensive as a slack boundary at a single richest player.  Theorem 8 records
+that the obvious mechanism for that coincidence is nevertheless NOT the reason.
+
+================================================================================
+PART IV.  ROUTE A: WHAT THE MERGE GIVES, AND WHERE IT STOPS
+================================================================================
+
+The natural transfer is to merge the rich pair into one player and invoke the
+h = 1 bound m_min(1) = 4.  Three of its four links hold; the fourth does not.
+
+--------------------------------------------------------------------------------
+THEOREM 8 (RICH-PAIR MERGE).  Let v, phi, H = {f,g}, L be as above (no PART
+hypothesis needed).  Define, on N' = L u {r},
+      w'(A) = v(A)  for A subset of L,     w'(A u {r}) = v(A u H) - v(H).
+Then:
+  (M1) w' is EXACT;
+  (M2) w' is singleton-normalized;
+  (M3) psi := (phi|_L, s_phi(H)) lies in core(w').
+But the two remaining links are FALSE in general, even at PART configurations:
+  (T1) s_phi(H) > max_{i in L} phi_i        -- FAILS;
+  (T2) psi = Lmin(w')                        -- FAILS.
+Hence the h = 1 phase bound cannot be imported through the merge.
+--------------------------------------------------------------------------------
+PROOF of (M1)-(M3).  Let pi: R^N -> R^N' send x to (x|_L, x(H) - v(H)).  For
+x in core(v), pi(x)(B) = x(B-hat) - v(H)[r in B] where B-hat is B with r
+replaced by H; so pi(x)(B) >= w'(B) with equality of totals, i.e.
+pi(core(v)) is contained in core(w').  For any B,
+
+  w'(B) <= min over core(w') of x'(B) <= min over pi(core(v)) of x'(B)
+        = min over core(v) of x(B-hat) - v(H)[r in B] = v(B-hat) - v(H)[r in B]
+        = w'(B),
+
+the third equality by exactness of v.  So all are equalities: w' is exact,
+which is (M1).  (M2): w'({i}) = v({i}) = 0 for i in L and
+w'({r}) = v(H) - v(H) = 0.  (M3): psi = pi(phi), and pi(phi)_r = phi(H) - v(H)
+= s.  []
+
+REFUTATION of (T1) and (T2).  merge.py tests both at every PART configuration
+it can find.  Of 7 PART configurations tested (the n = 6 witness of Theorem E,
+four harvested n = 6 witnesses of splits (1,3) and (3,1), and a random n = 7
+PART(2,3)), (T1) fails 5 times and (T2) fails 3 times; (M1), (M2), (M3) never
+fail.  Concretely: at the harvested PART(1,3) witness, s = 1/2 while
+max_L phi = 5/4, so {r} is not even the richest player of the merged game; at
+the PART(2,2) witness of Theorem E, s = 4 > 1 = max_L phi, but psi is not the
+leximin point of the merged game.  The negative control behaves as it must:
+at the (m,h) = (3,2) member of paper4's three-poorer escape family -- a slack
+h = 2 boundary carrying NO PART pair, and living at m = 3 -- (T1) fails, as it
+has to, since m = 3 occurs there.
+
+RECORDED SO IT IS NOT RETRIED.  The merge is the right object -- (M1) is a
+clean and apparently new statement, that contracting a coalition of an exact
+game and renormalizing leaves it exact -- but it does not transport Lmin.  The
+coincidence of the PART threshold with m_min(1) = 4 remains unexplained
+structurally.
+
+================================================================================
+PART V.  CONTROLS
+================================================================================
+
+Every verdict above rests on encodings that were themselves tested in both
+directions.  controls.py:
+
+  L+  the leximin Farkas block ACCEPTS phi = Lmin(v):  40/40 at n = 4,
+      40/40 at n = 5, on random exact games.  0 failures.
+  L-  it REJECTS core points that are not Lmin:  120/120 at n = 4,
+      120/120 at n = 5.  0 failures.
+  X+  the exactness block ACCEPTS exact games:  25/25 at n = 5.
+  X-  it REJECTS non-exact games:  23/23 at n = 5.
+  P+  the FULL PART encoding, with v and phi pinned to the harvested genuine
+      PART(2,2) witness, is SAT.  So the encoding does not over-constrain a
+      real realization.
+
+  DROP-THE-HYPOTHESIS.  The same PART encoding run on the realizable profile
+  PART(1,3) at n = 6 returns SAT on 32 of 60 stratifications, and every SAT
+  model passes the end-to-end audit.  An encoding that returned UNSAT here
+  would explain the n = 5 UNSATs away; it does not.
+
+  CEGAR POSITIVE CONTROL.  At the SAME n = 5 and through the same numeric LP,
+  requiring only that H be a slack strict richer suffix (both tightness
+  hypotheses dropped), families.py returns candidate tight families -- 5 on the
+  first stratification alone; one of them is {ade, cde, acde}, which CONTAINS the
+  pair {ade, cde} that paper4's Remark 'catalogue' records as the complete set
+  of proper tight coalitions of the (m,h) = (3,2) member of its three-poorer
+  escape family, phi = (1,1,2,3,3) with H = de.  (Containment, not equality, is
+  the right relation: the CEGAR's numeric LP only requires the listed sets to
+  be tight, so a candidate family may be a superset of a realized one.)  The
+  CEGAR therefore reaches a genuine five-player realization where one exists.
+  See cegar_control_slack.log.
+
+================================================================================
+STATUS SUMMARY
+================================================================================
+  Thm 1   block rigidity (S1,S2 tight on the whole core) ..... PROVED
+  Lem 2   protectors ............................................ PROVED
+  Lem 3-5 the m=3 tight-set constraints ......................... PROVED
+  Lem 6   null-player descent; no poor player is null ........... PROVED
+  Thm 7   PART(1,1) impossible .................................. PROVED
+  Thm A   exactness is existential and linear ................... PROVED
+  Thm B   leximin is a Farkas certificate ....................... PROVED
+  Cor C   the finite check is decisive .......................... PROVED
+  Thm D   no PART at m = 3 ...................................... FINITE CHECK
+                                                 (48 UNSAT, two methods)
+  Thm E   PART(2,2) realizable .................................. PROVED
+                                                 (explicit audited witness)
+  Thm 6   n = 7 ZP type B realizable ............................ PROVED
+  Lem 9   padding: PART(p,q) => PART(p+1,q) and PART(p,q+1) ..... PROVED
+  Thm F   realizable iff p,q>=1 and p+q>=4 ...................... PROVED
+                                                 (both halves, no residue)
+  Thm 8   merge is exact (M1-M3) ................................ PROVED
+          transfer (T1),(T2) .................................... REFUTED
+
+All arithmetic exact (fractions.Fraction / z3 exact LRA).  Every solver call
+asserted sat or unsat; no call returned unknown.  No core-vertex enumeration
+was performed at any n.
+================================================================================

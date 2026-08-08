@@ -1077,6 +1077,18 @@ localization of exactness; "|B|=4 is special".
   (descent-correspondence evidence across 380k games; the m=5 ZP profiles
   are exactly the m=4 PART splits).  Decisive-LP route blocked exactly by
   the multi-stage leximin encoding, recorded for continuation.
+  → CLOSED 2026-08-08 (task #23, verifiers/part/): the conjecture is FALSE.
+  PART(p,q) realizable ⟺ p,q ≥ 1 and p+q ≥ 4, BOTH halves proved; PART(2,2)
+  and the n=7 ZP(2,2) are REALIZED by explicit audited witnesses
+  (lead-verified independently).  The two decisive-LP blockers were removed
+  exactly: exactness is existential/linear (one attaining core point per
+  coalition — no catalogue at any n) and leximin is a quantifier-free Farkas
+  certificate (complementary slackness kills the bilinear terms, leaving a
+  support disjunction).  New by-products: block rigidity (PART's S1,S2 tight
+  on the whole core), protector lemma, rich-pair merge is exact (M1–M3) but
+  does NOT transport Lmin (T1/T2 refuted — recorded so it is not retried);
+  padding lemma.  The "PART(2,2) never" evidence was a sampling artefact
+  (hit rate ~1/16k), the campaign's third.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
