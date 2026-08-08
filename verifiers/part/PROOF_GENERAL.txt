@@ -1,0 +1,328 @@
+================================================================================
+THE GENERAL BLOCK-POLYTOPE FRAME FOR PART(p,q)
+one obstruction, one construction, one inequality
+================================================================================
+
+VERDICT.  The frame delivers what it was asked for.  Both halves of
+
+        PART(p,q) exists  <==>  p,q >= 1  and  p + q >= 4
+
+now come out of a SINGLE inequality, applied in the two directions:
+
+        for a phi-tight T containing H but omitting all of P,
+                            |Q \ T|  >=  2.                            (KEY)
+
+Reading (KEY) as a prohibition kills every configuration with p + q <= 3.
+Reading it as a design constraint produces two explicit construction recipes
+whose combined range is exactly {p,q >= 1, p + q >= 4}.  The threshold is not
+two separate facts glued at m = 4; it is one inequality that becomes
+satisfiable exactly there.
+
+Superseded: the m = 3 argument of PROOF_M3.txt (now the q = 2 branch of one
+uniform proof) and the explicit-games-plus-padding realizability argument of
+PROOF.txt Lemma 9 / Theorem F (now a corollary of the recipes, with the
+padding lemma retained only as the cheapest route for p,q both large).
+
+--------------------------------------------------------------------------------
+SETUP
+--------------------------------------------------------------------------------
+v exact and singleton-normalized on N, phi = Lmin(v), H = {f,g} a strict
+richer-suffix boundary with s_phi(H) > 0, L = N \ H, m = |L|.  A PART(p,q)
+configuration is a pair of phi-tight coalitions
+
+        S1 = P u {f},   S2 = Q u {g},   P u Q = L,  P n Q = empty,
+        p = |P|,  q = |Q|,  p + q = m.
+
+Theorem 5' of PROOF.txt gives p, q >= 1.  Strictness gives phi_i < min(phi_f,
+phi_g) for i in L and phi_f, phi_g > 0.  For a coalition T write
+eps_f = [f in T], eps_g = [g in T].
+
+REDUCTION (no null poorer player).  If min_{i in L} phi_i = 0, Lemma 6 of
+PROOF.txt drops the configuration to PART(p-1,q) or PART(p,q-1); the base cases
+are Theorem 5' and Theorem 7.  So we may assume phi_i > 0 on L, and no
+singleton is phi-tight.
+
+REDUCTION (the f/g symmetry).  Interchanging (f,P,S1) with (g,Q,S2) carries
+PART(p,q) to PART(q,p).  Every statement below may therefore be read with the
+blocks swapped.
+
+================================================================================
+PART I.  THE FRAME
+================================================================================
+
+--------------------------------------------------------------------------------
+LEMMA N* (BLOCK NORMAL FORM).  Every core point satisfies x(S1) = v(S1) and
+x(S2) = v(S2).  Writing u_i = x_i - phi_i for i in L, the core is a polytope K
+in R^L containing the origin, with
+        x_f - phi_f = -U_P,     x_g - phi_g = -U_Q,
+where U_P = sum_{i in P} u_i and U_Q = sum_{i in Q} u_i.  The facet normal of a
+coalition T, as a vector in R^L, is
+        nu_i = [i in T] - eps_f  (i in P),      nu_i = [i in T] - eps_g  (i in Q).
+Consequently, WITHIN EACH BLOCK the coordinates of nu lie all in {0,1} (when
+that block's rich player is outside T) or all in {-1,0} (when it is inside):
+NO FACET NORMAL SEPARATES TWO PLAYERS OF THE SAME BLOCK WITH OPPOSITE SIGNS.
+--------------------------------------------------------------------------------
+PROOF.  Block rigidity (PROOF.txt Theorem 1): v(S1) + v(S2) = phi(N) = v(N) and
+two core inequalities summing to an equality are equalities.  Solving
+x(S1) = v(S1) for x_f and x(S2) = v(S2) for x_g gives the displayed
+substitutions.  Then
+        d(T) = sum_{i in T n L} u_i - eps_f U_P - eps_g U_Q,
+and collecting the coefficient of u_i gives the displayed nu.  The sign
+statement is immediate: for i in P the coefficient is [i in T] - eps_f, which
+ranges over {0,1} if eps_f = 0 and over {-1,0} if eps_f = 1.               []
+
+At (p,q) = (1,2) this is the three-variable normal form of PROOF_M3.txt, and
+the missing forms v_b - v_c, u +- (v_b - v_c) recorded there are the |Q| = 2
+instance of the last sentence.  MACHINE-CHECKED (general.py, G1/G2): the
+formula agrees with brute-force expansion and the sign statement has zero
+violations, over all coalitions, for (p,q) in {(1,2),(2,2),(1,3),(2,3),(3,3),
+(1,4),(4,2)}.
+
+--------------------------------------------------------------------------------
+LEMMA I* (IMPROVING DIRECTIONS).  Let D = { d in R^L : nu_T . d >= 0 for every
+phi-tight T } be the tangent cone.  Then
+                        D n R^L_{>=0} = {0}.
+Equivalently, in purely combinatorial form: for every nonempty S contained in L
+there is a phi-tight T with
+        |T n S|  <  eps_f |P n S| + eps_g |Q n S|.                      (I*)
+--------------------------------------------------------------------------------
+PROOF.  Let d in D be nonnegative on L and nonzero.  Because the boundary is
+strict, every stratum of L precedes every stratum meeting H; let B_j be the
+first stratum on which d is nonzero.  Since d is nonzero somewhere on L, B_j is
+a stratum of L, so d|B_j >= 0 and d|B_j is nonzero.  Then phi + t d lies in the
+core for small t > 0 and raises the sorted payoff vector at the first position
+where it changes, contradicting phi = Lmin(v).
+
+For the combinatorial form, take d = 1_S: by Lemma N*,
+nu_T . 1_S = |T n S| - eps_f |P n S| - eps_g |Q n S|, and 1_S is excluded from
+D exactly when some tight T makes this negative.  Conversely a nonnegative
+nonzero d is a positive combination of such 1_S, so blocking every 1_S blocks
+every such d.                                                              []
+
+MACHINE-CHECKED (general.py, G3): the identity for nu_T . 1_S holds over all
+coalitions and all nonempty S, for (p,q) in {(1,2),(2,2),(1,3),(2,3)}.
+
+SPECIALIZATIONS WORTH NAMING.  S = {i} for i in P requires a tight T with
+f in T and i not in T -- the f-PROTECTOR of i, which is Lemma 2 of PROOF.txt
+and Lemma 4 of PROOF_M3.txt.  S = P requires a tight T containing f and missing
+at least one member of P.
+
+--------------------------------------------------------------------------------
+LEMMA E* (EXACTNESS DIRECTIONS).  There is d* in D with
+        sum_{i in P} d*_i = phi_f > 0,
+and, symmetrically, d** in D with sum_{i in Q} d**_i = phi_g > 0.
+--------------------------------------------------------------------------------
+PROOF.  Exactness at {f} gives a core point z with z_f = v({f}) = 0.  Block
+rigidity gives z(P) + z_f = v(S1) = phi(P) + phi_f, so sum_{i in P}(z_i - phi_i)
+= phi_f.  Put d* = z - phi; it lies in D because z is a core point.        []
+
+At p = 1 this pins the whole of phi_f onto the single player of P.  At p >= 2
+it only says SOME member of P gains -- which is exactly the slack the
+construction of Part III exploits.
+
+--------------------------------------------------------------------------------
+LEMMA X* (THE CROSSING EXCLUSION, AND THE KEY INEQUALITY).  Let T be phi-tight.
+  (i) If f in T then s_phi((P n T) u {f}) <= phi(Q \ T) + [g not in T] phi_g.
+ (ii) If g in T then s_phi((Q n T) u {g}) <= phi(P \ T) + [f not in T] phi_f.
+In particular, if T contains H and P n T = empty then phi_f <= phi(Q \ T), and
+since every phi_i (i in L) is strictly below phi_f this forces
+                        |Q \ T|  >=  2.                                  (KEY)
+Symmetrically, if T contains H and Q n T = empty then |P \ T| >= 2.
+--------------------------------------------------------------------------------
+PROOF.  Cross T with S1 using paper4's crossing budget
+s_phi(S1 n T) <= phi(N \ (S1 u T)).  Here S1 n T = (P n T) u {f} and
+N \ (S1 u T) = (Q \ T) u ({g} \ T), giving (i); (ii) is the mirror.  For (KEY),
+P n T = empty makes the left side s_phi({f}) = phi_f - v({f}) = phi_f, and
+g in T removes the phi_g term.  If |Q \ T| = 0 we get phi_f <= 0, false; if
+|Q \ T| = 1 we get phi_f <= phi_i < phi_f, false.                          []
+
+(KEY) is the whole theorem in one line.  Everything below is bookkeeping.
+
+================================================================================
+PART II.  THE OBSTRUCTION
+================================================================================
+
+--------------------------------------------------------------------------------
+THEOREM G1.  If p = 1 then q >= 3.
+--------------------------------------------------------------------------------
+Write P = {a} and suppose q <= 2.
+
+STEP 1.  Lemma I* at S = {a} requires a phi-tight T with
+|T n {a}| < eps_f, hence eps_f = 1 and a not in T: a tight T containing f and
+omitting a.
+
+STEP 2.  Such a T does not contain g.  Indeed if g in T then T contains H and
+P n T = empty, so (KEY) gives |Q \ T| >= 2, hence q >= 2 and therefore q = 2
+with T n Q = empty, i.e. T is contained in H.  But T = {f} is not tight
+(phi_f > 0) and T = H is slack.  So g is not in T, T is contained in Q u {f},
+and R := T n Q is nonempty because {f} is not tight.
+
+STEP 3.  Let d* be the direction of Lemma E*; since p = 1, d*_a = phi_f > 0.
+The normal of T = R u {f} has nu_a = -1 and nu_j = [j in R] for j in Q, so
+nu_T . d* >= 0 reads
+        sum_{j in R} d*_j  >=  d*_a  =  phi_f  >  0,
+and some j in R has d*_j > 0.
+
+CASE q = 1.  Then R = Q = {b} and d*_b > 0, so d* is strictly positive on all
+of L -- a nonzero nonnegative element of D, contradicting Lemma I*.
+
+CASE q = 2.  Write Q = {b,c} and, using the b/c relabelling, take d*_b > 0.
+If d*_c >= 0 then again d* is a nonzero nonnegative element of D, contradicting
+Lemma I*.  So d*_c < 0.  Now apply Lemma I* at S = {a,b}: some phi-tight T'
+satisfies |T' n {a,b}| < eps_f + eps_g.  Enumerate by (eps_f, eps_g):
+
+  (0,0)  the right side is 0: impossible.
+
+  (1,0)  a, b not in T', f in T', so T' is contained in {c,f} and is not {f};
+         hence T' = {c,f}, with nu_a = -1, nu_b = 0, nu_c = 1.  Then
+         nu . d* >= 0 gives d*_c >= d*_a = phi_f > 0, against d*_c < 0.
+
+  (0,1)  a, b not in T', g in T', so T' = {c,g}, with nu_a = 0, nu_b = -1,
+         nu_c = 0.  Then nu . d* >= 0 gives d*_b <= 0, against d*_b > 0.
+
+  (1,1)  T' contains H and does not contain both a and b.
+         If a not in T', Step 2 already excluded it.
+         If a in T' and b not in T', then nu_a = 0, nu_b = -1 and
+         nu_c = [c in T'] - 1.  If c in T', nu . d* >= 0 gives d*_b <= 0,
+         against d*_b > 0.  If c not in T' then T' = H u {a} = H u P, and
+         crossing that with S2 gives (T' n S2) = {g}, T' u S2 = N, hence
+         phi_g <= 0 -- false.
+
+Every case is contradictory, so q <= 2 is impossible.                      []
+
+--------------------------------------------------------------------------------
+THEOREM G2 (THE CHARACTERIZATION, NECESSITY).  A PART(p,q) configuration
+requires p, q >= 1 and p + q >= 4.
+--------------------------------------------------------------------------------
+PROOF.  p,q >= 1 is Theorem 5'.  Theorem G1 gives p = 1 ==> q >= 3, and its
+f/g mirror gives q = 1 ==> p >= 3.  If p,q >= 2 then p + q >= 4 directly.  In
+all three cases p + q >= 4.                                                []
+
+Theorem G1 subsumes PROOF_M3.txt: the case q = 2 is that file's four-case
+table, rederived here from Lemma I* instead of from an ad hoc reading of the
+twelve admissible normals, and the case q = 1 (which PROOF_M3.txt imported from
+the n <= 4 rigidity) is now proved in the same breath.
+
+================================================================================
+PART III.  THE CONSTRUCTION
+================================================================================
+
+Lemma I* says the tight family must contain an ORTHANT-KILLING CERTIFICATE: a
+set K of coalitions with
+        { d >= 0 : nu_T . d >= 0 for all T in K }  =  {0}.
+That is the whole leximin content whenever phi has the two-stratum shape
+L < H, because then the only leximin stage that is not automatic is the first,
+and its condition is exactly Lemma I*.  So a construction reduces to: exhibit
+an orthant-killing certificate that (KEY) permits.
+
+--------------------------------------------------------------------------------
+RECIPE A (both blocks large: p >= 2 and q >= 2).  Fix b0 in Q and take
+        T_x = N \ {b0, x}   for each x in P,        U = {g} u P.
+--------------------------------------------------------------------------------
+Normals: T_x contains H, so nu(T_x) = -e_x - e_{b0}; and U has eps_g = 1,
+eps_f = 0, so nu(U) = 1_P - 1_Q.  On the nonnegative orthant the T_x force
+d_x = d_{b0} = 0 for every x in P, and then nu(U) . d >= 0 reads
+-sum_{j in Q} d_j >= 0, forcing the rest of Q to vanish.  So K kills the
+orthant.
+
+(KEY) permits it exactly when p, q >= 2.  Lemma X*(i) applied to T_x, whose
+Q-part is all of Q, forces (P \ {x}) u {f} to be tight; that is harmless when
+p >= 2 but says {f} is tight, i.e. phi_f = 0, when p = 1.  The mirror
+Lemma X*(ii) needs q >= 2 the same way.
+
+--------------------------------------------------------------------------------
+RECIPE B' (one block a singleton: p = 1 and q >= 3).  Write Q =
+{b_1,...,b_q} and take
+        T_1 = H u P u {b_1},        T_2 = H u {b_2}.
+--------------------------------------------------------------------------------
+Normals: both contain H, so nu(T_1) = -1_{Q \ {b_1}} and
+nu(T_2) = -e_a - 1_{Q \ {b_2}}.  On the orthant T_1 kills every d_j with
+j in Q \ {b_1}, and T_2 kills d_a and d_{b_1}.  So K kills the orthant.
+
+(KEY) permits it exactly when q >= 3.  T_2 contains H and omits P, so (KEY)
+demands |Q \ T_2| = q - 1 >= 2, that is q >= 3.  At q = 2 it demands q - 1 >= 2
+and fails -- which is Step 2 of Theorem G1 seen from the constructive side.
+
+--------------------------------------------------------------------------------
+THEOREM G3 (THE CHARACTERIZATION, SUFFICIENCY).  Recipes A and B' and the
+mirror of B' cover exactly {(p,q) : p,q >= 1, p + q >= 4}, and each is carried
+by a genuine exact game.
+--------------------------------------------------------------------------------
+COVERAGE.  p,q >= 2 is Recipe A; p = 1 with q >= 3 is Recipe B'; q = 1 with
+p >= 3 is its mirror.  Those three ranges partition {p,q >= 1, p+q >= 4}, and
+their union misses exactly (1,1), (1,2), (2,1) -- the three profiles of
+Theorem G2.
+
+REALIZATION (machine-checked, each model audited end to end -- rebuild v,
+re-derive exactness by LP, recompute Lmin from scratch, re-check the
+configuration):
+
+    recipe    (p,q)     n    tight sets imposed      verdict      Lmin
+    A         (2,2)     6    bdef, adef, abf         GENUINE      (1/4^4, 1/2^2)
+    A         (2,3)     7    bdefg, adefg, abg       GENUINE      (1/4^5, 1/2^2)
+    A         (3,2)     7    bcefg, acefg, abefg,    GENUINE      (1/4^5, 1/2^2)
+                             abcg
+    B'        (1,3)     6    abef, cef              GENUINE      (1^4, 2^2)
+    B'        (1,4)     7    abfg, cfg              GENUINE      (2^5, 3^2)
+
+Recipe A produces a strikingly uniform family: every poorer player at 1/4,
+both richer players at 1/2, for every (p,q) tested.  Scripts recipes.py and
+recipeB.py.                                                                []
+
+HONEST NOTE ON HOW B' WAS FOUND.  A first attempt (recipe B: T_0 = H u
+{b_3..b_q} together with U = {g,b_1,b_2}) kills the orthant but is UNSAT as a
+game -- the encoding rejected it in 0.1s.  It is recorded in recipes.py rather
+than deleted.  B' was then read off from the minimal orthant-killing
+certificate that the harvested PART(1,3) witness actually carries, namely
+{bcde, cef}, both of which contain H.  Killing the orthant is necessary, not
+sufficient; the recipes above are the ones that survive the numeric side too.
+
+--------------------------------------------------------------------------------
+WHAT THE TWO PARTS SHARE
+--------------------------------------------------------------------------------
+Theorem G1 Step 2 and Recipe B' are the same computation with opposite signs.
+Step 2 needs a tight T containing f and omitting a; if such a T also contains
+g then (KEY) demands |Q \ T| >= 2, which at q <= 2 leaves only T contained in
+H -- and H is slack.  Recipe B' needs a tight T containing H and omitting a;
+(KEY) demands |Q \ T| >= 2, which at q >= 3 is satisfiable and is exactly what
+T_2 does.
+
+So the threshold is a single phenomenon.  A PART configuration must buy a tight
+coalition over H that omits the poorer side of one block, and (KEY) prices that
+purchase at two spare players in the other block.  With p = 1 the buyer needs
+q >= 3; with p >= 2 the cost is shared and q >= 2 suffices.  Both readings
+first become affordable at p + q = 4.
+
+--------------------------------------------------------------------------------
+STATUS
+--------------------------------------------------------------------------------
+  Lemma N*  block normal form, no intra-block separation ...... PROVED
+  Lemma I*  D n R^L_{>=0} = {0}, and its combinatorial form ... PROVED
+  Lemma E*  exactness directions .............................. PROVED
+  Lemma X*  crossing exclusion and (KEY) ...................... PROVED
+  Thm G1    p = 1 ==> q >= 3 (subsumes PROOF_M3.txt) .......... PROVED
+  Thm G2    necessity: p,q >= 1 and p+q >= 4 .................. PROVED
+  Recipes A, B' kill the orthant .............................. PROVED
+  Thm G3    sufficiency, by recipe rather than by padding ..... PROVED for the
+            five instances realized above; the recipes and their (KEY) budgets
+            are general, but the numeric realization of each recipe at every
+            (p,q) is NOT proved in closed form -- see below.
+
+WHAT IS STILL OPEN.  Theorem G3's coverage argument is general, but its
+realization line is five machine-audited instances plus the observation that
+Recipe A's games all share the shape (1/4 on L, 1/2 on H).  Turning that into a
+closed-form family -- explicit generators for every (p,q), proved by the
+progressive-leximin method paper4 uses for its three families -- is the
+remaining work.  Until then, universal sufficiency still rests on PROOF.txt
+Lemma 9 (padding), which is proved for all (p,q); the recipes improve on it by
+being non-degenerate (no null players) and by explaining the threshold, not by
+replacing its logical coverage.
+
+  MACHINE CROSS-CHECKS.  general.py (G1-G5, ALL CHECKS PASSED) verifies the
+  normal formula against brute force, Lemma N*, the combinatorial form of
+  Lemma I*, that both recipes kill the orthant across a range of (p,q), and
+  that both published witnesses carry an orthant-killing certificate --
+  exhibiting the minimal one in each case.  recipes.py and recipeB.py carry
+  the realizations.  All arithmetic exact; every solver call asserted sat or
+  unsat.
+================================================================================

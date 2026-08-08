@@ -1134,6 +1134,26 @@ localization of exactness; "|B|=4 is special".
   line audit.  Paper5 updated (new sec:s5full, abstract, scope now 4 open
   problems).  Residues: hand proof of A3 (mechanism only), hand
   distillation of the 649 solver-closed configurations, s(6).
+- Round 2 on C-C^ and PART (2026-08-08 evening, tasks #25/#26):
+  (a) C-C-left ALSO fails at n=6 — two audited multi-slack games (one with
+  tight/slack suffixes INTERLEAVING; lead re-verified Case A end-to-end);
+  C-C^ survives ~2,800 designed n=6 danger-class violations (0 failures
+  either half, left-of-C-C failing ~28% on the same corpus).  New L-out
+  lemma (paper4 cor:lout): EVERY outsider sub-coalition carries slack >= rho
+  — absorbs push(ii)/(iii).  Hand-proof of cchat de-prioritized on evidence:
+  72-assertion irredundant unsat core even after the two-strata reduction,
+  and exactness of v' at non-supersets of S provably irreplaceable (L-out
+  alone flips UNSAT->SAT).  Data-loss law: d14_n6multi.py hardcodes its
+  output name — rename per seed or earlier runs are destroyed.
+  (b) PART characterization unified (verifiers/part/PROOF_GENERAL.txt): ONE
+  inequality (KEY: tight T over H omitting P forces |Q\T| >= 2) drives both
+  halves.  Lemmas N*/I*/E*/X* generalize the m=3 frame to all (p,q);
+  Theorem G1 (p=1 => q>=3) subsumes PROOF_M3; recipes A (p,q>=2) and B'
+  (p=1,q>=3) construct witnesses (5 audited realizations; recipe A uniform:
+  L at 1/4, H at 1/2).  Threshold explained: a PART configuration must buy
+  a tight coalition over H omitting one block's poorer side, priced by KEY
+  at two spare players in the other block.  Residue: closed-form recipe
+  family for all (p,q) by progressive leximin.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
