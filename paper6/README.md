@@ -42,7 +42,12 @@ pdflatex -interaction=nonstopmode -halt-on-error partition.tex
 pdflatex -interaction=nonstopmode -halt-on-error partition.tex
 ```
 
-Twelve pages. Everything in the main theorem is proved by hand. The single
+Twelve pages, one open TODO: prior-art positioning, marked in the introduction
+for the lead's citation verification pass. The bibliography deliberately lists
+only the three works actually cited, each carried over verbatim from paper4's
+bibliography; nothing was reconstructed from memory.
+
+Everything in the main theorem is proved by hand. The single
 machine proof dependency is the frontier dichotomy (Theorem 23), a finite check
 over the 60 payoff stratifications of type `(1,3)` with a satisfiable control;
 it is used nowhere else. Drivers, controls and audits are archived in
