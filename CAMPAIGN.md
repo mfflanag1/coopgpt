@@ -1161,6 +1161,16 @@ localization of exactness; "|B|=4 is special".
   a tight coalition over H omitting one block's poorer side, priced by KEY
   at two spare players in the other block.  Residue: closed-form recipe
   family for all (p,q) by progressive leximin.
+  → CLOSED (task #29, verifiers/part/PROOF_FAMILY.txt): explicit envelope
+  FAMILIES for every (p,q) — Family A (p,q>=2; m+2 rows; Lmin = 1 on L, 2
+  on H, slack constant 4) and 4-row Family B (p=1, q>=3; Lmin = 1 on L,
+  q-1 on H, slack q-2) + mirror; proved by a 4-line PINNING LEMMA
+  (uniqueness above 1_N + block rigidity pins both stages) with no solver
+  in the proof; (KEY)'s two readings visible as row-arithmetic caps.
+  Machine-validated 18 instances n<=9, 97 checks 0 failures; lead verified
+  3 instances independently.  Padding lemma retires from load-bearing
+  duty; Theorem G7 = closed-form sufficiency.  PART program: nothing
+  outstanding.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
