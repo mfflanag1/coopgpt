@@ -1211,6 +1211,24 @@ localization of exactness; "|B|=4 is special".
   memory Llerena-Mauri entry was invented — deleted), prior-art
   positioning pass PENDING and marked in the tex.  NOT submission-ready:
   needs the positioning pass + a hostile audit round.
+- s(5) DISTILLATION, increment 1+2 (task #27, verifiers/s5close/
+  PROOF27/REPORT27): seven new hand lemmas, ALL A3-FREE, one idea (an
+  improving core direction must leave the polytope) — L7/L7' extremal
+  rigidity (every core point has max_{D1} >= M, min_P <= mu), L1''
+  (|D1| >= 2 with no A3: exactness at {i} + L7 forces v({i}) >= M > 0),
+  L5, L6 (singleton bottom stratum forces f({i}) = mu), protector level
+  forms L11/L12 (first lemmas coupling the two allocations).  L2/L2'
+  (starved-player) now A3-free.  Solver residue 208 -> 132 (2,829/2,961
+  hand-excluded); the A3-free net (204) BEATS the A3 baseline (208); T1's
+  17 solver cases -> 9.  Tight-family lemmas L14-L17 proved but buy ZERO
+  configurations (negative result recorded; complement-closure FALSE
+  4,433/15,335).  RESIDUE NAMED: 27 possible configurations = the
+  mu-lower-bound problem (= hand-A3, Part D's deepest gap; includes CFG's
+  mu >= 1/8) + 105 impossible-but-not-yet-hand-excluded (87 with >= 3
+  Lmin strata; barrier = no second canonical core point in the stage-1
+  face — L13 proved but vacuous without one).  Controls: whole-core LP
+  validation of L7/L7' + all lemmas 0 failures over 2,668 games.  Paper
+  integration deferred until audit #31 lands (fixed diff range).
 - PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
   whose converse is never invoked, a declared reference never cited, a

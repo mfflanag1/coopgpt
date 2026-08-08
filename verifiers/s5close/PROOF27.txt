@@ -1,0 +1,147 @@
+================================================================================
+TASK #27.  DISTILLING THE MECHANISM BEHIND s(5) = 1/2.
+Seven hand lemmas, all A3-free, all proved by perturbing inside the core.
+================================================================================
+Conventions as in PROOF.txt: T = 1, x = Lmin(v), z = Lmax(v), mu = min x,
+M = max z, P = {i : x_i = mu} the Lmin bottom stratum, D1 = {i : z_i = M} the
+Lmax top stratum.  v is singleton-normalized and exact, so v(S) = min over
+Core(v) of w(S) for every S, and the core is a nonempty convex polytope.
+
+THE ONE IDEA.  Both selections are optima of a staged program over the core, so
+any core direction that improves the objective must leave the polytope.  Every
+lemma below is that observation applied once.  None uses A3, the facet
+catalogue, or a solver.
+
+--------------------------------------------------------------------------------
+L7  (CEILING EXTREMAL RIGIDITY).  Every core point w has max_{i in D1} w_i >= M.
+--------------------------------------------------------------------------------
+PROOF.  Suppose w_i < M for every i in D1.  For j outside D1, z_j < M by the
+definition of D1.  Put w_th = (1-th)z + th*w, a core point by convexity.  For
+i in D1, w_th,i = (1-th)M + th*w_i < M for every th > 0; for the finitely many
+j outside D1, w_th,j < M once th is small.  So max_j w_th,j < M, contradicting
+M = min over the core of the largest coordinate.                             []
+
+--------------------------------------------------------------------------------
+L7' (FLOOR EXTREMAL RIGIDITY).  Every core point w has min_{i in P} w_i <= mu.
+--------------------------------------------------------------------------------
+PROOF.  The mirror: if w_i > mu for every i in P, then for small th every
+coordinate of (1-th)x + th*w exceeds mu, contradicting mu = max over the core
+of the smallest coordinate.                                                  []
+
+CONSEQUENCE.  Taking w = z gives mu >= min_{i in P} z_i, which is exactly
+L2(c) of PROOF.txt -- previously derived from A3.  SO L2, AND WITH IT
+COROLLARY L2' (THE Lmax-STARVED PLAYER IS Lmin-POOR), ARE A3-FREE.
+Taking w = x in L7 gives max_{i in D1} x_i >= M, which is the A3-free form of
+L1's corollary.
+
+--------------------------------------------------------------------------------
+L1'' (THE Lmax TOP STRATUM HAS AT LEAST TWO PLAYERS) -- A3-FREE.
+--------------------------------------------------------------------------------
+PROOF.  Suppose D1 = {i}.  Then L7 reads w_i >= M for EVERY core point w, so by
+exactness v({i}) = min over the core of w_i >= M >= T/5 > 0, contradicting
+singleton normalization v({i}) = 0.                                          []
+
+This replaces L1' (which came from A3) and therefore makes the exclusion of
+1953 of the 2961 configurations a hand argument.
+
+--------------------------------------------------------------------------------
+L5  min z <= mu  and  M <= max x.
+--------------------------------------------------------------------------------
+PROOF.  Immediate from optimality: mu = max over the core of the minimum, so
+mu >= min_i z_i; M = min over the core of the maximum, so M <= max_i x_i.    []
+
+--------------------------------------------------------------------------------
+L6  (SINGLETON FLOOR STRATUM).  If P = {i} then f({i}) = mu, i.e.
+    v(N \\ {i}) = T - mu.
+--------------------------------------------------------------------------------
+PROOF.  L7' with P = {i} says w_i <= mu for every core point w, so
+f({i}) = max over the core of w_i <= mu; and f({i}) >= x_i = mu.             []
+
+So in every singleton-bottom-stratum configuration the floor anchor is forced
+to be {i} -- the "hard case" of records/S5PROOF.txt Part D always occurs there.
+
+--------------------------------------------------------------------------------
+L11, L12  (THE PROTECTOR LEMMAS).
+--------------------------------------------------------------------------------
+PROTECTOR.  Let phi be the leximin point, or the leximax point, of the core,
+and suppose phi_i < phi_j.  Then some PROPER coalition A with j in A and
+i not in A is phi-tight: phi(A) = v(A).
+
+PROOF.  Let d = e_i - e_j and consider phi + th*d, which preserves the total.
+FLOOR CASE: sort ascending.  For small th the sorted vector agrees with phi's
+up to the last copy of the value phi_i, where it becomes phi_i + th > phi_i; so
+phi + th*d is strictly leximin-better than phi.  As phi is leximin-maximal over
+the core, phi + th*d is outside the core for every th > 0.  The core is a
+polyhedron containing phi, so some constraint active at phi is violated in the
+direction d: a coalition A with phi(A) = v(A) and d(A) < 0, i.e. j in A and
+i not in A.  A is proper: d(N) = 0 excludes A = N, and A contains j so it is
+nonempty.  CEILING CASE: sort descending; the same shift lowers the last copy
+of the value phi_j to phi_j - th and, th being small, leaves phi_i + th below
+phi_j, so it is strictly leximax-better; the rest is identical.              []
+
+LEVEL FORM.  Tightness plus core membership of the OTHER selection turns this
+into a statement about the two allocations alone:
+
+  L11.  x_i < x_j  =>  some proper A with j in A, i not in A has x(A) <= z(A).
+        (A is x-tight, so v(A) = x(A); z is a core point, so z(A) >= v(A).)
+  L12.  z_i < z_j  =>  some proper A with j in A, i not in A has z(A) <= x(A).
+        (A is z-tight, so v(A) = z(A); x is a core point, so x(A) >= v(A).)
+
+Both mention only the levels, so both can be tested configuration by
+configuration with no game variable.  Each is a disjunction over the eight
+coalitions containing j and avoiding i.
+
+VERIFICATION.  All 2668 harvested genuine exact games (both harvests):
+16,024 floor pairs and 15,800 ceiling pairs; 0 failures of the raw protector
+statement and 0 of the level form (protector_validate.json).  L5, L6, L1'' and
+the derived bound M + 4mu <= T were checked on the same games with 0 failures
+(lemmas27.py -> lemmas27.json).
+
+--------------------------------------------------------------------------------
+WHAT THE HAND NET NOW REACHES
+--------------------------------------------------------------------------------
+Each net below is a LEVEL-ONLY feasibility test -- no v, no pinning, no
+catalogue -- run on all 2961 configurations against the failure hypothesis
+ratio >= 1/2 (arith27b.py -> arith27b_1_2.json):
+
+   net   contents                                    survive (solver residue)
+   ----  ------------------------------------------  ------------------------
+   H     levels + L1'' + L7 + L7'      (A3-free)             377
+   HP    H + L11 + L12                 (A3-free)             204
+   HA    H + the A3 anchors            (= accepted baseline) 208
+   HAP   HA + L11 + L12                                      132
+
+TWO READINGS.
+ (1) THE A3-FREE HAND NET NOW BEATS THE A3-DEPENDENT BASELINE: 204 against 208.
+     So the whole distillation can be carried out without A3, and A3 buys only
+     the further reduction 204 -> 132.
+ (2) The solver residue of the accepted proof drops from 208 to 132; equivalently
+     2829 of the 2961 configurations are now excluded by statements a reader can
+     check by hand, up from 2753.
+
+THE TWO-STRATUM THEOREM T1.  Its 17 solver cases drop to 9 under HAP -- the
+entire Lmin (2,3) regime is now hand-excluded, together with (3,2)x(2,1,2),
+(3,2)x(2,3), (4,1)x(2,1,2) and (4,1)x(3,2).  The 9 that remain are
+
+   IMPOSSIBLE but not yet hand-excluded (5):
+     (3,2) x (1,1,1,2) [[1,1,1,0],[0,0,0,2]]
+     (3,2) x (1,1,3)   [[1,1,1],[0,0,2]]
+     (4,1) x (1,1,1,2) [[1,1,1,1],[0,0,0,1]]
+     (4,1) x (1,1,3)   [[1,1,2],[0,0,1]]
+     (4,1) x (1,2,2)   [[1,2,1],[0,0,1]]
+   GENUINELY POSSIBLE, so no level-only net can ever kill them (4):
+     (3,2) x (1,4)     [[1,2],[0,2]]   = CFG, occurs at ratio exactly 1/2
+     (3,2) x (1,2,2)   [[1,2,0],[0,0,2]]        occurs at 4/9
+     (4,1) x (1,4)     [[1,3],[0,1]]            occurs at 1/3
+     (4,1) x (2,3)     [[2,2],[0,1]]            occurs at 1/3
+
+THE HONEST LIMIT.  The last four are not a gap in the net; they are the
+mathematical content.  Each is a configuration that EXISTS, so excluding
+ratio > 1/2 there is not a statement about levels at all -- it requires a LOWER
+BOUND ON mu (mu >= 1/8 for CFG, and the analogues for the others).  That is
+precisely the inequality (*) of records/S5PROOF.txt Part D, the one that
+paper5's Theorem thm:cfg establishes by finite check and that Part D identifies
+as the deepest obstruction in the program.  Distilling those four is the same
+problem as proving A3-style one-coalition optimality by hand; the other five
+are ordinary case analysis and are the realistic next target.
+================================================================================

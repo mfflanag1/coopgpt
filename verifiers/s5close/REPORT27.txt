@@ -1,0 +1,197 @@
+================================================================================
+TASK #27 -- DISTILL THE MECHANISM.  Progress report (increment 1).
+Work dir: scratchpad/r22/ (shared with #22).  Repo read-only, nothing committed.
+================================================================================
+
+--------------------------------------------------------------------------------
+0.  WHERE THE RESIDUE STANDS
+--------------------------------------------------------------------------------
+                                        before (#22)      after (increment 1)
+  configurations                          2961                 2961
+  excluded by a hand lemma                1953 (L1', via A3)   1953 (L1'', A3-FREE)
+  killed by the level-only net             800                  876
+  LEFT TO THE SOLVER                       208                  132
+  ... and A3-free                          n/a                  204
+  T1's two-stratum solver cases             17                    9
+
+So 2829 of 2961 configurations are now excluded by statements a reader checks by
+hand, and -- the part I did not expect -- the A3-FREE net (204) is now better
+than the A3-dependent baseline it was measured against (208).
+
+--------------------------------------------------------------------------------
+1.  WHAT WAS ADDED:  SEVEN LEMMAS, ONE IDEA
+--------------------------------------------------------------------------------
+Every new lemma is the same observation applied once -- both selections optimize
+a staged program over the core, so a core direction that improves the objective
+must leave the polytope.  All are A3-free and none needs a solver.  Statements
+and proofs: PROOF27.txt.
+
+  L7    every core point w has max_{i in D1} w_i >= M
+  L7'   every core point w has min_{i in P}  w_i <= mu
+  L5    min Lmax <= min Lmin and max Lmax <= max Lmin
+  L1''  the Lmax top stratum has >= 2 players            (A3-FREE)
+  L6    if the Lmin bottom stratum is a singleton {i} then f({i}) = mu
+  L11   x_i < x_j => some proper A with j in A, i not in A has x(A) <= z(A)
+  L12   z_i < z_j => some proper A with j in A, i not in A has z(A) <= x(A)
+
+TWO OF THESE CHANGE THE STATUS OF EARLIER RESULTS.
+ * L7' with w = z IS L2(c).  So L2, and its corollary L2' (the Lmax-starved
+   player is Lmin-poor -- the one that replaced 10,974 programs), are A3-FREE.
+ * L1'' replaces L1', so the 1953 exclusions no longer route through A3.
+Between them, the A3-dependence of the STRUCTURAL story is now confined to the
+anchor conditions, which buy only 204 -> 132.
+
+L11/L12 are the productive pair: they are the first lemmas that constrain the
+two allocations AGAINST EACH OTHER on a specific coalition, and they are what
+takes 377 -> 204 and 208 -> 132.
+
+--------------------------------------------------------------------------------
+2.  CONTROLS
+--------------------------------------------------------------------------------
+ * PROTECTOR (L11/L12), the lemmas the new reach depends on: verified on all
+   2668 harvested genuine exact games from both harvests -- 16,024 floor pairs
+   and 15,800 ceiling pairs -- with 0 failures of the RAW statement (a tight
+   separating coalition exists) and 0 of the LEVEL form (that coalition also
+   compares the two allocations the right way).  -> protector_validate.json
+ * L5, L6, L1'' and the derived M + 4mu <= T: 0 failures on the same games.
+ * L7/L7' quantify over EVERY core point, so they are verified as two exact
+   LPs per game rather than by enumerating core vertices: L7 says the minimum
+   over the core of max_{i in D1} w_i is >= M, L7' says the maximum over the
+   core of min_{i in P} w_i is <= mu.  Run on all 2668 games of both harvests:
+   0 failures on each side (l7_validate.json).  This covers the whole core, not
+   a sample of it.  (They were also already verified indirectly in #22, with
+   0 failures over 1050 games, as L5a/L5b and the L2 corollary.)
+ * Every net verdict is an exact-rational z3 call asserted sat or unsat.
+ * The nets are only ADDED to the accepted #22 pipeline's reasoning; no verdict
+   of #22 is revised, and T0/T1/T2 stand exactly as accepted.
+
+--------------------------------------------------------------------------------
+3.  THE PRIZE (T1 BY HAND):  17 -> 9, AND WHY 4 OF THE 9 ARE NOT A GAP
+--------------------------------------------------------------------------------
+The whole Lmin (2,3) regime now falls to hand lemmas, along with
+(3,2)x(2,1,2), (3,2)x(2,3), (4,1)x(2,1,2) and (4,1)x(3,2).  Of the 9 left:
+
+ FIVE are impossible configurations not yet hand-excluded.  These are ordinary
+ case analysis against L7/L7'/L11/L12 plus the anchors, and they are the
+ realistic next target:
+     (3,2) x (1,1,1,2) [[1,1,1,0],[0,0,0,2]]
+     (3,2) x (1,1,3)   [[1,1,1],[0,0,2]]
+     (4,1) x (1,1,1,2) [[1,1,1,1],[0,0,0,1]]
+     (4,1) x (1,1,3)   [[1,1,2],[0,0,1]]
+     (4,1) x (1,2,2)   [[1,2,1],[0,0,1]]
+
+ FOUR GENUINELY OCCUR, so no level-only net can ever exclude them, and this is
+ not a weakness of the net but the location of the mathematics:
+     (3,2) x (1,4)   = CFG          occurs at ratio exactly 1/2
+     (3,2) x (1,2,2)                occurs at 4/9
+     (4,1) x (1,4)                  occurs at 1/3
+     (4,1) x (2,3)                  occurs at 1/3
+ For each, excluding ratio > 1/2 is equivalent to a LOWER BOUND ON mu -- for CFG
+ exactly mu >= T/8.  That is inequality (*) of records/S5PROOF.txt Part D, the
+ obstruction that paper5's thm:cfg settles by finite check and that Part D calls
+ the deepest gap in the program.  Distilling these four is the same problem as
+ proving one-coalition optimality (A3) by hand.  I would not report a hand proof
+ of T1 as close until that is cracked; the five above are close.
+
+--------------------------------------------------------------------------------
+4.  STATUS AND NEXT STEPS
+--------------------------------------------------------------------------------
+NOTHING IS STILL RUNNING; every lemma the reach numbers depend on is verified
+over both harvests.  (The first attempt at the L7/L7' control enumerated core
+vertices on a bounded prefix and was far too slow; it was replaced by the two
+LPs above, which are both cheaper and stronger.)
+
+NEXT, in order:
+ (a) hand-exclude the five impossible T1 configurations above;
+ (b) mine the 132 HAP survivors for the next recurring pattern -- the natural
+     candidate is a stage-2 analogue of L7/L7' (the same perturbation argument
+     inside the face where the top/bottom stratum is already pinned), which
+     would give protector-style constraints for the middle strata that the
+     current net has nothing to say about;
+ (c) quantify a final named residue: which configurations still need a machine,
+     and for each, exactly which mu bound would remove it.
+
+
+--------------------------------------------------------------------------------
+5.  INCREMENT 2:  TIGHT-FAMILY LEMMAS (TRUE, AND THEY BUY NOTHING), AND THE
+    NAMED RESIDUE
+--------------------------------------------------------------------------------
+FOUR MORE LEMMAS, ALL VERIFIED, ALL A3-FREE (tightfam.py -> tightfam.json).
+The protectors supply tight coalitions one at a time; these say how tight
+coalitions combine.  phi is a core point, "phi-tight" means phi(A) = v(A).
+  L14  A, B disjoint and phi-tight  =>  A u B is phi-tight
+       (superadditivity one way, core membership the other).
+  L15  A x-tight, B z-tight, A subset B  =>  x(A) <= z(B)   (monotonicity).
+  L16  A x-tight, B z-tight, disjoint  =>  x(A)+z(B) <= min(x(AuB), z(AuB)).
+  L17  A both x- and z-tight  =>  x(A) = z(A).
+Verified on all 2668 harvested games: L14 16,286 cases, L15 42,455, L16 16,917,
+L17 15,194 -- 0 failures each; monotonicity and superadditivity of v, on which
+they rest, also 0 failures.
+CHECKED AND FALSE, SO NOT USED: the tight family is NOT closed under
+complementation (the complement of a tight set failed to be tight in 4,433 of
+15,335 cases).  A x-tight gives only v(N\A) <= x(N\A), which is core
+membership again.
+
+NEGATIVE RESULT, REPORTED AS SUCH.  Adding all four to the net (arith27c.py,
+net HAPT: Boolean tight-markers per coalition, with the protectors supplying
+them and L14-L16 propagating) kills EXACTLY ZERO further configurations:
+132 in, 132 out.  So the tight-family closure, though true and not obvious, has
+no consequences for the LEVELS beyond what L11/L12 already extract.  Soundness
+of the stronger net was checked too: of the 21 configurations the harvests
+actually produce, 0 are wrongly killed.
+
+THE RESIDUE, NAMED (target (c) of the assignment).  Splitting the 132 by
+whether the configuration can occur at all (the A3-free encoding's positive
+control):
+
+   27  POSSIBLE configurations.  These can NEVER be killed by any level-only
+       net, because they exist.  For each, excluding ratio > 1/2 is exactly a
+       LOWER BOUND ON mu -- inequality (*) of records/S5PROOF.txt Part D.
+       They include CFG, (3,2)x(1,2,2), (4,1)x(1,4) and (4,1)x(2,3), i.e. the
+       four two-stratum cases of section 3, plus 23 with three or more Lmin
+       strata.  This is the irreducible core of the whole problem.
+  105  IMPOSSIBLE configurations not yet hand-excluded.  Reachable in
+       principle.  They concentrate sharply in Lmin shapes with many strata:
+       (1,1,1,1,1) 22, (2,1,1,1) 21, (1,1,2,1) 12, (1,2,1,1) 11, (2,2,1) 11,
+       (3,1,1) 10 -- 87 of the 105 have three or more Lmin strata.
+
+WHY THAT CONCENTRATION, AND WHERE THE NEXT LEMMA MUST COME FROM.  L7 and L7'
+are statements about the EXTREME strata only -- the Lmax top and the Lmin
+bottom.  A configuration with many strata has middle strata about which the
+whole net says nothing beyond the protectors.  The natural fix is the stage-2
+extremal rigidity, and the same perturbation proves it:
+
+  L13.  Every core point w with w <= M*1 satisfies max_{i in D2} w_i >= M2,
+        where D2 is the second Lmax stratum and M2 its level.
+        (The stage-1 feasible set IS {w in Core : w <= M*1}, since pinning is
+        what forces w = M on D1 there; then perturb inside it exactly as in L7.)
+
+L13 is true and proved, but it is NOT usable in a level-only net as things
+stand: to extract a consequence one must instantiate w at a known point of
+{w in Core : w <= M*1}, and the only canonical such point is z itself, which
+makes the statement vacuous.  L7 was usable precisely because x is a core point
+available for free.  So the barrier at 132 is not a shortage of true lemmas --
+it is the absence of a second canonical core point inside the stage-1 face.
+Manufacturing one (for instance the leximin point OF THE FACE, or the core
+point attaining v(S) for a well-chosen S via Theorem A) is the concrete next
+step, and it is what I would attack first.
+
+--------------------------------------------------------------------------------
+6.  FILE INDEX
+--------------------------------------------------------------------------------
+FILES ADDED, INCREMENT 1
+ lemmas27.py           the seven lemmas, with the statements and the slower
+                       vertex-based control (superseded, kept for the record)
+ l7_validate.json      L7/L7' verified over the WHOLE core, 2668 games, by LP
+ protector_validate.json  standalone L11/L12 verification, 2668 games
+ arith27.py            reach of the first hand net.  -> arith27_1_2.json
+ arith27b.py           reach of the four nets H/HP/HA/HAP.
+                       -> arith27b_1_2.json, arith27b.log
+ PROOF27.txt           statements and proofs
+ REPORT27.txt          this file
+FILES ADDED, INCREMENT 2
+ tightfam.py           L14-L17 + the false-complement check.  -> tightfam.json
+ arith27c.py           net HAPT (Boolean tight-family reasoning) + the
+                       soundness check on observed configurations.
+                       -> arith27c_1_2.json, arith27c.log
+================================================================================
