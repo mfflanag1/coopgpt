@@ -1,0 +1,443 @@
+================================================================================
+r12 / task #12   C-C CONTAINMENT:  STATEMENTS AND PROOFS
+================================================================================
+Notation follows paper4/threshold.tex, Section "Monotonicity failures at Lmin".
+v is singleton-normalized and exact, phi = Lmin(v) is the (unique) leximin-
+maximal core element, S is proper with |S| >= 2, alpha > 0, v' = v^{S,alpha},
+phi' = Lmin(v'), Delta = phi' - phi, W = {i in S : phi'_i < phi_i},
+rho = alpha - s_phi(S).  B_1 < ... < B_k are the payoff strata of phi,
+H_j = B_{j+1} u ... u B_k the richer suffix at the j-th cut, P_j = N \ H_j.
+j* = max{j : s_phi(H_j) > 0}, H* = H_{j*} (INNERMOST slack suffix, i.e. the
+smallest slack one, since H_1 > H_2 > ... ).  We also write
+j_min = min{j : s_phi(H_j) > 0} and Hhat = H_{j_min}, the OUTERMOST (largest)
+slack suffix.  Everything below is exact rational arithmetic.
+
+================================================================================
+PART I.  LEMMAS PROVED HERE (all used later, all independently verified)
+================================================================================
+
+--------------------------------------------------------------------------------
+LEMMA L (leximin optimality certificate).  Let x be a core element of a game u
+with strata B_1 < ... < B_k and richer suffixes H_j.  Then x is the leximin-
+maximal element of core(u) IF AND ONLY IF for every j in {1,...,k} there exist
+reals lambda_T >= 0, supported on proper x-tight coalitions (x(T) = u(T)), and
+a scalar nu, with
+
+        sum_{T ni i} lambda_T  =  nu        for every i in H_j,
+        sum_{T ni i} lambda_T  <= nu - 1    for every i in B_j,
+
+and no condition on i in P_{j-1}.  (Necessarily nu >= 1.)  When H_j is x-tight
+the certificate is witnessed by lambda = 1_{H_j}, nu = 1.
+
+PROOF.
+(Necessity.)  Let D = {delta : delta(N) = 0, delta(T) >= 0 for every proper
+x-tight T} be the tangent cone of core(u) at x; for delta in D and small t > 0
+one has x + t*delta in core(u).  For small t the strata of x + t*delta refine
+those of x in the obvious way, so the leximin comparison of x + t*delta with x
+is the lexicographic comparison of
+      sort(delta|B_1) ++ sort(delta|B_2) ++ ... ++ sort(delta|B_k)
+(each block sorted ascending) with 0.  Hence x + t*delta is leximin-better
+exactly when there is a j with delta|B_l = 0 for all l < j, delta|B_j >= 0 and
+delta|B_j =/= 0.  Leximin-maximality of x therefore says: for each j, the LP
+      max  delta(B_j)   s.t.  delta(N) = 0;  delta(T) >= 0 (T proper x-tight);
+                              delta_i = 0 (i in P_{j-1});  delta_i >= 0 (i in B_j)
+has value 0.  By Farkas (the feasible set is a cone containing 0), this holds
+iff  -1_{B_j}  lies in  cone{1_T : T proper x-tight} + cone{e_i : i in B_j}
+                        + span{1_N} + span{e_i : i in P_{j-1}}, i.e.
+      -1_{B_j} = sum_T lambda_T 1_T + sum_{i in B_j} mu_i e_i + nu0 1_N
+                 + sum_{i in P_{j-1}} gamma_i e_i,     lambda, mu >= 0.
+Reading coordinates: for i in H_j, sum_{T ni i} lambda_T = -nu0; for i in B_j,
+sum_{T ni i} lambda_T = -1 - nu0 - mu_i <= -1 - nu0; for i in P_{j-1} nothing.
+Put nu = -nu0.  Since lambda >= 0 the B_j line forces nu >= 1.
+
+(Sufficiency.)  Suppose the certificates exist and y in core(u) has
+sort(y) >lex sort(x).  Put delta = y - x; then delta(N) = 0 and, at any x-tight
+T, y(T) >= u(T) = x(T), so delta(T) >= 0: delta lies in D.  If delta_i < 0 for
+some i in B_1 then min y < min x and y is leximin-WORSE, a contradiction; so
+delta|B_1 >= 0.  If delta|B_1 =/= 0 we have exactly the direction the j = 1
+certificate forbids.  Otherwise delta|B_1 = 0; every i outside B_1 must then
+have y_i > x_1 (if y_i = x_1 the sorted vector of y has one more entry at level
+x_1 than that of x, making y worse at position |B_1| + 1; if y_i < x_1 it is
+worse at position 1), so the first |B_1| entries of the two sorted vectors
+agree and the argument repeats at the next stratum.  Some cut is reached and
+contradicted.                                                              []
+
+  Verification: driver d3_lemmaL.py.  POSITIVE control -- the certificate
+  exists at EVERY cut for the true Lmin of paper4's two n=6 games and of 31/31
+  random exact games (4 <= n <= 6).  NEGATIVE control -- for 6/6 core points
+  that are not leximin-maximal (the generator rows of those two games) the
+  certificate fails at some cut, so the condition is discriminating, not
+  vacuous.
+
+  CROSS-CHECK AGAINST r23 (driver d16_crosscheck.py).  Task #23's Theorem B
+  characterizes the same thing by dualizing the same stage LP one PLAYER at a
+  time (max x_i = phi_i for each i in B_t) where Lemma L dualizes it one CUT at
+  a time (max delta(B_t) = 0).  The two are equivalent a priori -- on the stage
+  tangent cone every direction is >= 0 on B_t, so the sum has maximum 0 iff
+  each coordinate does -- and they were checked against each other, coded
+  independently from their two statements: 30/30 games where both must accept
+  the true Lmin (including both games of the Theorem-1 counterexample) and 6/6
+  non-optimal core points where both must reject.  Full agreement in both
+  directions.  The completeness on which Theorems 2 and 3 rest therefore has
+  two independent derivations behind it.
+
+  REMARK.  Lemma L specializes to the "protector" statement already used in the
+  campaign (paper3, and Lemma 2 of task #23): if phi_i < phi_r then some proper phi-tight T has r in T
+  and i not in T.  (Otherwise transfer eps from r to i: every constraint T with
+  r in T, i not in T is slack, all others do not decrease, and the transfer is
+  leximin-improving because phi_i < phi_r.)
+
+--------------------------------------------------------------------------------
+LEMMA D+ (Prop D, in its sharpest form).  For EVERY proper phi-tight T,
+Delta(T) >= 0.
+
+PROOF.  If T =/= S then phi'(T) >= v'(T) = v(T) = phi(T).  If T = S then
+s_phi(S) = 0, so alpha > s_phi(S) and Lemma reduce(ii) gives
+Delta(S) >= alpha > 0.                                                     []
+
+(paper4's mono:prop:shield excludes T = S; the exclusion is unnecessary.)
+
+--------------------------------------------------------------------------------
+LEMMA C+ (Lemma C, in its sharpest form).  For EVERY proper phi'-tight
+T =/= S, Delta(T) <= 0.  If moreover T is phi-tight, Delta(T) = 0.
+
+PROOF.  v' agrees with v at every coalition other than S -- including at the
+coalitions that strictly CONTAIN S.  So phi'(T) = v'(T) = v(T) <= phi(T).  []
+
+(summary2's LemmaC assumes "S not a subset of T"; the hypothesis can be dropped
+to "T =/= S", which strictly enlarges the family of usable certificates: every
+phi'-tight proper superset of S now also weakly loses.)
+
+--------------------------------------------------------------------------------
+LEMMA M (the two master inequalities).  Let lambda, nu be a Lemma-L certificate
+for phi at cut j and c_i = sum_{T ni i} lambda_T.  Let lambda', nu' be a
+Lemma-L certificate for phi' at one of its cuts and c'_i the analogous cover.
+Then
+      (MA)   sum_i c_i Delta_i    >= 0,
+      (MB)   sum_i c'_i Delta_i   <= lambda'_S * rho     (= 0 if S is not in
+                                                          the support of lambda').
+Equivalently, with H_j, B_j the suffix and block of the phi-cut, and H'_m, B'_m
+those of the phi'-cut,
+      (MA')  sum_{i in B_j}  (nu  - c_i ) Delta_i  <=  sum_{i in P_{j-1}}  (c_i  - nu ) Delta_i,
+      (MB')  sum_{i in B'_m} (nu' - c'_i) Delta_i  >=  sum_{i in P'_{m-1}} (c'_i - nu') Delta_i
+                                                        - lambda'_S rho,
+in both of which every weight on the left is >= 1.
+
+PROOF.  sum_T lambda_T Delta(T) = sum_i c_i Delta_i.  In (MA) every T in the
+support is proper phi-tight, so Delta(T) >= 0 by Lemma D+.  In (MB) every T in
+the support is proper phi'-tight, so Delta(T) <= 0 by Lemma C+ unless T = S,
+and Delta(S) = rho exactly when S is phi'-tight.  The primed forms follow by
+substituting Delta(H) = -Delta(P) from Delta(N) = 0.                       []
+
+Special case j = 1 of (MA'): a positively weighted sum of Delta over the
+POOREST stratum is <= 0 -- the weighted form of the descent lemma (paper4's
+Prop 4 / summary.json Prop4).
+
+--------------------------------------------------------------------------------
+LEMMA WIN (the admissible exact-bump window is a closed interval, with an
+explicit endpoint).  For a proper T =/= S put
+      beta_T = max{ x(S) : x in core(v), x(T) = v(T) } - v(S)
+(finite and attained whenever v is exact).  Then v^{S,alpha} is exact if and
+only if 0 <= alpha <= alpha_ex(S) := min_{T =/= S proper} beta_T.  Consequently
+a monotonicity failure at S requires the window
+      s_phi(S) < alpha <= alpha_ex(S)
+to be nonempty, and alpha_ex(S) <= g(S) = min_{j not in S}(v(S u j) - v(S)).
+
+PROOF.  core(v^{S,alpha}) shrinks as alpha grows, so
+m_T(alpha) = min{x(T) : x in core(v^{S,alpha})} is nondecreasing in alpha, and
+m_T(alpha) = v(T) iff some x in core(v) has x(T) = v(T) and x(S) >= v(S)+alpha,
+i.e. iff alpha <= beta_T.  Exactness AT S itself is automatic whenever the core
+is nonempty: pick x0 in core(v) with x0(S) = v(S) (exactness of v) and any
+y in core(v^{S,alpha}); on the segment [x0,y] the value of x(S) is continuous,
+so some point has x(S) = v(S)+alpha exactly, and that point lies in
+core(v^{S,alpha}).  Finally with T = S u {j}, x(S) = x(S u j) - x_j
+= v(S u j) - x_j <= v(S u j) since x_j >= v({j}) = 0, so beta_{S u j}
+<= v(S u j) - v(S), whence alpha_ex(S) <= g(S).                            []
+
+  Verification: lib12.alpha_exact_max, controlled in both directions -- at
+  alpha = alpha_ex the bumped game is certified exact on all proper coalitions,
+  and at alpha_ex + 1/64 it is certified inexact, on both paper4 games
+  (alpha_ex = 1 for mono:ex:notsuffix, matching the paper's window (1/2, 1];
+  alpha_ex = 4 for mono:ex:notstratum, matching the recorded d_max = 4).
+
+================================================================================
+PART II.  THE LEFT INCLUSION  W subset H*  IS FALSE
+================================================================================
+
+THEOREM 1 (refutation).  There is a five-player singleton-normalized EXACT game
+v and an EXACT bump v' = v^{S,alpha} which is a monotonicity failure and for
+which W is not contained in H*.
+
+WITNESS.  n = 5, all singletons 0, v(N) = 660, and (values not listed are 0):
+
+    v({1,2})     = 106      v({1,3})     = 136      v({1,2,3})   = 136
+    v({1,4})     = 161      v({1,2,4})   = 161      v({3,4})     = 176
+    v({2,3,4})   = 176      v({1,3,4})   = 297      v({1,2,3,4}) = 297
+    v({1,5})     = 242      v({1,2,5})   = 242      v({3,5})     = 242
+    v({2,3,5})   = 242      v({1,3,5})   = 393      v({1,2,3,5}) = 484
+    v({4,5})     = 176      v({2,4,5})   = 176      v({1,4,5})   = 418
+    v({1,2,4,5}) = 418      v({3,4,5})   = 418      v({2,3,4,5}) = 418
+    v({1,3,4,5}) = 534      v(N)         = 660
+
+    phi = Lmin(v) = (121, 121, 121, 146, 151)
+    strata           {1,2,3} < {4} < {5}
+    richer suffixes  s_phi({4,5}) = 121 > 0 ,  s_phi({5}) = 151 > 0
+                     -- BOTH are slack, so j* = 2 and H* = {5}, Hhat = {4,5}
+
+    S = {1,3,4,5},  v(S) = 534,  phi(S) = 539,  s_phi(S) = 5,
+    g(S) = 126,  alpha_ex(S) = 20,  alpha = 20,  rho = 15,  v'(S) = 554
+
+    phi' = Lmin(v') = (136, 106, 136, 141, 141)
+    Delta = (+15, -15, +15, -5, -10)
+
+    W = {4,5},   all strict losers = {2,4,5},   gainers = {1,3}
+    H* = {5}  does NOT contain  W = {4,5}     <-- the left inclusion fails
+    H* = {5}  IS contained in   S             <-- the right inclusion holds
+
+AUDIT (driver d11_audit.py; nothing is taken from the search that produced it):
+  * v exact on all 30 proper coalitions -- certified twice, by exact z3
+    minimisation over the core and, independently, by exact rational core-vertex
+    enumeration (30 vertices).  Same for v' (27 vertices).
+  * v' differs from v at exactly one coalition, namely S; S is proper with
+    |S| = 4 >= 2; alpha = 20 > 0; both games singleton-normalized.
+  * phi and phi' each computed by two independent leximin algorithms (staged
+    pinning; the Sigma_m ladder), which agree, each with a z3 UNSAT proof that
+    the ladder optimum is unique.
+  * For each game, z3 UNSAT that any core point is leximin-strictly-better
+    (encoded on the partial-sum ladder) -- an optimality proof independent of
+    the optimizer that produced the point.
+  * For each game, a Lemma-L certificate exists at every cut (3/3 and 3/3).
+  * Every proved statement of paper4 re-checked and satisfied on the instance:
+    Theorem A (loss 15 <= s_phi(W) = 121), Lemma reduce(iii) (outsider 2 loses),
+    Delta(S) = 15 = rho, Lemma D+, Lemma C+.
+
+HAND CHECK (the instance is small enough to verify without a computer).
+  phi:  x_1 + x_2 <= v(N) - v({3,4,5}) = 660 - 418 = 242 and likewise
+        x_2 + x_3 <= 242, so the poorest level is at most 121; setting
+        x_1 = x_2 = x_3 = 121 meets both with equality, so 121 is the max-min
+        and all three are pinned there.  Then x_4 + x_5 = 297 subject to
+        x_5 >= v({1,3,5}) - 242 = 151 and x_4 >= v({1,3,4}) - 242 = 55; the
+        leximin choice is x_4 = 146, x_5 = 151.
+  phi': S = {1,3,4,5} is v'-tight at 554, so x_2 <= 660 - 554 = 106, and 106 is
+        attained; then x_1 <= v(N) - x_2 - v({3,4,5}) = 136 and symmetrically
+        x_3 <= 136, so the next level is 136 and 1,3 are pinned; finally
+        x_4 + x_5 = 282 with x_5 >= v({1,3,5}) - 272 = 121 and
+        x_4 >= v({1,3,4}) - 272 = 25, so the leximin choice is x_4 = x_5 = 141.
+
+WHY IT WAS NOT SEEN BEFORE (mechanism).  The base game has TWO slack richer
+suffixes.  In every instance behind the 1041 records -- and in both paper4
+examples -- the top stratum is phi-tight and exactly one suffix is slack, so
+"innermost" and "outermost" slack suffix coincide and the distinction in
+mono:def:hstar is invisible.  Here nothing above the poorest stratum is tight,
+so Proposition D (shields) bars nothing, and the middle stratum {4} -- inside
+the outer slack suffix {4,5} but outside the inner one {5} -- pays 5.  This is
+the multi-slack class that summary2 records as rare (2.1% of the untuned
+generator, 17.7% after tuning) and on which the previous round's evidence for
+the "innermost" refinement C-A' was only 20 violations from 5 base games.
+
+THEOREM 1b (the counterexample does NOT lift by a null player).  Let p be a
+null player of v (v(T u p) = v(T) for all T, v({p}) = 0) and let alpha > 0.
+Then NO bump v^{S,alpha} is exact.
+
+PROOF.  Every core point has x_p = 0, because x(N) = v(N) = v(N\p) <= x(N\p).
+Hence x(S u p) = x(S) = x(S \ p) throughout core(v^{S,alpha}), while all three
+coalitions have v' equal to v(S) except S itself, whose v' is v(S) + alpha.
+If p is not in S and S u p is proper, v'(S u p) = v(S) but every core(v')
+point has x(S u p) = x(S) >= v(S) + alpha, so exactness fails at S u p; if
+S u p = N the core of v' is empty.  If p is in S then S \ p is a proper
+coalition with v'(S \ p) = v(S) and x(S \ p) = x(S) >= v(S) + alpha, so
+exactness fails at S \ p.                                                 []
+
+  Verified: driver d13_lift.py exhibits both failures on the Theorem-1 game
+  (at {1,3,4,5,6} for the outside placement, at {1,3,4,5} for the inside one).
+  So the cheap dimension lift is genuinely blocked; whether the left inclusion
+  fails at n >= 6 needs a fresh search, and is left OPEN here.  This lemma is
+  also of independent interest: exact bumps and null players are incompatible,
+  which is one more reason exactness of v' is such a strong hypothesis.
+
+COROLLARY.  The witness satisfies C-A (W = {4,5} is a slack richer suffix, the
+OUTER one).  Together with mono:ex:notsuffix, which satisfies C-C-left and
+refutes C-A, this shows C-A and C-C-left are logically incomparable and both
+false: there is no "W is (contained in) THE suffix at a distinguished slack
+boundary" law with the boundary chosen at either end of the chain -- except
+possibly the outermost-slack version below.
+
+================================================================================
+PART III.  THE RIGHT INCLUSION  H* subset S
+================================================================================
+
+THEOREM 2 (n = 5).  For every five-player singleton-normalized exact game v
+whose Lmin has a slack richer suffix, and every exact bump v' = v^{S,alpha}
+that is a monotonicity failure, H* is contained in S.
+
+PROOF (exhaustive, machine).  Driver d2_lab.py, target "right", n = 5, all
+condition groups on.  The encoding is a COMPLETE description of a counter-
+example, not merely a relaxation:
+
+  * WLOG phi_0 <= ... <= phi_{n-1} (relabelling) and v(N) = 1 (scaling; v(N) = 0
+    forces phi = 0, no cut, no H*).  The 31 nonempty gap patterns on
+    {1,...,n-1} times the choice of j* inside each give 32 shapes; the driver
+    enumerates all 32.  S is a variable coalition (one-hot booleans over the
+    proper coalitions of size >= 2), so each call quantifies over all bumps.
+  * v exact <=> a core witness y^T with y^T(T) = v(T) exists for each proper T
+    (group exv); same for v' (exv2).
+  * phi in core(v) plus Lemma L at every cut <=> phi = Lmin(v)  (Lemma L is
+    necessary AND sufficient); same for phi' with the shape-free form of
+    Lemma L, one certificate per attained level (cert, cert2).
+  * hstar encodes exactly "H_{j*} slack and H_j tight for j > j*".
+  * The negated conclusion is "some player of H* is outside S", the hypothesis
+    "W nonempty".
+Result: 32/32 UNSAT, 0 unknown, total 951 s.  Since the encoding is exact
+(rational LRA, no floats) and complete, this is a decision: no five-player
+counterexample exists.
+
+FAITHFULNESS AND NON-VACUITY (this is what makes the UNSAT bite).
+  * Driver d2_lab.py target "control" (same groups) asserts C-C instead of
+    negating it: 12/32 shapes SAT.  So the system is not over-constrained.
+  * Driver d7_n5.py exhibits a REAL five-player exact-domain monotonicity
+    failure: lower envelope of (0,3,0,3,0), (0,0,0,0,6), (1,0,1,0,4) with
+    common total 6, S = {2,4,5} (TWO outsiders), alpha = 1/4, phi = (1,1,1,1,2),
+    phi' = (7/8, 5/4, 7/8, 5/4, 7/4), W = {5} = H*.  Driver d8_faithful.py
+    certifies it end to end and then checks EVERY condition group of the lab on
+    it (core, sup, exv, exv2, cert, cert2, worse, hstar: all True) and finally
+    feeds the pinned witness into the lab's own constraint system, which
+    returns sat.  A real violation therefore lives inside the encoding.
+  * The same conditions, with the negated conclusion of the LEFT inclusion
+    instead, return SAT -- and the SAT model realizes as the genuine game of
+    Theorem 1.  The lab is therefore demonstrably able to FIND counterexamples,
+    which is the strongest possible evidence that its UNSAT verdicts are not an
+    artefact.
+
+WHICH HYPOTHESES DO THE WORK (driver d5_ablate.py, leave-one-out on the shape
+gaps=(1,3), c* = 3, where the control is SAT).  For the right inclusion the
+essential groups are exv2, cert, cert2; removing sup, exv or worse leaves the
+system UNSAT.  So Theorem 2 does NOT need exactness of the BASE game v, nor
+superadditivity: it needs exactness of the BUMPED game together with the
+leximin optimality of both allocations.  Removing exv2 makes both targets SAT,
+which is the predicted behaviour: paper4's Remark mono:rem:exact records that
+the inclusions fail for inexact bumps, and the drop-the-hypothesis control
+reproduces exactly that.  For the left inclusion the essential groups are
+exv2 and cert2 only.
+
+STATUS FOR n >= 6.  Open.  The same lab at n = 6 (62 coalitions, ~4000
+constraints from the exactness witnesses alone) returned "unknown" on the first
+shape at a 300 s timeout; the encoding does not scale as written.  No human
+proof of Theorem 2 was obtained.  The available ingredients are Lemma D+,
+Lemma C+, Lemma M and Lemma WIN; the missing step is an argument that a player
+of H* outside S makes the two master inequalities inconsistent.
+
+================================================================================
+PART IV.  THE REPAIRED CONJECTURE  C-C^ ,  PROVED AT n = 5
+================================================================================
+Let Hhat = H_{j_min} be the OUTERMOST (largest) slack richer suffix,
+j_min = min{j : s_phi(H_j) > 0}.  Since the suffixes are nested decreasing,
+Hhat contains every slack richer suffix, in particular H*.
+
+THEOREM 3 (n = 5).  For every five-player singleton-normalized exact game v
+whose Lmin has a slack richer suffix, and every exact bump v' = v^{S,alpha}
+that is a monotonicity failure,
+                        W  subset  Hhat  subset  S .
+
+PROOF (exhaustive, machine).  Identical to Theorem 2 except that the group
+"hmin" replaces "hstar": it asserts s_phi(H_{j_min}) > 0 and s_phi(H_j) = 0 for
+every j < j_min, which is exactly the definition of the outermost slack cut.
+The two halves are the targets "leftmin" and "rightmin" of d2_lab.py.
+   leftmin   32/32 UNSAT, 0 unknown  [lab5_leftmin.txt]
+   rightmin  32/32 UNSAT, 0 unknown  [lab5_rightmin.txt]
+Non-vacuity control "controlmin" (the conclusion asserted rather than negated):
+16/32 shapes SAT  [lab5_controlmin.txt].  As in Theorem 2 the encoding is a
+complete description of a counterexample, so these are decisions, not merely
+implications from a chosen list of necessary conditions.
+
+Note the direction of the change.  C-C^ LEFT is WEAKER than C-C left (Hhat is
+the largest slack suffix, H* the smallest), and is exactly what survives the
+counterexample of Theorem 1.  C-C^ RIGHT is STRICTLY STRONGER than C-C right,
+since Hhat contains H*; Theorem 3 therefore subsumes Theorem 2.
+
+Instances outside n = 5 on which C-C^ has been checked and holds: paper4's
+mono:ex:notsuffix and mono:ex:notstratum (where Hhat = H*), all 137 members of
+the regenerated BT family with their 309 violations, all 60 records of the
+fresh n = 5 corpus, and all 24 bumps across the admissible window of the
+Theorem-1 game.  For n >= 6 it is a conjecture, on the same footing the old
+C-C had -- with the difference that the class which killed C-C (multi-slack
+bases) is now the class the statement was designed around.
+
+ROBUSTNESS OF THE UNSAT VERDICTS (driver d15_seeds.py).  Representative shapes
+of Theorems 2 and 3 were re-solved with four different z3 random seeds and with
+the assertion list randomly permuted, which changes the search entirely; every
+run agreed on unsat.  The verdicts nonetheless rest on z3 being correct over
+exact rational LRA; the strongest independent evidence that it is behaving is
+that the SAME encoding returned SAT on the C-C-left target and its model
+realized, from scratch and by two other algorithms, as the genuine game of
+Theorem 1.
+
+================================================================================
+PART V.  CLOSED FORMS FOR THE BT FAMILY
+================================================================================
+Parametrization (paper4 / verifiers/monotonicity/family.py), n = 6:
+      A = (0, a, 0, b, 0, 0)          a + b         = T
+      B = (0, c, 0, e, f, g)          c + e + f + g = T
+      C = (h, 0, i, 0, j, 0)          h + i + j     = T
+v = min(A,B,C) coordinatewise on coalitions; every coordinate vanishes in some
+row, so v is exact and singleton-normalized for free.
+
+CLAIM.  Fix a region of parameter space on which (i) the attaining row of each
+v(T) is constant and (ii) the phi-tight family and the stratum pattern are
+constant.  There every v(T) is a linear form in (a,...,j), and phi is the
+unique solution of the linear system consisting of the intra-stratum equalities
+phi_i = phi_l and the tightness equations phi(T) = v(T); hence phi, every
+richer-suffix slack, s_phi(S) and alpha_ex(S) are explicit LINEAR functions of
+the parameters, and the family is piecewise linear with these regions as
+pieces.  (alpha_ex is linear because, by Lemma WIN, it is the value of an LP
+whose optimal basis is also constant on the region.)
+
+DERIVED AND VERIFIED (driver d6_closed.py; each formula checked against the
+exactly recomputed numerical value on every member of its region):
+
+REGION 0  -- the mono:ex:notsuffix region, 8 members, strata {3,6} < {1} < {4} < {2,5}
+   pinned by  phi_3 = phi_6, phi_2 = phi_5, phi(N) = v(N),
+              phi({2,5}) = v({2,5}), phi({1,2,4,5}) = v, phi({2,3,4,5}) = v
+   phi_1 = (a + b + c + e + f)/2 - i - j
+   phi_2 = phi_5 = a/2
+   phi_3 = phi_6 = (a + b - c - e - f)/2
+   phi_4 = -(3a + b)/2 + (c + e + f)/2 + i + j
+   s_phi({1,2,4,5}) = 0
+   s_phi({2,4,5})   = (-a - b + c + e + f)/2 + i          [= 1/2 at the witness]
+   s_phi({2,5})     = 0        so  H* = {2,4,5}
+   S = {1,2,3,4,5}:  window = ( (a + b - c - e - f)/2 , i ]   [= (1/2, 1] ]
+                     binding T* = {1};  W = {4}
+REGION 1  -- the mono:ex:notstratum region, 8 members, strata {1,3,6} < {4} < {2,5}
+   pinned by  phi_1 = phi_3 = phi_6, phi_2 = phi_5, phi(N) = v(N),
+              phi({2,5}) = v({2,5}), phi({4,5}) = v({4,5})
+   phi_1 = phi_3 = phi_6 = a/6
+   phi_2 = phi_5 = a/2
+   phi_4 = b - a/2
+   s_phi({2,4,5}) = a/2 + b - j        [= 1/2 at the witness]
+   s_phi({2,5})   = 0                  so  H* = {2,4,5}
+   S = {1,2,3,4,5}:  window = ( 5a/6 + b - c - e - f , a + b - h - j ]
+                     [= (5/2, 4] ];  binding T* = {1,2,4,5};  W = {2,4}
+REGION 2  -- 3 members, strata {6} < {1,3} < {4} < {2,5}
+   phi_1 = phi_3 = c + e + f - h - j ;  phi_2 = phi_5 = a/2 ;
+   phi_4 = 2h + 2j - a - c - e - f ;    phi_6 = a + b - c - e - f
+   s_phi({2,4,5}) = 2h + j - c - e - f ;  s_phi({1,2,3,4,5}) = s_phi({2,5}) = 0
+   S = {1,2,3,4,5}:  window = ( 0 , h + i + j - c - e - f ]  = (0, 1]
+REGION 3  -- 2 members, strata {1,3,6} < {2} < {4,5}
+   phi_1 = phi_3 = phi_6 = (a + b - c - e - f)/2 ;
+   phi_2 = (3c + e + f - a - b)/2 ;  phi_4 = phi_5 = (e + f)/2
+   s_phi({2,4,5}) = (3c + 3e + 3f - a - b)/2 - j ;  s_phi({4,5}) = 0
+   S = {1,2,3,4,5}:  s_phi(S) = (a + b - c - e - f)/2 ;  W = {2}
+REGION 4  -- 2 members, strata {1,3,6} < {4} < {2,5}
+   phi_1 = phi_3 = phi_6 = (a + b - c - e - f)/2 ;  phi_2 = phi_5 = (c + f)/2 ;
+   phi_4 = (c + 3e + f - a - b)/2
+   s_phi({2,4,5}) = (3c + 3e + 3f - a - b)/2 - j ;  s_phi({2,5}) = 0
+
+Coverage: the axis sweep and the box sweep together give 137 family members
+falling into 93 regions, and ALL 93 have closed forms verified against the
+exactly recomputed phi on every member (driver output closed_forms.txt, machine
+form closed_forms.json).  Regions 0 and 1 above are the ones carrying paper4's
+two published examples; the region list is long because each change of an
+attaining row splits a piece, which is exactly what "piecewise" means here.
+Across all 137 members and their 309 violations both inclusions of C-C hold --
+the family lives entirely in the single-slack regime, which is why it never
+meets the counterexample of Part II.
+================================================================================

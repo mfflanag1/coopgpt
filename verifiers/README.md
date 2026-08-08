@@ -16,6 +16,8 @@ Two tiers, matching the papers' status tables.
 | paper4 Thm (h=2 split threshold, m≤4) and Thm (h=3 collections) | `selection/` — `m5.py` (42/216/950 abstract packets, the two m=5 split facets), `facet_test.py` (h=3 breakdown 2/31/10/12), `enum_packets.py`, `starproof.py` (34 star types re-classified) |
 | paper4 §7 large-core statements for the four example games | `large_core_qe.py` (quantifier-elimination, no enumeration) |
 | paper5 Thm (unconditional configuration bound): rich-branch μ ≥ T/6 | `s5full/jrich.py` (31 × 354 programs), `s5full/checks2.py` (controls), `s5full/arith*.py` (the game-free 3/2 ceiling), `s5full/REPORT.txt` (incl. the ceiling second-stage derivation sketch) |
+| PART(p,q) characterization (realizable ⟺ p,q≥1, p+q≥4; Conjecture 10 refuted; n=7 ZP(2,2) realized) | `part/` — `PROOF.txt` (Theorems A/B/D/E/F, block rigidity, padding), `decisive.py` (48 UNSAT at m=3 + audited witnesses), `families.py` (independent CEGAR cross-check), `controls.py` (L±, X±, P+), `audit_witness.py`, `lead_verify_part22.py` (the lead's independent witness check) |
+| paper4 Thm (five-player containment W ⊆ Ĥ ⊆ S) and the C-C-left refutation | `cc/` — `PROOF.txt` (Lemma L, D+/C+, window, master inequalities, closed forms), `d2_lab.py` (the 32-shape decision procedure, targets left/right/leftmin/rightmin/control), `d3_lemmaL.py`/`d16_crosscheck.py` (certificate controls + cross-validation vs `part/` Theorem B), `d11_audit.py` (counterexample audit), `d5_ablate.py`, `d6_closed.py` (93 closed-form regions), `lead_verify_cc.py` (the lead's independent counterexample check) |
 
 ## Bug audits and computational evidence (not proof dependencies)
 
@@ -24,7 +26,7 @@ Two tiers, matching the papers' status tables.
 | paper4 §7 examples, C-C evidence, exact-partition search | `monotonicity/` — `refute.py`/`refute2.py` (the two retiring examples), `survive.py` (the 1041-record tally), `inexact_cc.py` (localization non-correlation), `hunt7.py`/`family_ep.py` (exact-partition search), `ce5.py`/`ce7.py` (inexactness examples), `family.py` (the 197-member family) |
 | paper5 enumeration table, extremal class, searches | `divergence/` — `exhaust2n.py`/`exhaust3.py` (complete 2- and 3-generator enumerations), `twogen.py` (duality/floor checks), `cspace.py` (seeded core-space climbing), `seesaw.py`/`structure.py` (extremal-class profiling), `scan2block.py`, `simplex.py`/`lexsimplex.py` (independent exact solvers) |
 | n=5/n=6/n=7 packet censuses and the campaign theorem files | `records/` — census reports, `THEOREMS.txt`, `FINAL.txt`, `S5PROOF.txt` |
-| ZP descent: profile (4,0) impossibility at n=7 (proved), the PART(p,q) conjecture | `zp/` — `PROOF.txt` (the null-player descent chain L1–T8), `REPORT.txt`, harvest and validation scripts |
+| ZP descent: profile (4,0) impossibility at n=7 (proved); Conjecture 10 (since refuted — see `part/`) | `zp/` — `PROOF.txt` (the null-player descent chain L1–T8, with the 2026-08-08 resolution note), `REPORT.txt`, harvest and validation scripts |
 
 Earlier verifiers for the phase-diagram core remain in `../src` with saved
 outputs in `../results`, as described in the papers' reproducibility notes.

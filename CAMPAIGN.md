@@ -1044,6 +1044,22 @@ pages, `paper5/divergence.tex` (19 pages) is new.
   two six-player examples retiring "losers = slack suffix" and "losers = one
   stratum"; containment conjecture W ⊆ H* ⊆ S (1041/1041, two sampling
   regions).
+  → RESOLVED 2026-08-08 (task #12, verifiers/cc/): C-C LEFT is FALSE — a
+  five-player MULTI-SLACK counterexample (both richer suffixes slack, the
+  middle stratum pays; lead-verified independently; the campaign's fourth
+  sampling artifact: all 1041 records were single-slack, where innermost =
+  outermost).  REPAIRED as C-C^: W ⊆ Ĥ ⊆ S with Ĥ the OUTERMOST slack
+  suffix — PROVED at n=5 by an exact decision procedure (32/32 UNSAT each
+  half; Lemma-L leximin certificates, iff, cross-validated against task
+  #23's Theorem B 30/30+6/6; faithfulness: the same lab's SAT model on
+  C-C-left realized as the counterexample), conjectured for n≥6.  New
+  proved lemmas: exact-bump window (closed interval, alpha_ex ≤ g(S)),
+  null-players-forbid-exact-bumps, Lemma C+ (phi'-tight T ≠ S weakly
+  loses, supersets of S included), master inequalities (MA)/(MB).  BT
+  closed forms delivered: 137 members, 93 regions, piecewise linear,
+  93/93 verified.  Paper4 monotonicity section rewritten accordingly
+  (third retiring example, five-player containment theorem, repaired
+  conjecture, window proposition).
 - Divergence paper (paper5): two-generator core duality (general form);
   master family G(p,k) with closed forms and membership for all parameters;
   deficit identity 2−ρ = 2n/(k(p+1)); sup_n s(n) = 2, s(n) ≥ 2−8/n; overlap

@@ -1247,7 +1247,8 @@ on large-core games --- \emph{is} coalitionally monotonic on its domain.
 The contribution here is localization, not existence: where the losers sit,
 what finances them, and which parts of the payoff order are immune.  The
 theorems below are proved; the identification of the loser set is not, and
-two explicit games are given that retire the two natural guesses.
+three explicit games are given that retire the three natural guesses ---
+two identifications and one containment.
 
 Throughout, $v$ is singleton-normalized and exact and $\phi=\Lmin(v)$.
 
@@ -1266,12 +1267,18 @@ the set of \emph{strict losers inside the bumped coalition}.  A bump is a
 \core(v)$ and $\phi'(N)=\phi(N)=v(N)$.
 \end{definition}
 
-\begin{definition}[innermost slack suffix]\label{mono:def:hstar}
+\begin{definition}[innermost and outermost slack suffixes]\label{mono:def:hstar}
 Let $B_1\prec\cdots\prec B_k$ be the payoff strata of $\phi$, poorest to
 richest, and $H_j=B_{j+1}\cup\cdots\cup B_k$ the richer suffix at the $j$th
 strict payoff boundary, $1\le j\le k-1$.  When some $H_j$ is slack, put
 $j^*=\max\{j:s_\phi(H_j)>0\}$ and call $H^*=H_{j^*}$ the \emph{innermost
 slack suffix}: the smallest richer suffix that is not $\phi$-tight.
+Dually, put $j_{\min}=\min\{j:s_\phi(H_j)>0\}$ and call
+$\widehat H=H_{j_{\min}}$ the \emph{outermost slack suffix}: the largest
+richer suffix that is not $\phi$-tight.  Since the suffixes are nested,
+$H^*\subseteq\widehat H$, with equality exactly when one suffix is slack ---
+the regime, it will turn out, of every recorded failure but one, and the
+reason the distinction matters.
 \end{definition}
 
 \subsection{First reductions}
@@ -1386,6 +1393,55 @@ condition, free of linear programming, and it is what makes failures rare:
 the bump must simultaneously exceed the slack of $S$ at $\phi$ and stay below
 the smallest marginal contribution to $S$ from outside.
 
+The prefilter can be sharpened to an exact description of the admissible
+bumps: they form a closed interval whose right endpoint is the value of a
+linear program over the unbumped core.
+
+\begin{proposition}[the exact-bump window]\label{mono:prop:window}
+For a proper coalition $T\ne S$ put
+$\beta_T=\max\{x(S):x\in\core(v),\ x(T)=v(T)\}-v(S)$, finite and attained
+because $v$ is exact.  Then $v^{S,\alpha}$ is exact if and only if
+$0\le\alpha\le\alpha_{\mathrm{ex}}(S):=\min_{T\ne S\text{ proper}}\beta_T$,
+and $\alpha_{\mathrm{ex}}(S)\le g(S)$.  A monotonicity failure at $S$
+therefore requires the window
+$s_\phi(S)<\alpha\le\alpha_{\mathrm{ex}}(S)$ to be nonempty.
+\end{proposition}
+
+\begin{proof}
+Since $\core(v^{S,\alpha})=\core(v)\cap\{x(S)\ge v(S)+\alpha\}$, the value
+$v'(T)=v(T)$ is attained on it if and only if some $x\in\core(v)$ has
+$x(T)=v(T)$ and $x(S)\ge v(S)+\alpha$, i.e.\ if and only if
+$\alpha\le\beta_T$.  Exactness at $S$ itself is automatic whenever
+$\core(v^{S,\alpha})$ is nonempty: pick $x^0\in\core(v)$ with $x^0(S)=v(S)$
+(exactness of $v$) and any $y\in\core(v^{S,\alpha})$; on the segment
+$[x^0,y]\subseteq\core(v)$ the value of $x(S)$ is continuous, so some point
+attains $v(S)+\alpha$ exactly and lies in $\core(v^{S,\alpha})$.
+Nonemptiness itself follows from $\alpha\le\beta_T$ for any single $T$.
+Finally, for $T=S\cup\{j\}$ and $x$ with $x(T)=v(T)$,
+$x(S)=v(S\cup\{j\})-x_j\le v(S\cup\{j\})$, so
+$\beta_{S\cup\{j\}}\le v(S\cup\{j\})-v(S)$, whence
+$\alpha_{\mathrm{ex}}(S)\le g(S)$.
+\end{proof}
+
+\begin{lemma}[null players forbid exact bumps]\label{mono:lem:null}
+If $v$ has a null player $p$ (that is, $v(T\cup\{p\})=v(T)$ for all $T$),
+then no bump $v^{S,\alpha}$ with $\alpha>0$ is exact.
+\end{lemma}
+
+\begin{proof}
+Every core point of $v$, hence of $v'$, has $x_p=0$, since
+$x(N)=v(N)=v(N\setminus\{p\})\le x(N\setminus\{p\})$.  So
+$x(S\cup\{p\})=x(S)=x(S\setminus\{p\})\ge v(S)+\alpha$ throughout
+$\core(v')$.  If $p\notin S$ and $S\cup\{p\}$ is proper, exactness fails at
+$S\cup\{p\}$, whose $v'$-value is $v(S)$; if $S\cup\{p\}=N$ then
+$\core(v')$ is empty; if $p\in S$, exactness fails at the proper coalition
+$S\setminus\{p\}$, whose $v'$-value is $v(S)$.
+\end{proof}
+
+Lemma~\ref{mono:lem:null} is one more measure of how strong exactness of the
+bumped game is as a hypothesis; it also blocks the cheap dimension lift, so
+no example below extends to more players by adjoining a null player.
+
 \subsection{Tight suffixes are shields}
 
 \begin{proposition}[shields]\label{mono:prop:shield}
@@ -1495,43 +1551,125 @@ The quantitative extent of the $\Lmin$/$\Lmax$ separation is the subject
 of the companion paper \citep{Flanagan2026div}.
 What both examples do respect is a containment.
 
-\subsection{The containment conjecture}
+\subsection{Containment: a refutation and a repair}
 
-\begin{conjecture}[containment]\label{mono:conj:cc}
-Let $v'=v^{S,\alpha}$ be an exact bump that is a monotonicity failure, and
-suppose $\phi$ has a slack richer suffix.  Then
+The natural containment law suggested by every recorded failure is
+\begin{equation}\label{mono:eq:ccfalse}
+ W\ \subseteq\ H^*\ \subseteq\ S ,
+ \tag{C-C}
+\end{equation}
+with $H^*$ the innermost slack suffix: the bumped coalition must contain
+the innermost slack suffix, and every loser inside $S$ lies in it.  It held
+at all $1041$ failures then on record, drawn from two sampling regions of
+different construction --- a random lower-envelope harvest at $n=5$ and
+$n=6$, and a designed family of tight-top-stratum games with $197$
+members.  The left inclusion is nevertheless false, and the correct suffix
+is the \emph{outermost} one.
+
+\begin{example}[the losers need not lie in the innermost slack suffix]
+\label{mono:ex:multislack}
+Take the five-player game with every singleton $0$, $v(N)=660$, values
 \[
- W\ \subseteq\ H^*\ \subseteq\ S .
+\begin{array}{llll}
+ v_{12}=106, & v_{13}=v_{123}=136, & v_{14}=v_{124}=161, & v_{34}=v_{234}=176,\\
+ v_{134}=v_{1234}=297, & v_{15}=v_{125}=242, & v_{35}=v_{235}=242, & v_{135}=393,\\
+ v_{1235}=484, & v_{45}=v_{245}=176, & v_{145}=v_{1245}=418, & v_{345}=v_{2345}=418,\\
+ v_{1345}=534, &&&
+\end{array}
 \]
+and all other proper values $0$.  The game is exact, with
+$\phi=(121,121,121,146,151)$, strata $\{1,2,3\}\prec\{4\}\prec\{5\}$, and
+suffix slacks $s_\phi(\{4,5\})=121$ and $s_\phi(\{5\})=151$: \emph{both}
+richer suffixes are slack, so $H^*=\{5\}$ and $\widehat H=\{4,5\}$.  Bump
+$S=\{1,3,4,5\}$ by $\alpha=20$; here $s_\phi(S)=5$,
+$\alpha_{\mathrm{ex}}(S)=20$ (Proposition~\ref{mono:prop:window}), the bump
+is exact, and
+\[
+ \phi'=(136,106,136,141,141),\qquad W=\{4,5\}.
+\]
+The strict losers are $2$, $4$ and $5$, the gainers $1$ and $3$.  Thus
+$W\not\subseteq H^*$: the middle stratum $\{4\}$ --- inside the outer slack
+suffix, outside the inner one --- pays.  The right inclusion
+$H^*\subseteq S$ holds, as does $W\subseteq\widehat H\subseteq S$.  The
+example is not a knife edge: $16$ of $24$ sampled $\alpha$ across the
+admissible window $(5,20]$ fail the left inclusion of~\eqref{mono:eq:ccfalse}.
+The mechanism is that the base game is \emph{multi-slack}: no richer suffix
+is $\phi$-tight at all, so Proposition~\ref{mono:prop:shield} bars nothing
+and the loss can climb past the innermost slack cut.  In every one of the
+$1041$ recorded failures exactly one suffix was slack, so $H^*=\widehat H$
+there and the choice of end in Definition~\ref{mono:def:hstar} was
+invisible; multi-slack bases are rare under the harvest generators, which
+is why so much sampling never met one.  The witness also satisfies the
+suffix identification retired by Example~\ref{mono:ex:notsuffix} ($W$ here
+\emph{is} a slack richer suffix --- the outer one), so that identification
+and the left inclusion of~\eqref{mono:eq:ccfalse} are logically
+incomparable, and both are false.
+\end{example}
+
+With the outermost suffix in place of the innermost, both inclusions become
+a theorem on five players.
+
+\begin{theorem}[five-player containment]\label{mono:thm:cchat}
+Let $n=5$, let $v$ be singleton-normalized and exact with $\phi=\Lmin(v)$
+having a slack richer suffix, and let $v'=v^{S,\alpha}$ be an exact bump
+that is a monotonicity failure.  Then
+\[
+ W\ \subseteq\ \widehat H\ \subseteq\ S .
+\]
+\end{theorem}
+
+\begin{proof}
+By exhaustive exact finite check, archived with the verifier drivers.  The
+encoding is a complete description of a counterexample, not a relaxation:
+after normalizing $v(N)=1$ and ordering the players by $\phi$, the $31$
+strict/tie patterns of $\phi$ with the choice of slack cut give $32$
+shapes; within each, the bumped coalition ranges over all proper $S$ with
+$|S|\ge2$, exactness of $v$ and of $v'$ is imposed existentially (one
+attaining core witness per coalition), and leximin optimality of $\phi$
+and of $\phi'$ is imposed through a certificate that is both necessary and
+sufficient --- the Farkas dual of the staged max-min, one certificate per
+payoff cut, with support confined to tight coalitions.  Each half of the
+containment is negated in turn; all $32$ shapes return infeasible for
+each, in exact rational arithmetic with no indeterminate verdicts.  The
+same laboratory is faithful in both directions: asserting the conclusion
+instead of negating it is feasible on $16$ of the $32$ shapes, a genuine
+five-player failure pins into the constraint system satisfiably, and the
+identical encoding pointed at the left inclusion of~\eqref{mono:eq:ccfalse}
+returned a feasible model that realizes as the game of
+Example~\ref{mono:ex:multislack}.  Since
+$H^*\subseteq\widehat H$, the theorem contains $H^*\subseteq S$; ablation
+shows the hypotheses actually consumed are exactness of the \emph{bumped}
+game and the two leximin certificates --- exactness of the base game and
+superadditivity are not needed.
+\end{proof}
+
+\begin{conjecture}[containment, repaired]\label{mono:conj:cc}
+The containment $W\subseteq\widehat H\subseteq S$ of
+Theorem~\ref{mono:thm:cchat} holds for every $n$.
 \end{conjecture}
 
-The right inclusion is the substantive half: the bumped coalition must
-already contain the innermost slack suffix.  The left inclusion confines
-every loser inside $S$ to that suffix, and by Theorem~\ref{mono:thm:loss}
-what they lose in total is at most $s_\phi(W)$.  Independently of the
-conjecture, a monotonicity failure at a $\phi$ with a slack richer suffix
-sits at a boundary to which Theorem~\ref{thm:phase} applies, so it requires
-$m\ge m_{\min}(h)$ there and hence, by Corollary~\ref{cor:fourfive}, at
-least five players --- the same four/five threshold, reached through a
-different pathology.  What the conjecture adds is the location of $W$, not
-the threshold.
-
-The evidence is $1041$ monotonicity failures under exact bumps, all computed
-in exact rational arithmetic, drawn from two sampling regions of different
-construction: a random lower-envelope harvest at $n=5$ and $n=6$, and a
-designed family of tight-top-stratum games with $197$ members, obtained by
-parametrizing the first such game the harvest found.
-Both inclusions hold in all $1041$; $S=H^*$ occurs in none of them.  Two
-further regularities hold in all $1041$ and are recorded as observations
-only, since neither follows from Theorem~\ref{mono:thm:loss} and
-Proposition~\ref{mono:prop:shield}: every strict loser outside $S$ is
-strictly poorer than every strict loser inside $S$, and every player strictly
-richer than the richest loser is left unmoved.  By contrast the two
-identifications retired above hold in $248$ and $959$ of the $1041$
-respectively.
+Independently of the conjecture, a monotonicity failure at a $\phi$ with a
+slack richer suffix sits at a boundary to which Theorem~\ref{thm:phase}
+applies, so it requires $m\ge m_{\min}(h)$ there and hence, by
+Corollary~\ref{cor:fourfive}, at least five players --- the same four/five
+threshold, reached through a different pathology.  What the conjecture adds
+is the location of $W$, not the threshold.  Beyond $n=5$ the evidence for
+Conjecture~\ref{mono:conj:cc} is the $1041$ recorded failures, the
+$309$ violations of the regenerated designed family, a fresh $60$-record
+five-player corpus from a new generator region, and all $24$ admissible
+bumps of Example~\ref{mono:ex:multislack} --- with the essential caveat
+that all but the last live in the single-slack regime, where the repaired
+and refuted forms coincide; the class that killed~\eqref{mono:eq:ccfalse}
+is the class the repair was designed around, and a designed multi-slack
+search at $n=6$ is the natural next test.  Two further regularities hold in
+all $1041$ records and at the displayed bump of
+Example~\ref{mono:ex:multislack}, and are recorded as observations only:
+every strict loser outside $S$ is strictly poorer than every strict loser
+inside $S$, and every player strictly richer than the richest loser is left
+unmoved.
 
 One hypothesis of Conjecture~\ref{mono:conj:cc} is not idle.  At an
-exact-partition $\phi$ every richer suffix is $\phi$-tight, so $H^*$
+exact-partition $\phi$ every richer suffix is $\phi$-tight, so $\widehat H$
 does not exist and, by Proposition~\ref{mono:prop:shield},
 $\Delta(H_j)\ge0$ at every cut: no cumulative richer suffix can lose and
 every cumulative poorer side weakly loses.  Theorem~\ref{mono:thm:loss}
@@ -1561,8 +1699,8 @@ is exact with $\phi=\bigl(\tfrac12,\tfrac12,\tfrac94,\tfrac12,\tfrac94\bigr)$
 and unique slack suffix $\{3,5\}$; bumping $S=\{1,2,3,5\}$ by $\alpha=1$
 gives a balanced but inexact $v'$ with
 $\phi'=\bigl(1,0,\tfrac52,0,\tfrac52\bigr)$, so $W=\{2\}$ is a poorest-stratum
-player while the rich pair gains, so the left inclusion of
-Conjecture~\ref{mono:conj:cc} fails.  Across the harvest both inclusions hold
+player while the rich pair gains, and the left containment fails --- in both
+its forms, the base being single-slack so that $H^*=\widehat H$.  Across the harvest both inclusions hold
 at only $1280$ of $3700$ inexact-bump failures; it is the left one that is
 fragile, the right one surviving at $3188$ of them.  The hypothesis also
 cannot be localized: restricting exactness of $v'$ to the coalitions
@@ -1583,9 +1721,14 @@ constructed (of which $238$ were retained as stored records), and the
 stratum identification retired by Example~\ref{mono:ex:notstratum} held at
 every one of the $253$ records available before \emph{that} one was; a strengthening asserting that all payoff strata
 above the paying one are frozen pointwise also held $253$ times out of $253$
-and is false.  In each case the counterexample was found not by more sampling
+and is false.  The left inclusion of~\eqref{mono:eq:ccfalse} is the third
+instance: it held at all $1041$ records --- across \emph{two} sampling
+regions of different construction --- and is false, because both regions
+produce only single-slack bases.  In each case the counterexample was found
+not by more sampling
 but by changing the generator so as to reach a region the previous generator
-could not produce --- here, games whose top payoff stratum is $\phi$-tight.
+could not produce --- games whose top payoff stratum is $\phi$-tight, and
+then games with two slack suffixes at once.
 Random exact games concentrate in a narrow corner of the exact cone.  This is
 the same caution already recorded for split packets in
 Section~\ref{sec:selection}, and it applies to any statement of the present
@@ -1602,20 +1745,30 @@ kind that rests on random harvests rather than on a finite check or a proof.
 proved &
  Lemma~\ref{mono:lem:reduce}; Theorem~\ref{mono:thm:loss};
  Theorem~\ref{mono:thm:push} and Corollary~\ref{mono:cor:prefilter};
- Proposition~\ref{mono:prop:shield} and Remark~\ref{mono:rem:totals}.  None
+ Proposition~\ref{mono:prop:shield} and Remark~\ref{mono:rem:totals};
+ Proposition~\ref{mono:prop:window} and Lemma~\ref{mono:lem:null}.  None
  uses a boundary hypothesis or a cardinality bound.\\
+finite check &
+ Theorem~\ref{mono:thm:cchat}, by the exact five-player decision procedure
+ described in its proof, archived with the verifier drivers; on the same
+ footing as Theorems~\ref{sel:thm:mthr} and~\ref{sel:thm:h3}.\\
 verified &
- Examples~\ref{mono:ex:notsuffix} and~\ref{mono:ex:notstratum}, and the
+ Examples~\ref{mono:ex:notsuffix}, \ref{mono:ex:notstratum}
+ and~\ref{mono:ex:multislack}, and the
  inexact bump of Remark~\ref{mono:rem:exact}, by exact rational
- recomputation of the envelope, of $\Lmin$ by two independent algorithms
+ recomputation of the envelope (or the value table), of $\Lmin$ by two
+ independent algorithms
  (staged optimization and the partial-sum ladder, the latter with a
- uniqueness certificate), and of the exactness of $v$ --- and, for the
+ uniqueness certificate), and of the exactness of both games --- and, for the
  remark, the failure of exactness of $v'$ --- coalition by coalition; the
- large-core property of the four example games, by exact
+ large-core property of the four six-player example games, by exact
  quantifier-elimination.\\
+refuted &
+ The left inclusion of~\eqref{mono:eq:ccfalse}, by
+ Example~\ref{mono:ex:multislack}, after holding at all $1041$ recorded
+ failures.\\
 conjectured &
- Conjecture~\ref{mono:conj:cc}, on $1041$ exact-domain failures from two
- sampling regions of different construction, together with the two
+ Conjecture~\ref{mono:conj:cc} for $n\ge6$, together with the two
  observational regularities recorded after it.  Whether a failure can occur
  with no slack richer suffix at all is conjectured impossible and remains
  open; a dedicated search over
@@ -1628,9 +1781,11 @@ conjectured &
 The section's thesis is therefore a containment and not an identification:
 a monotonicity failure at $\Lmin$ is bounded by the slack of its own loser
 set (Theorem~\ref{mono:thm:loss}) and cannot be paid for by a tight richer
-suffix (Proposition~\ref{mono:prop:shield}); conjecturally it is confined
-to the innermost slack suffix, which the bumped coalition must already
-contain.  Two sharper descriptions were available and both are false.
+suffix (Proposition~\ref{mono:prop:shield}); on five players it is provably
+confined to the outermost slack suffix, which the bumped coalition must
+already contain (Theorem~\ref{mono:thm:cchat}), and conjecturally so in
+general.  Three sharper descriptions were available --- two identifications
+and the innermost-suffix containment --- and all three are false.
 
 \section{What the theorem does and does not establish}\label{sec:limits}
 
@@ -1668,7 +1823,8 @@ lemmas, the star normal form with its facet proposition, the five-player
 selection theorem, and the poorer-side threshold for split facets; and the
 monotonicity results of Section~\ref{sec:mono}: the slack bound, the
 exactness pushback with its combinatorial prefilter, the shield proposition,
-and the containment conjecture with its two retiring examples.
+the exact-bump window, and the five-player containment theorem with its
+three retiring examples and repaired conjecture.
 
 \section*{Reproducibility note}
 
@@ -1676,8 +1832,9 @@ The phase-diagram proof is human and enumerates neither games nor
 payoff-stratum patterns.  Theorems~\ref{sel:thm:mthr}
 and~\ref{sel:thm:h3} and the eleven-shape list of
 Section~\ref{sec:selection} are proved by exhaustive finite checks over
-abstract set systems; those checks are proof dependencies, archived in
-\texttt{../verifiers} with a theorem-to-driver map.  The remaining exact
+abstract set systems, and Theorem~\ref{mono:thm:cchat} by an exact
+five-player decision procedure; those checks are proof dependencies,
+archived in \texttt{../verifiers} with a theorem-to-driver map.  The remaining exact
 rational programs in the companion repository independently reconstruct the
 smallest family members, all coalition values, and staged Lmin solutions,
 and classify the packet systems of Remark~\ref{rem:catalogue} against the

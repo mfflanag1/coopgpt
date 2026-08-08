@@ -1,0 +1,323 @@
+================================================================================
+r12 / task #12  --  C-C CONTAINMENT (paper4 mono:conj:cc)          STATUS REPORT
+work dir: /private/tmp/claude-501/-Users-maxf/f0530d27-effc-4967-b154-48a9b65ca708/scratchpad/r12
+================================================================================
+
+HEADLINE
+--------
+C-C is FALSE.  Its left inclusion W subset H* is refuted by an explicit, fully
+audited five-player exact game.  Its right inclusion H* subset S is PROVED at
+n = 5 by an exact decision procedure (open for n >= 6).  The repair is to read
+the suffix chain from the other end: with Hhat the OUTERMOST slack richer
+suffix, BOTH halves of
+                        W  subset  Hhat  subset  S
+are proved at n = 5 by the same decision procedure, and Hhat-right is strictly
+stronger than the old H*-right.  Every instance on record satisfies C-C^.
+The BT-family closed forms, the undelivered piece of the earlier round, are
+delivered: 137 members, 93 regions, 93/93 verified.
+
+--------------------------------------------------------------------------------
+1.  LEFT INCLUSION  W subset H*        VERDICT: REFUTED
+--------------------------------------------------------------------------------
+Counterexample (PROOF.txt Part II, Theorem 1; driver d11_audit.py):
+  n = 5, singleton-normalized, v(N) = 660, integral values,
+  phi  = Lmin(v)  = (121, 121, 121, 146, 151),  strata {1,2,3} < {4} < {5}
+  richer-suffix slacks   s_phi({4,5}) = 121 > 0 ,  s_phi({5}) = 151 > 0
+                         -- BOTH slack, so H* = {5} and Hhat = {4,5}
+  S = {1,3,4,5},  s_phi(S) = 5,  alpha = 20 (= alpha_ex),  rho = 15
+  phi' = Lmin(v') = (136, 106, 136, 141, 141),  Delta = (+15,-15,+15,-5,-10)
+  W = {4,5},  losers {2,4,5},  gainers {1,3}
+  W is NOT contained in H* = {5}      (player 4 loses 5 and sits below the cut)
+  H* IS contained in S                (the right inclusion survives here)
+
+Audit (all exact rational, nothing inherited from the search):
+  - v exact on all 30 proper coalitions, certified TWICE: exact z3 minimisation
+    over the core, and independent exact rational core-vertex enumeration
+    (30 vertices).  v' likewise (27 vertices).
+  - v' differs from v at exactly one coalition, S; S proper, |S| = 4; alpha > 0.
+  - phi and phi' each by two independent leximin algorithms (staged pinning and
+    the Sigma_m ladder) that agree, each with a z3 UNSAT uniqueness proof.
+  - For each game a further z3 UNSAT that no core point is leximin-better.
+  - For each game a Lemma-L optimality certificate at every cut (3/3, 3/3).
+  - Theorem A, Lemma reduce(iii), Prop D+ and Lemma C+ all hold on the instance.
+  - A hand verification of both leximin computations is written out in PROOF.txt.
+
+Does not lift cheaply (driver d13_lift.py).  Theorem 1b: a game with a null
+player admits NO exact bump at all -- every core point has x_p = 0, so
+x(S u p) = x(S) = x(S \ p) while v' separates S from its two neighbours by
+alpha, and exactness fails at S u p (p outside S) or at S \ p (p inside).  So
+the standard dimension lift is blocked and n >= 6 is genuinely open for the
+left inclusion; a designed multi-slack search at n = 6 was launched
+(d14_n6multi.py, n6multi.json) -- see APPENDIX for its outcome.
+
+Not a knife edge (driver d12_window.py): over the admissible exact window
+(5, 20] of this S, 24 sampled bumps all give violations and 16 of them -- the
+entire sub-interval from alpha = 85/8 to alpha = 20 -- fail the left inclusion.
+Below that the loser set is W = {5} and the inclusion holds; the failure turns
+on at an interior breakpoint.  No other bumped coalition of the base game
+produces a violation at all.
+
+Mechanism.  The base game has TWO slack richer suffixes.  In both paper4
+examples, in the whole BT family and in the recorded 1041, the top stratum is
+phi-tight and exactly ONE suffix is slack, so innermost and outermost slack
+suffix coincide and mono:def:hstar's choice of end is invisible.  Here nothing
+above the poorest stratum is tight, Proposition D shields nothing, and the
+middle stratum {4} -- inside the outer slack suffix {4,5}, outside the inner
+one {5} -- pays.  This is the multi-slack class summary2 records as rare
+(2.1% of the untuned generator, 17.7% after tuning), and the only earlier
+evidence bearing on the innermost/outermost distinction was C-A''s 20
+violations from 5 base games.
+
+Consequence for the two retired laws: this witness SATISFIES C-A (W = {4,5} is
+a slack richer suffix -- the outer one), while mono:ex:notsuffix satisfies C-C
+left and refutes C-A.  So C-A and C-C-left are incomparable and both false.
+
+--------------------------------------------------------------------------------
+2.  RIGHT INCLUSION  H* subset S       VERDICT: PROVED at n = 5, OPEN n >= 6
+--------------------------------------------------------------------------------
+Theorem 2 (PROOF.txt Part III).  For every five-player singleton-normalized
+exact game whose Lmin has a slack richer suffix, and every exact bump that is a
+monotonicity failure, H* is contained in S.
+
+Method: d2_lab.py, an exact-rational z3 encoding that is a COMPLETE description
+of a counterexample rather than a relaxation, because Lemma L (below) is both
+necessary and sufficient for leximin-maximality of a core point.  All 32
+shapes (31 nonempty gap patterns times the choice of j*) enumerated; S is a
+variable one-hot coalition so each call covers all bumps at once.
+   RESULT   32/32 UNSAT, 0 unknown, 951 s.        [lab5b_right.txt]
+
+Why the UNSAT bites -- three controls:
+   (a) NON-VACUITY.  Same encoding, conclusion ASSERTED instead of negated:
+       12/32 shapes SAT.                           [lab5b_control.txt]
+   (b) FAITHFULNESS.  A REAL five-player exact-domain violation was constructed
+       (d7_n5.py): lower envelope of (0,3,0,3,0), (0,0,0,0,6), (1,0,1,0,4),
+       common total 6, S = {2,4,5} (two outsiders), alpha = 1/4,
+       phi = (1,1,1,1,2), phi' = (7/8,5/4,7/8,5/4,7/4), W = {5} = H*.
+       d8_faithful.py certifies it end to end, checks EVERY lab condition group
+       on it (all True), and feeds the pinned witness into the lab's own
+       constraint system, which returns sat.
+   (c) THE LAB FINDS COUNTEREXAMPLES WHEN THEY EXIST.  Run on the left
+       inclusion it returned SAT, and the model realized as the genuine game of
+       section 1.  An encoding that can produce a real counterexample is not
+       silently unsatisfiable.
+
+Ablation (d5_ablate.py, leave-one-out on shape gaps=(1,3), c*=3):
+   right inclusion  ESSENTIAL: exv2, cert, cert2      not needed: sup, exv, worse
+   left  inclusion  ESSENTIAL: exv2, cert2            not needed: sup, exv, cert, worse
+So Theorem 2 needs exactness of the BUMPED game plus leximin optimality of both
+allocations, and needs NEITHER exactness of the base game NOR superadditivity.
+Removing exv2 turns both targets SAT -- exactly the behaviour paper4's
+Remark mono:rem:exact predicts, so the drop-the-hypothesis control passes.
+
+n >= 6: the same lab returned "unknown" on the first shape at a 300 s timeout
+(62 coalitions, ~4000 constraints from the exactness witnesses alone).  No
+human proof was obtained; the blocker is stated in section 5.
+
+--------------------------------------------------------------------------------
+3.  THE BOUNDARY CASE (exact partition)
+--------------------------------------------------------------------------------
+Unchanged and untouched by this round.  At an exact-partition phi every richer
+suffix is tight, H* is undefined and the conjecture is vacuous; paper4's
+dedicated search (15,824 bases, 10,239 exact bumps, none) still stands.  The
+counterexample of section 1 is at the opposite extreme -- NO richer suffix is
+tight -- which is precisely the regime the campaign had not sampled.  Worth
+recording as a symmetric caution: the exact-partition search covered "all
+suffixes tight"; nothing had covered "no suffix tight".
+
+--------------------------------------------------------------------------------
+4.  REPAIRED CONJECTURE  C-C^ :  W subset Hhat subset S    PROVED at n = 5
+--------------------------------------------------------------------------------
+Hhat = H_{j_min}, j_min = min{j : s_phi(H_j) > 0}, the OUTERMOST (largest)
+slack richer suffix.  It contains every slack suffix, so C-C^ left is weaker
+than C-C left (and survives the counterexample) while C-C^ right is STRICTLY
+STRONGER than C-C right and subsumes Theorem 2.
+
+Theorem 3 (PROOF.txt Part IV).  At n = 5, every exact-domain monotonicity
+failure with a slack richer suffix satisfies W subset Hhat subset S.
+   leftmin    32/32 UNSAT, 0 unknown      [lab5_leftmin.txt]
+   rightmin   32/32 UNSAT, 0 unknown      [lab5_rightmin.txt]
+   controlmin 16/32 SAT (non-vacuity)     [lab5_controlmin.txt]
+Same complete encoding as Theorem 2 with the group hmin (outermost slack cut)
+in place of hstar, so these are decisions and not merely implications.
+
+Also checked and holding, outside n = 5: paper4's mono:ex:notsuffix and
+mono:ex:notstratum, all 137 BT-family members with their 309 violations, all
+60 records of the fresh n = 5 corpus, and all 24 bumps across the window of the
+counterexample game.  For n >= 6 C-C^ is a conjecture -- but unlike C-C it was
+designed against the class that killed C-C.
+
+RECOMMENDATION FOR paper4.  Replace mono:conj:cc by C-C^, keep mono:def:hstar
+but add Hhat, state Theorem 1's game as a third example (it retires the
+innermost reading exactly as mono:ex:notsuffix and mono:ex:notstratum retired
+the suffix and stratum readings), and record that the innermost/outermost
+distinction is invisible on single-slack bases, which is the entire recorded
+harvest.  Lemma D+, Lemma C+ and Lemma WIN are drop-in strengthenings of
+mono:prop:shield, summary2's LemmaC and the informal bump window.
+
+--------------------------------------------------------------------------------
+5.  NEW PROVED LEMMAS (all in PROOF.txt Part I, all with controls)
+--------------------------------------------------------------------------------
+LEMMA L  (leximin optimality certificate) -- necessary AND sufficient.  x in
+  core(u) is leximin-maximal iff at every cut there are lambda_T >= 0 supported
+  on proper x-tight coalitions and nu with cover = nu on the richer suffix and
+  cover <= nu - 1 on the block.  Necessity by Farkas on the tangent cone;
+  sufficiency by a sorted-vector argument.  Verified 31/31 + 2/2 positive,
+  6/6 negative (d3_lemmaL.py).  This is what makes the lab a DECISION procedure
+  and not merely a source of necessary conditions.
+LEMMA D+  Prop D holds for EVERY proper phi-tight T, including T = S (where
+  Delta(S) >= alpha > 0).  The exclusion of S in mono:prop:shield is not needed.
+LEMMA C+  Lemma C holds for EVERY proper phi'-tight T =/= S, not only those
+  with S not a subset of T: v' agrees with v at every coalition except S, so
+  phi'-tight supersets of S also satisfy Delta(T) <= 0.  This strictly enlarges
+  the usable certificate family.
+LEMMA M   The two master inequalities: for a Lemma-L cover c of phi,
+  sum_i c_i Delta_i >= 0; for a cover c' of phi', sum_i c'_i Delta_i <=
+  lambda'_S * rho.  Their difference is the engine any proof of the right
+  inclusion will have to run; the j = 1 instance of the first is the weighted
+  form of the known descent lemma.
+LEMMA WIN The admissible exact-bump window is the CLOSED INTERVAL
+  (s_phi(S), alpha_ex(S)] with
+      alpha_ex(S) = min_{T =/= S proper} max{ x(S) : x in core(v), x(T)=v(T) } - v(S),
+  because min_{core(v^{S,alpha})} x(T) is nondecreasing in alpha.  Controlled in
+  both directions on both paper4 games (exact at alpha_ex, inexact just above;
+  reproduces the recorded windows (1/2,1] and d_max = 4).  This replaces
+  grid-guessing of alpha by an exact endpoint and makes every sampled bump
+  exact by construction.
+
+REMAINING BLOCKER for a human proof of the right inclusion.  Suppose p in H*\S.
+Lemma D+ gives Delta(T) >= 0 at all phi-tight T, Lemma C+ gives Delta(T) <= 0
+at all phi'-tight T =/= S, and Delta(S) >= rho > 0.  What is missing is a
+choice of Lemma-L certificate -- for phi at the cut j*, or for phi' at the
+level of a loser -- whose cover vector makes (MA) and (MB) contradict each
+other.  Because S = H* never occurs and the only proved link between S and the
+suffix chain is Theorem B(ii) (phi_j >= alpha - s_phi(S) for outsiders), the
+argument must be genuinely two-sided; a one-sided slack-budget count does not
+close it.
+
+--------------------------------------------------------------------------------
+6.  CLOSED FORMS FOR THE BT FAMILY (the undelivered piece of the earlier round)
+--------------------------------------------------------------------------------
+DELIVERED.  PROOF.txt Part V and closed_forms.txt / closed_forms.json.
+The family is piecewise LINEAR in (a,b,c,e,f,g,h,i,j): on any region where the
+attaining row of each v(T) and the phi-tight family are constant, phi solves
+the linear system {intra-stratum equalities} u {tightness equations}, so phi,
+every richer-suffix slack, s_phi(S) and alpha_ex(S) are linear forms.
+Derived symbolically (sympy, exact rationals) and checked against the exactly
+recomputed numerical value on every member: 137 family members (axis sweep plus
+box sweep), 93 regions, 93/93 with verified closed forms.  The region count is
+large because every change of an attaining row splits a piece -- that is what
+"piecewise" means here.  Across all 137 members and their 309 violations both
+inclusions of C-C hold, because the family lives entirely in the single-slack
+regime.  The two regions carrying paper4's published
+examples:
+  mono:ex:notsuffix region (8 members, strata {3,6}<{1}<{4}<{2,5}):
+     phi_2 = phi_5 = a/2,  phi_3 = phi_6 = (a+b-c-e-f)/2,
+     phi_1 = (a+b+c+e+f)/2 - i - j,  phi_4 = (c+e+f)/2 - (3a+b)/2 + i + j,
+     s_phi({2,4,5}) = (c+e+f-a-b)/2 + i,  s_phi({1,2,4,5}) = s_phi({2,5}) = 0,
+     window at S={1,2,3,4,5}:  ( (a+b-c-e-f)/2 , i ]      [= (1/2, 1] ],  W={4}
+  mono:ex:notstratum region (8 members, strata {1,3,6}<{4}<{2,5}):
+     phi_1 = phi_3 = phi_6 = a/6,  phi_2 = phi_5 = a/2,  phi_4 = b - a/2,
+     s_phi({2,4,5}) = a/2 + b - j,  s_phi({2,5}) = 0,
+     window at S={1,2,3,4,5}:  ( 5a/6 + b - c - e - f , a + b - h - j ]
+                               [= (5/2, 4] ],  W={2,4}
+Regenerated family: 34 axis members (d4_family.py axis) plus a box sweep; all
+verified left- and right-inclusion-compliant, consistent with the earlier round
+(the family lives entirely in the single-slack regime, which is why it never
+saw the section-1 failure).
+
+--------------------------------------------------------------------------------
+7.  FRESH INDEPENDENT EVIDENCE (a new sampling region)
+--------------------------------------------------------------------------------
+d7_n5.py produced 60 certified exact-domain violations at n = 5 from 15 distinct
+base games, in a generator region the campaign had not used (five-player
+BT-shaped envelopes with small totals; 12 of the 60 have TWO outsiders, so the
+old worry that the harvest was dominated by S = N minus one player does not
+apply here).  Re-audited from the generator rows (d9_corpus.py):
+    C-C both halves      60/60          W = H*               60/60
+    S = H*                0/60          Prop D+ / Lemma C+   60/60 / 60/60
+    Theorem A            60/60          S phi'-tight in v'   60/60
+    frozen above         60/60          outsider losers below 60/60
+All 15 base games are single-slack, which is exactly why the corpus is
+unanimous and why unanimity of this kind proves nothing -- the campaign law
+holds again.
+
+--------------------------------------------------------------------------------
+8.  FILE POINTERS (all in the work dir)
+--------------------------------------------------------------------------------
+  lib12.py        toolkit: exact envelope, z3 exactness certification, two
+                  leximin algorithms, strata/suffixes/H*, alpha_exact_max
+  d0_controls.py  positive control: reproduces paper4's two n=6 examples exactly
+  d1_hunt.py      designed random hunt (regimes A-H), exact windows
+  d2_lab.py       THE LAB: complete z3 encoding, targets right/left/control and
+                  leftmin/rightmin/controlmin, switchable condition groups
+  d3_lemmaL.py    Lemma L verification, positive + negative controls
+  d4_family.py    BT family regeneration (axis and box sweeps)
+  d5_ablate.py    leave-one-out hypothesis ablation
+  d6_closed.py    symbolic closed forms per region, verified against numerics
+  d7_n5.py        designed n=5 exact-violation hunt (produced the corpus and the
+                  faithfulness witness)
+  d8_faithful.py  faithfulness control for the lab encoding
+  d9_corpus.py    re-audit and tabulation of the n=5 corpus
+  d10_realize.py  extracts a lab SAT model and realizes it as a real game
+  d11_audit.py    end-to-end adversarial audit of the counterexample
+  d12_window.py   window sweep: the counterexample is not a knife edge
+  outputs: lab5b_*.txt, lab5_*min.txt, ablate_*.txt, closed_forms.txt/.json,
+           family_axis.json, family_box.json, n5_hits_log.json, n5hunt.log
+================================================================================
+
+--------------------------------------------------------------------------------
+APPENDIX.  ALL MACHINE VERDICTS AT n = 5 (exact rational LRA, z3)
+--------------------------------------------------------------------------------
+Every run below enumerates all 32 shapes (31 nonempty gap patterns times the
+choice of the distinguished slack cut) with S a variable one-hot coalition.
+
+  target       group set                                     verdict
+  ---------    ------------------------------------------    -----------------
+  control      core,sup,exv,exv2,cert,cert2,worse,hstar       12 sat / 20 unsat
+  right        core,sup,exv,exv2,cert,cert2,worse,hstar        0 sat / 32 unsat
+  left         core,sup,exv,exv2,cert,cert2,worse,hstar        4 sat / 28 unsat
+  controlmin   core,sup,exv,exv2,cert,cert2,worse,hmin        16 sat / 16 unsat
+  rightmin     core,sup,exv,exv2,cert,cert2,worse,hmin         0 sat / 32 unsat
+  leftmin      core,sup,exv,exv2,cert,cert2,worse,hmin         0 sat / 32 unsat
+  (no run produced "unknown")
+
+The 4 sat shapes of target "left" are gaps (3,4), (1,3,4), (2,3,4), (1,2,3,4),
+all with c* = 4 -- exactly the shapes in which the top stratum is a slack
+singleton sitting above a second slack cut.  The model of the first of them was
+realized as the counterexample of section 1 (driver d10_realize.py, audited by
+d11_audit.py).
+
+Earlier, weaker run (protector lemma for phi' instead of the full Lemma L, no
+"worse"): right 12 sat / 20 unsat, left 12 sat / 20 unsat -- recorded to show
+that the strengthening to the complete encoding is what decided the question,
+and that the 20 unsat there were driven by |H*| >= 3 being impossible at n = 5,
+not by C-C.
+
+Solver robustness (d15_seeds.py): representative shapes re-solved with four z3
+random seeds and a randomly permuted assertion list (a completely different
+search); every completed run agreed unsat --
+  right     gaps=(3,)   c*=3  seed 0                          unsat (819 s)
+  leftmin   gaps=(3,4)  c*=3  seeds 0, 1, 7, 12345            unsat (89-145 s)
+  leftmin   gaps=(1,3,4) c*=3 seeds 0, 1                      unsat (11-13 s)
+Shuffling slows z3 by up to an order of magnitude, so the remaining
+seed/shape combinations were still running when this report was written; none
+disagreed.
+
+n = 6: the same lab is out of reach as written (unknown at a 300 s timeout on
+the first shape).  A designed six-player search restricted to MULTI-SLACK base
+games -- the class that produced the n=5 counterexample and that the earlier
+harvest never targeted -- was launched (d14_n6multi.py -> n6multi.json); it had
+not reported a failure when this report was written.  Reproduce with
+    python3 d14_n6multi.py <budget_seconds> <seed>
+
+CAVEATS, stated plainly
+  * The n = 5 theorems are machine decisions, not human proofs.  They rest on
+    (i) Lemma L being both necessary and sufficient -- proved here and
+    controlled in both directions -- and (ii) z3 deciding exact rational LRA
+    correctly.  No human proof of either half was obtained.
+  * The counterexample of section 1 does NOT depend on any of that: it is a
+    concrete integral game, re-derived from the bare value list by algorithms
+    that share no code path with the search, and hand-checkable (the hand
+    verification is written out in PROOF.txt Part II).
+  * Everything proved here is at n = 5.  n >= 6 is open for both the refutation
+    and the repaired conjecture, and the null-player lift is blocked (Thm 1b).
