@@ -293,6 +293,75 @@ purchase at two spare players in the other block.  With p = 1 the buyer needs
 q >= 3; with p >= 2 the cost is shared and q >= 2 suffices.  Both readings
 first become affordable at p + q = 4.
 
+================================================================================
+PART IV.  THE FRONTIER AT m = 4:  ONE CONJECTURE REFUTED, ONE THEOREM GAINED
+================================================================================
+
+PROOF_M3.txt observed that at the harvested PART(1,3) witness the crossing
+budget phi_f <= phi(Q \ T) held with EQUALITY, and called the threshold
+"razor-thin" on that basis.  The question of whether the equality is FORCED --
+which would upgrade threshold sharpness from observation to theorem -- is
+decided here.  It is not.  But a sharper statement is, and it is the right one.
+
+SETUP.  PART(1,3): P = {a}, Q = {b,c,d}, H = {f,g}, n = 6.  For a phi-tight T
+containing H with a not in T, (KEY) forces |Q \ T| >= 2, and T = H is slack, so
+|Q \ T| = 3 is out too.  Hence the ONLY candidates are
+
+        T_j = H u {j},   j in Q,      carrying   phi_f <= phi(Q \ {j}).
+
+Three questions, each decided over all 60 stratifications with the full
+decisive encoding (frontier_forced.py; exactness by attaining core points,
+leximin by Farkas, every SAT model audited end to end).
+
+--------------------------------------------------------------------------------
+THEOREM G4 (THE FRONTIER COALITION IS MANDATORY AT q = 3).  Every PART(1,3)
+configuration has a phi-tight T containing H with a not in T -- necessarily
+T = H u {j} for a single j in Q.
+--------------------------------------------------------------------------------
+FINITE CHECK.  Forbidding every such T (imposing phi(T) > v(T) for all seven
+proper T over H that omit a) is UNSAT on all 60 stratifications.  Zero
+"unknown".                                                                  []
+
+This is the exact counterpart of Step 2 of Theorem G1, which proves BY HAND
+that no such T exists when q <= 2.  Together:
+
+        q <= 2:  a phi-tight T over H omitting P is IMPOSSIBLE   (by hand)
+        q  = 3:  it is MANDATORY                                 (finite check)
+
+That dichotomy is the sharpness of the threshold, and it is a cleaner statement
+than the equality would have been: the object the obstruction forbids does not
+become gradually easier to build, it goes from unavailable to unavoidable at
+exactly q = 3.
+
+--------------------------------------------------------------------------------
+THE EQUALITY IS NOT FORCED (the PROOF_M3.txt remark is withdrawn).
+--------------------------------------------------------------------------------
+Imposing T_j tight together with the STRICT inequality
+phi_f < phi(Q \ {j}) is SATISFIABLE: 74 of the 180 (stratification, j) pairs,
+and every one of the 74 models passes the end-to-end audit as a GENUINE
+WITNESS.  One of them, verified by hand arithmetic:
+
+        Lmin = (25/24, 1, 49/48, 17/16, 13/12, 13/12)  on (a,b,c,d,f,g),
+        strict boundary   max_L phi = 17/16  <  13/12 = min_H phi,
+        j = c, so T_j = cfg is tight and Q \ {c} = {b,d},
+        budget:  phi_f = 13/12  <  33/16 = phi_b + phi_d,   gap 47/48.
+
+A gap of 47/48 against a value of 13/12 is not a perturbation of equality; the
+budget is simply slack in general.
+
+CONTROL.  The same encoding WITHOUT the strict inequality -- T_j merely tight --
+is SAT on exactly the same 74 pairs and UNSAT on the same 106.  So the
+strictness requirement removes no solution whatsoever: wherever the frontier
+coalition can be tight at all, the budget can also be slack there.  That
+identity of counts is what rules out the alternative reading, that strictness
+is available only in degenerate corners.
+
+WHAT THIS COSTS AND WHAT IT BUYS.  It costs the "razor-thin" sentence in
+PROOF_M3.txt, now corrected in place.  It buys Theorem G4, which is what the
+sharpness claim should have been: the threshold is sharp because the required
+tight coalition flips from forbidden to forced, not because any inequality is
+met with equality.
+
 --------------------------------------------------------------------------------
 STATUS
 --------------------------------------------------------------------------------
@@ -303,6 +372,10 @@ STATUS
   Thm G1    p = 1 ==> q >= 3 (subsumes PROOF_M3.txt) .......... PROVED
   Thm G2    necessity: p,q >= 1 and p+q >= 4 .................. PROVED
   Recipes A, B' kill the orthant .............................. PROVED
+  Thm G4    the frontier coalition is mandatory at q = 3 ...... FINITE CHECK
+                                                 (60 UNSAT, control SAT 74/180)
+  the m=4 crossing budget is forced tight ..................... REFUTED
+                                                 (74 audited strict witnesses)
   Thm G3    sufficiency, by recipe rather than by padding ..... PROVED for the
             five instances realized above; the recipes and their (KEY) budgets
             are general, but the numeric realization of each recipe at every

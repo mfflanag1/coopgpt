@@ -1112,8 +1112,15 @@ localization of exactness; "|B|=4 is special".
   exactness-at-{f} direction contradicts all four combinations, two lines
   each.  No stratification case tree; the 48-UNSAT and CEGAR runs are now
   cross-checks.  The threshold mechanism is identified: Lemma 3's crossing
-  budget needs |Q\T| <= 1 and expires exactly at m=4, where the harvested
-  witnesses realize it as an EQUALITY (phi_f = 7/4 <= 7/4) — razor-thin.
+  budget needs |Q\T| <= 1 and expires exactly at m=4.  [CORRECTED
+  2026-08-08 by r23 itself: the initially-claimed "equality at the frontier
+  / razor-thin" reading was an overreach from one witness — 74 audited
+  PART(1,3) configurations have the budget STRICT (gaps up to 47/48), and
+  a control shows strictness removes no solutions.  The true sharpness
+  statement is Theorem G4's dichotomy: a tight T over H omitting P is
+  IMPOSSIBLE at q<=2 (hand proof, G1 Step 2) and MANDATORY at q=3 (finite
+  check, 60/60 UNSAT with SAT control) — the forbidden object flips from
+  unavailable to unavoidable, nothing degrades gradually.]
   Reusable frame for all m: a PART core is a polytope in |L| variables
   whose facet normals cannot separate same-block players.
 - s(5) = 1/2 PROVED IN FULL, UNCONDITIONALLY (2026-08-08, task #22,
