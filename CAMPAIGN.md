@@ -1211,6 +1211,13 @@ localization of exactness; "|B|=4 is special".
   memory Llerena-Mauri entry was invented — deleted), prior-art
   positioning pass PENDING and marked in the tex.  NOT submission-ready:
   needs the positioning pass + a hostile audit round.
+- PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
+  both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
+  whose converse is never invoked, a declared reference never cited, a
+  hypothesis never discharged — nothing consumes them, so nothing checks
+  them, and that is exactly where errors survive audits.  Both failures
+  were invisible to use-driven checking and surfaced only on line-by-line
+  reading against a source.
 - s2(n) = 2−8n/(n²−(n mod 2)) as upper bound; 2-generator extremality.
 - General facet dichotomy (packet facet iff full-trace).
 - h=4/h=5 completeness at n=7 (needs per-type construction, not sampling).
