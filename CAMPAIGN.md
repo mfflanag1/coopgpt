@@ -1260,7 +1260,11 @@ localization of exactness; "|B|=4 is special".
   snapshot only — a printed count with no artifact is what
   reproducibility notes exist to prevent; r12's own runs, never
   finished); R4 paper6's 74 are stratification-j PAIRS, not
-  configurations.  Checklist phantom resolved: "97 family checks" = the
+  configurations — attribution corrected by r23 itself: the slip was in
+  its draft prose (PROOF_GENERAL.txt had it right; the distinction was
+  flattened at restatement and nothing consumed it — the
+  audit-the-unused-half failure mode, live within hours of adopting the
+  law).  Checklist phantom resolved: "97 family checks" = the
   97 OK lines of families_closed.log, real but never printed.
 - PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
