@@ -1229,6 +1229,20 @@ localization of exactness; "|B|=4 is special".
   face — L13 proved but vacuous without one).  Controls: whole-core LP
   validation of L7/L7' + all lemmas 0 failures over 2,668 games.  Paper
   integration deferred until audit #31 lands (fixed diff range).
+  INCREMENT 3 (decisive negatives + splice audit): seven candidate
+  middle-stratum lemmas DEAD with recorded counterexamples — notably C7:
+  Lmin does NOT Lorenz-dominate Lmax on exact games in general (1,102
+  failures), killing a whole argument family and showing Lemma 0's
+  exact-partition hypothesis does real work.  Theorem-A attaining points
+  buy nothing level-only.  HARD BARRIER PROVED: the full hand net is
+  consistent on all 105 impossible survivors with the failure hypothesis
+  removed — level-only reasoning with this vocabulary CANNOT exclude
+  them; the five T1 stragglers are SAT under anchors+protectors and need
+  the full ladders.  Residue 132 = 27 + 105 is sharp for this lemma
+  class.  r22's audit of the lead's four s5close restatements in paper5:
+  sound, 3 LOW fixes applied (111 not 64 at ratio 1/3 — source error in
+  r22's own REPORT.txt sec.4; 5,250 mirror certificates; control counts
+  attributed per pipeline).
 - PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
   whose converse is never invoked, a declared reference never cited, a
