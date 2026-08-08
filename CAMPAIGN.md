@@ -1243,6 +1243,11 @@ localization of exactness; "|B|=4 is special".
   sound, 3 LOW fixes applied (111 not 64 at ratio 1/3 — source error in
   r22's own REPORT.txt sec.4; 5,250 mirror certificates; control counts
   attributed per pipeline).
+  #27 CLOSED: final fold archived; C7 witness (T=4 integral game,
+  Lorenz violation at k=4, ratio exactly 1/3) independently verified by
+  the lead; twelve A3-free lemmas; residue 132 = 27 (hand-A3 core, future
+  task) + 105 (proved beyond level-only reasoning); the barrier = no
+  second canonical core point in the stage-1 face.
 - PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
   whose converse is never invoked, a declared reference never cited, a

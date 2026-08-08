@@ -195,3 +195,83 @@ FILES ADDED, INCREMENT 2
                        soundness check on observed configurations.
                        -> arith27c_1_2.json, arith27c.log
 ================================================================================
+
+--------------------------------------------------------------------------------
+7.  INCREMENT 3:  THE MIDDLE-STRATUM ROUTE IS CLOSED OFF (NEGATIVE, DECISIVE)
+--------------------------------------------------------------------------------
+Increment 2 diagnosed the barrier as "L7/L7' speak only about the extreme
+strata".  Rather than guess a middle-stratum lemma, increment 3 SCREENS eight
+candidates against all 2668 harvested genuine exact games (cands.py ->
+cands.json, which stores a counterexample game for each casualty).
+
+  C1  L7 generalized: for EVERY Lmax stratum l, some i in D^l has x_i >= M_l
+                                                          DEAD, 233 failures
+  C2  L7' generalized to every Lmin stratum               DEAD, 144
+  C3  z(D1) <= x(D1)   (top-stratum sum domination)       DEAD, 403
+  C4  x(P)  >= z(P)    (bottom-stratum sum domination)    DEAD, 453
+  C5  z(U) <= x(U) for every Lmax rich suffix U           DEAD, 617
+  C6  x(L) >= z(L) for every Lmin poor prefix L           DEAD, 621
+  C7  Lmin LORENZ-DOMINATES Lmax                          DEAD, 1102
+  C8  the face instantiation (applies exactly when max x = M)  survives, 4923
+
+C7 IS WORTH RECORDING ON ITS OWN.  The leximin point of an exact game's core is
+NOT Lorenz-greatest in general -- 1102 violations.  That kills an entire family
+of would-be arguments (anything that tries to compare partial sums of the two
+selections) and shows that the exact-partition hypothesis in Lemma 0 of
+s5full/REPORT.txt is doing real work rather than being a convenience.
+
+C8 is the only survivor and it is conditional: by L5, M <= max x always, so the
+hypothesis max x <= M means max x = M exactly, and then x lies in the stage-1
+face {w in Core : w <= M*1} and L13 applies at w = x.  Useful where it applies,
+but it is not the unconditional middle-stratum lemma the net needs.
+
+THE SECOND-CANONICAL-POINT ROUTE, TESTED.  Instantiating L7/L7' at the
+Theorem-A attaining points w^S yields, for S containing D1, only v(S) >= M --
+which the net already implies.  Other choices of S bound only one coordinate of
+w^S and give nothing at the level of stratum sums.  So that route, too, does not
+produce new level-only content.
+
+THE BARRIER, NOW ESTABLISHED RATHER THAN CONJECTURED.  With the failure
+hypothesis REMOVED entirely, the full hand net (levels, L1'', L7, L7', L11,
+L12, L14-L16 and the A3 anchors) is CONSISTENT on every one of the 105
+impossible survivors -- 0 of 105 are hand-excluded outright
+(impossible_split.json).  So the 105 are not reachable by any level-only
+argument built from the current lemmas; they require statements that reference
+actual coalition values.
+
+TARGET (a), THE FIVE T1 CONFIGURATIONS: A SHARP NEGATIVE.  Tracking every
+assertion and asking for a minimal unsat core (core5.py) over the hypothesis
+set the assignment proposed -- levels, both core memberships, v >= 0, the A3
+anchors, the A3 global inequalities, and the protectors in their tight form --
+returns SAT for all five.  So that toolkit is PROVABLY INSUFFICIENT for them;
+they need the full staged Farkas ladders, and no case analysis against
+L7/L7'/L11/L12 + anchors can work.  This does not close (a), but it stops the
+proposed line of attack from being retried and says exactly what is missing.
+
+RESIDUE, UNCHANGED AND STILL CURRENT: 132 = 27 possible (irreducible for any
+level-only net; each needs its own lower bound on mu, i.e. the (*) obstruction)
++ 105 impossible (now known not to fall to level-only reasoning at all).
+
+FILES ADDED, INCREMENT 3
+ cands.py              the eight-candidate screen.  -> cands.json (with a
+                       counterexample game stored for each casualty)
+ impossible_split.json the 105 tested with no failure hypothesis: 0 excluded
+ core5.py              unsat-core attempt on the five.  -> core5.log
+ AUDIT_SPLICE.txt      audit of the four paper5 restatements spliced from this
+                       archive (three LOW findings; see below)
+
+--------------------------------------------------------------------------------
+8.  PAPER SPLICE AUDIT (requested alongside #27)
+--------------------------------------------------------------------------------
+Full write-up in AUDIT_SPLICE.txt.  Nothing HIGH.  lem:anchors, cor:poorstarved,
+lem:staged with its mirror, the rewritten thm:cfgbound proof and the thm:s5
+narrative all check out against this archive, counts included.  Three LOW fixes:
+(1) thm:regime41's "64 harvested at exactly 1/3" is wrong -- 64 is the number of
+    Lmin-(4,1) games in the seed-22 harvest, not the number attaining 1/3; the
+    true figures are 51 of 64 (seed-22), 60 of 83 (seed-777), 111 of 147 (both).
+    THE AMBIGUITY ORIGINATED IN SECTION 4 OF MY OWN #22 REPORT, which has now
+    been rewritten to state the counts explicitly.
+(2) the mirror's validation is 5,250 ceiling certificates, not 10,500 (that is
+    floor plus ceiling).
+(3) the 2874 stage certificates are pipeline 1's ladders only; pipeline 2's
+    certificate validation is a separate run and should be attributed as such.

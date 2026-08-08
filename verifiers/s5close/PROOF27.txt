@@ -145,3 +145,96 @@ as the deepest obstruction in the program.  Distilling those four is the same
 problem as proving A3-style one-coalition optimality by hand; the other five
 are ordinary case analysis and are the realistic next target.
 ================================================================================
+
+--------------------------------------------------------------------------------
+L13  (STAGE-2 RIGIDITY) -- TRUE, AND NOT INSTANTIABLE.  RECORDED WITH ITS
+     OBSTRUCTION SO THE NEXT ATTEMPT DOES NOT REDISCOVER BOTH.
+--------------------------------------------------------------------------------
+Let D2 be the second Lmax stratum and M2 its level.  Every core point w with
+w <= M*1 satisfies max_{i in D2} w_i >= M2.
+
+PROOF.  The stage-1 feasible set is exactly F1 = {w in Core : w <= M*1}:
+pinning is what forces w = M on D1 there.  F1 is convex and contains z.  If
+w in F1 had w_i < M2 for every i in D2, then for j outside D1 u D2 we have
+z_j < M2, so for small th the point (1-th)z + th*w lies in F1 and has every
+coordinate off D1 strictly below M2, contradicting M2 = min over F1 of
+max_{i not in D1} w_i.                                                       []
+
+WHY IT CANNOT BE USED.  To extract a consequence one must instantiate w at a
+KNOWN point of F1.  The only canonical member of F1 is z itself, which makes
+the statement vacuous.  L7 was usable precisely because Lmin is a second core
+point available for nothing; there is no analogous free point inside F1.  By
+L5, M <= max x always, so x in F1 happens exactly when max x = M -- the
+conditional case C8 below, and nothing more.  MANUFACTURING A SECOND CANONICAL
+POINT OF F1 IS THE OPEN PROBLEM BEHIND THE 105.
+
+--------------------------------------------------------------------------------
+L14-L17  (TIGHT-FAMILY CLOSURE) -- TRUE, VERIFIED, AND WITHOUT CONSEQUENCE
+--------------------------------------------------------------------------------
+For a core point phi, call A phi-tight if phi(A) = v(A).  Exact games are
+monotone and superadditive (both immediate from v(S) = min over the core of
+w(S), with w >= 0).  Hence
+  L14  A, B disjoint and phi-tight  =>  A u B is phi-tight;
+  L15  A x-tight, B z-tight, A subset B  =>  x(A) <= z(B)  (and symmetrically);
+  L16  A x-tight, B z-tight, disjoint  =>  x(A)+z(B) <= min(x(AuB), z(AuB));
+  L17  A both x- and z-tight  =>  x(A) = z(A).
+Proofs are one line each; verified on 2668 games (L14 16,286 cases, L15 42,455,
+L16 16,917, L17 15,194; 0 failures).  Adding all four to the net kills exactly
+zero further configurations: they have no consequence for the LEVELS beyond
+what L11/L12 already extract.
+
+CHECKED AND FALSE, SO NOT USED.  The tight family is NOT closed under
+complementation: A x-tight gives only v(N\A) <= x(N\A), which is core
+membership again.  The complement of a tight set failed to be tight in 4,433 of
+15,335 cases.
+
+--------------------------------------------------------------------------------
+C7  A GENUINE EXACT GAME WHOSE LEXIMIN POINT DOES NOT LORENZ-DOMINATE ITS
+    LEXIMAX POINT.
+--------------------------------------------------------------------------------
+The leximin point of the core is Lorenz-greatest when the core has a
+Lorenz-greatest element -- convex games, or exact partition at the allocation,
+which is the hypothesis of Lemma 0 of s5full/REPORT.txt.  It is natural to hope
+this holds for exact games generally; it does not, and the witness is small.
+
+  N = {1..5},  T = v(N) = 4,  v singleton-normalized and EXACT (verified by
+  exact rational core-vertex enumeration: 12 core vertices, every coalition's
+  minimum over the core attained).  Indexed by subset mask 0..31,
+    v = [0,0,0,2,0,0,0,2,0,2,0,2,0,2,1,3,
+         0,0,0,2,0,0,0,2,0,2,1,3,0,2,1,4]
+  Lmin(v) = (4/3, 2/3, 2/3, 2/3, 2/3)      Lmax(v) = (1, 1, 1/2, 1, 1/2)
+
+  Lorenz partial sums (sum of the k smallest coordinates):
+      k        1      2      3      4      5
+      Lmin    2/3    4/3     2     8/3     4
+      Lmax    1/2     1       2      3      4
+  At k = 4, 8/3 < 3: the leximin point falls BELOW the leximax point.
+
+The game is not pathological -- its Lmin strata are (4,1), its Lmax strata are
+(2,3), and its ratio is exactly 1/3, so it is one of the extremal games of
+Theorem T2.  Audited end to end in c7_witness.json.
+
+CONSEQUENCE FOR THE PROGRAM.  Every argument that compares partial sums of the
+two selections is dead at n = 5, and the exact-partition hypothesis in Lemma 0
+is load-bearing rather than a convenience.  The full dead list from the same
+screen -- L7 and L7' generalized to every stratum, top/bottom stratum-sum
+domination, and rich-suffix / poor-prefix domination -- is in cands.json with a
+counterexample game stored for each.
+
+--------------------------------------------------------------------------------
+THE BARRIER, AS A STATEMENT RATHER THAN AN OBSERVATION
+--------------------------------------------------------------------------------
+Of the 132 configurations the hand net leaves, 105 are impossible and 27 occur.
+For the 105: with the failure hypothesis REMOVED, the net consisting of the
+level equations, L1'', L7, L7', L11, L12, L14-L16 and the A3 anchor conditions
+is CONSISTENT on every one of them.  So no argument expressible in that
+vocabulary -- statements about the two allocations' levels and their tight
+coalitions -- can exclude them; excluding them requires reference to actual
+coalition values.  For the 27: they are realized by genuine games, so excluding
+ratio > 1/2 there is not a statement about levels at all but a lower bound on
+mu, which is inequality (*) of records/S5PROOF.txt Part D.
+
+That is the endpoint of the distillation: 2829 of 2961 configurations reduced
+to hand argument, and the remaining 132 split into a part that is provably out
+of reach of this vocabulary and a part that is the known deep obstruction.
+================================================================================
