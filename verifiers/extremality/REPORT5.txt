@@ -194,3 +194,78 @@ description -- which is the natural next thought -- should settle (i) versus
 (ii) FIRST, on the (3,2,1) witness, before building on it.  Flagged rather than
 resolved; asserting either branch without checking is exactly the kind of
 plausible-and-wrong step this campaign keeps catching.
+
+================================================================================
+ADDENDUM 2 (step 2 continued): THE TRAP IS RESOLVED, AND CASE (a) IS PROVED
+================================================================================
+
+THE POLYMATROID TRAP: RESOLVED, BRANCH (i).  Computed on the (3,2,1) witness:
+  * the tight rank function of the core is rho^ (verified: max_{x in Core} x(A)
+    = rho^(A) for all 62 proper A, where rho^ is the partition-truncation of
+    rho computed by the split recursion), and rho^(N) = T;
+  * but rho^ is NOT SUBMODULAR.  Witness, hand-checkable on the blocks
+    {1,2,3}/{4,5}/{6} with weights (1,4,1)/(1,5)/(6):
+        A = {1,4}, B = {2,4}:   rho^(A u B) + rho^(A n B) = 5 + 1 = 6
+                                rho^(A)     + rho^(B)     = 1 + 4 = 5.
+So the failing step is the one I suspected first: Core(v) is NOT a polymatroid
+base polytope.  My claim that {x >= 0 : x(A) <= rho(A)} = P(rho^) with rho^
+submodular was simply wrong -- the Dilworth truncation is submodular for
+INTERSECTING-submodular inputs, not for an arbitrary monotone rho, and this rho
+is not intersecting-submodular.  There is therefore no tension with Fujishige
+or Frank--Murota at all; they never applied.  The route is dead for a clean
+reason rather than merely unusable, and nobody needs to re-derive this.
+
+--------------------------------------------------------------------------------
+PROPOSITION (rigid direction, case (a)).  If at most one block has size >= 2,
+then Lmin(v) = Lmax(v).
+--------------------------------------------------------------------------------
+PROOF.  Let B_1 be the only block that may have size >= 2; every other block is
+a singleton {p} with w_p = w(B_j) = T.
+
+STEP 1: the core is a CAPPED SIMPLEX,
+        Core(v) = { x >= 0 : x(N) = T,  x_i <= w_i for i in B_1 }.
+By the dual description (C), Core(v) = {x >= 0 : x(N)=T, x(A) <= rho(A)}.  If A
+meets a singleton block {p} then rho(A) >= w_p = T, and rho <= T always, so the
+cap at A reads x(A) <= T, which x >= 0 and x(N) = T already give.  If A is
+contained in B_1 then rho(A) = w(A), and x(A) <= w(A) follows by summing the
+singleton caps x_i <= w_i, which are themselves the caps at A = {i}.  So the
+caps on B_1's singletons are the only binding ones.
+
+STEP 2: on a capped simplex both selections are the same water-filling point.
+Write c_i = w_i for i in B_1 and c_i = T otherwise, and let theta be the unique
+solution of sum_i min(c_i, theta) = T; put x*_i = min(c_i, theta).
+  Lmax.  If a feasible x has max_i x_i <= M then T = sum_i x_i <= sum_i
+  min(c_i, M), so M >= theta; and x* attains max = theta.  So theta is the
+  minimum possible maximum, and x* attains it.
+  Lmin.  If a feasible x had min_i x_i > theta then T = sum x_i > n*theta,
+  while sum_i min(c_i,theta) = T with every term <= theta gives T <= n*theta --
+  a contradiction.  So min_i x_i <= theta; also x_i <= c_i gives min_i x_i <=
+  min_i c_i.  Hence min_i x_i <= min(min_i c_i, theta) = min_i x*_i, and x*
+  attains it.  So x* maximizes the minimum.
+Each selection then pins the coordinates achieving its extreme level and
+recurses on the remaining players, which is again a capped simplex with the
+same data; the recursion produces x* at every stage on both sides.  Hence
+Lmin = Lmax = x*.                                                          []
+
+  VERIFIED (mechanism, not just conclusion): 36 random case-(a) instances at
+  n = 5,6,7 -- in every one Lmin = Lmax AND both equal the water-filling point
+  min(c_i, theta).  Zero failures.  Note this covers the profiles (6,1,1),
+  (5,1,1), (4,1,1), (3,1,1) and all the all-singleton ones, i.e. exactly the
+  rigid profiles of the second clause.
+
+--------------------------------------------------------------------------------
+STILL OPEN (the blockers, stated precisely)
+--------------------------------------------------------------------------------
+  (b) RIGID, all blocks of size <= 2.  Not proved.  Here the core is NOT a
+      capped simplex: with two blocks of size 2 the cross-block caps
+      x_u + x_v <= max(w_u, w_v) are binding and are not implied by any set of
+      single-coordinate caps, so Step 1 fails and Step 2 has nothing to run on.
+      This is the whole content of the first clause -- (2,2,2), (2,2,2,2),
+      (2,2,1,1) etc. -- and it needs a different argument.
+  (c) BREAKING direction.  Not attempted beyond the audited (3,2,1) witness.
+      What is needed is a construction, for every profile with a block of size
+      >= 3 and a second block of size >= 2, of an explicit game with
+      Lmin != Lmax.  The witness suggests the shape (a size-3 block with an
+      interior player the floor can raise, against a size-2 block supplying the
+      cap the ceiling must respect) but I have not turned that into a family.
+================================================================================

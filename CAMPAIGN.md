@@ -1448,6 +1448,23 @@ localization of exactness; "|B|=4 is special".
   the route.  A plausible chain contradicting an audited witness,
   handed over labelled instead of buried in a sketch.  No hand proof
   yet.
+- BLOCK-RIGIDITY ROUND 3 (task #35 cont.): TRAP RESOLVED, branch (i),
+  hand-checkable — the tight rank function IS rho^ (verified on all 62
+  coalitions of the witness) but rho^ is NOT SUBMODULAR (A={1,4},
+  B={2,4}: 6 > 5 on the (3,2,1) witness), so Core is no base polytope
+  and Fujishige/Frank-Murota never applied; the Dilworth truncation is
+  submodular for INTERSECTING-submodular inputs only.  Route dead for
+  a clean reason (lead's branch-(i) hunch confirmed).  PROVED by hand,
+  case (a) of the rigid direction: at most one block >= 2 implies
+  Lmin = Lmax — the core collapses to a CAPPED SIMPLEX (singleton
+  blocks carry weight T so their caps trivialize) and both selections
+  are the water-filling point (mechanism verified 36/36 at n=5-7).
+  BLOCKERS STATED: (b) all-blocks-<=2 — cross-block caps bind, not a
+  capped simplex, needs a different argument; (c) the breaking
+  direction needs a witness FAMILY.  Not yet a paper5 proposition
+  (needs (b)).  Compute rule complied: all r12 background jobs killed
+  (the mid-run extremality hunts died — final tables lost, no claim
+  affected since snapshots were already flagged as snapshots).
 - (ii) RESTORED WITH A VALID WITNESS (task #33 final round,
   verifiers/cfg_hand/designed.py): the targeted search over the
   residual shape — COMPLETE for balanced games, since Lemmas B/C/E1
