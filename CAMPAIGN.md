@@ -1375,6 +1375,26 @@ localization of exactness; "|B|=4 is special".
   answered: the CFG family stops winning there.  n=7 prediction 3/4
   untested.  Stage B meanwhile 58/74 all UNSAT; clean gate CHAINED to
   auto-run after Stage B (HALT-marker guard).
+- (R) ROUNDS 4-5 (task #33 cont., verifiers/cfg_hand/): three routes
+  CLOSED — (a) the lead's merge/contraction route (direction argument:
+  contraction enlarges the core, upper-bounds the max (R) needs
+  lower-bounded); (b) the lead's chain-attainment route (nested f-caps
+  NOT simultaneously attainable: 64/4000 pairs fail over 200 games,
+  explicit T=14 witness with max = 15 < 16; (R) survives all 64 with
+  margin >= 1 — the strictly stronger statement was the false one);
+  (c) Lemma D alone (the eta < 0 dual branch is ACTIVE on ~1% of
+  instances — 13/1200 pairs strictly worse under eta >= 0).  Lead's
+  fallback framing corrected by r23: by strong duality the dual-vertex
+  characterization IS (R), an enumeration strategy not a reduction.
+  Constraint (ii) (exactness load-bearing) remains CHALLENGED by the
+  lead — the balanced witness mu = 8/5 < 5/3 uses proper-only lambda;
+  under paper5's N-inclusive lambda the game has mu = lambda = T/5
+  exactly, and the free zeroth filter (lambda_proper > T/5 forces
+  mu = lambda for ANY nonempty-core game) means the question lives
+  only in lambda_proper <= T/5.  Resolution pending.  r23's
+  recommendation: bank the specification as paper5 open problem 4 and
+  hand (R) to a fresh attempt — three consecutive route-closures being
+  the honest signal it needs a new idea.
 - EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
   extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
   ~21,000 games, ZERO above either bound.  Region A (starved-Lmax

@@ -120,6 +120,92 @@ grand coalition, while the duality above ranges over PROPER coalitions only
 one extra vertex is the trivial cover beta_N = 1.  Flagged so the two numbers
 are not later read as a discrepancy.
 
+
+--------------------------------------------------------------------------------
+TARGET 2, ROUND 4: TWO LEADS RESOLVED (one negatively, one decisively)
+--------------------------------------------------------------------------------
+THE R4 / MERGE ROUTE IS THE WRONG DIRECTION.  REFUTED.
+The suggestion was to contract a surviving vertex's sub-problem to a game on
+<= 4 players and kill it with R4, using the merge lemma (PART round, M1:
+contracting a coalition of an exact game preserves exactness).  It cannot work,
+for a structural reason that needs no computation: pi(y) = (y_p, y_q,
+y(B) - v(B)) maps Core(v) INTO Core(w'), and the objective 2y_p + y_q is
+unchanged by pi, so
+        max over Core(w')  >=  max over Core(v).
+(R) needs a LOWER bound on the right-hand side; the merge supplies an upper
+bound on it.  The route survives only if pi is ONTO.  It is not:
+merge_route.py, over 120 random exact five-player games, finds the two maxima
+equal in 117 and STRICTLY LARGER on the merged game in 3, by as much as 2.
+So the contraction genuinely loses core points, and the floor bound does not
+transport even though exactness does.  (The lead's hope was that transporting
+the FLOOR rather than the full selection would dodge M1's known limitation; it
+does not -- the obstruction is the direction of the inequality, not which
+object is transported.)
+
+EXACTNESS IS LOAD-BEARING.  CONFIRMED BY COUNTEREXAMPLE.
+The residual inequality is v({q,y,z}) + v({x,z}) + v({x,y}) <= 2T - 3*lambda.
+BALANCEDNESS alone cannot reach it: the collection above together with
+2*{p} + {q} is balanced with r = 2, and singleton values vanish, so
+balancedness yields only <= 2T; replacing 2*{p}+{q} by {p,q}+{p} yields
+<= 2T - v({p,q}), and v({p,q}) can be 0.  Either way one is short by 3*lambda.
+So any proof must use exactness.  That is not a guess: exactness_needed.py
+exhibits a BALANCED (nonempty core) but NON-EXACT five-player game with
+        T = 8,   mu = 8/5  <  5/3 = lambda,   gap 1/15,
+        v = {ab:2, ac:3, bc:2, abc:1, ad:2, bd:3, cd:1, acd:4, bcd:3, be:3,
+             abe:3, ace:4, bce:3, abce:2, ade:1, abde:4, cde:2, acde:5, bcde:1}.
+So mu = lambda is FALSE for balanced games at n = 5, and every free lemma above
+(B, C, E1, D) is consistent with that -- each uses only core membership, which
+balanced games have.  The exactness content must therefore enter precisely at
+the residual shape, and nowhere else.
+
+WHAT THIS LEAVES.  The residue is one inequality (R), it is sharp, it fails only
+through eta < 0, it cannot be obtained from balancedness, and it cannot be
+reduced to <= 4 players by contraction.  Those four facts together are a tight
+specification of what a proof must look like: an argument that consumes
+exactness at a five-player configuration, in the eta < 0 branch of one dual, and
+does not factor through any contraction.  That is the sharp form of paper5's
+"why five" and is, in my judgement, the right way to state the open problem in
+print.
+
+--------------------------------------------------------------------------------
+TARGET 2, ROUND 5: THE CHAIN-ATTAINMENT REFORMULATION IS FALSE; THE eta<0
+BRANCH IS ACTIVE
+--------------------------------------------------------------------------------
+CHAIN ATTAINMENT: REFUTED at n = 5.  The proposed sufficient statement was that
+a nested pair of f-caps is simultaneously attainable -- some core point with
+y_p = f({p}) AND y_p + y_q = f({p,q}), which would give (R) at once since
+f({p}) + f({p,q}) >= 3*lambda.  Tested exactly (chain.py) on 200 genuine exact
+five-player games and all 4000 ordered pairs: attainable on 3936, NOT
+attainable on 64.  Explicit failure: T = 14, p, q with f({p}) = 4 and
+f({p,q}) = 12, but max over the core of 2y_p + y_q = 15 < 16 = f({p}) + f({p,q}).
+So the two caps cannot be saturated together.
+IMPORTANTLY (R) SURVIVES: on all 64 failures the margin
+max(2y_p+y_q) - 3*lambda is >= 0, minimum 1.  Chain attainment is strictly
+stronger than (R), and it is the strictly stronger statement that is false.
+
+THE eta < 0 BRANCH IS ACTIVE, SO LEMMA D DOES NOT CLOSE (R).  If the dual
+optimum were always attained at some eta >= 0, Lemma D would certify (R) and
+mu = lambda would be a hand theorem.  Tested (eta.py) by solving the dual twice,
+once unrestricted and once with eta >= 0 imposed, on 60 games and 1200 ordered
+pairs: the optimum is unchanged on 1187 and STRICTLY WORSE under eta >= 0 on 13.
+So the eta < 0 region genuinely carries content -- rarely (about 1%), but it
+cannot be discarded.  In all 13 the free optimum is still >= 3*lambda, as it
+must be.
+
+AND THE FALLBACK IS NOT A REDUCTION.  By LP strong duality the dual optimum
+EQUALS max over the core of (2y_p + y_q).  So "characterize the eta < 0 dual
+vertices and kill them against exactness" is not logically easier than (R) --
+it is (R), restated on the other side.  That does not make it a bad tactic: the
+dual vertices are finitely many shapes and enumeration is exactly what worked
+on the primal side.  But it should be pursued as an enumeration strategy, not
+as a simplification, and any claim that it "reduces" (R) would be wrong.
+
+NET EFFECT ON THE SPECIFICATION.  A proof of (R) must, in addition to the four
+constraints of round 4, engage a dual region that is active on roughly 1% of
+instances and cannot be reached by saturating the two caps of the chain
+simultaneously.  That is a fifth constraint, and the rarity is itself a hint:
+whatever exactness supplies is needed only on a thin set of games.
+
 --------------------------------------------------------------------------------
 TARGET 3 -- the other 26 configurations.  NOT ATTEMPTED.
 --------------------------------------------------------------------------------
@@ -137,7 +223,13 @@ STATUS
   Localization 2286 -> 60 -> ONE shape ..................... EXACT ENUMERATION
   Target 2  mu = lambda at n = 5 ........................... OPEN, reduced to
             the single inequality (R) with eta < 0
+  R4 / merge route for the residue ......................... REFUTED
+  chain attainment of a nested cap pair at n=5 ............. REFUTED
+  eta < 0 branch is inactive (would have closed (R)) ....... REFUTED (active ~1%)
+  exactness is load-bearing (balanced counterexample) ...... PROVED
   Target 3  the other 26 configurations .................... NOT ATTEMPTED
+            (and likely the wrong frame: if (R) falls, mu = lambda falls for
+             all configurations at once)
 
 FILES.  PROOF_A3.txt (target 1), verify_hand_cfg.py, reality2.py, covers.py +
 covers.json (target 2), and the three build_cfg*.py / reality_cfg.py attempts
