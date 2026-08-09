@@ -1411,6 +1411,36 @@ localization of exactness; "|B|=4 is special".
   recommendation: bank the specification as paper5 open problem 4 and
   hand (R) to a fresh attempt — three consecutive route-closures being
   the honest signal it needs a new idea.
+- (ii) WITHDRAWN + SPEC BANKED (task #33 closure): r23 confirmed the
+  lead's challenge on every point — the lambda-proper convention slip
+  was SYSTEMATIC (one line copied across four scripts); the balanced
+  witness satisfies mu = lambda under the paper's definition; the
+  zeroth filter is now a lemma (127/400 games out of regime, all
+  mu = lambda); everything structural survives BECAUSE the derivation
+  used the N-inclusive lambda all along (Lemma D's step IS T >= 5*
+  lambda).  (R) still tight in-regime (margin 0 at T=7).  In-regime
+  balanced witness: NONE in 20,000 samples, recorded as OPEN (weak
+  sampler; the right instrument is targeted construction over the
+  residual cover shape).  Revised constraints: (i) establish (R);
+  (iii) engage eta<0; (iv) no contraction; (v) no chain saturation;
+  (ii) struck pending witness.  Live thread handed forward: the FACE
+  y_p = f({p}) restriction (not covered by the contraction refutation;
+  the face is the core of a reduced game where R4 could bite).  The
+  specification is BANKED as paper5 open problem 4 (rewritten, with
+  the crossover as part one).  NEW SIBLING LAW (r23, from three
+  corrected claims with one shared cause): RE-READ THE DEFINITION YOUR
+  CODE IMPLEMENTS against the definition the paper states, especially
+  when you copy the line.
+- s(6) STAGE B CONTROLS ALL PASS (task #32): teeth 15/15 SAT and
+  15/15 REALIZABLE at n=6 (Theorem-A LP audits, no vertex enumeration)
+  — pipeline 2 SURVIVES THE DIMENSION JUMP, the round's key
+  validation; drop-the-hypothesis 69/69 SAT; main verdicts 65 UNSAT /
+  3 unknown / 0 SAT of 68 done.  All three unknowns cap-exact (600.0s
+  vs max genuine solve 183.7s — nothing between), from OTHER agents'
+  compute contending on the shared box; presumed artifacts per the
+  standing law, auto-rerun in isolation at 1200s before the chained
+  clean gate.  FLEET COMPUTE RULE adopted: while a solver stage runs,
+  other agents refrain from heavy multi-core work.
 - EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
   extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
   ~21,000 games, ZERO above either bound.  Region A (starved-Lmax

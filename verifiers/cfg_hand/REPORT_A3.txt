@@ -206,6 +206,57 @@ instances and cannot be reached by saturating the two caps of the chain
 simultaneously.  That is a fifth constraint, and the rarity is itself a hint:
 whatever exactness supplies is needed only on a thin set of games.
 
+================================================================================
+CORRECTION (2026-08-09, lead-caught).  THE LAMBDA CONVENTION.
+================================================================================
+WHAT WAS WRONG.  All four empirical scripts of rounds 3-5 (covers3.py, chain.py,
+eta.py, exactness_needed.py) computed lambda as a minimum over PROPER coalitions
+only.  paper5's lambda ranges over ALL nonempty S INCLUDING N, so the correct
+value is lambda = min(lambda_proper, T/5).  A systematic convention slip, in
+four places, mine.
+
+WHAT IT COSTS: CONSTRAINT (ii) IS WITHDRAWN.  My round-4 "balanced game with
+mu < lambda" had T = 8, lambda_proper = 5/3, mu = 8/5.  But T/5 = 8/5, so the
+true lambda is 8/5 = mu: the game satisfies mu = lambda and refutes nothing.
+It is also OUT OF REGIME (lambda_proper = 5/3 > 8/5 = T/5).  Verified.
+So "exactness is load-bearing" is NOT established.  What survives is only the
+SYNTACTIC observation that balanced-collection bookkeeping cannot derive the
+residual inequality (short by 3*lambda) -- a statement about one proof template,
+not about games.
+
+WHAT IT ADDS: THE FREE ZEROTH FILTER (the lead's, and it is a real lemma).
+If lambda_proper > T/5 then lambda = T/5, so g(N) = T - 5*lambda = 0 while
+g >= 0 on every proper S; the cover inequality sum beta_S g(S) >= g(N) = 0 is
+then automatic.  Hence mu = lambda holds for ANY game with a nonempty core
+outside the regime lambda_proper <= T/5.  Machine-checked: of 400 random exact
+games, 127 were out of regime and every one had mu = lambda.  This belongs at
+the FRONT of the decomposition, before Lemmas B/C/E1/D: the entire open problem
+lives in the regime lambda_proper <= T/5.
+
+WHAT SURVIVES UNCHANGED.  The structural derivation never used lambda_proper:
+the reduction needs g >= 0 on proper S (i.e. lambda <= lambda_proper) and
+g(N) = T - 5*lambda >= 0 (i.e. lambda <= T/5), and Lemma D explicitly uses
+T >= 5*lambda -- which is exactly the N-inclusion the slip dropped.  So
+Lemmas B, C, E1, D, the 2286 -> 60 -> one-shape localization, and the merge
+refutation are all unaffected.  Re-run with the correct lambda IN REGIME, (R)
+is STILL TIGHT: smallest margin 0, at T = 7.  The empirical claims of rounds 3
+and 5 were tested against lambda_proper >= lambda, i.e. a HARDER condition, so
+their "margin >= 0 always" conclusions hold a fortiori.
+
+AND IT OPENS A NEW QUESTION, which may matter more than what it closed.
+Hunting for a genuine in-regime witness -- balanced, non-exact,
+lambda_proper <= T/5, mu < lambda -- found NONE in 20,000 sampled balanced
+games.  If none exists, core membership alone proves (R) and exactness is NOT
+where the content of mu = lambda lives, which would reopen the localization of
+round 4 entirely.  I could not settle this: my sampler draws v coordinatewise
+at random and is poor at producing interesting balanced non-exact games, so
+absence here is weak evidence.  Recorded as OPEN, not as evidence either way.
+
+REVISED CONSTRAINT LIST for a proof of (R): (i) establish (R); (iii) engage the
+eta < 0 dual region, active on ~1% of instances; (iv) not factor through
+contraction; (v) not proceed by chain saturation.  Constraint (ii) is struck
+pending an in-regime witness.
+
 --------------------------------------------------------------------------------
 TARGET 3 -- the other 26 configurations.  NOT ATTEMPTED.
 --------------------------------------------------------------------------------
@@ -226,7 +277,9 @@ STATUS
   R4 / merge route for the residue ......................... REFUTED
   chain attainment of a nested cap pair at n=5 ............. REFUTED
   eta < 0 branch is inactive (would have closed (R)) ....... REFUTED (active ~1%)
-  exactness is load-bearing (balanced counterexample) ...... PROVED
+  exactness is load-bearing ................................ WITHDRAWN
+            (lambda-convention slip; see the CORRECTION section)
+  free zeroth filter: lambda_proper > T/5 => mu = lambda .... PROVED (lead's)
   Target 3  the other 26 configurations .................... NOT ATTEMPTED
             (and likely the wrong frame: if (R) falls, mu = lambda falls for
              all configurations at once)
