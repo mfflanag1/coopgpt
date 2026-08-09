@@ -1299,6 +1299,23 @@ localization of exactness; "|B|=4 is special".
   route.  Plan: Stage B (74 populated configs + n=6 controls) + Stage C
   gate (60-sample unknown-rate measurement at 600s) then full run or
   honest PARTIAL ("<= 2/3 except a named list").
+- HAND-A3 TARGET 2 PARTIAL (task #33 cont., verifiers/cfg_hand/
+  REPORT_A3.txt + covers.py/json): mu = lambda at n=5 REDUCED exactly to
+  "no fractional-cover vertex undercuts g(N)" (the Part-D obstruction,
+  now pinned).  Lemma B (balanced covers free — paper5 prop:balanced
+  recovered, dimension-free) + NEW Lemma E1 (single-excess-player
+  covers free via exactness at the complement, dimension-free) kill
+  2,076 of the 2,286 proper-cover vertices; 210 SURVIVORS, all with
+  support 2-3 and |E| in {2,3} — hand-sized, not yet hand-proved.
+  BLOCKER NAMED: self-similarity — the needed mu_E >= lambda is the
+  same question restricted to E; doesn't terminate alone.  FIVE-NESS
+  LEAD (flagged as lead, not result): survivors' sub-problems live on
+  <= 3 players where the n<=4 rigidity R4 is available — if the R4
+  route closes, that localization IS the "why five" answer, since both
+  killing lemmas are dimension-free and only the surviving family's
+  support size depends on n.  Bonus: independent reproduction of the
+  archived 2287 cover-vertex count (2286 proper-only + the trivial
+  beta_N cover; conventions reconciled, no discrepancy).
 - EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
   extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
   ~21,000 games, ZERO above either bound.  Region A (starved-Lmax

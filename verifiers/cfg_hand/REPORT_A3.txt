@@ -1,0 +1,125 @@
+================================================================================
+TASK #33 -- THE HAND-A3 CORE
+Target 1: DONE (hand theorem).   Target 2: PARTIAL, with a sharp localization.
+Target 3: not attempted.
+================================================================================
+
+--------------------------------------------------------------------------------
+TARGET 1 -- CFG's f({j}) >= T/8 BY HAND.  CRACKED.
+--------------------------------------------------------------------------------
+Full proof in PROOF_A3.txt; verified by verify_hand_cfg.py and reality2.py.
+Reported and archived by the lead at verifiers/cfg_hand/.  One page, no vertex
+enumeration, no 354 pinning-dual vertices, no catalogue, and it does not use
+A3's hard direction -- only A2 (mu <= lambda, true for all games).
+
+Summary of the mechanism: dualizing the pinning gives a certificate of cost at
+most cA; core membership of Lmin forces its cost to be at least cA, because
+2(rho - mu) = 1 - 5mu EXACTLY; so the certificate is squeezed to exact
+optimality, hence every coalition it uses is a cap of Lmin; and a cap of Lmin
+can never touch the two non-starved poor players more often than the rich pair
+(the key lemma, from core membership of Lmax).  The load count then fails by
+exactly 2.  The constant 1/8 appears in one line only and is sharp: at
+mu = T/8 the key lemma fails at the single shape (a,b,eps) = (1,2,0), realized
+in paper5's own extremal game.
+
+--------------------------------------------------------------------------------
+TARGET 2 -- mu = lambda AT n = 5 BY HAND.  PARTIAL.
+--------------------------------------------------------------------------------
+Not proved.  What is delivered is a reduction that turns the theorem into a
+finite, explicitly enumerated question, plus two lemmas that remove 91% of it.
+The residue is 210 objects with support 2 or 3, described exactly below.
+
+THE REDUCTION (proved).  mu = max{t : exists y in Core, y >= t*1}.  Put
+u = y - t*1 and g_t(S) = f(S) - t|S|.  Nonnegativity of u forces g_t >= 0, i.e.
+t <= lambda -- which is A2, recovered.  At t = lambda, writing g := g_lambda >= 0
+and g(N) := T - n*lambda,
+
+      mu = lambda   <=>   max{ u(N) : u >= 0, u(S) <= g(S), S proper } >= g(N),
+
+and by LP duality the max is a min over FRACTIONAL COVERS -- beta >= 0 on
+proper coalitions with load c_k := sum_{S ni k} beta_S >= 1 for every k.  Hence
+
+      mu = lambda   <=>   sum_S beta_S g(S)  >=  g(N)
+                          for every vertex beta of the cover polyhedron.   (C)
+
+This is the precise form of the "one coalition versus a fractional cover"
+obstruction that records/S5PROOF.txt Part D named and could not pin down: the
+floor level is certified by ONE cap exactly when no fractional cover of the
+player set undercuts g(N).
+
+LEMMA B (balanced covers are free; any n, any game with a nonempty core).
+If c_k = 1 for every k then for any core point y,
+      sum_S beta_S g(S) >= sum_k c_k (y_k - lambda) = sum_k (y_k - lambda) = g(N),
+using f(S) >= y(S).  So a balanced cover can never witness failure.
+PROOF NOTE: the first step is f(S) >= y(S) summed with weights beta; the second
+is c_k = 1.
+
+LEMMA E1 (single excess player).  Let E := {k : c_k > 1}.  The general bound
+reads sum_S beta_S g(S) >= sum_k c_k(y_k - lambda), so (C) holds as soon as
+some core point y has y_k >= lambda for every k in E, since then
+sum_k (c_k - 1)(y_k - lambda) >= 0 termwise.  If |E| = 1, say E = {k}, such a y
+exists: lambda <= f({k}) and exactness at {k} supplies a core point attaining
+f({k}).  So every vertex with |E| = 1 is free.
+
+WHAT SURVIVES (covers.py, exact rational vertex enumeration at n = 5):
+      vertices of the cover polyhedron          2286
+        balanced, killed by Lemma B             1291
+        |E| = 1, killed by Lemma E1              785
+        REMAINING                                210      (9.2%)
+      remaining by (support size, |E|):
+        (2, 2): 30      (2, 3): 10      (3, 2): 170
+
+So the theorem reduces to 210 covers, every one of which uses only TWO or THREE
+coalitions and has an excess set of size 2 or 3.  That is a hand-sized family;
+it is not yet a hand proof.
+
+THE PRECISE BLOCKER.  For a surviving vertex the needed statement is: some core
+point is at or above lambda simultaneously on the excess set E, |E| in {2,3}.
+Equivalently, writing mu_E := max{t : exists y in Core, y_k >= t for k in E},
+one needs mu_E >= lambda.  That is the SAME question as the theorem, restricted
+from N to E -- the reduction is self-similar, and the induction does not
+terminate on its own because mu_E >= lambda is not implied by
+mu_{E'} >= lambda for smaller E'.  Breaking that self-similarity is exactly
+what a hand proof must do, and it is where I stopped.
+
+WHERE FIVE-NESS WOULD ENTER, on this evidence.  Not in Lemmas B or E1 -- both
+are dimension-free.  It can only enter through the surviving family, whose size
+and shape depend on n: at n = 5 the survivors have support at most 3, so the
+excess set and the support are both small enough that the self-similar
+sub-problem is over at most 3 players, where the n <= 4 rigidity theorem (R4)
+is available.  That is the concrete shape I would try next: show that a
+surviving cover's sub-problem on E is governed by a game on at most four
+players, where Lmin = Lmax and the floor question is trivial.  I did not verify
+that this closes; it is a lead, not a result.
+
+CROSS-CHECK ON AN ARCHIVED COUNT.  verifiers/a3check/coververt.py is recorded
+in the verifiers README as producing 2287 cover vertices; my enumeration gives
+2286.  These agree: a3check takes SETS = range(1, FULL+1), which INCLUDES the
+grand coalition, while the duality above ranges over PROPER coalitions only
+(the grand coalition's constraint is the efficiency equality, not a cap).  The
+one extra vertex is the trivial cover beta_N = 1.  Flagged so the two numbers
+are not later read as a discrepancy.
+
+--------------------------------------------------------------------------------
+TARGET 3 -- the other 26 configurations.  NOT ATTEMPTED.
+--------------------------------------------------------------------------------
+Conditional on target 2 in the assignment, and the budget went to target 1.
+
+--------------------------------------------------------------------------------
+STATUS
+--------------------------------------------------------------------------------
+  Target 1  thm:cfg by hand ................................ PROVED
+  Reduction (C): mu = lambda as a cover inequality ......... PROVED
+  Lemma B   balanced covers are free (any n) ............... PROVED
+  Lemma E1  single-excess-player covers are free ........... PROVED
+  Localization 2286 -> 210 ................................. EXACT ENUMERATION
+  Target 2  mu = lambda at n = 5 ........................... OPEN (210 covers)
+  Target 3  the other 26 configurations .................... NOT ATTEMPTED
+
+FILES.  PROOF_A3.txt (target 1), verify_hand_cfg.py, reality2.py, covers.py +
+covers.json (target 2), and the three build_cfg*.py / reality_cfg.py attempts
+that failed to sample a CFG game before I found paper5's extremal one -- kept
+rather than deleted, since the failure is informative: CFG is far too rare to
+harvest by naive sampling, and the canonical witness was already in the paper.
+All arithmetic exact; repo read-only; no commits.
+================================================================================
