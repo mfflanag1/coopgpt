@@ -251,8 +251,17 @@ Hostile questions:
     staged Lmax, displayed distance `553/825`, changed Lmin, and true distance
     `53/165`.  Independently inspect both exact games, both selection
     formulations, and all 24 pinning certificates.  Decide whether these
-    controls really establish that the simultaneous-split bridge must couple
-    both full staged packets.
+    controls establish only that neither fixed one-sided packet is universal,
+    rather than the stronger and now-withdrawn claim that both packets must be
+    coupled inside every simultaneous-split support type.
+17. Reproduce the fast structural checks in
+    `positive_packet_ablation_census.json`, then rerun the expensive census if
+    resources permit.  Confirm that all 1,659 positive refinements are decided,
+    that the Lmin-only and Lmax-only SAT sets have sizes 38 and 257, and that
+    their intersection is empty.  Hostilely test the proposed handover rule:
+    choose Lmax for rich-player Lmax isolation or the `(1,1,2,2)` first-high-
+    block exception, and Lmin otherwise.  Treat this as a separator of solver
+    verdicts and a human-proof target, not as independent proof evidence.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -278,6 +287,14 @@ python3 coopgames/verifiers/s6/audit_positive_two_sided_ablation.py \
   --output /tmp/positive-two-sided-current.json
 cmp coopgames/verifiers/s6/positive_two_sided_ablation_audit.json \
   /tmp/positive-two-sided-current.json
+python3 coopgames/verifiers/s6/audit_positive_packet_ablation_census.py \
+  --output /tmp/positive-packet-census-current.json
+cmp coopgames/verifiers/s6/positive_packet_ablation_census.json \
+  /tmp/positive-packet-census-current.json
+
+# Expensive: recomputes all 3,318 one-sided solver instances (30 s cap each).
+python3 coopgames/verifiers/s6/audit_positive_packet_ablation_census.py \
+  --recompute --output /tmp/positive-packet-census-recomputed.json
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 

@@ -531,7 +531,7 @@ the already-audited hand-net exclusions.  The exact script independently
 guards every level assignment, local sign, triple equation, and direction
 blocker enumeration.
 
-### Both staged packets are necessary for simultaneous splits
+### Simultaneous splits have a disjunctive one-sided handover
 
 The one-split proof does not mean that the positive tangent theorem is a
 one-sided Lmin statement.  The exact audit
@@ -556,14 +556,41 @@ all twelve per-player pinning certificates for each reconstructed game.
 Thus the omitted-packet failures are not spurious nonexact pairs.  Exact
 closure preserves the fully certified side and repairs the distance by moving
 precisely the uncertified side.  Conversely, restoring both packets makes the
-corresponding support type UNSAT.  The missing structural condition is
-therefore now exact:
+corresponding support type UNSAT.  These two controls show that no *fixed*
+choice of one staged packet works throughout the neighborhood.  They do not
+show that both packets must be coupled within a single support type.
 
-> simultaneous splits require a genuinely **two-sided coupling of the full
-> staged Lmin and Lmax packets**.
+The exhaustive audit `audit_positive_packet_ablation_census.py` supplies the
+sharper navigation result.  Among all 1,659 positive hand-net refinements, 38
+remain SAT with only the full Lmin packet and 257 remain SAT with only the full
+Lmax packet.  There are no unknown verdicts and, crucially, the two SAT sets
+are disjoint.  Conditional on this solver census, every refinement is already
+contradictory under at least one complete one-sided packet.
 
-Neither first-stage packets, critical triple geometry, the full Lmin packet
-alone, nor the full Lmax packet alone suffices.
+The finite handover even has a short separator.  Let `r` be the rich player.
+Choose the full Lmax packet if
+
+1. `r` is alone in its Lmax stratum; or
+2. the Lmax composition is `(1,1,2,2)` and `r` lies in the first size-two
+   high block.
+
+Choose the full Lmin packet otherwise.  All 38 Lmin-only false survivors lie
+in the first case of this rule (32 isolated and six exceptional early ties),
+while all 257 Lmax-only false survivors lie in the second case.  Hence the
+chosen packet is UNSAT for all 1,659 audited refinements.  The rule selects
+Lmax in 339 configurations and Lmin in 1,320.
+
+This is not yet a human simultaneous-split theorem: the 1,659 one-sided UNSAT
+verdicts are not rational infeasibility certificates.  It replaces the former
+``couple both packets'' target with a more structured obligation:
+
+> prove directly that rich-player Lmax isolation (including the one early-tie
+> boundary) activates an Lmax contradiction, and that sharing the other rich
+> Lmax strata activates an Lmin contradiction.
+
+Neither first-stage packets nor critical-triple geometry alone suffices, and
+neither full packet is universal.  But the complete packets may hand off by
+support geometry rather than interact algebraically in every configuration.
 
 This still does **not** reduce simultaneous splits to one split.  The tangent
 graph of a piecewise-linear lexicographic selection need not be convex, so a
@@ -691,6 +718,10 @@ python3 coopgames/verifiers/s6/audit_positive_two_sided_ablation.py \
   --output /tmp/positive-two-sided-current.json
 cmp coopgames/verifiers/s6/positive_two_sided_ablation_audit.json \
   /tmp/positive-two-sided-current.json
+python3 coopgames/verifiers/s6/audit_positive_packet_ablation_census.py \
+  --output /tmp/positive-packet-census-current.json
+cmp coopgames/verifiers/s6/positive_packet_ablation_census.json \
+  /tmp/positive-packet-census-current.json
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \

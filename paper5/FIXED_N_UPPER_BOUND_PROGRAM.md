@@ -218,25 +218,33 @@ dimension-free spectral lower bound for the hybrid overlap.  That bound is
 sharp on all archived six-player equality cases and, together with null-player
 deletion, certifies the full archived six-player bank.
 
-The remaining bridge is no longer existence or sparsity.  It is a
-**strengthened two-packet inequality**: retain the individual
-tight-coalition inequalities from the Lmax over-cover and the full Lmin packet
-simultaneously, rather than only their weighted spectral aggregates, and prove
-that their joint incidence geometry forces `(H_6)`.  The audit in
+The remaining bridge is no longer existence or sparsity.  The audit in
 `TWO_PACKET_EXACTIFICATION_BOUNDARY.md` proves that replacing the full Lmin
 packet by its aggregate first-stage under-cover is insufficient: an abstract
 pair then reaches overlap `1/2`, and only the missing staged Lmin information
 repairs it under singleton exactification.  A finite-support route remains
 available because the full certificates have linear support.
 
+For the positive six-player equality neighborhood, the newest exhaustive
+ablation census changes the immediate proof target.  The 38 refinements that
+survive with only the full Lmin packet and the 257 that survive with only the
+full Lmax packet are disjoint.  A short rich-player-stratum rule chooses an
+UNSAT one-sided packet on every one of the 1,659 audited refinements: Lmax when
+the rich player is isolated in its Lmax stratum (plus one `(1,1,2,2)` early-tie
+boundary), and Lmin otherwise.  Thus a within-type hybrid coupling inequality
+may be unnecessary here.  The high-value human target is now a **one-sided
+handover lemma** proving this dichotomy without contingency-table enumeration.
+This remains conditional solver navigation, not a proof of `(H_6)`.
+
 There is now also an exact computational route that retains the full staged
 information without 62 coalition-attainment witnesses.  The core-closure lemma
 in `CORE_CLOSURE_REDUCTION.md` shows that six singleton-attaining core points
 are enough: closing the resulting core exactifies every coalition while
 preserving the core and both selections.  Initial hard-case timings improve
-from 600-second unknowns to subsecond UNSAT verdicts.  A complete census is
-still required, and solver verdicts must ultimately be converted into human
-inequalities or independently checkable rational certificates.
+from 600-second unknowns to subsecond UNSAT verdicts.  The configuration
+census is now complete at solver level, but its verdicts must ultimately be
+converted into human inequalities or independently checkable rational
+certificates.
 
 The first complete run of that route is recorded in
 `S6_GENERATOR_CENSUS_CHECKPOINT.md`: all 3,350 hand-net survivors have decisive
