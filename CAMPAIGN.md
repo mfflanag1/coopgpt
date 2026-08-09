@@ -1511,6 +1511,33 @@ localization of exactness; "|B|=4 is special".
   (index slip in the sweep, construction unaffected — caught because
   the sweep prints values, not booleans).  paper5 open problem 4 part
   one upgraded from two-point-verified to THEOREM.
+- (R) FRESH ATTEMPT, ROUND 1 (task #36, r24, verifiers/cfg_hand/r24/;
+  lead-audited both new proofs): the floor half at n=5 REDUCES TO ONE
+  FOUR-PLAYER STATEMENT.  New proved: the FACE IDENTITY (the slice
+  y_p = t of the core IS the core of an explicit 4-player game w_t,
+  with EQUALITY — the sharp difference from the refuted merge, which
+  enlarged); LEMMA M (t >= lambda implies 2t + lambda_w >= 3*lambda —
+  hand, machine-tight, drop-control negative); THEOREM(4) (the cover
+  residue is EMPTY at n <= 4, and Lemmas B/C/E1 need only (EXlam):
+  max y(E) >= lambda|E| — STRICTLY weaker than exactness; so every
+  <= 4-player core-nonempty game with (EXlam) has mu = lambda).
+  REDUCTION: (EXlam) for the EXTREME face w at t = f(p) implies (R)
+  implies mu = lambda; empirics 0/1875 violations, min margin 0 (sharp,
+  322 equality cases).  All five constraints respected, incl. (ii)
+  consumed at one identified point (the reduction FAILS on the
+  balanced witness at p=a, A=bc, margin -1/12).  Routes closed: the
+  interior slice t = lambda FAILS (the extreme slice is right — "I
+  would have bet the other way"); FACEq is (R) restated; candidate L*
+  false (witness); free-tool ceiling EXACTLY T + 2*lambda (the gap is
+  precisely one lambda).  Free facts: (R) can fail for AT MOST ONE
+  ORDER of each pair (both-orders sum >= 3f(pq)); every tight instance
+  has f(p) = lambda, f(pq) = 2*lambda, eta = 0.  "Why five" refined:
+  the slice-induction runs at 5 because the residue is empty at <= 4
+  and stops at 6 because the 5-player face's residue is the 60-shape.
+  A sampler that failed its own negative control was voided and kept
+  as a warning.  NO solver processes used (hand-rolled exact simplex,
+  selftested) — compute-rule compliant during Stage C.  Remaining gap,
+  named: does the face attain its cap at the lambda_w-argmin?
 - BOTH PROBES: THE HIGH-k WALL IS STRUCTURAL (headroom_A/B.json):
   the genuine Stage-B unknown (lmin(1,3,1,1)xlmax(2,2,2), POPULATED at
   observed 2/11) and the k=5 gate representative both cap-exact at
