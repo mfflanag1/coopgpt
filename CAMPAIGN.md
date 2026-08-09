@@ -1266,6 +1266,23 @@ localization of exactness; "|B|=4 is special".
   audit-the-unused-half failure mode, live within hours of adopting the
   law).  Checklist phantom resolved: "97 family checks" = the
   97 OK lines of families_closed.log, real but never printed.
+- NEW WAVE (Aug 8 late, tasks #32-#34): HAND-A3 CORE CRACKED, TARGET 1
+  (task #33, verifiers/cfg_hand/): paper5 thm:cfg (f({j}) >= T/8 in CFG)
+  is a HAND THEOREM — one page replacing 10,974 programs.  Four steps:
+  KEY LEMMA (an f-tight cap never meets {p1,p2} more than R — from core
+  membership of BOTH selections; six violating complement shapes, only
+  U={p_i}∪R uses mu<1/8, so the constant FALLS OUT and is sharp: at
+  mu=T/8 the lemma fails at S={j,p_other}, realized in thm:n5's extremal
+  game); dualized pinning (loads B >= 1+A on P, A on R); the pivot
+  2(rho-mu) = 1-5mu = c EXACTLY forces the certificate optimal and every
+  support set f-tight; weighted count 2+2A <= 2A.  Uses only A2 (easy
+  direction), cor:poorstarved, core membership, the pinning — NOT A3's
+  hard direction, NOT the catalogue.  Lead line-audited every step +
+  re-derived the six kills + ran the guards.  Paper5 thm:cfg proof
+  replaced (now 24pp); finite check demoted to archived confirmation.
+  Method notes for the other 26: cap-shape lemma + load count, nothing
+  CFG-specific but the numbers.  Targets 2-3 (mu=lambda by hand; the
+  other 26) not attempted.
 - PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
   whose converse is never invoked, a declared reference never cited, a

@@ -1124,22 +1124,79 @@ $(1,4)$ with the singleton stratum at zero, at player $j$.  Then
 \]
 \end{theorem}
 
-\begin{proof}[Proof, by finite exact check]
-Suppose $f(\{j\})<T/8$.  By the size bound from the $\Lmax$ vector's core
-membership, every other coalition has $f(S)/|S|\ge T/8$, so
-Theorem~\ref{thm:n5closed} places the leximin floor at
-$\mu=f(\{j\})<T/8$; and $j$ is poor, since were $j$ rich, then
-$f(\{j\})\ge\Lmin_j=(T-3\mu)/2=(T-3f(\{j\}))/2$ would give
-$f(\{j\})\ge T/5>T/8$, contradicting the failure hypothesis.  The $(3,2)$ hypothesis says the entire poor stratum is pinned at
-$\mu$; by LP duality that pinning is certified by one of $354$ vertices of a
-dual polyhedron involving no game data.  Fixing the certificate and an anchor
-coalition makes everything linear in $(v,\mu)$, and all $10{,}974$ resulting
-exact programs are infeasible.  An ablation shows the check already goes
-through from a strictly smaller hypothesis set --- core membership of the
-$\Lmax$ vector, core membership of the $\Lmin$ vector, and the pinning ---
-so a direct argument is available that uses neither the facet description
-nor the $M$-side of Theorem~\ref{thm:n5closed}.
+\begin{proof}
+Normalize $T=1$ and suppose $f(\{j\})<\tfrac18$.  The starved player $j$ is
+$\Lmin$-poor by Corollary~\ref{cor:poorstarved} below (whose two-line proof
+uses only Lemma~\ref{lem:anchors} and is independent of this theorem);
+write $P=\{j,p_1,p_2\}$ for the poor stratum and $R=\{r_1,r_2\}$ for the
+rich pair, with $x=\Lmin$ equal to $\mu$ on $P$ and
+$\varrho=(1-3\mu)/2$ on $R$, and $z=\Lmax$ equal to $0$ at $j$ and
+$\tfrac14$ elsewhere.  Call $S$ \emph{$f$-tight} when $x(S)=f(S)$,
+equivalently when $N\setminus S$ is $v$-tight at $x$.
+
+\emph{Step 0.}  $\lambda\le f(\{j\})<\tfrac18$, and $\mu\le\lambda$ holds
+for every game (the easy half of Theorem~\ref{thm:n5closed}, i.e.\
+Theorem~\ref{thm:floor}'s argument), so $\mu<\tfrac18$; hence
+$\varrho>\tfrac5{16}>\tfrac14$ and $c:=1-5\mu>0$.
+
+\emph{Step 1 (key lemma).}  Every $f$-tight $S$ satisfies
+$|S\cap\{p_1,p_2\}|\le|S\cap R|$.  Indeed, $U=N\setminus S$ is $v$-tight,
+and $z\in\core(v)$ gives, with $a=|U\cap P|$, $b=|U\cap R|$,
+$\varepsilon=[\,j\in U\,]$,
+\[
+ \mu a+\varrho b\ =\ x(U)=v(U)\ \le\ z(U)\ =\ \tfrac{a+b-\varepsilon}4 .
+\]
+The claim is $b\le a-\varepsilon$.  A violation leaves four shapes, each
+contradictory: $a-\varepsilon=0$ with $\varepsilon=0$ gives
+$\varrho\le\tfrac14$; with $\varepsilon=1$ it gives
+$\mu\le b(\tfrac14-\varrho)<0$; $a-\varepsilon=1$ with $\varepsilon=1$
+(so $b=2$) gives $1-\mu\le\tfrac34$, i.e.\ $\mu\ge\tfrac14$; and
+$a-\varepsilon=1$ with $\varepsilon=0$, $b=2$ --- the coalition
+$U=\{p_i\}\cup R$ --- gives $1-2\mu\le\tfrac34$, i.e.\ $\mu\ge\tfrac18$,
+against the failure hypothesis.  This last case is the only one that
+mentions $\tfrac18$.
+
+\emph{Step 2 (the pinning, dualized).}  That $P$ is the $\Lmin$ bottom
+stratum means every core point $y\ge\mu\one$ has $y(P)=3\mu$.
+Substituting $u=y-\mu\one$, this is
+$\max\{u(P):u\ge0,\ u(N)=c,\ u(S)\le h(S)\}=0$ with
+$h(S):=f(S)-\mu|S|\ge0$.  LP duality supplies $\alpha$ and $\beta\ge0$
+with $\alpha+B_k\ge[\,k\in P\,]$ for every player $k$, where
+$B_k=\sum_{S\ni k}\beta_S$, and $\alpha c+\sum_S\beta_Sh(S)\le0$.  Since
+$c>0$ and $h\ge0$, necessarily $\alpha\le0$; put $A=-\alpha\ge0$, so
+$B_k\ge1+A$ on $P$ and $B_k\ge A$ on $R$.
+
+\emph{Step 3 (exact tightness).}  $x\in\core(v)$ gives
+$h(S)\ge x(S)-\mu|S|=(\varrho-\mu)\,|S\cap R|$, so
+\[
+ \sum_S\beta_Sh(S)\ \ge\ (\varrho-\mu)(B_{r_1}+B_{r_2})\ \ge\
+ 2A(\varrho-\mu)\ =\ cA,
+\]
+using $2(\varrho-\mu)=1-5\mu=c$ \emph{exactly}.  Step 2 bounds the same
+sum by $cA$, so both inequalities are equalities: $B_{r_1}+B_{r_2}=2A$,
+and every support set of $\beta$ is $f$-tight.
+
+\emph{Step 4 (counting).}  The key lemma now applies to every support
+set, so
+$B_{p_1}+B_{p_2}=\sum_S\beta_S|S\cap\{p_1,p_2\}|
+\le\sum_S\beta_S|S\cap R|=2A$, while Step 2 demands
+$B_{p_1}+B_{p_2}\ge2+2A$.  Contradiction.
 \end{proof}
+
+\begin{remark}[sharpness, and the archived check]\label{rem:cfghand}
+The constant is not inserted; it falls out.  Exactly one line of the proof
+mentions $\tfrac18$ --- the coalition shape $U=\{p_i\}\cup R$ --- and at
+$\mu=T/8$ that inequality becomes an equality and the key lemma fails at
+$S=\{j,p_{i'}\}$.  This is realized: in the extremal game of
+Theorem~\ref{thm:n5} (which lies in the configuration with $\mu=T/8$) the
+$f$-tight sets $\{1,2\}$ and $\{2,4\}$ are precisely of that shape.  The
+proof also consumes strictly less than the original finite check did:
+neither the hard direction of Theorem~\ref{thm:n5closed} nor the facet
+description appears --- only core membership of the two selections, the
+floor bracketing $\mu\le\lambda$, Corollary~\ref{cor:poorstarved}, and the
+pinning.  The original check ($10{,}974$ exact programs over the $354$
+pinning-dual vertices) remains archived as an independent confirmation.
+\end{remark}
 
 \begin{corollary}[the pinned solution pair]\label{cor:cfg}
 In the configuration of Theorem~\ref{thm:cfg}, suppose in addition that the
@@ -1197,7 +1254,7 @@ supersedes that check by showing the branch is vacuous; the check remains
 archived as an independent confirmation.)
 \end{proof}
 
-Two calibrations.  First, the finite check is not removable in favour of
+Two calibrations.  First, the floor bound is not removable in favour of
 soft arguments: from Theorem~\ref{thm:n5closed} and core membership of both
 allocation vectors alone --- everything that is game-free --- the best
 obtainable bound on $\rho$ at five players is exactly $\tfrac32$, so every
@@ -1511,11 +1568,13 @@ a named game, and each is a refutation, so a single instance suffices.
 \paragraph{Proved by exhaustive finite check.}
 Theorem~\ref{thm:n5closed} ($\mu=\lambda$ and $M=\nu$ for every exact
 five-player game; $1142$ symmetry classes, each infeasible in exact rational
-arithmetic); Theorem~\ref{thm:cfg} with Corollary~\ref{cor:cfg}
-($f(\{j\})\ge T/8$ in the extremal configuration; $10{,}974$ programs);
+arithmetic), whose $M$-side Corollary~\ref{cor:cfg} consumes;
 and Theorems~\ref{thm:s5} and~\ref{thm:regime41} ($s(5)=1/2$ and the
 $(4,1)$ bound $1/3$; $2961$ configurations, two independent pipelines,
-machine-audited coverage).  Lemma~\ref{lem:anchors} and
+machine-audited coverage).  Theorem~\ref{thm:cfg} is now a \emph{hand}
+result (its one-page proof replaced the original $10{,}974$-program
+check, which remains archived as confirmation);
+Lemma~\ref{lem:anchors} and
 Corollary~\ref{cor:poorstarved} are hand results; Lemma~\ref{lem:staged} is
 a hand result derived independently twice within the program.
 The checks are proof dependencies; the corollary's remaining additional
@@ -1598,13 +1657,14 @@ review.
 \section*{Reproducibility note}
 
 Sections~2--4 and~6 are proved by hand and depend on no program.
-Theorems~\ref{thm:n5closed}, \ref{thm:cfg}, \ref{thm:regime41}
+Theorems~\ref{thm:n5closed}, \ref{thm:regime41}
 and~\ref{thm:s5} are proved by exhaustive
 finite exact-rational checks, described in their proofs; those checks are
 proof dependencies, archived in \texttt{../verifiers} with the
 theorem-to-driver map in its README (for Theorems~\ref{thm:regime41}
 and~\ref{thm:s5}, both pipelines, the coverage audit, and the full control
-suite).  The remaining
+suite).  Theorem~\ref{thm:cfg} is proved by hand; its superseded finite
+check and the hand proof's own symbolic guards are archived alongside.  The remaining
 programs are bug audits, not proof dependencies.  Exact rational programs in the companion repository
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full
