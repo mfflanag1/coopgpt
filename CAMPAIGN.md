@@ -1511,6 +1511,21 @@ localization of exactness; "|B|=4 is special".
   (index slip in the sweep, construction unaffected — caught because
   the sweep prints values, not booleans).  paper5 open problem 4 part
   one upgraded from two-point-verified to THEOREM.
+- THE n=5 BOUNDARY PRECISION (task #39 coda): the family's n=5 member
+  is the SAME CONFIGURATION as thm:n5's extremal game but a DIFFERENT
+  GAME — all 120 relabellings checked, 19 coalitions differ at best
+  alignment (n5_boundary.py).  CFG at n=5 is attained by at least two
+  non-isomorphic games; the family supplies one uniformly in n.  This
+  corrected the LEAD's splice at 32c7b97 ("is the extremal game
+  itself"): profile-match is not game-match — the law behind the
+  PART(2,2) and region-D artifacts, applied by r23 before the claim
+  shipped.  Also: r12's contention self-census came back clean (none
+  of the three non-s(6) processes was r12's; check repeatable).
+  r12's BANKING CAVEAT adopted as a package requirement: UNSAT-is-
+  sound covers the SOLVER, not the PIPELINE — the audit additionally
+  needs shard bookkeeping complete and disjoint (each of the 3,276 in
+  exactly one shard output, identifiers carried from triage32.json,
+  never reconstructed by position).
 - SIX-HOUR GOVERNANCE ROUND (r25 + r12): executor collision resolved
   (r22 keeps Stage C + probes; r25 owns diagnostic + VERDICT32; only
   r25 writes the package).  r25's re-analysis DEMOTED r22's
