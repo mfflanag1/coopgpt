@@ -1561,6 +1561,27 @@ localization of exactness; "|B|=4 is special".
   now and as THE POST-WINDOW COMPLETION METHOD for all unknowns and
   the unreached k>=5 classes.  Bank k<=3 confirmed.  Package split:
   r25 writes VERDICT32_S456.txt, never touching r22's VERDICT32.txt.
+- FINAL FREEZE (r25; post-audit rows follow the audited machine
+  pipeline but are formally post-audit — noted for honesty): the k<=3
+  residue is SEVEN, not 36.  The 23 never-tested: 21 decided in 244s
+  wall.  Then a SIX-SEED escalation over the 15 resistant converted 8
+  more — configurations that had survived 600s + three seeds still
+  convert at >50% with more seeds: THE LADDER WORKS BY WIDENING, NOT
+  LENGTHENING (the sharpest heavy-tail evidence yet).  FROZEN TOTALS:
+  k<=3 507/514 = 98.6% decided all-UNSAT; 1,133 verdicts, SAT COUNT
+  ZERO.  Deduplicated restart totals: Group A 5/5, Group B (k=5/6)
+  1/6, Group C 77/84 = 92%.  Item-zero integrity re-verified at
+  freeze (matched by identifier, 0 duplicates, 0 out-of-population,
+  gaps recorded as gaps).  The kill executed by inspected PID list.
+  GOVERNANCE REFINEMENT (r25 on r12's finding): the gate sample was
+  NOT skewed — the distributions track; the real lesson is that A
+  POOLED RATE DOES NOT TRANSFER TO A RUN ORDERED BY THE VARIABLE THAT
+  DRIVES IT, and post-heavy-tail the honest object is per-k
+  CONVERSION UNDER AN ATTEMPT BUDGET, not a rate at all.  THE
+  STANDING CLAIM, as framed: rho <= 2/3 holds for every configuration
+  decided — all 74 realized ones and 507 of 514 at k<=3 — with seven
+  named k<=3 configurations and the k>=4 classes outstanding, and a
+  method visibly closing the residue.  Not s(6) = 2/3.
 - s(6) AUDIT COMPLETE (r12, AUDIT_S6.txt in verifiers/s6/): NO FATAL,
   NO HIGH.  Item-0 bookkeeping CLEAN (994 entries, identity-carried,
   0 duplicates/0 out-of-population/0 SAT — the failure mode that

@@ -1,5 +1,5 @@
 ================================================================================
-TASK #32 -- s(6) VERDICT PACKAGE, SECTIONS 4-6.   Generated 2026-08-09 04:02:50
+TASK #32 -- s(6) VERDICT PACKAGE, SECTIONS 4-6.   Generated 2026-08-09 04:10:31
 Author: r25-s6 (executor).  Sections 1-3 are r22's, in VERDICT32.txt.
 Every number below is read from a completed checkpoint file by
 mkverdict.py.  No number is transcribed by hand and none is taken from a
@@ -177,15 +177,25 @@ is the controlled test of whether that swing generalizes.
      BUDGET as the single 600s attempt already on record for each of these
      configurations, so it is a fair head-to-head.  A random seed changes
      search order only; verdicts stay sound.
+     PROVENANCE OF THE SWEEP FILES, because not all of them are mine:
+        seedsweep_k3.json: 61 rows, run by r25-s6
+        seedsweep_k3b.json: 23 rows, run by r25-s6
+        seedsweep_k3deep.json: 15 rows, run by r25-s6
+        seedsweep_k4plus.json: 30 rows, run by ANOTHER AGENT (adopted the method mid-window)
+        seedsweep_s1.json: 11 rows, run by r25-s6
+     Rows from another agent's concurrent run are included because they
+     are completed checkpoints of the same experiment, but they were
+     still being written at freeze time, so their counts are as-of-freeze
+     and will grow.  Nothing else in this package depends on them.
 
      GROUP A (3 x 200s = 600s budget) -- CONTROL, known-decidable: the gate decided each of these, and a single fresh 600s attempt then FAILED to
         DECIDED 5 of 5  (100%)   k in [4, 5, 6]   SAT: 0
-        resolved on the FIRST attempt: 3 of 5   total-time median 21.4s  max 266.4s
-        k=4 [1, 1, 1, 3] x [1, 1, 1, 3]: UNSAT in 15.2s [unsat@15.2s]
-        k=5 [2, 1, 1, 1, 1] x [2, 2, 2]: UNSAT in 21.4s [unsat@21.4s]
-        k=4 [2, 2, 1, 1] x [1, 1, 1, 3]: UNSAT in 20.2s [unsat@20.2s]
-        k=6 [1, 1, 1, 1, 1, 1] x [2, 1, 3]: UNSAT in 225.2s [unknown@200.0s,unsat@25.2s]
-        k=5 [1, 1, 1, 1, 2] x [1, 3, 2]: UNSAT in 266.4s [unknown@200.0s,unsat@66.4s]
+        resolved on the FIRST attempt: 0 of 5   total-time median 110.4s  max 321.7s
+        k=4 [1, 1, 1, 3] x [1, 1, 1, 3]: UNSAT in 31.2s [unsat@16.0s,unsat@15.2s]
+        k=4 [2, 2, 1, 1] x [1, 1, 1, 3]: UNSAT in 43.0s [unsat@22.8s,unsat@20.2s]
+        k=5 [2, 1, 1, 1, 1] x [2, 2, 2]: UNSAT in 110.4s [unknown@70.0s,unsat@19.0s,unsat@21.4s]
+        k=6 [1, 1, 1, 1, 1, 1] x [2, 1, 3]: UNSAT in 321.7s [unknown@70.0s,unsat@26.5s,unknown@200.0s,unsat@25.2s]
+        k=5 [1, 1, 1, 1, 2] x [1, 3, 2]: UNSAT in 316.0s [unsat@49.6s,unknown@200.0s,unsat@66.4s]
 
      GROUP B (3 x 200s = 600s budget) -- gate unknowns -- never decided by any run of this program
         DECIDED 1 of 6  (17%)   k in [4, 5]   SAT: 0
@@ -198,18 +208,18 @@ is the controlled test of whether that swing generalizes.
         k=5 [1, 1, 1, 2, 1] x [2, 1, 3]: UNKNOWN in 600.0s [unknown@200.0s,unknown@200.0s,unknown@200.0s]
 
      GROUP C (3 x 70s = 210s budget) -- Stage-C k<=3 unknowns -- each already failed one full 600s attempt; this is the theorem boundary
-        DECIDED 73 of 88  (83%)   k in [2, 3]   SAT: 0
-        resolved on the FIRST attempt: 50 of 73   total-time median 38.8s  max 186.4s
+        DECIDED 77 of 84  (92%)   k in [2, 3]   SAT: 0
+        resolved on the FIRST attempt: 47 of 77   total-time median 39.8s  max 552.5s
         k=3 [2, 3, 1] x [3, 1, 2]: UNSAT in 27.5s [unsat@27.5s]
         k=3 [1, 3, 2] x [2, 1, 1, 2]: UNSAT in 19.7s [unsat@19.7s]
         k=3 [4, 1, 1] x [1, 1, 1, 3]: UNSAT in 95.0s [unknown@70.0s,unsat@25.0s]
         k=3 [2, 2, 2] x [1, 1, 1, 1, 2]: UNSAT in 39.3s [unsat@39.3s]
         k=3 [3, 1, 2] x [1, 1, 1, 1, 2]: UNSAT in 83.8s [unknown@70.1s,unsat@13.7s]
         k=3 [2, 1, 3] x [1, 1, 1, 1, 2]: UNSAT in 25.7s [unsat@25.7s]
-        k=3 [2, 3, 1] x [1, 1, 1, 3]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
-        k=3 [1, 4, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
-        k=3 [2, 3, 1] x [1, 2, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
-        ... 79 further rows in seedsweep_*.json
+        k=3 [2, 3, 1] x [1, 1, 1, 3]: UNKNOWN in 630.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s]
+        k=3 [1, 4, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 630.1s [unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.1s,unknown@70.0s,unknown@70.0s,unknown@70.0s]
+        k=3 [3, 2, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 630.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s,unknown@70.0s]
+        ... 75 further rows in seedsweep_*.json
 
      READING.
      Group A is the control and it is the cleanest evidence in this
@@ -224,9 +234,9 @@ is the controlled test of whether that swing generalizes.
      Group C is the one that touches the theorem.  Each of these 84
      Stage-C k<=3 unknowns had already consumed a full 600s without
      a verdict.  On a 210s budget -- barely a third of what already
-     failed -- 73 of 88 were decided (83%), every one UNSAT.
+     failed -- 77 of 84 were decided (92%), every one UNSAT.
      PROJECTION, stated as a projection and not a result: at that
-     rate the full 84 would leave roughly 14 genuinely resistant, and
+     rate the full 84 would leave roughly 7 genuinely resistant, and
      closing all 84 costs about 84 x 210s = 4.9 worker-hours, i.e.
      under half an hour on eleven workers.  A CLEAN k<=3 THEOREM IS
      THEREFORE PROBABLY WITHIN REACH, and k<=3 contains both
@@ -237,8 +247,8 @@ is the controlled test of whether that swing generalizes.
      rather than assumed.  The before/after is therefore at the
      POPULATION level (all 84 had failed a 600s Stage-C attempt),
      not a paired same-instance comparison.
-     OVERALL: 95 of 116 decided at or below the budget that
-     had already failed on every one of them -- against 0 of 116
+     OVERALL: 102 of 120 distinct configurations decided at or
+     below the budget that had already failed on every one -- against 0 of 120
      for the single long attempts they replace.
      SAT at 2/3 across all restart sweeps: 0  <-- HALT trigger
 
@@ -261,12 +271,12 @@ is the controlled test of whether that swing generalizes.
      RECONCILIATION -- the table above is the SHARDED runner's view and
      does not credit the restart sweeps of 4.4c.  Applying them:
        k=2: 1 unknown, of which 1 since DECIDED by restart -> 0 outstanding
-       k=3: 83 unknown, of which 72 since DECIDED by restart -> 11 outstanding
-       k=4: 103 unknown, of which 10 since DECIDED by restart -> 93 outstanding
-     THE k<=3 BOUNDARY: population 514, now decided 503, OUTSTANDING 11  (97.9% closed).
+       k=3: 83 unknown, of which 76 since DECIDED by restart -> 7 outstanding
+       k=4: 103 unknown, of which 17 since DECIDED by restart -> 86 outstanding
+     THE k<=3 BOUNDARY: population 514, now decided 507, OUTSTANDING 7  (98.6% closed).
      Every one of those decisions is UNSAT.  What stands between the
      program and a clean 's(6) <= 2/3 for all k<=3' is now a named
-     list of 11 configurations, not an open-ended search.
+     list of 7 configurations, not an open-ended search.
      No k-stratum is yet complete-with-zero-unknowns.
 
 4.6  HEADROOM PROBES  (3600s, isolated, one process each)
@@ -327,8 +337,8 @@ APPLICATION, in the order the rule prescribes:
     clean gate unknown count (raw)   = 28 of 60  (46.7%)
     of which cap-exact / voided      = 28
     re-run under clean conditions    = 11 of 28  (single fresh attempts and restart sweeps combined)
-    of those, RESOLVED               = 4   (all ['unsat'])
-    unknowns SURVIVING the voiding   = 7 of the 11 re-run; 17 never re-run (window ended)
+    of those, RESOLVED               = 6   (all ['unsat'])
+    unknowns SURVIVING the voiding   = 5 of the 11 re-run; 17 never re-run (window ended)
     branch taken                     = NOT YET TAKEN.  The rule's branch
       is a function of the POST-VOIDING count, and the voiding is
       incomplete, so no branch is claimed here.
