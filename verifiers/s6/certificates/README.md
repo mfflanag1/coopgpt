@@ -2,7 +2,7 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for nine
+These files exercise an independently checked proof-object path for ten
 six-player generator-normal-form queries.  They do not replace the complete
 3,350-configuration census and do not by themselves prove the global bound.
 
@@ -17,6 +17,7 @@ six-player generator-normal-form queries.  They do not replace the complete
 | `equality_no_triple_index2236.smt2` | 2236 | distance `=2/3`, no tight triple of Lmax-top players | UNSAT |
 | `equality_subthird_index1408.smt2` | 1408 | distance `=2/3`, Lmax over-cover dispersion `<1/3` | UNSAT |
 | `equality_subthird_index2236.smt2` | 2236 | distance `=2/3`, Lmax over-cover dispersion `<1/3` | UNSAT |
+| `positive_lmax_direction_index0040.smt2` | 40 | positive critical residue plus a blocker to direction `(0,0,0,-1,0,1)` | UNSAT |
 
 Indices 1408 and 2236 are the two equality-feasible stratum/table
 configurations left by the complete staged census:
@@ -56,6 +57,15 @@ but the strict-bound lane remains representative rather than exhaustive.
 A paper theorem still requires either checked proof objects for all excluded
 support/configuration types or a human structural reduction that makes most
 of those objects unnecessary.
+
+The survivor-40 control is the first proof object for the new one-sided
+handover.  Its base critical-triple system is SAT.  The added formula says
+that at least one coalition blocks the displayed lexicographically improving
+Lmax direction, with the blocker required to be eligible at `z` for `x` and
+for all six singleton-exactness witnesses.  Its UNSAT proof therefore checks
+one genuinely nonvacuous direction argument.  It does **not** certify the
+other 108 single-direction rows, the 230 rows killed by critical algebra, or
+any Lmin direction-menu row.
 
 ## Pinned checker sources
 
@@ -106,4 +116,5 @@ formula/proof hashes and recorded Ethos verdicts:
 
 ```text
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
+python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 ```

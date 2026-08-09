@@ -140,6 +140,11 @@ verifiers/s6/certificates/README.md
 verifiers/s6/export_core_closure_smt.py
 verifiers/s6/replay_core_closure_smt.py
 verifiers/s6/verify_frozen_certificates.py
+verifiers/s6/export_positive_handover_smt.py
+verifiers/s6/verify_positive_handover_certificates.py
+verifiers/s6/certificates/positive_lmax_direction_index0040.smt2
+verifiers/s6/certificates/positive_lmax_direction_index0040.cpc
+verifiers/s6/certificates/positive_lmax_direction_index0040.json
 ```
 
 Hostile questions:
@@ -273,6 +278,13 @@ Hostile questions:
     `1_I-e_n-(|I|-1)e_r`, the all-directions-blocked quantifier, and the two
     exceptional tables 2597 and 3237.  Treat these exact blocker UNSAT verdicts
     as a compressed proof-discovery map, not as independent proof evidence.
+19. Inspect the survivor-40 positive-handover proof object independently.
+    Confirm that the base critical system is feasible, direction
+    `(0,0,0,-1,0,1)` lexicographically improves Lmax in that support type,
+    and the blocker disjunction has the correct inequality direction for `x`
+    and all six singleton witnesses.  Ethos checks this exact CPC body, but it
+    covers only one of the 109 single-direction Lmax rows and none of the 230
+    critical-algebra rows; do not extrapolate it to the complete branch.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -283,6 +295,7 @@ cmp coopgames/verifiers/s6/two_packet_exactification_audit.json \
   /tmp/two-packet-current.json
 python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
+python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py

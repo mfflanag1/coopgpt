@@ -757,6 +757,7 @@ From the repository root:
 ```bash
 python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
+python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py

@@ -101,6 +101,10 @@ def smt_term(term: z3.ExprRef) -> str:
     operator = str(term.decl().name())
     if operator == "if":
         operator = "ite"
+    # Z3 permits unary ``(+ x)``/``(* x)`` nodes, while strict SMT-LIB and
+    # cvc5 require these operators to have at least two arguments.
+    if operator in {"+", "*"} and term.num_args() == 1:
+        return smt_term(term.arg(0))
     return f"({operator} {' '.join(smt_term(child) for child in term.children())})"
 
 
