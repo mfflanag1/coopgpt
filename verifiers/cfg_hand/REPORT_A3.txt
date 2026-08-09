@@ -61,36 +61,56 @@ sum_k (c_k - 1)(y_k - lambda) >= 0 termwise.  If |E| = 1, say E = {k}, such a y
 exists: lambda <= f({k}) and exactness at {k} supplies a core point attaining
 f({k}).  So every vertex with |E| = 1 is free.
 
-WHAT SURVIVES (covers.py, exact rational vertex enumeration at n = 5):
-      vertices of the cover polyhedron          2286
-        balanced, killed by Lemma B             1291
-        |E| = 1, killed by Lemma E1              785
-        REMAINING                                210      (9.2%)
-      remaining by (support size, |E|):
-        (2, 2): 30      (2, 3): 10      (3, 2): 170
+LEMMA C (equal excess).  If the excess weights w_k = c_k - 1 are CONSTANT on E,
+the requirement is y(E) >= lambda|E| for some core point, and
+max_y y(E) = f(E) >= lambda|E| by the definition of lambda.  Free.
+  COROLLARY (all support-2 vertices are free).  A support-2 vertex has
+  S1 u S2 = N with A = S1\S2, B = S2\S1 nonempty, beta = (1,1), and
+  E = S1 n S2 carrying c = 2 throughout.  Directly: the cover inequality reads
+  v(A) + v(B) <= T - lambda|C|, and v(A)+v(B) <= T - max_y y(C) = T - f(C)
+  <= T - lambda|C|.
 
-So the theorem reduces to 210 covers, every one of which uses only TWO or THREE
-coalitions and has an excess set of size 2 or 3.  That is a hand-sized family;
-it is not yet a hand proof.
+WHAT SURVIVES (covers.py, covers2.py, covers3.py; exact rational enumeration):
+      cover vertices at n = 5                        2286
+        balanced, killed by Lemma B                  1291
+        |E| = 1, killed by Lemma E1                   785
+        equal excess, killed by Lemma C               150
+        REMAINING                                      60
+      and the 60 are ONE SHAPE up to relabelling (machine-confirmed):
+        S1 = {p,x},  S2 = {p,q,y},  S3 = {p,q,z},  beta = (1,1,1),
+        loads p:3, q:2, x,y,z:1, so E = {p,q} with excess weights (2,1).
+      60 = 5*4*3, the number of labellings.
 
-THE PRECISE BLOCKER.  For a surviving vertex the needed statement is: some core
-point is at or above lambda simultaneously on the excess set E, |E| in {2,3}.
-Equivalently, writing mu_E := max{t : exists y in Core, y_k >= t for k in E},
-one needs mu_E >= lambda.  That is the SAME question as the theorem, restricted
-from N to E -- the reduction is self-similar, and the induction does not
-terminate on its own because mu_E >= lambda is not implied by
-mu_{E'} >= lambda for smaller E'.  Breaking that self-similarity is exactly
-what a hand proof must do, and it is where I stopped.
+So the whole of mu = lambda at n = 5 reduces to ONE inequality:
 
-WHERE FIVE-NESS WOULD ENTER, on this evidence.  Not in Lemmas B or E1 -- both
-are dimension-free.  It can only enter through the surviving family, whose size
-and shape depend on n: at n = 5 the survivors have support at most 3, so the
-excess set and the support are both small enough that the self-similar
-sub-problem is over at most 3 players, where the n <= 4 rigidity theorem (R4)
-is available.  That is the concrete shape I would try next: show that a
-surviving cover's sub-problem on E is governed by a game on at most four
-players, where Lmin = Lmax and the floor question is trivial.  I did not verify
-that this closes; it is a lead, not a result.
+      (R)     max_{y in Core} ( 2 y_p + y_q )  >=  3*lambda
+
+for every ordered pair p != q.  Equivalently
+f({p,x}) + f({p,q,y}) + f({p,q,z}) >= T + 3*lambda, equivalently
+v({q,y,z}) + v({x,z}) + v({x,y}) <= 2T - 3*lambda.
+
+LEMMA D (half of (R), free).  Dualizing max sum_k w_k y_k over
+Core = {y >= 0, y(N) = T, y(S) <= f(S)} gives
+      min { eta*T + sum_S gamma_S f(S) : gamma >= 0, eta + Gamma_k >= w_k },
+with Gamma_k = sum_{S ni k} gamma_S.  If eta >= 0 then, using f(S) >= lambda|S|,
+      eta*T + sum_S gamma_S f(S) >= eta*T + lambda*sum_k Gamma_k
+                                 >= eta*T + lambda*sum_k (w_k - eta)
+                                 =  3*lambda + eta*(T - 5*lambda)  >=  3*lambda,
+because T >= 5*lambda.  So (R) CAN ONLY FAIL THROUGH A DUAL OPTIMUM WITH
+eta < 0.  That is the failure boundary, and it is where I stopped.
+
+(R) IS SHARP, NOT SLACK.  Over 250 random genuine exact five-player games and
+all 20 ordered pairs (p,q) each, the margin max(2y_p+y_q) - 3*lambda is
+nonnegative always and EQUALS ZERO somewhere.  So (R) is a real constraint that
+the games meet exactly -- which is why it is the one surviving all four free
+lemmas, and why no cruder bound will dispose of it.
+
+WHERE FIVE-NESS WOULD ENTER, on this evidence.  Lemmas B, C, E1 and D are all
+dimension-free.  Five-ness can only be in the residue, and the residue is now a
+single named shape whose complement structure -- one 3-set and two 2-sets -- is
+specific to n = 5: at larger n the same vertex family has more members and more
+shapes.  A hand proof of (R), or a demonstration that its eta < 0 branch is
+empty at n = 5 but not at n = 6, IS the "why five" answer.
 
 CROSS-CHECK ON AN ARCHIVED COUNT.  verifiers/a3check/coververt.py is recorded
 in the verifiers README as producing 2287 cover vertices; my enumeration gives
@@ -112,8 +132,11 @@ STATUS
   Reduction (C): mu = lambda as a cover inequality ......... PROVED
   Lemma B   balanced covers are free (any n) ............... PROVED
   Lemma E1  single-excess-player covers are free ........... PROVED
-  Localization 2286 -> 210 ................................. EXACT ENUMERATION
-  Target 2  mu = lambda at n = 5 ........................... OPEN (210 covers)
+  Lemma C   equal-excess covers are free ................... PROVED
+  Lemma D   the eta >= 0 half of the residual (R) .......... PROVED
+  Localization 2286 -> 60 -> ONE shape ..................... EXACT ENUMERATION
+  Target 2  mu = lambda at n = 5 ........................... OPEN, reduced to
+            the single inequality (R) with eta < 0
   Target 3  the other 26 configurations .................... NOT ATTEMPTED
 
 FILES.  PROOF_A3.txt (target 1), verify_hand_cfg.py, reality2.py, covers.py +

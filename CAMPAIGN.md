@@ -1316,6 +1316,21 @@ localization of exactness; "|B|=4 is special".
   support size depends on n.  Bonus: independent reproduction of the
   archived 2287 cover-vertex count (2286 proper-only + the trivial
   beta_N cover; conventions reconciled, no discrepancy).
+- HAND-A3 TARGET 2, ROUND 2 (task #33 cont.): mu = lambda at n=5 is now
+  EQUIVALENT TO ONE INEQUALITY — (R): max over the core of 2y_p + y_q
+  >= 3*lambda, for every ordered pair (equivalence verified by the
+  lead: mu=lambda supplies a uniform-lambda core point, giving (R)
+  trivially; (R) frees the last vertices).  New dimension-free Lemmas C
+  (equal excess: y(E) >= lambda|E| via f(E)) and D (the dual can only
+  beat 3*lambda through eta < 0 — the located failure boundary) join
+  B/E1; the 2,286 cover vertices reduce 1291+785+150 to 60 SURVIVORS =
+  ONE SHAPE up to relabelling (S1={p,x}, S2={p,q,y}, S3={p,q,z}; loads
+  3,2,1,1,1).  (R) is SHARP: margin zero somewhere on 250 random exact
+  games — no crude bound disposes of it.  "Why five" in print-ready
+  form: prove (R) at n=5, or show its eta<0 branch empty at n=5 and
+  nonempty at n=6.  Config-free — if (R) falls, ALL 26 residue
+  configurations of the s(5) distillation become corollaries (target 3
+  retired as a separate frame).
 - EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
   extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
   ~21,000 games, ZERO above either bound.  Region A (starved-Lmax
