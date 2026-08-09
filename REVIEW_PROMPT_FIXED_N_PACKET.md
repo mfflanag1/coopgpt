@@ -69,3 +69,40 @@ Please separate your verdict into: proved as written; repairable gap; false;
 novelty unclear; and prior art.  The most important outcome is whether the
 packet LP theorem is correct and whether the hybrid-overlap reduction exposes
 a plausible route to a genuine fixed-dimension theorem.
+
+## Addendum: sparse Lmax over-cover checkpoint
+
+Also audit the subsequent files:
+
+```text
+paper5/LMAX_OVERCOVER_COUPLING.md
+verifiers/divergence/audit_lmax_overcover.py
+verifiers/divergence/lmax_overcover_audit.json
+```
+
+In particular, check:
+
+1. every sign in the first-stage Lmax dual and the objective identity
+   `M=sum lambda_A v(A)-eta T`;
+2. the `n`-coalition support bound and its preservation when dispersion
+   `theta=min max alpha_i` is optimized;
+3. the deduction `alpha.Lmin>=M` and the spectral excess condition (4);
+4. the direction of the rearrangement inequality used in `(SA)`;
+5. the first-stage Lmin under-cover companion `(UC)`, including its signs and
+   `n-1` support count;
+6. whether the five equality certificates really justify describing the
+   three-player dispersed anchor as a common equality geometry;
+7. the precise remaining gap: the archive audit is not an exhaustive
+   six-player theorem, and the abstract spectra in §6 rule out silently
+   replacing exact-game realizability by arbitrary equal-sum vectors.
+
+Reproduce the new artifact with:
+
+```bash
+python3 coopgames/verifiers/divergence/audit_lmax_overcover.py \
+  --output /tmp/lmax-overcover-current.json \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json
+cmp coopgames/verifiers/divergence/lmax_overcover_audit.json \
+  /tmp/lmax-overcover-current.json
+```

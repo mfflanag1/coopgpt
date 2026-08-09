@@ -211,8 +211,16 @@ is the comparison-cut form obtained by taking
    `G` family refutes such bounds from `n=9`).
 
 A successful proof must instead use exactness to couple the two different
-lexicographic normal systems.  The natural next object is a *paired cover*:
-one cover from the bottom strata of `Lmin` and one from the top strata of
-`Lmax`, evaluated on the same hybrid cut.  The one-packet theorem supplies a
-linear-size representative on the `Lmin` side; an analogous sparse
-over-covering representative for the `Lmax` side is the missing bridge.
+lexicographic normal systems.  The missing Lmax object has now been
+constructed in `LMAX_OVERCOVER_COUPLING.md`: a dispersion-optimal top
+over-cover has a linear-size tight-coalition representation and yields a
+dimension-free spectral lower bound for the hybrid overlap.  That bound is
+sharp on all archived six-player equality cases and, together with null-player
+deletion, certifies the full archived six-player bank.
+
+The remaining bridge is no longer existence or sparsity.  It is a
+**two-packet inequality**: retain the individual tight-coalition inequalities
+from the Lmax over-cover and the Lmin packet simultaneously, rather than only
+their weighted spectral aggregates, and prove that their joint incidence
+geometry forces `(H_6)`.  A finite-support route is also available because
+each certificate has only linear support.
