@@ -1,0 +1,309 @@
+================================================================================
+TASK #32 -- s(6) VERDICT PACKAGE, for adversarial audit by r12.
+Sections 1 and 2 are written BEFORE the results they govern; section 3 is a
+running ledger appended as events occur.  Nothing here is reconstructed after
+the fact.  Section 4 (results) is filled only when the runs land.
+================================================================================
+
+--------------------------------------------------------------------------------
+1.  COVERAGE AS AN ARGUMENT:  WHY THE 37,277 ARE ALL OF THEM
+--------------------------------------------------------------------------------
+CLAIM.  Every singleton-normalized exact six-player game falls into exactly one
+of 37,277 configurations, and the run partitions those 37,277 into disjoint
+buckets covering all of them.
+
+(a) WHAT A CONFIGURATION IS, AND WHY EVERY GAME HAS EXACTLY ONE.
+Fix a game v with Lmin = x and Lmax = z.  Sort the players by x-payoff and
+group maximal blocks of equal payoff, poorest first.  The block SIZES form an
+ordered tuple r = (r_1,...,r_A) of positive integers with sum 6 -- an ordered
+COMPOSITION of 6 -- and it is uniquely determined by v, because the multiset of
+x-values and their multiplicities are.  Likewise z gives a composition c.  The
+overlap table tbl[k][l] := #{i : i in Lmin block k and Lmax block l} is then
+determined, and by construction its row sums are r and its column sums are c.
+So v |-> (r, c, tbl) is a well-defined total function.  No game is missed and
+none is counted twice.
+
+(b) WHY THE ENUMERATION OF (r, c, tbl) IS EXHAUSTIVE.
+Compositions: an ordered composition of n corresponds bijectively to a subset of
+the n-1 internal gaps (cut or not cut), so there are exactly 2^(n-1).  The
+enumerator returns 8, 16, 32 at n = 4, 5, 6 -- matching 2^3, 2^4, 2^5 exactly
+(checked, not assumed).
+Tables: for fixed margins the enumerator recurses over rows, and for each row
+enumerates every way of splitting r_k across the B columns subject to the
+remaining column capacities, accepting only when all column remainders reach
+zero.  Every nonnegative integer matrix with those margins is produced exactly
+once, since a matrix is determined by its rows and each row is generated once.
+Summing over all 32 x 32 margin pairs gives
+        n = 4 :    281        n = 5 :  2,961        n = 6 : 37,277.
+
+(c) TWO INDEPENDENT CORROBORATIONS OF THE COUNT.
+  * The same code at n = 5 returns 2,961, and that number was independently
+    machine-audited in the s(5) work by coverage.py, which verified the four
+    s(5) buckets partition it exactly once with zero overlap.  The enumerator is
+    therefore not being trusted on its first outing.
+  * The L1''-excluded fraction is 65.1% / 66.0% / 66.5% at n = 4 / 5 / 6 -- a
+    smooth progression, not the jump a miscount would produce.
+
+(d) WHY RELABELLING IS FREE.
+Within a configuration the canonical layout assigns players to cells in
+row-major order.  Any game in that configuration is carried to the canonical
+layout by a permutation of players, and every constraint in both encodings is
+permutation-equivariant (the level variables are per-stratum; the coalition
+quantifiers range over all subsets; the exactness witnesses and Farkas bundles
+are generated per coalition and per player).  So deciding the canonical layout
+decides the configuration.
+
+(e) WHY THE BUCKETS PARTITION EXACTLY ONCE.
+The filter is SEQUENTIAL and each stage consumes only what the previous stage
+passed on:
+      37,277  universe
+    - 24,795  L1''-excluded  (Lmax composition ends in 1; a purely
+                              combinatorial test on c, disjoint from the rest
+                              by definition)
+    =  12,482 post-L1''
+    -  9,132  killed by the A3-free hand net at target 2/3
+    =   3,350 survivors, split by a disjoint predicate:
+                 74  populated (the harvest realizes them) -> Stage B
+              3,276  remainder                              -> Stage C
+Membership in each bucket is decided by a predicate on (r, c, tbl) alone, and
+the predicates are mutually exclusive and exhaustive by construction.  The
+analogous partition at n = 5 was machine-audited; the same audit is to be run
+here before the verdict is claimed.
+
+(e') MACHINE-CHECKED, NOT ONLY ARGUED.  coverage32.py re-derives the universe
+from scratch and verifies the partition without trusting any tally printed
+elsewhere.  It passes:
+        universe            37,277
+        L1''-excluded       24,795
+        killed by hand net   9,132
+        survivors            3,350  =  74 (Stage B) + 3,276 (Stage C)
+        buckets sum 37,277, union 37,277, OVERLAP 0
+It additionally verifies that the harvest-realized set is EXACTLY the Stage-B
+set (74, symmetric difference zero) and that no realized configuration was
+excluded by the net -- the direction that would falsify the whole triage.
+                                                         -> coverage32.json
+
+(f) WHAT COVERAGE DOES *NOT* CLAIM.
+It does not claim the harvest found every realizable configuration -- only 74
+were populated, and the other 3,276 survivors are unaddressed by the harvest.
+That is precisely why Stage C exists.  Coverage is a statement about the
+CONFIGURATION SPACE being exhausted, not about sampling.
+
+--------------------------------------------------------------------------------
+2.  THE DECISION RULE, QUOTED BEFORE IT IS APPLIED
+--------------------------------------------------------------------------------
+Verbatim from the lead's Stage-B/C authorization:
+
+  "Decision rule, agreed in advance so we don't relitigate: gate unknown rate 0
+   -> launch the full 3,276 sharded 12 ways; a handful of unknowns (<=2% of the
+   sample) -> launch, quarantine the unknowns, and attack them individually with
+   per-configuration reformulations (different Boolean orderings, seed sweeps,
+   target relaxation to bracket) before accepting a PARTIAL; materially positive
+   (>2%) -> stop, and we ship the honest PARTIAL 'rho <= 2/3 except a named list
+   of N configurations' with the list and the wall characterized. If ANY
+   configuration comes back SAT at target 2/3 in Stage B or C, stop everything
+   and audit the model end-to-end before any further compute -- a genuine game
+   above 2/3 refutes two-generator extremality and outranks the rest of the
+   program."
+
+Verbatim from the follow-up that pre-authorized Stage C:
+
+  "STAGE C IS PRE-AUTHORIZED under the decision rule we fixed in advance: when
+   the gate sample completes at 0 unknowns (or <=1 of 60, given your
+   confidence-interval point -- that's within the 'quarantine and reformulate
+   individually' branch), launch the full ~3,276 at the 600s cap, sharded 12
+   ways, checkpointed, WITHOUT waiting for another message from me. If the gate
+   lands at 2+ unknowns, stop and report per the rule."
+
+WHICH FORM GOVERNS.  The rule was later QUANTIFIED in the ledger at a3db41e
+because the record carried the softer recon language rather than the messages
+quoted above.  At the moment that refinement arrived the chain had NOT yet
+fired its Stage-C decision -- chain32.log was empty and Stage B was still at
+71 of 74 -- so per instruction the chain was updated to the recorded form
+BEFORE any decision was taken.  Nothing was retrofitted.  The governing rule is
+therefore:
+
+    0/60 unknown    -> launch Stage C
+    1-2/60 unknown  -> re-run exactly those at 1800s in ISOLATION first; launch
+                       only if all resolve, else HALT for PARTIAL
+    >=3/60 unknown  -> HALT for PARTIAL
+    contaminated draws void and are re-run same-configuration in isolation
+
+ORDER OF OPERATIONS, fixed in advance because the two clauses interact.  The
+contamination clause is applied FIRST: every cap-exact unknown is voided and
+re-run in isolation at 1800s.  The 0 / 1-2 / >=3 branch is then taken on the
+count of unknowns that SURVIVE that voiding.  Counting before voiding would let
+a contaminated draw force a PARTIAL, which is exactly what the contamination
+clause exists to prevent; counting after is what "void" means.  This ordering is
+implemented in decide32.py and is fixed before the data.
+
+APPLICATION (the rule above must not be edited below this line):
+    clean gate unknown count (raw)        = [PENDING]
+    of which cap-exact / voided           = [PENDING]
+    unknowns surviving isolation          = [PENDING]
+    branch taken                          = [PENDING]
+    justification                         = [PENDING]
+
+--------------------------------------------------------------------------------
+3.  UNKNOWN PROVENANCE LEDGER  (running; every cap-hit anywhere in the program)
+--------------------------------------------------------------------------------
+Standing law (ledger 7416f38): solver processes <= cores is a hard constraint,
+and any 'unknown' whose wall-clock equals the cap to within a tenth of a second
+is presumed a SCHEDULING ARTIFACT until re-run in isolation.  z3's timeout is
+wall clock, so an oversubscribed box manufactures them.
+
+EVENT 1 -- RECON SAMPLE 1.  8 configurations, 120s cap.  TWO unknowns.
+  Box state: not recorded at the time (my omission).  Later evidence indicates
+  the 120s cap was simply too short: a like-for-like rerun at 300s solved
+  comparable configurations in seconds.
+  Final status: SUPERSEDED, not counted anywhere; the cap was raised to 600s.
+
+EVENT 2 -- RECON SAMPLE 2 (like-for-like), 300s cap, shared-tightness variant.
+  ONE unknown at 300.0s on a configuration the ORIGINAL encoding solved in 3.1s.
+  Cause: the withdrawn optimization, not the box.
+  Final status: the variant was WITHDRAWN; the original encoding is used
+  everywhere.  Recorded in opt32.py.
+
+EVENT 3 -- FIRST GATE RUN, 600s cap.  ELEVEN unknowns of 26.
+  Box state: 12 gate shards + 6 Stage-B shards = 18 solver processes on 14
+  cores, my own oversubscription.
+  Signature: ALL ELEVEN at exactly 600.0-600.1s, while every genuine solve in
+  the same batch finished between 8.5s and 268.3s.  Nothing in between.
+  Action: run killed; output quarantined under contaminated/ so it can never be
+  read as a measurement.  The pre-agreed rule was NOT applied to it -- taken at
+  face value it read as 42% and would have tripped the PARTIAL branch.
+  Final status: CONTAMINATED, discarded, to be replaced by the clean gate on the
+  SAME 60-configuration sample (seed 6060), making the replacement like-for-like.
+
+EVENT 4 -- STAGE B.  THREE unknowns of 74.
+    lmin [2,1,1,2] lmax [1,1,1,3]     600.0s
+    lmin [2,1,1,2] lmax [1,1,1,1,2]   600.0s
+    lmin [3,1,2]  lmax [1,1,1,3]      600.0s
+  Box state: 16 python processes on 14 cores, from OTHER agents' runs (r12's
+  sweep, r23's sampler), not mine.  This prompted the fleet-level rule.
+  Signature: all three cap-exact; Stage B's genuine solves ran min 1.1s, median
+  12.2s, MAX 183.7s -- again nothing between 183.7s and the cap.
+  Action: all three are cap-exact, so rerun_unknowns.py picks up every one (I
+  checked this explicitly rather than assuming the filter caught them; an
+  unknown falling short of the cap would have been silently skipped).  They
+  re-run in ISOLATION at a 1200s cap before the gate starts.
+  Final status: [PENDING re-run]
+
+HOUSEKEEPING NOTE FOR THE AUDITOR.  Two stale shell waiters from the
+contaminated-gate era (PIDs 41229, 41425) sat on the box polling for twelve
+"SHARD ... DONE" lines in g32_*.log.  The clean gate runs TEN shards and those
+logs were moved into contaminated/, so they would have waited forever.  They
+consumed no CPU (sleep loops) and touched no data.  Both were killed; the two
+exit-144 task notifications in the transcript are them.  Nothing in the run
+depended on them.
+
+EVENT 5 -- CLEAN GATE, COMPLETE.  28 unknowns of 60 (46.7%).
+  Box state: 10 shards on 14 cores, launched by the chain after Stage B had
+  finished; box otherwise idle (6 python processes).  NOT oversubscribed.
+  Signature: all 28 at 600.0-600.1s.  BUT on an uncontended box that is also
+  what a genuine timeout looks like, so the cap-exact test does NOT discriminate
+  here.  The 32 solves ran 4s..383s with a continuously rising tail -- no clean
+  separation, unlike Events 3 and 4.
+  Branch: >=3 surviving -> BRANCH 3 of the amended rule, report for a parameter
+  decision.  NOTHING LAUNCHED.
+  Final status: 46.7% raw; post-void number pending, and see EVENT 7.
+
+EVENT 6 -- STAGE C.      NOT LAUNCHED (branch 3).
+
+EVENT 8 -- THE STRUCTURE OF THE HARDNESS.  The unknowns are not scattered; they
+  are governed by the number of Lmin strata k, exactly as the certificate-block
+  cost law predicts (one Farkas bundle per player per stage, on both sides):
+      k     n   unsat  unknown   unk%   median unsat
+      2     1     1       0        0%      4s
+      3    10     9       1       10%     13s
+      4    24    17       7       29%     20s
+      5    19     4      15       79%     61s
+      6     6     1       5       83%     31s
+  The Lmax side shows the same gradient: 0% / 21% / 55% / 57% unknown at 2 / 3 /
+  4 / 5 Lmax strata.  The break is between k=4 and k=5.
+  CONSEQUENCE FOR THE THEOREM SHAPE: a cutoff at k <= 3 is defensible (10%
+  unknown in the gate); k <= 4 is not (29%).  The Stage C population splits
+  53 / 461 / 1,182 / 1,173 / 407 across k = 2..6, so k <= 3 is 514
+  configurations.  The harvest-populated 74 have k in {2,3,4} (17 / 41 / 16) and
+  BOTH 2/3-attaining configurations have k = 2, so a k <= 3 statement contains
+  the extremal class.
+
+EVENT 7 -- A CONFOUND FOUND IN MY OWN INSTRUMENT, affecting Events 4-5.
+  The configuration lmin (1,1,2,1,1) x lmax (2,1,1,2) took 595.9s under
+  decide32.py (28 isolations SEQUENTIALLY in one process) and 56.0s under
+  isolate28.py (fresh process per shard) -- identical encoding, identical cap,
+  10x apart.  z3 on a fixed instance should not vary that way.
+  HYPOTHESIS: process-level state.  Each program carries 62 exactness witness
+  vectors and ~1700 Farkas variables; building and solving many in one
+  long-lived interpreter degrades later solves.  The clean gate ran 6
+  configurations per shard, so five of every six solves were NOT
+  first-in-process -- meaning the 46.7% may be partly manufactured by the
+  harness rather than by the mathematics.
+  STATUS: OPEN.  (This entry said REFUTED; that was an overclaim and is
+  corrected here.  r25-s6 challenged it, reproduced the position analysis
+  independently, and is right.)  The gate ran 6 configurations per
+  shard, so if accumulated process state drove the timeouts, later positions
+  within a shard would be worse.  They are not:
+      position 0: 70% unknown   position 3: 60%
+      position 1: 30%           position 4: 50%
+      position 2: 30%           position 5: 40%
+  No trend, and the FIRST position is the worst -- so a simple "degrades with
+  reuse" model is not supported.  BUT THIS TEST IS WEAK AND INDIRECT, and I
+  originally read too much into it:
+    * n = 10 per cell; 70% against 30% is about two sigma.  The test has little
+      power to detect a moderate effect, so failing to see one is not evidence
+      of absence.
+    * It is indirect -- it infers from position, not from re-running the same
+      instance.
+  THE DIRECT EVIDENCE POINTS THE OTHER WAY.  The one configuration for which an
+  in-process and a fresh-process solve of the SAME instance exist,
+  lmin (1,1,2,1,1) x lmax (2,1,1,2), capped at 600.0s in the gate and finished
+  in 56.5s fresh -- and it sat at POSITION 1, the position with the LOWEST
+  unknown rate.  An indirect null at n=10 per cell does not overturn a direct
+  10x on the same instance.
+  r25-s6 also added the control I lacked: mean k by position is
+  4.60/4.40/4.30/4.30/4.40/3.90, so position is not confounded with stratum
+  count and the null is at least measuring what it claims to.
+  RESOLUTION: r25-s6 is re-running all 27 remaining gate unknowns one fresh
+  interpreter per configuration at the gate's own 600s cap -- like-for-like with
+  the gate, and the direct test I proposed but did not run.  Until it lands,
+  EVENT 5's 46.7% must be read as an UPPER bound on genuine hardness.
+
+  CONSEQUENCE THAT HOLDS EITHER WAY, and it is the load-bearing one: contention
+  and process state can only ever turn a would-be-UNSAT into an unknown.  z3
+  returns unsat only on a completed refutation, so no amount of resource
+  pressure can manufacture a false UNSAT.  EVERY UNSAT VERDICT ANYWHERE IN THIS
+  PROGRAM IS THEREFORE SOUND REGARDLESS OF BOX CONDITIONS; only the unknown
+  counts are in question.
+
+METHODOLOGICAL ERROR TO RECORD, mine.  Earlier I reported the gate as "10 of 10
+UNSAT, 0 unknown" and projected from it.  That was COMPLETION-ORDER SAMPLING:
+shards write results as they finish, so the first completions oversample the
+FAST configurations by construction.  It was never a random sample of the 60 --
+it was the ten quickest.  I gave a small-sample confidence caveat but missed the
+selection bias, which is the larger error and is why the optimistic
+"cap-not-encoding" diagnosis survived as long as it did.
+
+SUMMARY OF PROVENANCE SO FAR: of the unknowns observed in this program, none has
+yet survived being re-run under clean conditions, and every one carried the
+cap-exact signature or a withdrawn-encoding cause.  That is the reason the count
+alone is not reported.
+
+--------------------------------------------------------------------------------
+4.  RESULTS  [PENDING -- filled when the runs land]
+--------------------------------------------------------------------------------
+Stage B (74 populated configurations), at time of writing 71 of 74:
+    main verdicts        : 68 UNSAT, 3 unknown (Event 4), 0 SAT, NO HALT
+    drop-the-hypothesis  : 69/69 SAT          [sB_*.log, stageB_*.json]
+    completeness-teeth   : 15/15 SAT          [stageB_*.json]
+    teeth AUDITS         : 15/15 REALIZABLE   [stageB_*.json, field teeth_audit]
+  The teeth audits are the dimension-jump validation: on every configuration
+  with a known game above a lower target, the n=6 program returns SAT and the
+  witness audits end to end as a genuine exact six-player game in that very
+  configuration, exactness by Theorem-A LPs (62 per game), never by vertex
+  enumeration.
+Clean gate:  [PENDING]
+Stage C:     [PENDING]
+Per-shard tallies: stageB_*.json, rerun_unknowns.json, gate32_*.json,
+                   and for Stage C the batch files it writes.
+================================================================================

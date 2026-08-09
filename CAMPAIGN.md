@@ -1561,6 +1561,28 @@ localization of exactness; "|B|=4 is special".
   now and as THE POST-WINDOW COMPLETION METHOD for all unknowns and
   the unreached k>=5 classes.  Bank k<=3 confirmed.  Package split:
   r25 writes VERDICT32_S456.txt, never touching r22's VERDICT32.txt.
+- WINDOW-END PACKAGE (r25, verifiers/s6/VERDICT32*.txt): 1,122
+  verdicts at target 2/3 across five architectures — SAT COUNT ZERO,
+  no HALT ever.  k<=3: 478/514 decided (93%), all UNSAT, outstanding a
+  NAMED LIST of 36 (13 tested-resistant + 23 never-reached; the final
+  sweep shrinks this further) — the clean k<=3 theorem is a named
+  finite list away, and the class contains both extremal
+  configurations.  Stage C overall 984 attempted / 801 unsat / 183
+  unknown / 0 SAT; k=5,6 never reached as projected.  Paired-test
+  final numbers: fresh/sharded median 1.26, slower 18/25 —
+  architecture effect zero, heavy tail confirmed (paired ratios 0.12x
+  to 9.18x; 7 of 32 gate-decided failed on re-run incl. an 8.7s one).
+  Restart sweeps: Group A control 5/5 recovered; Group C 48/61 of the
+  k<=3 unknowns at 210s budgets (32 on the first 70s attempt); Group
+  B (k=5/6) 1/6 — the high-k tail is real.  GOVERNANCE, self-
+  reported: RULE 3 WAS NOT SATISFIED (gate voiding incomplete, 11/28
+  re-run) — no branch claimed; Stage C logged as evidence gathered
+  AHEAD of its authorizing test.  The probes' STRUCTURAL gloss
+  withdrawn (one long draw is one draw; Group A is the
+  counterexample).  Claim state per the pre-committed hierarchy: NO
+  tier claimable yet; certified instead: zero SAT in 1,122 and k<=3
+  93% decided all-UNSAT.  Next-window rule, adopted verbatim: "stop
+  buying longer caps and start buying re-rolls."  Audit (r12) begun.
 - THE RESTART REVOLUTION + ARCHITECTURE SWITCH (r25; lead-ordered,
   timestamped by the switch message): the restart sweep decided 11 of
   13 previously-600s-failed k<=3 configurations at 3 x 70s seeds —

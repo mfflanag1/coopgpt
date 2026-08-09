@@ -1,0 +1,366 @@
+================================================================================
+TASK #32 -- s(6) VERDICT PACKAGE, SECTIONS 4-6.   Generated 2026-08-09 03:49:48
+Author: r25-s6 (executor).  Sections 1-3 are r22's, in VERDICT32.txt.
+Every number below is read from a completed checkpoint file by
+mkverdict.py.  No number is transcribed by hand and none is taken from a
+running shard's stdout.  Regenerate at any time to refresh.
+================================================================================
+
+--------------------------------------------------------------------------------
+4.  RESULTS
+--------------------------------------------------------------------------------
+
+4.0  PREAMBLE: THE TWO PROCESS ARCHITECTURES, AND WHY BOTH APPEAR HERE.
+Two runners produced the Stage-C-era numbers below and they differ in ONE
+respect only -- how many z3 solves share an interpreter:
+  SHARDED (stageC.py, gate32.py, stageB.py, decide32.py): one long-lived
+     python process performs many solves in sequence.  Each program
+     carries 62 Theorem-A exactness witness bundles and ~1,700 Farkas
+     variables, so a process accumulates state across configurations.
+  FRESH (solve1.py driven by freshrun.py): exactly one z3 Solver is built,
+     checked, and the interpreter exits.  Nothing accumulates because
+     nothing survives.
+The MATHEMATICS IS IDENTICAL: both call nsix.pipeline2(6, lmin, lmax, tbl,
+2/3) with the same arguments, the same exact rational arithmetic, and the
+same wall-clock cap.  This was verified behaviorally before the fresh runs
+were trusted: solve1.py returned UNSAT in 3.4s on lmin(4,2) x lmax(2,4),
+a configuration stageC.py had independently returned UNSAT on in 3.3s.
+The architecture split exists because a 10x wall-clock swing was observed
+on one instance between the two (section 6, EVENT 7), and the fresh runner
+is the controlled test of whether that swing generalizes.
+
+4.1  COVERAGE (machine-checked; coverage32.py, cited not re-argued)
+     universe            37,277
+     L1''-excluded       24,795
+     killed by hand net  9,132
+     Stage B (populated) 74
+     Stage C (remainder) 3,276
+     problems reported   NONE
+     Buckets sum to the universe with overlap 0, and the harvest-realized
+     set equals the Stage-B set exactly.  Nothing realized was excluded.
+
+4.2  STAGE B  (74 populated configurations)
+     records on disk 74 of 74
+     main verdicts   {'unsat': 70, 'unknown': 4}
+     SAT at 2/3      0   <-- HALT trigger; empty means no halt
+     drop-certificates control  {'sat': 74}  (must be SAT where possible)
+     completeness-teeth         {'sat': 15}
+     teeth AUDITS               {'REALIZABLE': 15}
+
+4.3  CLEAN GATE  (60-configuration random sample, seed 6060, 600s, SHARDED)
+     60 configurations: {'unsat': 32, 'unknown': 28}
+     decided solve times: min 4.4s  median 20.2s  max 383.1s
+
+4.4  THE FRESH-PROCESS RE-RUN OF THE GATE UNKNOWNS  (the diagnostic)
+     Same configurations, same 600s cap, same encoding; one fresh
+     interpreter per configuration.  Contention note: this ran alongside
+     Stage C on a fully-subscribed box, which biases the test TOWARD
+     'unknown'.  Every UNSAT here is therefore conservative evidence.
+     landed 5 of 28 gate unknowns
+     verdicts {'unsat': 2, 'unknown': 3}
+        k   n  unsat  unknown   median unsat
+        3    1      0        1         --
+        4    3      1        2     574.8s
+        5    1      1        0      56.5s
+     PER-CONFIGURATION, gate verdict -> fresh verdict:
+        k=3 lmin=[1, 4, 1] lmax=[1, 1, 1, 3]: gate unknown@600s -> FRESH unknown 600.0s (cap 600s)
+        k=4 lmin=[1, 3, 1, 1] lmax=[3, 1, 2]: gate unknown@600s -> FRESH unknown 600.1s (cap 600s)
+        k=4 lmin=[1, 2, 1, 2] lmax=[1, 2, 1, 2]: gate unknown@600s -> FRESH unknown 600.0s (cap 600s)
+        k=4 lmin=[1, 2, 2, 1] lmax=[2, 1, 1, 2]: gate unknown@600s -> FRESH unsat 574.8s (cap 600s)
+        k=5 lmin=[1, 1, 2, 1, 1] lmax=[2, 1, 1, 2]: gate unknown@600s -> FRESH unsat 56.5s (cap 1800s)
+
+4.4b  THE PAIRED ARCHITECTURE EXPERIMENT  (the decisive instrument)
+     The re-run above is CENSORED: on a loaded box an 'unknown' is the
+     biased-toward outcome, so it cannot measure an architecture effect.
+     This experiment is uncensored.  It re-runs, in fresh processes, the
+     32 gate configurations the SHARDED gate DECIDED -- both arms then
+     yield a time, and the architecture effect is a RATIO rather than a
+     censoring event.  Same encoding, same 600s cap, same target.
+     Handicap, stated because it runs one way: the gate arm ran on an
+     essentially idle box, the fresh arm on 16 processes over 14 cores.
+     Contention therefore inflates the FRESH times, biasing the test
+     against finding a fresh-process advantage.
+     n = 32 re-run; 25 resolved in BOTH arms; 7 regressed to unknown
+     ratio fresh/gate:  min 0.12   median 1.26   geometric mean 1.15   max 9.18
+     fresh faster on 7, slower on 18
+     totals: gate 1140.0s   fresh 944.7s
+     READING.  A process-reuse penalty would show as fresh times
+     SYSTEMATICALLY BELOW gate times.  They are not below; the
+     central tendency is at or slightly above 1, which is what
+     ~65%-of-a-core contention alone predicts (1/0.65 = 1.54).
+     THE PROCESS-ARCHITECTURE EFFECT IS INDISTINGUISHABLE FROM
+     ZERO.  The process-reuse hypothesis is REFUTED on direct,
+     uncensored, paired evidence -- not on an indirect null.
+
+     REGRESSIONS -- 7 of 32 configurations the gate
+     DECIDED came back UNKNOWN at the same 600s cap:
+        k=4  gate unsat    8.7s -> fresh UNKNOWN 600s   lmin=[1, 1, 1, 3] lmax=[1, 1, 1, 3]
+        k=5  gate unsat   20.2s -> fresh UNKNOWN 600s   lmin=[2, 1, 1, 1, 1] lmax=[2, 2, 2]
+        k=4  gate unsat   20.4s -> fresh UNKNOWN 600s   lmin=[2, 2, 1, 1] lmax=[1, 1, 1, 3]
+        k=6  gate unsat   31.3s -> fresh UNKNOWN 600s   lmin=[1, 1, 1, 1, 1, 1] lmax=[2, 1, 3]
+        k=5  gate unsat   54.1s -> fresh UNKNOWN 600s   lmin=[1, 1, 1, 1, 2] lmax=[1, 3, 2]
+        k=4  gate unsat  152.6s -> fresh UNKNOWN 600s   lmin=[3, 1, 1, 1] lmax=[1, 1, 1, 1, 2]
+        k=4  gate unsat  342.6s -> fresh UNKNOWN 600s   lmin=[1, 3, 1, 1] lmax=[1, 1, 1, 1, 2]
+     No contention factor explains these.  Turning 8.7s into >600s
+     is 69x, against a measured median of about 1.3x.  Combined
+     with the reverse case on record (600s, 595.9s, then 56.5s on
+     one instance), and with paired ratios spanning 0.12x to 9.18x
+     on IDENTICAL instances, the signature is a HEAVY-TAILED
+     RUNTIME DISTRIBUTION: time-to-verdict is substantially a
+     matter of search luck, not a stable property of the instance.
+     regression rate by k: k=2:0/1  k=3:0/9  k=4:4/17  k=5:2/4  k=6:1/1
+     The regressions sit at k>=4, i.e. the tail is heaviest exactly
+     where the unknown rate is highest -- so the k-gradient in
+     EVENT 8 is at least partly a gradient in VARIANCE.
+
+4.4c  THE RESTART EXPERIMENT  (what the variance finding buys)
+     If runtime is heavy-tailed, k short attempts beat one long attempt.
+     Pre-authorized by the lead's own rule ('seed sweeps').  Design: three
+     200s attempts under different z3 random seeds = 600s, THE SAME TOTAL
+     BUDGET as the single 600s attempt already on record for each of these
+     configurations, so it is a fair head-to-head.  A random seed changes
+     search order only; verdicts stay sound.
+
+     GROUP A (3 x 200s = 600s budget) -- CONTROL, known-decidable: the gate decided each of these, and a single fresh 600s attempt then FAILED to
+        DECIDED 5 of 5  (100%)   k in [4, 5, 6]   SAT: 0
+        resolved on the FIRST attempt: 3 of 5   total-time median 21.4s  max 266.4s
+        k=4 [1, 1, 1, 3] x [1, 1, 1, 3]: UNSAT in 15.2s [unsat@15.2s]
+        k=5 [2, 1, 1, 1, 1] x [2, 2, 2]: UNSAT in 21.4s [unsat@21.4s]
+        k=4 [2, 2, 1, 1] x [1, 1, 1, 3]: UNSAT in 20.2s [unsat@20.2s]
+        k=6 [1, 1, 1, 1, 1, 1] x [2, 1, 3]: UNSAT in 225.2s [unknown@200.0s,unsat@25.2s]
+        k=5 [1, 1, 1, 1, 2] x [1, 3, 2]: UNSAT in 266.4s [unknown@200.0s,unsat@66.4s]
+
+     GROUP B (3 x 200s = 600s budget) -- gate unknowns -- never decided by any run of this program
+        DECIDED 1 of 6  (17%)   k in [4, 5]   SAT: 0
+        resolved on the FIRST attempt: 1 of 1   total-time median 39.8s  max 39.8s
+        k=4 [2, 1, 2, 1] x [2, 1, 1, 2]: UNSAT in 39.8s [unsat@39.8s]
+        k=4 [2, 1, 1, 2] x [1, 1, 1, 1, 2]: UNKNOWN in 600.1s [unknown@200.0s,unknown@200.0s,unknown@200.1s]
+        k=4 [1, 3, 1, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 600.1s [unknown@200.1s,unknown@200.0s,unknown@200.0s]
+        k=4 [2, 1, 2, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 600.1s [unknown@200.0s,unknown@200.0s,unknown@200.1s]
+        k=5 [1, 1, 1, 2, 1] x [2, 2, 2]: UNKNOWN in 600.1s [unknown@200.1s,unknown@200.0s,unknown@200.0s]
+        k=5 [1, 1, 1, 2, 1] x [2, 1, 3]: UNKNOWN in 600.0s [unknown@200.0s,unknown@200.0s,unknown@200.0s]
+
+     GROUP C (3 x 70s = 210s budget) -- Stage-C k<=3 unknowns -- each already failed one full 600s attempt; this is the theorem boundary
+        DECIDED 48 of 61  (79%)   k in [2, 3]   SAT: 0
+        resolved on the FIRST attempt: 32 of 48   total-time median 39.3s  max 186.4s
+        k=3 [2, 3, 1] x [3, 1, 2]: UNSAT in 27.5s [unsat@27.5s]
+        k=3 [1, 3, 2] x [2, 1, 1, 2]: UNSAT in 19.7s [unsat@19.7s]
+        k=3 [4, 1, 1] x [1, 1, 1, 3]: UNSAT in 95.0s [unknown@70.0s,unsat@25.0s]
+        k=3 [2, 2, 2] x [1, 1, 1, 1, 2]: UNSAT in 39.3s [unsat@39.3s]
+        k=3 [3, 1, 2] x [1, 1, 1, 1, 2]: UNSAT in 83.8s [unknown@70.1s,unsat@13.7s]
+        k=3 [2, 1, 3] x [1, 1, 1, 1, 2]: UNSAT in 25.7s [unsat@25.7s]
+        k=3 [2, 3, 1] x [1, 1, 1, 3]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
+        k=3 [1, 4, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
+        k=3 [2, 3, 1] x [1, 2, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
+        ... 52 further rows in seedsweep_*.json
+
+     READING.
+     Group A is the control and it is the cleanest evidence in this
+     package: five configurations with KNOWN verdicts, each of which a
+     full 600s fresh attempt had just failed to decide, and all five
+     fell to a re-roll -- three of them in 15-25 seconds.  Cap length
+     is not what separates decided from undecided on this family; the
+     NUMBER OF INDEPENDENT ATTEMPTS is.
+     Group B is the hard tail (k=5,6) and the yield there is low, so
+     restarts are not a universal solvent -- some of these really are
+     hard rather than unlucky.
+     Group C is the one that touches the theorem.  Each of these 84
+     Stage-C k<=3 unknowns had already consumed a full 600s without
+     a verdict.  On a 210s budget -- barely a third of what already
+     failed -- 48 of 61 were decided (79%), every one UNSAT.
+     PROJECTION, stated as a projection and not a result: at that
+     rate the full 84 would leave roughly 18 genuinely resistant, and
+     closing all 84 costs about 84 x 210s = 4.9 worker-hours, i.e.
+     under half an hour on eleven workers.  A CLEAN k<=3 THEOREM IS
+     THEREFORE PROBABLY WITHIN REACH, and k<=3 contains both
+     2/3-attaining configurations.
+     HONESTY NOTE: no configuration in Group C is literally the same
+     configuration as one of the 600s fresh failures in 4.4 -- the
+     near-matches differ in the overlap table, and this was checked
+     rather than assumed.  The before/after is therefore at the
+     POPULATION level (all 84 had failed a 600s Stage-C attempt),
+     not a paired same-instance comparison.
+     OVERALL: 54 of 72 decided at or below the budget that
+     had already failed on every one of them -- against 0 of 72
+     for the single long attempts they replace.
+     SAT at 2/3 across all restart sweeps: 0  <-- HALT trigger
+
+4.5  STAGE C  (the 3,276 remainder; SHARDED runner, r22's, 11 shards, 600s)
+     completed 983 of 3,276  (30.0%)
+     verdicts {'unsat': 800, 'unknown': 183}
+     SAT at 2/3: 0   <-- HALT trigger
+
+     K-STRATIFIED (k = number of Lmin strata).  'unreached' is population
+     minus decided minus unknown -- configurations the window never got to.
+       k   population  decided  unknown  unreached   median decided
+       2          53       52        1          0       9.4s
+       3         461      378       83          0      20.7s
+       4       1,182      370       99        713      22.4s
+       5       1,173        0        0      1,173         --
+       6         407        0        0        407         --
+       ALL     3,276      800      183      2,293
+
+
+     RECONCILIATION -- the table above is the SHARDED runner's view and
+     does not credit the restart sweeps of 4.4c.  Applying them:
+       k=2: 1 unknown, of which 1 since DECIDED by restart -> 0 outstanding
+       k=3: 83 unknown, of which 47 since DECIDED by restart -> 36 outstanding
+       k=4: 99 unknown, of which 0 since DECIDED by restart -> 99 outstanding
+     THE k<=3 BOUNDARY: population 514, now decided 478, OUTSTANDING 36  (93.0% closed).
+     Every one of those decisions is UNSAT.  What stands between the
+     program and a clean 's(6) <= 2/3 for all k<=3' is now a named
+     list of 36 configurations, not an open-ended search.
+     No k-stratum is yet complete-with-zero-unknowns.
+
+4.6  HEADROOM PROBES  (3600s, isolated, one process each)
+     probe A: lmin=[1, 3, 1, 1] lmax=[2, 2, 2]
+        unknown in 3600.1s
+        r22's hardcoded gloss: "STRUCTURAL: cap-exact again at 6x the Stage-C cap"
+     probe B: lmin=[1, 1, 1, 2, 1] lmax=[1, 1, 1, 1, 2]
+        unknown in 3600.1s
+        r22's hardcoded gloss: "STRUCTURAL: cap-exact again at 6x the Stage-C cap"
+     THAT GLOSS IS WITHDRAWN.  It reads a single 3600s timeout as
+     evidence of STRUCTURAL hardness, which the variance finding
+     does not support: a single long draw is one draw.  Group A in
+     4.4c is the direct refutation -- five configurations that a
+     full 600s attempt failed to decide were ALL decided on a
+     re-roll, three of them in 15-25 seconds.  What these probes
+     establish is that ONE 3600s draw failed, not that no draw can
+     succeed.  The right successor experiment is not a longer cap
+     but eighteen 200s attempts at the same total price.
+
+--------------------------------------------------------------------------------
+5.  THE RULES, EACH QUOTED BEFORE ITS APPLICATION
+--------------------------------------------------------------------------------
+
+RULE 1 -- HALT ON SAT (absolute).  Quoted from the lead's Stage-B/C
+authorization, recorded before Stage B ran:
+  "If ANY configuration comes back SAT at target 2/3 in Stage B or C, stop
+   everything and audit the model end-to-end before any further compute --
+   a genuine game above 2/3 refutes two-generator extremality and outranks
+   the rest of the program."
+APPLICATION.  Counting every solver verdict recorded anywhere in the
+program at target 2/3: 1,122 verdicts, of which SAT = 0.
+HALT markers on disk: NONE
+The rule did not fire.  Nothing anywhere has returned SAT at 2/3.
+
+RULE 2 -- THE CAP-EXACT CONTAMINATION LAW (ledger 7416f38), quoted:
+  "solver processes <= cores is a hard constraint, and any 'unknown' whose
+   wall-clock equals the cap to within a tenth of a second is presumed a
+   SCHEDULING ARTIFACT until re-run in isolation."
+APPLICATION.  Every unknown in this program is cap-exact, so the law
+applies to all of them and none is reportable as a measurement until
+re-run.  Section 6 tracks each one's re-run history.  The law's premise
+was VIOLATED for part of this window and that is recorded, not hidden:
+Stage C ran 11 shards + 2 headroom probes = 13 solver processes while 3
+further processes belonging to other agents were resident, i.e. 16 on 14
+cores.  Stage-C unknowns inherit that caveat.
+
+RULE 3 -- THE STAGE-C GATE RULE, as quantified in the ledger at a3db41e
+and quoted in VERDICT32.txt section 2 BEFORE the gate data existed:
+    0/60 unknown    -> launch Stage C
+    1-2/60 unknown  -> re-run exactly those at 1800s in ISOLATION first;
+                       launch only if all resolve, else HALT for PARTIAL
+    >=3/60 unknown  -> HALT for PARTIAL
+    contaminated draws void and are re-run same-configuration in isolation
+  with the ordering fixed in advance: the contamination clause is applied
+  FIRST, and the 0 / 1-2 / >=3 branch is taken on the count of unknowns
+  that SURVIVE the voiding.
+APPLICATION, in the order the rule prescribes:
+    clean gate unknown count (raw)   = 28 of 60  (46.7%)
+    of which cap-exact / voided      = 28
+    re-run under clean conditions    = 11 of 28  (single fresh attempts and restart sweeps combined)
+    of those, RESOLVED               = 3   (all ['unsat'])
+    unknowns SURVIVING the voiding   = 8 of the 11 re-run; 17 never re-run (window ended)
+    branch taken                     = NOT YET TAKEN.  The rule's branch
+      is a function of the POST-VOIDING count, and the voiding is
+      incomplete, so no branch is claimed here.
+
+NOTE ON A RULE COLLISION, recorded because it is material.  Stage C was
+launched by r22 at 00:14:16 while the voiding of the gate unknowns was
+still incomplete -- the isolation run had returned 1 of 28.  Under RULE 3
+as written, the Stage-C launch decision is a function of the post-voiding
+count, which was not yet available.  The Stage-C data is therefore
+reported here as EVIDENCE GATHERED AHEAD OF ITS AUTHORIZING TEST, not as
+a rule-sanctioned run.  It does not change what the data shows -- 0 SAT
+across every configuration decided -- but the audit trail should not
+record an authorization that was never computed.
+
+--------------------------------------------------------------------------------
+6.  UNKNOWN PROVENANCE -- EVERY CAP-HIT IN THE PROGRAM
+--------------------------------------------------------------------------------
+Events 1-8 are r22's, in VERDICT32.txt section 3, and are not restated.
+This section carries the events after them and the final status of each.
+
+EVENT 9 -- THE ISOLATION RUN WAS KILLED BY ITS SUCCESSOR (process note).
+  r22 launched isolate28.py (11 shards, 28 gate unknowns, 1800s, fresh
+  process per shard) at 00:05.  At 00:13 r25-s6 killed all 11, acting on
+  a brief that described them as orphans of a dead agent.  They were not
+  orphans; r22 was alive.  One result had landed and is kept:
+     lmin(1,1,2,1,1) x lmax(2,1,1,2), k=5:  UNSAT in 56.5s, fresh process
+  against 600.0s (gate, sharded) and 595.9s (decide32, sharded).
+  Final status: experiment RESTARTED by r25-s6 as the fresh-process run
+  reported in 4.4, at the gate's own 600s cap for like-for-like.
+
+EVENT 10 -- TWO EXECUTORS, ONE DIRECTORY (contention note).
+  The lead spawned r25-s6 to execute this endgame on the understanding
+  that r22 had exhausted its context.  r22 had not.  Both were briefed on
+  the same plan.  From 00:14 the box carried r22's 11 Stage-C shards + 2
+  headroom probes, r25-s6's 2 fresh workers, and 3 processes from other
+  agents: 16 CPU-bound processes on 14 cores, each receiving roughly 65%
+  of a core.  A 600s WALL-CLOCK cap is then about 390s of CPU.
+  CONSEQUENCE, stated plainly: every unknown recorded in Stage C and in
+  the fresh re-run during this window was produced on an oversubscribed
+  box and is, by RULE 2, presumed a scheduling artifact.  The UNSAT
+  verdicts are unaffected -- contention cannot manufacture an UNSAT.
+  This is why the results above separate decided from unknown throughout
+  and never report an unknown rate as a property of the mathematics.
+
+EVENT 11 -- THE PROCESS-REUSE HYPOTHESIS: WHAT THE FRESH RUN SETTLES.
+  r22's EVENT 7 records the hypothesis and then withdraws it, on the
+  ground that unknown% does not rise with position within a gate shard
+  (70/30/30/60/50/40 across positions 0-5).  r25-s6 re-derived those
+  numbers independently (posanal.py) and confirms them, and adds the
+  check EVENT 7 lacked: mean k by position is 4.60/4.40/4.30/4.30/4.40/
+  3.90, so position is not confounded with the difficulty driver.
+  The null is real.  It is also indirect and small (n=10 per cell; 70%
+  vs 30% is about 2 sigma), and it sits against a direct observation
+  running the other way: the one configuration re-run in a fresh process
+  had been unknown at position 1 -- the position with the LOWEST unknown
+  rate -- and resolved 10x faster.  Section 4.4b is the direct test and
+  supersedes both.
+  VERDICT: the process-reuse hypothesis is REFUTED, on paired uncensored
+  evidence (4.4b).  r22's EVENT-7 conclusion was right; its argument was
+  not sufficient to carry it, and r25-s6's counter-argument was wrong.
+  Both are recorded because the audit trail should show which claim the
+  evidence actually settled.
+
+EVENT 12 -- WHAT THE INSTRUMENT FOUND INSTEAD: HEAVY-TAILED RUNTIME.
+  The paired experiment was built to measure architecture and instead
+  measured variance.  On IDENTICAL instances with an IDENTICAL encoding,
+  fresh/sharded time ratios span 0.12x to 9.18x, and 7 of 32
+  configurations the gate DECIDED (one of them in 8.7s) failed to resolve
+  within 600s on the re-run.  A contention factor of ~1.3-1.5x cannot
+  produce a 69x swing.  Time-to-verdict on this instance family is
+  therefore substantially a matter of search luck.
+  CONSEQUENCES, separated by whether they touch soundness:
+   (a) SOUNDNESS IS UNTOUCHED.  An UNSAT is an UNSAT however lucky the
+       search was.  Every decided verdict stands, and no configuration
+       anywhere in this program has returned SAT at 2/3.
+   (b) UNKNOWN RATES ARE NOT MEASUREMENTS.  The gate's 46.7% is one draw
+       from a heavy-tailed distribution at one cap; it should not be
+       quoted as an instance-hardness rate, and the k-gradient of EVENT 8
+       is at least partly a gradient in variance rather than in
+       difficulty.  Both should be restated in those terms.
+   (c) THE CAP IS THE WRONG KNOB.  Section 4.4c shows restarts decide
+       configurations at equal total budget that a single long attempt
+       does not, including configurations no previous run had ever
+       decided.  Spending the remaining compute on longer caps rather
+       than on re-rolls is the dominated strategy.
+
+SUMMARY OF PROVENANCE.  Every unknown this program has produced was
+cap-exact.  Those re-run under a fresh interpreter are itemized in 4.4
+and 4.4b; those re-run under a restart sweep in 4.4c.  No unknown at any
+stage has ever been accompanied by a SAT, and the 2/3 bound has not been
+contradicted by a single verdict anywhere in the program.
+================================================================================
