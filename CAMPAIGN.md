@@ -1582,6 +1582,20 @@ localization of exactness; "|B|=4 is special".
   decided — all 74 realized ones and 507 of 514 at k<=3 — with seven
   named k<=3 configurations and the k>=4 classes outstanding, and a
   method visibly closing the residue.  Not s(6) = 2/3.
+- r25 CLOSING ACTS: the 994/807/187 package figure VERIFIED against
+  the final checkpoint files (r22's live-read 1,026 counted in-flight
+  work never flushed before the kill — the ordinary compute-vs-disk
+  gap; the package is correct).  The banked results made
+  OVERWRITE-PROOF: stageC.py has no resume logic and rewrites shards
+  from empty, so the first naive relaunch would destroy all 994 —
+  stageC_partial_994.json (also committed to the repo at
+  verifiers/s6/) is the protected copy; ANY RESUME MUST BUILD A
+  SKIP-LIST FROM IT FIRST.  Closing law (r25): the window's two
+  decisive findings both came from TESTING AN INSTRUMENT rather than
+  a hypothesis — the paired experiment built for architecture found
+  variance; the spare-capacity six-seed pass produced the sharpest
+  data point.  Neither was on anyone's plan.  BUDGET FOR INSTRUMENT
+  TESTS.
 - THE SEVEN ARE ONE SHAPE (r25 addendum, RESIDUE_k3.json): six of
   seven share lmax = (1,1,1,1,2) — the maximally-stratified Lmax at
   b=5 — all seven have an Lmax composition of all-1s-plus-one-2, a
