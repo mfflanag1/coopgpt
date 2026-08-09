@@ -1469,6 +1469,20 @@ localization of exactness; "|B|=4 is special".
   already-armed chain executes the earlier <=1-launch form before this
   refinement reaches r22, the earlier form governs — both are
   pre-data, and the audit records which executed.
+  AMENDMENTS, still pre-data: (1) the chain had NOT fired when the
+  refinement arrived, so the recorded rule is the only one that will
+  ever have executed — contingency clause moot.  (2) CLAUSE ORDERING
+  (r22's catch): the contamination-void clause is applied BEFORE the
+  0/1-2/>=3 count — otherwise three contaminated draws would force a
+  PARTIAL, which is precisely what the void clause exists to prevent;
+  decide32.py voids-and-reruns first, then branches on the surviving
+  count, and this ordering is written into VERDICT32 sec.2 before any
+  data exists.  (3) Stale 12-shard waiters (PIDs 41229/41425) killed;
+  their exit-144 notifications are housekeeping, not run failures.
+  (4) Coverage is now MACHINE-BACKED pre-verdict: coverage32.py
+  independently re-derives 37,277 = 24,795 + 9,132 + 74 + 3,276 with
+  zero overlap, the harvest-realized set exactly the Stage-B 74, and
+  no realized configuration excluded by the net.
 - BLOCK-RIGIDITY ROUND 3 (task #35 cont.): TRAP RESOLVED, branch (i),
   hand-checkable — the tight rank function IS rho^ (verified on all 62
   coalitions of the witness) but rho^ is NOT SUBMODULAR (A={1,4},
