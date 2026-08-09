@@ -1,5 +1,5 @@
 ================================================================================
-TASK #32 -- s(6) VERDICT PACKAGE, SECTIONS 4-6.   Generated 2026-08-09 03:57:02
+TASK #32 -- s(6) VERDICT PACKAGE, SECTIONS 4-6.   Generated 2026-08-09 04:02:50
 Author: r25-s6 (executor).  Sections 1-3 are r22's, in VERDICT32.txt.
 Every number below is read from a completed checkpoint file by
 mkverdict.py.  No number is transcribed by hand and none is taken from a
@@ -66,11 +66,25 @@ is the controlled test of whether that swing generalizes.
         4    24 (40.0%)      1,182 (36.1%)
         5    19 (31.7%)      1,173 (35.8%)
         6     6 (10.0%)        407 (12.4%)
-      The gate over-weighted k=4 and under-weighted k=5, and the >=5%
-      threshold the launch decision turned on was therefore calibrated
-      against a mixture that does not match the run order.  Recorded as a
-      governance finding: a gate must be drawn from the population in the
-      order it will be consumed, or its rate does not transfer.
+      HONEST READING OF THAT TABLE.  The two distributions in fact track
+      each other closely -- the sample was drawn uniformly, and it
+      behaved.  There is no material skew, and it would be wrong to
+      claim one.  The governance finding is not about skew:
+      IT IS THAT A SINGLE POOLED RATE DOES NOT TRANSFER TO A RUN ORDERED
+      BY THE VARIABLE THAT DRIVES IT.  The gate's 46.7% is an average over
+      a k-mixture.  Stage C then consumed the population in ascending k,
+      so no contiguous segment of the run ever experiences 46.7%: the
+      early segment runs far below it (the gate's own per-k rates are
+      0/10/29/79/83%) and the unreached tail would run far above it.  The
+      threshold the launch decision turned on was compared against a
+      number that describes no part of the run.
+      What the gate SHOULD have reported, and what the package reports
+      instead, is the per-k breakdown -- which r22 did produce (EVENT 8),
+      and which is why the ascending-k order was the right call even
+      though the pooled rate that authorized it was not meaningful.
+      Sharper still, per 4.4b/4.4c: the per-k rates are themselves rates
+      of a LOTTERY at a fixed cap, not of difficulty, so the honest object
+      is per-k CONVERSION UNDER A GIVEN ATTEMPT BUDGET.
 
 4.1  COVERAGE (machine-checked; coverage32.py, cited not re-argued)
      universe            37,277
@@ -92,7 +106,7 @@ is the controlled test of whether that swing generalizes.
 
 4.3  CLEAN GATE  (60-configuration random sample, seed 6060, 600s, SHARDED)
      60 configurations: {'unsat': 32, 'unknown': 28}
-     decided solve times: min 4.4s  median 20.2s  max 383.1s
+     decided solve times: min 4.4s  median 18.85s  max 383.1s
 
 4.4  THE FRESH-PROCESS RE-RUN OF THE GATE UNKNOWNS  (the diagnostic)
      Same configurations, same 600s cap, same encoding; one fresh
@@ -184,8 +198,8 @@ is the controlled test of whether that swing generalizes.
         k=5 [1, 1, 1, 2, 1] x [2, 1, 3]: UNKNOWN in 600.0s [unknown@200.0s,unknown@200.0s,unknown@200.0s]
 
      GROUP C (3 x 70s = 210s budget) -- Stage-C k<=3 unknowns -- each already failed one full 600s attempt; this is the theorem boundary
-        DECIDED 60 of 73  (82%)   k in [2, 3]   SAT: 0
-        resolved on the FIRST attempt: 44 of 60   total-time median 35.0s  max 186.4s
+        DECIDED 73 of 88  (83%)   k in [2, 3]   SAT: 0
+        resolved on the FIRST attempt: 50 of 73   total-time median 38.8s  max 186.4s
         k=3 [2, 3, 1] x [3, 1, 2]: UNSAT in 27.5s [unsat@27.5s]
         k=3 [1, 3, 2] x [2, 1, 1, 2]: UNSAT in 19.7s [unsat@19.7s]
         k=3 [4, 1, 1] x [1, 1, 1, 3]: UNSAT in 95.0s [unknown@70.0s,unsat@25.0s]
@@ -195,7 +209,7 @@ is the controlled test of whether that swing generalizes.
         k=3 [2, 3, 1] x [1, 1, 1, 3]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
         k=3 [1, 4, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
         k=3 [2, 3, 1] x [1, 2, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
-        ... 64 further rows in seedsweep_*.json
+        ... 79 further rows in seedsweep_*.json
 
      READING.
      Group A is the control and it is the cleanest evidence in this
@@ -210,9 +224,9 @@ is the controlled test of whether that swing generalizes.
      Group C is the one that touches the theorem.  Each of these 84
      Stage-C k<=3 unknowns had already consumed a full 600s without
      a verdict.  On a 210s budget -- barely a third of what already
-     failed -- 60 of 73 were decided (82%), every one UNSAT.
+     failed -- 73 of 88 were decided (83%), every one UNSAT.
      PROJECTION, stated as a projection and not a result: at that
-     rate the full 84 would leave roughly 15 genuinely resistant, and
+     rate the full 84 would leave roughly 14 genuinely resistant, and
      closing all 84 costs about 84 x 210s = 4.9 worker-hours, i.e.
      under half an hour on eleven workers.  A CLEAN k<=3 THEOREM IS
      THEREFORE PROBABLY WITHIN REACH, and k<=3 contains both
@@ -223,8 +237,8 @@ is the controlled test of whether that swing generalizes.
      rather than assumed.  The before/after is therefore at the
      POPULATION level (all 84 had failed a 600s Stage-C attempt),
      not a paired same-instance comparison.
-     OVERALL: 69 of 87 decided at or below the budget that
-     had already failed on every one of them -- against 0 of 87
+     OVERALL: 95 of 116 decided at or below the budget that
+     had already failed on every one of them -- against 0 of 116
      for the single long attempts they replace.
      SAT at 2/3 across all restart sweeps: 0  <-- HALT trigger
 
@@ -236,8 +250,8 @@ is the controlled test of whether that swing generalizes.
      K-STRATIFIED (k = number of Lmin strata).  'unreached' is population
      minus decided minus unknown -- configurations the window never got to.
        k   population  decided  unknown  unreached   median decided
-       2          53       52        1          0       9.4s
-       3         461      378       83          0      20.7s
+       2          53       52        1          0   9.100000000000001s
+       3         461      378       83          0      20.5s
        4       1,182      377      103        702      22.2s
        5       1,173        0        0      1,173         --
        6         407        0        0        407         --
@@ -247,12 +261,12 @@ is the controlled test of whether that swing generalizes.
      RECONCILIATION -- the table above is the SHARDED runner's view and
      does not credit the restart sweeps of 4.4c.  Applying them:
        k=2: 1 unknown, of which 1 since DECIDED by restart -> 0 outstanding
-       k=3: 83 unknown, of which 59 since DECIDED by restart -> 24 outstanding
-       k=4: 103 unknown, of which 3 since DECIDED by restart -> 100 outstanding
-     THE k<=3 BOUNDARY: population 514, now decided 490, OUTSTANDING 24  (95.3% closed).
+       k=3: 83 unknown, of which 72 since DECIDED by restart -> 11 outstanding
+       k=4: 103 unknown, of which 10 since DECIDED by restart -> 93 outstanding
+     THE k<=3 BOUNDARY: population 514, now decided 503, OUTSTANDING 11  (97.9% closed).
      Every one of those decisions is UNSAT.  What stands between the
      program and a clean 's(6) <= 2/3 for all k<=3' is now a named
-     list of 24 configurations, not an open-ended search.
+     list of 11 configurations, not an open-ended search.
      No k-stratum is yet complete-with-zero-unknowns.
 
 4.6  HEADROOM PROBES  (3600s, isolated, one process each)

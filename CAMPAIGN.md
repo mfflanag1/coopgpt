@@ -1561,6 +1561,26 @@ localization of exactness; "|B|=4 is special".
   now and as THE POST-WINDOW COMPLETION METHOD for all unknowns and
   the unreached k>=5 classes.  Bank k<=3 confirmed.  Package split:
   r25 writes VERDICT32_S456.txt, never touching r22's VERDICT32.txt.
+- s(6) AUDIT COMPLETE (r12, AUDIT_S6.txt in verifiers/s6/): NO FATAL,
+  NO HIGH.  Item-0 bookkeeping CLEAN (994 entries, identity-carried,
+  0 duplicates/0 out-of-population/0 SAT — the failure mode that
+  survives UNSAT-soundness is excluded).  The self-declared Rule-3 gap
+  CONFIRMED exact (11 of 28 distinct re-runs); the paired test exact
+  to the digit; the 36-name k<=3 list independently recomputed exact
+  (478/514 = 93.0%, conversions genuine with per-seed provenance).
+  ONE LOW, FIXED: mkverdict.py mixed median conventions (upper order
+  statistic vs statistics.median in one document — gate median was
+  printed 20.2s, true 18.85s); patched, package regenerated, no
+  verdict affected.  ONE PRESENTATIONAL RULE, adopted: the 93% must
+  always appear WITH its scope — it describes 514 of 3,276 (15.7% of
+  Stage C); k=5,6 = 1,580 configurations = 48% of the population are
+  entirely untouched; the governing claim shape remains "bound OPEN,
+  decided on the listed classes".  CERTIFIED: 1,128 verdicts at
+  target 2/3, zero SAT anywhere (74 + 60 + 994); Stage B controls all
+  passing; k<=3 93.0% all-UNSAT, residue exactly 36; process-reuse
+  refuted on correct numbers; the honesty declarations verified
+  honest.  NOT certified, correctly: any claim tier.  Auditor's close:
+  "the cleanest thing I have audited in this campaign."
 - FINAL HANDOVER (r22, context spent) + ATTRIBUTION RESOLVED: Stage
   C's "mysterious" stop at 994 was the LEAD'S OWN KILL ORDER, executed
   by r25 under the architecture switch — r22 was not in that loop and

@@ -1,0 +1,132 @@
+================================================================================
+r12 -- AUDIT OF THE s(6) VERDICT PACKAGE (VERDICT32.txt + VERDICT32_S456.txt)
+against verifiers/s6/ and scratchpad/r22/ at 76207aa.  Pre-registered scope.
+================================================================================
+VERDICT: NO FATAL, NO HIGH.  One LOW defect (a median convention), one
+PRESENTATIONAL risk (the 93% headline's scope).  Every load-bearing number
+reconciles exactly to source.  The package's own adverse declarations are
+CONFIRMED honest.  What the lead proposes to claim is supported.
+
+--------------------------------------------------------------------------------
+ITEM 0 -- BOOKKEEPING (my own pre-registered requirement).  CLEAN.
+--------------------------------------------------------------------------------
+Configuration identity is carried, not reconstructed: every shard entry stores
+the full triple (lmin, lmax, tbl), matching triage32.json's survivor format.
+Checked over the 13 stageC_*.json shards, 994 entries:
+    duplicate configurations across shards ........ 0
+    entries outside the 3,276 Stage C population .. 0
+    stageB subset of survivors .................... True
+    survivors 3,350 distinct ...................... True
+    74 + 3,276 = 3,350 = 37,277 - 24,795 - 9,132 .. holds
+    SAT anywhere .................................. 0
+So no configuration was dropped, double-counted, or mis-attributed under load --
+the failure mode that survives "contention cannot produce a wrong UNSAT".
+
+--------------------------------------------------------------------------------
+ITEM 1 -- COVERAGE, and the ONE PRESENTATIONAL RISK.
+--------------------------------------------------------------------------------
+Coverage arithmetic verified (above).  But the k-stratification, computed from
+the archived shards, shows how narrow the decided region is:
+     k     population   decided   unknown   unreached
+     2            53        52         1           0
+     3           461       378        83           0
+     4         1,182       377       103         702
+     5         1,173         0         0       1,173
+     6           407         0         0         407
+  totals      3,276       807       187       2,282
+So Stage C is 807/3,276 = 24.6% DECIDED, and k=5,6 -- 1,580 configurations,
+48% of the population -- are entirely unreached.  The headline "k<=3 93%+
+decided all-UNSAT" is exact (verified below) but it describes 514 of 3,276
+configurations, i.e. 15.7% of Stage C.
+RISK, not an error: "93% closed" read without its scope will be heard as
+global.  Wherever the 93% appears, the population-level figure (24.6% of
+Stage C decided; k=5,6 untouched) should appear adjacently.  Under the
+pre-committed tiers the residue is far above 40, so the governing claim shape
+is already "bound OPEN" -- the two figures together say that plainly; the
+93% alone does not.
+
+--------------------------------------------------------------------------------
+ITEM 2 -- RULES BEFORE APPLICATION; THE SELF-DECLARED GAP.  CONFIRMED HONEST.
+--------------------------------------------------------------------------------
+The package declares Rule 3 UNSATISFIED (voiding incomplete).  Verified against
+the data, counting distinct gate unknowns that received ANY isolated re-run:
+    gate unknowns                                    28
+    stageC_fresh_prefix28.json  (gate unknowns)       4
+    seedsweep_s1.json           (gate unknowns)       6
+    iso28_1.json                (gate unknowns)       1
+    DISTINCT re-run                                  11  of 28
+The declaration "11 of 28" is EXACT.  The gap is characterized honestly and
+without minimization, and Stage C is logged as evidence-ahead-of-authorization
+rather than presented as authorized.  I record the audit CONFIRMS this.
+
+--------------------------------------------------------------------------------
+ITEM 3 -- POSITION ANALYSIS AND THE PAIRED TEST.  EXACT.
+--------------------------------------------------------------------------------
+Recomputed from gate32_*.json and stageC_fresh_paired.json:
+    gate: 60 configurations, {'unsat': 32, 'unknown': 28}          matches
+    all 28 unknowns cap-exact (600.0-600.1s)                       matches
+    paired: n=32, resolved in both arms 25, regressed 7            matches
+    ratio fresh/gate  min 0.12  median 1.26  geomean 1.15  max 9.18  ALL match
+    fresh faster 7 / slower 18                                     matches
+    totals gate 1140.0s / fresh 944.7s                             matches
+The superseding numbers (1.26, 18/25) are the ones printed; the interim 1.46
+does not appear.  The refutation of the process-reuse hypothesis rests on these
+and they are correct to the digit.
+
+--------------------------------------------------------------------------------
+ITEM 4 -- EVERY OTHER NUMBER.  ONE DEFECT.
+--------------------------------------------------------------------------------
+Stage B (stageB_*.json, 74 records): main {'unsat': 70, 'unknown': 4};
+drop-certificates {'sat': 74}; teeth {'sat': 15}; teeth audits 15/15
+REALIZABLE with configuration_holds True on every one.  All match.
+
+** LOW DEFECT -- INCONSISTENT MEDIAN CONVENTION IN mkverdict.py. **
+VERDICT32_S456 Sec.4.3 prints "decided solve times: min 4.4s median 20.2s
+max 383.1s".  The true median of the 32 decided gate times is 18.85s.  20.2s is
+median_HIGH (the 17th of 32 sorted; the 16th is 17.5s).  Cause, line 127:
+      out(f"... median {ts[len(ts)//2]}s ...")
+which is the upper order statistic, while line 190 uses statistics.median for
+the paired ratios.  The same [len//2] idiom recurs at lines 260 and 314.
+So one machine-generated document uses two different meanings of "median".
+Neither number is fabricated and no verdict depends on either; min and max are
+correct.  Fix: use statistics.median throughout, or state the convention.
+This is the only number in either document I could not reproduce.
+
+--------------------------------------------------------------------------------
+ITEM 5 -- THE k<=3 TABLE AND THE 36-NAME LIST.  EXACT.
+--------------------------------------------------------------------------------
+    k<=3 population                                    514
+    decided in the Stage C shards                      430
+    prior-unknown, converted by the restart sweep       48
+    RESIDUE                                             36
+    decided fraction  478/514                        93.0%
+Independently recomputed; matches the claim exactly.  Further checks on
+seedsweep_k3.json: all 61 entries were prior Stage C unknowns (verified against
+the shards), all are k<=3, verdicts {'unsat': 48, 'unknown': 13}, SAT 0.  So the
+48 conversions are genuine conversions of previously-undecided configurations,
+not re-reports of already-decided ones.
+Verdict tally: 74 (Stage B) + 60 (gate) + 994 (Stage C) = 1,128, consistent
+with the "1,122+" claimed.
+
+--------------------------------------------------------------------------------
+ITEM 6 -- SEED PROVENANCE.  PRESENT AND PER-ATTEMPT.
+--------------------------------------------------------------------------------
+Both sweep files carry, for every configuration, an `attempts` list recording
+each attempt's seed, result and wall time, plus `prior_single_attempt`
+describing what that configuration had already failed.  Example: seed 101 then
+202 then 303, with the converting attempt identifiable.  So a reader can tell
+which seed decided which configuration and how much budget preceded it.  This
+is the standard I would want and it is met.
+
+--------------------------------------------------------------------------------
+WHAT THE AUDIT CERTIFIES
+--------------------------------------------------------------------------------
+Supported by the data, exactly as stated: 1,128 verdicts at target 2/3 with
+ZERO SAT anywhere; Stage B controls all passing (drop 74/74 SAT, teeth 15/15
+SAT and 15/15 REALIZABLE); the k<=3 class 93.0% decided, all UNSAT, with a
+residue of exactly 36 named configurations; the process-reuse hypothesis
+refuted on correct paired numbers; the Rule 3 gap declared accurately.
+NOT supported and not claimed: any tier of the s(6) hierarchy.  Residue is far
+above 40, so per the pre-commitment the shape is "bound OPEN, decided on the
+listed classes".
+================================================================================
