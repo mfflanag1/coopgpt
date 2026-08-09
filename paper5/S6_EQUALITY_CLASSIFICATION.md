@@ -725,6 +725,29 @@ singleton witness is used.  The dependency audit checks that all 21 finite
 support types have exactly the required shared-cell and forced-common-pair
 pattern.
 
+The final eight Lmax direction rows also share one role order.  Write `n` for
+the poor player decreased by `e_{n'}-e_n`, let `j,k` be the forced common
+excluded-player pair, let `l` be the third `P` player, and let `r` be rich.
+After the exact distance constraint is removed, a full blocker can exist only
+on four coalition shapes:
+
+```text
+{n,l},   {n,j,k,r},   {n,j,l,r},   {n,k,l,r}.          (32)
+```
+
+This is no longer merely an eight-table observation.  The exporter
+`export_positive_lmax_boundary_smt.py` drops the tables entirely, weakens all
+coordinate orders, retains only normalization, the two common equalities,
+the six simplex witnesses and their critical-triple inequalities, and one
+blocker from (32).  In each of the four abstract systems, adding distance
+`>2/3` is UNSAT.  cvc5 emits a trust-free exact CPC proof and Ethos checks it
+as `correct`.  Hence each abstract blocker forces distance at most `2/3`.
+The finite dependency audit verifies that every one of the eight support
+types has the required role order, forced common pair, and exactly the four
+distance-free blocker shapes.  This gives a checked abstract completion of
+the distance-sensitive direction template, though a short human Farkas
+derivation of the four inequalities would still be preferable.
+
 On the Lmin side, the 322 single directions likewise use only three role
 templates:
 

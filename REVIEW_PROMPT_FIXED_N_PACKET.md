@@ -141,6 +141,7 @@ verifiers/s6/export_core_closure_smt.py
 verifiers/s6/replay_core_closure_smt.py
 verifiers/s6/verify_frozen_certificates.py
 verifiers/s6/export_positive_handover_smt.py
+verifiers/s6/export_positive_lmax_boundary_smt.py
 verifiers/s6/verify_positive_handover_certificates.py
 verifiers/s6/audit_positive_lmax_direction_layers.py
 verifiers/s6/positive_lmax_direction_layers_audit.json
@@ -153,6 +154,18 @@ verifiers/s6/certificates/positive_lmax_direction_index0200.json
 verifiers/s6/certificates/positive_lmax_direction_index0504.smt2
 verifiers/s6/certificates/positive_lmax_direction_index0504.cpc
 verifiers/s6/certificates/positive_lmax_direction_index0504.json
+verifiers/s6/certificates/positive_lmax_boundary_n_l.smt2
+verifiers/s6/certificates/positive_lmax_boundary_n_l.cpc
+verifiers/s6/certificates/positive_lmax_boundary_n_l.json
+verifiers/s6/certificates/positive_lmax_boundary_n_j_k_r.smt2
+verifiers/s6/certificates/positive_lmax_boundary_n_j_k_r.cpc
+verifiers/s6/certificates/positive_lmax_boundary_n_j_k_r.json
+verifiers/s6/certificates/positive_lmax_boundary_n_j_l_r.smt2
+verifiers/s6/certificates/positive_lmax_boundary_n_j_l_r.cpc
+verifiers/s6/certificates/positive_lmax_boundary_n_j_l_r.json
+verifiers/s6/certificates/positive_lmax_boundary_n_k_l_r.smt2
+verifiers/s6/certificates/positive_lmax_boundary_n_k_l_r.cpc
+verifiers/s6/certificates/positive_lmax_boundary_n_k_l_r.json
 ```
 
 Hostile questions:
@@ -310,6 +323,12 @@ Hostile questions:
     derivative.  This is intended as a human direction lemma conditional on
     the finite stratum-pattern classification, not a proof of that
     classification without enumeration.
+    For the eight-row boundary template, verify the shared weak coordinate
+    order and the reduction to exactly the four coalitions in `(32)`.  Then
+    audit each abstract SMT formula against its prose assumptions and replay
+    its CPC proof.  Confirm that these formulas prove only that a displayed
+    blocker forces distance at most `2/3`; the finite audit supplies the
+    separate map from the eight tables to those blocker shapes.
 
 Reproduce the two exact reconstruction controls from the repository root:
 

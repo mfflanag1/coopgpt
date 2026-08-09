@@ -2,7 +2,7 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for twelve
+These files exercise an independently checked proof-object path for sixteen
 six-player generator-normal-form queries.  They do not replace the complete
 3,350-configuration census and do not by themselves prove the global bound.
 
@@ -20,6 +20,10 @@ six-player generator-normal-form queries.  They do not replace the complete
 | `positive_lmax_direction_index0040.smt2` | 40 | positive critical residue plus a blocker to direction `(0,0,0,-1,0,1)` | UNSAT |
 | `positive_lmax_direction_index0200.smt2` | 200 | representative `N(1,1),P(-2,-2,-1),r=3` Lmax direction blocker | UNSAT |
 | `positive_lmax_direction_index0504.smt2` | 504 | representative distance-sensitive `N(-1,1),P(0,0,0),r=0` Lmax direction blocker | UNSAT |
+| `positive_lmax_boundary_n_l.smt2` | abstract | blocker `{n,l}` plus distance `>2/3` | UNSAT |
+| `positive_lmax_boundary_n_j_k_r.smt2` | abstract | blocker `{n,j,k,r}` plus distance `>2/3` | UNSAT |
+| `positive_lmax_boundary_n_j_l_r.smt2` | abstract | blocker `{n,j,l,r}` plus distance `>2/3` | UNSAT |
+| `positive_lmax_boundary_n_k_l_r.smt2` | abstract | blocker `{n,k,l,r}` plus distance `>2/3` | UNSAT |
 
 Indices 1408 and 2236 are the two equality-feasible stratum/table
 configurations left by the complete staged census:
@@ -68,6 +72,14 @@ for all six singleton-exactness witnesses.  Its UNSAT proof therefore checks
 one genuinely nonvacuous direction argument per template.  They do **not**
 certify the other 106 single-direction rows, the 230 rows killed by critical algebra, or
 any Lmin direction-menu row.
+
+The four abstract boundary controls no longer encode a contingency table.
+They assume only the shared weak orders of the eight distance-sensitive rows,
+the two common-triple equalities, six simplex witnesses satisfying all three
+critical-triple inequalities, one displayed blocker, and distance `>2/3`.
+Their checked UNSAT proofs show that each blocker shape forces distance at
+most `2/3`.  A separate finite audit is still needed to map the eight refined
+support types to exactly these four shapes.
 
 ## Pinned checker sources
 

@@ -167,6 +167,81 @@ def common_pair_template_structure(configuration, index, row):
     return common_pair, high
 
 
+def boundary_template_structure(configuration, index, row):
+    """Map each of the eight distance-sensitive rows to four abstract blockers."""
+    solver, labels, witnesses = critical_all_witness_solver(
+        index, configuration, include_distance=False
+    )
+    cell = nsix.layout(
+        6,
+        tuple(configuration[0]),
+        tuple(configuration[1]),
+        tuple(tuple(values) for values in configuration[2]),
+    )
+    decreased = next(
+        player for player in labels["poor_players"] if row["direction"][player] == -1
+    )
+    increased = next(
+        player for player in labels["poor_players"] if row["direction"][player] == 1
+    )
+    j, k, ell = sorted(labels["P_players"], key=lambda player: cell[player][0])
+    rich = labels["rich_player"]
+    assert cell[decreased][0] <= cell[j][0] < cell[increased][0]
+    assert cell[increased][0] <= cell[k][0] < cell[ell][0] < cell[rich][0]
+    assert cell[increased][1] < cell[decreased][1] < cell[j][1]
+    assert cell[j][1] <= cell[rich][1] < cell[k][1] == cell[ell][1]
+
+    x = [z3.Real(f"m{cell[i][0]}") for i in range(6)]
+    z = [z3.Real(f"M{cell[i][1]}") for i in range(6)]
+    for excluded in (j, k):
+        triple = tuple(
+            player for player in labels["P_players"] if player != excluded
+        ) + (rich,)
+        solver.push()
+        solver.add(point_sum(z, triple) != point_sum(x, triple))
+        result = solver.check()
+        solver.pop()
+        assert result == z3.unsat
+
+    feasible = []
+    for mask in range(1, (1 << 6) - 1):
+        if not (mask >> decreased & 1) or mask >> increased & 1:
+            continue
+        coalition = tuple(player for player in range(6) if mask >> player & 1)
+        solver.push()
+        solver.add(
+            point_sum(x, coalition) >= point_sum(z, coalition),
+            *[
+                point_sum(witness, coalition) >= point_sum(z, coalition)
+                for witness in witnesses
+            ],
+        )
+        result = solver.check()
+        solver.pop()
+        if result == z3.sat:
+            feasible.append(mask)
+        else:
+            assert result == z3.unsat
+    expected_coalitions = (
+        (decreased, ell),
+        (decreased, j, k, rich),
+        (decreased, j, ell, rich),
+        (decreased, k, ell, rich),
+    )
+    expected_masks = sorted(
+        sum(1 << player for player in coalition)
+        for coalition in expected_coalitions
+    )
+    assert feasible == expected_masks
+    return {
+        "decreased_poor_player": decreased,
+        "increased_poor_player": increased,
+        "common_P_players": [j, k],
+        "third_P_player": ell,
+        "distance_free_feasible_blocker_masks": feasible,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--triage", type=Path, default=HERE / "triage32.json")
@@ -214,6 +289,8 @@ def main() -> None:
                 "forced_common_excluded_players": common_pair,
                 "higher_x_same_z_P_player": high,
             }
+        if template(row) == "N(-1,1)_P(0,0,0)_r0":
+            extra = boundary_template_structure(configuration, index, row)
         rows.append(
             {
                 "survivor_index": index,
