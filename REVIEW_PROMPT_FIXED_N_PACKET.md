@@ -211,6 +211,15 @@ Hostile questions:
     `h=(0,0,1,1,-1,-1)` is feasible at every Lmin-tight coalition.  Confirm
     that a small positive perturbation improves the sorted Lmin vector and
     that the equality case forces the canonical starved payoff pair.
+13. Audit the human index-2236 barrier separately.  Check the eight exchange
+    directions, the complete blocker classification when `w<2v`, and each of
+    the zero/one/two/three-atom budget cases.  In particular verify every use
+    of `c+5d>1`, `c+6d>1`, and `3c+9d>2`.  Then check the Lmin argument forcing
+    `w=2v`, the three common tight triples, and the deduction
+    `2q(P)>=9d => d<=2/9 => v<=1/9`.  Decide whether the small QF_LRA audit
+    really matches the written exchange lemma.  Do not infer from these two
+    coarse-profile barriers that arbitrary simultaneous stratum refinements
+    have already been controlled.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -223,6 +232,7 @@ python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
+python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 

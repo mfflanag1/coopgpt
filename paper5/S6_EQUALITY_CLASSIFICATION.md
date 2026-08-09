@@ -146,35 +146,165 @@ v=1/6,   w=u=1/12,   c=0,
 which forces the canonical index-1408 pair.  This is both a human strict
 barrier and a human rigidity proof for one of the two equality profiles.
 
-## 4. Common-triple rigidity for the positive type
+## 4. A human barrier for the positive type
 
-The checked `equality_no_common_triple` formula for index 2236 proves that
-some triple of Lmax-top players is tight at **both** selections.  This produces
-a short algebraic explanation of the second payoff profile.  Write
+The positive type at index 2236 also admits a structural proof.  Write
 
 ```text
 x=(a,a,a,a,a,b),       z=(c,c,d,d,d,d),
 ```
 
-with table `((2,3),(0,1))`.  Again `c<=a`, `d<=b`, and common-triple equality
-forces `a<=d`.  The distance and total equations reduce to
+with table `((2,3),(0,1))`.  Label the cells as two players `N` of type
+`(a,c)`, three players `P` of type `(a,d)`, and the player `r` of type
+`(b,d)`.  Again `c<=a`, `d<=b`, and equality of totals forces `a<d`.  Put
 
 ```text
-2a+c=5/18.
+u=a-c,       v=d-a,       w=b-d.
 ```
 
-A top triple of three `a` players would give `a=d`; the Lmax total would then
-make the left side above equal `1/2`, a contradiction.  Thus the common triple
-contains the unique `b` player.  Combining `2a+b=3d` with the two total
-equations gives
+Then `u,w>=0`, `v>0`,
 
 ```text
-a=1/9,   b=4/9,   c=1/18,   d=2/9.
+3v=2u+w,                  ||x-z||_1=6v,                 (13)
+c=(1-10v+2w)/6,           d=(1+5v-w)/6.                (14)
 ```
 
-This explains the positive profile once common-triple existence is accepted.
-Unlike the starved profile, its common-triple existence currently has a checked
-finite proof object rather than a human proof.
+Exactness at the singleton `{r}` supplies a core point `q` with `q_r=0`.
+Call a coalition *eligible* if
+
+```text
+x(S)>=z(S) and q(S)>=z(S).                              (15)
+```
+
+Every coalition tight at `z` is eligible.  Consider the following eight
+efficiency-preserving directions (coordinates are ordered as the two `N`, the
+three `P`, and `r`):
+
+```text
+e_1-e_i                                      (i in P),
+(1,1,-1_i,-1_j,0)                            ({i,j} subset P),
+(2,1,-1,-1,-1,0),  (1,2,-1,-1,-1,0).        (16)
+```
+
+Here omitted coordinates are zero.  Each direction is nonpositive on the
+four-player Lmax-top block and is strictly negative somewhere on that block.
+The following exchange lemma is the key point.
+
+### Exchange lemma
+
+If `w<2v`, at least one direction in (16) is nonnegative on every eligible
+coalition.
+
+### Proof
+
+For a coalition containing `n` players of `N`, `p` players of `P`, and
+possibly `r`, the first inequality in (15) is
+
+```text
+nu + 1_{r in S} w - pv >= 0.                            (17)
+```
+
+If `w<v`, take either of the last two directions in (16).  A negative
+coalition with no `N` player contains a `P` player, and (17) would require
+`w>=v`.  A negative coalition containing only the coefficient-one `N` player
+has at least two `P` players, but even after adding `r` its left side in (17)
+is at most `u+w-2v=(w-v)/2<0`.  With only the coefficient-two `N` player it
+needs all three `P` players, giving at most
+`u+w-3v=(w-3v)/2<0`; with both `N` players it cannot be negative.  Thus this
+direction has no negative eligible coalition.
+
+It remains to take `v<=w<2v`.  Define an **atom**
+
+```text
+A_i={r,i},       i in P.
+```
+
+By (17), a negative eligible coalition with no `N` player is necessarily an
+atom, and atom eligibility says `q_i>=2d`.  A negative eligible coalition for
+a two-player direction in (16), if it is not an atom, is necessarily
+
+```text
+B_{k,ij}={k,r,i,j},       k in N, {i,j} subset P,        (18)
+```
+
+and its `q` inequality is `q_k+q_i+q_j>=c+3d`.  The same
+description holds for an asymmetric three-player direction, with `k` equal
+to its coefficient-one `N` player.
+
+There are four cases.
+
+1. If all three atoms are eligible, `q(P)>=6d>1`, because (14) and
+   `w<2v` give `d>1/6`.
+2. If exactly two atoms are eligible, use the one-player direction targeting
+   the remaining `P` player.  Any blocker omits one eligible atom when it
+   contains two `P` players and omits both when it contains only one.  Adding
+   the omitted atom inequalities to its `q` inequality gives respectively
+   `q(N union P)>=(c+3d)+2d=c+5d>1` or
+   `q(N union P)>=(c+2d)+4d=c+6d>1`.  At the endpoint `w=v`, the only extra
+   blocker omits `r` and both atoms and gives `c+d+4d=c+5d>1`.
+3. If exactly one atom `A_i` is eligible, the two-player direction on
+   `P\{i}` must have a blocker `B_{k,P\{i}}`.  The atom and blocker are
+   disjoint, so their inequalities give `q(N union P)>=c+5d>1`.
+4. Suppose no atom is eligible.  The two asymmetric directions have blockers
+   `B_{1,I}` and `B_{0,J}` for two-element subsets `I,J` of `P`.  If `I!=J`,
+   adding their inequalities gives `q_{I intersect J}>=2d`, an atom.  Hence
+   `I=J={i,j}`.  Apply the two-player directions to `{i,k}` and `{j,k}`, where
+   `k` is the remaining `P` player.  If their blockers use different `N`
+   players, adding those two inequalities and the two asymmetric-blocker
+   inequalities gives `q_i+q_j>=4d`, hence an atom.  If they use the same
+   `N` player, add those two inequalities to the asymmetric blocker using the
+   other `N` player.  The left side is at most `2`, whereas the right side is
+   `3c+9d=3/2+3d>2`, again impossible.
+
+In every case the assumption that all eight directions are blocked is
+impossible.  This proves the lemma.  QED.
+
+If `w<2v`, take the direction supplied by the lemma.  Every `z`-tight core
+constraint has nonnegative directional derivative; every other constraint
+has positive slack.  For sufficiently small positive `epsilon`, therefore,
+`z+epsilon h` is in the core.  Its old top coordinates do not increase, at
+least one decreases, and the two lower coordinates remain below the old top
+level.  This lexicographically improves the decreasingly sorted vector,
+contradicting `z=Lmax`.  Thus
+
+```text
+w>=2v.                                                   (19)
+```
+
+Combine (19) with the Lmin side.  If `w>2v`, then for each `i in P` the direction
+`e_i-e_r` is nonnegative on every `x`-tight coalition, by the same count in
+(17), and improves the Lmin vector.  Hence Lmin optimality forces `w<=2v`, so
+
+```text
+w=2v.                                                    (20)
+```
+
+At (20), the only coalition eligible to block `e_i-e_r` is
+`(P\{i}) union {r}`.  Lmin optimality therefore forces all three such triples
+to be tight at `x`.  Their `x` and `z` sums agree and equal `3d`, so they are
+common tight triples.  Evaluating them at the exactness witness `q_r=0` and
+summing gives
+
+```text
+2q(P)>=9d,       hence d<=2/9.                           (21)
+```
+
+But (14) and (20) give `d=(1+3v)/6`; (21) yields `v<=1/9` and therefore
+
+```text
+||x-z||_1=6v<=2/3.
+```
+
+Equality forces
+
+```text
+a=1/9,   b=4/9,   c=1/18,   d=2/9,
+```
+
+the canonical index-2236 pair.  Thus both solver-surviving equality types now
+have human strict barriers and human rigidity proofs.  The script
+`audit_positive_5_1_barrier.py` separately checks the eight-direction
+coalition enumeration and the boundary arithmetic.
 
 ## 5. Equality anchor geometry is exact
 
@@ -249,14 +379,19 @@ proof-object burden to those 22 cases.  No such lemma is claimed here.
 
 The highest-value next theorem is now sharply localized:
 
-> Prove a tangent/normal-cone inequality at the two canonical equality
-> profiles showing that no exact-game direction can increase the distance.
+> Prove a **refined** tangent/normal-cone inequality at the two canonical
+> equality profiles showing that no simultaneous splitting of their payoff
+> strata can increase the distance.
 
-Together with the first-crossing argument, that would replace the global
-strict census by a human local barrier theorem.  A weaker computer-assisted
-completion would require checked proof objects for the 3,348 equality-type
-exclusions and the relevant strict refinement neighborhood.  Merely adding
-more sampled games or more unsat cores would not close either gap.
+The two coarse stratum/table barriers are now human.  They control movement
+that preserves the displayed blocks and force both canonical boundary pairs,
+but they do not yet justify projecting an arbitrary simultaneous block split
+onto those coarse directions.  A refined tangent theorem, together with the
+first-crossing argument, would replace the global strict census by a human
+local proof.  A weaker computer-assisted completion would require checked
+proof objects for the 3,348 equality-type exclusions and the relevant strict
+refinement neighborhood.  Merely adding more sampled games or more unsat
+cores would not close either gap.
 
 ## 8. Reproduction
 
@@ -267,6 +402,7 @@ python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
+python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \

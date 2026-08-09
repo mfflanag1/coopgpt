@@ -253,8 +253,17 @@ counterexample direction at one of these two profiles.  The remaining human
 target is therefore a tangent/normal-cone barrier at the two equality
 profiles, not another archive search.
 
-One half of that local program is now human: for the starved `(4,2)` by `(2,4)`
-profile, the direction `(0,0,1,1,-1,-1)` is feasible at every Lmin-tight
-coalition whenever the distance would exceed `2/3`, contradicting leximin
-optimality.  The same argument forces the canonical starved pair at equality.
-The positive `(5,1)` by `(2,4)` profile remains the live local barrier.
+Both coarse equality types now have human barriers.  For the starved `(4,2)`
+by `(2,4)` profile, the direction `(0,0,1,1,-1,-1)` is feasible at every
+Lmin-tight coalition whenever the distance would exceed `2/3`.  For the
+positive `(5,1)` by `(2,4)` profile, an eight-direction Lmax exchange lemma
+forces the rich-cell gap identity `w=2v`; three then-forced common tight
+triples and a zero-coordinate exactness witness give `v<=1/9`.  Both arguments
+also force the canonical payoff pair at equality.
+
+This removes the last coarse-profile barrier, but it does not by itself prove
+the global six-player theorem.  At a first crossing, several equal payoff
+blocks may split simultaneously.  The new live target is therefore the
+**refined tangent theorem**: show that every outward exact-game direction at
+either canonical pair descends to one of the coarse exchange directions, or
+extend the exchange-menu argument uniformly to all contiguous refinements.
