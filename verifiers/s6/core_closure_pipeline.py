@@ -306,6 +306,25 @@ def require_equality_without_uniform_triple_anchor(data, lmax_composition):
     return tuple(triple_masks)
 
 
+def require_equality_with_uniform_triple_anchor(data, lmax_composition):
+    """Ask for equality and mark at least one tight triple of Lmax-top players."""
+    data["solver"].add(data["distance"] == z3.RealVal("2/3"))
+    top_column = len(lmax_composition) - 1
+    top = [i for i, (_, column) in enumerate(data["cell"]) if column == top_column]
+    triple_masks = tuple(
+        sum(1 << i for i in triple) for triple in itertools.combinations(top, 3)
+    )
+    markers = [data["tight_lmax"][coalition] for coalition in triple_masks]
+    if not markers:
+        condition = z3.BoolVal(False)
+    elif len(markers) == 1:
+        condition = markers[0]
+    else:
+        condition = z3.Or(markers)
+    data["solver"].add(condition)
+    return triple_masks
+
+
 def require_equality_with_subthird_overcover(data, lmax_composition):
     """Ask for equality together with an Lmax over-cover of dispersion <1/3."""
     solver = data["solver"]

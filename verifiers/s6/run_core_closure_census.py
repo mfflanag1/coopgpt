@@ -19,6 +19,7 @@ sys.path.insert(0, str(HERE))
 from core_closure_pipeline import (  # noqa: E402
     pipeline2_core_closure,
     pipeline2_generator_normal_form,
+    require_equality_with_uniform_triple_anchor,
     require_equality_with_subthird_overcover,
     require_equality_without_uniform_triple_anchor,
 )
@@ -34,12 +35,15 @@ def solve_one(task):
     data = builder(
         6, tuple(r), tuple(c), table, F(2, 3), mode == "failure"
     )
+    auxiliary = None
     if mode == "equality":
         data["solver"].add(data["distance"] == z3.RealVal("2/3"))
+    elif mode == "equality-triple":
+        auxiliary = require_equality_with_uniform_triple_anchor(data, tuple(c))
     elif mode == "equality-no-triple":
-        require_equality_without_uniform_triple_anchor(data, tuple(c))
+        auxiliary = require_equality_without_uniform_triple_anchor(data, tuple(c))
     elif mode == "equality-subthird":
-        require_equality_with_subthird_overcover(data, tuple(c))
+        auxiliary = require_equality_with_subthird_overcover(data, tuple(c))
     data["solver"].set(timeout=timeout * 1000)
     started = time.monotonic()
     verdict = data["solver"].check()
@@ -61,6 +65,25 @@ def solve_one(task):
             for witness in data["singleton_witnesses"]
         ]
         row["candidate_distance"] = str(model.eval(data["distance"]))
+        if mode in ("equality-triple", "equality-no-triple"):
+            row["candidate_tight_lmax_top_triples"] = [
+                coalition
+                for coalition in auxiliary
+                if z3.is_true(
+                    model.eval(data["tight_lmax"][coalition], model_completion=True)
+                )
+            ]
+        elif mode == "equality-subthird":
+            row["candidate_dispersion_eta"] = str(model.eval(auxiliary["eta"]))
+            row["candidate_dispersion_alpha"] = {
+                str(i): str(model.eval(value))
+                for i, value in auxiliary["alpha"].items()
+            }
+            row["candidate_dispersion_support"] = [
+                coalition
+                for coalition, value in auxiliary["weights"].items()
+                if model.eval(value).as_fraction() > 0
+            ]
     return row
 
 
@@ -94,6 +117,7 @@ def main():
         choices=(
             "failure",
             "equality",
+            "equality-triple",
             "equality-no-triple",
             "equality-subthird",
         ),

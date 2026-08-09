@@ -12,6 +12,17 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--triage", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--mode",
+        choices=(
+            "failure",
+            "equality",
+            "equality-triple",
+            "equality-no-triple",
+            "equality-subthird",
+        ),
+        default="failure",
+    )
     parser.add_argument("shards", nargs="+", type=Path)
     args = parser.parse_args()
 
@@ -22,8 +33,11 @@ def main():
     shard_ranges = []
     for path in args.shards:
         shard = json.loads(path.read_text())
-        if shard.get("mode") not in (None, "failure"):
-            raise AssertionError(f"{path}: not a strict-failure shard")
+        allowed_modes = (None, "failure") if args.mode == "failure" else (args.mode,)
+        if shard.get("mode") not in allowed_modes:
+            raise AssertionError(
+                f"{path}: mode {shard.get('mode')!r}, expected {args.mode!r}"
+            )
         shard_ranges.append(shard["range"])
         for row in shard["rows"]:
             index = row["index"]
@@ -73,19 +87,43 @@ def main():
         verdict: sum(row["result"] == verdict for row in rows)
         for verdict in ("sat", "unsat", "unknown")
     }
-    complete_unsat = tally == {"sat": 0, "unsat": len(rows), "unknown": 0}
+    require_all_unsat = args.mode not in ("equality", "equality-triple")
+    decisive = tally["unknown"] == 0
+    expected = not require_all_unsat or tally["sat"] == 0
+    passed = decisive and expected
+    labels = {
+        "failure": "strict-failure",
+        "equality": "equality-feasibility",
+        "equality-triple": "equality-with-triple feasibility",
+        "equality-no-triple": "equality-no-triple negation",
+        "equality-subthird": "equality-subthird negation",
+    }
+    targets = {
+        "failure": "L1(Lmin,Lmax) > 2/3, equivalently overlap < 2/3",
+        "equality": "L1(Lmin,Lmax) = 2/3",
+        "equality-triple": (
+            "L1(Lmin,Lmax) = 2/3 with a tight triple of Lmax-top players"
+        ),
+        "equality-no-triple": (
+            "L1(Lmin,Lmax) = 2/3 without a tight triple of Lmax-top players"
+        ),
+        "equality-subthird": (
+            "L1(Lmin,Lmax) = 2/3 with an Lmax over-cover of dispersion < 1/3"
+        ),
+    }
     report = {
         "status": (
-            "complete strict-failure survivor census"
-            if complete_unsat
-            else "incomplete or adverse strict-failure survivor census"
+            f"complete {labels[args.mode]} survivor census"
+            if passed
+            else f"incomplete or adverse {labels[args.mode]} survivor census"
         ),
+        "mode": args.mode,
         "claim_scope": (
             "conditional on the separately audited hand-net exclusions and the "
             "full-staged encoding; solver verdicts are not yet independent "
             "rational infeasibility certificates"
         ),
-        "target": "L1(Lmin,Lmax) > 2/3, equivalently overlap < 2/3",
+        "target": targets[args.mode],
         "triage_source": str(args.triage),
         "triage_tally": triage["tally"],
         "shard_ranges": shard_ranges,
@@ -98,7 +136,7 @@ def main():
     }
     args.output.write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps({key: report[key] for key in ("status", "survivor_count", "tally")}, indent=2))
-    if not complete_unsat:
+    if not passed:
         raise SystemExit(1)
 
 

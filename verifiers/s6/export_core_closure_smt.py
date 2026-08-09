@@ -21,6 +21,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from core_closure_pipeline import (  # noqa: E402
     pipeline2_generator_normal_form,
+    require_equality_with_uniform_triple_anchor,
     require_equality_with_subthird_overcover,
     require_equality_without_uniform_triple_anchor,
 )
@@ -36,6 +37,8 @@ def build(index: int, mode: str, source: Path) -> z3.Solver:
     )
     if mode == "equality":
         data["solver"].add(data["distance"] == z3.RealVal("2/3"))
+    elif mode == "equality-triple":
+        require_equality_with_uniform_triple_anchor(data, tuple(c))
     elif mode == "equality-no-triple":
         require_equality_without_uniform_triple_anchor(data, tuple(c))
     elif mode == "equality-subthird":
@@ -105,7 +108,13 @@ def main() -> None:
     parser.add_argument("--index", type=int, required=True)
     parser.add_argument(
         "--mode",
-        choices=("failure", "equality", "equality-no-triple", "equality-subthird"),
+        choices=(
+            "failure",
+            "equality",
+            "equality-triple",
+            "equality-no-triple",
+            "equality-subthird",
+        ),
         default="failure",
     )
     parser.add_argument("--source", type=Path, default=HERE / "triage32.json")
