@@ -1499,6 +1499,29 @@ localization of exactness; "|B|=4 is special".
   Headroom probes: the genuine Stage-B unknown + one k=5 gate unknown,
   each 3600s isolated — the latter decides cap-shaped vs structural
   for the high-k wall.  Sort order fixed BEFORE launch.
+- STAGE C LAUNCHED (by r22, under the lead's parameter-decision
+  message — it crossed the r25 handover; no double launch, r25
+  redirected to monitor + package assembly): sorted (k_Lmin, k_Lmax)
+  ascending, 600s, 11 shards + 2 probes = 13/14 cores, HALT-on-SAT,
+  sort written pre-launch.  First 78 configs all UNSAT (k=2,3).
+  TWO OPERATIONAL ENTRIES: (1) NEW FLEET LAW (from r22's disclosed
+  cross-lane kill of r24's harvest.py): inspect in a SEPARATE command,
+  kill only by PID or working directory, NEVER by bare script name —
+  generic names collide across lanes; r24 notified to restart.
+  (2) r22's "25 processes" alarm was its own miscount (grep/shell
+  wrappers), corrected within the minute — no oversubscription
+  occurred.
+- BLOCK-RIGIDITY ROUND 5 (task #37): both stage-one bounds PROVED
+  (floor: the argmin transversal's cap read directly; ceiling: the
+  same cap read on the complement — the program's third
+  one-inequality-read-twice); tightness 60/60 over six profiles;
+  ATTAINMENT REDUCED to a Hall-type feasibility (z >= 0, z(N) =
+  T - n*theta1, z(A) <= m(A) - theta1|A|, nonnegativity of the caps
+  EXACTLY the floor bound — the two halves belong to one argument).
+  New structural observation: the average of the generator rows is a
+  core point via |A| <= k — THE CAP SYSTEM IS CALIBRATED TO THE
+  NUMBER OF BLOCKS, a candidate hinge.  Residue: one combinatorial
+  lemma (greedy never strands budget), handed at the honest line.
 - BLOCK-RIGIDITY ROUND 4 (task #37, REPORT5 addendum 3): the
   submodularity SPLIT — rho^ submodular EXACTLY on the case-(a)
   profiles (independent confirmation of (a)) and non-submodular on
