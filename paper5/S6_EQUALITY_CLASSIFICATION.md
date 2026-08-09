@@ -796,6 +796,30 @@ templates:
 | `(-1,-1)` | `(1,2,2)` | `-3` | 5 |
 | `(-1,-1)` | `(1,1,2)` | `-2` | 5 |
 
+The same exact premise ablation on the complete Lmin-selected branch gives a
+different dependency profile:
+
+| critical-algebra mechanism | rows |
+|---|---:|
+| payoff signs plus common-pair condition | 293 |
+| additionally needs the third triple comparison | 266 |
+| jointly needs distance and singleton witnesses | 342 |
+
+| single-direction mechanism | rows |
+|---|---:|
+| premise-light | 71 |
+| distance, but not blocker-witness inequalities | 14 |
+| blocker-witness inequalities, but not distance | 5 |
+| distance and blocker-witness inequalities jointly | 232 |
+
+Here “blocker-witness inequalities” means the requirement that a proposed
+Lmin-tight blocker also be eligible for all six singleton witnesses; the
+critical-triple witness system itself remains present in the corresponding
+ablation.  Thus the dominant 312-row direction template is not one uniform
+payoff lemma: 66 rows are premise-light, 14 are distance-only, and 232 require
+the distance/witness coupling.  The two five-row templates contribute five
+additional premise-light and five witness-only rows.
+
 The remaining 97 Lmin cases are exchange-lemma rather than single-direction
 cases.  Ninety-five are closed by one conceptual fourteen-direction family:
 for a poor player `n` and a nonempty subset `I` of `P`, use
@@ -809,12 +833,26 @@ members of (28) have a tight negative blocker is infeasible.  Only indices
 2597 and 3237 lie outside this family.  Their stored contingency tables admit
 explicit minimized menus of sizes two and four, respectively.
 
+For the 97 menu rows, simultaneous blocker ablation gives
+
+| exchange-menu mechanism | rows |
+|---|---:|
+| premise-light | 13 |
+| blocker-witness inequalities, but not distance | 64 |
+| distance and blocker-witness inequalities jointly | 20 |
+
+These counts are a complete exact QF_LRA audit, frozen in
+`positive_lmin_handover_layers_audit.json`.  They are solver evidence rather
+than proof objects.  The reproduction driver runs twelve bounded-lifetime
+shards and then rejects incomplete, duplicate, or count-inconsistent merges;
+this avoids treating a single long-lived Z3 process as reliable evidence.
+
 This is a substantial compression—from 1,659 support tables to three Lmax
 direction templates, three Lmin direction templates, one subset-exchange
 family, and two boundary tables.  It is still solver-derived navigation, not
-a finished human proof: the 1,131 critical-algebra UNSAT cases and the blocker
-menu contradictions must be replaced by uniform inequalities or checkable
-rational certificates.  Unlike the earlier raw census, however, it now gives
+a finished human proof: the remaining Lmin payoff and coupled-witness classes
+and the blocker-menu contradictions must be replaced by uniform inequalities
+or checkable rational certificates.  Unlike the earlier raw census, however, it now gives
 a concrete and small proof architecture for the full positive neighborhood.
 
 This still does **not** reduce simultaneous splits to one split.  The tangent
@@ -963,6 +1001,10 @@ python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
   --output /tmp/positive-lmin-handover-current.json
 cmp coopgames/verifiers/s6/positive_lmin_handover_directions.json \
   /tmp/positive-lmin-handover-current.json
+python3 coopgames/verifiers/s6/reproduce_positive_lmin_handover_layers.py \
+  --output /tmp/positive-lmin-layers-current.json
+cmp coopgames/verifiers/s6/positive_lmin_handover_layers_audit.json \
+  /tmp/positive-lmin-layers-current.json
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \

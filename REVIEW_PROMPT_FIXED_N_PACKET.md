@@ -146,6 +146,10 @@ verifiers/s6/export_positive_lmax_critical_boundary_smt.py
 verifiers/s6/verify_positive_handover_certificates.py
 verifiers/s6/audit_positive_lmax_direction_layers.py
 verifiers/s6/positive_lmax_direction_layers_audit.json
+verifiers/s6/audit_positive_lmin_handover_layers.py
+verifiers/s6/merge_positive_lmin_handover_layers.py
+verifiers/s6/reproduce_positive_lmin_handover_layers.py
+verifiers/s6/positive_lmin_handover_layers_audit.json
 verifiers/s6/certificates/positive_lmax_direction_index0040.smt2
 verifiers/s6/certificates/positive_lmax_direction_index0040.cpc
 verifiers/s6/certificates/positive_lmax_direction_index0040.json
@@ -303,6 +307,11 @@ Hostile questions:
     `1_I-e_n-(|I|-1)e_r`, the all-directions-blocked quantifier, and the two
     exceptional tables 2597 and 3237.  Treat these exact blocker UNSAT verdicts
     as a compressed proof-discovery map, not as independent proof evidence.
+    Reproduce the sharded Lmin dependency audit and reconcile the critical
+    split `293+266+342`, direction split `71+14+5+232`, and menu split
+    `13+64+20`.  Check carefully that removing blocker-witness inequalities
+    does not remove the separate critical-triple witness system.  Treat these
+    classifications as a map for abstract lemmas, not as proof objects.
 19. Inspect the three representative positive-handover proof objects
     independently.  For survivor 40, confirm that the base critical system is
     feasible, direction
@@ -395,6 +404,10 @@ python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
   --output /tmp/positive-lmin-handover-current.json
 cmp coopgames/verifiers/s6/positive_lmin_handover_directions.json \
   /tmp/positive-lmin-handover-current.json
+python3 coopgames/verifiers/s6/reproduce_positive_lmin_handover_layers.py \
+  --output /tmp/positive-lmin-layers-current.json
+cmp coopgames/verifiers/s6/positive_lmin_handover_layers_audit.json \
+  /tmp/positive-lmin-layers-current.json
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 
