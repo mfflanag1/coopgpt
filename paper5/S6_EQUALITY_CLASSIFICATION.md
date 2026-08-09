@@ -414,30 +414,128 @@ the positive type coarse or splitting exactly one Lmin/Lmax block,
 `audit_positive_one_split_residue.py` finds:
 
 ```text
-critical triples + r-singleton exactness already UNSAT:   8
-still SAT until staged pinning is restored:               3
-full-staged verdict on those three:                  0 SAT / 3 UNSAT.
+critical triples + local signs + exactness UNSAT:          9
+still SAT until an Lmin improvement is used:               2
+explicit-direction blocker verdicts:                 0 SAT / 2 UNSAT.
 ```
 
-The exact staged residue is
+The two residual rows are
 
-| census index | refinement | missing side indicated by minimized navigation core |
+| census index | refinement | Lmin-improving direction |
 |---:|---|---|
-| 1414 | Lmax top `4 -> 1+3` | first Lmax ceiling pin |
-| 1442 | Lmin bottom `5 -> 3+2` | first Lmin floor pin |
-| 2268 | Lmin bottom `5 -> 4+1` | first Lmin floor pin |
+| 1442 | Lmin bottom `5 -> 3+2` | `(0,1,1,-1,1,-2)` |
+| 2268 | Lmin bottom `5 -> 4+1` | `(0,1,1,1,-1,-2)` |
 
-The first two columns and both SAT/UNSAT layers are regenerated directly; the
-last column is proof-discovery navigation, not independent proof evidence.
-This is the first explicit finite obstruction list produced by the local
-theory: a human one-split completion now needs only three staged cases rather
-than eleven support types or 62 coalition constraints.
+The coordinates follow the player order stored in the artifact.  In both
+rows the direction sums to zero, is nonnegative on the current poorest Lmin
+stratum, and is strictly positive on at least one member of that stratum.
+
+For row 2268 write the low Lmin level as `a`, the split-off poor-player level
+as `beta`, the rich level as `b`, and the two Lmax levels as `c<d`.  All three
+common triples give
+
+```text
+3d=2a+b,       hence b-d=2(d-a).
+```
+
+For `h=(0,1,1,1,-1,-2)`, a coalition with `h(S)<0` either contains the
+split-off poor player but no rich player and no `P` player, or contains the
+rich player with too few `P` players.  In the first case `z(S)<x(S)` because
+`beta>c`.  In the second, even the largest possible `z-x` contribution is
+
+```text
+2(d-a)-(beta-c)-2(d-a)<0.
+```
+
+Thus no `x`-tight coalition blocks `h`, contradicting Lmin optimality.
+
+For row 1442 let the two Lmin levels below the rich player be `a<beta`.
+The two possible common triples force
+
+```text
+3d=a+beta+b,       hence b-d=(d-a)+(d-beta).
+```
+
+Set `g=d-a`, `k=d-beta`, and note `g-k=beta-a` and
+`beta-c=(g-k)+(a-c)>g-k`.  For
+`h=(0,1,1,-1,1,-2)`, a negative coalition without the rich player has only
+the split-off `N` player and therefore has `z(S)<x(S)`.  With the rich player,
+the worst negative case contains two low `P` players and that split-off `N`;
+its `z-x` difference is
+
+```text
+2g-(beta-c)-(g+k)=g-k-(beta-c)<0.
+```
+
+All other negative cases are smaller.  Again `h` is feasible and improves
+Lmin, a contradiction.
+
+The apparent third residue, row 1414, was a diagnostic error caused by
+omitting the strict cross-cell signs inherited from the canonical pair.  With
+those signs, the two common triples give `e+2d=2a+b`, where `e` is the split
+Lmax-top level.  The three exactness-witness pair inequalities imply
+`2a+b<=2/3`; since `5a+b=1`, one has `a>=1/9`.  The local-sign distance is
+
+```text
+2[(e-a)+2(d-a)]=2(1-6a)<=2/3.
+```
+
+So this row is eliminated without a ceiling certificate.  The audit now
+retains the local signs explicitly to prevent that remote false residue from
+returning.
+
+The other seven algebraic rows share one calculation.  Put
+`Y=x(P)`.  Since all three triples are x-tight, the rich-player witness gives
+
+```text
+q(P\{i}) >= x(P\{i})+b.
+```
+
+Summing over `i` and using `q(P)<=1` yields
+
+```text
+2Y+3b<=2.                                                (26)
+```
+
+When Lmax remains coarse, a common triple excluding a player with Lmin value
+`y` gives
+
+```text
+G := sum_{i in P}(z_i-x_i)=b-y,                          (27)
+```
+
+and the forbidden distance is exactly `2G>2/3`.  The five Lmin-split rows now
+reduce as follows; `a<beta<b` are their ordered Lmin levels.
+
+| index | `(x(N);x(P))` | lower consequence | outward consequence | contradiction |
+|---:|---|---|---|---|
+| 291 | `(a,beta);(beta,beta,beta)` | `a+2beta>=1/3`, hence `beta>1/9` | `beta<1/9` | immediate |
+| 1149 | `(a,a);(a,beta,beta)` | `7a+2beta>=1` | `a+beta<2/9` | latter and `a<beta` give `7a+2beta<1` |
+| 1713 | `(a,a);(beta,beta,beta)` | `2a+beta>=1/3` | `a+2beta<1/3` | would require `a>beta` |
+| 2541 | `(a,beta);(a,beta,beta)` | `4a+5beta>=1` | `a+2beta<1/3` | latter and `a<beta` give `4a+5beta<1` |
+| 2565 | `(a,a);(a,a,beta)` | `8a+beta>=1` | `5a+beta<2/3` | first gives `a>1/9`, then `5a+beta>2/3` |
+
+For row 1413, Lmin is unsplit and only the two poor Lmax coordinates split.
+Equation (26) gives `2a+b<=2/3`; with `5a+b=1`, this says `a>=1/9`, and
+`G=b-a=1-6a<=1/3`.
+
+For row 2238, Lmin is unsplit and the four-player Lmax top splits `2+2`.
+The only two triples with equal Lmax sums have value `e+2d`, while the third
+has value `2e+d<e+2d`.  If the equal pair is common, the third violates the
+required inequality `z(T)>=x(T)` for its x-tight triple.  Hence the row is
+impossible before any distance calculation.
+
+Together with the coarse proof and the three displayed special cases, this is
+a human proof of the entire positive coarse-or-one-split layer conditional on
+the already-audited hand-net exclusions.  The exact script independently
+guards every level assignment, local sign, triple equation, and direction
+blocker enumeration.
 
 This still does **not** reduce simultaneous splits to one split.  The tangent
 graph of a piecewise-linear lexicographic selection need not be convex, so a
 formal braid-cone decomposition of payoff derivatives would not by itself
-show that its summands remain realizable selection derivatives.  The three-row
-list is therefore a genuine next lemma, not a surrogate proof of the whole
+show that its summands remain realizable selection derivatives.  The closed
+one-split layer is therefore a genuine local lemma, not a surrogate proof of the whole
 1,659-type positive refinement neighborhood.
 
 ## 5. Equality anchor geometry is exact
@@ -533,8 +631,9 @@ three common triples as boundary blockers.  The missing statement is a
 first-order inequality coupling the full staged pinning packet—not only the
 derivatives of those three tight values—to the derivative of
 `sum_{i in P}(z_i-x_i)`.  The local relaxation (23)--(25) is a mandatory
-negative control for any proposed coupling.  At the one-split level, that
-coupling only needs to explain census types 1414, 1442, and 2268.
+negative control for any proposed coupling.  At the one-split level, explicit
+Lmin directions already handle the only two rows not eliminated by triple
+algebra and local signs.
 
 ## 8. Reproduction
 

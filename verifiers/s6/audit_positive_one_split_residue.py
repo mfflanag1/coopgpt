@@ -3,9 +3,11 @@
 
 The human critical-residue theorem forces all three P-pair-plus-r triples to
 be Lmin-tight and at least two to be common.  On the eleven hand-net survivors
-with at most one additional stratum, those conditions plus the r-singleton
-witness eliminate eight types.  Exactly three need staged selection
-optimality; the accepted full-staged generator encoding eliminates all three.
+with at most one additional stratum, those conditions, the r-singleton
+witness, and the strict cross-cell signs inherited from the canonical pair
+eliminate nine types.  Two Lmin-split types remain, and one explicit
+Lmin-improving direction eliminates each.  The accepted full-staged generator
+encoding is checked as a control.
 
 This is a proof-discovery and finite-reduction audit.  Its Z3 UNSAT verdicts
 are not independently checked proof objects, and the one-split neighborhood
@@ -65,13 +67,25 @@ def critical_solver(index, configuration):
         for i, (row, column) in enumerate(cell)
         if row in row_groups[0] and column in column_groups[1]
     ]
+    poor = [
+        i
+        for i, (row, column) in enumerate(cell)
+        if row in row_groups[0] and column in column_groups[0]
+    ]
     rich = [
         i
         for i, (row, column) in enumerate(cell)
         if row in row_groups[1] and column in column_groups[1]
     ]
-    assert len(P) == 3 and len(rich) == 1
+    assert len(poor) == 2 and len(P) == 3 and len(rich) == 1
     rich = rich[0]
+
+    # These signs are strict at the canonical pair and therefore persist in
+    # the first-crossing neighborhood.  A refinement table alone does not
+    # encode them; omitting them admits remote, irrelevant SAT points.
+    solver.add(*[x[i] > z[i] for i in poor])
+    solver.add(*[z[i] > x[i] for i in P])
+    solver.add(x[rich] > z[rich])
 
     witness = [z3.Real(f"critical_q_{index}_{i}") for i in range(N)]
     solver.add(
@@ -114,9 +128,34 @@ def critical_solver(index, configuration):
     solver.add(distance > q(F(2, 3)))
     return solver, {
         "P_players": P,
+        "poor_players": poor,
         "rich_player": rich,
         "triple_masks": [sum(1 << i for i in triple) for triple in triples],
     }
+
+
+def direction_blocker_verdict(index, configuration, direction):
+    solver, _ = critical_solver(index, configuration)
+    r = tuple(configuration[0])
+    c = tuple(configuration[1])
+    table = tuple(tuple(row) for row in configuration[2])
+    cell = nsix.layout(N, r, c, table)
+    x = [z3.Real(f"m{cell[i][0]}") for i in range(N)]
+    z = [z3.Real(f"M{cell[i][1]}") for i in range(N)]
+    witness = [z3.Real(f"critical_q_{index}_{i}") for i in range(N)]
+    blockers = []
+    for coalition in range(1, (1 << N) - 1):
+        if sum(direction[i] for i in range(N) if coalition >> i & 1) >= 0:
+            continue
+        players = tuple(i for i in range(N) if coalition >> i & 1)
+        blockers.append(
+            z3.And(
+                point_sum(z, players) >= point_sum(x, players),
+                point_sum(witness, players) >= point_sum(x, players),
+            )
+        )
+    solver.add(z3.Or(*blockers))
+    return solver.check()
 
 
 def main() -> None:
@@ -143,20 +182,36 @@ def main() -> None:
         )["solver"]
         full_verdict = full.check()
         assert full_verdict == z3.unsat
-        rows.append(
-            {
+        row = {
                 "survivor_index": index,
                 "configuration": configuration,
                 **labels,
                 "critical_triples_plus_exactness": str(critical_verdict),
                 "full_staged_generator_system": str(full_verdict),
-                "requires_staged_packet": critical_verdict == z3.sat,
+                "requires_lmin_optimality_beyond_critical_algebra": (
+                    critical_verdict == z3.sat
+                ),
             }
-        )
+        direction = {
+            1442: (0, 1, 1, -1, 1, -2),
+            2268: (0, 1, 1, 1, -1, -2),
+        }.get(index)
+        if direction is not None:
+            direction_verdict = direction_blocker_verdict(
+                index, configuration, direction
+            )
+            assert direction_verdict == z3.unsat
+            row["explicit_lmin_improving_direction"] = direction
+            row["eligible_negative_blocker_verdict"] = str(direction_verdict)
+        rows.append(row)
 
     assert len(rows) == 11
-    residual = [row for row in rows if row["requires_staged_packet"]]
-    assert [row["survivor_index"] for row in residual] == [1414, 1442, 2268]
+    residual = [
+        row
+        for row in rows
+        if row["requires_lmin_optimality_beyond_critical_algebra"]
+    ]
+    assert [row["survivor_index"] for row in residual] == [1442, 2268]
     report = {
         "status": (
             "exact one-split finite reduction; solver evidence, not independent "
@@ -167,8 +222,12 @@ def main() -> None:
         "eliminated_by_critical_triples_and_exactness": sum(
             row["critical_triples_plus_exactness"] == "unsat" for row in rows
         ),
-        "requires_full_staged_packet": len(residual),
-        "staged_residual_indices": [row["survivor_index"] for row in residual],
+        "critical_algebra_residual_count": len(residual),
+        "critical_algebra_residual_indices": [
+            row["survivor_index"] for row in residual
+        ],
+        "eliminated_by_explicit_lmin_directions": 2,
+        "unresolved_after_explicit_directions": 0,
         "rows": rows,
     }
     rendered = json.dumps(report, indent=2) + "\n"

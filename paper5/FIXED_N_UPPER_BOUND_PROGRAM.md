@@ -278,8 +278,12 @@ relaxation preserves all six singleton witnesses and all three common triples
 along an arbitrarily local outward ray of displayed pairs, but exact closure
 recomputes later Lmin/Lmax strata and reduces the true distance to `4/9`.
 Accordingly, the next proof cannot replace staged pinning by triple geometry.
-At the coarse-or-one-split layer the remaining staged obstruction is now an
-explicit three-row list: census types `1414` (one Lmax ceiling case), `1442`,
-and `2268` (two Lmin floor cases).  Critical triple algebra eliminates the
-other eight survivors.  This is a finite local reduction, not yet a theorem
-that simultaneous splits decompose into one-split directions.
+At the coarse-or-one-split layer, critical triple algebra, local cross-cell
+signs, and exactness eliminate nine of the eleven survivors.  The remaining
+two, census types `1442` and `2268`, are eliminated by explicit
+Lmin-improving directions.  The previously reported type `1414` residue was a
+remote artifact of omitting the local signs and has been withdrawn.  Seven of
+the algebraic rows share the witness inequality `2x(P)+3x_r<=2` and now have
+a human case proof.  Thus the positive coarse-or-one-split layer is closed,
+conditional on the audited hand net.  This is still not a theorem that
+simultaneous splits decompose into one-split directions.

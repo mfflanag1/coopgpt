@@ -235,11 +235,15 @@ Hostile questions:
     tangent arguments, not as a counterexample to the six-player conjecture.
 15. Reproduce `positive_one_split_residue_audit.json`.  Confirm that the
     positive coarse-or-one-split neighborhood has eleven hand-net survivors,
-    that the human critical-triple conditions alone exclude eight, and that
-    precisely indices 1414, 1442, and 2268 remain until the full staged system
-    is restored.  Treat all eleven verdicts as solver evidence unless replaced
-    by checked proof objects.  In particular, do not infer a simultaneous-
-    split reduction from this one-split list.
+    that the critical triples, exactness, and locally persistent cross-cell
+    signs exclude nine, and that precisely indices 1442 and 2268 remain before
+    the explicit Lmin directions are imposed.  Audit the two direction-count
+    arguments and the direct index-1414 algebra.  Confirm that the earlier
+    three-row residue was correctly withdrawn because its 1414 SAT point had
+    the wrong local sign.  Check the common witness inequality
+    `2x(P)+3x_r<=2` and every row of the seven-case table against the stored
+    contingency tables.  In particular, do not infer a simultaneous-split
+    reduction from this one-split theorem.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
