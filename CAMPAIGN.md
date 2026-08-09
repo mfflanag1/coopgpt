@@ -1331,6 +1331,24 @@ localization of exactness; "|B|=4 is special".
   nonempty at n=6.  Config-free — if (R) falls, ALL 26 residue
   configurations of the s(5) distillation become corollaries (target 3
   retired as a separate frame).
+- s(6) GATE CONTAMINATION CAUGHT + THE n=6 EXTREMAL CLASS (task #32):
+  running the gate and Stage B concurrently on a shared 14-core box
+  oversubscribed CPU; z3 timeouts are WALL-CLOCK, so 11/26 gate configs
+  "unknowned" at exactly 600.0-600.1s (every real solve 8.5-268.3s —
+  the tell).  Face value = 42% unknown = the wrong branch of the
+  pre-agreed rule; r22 did NOT trip it, quarantined the data under
+  contaminated/, let Stage B run alone (39/74 UNSAT, clean), gate to
+  re-run in isolation; Stage C stays pre-authorized on the CLEAN number
+  only.  NEW LAWS: total solver processes <= cores, hard; any 'unknown'
+  at the cap to within 0.1s is presumed a scheduling artifact until
+  re-run in isolation.  (Lead's "run concurrently" instruction
+  contributed; "concurrent scheduling, not simultaneous saturation.")
+  PROFILING (PROFILE6.txt): the n=6 extremal class at 2/3 is TWO
+  classes, both Lmax shape (2,4): Class A Lmin(5,1), Lmax=(1/18 x2,
+  2/9 x4), NOT starved; Class B Lmin(4,2), Lmax=(0,0,1/4 x4), STARVED
+  — the CFG family continued (zeros 1->2, poor stratum 3->4, M=T/4,
+  ratio 1/2->2/3).  "Extremal => starved Lmax" FAILS at n=6; the (2,4)
+  Lmax shape is where an n=6 hand bound should start.
 - EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
   extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
   ~21,000 games, ZERO above either bound.  Region A (starved-Lmax
