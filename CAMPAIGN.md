@@ -1511,6 +1511,23 @@ localization of exactness; "|B|=4 is special".
   (index slip in the sweep, construction unaffected — caught because
   the sweep prints values, not booleans).  paper5 open problem 4 part
   one upgraded from two-point-verified to THEOREM.
+- BOTH PROBES: THE HIGH-k WALL IS STRUCTURAL (headroom_A/B.json):
+  the genuine Stage-B unknown (lmin(1,3,1,1)xlmax(2,2,2), POPULATED at
+  observed 2/11) and the k=5 gate representative both cap-exact at
+  3600s IN ISOLATION — 6x the Stage-C cap.  No feasible cap escalation
+  finishes the theorem with this encoding; the k-heavy classes need
+  different mathematics (candidate B: pipeline-1 ladders with n=6
+  catalogue cuts — sound for UNSAT, reinstates the converse caveat in
+  the statement — or new hand lemmas).  CONSEQUENCES: (1) the
+  pre-committed claim hierarchy almost surely lands at tier 3
+  ("partial sweep, bound open on the k-heavy classes") since the
+  residue will exceed 40; (2) the "every realized configuration"
+  clause must be scoped 73/74 — the one populated k=4 configuration is
+  UNDECIDED at any tested cap and is named; (3) the k<=3 theorem
+  clause is unaffected.  Stage C meanwhile: 483/3,276, 0 SAT; k=3 at
+  347/60 (14.7% unknown, rising with the tail); diagnostic 2/27 done
+  (both unknown so far, under full contention — the conservative-test
+  asymmetry means these do not decide anything yet).
 - THE n=5 BOUNDARY PRECISION (task #39 coda): the family's n=5 member
   is the SAME CONFIGURATION as thm:n5's extremal game but a DIFFERENT
   GAME — all 120 relabellings checked, 19 coalitions differ at best
