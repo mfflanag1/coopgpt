@@ -125,6 +125,17 @@ def main() -> None:
         assert masks and set(masks) <= triple_masks
         canonical_exchange_blockers[name] = masks
 
+    blocker_sets = [set(masks) for masks in canonical_exchange_blockers.values()]
+    hitting_sets = []
+    ordered_triples = sorted(triple_masks)
+    for size in range(1, len(ordered_triples) + 1):
+        for chosen in itertools.combinations(ordered_triples, size):
+            if all(set(chosen) & blockers for blockers in blocker_sets):
+                hitting_sets.append(chosen)
+        if hitting_sets:
+            break
+    assert len(hitting_sets[0]) == 2
+
     canonical_lmin_blockers = {}
     for i in P:
         h = [0] * 6
@@ -150,6 +161,7 @@ def main() -> None:
                 "syntactic_negative_mask_counts": blocker_counts,
                 "boundary_implication_d_le_2_9_to_v_le_1_9": str(boundary_verdict),
                 "canonical_exchange_blockers": canonical_exchange_blockers,
+                "minimum_canonical_blocker_hitting_sets": hitting_sets,
                 "canonical_lmin_blockers": canonical_lmin_blockers,
             },
             indent=2,

@@ -272,4 +272,9 @@ the rich-player zero witness is uniquely uniform on the three `P` players,
 and only the three common tight triples can block any of the eight Lmax
 exchange directions or the three relevant Lmin directions at the canonical
 pair.  The remaining obstruction is therefore a first-order coupling over
-three critical tight values, not another all-coalition search.
+three critical tight values and the full staged packet, not another
+all-coalition search.  The distinction is load-bearing: an exact rational
+relaxation preserves all six singleton witnesses and all three common triples
+along an arbitrarily local outward ray of displayed pairs, but exact closure
+recomputes later Lmin/Lmax strata and reduces the true distance to `4/9`.
+Accordingly, the next proof cannot replace staged pinning by triple geometry.

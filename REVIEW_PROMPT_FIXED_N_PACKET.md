@@ -222,6 +222,17 @@ Hostile questions:
     have already been controlled.  Also check the equality corollary that the
     singleton-rich witness is uniquely `(0,0,1/3,1/3,1/3,0)` and that the
     exact local blocker residue consists only of the three common triples.
+    Hostilely check the compactness and strict-margin steps in the resulting
+    positive critical-residue theorem, especially the claimed uniform
+    neighborhood and the two-of-three hitting-set conclusion.
+14. Audit the negative control in `positive_critical_relaxation_audit.json`.
+    Verify the displayed distance `31/45`, all six indexed zero-coordinate
+    witnesses, all three common-triple equalities, and the affine local ray
+    with distance `2/3+lambda/45`.  Then discard the claimed selections,
+    reconstruct the lower-envelope game, and independently check the complete
+    `(3,2,1)` Lmin and `(2,1,3)` Lmax traces, all twelve pinning certificates,
+    and true distance `4/9`.  Treat this as a falsification of triple-only
+    tangent arguments, not as a counterexample to the six-player conjecture.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -235,6 +246,10 @@ python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
+python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
+  --output /tmp/positive-critical-current.json
+cmp coopgames/verifiers/s6/positive_critical_relaxation_audit.json \
+  /tmp/positive-critical-current.json
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 

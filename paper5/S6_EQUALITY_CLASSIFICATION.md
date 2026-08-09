@@ -318,10 +318,93 @@ q=(0,0,1/3,1/3,1/3,0).                                  (22)
 With the canonical `x,z,q`, an exact coalition check leaves only the three
 triples `(P\{i}) union {r}` as eligible negative blockers for any direction
 in (16).  For the Lmin direction `e_i-e_r`, exactly its corresponding triple
-survives.  Thus the positive refined-tangent problem has a three-constraint
-critical residue, not a 62-coalition local residue.  This is a reduction of
-the next problem, not yet a proof that arbitrary simultaneous splits are
-non-outward.
+survives.  This gives the following genuine neighborhood reduction.
+
+### Positive critical-residue theorem
+
+There is a neighborhood of the canonical index-2236 payoff pair such that,
+for every singleton-normalized exact game whose two selections lie in that
+neighborhood (with players labeled by the three canonical populated cells):
+
+1. all three triples `(P\{i}) union {r}` are tight at Lmin; and
+2. at least two of them are also tight at Lmax.
+
+### Proof
+
+For the first claim, suppose a triple corresponding to `i` were not tight at
+`x`.  At the canonical pair, every other coalition on which `e_i-e_r` is
+negative has the strict wrong sign `z(S)<x(S)`.  That remains true in a small
+neighborhood.  Hence `e_i-e_r` would be nonnegative on every `x`-tight
+constraint, and a short step would improve Lmin, a contradiction.
+
+For the second claim, choose an exactness witness `q^m_r=0` along any sequence
+of such games converging to the canonical pair.  Compactness gives a convergent
+subsequence.  The first claim makes all three triple values converge to
+`2/3`; evaluating them at the witness shows that its limit satisfies
+`q(P\{i})>=2/3` for every `i`.  The equality argument leading to (22) makes
+the limit uniquely `q`.  Therefore every coalition outside the three triples
+which is negative for a direction in (16) retains either the strict wrong
+`x-z` sign or the strict wrong `q-z` sign.  It cannot be `z`-tight.  Lmax
+optimality requires every direction in (16) to have a negative tight blocker.
+The three one-player directions have blocker sets `{T_2,T_3}`,
+`{T_2,T_4}`, and `{T_3,T_4}`; hitting all three requires at least two
+triples.  A compactness contradiction upgrades the sequential statement to a
+single neighborhood.  QED.
+
+Thus the positive refined-tangent problem has a three-constraint critical
+residue, not a 62-coalition local residue.  This is a reduction of the next
+problem, not yet a proof that arbitrary simultaneous splits are non-outward.
+
+### The three-triple residue is not the missing theorem
+
+The exact audit `audit_positive_critical_relaxation.py` prevents one tempting
+overreach.  It exhibits rational displayed generators satisfying all six
+singleton zero-coordinate conditions, all three Lmin-triple inequalities,
+and in fact all three common-triple equalities, with displayed pair
+
+```text
+x~=(2/135,29/270,7/30,1/6,7/30,11/45),
+z~=(1/270,1/270,47/135,38/135,47/135,2/135)
+```
+
+and
+
+```text
+||x~-z~||_1=31/45>2/3.                                  (23)
+```
+
+This relaxation is arbitrarily local.  Interpolate `x~`, `z~`, and each of
+its six indexed singleton witnesses componentwise with the canonical pair and
+the canonical witnesses from the accepted index-2236 model.  Every simplex,
+zero-coordinate, triple-dominance, and common-triple condition is affine and
+holds at both endpoints.  The cross-cell signs agree, so for `0<lambda<=1`
+the displayed distance is exactly
+
+```text
+2/3 + lambda/45.                                         (24)
+```
+
+Thus even the complete three-triple critical residue permits a first-order
+outward ray if staged selection optimality is discarded.
+
+Closing the eight displayed generators produces a singleton-normalized exact
+game.  Two independently formulated exact rational LP implementations then
+recompute
+
+```text
+Lmin=(13,13,22,13,22,52)/135,
+Lmax=(8,8,32,23,32,32)/135,
+||Lmin-Lmax||_1=4/9.                                    (25)
+```
+
+The Lmin trace has strata `(3,2,1)` and the Lmax trace has strata `(2,1,3)`;
+the artifact contains all twelve per-player staged pinning certificates.
+Hence exact closure repairs (23) by changing the later lexicographic strata,
+not by violating exactness or losing the three triples.  This identifies the
+missing structural condition sharply: the refined proof must retain the full
+staged pinning packet (or a theorem genuinely equivalent to it).  Neither
+singleton exactification nor the critical common triples can replace that
+packet, even infinitesimally.
 
 ## 5. Equality anchor geometry is exact
 
@@ -413,8 +496,10 @@ cores would not close either gap.
 For the positive profile, the next calculation should begin from (22): all
 eight Lmax exchange directions and all three Lmin directions have only the
 three common triples as boundary blockers.  The missing statement is a
-first-order inequality coupling the derivatives of those three tight values
-to the derivative of `sum_{i in P}(z_i-x_i)`.
+first-order inequality coupling the full staged pinning packet—not only the
+derivatives of those three tight values—to the derivative of
+`sum_{i in P}(z_i-x_i)`.  The local relaxation (23)--(25) is a mandatory
+negative control for any proposed coupling.
 
 ## 8. Reproduction
 
@@ -426,6 +511,10 @@ python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
+python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
+  --output /tmp/positive-critical-current.json
+cmp coopgames/verifiers/s6/positive_critical_relaxation_audit.json \
+  /tmp/positive-critical-current.json
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \
