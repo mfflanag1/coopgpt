@@ -531,6 +531,40 @@ the already-audited hand-net exclusions.  The exact script independently
 guards every level assignment, local sign, triple equation, and direction
 blocker enumeration.
 
+### Both staged packets are necessary for simultaneous splits
+
+The one-split proof does not mean that the positive tangent theorem is a
+one-sided Lmin statement.  The exact audit
+`audit_positive_two_sided_ablation.py` imposes the critical triples, all local
+cross-cell signs, all six singleton witnesses, and one complete staged packet,
+while deleting the other packet.  It finds two rational simultaneous-split
+controls:
+
+| index | retained staged packet | displayed distance | selection changed by exact closure | true distance |
+|---:|---|---:|---|---:|
+| 239 | full Lmin | `449/516` | Lmax | `118/387` |
+| 212 | full Lmax | `553/825` | Lmin | `53/165` |
+
+For index 239 the independently recomputed Lmin is exactly the displayed
+five-stratum point, while Lmax changes to a `(3,1,2)` trace.  For index 212
+the independently recomputed five-stratum Lmax is exactly displayed, while
+Lmin changes to a `(3,1,2)` trace.  Each lower-envelope game is
+singleton-normalized and exact coalition by coalition; two independent exact
+rational LP formulations agree on both selections, and the artifact contains
+all twelve per-player pinning certificates for each reconstructed game.
+
+Thus the omitted-packet failures are not spurious nonexact pairs.  Exact
+closure preserves the fully certified side and repairs the distance by moving
+precisely the uncertified side.  Conversely, restoring both packets makes the
+corresponding support type UNSAT.  The missing structural condition is
+therefore now exact:
+
+> simultaneous splits require a genuinely **two-sided coupling of the full
+> staged Lmin and Lmax packets**.
+
+Neither first-stage packets, critical triple geometry, the full Lmin packet
+alone, nor the full Lmax packet alone suffices.
+
 This still does **not** reduce simultaneous splits to one split.  The tangent
 graph of a piecewise-linear lexicographic selection need not be convex, so a
 formal braid-cone decomposition of payoff derivatives would not by itself
@@ -653,6 +687,10 @@ python3 coopgames/verifiers/s6/audit_positive_one_split_residue.py \
   --output /tmp/positive-one-split-current.json
 cmp coopgames/verifiers/s6/positive_one_split_residue_audit.json \
   /tmp/positive-one-split-current.json
+python3 coopgames/verifiers/s6/audit_positive_two_sided_ablation.py \
+  --output /tmp/positive-two-sided-current.json
+cmp coopgames/verifiers/s6/positive_two_sided_ablation_audit.json \
+  /tmp/positive-two-sided-current.json
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \

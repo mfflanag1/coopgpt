@@ -287,3 +287,11 @@ the algebraic rows share the witness inequality `2x(P)+3x_r<=2` and now have
 a human case proof.  Thus the positive coarse-or-one-split layer is closed,
 conditional on the audited hand net.  This is still not a theorem that
 simultaneous splits decompose into one-split directions.
+The simultaneous-split obstruction is now known to be irreducibly two-sided.
+With the critical triples and all exactness witnesses retained, a full staged
+Lmin packet alone admits index 239 at displayed distance `449/516`; exact
+closure preserves Lmin, changes Lmax, and gives true distance `118/387`.
+The mirror ablation retains full staged Lmax at index 212 with displayed
+distance `553/825`; closure preserves Lmax, changes Lmin, and gives true
+distance `53/165`.  Hence the live theorem is specifically a coupling of both
+full staged packets, not merely a search for a stronger one-sided packet.

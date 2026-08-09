@@ -244,6 +244,15 @@ Hostile questions:
     `2x(P)+3x_r<=2` and every row of the seven-case table against the stored
     contingency tables.  In particular, do not infer a simultaneous-split
     reduction from this one-split theorem.
+16. Reproduce `positive_two_sided_ablation_audit.json`.  For index 239 verify
+    that the complete staged Lmin packet is retained, the displayed distance
+    is `449/516`, exact closure preserves Lmin, changes Lmax, and produces true
+    distance `118/387`.  For index 212 check the mirror statement with full
+    staged Lmax, displayed distance `553/825`, changed Lmin, and true distance
+    `53/165`.  Independently inspect both exact games, both selection
+    formulations, and all 24 pinning certificates.  Decide whether these
+    controls really establish that the simultaneous-split bridge must couple
+    both full staged packets.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -265,6 +274,10 @@ python3 coopgames/verifiers/s6/audit_positive_one_split_residue.py \
   --output /tmp/positive-one-split-current.json
 cmp coopgames/verifiers/s6/positive_one_split_residue_audit.json \
   /tmp/positive-one-split-current.json
+python3 coopgames/verifiers/s6/audit_positive_two_sided_ablation.py \
+  --output /tmp/positive-two-sided-current.json
+cmp coopgames/verifiers/s6/positive_two_sided_ablation_audit.json \
+  /tmp/positive-two-sided-current.json
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 
