@@ -406,6 +406,40 @@ staged pinning packet (or a theorem genuinely equivalent to it).  Neither
 singleton exactification nor the critical common triples can replace that
 packet, even infinitesimally.
 
+### Exact one-split residue
+
+The critical-residue theorem nevertheless makes the first finite tangent
+layer very small.  Among the eleven hand-net survivors obtained by leaving
+the positive type coarse or splitting exactly one Lmin/Lmax block,
+`audit_positive_one_split_residue.py` finds:
+
+```text
+critical triples + r-singleton exactness already UNSAT:   8
+still SAT until staged pinning is restored:               3
+full-staged verdict on those three:                  0 SAT / 3 UNSAT.
+```
+
+The exact staged residue is
+
+| census index | refinement | missing side indicated by minimized navigation core |
+|---:|---|---|
+| 1414 | Lmax top `4 -> 1+3` | first Lmax ceiling pin |
+| 1442 | Lmin bottom `5 -> 3+2` | first Lmin floor pin |
+| 2268 | Lmin bottom `5 -> 4+1` | first Lmin floor pin |
+
+The first two columns and both SAT/UNSAT layers are regenerated directly; the
+last column is proof-discovery navigation, not independent proof evidence.
+This is the first explicit finite obstruction list produced by the local
+theory: a human one-split completion now needs only three staged cases rather
+than eleven support types or 62 coalition constraints.
+
+This still does **not** reduce simultaneous splits to one split.  The tangent
+graph of a piecewise-linear lexicographic selection need not be convex, so a
+formal braid-cone decomposition of payoff derivatives would not by itself
+show that its summands remain realizable selection derivatives.  The three-row
+list is therefore a genuine next lemma, not a surrogate proof of the whole
+1,659-type positive refinement neighborhood.
+
 ## 5. Equality anchor geometry is exact
 
 Every equality model in either surviving type has a tight coalition consisting
@@ -499,7 +533,8 @@ three common triples as boundary blockers.  The missing statement is a
 first-order inequality coupling the full staged pinning packet—not only the
 derivatives of those three tight values—to the derivative of
 `sum_{i in P}(z_i-x_i)`.  The local relaxation (23)--(25) is a mandatory
-negative control for any proposed coupling.
+negative control for any proposed coupling.  At the one-split level, that
+coupling only needs to explain census types 1414, 1442, and 2268.
 
 ## 8. Reproduction
 
@@ -515,6 +550,10 @@ python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
   --output /tmp/positive-critical-current.json
 cmp coopgames/verifiers/s6/positive_critical_relaxation_audit.json \
   /tmp/positive-critical-current.json
+python3 coopgames/verifiers/s6/audit_positive_one_split_residue.py \
+  --output /tmp/positive-one-split-current.json
+cmp coopgames/verifiers/s6/positive_one_split_residue_audit.json \
+  /tmp/positive-one-split-current.json
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \

@@ -233,6 +233,13 @@ Hostile questions:
     `(3,2,1)` Lmin and `(2,1,3)` Lmax traces, all twelve pinning certificates,
     and true distance `4/9`.  Treat this as a falsification of triple-only
     tangent arguments, not as a counterexample to the six-player conjecture.
+15. Reproduce `positive_one_split_residue_audit.json`.  Confirm that the
+    positive coarse-or-one-split neighborhood has eleven hand-net survivors,
+    that the human critical-triple conditions alone exclude eight, and that
+    precisely indices 1414, 1442, and 2268 remain until the full staged system
+    is restored.  Treat all eleven verdicts as solver evidence unless replaced
+    by checked proof objects.  In particular, do not infer a simultaneous-
+    split reduction from this one-split list.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -250,6 +257,10 @@ python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
   --output /tmp/positive-critical-current.json
 cmp coopgames/verifiers/s6/positive_critical_relaxation_audit.json \
   /tmp/positive-critical-current.json
+python3 coopgames/verifiers/s6/audit_positive_one_split_residue.py \
+  --output /tmp/positive-one-split-current.json
+cmp coopgames/verifiers/s6/positive_one_split_residue_audit.json \
+  /tmp/positive-one-split-current.json
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 

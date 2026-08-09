@@ -278,3 +278,8 @@ relaxation preserves all six singleton witnesses and all three common triples
 along an arbitrarily local outward ray of displayed pairs, but exact closure
 recomputes later Lmin/Lmax strata and reduces the true distance to `4/9`.
 Accordingly, the next proof cannot replace staged pinning by triple geometry.
+At the coarse-or-one-split layer the remaining staged obstruction is now an
+explicit three-row list: census types `1414` (one Lmax ceiling case), `1442`,
+and `2268` (two Lmin floor cases).  Critical triple algebra eliminates the
+other eight survivors.  This is a finite local reduction, not yet a theorem
+that simultaneous splits decompose into one-split directions.
