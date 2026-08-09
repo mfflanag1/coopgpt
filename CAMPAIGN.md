@@ -1483,6 +1483,22 @@ localization of exactness; "|B|=4 is special".
   independently re-derives 37,277 = 24,795 + 9,132 + 74 + 3,276 with
   zero overlap, the harvest-realized set exactly the Stage-B 74, and
   no realized configuration excluded by the net.
+- s(6) CLEAN GATE VERDICT + PARAMETER DECISION (recorded at issue
+  time): gate 60/60 = 32 UNSAT / 28 UNKNOWN (47%) in clean conditions
+  — branch 3 of the amended rule (>5%) fired.  THE STRUCTURE: unknowns
+  concentrate by Lmin stratum count k (solve rates 1/1, 9/10, 17/24,
+  4/19, 1/6 for k = 2..6) — the certificate-block cost law from the
+  containment wall, now measured at n=6; the earlier 10/10-clean gate
+  sample was the fast head (completion-order bias, as the audit prep
+  warned).  Population k-split of the 3,350: {2:70, 3:502, 4:1198,
+  5:1173, 6:407}.  PARAMETER DECISION (lead, from own analysis of the
+  gate JSONs): Stage C over all 3,276 SORTED BY ASCENDING k, 600s cap,
+  11 shards, checkpointed, HALT-on-SAT — the deadline is the cutoff;
+  the residue at window end is the unreached/unknown tail, described
+  structurally (concentrated in k >= 5, never harvest-populated).
+  Headroom probes: the genuine Stage-B unknown + one k=5 gate unknown,
+  each 3600s isolated — the latter decides cap-shaped vs structural
+  for the high-k wall.  Sort order fixed BEFORE launch.
 - PAPER6 POSITIONING PASS DONE (lead, during the six-hour push): the
   prior-art paragraph written with NINE citations, all cited in text,
   all verified — seven against the companions' bibliographies, two new
