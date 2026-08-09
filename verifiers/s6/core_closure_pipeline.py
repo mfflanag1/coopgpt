@@ -325,6 +325,35 @@ def require_equality_with_uniform_triple_anchor(data, lmax_composition):
     return triple_masks
 
 
+def require_equality_without_common_uniform_triple_anchor(data, lmax_composition):
+    """Ask for equality with no Lmax-top triple tight at both selections."""
+    data["solver"].add(data["distance"] == z3.RealVal("2/3"))
+    top_column = len(lmax_composition) - 1
+    top = [i for i, (_, column) in enumerate(data["cell"]) if column == top_column]
+    triple_masks = []
+    for triple in itertools.combinations(top, 3):
+        coalition = sum(1 << i for i in triple)
+        triple_masks.append(coalition)
+        x_sum = z3.Sum([data["lmin"][i] for i in triple])
+        z_sum = z3.Sum([data["lmax"][i] for i in triple])
+        if data["v"] is not None:
+            data["solver"].add(
+                z3.Or(z_sum != data["v"][coalition], x_sum != z_sum)
+            )
+        else:
+            data["solver"].add(
+                z3.Or(
+                    [x_sum != z_sum]
+                    + [
+                        z3.Sum([g[i] for i in triple]) < z_sum
+                        for g in data["generators"]
+                        if g is not data["lmax"]
+                    ]
+                )
+            )
+    return tuple(triple_masks)
+
+
 def require_equality_with_subthird_overcover(data, lmax_composition):
     """Ask for equality together with an Lmax over-cover of dispersion <1/3."""
     solver = data["solver"]

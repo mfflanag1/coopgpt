@@ -118,14 +118,27 @@ paper5/TWO_PACKET_EXACTIFICATION_BOUNDARY.md
 paper5/CORE_CLOSURE_REDUCTION.md
 verifiers/s6/audit_two_packet_exactification.py
 verifiers/s6/two_packet_exactification_audit.json
+verifiers/s6/verify_two_packet_staged_certificates.py
 verifiers/s6/core_closure_pipeline.py
+verifiers/s6/coverage32.py
+verifiers/s6/coverage32.json
 verifiers/s6/audit_core_closure_reconstruction.py
 verifiers/s6/core_closure_reconstruction_audit.json
 verifiers/s6/run_core_closure_census.py
 verifiers/s6/rerun_core_closure_unknowns.py
 verifiers/s6/merge_core_closure_census.py
 paper5/S6_GENERATOR_CENSUS_CHECKPOINT.md
+paper5/S6_EQUALITY_CLASSIFICATION.md
 verifiers/s6/core_generator_census.json
+verifiers/s6/equality_triple_census.json
+verifiers/s6/equality_no_triple_census.json
+verifiers/s6/verify_equality_checkpoint.py
+verifiers/s6/audit_equality_refinement_neighborhood.py
+verifiers/s6/equality_refinement_neighborhood_audit.json
+verifiers/s6/certificates/README.md
+verifiers/s6/export_core_closure_smt.py
+verifiers/s6/replay_core_closure_smt.py
+verifiers/s6/verify_frozen_certificates.py
 ```
 
 Hostile questions:
@@ -137,7 +150,11 @@ Hostile questions:
    exactly to `2/3`.
 2. Check the individual floor-pinning dual `(IP1)--(IP2)` in both directions,
    including every sign and the complementary-slackness restriction to
-   trial-tight coalitions.
+   trial-tight coalitions.  Then check the recursive `(SP-min)--(SO-min)` and
+   `(SP-max)--(SO-max)` identities, especially the signs on the current-block,
+   distinguished-player, old-pin, and efficiency terms.  The frozen boundary
+   audit now contains 24 exact staged certificates; independently replay them
+   with `verify_two_packet_staged_certificates.py`.
 3. Audit the core-closure lemma: for
    `cl_C(S)=min_{y in C}y(S)`, is `Core(cl_C)=C`, is compactness justified,
    and do six zero-coordinate core witnesses suffice for singleton
@@ -166,6 +183,27 @@ Hostile questions:
    decisive rows agree, and all 17 earlier timeouts have decisive isolated
    generator-normal-form reruns.  Do not treat the merged JSON as an
    independently replayable infeasibility certificate.
+9. Audit the representative CPC proof-object lane separately from the census.
+   Confirm that the SMT exporter preserves the Z3 AST, that Z3 and cvc5 decide
+   the identical frozen bytes, and that Ethos checks the CPC bodies against the
+   pinned cvc5 1.3.3 signatures.  The strict-failure object remains
+   representative only.  The eight equality objects cover rigidity,
+   common-triple, no-triple, and sub-third negations in both solver-surviving
+   equality types, but do not
+   prove the 3,348 other types infeasible.
+10. Audit the equality split as a genuine partition: equality with at least one
+    tight Lmax-top triple versus equality with none.  Reconcile `2/3348/0` and
+    `0/3350/0`, verify the two exact reconstructions, and check that the
+    noncanonical CPC formulas really force the complete payoff pair rather
+    than only one chosen level.  Separately check the no-common-triple formulas
+    and the short algebra in `S6_EQUALITY_CLASSIFICATION.md` deriving both
+    canonical payoff pairs from a common tight top triple.
+11. Audit the first-crossing reduction in `S6_EQUALITY_CLASSIFICATION.md`.
+    In particular, check convexity of the exact-game cone, exactness and
+    singleton normalization along the unanimity path, continuity of both lex
+    selections under the stated Slater condition, and the inference that a
+    nearby table is a contiguous refinement.  Treat the 22 one-split count as
+    diagnostic only unless a tangent-cone generation lemma is supplied.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -174,15 +212,26 @@ python3 coopgames/verifiers/s6/audit_two_packet_exactification.py \
   --output /tmp/two-packet-current.json
 cmp coopgames/verifiers/s6/two_packet_exactification_audit.json \
   /tmp/two-packet-current.json
+python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
+python3 coopgames/verifiers/s6/verify_frozen_certificates.py
+python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
+
+(cd coopgames/verifiers/s6 && python3 coverage32.py)
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
+  --census coopgames/verifiers/s6/equality_triple_census.json \
   --output /tmp/core-closure-reconstruction-current.json
 cmp coopgames/verifiers/s6/core_closure_reconstruction_audit.json \
   /tmp/core-closure-reconstruction-current.json
+
+python3 coopgames/verifiers/s6/audit_equality_refinement_neighborhood.py \
+  --output /tmp/equality-refinement-current.json
+cmp coopgames/verifiers/s6/equality_refinement_neighborhood_audit.json \
+  /tmp/equality-refinement-current.json
 ```
 
-The second control constructs a fresh equality model, compresses its singleton
-witnesses, forms the finite lower envelope, and recomputes both selections with
-two independently formulated exact rational LP implementations.  It is a
-normal-form control, not evidence that every strict-failure configuration is
-infeasible.
+The second control reconstructs both equality-census SAT models, compresses
+their singleton witnesses, forms each finite lower envelope, and recomputes
+both selections with two independently formulated exact rational LP
+implementations.  These are normal-form controls, not evidence that every
+strict-failure configuration is infeasible.

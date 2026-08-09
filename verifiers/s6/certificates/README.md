@@ -2,29 +2,36 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for three
-representative six-player generator-normal-form queries.  They do not replace
-the complete 3,350-configuration census and do not by themselves prove the
-global bound.
+These files exercise an independently checked proof-object path for nine
+six-player generator-normal-form queries.  They do not replace the complete
+3,350-configuration census and do not by themselves prove the global bound.
 
 | Formula | Survivor | Query | Verdict |
 |---|---:|---|---|
 | `failure_index0000.smt2` | 0 | strict distance `>2/3` | UNSAT |
+| `equality_noncanonical_index1408.smt2` | 1408 | distance `=2/3`, payoff pair differs from the displayed canonical pair | UNSAT |
+| `equality_noncanonical_index2236.smt2` | 2236 | distance `=2/3`, payoff pair differs from the displayed canonical pair | UNSAT |
+| `equality_no_common_triple_index1408.smt2` | 1408 | distance `=2/3`, no Lmax-top triple tight at both selections | UNSAT |
+| `equality_no_common_triple_index2236.smt2` | 2236 | distance `=2/3`, no Lmax-top triple tight at both selections | UNSAT |
+| `equality_no_triple_index1408.smt2` | 1408 | distance `=2/3`, no tight triple of Lmax-top players | UNSAT |
 | `equality_no_triple_index2236.smt2` | 2236 | distance `=2/3`, no tight triple of Lmax-top players | UNSAT |
+| `equality_subthird_index1408.smt2` | 1408 | distance `=2/3`, Lmax over-cover dispersion `<1/3` | UNSAT |
 | `equality_subthird_index2236.smt2` | 2236 | distance `=2/3`, Lmax over-cover dispersion `<1/3` | UNSAT |
 
-Index 2236 is the stratum/table configuration
+Indices 1408 and 2236 are the two equality-feasible stratum/table
+configurations left by the complete staged census:
 
 ```text
-Lmin composition (5,1)
-Lmax composition (2,4)
-table ((2,3),(0,1)).
+index 1408: Lmin (4,2), Lmax (2,4), table ((2,2),(0,2));
+index 2236: Lmin (5,1), Lmax (2,4), table ((2,3),(0,1)).
 ```
 
-The separate reconstruction audit supplies a realizable equality model in
-this configuration.  Thus the last two queries are nonvacuous controls: the
-base equality query is SAT, while each asserted negation of the observed
-anchor geometry is UNSAT.
+The separate reconstruction audit supplies and independently recomputes a
+realizable equality game in each configuration.  Thus all eight equality
+queries are nonvacuous: each base equality query is SAT; every equality payoff
+pair in the type is the displayed canonical pair; a common tight top triple is
+forced; and both asserted negations of the observed anchor geometry are UNSAT
+in each surviving type.
 
 ## What is checked
 
@@ -44,10 +51,11 @@ This is stronger evidence than an unsat core: no unsat core is treated as a
 proof, and the proof checker validates the complete proof body against the
 official CPC signatures.
 
-This is still a representative certificate lane, not exhaustive proof
-coverage.  A paper theorem requires either a checked proof object for every
-remaining support/configuration type or a human structural reduction that
-makes most of those objects unnecessary.
+The equality rigidity/negation lane now covers both solver-surviving equality types,
+but the strict-bound lane remains representative rather than exhaustive.
+A paper theorem still requires either checked proof objects for all excluded
+support/configuration types or a human structural reduction that makes most
+of those objects unnecessary.
 
 ## Pinned checker sources
 
@@ -75,22 +83,26 @@ ETHOS=.../ethos
 CPC_SIGNATURES=.../cvc5/proofs/eo/cpc
 
 $PYTHON coopgames/verifiers/s6/export_core_closure_smt.py \
-  --index 2236 --mode equality-no-triple \
-  --output /tmp/equality_no_triple_index2236.smt2
+  --index 1408 --mode equality-no-triple \
+  --output /tmp/equality_no_triple_index1408.smt2
 
 $PYTHON coopgames/verifiers/s6/replay_core_closure_smt.py \
-  --formula /tmp/equality_no_triple_index2236.smt2 \
+  --formula /tmp/equality_no_triple_index1408.smt2 \
   --z3 $Z3 --cvc5 $CVC5 --ethos $ETHOS \
   --cpc-signatures $CPC_SIGNATURES --timeout-seconds 120 \
-  --cpc-proof /tmp/equality_no_triple_index2236.cpc \
-  --output /tmp/equality_no_triple_index2236.json
+  --cpc-proof /tmp/equality_no_triple_index1408.cpc \
+  --output /tmp/equality_no_triple_index1408.json
 ```
 
-The analogous modes are `failure` at index 0 and `equality-subthird` at
-index 2236.  Compare the regenerated formula/proof hashes and the final
-`PASS`/`correct` fields with the committed JSON records.
+The analogous modes are `failure` at index 0, and all four equality modes
+(`equality-noncanonical`, `equality-no-common-triple`, `equality-no-triple`,
+`equality-subthird`) at indices 1408 and 2236.  Compare the regenerated
+formula/proof hashes and the final `PASS`/`correct` fields with the committed
+JSON records.
 
-An offline integrity check of all committed formula/proof pairs is:
+An offline integrity check regenerates every formula from the current exporter
+and `triage32.json`, checks byte identity, and then verifies all committed
+formula/proof hashes and recorded Ethos verdicts:
 
 ```text
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py

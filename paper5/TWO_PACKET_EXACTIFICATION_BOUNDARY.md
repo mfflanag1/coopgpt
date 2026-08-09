@@ -178,6 +178,37 @@ Thus the relevant missing objects remain linear incidence systems.  They are
 more numerous than the single aggregate under-cover, but they are exact,
 sparse, and suitable for a finite support classification.
 
+### Complete staged certificates
+
+The same construction extends recursively.  At a given stage let `O` be the
+already pinned players, `P` the block newly pinned at level `ell`, and let
+`q_j` (`j in O`) and the efficiency multiplier `c` be free.  For every
+`i in P`, Lmin pinning is certified by nonnegative `lambda_S,r_k` satisfying
+
+```text
+sum_S lambda_S 1_S + sum_{j in O}q_j e_j
+  + sum_{k in P}r_k e_k + e_i = c 1_N,                    (SP-min)
+cT-sum_S lambda_S v(S)-sum_{j in O}q_j x_j
+  -ell sum_{k in P}r_k = ell.                             (SO-min)
+```
+
+For Lmax, where the current face has `a_k<=ell`, the signs are
+
+```text
+sum_S lambda_S 1_S + sum_{j in O}q_j e_j
+  - sum_{k in P}r_k e_k - e_i = c 1_N,                    (SP-max)
+sum_S lambda_S v(S)+sum_{j in O}q_j z_j
+  -ell sum_{k in P}r_k-cT = ell.                          (SO-max)
+```
+
+Evaluating these identities on the recursively restricted core face proves,
+respectively, `a_i<=ell` and `a_i>=ell`.  Complementary slackness restricts
+positive coalition weights to coalitions tight at the selected point.  The
+audit now emits one exact rational certificate for every player at every
+Lmin and Lmax stage—six certificates per selection for both the abstract and
+exactified games.  A separate checker replays the incidence and objective
+identities directly from the JSON, without solving an LP.
+
 ## 4. Consequence for the fixed-six proof program
 
 The earlier proposed finite incidence theorem—classify only one sparse
@@ -213,11 +244,13 @@ Run from `coopgames/`:
 ```text
 python3 verifiers/s6/audit_two_packet_exactification.py \
   --output verifiers/s6/two_packet_exactification_audit.json
+python3 verifiers/s6/verify_two_packet_staged_certificates.py
 ```
 
 The verifier checks exactness and normalization from the generators, both
 incidence identities, both cross equalities, the two aggregate anchors, both
-stage traces, and both overlap values.  It compares the pre-existing
+stage traces, all 24 staged pinning identities across the two games, and both
+overlap values.  It compares the pre-existing
 nonnegative-variable simplex with a separate staged encoding using
 `src/exactlp.py`.  The JSON output is a reproducible audit artifact, not an
 exhaustive proof or evidence of novelty.

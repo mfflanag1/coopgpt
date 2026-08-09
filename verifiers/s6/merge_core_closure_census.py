@@ -73,15 +73,17 @@ def main():
         observed_configuration = [row["lmin"], row["lmax"], row["table"]]
         if observed_configuration != expected_configuration:
             raise AssertionError(f"configuration mismatch at survivor index {index}")
-        rows.append(
-            {
-                "index": index,
-                "lmin": row["lmin"],
-                "lmax": row["lmax"],
-                "table": row["table"],
-                "result": row["result"],
-            }
-        )
+        merged_row = {
+            "index": index,
+            "lmin": row["lmin"],
+            "lmax": row["lmax"],
+            "table": row["table"],
+            "result": row["result"],
+        }
+        for key in sorted(row):
+            if key.startswith("candidate_"):
+                merged_row[key] = row[key]
+        rows.append(merged_row)
 
     tally = {
         verdict: sum(row["result"] == verdict for row in rows)

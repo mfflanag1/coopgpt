@@ -26,8 +26,9 @@ on six-player singleton-normalized exact games.
 
 It is not yet presented as an unconditional paper theorem.  The accepted
 artifact records exact QF_LRA solver verdicts, not independently replayed
-rational infeasibility certificates.  Equality classification and hostile
-external review also remain incomplete.
+rational infeasibility certificates.  Equality classification is now complete
+at the same solver-evidence level and is documented separately in
+`S6_EQUALITY_CLASSIFICATION.md`; hostile external review remains incomplete.
 
 ## Dependency map
 
@@ -44,7 +45,8 @@ The computational conclusion has five dependencies.
 3. **Hand exclusions.**  The previously reviewed dimension-free lemmas exclude
    24,795 unique-Lmax-top configurations and the hand net excludes 9,132 more,
    leaving exactly 3,350 survivors.  These exclusions are recorded in
-   `triage32.json` and audited in `AUDIT_S6.txt` and `coverage32.py`.
+   `triage32.json` and audited in `AUDIT_S6.txt`, `coverage32.py`, and its
+   regenerated `coverage32.json` output.
 4. **Full staged optimality.**  The encoding carries a separate Farkas
    certificate for every player at every Lmin and Lmax stage, with old pinned
    levels imposed recursively.  It therefore does not substitute the false
@@ -106,39 +108,52 @@ The independently encoded reconstruction control
 verifiers/s6/audit_core_closure_reconstruction.py
 ```
 
-constructs a fresh equality model, compresses it to four generators, and
-recomputes both selections with two independently formulated exact rational LP
-implementations.  It obtains overlap exactly `2/3` and the dispersion-optimal
-Lmax certificate
+now reads the complete equality-with-triple census, reconstructs both SAT
+models, compresses their singleton witnesses, and recomputes both selections
+with two independently formulated exact rational LP implementations.  The two
+surviving support types are
+
+```text
+index 1408: Lmin (4,2), Lmax (2,4), table ((2,2),(0,2));
+index 2236: Lmin (5,1), Lmax (2,4), table ((2,3),(0,1)).
+```
+
+Both obtain overlap exactly `2/3` and the dispersion-optimal Lmax certificate
 
 ```text
 theta=1/3, eta=0, alpha=(0,0,0,1/3,1/3,1/3), support={56}.
 ```
 
-This verifies sharpness and one equality instance.  It does not prove that
-every equality case has the same anchor.  The prepared equality searches must
-still exclude (i) equality without a tight triple of Lmax-top players and
-(ii) equality with an over-cover of dispersion strictly below `1/3`.
+The complete equality split is now
+
+```text
+with a tight Lmax-top triple:       2 SAT / 3348 UNSAT / 0 UNKNOWN
+without a tight Lmax-top triple:    0 SAT / 3350 UNSAT / 0 UNKNOWN.
+```
+
+Within the two surviving types, independently checked CPC proofs show that
+the displayed payoff pairs are forced and exclude both absence of a tight top
+triple and over-cover dispersion below `1/3`.  Thus equality anchor geometry
+is rigid conditional on the finite classification.  The 3,348 type exclusions
+remain census verdicts rather than individually checked proof objects.
 
 An independently checked proof-object lane is now frozen under
 `verifiers/s6/certificates/`.  Z3 and cvc5 agree on one representative strict
-failure exclusion and the two equality negations for the realizable boundary
-configuration at survivor index 2236.  With trusted proof steps disabled,
-cvc5 emits exact CPC proof bodies that the separately built Ethos checker
-accepts as `correct`.  These controls validate the exporter and proof-checker
-path; they are not yet certificate coverage for all 3,350 configurations.
+failure exclusion and all eight rigidity/common-triple/anchor negations for the two realizable
+equality types.  With trusted proof steps disabled, cvc5 emits exact CPC proof
+bodies that the separately built Ethos checker accepts as `correct`.  The
+equality lane covers both surviving equality types; the strict-failure lane is
+still representative rather than coverage for all 3,350 configurations.
 
 ## Required next checks
 
 Before promoting the bound to a main paper theorem:
 
-1. rerun a clean all-generator census or independently cross-check the accepted
-   configurations with a second exact QF_LRA implementation;
-2. extract replayable proof evidence—preferably rational LRA certificates—from
-   the Boolean support branches rather than treating unsat cores as proof;
-3. complete the two equality censuses and extract the surviving equality
-   support types up to permutation;
-4. obtain hostile external review of the normal-form theorem, staged Farkas
+1. replace the 3,350 strict and 3,348 equality-type UNSAT verdicts by a human
+   structural reduction or checked proof-object coverage;
+2. attack the local tangent/normal-cone barrier at the two rigid equality
+   profiles described in `S6_EQUALITY_CLASSIFICATION.md`;
+3. obtain hostile external review of the normal-form theorem, staged Farkas
    signs, universe coverage, and artifact merger; and
-5. search the literature before making a novelty claim for the
+4. search the literature before making a novelty claim for the
    selection-preserving `n+2` reduction.

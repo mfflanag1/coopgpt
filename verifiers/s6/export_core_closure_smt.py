@@ -21,6 +21,7 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from core_closure_pipeline import (  # noqa: E402
     pipeline2_generator_normal_form,
+    require_equality_without_common_uniform_triple_anchor,
     require_equality_with_uniform_triple_anchor,
     require_equality_with_subthird_overcover,
     require_equality_without_uniform_triple_anchor,
@@ -41,8 +42,40 @@ def build(index: int, mode: str, source: Path) -> z3.Solver:
         require_equality_with_uniform_triple_anchor(data, tuple(c))
     elif mode == "equality-no-triple":
         require_equality_without_uniform_triple_anchor(data, tuple(c))
+    elif mode == "equality-no-common-triple":
+        require_equality_without_common_uniform_triple_anchor(data, tuple(c))
     elif mode == "equality-subthird":
         require_equality_with_subthird_overcover(data, tuple(c))
+    elif mode == "equality-noncanonical":
+        canonical = {
+            1408: (
+                ("1/12", "1/12", "1/12", "1/12", "1/3", "1/3"),
+                ("0", "0", "1/4", "1/4", "1/4", "1/4"),
+            ),
+            2236: (
+                ("1/9", "1/9", "1/9", "1/9", "1/9", "4/9"),
+                ("1/18", "1/18", "2/9", "2/9", "2/9", "2/9"),
+            ),
+        }
+        if index not in canonical:
+            raise ValueError(
+                "equality-noncanonical is defined only for equality indices "
+                "1408 and 2236"
+            )
+        expected_lmin, expected_lmax = canonical[index]
+        data["solver"].add(data["distance"] == z3.RealVal("2/3"))
+        data["solver"].add(
+            z3.Or(
+                [
+                    value != z3.RealVal(expected)
+                    for value, expected in zip(data["lmin"], expected_lmin)
+                ]
+                + [
+                    value != z3.RealVal(expected)
+                    for value, expected in zip(data["lmax"], expected_lmax)
+                ]
+            )
+        )
     return data["solver"]
 
 
@@ -113,7 +146,9 @@ def main() -> None:
             "equality",
             "equality-triple",
             "equality-no-triple",
+            "equality-no-common-triple",
             "equality-subthird",
+            "equality-noncanonical",
         ),
         default="failure",
     )

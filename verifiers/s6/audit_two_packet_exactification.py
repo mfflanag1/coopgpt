@@ -220,6 +220,142 @@ def first_floor_pinning_certificate(v, trial, player):
     return {"coalition_weights": lambdas, "floor_weights": q, "cover_level": c}
 
 
+def staged_pinning_certificate(v, point, trace, mode, stage, player):
+    """Exact dual certificate for one coordinate pinned at one lex stage.
+
+    For Lmin, on the face with old coordinates fixed and the current block
+    constrained below by its level, the incidence identity is
+
+        sum lambda_S 1_S + sum q_j e_j + sum r_k e_k + e_i = c 1_N.
+
+    For Lmax, with the current block constrained above by its level, it is
+
+        sum lambda_S 1_S + sum q_j e_j - sum r_k e_k - e_i = c 1_N.
+
+    Here lambda and r are nonnegative, q and c are free, and supported
+    coalitions are point-tight.  The corresponding exact objective identity
+    proves the required opposite extremum equals the stage level.
+    """
+    if mode not in ("min", "max"):
+        raise ValueError(mode)
+    block = tuple(trace[stage]["newly_pinned"])
+    if player not in block:
+        raise ValueError("player is not in the requested stage block")
+    old = tuple(
+        i
+        for earlier in range(stage)
+        for i in trace[earlier]["newly_pinned"]
+    )
+    level = trace[stage]["level"]
+    tight = tuple(
+        coalition
+        for coalition in range(1, FULL)
+        if coalition_sum(point, coalition) == v[coalition]
+    )
+    m = len(tight)
+    q_index = {j: m + k for k, j in enumerate(old)}
+    r_index = {j: m + len(old) + k for k, j in enumerate(block)}
+    c_index = m + len(old) + len(block)
+    width = c_index + 1
+
+    aeq, beq = [], []
+    for i in range(N):
+        row = [F(0)] * width
+        for k, coalition in enumerate(tight):
+            row[k] = F(int(bool(coalition >> i & 1)))
+        if i in q_index:
+            row[q_index[i]] = F(1)
+        if i in r_index:
+            row[r_index[i]] = F(1 if mode == "min" else -1)
+        row[c_index] = F(-1)
+        aeq.append(row)
+        beq.append(F(-int(i == player) if mode == "min" else int(i == player)))
+
+    row = [F(0)] * width
+    if mode == "min":
+        for k, coalition in enumerate(tight):
+            row[k] = -v[coalition]
+        for j in old:
+            row[q_index[j]] = -point[j]
+        for j in block:
+            row[r_index[j]] = -level
+        row[c_index] = v[FULL]
+    else:
+        for k, coalition in enumerate(tight):
+            row[k] = v[coalition]
+        for j in old:
+            row[q_index[j]] = point[j]
+        for j in block:
+            row[r_index[j]] = -level
+        row[c_index] = -v[FULL]
+    aeq.append(row)
+    beq.append(level)
+
+    aub, bub = [], []
+    for k in tuple(range(m)) + tuple(r_index.values()):
+        row = [F(0)] * width
+        row[k] = F(-1)
+        aub.append(row)
+        bub.append(F(0))
+    status, _, solution = exact_linprog([F(0)] * width, aub, bub, aeq, beq)
+    assert status == "optimal"
+    lambdas = tuple(
+        (tight[k], solution[k]) for k in range(m) if solution[k] > 0
+    )
+    old_weights = tuple(
+        (j, solution[q_index[j]]) for j in old if solution[q_index[j]] != 0
+    )
+    side_weights = tuple(
+        (j, solution[r_index[j]]) for j in block if solution[r_index[j]] > 0
+    )
+    c = solution[c_index]
+
+    for i in range(N):
+        load = sum(
+            (weight for coalition, weight in lambdas if coalition >> i & 1),
+            F(0),
+        ) + sum((weight for j, weight in old_weights if j == i), F(0))
+        side = sum((weight for j, weight in side_weights if j == i), F(0))
+        if mode == "min":
+            load += side + F(int(i == player))
+        else:
+            load -= side + F(int(i == player))
+        assert load == c
+    if mode == "min":
+        objective = (
+            c * v[FULL]
+            - sum((weight * v[S] for S, weight in lambdas), F(0))
+            - sum((weight * point[j] for j, weight in old_weights), F(0))
+            - level * sum((weight for _, weight in side_weights), F(0))
+        )
+    else:
+        objective = (
+            sum((weight * v[S] for S, weight in lambdas), F(0))
+            + sum((weight * point[j] for j, weight in old_weights), F(0))
+            - level * sum((weight for _, weight in side_weights), F(0))
+            - c * v[FULL]
+        )
+    assert objective == level
+    return {
+        "stage": stage,
+        "player": player,
+        "level": level,
+        "coalition_weights": lambdas,
+        "old_pin_weights": old_weights,
+        "level_side_weights": side_weights,
+        "efficiency_weight": c,
+        "incidence_sign": "+e_i" if mode == "min" else "-e_i",
+    }
+
+
+def all_staged_pinning_certificates(v, point, trace, mode):
+    return tuple(
+        staged_pinning_certificate(v, point, trace, mode, stage, player)
+        for stage in range(len(trace))
+        for player in trace[stage]["newly_pinned"]
+    )
+
+
 def encode(value):
     if isinstance(value, F):
         return str(value)
@@ -257,6 +393,9 @@ def audit_game(label, rows):
         selections[mode] = {
             "point": independent_point,
             "trace": independent_trace,
+            "pinning_certificates": all_staged_pinning_certificates(
+                v, independent_point, independent_trace, mode
+            ),
         }
 
     trial_floor = min(TRIAL_LMIN)
@@ -347,7 +486,10 @@ def main():
     assert min(true_lmin) == F(1, 12) and true_lmin[3] > F(1, 12)
 
     report = {
-        "status": "exact boundary audit; not a proof of the general six-player bound",
+        "status": (
+            "exact boundary audit with complete staged pinning certificates; "
+            "not a proof of the general six-player bound"
+        ),
         "paired_certificate": {
             "top_support": [TOP_COALITION],
             "top_weight": F(1, 3),

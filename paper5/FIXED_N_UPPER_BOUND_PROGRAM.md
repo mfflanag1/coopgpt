@@ -242,5 +242,13 @@ The first complete run of that route is recorded in
 `S6_GENERATOR_CENSUS_CHECKPOINT.md`: all 3,350 hand-net survivors have decisive
 strict-failure verdicts, with `0 SAT / 3350 UNSAT / 0 UNKNOWN`.  This closes the
 configuration census at the solver-evidence level.  It does not remove the
-stated certificate, equality-classification, clean independent rerun, or
-external-review requirements.
+stated certificate or external-review requirements.
+
+`S6_EQUALITY_CLASSIFICATION.md` now completes the equality census at the same
+evidence level.  Exactly two support types survive, their normalized payoff
+pairs are rigid, and both have dispersion exactly `1/3`.  Exact reconstructed
+games and checked CPC proofs cover rigidity and the two anchor negations within
+those types.  A first-crossing argument localizes any hypothetical outward
+counterexample direction at one of these two profiles.  The remaining human
+target is therefore a tangent/normal-cone barrier at the two equality
+profiles, not another archive search.
