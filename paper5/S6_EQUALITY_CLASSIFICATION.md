@@ -748,6 +748,26 @@ distance-free blocker shapes.  This gives a checked abstract completion of
 the distance-sensitive direction template, though a short human Farkas
 derivation of the four inequalities would still be preferable.
 
+The 230 Lmax rows eliminated before a direction is needed are not one opaque
+solver class either.  Exact premise ablation gives
+
+| critical-algebra mechanism | rows |
+|---|---:|
+| payoff signs plus the common-pair condition | 68 |
+| additionally needs the third critical-triple payoff comparison | 146 |
+| jointly needs distance and singleton witnesses | 16 |
+
+The last sixteen rows again share one role order and the same forced common
+pair.  `export_positive_lmax_critical_boundary_smt.py` weakens that order,
+removes all contingency tables, and retains only normalization, local signs,
+the two common equalities, and the six critical witnesses.  Distance `>2/3`
+is UNSAT; cvc5's exact CPC proof is checked by Ethos.  The finite audit maps
+all sixteen rows to this abstract lemma.  Consequently the unsimplified part
+of the complete Lmax-selected branch has been reduced to purely payoff-level
+classification for the other 214 critical rows and the payoff-order lemma in
+the 80-row direction template—no remaining Lmax residue mixes an unbounded
+number of support-table-specific witness arguments.
+
 On the Lmin side, the 322 single directions likewise use only three role
 templates:
 

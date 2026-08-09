@@ -2,7 +2,7 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for sixteen
+These files exercise an independently checked proof-object path for seventeen
 six-player generator-normal-form queries.  They do not replace the complete
 3,350-configuration census and do not by themselves prove the global bound.
 
@@ -24,6 +24,7 @@ six-player generator-normal-form queries.  They do not replace the complete
 | `positive_lmax_boundary_n_j_k_r.smt2` | abstract | blocker `{n,j,k,r}` plus distance `>2/3` | UNSAT |
 | `positive_lmax_boundary_n_j_l_r.smt2` | abstract | blocker `{n,j,l,r}` plus distance `>2/3` | UNSAT |
 | `positive_lmax_boundary_n_k_l_r.smt2` | abstract | blocker `{n,k,l,r}` plus distance `>2/3` | UNSAT |
+| `positive_lmax_critical_boundary.smt2` | abstract | shared 16-row critical order plus distance `>2/3` | UNSAT |
 
 Indices 1408 and 2236 are the two equality-feasible stratum/table
 configurations left by the complete staged census:
@@ -80,6 +81,13 @@ critical-triple inequalities, one displayed blocker, and distance `>2/3`.
 Their checked UNSAT proofs show that each blocker shape forces distance at
 most `2/3`.  A separate finite audit is still needed to map the eight refined
 support types to exactly these four shapes.
+
+The abstract critical-boundary control similarly removes all contingency
+tables.  It assumes the shared weak order of the sixteen critical rows that
+survive every single premise ablation, their forced common pair, all six
+critical witnesses, and distance `>2/3`.  Its checked UNSAT proof covers the
+abstract implication; the finite dependency audit separately verifies that
+the sixteen rows have the required order and common pair.
 
 ## Pinned checker sources
 

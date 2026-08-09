@@ -35,7 +35,13 @@ from audit_positive_packet_ablation_census import (  # noqa: E402
 from audit_equality_refinement_neighborhood import refines  # noqa: E402
 
 
-def critical_all_witness_solver(index, configuration, include_distance=True):
+def critical_all_witness_solver(
+    index,
+    configuration,
+    include_distance=True,
+    include_witnesses=True,
+    include_triple_comparisons=True,
+):
     r = tuple(configuration[0])
     c = tuple(configuration[1])
     table = tuple(tuple(row) for row in configuration[2])
@@ -52,19 +58,21 @@ def critical_all_witness_solver(index, configuration, include_distance=True):
     solver.add(*[z[i] > x[i] for i in P])
     solver.add(x[rich] > z[rich])
     witnesses = []
-    for zero in range(N):
-        witness = [z3.Real(f"handover_q_{index}_{zero}_{i}") for i in range(N)]
-        witnesses.append(witness)
-        solver.add(
-            z3.Sum(witness) == 1,
-            witness[zero] == 0,
-            *[coordinate >= 0 for coordinate in witness],
-        )
+    if include_witnesses:
+        for zero in range(N):
+            witness = [z3.Real(f"handover_q_{index}_{zero}_{i}") for i in range(N)]
+            witnesses.append(witness)
+            solver.add(
+                z3.Sum(witness) == 1,
+                witness[zero] == 0,
+                *[coordinate >= 0 for coordinate in witness],
+            )
     triples = []
     for excluded in P:
         triple = tuple(i for i in P if i != excluded) + (rich,)
         triples.append(triple)
-        solver.add(point_sum(z, triple) >= point_sum(x, triple))
+        if include_triple_comparisons:
+            solver.add(point_sum(z, triple) >= point_sum(x, triple))
         for witness in witnesses:
             solver.add(point_sum(witness, triple) >= point_sum(x, triple))
     solver.add(

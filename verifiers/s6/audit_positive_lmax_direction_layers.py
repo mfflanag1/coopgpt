@@ -242,6 +242,38 @@ def boundary_template_structure(configuration, index, row):
     }
 
 
+def check_critical_boundary_structure(configuration, index):
+    solver, labels, _ = critical_all_witness_solver(
+        index, configuration, include_distance=False
+    )
+    cell = nsix.layout(
+        6,
+        tuple(configuration[0]),
+        tuple(configuration[1]),
+        tuple(tuple(values) for values in configuration[2]),
+    )
+    n0, n1 = labels["poor_players"]
+    j, k, ell = sorted(labels["P_players"], key=lambda player: cell[player][0])
+    rich = labels["rich_player"]
+    assert cell[n0][0] <= cell[n1][0] <= cell[j][0]
+    assert cell[j][0] < cell[k][0] < cell[ell][0] < cell[rich][0]
+    assert cell[n0][1] <= cell[j][1]
+    assert cell[n1][1] <= cell[j][1]
+    assert cell[j][1] <= cell[rich][1] < cell[k][1] == cell[ell][1]
+    x = [z3.Real(f"m{cell[i][0]}") for i in range(6)]
+    z = [z3.Real(f"M{cell[i][1]}") for i in range(6)]
+    for excluded in (j, k):
+        triple = tuple(
+            player for player in labels["P_players"] if player != excluded
+        ) + (rich,)
+        solver.push()
+        solver.add(point_sum(z, triple) != point_sum(x, triple))
+        result = solver.check()
+        solver.pop()
+        assert result == z3.unsat
+    return [j, k]
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--triage", type=Path, default=HERE / "triage32.json")
@@ -254,6 +286,45 @@ def main() -> None:
     args = parser.parse_args()
     survivors = json.loads(args.triage.read_text())["survivors"]
     source = json.loads(args.directions.read_text())["rows"]
+    critical_rows = [
+        row for row in source if row.get("critical_algebra_verdict") == "unsat"
+    ]
+    critical_classes = collections.Counter()
+    critical_boundary_rows = []
+    for row in critical_rows:
+        index = row["survivor_index"]
+        configuration = survivors[index]
+        variants = {}
+        for name, distance, witnesses, comparisons in (
+            ("without_distance", False, True, True),
+            ("without_witnesses", True, False, True),
+            ("payoff_critical", False, False, True),
+            ("common_sign_only", False, False, False),
+        ):
+            candidate, _, _ = critical_all_witness_solver(
+                index,
+                configuration,
+                include_distance=distance,
+                include_witnesses=witnesses,
+                include_triple_comparisons=comparisons,
+            )
+            variants[name] = str(candidate.check())
+        if variants["common_sign_only"] == "unsat":
+            critical_classes["common_sign_only"] += 1
+        elif variants["payoff_critical"] == "unsat":
+            critical_classes["needs_third_triple_comparison"] += 1
+        else:
+            assert set(variants.values()) == {"sat"}
+            critical_classes["needs_distance_and_witnesses"] += 1
+            common_pair = check_critical_boundary_structure(configuration, index)
+            critical_boundary_rows.append(
+                {"survivor_index": index, "forced_common_P_players": common_pair}
+            )
+    assert dict(critical_classes) == {
+        "common_sign_only": 68,
+        "needs_third_triple_comparison": 146,
+        "needs_distance_and_witnesses": 16,
+    }
     rows = []
     for row in source:
         if row.get("selected_side") != "max" or row.get("direction") is None:
@@ -319,6 +390,8 @@ def main() -> None:
         "schema": "positive-lmax-direction-dependency-audit-v1",
         "scope": "exact QF_LRA dependency audit; solver evidence, not proof objects",
         "summary": summary,
+        "critical_algebra_dependency_summary": dict(critical_classes),
+        "critical_boundary_rows": critical_boundary_rows,
         "rows": rows,
     }
     text = json.dumps(payload, indent=2, sort_keys=True) + "\n"

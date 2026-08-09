@@ -142,6 +142,7 @@ verifiers/s6/replay_core_closure_smt.py
 verifiers/s6/verify_frozen_certificates.py
 verifiers/s6/export_positive_handover_smt.py
 verifiers/s6/export_positive_lmax_boundary_smt.py
+verifiers/s6/export_positive_lmax_critical_boundary_smt.py
 verifiers/s6/verify_positive_handover_certificates.py
 verifiers/s6/audit_positive_lmax_direction_layers.py
 verifiers/s6/positive_lmax_direction_layers_audit.json
@@ -166,6 +167,9 @@ verifiers/s6/certificates/positive_lmax_boundary_n_j_l_r.json
 verifiers/s6/certificates/positive_lmax_boundary_n_k_l_r.smt2
 verifiers/s6/certificates/positive_lmax_boundary_n_k_l_r.cpc
 verifiers/s6/certificates/positive_lmax_boundary_n_k_l_r.json
+verifiers/s6/certificates/positive_lmax_critical_boundary.smt2
+verifiers/s6/certificates/positive_lmax_critical_boundary.cpc
+verifiers/s6/certificates/positive_lmax_critical_boundary.json
 ```
 
 Hostile questions:
@@ -300,12 +304,12 @@ Hostile questions:
     exceptional tables 2597 and 3237.  Treat these exact blocker UNSAT verdicts
     as a compressed proof-discovery map, not as independent proof evidence.
 19. Inspect the three representative positive-handover proof objects
-    independently.  For survivor 40, confirm
-    Confirm that the base critical system is feasible, direction
+    independently.  For survivor 40, confirm that the base critical system is
+    feasible, direction
     `(0,0,0,-1,0,1)` lexicographically improves Lmax in that support type,
     and the blocker disjunction has the correct inequality direction for `x`
-    and all six singleton witnesses.  Ethos checks this exact CPC body, but it
-    the short gap calculation `(29)--(30)`.  Reproduce the dependency ablation:
+    and all six singleton witnesses, then audit the short gap calculation
+    `(29)--(30)`.  Reproduce the dependency ablation:
     21 direction rows need neither distance nor witness blocker inequalities,
     80 need witnesses but not distance, and eight need both.  Survivors 40,
     200, and 504 represent those three templates, but cover only three of the
@@ -329,6 +333,13 @@ Hostile questions:
     its CPC proof.  Confirm that these formulas prove only that a displayed
     blocker forces distance at most `2/3`; the finite audit supplies the
     separate map from the eight tables to those blocker shapes.
+    Finally, reproduce the `68+146+16=230` critical-algebra split.  Check that
+    the first 68 use only signs/common-pair algebra, the next 146 also use the
+    third triple comparison but neither distance nor witnesses, and all
+    sixteen remaining rows fit the weak order in the abstract critical-boundary
+    exporter.  Replay its CPC proof, while treating the 214-row payoff
+    classification as finite solver evidence until uniform inequalities are
+    written.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
