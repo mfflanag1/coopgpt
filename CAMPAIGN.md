@@ -1582,6 +1582,21 @@ localization of exactness; "|B|=4 is special".
   decided — all 74 realized ones and 507 of 514 at k<=3 — with seven
   named k<=3 configurations and the k>=4 classes outstanding, and a
   method visibly closing the residue.  Not s(6) = 2/3.
+- THE SEVEN ARE ONE SHAPE (r25 addendum, RESIDUE_k3.json): six of
+  seven share lmax = (1,1,1,1,2) — the maximally-stratified Lmax at
+  b=5 — all seven have an Lmax composition of all-1s-plus-one-2, a
+  three-stratum Lmin with a SINGLETON TOP, and the last Lmax column
+  containing exactly the top Lmin player.  A hypothesis generator from
+  seven points, correctly not overread — but the k<=3 wall is ONE
+  CONFIGURATION SHAPE the encoding finds hard, not seven hard
+  instances, and shapes are what the hand net was built to kill.
+  NEXT-WINDOW ROUTE (a), better than re-rolls: an A3-free hand lemma
+  excluding all-1s-plus-2 Lmax against a singleton Lmin top — L7'/L12
+  territory (exactly this interface) — would close k<=3 as a theorem
+  with NO solver residue; the four [2,3,1]x[1,1,1,1,2] entries fall
+  together to any shape-level lemma.  Route (b) fallback: target-
+  relaxation brackets on the seven (the yes/no at 2/3 is where the
+  search burns).
 - s(6) AUDIT COMPLETE (r12, AUDIT_S6.txt in verifiers/s6/): NO FATAL,
   NO HIGH.  Item-0 bookkeeping CLEAN (994 entries, identity-carried,
   0 duplicates/0 out-of-population/0 SAT — the failure mode that
