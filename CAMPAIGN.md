@@ -1561,6 +1561,25 @@ localization of exactness; "|B|=4 is special".
   now and as THE POST-WINDOW COMPLETION METHOD for all unknowns and
   the unreached k>=5 classes.  Bank k<=3 confirmed.  Package split:
   r25 writes VERDICT32_S456.txt, never touching r22's VERDICT32.txt.
+- THE RESTART REVOLUTION + ARCHITECTURE SWITCH (r25; lead-ordered,
+  timestamped by the switch message): the restart sweep decided 11 of
+  13 previously-600s-failed k<=3 configurations at 3 x 70s seeds —
+  median 31.2s TOTAL, 7 on the first attempt — 85% of the "wall"
+  dissolving at half the failed budget.  r25's own "k<=3 lands clean"
+  projection RETRACTED with data (k<=3 fully attempted carries 84
+  unknowns; the clean boundary did not exist as projected); its
+  honesty note: the sweep comparison is population-level, not paired.
+  The probes re-read as "one long draw failed" (Group-A control: five
+  600s-fresh failures all decided on re-roll, three in 15-25s).
+  SWITCH ORDERED: Stage C's fixed-cap shards stopped (700 decided
+  bank, all UNSAT), all thirteen slots to restart sweeps — the 84
+  k<=3 first (the clean theorem's last obstacle), then k=4's 52, then
+  k=4 unreached re-roll-first, probes last; seed provenance recorded
+  per result.  RUNNING TOTAL: 975+ verdicts at target 2/3 across
+  every stage and architecture, SAT count ZERO, no HALT marker ever.
+  The restart architecture is the s(6) completion method (k=5/6:
+  1-of-6 on re-roll says harder-not-impossible; escalation ladder =
+  more seeds, portfolio, catalogue-cut alternative).
 - (R) FINAL ROUND (task #36 CLOSED as the program's best-documented
   open problem; lead-audited both new proofs): SUBADDITIVITY COLLAPSE
   — f_w(A) = f(A u p) - f(p) always (the other branch never strictly
