@@ -339,7 +339,10 @@ Hostile questions:
     sixteen remaining rows fit the weak order in the abstract critical-boundary
     exporter.  Replay its CPC proof, while treating the 214-row payoff
     classification as finite solver evidence until uniform inequalities are
-    written.
+    written.  Verify the gap equivalence `(33)`: all 68 first-layer rows have
+    no order-feasible equal-gap pair, while every one of the 146 second-layer
+    rows has exactly one candidate pair and that pair fails only when the
+    third-gap comparison is added.
 
 Reproduce the two exact reconstruction controls from the repository root:
 

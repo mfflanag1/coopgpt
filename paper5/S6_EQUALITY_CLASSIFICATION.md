@@ -757,6 +757,25 @@ solver class either.  Exact premise ablation gives
 | additionally needs the third critical-triple payoff comparison | 146 |
 | jointly needs distance and singleton witnesses | 16 |
 
+This split has a simple gap interpretation.  Put
+`A=sum_{i in N}(x_i-z_i)>0` and `delta_j=x_j-z_j<0` for `j in P`.
+Efficiency turns the three critical comparisons and the two-of-three common
+condition into
+
+```text
+delta_j >= -A for every j in P,
+with equality for at least two j.                            (33)
+```
+
+For each of the first 68 tables, no pair in `P` can have the equal gap `-A`
+under the displayed stratum orders.  For each of the next 146, exactly one
+pair is order-feasible, but imposing the remaining inequality in (33) is
+infeasible.  The audit checks all three candidate pairs separately, so the
+`68+146` split is precisely “no equal-gap pair” versus “one candidate pair,
+third gap too small,” not merely two solver timing classes.  Turning this
+finite ordered-difference classification into a short forbidden-pattern
+lemma is the remaining human payoff-algebra task.
+
 The last sixteen rows again share one role order and the same forced common
 pair.  `export_positive_lmax_critical_boundary_smt.py` weakens that order,
 removes all contingency tables, and retains only normalization, local signs,

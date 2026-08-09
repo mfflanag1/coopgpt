@@ -10,6 +10,7 @@ from __future__ import annotations
 
 import argparse
 import collections
+import itertools
 import json
 import sys
 from pathlib import Path
@@ -274,6 +275,44 @@ def check_critical_boundary_structure(configuration, index):
     return [j, k]
 
 
+def feasible_common_pairs(configuration, index, require_third_comparison):
+    solver, labels, _ = critical_all_witness_solver(
+        index,
+        configuration,
+        include_distance=False,
+        include_witnesses=False,
+        include_triple_comparisons=require_third_comparison,
+    )
+    cell = nsix.layout(
+        6,
+        tuple(configuration[0]),
+        tuple(configuration[1]),
+        tuple(tuple(values) for values in configuration[2]),
+    )
+    x = [z3.Real(f"m{cell[i][0]}") for i in range(6)]
+    z = [z3.Real(f"M{cell[i][1]}") for i in range(6)]
+    triples = []
+    for excluded in labels["P_players"]:
+        triple = tuple(
+            player for player in labels["P_players"] if player != excluded
+        ) + (labels["rich_player"],)
+        triples.append((excluded, triple))
+    feasible = []
+    for first, second in itertools.combinations(triples, 2):
+        solver.push()
+        solver.add(
+            point_sum(z, first[1]) == point_sum(x, first[1]),
+            point_sum(z, second[1]) == point_sum(x, second[1]),
+        )
+        result = solver.check()
+        solver.pop()
+        if result == z3.sat:
+            feasible.append(sorted((first[0], second[0])))
+        else:
+            assert result == z3.unsat
+    return feasible
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--triage", type=Path, default=HERE / "triage32.json")
@@ -291,6 +330,7 @@ def main() -> None:
     ]
     critical_classes = collections.Counter()
     critical_boundary_rows = []
+    critical_payoff_rows = []
     for row in critical_rows:
         index = row["survivor_index"]
         configuration = survivors[index]
@@ -310,9 +350,19 @@ def main() -> None:
             )
             variants[name] = str(candidate.check())
         if variants["common_sign_only"] == "unsat":
+            assert feasible_common_pairs(configuration, index, False) == []
             critical_classes["common_sign_only"] += 1
         elif variants["payoff_critical"] == "unsat":
+            candidate_pairs = feasible_common_pairs(configuration, index, False)
+            assert len(candidate_pairs) == 1
+            assert feasible_common_pairs(configuration, index, True) == []
             critical_classes["needs_third_triple_comparison"] += 1
+            critical_payoff_rows.append(
+                {
+                    "survivor_index": index,
+                    "unique_order_feasible_common_pair": candidate_pairs[0],
+                }
+            )
         else:
             assert set(variants.values()) == {"sat"}
             critical_classes["needs_distance_and_witnesses"] += 1
@@ -392,6 +442,7 @@ def main() -> None:
         "summary": summary,
         "critical_algebra_dependency_summary": dict(critical_classes),
         "critical_boundary_rows": critical_boundary_rows,
+        "critical_payoff_rows": critical_payoff_rows,
         "rows": rows,
     }
     text = json.dumps(payload, indent=2, sort_keys=True) + "\n"
