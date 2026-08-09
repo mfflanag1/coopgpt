@@ -1483,6 +1483,15 @@ localization of exactness; "|B|=4 is special".
   independently re-derives 37,277 = 24,795 + 9,132 + 74 + 3,276 with
   zero overlap, the harvest-realized set exactly the Stage-B 74, and
   no realized configuration excluded by the net.
+- PAPER6 POSITIONING PASS DONE (lead, during the six-hour push): the
+  prior-art paragraph written with NINE citations, all cited in text,
+  all verified — seven against the companions' bibliographies, two new
+  (Dutta-Ray 1989 Econometrica 57:615-635; Schmeidler 1972 JMAA
+  40:214-225) against publisher records via web search.  Claims scoped
+  narrowly (the tight-coalition protector form, not the transfer
+  technique; existential exactness as folklore-read-as-device).  TODO
+  macro removed (unused).  paper6 12pp clean; remaining before
+  submission-ready: one hostile-audit round.
 - SIX-HOUR PUSH AUTHORIZED (2026-08-09 ~00:50 UTC; user grant).
   RESOURCE AMENDMENT to the s(6) plan, made while the clean gate is
   RUNNING at 17/60 (10 unsat, 7 unknown seen) and recorded with that
