@@ -1,0 +1,149 @@
+================================================================================
+THE STARVED FAMILY:  A THEOREM AT EVERY n >= 5
+six rows, ratio (n-4)/(n-3), proved by progressive leximin
+================================================================================
+
+VERDICT.  PROVED.  The six-row constructor is upgraded from four verified
+instances to a theorem for every n >= 5.  The proof needs only TWO coalition
+values and is uniform in n; no solver appears in it.
+
+A SIMPLIFICATION FOUND WHILE PROVING IT.  The n=7 design used two kinds of pin,
+PAIR caps inside the Lmax zero-set and QUAD caps.  The pair caps are REDUNDANT:
+the quad caps alone pin the entire poorer side, because y(Z u {k}) <= 2(n-3) is
+a sum of n-3 terms each at least 2 under the stage-1 constraint, so every one of
+them is exactly 2.  The theorem below therefore rests on two coalition values,
+not five.
+
+--------------------------------------------------------------------------------
+THE FAMILY
+--------------------------------------------------------------------------------
+Fix n >= 5 and put
+      T = 8(n-3),   mu = 2,   M = T/4 = 2(n-3),   rho = 3n-10,
+      Z = {1,...,n-4}  (the Lmax zero-set),  k1 = n-3,  k2 = n-2,
+      r1 = n-1,  r2 = n,   P = Z u {k1,k2}  (|P| = n-2),  R = {r1,r2}.
+Note rho > mu and M > 0 for n >= 5.  Let G(n) be the lower envelope of the six
+allocations of common total T
+
+    x  = ( mu on P,                 rho, rho )
+    z  = ( 0 on Z,  M, M,           M,   M   )
+    a1 = ( 0 on Z,  0, M,           h,   h   )        h := (T-M)/2 = 3(n-3)
+    a2 = ( 0 on Z,  M, 0,           h,   h   )
+    b1 = ( mu on P,                 2rho, 0  )
+    b2 = ( mu on P,                 0,    2rho )
+
+All entries are nonnegative and each row totals T:
+x gives 2(n-2) + 2(3n-10) = 8n-24; z gives 4M = 8(n-3); a1, a2 give M + 2h =
+2(n-3) + 6(n-3) = 8(n-3); b1, b2 give 2(n-2) + 2rho = 8n-24.
+
+--------------------------------------------------------------------------------
+THEOREM.  For every n >= 5, G(n) is exact and singleton-normalized, with
+      Lmin(G(n)) = x,   strata (n-2, 2) at levels mu = 2 and rho = 3n-10,
+      Lmax(G(n)) = z,   strata (n-4, 4) at levels 0 and M = 2(n-3),
+      ||Lmin - Lmax||_1 / T  =  (n-4)/(n-3).
+--------------------------------------------------------------------------------
+PROOF.
+
+STEP 1 (exact, normalized).  By the envelope lemma G(n) is exact and every row
+lies in its core; in particular x and z are core points.  Every coordinate
+vanishes in some row -- each i in Z in z, k1 in a1, k2 in a2, r1 in b2, r2 in
+b1 -- so G(n) is singleton-normalized.
+
+STEP 2 (the two quad caps).  For k in {k1,k2} the set Z u {k} has n-3 elements,
+and the row values of g(Z u {k}) are
+      x : 2(n-3) = M      z : 0 + M = M       a1 : 0 or M      a2 : M or 0
+      b1, b2 : 2(n-3) = M
+so max over rows is exactly M, whence
+      f(Z u {k}) = M,  equivalently  v(N \ (Z u {k})) = T - M = 3M = 6(n-3).
+Since N \ (Z u {k}) consists of three players, this single value is
+simultaneously a CAP of size M on the n-3 players of Z u {k} and a coalition
+worth 3M on three players.  That coincidence -- T - (n-3)mu = 3T/4 = 3M -- is
+what makes the family work, and it holds identically in n.
+
+STEP 3 (Lmin = x), by progressive leximin.
+Every core point y obeys y(Z u {k}) <= M for k = k1, k2.
+  Stage 1.  If y >= lambda*1 then lambda(n-3) <= y(Z u {k1}) <= M = 2(n-3), so
+  lambda <= 2; and x attains lambda = 2.  Hence the stage-1 level is mu = 2.
+  Now let y be any core point with y >= 2*1.  Then y(Z u {k1}) <= 2(n-3) is a
+  sum of n-3 terms each at least 2, so every one equals 2; the same with k2.
+  As Z u {k1} u Z u {k2} = P, we get y = 2 on all of P.  Therefore
+  max y_i = 2 for each i in P, and all of P is pinned at stage 1.  No player of
+  R is pinned, since x_i = rho > 2 there.
+  Stage 2.  With P fixed at 2, efficiency gives y_{r1} + y_{r2} = T - 2(n-2)
+  = 2rho.  The largest common lower bound is rho, attained by x, and subject to
+  both being at least rho with sum 2rho each equals rho.  So both are pinned at
+  rho.
+Hence Lmin = x, with n-2 coordinates at 2 and two at rho > 2.
+
+STEP 4 (Lmax = z).
+  (a) Every core point has max_i y_i >= M: from Step 2,
+  y({k2,r1,r2}) >= v({k2,r1,r2}) = 3M, a sum of three terms.
+  (b) Suppose y is a core point with y_i <= M for every i.  Then
+  y({k2,r1,r2}) >= 3M with each term at most M forces y_{k2} = y_{r1} = y_{r2}
+  = M, and y({k1,r1,r2}) >= 3M forces y_{k1} = M.  The four of them already
+  total 4M = T, so y = 0 on Z; that is, y = z.
+So the minimum over the core of max_i y_i equals M and is attained only at z.
+Lmax minimizes the payoff vector sorted in decreasing order, lexicographically,
+and its first entry is max_i y_i; every core point other than z has a strictly
+larger first entry.  Hence Lmax = z, with n-4 coordinates at 0 and four at M.
+
+STEP 5 (the ratio).  Coordinatewise, |x - z| equals
+      2            on each of the n-4 players of Z,
+      M - 2 = 2n-8 on each of k1, k2   (M >= 2 for n >= 4),
+      rho - M = n-4 on each of r1, r2  (rho >= M for n >= 4),
+so ||x - z||_1 = 2(n-4) + 2(2n-8) + 2(n-4) = 8n - 32 = 8(n-4), and
+      ||x - z||_1 / T = 8(n-4) / (8(n-3)) = (n-4)/(n-3).                    []
+
+--------------------------------------------------------------------------------
+REMARKS
+--------------------------------------------------------------------------------
+1.  ONLY TWO VALUES ARE USED.  Steps 3 and 4 consume nothing about G(n) beyond
+    membership of x and z in the core and the two values v(N \ (Z u {k})) = 3M.
+    Any exact singleton-normalized game with those properties has the same Lmin,
+    Lmax and ratio.  The six rows are one way to realize them, not the content.
+
+2.  THE n = 5 BOUNDARY, PRECISELY.  At n = 5 we have T = 16, mu = 2, rho = 5,
+    M = 4, and |Z| = n-4 = 1 -- the Lmax zero-set is a single player, which is
+    the smallest case in which the construction is defined.  The member has
+    Lmin = (2,2,2,5,5) = (T/8 x3, 5T/16 x2) and Lmax = (0,4,4,4,4)
+    = (0, T/4 x4): exactly the CONFIGURATION CFG of paper5 thm:cfg, with ratio
+    1/2 = s(5).  So the family realizes the five-player extremal configuration
+    and its bound is TIGHT at n = 5.
+
+    BUT IT IS NOT THE SAME GAME as paper5 thm:n5's extremal example.  Scaling
+    that game (the envelope of (1,0,0,1,2) and (0,1,3,0,0)) to T = 16 and
+    comparing as UNLABELLED games -- searching all 120 relabellings -- no
+    permutation carries one v to the other; 19 coalitions differ even under the
+    best alignment.  The two games share the configuration, the selections up
+    to relabelling, and the ratio, and they differ as games.  Checked, not
+    assumed (n5_boundary.py), because a matching profile is not a matching
+    game -- a distinction this campaign has been caught by before.  The useful
+    reading: CFG at n = 5 is realized by at least two essentially different
+    games, and the family supplies one of them uniformly in n.
+
+3.  WHAT THE THEOREM DOES NOT SAY.  It gives s(n) >= (n-4)/(n-3), a lower
+    bound that increases to 1.  It is tight at n = 5 but NOT extremal in
+    general: the program's s(n) is known to exceed 1 from n = 8 and to tend to
+    2, so this family is beaten for large n.  The theorem is a clean, uniform
+    lower-bound family and the n-generic mechanism behind the crossover; it is
+    not a claim about the supremum at any n > 5.
+
+4.  NO MINIMALITY is claimed for the six rows.
+
+--------------------------------------------------------------------------------
+MACHINE CHECKS (guards, not premises)
+--------------------------------------------------------------------------------
+verify_family.py rebuilds G(n) from the closed form and re-derives everything
+from the rows alone, exact rational, single process, for n = 5,...,9:
+zero cover; both quad-cap values equal 6(n-3); Lmin and Lmax equal to the
+targets; ratio equal to (n-4)/(n-3); and exactness at DEFINITION level by LP
+over the core for n <= 8 (at n = 9 exactness is already the envelope lemma).
+All pass.  It also confirms Remark 2 numerically.
+
+ONE BUG FOUND AND FIXED in the verifier, not the construction: k1 and k2 sit at
+indices n-4 and n-3, and a first version of the sweep read the second quad cap
+at index n-2 (a rich player), reporting 4 instead of 6(n-3).  The construction
+was never affected; the mis-indexed line is corrected in verify_family.py.
+
+FILES: PROOF_FAMILY_N.txt (this), verify_family.py (the sweep), family_n.py and
+design7.py (the earlier constructor and the standalone n=7 instance).
+================================================================================

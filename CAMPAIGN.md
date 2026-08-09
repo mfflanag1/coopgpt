@@ -1499,6 +1499,37 @@ localization of exactness; "|B|=4 is special".
   Headroom probes: the genuine Stage-B unknown + one k=5 gate unknown,
   each 3600s isolated — the latter decides cap-shaped vs structural
   for the high-k wall.  Sort order fixed BEFORE launch.
+- FAMILY THEOREM PROVED (task #39, verifiers/s6/n7family/
+  PROOF_FAMILY_N.txt, lead-audited all five steps): the starved family
+  exists at EVERY n >= 5, ratio exactly (n-4)/(n-3), hand proof
+  uniform in n resting on TWO coalition values — the pair caps of the
+  original design proved REDUNDANT in the proving (the quad cap's sum
+  bound pins all n-3 players at once).  The n=5 member IS thm:n5's
+  extremal game (family tight at 5).  Scope guarded: a uniform
+  lower-bound family + the crossover mechanism, dominated for large n,
+  no claim about suprema beyond n=5.  One verifier bug self-caught
+  (index slip in the sweep, construction unaffected — caught because
+  the sweep prints values, not booleans).  paper5 open problem 4 part
+  one upgraded from two-point-verified to THEOREM.
+- SIX-HOUR GOVERNANCE ROUND (r25 + r12): executor collision resolved
+  (r22 keeps Stage C + probes; r25 owns diagnostic + VERDICT32; only
+  r25 writes the package).  r25's re-analysis DEMOTED r22's
+  reuse-hypothesis refutation to OPEN (n=10 cells, ~2 sigma, vs the
+  direct 10x single-config evidence: two long-lived cap-outs, one
+  fresh 56.5s resolve) — r22 accepted; the 27-unknown fresh-process
+  diagnostic runs at concurrency 2 as a CONSERVATIVE test (contention
+  biases against the hypothesis, so fresh UNSATs are decisive).
+  Pre-committed branch (c): >= 20/27 fresh-UNSAT -> stop Stage C, bank
+  UNSATs (contention-proof), void contended unknowns, relaunch fresh;
+  < 20 -> continue, unknowns marked contended.  r12's governance
+  catch: the ~5% launch threshold was a MIXTURE statistic applied to a
+  k-SORTED run (live k=3 rate 12.4%) — the completion-order bias
+  institutionalized; gate-vs-population k-distributions go in the
+  package.  PARTIAL claim hierarchy pre-committed: residue 0 ->
+  "s(6) = 2/3"; 1-40 -> named-list theorem; > 40 -> partial sweep,
+  bound OPEN — fixed before any residue size is known.  Box was 16
+  CPU-bound on 14 (3 non-s(6) processes — fleet-rule enforcement
+  failure, lead's); non-s(6) lanes ordered to drain.
 - STAGE C LAUNCHED (by r22, under the lead's parameter-decision
   message — it crossed the r25 handover; no double launch, r25
   redirected to monitor + package assembly): sorted (k_Lmin, k_Lmax)
