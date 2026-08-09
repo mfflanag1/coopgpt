@@ -1,0 +1,149 @@
+================================================================================
+TASK #32 -- THE s(6) PROGRAM.  PHASE 1 RECON.
+Recommendation: GO, STAGED, with a measurement gate before the full run.
+Work dir: scratchpad/r22/.  Repo read-only, nothing committed.
+================================================================================
+
+--------------------------------------------------------------------------------
+0.  RECOMMENDATION UP FRONT
+--------------------------------------------------------------------------------
+GO on Stage B (74 configurations, decisive, hours).
+GATE Stage C (the remaining 3,276) behind a measurement of the solver's
+'unknown' rate, which is the one thing that can sink the program and is not yet
+pinned down.
+
+I cannot promise s(6) closes the way s(5) did.  The triage is encouraging and
+the harvest says 2/3 is the right number, but at n = 6 the certificate solver
+sometimes returns 'unknown', and under campaign discipline that is a failure,
+not a soft result.
+
+--------------------------------------------------------------------------------
+1.  WHAT IS VALID AT n = 6, AND WHAT IS NOT
+--------------------------------------------------------------------------------
+A3 IS FALSE ON THE M-SIDE FROM n = 6 (paper5 obs:Mside), so two things from the
+n = 5 toolkit are DROPPED and appear nowhere in this recon:
+  * the anchor conditions (lem:anchors (a),(b) as disjunctions over attaining
+    coalitions) -- they presuppose nu = M and lambda = mu;
+  * L3 (2M + 3mu <= T), whose proof runs through the ceiling anchor.
+EVERYTHING ELSE SURVIVES UNCHANGED, because each proof is a perturbation inside
+the core and never mentions the number of players:
+  L4, L5, L6, L7, L7', L1'', L11, L12, L13, L14-L17,
+together with both halves of pipeline 2 -- Theorem A (exactness is existential
+and linear) and the staged Farkas certificates with their mirror.
+Nothing in nsix.py assumes A3.
+
+--------------------------------------------------------------------------------
+2.  THE CONFIGURATION UNIVERSE
+--------------------------------------------------------------------------------
+        n = 4:    281 configurations,   183 killed by L1''  (65.1%)
+        n = 5:  2,961 configurations, 1,953 killed by L1''  (66.0%)
+        n = 6: 37,277 configurations, 24,795 killed by L1''  (66.5%)
+L1'' -- the Lmax top stratum has at least two players -- is a pure
+combinatorial filter and is A3-free, so two thirds of the universe goes for
+free at every n tried.  12,482 configurations remain at n = 6.
+
+--------------------------------------------------------------------------------
+3.  THE HAND-NET TRIAGE  (the good news)
+--------------------------------------------------------------------------------
+Net: levels + L1'' + L7 + L7' + L11 + L12, all A3-free, no game variable,
+target 2/3.  Cost 45 ms per configuration; the whole universe in ~2 minutes on
+12 cores (triage32.py, sharded, -> triage32.json).
+
+        universe                37,277
+        L1''-excluded           24,795
+        killed by the hand net   9,132
+        SURVIVE                  3,350      9.0% of the universe
+        HAND-EXCLUDED           33,927     91.0%
+
+For comparison, the same A3-free net at n = 5 left 6.9%.  The reach carries to
+n = 6 essentially intact, and it does so having LOST the anchor conditions.
+
+SOUNDNESS CHECK.  Of the 74 configurations the harvest actually populates with
+positive ratio, the net kills ZERO.  It excludes nothing real.
+
+Survivors concentrate, as at n = 5, in many-stratum Lmin shapes:
+(1,1,1,1,1,1) 407, (2,1,1,1,1) 351, (1,2,1,1,1) 228, (1,1,2,1,1) 212,
+(1,1,1,2,1) 211, (2,1,2,1) 183, (2,2,1,1) 180, (3,1,1,1) 175.
+
+--------------------------------------------------------------------------------
+4.  THE HARVEST  (calibration)
+--------------------------------------------------------------------------------
+2,400 draws over two seeds, 374 games with positive ratio, exact rationals.
+Games are lower envelopes of common-total nonnegative allocations, which is
+exactly the exact class -- so exactness needs no test, and no core-vertex
+enumeration is performed anywhere at n = 6.
+
+        MAXIMUM RATIO = 2/3, EXACTLY.  NOTHING ABOVE.
+
+No refutation of two-generator extremality; consistent with s(6) = 2/3 = s_2(6).
+2/3 is attained in exactly two configurations:
+        Lmin (5,1) x Lmax (2,4)   tbl [[2,3],[0,1]]
+        Lmin (4,2) x Lmax (2,4)   tbl [[2,2],[0,2]]
+Next values down: 3/5, 4/7, then 1/2 (36 games).  74 distinct configurations
+carry positive ratio at all.
+
+--------------------------------------------------------------------------------
+5.  PIPELINE-2 COST  (the problem)
+--------------------------------------------------------------------------------
+  sample 1  8 configurations, 120s cap : mean 42.1s, TWO returned UNKNOWN
+  sample 2  like-for-like, 300s cap, 4 completed : mean 2.8s, zero unknown
+The median is a few seconds; the tail is heavy; the unknown rate lies somewhere
+in 0-25% on samples far too small to pin down.  THIS IS THE CRUX.  At 3,350
+survivors a 10% unknown rate leaves ~335 configurations the encoding cannot
+close, and s(6) does not close with it.
+
+AN OPTIMIZATION PROPOSED, TESTED, AND WITHDRAWN.  I expected the Boolean cost to
+come from re-deciding the support condition "y_A = 0 or phi(A) = v(A)" inside
+every Farkas bundle (744 independent choices at n = 6), and built a variant
+hoisting tightness into 124 shared markers tx[A]/tz[A].  It is logically
+equivalent and STRICTLY WORSE: it returned unknown at 300s on a configuration
+the original solved in 3.1s.  In hindsight the biconditional
+tx[S] <-> (x(S) = v(S)) forces z3 to decide tightness for all 62 coalitions
+eagerly, while the original disjunction forces it only where y is nonzero.
+Recorded in opt32.py so it is not reinvented.  DO NOT ADOPT.
+
+A METHODOLOGICAL ERROR OF MY OWN, CORRECTED.  My first comparison of the two
+encodings used tables(r,c)[0] instead of the sampled table, so it compared
+different configurations and appeared to show the optimization fixing the
+unknowns.  The numbers above are from the corrected like-for-like run
+(time32b.py), which reverses that conclusion.
+
+--------------------------------------------------------------------------------
+6.  THE STAGED PLAN
+--------------------------------------------------------------------------------
+STAGE A -- DONE.  Triage complete; 3,350 survivors archived in triage32.json.
+
+STAGE B -- RUN ON YOUR GO.  ~74 configurations, hours not days.  Pipeline 2 at
+target 2/3 on every configuration the harvest populates (all 74 survive the
+net; stageB.json lists them with observed maxima), plus the two n = 6 controls
+the discipline requires:
+   drop-the-hypothesis -- deleting the certificates must restore feasibility
+       wherever the configuration is possible;
+   completeness-with-teeth -- the 2/3 games must come back SAT at a lower
+       target and audit end-to-end as genuine exact n = 6 games, exactness
+       verified by Theorem-A LPs (62 per game), never by vertex enumeration.
+This decides whether anything OBSERVED can exceed 2/3 and validates the n = 6
+encoding end to end.  It is the highest information per CPU-hour available.
+
+STAGE C -- GATED, NOT LAUNCHED BLIND.  Before committing to the other 3,276:
+   measure the unknown rate on a random 60-configuration sample at a 600s cap
+   (~1 CPU-hour).  If it is ~0, the full run is roughly 5-15 CPU-hours sharded
+   twelve ways, with checkpointing -- launch it.  If it is materially positive,
+   the honest deliverable is a PARTIAL theorem, "ratio <= 2/3 for all but a
+   named list of N configurations", reported as such rather than chased.
+
+--------------------------------------------------------------------------------
+7.  FILES
+--------------------------------------------------------------------------------
+ nsix.py          general-n machinery: compositions, tables, the A3-free hand
+                  net, pipeline 2 (Theorem A + staged Farkas).  A3-free by
+                  construction; the omissions are documented in its docstring.
+ triage32.py      the full triage, sharded.   -> triage32.json, tri32_*.log
+ harvest6.py      the n=6 harvest.            -> harvest6_601.json,
+                                                 harvest6_602.json + logs
+ time32.py        first cost sample.          -> time32.log
+ time32b.py       corrected like-for-like comparison. -> time32b.json/.log
+ opt32.py         the withdrawn shared-tightness variant, kept as a record
+ stageB.json      the 74 populated configurations with their observed maxima
+ RECON32.txt      this file
+================================================================================

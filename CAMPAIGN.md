@@ -1283,7 +1283,22 @@ localization of exactness; "|B|=4 is special".
   Method notes for the other 26: cap-shape lemma + load count, nothing
   CFG-specific but the numbers.  Targets 2-3 (mu=lambda by hand; the
   other 26) not attempted.
-- PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
+- s(6) PROGRAM, PHASE-1 RECON (task #32, verifiers/s6/): universe 37,277
+  configurations at n=6; the A3-FREE hand net (levels + L1'' + L7/L7' +
+  L11/L12 — anchors and L3 dropped, they route through A3 which is false
+  M-side at n>=6) leaves 3,350 survivors at target 2/3 = 91% hand-
+  excluded (vs 93% at n=5), soundness clean (kills none of the 74
+  populated configurations).  Fresh harvest (2,400 draws, 374 positive-
+  ratio): MAX RATIO EXACTLY 2/3, attained in two configurations
+  (Lmin(5,1)xLmax(2,4) and (4,2)x(2,4)) — no extremality refutation,
+  consistent with s(6)=2/3.  Cost gate: pipeline-2 per-configuration
+  median seconds but heavy tail, unknown rate 0-25% UNMEASURED — the
+  crux.  A tightness-hoisting optimization proposed, tested, WITHDRAWN
+  (logically equivalent, strictly worse: eager tightness decisions; do
+  not adopt), with a self-caught like-for-like comparison error en
+  route.  Plan: Stage B (74 populated configs + n=6 controls) + Stage C
+  gate (60-sample unknown-rate measurement at 600s) then full run or
+  honest PARTIAL ("<= 2/3 except a named list"). + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
   whose converse is never invoked, a declared reference never cited, a
   hypothesis never discharged — nothing consumes them, so nothing checks
