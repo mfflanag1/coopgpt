@@ -228,3 +228,12 @@ packet by its aggregate first-stage under-cover is insufficient: an abstract
 pair then reaches overlap `1/2`, and only the missing staged Lmin information
 repairs it under singleton exactification.  A finite-support route remains
 available because the full certificates have linear support.
+
+There is now also an exact computational route that retains the full staged
+information without 62 coalition-attainment witnesses.  The core-closure lemma
+in `CORE_CLOSURE_REDUCTION.md` shows that six singleton-attaining core points
+are enough: closing the resulting core exactifies every coalition while
+preserving the core and both selections.  Initial hard-case timings improve
+from 600-second unknowns to subsecond UNSAT verdicts.  A complete census is
+still required, and solver verdicts must ultimately be converted into human
+inequalities or independently checkable rational certificates.

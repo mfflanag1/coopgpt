@@ -256,7 +256,7 @@ satisfy the elementary sum, order and dispersed-anchor conditions but give
 game or from a realizable pair of certificates.  They show why a proof must
 retain exact-game structure rather than optimize (7) over arbitrary vectors.
 
-There are now two sharply defined completion routes:
+There are now three sharply defined completion routes:
 
 1. **Strengthened two-packet theorem.**  Couple the sparse Lmax support with
    the full Lmin one-packet boundary (or equivalent staged pinning
@@ -267,6 +267,14 @@ There are now two sharply defined completion routes:
    payoff inequalities symbolically.  Each side has at most six coalitions;
    this is far smaller than enumerating exact games or all staged strata.
 
-The first route would be a human structural proof.  The second could give a
-computer-assisted fixed-six-player theorem with short rational certificates,
-and may reveal the missing human inequality.
+3. **Core-closure staged census.**  Use the reduction in
+   `CORE_CLOSURE_REDUCTION.md` to retain the complete staged Farkas systems but
+   replace the 62 exactness witnesses by six singleton witnesses.  Closing any
+   SAT core polytope produces an exact game with the same selections.  Decide
+   the stratum/table residue first, then extract sparse supports from the
+   surviving or boundary configurations.
+
+The first route would be a human structural proof.  The second and third could
+give a computer-assisted fixed-six-player theorem only after their solver
+verdicts are converted into short rational certificates or structural
+inequalities; either may reveal the missing human argument.

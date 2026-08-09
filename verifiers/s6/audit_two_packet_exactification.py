@@ -140,6 +140,86 @@ def independent_lex(v, mode):
     return tuple(pinned[i] for i in range(N)), trace
 
 
+def first_floor_pinning_certificate(v, trial, player):
+    """Find the exact dual certificate that ``player`` is pinned at the floor.
+
+    For ``mu=min(trial)`` and ``P={j:trial_j=mu}``, the certificate is
+
+        sum_S lambda_S 1_S + sum_{j in P} q_j e_j + e_player = c 1_N,
+        c T - sum_S lambda_S v(S) - mu sum_j q_j = mu,
+
+    with lambda,q,c nonnegative and S restricted to proper trial-tight
+    coalitions.  Evaluating the incidence identity at any core point whose
+    coordinates are at least mu proves y_player<=mu.  Strong LP duality gives
+    the converse, so feasibility is equivalent to individual first-stage
+    pinning.
+    """
+    mu = min(trial)
+    floor = tuple(i for i, value in enumerate(trial) if value == mu)
+    if player not in floor:
+        raise ValueError("pinning certificate requested off the trial floor")
+    tight = tuple(
+        coalition
+        for coalition in range(1, FULL)
+        if coalition_sum(trial, coalition) == v[coalition]
+    )
+    m = len(tight)
+    q_index = {j: m + k for k, j in enumerate(floor)}
+    c_index = m + len(floor)
+    width = c_index + 1
+
+    aeq, beq = [], []
+    for i in range(N):
+        row = [F(0)] * width
+        for k, coalition in enumerate(tight):
+            row[k] = F(int(bool(coalition >> i & 1)))
+        if i in q_index:
+            row[q_index[i]] = F(1)
+        row[c_index] = F(-1)
+        aeq.append(row)
+        beq.append(F(-int(i == player)))
+    row = [F(0)] * width
+    for k, coalition in enumerate(tight):
+        row[k] = -v[coalition]
+    for j in floor:
+        row[q_index[j]] = -mu
+    row[c_index] = v[FULL]
+    aeq.append(row)
+    beq.append(mu)
+
+    aub, bub = [], []
+    for k in range(width):
+        row = [F(0)] * width
+        row[k] = F(-1)
+        aub.append(row)
+        bub.append(F(0))
+    status, _, solution = exact_linprog(
+        [F(0)] * width, aub, bub, aeq, beq
+    )
+    if status == "infeasible":
+        return None
+    assert status == "optimal"
+    lambdas = tuple(
+        (tight[k], solution[k]) for k in range(m) if solution[k] > 0
+    )
+    q = tuple((j, solution[q_index[j]]) for j in floor if solution[q_index[j]] > 0)
+    c = solution[c_index]
+    assert c >= 0
+    for i in range(N):
+        load = sum(
+            (weight for coalition, weight in lambdas if coalition >> i & 1),
+            F(0),
+        ) + sum((weight for j, weight in q if j == i), F(0)) + F(int(i == player))
+        assert load == c
+    assert (
+        c * v[FULL]
+        - sum((weight * v[coalition] for coalition, weight in lambdas), F(0))
+        - mu * sum((weight for _, weight in q), F(0))
+        == mu
+    )
+    return {"coalition_weights": lambdas, "floor_weights": q, "cover_level": c}
+
+
 def encode(value):
     if isinstance(value, F):
         return str(value)
@@ -179,6 +259,13 @@ def audit_game(label, rows):
             "trace": independent_trace,
         }
 
+    trial_floor = min(TRIAL_LMIN)
+    trial_bottom = tuple(i for i, value in enumerate(TRIAL_LMIN) if value == trial_floor)
+    pinning = {
+        str(i): first_floor_pinning_certificate(v, TRIAL_LMIN, i)
+        for i in trial_bottom
+    }
+
     return {
         "label": label,
         "generators": rows,
@@ -192,6 +279,7 @@ def audit_game(label, rows):
         "total": v[FULL],
         "top_coalition_value": v[TOP_COALITION],
         "bottom_coalition_value": v[BOTTOM_COALITION],
+        "trial_lmin_first_floor_pinning_certificates": pinning,
     }
 
 
@@ -216,6 +304,15 @@ def main():
     assert exactified["lmax"]["point"] == LMAX
     assert exactified["overlap"] == F(2, 3)
     assert exactified["singleton_normalized"]
+    assert all(
+        abstract["trial_lmin_first_floor_pinning_certificates"][str(i)] is not None
+        for i in (0, 1, 2, 3, 5)
+    )
+    assert all(
+        exactified["trial_lmin_first_floor_pinning_certificates"][str(i)] is not None
+        for i in (0, 1, 2, 5)
+    )
+    assert exactified["trial_lmin_first_floor_pinning_certificates"]["3"] is None
 
     # The same sparse paired certificate and both individual cross inequalities
     # survive exactification.  It is therefore insufficient as a theorem

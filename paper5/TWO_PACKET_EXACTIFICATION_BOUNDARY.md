@@ -141,6 +141,43 @@ that every coordinate displayed at the trial floor is individually forced
 there.  Other tight coalitions may pin additional players (player 1 here), so
 the support of `beta` is not itself a complete pinning classification either.
 
+### Individual first-floor certificates
+
+There is a short exact replacement for the missing assertion.  Let `y` be a
+trial core point, `mu=min y`, `P={j:y_j=mu}`, and `T=v(N)`.  A player `i in P`
+is individually pinned at the first Lmin stage if and only if there are
+nonnegative `lambda_S,q_j,c`, with `S` proper and `y`-tight, such that
+
+```text
+sum_S lambda_S 1_S + sum_{j in P} q_j e_j + e_i = c 1_N,       (IP1)
+c T - sum_S lambda_S v(S) - mu sum_{j in P} q_j = mu.          (IP2)
+```
+
+Indeed, evaluating (IP1) at any core point `a` with `a_j>=mu` gives
+
+```text
+a_i <= cT-sum_S lambda_S v(S)-mu sum_j q_j = mu.
+```
+
+The reverse implication is the exact LP dual of maximizing `a_i` over that
+first-stage face.  Complementary slackness restricts positive `lambda` to
+`y`-tight coalitions and positive `q` to coordinates of `P`.  A basic dual
+solution supplies a sparse certificate.
+
+The verifier solves (IP1)--(IP2) exactly.  Before normalization, certificates
+exist for every alleged bottom player `{0,1,2,3,5}`.  After normalization they
+exist precisely for `{0,1,2,5}` and are infeasible for player 3.  Particularly
+simple certificates after normalization are
+
+```text
+i=0,1,2:  coalition A={3,4,5}, completed by unit floor columns;
+i=5:      coalition B={1,3,4}, completed by unit floor columns.
+```
+
+Thus the relevant missing objects remain linear incidence systems.  They are
+more numerous than the single aggregate under-cover, but they are exact,
+sparse, and suitable for a finite support classification.
+
 ## 4. Consequence for the fixed-six proof program
 
 The earlier proposed finite incidence theorem—classify only one sparse
@@ -154,7 +191,8 @@ A strengthened support type must contain, at minimum:
 1. the first-stage Lmax over-cover and its tight coalitions;
 2. the first-stage Lmin under-cover and its tight coalitions;
 3. for every alleged member of a pinned stratum, a certificate that its
-   opposite extremum equals the current stage level; and
+   opposite extremum equals the current stage level, such as (IP1)--(IP2) at
+   the first floor; and
 4. the recursively restricted core face on which the next stage is solved.
 
 Equivalently, one may encode the full Lmin one-packet boundary rather than a
