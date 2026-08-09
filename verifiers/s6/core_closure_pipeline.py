@@ -36,6 +36,16 @@ sys.path.insert(0, str(HERE))
 import nsix  # noqa: E402
 
 
+def linear_sum(terms):
+    """Return standard SMT-LIB arithmetic, including zero/one-term sums."""
+    terms = list(terms)
+    if not terms:
+        return z3.RealVal(0)
+    if len(terms) == 1:
+        return terms[0]
+    return z3.Sum(terms)
+
+
 def pipeline2_core_closure(n, r, c, table, target=F(2, 3), fail=True):
     """Return the reduced full-staged solver and its principal variables."""
     full = (1 << n) - 1
@@ -52,7 +62,7 @@ def pipeline2_core_closure(n, r, c, table, target=F(2, 3), fail=True):
         solver.add(v[1 << i] == 0)
 
     def point_sum(point, coalition):
-        return z3.Sum([point[i] for i in range(n) if coalition >> i & 1])
+        return linear_sum(point[i] for i in range(n) if coalition >> i & 1)
 
     for coalition in proper:
         solver.add(v[coalition] <= point_sum(x, coalition))
@@ -173,7 +183,7 @@ def pipeline2_generator_normal_form(n, r, c, table, target=F(2, 3), fail=True):
         solver.add(*[coordinate >= 0 for coordinate in witness])
 
     def point_sum(point, coalition):
-        return z3.Sum([point[i] for i in range(n) if coalition >> i & 1])
+        return linear_sum(point[i] for i in range(n) if coalition >> i & 1)
 
     generators = [x, z] + singleton_witnesses
     tight_x = {coalition: z3.Bool(f"tight_x_{coalition}") for coalition in proper}

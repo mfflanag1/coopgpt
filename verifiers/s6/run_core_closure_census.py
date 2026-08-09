@@ -34,7 +34,9 @@ def solve_one(task):
     data = builder(
         6, tuple(r), tuple(c), table, F(2, 3), mode == "failure"
     )
-    if mode == "equality-no-triple":
+    if mode == "equality":
+        data["solver"].add(data["distance"] == z3.RealVal("2/3"))
+    elif mode == "equality-no-triple":
         require_equality_without_uniform_triple_anchor(data, tuple(c))
     elif mode == "equality-subthird":
         require_equality_with_subthird_overcover(data, tuple(c))
@@ -89,7 +91,12 @@ def main():
     parser.add_argument("--workers", type=int, default=1)
     parser.add_argument(
         "--mode",
-        choices=("failure", "equality-no-triple", "equality-subthird"),
+        choices=(
+            "failure",
+            "equality",
+            "equality-no-triple",
+            "equality-subthird",
+        ),
         default="failure",
     )
     parser.add_argument(

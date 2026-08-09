@@ -120,6 +120,14 @@ every equality case has the same anchor.  The prepared equality searches must
 still exclude (i) equality without a tight triple of Lmax-top players and
 (ii) equality with an over-cover of dispersion strictly below `1/3`.
 
+An independently checked proof-object lane is now frozen under
+`verifiers/s6/certificates/`.  Z3 and cvc5 agree on one representative strict
+failure exclusion and the two equality negations for the realizable boundary
+configuration at survivor index 2236.  With trusted proof steps disabled,
+cvc5 emits exact CPC proof bodies that the separately built Ethos checker
+accepts as `correct`.  These controls validate the exporter and proof-checker
+path; they are not yet certificate coverage for all 3,350 configurations.
+
 ## Required next checks
 
 Before promoting the bound to a main paper theorem:
