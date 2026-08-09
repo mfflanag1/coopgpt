@@ -11,6 +11,10 @@ from export_core_closure_smt import qf_lra_smt2
 from export_positive_handover_smt import build as direction_build
 from export_positive_lmax_boundary_smt import build as boundary_build
 from export_positive_lmax_critical_boundary_smt import build as critical_boundary_build
+from export_positive_lmin_critical_boundary_smt import (
+    CASES as LMIN_CRITICAL_CASES,
+    build as lmin_critical_boundary_build,
+)
 from search_positive_handover_directions import critical_all_witness_solver
 
 
@@ -126,6 +130,33 @@ def main() -> None:
             "formula_regenerates_from_current_source": True,
         }
     )
+    for case in LMIN_CRITICAL_CASES:
+        stem = f"positive_lmin_critical_boundary_{case.replace('-', '_')}"
+        formula = CERTIFICATES / f"{stem}.smt2"
+        proof = CERTIFICATES / f"{stem}.cpc"
+        record = json.loads((CERTIFICATES / f"{stem}.json").read_text())
+        assert formula.read_text() == qf_lra_smt2(lmin_critical_boundary_build(case))
+        assert record["status"] == "PASS"
+        assert record["z3"]["status"] == "unsat"
+        assert record["cvc5"]["status"] == "unsat"
+        assert record["formula_sha256"] == sha256(formula)
+        cpc = record["cpc_proof"]
+        assert cpc["status"] == "PASS"
+        assert cpc["ethos"]["status"] == "correct"
+        assert cpc["proof_sha256"] == sha256(proof)
+        assert cpc["forbidden_markers"] == []
+        lowered = proof.read_text().lower()
+        assert not any(marker in lowered for marker in ("trust", "hole", "warning"))
+        rows.append(
+            {
+                "stem": stem,
+                "formula_sha256": record["formula_sha256"],
+                "proof_sha256": cpc["proof_sha256"],
+                "ethos": cpc["ethos"]["status"],
+                "abstract_lmin_critical_boundary_case": case,
+                "formula_regenerates_from_current_source": True,
+            }
+        )
     print(json.dumps({"status": "PASS", "certificates": rows}, indent=2))
 
 

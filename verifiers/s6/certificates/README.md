@@ -2,7 +2,7 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for seventeen
+These files exercise an independently checked proof-object path for twenty-five
 six-player generator-normal-form queries.  They do not replace the complete
 3,350-configuration census and do not by themselves prove the global bound.
 
@@ -25,6 +25,14 @@ six-player generator-normal-form queries.  They do not replace the complete
 | `positive_lmax_boundary_n_j_l_r.smt2` | abstract | blocker `{n,j,l,r}` plus distance `>2/3` | UNSAT |
 | `positive_lmax_boundary_n_k_l_r.smt2` | abstract | blocker `{n,k,l,r}` plus distance `>2/3` | UNSAT |
 | `positive_lmax_critical_boundary.smt2` | abstract | shared 16-row critical order plus distance `>2/3` | UNSAT |
+| `positive_lmin_critical_boundary_nnpppr_low.smt2` | abstract | `NNPPPR`, low common pair | UNSAT |
+| `positive_lmin_critical_boundary_nnpppr_outer.smt2` | abstract | `NNPPPR`, outer common pair | UNSAT |
+| `positive_lmin_critical_boundary_nnpppr_high.smt2` | abstract | `NNPPPR`, high common pair | UNSAT |
+| `positive_lmin_critical_boundary_npnppr_low.smt2` | abstract | `NPNPPR`, low common pair | UNSAT |
+| `positive_lmin_critical_boundary_npnppr_outer.smt2` | abstract | `NPNPPR`, outer common pair | UNSAT |
+| `positive_lmin_critical_boundary_npnppr_high.smt2` | abstract | `NPNPPR`, high common pair | UNSAT |
+| `positive_lmin_critical_boundary_nppnpr_outer.smt2` | abstract | `NPPNPR`, outer common pair | UNSAT |
+| `positive_lmin_critical_boundary_nppnpr_high.smt2` | abstract | `NPPNPR`, high common pair | UNSAT |
 
 Indices 1408 and 2236 are the two equality-feasible stratum/table
 configurations left by the complete staged census:
@@ -88,6 +96,13 @@ survive every single premise ablation, their forced common pair, all six
 critical witnesses, and distance `>2/3`.  Its checked UNSAT proof covers the
 abstract implication; the finite dependency audit separately verifies that
 the sixteen rows have the required order and common pair.
+
+The eight abstract Lmin critical-boundary controls use the **global** weak
+Lmin order, recorded as an `N/P/R` role word.  This distinction matters: a P
+player can lie between the two poor players.  Each formula retains only that
+role word, one common excluded-player pair, one Lmax relation, the critical
+witness system, and distance `>2/3`.  The separate map covers 342 rows and 470
+feasible-pair instances; it must be audited together with these proof objects.
 
 ## Pinned checker sources
 

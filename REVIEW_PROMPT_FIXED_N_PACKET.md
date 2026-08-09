@@ -150,6 +150,14 @@ verifiers/s6/audit_positive_lmin_handover_layers.py
 verifiers/s6/merge_positive_lmin_handover_layers.py
 verifiers/s6/reproduce_positive_lmin_handover_layers.py
 verifiers/s6/positive_lmin_handover_layers_audit.json
+verifiers/s6/audit_positive_common_gap_pairs.py
+verifiers/s6/positive_common_gap_pair_audit.json
+verifiers/s6/export_positive_lmin_critical_boundary_smt.py
+verifiers/s6/audit_positive_lmin_critical_boundary.py
+verifiers/s6/positive_lmin_critical_boundary_map.json
+verifiers/s6/certificates/positive_lmin_critical_boundary_*.smt2
+verifiers/s6/certificates/positive_lmin_critical_boundary_*.cpc
+verifiers/s6/certificates/positive_lmin_critical_boundary_*.json
 verifiers/s6/certificates/positive_lmax_direction_index0040.smt2
 verifiers/s6/certificates/positive_lmax_direction_index0040.cpc
 verifiers/s6/certificates/positive_lmax_direction_index0040.json
@@ -312,6 +320,16 @@ Hostile questions:
     `13+64+20`.  Check carefully that removing blocker-witness inequalities
     does not remove the separate critical-triple witness system.  Treat these
     classifications as a map for abstract lemmas, not as proof objects.
+    Audit the shared gap-pair classification across both sides: no feasible
+    pair in `68+293` rows, exactly one pair in `146+266`, and no candidate
+    surviving the third-gap comparison.  Decide whether this can be promoted
+    from a finite ordered-stratum audit to one forbidden-pattern lemma.
+    For the 342 coupled critical rows, verify that players are globally
+    Lmin-sorted before recording the `N/P/R` word; specifically try to recreate
+    the rejected mistake of placing both poor players first.  Reconcile 278
+    one-pair rows, 64 three-pair rows, 470 mappings, and all eight abstract
+    cases.  Check that each exporter retains only the claimed single Lmax
+    relation, then replay all eight CPC proofs.
 19. Inspect the three representative positive-handover proof objects
     independently.  For survivor 40, confirm that the base critical system is
     feasible, direction
@@ -408,6 +426,14 @@ python3 coopgames/verifiers/s6/reproduce_positive_lmin_handover_layers.py \
   --output /tmp/positive-lmin-layers-current.json
 cmp coopgames/verifiers/s6/positive_lmin_handover_layers_audit.json \
   /tmp/positive-lmin-layers-current.json
+python3 coopgames/verifiers/s6/audit_positive_common_gap_pairs.py \
+  --output /tmp/positive-common-gap-current.json
+cmp coopgames/verifiers/s6/positive_common_gap_pair_audit.json \
+  /tmp/positive-common-gap-current.json
+python3 coopgames/verifiers/s6/audit_positive_lmin_critical_boundary.py \
+  --output /tmp/positive-lmin-critical-boundary-current.json
+cmp coopgames/verifiers/s6/positive_lmin_critical_boundary_map.json \
+  /tmp/positive-lmin-critical-boundary-current.json
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 

@@ -805,6 +805,51 @@ different dependency profile:
 | additionally needs the third triple comparison | 266 |
 | jointly needs distance and singleton witnesses | 342 |
 
+The first two Lmin rows obey exactly the same equal-gap theorem (33) as the
+Lmax branch.  None of the 293 first-layer tables has an order-feasible common
+pair.  Every one of the 266 second-layer tables has exactly one candidate
+pair, and the third-gap comparison excludes it.  The cross-branch audit
+`positive_common_gap_pair_audit.json` checks all three pairs in all 773
+payoff-only critical rows and reconciles the split
+
+```text
+Lmax: 68 + 146,        Lmin: 293 + 266.
+```
+
+Thus one forbidden ordered-difference lemma would replace all 773 of these
+finite payoff-only exclusions simultaneously; the remaining difficulty is
+to state that lemma directly in terms of the two stratum orders without
+enumerating their contingency tables.
+
+The remaining 342 Lmin critical rows admit a checked table-independent
+compression.  Globally sort players by Lmin, retaining the role word rather
+than incorrectly placing both poor players first.  Exactly three words occur:
+`NNPPPR`, `NPNPPR`, and `NPPNPR`.  Of the 342 rows, 278 have one feasible
+common pair and 64 have all three, giving 470 pair instances.  They map to
+eight abstract cases:
+
+| role word / common pair | pair instances | only retained Lmax relation |
+|---|---:|---|
+| `NNPPPR` / low | 104 | `z_2<=z_5` |
+| `NNPPPR` / outer | 90 | `z_4=z_5` |
+| `NNPPPR` / high | 60 | `z_4=z_5` |
+| `NPNPPR` / low | 72 | `z_3<=z_5` |
+| `NPNPPR` / outer | 84 | `z_4=z_5` |
+| `NPNPPR` / high | 24 | `z_4=z_5` |
+| `NPPNPR` / outer | 24 | `z_4=z_5` |
+| `NPPNPR` / high | 12 | `z_4=z_5` |
+
+For each row of this table,
+`export_positive_lmin_critical_boundary_smt.py` keeps only the global weak
+Lmin chain, the role signs, the displayed common pair and Lmax relation, all
+three critical comparisons, the six simplex witnesses, and distance `>2/3`.
+Every formula is UNSAT; cvc5 emits trust-free exact CPC and Ethos returns
+`correct`.  The separate finite map
+`positive_lmin_critical_boundary_map.json` verifies all 342 rows and all 470
+pair instances against the correct role word and relation.  This closes the
+coupled Lmin critical layer at a table-independent computer-assisted level,
+though human inequalities for the eight formulas remain desirable.
+
 | single-direction mechanism | rows |
 |---|---:|
 | premise-light | 71 |
@@ -1005,6 +1050,14 @@ python3 coopgames/verifiers/s6/reproduce_positive_lmin_handover_layers.py \
   --output /tmp/positive-lmin-layers-current.json
 cmp coopgames/verifiers/s6/positive_lmin_handover_layers_audit.json \
   /tmp/positive-lmin-layers-current.json
+python3 coopgames/verifiers/s6/audit_positive_common_gap_pairs.py \
+  --output /tmp/positive-common-gap-current.json
+cmp coopgames/verifiers/s6/positive_common_gap_pair_audit.json \
+  /tmp/positive-common-gap-current.json
+python3 coopgames/verifiers/s6/audit_positive_lmin_critical_boundary.py \
+  --output /tmp/positive-lmin-critical-boundary-current.json
+cmp coopgames/verifiers/s6/positive_lmin_critical_boundary_map.json \
+  /tmp/positive-lmin-critical-boundary-current.json
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \
