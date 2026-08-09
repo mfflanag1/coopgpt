@@ -269,3 +269,108 @@ STILL OPEN (the blockers, stated precisely)
       interior player the floor can raise, against a size-2 block supplying the
       cap the ceiling must respect) but I have not turned that into a family.
 ================================================================================
+
+================================================================================
+ADDENDUM 3 (six-hour window): BLOCKER (b) -- REDUCED AND MECHANISM-IDENTIFIED,
+NOT PROVED.  One route killed.
+================================================================================
+
+B1.  THE POLYMATROID ROUTE CANNOT PROVE (b)  [kills opening (2)]
+--------------------------------------------------------------------------------
+Submodularity of the truncation rho^ was the natural hope, since it is what
+makes case (a) work.  Tested per profile (single process, exact Fractions,
+3 weightings each, T=12):
+    (4,1,1) rigid   rho^ submodular  YES        (3,1,1) rigid   YES
+    (2,2,2) rigid   rho^ submodular  NO         (2,2,1,1) rigid NO
+    (2,2,2,2) rigid                  NO
+    (3,2,1) breaks                   NO         (3,3,1), (4,2,1) breaks  NO
+So submodularity of rho^ is SUFFICIENT for rigidity -- it holds exactly on the
+case-(a) profiles, which is a second, independent confirmation of the case-(a)
+proof -- but it is NOT NECESSARY: every all-blocks-<=2 profile is rigid with
+rho^ NOT submodular.  Case (b) is therefore rigid for a different reason than
+case (a), and no polymatroid/Fujishige argument can reach it.  Opening (2) of
+the assignment is closed negatively.
+
+B2.  THE REDUCTION THAT DOES HOLD WHEN ALL BLOCKS ARE <= 2
+--------------------------------------------------------------------------------
+LEMMA.  If every block has size <= 2 then the binding caps are exactly the
+PARTIAL TRANSVERSAL caps:
+        Core(v) = { x >= 0 : x(N) = T,  x(A) <= max_{i in A} w_i
+                    for every A meeting each block at most once }.
+PROOF.  From the dual description, the cap at A is x(A) <= rho(A)
+= max_j w(A n B_j).  If A contains a whole block then rho(A) = T and the cap is
+implied by x >= 0 and x(N) = T.  Otherwise A meets each block at most once
+(blocks have size <= 2), so w(A n B_j) is either 0 or a single weight, and
+rho(A) = max_{i in A} w_i.                                                 []
+The |A| = 1 case is the singleton cap x_i <= w_i; the |A| = 2 cross-block case
+is x_u + x_v <= max(w_u, w_v), the constraint I identified as the obstruction
+to case (a)'s argument.  So the whole system is now explicit.
+
+B3.  THE MECHANISM, IDENTIFIED AND VERIFIED (not proved)
+--------------------------------------------------------------------------------
+TRANSVERSAL WATER-FILLING: raise all free players together until some partial
+transversal cap saturates; freeze that transversal's players at that level;
+repeat on the rest with the residual budget.
+VERIFIED: on 40 instances over the profiles (2,2,2), (2,2,1,1), (2,2,2,1) and
+(2,2,2,2) -- the last at n = 8, so the check is dimension-crossing -- the
+greedy point equals Lmin AND equals Lmax, 40/40.  This is the same standard as
+case (a): the MECHANISM is verified, not merely the coincidence.
+WHAT IS MISSING: a proof that each selection must equal this point.  For case
+(a) that step was two short arguments because the feasible set was a capped
+simplex and the bound on max (resp. min) was immediate.  Here the saturating
+object at each stage is a transversal rather than a coordinate, and I do not
+have the corresponding two bounds.  That is the blocker, and it is now a
+precise one: show (i) any feasible x has max_i x_i >= the greedy's first level,
+and (ii) any feasible x has min_i x_i <= it.
+
+B4.  NEGATIVE CONTROL -- WHERE THE ARGUMENT FAILS ON (3,2,1), VISIBLY
+--------------------------------------------------------------------------------
+The reduction B2 is exactly what a size-3 block destroys, and one can point at
+the set.  On the audited witness (blocks {1,2,3}/{4,5}/{6}, weights
+(1,4,1)/(1,5)/(6)), take A = {2,3}: two players of the size-3 block, so A does
+NOT contain a whole block, yet
+        rho(A) = 1 + 4 = 5   while   max_{i in A} w_i = 4.
+The cap is x_2 + x_3 <= 5, not <= 4.  So the partial-transversal description --
+the entire basis of B2 and hence of B3 -- is unavailable the moment one block
+reaches size 3, and it fails on a two-element set one can write down.  This is
+the requested visible failure point, and it also says why the two clauses of
+the corrected condition are the right two: clause one bounds block size so that
+each block contributes at most one player to any non-trivial cap; clause two
+(at most one block of size >= 2) instead makes every cross-block cap vacuous.
+Two different reasons, one boundary.
+
+--------------------------------------------------------------------------------
+B5.  THE TWO STAGE-ONE BOUNDS -- ONE PROVED EACH WAY; THE GAP IS NOW ATTAINMENT
+--------------------------------------------------------------------------------
+Write m(A) = max_{i in A} w_i, and let A range over PARTIAL TRANSVERSALS (at
+most one player per block), which by B2 index exactly the binding caps.  Put
+        theta1 = min( T/n,  min_A  m(A)/|A| )
+        M*     = max( T/n,  max_{|A|<n} (T - m(A))/(n - |A|) ).
+
+LEMMA (floor bound).  Every x in Core(v) has min_i x_i <= theta1.
+PROOF.  Suppose min_i x_i > theta1.  If theta1 = T/n then x(N) > n*(T/n) = T,
+contradicting efficiency.  Otherwise theta1 = m(A)/|A| for some partial
+transversal A, and then x(A) > |A| * m(A)/|A| = m(A), violating the cap at A. []
+
+LEMMA (ceiling bound).  Every x in Core(v) has max_i x_i >= M*.
+PROOF.  If all x_i < T/n then x(N) < T.  And for any partial transversal A with
+|A| < n, the cap gives x(A) <= m(A), so x(N\A) >= T - m(A) and some player of
+the complement carries at least (T - m(A))/(n - |A|).                       []
+
+VERIFIED TIGHT: on instances of (2,2,2), (2,2,1,1), (2,2,2,1) and (2,2,2,2),
+min(Lmin) = theta1 AND max(Lmax) = M* in every case.
+
+WHAT THIS CHANGES.  The blocker was "I have no bounds"; it is now the single
+word ATTAINMENT, in two places, plus the recursion:
+  (A1) exhibit a core point attaining min = theta1 (the uniform level theta1
+       leaves T - n*theta1 to place without breaking a cap; plausible, unproved);
+  (A2) exhibit a core point attaining max = M*;
+  (A3) show each selection then pins the same set at that level, so that the
+       recursion -- which is again a system of the same shape on the remaining players
+       -- carries both to the same point.
+(A1) and (A2) are what the transversal water-filling greedy of B3 does
+constructively, 40/40; turning that construction into a proof of feasibility is
+the remaining mathematical content.  Note the pleasant symmetry: the floor
+bound comes from a cap read directly, the ceiling bound from the same cap read
+on the complement -- which is exactly the "one inequality read twice" shape the
+PART frame has, and is the first sign that case (b) has a clean proof at all.

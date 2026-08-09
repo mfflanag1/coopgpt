@@ -1499,6 +1499,21 @@ localization of exactness; "|B|=4 is special".
   Headroom probes: the genuine Stage-B unknown + one k=5 gate unknown,
   each 3600s isolated — the latter decides cap-shaped vs structural
   for the high-k wall.  Sort order fixed BEFORE launch.
+- BLOCK-RIGIDITY ROUND 4 (task #37, REPORT5 addendum 3): the
+  submodularity SPLIT — rho^ submodular EXACTLY on the case-(a)
+  profiles (independent confirmation of (a)) and non-submodular on
+  every all-blocks-<=2 profile, rigid or breaking — so case (b) is
+  rigid for a genuinely different reason and no polymatroid argument
+  reaches it (route 2 dead for a stated reason).  PROVED: the explicit
+  cap system for all-blocks-<=2 (caps exactly at partial transversals,
+  x(A) <= max_{i in A} w_i).  MECHANISM verified 40/40 incl. n=8:
+  transversal water-filling.  Blockers (i)/(ii): the two greedy-level
+  bounds.  Negative control: at a size-3 block the partial-transversal
+  description fails at a visible 2-set (A={2,3}: cap 5, not 4).  THE
+  TWO-CLAUSE CONDITION EXPLAINED: clause one makes blocks contribute
+  <= 1 player per cap; clause two makes cross-block caps vacuous —
+  two mechanisms, one boundary, which is why no single argument covers
+  both.
 - THE PROCESS-REUSE DISCOVERY + EXECUTOR HANDOVER (pre-stated, before
   any fresh-process data): r22 found a 10x timing swing on IDENTICAL
   input (595.9s in a 28-solve long-lived process vs 56.0s in a fresh
