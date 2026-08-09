@@ -767,14 +767,38 @@ delta_j >= -A for every j in P,
 with equality for at least two j.                            (33)
 ```
 
-For each of the first 68 tables, no pair in `P` can have the equal gap `-A`
-under the displayed stratum orders.  For each of the next 146, exactly one
-pair is order-feasible, but imposing the remaining inequality in (33) is
-infeasible.  The audit checks all three candidate pairs separately, so the
-`68+146` split is precisely “no equal-gap pair” versus “one candidate pair,
-third gap too small,” not merely two solver timing classes.  Turning this
-finite ordered-difference classification into a short forbidden-pattern
-lemma is the remaining human payoff-algebra task.
+Call two `P` players `j,k` concordant when their weak relation is the same in
+the two payoff orders: `x_j<x_k`, `=`, or `>` holds exactly when the
+corresponding relation holds between `z_j,z_k`.  If
+`delta_j=delta_k`, then
+
+```text
+x_j-x_k = z_j-z_k,                                      (34)
+```
+
+so an equal-gap pair must be concordant.  This immediately excludes every
+row having no concordant `P` pair.
+
+There is an equally short exclusion when exactly one pair `j,k` is
+concordant.  Let `l` be the third `P` player.  If its two order relations obey
+
+```text
+x_l <= x_j and z_l >= z_j, with at least one strict,       (35)
+```
+
+then `delta_l<delta_j`.  But the common-pair equalities in (33) give
+`delta_j=delta_k=-A`, while the remaining critical-triple comparison gives
+`delta_l>=-A`.  This is a contradiction.  The same argument applies with
+`k` in place of `j`.
+
+The purely combinatorial audit
+`positive_common_gap_order_lemma_audit.json` checks these hypotheses directly
+from the two stratum orders, without an LP or SMT query.  Across both handover
+branches, 361 rows have no concordant pair.  Each of the other 412 has exactly
+one concordant pair, and its third `P` player satisfies (35) against **both**
+members.  Thus (34)--(35) give a human structural proof for all 773
+payoff-only critical rows; the finite component is only the order-pattern map,
+not a solver infeasibility claim.
 
 The last sixteen rows again share one role order and the same forced common
 pair.  `export_positive_lmax_critical_boundary_smt.py` weakens that order,
@@ -816,10 +840,10 @@ payoff-only critical rows and reconciles the split
 Lmax: 68 + 146,        Lmin: 293 + 266.
 ```
 
-Thus one forbidden ordered-difference lemma would replace all 773 of these
-finite payoff-only exclusions simultaneously; the remaining difficulty is
-to state that lemma directly in terms of the two stratum orders without
-enumerating their contingency tables.
+The concordance/inversion lemma (34)--(35) replaces all 773 finite
+payoff-infeasibility verdicts simultaneously.  The older
+`positive_common_gap_pair_audit.json` remains a solver cross-check; the new
+order audit is the direct dependency of the human proof.
 
 The remaining 342 Lmin critical rows admit a checked table-independent
 compression.  Globally sort players by Lmin, retaining the role word rather
@@ -934,9 +958,9 @@ This is a substantial compression—from 1,659 support tables to three Lmax
 direction templates, eight Lmin critical-boundary lemmas, 23 Lmin
 single-direction lemmas, one subset-exchange family, and two exceptional menu
 tables.  The critical and single-direction Lmin formulas now have independently
-checked proof objects.  It is still not a finished human proof: the 773
-payoff-only exclusions need a forbidden-pattern lemma, and the checked
-critical, direction, and menu formulas would benefit from readable
+checked proof objects.  It is still not a finished human proof: although the
+773 payoff-only exclusions now have the concordance/inversion proof, the
+checked critical, direction, and menu formulas would benefit from readable
 inequalities.  Unlike the earlier raw census, however,
 it now gives a concrete and small proof architecture for the full positive
 neighborhood.

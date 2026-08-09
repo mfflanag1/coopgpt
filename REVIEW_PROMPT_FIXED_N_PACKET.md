@@ -322,8 +322,16 @@ Hostile questions:
     classifications as a map for abstract lemmas, not as proof objects.
     Audit the shared gap-pair classification across both sides: no feasible
     pair in `68+293` rows, exactly one pair in `146+266`, and no candidate
-    surviving the third-gap comparison.  Decide whether this can be promoted
-    from a finite ordered-stratum audit to one forbidden-pattern lemma.
+    surviving the third-gap comparison.  Then independently audit the promoted
+    concordance/inversion lemma (34)--(35) and reproduce
+    `positive_common_gap_order_lemma_audit.json`: 361 rows must have no P pair
+    with the same weak relation in both payoff orders; each of the other 412
+    must have one such pair and the third P player must be weakly lower in
+    Lmin, weakly higher in Lmax, with strictness, relative to both pair
+    members.  Check the deductions `delta_j=delta_k => x_j-x_k=z_j-z_k` and
+    `delta_l<delta_j=-A` against the third comparison `delta_l>=-A`.  This is
+    intended as a human proof with a combinatorial finite map, not an SMT
+    infeasibility certificate.
     For the 342 coupled critical rows, verify that players are globally
     Lmin-sorted before recording the `N/P/R` word; specifically try to recreate
     the rejected mistake of placing both poor players first.  Reconcile 278
