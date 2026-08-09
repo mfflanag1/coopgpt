@@ -1,5 +1,5 @@
 ================================================================================
-TASK #32 -- s(6) VERDICT PACKAGE, SECTIONS 4-6.   Generated 2026-08-09 03:49:48
+TASK #32 -- s(6) VERDICT PACKAGE, SECTIONS 4-6.   Generated 2026-08-09 03:57:02
 Author: r25-s6 (executor).  Sections 1-3 are r22's, in VERDICT32.txt.
 Every number below is read from a completed checkpoint file by
 mkverdict.py.  No number is transcribed by hand and none is taken from a
@@ -28,6 +28,49 @@ a configuration stageC.py had independently returned UNSAT on in 3.3s.
 The architecture split exists because a 10x wall-clock swing was observed
 on one instance between the two (section 6, EVENT 7), and the fresh runner
 is the controlled test of whether that swing generalizes.
+
+4.0b  WHY EVERY BANKED UNSAT IS SOUND, AND WHY ONLY UNKNOWNS ARE IN
+      QUESTION.  r22's argument, adopted verbatim as the frame for
+      everything below:
+        "CONTENTION AND PROCESS STATE CAN ONLY EVER TURN A WOULD-BE-UNSAT
+         INTO AN UNKNOWN.  z3 returns unsat only on a completed refutation,
+         so no amount of resource pressure or heap can manufacture a false
+         UNSAT."
+      Consequences: every UNSAT anywhere in this program is sound
+      regardless of box conditions; only the UNKNOWN counts are in
+      question, in either direction; and nothing that returned UNSAT needs
+      re-running however contended the box was when it did.
+      SCOPE LIMIT (auditor's item, ledger 8578181).  That argument covers
+      the SOLVER only.  It says nothing about whether the harness carried
+      every configuration to a solver exactly once.  That is a separate
+      claim and it is checked separately, immediately below.
+
+4.0c  PIPELINE INTEGRITY -- AUDIT ITEM ZERO
+      Every configuration matched BY IDENTIFIER (lmin, lmax, tbl) carried
+      through from triage32.json, never reconstructed from shard position.
+      STAGE C: population 3,276; attempted 994; duplicates 0; not-in-population 0
+        unattempted (window ended) 2,282 -- a gap, not an error: these were never launched.
+        per-shard row counts: 0=87, 1=79, 10=104, 2=89, 3=90, 4=85, 5=91, 6=81, 7=109, 8=95, 9=84
+      STAGE B: population 74; recorded 74; duplicates 0; symmetric difference 0
+      CLEAN GATE: sample re-derived from seed 6060 = 60; recorded 60; symmetric difference 0
+      RESULT: INTEGRITY OK -- no drops, no double-counts, every identifier accounted for.
+
+4.0d  THE GATE WAS A SAMPLE OF A DIFFERENT DISTRIBUTION THAN THE RUN
+      (auditor's governance finding).  The gate drew 60 uniformly from the
+      3,350 survivors; Stage C then ran the 3,276 in ASCENDING k.  The two
+      k-distributions are not the same, so the gate's unknown rate was
+      measured on a mixture and not on the population being decided.
+        k    gate 60      Stage-C population 3,276
+        2     1 ( 1.7%)         53 ( 1.6%)
+        3    10 (16.7%)        461 (14.1%)
+        4    24 (40.0%)      1,182 (36.1%)
+        5    19 (31.7%)      1,173 (35.8%)
+        6     6 (10.0%)        407 (12.4%)
+      The gate over-weighted k=4 and under-weighted k=5, and the >=5%
+      threshold the launch decision turned on was therefore calibrated
+      against a mixture that does not match the run order.  Recorded as a
+      governance finding: a gate must be drawn from the population in the
+      order it will be consumed, or its rate does not transfer.
 
 4.1  COVERAGE (machine-checked; coverage32.py, cited not re-argued)
      universe            37,277
@@ -141,8 +184,8 @@ is the controlled test of whether that swing generalizes.
         k=5 [1, 1, 1, 2, 1] x [2, 1, 3]: UNKNOWN in 600.0s [unknown@200.0s,unknown@200.0s,unknown@200.0s]
 
      GROUP C (3 x 70s = 210s budget) -- Stage-C k<=3 unknowns -- each already failed one full 600s attempt; this is the theorem boundary
-        DECIDED 48 of 61  (79%)   k in [2, 3]   SAT: 0
-        resolved on the FIRST attempt: 32 of 48   total-time median 39.3s  max 186.4s
+        DECIDED 60 of 73  (82%)   k in [2, 3]   SAT: 0
+        resolved on the FIRST attempt: 44 of 60   total-time median 35.0s  max 186.4s
         k=3 [2, 3, 1] x [3, 1, 2]: UNSAT in 27.5s [unsat@27.5s]
         k=3 [1, 3, 2] x [2, 1, 1, 2]: UNSAT in 19.7s [unsat@19.7s]
         k=3 [4, 1, 1] x [1, 1, 1, 3]: UNSAT in 95.0s [unknown@70.0s,unsat@25.0s]
@@ -152,7 +195,7 @@ is the controlled test of whether that swing generalizes.
         k=3 [2, 3, 1] x [1, 1, 1, 3]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
         k=3 [1, 4, 1] x [1, 1, 1, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
         k=3 [2, 3, 1] x [1, 2, 1, 2]: UNKNOWN in 210.0s [unknown@70.0s,unknown@70.0s,unknown@70.0s]
-        ... 52 further rows in seedsweep_*.json
+        ... 64 further rows in seedsweep_*.json
 
      READING.
      Group A is the control and it is the cleanest evidence in this
@@ -167,9 +210,9 @@ is the controlled test of whether that swing generalizes.
      Group C is the one that touches the theorem.  Each of these 84
      Stage-C k<=3 unknowns had already consumed a full 600s without
      a verdict.  On a 210s budget -- barely a third of what already
-     failed -- 48 of 61 were decided (79%), every one UNSAT.
+     failed -- 60 of 73 were decided (82%), every one UNSAT.
      PROJECTION, stated as a projection and not a result: at that
-     rate the full 84 would leave roughly 18 genuinely resistant, and
+     rate the full 84 would leave roughly 15 genuinely resistant, and
      closing all 84 costs about 84 x 210s = 4.9 worker-hours, i.e.
      under half an hour on eleven workers.  A CLEAN k<=3 THEOREM IS
      THEREFORE PROBABLY WITHIN REACH, and k<=3 contains both
@@ -180,14 +223,14 @@ is the controlled test of whether that swing generalizes.
      rather than assumed.  The before/after is therefore at the
      POPULATION level (all 84 had failed a 600s Stage-C attempt),
      not a paired same-instance comparison.
-     OVERALL: 54 of 72 decided at or below the budget that
-     had already failed on every one of them -- against 0 of 72
+     OVERALL: 69 of 87 decided at or below the budget that
+     had already failed on every one of them -- against 0 of 87
      for the single long attempts they replace.
      SAT at 2/3 across all restart sweeps: 0  <-- HALT trigger
 
 4.5  STAGE C  (the 3,276 remainder; SHARDED runner, r22's, 11 shards, 600s)
-     completed 983 of 3,276  (30.0%)
-     verdicts {'unsat': 800, 'unknown': 183}
+     completed 994 of 3,276  (30.3%)
+     verdicts {'unsat': 807, 'unknown': 187}
      SAT at 2/3: 0   <-- HALT trigger
 
      K-STRATIFIED (k = number of Lmin strata).  'unreached' is population
@@ -195,21 +238,21 @@ is the controlled test of whether that swing generalizes.
        k   population  decided  unknown  unreached   median decided
        2          53       52        1          0       9.4s
        3         461      378       83          0      20.7s
-       4       1,182      370       99        713      22.4s
+       4       1,182      377      103        702      22.2s
        5       1,173        0        0      1,173         --
        6         407        0        0        407         --
-       ALL     3,276      800      183      2,293
+       ALL     3,276      807      187      2,282
 
 
      RECONCILIATION -- the table above is the SHARDED runner's view and
      does not credit the restart sweeps of 4.4c.  Applying them:
        k=2: 1 unknown, of which 1 since DECIDED by restart -> 0 outstanding
-       k=3: 83 unknown, of which 47 since DECIDED by restart -> 36 outstanding
-       k=4: 99 unknown, of which 0 since DECIDED by restart -> 99 outstanding
-     THE k<=3 BOUNDARY: population 514, now decided 478, OUTSTANDING 36  (93.0% closed).
+       k=3: 83 unknown, of which 59 since DECIDED by restart -> 24 outstanding
+       k=4: 103 unknown, of which 3 since DECIDED by restart -> 100 outstanding
+     THE k<=3 BOUNDARY: population 514, now decided 490, OUTSTANDING 24  (95.3% closed).
      Every one of those decisions is UNSAT.  What stands between the
      program and a clean 's(6) <= 2/3 for all k<=3' is now a named
-     list of 36 configurations, not an open-ended search.
+     list of 24 configurations, not an open-ended search.
      No k-stratum is yet complete-with-zero-unknowns.
 
 4.6  HEADROOM PROBES  (3600s, isolated, one process each)
@@ -240,7 +283,7 @@ authorization, recorded before Stage B ran:
    a genuine game above 2/3 refutes two-generator extremality and outranks
    the rest of the program."
 APPLICATION.  Counting every solver verdict recorded anywhere in the
-program at target 2/3: 1,122 verdicts, of which SAT = 0.
+program at target 2/3: 1,133 verdicts, of which SAT = 0.
 HALT markers on disk: NONE
 The rule did not fire.  Nothing anywhere has returned SAT at 2/3.
 
@@ -270,11 +313,30 @@ APPLICATION, in the order the rule prescribes:
     clean gate unknown count (raw)   = 28 of 60  (46.7%)
     of which cap-exact / voided      = 28
     re-run under clean conditions    = 11 of 28  (single fresh attempts and restart sweeps combined)
-    of those, RESOLVED               = 3   (all ['unsat'])
-    unknowns SURVIVING the voiding   = 8 of the 11 re-run; 17 never re-run (window ended)
+    of those, RESOLVED               = 4   (all ['unsat'])
+    unknowns SURVIVING the voiding   = 7 of the 11 re-run; 17 never re-run (window ended)
     branch taken                     = NOT YET TAKEN.  The rule's branch
       is a function of the POST-VOIDING count, and the voiding is
       incomplete, so no branch is claimed here.
+
+
+RULE 4 -- THE ARCHITECTURE SWITCH, ordered by the lead after the restart
+result and quoted before its application:
+  "ARCHITECTURE SWITCH, effective immediately -- this supersedes the
+   'Stage C runs to window end' instruction as a pure resource decision
+   (the theorem decision remains residue-based, unchanged): 1. STOP r22's
+   Stage-C shards now (kill by PID after inspecting -- you have my
+   authorization for THESE ELEVEN specific processes)...  2. ALL thirteen
+   slots to the restart-sweep architecture."
+JUSTIFICATION ON THE RECORD, as the order requires: the 11-of-13 first
+result of the k<=3 restart sweep (final rate in 4.4c), i.e. restarts
+deciding at a third of the budget that had already failed.
+APPLICATION.  The eleven shards were inspected by PID before any signal
+was sent (all eleven confirmed as 'python3 stageC.py 11 <shard>', started
+00:14:16, elapsed 03:40:52), then killed by explicit PID list
+15987-15997.  No other process was signalled.  Stage C's checkpoints bank
+as-is and are reported in 4.5.  Every freed worker went to the restart
+architecture on the k<=3 residue.
 
 NOTE ON A RULE COLLISION, recorded because it is material.  Stage C was
 launched by r22 at 00:14:16 while the voiding of the gate unknowns was
@@ -329,6 +391,37 @@ EVENT 11 -- THE PROCESS-REUSE HYPOTHESIS: WHAT THE FRESH RUN SETTLES.
   had been unknown at position 1 -- the position with the LOWEST unknown
   rate -- and resolved 10x faster.  Section 4.4b is the direct test and
   supersedes both.
+
+  THE DISPUTE, AS A THREE-STEP EXCHANGE (the auditor asked for both
+  analyses on the record, so the hypothesis can be watched dying).
+  STEP 1 -- r22 writes REFUTED.  Unknown% by within-shard position is
+    70/30/30/60/50/40 across positions 0-5.  If accumulated interpreter
+    state drove the timeouts, later positions would be worse.  They are
+    not, and the FIRST position is the worst.  Conclusion recorded:
+    'GENUINE INSTANCE HARDNESS, not a harness artifact'.
+  STEP 2 -- r25-s6 challenges, and asks for OPEN.  The numbers reproduce
+    exactly, and a control r22 did not have confirms the test is at least
+    well-posed: mean k by position is 4.60/4.40/4.30/4.30/4.40/3.90, so
+    position is not confounded with the difficulty driver.  But n=10 per
+    cell gives almost no power (70% vs 30% is about 2 sigma), the test is
+    INDIRECT, and it is contradicted by the one DIRECT same-instance
+    comparison available: that configuration sat at POSITION 1 -- the
+    position r22's own table calls cleanest -- and ran 600.0s in-process
+    against 56.5s fresh.  A failure to detect is not a detection of
+    absence.
+  STEP 3 -- r22 concedes and corrects the ledger to OPEN, in its words:
+    "I treated a failure to detect as a detection of absence... That is
+     the observation with the most information in it and I discounted it
+     because a weaker test disagreed."
+  RESOLUTION -- and it goes against the challenger.  The paired uncensored
+  experiment of 4.4b was run precisely to settle this, and it REFUTES the
+  process-reuse hypothesis on direct evidence: fresh is not faster, it is
+  about 1.26x slower, which is what contention alone predicts.  r22's
+  original conclusion was CORRECT; its argument was not strong enough to
+  carry it; and r25-s6's challenge was well-founded as a challenge and
+  wrong as a conclusion.  All three steps are recorded because the
+  auditor should see which claim the evidence actually settled, and that
+  the correction ran in the direction nobody's ego preferred.
   VERDICT: the process-reuse hypothesis is REFUTED, on paired uncensored
   evidence (4.4b).  r22's EVENT-7 conclusion was right; its argument was
   not sufficient to carry it, and r25-s6's counter-argument was wrong.

@@ -1561,6 +1561,24 @@ localization of exactness; "|B|=4 is special".
   now and as THE POST-WINDOW COMPLETION METHOD for all unknowns and
   the unreached k>=5 classes.  Bank k<=3 confirmed.  Package split:
   r25 writes VERDICT32_S456.txt, never touching r22's VERDICT32.txt.
+- FINAL HANDOVER (r22, context spent) + ATTRIBUTION RESOLVED: Stage
+  C's "mysterious" stop at 994 was the LEAD'S OWN KILL ORDER, executed
+  by r25 under the architecture switch — r22 was not in that loop and
+  correctly preserved rather than restarted; recorded so nobody hunts
+  a phantom failure.  DURABLE STAGE C: 994 verdicts — 807 UNSAT, 187
+  unknown, ZERO SAT (stageC_partial_994.json).  r22's two closing
+  corrections: (1) its earlier 1,026/1,030 counts were inflated by a
+  LOOSE GLOB matching r25's files in the shared directory — the same
+  error class as the pkill incident, now a general law: NEVER
+  pattern-match in a namespace you do not own (globs, pkills, greps
+  alike); (2) RESUME HAZARD, critical: stageC.py rewrites shard
+  checkpoints from scratch on restart — any resume MUST build a
+  skip-list from stageC_partial_994.json first, or the 994 are
+  destroyed.  Restart protocol CONFIRMED at k=4 (two 600s-failures
+  converted in 28.3s and 21.9s first-attempt; sweep self-checkpoints
+  to seedsweep_k4plus.json).  r22's honest-headline framing adopted:
+  the obstacle to s(6) = 2/3 was never evidence against it — it is a
+  lottery column, and the fix is re-rolls.
 - WINDOW-END PACKAGE (r25, verifiers/s6/VERDICT32*.txt): 1,122
   verdicts at target 2/3 across five architectures — SAT COUNT ZERO,
   no HALT ever.  k<=3: 478/514 decided (93%), all UNSAT, outstanding a
