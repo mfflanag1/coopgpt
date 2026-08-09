@@ -865,6 +865,26 @@ payoff lemma: 66 rows are premise-light, 14 are distance-only, and 232 require
 the distance/witness coupling.  The two five-row templates contribute five
 additional premise-light and five witness-only rows.
 
+The complete 322-row layer now has a table-independent checked compression.
+Globally Lmin-sort the six players, retain the resulting role word, normalize
+the direction, and record the positions of a feasible common excluded-player
+pair.  The 322 rows give 494 pair instances and only twenty
+role/direction/pair patterns.  Seventeen patterns are infeasible using their
+shared weak order alone.  The remaining three are covered by six refinements,
+each adding at most two stratum relations.  After premise minimization this
+gives 23 abstract formulas; twelve require one order relation, five require
+two, five require three, and one requires four.  No formula contains a
+contingency table.
+
+`positive_lmin_direction_patterns_audit.json` records the complete 494-entry
+map and the minimized assumptions.  Every one of its 23 formulas is UNSAT in
+Z3 and cvc5; cvc5 emits a trust-free exact CPC proof and Ethos returns
+`correct`.  This closes the Lmin single-direction layer at the same
+table-independent computer-assisted level as the eight critical-boundary
+lemmas.  It does not yet supply a concise hand proof: the 23 cases should be
+read as a small ordered-stratum lemma family whose inequalities remain to be
+extracted from the proof objects.
+
 The remaining 97 Lmin cases are exchange-lemma rather than single-direction
 cases.  Ninety-five are closed by one conceptual fourteen-direction family:
 for a poor player `n` and a nonempty subset `I` of `P`, use
@@ -893,12 +913,15 @@ shards and then rejects incomplete, duplicate, or count-inconsistent merges;
 this avoids treating a single long-lived Z3 process as reliable evidence.
 
 This is a substantial compression—from 1,659 support tables to three Lmax
-direction templates, three Lmin direction templates, one subset-exchange
-family, and two boundary tables.  It is still solver-derived navigation, not
-a finished human proof: the remaining Lmin payoff and coupled-witness classes
-and the blocker-menu contradictions must be replaced by uniform inequalities
-or checkable rational certificates.  Unlike the earlier raw census, however, it now gives
-a concrete and small proof architecture for the full positive neighborhood.
+direction templates, eight Lmin critical-boundary lemmas, 23 Lmin
+single-direction lemmas, one subset-exchange family, and two exceptional menu
+tables.  The critical and single-direction Lmin formulas now have independently
+checked proof objects.  It is still not a finished human proof: the 773
+payoff-only exclusions need a forbidden-pattern lemma, the 97 blocker-menu
+contradictions remain solver evidence, and the checked abstract formulas would
+benefit from readable inequalities.  Unlike the earlier raw census, however,
+it now gives a concrete and small proof architecture for the full positive
+neighborhood.
 
 This still does **not** reduce simultaneous splits to one split.  The tangent
 graph of a piecewise-linear lexicographic selection need not be convex, so a

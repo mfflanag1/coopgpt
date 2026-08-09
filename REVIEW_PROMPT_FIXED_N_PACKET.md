@@ -330,6 +330,17 @@ Hostile questions:
     one-pair rows, 64 three-pair rows, 470 mappings, and all eight abstract
     cases.  Check that each exporter retains only the claimed single Lmax
     relation, then replay all eight CPC proofs.
+    Reproduce `positive_lmin_direction_patterns_audit.json` and confirm that
+    the 322 single-direction rows yield 494 feasible-pair instances, twenty
+    global-Lmin-normalized role/direction/pair patterns, and 23 minimized proof
+    cases.  Hostilely check the global sort and direction permutation, every
+    weak-order relation in the map, and coverage of all 494 instances.  Replay
+    all 23 SMT/CPC controls and confirm Z3 UNSAT, cvc5 UNSAT, no trust markers,
+    and Ethos `correct`.  Try to weaken each listed relation independently;
+    distinguish subset-minimality under the deterministic deletion order from
+    minimum cardinality.  Treat the finite mapping and the abstract formulas
+    as separate dependencies, and do not infer a human proof from the proof
+    objects alone.
 19. Inspect the three representative positive-handover proof objects
     independently.  For survivor 40, confirm that the base critical system is
     feasible, direction

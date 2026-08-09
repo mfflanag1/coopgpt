@@ -2,7 +2,7 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for twenty-five
+These files exercise an independently checked proof-object path for forty-eight
 six-player generator-normal-form queries.  They do not replace the complete
 3,350-configuration census and do not by themselves prove the global bound.
 
@@ -33,6 +33,7 @@ six-player generator-normal-form queries.  They do not replace the complete
 | `positive_lmin_critical_boundary_npnppr_high.smt2` | abstract | `NPNPPR`, high common pair | UNSAT |
 | `positive_lmin_critical_boundary_nppnpr_outer.smt2` | abstract | `NPPNPR`, outer common pair | UNSAT |
 | `positive_lmin_critical_boundary_nppnpr_high.smt2` | abstract | `NPPNPR`, high common pair | UNSAT |
+| `positive_lmin_direction_pattern_*.smt2` (23 files) | abstract | complete 322-row Lmin single-direction layer mapped to 23 order-pattern lemmas | UNSAT |
 
 Indices 1408 and 2236 are the two equality-feasible stratum/table
 configurations left by the complete staged census:
@@ -73,14 +74,14 @@ A paper theorem still requires either checked proof objects for all excluded
 support/configuration types or a human structural reduction that makes most
 of those objects unnecessary.
 
-The three positive-handover controls represent the three role-normalized Lmax
+The three representative positive-handover controls represent the three role-normalized Lmax
 direction templates.  Each base critical-triple system is SAT.  The added formula says
 that at least one coalition blocks the displayed lexicographically improving
 Lmax direction, with the blocker required to be eligible at `z` for `x` and
 for all six singleton-exactness witnesses.  Its UNSAT proof therefore checks
 one genuinely nonvacuous direction argument per template.  They do **not**
-certify the other 106 single-direction rows, the 230 rows killed by critical algebra, or
-any Lmin direction-menu row.
+certify the other 106 single-direction Lmax rows or the 230 Lmax rows killed by
+critical algebra.  They also do not certify any Lmin direction-menu row.
 
 The four abstract boundary controls no longer encode a contingency table.
 They assume only the shared weak orders of the eight distance-sensitive rows,
@@ -103,6 +104,17 @@ player can lie between the two poor players.  Each formula retains only that
 role word, one common excluded-player pair, one Lmax relation, the critical
 witness system, and distance `>2/3`.  The separate map covers 342 rows and 470
 feasible-pair instances; it must be audited together with these proof objects.
+
+The 23 abstract Lmin single-direction controls contain no contingency tables.
+The separate mapping audit globally Lmin-sorts every row, permutes its role
+word and direction, checks every feasible common excluded-player pair, and
+maps all 494 pair instances from all 322 rows to a minimized abstract case.
+Each formula contains normalization, the global weak Lmin chain, strict role
+signs, one common pair, the critical comparisons and six singleton witnesses,
+distance `>2/3`, the exact blocker disjunction for its direction, and between
+one and four additional stratum-order relations.  The mapping audit is finite
+classification evidence; the 23 CPC files independently check the abstract
+implications.  Neither component alone certifies the complete layer.
 
 ## Pinned checker sources
 
