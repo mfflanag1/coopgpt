@@ -1302,8 +1302,14 @@ localization of exactness; "|B|=4 is special".
 - EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
   extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
   ~21,000 games, ZERO above either bound.  Region A (starved-Lmax
-  hybrids) tops out FAR below — 8/15 at n=6, 23/45 at n=7: carrying the
-  n=5 mechanism up COSTS ratio, direct regime-change evidence.  Region C
+  hybrids) tops out FAR below AT n=6 ONLY — 8/15 vs 2/3, stable as the
+  run grew: carrying the n=5 mechanism up COSTS ratio at six players.
+  [RETRACTED by r12 same day: the n=7 companion figure 23/45 was a
+  mid-run snapshot that later climbed to 2/3 (still under 5/6) — the
+  costs-ratio reading is a SIX-PLAYER statement only; r12's own R3
+  finding (never print a number off a running job) reproduced by its
+  author within hours.  Quote figures only from completed
+  extremal_*.json, never from ext*.log.]  Region C
   reaches 2/3 from a non-G construction.  NEW: region D — 3,718 games
   with 3-4 pairwise-disjoint-support generators at n=6 ALL have
   Lmin = Lmax (rho EXACTLY 0), while n=7 reaches 8/15; candidate
