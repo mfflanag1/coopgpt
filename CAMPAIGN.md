@@ -1483,6 +1483,30 @@ localization of exactness; "|B|=4 is special".
   independently re-derives 37,277 = 24,795 + 9,132 + 74 + 3,276 with
   zero overlap, the harvest-realized set exactly the Stage-B 74, and
   no realized configuration excluded by the net.
+- SIX-HOUR PUSH AUTHORIZED (2026-08-09 ~00:50 UTC; user grant).
+  RESOURCE AMENDMENT to the s(6) plan, made while the clean gate is
+  RUNNING at 17/60 (10 unsat, 7 unknown seen) and recorded with that
+  knowledge state explicit: the gate's original purpose — decide
+  whether ~66 CPU-hours is worth spending — is mooted by the explicit
+  6-hour compute grant, so Stage C's LAUNCH is now a resource decision
+  separate from the THEOREM decision, which the residue alone settles.
+  Amended protocol: (1) gate completes and decide32 reports as
+  recorded; (2) if the gate's unknown rate (post-void, isolated) is
+  <= ~5%, Stage C launches at 600s cap, ELEVEN shards (leaving fleet
+  headroom of 3 cores; one-solver-process budget for each other lane),
+  with a second-pass 1800s isolated escalation of every unknown; if
+  > ~5%, NO blind launch — r22 reports the timing distribution for a
+  parameter decision; (3) the genuine Stage-B unknown (Lmin(1,3,1,1) x
+  Lmax(2,2,2), survived 1200s isolated) gets a 3600s isolated run in
+  the headroom; (4) final theorem shape decided by the residue: empty
+  -> s(6) = 2/3; nonempty -> rho <= 2/3 except the named list.  This
+  can only SHRINK the residue relative to the recorded rule's PARTIAL
+  branch; it cannot flip any verdict.  Concurrent lanes: fresh-agent
+  attack on (R) (the spec's prescribed fresh attempt), r12 on rigidity
+  blocker (b) hand-work while on audit call, r23 on the n=7 CFG-family
+  instance by design-backwards, lead on paper6 positioning with
+  web-verified citations.  Fleet compute rule in force: hand work only
+  until the gate completes; then one solver process per non-s(6) lane.
 - BLOCK-RIGIDITY ROUND 3 (task #35 cont.): TRAP RESOLVED, branch (i),
   hand-checkable — the tight rank function IS rho^ (verified on all 62
   coalitions of the witness) but rho^ is NOT SUBMODULAR (A={1,4},
