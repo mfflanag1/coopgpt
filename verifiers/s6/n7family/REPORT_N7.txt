@@ -1,0 +1,107 @@
+================================================================================
+THE n = 7 CFG-FAMILY INSTANCE -- REALIZED, AND THE FAMILY GENERALIZED
+================================================================================
+
+VERDICT.  Realized on the first design, and the construction generalizes: one
+six-row constructor gives the instance at every n, verified end to end at
+n = 6, 7, 8.  The crossover formula (n-4)/(n-3) is now FOUR-POINT verified
+(n = 5: 1/2 from the known extremal game; n = 6: 2/3; n = 7: 3/4; n = 8: 4/5).
+
+--------------------------------------------------------------------------------
+THE n = 7 INSTANCE
+--------------------------------------------------------------------------------
+T = 32 (so mu = 1/16 -> 2 and rho = 11/32 -> 11 are integral).  Lower envelope
+of six allocations of common total 32:
+
+    ( 2, 2, 2, 2, 2, 11, 11)      = the target Lmin
+    ( 0, 0, 0, 8, 8,  8,  8)      = the target Lmax;  zeroes players 1,2,3
+    ( 0, 0, 0, 0, 8, 12, 12)      zeroes player 4
+    ( 0, 0, 0, 8, 0, 12, 12)      zeroes player 5
+    ( 2, 2, 2, 2, 2, 22,  0)      zeroes player 7
+    ( 2, 2, 2, 2, 2,  0, 22)      zeroes player 6
+
+Verified from those rows alone, exact rational, single process:
+    singleton-normalized                                    yes
+    EXACT at definition level (LP over the core, no vertex enumeration)  yes
+    Lmin = (2,2,2,2,2,11,11)      strata (5,2)              on target
+    Lmax = (0,0,0,8,8,8,8)        strata (3,4)              on target
+    ||Lmin - Lmax||_1 = 24,  ratio 24/32 = 3/4              = (n-4)/(n-3)
+
+--------------------------------------------------------------------------------
+THE DESIGN, AND WHY THE TWO-GENERATOR ATTEMPT COULD NOT WORK
+--------------------------------------------------------------------------------
+r22's envelope of the target pair zeroes only the Lmax zero-set {1,2,3}, so
+v({i}) > 0 for i = 4..7 and the game is not singleton-normalized.  Adding rows
+naively then moves the selections.  Design-backwards fixes the order: choose the
+PINS first, then find a zero cover that respects them.
+
+x - z = (2,2,2,-6,-6,3,3), so a coalition can be tight for BOTH selections only
+where x(S) >= z(S).  Two families of such coalitions do all the work.
+
+  PAIR CAPS.  v(N\{i,j}) = T - 2mu = 28 for the three pairs inside the Lmax
+  zero-set Z = {1,2,3}.  These give y_i + y_j <= 4, which caps the leximin
+  stage-1 level at 2 and pins players 1, 2, 3.
+
+  QUAD CAPS.  v({5,6,7}) = v({4,6,7}) = 24.  These give y(Z u {4}) <= 8 and
+  y(Z u {5}) <= 8, which -- once 1,2,3 sit at 2 -- pin players 4 and 5.
+
+THE COINCIDENCE THAT MAKES THE FAMILY EXIST.  The quad value is
+T - (|Z|+1)mu = T - (n-3)mu = 3T/4, and the nu-anchor condition needs
+M*(n - |Z| - 1) = (T/4)*3 = 3T/4.  They are equal for EVERY n.  So one pair of
+coalitions simultaneously (a) pins the last two poor players from the floor
+side and (b) forces max_i y_i >= M from the ceiling side.  Ceiling uniqueness
+follows: if max_i y_i <= M then v({5,6,7}) = 3M forces y_5 = y_6 = y_7 = M and
+v({4,6,7}) = 3M forces y_4 = M, and the total leaves y_1 = y_2 = y_3 = 0, so z
+is the ONLY core point with max <= M and is therefore Lmax.
+
+--------------------------------------------------------------------------------
+THE GENERAL CONSTRUCTOR (family_n.py)
+--------------------------------------------------------------------------------
+For n >= 6 put T = 8(n-3), mu = 2, M = T/4 = 2(n-3), rho = 3n-10, and let the
+Lmax zero-set be Z = {1..n-4}.  Six rows:
+
+    ( mu^(n-2), rho, rho )                        = x
+    ( 0^(n-4), M, M, M, M )                       = z
+    ( 0^(n-4), 0, M,  (T-M)/2, (T-M)/2 )          zeroes k1
+    ( 0^(n-4), M, 0,  (T-M)/2, (T-M)/2 )          zeroes k2
+    ( mu^(n-2), 6n-20, 0 )                        zeroes r2
+    ( mu^(n-2), 0, 6n-20 )                        zeroes r1
+
+Row constraints respected by construction: g_i+g_j <= 2mu on Z,
+g(Z u {k}) <= (|Z|+1)mu for k1,k2, total T, nonnegative, and the six rows zero
+every coordinate.
+
+RESULTS (all exact rational; Lmin and Lmax by staged computation):
+    n = 6:  T = 24,  Lmin (2^4, 8, 8),   Lmax (0,0,6,6,6,6),   ratio 2/3   exact
+    n = 7:  T = 32,  Lmin (2^5, 11,11),  Lmax (0,0,0,8^4),     ratio 3/4   exact
+    n = 8:  T = 40,  Lmin (2^6, 14,14),  Lmax (0^4, 10^4),     ratio 4/5   exact
+Definition-level exactness verified by LP at all three, including n = 8
+(254 exact LPs, 11.9 s).
+
+INDEPENDENT CHECK ON THE CONSTRUCTOR.  At n = 6 the constructor reproduces the
+known Class B member exactly: scaling T = 24 gives mu = 2/24 = 1/12,
+rho = 8/24 = 1/3, M = 6/24 = 1/4 -- i.e. Lmin (1/12 x4, 1/3 x2) and
+Lmax (0, 0, 1/4 x4), the profile already in the s(6) harvest.  So the
+constructor was not tuned to n = 7; it regenerates a game found independently.
+
+--------------------------------------------------------------------------------
+SCOPE
+--------------------------------------------------------------------------------
+Four points, not a theorem.  The constructor is uniform in n and every step of
+its verification is uniform, but I have not PROVED that Lmin and Lmax come out
+as designed for all n -- only checked it at n = 6, 7, 8.  The pin argument
+above is written to be n-generic and I believe it proves the general case (the
+pair caps and quad caps, the 3T/4 coincidence, and the ceiling-uniqueness
+argument all read the same at every n), but turning it into a theorem needs the
+progressive-leximin write-up that Family A/B got, which I did not do here.
+Recorded as a construction with four verified instances, not as a family
+theorem.
+
+Also not claimed: minimality of the six rows, and anything about whether the
+ratio (n-4)/(n-3) is the SUPREMUM at each n -- these instances are lower
+bounds on s(n), nothing more.
+
+FILES: design7.py (the n=7 instance, standalone), family_n.py (the general
+constructor at n = 6,7,8), REPORT_N7.txt.  Single process throughout; repo
+read-only; no commits.
+================================================================================

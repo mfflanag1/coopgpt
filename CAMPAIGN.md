@@ -1514,6 +1514,33 @@ localization of exactness; "|B|=4 is special".
   <= 1 player per cap; clause two makes cross-block caps vacuous —
   two mechanisms, one boundary, which is why no single argument covers
   both.
+- THE CFG FAMILY EXISTS AT EVERY TESTED n — CROSSOVER FOUR-POINT
+  (task #38, verifiers/s6/n7family/): n=7 REALIZED first design at
+  ratio exactly 3/4 (lead-verified end to end with own solver), by
+  pins-first-zero-cover-second — r22's failure was an ORDER problem.
+  Generalized six-row constructor uniform in n (T = 8(n-3), mu = 2,
+  M = 2(n-3)); verified n = 6, 7, 8 (ratio 2/3, 3/4, 4/5), and at n=6
+  it REGENERATES the known Class B harvest member exactly — the check
+  that shows the design is the family's mechanism, not a fit.  THE
+  MECHANISM: the quad-cap value T-(n-3)mu = 3T/4 EQUALS the nu-anchor
+  requirement M(n-|Z|-1) at every n, so one coalition pair pins the
+  last poor players from below and forces the ceiling from above;
+  ceiling uniqueness follows.  Scope kept honest: four verified
+  instances + an n-generic pin argument, NOT yet a family theorem
+  (needs the progressive-leximin write-up); lower bounds only.
+- r22 FINAL REPORT: k-split CONFIRMED sharply (unknown rates
+  0/10/29/79/83% by Lmin k; same gradient on the Lmax side); its OWN
+  process-reuse hypothesis REFUTED by position-in-shard analysis (no
+  positional trend; first position worst) — the 46.7% is genuine
+  hardness, the 10x swing was single-instance variance, the inference
+  withdrawn on the record.  Cutoff corrected: k <= 4 would strand ~29%
+  of its own class; Stage C-FAST = k <= 3 (514 configs, 2-3 CPU-h).
+  Harvest-populated 74 have k in {2,3,4} and BOTH extremal configs
+  have k=2, so the k<=3 theorem contains the extremal class.
+  Candidate-B caveat recorded (catalogue cuts are sound for UNSAT but
+  reintroduce the n=6 converse caveat into the theorem's statement).
+  r22 stood down; r25-s6 redirected accordingly (skip the 28-prefix,
+  k-ascending launch).
 - THE PROCESS-REUSE DISCOVERY + EXECUTOR HANDOVER (pre-stated, before
   any fresh-process data): r22 found a 10x timing swing on IDENTICAL
   input (595.9s in a 28-solve long-lived process vs 56.0s in a fresh
