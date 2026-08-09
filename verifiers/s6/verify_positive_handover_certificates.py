@@ -14,7 +14,11 @@ from search_positive_handover_directions import critical_all_witness_solver
 
 HERE = Path(__file__).resolve().parent
 CERTIFICATES = HERE / "certificates"
-CASES = (("positive_lmax_direction_index0040", 40),)
+CASES = (
+    ("positive_lmax_direction_index0040", 40),
+    ("positive_lmax_direction_index0200", 200),
+    ("positive_lmax_direction_index0504", 504),
+)
 
 
 def sha256(path: Path) -> str:

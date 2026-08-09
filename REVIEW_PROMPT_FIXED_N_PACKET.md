@@ -142,9 +142,17 @@ verifiers/s6/replay_core_closure_smt.py
 verifiers/s6/verify_frozen_certificates.py
 verifiers/s6/export_positive_handover_smt.py
 verifiers/s6/verify_positive_handover_certificates.py
+verifiers/s6/audit_positive_lmax_direction_layers.py
+verifiers/s6/positive_lmax_direction_layers_audit.json
 verifiers/s6/certificates/positive_lmax_direction_index0040.smt2
 verifiers/s6/certificates/positive_lmax_direction_index0040.cpc
 verifiers/s6/certificates/positive_lmax_direction_index0040.json
+verifiers/s6/certificates/positive_lmax_direction_index0200.smt2
+verifiers/s6/certificates/positive_lmax_direction_index0200.cpc
+verifiers/s6/certificates/positive_lmax_direction_index0200.json
+verifiers/s6/certificates/positive_lmax_direction_index0504.smt2
+verifiers/s6/certificates/positive_lmax_direction_index0504.cpc
+verifiers/s6/certificates/positive_lmax_direction_index0504.json
 ```
 
 Hostile questions:
@@ -278,13 +286,18 @@ Hostile questions:
     `1_I-e_n-(|I|-1)e_r`, the all-directions-blocked quantifier, and the two
     exceptional tables 2597 and 3237.  Treat these exact blocker UNSAT verdicts
     as a compressed proof-discovery map, not as independent proof evidence.
-19. Inspect the survivor-40 positive-handover proof object independently.
+19. Inspect the three representative positive-handover proof objects
+    independently.  For survivor 40, confirm
     Confirm that the base critical system is feasible, direction
     `(0,0,0,-1,0,1)` lexicographically improves Lmax in that support type,
     and the blocker disjunction has the correct inequality direction for `x`
     and all six singleton witnesses.  Ethos checks this exact CPC body, but it
-    covers only one of the 109 single-direction Lmax rows and none of the 230
-    critical-algebra rows; do not extrapolate it to the complete branch.
+    the short gap calculation `(29)--(30)`.  Reproduce the dependency ablation:
+    21 direction rows need neither distance nor witness blocker inequalities,
+    80 need witnesses but not distance, and eight need both.  Survivors 40,
+    200, and 504 represent those three templates, but cover only three of the
+    109 single-direction Lmax rows and none of the 230 critical-algebra rows;
+    do not extrapolate them to the complete branch.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -325,6 +338,10 @@ python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
   --output /tmp/positive-lmax-handover-current.json
 cmp coopgames/verifiers/s6/positive_lmax_handover_directions.json \
   /tmp/positive-lmax-handover-current.json
+python3 coopgames/verifiers/s6/audit_positive_lmax_direction_layers.py \
+  --output /tmp/positive-lmax-layers-current.json
+cmp coopgames/verifiers/s6/positive_lmax_direction_layers_audit.json \
+  /tmp/positive-lmax-layers-current.json
 
 # Slower: full Lmin branch, including the canonical and exceptional menus.
 python3 coopgames/verifiers/s6/search_positive_handover_directions.py \

@@ -616,6 +616,58 @@ actual player is selected by the refined strata:
 | `(1,1)` | `(-2,-2,-1)` | `3` | 21 |
 | `(-1,1)` | `(0,0,0)` | `0` | 8 |
 
+A second ablation, frozen in
+`positive_lmax_direction_layers_audit.json`, sharply separates the three
+mechanisms:
+
+| Lmax direction template | count | distance needed? | singleton witnesses needed? |
+|---|---:|---|---|
+| `(0,0);(-1,0,0);1` | 80 | no | yes |
+| `(1,1);(-2,-2,-1);3` | 21 | no | no |
+| `(-1,1);(0,0,0);0` | 8 | yes | yes |
+
+Thus only eight of the 109 one-direction rows are genuinely
+distance-sensitive.  This is an exact QF_LRA dependency audit, not a proof of
+the uniform statements in the table.
+
+There is already a short human proof for representative survivor 40 in the
+80-row class.  Write its Lmin levels as `a<b<c` and its Lmax levels as
+`u<v<w<t<d`, so the player profiles are
+
+```text
+x=(a,a,a,b,b,c),       z=(u,v,w,d,d,t).
+```
+
+The common tight triple `{2,4,5}` and efficiency give
+
+```text
+d-b=(a-u)+(a-v).                                      (29)
+```
+
+For `h=e_5-e_3`, every negative-derivative coalition contains player 3 and
+omits player 5.  Put `A=a-u>0`, `B=a-v>0`, and `C=w-a>0`.  If such a coalition
+contains optional players `0,1,2,4` with indicators `e_0,e_1,e_2,e_4`, then
+
+```text
+x(S)-z(S)=e_0 A+e_1 B-e_2 C-(1+e_4)(A+B).            (30)
+```
+
+This is negative in all sixteen cases except `S={0,1,3}`, where it is zero.
+For that last coalition, the witness `q^3` with `q^3_3=0`, the blocker lower
+bound, and the critical triple `{3,4,5}` would require
+
+```text
+q^3({0,1}) >= 2a+b,       q^3({4,5}) >= 2b+c.
+```
+
+The left sides sum to at most one, while the right sides sum to
+`2a+3b+c=1+(b-a)>1`, a contradiction.  Hence the displayed direction is
+feasible without using the strict distance hypothesis.  The frozen
+survivor-40 CPC object independently checks the full linear formulation.
+Survivors 200 and 504 provide checked representative proof objects for the
+other two templates; these three objects are controls, not a proof for all
+109 rows.
+
 On the Lmin side, the 322 single directions likewise use only three role
 templates:
 
@@ -782,6 +834,10 @@ python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
   --output /tmp/positive-lmax-handover-current.json
 cmp coopgames/verifiers/s6/positive_lmax_handover_directions.json \
   /tmp/positive-lmax-handover-current.json
+python3 coopgames/verifiers/s6/audit_positive_lmax_direction_layers.py \
+  --output /tmp/positive-lmax-layers-current.json
+cmp coopgames/verifiers/s6/positive_lmax_direction_layers_audit.json \
+  /tmp/positive-lmax-layers-current.json
 python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
   --selected-side min --bound 3 --max-single-directions 100 \
   --timeout-ms 30000 --allow-menus --canonical-menus \

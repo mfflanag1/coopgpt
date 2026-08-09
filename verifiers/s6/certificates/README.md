@@ -2,7 +2,7 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for ten
+These files exercise an independently checked proof-object path for twelve
 six-player generator-normal-form queries.  They do not replace the complete
 3,350-configuration census and do not by themselves prove the global bound.
 
@@ -18,6 +18,8 @@ six-player generator-normal-form queries.  They do not replace the complete
 | `equality_subthird_index1408.smt2` | 1408 | distance `=2/3`, Lmax over-cover dispersion `<1/3` | UNSAT |
 | `equality_subthird_index2236.smt2` | 2236 | distance `=2/3`, Lmax over-cover dispersion `<1/3` | UNSAT |
 | `positive_lmax_direction_index0040.smt2` | 40 | positive critical residue plus a blocker to direction `(0,0,0,-1,0,1)` | UNSAT |
+| `positive_lmax_direction_index0200.smt2` | 200 | representative `N(1,1),P(-2,-2,-1),r=3` Lmax direction blocker | UNSAT |
+| `positive_lmax_direction_index0504.smt2` | 504 | representative distance-sensitive `N(-1,1),P(0,0,0),r=0` Lmax direction blocker | UNSAT |
 
 Indices 1408 and 2236 are the two equality-feasible stratum/table
 configurations left by the complete staged census:
@@ -58,13 +60,13 @@ A paper theorem still requires either checked proof objects for all excluded
 support/configuration types or a human structural reduction that makes most
 of those objects unnecessary.
 
-The survivor-40 control is the first proof object for the new one-sided
-handover.  Its base critical-triple system is SAT.  The added formula says
+The three positive-handover controls represent the three role-normalized Lmax
+direction templates.  Each base critical-triple system is SAT.  The added formula says
 that at least one coalition blocks the displayed lexicographically improving
 Lmax direction, with the blocker required to be eligible at `z` for `x` and
 for all six singleton-exactness witnesses.  Its UNSAT proof therefore checks
-one genuinely nonvacuous direction argument.  It does **not** certify the
-other 108 single-direction rows, the 230 rows killed by critical algebra, or
+one genuinely nonvacuous direction argument per template.  They do **not**
+certify the other 106 single-direction rows, the 230 rows killed by critical algebra, or
 any Lmin direction-menu row.
 
 ## Pinned checker sources

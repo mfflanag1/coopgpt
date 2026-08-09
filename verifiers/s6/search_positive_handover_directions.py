@@ -35,7 +35,7 @@ from audit_positive_packet_ablation_census import (  # noqa: E402
 from audit_equality_refinement_neighborhood import refines  # noqa: E402
 
 
-def critical_all_witness_solver(index, configuration):
+def critical_all_witness_solver(index, configuration, include_distance=True):
     r = tuple(configuration[0])
     c = tuple(configuration[1])
     table = tuple(tuple(row) for row in configuration[2])
@@ -89,7 +89,8 @@ def critical_all_witness_solver(index, configuration):
             if table[row][column]
         ]
     )
-    solver.add(distance > z3.RealVal("2/3"))
+    if include_distance:
+        solver.add(distance > z3.RealVal("2/3"))
     return solver, {
         "P_players": P,
         "poor_players": poor,
@@ -440,10 +441,17 @@ def main():
         sum(item.get("direction") is not None for item in rows),
         sum(item.get("full_direction_menu_verdict") == "unsat" for item in rows),
     )
-    if args.selected_side == "max" and args.bound == 3:
+    if (
+        not args.indices
+        and not args.ablation_side
+        and args.selected_side == "max"
+        and args.bound == 3
+    ):
         assert len(rows) == 339 and final == (230, 109, 0)
     if (
-        args.selected_side == "min"
+        not args.indices
+        and not args.ablation_side
+        and args.selected_side == "min"
         and args.bound == 3
         and args.max_single_directions == 100
         and args.allow_menus
