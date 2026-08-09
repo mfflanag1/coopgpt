@@ -1448,6 +1448,27 @@ localization of exactness; "|B|=4 is special".
   the route.  A plausible chain contradicting an audited witness,
   handed over labelled instead of buried in a sketch.  No hand proof
   yet.
+- THE s(6) GATE RULE, QUANTIFIED IN THE RECORD (pre-data; auditor's
+  catch): the ledger had carried only the recon's soft form ("~0 ->
+  launch; materially positive -> PARTIAL").  The lead's authorization
+  messages had already fixed numbers BEFORE any gate data (0 -> launch;
+  <=2% of sample -> launch with quarantine; >2% -> stop; restated as
+  <=1/60 launch, 2+ stop), but messages are not the auditable record —
+  hence this entry, written while the clean gate is still running and
+  no clean number exists.  GOVERNING RULE, adopting the auditor's
+  middle-band protocol: denominator = 60 configurations each run in
+  ISOLATION (a contaminated run is void and the SAME configuration is
+  re-run in isolation; it is neither success nor failure).  Then:
+  0/60 unknown -> launch Stage C (600s cap, sharded <= cores,
+  isolated).  1-2/60 -> re-run exactly those configurations at 1800s
+  in isolation; all resolve -> launch Stage C with the same 3x-retry
+  protocol for any Stage-C unknown; any survivor -> PARTIAL with the
+  named list.  >=3/60 -> PARTIAL ("rho <= 2/3 except a named list"),
+  no Stage C without a new decision.  Any SAT at target 2/3 anywhere ->
+  HALT everything for the end-to-end audit.  Contingency: if the
+  already-armed chain executes the earlier <=1-launch form before this
+  refinement reaches r22, the earlier form governs — both are
+  pre-data, and the audit records which executed.
 - BLOCK-RIGIDITY ROUND 3 (task #35 cont.): TRAP RESOLVED, branch (i),
   hand-checkable — the tight rank function IS rho^ (verified on all 62
   coalitions of the witness) but rho^ is NOT SUBMODULAR (A={1,4},
