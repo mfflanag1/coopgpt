@@ -1538,6 +1538,29 @@ localization of exactness; "|B|=4 is special".
   as a warning.  NO solver processes used (hand-rolled exact simplex,
   selftested) — compute-rule compliant during Stage C.  Remaining gap,
   named: does the face attain its cap at the lambda_w-argmin?
+- THE HEAVY-TAIL DISCOVERY (r25 diagnostic; the window's decisive
+  instrument finding): the PAIRED UNCENSORED test (re-run the 32
+  gate-DECIDED configs fresh — real times in both arms, unlike the
+  censored 28-unknown test, which r25 stopped as uninformative under
+  contention) shows fresh/sharded ratio median 1.46x vs the predicted
+  contention factor 1.54x — THE PROCESS-ARCHITECTURE EFFECT IS ZERO;
+  r22's conclusion stands, r25's skepticism withdrawn after testing.
+  THE REAL CAUSE: four configs the gate decided in 8.7-24s came back
+  UNKNOWN at 600s under identical encoding (69x has no contention
+  explanation), plus the reverse case on record — SOLVER RUNTIME IS
+  HEAVY-TAILED; unknown/decided is substantially a LOTTERY at any
+  fixed cap.  Consequences: (a) soundness UNAFFECTED — every UNSAT
+  banks, zero SAT anywhere, k<=3 coverage stands; (b) the 46.7% must
+  never be quoted as an instance-hardness rate — it is one draw; (c)
+  the probes' "STRUCTURAL wall" reading is DOWNGRADED to "resistant
+  at tested caps under single draws" — cap-exact single draws do not
+  prove structure in a heavy-tailed regime; (d) RESTARTS dominate:
+  k short attempts beat one long attempt, and the pre-authorized
+  seed-sweep protocol (3 x 200s under different z3 seeds, equal
+  budget) is the textbook exploitation — approved as the sample test
+  now and as THE POST-WINDOW COMPLETION METHOD for all unknowns and
+  the unreached k>=5 classes.  Bank k<=3 confirmed.  Package split:
+  r25 writes VERDICT32_S456.txt, never touching r22's VERDICT32.txt.
 - (R) FINAL ROUND (task #36 CLOSED as the program's best-documented
   open problem; lead-audited both new proofs): SUBADDITIVITY COLLAPSE
   — f_w(A) = f(A u p) - f(p) always (the other branch never strictly
