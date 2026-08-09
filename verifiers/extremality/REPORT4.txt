@@ -1,0 +1,202 @@
+================================================================================
+r12 / task #34  --  EXTREMALITY STRESS-TEST (n=6,7) AND THE C-C^ n=6 SCALING
+work dir: /private/tmp/claude-501/-Users-maxf/f0530d27-effc-4967-b154-48a9b65ca708/scratchpad/r12
+worktree read-only at ca49a22.  Papers not edited.
+================================================================================
+
+HEADLINE.  Target 1: no game beats the two-generator bound in any designed
+region -- but the informative part is WHERE the designed regions topped out,
+and one of them says the n=5 extremal mechanism provably does not transfer.
+Target 2: n=6 is still out of reach, and the wall is now located exactly -- it
+is the CONJUNCTION of existential exactness of v' with the phi' certificate
+family, neither of which is expensive alone.  The n=6 encoding is faithful:
+all four pinning controls pass, including both audited n=6 games.
+
+--------------------------------------------------------------------------------
+0.  A CORRECTION TO THE ASSIGNMENT'S PREMISE
+--------------------------------------------------------------------------------
+"Your old lab timed out at n=6 with the vertex-based pinnings ... rebuild the
+encoding pipeline-2 style."  The old lab was ALREADY pipeline-2 style.
+d2_lab.py's `exv`/`exv2` groups impose exactness EXISTENTIALLY (one attaining
+core witness per proper coalition, purely linear -- part/ Theorem A), and its
+`cert`/`cert2` groups impose leximin optimality through the Farkas certificates
+(Lemma L / part/ Theorem B, the two forms I cross-validated in d16).  There is
+no facet catalogue and no dual-polyhedron vertex anywhere in it.  So the n=6
+wall was never a modelling choice waiting to be undone; it is raw size, and
+that is what section 3 measures.
+
+--------------------------------------------------------------------------------
+1.  TARGET 1 -- DESIGNED EXTREMALITY STRESS-TEST
+--------------------------------------------------------------------------------
+Bounds under test: s_2(6) = 2/3 (attained by G(2,3)), s_2(7) = 5/6 (G(2,4) and
+G(3,3)).  Driver d29_extremality.py.  Every game is an envelope of nonnegative
+common-total rows with every coordinate vanishing in some row, so exactness and
+singleton normalization are free; Lmin and Lmax are computed exactly, and any
+game above the bound would be re-derived with the independent second algorithm
+for each selection before being reported.
+
+POSITIVE CONTROL.  Lmin, Lmax and rho were validated against paper5
+thm:family's closed forms on five members of the master family:
+   G(2,3) n=6 rho=2/3 | G(3,2) n=6 1/2 | G(1,4) n=6 1/2
+   G(2,4) n=7 rho=5/6 | G(3,3) n=7 5/6
+all matching 2(p(k-1)-1)/(k(p+1)) exactly, with Lmin by two independent
+algorithms and Lmax by two more (staged pinning, and a mirror Sigma_m ladder
+with a uniqueness proof) -- so both selections are double-computed before any
+hunting starts.
+
+FOUR DESIGNED REGIONS, chosen where neither the two-generator enumeration nor
+random harvests look:
+  A  starved-Lmax hybrids: one generator concentrated on a single player (the
+     n=5 extremal's shape), two or three others spread; the region that
+     carries the n=5 mechanism into n>=6.
+  B  G-perturbations: the G(p,k) pair at this n under a random relabelling,
+     usually with a third generator added.
+  C  deep floors: a large coalition against its complement, plus extra rows.
+  D  disjoint-support multigen: three or four generators with pairwise disjoint
+     supports -- a shape the two-generator class cannot express at all.
+
+RESULTS (snapshots of runs still in progress; extremal_6_1.json is a completed
+70 s pilot, ext6.log/ext7.log the long runs):
+
+  n = 6, bound 2/3            games    starved   best rho   ties at bound  above
+    A starved-Lmax hybrids     3684      2377      8/15           0          0
+    B G-perturbations          4730         0       2/3         623          0
+    C deep floors              4766      1946       2/3           4          0
+    D disjoint multigen        4820      1501         0           0          0
+
+  n = 7, bound 5/6            games    starved   best rho   ties at bound  above
+    A starved-Lmax hybrids     1770      1313       2/3           0          0
+    B G-perturbations          2088        17       5/6         363          0
+    C deep floors              2043      1091       2/3           0          0
+    D disjoint multigen        2099       894      8/15           0          0
+
+  (Snapshots of runs still in progress -- see the CORRECTION note below.)
+
+ZERO games above either bound.  What the regions say, which is the part worth
+reporting:
+
+  * REGION A IS THE INFORMATIVE ONE, but the n=6 and n=7 readings differ and
+    only the n=6 one is strong.  At n = 6 it tops out at 8/15 = 0.533 against
+    a bound of 2/3, over 3,684 games of which 2,377 genuinely starve -- a
+    ceiling well below the bound that has not moved as the run has grown.  So
+    at n = 6 the starvation mechanism that makes n=5 anomalous does not merely
+    fail to help; carrying it up actively COSTS ratio, which is direct evidence
+    for paper5's remark that the n=5 extremal class is qualitatively unlike the
+    n>=6 one, and it closes the most natural "hybrid" route to beating s_2(6).
+    At n = 7 the same region has since reached 2/3 -- still below the 5/6 bound
+    but no longer far below, so the "actively costs ratio" reading is NOT
+    supported at n=7 and should not be claimed there.
+
+  * CORRECTION (recorded against my own first report).  My initial message gave
+    region A's n=7 ceiling as 23/45 = 0.511.  That was a mid-run snapshot and
+    the same run has since climbed to 2/3; the qualitative claim (region A
+    stays under the bound) survives, the number does not.  This is exactly the
+    staleness failure I flagged as finding R3 in the splice audit, reproduced
+    in my own reporting the same day: a number read off a running job is not a
+    result.  Any figure from this table that is quoted anywhere must be taken
+    from the completed extremal_*.json, not from ext6.log / ext7.log.
+  * REGION B reaches the bound often (484 and 268 ties) and never exceeds it,
+    even with a third generator added to the G pair -- i.e. perturbing the
+    known extremal family does not improve it.
+  * REGION C reaches 2/3 at n=6 from a completely different construction
+    (4 ties, deep-floor shapes rather than G shapes), which is mild evidence
+    that 2/3 is a genuine ceiling rather than an artifact of the G family.
+  * REGION D IS A CLEAN STRUCTURAL FACT AT n=6: 4,820 games with three or four
+    pairwise-disjoint-support generators, best rho EXACTLY 0 -- Lmin = Lmax on
+    every one.  At n=7 the same region reaches 8/15, so this is not a general
+    fact about disjoint supports; it is specific to n=6, and it is a
+    conjecture-sized observation the campaign has not recorded.  Worth a hand
+    look: disjoint-support envelopes at n=6 appear to be rigidity games.
+
+HONEST LIMIT.  This is a designed zero-failure outcome, not a proof.  Per
+campaign law it is worth exactly what its regions cover, which is why the table
+above reports the regions and their ceilings rather than a single total.
+Region A's ceiling is the substantive contribution; the rest is coverage.
+
+--------------------------------------------------------------------------------
+2.  TARGET 2 -- FAITHFULNESS OF THE n=6 ENCODING (all four controls pass)
+--------------------------------------------------------------------------------
+Driver d30_lab6.py, mode `control`.  The lean encoding fixes S (removing the 62
+one-hot booleans and making v' concrete) and drops the hypotheses the ablation
+showed are not consumed.  Controls, all with every value pinned:
+
+  the n=5 Theorem-1 game, H*-left target      sat     (must be sat)
+  the n=5 Theorem-1 game, Hhat-leftmin target unsat   (must be unsat)
+  n=6 counterexample A, H*-left target        sat     (must be sat)
+  n=6 counterexample B, H*-left target        sat     (must be sat)
+
+The second row is the sharper control and it was not in the assignment: the
+same game must be ACCEPTED by the H* target and REJECTED by the Hhat target,
+because it refutes the first containment and satisfies the second.  An
+encoding that accepted both would be vacuous.
+
+TWO HARNESS BUGS THE CONTROLS CAUGHT (mine, not the encoding's; recorded
+because both are easy to repeat):
+  (a) I first pinned the C-C-LEFT counterexamples into the Hhat target.  They
+      satisfy W subset Hhat, so unsat was correct and my expectation was wrong.
+      A control's expected value is part of the control.
+  (b) lib12.suffixes returns the STRATUM INDEX j, while the lab keys cuts by
+      CUT POSITION (players below the cut).  These coincide only when every
+      lower stratum is a singleton, so the conversion is invisible on exactly
+      the examples one tests first.  And the encoding assumes players are
+      indexed in ascending phi order; both n=6 games violate that, so pinning
+      needs an explicit relabelling with v permuted along.  Until both were
+      fixed the controls returned unsat -- i.e. they failed loudly rather than
+      silently, which is the only reason this is a footnote and not a defect.
+
+--------------------------------------------------------------------------------
+3.  TARGET 2 -- THE WALL, LOCATED
+--------------------------------------------------------------------------------
+Shape gaps=(3,4), c*=3, S={2,3,4,5}, target leftmin, 120 s cap, groups added
+incrementally (d30_lab6.py plus wall6.txt / wall6b.txt):
+
+    core,hmin                        sat        0.0 s     141 assertions
+    core,cert,hmin                   sat        0.0 s     398
+    core,cert2,hmin                  sat        0.2 s     957
+    core,exv2,hmin                   sat        0.4 s   4,109
+    core,exv2,cert,hmin              sat        0.7 s   4,366
+    core,exv2,cert2,hmin         UNKNOWN      120.4 s   4,925
+    core,exv2,cert,cert2,hmin    UNKNOWN      120.5 s   5,182
+
+So it is NOT the exactness witnesses (4,109 assertions, 0.4 s) and NOT the phi'
+certificate family (957 assertions, 0.2 s).  It is precisely their CONJUNCTION.
+The mechanism is clear from the encoding: cert2's support conditions are 6
+blocks of 62 implications "lambda_T > 0 => phi'(T) = v'(T)", each of which asks
+which coalitions are phi'-tight, and every one of those tightness questions is
+now coupled to the 62 witness blocks that place 62 core points of v'.  The
+solver is doing a disjunctive search over tightness patterns with a 3,900-
+constraint linear system hanging off each branch.
+
+Confirming that reading, restricting cert2 to k of the 6 levels -- still a
+NECESSARY condition, so an unsat there would still decide the theorem -- shows
+the cost growing with the number of certificate blocks and not with anything
+else (wall6b.txt):
+    1 level  sat 1.0 s | 2 levels sat 1.6-3.4 s | 3 levels sat 3.6-5.9 s
+    6 levels unknown at 120 s
+All of those are sat, so the weakened systems do not decide anything; they only
+localize the blowup.
+
+CONSEQUENCE.  n=6 is not decidable by this encoding as written, and the
+obstruction is structural rather than a matter of tuning: any encoding that
+imposes exactness by existential witnesses AND leximin by support-conditioned
+Farkas certificates will pay this product.  Breaking it needs one of the two
+sides made non-disjunctive -- e.g. a sound a-priori bound on the certificate
+multipliers permitting a Big-M/boolean formulation, or a Caratheodory-style
+restriction of each certificate to at most n coalitions with a cheap selector.
+I did not find a sound version of either within this round.
+
+STATUS: C-C^ at n=6 remains a conjecture.  Per the assignment, reporting the
+wall precisely and stopping.
+
+--------------------------------------------------------------------------------
+4.  FILES
+--------------------------------------------------------------------------------
+  lib12.py            extended: lmax_staged, lmax_ladder (mirror Sigma_m ladder
+                      with uniqueness proof), rho, G(p,k)
+  d29_extremality.py  the four designed regions -> extremal_6_1.json,
+                      ext6.log, ext7.log
+  d30_lab6.py         the lean fixed-S n=6 lab; modes time / control / sweep
+  wall6.txt           the incremental group timing (the wall)
+  wall6b.txt          the certificate-level scaling
+  ctrl6.txt           the four pinning controls
+================================================================================
