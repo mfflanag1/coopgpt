@@ -1373,7 +1373,13 @@ localization of exactness; "|B|=4 is special".
   extremal class is TWO classes — the handover), undershoots from n=7
   (3/4 < 5/6), saturates at 1 vs 2.  "Why the G-family wins from n=6"
   answered: the CFG family stops winning there.  n=7 prediction 3/4
-  untested.  Stage B meanwhile 58/74 all UNSAT; clean gate CHAINED to
+  untested — first construction attempt FAILED for a construction-
+  internal reason (the two-generator envelope of the target pair zeroes
+  only z's zero-set, so v({i}) != 0 for four players; a valid instance
+  needs a zero-cover generator set that doesn't disturb the pins — the
+  design-backwards problem).  Explicitly NOT family-nonexistence
+  evidence; the crossover stays a verified TWO-point closed form and
+  must not be printed as three-point.  Stage B meanwhile 58/74 all UNSAT; clean gate CHAINED to
   auto-run after Stage B (HALT-marker guard).
 - (R) ROUNDS 4-5 (task #33 cont., verifiers/cfg_hand/): three routes
   CLOSED — (a) the lead's merge/contraction route (direction argument:
