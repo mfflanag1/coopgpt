@@ -102,7 +102,8 @@ Reproduce the new artifact with:
 python3 coopgames/verifiers/divergence/audit_lmax_overcover.py \
   --output /tmp/lmax-overcover-current.json \
   coopgames/verifiers/s6/harvest6_601.json \
-  coopgames/verifiers/s6/harvest6_602.json
+  coopgames/verifiers/s6/harvest6_602.json \
+  coopgames/verifiers/divergence/summary2.json
 cmp coopgames/verifiers/divergence/lmax_overcover_audit.json \
   /tmp/lmax-overcover-current.json
 ```

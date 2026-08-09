@@ -207,7 +207,7 @@ verifiers/divergence/audit_lmax_overcover.py
 ```
 
 reconstructed the dispersion-optimal certificate in exact rational arithmetic
-for 374 archived six-player games.  Its reproducible output is
+for 375 archived six-player games.  Its reproducible output is
 
 ```text
 verifiers/divergence/lmax_overcover_audit.json
@@ -216,13 +216,13 @@ verifiers/divergence/lmax_overcover_audit.json
 Results:
 
 ```text
-positive Lmin floor:                     249
+positive Lmin floor:                     250
 zero Lmin floor:                         125
 positive-floor failures of (SA)>=2T/3:    0
 ```
 
 Every zero-floor case deletes a null player and is therefore bounded by the
-proved `s(5)=1/2`.  Thus the new argument certifies all 374 archived games,
+proved `s(5)=1/2`.  Thus the new argument certifies all 375 archived games,
 without using their actual Lmin/Lmax player matching.  This remains an archive
 audit, not exhaustive proof evidence.
 

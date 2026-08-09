@@ -49,15 +49,32 @@ def as_fraction(value: Any) -> F:
 def records(node: Any, source: Path, trail: str = "$") -> Iterator[tuple]:
     if isinstance(node, dict):
         lower = {str(key).lower(): key for key in node}
-        if {"v", "lmin", "lmax"} <= set(lower):
-            raw_v = node[lower["v"]]
+        if {"lmin", "lmax"} <= set(lower):
             raw_x = node[lower["lmin"]]
             raw_z = node[lower["lmax"]]
-            if all(isinstance(row, list) for row in (raw_v, raw_x, raw_z)):
+            raw_v = node[lower["v"]] if "v" in lower else None
+            raw_g = node[lower["g"]] if "g" in lower else None
+            raw_h = node[lower["h"]] if "h" in lower else None
+            if isinstance(raw_x, list) and isinstance(raw_z, list):
                 try:
-                    v = tuple(as_fraction(q) for q in raw_v)
                     x = tuple(as_fraction(q) for q in raw_x)
                     z = tuple(as_fraction(q) for q in raw_z)
+                    if isinstance(raw_v, list):
+                        v = tuple(as_fraction(q) for q in raw_v)
+                    elif isinstance(raw_g, list) and isinstance(raw_h, list):
+                        g = tuple(as_fraction(q) for q in raw_g)
+                        h = tuple(as_fraction(q) for q in raw_h)
+                        if len(g) != len(x) or len(h) != len(x):
+                            raise ValueError("generator dimension mismatch")
+                        v = tuple(
+                            min(
+                                sum((g[i] for i in range(len(x)) if mask >> i & 1), F(0)),
+                                sum((h[i] for i in range(len(x)) if mask >> i & 1), F(0)),
+                            )
+                            for mask in range(1 << len(x))
+                        )
+                    else:
+                        raise ValueError("no characteristic function or generator pair")
                 except ValueError:
                     pass
                 else:
