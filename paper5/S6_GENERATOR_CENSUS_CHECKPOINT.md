@@ -137,6 +137,11 @@ triple and over-cover dispersion below `1/3`.  Thus equality anchor geometry
 is rigid conditional on the finite classification.  The 3,348 type exclusions
 remain census verdicts rather than individually checked proof objects.
 
+The starved type at index 1408 now also has a human barrier proof: an explicit
+core direction rules out distance above `2/3` and forces its canonical payoff
+pair at equality.  Only the positive type at index 2236 still relies on the
+common-triple CPC object for its short rigidity algebra.
+
 An independently checked proof-object lane is now frozen under
 `verifiers/s6/certificates/`.  Z3 and cvc5 agree on one representative strict
 failure exclusion and all eight rigidity/common-triple/anchor negations for the two realizable

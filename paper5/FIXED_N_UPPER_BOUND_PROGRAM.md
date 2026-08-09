@@ -252,3 +252,9 @@ those types.  A first-crossing argument localizes any hypothetical outward
 counterexample direction at one of these two profiles.  The remaining human
 target is therefore a tangent/normal-cone barrier at the two equality
 profiles, not another archive search.
+
+One half of that local program is now human: for the starved `(4,2)` by `(2,4)`
+profile, the direction `(0,0,1,1,-1,-1)` is feasible at every Lmin-tight
+coalition whenever the distance would exceed `2/3`, contradicting leximin
+optimality.  The same argument forces the canonical starved pair at equality.
+The positive `(5,1)` by `(2,4)` profile remains the live local barrier.

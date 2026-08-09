@@ -133,6 +133,7 @@ verifiers/s6/core_generator_census.json
 verifiers/s6/equality_triple_census.json
 verifiers/s6/equality_no_triple_census.json
 verifiers/s6/verify_equality_checkpoint.py
+verifiers/s6/audit_starved_4_2_barrier.py
 verifiers/s6/audit_equality_refinement_neighborhood.py
 verifiers/s6/equality_refinement_neighborhood_audit.json
 verifiers/s6/certificates/README.md
@@ -204,6 +205,12 @@ Hostile questions:
     selections under the stated Slater condition, and the inference that a
     nearby table is a contiguous refinement.  Treat the 22 one-split count as
     diagnostic only unless a tangent-cone generation lemma is supplied.
+12. Audit the human index-1408 barrier separately from the census.  Check the
+    gap coordinates `u,v,w`, the identity `1=6c+8v-4w`, the inference
+    `v>1/6 => 2w>v`, and the coalition count argument proving
+    `h=(0,0,1,1,-1,-1)` is feasible at every Lmin-tight coalition.  Confirm
+    that a small positive perturbation improves the sorted Lmin vector and
+    that the equality case forces the canonical starved payoff pair.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -215,6 +222,7 @@ cmp coopgames/verifiers/s6/two_packet_exactification_audit.json \
 python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
+python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 
