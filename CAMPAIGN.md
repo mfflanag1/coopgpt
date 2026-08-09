@@ -1431,6 +1431,23 @@ localization of exactness; "|B|=4 is special".
   corrected claims with one shared cause): RE-READ THE DEFINITION YOUR
   CODE IMPLEMENTS against the definition the paper states, especially
   when you copy the line.
+- BLOCK-RIGIDITY STEP 2 (task #35 cont., verifiers/extremality/
+  REPORT5.txt addendum): DUAL DESCRIPTION proved + verified (26 games,
+  5 profiles, 0 failures) — for disjoint-support envelopes,
+  v(X) = min_j w(X cap B_j) and Core = {x >= 0 : x(N) = T, x(A) <=
+  rho(A) := max_j w(A cap B_j)}, a pure upper-cap system (the analogue
+  of paper5 thm:duality; lead re-derived the duality chain).  The
+  cross-block caps x_u + x_v <= max(w_u, w_v) are the mechanism to aim
+  at.  TRAP FLAGGED, NOT RESOLVED, on the record so nobody builds on
+  it: the cap form invites a polymatroid/base-polytope argument
+  (Dilworth truncation + Fujishige dec-min = inc-max), which would
+  conclude Lmin = Lmax for EVERY profile — FALSE against the audited
+  (3,2,1) witness.  Either the polytope is not the base polytope of a
+  submodular rho^, or the dec-min = inc-max identity needs hypotheses
+  this polytope lacks; settle (i)-vs-(ii) ON THE WITNESS before using
+  the route.  A plausible chain contradicting an audited witness,
+  handed over labelled instead of buried in a sketch.  No hand proof
+  yet.
 - (ii) RESTORED WITH A VALID WITNESS (task #33 final round,
   verifiers/cfg_hand/designed.py): the targeted search over the
   residual shape — COMPLETE for balanced games, since Lemmas B/C/E1

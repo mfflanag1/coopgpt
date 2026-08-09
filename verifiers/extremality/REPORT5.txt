@@ -140,3 +140,57 @@ hand proof of either direction and am not claiming one.
   (the decisive test and the witness audit are inline runs recorded here;
    lib12.py supplies envelope, lmin/lmax by two algorithms each, rho)
 ================================================================================
+
+================================================================================
+ADDENDUM (task #35 step 2): STRUCTURE FOR THE HAND PROOF, AND ONE TRAP
+================================================================================
+
+LEMMA (dual description of the core; verified, proof three lines).
+Let the blocks be B_1..B_k, let w_i = g_{j(i)}(i) be player i's weight in its
+own generator, so w(B_j) = T for every j, and write w(A) = sum_{i in A} w_i.
+Then
+        v(X) = min_j  w(X n B_j)                                        (V)
+and, writing rho(A) = max_j w(A n B_j),
+        Core(v) = { x >= 0 : x(N) = T,  x(A) <= rho(A) for every A }.   (C)
+
+PROOF.  (V): g_j vanishes off B_j, so g_j(X) = w(X n B_j), and v is the lower
+envelope.  (C): for proper X, max_j w((N\X) n B_j) = max_j (T - w(X n B_j))
+= T - min_j w(X n B_j) = T - v(X), so given x(N) = T the core inequality at X
+is exactly the cap at A = N \ X.  Nonnegativity is the singleton case, since
+v({i}) = 0 once k >= 2.                                                  []
+
+VERIFIED: (V) and the cap identity checked exactly on 26 block games spanning
+the profiles (3,2,1), (2,2,2), (4,1,1), (3,3,1), (2,2,1) -- zero failures.
+
+WHY THIS IS THE RIGHT STARTING POINT.  It turns the class into a pure system of
+UPPER CAPS -- the exact analogue of paper5's thm:duality for the two-generator
+class -- and it makes the pairwise structure visible: for u, v in DIFFERENT
+blocks, A = {u,v} gives
+        x_u + x_v  <=  max(w_u, w_v),
+which is far stronger than the within-block caps x(A) <= w(A).  The
+cross-block caps are what the two selections have to negotiate, and the
+conjunction condition (a block of size >= 3 AND another of size >= 2) is
+plausibly the smallest configuration in which that negotiation has two
+degrees of freedom pulling opposite ways.  I did not turn this into a proof.
+
+A TRAP, RECORDED SO THE NEXT ATTEMPT DOES NOT LOSE A DAY TO IT.
+The cap form (C) invites a polymatroid argument: a polytope
+{x >= 0 : x(A) <= rho(A)} equals P(rho^) for the Dilworth truncation rho^,
+which is submodular; rho^(N) = T here (every partition of N has
+sum_i rho(A_i) >= sum_i w(A_i n B_1) = T, with equality at the trivial
+partition), so Core(v) looks exactly like the BASE POLYTOPE of a polymatroid.
+On base polytopes the decreasingly-minimal and increasingly-maximal elements
+coincide (Fujishige's lexicographically optimal base / the Frank--Murota
+dec-min theory), which would give Lmin = Lmax for EVERY profile.
+
+That conclusion is FALSE -- the audited (3,2,1) witness has rho = 1/3.  So one
+of the steps is wrong, and I could not determine which within this round.  The
+candidates are (i) Core(v) is not in fact the base polytope of rho^ (the
+truncation may not be attained where the argument needs it), or (ii) the
+dec-min = inc-max identity does not apply in the form recalled here, e.g. it
+needs integrality or an M-convexity hypothesis this polytope lacks.  Either way
+the route is NOT usable as stated, and anyone who reaches for it from the cap
+description -- which is the natural next thought -- should settle (i) versus
+(ii) FIRST, on the (3,2,1) witness, before building on it.  Flagged rather than
+resolved; asserting either branch without checking is exactly the kind of
+plausible-and-wrong step this campaign keeps catching.
