@@ -124,6 +124,8 @@ verifiers/s6/core_closure_reconstruction_audit.json
 verifiers/s6/run_core_closure_census.py
 verifiers/s6/rerun_core_closure_unknowns.py
 verifiers/s6/merge_core_closure_census.py
+paper5/S6_GENERATOR_CENSUS_CHECKPOINT.md
+verifiers/s6/core_generator_census.json
 ```
 
 Hostile questions:
@@ -158,6 +160,12 @@ Hostile questions:
    still needs exact coverage reconciliation, isolated reruns of every timeout,
    independent proof evidence or rational infeasibility certificates, equality
    classification, and specialist review.
+8. Audit the completed accepted-output merge: it reports all 3,350 survivors
+   `UNSAT`, with no `SAT` or `UNKNOWN`.  Verify that every survivor index is
+   present, each stored configuration equals `triage32.json`, all overlapping
+   decisive rows agree, and all 17 earlier timeouts have decisive isolated
+   generator-normal-form reruns.  Do not treat the merged JSON as an
+   independently replayable infeasibility certificate.
 
 Reproduce the two exact reconstruction controls from the repository root:
 

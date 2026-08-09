@@ -237,3 +237,10 @@ preserving the core and both selections.  Initial hard-case timings improve
 from 600-second unknowns to subsecond UNSAT verdicts.  A complete census is
 still required, and solver verdicts must ultimately be converted into human
 inequalities or independently checkable rational certificates.
+
+The first complete run of that route is recorded in
+`S6_GENERATOR_CENSUS_CHECKPOINT.md`: all 3,350 hand-net survivors have decisive
+strict-failure verdicts, with `0 SAT / 3350 UNSAT / 0 UNKNOWN`.  This closes the
+configuration census at the solver-evidence level.  It does not remove the
+stated certificate, equality-classification, clean independent rerun, or
+external-review requirements.

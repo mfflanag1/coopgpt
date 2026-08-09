@@ -11,9 +11,12 @@ proper coalitions `S`, it introduced a separate core allocation attaining
 `v(S)`.  For a question depending only on the core and its Lmin/Lmax selections,
 those 62 witnesses are unnecessary.  Six singleton witnesses suffice.
 
-No novelty claim is made for the closure operation itself.  The new project
-contribution is its use to quotient the full-staged decision encoding by
-core-equivalence.
+No novelty claim is made for the closure operation or for exactness of a
+finite lower envelope of common-total core allocations; the latter is already
+used throughout the earlier project papers.  The potentially new project
+contribution is the selection-preserving `n+2` reduction and its use to
+quotient the full-staged decision encoding by core-equivalence.  That novelty
+assessment remains subject to specialist literature review.
 
 ## 1. Exact closure preserves the core
 
@@ -126,8 +129,9 @@ Thus `Lmin(v_G)=x` and `Lmax(v_G)=z`.  QED.
 
 Consequently, if a counterexample exists on `n` players, one exists as a lower
 envelope of at most `n+2` common-total nonnegative allocations.  For `n=6`, an
-eight-generator rational game is a complete output format.  This normal form
-does not assert that all eight generators are necessary.
+eight-generator game is a complete output format; any SAT model returned by
+the rational linear-arithmetic encoding supplies rational generators.  This
+normal form does not assert that all eight generators are necessary.
 
 ### Corollary (extremal-domain reduction)
 
