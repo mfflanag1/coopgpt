@@ -1431,6 +1431,23 @@ localization of exactness; "|B|=4 is special".
   corrected claims with one shared cause): RE-READ THE DEFINITION YOUR
   CODE IMPLEMENTS against the definition the paper states, especially
   when you copy the line.
+- (ii) RESTORED WITH A VALID WITNESS (task #33 final round,
+  verifiers/cfg_hand/designed.py): the targeted search over the
+  residual shape — COMPLETE for balanced games, since Lemmas B/C/E1
+  use only core membership and the residual shape is thus the only
+  violable vertex — found an in-regime balanced non-exact game in
+  seconds: T=1, v(cd)=3/4, v(ce)=1/4, v(bde)=5/6, else 0; core point
+  (0,1/6,1/6,7/12,1/12); lambda_proper = 1/12 (at ac, abe) <= T/5;
+  mu = 1/18 < 1/12; exactness fails at d.  LEAD-VERIFIED all four
+  claims independently.  So exactness IS load-bearing; constraint (ii)
+  is a theorem about games; the specification is complete at FIVE
+  constraints + the zeroth filter, banked in paper5 open problem 4
+  (updated).  Ledger distinction per r23: last round's withdrawal was
+  right about the invalid witness and over-cautious about the claim —
+  the claim was true, the evidence was not; different failures.  The
+  random sampler's 0/20,000 was the sampler, not the world: the
+  designed search found the witness in seconds (tune generators, not
+  volume — again).  Live thread handed forward: the face restriction.
 - s(6) STAGE B CONTROLS ALL PASS (task #32): teeth 15/15 SAT and
   15/15 REALIZABLE at n=6 (Theorem-A LP audits, no vertex enumeration)
   — pipeline 2 SURVIVES THE DIMENSION JUMP, the round's key

@@ -243,19 +243,33 @@ is STILL TIGHT: smallest margin 0, at T = 7.  The empirical claims of rounds 3
 and 5 were tested against lambda_proper >= lambda, i.e. a HARDER condition, so
 their "margin >= 0 always" conclusions hold a fortiori.
 
-AND IT OPENS A NEW QUESTION, which may matter more than what it closed.
-Hunting for a genuine in-regime witness -- balanced, non-exact,
-lambda_proper <= T/5, mu < lambda -- found NONE in 20,000 sampled balanced
-games.  If none exists, core membership alone proves (R) and exactness is NOT
-where the content of mu = lambda lives, which would reopen the localization of
-round 4 entirely.  I could not settle this: my sampler draws v coordinatewise
-at random and is poor at producing interesting balanced non-exact games, so
-absence here is weak evidence.  Recorded as OPEN, not as evidence either way.
+CONSTRAINT (ii) IS RESTORED -- BY A DESIGNED SEARCH (2026-08-09).
+Random sampling had found nothing in 20,000 balanced games, but that sampler is
+poor at producing interesting balanced non-exact games.  The right instrument,
+as flagged, is to target the residual shape SEMANTICALLY: ask a solver directly
+for a singleton-normalized v with a NONEMPTY CORE that VIOLATES the one
+surviving cover inequality f(S1)+f(S2)+f(S3) >= T + 3*lambda, imposing no
+exactness.  This is legitimate as a complete test because Lemmas B, C and E1
+use ONLY core membership, so they apply to balanced games too, and the residual
+shape is therefore the only vertex a balanced game can violate.  SAT in
+seconds.  Witness, re-audited independently (designed.py):
 
-REVISED CONSTRAINT LIST for a proof of (R): (i) establish (R); (iii) engage the
-eta < 0 dual region, active on ~1% of instances; (iv) not factor through
-contraction; (v) not proceed by chain saturation.  Constraint (ii) is struck
-pending an in-regime witness.
+    T = 1,   v(cd) = 3/4,  v(ce) = 1/4,  v(bde) = 5/6,  all other v(S) = 0
+    core point (0, 1/6, 1/6, 7/12, 1/12) -- BALANCED
+    lambda_proper = 1/12, attained at ac and abe;  T/5 = 1/5, so IN REGIME
+    mu = 1/18  <  1/12 = lambda
+    exact: FALSE (exactness first fails at the singleton d)
+
+So mu = lambda is genuinely FALSE for balanced games at n = 5, in the regime
+where the question bites.  EXACTNESS IS LOAD-BEARING: constraint (ii) is a
+theorem about games, not merely a shortfall of one proof template, and any
+proof of (R) must consume exactness.  The earlier withdrawal was correct about
+the invalid witness and over-cautious about the claim.
+
+REVISED CONSTRAINT LIST for a proof of (R): (i) establish (R); (ii) consume
+EXACTNESS (witness above); (iii) engage the eta < 0 dual region, active on ~1%
+of instances; (iv) not factor through contraction; (v) not proceed by chain
+saturation.  Five constraints, all established.
 
 --------------------------------------------------------------------------------
 TARGET 3 -- the other 26 configurations.  NOT ATTEMPTED.
@@ -277,8 +291,9 @@ STATUS
   R4 / merge route for the residue ......................... REFUTED
   chain attainment of a nested cap pair at n=5 ............. REFUTED
   eta < 0 branch is inactive (would have closed (R)) ....... REFUTED (active ~1%)
-  exactness is load-bearing ................................ WITHDRAWN
-            (lambda-convention slip; see the CORRECTION section)
+  exactness is load-bearing ................................ PROVED
+            (designed in-regime witness; the round-4 witness was invalid --
+             see the CORRECTION section for the lambda-convention slip)
   free zeroth filter: lambda_proper > T/5 => mu = lambda .... PROVED (lead's)
   Target 3  the other 26 configurations .................... NOT ATTEMPTED
             (and likely the wrong frame: if (R) falls, mu = lambda falls for
