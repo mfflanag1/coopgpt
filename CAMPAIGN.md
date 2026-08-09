@@ -1538,6 +1538,26 @@ localization of exactness; "|B|=4 is special".
   as a warning.  NO solver processes used (hand-rolled exact simplex,
   selftested) — compute-rule compliant during Stage C.  Remaining gap,
   named: does the face attain its cap at the lambda_w-argmin?
+- (R) FINAL ROUND (task #36 CLOSED as the program's best-documented
+  open problem; lead-audited both new proofs): SUBADDITIVITY COLLAPSE
+  — f_w(A) = f(A u p) - f(p) always (the other branch never strictly
+  active), so lambda_w is the smallest PER-CAPITA MARGINAL over p,
+  Lemma M becomes one line, and the disjoint-caps angle DOES NOT EXIST
+  (always the nested chain).  LEMMA N (an identity, 4500/4500): the
+  face-reduced game preserves p's singleton cap EXACTLY — so chain
+  saturation fails ONLY through non-exactness of the reduced game at
+  B; the question's cleanest form.  EMPIRICS: chain saturation fails
+  ~15% in general (the old 64/4000 badly understated it: at |A|=2,3
+  failure is COMMON) yet 0/165 AT THE ARGMIN — a real selection
+  effect.  SCOPE: attainment-at-argmin is sufficient NOT necessary
+  ((R) has the level-ell fallback, vacuous when f(p) >= 3lambda/2);
+  the argmin principle is NOT free (eta<0 deficit), IS free at
+  lambda = T/n, and is STRICTLY WEAKER than (EXlam) (the balanced
+  witness separates them).  SHORTEST REMAINING PATH, named: the
+  |B0|=1 case on M = {p,q} — the round-1 three-player feasibility
+  where 4 of 5 balanced conditions are already proved free; close the
+  fifth under the argmin hypothesis.  (R) hands forward as: reduced-
+  game exactness inheritance at the per-capita-marginal argmin.
 - BOTH PROBES: THE HIGH-k WALL IS STRUCTURAL (headroom_A/B.json):
   the genuine Stage-B unknown (lmin(1,3,1,1)xlmax(2,2,2), POPULATED at
   observed 2/11) and the k=5 gate representative both cap-exact at

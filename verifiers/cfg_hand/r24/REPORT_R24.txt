@@ -1,0 +1,222 @@
+================================================================================
+ROUND 24 -- INEQUALITY (R), FRESH ATTEMPT
+VERDICT: PARTIAL.  (R) is NOT proved.  Two new lemmas are proved, the target is
+reduced to ONE statement about a four-player face, and four routes are closed.
+The proved material is in PROOF_M.txt; this file is the round's ledger,
+including everything that failed.
+================================================================================
+
+COMPUTE.  No solver process was used at any point.  Every linear program in
+this round was solved by a hand-written exact rational simplex (Bland's rule,
+fractions.Fraction), selftested in selftest.py against brute-force enumeration
+of core vertices, with a negative control (a deliberately non-exact game must
+fail the exactness round trip -- it does).  All arithmetic exact.  Repo
+read-only, no commits, no paper edits.
+
+GENERATOR AND ITS REACHABLE SHAPES (stated once, applies to every count below).
+Games are lower envelopes of m random integer allocation rows, m in 2..5, with
+common total T in 4..16, rejected unless every coordinate is 0 in some row.
+Such an envelope is always exact, with v(S) = min over rows and f(S) = max over
+rows.  Conversely EVERY exact game is the envelope of its core vertices, so the
+family is complete in principle; what this sampler actually reaches is exact
+games whose core is the cap closure of at most 5 small-integer points.  Games
+needing more generators or finer denominators are NOT reached.  Zero counts are
+statements about that family only, never about all exact games.
+
+USEFUL REFRAMING (used throughout, elementary): exact games at n = 5 are
+exactly the CAP CLOSURES of nonempty subsets of the simplex {y >= 0, y(N) = T}.
+For any such Q, cl(Q) = intersection over S of {y(S) <= max_Q y(S)} is exact,
+and cl(cl(Q)) = cl(Q).  This is why the envelope generator is complete.
+
+--------------------------------------------------------------------------------
+WHAT IS PROVED (details in PROOF_M.txt)
+--------------------------------------------------------------------------------
+1.  THE FACE IS A FOUR-PLAYER GAME, EXACTLY.  For any p and any t,
+    {y|_U : y in Core(v), y_p = t} = Core(w_t) with EQUALITY, where U = N\{p},
+    w_t(A) = max(v(A), v(A u p) - t) and w_t(U) = T - t.  Cap function
+    f_{w_t}(A) = min(f(A), f(A u p) - t); the second branch is the SUBGAME
+    v_U's own cap, so the face's caps are the pointwise min of v's caps and the
+    subgame's.  Guarded: 900 (game, p, A) triples, equality every time
+    (faceeq.py), and 1875 further comparisons in verify.py.
+
+2.  LEMMA M.  For t >= lambda,   2t + lambda_{w_t} >= 3*lambda,
+    with lambda_{w_t} the min of f_{w_t}(A)/|A| over nonempty A subset U
+    INCLUDING A = U.  Two-branch proof, one paragraph.  Machine: min = 0, so
+    TIGHT.  Drop t >= lambda and it goes to -16/3 (negative in 220 cases).
+
+3.  THEOREM(4).  Exact enumeration: the cover-vertex residue is EMPTY at
+    n = 3 (8 = 5 + 3) and n = 4 (79 = 41 + 32 + 6).  Positive control: the same
+    code at n = 5 reproduces REPORT_A3's 2286 = 1291 + 785 + 150 + 60 and the
+    single surviving shape.  Since Lemma B needs only a core point and Lemmas C
+    and E1 need only
+        (EXlam)  max over the core of y(E) >= lambda|E|, every nonempty E,
+    which is strictly weaker than exactness, it follows that any game on <= 4
+    players with a nonempty core satisfying (EXlam) has mu = lambda.
+
+4.  THE REDUCTION.  (EXlam) for the face F_p (at t = f(p)) plus THEOREM(4)
+    plus LEMMA M gives (R) for every ordered pair, hence mu = lambda at n = 5.
+    By THEOREM(4) the hypothesis is EQUIVALENT to mu_w = lambda_w.  So the
+    floor half at n = 5 is now exactly:
+
+        THE FOUR-PLAYER FACE GAME SATISFIES THE FLOOR PROPERTY.
+
+    Evidence: 0 violations in 1875 exact instances over 25 in-regime games,
+    minimum margin 0 with 322 equality cases.  The equality is structural (at
+    the lambda_w-attaining coalition B0 the claim forces h(B0) = f_w(B0)).
+    HONEST CAVEAT: this hypothesis is STRICTLY STRONGER than (R) -- tight in
+    322/1875 instances against (R)'s 9/600 ordered pairs.
+
+--------------------------------------------------------------------------------
+THE FIVE CONSTRAINTS, discharged
+--------------------------------------------------------------------------------
+(i)   Establishes (R): yes, modulo the one hypothesis, end to end.  The chain
+      2f(p) + max_{F_p} y_q - 3 lambda was measured directly: min 0, no
+      violations.
+(ii)  CONSUMES EXACTNESS.  Twice.  Structurally, F_p is nonempty only because
+      f({p}) is attained.  Empirically, on the lead-verified balanced non-exact
+      in-regime witness (mu = 1/18 < 1/12 = lambda), (EXlam-FACE) FAILS with
+      margin -1/12 at p = a, A = bc.
+(iii) ETA < 0.  The argument is PRIMAL -- it exhibits a core point -- so by
+      strong duality it bounds every dual solution, the eta < 0 ones included;
+      it does not route around that branch.  Measured separately: of 600
+      ordered pairs, 9 are tight, and every one of them has eta = 0.  The
+      eta < 0 region is active but was never tight in anything found here.
+(iv)  NOT CONTRACTION.  Core(w) = F_p with equality; the face is a subset of
+      the core.  The merge route died because its map enlarged the core; this
+      one neither loses nor gains points.
+(v)   NOT CHAIN SATURATION.  The face game w is NOT exact in 49 of 75 slices,
+      so the two caps are demonstrably not simultaneously attained, and nothing
+      in the argument supposes they are.
+
+--------------------------------------------------------------------------------
+ROUTES CLOSED (negative results; each audited)
+--------------------------------------------------------------------------------
+A.  THE FOUR-PLAYER HALF CANNOT BE A BALANCED-GAME THEOREM.  Designed witness,
+    verified exactly (n4witness.py): N = {p,q,x,y}, T = 1, singleton-
+    normalized, v(qx) = v(qy) = v(xy) = 2/3, all other proper v(S) = 0.  The
+    three constraints force the core to the single point (0, 1/3, 1/3, 1/3);
+    f(pq) = 1/3 so lambda = 1/6, in regime, while mu = 0.  Lemma E1 itself
+    fails there.  Hence (EXlam) is exactly the right hypothesis for THEOREM(4)
+    and nothing weaker will serve.
+
+B.  THE INTERIOR SLICE t = lambda DOES NOT WORK, although it is the natural
+    choice: lambda_{w_lambda} >= lambda always, so a floor property for that
+    slice would give mu = lambda in ONE step with no appeal to (R).  Measured:
+    (EXlam) FAILS there (margin -1/4), while at t = f(p) it holds 1875/1875.
+    The EXTREME face is the right slice.  Recorded because the interior slice
+    is the more attractive-looking object and it is wrong.
+
+C.  FACEq IS EQUIVALENT TO (R), NOT STRONGER, so it cannot serve as a proof.
+    Let G = {y in Core : y_p + y_q = f(pq)}, d = f(pq), R = N\{p,q},
+    sigma = T - d.  Projecting G turns "max_G y_p >= 3 lambda - d" into a
+    THREE-player feasibility problem: some x in Core(v_R) has
+    x(D) <= f(D u p) + d - 3 lambda for every D subset R.  Writing
+    U(D) = min( f(D u p) + d - 3 lambda,  f(D u p u q) - d ), feasibility is
+    exactly the five minimal-balanced-collection inequalities on R,
+    sum beta_D U(D) >= sigma.  Four of the five are free, each from the cover
+    bound sum_S f(S) >= T + sum_k (c_k - 1) y_k evaluated at an exactness
+    point:
+      - U(k) + U(lm) >= sigma, both branches, from
+        f(lmp) + f(kp) + f(pq) >= T + 2 f(p)   (cover {lmp},{kp},{pq}, excess 2
+        at p, exactness point of {p}), and from
+        f(lmp) + f(kpq) >= T + f(p)            (cover {lmp},{kpq}, excess 1
+        at p);
+      - the all-b singleton case f(xpq)+f(ypq)+f(zpq) >= T + 2 f(pq), from the
+        cover {xpq},{ypq},{zpq} (excess 2 at p and at q) at the exactness point
+        of {p,q} -- an exact fit;
+      - the all-a case f(xp)+f(yp)+f(zp)+f(pq) >= T + 3 f(p), then
+        3 f(pq) >= 6 lambda;
+      - the |I| = 2 mixed case, and the half-integral triangle condition, the
+        latter using the cover {xyp},{xzp},{yzp} at the exactness point of {q}
+        (where y_q = 0), giving >= 2T.
+    The single remaining case, |I| = 1, expands to
+        f(px) + f(pqy) + f(pqz) >= T + 3 lambda,
+    the residual inequality verbatim.  So FACEq is (R) restated.
+
+D.  THE CANDIDATE L* IS FALSE.  L*(A,k): "max{y_k : y in Core, y(A) = f(A)}
+    >= min(lambda, f(A u k) - f(A))" would generalize Lemma E1 from A = empty
+    to all A, and its singleton-A case alone implies (R).  It fails already at
+    singleton A: T = 5, A = {a}, k = d, f(a) = 3, f(ad) = 4, lambda = 1, and
+    the face maximum of y_d is 0 while the claim needs 1.  ((R) survives there
+    with margin 3, carried by f(p) being large.)  The correct replacement is
+    LEMMA M, in which the "needed amount" is lambda_w rather than lambda.
+
+E.  THE FREE-TOOL CEILING IS EXACTLY T + 2 lambda.  The residual cover
+    {p,x},{p,q,y},{p,q,z} has excess 2 at p and 1 at q, so cover-plus-exactness
+    gives f(px) + f(pqy) + f(pqz) >= T + max(2 f(p), f(pq)) >= T + 2 lambda,
+    and no combination of the cover bound, f(S) >= lambda|S| and monotonicity
+    of f reaches T + 3 lambda.  That measures the gap precisely: exactly
+    lambda, and it is exactly the quantity 2 y_p + y_q that must be found in a
+    single core point.
+
+F.  LITERAL DUAL ENUMERATION FOR (R) IS THE WRONG SIZE.  The game-free dual
+    polyhedron Q = {(eta, gamma >= 0) : eta + Gamma_k >= w_k}, w = (2,1,0,0,0),
+    has 742 vertices; a dimension count caps the gamma-support at 4.  652 have
+    eta < 0, falling into 158 shapes up to relabelling x, y, z; componentwise
+    domination prunes none of them.  This is strictly worse than the ONE
+    residual cover shape already in hand, so the enumeration was abandoned
+    rather than pushed.  Recorded so nobody re-derives it.  (dualverts.py)
+
+G.  A FAILED CONTROL, kept as a warning.  n4bal.py samples random balanced
+    games at n = 3, 4, 5 and looks for mu < lambda.  It found NONE -- including
+    at n = 5, where the lead's designed witness proves violations exist.  So
+    that sampler's reachable shapes miss the region entirely and its zeros are
+    void; the n = 4 refutation in A was obtained by DESIGN, not by sampling.
+    This reproduces REPORT_A3's own observation that random balanced sampling
+    is the wrong instrument here.
+
+--------------------------------------------------------------------------------
+TWO SMALL FREE FACTS WORTH KEEPING
+--------------------------------------------------------------------------------
+*  max(2 y_p + y_q) + max(2 y_q + y_p) >= 3 f(pq) >= 6 lambda.  One line:
+   evaluate both objectives at the core point attaining f(pq), where they sum
+   to 3(y_p + y_q) = 3 f(pq).  Consequences: (R) can fail for at most ONE order
+   of each unordered pair, and if both orders are tight then f(pq) = 2 lambda
+   exactly.
+*  EQUALITY STRUCTURE.  In all 9 tight instances found (of 600 ordered pairs
+   over 30 in-regime games): f(p) = lambda, f(pq) = 2 lambda, the optimal core
+   point has y_p = y_q = lambda, and eta = 0.
+
+--------------------------------------------------------------------------------
+WHY FIVE, on this evidence
+--------------------------------------------------------------------------------
+The mechanism is "slice off one player and apply the floor property to the
+four-player face".  It runs at n = 5 precisely because the cover residue is
+empty at n <= 4.  At n = 6 the identical step would need the floor property for
+a FIVE-player face, and the residue at n = 5 is the 60-vertex shape.  The
+induction stops exactly where the phenomenon does.  The property exactness buys
+and balancedness does not is (EXlam), and witness A shows that gap is real.
+
+--------------------------------------------------------------------------------
+SHARPEST NEXT QUESTION
+--------------------------------------------------------------------------------
+Does the face F_p attain its cap at the coalition B0 minimizing
+f_w(B)/|B| -- that is, is max_{F_p} y(B0) = min(f(B0), f(B0 u p) - f(p))?
+That single attainment, plus THEOREM(4), is the entire remaining gap.  It is a
+question about ONE coalition per face, not about all of them, and the machine
+data says the equality holds every time.
+
+--------------------------------------------------------------------------------
+STATUS
+--------------------------------------------------------------------------------
+  exact simplex + selftests (incl. negative control) ....... PASSED
+  Face = Core(w_t), with equality .......................... PROVED (guarded)
+  cap formula f_{w_t}(A) = min(f(A), f(A u p) - t) ......... PROVED
+  LEMMA M   2t + lambda_{w_t} >= 3 lambda, t >= lambda ..... PROVED, TIGHT
+  n <= 4 cover residue empty ............................... EXACT ENUMERATION
+                                                             (n=5 control OK)
+  THEOREM(4)  nonempty core + (EXlam) => mu = lambda ....... PROVED
+  balancedness insufficient at n = 4 ....................... REFUTED (witness)
+  interior slice t = lambda ................................ REFUTED
+  FACEq certificate stronger than (R) ...................... REFUTED (equal)
+  candidate lemma L* ....................................... REFUTED
+  (EXlam-FACE) ............................................. OPEN (0 / 1875)
+  (R) and mu = lambda at n = 5 ............................. OPEN, reduced to
+                                                             (EXlam-FACE)
+
+FILES.  lib24.py (exact simplex, core LPs on the 5-row dual with the primal
+read off as multipliers and re-verified feasible), selftest.py, genn.py,
+harvest.py, lstar.py, reduce.py, slicetest.py + slicetest.log, covers4.py,
+n4witness.py, n4bal.py (failed control, kept), dualverts.py, tight.py,
+verify.py + verify.log, faceeq.py, PROOF_M.txt, this file.
+================================================================================

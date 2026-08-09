@@ -1,0 +1,203 @@
+================================================================================
+THE FACE GAME, LEMMA M, AND THEOREM(4)
+Round 24.  Everything on this page is PROVED.  The one open step is stated at
+the end and is NOT proved.
+================================================================================
+
+CONVENTIONS.  v is a singleton-normalized game on N = {1..5} with a nonempty
+core, T = v(N), f(S) = T - v(N\S), and
+
+      Core(v) = { y : y(N) = T,  y(S) <= f(S) for every proper nonempty S }
+
+which is a tautology (y(S) >= v(S) iff y(N\S) <= f(N\S)) and already forces
+y >= 0 via S = N\{i}.  lambda = min over ALL nonempty S INCLUDING N of
+f(S)/|S|; since f(N) = T this is min(lambda_proper, T/5).  mu = min coordinate
+of the leximin core point = max{ t : some core point has every coordinate >= t }.
+v is EXACT iff every cap is attained: f(S) = max over the core of y(S).
+
+--------------------------------------------------------------------------------
+1.  THE FACE IS A FOUR-PLAYER GAME, EXACTLY.  (no exactness used)
+--------------------------------------------------------------------------------
+Fix a player p, write U = N\{p}, and let t be a real number.  Define the
+four-player game
+
+      w_t(A) = max( v(A), v(A u p) - t )   for A subset U,     w_t(U) = T - t.
+
+CLAIM.   { y|_U : y in Core(v), y_p = t }  =  Core(w_t),  with EQUALITY.
+
+PROOF.  Let y satisfy y(N) = T and y_p = t.  Every coalition S is either
+A subset U or A u {p} with A subset U.  For the first kind, y(S) >= v(S) reads
+y(A) >= v(A).  For the second, y(A u p) = t + y(A), so y(A u p) >= v(A u p)
+reads y(A) >= v(A u p) - t.  The two together are y(A) >= w_t(A).  Finally
+y(U) = T - t = w_t(U).  Conversely the same reading runs backwards.          []
+
+[ADDENDUM, final round: the min below is ALWAYS the second branch.  f is
+subadditive on disjoint sets, f(A u p) <= f(A) + f(p), so f(A u p) - f(p)
+<= f(A) for every A, and f_{w_t}(A) = f(A u p) - t whenever t <= f(p).  In
+particular lambda_w = min over B containing p, |B| >= 2, of
+(f(B) - f(p))/(|B| - 1), the smallest per-capita marginal over p, and branch 1
+of LEMMA M below is vacuous.  See ADDENDUM_R24.txt.]
+
+Its cap function is
+      f_{w_t}(A) := w_t(U) - w_t(U\A)
+                  = (T - t) - max( v(U\A), v(N\A) - t )
+                  = min( (T - t) - v(U\A),  T - v(N\A) )
+                  = min( f(A u p) - t,  f(A) ),
+because f(A u p) = T - v(N\(A u p)) = T - v(U\A).  Note that
+f(A u p) - t = (T - t) - v(U\A) is the cap of the SUBGAME v_U, so the face's
+caps are the pointwise minimum of v's caps and the subgame's caps.  Put
+
+      lambda_w := min over nonempty A subset U, INCLUDING A = U,
+                  of f_{w_t}(A)/|A| .
+
+(For A = U: f_{w_t}(U) = min(T - t, T - v({p})) = T - t, so the A = U term is
+(T - t)/4, which is the "include N" convention one level down.)
+
+At t = f({p}) this face is F_p = {y in Core(v) : y_p = f({p})}, nonempty
+exactly when f({p}) is attained -- i.e. by exactness of v at N\{p}.  THIS IS
+THE ONLY PLACE THE CONSTRUCTION NEEDS EXACTNESS, and it is a subset of the
+core, not a projection of it: the objection that killed the contraction/merge
+route (that the map enlarges the core) does not arise, since the containment
+above is an equality.
+
+--------------------------------------------------------------------------------
+2.  LEMMA M.   t >= lambda   =>   2t + lambda_{w_t} >= 3*lambda.
+--------------------------------------------------------------------------------
+PROOF.  Let A be nonempty, A subset U, s = |A|.  The value f_{w_t}(A)/s is one
+of two branches.
+
+  Branch 1, f_{w_t}(A) = f(A).  Then f(A)/s >= lambda by the definition of
+  lambda, and t >= lambda, so  2t + f(A)/s >= 2 lambda + lambda = 3 lambda.
+
+  Branch 2, f_{w_t}(A) = f(A u p) - t.  Then
+        2t + (f(A u p) - t)/s  =  t (2 - 1/s)  +  f(A u p)/s .
+  Since s >= 1 we have 2 - 1/s > 0, so t >= lambda may be substituted, and
+  f(A u p) >= lambda(s+1) because |A u p| = s + 1.  Hence
+        2t + (f(A u p) - t)/s  >=  lambda(2 - 1/s) + lambda(s+1)/s
+                                =  lambda[ 2 - 1/s + 1 + 1/s ]  =  3 lambda.
+
+Every A clears 3*lambda, so their minimum does.                              []
+
+SHARPNESS.  Machine-measured over in-regime exact games, the minimum of
+2t + lambda_{w_t} - 3*lambda over t in {f(p), lambda} is exactly 0.  The lemma
+is TIGHT and proves nothing stronger.
+HYPOTHESIS IS LOAD-BEARING.  With t in {0, lambda/2} (that is, t < lambda) the
+same quantity reaches -16/3 and is negative in 220 measured cases.  Branch 2
+is what fails: it needs the coefficient (2 - 1/s) multiplied by something at
+least lambda.
+
+TWO SPECIAL CASES worth naming.
+  t = lambda gives lambda_{w_lambda} >= lambda outright.
+  More generally lambda_{w_t} >= lambda for every t up to
+  tau_p := min over B containing p of [ f(B) - lambda(|B| - 1) ],  and
+  lambda <= tau_p <= f({p}).
+
+--------------------------------------------------------------------------------
+3.  THEOREM(4).  The cover residue is empty at n <= 4.
+--------------------------------------------------------------------------------
+Recall REPORT_A3's reduction, which is pure LP duality and uses no exactness:
+with g(S) = f(S) - lambda|S| (>= 0 on proper S by lambda <= lambda_proper, and
+g(N) = T - n*lambda >= 0 by lambda <= T/n),
+
+      mu >= lambda   iff   sum_S beta_S g(S) >= g(N)
+                           for every vertex beta of the fractional-cover
+                           polyhedron on PROPER coalitions.
+
+For any core point y and any cover with loads c_k >= 1,
+      sum_S beta_S g(S) >= sum_k c_k (y_k - lambda)
+                         = g(N) + sum_{k in E} (c_k - 1)(y_k - lambda),
+E := {k : c_k > 1}.  So a vertex is discharged as soon as some core point y
+makes the last sum nonnegative.  Reading off what each free lemma needs:
+
+      LEMMA B  (E empty)                  needs only a core point;
+      LEMMA E1 (|E| = 1, say E = {k})     needs max_core y_k >= lambda;
+      LEMMA C  (c_k constant on E)        needs max_core y(E) >= lambda|E|.
+
+The last two are both instances of
+
+      (EXlam)   max over the core of y(E)  >=  lambda |E|,  every nonempty E,
+
+which EXACT games satisfy trivially, since there the max IS f(E) >= lambda|E|,
+and which is STRICTLY WEAKER than exactness.
+
+EXACT ENUMERATION of the cover vertices (covers4.py, exact rationals):
+      n = 3:   8 vertices  =  5 balanced  +  3 with |E| = 1  +  0  +  0
+      n = 4:  79 vertices  = 41 balanced  + 32 with |E| = 1  +  6 equal-excess
+                                                             + RESIDUE 0
+POSITIVE CONTROL: the same code at n = 5 returns 2286 = 1291 + 785 + 150 + 60,
+reproducing REPORT_A3 exactly, and the 60 collapse to the single shape
+{p,x}, {p,q,y}, {p,q,z}.  So the enumerator is not lying about the empty
+residue at n <= 4.
+
+      THEOREM(4).  Any game on at most four players with a nonempty core that
+      satisfies (EXlam) has mu >= lambda, hence mu = lambda.
+
+(EXlam) IS NECESSARY, NOT DECORATION.  DESIGNED WITNESS, exactly verified:
+N = {p,q,x,y}, T = 1, singleton-normalized,
+      v(qx) = v(qy) = v(xy) = 2/3,   every other proper v(S) = 0.
+Adding the three constraints gives 2(y_q + y_x + y_y) >= 2, so y_p <= 0, so
+y_p = 0 and y_q = y_x = y_y = 1/3: the core is the single point
+(0, 1/3, 1/3, 1/3).  f(pq) = 1 - v(xy) = 1/3, so lambda <= 1/6; in fact
+lambda = 1/6, and it is in regime (1/6 <= T/4 = 1/4).  But mu = 0.  So
+mu >= lambda is FALSE for balanced four-player games, and Lemma E1 itself
+fails there -- f(p) = 1 while no core point gives p anything at all.
+
+--------------------------------------------------------------------------------
+4.  THE REDUCTION, AND THE ONE OPEN STEP.
+--------------------------------------------------------------------------------
+Take t = c := f({p}) and let F_p be the face.  Suppose
+
+      (EXlam-FACE)   for every nonempty A subset N\{p},
+                     max{ y(A) : y in Core(v), y_p = f({p}) }  >=  lambda_w |A|.
+
+Then w := w_c has a nonempty core (exactness at N\{p}) and satisfies (EXlam),
+so THEOREM(4) gives mu_w >= lambda_w: some point of F_p has every U-coordinate
+at least lambda_w.  In particular, for every q =/= p,
+
+      2 f(p) + max_{F_p} y_q  >=  2 f(p) + lambda_w  >=  3 lambda
+
+by LEMMA M, which is (R) for the ordered pair (p, q).  Ranging over all
+ordered pairs and feeding REPORT_A3's localization gives mu = lambda at n = 5.
+
+By THEOREM(4) itself the hypothesis is EQUIVALENT to mu_w = lambda_w.  So:
+
+      THE FLOOR HALF AT n = 5 IS EXACTLY THE STATEMENT THAT THE FOUR-PLAYER
+      FACE GAME SATISFIES THE FLOOR PROPERTY.
+
+STATUS OF THAT STATEMENT: OPEN.  Machine evidence, exact, over 25 in-regime
+games: 0 violations in 1875 (game, p, A) instances, minimum margin 0, with 322
+equality cases.  The equality is structural, not luck: if B0 attains lambda_w
+then h(B0) <= f_w(B0) = lambda_w|B0|, so the claim forces h(B0) = f_w(B0),
+i.e. the face attains its cap at B0.  HONEST CAVEAT: (EXlam-FACE) is STRICTLY
+STRONGER than (R) -- tight in 322 of 1875 instances against (R)'s 9 of 600
+ordered pairs -- so it is the riskier conjecture.
+
+IT CONSUMES EXACTNESS.  On the lead-verified balanced non-exact in-regime
+witness (T = 1, v(cd) = 3/4, v(ce) = 1/4, v(bde) = 5/6; mu = 1/18 < 1/12 =
+lambda), (EXlam-FACE) FAILS with margin -1/12 at p = a, A = bc, where the
+attained maximum of y_a is 1/12 although f(a) = 1.  So the reduction is not
+available to balanced games, as constraint (ii) demands.
+
+--------------------------------------------------------------------------------
+5.  WHY FIVE, on this evidence.
+--------------------------------------------------------------------------------
+The argument is "slice off one player, apply the floor property to the
+four-player face".  It runs at n = 5 because the cover residue is empty at
+n <= 4.  At n = 6 the identical step would require the floor property for a
+FIVE-player face, and the residue at n = 5 is the 60-vertex shape.  The
+induction therefore stops at exactly the observed place.  What exactness buys
+and balancedness does not is (EXlam); the four-player witness of section 3
+shows the gap is real.
+
+================================================================================
+STATUS
+  Face = Core(w_t), with equality ......................... PROVED (guarded)
+  Cap formula f_{w_t}(A) = min(f(A), f(Aup) - t) .......... PROVED
+  LEMMA M  2t + lambda_{w_t} >= 3 lambda for t >= lambda ... PROVED, TIGHT
+  n <= 4 cover residue empty .............................. EXACT ENUMERATION
+  THEOREM(4) (EXlam) + nonempty core => mu = lambda ....... PROVED
+  balancedness insufficient at n = 4 ...................... REFUTED by witness
+  (EXlam-FACE) ............................................ OPEN  (0/1875)
+  (R), mu = lambda at n = 5 ............................... OPEN, reduced to
+                                                            (EXlam-FACE)
+================================================================================
