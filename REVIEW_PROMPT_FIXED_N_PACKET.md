@@ -297,7 +297,19 @@ Hostile questions:
     80 need witnesses but not distance, and eight need both.  Survivors 40,
     200, and 504 represent those three templates, but cover only three of the
     109 single-direction Lmax rows and none of the 230 critical-algebra rows;
-    do not extrapolate them to the complete branch.
+    do not extrapolate them to the complete branch.  For the 80-row template,
+    independently verify that the sole payoff-comparison-eligible coalition
+    is `N union {p}`, that the recorded `j` is below `p` in both selections,
+    and that the zero-at-`p` witness plus `T_j` gives the stated disjoint-set
+    contradiction.  Decide whether the remaining payoff-order lemma can be
+    proved without enumerating refined strata.  For the 21-row template,
+    audit the complete gap proof around direction `(31)`: the two `-2`
+    players must occupy one cell and have forced common excluded-player
+    triples, the `-1` player must share their Lmax level but have higher Lmin,
+    and the four `(m,l)` cases must cover every coalition with negative
+    derivative.  This is intended as a human direction lemma conditional on
+    the finite stratum-pattern classification, not a proof of that
+    classification without enumeration.
 
 Reproduce the two exact reconstruction controls from the repository root:
 

@@ -630,6 +630,32 @@ Thus only eight of the 109 one-direction rows are genuinely
 distance-sensitive.  This is an exact QF_LRA dependency audit, not a proof of
 the uniform statements in the table.
 
+The 80-row class compresses one step further.  In every row the payoff-only
+blocker test leaves exactly one possible negative-derivative coalition,
+
+```text
+S = N union {p},
+```
+
+where `p` is the `P` player decreased by `e_r-e_p`.  There is also a unique
+`j` in `P\{p}` lying below `p` in both selections for which the critical
+algebra forces `z(N union {p})>x(N union {j})`.  Once those two payoff facts
+are proved uniformly, the witness step is already human.  Among any two
+common triples, at least one of `T_p` and `T_j` is common.  If it is `T_p`,
+efficiency gives `z(N+p)=x(N+p)>x(N+j)`; if it is `T_j`, it gives
+`z(N+j)=x(N+j)<z(N+p)`.  The zero-at-`p` witness and the always-valid critical
+inequality for `T_j=(P\{j}) union {r}` would then imply
+
+```text
+q^p(N) >= z(N+p),        q^p(T_j) >= 1-x(N+j).
+```
+
+Their effective supports are disjoint, so the strict right-side sum exceeds
+one, impossible.  Consequently the remaining human task for this entire
+80-row template is now a payoff-order lemma showing that all other negative
+coalitions fail `x(S)>=z(S)` and identifying the common low player `j`; the
+exact audit verifies both statements in every finite support type.
+
 There is already a short human proof for representative survivor 40 in the
 80-row class.  Write its Lmin levels as `a<b<c` and its Lmax levels as
 `u<v<w<t<d`, so the player profiles are
@@ -667,6 +693,37 @@ survivor-40 CPC object independently checks the full linear formulation.
 Survivors 200 and 504 provide checked representative proof objects for the
 other two templates; these three objects are controls, not a proof for all
 109 rows.
+
+The 21-row class has a complete uniform direction proof once its displayed
+stratum pattern is known.  Let
+
+```text
+Delta = sum_{i in N}(x_i-z_i) > 0.
+```
+
+The two `P` players receiving coefficient `-2` occupy the same cell and their
+excluded-player triples are both forced common.  Efficiency therefore gives
+`x_i-z_i=-Delta` for each.  The remaining `P` player receives coefficient
+`-1`; it has the same Lmax level but a strictly higher Lmin level, so write
+its gap as `-gamma` with `0<gamma<Delta`.  Efficiency then forces the rich
+gap to be `Delta+gamma`.  For the direction
+
+```text
+h_N=(1,1),       h_P=(-2,-2,-1),       h_r=3,          (31)
+```
+
+consider a coalition with `t` poor players, `k` of the two common `P`
+players, indicator `l` for the remaining `P` player, and indicator `m` for
+the rich player.  If `m=0`, the condition
+`t-2k-l<0` makes its gap sum negative: for `k>=1`, use that any proper subset
+of the two positive poor gaps is strictly below `Delta`; for `k=0`, negativity
+forces `t=0,l=1`.  If `m=1`, negativity forces `k=2`; when `l=0` it also forces
+`t=0`, giving `-Delta+gamma<0`, and when `l=1` it forces `t<=1`, giving a
+proper poor-gap subtotal minus `Delta`.  Thus every coalition with `h(S)<0`
+has `x(S)<z(S)`, so (31) is Lmax-feasible.  No distance inequality or
+singleton witness is used.  The dependency audit checks that all 21 finite
+support types have exactly the required shared-cell and forced-common-pair
+pattern.
 
 On the Lmin side, the 322 single directions likewise use only three role
 templates:
