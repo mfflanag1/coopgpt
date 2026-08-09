@@ -1,0 +1,125 @@
+================================================================================
+r12 / task #35  --  THE DISJOINT-SUPPORT RIGIDITY
+work dir: /private/tmp/claude-501/-Users-maxf/f0530d27-effc-4967-b154-48a9b65ca708/scratchpad/r12
+================================================================================
+
+VERDICT.  The conjecture is FALSE, and my own region-D observation that
+prompted it was a generator artifact -- the fourth-and-a-half instance of the
+campaign's signature failure, this time produced by me.  What survives is a
+sharper and dimension-FREE statement: rigidity is governed by the block-size
+profile alone, with a clean two-condition threshold that fits 10/10 profiles
+across n = 5,6,7,8.
+
+--------------------------------------------------------------------------------
+1.  THE CONJECTURE IS REFUTED AT n = 6
+--------------------------------------------------------------------------------
+Conjectured: at n = 6, the lower envelope of k >= 3 generators with pairwise
+disjoint supports has Lmin = Lmax.
+
+WITNESS (k = 3, disjoint supports, n = 6, common total 6):
+        (1, 4, 1, 0, 0, 0)      blocks {1,2,3}
+        (0, 0, 0, 1, 5, 0)             {4,5}
+        (0, 0, 0, 0, 0, 6)             {6}
+    Lmin = (1/2, 3/2, 1/2, 1/2, 3/2, 3/2)
+    Lmax = (1,    4/3, 1,   0,   4/3, 4/3)
+    rho  = 1/3,   Lmin != Lmax.
+
+AUDIT.  Common total 6 shared by all three rows; every coordinate vanishes in
+some row, so v is exact and singleton-normalized for free by the envelope
+lemma, and this is confirmed independently by z3 on all 62 proper coalitions.
+Lmin computed by two independent algorithms (staged pinning and the Sigma_m
+ladder) which agree, with a uniqueness proof; Lmax likewise by two (staged
+pinning and the mirror ladder), with a uniqueness proof.  So the separation is
+certified on both sides.
+
+--------------------------------------------------------------------------------
+2.  WHY I BELIEVED IT: A GENERATOR ARTIFACT, MINE
+--------------------------------------------------------------------------------
+d29's region-D generator distributed players round-robin over k = 3 or 4
+blocks after a shuffle.  At n = 6 that produces ONLY the balanced profiles
+(2,2,2) and (2,2,1,1); at n = 7 it produces (3,2,2) and (2,2,2,1).  Both n = 6
+profiles are genuinely rigid and both were sampled thousands of times -- 4,820
+games, rho = 0 every time -- while the profile that breaks, (3,2,1), was
+UNREACHABLE by that generator.  The n = 7 nonzero readings came from (3,2,2),
+its one profile containing a block of size 3.
+
+So "rigid at n = 6, not at n = 7" was never about n.  It was the round-robin
+partition silently restricting the block-size profile, and the apparent
+dimension dependence was the profile changing with n underneath a fixed
+generator.  Recorded as the same law the campaign has now hit five times: a
+zero-failure region is worth exactly the shapes its generator can reach, and
+"which shapes CAN this generator emit" is a question to answer before, not
+after, reporting a zero.
+
+--------------------------------------------------------------------------------
+3.  THE CORRECTED STATEMENT (dimension-free, fits 10/10)
+--------------------------------------------------------------------------------
+Let v be the lower envelope of k >= 3 nonnegative generators with pairwise
+disjoint supports B_1,...,B_k partitioning N, each g_j strictly positive on
+B_j with common total T.
+
+    CONJECTURE (corrected).  Lmin(v) = Lmax(v)  if and only if
+        every block has size <= 2,   OR   at most one block has size >= 2.
+    Equivalently, rigidity FAILS exactly when some block has size >= 3 AND
+    some OTHER block has size >= 2.
+
+TESTED (d31/decisive driver, all set partitions listed, ~40 games each):
+    n   profile        predicted   nonzero rho   best rho
+    5   (3,1,1)        rigid            0           0        OK
+    5   (2,2,1)        rigid            0           0        OK
+    6   (2,2,2)        rigid            0           0        OK
+    6   (2,2,1,1)      rigid            0           0        OK
+    6   (4,1,1)        rigid            0           0        OK
+    6   (3,2,1)        BREAKS           7         1/3        OK
+    7   (2,2,2,1)      rigid            0           0        OK
+    7   (5,1,1)        rigid            0           0        OK
+    7   (3,3,1)        BREAKS          21         3/8        OK
+    7   (3,2,1,1)      BREAKS           4         1/4        OK
+    8   (3,2,2,1)      BREAKS           5         4/9        OK
+Ten of ten, and note the two independent ways the condition could have been
+wrong are both exercised: (4,1,1) has a size-4 block and stays rigid (so
+"some block >= 3" alone is not enough), and (2,2,2) has three blocks of size 2
+and stays rigid (so "two blocks >= 2" alone is not enough).  It is the
+CONJUNCTION that breaks it.
+
+WHY THE TWO RIGID FAMILIES ARE PLAUSIBLE (sketch, not a proof).  Write
+v(X) = min_j g_j(X ∩ B_j); since g_j vanishes off B_j, v(X) = 0 unless X meets
+every block, so the only active constraints come from transversal-ish sets.
+When at most one block B_1 has size >= 2, every other block is a singleton
+{p_j} with g_j(p_j) = T, so v(X) = g_1(X ∩ B_1) whenever X contains all those
+singletons and 0 otherwise; taking X = (N \ B_1) ∪ (B_1 \ {i}) gives the caps
+x_i <= g_1(i) for i in B_1, and the core collapses to a one-block problem.
+When every block has size <= 2 the transversal constraints are pairwise and
+the same collapse happens blockwise.  A third block of size >= 2 alongside a
+block of size >= 3 is what first gives the two selections room to disagree --
+the size-3 block supplies an interior player the floor can raise while the
+size-2 block supplies the cap the ceiling must respect.  I did not complete a
+hand proof of either direction and am not claiming one.
+
+--------------------------------------------------------------------------------
+4.  STATUS AND WHAT I DID NOT DO
+--------------------------------------------------------------------------------
+  * The conjecture as assigned: REFUTED, witness audited end to end.
+  * "Why n=6 and not n=7": the premise is void -- it is not about n.  The
+    n=6/n=7 split in my data was my generator's block-size profile changing
+    with n.
+  * The corrected size condition: strong evidence (10/10 profiles, both
+    failure modes of the condition exercised), NO PROOF in either direction.
+  * The lead's route (1) -- that disjoint supports force exact partition at
+    Lmin, giving Lmin = Lmax by the Lorenz chain -- is untested here.  It
+    remains the natural attack on the rigid direction, and the corrected
+    condition tells it exactly which profiles it must cover and which it must
+    NOT (it must fail on (3,2,1)).  Note the lead's own caution applies: the
+    Lorenz chain needs exact partition as a hypothesis, per r22's C7 witness.
+  * A full set-partition sweep at n = 5,6,7 (d31_blocks.py, ~1,020 partitions)
+    was launched to confirm the condition exhaustively rather than on the ten
+    hand-picked profiles; it had not finished when this was written and its
+    result should be folded in before the condition is quoted anywhere.
+
+--------------------------------------------------------------------------------
+5.  FILES
+--------------------------------------------------------------------------------
+  d31_blocks.py   all-set-partition sweep by block-size profile -> blocks.json
+  (the decisive test and the witness audit are inline runs recorded here;
+   lib12.py supplies envelope, lmin/lmax by two algorithms each, rho)
+================================================================================

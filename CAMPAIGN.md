@@ -1349,6 +1349,32 @@ localization of exactness; "|B|=4 is special".
   — the CFG family continued (zeros 1->2, poor stratum 3->4, M=T/4,
   ratio 1/2->2/3).  "Extremal => starved Lmax" FAILS at n=6; the (2,4)
   Lmax shape is where an n=6 hand bound should start.
+- DISJOINT-SUPPORT RIGIDITY REFUTED + CORRECTED (task #35,
+  verifiers/extremality/REPORT5.txt): the region-D "rho = 0 at n=6"
+  was r12's OWN generator artifact (round-robin block assignment emits
+  only (2,2,2)/(2,2,1,1) at n=6 — both genuinely rigid — while the
+  breaking profile (3,2,1) was unreachable; 5th sampling-artifact
+  instance, self-caught, this one in a DESIGNED corpus).  Refutation
+  witness lead-verified (envelope (1,4,1|1,5|6), Lmin != Lmax, rho =
+  1/3).  CORRECTED, dimension-free: Lmin = Lmax for disjoint-support
+  envelopes iff every block <= 2 OR at most one block >= 2 (fails iff
+  some block >= 3 AND another >= 2); 11/11 hand-picked profiles, both
+  failure modes of the condition exercised ((4,1,1) rigid, (2,2,2)
+  rigid); full set-partition sweep RUNNING, condition not to be quoted
+  as verified until it lands.  NEW LAW (generalized): a zero-failure
+  region is worth exactly the SHAPES its generator can emit —
+  enumerate emittable shapes BEFORE reporting the zero.
+- THE CFG-FAMILY CROSSOVER (task #32 side-result, verifiers/s6/
+  PROFILE6.txt): the starved family (4 players at T/4, poor stratum
+  n-2 absorbing the zeros) has mu = 1/(4(n-3)) and ratio EXACTLY
+  (n-4)/(n-3) — derived structurally, lead-verified telescoping, both
+  observed members reproduced.  Against s_2(n): EXCEEDS at n=5 (1/2 >
+  1/3, why s(5) beats the G-family), TIES at n=6 (2/3 = 2/3, why the
+  extremal class is TWO classes — the handover), undershoots from n=7
+  (3/4 < 5/6), saturates at 1 vs 2.  "Why the G-family wins from n=6"
+  answered: the CFG family stops winning there.  n=7 prediction 3/4
+  untested.  Stage B meanwhile 58/74 all UNSAT; clean gate CHAINED to
+  auto-run after Stage B (HALT-marker guard).
 - EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
   extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
   ~21,000 games, ZERO above either bound.  Region A (starved-Lmax
