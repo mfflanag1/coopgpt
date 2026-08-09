@@ -71,8 +71,17 @@ def pipeline2_core_closure(n, r, c, table, target=F(2, 3), fail=True):
     tight_x = {coalition: z3.Bool(f"tight_x_{coalition}") for coalition in proper}
     tight_z = {coalition: z3.Bool(f"tight_z_{coalition}") for coalition in proper}
     for coalition in proper:
-        solver.add(tight_x[coalition] == (point_sum(x, coalition) == v[coalition]))
-        solver.add(tight_z[coalition] == (point_sum(z, coalition) == v[coalition]))
+        # These are shared support-eligibility markers, not declarations of the
+        # entire tight family.  Only marker => tightness is needed: a model can
+        # mark exactly the coalitions used by at least one staged certificate.
+        # Requiring the reverse implication creates 124 unnecessary Boolean
+        # decisions and was the main residue in the first closure census.
+        solver.add(
+            z3.Implies(tight_x[coalition], point_sum(x, coalition) == v[coalition])
+        )
+        solver.add(
+            z3.Implies(tight_z[coalition], point_sum(z, coalition) == v[coalition])
+        )
 
     row_blocks = [
         [i for i in range(n) if cell[i][0] == k] for k in range(row_count)
@@ -140,6 +149,123 @@ def pipeline2_core_closure(n, r, c, table, target=F(2, 3), fail=True):
     }
 
 
+def pipeline2_generator_normal_form(n, r, c, table, target=F(2, 3), fail=True):
+    """Full-staged encoding directly in the ``n+2``-generator normal form.
+
+    This is existence-equivalent to :func:`pipeline2_core_closure`.  It omits
+    the provisional characteristic function: a support coalition is tight at
+    x (respectively z) exactly when every other displayed generator has at
+    least the x-sum (respectively z-sum) on that coalition.
+    """
+    full = (1 << n) - 1
+    proper = tuple(range(1, full))
+    cell = nsix.layout(n, r, c, table)
+    solver = z3.Solver()
+    m, maximum_levels = nsix.levels(n, r, c, solver)
+    x = [m[cell[i][0]] for i in range(n)]
+    z = [maximum_levels[cell[i][1]] for i in range(n)]
+
+    singleton_witnesses = []
+    for i in range(n):
+        witness = [z3.Real(f"singleton_witness_{i}_{j}") for j in range(n)]
+        singleton_witnesses.append(witness)
+        solver.add(z3.Sum(witness) == 1, witness[i] == 0)
+        solver.add(*[coordinate >= 0 for coordinate in witness])
+
+    def point_sum(point, coalition):
+        return z3.Sum([point[i] for i in range(n) if coalition >> i & 1])
+
+    generators = [x, z] + singleton_witnesses
+    tight_x = {coalition: z3.Bool(f"tight_x_{coalition}") for coalition in proper}
+    tight_z = {coalition: z3.Bool(f"tight_z_{coalition}") for coalition in proper}
+    for coalition in proper:
+        x_sum = point_sum(x, coalition)
+        z_sum = point_sum(z, coalition)
+        solver.add(
+            z3.Implies(
+                tight_x[coalition],
+                z3.And(
+                    [x_sum <= point_sum(g, coalition) for g in generators[1:]]
+                ),
+            )
+        )
+        solver.add(
+            z3.Implies(
+                tight_z[coalition],
+                z3.And(
+                    [z_sum <= point_sum(g, coalition) for g in [x] + singleton_witnesses]
+                ),
+            )
+        )
+
+    row_blocks = [
+        [i for i in range(n) if cell[i][0] == k] for k in range(len(r))
+    ]
+    column_blocks = [
+        [i for i in range(n) if cell[i][1] == k] for k in range(len(c))
+    ]
+
+    def staged_farkas(blocks, ceiling, tag, tight):
+        sign = 1 if ceiling else -1
+        rhs = -1 if ceiling else 1
+        pinned = []
+        for stage, block in enumerate(blocks):
+            for i in block:
+                weights = {
+                    coalition: z3.Real(f"{tag}_weight_{stage}_{i}_{coalition}")
+                    for coalition in proper
+                }
+                efficiency = z3.Real(f"{tag}_efficiency_{stage}_{i}")
+                old_pin = {
+                    j: z3.Real(f"{tag}_old_pin_{stage}_{i}_{j}") for j in pinned
+                }
+                level_side = {
+                    j: z3.Real(f"{tag}_level_side_{stage}_{i}_{j}") for j in block
+                }
+                for coalition in proper:
+                    solver.add(weights[coalition] >= 0)
+                    solver.add(z3.Implies(weights[coalition] > 0, tight[coalition]))
+                for j in block:
+                    solver.add(level_side[j] >= 0)
+                for j in range(n):
+                    stationarity = -z3.Sum(
+                        [weights[S] for S in proper if S >> j & 1]
+                    ) + efficiency
+                    if j in pinned:
+                        stationarity += old_pin[j]
+                    if j in block:
+                        stationarity += sign * level_side[j]
+                    solver.add(stationarity == (rhs if j == i else 0))
+            pinned.extend(block)
+
+    staged_farkas(row_blocks, False, "floor", tight_x)
+    staged_farkas(column_blocks[::-1], True, "ceiling", tight_z)
+
+    distance = z3.Sum(
+        [
+            nsix.q(table[k][l]) * z3.Abs(m[k] - maximum_levels[l])
+            for k in range(len(r))
+            for l in range(len(c))
+            if table[k][l]
+        ]
+    )
+    solver.add(distance > nsix.q(target) if fail else distance <= nsix.q(target))
+    return {
+        "solver": solver,
+        "v": None,
+        "lmin_levels": m,
+        "lmax_levels": maximum_levels,
+        "lmin": x,
+        "lmax": z,
+        "singleton_witnesses": singleton_witnesses,
+        "distance": distance,
+        "cell": cell,
+        "tight_lmax": tight_z,
+        "generators": generators,
+        "encoding": "n+2-generator normal form",
+    }
+
+
 def require_equality_without_uniform_triple_anchor(data, lmax_composition):
     """Add the negation of the observed six-player equality geometry.
 
@@ -154,7 +280,19 @@ def require_equality_without_uniform_triple_anchor(data, lmax_composition):
     for triple in itertools.combinations(top, 3):
         coalition = sum(1 << i for i in triple)
         triple_masks.append(coalition)
-        data["solver"].add(z3.Not(data["tight_lmax"][coalition]))
+        coalition_sum = z3.Sum([data["lmax"][i] for i in triple])
+        if data["v"] is not None:
+            data["solver"].add(coalition_sum != data["v"][coalition])
+        else:
+            data["solver"].add(
+                z3.Or(
+                    [
+                        z3.Sum([g[i] for i in triple]) < coalition_sum
+                        for g in data["generators"]
+                        if g is not data["lmax"]
+                    ]
+                )
+            )
     return tuple(triple_masks)
 
 

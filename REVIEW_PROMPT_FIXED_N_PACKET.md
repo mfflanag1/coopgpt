@@ -107,3 +107,74 @@ python3 coopgames/verifiers/divergence/audit_lmax_overcover.py \
 cmp coopgames/verifiers/divergence/lmax_overcover_audit.json \
   /tmp/lmax-overcover-current.json
 ```
+
+## Addendum: exactification boundary and generator normal form
+
+The next checkpoint materially changes the completion route.  Audit these
+files before accepting any computer-assisted six-player claim:
+
+```text
+paper5/TWO_PACKET_EXACTIFICATION_BOUNDARY.md
+paper5/CORE_CLOSURE_REDUCTION.md
+verifiers/s6/audit_two_packet_exactification.py
+verifiers/s6/two_packet_exactification_audit.json
+verifiers/s6/core_closure_pipeline.py
+verifiers/s6/audit_core_closure_reconstruction.py
+verifiers/s6/core_closure_reconstruction_audit.json
+verifiers/s6/run_core_closure_census.py
+verifiers/s6/rerun_core_closure_unknowns.py
+verifiers/s6/merge_core_closure_census.py
+```
+
+Hostile questions:
+
+1. Confirm that the two first-stage incidence supports and both individual
+   cross inequalities really permit the displayed unnormalized overlap `1/2`.
+   Confirm independently that adjoining the three singleton witnesses preserves
+   those supports but changes the first Lmin pinned set and restores overlap
+   exactly to `2/3`.
+2. Check the individual floor-pinning dual `(IP1)--(IP2)` in both directions,
+   including every sign and the complementary-slackness restriction to
+   trial-tight coalitions.
+3. Audit the core-closure lemma: for
+   `cl_C(S)=min_{y in C}y(S)`, is `Core(cl_C)=C`, is compactness justified,
+   and do six zero-coordinate core witnesses suffice for singleton
+   normalization?
+4. Audit the stronger certificate-preserving finite exactification theorem.
+   Given Lmin `x`, Lmax `z`, and one singleton witness per player, does their
+   lower envelope always preserve every coalition used by the staged Farkas
+   certificates and therefore preserve every lexicographic stage?  Try to find
+   a counterexample to the claimed `n+2`-generator normal form.
+5. Compare `pipeline2_core_closure` with
+   `pipeline2_generator_normal_form`.  The latter removes `v(S)` entirely and
+   marks a coalition support-eligible at `x` only when all other displayed
+   generators have at least the `x` coalition sum (and mirrors this at `z`).
+   Verify that this is existence-equivalent, not a strengthening.
+6. Hostilely recheck the full staged Farkas signs inherited from `nsix.py`, the
+   order of the Lmax blocks, the strict stratum inequalities, the contingency
+   table convention, and the equivalence between L1 distance `>2/3` and overlap
+   `<2/3` at total one.
+7. Treat every current SMT count as solver evidence only.  A completed census
+   still needs exact coverage reconciliation, isolated reruns of every timeout,
+   independent proof evidence or rational infeasibility certificates, equality
+   classification, and specialist review.
+
+Reproduce the two exact reconstruction controls from the repository root:
+
+```bash
+python3 coopgames/verifiers/s6/audit_two_packet_exactification.py \
+  --output /tmp/two-packet-current.json
+cmp coopgames/verifiers/s6/two_packet_exactification_audit.json \
+  /tmp/two-packet-current.json
+
+python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
+  --output /tmp/core-closure-reconstruction-current.json
+cmp coopgames/verifiers/s6/core_closure_reconstruction_audit.json \
+  /tmp/core-closure-reconstruction-current.json
+```
+
+The second control constructs a fresh equality model, compresses its singleton
+witnesses, forms the finite lower envelope, and recomputes both selections with
+two independently formulated exact rational LP implementations.  It is a
+normal-form control, not evidence that every strict-failure configuration is
+infeasible.

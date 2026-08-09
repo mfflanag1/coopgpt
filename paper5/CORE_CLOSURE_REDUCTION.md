@@ -129,6 +129,23 @@ envelope of at most `n+2` common-total nonnegative allocations.  For `n=6`, an
 eight-generator rational game is a complete output format.  This normal form
 does not assert that all eight generators are necessary.
 
+### Corollary (extremal-domain reduction)
+
+For every fixed `n`, the supremum of any objective depending only on
+`(Lmin,Lmax)` over singleton-normalized exact games is unchanged if the domain
+is restricted to lower envelopes of at most `n+2` common-total nonnegative
+allocations whose coordinatewise zero sets cover `N`.
+
+One inequality is immediate because finite lower-envelope games form a
+subclass of exact games.  For the reverse inequality, apply the theorem to an
+arbitrary exact game and its two selected points; the resulting finite game has
+the identical ordered pair `(Lmin,Lmax)`.  In particular, the extremal
+divergence problem defining `s(n)` has this finite-generator normal form.
+
+This reduces the representation class, not the continuous dimension of the
+optimization, and by itself gives neither attainment nor a closed-form value
+of `s(n)`.
+
 ## 4. Logical scope of verdicts
 
 The reduced encoding is equivalent to the original full-exactness encoding for
@@ -149,11 +166,19 @@ counterexample.
 
 ## 5. Initial performance audit
 
-The implementation is
+The implementation has two equivalent forms in
 
 ```text
 verifiers/s6/core_closure_pipeline.py
 ```
+
+`pipeline2_core_closure` retains provisional worth variables but only six
+singleton witnesses.  `pipeline2_generator_normal_form` applies the finite
+exactification theorem completely and removes the worth variables.  A
+coalition is eligible to support an Lmin staged dual only if every other
+displayed generator has at least the Lmin coalition sum; the Lmax condition is
+the mirror image.  These are exactly the tightness conditions for the finite
+lower envelope.
 
 with a checkpointed census driver in
 
@@ -180,6 +205,11 @@ These timings and partial counts are engineering evidence only.  They do not
 prove the six-player theorem; a complete configuration census, independently
 checkable UNSAT evidence, equality analysis, and external review remain
 necessary.
+
+The first capped closure sweep isolated a small collection of five-level
+timeout types.  The direct generator-normal-form encoding resolved every one
+of the first seven such controls as exact `UNSAT` in 5--24 seconds under
+concurrent load.  This is still a performance result, not a completed census.
 
 ## 6. Mathematical next step
 

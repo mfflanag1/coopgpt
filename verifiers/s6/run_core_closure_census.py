@@ -18,14 +18,20 @@ HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 from core_closure_pipeline import (  # noqa: E402
     pipeline2_core_closure,
+    pipeline2_generator_normal_form,
     require_equality_with_subthird_overcover,
     require_equality_without_uniform_triple_anchor,
 )
 
 
 def solve_one(task):
-    index, r, c, table, timeout, mode = task
-    data = pipeline2_core_closure(
+    index, r, c, table, timeout, mode, encoding = task
+    builder = (
+        pipeline2_generator_normal_form
+        if encoding == "generators"
+        else pipeline2_core_closure
+    )
+    data = builder(
         6, tuple(r), tuple(c), table, F(2, 3), mode == "failure"
     )
     if mode == "equality-no-triple":
@@ -56,7 +62,7 @@ def solve_one(task):
     return row
 
 
-def write_report(path, source, start, stop, timeout, workers, mode, rows):
+def write_report(path, source, start, stop, timeout, workers, mode, encoding, rows):
     tally = {key: sum(row["result"] == key for row in rows) for key in ("sat", "unsat", "unknown")}
     report = {
         "status": "core-closure full-staged census; each row is one stratum/table configuration",
@@ -65,6 +71,7 @@ def write_report(path, source, start, stop, timeout, workers, mode, rows):
         "per_configuration_timeout_seconds": timeout,
         "workers": workers,
         "mode": mode,
+        "encoding": encoding,
         "tally": tally,
         "maximum_seconds": max((row["seconds"] for row in rows), default=0),
         "rows": sorted(rows, key=lambda row: row["index"]),
@@ -85,13 +92,24 @@ def main():
         choices=("failure", "equality-no-triple", "equality-subthird"),
         default="failure",
     )
+    parser.add_argument(
+        "--encoding", choices=("closure", "generators"), default="generators"
+    )
     args = parser.parse_args()
 
     survivors = json.loads(args.input.read_text())["survivors"]
     stop = len(survivors) if args.limit is None else min(len(survivors), args.start + args.limit)
     selected = survivors[args.start:stop]
     tasks = [
-        (args.start + offset, r, c, table, args.timeout, args.mode)
+        (
+            args.start + offset,
+            r,
+            c,
+            table,
+            args.timeout,
+            args.mode,
+            args.encoding,
+        )
         for offset, (r, c, table) in enumerate(selected)
     ]
     rows = []
@@ -99,7 +117,15 @@ def main():
         for task in tasks:
             rows.append(solve_one(task))
             write_report(
-                args.output, args.input, args.start, stop, args.timeout, 1, args.mode, rows
+                args.output,
+                args.input,
+                args.start,
+                stop,
+                args.timeout,
+                1,
+                args.mode,
+                args.encoding,
+                rows,
             )
     else:
         with ProcessPoolExecutor(max_workers=args.workers) as executor:
@@ -114,6 +140,7 @@ def main():
                     args.timeout,
                     args.workers,
                     args.mode,
+                    args.encoding,
                     rows,
                 )
     write_report(
@@ -124,6 +151,7 @@ def main():
         args.timeout,
         args.workers,
         args.mode,
+        args.encoding,
         rows,
     )
     print(json.dumps(json.loads(args.output.read_text())["tally"], sort_keys=True))

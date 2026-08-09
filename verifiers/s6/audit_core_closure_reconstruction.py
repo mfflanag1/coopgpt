@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Independent exact reconstruction control for the core-closure encoding."""
+"""Independent exact reconstruction control for the generator normal form."""
 
 from __future__ import annotations
 
@@ -19,7 +19,8 @@ sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(COOPGAMES / "verifiers" / "divergence"))
 
 from audit_two_packet_exactification import independent_lex  # noqa: E402
-from core_closure_pipeline import pipeline2_core_closure  # noqa: E402
+from audit_lmax_overcover import top_certificate  # noqa: E402
+from core_closure_pipeline import pipeline2_generator_normal_form  # noqa: E402
 from lexsimplex import lex_point_with_trace  # noqa: E402
 
 
@@ -64,7 +65,7 @@ def main():
     # displayed points.
     r, c = (5, 1), (2, 4)
     table = [[2, 3], [0, 1]]
-    data = pipeline2_core_closure(6, r, c, table, F(2, 3), fail=False)
+    data = pipeline2_generator_normal_form(6, r, c, table, F(2, 3), fail=False)
     data["solver"].add(data["distance"] == z3.RealVal("2/3"))
     data["solver"].set(timeout=120000)
     assert data["solver"].check() == z3.sat
@@ -111,9 +112,16 @@ def main():
     overlap = sum((min(a, b) for a, b in zip(claimed_lmin, claimed_lmax)), F(0))
     distance = sum((abs(a - b) for a, b in zip(claimed_lmin, claimed_lmax)), F(0))
     assert overlap == F(2, 3) and distance == F(2, 3)
+    anchor = top_certificate(game, claimed_lmax)
+    assert anchor == {
+        "theta": F(1, 3),
+        "eta": F(0),
+        "alpha": (F(0), F(0), F(0), F(1, 3), F(1, 3), F(1, 3)),
+        "support": (56,),
+    }
 
     report = {
-        "status": "exact reconstruction control; not an exhaustive theorem",
+        "status": "exact generator-normal-form reconstruction control; not an exhaustive theorem",
         "source_configuration": {"lmin": r, "lmax": c, "table": table},
         "encoded_singleton_witness_count": len(witnesses),
         "selected_witness_indices": witness_cover,
@@ -124,6 +132,7 @@ def main():
         "lmax": selections["max"],
         "overlap": overlap,
         "l1_distance": distance,
+        "dispersion_optimal_lmax_anchor": anchor,
         "independent_selection_encodings": 2,
     }
     rendered = json.dumps(encode(report), indent=2) + "\n"
