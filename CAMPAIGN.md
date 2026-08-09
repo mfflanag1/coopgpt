@@ -1499,6 +1499,27 @@ localization of exactness; "|B|=4 is special".
   Headroom probes: the genuine Stage-B unknown + one k=5 gate unknown,
   each 3600s isolated — the latter decides cap-shaped vs structural
   for the high-k wall.  Sort order fixed BEFORE launch.
+- THE PROCESS-REUSE DISCOVERY + EXECUTOR HANDOVER (pre-stated, before
+  any fresh-process data): r22 found a 10x timing swing on IDENTICAL
+  input (595.9s in a 28-solve long-lived process vs 56.0s in a fresh
+  process) — hypothesis: z3 context / Python heap accumulation degrades
+  later solves, so the clean gate's 46.7% unknown rate (10 shards x 6
+  sequential solves each: 5/6 of solves non-fresh) may be PARTLY
+  MANUFACTURED.  r22 also self-corrected its earlier optimistic gate
+  read as COMPLETION-ORDER SAMPLING (the first 10 completions are the
+  10 fastest by construction — selection bias, worse than the
+  small-sample caveat it had flagged).  DECISION (lead, pre-data):
+  Stage C launches in ONE-FRESH-PROCESS-PER-CONFIGURATION mode, the
+  encoding byte-identical, only process architecture changed; priority
+  prefix = the 28 gate unknowns re-run fresh (the diagnostic: mostly-
+  resolve -> the 46.7% was manufactured; mostly-resist -> genuinely
+  hard population), then the k-ascending 3,276.  The prefix outcome
+  decides the NARRATIVE, not the launch (the resource grant justifies
+  the launch; the deadline is the cutoff; checkpoints make any stop
+  honest).  Executor handover: r22 context-exhausted, stands down with
+  its diagnosis handed over clean — a fresh agent (r25-s6) executes
+  from the disk state.  Fleet compute: r25-s6 owns the box (11
+  concurrent fresh processes max); all other lanes one process.
 - PAPER6 POSITIONING PASS DONE (lead, during the six-hour push): the
   prior-art paragraph written with NINE citations, all cited in text,
   all verified — seven against the companions' bibliographies, two new
