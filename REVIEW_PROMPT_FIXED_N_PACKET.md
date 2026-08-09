@@ -219,7 +219,9 @@ Hostile questions:
     `2q(P)>=9d => d<=2/9 => v<=1/9`.  Decide whether the small QF_LRA audit
     really matches the written exchange lemma.  Do not infer from these two
     coarse-profile barriers that arbitrary simultaneous stratum refinements
-    have already been controlled.
+    have already been controlled.  Also check the equality corollary that the
+    singleton-rich witness is uniquely `(0,0,1/3,1/3,1/3,0)` and that the
+    exact local blocker residue consists only of the three common triples.
 
 Reproduce the two exact reconstruction controls from the repository root:
 

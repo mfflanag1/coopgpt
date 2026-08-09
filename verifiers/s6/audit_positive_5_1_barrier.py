@@ -11,6 +11,7 @@ from __future__ import annotations
 
 import itertools
 import json
+from fractions import Fraction as F
 
 import z3
 
@@ -96,6 +97,48 @@ def main() -> None:
     boundary_verdict = boundary.check()
     assert boundary_verdict == z3.unsat
 
+    # At the canonical boundary, the unique r-singleton witness is uniform on
+    # P.  Check that the only eligible negative masks left from the exchange
+    # menu are the three common triples T_i=(P\{i}) union {r}.  These are the
+    # entire first-order blocker residue for the refined-tangent program.
+    x0 = [F(1, 9)] * 5 + [F(4, 9)]
+    z0 = [F(1, 18), F(1, 18)] + [F(2, 9)] * 4
+    q0 = [F(0), F(0), F(1, 3), F(1, 3), F(1, 3), F(0)]
+    triple_masks = {
+        sum(1 << j for j in P if j != i) | (1 << R) for i in P
+    }
+
+    def exact_sum(point, coalition):
+        return sum(point[i] for i in range(6) if coalition >> i & 1)
+
+    canonical_exchange_blockers = {}
+    for name, h in directions:
+        masks = []
+        for coalition in PROPER:
+            if sum(h[i] for i in range(6) if coalition >> i & 1) >= 0:
+                continue
+            if (
+                exact_sum(x0, coalition) >= exact_sum(z0, coalition)
+                and exact_sum(q0, coalition) >= exact_sum(z0, coalition)
+            ):
+                masks.append(coalition)
+        assert masks and set(masks) <= triple_masks
+        canonical_exchange_blockers[name] = masks
+
+    canonical_lmin_blockers = {}
+    for i in P:
+        h = [0] * 6
+        h[i], h[R] = 1, -1
+        masks = []
+        for coalition in PROPER:
+            if sum(h[j] for j in range(6) if coalition >> j & 1) >= 0:
+                continue
+            if exact_sum(z0, coalition) >= exact_sum(x0, coalition):
+                masks.append(coalition)
+        expected = sum(1 << j for j in P if j != i) | (1 << R)
+        assert masks == [expected]
+        canonical_lmin_blockers[f"raise_P{i}_lower_r"] = masks
+
     print(
         json.dumps(
             {
@@ -106,6 +149,8 @@ def main() -> None:
                 "directions": [name for name, _ in directions],
                 "syntactic_negative_mask_counts": blocker_counts,
                 "boundary_implication_d_le_2_9_to_v_le_1_9": str(boundary_verdict),
+                "canonical_exchange_blockers": canonical_exchange_blockers,
+                "canonical_lmin_blockers": canonical_lmin_blockers,
             },
             indent=2,
         )

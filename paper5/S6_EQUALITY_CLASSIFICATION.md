@@ -306,6 +306,23 @@ have human strict barriers and human rigidity proofs.  The script
 `audit_positive_5_1_barrier.py` separately checks the eight-direction
 coalition enumeration and the boundary arithmetic.
 
+There is an additional rigidity fact useful for the refined tangent problem.
+At equality, (21) is an equality throughout: `q(P)=1`, both `N` coordinates
+of `q` vanish, and `q(P\{i})=2/3` for every `i`.  Hence the singleton-`r`
+witness is unique:
+
+```text
+q=(0,0,1/3,1/3,1/3,0).                                  (22)
+```
+
+With the canonical `x,z,q`, an exact coalition check leaves only the three
+triples `(P\{i}) union {r}` as eligible negative blockers for any direction
+in (16).  For the Lmin direction `e_i-e_r`, exactly its corresponding triple
+survives.  Thus the positive refined-tangent problem has a three-constraint
+critical residue, not a 62-coalition local residue.  This is a reduction of
+the next problem, not yet a proof that arbitrary simultaneous splits are
+non-outward.
+
 ## 5. Equality anchor geometry is exact
 
 Every equality model in either surviving type has a tight coalition consisting
@@ -392,6 +409,12 @@ local proof.  A weaker computer-assisted completion would require checked
 proof objects for the 3,348 equality-type exclusions and the relevant strict
 refinement neighborhood.  Merely adding more sampled games or more unsat
 cores would not close either gap.
+
+For the positive profile, the next calculation should begin from (22): all
+eight Lmax exchange directions and all three Lmin directions have only the
+three common triples as boundary blockers.  The missing statement is a
+first-order inequality coupling the derivatives of those three tight values
+to the derivative of `sum_{i in P}(z_i-x_i)`.
 
 ## 8. Reproduction
 

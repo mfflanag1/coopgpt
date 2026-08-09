@@ -267,3 +267,9 @@ blocks may split simultaneously.  The new live target is therefore the
 **refined tangent theorem**: show that every outward exact-game direction at
 either canonical pair descends to one of the coarse exchange directions, or
 extend the exchange-menu argument uniformly to all contiguous refinements.
+For the positive profile this tangent problem has already collapsed locally:
+the rich-player zero witness is uniquely uniform on the three `P` players,
+and only the three common tight triples can block any of the eight Lmax
+exchange directions or the three relevant Lmin directions at the canonical
+pair.  The remaining obstruction is therefore a first-order coupling over
+three critical tight values, not another all-coalition search.
