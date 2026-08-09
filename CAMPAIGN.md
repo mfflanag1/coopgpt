@@ -1360,8 +1360,18 @@ localization of exactness; "|B|=4 is special".
   envelopes iff every block <= 2 OR at most one block >= 2 (fails iff
   some block >= 3 AND another >= 2); 11/11 hand-picked profiles, both
   failure modes of the condition exercised ((4,1,1) rigid, (2,2,2)
-  rigid); full set-partition sweep RUNNING, condition not to be quoted
-  as verified until it lands.  NEW LAW (generalized): a zero-failure
+  rigid); sweep CLOSED EXHAUSTIVELY: relabelling equivariance means the
+  block-size PROFILE is the right unit (the ~1,020-set-partition sweep
+  was computing 39 numbers fifty times over — killed, replaced by
+  d32_profiles.py), and all 39 profiles with k >= 3 parts at n = 5-8
+  agree with the condition, zero mismatches; the 13 breaking profiles
+  all have (>=3)+(>=2) blocks, every rigid one fails a clause, and the
+  discriminating cases (6,1,1)/(2,2,2,2) are covered at every n.
+  STILL UNPROVED both directions — exhaustive-over-profiles at small n
+  is evidence and the campaign's law says what that is worth; but the
+  theorem, if it exists, is about two size clauses and not about n.
+  Hand-proof target pinned: cover (6,1,1) and (2,2,2,2), fail on
+  (3,2,1).  NEW LAW (generalized): a zero-failure
   region is worth exactly the SHAPES its generator can emit —
   enumerate emittable shapes BEFORE reporting the zero.
 - THE CFG-FAMILY CROSSOVER (task #32 side-result, verifiers/s6/
