@@ -219,8 +219,12 @@ sharp on all archived six-player equality cases and, together with null-player
 deletion, certifies the full archived six-player bank.
 
 The remaining bridge is no longer existence or sparsity.  It is a
-**two-packet inequality**: retain the individual tight-coalition inequalities
-from the Lmax over-cover and the Lmin packet simultaneously, rather than only
-their weighted spectral aggregates, and prove that their joint incidence
-geometry forces `(H_6)`.  A finite-support route is also available because
-each certificate has only linear support.
+**strengthened two-packet inequality**: retain the individual
+tight-coalition inequalities from the Lmax over-cover and the full Lmin packet
+simultaneously, rather than only their weighted spectral aggregates, and prove
+that their joint incidence geometry forces `(H_6)`.  The audit in
+`TWO_PACKET_EXACTIFICATION_BOUNDARY.md` proves that replacing the full Lmin
+packet by its aggregate first-stage under-cover is insufficient: an abstract
+pair then reaches overlap `1/2`, and only the missing staged Lmin information
+repairs it under singleton exactification.  A finite-support route remains
+available because the full certificates have linear support.

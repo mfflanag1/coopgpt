@@ -186,17 +186,19 @@ coalitions.  Evaluating it at `z` gives
 beta.z <= mu.                                            (8)
 ```
 
-This is the first-stage shadow of the full Lmin one-packet theorem.  The next
-proof attempt should retain the individual supported inequalities on both
-sides:
+This is only the first-stage shadow of the full Lmin one-packet theorem.  The
+exact boundary audit in `TWO_PACKET_EXACTIFICATION_BOUNDARY.md` shows that this
+aggregate companion is insufficient even when the individual supported
+inequalities on both sides are retained:
 
 ```text
 x(A) >= z(A)   for Lmax-certificate coalitions A,
 z(B) >= x(B)   for Lmin-certificate coalitions B.         (9)
 ```
 
-The spectral theorem uses only their weighted aggregate.  Keeping the two
-sparse set systems in (9) is the natural route to a complete fixed-`n` proof.
+The spectral theorem uses only their weighted aggregate.  Keeping (9) remains
+necessary, but a complete fixed-`n` proof must additionally retain the full
+Lmin packet or equivalent per-player staged pinning data.
 
 ## 5. Exact six-player audit
 
@@ -256,8 +258,10 @@ retain exact-game structure rather than optimize (7) over arbitrary vectors.
 
 There are now two sharply defined completion routes:
 
-1. **Two-packet theorem.**  Prove directly from the two sparse tight set
-   systems in (9) that `B>=2T/3` when `n=6` and `mu>0`.
+1. **Strengthened two-packet theorem.**  Couple the sparse Lmax support with
+   the full Lmin one-packet boundary (or equivalent staged pinning
+   certificates) and prove `B>=2T/3` when `n=6` and `mu>0`.  The two
+   first-stage supports in (9) alone do not suffice.
 2. **Finite incidence theorem.**  Enumerate the linearly independent supports
    of the two certificates up to permutation, then solve the remaining
    payoff inequalities symbolically.  Each side has at most six coalitions;

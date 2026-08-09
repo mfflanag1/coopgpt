@@ -29,9 +29,18 @@ def _base_rows(n, v, pinned):
     return A, b
 
 
-def lex_point(n, v, mode):
-    """mode='min' -> leximin;  mode='max' -> leximax-min."""
+def lex_point_with_trace(n, v, mode):
+    """Return the selected point and an exact trace of its lexicographic stages.
+
+    ``mode='min'`` computes leximin and ``mode='max'`` computes leximax-min.
+    The trace records the level, the coordinates newly forced to that level,
+    and those still free after each stage.  Recording the *forced* coordinates
+    matters when auditing packet certificates: a first-stage aggregate dual
+    need not certify that every coordinate displayed at the trial level is
+    individually pinned.
+    """
     pinned, free = {}, set(range(n))
+    trace = []
     guard = 0
     while free and guard <= n:
         guard += 1
@@ -66,8 +75,19 @@ def lex_point(n, v, mode):
         for i in newly:
             pinned[i] = lvl
             free.discard(i)
+        trace.append({
+            "level": lvl,
+            "newly_pinned": tuple(newly),
+            "remaining_free": tuple(sorted(free)),
+        })
     assert not free, "guard exceeded"
-    return [pinned[i] for i in range(n)]
+    return [pinned[i] for i in range(n)], trace
+
+
+def lex_point(n, v, mode):
+    """mode='min' -> leximin;  mode='max' -> leximax-min."""
+    point, _ = lex_point_with_trace(n, v, mode)
+    return point
 
 
 def sx_lmin(n, v):
