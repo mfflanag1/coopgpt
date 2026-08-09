@@ -236,6 +236,16 @@ may be unnecessary here.  The high-value human target is now a **one-sided
 handover lemma** proving this dichotomy without contingency-table enumeration.
 This remains conditional solver navigation, not a proof of `(H_6)`.
 
+That handover has now been compressed further.  Of the 339 types assigned to
+Lmax, 230 fail the critical algebra directly and all remaining 109 are killed
+by one direction from three role templates.  Of the 1,320 types assigned to
+Lmin, 901 fail the critical algebra, 322 are killed by three single-direction
+templates, and the last 97 are covered by one fourteen-direction subset
+exchange family except for two explicit boundary tables.  This does not yet
+replace the solver verdicts with a proof, but it turns the positive
+simultaneous-split problem into a small exchange-lemma program rather than a
+1,659-case classification.
+
 There is now also an exact computational route that retains the full staged
 information without 62 coalition-attainment witnesses.  The core-closure lemma
 in `CORE_CLOSURE_REDUCTION.md` shows that six singleton-attaining core points

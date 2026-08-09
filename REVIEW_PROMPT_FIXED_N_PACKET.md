@@ -262,6 +262,17 @@ Hostile questions:
     choose Lmax for rich-player Lmax isolation or the `(1,1,2,2)` first-high-
     block exception, and Lmin otherwise.  Treat this as a separator of solver
     verdicts and a human-proof target, not as independent proof evidence.
+18. Reproduce `positive_lmax_handover_directions.json` and
+    `positive_lmin_handover_directions.json`.  Confirm the complete
+    `230+109=339` and `901+322+97=1320` decompositions and zero unresolved
+    rows.  For every reported direction, independently check efficiency,
+    lexicographic improvement in the stated refined stratum, and the absence
+    of a coalition that is both derivative-negative and eligible to be tight.
+    Normalize directions by the `N,P,r` roles and verify the three templates
+    on each side.  For the 97 menu cases, audit the fourteen directions
+    `1_I-e_n-(|I|-1)e_r`, the all-directions-blocked quantifier, and the two
+    exceptional tables 2597 and 3237.  Treat these exact blocker UNSAT verdicts
+    as a compressed proof-discovery map, not as independent proof evidence.
 
 Reproduce the two exact reconstruction controls from the repository root:
 
@@ -295,6 +306,20 @@ cmp coopgames/verifiers/s6/positive_packet_ablation_census.json \
 # Expensive: recomputes all 3,318 one-sided solver instances (30 s cap each).
 python3 coopgames/verifiers/s6/audit_positive_packet_ablation_census.py \
   --recompute --output /tmp/positive-packet-census-recomputed.json
+
+python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
+  --selected-side max --bound 3 --timeout-ms 1000 \
+  --output /tmp/positive-lmax-handover-current.json
+cmp coopgames/verifiers/s6/positive_lmax_handover_directions.json \
+  /tmp/positive-lmax-handover-current.json
+
+# Slower: full Lmin branch, including the canonical and exceptional menus.
+python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
+  --selected-side min --bound 3 --max-single-directions 100 \
+  --timeout-ms 30000 --allow-menus --canonical-menus \
+  --output /tmp/positive-lmin-handover-current.json
+cmp coopgames/verifiers/s6/positive_lmin_handover_directions.json \
+  /tmp/positive-lmin-handover-current.json
 
 (cd coopgames/verifiers/s6 && python3 coverage32.py)
 

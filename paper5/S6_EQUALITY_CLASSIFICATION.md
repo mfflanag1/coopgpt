@@ -592,6 +592,60 @@ Neither first-stage packets nor critical-triple geometry alone suffices, and
 neither full packet is universal.  But the complete packets may hand off by
 support geometry rather than interact algebraically in every configuration.
 
+#### Finite structural compression of the handover
+
+The follow-up audit `search_positive_handover_directions.py` removes most of
+the apparent complexity of the one-sided census.  It retains the local signs,
+the three Lmin-tight critical triples, the two-of-three common condition,
+strict distance, and all six singleton-attaining exactness witnesses.  It then
+asks whether every coalition with negative derivative can be excluded from
+the relevant tight family.  The resulting exact blocker checks give:
+
+| packet selected by the handover | types | critical algebra alone | one explicit direction | exchange menu | unresolved |
+|---|---:|---:|---:|---:|---:|
+| Lmax | 339 | 230 | 109 | 0 | 0 |
+| Lmin | 1,320 | 901 | 322 | 97 | 0 |
+
+On the Lmax side, the 109 directions reduce to three role-normalized
+templates.  Coordinates within `N` and `P` are shown as multisets because the
+actual player is selected by the refined strata:
+
+| `h(N)` | `h(P)` | `h_r` | count |
+|---|---|---:|---:|
+| `(0,0)` | `(-1,0,0)` | `1` | 80 |
+| `(1,1)` | `(-2,-2,-1)` | `3` | 21 |
+| `(-1,1)` | `(0,0,0)` | `0` | 8 |
+
+On the Lmin side, the 322 single directions likewise use only three role
+templates:
+
+| `h(N)` | `h(P)` | `h_r` | count |
+|---|---|---:|---:|
+| `(-1,0)` | `(1,1,1)` | `-2` | 312 |
+| `(-1,-1)` | `(1,2,2)` | `-3` | 5 |
+| `(-1,-1)` | `(1,1,2)` | `-2` | 5 |
+
+The remaining 97 Lmin cases are exchange-lemma rather than single-direction
+cases.  Ninety-five are closed by one conceptual fourteen-direction family:
+for a poor player `n` and a nonempty subset `I` of `P`, use
+
+```text
+h(n,I) = 1_I - e_n - (|I|-1)e_r.                         (28)
+```
+
+For every one of those 95 support types, assuming that all lex-eligible
+members of (28) have a tight negative blocker is infeasible.  Only indices
+2597 and 3237 lie outside this family.  Their stored contingency tables admit
+explicit minimized menus of sizes two and four, respectively.
+
+This is a substantial compression—from 1,659 support tables to three Lmax
+direction templates, three Lmin direction templates, one subset-exchange
+family, and two boundary tables.  It is still solver-derived navigation, not
+a finished human proof: the 1,131 critical-algebra UNSAT cases and the blocker
+menu contradictions must be replaced by uniform inequalities or checkable
+rational certificates.  Unlike the earlier raw census, however, it now gives
+a concrete and small proof architecture for the full positive neighborhood.
+
 This still does **not** reduce simultaneous splits to one split.  The tangent
 graph of a piecewise-linear lexicographic selection need not be convex, so a
 formal braid-cone decomposition of payoff derivatives would not by itself
@@ -722,6 +776,17 @@ python3 coopgames/verifiers/s6/audit_positive_packet_ablation_census.py \
   --output /tmp/positive-packet-census-current.json
 cmp coopgames/verifiers/s6/positive_packet_ablation_census.json \
   /tmp/positive-packet-census-current.json
+python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
+  --selected-side max --bound 3 --timeout-ms 1000 \
+  --output /tmp/positive-lmax-handover-current.json
+cmp coopgames/verifiers/s6/positive_lmax_handover_directions.json \
+  /tmp/positive-lmax-handover-current.json
+python3 coopgames/verifiers/s6/search_positive_handover_directions.py \
+  --selected-side min --bound 3 --max-single-directions 100 \
+  --timeout-ms 30000 --allow-menus --canonical-menus \
+  --output /tmp/positive-lmin-handover-current.json
+cmp coopgames/verifiers/s6/positive_lmin_handover_directions.json \
+  /tmp/positive-lmin-handover-current.json
 
 python3 coopgames/verifiers/s6/audit_core_closure_reconstruction.py \
   --census coopgames/verifiers/s6/equality_triple_census.json \
