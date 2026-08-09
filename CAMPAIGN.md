@@ -1298,7 +1298,24 @@ localization of exactness; "|B|=4 is special".
   not adopt), with a self-caught like-for-like comparison error en
   route.  Plan: Stage B (74 populated configs + n=6 controls) + Stage C
   gate (60-sample unknown-rate measurement at 600s) then full run or
-  honest PARTIAL ("<= 2/3 except a named list"). + the invented-citation miss,
+  honest PARTIAL ("<= 2/3 except a named list").
+- EXTREMALITY STRESS-TEST + C-C^ n=6 WALL (task #34, verifiers/
+  extremality/): four designed regions at n=6 (bound 2/3) and n=7 (5/6),
+  ~21,000 games, ZERO above either bound.  Region A (starved-Lmax
+  hybrids) tops out FAR below — 8/15 at n=6, 23/45 at n=7: carrying the
+  n=5 mechanism up COSTS ratio, direct regime-change evidence.  Region C
+  reaches 2/3 from a non-G construction.  NEW: region D — 3,718 games
+  with 3-4 pairwise-disjoint-support generators at n=6 ALL have
+  Lmin = Lmax (rho EXACTLY 0), while n=7 reaches 8/15; candidate
+  rigidity theorem.  C-C^ n=6: encoding FAITHFUL (4 pinning controls),
+  wall located EXACTLY = the CONJUNCTION exv2 x cert2 (cost tracks
+  certificate-block count; structural; escape needs a sound multiplier
+  bound or Caratheodory selector, neither found).  Lead premise
+  corrections (2, recorded): the old lab already used existential
+  exactness + Farkas certificates; two r12 harness bugs self-caught
+  (control expectations are part of the control; stratum-index vs
+  cut-position coincide only on singleton lower strata).
+- PROCESS LAW (r23, from the Lemma-I* miss + the invented-citation miss,
   both of which passed every audit): AUDIT THE UNUSED HALF.  An "iff"
   whose converse is never invoked, a declared reference never cited, a
   hypothesis never discharged — nothing consumes them, so nothing checks
