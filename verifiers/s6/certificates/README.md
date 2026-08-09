@@ -2,7 +2,7 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for forty-eight
+These files exercise an independently checked proof-object path for seventy
 six-player generator-normal-form queries.  They do not replace the complete
 3,350-configuration census and do not by themselves prove the global bound.
 
@@ -34,6 +34,7 @@ six-player generator-normal-form queries.  They do not replace the complete
 | `positive_lmin_critical_boundary_nppnpr_outer.smt2` | abstract | `NPPNPR`, outer common pair | UNSAT |
 | `positive_lmin_critical_boundary_nppnpr_high.smt2` | abstract | `NPPNPR`, high common pair | UNSAT |
 | `positive_lmin_direction_pattern_*.smt2` (23 files) | abstract | complete 322-row Lmin single-direction layer mapped to 23 order-pattern lemmas | UNSAT |
+| `positive_lmin_menu_pattern_*.smt2` (22 files) | abstract | complete 97-row Lmin exchange-menu layer mapped to 22 order-pattern lemmas | UNSAT |
 
 Indices 1408 and 2236 are the two equality-feasible stratum/table
 configurations left by the complete staged census:
@@ -115,6 +116,17 @@ distance `>2/3`, the exact blocker disjunction for its direction, and between
 one and four additional stratum-order relations.  The mapping audit is finite
 classification evidence; the 23 CPC files independently check the abstract
 implications.  Neither component alone certifies the complete layer.
+
+The 22 abstract Lmin exchange-menu controls apply the same separation to the
+remaining 97 rows.  For the 95 ordinary rows the formulas use every
+lexicographically eligible member of the canonical fourteen-direction subset
+exchange family; the two exceptional tables use their stored two- and
+four-direction menus.  Global normalization gives 161 feasible-pair instances
+and 21 role/menu/pair patterns.  Twenty close with their shared weak orders;
+one eight-instance pattern splits into two one-relation cases.  After premise
+minimization, four formulas need no additional stratum relation, sixteen need
+one, one needs two, and one needs three.  The mapping and proof objects must
+again be audited as separate dependencies.
 
 ## Pinned checker sources
 

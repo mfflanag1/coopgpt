@@ -912,14 +912,32 @@ than proof objects.  The reproduction driver runs twelve bounded-lifetime
 shards and then rejects incomplete, duplicate, or count-inconsistent merges;
 this avoids treating a single long-lived Z3 process as reliable evidence.
 
+The full exchange-menu layer also has a table-independent checked
+compression.  Replace each minimized core in the 95 ordinary rows by every
+lexicographically eligible member of the canonical fourteen-direction family;
+Lmin optimality requires every such direction to have a blocker.  Retain the
+stored two- and four-direction menus for exceptional indices 2597 and 3237.
+After global Lmin normalization, the 97 rows give 161 feasible-pair instances
+and 21 role/menu/pair patterns.  Twenty are already infeasible under their
+shared weak orders.  The remaining eight-instance pattern splits into two
+cases according to one comparison, `x_3<x_4` or `z_3<z_4`.
+
+Premise minimization leaves 22 abstract formulas: four require no additional
+stratum relation, sixteen require one, one requires two, and one requires
+three.  `positive_lmin_menu_patterns_audit.json` records the complete map.
+Every formula is UNSAT in Z3 and cvc5, every cvc5 CPC proof is generated with
+trust disabled, and Ethos returns `correct`.  Thus all 97 exchange-menu rows
+are closed at a table-independent computer-assisted level; a readable
+subset-exchange inequality remains the human-proof target.
+
 This is a substantial compression—from 1,659 support tables to three Lmax
 direction templates, eight Lmin critical-boundary lemmas, 23 Lmin
 single-direction lemmas, one subset-exchange family, and two exceptional menu
 tables.  The critical and single-direction Lmin formulas now have independently
 checked proof objects.  It is still not a finished human proof: the 773
-payoff-only exclusions need a forbidden-pattern lemma, the 97 blocker-menu
-contradictions remain solver evidence, and the checked abstract formulas would
-benefit from readable inequalities.  Unlike the earlier raw census, however,
+payoff-only exclusions need a forbidden-pattern lemma, and the checked
+critical, direction, and menu formulas would benefit from readable
+inequalities.  Unlike the earlier raw census, however,
 it now gives a concrete and small proof architecture for the full positive
 neighborhood.
 

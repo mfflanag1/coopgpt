@@ -341,6 +341,15 @@ Hostile questions:
     minimum cardinality.  Treat the finite mapping and the abstract formulas
     as separate dependencies, and do not infer a human proof from the proof
     objects alone.
+    Reproduce `positive_lmin_menu_patterns_audit.json`.  Confirm that the 95
+    ordinary rows use all lex-eligible members of the canonical fourteen-
+    direction subset-exchange family, while indices 2597 and 3237 use exactly
+    their stored exceptional menus.  Reconcile 97 rows, 161 pair instances,
+    21 role/menu/pair patterns, and 22 minimized proof cases.  Audit the sole
+    two-case refinement (`x_3<x_4` versus `z_3<z_4`), coverage of every mapping,
+    and all direction/blocker signs.  Replay all 22 SMT/CPC controls and apply
+    the same separation between finite mapping evidence, abstract implication,
+    and human proof as for the single-direction layer.
 19. Inspect the three representative positive-handover proof objects
     independently.  For survivor 40, confirm that the base critical system is
     feasible, direction

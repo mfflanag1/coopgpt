@@ -16,6 +16,7 @@ from export_positive_lmin_critical_boundary_smt import (
     build as lmin_critical_boundary_build,
 )
 from export_positive_lmin_direction_pattern_smt import build as lmin_direction_pattern_build
+from export_positive_lmin_menu_pattern_smt import build as lmin_menu_pattern_build
 from search_positive_handover_directions import critical_all_witness_solver
 
 
@@ -191,6 +192,43 @@ def main() -> None:
                 "proof_sha256": cpc["proof_sha256"],
                 "ethos": cpc["ethos"]["status"],
                 "abstract_lmin_direction_case": case,
+                "mapped_instances": item["mapped_instances"],
+                "formula_regenerates_from_current_source": True,
+            }
+        )
+    menu_patterns = json.loads(
+        (HERE / "positive_lmin_menu_patterns_audit.json").read_text()
+    )
+    assert menu_patterns["proof_case_count"] == 22
+    for item in menu_patterns["proof_cases"]:
+        case = item["case"]
+        stem = f"positive_lmin_menu_{case.replace('-', '_')}"
+        formula = CERTIFICATES / f"{stem}.smt2"
+        proof = CERTIFICATES / f"{stem}.cpc"
+        record = json.loads((CERTIFICATES / f"{stem}.json").read_text())
+        assert formula.read_text() == qf_lra_smt2(
+            lmin_menu_pattern_build(
+                case, HERE / "positive_lmin_menu_patterns_audit.json"
+            )
+        )
+        assert record["status"] == "PASS"
+        assert record["z3"]["status"] == "unsat"
+        assert record["cvc5"]["status"] == "unsat"
+        assert record["formula_sha256"] == sha256(formula)
+        cpc = record["cpc_proof"]
+        assert cpc["status"] == "PASS"
+        assert cpc["ethos"]["status"] == "correct"
+        assert cpc["proof_sha256"] == sha256(proof)
+        assert cpc["forbidden_markers"] == []
+        lowered = proof.read_text().lower()
+        assert not any(marker in lowered for marker in ("trust", "hole", "warning"))
+        rows.append(
+            {
+                "stem": stem,
+                "formula_sha256": record["formula_sha256"],
+                "proof_sha256": cpc["proof_sha256"],
+                "ethos": cpc["ethos"]["status"],
+                "abstract_lmin_menu_case": case,
                 "mapped_instances": item["mapped_instances"],
                 "formula_regenerates_from_current_source": True,
             }
