@@ -101,9 +101,38 @@ result under another formulation.
     DOI: <https://doi.org/10.1007/s00186-019-00672-y>;
     preprint: <https://arxiv.org/abs/1812.00576>.
 
+12. **Gong, Dietzenbacher, and Peters (2022), “Reduced two-bound core
+    games.”**  A two-bound core is exactly a box--efficiency-hyperplane
+    section, `C(v)=[l*,u*]∩X(v)`.  The paper proves that its egalitarian
+    core is a singleton and gives the explicit clipped-level (water-filling)
+    formula.  Since both selectors considered here belong to the Lorenz-
+    stable/egalitarian core, they coincide on this special class.  This is a
+    useful positive transfer, but not a theorem about arbitrary exact-game
+    cores; the paper treats two-bound cores as a restricted domain and notes
+    that all balanced games are two-bound only through three players.
+    DOI: <https://doi.org/10.1007/s00186-022-00800-1>.
+
+13. **Gong and Dietzenbacher (2026), “Core bound reduced games and
+    consistency.”**  Introduces lower/upper exact-core-bound reductions and
+    constrained lower/upper equality values on all balanced games.  These
+    values are coordinatewise clipping rules built from individual exact
+    core bounds, not the two Lorenz core selectors.  Crucially, the paper's
+    three-player example shows that either constrained equality value may
+    lie outside the core.  Thus its bilateral core-bound consistency theorem
+    cannot be substituted for the present within-core exchange theorem.
+    DOI: <https://doi.org/10.1007/s00182-026-00986-2>.
+
+14. **Gong and Li (2025), “Reduced game and constrained egalitarianism.”**
+    Characterizes two values obtained by equalizing subject to singleton
+    worths or marginal contributions.  The constraints use coordinate
+    benchmarks rather than all coalition inequalities, so the values are
+    not `Lmin` and `Lmax` on a general exact core and no selector-distance
+    result is stated.
+    DOI: <https://doi.org/10.1016/j.orl.2024.107231>.
+
 ## Adjacent-language transfer audit
 
-The closest apparent transfers separate into four distinct levels:
+The closest apparent transfers separate into five distinct levels:
 
 1. **Base-polyhedron decreasing minimization.**  This literature gives
    exchange and canonical-partition structure for one lexicographically
@@ -113,7 +142,11 @@ The closest apparent transfers separate into four distinct levels:
    core has the required base-polyhedron representation, or that both
    selectors become a known dec-min/increasing pair under one.  Establishing
    such a representation would be a substantive theorem, not a terminological
-   substitution.
+   substitution.  In particular, a core has the standard base-polyhedron
+   representation when the game is convex/supermodular; exactness alone is
+   coalitionwise attainability and does not impose that lattice inequality.
+   The exact-cone facet description therefore does not itself supply the
+   missing submodular rank function.
 
 2. **Exact-cone and totally-balanced-cone facets.**  Semi-balanced and
    min-balanced systems describe inequalities cutting out classes of games in
@@ -122,20 +155,61 @@ The closest apparent transfers separate into four distinct levels:
    may help derive the blocker theorem, but the checked classifications do
    not state that implication.
 
-3. **Exact partition and antiduality.**  These results explain coincidence or
+3. **Two-bound cores and exact core bounds.**  On the box--hyperplane class,
+   the clipped-level formula collapses the Lorenz-stable set to one point and
+   therefore collapses the two selectors.  This is the closest checked
+   positive geometric theorem.  General exact cores need not be box--
+   hyperplane sections.  The 2026 bound-consistency extension to all balanced
+   games does not repair that gap: its clipped coordinate values can fail
+   core membership already with three players.
+
+4. **Exact partition and antiduality.**  These results explain coincidence or
    axiomatic relations on special domains.  They do not furnish the
    quantitative `2/3` separation bound on the full six-player exact domain.
 
-4. **Coherent lower probabilities.**  Exact games also occur in this
+5. **Coherent lower probabilities.**  Exact games also occur in this
    language, as the exact-cone source records.  The targeted search found no
    selection-distance result there, but this is the least conclusive portion
    of the audit because the selectors may be named differently.
 
+## Concrete transfer tests
+
+The two closest theories can be tested without relying on terminology.
+
+**Base-polyhedron test.**  Suppose an exact game `v` had its core represented
+as the base-polyhedron `B(f)` of a submodular function `f`, in the original
+player coordinates.  Exactness and the standard tightness property of a
+base-polyhedron give, for every coalition `S`,
+
+```text
+v(S) = min{x(S): x in C(v)} = f(N) - f(N\S).
+```
+
+The right-hand side is supermodular in `S`; hence `v` would be convex.  The
+converse is the standard core/base-polyhedron representation of a convex
+game.  Therefore, on exact games, this direct representation is available
+exactly on the convex subdomain.  Exact games outside that subdomain cannot
+be imported into Frank--Murota by merely renaming their cores.  A more
+general affine or extended formulation remains logically possible, but a
+reviewer would have to exhibit it and prove that it preserves both sorted
+lexicographic selectors and the normalized `L1` metric.
+
+**Two-bound test.**  If `C(v)=[l*,u*]∩X(v)`, the 2022 clipped-level theorem
+makes the egalitarian core a singleton.  Since `Lmin` and `Lmax` are both
+Lorenz-stable selections, they must be that same point.  Consequently every
+archived exact example with `Lmin != Lmax` is, without further computation, a
+certificate that the full exact domain cannot be reduced to the two-bound
+domain.  By contrast, the 2026 constrained equality values apply on all
+balanced games but are not core selections; their published three-player
+example explicitly witnesses the failed premise.
+
 This audit therefore found no theorem that presently subsumes the claimed
-bound.  The remaining high-value novelty question is precise: can a
-specialist derive the singleton-exactness blocker or the `2/3` inequality
-from a known base-polyhedron, exact-cone, or coherent-lower-probability
-theorem after an explicit translation?  Until that question is answered, the
+bound.  The two-bound-core result is an important boundary case, not a
+subsuming result.  The remaining high-value novelty question is precise: can
+a specialist derive the singleton-exactness blocker or the `2/3` inequality
+from a known base-polyhedron, exact-cone, exact-core-bound, or coherent-lower-
+probability theorem after an explicit translation?  Until that question is
+answered, the
 appropriate claim is “no equivalent located in a targeted cross-domain
 search,” not “first” or “previously unknown.”
 
@@ -152,7 +226,11 @@ six-player exact cooperative game egalitarian
 Lorenz dominance exact games Lmin Lmax
 ```
 
-and followed citations in the primary sources above.  Searches were also run
+and followed citations in the primary sources above.  A date refresh on
+2026-08-10 additionally searched `exact core bounds`, `core bound reduced
+games`, `two-bound core games`, and constrained-egalitarian reduced-game
+terminology, including publications through March 2026.  Searches were also
+run
 against exact-cone facets, exact partition games, large cores, antiduality,
 assignment/matching-game leximin/leximax work, and recent monotonicity papers.
 The adjacent-language pass additionally checked continuous and discrete
@@ -169,6 +247,7 @@ The defensible statement is:
 > six-player theorem.  Novelty remains subject to specialist review.
 
 Avoid “first,” “new,” or “previously unknown” without qualification.  A
-specialist reviewer should specifically check whether antiduality, base-
-polyhedron dec-min theory, or coherent-lower-probability results imply an
-equivalent inequality under different terminology.
+specialist reviewer should specifically check whether antiduality, two-bound
+or exact-core-bound reductions, base-polyhedron dec-min theory, or coherent-
+lower-probability results imply an equivalent inequality under different
+terminology.

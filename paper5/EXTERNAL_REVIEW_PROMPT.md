@@ -1,6 +1,6 @@
 # Hostile review — maximal divergence of Lmin and Lmax in exact games
 
-> **Update, 2026-08-09.** The six-player upper bound is no longer open in the
+> **Update, 2026-08-10.** The six-player upper bound is no longer open in the
 > current branch: a new direct table-free computer-assisted theorem proves
 > `s(6)=2/3`. Review that claim first using
 > `EXTERNAL_REVIEW_S6_DIRECT_BOUND.md`. Where this older prompt says that
@@ -11,11 +11,12 @@
 Please review the standalone manuscript:
 
 ```text
-paper5/divergence.pdf    (20 pages)
+paper5/divergence.pdf    (30 pages)
 paper5/divergence.tex
 ```
 
-Repository commit: `3587e55`, branch `codex/credal-local-universal-selector`.
+Repository branch: `codex/fixed-n-handover-facets`.  Record the exact reviewed
+`HEAD` in the report rather than relying on an embedded historical commit.
 The companion manuscript is `paper4/threshold.pdf`; this paper cites it for
 the four-player rigidity and reuses its lower-envelope technique, but is
 otherwise self-contained. Both papers are under preparation simultaneously.
