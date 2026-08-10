@@ -80,7 +80,26 @@ Across the 49 direction nodes there are 924 eligible negative-cut uses.  (The
 `h10` and `h15` directions have 16 each; the other five types have 20.)  Exact
 Fourier--Motzkin elimination over the five-dimensional difference cone removes
 711 and retains 213.  Only ten distinct candidate sets occur across all 49
-nodes.  The remaining partition is disjoint and exhaustive:
+nodes.  More precisely, the 49 censuses collapse to seven direction menus and
+one branch bit.  Four menus are fixed:
+
+```text
+h11: 24,124       h12: 34,134
+h17: 135,0135     h18: 235.
+```
+
+The three longer base menus are
+
+```text
+h10: 1,12,13,123,124,134,1234,1235
+h15: 14,15,125,135,145,1245,1345,12345
+h7 : 1,13,134,0135,1235.
+```
+
+If and only if the path lies below the weak-root `h11` blocker `124`, these
+menus acquire respectively the single extra cuts `135`, `124`, and `135`.
+Thus the apparent 49-fold enumeration is seven reusable cut lemmas plus one
+binary refinement.  The remaining partition is disjoint and exhaustive:
 
 ```text
 pure difference exclusions       711

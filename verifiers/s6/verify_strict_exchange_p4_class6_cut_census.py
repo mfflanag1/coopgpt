@@ -47,6 +47,20 @@ EXPECTED_STAGE_TYPES = {
     (18, 20, 1): 7,
 }
 EXPECTED_CANDIDATE_SHA256 = "8c0128a11215ca09b23213e91a9893e18edf280f94d90a4f203af31bffc5717b"
+BASE_MENUS = {
+    7: {(1,), (1, 3), (1, 3, 4), (0, 1, 3, 5), (1, 2, 3, 5)},
+    10: {(1,), (1, 2), (1, 3), (1, 2, 3), (1, 2, 4), (1, 3, 4),
+         (1, 2, 3, 4), (1, 2, 3, 5)},
+    11: {(2, 4), (1, 2, 4)},
+    12: {(3, 4), (1, 3, 4)},
+    15: {(1, 4), (1, 5), (1, 2, 5), (1, 3, 5), (1, 4, 5),
+         (1, 2, 4, 5), (1, 3, 4, 5), (1, 2, 3, 4, 5)},
+    17: {(1, 3, 5), (0, 1, 3, 5)},
+    18: {(2, 3, 5)},
+}
+# The sole menu refinement: after the weak h11 blocker C=124, these three
+# direction types each acquire one additional difference-cone candidate.
+RICH_BRANCH_EXTRAS = {7: {(1, 3, 5)}, 10: {(1, 3, 5)}, 15: {(1, 2, 4)}}
 
 
 def eligible(direction):
@@ -138,6 +152,7 @@ def census(relay_payload, context_keys, witness_keys,
            expected_digest=EXPECTED_CANDIDATE_SHA256):
     class_row = next(row for row in relay_payload["rows"] if row["class"] == 6)
     stage_types = Counter()
+    menu_variants = Counter()
     candidate_keys = set()
     branch_keys = set()
     stage_count = eligible_count = 0
@@ -163,6 +178,16 @@ def census(relay_payload, context_keys, witness_keys,
             if fourier_motzkin_feasible([*cone_rows(path), (blocker, Fraction())]):
                 candidates.append(cut)
                 candidate_keys.add((stage, cut))
+        rich_branch = any(parent == 11 and cut == (1, 2, 4) for parent, cut in path)
+        expected_menu = BASE_MENUS[direction] | (
+            RICH_BRANCH_EXTRAS.get(direction, set()) if rich_branch else set()
+        )
+        if set(candidates) != expected_menu:
+            raise AssertionError(
+                f"orbit-menu atlas changed at {stage}: {set(candidates)}"
+            )
+        menu_variants[(direction, "rich-124" if rich_branch and direction in RICH_BRANCH_EXTRAS
+                       else "base")] += 1
         stage_count += 1
         eligible_count += len(cuts)
         stage_types[(direction, len(cuts), len(candidates))] += 1
@@ -187,6 +212,15 @@ def census(relay_payload, context_keys, witness_keys,
         raise AssertionError(f"pure candidate digest changed: {digest}")
     if dict(stage_types) != EXPECTED_STAGE_TYPES:
         raise AssertionError(f"stage-type census changed: {stage_types}")
+    expected_variants = {
+        (7, "base"): 3, (7, "rich-124"): 6,
+        (10, "base"): 2, (10, "rich-124"): 1,
+        (11, "base"): 3, (12, "base"): 1,
+        (15, "base"): 7, (15, "rich-124"): 4,
+        (17, "base"): 15, (18, "base"): 7,
+    }
+    if dict(menu_variants) != expected_variants:
+        raise AssertionError(f"menu-variant census changed: {menu_variants}")
     layers = [context_keys, witness_keys, branch_keys]
     if any(layers[i] & layers[j] for i in range(3) for j in range(i + 1, 3)):
         raise AssertionError("class-6 cut layers overlap")
@@ -221,7 +255,7 @@ def census(relay_payload, context_keys, witness_keys,
     }
     if actual != expected:
         raise AssertionError(f"complete cut census changed: {actual}")
-    return actual, digest, stage_types
+    return actual, digest, stage_types, menu_variants
 
 
 def expect_rejection(action, message):
@@ -242,7 +276,9 @@ def main():
     relay_payload = json.loads(args.relay.read_text())
     context_keys = use_keys(args.context_rows)
     witness_keys = use_keys(args.witness_rows)
-    counts, digest, stage_types = census(relay_payload, context_keys, witness_keys)
+    counts, digest, stage_types, menu_variants = census(
+        relay_payload, context_keys, witness_keys
+    )
 
     missing_context = set(context_keys)
     missing_context.pop()
@@ -270,6 +306,18 @@ def main():
         "stage_type_counts": {
             f"h{direction}:eligible{eligible_count}:candidates{candidate_count}": count
             for (direction, eligible_count, candidate_count), count in sorted(stage_types.items())
+        },
+        "orbit_menu_atlas": {
+            f"h{direction}": {
+                "base": [list(cut) for cut in sorted(BASE_MENUS[direction])],
+                **({"after_h11_C124_extra": [list(cut) for cut in sorted(RICH_BRANCH_EXTRAS[direction])]}
+                   if direction in RICH_BRANCH_EXTRAS else {}),
+            }
+            for direction in sorted(BASE_MENUS)
+        },
+        "menu_variant_counts": {
+            f"h{direction}:{variant}": count
+            for (direction, variant), count in sorted(menu_variants.items())
         },
         "mutation_controls": {
             "partition": partition_mutation,
