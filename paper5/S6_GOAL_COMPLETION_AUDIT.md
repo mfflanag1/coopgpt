@@ -96,7 +96,8 @@ directions to 44 sign-role orbits.  A later unguarded minimization closes them
 with 136 directions in an irredundant 8/5/6 split, only 19 sign-role schemas
 total and three coefficient archetypes up to reversal.  Z3/cvc5 and checked
 CPC proofs certify all three smaller formulas; all 19 single-orbit ablations
-are SAT.  This is substantial explanatory progress, not yet a complete hand
+are SAT.  These large-case cores need only the two cross-selection anchors,
+not the no-unique-Lmax-top anchor.  This is substantial explanatory progress, not yet a complete hand
 proof of those 19 schemas.
 
 ## 4. Sharpness and equality cases

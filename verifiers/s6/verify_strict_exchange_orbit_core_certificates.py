@@ -27,6 +27,7 @@ def main():
     }
     source_rows = {row["case"]: row for row in original["rows"]}
     assert audit["status"] == "PASS"
+    assert audit["base_assertion_count_per_case"] == 71
     assert audit["original_role_orbit_count"] == 44
     assert audit["selected_role_orbit_count"] == 19
     assert audit["selected_labeled_direction_count"] == 136
@@ -51,6 +52,11 @@ def main():
         assert cpc["forbidden_markers"] == []
         assert cpc["proof_sha256"] == sha256(proof)
         assert all(item["verdict"] == "sat" for item in row["single_orbit_ablations"])
+        assert [item["removed"] for item in row["single_cross_anchor_ablations"]] == [
+            "lmax_top_cross",
+            "lmin_bottom_cross",
+        ]
+        assert all(item["verdict"] == "sat" for item in row["single_cross_anchor_ablations"])
         checked.append(
             {
                 "case": case,

@@ -99,6 +99,12 @@ controls, not games and not independent proof evidence.  The three unguarded
 reduced formulas are independently UNSAT in Z3 and cvc5; their trust-disabled
 CPC proofs contain no forbidden markers and check `correct` in Ethos.
 
+The reduced large-case formulas also dispense with the no-unique-Lmax-top
+anchor.  They use only the Lmax-top cross anchor and the Lmin-bottom cross
+anchor; removing either one makes each corresponding relaxation SAT.  Thus
+the dimension-specific large-case argument needs two convex-segment facts,
+not all three anchors used by the uniform fifteen-case presentation.
+
 Thus the remaining human target is 19 sign-role schemas built from only three
 unoriented exchange ideas.  In particular, the two coefficient-one large
 cases use only one-for-one and two-for-two exchanges.  The balanced case adds

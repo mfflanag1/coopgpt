@@ -207,6 +207,9 @@ unguarded formulas is UNSAT in Z3 and cvc5 and has a fresh trust-disabled CPC
 proof checked by Ethos; deleting any one selected orbit makes that reduced
 relaxation SAT.  The SAT ablations establish irredundancy only inside the
 relaxation and are not games or independent proof evidence.
+All three reduced formulas omit the no-unique-Lmax-top anchor: only the two
+cross-selection anchors remain, and each is necessary within the reduced
+relaxation.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen

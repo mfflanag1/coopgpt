@@ -157,7 +157,8 @@ Also assess the orbit compression independently: reproduce
 counts, and state whether the six unoriented archetypes materially clarify
 the mathematics.  Then audit the smaller 19-orbit core: verify the 8/5/6
 split, all 19 single-orbit SAT ablations, the 136-direction unguarded rebuilds,
-and the three CPC/Ethos records.  Do not treat this reduction as an all-human
+the omission of the no-unique-Lmax-top anchor, irredundancy of the two cross
+anchors, and the three CPC/Ethos records.  Do not treat this reduction as an all-human
 proof of the 19 remaining sign-role schemas.
 
 Classify every issue as fatal, repairable, or expository and cite exact file

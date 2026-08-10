@@ -88,7 +88,9 @@ def build_reduced(row, selected):
     assertions = list(source.assertions())
     if len(assertions) != 72 + row["retained_direction_count"]:
         raise AssertionError(f"unexpected assertion layout for {row['case']}")
-    base = assertions[:72]
+    # The large-case orbit cores do not need the no-unique-Lmax-top anchor at
+    # source assertion 21.  Retain the two cross-selection anchors 22 and 23.
+    base = assertions[:21] + assertions[22:72]
     directional = assertions[72:]
     groups = {}
     for item, assertion in zip(row["retained_menu"], directional, strict=True):
@@ -130,6 +132,16 @@ def main():
         verdict = solver.check()
         if verdict != z3.unsat:
             raise AssertionError(f"reduced {case} is {verdict}")
+        reduced_assertions = list(solver.assertions())
+        anchor_ablations = []
+        for anchor, index in (("lmax_top_cross", 21), ("lmin_bottom_cross", 22)):
+            trial = z3.Solver()
+            trial.set(timeout=args.timeout_ms)
+            trial.add(*(item for offset, item in enumerate(reduced_assertions) if offset != index))
+            trial_verdict = trial.check()
+            if trial_verdict != z3.sat:
+                raise AssertionError(f"{case} {anchor} ablation is {trial_verdict}")
+            anchor_ablations.append({"removed": anchor, "verdict": "sat"})
         ablations = []
         for removed in selected:
             trial, _ = build_reduced(enriched, tuple(item for item in selected if item != removed))
@@ -161,6 +173,7 @@ def main():
                 "selected_orbits": [rendered_signature(item) for item in selected],
                 "unguarded_rebuild_verdict": "unsat",
                 "single_orbit_ablations": ablations,
+                "single_cross_anchor_ablations": anchor_ablations,
                 "formula": formula_name,
             }
         )
@@ -173,7 +186,7 @@ def main():
             "unguarded reduced formulas retaining complete sign-role orbits; "
             "UNSAT is a proof reduction, SAT ablations are irredundancy controls"
         ),
-        "base_assertion_count_per_case": 72,
+        "base_assertion_count_per_case": 71,
         "original_labeled_direction_count": sum(row["original_labeled_direction_count"] for row in rows),
         "selected_labeled_direction_count": sum(row["selected_labeled_direction_count"] for row in rows),
         "original_role_orbit_count": sum(row["original_role_orbit_count"] for row in rows),

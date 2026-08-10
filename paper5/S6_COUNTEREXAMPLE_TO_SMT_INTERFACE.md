@@ -235,3 +235,10 @@ A fatal objection must identify one of the following:
 Solver reruns do not answer these questions.  The appropriate review is to
 prove or refute Sections 2--6 and then inspect several full implication rows,
 especially in `(2,3,1)` and `(3,3,0)`, against the assertion manifest.
+
+The separately certified 19-orbit large-case formulas are intentionally
+weaker than this uniform map: they delete `a21`, the no-unique-Lmax-top
+anchor, and retain only the two cross anchors.  This does not affect the
+soundness implication because every genuine counterexample satisfies the
+weaker premise list.  Their single-cross-anchor ablations are SAT, so both
+remaining cross anchors are load-bearing within that reduced relaxation.

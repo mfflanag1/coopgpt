@@ -209,6 +209,10 @@ trust-disabled CPC proof checked `correct` by Ethos.  Run
 python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
 ```
 
+Unlike the uniform fifteen-case suite, these three reduced formulas omit the
+no-unique-Lmax-top anchor.  They retain only the Lmax-top and Lmin-bottom cross
+anchors; both are irredundant in each reduced relaxation.
+
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
 that each declares only the 48 expected selection/witness reals, has the same
