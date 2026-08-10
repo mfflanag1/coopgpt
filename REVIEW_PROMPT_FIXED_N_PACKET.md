@@ -245,8 +245,20 @@ Hostile questions:
     In particular, check convexity of the exact-game cone, exactness and
     singleton normalization along the unanimity path, continuity of both lex
     selections under the stated Slater condition, and the inference that a
-    nearby table is a contiguous refinement.  Treat the 22 one-split count as
-    diagnostic only unless a tangent-cone generation lemma is supplied.
+    nearby table is a contiguous refinement.  Confirm that the complete
+    positive handover covers all 1,659 positive refinements directly, not by
+    extrapolating from the 22 one-split cases.  Reproduce the four bounded
+    shards and merged `starved_packet_handover_audit.json`: exactly 504
+    starved-only refinements, Lmin-only SAT 58, Lmax-only SAT 236, intersection
+    zero, and both UNSAT 210.  Hostilely test the separator choosing Lmax iff
+    a coarse-rich player lies strictly below both coarse-P players in refined
+    Lmax; reconcile the `128/376` selected-packet split and verify the selected
+    packet is UNSAT in every row.  Treat this starved handover as solver census
+    evidence until it receives the same abstract proof-object compression as
+    the positive side.  Separately reproduce
+    `starved_refinement_direction_audit.json`: six Lmin and two Lmax payoff
+    direction templates must close 222 rows by direct blocker checks, leaving
+    282 staged-information rows.
 12. Audit the human index-1408 barrier separately from the census.  Check the
     gap coordinates `u,v,w`, the identity `1=6c+8v-4w`, the inference
     `v>1/6 => 2w>v`, and the coalition count argument proving
