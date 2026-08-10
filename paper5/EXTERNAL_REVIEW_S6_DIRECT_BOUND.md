@@ -208,6 +208,13 @@ not infer from the ablations that a corresponding exact game exists.  Do not
 treat this reduction as an all-human proof of the 19 remaining sign-role
 schemas.
 
+For the H7 two-for-two archetype, independently prove the extremal-level
+activation lemma in `S6_EXCHANGE_ORBIT_LEMMAS.md`: Lmin activation is
+`min(x_a,x_b)>min(x_r,x_s)` and the Lmax dual is the corresponding strict
+maximum comparison.  Verify the four-term failure DNF and decide whether this
+genuinely humanizes the activation side of all 95 labelled H7 rows.  Keep the
+separate blocker-classification obligation explicit.
+
 Audit the anchor-localized `(4,2,0)` alternative separately.  Prove the
 coincident-anchor contradiction, justify the WLOG labels `a=0,b=1`, verify
 the residual `S_2 x S_2` action and all ten orbit rows, and inspect the frozen

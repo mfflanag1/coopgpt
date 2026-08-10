@@ -31,6 +31,46 @@ negative-cut alternatives.  The proof objects show that, for the listed role
 placements, no consistent choice of such alternatives exists when the
 distance is greater than `2/3`.
 
+### Extremal-level activation for every two-for-two exchange
+
+The H7 activation is a single order statistic, not a large disjunction.  Write
+
+```text
+h=-e_a-e_b+e_r+e_s.
+```
+
+For Lmin, the first affected payoff stratum improves exactly when it contains
+a recipient and no donor.  Equivalently,
+
+```text
+min(x_a,x_b) > min(x_r,x_s).                       (A1)
+```
+
+The raw first-stratum encoding chooses which recipient is lower and therefore
+displays two alternatives.  Their combined failure has the four-term DNF
+
+```text
+(x_a<=x_r and x_a<=x_s) or (x_a<=x_r and x_b<=x_s)
+or (x_b<=x_r and x_a<=x_s) or (x_b<=x_r and x_b<=x_s).   (A2)
+```
+
+The Lmax dual for `-h` is
+
+```text
+max(z_a,z_b) < max(z_r,z_s),                       (A3)
+```
+
+with the same four-term pattern after reversing the comparisons.  These
+equivalences follow directly by conditioning on the lower recipient in (A1)
+or the higher recipient in (A3); a solver-free audit also checks all 256
+four-level assignments.
+
+This lemma applies to all 95 labelled H7 rows in the large-case table and to
+the order-refined packet relays.  It removes activation-disjunction bulk, but
+does not classify the negative-cut blockers forced after activation.  In class
+1 it reduces the exact proof object from 125 identities at 232 uses to 109 at
+160 uses; classes 2, 5, and 6 can reuse the same four-case interface.
+
 ## 2. Six exchange archetypes
 
 The oriented coefficient multisets are:
