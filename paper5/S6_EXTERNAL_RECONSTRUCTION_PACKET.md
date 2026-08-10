@@ -46,6 +46,12 @@ between Lmin and Lmax.  Then manually trace at least one complete implication
 in each coefficient-two sign case `(2,3,1)` and `(3,3,0)` from its human
 direction through every negative cut and all seven blocker comparisons.
 
+Section 5 of the interface note now gives an explicit order-crossing bound
+`Delta(y,h)`, and Section 6 takes epsilon below both that bound and every
+nontight-coalition slack ratio.  Verify positivity of this common finite
+minimum and the resulting sorted-vector comparison; do not accept the phrase
+“sufficiently small” as a separate premise.
+
 Required reviewer output: a table with one row per assertion family, marked
 `proved`, `false`, or `not checked`, with a citation to the precise source
 line or a counterexample.  Passing JSON audits prove transcription and local

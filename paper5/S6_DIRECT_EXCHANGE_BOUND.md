@@ -92,6 +92,18 @@ tests.
 The predicates in `lex_improves` express exactly these sufficient conditions;
 they do not claim to recognize every improving direction.
 
+For completeness, the short-step argument can be made uniform.  Given a
+point `y` and direction `h`, choose epsilon below every positive crossing time
+
+```text
+(y_j-y_i)/(h_i-h_j)   with y_i<y_j and h_i>h_j.
+```
+
+Then no two distinct old payoff strata cross.  At the lowest affected Lmin
+stratum, some coordinate rises and none falls; the increasing rearrangement
+therefore first changes upward.  The order-dual statement proves the Lmax
+test.  This works unchanged for coefficient-two directions.
+
 As a differential control, `audit_lex_improvement_predicate.py` compares the
 pivot formulation with a separately written first-affected-stratum criterion
 on all 4,683 labeled weak orders, all 1,610 bound-two directions, and both
@@ -101,7 +113,9 @@ If such an `h` improves a selection `y`, optimality implies that some proper
 coalition `S` tight at `y` has `h(S)<0`.  Otherwise every tight inequality has
 nonnegative derivative, every nontight inequality has positive slack, and a
 sufficiently short step `y+epsilon h` remains in the core while improving the
-selection.
+selection.  Explicitly, shrink the same epsilon below every positive ratio
+`(y(S)-v(S))/(-h(S))` over nontight coalitions with `h(S)<0`.  Finiteness of
+the coalition set makes the common choice positive.
 
 Core membership of the opposite selection and all six exactness witnesses
 then gives the necessary blocker conditions

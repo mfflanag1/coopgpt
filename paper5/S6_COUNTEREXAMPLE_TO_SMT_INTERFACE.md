@@ -121,6 +121,38 @@ relaxation, not an omitted premise in the soundness direction.
 
 Let `h` be a retained integer direction with `h(N)=0`.
 
+The following elementary lemma makes every use of “sufficiently small” in
+this note finite and explicit.
+
+**Order-preservation lemma.**  For a point `y` and a direction `h`, put
+
+```text
+Delta(y,h) = min {(y_j-y_i)/(h_i-h_j):
+                  y_i<y_j and h_i>h_j},
+```
+
+with the minimum of the empty set interpreted as `+infinity`.  Every
+`0<epsilon<Delta(y,h)` preserves every strict order between distinct old
+payoff strata:
+
+```text
+y_i<y_j  ==>  y_i+epsilon h_i < y_j+epsilon h_j.
+```
+
+Indeed, only a pair with `h_i>h_j` can close its old positive gap, and the
+displayed ratio is exactly its crossing time.  There are finitely many pairs,
+so `Delta(y,h)>0` whenever it is finite.
+
+Now let `alpha` be the lowest old payoff level containing a nonzero entry of
+`h`.  If every player at level `alpha` has `h_i>=0` and at least one has
+`h_i>0`, then for every `0<epsilon<Delta(y,h)` the increasing rearrangement
+of `y+epsilon h` agrees with that of `y` below the `alpha` block; inside that
+block, its initial zero-direction entries agree and its next entry strictly
+increases.  It is therefore lexicographically larger.  This proves the Lmin
+criterion.  Taking the highest affected level, reversing all inequalities,
+and requiring one negative and no positive coefficient proves the Lmax
+criterion.  The conclusion does not depend on coefficients being unit-sized.
+
 For Lmin, call `h` admissible at `x` when the lowest payoff level touched by
 `h` has no negative coefficient and has at least one positive coefficient.
 Equivalently, there is a positive pivot `r` such that every affected player
@@ -154,11 +186,18 @@ Suppose `h` passes the relevant sufficient improvement test at a selected
 point `y`.  If every coalition tight at `y` had `h(S)>=0`, then all tight
 inequalities would remain satisfied along `y+epsilon h`.  There are finitely
 many nontight coalitions.  Each with `h(S)<0` has positive slack, so one can
-choose a common positive `epsilon` smaller than all ratios
+choose a common positive `epsilon` smaller than `Delta(y,h)` and all ratios
 
 ```text
 (y(S)-v(S))/(-h(S)).
 ```
+
+Again the minimum of an empty set is `+infinity`.  Every displayed finite
+quantity is strictly positive.  Coalitions with `h(S)>=0` cannot become
+violated, tight coalitions are safe by the supposition, and the chosen slack
+ratios protect all remaining coalitions.  Thus this one epsilon both
+preserves the payoff-stratum order needed for lex improvement and preserves
+every core inequality.
 
 Efficiency is preserved because `h(N)=0`.  Singleton nonnegativity is already
 among the coalition inequalities because `v({i})=0`.  Hence a short improving
@@ -263,6 +302,13 @@ A fatal objection must identify one of the following:
 4. a reversed inequality in (Bx) or (Bz);
 5. a coalition with `h(S)<0` omitted from a machine disjunction; or
 6. an assertion in a frozen formula not accounted for above.
+
+For item 2, it is enough to check the order-preservation lemma and then check
+that each encoded pivot predicate is the displayed lowest/highest-affected-
+level condition.  For item 3, it is enough to check the finite minimum of
+`Delta(y,h)` and the nontight-coalition slack ratios.  These reductions do not
+replace review, but they localize the two previously informal epsilon choices
+to explicit positive quantities.
 
 Solver reruns do not answer these questions.  The appropriate review is to
 prove or refute Sections 2--6 and then inspect several full implication rows,
