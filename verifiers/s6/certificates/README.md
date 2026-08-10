@@ -448,9 +448,11 @@ cmp /tmp/strict_exchange_large_case_activation_atlas.json \
 
 It expands all 19 selected role schemas to 136 labelled directions and checks
 their min/max order-statistic activation formulas on all 4,683 labelled weak
-orders, for 636,888 comparisons.  It deliberately excludes blocker
-consequents; its result humanizes lexicographic activation without proving
-the finite coexistence contradiction.
+orders, for 636,888 comparisons.  It also checks the three-template census of
+2,512 eligible negative cuts and 17,584 comparison occurrences.  It
+deliberately excludes feasibility of the blocker consequents; its result
+humanizes activation and cut shape without proving the finite coexistence
+contradiction.
 
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies

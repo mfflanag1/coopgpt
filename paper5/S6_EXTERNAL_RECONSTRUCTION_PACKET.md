@@ -135,6 +135,13 @@ confirm explicitly that swapping coefficient magnitudes leaves activation
 unchanged but changes the negative-cut family.  This settles the activation
 vocabulary, not the coexistence of the resulting blockers.
 
+Then derive the three negative-cut templates without enumeration: 16 cuts
+for one-for-one, 20 for two-for-two, and 24 for either asymmetric
+coefficient-two orientation.  Confirm the aggregate
+`64*16+60*20+12*24=2512` and the seven comparison sources on every cut.  The
+frozen atlas audit checks the expansion and counts; the reviewer must still
+assess the mathematical derivation and the blocker coexistence proof.
+
 Confirm separately that `(3,3,0)` needs the H4/H5 asymmetric
 coefficient-two pair in addition to H7/H8, while `(3,2,1)` and `(4,2,0)` use
 only one-for-one and two-for-two exchanges.  Treat orbit-level UNSAT and SAT

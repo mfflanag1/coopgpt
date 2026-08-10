@@ -286,11 +286,43 @@ been reduced to `8+5+6=19` order-statistic schemas.  This exactly mirrors the
 19 selected sign-role orbits.  The remaining opacity is now localized to the
 negative-cut blocker coexistence layer, not to lexicographic activation.
 
+The eligible negative cuts themselves have a three-template atlas.  For a
+one-for-one direction `h=-e_a+e_r`, negativity is exactly
+`a in S, r not in S`; the other four players are free, so there are 16 cuts.
+For `h=-e_a-e_b+e_r+e_s`, write `d=|S intersect {a,b}|` and
+`u=|S intersect {r,s}|`.  Negativity is `d>u`: the `(d,u)=(1,0)` cases give
+8 cuts after the two zero players are chosen freely, and `(2,0)` or `(2,1)`
+give 12 more, for 20.
+
+The asymmetric B4 direction
+
+```text
+h=e_p+2e_{p'}-e_{m_1}-e_{m_2}-e_{m_3}
+```
+
+has `h(S)<0` exactly when the number of selected `M`-players exceeds
+`1[p in S]+2 1[p' in S]`.  With the remaining zero player optional, the
+three possible positive-side loads contribute `14+8+2=24` cuts.  Its B5
+reverse has the complementary `2+8+14=24` split.  Thus the 136 rows consist
+of
+
+```text
+64 one-for-one rows       x 16 cuts
+60 two-for-two rows       x 20 cuts
+12 asymmetric rows        x 24 cuts
+                         = 2512 eligible negative cuts,
+```
+
+each with the opposite-selection and six witness comparisons, or 17,584
+individual comparison occurrences.  The atlas classifies the disjunctions;
+it does not prove that the 2,512 alternatives cannot coexist.
+
 A solver-free checker expands the 19 role orbits to all 136 labelled
 directions and compares these extreme-level tests with the direct
 first-affected-level definition on all 4,683 labelled weak orders.  All
-636,888 comparisons agree, and replacing strict by non-strict comparison is
-detected.  Reproduce the frozen audit with
+636,888 comparisons agree, verifies the three cut counts for every labelled
+direction, and detects replacing strict by non-strict activation.  Reproduce
+the frozen audit with
 
 ```bash
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_activation_atlas.py \

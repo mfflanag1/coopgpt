@@ -26,6 +26,12 @@ EXPECTED_COUNTS = {
     "p3_n3_t0": [9, 9, 9, 6, 6],
     "p4_n2_t0": [8, 24, 12, 6, 12, 6],
 }
+CUT_TEMPLATES = {
+    (-1, 1): ("one_for_one", 16),
+    (-1, -1, 1, 1): ("two_for_two", 20),
+    (-1, -1, -1, 1, 2): ("asymmetric_bound_two", 24),
+    (-2, -1, 1, 1, 1): ("asymmetric_bound_two", 24),
+}
 
 
 def weak_orders(size: int):
@@ -83,6 +89,17 @@ def extreme_support_test(ranks, direction, side, strict=True):
     raise ValueError(side)
 
 
+def negative_cut_count(direction):
+    return sum(
+        1
+        for mask in range(1, 63)
+        if sum(
+            direction[index] for index in range(6) if mask & (1 << index)
+        )
+        < 0
+    )
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -97,6 +114,12 @@ def main():
     rows = []
     total_directions = 0
     total_comparisons = 0
+    total_negative_cuts = 0
+    template_direction_counts = {
+        "one_for_one": 0,
+        "two_for_two": 0,
+        "asymmetric_bound_two": 0,
+    }
     mutation_detected = False
     for case, (positive_count, negative_count, tie_count, prefix) in CASE_META.items():
         source = source_rows[case]
@@ -106,13 +129,27 @@ def main():
             raise AssertionError(f"{case}: unexpected schema count")
         schemas = []
         case_directions = 0
+        case_negative_cuts = 0
         for offset, (orbit, expected_count) in enumerate(zip(orbits, expected, strict=True), 1):
             directions = expand_orbit(orbit, positive_count, negative_count, tie_count)
             if len(directions) != expected_count:
                 raise AssertionError(
                     f"{case} {prefix}{offset}: {len(directions)} != {expected_count}"
                 )
+            schema_negative_cuts = 0
             for direction in directions:
+                coefficient_key = tuple(sorted(value for value in direction if value))
+                if coefficient_key not in CUT_TEMPLATES:
+                    raise AssertionError(f"unrecognized cut template: {direction}")
+                template, expected_cut_count = CUT_TEMPLATES[coefficient_key]
+                actual_cut_count = negative_cut_count(direction)
+                if actual_cut_count != expected_cut_count:
+                    raise AssertionError(
+                        f"{case} {prefix}{offset}: {actual_cut_count} negative cuts, "
+                        f"expected {expected_cut_count}"
+                    )
+                schema_negative_cuts += actual_cut_count
+                template_direction_counts[template] += 1
                 for ranks in orders:
                     direct = first_affected_level(ranks, direction, orbit["side"])
                     extreme = extreme_support_test(ranks, direction, orbit["side"])
@@ -128,39 +165,53 @@ def main():
             comparisons = len(directions) * len(orders)
             total_comparisons += comparisons
             case_directions += len(directions)
+            case_negative_cuts += schema_negative_cuts
             schemas.append(
                 {
                     "schema": f"{prefix}{offset}",
                     "side": orbit["side"],
                     "labelled_direction_count": len(directions),
+                    "negative_cut_count": schema_negative_cuts,
                     "weak_order_comparisons": comparisons,
                 }
             )
         if case_directions != source["selected_labeled_direction_count"]:
             raise AssertionError(f"{case}: labelled selected-core count changed")
         total_directions += case_directions
+        total_negative_cuts += case_negative_cuts
         rows.append(
             {
                 "case": case,
                 "schema_count": len(schemas),
                 "labelled_direction_count": case_directions,
+                "negative_cut_count": case_negative_cuts,
                 "schemas": schemas,
             }
         )
 
-    if total_directions != 136 or not mutation_detected:
+    if (
+        total_directions != 136
+        or total_negative_cuts != 2512
+        or template_direction_counts
+        != {"one_for_one": 64, "two_for_two": 60, "asymmetric_bound_two": 12}
+        or not mutation_detected
+    ):
         raise AssertionError("activation atlas coverage or strictness mutation failed")
     report = {
-        "schema": "strict-exchange-large-case-activation-atlas-v1",
+        "schema": "strict-exchange-large-case-activation-atlas-v2",
         "status": "PASS",
         "scope": (
             "solver-free expansion of the 19 selected role orbits and exhaustive "
-            "activation equivalence on labelled weak orders; blocker consequents excluded"
+            "activation equivalence on labelled weak orders plus the three-template "
+            "negative-cut census; blocker comparison feasibility excluded"
         ),
         "weak_order_count": len(orders),
         "selected_schema_count": sum(row["schema_count"] for row in rows),
         "selected_labeled_direction_count": total_directions,
         "activation_comparison_count": total_comparisons,
+        "eligible_negative_cut_count": total_negative_cuts,
+        "blocker_comparison_count": 7 * total_negative_cuts,
+        "direction_template_counts": template_direction_counts,
         "nonstrict_mutation_detected": mutation_detected,
         "rows": rows,
     }
@@ -169,6 +220,7 @@ def main():
     schema_block = re.compile(
         r'(?m)^(?P<indent>\s*)\{\n'
         r'(?P=indent)  "labelled_direction_count": (?P<count>[0-9]+),\n'
+        r'(?P=indent)  "negative_cut_count": (?P<cuts>[0-9]+),\n'
         r'(?P=indent)  "schema": "(?P<schema>[ABC][0-9]+)",\n'
         r'(?P=indent)  "side": "(?P<side>min|max)",\n'
         r'(?P=indent)  "weak_order_comparisons": (?P<comps>[0-9]+)\n'
@@ -177,7 +229,8 @@ def main():
     rendered = schema_block.sub(
         lambda match: (
             f'{match.group("indent")}{{"labelled_direction_count": '
-            f'{match.group("count")}, "schema": "{match.group("schema")}", '
+            f'{match.group("count")}, "negative_cut_count": {match.group("cuts")}, '
+            f'"schema": "{match.group("schema")}", '
             f'"side": "{match.group("side")}", "weak_order_comparisons": '
             f'{match.group("comps")}}}'
         ),
