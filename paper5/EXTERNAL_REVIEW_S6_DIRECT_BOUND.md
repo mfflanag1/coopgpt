@@ -25,6 +25,13 @@ coopgames/verifiers/s6/export_strict_exchange_bound_smt.py
 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
 coopgames/verifiers/s6/verify_strict_exchange_bound_certificates.py
 coopgames/verifiers/s6/certificates/strict_exchange_*.{smt2,cpc,json}
+coopgames/verifiers/s6/independent_bound_two_reconstruction.py
+coopgames/verifiers/s6/verify_independent_bound_two.py
+coopgames/verifiers/s6/independent_bound_two/*.{smt2,cpc,json}
+coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
+coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
+coopgames/verifiers/s6/strict_exchange_large_case_templates.json
+coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```
 
 The equality theorem is a useful differential check but is not a dependency:
@@ -89,6 +96,11 @@ singleton-exactified overlap `2/3`.
    Z3/cvc5 agreement, strict parsing, proof pedantry, trust disabling,
    forbidden-marker scan, CPC signatures, Ethos output, and hashes.  State
    precisely what the proof objects do and do not independently certify.
+   Then run `verify_independent_bound_two.py` and inspect whether the claimed
+   separation from the production implementation is real.  In particular,
+   check the direct first-affected-stratum predicates, rebuilt negative cuts,
+   dual no-unique-top encoding, SAT base controls, strict SMT-LIB parsing, and
+   the two new CPC/Ethos records.
 10. **Lower bound.** Independently recheck exactness and the displayed Lmin,
     Lmax, and ratio of `G(2,3)`; do not infer `s(6)=2/3` from the upper suite
     alone.
@@ -128,6 +140,12 @@ Return `verified`, `verified with qualifications`, or `not verified` for:
 10. the lower bound and equality `s(6)=2/3`;
 11. claimed independence from the older programs; and
 12. novelty and mathematical significance.
+
+Also assess the orbit compression independently: reproduce
+`strict_exchange_large_case_templates.json`, verify the quotient action and
+counts, and state whether the six unoriented archetypes materially clarify
+the mathematics.  Do not treat the quotient as an all-human proof of the 44
+remaining sign-role placements.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

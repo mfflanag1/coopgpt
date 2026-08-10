@@ -176,6 +176,27 @@ all 4,683 weak orders against all 1,610 bound-two directions on both sides
 (15,079,260 comparisons, zero mismatches); it is a combinatorial differential
 control rather than part of the CPC proof objects.
 
+The coefficient-two cases have an additional, independently formulated lane
+under `../independent_bound_two/`.  Its reconstruction script imports none of
+the production encoder, lex predicate, blocker builder, direction pool,
+minimizer, or serializer; only the frozen retained direction menus are shared
+as theorem data.  It rewrites the first-affected-stratum test and every
+negative coalition cut, uses a logically dual encoding of the no-unique-top
+anchor, and byte-regenerates both SMT formulas.  Removing the exchange
+implications leaves each base system SAT.  The full `(2,3,1)` and `(3,3,0)`
+systems are UNSAT in both solvers and have separate trust-disabled CPC proofs
+checked `correct` by Ethos.  Run:
+
+```text
+python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+```
+
+The three largest menus are additionally summarized by the non-proof audit
+`../strict_exchange_large_case_templates.json`: 213 labeled rows quotient to
+44 sign-role orbits and eight oriented coefficient templates (six modulo sign
+reversal).  See `paper5/S6_EXCHANGE_ORBIT_LEMMAS.md`.  This quotient is an
+explanatory map, not an independent certificate of the formulas.
+
 The sharp lower-bound witness also has a targeted exact end-to-end regression:
 
 ```bash

@@ -1,6 +1,6 @@
 # Completion audit for the sharp six-player program
 
-Date: 2026-08-09
+Date: 2026-08-10
 
 This ledger maps every requested component of the six-player research goal to
 current repository evidence.  It distinguishes mathematical proof,
@@ -83,6 +83,19 @@ It is stronger than the goal's finite-obstruction fallback because no support
 configuration remains unresolved, but it must continue to be described as
 computer-assisted.
 
+The two coefficient-two sign cases now have a separately written
+reconstruction that shares only the frozen retained direction menus as theorem
+data.  It uses its own variables, lex-improvement predicates, blocker cuts,
+anchor encoding, and SMT serialization.  Both base systems are SAT, both full
+systems are UNSAT in Z3 and cvc5, and their new trust-disabled CPC proofs check
+`correct` in Ethos.  This materially reduces correlated implementation risk;
+it does not independently prove the human counterexample-to-formula map.
+
+The 52-, 71-, and 90-direction cases have also been compressed from 213
+labeled directions to 44 sign-role orbits and six coefficient archetypes up
+to reversal.  This is explanatory progress, not yet a complete hand proof of
+those 44 placements.
+
 ## 4. Sharpness and equality cases
 
 **Requirement.** Supply the matching lower bound and classify equality if the
@@ -105,11 +118,15 @@ games.  The older 3,348 equality exclusions are not proof dependencies.
 **Requirement.** Produce a self-contained paper section, reproducible exact
 artifacts, and a hostile-review packet; do not overstate novelty.
 
-**Status: complete, external review pending.** The theorem and reduction are in
+**Status: reviewer packet complete, external review pending.** The theorem and reduction are in
 `divergence.tex` and the compiled `divergence.pdf`.  The focused review packet
 is `EXTERNAL_REVIEW_S6_DIRECT_BOUND.md`.  It asks reviewers to audit every
 load-bearing interface, independently encode the two bound-two cases, verify
 the lower witness, and separate correctness, novelty, and significance.
+
+`S6_LITERATURE_NOVELTY_AUDIT.md` records a targeted primary-source search.
+No equivalent quantitative fixed-dimensional separation theorem was found,
+but this negative result is expressly not treated as proof of novelty.
 
 No claim of external validation or field-level novelty is made.  The branch
 must not be merged before that review.  A negative external verdict would
@@ -128,6 +145,11 @@ cmp coopgames/verifiers/s6/two_packet_exactification_audit.json \
 python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/audit_lex_improvement_predicate.py
 python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
+python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
+  --output /tmp/strict_exchange_large_case_templates.json
+cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \
+  /tmp/strict_exchange_large_case_templates.json
 python3 coopgames/verifiers/s6/reproduce_equality_exchange_classification.py
 python3 coopgames/verifiers/s6/verify_g23_witness.py
 ```

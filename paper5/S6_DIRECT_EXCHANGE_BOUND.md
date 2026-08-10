@@ -184,6 +184,20 @@ formulas.  Human review must still verify the first implication: normalization,
 sign relabeling, the three anchors, both lex-improvement predicates, and the
 exactness blocker lemma.  None is a large theorem, but each is load-bearing.
 
+The highest-risk implementation overlap has a second lane.  The two cases
+that require coefficient-two directions, `(2,3,1)` and `(3,3,0)`, are rebuilt
+by an independently formulated encoder.  It shares only the frozen retained
+menus as theorem data and imports no production encoder, lex predicate,
+blocker, direction pool, minimizer, or serializer.  Both base systems with the
+exchange implications removed are SAT; both full systems are UNSAT in Z3 and
+cvc5; fresh trust-disabled CPC proofs check `correct` in Ethos.
+
+The three largest menus have also been quotiented under relabelings internal
+to `P`, `M`, and `E`: 213 labeled directions become 44 sign-role orbits and
+eight oriented coefficient templates, or six up to sign reversal.  The
+one-for-one and two-for-two templates cover 179 of the 213 rows.  This is a
+readability reduction, not an all-human replacement for the finite proof.
+
 The direct proof makes the older first-crossing, equality-neighborhood, and
 support-table programs logically unnecessary for `s(6)=2/3`.  They remain
 valuable differential checks and structural information about the equality
@@ -196,6 +210,11 @@ Run from the repository root:
 
 ```text
 python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
+python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
+  --output /tmp/strict_exchange_large_case_templates.json
+cmp /tmp/strict_exchange_large_case_templates.json \
+  coopgames/verifiers/s6/strict_exchange_large_case_templates.json
 ```
 
 This byte-regenerates all fifteen strict SMT-LIB formulas from the minimized
@@ -217,6 +236,13 @@ coopgames/verifiers/s6/generate_equality_exchange_certificates.py
 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
 coopgames/verifiers/s6/verify_strict_exchange_bound_certificates.py
 coopgames/verifiers/s6/certificates/strict_exchange_*.{smt2,cpc,json}
+coopgames/verifiers/s6/independent_bound_two_reconstruction.py
+coopgames/verifiers/s6/verify_independent_bound_two.py
+coopgames/verifiers/s6/independent_bound_two/*.{smt2,cpc,json}
+coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
+coopgames/verifiers/s6/strict_exchange_large_case_templates.json
+coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
+coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```
 
 The correct significance statement before external review is: a direct,

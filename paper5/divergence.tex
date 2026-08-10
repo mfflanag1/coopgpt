@@ -117,10 +117,15 @@ this paper quantifies; the leximax selection appears earlier as the leximax
 solution of neighbour games \citep{KlijnEtAl2003} and as the lexmax
 solution in the egalitarian-set literature \citep{LlerenaMauri2016},
 besides its large-core characterization \citep{ArinKuipersVermeulen2003}.
-What is new here is the quantitative worst case: the exact domain, the
-supremum $2$ with its support-disjointness characterization, the closed-form
-extremal family, and the direction result that the \emph{concentrating}
-selection is the leximin one.
+The candidate contribution here is the quantitative worst case: the exact
+domain, the supremum $2$ with its support-disjointness characterization, the
+closed-form extremal family, and the direction result that the
+\emph{concentrating} selection is the leximin one.  A targeted review of the
+principal egalitarian-core, antiduality, exact-partition, large-core, and
+exact-cone sources found no prior fixed-dimensional separation bound
+\citep{ArinEtAl2008,DietzenbacherYanovskaya2020,StudenyKratochvil2022}; this
+negative search is not a novelty proof, and the claim remains subject to
+specialist review.
 
 The question of this paper is what happens after the rigidity breaks.  Write
 \[
@@ -1467,6 +1472,18 @@ every feasible model here is audited before it is believed.
 
 \subsection{The exact six-player bound}
 
+Conceptually, this is a theorem about a core polytope inside the normalized
+simplex.  Singleton exactness makes that polytope touch every coordinate
+facet, through six witness allocations.  If two canonical Lorenz selections
+were farther than $2/3$, their coordinatewise comparison would have one of
+fifteen sign patterns.  In each pattern, every infinitesimal exchange that
+improves one selection must be stopped by a tight coalition on which the
+exchange has negative sum; the opposite selection and the six facet
+witnesses impose seven necessary inequalities on that blocker.  The finite
+part proves that no such blockers can coexist.  Thus the computation is a
+fifteen-case convex-geometric exhaustion of necessary exchange obstructions,
+not an enumeration of games or core vertices.
+
 The first nontrivial fixed dimension can now be closed without a generator
 normal form or a support-table census.
 
@@ -1539,6 +1556,18 @@ consequences of tightness, so their infeasibility excludes every exact-game
 counterexample.  The source-to-formula regeneration, hashes, proof controls,
 and all retained directions are in the repository under
 \texttt{verifiers/s6/strict\_exchange\_*}.
+
+The two bound-two cases were additionally reconstructed by a separate encoder
+that imports none of the production encoder, lex predicate, blocker builder,
+direction generator, minimizer, or SMT serializer.  Its base systems are
+satisfiable, its full systems are infeasible in both solvers, and its fresh
+trust-disabled CPC proofs check in Ethos.  As an explanatory compression of
+the three largest menus, their $213$ labeled directions form $44$ orbits under
+relabeling within $P,M,E$, and use eight oriented coefficient templates (six
+up to reversing sign); the elementary one-for-one and two-for-two templates
+account for $179$ rows.  These controls reduce implementation correlation and
+make the finite anatomy readable, but they do not replace the human obligation
+to verify the counterexample-to-formula implication.
 
 Thus the upper bound holds.  The family formula gives
 $\rho(G(2,3))=2(2(3-1)-1)/(3(2+1))=2/3$, proving equality.
@@ -1764,8 +1793,9 @@ Four problems remain open.
 \paragraph{Not claimed.}
 Exactness theory, lower-envelope exactification, and the characterizations of
 the egalitarian selections are prior art
-\citep{ArinInarra2001,ArinKuipersVermeulen2003,Biswas1999,Dietzenbacher2021,
-LlerenaMauri2017,CsokaHeringsKoczy2011,StudenyKratochvil2022}; the
+\citep{ArinInarra2001,ArinKuipersVermeulen2003,ArinEtAl2008,Biswas1999,
+Dietzenbacher2021,DietzenbacherYanovskaya2020,LlerenaMauri2017,
+CsokaHeringsKoczy2011,StudenyKratochvil2022}; the
 four-player rigidity is the companion paper's classification
 \citep{Flanagan2026} combined with the Lorenz implication of
 \citet{LlerenaMauri2017}.  The candidate
@@ -1790,7 +1820,11 @@ theorem-to-driver map in its README (for Theorems~\ref{thm:regime41}
 and~\ref{thm:s5}, both pipelines, the coverage audit, and the full control
 suite; for Theorem~\ref{thm:s6}, the fifteen source-regenerated QF\_LRA
 formulas, Z3/cvc5 records, trust-disabled CPC proofs, and Ethos checks under
-\texttt{s6/strict\_exchange\_*}).  Theorem~\ref{thm:cfg} is proved by hand; its superseded finite
+\texttt{s6/strict\_exchange\_*}, plus the independently formulated
+bound-two reconstruction under \texttt{s6/independent\_bound\_two/}).
+The orbit audit under \texttt{s6/strict\_exchange\_large\_case\_templates.json}
+is explanatory and not a separate proof dependency.
+Theorem~\ref{thm:cfg} is proved by hand; its superseded finite
 check and the hand proof's own symbolic guards are archived alongside.  The remaining
 programs are bug audits, not proof dependencies.  Exact rational programs in the companion repository
 independently reconstruct all displayed games and coalition values, the
@@ -1815,12 +1849,17 @@ International Journal of Game Theory 30:187--193.
 \bibitem[Arin et al.(2003)]{ArinKuipersVermeulen2003}
 Arin J, Kuipers J, Vermeulen D (2003) Some characterizations of egalitarian
 solutions on classes of TU-games. Mathematical Social Sciences 46:327--345.
-\url{https://doi.org/10.1016/S0165-4896(03)00048-6}
+\url{https://doi.org/10.1016/S0165-4896(03)00051-9}
+
+\bibitem[Arin et al.(2008)]{ArinEtAl2008}
+Arin J, Kuipers J, Vermeulen D (2008) An axiomatic approach to egalitarianism
+in TU-games. International Journal of Game Theory 37:565--580.
+\url{https://doi.org/10.1007/s00182-008-0133-6}
 
 \bibitem[Biswas et al.(1999)]{Biswas1999}
 Biswas AK, Parthasarathy T, Potters JAM, Voorneveld M (1999) Large cores and
 exactness. Games and Economic Behavior 28:1--12.
-\url{https://doi.org/10.1006/game.1998.0683}
+\url{https://doi.org/10.1006/game.1998.0686}
 
 \bibitem[Cs\'oka et al.(2011)]{CsokaHeringsKoczy2011}
 Cs\'oka P, Herings PJJ, K\'oczy L\'A (2011) Balancedness conditions for exact
@@ -1855,6 +1894,11 @@ constraints. Econometrica 57:615--635.
 Dietzenbacher B (2021) Monotonicity and egalitarianism.
 Games and Economic Behavior 127:194--205.
 \url{https://doi.org/10.1016/j.geb.2021.03.006}
+
+\bibitem[Dietzenbacher and Yanovskaya(2020)]{DietzenbacherYanovskaya2020}
+Dietzenbacher B, Yanovskaya E (2020) Antiduality in exact partition games.
+Mathematical Social Sciences 108:116--121.
+\url{https://doi.org/10.1016/j.mathsocsci.2020.04.006}
 
 \bibitem[Flanagan(2026)]{Flanagan2026}
 Flanagan M (2026) Balanced transport at the egalitarian core: a complete
