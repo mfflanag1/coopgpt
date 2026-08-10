@@ -339,6 +339,20 @@ The checker localizes 103 blocker exclusions to `q1` alone and two to the
 opposite selection alone.  It uses exact `Fraction` arithmetic, imports no
 solver or production encoder, and rejects the same five mutation classes.
 
+The all-class relay audit imposes `x3<=x4` versus `x3>x4` at every packet root.
+All eleven classes then close, with class 10 alone requiring its nested
+`x1<=x2` versus `x1>x2` split:
+
+```text
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
+  --output /tmp/strict_exchange_p4_universal_order_relays.json
+cmp /tmp/strict_exchange_p4_universal_order_relays.json \
+  coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
+```
+
+This audit shares the parent encoder.  It is a structural decomposition, not
+an independent certificate or an all-human proof of the four remaining rows.
+
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
 that each declares only the 48 expected selection/witness reals, has the same

@@ -265,7 +265,11 @@ The corresponding forced-exchange audit closes seven packet classes
 `3,4,7,8,9,10,11` as relay trees, covering twenty-four of the 32 feasible
 labelled packets.  All seven now have hand-checkable proofs; the other four
 packet classes, covering eight labelled packets, retain machine-resolved
-residue.  See `S6_P4_RELAY_TREES.md`.
+residue.  They are no longer structurally open: the single universal split
+`x_3<=x_4` versus `x_3>x_4` closes all eleven packet classes as relay trees,
+with only class 10 requiring the nested `x_1`/`x_2` split.  Thus the remaining
+gap is hand-certificate compression, not an unexplained SAT leaf.  See
+`S6_P4_UNIVERSAL_ORDER_RELAY.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen
@@ -334,6 +338,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificat
   --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
+  --output /tmp/strict_exchange_p4_universal_order_relays.json
+cmp /tmp/strict_exchange_p4_universal_order_relays.json \
+  coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -390,6 +398,8 @@ coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
+coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
@@ -399,6 +409,7 @@ coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/paper5/S6_P4_ANCHOR_LOCALIZATION.md
 coopgames/paper5/S6_P4_PACKET_CLASSIFICATION.md
 coopgames/paper5/S6_P4_RELAY_TREES.md
+coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```
 

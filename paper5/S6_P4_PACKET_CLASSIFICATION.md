@@ -132,6 +132,9 @@ the exhaustive split `x_3<=x_4` versus `x_3>x_4`, bringing the total to
 twenty-two packets.  Class 10 adds a seventh hand-checkable row after the same
 root split and one nested comparison, bringing the total to twenty-four
 packets.  Four classes covering the other eight packets remain machine-resolved.
+All four nevertheless close under the same root split `x_3<=x_4` versus
+`x_3>x_4`; in fact this split gives complete relay trees for all eleven
+classes, with only class 10 needing one nested `x_1`/`x_2` split.
 Class 4 uses
 a three-leaf star whose terminal cuts are closed by sixteen `q^1`-complement
 identities and four opposite-base-cut identities, all checked with pure exact
@@ -145,10 +148,10 @@ Class 9 uses ten exact difference-cone censuses and 52 distinct rational
 identities, checked at all 71 uses by a solver-free verifier.
 Class 10 uses eighteen exact censuses and 108 identities checked at all 122
 uses; 103 of its 105 blocker exclusions require only `q^1`.
-Classes 9 and 10 also close computationally after, respectively, one payoff-
-order split and a depth-two order tree.  Those two decompositions cover six
-more labelled packets but remain machine-checked targets rather than hand
-proofs.
+The older order-tree artifact gives an encoding-shared differential check of
+the class-9 and class-10 hand certificates.  The universal order audit extends
+the same root comparison to all eleven rows; classes 1, 2, 5, and 6 remain
+machine-checked hand-proof targets.
 
 ## 4. Class 3 is a two-exchange hand relay
 
@@ -340,6 +343,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificat
   --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
+  --output /tmp/strict_exchange_p4_universal_order_relays.json
+cmp /tmp/strict_exchange_p4_universal_order_relays.json \
+  coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 ```
 
 The audit independently checks within the parent encoding that
@@ -384,12 +391,15 @@ The audit independently checks within the parent encoding that
     difference-cone cut censuses, checks 52 distinct rational identities at
     all 71 stage uses, exhausts all 56 discarded blockers and eleven relay
     activations, and rejects coefficient, use-site, candidate-deletion,
-    use-map-deletion, and strict-target mutations.
+    use-map-deletion, and strict-target mutations; and
 18. the solver-free class-10 checker independently recomputes all eighteen
     exact difference-cone censuses, checks 108 identities at 122 uses,
     exhausts 105 discarded blockers and seventeen activations, localizes 103
     blocker exclusions to `q^1` and two to the opposite comparison, and
-    rejects the same five mutation classes.
+    rejects the same five mutation classes; and
+19. the universal order audit closes all eleven packet classes after the
+    single root split `x_3<=x_4` versus `x_3>x_4`; class 10 is the unique row
+    needing `x_1<=x_2` versus `x_1>x_2` on its weak branch.
 
 The authoritative proof object for the unsplit, weaker relaxation remains
 the trust-disabled CPC proof in

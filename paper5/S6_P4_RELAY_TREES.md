@@ -432,14 +432,20 @@ censuses and checks 95 blocker plus thirteen activation identities at all 122
 uses.  Of 105 blocker exclusions, 103 use only `q^1`; the two weak-left
 exceptions use only the opposite comparison.
 
-## 7. What remains unresolved
+## 7. Universal order completion and remaining hand gap
 
 The unsplit relay method stalls immediately in classes 9 and 10, while the
 order-split refinement and exact certificate audits now close both trees by
-hand.  Classes 1, 2, 5, and 6
-have many closed branches but retain,
-respectively, 6, 3, 3, and 4 open leaves.  These are precise structural
-residues, not counterexamples.
+hand.  The same root split `x_3<=x_4` versus `x_3>x_4` also closes every open
+leaf in classes 1, 2, 5, and 6.  Imposing it uniformly gives complete relay
+trees for all eleven packet classes; class 10 alone needs the nested
+`x_1<=x_2` versus `x_1>x_2` split.  `S6_P4_UNIVERSAL_ORDER_RELAY.md` records
+the resulting all-class anatomy.
+
+Classes 1, 2, 5, and 6 remain unresolved only at the hand-certificate layer.
+Their order-refined trees share the parent encoding and have not yet been
+compressed into independent exact identities.  They are precise structural
+targets, not counterexamples or unexplained open leaves.
 
 The relay audit does not replace the trust-disabled CPC proof of the weaker
 parent formula and does not validate the human-to-machine map.  Its purpose is
@@ -479,6 +485,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificat
   --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
+  --output /tmp/strict_exchange_p4_universal_order_relays.json
+cmp /tmp/strict_exchange_p4_universal_order_relays.json \
+  coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 ```
 
 The frozen JSON records every chosen direction, its side and role orbit, the

@@ -142,7 +142,11 @@ checked at all 122 uses.  Four packet classes covering eight labelled pairs
 remain machine-resolved.  A separate forced-exchange audit sharpens that
 boundary: classes `3,4,7,8,9,10,11` have complete relay trees and together
 cover twenty-four labelled packets.  All seven now have hand-checkable proofs;
-classes 1, 2, 5, and 6 retain explicit open relay leaves.
+classes 1, 2, 5, and 6 remain machine-resolved at the hand-certificate layer.
+A universal order audit eliminates their open leaves: `x_3<=x_4` versus
+`x_3>x_4` closes every one of the eleven packet classes, with class 10 the
+unique row requiring a nested `x_1`/`x_2` split.  The remaining gap is exact
+human compression of four closed machine trees, not unknown finite anatomy.
 
 ## 4. Sharpness and equality cases
 
@@ -250,6 +254,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificat
   --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json \
   /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
+  --output /tmp/strict_exchange_p4_universal_order_relays.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \
+  /tmp/strict_exchange_p4_universal_order_relays.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

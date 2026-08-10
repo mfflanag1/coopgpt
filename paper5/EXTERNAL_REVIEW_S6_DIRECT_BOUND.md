@@ -62,6 +62,9 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
 coopgames/paper5/S6_P4_CLASS10_HAND_CERTIFICATE.md
+coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
+coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
+coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -282,6 +285,14 @@ blocker exclusions genuinely require only `q^1`, and that all terminal leaves
 force `D<=1/3` without an unstated threshold anchor.  Check all six strict
 `d_0` uses and all five mutation controls.  State whether class 10 is
 hand-checkable without relying on the SMT blocker census.
+
+Then audit the universal order theorem.  Confirm independently that the root
+split `x_3<=x_4` versus `x_3>x_4` closes all eleven packet rows, that the weak
+regions of classes 3, 4, and 7 are genuinely linearly infeasible, and that
+class 10 is the unique row requiring the nested `x_1`/`x_2` split.  Check that
+all other feasible order regions are SAT before relay implications are added.
+Treat the resulting 32-packet closure as a shared-encoder structural theorem,
+not as an all-human proof of classes 1, 2, 5, and 6.
 
 Finally inspect the order-split relay artifact.  Confirm that both order
 branches for class 9 and all three terminal order regions for class 10 are SAT
