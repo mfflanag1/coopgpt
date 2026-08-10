@@ -339,6 +339,22 @@ The checker localizes 103 blocker exclusions to `q1` alone and two to the
 opposite selection alone.  It uses exact `Fraction` arithmetic, imports no
 solver or production encoder, and rejects the same five mutation classes.
 
+Class 1 closes its fifteen-leaf universal-order tree through twenty-one exact
+difference-cone censuses.  Its proof object has 65 blocker and 60 activation
+identities mapped to 232 uses and audits all 165 activation-failure cases:
+
+```text
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class1_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
+```
+
+The checker uses exact `Fraction` arithmetic, imports no solver or production
+encoder, and rejects coefficient, use-site, candidate-set, use-map,
+activation-atom, and strict-target mutations.  The length of this proof object
+is still a conceptual-compression target.
+
 The all-class relay audit imposes `x3<=x4` versus `x3>x4` at every packet root.
 All eleven classes then close, with class 10 alone requiring its nested
 `x1<=x2` versus `x1>x2` split:

@@ -53,11 +53,11 @@ separately in classes 9 and 10: imposing it at the root closes classes 1, 2,
 trees still had open leaves after classes 9 and 10 were humanized.
 
 This is a meaningful structural compression of the finite `P4` lemma.  It
-does **not** yet make all eleven rows hand-checkable.  Classes 3, 4, 7, 8, 9,
-10, and 11 have separate exact hand proofs, covering 24 labelled packets.
-Classes 1, 2, 5, and 6, covering the other eight, still rely on the shared
-parent encoding for their order-refined relay trees.  Their new trees are now
-precise hand-proof targets rather than unexplained UNSAT residue.
+does **not** yet make all eleven rows hand-checkable.  Classes 1, 3, 4, 7, 8,
+9, 10, and 11 have separate exact hand proof objects, covering 25 labelled
+packets.  Classes 2, 5, and 6, covering the other seven, still rely on the
+shared parent encoding for their order-refined relay trees.  Their trees are
+now precise hand-proof targets rather than unexplained UNSAT residue.
 
 ## Reproduction and review boundary
 

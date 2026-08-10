@@ -121,7 +121,7 @@ eleven concrete packet rows, each using at most seven residual implications.
 
 The table as a whole remains a finite computer-assisted lemma.  A complete
 hand proof would still have to replace the residual blocker alternatives in
-the unresolved rows by explicit inequalities or Farkas combinations.  Seven
+the unresolved rows by explicit inequalities or Farkas combinations.  Eight
 rows can now be removed from that residue completely.
 
 `S6_P4_RELAY_TREES.md` decomposes the remaining cores dynamically.  Five
@@ -131,8 +131,10 @@ complete hand-checkable proofs.  Class 9 adds a sixth hand-checkable row after
 the exhaustive split `x_3<=x_4` versus `x_3>x_4`, bringing the total to
 twenty-two packets.  Class 10 adds a seventh hand-checkable row after the same
 root split and one nested comparison, bringing the total to twenty-four
-packets.  Four classes covering the other eight packets remain machine-resolved.
-All four nevertheless close under the same root split `x_3<=x_4` versus
+packets.  Class 1 is now the eighth hand-checkable row: twenty-one exact cut
+censuses and 125 rational identities at 232 uses bring the total to twenty-five
+packets.  Three classes covering the other seven packets remain machine-resolved.
+All three nevertheless close under the same root split `x_3<=x_4` versus
 `x_3>x_4`; in fact this split gives complete relay trees for all eleven
 classes, with only class 10 needing one nested `x_1`/`x_2` split.
 Class 4 uses
@@ -148,9 +150,12 @@ Class 9 uses ten exact difference-cone censuses and 52 distinct rational
 identities, checked at all 71 uses by a solver-free verifier.
 Class 10 uses eighteen exact censuses and 108 identities checked at all 122
 uses; 103 of its 105 blocker exclusions require only `q^1`.
+Class 1 uses twenty-one exact censuses and an exhaustive 165-case activation
+failure audit; its 65 blocker plus 60 activation identities are checked at all
+232 uses without a solver or production import.
 The older order-tree artifact gives an encoding-shared differential check of
-the class-9 and class-10 hand certificates.  The universal order audit extends
-the same root comparison to all eleven rows; classes 1, 2, 5, and 6 remain
+the class-9, class-10, and class-1 hand certificates.  The universal order audit
+extends the same root comparison to all eleven rows; classes 2, 5, and 6 remain
 machine-checked hand-proof targets.
 
 ## 4. Class 3 is a two-exchange hand relay
@@ -343,6 +348,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificat
   --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class1_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

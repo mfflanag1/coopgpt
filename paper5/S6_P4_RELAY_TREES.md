@@ -45,7 +45,8 @@ and all five are converted into explicit hand-checkable inequalities.  Of the
 six classes left open by this no-new-order rule, class 9 is now also
 hand-checkable after one exhaustive order split; Section 6 records that
 refinement.  Class 10 is likewise hand-checkable after its nested order split.
-The combined hand coverage is therefore twenty-four packets.
+Class 1 is now hand-checkable after the universal root split.  The combined
+hand coverage is therefore twenty-five packets.
 
 ## 3. Two especially small targets
 
@@ -431,6 +432,10 @@ also hand-checkable.  Its solver-free verifier recomputes eighteen cut
 censuses and checks 95 blocker plus thirteen activation identities at all 122
 uses.  Of 105 blocker exclusions, 103 use only `q^1`; the two weak-left
 exceptions use only the opposite comparison.
+Class 1 is now hand-checkable as well.  Its solver-free verifier recomputes
+twenty-one cut censuses and checks 65 blocker plus 60 activation identities at
+232 uses.  It audits all 165 activation-failure cases, including eighteen
+direct contradictions between the strict failures `x5<x4` and `x4<x5`.
 
 ## 7. Universal order completion and remaining hand gap
 
@@ -442,9 +447,11 @@ trees for all eleven packet classes; class 10 alone needs the nested
 `x_1<=x_2` versus `x_1>x_2` split.  `S6_P4_UNIVERSAL_ORDER_RELAY.md` records
 the resulting all-class anatomy.
 
-Classes 1, 2, 5, and 6 remain unresolved only at the hand-certificate layer.
+Classes 2, 5, and 6 remain unresolved only at the hand-certificate layer.
 Their order-refined trees share the parent encoding and have not yet been
-compressed into independent exact identities.  They are precise structural
+compressed into independent exact identities.  Class 1 has crossed that
+boundary, although its 125-row proof object remains a compression target rather
+than a short conceptual lemma.  The remaining rows are precise structural
 targets, not counterexamples or unexplained open leaves.
 
 The relay audit does not replace the trust-disabled CPC proof of the weaker
@@ -485,6 +492,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificat
   --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class1_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \
