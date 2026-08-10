@@ -35,6 +35,11 @@ coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py
 coopgames/verifiers/s6/strict_exchange_large_case_orbit_cores.json
 coopgames/verifiers/s6/orbit_core_certificates/*.{smt2,cpc,json}
 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+coopgames/paper5/S6_P4_ANCHOR_LOCALIZATION.md
+coopgames/verifiers/s6/audit_strict_exchange_p4_anchor_core.py
+coopgames/verifiers/s6/strict_exchange_p4_anchor_core.json
+coopgames/verifiers/s6/p4_anchor_core_certificates/*.{smt2,cpc,json}
+coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -166,6 +171,16 @@ are SAT.  Check that this is a sound weakening of the uniform interface; do
 not infer from the ablations that a corresponding exact game exists.  Do not
 treat this reduction as an all-human proof of the 19 remaining sign-role
 schemas.
+
+Audit the anchor-localized `(4,2,0)` alternative separately.  Prove the
+coincident-anchor contradiction, justify the WLOG labels `a=0,b=1`, verify
+the residual `S_2 x S_2` action and all ten orbit rows, and inspect the frozen
+formula to confirm that it declares only `x,z,q^1`.  Check that all nineteen
+blocker implications use only the opposite and `q^1` comparisons.  Reproduce
+the nineteen direction, ten orbit, and two source ablations, but treat their
+SAT models only as relaxation controls.  Finally verify the Z3/cvc5 record and
+the trust-disabled CPC proof in Ethos.  State explicitly whether the
+one-witness localization materially improves the mathematical explanation.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

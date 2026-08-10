@@ -219,6 +219,14 @@ weakened formula is proof-checked UNSAT, while deleting any one of the five
 retained comparison-source families makes the relaxation SAT.  These are
 internal irredundancy controls, not realizing games.
 
+An anchor-localized alternative makes the structure sharper.  Let `a in P`
+be an Lmin-bottom anchor and `b in P` an Lmax-top anchor.  The case `a=b` is
+impossible by `x_m>=x_a>z_a>=z_m>x_m` for `m in M`.  With distinct anchors
+relabelled as `a=0,b=1`, a separately certified formula uses only `x,z`, the
+single exactness witness `q^b`, and nineteen directions in ten residual
+orbits.  It declares 18 reals and has a fresh trust-disabled CPC proof checked
+by Ethos.  See `S6_P4_ANCHOR_LOCALIZATION.md`.
+
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen
 formula declares exactly 48 reals and consists of exactly 72 documented base
@@ -244,6 +252,7 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
 cmp /tmp/strict_exchange_formula_interface.json \
   coopgames/verifiers/s6/strict_exchange_formula_interface.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -278,10 +287,15 @@ coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py
 coopgames/verifiers/s6/strict_exchange_large_case_orbit_cores.json
 coopgames/verifiers/s6/orbit_core_certificates/*.{smt2,cpc,json}
 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+coopgames/verifiers/s6/audit_strict_exchange_p4_anchor_core.py
+coopgames/verifiers/s6/strict_exchange_p4_anchor_core.json
+coopgames/verifiers/s6/p4_anchor_core_certificates/*.{smt2,cpc,json}
+coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
+coopgames/paper5/S6_P4_ANCHOR_LOCALIZATION.md
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```
 

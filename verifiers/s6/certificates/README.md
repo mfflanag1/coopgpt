@@ -220,6 +220,23 @@ remain.  Each of those five retained comparison-source families is separately
 irredundant by a SAT ablation.  The audit records the exact source list and
 ablations in `../strict_exchange_large_case_orbit_cores.json`.
 
+The stronger anchor-localized alternative for `p4_n2_t0` is under
+`../p4_anchor_core_certificates/`.  It closes the coincident `x`-bottom/
+`z`-top anchor branch by the four-inequality chain
+`x_m>=x_a>z_a>=z_m>x_m`.  In the distinct branch it fixes `a=0,b=1`, keeps
+only `x,z` and the top anchor's exactness witness `q1`, and retains nineteen
+directions in ten residual `S2 x S2` orbits.  The formula has 18 declared
+reals and 58 assertions.  Z3 and cvc5 return UNSAT, and a trust-disabled CPC
+proof checks `correct` in Ethos.  Reproduce the audit and verify the frozen
+objects with
+
+```text
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_anchor_core.py \
+  --output /tmp/strict_exchange_p4_anchor_core.json \
+  --formula /tmp/strict_exchange_p4_anchor_core.smt2
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
+```
+
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
 that each declares only the 48 expected selection/witness reals, has the same

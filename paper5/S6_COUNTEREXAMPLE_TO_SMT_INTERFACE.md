@@ -251,3 +251,15 @@ their base simplex/zero constraints remain in the formula.  Removing any one
 of the five retained comparison-source families makes this reduced
 relaxation SAT; that is an internal irredundancy control, not a claim that the
 omitted witnesses are unnecessary in the general blocker lemma.
+
+The separate anchor-localized `(4,2,0)` formula weakens this interface much
+further.  The two cross anchors choose an `x`-bottom `a in P` and a `z`-top
+`b in P`.  If `a=b`, then any `m in M` gives
+`x_m>=x_a>z_a>=z_m>x_m`; hence only the distinct branch exists.  Relabel it
+as `a=0,b=1`.  The frozen localized formula replaces both anchor disjunctions
+by these extreme-role inequalities, retains only the actual exactness witness
+`q^b`, and keeps only the opposite and `q^b` comparisons in every blocker
+alternative.  A real counterexample satisfies all of those weaker assertions.
+The formula has 18 reals, 39 base assertions, and nineteen direction
+implications in ten residual orbits.  Its complete assertion-level account is
+`S6_P4_ANCHOR_LOCALIZATION.md`.

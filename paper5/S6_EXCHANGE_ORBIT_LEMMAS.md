@@ -115,11 +115,31 @@ UNSAT; deleting any one of its five retained comparison-source families
 five SAT ablations are again irredundancy controls, not games or proof of the
 underlying theorem.
 
+The stronger anchor-localized alternative in `S6_P4_ANCHOR_LOCALIZATION.md`
+explains why this witness deletion occurs.  Choose an `x`-bottom anchor `a`
+and a `z`-top anchor `b`, both in `P`.  They cannot coincide: for any `m in M`,
+
+```text
+x_m >= x_a > z_a >= z_m > x_m.
+```
+
+After relabeling the distinct anchors as `a=0,b=1`, the `(4,2,0)` proof needs
+only the opposite selection and the single exactness witness `q^b`.  It uses
+nineteen labelled directions in ten complete orbits under the residual swaps
+of the other two `P`-players and the two `M`-players.  The corresponding
+18-real formula and its trust-disabled CPC/Ethos certificate are frozen
+separately.  Thus the coincident-anchor branch is closed completely by hand;
+only the ten residual orbit families remain machine-resolved.
+
 Thus the remaining human target is 19 sign-role schemas built from only three
 unoriented exchange ideas.  In particular, the two coefficient-one large
 cases use only one-for-one and two-for-two exchanges.  The balanced case adds
 one asymmetric coefficient-two exchange and its reverse.  The H1/H2/H3 and
 H6 templates are dispensable from this reduced large-case proof.
+
+For `(4,2,0)`, the anchor-localized alternative replaces the six uniform
+C-schemas by a one-line coincident-anchor contradiction and ten smaller
+residual role orbits with one witness.
 
 Here is the complete human checklist.  An entry such as
 `min: P[-1,0,0] M[0,1] E[0]` means every labeled Lmin direction whose
@@ -188,6 +208,6 @@ This compression materially improves readability but is not yet an all-human
 proof of the three large cases.  A complete hand replacement would have to
 show, for each of the 19 selected sign-role schemas, why the eligible negative
 cuts forced by the appropriate archetype cannot coexist.  The highest-value
-next step is to derive common cut inequalities for A1--A8 and C1--C6, then
-handle the five-schema balanced core B1--B5, whose last two schemas form the
-H4/H5 coefficient-two reversal pair.
+next step is to derive common cut inequalities for A1--A8 and for the ten
+anchor-localized `(4,2,0)` orbits, then handle the five-schema balanced core
+B1--B5, whose last two schemas form the H4/H5 coefficient-two reversal pair.

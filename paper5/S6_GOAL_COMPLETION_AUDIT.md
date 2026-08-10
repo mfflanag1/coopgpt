@@ -105,6 +105,15 @@ families makes the relaxation SAT.  The base constraints for all six witnesses
 remain.  This is substantial explanatory progress, not yet a complete hand
 proof of those 19 schemas.
 
+The separately proof-checked anchor-localized `(4,2,0)` alternative goes
+further.  A one-line order chain closes the coincident bottom/top-anchor
+branch.  In the distinct branch, sign-preserving relabeling leaves an 18-real
+formula with one singleton exactness witness, nineteen labelled directions,
+and ten residual role orbits.  Z3/cvc5 and a trust-disabled CPC proof checked
+by Ethos certify it; every single direction, residual orbit, and either of its
+two blocker-comparison sources is irredundant by SAT ablation.  The remaining
+ten-orbit incompatibility is still machine-resolved.
+
 ## 4. Sharpness and equality cases
 
 **Requirement.** Supply the matching lower bound and classify equality if the
@@ -167,6 +176,7 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
 cmp coopgames/verifiers/s6/strict_exchange_formula_interface.json \
   /tmp/strict_exchange_formula_interface.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \
