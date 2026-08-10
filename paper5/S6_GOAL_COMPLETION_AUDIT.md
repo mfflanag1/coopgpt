@@ -270,6 +270,9 @@ orders the remaining work into the human-to-machine map, coefficient-two
 reconstruction, the 52/71/90 orbit quotient, class-5/class-6 map
 reconstruction, and novelty gates, with exact paths and required reviewer
 outputs.
+`S6_INTERFACE_REVIEW_WORKSHEET.md` turns the first gate into fourteen human
+lemma verdicts and nine formula-correspondence verdicts, with separate
+mandatory traces for the two coefficient-two rows.
 
 `S6_LITERATURE_NOVELTY_AUDIT.md` records a targeted primary-source search.
 No equivalent quantitative fixed-dimensional separation theorem was found,
@@ -288,9 +291,11 @@ and 252 direction implications, rebuilding 4,722 negative-cut alternatives
 and 33,054 blocker comparisons.  This closes the literal transcription gap;
 it still does not independently prove the human anchor, lex-improvement, or
 tight-blocker lemmas.
-The note now makes the common short step explicit as the minimum of a positive
-payoff-order crossing bound and the finitely many positive coalition-slack
-ratios.  It also traces one complete coefficient-two implication in each
+The note now uses the same explicit order-crossing radius in all three anchor
+segments.  Its blocker radius `(E1)` is the minimum of `1`, the positive
+payoff-order crossing bound, and the finitely many positive coalition-slack
+ratios; including `1` removes the empty-minimum convention.  It also traces
+one complete coefficient-two implication in each
 difficult case without SMT syntax: 24 negative cuts for `p2_n3_t1:a72` and 26
 for `p3_n3_t0:a74`.  These additions localize external review but do not count
 as an external verdict.

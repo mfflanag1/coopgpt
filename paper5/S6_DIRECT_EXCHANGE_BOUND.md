@@ -368,6 +368,10 @@ the production encoder or predicates and proves each locally equivalent to its
 independent statement.  It rebuilds 4,722 negative-cut alternatives and 33,054
 blocker comparisons.  This closes the transcription question while leaving
 the human necessity of the anchors, lex test, and blocker lemma open to review.
+The companion `S6_INTERFACE_REVIEW_WORKSHEET.md` exposes that obligation as
+fourteen human-lemma verdicts and nine formula-correspondence verdicts.  All
+three anchor segments and the tight-blocker step now use explicit positive
+order/slack radii rather than an unquantified “small step.”
 
 The direct proof makes the older first-crossing, equality-neighborhood, and
 support-table programs logically unnecessary for `s(6)=2/3`.  They remain
@@ -551,6 +555,7 @@ coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
 coopgames/verifiers/s6/strict_exchange_semantic_interface.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
+coopgames/paper5/S6_INTERFACE_REVIEW_WORKSHEET.md
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/paper5/S6_P4_ANCHOR_LOCALIZATION.md
 coopgames/paper5/S6_P4_PACKET_CLASSIFICATION.md

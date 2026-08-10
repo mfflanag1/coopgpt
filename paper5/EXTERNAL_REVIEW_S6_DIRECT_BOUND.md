@@ -106,6 +106,7 @@ coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
+coopgames/paper5/S6_INTERFACE_REVIEW_WORKSHEET.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
@@ -172,6 +173,10 @@ singleton-exactified overlap `2/3`.
    production implementation and that all 1,332 local equivalence checks have
    the claimed meaning.  This differential audit reduces transcription risk;
    it does not validate the human convexity or tight-blocker lemmas.
+   Record the verdicts in `S6_INTERFACE_REVIEW_WORKSHEET.md`; do not replace a
+   `proved` entry with a passing script.  In particular, check the explicit
+   anchor radius `(E0)` and common blocker radius `(E1)` rather than accepting
+   “sufficiently small.”
 7. **Direction pools.** Verify that `direction_pool(1)` and
    `direction_pool(2)` contain exactly the asserted efficiency-preserving
    integer directions, that only the two named cases use bound two, and that

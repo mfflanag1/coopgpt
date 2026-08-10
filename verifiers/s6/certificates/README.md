@@ -494,6 +494,9 @@ that each declares only the 48 expected selection/witness reals, has the same
 implications afterward.  It maps every implication to its named assertion and
 negative-cut count.  This audit excludes hidden machine premises; the human
 soundness proof remains `paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md`.
+The external verdict form is `paper5/S6_INTERFACE_REVIEW_WORKSHEET.md`; it
+separates fourteen human lemmas from nine formula-correspondence checks and
+requires complete traces of both coefficient-two rows.
 
 `../strict_exchange_semantic_interface.json` is the independent semantic
 differential.  Its generator imports none of the production formula machinery,

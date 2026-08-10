@@ -76,14 +76,25 @@ the explicit family supplies attainment separately.
 
 ## 3. The three selection anchors (`a21-a23`)
 
-All three arguments use a short core segment.  A segment between two core
-points remains in the core.
+All three arguments use a core segment.  A segment between two core points
+remains in the core.  To remove the informal phrase “small step,” use the
+order-crossing radius `Delta(y,h)` defined in Section 5 and choose
+
+```text
+0 < epsilon < min{1,Delta(y,h)}.                         (E0)
+```
+
+The direction in each argument is the endpoint difference.  Formula (E0)
+keeps the point on the core segment and preserves every strict order between
+distinct old payoff strata.  It is positive because `Delta` is either
+strictly positive or `+infinity`.
 
 **No unique Lmax top (`a21`).**  Suppose `i` were the unique maximum of `z`.
 Then `z_i>0`, since the six nonnegative coordinates sum to one.  Along the
-segment from `z` to `q^i`, coordinate `i` decreases toward zero.  For a small
-positive step it remains separated from every old lower coordinate, so the
-first entry of the decreasing rearrangement falls.  This contradicts the
+segment from `z` to `q^i`, use `h=q^i-z`.  At the unique top level,
+`h_i=-z_i<0`; there is no other coordinate in that level.  Formula (E0) and
+the Lmax half of the order-preservation lemma therefore make the first entry
+of the decreasing rearrangement fall.  This contradicts the
 leximax-minimality of `z`.  Therefore at least two coordinates share the
 maximum.  The production formula writes this as a disjunction over tied top
 pairs; the independent bound-two encoder writes the logically equivalent
@@ -91,13 +102,16 @@ negation of a unique top.
 
 **Lmax-top cross anchor (`a22`).**  If every player in the top stratum of `z`
 satisfied `x_i<z_i`, then a short segment from `z` toward `x` would decrease
-every old top coordinate.  Before any lower stratum could cross it, the first
-entry of the decreasing rearrangement would fall.  Hence some `z`-top player
-has `x_i>=z_i`.
+every old top coordinate.  More explicitly, put `h=x-z` and use (E0).  Every
+coefficient at the highest affected old level is negative, so the Lmax
+criterion makes the decreasing rearrangement lexicographically smaller.
+Hence some `z`-top player has `x_i>=z_i`.
 
 **Lmin-bottom cross anchor (`a23`).**  Dually, if every player in the bottom
 stratum of `x` satisfied `z_i>x_i`, a short segment from `x` toward `z` would
-increase every old bottom coordinate before a higher stratum could cross it.
+increase every old bottom coordinate.  With `h=z-x` and (E0), every
+coefficient at the lowest affected old level is positive, so the Lmin
+criterion makes the increasing rearrangement lexicographically larger.
 Hence some `x`-bottom player has `z_i<=x_i`.
 
 These proofs allow tied strata and zero boundary coordinates.  The only place
@@ -186,18 +200,21 @@ Suppose `h` passes the relevant sufficient improvement test at a selected
 point `y`.  If every coalition tight at `y` had `h(S)>=0`, then all tight
 inequalities would remain satisfied along `y+epsilon h`.  There are finitely
 many nontight coalitions.  Each with `h(S)<0` has positive slack, so one can
-choose a common positive `epsilon` smaller than `Delta(y,h)` and all ratios
+define the single radius
 
 ```text
-(y(S)-v(S))/(-h(S)).
+epsilon_* = min({1,Delta(y,h)} union
+                {(y(S)-v(S))/(-h(S)):
+                 S proper, y(S)>v(S), h(S)<0}).          (E1)
 ```
 
-Again the minimum of an empty set is `+infinity`.  Every displayed finite
-quantity is strictly positive.  Coalitions with `h(S)>=0` cannot become
-violated, tight coalitions are safe by the supposition, and the chosen slack
-ratios protect all remaining coalitions.  Thus this one epsilon both
-preserves the payoff-stratum order needed for lex improvement and preserves
-every core inequality.
+The ratio set may be empty, but the set in (E1) always contains `1`; every
+other finite member is strictly positive, so `epsilon_*>0`.  Choose
+`0<epsilon<epsilon_*`.  Coalitions with `h(S)>=0` cannot become violated,
+tight coalitions are safe by the supposition, and the slack ratios protect all
+remaining coalitions.  The same epsilon lies below `Delta(y,h)`, so it also
+preserves the payoff-stratum order needed for lex improvement.  Thus one
+explicit positive radius handles both requirements.
 
 Efficiency is preserved because `h(N)=0`.  Singleton nonnegativity is already
 among the coalition inequalities because `v({i})=0`.  Hence a short improving

@@ -21,6 +21,7 @@ Read first:
 
 ```text
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
+coopgames/paper5/S6_INTERFACE_REVIEW_WORKSHEET.md
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/strict_exchange_semantic_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
@@ -46,11 +47,12 @@ between Lmin and Lmax.  Then manually trace at least one complete implication
 in each coefficient-two sign case `(2,3,1)` and `(3,3,0)` from its human
 direction through every negative cut and all seven blocker comparisons.
 
-Section 5 of the interface note now gives an explicit order-crossing bound
-`Delta(y,h)`, and Section 6 takes epsilon below both that bound and every
-nontight-coalition slack ratio.  Verify positivity of this common finite
-minimum and the resulting sorted-vector comparison; do not accept the phrase
-“sufficiently small” as a separate premise.
+Section 3 now uses `min(1,Delta)` for all three core-segment anchors.  Section
+6 uses the single radius `(E1)`, the minimum of `1`, `Delta`, and every
+nontight-coalition slack ratio.  Verify positivity and the resulting
+sorted-vector comparison; do not accept the phrase “sufficiently small” as a
+separate premise.  Record verdicts H1--H14 and F1--F9 directly in the
+worksheet.
 
 Section 7 then writes one full coefficient-two implication in each difficult
 case without SMT syntax: `p2_n3_t1:a72` has 24 explicitly parametrized
