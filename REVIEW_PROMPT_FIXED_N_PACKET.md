@@ -373,8 +373,13 @@ Hostile questions:
     independently verify that the sole payoff-comparison-eligible coalition
     is `N union {p}`, that the recorded `j` is below `p` in both selections,
     and that the zero-at-`p` witness plus `T_j` gives the stated disjoint-set
-    contradiction.  Decide whether the remaining payoff-order lemma can be
-    proved without enumerating refined strata.  For the 21-row template,
+    contradiction.  Reproduce the promoted uniform proof and
+    `positive_lmax_dominant_order_lemma_audit.json`: reconcile the 62 rows with
+    two concordant pairs and the 18 with three; check that every common-pair
+    alternative forces `delta_p=-A` or is excluded by gap inversion; then
+    verify that only `N union {p}` can have nonnegative gap and that the unique
+    low `j` makes the two disjoint witness lower bounds sum above one.  The
+    order audit must perform no infeasibility solve.  For the 21-row template,
     audit the complete gap proof around direction `(31)`: the two `-2`
     players must occupy one cell and have forced common excluded-player
     triples, the `-1` player must share their Lmax level but have higher Lmin,

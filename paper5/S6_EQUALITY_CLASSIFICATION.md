@@ -630,31 +630,43 @@ Thus only eight of the 109 one-direction rows are genuinely
 distance-sensitive.  This is an exact QF_LRA dependency audit, not a proof of
 the uniform statements in the table.
 
-The 80-row class compresses one step further.  In every row the payoff-only
-blocker test leaves exactly one possible negative-derivative coalition,
+The 80-row class has a uniform human direction proof.  Write `p` for the
+`P` player decreased by `h=e_r-e_p`.  Any actual common pair must be
+concordant in the sense of (34).  The order audit shows two possibilities:
+
+1. in 62 rows there are two concordant pairs and only one contains `p`; the
+   pair excluding `p` is ruled out by the gap inversion (35);
+2. in 18 rows all three pairs are concordant, but another `P` player shares
+   the exact `(x,z)` cell of `p`.
+
+Consequently every possible common pair either contains `p`, contains a
+player with the same gap as `p`, or is impossible by (35).  Since both members
+of a common pair have gap `-A`, all cases force
+`delta_p=-A`.  Equivalently, `T_p` itself is common.
+
+Now `h(S)<0` exactly when `p in S` and `r notin S`.  Adding another `P`
+player strictly decreases `delta(S)`.  If the poor-player part of `S` is a
+proper subset of `N`, its positive gap sum is strictly below `A`, so
+`delta(S)<0`; with all of `N` and no other `P`, the gap is zero.  Thus the
+only payoff-eligible negative-derivative coalition is
 
 ```text
 S = N union {p},
 ```
 
-where `p` is the `P` player decreased by `e_r-e_p`.  There is also a unique
-`j` in `P\{p}` lying below `p` in both selections for which the critical
-algebra forces `z(N union {p})>x(N union {j})`.  Once those two payoff facts
-are proved uniformly, the witness step is already human.  Among any two
-common triples, at least one of `T_p` and `T_j` is common.  If it is `T_p`,
-efficiency gives `z(N+p)=x(N+p)>x(N+j)`; if it is `T_j`, it gives
-`z(N+j)=x(N+j)<z(N+p)`.  The zero-at-`p` witness and the always-valid critical
-inequality for `T_j=(P\{j}) union {r}` would then imply
+and it is tight.  The audit also identifies a unique `j in P\{p}` strictly
+below `p` in both selections.  Since `T_p` is common,
+`z(N+p)=x(N+p)>x(N+j)`.  The zero-at-`p` singleton witness and the always-valid
+critical inequality for `T_j=(P\{j}) union {r}` would then imply
 
 ```text
 q^p(N) >= z(N+p),        q^p(T_j) >= 1-x(N+j).
 ```
 
 Their effective supports are disjoint, so the strict right-side sum exceeds
-one, impossible.  Consequently the remaining human task for this entire
-80-row template is now a payoff-order lemma showing that all other negative
-coalitions fail `x(S)>=z(S)` and identifying the common low player `j`; the
-exact audit verifies both statements in every finite support type.
+one, impossible.  Therefore `h=e_r-e_p` is Lmax-feasible in all 80 rows.
+`positive_lmax_dominant_order_lemma_audit.json` checks only the finite order
+hypotheses and the low player; it performs no LP or SMT infeasibility query.
 
 There is already a short human proof for representative survivor 40 in the
 80-row class.  Write its Lmin levels as `a<b<c` and its Lmax levels as
@@ -807,9 +819,11 @@ the two common equalities, and the six critical witnesses.  Distance `>2/3`
 is UNSAT; cvc5's exact CPC proof is checked by Ethos.  The finite audit maps
 all sixteen rows to this abstract lemma.  Consequently the unsimplified part
 of the complete Lmax-selected branch has been reduced to purely payoff-level
-classification for the other 214 critical rows and the payoff-order lemma in
-the 80-row direction template—no remaining Lmax residue mixes an unbounded
-number of support-table-specific witness arguments.
+classification for the other 214 critical rows.  The concordance/inversion
+lemma above now supplies that classification, while the uniform argument for
+the 80-row direction template closes its former payoff-order gap.  No
+remaining Lmax residue mixes an unbounded number of support-table-specific
+witness arguments.
 
 On the Lmin side, the 322 single directions likewise use only three role
 templates:
