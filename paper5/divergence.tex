@@ -27,7 +27,7 @@
 \title{Maximal divergence of the leximin and leximax\\
 core selections in exact games}
 \author{Maxwell Flanagan}
-\date{Draft of August 7, 2026}
+\date{Draft of August 9, 2026}
 
 \begin{document}
 \maketitle
@@ -59,7 +59,10 @@ it extremal: $s(5)=1/2$, with the sharper bound $1/3$ when the leximin
 strata form the pattern $(4,1)$, both attained.  We also prove that at five
 players \emph{both} egalitarian
 levels are certified by single coalitions --- the property whose failure
-from six players on accompanies the climb of $s(n)$.  We also close one natural route to a matching upper
+from six players on accompanies the climb of $s(n)$.  At six players a direct
+exactness-exchange finite proof gives the matching upper bound
+$s(6)=2/3$: fifteen sign-count relaxations are certified infeasible by
+independently checked exact proof objects.  We also close one natural route to a matching upper
 bound, by a seven-player game in which smoothing a generator toward
 uniformity collapses $\rho$ from $1/5$ to $0$.
 \end{abstract}
@@ -136,8 +139,9 @@ The answer is: as large as arithmetically possible.
 \begin{itemize}[nosep]
 \item $\sup_n s(n)=2$, and at fixed $n$, $s(n)\ge 2-8n/(n^2-(n\bmod2))$,
       which is $2-8/n$ for even $n$ (Theorem~\ref{thm:sup}); in particular
-      $s(n)\ge1$ from $n=8$ and $s(n)>1$ from $n=9$, and the bound is attained on the two-generator
-      class at $n=6,7,8$ by complete enumeration.
+      $s(n)\ge1$ from $n=8$ and $s(n)>1$ from $n=9$; the bound is the full
+      exact-class value at $n=6$, and is attained on the two-generator class
+      at $n=7,8$ by complete enumeration.
 \item The witnesses form a two-parameter family $G(p,k)$ whose two
       allocations are computed in closed form (Theorem~\ref{thm:family}),
       with the deficit identity $2-\rho(G(p,k))=2n/(k(p+1))$
@@ -153,6 +157,11 @@ The answer is: as large as arithmetically possible.
       regime (Theorems~\ref{thm:s5} and~\ref{thm:regime41}, by
       configuration-complete finite check, twice over) --- while the $n=5$
       extremal class is qualitatively unlike the $n\ge6$ one.
+\item At $n=6$ the family lower bound is sharp: $s(6)=2/3$
+      (Theorem~\ref{thm:s6}).  The upper bound is a table-free exact finite
+      proof using singleton exactness witnesses and lexicographic exchange
+      blockers; all fifteen sign-count cases have independently checked CPC
+      proof objects.
 \end{itemize}
 
 \paragraph{The mechanism, in one sentence.}
@@ -1456,6 +1465,85 @@ every feasible model here is audited before it is believed.
 
 \section{Obstructions to an upper bound}\label{sec:obstruction}
 
+\subsection{The exact six-player bound}
+
+The first nontrivial fixed dimension can now be closed without a generator
+normal form or a support-table census.
+
+\begin{theorem}[Six-player bound]\label{thm:s6}
+Every singleton-normalized exact six-player game satisfies
+\[
+ \|\Lmin(v)-\Lmax(v)\|_1\le \frac23v(N).
+\]
+The bound is attained by $G(2,3)$, and hence $s(6)=2/3$.
+\end{theorem}
+
+\begin{proof}
+Scale $T=v(N)$ to one and write $x=\Lmin(v)$, $z=\Lmax(v)$.  Put
+\[
+ P=\{i:x_i>z_i\},\qquad M=\{i:z_i>x_i\},\qquad E=\{i:x_i=z_i\}.
+\]
+If $x\ne z$, both $P$ and $M$ are nonempty.  Up to a common relabelling
+there are therefore fifteen triples $(p,m,e)$ with $p,m\ge1$ and
+$p+m+e=6$, and
+\[
+ \|x-z\|_1=2\sum_{i\in P}(x_i-z_i).                    \tag{28}
+\]
+
+Exactness at each singleton supplies a core point $q^i$ with $q^i_i=0$.
+Three elementary selection anchors will be used.  First, $z$ cannot have a
+unique top player $i$: moving a short distance toward $q^i$ would lower that
+unique maximum.  Second, some $z$-top player has $x_i\ge z_i$, since otherwise
+a short move from $z$ toward $x$ lowers every old top coordinate.  Dually,
+some $x$-bottom player has $z_i\le x_i$.  Each move stays in the core by
+convexity and improves the relevant sorted lexicographic vector before a
+neighbouring stratum can cross.
+
+Now let $h(N)=0$.  On the Lmin side call $h$ admissible if its lowest affected
+payoff stratum has a positive coefficient and no negative coefficient.  On
+the Lmax side call it admissible if its highest affected stratum has a
+negative coefficient and no positive coefficient.  Such a direction strictly
+improves the relevant sorted lexicographic vector for a sufficiently short
+positive step.  Optimality therefore forces a proper tight coalition $S$
+with $h(S)<0$; otherwise all tight core inequalities have nonnegative
+derivative and all other inequalities retain slack.  Core membership of the
+opposite selection and the six witnesses gives, respectively,
+\[
+ z(S)\ge x(S),\quad q^i(S)\ge x(S)\ (i\in N),           \tag{29}
+\]
+or
+\[
+ x(S)\ge z(S),\quad q^i(S)\ge z(S)\ (i\in N).           \tag{30}
+\]
+
+As a finite differential control, the pivot implementation of admissibility
+was compared with a separately written first-affected-stratum criterion on
+all $4{,}683$ labelled weak payoff orders, all $1{,}610$ bound-two directions,
+and both selections: $15{,}079{,}260$ comparisons with no mismatch.
+
+For each sign triple, impose nonnegativity and efficiency of $x,z,q^i$, the
+strict signs, (28) with left side $>2/3$, the three anchors, and the necessary
+blocker disjunction (29) or (30) for a finite menu of admissible integer
+directions.  Thirteen cases use only efficiency-preserving directions with
+coefficients in $\{-1,0,1\}$; $(2,3,1)$ and $(3,3,0)$ use coefficients in
+$[-2,2]$.  After deletion of redundant direction clauses the fifteen menu
+sizes are
+\[
+ 1,1,1,1,0,2,5,14,8,2,52,71,2,90,2,                  \tag{31}
+\]
+in lexicographic order of $(p,m,e)$.  Every resulting exact QF\_LRA formula
+is infeasible.  Z3 and cvc5 agree on every formula; cvc5 emits CPC with proof
+pedantry enabled and trust disabled, and Ethos checks all fifteen proofs as
+\texttt{correct}.  The formulas are relaxations: they retain only necessary
+consequences of tightness, so their infeasibility excludes every exact-game
+counterexample.  The source-to-formula regeneration, hashes, proof controls,
+and all retained directions are in the repository under
+\texttt{verifiers/s6/strict\_exchange\_*}.
+
+Thus the upper bound holds.  The family formula gives
+$\rho(G(2,3))=2(2(3-1)-1)/(3(2+1))=2/3$, proving equality.
+\end{proof}
+
 \subsection{No constant below $2$}
 
 Theorem~\ref{thm:sup} already rules out one shape of answer.  Any bound of
@@ -1466,8 +1554,9 @@ the finite-$n$ statement
 \[
  s_2(n)=2-\frac{8n}{n^2-(n\bmod2)}\qquad(n\ge6),
 \]
-currently confirmed by complete enumeration only at $n=6,7,8$, together with
-the question of whether $s(n)=s_2(n)$.
+now proved for the full exact class at $n=6$ by Theorem~\ref{thm:s6}, and
+confirmed by complete two-generator enumeration at $n=7,8$, together with the
+question of whether $s(n)=s_2(n)$ in larger dimensions.
 
 \subsection{No bound linear in the leximin floor}
 
@@ -1571,7 +1660,9 @@ five-player game; $1142$ symmetry classes, each infeasible in exact rational
 arithmetic), whose $M$-side Corollary~\ref{cor:cfg} consumes;
 and Theorems~\ref{thm:s5} and~\ref{thm:regime41} ($s(5)=1/2$ and the
 $(4,1)$ bound $1/3$; $2961$ configurations, two independent pipelines,
-machine-audited coverage).  Theorem~\ref{thm:cfg} is now a \emph{hand}
+machine-audited coverage); and Theorem~\ref{thm:s6} ($s(6)=2/3$; fifteen
+table-free sign-count relaxations, independently checked exact CPC proofs).
+Theorem~\ref{thm:cfg} is now a \emph{hand}
 result (its one-page proof replaced the original $10{,}974$-program
 check, which remains archived as confirmation);
 Lemma~\ref{lem:anchors} and
@@ -1608,23 +1699,23 @@ Four problems remain open.
       general.  At five players Theorem~\ref{thm:n5closed} \emph{proves}
       the equality, for every exact game and not only two-generator ones.
       Verified in $586/586$ random two-generator games at $n=4,\dots,7$.
-\item \textbf{An upper bound for $n\ge6$.}  Theorem~\ref{thm:sup} forces any
+\item \textbf{An upper bound for $n\ge7$.}  Theorem~\ref{thm:sup} forces any
       true bound
       to be asymptotically $2$, so every bound $c\cdot v(N)$ with $c<2$ is
       false for large $n$.  The right target is
-      $s_2(n)=2-8n/(n^2-(n\bmod2))$ for $n\ge6$, confirmed by complete
-      enumeration at $n=6,7,8$ only.  Section~\ref{sec:obstruction} closes
+      $s_2(n)=2-8n/(n^2-(n\bmod2))$ for $n\ge7$, confirmed by complete
+      enumeration at $n=7,8$ only.  The six-player case is now proved:
+      $s(6)=s_2(6)=2/3$ (Theorem~\ref{thm:s6}).
+      Section~\ref{sec:obstruction} closes
       the majorization route and the $C(n)\mu$ route.  $n=5$ is settled
-      (Theorem~\ref{thm:s5}); the second pipeline of its proof is
-      dimension-independent in its machinery, but the configuration universe
-      grows quickly and $s(6)$ has not been attempted.
+      (Theorem~\ref{thm:s5}); larger fixed dimensions remain open.
 \item \textbf{Is the two-generator class extremal?}  Adding a generator
       lowers the envelope and grows the core, so this is not automatic.  All
       evidence is negative for a counterexample: zero improvements from about
       $200$ third generators at each of $n=5,6,7,8$, and no improvement from
       seeded $c$-space climbing over the full exact class at $n=5,6,7$.  Open
-      globally; settled affirmatively at $n=5$, where the two-generator
-      maximum $\tfrac12$ equals $s(5)$.
+      globally; settled affirmatively at $n=5,6$, where the two-generator
+      lower bounds equal $s(5)$ and $s(6)$.
 \item \textbf{A structural explanation of the $n=5$ versus $n\ge6$ regime
       change.}  The question now has a sharp two-part form, replacing the
       earlier ``why five''.  \emph{Part one, answered}: the starved
@@ -1646,8 +1737,9 @@ Four problems remain open.
       saturates at $1$ while $s_2$ climbs to $2$, so it is dominated
       for large $n$ and says nothing about the supremum beyond
       $n=5$); the regime
-      change is the handover between champion families, and the value
-      $s(6)$ is the crossover's test.  \emph{Part two, open}: the floor
+      change is the handover between champion families.  The crossover test
+      is now resolved by Theorem~\ref{thm:s6}: both families attain the common
+      value $s(6)=2/3$.  \emph{Part two, open}: the floor
       side of Theorem~\ref{thm:n5closed} reduces (archived, with hand
       lemmas) to a single inequality --- for every ordered pair $(p,q)$
       of players, some core point satisfies $2y_p+y_q\ge3\lambda$ ---
@@ -1683,19 +1775,22 @@ identity, the resulting evaluation $\sup_n s(n)=2$, the identification of the
 $n=5$ anomaly with a proof by hand, the one-coalition certificate theorem
 and the pinned extremal configuration at five players, the evaluation
 $s(5)=\tfrac12$ with the $(4,1)$-regime bound $\tfrac13$, and the two closed
-routes of Section~\ref{sec:obstruction}.  Novelty remains conditional on specialist
+routes of Section~\ref{sec:obstruction}, together with the direct exactness-
+exchange evaluation $s(6)=\tfrac23$.  Novelty remains conditional on specialist
 review.
 
 \section*{Reproducibility note}
 
 Sections~2--4 and~6 are proved by hand and depend on no program.
-Theorems~\ref{thm:n5closed}, \ref{thm:regime41}
-and~\ref{thm:s5} are proved by exhaustive
+Theorems~\ref{thm:n5closed}, \ref{thm:regime41}, \ref{thm:s5},
+and~\ref{thm:s6} are proved by exhaustive
 finite exact-rational checks, described in their proofs; those checks are
 proof dependencies, archived in \texttt{../verifiers} with the
 theorem-to-driver map in its README (for Theorems~\ref{thm:regime41}
 and~\ref{thm:s5}, both pipelines, the coverage audit, and the full control
-suite).  Theorem~\ref{thm:cfg} is proved by hand; its superseded finite
+suite; for Theorem~\ref{thm:s6}, the fifteen source-regenerated QF\_LRA
+formulas, Z3/cvc5 records, trust-disabled CPC proofs, and Ethos checks under
+\texttt{s6/strict\_exchange\_*}).  Theorem~\ref{thm:cfg} is proved by hand; its superseded finite
 check and the hand proof's own symbolic guards are archived alongside.  The remaining
 programs are bug audits, not proof dependencies.  Exact rational programs in the companion repository
 independently reconstruct all displayed games and coalition values, the

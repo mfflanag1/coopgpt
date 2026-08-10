@@ -19,6 +19,12 @@ dependency.  External specialist review is still required, especially at the
 interfaces from selection optimality to exchange blockers and from equality
 classification to the first-crossing neighborhood.
 
+The newer direct strict-distance theorem in
+`S6_DIRECT_EXCHANGE_BOUND.md` proves `s(6)=2/3` without first crossing or this
+local refinement analysis.  This document is therefore now the stronger
+equality-rigidity companion and an independent audit route, not the upper
+bound's main proof.
+
 ## 1. Older staged-generator classification cross-check
 
 Assume the following audited dependencies:
@@ -1119,27 +1125,24 @@ is closed at a table-independent computer-assisted level.  The finite 504-row
 menu archive remains a discovery and differential cross-check rather than the
 proof-level dependency.
 
-## 7. Exact remaining gap
+## 7. First-crossing route superseded
 
-Equality itself and both equality-profile refinement neighborhoods are now
-closed at a table-independent computer-assisted level, and the two coarse
-barriers are human.  Conditional only on the first-crossing bridge and the
-audited mapping into the two local exchange theorems, this gives a
-proof-object barrier against crossing above `2/3`.
+Equality itself and both equality-profile refinement neighborhoods are closed
+at a table-independent computer-assisted level, and the two coarse barriers
+are human.  This would yield an alternative upper-bound proof after a hostile
+audit of continuity, first crossing, and the refinement maps.
 
-The remaining obligations before an unconditional six-player theorem are:
-
-1. hostilely verify the convex exact-game path, stagewise selection
-   continuity, first-crossing existence, contiguous-refinement inference, and
-   complete mapping into the positive/starved local exchange formulas; and
-2. preferably extract readable inequalities from the equality sign cases,
-   the positive abstract CPC cases, and the two universal starved exchange
-   formulas.
+That audit is no longer required for the theorem: the direct strict-distance
+exchange suite rules out a counterexample without constructing a path.  The
+remaining obligations are external review of the direct blocker reduction and,
+preferably, readable inequalities for its larger sign cases.  The
+first-crossing program remains a valuable independent cross-check and may
+still explain equality geometry better than the direct finite split.
 
 The older `222+151+131` starved decomposition and 504-row exactness-menu audit
 remain useful negative controls and discovery records, but neither is now a
-logical bottleneck.  More sampled games or raw solver cores would not close
-the remaining gap.
+logical bottleneck.  More sampled games or raw solver cores would not improve
+the new theorem's review status.
 
 ## 8. Reproduction
 
@@ -1151,6 +1154,7 @@ python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/reproduce_equality_exchange_classification.py
+python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/reproduce_starved_exactness_menus.py
 python3 coopgames/verifiers/s6/audit_starved_universal_exchange_mapping.py

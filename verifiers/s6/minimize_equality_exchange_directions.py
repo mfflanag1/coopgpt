@@ -24,8 +24,12 @@ from audit_equality_universal_exchange_relaxation import (  # noqa: E402
 )
 
 
-def case_configuration(positive, negative):
+def case_configuration(positive, negative, distance_relation="eq"):
     ties = 6 - positive - negative
+    if distance_relation == "gt":
+        if (positive, negative, ties) in ((2, 3, 1), (3, 3, 0)):
+            return 2, False, False
+        return 1, False, False
     if (positive, negative, ties) == (3, 3, 0):
         return 2, False, True
     if (positive, negative, ties) == (4, 2, 0):
@@ -47,6 +51,7 @@ def rebuilt_solver_from_row(row, timeout_ms=0):
         False,
         row["exclude_canonical"],
         timeout_ms,
+        row.get("distance_relation", "eq"),
     )
     assertions = list(solver.assertions())
     directional_count = 2 * direction_count
@@ -77,9 +82,11 @@ def rebuilt_solver_from_row(row, timeout_ms=0):
     return rebuilt
 
 
-def minimize_case(positive, negative, timeout_ms, max_greedy_core_size):
+def minimize_case(
+    positive, negative, timeout_ms, max_greedy_core_size, distance_relation="eq"
+):
     bound, extra_coefficient_two, exclude_canonical = case_configuration(
-        positive, negative
+        positive, negative, distance_relation
     )
     solver, *_rest, direction_count, ties = build(
         positive,
@@ -90,6 +97,7 @@ def minimize_case(positive, negative, timeout_ms, max_greedy_core_size):
         False,
         exclude_canonical,
         timeout_ms,
+        distance_relation,
     )
     assertions = list(solver.assertions())
     directional_count = 2 * direction_count
@@ -153,6 +161,7 @@ def minimize_case(positive, negative, timeout_ms, max_greedy_core_size):
         "bound": bound,
         "extra_coefficient_two": extra_coefficient_two,
         "exclude_canonical": exclude_canonical,
+        "distance_relation": distance_relation,
         "full_direction_count_per_side": direction_count,
         "initial_unsat_core_size": len(core_names),
         "greedily_minimized": greedily_minimized,
@@ -168,6 +177,7 @@ def main():
     parser.add_argument("--max-greedy-core-size", type=int, default=40)
     parser.add_argument("--output", type=Path)
     parser.add_argument("--case")
+    parser.add_argument("--distance-relation", choices=("eq", "gt"), default="eq")
     args = parser.parse_args()
     rows = []
     for positive in range(1, 6):
@@ -182,13 +192,15 @@ def main():
                     negative,
                     args.timeout_ms,
                     args.max_greedy_core_size,
+                    args.distance_relation,
                 )
             )
             print(f"closed {name}", file=sys.stderr, flush=True)
     if args.case and not rows:
         parser.error(f"unknown case {args.case!r}")
     payload = {
-        "schema": "equality-exchange-direction-cores-v1",
+        "schema": "exactness-exchange-direction-cores-v1",
+        "distance_relation": args.distance_relation,
         "scope": (
             "complete sign-count classification; unsat cores are discovery aids, "
             "while every retained unguarded formula is rechecked"

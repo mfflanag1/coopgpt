@@ -148,6 +148,7 @@ def build(
     forbid_top_triple,
     exclude_canonical,
     timeout_ms,
+    distance_relation="eq",
 ):
     tie_count = 6 - positive_count - negative_count
     solver = z3.Solver()
@@ -157,6 +158,16 @@ def build(
     positive = tuple(range(positive_count))
     negative = tuple(range(positive_count, positive_count + negative_count))
     tied = tuple(range(positive_count + negative_count, 6))
+    distance_left = 2 * z3.Sum(
+        *[x[player] - z[player] for player in positive]
+    )
+    distance_right = z3.RealVal("2/3")
+    if distance_relation == "eq":
+        distance_constraint = distance_left == distance_right
+    elif distance_relation == "gt":
+        distance_constraint = distance_left > distance_right
+    else:
+        raise ValueError(distance_relation)
     solver.add(
         z3.Sum(*x) == 1,
         z3.Sum(*z) == 1,
@@ -164,8 +175,7 @@ def build(
         *[x[player] > z[player] for player in positive],
         *[z[player] > x[player] for player in negative],
         *[x[player] == z[player] for player in tied],
-        2 * z3.Sum(*[x[player] - z[player] for player in positive])
-        == z3.RealVal("2/3"),
+        distance_constraint,
     )
     if exclude_canonical:
         solver.add(z3.Not(canonical_equality_formula(x, z, positive_count, negative_count)))
@@ -216,6 +226,7 @@ def main():
     parser.add_argument("--positive-count", type=int)
     parser.add_argument("--negative-count", type=int)
     parser.add_argument("--output", type=Path)
+    parser.add_argument("--distance-relation", choices=("eq", "gt"), default="eq")
     args = parser.parse_args()
     if args.require_top_triple and args.forbid_top_triple:
         parser.error("--require-top-triple and --forbid-top-triple are incompatible")
@@ -241,6 +252,7 @@ def main():
             args.forbid_top_triple,
             args.exclude_canonical,
             args.timeout_ms,
+            args.distance_relation,
         )
         verdict = solver.check()
         row = {
@@ -270,6 +282,7 @@ def main():
         "require_top_triple": args.require_top_triple,
         "forbid_top_triple": args.forbid_top_triple,
         "exclude_canonical": args.exclude_canonical,
+        "distance_relation": args.distance_relation,
         "verdict_summary": dict(sorted(Counter(row["verdict"] for row in rows).items())),
         "rows": rows,
     }

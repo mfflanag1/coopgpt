@@ -1,5 +1,13 @@
 # Hostile review — maximal divergence of Lmin and Lmax in exact games
 
+> **Update, 2026-08-09.** The six-player upper bound is no longer open in the
+> current branch: a new direct table-free computer-assisted theorem proves
+> `s(6)=2/3`. Review that claim first using
+> `EXTERNAL_REVIEW_S6_DIRECT_BOUND.md`. Where this older prompt says that
+> `s(6)` is open or only enumerated, the focused prompt and current manuscript
+> supersede it. All novelty and correctness claims remain conditional on
+> hostile external review.
+
 Please review the standalone manuscript:
 
 ```text

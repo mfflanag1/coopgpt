@@ -158,6 +158,32 @@ check `correct` in Ethos.  The prose reduction from exact-game selection
 optimality to the displayed blocker formulas remains a human-review boundary;
 see `paper5/EQUALITY_EXCHANGE_CLASSIFICATION.md`.
 
+The fifteen `strict_exchange_p*_n*_t*` controls strengthen the same reduction
+from equality to the strict upper bound.  They replace the distance equation
+by `||Lmin-Lmax||_1>2/3`, use no canonical-profile exclusion, and close all
+fifteen sign-count regimes directly.  Thirteen cases need only coefficient-one
+efficiency-preserving directions; `p2_n3_t1` and `p3_n3_t0` use coefficients
+in `[-2,2]`.  The frozen unguarded formulas retain 252 labeled directions in
+total.  Z3 and cvc5 return UNSAT and every trust-disabled CPC proof checks
+`correct` in Ethos.  Together with the exact `G(2,3)` witness these controls
+prove `s(6)=2/3`, subject to hostile review of the short human reduction in
+`paper5/S6_DIRECT_EXCHANGE_BOUND.md`.  The separate lex-predicate audit checks
+all 4,683 weak orders against all 1,610 bound-two directions on both sides
+(15,079,260 comparisons, zero mismatches); it is a combinatorial differential
+control rather than part of the CPC proof objects.
+
+The sharp lower-bound witness also has a targeted exact end-to-end regression:
+
+```bash
+python3 coopgames/verifiers/s6/verify_g23_witness.py
+```
+
+It reconstructs the lower envelope, checks a generator attains every
+coalition value (hence exactness), recomputes both selections using the
+repository's exact-rational staged LP implementation, and verifies
+`distance = 4`, `T = 6`, and `rho = 2/3`. It is a bug audit; the family
+theorem in the manuscript supplies the human proof of the lower bound.
+
 ## Pinned checker sources
 
 - cvc5 tag `cvc5-1.3.3`, commit

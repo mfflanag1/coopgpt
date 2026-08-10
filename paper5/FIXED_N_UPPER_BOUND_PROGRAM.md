@@ -7,6 +7,10 @@ a sharp explanation of the two known extremal-family regimes, and one failed
 strengthening detected before it became a conjecture.  Nothing below upgrades
 the open statement `s(n)=s_2(n)` to a theorem.
 
+The six-player case is now resolved separately: the direct table-free
+exactness-exchange theorem in `S6_DIRECT_EXCHANGE_BOUND.md` proves
+`s(6)=2/3`.  The general equality `s(n)=s_2(n)` remains open for larger `n`.
+
 ## 1. The right invariant is cross-selection overlap
 
 Let
@@ -309,11 +313,11 @@ two-for-two exchanges, and one coefficient-two Lmin shape.  Z3 and cvc5 both
 return UNSAT; cvc5 emits trust-free CPC and Ethos checks both proofs as
 `correct`.  The three-for-three finite-menu shape is redundant.
 
-Thus equality and both refinement neighborhoods are closed at a
-table-independent computer-assisted level.  The 3,348 equality-type
-exclusions and the generator normal form are no longer dependencies of this
-route.  The primary obstacle to an unconditional six-player theorem is now a
-hostile audit of the continuity/first-crossing bridge and of the finite maps
-from contiguous refinements into the two local exchange theorems.  Readable
-inequalities for the remaining abstract CPC cases are a secondary but
-valuable target.
+The later direct strict-distance exchange theorem supersedes this route for
+the upper bound itself.  It applies the same singleton-witness blocker idea to
+all fifteen signs of `Lmin-Lmax` with distance `>2/3`, and proves every case
+UNSAT with independently checked CPC.  Hence neither the 3,348 equality-type
+exclusions nor continuity, first crossing, generator normal form, or local
+refinement maps are dependencies of `s(6)=2/3`.  They remain useful structural
+cross-checks.  The live next target is a human compression of the larger
+strict sign cases and a hostile external review of the direct reduction.

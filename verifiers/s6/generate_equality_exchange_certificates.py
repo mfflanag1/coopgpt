@@ -21,12 +21,18 @@ def main():
     parser.add_argument("--cpc-signatures", type=Path, required=True)
     parser.add_argument("--timeout-seconds", type=int, default=300)
     parser.add_argument("--certificates", type=Path, default=HERE / "certificates")
+    parser.add_argument(
+        "--audit",
+        type=Path,
+        default=HERE / "equality_exchange_direction_cores.json",
+    )
+    parser.add_argument("--stem-prefix", default="equality_exchange")
     args = parser.parse_args()
-    audit = json.loads((HERE / "equality_exchange_direction_cores.json").read_text())
+    audit = json.loads(args.audit.read_text())
     args.certificates.mkdir(parents=True, exist_ok=True)
     for row in audit["rows"]:
         case = row["case"]
-        stem = f"equality_exchange_{case}"
+        stem = f"{args.stem_prefix}_{case}"
         formula = args.certificates / f"{stem}.smt2"
         proof = args.certificates / f"{stem}.cpc"
         record = args.certificates / f"{stem}.json"
@@ -35,6 +41,7 @@ def main():
                 sys.executable,
                 str(HERE / "export_equality_exchange_classification_smt.py"),
                 "--case", case,
+                "--audit", str(args.audit),
                 "--output", str(formula),
             ],
             check=True,
