@@ -77,9 +77,74 @@ inside `P` produces no new lemma.  The exact counts are:
 
 The frozen formulas remain labeled because their disjunctions refer to
 specific witness coordinates.  The orbit quotient is therefore explanatory,
-not a replacement proof.  It does, however, identify the human target
-precisely: derive six template lemmas and a short role-placement argument,
-rather than explain 213 directions one by one.
+not a replacement proof.  It does, however, identify a human target much
+smaller than 213 separate directions.
+
+### An irredundant 19-orbit proof core
+
+A second reduction groups the direction implications by the full sign-role
+signature above and minimizes at the orbit level.  It produces unguarded
+UNSAT formulas with the following smaller menus:
+
+| sign case | original orbits | selected orbits | selected labeled rows | needed coefficient archetypes |
+|---|---:|---:|---:|---|
+| `(3,2,1)` | 17 | 8 | 29 | H7, H8 |
+| `(3,3,0)` | 18 | 5 | 39 | H4, H5, H7, H8 |
+| `(4,2,0)` | 9 | 6 | 68 | H7, H8 |
+| **total** | **44** | **19** | **136** | **three up to reversal** |
+
+Deleting any one of the 19 selected orbit families makes its corresponding
+reduced relaxation SAT.  Those SAT ablations are navigation and irredundancy
+controls, not games and not independent proof evidence.  The three unguarded
+reduced formulas are independently UNSAT in Z3 and cvc5; their trust-disabled
+CPC proofs contain no forbidden markers and check `correct` in Ethos.
+
+Thus the remaining human target is 19 sign-role schemas built from only three
+unoriented exchange ideas.  In particular, the two coefficient-one large
+cases use only one-for-one and two-for-two exchanges.  The balanced case adds
+one asymmetric coefficient-two exchange and its reverse.  The H1/H2/H3 and
+H6 templates are dispensable from this reduced large-case proof.
+
+Here is the complete human checklist.  An entry such as
+`min: P[-1,0,0] M[0,1] E[0]` means every labeled Lmin direction whose
+coefficient multisets on `P,M,E` are the displayed lists.
+
+| case | schema | selected orbit |
+|---|---|---|
+| `(3,2,1)` | A1 | `min: P[0,0,0] M[0,1] E[-1]` |
+| | A2 | `max: P[-1,0,0] M[0,0] E[1]` |
+| | A3 | `min: P[-1,0,0] M[0,1] E[0]` |
+| | A4 | `max: P[0,0,1] M[-1,-1] E[1]` |
+| | A5 | `min: P[-1,0,0] M[0,0] E[1]` |
+| | A6 | `max: P[0,1,1] M[-1,0] E[-1]` |
+| | A7 | `max: P[0,1,1] M[-1,-1] E[0]` |
+| | A8 | `min: P[-1,-1,0] M[1,1] E[0]` |
+| `(3,3,0)` | B1 | `min: P[-1,0,0] M[0,0,1]` |
+| | B2 | `min: P[-1,-1,0] M[0,1,1]` |
+| | B3 | `max: P[0,0,1] M[-1,0,0]` |
+| | B4 | `max: P[0,1,2] M[-1,-1,-1]` |
+| | B5 | `min: P[-2,-1,0] M[1,1,1]` |
+| `(4,2,0)` | C1 | `min: P[-1,0,0,0] M[0,1]` |
+| | C2 | `max: P[-1,0,1,1] M[-1,0]` |
+| | C3 | `max: P[-1,0,0,1] M[0,0]` |
+| | C4 | `max: P[0,0,1,1] M[-1,-1]` |
+| | C5 | `min: P[-1,0,0,1] M[0,0]` |
+| | C6 | `min: P[-1,-1,0,0] M[1,1]` |
+
+Reproduce the full orbit minimization, including all 19 SAT ablations, with
+
+```bash
+python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py \
+  --output /tmp/strict_exchange_large_case_orbit_cores.json
+cmp /tmp/strict_exchange_large_case_orbit_cores.json \
+  coopgames/verifiers/s6/strict_exchange_large_case_orbit_cores.json
+```
+
+Verify byte regeneration and the frozen proof records with
+
+```bash
+python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+```
 
 ## 4. Independent coefficient-two control
 
@@ -105,7 +170,8 @@ to byte-regenerate both formulas and verify their hashes and proof records.
 
 This compression materially improves readability but is not yet an all-human
 proof of the three large cases.  A complete hand replacement would have to
-show, for each of the 44 sign-role placements, why the eligible negative cuts
-forced by the appropriate archetype cannot coexist.  The highest-value next
-step is to pair sign-reversed placements and derive a common cut inequality,
-starting with H8 and H7, before tackling the six coefficient-two placements.
+show, for each of the 19 selected sign-role schemas, why the eligible negative
+cuts forced by the appropriate archetype cannot coexist.  The highest-value
+next step is to derive common cut inequalities for A1--A8 and C1--C6, then
+handle the five-schema balanced core B1--B5, whose last two schemas form the
+H4/H5 coefficient-two reversal pair.

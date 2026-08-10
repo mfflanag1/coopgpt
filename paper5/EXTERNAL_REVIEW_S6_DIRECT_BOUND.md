@@ -31,6 +31,13 @@ coopgames/verifiers/s6/independent_bound_two/*.{smt2,cpc,json}
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
 coopgames/verifiers/s6/strict_exchange_large_case_templates.json
+coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py
+coopgames/verifiers/s6/strict_exchange_large_case_orbit_cores.json
+coopgames/verifiers/s6/orbit_core_certificates/*.{smt2,cpc,json}
+coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
+coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
+coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```
 
@@ -84,6 +91,10 @@ singleton-exactified overlap `2/3`.
    common game or actual tightness: every real counterexample maps into the
    relaxation, so UNSAT is sound.  Look specifically for any omitted premise
    needed by that map.
+   Use `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` as a claim to attack, not as an
+   authority.  Match each proof step to the literal assertion ranges in
+   `strict_exchange_formula_interface.json`, and inspect representative full
+   blocker disjunctions on both sides.
 7. **Direction pools.** Verify that `direction_pool(1)` and
    `direction_pool(2)` contain exactly the asserted efficiency-preserving
    integer directions, that only the two named cases use bound two, and that
@@ -144,8 +155,10 @@ Return `verified`, `verified with qualifications`, or `not verified` for:
 Also assess the orbit compression independently: reproduce
 `strict_exchange_large_case_templates.json`, verify the quotient action and
 counts, and state whether the six unoriented archetypes materially clarify
-the mathematics.  Do not treat the quotient as an all-human proof of the 44
-remaining sign-role placements.
+the mathematics.  Then audit the smaller 19-orbit core: verify the 8/5/6
+split, all 19 single-orbit SAT ablations, the 136-direction unguarded rebuilds,
+and the three CPC/Ethos records.  Do not treat this reduction as an all-human
+proof of the 19 remaining sign-role schemas.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

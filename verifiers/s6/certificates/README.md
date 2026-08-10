@@ -197,6 +197,26 @@ The three largest menus are additionally summarized by the non-proof audit
 reversal).  See `paper5/S6_EXCHANGE_ORBIT_LEMMAS.md`.  This quotient is an
 explanatory map, not an independent certificate of the formulas.
 
+The follow-up orbit-core suite under `../orbit_core_certificates/` is a genuine
+proof reduction for those three cases.  It retains every labeled implication
+in each selected sign-role orbit and reduces 44 orbits/213 directions to an
+irredundant 19 orbits/136 directions.  The split is 8, 5, and 6 orbits for
+`p3_n2_t1`, `p3_n3_t0`, and `p4_n2_t0`.  Every single-orbit deletion is SAT;
+every complete reduced formula is UNSAT in Z3 and cvc5 and has a separate
+trust-disabled CPC proof checked `correct` by Ethos.  Run
+
+```text
+python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+```
+
+Finally, `../strict_exchange_formula_interface.json` is the literal
+human-to-machine manifest.  It parses all frozen strict formulas and verifies
+that each declares only the 48 expected selection/witness reals, has the same
+72 documented base assertions, and contains only the recorded direction
+implications afterward.  It maps every implication to its named assertion and
+negative-cut count.  This audit excludes hidden machine premises; the human
+soundness proof remains `paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md`.
+
 The sharp lower-bound witness also has a targeted exact end-to-end regression:
 
 ```bash

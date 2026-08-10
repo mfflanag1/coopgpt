@@ -198,6 +198,23 @@ eight oriented coefficient templates, or six up to sign reversal.  The
 one-for-one and two-for-two templates cover 179 of the 213 rows.  This is a
 readability reduction, not an all-human replacement for the finite proof.
 
+A second, proof-checked orbit reduction is stronger.  It retains complete
+orbits but shrinks the three cases to 19 selected sign-role schemas and 136
+labeled implications.  The `(3,2,1)` and `(4,2,0)` cases use only one-for-one
+and two-for-two exchanges.  The balanced `(3,3,0)` case additionally uses one
+asymmetric coefficient-two shape and its reversal.  Each of the three reduced
+unguarded formulas is UNSAT in Z3 and cvc5 and has a fresh trust-disabled CPC
+proof checked by Ethos; deleting any one selected orbit makes that reduced
+relaxation SAT.  The SAT ablations establish irredundancy only inside the
+relaxation and are not games or independent proof evidence.
+
+`S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
+human soundness proof.  Its literal audit confirms that every original frozen
+formula declares exactly 48 reals and consists of exactly 72 documented base
+assertions followed only by its recorded direction implications.  This is the
+review boundary that matters: a reviewer should prove or refute that every
+genuine counterexample satisfies those assertions, not merely rerun UNSAT.
+
 The direct proof makes the older first-crossing, equality-neighborhood, and
 support-table programs logically unnecessary for `s(6)=2/3`.  They remain
 valuable differential checks and structural information about the equality
@@ -211,6 +228,11 @@ Run from the repository root:
 ```text
 python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
 python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
+  --output /tmp/strict_exchange_formula_interface.json
+cmp /tmp/strict_exchange_formula_interface.json \
+  coopgames/verifiers/s6/strict_exchange_formula_interface.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -241,6 +263,13 @@ coopgames/verifiers/s6/verify_independent_bound_two.py
 coopgames/verifiers/s6/independent_bound_two/*.{smt2,cpc,json}
 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
 coopgames/verifiers/s6/strict_exchange_large_case_templates.json
+coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py
+coopgames/verifiers/s6/strict_exchange_large_case_orbit_cores.json
+coopgames/verifiers/s6/orbit_core_certificates/*.{smt2,cpc,json}
+coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
+coopgames/verifiers/s6/strict_exchange_formula_interface.json
+coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```

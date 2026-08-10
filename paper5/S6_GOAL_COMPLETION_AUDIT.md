@@ -91,10 +91,13 @@ systems are UNSAT in Z3 and cvc5, and their new trust-disabled CPC proofs check
 `correct` in Ethos.  This materially reduces correlated implementation risk;
 it does not independently prove the human counterexample-to-formula map.
 
-The 52-, 71-, and 90-direction cases have also been compressed from 213
-labeled directions to 44 sign-role orbits and six coefficient archetypes up
-to reversal.  This is explanatory progress, not yet a complete hand proof of
-those 44 placements.
+The 52-, 71-, and 90-direction cases were first compressed from 213 labeled
+directions to 44 sign-role orbits.  A later unguarded minimization closes them
+with 136 directions in an irredundant 8/5/6 split, only 19 sign-role schemas
+total and three coefficient archetypes up to reversal.  Z3/cvc5 and checked
+CPC proofs certify all three smaller formulas; all 19 single-orbit ablations
+are SAT.  This is substantial explanatory progress, not yet a complete hand
+proof of those 19 schemas.
 
 ## 4. Sharpness and equality cases
 
@@ -128,6 +131,13 @@ the lower witness, and separate correctness, novelty, and significance.
 No equivalent quantitative fixed-dimensional separation theorem was found,
 but this negative result is expressly not treated as proof of novelty.
 
+`S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` now proves the human-to-machine map
+assertion by assertion.  The accompanying literal audit verifies that every
+frozen formula has exactly 48 declared reals, 72 documented base assertions,
+and only the recorded exchange implications afterward.  This makes the
+remaining external task sharply falsifiable, but it is not a substitute for
+an independent human verdict.
+
 No claim of external validation or field-level novelty is made.  The branch
 must not be merged before that review.  A negative external verdict would
 reopen the affected item in this ledger.
@@ -146,6 +156,11 @@ python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/audit_lex_improvement_predicate.py
 python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
 python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
+  --output /tmp/strict_exchange_formula_interface.json
+cmp coopgames/verifiers/s6/strict_exchange_formula_interface.json \
+  /tmp/strict_exchange_formula_interface.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \
