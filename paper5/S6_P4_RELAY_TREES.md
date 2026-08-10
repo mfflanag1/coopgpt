@@ -433,9 +433,9 @@ censuses and checks 95 blocker plus thirteen activation identities at all 122
 uses.  Of 105 blocker exclusions, 103 use only `q^1`; the two weak-left
 exceptions use only the opposite comparison.
 Class 1 is now hand-checkable as well.  Its solver-free verifier recomputes
-twenty-one cut censuses and checks 65 blocker plus 60 activation identities at
-232 uses.  It audits all 165 activation-failure cases, including eighteen
-direct contradictions between the strict failures `x5<x4` and `x4<x5`.
+twenty-one cut censuses and checks 65 blocker plus 44 activation identities at
+160 uses.  The identity `min(x_a,x_b)>min(x_4,x_5)` compresses every two-donor
+activation to four failure conjunctions, giving 75 activation cases in total.
 
 ## 7. Universal order completion and remaining hand gap
 
@@ -450,7 +450,7 @@ the resulting all-class anatomy.
 Classes 2, 5, and 6 remain unresolved only at the hand-certificate layer.
 Their order-refined trees share the parent encoding and have not yet been
 compressed into independent exact identities.  Class 1 has crossed that
-boundary, although its 125-row proof object remains a compression target rather
+boundary, although its 109-row proof object remains a compression target rather
 than a short conceptual lemma.  The remaining rows are precise structural
 targets, not counterexamples or unexplained open leaves.
 

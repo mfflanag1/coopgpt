@@ -2,9 +2,9 @@
 """Verify the class-1 universal-order relay using exact rational arithmetic.
 
 This checker imports no solver and no production encoder.  It reconstructs
-the affine premises at all 232 certificate uses, recomputes twenty-one exact
-difference-cone candidate censuses, and audits all 165 activation-failure
-cases, including eighteen direct order contradictions.
+the affine premises at all 160 certificate uses, recomputes twenty-one exact
+difference-cone candidate censuses, and audits all 75 activation-failure
+cases after a solver-free order-theoretic DNF compression.
 """
 from __future__ import annotations
 
@@ -195,6 +195,25 @@ def failure_atoms(direction,case):
  right=[f'x{i}<=x5' for i in negative]+['x4<=x5']
  return (left[(case-1)//3],right[(case-1)%3]) if 1<=case<=9 else ()
 
+def audit_activation_logic():
+ # For hab=-ea-eb+e4+e5, the production antecedent says that both
+ # donors lie strictly above whichever recipient is lower.  Its failure is
+ # (a<=r or b<=r) and (a<=s or b<=s), whose four-term DNF is frozen below.
+ cases={1,2,4,5}
+ for a in range(4):
+  for b in range(4):
+   for r in range(4):
+    for s in range(4):
+     production=(a>r and b>r and s>=r) or (a>s and b>s and r>=s)
+     failure=any(all({'a<=r':a<=r,'b<=r':b<=r,'a<=s':a<=s,'b<=s':b<=s}[atom]
+                         for atom in ({1:('a<=r','a<=s'),2:('a<=r','b<=s'),
+                                       4:('b<=r','a<=s'),5:('b<=r','b<=s')}[case]))
+                 for case in cases)
+     if production==failure:raise AssertionError('activation DNF equivalence failed')
+ return {'tested_total_preorder_representatives':4**4,
+         'production_antecedent':'(a>r and b>r and s>=r) or (a>s and b>s and r>=s)',
+         'equivalent_form':'min(a,b)>min(r,s)','failure_dnf_cases':[1,2,4,5]}
+
 def census(override=None):
  result={}
  for name,(h,side,branches,expected) in STRUCT.items():
@@ -214,24 +233,18 @@ def audit_uses(uses,identities):
  expected={s:STRUCT[s][3]-survivors for s,survivors in SURVIVORS.items()}
  if actual!=expected:raise AssertionError(f'blocker use map incomplete: {actual}')
  acts=[u for u in uses if u['kind']=='activation'];actual_cases={(u['stage'],u['failure_case']) for u in acts}
- expected_cases=set();direct=[]
+ expected_cases=set()
  for name,(_,_,_,_) in STRUCT.items():
   direction=parse_stage(name)['direction']
-  for case in ((1,) if direction==10 else range(1,10)):
-   atoms=failure_atoms(direction,case)
-   if case==9 and direction!=10:
-    if set(atoms)!={'x5<=x4','x4<=x5'}:raise AssertionError('direct contradiction changed')
-    direct.append({'stage':name,'failure_case':9,'strict_failures':['x5<x4','x4<x5']})
-   else:expected_cases.add((name,case))
+  for case in ((1,) if direction==10 else (1,2,4,5)):expected_cases.add((name,case))
  for use in acts:
   direction=parse_stage(use['stage'])['direction'];expected_atoms=failure_atoms(direction,use['failure_case'])
   if tuple(use.get('failure_atoms',()))!=expected_atoms:raise AssertionError(f'failure atoms changed at {use["stage"]} case {use["failure_case"]}')
- if actual_cases!=expected_cases or len(acts)!=147:raise AssertionError('activation failure map incomplete')
- if len(direct)!=18:raise AssertionError('direct contradiction census changed')
+ if actual_cases!=expected_cases or len(acts)!=75:raise AssertionError('activation failure map incomplete')
  if {u['identity'] for u in uses}!=set(identities):raise AssertionError('orphan identity')
  return {'blocker_uses_by_stage':{s:len(v) for s,v in expected.items()},
          'certified_activation_failures_by_stage':{s:sum(u['stage']==s for u in acts) for s in sorted(STRUCT)},
-         'direct_strict_order_contradictions':direct,'total_activation_failure_cases':len(acts)+len(direct)}
+         'total_activation_failure_cases':len(acts)}
 
 def audit_semantics(uses,identities,strict=frozenset({'d0','S-strict'})):
  counts={'D-1/3':0,'d0':0,'S-strict':0};sources={'q1_only':0,'opposite_only':0,'both':0}
@@ -242,7 +255,7 @@ def audit_semantics(uses,identities,strict=frozenset({'d0','S-strict'})):
    co='Co' in row['inequality_multipliers'];cq='Cq' in row['inequality_multipliers']
    sources['both' if co and cq else 'opposite_only' if co else 'q1_only' if cq else 'both']+=1
    if not (co or cq):raise AssertionError('blocker certificate uses neither source comparison')
- if counts!={'D-1/3':223,'d0':6,'S-strict':3}:raise AssertionError(f'target counts changed: {counts}')
+ if counts!={'D-1/3':153,'d0':6,'S-strict':1}:raise AssertionError(f'target counts changed: {counts}')
  if sources!={'q1_only':37,'opposite_only':12,'both':36}:raise AssertionError(f'source localization changed: {sources}')
  return counts,sources
 
@@ -259,8 +272,8 @@ def main():
  identities={row['id']:row for row in source['identities']}
  if len(identities)!=len(source['identities']) or len({signature(r) for r in identities.values()})!=len(identities):raise AssertionError('identity ids are not deduplicated')
  counts={k:sum(r['kind']==k for r in identities.values()) for k in ('blocker','activation')}
- if counts!={'blocker':65,'activation':60}:raise AssertionError(f'identity counts changed: {counts}')
- structure=census();use_audit=audit_uses(source['uses'],identities);targets,sources=audit_semantics(source['uses'],identities)
+ if counts!={'blocker':65,'activation':44}:raise AssertionError(f'identity counts changed: {counts}')
+ structure=census();logic=audit_activation_logic();use_audit=audit_uses(source['uses'],identities);targets,sources=audit_semantics(source['uses'],identities)
  checked=[verify_use(use,identities) for use in source['uses']]
  bad=copy.deepcopy(identities);first=bad[source['uses'][0]['identity']];premise=next(iter(first['inequality_multipliers']));first['inequality_multipliers'][premise]=str(Fraction(first['inequality_multipliers'][premise])+1)
  coefficient=reject(lambda:verify_use(source['uses'][0],bad),'rejected coefficient perturbation')
@@ -274,13 +287,13 @@ def main():
  atom_mutation=reject(lambda:audit_uses(altered,identities),'rejected activation-failure atom mutation')
  strict=reject(lambda:audit_semantics(source['uses'],identities,frozenset()),'rejected removal of strict-target semantics')
  payload={'schema':'strict-exchange-p4-class1-hand-certificate-audit-v1','status':'PASS',
-  'scope':'twenty-one exact difference-cone censuses, 125 deduplicated rational identities, exhaustive 232-use map, and all 165 activation-failure cases; no solver or production encoder',
+  'scope':'twenty-one exact difference-cone censuses, 109 deduplicated rational identities, exhaustive 160-use map, and all 75 DNF-compressed activation-failure cases; no solver or production encoder',
   'packet':{'first_optional_players':[],'second_optional_players':[]},
   'order_tree':['x3<=x4','x3>x4'],
   'identity_counts':counts,'use_counts':{k:sum(u['kind']==k for u in source['uses']) for k in ('blocker','activation')},
   'target_use_counts':targets,'blocker_source_localization':sources,
   'strict_target_semantics':{'d0':'x0-z0 is strictly negative by the original positive d0 sign','S-strict':'x4-x3 is strictly negative on the strict root branch'},
-  'structural_census':structure,'use_map_audit':use_audit,'coefficient_mutation_control':coefficient,
+  'structural_census':structure,'activation_logic_audit':logic,'use_map_audit':use_audit,'coefficient_mutation_control':coefficient,
   'use_site_mutation_control':use_site,'census_mutation_control':candidate,'use_map_mutation_control':use_delete,
   'activation_atom_mutation_control':atom_mutation,'strict_target_mutation_control':strict,'checked_uses':checked}
  rendered=json.dumps(payload,indent=2,sort_keys=True)+'\n'

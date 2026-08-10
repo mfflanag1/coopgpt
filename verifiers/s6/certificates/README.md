@@ -340,8 +340,9 @@ opposite selection alone.  It uses exact `Fraction` arithmetic, imports no
 solver or production encoder, and rejects the same five mutation classes.
 
 Class 1 closes its fifteen-leaf universal-order tree through twenty-one exact
-difference-cone censuses.  Its proof object has 65 blocker and 60 activation
-identities mapped to 232 uses and audits all 165 activation-failure cases:
+difference-cone censuses.  A minimum-level lemma compresses each two-donor
+activation to four failure conjunctions.  Its proof object has 65 blocker and
+44 activation identities mapped to 160 uses and audits all 75 activation cases:
 
 ```text
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py \

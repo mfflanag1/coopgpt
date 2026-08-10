@@ -132,7 +132,7 @@ the exhaustive split `x_3<=x_4` versus `x_3>x_4`, bringing the total to
 twenty-two packets.  Class 10 adds a seventh hand-checkable row after the same
 root split and one nested comparison, bringing the total to twenty-four
 packets.  Class 1 is now the eighth hand-checkable row: twenty-one exact cut
-censuses and 125 rational identities at 232 uses bring the total to twenty-five
+censuses and 109 rational identities at 160 uses bring the total to twenty-five
 packets.  Three classes covering the other seven packets remain machine-resolved.
 All three nevertheless close under the same root split `x_3<=x_4` versus
 `x_3>x_4`; in fact this split gives complete relay trees for all eleven
@@ -150,9 +150,9 @@ Class 9 uses ten exact difference-cone censuses and 52 distinct rational
 identities, checked at all 71 uses by a solver-free verifier.
 Class 10 uses eighteen exact censuses and 108 identities checked at all 122
 uses; 103 of its 105 blocker exclusions require only `q^1`.
-Class 1 uses twenty-one exact censuses and an exhaustive 165-case activation
-failure audit; its 65 blocker plus 60 activation identities are checked at all
-232 uses without a solver or production import.
+Class 1 uses twenty-one exact censuses and a minimum-level lemma compressing
+its activation audit to 75 cases; its 65 blocker plus 44 activation identities
+are checked at all 160 uses without a solver or production import.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, and class-1 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 2, 5, and 6 remain

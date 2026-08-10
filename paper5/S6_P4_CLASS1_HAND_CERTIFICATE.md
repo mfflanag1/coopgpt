@@ -98,21 +98,32 @@ or
 (xa>x5 and xb>x5 and x4>=x5).                    (1.2)
 ```
 
-Failure of (1.2) expands into nine pairs of failed atoms.  The ninth pair
-contains both strict failures `x5<x4` and `x4<x5` and is contradictory.  For
-each of the other eight pairs, the certificate uses the weaker non-strict
-relations and proves either `D<=1/3` or, in three strict-root cases,
-`x4-x3<=0`; the latter is strict on `S`.  There are eighteen such two-branch
-activation sites, hence 144 rational cases plus eighteen direct contradictions.
-The three `h10` sites each have the single failure `z1<=z0`.  The checker
-therefore audits all
+The two alternatives in (1.2) have the simpler order-theoretic form
 
 ```text
-144 + 18 + 3 = 165
+min(xa,xb) > min(x4,x5).                          (1.3)
 ```
 
-activation-failure cases.  This explicit DNF coverage is necessary: neither
-alternative of (1.2) is individually forced at the generic relay states.
+Indeed, the first alternative applies when `x4<=x5` and the second when
+`x5<=x4`.  Failure of (1.3) is
+
+```text
+(xa<=x4 or xb<=x4) and (xa<=x5 or xb<=x5),
+```
+
+which expands to only four conjunctions.  The checker verifies the equivalence
+against all 256 four-level assignments, covering every total-preorder type of
+the four payoffs.  At each of eighteen two-donor activation sites, four exact
+rational certificates exclude those conjunctions.  The three `h10` sites each
+have the single failure `z1<=z0`.  Thus the complete activation audit has
+
+```text
+18*4 + 3 = 75
+```
+
+cases, rather than the raw nine-case expansion.  This minimum-level lemma is
+the conceptual compression: neither original alternative is individually
+forced, but their disjunction is a single donor-versus-recipient order test.
 
 ## 5. Exact census and certificate compression
 
@@ -122,14 +133,14 @@ excluded by exact payoff/witness identities.  The activation and blocker rows
 deduplicate as follows:
 
 ```text
-65 blocker identities + 60 activation identities = 125 identities,
-85 blocker uses       + 147 activation uses       = 232 uses.
+65 blocker identities + 44 activation identities = 109 identities,
+85 blocker uses       + 75 activation uses        = 160 uses.
 ```
 
 Among the 85 blocker uses, 37 use only the `q1` comparison, twelve use only
-the opposite-allocation comparison, and 36 use both.  Across all uses, 223
-identities target `D-1/3`, six target the strict sign `x0-z0<0`, and three
-target the strict branch sign `x4-x3<0`.
+the opposite-allocation comparison, and 36 use both.  Across all uses, 153
+identities target `D-1/3`, six target the strict sign `x0-z0<0`, and one
+targets the strict branch sign `x4-x3<0`.
 
 The checker rebuilds every named premise at each use site, verifies all
 multipliers and affine identities with exact rational arithmetic, recomputes

@@ -139,8 +139,8 @@ Class 9, covering four labelled pairs, closes after `x_3<=x_4` versus
 at all 71 stage uses by a solver-free rational verifier.  Class 10, covering
 two labelled pairs, adds eighteen exact cut censuses and 108 identities
 checked at all 122 uses.  Class 1, covering one labelled pair, adds twenty-one
-exact censuses and 125 identities checked at all 232 uses, including an
-exhaustive audit of 165 activation-failure cases.  Three packet classes covering
+exact censuses and 109 identities checked at all 160 uses.  A minimum-level
+lemma reduces its complete activation audit to 75 cases.  Three packet classes covering
 seven labelled pairs remain machine-resolved.  A separate forced-exchange audit
 sharpens that boundary: classes `1,3,4,7,8,9,10,11` now have complete exact
 relay certificates and together cover twenty-five labelled packets.  All eight

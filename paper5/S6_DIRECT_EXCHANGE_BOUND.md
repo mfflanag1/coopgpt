@@ -259,8 +259,9 @@ nine-leaf two-order tree through eighteen exact difference-cone censuses and
 108 identities checked at 122 uses.  Its terminal leaves force `D<=1/3`
 directly; 103 of 105 blocker exclusions use only the `q^1` comparison.
 Class 1 adds a fifteen-leaf universal-order relay: twenty-one exact cut censuses,
-85 blocker exclusions, and all 165 activation-failure cases are checked through
-125 deduplicated identities at 232 uses.  Together the eight hand lemmas remove
+85 blocker exclusions, and a minimum-level lemma compressing activation to 75
+failure cases.  Its 109 deduplicated identities are checked at 160 uses.
+Together the eight hand lemmas remove
 twenty-five labelled packets from the
 finite residue.
 

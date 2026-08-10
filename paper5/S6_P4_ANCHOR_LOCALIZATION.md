@@ -138,8 +138,9 @@ The same audit closes classes 9 and 10 after minimal payoff-order trees.  The
 class-9 branch inequalities are now humanized by ten exact cut censuses and a
 solver-free 71-use certificate audit.  Class 10 is now humanized as well: its
 eighteen cut censuses and 122-use exact certificate audit close all nine
-leaves directly at `D<=1/3`.  Class 1 adds a twenty-one-census, 232-use exact
-certificate audit of its fifteen-leaf universal-order tree.
+leaves directly at `D<=1/3`.  Class 1 adds a twenty-one-census, 160-use exact
+certificate audit of its fifteen-leaf universal-order tree, with a minimum-level
+lemma reducing the activation audit to 75 cases.
 
 ## 5. Reproduction
 

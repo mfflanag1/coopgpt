@@ -292,12 +292,12 @@ hand-checkable without relying on the SMT blocker census.
 
 For class 1, independently derive the packet sandwich (1.1), all twenty-one
 difference-cone candidate sets, and the fifteen-leaf relay in
-`S6_P4_CLASS1_HAND_CERTIFICATE.md`.  Audit the complete nine-case failure
-expansion of the disjunctive Lmin activation premise: eight relaxed rational
-cases and the direct contradiction `x5<x4` with `x4<x5` at each of eighteen
-sites, plus the three single-case Lmax activations.  Then audit the 125
-deduplicated identities at all 232 uses.  Check the six strict `d_0` targets,
-three strict-root `x4-x3` targets, all three blocker-source categories, and all
+`S6_P4_CLASS1_HAND_CERTIFICATE.md`.  Prove that the production Lmin activation
+disjunction is equivalent to `min(xa,xb)>min(x4,x5)` and that its failure has
+exactly the four recorded DNF conjunctions.  Audit those four cases at each of
+eighteen sites plus the three single-case Lmax activations.  Then audit the 109
+deduplicated identities at all 160 uses.  Check the six strict `d_0` targets,
+one strict-root `x4-x3` target, all three blocker-source categories, and all
 six mutation controls.  State explicitly whether this is a valid exact finite
 proof object and separately whether it is conceptually compressed enough for
 the paper; do not infer either answer from `PASS`.
