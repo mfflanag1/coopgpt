@@ -1083,9 +1083,13 @@ The highest-value next theorem is now sharply localized:
 The two coarse stratum/table barriers are human, and the positive arbitrary-
 split neighborhood is now closed computer-assistively without projecting to
 one-split directions.  On the starved side, a payoff-only tangent separator
-already finds eight direction templates covering 222 of the 504 rows; the
-remaining 282 require staged information.  Completing their selected-packet
-compression, together with the first-crossing argument, would replace the
+finds eight direction templates covering 222 of the 504 rows.  A complete
+bound-two exchange-menu search then closes 140 more with Lmin menus and 11
+with Lmax menus.  The menu sizes are two through four, and every reported
+menu is checked against the full continuum of payoff levels in its order
+type.  Thus only 131 rows remain genuinely staged-dependent; the exact
+decomposition is frozen in `starved_payoff_menu_audit.json`.  Completing their
+selected-packet compression, together with the first-crossing argument, would replace the
 global strict census by a checked local proof conditional on the equality
 classification.  An unconditional theorem would still require a structural
 or proof-object replacement for the 3,348 equality-type exclusions and
@@ -1093,8 +1097,9 @@ hostile review of the normal-form and continuity dependencies.  More sampled
 games or unsat cores would not close those gaps.
 
 For the starved profile, the next calculation should begin with the 222
-payoff-separated rows and the `128/376` packet separator.  The main question
-is which critical tight families distinguish the remaining 282 rows and
+payoff-separated rows, the 151 payoff-menu rows, and the `128/376` packet
+separator.  The main question is which critical tight families distinguish
+the remaining 131 rows and
 whether their selected-packet contradictions reduce to a small direction or
 exchange-menu family.  The positive relaxation (23)--(25) remains a mandatory
 negative control against discarding later staged information in any proposed

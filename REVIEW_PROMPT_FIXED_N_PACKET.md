@@ -258,7 +258,12 @@ Hostile questions:
     the positive side.  Separately reproduce
     `starved_refinement_direction_audit.json`: six Lmin and two Lmax payoff
     direction templates must close 222 rows by direct blocker checks, leaving
-    282 staged-information rows.
+    282 single-direction residue rows.  Reproduce the bound-two payoff-menu
+    shards and `starved_payoff_menu_audit.json`: Lmin menus must close 140,
+    Lmax menus 11, with size split `94/38/8` for Lmin sizes `2/3/4` and `8/3`
+    for Lmax sizes `2/3`, leaving exactly 131 staged-dependent rows.  Verify
+    the all-directions-blocked quantifier and do not treat minimized unsat
+    cores as proof objects.
 12. Audit the human index-1408 barrier separately from the census.  Check the
     gap coordinates `u,v,w`, the identity `1=6c+8v-4w`, the inference
     `v>1/6 => 2w>v`, and the coalition count argument proving
