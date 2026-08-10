@@ -207,7 +207,12 @@ Then reproduce the forced-relay audit.  Check that its branch rule is sound,
 that every recorded discarded blocker is genuinely UNSAT with the current
 branch, and that classes `3,4,7,8,11` cover eighteen labelled packets.  Do not
 promote the closed trees for classes 4, 7, or 11 to hand proofs until their
-individual activation and blocker inequalities are supplied.
+individual activation and blocker inequalities are supplied.  For class 11,
+independently check (11.1)--(11.4) in `S6_P4_RELAY_TREES.md`: the first three
+identities now humanize every exchange activation and the fourth excludes the
+otherwise awkward first blocker `{0,1}`.  Confirm that these are genuine
+progress but not a complete hand proof, because the remaining blocker-cut
+classification is still supplied by the finite audit.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

@@ -270,6 +270,173 @@ def class3_hand_checks(timeout_ms):
     }
 
 
+def class11_relay_reduction_checks(timeout_ms):
+    """Restate the class-11 relay and check its two displayed hand identities.
+
+    This is deliberately not labelled a complete hand proof: the exact blocker
+    lists are still finite SMT classifications.  The two algebraic identities
+    checked below isolate the human part that no longer depends on those lists.
+    """
+    x = [z3.Real(f"packet_class11_x_{index}") for index in range(6)]
+    z = [z3.Real(f"packet_class11_z_{index}") for index in range(6)]
+    q1 = [z3.Real(f"packet_class11_q_{index}") for index in range(6)]
+    d = [x[index] - z[index] for index in range(6)]
+    distance = point_sum(d, (0, 1, 2, 3))
+    p4 = (1, 2, 4)
+    p5 = (1, 2, 3, 5)
+    common = [
+        point_sum(x, range(6)) == 1,
+        point_sum(z, range(6)) == 1,
+        point_sum(q1, range(6)) == 1,
+        q1[1] == 0,
+        *(value >= 0 for value in (*x, *z, *q1)),
+        *(d[index] > 0 for index in (0, 1, 2, 3)),
+        *(d[index] < 0 for index in (4, 5)),
+        *(x[0] <= x[index] for index in range(1, 6)),
+        *(z[1] >= z[index] for index in (0, 2, 3, 4, 5)),
+        distance > z3.RealVal(1) / 3,
+        *packet_constraints(x, z, q1, (2,), (2, 3)),
+    ]
+
+    # The first Lmax exchange is activated by z_1>z_2,z_3.  The final
+    # Lmin exchange is activated by x_1>x_2.  Both negations contradict the
+    # displayed packet inequalities and D>1/3.
+    first_activation_premises = [
+        point_sum(x, range(6)) == 1,
+        point_sum(z, range(6)) == 1,
+        *(z[index] >= 0 for index in range(6)),
+        *(z[1] >= z[index] for index in (0, 2, 3, 4, 5)),
+        x[0] <= x[5],
+        distance > z3.RealVal(1) / 3,
+        point_sum(z, p4) >= point_sum(x, p4),
+        point_sum(z, p5) >= point_sum(x, p5),
+    ]
+    if verdict(
+        [*first_activation_premises, z3.Or(z[1] <= z[2], z[1] <= z[3])],
+        timeout_ms,
+    ) != z3.unsat:
+        raise AssertionError("class-11 first Lmax activation did not close")
+    if verdict([*common, x[1] <= x[2]], timeout_ms) != z3.unsat:
+        raise AssertionError("class-11 final Lmin activation did not close")
+
+    # Check the exact weighted identity printed in the paper note for the
+    # implication x_1<=x_2 => D<=1/3.  Every parenthesized term is <=0 under
+    # that assumption; the final term is the efficiency equality for z.
+    activation_identity = (
+        z3.RealVal(1) / 3 * (-x[4])
+        + z3.RealVal(4) / 3 * (-z[0])
+        + z3.RealVal(1) / 3 * (-z[3])
+        + z3.RealVal(2) / 3 * (z[1] - x[1])
+        + (x[0] - x[5])
+        + z3.RealVal(2) / 3 * (z[5] - z[1])
+        + z3.RealVal(1) / 3 * (point_sum(x, p4) - point_sum(z, p4))
+        + (point_sum(x, p5) - point_sum(z, p5))
+        + z3.RealVal(1) / 3 * (x[1] - x[2])
+        + z3.RealVal(1) / 3 * (point_sum(z, range(6)) - 1)
+    )
+    activation_residual = z3.simplify(
+        activation_identity - (distance - z3.RealVal(1) / 3)
+    )
+    if not z3.eq(activation_residual, z3.RealVal(0)):
+        raise AssertionError(
+            f"class-11 x-order weighted identity changed: {activation_residual}"
+        )
+
+    def eligible(direction):
+        return [
+            tuple(index for index in range(6) if mask & (1 << index))
+            for mask in range(1, (1 << 6) - 1)
+            if sum(direction[index] for index in range(6) if mask & (1 << index)) < 0
+        ]
+
+    def comparisons(coalition, side):
+        if side == "max":
+            return [
+                point_sum(x, coalition) >= point_sum(z, coalition),
+                point_sum(q1, coalition) >= point_sum(z, coalition),
+            ]
+        return [
+            point_sum(z, coalition) >= point_sum(x, coalition),
+            point_sum(q1, coalition) >= point_sum(x, coalition),
+        ]
+
+    def feasible_blockers(direction, side, premises):
+        rows = []
+        for coalition in eligible(direction):
+            status = verdict([*common, *premises, *comparisons(coalition, side)], timeout_ms)
+            if status == z3.sat:
+                rows.append(coalition)
+            elif status != z3.unsat:
+                raise RuntimeError(
+                    f"class-11 {side} blocker {coalition} returned {status}"
+                )
+        return rows
+
+    first_direction = (0, -1, 1, 1, 0, -1)
+    second_direction = (0, -1, 1, 0, 0, 0)
+    first_feasible = feasible_blockers(first_direction, "max", [])
+    expected_first = [(0, 1, 2, 5)]
+    if first_feasible != expected_first:
+        raise AssertionError(f"unexpected class-11 first blockers: {first_feasible}")
+
+    first_rows = comparisons(expected_first[0], "max")
+    second_feasible = feasible_blockers(second_direction, "max", first_rows)
+    expected_second = [(0, 1, 3)]
+    if second_feasible != expected_second:
+        raise AssertionError(f"unexpected class-11 second blockers: {second_feasible}")
+
+    second_rows = comparisons(expected_second[0], "max")
+    terminal_feasible = feasible_blockers(
+        second_direction, "min", [*first_rows, *second_rows]
+    )
+    if terminal_feasible:
+        raise AssertionError(f"unexpected class-11 terminal blockers: {terminal_feasible}")
+
+    # One otherwise awkward first-stage exclusion, C={0,1}, has a compact
+    # checkable weighted identity.  This records the exact algebra rather than
+    # treating an UNSAT core as proof evidence.
+    c01 = (0, 1)
+    c01_identity = (
+        z3.RealVal(4) / 3 * (-z[0])
+        + z3.RealVal(1) / 3 * (-z[2])
+        + z3.RealVal(1) / 3 * (-z[3])
+        + z3.RealVal(1) / 3 * (-q1[4])
+        + (x[0] - x[5])
+        + z3.RealVal(2) / 3 * (z[5] - z[1])
+        + z3.RealVal(2) / 3 * (point_sum(x, p5) - point_sum(z, p5))
+        + z3.RealVal(1) / 3 * (point_sum(x, p5) - point_sum(q1, p5))
+        + z3.RealVal(1) / 3 * (point_sum(z, c01) - point_sum(q1, c01))
+        + z3.RealVal(1) / 3 * (point_sum(q1, range(6)) - 1)
+        + z3.RealVal(1) / 3 * q1[1]
+    )
+    c01_residual = z3.simplify(c01_identity - (distance - z3.RealVal(1) / 3))
+    if not z3.eq(c01_residual, z3.RealVal(0)):
+        raise AssertionError(
+            f"class-11 C={{0,1}} weighted identity changed: {c01_residual}"
+        )
+
+    return {
+        "packet_class": 11,
+        "packet": {
+            "first_optional_players": [2],
+            "second_optional_players": [2, 3],
+        },
+        "human_activated_directions": [list(first_direction), list(second_direction)],
+        "negated_first_lmax_activation_verdict": "unsat",
+        "negated_final_lmin_activation_verdict": "unsat",
+        "x_order_weighted_identity": "checked",
+        "first_eligible_negative_cut_count": len(eligible(first_direction)),
+        "first_feasible_blockers": [list(item) for item in first_feasible],
+        "c01_blocker_weighted_identity": "checked",
+        "second_eligible_negative_cut_count": len(eligible(second_direction)),
+        "second_feasible_blockers": [list(item) for item in second_feasible],
+        "terminal_feasible_blockers": [],
+        "complete_forced_relay": True,
+        "complete_hand_proof": False,
+        "remaining_human_task": "replace the other finite blocker exclusions by structural inequalities",
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -411,6 +578,7 @@ def main():
         "classes": rows,
         "class3_hand_lemma": class3_hand_checks(args.timeout_ms),
         "class8_hand_lemma": class8_hand_checks(args.timeout_ms),
+        "class11_relay_reduction": class11_relay_reduction_checks(args.timeout_ms),
     }
     rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
     if args.output:

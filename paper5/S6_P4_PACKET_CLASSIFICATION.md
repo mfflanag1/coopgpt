@@ -128,7 +128,9 @@ rows can now be removed from that residue completely.
 classes (`3,4,7,8,11`), covering eighteen of the 32 feasible labelled packets,
 close by forced-exchange relay trees with no order split.  Classes 3 and 8 are
 the two hand proofs below; classes 4, 7, and 11 are now concrete next targets
-rather than opaque UNSAT rows.
+rather than opaque UNSAT rows.  For class 11, all three relay activations and
+two exact weighted identities are now displayed by hand; its remaining
+blocker-cut exclusions have not yet been promoted from the finite audit.
 
 ## 4. Class 3 is a two-exchange hand relay
 
@@ -310,7 +312,11 @@ The audit independently checks within the parent encoding that
    blocker pairs are UNSAT;
 8. the reduced class-8 activation negation is UNSAT; and
 9. each of the twenty eligible class-8 blocker comparisons is UNSAT without
-   a `q^1` premise.
+   a `q^1` premise;
+10. the class-11 activation negations are UNSAT, and the displayed
+    `x_1<=x_2` and `C={0,1}` weighted sums are literal identities; and
+11. the independently restated class-11 relay has the unique blockers
+    `{0,1,2,5}`, then `{0,1,3}`, and no terminal blocker.
 
 The authoritative proof object for the unsplit, weaker relaxation remains
 the trust-disabled CPC proof in

@@ -130,8 +130,11 @@ labelled pairs remain machine-resolved.
 A separate forced-exchange audit sharpens that boundary: classes `3,4,7,8,11`
 have complete relay trees and together cover eighteen labelled packets.
 Classes 4 and 11 reduce to a three-leaf star and a unique three-exchange chain,
-respectively; they remain machine-checked until their blocker exclusions are
-written as hand inequalities.  Six other classes contain explicit open relay
+respectively.  All three class-11 exchange activations are now proved by
+displayed inequalities, and two of its less transparent exclusions have
+literal weighted-sum identities; the remaining blocker exclusions are still
+machine-classified, so class 11 is not yet counted as an all-human packet.
+Six other classes contain explicit open relay
 leaves, including classes 9 and 10 where no core direction is initially
 forced.
 

@@ -272,8 +272,12 @@ cmp /tmp/strict_exchange_p4_relay_trees.json \
   coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 ```
 
-Only classes 3 and 8 currently have separate hand proofs; the other closed
-trees are machine-checked road maps for the next lemmas.
+Only classes 3 and 8 currently have complete separate hand proofs.  The packet
+audit now also restates class 11 independently, checks all three activation
+negations, verifies two displayed weighted identities algebraically, and
+recovers its unique two-blocker chain.  Its remaining cut exclusions are still
+machine-classified, so class 11 remains a partially humanized road map rather
+than a hand proof.
 
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies

@@ -88,7 +88,74 @@ max-to-min exchange-relay lemma.
 Class 7 is also complete but has four leaves and depth three.  It should be
 attempted after classes 4 and 11.
 
-## 4. What remains unresolved
+## 4. Human activation reduction for class 11
+
+The three exchanges in the class-11 chain are no longer black-box
+activations.  Here `A={2}`, `B={2,3}`, write
+
+```text
+d_i=x_i-z_i  (i in P),     delta_m=z_m-x_m  (m in M),
+D=d_0+d_1+d_2+d_3=delta_4+delta_5>1/3.
+```
+
+The two packet opposite comparisons and their complements give
+
+```text
+d_1+d_2 <= delta_4 <= d_0,
+d_1+d_2+d_3 <= delta_5 <= d_0+d_3.              (11.1)
+```
+
+Since `x_0<=x_5`, (11.1) implies
+
+```text
+D <= d_0+delta_5 <= z_5-z_0.                    (11.2)
+```
+
+If `z_1=z_j` for `j=2` or `3`, topness of `z_1` and nonnegativity give
+
+```text
+3D <= 3(z_5-z_0) <= z_1+z_j+z_5-3z_0 <= 1,
+```
+
+a contradiction.  Hence `z_1>z_2,z_3`, which activates both Lmax directions
+in the chain.
+
+The last Lmin direction requires `x_1>x_2`.  If instead `x_1<=x_2`, direct
+addition of valid nonpositive terms gives the checkable identity
+
+```text
+3D-1 = -x_4-4z_0-z_3 +2(z_1-x_1)+3(x_0-x_5)+2(z_5-z_1)
+       +(x(P4)-z(P4))+3(x(P5)-z(P5))+(x_1-x_2)+(z(N)-1),   (11.3)
+```
+
+where `P4={1,2,4}` and `P5={1,2,3,5}` are the packet coalitions.  Every term
+on the right of (11.3) is nonpositive; the last is zero.  Thus `D<=1/3`, a
+contradiction.  This proves all three relay activations by displayed
+inequalities.
+
+The finite audit still supplies the blocker classification
+
+```text
+first Lmax blocker:   {0,1,2,5} only;
+second Lmax blocker:  {0,1,3} only;
+final Lmin blockers:  none.
+```
+
+One awkward first-stage exclusion also has a short displayed certificate.  If
+`C={0,1}` were an Lmax blocker, then
+
+```text
+3D-1 = -4z_0-z_2-z_3-q_4 +3(x_0-x_5)+2(z_5-z_1)
+       +2(x(P5)-z(P5)) +(x(P5)-q(P5)) +(z(C)-q(C))
+       +(q(N)-1)+q_1 <= 0.                              (11.4)
+```
+
+The audit checks (11.3) and (11.4) as literal polynomial identities, in
+addition to independently restating the packet and relay.  Class 11 is not
+yet labelled an all-human packet proof: the other cut exclusions still need
+structural inequalities or an explicit family of checkable certificates.
+
+## 5. What remains unresolved
 
 The relay method stalls immediately in classes 9 and 10 because none of the
 directions in the chosen subset-minimal core is forced before an additional
@@ -101,7 +168,7 @@ parent formula and does not validate the human-to-machine map.  Its purpose is
 to turn the residual finite proof into a short list of concrete exchange and
 blocker lemmas suitable for external review.
 
-## 5. Reproduction
+## 6. Reproduction
 
 Run from the repository root with the Z3-enabled Python environment:
 
