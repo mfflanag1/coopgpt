@@ -1,0 +1,195 @@
+# Independent reconstruction packet for the six-player theorem
+
+Date: 2026-08-10
+
+Review branch `codex/fixed-n-handover-facets` at commit `02524cc` or later.
+The target theorem is the sharp singleton-normalized exact-game bound
+
+```text
+||Lmin(v)-Lmax(v)||_1 <= 2/3 v(N)    for n=6.
+```
+
+This packet is deliberately shorter than `EXTERNAL_REVIEW_S6_DIRECT_BOUND.md`.
+It identifies the remaining logical gates after exactification and orbit-level
+compression.  A solver rerun is not a substitute for any gate below.  The
+work has not received the requested external specialist validation, and the
+literature search does not establish novelty.
+
+## Gate 1: reconstruct the counterexample-to-relaxation implication
+
+Read first:
+
+```text
+coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
+coopgames/verifiers/s6/strict_exchange_formula_interface.json
+coopgames/verifiers/s6/strict_exchange_semantic_interface.json
+coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
+coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
+```
+
+Independently prove or refute each arrow:
+
+```text
+exact game
+ -> normalized nonnegative core allocations x,z and singleton witnesses q^i
+ -> one of the fifteen canonical sign cases
+ -> the three selection anchors
+ -> every retained direction is genuinely sorted-lex improving when active
+ -> optimality supplies a negative tight blocker
+ -> the blocker supplies every retained opposite/witness comparison
+ -> one complete frozen implication row.
+```
+
+Pay particular attention to tied payoff strata, zero coordinates, the common
+short-step choice across all nontight coalitions, and the orientation switch
+between Lmin and Lmax.  Then manually trace at least one complete implication
+in each coefficient-two sign case `(2,3,1)` and `(3,3,0)` from its human
+direction through every negative cut and all seven blocker comparisons.
+
+Required reviewer output: a table with one row per assertion family, marked
+`proved`, `false`, or `not checked`, with a citation to the precise source
+line or a counterexample.  Passing JSON audits prove transcription and local
+equivalence only; they do not prove the mathematical arrows.
+
+## Gate 2: independently reconstruct the two coefficient-two cases
+
+The existing second formulation is here:
+
+```text
+coopgames/verifiers/s6/independent_bound_two_reconstruction.py
+coopgames/verifiers/s6/verify_independent_bound_two.py
+coopgames/verifiers/s6/independent_bound_two/audit.json
+coopgames/verifiers/s6/independent_bound_two/p2_n3_t1.{smt2,cpc,json}
+coopgames/verifiers/s6/independent_bound_two/p3_n3_t0.{smt2,cpc,json}
+```
+
+It shares only the frozen retained menus with the production proof and imports
+none of the production encoder, lex predicate, blocker builder, direction
+generator, minimizer, or serializer.  It records:
+
+```text
+(2,3,1): 14 retained directions, base SAT, full formula UNSAT;
+(3,3,0): 71 retained directions, base SAT, full formula UNSAT.
+```
+
+For genuine independence, write a third formulation without importing either
+Python encoder.  Recommended minimal specification:
+
+1. declare `x,z,q^0,...,q^5` directly;
+2. encode the sign case, efficiency, nonnegativity, strict distance and three
+   anchors from the mathematical statement;
+3. implement lex activation by the first affected payoff level, not by the
+   pivot code;
+4. enumerate nonempty proper coalitions and retain exactly those with
+   negative direction sum;
+5. generate opposite plus six singleton-witness comparisons directly; and
+6. check base SAT, full UNSAT, and logical equivalence of sampled complete
+   implication rows against the frozen SMT-LIB.
+
+Do not count a byte comparison, a shared helper, or a second solver on the
+same formula as independent reconstruction.  The CPC/Ethos records establish
+UNSAT of the stored formulas after the human-to-formula map is accepted.
+
+Reproduction command:
+
+```bash
+python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+```
+
+The verifier permits the recorded local Z3 version to differ as provenance,
+but requires every substantive audit field and both generated SMT-LIB files
+to reproduce exactly; it separately checks the frozen formula and CPC hashes.
+
+## Gate 3: reconstruct the class-5 large map
+
+Read:
+
+```text
+coopgames/paper5/S6_P4_CLASS5_PACKET_SKELETON.md
+coopgames/verifiers/s6/verify_strict_exchange_p4_class5_cut_census.py
+coopgames/verifiers/s6/strict_exchange_p4_class5_cut_census_audit.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class5_allocation_identities.py
+coopgames/verifiers/s6/verify_strict_exchange_p4_class5_activation_identities.py
+```
+
+The arithmetic status is complete conditional on the map:
+
+```text
+1736 = 1464 pure exclusions + 34 context + 150 target + 88 branches;
+285 activation failures = 195 direct contradictions + 90 witness covers.
+```
+
+The map is now compressed.  Reconstruct, without reading the relay JSON while
+deriving it:
+
+- the fifteen rich-player-parametric menu templates and their 24 labelled
+  expansions;
+- the weak/strict path grammar generating all 88 edges and 51 leaves; and
+- the activation split into 253 path-free uses and a 32-use ancestor-dependent
+  residual.
+
+The 32 residual uses have only three families: eight terminal `h11/h12`,
+thirteen exceptional `h16`, and eleven terminal `h17/h18` cases.  Exact affine
+canonicalization reduces all 72 activation identities to 47 motifs, including
+20 for this residual.  Forgetting source-depth aliases does not prove that a
+motif is available at a given path; verify every residual placement.
+
+## Gate 4: reconstruct the class-6 large map
+
+Read:
+
+```text
+coopgames/paper5/S6_P4_CLASS6_PACKET_SKELETON.md
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_cut_census.py
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_context_identities.py
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py
+```
+
+Reconstruct the seven direction menus plus the weak `h11:C124` refinement and
+the seven-rule transition grammar.  Confirm
+
+```text
+924 = 711 pure exclusions + 11 context + 155 target + 47 branches
+```
+
+and all 29 terminal leaves.  Then reconstruct the `124=84+4+36` activation
+partition and the placement of the 36 witness plus four direct identities.
+The rational identities remove solver dependence from arithmetic; they do not
+derive their relay/use sites.
+
+## Gate 5: novelty is a separate review
+
+Start with:
+
+```text
+coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
+```
+
+Search beyond its terminology in exact-partition games, antiduality,
+large-core games, exact-cone facets and indecomposable semi-balanced systems,
+base-polyhedron decreasing/increasing minimizers, polymatroid exchange, and
+coherent lower probabilities.  Specifically ask whether any known theorem
+implies the sharp fixed-six inequality or an equivalent exchange principle.
+
+The current defensible statement is only: a targeted primary-source search
+did not locate an equivalent theorem.  Report correctness and novelty as two
+separate conclusions.
+
+## Requested final review format
+
+Classify every issue as `fatal`, `repairable`, or `expository`, with exact
+file and line references.  End with separate answers:
+
+1. Does every genuine counterexample map into a frozen relaxation?
+2. Are the two coefficient-two cases independently reconstructed?
+3. Are the class-5 and class-6 maps independently derivable from the stated
+   orbit grammars?
+4. Is the theorem already known under another formulation?
+5. If correct and new, is this a finite computational theorem, a substantial
+   structural theorem, or a major field-level result?
+
+Until Gates 1--5 receive specialist answers, describe the result as a strong
+computer-assisted six-player theorem candidate with extensive solver-free
+arithmetic and structural compression, not as externally validated or a
+major field breakthrough.

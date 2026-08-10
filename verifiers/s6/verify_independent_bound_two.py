@@ -40,7 +40,13 @@ def main():
         # Paths differ by construction; the mathematical metadata and bytes do not.
         for row in regenerated_audit["rows"]:
             row["formula"] = f"independent_bound_two/{row['case']}.smt2"
-        if regenerated_audit != frozen_audit:
+        # The generator records the local Z3 version as provenance.  A version
+        # upgrade must not invalidate byte-identical formulas and substantive
+        # audit metadata.
+        regenerated_z3_version = regenerated_audit.pop("z3_version", None)
+        frozen_comparable = dict(frozen_audit)
+        frozen_z3_version = frozen_comparable.pop("z3_version", None)
+        if regenerated_audit != frozen_comparable:
             raise AssertionError("independent reconstruction audit did not regenerate")
         for case in CASES:
             if (temporary / f"{case}.smt2").read_bytes() != (
@@ -70,7 +76,12 @@ def main():
                 "proof_sha256": cpc["proof_sha256"],
             }
         )
-    print(json.dumps({"status": "PASS", "checked": checked}, indent=2))
+    print(json.dumps({
+        "status": "PASS",
+        "frozen_z3_version": frozen_z3_version,
+        "regenerated_z3_version": regenerated_z3_version,
+        "checked": checked,
+    }, indent=2))
 
 
 if __name__ == "__main__":

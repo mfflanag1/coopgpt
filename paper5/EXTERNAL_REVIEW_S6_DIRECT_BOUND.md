@@ -15,6 +15,7 @@ accepted without an independent literature search.
 ## Read first
 
 ```text
+coopgames/paper5/S6_EXTERNAL_RECONSTRUCTION_PACKET.md
 coopgames/paper5/S6_GOAL_COMPLETION_AUDIT.md
 coopgames/paper5/S6_DIRECT_EXCHANGE_BOUND.md
 coopgames/verifiers/s6/audit_equality_universal_exchange_relaxation.py

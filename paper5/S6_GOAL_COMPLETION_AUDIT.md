@@ -236,6 +236,10 @@ artifacts, and a hostile-review packet; do not overstate novelty.
 is `EXTERNAL_REVIEW_S6_DIRECT_BOUND.md`.  It asks reviewers to audit every
 load-bearing interface, independently encode the two bound-two cases, verify
 the lower witness, and separate correctness, novelty, and significance.
+`S6_EXTERNAL_RECONSTRUCTION_PACKET.md` is the shorter operational handoff: it
+orders the remaining work into the human-to-machine map, coefficient-two
+reconstruction, class-5/class-6 map reconstruction, and novelty gates, with
+exact paths and required reviewer outputs.
 
 `S6_LITERATURE_NOVELTY_AUDIT.md` records a targeted primary-source search.
 No equivalent quantitative fixed-dimensional separation theorem was found,
