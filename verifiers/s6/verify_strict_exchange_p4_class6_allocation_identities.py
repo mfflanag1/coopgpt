@@ -63,7 +63,7 @@ def comparison_form(side, coalition):
     )
 
 
-def premise(source):
+def premise(source, packet5=(0, 1, 2, 5)):
     if source == "B0":
         form = point_sum("x", range(6)); form[0] = -1
         return "eq", form
@@ -98,7 +98,7 @@ def premise(source):
             other = (0, 2, 3, 4, 5)[index - 5]
             return "ge", combine((1, unit(8)), (-1, unit(7 + other)))
     if source in ("P4", "P5"):
-        coalition = (0, 1, 4) if source == "P4" else (0, 1, 2, 5)
+        coalition = (0, 1, 4) if source == "P4" else packet5
         return "ge", combine((1, point_sum("z", coalition)), (-1, point_sum("x", coalition)))
     if source == "order-W":
         return "ge", combine((1, unit(5)), (-1, unit(4)))

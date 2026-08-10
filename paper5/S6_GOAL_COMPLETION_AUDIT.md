@@ -142,31 +142,36 @@ checked at all 122 uses.  Class 1, covering one labelled pair, adds twenty-one
 exact censuses and 109 identities checked at all 160 uses.  A minimum-level
 lemma reduces its complete activation audit to 75 cases.  Class 2, covering two labelled
 pairs, adds 21 exact censuses and 108 identities at 132 uses.  Its shared
-minimum/maximum-level lemma reduces activation to 72 cases.  Of the last two
-packet classes covering five labelled pairs, class 6 now has complete exact
-arithmetic conditional on frozen integration maps, while class 5 remains
-machine-resolved.  A
+minimum/maximum-level lemma reduces activation to 72 cases.  The last two
+packet classes covering five labelled pairs now both have complete exact
+arithmetic conditional on frozen integration maps.  A
 separate forced-exchange audit sharpens that boundary: classes
 `1,2,3,4,7,8,9,10,11` now have complete exact relay certificates and together
 cover twenty-seven labelled packets.  All nine now have independently
-specified hand-checkable proof objects; class 6 has a complete conditional
-arithmetic certificate and class 5 remains machine-resolved at the
-hand-certificate layer.
+specified hand-checkable proof objects; classes 5 and 6 have complete
+conditional arithmetic certificates but not independently derived relay/use
+maps.
 A universal order audit eliminates their open leaves: `x_3<=x_4` versus
 `x_3>x_4` closes every one of the eleven packet classes, with class 10 the
 unique row requiring a nested `x_1`/`x_2` split.  The remaining gap is
-completion of class 5, conceptual compression and independent map validation
-for class 6, not unknown finite anatomy.
-There is now a first solver-free class-5 compression: the symmetric packet
+conceptual compression and independent map validation for classes 5 and 6,
+not unknown finite anatomy.
+Class 5 has a solver-free packet compression: the symmetric packet
 sandwich and cross-anchor chain replace all ten `h15` activation checks by one
 lemma and reduce each of its sixteen-cut blocker censuses to the same ten
-packet-level candidates.  This is a verified partial skeleton, not a tenth
-complete hand-checkable packet row.  Three exact crossing identities also
+packet-level candidates.  Three exact crossing identities also
 exclude seven of the thirty formal `h10`/`h15` blocker pairs in only three
 orbits.  The weak and strict roots also have complete hand classifications:
 twenty cuts reduce respectively to three and four blockers, using only one
-seven-term witness identity beyond the packet/sign arguments.  The 51 relay
-leaves remain to be compressed.
+seven-term witness identity beyond the packet/sign arguments.  Across all 90
+nodes, 1,736 eligible cuts split into 1,464 pure difference-cone exclusions,
+34 context exclusions, 150 target-witness exclusions and 88 relay branches.
+The 184 exclusions reduce to 107 exact rational identities.  The 285
+activation failures split into 195 exact allocation contradictions and 90
+unit-weight witness over-covers, all covered by 72 exact rational identities.
+No class-5 arithmetic leaf remains machine-only.  The 51-leaf map still needs
+orbit-level compression and independent reconstruction before this is a tenth
+hand-checkable packet row.
 Class 6 now has complete solver-free arithmetic conditional on its frozen
 relay/use maps.  Its stronger sandwich reduces both twenty-cut roots to two
 blockers apiece without a witness identity.  Across 49 nodes, exact
@@ -197,7 +202,7 @@ the convex hull of the non-anchor incidence columns; feasibility of lower
 requirements is characterized by all nonnegative support inequalities.  The
 result supplies a sparse LP/facet algorithm and explains the class-5 crossing
 identities as incidence over-covers.  It is elementary convex duality, not a
-novelty claim or a completion of the remaining opposite-comparison work.
+novelty claim or an independent validation of the relay/use maps.
 
 ## 4. Sharpness and equality cases
 
@@ -317,6 +322,24 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.
   --output /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json \
   /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class5_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class5_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class5_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class5_allocation_identity_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class5_allocation_identity_audit.json \
+  /tmp/strict_exchange_p4_class5_allocation_identity_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_cut_census.py \
+  --output /tmp/strict_exchange_p4_class5_cut_census_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class5_cut_census_audit.json \
+  /tmp/strict_exchange_p4_class5_cut_census_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class5_activation_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class5_activation_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class5_activation_details.json \
+  --output /tmp/strict_exchange_p4_class5_activation_identity_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class5_activation_identity_audit.json \
+  /tmp/strict_exchange_p4_class5_activation_identity_audit.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py \
   --output /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json \

@@ -266,16 +266,24 @@ identities at 132 uses.  Together the nine hand lemmas remove twenty-seven
 labelled packets from the
 finite residue.
 
-Class 5 now has a verified partial hand skeleton.  Its symmetric packet gives
+Class 5 now has a verified hand skeleton and complete exact arithmetic
+conditional on its frozen relay/use maps.  Its symmetric packet gives
 `d0+d1<=delta4,delta5<=d2+d3`; two cross-anchor chains make `h10` and `h15`
 automatic, and one exact cut argument reduces all ten `h15` nodes from sixteen
 eligible cuts to the same ten opposite-comparison candidates.  Three crossing
 identities exclude seven of the thirty formal `h10`-predecessor/`h15`-blocker
-pairs.  The checker is solver-free, but this is not yet a complete tenth hand
-lemma.  The root split itself is now structural: its two twenty-cut censuses
+pairs.  The root split itself is structural: its two twenty-cut censuses
 reduce to exact three- and four-blocker lists, with only one seven-term witness
-identity beyond signs.  The 51 leaves and their non-root filters must still be
-compressed.
+identity beyond signs.  Across the full 90-node tree, 1,736 eligible cuts
+split exactly into 1,464 pure difference-cone exclusions, 34 context
+exclusions, 150 target-witness exclusions, and 88 relay branches.  The 184
+witness exclusions reduce to 107 exact rational identities.  The 285
+activation-failure cases split into 195 exact allocation contradictions and
+90 unit-weight witness over-covers, all covered by 72 exact rational
+identities.  Solver-free checkers verify every arithmetic identity and the
+exhaustive partitions.  This is not yet a tenth independently derived hand
+lemma: the relay/use maps and the 51-leaf conceptual compression remain the
+external-review boundary.
 The other remaining row, class 6, has an asymmetric sandwich
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`.  It reduces both
 twenty-cut roots to two blockers using signs alone.  Its 29 non-root leaves
@@ -311,14 +319,13 @@ problem.  It is standard convex duality, not an additional novelty claim.
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the
 32 feasible labelled packets.  All nine now have hand-checkable proof objects;
-the other two packet classes, covering five labelled packets, differ in proof
-status: class 6 now has complete exact arithmetic conditional on its frozen
-maps, while class 5 retains machine-resolved residue.  They are no longer
-structurally open: the single universal split
+the other two packet classes, covering five labelled packets, now both have
+complete exact arithmetic conditional on their frozen maps.  They are no
+longer structurally or arithmetically open: the single universal split
 `x_3<=x_4` versus `x_3>x_4` closes all eleven packet classes as relay trees,
 with only class 10 requiring the nested `x_1`/`x_2` split.  Thus the remaining
-gap is completion of the partial class-5 skeleton, conceptual compression of
-class 6, and external validation of its maps, not an unexplained SAT leaf.  See
+gap is orbit-level compression of classes 5 and 6 and external validation of
+their maps, not an unexplained SAT leaf.  See
 `S6_P4_UNIVERSAL_ORDER_RELAY.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion

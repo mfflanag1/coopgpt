@@ -73,6 +73,18 @@ coopgames/paper5/S6_P4_CLASS2_HAND_CERTIFICATE.md
 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.py
 coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json
 coopgames/paper5/S6_P4_CLASS5_PACKET_SKELETON.md
+coopgames/verifiers/s6/audit_strict_exchange_p4_class5_overcovers.py
+coopgames/verifiers/s6/strict_exchange_p4_class5_overcovers.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class5_allocation_identities.py
+coopgames/verifiers/s6/strict_exchange_p4_class5_allocation_identity_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class5_allocation_identity_audit.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class5_cut_census.py
+coopgames/verifiers/s6/strict_exchange_p4_class5_cut_census_audit.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_class5_activation_overcovers.py
+coopgames/verifiers/s6/strict_exchange_p4_class5_activation_overcovers.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class5_activation_identities.py
+coopgames/verifiers/s6/strict_exchange_p4_class5_activation_identity_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class5_activation_identity_audit.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py
 coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json
 coopgames/paper5/S6_P4_CLASS6_PACKET_SKELETON.md
@@ -342,7 +354,7 @@ and the mixed min/max branch orientations in the depth-four subtrees.  State
 whether class 2 is independently hand-checkable without the universal relay
 encoder.
 
-For the still-incomplete class 5, audit only the partial claim in
+For class 5, begin with the human lemmas in
 `S6_P4_CLASS5_PACKET_SKELETON.md`.  Derive the symmetric packet sandwich,
 check both strict cross-anchor chains, and classify all sixteen `h15`-negative
 cuts into the six structural exclusions and ten candidates shown there.
@@ -351,10 +363,45 @@ labelled exclusions, and the resulting `30 -> 23` pair census.
 Independently derive both root activations and the root blocker lists
 `24,124,25` and `134,0134,135,0135`; audit the single seven-term identity
 that removes weak-root candidate `125`.
-Confirm that the checker uses exact arithmetic without a solver or production
-encoder, while treating its frozen-relay integration count as an audit
-convenience.  Do not promote this skeleton to a complete hand proof of class
-5: it does not yet compress the preceding-blocker filters or the 51 leaves.
+
+Next audit the complete class-5 cut census in
+`verify_strict_exchange_p4_class5_cut_census.py`.  Independently check the
+five-coordinate difference parametrization, packet inequalities, every
+min/max branch orientation and strict-sign normalization.  Confirm
+
+```text
+1736 = 1464 pure-difference exclusions
+     +   34 allocation-context exclusions
+     +  150 target-witness exclusions
+     +   88 relay branches,
+```
+
+with 24 distinct candidate sets, 90 stages and 51 terminal leaves.  Do not
+infer soundness of the 34/150/88 use maps from this exhaustive partition;
+derive or challenge their relationship to the game-theoretic relay semantics.
+
+Regenerate both layers of `audit_strict_exchange_p4_class5_overcovers.py`
+with `--details`.  Check every incidence load and digest.  The 34 context
+supports have size at most five and include sixteen coefficient-two cases;
+the 150 target supports have size at most four and include three
+coefficient-two cases.  Then audit all 107 exact rational identities at their
+184 uses with `verify_strict_exchange_p4_class5_allocation_identities.py`.
+Check premise availability, multiplier signs, strictness, and the path-source
+census `94 none + 50 ancestor + 38 target + 2 both`.
+
+Finally audit `audit_strict_exchange_p4_class5_activation_overcovers.py`.
+Independently derive each activation-failure DNF, especially the four cases
+for the `h16` two-for-two direction, and verify
+`285 = 195 allocation-infeasible + 90 witness`.  All 90 witness supports must
+have unit coefficients and size at most four.  Audit the 72 stored rational
+identities with `verify_strict_exchange_p4_class5_activation_identities.py`:
+18 zero-target identities cover the 195 direct contradictions and 54
+lower-bound identities cover the 90 witness uses.  Verify every failure atom,
+strict multiplier, path premise and digest link.  This removes solver
+dependence from class-5 arithmetic, but not from discovery of the frozen maps.
+Do not promote class 5 to an independently derived tenth hand proof until its
+24 menus, 88 transitions and 285 activation uses have either a short
+orbit-level derivation or a separate reviewer reconstruction.
 
 For class 6, independently derive the asymmetric sandwich in
 `S6_P4_CLASS6_PACKET_SKELETON.md`, both root activation chains, and the exact

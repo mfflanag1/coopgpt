@@ -134,9 +134,9 @@ root split and one nested comparison, bringing the total to twenty-four
 packets.  Class 1 is now the eighth hand-checkable row: twenty-one exact cut
 censuses and 109 rational identities at 160 uses bring the total to twenty-five
 packets.  Class 2 is the ninth: 21 cut censuses and 108 identities at 132 uses
-bring the total to twenty-seven.  Of the two classes covering the other five
-packets, class 6 now has complete exact arithmetic conditional on its frozen
-relay/use maps, while class 5 retains machine-resolved residue.  Both close
+bring the total to twenty-seven.  The two classes covering the other five
+packets now both have complete exact arithmetic conditional on their frozen
+relay/use maps.  Both close
 under the same root split `x_3<=x_4` versus
 `x_3>x_4`; in fact this split gives complete relay trees for all eleven
 classes, with only class 10 needing one nested `x_1`/`x_2` split.
@@ -158,7 +158,8 @@ its activation audit to 75 cases; its 65 blocker plus 44 activation identities
 are checked at all 160 uses without a solver or production import.
 Class 2 uses the same lemma and its maximum-level dual; 52 blocker plus 56
 activation identities are checked at all 132 uses.
-Class 5 now has a solver-free packet skeleton, although not yet a complete
+Class 5 now has a solver-free packet skeleton and complete exact arithmetic
+conditional on its relay/use maps, although not yet an independently derived
 hand certificate.  Its symmetric packet gives
 `d0+d1<=delta4,delta5<=d2+d3`; a cross-anchor chain makes both one-for-one
 directions automatically improving, and the packet sandwich reduces every
@@ -170,6 +171,17 @@ root order split is also human: the weak `h11` root has exactly `24,124,25`
 as blockers, while the strict `h17` root has exactly
 `134,0134,135,0135`; one seven-term witness identity is the only
 non-sign filter needed at this layer.
+Across its 90 stages, 1,736 eligible cuts split into 1,464 pure
+difference-cone exclusions and 272 candidates.  The latter split exactly into
+34 existing-context exclusions, 150 target-witness exclusions and 88 relay
+branches, with only 24 distinct candidate sets.  Sparse incidence over-covers
+and 107 exact rational allocation identities settle all 184 exclusions.  The
+activation layer has 285 elementary failure cases: 195 have exact
+zero-target contradictions and 90 have unit-weight incidence over-covers;
+72 exact rational identities settle all 285 uses.  The checkers import no
+solver when verifying these identities and exhaustive partitions.  The use
+maps remain relay-derived, so class 5 now has complete arithmetic rather than
+a tenth externally validated hand proof.
 Class 6 has a parallel solver-free root skeleton.  Its asymmetric packet gives
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`; these stronger bounds
 reduce the weak and strict twenty-cut roots directly to `24,124` and
@@ -206,7 +218,8 @@ relay-derived coverage map remains encoding-shared.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain
-machine-checked hand-proof targets.
+external-review and conceptual-compression targets despite their complete
+solver-free arithmetic.
 
 ## 4. Class 3 is a two-exchange hand relay
 

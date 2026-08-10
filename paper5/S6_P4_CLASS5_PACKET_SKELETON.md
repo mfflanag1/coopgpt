@@ -9,9 +9,10 @@ P4={0,1,4},   P5={0,1,5}.
 ```
 
 Its universal order relay closes, but the raw tree has 90 nodes and 51
-leaves.  This note extracts reusable hand lemmas from that tree.  It is a
-partial humanization, not yet a complete class-5 hand proof, external review,
-or novelty evidence.
+leaves.  This note extracts reusable hand lemmas and gives complete exact
+arithmetic for that tree conditional on its frozen relay/use maps.  It is not
+yet an independent derivation of those maps, external review, or novelty
+evidence.
 
 ## 2. The rich-packet sandwich
 
@@ -92,9 +93,10 @@ ten separate activation checks     -> one anchor-chain lemma,
 ten copies of sixteen eligible cuts -> one ten-candidate packet census.
 ```
 
-It does not close the 51 leaves.  The remaining task is to compress how the
-preceding blocker comparisons filter (5.2) and force the terminal two-for-two
-exchanges.
+This packet-level lemma alone does not close the 51 leaves.  Sections 7--8
+settle their arithmetic exhaustively; the remaining humanization task is to
+compress how preceding blocker comparisons filter (5.2) and force the
+terminal two-for-two exchanges.
 
 ## 5. The root order split is structural
 
@@ -185,9 +187,75 @@ proves the exact support-function theorem behind this observation.
 Thus the common predecessor/successor census falls from thirty formal pairs
 to 23, and every actual class-5 relay edge respects the resulting crossing
 rule.  Together with the root lemma, this isolates the remaining work to the
-non-root blocker filters and terminal two-for-two closures.
+non-root blocker filters and terminal two-for-two closures.  The next two
+sections settle their arithmetic exhaustively, while leaving conceptual
+compression and independent validation of the maps open.
 
-## 7. Solver-free audit
+## 7. Complete cut-layer accounting
+
+Exact Fourier--Motzkin elimination in the five difference coordinates gives
+the following exhaustive partition across all 90 stages:
+
+```text
+1736 eligible negative-cut uses
+ = 1464 pure difference-cone exclusions
+ +   34 packet/ancestor-context exclusions
+ +  150 target-witness exclusions
+ +   88 relay branches.                              (5.5)
+```
+
+The 272 candidates left after the pure difference cone have only 24 distinct
+candidate sets.  Every one is assigned exactly once to the last three layers
+of (5.5), including every terminal no-blocker closure.  This is checked by a
+solver-free exact-arithmetic census with mutations of the candidate digest,
+direction and layer partition.
+
+The 34 context exclusions and 150 target exclusions have sparse incidence
+over-covers.  Context supports have size at most five, with sixteen of 34
+using a coefficient two.  Target supports have size at most four, with only
+three of 150 using a coefficient two.  The zero-anchor support theorem proves
+their witness-side upper bounds.  Their allocation-side strict lower bounds
+deduplicate to 107 exact rational identities checked at all 184 uses.  Of
+those uses, 94 need no path comparison, 50 use ancestors only, 38 use the
+target comparison only, and two use both.  Hence no cut-filter arithmetic
+remains solver-only.  The assignment of the 34, 150 and 88 uses is still a
+relay-derived integration record, not an independently derived hand map.
+
+## 8. Complete activation-layer accounting
+
+The 90 stages have 285 elementary activation-failure conjunctions.  Their
+exact partition is
+
+```text
+285 = 195 allocation-infeasible cases + 90 witness over-covers.       (5.6)
+```
+
+The failure expansion includes the four conjunctions for the two-for-two
+Lmin direction
+
+```text
+(x1<=x4 or x2<=x4) and (x1<=x5 or x2<=x5),
+```
+
+so (5.6) audits the disjunction rather than replacing it by a stronger
+one-for-one condition.  Every one of the 90 witness cases has a unit-weight
+incidence support of size at most four; these reduce to 63 support signatures.
+The allocation arithmetic for all 285 cases deduplicates to 72 exact rational
+identities: 18 zero-target contradictions cover the 195 infeasible cases and
+54 strict lower-bound identities cover the 90 witness cases.  A solver-free
+checker reconstructs every failure atom and named affine premise, checks its
+availability on the recorded relay path, verifies the detailed witness digest,
+and rejects coefficient, failure-case and layer-partition mutations.
+
+Equations (5.5)--(5.6) put class 5 at the same proof status as class 6: all
+arithmetic leaves are exact and solver-free conditional on frozen relay/use
+maps.  It is still not a tenth independently hand-derived packet lemma.  A
+reviewer must verify the maps against the relay semantics and the overarching
+counterexample-to-formula implication; a useful expository next step is to
+compress the 24 cut menus, 88 transitions and 72 activation identities into
+orbit-level rules.
+
+## 9. Solver-free audit
 
 Run
 
@@ -196,13 +264,35 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.
   --output /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
 cmp /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json
+
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class5_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class5_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class5_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class5_allocation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class5_allocation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class5_allocation_identity_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_cut_census.py \
+  --output /tmp/strict_exchange_p4_class5_cut_census_audit.json
+cmp /tmp/strict_exchange_p4_class5_cut_census_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class5_cut_census_audit.json
+
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class5_activation_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class5_activation_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class5_activation_details.json \
+  --output /tmp/strict_exchange_p4_class5_activation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class5_activation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class5_activation_identity_audit.json
 ```
 
 The checker imports no solver or production encoder.  Exact rational
 coefficient arithmetic verifies (5.1), every cut identity, the exhaustive
 sixteen-cut partition, both twenty-cut root classifications, the weak-root
 witness identity, and all seven crossing exclusions through three orbit
-identities.  Finite total-preorder enumeration checks the anchor and root
-activation chains and rejects weakened-sign mutations.  Reading the frozen relay
-is confined to a separately labelled integration audit; it is not proof
-evidence for the lemma or for the human-to-machine implication.
+identities.  The additional checkers prove the exact cut and activation
+identities over the rationals without a solver.  Finite total-preorder
+enumeration checks the anchor and root activation chains and rejects
+weakened-sign mutations.  Reading the frozen relay is confined to separately
+labelled integration audits; it is not proof evidence for the lemma, the use
+maps, or the human-to-machine implication.

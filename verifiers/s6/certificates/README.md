@@ -372,6 +372,32 @@ The solver-free checker independently encodes the asymmetric packet sandwich,
 all mixed min/max branch orientations, both extremal-level activation forms,
 and the same six mutation classes.
 
+Class 5 now has a complete solver-free arithmetic partition conditional on
+its 90-node frozen relay/use maps.  Exact elimination gives
+`1736 = 1464 + 34 + 150 + 88`; 107 rational identities certify the 184
+context/target exclusions, and 72 rational identities certify all 285
+activation failures:
+
+```text
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class5_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class5_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class5_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class5_allocation_identity_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_cut_census.py \
+  --output /tmp/strict_exchange_p4_class5_cut_census_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class5_activation_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class5_activation_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class5_activation_details.json \
+  --output /tmp/strict_exchange_p4_class5_activation_identity_audit.json
+```
+
+The identity verifiers import no solver or production encoder, reconstruct
+every named affine premise over the rationals, check path availability, and
+exercise mutation controls.  The 34/150/88 cut map and 195/90 activation map
+remain encoding-shared integration records requiring external review.
+
 Class 6 has a complete solver-free cut partition conditional on the frozen
 relay/use maps.  Exact Fourier--Motzkin elimination gives
 `924 = 711 + 213`; the 213 candidates split disjointly as 11 pre-target
