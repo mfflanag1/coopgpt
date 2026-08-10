@@ -467,9 +467,10 @@ twenty-cut root censuses collapse to two blockers each without a witness
 identity.  All 155 witness-rejected cuts in its non-root relay now have sparse
 incidence over-covers of support at most five, with only five coefficient-two
 cases.  This completely explains the witness-side upper bounds.  The
-allocation-side strict reductions and the 47 witness-compatible cuts remain
-at the shared-encoder hand-certificate boundary, so its 29 leaves are not yet
-a complete human relay.
+allocation-side strict reductions are now 53 solver-free exact rational
+identities at all 155 uses.  The coverage map remains relay-derived, and the
+47 witness-compatible cuts still require activation and terminal lemmas, so
+its 29 leaves are not yet a complete human relay.
 
 The relay audit does not replace the trust-disabled CPC proof of the weaker
 parent formula and does not validate the human-to-machine map.  Its purpose is
@@ -521,6 +522,13 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --output /tmp/strict_exchange_p4_class6_overcovers.json
 cmp /tmp/strict_exchange_p4_class6_overcovers.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class6_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

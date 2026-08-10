@@ -92,12 +92,25 @@ bounds are zero in 12 cases, one in 98, two in 42, and three in three.  Thus
 the witness side of every non-root filter is now a short incidence inequality,
 not an opaque Farkas certificate.
 
-This census is not yet an independent hand proof of the filters.  The
-incidence upper bound follows solver-free from the zero-anchor theorem, but
-the current audit checks inside the localized parent encoding that the
-corresponding allocation-side lower sum strictly exceeds that bound.  Those
-allocation reductions, together with the 47 full survivors and their terminal
-closures, are the remaining humanization target.
+The allocation half has now also been exactified.  The 155 strict lower bounds
+deduplicate to 53 rational identities, each using three to eleven displayed
+premises.  A solver-free checker reconstructs every normalization, sign,
+anchor-order, packet, ancestor, and target premise as an affine form and
+checks the identities over `Q`, including a positive multiplier on a strict
+premise.  At the use level their anatomy is
+
+```text
+anchor/sign only  57       order-dependent   37
+packet-dependent  24       path-dependent    37
+```
+
+Thus 118 of the 155 reductions use no ancestor or target comparison.  Of the
+37 path-dependent uses, 33 use ancestors only and four also use the target's
+opposite comparison.  The 53 identities split into 31 path-free and 22
+path-dependent rows.  This removes Z3 from the arithmetic layer.  It does not
+independently establish that the frozen 155-use map is exhaustive; that map
+still comes from the localized relay and remains part of the external-review
+boundary.
 
 ## 5. Residual relay
 
@@ -105,10 +118,10 @@ The weak root has two symmetric-looking subtrees.  Each passes through the
 automatic `h10=e0-e1` Lmax exchange, one of four `h10` blockers, the automatic
 Lmin exchange `h15=e0-e1`, and then closes immediately with either `h17` or
 the three-for-three Lmax exchange `h7=e0-e1+e2-e5`.  The strict root has only
-seven leaves and depth four.  The 155 witness rejections now have sparse
-incidence supports, but the 29 leaves remain machine-resolved until their
-allocation-side reductions and the 47 surviving-cut terminal closures receive
-exact hand identities.
+seven leaves and depth four.  The 155 witness rejections now have complete
+solver-free incidence and allocation identities, conditional on the frozen
+use map.  The 29 leaves remain machine-resolved at the 47 witness-compatible
+cuts, activation steps, and terminal closures.
 
 ## 6. Audits
 
@@ -135,10 +148,18 @@ cmp /tmp/strict_exchange_p4_class6_overcovers.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --details --output /tmp/strict_exchange_p4_class6_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 ```
 
 The compact artifact freezes the census and a SHA-256 digest of the canonical
 155-row certificate list.  `--details` regenerates the complete list for
 inspection without storing a large redundant proof artifact.  This second
 audit imports Z3 and the localized relay encoder; it is a discovery and
-integration audit, not independent evidence for the allocation inequalities.
+integration audit.  The allocation checker itself imports neither and checks
+the stored 53 identities by exact rational arithmetic.  Its linkage to all
+155 detailed supports is digest-protected, but the relay-derived use map is
+still not independent human-to-machine evidence.

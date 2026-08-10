@@ -124,12 +124,14 @@ using at most five available comparisons: 150 use only unit coefficients and
 five require coefficient two.  The support-size distribution is
 `12,82,27,30,4` for sizes one through five.
 
-This exhausts the *witness-side* geometry of the class-6 filters.  It does not
-yet independently prove that the allocation comparisons force a lower sum
-above the support bound: the current exhaustive audit establishes those
-strict lower bounds in the shared localized encoding.  Exactifying those
-allocation reductions and the 47 witness-compatible survivors is the next
-human-proof task.
+The allocation lower bounds have separately been exactified into 53 rational
+identities.  A solver-free checker reconstructs every named premise and checks
+all 155 uses, including strictness.  Of those uses, 118 require only global
+anchor/sign, root-order, or packet premises; 33 use ancestor comparisons and
+four also use the target comparison.  Hence the incidence theorem plus those
+identities completely explains the arithmetic of every witness rejection.
+The frozen 155-use map still comes from the shared localized relay, and the 47
+witness-compatible cuts and their terminal closures remain to be humanized.
 
 ## 6. Audits
 
@@ -152,7 +154,15 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --output /tmp/strict_exchange_p4_class6_overcovers.json
 cmp /tmp/strict_exchange_p4_class6_overcovers.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class6_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 ```
 
-Its exact incidence calculations instantiate (Z2), while its allocation-side
-UNSAT queries remain audit conveniences rather than independent proof objects.
+Its exact incidence calculations instantiate (Z2).  The stored allocation
+identities replace the earlier allocation-side UNSAT queries as arithmetic
+proof objects; only their relay-derived coverage map remains encoding-shared.

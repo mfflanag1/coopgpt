@@ -181,8 +181,11 @@ algorithm for the remaining witness filters.  In class 6 this program is now
 exhaustive on the witness side: all 155 witness-rejected cuts across 49 stages
 have supports of size at most five; 150 use unit coefficients and five use a
 coefficient two.  The associated allocation-side strict inequalities are
-still checked in the shared localized encoding, so this is a compression
-roadmap rather than a tenth hand certificate.
+now 53 deduplicated exact rational identities checked solver-free at all 155
+uses.  Thirty-one identities need no path premise; 22 use an ancestor or
+target comparison.  The use map remains relay-derived and the 47
+witness-compatible cuts are not closed, so this is still a compression
+checkpoint rather than a tenth hand certificate.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain
@@ -402,6 +405,13 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --output /tmp/strict_exchange_p4_class6_overcovers.json
 cmp /tmp/strict_exchange_p4_class6_overcovers.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class6_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

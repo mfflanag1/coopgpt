@@ -168,9 +168,11 @@ witness identity.  Its complete witness-side census further replaces all 155
 `q^1` rejections across 49 non-root stages by incidence over-covers of support
 at most five; 150 use unit coefficients and five use a coefficient two.  The
 incidence bounds are human consequences of the general theorem, but their
-allocation-side strict lower bounds are still established in the shared
-localized encoding.  This remains a partial skeleton: the 29 non-root leaves
-are not yet a complete hand certificate.
+allocation-side strict lower bounds are now 53 deduplicated exact rational
+identities checked solver-free at all 155 uses.  The digest-protected use map
+still comes from the shared localized relay; the 47 witness-compatible cuts
+and terminal closures are not yet hand-compressed.  This remains a partial
+skeleton: the 29 non-root leaves are not yet a complete hand certificate.
 The single-witness component now has a general exact-cone theorem rather than
 case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
 the convex hull of the non-anchor incidence columns; feasibility of lower
@@ -309,6 +311,13 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --output /tmp/strict_exchange_p4_class6_overcovers.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json \
   /tmp/strict_exchange_p4_class6_overcovers.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class6_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json \
+  /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \
