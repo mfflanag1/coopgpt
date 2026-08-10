@@ -176,12 +176,14 @@ difference-cone exclusions and 272 candidates.  The latter split exactly into
 34 existing-context exclusions, 150 target-witness exclusions and 88 relay
 branches, with only 24 distinct candidate sets.  Sparse incidence over-covers
 and 107 exact rational allocation identities settle all 184 exclusions.  The
+24 labelled menus collapse to fifteen rich-player-parametric templates, and
+a path-local grammar generates all 88 relay edges and 51 leaves.  The
 activation layer has 285 elementary failure cases: 195 have exact
 zero-target contradictions and 90 have unit-weight incidence over-covers;
 72 exact rational identities settle all 285 uses.  The checkers import no
 solver when verifying these identities and exhaustive partitions.  The use
-maps remain relay-derived, so class 5 now has complete arithmetic rather than
-a tenth externally validated hand proof.
+maps remain relay-derived, so class 5 now has complete and partly compressed
+arithmetic rather than a tenth externally validated hand proof.
 Class 6 has a parallel solver-free root skeleton.  Its asymmetric packet gives
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`; these stronger bounds
 reduce the weak and strict twenty-cut roots directly to `24,124` and

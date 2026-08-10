@@ -221,6 +221,94 @@ target comparison only, and two use both.  Hence no cut-filter arithmetic
 remains solver-only.  The assignment of the 34, 150 and 88 uses is still a
 relay-derived integration record, not an independently derived hand map.
 
+### A 15-template menu atlas
+
+The 24 labelled candidate sets are not 24 unrelated cases.  Let
+`r in {4,5}` and write `rbar=9-r`; juxtaposition denotes a coalition.  Put
+
+```text
+B10={1,12,13,123,124,125,1234,1235},
+D10={1,12,13,123,1234,1235},
+B15={14,15,134,135,145,1245,1345,12345}.
+```
+
+Every stage menu is one of the following fifteen parametric templates:
+
+```text
+h10: B10+{13r};                    D10+{12rbar,13rbar}
+h11: {24,25,124,125};              {2rbar,12rbar}
+h12: {13rbar};                     {3rbar,13rbar}
+h15: B15+{12r}
+h16: {12r}; {12r,012r};            {124,125,012r}
+h17: {135,0135};                   {134,135,0134,0135}
+h18: {23r};                        {234,235}.
+```
+
+Expanding `r=4,5` and removing the non-parametric duplicates gives exactly
+the 24 stored menus.  The largest repetition is especially simple: the two
+`h16` pair menus occur fifteen times each, while their singleton versions
+occur nine times in total.  The cut verifier checks template membership and
+the exact multiplicity of every labelled expansion, in addition to the
+stage-by-stage candidate digest.
+
+### A path-local transition grammar
+
+The 88 relay edges also have a short description.  On the weak branch:
+
+```text
+h11(root) -> {24,124,25};
+h11:2r -> h10:{12,123,124,13r};
+h10:12  -> h15:{145,1245,1345};
+h10:123 -> h15:{134,135,145,1345}.
+```
+
+All descendants are terminal except the three continuations
+
+```text
+(24,12,145) -> h16:0125,
+(24,124)    -> h16:0125,
+(124)       -> h16:0125,
+```
+
+whose following `h17` nodes are terminal.  On the strict branch:
+
+```text
+h17(root) -> {13r,013r}.
+```
+
+The short root blocker `13r` gives
+
+```text
+h16 -> {12r,012r};
+012r -> h18:23r -> h11:2rbar,
+```
+
+and the resulting `h10` is terminal.  The long root blocker `013r` gives
+
+```text
+h10 -> {12,13,123,12r,13rbar}.
+```
+
+Its five successors obey only these rules:
+
+```text
+12   -> h18:23r -> h15:12r -> terminal h12;
+13   -> h15:{14,134,15,135,145,1345,12345};
+        only 13r,145,1345 continue h16:012r,
+        and only 13r then continues h18:23r;
+123  -> h15:{134,135,145,1345}, with terminal h16 children;
+12r  -> h16:12r -> h18:23r -> terminal h12;
+13rbar -> terminal h15.
+```
+
+These rules generate exactly 88 edges and 51 terminal leaves.  Unlike a raw
+stage list, they expose the two true state variables: the weak/strict root
+regime and the selected rich player `r`, with only three exceptional weak
+continuations.  The verifier compares this grammar directly with every
+stored child set and rejects a relay-edge deletion.  This materially
+compresses the map, but external review must still establish that the relay
+semantics themselves are necessary for every genuine counterexample.
+
 ## 8. Complete activation-layer accounting
 
 The 90 stages have 285 elementary activation-failure conjunctions.  Their
@@ -251,9 +339,9 @@ Equations (5.5)--(5.6) put class 5 at the same proof status as class 6: all
 arithmetic leaves are exact and solver-free conditional on frozen relay/use
 maps.  It is still not a tenth independently hand-derived packet lemma.  A
 reviewer must verify the maps against the relay semantics and the overarching
-counterexample-to-formula implication; a useful expository next step is to
-compress the 24 cut menus, 88 transitions and 72 activation identities into
-orbit-level rules.
+counterexample-to-formula implication.  The cut menus and transitions now
+have the orbit-level atlas and path grammar above; the useful remaining
+compression target is the 72 activation identities and their 285-use map.
 
 ## 9. Solver-free audit
 

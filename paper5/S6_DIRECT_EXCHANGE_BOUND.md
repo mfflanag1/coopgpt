@@ -282,8 +282,11 @@ activation-failure cases split into 195 exact allocation contradictions and
 90 unit-weight witness over-covers, all covered by 72 exact rational
 identities.  Solver-free checkers verify every arithmetic identity and the
 exhaustive partitions.  This is not yet a tenth independently derived hand
-lemma: the relay/use maps and the 51-leaf conceptual compression remain the
-external-review boundary.
+lemma.  The 24 labelled cut menus now collapse to fifteen rich-player
+templates, and a path-local grammar generates all 88 edges and 51 leaves.
+Independent derivation of that grammar from the relay semantics, together
+with compression of the 285-use activation map, remains the external-review
+boundary.
 The other remaining row, class 6, has an asymmetric sandwich
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`.  It reduces both
 twenty-cut roots to two blockers using signs alone.  Its 29 non-root leaves

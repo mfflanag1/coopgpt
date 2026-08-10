@@ -379,6 +379,11 @@ min/max branch orientation and strict-sign normalization.  Confirm
 with 24 distinct candidate sets, 90 stages and 51 terminal leaves.  Do not
 infer soundness of the 34/150/88 use maps from this exhaustive partition;
 derive or challenge their relationship to the game-theoretic relay semantics.
+Audit the fifteen rich-player-parametric menu templates and the path-local
+transition grammar stated in `S6_P4_CLASS5_PACKET_SKELETON.md`.  Confirm that
+they expand to exactly the 24 labelled menus and generate all 88 edges and 51
+leaves, including the three exceptional weak continuations.  This is a
+compact reconstruction target, not permission to trust the parent encoder.
 
 Regenerate both layers of `audit_strict_exchange_p4_class5_overcovers.py`
 with `--details`.  Check every incidence load and digest.  The 34 context
@@ -400,8 +405,9 @@ lower-bound identities cover the 90 witness uses.  Verify every failure atom,
 strict multiplier, path premise and digest link.  This removes solver
 dependence from class-5 arithmetic, but not from discovery of the frozen maps.
 Do not promote class 5 to an independently derived tenth hand proof until its
-24 menus, 88 transitions and 285 activation uses have either a short
-orbit-level derivation or a separate reviewer reconstruction.
+menu atlas and transition grammar have been reconstructed from the relay
+semantics and its 285 activation uses have either a short orbit-level
+derivation or a separate reviewer reconstruction.
 
 For class 6, independently derive the asymmetric sandwich in
 `S6_P4_CLASS6_PACKET_SKELETON.md`, both root activation chains, and the exact

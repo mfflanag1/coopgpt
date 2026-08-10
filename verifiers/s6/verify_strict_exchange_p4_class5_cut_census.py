@@ -52,6 +52,154 @@ EXPECTED_STAGE_TYPES = {
 EXPECTED_CANDIDATE_SHA256 = "ccad06a9a62895328de02f795c4bdb61d3cb53679d6d96e735c250294afbc576"
 
 
+def cut(*players):
+    return tuple(sorted(players))
+
+
+def menu_templates():
+    """The 24 labelled menus as 15 rich-player-parametric templates."""
+    templates = {}
+
+    def add(direction, name, menu, count):
+        key = direction, frozenset(menu)
+        if key in templates:
+            raise AssertionError(f"duplicate class-5 menu template {key}")
+        templates[key] = (name, count)
+
+    base10 = {
+        cut(1), cut(1, 2), cut(1, 3), cut(1, 2, 3), cut(1, 2, 4),
+        cut(1, 2, 5), cut(1, 2, 3, 4), cut(1, 2, 3, 5),
+    }
+    deep10 = {
+        cut(1), cut(1, 2), cut(1, 3), cut(1, 2, 3),
+        cut(1, 2, 3, 4), cut(1, 2, 3, 5),
+    }
+    base15 = {
+        cut(1, 4), cut(1, 5), cut(1, 3, 4), cut(1, 3, 5),
+        cut(1, 4, 5), cut(1, 2, 4, 5), cut(1, 3, 4, 5),
+        cut(1, 2, 3, 4, 5),
+    }
+    for rich in (4, 5):
+        other = 9 - rich
+        add(10, f"h10-cross-r{rich}", base10 | {cut(1, 3, rich)}, 2)
+        add(10, f"h10-deep-r{rich}",
+            deep10 | {cut(1, 2, other), cut(1, 3, other)}, 1)
+        add(11, f"h11-opposite-r{rich}",
+            {cut(2, other), cut(1, 2, other)}, 2)
+        add(12, f"h12-pair-r{rich}",
+            {cut(3, other), cut(1, 3, other)}, 1)
+        add(12, f"h12-single-r{rich}", {cut(1, 3, other)}, 1)
+        add(15, f"h15-r{rich}", base15 | {cut(1, 2, rich)}, 5)
+        add(16, f"h16-pair-r{rich}",
+            {cut(1, 2, rich), cut(0, 1, 2, rich)}, 15)
+        add(16, f"h16-single-r{rich}", {cut(1, 2, rich)}, 5 if rich == 4 else 4)
+        add(16, f"h16-root-r{rich}",
+            {cut(1, 2, 4), cut(1, 2, 5), cut(0, 1, 2, rich)},
+            1 if rich == 4 else 2)
+        add(18, f"h18-single-r{rich}", {cut(2, 3, rich)}, 8)
+    add(11, "h11-root", {cut(2, 4), cut(2, 5), cut(1, 2, 4), cut(1, 2, 5)}, 1)
+    add(17, "h17-short", {cut(1, 3, 5), cut(0, 1, 3, 5)}, 3)
+    add(17, "h17-root",
+        {cut(1, 3, 4), cut(1, 3, 5), cut(0, 1, 3, 4), cut(0, 1, 3, 5)}, 2)
+    add(18, "h18-pair", {cut(2, 3, 4), cut(2, 3, 5)}, 2)
+    if len(templates) != 24:
+        raise AssertionError("class-5 menu template census changed")
+    return templates
+
+
+MENU_TEMPLATES = menu_templates()
+
+
+def expected_branches(direction, order, path):
+    """Compact path-local grammar generating all 88 class-5 relay edges."""
+    if order == "W":
+        if direction == 11 and not path:
+            return {cut(2, 4), cut(1, 2, 4), cut(2, 5)}
+        if direction == 10 and len(path) == 1 and path[0][0] == 11:
+            rich = path[0][1][-1]
+            return {cut(1, 2), cut(1, 2, 3), cut(1, 2, 4), cut(1, 3, rich)}
+        if direction == 15:
+            h10_cut = next(coalition for parent, coalition in path if parent == 10)
+            if h10_cut == cut(1, 2):
+                return {cut(1, 4, 5), cut(1, 2, 4, 5), cut(1, 3, 4, 5)}
+            if h10_cut == cut(1, 2, 3):
+                return {cut(1, 3, 4), cut(1, 3, 5), cut(1, 4, 5), cut(1, 3, 4, 5)}
+            return set()
+        if direction == 16:
+            continuing = {
+                ((11, cut(2, 4)), (10, cut(1, 2)), (15, cut(1, 4, 5))),
+                ((11, cut(2, 4)), (10, cut(1, 2, 4))),
+                ((11, cut(1, 2, 4)),),
+            }
+            return {cut(0, 1, 2, 5)} if tuple(path) in continuing else set()
+        return set()
+
+    if direction == 17 and not path:
+        return {cut(1, 3, 4), cut(0, 1, 3, 4),
+                cut(1, 3, 5), cut(0, 1, 3, 5)}
+    if not path or path[0][0] != 17:
+        return set()
+    root_cut = path[0][1]
+    rich = root_cut[-1]
+    rich_short = root_cut == cut(1, 3, rich)
+    if rich_short:
+        if direction == 16 and len(path) == 1:
+            return {cut(1, 2, rich), cut(0, 1, 2, rich)}
+        if direction == 18 and tuple(path) == (
+            (17, cut(1, 3, rich)), (16, cut(0, 1, 2, rich))
+        ):
+            return {cut(2, 3, rich)}
+        if direction == 11 and tuple(path) == (
+            (17, cut(1, 3, rich)), (16, cut(0, 1, 2, rich)),
+            (18, cut(2, 3, rich)),
+        ):
+            return {cut(2, 9 - rich)}
+        return set()
+
+    if direction == 10 and len(path) == 1:
+        return {
+            cut(1, 2), cut(1, 3), cut(1, 2, 3),
+            cut(1, 2, rich), cut(1, 3, 9 - rich),
+        }
+    h10_cut = next((coalition for parent, coalition in path if parent == 10), None)
+    h15_cut = next((coalition for parent, coalition in path if parent == 15), None)
+    if direction == 15:
+        if h10_cut == cut(1, 2) and path[-1] == (18, cut(2, 3, rich)):
+            return {cut(1, 2, rich)}
+        if h10_cut == cut(1, 3) and len(path) == 2:
+            return {
+                cut(1, 4), cut(1, 3, 4), cut(1, 5), cut(1, 3, 5),
+                cut(1, 4, 5), cut(1, 3, 4, 5), cut(1, 2, 3, 4, 5),
+            }
+        if h10_cut == cut(1, 2, 3) and len(path) == 2:
+            return {cut(1, 3, 4), cut(1, 3, 5),
+                    cut(1, 4, 5), cut(1, 3, 4, 5)}
+        return set()
+    if direction == 16:
+        if h10_cut == cut(1, 3) and h15_cut in {
+            cut(1, 3, rich), cut(1, 4, 5), cut(1, 3, 4, 5)
+        }:
+            return {cut(0, 1, 2, rich)}
+        if h10_cut == cut(1, 2, rich) and len(path) == 2:
+            return {cut(1, 2, rich)}
+        return set()
+    if direction == 18:
+        if tuple(path) == (
+            (17, cut(0, 1, 3, rich)), (10, cut(1, 2))
+        ):
+            return {cut(2, 3, rich)}
+        if tuple(path) == (
+            (17, cut(0, 1, 3, rich)), (10, cut(1, 2, rich)),
+            (16, cut(1, 2, rich)),
+        ):
+            return {cut(2, 3, rich)}
+        if h10_cut == cut(1, 3) and h15_cut == cut(1, 3, rich) \
+                and path[-1] == (16, cut(0, 1, 2, rich)):
+            return {cut(2, 3, rich)}
+        return set()
+    return set()
+
+
 def eligible(direction):
     return [coalition for size in range(1, 6)
             for coalition in combinations(range(6), size)
@@ -142,6 +290,7 @@ def census(relay_payload, context_keys, witness_keys,
            expected_digest=EXPECTED_CANDIDATE_SHA256):
     class_row = next(row for row in relay_payload["rows"] if row["class"] == 5)
     stage_types = Counter()
+    menu_variants = Counter()
     candidate_keys = set()
     branch_keys = set()
     stage_count = eligible_count = 0
@@ -167,9 +316,19 @@ def census(relay_payload, context_keys, witness_keys,
             if fourier_motzkin_feasible([*cone_rows(path), (blocker, Fraction())]):
                 candidates.append(cut)
                 candidate_keys.add((stage, cut))
+        template_key = direction, frozenset(candidates)
+        if template_key not in MENU_TEMPLATES:
+            raise AssertionError(f"class-5 menu atlas changed at {stage}: {set(candidates)}")
+        template_name, _ = MENU_TEMPLATES[template_key]
+        menu_variants[template_name] += 1
         stage_count += 1
         eligible_count += len(cuts)
         stage_types[(direction, len(cuts), len(candidates))] += 1
+        actual_branches = {tuple(branch["coalition"]) for branch in node.get("branches", [])}
+        if actual_branches != expected_branches(direction, order, path):
+            raise AssertionError(
+                f"class-5 transition grammar changed at {stage}: {actual_branches}"
+            )
         if node["feasible_blocker_count"] != len(node.get("branches", [])):
             raise AssertionError(f"relay branch metadata changed at {stage}")
         for branch in node.get("branches", []):
@@ -191,6 +350,9 @@ def census(relay_payload, context_keys, witness_keys,
         raise AssertionError(f"pure candidate digest changed: {digest}")
     if dict(stage_types) != EXPECTED_STAGE_TYPES:
         raise AssertionError(f"stage-type census changed: {stage_types}")
+    expected_variants = {name: count for name, count in MENU_TEMPLATES.values()}
+    if dict(menu_variants) != expected_variants:
+        raise AssertionError(f"class-5 menu-variant census changed: {menu_variants}")
     layers = [context_keys, witness_keys, branch_keys]
     if any(layers[i] & layers[j] for i in range(3) for j in range(i + 1, 3)):
         raise AssertionError("class-5 cut layers overlap")
@@ -225,7 +387,7 @@ def census(relay_payload, context_keys, witness_keys,
     }
     if actual != expected:
         raise AssertionError(f"complete cut census changed: {actual}")
-    return actual, digest, stage_types
+    return actual, digest, stage_types, menu_variants
 
 
 def expect_rejection(action, message):
@@ -245,7 +407,7 @@ def main():
     relay_payload = json.loads(args.relay.read_text())
     context_keys = use_keys(args.identity_rows, "context")
     witness_keys = use_keys(args.identity_rows, "target")
-    counts, digest, stage_types = census(
+    counts, digest, stage_types, menu_variants = census(
         relay_payload, context_keys, witness_keys
     )
 
@@ -262,6 +424,15 @@ def main():
         lambda: census(relay_mutation, context_keys, witness_keys, digest),
         "rejected direction mutation",
     )
+    transition_mutation_payload = copy.deepcopy(relay_payload)
+    transition_row = next(
+        item for item in transition_mutation_payload["rows"] if item["class"] == 5
+    )
+    transition_row["weak_branch"]["tree"]["branches"].pop()
+    transition_mutation = expect_rejection(
+        lambda: census(transition_mutation_payload, context_keys, witness_keys, digest),
+        "rejected relay-transition deletion",
+    )
     digest_mutation = expect_rejection(
         lambda: census(relay_payload, context_keys, witness_keys, "0" * 64),
         "rejected candidate-digest mutation",
@@ -269,16 +440,18 @@ def main():
     report = {
         "schema": "strict-exchange-p4-class5-cut-census-audit-v1",
         "status": "PASS",
-        "scope": "solver-free exact Fourier--Motzkin census and exhaustive cut-layer partition; frozen relay/use maps are integration records, not independent human-to-machine evidence",
+        "scope": "solver-free exact Fourier--Motzkin census, 15-template menu atlas, path-local 88-edge grammar, and exhaustive cut-layer partition; relay/use semantics remain external-review obligations",
         **counts,
         "pure_candidate_sha256": digest,
         "stage_type_counts": {
             f"h{direction}:eligible{eligible_count}:candidates{candidate_count}": count
             for (direction, eligible_count, candidate_count), count in sorted(stage_types.items())
         },
+        "menu_template_counts": dict(sorted(menu_variants.items())),
         "mutation_controls": {
             "partition": partition_mutation,
             "direction": direction_mutation,
+            "transition_grammar": transition_mutation,
             "candidate_digest": digest_mutation,
         },
     }
