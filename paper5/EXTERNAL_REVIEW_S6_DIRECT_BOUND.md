@@ -158,8 +158,14 @@ counts, and state whether the six unoriented archetypes materially clarify
 the mathematics.  Then audit the smaller 19-orbit core: verify the 8/5/6
 split, all 19 single-orbit SAT ablations, the 136-direction unguarded rebuilds,
 the omission of the no-unique-Lmax-top anchor, irredundancy of the two cross
-anchors, and the three CPC/Ethos records.  Do not treat this reduction as an all-human
-proof of the 19 remaining sign-role schemas.
+anchors, and the three CPC/Ethos records.  For `(4,2,0)`, also verify directly
+that each blocker alternative retains only the opposite comparison and the
+four `P`-indexed singleton-witness comparisons, that the two `M`-indexed
+comparisons are genuinely absent, and that all five retained-source ablations
+are SAT.  Check that this is a sound weakening of the uniform interface; do
+not infer from the ablations that a corresponding exact game exists.  Do not
+treat this reduction as an all-human proof of the 19 remaining sign-role
+schemas.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

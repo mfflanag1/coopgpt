@@ -242,3 +242,12 @@ anchor, and retain only the two cross anchors.  This does not affect the
 soundness implication because every genuine counterexample satisfies the
 weaker premise list.  Their single-cross-anchor ablations are SAT, so both
 remaining cross anchors are load-bearing within that reduced relaxation.
+The `(4,2,0)` orbit formula is weaker once more: in each negative-cut
+alternative it keeps the opposite-selection comparison and the four
+singleton-witness comparisons indexed by `P`, but drops the two indexed by
+`M`.  Every genuine counterexample satisfies the retained comparisons, so
+this deletion preserves the one-way map.  The six witness variable blocks and
+their base simplex/zero constraints remain in the formula.  Removing any one
+of the five retained comparison-source families makes this reduced
+relaxation SAT; that is an internal irredundancy control, not a claim that the
+omitted witnesses are unnecessary in the general blocker lemma.

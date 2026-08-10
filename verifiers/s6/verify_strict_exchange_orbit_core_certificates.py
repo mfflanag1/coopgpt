@@ -26,6 +26,7 @@ def main():
         for row in json.loads((HERE / "strict_exchange_sign_orbits.json").read_text())["rows"]
     }
     source_rows = {row["case"]: row for row in original["rows"]}
+    assert audit["schema"] == "strict-exchange-large-case-orbit-cores-v1"
     assert audit["status"] == "PASS"
     assert audit["base_assertion_count_per_case"] == 71
     assert audit["original_role_orbit_count"] == 44
@@ -57,6 +58,19 @@ def main():
             "lmin_bottom_cross",
         ]
         assert all(item["verdict"] == "sat" for item in row["single_cross_anchor_ablations"])
+        expected_sources = ["opposite", "q0", "q1", "q2", "q3"]
+        if case != "p4_n2_t0":
+            expected_sources += ["q4", "q5"]
+        assert row["blocker_comparison_sources"] == expected_sources
+        if case == "p4_n2_t0":
+            assert [item["removed"] for item in row["single_blocker_source_ablations"]] == row[
+                "blocker_comparison_sources"
+            ]
+            assert all(
+                item["verdict"] == "sat" for item in row["single_blocker_source_ablations"]
+            )
+        else:
+            assert row["single_blocker_source_ablations"] == []
         checked.append(
             {
                 "case": case,

@@ -62,6 +62,15 @@ SELECTED = {
     ),
 }
 
+# Comparison source 0 is the opposite selection; sources 1,...,6 are q^0,...,q^5.
+# In the (4,2,0) core, the blocker comparisons contributed by the two singleton
+# witnesses indexed by M are dispensable.  Their base witness constraints remain.
+BLOCKER_SOURCES = {
+    "p3_n2_t1": tuple(range(7)),
+    "p3_n3_t0": tuple(range(7)),
+    "p4_n2_t0": (0, 1, 2, 3, 4),
+}
+
 
 def role_signature(item, positive_count, negative_count):
     direction = item["direction"]
@@ -83,7 +92,21 @@ def rendered_signature(signature):
     }
 
 
-def build_reduced(row, selected):
+def weaken_blocker_sources(assertion, sources):
+    if not z3.is_implies(assertion):
+        raise AssertionError("expected a direction implication")
+    antecedent, consequent = assertion.children()
+    alternatives = consequent.children() if z3.is_or(consequent) else (consequent,)
+    weakened = []
+    for alternative in alternatives:
+        comparisons = alternative.children() if z3.is_and(alternative) else (alternative,)
+        if len(comparisons) != 7:
+            raise AssertionError("expected opposite-selection plus six witness comparisons")
+        weakened.append(z3.And(*(comparisons[index] for index in sources)))
+    return z3.Implies(antecedent, z3.Or(*weakened))
+
+
+def build_reduced(row, selected, blocker_sources=None):
     source = rebuilt_solver_from_row(row)
     assertions = list(source.assertions())
     if len(assertions) != 72 + row["retained_direction_count"]:
@@ -92,6 +115,8 @@ def build_reduced(row, selected):
     # source assertion 21.  Retain the two cross-selection anchors 22 and 23.
     base = assertions[:21] + assertions[22:72]
     directional = assertions[72:]
+    sources = BLOCKER_SOURCES[row["case"]] if blocker_sources is None else blocker_sources
+    directional = [weaken_blocker_sources(item, sources) for item in directional]
     groups = {}
     for item, assertion in zip(row["retained_menu"], directional, strict=True):
         signature = role_signature(item, row["positive_count"], row["negative_count"])
@@ -162,6 +187,24 @@ def main():
         formula_name = f"strict_exchange_orbit_core_{case}.smt2"
         if args.formula_dir:
             (args.formula_dir / formula_name).write_text(qf_lra_smt2(solver))
+        source_names = ["opposite"] + [f"q{index}" for index in range(6)]
+        blocker_source_ablations = []
+        if case == "p4_n2_t0":
+            for removed in BLOCKER_SOURCES[case]:
+                trial, _ = build_reduced(
+                    enriched,
+                    selected,
+                    tuple(index for index in BLOCKER_SOURCES[case] if index != removed),
+                )
+                trial.set(timeout=args.timeout_ms)
+                trial_verdict = trial.check()
+                if trial_verdict != z3.sat:
+                    raise AssertionError(
+                        f"{case} blocker source {source_names[removed]} ablation is {trial_verdict}"
+                    )
+                blocker_source_ablations.append(
+                    {"removed": source_names[removed], "verdict": "sat"}
+                )
         rows.append(
             {
                 "case": case,
@@ -171,6 +214,10 @@ def main():
                 "selected_role_orbit_count": len(selected),
                 "selected_oriented_coefficient_multisets": [list(shape) for shape in shapes],
                 "selected_orbits": [rendered_signature(item) for item in selected],
+                "blocker_comparison_sources": [
+                    source_names[index] for index in BLOCKER_SOURCES[case]
+                ],
+                "single_blocker_source_ablations": blocker_source_ablations,
                 "unguarded_rebuild_verdict": "unsat",
                 "single_orbit_ablations": ablations,
                 "single_cross_anchor_ablations": anchor_ablations,

@@ -213,6 +213,13 @@ Unlike the uniform fifteen-case suite, these three reduced formulas omit the
 no-unique-Lmax-top anchor.  They retain only the Lmax-top and Lmin-bottom cross
 anchors; both are irredundant in each reduced relaxation.
 
+The `p4_n2_t0` formula additionally deletes the blocker comparisons from the
+two singleton witnesses indexed by `M`.  Its alternatives retain the opposite
+selection and `q0` through `q3`, indexed by `P`; all six base witness blocks
+remain.  Each of those five retained comparison-source families is separately
+irredundant by a SAT ablation.  The audit records the exact source list and
+ablations in `../strict_exchange_large_case_orbit_cores.json`.
+
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
 that each declares only the 48 expected selection/witness reals, has the same

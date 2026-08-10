@@ -97,7 +97,12 @@ with 136 directions in an irredundant 8/5/6 split, only 19 sign-role schemas
 total and three coefficient archetypes up to reversal.  Z3/cvc5 and checked
 CPC proofs certify all three smaller formulas; all 19 single-orbit ablations
 are SAT.  These large-case cores need only the two cross-selection anchors,
-not the no-unique-Lmax-top anchor.  This is substantial explanatory progress, not yet a complete hand
+not the no-unique-Lmax-top anchor.  In `(4,2,0)`, blocker alternatives need
+only the opposite-selection comparison and the four `P`-indexed
+singleton-witness comparisons; the two `M`-indexed blocker-comparison
+families are dispensable, while deleting any of the five retained source
+families makes the relaxation SAT.  The base constraints for all six witnesses
+remain.  This is substantial explanatory progress, not yet a complete hand
 proof of those 19 schemas.
 
 ## 4. Sharpness and equality cases

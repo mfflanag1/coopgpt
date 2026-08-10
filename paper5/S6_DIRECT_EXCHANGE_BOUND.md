@@ -211,6 +211,14 @@ All three reduced formulas omit the no-unique-Lmax-top anchor: only the two
 cross-selection anchors remain, and each is necessary within the reduced
 relaxation.
 
+The `(4,2,0)` reduced formula admits one more weakening.  Its blocker
+alternatives use the opposite-selection comparison and only the four
+singleton-witness comparisons indexed by `P`; the two `M`-indexed witness
+comparisons are omitted, although all six base witness blocks remain.  The
+weakened formula is proof-checked UNSAT, while deleting any one of the five
+retained comparison-source families makes the relaxation SAT.  These are
+internal irredundancy controls, not realizing games.
+
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen
 formula declares exactly 48 reals and consists of exactly 72 documented base

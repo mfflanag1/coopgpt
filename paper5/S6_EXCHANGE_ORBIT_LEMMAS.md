@@ -105,6 +105,16 @@ anchor; removing either one makes each corresponding relaxation SAT.  Thus
 the dimension-specific large-case argument needs two convex-segment facts,
 not all three anchors used by the uniform fifteen-case presentation.
 
+There is a further witness-role simplification in `(4,2,0)`.  In canonical
+labels `P={0,1,2,3}` and `M={4,5}`, every blocker alternative retains the
+opposite-selection comparison and only the four comparisons contributed by
+`q^0,...,q^3`.  The `q^4,q^5` base witness constraints remain, but their
+blocker comparisons can be deleted.  The resulting weaker formula is still
+UNSAT; deleting any one of its five retained comparison-source families
+(opposite, `q^0`, `q^1`, `q^2`, or `q^3`) makes the relaxation SAT.  These
+five SAT ablations are again irredundancy controls, not games or proof of the
+underlying theorem.
+
 Thus the remaining human target is 19 sign-role schemas built from only three
 unoriented exchange ideas.  In particular, the two coefficient-one large
 cases use only one-for-one and two-for-two exchanges.  The balanced case adds
