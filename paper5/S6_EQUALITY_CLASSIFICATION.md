@@ -4,18 +4,22 @@ Date: 2026-08-09
 
 ## Status
 
-This checkpoint gives a complete **solver-level** classification of equality
-in the six-player full-staged generator normal form.  It also gives exact
-rational realizations of every surviving type and independently checked CPC
-proofs of rigidity and anchor geometry within those types.
+Equality is now classified by a **table-free computer-assisted theorem** for
+all singleton-normalized six-player exact games.  The fifteen possible sign
+counts of `Lmin_i-Lmax_i` are closed by exactness-aware exchange formulas; Z3
+and cvc5 return UNSAT on every noncanonical branch, and all fifteen
+trust-disabled CPC proofs check `correct` in Ethos.  The only equality payoff
+pairs are the starved and positive pairs displayed below, up to permutation.
+See `EQUALITY_EXCHANGE_CLASSIFICATION.md` for the theorem, elementary blocker
+reduction, complete case table, proof-object boundary, and reproduction paths.
 
-It is not yet stated as an unconditional theorem about all exact games.  The
-3,348 support-type exclusions in the equality-with-triple census and the
-3,350 strict-failure exclusions remain exact QF_LRA solver verdicts rather
-than a human reduction or checked proof object for every row.  The normal-form
-and hand-net dependencies also still require hostile specialist review.
+The older 3,350-type staged-generator census remains an independent discovery
+and differential cross-check, but its 3,348 exclusions are no longer a logical
+dependency.  External specialist review is still required, especially at the
+interfaces from selection optimality to exchange blockers and from equality
+classification to the first-crossing neighborhood.
 
-## 1. Conditional finite classification
+## 1. Older staged-generator classification cross-check
 
 Assume the following audited dependencies:
 
@@ -1117,26 +1121,25 @@ proof-level dependency.
 
 ## 7. Exact remaining gap
 
-Both equality-profile refinement neighborhoods are now closed at a
-table-independent computer-assisted level, and the two coarse barriers are
-human.  Conditional on the equality classification and the first-crossing
-reduction, this gives a local proof-object barrier against crossing above
-`2/3`.
+Equality itself and both equality-profile refinement neighborhoods are now
+closed at a table-independent computer-assisted level, and the two coarse
+barriers are human.  Conditional only on the first-crossing bridge and the
+audited mapping into the two local exchange theorems, this gives a
+proof-object barrier against crossing above `2/3`.
 
 The remaining obligations before an unconditional six-player theorem are:
 
-1. replace the solver census excluding the other 3,348 equality types by a
-   structural theorem or independently checked proof-object family;
-2. hostilely verify the core-closure normal form, convex exact-game path,
-   stagewise continuity, first-crossing existence, and contiguous-refinement
-   inference; and
-3. preferably extract readable inequalities from the positive abstract CPC
-   cases and the two universal starved exchange formulas.
+1. hostilely verify the convex exact-game path, stagewise selection
+   continuity, first-crossing existence, contiguous-refinement inference, and
+   complete mapping into the positive/starved local exchange formulas; and
+2. preferably extract readable inequalities from the equality sign cases,
+   the positive abstract CPC cases, and the two universal starved exchange
+   formulas.
 
 The older `222+151+131` starved decomposition and 504-row exactness-menu audit
 remain useful negative controls and discovery records, but neither is now a
-logical bottleneck.  More sampled games or unsat cores would not close the
-remaining gaps.
+logical bottleneck.  More sampled games or raw solver cores would not close
+the remaining gap.
 
 ## 8. Reproduction
 
@@ -1147,6 +1150,7 @@ python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
+python3 coopgames/verifiers/s6/reproduce_equality_exchange_classification.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/reproduce_starved_exactness_menus.py
 python3 coopgames/verifiers/s6/audit_starved_universal_exchange_mapping.py

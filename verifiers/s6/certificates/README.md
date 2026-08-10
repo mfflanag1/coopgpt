@@ -143,6 +143,21 @@ CPC proofs checked `correct` by Ethos.  These objects are conditional on their
 displayed selection-anchor and first-crossing premises; they do not certify
 the equality classification.
 
+The fifteen `equality_exchange_p*_n*_t*` controls certify the equality
+classification without support tables or staged-generator variables.  After
+relabeling players by the sign of `Lmin_i-Lmax_i`, each formula contains the
+simplex and exact-distance equations, the three standard selection anchors,
+six singleton-zero witnesses, and a minimized labeled menu of exactness
+blocker implications.  Thirteen formulas exclude their sign regime outright;
+the `p3_n3_t0` and `p4_n2_t0` formulas instead exclude the positive and
+starved canonical payoff profiles.  Their conjunction therefore leaves
+exactly those two profiles at distance `2/3`.  UNSAT cores were used only to
+choose smaller menus; every frozen formula is rebuilt without assumption
+literals.  Z3 and cvc5 return UNSAT, and all fifteen trust-disabled CPC proofs
+check `correct` in Ethos.  The prose reduction from exact-game selection
+optimality to the displayed blocker formulas remains a human-review boundary;
+see `paper5/EQUALITY_EXCHANGE_CLASSIFICATION.md`.
+
 ## Pinned checker sources
 
 - cvc5 tag `cvc5-1.3.3`, commit

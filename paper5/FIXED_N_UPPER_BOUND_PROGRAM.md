@@ -262,14 +262,14 @@ strict-failure verdicts, with `0 SAT / 3350 UNSAT / 0 UNKNOWN`.  This closes the
 configuration census at the solver-evidence level.  It does not remove the
 stated certificate or external-review requirements.
 
-`S6_EQUALITY_CLASSIFICATION.md` now completes the equality census at the same
-evidence level.  Exactly two support types survive, their normalized payoff
-pairs are rigid, and both have dispersion exactly `1/3`.  Exact reconstructed
-games and checked CPC proofs cover rigidity and the two anchor negations within
-those types.  A first-crossing argument localizes any hypothetical outward
-counterexample direction at one of these two profiles.  The remaining human
-target is therefore a tangent/normal-cone barrier at the two equality
-profiles, not another archive search.
+`EQUALITY_EXCHANGE_CLASSIFICATION.md` now replaces that equality census by a
+table-free exactness-exchange theorem.  The fifteen sign-count cases for
+`Lmin-Lmax` have independently checked CPC proofs; every noncanonical branch
+is impossible, leaving exactly the starved and positive normalized payoff
+pairs.  This uses no support tables, generator normal form, or staged Farkas
+variables.  The old census and exact reconstructed games remain independent
+cross-checks.  A first-crossing argument localizes any hypothetical outward
+counterexample direction at one of these two profiles.
 
 Both coarse equality types now have human barriers.  For the starved `(4,2)`
 by `(2,4)` profile, the direction `(0,0,1,1,-1,-1)` is feasible at every
@@ -309,10 +309,11 @@ two-for-two exchanges, and one coefficient-two Lmin shape.  Z3 and cvc5 both
 return UNSAT; cvc5 emits trust-free CPC and Ethos checks both proofs as
 `correct`.  The three-for-three finite-menu shape is redundant.
 
-Thus both refinement neighborhoods are closed at a table-independent
-computer-assisted level.  Conditional on the equality classification and the
-first-crossing reduction, this establishes the local `2/3` barrier.  It does
-not by itself replace the 3,348 equality-type exclusions or discharge the
-continuity and normal-form review obligations.  Those are now the primary
-obstacles to an unconditional six-player theorem; readable inequalities for
-the remaining abstract CPC cases are a secondary but valuable target.
+Thus equality and both refinement neighborhoods are closed at a
+table-independent computer-assisted level.  The 3,348 equality-type
+exclusions and the generator normal form are no longer dependencies of this
+route.  The primary obstacle to an unconditional six-player theorem is now a
+hostile audit of the continuity/first-crossing bridge and of the finite maps
+from contiguous refinements into the two local exchange theorems.  Readable
+inequalities for the remaining abstract CPC cases are a secondary but
+valuable target.
