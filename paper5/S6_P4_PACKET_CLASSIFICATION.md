@@ -190,7 +190,9 @@ At the activation layer, the 49 nodes yield 124 elementary failure cases.
 Anchor/order arguments remove 84, four are allocation-infeasible, and all 36
 remaining failures have packet/ancestor over-covers of support at most four.
 This unifies activation and blocker filtering under the same incidence
-theorem, but the 36 activation lower bounds are not yet solver-free identities.
+theorem.  The 36 activation lower bounds now have 26 solver-free rational
+identities, while the four direct cases share one more identity; only their
+relay-derived coverage map remains encoding-shared.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain
@@ -418,9 +420,12 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
-  --output /tmp/strict_exchange_p4_class6_activation_overcovers.json
-cmp /tmp/strict_exchange_p4_class6_activation_overcovers.json \
-  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
+  --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_activation_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_activation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_activation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

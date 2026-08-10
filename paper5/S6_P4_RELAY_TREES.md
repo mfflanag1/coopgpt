@@ -474,7 +474,8 @@ its 29 leaves are not yet a complete human relay.  Activation has nevertheless
 collapsed to the same incidence mechanism: 84 of 124 failure cases are
 structural, four are allocation-infeasible, and the remaining 36 use
 over-covers of support at most four.  Exact allocation identities for those
-36 cases are the next hand-certificate layer.
+36 cases now deduplicate to 26 solver-free rows, and the four direct cases
+share one more identity.  The 40-use coverage map remains relay-derived.
 
 The relay audit does not replace the trust-disabled CPC proof of the weaker
 parent formula and does not validate the human-to-machine map.  Its purpose is
@@ -534,9 +535,12 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
-  --output /tmp/strict_exchange_p4_class6_activation_overcovers.json
-cmp /tmp/strict_exchange_p4_class6_activation_overcovers.json \
-  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
+  --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_activation_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_activation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_activation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

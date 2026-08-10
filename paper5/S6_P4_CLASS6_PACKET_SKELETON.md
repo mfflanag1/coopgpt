@@ -131,10 +131,13 @@ leaves 24 labelled support signatures.  Thus blocker filtering and forced
 activation are two applications of the same witness-image theorem, rather
 than separate solver phenomena.
 
-This activation census is presently encoding-shared.  The incidence upper
-bounds are human consequences of (Z2), but the allocation lower bounds for
-the 36 witness cases and the four direct cases have not yet been exactified
-into solver-free identities.  That is the next arithmetic checkpoint.
+The allocation half is now exactified too.  The 36 witness lower bounds
+deduplicate to 26 rational identities, and the four direct cases share one
+contradiction identity.  A solver-free checker reconstructs every failure
+atom and named premise, checks the identities and strict semantics over `Q`,
+and digest-links them to the 36 detailed incidence supports.  Nineteen uses
+need no path comparison and seventeen use an ancestor.  This removes Z3 from
+activation arithmetic; the relay-derived coverage map remains encoding-shared.
 
 ## 6. Residual relay
 
@@ -179,9 +182,12 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
-  --output /tmp/strict_exchange_p4_class6_activation_overcovers.json
-cmp /tmp/strict_exchange_p4_class6_activation_overcovers.json \
-  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
+  --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_activation_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_activation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_activation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json
 ```
 
 The compact artifact freezes the census and a SHA-256 digest of the canonical
@@ -196,5 +202,6 @@ still not independent human-to-machine evidence.
 The activation audit also imports the localized encoder.  It checks all 49
 failure expansions and the `124 -> 84 + 4 + 36` partition, and freezes a
 digest for the 36 detailed supports.  Its incidence rows instantiate the
-solver-free theorem, while its allocation-side and coverage verdicts remain
-explicit integration evidence.
+solver-free theorem.  The separate rational checker proves the 26 lower-bound
+and one direct identity without an encoder; only their 40-use coverage map is
+integration evidence.

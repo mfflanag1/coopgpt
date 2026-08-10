@@ -176,7 +176,8 @@ skeleton: the 29 non-root leaves are not yet a complete hand certificate.
 The same incidence theorem now compresses activation: of 124 elementary
 failure cases, 84 are structural, four are allocation-infeasible, and the
 other 36 have over-covers of support at most four.  Their allocation-side
-strict reductions remain to be exactified.
+strict reductions are now 26 solver-free rational identities, while the four
+direct cases share one more identity.  Coverage remains relay-derived.
 The single-witness component now has a general exact-cone theorem rather than
 case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
 the convex hull of the non-anchor incidence columns; feasibility of lower
@@ -323,9 +324,12 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
 cmp coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json \
   /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
-  --output /tmp/strict_exchange_p4_class6_activation_overcovers.json
-cmp coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json \
-  /tmp/strict_exchange_p4_class6_activation_overcovers.json
+  --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_activation_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_activation_identity_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json \
+  /tmp/strict_exchange_p4_class6_activation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \

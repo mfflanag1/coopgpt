@@ -290,7 +290,9 @@ the 47 witness-compatible cuts remain the hand-proof boundary.  Activation is
 now governed by the same geometry: 84 of 124 elementary failure cases collapse
 by anchor/order chains, four are allocation-infeasible, and all remaining 36
 have packet/ancestor over-covers of support at most four.  Their incidence
-bounds are human; their allocation lower bounds remain encoding-shared.
+bounds are human.  The 36 lower bounds reduce to 26 solver-free rational
+identities, and the four direct cases share one further identity; only their
+coverage map remains encoding-shared.
 
 The single-witness filters admit a general exact projection theorem.  For a
 fixed blocker menu, `q^b` maps the zero-anchor simplex onto the convex hull of
@@ -407,9 +409,12 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
-  --output /tmp/strict_exchange_p4_class6_activation_overcovers.json
-cmp /tmp/strict_exchange_p4_class6_activation_overcovers.json \
-  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
+  --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \
+  --overcover-details /tmp/strict_exchange_p4_class6_activation_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_activation_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_activation_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \
@@ -487,6 +492,9 @@ coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py
 coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py
+coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py

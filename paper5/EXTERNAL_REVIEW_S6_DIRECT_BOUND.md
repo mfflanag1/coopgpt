@@ -86,6 +86,9 @@ coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py
 coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py
+coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
@@ -381,8 +384,12 @@ Also audit the activation census in
 check the elementary failure expansions for the seven direction types and the
 `124 = 84 + 4 + 36` partition.  Verify the 36 incidence supports, including
 the six coefficient-two cases.  Treat their support bounds as instances of
-the zero-anchor theorem, but do not promote the allocation-side Z3 verdicts
-to proof objects; exact rational identities for those cases are still pending.
+the zero-anchor theorem.  Then audit the 26 stored lower-bound identities and
+the one direct contradiction with
+`verify_strict_exchange_p4_class6_activation_identities.py`; verify every
+failure atom, multiplier sign, strict premise, use count, and digest link.
+Treat the frozen 40-use map as encoding-shared even though its arithmetic is
+now solver-free.
 
 Audit the general witness projection theorem in
 `S6_ZERO_ANCHOR_OVERCOVER_DUALITY.md`.  Verify that the coalition-sum image of
