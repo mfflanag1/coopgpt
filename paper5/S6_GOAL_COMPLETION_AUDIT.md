@@ -105,6 +105,17 @@ families makes the relaxation SAT.  The base constraints for all six witnesses
 remain.  This is substantial explanatory progress, not yet a complete hand
 proof of those 19 schemas.
 
+The activation side of those 19 schemas is now entirely explicit.  The 136
+labelled rows reduce to eight A-, five B-, and six C-order-statistic tests:
+Lmin compares the lowest recipient and donor levels, while Lmax compares the
+highest donor and recipient levels.  Their eligible blocker cuts reduce to
+three unoriented templates: 64 one-for-one rows with 16 cuts each, 60
+two-for-two rows with 20 cuts each, and 12 asymmetric coefficient-two rows
+with 24 cuts each.  A solver-free audit checks all 636,888 activation/weak-
+order comparisons and the complete 2,512-cut, 17,584-comparison accounting.
+The remaining finite issue is coexistence of chosen blockers, not activation
+or cut enumeration.
+
 The separately proof-checked anchor-localized `(4,2,0)` alternative goes
 further.  A one-line order chain closes the coincident bottom/top-anchor
 branch.  In the distinct branch, sign-preserving relabeling leaves an 18-real
@@ -154,8 +165,8 @@ maps.
 A universal order audit eliminates their open leaves: `x_3<=x_4` versus
 `x_3>x_4` closes every one of the eleven packet classes, with class 10 the
 unique row requiring a nested `x_1`/`x_2` split.  The remaining gap is
-conceptual compression and independent map validation for classes 5 and 6,
-not unknown finite anatomy.
+independent derivation and validation of the compressed class-5/class-6
+grammars and their path-dependent placements, not unknown finite anatomy.
 Class 5 has a solver-free packet compression: the symmetric packet
 sandwich and cross-anchor chain replace all ten `h15` activation checks by one
 lemma and reduce each of its sixteen-cut blocker censuses to the same ten
@@ -203,13 +214,19 @@ placements in three relay families, and the 27 identities reduce to 25 affine
 motifs after source-depth aliases are forgotten.  Coverage remains
 relay-derived, so independent validation of the map is still required before
 calling this an externally reviewed hand certificate.
-The single-witness component now has a general exact-cone theorem rather than
-case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
-the convex hull of the non-anchor incidence columns; feasibility of lower
-requirements is characterized by all nonnegative support inequalities.  The
-result supplies a sparse LP/facet algorithm and explains the class-5 crossing
-identities as incidence over-covers.  It is elementary convex duality, not a
-novelty claim or an independent validation of the relay/use maps.
+The witness component now has a general exact-cone theorem rather than
+case-specific Farkas sums.  For one zero-anchor witness, the coalition-sum
+image is the convex hull of the non-anchor incidence columns and feasibility
+is characterized by all nonnegative support inequalities.  With a witness at
+every player, the six anchor-specific bounds collapse exactly to the
+second-largest player incidence load.  After blocker cuts are chosen, this
+eliminates all 36 witness coordinates and leaves a symmetric cut-transversal
+problem coupled to the opposite-selection signs.  Helly's theorem bounds a
+pointwise witness obstruction by five blocker requirements.  The solver-free
+audit checks the theorem on 160 weighted menus and all 1,953 unordered pairs
+of nonempty proper coalitions.  This is elementary convex duality, not a
+novelty claim, an independent validation of the relay/use maps, or a proof
+that no global blocker transversal exists.
 
 ## 4. Sharpness and equality cases
 
@@ -240,8 +257,9 @@ load-bearing interface, independently encode the two bound-two cases, verify
 the lower witness, and separate correctness, novelty, and significance.
 `S6_EXTERNAL_RECONSTRUCTION_PACKET.md` is the shorter operational handoff: it
 orders the remaining work into the human-to-machine map, coefficient-two
-reconstruction, class-5/class-6 map reconstruction, and novelty gates, with
-exact paths and required reviewer outputs.
+reconstruction, the 52/71/90 orbit quotient, class-5/class-6 map
+reconstruction, and novelty gates, with exact paths and required reviewer
+outputs.
 
 `S6_LITERATURE_NOVELTY_AUDIT.md` records a targeted primary-source search.
 No equivalent quantitative fixed-dimensional separation theorem was found,
@@ -260,6 +278,12 @@ and 252 direction implications, rebuilding 4,722 negative-cut alternatives
 and 33,054 blocker comparisons.  This closes the literal transcription gap;
 it still does not independently prove the human anchor, lex-improvement, or
 tight-blocker lemmas.
+The note now makes the common short step explicit as the minimum of a positive
+payoff-order crossing bound and the finitely many positive coalition-slack
+ratios.  It also traces one complete coefficient-two implication in each
+difficult case without SMT syntax: 24 negative cuts for `p2_n3_t1:a72` and 26
+for `p3_n3_t0:a74`.  These additions localize external review but do not count
+as an external verdict.
 
 No claim of external validation or field-level novelty is made.  The branch
 must not be merged before that review.  A negative external verdict would
@@ -385,6 +409,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \
   /tmp/strict_exchange_large_case_templates.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_activation_atlas.py \
+  --output /tmp/strict_exchange_large_case_activation_atlas.json
+cmp coopgames/verifiers/s6/strict_exchange_large_case_activation_atlas.json \
+  /tmp/strict_exchange_large_case_activation_atlas.json
 python3 coopgames/verifiers/s6/reproduce_equality_exchange_classification.py
 python3 coopgames/verifiers/s6/verify_g23_witness.py
 ```
