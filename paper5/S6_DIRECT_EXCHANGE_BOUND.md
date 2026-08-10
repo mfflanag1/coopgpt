@@ -276,6 +276,10 @@ lemma.  The root split itself is now structural: its two twenty-cut censuses
 reduce to exact three- and four-blocker lists, with only one seven-term witness
 identity beyond signs.  The 51 leaves and their non-root filters must still be
 compressed.
+The other remaining row, class 6, has an asymmetric sandwich
+`d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`.  It reduces both
+twenty-cut roots to two blockers using signs alone.  Its 29 non-root leaves
+remain to be humanized.
 
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the

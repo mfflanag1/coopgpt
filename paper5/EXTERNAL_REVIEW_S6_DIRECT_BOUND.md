@@ -73,6 +73,9 @@ coopgames/paper5/S6_P4_CLASS2_HAND_CERTIFICATE.md
 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.py
 coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json
 coopgames/paper5/S6_P4_CLASS5_PACKET_SKELETON.md
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py
+coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json
+coopgames/paper5/S6_P4_CLASS6_PACKET_SKELETON.md
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
@@ -339,6 +342,12 @@ Confirm that the checker uses exact arithmetic without a solver or production
 encoder, while treating its frozen-relay integration count as an audit
 convenience.  Do not promote this skeleton to a complete hand proof of class
 5: it does not yet compress the preceding-blocker filters or the 51 leaves.
+
+For class 6, independently derive the asymmetric sandwich in
+`S6_P4_CLASS6_PACKET_SKELETON.md`, both root activation chains, and the exact
+root blocker lists `24,124` and `135,0135`.  Confirm that no witness
+comparison is used in those cut classifications.  Treat the artifact as a
+partial root lemma, not a hand proof of the remaining 29 leaves.
 
 Then audit the universal order theorem.  Confirm independently that the root
 split `x_3<=x_4` versus `x_3>x_4` closes all eleven packet rows, that the weak

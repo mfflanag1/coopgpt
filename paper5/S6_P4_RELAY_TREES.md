@@ -462,6 +462,9 @@ the 51 leaves.  Classes 1 and 2 have crossed
 that boundary, although their proof objects remain compression targets rather
 than a short conceptual lemma.  The remaining rows are precise structural
 targets, not counterexamples or unexplained open leaves.
+Class 6 also has a solver-free asymmetric-packet root skeleton: its two
+twenty-cut root censuses collapse to two blockers each without a witness
+identity.  Its 29 leaves remain at the hand-certificate boundary.
 
 The relay audit does not replace the trust-disabled CPC proof of the weaker
 parent formula and does not validate the human-to-machine map.  Its purpose is

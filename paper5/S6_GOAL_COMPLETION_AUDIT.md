@@ -162,6 +162,10 @@ orbits.  The weak and strict roots also have complete hand classifications:
 twenty cuts reduce respectively to three and four blockers, using only one
 seven-term witness identity beyond the packet/sign arguments.  The 51 relay
 leaves remain to be compressed.
+Class 6 now also has a solver-free asymmetric-packet root lemma.  Its stronger
+sandwich reduces both twenty-cut roots to two blockers apiece without a
+witness identity.  This remains a partial skeleton: the 29 non-root leaves
+are not yet a complete hand certificate.
 
 ## 4. Sharpness and equality cases
 
@@ -281,6 +285,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.
   --output /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json \
   /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py \
+  --output /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json \
+  /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \
