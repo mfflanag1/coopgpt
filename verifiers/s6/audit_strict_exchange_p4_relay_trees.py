@@ -24,7 +24,7 @@ from audit_strict_exchange_p4_packet_classes import packet_constraints
 
 
 HERE = Path(__file__).resolve().parent
-HAND_CLASSES = {3, 4, 8}
+HAND_CLASSES = {3, 4, 8, 11}
 
 
 def verdict(assertions, timeout_ms):

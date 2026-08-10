@@ -126,16 +126,17 @@ rows can now be removed from that residue completely.
 
 `S6_P4_RELAY_TREES.md` decomposes the remaining cores dynamically.  Five
 classes (`3,4,7,8,11`), covering eighteen of the 32 feasible labelled packets,
-close by forced-exchange relay trees with no order split.  Classes 3, 4, and 8
-are complete hand-checkable proofs covering ten labelled packets; eight
-classes covering the other 22 packets remain machine-resolved.  Class 4 uses
+close by forced-exchange relay trees with no order split.  Classes 3, 4, 8, and
+11 are complete hand-checkable proofs covering fourteen labelled packets;
+seven classes covering the other eighteen packets remain machine-resolved.
+Class 4 uses
 a three-leaf star whose terminal cuts are closed by sixteen `q^1`-complement
 identities and four opposite-base-cut identities, all checked with pure exact
 rational arithmetic in `verify_strict_exchange_p4_class4_hand_certificates.py`.
-Classes 7 and 11 are the next concrete targets rather than opaque UNSAT rows.
-For class 11, all three relay activations and two exact weighted identities are
-now displayed by hand; its remaining blocker-cut exclusions have not yet been
-promoted from the finite audit.
+Class 11 uses a unique three-exchange chain: its activations are structural and
+37 source-specific rational identities prove the exact two-blocker chain and
+empty terminal blocker list.  Class 7 is now the next closed-relay target
+rather than an opaque UNSAT row.
 
 ## 4. Class 3 is a two-exchange hand relay
 
@@ -307,6 +308,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificate
   --output /tmp/strict_exchange_p4_class4_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class4_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class11_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class11_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
 ```
 
 The audit independently checks within the parent encoding that
@@ -334,7 +339,11 @@ The audit independently checks within the parent encoding that
     `q^1`-complement cuts and all four opposite-base-cut cases, uses only
     nonnegative inequality multipliers, and verifies every exact weighted
     identity with rational coefficient arithmetic; a one-coefficient mutation
-    is rejected.
+    is rejected; and
+14. the solver-free class-11 checker exhausts its two opposite exceptions,
+    four first-stage `q^1` filters, fifteen second-stage `q^1` filters, and
+    sixteen terminal `q^1` filters, verifies 37 exact identities, and rejects
+    its mutation control.
 
 The authoritative proof object for the unsplit, weaker relaxation remains
 the trust-disabled CPC proof in

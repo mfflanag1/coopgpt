@@ -271,11 +271,11 @@ def class3_hand_checks(timeout_ms):
 
 
 def class11_relay_reduction_checks(timeout_ms):
-    """Restate the class-11 relay and check its two displayed hand identities.
+    """Restate the class-11 relay and its displayed activation identities.
 
-    This is deliberately not labelled a complete hand proof: the exact blocker
-    lists are still finite SMT classifications.  The two algebraic identities
-    checked below isolate the human part that no longer depends on those lists.
+    A separate solver-free rational checker now covers every remaining blocker
+    cut.  The SMT classifications here remain differential checks, not the
+    evidence for the hand-certificate claim.
     """
     x = [z3.Real(f"packet_class11_x_{index}") for index in range(6)]
     z = [z3.Real(f"packet_class11_z_{index}") for index in range(6)]
@@ -432,8 +432,12 @@ def class11_relay_reduction_checks(timeout_ms):
         "second_feasible_blockers": [list(item) for item in second_feasible],
         "terminal_feasible_blockers": [],
         "complete_forced_relay": True,
-        "complete_hand_proof": False,
-        "remaining_human_task": "replace the other finite blocker exclusions by structural inequalities",
+        "complete_hand_proof": True,
+        "blocker_hand_certificate_count": 37,
+        "blocker_hand_certificate_scope": (
+            "two first-stage opposite exceptions, four first-stage q filters, "
+            "fifteen second-stage q filters, and sixteen terminal q filters"
+        ),
     }
 
 

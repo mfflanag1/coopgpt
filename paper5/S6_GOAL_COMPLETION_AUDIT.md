@@ -119,7 +119,7 @@ are base-infeasible, and the 32 feasible pairs form eleven residual-symmetry
 orbits.  Each row closes using a subset-minimal menu of at most seven
 remaining directions.  This materially improves readability but does not yet
 replace every residual blocker alternative by hand inequalities.
-Three packet classes are now closed by hand.  Class 8, covering two labelled
+Four packet classes are now closed by hand.  Class 8, covering two labelled
 pairs, uses a single two-for-two direction.  Its activation
 and all twenty blocker exclusions use only the opposite-selection comparison;
 the audit verifies the reduced inequalities independently of `q^1`.  Class 3
@@ -129,16 +129,15 @@ are independently restated and checked.  Class 4, covering four labelled
 pairs, is a three-leaf star: its root classification and child activations are
 structural, and twenty exact nonnegative weighted identities close all
 terminal cuts.  The certificate checker uses pure rational coefficient
-arithmetic, no solver call, and no production encoder.  Eight packet classes
-covering 22 labelled pairs remain machine-resolved.
+arithmetic, no solver call, and no production encoder.  Class 11, covering
+four labelled pairs, is a unique three-exchange chain.  A structural cut split
+plus 37 source-specific exact identities proves its two unique blockers and
+empty terminal blocker list.  Seven packet classes covering eighteen labelled
+pairs remain machine-resolved.
 A separate forced-exchange audit sharpens that boundary: classes `3,4,7,8,11`
 have complete relay trees and together cover eighteen labelled packets.
-Class 4 is now included among the three hand proofs.  Class 11 reduces to a
-unique three-exchange chain.  All three class-11 exchange activations are
-proved by displayed inequalities, and
-two of its less transparent exclusions have literal weighted-sum identities;
-the remaining blocker exclusions are still machine-classified.  Class 11 is
-not yet counted as an all-human packet.
+Classes 4 and 11 are included among the four hand proofs.  Class 7 is the only
+complete relay tree whose blocker cuts are still machine-classified.
 Six other classes contain explicit open relay
 leaves, including classes 9 and 10 where no core direction is initially
 forced.
@@ -229,6 +228,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificate
   --output /tmp/strict_exchange_p4_class4_hand_certificates.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json \
   /tmp/strict_exchange_p4_class4_hand_certificates.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class11_hand_certificates.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json \
+  /tmp/strict_exchange_p4_class11_hand_certificates.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

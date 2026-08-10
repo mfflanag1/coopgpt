@@ -37,14 +37,13 @@ terminal leaves; depth zero means the first forced direction has no blocker.
 | 8 | 2 | 1 | `1/0` | 0 | yes | yes |
 | 9 | 4 | 4 | `0/1` | 0 | no | no |
 | 10 | 2 | 4 | `0/1` | 0 | no | no |
-| 11 | 4 | 3 | `1/0` | 2 | yes | no |
+| 11 | 4 | 3 | `1/0` | 2 | yes | yes |
 
 Thus classes `3,4,7,8,11` have complete forced relays.  Their orbit sizes sum
-to eighteen of the 32 feasible labelled packets.  Classes 3, 4, and 8,
-covering ten packets, have now been converted into explicit hand-checkable
-inequalities.  The other eight packets in the closed relay set have
-machine-checked trees that specify exactly which blocker lemmas remain to be
-humanized.
+to eighteen of the 32 feasible labelled packets.  Classes 3, 4, 8, and 11,
+covering fourteen packets, have now been converted into explicit
+hand-checkable inequalities.  Class 7, covering the other four packets in the
+closed relay set, is the remaining machine-checked tree to humanize.
 
 ## 3. Two especially small targets
 
@@ -168,13 +167,13 @@ Lmin: -e_1+e_2
 ```
 
 This chain covers four labelled packets.  It is longer than class 4 but has a
-single terminal obligation and is the cleanest candidate for a named
-max-to-min exchange-relay lemma.
+particularly clean separation between its opposite-selection and
+singleton-witness blocker tests.
 
-Class 7 is also complete but has four leaves and depth three.  It should be
-attempted after class 11.
+Class 7 is also complete but has four leaves and depth three.  It is now the
+next closed relay to humanize.
 
-## 4. Human activation reduction for class 11
+## 4. Human completion of class 11
 
 The three exchanges in the class-11 chain are no longer black-box
 activations.  Here `A={2}`, `B={2,3}`, write
@@ -219,7 +218,7 @@ on the right of (11.3) is nonpositive; the last is zero.  Thus `D<=1/3`, a
 contradiction.  This proves all three relay activations by displayed
 inequalities.
 
-The finite audit still supplies the blocker classification
+It remains to prove the blocker classification
 
 ```text
 first Lmax blocker:   {0,1,2,5} only;
@@ -227,7 +226,7 @@ second Lmax blocker:  {0,1,3} only;
 final Lmin blockers:  none.
 ```
 
-One awkward first-stage exclusion also has a short displayed certificate.  If
+One first-stage exclusion has the short displayed certificate below.  If
 `C={0,1}` were an Lmax blocker, then
 
 ```text
@@ -236,10 +235,54 @@ One awkward first-stage exclusion also has a short displayed certificate.  If
        +(q(N)-1)+q_1 <= 0.                              (11.4)
 ```
 
-The audit checks (11.3) and (11.4) as literal polynomial identities, in
-addition to independently restating the packet and relay.  Class 11 is not
-yet labelled an all-human packet proof: the other cut exclusions still need
-structural inequalities or an explicit family of checkable certificates.
+The rest of the classification has a compact source-specific organization.
+For the first direction, direct membership casework using positivity,
+efficiency, and (11.1) reduces its twenty negative cuts to the seven sets
+
+```text
+{1}, {0,1}, {0,5}, {0,1,4}, {0,1,5},
+{0,1,2,5}, {0,1,3,5}.                              (11.5)
+```
+
+The enumeration is exhaustive for the following reason:
+
+| negative-coefficient players in `C` | positive-coefficient players in `C` | optional zero players | cuts not immediately having negative `d(C)` |
+|---|---|---|---|
+| `{1}` | none | subset of `{0,4}` | `{1}`, `{0,1}`, `{0,1,4}` |
+| `{5}` | none | subset of `{0,4}` | `{0,5}` |
+| `{1,5}` | none | subset of `{0,4}` | `{0,1,5}` |
+| `{1,5}` | exactly one `r` in `{2,3}` | subset of `{0,4}` | `{0,1,r,5}` |
+
+Indeed, `{1,4}` has `d`-sum at most `-d_2`, `{1,2,5}` has `d`-sum at most
+`-d_3`, adding player `4` only decreases these sums, and adding both zero
+players makes the cut the complement of an omitted positive-`d` player.  The
+remaining cases are immediate from `delta_5>=d_1+d_2+d_3` or positivity.
+Two opposite-comparison identities
+eliminate `{0,5}` and `{0,1,5}` from (11.5).  Four `q^1`-comparison identities
+then eliminate `{1}`, `{0,1}`, `{0,1,4}`, and `{0,1,3,5}`.  The only possible
+first blocker is therefore `{0,1,2,5}`.
+
+For the second direction, every negative cut has the form
+
+```text
+C={1} union K,                 K subset {0,3,4,5}.            (11.6)
+```
+
+The first branch's two comparisons are now premises.  The `q^1` comparison
+alone eliminates fifteen of the sixteen sets in (11.6), leaving exactly
+`{0,1,3}`.  After its two comparisons are added, the terminal Lmin direction
+has the same sixteen cuts, and its `q^1` comparison alone is impossible for
+all sixteen.
+
+The frozen certificate table records the resulting 37 identities: two
+first-stage opposite exceptions, four first-stage `q^1` filters, fifteen
+second-stage `q^1` filters, and sixteen terminal `q^1` filters.  Every named
+inequality is oriented as `<=0`; every inequality multiplier is nonnegative;
+and every weighted sum is the recorded positive integer multiple of
+`D-1/3`.  The checker uses pure rational coefficient arithmetic, imports no
+production encoder, makes no satisfiability query, exhausts each cut family,
+and rejects a one-coefficient mutation control.  Together with
+(11.1)--(11.6), these rows complete a hand-checkable proof of class 11.
 
 ## 5. What remains unresolved
 
@@ -267,6 +310,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificate
   --output /tmp/strict_exchange_p4_class4_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class4_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class11_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class11_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
 ```
 
 The frozen JSON records every chosen direction, its side and role orbit, the

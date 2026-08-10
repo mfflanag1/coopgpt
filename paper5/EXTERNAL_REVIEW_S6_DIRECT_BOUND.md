@@ -48,6 +48,8 @@ coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py
 coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -215,13 +217,18 @@ four-case terminal sum giving `D<=x_1<=1/3`.
 Then reproduce the forced-relay audit.  Check that its branch rule is sound,
 that every recorded discarded blocker is genuinely UNSAT with the current
 branch, and that classes `3,4,7,8,11` cover eighteen labelled packets.  Do not
-promote the closed trees for classes 7 or 11 to hand proofs until their
-individual activation and blocker inequalities are supplied.  For class 11,
+promote the closed tree for class 7 to a hand proof until its individual
+activation and blocker inequalities are supplied.  For class 11,
 independently check (11.1)--(11.4) in `S6_P4_RELAY_TREES.md`: the first three
 identities now humanize every exchange activation and the fourth excludes the
-otherwise awkward first blocker `{0,1}`.  Confirm that these are genuine
-progress but not a complete hand proof, because the remaining blocker-cut
-classification is still supplied by the finite audit.
+otherwise awkward first blocker `{0,1}`.  Then independently derive the
+seven-cut structural list (11.5), including every membership case.  Audit all
+37 rows in `strict_exchange_p4_class11_hand_certificates.json`: the two
+first-stage opposite exceptions, four first-stage `q^1` filters, fifteen
+second-stage `q^1` filters, and sixteen terminal `q^1` filters.  Verify each
+premise orientation, nonnegative inequality multiplier, recorded scaled
+identity, cut-family exhaustiveness check, and mutation control.  State whether
+this genuinely completes class 11 without relying on its SMT blocker census.
 For class 4, independently check (4.1)--(4.3), the five-candidate opposite-cut
 classification, the two `q` exclusions leaving exactly three root blockers,
 and all three child activations.  Then check (4.4)--(4.5) without trusting the
