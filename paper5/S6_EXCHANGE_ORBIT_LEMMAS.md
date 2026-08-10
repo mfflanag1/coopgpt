@@ -388,6 +388,22 @@ fixed five-requirement certificate works uniformly over an entire symbolic
 payoff region, but it explains the observed support ceiling of five in the
 class-5/class-6 affine certificates.
 
+There is also a constructive strengthening.  For anchor `i` and a proposed
+maximizing player `k!=i`, partition the nonnegative `lambda` orthant by
+
+```text
+K(i,k)={lambda>=0:
+        lambda.(a^k-a^l)>=0 for every l not in {i,k}}.
+```
+
+On this cone the right side of (W2) is linear, so it is enough to check its
+finitely many extreme rays.  A ray with `s` positive coordinates needs
+`s-1` active player-comparison hyperplanes, but there are only `n-2`; hence
+`s<=n-1`, or five here.  The bound is sharp, and exact active-set enumeration
+produces a finite rational H-description of the witness projection.  See
+`S6_ZERO_ANCHOR_FACET_RAYS.md`.  Unlike the pointwise Helly statement, this is
+an explicit algorithm for generating every required witness-side inequality.
+
 The projection is the sought exact-cone/facet theorem for the witness side
 of all three large cases.  It converts the remaining task from continuous
 witness feasibility to a finite transversal-and-facet problem.  It does not

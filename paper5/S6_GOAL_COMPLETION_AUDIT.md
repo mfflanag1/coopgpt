@@ -228,6 +228,16 @@ of nonempty proper coalitions.  This is elementary convex duality, not a
 novelty claim, an independent validation of the relay/use maps, or a proof
 that no global blocker transversal exists.
 
+The pointwise statement now has an exact constructive refinement.  Splitting
+the nonnegative weight orthant by anchor and maximizing incidence column turns
+the support function into finitely many rational polyhedral cones.  Their
+extreme rays give a complete H-description, and every ray uses at most `n-1`
+requirements, hence at most five here.  A five-coalition circuit shows the
+bound is sharp.  A solver-free exact-row-reduction audit checks 56
+representative menus, reconstructs the sharp ray, and detects an artificial
+support-four cap.  This settles the requested algorithmic/exact-cone facet
+question for the witness component, not the coupled blocker-selection layer.
+
 ## 4. Sharpness and equality cases
 
 **Requirement.** Supply the matching lower bound and classify equality if the
@@ -383,6 +393,10 @@ python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
   --output /tmp/zero_anchor_overcover_duality_audit.json
 cmp coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json \
   /tmp/zero_anchor_overcover_duality_audit.json
+python3 coopgames/verifiers/s6/verify_zero_anchor_facet_rays.py \
+  --output /tmp/zero_anchor_facet_rays.json
+cmp coopgames/verifiers/s6/zero_anchor_facet_rays.json \
+  /tmp/zero_anchor_facet_rays.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --output /tmp/strict_exchange_p4_class6_overcovers.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json \

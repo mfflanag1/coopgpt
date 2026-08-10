@@ -64,9 +64,9 @@ and a maximizing unit vector attains the bound.
 
 Thus the exact projected witness polytope is the convex hull of at most
 `n-1` zero-one columns.  Its downward closure has a finite rational facet
-description.  A sparse witness obstruction is simply a nonnegative supporting
-normal `lambda`; it can be found by a small LP or by enumerating upper facets
-of those incidence columns.
+description.  Section 4 below makes this finiteness constructive and proves
+the sharp support bound `n-1`.  A sparse witness obstruction is simply a
+nonnegative supporting normal `lambda`.
 
 ## 3. All-anchor second-load theorem
 
@@ -128,7 +128,39 @@ The theorem is dimension-free standard convex duality, not a novelty claim.
 Its significance here is that it identifies the exact invariant behind the
 many pair, triple, and five-comparison over-covers in the large finite cases.
 
-## 4. The class-5 identities are incidence covers
+## 4. Finite ray theorem and sharp support bound
+
+Fix an anchor `i` and a possible maximizing non-anchor player `k`.  Partition
+the nonnegative weight orthant into the cones
+
+```text
+K(i,k)={lambda>=0:
+        lambda.(a^k-a^l)>=0 for all l not in {i,k}}.     (Z5)
+```
+
+On `K(i,k)`, the maximum in (Z2) is the single linear form
+`lambda.a^k`.  It is therefore necessary and sufficient to check (Z2) on the
+extreme rays of the finitely many rational cones (Z5).  If such a ray has
+`s` positive coordinates, its coordinate face has dimension `s`.  Cutting it
+to a ray needs `s-1` independent active comparisons, while (Z5) has only
+`n-2` comparison inequalities.  Hence
+
+```text
+s <= n-1.                                               (Z6)
+```
+
+At six players, every witness-side inequality thus uses at most five blocker
+requirements.  The bound is sharp: with anchor `5`, maximizer `0`, and
+coalitions `0234,0134,0124,0123,1234`, the unique positive comparison-null
+ray is `(1,1,1,1,1)`.  The exact construction, proof, and rational audit are
+in `S6_ZERO_ANCHOR_FACET_RAYS.md`.
+
+This result upgrades the Helly explanation to a complete algorithmic
+H-description.  Enumerate every anchor/maximizer pair, enumerate active
+comparison sets, and retain their primitive positive null rays.  It does not
+choose the blockers or enforce their opposite-selection comparisons.
+
+## 5. The class-5 identities are incidence covers
 
 Use anchor `b=1`.  In the first two `h10`/`h15` crossing orbits, the three
 witness comparisons use a packet coalition, an `h10` blocker `B`, and an
@@ -157,15 +189,15 @@ solver-free class-5 checker verifies those affine reductions.  The witness
 part itself is now the one-line incidence theorem (Z2), rather than four
 unrelated Farkas sums.
 
-## 5. Algorithmic consequence for the packet program
+## 6. Algorithmic consequence for the packet program
 
 At any relay state:
 
 1. collect the packet and blocker coalitions whose `q^b` comparisons are in
    force;
 2. form the `(n-1) x r` non-anchor incidence matrix;
-3. compute the upper facets of its column convex hull, or solve the separation
-   LP in (Z2) against the proposed allocation-side lower bounds;
+3. enumerate the extreme rays in (Z5), or solve the separation LP in (Z2)
+   against the proposed allocation-side lower bounds;
 4. retain a sparse extreme normal `lambda` and exactify its rational
    coefficients.
 
@@ -175,7 +207,7 @@ and it does not prove classes 5 or 6.  It does explain why one singleton
 witness can filter many blocker combinations and provides a principled route
 for compressing their remaining non-root leaves.
 
-## 6. Exhaustive class-6 application
+## 7. Exhaustive class-6 application
 
 The asymmetric class-6 relay has 49 direction nodes and 924 eligible cut uses.
 Exact difference-cone elimination removes 711.  Of the 213 candidates, 11 are
@@ -213,7 +245,7 @@ rational lower-bound identities for the 36 witness uses and one direct
 identity for the other four cases, all checked solver-free.  The relay-derived
 coverage map remains encoding-shared.
 
-## 7. Audits
+## 8. Audits
 
 ```bash
 python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
@@ -226,6 +258,19 @@ The checker proves the coefficient identity for every tested menu, verifies
 the exact non-anchor support value and its attaining unit-vector witnesses,
 checks the four class-5 applications, and rejects incidence and bound
 mutations.  It imports no solver or production encoder.
+
+The finite-ray refinement is reproduced by
+
+```bash
+python3 coopgames/verifiers/s6/verify_zero_anchor_facet_rays.py \
+  --output /tmp/zero_anchor_facet_rays.json
+cmp /tmp/zero_anchor_facet_rays.json \
+  coopgames/verifiers/s6/zero_anchor_facet_rays.json
+```
+
+It uses exact row reduction, audits 56 representative coalition menus, and
+reconstructs the sharp support-five circuit.  It rejects capping ray support
+at four.
 
 The exhaustive class-6 application is encoding-shared:
 

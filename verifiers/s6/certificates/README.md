@@ -439,6 +439,22 @@ coalitions, replays the class-5 applications, and rejects replacing the
 second-largest load by the largest.  This is standard convex duality and
 eliminates witness coordinates only after blocker cuts have been chosen.
 
+The support system also has an exact finite ray form:
+
+```text
+python3 coopgames/verifiers/s6/verify_zero_anchor_facet_rays.py \
+  --output /tmp/zero_anchor_facet_rays.json
+cmp /tmp/zero_anchor_facet_rays.json \
+  coopgames/verifiers/s6/zero_anchor_facet_rays.json
+```
+
+For each anchor and proposed maximizing incidence column, the checker
+enumerates primitive extreme rays of the corresponding comparison cone by
+exact row reduction.  Every ray uses at most `n-1` requirements, and the
+audit reconstructs a sharp support-five circuit at `n=6`.  This is a
+constructive witness-side H-description, not a blocker-transversal proof or
+novelty evidence.
+
 The all-class relay audit imposes `x3<=x4` versus `x3>x4` at every packet root.
 All eleven classes then close, with class 10 alone requiring its nested
 `x1<=x2` versus `x1>x2` split:

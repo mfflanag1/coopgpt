@@ -152,6 +152,13 @@ five-requirement Helly bound.  State explicitly whether this reduces the
 remaining proof to a finite transversal/facet problem or whether any coupling
 between witnesses was lost.
 
+Then independently check the constructive refinement in
+`S6_ZERO_ANCHOR_FACET_RAYS.md`: partition the weight orthant into the
+anchor/maximizer cones `K(i,k)`, prove that their extreme rays give an exact
+finite inequality system, and verify the support bound `n-1` and its
+five-coalition sharp example.  Distinguish this standard polyhedral reduction
+from the still-open global blocker-transversal argument.
+
 Confirm separately that `(3,3,0)` needs the H4/H5 asymmetric
 coefficient-two pair in addition to H7/H8, while `(3,2,1)` and `(4,2,0)` use
 only one-for-one and two-for-two exchanges.  Treat orbit-level UNSAT and SAT
