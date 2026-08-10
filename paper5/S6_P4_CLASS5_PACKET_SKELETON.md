@@ -335,13 +335,36 @@ checker reconstructs every failure atom and named affine premise, checks its
 availability on the recorded relay path, verifies the detailed witness digest,
 and rejects coefficient, failure-case and layer-partition mutations.
 
+The 285-use map itself has a sharp path-free/path-dependent split.  Forty-one
+identities use only global anchors or the root order and cover 253 uses:
+29 anchor/sign identities cover 202 uses and twelve order identities cover 51.
+Only 32 uses require an ancestor comparison.  They fall into three relay
+families:
+
+```text
+terminal h11/h12 endpoints:       4+4 =  8 uses,
+exceptional h16 activations:  2+1+1+9 = 13 uses,
+terminal h17/h18 activations:   2+6+3 = 11 uses.       (5.7)
+```
+
+If source-depth aliases are forgotten and the rich-player swap `4<->5` is
+canonicalized, the 72 stored identities reduce to 47 exact affine motifs.
+The 41 path-free identities give 27 motifs; the 31 path-dependent identities
+give only 20 motifs at the 32 uses in (5.7).  The verifier recomputes this
+canonicalization from the exact affine forms rather than trusting identity
+labels, and rejects a path-site mutation.  Thus the opaque residue is no
+longer a 285-row list: it is a global 253-use layer plus a 32-use residual in
+three geometrically identifiable families.  A reviewer must still derive the
+placement of those residual uses from the relay semantics.
+
 Equations (5.5)--(5.6) put class 5 at the same proof status as class 6: all
 arithmetic leaves are exact and solver-free conditional on frozen relay/use
 maps.  It is still not a tenth independently hand-derived packet lemma.  A
 reviewer must verify the maps against the relay semantics and the overarching
 counterexample-to-formula implication.  The cut menus and transitions now
-have the orbit-level atlas and path grammar above; the useful remaining
-compression target is the 72 activation identities and their 285-use map.
+have the orbit-level atlas and path grammar above; activation is reduced to
+47 affine motifs and the 32-use residual (5.7).  The remaining task is a
+human derivation of that residual placement rather than further arithmetic.
 
 ## 9. Solver-free audit
 

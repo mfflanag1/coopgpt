@@ -116,6 +116,35 @@ def category(identity):
     return "anchor/sign only"
 
 
+def rich_swap(form):
+    swapped = list(form)
+    swapped[5], swapped[6] = swapped[6], swapped[5]
+    swapped[11], swapped[12] = swapped[12], swapped[11]
+    return swapped
+
+
+def affine_signature(identity, swap=False):
+    """Forget source aliases and canonicalize the exact identity under 4<->5."""
+    rows = []
+    for row in identity["rows"]:
+        kind, form = activation_premise(
+            row["source"], identity["direction_index"], identity["failure_case"]
+        )
+        if swap:
+            form = rich_swap(form)
+        rows.append((kind, Fraction(row["multiplier"]), tuple(form)))
+    target = parsed_form(identity["target_form"])
+    if swap:
+        target = rich_swap(target)
+    return identity["direction_index"], tuple(sorted(rows, key=repr)), tuple(target)
+
+
+def motif_key(identity):
+    direct = repr(affine_signature(identity))
+    swapped = repr(affine_signature(identity, swap=True))
+    return min(direct, swapped)
+
+
 def verify_rows(payload):
     if payload.get("schema") != "strict-exchange-p4-class5-activation-allocation-identities-v1":
         raise AssertionError("unexpected class-5 activation identity schema")
@@ -195,11 +224,53 @@ def verify_rows(payload):
     }
     if dict(use_categories) != expected_use_categories:
         raise AssertionError(f"activation use categories changed: {use_categories}")
+    motifs = {}
+    for identity in identities:
+        motifs.setdefault(motif_key(identity), []).append(identity["id"])
+    motif_sizes = Counter(len(group) for group in motifs.values())
+    if motif_sizes != {1: 29, 2: 12, 3: 5, 4: 1}:
+        raise AssertionError(f"activation affine-motif census changed: {motif_sizes}")
+    path_motifs = {
+        key: group for key, group in motifs.items()
+        if category(identity_map[group[0]]) == "path-dependent"
+    }
+    if len(motifs) != 47 or len(path_motifs) != 20:
+        raise AssertionError("activation affine-motif counts changed")
+    if any(
+        len({category(identity_map[identity]) for identity in group}) != 1
+        for group in motifs.values()
+    ):
+        raise AssertionError("activation motif mixes path and path-free identities")
+    path_residuals = Counter(
+        (use["direction_index"], use["failure_case"])
+        for use in uses if category(identity_map[use["identity"]]) == "path-dependent"
+    )
+    expected_path_residuals = {
+        (11, 0): 4, (12, 0): 4,
+        (16, 0): 2, (16, 1): 1, (16, 2): 1, (16, 3): 9,
+        (17, 0): 2, (18, 0): 6, (18, 1): 3,
+    }
+    if dict(path_residuals) != expected_path_residuals:
+        raise AssertionError(f"activation path residuals changed: {path_residuals}")
+    compression = {
+        "path_free_identity_count": 41,
+        "path_free_use_count": 253,
+        "path_dependent_identity_count": 31,
+        "path_dependent_use_count": 32,
+        "affine_motif_count": len(motifs),
+        "path_free_affine_motif_count": len(motifs) - len(path_motifs),
+        "path_dependent_affine_motif_count": len(path_motifs),
+        "path_residual_groups": {
+            f"h{direction}:failure{failure}": count
+            for (direction, failure), count in sorted(path_residuals.items())
+        },
+    }
     return (
         identity_map,
         dict(sorted(support_sizes.items())),
         expected_identity_categories,
         expected_use_categories,
+        compression,
     )
 
 
@@ -258,7 +329,7 @@ def main():
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     payload = json.loads(args.rows.read_text())
-    identity_map, supports, identity_categories, use_categories = verify_rows(payload)
+    identity_map, supports, identity_categories, use_categories, compression = verify_rows(payload)
     digest = (
         verify_details(payload, identity_map, args.overcover_details)
         if args.overcover_details else None
@@ -272,21 +343,30 @@ def main():
     layer_mutation = expect_rejection(
         payload, lambda trial: trial["uses"][0].update(layer="witness")
     )
+    path_use_index = next(
+        index for index, use in enumerate(payload["uses"])
+        if category(identity_map[use["identity"]]) == "path-dependent"
+    )
+    path_site_mutation = expect_rejection(
+        payload, lambda trial: trial["uses"][path_use_index].update(stage="S-h11")
+    )
     report = {
         "schema": "strict-exchange-p4-class5-activation-identity-audit-v1",
         "status": "PASS",
-        "scope": "solver-free exact-rational audit of 72 identities at all 285 class-5 activation failures; relay/use maps remain integration records",
+        "scope": "solver-free exact-rational audit of 72 identities at all 285 class-5 activation failures, with 47 affine motifs and a 32-use path residual; relay semantics remain an external-review obligation",
         "identity_count": len(payload["identities"]),
         "use_count": len(payload["uses"]),
         "layer_use_counts": dict(sorted(Counter(use["layer"] for use in payload["uses"]).items())),
         "identity_support_sizes": supports,
         "identity_categories": identity_categories,
         "use_categories": use_categories,
+        "map_compression": compression,
         "detailed_overcover_sha256": digest,
         "mutation_controls": {
             "coefficient": coefficient_mutation,
             "failure_semantics": failure_mutation,
             "layer_partition": layer_mutation,
+            "path_site": path_site_mutation,
         },
     }
     rendered = json.dumps(report, indent=2, sort_keys=True) + "\n"

@@ -284,9 +284,11 @@ identities.  Solver-free checkers verify every arithmetic identity and the
 exhaustive partitions.  This is not yet a tenth independently derived hand
 lemma.  The 24 labelled cut menus now collapse to fifteen rich-player
 templates, and a path-local grammar generates all 88 edges and 51 leaves.
-Independent derivation of that grammar from the relay semantics, together
-with compression of the 285-use activation map, remains the external-review
-boundary.
+On activation, 41 path-free identities cover 253 of 285 uses; the 32
+path-dependent uses lie in three endpoint/exceptional families.  Rich-player
+canonicalization reduces all 72 identities to 47 affine motifs, only 20 of
+them path-dependent.  Independent derivation of the grammar and the 32-use
+residual from the relay semantics remains the external-review boundary.
 The other remaining row, class 6, has an asymmetric sandwich
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`.  It reduces both
 twenty-cut roots to two blockers using signs alone.  Its 29 non-root leaves

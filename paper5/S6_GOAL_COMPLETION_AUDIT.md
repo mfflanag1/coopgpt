@@ -171,9 +171,12 @@ activation failures split into 195 exact allocation contradictions and 90
 unit-weight witness over-covers, all covered by 72 exact rational identities.
 No class-5 arithmetic leaf remains machine-only.  The 24 labelled menus now
 collapse to fifteen rich-player templates, and a path-local grammar generates
-all 88 edges and 51 leaves.  The activation-use map still needs orbit-level
-compression, and the full grammar needs independent reconstruction before
-this is a tenth hand-checkable packet row.
+all 88 edges and 51 leaves.  The activation-use map also compresses sharply:
+41 path-free identities cover 253 uses, leaving only 32
+ancestor-dependent uses in three relay families.  Rich-player
+canonicalization reduces the 72 identities to 47 affine motifs, including 20
+for the residual.  The full grammar and those 32 placements need independent
+reconstruction before this is a tenth hand-checkable packet row.
 Class 6 now has complete solver-free arithmetic conditional on its frozen
 relay/use maps.  Its stronger sandwich reduces both twenty-cut roots to two
 blockers apiece without a witness identity.  Across 49 nodes, exact

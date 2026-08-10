@@ -397,6 +397,10 @@ The identity verifiers import no solver or production encoder, reconstruct
 every named affine premise over the rationals, check path availability, and
 exercise mutation controls.  The 34/150/88 cut map and 195/90 activation map
 remain encoding-shared integration records requiring external review.
+The cut verifier additionally checks a fifteen-template menu atlas and the
+complete path-local 88-edge grammar.  The activation verifier separates 253
+path-free uses from a 32-use ancestor-dependent residual and canonicalizes the
+72 identities to 47 affine motifs under the rich-player swap.
 
 Class 6 has a complete solver-free cut partition conditional on the frozen
 relay/use maps.  Exact Fourier--Motzkin elimination gives

@@ -404,10 +404,16 @@ identities with `verify_strict_exchange_p4_class5_activation_identities.py`:
 lower-bound identities cover the 90 witness uses.  Verify every failure atom,
 strict multiplier, path premise and digest link.  This removes solver
 dependence from class-5 arithmetic, but not from discovery of the frozen maps.
+Independently verify the claimed compression: 41 path-free identities cover
+253 uses, while the 32 path-dependent uses split as eight terminal `h11/h12`,
+thirteen exceptional `h16`, and eleven terminal `h17/h18` cases.  Recompute
+the rich-player canonicalization from affine forms and confirm 47 total
+motifs, of which 20 cover the path-dependent residue.  Do not treat forgetting
+source-depth aliases as proof that a motif is available at a particular path.
 Do not promote class 5 to an independently derived tenth hand proof until its
 menu atlas and transition grammar have been reconstructed from the relay
-semantics and its 285 activation uses have either a short orbit-level
-derivation or a separate reviewer reconstruction.
+semantics and the 32 residual activation uses have a separate reviewer
+reconstruction.
 
 For class 6, independently derive the asymmetric sandwich in
 `S6_P4_CLASS6_PACKET_SKELETON.md`, both root activation chains, and the exact

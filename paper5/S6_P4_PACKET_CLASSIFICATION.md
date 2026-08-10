@@ -181,8 +181,11 @@ a path-local grammar generates all 88 relay edges and 51 leaves.  The
 activation layer has 285 elementary failure cases: 195 have exact
 zero-target contradictions and 90 have unit-weight incidence over-covers;
 72 exact rational identities settle all 285 uses.  The checkers import no
-solver when verifying these identities and exhaustive partitions.  The use
-maps remain relay-derived, so class 5 now has complete and partly compressed
+solver when verifying these identities and exhaustive partitions.  Forty-one
+path-free identities cover 253 activation uses; only 32 uses require an
+ancestor comparison, in three relay families.  Canonicalization under the
+rich-player swap reduces the 72 identities to 47 affine motifs.  The use maps
+remain relay-derived, so class 5 now has complete and substantially compressed
 arithmetic rather than a tenth externally validated hand proof.
 Class 6 has a parallel solver-free root skeleton.  Its asymmetric packet gives
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`; these stronger bounds
