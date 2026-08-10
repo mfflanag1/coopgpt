@@ -73,17 +73,44 @@ player 2 is impossible by `delta5<=d2+d3`.  Hence the exact root list is
 Equations (6.2)--(6.3) replace both twenty-cut root censuses by two two-cut
 lists using only the packet sandwich and strict signs.
 
-## 4. Residual relay
+## 4. Every witness filter has a sparse over-cover
+
+The 49 non-root relay stages expose 202 cuts that survive the
+opposite-allocation comparison.  Of these, 47 survive the full witness
+comparison and 155 are excluded by `q^1`.  Applying the zero-anchor incidence
+theorem to every one of those 155 exclusions produces an over-cover using at
+most five of the packet, ancestor, and target coalitions:
+
+```text
+support size       1   2   3   4   5
+certificate count 12  82  27  30   4
+```
+
+Exactly 150 certificates have only unit coefficients.  The other five use a
+coefficient two; no coefficient larger than two is needed.  The exact support
+bounds are zero in 12 cases, one in 98, two in 42, and three in three.  Thus
+the witness side of every non-root filter is now a short incidence inequality,
+not an opaque Farkas certificate.
+
+This census is not yet an independent hand proof of the filters.  The
+incidence upper bound follows solver-free from the zero-anchor theorem, but
+the current audit checks inside the localized parent encoding that the
+corresponding allocation-side lower sum strictly exceeds that bound.  Those
+allocation reductions, together with the 47 full survivors and their terminal
+closures, are the remaining humanization target.
+
+## 5. Residual relay
 
 The weak root has two symmetric-looking subtrees.  Each passes through the
 automatic `h10=e0-e1` Lmax exchange, one of four `h10` blockers, the automatic
 Lmin exchange `h15=e0-e1`, and then closes immediately with either `h17` or
 the three-for-three Lmax exchange `h7=e0-e1+e2-e5`.  The strict root has only
-seven leaves and depth four.  These 29 leaves remain machine-resolved until
-their non-root blocker filters and terminal closures receive exact hand
-identities.
+seven leaves and depth four.  The 155 witness rejections now have sparse
+incidence supports, but the 29 leaves remain machine-resolved until their
+allocation-side reductions and the 47 surviving-cut terminal closures receive
+exact hand identities.
 
-## 5. Solver-free audit
+## 6. Audits
 
 ```bash
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py \
@@ -98,3 +125,20 @@ twenty-cut root lists.  Finite order enumeration checks both activation
 chains and rejects weakened-chain and candidate-deletion mutations.  Its read
 of the frozen universal relay is separately labelled as an integration audit,
 not proof evidence for the lemma or the human-to-machine implication.
+
+The encoding-shared over-cover census is reproduced separately:
+
+```bash
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --output /tmp/strict_exchange_p4_class6_overcovers.json
+cmp /tmp/strict_exchange_p4_class6_overcovers.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class6_overcovers_details.json
+```
+
+The compact artifact freezes the census and a SHA-256 digest of the canonical
+155-row certificate list.  `--details` regenerates the complete list for
+inspection without storing a large redundant proof artifact.  This second
+audit imports Z3 and the localized relay encoder; it is a discovery and
+integration audit, not independent evidence for the allocation inequalities.

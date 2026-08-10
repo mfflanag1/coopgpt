@@ -279,7 +279,11 @@ compressed.
 The other remaining row, class 6, has an asymmetric sandwich
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`.  It reduces both
 twenty-cut roots to two blockers using signs alone.  Its 29 non-root leaves
-remain to be humanized.
+remain to be humanized.  Their witness-side residue is now fully classified:
+across 49 stages, all 155 witness-rejected cuts have incidence over-covers of
+support at most five.  Of these, 150 use only unit coefficients and five use a
+coefficient two.  The incidence bound is a human theorem; the allocation-side
+strict inequality is presently verified inside the shared localized encoding.
 
 The single-witness filters admit a general exact projection theorem.  For a
 fixed blocker menu, `q^b` maps the zero-anchor simplex onto the convex hull of
@@ -376,6 +380,18 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificate
   --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class2_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py \
+  --output /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
+cmp /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json
+python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
+  --output /tmp/zero_anchor_overcover_duality_audit.json
+cmp /tmp/zero_anchor_overcover_duality_audit.json \
+  coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --output /tmp/strict_exchange_p4_class6_overcovers.json
+cmp /tmp/strict_exchange_p4_class6_overcovers.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \
@@ -442,6 +458,12 @@ coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py
+coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json
+coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py
+coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py
+coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py

@@ -177,7 +177,12 @@ coalition menu, the `q^1`-sum image is the convex hull of the five non-anchor
 incidence columns.  Its nonnegative support function is the maximum
 non-anchor incidence load.  This zero-anchor over-cover duality turns the
 class-5 crossing identities into sparse incidence covers and gives an LP/facet
-algorithm for the remaining witness filters.
+algorithm for the remaining witness filters.  In class 6 this program is now
+exhaustive on the witness side: all 155 witness-rejected cuts across 49 stages
+have supports of size at most five; 150 use unit coefficients and five use a
+coefficient two.  The associated allocation-side strict inequalities are
+still checked in the shared localized encoding, so this is a compression
+roadmap rather than a tenth hand certificate.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain
@@ -393,6 +398,10 @@ python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
   --output /tmp/zero_anchor_overcover_duality_audit.json
 cmp /tmp/zero_anchor_overcover_duality_audit.json \
   coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --output /tmp/strict_exchange_p4_class6_overcovers.json
+cmp /tmp/strict_exchange_p4_class6_overcovers.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

@@ -164,7 +164,12 @@ seven-term witness identity beyond the packet/sign arguments.  The 51 relay
 leaves remain to be compressed.
 Class 6 now also has a solver-free asymmetric-packet root lemma.  Its stronger
 sandwich reduces both twenty-cut roots to two blockers apiece without a
-witness identity.  This remains a partial skeleton: the 29 non-root leaves
+witness identity.  Its complete witness-side census further replaces all 155
+`q^1` rejections across 49 non-root stages by incidence over-covers of support
+at most five; 150 use unit coefficients and five use a coefficient two.  The
+incidence bounds are human consequences of the general theorem, but their
+allocation-side strict lower bounds are still established in the shared
+localized encoding.  This remains a partial skeleton: the 29 non-root leaves
 are not yet a complete hand certificate.
 The single-witness component now has a general exact-cone theorem rather than
 case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
@@ -300,6 +305,10 @@ python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
   --output /tmp/zero_anchor_overcover_duality_audit.json
 cmp coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json \
   /tmp/zero_anchor_overcover_duality_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --output /tmp/strict_exchange_p4_class6_overcovers.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json \
+  /tmp/strict_exchange_p4_class6_overcovers.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \

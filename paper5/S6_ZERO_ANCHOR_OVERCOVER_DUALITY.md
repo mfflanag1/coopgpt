@@ -115,7 +115,23 @@ and it does not prove classes 5 or 6.  It does explain why one singleton
 witness can filter many blocker combinations and provides a principled route
 for compressing their remaining non-root leaves.
 
-## 5. Solver-free audit
+## 5. Exhaustive class-6 application
+
+The asymmetric class-6 relay has 49 stages and 202 cuts that survive their
+opposite-allocation comparison.  Forty-seven also survive the witness test.
+Every one of the other 155 cuts has a support inequality of the form (Z2)
+using at most five available comparisons: 150 use only unit coefficients and
+five require coefficient two.  The support-size distribution is
+`12,82,27,30,4` for sizes one through five.
+
+This exhausts the *witness-side* geometry of the class-6 filters.  It does not
+yet independently prove that the allocation comparisons force a lower sum
+above the support bound: the current exhaustive audit establishes those
+strict lower bounds in the shared localized encoding.  Exactifying those
+allocation reductions and the 47 witness-compatible survivors is the next
+human-proof task.
+
+## 6. Audits
 
 ```bash
 python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
@@ -128,3 +144,15 @@ The checker proves the coefficient identity for every tested menu, verifies
 the exact non-anchor support value and its attaining unit-vector witnesses,
 checks the four class-5 applications, and rejects incidence and bound
 mutations.  It imports no solver or production encoder.
+
+The exhaustive class-6 application is encoding-shared:
+
+```bash
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+  --output /tmp/strict_exchange_p4_class6_overcovers.json
+cmp /tmp/strict_exchange_p4_class6_overcovers.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
+```
+
+Its exact incidence calculations instantiate (Z2), while its allocation-side
+UNSAT queries remain audit conveniences rather than independent proof objects.
