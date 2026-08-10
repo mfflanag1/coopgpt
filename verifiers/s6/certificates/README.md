@@ -436,6 +436,22 @@ cmp /tmp/strict_exchange_p4_universal_order_relays.json \
 This audit shares the parent encoder.  It is a structural decomposition, not
 an independent certificate or an all-human proof of the four remaining rows.
 
+The reduced `52+71+90` large-case cores also have a solver-free activation
+atlas audit:
+
+```text
+python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_activation_atlas.py \
+  --output /tmp/strict_exchange_large_case_activation_atlas.json
+cmp /tmp/strict_exchange_large_case_activation_atlas.json \
+  coopgames/verifiers/s6/strict_exchange_large_case_activation_atlas.json
+```
+
+It expands all 19 selected role schemas to 136 labelled directions and checks
+their min/max order-statistic activation formulas on all 4,683 labelled weak
+orders, for 636,888 comparisons.  It deliberately excludes blocker
+consequents; its result humanizes lexicographic activation without proving
+the finite coexistence contradiction.
+
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
 that each declares only the 48 expected selection/witness reals, has the same

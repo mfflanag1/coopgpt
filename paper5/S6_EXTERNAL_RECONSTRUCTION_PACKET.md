@@ -120,16 +120,20 @@ Read:
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
 coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py
+coopgames/verifiers/s6/audit_strict_exchange_large_case_activation_atlas.py
 coopgames/verifiers/s6/strict_exchange_large_case_orbit_cores.json
+coopgames/verifiers/s6/strict_exchange_large_case_activation_atlas.json
 ```
 
 Independently verify that relabelling within `P`, `M`, and `E` sends the 213
 labelled rows of the `52+71+90` cases to 44 sign-role orbits, and that the
 reduced proof retains 19 complete orbits containing 136 rows.  For the
-`(3,2,1)` case, derive the A1--A8 activation atlas directly: its 29 retained
-rows must reduce to the eight displayed min/max order-statistic tests with
-multiplicities `2+3+6+3+3+6+3+3`.  This settles the activation vocabulary,
-not the coexistence of the resulting blockers.
+three cases, derive the A1--A8, B1--B5, and C1--C6 activation atlases
+directly.  Their `29+39+68=136` retained rows must reduce to the 19 displayed
+min/max order-statistic tests with the stated multiplicities.  In B4/B5,
+confirm explicitly that swapping coefficient magnitudes leaves activation
+unchanged but changes the negative-cut family.  This settles the activation
+vocabulary, not the coexistence of the resulting blockers.
 
 Confirm separately that `(3,3,0)` needs the H4/H5 asymmetric
 coefficient-two pair in addition to H7/H8, while `(3,2,1)` and `(4,2,0)` use
@@ -242,7 +246,7 @@ file and line references.  End with separate answers:
 
 1. Does every genuine counterexample map into a frozen relaxation?
 2. Are the two coefficient-two cases independently reconstructed?
-3. Is the 52/71/90 orbit quotient, including the A1--A8 activation atlas,
+3. Is the 52/71/90 orbit quotient, including the A/B/C activation atlases,
    independently derivable from role relabelling and order statistics?
 4. Are the class-5 and class-6 maps independently derivable from the stated
    orbit grammars?

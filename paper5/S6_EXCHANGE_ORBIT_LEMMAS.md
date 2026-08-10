@@ -208,7 +208,7 @@ coefficient multisets on `P,M,E` are the displayed lists.
 | | C5 | `min: P[-1,0,0,1] M[0,0]` |
 | | C6 | `min: P[-1,-1,0,0] M[1,1]` |
 
-### Exact activation atlas for the 52-direction case
+### Exact activation atlases for the 52/71/90-direction cases
 
 The reduced `(3,2,1)` core contains 29 labelled directions, but their
 activation conditions are eight elementary order-statistic statements.  Put
@@ -245,6 +245,59 @@ Thus all activation logic in the reduced 52-direction case is humanized by
 eight order-statistic comparisons and two exchange archetypes.  What remains
 finite is the coexistence of the negative-cut blockers forced when these
 conditions hold; this atlas does not claim to settle that layer by hand.
+
+The balanced `(3,3,0)` core similarly reduces its 39 labelled rows to five
+tests:
+
+| schema | labelled direction `h` | side | exact activation condition | labelled rows |
+|---|---|---|---|---:|
+| B1 | `-e_p+e_m` | Lmin | `x_m<x_p` | 9 |
+| B2 | `-e_p-e_{p'}+e_m+e_{m'}` | Lmin | `min(x_m,x_{m'})<min(x_p,x_{p'})` | 9 |
+| B3 | `e_p-e_m` | Lmax | `z_m>z_p` | 9 |
+| B4 | `e_p+2e_{p'}-e_{m_1}-e_{m_2}-e_{m_3}` | Lmax | `max_{m in M} z_m>max(z_p,z_{p'})` | 6 |
+| B5 | `-2e_p-e_{p'}+e_{m_1}+e_{m_2}+e_{m_3}` | Lmin | `min_{m in M} x_m<min(x_p,x_{p'})` | 6 |
+
+Here B4 and B5 assign coefficients one and two to an ordered pair of
+`P`-players, giving six labelled rows apiece.  Swapping those magnitudes does
+not change activation, but it does change the negative-cut family and hence
+cannot be quotiented out of the blocker proof.  The multiplicities give
+`9+9+9+6+6=39`.
+
+Finally, the reduced `(4,2,0)` orbit core has the following six tests for its
+68 rows:
+
+| schema | labelled direction `h` | side | exact activation condition | labelled rows |
+|---|---|---|---|---:|
+| C1 | `-e_p+e_m` | Lmin | `x_m<x_p` | 8 |
+| C2 | `-e_p+e_r+e_s-e_m` | Lmax | `max(z_p,z_m)>max(z_r,z_s)` | 24 |
+| C3 | `-e_p+e_r` | Lmax | `z_p>z_r` | 12 |
+| C4 | `e_p+e_{p'}-e_{m_1}-e_{m_2}` | Lmax | `max(z_{m_1},z_{m_2})>max(z_p,z_{p'})` | 6 |
+| C5 | `-e_p+e_r` | Lmin | `x_r<x_p` | 12 |
+| C6 | `-e_p-e_{p'}+e_{m_1}+e_{m_2}` | Lmin | `min(x_{m_1},x_{m_2})<min(x_p,x_{p'})` | 6 |
+
+In C2, `p,r,s` are distinct `P`-players and the fourth `P`-player has
+coefficient zero.  The multiplicities give `8+24+12+6+12+6=68`.  The
+anchor-localized alternative reduces this case further, to 19 directions in
+ten residual orbits and one singleton witness; the C-atlas records the
+symmetry-complete uniform core rather than replacing that sharper route.
+
+Across all three cases, the 136 retained labelled activations have therefore
+been reduced to `8+5+6=19` order-statistic schemas.  This exactly mirrors the
+19 selected sign-role orbits.  The remaining opacity is now localized to the
+negative-cut blocker coexistence layer, not to lexicographic activation.
+
+A solver-free checker expands the 19 role orbits to all 136 labelled
+directions and compares these extreme-level tests with the direct
+first-affected-level definition on all 4,683 labelled weak orders.  All
+636,888 comparisons agree, and replacing strict by non-strict comparison is
+detected.  Reproduce the frozen audit with
+
+```bash
+python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_activation_atlas.py \
+  --output /tmp/strict_exchange_large_case_activation_atlas.json
+cmp /tmp/strict_exchange_large_case_activation_atlas.json \
+  coopgames/verifiers/s6/strict_exchange_large_case_activation_atlas.json
+```
 
 Reproduce the full orbit minimization, including all 19 SAT ablations, with
 
