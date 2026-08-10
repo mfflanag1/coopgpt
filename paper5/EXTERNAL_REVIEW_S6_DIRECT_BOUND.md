@@ -49,6 +49,8 @@ coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
+coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
+coopgames/verifiers/s6/strict_exchange_semantic_interface.json
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```
 
@@ -105,7 +107,12 @@ singleton-exactified overlap `2/3`.
    Use `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` as a claim to attack, not as an
    authority.  Match each proof step to the literal assertion ranges in
    `strict_exchange_formula_interface.json`, and inspect representative full
-   blocker disjunctions on both sides.
+   blocker disjunctions on both sides.  Then run the separate semantic audit:
+   check that its independently written no-unique-top, first-affected-level,
+   and subset-by-subset blocker formulas are genuinely independent of the
+   production implementation and that all 1,332 local equivalence checks have
+   the claimed meaning.  This differential audit reduces transcription risk;
+   it does not validate the human convexity or tight-blocker lemmas.
 7. **Direction pools.** Verify that `direction_pool(1)` and
    `direction_pool(2)` contain exactly the asserted efficiency-preserving
    integer directions, that only the two named cases use bound two, and that

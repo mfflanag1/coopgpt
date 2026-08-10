@@ -220,6 +220,38 @@ cmp /tmp/strict_exchange_formula_interface.json \
 The JSON maps each direction implication to its assertion label, direction,
 side, negative-proper-cut count, and seven comparisons per cut.
 
+The layout audit alone does not establish that an assertion with the right
+outer shape has the right semantics.  A second script therefore reconstructs
+every frozen assertion independently and tests logical equivalence one row at
+a time:
+
+```bash
+python3 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py \
+  --output /tmp/strict_exchange_semantic_interface.json
+cmp /tmp/strict_exchange_semantic_interface.json \
+  coopgames/verifiers/s6/strict_exchange_semantic_interface.json
+```
+
+This reconstruction imports no production encoder, lex predicate, blocker
+builder, direction generator, minimizer, exporter, or serializer.  It treats
+only the retained menus as theorem data.  It writes the no-unique-top anchor
+as the negation of a unique maximum, writes lex improvement by the direct
+first-affected-payoff-level criterion, and rebuilds every blocker by iterating
+all nonempty proper subsets with negative direction sum.  Across the fifteen
+formulas it checks semantic equivalence of all `1,080` base assertions and all
+`252` direction implications.  The latter independently reconstruct `4,722`
+negative-cut alternatives and `33,054` individual blocker comparisons.  Every
+one of the `1,332` local equivalence queries is UNSAT.
+
+This is materially stronger than checking assertion counts or rerunning the
+theorem formulas.  It would detect a reversed comparison, a missing negative
+cut, a wrong sign case, a changed distance normalization, or a production lex
+predicate that differs from the first-affected-level statement.  It still
+does not prove the human claims that the three anchors are necessary, that the
+first-affected test is genuinely lex-improving, or that optimality supplies a
+negative tight blocker.  Those remain the external reviewer's load-bearing
+mathematical tasks.
+
 ## 8. What an external reviewer can still falsify
 
 A fatal objection must identify one of the following:

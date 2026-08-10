@@ -289,6 +289,14 @@ implications afterward.  It maps every implication to its named assertion and
 negative-cut count.  This audit excludes hidden machine premises; the human
 soundness proof remains `paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md`.
 
+`../strict_exchange_semantic_interface.json` is the independent semantic
+differential.  Its generator imports none of the production formula machinery,
+rebuilds the anchors, first-affected-level predicates, and every negative cut,
+then checks each of the 1,332 frozen assertions for local logical equivalence.
+It reconstructs 4,722 cut alternatives and 33,054 individual comparisons.  It
+checks the transcription from the documented mathematics into SMT, not the
+human proof that those documented premises are necessary.
+
 The sharp lower-bound witness also has a targeted exact end-to-end regression:
 
 ```bash

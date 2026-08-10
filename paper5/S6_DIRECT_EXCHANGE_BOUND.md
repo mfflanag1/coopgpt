@@ -257,6 +257,11 @@ formula declares exactly 48 reals and consists of exactly 72 documented base
 assertions followed only by its recorded direction implications.  This is the
 review boundary that matters: a reviewer should prove or refute that every
 genuine counterexample satisfies those assertions, not merely rerun UNSAT.
+A separate semantic audit now reconstructs all 1,332 frozen assertions without
+the production encoder or predicates and proves each locally equivalent to its
+independent statement.  It rebuilds 4,722 negative-cut alternatives and 33,054
+blocker comparisons.  This closes the transcription question while leaving
+the human necessity of the anchors, lex test, and blocker lemma open to review.
 
 The direct proof makes the older first-crossing, equality-neighborhood, and
 support-table programs logically unnecessary for `s(6)=2/3`.  They remain
@@ -275,6 +280,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
   --output /tmp/strict_exchange_formula_interface.json
 cmp /tmp/strict_exchange_formula_interface.json \
   coopgames/verifiers/s6/strict_exchange_formula_interface.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py \
+  --output /tmp/strict_exchange_semantic_interface.json
+cmp /tmp/strict_exchange_semantic_interface.json \
+  coopgames/verifiers/s6/strict_exchange_semantic_interface.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
@@ -329,6 +338,8 @@ coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py
 coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
+coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
+coopgames/verifiers/s6/strict_exchange_semantic_interface.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/paper5/S6_P4_ANCHOR_LOCALIZATION.md

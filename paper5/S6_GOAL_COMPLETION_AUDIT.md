@@ -178,7 +178,14 @@ assertion by assertion.  The accompanying literal audit verifies that every
 frozen formula has exactly 48 declared reals, 72 documented base assertions,
 and only the recorded exchange implications afterward.  This makes the
 remaining external task sharply falsifiable, but it is not a substitute for
-an independent human verdict.
+an independent human verdict.  A second, separately formulated semantic audit
+now reconstructs every assertion without importing the production encoder,
+lex predicate, blocker, direction generator, minimizer, exporter, or
+serializer.  It proves local logical equivalence for all 1,080 base assertions
+and 252 direction implications, rebuilding 4,722 negative-cut alternatives
+and 33,054 blocker comparisons.  This closes the literal transcription gap;
+it still does not independently prove the human anchor, lex-improvement, or
+tight-blocker lemmas.
 
 No claim of external validation or field-level novelty is made.  The branch
 must not be merged before that review.  A negative external verdict would
@@ -202,6 +209,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
   --output /tmp/strict_exchange_formula_interface.json
 cmp coopgames/verifiers/s6/strict_exchange_formula_interface.json \
   /tmp/strict_exchange_formula_interface.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py \
+  --output /tmp/strict_exchange_semantic_interface.json
+cmp coopgames/verifiers/s6/strict_exchange_semantic_interface.json \
+  /tmp/strict_exchange_semantic_interface.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
