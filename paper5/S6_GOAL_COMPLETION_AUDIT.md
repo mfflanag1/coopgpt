@@ -142,16 +142,21 @@ checked at all 122 uses.  Class 1, covering one labelled pair, adds twenty-one
 exact censuses and 109 identities checked at all 160 uses.  A minimum-level
 lemma reduces its complete activation audit to 75 cases.  Class 2, covering two labelled
 pairs, adds 21 exact censuses and 108 identities at 132 uses.  Its shared
-minimum/maximum-level lemma reduces activation to 72 cases.  Thus only two
-packet classes covering five labelled pairs remain machine-resolved.  A
+minimum/maximum-level lemma reduces activation to 72 cases.  Of the last two
+packet classes covering five labelled pairs, class 6 now has complete exact
+arithmetic conditional on frozen integration maps, while class 5 remains
+machine-resolved.  A
 separate forced-exchange audit sharpens that boundary: classes
 `1,2,3,4,7,8,9,10,11` now have complete exact relay certificates and together
-cover twenty-seven labelled packets.  All nine now have hand-checkable proof
-objects; classes 5 and 6 remain machine-resolved at the hand-certificate layer.
+cover twenty-seven labelled packets.  All nine now have independently
+specified hand-checkable proof objects; class 6 has a complete conditional
+arithmetic certificate and class 5 remains machine-resolved at the
+hand-certificate layer.
 A universal order audit eliminates their open leaves: `x_3<=x_4` versus
 `x_3>x_4` closes every one of the eleven packet classes, with class 10 the
-unique row requiring a nested `x_1`/`x_2` split.  The remaining gap is exact
-human compression of two closed machine trees, not unknown finite anatomy.
+unique row requiring a nested `x_1`/`x_2` split.  The remaining gap is
+completion of class 5, conceptual compression and independent map validation
+for class 6, not unknown finite anatomy.
 There is now a first solver-free class-5 compression: the symmetric packet
 sandwich and cross-anchor chain replace all ten `h15` activation checks by one
 lemma and reduce each of its sixteen-cut blocker censuses to the same ten
@@ -162,22 +167,30 @@ orbits.  The weak and strict roots also have complete hand classifications:
 twenty cuts reduce respectively to three and four blockers, using only one
 seven-term witness identity beyond the packet/sign arguments.  The 51 relay
 leaves remain to be compressed.
-Class 6 now also has a solver-free asymmetric-packet root lemma.  Its stronger
-sandwich reduces both twenty-cut roots to two blockers apiece without a
-witness identity.  Its complete witness-side census further replaces all 155
-`q^1` rejections across 49 non-root stages by incidence over-covers of support
+Class 6 now has complete solver-free arithmetic conditional on its frozen
+relay/use maps.  Its stronger sandwich reduces both twenty-cut roots to two
+blockers apiece without a witness identity.  Across 49 nodes, exact
+Fourier--Motzkin elimination partitions 924 eligible cut uses into 711 pure
+difference exclusions and 213 candidates.  Eleven candidates are excluded by
+the existing packet/ancestor witness context, 155 by the target `q^1`
+witness, and 47 are exactly the relay branches.  The eleven context exclusions
+have nine exact rational identities.  The 155 target-witness rejections have
+incidence over-covers of support
 at most five; 150 use unit coefficients and five use a coefficient two.  The
 incidence bounds are human consequences of the general theorem, but their
 allocation-side strict lower bounds are now 53 deduplicated exact rational
 identities checked solver-free at all 155 uses.  The digest-protected use map
-still comes from the shared localized relay; the 47 witness-compatible cuts
-and terminal closures are not yet hand-compressed.  This remains a partial
-skeleton: the 29 non-root leaves are not yet a complete hand certificate.
+still comes from the shared localized relay, but a separate exact census
+checks that the 11, 155, and 47 uses exhaust all 213 candidates and hence every
+terminal closure.  No cut arithmetic remains machine-only.
 The same incidence theorem now compresses activation: of 124 elementary
 failure cases, 84 are structural, four are allocation-infeasible, and the
 other 36 have over-covers of support at most four.  Their allocation-side
 strict reductions are now 26 solver-free rational identities, while the four
-direct cases share one more identity.  Coverage remains relay-derived.
+direct cases share one more identity.  No activation arithmetic remains
+machine-only.  Coverage remains relay-derived, so independent validation of
+the map is still required before calling this an externally reviewed hand
+certificate.
 The single-witness component now has a general exact-cone theorem rather than
 case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
 the convex hull of the non-anchor incidence columns; feasibility of lower

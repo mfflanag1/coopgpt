@@ -134,8 +134,10 @@ root split and one nested comparison, bringing the total to twenty-four
 packets.  Class 1 is now the eighth hand-checkable row: twenty-one exact cut
 censuses and 109 rational identities at 160 uses bring the total to twenty-five
 packets.  Class 2 is the ninth: 21 cut censuses and 108 identities at 132 uses
-bring the total to twenty-seven.  Two classes covering the other five packets
-remain machine-resolved.  Both nevertheless close under the same root split `x_3<=x_4` versus
+bring the total to twenty-seven.  Of the two classes covering the other five
+packets, class 6 now has complete exact arithmetic conditional on its frozen
+relay/use maps, while class 5 retains machine-resolved residue.  Both close
+under the same root split `x_3<=x_4` versus
 `x_3>x_4`; in fact this split gives complete relay trees for all eleven
 classes, with only class 10 needing one nested `x_1`/`x_2` split.
 Class 4 uses
@@ -172,7 +174,12 @@ Class 6 has a parallel solver-free root skeleton.  Its asymmetric packet gives
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`; these stronger bounds
 reduce the weak and strict twenty-cut roots directly to `24,124` and
 `135,0135`, with no witness filter.
-The witness filters themselves now have an exact common description: for any
+The cut filters themselves now have complete exact accounting.  Across the 49
+class-6 nodes, 924 eligible cuts split into 711 pure difference-cone
+exclusions and 213 candidates.  Of those candidates, 11 are excluded by the
+existing packet/ancestor witness context, 155 by the target witness, and 47
+are exactly the relay branches.  Only ten distinct difference-cone candidate
+sets occur.  The witness filters have an exact common description: for any
 coalition menu, the `q^1`-sum image is the convex hull of the five non-anchor
 incidence columns.  Its nonnegative support function is the maximum
 non-anchor incidence load.  This zero-anchor over-cover duality turns the
@@ -183,9 +190,12 @@ have supports of size at most five; 150 use unit coefficients and five use a
 coefficient two.  The associated allocation-side strict inequalities are
 now 53 deduplicated exact rational identities checked solver-free at all 155
 uses.  Thirty-one identities need no path premise; 22 use an ancestor or
-target comparison.  The use map remains relay-derived and the 47
-witness-compatible cuts are not closed, so this is still a compression
-checkpoint rather than a tenth hand certificate.
+target comparison.  The 11 context exclusions similarly reduce to nine exact
+identities.  A solver-free checker verifies the exhaustive
+`213=11+155+47` partition and therefore every terminal no-blocker closure.
+The use maps remain relay-derived, so this is a complete arithmetic
+certificate conditional on those maps rather than an externally validated
+tenth hand certificate.
 At the activation layer, the 49 nodes yield 124 elementary failure cases.
 Anchor/order arguments remove 84, four are allocation-infeasible, and all 36
 remaining failures have packet/ancestor over-covers of support at most four.

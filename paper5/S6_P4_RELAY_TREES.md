@@ -462,20 +462,26 @@ the 51 leaves.  Classes 1 and 2 have crossed
 that boundary, although their proof objects remain compression targets rather
 than a short conceptual lemma.  The remaining rows are precise structural
 targets, not counterexamples or unexplained open leaves.
-Class 6 also has a solver-free asymmetric-packet root skeleton: its two
-twenty-cut root censuses collapse to two blockers each without a witness
-identity.  All 155 witness-rejected cuts in its non-root relay now have sparse
+Class 6 now has complete solver-free arithmetic conditional on its frozen
+relay/use maps.  Its two twenty-cut root censuses collapse to two blockers
+each without a witness identity.  Across all 49 direction nodes, exact
+Fourier--Motzkin elimination partitions 924 eligible cut uses into 711 pure
+difference exclusions and 213 candidates.  Eleven candidates are excluded by
+the existing packet/ancestor witness context, 155 by the target witness, and
+47 are exactly the relay branches.  The eleven context exclusions have nine
+exact rational identities.  All 155 target-witness exclusions have sparse
 incidence over-covers of support at most five, with only five coefficient-two
 cases.  This completely explains the witness-side upper bounds.  The
 allocation-side strict reductions are now 53 solver-free exact rational
-identities at all 155 uses.  The coverage map remains relay-derived, and the
-47 witness-compatible cuts still require activation and terminal lemmas, so
-its 29 leaves are not yet a complete human relay.  Activation has nevertheless
-collapsed to the same incidence mechanism: 84 of 124 failure cases are
+identities at all 155 uses.  The exact cut partition certifies every terminal
+no-blocker closure.  Activation collapses to the same incidence mechanism: 84
+of 124 failure cases are
 structural, four are allocation-infeasible, and the remaining 36 use
 over-covers of support at most four.  Exact allocation identities for those
 36 cases now deduplicate to 26 solver-free rows, and the four direct cases
-share one more identity.  The 40-use coverage map remains relay-derived.
+share one more identity.  No arithmetic leaf remains machine-only; the cut and
+activation coverage maps remain relay-derived and are still part of the
+external-review boundary.
 
 The relay audit does not replace the trust-disabled CPC proof of the weaker
 parent formula and does not validate the human-to-machine map.  Its purpose is
@@ -534,6 +540,17 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
   --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_context_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class6_context_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_context_identities.py \
+  --context-details /tmp/strict_exchange_p4_class6_context_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_context_identity_audit.json
+cmp /tmp/strict_exchange_p4_class6_context_identity_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_context_identity_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_cut_census.py \
+  --output /tmp/strict_exchange_p4_class6_cut_census_audit.json
+cmp /tmp/strict_exchange_p4_class6_cut_census_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_cut_census_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
   --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \

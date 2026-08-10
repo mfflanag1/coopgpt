@@ -117,12 +117,19 @@ for compressing their remaining non-root leaves.
 
 ## 5. Exhaustive class-6 application
 
-The asymmetric class-6 relay has 49 stages and 202 cuts that survive their
-opposite-allocation comparison.  Forty-seven also survive the witness test.
-Every one of the other 155 cuts has a support inequality of the form (Z2)
+The asymmetric class-6 relay has 49 direction nodes and 924 eligible cut uses.
+Exact difference-cone elimination removes 711.  Of the 213 candidates, 11 are
+excluded by the already active packet/ancestor witness context, 155 by the
+target witness, and 47 are exactly the relay branches.  Every one of the 155
+target-witness exclusions has a support inequality of the form (Z2)
 using at most five available comparisons: 150 use only unit coefficients and
 five require coefficient two.  The support-size distribution is
 `12,82,27,30,4` for sizes one through five.
+
+The same theorem gives supports of size at most five for the 11 context
+exclusions; eight have unit coefficients and three require coefficient two.
+Their allocation lower bounds deduplicate to nine exact rational identities,
+checked solver-free at all 11 path-valid uses.
 
 The allocation lower bounds have separately been exactified into 53 rational
 identities.  A solver-free checker reconstructs every named premise and checks
@@ -130,8 +137,11 @@ all 155 uses, including strictness.  Of those uses, 118 require only global
 anchor/sign, root-order, or packet premises; 33 use ancestor comparisons and
 four also use the target comparison.  Hence the incidence theorem plus those
 identities completely explains the arithmetic of every witness rejection.
-The frozen 155-use map still comes from the shared localized relay, and the 47
-witness-compatible cuts and their terminal closures remain to be humanized.
+The frozen use maps still come from the shared localized relay.  A separate
+solver-free census checks the disjoint exhaustive partition
+`213=11+155+47`, so every terminal no-blocker closure is arithmetically
+certified; deriving those use maps from the game-theoretic semantics remains
+the external-review boundary.
 
 The same geometry controls activation.  The 49 class-6 direction nodes have
 124 elementary failure conjunctions.  Anchor/order chains remove 84; four
@@ -171,6 +181,13 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
   --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_context_overcovers.py \
+  --details --output /tmp/strict_exchange_p4_class6_context_overcovers_details.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_context_identities.py \
+  --context-details /tmp/strict_exchange_p4_class6_context_overcovers_details.json \
+  --output /tmp/strict_exchange_p4_class6_context_identity_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_cut_census.py \
+  --output /tmp/strict_exchange_p4_class6_cut_census_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
   --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \

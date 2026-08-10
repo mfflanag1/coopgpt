@@ -279,20 +279,25 @@ compressed.
 The other remaining row, class 6, has an asymmetric sandwich
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`.  It reduces both
 twenty-cut roots to two blockers using signs alone.  Its 29 non-root leaves
-remain to be humanized.  Their witness-side residue is now fully classified:
-across 49 stages, all 155 witness-rejected cuts have incidence over-covers of
+now have complete solver-free arithmetic conditional on the frozen relay/use
+maps.  Across 49 nodes, 924 eligible cuts split into 711 pure difference-cone
+exclusions, 11 packet/ancestor-witness context exclusions, 155 target-witness
+exclusions, and 47 relay branches.  The 11 context exclusions have nine exact
+rational identities.  All 155 target-witness cuts have incidence over-covers of
 support at most five.  Of these, 150 use only unit coefficients and five use a
 coefficient two.  The incidence bound is a human theorem.  The allocation-side
 strict inequalities deduplicate to 53 exact rational identities checked
 solver-free at all 155 uses; 118 uses need no path comparison, 33 use ancestors
-only, and four also use the target comparison.  The relay-derived use map and
-the 47 witness-compatible cuts remain the hand-proof boundary.  Activation is
+only, and four also use the target comparison.  Exact arithmetic verifies that
+the three surviving layers exhaust all 213 candidates, including every
+terminal no-blocker closure.  Activation is
 now governed by the same geometry: 84 of 124 elementary failure cases collapse
 by anchor/order chains, four are allocation-infeasible, and all remaining 36
 have packet/ancestor over-covers of support at most four.  Their incidence
 bounds are human.  The 36 lower bounds reduce to 26 solver-free rational
-identities, and the four direct cases share one further identity; only their
-coverage map remains encoding-shared.
+identities, and the four direct cases share one further identity.  No
+arithmetic leaf remains machine-only; the relay-derived cut and activation use
+maps remain the hand-proof and external-review boundary.
 
 The single-witness filters admit a general exact projection theorem.  For a
 fixed blocker menu, `q^b` maps the zero-anchor simplex onto the convex hull of
@@ -306,12 +311,14 @@ problem.  It is standard convex duality, not an additional novelty claim.
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the
 32 feasible labelled packets.  All nine now have hand-checkable proof objects;
-the other two packet classes, covering five labelled packets, retain machine-resolved
-residue.  They are no longer structurally open: the single universal split
+the other two packet classes, covering five labelled packets, differ in proof
+status: class 6 now has complete exact arithmetic conditional on its frozen
+maps, while class 5 retains machine-resolved residue.  They are no longer
+structurally open: the single universal split
 `x_3<=x_4` versus `x_3>x_4` closes all eleven packet classes as relay trees,
 with only class 10 requiring the nested `x_1`/`x_2` split.  Thus the remaining
-gap is completion of the partial class-5 skeleton and hand-certificate
-compression for class 6, not an unexplained SAT leaf.  See
+gap is completion of the partial class-5 skeleton, conceptual compression of
+class 6, and external validation of its maps, not an unexplained SAT leaf.  See
 `S6_P4_UNIVERSAL_ORDER_RELAY.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
