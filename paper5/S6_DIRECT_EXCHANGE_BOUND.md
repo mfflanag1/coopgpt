@@ -258,6 +258,10 @@ The corresponding forced-exchange audit closes five packet classes
 packets.  All five closed relay trees now have hand-checkable proofs; the other
 six packet classes, covering fourteen labelled packets, retain machine-resolved
 residue.  See `S6_P4_RELAY_TREES.md`.
+Two of those six classes now have complete machine-checked order-split relays:
+class 9 needs only `x_3<=x_4` versus `x_3>x_4`, while class 10 needs that split
+and one nested comparison of `x_1,x_2`.  They are compact hand-proof targets,
+not additional theorem evidence.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen
@@ -314,6 +318,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificate
   --output /tmp/strict_exchange_p4_class7_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class7_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
+  --output /tmp/strict_exchange_p4_order_split_relays.json
+cmp /tmp/strict_exchange_p4_order_split_relays.json \
+  coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -362,6 +370,8 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py
+coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py

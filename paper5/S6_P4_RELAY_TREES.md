@@ -386,11 +386,44 @@ of a structural candidate.  Equations (7.1)--(7.5), the table, and the 25
 weighted rows therefore give a complete hand-checkable proof of class 7,
 covering four labelled packets.
 
-## 6. What remains unresolved
+## 6. Two complete order-split relays
 
-The relay method stalls immediately in classes 9 and 10 because none of the
-directions in the chosen subset-minimal core is forced before an additional
-order split.  Classes 1, 2, 5, and 6 have many closed branches but retain,
+The unsplit relay rule is deliberately conservative: it opens a leaf whenever
+no direction is forced before any new payoff-order choice.  Classes 9 and 10
+stall for exactly this reason, but both close after very small exhaustive order
+trees.
+
+For class 9, the single split
+
+```text
+x_3 <= x_4        or        x_3 > x_4
+```
+
+closes both branches.  The weak branch has two closed leaves and depth two;
+the strict branch has three closed leaves and depth three.  Thus the entire
+four-packet orbit is reduced to five terminal contradictions.
+
+For class 10, the strict branch `x_3>x_4` closes with four leaves.  On the weak
+branch `x_3<=x_4`, the one additional split
+
+```text
+x_1 <= x_2        or        x_1 > x_2
+```
+
+closes with one and four leaves, respectively.  The two-packet orbit is
+therefore reduced to a nine-leaf tree of depth at most three.
+
+`audit_strict_exchange_p4_order_split_relays.py` freezes every direction,
+blocker coalition, branch, and SAT order premise in these two trees.  This is
+a sharper humanization target, not yet a hand proof: the activations and
+blocker exclusions still need structural inequalities or exact weighted
+identities, and the audit shares the parent encoding.
+
+## 7. What remains unresolved
+
+The unsplit relay method stalls immediately in classes 9 and 10, while the
+order-split refinement above closes them computationally.  Classes 1, 2, 5,
+and 6 have many closed branches but retain,
 respectively, 6, 3, 3, and 4 open leaves.  These are precise structural
 residues, not counterexamples.
 
@@ -399,7 +432,7 @@ parent formula and does not validate the human-to-machine map.  Its purpose is
 to turn the residual finite proof into a short list of concrete exchange and
 blocker lemmas suitable for external review.
 
-## 7. Reproduction
+## 8. Reproduction
 
 Run from the repository root with the Z3-enabled Python environment:
 
@@ -420,6 +453,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificate
   --output /tmp/strict_exchange_p4_class7_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class7_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
+  --output /tmp/strict_exchange_p4_order_split_relays.json
+cmp /tmp/strict_exchange_p4_order_split_relays.json \
+  coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
 ```
 
 The frozen JSON records every chosen direction, its side and role orbit, the

@@ -52,6 +52,8 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py
+coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -252,6 +254,11 @@ Confirm that the recorded coefficient-perturbation mutation control fails for
 the intended algebraic reason.
 State whether this genuinely makes class 4 a complete hand-checkable packet
 proof; do not infer correctness merely from the checker's `PASS` status.
+Finally inspect the order-split relay artifact.  Confirm that both order
+branches for class 9 and all three terminal order regions for class 10 are SAT
+before the relay implications are added, and that every resulting relay leaf
+closes.  Treat this as a roadmap for new hand proofs, not as independent proof
+evidence.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

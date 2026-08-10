@@ -133,6 +133,8 @@ A forced-exchange relay audit closes classes `3,4,7,8,11` without an order
 split, covering eighteen of the 32 feasible labelled packets.  All five closed
 trees now have hand-checkable proofs; class 7 is compressed into an exact
 difference-cone census and 25 rational identities in `S6_P4_RELAY_TREES.md`.
+The same audit now closes classes 9 and 10 after minimal payoff-order trees,
+leaving their individual branch inequalities as the next humanization target.
 
 ## 5. Reproduction
 

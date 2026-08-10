@@ -140,7 +140,9 @@ have complete relay trees and together cover eighteen labelled packets.
 All five complete relay trees now have hand-checkable proofs.  Six other
 classes contain explicit open relay
 leaves, including classes 9 and 10 where no core direction is initially
-forced.
+forced.  A separate refinement now closes classes 9 and 10 computationally
+after one and two exhaustive payoff-order splits, respectively; their branch
+inequalities have not yet been humanized.
 
 ## 4. Sharpness and equality cases
 
@@ -236,6 +238,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificate
   --output /tmp/strict_exchange_p4_class7_hand_certificates.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json \
   /tmp/strict_exchange_p4_class7_hand_certificates.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
+  --output /tmp/strict_exchange_p4_order_split_relays.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json \
+  /tmp/strict_exchange_p4_order_split_relays.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

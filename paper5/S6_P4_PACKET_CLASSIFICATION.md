@@ -138,6 +138,10 @@ Class 11 uses a unique three-exchange chain: its activations are structural and
 empty terminal blocker list.  Class 7 uses an eight-stage exact
 difference-cone census, sixteen blocker filters, and nine activation identities
 to humanize its depth-three relay without expanding it into a cut-by-cut dump.
+Classes 9 and 10 also close computationally after, respectively, one payoff-
+order split and a depth-two order tree.  Those two decompositions cover six
+more labelled packets but remain machine-checked targets rather than hand
+proofs.
 
 ## 4. Class 3 is a two-exchange hand relay
 
@@ -317,6 +321,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificate
   --output /tmp/strict_exchange_p4_class7_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class7_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
+  --output /tmp/strict_exchange_p4_order_split_relays.json
+cmp /tmp/strict_exchange_p4_order_split_relays.json \
+  coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
 ```
 
 The audit independently checks within the parent encoding that
@@ -352,7 +360,11 @@ The audit independently checks within the parent encoding that
 15. the solver-free class-7 checker independently recomputes all eight
     difference-cone cut censuses by exact Fourier--Motzkin elimination,
     verifies sixteen blocker filters and nine activation identities, and
-    rejects both coefficient and candidate-set mutations.
+    rejects both coefficient and candidate-set mutations; and
+16. the order-split audit closes class 9 after `x_3<=x_4` versus `x_3>x_4`,
+    and class 10 after the same root split plus `x_1<=x_2` versus `x_1>x_2`
+    on the weak branch; every order branch remains SAT before its relay is
+    added.
 
 The authoritative proof object for the unsplit, weaker relaxation remains
 the trust-disabled CPC proof in
