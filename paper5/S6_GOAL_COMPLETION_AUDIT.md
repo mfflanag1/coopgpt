@@ -119,7 +119,7 @@ are base-infeasible, and the 32 feasible pairs form eleven residual-symmetry
 orbits.  Each row closes using a subset-minimal menu of at most seven
 remaining directions.  This materially improves readability but does not yet
 replace every residual blocker alternative by hand inequalities.
-Four packet classes are now closed by hand.  Class 8, covering two labelled
+Six packet classes are now closed by hand.  Class 8, covering two labelled
 pairs, uses a single two-for-two direction.  Its activation
 and all twenty blocker exclusions use only the opposite-selection comparison;
 the audit verifies the reduced inequalities independently of `q^1`.  Class 3
@@ -134,15 +134,15 @@ four labelled pairs, is a unique three-exchange chain.  A structural cut split
 plus 37 source-specific exact identities proves its two unique blockers and
 empty terminal blocker list.  Class 7, covering four labelled pairs, now has
 an exact eight-stage difference-cone census plus 25 rational identities.
-Six packet classes covering fourteen labelled pairs remain machine-resolved.
-A separate forced-exchange audit sharpens that boundary: classes `3,4,7,8,11`
-have complete relay trees and together cover eighteen labelled packets.
-All five complete relay trees now have hand-checkable proofs.  Six other
-classes contain explicit open relay
-leaves, including classes 9 and 10 where no core direction is initially
-forced.  A separate refinement now closes classes 9 and 10 computationally
-after one and two exhaustive payoff-order splits, respectively; their branch
-inequalities have not yet been humanized.
+Class 9, covering four labelled pairs, closes after `x_3<=x_4` versus
+`x_3>x_4`; its ten exact cut censuses and 52 distinct identities are checked
+at all 71 stage uses by a solver-free rational verifier.  Five packet classes
+covering ten labelled pairs remain machine-resolved.  A separate
+forced-exchange audit sharpens that boundary: classes `3,4,7,8,9,11` have
+complete relay trees and together cover twenty-two labelled packets.  All six
+now have hand-checkable proofs.  Class 10 closes computationally after two
+exhaustive payoff-order splits but its branch inequalities have not yet been
+humanized; classes 1, 2, 5, and 6 retain explicit open relay leaves.
 
 ## 4. Sharpness and equality cases
 
@@ -242,6 +242,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
   --output /tmp/strict_exchange_p4_order_split_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json \
   /tmp/strict_exchange_p4_order_split_relays.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json \
+  /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

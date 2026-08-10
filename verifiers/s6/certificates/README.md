@@ -272,7 +272,8 @@ cmp /tmp/strict_exchange_p4_relay_trees.json \
   coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 ```
 
-Classes 3, 4, 8, and 11 now have complete separate hand-checkable proofs.  For
+Classes 3, 4, 7, 8, 9, and 11 now have complete separate hand-checkable
+proofs.  For
 class 4 the packet audit checks the five-candidate opposite classification,
 the exact three root blockers, all three child activations, and the
 source-localized terminal closures.  A separate certificate table replaces
@@ -306,6 +307,22 @@ cmp /tmp/strict_exchange_p4_class11_hand_certificates.json \
 This checker also uses only exact `Fraction` arithmetic, imports no production
 encoder, makes no solver call, verifies cut-family exhaustiveness, and rejects
 a coefficient mutation.
+
+Class 9 closes its five-leaf order-split relay through ten exact
+difference-cone censuses and a deduplicated proof object.  The source table has
+43 blocker, seven activation, and two terminal-anchor identities, with an
+explicit map to all 71 required uses:
+
+```text
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class9_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
+```
+
+The checker reconstructs every premise at every use site with exact
+`Fraction` arithmetic, imports no solver or production encoder, and rejects
+coefficient, use-site, candidate-set, use-map, and strict-target mutations.
 
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies

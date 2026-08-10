@@ -11,11 +11,13 @@ packets close after the single exhaustive split
 x_3 <= x_4        or        x_3 > x_4.
 ```
 
-The frozen machine relay has five leaves and depth at most three.  This note
-records the structural reduction and the exact-certificate discovery
-checkpoint.  It is **not yet a complete hand proof**: the discovered
-coefficients still need to be deduplicated, frozen in a source table, and
-checked by a solver-free verifier that imports no production encoder.
+The frozen machine relay has five leaves and depth at most three.  The
+structural reduction is now paired with a frozen, deduplicated exact proof
+object and a solver-free verifier that imports no production encoder.  In the
+same finite-certificate sense as the class-4, class-7, and class-11 lemmas,
+this is a complete hand-checkable proof of the class-9 row.  It remains a
+finite packet lemma and does not independently validate the parent theorem's
+human-to-machine interface.
 
 ## 2. Packet inequalities
 
@@ -111,8 +113,10 @@ the branch comparisons imply
 x_1 > 1/3.                                           (9.6)
 ```
 
-There is one exact `D-1/3` identity for the negation `x_1<=1/3` in each
-profile.  Conversely, combining a hypothetical terminal `q(C)>=x(C)` with
+There is an exact `D-1/3` identity for the negation `x_1<=1/3` in each
+profile.  The four profile uses reduce to two distinct identities: one for
+the weak branch and one shared by all three strict-branch profiles.
+Conversely, combining a hypothetical terminal `q(C)>=x(C)` with
 the packet and branch comparisons gives
 
 ```text
@@ -124,32 +128,39 @@ instances of (9.7) reduce to 27 distinct rational identities.  Thus the
 terminal closure is an anchor-threshold contradiction, not 33 unrelated
 UNSAT leaves.
 
-## 6. Exact-certificate discovery audit
+## 6. Exact-certificate audit
 
-An independently assembled affine system found and exactified:
+An independently assembled affine system found and exactified the raw rows.
+They are now frozen as a proof object containing:
 
-- 56 blocker-filter rows: 33 target `x_1-1/3`, 20 target `D-1/3`, and three
-  strict-sign contradictions targeting `d_0`;
-- eleven activation rows, reducing to seven distinct identities;
-- four branch-anchor rows proving (9.6).
+- 56 blocker-filter uses, reducing to 43 distinct identities: 33 uses target
+  `x_1-1/3`, twenty target `D-1/3`, and three strict-sign contradictions
+  target `d_0`;
+- eleven activation uses, reducing to seven distinct identities;
+- four branch-anchor uses proving (9.6), reducing to two identities.
 
-Every numerical LP output was rationalized and then rejected unless its
-weighted affine sum was literally equal, coefficient by coefficient, to the
-claimed target.  This is discovery evidence only: it does not replace the
-pending source-table audit, nonnegative-multiplier check, exhaustive-use map,
-mutation controls, or external review.
+`verify_strict_exchange_p4_class9_hand_certificates.py` reconstructs each
+affine premise afresh at every use site and checks every weighted sum with
+pure `Fraction` arithmetic.  It also recomputes all ten difference-cone
+candidate sets by exact Fourier--Motzkin elimination, checks the exhaustive
+use map, and rejects mutations of a coefficient, a use site, a candidate set,
+the use map, and the strict-target declaration.  Thus deduplication cannot
+silently reuse a row where one of its premises is unavailable.
 
-## 7. Next exact checkpoint
+## 7. Proof boundary and reproduction
 
-1. Freeze the 43 distinct blocker identities, seven activation identities,
-   and four anchor identities with an explicit use map for all 56 exclusions
-   and eleven activations.
-2. Implement a pure-`Fraction` verifier with an exact Fourier--Motzkin
-   reconstruction of every difference-cone row.
-3. Add coefficient, use-map, strict-target, and candidate-deletion mutation
-   controls.
-4. Only after those checks pass, promote class 9 to a sixth
-   hand-checkable packet lemma and update the manuscript counts.
+Run from the repository root:
 
-Until then, the authoritative theorem evidence remains the parent CPC proof;
-the class-9 order tree and this note are explanatory reductions.
+```bash
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class9_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
+```
+
+The verifier and its frozen rows are independently formulated only relative
+to the class-9 packet inequalities and relay premises displayed above.  They
+do not prove that every genuine counterexample satisfies the parent encoded
+relaxation.  The authoritative theorem evidence remains the parent CPC proof,
+and external review of that semantic interface remains the highest-priority
+independent gate.

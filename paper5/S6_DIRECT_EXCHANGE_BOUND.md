@@ -235,7 +235,7 @@ eleven residual-symmetry classes, each closed by a subset-minimal menu of at
 most seven other directions.  The aggregate packet inequalities are derived
 by hand in `S6_P4_PACKET_CLASSIFICATION.md`.  This makes the remaining finite
 anatomy smaller and more explicit, but does not turn it into an all-human
-proof.  Five of the eleven rows now close completely by hand.  In class 8 the
+proof.  Six of the eleven rows now close completely by hand.  In class 8 the
 packet forces `-e_1-e_3+e_4+e_5` to improve Lmin, and elementary `d=x-z`
 inequalities exclude all twenty of its eligible blockers without using the
 `q^1` comparison.  Class 3 also closes by hand through a two-exchange relay:
@@ -250,17 +250,20 @@ chain.  Its twenty first-stage cuts reduce structurally to seven candidates;
 six exact identities leave the unique first blocker, fifteen `q^1` identities
 leave the unique second blocker, and sixteen more exclude every terminal cut.
 Class 7 reduces its depth-three relay to eight exact difference-cone cut
-censuses, sixteen blocker filters, and nine activation identities.  Together
-the five hand lemmas remove eighteen labelled packets from the finite residue.
+censuses, sixteen blocker filters, and nine activation identities.  Class 9
+closes after the exhaustive split `x_3<=x_4` versus `x_3>x_4`: ten exact
+difference-cone censuses and a 71-use map reduce to 43 blocker, seven
+activation, and two terminal-anchor identities.  Its terminal leaves share
+the threshold contradiction `x_1>1/3` versus `x_1<=1/3`.  Together the six
+hand lemmas remove twenty-two labelled packets from the finite residue.
 
-The corresponding forced-exchange audit closes five packet classes
-`3,4,7,8,11` as relay trees, covering eighteen of the 32 feasible labelled
-packets.  All five closed relay trees now have hand-checkable proofs; the other
-six packet classes, covering fourteen labelled packets, retain machine-resolved
-residue.  See `S6_P4_RELAY_TREES.md`.
-Two of those six classes now have complete machine-checked order-split relays:
-class 9 needs only `x_3<=x_4` versus `x_3>x_4`, while class 10 needs that split
-and one nested comparison of `x_1,x_2`.  They are compact hand-proof targets,
+The corresponding forced-exchange audit closes six packet classes
+`3,4,7,8,9,11` as relay trees, covering twenty-two of the 32 feasible labelled
+packets.  All six closed relay trees now have hand-checkable proofs; the other
+five packet classes, covering ten labelled packets, retain machine-resolved
+residue.  See `S6_P4_RELAY_TREES.md`.  Class 10 also has a complete
+machine-checked order-split relay: it needs the same root split as class 9 and
+one nested comparison of `x_1,x_2`.  It remains a compact hand-proof target,
 not additional theorem evidence.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
@@ -322,6 +325,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
   --output /tmp/strict_exchange_p4_order_split_relays.json
 cmp /tmp/strict_exchange_p4_order_split_relays.json \
   coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class9_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -372,6 +379,9 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
