@@ -30,7 +30,7 @@ terminal leaves; depth zero means the first forced direction has no blocker.
 | 1 | 1 | 4 | `2/6` | 1 | no | no |
 | 2 | 2 | 6 | `6/3` | 4 | no | no |
 | 3 | 4 | 2 | `2/0` | 1 | yes | yes |
-| 4 | 4 | 3 | `3/0` | 1 | yes | no |
+| 4 | 4 | 3 | `3/0` | 1 | yes | yes |
 | 5 | 1 | 7 | `30/3` | 4 | no | no |
 | 6 | 4 | 7 | `29/4` | 4 | no | no |
 | 7 | 4 | 4 | `4/0` | 3 | yes | no |
@@ -40,11 +40,11 @@ terminal leaves; depth zero means the first forced direction has no blocker.
 | 11 | 4 | 3 | `1/0` | 2 | yes | no |
 
 Thus classes `3,4,7,8,11` have complete forced relays.  Their orbit sizes sum
-to eighteen of the 32 feasible labelled packets.  Classes 3 and 8, covering
-six packets, have already been converted into the explicit hand inequalities
-in `S6_P4_PACKET_CLASSIFICATION.md`.  The other twelve packets in the closed
-relay set have machine-checked trees that now specify exactly which blocker
-lemmas remain to be humanized.
+to eighteen of the 32 feasible labelled packets.  Classes 3, 4, and 8,
+covering ten packets, have now been converted into explicit hand-checkable
+inequalities.  The other eight packets in the closed relay set have
+machine-checked trees that specify exactly which blocker lemmas remain to be
+humanized.
 
 ## 3. Two especially small targets
 
@@ -65,8 +65,7 @@ Only three of its twenty negative cuts survive:
 The first blocker forces `e_2-e_1` to improve Lmax, with no feasible blocker.
 Either of the other two forces `-e_2-e_3+e_4+e_5` to improve Lmin, again with
 no feasible blocker.  The whole four-packet orbit is therefore a depth-one,
-three-leaf relay.  Converting the three no-blocker leaves into displayed
-inequalities is the highest-value next hand target.
+three-leaf relay.
 
 The root of this star is now humanized.  For class 4, `A` is empty and
 `B={2}`.  Its packet `q` comparisons are
@@ -114,12 +113,46 @@ All three child activations are also short.  The blocker `{1,2,3,4}` implies
 larger than either `M` payoff, (4.2) would again follow.  Thus the required
 child direction improves in both branches.
 
-What remains for a complete class-4 hand proof is now only the three terminal
-cut exclusions.  The independent audit records a useful separation: after
-`{1,2,3,4}`, the `q^1` comparison alone eliminates every terminal Lmax cut;
-after either other blocker, the opposite-selection comparison alone
-eliminates every terminal Lmin cut.  These source-level enumerations are not
-yet displayed structural proofs.
+The three terminal exclusions also admit an exhaustive human-sized
+description.  After the blocker `{1,2,3,4}`, the terminal Lmax direction is
+`-e_1+e_2`.  Every negative cut contains `1` and excludes `2`, so its
+complement is
+
+```text
+L={2} union K,                 K subset {0,3,4,5}.            (4.4)
+```
+
+Because `q(N)=z(N)=1`, the required blocker comparison `q(C)>=z(C)` is
+equivalent to `q(L)<=z(L)`.  There are exactly sixteen sets in (4.4).  For
+each one, the frozen certificate table gives nonnegative multipliers on the
+packet, root-blocker, order, sign, and hypothetical `q(L)<=z(L)` inequalities
+whose sum is the recorded positive integer multiple of `D-1/3`.  Thus no such
+comparison can hold when
+`D>1/3`.
+
+After either blocker `{1,3,5}` or `{0,1,3,5}`, the terminal Lmin direction is
+`-e_2-e_3+e_4+e_5`.  A negative cut containing an `M` player has the form
+
+```text
+{2,3,m} union K,              m in {4,5},  K subset {0,1}.   (4.5)
+```
+
+A cut with no `M` player has positive `d=x-z` sum and cannot satisfy the
+opposite-selection blocker comparison.  The optional players in (4.5) also
+have positive `d`, so any opposite comparison for (4.5) implies the same
+comparison for the base cut `{2,3,m}`.  Four further weighted identities—one
+for each root blocker and choice of `m`—show that this base comparison also
+forces `D<=1/3`.
+
+The checker
+`verify_strict_exchange_p4_class4_hand_certificates.py` contains all sixteen
+complement rows and all four base-cut rows.  It orients every named inequality
+as `<=0`, checks that every inequality multiplier is nonnegative, and verifies
+the exact affine identity using only rational coefficient arithmetic.  It
+makes no satisfiability query, imports no production encoder, and rejects a
+one-coefficient mutation control.  Equations
+(4.1)--(4.5) plus these twenty inspectable rows therefore give a complete
+hand-checkable proof of class 4, covering four labelled packets.
 
 ### Class 11: a unique three-exchange chain
 
@@ -139,7 +172,7 @@ single terminal obligation and is the cleanest candidate for a named
 max-to-min exchange-relay lemma.
 
 Class 7 is also complete but has four leaves and depth three.  It should be
-attempted after classes 4 and 11.
+attempted after class 11.
 
 ## 4. Human activation reduction for class 11
 
@@ -230,6 +263,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
   --output /tmp/strict_exchange_p4_relay_trees.json
 cmp /tmp/strict_exchange_p4_relay_trees.json \
   coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class4_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class4_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
 ```
 
 The frozen JSON records every chosen direction, its side and role orbit, the

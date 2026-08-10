@@ -235,20 +235,24 @@ eleven residual-symmetry classes, each closed by a subset-minimal menu of at
 most seven other directions.  The aggregate packet inequalities are derived
 by hand in `S6_P4_PACKET_CLASSIFICATION.md`.  This makes the remaining finite
 anatomy smaller and more explicit, but does not turn it into an all-human
-proof.  One of the eleven rows, class 8, does close completely by hand: the
+proof.  Three of the eleven rows now close completely by hand.  In class 8 the
 packet forces `-e_1-e_3+e_4+e_5` to improve Lmin, and elementary `d=x-z`
 inequalities exclude all twenty of its eligible blockers without using the
 `q^1` comparison.  Class 3 also closes by hand through a two-exchange relay:
 the first blocker has two possible forms, either activates the second
 exchange, and the four final blocker pairs all force the distance back to at
-most `1/3`.  Together these two hand lemmas remove six labelled packets from
-the finite residue.
+most `1/3`.  Class 4 is a depth-one three-leaf star: the root classification
+and child activations are structural, while sixteen `q^1`-complement identities
+and four opposite-base-cut identities close every terminal cut.  A pure
+rational-coefficient checker verifies each nonnegative weighted sum without a
+solver or production-encoder import.  Together the three hand lemmas remove
+ten labelled packets from the finite residue.
 
 The corresponding forced-exchange audit closes five packet classes
 `3,4,7,8,11` as relay trees, covering eighteen of the 32 feasible labelled
-packets.  Beyond the two hand proofs, class 4 is a depth-one three-leaf star
-and class 11 is a unique three-exchange chain.  These trees are exact
-humanization targets, not additional proof evidence; see
+packets.  Beyond the three hand proofs, class 11 is a unique three-exchange
+chain and class 7 is a depth-three four-leaf tree.  These remaining trees are
+exact humanization targets, not additional proof evidence; see
 `S6_P4_RELAY_TREES.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
@@ -294,6 +298,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
   --output /tmp/strict_exchange_p4_relay_trees.json
 cmp /tmp/strict_exchange_p4_relay_trees.json \
   coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class4_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class4_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -336,6 +344,8 @@ coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py
 coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py
 coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py

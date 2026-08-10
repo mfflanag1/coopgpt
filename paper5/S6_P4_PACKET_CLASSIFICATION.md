@@ -121,19 +121,21 @@ eleven concrete packet rows, each using at most seven residual implications.
 
 The table as a whole remains a finite computer-assisted lemma.  A complete
 hand proof would still have to replace the residual blocker alternatives in
-the unresolved rows by explicit inequalities or Farkas combinations.  Two
+the unresolved rows by explicit inequalities or Farkas combinations.  Three
 rows can now be removed from that residue completely.
 
 `S6_P4_RELAY_TREES.md` decomposes the remaining cores dynamically.  Five
 classes (`3,4,7,8,11`), covering eighteen of the 32 feasible labelled packets,
-close by forced-exchange relay trees with no order split.  Classes 3 and 8 are
-the two hand proofs below; classes 4, 7, and 11 are now concrete next targets
-rather than opaque UNSAT rows.  For class 4, the root activation, exact
-three-blocker classification, and all three child activations are now derived
-by hand; only its terminal cut exclusions remain finite.  For class 11, all
-three relay activations and two exact weighted identities are now displayed by
-hand; its remaining blocker-cut exclusions have not yet been promoted from the
-finite audit.
+close by forced-exchange relay trees with no order split.  Classes 3, 4, and 8
+are complete hand-checkable proofs covering ten labelled packets; eight
+classes covering the other 22 packets remain machine-resolved.  Class 4 uses
+a three-leaf star whose terminal cuts are closed by sixteen `q^1`-complement
+identities and four opposite-base-cut identities, all checked with pure exact
+rational arithmetic in `verify_strict_exchange_p4_class4_hand_certificates.py`.
+Classes 7 and 11 are the next concrete targets rather than opaque UNSAT rows.
+For class 11, all three relay activations and two exact weighted identities are
+now displayed by hand; its remaining blocker-cut exclusions have not yet been
+promoted from the finite audit.
 
 ## 4. Class 3 is a two-exchange hand relay
 
@@ -301,6 +303,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
   --output /tmp/strict_exchange_p4_relay_trees.json
 cmp /tmp/strict_exchange_p4_relay_trees.json \
   coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class4_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class4_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
 ```
 
 The audit independently checks within the parent encoding that
@@ -323,7 +329,12 @@ The audit independently checks within the parent encoding that
 12. the separately restated class-4 star has exactly five opposite candidates,
     exactly three full root blockers, all three forced child activations, and
     no terminal blocker; the first leaf closes using `q^1` comparisons alone
-    and the other two using opposite comparisons alone.
+    and the other two using opposite comparisons alone; and
+13. the solver-free class-4 certificate checker exhausts all sixteen
+    `q^1`-complement cuts and all four opposite-base-cut cases, uses only
+    nonnegative inequality multipliers, and verifies every exact weighted
+    identity with rational coefficient arithmetic; a one-coefficient mutation
+    is rejected.
 
 The authoritative proof object for the unsplit, weaker relaxation remains
 the trust-disabled CPC proof in

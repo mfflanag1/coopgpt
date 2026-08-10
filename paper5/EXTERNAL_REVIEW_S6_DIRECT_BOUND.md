@@ -46,6 +46,8 @@ coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
 coopgames/paper5/S6_P4_RELAY_TREES.md
 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py
 coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -213,7 +215,7 @@ four-case terminal sum giving `D<=x_1<=1/3`.
 Then reproduce the forced-relay audit.  Check that its branch rule is sound,
 that every recorded discarded blocker is genuinely UNSAT with the current
 branch, and that classes `3,4,7,8,11` cover eighteen labelled packets.  Do not
-promote the closed trees for classes 4, 7, or 11 to hand proofs until their
+promote the closed trees for classes 7 or 11 to hand proofs until their
 individual activation and blocker inequalities are supplied.  For class 11,
 independently check (11.1)--(11.4) in `S6_P4_RELAY_TREES.md`: the first three
 identities now humanize every exchange activation and the fourth excludes the
@@ -222,11 +224,19 @@ progress but not a complete hand proof, because the remaining blocker-cut
 classification is still supplied by the finite audit.
 For class 4, independently check (4.1)--(4.3), the five-candidate opposite-cut
 classification, the two `q` exclusions leaving exactly three root blockers,
-and all three child activations.  Confirm separately that the audit's terminal
-source claims are accurate—`q^1` alone closes the first leaf and the opposite
-selection alone closes the other two—but do not promote those enumerations to
-hand inequalities until the individual terminal cuts are structurally
-excluded.
+and all three child activations.  Then check (4.4)--(4.5) without trusting the
+enumerator: establish the sixteen exhaustive complements in the Lmax leaf and
+the two base cuts sufficient for each Lmin leaf.  Audit all twenty rows in
+`strict_exchange_p4_class4_hand_certificates.json`: independently orient every
+named premise as `<=0`, verify nonnegative inequality multipliers and arbitrary
+equality multipliers, and confirm that each weighted sum is exactly the
+recorded positive integer multiple of `D-1/3`.  Inspect the checker to confirm
+that it uses pure rational coefficient arithmetic, makes no satisfiability
+query, and imports no production encoder.
+Confirm that the recorded coefficient-perturbation mutation control fails for
+the intended algebraic reason.
+State whether this genuinely makes class 4 a complete hand-checkable packet
+proof; do not infer correctness merely from the checker's `PASS` status.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

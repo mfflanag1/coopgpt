@@ -272,14 +272,29 @@ cmp /tmp/strict_exchange_p4_relay_trees.json \
   coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 ```
 
-Only classes 3 and 8 currently have complete separate hand proofs.  The packet
-audit now also restates classes 4 and 11 independently.  For class 4 it checks
-the five-candidate opposite classification, the exact three root blockers, all
-three child activations, and the source-localized terminal closures.  For class
-11 it checks all three activation negations, verifies two displayed weighted
-identities algebraically, and recovers its unique two-blocker chain.  Their
-remaining terminal or blocker-cut exclusions are still machine-classified, so
-both remain partially humanized road maps rather than hand proofs.
+Classes 3, 4, and 8 now have complete separate hand-checkable proofs.  For
+class 4 the packet audit checks the five-candidate opposite classification,
+the exact three root blockers, all three child activations, and the
+source-localized terminal closures.  A separate certificate table replaces
+those terminal enumerations by sixteen `q1`-complement identities and four
+opposite-base-cut identities:
+
+```text
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class4_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class4_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
+```
+
+The checker uses only sparse affine forms with exact `Fraction` coefficients,
+requires nonnegative multipliers on every inequality, and checks each weighted
+sum equals its recorded positive integer multiple of `D-1/3`.  It imports no
+production encoder, makes no solver call, and rejects a one-coefficient
+mutation control.  Class 11 remains partial: the
+packet audit checks all three
+activation negations, verifies two displayed weighted identities algebraically,
+and recovers its unique two-blocker chain, but its remaining blocker-cut
+exclusions are still machine-classified.
 
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies

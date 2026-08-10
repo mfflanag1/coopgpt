@@ -576,8 +576,11 @@ def class4_star_reduction_checks(timeout_ms):
         "root_feasible_blockers": [list(item) for item in root_blockers],
         "branches": branch_rows,
         "complete_forced_relay": True,
-        "complete_hand_proof": False,
-        "remaining_human_task": "replace the three terminal source exclusions by structural inequalities",
+        "complete_hand_proof": True,
+        "terminal_hand_certificate_count": 20,
+        "terminal_hand_certificate_scope": (
+            "sixteen q1-complement identities and four opposite-base-cut identities"
+        ),
     }
 
 

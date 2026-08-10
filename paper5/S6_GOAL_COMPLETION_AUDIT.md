@@ -119,24 +119,26 @@ are base-infeasible, and the 32 feasible pairs form eleven residual-symmetry
 orbits.  Each row closes using a subset-minimal menu of at most seven
 remaining directions.  This materially improves readability but does not yet
 replace every residual blocker alternative by hand inequalities.
-One complete packet orbit (class 8, covering two labelled pairs) is now
-closed entirely by hand with a single two-for-two direction.  Its activation
+Three packet classes are now closed by hand.  Class 8, covering two labelled
+pairs, uses a single two-for-two direction.  Its activation
 and all twenty blocker exclusions use only the opposite-selection comparison;
 the audit verifies the reduced inequalities independently of `q^1`.  Class 3
 (four labelled pairs) is also closed by hand using a two-exchange blocker
 relay.  Its exact two-candidate blocker lists and four terminal contradictions
-are independently restated and checked.  Nine packet classes covering 26
-labelled pairs remain machine-resolved.
+are independently restated and checked.  Class 4, covering four labelled
+pairs, is a three-leaf star: its root classification and child activations are
+structural, and twenty exact nonnegative weighted identities close all
+terminal cuts.  The certificate checker uses pure rational coefficient
+arithmetic, no solver call, and no production encoder.  Eight packet classes
+covering 22 labelled pairs remain machine-resolved.
 A separate forced-exchange audit sharpens that boundary: classes `3,4,7,8,11`
 have complete relay trees and together cover eighteen labelled packets.
-Classes 4 and 11 reduce to a three-leaf star and a unique three-exchange chain,
-respectively.  The class-4 root activation, exact three-blocker classification,
-and all child activations are now proved by displayed inequalities; its three
-terminal cut exclusions remain source-localized finite checks.  All three
-class-11 exchange activations are also proved by displayed inequalities, and
+Class 4 is now included among the three hand proofs.  Class 11 reduces to a
+unique three-exchange chain.  All three class-11 exchange activations are
+proved by displayed inequalities, and
 two of its less transparent exclusions have literal weighted-sum identities;
-the remaining blocker exclusions are still machine-classified.  Neither class
-is yet counted as an all-human packet.
+the remaining blocker exclusions are still machine-classified.  Class 11 is
+not yet counted as an all-human packet.
 Six other classes contain explicit open relay
 leaves, including classes 9 and 10 where no core direction is initially
 forced.
@@ -223,6 +225,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
   --output /tmp/strict_exchange_p4_relay_trees.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json \
   /tmp/strict_exchange_p4_relay_trees.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class4_hand_certificates.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json \
+  /tmp/strict_exchange_p4_class4_hand_certificates.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

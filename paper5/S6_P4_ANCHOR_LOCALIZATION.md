@@ -120,17 +120,18 @@ Of the 64 labelled pairs, 32 are base-infeasible and the other 32 form only
 eleven classes under the residual symmetry.  Every class closes with a
 subset-minimal menu of at most seven of the remaining seventeen directions.
 This is a reviewer-readable finite packet table, but its residual blocker
-alternatives are still machine-resolved except in classes 3 and 8.  Class 3
-closes four labelled packets by a two-exchange blocker relay; class 8 closes
+alternatives are still machine-resolved except in classes 3, 4, and 8.  Class
+3 closes four labelled packets by a two-exchange blocker relay; class 4 closes
+four by a three-leaf star and twenty exact weighted identities; class 8 closes
 two labelled packets with the single direction `-e_1-e_3+e_4+e_5`.  The
 class-8 activation and exclusion of all twenty eligible blockers use only the
 opposite comparison, not `q^1`.
 
 A forced-exchange relay audit closes classes `3,4,7,8,11` without an order
-split, covering eighteen of the 32 feasible labelled packets.  The three
-closed but not yet hand-written trees are recorded coalition by coalition in
-`S6_P4_RELAY_TREES.md`; class 4 is a depth-one three-leaf star and class 11 a
-unique three-exchange chain.
+split, covering eighteen of the 32 feasible labelled packets.  The two closed
+but not yet fully hand-written trees are recorded coalition by coalition in
+`S6_P4_RELAY_TREES.md`; class 7 has depth three and class 11 is a unique
+three-exchange chain.
 
 ## 5. Reproduction
 
