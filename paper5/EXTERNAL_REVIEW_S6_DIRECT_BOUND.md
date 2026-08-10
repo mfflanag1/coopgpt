@@ -330,6 +330,8 @@ For the still-incomplete class 5, audit only the partial claim in
 `S6_P4_CLASS5_PACKET_SKELETON.md`.  Derive the symmetric packet sandwich,
 check both strict cross-anchor chains, and classify all sixteen `h15`-negative
 cuts into the six structural exclusions and ten candidates shown there.
+Then verify the three displayed `h10`/`h15` crossing identities, their seven
+labelled exclusions, and the resulting `30 -> 23` pair census.
 Confirm that the checker uses exact arithmetic without a solver or production
 encoder, while treating its frozen-relay integration count as an audit
 convenience.  Do not promote this skeleton to a complete hand proof of class

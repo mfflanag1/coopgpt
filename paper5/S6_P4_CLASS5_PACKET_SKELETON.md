@@ -96,7 +96,39 @@ It does not close the 51 leaves.  The remaining task is to compress how the
 preceding `h10`, `h11`, and `h17` blocker comparisons filter (5.2) and force
 the terminal two-for-two exchanges.
 
-## 5. Solver-free audit
+## 5. A three-orbit `h10`/`h15` crossing lemma
+
+Every `h15` node in the frozen relay has an earlier `h10` blocker
+
+```text
+B in {12,13,123}.
+```
+
+Pair this with an `h15` blocker `C` from (5.2).  Seven of the thirty formal
+pairs are impossible, in only three orbits under the swaps `2<->3` and
+`4<->5`:
+
+```text
+B={1,k},   C={1,l,m},      {k,l}={2,3}, m in {4,5};   (four pairs)
+B=123,     C={1,m},                        m in {4,5};   (two pairs)
+B=123,     C=12345.                                      (one pair)
+```
+
+There is one short exact weighted identity for each orbit.  In the first,
+add nonnegativity of `x4,x5`, twice positivity of `d1`, positivity of `d_l`,
+the two top-anchor inequalities `z4,z5<=z1`, the packet witness comparison
+for the rich player other than `m`, and the `q1` comparisons for `B` and `C`;
+then use `-sum(z)+sum(q)+2q1=0`.  The sum is exactly `d0<=0`.  The second
+identity omits `d_l`.  The third uses both packet witness comparisons and
+`-sum(x)-sum(z)+2sum(q)+2q1=0`.  Its sum is again `d0<=0`.  All contradict
+the strict sign `d0>0`.
+
+Thus the common predecessor/successor census falls from thirty formal pairs
+to 23, and every actual class-5 relay edge respects the resulting crossing
+rule.  This is the first exact compression of the preceding-blocker filters;
+the `h11`/`h17` filters and terminal two-for-two closures remain.
+
+## 6. Solver-free audit
 
 Run
 
@@ -108,8 +140,9 @@ cmp /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json \
 ```
 
 The checker imports no solver or production encoder.  Exact rational
-coefficient arithmetic verifies (5.1), every cut identity, and the exhaustive
-sixteen-cut partition.  Finite total-preorder enumeration checks the two
-anchor chains and rejects weakened-sign mutations.  Reading the frozen relay
+coefficient arithmetic verifies (5.1), every cut identity, the exhaustive
+sixteen-cut partition, and all seven crossing exclusions through three orbit
+identities.  Finite total-preorder enumeration checks the two anchor chains
+and rejects weakened-sign mutations.  Reading the frozen relay
 is confined to a separately labelled integration audit; it is not proof
 evidence for the lemma or for the human-to-machine implication.

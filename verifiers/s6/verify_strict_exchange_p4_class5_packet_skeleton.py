@@ -35,6 +35,14 @@ def variable(name):
     return {name: Fraction(1)}
 
 
+def constant(value):
+    return {"constant": Fraction(value)} if value else {}
+
+
+def point_sum(point, coalition):
+    return linear(*((1, point[i]) for i in coalition))
+
+
 D = [variable(f"d{i}") for i in range(4)]
 DELTA = {4: variable("delta4"), 5: variable("delta5")}
 S = linear((1, D[0]), (1, D[1]))
@@ -169,20 +177,123 @@ def audit_anchor_chains(mutated=None):
     }
 
 
-def walk_h15(node, rows):
+def crossing_system(B, C):
+    x = [variable(f"x{i}") for i in range(6)]
+    z = [variable(f"z{i}") for i in range(6)]
+    q = [variable(f"q{i}") for i in range(6)]
+    inequalities = {}
+    for i in (4, 5):
+        inequalities[f"x{i}>=0"] = linear((-1, x[i]))
+        inequalities[f"z{i}<=z1"] = linear((1, z[i]), (-1, z[1]))
+    for i in (1, 2, 3):
+        inequalities[f"d{i}>=0"] = linear((1, z[i]), (-1, x[i]))
+    for m in (4, 5):
+        packet = (0, 1, m)
+        inequalities[f"P{m}q"] = linear((1, point_sum(x, packet)), (-1, point_sum(q, packet)))
+    inequalities["Bq"] = linear((1, point_sum(z, B)), (-1, point_sum(q, B)))
+    inequalities["Cq"] = linear((1, point_sum(x, C)), (-1, point_sum(q, C)))
+    equalities = {
+        "sumx": linear((1, point_sum(x, range(6))), (-1, constant(1))),
+        "sumz": linear((1, point_sum(z, range(6))), (-1, constant(1))),
+        "sumq": linear((1, point_sum(q, range(6))), (-1, constant(1))),
+        "q1": q[1],
+    }
+    target = linear((1, x[0]), (-1, z[0]))
+    return inequalities, equalities, target
+
+
+def verify_crossing_identity(B, C, inequality_multipliers, equality_multipliers):
+    inequalities, equalities, target = crossing_system(B, C)
+    terms = []
+    for name, multiplier in inequality_multipliers.items():
+        if name not in inequalities or Fraction(multiplier) < 0:
+            raise AssertionError(f"bad crossing inequality {name}")
+        terms.append((Fraction(multiplier), inequalities[name]))
+    for name, multiplier in equality_multipliers.items():
+        if name not in equalities:
+            raise AssertionError(f"bad crossing equality {name}")
+        terms.append((Fraction(multiplier), equalities[name]))
+    assert_identity(linear(*terms), target, f"crossing B={B}, C={C}")
+
+
+def audit_crossing_lemma(mutate=False):
+    exclusions = []
+    for k, ell in ((2, 3), (3, 2)):
+        for m in (4, 5):
+            B = (1, k)
+            C = tuple(sorted((1, ell, m)))
+            multipliers = {
+                "x4>=0": 1, "x5>=0": 1, "d1>=0": 2, f"d{ell}>=0": 1,
+                "z4<=z1": 1, "z5<=z1": 1, f"P{9-m}q": 1, "Bq": 1, "Cq": 1,
+            }
+            if mutate and not exclusions:
+                multipliers["d1>=0"] = 1
+            verify_crossing_identity(B, C, multipliers, {"sumz": -1, "sumq": 1, "q1": 2})
+            exclusions.append((B, C, "split-poor crossing"))
+    for m in (4, 5):
+        B = (1, 2, 3)
+        C = (1, m)
+        verify_crossing_identity(
+            B, C,
+            {"x4>=0": 1, "x5>=0": 1, "d1>=0": 2,
+             "z4<=z1": 1, "z5<=z1": 1, f"P{9-m}q": 1, "Bq": 1, "Cq": 1},
+            {"sumz": -1, "sumq": 1, "q1": 2},
+        )
+        exclusions.append((B, C, "empty-poor crossing"))
+    B = (1, 2, 3)
+    C = (1, 2, 3, 4, 5)
+    verify_crossing_identity(
+        B, C,
+        {"x4>=0": 1, "x5>=0": 1, "d1>=0": 2, "z4<=z1": 1,
+         "z5<=z1": 1, "P4q": 1, "P5q": 1, "Bq": 1, "Cq": 1},
+        {"sumx": -1, "sumz": -1, "sumq": 2, "q1": 2},
+    )
+    exclusions.append((B, C, "full-complement crossing"))
+
+    h10 = {(1, 2), (1, 3), (1, 2, 3)}
+    h15 = {
+        (1, 4), (1, 2, 4), (1, 3, 4), (1, 5), (1, 2, 5), (1, 3, 5),
+        (1, 4, 5), (1, 2, 4, 5), (1, 3, 4, 5), (1, 2, 3, 4, 5),
+    }
+    excluded_pairs = {(B, C) for B, C, _ in exclusions}
+    allowed = {(B, C) for B in h10 for C in h15} - excluded_pairs
+    if len(exclusions) != 7 or len(allowed) != 23:
+        raise AssertionError("crossing pair census changed")
+    return {
+        "h10_predecessor_types": [list(B) for B in sorted(h10)],
+        "h15_packet_candidates": len(h15),
+        "raw_pair_count": len(h10) * len(h15),
+        "excluded_pair_count": len(exclusions),
+        "allowed_pair_count": len(allowed),
+        "excluded_pairs": [
+            {"h10_blocker": list(B), "h15_blocker": list(C), "orbit_reason": reason}
+            for B, C, reason in exclusions
+        ],
+        "identity_target": "d0=x0-z0>0; every excluded pair would imply d0<=0",
+        "identity_orbit_count": 3,
+        "allowed_pairs": allowed,
+    }
+
+
+def walk_h15(node, rows, last_h10=None):
+    if node.get("direction_index") == 10:
+        # The selected blocker is recorded on each outgoing branch below.
+        pass
     if node.get("direction_index") == 15:
         rows.append(
             {
                 "depth": node["depth"],
+                "h10_predecessor": list(last_h10) if last_h10 else None,
                 "feasible_blocker_count": node["feasible_blocker_count"],
                 "coalitions": [branch["coalition"] for branch in node.get("branches", [])],
             }
         )
     for branch in node.get("branches", []):
-        walk_h15(branch["child"], rows)
+        predecessor = tuple(branch["coalition"]) if node.get("direction_index") == 10 else last_h10
+        walk_h15(branch["child"], rows, predecessor)
 
 
-def audit_relay_integration(candidates):
+def audit_relay_integration(candidates, allowed_pairs):
     data = json.loads(RELAY.read_text())
     row = next(item for item in data["rows"] if item["class"] == 5)
     uses = []
@@ -192,6 +303,10 @@ def audit_relay_integration(candidates):
     for use in uses:
         if not {tuple(c) for c in use["coalitions"]} <= candidate_set:
             raise AssertionError("relay h15 child lies outside the hand classification")
+        if use["h10_predecessor"] is None:
+            raise AssertionError("relay h15 node has no h10 predecessor")
+        if any((tuple(use["h10_predecessor"]), tuple(C)) not in allowed_pairs for C in use["coalitions"]):
+            raise AssertionError("relay h10/h15 pair violates the crossing lemma")
     if len(uses) != 10:
         raise AssertionError(f"expected ten h15 uses, found {len(uses)}")
     return {
@@ -200,6 +315,7 @@ def audit_relay_integration(candidates):
         "weak_branch_node_count": 4,
         "strict_branch_node_count": 6,
         "all_relay_children_in_hand_candidate_set": True,
+        "all_relay_h10_h15_pairs_pass_crossing_lemma": True,
     }
 
 
@@ -219,6 +335,7 @@ def main():
     sandwich = audit_packet_sandwich()
     classification = audit_h15_cut_classification()
     chains = audit_anchor_chains()
+    crossing = audit_crossing_lemma()
     mutations = [
         reject(lambda: audit_anchor_chains(("h10", (0, 2))), "weaken both h10 sign links"),
         reject(lambda: audit_anchor_chains(("h15", (1, 3))), "weaken both h15 sign links"),
@@ -234,15 +351,17 @@ def main():
             ),
             "add excluded h15 cut",
         ),
+        reject(lambda: audit_crossing_lemma(mutate=True), "crossing identity coefficient"),
     ]
-    integration = audit_relay_integration(classification["candidates"])
+    integration = audit_relay_integration(classification["candidates"], crossing.pop("allowed_pairs"))
     payload = {
-        "schema": "strict-exchange-p4-class5-packet-skeleton-v1",
+        "schema": "strict-exchange-p4-class5-packet-skeleton-v2",
         "status": "PASS",
         "scope": "solver-free hand lemma for class-5 packet; partial humanization, not a complete class-5 proof and not independent theorem evidence",
         "packet_sandwich": sandwich,
         "automatic_anchor_exchanges": chains,
         "h15_cut_classification": classification,
+        "h10_h15_crossing_lemma": crossing,
         "relay_integration": integration,
         "rejected_mutations": mutations,
     }

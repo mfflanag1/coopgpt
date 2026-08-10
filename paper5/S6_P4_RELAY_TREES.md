@@ -455,7 +455,8 @@ Their order-refined trees share the parent encoding and have not yet been
 compressed into complete independent exact identities.  Class 5 now has a
 solver-free packet skeleton: one sandwich and anchor-chain lemma covers all
 ten `h15` activations and gives their common ten-candidate blocker census.
-It does not yet close the 51 leaves.  Classes 1 and 2 have crossed
+Three orbit identities also remove seven of the thirty formal blocker pairs
+with the preceding `h10` step.  It does not yet close the 51 leaves.  Classes 1 and 2 have crossed
 that boundary, although their proof objects remain compression targets rather
 than a short conceptual lemma.  The remaining rows are precise structural
 targets, not counterexamples or unexplained open leaves.

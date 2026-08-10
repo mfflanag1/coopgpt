@@ -161,7 +161,9 @@ hand certificate.  Its symmetric packet gives
 `d0+d1<=delta4,delta5<=d2+d3`; a cross-anchor chain makes both one-for-one
 directions automatically improving, and the packet sandwich reduces every
 `h15` blocker census from sixteen eligible cuts to the same ten candidates.
-This single lemma covers all ten `h15` nodes of the 90-node frozen relay.
+This single lemma covers all ten `h15` nodes of the 90-node frozen relay.  A
+three-orbit crossing lemma then excludes seven of the thirty formal pairs
+between their three `h10` predecessor blockers and ten `h15` candidates.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain

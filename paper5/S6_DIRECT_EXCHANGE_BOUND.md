@@ -269,9 +269,10 @@ finite residue.
 Class 5 now has a verified partial hand skeleton.  Its symmetric packet gives
 `d0+d1<=delta4,delta5<=d2+d3`; two cross-anchor chains make `h10` and `h15`
 automatic, and one exact cut argument reduces all ten `h15` nodes from sixteen
-eligible cuts to the same ten opposite-comparison candidates.  The checker is
-solver-free, but this is not yet a complete tenth hand lemma: the 51 leaves
-and their preceding-blocker filters remain to be compressed.
+eligible cuts to the same ten opposite-comparison candidates.  Three crossing
+identities exclude seven of the thirty formal `h10`-predecessor/`h15`-blocker
+pairs.  The checker is solver-free, but this is not yet a complete tenth hand
+lemma: the 51 leaves and their remaining filters must still be compressed.
 
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the

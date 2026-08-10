@@ -156,8 +156,9 @@ There is now a first solver-free class-5 compression: the symmetric packet
 sandwich and cross-anchor chain replace all ten `h15` activation checks by one
 lemma and reduce each of its sixteen-cut blocker censuses to the same ten
 packet-level candidates.  This is a verified partial skeleton, not a tenth
-complete hand-checkable packet row; the 51 relay leaves remain to be
-compressed.
+complete hand-checkable packet row.  Three exact crossing identities also
+exclude seven of the thirty formal `h10`/`h15` blocker pairs in only three
+orbits; the 51 relay leaves remain to be compressed.
 
 ## 4. Sharpness and equality cases
 
