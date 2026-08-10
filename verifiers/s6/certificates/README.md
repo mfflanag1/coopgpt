@@ -260,6 +260,21 @@ Packet class 3 also closes by hand as a two-exchange relay.  The audit rebuilds
 its premises separately, verifies two possible blockers for each exchange,
 checks both relay activations, and closes all four terminal blocker pairs.
 
+The follow-up relay-tree audit applies that pattern to every packet core.
+Classes `3,4,7,8,11`, covering eighteen labelled packets, close without an
+order split.  The frozen JSON records every surviving coalition and every
+open or closed leaf:
+
+```text
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
+  --output /tmp/strict_exchange_p4_relay_trees.json
+cmp /tmp/strict_exchange_p4_relay_trees.json \
+  coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
+```
+
+Only classes 3 and 8 currently have separate hand proofs; the other closed
+trees are machine-checked road maps for the next lemmas.
+
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
 that each declares only the 48 expected selection/witness reals, has the same

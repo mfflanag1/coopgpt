@@ -244,6 +244,13 @@ exchange, and the four final blocker pairs all force the distance back to at
 most `1/3`.  Together these two hand lemmas remove six labelled packets from
 the finite residue.
 
+The corresponding forced-exchange audit closes five packet classes
+`3,4,7,8,11` as relay trees, covering eighteen of the 32 feasible labelled
+packets.  Beyond the two hand proofs, class 4 is a depth-one three-leaf star
+and class 11 is a unique three-exchange chain.  These trees are exact
+humanization targets, not additional proof evidence; see
+`S6_P4_RELAY_TREES.md`.
+
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen
 formula declares exactly 48 reals and consists of exactly 72 documented base
@@ -274,6 +281,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
   --output /tmp/strict_exchange_p4_packet_classes.json
 cmp /tmp/strict_exchange_p4_packet_classes.json \
   coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
+  --output /tmp/strict_exchange_p4_relay_trees.json
+cmp /tmp/strict_exchange_p4_relay_trees.json \
+  coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -314,12 +325,15 @@ coopgames/verifiers/s6/p4_anchor_core_certificates/*.{smt2,cpc,json}
 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py
 coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py
+coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/paper5/S6_P4_ANCHOR_LOCALIZATION.md
 coopgames/paper5/S6_P4_PACKET_CLASSIFICATION.md
+coopgames/paper5/S6_P4_RELAY_TREES.md
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 ```
 

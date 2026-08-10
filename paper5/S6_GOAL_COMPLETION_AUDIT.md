@@ -127,6 +127,13 @@ the audit verifies the reduced inequalities independently of `q^1`.  Class 3
 relay.  Its exact two-candidate blocker lists and four terminal contradictions
 are independently restated and checked.  Nine packet classes covering 26
 labelled pairs remain machine-resolved.
+A separate forced-exchange audit sharpens that boundary: classes `3,4,7,8,11`
+have complete relay trees and together cover eighteen labelled packets.
+Classes 4 and 11 reduce to a three-leaf star and a unique three-exchange chain,
+respectively; they remain machine-checked until their blocker exclusions are
+written as hand inequalities.  Six other classes contain explicit open relay
+leaves, including classes 9 and 10 where no core direction is initially
+forced.
 
 ## 4. Sharpness and equality cases
 
@@ -195,6 +202,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
   --output /tmp/strict_exchange_p4_packet_classes.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json \
   /tmp/strict_exchange_p4_packet_classes.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
+  --output /tmp/strict_exchange_p4_relay_trees.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json \
+  /tmp/strict_exchange_p4_relay_trees.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

@@ -43,6 +43,9 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 coopgames/paper5/S6_P4_PACKET_CLASSIFICATION.md
 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py
 coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
+coopgames/paper5/S6_P4_RELAY_TREES.md
+coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py
+coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -200,6 +203,11 @@ Confirm that neither half of this argument uses `q^1`.
 For class 3, audit the two-exchange relay without trusting the enumerator:
 derive both activations, prove the two exact blocker lists, and check the
 four-case terminal sum giving `D<=x_1<=1/3`.
+Then reproduce the forced-relay audit.  Check that its branch rule is sound,
+that every recorded discarded blocker is genuinely UNSAT with the current
+branch, and that classes `3,4,7,8,11` cover eighteen labelled packets.  Do not
+promote the closed trees for classes 4, 7, or 11 to hand proofs until their
+individual activation and blocker inequalities are supplied.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

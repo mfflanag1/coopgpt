@@ -124,6 +124,12 @@ hand proof would still have to replace the residual blocker alternatives in
 the unresolved rows by explicit inequalities or Farkas combinations.  Two
 rows can now be removed from that residue completely.
 
+`S6_P4_RELAY_TREES.md` decomposes the remaining cores dynamically.  Five
+classes (`3,4,7,8,11`), covering eighteen of the 32 feasible labelled packets,
+close by forced-exchange relay trees with no order split.  Classes 3 and 8 are
+the two hand proofs below; classes 4, 7, and 11 are now concrete next targets
+rather than opaque UNSAT rows.
+
 ## 4. Class 3 is a two-exchange hand relay
 
 For class 3, `A` is empty and `B={0,2}`.  The packet `q` comparisons are
@@ -286,6 +292,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
   --output /tmp/strict_exchange_p4_packet_classes.json
 cmp /tmp/strict_exchange_p4_packet_classes.json \
   coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
+  --output /tmp/strict_exchange_p4_relay_trees.json
+cmp /tmp/strict_exchange_p4_relay_trees.json \
+  coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 ```
 
 The audit independently checks within the parent encoding that

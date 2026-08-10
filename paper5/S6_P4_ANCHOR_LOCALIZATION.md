@@ -126,6 +126,12 @@ two labelled packets with the single direction `-e_1-e_3+e_4+e_5`.  The
 class-8 activation and exclusion of all twenty eligible blockers use only the
 opposite comparison, not `q^1`.
 
+A forced-exchange relay audit closes classes `3,4,7,8,11` without an order
+split, covering eighteen of the 32 feasible labelled packets.  The three
+closed but not yet hand-written trees are recorded coalition by coalition in
+`S6_P4_RELAY_TREES.md`; class 4 is a depth-one three-leaf star and class 11 a
+unique three-exchange chain.
+
 ## 5. Reproduction
 
 Run from the repository root with the Z3-enabled Python environment:
@@ -143,6 +149,10 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
   --output /tmp/strict_exchange_p4_packet_classes.json
 cmp /tmp/strict_exchange_p4_packet_classes.json \
   coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
+  --output /tmp/strict_exchange_p4_relay_trees.json
+cmp /tmp/strict_exchange_p4_relay_trees.json \
+  coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 ```
 
 The frozen artifacts are
@@ -156,4 +166,6 @@ coopgames/verifiers/s6/p4_anchor_core_certificates/strict_exchange_p4_anchor_cor
 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py
 coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py
+coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
 ```
