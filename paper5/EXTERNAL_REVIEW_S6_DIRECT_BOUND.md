@@ -15,6 +15,7 @@ accepted without an independent literature search.
 ## Read first
 
 ```text
+coopgames/paper5/S6_GOAL_COMPLETION_AUDIT.md
 coopgames/paper5/S6_DIRECT_EXCHANGE_BOUND.md
 coopgames/verifiers/s6/audit_equality_universal_exchange_relaxation.py
 coopgames/verifiers/s6/minimize_equality_exchange_directions.py
@@ -32,6 +33,21 @@ The equality theorem is a useful differential check but is not a dependency:
 coopgames/paper5/EQUALITY_EXCHANGE_CLASSIFICATION.md
 coopgames/verifiers/s6/certificates/equality_exchange_*.{smt2,cpc,json}
 ```
+
+The original two-packet boundary requested by the research program is also
+fully archived.  It is not a dependency of the direct proof, but it is an
+important negative control for any attempted shorter certificate argument:
+
+```text
+coopgames/paper5/TWO_PACKET_EXACTIFICATION_BOUNDARY.md
+coopgames/verifiers/s6/audit_two_packet_exactification.py
+coopgames/verifiers/s6/two_packet_exactification_audit.json
+coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
+```
+
+Reproduce it and check both independent staged LP traces, all 24 rational
+per-player pinning certificates, the abstract overlap `1/2`, and the
+singleton-exactified overlap `2/3`.
 
 ## Load-bearing mathematical questions
 

@@ -240,7 +240,13 @@ This common certificate geometry occurs for both the `3|3` and `4|2`
 comparison-cut equality games.  The sign cut is therefore not the invariant;
 the invariant visible at equality is a dispersed three-player Lmax anchor.
 
-## 6. What remains before `s(6)=2/3` is a theorem
+## 6. Historical completion routes, now superseded
+
+The direct exactness-exchange theorem in `S6_DIRECT_EXCHANGE_BOUND.md` now
+proves `s(6)=2/3`.  It bypasses the hybrid-overlap program below entirely.
+This section is retained as a record of the structural route that exposed the
+two-packet boundary and motivated full per-player pinning certificates; its
+three routes are no longer prerequisites for the six-player theorem.
 
 The certificate and spectral theorem alone do not make a purely numerical
 statement about arbitrary equal-sum spectra.  For example, the abstract data
@@ -256,7 +262,8 @@ satisfy the elementary sum, order and dispersed-anchor conditions but give
 game or from a realizable pair of certificates.  They show why a proof must
 retain exact-game structure rather than optimize (7) over arbitrary vectors.
 
-There are now three sharply defined completion routes:
+Before the direct theorem was found, there were three sharply defined
+completion routes:
 
 1. **Strengthened two-packet theorem.**  Couple the sparse Lmax support with
    the full Lmin one-packet boundary (or equivalent staged pinning

@@ -193,21 +193,16 @@ coopgames/verifiers/s6/certificates/equality_exchange_*.{smt2,cpc,json}
 ## 5. Consequence for the six-player program
 
 The old 3,348-row equality-exclusion census is no longer a logical dependency.
-Together with the already-checked table-free barriers in the contiguous
-refinement neighborhoods of the two canonical profiles, this leaves the
-first-crossing bridge—not equality classification—as the principal obstacle
-to a computer-assisted proof of `s(6)=2/3`.
+The direct strict-distance theorem in `S6_DIRECT_EXCHANGE_BOUND.md` has also
+superseded the first-crossing route: it proves `s(6)=2/3` without continuity,
+neighborhood refinements, or this equality classification.  The present
+theorem is now a rigidity companion and an independent differential check.
 
-The next highest-value audit is therefore hostile verification of:
-
-1. continuity of both staged lexicographic selections along the exact-game
-   path from the unanimity game;
-2. existence of a first `2/3` crossing before any strict counterexample;
-3. the inference that a sufficiently nearby ordered payoff pattern is a
-   contiguous refinement of the canonical equality strata; and
-4. the mapping from every such refinement into the positive or starved
-   table-free exchange theorem.
-
-Until those interfaces are reviewed, the correct claim is a new
-computer-assisted equality classification and a nearly closed route to the
-six-player upper bound—not a field-level breakthrough.
+The load-bearing review obligations for this equality theorem are the same
+elementary counterexample-to-formula interface as for the direct theorem:
+the three anchors, both lex-improvement predicates, the negative-tight-blocker
+lemma, and the use of singleton exactness witnesses.  The fifteen CPC objects
+then certify the finite equality classification itself.  Until those
+interfaces and the literature comparison receive external specialist review,
+the result should be described as a table-free computer-assisted equality
+classification—not as an externally validated field-level breakthrough.

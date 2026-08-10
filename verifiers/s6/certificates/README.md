@@ -2,9 +2,13 @@
 
 Date: 2026-08-09
 
-These files exercise an independently checked proof-object path for seventy
-six-player generator-normal-form queries.  They do not replace the complete
-3,350-configuration census and do not by themselves prove the global bound.
+This directory contains several generations of independently checked
+six-player proof objects.  The older generator-normal-form and local-handover
+queries do not replace the complete 3,350-configuration census by themselves.
+The newer table-free `strict_exchange_*` suite is different: together with
+the elementary exactness-exchange reduction documented below, its fifteen
+formulas prove the global six-player upper bound.  The parallel
+`equality_exchange_*` suite classifies every equality payoff pair.
 
 | Formula | Survivor | Query | Verdict |
 |---|---:|---|---|
@@ -69,11 +73,11 @@ This is stronger evidence than an unsat core: no unsat core is treated as a
 proof, and the proof checker validates the complete proof body against the
 official CPC signatures.
 
-The equality rigidity/negation lane now covers both solver-surviving equality types,
-but the strict-bound lane remains representative rather than exhaustive.
-A paper theorem still requires either checked proof objects for all excluded
-support/configuration types or a human structural reduction that makes most
-of those objects unnecessary.
+The paragraph below concerns the older generator-normal-form lanes only.  In
+that subsystem, equality rigidity covers both solver-surviving types while
+the archived strict-bound controls are representative rather than exhaustive.
+The later table-free exchange suites supply the now-complete proof-object
+theorems without relying on those support/configuration exclusions.
 
 The three representative positive-handover controls represent the three role-normalized Lmax
 direction templates.  Each base critical-triple system is SAT.  The added formula says
