@@ -128,6 +128,21 @@ minimization, four formulas need no additional stratum relation, sixteen need
 one, one needs two, and one needs three.  The mapping and proof objects must
 again be audited as separate dependencies.
 
+The two `starved_universal_exchange_{min,max}` controls replace the complete
+504-row starved-only refinement census by one table-free formula per handover
+branch.  They retain coarse `N/P/R` signs and gaps, the tied rich Lmin pair,
+standard top/bottom selection anchors, six singleton-zero witnesses,
+opposite-side swap blockers, and selected-side blockers from 240 labeled
+permutations of three exchange shapes.  The separate structural map verifies
+that starved-only is exactly the tied-rich branch within the 1,352 starved
+survivor refinements and differentially checks the symbolic lex predicate.
+The shape ablation shows that swaps plus two-for-two exchanges close Lmax,
+while Lmin genuinely needs the coefficient-two shape; the observed
+three-for-three shape is redundant.  Both table-free formulas have trust-free
+CPC proofs checked `correct` by Ethos.  These objects are conditional on their
+displayed selection-anchor and first-crossing premises; they do not certify
+the equality classification.
+
 ## Pinned checker sources
 
 - cvc5 tag `cvc5-1.3.3`, commit
@@ -178,4 +193,5 @@ formula/proof hashes and recorded Ethos verdicts:
 ```text
 python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
+python3 coopgames/verifiers/s6/reproduce_starved_universal_exchange.py
 ```

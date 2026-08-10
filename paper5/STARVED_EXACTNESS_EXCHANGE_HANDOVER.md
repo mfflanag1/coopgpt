@@ -8,10 +8,12 @@ profile.  The replacement is a finite family of ordinary lexicographic
 exchange directions whose possible tight blockers are restricted by
 singleton exactness.
 
-The complete finite audit is exact rational QF_LRA evidence, not yet a human
-proof of all 504 order types and not an independently checked proof-object
-family.  Its value is structural: the former 131-row staged residue disappears
-entirely.
+The complete finite audit first showed that the former 131-row staged residue
+disappears entirely.  That audit has now been compressed further to two
+table-free exact-QF_LRA formulas, one for each side of the order handover.
+Both formulas have independently checked trust-free CPC proofs.  Readable
+inequalities remain desirable, but the starved local neighborhood no longer
+depends on a 504-table solver census.
 
 ## 1. The exactness-aware blocker lemma
 
@@ -121,40 +123,99 @@ remains a valid ablation record, but “staged rows” is no longer the correct
 structural interpretation.  All 131 are closed by exactness-aware menus of
 sizes two through six, and the same mechanism closes all other starved rows.
 
-## 4. Status and next theorem
+## 4. Table-free two-branch compression
+
+The finite audit suggests a stronger statement that does not name any payoff
+partition or contingency table.  Fix labels `N={0,1}`, `P={2,3}` and
+`R={4,5}`.  Retain only:
+
+1. the signs `(4)` and strict coarse gaps `x_(N union P)<x_R` and
+   `z_N<z_(P union R)`;
+2. the starved-only identity `x_4=x_5`;
+3. the standard selection anchors: Lmax has at least two top players, some
+   Lmax-top player has `x_i>=z_i`, and some Lmin-bottom player has
+   `z_i<=x_i`;
+4. the six singleton-zero simplex witnesses;
+5. exactness-aware one-for-one blockers on the nonselected side; and
+6. exactness-aware blockers for every lex-improving permutation of
+
+```text
+(-1, 0, 0, 0, 0, 1),
+(-1,-1, 0, 0, 1, 1),
+(-1,-1,-1, 0, 1, 2)                                   (7)
+```
+
+on the side chosen by `(5)`.
+
+### Computer-assisted universal exchange lemma
+
+Under these premises, `||x-z||_1<=2/3`.
+
+The negation is one table-free QF_LRA formula for the Lmin branch and one for
+the Lmax branch.  There are 240 labeled directions in the union of the three
+permutation families.  Both formulas are UNSAT.  The three-for-three exchange
+which appeared three times in noncanonical finite menus is redundant.
+
+`starved_universal_exchange_mapping_audit.json` verifies without solver
+verdicts that among all 1,352 starved survivor refinements, the 504
+starved-only rows are exactly those in which the coarse-rich pair remains tied
+at Lmin; the other 848 also refine the positive profile.  It also checks the
+symbolic lex-improvement predicate against the finite rank implementation in
+241,920 side/direction instances and recovers the `128/376` handover split.
+
+The frozen formulas are approximately 6 MB each.  Z3 and cvc5 both return
+UNSAT on identical bytes.  For each formula, cvc5 1.3.3 emits a proof with
+trust disabled, no forbidden markers occur, and Ethos returns `correct`:
+
+```text
+Lmin CPC: 1,656,704 bytes,   sha256 a84af7a558799a0e...a201047
+Lmax CPC: 1,860,649 bytes,   sha256 621ced79090225dc...f6f96d.
+```
+
+Thus the 504-table audit is now a discovery cross-check, not the proof-level
+dependency of the local starved barrier.
+
+## 5. Status and next theorem
 
 This is a meaningful local simplification, not yet an unconditional proof of
 `s(6)=2/3`.
 
-What is now established computationally:
+What is now established computer-assistively:
 
-1. the selected-side formulas are exact linear arithmetic;
-2. all 504 formulas are UNSAT;
-3. the audit byte-reproduces from eight bounded shards plus the two explicit
-   bound-two exceptions; and
-4. the formulas no longer rely on a staged Farkas encoding.
+1. the finite selected-side formulas are exact linear arithmetic and all 504
+   are UNSAT;
+2. the finite audit byte-reproduces from eight bounded shards plus the two
+   explicit bound-two exceptions;
+3. the map from those 504 rows to the two universal branches is checked
+   combinatorially;
+4. the two table-free formulas have independent Z3/cvc5 agreement and
+   trust-free Ethos-checked CPC proofs; and
+5. no formula relies on a staged Farkas encoding.
 
 What remains:
 
-1. normalize the 504 menus by role word and the weak Lmin/Lmax order they use;
-2. compress them into a small table-independent exchange-lemma family;
-3. export each abstract formula to Z3 and cvc5, generate trust-free CPC, and
-   check it with Ethos; and preferably
-4. extract readable inequalities proving the four direction shapes cannot all
-   have exactness-eligible blockers when the distance exceeds `2/3`.
+1. extract readable inequalities proving the three families in `(7)` cannot
+   all have exactness-eligible blockers when the distance exceeds `2/3`;
+2. hostilely review the symbolic lex predicate, anchor hypotheses, handover
+   disjunction, and singleton-exactness blocker lemma; and
+3. integrate this local barrier with a fully reviewed first-crossing argument.
 
-That compression, combined with the already compressed positive neighborhood,
-would complete the local first-crossing barrier conditional on the equality
-classification.  A fully unconditional theorem would still need a structural
-or proof-object replacement for the 3,348 equality-type exclusions and hostile
-review of the normal-form and continuity arguments.
+Combined with the already compressed positive neighborhood, this completes
+the local first-crossing barrier at a computer-assisted proof-object level,
+conditional on the equality classification and the first-crossing premises.
+A fully unconditional theorem would still need a structural or proof-object
+replacement for the 3,348 equality-type exclusions and hostile review of the
+normal-form and continuity arguments.
 
-## 5. Reproduction
+## 6. Reproduction
 
 From the repository root, using a Python environment with `z3-solver`:
 
 ```bash
 python3 coopgames/verifiers/s6/reproduce_starved_exactness_menus.py
+python3 coopgames/verifiers/s6/audit_starved_universal_exchange_mapping.py
+python3 coopgames/verifiers/s6/audit_starved_universal_shape_ablation.py
+python3 coopgames/verifiers/s6/reproduce_starved_universal_exchange.py
 ```
 
 The driver runs eight 63-row bound-one shards in bounded parallelism, reruns

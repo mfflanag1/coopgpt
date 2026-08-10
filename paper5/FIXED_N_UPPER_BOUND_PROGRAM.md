@@ -301,10 +301,18 @@ coefficient-one subset exchanges, and two explicit `NPPNRR` Lmin rows require
 coefficient two.  No staged Farkas certificate occurs in these formulas; see
 `STARVED_EXACTNESS_EXCHANGE_HANDOVER.md`.
 
-Thus the live local theorem is no longer a coupling of two full staged
-packets.  It is a table-independent compression of two finite exchange
-handovers: the completed positive pattern family and the four starved
-direction shapes.  Completing that compression would prove the local
-first-crossing barrier conditional on the equality classification.  It would
+The starved finite handover has now been compressed completely.  Starved-only
+is equivalent, within the survivor refinement set, to the coarse-rich pair
+remaining tied at Lmin.  Under that identity and the standard selection
+anchors, the two handover branches reduce to table-free formulas using swaps,
+two-for-two exchanges, and one coefficient-two Lmin shape.  Z3 and cvc5 both
+return UNSAT; cvc5 emits trust-free CPC and Ethos checks both proofs as
+`correct`.  The three-for-three finite-menu shape is redundant.
+
+Thus both refinement neighborhoods are closed at a table-independent
+computer-assisted level.  Conditional on the equality classification and the
+first-crossing reduction, this establishes the local `2/3` barrier.  It does
 not by itself replace the 3,348 equality-type exclusions or discharge the
-continuity and normal-form review obligations.
+continuity and normal-form review obligations.  Those are now the primary
+obstacles to an unconditional six-player theorem; readable inequalities for
+the remaining abstract CPC cases are a secondary but valuable target.

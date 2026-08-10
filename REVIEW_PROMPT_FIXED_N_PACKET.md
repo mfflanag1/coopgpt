@@ -129,11 +129,24 @@ verifiers/s6/rerun_core_closure_unknowns.py
 verifiers/s6/merge_core_closure_census.py
 paper5/S6_GENERATOR_CENSUS_CHECKPOINT.md
 paper5/S6_EQUALITY_CLASSIFICATION.md
+paper5/STARVED_EXACTNESS_EXCHANGE_HANDOVER.md
 verifiers/s6/core_generator_census.json
 verifiers/s6/equality_triple_census.json
 verifiers/s6/equality_no_triple_census.json
 verifiers/s6/verify_equality_checkpoint.py
 verifiers/s6/audit_starved_4_2_barrier.py
+verifiers/s6/starved_exactness_menu_audit.json
+verifiers/s6/reproduce_starved_exactness_menus.py
+verifiers/s6/audit_starved_universal_exchange_lemma.py
+verifiers/s6/starved_universal_exchange_lemma_audit.json
+verifiers/s6/audit_starved_universal_exchange_mapping.py
+verifiers/s6/starved_universal_exchange_mapping_audit.json
+verifiers/s6/audit_starved_universal_shape_ablation.py
+verifiers/s6/starved_universal_shape_ablation_audit.json
+verifiers/s6/export_starved_universal_exchange_smt.py
+verifiers/s6/reproduce_starved_universal_exchange.py
+verifiers/s6/verify_starved_universal_exchange_certificates.py
+verifiers/s6/certificates/starved_universal_exchange_{min,max}.{smt2,cpc,json}
 verifiers/s6/audit_equality_refinement_neighborhood.py
 verifiers/s6/equality_refinement_neighborhood_audit.json
 verifiers/s6/certificates/README.md
@@ -272,8 +285,22 @@ Hostile questions:
     maximum menu size eight, and only four direction multisets up to labels.
     Confirm that no staged Farkas constraint or characteristic-function
     variable occurs in the new formulas.  Treat both minimized menu audits as
-    proof-discovery evidence until the role/order patterns receive abstract
-    proof objects; do not treat minimized unsat cores as proof objects.
+    proof-discovery evidence; do not treat minimized unsat cores as proof
+    objects.  Then audit the stronger table-free compression in
+    `STARVED_EXACTNESS_EXCHANGE_HANDOVER.md`.  Reproduce the structural map:
+    among 1,352 starved survivor refinements, exactly the 504 starved-only rows
+    retain a tied coarse-rich Lmin pair, while 848 split that pair and also
+    refine the positive profile.  Check all 241,920 symbolic-versus-rank lex
+    predicate instances.  Hostilely audit both universal branch formulas,
+    especially the top multiplicity and cross-anchor premises, the opposite-
+    side swap blockers, the `128/376` disjunction, and the claim that only 240
+    permutations of three shapes are needed.  Replay the frozen Z3/cvc5
+    results and both trust-free CPC proofs; Ethos must return `correct` with no
+    forbidden markers.  Verify independently that dropping the coefficient-
+    two shape makes the Lmin branch SAT, while the three-for-three shape is
+    redundant.  Do not promote this conditional local barrier to an
+    unconditional `s(6)=2/3` theorem without separately accepting the
+    equality classification and first-crossing dependencies.
 12. Audit the human index-1408 barrier separately from the census.  Check the
     gap coordinates `u,v,w`, the identity `1=6c+8v-4w`, the inference
     `v>1/6 => 2w>v`, and the coalition count argument proving
@@ -444,6 +471,9 @@ python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/reproduce_starved_exactness_menus.py
+python3 coopgames/verifiers/s6/audit_starved_universal_exchange_mapping.py
+python3 coopgames/verifiers/s6/audit_starved_universal_shape_ablation.py
+python3 coopgames/verifiers/s6/reproduce_starved_universal_exchange.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
   --output /tmp/positive-critical-current.json

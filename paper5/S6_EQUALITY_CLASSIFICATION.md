@@ -1092,40 +1092,51 @@ The audit byte-reproduces through
 evidence rather than a table-independent proof-object family, but it replaces
 the previous staged-packet target by ordinary exchange algebra plus exactness.
 
+That finite audit has now been compressed to two table-free formulas.  Among
+the 1,352 starved survivor refinements, the 504 starved-only rows are exactly
+those where the coarse-rich pair remains tied at Lmin; the other 848 also
+refine the positive profile.  Retain this tie, the coarse role signs, the
+standard Lmin/Lmax top and bottom anchors, all six singleton-zero witnesses,
+and the handover rule.  It is enough to use labeled permutations of only
+three direction shapes:
+
+```text
+(-1,0,0,0,0,1),
+(-1,-1,0,0,1,1),
+(-1,-1,-1,0,1,2).
+```
+
+The selected side uses all lex-improving permutations; the opposite side
+uses only one-for-one exchanges.  The resulting Lmin and Lmax branch formulas
+are both UNSAT in Z3 and cvc5.  cvc5 emits trust-free CPC proofs and Ethos
+returns `correct` on both.  The finite map checks 241,920 symbolic-versus-rank
+lex predicates and the `128/376` branch split.  Thus the starved neighborhood
+is closed at a table-independent computer-assisted level.  The finite 504-row
+menu archive remains a discovery and differential cross-check rather than the
+proof-level dependency.
+
 ## 7. Exact remaining gap
 
-The highest-value next theorem is now sharply localized:
+Both equality-profile refinement neighborhoods are now closed at a
+table-independent computer-assisted level, and the two coarse barriers are
+human.  Conditional on the equality classification and the first-crossing
+reduction, this gives a local proof-object barrier against crossing above
+`2/3`.
 
-> Compress the 504 starved-only exactness-aware exchange menus into a small
-> family of table-independent inequalities or independently checked proof
-> objects, matching the completed positive handover.
+The remaining obligations before an unconditional six-player theorem are:
 
-The two coarse stratum/table barriers are human, and the positive arbitrary-
-split neighborhood is now closed computer-assistively without projecting to
-one-split directions.  On the starved side, a payoff-only tangent separator
-finds eight direction templates covering 222 of the 504 rows.  A complete
-bound-two exchange-menu search then closes 140 more with Lmin menus and 11
-with Lmax menus.  The menu sizes are two through four, and every reported
-menu is checked against the full continuum of payoff levels in its order
-type.  That older ablation left 131 apparently staged-dependent rows, with the
-decomposition frozen in `starved_payoff_menu_audit.json`.  The unified
-exactness-aware audit now closes those 131 and every other starved row with
-ordinary menus: 502 rows use coefficient-one directions and two explicit
-`NPPNRR` Lmin rows use coefficient two.  Completing a table-independent
-compression of those menus, together with the first-crossing argument, would
-replace the global strict census by a checked local proof conditional on the
-equality classification.  An unconditional theorem would still require a
-structural or proof-object replacement for the 3,348 equality-type exclusions
-and hostile review of the normal-form and continuity dependencies.  More
-sampled games or unsat cores would not close those gaps.
+1. replace the solver census excluding the other 3,348 equality types by a
+   structural theorem or independently checked proof-object family;
+2. hostilely verify the core-closure normal form, convex exact-game path,
+   stagewise continuity, first-crossing existence, and contiguous-refinement
+   inference; and
+3. preferably extract readable inequalities from the positive abstract CPC
+   cases and the two universal starved exchange formulas.
 
-For the starved profile, the next calculation should normalize the 504 new
-menus by role word and weak payoff order, then extract human inequalities for
-the four direction shapes in
-`STARVED_EXACTNESS_EXCHANGE_HANDOVER.md`.  Staged dependency analysis is no
-longer the primary target.  The positive relaxation (23)--(25) remains a
-mandatory negative control against discarding later staged information in any
-proposed dimension-free argument outside this exactness-aware local lemma.
+The older `222+151+131` starved decomposition and 504-row exactness-menu audit
+remain useful negative controls and discovery records, but neither is now a
+logical bottleneck.  More sampled games or unsat cores would not close the
+remaining gaps.
 
 ## 8. Reproduction
 
@@ -1138,6 +1149,9 @@ python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
 python3 coopgames/verifiers/s6/reproduce_starved_exactness_menus.py
+python3 coopgames/verifiers/s6/audit_starved_universal_exchange_mapping.py
+python3 coopgames/verifiers/s6/audit_starved_universal_shape_ablation.py
+python3 coopgames/verifiers/s6/reproduce_starved_universal_exchange.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
   --output /tmp/positive-critical-current.json
