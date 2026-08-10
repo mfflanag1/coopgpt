@@ -229,7 +229,93 @@ The consequent does not assert tightness, does not introduce `v(S)`, and may
 choose a different coalition independently for each direction.  Each change
 only enlarges the machine-feasible set.  It cannot create a false UNSAT proof.
 
-## 7. Exhaustion and soundness conclusion
+## 7. Two coefficient-two implication rows without SMT syntax
+
+These examples expose the complete mathematical content of one retained row
+in each bound-two sign case.  They are not representative spot checks used to
+infer the other rows; the semantic audit reconstructs every row.  Their
+purpose is to make the external review start from coalition arithmetic.
+
+### Case `(p,m,e)=(2,3,1)`, assertion `a72`
+
+Here `P={0,1}`, `M={2,3,4}`, `E={5}` and the Lmin direction is
+
+```text
+h=(-2,-1,1,1,1,0).
+```
+
+Its activation condition is exactly
+
+```text
+min(x_2,x_3,x_4) < min(x_0,x_1).                      (A231)
+```
+
+Indeed, the lowest affected level then contains a positive recipient and no
+negative donor, and the converse is immediate.  Write
+`R=S intersect {2,3,4}`.  The complete set of negative proper cuts is
+
+```text
+S intersect {0,1} = {1}:    |R|=0;
+S intersect {0,1} = {0}:    |R|=0 or 1;
+S intersect {0,1} = {0,1}:  |R|=0, 1, or 2,
+```
+
+with player 5 independently absent or present.  Thus there are
+`2 + 8 + 14 = 24` alternatives, and no others, because these conditions are
+just `h(S)=-2 1[0 in S]-1[1 in S]+|R|<0`.
+
+For each of these 24 coalitions the consequent has exactly the seven
+comparisons
+
+```text
+z(S)>=x(S),   q^0(S)>=x(S), ..., q^5(S)>=x(S).         (B231)
+```
+
+Therefore `a72` says `(A231) ==> OR_S (B231)`, with `S` ranging over precisely
+the displayed family.
+
+### Case `(p,m,e)=(3,3,0)`, assertion `a74`
+
+Here `P={0,1,2}`, `M={3,4,5}` and consider the Lmin direction
+
+```text
+h=(-2,0,-2,1,1,2).
+```
+
+Its activation condition is
+
+```text
+min(x_3,x_4,x_5) < min(x_0,x_2).                      (A330)
+```
+
+Player 1 is unaffected.  Let `D=S intersect {0,2}` and let
+
+```text
+w(S)=1[3 in S]+1[4 in S]+2 1[5 in S].
+```
+
+The negative-cut condition is exactly `w(S)<2|D|`.  Hence `D` must be
+nonempty.  If `|D|=1`, then `w(S)<2`, giving three recipient subsets; there
+are two choices of donor and two independent choices for player 1, for 12
+cuts.  If `|D|=2`, every recipient subset except `{3,4,5}` has weight below
+four; with player 1 optional this gives 14 cuts.  These 26 coalitions are the
+complete negative-cut family.
+
+For each such `S`, the consequent is
+
+```text
+z(S)>=x(S),   q^0(S)>=x(S), ..., q^5(S)>=x(S).         (B330)
+```
+
+Thus `a74` is `(A330) ==> OR_S (B330)` over exactly those 26 cuts.  The
+coefficient two affects which coalitions are negative, but not the
+first-affected-level proof of lexicographic improvement.
+
+An external reviewer can now check both examples by comparing the displayed
+cut parametrizations with the corresponding rows of
+`strict_exchange_formula_interface.json`; no solver result is needed.
+
+## 8. Exhaustion and soundness conclusion
 
 Given a genuine strict counterexample:
 
@@ -291,7 +377,7 @@ first-affected test is genuinely lex-improving, or that optimality supplies a
 negative tight blocker.  Those remain the external reviewer's load-bearing
 mathematical tasks.
 
-## 8. What an external reviewer can still falsify
+## 9. What an external reviewer can still falsify
 
 A fatal objection must identify one of the following:
 

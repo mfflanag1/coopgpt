@@ -52,6 +52,12 @@ nontight-coalition slack ratio.  Verify positivity of this common finite
 minimum and the resulting sorted-vector comparison; do not accept the phrase
 “sufficiently small” as a separate premise.
 
+Section 7 then writes one full coefficient-two implication in each difficult
+case without SMT syntax: `p2_n3_t1:a72` has 24 explicitly parametrized
+negative cuts, while `p3_n3_t0:a74` has 26.  Check both activation
+equivalences, the cut counts, and all seven comparison sources against the
+formula-interface JSON before sampling any additional rows.
+
 Required reviewer output: a table with one row per assertion family, marked
 `proved`, `false`, or `not checked`, with a citation to the precise source
 line or a counterexample.  Passing JSON audits prove transcription and local
