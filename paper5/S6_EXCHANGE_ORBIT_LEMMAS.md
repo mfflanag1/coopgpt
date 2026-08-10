@@ -317,6 +317,72 @@ each with the opposite-selection and six witness comparisons, or 17,584
 individual comparison occurrences.  The atlas classifies the disjunctions;
 it does not prove that the 2,512 alternatives cannot coexist.
 
+### Exact projection of the blocker-coexistence layer
+
+There is nevertheless an exact structural replacement for the witness
+variables once one blocker cut has been chosen for every active direction.
+Index the chosen blocker requirements by `j in J`.  Requirement `j` uses a
+coalition `C_j` and a selected allocation `y^j` (either `x` or `z`), and asks
+
+```text
+q^i(C_j) >= y^j(C_j)             for every singleton witness i.
+```
+
+For fixed `i`, let `a^k in {0,1}^J` be the incidence column
+`a^k_j=1[k in C_j]`.  The zero coordinate and simplex constraints give the
+exact image
+
+```text
+{(q^i(C_j))_j : q^i>=0, q^i(N)=1, q^i_i=0}
+  = conv{a^k : k != i}.                                  (W1)
+```
+
+Consequently the entire family of witness-`i` blocker requirements is
+feasible if and only if, for every `lambda>=0`,
+
+```text
+sum_j lambda_j y^j(C_j)
+  <= max_{k != i} sum_{j:k in C_j} lambda_j.             (W2)
+```
+
+This is the support-function theorem of
+`S6_ZERO_ANCHOR_OVERCOVER_DUALITY.md`, now applied simultaneously to every
+blocker choice and every anchor.  Since the six witnesses are otherwise
+independent, (W2) for `i=0,...,5` eliminates all 36 witness coordinates
+without weakening or strengthening the chosen-cut system.  The opposite-
+selection half remains simply
+
+```text
+d(C_j)<=0 for an Lmin blocker,   d(C_j)>=0 for an Lmax blocker,
+where d=x-z.                                             (W3)
+```
+
+Thus blocker coexistence has the exact projected form:
+
+```text
+choose one cut from the 16/20/24-cut template for each active schema;
+enforce the corresponding sign condition (W3);
+enforce the six five-column incidence-hull facet systems (W2).
+```
+
+For a fixed numerical `x,z` and a fixed cut choice, any infeasible witness
+system has a small sub-obstruction.  The face
+`{q>=0:q(N)=1,q_i=0}` has affine dimension four.  Applying Helly's theorem to
+the blocker halfspaces on that affine space shows that at most five blocker
+requirements, together with the simplex constraints, already make it empty.
+If the minimal Helly subfamily includes the simplex as one of its convex sets,
+only four blocker halfspaces are needed; without that extra condition the
+uniform bound is five.  This pointwise support bound does not say that one
+fixed five-requirement certificate works uniformly over an entire symbolic
+payoff region, but it explains the observed support ceiling of five in the
+class-5/class-6 affine certificates.
+
+The projection is the sought exact-cone/facet theorem for the witness side
+of all three large cases.  It converts the remaining task from continuous
+witness feasibility to a finite transversal-and-facet problem.  It does not
+yet prove that no global cut transversal satisfies (W2)--(W3), so the
+six-player upper bound still relies on the certified finite formulas.
+
 A solver-free checker expands the 19 role orbits to all 136 labelled
 directions and compares these extreme-level tests with the direct
 first-affected-level definition on all 4,683 labelled weak orders.  All

@@ -142,6 +142,15 @@ coefficient-two orientation.  Confirm the aggregate
 frozen atlas audit checks the expansion and counts; the reviewer must still
 assess the mathematical derivation and the blocker coexistence proof.
 
+Finally verify the blocker-coexistence projection lemma in
+`S6_EXCHANGE_ORBIT_LEMMAS.md`.  After fixing one blocker cut per active
+direction, (W1)--(W2) must eliminate each witness simplex exactly, while
+(W3) retains the opposite-selection comparison.  Check the five-column
+incidence-hull formulation for all six zero anchors and the pointwise
+five-requirement Helly bound.  State explicitly whether this reduces the
+remaining proof to a finite transversal/facet problem or whether any coupling
+between witnesses was lost.
+
 Confirm separately that `(3,3,0)` needs the H4/H5 asymmetric
 coefficient-two pair in addition to H7/H8, while `(3,2,1)` and `(4,2,0)` use
 only one-for-one and two-for-two exchanges.  Treat orbit-level UNSAT and SAT
