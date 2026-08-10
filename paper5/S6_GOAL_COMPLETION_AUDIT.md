@@ -119,6 +119,10 @@ are base-infeasible, and the 32 feasible pairs form eleven residual-symmetry
 orbits.  Each row closes using a subset-minimal menu of at most seven
 remaining directions.  This materially improves readability but does not yet
 replace every residual blocker alternative by hand inequalities.
+One complete packet orbit (class 8, covering two labelled pairs) is now
+closed entirely by hand with a single two-for-two direction.  Its activation
+and all twenty blocker exclusions use only the opposite-selection comparison;
+the audit verifies the reduced inequalities independently of `q^1`.
 
 ## 4. Sharpness and equality cases
 

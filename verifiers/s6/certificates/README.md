@@ -252,6 +252,10 @@ cmp /tmp/strict_exchange_p4_packet_classes.json \
 
 This table strengthens selected disjuncts of the proof-checked parent formula;
 it is a readability decomposition, not an additional proof object.
+One row is now independent of the residual disjunction: packet class 8 closes
+by hand with `-e1-e3+e4+e5`.  The same audit checks the reduced negated
+activation formula and all twenty eligible opposite-blocker comparisons,
+without a `q1` premise.
 
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies

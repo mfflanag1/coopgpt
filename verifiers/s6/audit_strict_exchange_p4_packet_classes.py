@@ -102,6 +102,65 @@ def subset_minimal_core(common, implications, timeout_ms):
     return active
 
 
+def class8_hand_checks(timeout_ms):
+    """Check the reduced inequalities used in the all-human class-8 lemma."""
+    x = [z3.Real(f"packet_hand_x_{index}") for index in range(6)]
+    z = [z3.Real(f"packet_hand_z_{index}") for index in range(6)]
+    distance = point_sum(x, (0, 1, 2, 3)) - point_sum(z, (0, 1, 2, 3))
+    first = (0, 1, 2, 4)
+    second = (0, 1, 2, 5)
+    activation_premises = [
+        point_sum(z, range(6)) == 1,
+        z[0] >= 0,
+        z[2] >= 0,
+        z[3] >= 0,
+        z[1] >= z[4],
+        point_sum(z, first) >= point_sum(x, first),
+        point_sum(z, second) >= point_sum(x, second),
+        x[3] <= x[4],
+        x[3] <= x[5],
+        distance > z3.RealVal(1) / 3,
+    ]
+    activation_status = verdict(activation_premises, timeout_ms)
+    if activation_status != z3.unsat:
+        raise AssertionError(f"class-8 activation hand lemma is {activation_status}")
+
+    d = [z3.Real(f"packet_hand_d_{index}") for index in range(6)]
+    blocker_premises = [
+        z3.Sum(*d) == 0,
+        *(d[index] > 0 for index in (0, 1, 2, 3)),
+        *(d[index] < 0 for index in (4, 5)),
+        point_sum(d, first) <= 0,
+        point_sum(d, second) <= 0,
+    ]
+    direction = (0, -1, 0, -1, 1, 1)
+    eligible = []
+    for mask in range(1, (1 << 6) - 1):
+        coalition = tuple(index for index in range(6) if mask & (1 << index))
+        if sum(direction[index] for index in coalition) >= 0:
+            continue
+        status = verdict(
+            [*blocker_premises, point_sum(d, coalition) <= 0], timeout_ms
+        )
+        if status != z3.unsat:
+            raise AssertionError(f"class-8 blocker {coalition} is {status}")
+        eligible.append({"coalition": list(coalition), "opposite_comparison": "unsat"})
+    if len(eligible) != 20:
+        raise AssertionError(f"expected 20 class-8 blocker coalitions, got {len(eligible)}")
+    return {
+        "packet_class": 8,
+        "packet": {"first_optional_players": [0, 2], "second_optional_players": [0, 2]},
+        "direction": list(direction),
+        "side": "min",
+        "negated_lex_activation_verdict": "unsat",
+        "activation_uses_q1": False,
+        "eligible_negative_cut_count": len(eligible),
+        "eligible_negative_cuts": eligible,
+        "every_opposite_blocker_comparison_verdict": "unsat",
+        "blocker_exclusion_uses_q1": False,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -206,6 +265,14 @@ def main():
         raise AssertionError("the symmetry representatives do not cover every feasible pair")
     if len(feasible_pairs) + len(infeasible_pairs) != 64:
         raise AssertionError("the packet enumeration is not exhaustive")
+    class8 = rows[7]
+    if (
+        class8["class"] != 8
+        or class8["first_optional_players"] != [0, 2]
+        or class8["second_optional_players"] != [0, 2]
+        or [item["direction_index"] for item in class8["subset_minimal_core"]] != [17]
+    ):
+        raise AssertionError("the class-8 hand lemma is detached from its packet row")
 
     payload = {
         "schema": "strict-exchange-p4-packet-classes-v1",
@@ -225,6 +292,7 @@ def main():
         "feasible_symmetry_class_count": len(rows),
         "feasible_orbit_size_sum": sum(row["raw_orbit_size"] for row in rows),
         "classes": rows,
+        "class8_hand_lemma": class8_hand_checks(args.timeout_ms),
     }
     rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
     if args.output:

@@ -193,6 +193,10 @@ verdicts, the 32/32 feasible split, the residual group action, the eleven
 representatives, and every subset-minimal core ablation.  Treat the packet
 table as a decomposition of the already certified parent relaxation, not as
 independent evidence or as an all-human proof.
+For packet class 8, separately audit the claimed all-human exception: derive
+`D<=1/3` from the negation of lex activation, then classify every coalition
+with `(-e_1-e_3+e_4+e_5)(S)<0` and prove that its opposite comparison fails.
+Confirm that neither half of this argument uses `q^1`.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

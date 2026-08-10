@@ -123,7 +123,72 @@ It remains a finite computer-assisted lemma.  A complete hand proof would
 still have to replace the residual blocker alternatives in these eleven rows
 by explicit inequalities or Farkas combinations.
 
-## 4. Reproduction and proof status
+## 4. Class 8 closes completely by hand
+
+For class 8, `A=B={0,2}`.  Write
+
+```text
+D=d(P)>1/3,   s=d_0+d_1+d_2,
+delta_m=z_m-x_m=-d_m  for m in M.
+```
+
+Consider the single residual direction in its core,
+
+```text
+h=-e_1-e_3+e_4+e_5.                               (H)
+```
+
+First, `(H)` is necessarily Lmin-improving.  Suppose instead that
+`x_3<=x_4,x_5`.  The two packet opposite comparisons imply
+
+```text
+x(P) <= z_0+z_1+z_2+z_4,
+x(P) <= z_0+z_1+z_2+z_5,
+```
+
+because `x_3<=x_4,x_5`.  Subtracting `z(P)` gives
+
+```text
+D <= z_4-z_3,      D <= z_5-z_3.
+```
+
+The top-anchor order `z_1>=z_4` and nonnegativity now give
+
+```text
+1=sum z >= z_1+z_4+z_5+z_3 >= 3D+4z_3 >= 3D,
+```
+
+contrary to `D>1/3`.  Hence `x_3>min{x_4,x_5}`.  The anchor chain already
+gives `x_1>x_4,x_5`; choosing the lower of players `4,5` shows that the lowest
+stratum touched by `(H)` has positive and no negative coefficients.  Thus
+`(H)` improves Lmin.
+
+Second, `(H)` has no possible opposite blocker.  The packet inequalities say
+
+```text
+delta_4>=s,       delta_5>=s.
+```
+
+Since `delta_4+delta_5=D=s+d_3`, each `delta_m<=d_3`.  If `h(S)<0` and `S`
+contains no `M` player, then it contains at least one of `1,3` and only
+positive-`d` players, so `d(S)>0`.  If it contains exactly one `M` player
+`m`, it must contain both `1,3`, and therefore
+
+```text
+d(S) >= d_1+d_3-delta_m > 0.
+```
+
+With both `M` players, `h(S)<0` is impossible.  Consequently every eligible
+negative cut has `x(S)>z(S)`, while an Lmin blocker would require
+`z(S)>=x(S)`.  No blocker exists, contradicting optimality.
+
+This is an all-human closure of one full packet orbit (two of the 32 labelled
+feasible packets).  It uses neither the `q^1` blocker comparison nor a solver
+in the proof.  The audit separately checks the negation of the activation
+argument and all twenty eligible negative cuts from only the displayed
+reduced premises.
+
+## 5. Reproduction and proof status
 
 Run from the repository root with the Z3-enabled Python environment:
 
@@ -141,7 +206,10 @@ The audit independently checks within the parent encoding that
 3. exactly 32 pairs are base-feasible;
 4. the eleven representatives cover all 32 pairs under the residual group;
 5. every representative plus all remaining implications is UNSAT; and
-6. every single deletion from every displayed residual core is SAT.
+6. every single deletion from every displayed residual core is SAT;
+7. the reduced class-8 activation negation is UNSAT; and
+8. each of the twenty eligible class-8 blocker comparisons is UNSAT without
+   a `q^1` premise.
 
 The authoritative proof object for the unsplit, weaker relaxation remains
 the trust-disabled CPC proof in

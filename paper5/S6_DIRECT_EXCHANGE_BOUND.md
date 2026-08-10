@@ -235,7 +235,10 @@ eleven residual-symmetry classes, each closed by a subset-minimal menu of at
 most seven other directions.  The aggregate packet inequalities are derived
 by hand in `S6_P4_PACKET_CLASSIFICATION.md`.  This makes the remaining finite
 anatomy smaller and more explicit, but does not turn it into an all-human
-proof.
+proof.  One of the eleven rows, class 8, does close completely by hand: the
+packet forces `-e_1-e_3+e_4+e_5` to improve Lmin, and elementary `d=x-z`
+inequalities exclude all twenty of its eligible blockers without using the
+`q^1` comparison.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen
