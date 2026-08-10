@@ -261,9 +261,19 @@ Hostile questions:
     282 single-direction residue rows.  Reproduce the bound-two payoff-menu
     shards and `starved_payoff_menu_audit.json`: Lmin menus must close 140,
     Lmax menus 11, with size split `94/38/8` for Lmin sizes `2/3/4` and `8/3`
-    for Lmax sizes `2/3`, leaving exactly 131 staged-dependent rows.  Verify
-    the all-directions-blocked quantifier and do not treat minimized unsat
-    cores as proof objects.
+    for Lmax sizes `2/3`, leaving exactly 131 rows under that payoff-only
+    ablation.  Then reproduce `starved_exactness_menu_audit.json`.  Verify
+    directly that exactness at every normalized singleton supplies the six
+    zero-coordinate core witnesses used in each blocker formula, and that
+    Lmin/Lmax optimality forces a negative tight blocker for every displayed
+    lex-improving direction.  Reconcile the complete result: all 504 rows
+    UNSAT, the same `128/376` side split, 502 coefficient-one rows, exactly
+    two coefficient-two exceptions at survivor indices `932` and `2332`,
+    maximum menu size eight, and only four direction multisets up to labels.
+    Confirm that no staged Farkas constraint or characteristic-function
+    variable occurs in the new formulas.  Treat both minimized menu audits as
+    proof-discovery evidence until the role/order patterns receive abstract
+    proof objects; do not treat minimized unsat cores as proof objects.
 12. Audit the human index-1408 barrier separately from the census.  Check the
     gap coordinates `u,v,w`, the identity `1=6c+8v-4w`, the inference
     `v>1/6 => 2w>v`, and the coalition count argument proving
@@ -433,6 +443,7 @@ python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
+python3 coopgames/verifiers/s6/reproduce_starved_exactness_menus.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
   --output /tmp/positive-critical-current.json

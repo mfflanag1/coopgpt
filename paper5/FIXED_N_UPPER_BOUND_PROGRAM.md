@@ -285,31 +285,26 @@ blocks may split simultaneously.  The new live target is therefore the
 **refined tangent theorem**: show that every outward exact-game direction at
 either canonical pair descends to one of the coarse exchange directions, or
 extend the exchange-menu argument uniformly to all contiguous refinements.
-For the positive profile this tangent problem has already collapsed locally:
-the rich-player zero witness is uniquely uniform on the three `P` players,
-and only the three common tight triples can block any of the eight Lmax
-exchange directions or the three relevant Lmin directions at the canonical
-pair.  The remaining obstruction is therefore a first-order coupling over
-three critical tight values and the full staged packet, not another
-all-coalition search.  The distinction is load-bearing: an exact rational
-relaxation preserves all six singleton witnesses and all three common triples
-along an arbitrarily local outward ray of displayed pairs, but exact closure
-recomputes later Lmin/Lmax strata and reduces the true distance to `4/9`.
-Accordingly, the next proof cannot replace staged pinning by triple geometry.
-At the coarse-or-one-split layer, critical triple algebra, local cross-cell
-signs, and exactness eliminate nine of the eleven survivors.  The remaining
-two, census types `1442` and `2268`, are eliminated by explicit
-Lmin-improving directions.  The previously reported type `1414` residue was a
-remote artifact of omitting the local signs and has been withdrawn.  Seven of
-the algebraic rows share the witness inequality `2x(P)+3x_r<=2` and now have
-a human case proof.  Thus the positive coarse-or-one-split layer is closed,
-conditional on the audited hand net.  This is still not a theorem that
-simultaneous splits decompose into one-split directions.
-The simultaneous-split obstruction is now known to be irreducibly two-sided.
-With the critical triples and all exactness witnesses retained, a full staged
-Lmin packet alone admits index 239 at displayed distance `449/516`; exact
-closure preserves Lmin, changes Lmax, and gives true distance `118/387`.
-The mirror ablation retains full staged Lmax at index 212 with displayed
-distance `553/825`; closure preserves Lmax, changes Lmin, and gives true
-distance `53/165`.  Hence the live theorem is specifically a coupling of both
-full staged packets, not merely a search for a stronger one-sided packet.
+For the positive profile the complete simultaneous-split neighborhood is now
+covered directly by the one-sided handover described above; no inference from
+one-split directions is used.  The earlier two ablation examples remain valid
+negative controls showing that neither *fixed* one-sided packet is universal.
+They do not refute an order-dependent handover between the two sides.
+
+The starved profile has now simplified further.  On all 504 starved-only
+refinements, the same `128/376` order rule selects a side on which ordinary
+exactness-aware exchange menus are contradictory.  Singleton exactness
+supplies six zero-coordinate core witnesses; every tight blocker for an
+improving direction must be eligible against the opposite selection and all
+six witnesses.  With these inequalities, 502 rows close using only
+coefficient-one subset exchanges, and two explicit `NPPNRR` Lmin rows require
+coefficient two.  No staged Farkas certificate occurs in these formulas; see
+`STARVED_EXACTNESS_EXCHANGE_HANDOVER.md`.
+
+Thus the live local theorem is no longer a coupling of two full staged
+packets.  It is a table-independent compression of two finite exchange
+handovers: the completed positive pattern family and the four starved
+direction shapes.  Completing that compression would prove the local
+first-crossing barrier conditional on the equality classification.  It would
+not by itself replace the 3,348 equality-type exclusions or discharge the
+continuity and normal-form review obligations.

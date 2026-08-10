@@ -1072,11 +1072,31 @@ yet a table-independent proof-object compression like the positive handover.
 It nevertheless reduces the unresolved first-crossing neighborhood from
 2,163 raw types to one explicit 504-row starved handover target.
 
+The newer exactness-aware exchange audit removes the apparent dependence on
+those staged packets.  Exactness at each singleton supplies a core point
+`q^i` with `q^i_i=0`.  Any lex-improving direction at Lmin or Lmax must then
+have a tight negative blocker which is simultaneously eligible against the
+opposite selection and all six `q^i`.  Applying the same `128/376` order
+handover, `starved_exactness_menu_audit.json` finds contradictory finite
+exchange menus on all 504 rows without any staged Farkas variables:
+
+```text
+coefficient-one menus: 502,       coefficient-two exceptions: 2,
+maximum menu size: 8,             direction shapes up to labels: 4.
+```
+
+The only shapes are a one-for-one swap, a two-for-two exchange, a
+three-for-three exchange, and one explicit coefficient-two boundary shape.
+The audit byte-reproduces through
+`reproduce_starved_exactness_menus.py`.  This is still finite exact-QF_LRA
+evidence rather than a table-independent proof-object family, but it replaces
+the previous staged-packet target by ordinary exchange algebra plus exactness.
+
 ## 7. Exact remaining gap
 
 The highest-value next theorem is now sharply localized:
 
-> Compress the 504 starved-only selected-packet contradictions into a small
+> Compress the 504 starved-only exactness-aware exchange menus into a small
 > family of table-independent inequalities or independently checked proof
 > objects, matching the completed positive handover.
 
@@ -1087,23 +1107,25 @@ finds eight direction templates covering 222 of the 504 rows.  A complete
 bound-two exchange-menu search then closes 140 more with Lmin menus and 11
 with Lmax menus.  The menu sizes are two through four, and every reported
 menu is checked against the full continuum of payoff levels in its order
-type.  Thus only 131 rows remain genuinely staged-dependent; the exact
-decomposition is frozen in `starved_payoff_menu_audit.json`.  Completing their
-selected-packet compression, together with the first-crossing argument, would replace the
-global strict census by a checked local proof conditional on the equality
-classification.  An unconditional theorem would still require a structural
-or proof-object replacement for the 3,348 equality-type exclusions and
-hostile review of the normal-form and continuity dependencies.  More sampled
-games or unsat cores would not close those gaps.
+type.  That older ablation left 131 apparently staged-dependent rows, with the
+decomposition frozen in `starved_payoff_menu_audit.json`.  The unified
+exactness-aware audit now closes those 131 and every other starved row with
+ordinary menus: 502 rows use coefficient-one directions and two explicit
+`NPPNRR` Lmin rows use coefficient two.  Completing a table-independent
+compression of those menus, together with the first-crossing argument, would
+replace the global strict census by a checked local proof conditional on the
+equality classification.  An unconditional theorem would still require a
+structural or proof-object replacement for the 3,348 equality-type exclusions
+and hostile review of the normal-form and continuity dependencies.  More
+sampled games or unsat cores would not close those gaps.
 
-For the starved profile, the next calculation should begin with the 222
-payoff-separated rows, the 151 payoff-menu rows, and the `128/376` packet
-separator.  The main question is which critical tight families distinguish
-the remaining 131 rows and
-whether their selected-packet contradictions reduce to a small direction or
-exchange-menu family.  The positive relaxation (23)--(25) remains a mandatory
-negative control against discarding later staged information in any proposed
-dimension-free argument.
+For the starved profile, the next calculation should normalize the 504 new
+menus by role word and weak payoff order, then extract human inequalities for
+the four direction shapes in
+`STARVED_EXACTNESS_EXCHANGE_HANDOVER.md`.  Staged dependency analysis is no
+longer the primary target.  The positive relaxation (23)--(25) remains a
+mandatory negative control against discarding later staged information in any
+proposed dimension-free argument outside this exactness-aware local lemma.
 
 ## 8. Reproduction
 
@@ -1115,6 +1137,7 @@ python3 coopgames/verifiers/s6/verify_frozen_certificates.py
 python3 coopgames/verifiers/s6/verify_positive_handover_certificates.py
 python3 coopgames/verifiers/s6/verify_equality_checkpoint.py
 python3 coopgames/verifiers/s6/audit_starved_4_2_barrier.py
+python3 coopgames/verifiers/s6/reproduce_starved_exactness_menus.py
 python3 coopgames/verifiers/s6/audit_positive_5_1_barrier.py
 python3 coopgames/verifiers/s6/audit_positive_critical_relaxation.py \
   --output /tmp/positive-critical-current.json
