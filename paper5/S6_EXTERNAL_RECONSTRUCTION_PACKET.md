@@ -86,19 +86,39 @@ generator, minimizer, or serializer.  It records:
 (3,3,0): 71 retained directions, base SAT, full formula UNSAT.
 ```
 
-For genuine independence, write a third formulation without importing either
-Python encoder.  Recommended minimal specification:
+A third formulation is now frozen here:
+
+```text
+coopgames/paper5/S6_THIRD_BOUND_TWO_RECONSTRUCTION.md
+coopgames/verifiers/s6/third_bound_two_direct_smt.py
+coopgames/verifiers/s6/verify_third_bound_two.py
+coopgames/verifiers/s6/third_bound_two/audit.json
+coopgames/verifiers/s6/third_bound_two/verification.json
+coopgames/verifiers/s6/third_bound_two/p2_n3_t1.smt2
+coopgames/verifiers/s6/third_bound_two/p3_n3_t0.smt2
+```
+
+Its generator imports only the standard library, constructs no Z3 AST, uses
+strict positive/negative-support separation instead of pivot activation,
+enumerates coalitions by cardinality combinations, and serializes SMT-LIB
+directly.  It reconstructs all 1,726 cuts and 12,082 comparisons.  The
+verifier checks 458 assertion equivalences against both previous encodings;
+both bases are SAT and both full formulas are UNSAT.  Non-strict activation
+and cut-omission mutations are detected on all 85 direction rows.
+
+For external validation, inspect or rewrite this third formulation without
+assuming its verdict.  The minimal specification remains:
 
 1. declare `x,z,q^0,...,q^5` directly;
 2. encode the sign case, efficiency, nonnegativity, strict distance and three
    anchors from the mathematical statement;
-3. implement lex activation by the first affected payoff level, not by the
-   pivot code;
+3. implement lex activation directly, preferably by the `(Tmin)/(Tmax)`
+   support-separation lemma rather than either pivot code;
 4. enumerate nonempty proper coalitions and retain exactly those with
    negative direction sum;
 5. generate opposite plus six singleton-witness comparisons directly; and
-6. check base SAT, full UNSAT, and logical equivalence of sampled complete
-   implication rows against the frozen SMT-LIB.
+6. check base SAT, full UNSAT, and logical equivalence of every complete
+   implication row against the frozen SMT-LIB.
 
 Do not count a byte comparison, a shared helper, or a second solver on the
 same formula as independent reconstruction.  The CPC/Ethos records establish
@@ -108,11 +128,18 @@ Reproduction command:
 
 ```bash
 python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+python3 coopgames/verifiers/s6/verify_third_bound_two.py \
+  --output /tmp/third_bound_two_verification.json
+cmp /tmp/third_bound_two_verification.json \
+  coopgames/verifiers/s6/third_bound_two/verification.json
 ```
 
 The verifier permits the recorded local Z3 version to differ as provenance,
 but requires every substantive audit field and both generated SMT-LIB files
 to reproduce exactly; it separately checks the frozen formula and CPC hashes.
+The third verifier byte-regenerates its direct-text formulas and compares each
+assertion semantically with both earlier formulations.  Neither internal
+reconstruction supplies the external verdict required by Gate 1.
 
 ## Gate 3: reconstruct the 52/71/90 orbit quotient
 

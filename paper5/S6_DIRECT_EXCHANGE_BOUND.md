@@ -386,6 +386,10 @@ Run from the repository root:
 ```text
 python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
 python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+python3 coopgames/verifiers/s6/verify_third_bound_two.py \
+  --output /tmp/third_bound_two_verification.json
+cmp /tmp/third_bound_two_verification.json \
+  coopgames/verifiers/s6/third_bound_two/verification.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
   --output /tmp/strict_exchange_formula_interface.json
 cmp /tmp/strict_exchange_formula_interface.json \
@@ -498,6 +502,10 @@ coopgames/verifiers/s6/certificates/strict_exchange_*.{smt2,cpc,json}
 coopgames/verifiers/s6/independent_bound_two_reconstruction.py
 coopgames/verifiers/s6/verify_independent_bound_two.py
 coopgames/verifiers/s6/independent_bound_two/*.{smt2,cpc,json}
+coopgames/paper5/S6_THIRD_BOUND_TWO_RECONSTRUCTION.md
+coopgames/verifiers/s6/third_bound_two_direct_smt.py
+coopgames/verifiers/s6/verify_third_bound_two.py
+coopgames/verifiers/s6/third_bound_two/*.{smt2,json}
 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
 coopgames/verifiers/s6/strict_exchange_large_case_templates.json
 coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py

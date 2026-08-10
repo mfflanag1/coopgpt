@@ -29,6 +29,10 @@ coopgames/verifiers/s6/certificates/strict_exchange_*.{smt2,cpc,json}
 coopgames/verifiers/s6/independent_bound_two_reconstruction.py
 coopgames/verifiers/s6/verify_independent_bound_two.py
 coopgames/verifiers/s6/independent_bound_two/*.{smt2,cpc,json}
+coopgames/paper5/S6_THIRD_BOUND_TWO_RECONSTRUCTION.md
+coopgames/verifiers/s6/third_bound_two_direct_smt.py
+coopgames/verifiers/s6/verify_third_bound_two.py
+coopgames/verifiers/s6/third_bound_two/*.{smt2,json}
 coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
 coopgames/verifiers/s6/strict_exchange_large_case_templates.json
@@ -194,6 +198,11 @@ singleton-exactified overlap `2/3`.
    check the direct first-affected-stratum predicates, rebuilt negative cuts,
    dual no-unique-top encoding, SAT base controls, strict SMT-LIB parsing, and
    the two new CPC/Ethos records.
+   Then run `verify_third_bound_two.py`.  Audit whether its standard-library
+   text generator, support-separation activation, cardinality-based coalition
+   expansion, and pointwise-dominance anchor are genuinely distinct.  Check
+   all 458 row equivalences and both mutation families; do not treat agreement
+   among three encodings as proof of the human game-to-formula implication.
 10. **Lower bound.** Independently recheck exactness and the displayed Lmin,
     Lmax, and ratio of `G(2,3)`; do not infer `s(6)=2/3` from the upper suite
     alone.

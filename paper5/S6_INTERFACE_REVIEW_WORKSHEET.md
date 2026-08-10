@@ -84,6 +84,13 @@ Record separately whether the independently formulated encoder in
 Lmin-optimality component.  Do not infer the human implication from agreement
 between encoders.
 
+Also inspect the standard-library-only third formulation in
+`third_bound_two_direct_smt.py`.  Its activation predicate is `(Tmin)/(Tmax)`
+support separation rather than a pivot formula, and its 458 equivalence
+checks compare every assertion with both prior encodings.  Agreement among
+three formulations reduces correlated encoding risk; it still does not prove
+H1--H14.
+
 ## D. Required reviewer conclusion
 
 Answer each question separately.

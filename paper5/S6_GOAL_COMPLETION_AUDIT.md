@@ -91,6 +91,17 @@ systems are UNSAT in Z3 and cvc5, and their new trust-disabled CPC proofs check
 `correct` in Ethos.  This materially reduces correlated implementation risk;
 it does not independently prove the human counterexample-to-formula map.
 
+A third formulation now removes the remaining shared solver-construction
+style.  Its standard-library generator imports neither prior encoder nor Z3,
+uses strict separation of the positive and negative payoff supports rather
+than a pivot predicate, enumerates coalitions by cardinality, and emits
+SMT-LIB directly.  It reconstructs 1,726 cuts and 12,082 comparisons.  All
+458 assertion-level comparisons with both earlier encodings are equivalent;
+both bases are SAT and both full systems UNSAT.  Non-strict activation and
+single-cut omission are detected on every one of the 85 direction rows.  This
+is a third internal reconstruction, not external validation or a new proof of
+the human interface.
+
 The 52-, 71-, and 90-direction cases were first compressed from 213 labeled
 directions to 44 sign-role orbits.  A later unguarded minimization closes them
 with 136 directions in an irredundant 8/5/6 split, only 19 sign-role schemas
@@ -318,6 +329,10 @@ python3 coopgames/verifiers/s6/verify_two_packet_staged_certificates.py
 python3 coopgames/verifiers/s6/audit_lex_improvement_predicate.py
 python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
 python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+python3 coopgames/verifiers/s6/verify_third_bound_two.py \
+  --output /tmp/third_bound_two_verification.json
+cmp coopgames/verifiers/s6/third_bound_two/verification.json \
+  /tmp/third_bound_two_verification.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
   --output /tmp/strict_exchange_formula_interface.json
 cmp coopgames/verifiers/s6/strict_exchange_formula_interface.json \

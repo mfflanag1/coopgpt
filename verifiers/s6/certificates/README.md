@@ -191,6 +191,24 @@ checked `correct` by Ethos.  Run:
 python3 coopgames/verifiers/s6/verify_independent_bound_two.py
 ```
 
+A third lane under `../third_bound_two/` removes Z3 from formula generation
+entirely.  The standard-library generator serializes SMT-LIB directly, uses
+strict separation of positive and negative payoff supports instead of pivot
+activation, and enumerates coalitions by cardinality combinations.  Its
+verifier performs 458 assertion-level equivalence checks against both earlier
+encodings, checks both bases SAT and both full systems UNSAT, and detects
+non-strict-activation and cut-omission mutations on all 85 rows:
+
+```text
+python3 coopgames/verifiers/s6/verify_third_bound_two.py \
+  --output /tmp/third_bound_two_verification.json
+cmp /tmp/third_bound_two_verification.json \
+  coopgames/verifiers/s6/third_bound_two/verification.json
+```
+
+This is independent machine-formulation evidence, not an external verdict on
+the counterexample-to-formula implication.
+
 The three largest menus are additionally summarized by the non-proof audit
 `../strict_exchange_large_case_templates.json`: 213 labeled rows quotient to
 44 sign-role orbits and eight oriented coefficient templates (six modulo sign
