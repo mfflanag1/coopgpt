@@ -112,7 +112,32 @@ The verifier permits the recorded local Z3 version to differ as provenance,
 but requires every substantive audit field and both generated SMT-LIB files
 to reproduce exactly; it separately checks the frozen formula and CPC hashes.
 
-## Gate 3: reconstruct the class-5 large map
+## Gate 3: reconstruct the 52/71/90 orbit quotient
+
+Read:
+
+```text
+coopgames/paper5/S6_EXCHANGE_ORBIT_LEMMAS.md
+coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py
+coopgames/verifiers/s6/audit_strict_exchange_large_case_orbit_cores.py
+coopgames/verifiers/s6/strict_exchange_large_case_orbit_cores.json
+```
+
+Independently verify that relabelling within `P`, `M`, and `E` sends the 213
+labelled rows of the `52+71+90` cases to 44 sign-role orbits, and that the
+reduced proof retains 19 complete orbits containing 136 rows.  For the
+`(3,2,1)` case, derive the A1--A8 activation atlas directly: its 29 retained
+rows must reduce to the eight displayed min/max order-statistic tests with
+multiplicities `2+3+6+3+3+6+3+3`.  This settles the activation vocabulary,
+not the coexistence of the resulting blockers.
+
+Confirm separately that `(3,3,0)` needs the H4/H5 asymmetric
+coefficient-two pair in addition to H7/H8, while `(3,2,1)` and `(4,2,0)` use
+only one-for-one and two-for-two exchanges.  Treat orbit-level UNSAT and SAT
+ablations as finite-proof and irredundancy evidence, not as a human derivation
+of the blocker layer.
+
+## Gate 4: reconstruct the class-5 large map
 
 Read:
 
@@ -146,7 +171,7 @@ canonicalization reduces all 72 activation identities to 47 motifs, including
 20 for this residual.  Forgetting source-depth aliases does not prove that a
 motif is available at a given path; verify every residual placement.
 
-## Gate 4: reconstruct the class-6 large map
+## Gate 5: reconstruct the class-6 large map
 
 Read:
 
@@ -175,7 +200,7 @@ inferring availability from motif equality.
 The rational identities remove solver dependence from arithmetic; they do not
 derive their relay/use sites.
 
-## Gate 5: novelty is a separate review
+## Gate 6: novelty is a separate review
 
 Start with:
 
@@ -217,13 +242,15 @@ file and line references.  End with separate answers:
 
 1. Does every genuine counterexample map into a frozen relaxation?
 2. Are the two coefficient-two cases independently reconstructed?
-3. Are the class-5 and class-6 maps independently derivable from the stated
+3. Is the 52/71/90 orbit quotient, including the A1--A8 activation atlas,
+   independently derivable from role relabelling and order statistics?
+4. Are the class-5 and class-6 maps independently derivable from the stated
    orbit grammars?
-4. Is the theorem already known under another formulation?
-5. If correct and new, is this a finite computational theorem, a substantial
+5. Is the theorem already known under another formulation?
+6. If correct and new, is this a finite computational theorem, a substantial
    structural theorem, or a major field-level result?
 
-Until Gates 1--5 receive specialist answers, describe the result as a strong
+Until Gates 1--6 receive specialist answers, describe the result as a strong
 computer-assisted six-player theorem candidate with extensive solver-free
 arithmetic and structural compression, not as externally validated or a
 major field breakthrough.

@@ -208,6 +208,44 @@ coefficient multisets on `P,M,E` are the displayed lists.
 | | C5 | `min: P[-1,0,0,1] M[0,0]` |
 | | C6 | `min: P[-1,-1,0,0] M[1,1]` |
 
+### Exact activation atlas for the 52-direction case
+
+The reduced `(3,2,1)` core contains 29 labelled directions, but their
+activation conditions are eight elementary order-statistic statements.  Put
+`E={e}`.  In the table, distinct symbols chosen from the same role class are
+understood to be distinct.
+
+| schema | labelled direction `h` | side | exact activation condition | labelled rows |
+|---|---|---|---|---:|
+| A1 | `-e_e+e_m` | Lmin | `x_m<x_e` | 2 |
+| A2 | `-e_p+e_e` | Lmax | `z_p>z_e` | 3 |
+| A3 | `-e_p+e_m` | Lmin | `x_m<x_p` | 6 |
+| A4 | `e_p+e_e-e_{m_1}-e_{m_2}` | Lmax | `max(z_{m_1},z_{m_2})>max(z_p,z_e)` | 3 |
+| A5 | `-e_p+e_e` | Lmin | `x_e<x_p` | 3 |
+| A6 | `e_p+e_{p'}-e_m-e_e` | Lmax | `max(z_m,z_e)>max(z_p,z_{p'})` | 6 |
+| A7 | `e_p+e_{p'}-e_{m_1}-e_{m_2}` | Lmax | `max(z_{m_1},z_{m_2})>max(z_p,z_{p'})` | 3 |
+| A8 | `-e_p-e_{p'}+e_{m_1}+e_{m_2}` | Lmin | `min(x_{m_1},x_{m_2})<min(x_p,x_{p'})` | 3 |
+
+For a one-for-one transfer, the statement is immediate: the recipient must
+lie strictly below the donor for Lmin, and the negative-coordinate player
+must lie strictly above the positive-coordinate player for Lmax.  For a
+two-for-two exchange, the Lmin condition is “the lowest recipient is below
+the lowest donor,” while its Lmax dual is “the highest donor is above the
+highest recipient.”  These are precisely the first-affected-level tests, so
+ties make the corresponding strict comparison fail rather than create an
+extra case.
+
+The multiplicities sum to
+
+```text
+2+3+6+3+3+6+3+3 = 29.
+```
+
+Thus all activation logic in the reduced 52-direction case is humanized by
+eight order-statistic comparisons and two exchange archetypes.  What remains
+finite is the coexistence of the negative-cut blockers forced when these
+conditions hold; this atlas does not claim to settle that layer by hand.
+
 Reproduce the full orbit minimization, including all 19 SAT ablations, with
 
 ```bash
