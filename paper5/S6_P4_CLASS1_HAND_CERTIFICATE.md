@@ -139,7 +139,7 @@ deduplicate as follows:
 
 Among the 85 blocker uses, 37 use only the `q1` comparison, twelve use only
 the opposite-allocation comparison, and 36 use both.  Across all uses, 153
-identities target `D-1/3`, six target the strict sign `x0-z0<0`, and one
+identities target `D-1/3`, six target the strictly positive sign `x0-z0>0`, and one
 targets the strict branch sign `x4-x3<0`.
 
 The checker rebuilds every named premise at each use site, verifies all

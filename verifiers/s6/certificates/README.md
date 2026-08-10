@@ -356,6 +356,22 @@ encoder, and rejects coefficient, use-site, candidate-set, use-map,
 activation-atom, and strict-target mutations.  The length of this proof object
 is still a conceptual-compression target.
 
+Class 2 closes an eleven-leaf universal-order relay through 21 exact cut
+censuses.  The minimum-level lemma and its maximum-level dual reduce activation
+to 72 cases.  Its proof object has 52 blocker and 56 activation identities
+mapped to 132 uses:
+
+```text
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class2_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
+```
+
+The solver-free checker independently encodes the asymmetric packet sandwich,
+all mixed min/max branch orientations, both extremal-level activation forms,
+and the same six mutation classes.
+
 The all-class relay audit imposes `x3<=x4` versus `x3>x4` at every packet root.
 All eleven classes then close, with class 10 alone requiring its nested
 `x1<=x2` versus `x1>x2` split:

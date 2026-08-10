@@ -133,8 +133,9 @@ twenty-two packets.  Class 10 adds a seventh hand-checkable row after the same
 root split and one nested comparison, bringing the total to twenty-four
 packets.  Class 1 is now the eighth hand-checkable row: twenty-one exact cut
 censuses and 109 rational identities at 160 uses bring the total to twenty-five
-packets.  Three classes covering the other seven packets remain machine-resolved.
-All three nevertheless close under the same root split `x_3<=x_4` versus
+packets.  Class 2 is the ninth: 21 cut censuses and 108 identities at 132 uses
+bring the total to twenty-seven.  Two classes covering the other five packets
+remain machine-resolved.  Both nevertheless close under the same root split `x_3<=x_4` versus
 `x_3>x_4`; in fact this split gives complete relay trees for all eleven
 classes, with only class 10 needing one nested `x_1`/`x_2` split.
 Class 4 uses
@@ -153,9 +154,11 @@ uses; 103 of its 105 blocker exclusions require only `q^1`.
 Class 1 uses twenty-one exact censuses and a minimum-level lemma compressing
 its activation audit to 75 cases; its 65 blocker plus 44 activation identities
 are checked at all 160 uses without a solver or production import.
+Class 2 uses the same lemma and its maximum-level dual; 52 blocker plus 56
+activation identities are checked at all 132 uses.
 The older order-tree artifact gives an encoding-shared differential check of
-the class-9, class-10, and class-1 hand certificates.  The universal order audit
-extends the same root comparison to all eleven rows; classes 2, 5, and 6 remain
+the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
+extends the same root comparison to all eleven rows; classes 5 and 6 remain
 machine-checked hand-proof targets.
 
 ## 4. Class 3 is a two-exchange hand relay
@@ -352,6 +355,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificate
   --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class1_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class2_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

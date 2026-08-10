@@ -261,18 +261,19 @@ directly; 103 of 105 blocker exclusions use only the `q^1` comparison.
 Class 1 adds a fifteen-leaf universal-order relay: twenty-one exact cut censuses,
 85 blocker exclusions, and a minimum-level lemma compressing activation to 75
 failure cases.  Its 109 deduplicated identities are checked at 160 uses.
-Together the eight hand lemmas remove
-twenty-five labelled packets from the
+Class 2 adds an eleven-leaf extremal-level relay with 21 cut censuses and 108
+identities at 132 uses.  Together the nine hand lemmas remove twenty-seven
+labelled packets from the
 finite residue.
 
-The corresponding forced-exchange audit closes eight packet classes
-`1,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-five of the
-32 feasible labelled packets.  All eight now have hand-checkable proof objects;
-the other three packet classes, covering seven labelled packets, retain machine-resolved
+The corresponding forced-exchange audit closes nine packet classes
+`1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the
+32 feasible labelled packets.  All nine now have hand-checkable proof objects;
+the other two packet classes, covering five labelled packets, retain machine-resolved
 residue.  They are no longer structurally open: the single universal split
 `x_3<=x_4` versus `x_3>x_4` closes all eleven packet classes as relay trees,
 with only class 10 requiring the nested `x_1`/`x_2` split.  Thus the remaining
-gap is hand-certificate compression for classes 2, 5, and 6, not an unexplained SAT leaf.  See
+gap is hand-certificate compression for classes 5 and 6, not an unexplained SAT leaf.  See
 `S6_P4_UNIVERSAL_ORDER_RELAY.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
@@ -346,6 +347,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificate
   --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class1_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class2_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \
@@ -409,6 +414,9 @@ coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py

@@ -120,8 +120,8 @@ Of the 64 labelled pairs, 32 are base-infeasible and the other 32 form only
 eleven classes under the residual symmetry.  Every class closes with a
 subset-minimal menu of at most seven of the remaining seventeen directions.
 This is a reviewer-readable finite packet table, but its residual blocker
-alternatives are still machine-resolved except in classes 1, 3, 4, 7, 8, 9,
-10, and 11.  Class
+alternatives are still machine-resolved except in classes 1, 2, 3, 4, 7, 8,
+9, 10, and 11.  Class
 3 closes four labelled packets by a two-exchange blocker relay; class 4 closes
 four by a three-leaf star and twenty exact weighted identities; class 8 closes
 two labelled packets with the single direction `-e_1-e_3+e_4+e_5`; class 11
@@ -141,6 +141,8 @@ eighteen cut censuses and 122-use exact certificate audit close all nine
 leaves directly at `D<=1/3`.  Class 1 adds a twenty-one-census, 160-use exact
 certificate audit of its fifteen-leaf universal-order tree, with a minimum-level
 lemma reducing the activation audit to 75 cases.
+Class 2 adds an eleven-leaf, 132-use exact audit using the same lemma and its
+maximum-level dual.
 
 ## 5. Reproduction
 

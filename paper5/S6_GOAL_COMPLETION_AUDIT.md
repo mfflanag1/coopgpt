@@ -119,7 +119,7 @@ are base-infeasible, and the 32 feasible pairs form eleven residual-symmetry
 orbits.  Each row closes using a subset-minimal menu of at most seven
 remaining directions.  This materially improves readability but does not yet
 replace every residual blocker alternative by hand inequalities.
-Eight packet classes now have exact hand-checkable proof objects.  Class 8, covering two labelled
+Nine packet classes now have exact hand-checkable proof objects.  Class 8, covering two labelled
 pairs, uses a single two-for-two direction.  Its activation
 and all twenty blocker exclusions use only the opposite-selection comparison;
 the audit verifies the reduced inequalities independently of `q^1`.  Class 3
@@ -140,16 +140,18 @@ at all 71 stage uses by a solver-free rational verifier.  Class 10, covering
 two labelled pairs, adds eighteen exact cut censuses and 108 identities
 checked at all 122 uses.  Class 1, covering one labelled pair, adds twenty-one
 exact censuses and 109 identities checked at all 160 uses.  A minimum-level
-lemma reduces its complete activation audit to 75 cases.  Three packet classes covering
-seven labelled pairs remain machine-resolved.  A separate forced-exchange audit
-sharpens that boundary: classes `1,3,4,7,8,9,10,11` now have complete exact
-relay certificates and together cover twenty-five labelled packets.  All eight
-now have hand-checkable proof objects; classes 2, 5, and 6 remain
-machine-resolved at the hand-certificate layer.
+lemma reduces its complete activation audit to 75 cases.  Class 2, covering two labelled
+pairs, adds 21 exact censuses and 108 identities at 132 uses.  Its shared
+minimum/maximum-level lemma reduces activation to 72 cases.  Thus only two
+packet classes covering five labelled pairs remain machine-resolved.  A
+separate forced-exchange audit sharpens that boundary: classes
+`1,2,3,4,7,8,9,10,11` now have complete exact relay certificates and together
+cover twenty-seven labelled packets.  All nine now have hand-checkable proof
+objects; classes 5 and 6 remain machine-resolved at the hand-certificate layer.
 A universal order audit eliminates their open leaves: `x_3<=x_4` versus
 `x_3>x_4` closes every one of the eleven packet classes, with class 10 the
 unique row requiring a nested `x_1`/`x_2` split.  The remaining gap is exact
-human compression of three closed machine trees, not unknown finite anatomy.
+human compression of two closed machine trees, not unknown finite anatomy.
 
 ## 4. Sharpness and equality cases
 
@@ -261,6 +263,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificate
   --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json \
   /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json \
+  /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \

@@ -69,7 +69,8 @@ This lemma applies to all 95 labelled H7 rows in the large-case table and to
 the order-refined packet relays.  It removes activation-disjunction bulk, but
 does not classify the negative-cut blockers forced after activation.  In class
 1 it reduces the exact proof object from 125 identities at 232 uses to 109 at
-160 uses; classes 2, 5, and 6 can reuse the same four-case interface.
+160 uses.  Class 2 now reuses both the minimum-level statement and its
+maximum-level dual; classes 5 and 6 can reuse the same four-case interface.
 
 ## 2. Six exchange archetypes
 

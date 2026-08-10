@@ -292,7 +292,7 @@ def main():
   'order_tree':['x3<=x4','x3>x4'],
   'identity_counts':counts,'use_counts':{k:sum(u['kind']==k for u in source['uses']) for k in ('blocker','activation')},
   'target_use_counts':targets,'blocker_source_localization':sources,
-  'strict_target_semantics':{'d0':'x0-z0 is strictly negative by the original positive d0 sign','S-strict':'x4-x3 is strictly negative on the strict root branch'},
+  'strict_target_semantics':{'d0':'x0-z0 is strictly positive by the original P-sign premise','S-strict':'x4-x3 is strictly negative on the strict root branch'},
   'structural_census':structure,'activation_logic_audit':logic,'use_map_audit':use_audit,'coefficient_mutation_control':coefficient,
   'use_site_mutation_control':use_site,'census_mutation_control':candidate,'use_map_mutation_control':use_delete,
   'activation_atom_mutation_control':atom_mutation,'strict_target_mutation_control':strict,'checked_uses':checked}

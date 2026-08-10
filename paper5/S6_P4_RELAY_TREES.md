@@ -45,8 +45,8 @@ and all five are converted into explicit hand-checkable inequalities.  Of the
 six classes left open by this no-new-order rule, class 9 is now also
 hand-checkable after one exhaustive order split; Section 6 records that
 refinement.  Class 10 is likewise hand-checkable after its nested order split.
-Class 1 is now hand-checkable after the universal root split.  The combined
-hand coverage is therefore twenty-five packets.
+Classes 1 and 2 are now hand-checkable after the universal root split.  The
+combined hand coverage is therefore twenty-seven packets.
 
 ## 3. Two especially small targets
 
@@ -436,6 +436,9 @@ Class 1 is now hand-checkable as well.  Its solver-free verifier recomputes
 twenty-one cut censuses and checks 65 blocker plus 44 activation identities at
 160 uses.  The identity `min(x_a,x_b)>min(x_4,x_5)` compresses every two-donor
 activation to four failure conjunctions, giving 75 activation cases in total.
+Class 2 reuses the minimum-level lemma and its maximum-level dual.  Its
+solver-free verifier checks 21 cut censuses, 52 blocker plus 56 activation
+identities, and all 132 uses.  The eleven-leaf tree covers two labelled packets.
 
 ## 7. Universal order completion and remaining hand gap
 
@@ -447,10 +450,10 @@ trees for all eleven packet classes; class 10 alone needs the nested
 `x_1<=x_2` versus `x_1>x_2` split.  `S6_P4_UNIVERSAL_ORDER_RELAY.md` records
 the resulting all-class anatomy.
 
-Classes 2, 5, and 6 remain unresolved only at the hand-certificate layer.
+Classes 5 and 6 remain unresolved only at the hand-certificate layer.
 Their order-refined trees share the parent encoding and have not yet been
-compressed into independent exact identities.  Class 1 has crossed that
-boundary, although its 109-row proof object remains a compression target rather
+compressed into independent exact identities.  Classes 1 and 2 have crossed
+that boundary, although their proof objects remain compression targets rather
 than a short conceptual lemma.  The remaining rows are precise structural
 targets, not counterexamples or unexplained open leaves.
 
@@ -496,6 +499,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificate
   --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class1_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class2_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

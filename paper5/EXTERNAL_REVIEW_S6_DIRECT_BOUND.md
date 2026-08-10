@@ -66,6 +66,10 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
 coopgames/paper5/S6_P4_CLASS1_HAND_CERTIFICATE.md
+coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
+coopgames/paper5/S6_P4_CLASS2_HAND_CERTIFICATE.md
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
@@ -309,14 +313,24 @@ six mutation controls.  State explicitly whether this is a valid exact finite
 proof object and separately whether it is conceptually compressed enough for
 the paper; do not infer either answer from `PASS`.
 
+For class 2, independently derive the asymmetric packet sandwich (2.1), all
+21 difference-cone candidate sets, and the eleven-leaf relay in
+`S6_P4_CLASS2_HAND_CERTIFICATE.md`.  Verify both extremal-level activation
+forms, including the Lmax maximum-level dual used by `h11` and `h12`, and all
+72 failure cases.  Audit 108 identities at all 132 uses, with particular
+attention to the seven positive `d_0` targets, five strict-root order targets,
+and the mixed min/max branch orientations in the depth-four subtrees.  State
+whether class 2 is independently hand-checkable without the universal relay
+encoder.
+
 Then audit the universal order theorem.  Confirm independently that the root
 split `x_3<=x_4` versus `x_3>x_4` closes all eleven packet rows, that the weak
 regions of classes 3, 4, and 7 are genuinely linearly infeasible, and that
 class 10 is the unique row requiring the nested `x_1`/`x_2` split.  Check that
 all other feasible order regions are SAT before relay implications are added.
 Treat the resulting 32-packet closure as a shared-encoder structural theorem,
-not as an all-human proof of classes 2, 5, and 6.  Use the separate class-1
-certificate, not the universal artifact, when assessing class 1.
+not as an all-human proof of classes 5 and 6.  Use the separate class-1 and
+class-2 certificates, not the universal artifact, when assessing those rows.
 
 Finally inspect the order-split relay artifact.  Confirm that both order
 branches for class 9 and all three terminal order regions for class 10 are SAT
