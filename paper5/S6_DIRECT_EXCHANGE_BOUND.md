@@ -337,7 +337,12 @@ of witness comparisons is bounded exactly by its maximum non-anchor incidence
 load, and every such support bound is attained at a unit vector.  This
 zero-anchor over-cover duality explains the sparse crossing identities and
 turns discovery of the remaining witness filters into a small LP/facet
-problem.  It is standard convex duality, not an additional novelty claim.
+problem.  With one zero-anchor witness for every player, the six support
+bounds collapse exactly to the second-largest player incidence load.  Thus,
+after fixing blocker cuts, all witness variables disappear and the remainder
+is a cut-transversal problem coupled to one symmetric incidence support
+function and the opposite-selection signs.  It is standard convex duality,
+not an additional novelty claim.
 
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the
@@ -347,8 +352,9 @@ complete exact arithmetic conditional on their frozen maps.  They are no
 longer structurally or arithmetically open: the single universal split
 `x_3<=x_4` versus `x_3>x_4` closes all eleven packet classes as relay trees,
 with only class 10 requiring the nested `x_1`/`x_2` split.  Thus the remaining
-gap is orbit-level compression of classes 5 and 6 and external validation of
-their maps, not an unexplained SAT leaf.  See
+gap is an independent derivation of the compressed class-5/class-6 maps and a
+human proof that no global blocker transversal satisfies the projected
+second-load inequalities, not an unexplained SAT leaf.  See
 `S6_P4_UNIVERSAL_ORDER_RELAY.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion

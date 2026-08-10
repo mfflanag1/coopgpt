@@ -348,8 +348,19 @@ sum_j lambda_j y^j(C_j)
 This is the support-function theorem of
 `S6_ZERO_ANCHOR_OVERCOVER_DUALITY.md`, now applied simultaneously to every
 blocker choice and every anchor.  Since the six witnesses are otherwise
-independent, (W2) for `i=0,...,5` eliminates all 36 witness coordinates
-without weakening or strengthening the chosen-cut system.  The opposite-
+independent, the six instances of (W2) are equivalent to the single symmetric
+condition
+
+```text
+sum_j lambda_j y^j(C_j)
+  <= second-largest_k sum_{j:k in C_j} lambda_j         (W2')
+```
+
+for every `lambda>=0`: the minimum over anchors of the maximum non-anchor
+load is exactly the second-largest player load.  Thus (W2') eliminates all
+36 witness coordinates without weakening or strengthening the chosen-cut
+system.  In particular, two unit-weight blocker requirements whose coalitions
+intersect in at most one player have lower bounds summing to at most one.  The opposite-
 selection half remains simply
 
 ```text
@@ -362,7 +373,7 @@ Thus blocker coexistence has the exact projected form:
 ```text
 choose one cut from the 16/20/24-cut template for each active schema;
 enforce the corresponding sign condition (W3);
-enforce the six five-column incidence-hull facet systems (W2).
+enforce the second-load incidence inequality (W2').
 ```
 
 For a fixed numerical `x,z` and a fixed cut choice, any infeasible witness
@@ -380,14 +391,15 @@ class-5/class-6 affine certificates.
 The projection is the sought exact-cone/facet theorem for the witness side
 of all three large cases.  It converts the remaining task from continuous
 witness feasibility to a finite transversal-and-facet problem.  It does not
-yet prove that no global cut transversal satisfies (W2)--(W3), so the
+yet prove that no global cut transversal satisfies (W2')--(W3), so the
 six-player upper bound still relies on the certified finite formulas.
 
 A solver-free checker expands the 19 role orbits to all 136 labelled
 directions and compares these extreme-level tests with the direct
 first-affected-level definition on all 4,683 labelled weak orders.  All
-636,888 comparisons agree, verifies the three cut counts for every labelled
-direction, and detects replacing strict by non-strict activation.  Reproduce
+636,888 comparisons agree.  The checker also verifies the three cut counts
+for every labelled direction and detects replacing strict by non-strict
+activation.  Reproduce
 the frozen audit with
 
 ```bash

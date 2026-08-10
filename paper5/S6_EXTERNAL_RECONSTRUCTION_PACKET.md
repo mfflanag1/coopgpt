@@ -146,7 +146,8 @@ Finally verify the blocker-coexistence projection lemma in
 `S6_EXCHANGE_ORBIT_LEMMAS.md`.  After fixing one blocker cut per active
 direction, (W1)--(W2) must eliminate each witness simplex exactly, while
 (W3) retains the opposite-selection comparison.  Check the five-column
-incidence-hull formulation for all six zero anchors and the pointwise
+incidence-hull formulation for all six zero anchors, its exact reduction to
+the second-largest incidence load, the pairwise intersection corollary, and the pointwise
 five-requirement Helly bound.  State explicitly whether this reduces the
 remaining proof to a finite transversal/facet problem or whether any coupling
 between witnesses was lost.

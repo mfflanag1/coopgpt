@@ -68,7 +68,67 @@ description.  A sparse witness obstruction is simply a nonnegative supporting
 normal `lambda`; it can be found by a small LP or by enumerating upper facets
 of those incidence columns.
 
-## 3. The class-5 identities are incidence covers
+## 3. All-anchor second-load theorem
+
+The strict six-player relaxation contains one witness for every possible
+zero coordinate.  This makes the conjunction of the six projections simpler,
+not more complicated.  Let
+
+```text
+L_k(lambda)=sum_{j:k in Cj} lambda_j
+```
+
+be player `k`'s weighted incidence load, and write `L_[2](lambda)` for the
+second-largest of the `n` loads, counted with multiplicity.
+
+**Theorem (all-anchor witness projection).**  For `n>=2`, there exist vectors
+`q^0,...,q^{n-1}` satisfying
+
+```text
+q^i>=0,  q^i(N)=1,  q^i_i=0,
+q^i(Cj)>=rj for every i,j
+```
+
+if and only if
+
+```text
+sum_j lambda_j rj <= L_[2](lambda)                    (Z3)
+```
+
+for every nonnegative `lambda`.
+
+**Proof.**  For fixed anchor `i`, (Z2) gives the bound
+`max_{k!=i} L_k(lambda)`.  The witnesses have no constraints coupling them,
+so all of them exist exactly when the left side is bounded by the minimum of
+these `n` anchor-specific maxima.  Excluding a player of maximum load exposes
+the second-largest load, while excluding any other player leaves a maximum;
+hence
+
+```text
+min_i max_{k!=i} L_k(lambda) = L_[2](lambda).
+```
+
+This proves (Z3) and its sufficiency.
+
+For two unit-weight requirements on coalitions `C,D`, the second-largest load
+is at most one whenever `|C intersect D|<=1`.  Hence all singleton witnesses
+force
+
+```text
+r_C+r_D <= 1.                                          (Z4)
+```
+
+When the intersection contains at least two players, the second-largest load
+is two and this particular pair inequality is only the trivial simplex bound.
+For larger menus, (Z3) says that the relevant capacity is always the
+second-heaviest incidence column.  It replaces six anchor-indexed facet
+systems by one symmetric order-statistic support function.
+
+The theorem is dimension-free standard convex duality, not a novelty claim.
+Its significance here is that it identifies the exact invariant behind the
+many pair, triple, and five-comparison over-covers in the large finite cases.
+
+## 4. The class-5 identities are incidence covers
 
 Use anchor `b=1`.  In the first two `h10`/`h15` crossing orbits, the three
 witness comparisons use a packet coalition, an `h10` blocker `B`, and an
@@ -97,7 +157,7 @@ solver-free class-5 checker verifies those affine reductions.  The witness
 part itself is now the one-line incidence theorem (Z2), rather than four
 unrelated Farkas sums.
 
-## 4. Algorithmic consequence for the packet program
+## 5. Algorithmic consequence for the packet program
 
 At any relay state:
 
@@ -115,7 +175,7 @@ and it does not prove classes 5 or 6.  It does explain why one singleton
 witness can filter many blocker combinations and provides a principled route
 for compressing their remaining non-root leaves.
 
-## 5. Exhaustive class-6 application
+## 6. Exhaustive class-6 application
 
 The asymmetric class-6 relay has 49 direction nodes and 924 eligible cut uses.
 Exact difference-cone elimination removes 711.  Of the 213 candidates, 11 are
@@ -153,7 +213,7 @@ rational lower-bound identities for the 36 witness uses and one direct
 identity for the other four cases, all checked solver-free.  The relay-derived
 coverage map remains encoding-shared.
 
-## 6. Audits
+## 7. Audits
 
 ```bash
 python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \

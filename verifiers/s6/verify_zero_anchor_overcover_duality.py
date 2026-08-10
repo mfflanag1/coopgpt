@@ -5,7 +5,7 @@ from __future__ import annotations
 import argparse
 import json
 from fractions import Fraction
-from itertools import combinations, product
+from itertools import combinations, combinations_with_replacement, product
 from pathlib import Path
 
 
@@ -60,6 +60,18 @@ def audit_menu(coalitions, weights, anchor, expected_bound=None):
     }
 
 
+def all_anchor_bound(coalitions, weights, n=6):
+    incidence_loads = loads(coalitions, weights, n)
+    anchor_bounds = tuple(
+        max(incidence_loads[k] for k in range(n) if k != anchor)
+        for anchor in range(n)
+    )
+    second_largest = sorted(incidence_loads, reverse=True)[1]
+    if min(anchor_bounds) != second_largest:
+        raise AssertionError("all-anchor minimum is not the second-largest load")
+    return incidence_loads, anchor_bounds, second_largest
+
+
 def exhaustive_small_menu_audit():
     # Exhaust every one- through three-coalition menu from a representative
     # four-coalition universe and weights 0,1,2.  This checks the theorem's
@@ -72,8 +84,38 @@ def exhaustive_small_menu_audit():
                 if not any(weights):
                     continue
                 audit_menu(menu, weights, 1)
+                all_anchor_bound(menu, tuple(Fraction(weight) for weight in weights))
                 tested += 1
     return tested
+
+
+def exhaustive_pair_audit():
+    coalitions = tuple(
+        tuple(i for i in range(6) if mask & (1 << i)) for mask in range(1, 63)
+    )
+    tested = 0
+    for first, second in combinations_with_replacement(coalitions, 2):
+        incidence_loads, _, bound = all_anchor_bound(
+            (first, second), (Fraction(1), Fraction(1))
+        )
+        intersection_size = len(set(first) & set(second))
+        if intersection_size <= 1 and bound > 1:
+            raise AssertionError("pair intersection bound exceeded one")
+        if intersection_size >= 2 and bound != 2:
+            raise AssertionError("two-player intersection did not attain load two")
+        if bound != sorted(incidence_loads, reverse=True)[1]:
+            raise AssertionError("pair second-load mismatch")
+        tested += 1
+    return tested
+
+
+def reject_largest_load_mutation():
+    incidence_loads, _, second_largest = all_anchor_bound(
+        ((0, 1), (0, 2)), (Fraction(1), Fraction(1))
+    )
+    if max(incidence_loads) == second_largest:
+        raise AssertionError("largest-load mutation was not detected")
+    return "replace second-largest load by largest load"
 
 
 def reject(function, label):
@@ -96,19 +138,27 @@ def main():
     ]
     applications = []
     for name, coalitions, weights, bound in rows:
-        applications.append({"name": name, **audit_menu(coalitions, weights, 1, bound)})
+        application = {"name": name, **audit_menu(coalitions, weights, 1, bound)}
+        _, anchor_bounds, second_largest = all_anchor_bound(
+            coalitions, tuple(Fraction(weight) for weight in weights)
+        )
+        application["all_anchor_bounds"] = [str(value) for value in anchor_bounds]
+        application["second_largest_incidence_load"] = str(second_largest)
+        applications.append(application)
     mutations = [
         reject(lambda: audit_menu(((0, 1, 5), (1, 2), (0, 1, 3, 4)), (1, 1, 1), 1, 1), "raise a nonanchor incidence load"),
         reject(lambda: audit_menu(((0, 1, 4), (0, 1, 5), (1, 2, 3), (1, 2, 3, 4, 5)), (1, 1, 1, 1), 1, 1), "understate support bound"),
         reject(lambda: audit_menu(((0, 1, 5),), (-1,), 1), "negative weight"),
+        reject_largest_load_mutation(),
     ]
     payload = {
-        "schema": "zero-anchor-overcover-duality-v1",
+        "schema": "zero-anchor-overcover-duality-v2",
         "status": "PASS",
-        "scope": "solver-free incidence/support-function theorem and class-5 applications; standard convex duality, not novelty evidence",
-        "theorem": "the q_b=0 simplex maps to the convex hull of nonanchor incidence columns; nonnegative support equals maximum nonanchor incidence load",
+        "scope": "solver-free one-anchor and all-anchor incidence/support-function theorems plus class-5 applications; standard convex duality, not novelty evidence",
+        "theorem": "one zero-anchor witness gives the maximum nonanchor incidence load; witnesses at every anchor give the second-largest incidence load",
         "class5_applications": applications,
         "exhaustive_small_menu_count": exhaustive_small_menu_audit(),
+        "exhaustive_coalition_pair_count": exhaustive_pair_audit(),
         "rejected_mutations": mutations,
     }
     rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
