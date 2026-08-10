@@ -177,6 +177,23 @@ base-polyhedron decreasing/increasing minimizers, polymatroid exchange, and
 coherent lower probabilities.  Specifically ask whether any known theorem
 implies the sharp fixed-six inequality or an equivalent exchange principle.
 
+The closest checked adjacent results do two different jobs: Frank--Murota
+develop decreasing minimization and canonical partitions for
+base-polyhedra/M-convex sets, while Studený--Kratochvíl and
+Kroupa--Studený classify facets of the exact and totally balanced game cones.
+Do not infer the present theorem from either vocabulary without supplying the
+missing translation.  The reviewer should answer these concrete questions:
+
+1. Can every exact-game core needed here be represented as a
+   base-polyhedron in a way that sends `Lmin` and `Lmax` to a known opposing
+   pair of lexicographic selectors?
+2. If yes, does an existing exchange/proximity theorem imply the `2/3`
+   distance bound and its equality cases?
+3. If no, do indecomposable semi-balanced facet inequalities nevertheless
+   imply the singleton-exactness blocker used by this proof?
+4. Is there an equivalent selector-distance statement in coherent-lower-
+   probability terminology?
+
 The current defensible statement is only: a targeted primary-source search
 did not locate an equivalent theorem.  Report correctness and novelty as two
 separate conclusions.

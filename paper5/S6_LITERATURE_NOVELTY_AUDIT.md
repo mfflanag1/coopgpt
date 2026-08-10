@@ -76,6 +76,69 @@ result under another formulation.
    DOI: <https://doi.org/10.1007/s00186-022-00770-4>;
    preprint: <https://arxiv.org/abs/2103.02414>.
 
+9. **Frank and Murota (2022), “Decreasing Minimization on
+   Base-Polyhedra: Relation Between Discrete and Continuous Cases.”**
+   Relates the continuous lexicographically optimal base to decreasingly
+   minimal integral points, principal/canonical partitions, and proximity
+   between the continuous and discrete problems.  Its object is one dec-min
+   selector on a base-polyhedron (or its integral points), not the distance
+   between the two opposing Lorenz core selectors considered here.
+   Preprint: <https://arxiv.org/abs/2202.06561>.
+
+10. **Frank and Murota (2019), “Discrete Decreasing Minimization, Part I.”**
+    Characterizes dec-min elements of integral base-polyhedra/M-convex sets
+    by exchange and canonical-chain structure.  This is relevant background
+    for a possible exchange reformulation, but it does not by itself identify
+    a general exact-game core with a base-polyhedron or turn `Lmin` and
+    `Lmax` into the two selectors in the present theorem.
+    Preprint: <https://arxiv.org/abs/1808.07600>.
+
+11. **Kroupa and Studený (2019), “Facets of the Cone of Totally Balanced
+    Games.”**  Characterizes those facets by irreducible min-balanced
+    systems.  Together with the exact-cone paper, this locates the adjacent
+    set-system/facet language but does not analyze egalitarian selection
+    geometry within an individual core.
+    DOI: <https://doi.org/10.1007/s00186-019-00672-y>;
+    preprint: <https://arxiv.org/abs/1812.00576>.
+
+## Adjacent-language transfer audit
+
+The closest apparent transfers separate into four distinct levels:
+
+1. **Base-polyhedron decreasing minimization.**  This literature gives
+   exchange and canonical-partition structure for one lexicographically
+   optimal base and, in the integral setting, its dec-min points.  The present
+   theorem concerns the separation of two opposing Lorenz selections in the
+   core of an arbitrary exact game.  No checked source states that every such
+   core has the required base-polyhedron representation, or that both
+   selectors become a known dec-min/increasing pair under one.  Establishing
+   such a representation would be a substantive theorem, not a terminological
+   substitution.
+
+2. **Exact-cone and totally-balanced-cone facets.**  Semi-balanced and
+   min-balanced systems describe inequalities cutting out classes of games in
+   game-value space.  The fixed-six theorem instead controls the relative
+   positions of two selected points inside each core.  A facet classification
+   may help derive the blocker theorem, but the checked classifications do
+   not state that implication.
+
+3. **Exact partition and antiduality.**  These results explain coincidence or
+   axiomatic relations on special domains.  They do not furnish the
+   quantitative `2/3` separation bound on the full six-player exact domain.
+
+4. **Coherent lower probabilities.**  Exact games also occur in this
+   language, as the exact-cone source records.  The targeted search found no
+   selection-distance result there, but this is the least conclusive portion
+   of the audit because the selectors may be named differently.
+
+This audit therefore found no theorem that presently subsumes the claimed
+bound.  The remaining high-value novelty question is precise: can a
+specialist derive the singleton-exactness blocker or the `2/3` inequality
+from a known base-polyhedron, exact-cone, or coherent-lower-probability
+theorem after an explicit translation?  Until that question is answered, the
+appropriate claim is “no equivalent located in a targeted cross-domain
+search,” not “first” or “previously unknown.”
+
 ## Searches performed
 
 Searches combined the phrases
@@ -92,6 +155,9 @@ Lorenz dominance exact games Lmin Lmax
 and followed citations in the primary sources above.  Searches were also run
 against exact-cone facets, exact partition games, large cores, antiduality,
 assignment/matching-game leximin/leximax work, and recent monotonicity papers.
+The adjacent-language pass additionally checked continuous and discrete
+decreasing minimization on base-polyhedra, M-convex exchange, totally balanced
+cone facets, semi-balanced systems, and coherent-lower-probability terminology.
 
 ## Claim discipline for the manuscript
 
