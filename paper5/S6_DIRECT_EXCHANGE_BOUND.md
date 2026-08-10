@@ -272,7 +272,10 @@ automatic, and one exact cut argument reduces all ten `h15` nodes from sixteen
 eligible cuts to the same ten opposite-comparison candidates.  Three crossing
 identities exclude seven of the thirty formal `h10`-predecessor/`h15`-blocker
 pairs.  The checker is solver-free, but this is not yet a complete tenth hand
-lemma: the 51 leaves and their remaining filters must still be compressed.
+lemma.  The root split itself is now structural: its two twenty-cut censuses
+reduce to exact three- and four-blocker lists, with only one seven-term witness
+identity beyond signs.  The 51 leaves and their non-root filters must still be
+compressed.
 
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the

@@ -76,6 +76,15 @@ def eligible_h15_cuts():
     }
 
 
+def eligible_cuts(direction):
+    return {
+        coalition
+        for size in range(1, 6)
+        for coalition in combinations(range(6), size)
+        if sum(direction[i] for i in coalition) < 0
+    }
+
+
 def audit_packet_sandwich():
     # EFFICIENCY + (s-delta_other) = delta_m-t.
     assert_identity(UPPER[4], linear((1, EFFICIENCY), (1, LOWER[5])), "delta4 upper")
@@ -174,6 +183,143 @@ def audit_anchor_chains(mutated=None):
         "h15_chain": "x0<=x4<z4<=z1<x1, hence x0<x1",
         "tested_level_assignments_per_chain": 5**5,
         "satisfying_level_assignments": counts,
+    }
+
+
+def audit_root_activations():
+    weak_count = 0
+    for levels in product(range(5), repeat=6):
+        values = dict(zip(("z0", "x0", "z3", "x3", "x4", "z4"), levels, strict=True))
+        if not (values["z0"] < values["x0"] <= values["x4"] < values["z4"]
+                and values["z3"] < values["x3"] <= values["x4"]):
+            continue
+        weak_count += 1
+        if not max(values["z0"], values["z3"]) < values["z4"]:
+            raise AssertionError("weak h11 root activation failed")
+    strict_count = 0
+    variables = ("x1", "z1", "z4", "x4", "z5", "x5", "x3")
+    for levels in product(range(5), repeat=len(variables)):
+        values = dict(zip(variables, levels, strict=True))
+        if not (values["x1"] > values["z1"] >= values["z4"] > values["x4"]
+                and values["z1"] >= values["z5"] > values["x5"]
+                and values["x3"] > values["x4"]):
+            continue
+        strict_count += 1
+        if not min(values["x1"], values["x3"]) > min(values["x4"], values["x5"]):
+            raise AssertionError("strict h17 root activation failed")
+    if weak_count == 0 or strict_count == 0:
+        raise AssertionError("root activation chains have no finite-order representatives")
+    return {
+        "weak_h11_chain": "z0<x0<=x4<z4 and z3<x3<=x4, hence max(z0,z3)<z4",
+        "strict_h17_chain": "x1>x4,x5 and x3>x4>=min(x4,x5), hence min(x1,x3)>min(x4,x5)",
+        "weak_satisfying_level_assignments": weak_count,
+        "strict_satisfying_level_assignments": strict_count,
+    }
+
+
+def audit_root_cut_classification(expected_h11=None, expected_h17=None):
+    h11_eligible = eligible_cuts((1, 0, 0, 1, -1, -1))
+    h11_candidates = set()
+    for coalition in h11_eligible:
+        rich = set(coalition) & {4, 5}
+        if len(rich) == 1:
+            poor = set(coalition) & {1, 2}
+            m = next(iter(rich))
+            if poor in ({2}, {1, 2}):
+                h11_candidates.add(coalition)
+            elif poor == set():
+                assert_identity(cut_difference(coalition), linear((-1, DELTA[m])), f"h11 empty-poor {coalition}")
+            elif poor == {1}:
+                assert_identity(
+                    cut_difference(coalition),
+                    linear((-1, D[0]), (1, LOWER[m])),
+                    f"h11 one-poor {coalition}",
+                )
+            else:
+                raise AssertionError(f"unexpected h11 one-rich cut {coalition}")
+        elif len(rich) == 2:
+            missing = set(range(4)) - set(coalition)
+            assert_identity(
+                cut_difference(coalition),
+                linear(*((-1, D[i]) for i in sorted(missing)), (-1, EFFICIENCY)),
+                f"h11 two-rich {coalition}",
+            )
+        else:
+            raise AssertionError(f"unexpected h11 eligible cut {coalition}")
+    canonical_h11 = {(2, 4), (1, 2, 4), (2, 5), (1, 2, 5)}
+    if h11_candidates != (canonical_h11 if expected_h11 is None else expected_h11):
+        raise AssertionError(f"h11 root candidate census changed: {sorted(h11_candidates)}")
+
+    h17_eligible = eligible_cuts((0, -1, 0, -1, 1, 1))
+    h17_candidates = set()
+    for coalition in h17_eligible:
+        rich = set(coalition) & {4, 5}
+        if not rich:
+            assert_identity(
+                cut_difference(coalition),
+                linear(*((1, D[i]) for i in coalition)),
+                f"h17 no-rich {coalition}",
+            )
+        elif len(rich) == 1:
+            if not {1, 3} <= set(coalition):
+                raise AssertionError(f"unexpected h17 one-rich cut {coalition}")
+            if 2 not in coalition:
+                h17_candidates.add(coalition)
+            else:
+                m = next(iter(rich))
+                rhs = linear((1, D[1]), (-1, UPPER[m]), *((1, D[i]) for i in (0,) if i in coalition))
+                assert_identity(cut_difference(coalition), rhs, f"h17 includes player 2 {coalition}")
+        else:
+            raise AssertionError(f"unexpected h17 eligible cut {coalition}")
+    canonical_h17 = {(1, 3, 4), (0, 1, 3, 4), (1, 3, 5), (0, 1, 3, 5)}
+    if h17_candidates != (canonical_h17 if expected_h17 is None else expected_h17):
+        raise AssertionError(f"h17 root candidate census changed: {sorted(h17_candidates)}")
+    return {
+        "weak_h11": {
+            "eligible_negative_cut_count": len(h11_eligible),
+            "opposite_comparison_candidates_before_q1": [list(C) for C in sorted(h11_candidates)],
+            "opposite_candidate_count": len(h11_candidates),
+        },
+        "strict_h17": {
+            "eligible_negative_cut_count": len(h17_eligible),
+            "opposite_comparison_candidates": [list(C) for C in sorted(h17_candidates)],
+            "opposite_candidate_count": len(h17_candidates),
+        },
+    }
+
+
+def audit_h11_q_filter(mutate=False):
+    x = [variable(f"x{i}") for i in range(6)]
+    z = [variable(f"z{i}") for i in range(6)]
+    q = [variable(f"q{i}") for i in range(6)]
+    P4 = (0, 1, 4)
+    C = (1, 2, 5)
+    inequalities = {
+        "q3>=0": linear((-1, q[3])),
+        "d1>=0": linear((1, z[1]), (-1, x[1])),
+        "d3>=0": linear((1, z[3]), (-1, x[3])),
+        "z4<=z1": linear((1, z[4]), (-1, z[1])),
+        "P4q": linear((1, point_sum(x, P4)), (-1, point_sum(q, P4))),
+        "W": linear((1, x[3]), (-1, x[4])),
+        "Cq": linear((1, point_sum(z, C)), (-1, point_sum(q, C))),
+    }
+    equalities = {
+        "sumz": linear((1, point_sum(z, range(6))), (-1, constant(1))),
+        "sumq": linear((1, point_sum(q, range(6))), (-1, constant(1))),
+        "q1": q[1],
+    }
+    multipliers = {name: 1 for name in inequalities}
+    if mutate:
+        multipliers["d1>=0"] = 0
+    terms = [(value, inequalities[name]) for name, value in multipliers.items()]
+    terms += [(-1, equalities["sumz"]), (1, equalities["sumq"]), (1, equalities["q1"])]
+    target = linear((1, x[0]), (-1, z[0]))
+    assert_identity(linear(*terms), target, "weak h11 C=125 q filter")
+    return {
+        "excluded_candidate": [1, 2, 5],
+        "remaining_root_blockers": [[2, 4], [1, 2, 4], [2, 5]],
+        "identity_target": "d0=x0-z0>0; the C=125 witness comparison would imply d0<=0",
+        "inequality_multiplier_count": len(inequalities),
     }
 
 
@@ -293,9 +439,17 @@ def walk_h15(node, rows, last_h10=None):
         walk_h15(branch["child"], rows, predecessor)
 
 
-def audit_relay_integration(candidates, allowed_pairs):
+def audit_relay_integration(candidates, allowed_pairs, root_filters):
     data = json.loads(RELAY.read_text())
     row = next(item for item in data["rows"] if item["class"] == 5)
+    weak_root = row["weak_branch"]["tree"]
+    strict_root = row["strict_branch"]["tree"]
+    if weak_root.get("direction_index") != 11 or strict_root.get("direction_index") != 17:
+        raise AssertionError("class-5 universal root directions changed")
+    if [branch["coalition"] for branch in weak_root.get("branches", [])] != root_filters["weak_h11_remaining"]:
+        raise AssertionError("weak h11 root blocker list changed")
+    if {tuple(branch["coalition"]) for branch in strict_root.get("branches", [])} != {tuple(C) for C in root_filters["strict_h17"]}:
+        raise AssertionError("strict h17 root blocker list changed")
     uses = []
     walk_h15(row["weak_branch"]["tree"], uses)
     walk_h15(row["strict_branch"]["tree"], uses)
@@ -316,6 +470,7 @@ def audit_relay_integration(candidates, allowed_pairs):
         "strict_branch_node_count": 6,
         "all_relay_children_in_hand_candidate_set": True,
         "all_relay_h10_h15_pairs_pass_crossing_lemma": True,
+        "root_h11_h17_blocker_lists_match_hand_classification": True,
     }
 
 
@@ -335,6 +490,9 @@ def main():
     sandwich = audit_packet_sandwich()
     classification = audit_h15_cut_classification()
     chains = audit_anchor_chains()
+    root_activations = audit_root_activations()
+    root_cuts = audit_root_cut_classification()
+    h11_q_filter = audit_h11_q_filter()
     crossing = audit_crossing_lemma()
     mutations = [
         reject(lambda: audit_anchor_chains(("h10", (0, 2))), "weaken both h10 sign links"),
@@ -352,14 +510,31 @@ def main():
             "add excluded h15 cut",
         ),
         reject(lambda: audit_crossing_lemma(mutate=True), "crossing identity coefficient"),
+        reject(lambda: audit_h11_q_filter(mutate=True), "weak h11 q-filter coefficient"),
+        reject(
+            lambda: audit_root_cut_classification(
+                {(2, 4), (1, 2, 4), (2, 5)},
+                {(1, 3, 4), (0, 1, 3, 4), (1, 3, 5), (0, 1, 3, 5)},
+            ),
+            "delete weak h11 opposite candidate",
+        ),
     ]
-    integration = audit_relay_integration(classification["candidates"], crossing.pop("allowed_pairs"))
+    integration = audit_relay_integration(
+        classification["candidates"], crossing.pop("allowed_pairs"),
+        {
+            "weak_h11_remaining": h11_q_filter["remaining_root_blockers"],
+            "strict_h17": root_cuts["strict_h17"]["opposite_comparison_candidates"],
+        },
+    )
     payload = {
-        "schema": "strict-exchange-p4-class5-packet-skeleton-v2",
+        "schema": "strict-exchange-p4-class5-packet-skeleton-v3",
         "status": "PASS",
         "scope": "solver-free hand lemma for class-5 packet; partial humanization, not a complete class-5 proof and not independent theorem evidence",
         "packet_sandwich": sandwich,
         "automatic_anchor_exchanges": chains,
+        "root_order_split_activations": root_activations,
+        "root_cut_classification": root_cuts,
+        "weak_h11_q1_filter": h11_q_filter,
         "h15_cut_classification": classification,
         "h10_h15_crossing_lemma": crossing,
         "relay_integration": integration,

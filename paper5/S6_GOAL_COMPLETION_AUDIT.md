@@ -158,7 +158,10 @@ lemma and reduce each of its sixteen-cut blocker censuses to the same ten
 packet-level candidates.  This is a verified partial skeleton, not a tenth
 complete hand-checkable packet row.  Three exact crossing identities also
 exclude seven of the thirty formal `h10`/`h15` blocker pairs in only three
-orbits; the 51 relay leaves remain to be compressed.
+orbits.  The weak and strict roots also have complete hand classifications:
+twenty cuts reduce respectively to three and four blockers, using only one
+seven-term witness identity beyond the packet/sign arguments.  The 51 relay
+leaves remain to be compressed.
 
 ## 4. Sharpness and equality cases
 

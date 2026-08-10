@@ -9,7 +9,7 @@ P4={0,1,4},   P5={0,1,5}.
 ```
 
 Its universal order relay closes, but the raw tree has 90 nodes and 51
-leaves.  This note extracts one reusable hand lemma from that tree.  It is a
+leaves.  This note extracts reusable hand lemmas from that tree.  It is a
 partial humanization, not yet a complete class-5 hand proof, external review,
 or novelty evidence.
 
@@ -93,10 +93,63 @@ ten copies of sixteen eligible cuts -> one ten-candidate packet census.
 ```
 
 It does not close the 51 leaves.  The remaining task is to compress how the
-preceding `h10`, `h11`, and `h17` blocker comparisons filter (5.2) and force
-the terminal two-for-two exchanges.
+preceding blocker comparisons filter (5.2) and force the terminal two-for-two
+exchanges.
 
-## 5. A three-orbit `h10`/`h15` crossing lemma
+## 5. The root order split is structural
+
+On the weak branch `x3<=x4`, the root direction is
+
+```text
+h11=e0+e3-e4-e5        (Lmax).
+```
+
+Both positive recipients lie strictly below player 4 in `z`:
+
+```text
+z0<x0<=x4<z4,     z3<x3<=x4<z4.
+```
+
+Hence `max(z0,z3)<z4<=max(z4,z5)`, so `h11` improves Lmax.  Of its twenty
+negative cuts, (5.1) leaves only the four opposite-comparison candidates
+
+```text
+24, 124, 25, 125.
+```
+
+Cuts with both rich players omit at least one positive-`d` player and have
+negative `d(C)` by efficiency.  With one rich player `m`, the cases with no
+poor player or only player 1 have `d(C)<0` from `delta_m>=d0+d1`; only the
+cases containing player 2 survive.  Finally, the `q1` comparison for `125`,
+the packet-witness comparison for `P4`, the weak order, and the anchor/sign
+premises have a seven-term exact weighted sum equal to `d0<=0`.  Thus the
+weak root has exactly the three blockers
+
+```text
+24, 124, 25.                                      (5.3)
+```
+
+On the strict branch `x3>x4`, the root direction is
+
+```text
+h17=-e1-e3+e4+e5       (Lmin).
+```
+
+Here `x1>x4,x5` by the anchor chain and
+`x3>x4>=min(x4,x5)`, so `h17` improves Lmin.  Its twenty negative cuts reduce
+without a witness identity to
+
+```text
+134, 0134, 135, 0135.                              (5.4)
+```
+
+Indeed a cut with no rich player has positive `d(C)`.  A negative cut with
+one rich player contains both 1 and 3; if it also contains player 2, then
+`delta_m<=d2+d3` again makes `d(C)>0`.  No cut containing both rich players is
+negative for `h17`.  Equations (5.3)--(5.4) give a complete hand
+classification of the two roots of the 51-leaf tree.
+
+## 6. A three-orbit `h10`/`h15` crossing lemma
 
 Every `h15` node in the frozen relay has an earlier `h10` blocker
 
@@ -125,10 +178,10 @@ the strict sign `d0>0`.
 
 Thus the common predecessor/successor census falls from thirty formal pairs
 to 23, and every actual class-5 relay edge respects the resulting crossing
-rule.  This is the first exact compression of the preceding-blocker filters;
-the `h11`/`h17` filters and terminal two-for-two closures remain.
+rule.  Together with the root lemma, this isolates the remaining work to the
+non-root blocker filters and terminal two-for-two closures.
 
-## 6. Solver-free audit
+## 7. Solver-free audit
 
 Run
 
@@ -141,8 +194,9 @@ cmp /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json \
 
 The checker imports no solver or production encoder.  Exact rational
 coefficient arithmetic verifies (5.1), every cut identity, the exhaustive
-sixteen-cut partition, and all seven crossing exclusions through three orbit
-identities.  Finite total-preorder enumeration checks the two anchor chains
-and rejects weakened-sign mutations.  Reading the frozen relay
+sixteen-cut partition, both twenty-cut root classifications, the weak-root
+witness identity, and all seven crossing exclusions through three orbit
+identities.  Finite total-preorder enumeration checks the anchor and root
+activation chains and rejects weakened-sign mutations.  Reading the frozen relay
 is confined to a separately labelled integration audit; it is not proof
 evidence for the lemma or for the human-to-machine implication.

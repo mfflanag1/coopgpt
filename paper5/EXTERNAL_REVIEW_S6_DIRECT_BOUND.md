@@ -332,6 +332,9 @@ check both strict cross-anchor chains, and classify all sixteen `h15`-negative
 cuts into the six structural exclusions and ten candidates shown there.
 Then verify the three displayed `h10`/`h15` crossing identities, their seven
 labelled exclusions, and the resulting `30 -> 23` pair census.
+Independently derive both root activations and the root blocker lists
+`24,124,25` and `134,0134,135,0135`; audit the single seven-term identity
+that removes weak-root candidate `125`.
 Confirm that the checker uses exact arithmetic without a solver or production
 encoder, while treating its frozen-relay integration count as an audit
 convenience.  Do not promote this skeleton to a complete hand proof of class
