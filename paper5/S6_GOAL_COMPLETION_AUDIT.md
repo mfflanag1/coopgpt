@@ -198,9 +198,11 @@ failure cases, 84 are structural, four are allocation-infeasible, and the
 other 36 have over-covers of support at most four.  Their allocation-side
 strict reductions are now 26 solver-free rational identities, while the four
 direct cases share one more identity.  No activation arithmetic remains
-machine-only.  Coverage remains relay-derived, so independent validation of
-the map is still required before calling this an externally reviewed hand
-certificate.
+machine-only.  The 40 uses split into 19 path-free and 21 path-dependent
+placements in three relay families, and the 27 identities reduce to 25 affine
+motifs after source-depth aliases are forgotten.  Coverage remains
+relay-derived, so independent validation of the map is still required before
+calling this an externally reviewed hand certificate.
 The single-witness component now has a general exact-cone theorem rather than
 case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
 the convex hull of the non-anchor incidence columns; feasibility of lower

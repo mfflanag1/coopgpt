@@ -482,6 +482,12 @@ the zero-anchor theorem.  Then audit the 26 stored lower-bound identities and
 the one direct contradiction with
 `verify_strict_exchange_p4_class6_activation_identities.py`; verify every
 failure atom, multiplier sign, strict premise, use count, and digest link.
+Confirm that the checker validates every path premise rather than merely the
+identity arithmetic.  Reconstruct the 40-use compression: 19 uses are
+path-free, while the 21 path-dependent uses split into nine weak-terminal
+`h17`, eight strict-chain endpoint, and four direct weak-`h7` cases.  Check
+that forgetting only source-depth aliases reduces 27 identities to 25 affine
+motifs, and do not infer use-site availability from that equality.
 Treat the frozen 40-use map as encoding-shared even though its arithmetic is
 now solver-free.
 

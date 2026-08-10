@@ -309,7 +309,11 @@ by anchor/order chains, four are allocation-infeasible, and all remaining 36
 have packet/ancestor over-covers of support at most four.  Their incidence
 bounds are human.  The 36 lower bounds reduce to 26 solver-free rational
 identities, and the four direct cases share one further identity.  No
-arithmetic leaf remains machine-only; the relay-derived cut and activation use
+arithmetic leaf remains machine-only.  Of the full 40-use activation map, 19
+uses are path-free and the 21 ancestor-dependent uses split into three relay
+families (nine weak-terminal `h17`, eight strict-chain endpoints, and four
+direct weak `h7`).  The 27 identities reduce to 25 exact affine motifs after
+source-depth aliases are forgotten.  The relay-derived cut and activation use
 maps remain the hand-proof and external-review boundary.
 
 The single-witness filters admit a general exact projection theorem.  For a

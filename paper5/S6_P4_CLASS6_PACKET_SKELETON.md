@@ -204,6 +204,24 @@ and digest-links them to the 36 detailed incidence supports.  Nineteen uses
 need no path comparison and seventeen use an ancestor.  This removes Z3 from
 activation arithmetic; the relay-derived coverage map remains encoding-shared.
 
+Including the four direct cases, the 40-use map has 19 path-free and 21
+path-dependent uses.  The latter have only three relay families:
+
+```text
+weak terminal h17 lower bounds   9,
+strict-chain endpoints           8,
+weak direct h7 contradictions    4.
+```
+
+Forgetting source-depth aliases reduces the 27 stored identities (the 26
+lower bounds plus the direct contradiction) to 25 exact affine motifs.  The
+fifteen path-free identities give fourteen motifs; the twelve path-dependent
+identities give eleven.  The solver-free verifier now checks premise
+availability at every path, recomputes this motif census, and rejects a
+path-site mutation.  Thus the activation map is a 21-use residual in three
+families, not an unstructured 40-row list.  Its placement still requires
+independent derivation from the relay semantics.
+
 ## 6. Residual relay
 
 The weak root has two symmetric-looking subtrees.  Each passes through the

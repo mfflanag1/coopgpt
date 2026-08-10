@@ -219,7 +219,10 @@ remaining failures have packet/ancestor over-covers of support at most four.
 This unifies activation and blocker filtering under the same incidence
 theorem.  The 36 activation lower bounds now have 26 solver-free rational
 identities, while the four direct cases share one more identity; only their
-relay-derived coverage map remains encoding-shared.
+relay-derived coverage map remains encoding-shared.  Across all 40 uses, 19
+are path-free and the 21 path-dependent uses split into three relay families;
+the 27 stored identities reduce to 25 exact affine motifs after source-depth
+aliases are forgotten.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain

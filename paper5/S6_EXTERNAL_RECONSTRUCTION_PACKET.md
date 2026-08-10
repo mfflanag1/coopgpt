@@ -155,6 +155,11 @@ the seven-rule transition grammar.  Confirm
 
 and all 29 terminal leaves.  Then reconstruct the `124=84+4+36` activation
 partition and the placement of the 36 witness plus four direct identities.
+The 40 uses compress into 19 path-free cases and a 21-use residual with three
+families: nine weak-terminal `h17`, eight strict-chain endpoint, and four
+direct weak-`h7` cases.  Forgetting source-depth aliases reduces the 27
+identities to 25 affine motifs.  Verify the residual placements rather than
+inferring availability from motif equality.
 The rational identities remove solver dependence from arithmetic; they do not
 derive their relay/use sites.
 

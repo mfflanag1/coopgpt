@@ -64,6 +64,43 @@ def failure_premise(source, direction, failure_case):
     return "ge", forms[(direction, failure_case)][atom]
 
 
+def failure_atom_count(direction, failure_case):
+    counts = {
+        (7, 1): 1,
+        (11, 0): 2,
+        (12, 0): 2,
+        (17, 0): 2,
+        (18, 0): 2,
+        (18, 1): 2,
+    }
+    try:
+        return counts[(direction, failure_case)]
+    except KeyError as error:
+        raise AssertionError(f"unknown class-6 activation failure {direction}:{failure_case}") from error
+
+
+def stage_sources(use):
+    stage = use["stage"]
+    order = stage[0]
+    tokens = re.findall(r"h(\d+)(?:C(\d+))?", stage)
+    if order not in ("W", "S") or not tokens or tokens[-1][1]:
+        raise AssertionError(f"bad class-6 activation stage {stage}")
+    direction = int(tokens[-1][0])
+    if direction != use["direction_index"]:
+        raise AssertionError(f"activation direction mismatch at {stage}")
+    available = {f"B{index}" for index in range(21)}
+    available |= {f"C{index}" for index in range(10)}
+    available |= {"P4", "P5", f"order-{order}"}
+    for depth, (parent, digits) in enumerate(tokens[:-1]):
+        coalition = tuple(int(digit) for digit in digits)
+        available.add(f"A{depth}:h{int(parent)}:C{coalition}")
+    available |= {
+        f"F{use['failure_case']}.{atom}"
+        for atom in range(failure_atom_count(direction, use["failure_case"]))
+    }
+    return available
+
+
 def verify_identity(identity, contradiction=False):
     total = zero()
     strict = False
@@ -133,6 +170,9 @@ def verify_rows(payload):
             raise AssertionError("activation use type mismatch")
         if counts[use["identity"]] != identity["use_count"]:
             raise AssertionError("activation identity use count mismatch")
+        unavailable = {row["source"] for row in identity["rows"]} - stage_sources(use)
+        if unavailable:
+            raise AssertionError(f"unavailable class-6 premises at {use['stage']}: {unavailable}")
         use_categories[category(identity)] += 1
     expected_use_categories = {
         "anchor/sign only": 8,
@@ -151,7 +191,77 @@ def verify_rows(payload):
         for use in payload["direct_uses"]
     ):
         raise AssertionError("direct activation type changed")
+    for use in payload["direct_uses"]:
+        unavailable = {row["source"] for row in direct["rows"]} - stage_sources(use)
+        if unavailable:
+            raise AssertionError(f"unavailable direct premises at {use['stage']}: {unavailable}")
     return identity_map, expected_supports, expected_identity_categories, expected_use_categories
+
+
+def affine_signature(identity, contradiction=False):
+    rows = []
+    for row in identity["rows"]:
+        kind, form = failure_premise(
+            row["source"], identity["direction_index"], identity["failure_case"]
+        )
+        rows.append((kind, Fraction(row["multiplier"]), tuple(form)))
+    target = zero() if contradiction else parsed_form(identity["target_form"])
+    return identity["direction_index"], tuple(sorted(rows, key=repr)), tuple(target)
+
+
+def map_compression(payload, identity_map):
+    direct = payload["direct_identity"]
+    all_identities = [*identity_map.values(), direct]
+    motifs = Counter(repr(affine_signature(identity, identity is direct))
+                     for identity in all_identities)
+    if len(motifs) != 25 or Counter(motifs.values()) != {1: 23, 2: 2}:
+        raise AssertionError(f"class-6 activation motif census changed: {motifs}")
+    all_identity_map = {**identity_map, direct["id"]: direct}
+    annotated_uses = [
+        {**use, "identity": use["identity"], "layer": "witness"}
+        for use in payload["uses"]
+    ] + [
+        {**use, "identity": direct["id"], "layer": "direct"}
+        for use in payload["direct_uses"]
+    ]
+    path_uses = [
+        use for use in annotated_uses
+        if category(all_identity_map[use["identity"]]) == "path-dependent"
+    ]
+    if len(path_uses) != 21:
+        raise AssertionError("class-6 activation path-use count changed")
+    path_identities = [
+        identity for identity in all_identities if category(identity) == "path-dependent"
+    ]
+    path_motifs = {repr(affine_signature(identity, identity is direct))
+                   for identity in path_identities}
+    if len(path_identities) != 12 or len(path_motifs) != 11:
+        raise AssertionError("class-6 path motif census changed")
+    residual_families = Counter()
+    for use in path_uses:
+        if use["layer"] == "direct":
+            residual_families["weak-direct-h7"] += 1
+        elif use["direction_index"] == 17:
+            residual_families["weak-terminal-h17"] += 1
+        else:
+            residual_families["strict-chain-endpoints"] += 1
+    expected_families = {
+        "strict-chain-endpoints": 8,
+        "weak-direct-h7": 4,
+        "weak-terminal-h17": 9,
+    }
+    if dict(residual_families) != expected_families:
+        raise AssertionError(f"class-6 activation residual families changed: {residual_families}")
+    return {
+        "path_free_identity_count": 15,
+        "path_free_use_count": 19,
+        "path_dependent_identity_count": len(path_identities),
+        "path_dependent_use_count": len(path_uses),
+        "affine_motif_count": len(motifs),
+        "path_free_affine_motif_count": len(motifs) - len(path_motifs),
+        "path_dependent_affine_motif_count": len(path_motifs),
+        "path_residual_families": dict(sorted(residual_families.items())),
+    }
 
 
 def verify_details(payload, identity_map, path):
@@ -206,6 +316,7 @@ def main():
     args = parser.parse_args()
     payload = json.loads(args.rows.read_text())
     identity_map, supports, identity_categories, use_categories = verify_rows(payload)
+    compression = map_compression(payload, identity_map)
     digest = verify_details(payload, identity_map, args.overcover_details) if args.overcover_details else None
     coefficient_mutation = expect_rejection(
         payload, lambda trial: trial["identities"][0]["rows"][0].update(multiplier="0")
@@ -213,10 +324,17 @@ def main():
     failure_mutation = expect_rejection(
         payload, lambda trial: trial["identities"][0].update(failure_case=9)
     )
+    path_use_index = next(
+        index for index, use in enumerate(payload["uses"])
+        if category(identity_map[use["identity"]]) == "path-dependent"
+    )
+    path_site_mutation = expect_rejection(
+        payload, lambda trial: trial["uses"][path_use_index].update(stage="S-h11")
+    )
     report = {
         "schema": "strict-exchange-p4-class6-activation-identity-audit-v1",
         "status": "PASS",
-        "scope": "solver-free exact-rational audit of 26 activation lower-bound identities at 36 witness uses and one direct identity at four uses; coverage remains relay-derived",
+        "scope": "solver-free exact-rational audit of 26 activation lower-bound identities at 36 witness uses and one direct identity at four uses, with a 21-use path residual; relay semantics remain an external-review obligation",
         "identity_count": len(payload["identities"]),
         "witness_use_count": len(payload["uses"]),
         "direct_identity_count": 1,
@@ -224,10 +342,12 @@ def main():
         "identity_support_sizes": supports,
         "identity_categories": identity_categories,
         "use_categories": use_categories,
+        "map_compression": compression,
         "detailed_overcover_sha256": digest,
         "mutation_controls": {
             "coefficient": coefficient_mutation,
             "failure_semantics": failure_mutation,
+            "path_site": path_site_mutation,
         },
     }
     rendered = json.dumps(report, indent=2, sort_keys=True) + "\n"
