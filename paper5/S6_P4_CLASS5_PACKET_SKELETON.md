@@ -176,6 +176,12 @@ identity omits `d_l`.  The third uses both packet witness comparisons and
 `-sum(x)-sum(z)+2sum(q)+2q1=0`.  Its sum is again `d0<=0`.  All contradict
 the strict sign `d0>0`.
 
+Conceptually, the witness half of all three identities is one incidence
+over-cover.  The relevant comparison coalitions load every non-anchor player
+once (or twice) and may overload only player 1, where `q1=0`; hence their
+`q`-sums are at most one (or two).  `S6_ZERO_ANCHOR_OVERCOVER_DUALITY.md`
+proves the exact support-function theorem behind this observation.
+
 Thus the common predecessor/successor census falls from thirty formal pairs
 to 23, and every actual class-5 relay edge respects the resulting crossing
 rule.  Together with the root lemma, this isolates the remaining work to the

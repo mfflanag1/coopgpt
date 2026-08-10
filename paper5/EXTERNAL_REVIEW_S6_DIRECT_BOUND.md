@@ -76,6 +76,9 @@ coopgames/paper5/S6_P4_CLASS5_PACKET_SKELETON.md
 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py
 coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json
 coopgames/paper5/S6_P4_CLASS6_PACKET_SKELETON.md
+coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py
+coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json
+coopgames/paper5/S6_ZERO_ANCHOR_OVERCOVER_DUALITY.md
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
@@ -348,6 +351,14 @@ For class 6, independently derive the asymmetric sandwich in
 root blocker lists `24,124` and `135,0135`.  Confirm that no witness
 comparison is used in those cut classifications.  Treat the artifact as a
 partial root lemma, not a hand proof of the remaining 29 leaves.
+
+Audit the general witness projection theorem in
+`S6_ZERO_ANCHOR_OVERCOVER_DUALITY.md`.  Verify that the coalition-sum image of
+`q^b>=0`, `q^b(N)=1`, `q^b_b=0` is exactly the convex hull of the non-anchor
+incidence columns, and that downward feasibility is equivalent to every
+nonnegative support inequality.  Recompute the four class-5 incidence loads.
+Treat this as standard convex duality and a proof-compression tool, not as a
+novel cooperative-game theorem.
 
 Then audit the universal order theorem.  Confirm independently that the root
 split `x_3<=x_4` versus `x_3>x_4` closes all eleven packet rows, that the weak

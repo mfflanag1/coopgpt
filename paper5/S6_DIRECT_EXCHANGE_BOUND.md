@@ -281,6 +281,15 @@ The other remaining row, class 6, has an asymmetric sandwich
 twenty-cut roots to two blockers using signs alone.  Its 29 non-root leaves
 remain to be humanized.
 
+The single-witness filters admit a general exact projection theorem.  For a
+fixed blocker menu, `q^b` maps the zero-anchor simplex onto the convex hull of
+the non-anchor incidence columns.  Therefore every nonnegative weighted sum
+of witness comparisons is bounded exactly by its maximum non-anchor incidence
+load, and every such support bound is attained at a unit vector.  This
+zero-anchor over-cover duality explains the sparse crossing identities and
+turns discovery of the remaining witness filters into a small LP/facet
+problem.  It is standard convex duality, not an additional novelty claim.
+
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the
 32 feasible labelled packets.  All nine now have hand-checkable proof objects;

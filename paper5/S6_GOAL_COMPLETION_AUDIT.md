@@ -166,6 +166,13 @@ Class 6 now also has a solver-free asymmetric-packet root lemma.  Its stronger
 sandwich reduces both twenty-cut roots to two blockers apiece without a
 witness identity.  This remains a partial skeleton: the 29 non-root leaves
 are not yet a complete hand certificate.
+The single-witness component now has a general exact-cone theorem rather than
+case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
+the convex hull of the non-anchor incidence columns; feasibility of lower
+requirements is characterized by all nonnegative support inequalities.  The
+result supplies a sparse LP/facet algorithm and explains the class-5 crossing
+identities as incidence over-covers.  It is elementary convex duality, not a
+novelty claim or a completion of the remaining opposite-comparison work.
 
 ## 4. Sharpness and equality cases
 
@@ -289,6 +296,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.
   --output /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json \
   /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
+python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
+  --output /tmp/zero_anchor_overcover_duality_audit.json
+cmp coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json \
+  /tmp/zero_anchor_overcover_duality_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \

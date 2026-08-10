@@ -172,6 +172,12 @@ Class 6 has a parallel solver-free root skeleton.  Its asymmetric packet gives
 `d0+d1<=delta4<=d3` and `d0+d1+d2<=delta5<=d2+d3`; these stronger bounds
 reduce the weak and strict twenty-cut roots directly to `24,124` and
 `135,0135`, with no witness filter.
+The witness filters themselves now have an exact common description: for any
+coalition menu, the `q^1`-sum image is the convex hull of the five non-anchor
+incidence columns.  Its nonnegative support function is the maximum
+non-anchor incidence load.  This zero-anchor over-cover duality turns the
+class-5 crossing identities into sparse incidence covers and gives an LP/facet
+algorithm for the remaining witness filters.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain
@@ -383,6 +389,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.
   --output /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
 cmp /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json
+python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
+  --output /tmp/zero_anchor_overcover_duality_audit.json
+cmp /tmp/zero_anchor_overcover_duality_audit.json \
+  coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \
