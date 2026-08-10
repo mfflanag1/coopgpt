@@ -437,6 +437,150 @@ def class11_relay_reduction_checks(timeout_ms):
     }
 
 
+def class4_star_reduction_checks(timeout_ms):
+    """Independently restate the partially humanized class-4 relay star."""
+    x = [z3.Real(f"packet_class4_x_{index}") for index in range(6)]
+    z = [z3.Real(f"packet_class4_z_{index}") for index in range(6)]
+    q1 = [z3.Real(f"packet_class4_q_{index}") for index in range(6)]
+    d = [x[index] - z[index] for index in range(6)]
+    distance = point_sum(d, (0, 1, 2, 3))
+    common = [
+        point_sum(x, range(6)) == 1,
+        point_sum(z, range(6)) == 1,
+        point_sum(q1, range(6)) == 1,
+        q1[1] == 0,
+        *(value >= 0 for value in (*x, *z, *q1)),
+        *(d[index] > 0 for index in (0, 1, 2, 3)),
+        *(d[index] < 0 for index in (4, 5)),
+        *(x[0] <= x[index] for index in range(1, 6)),
+        *(z[1] >= z[index] for index in (0, 2, 3, 4, 5)),
+        distance > z3.RealVal(1) / 3,
+        *packet_constraints(x, z, q1, (), (2,)),
+    ]
+
+    def eligible(direction):
+        return [
+            tuple(index for index in range(6) if mask & (1 << index))
+            for mask in range(1, (1 << 6) - 1)
+            if sum(direction[index] for index in range(6) if mask & (1 << index)) < 0
+        ]
+
+    def comparisons(coalition, side, sources=("opposite", "q1")):
+        rows = []
+        if side == "max":
+            if "opposite" in sources:
+                rows.append(point_sum(x, coalition) >= point_sum(z, coalition))
+            if "q1" in sources:
+                rows.append(point_sum(q1, coalition) >= point_sum(z, coalition))
+        else:
+            if "opposite" in sources:
+                rows.append(point_sum(z, coalition) >= point_sum(x, coalition))
+            if "q1" in sources:
+                rows.append(point_sum(q1, coalition) >= point_sum(x, coalition))
+        return rows
+
+    def feasible(direction, side, premises=(), sources=("opposite", "q1")):
+        rows = []
+        for coalition in eligible(direction):
+            status = verdict(
+                [*common, *premises, *comparisons(coalition, side, sources)],
+                timeout_ms,
+            )
+            if status == z3.sat:
+                rows.append(coalition)
+            elif status != z3.unsat:
+                raise RuntimeError(
+                    f"class-4 {side} blocker {coalition} returned {status}"
+                )
+        return rows
+
+    root_direction = (0, -1, 0, -1, 1, 1)
+    root_activation_failure = z3.Or(
+        *(x[p] <= x[m] for p in (1, 3) for m in (4, 5))
+    )
+    if verdict([*common, root_activation_failure], timeout_ms) != z3.unsat:
+        raise AssertionError("class-4 root Lmin activation did not close")
+
+    opposite_candidates = feasible(
+        root_direction, "min", sources=("opposite",)
+    )
+    expected_opposite = [
+        (1, 3, 4),
+        (1, 2, 3, 4),
+        (1, 3, 5),
+        (0, 1, 3, 5),
+        (1, 2, 3, 5),
+    ]
+    if opposite_candidates != expected_opposite:
+        raise AssertionError(
+            f"unexpected class-4 opposite candidates: {opposite_candidates}"
+        )
+    root_blockers = feasible(root_direction, "min")
+    expected_root = [(1, 2, 3, 4), (1, 3, 5), (0, 1, 3, 5)]
+    if root_blockers != expected_root:
+        raise AssertionError(f"unexpected class-4 root blockers: {root_blockers}")
+
+    max_direction = (0, -1, 1, 0, 0, 0)
+    min_direction = (0, 0, -1, -1, 1, 1)
+    branch_rows = []
+    for blocker in root_blockers:
+        blocker_rows = comparisons(blocker, "min")
+        if blocker == expected_root[0]:
+            activation_failure = z[1] <= z[2]
+            direction = max_direction
+            side = "max"
+            terminal_sources = ("q1",)
+        else:
+            activation_failure = z3.Or(
+                *(x[p] <= x[m] for p in (2, 3) for m in (4, 5))
+            )
+            direction = min_direction
+            side = "min"
+            terminal_sources = ("opposite",)
+        if verdict([*common, *blocker_rows, activation_failure], timeout_ms) != z3.unsat:
+            raise AssertionError(f"class-4 activation after {blocker} did not close")
+        source_feasible = feasible(
+            direction, side, blocker_rows, sources=terminal_sources
+        )
+        if source_feasible:
+            raise AssertionError(
+                f"class-4 terminal source blockers after {blocker}: {source_feasible}"
+            )
+        terminal_feasible = feasible(direction, side, blocker_rows)
+        if terminal_feasible:
+            raise AssertionError(
+                f"class-4 terminal full blockers after {blocker}: {terminal_feasible}"
+            )
+        branch_rows.append(
+            {
+                "root_blocker": list(blocker),
+                "forced_direction": list(direction),
+                "side": side,
+                "negated_activation_verdict": "unsat",
+                "terminal_exclusion_source": terminal_sources[0],
+                "terminal_source_feasible_blockers": [],
+                "terminal_full_feasible_blockers": [],
+            }
+        )
+
+    return {
+        "packet_class": 4,
+        "packet": {
+            "first_optional_players": [],
+            "second_optional_players": [2],
+        },
+        "root_direction": list(root_direction),
+        "negated_root_activation_verdict": "unsat",
+        "root_eligible_negative_cut_count": len(eligible(root_direction)),
+        "root_opposite_candidates": [list(item) for item in opposite_candidates],
+        "root_feasible_blockers": [list(item) for item in root_blockers],
+        "branches": branch_rows,
+        "complete_forced_relay": True,
+        "complete_hand_proof": False,
+        "remaining_human_task": "replace the three terminal source exclusions by structural inequalities",
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -577,6 +721,7 @@ def main():
         "feasible_orbit_size_sum": sum(row["raw_orbit_size"] for row in rows),
         "classes": rows,
         "class3_hand_lemma": class3_hand_checks(args.timeout_ms),
+        "class4_star_reduction": class4_star_reduction_checks(args.timeout_ms),
         "class8_hand_lemma": class8_hand_checks(args.timeout_ms),
         "class11_relay_reduction": class11_relay_reduction_checks(args.timeout_ms),
     }

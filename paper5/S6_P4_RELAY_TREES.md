@@ -68,6 +68,59 @@ no feasible blocker.  The whole four-packet orbit is therefore a depth-one,
 three-leaf relay.  Converting the three no-blocker leaves into displayed
 inequalities is the highest-value next hand target.
 
+The root of this star is now humanized.  For class 4, `A` is empty and
+`B={2}`.  Its packet `q` comparisons are
+
+```text
+q_4 >= x_1+x_4,                  q_2+q_5 >= x_1+x_2+x_5.       (4.1)
+```
+
+The complement of the second inequality and the first inequality give
+`x_0+x_3>=x_1+q_0+q_3>=x_1`.  If `x_3<=x_m` for either `m=4,5`, bottomness of
+`x_0` gives `x_4+x_5>=x_1`; hence
+
+```text
+D <= z_4+z_5-x_1 < z_4+z_5-z_1 <= 1/3.             (4.2)
+```
+
+Thus `x_1,x_3>x_4,x_5`, and the root direction necessarily improves Lmin.
+
+Its negative cuts either contain no `M` player, in which case their `d`-sum
+is positive, or have the form `{1,3,m} union K` with `m` in `{4,5}` and
+`K subset {0,2}`.  The packet opposite comparisons and their complements are
+
+```text
+d_1 <= delta_4 <= d_0+d_3,
+d_1+d_2 <= delta_5 <= d_0+d_2+d_3.                  (4.3)
+```
+
+Using (4.3), an opposite blocker can only be
+
+```text
+{1,3,4}, {1,2,3,4}, {1,3,5}, {0,1,3,5}, {1,2,3,5}.
+```
+
+The first and last candidates are impossible by (4.1): their complementary
+`q` comparisons respectively give `q_0+q_2+q_5<=x_0+x_2+x_5` and
+`q_0+q_4<=x_0+x_4`, each forcing `x_1<=x_0`, whereas
+`x_0<=x_4<z_4<=z_1<x_1`.  This leaves exactly the three branches displayed
+above, with no finite search in the root classification.
+
+All three child activations are also short.  The blocker `{1,2,3,4}` implies
+`delta_5<=d_0`; therefore `D<=z_4-z_0`, and `z_1=z_2` would imply
+`D<=1/3` exactly as in (11.2).  Hence `z_1>z_2`.  For blocker `{1,3,5}` its
+`q` comparison and the complement of the first inequality in (4.1) give
+`x_0+x_2>=x_1`; for `{0,1,3,5}` they give `x_2>=x_1`.  If `x_2` were no
+larger than either `M` payoff, (4.2) would again follow.  Thus the required
+child direction improves in both branches.
+
+What remains for a complete class-4 hand proof is now only the three terminal
+cut exclusions.  The independent audit records a useful separation: after
+`{1,2,3,4}`, the `q^1` comparison alone eliminates every terminal Lmax cut;
+after either other blocker, the opposite-selection comparison alone
+eliminates every terminal Lmin cut.  These source-level enumerations are not
+yet displayed structural proofs.
+
 ### Class 11: a unique three-exchange chain
 
 There is no branching:

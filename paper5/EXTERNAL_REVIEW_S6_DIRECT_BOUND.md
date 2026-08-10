@@ -213,6 +213,13 @@ identities now humanize every exchange activation and the fourth excludes the
 otherwise awkward first blocker `{0,1}`.  Confirm that these are genuine
 progress but not a complete hand proof, because the remaining blocker-cut
 classification is still supplied by the finite audit.
+For class 4, independently check (4.1)--(4.3), the five-candidate opposite-cut
+classification, the two `q` exclusions leaving exactly three root blockers,
+and all three child activations.  Confirm separately that the audit's terminal
+source claims are accurate—`q^1` alone closes the first leaf and the opposite
+selection alone closes the other two—but do not promote those enumerations to
+hand inequalities until the individual terminal cuts are structurally
+excluded.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

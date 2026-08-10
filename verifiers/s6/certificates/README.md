@@ -273,11 +273,13 @@ cmp /tmp/strict_exchange_p4_relay_trees.json \
 ```
 
 Only classes 3 and 8 currently have complete separate hand proofs.  The packet
-audit now also restates class 11 independently, checks all three activation
-negations, verifies two displayed weighted identities algebraically, and
-recovers its unique two-blocker chain.  Its remaining cut exclusions are still
-machine-classified, so class 11 remains a partially humanized road map rather
-than a hand proof.
+audit now also restates classes 4 and 11 independently.  For class 4 it checks
+the five-candidate opposite classification, the exact three root blockers, all
+three child activations, and the source-localized terminal closures.  For class
+11 it checks all three activation negations, verifies two displayed weighted
+identities algebraically, and recovers its unique two-blocker chain.  Their
+remaining terminal or blocker-cut exclusions are still machine-classified, so
+both remain partially humanized road maps rather than hand proofs.
 
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
