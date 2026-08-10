@@ -152,6 +152,12 @@ A universal order audit eliminates their open leaves: `x_3<=x_4` versus
 `x_3>x_4` closes every one of the eleven packet classes, with class 10 the
 unique row requiring a nested `x_1`/`x_2` split.  The remaining gap is exact
 human compression of two closed machine trees, not unknown finite anatomy.
+There is now a first solver-free class-5 compression: the symmetric packet
+sandwich and cross-anchor chain replace all ten `h15` activation checks by one
+lemma and reduce each of its sixteen-cut blocker censuses to the same ten
+packet-level candidates.  This is a verified partial skeleton, not a tenth
+complete hand-checkable packet row; the 51 relay leaves remain to be
+compressed.
 
 ## 4. Sharpness and equality cases
 
@@ -267,6 +273,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificate
   --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json \
   /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.py \
+  --output /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json \
+  /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \

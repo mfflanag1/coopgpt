@@ -452,7 +452,10 @@ the resulting all-class anatomy.
 
 Classes 5 and 6 remain unresolved only at the hand-certificate layer.
 Their order-refined trees share the parent encoding and have not yet been
-compressed into independent exact identities.  Classes 1 and 2 have crossed
+compressed into complete independent exact identities.  Class 5 now has a
+solver-free packet skeleton: one sandwich and anchor-chain lemma covers all
+ten `h15` activations and gives their common ten-candidate blocker census.
+It does not yet close the 51 leaves.  Classes 1 and 2 have crossed
 that boundary, although their proof objects remain compression targets rather
 than a short conceptual lemma.  The remaining rows are precise structural
 targets, not counterexamples or unexplained open leaves.

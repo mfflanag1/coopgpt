@@ -156,6 +156,12 @@ its activation audit to 75 cases; its 65 blocker plus 44 activation identities
 are checked at all 160 uses without a solver or production import.
 Class 2 uses the same lemma and its maximum-level dual; 52 blocker plus 56
 activation identities are checked at all 132 uses.
+Class 5 now has a solver-free packet skeleton, although not yet a complete
+hand certificate.  Its symmetric packet gives
+`d0+d1<=delta4,delta5<=d2+d3`; a cross-anchor chain makes both one-for-one
+directions automatically improving, and the packet sandwich reduces every
+`h15` blocker census from sixteen eligible cuts to the same ten candidates.
+This single lemma covers all ten `h15` nodes of the 90-node frozen relay.
 The older order-tree artifact gives an encoding-shared differential check of
 the class-9, class-10, class-1, and class-2 hand certificates.  The universal order audit
 extends the same root comparison to all eleven rows; classes 5 and 6 remain
@@ -359,6 +365,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificate
   --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class2_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.py \
+  --output /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json
+cmp /tmp/strict_exchange_p4_class5_packet_skeleton_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \

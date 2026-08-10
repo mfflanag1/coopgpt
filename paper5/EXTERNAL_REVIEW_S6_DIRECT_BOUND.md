@@ -70,6 +70,9 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
 coopgames/paper5/S6_P4_CLASS2_HAND_CERTIFICATE.md
+coopgames/verifiers/s6/verify_strict_exchange_p4_class5_packet_skeleton.py
+coopgames/verifiers/s6/strict_exchange_p4_class5_packet_skeleton_audit.json
+coopgames/paper5/S6_P4_CLASS5_PACKET_SKELETON.md
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
@@ -322,6 +325,15 @@ attention to the seven positive `d_0` targets, five strict-root order targets,
 and the mixed min/max branch orientations in the depth-four subtrees.  State
 whether class 2 is independently hand-checkable without the universal relay
 encoder.
+
+For the still-incomplete class 5, audit only the partial claim in
+`S6_P4_CLASS5_PACKET_SKELETON.md`.  Derive the symmetric packet sandwich,
+check both strict cross-anchor chains, and classify all sixteen `h15`-negative
+cuts into the six structural exclusions and ten candidates shown there.
+Confirm that the checker uses exact arithmetic without a solver or production
+encoder, while treating its frozen-relay integration count as an audit
+convenience.  Do not promote this skeleton to a complete hand proof of class
+5: it does not yet compress the preceding-blocker filters or the 51 leaves.
 
 Then audit the universal order theorem.  Confirm independently that the root
 split `x_3<=x_4` versus `x_3>x_4` closes all eleven packet rows, that the weak

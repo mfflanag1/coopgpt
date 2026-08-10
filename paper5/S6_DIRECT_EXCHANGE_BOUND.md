@@ -266,6 +266,13 @@ identities at 132 uses.  Together the nine hand lemmas remove twenty-seven
 labelled packets from the
 finite residue.
 
+Class 5 now has a verified partial hand skeleton.  Its symmetric packet gives
+`d0+d1<=delta4,delta5<=d2+d3`; two cross-anchor chains make `h10` and `h15`
+automatic, and one exact cut argument reduces all ten `h15` nodes from sixteen
+eligible cuts to the same ten opposite-comparison candidates.  The checker is
+solver-free, but this is not yet a complete tenth hand lemma: the 51 leaves
+and their preceding-blocker filters remain to be compressed.
+
 The corresponding forced-exchange audit closes nine packet classes
 `1,2,3,4,7,8,9,10,11` as exact relay certificates, covering twenty-seven of the
 32 feasible labelled packets.  All nine now have hand-checkable proof objects;
@@ -273,7 +280,8 @@ the other two packet classes, covering five labelled packets, retain machine-res
 residue.  They are no longer structurally open: the single universal split
 `x_3<=x_4` versus `x_3>x_4` closes all eleven packet classes as relay trees,
 with only class 10 requiring the nested `x_1`/`x_2` split.  Thus the remaining
-gap is hand-certificate compression for classes 5 and 6, not an unexplained SAT leaf.  See
+gap is completion of the partial class-5 skeleton and hand-certificate
+compression for class 6, not an unexplained SAT leaf.  See
 `S6_P4_UNIVERSAL_ORDER_RELAY.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
