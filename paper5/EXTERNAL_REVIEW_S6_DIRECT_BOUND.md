@@ -378,7 +378,10 @@ In particular, verify why `h10` and `h15` have only 16 eligible cuts while the
 other direction types have 20.  Verify the seven-menu atlas stated in
 `S6_P4_CLASS6_PACKET_SKELETON.md`: `h11,h12,h17,h18` have fixed menus, while
 the `h7,h10,h15` base menus each gain one stated cut exactly below the weak
-`h11:C124` branch.  Do not infer soundness of the use maps merely
+`h11:C124` branch.  Then derive the seven-rule transition grammar in the same
+note, including the weak/strict `h10` lists and the preceding-cut table for
+`h15`.  Confirm that it generates exactly the 47 relay edges and all 29
+terminal leaves.  Do not infer soundness of the use maps merely
 from the exhaustive partition: the 11-, 155-, and 47-use lists are frozen
 integration inputs whose derivation must still be checked against the
 game-theoretic relay semantics.

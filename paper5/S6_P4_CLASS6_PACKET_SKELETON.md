@@ -99,7 +99,27 @@ h7 : 1,13,134,0135,1235.
 If and only if the path lies below the weak-root `h11` blocker `124`, these
 menus acquire respectively the single extra cuts `135`, `124`, and `135`.
 Thus the apparent 49-fold enumeration is seven reusable cut lemmas plus one
-binary refinement.  The remaining partition is disjoint and exhaustive:
+binary refinement.
+
+The 47 surviving edges also have a short transition grammar:
+
+```text
+h7,h12       terminal: no branch
+h17          {135,0135} at the strict root, none later
+h10 weak     {12,123,1234,124}
+h10 strict   {12,13,123}
+h11          {24,124} at the weak root; later only {24} below h17:135
+h18          {235} below root 135, after h10:12, or after h10:13 then h15:135
+```
+
+For weak `h15`, the preceding `h10` cuts `12,123,1234,124` give respectively
+`{145,1245}`, `{1245}`, `{145,1245}`, and
+`{15,145,1245,1345}`, with `124` added below weak `h11:124`.  For strict
+`h15`, preceding cuts `12,123,13` give `{125}`, `{145}`, and
+`{15,135,145,1345}`.  A separately formulated checker reconstructs this
+grammar from the path labels and rejects any relay edge outside it.  Hence 49
+nodes and 47 edges reduce to seven menu rules and seven transition rules.  The
+remaining arithmetic partition is disjoint and exhaustive:
 
 ```text
 pure difference exclusions       711

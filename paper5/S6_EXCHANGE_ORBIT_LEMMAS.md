@@ -243,7 +243,37 @@ python3 coopgames/verifiers/s6/verify_independent_bound_two.py
 
 to byte-regenerate both formulas and verify their hashes and proof records.
 
-## 5. Remaining humanization boundary
+## 5. A complete seven-menu packet orbit inside the 90-direction case
+
+The anchor-localized `(4,2,0)` argument has eleven packet orbits.  Packet
+class 6, representing four labelled packets, now has complete solver-free
+arithmetic conditional on its frozen relay/use maps.  Its 49 direction nodes
+do not require 49 cut lemmas: exact elimination leaves only seven direction
+menus, and the weak `h11:C124` branch adds one candidate to each of the
+`h7,h10,h15` menus.  Seven path-local transition rules generate all 47 relay
+edges from the weak/strict regime, the preceding `h10` cut, and that same
+one-bit refinement.
+
+The complete accounting is
+
+```text
+924 eligible cut uses
+  = 711 pure difference-cone exclusions
+  +  11 packet/ancestor-witness context exclusions
+  + 155 target-witness exclusions
+  +  47 relay branches.
+```
+
+Nine rational identities certify the 11 context exclusions; 53 certify all
+155 target-witness exclusions; 26 plus one direct identity certify every
+activation failure not already structural.  Every identity is checked over
+`Q` without a solver, and the cut verifier independently enforces the menu
+atlas, transition grammar, and exhaustive partition.  What remains shared
+with the encoder is the exclusion-use map itself.  This is therefore a
+conceptual compression of one four-packet orbit, not independent external
+validation of the full 90-direction theorem.
+
+## 6. Remaining humanization boundary
 
 This compression materially improves readability but is not yet an all-human
 proof of the three large cases.  A complete hand replacement would have to

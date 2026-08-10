@@ -63,6 +63,49 @@ BASE_MENUS = {
 RICH_BRANCH_EXTRAS = {7: {(1, 3, 5)}, 10: {(1, 3, 5)}, 15: {(1, 2, 4)}}
 
 
+def expected_branches(direction, order, path):
+    """Compact class-6 transition grammar for the 47 relay edges."""
+    rich_branch = any(parent == 11 and cut == (1, 2, 4) for parent, cut in path)
+    h10_cut = next((cut for parent, cut in path if parent == 10), None)
+    h15_cut = next((cut for parent, cut in path if parent == 15), None)
+    if direction in (7, 12):
+        return set()
+    if direction == 17:
+        return {(1, 3, 5), (0, 1, 3, 5)} if order == "S" and not path else set()
+    if direction == 10:
+        return ({(1, 2), (1, 2, 3), (1, 2, 3, 4), (1, 2, 4)}
+                if order == "W" else {(1, 2), (1, 3), (1, 2, 3)})
+    if direction == 15:
+        if order == "W":
+            weak = {
+                (1, 2): {(1, 4, 5), (1, 2, 4, 5)},
+                (1, 2, 3): {(1, 2, 4, 5)},
+                (1, 2, 3, 4): {(1, 4, 5), (1, 2, 4, 5)},
+                (1, 2, 4): {(1, 5), (1, 4, 5), (1, 2, 4, 5), (1, 3, 4, 5)},
+            }[h10_cut]
+            return weak | ({(1, 2, 4)} if rich_branch else set())
+        return {
+            (1, 2): {(1, 2, 5)},
+            (1, 2, 3): {(1, 4, 5)},
+            (1, 3): {(1, 5), (1, 3, 5), (1, 4, 5), (1, 3, 4, 5)},
+        }[h10_cut]
+    if direction == 11:
+        if order == "W" and not path:
+            return {(2, 4), (1, 2, 4)}
+        if order == "S" and path and path[0] == (17, (1, 3, 5)):
+            return {(2, 4)}
+        return set()
+    if direction == 18:
+        if path == [(17, (1, 3, 5))]:
+            return {(2, 3, 5)}
+        if h10_cut == (1, 2) and h15_cut is None:
+            return {(2, 3, 5)}
+        if h10_cut == (1, 3) and h15_cut == (1, 3, 5):
+            return {(2, 3, 5)}
+        return set()
+    raise AssertionError(f"missing transition grammar for h{direction}")
+
+
 def eligible(direction):
     return [coalition for size in range(1, 6)
             for coalition in combinations(range(6), size)
@@ -191,6 +234,9 @@ def census(relay_payload, context_keys, witness_keys,
         stage_count += 1
         eligible_count += len(cuts)
         stage_types[(direction, len(cuts), len(candidates))] += 1
+        actual_branches = {tuple(branch["coalition"]) for branch in node.get("branches", [])}
+        if actual_branches != expected_branches(direction, order, path):
+            raise AssertionError(f"relay transition grammar changed at {stage}: {actual_branches}")
         if node["feasible_blocker_count"] != len(node.get("branches", [])):
             raise AssertionError(f"relay branch metadata changed at {stage}")
         for branch in node.get("branches", []):
@@ -293,6 +339,13 @@ def main():
         lambda: census(relay_mutation, context_keys, witness_keys, digest),
         "rejected direction mutation",
     )
+    transition_relay = copy.deepcopy(relay_payload)
+    transition_row = next(item for item in transition_relay["rows"] if item["class"] == 6)
+    transition_row["weak_branch"]["tree"]["branches"][0]["coalition"] = [2, 5]
+    transition_mutation = expect_rejection(
+        lambda: census(transition_relay, context_keys, witness_keys, digest),
+        "rejected relay-transition mutation",
+    )
     digest_mutation = expect_rejection(
         lambda: census(relay_payload, context_keys, witness_keys, "0" * 64),
         "rejected candidate-digest mutation",
@@ -319,9 +372,19 @@ def main():
             f"h{direction}:{variant}": count
             for (direction, variant), count in sorted(menu_variants.items())
         },
+        "relay_transition_grammar": {
+            "h7_h12": "terminal: no branches",
+            "h17": "both 135 and 0135 only at the strict root; terminal thereafter",
+            "h10": "weak branches 12,123,1234,124; strict branches 12,13,123",
+            "h15_weak": "branch set determined by the preceding h10 cut; add 124 exactly below weak h11:C124",
+            "h15_strict": "h10 cuts 12,123,13 give respectively {125},{145},{15,135,145,1345}",
+            "h11": "both root branches; later only 24 below strict h17:C135",
+            "h18": "235 branches below strict-root 135, immediately after h10:12, or after h10:13 then h15:135",
+        },
         "mutation_controls": {
             "partition": partition_mutation,
             "direction": direction_mutation,
+            "transition": transition_mutation,
             "candidate_digest": digest_mutation,
         },
     }
