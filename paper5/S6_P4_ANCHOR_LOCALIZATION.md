@@ -135,7 +135,9 @@ trees now have hand-checkable proofs; class 7 is compressed into an exact
 difference-cone census and 25 rational identities in `S6_P4_RELAY_TREES.md`.
 The same audit closes classes 9 and 10 after minimal payoff-order trees.  The
 class-9 branch inequalities are now humanized by ten exact cut censuses and a
-solver-free 71-use certificate audit; class 10 is the next such target.
+solver-free 71-use certificate audit.  Class 10 is now humanized as well: its
+eighteen cut censuses and 122-use exact certificate audit close all nine
+leaves directly at `D<=1/3`.
 
 ## 5. Reproduction
 

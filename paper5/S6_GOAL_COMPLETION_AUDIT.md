@@ -136,13 +136,13 @@ empty terminal blocker list.  Class 7, covering four labelled pairs, now has
 an exact eight-stage difference-cone census plus 25 rational identities.
 Class 9, covering four labelled pairs, closes after `x_3<=x_4` versus
 `x_3>x_4`; its ten exact cut censuses and 52 distinct identities are checked
-at all 71 stage uses by a solver-free rational verifier.  Five packet classes
-covering ten labelled pairs remain machine-resolved.  A separate
-forced-exchange audit sharpens that boundary: classes `3,4,7,8,9,11` have
-complete relay trees and together cover twenty-two labelled packets.  All six
-now have hand-checkable proofs.  Class 10 closes computationally after two
-exhaustive payoff-order splits but its branch inequalities have not yet been
-humanized; classes 1, 2, 5, and 6 retain explicit open relay leaves.
+at all 71 stage uses by a solver-free rational verifier.  Class 10, covering
+two labelled pairs, adds eighteen exact cut censuses and 108 identities
+checked at all 122 uses.  Four packet classes covering eight labelled pairs
+remain machine-resolved.  A separate forced-exchange audit sharpens that
+boundary: classes `3,4,7,8,9,10,11` have complete relay trees and together
+cover twenty-four labelled packets.  All seven now have hand-checkable proofs;
+classes 1, 2, 5, and 6 retain explicit open relay leaves.
 
 ## 4. Sharpness and equality cases
 
@@ -246,6 +246,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificate
   --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json \
   /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json \
+  /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

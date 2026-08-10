@@ -58,6 +58,10 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
 coopgames/paper5/S6_P4_CLASS9_HAND_CHECKPOINT.md
+coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_rows.json
+coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
+coopgames/paper5/S6_P4_CLASS10_HAND_CERTIFICATE.md
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -269,11 +273,21 @@ identities, and the 33 terminal blockers all imply `x_1<=1/3`.  Inspect all
 five mutation controls and state whether class 9 is genuinely hand-checkable
 without relying on the SMT blocker census.
 
+For class 10, independently derive the packet sandwich (10.1), all eighteen
+difference-cone candidate sets, and all nine leaves in
+`S6_P4_CLASS10_HAND_CERTIFICATE.md`.  Audit 108 distinct identities at all 122
+recorded uses.  Check especially that the two opposite-only exclusions are
+exactly `{3,5}` and `{1,2,3,5}` on the weak-left branch, that the other 103
+blocker exclusions genuinely require only `q^1`, and that all terminal leaves
+force `D<=1/3` without an unstated threshold anchor.  Check all six strict
+`d_0` uses and all five mutation controls.  State whether class 10 is
+hand-checkable without relying on the SMT blocker census.
+
 Finally inspect the order-split relay artifact.  Confirm that both order
 branches for class 9 and all three terminal order regions for class 10 are SAT
 before the relay implications are added, and that every resulting relay leaf
-closes.  Treat the class-10 tree as a roadmap for a new hand proof, not as
-independent proof evidence.
+closes.  Treat this as a differential check on the two hand certificates, not
+as independent proof evidence.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

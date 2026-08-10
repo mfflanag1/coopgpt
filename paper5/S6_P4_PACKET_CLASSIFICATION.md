@@ -121,7 +121,7 @@ eleven concrete packet rows, each using at most seven residual implications.
 
 The table as a whole remains a finite computer-assisted lemma.  A complete
 hand proof would still have to replace the residual blocker alternatives in
-the unresolved rows by explicit inequalities or Farkas combinations.  Six
+the unresolved rows by explicit inequalities or Farkas combinations.  Seven
 rows can now be removed from that residue completely.
 
 `S6_P4_RELAY_TREES.md` decomposes the remaining cores dynamically.  Five
@@ -129,8 +129,9 @@ classes (`3,4,7,8,11`), covering eighteen of the 32 feasible labelled packets,
 close by forced-exchange relay trees with no order split, and all five are now
 complete hand-checkable proofs.  Class 9 adds a sixth hand-checkable row after
 the exhaustive split `x_3<=x_4` versus `x_3>x_4`, bringing the total to
-twenty-two packets.  Five classes covering the other ten packets remain
-machine-resolved.
+twenty-two packets.  Class 10 adds a seventh hand-checkable row after the same
+root split and one nested comparison, bringing the total to twenty-four
+packets.  Four classes covering the other eight packets remain machine-resolved.
 Class 4 uses
 a three-leaf star whose terminal cuts are closed by sixteen `q^1`-complement
 identities and four opposite-base-cut identities, all checked with pure exact
@@ -142,6 +143,8 @@ difference-cone census, sixteen blocker filters, and nine activation identities
 to humanize its depth-three relay without expanding it into a cut-by-cut dump.
 Class 9 uses ten exact difference-cone censuses and 52 distinct rational
 identities, checked at all 71 uses by a solver-free verifier.
+Class 10 uses eighteen exact censuses and 108 identities checked at all 122
+uses; 103 of its 105 blocker exclusions require only `q^1`.
 Classes 9 and 10 also close computationally after, respectively, one payoff-
 order split and a depth-two order tree.  Those two decompositions cover six
 more labelled packets but remain machine-checked targets rather than hand
@@ -333,6 +336,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificate
   --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class9_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
 ```
 
 The audit independently checks within the parent encoding that
@@ -378,6 +385,11 @@ The audit independently checks within the parent encoding that
     all 71 stage uses, exhausts all 56 discarded blockers and eleven relay
     activations, and rejects coefficient, use-site, candidate-deletion,
     use-map-deletion, and strict-target mutations.
+18. the solver-free class-10 checker independently recomputes all eighteen
+    exact difference-cone censuses, checks 108 identities at 122 uses,
+    exhausts 105 discarded blockers and seventeen activations, localizes 103
+    blocker exclusions to `q^1` and two to the opposite comparison, and
+    rejects the same five mutation classes.
 
 The authoritative proof object for the unsplit, weaker relaxation remains
 the trust-disabled CPC proof in

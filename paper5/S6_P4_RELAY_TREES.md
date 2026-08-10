@@ -44,7 +44,8 @@ split.  Their orbit sizes sum to eighteen of the 32 feasible labelled packets,
 and all five are converted into explicit hand-checkable inequalities.  Of the
 six classes left open by this no-new-order rule, class 9 is now also
 hand-checkable after one exhaustive order split; Section 6 records that
-refinement.  The combined hand coverage is therefore twenty-two packets.
+refinement.  Class 10 is likewise hand-checkable after its nested order split.
+The combined hand coverage is therefore twenty-four packets.
 
 ## 3. Two especially small targets
 
@@ -425,15 +426,17 @@ difference-cone table and terminal anchor-threshold lemma.  The solver-free
 `verify_strict_exchange_p4_class9_hand_certificates.py` recomputes all ten
 cut censuses and checks 43 blocker identities, seven activation identities,
 and two terminal-anchor identities at all 71 required uses.  It imports no
-production encoder or solver and rejects five mutation controls.  Class 10
-remains a compact humanization target: its activations and blocker exclusions
-still need structural inequalities or exact weighted identities.
+production encoder or solver and rejects five mutation controls.  Class 10 is
+also hand-checkable.  Its solver-free verifier recomputes eighteen cut
+censuses and checks 95 blocker plus thirteen activation identities at all 122
+uses.  Of 105 blocker exclusions, 103 use only `q^1`; the two weak-left
+exceptions use only the opposite comparison.
 
 ## 7. What remains unresolved
 
 The unsplit relay method stalls immediately in classes 9 and 10, while the
-order-split refinement above closes them computationally and the class-9
-certificate audit now closes its order tree by hand.  Classes 1, 2, 5, and 6
+order-split refinement and exact certificate audits now close both trees by
+hand.  Classes 1, 2, 5, and 6
 have many closed branches but retain,
 respectively, 6, 3, 3, and 4 open leaves.  These are precise structural
 residues, not counterexamples.
@@ -472,6 +475,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificate
   --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class9_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
+cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
 ```
 
 The frozen JSON records every chosen direction, its side and role orbit, the
