@@ -40,6 +40,9 @@ coopgames/verifiers/s6/audit_strict_exchange_p4_anchor_core.py
 coopgames/verifiers/s6/strict_exchange_p4_anchor_core.json
 coopgames/verifiers/s6/p4_anchor_core_certificates/*.{smt2,cpc,json}
 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
+coopgames/paper5/S6_P4_PACKET_CLASSIFICATION.md
+coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py
+coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -181,6 +184,15 @@ the nineteen direction, ten orbit, and two source ablations, but treat their
 SAT models only as relaxation controls.  Finally verify the Z3/cvc5 record and
 the trust-disabled CPC proof in Ethos.  State explicitly whether the
 one-witness localization materially improves the mathematical explanation.
+
+Finally audit the forced-blocker packet classification.  Independently show
+that the two C1 antecedents are automatic and that their negative blockers
+must be `{1,4} union A` and `{1,5} union B`.  Check both displayed aggregate
+packet inequalities, including the use of `q^1_1=0`.  Reproduce all 64 pair
+verdicts, the 32/32 feasible split, the residual group action, the eleven
+representatives, and every subset-minimal core ablation.  Treat the packet
+table as a decomposition of the already certified parent relaxation, not as
+independent evidence or as an all-human proof.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two

@@ -108,6 +108,20 @@ The remaining non-human step is the incompatibility of the ten residual
 orbit families.  The reduction is therefore a substantial humanization of
 the former 90-direction/six-witness presentation, not a complete hand proof.
 
+`S6_P4_PACKET_CLASSIFICATION.md` exposes a second layer of that
+incompatibility.  Two C1 directions are forced active, and their blockers
+form a pair
+
+```text
+{1,4} union A,   {1,5} union B,   A,B subsets of {0,2,3}.
+```
+
+Of the 64 labelled pairs, 32 are base-infeasible and the other 32 form only
+eleven classes under the residual symmetry.  Every class closes with a
+subset-minimal menu of at most seven of the remaining seventeen directions.
+This is a reviewer-readable finite packet table, but its residual blocker
+alternatives are still machine-resolved.
+
 ## 5. Reproduction
 
 Run from the repository root with the Z3-enabled Python environment:
@@ -121,6 +135,10 @@ cmp /tmp/strict_exchange_p4_anchor_core.json \
 cmp /tmp/strict_exchange_p4_anchor_core.smt2 \
   coopgames/verifiers/s6/p4_anchor_core_certificates/strict_exchange_p4_anchor_core.smt2
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
+  --output /tmp/strict_exchange_p4_packet_classes.json
+cmp /tmp/strict_exchange_p4_packet_classes.json \
+  coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
 ```
 
 The frozen artifacts are
@@ -132,4 +150,6 @@ coopgames/verifiers/s6/p4_anchor_core_certificates/strict_exchange_p4_anchor_cor
 coopgames/verifiers/s6/p4_anchor_core_certificates/strict_exchange_p4_anchor_core.cpc
 coopgames/verifiers/s6/p4_anchor_core_certificates/strict_exchange_p4_anchor_core.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
+coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py
+coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
 ```

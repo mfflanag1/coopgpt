@@ -237,6 +237,22 @@ python3 coopgames/verifiers/s6/audit_strict_exchange_p4_anchor_core.py \
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
 ```
 
+The explanatory forced-blocker audit then conditions the two automatic C1
+directions on their concrete blockers.  It exhausts 64 labelled blocker
+pairs, finds 32 base-feasible pairs in eleven residual-symmetry classes, and
+closes every class with a subset-minimal menu of at most seven remaining
+directions.  Regenerate its frozen table with
+
+```text
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
+  --output /tmp/strict_exchange_p4_packet_classes.json
+cmp /tmp/strict_exchange_p4_packet_classes.json \
+  coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
+```
+
+This table strengthens selected disjuncts of the proof-checked parent formula;
+it is a readability decomposition, not an additional proof object.
+
 Finally, `../strict_exchange_formula_interface.json` is the literal
 human-to-machine manifest.  It parses all frozen strict formulas and verifies
 that each declares only the 48 expected selection/witness reals, has the same

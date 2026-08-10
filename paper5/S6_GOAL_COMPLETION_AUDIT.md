@@ -112,7 +112,13 @@ formula with one singleton exactness witness, nineteen labelled directions,
 and ten residual role orbits.  Z3/cvc5 and a trust-disabled CPC proof checked
 by Ethos certify it; every single direction, residual orbit, and either of its
 two blocker-comparison sources is irredundant by SAT ablation.  The remaining
-ten-orbit incompatibility is still machine-resolved.
+ten-orbit incompatibility is still machine-resolved.  A further
+forced-blocker decomposition now replaces the two sixteen-way C1 blocker
+disjunctions by eleven exact packet classes: 32 of 64 labelled blocker pairs
+are base-infeasible, and the 32 feasible pairs form eleven residual-symmetry
+orbits.  Each row closes using a subset-minimal menu of at most seven
+remaining directions.  This materially improves readability but does not yet
+replace every residual blocker alternative by hand inequalities.
 
 ## 4. Sharpness and equality cases
 
@@ -177,6 +183,10 @@ cmp coopgames/verifiers/s6/strict_exchange_formula_interface.json \
   /tmp/strict_exchange_formula_interface.json
 python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
+  --output /tmp/strict_exchange_p4_packet_classes.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json \
+  /tmp/strict_exchange_p4_packet_classes.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \
