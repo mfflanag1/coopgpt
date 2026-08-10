@@ -588,6 +588,120 @@ def class4_star_reduction_checks(timeout_ms):
     }
 
 
+def class7_relay_reduction_checks(timeout_ms):
+    """Differentially restate the now hand-certified class-7 relay.
+
+    The independent proof object is the solver-free rational checker.  These
+    SMT queries only ensure that its named branches still agree with the
+    production packet relaxation.
+    """
+    x = [z3.Real(f"packet_class7_x_{index}") for index in range(6)]
+    z = [z3.Real(f"packet_class7_z_{index}") for index in range(6)]
+    q1 = [z3.Real(f"packet_class7_q_{index}") for index in range(6)]
+    d = [x[index] - z[index] for index in range(6)]
+    common = [
+        point_sum(x, range(6)) == 1,
+        point_sum(z, range(6)) == 1,
+        point_sum(q1, range(6)) == 1,
+        q1[1] == 0,
+        *(value >= 0 for value in (*x, *z, *q1)),
+        *(d[index] > 0 for index in (0, 1, 2, 3)),
+        *(d[index] < 0 for index in (4, 5)),
+        *(x[0] <= x[index] for index in range(1, 6)),
+        *(z[1] >= z[index] for index in (0, 2, 3, 4, 5)),
+        point_sum(d, (0, 1, 2, 3)) > z3.RealVal(1) / 3,
+        *packet_constraints(x, z, q1, (0,), (2,)),
+    ]
+
+    def eligible(direction):
+        return [
+            tuple(index for index in range(6) if mask & (1 << index))
+            for mask in range(1, (1 << 6) - 1)
+            if sum(direction[index] for index in range(6) if mask & (1 << index)) < 0
+        ]
+
+    def comparisons(coalition, side):
+        reference, opposite = (x, z) if side == "min" else (z, x)
+        return [
+            point_sum(opposite, coalition) >= point_sum(reference, coalition),
+            point_sum(q1, coalition) >= point_sum(reference, coalition),
+        ]
+
+    def feasible(direction, side, premises=()):
+        rows = []
+        for coalition in eligible(direction):
+            status = verdict([*common, *premises, *comparisons(coalition, side)], timeout_ms)
+            if status == z3.sat:
+                rows.append(coalition)
+            elif status != z3.unsat:
+                raise RuntimeError(f"class-7 {side} blocker {coalition} returned {status}")
+        return rows
+
+    h17 = (0, -1, 0, -1, 1, 1)
+    h12 = (1, 0, 1, 0, -1, -1)
+    h10 = (1, -1, 0, 0, 0, 0)
+    h18 = (0, 0, -1, -1, 1, 1)
+    b0, b1, b2 = (1, 2, 3, 4), (1, 3, 5), (0, 1, 3, 5)
+    b3, b4, b5 = (1, 2), (1, 2, 5), (2, 3, 5)
+
+    if verdict([*common, x[3] < x[1]], timeout_ms) != z3.unsat:
+        raise AssertionError("class-7 root activation inequality changed")
+    root = feasible(h17, "min")
+    if root != [b0, b1, b2]:
+        raise AssertionError(f"unexpected class-7 root blockers: {root}")
+
+    activation_fail_h12 = z3.Or(
+        z3.And(z[4] <= z[0], z[5] <= z[0]),
+        z3.And(z[4] <= z[2], z[5] <= z[2]),
+    )
+    b0_rows = comparisons(b0, "min")
+    if verdict([*common, *b0_rows, activation_fail_h12], timeout_ms) != z3.unsat:
+        raise AssertionError("class-7 B0 activation changed")
+    if feasible(h12, "max", b0_rows):
+        raise AssertionError("class-7 B0 terminal gained a blocker")
+
+    b1_rows = comparisons(b1, "min")
+    if verdict([*common, *b1_rows, x[2] < x[1]], timeout_ms) != z3.unsat:
+        raise AssertionError("class-7 B1 activation changed")
+    if feasible(h18, "min", b1_rows):
+        raise AssertionError("class-7 B1 terminal gained a blocker")
+
+    b2_rows = comparisons(b2, "min")
+    if verdict([*common, *b2_rows, z[1] <= z[0]], timeout_ms) != z3.unsat:
+        raise AssertionError("class-7 B2 activation changed")
+    second = feasible(h10, "max", b2_rows)
+    if second != [b3, b4]:
+        raise AssertionError(f"unexpected class-7 second blockers: {second}")
+
+    branch_rows = []
+    for blocker in second:
+        rows = [*b2_rows, *comparisons(blocker, "max")]
+        if verdict([*common, *rows, x[2] <= x[5]], timeout_ms) != z3.unsat:
+            raise AssertionError(f"class-7 activation after {blocker} changed")
+        third = feasible(h18, "min", rows)
+        if third != [b5]:
+            raise AssertionError(f"unexpected class-7 third blockers after {blocker}: {third}")
+        terminal_rows = [*rows, *comparisons(b5, "min")]
+        if verdict([*common, *terminal_rows, activation_fail_h12], timeout_ms) != z3.unsat:
+            raise AssertionError(f"class-7 terminal activation after {blocker} changed")
+        if feasible(h12, "max", terminal_rows):
+            raise AssertionError(f"class-7 terminal after {blocker} gained a blocker")
+        branch_rows.append({"second_blocker": list(blocker), "third_blocker": list(b5)})
+
+    return {
+        "packet_class": 7,
+        "packet": {"first_optional_players": [0], "second_optional_players": [2]},
+        "root_blockers": [list(item) for item in root],
+        "long_branch_second_blockers": [list(item) for item in second],
+        "long_branch_relay": branch_rows,
+        "complete_forced_relay": True,
+        "complete_hand_proof": True,
+        "structural_census_stage_count": 8,
+        "blocker_filter_hand_certificate_count": 16,
+        "activation_hand_certificate_count": 9,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -729,6 +843,7 @@ def main():
         "classes": rows,
         "class3_hand_lemma": class3_hand_checks(args.timeout_ms),
         "class4_star_reduction": class4_star_reduction_checks(args.timeout_ms),
+        "class7_relay_reduction": class7_relay_reduction_checks(args.timeout_ms),
         "class8_hand_lemma": class8_hand_checks(args.timeout_ms),
         "class11_relay_reduction": class11_relay_reduction_checks(args.timeout_ms),
     }

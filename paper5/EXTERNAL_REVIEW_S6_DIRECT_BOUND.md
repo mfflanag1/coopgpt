@@ -50,6 +50,8 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
@@ -216,9 +218,15 @@ derive both activations, prove the two exact blocker lists, and check the
 four-case terminal sum giving `D<=x_1<=1/3`.
 Then reproduce the forced-relay audit.  Check that its branch rule is sound,
 that every recorded discarded blocker is genuinely UNSAT with the current
-branch, and that classes `3,4,7,8,11` cover eighteen labelled packets.  Do not
-promote the closed tree for class 7 to a hand proof until its individual
-activation and blocker inequalities are supplied.  For class 11,
+branch, and that classes `3,4,7,8,11` cover eighteen labelled packets.  For
+class 7, independently derive (7.1)--(7.4) and every membership case in the
+eight-row opposite-source cut table; do not trust the frozen candidate lists.
+Then audit all 25 rows in
+`strict_exchange_p4_class7_hand_certificates.json`: sixteen blocker filters
+and nine activation identities.  Check every premise orientation, all three rows
+whose strict target is `d_0`, the exact Fourier--Motzkin treatment of strict
+homogeneous differences, and both mutation controls.  State whether this
+really proves the relay (7.5) without relying on the SMT census.  For class 11,
 independently check (11.1)--(11.4) in `S6_P4_RELAY_TREES.md`: the first three
 identities now humanize every exchange activation and the fourth excludes the
 otherwise awkward first blocker `{0,1}`.  Then independently derive the

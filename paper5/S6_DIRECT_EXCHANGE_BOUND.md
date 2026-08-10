@@ -235,7 +235,7 @@ eleven residual-symmetry classes, each closed by a subset-minimal menu of at
 most seven other directions.  The aggregate packet inequalities are derived
 by hand in `S6_P4_PACKET_CLASSIFICATION.md`.  This makes the remaining finite
 anatomy smaller and more explicit, but does not turn it into an all-human
-proof.  Four of the eleven rows now close completely by hand.  In class 8 the
+proof.  Five of the eleven rows now close completely by hand.  In class 8 the
 packet forces `-e_1-e_3+e_4+e_5` to improve Lmin, and elementary `d=x-z`
 inequalities exclude all twenty of its eligible blockers without using the
 `q^1` comparison.  Class 3 also closes by hand through a two-exchange relay:
@@ -249,15 +249,15 @@ solver or production-encoder import.  Class 11 is a unique three-exchange
 chain.  Its twenty first-stage cuts reduce structurally to seven candidates;
 six exact identities leave the unique first blocker, fifteen `q^1` identities
 leave the unique second blocker, and sixteen more exclude every terminal cut.
-Together the four hand lemmas remove fourteen labelled packets from the finite
-residue.
+Class 7 reduces its depth-three relay to eight exact difference-cone cut
+censuses, sixteen blocker filters, and nine activation identities.  Together
+the five hand lemmas remove eighteen labelled packets from the finite residue.
 
 The corresponding forced-exchange audit closes five packet classes
 `3,4,7,8,11` as relay trees, covering eighteen of the 32 feasible labelled
-packets.  Beyond the four hand proofs, class 7 is a depth-three four-leaf tree.
-That remaining closed tree is an exact humanization target, not additional
-proof evidence; see
-`S6_P4_RELAY_TREES.md`.
+packets.  All five closed relay trees now have hand-checkable proofs; the other
+six packet classes, covering fourteen labelled packets, retain machine-resolved
+residue.  See `S6_P4_RELAY_TREES.md`.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen
@@ -310,6 +310,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificat
   --output /tmp/strict_exchange_p4_class11_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class11_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class7_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class7_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
@@ -356,6 +360,8 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
+coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py
+coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py

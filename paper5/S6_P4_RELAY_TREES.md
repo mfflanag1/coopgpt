@@ -33,17 +33,16 @@ terminal leaves; depth zero means the first forced direction has no blocker.
 | 4 | 4 | 3 | `3/0` | 1 | yes | yes |
 | 5 | 1 | 7 | `30/3` | 4 | no | no |
 | 6 | 4 | 7 | `29/4` | 4 | no | no |
-| 7 | 4 | 4 | `4/0` | 3 | yes | no |
+| 7 | 4 | 4 | `4/0` | 3 | yes | yes |
 | 8 | 2 | 1 | `1/0` | 0 | yes | yes |
 | 9 | 4 | 4 | `0/1` | 0 | no | no |
 | 10 | 2 | 4 | `0/1` | 0 | no | no |
 | 11 | 4 | 3 | `1/0` | 2 | yes | yes |
 
 Thus classes `3,4,7,8,11` have complete forced relays.  Their orbit sizes sum
-to eighteen of the 32 feasible labelled packets.  Classes 3, 4, 8, and 11,
-covering fourteen packets, have now been converted into explicit
-hand-checkable inequalities.  Class 7, covering the other four packets in the
-closed relay set, is the remaining machine-checked tree to humanize.
+to eighteen of the 32 feasible labelled packets, and all five are now
+converted into explicit hand-checkable inequalities.  The other six packet
+classes, covering fourteen labelled packets, remain machine-resolved.
 
 ## 3. Two especially small targets
 
@@ -170,8 +169,7 @@ This chain covers four labelled packets.  It is longer than class 4 but has a
 particularly clean separation between its opposite-selection and
 singleton-witness blocker tests.
 
-Class 7 is also complete but has four leaves and depth three.  It is now the
-next closed relay to humanize.
+Class 7 also has a complete hand proof, given in Section 5 below.
 
 ## 4. Human completion of class 11
 
@@ -284,7 +282,111 @@ production encoder, makes no satisfiability query, exhausts each cut family,
 and rejects a one-coefficient mutation control.  Together with
 (11.1)--(11.6), these rows complete a hand-checkable proof of class 11.
 
-## 5. What remains unresolved
+## 5. Human completion of class 7
+
+For class 7, `A={0}` and `B={2}`.  Put
+
+```text
+d_i=x_i-z_i  (i=0,1,2,3),       delta_m=z_m-x_m  (m=4,5).
+```
+
+The packet coalitions are `P4={0,1,4}` and `P5={1,2,5}`.  Their opposite
+comparisons and complements are exactly
+
+```text
+d_0+d_1 <= delta_4 <= d_0+d_3,
+d_1+d_2 <= delta_5 <= d_2+d_3.                    (7.1)
+```
+
+In particular `d_3>=d_1`.  Their `q=q^1` comparisons and complements give
+
+```text
+q_0+q_4 >= x_0+x_1+x_4,     q_2+q_5 >= x_1+x_2+x_5,
+q_2+q_3+q_5 <= x_2+x_3+x_5,
+q_0+q_3+q_4 <= x_0+x_3+x_4.                       (7.2)
+```
+
+Either lower inequality combined with the opposite upper inequality yields
+`x_3>=x_1+q_3>=x_1`.  Since `x_1>x_4,x_5`, this activates the root Lmin
+direction `-e_1-e_3+e_4+e_5` without a finite search.
+
+Name the only blockers that survive below by
+
+```text
+B0={1,2,3,4},  B1={1,3,5},    B2={0,1,3,5},
+B3={1,2},      B4={1,2,5},    B5={2,3,5}.          (7.3)
+```
+
+The opposite-source cut census is small.  Efficiency eliminates `delta_5`,
+and (7.1) becomes the five-variable interval system
+
+```text
+delta_4 >= d_0+d_1,       delta_4 <= d_0+d_3,
+delta_5  >= d_1+d_2,      delta_5  <= d_2+d_3,
+delta_4+delta_5=d_0+d_1+d_2+d_3.                  (7.4)
+```
+
+Substituting the appropriate branch comparison into `d(C)<=0` for an Lmin
+blocker or `d(C)>=0` for an Lmax blocker gives the complete table:
+
+| stage | direction and side | opposite-source candidates |
+|---|---|---|
+| root | `-e1-e3+e4+e5`, Lmin | `{1,3,4}`, `B0`, `B1`, `B2` |
+| after `B0` | `e0+e2-e4-e5`, Lmax | `{3,5}`, `{1,3,5}` |
+| after `B1` | `-e2-e3+e4+e5`, Lmin | `{2,3,4}`, `B5`, `{1,2,3,4}` |
+| after `B2` | `e0-e1`, Lmax | `{1}`, `B3`, `{1,3}`, `{1,2,3}`, `{1,2,4}`, `B4`, `{1,3,4}`, `{1,2,3,4}`, `{1,2,3,5}` |
+| after `B2,B3` | `-e2-e3+e4+e5`, Lmin | `B5` |
+| after `B2,B4` | `-e2-e3+e4+e5`, Lmin | `B5` |
+| after `B2,B3,B5` | `e0+e2-e4-e5`, Lmax | `{3,4}`, `{1,3,4}` |
+| after `B2,B4,B5` | `e0+e2-e4-e5`, Lmax | `{1,3,4}` |
+
+This is direct membership arithmetic, not an SMT census.  For example `B4`
+forces `delta_5<=d_1+d_2`, hence equality in the second lower bound of (7.4),
+while `B5` forces `delta_5>=d_2+d_3`, hence equality in its upper bound.  The
+solver-free checker independently recomputes all eight table rows from (7.4)
+by exact rational Fourier--Motzkin elimination.  It scales every strictly
+positive difference magnitude to at least one, which is equivalent by
+homogeneity and avoids any numerical treatment of strict inequalities.
+
+Only sixteen candidates in the table need an additional source-specific
+filter.  One `q` identity removes `{1,3,4}` at the root, leaving exactly
+`B0,B1,B2`.  The two candidates after `B0` are removed by `q`; after `B1`,
+two are removed by `q` and `B5` by the opposite comparison.  Seven `q`
+identities remove all candidates after `B2` except `B3,B4`.  Finally two and
+one `q` identities close the terminal lists after `B3` and `B4`, respectively.
+Thirteen identities have target `D-1/3`; the other three have target `d_0`,
+which is strictly positive.  Since every named premise is oriented as
+nonpositive, either target is a contradiction.
+
+The remaining activations are also explicit.  After `B0`, failure of the
+Lmax direction means either `z_0>=z_4,z_5` or `z_2>=z_4,z_5`; two weighted
+identities give `D<=1/3`.  After `B1`, its `q` comparison and the complement
+of the first inequality in (7.2) give `x_2>=x_1+q_2>=x_1`, activating the
+Lmin direction.  After `B2`, a weighted identity shows that `z_1<=z_0`
+forces `D<=1/3`, so `e_0-e_1` improves Lmax.  On either `B3` or `B4`, another
+identity shows that `x_2<=x_5` forces `D<=1/3`; together with
+`x_3>=x_1>x_5`, this activates the next Lmin direction.  After `B5`, two
+identities again exclude the two possible failure cases
+`z_0>=z_4,z_5` and `z_2>=z_4,z_5`, activating the terminal Lmax direction.
+There are nine activation identities in total.
+
+Thus the relay is
+
+```text
+root -> B0 -> contradiction,
+     -> B1 -> contradiction,
+     -> B2 -> B3 or B4 -> B5 -> contradiction.    (7.5)
+```
+
+`verify_strict_exchange_p4_class7_hand_certificates.py` checks the eight exact
+cut censuses, all sixteen blocker filters, and all nine activation identities.
+It uses pure `Fraction` arithmetic, imports no production encoder, makes no
+satisfiability call, and rejects both a coefficient perturbation and deletion
+of a structural candidate.  Equations (7.1)--(7.5), the table, and the 25
+weighted rows therefore give a complete hand-checkable proof of class 7,
+covering four labelled packets.
+
+## 6. What remains unresolved
 
 The relay method stalls immediately in classes 9 and 10 because none of the
 directions in the chosen subset-minimal core is forced before an additional
@@ -297,7 +399,7 @@ parent formula and does not validate the human-to-machine map.  Its purpose is
 to turn the residual finite proof into a short list of concrete exchange and
 blocker lemmas suitable for external review.
 
-## 6. Reproduction
+## 7. Reproduction
 
 Run from the repository root with the Z3-enabled Python environment:
 
@@ -314,6 +416,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificat
   --output /tmp/strict_exchange_p4_class11_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class11_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class7_hand_certificates.json
+cmp /tmp/strict_exchange_p4_class7_hand_certificates.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
 ```
 
 The frozen JSON records every chosen direction, its side and role orbit, the

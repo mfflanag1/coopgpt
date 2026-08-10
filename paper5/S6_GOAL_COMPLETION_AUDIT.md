@@ -132,13 +132,13 @@ terminal cuts.  The certificate checker uses pure rational coefficient
 arithmetic, no solver call, and no production encoder.  Class 11, covering
 four labelled pairs, is a unique three-exchange chain.  A structural cut split
 plus 37 source-specific exact identities proves its two unique blockers and
-empty terminal blocker list.  Seven packet classes covering eighteen labelled
-pairs remain machine-resolved.
+empty terminal blocker list.  Class 7, covering four labelled pairs, now has
+an exact eight-stage difference-cone census plus 25 rational identities.
+Six packet classes covering fourteen labelled pairs remain machine-resolved.
 A separate forced-exchange audit sharpens that boundary: classes `3,4,7,8,11`
 have complete relay trees and together cover eighteen labelled packets.
-Classes 4 and 11 are included among the four hand proofs.  Class 7 is the only
-complete relay tree whose blocker cuts are still machine-classified.
-Six other classes contain explicit open relay
+All five complete relay trees now have hand-checkable proofs.  Six other
+classes contain explicit open relay
 leaves, including classes 9 and 10 where no core direction is initially
 forced.
 
@@ -232,6 +232,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificat
   --output /tmp/strict_exchange_p4_class11_hand_certificates.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json \
   /tmp/strict_exchange_p4_class11_hand_certificates.json
+python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py \
+  --output /tmp/strict_exchange_p4_class7_hand_certificates.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json \
+  /tmp/strict_exchange_p4_class7_hand_certificates.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp coopgames/verifiers/s6/strict_exchange_large_case_templates.json \

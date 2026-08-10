@@ -130,9 +130,9 @@ class-8 activation and exclusion of all twenty eligible blockers use only the
 opposite comparison, not `q^1`.
 
 A forced-exchange relay audit closes classes `3,4,7,8,11` without an order
-split, covering eighteen of the 32 feasible labelled packets.  The only closed
-but not yet fully hand-written tree is class 7, recorded coalition by coalition
-at depth three in `S6_P4_RELAY_TREES.md`.
+split, covering eighteen of the 32 feasible labelled packets.  All five closed
+trees now have hand-checkable proofs; class 7 is compressed into an exact
+difference-cone census and 25 rational identities in `S6_P4_RELAY_TREES.md`.
 
 ## 5. Reproduction
 
