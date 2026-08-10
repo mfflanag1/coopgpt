@@ -84,6 +84,8 @@ coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py
 coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_rows.json
 coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
+coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py
+coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
 coopgames/paper5/S6_P4_UNIVERSAL_ORDER_RELAY.md
@@ -373,6 +375,14 @@ arithmetic but not from discovery of the frozen 155-use map.  The useful next
 question is whether the 22 path-dependent identities collapse into a few
 orbit lemmas, and whether the 47 witness-compatible cuts admit a short
 terminal lemma.
+
+Also audit the activation census in
+`audit_strict_exchange_p4_class6_activation_overcovers.py`.  Independently
+check the elementary failure expansions for the seven direction types and the
+`124 = 84 + 4 + 36` partition.  Verify the 36 incidence supports, including
+the six coefficient-two cases.  Treat their support bounds as instances of
+the zero-anchor theorem, but do not promote the allocation-side Z3 verdicts
+to proof objects; exact rational identities for those cases are still pending.
 
 Audit the general witness projection theorem in
 `S6_ZERO_ANCHOR_OVERCOVER_DUALITY.md`.  Verify that the coalition-sum image of

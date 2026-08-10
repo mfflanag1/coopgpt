@@ -173,6 +173,10 @@ identities checked solver-free at all 155 uses.  The digest-protected use map
 still comes from the shared localized relay; the 47 witness-compatible cuts
 and terminal closures are not yet hand-compressed.  This remains a partial
 skeleton: the 29 non-root leaves are not yet a complete hand certificate.
+The same incidence theorem now compresses activation: of 124 elementary
+failure cases, 84 are structural, four are allocation-infeasible, and the
+other 36 have over-covers of support at most four.  Their allocation-side
+strict reductions remain to be exactified.
 The single-witness component now has a general exact-cone theorem rather than
 case-specific Farkas sums.  For any blocker menu, its coalition-sum image is
 the convex hull of the non-anchor incidence columns; feasibility of lower
@@ -318,6 +322,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
   --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json \
   /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
+  --output /tmp/strict_exchange_p4_class6_activation_overcovers.json
+cmp coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json \
+  /tmp/strict_exchange_p4_class6_activation_overcovers.json
 python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json \

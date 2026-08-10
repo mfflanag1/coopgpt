@@ -112,7 +112,31 @@ independently establish that the frozen 155-use map is exhaustive; that map
 still comes from the localized relay and remains part of the external-review
 boundary.
 
-## 5. Residual relay
+## 5. The same over-cover theorem controls activation
+
+The 49 direction nodes have 124 elementary activation-failure conjunctions.
+The anchor chains and the root order remove 84 of them directly.  Of the 40
+residual cases, four `h7` failures are already inconsistent with the
+opposite-allocation comparisons.  Every one of the other 36 failures has a
+zero-anchor incidence over-cover using only the packet and ancestor witness
+comparisons:
+
+```text
+support size       2   3   4
+certificate count 12  10  14
+```
+
+Thirty use unit coefficients and six require coefficient two.  Deduplication
+leaves 24 labelled support signatures.  Thus blocker filtering and forced
+activation are two applications of the same witness-image theorem, rather
+than separate solver phenomena.
+
+This activation census is presently encoding-shared.  The incidence upper
+bounds are human consequences of (Z2), but the allocation lower bounds for
+the 36 witness cases and the four direct cases have not yet been exactified
+into solver-free identities.  That is the next arithmetic checkpoint.
+
+## 6. Residual relay
 
 The weak root has two symmetric-looking subtrees.  Each passes through the
 automatic `h10=e0-e1` Lmax exchange, one of four `h10` blockers, the automatic
@@ -120,10 +144,11 @@ Lmin exchange `h15=e0-e1`, and then closes immediately with either `h17` or
 the three-for-three Lmax exchange `h7=e0-e1+e2-e5`.  The strict root has only
 seven leaves and depth four.  The 155 witness rejections now have complete
 solver-free incidence and allocation identities, conditional on the frozen
-use map.  The 29 leaves remain machine-resolved at the 47 witness-compatible
-cuts, activation steps, and terminal closures.
+use map, and all activation failures have the decomposition above.  The 29
+leaves remain machine-resolved at the opposite-cut censuses and terminal
+no-blocker closures.
 
-## 6. Audits
+## 7. Audits
 
 ```bash
 python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py \
@@ -153,6 +178,10 @@ python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_ident
   --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
+python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
+  --output /tmp/strict_exchange_p4_class6_activation_overcovers.json
+cmp /tmp/strict_exchange_p4_class6_activation_overcovers.json \
+  coopgames/verifiers/s6/strict_exchange_p4_class6_activation_overcovers.json
 ```
 
 The compact artifact freezes the census and a SHA-256 digest of the canonical
@@ -163,3 +192,9 @@ integration audit.  The allocation checker itself imports neither and checks
 the stored 53 identities by exact rational arithmetic.  Its linkage to all
 155 detailed supports is digest-protected, but the relay-derived use map is
 still not independent human-to-machine evidence.
+
+The activation audit also imports the localized encoder.  It checks all 49
+failure expansions and the `124 -> 84 + 4 + 36` partition, and freezes a
+digest for the 36 detailed supports.  Its incidence rows instantiate the
+solver-free theorem, while its allocation-side and coverage verdicts remain
+explicit integration evidence.
