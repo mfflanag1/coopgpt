@@ -419,6 +419,11 @@ a sharper humanization target, not yet a hand proof: the activations and
 blocker exclusions still need structural inequalities or exact weighted
 identities, and the audit shares the parent encoding.
 
+`S6_P4_CLASS9_HAND_CHECKPOINT.md` now supplies the class-9 difference-cone
+table and a terminal anchor-threshold lemma.  Exact coefficients have been
+found for every remaining row, but are deliberately not promoted here until a
+deduplicated source table and solver-free checker are frozen.
+
 ## 7. What remains unresolved
 
 The unsplit relay method stalls immediately in classes 9 and 10, while the

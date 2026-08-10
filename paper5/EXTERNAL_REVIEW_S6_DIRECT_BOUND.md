@@ -54,6 +54,7 @@ coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py
 coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py
 coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
+coopgames/paper5/S6_P4_CLASS9_HAND_CHECKPOINT.md
 coopgames/paper5/S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md
 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py
 coopgames/verifiers/s6/strict_exchange_formula_interface.json
