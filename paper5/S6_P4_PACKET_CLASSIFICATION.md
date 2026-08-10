@@ -119,11 +119,100 @@ to
 eleven concrete packet rows, each using at most seven residual implications.
 ```
 
-It remains a finite computer-assisted lemma.  A complete hand proof would
-still have to replace the residual blocker alternatives in these eleven rows
-by explicit inequalities or Farkas combinations.
+The table as a whole remains a finite computer-assisted lemma.  A complete
+hand proof would still have to replace the residual blocker alternatives in
+the unresolved rows by explicit inequalities or Farkas combinations.  Two
+rows can now be removed from that residue completely.
 
-## 4. Class 8 closes completely by hand
+## 4. Class 3 is a two-exchange hand relay
+
+For class 3, `A` is empty and `B={0,2}`.  The packet `q` comparisons are
+
+```text
+q_4 >= x_1+x_4,                                  (Q4)
+q_0+q_2+q_5 >= x_0+x_1+x_2+x_5.                  (Q5)
+```
+
+The complement form of `(Q5)` is `q_3+q_4<=x_3+x_4`.  Together with `(Q4)`
+it gives `x_3>=x_1+q_3>=x_1`.  Since the anchor order gives
+`x_1>x_4,x_5`, the direction
+
+```text
+h^1=-e_1-e_3+e_4+e_5
+```
+
+necessarily improves Lmin.
+
+Its blocker can be classified by hand.  A negative cut with no `M` player
+has positive `d=x-z` sum.  If it contains player `4`, it contains both
+negative-coefficient players `1,3`; the other packet inequality gives
+`delta_4<=d_3`, so its `d` sum is at least `d_1>0`.  For a cut through player
+`5`, the only optional players are `0,2`.  Including `2` but not `0` makes the
+`q` comparison imply `q_0+q_4<=x_0+x_4`; `(Q4)` then gives `x_1<=x_0`,
+contrary to `x_0<=x_4<x_1`.  Including both `0,2` leaves the complement
+`{4}` and has positive `d` sum `delta_4`.  Hence the blocker must be
+
+```text
+S_K={1,3,5} union K,     K either empty or {0}.    (B1)
+```
+
+Either choice activates a second direction
+
+```text
+h^2=-e_2-e_3+e_4+e_5.
+```
+
+If `K={0}`, the complement of the `q` comparison in `(B1)` gives
+`q_2+q_4<=x_2+x_4`; `(Q4)` yields `x_2>=x_1+q_2>x_4,x_5`.  If `K` is empty,
+the same two comparisons give
+
+```text
+x_0+x_2 >= x_1+q_0+q_2.
+```
+
+Were `x_2<=x_4,x_5`, bottomness of `x_0` would imply
+`x_4+x_5>=x_1`.  Therefore
+
+```text
+D=z_4+z_5-x_4-x_5 <= z_4+z_5-z_1 <= 1/3,
+```
+
+where the last inequality uses `z_4,z_5<=z_1` and `sum z=1`.  This
+is the estimate
+`3(z_4+z_5-z_1)<=z_1+z_4+z_5<=1`.  It contradicts `D>1/3`, so `h^2`
+improves Lmin in both subcases.
+
+The same cut classification shows that its blocker must be
+
+```text
+T_L={2,3,5} union L,     L either empty or {0}.    (B2)
+```
+
+It remains to exclude the four pairs `(K,L)`.  Add twice `(Q4)`, once `(Q5)`,
+and the `q` comparison for `(B1)`.  With `k=1` when `K={0}` and zero otherwise,
+efficiency of `x,q` and `q_1=0` reduce the sum to
+
+```text
+q_4+q_5+k q_0 >= x_4+x_5+3x_1+k x_0.
+```
+
+Nonnegativity gives `x_1<=1/3`.  If `L` is empty, the complement of the
+opposite comparison in `(B2)` is
+
+```text
+z_0+z_1+z_4 <= x_0+x_1+x_4.
+```
+
+Using `z_5<=z_1`, `x_0<=x_5`, and `z_0>=0` gives `D<=x_1`.  If `L={0}` the
+complement is `z_1+z_4<=x_1+x_4`, which again gives `D<=x_1`.  Thus every
+pair has `D<=1/3`, the final contradiction.
+
+This closes all four labelled packets in class 3 by hand.  The local audit
+checks the first activation, the exact two-candidate blocker lists, both
+relay activations, and all four final blocker-pair contradictions from a
+fresh statement of the displayed premises.
+
+## 5. Class 8 closes completely by hand
 
 For class 8, `A=B={0,2}`.  Write
 
@@ -188,7 +277,7 @@ in the proof.  The audit separately checks the negation of the activation
 argument and all twenty eligible negative cuts from only the displayed
 reduced premises.
 
-## 5. Reproduction and proof status
+## 6. Reproduction and proof status
 
 Run from the repository root with the Z3-enabled Python environment:
 
@@ -207,8 +296,10 @@ The audit independently checks within the parent encoding that
 4. the eleven representatives cover all 32 pairs under the residual group;
 5. every representative plus all remaining implications is UNSAT; and
 6. every single deletion from every displayed residual core is SAT;
-7. the reduced class-8 activation negation is UNSAT; and
-8. each of the twenty eligible class-8 blocker comparisons is UNSAT without
+7. the class-3 relay has exactly two blockers at each stage and all four
+   blocker pairs are UNSAT;
+8. the reduced class-8 activation negation is UNSAT; and
+9. each of the twenty eligible class-8 blocker comparisons is UNSAT without
    a `q^1` premise.
 
 The authoritative proof object for the unsplit, weaker relaxation remains

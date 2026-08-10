@@ -161,6 +161,115 @@ def class8_hand_checks(timeout_ms):
     }
 
 
+def class3_hand_checks(timeout_ms):
+    """Check the two-exchange relay used in the all-human class-3 lemma."""
+    x = [z3.Real(f"packet_class3_x_{index}") for index in range(6)]
+    z = [z3.Real(f"packet_class3_z_{index}") for index in range(6)]
+    q1 = [z3.Real(f"packet_class3_q_{index}") for index in range(6)]
+    d = [x[index] - z[index] for index in range(6)]
+    common = [
+        point_sum(x, range(6)) == 1,
+        point_sum(z, range(6)) == 1,
+        point_sum(q1, range(6)) == 1,
+        q1[1] == 0,
+        *(value >= 0 for value in (*x, *z, *q1)),
+        *(d[index] > 0 for index in (0, 1, 2, 3)),
+        *(d[index] < 0 for index in (4, 5)),
+        *(x[0] <= x[index] for index in range(1, 6)),
+        *(z[1] >= z[index] for index in (0, 2, 3, 4, 5)),
+        point_sum(d, (0, 1, 2, 3)) > z3.RealVal(1) / 3,
+        *packet_constraints(x, z, q1, (), (0, 2)),
+    ]
+
+    first_direction = (0, -1, 0, -1, 1, 1)
+    second_direction = (0, 0, -1, -1, 1, 1)
+    first_activation_failure = z3.Or(
+        x[1] <= x[4], x[1] <= x[5], x[3] <= x[4], x[3] <= x[5]
+    )
+    if verdict([*common, first_activation_failure], timeout_ms) != z3.unsat:
+        raise AssertionError("class-3 first exchange activation did not close")
+
+    def eligible(direction):
+        rows = []
+        for mask in range(1, (1 << 6) - 1):
+            coalition = tuple(index for index in range(6) if mask & (1 << index))
+            if sum(direction[index] for index in coalition) < 0:
+                rows.append(coalition)
+        return rows
+
+    def comparisons(coalition):
+        return [
+            point_sum(z, coalition) >= point_sum(x, coalition),
+            point_sum(q1, coalition) >= point_sum(x, coalition),
+        ]
+
+    first_feasible = []
+    for coalition in eligible(first_direction):
+        status = verdict([*common, *comparisons(coalition)], timeout_ms)
+        if status == z3.sat:
+            first_feasible.append(coalition)
+        elif status != z3.unsat:
+            raise RuntimeError(f"class-3 first blocker {coalition} returned {status}")
+    expected_first = [(1, 3, 5), (0, 1, 3, 5)]
+    if first_feasible != expected_first:
+        raise AssertionError(f"unexpected class-3 first blockers: {first_feasible}")
+
+    second_activation_failure = z3.Or(
+        x[2] <= x[4], x[2] <= x[5], x[3] <= x[4], x[3] <= x[5]
+    )
+    relay_rows = []
+    for coalition in first_feasible:
+        status = verdict(
+            [*common, *comparisons(coalition), second_activation_failure], timeout_ms
+        )
+        if status != z3.unsat:
+            raise AssertionError(f"class-3 relay after {coalition} is {status}")
+        relay_rows.append(
+            {"first_blocker": list(coalition), "negated_second_activation": "unsat"}
+        )
+
+    second_feasible = []
+    for coalition in eligible(second_direction):
+        status = verdict([*common, *comparisons(coalition)], timeout_ms)
+        if status == z3.sat:
+            second_feasible.append(coalition)
+        elif status != z3.unsat:
+            raise RuntimeError(f"class-3 second blocker {coalition} returned {status}")
+    expected_second = [(2, 3, 5), (0, 2, 3, 5)]
+    if second_feasible != expected_second:
+        raise AssertionError(f"unexpected class-3 second blockers: {second_feasible}")
+
+    pair_rows = []
+    for first in first_feasible:
+        for second in second_feasible:
+            status = verdict(
+                [*common, *comparisons(first), *comparisons(second)], timeout_ms
+            )
+            if status != z3.unsat:
+                raise AssertionError(f"class-3 blocker pair {(first, second)} is {status}")
+            pair_rows.append(
+                {
+                    "first_blocker": list(first),
+                    "second_blocker": list(second),
+                    "joint_verdict": "unsat",
+                }
+            )
+    return {
+        "packet_class": 3,
+        "packet": {"first_optional_players": [], "second_optional_players": [0, 2]},
+        "first_direction": list(first_direction),
+        "negated_first_activation_verdict": "unsat",
+        "first_eligible_negative_cut_count": len(eligible(first_direction)),
+        "first_feasible_blockers": [list(coalition) for coalition in first_feasible],
+        "relay_checks": relay_rows,
+        "second_direction": list(second_direction),
+        "second_eligible_negative_cut_count": len(eligible(second_direction)),
+        "second_feasible_blockers": [list(coalition) for coalition in second_feasible],
+        "joint_blocker_pairs": pair_rows,
+        "all_four_joint_blocker_pairs_verdict": "unsat",
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -273,6 +382,14 @@ def main():
         or [item["direction_index"] for item in class8["subset_minimal_core"]] != [17]
     ):
         raise AssertionError("the class-8 hand lemma is detached from its packet row")
+    class3 = rows[2]
+    if (
+        class3["class"] != 3
+        or class3["first_optional_players"] != []
+        or class3["second_optional_players"] != [0, 2]
+        or [item["direction_index"] for item in class3["subset_minimal_core"]] != [17, 18]
+    ):
+        raise AssertionError("the class-3 hand lemma is detached from its packet row")
 
     payload = {
         "schema": "strict-exchange-p4-packet-classes-v1",
@@ -292,6 +409,7 @@ def main():
         "feasible_symmetry_class_count": len(rows),
         "feasible_orbit_size_sum": sum(row["raw_orbit_size"] for row in rows),
         "classes": rows,
+        "class3_hand_lemma": class3_hand_checks(args.timeout_ms),
         "class8_hand_lemma": class8_hand_checks(args.timeout_ms),
     }
     rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"

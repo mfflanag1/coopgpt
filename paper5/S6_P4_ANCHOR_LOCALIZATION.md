@@ -120,10 +120,11 @@ Of the 64 labelled pairs, 32 are base-infeasible and the other 32 form only
 eleven classes under the residual symmetry.  Every class closes with a
 subset-minimal menu of at most seven of the remaining seventeen directions.
 This is a reviewer-readable finite packet table, but its residual blocker
-alternatives are still machine-resolved except in class 8.  That entire
-two-packet orbit closes by hand with the single direction
-`-e_1-e_3+e_4+e_5`; its activation and the exclusion of all twenty eligible
-blockers use only the opposite comparison, not `q^1`.
+alternatives are still machine-resolved except in classes 3 and 8.  Class 3
+closes four labelled packets by a two-exchange blocker relay; class 8 closes
+two labelled packets with the single direction `-e_1-e_3+e_4+e_5`.  The
+class-8 activation and exclusion of all twenty eligible blockers use only the
+opposite comparison, not `q^1`.
 
 ## 5. Reproduction
 

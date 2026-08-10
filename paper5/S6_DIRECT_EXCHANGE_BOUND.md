@@ -238,7 +238,11 @@ anatomy smaller and more explicit, but does not turn it into an all-human
 proof.  One of the eleven rows, class 8, does close completely by hand: the
 packet forces `-e_1-e_3+e_4+e_5` to improve Lmin, and elementary `d=x-z`
 inequalities exclude all twenty of its eligible blockers without using the
-`q^1` comparison.
+`q^1` comparison.  Class 3 also closes by hand through a two-exchange relay:
+the first blocker has two possible forms, either activates the second
+exchange, and the four final blocker pairs all force the distance back to at
+most `1/3`.  Together these two hand lemmas remove six labelled packets from
+the finite residue.
 
 `S6_COUNTEREXAMPLE_TO_SMT_INTERFACE.md` supplies the assertion-by-assertion
 human soundness proof.  Its literal audit confirms that every original frozen

@@ -122,7 +122,11 @@ replace every residual blocker alternative by hand inequalities.
 One complete packet orbit (class 8, covering two labelled pairs) is now
 closed entirely by hand with a single two-for-two direction.  Its activation
 and all twenty blocker exclusions use only the opposite-selection comparison;
-the audit verifies the reduced inequalities independently of `q^1`.
+the audit verifies the reduced inequalities independently of `q^1`.  Class 3
+(four labelled pairs) is also closed by hand using a two-exchange blocker
+relay.  Its exact two-candidate blocker lists and four terminal contradictions
+are independently restated and checked.  Nine packet classes covering 26
+labelled pairs remain machine-resolved.
 
 ## 4. Sharpness and equality cases
 

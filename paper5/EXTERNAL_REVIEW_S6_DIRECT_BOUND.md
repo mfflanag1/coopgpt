@@ -197,6 +197,9 @@ For packet class 8, separately audit the claimed all-human exception: derive
 `D<=1/3` from the negation of lex activation, then classify every coalition
 with `(-e_1-e_3+e_4+e_5)(S)<0` and prove that its opposite comparison fails.
 Confirm that neither half of this argument uses `q^1`.
+For class 3, audit the two-exchange relay without trusting the enumerator:
+derive both activations, prove the two exact blocker lists, and check the
+four-case terminal sum giving `D<=x_1<=1/3`.
 
 Classify every issue as fatal, repairable, or expository and cite exact file
 and line numbers.  If possible, independently encode at least the two bound-two
