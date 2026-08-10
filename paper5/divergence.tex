@@ -55,8 +55,9 @@ core and a one-coalition certificate for the leximin floor; the mirror
 leximax-min ceiling statement fails.
 
 The fixed-dimensional upper bounds are computer-assisted.  At five players,
-two configuration-complete exact pipelines, with independently formulated
-Lmin-optimality components, prove the sharp value and the sharper $1/3$ bound
+two exact pipelines exhaust all configurations and use independently
+formulated Lmin-optimality components; they prove the sharp value and the
+$1/3$ bound
 in the leximin $(4,1)$ regime.
 At six players, singleton exactness and lexicographic optimality map a strict
 counterexample into one of fifteen sign-labelled blocker systems.  Exact
@@ -847,7 +848,8 @@ asymptotics: in $G(p,k)$ every coordinate of $\Lmax$ is strictly positive, so
 $|\supp(\Lmax)|=n$ and no player is starved at all.
 \end{remark}
 
-\section{Fixed $n$: enumeration, certificates, and the $n=5$ anomaly}
+\section{Fixed \texorpdfstring{$n$}{n}: enumeration, certificates, and the
+\texorpdfstring{$n=5$}{n=5} anomaly}
 \label{sec:fixedn}
 
 \subsection{Complete two-generator enumeration}
@@ -944,7 +946,7 @@ under-powered for $n\ge6$ and certifies nothing.  Only the seeded runs
 support the local-optimality claim, and none of these runs bears on global
 optimality.
 
-\subsection{The $n=5$ anomaly}\label{sec:n5}
+\subsection{The \texorpdfstring{$n=5$}{n=5} anomaly}\label{sec:n5}
 
 At $n=5$ the balanced-split family gives only $1/3$, but the truth is $1/2$,
 and the witness has a non-uniform $h$-block.  The proof is by hand from two
@@ -1513,6 +1515,43 @@ game $G(2,3)$ supplies the matching lower bound.  The earlier generator
 census, equality census, continuity arguments, and support tables are
 historical discovery routes and are not used in this proof.
 
+The three large finite menus use only the following hand-checkable exchange
+calculus.  Naming it separately isolates what is conceptual from the later
+blocker-coexistence certificates.
+
+\begin{lemma}[Three exchange templates]\label{lem:orbittemplates}
+Let $y\in\mathbb R^6$ and let $h(N)=0$.
+\begin{enumerate}[label=(\roman*),nosep]
+\item For $h=-e_a+e_r$, $h$ is Lmin-admissible exactly when $y_r<y_a$;
+      it has $16$ negative nonempty proper cuts.  The Lmax condition is the
+      same inequality $y_a>y_r$, read at the highest affected level.
+\item For $h=-e_a-e_b+e_r+e_s$, $h$ is Lmin-admissible exactly when
+      $\min(y_r,y_s)<\min(y_a,y_b)$; it has $20$ negative nonempty proper
+      cuts.  For Lmax, the condition is
+      $\max(y_a,y_b)>\max(y_r,y_s)$.
+\item For
+      $h=e_p+2e_{p'}-e_{m_1}-e_{m_2}-e_{m_3}$, $h$ is Lmax-admissible
+      exactly when
+      $\max_j y_{m_j}>\max(y_p,y_{p'})$; it has $24$ negative nonempty
+      proper cuts.  Negating $h$ gives the Lmin dual.
+\end{enumerate}
+Ties make the displayed strict activation fail; they introduce no additional
+case.
+\end{lemma}
+
+\begin{proof}
+Admissibility asks whether the first affected payoff stratum contains a
+coefficient of the improving sign and none of the opposite sign.  Reading the
+lowest affected stratum for Lmin and the highest for Lmax gives the stated
+minimum and maximum tests.  For (i), negativity means $a\in S,r\notin S$,
+with the other four players free.  For (ii), if $d$ donors and $u$ recipients
+belong to $S$, negativity is $d>u$; summing the cases $(d,u)=(1,0),(2,0),
+(2,1)$ gives $8+4+8=20$.  In (iii), negativity means
+$|S\cap\{m_1,m_2,m_3\}|>\mathbf{1}_{p\in S}+2\mathbf{1}_{p'\in S}$; the unused
+sixth player is optional, and the three positive-side loads contribute
+$14+8+2=24$ cuts.  Negation proves the dual statements.
+\end{proof}
+
 \begin{theorem}[Six-player bound]\label{thm:s6}
 Every singleton-normalized exact six-player game satisfies
 \[
@@ -1628,7 +1667,8 @@ are infeasible.  These controls reduce correlated encoding risk but do not
 replace external review of the human implication.  At the orbit level, the three
 largest menus admit a further unguarded reduction: their $213$ labeled
 directions and $44$ sign-role orbits shrink to $136$ directions in $19$
-orbits.  The $(3,2,1)$ and $(4,2,0)$ cases then use only one-for-one and
+orbits.  By Lemma~\ref{lem:orbittemplates}, the $(3,2,1)$ and $(4,2,0)$
+cases then use only one-for-one and
 two-for-two exchanges; the balanced $(3,3,0)$ case adds one asymmetric
 coefficient-two shape and its reverse.  Their activation side is completely
 described by the same $19$ role-level order-statistic tests: compare the
@@ -1810,7 +1850,7 @@ Thus the upper bound holds.  The family formula gives
 $\rho(G(2,3))=2(2(3-1)-1)/(3(2+1))=2/3$, proving equality.
 \end{proof}
 
-\subsection{No constant below $2$}
+\subsection{No constant below \texorpdfstring{$2$}{2}}
 
 Theorem~\ref{thm:sup} already rules out one shape of answer.  Any bound of
 the form $\|\Lmin(v)-\Lmax(v)\|_1\le c\cdot v(N)$ with a constant $c<2$,
@@ -2061,9 +2101,15 @@ and~\ref{thm:s5}, both pipelines, the coverage audit, and the full control
 suite; for Theorem~\ref{thm:s6}, the fifteen source-regenerated QF\_LRA
 formulas, Z3/cvc5 records, trust-disabled CPC proofs, and Ethos checks under
 \texttt{s6/strict\_exchange\_*}, plus the independently formulated
-bound-two reconstruction under \texttt{s6/independent\_bound\_two/}).
+bound-two reconstruction under \texttt{s6/independent\_bound\_two/} and the
+standard-library direct SMT-LIB reconstruction under
+\texttt{s6/third\_bound\_two/}).
 The literal 72-assertion human-to-machine map is audited under
-\texttt{s6/strict\_exchange\_formula\_interface.json}.  The orbit anatomy
+\texttt{s6/strict\_exchange\_formula\_interface.json}; a separately written
+semantic reconstruction is frozen as
+\texttt{s6/strict\_exchange\_semantic\_interface.json}.  These are
+transcription controls and do not replace external review of the human
+implication.  The orbit anatomy
 under \texttt{s6/strict\_exchange\_large\_case\_templates.json} is
 explanatory; the later 19-orbit formulas under
 \texttt{s6/orbit\_core\_certificates/} are separately proof-checked reduced
@@ -2091,6 +2137,8 @@ cycles on these degenerate programs and was not used for any reported number.
 
 {\footnotesize
 \begin{thebibliography}{99}
+\setlength{\itemsep}{0pt}
+\setlength{\parsep}{0pt}
 
 \bibitem[Arin and I\~narra(2001)]{ArinInarra2001}
 Arin J, I\~narra E (2001) Egalitarian solutions in the core.
