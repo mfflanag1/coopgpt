@@ -46,7 +46,12 @@ deficit/root price `P=Q/delta` proves
 `O/T>=n_0/(P+n_0-1)` whenever its deficits lie on one lower loss stratum and
 one mixed row pays the total gain.  Every extreme cut in the current hostile
 suite has affordable price; multistage stratum/sign alignment is now the
-precise unresolved facet interface.
+precise unresolved facet interface.  The price is attached to the **marked
+packing decomposition**, not to the completed exact-cone facet normal: the
+rooted-pair gauge used for facet enumeration preserves the latter but can
+destroy affordability.  Thus the missing selection object is a marked rooted
+facet (normalized facet plus Lmin-tight pair labels), rather than an
+unlabelled facet ray.
 The compact hostile-review packet is
 `MIXED_BLOCK_STAR_FACET_PRICE_THEOREM.md`.
 
@@ -3175,6 +3180,58 @@ vertices can otherwise encode the same exact-cone row.  This is a
 dimension-free reduction of the facet-enumeration problem, not merely a
 control-specific simplification.
 
+It is essential that this quotient is **not** used for the hybrid price.
+Writing `Q=sum_i q_i` and `K=floor(n^2/4)-n+1`, a gauge move of mass `t`
+sends
+
+```text
+delta'=delta-t,       Q'=Q+t,
+K delta'-Q'=K delta-Q-(K+1)t.                       (RPGP)
+```
+
+Thus `(RPG)` preserves the completed exact-cone row and its facet status but
+not `P=Q/delta`, nor even the sign of the target margin `K delta-Q`.  The
+price is an invariant of a **marked lift**---the completed row together with
+the packing/deficit origin of each rooted-pair coefficient---not of the facet
+normal alone.  Any all-dimensional selection theorem must retain this mark.
+
+The required mark can nevertheless be optimized without remembering a dual
+solver's history.  Fix a rooted completed row active at `x`, write `a_S>0`
+for its positive coefficients, and assume every nonpair `S` is `x`-tight.
+For the rooted pair `{r,i}`, split
+
+```text
+a_{r,i}=t_i+q_i,       0<=t_i<=a_{r,i},              (RPM1)
+```
+
+where `t_i` is packing mass and `q_i` is deficit mass.  Admissibility requires
+`t_i=0` unless `{r,i}` is `x`-tight.  Put
+
+```text
+delta(t)=sum_(|S|>=3) a_S+sum_i t_i-1,
+Q(t)=sum_i(a_{r,i}-t_i).                             (RPM2)
+```
+
+> **Lemma (optimal tight-pair marking).**  Among all admissible markings of
+> a fixed rooted row, `K delta(t)-Q(t)` is maximized by taking
+> `t_i=a_{r,i}` on every `x`-tight rooted pair and `t_i=0` on every non-tight
+> rooted pair.  Hence the existence of an affordable marking is determined
+> exactly by the facet normal together with its `x`-tight pair labels.
+
+Indeed, relative to `t=0`, equations `(RPM2)` give
+
+```text
+K delta(t)-Q(t)
+ =K delta(0)-Q(0)+(K+1)sum_i t_i.                    (RPM3)
+```
+
+Every coefficient of `t_i` is positive, so each admissible coordinate is set
+to its upper endpoint.  This proves the lemma.  Notice the distinction: an
+unlabelled facet ray is insufficient, but a facet active at a specified
+Lmin point has a canonical best marking.  The all-dimensional problem can
+therefore be posed as finite labelled-facet selection, not as recovery of a
+particular Farkas-dual vertex.
+
 For the coefficient-two strict common certificate, the normalized packing is
 
 ```text
@@ -4713,15 +4770,22 @@ This is finite structural evidence, not a six-player domain classification:
 the archive is not exhaustive, and one extracted optimal dual does not prove
 that every admissible branch selects one of the five supports.  It does
 sharpen the missing theorem from an unnamed rooted packet to a
-**facet-selection conjecture**: a positive-floor residual must expose a
-target-priced indecomposable rooted pair lift, with a common reverse row only
-when its Lmin-only price is insufficient.
+**marked-facet selection conjecture**: a positive-floor residual must expose
+an indecomposable rooted pair lift together with Lmin-tight labels whose
+canonical best marking is target-priced, with a common reverse row only when
+its Lmin-only marked price is insufficient.  The facet normal by itself does
+not retain this price.
 
 ```bash
 PYTHONPATH=verifiers/divergence:src python3 \
   verifiers/divergence/audit_n6_positive_residual_facet_atlas.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output verifiers/divergence/n6_positive_residual_facet_atlas.json
+
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/audit_affordable_rooted_packing.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/affordable_rooted_packing.json
 
 /tmp/coop-paper5-review/bin/python \
   verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
@@ -5100,9 +5164,11 @@ C_x^r={S in C_x: r in S},                            (RRC4)
 
 together with the restored rooted pair columns.  The open hybrid theorem is
 therefore sharper: after direct/interpolation/null branches fail, prove that
-some ceiling root exposes a target-priced rectangular facet using only its
-root-containing Lmin-tight submenu, with common Lmax rows supplying any
-needed reverse repair.  No such selection theorem is inferred here.
+some ceiling root exposes a rectangular facet using only its root-containing
+Lmin-tight submenu **and a marked pre-quotient packing of affordable price**,
+with common Lmax rows supplying any needed reverse repair.  Quotienting is
+valid for classifying the facet ray but not for testing that price.  No such
+selection theorem is inferred here.
 
 #### Saturated rooted-star matrix classification
 

@@ -2402,7 +2402,8 @@ Hence
 \]
 which proves the universal target whenever
 $P\le\lfloor n^2/4\rfloor-n+1$.  The ratio $Q/\delta$ is therefore an
-effective facet price.  For the block-star lift it is $p(k-1)$.  Every one
+effective \emph{marked} facet price.  For the block-star lift it is
+$p(k-1)$.  Every one
 of the nine extreme mixed-projection cuts in the hostile control suite has
 price at most its dimensional threshold.  Eight put every deficit on a
 nongaining player, but only five put every deficit on the first Lmin floor;
@@ -2557,6 +2558,32 @@ $\delta+\sum_jq_j$ are invariant.  Hence all rooted-pair columns may be
 deleted before packing-vertex enumeration and restored only as deficit
 columns.  This dimension-free gauge quotient removes duplicate encodings of
 the same exact-cone row.
+
+This quotient does not preserve the marked price.  With
+$K=\lfloor n^2/4\rfloor-n+1$, the same move sends
+\[
+ (\delta,Q,K\delta-Q)
+ \longmapsto(\delta-t,Q+t,K\delta-Q-(K+1)t).          \tag{RPGP}
+\]
+Thus the unlabelled facet normal does not determine affordability.  There is
+nevertheless a canonical best admissible marking once the Lmin-tight pairs
+are retained.  For a rooted completed row active at $x$, let $a_S>0$ be its
+positive coefficients and assume every nonpair $S$ is $x$-tight.  Split a
+rooted-pair coefficient as $a_{\{r,i\}}=t_i+q_i$, where $t_i$ is packing
+mass, $q_i$ is deficit mass, and require $t_i=0$ unless $\{r,i\}$ is
+$x$-tight.  Then
+\[
+ \delta(t)=\sum_{|S|\ge3}a_S+\sum_i t_i-1,
+ \qquad Q(t)=\sum_i(a_{\{r,i\}}-t_i),
+\]
+and consequently
+\[
+ K\delta(t)-Q(t)=K\delta(0)-Q(0)+(K+1)\sum_i t_i.    \tag{RPM}
+\]
+Every admissible $t_i$ therefore takes its upper endpoint in the optimal
+marking.  Affordability is determined exactly by the normalized facet normal
+together with its Lmin-tight pair labels; no particular dual-solver history
+is needed.
 
 For the coefficient-two certificate below, the normalized packing has
 $u_{24}=u_{44}=u_{79}=1/2$ at root $3$.  Deleting the rooted pair $24$ leaves
@@ -3116,10 +3143,14 @@ representatives.
 
 This is a finite facet atlas, not a six-player domain classification: the
 archive is not exhaustive and the extraction fixes one optimal dual per row.
-It does sharpen the missing statement to a \emph{facet-selection conjecture}:
-every positive-floor residual should expose a target-priced indecomposable
-rooted pair lift, with a common reverse comparison needed only when the
-Lmin-only price is insufficient.
+It does sharpen the missing statement to a \emph{marked-facet selection
+conjecture}: every positive-floor residual should expose an indecomposable
+rooted pair lift whose Lmin-tight labels give a target-priced canonical
+marking, with a common reverse comparison needed only when the Lmin-only
+marked price is insufficient.  The finite gauge audit makes the distinction
+necessary: all 13 extracted Lmin-only packings are affordable, whereas the
+canonical rooted-pair deletion leaves only six affordable; restoring every
+eligible Lmin-tight pair recovers all 13.
 
 The rooted status of the sharp rows does have a dimension-free explanation.
 If every Lmax coordinate is positive, then $\ell=z(P)/p>0$ for every
@@ -3364,8 +3395,10 @@ root, its pair lift is decomposable and cannot define a full exact-cone
 facet.  Irreducible facet selection may therefore be restricted in advance
 to root-containing Lmin-tight coalitions, together with the restored rooted
 pair columns.  The remaining hybrid theorem must show that some ceiling root
-exposes a sufficiently priced member of this smaller menu, or that an earlier
-direct/interpolation branch closes the target.
+exposes a member of this smaller menu whose canonical Lmin-labelled marking
+is sufficiently priced, or that an earlier direct/interpolation branch
+closes the target.  The gauge quotient classifies facet rays but cannot test
+this marked price.
 
 There is a closed inverse formula for the saturated rooted-star subclass
 containing (MCF) and the sharp-family facets.  Remove a root $r$ and
@@ -3607,7 +3640,10 @@ replay audits the exact mixed-witness projection and rooted-pair facet filter,
 and an exact-LRA Z3 formulation independently checks every reported
 decomposition count.  The complete-graph rooted-pair driver audits twelve
 finite parameter controls, and a separate exact-LRA encoding checks the first
-seven-player member; the graph case analysis is the proof.  None is a proof
+seven-player member; the graph case analysis is the proof.  The marked-price
+gauge audit exactly replays the 13 staged six-player residual packings and
+their canonical tight-pair markings; equation (RPM), not that finite audit,
+is the marking lemma's proof.  None is a proof
 dependency for the open all-dimension target.  Other programs
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full

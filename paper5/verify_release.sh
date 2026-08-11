@@ -85,6 +85,12 @@ run_python coopgames/verifiers/divergence/audit_n6_positive_residual_facet_atlas
   --output "$scratch_dir/n6-positive-residual-facet-atlas.json"
 cmp coopgames/verifiers/divergence/n6_positive_residual_facet_atlas.json \
   "$scratch_dir/n6-positive-residual-facet-atlas.json"
+run_python coopgames/verifiers/divergence/audit_affordable_rooted_packing.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/affordable-rooted-packing.json"
+cmp coopgames/verifiers/divergence/affordable_rooted_packing.json \
+  "$scratch_dir/affordable-rooted-packing.json"
 run_python coopgames/verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
   --output "$scratch_dir/n6-positive-residual-facets-z3.json"
 cmp coopgames/verifiers/divergence/n6_positive_residual_facets_z3.json \
