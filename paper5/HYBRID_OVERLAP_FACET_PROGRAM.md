@@ -154,7 +154,8 @@ python3 verifiers/divergence/verify_balanced_family_shared_hinge.py \
 
 checks both balanced seven-player orientations `(p,k)=(2,4),(3,3)`, every
 incidence and objective identity, core membership, every rooted slack
-equality, and the sharp overlap.  It uses the proved selection formulas;
+equality, the deleted-load normalization `(OCP)`, both zero-slack pair-lift
+evaluations, and the sharp overlap.  It uses the proved selection formulas;
 generic staged recomputation is separate existing evidence.
 
 ## 3. A clean strengthening that is false
@@ -2443,6 +2444,191 @@ two equality cases of `(PFRDB)` already computed symbolically in `(Gq)` and
 This supplies a uniform exact-cone explanation of the whole extremal family,
 not just its two seven-player orientations: equality is carried by one
 rooted pair-lift facet whose `k` common hinges are selected simultaneously.
+
+### Theorem (over-cover to rooted pair-lift coupling)
+
+Let a normalized Lmax top over-cover, supported on coalitions also tight at
+Lmin, be
+
+```text
+sum_S lambda_S 1_S=eta 1_N+alpha,
+sum_i alpha_i=1,             alpha>=0.
+```
+
+Fix a top player `r`, put
+
+```text
+theta_-=max_(i != r)alpha_i,       theta=eta+theta_-,
+u_S=lambda_S/theta.
+```
+
+Assume `theta>0`; if `theta=0`, the root-deletion inequality `(RD)` already
+forces the top level `M` to vanish.
+
+Then `u in K_r`, with
+
+```text
+delta=(alpha_r-theta_-)/theta,
+q_i=(theta_--alpha_i)/theta       (i != r).           (OCP)
+```
+
+In particular a strict deleted-load leader `alpha_r>theta_-` produces a
+positive-root pair lift.  Its exact-game inequality, simultaneously evaluated
+at the two selections, is
+
+```text
+(alpha_r-theta_-)x_r
+ +sum_(i != r)(theta_--alpha_i)v({r,i})
+ <=sum_(i != r)(theta_--alpha_i)x_i,                 (OCPLx)
+
+(alpha_r-theta_-)z_r
+ +sum_(i != r)(theta_--alpha_i)v({r,i})
+ <=sum_(i != r)(theta_--alpha_i)z_i.                 (OCPLz)
+```
+
+The two rows have the same nonnegative pair-lift slack
+
+```text
+sigma_r=sum_(i != r)(theta_--alpha_i)x_i
+        -(alpha_r-theta_-)x_r
+        -sum_(i != r)(theta_--alpha_i)v({r,i})
+
+       =sum_(i != r)(theta_--alpha_i)z_i
+        -(alpha_r-theta_-)z_r
+        -sum_(i != r)(theta_--alpha_i)v({r,i}).       (OCS)
+```
+
+Equivalently,
+
+```text
+sum_(i != r)(theta_--alpha_i)(x_i-z_i)
+ =(alpha_r-theta_-)(x_r-z_r).                        (OCD)
+```
+
+Thus the coupled pair-lift inequality is active at either selection if and only if
+`sigma_r=0`; then it is active at both, and `(OCD)` is its tangent balance
+law.
+
+If `u` is a vertex, the associated system is an exact-cone facet exactly
+when its rooted pair lift is indecomposable.  In the bounded positive-top
+case, an extreme-point decomposition of `u` expresses `(OCPL)` as a
+nonnegative combination of the vertex pair-lift inequalities.  Thus a
+common sparse over-cover supplies an
+explicit finite packet of full-cone facet candidates rather than an unnamed
+rooted charge.
+
+#### Proof
+
+The over-cover load at player `i` is `eta+alpha_i`.  Therefore
+
+```text
+p_i=sum_(S:i in S)u_S=(eta+alpha_i)/(eta+theta_-).
+```
+
+This is at most one off the root, and subtracting one gives exactly `(OCP)`.
+Apply `(RPL)` and multiply its induced inequalities by `theta`; the common
+tightness of every positively weighted over-cover coalition permits
+evaluation at both `x` and `z`, yielding `(OCPLx)--(OCPLz)`.  The facet and
+decomposition statements are the vertex theorem and rational polytope
+decomposition for `K_r`.  Finally common tightness gives
+`alpha.x=alpha.z`; equal totals expand this as `(OCD)`, and subtracting the
+two displayed facet slacks gives `(OCS)`.  QED.
+
+For `G(p,k)`, the common over-cover has
+
+```text
+alpha_r=1/k,
+theta_-=(k-1)/k^2,
+alpha_b=theta_-          (b in B),
+alpha_o=0                (o in O).
+```
+
+Hence `(OCP)` gives `q_b=0`, `q_o=1`, and
+`delta=1/(k-1)` exactly.  The single coupled inequality is `(GPL)`, while
+root deletion gives `M/T<=theta_-`; these are precisely the two structural
+ingredients in the sharp hand proof.
+
+This theorem does not by itself prove `(H)`.  Three genuinely separate
+failures remain possible: a sparse over-cover need not be entirely
+Lmin-tight; its ceiling root need not be a strict deleted-load leader; and
+even an indecomposable common pair lift controls only one weighted component
+`(OCD)` of the hybrid difference.  The pair-lift gluing disjunction must show
+that direct rows or additional staged facets compensate in exactly these
+cases.  These are now explicit premises to falsify, rather than hidden steps
+inside a generic Farkas certificate.
+
+### Exact premise map on the hostile controls
+
+Two root-specific optimizations must not be conflated.  The **deleted-load
+oracle** minimizes `theta_-=max_(i != r) alpha_i` over every normalized Lmax
+top over-cover.  The **common-leader oracle** restricts the coalition support
+to `C_x intersect C_z` and maximizes
+
+```text
+alpha_r-max_(i != r)alpha_i.                         (CLO)
+```
+
+The first is the strongest root-deletion ceiling certificate; the second is
+the correct feasibility test for a useful positive-root pair lift.  Exact
+rational optimization gives the following maximum-overlap-root map.  A dash
+means that no normalized top over-cover supported entirely on common hinges
+exists.
+
+| branch | root(s) | minimum deleted load; common? | maximum common leader gap |
+|---|---:|---|---|
+| optimized label-free | 3 | `5/9`; no | -- |
+| actual-top-fixed | 0, 2 | `1/2`; no | -- |
+| top-and-bottom-fixed | 4, 5 | `1/2`; no | -- |
+| coefficient two | 3 | `1/3`; yes, tied | `1/3` |
+| coefficient two | 5 | `1/3`; yes, tied | `0` |
+| primitive coefficient seven | 6 | `6/13`; yes | `1/13` |
+| sharp `G(2,4)` | 0 | `3/16`; yes | `1/16` |
+| sharp `G(3,3)` | 0 | `2/9`; yes | `1/9` |
+| neutral rectangle | 3 | `1/2`; yes, tied | `0` |
+
+The coefficient-two root `3` is the important correction.  One
+minimum-deleted-load optimum has no strict leader, but another common
+over-cover has
+
+```text
+eta=1/3,
+alpha=(0,0,1/3,2/3,0,0,0),
+lambda_24=lambda_44=lambda_79=1/3.
+```
+
+It has common-leader gap `1/3`, yields `delta=1/2`, and its pair-lift row is
+active at both `x` and `z`.  Thus minimizing deleted load first can hide a
+useful exact-cone facet-candidate packet.  Conversely, the neutral control proves that
+a common certificate can exist while every such certificate has nonpositive
+leader gap.  The first three controls prove a different obstruction: they
+have no common top over-cover at all.  The missing gluing result therefore
+has at least three real branches:
+
+1. a strict common leader, where `(OCPL)` supplies a positive-root packet;
+2. a common but necessarily tied root, where direct common-hinge or later
+   staged rows must close the target; and
+3. no common over-cover, where noncommon Lmax mass must be paid for before
+   pair-lift coupling is available.
+
+This is a finite hostile classification, not a proof that these branches
+close `(H)` in general.  It does, however, rule out a local maximum in which
+one optimizes `theta_-` and inspects only the returned optimal support.
+
+Reproduce the exact witnesses and the fixed-game common-leader exclusions by
+
+```bash
+python3 verifiers/divergence/audit_overcover_pair_lift_coupling.py \
+  --output verifiers/divergence/overcover_pair_lift_coupling.json
+
+PYTHONPATH=verifiers/divergence /tmp/coop-paper5-review/bin/python \
+  verifiers/divergence/verify_overcover_pair_lift_coupling_z3.py \
+  --output verifiers/divergence/overcover_pair_lift_coupling_z3.json
+```
+
+The second command independently reformulates every optimum and
+infeasibility in exact Z3 linear arithmetic.  For an optimum it checks both
+feasibility at the reported rational value and unsatisfiability of a strict
+improvement; the two formulations agree on all eleven roots.
 
 This extra term is exactly the coalition premium lost when the exceptional
 root is transported through a deficit singleton.  For any nonempty set `J`

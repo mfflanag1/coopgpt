@@ -595,7 +595,12 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the dimension-free sharp-family classification: the simultaneous
   `k`-hinge pair lift is indecomposable for every `p>=1,k>=2`, is active at
   both selections of `G(p,k)`, and supplies a uniform exact-cone facet
-  explanation of equality.
+  explanation of equality;
+- the over-cover/pair-lift coupling theorem: a common sparse Lmax over-cover
+  with deleted-root load ceiling `theta_-` normalizes directly to a rooted
+  packing with `delta=(alpha_r-theta_-)/(eta+theta_-)` and
+  `q_i=(theta_--alpha_i)/(eta+theta_-)`, yielding explicit two-selection
+  exact-cone facet charge.
 
 ### Exact rational evidence
 
@@ -613,7 +618,15 @@ ray; it does not make every relative proof a full exact-cone facet.
 - exact-LP and independent Z3 agreement that six of the eight rooted pair
   lifts are indecomposable exact-cone facets, including both sharp
   seven-player orientations; the other two have `3` and `20`
-  decompositions.
+  decompositions;
+- the exact root-specific over-cover audit separates deleted-load
+  minimization from common-leader maximization: the coefficient-two root
+  `3` has a strict common leader of gap `1/3` despite a tied
+  minimum-deleted-load solution; the primitive and both sharp cases also
+  have strict common leaders, the neutral control is necessarily tied, and
+  three hostile branches admit no normalized common top over-cover.  An
+  independently formulated Z3 exact-LRA replay agrees on all eleven optima
+  or infeasibilities.
 
 ### Refuted
 
@@ -632,7 +645,9 @@ ray; it does not make every relative proof a full exact-cone facet.
 - a dimension-free selection/gluing theorem guaranteeing that sparse Lmax
   common hinges expose enough rooted pair-lift facet charge to prove the
   hybrid target; the facet class and its quantitative currency
-  `v({r,i})` are now explicit.
+  `v({r,i})` are now explicit.  The theorem must distinguish strict-common,
+  tied-common, and noncommon-support branches; optimizing deleted load alone
+  cannot do so.
 
 The next live bridge is a **spectral-or-balanced disjunction**.  Positive
 hinge surplus already converts to a rigorous sharpened spectral lower bound;

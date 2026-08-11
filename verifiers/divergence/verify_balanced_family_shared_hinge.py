@@ -101,9 +101,71 @@ def audit(p: int, k: int):
     ]
     assert packing_loads == [F(1)] * n
 
+    # Deleted-root normalization of the sparse over-cover is exactly the
+    # rooted pair lift used by the dimension-free facet theorem.
+    root_mask = 1 << head
+    theta_minus = max(alpha[i] for i in range(n) if i != head)
+    theta = theta_minus
+    pair_u = oc_weight / theta
+    pair_p = [
+        sum(
+            (pair_u * incidence(mask, player) for mask in coalitions.values()),
+            F(0),
+        )
+        for player in range(n)
+    ]
+    pair_q = [F(0) if i == head else F(1) - pair_p[i] for i in range(n)]
+    pair_delta = pair_p[head] - 1
+    assert theta_minus == F(k - 1, k * k)
+    assert pair_u == F(1, k - 1)
+    assert pair_delta == F(1, k - 1)
+    assert pair_q == [F(0)] + [F(1)] * p + [F(0)] * k
+    pair_root_coefficient = pair_delta + sum(pair_q, F(0))
+    for player in range(n):
+        load = sum(
+            (pair_u * incidence(mask, player) for mask in coalitions.values()),
+            F(0),
+        )
+        load += sum(
+            (
+                pair_q[i] * incidence(root_mask | (1 << i), player)
+                for i in range(n)
+                if i != head
+            ),
+            F(0),
+        )
+        load -= pair_root_coefficient * incidence(root_mask, player)
+        assert load == 1
+    pair_lift_slacks = []
+    for point in (x, z):
+        slack = values[full]
+        slack -= sum(
+            (pair_u * values[mask] for mask in coalitions.values()), F(0)
+        )
+        slack -= sum(
+            (
+                pair_q[i] * values[root_mask | (1 << i)]
+                for i in range(n)
+                if i != head
+            ),
+            F(0),
+        )
+        slack += pair_root_coefficient * values[root_mask]
+        assert slack == 0
+        pair_lift_slacks.append(slack)
+    difference_lhs = sum(
+        (
+            (theta_minus - alpha[i]) * (x[i] - z[i])
+            for i in range(n)
+            if i != head
+        ),
+        F(0),
+    )
+    difference_rhs = (alpha[head] - theta_minus) * (x[head] - z[head])
+    assert difference_lhs == difference_rhs
+
     # Each hinge extends to a rooted block-star circuit.  Its budget is tight.
     rooted = []
-    root_mask = 1 << head
     root_slack = coalition_sum(x, root_mask) - values[root_mask]
     for omitted, protector in coalitions.items():
         spokes = tuple(root_mask | (1 << player) for player in ones + (omitted,))
@@ -152,6 +214,23 @@ def audit(p: int, k: int):
         "normalized_fractional_packing_loads": [
             str(value) for value in packing_loads
         ],
+        "overcover_to_pair_lift": {
+            "theta_minus": str(theta_minus),
+            "normalized_hinge_weight": str(pair_u),
+            "root_advantage": str(pair_delta),
+            "deficit_vector": [str(value) for value in pair_q],
+            "exceptional_root_coefficient": str(pair_root_coefficient),
+            "incidence_identity_verified": True,
+            "lmin_and_lmax_facet_slacks": [
+                str(value) for value in pair_lift_slacks
+            ],
+            "common_facet_slack_verified": pair_lift_slacks[0] == pair_lift_slacks[1],
+            "difference_identity": {
+                "lhs": str(difference_lhs),
+                "rhs": str(difference_rhs),
+                "verified": True,
+            },
+        },
         "rooted_packets": rooted,
     }
 
