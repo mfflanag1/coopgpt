@@ -562,6 +562,11 @@ ray; it does not make every relative proof a full exact-cone facet.
 
 ### Human theorems
 
+- the zero-floor null-player descent: convexity forces one coordinate to
+  vanish on the whole core, exactness makes that player null, restriction
+  preserves both selections and overlap, and the strictly decreasing target
+  constants reduce the branch inductively.  In particular every unresolved
+  seven-player game has positive Lmin floor;
 - clipped fractional-role decomposition `(U1)--(U3)`;
 - disjointness of the two ordered carrier packets;
 - `(CEB) => (H)`;

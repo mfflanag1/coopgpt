@@ -44,6 +44,92 @@ is now refuted by an exact two-generator seven-player game.  The role
 decomposition and exact dual formula for `theta_+` remain proved; their two
 reciprocal masses are not a universal overlap floor.
 
+### Theorem (zero-floor null-player descent)
+
+Let `v` be any singleton-normalized exact game and put `x=Lmin(v)`.  If
+
+```text
+min_i x_i=0,                                            (NPD0)
+```
+
+then some player `r` is null:
+
+```text
+v(S union {r})=v(S)                  (S subset N\{r}). (NPD1)
+```
+
+Writing `v'` for the restriction to `N\{r}`, one has
+
+```text
+Core(v)=Core(v') times {0_r},
+Lmin(v)=(Lmin(v'),0_r),
+Lmax(v)=(Lmax(v'),0_r),
+O(v)=O(v'),                         v(N)=v'(N).        (NPD2)
+```
+
+#### Proof
+
+Singleton normalization makes the core nonnegative, and the first Lmin stage
+is `max_(y in Core(v)) min_i y_i`.  If its value is zero, no core allocation
+is strictly positive in every coordinate.  Were each player positive at some
+core allocation `y^i`, the average of the finitely many `y^i` would be a core
+allocation positive in every coordinate, a contradiction.  Hence some fixed
+`r` is zero at every core allocation.  Exactness now gives
+
+```text
+v(S union {r})=min_(y in Core(v)) y(S union {r})
+              =min_(y in Core(v)) y(S)=v(S),
+```
+
+proving nullity.
+
+Because `v(N\{r})=v(N)`, efficiency and nonnegativity force every core point
+to have coordinate `r` equal to zero.  Restriction therefore maps
+`Core(v)` into `Core(v')`.  Conversely, extend any point of `Core(v')` by a
+zero at `r`; nullity checks every coalition inequality containing `r`, so the
+extension lies in `Core(v)`.  This proves the core product identity.  A
+coordinate fixed at zero in the entire feasible set can simply be deleted
+from both lexicographic comparisons, proving selection and overlap
+preservation.  QED.
+
+The target constants
+
+```text
+c_n=n/floor(n^2/4)=4n/[n^2-(n mod 2)]
+```
+
+are strictly decreasing.  For `n=2k`,
+
+```text
+c_(n-1)-c_n=(2k-1)/[k(k-1)]-2/k>0,
+```
+
+and for `n=2k+1`,
+
+```text
+c_(n-1)-c_n=2/k-(2k+1)/[k(k+1)]>0.                   (NPDC)
+```
+
+Therefore the zero-floor branch at dimension `n` follows from the theorem at
+dimension `n-1`.  The proved five-player overlap floor `3/4` exceeds
+`c_6=2/3`, so it seeds the six-player descent; the proved six-player theorem
+then closes every zero-floor seven-player game.  More generally, any
+minimal-dimensional counterexample to `(H)` has strictly positive Lmin floor
+and no null player.  Thus the all-dimension program may restrict its hard
+packet/gluing theorem to `mu>0` without loss under induction.
+
+This elementary descent was used in earlier finite work but had not been
+integrated into the all-dimension hybrid program.  It is not presented as a
+novel null-player result.
+
+Reproduce the target arithmetic and the existing exact null-padded control
+with
+
+```bash
+python3 verifiers/divergence/verify_null_player_hybrid_descent.py \
+  --output verifiers/divergence/null_player_hybrid_descent.json
+```
+
 ## 2. Shared-hinge theorem for the sharp family
 
 For the master family `G(p,k)`, write
