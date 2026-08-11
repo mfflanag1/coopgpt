@@ -2255,6 +2255,68 @@ deficit, charging intervals incident with the removed ceiling block to the
 top-selection currency.  This geometric occupancy statement replaces the
 false raw-coefficient congestion bound.
 
+For fixed payoff strata this packing problem has an exact combinatorial
+min--max theorem.  Split the threshold line into the merged coordinate
+intervals $J_\ell$, let $c_\ell=\min\{|A_t|,|D_t|\}$ there, and let
+$A_{\ell e}$ indicate whether carrier interval $e$ contains $J_\ell$.
+Then
+
+\[
+ \max\{\textstyle\sum_e |I_e|\rho_e:A\rho\le c,\ \rho\ge0\}
+ =\min\{\textstyle\sum_\ell c_\ell p_\ell:
+          \sum_{\ell:J_\ell\subset I_e}p_\ell\ge |I_e|,\ p\ge0\}.
+\]
+
+The columns of $A$ have the consecutive-ones property, so $A$ is totally
+unimodular.  Consequently an integral-capacity instance has an integral
+optimal packing with support at most the number of threshold layers, and the
+primal and dual are exactly computable in polynomial time for rational data.
+The feasible cover $p_\ell=|J_\ell|$ recovers the label-currency upper bound.
+Writing $r_k=\sum_{\ell\le k}p_\ell-\beta_k$ turns every carrier-cover
+constraint for $(\beta_s,\beta_t]$ into $r_t\ge r_s$ and nonnegativity into
+$r_k-r_{k-1}\ge-|J_k|$.  Hence an extreme cover has a rooted spanning-tree
+certificate in the graph of tight path and carrier arcs.
+This is a fixed-stratum packing theorem and an exact interface to the rooted
+incidence packets; it is not by itself a facet theorem for the exact-game
+cone.  The unresolved structural step is to prove that the intervals and
+supplies obtained from the staged circuits force the packing optimum to pay
+the post-spectral deficit.
+
+There is a precise linear version of this missing step.  Normalize every
+chosen staged relation at its forced player column and bound each carrier
+weight by the corresponding auxiliary-player coefficient.  Simultaneously
+choosing the staged relations and the packing is then one rational feasibility
+problem.  In the two hostile controls where the spectral and top-selection
+terms do not already reach the target, this strengthened system has short
+exact witnesses.  Respectively,
+
+\[
+ \mathbf 1_{\{0,2,4\}}+\mathbf 1_{\{0,1,2,3,6\}}
+ +\mathbf 1_{\{4,6\}}
+ +2e_5+e_1+e_3=2\cdot\mathbf 1_N
+\]
+
+supplies $(1/2,8]$ at weight $1/5$, paying the deficit $3/2$, and
+
+\[
+ \mathbf 1_{\{1,3,4,5,6\}}+e_2+e_0=\mathbf 1_N
+\]
+
+supplies $(1/2,19/2]$ at weight $1/9$, paying the deficit $1$.
+These checks show that the staged-supply formulation survives the known
+controls; they do not prove its universal feasibility.
+
+The rooted-tree description also gives an exact fixed-dimension decision
+procedure.  Refine the exact-game cone into rational polyhedral cells fixing
+the active staged bases, payoff orders, ceiling block, spectral branch, and
+carrier endpoints.  On each cell the selections and interval lengths are
+rational linear in the game, whereas the interval and staged-incidence
+matrices are fixed.  Enumerating rooted cover trees (or bases of the supplied
+joint system) reduces the existence of a violating game to finitely many
+exact rational linear programs.  This procedure may be exponential or worse
+and its cellwise inequalities are only candidate full-cone facets: they must
+still glue across cells and lift to indecomposable semi-balanced systems.
+
 \paragraph{Not claimed.}
 Exactness theory, lower-envelope exactification, and the characterizations of
 the egalitarian selections are prior art
@@ -2314,6 +2376,9 @@ programs are bug audits, not proof dependencies.  Exact rational programs in the
 on branch \path{codex/hybrid-overlap-facets} archive the refuted
 effective-bipartition bridge, its exact seven-player counterexample, the
 dispersion primal/dual witnesses, and the threshold-label currency audit;
+the latter also replays the exact interval-packing/cover duals and rooted
+potential trees.  A separate exact feasibility replay archives the two
+displayed staged-supply witnesses;
 none is a proof dependency for the open all-dimension target.  Other programs
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full

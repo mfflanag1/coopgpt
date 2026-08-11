@@ -610,3 +610,23 @@ to pack staged carrier intervals, with no threshold over capacity, to cover
 the residual spectral deficit.  This formulation survives the former
 large-coefficient counterexamples because it controls geometric occupancy
 rather than raw circuit multipliers.
+
+For fixed payoff strata and fixed carrier supports this is now an exact
+algorithmic theorem.  The carrier-by-threshold matrix has consecutive-one
+columns and is totally unimodular.  The maximum weighted interval packing
+equals a minimum threshold cover, has an integral sparse optimum for integer
+capacities, and is exactly solvable in polynomial time for rational data.
+The dual cover is the sharp Hall-type obstruction for a specified staged
+packet.  What remains open is the game-theoretic input: prove that some
+carrier supports and supplies furnished by the complete staged circuits make
+this optimum pay the residual hybrid-overlap deficit.  The interval theorem
+alone is only a relative fixed-stratum result and does not identify facets of
+the full exact-game cone.
+
+The minimum-cover dual also has a rooted potential form.  After subtracting
+the physical threshold coordinate from cumulative cover prices, carrier
+constraints say that the potential cannot fall along carrier arcs.  Extreme
+covers are certified by tight rooted spanning trees made from carrier arcs
+and adjacent-threshold path arcs.  These threshold trees are the candidate
+interface to rooted semi-balanced systems; a lift and indecomposability test
+are still required before any exact-cone facet conclusion.

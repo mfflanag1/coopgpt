@@ -2594,6 +2594,226 @@ sum_e rho_e |I_e| <= C_label.                         (LC7)
 This is immediate by integrating `(LC6)` and interchanging the finite sum
 and integral.
 
+### Theorem (exact interval-packing min--max and integrality)
+
+Fix `x,z`, the residual player set `R`, and a finite family `E` of residual
+carrier intervals.  Let
+
+```text
+0=beta_0<beta_1<...<beta_L
+```
+
+be the distinct residual coordinates of `x,z` (with zero adjoined), put
+`J_l=(beta_(l-1),beta_l]`, `Delta_l=beta_l-beta_(l-1)`, and let
+
+```text
+A_(l,e)=1[J_l subset I_e],
+c_l=min(|A_t|,|D_t|) on J_l.
+```
+
+Then the largest label-currency amount certifiable by `E` is exactly
+
+```text
+nu(E,c)
+ = max  sum_e |I_e| rho_e
+       A rho<=c, rho>=0
+
+ = min  sum_l c_l p_l,                              (IPD)
+       sum_(l:J_l subset I_e) p_l>=|I_e|  (e in E),
+       p>=0.
+```
+
+Moreover:
+
+1. `A` is totally unimodular.  Since `c` is integral, the packing problem
+   has an integral optimal extreme point, and one may choose such an optimum
+   with at most `rank(A)<=L` positive interval weights.
+2. If all payoff coordinates are rational, both sides of `(IPD)` are
+   computable by an exact rational linear program in time polynomial in the
+   displayed input.  After clearing the common payoff denominator, the cover
+   problem also has an integral optimal extreme point.
+3. The layer-width vector `p_l=Delta_l` is always cover-feasible and has cost
+
+   ```text
+   sum_l c_l Delta_l=C_label.
+   ```
+
+   Hence `nu(E,c)<=C_label`, as required by `(LC7)`.  Equality holds exactly
+   when some feasible packing saturates every positive-width layer with
+   `c_l>0`.
+4. If interval supplies `0<=rho_e<=b_e` inherited from a chosen staged packet
+   are included, the augmented constraint matrix remains totally unimodular.
+   Integral `b,c` still give integral vertices; arbitrary rational supplies
+   still give an exact polynomial-time primal--dual certificate.
+
+#### Proof
+
+Every column of `A` consists of one consecutive block of ones.  For any
+subset of rows, order the selected rows by threshold and give them alternating
+signs.  The signed sum in each interval column is `0`, `1`, or `-1`.
+The Ghouila--Houri criterion therefore proves total unimodularity.  Appending
+unit rows for supplies preserves total unimodularity.
+
+Linear-programming duality gives `(IPD)`.  Total unimodularity and integral
+right-hand sides give integral primal vertices.  After multiplying all
+payoffs by a common denominator, every interval length is integral; total
+unimodularity of the transposed cover matrix gives the dual integrality
+claim.  An extreme packing with more than `rank(A)` positive variables would
+have a nonzero support-preserving kernel perturbation and would not be
+extreme.  Finally,
+
+```text
+|I_e|=sum_(l:J_l subset I_e)Delta_l,
+```
+
+so `p=Delta` is feasible.  Its cost is `(LC5)`.  Since every `Delta_l>0`,
+equality with that cost holds precisely when no capacity is left unused on a
+positive-capacity layer.  QED.
+
+### Corollary (rooted threshold-potential form)
+
+The cover in `(IPD)` is a network-potential problem.  Define
+
+```text
+P_k=sum_(l=1)^k p_l,       r_k=P_k-beta_k,       r_0=0.
+```
+
+If `I_e=(beta_s,beta_t]`, its cover constraint becomes
+
+```text
+r_t>=r_s.                                             (RP1)
+```
+
+Nonnegativity of the layer price becomes
+
+```text
+r_l-r_(l-1)>=-Delta_l.                                (RP2)
+```
+
+The cover objective is exactly
+
+```text
+C_label+sum_l c_l(r_l-r_(l-1)).                       (RP3)
+```
+
+Thus a failure to recover all label currency is witnessed by a rooted
+potential satisfying `(RP1)--(RP2)` with a negative capacity-weighted
+increment in `(RP3)`.  The zero potential is the canonical full-currency
+cover.
+
+A feasible cover is a vertex precisely when its tight-edge graph on the
+threshold nodes `{0,...,L}` is connected, where a tight `(RP2)` is the path
+edge `(l-1,l)` and a tight `(RP1)` is the carrier edge `(s,t)`.  Consequently
+every extreme cover has a rooted spanning-tree certificate.  Conversely,
+choose a spanning tree of path and carrier edges, impose its equalities,
+solve for `r`, and retain the solution exactly when all remaining inequalities
+hold; this enumerates all extreme covers (with possible duplicates from
+degeneracy).
+
+Indeed, after fixing `r_0=0`, the active constraint rows are reduced
+node--arc incidence vectors.  They have rank `L` exactly when their
+underlying graph is connected.  This proves the vertex criterion and gives a
+second, network-matrix proof of integrality.  It also identifies the precise
+rooted object produced by the interval theory: a threshold tree, not yet an
+indecomposable semi-balanced coalition system.
+
+### Exact fixed-stratum algorithm and facet boundary
+
+For fixed payoff strata and fixed staged carrier supports, `(IPD)` is an
+exact algorithm, not an existence slogan:
+
+1. construct the merged threshold layers and their integer capacities;
+2. obtain carrier intervals and any supplies from the exact staged incidence
+   rays;
+3. solve the rational packing and cover pair and retain both checkable
+   certificates;
+4. if the optimum pays the residual target, combine the packing with the
+   rooted staged identities and the sparse over-cover;
+5. lift the resulting incidence inequality and apply the published
+   indecomposable semi-balanced-system test before calling it a facet of the
+   exact-game cone.
+
+The interval matrix proves integrality and sparsity only for the relative
+threshold-packing problem.  Its threshold rows are not coalition-incidence
+rows, and a support-minimal interval cover need not lift to an indecomposable
+semi-balanced system.  Thus this is a fixed-stratum algorithmic theorem and a
+facet-generation interface, not yet a facet characterization of the full
+exact-game cone.  Enumerating all projected staged circuits and all basic
+packings is finite and exact but can be exponential; no polynomial full
+facet-enumeration claim is made.
+
+### Theorem (cellwise pullback and an exact fixed-`n` decision algorithm)
+
+Fix `n` and refine the singleton-normalized exact-game cone into rational
+polyhedral cells on which all of the following data are fixed:
+
+- active staged bases and tight-coalition hypergraphs for Lmin and Lmax;
+- payoff orders and equality strata;
+- the actual Lmax ceiling block and the minimizing spectral branch;
+- the signs of `x_i-z_i` and the strict carrier endpoints.
+
+On each such cell, `x`, `z`, every threshold endpoint `beta_l`, `B_H`, and
+`delta` are rational linear functions of the game coordinates, while the
+capacity vector, interval incidence matrix, and staged incidence cones are
+constant.  For every rooted spanning tree in the threshold-potential graph,
+solving its tight equalities makes `p` a rational linear function of those
+coordinates.  The conditions that this tree solution is cover-feasible and
+that
+
+```text
+sum_l c_l p_l>=delta
+```
+
+are therefore finitely many rational linear inequalities on the cell.
+Enumerating the rooted trees and checking these inequalities by exact LP
+decides the unsupplied interval-packing statement on that cell.  If staged
+coefficient supplies `(SS1)` are retained, enumerate bases of the combined
+staged-incidence/interval LP instead; the same parametric-LP argument gives a
+finite exact decision procedure.
+
+Consequently, for every fixed `n`, universal validity of `(SSP)` is decidable
+by a finite rational polyhedral computation, and every cellwise obstruction
+has an exact rooted-tree/basis certificate.  This is not advertised as an
+efficient algorithm: the number of selection cells, staged circuits, and
+trees can be exponential or worse.  Nor does a cellwise boundary inequality
+automatically define a facet of the full exact-game cone.  A candidate full
+facet must survive gluing across adjacent selection cells and its coalition
+lift must be an indecomposable semi-balanced system.
+
+#### Proof
+
+Each egalitarian selection is obtained by a finite sequence of rational
+linear programs.  Fixing their active bases makes their solutions rational
+linear in the right-hand-side game coordinates; refining by the finitely many
+order, sign, top-block, and spectral comparisons gives the asserted rational
+polyhedral cells.  On a fixed cell all interval and capacity combinatorics are
+constant.  The rooted-tree equalities are a nonsingular reduced incidence
+system, so their solution is rational linear in the threshold endpoints.
+All remaining feasibility and target tests are consequently linear.  There
+are finitely many bases and trees at fixed `n`, and exact rational LP decides
+each resulting implication on the cell.  The supplied version is the same
+standard parametric-basis argument applied to the combined linear system.
+QED.
+
+This theorem answers the algorithmic half of the one-packet question: the
+theory gives an exact fixed-`n` decision and certificate-enumeration method.
+It does **not** yet answer the facet half with a one-to-one correspondence.
+The missing mathematical content is precisely the gluing and
+indecomposability theorem for the rooted threshold-tree lifts.
+
+For a desired residual amount `delta`, the exact remaining condition is now
+equivalent to either side of
+
+```text
+nu(E,c)>=delta
+
+<=> every fractional threshold cover p has sum_l c_l p_l>=delta.  (IPC)
+```
+
+This is the sharp Hall-type gate for a specified carrier family.  A cover
+with smaller cost is a checkable obstruction to that packet family, even
+when the main overlap inequality itself remains true.
+
 This theorem puts the missing labelled information in the same coordinates
 as the staged packets.  The sets `X_t` and `Z_t` are complements/unions of
 their cumulative ordered strata, and common-hinge rows are the only retained
@@ -2620,6 +2840,73 @@ coefficients are permitted; what must be controlled is their simultaneous
 threshold occupancy.  The previous coefficient-congestion counterexamples
 do not refute this formulation because `(LC6)` measures geometric occupancy,
 not the raw sum of circuit multipliers.
+
+### Precise staged-supply conjecture
+
+The word "from" in that lemma can be made exact.  Normalize each selected
+sign-coherent staged relation by giving its forced player column coefficient
+one, as in `(SP)`.  If the auxiliary coefficient on a losing carrier `j` is
+`a_(i,j)`, permit the corresponding strict residual carrier interval to have
+supply
+
+```text
+0<=rho_(i,j)<=a_(i,j).                                (SS1)
+```
+
+Choose the Lmin and Lmax relations, their auxiliary coefficients, and the
+interval weights simultaneously.  All incidence identities, sign
+restrictions, `(SS1)`, and the layer capacities `(LC6)` are linear rational
+constraints.  Put
+
+```text
+delta=max(0, nT/floor(n^2/4)-B_H),
+```
+
+where `B_H=B_*+C_top` uses the actual Lmax ceiling block.  The exact remaining
+packet statement is
+
+```text
+there are normalized staged relations and rho satisfying
+sum_e rho_e |I_e|>=delta.                              (SSP)
+```
+
+`(SSP)` implies the hybrid-overlap target immediately by `(LC7)`.  It is
+strictly stronger than the target and is not yet proved.  Its value is that
+it is no longer ambiguous about carrier availability, normalization, or
+coefficient supply.  Projecting the joint rational feasibility system onto
+the payoff-stratum coordinates gives the proposed exact-cone interface; a
+Farkas obstruction combines a rooted staged-incidence functional with a
+threshold-cover potential.  Showing that no such obstruction exists (or
+classifying its support-minimal forms as indecomposable semi-balanced lifts)
+is now the structural task.
+
+The two hostile controls for which `delta>0` have exceptionally small exact
+witnesses.  In the actual-top-fixed control, the Lmin relation
+
+```text
+1_{0,2,4}+1_{0,1,2,3,6}+1_{4,6}+2e_5+e_1+e_3=2 1_N
+```
+
+pins gainer `3` and supplies the interval `(x_5,x_3]=(1/2,8]`.  Giving it
+weight `1/5` packs `(15/2)(1/5)=3/2`, exactly the deficit.  In the
+top-and-bottom-fixed control,
+
+```text
+1_{1,3,4,5,6}+e_2+e_0=1_N
+```
+
+supplies `(x_2,x_0]=(1/2,19/2]`; weight `1/9` packs `1`, again exactly the
+deficit.  Every coalition displayed is tight at the relevant Lmin point and
+the layer capacities are checked exactly.  The full simultaneous certificate
+replay is
+
+```bash
+python3 verifiers/divergence/verify_staged_interval_deficit_controls.py \
+  --output verifiers/divergence/staged_interval_deficit_controls.json
+```
+
+This proves only that the sharpened formulation survives the named hostile
+controls.  It is not finite evidence for universal `(SSP)`.
 
 The three hostile spectral failures separate the two currencies:
 
