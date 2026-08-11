@@ -572,14 +572,18 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the normalized coefficient-supply collapse and complete strict carrier
   support theorem;
 - the canonical rank-pairing theorem recovering all label currency from
-  clipped high--low rectangles.
+  clipped high--low rectangles;
+- the exact rooted-hinge witness-projection theorem and its `n-1` support
+  bound for two-colour fractional hinge packings.
 
 ### Exact rational evidence
 
 - the archived `n=6`, `n=5`, hostile `n=7/n=8`, and full-branch boundary
   checks in `effective_bipartition_audit.json`;
 - the exact seven-player refutation `(V7)--(R7)`, including two formulations
-  of the selection certificates and primal/dual dispersion witnesses.
+  of the selection certificates and primal/dual dispersion witnesses;
+- independent direct-witness and projected cutting-plane agreement on all
+  maximum-overlap roots of the seven hostile/sharp fixed branches.
 
 ### Refuted
 

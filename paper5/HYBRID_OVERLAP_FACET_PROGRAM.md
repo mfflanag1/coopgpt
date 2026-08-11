@@ -1816,8 +1816,8 @@ the witness zero gives their shared negative root.  The Lmin/Lmax stratum rows
 orient `a-b`, preventing the relabelings that invalidated `(SRE)`.
 
 This also states the exact interface with rooted deficit completion.  On each
-staged subpacket having the protector/deficit form assumed by `(RMC)`, its
-`w^r`-slacks are the corresponding coordinates of `a` or `b`.  The two
+selected protector/deficit subpacket, its `w^r`-slacks are the corresponding
+coordinates of `a` or `b`.  The two
 applications must retain their common root and the labelwise maximum in
 `(RTD)`.  What remains to be proved is that suitable rooted subpacket budgets
 can be coupled so their shared charge is at most the right side of `(RTB)`.
@@ -2140,6 +2140,154 @@ tight coalitions**.  All other coalition-slack information comes from the
 complete Lmin packet.  This is a smaller structural interface than `(OW)`:
 the ceiling over-cover selects at most `n` possible gluing coalitions, and
 the complete Lmin packet decides which of them actually transmit charge.
+
+### Theorem (exact rooted-hinge witness projection)
+
+The common singleton witness can be eliminated without losing its shared
+root geometry.  Fix a root `r`, let `C_x` be the selected complete Lmin
+support, and let `C_cap` be the common-hinge support.  Retain the direct rows
+
+```text
+x(S)<=z(S)                 (S in C_x),
+z(S)<=x(S)                 (S in C_cap).               (RHP0)
+```
+
+On `C_cap`, `(RHP0)` already gives `x(S)=z(S)`, so the `z`-to-witness rows
+are duplicates of the `x`-to-witness rows.  Therefore a nonnegative total-`T`
+witness `w` with `w_r=0` and
+
+```text
+x(S)<=w(S)                 (S in C_x)                  (RHP1)
+```
+
+exists if and only if, for every weight family `u in R_+^(C_x)`, one has
+
+```text
+sum_(S in C_x)u_S x(S)
+ <=T max_(i != r)
+   sum_(S in C_x:i in S)u_S.                          (RHP2)
+```
+
+After normalizing the maximum load to at most one, it suffices to impose
+`(RHP2)` at the extreme points of the rooted fractional packing polytope
+
+```text
+K_r={u>=0:
+     sum_(S in C_x:i in S)u_S<=1
+     for every i != r}.                                (RHP3)
+```
+
+Every extreme packing has at most `n-1` positive weights.  Thus eliminating
+the witness replaces it by a finite family of rational inequalities with a
+linear support bound.  If no selected coalition is contained in `{r}`, then
+`K_r` is bounded; otherwise its extreme rays supply the corresponding
+zero-right-hand-side inequalities.
+
+#### Proof
+
+Necessity follows by weighting `(RHP1)`.  If
+`p_i=sum_(S:i in S)u_S`, then
+
+```text
+sum_S u_S x(S)<=p.w
+ <=T max_(i != r)p_i,
+```
+
+because `w>=0`, `w(N)=T`, and `w_r=0`.
+
+For sufficiency, the set of requirement vectors dominated by some
+`(w(S))_(S in C_x)` with `w` in the rooted simplex is a closed convex
+down-set.  If the vector of `x`-requirements lies outside it, strict
+separation from a down-set has a nonnegative normal `u`.  The support
+function of the rooted simplex in that direction is exactly
+`T max_(i != r)p_i`, contradicting `(RHP2)`.
+
+The normalized inequalities are precisely the points of `(RHP3)`, so its
+vertices and rays suffice.  At a vertex, the columns indexed by positive
+weights must be linearly independent on the at most `n-1` nonroot capacity
+rows; otherwise a support-preserving perturbation contradicts extremality.
+This proves the support bound.  Rationality and finiteness follow from the
+rational packing matrix.  QED.
+
+This is the non-tautological packing object that the label-rectangle route
+was missing.  Its capacities live on **players excluding the root**, not on
+payoff thresholds.  The complete Lmin support determines the packing; the
+sparse Lmax over-cover determines the diagonal gluing rows `x(S)=z(S)` on
+`C_cap`.  On the sharp family, one extreme packing is the uniform sum of the
+`k` block-star hinges.  Formula `(RHP2)`, transferred across those gluing
+rows, gives both `(Gq)` and `(GM)` exactly, hence the sharp hybrid-overlap
+bound.
+
+### Corollary (root-deficit balance)
+
+For `u in K_r`, let `p_i=sum_(S:i in S)u_S`, put
+
+```text
+delta=p_r-1,                 q_i=1-p_i>=0  (i != r).
+```
+
+Then `(RHP2)` is exactly
+
+```text
+delta x_r<=sum_(i != r)q_i x_i.                       (RDBx)
+```
+
+If every coalition with `u_S>0` is a common hinge, then the gluing equalities
+give the mirror inequality
+
+```text
+delta z_r<=sum_(i != r)q_i z_i.                       (RDBz)
+```
+
+Thus any packing with `delta>0` converts the shared negative root into an
+explicit nonroot deficit budget.  Equality requires the witness mass to be
+supported only on players whose packing load is one (besides its forced zero
+at `r`) and every positively weighted coalition comparison to be tight.
+
+For `G(p,k)`, the normalized uniform block-star packing has
+
+```text
+delta=1/(k-1),
+q_i=0 on B,                  q_i=1 on O.
+```
+
+Consequently `(RDBx)--(RDBz)` are precisely
+`X<=p(k-1)q` and `M<=p(k-1)l`.  Combining each with efficiency gives `(Gq)`
+and `(GM)`.  This is the human structural explanation of why the exceptional
+head, the `k` common hinges, and the `p` outside players produce the sharp
+constant.
+
+The remaining all-dimension problem is now more specific: prove a
+spectral-or-rooted-packing disjunction whose packing branch supplies enough
+`delta` and a sufficiently concentrated deficit vector `q`, or show that
+direct common-hinge gluing already proves the target when no such
+root-advantaged packing exists.  The actual-top-fixed hostile control is of
+the latter type: its target follows before any witness-projection cut, so a
+theorem demanding `delta>0` in every nonspectral branch would be false.
+
+The theorem also sharpens the relative facet interface.  Each nonredundant
+extreme packing gives a rooted two-selection inequality with at most `n-1`
+coalition rows.  Exact rank tests decide whether it is a facet of the
+projected common-hinge polytope.  It is still not automatically a facet of
+the exact-game cone: after eliminating the labelled selection coordinates,
+its coalition coefficients must pass the Studeny--Kratochvil
+indecomposable semi-balanced test.
+
+An independently formulated exact cutting-plane replay separates over
+`K_r`, adds violated inequalities `(RHP2)`, and compares the resulting
+two-generator minimum with the direct three-generator witness LP.  They agree
+on every maximum-overlap root of the five hostile branches and both sharp
+orientations.  The sharp orientations require exactly one cut, supported on
+`4` and `3` block-star hinges respectively, and recover `7/12` exactly.
+Reproduce with
+
+```bash
+python3 verifiers/divergence/verify_rooted_hinge_projection.py \
+  --output verifiers/divergence/rooted_hinge_projection.json
+```
+
+These are exact controls of the projection and support bound, not evidence
+that a target-proving extreme packing exists for every game.
 
 The reduction is sufficient, but deleting every Lmax row is false even in
 the archive.  In `harvest6_602.json`, record `82`, the maximum-overlap-root
