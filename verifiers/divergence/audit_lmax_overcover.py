@@ -165,6 +165,7 @@ def top_certificate(v: tuple[F, ...], z: tuple[F, ...]) -> dict:
         for player in range(n)
     )
     support = tuple(tight[j] for j, weight in enumerate(lambdas) if weight > 0)
+    support_weights = tuple(weight for weight in lambdas if weight > 0)
 
     if theta <= 0 or eta < 0 or any(weight < 0 for weight in lambdas + alpha):
         raise AssertionError("certificate has an invalid sign")
@@ -193,6 +194,7 @@ def top_certificate(v: tuple[F, ...], z: tuple[F, ...]) -> dict:
         "eta": eta,
         "alpha": alpha,
         "support": support,
+        "weights": support_weights,
     }
 
 

@@ -603,7 +603,15 @@ ray; it does not make every relative proof a full exact-cone facet.
   exact-cone facet charge;
 - the rooted-pair gauge quotient: packing weight on `{r,i}` can be transferred
   to its deficit coefficient without changing the merged pair-lift system,
-  so rooted-pair columns should be deleted before vertex/facet enumeration.
+  so rooted-pair columns should be deleted before vertex/facet enumeration;
+- the common-support deficiency dual: the minimum over-cover hinge surplus
+  equals an explicit player-price maximum and vanishes exactly when a common
+  normalized top over-cover exists;
+- the noncommon surplus-defect theorem: the Lmax-side scaled pair-lift slack
+  is `kappa_r`, the Lmin-side slack is exactly `kappa_r-epsilon`, and common
+  tangent balance acquires the exact defect `-epsilon`;
+- the best-single-anchor perspective LP, which optimizes
+  `(M+epsilon-mu)/theta` jointly over all sparse top over-covers.
 
 ### Exact rational evidence
 
@@ -631,7 +639,15 @@ ray; it does not make every relative proof a full exact-cone facet.
   independently formulated Z3 exact-LRA replay agrees on all eleven optima
   or infeasibilities.  After the gauge quotient, the coefficient-two strict
   certificate is the half-sum of two distinct active indecomposable facets;
-  exact-LP and Z3 both return zero decompositions for both supports.
+  exact-LP and Z3 both return zero decompositions for both supports;
+- on all 374 archived six-player records, the returned minimum-dispersion
+  certificate is also minimum-surplus, 73 minimum deficiencies are positive,
+  and at least one top root absorbs the surplus.  Exact-LP and independently
+  formulated Z3 agree on all named-control deficiency and best-anchor
+  optima;
+- a null-padded exact five-player control gives an exact six-player negative
+  control to unrestricted surplus absorption: `epsilon_*=3/112` but both top
+  pair lifts have `kappa_r=0`.  Its overlap `25/28` is safely above `2/3`.
 
 ### Refuted
 
@@ -640,7 +656,12 @@ ray; it does not make every relative proof a full exact-cone facet.
 - identification of an atomic dispersion root with a ceiling root as a
   sufficient repair—the counterexample has the same root;
 - the complete carrier-packing route as an independent bridge: after neutral
-  endpoints are restored, it is identically equal to label currency.
+  endpoints are restored, it is identically equal to label currency;
+- an unrestricted surplus-absorbing top-root theorem, by the null-padded
+  negative control;
+- every single scalar spectral-anchor proof, even after jointly optimizing
+  surplus and dispersion: three noncommon hostile controls retain exact
+  shortfalls `25/36`, `3/2`, and `1`.
 
 ### Still open
 
@@ -652,7 +673,10 @@ ray; it does not make every relative proof a full exact-cone facet.
   hybrid target; the facet class and its quantitative currency
   `v({r,i})` are now explicit.  The theorem must distinguish strict-common,
   tied-common, and noncommon-support branches; optimizing deleted load alone
-  cannot do so.
+  cannot do so.  In the noncommon positive-floor branch it must either prove
+  surplus absorption for a suitable root or distribute the unabsorbed
+  deficiency across multiple staged/facet rows; one scalar anchor is now
+  proved insufficient.
 
 The next live bridge is a **spectral-or-balanced disjunction**.  Positive
 hinge surplus already converts to a rigorous sharpened spectral lower bound;

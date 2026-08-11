@@ -2685,6 +2685,219 @@ feasibility at the reported rational value and unsatisfiability of a strict
 improvement; the two formulations agree on all eleven roots.  It also
 independently confirms indecomposability of `(C2F1)--(C2F2)`.
 
+### Theorem (common-support deficiency dual)
+
+Let `C_z` be the proper coalitions tight at `z`, let `H` be the Lmax top
+block, and put
+
+```text
+d_S=x(S)-v(S)>=0                 (S in C_z).
+```
+
+The least possible hinge surplus of a normalized top over-cover is
+
+```text
+epsilon_*=min sum_(S in C_z)d_S lambda_S             (CSD-P)
+
+subject to
+sum_S lambda_S 1_S=eta 1_N+alpha,
+sum_(i in H)alpha_i=1,
+lambda,eta,alpha>=0,             supp(alpha) subset H.
+```
+
+Its exact player-price dual is
+
+```text
+epsilon_*=max t                                         (CSD-D)
+
+subject to
+y(S)<=d_S                  (S in C_z),
+y(N)>=0,
+y_i>=t                     (i in H),
+y in R^N, t in R.
+```
+
+Moreover
+
+```text
+epsilon_*=0  iff  a normalized top over-cover supported on
+                   C_x intersect C_z exists.            (CSD0)
+```
+
+#### Proof
+
+The first display is the ordinary normalized over-cover LP with objective
+equal to its weighted Lmin slack.  Give the player incidence equalities dual
+prices `y_i` and the normalization equality dual price `t`.  The `lambda_S`,
+`eta`, and `alpha_i` columns respectively give
+
+```text
+y(S)<=d_S,       -y(N)<=0,       -y_i+t<=0,
+```
+
+which is `(CSD-D)`; rational LP strong duality applies because the primal is
+feasible and has nonnegative objective.  Since every summand
+`d_S lambda_S` is nonnegative, objective zero is equivalent to every
+positive-weight coalition satisfying `d_S=0`, exactly common tightness.
+QED.
+
+Thus “no common over-cover” is not a qualitative support accident.  It has a
+canonical nonnegative deficiency `epsilon_*` and an exact separating
+player-price witness.
+
+### Theorem (noncommon surplus defect of a pair lift)
+
+Take any normalized top over-cover, not necessarily common, and write
+
+```text
+epsilon=alpha.x-M=sum_S lambda_S[x(S)-v(S)].
+```
+
+For a top root `r`, put
+
+```text
+theta_-=max_(i != r)alpha_i,
+b_i=theta_--alpha_i              (i != r),
+a_r=alpha_r-theta_-,
+
+kappa_r=theta_- T-M-sum_(i != r)b_i v({r,i}).         (NSA)
+```
+
+Then `kappa_r>=0`; it is the scaled exact-game slack of the rooted pair lift.
+Its two selection-visible expressions satisfy
+
+```text
+sum_(i != r)b_i z_i-a_r z_r-sum_(i != r)b_i v({r,i})
+   =kappa_r,                                             (NSAz)
+
+sum_(i != r)b_i x_i-a_r x_r-sum_(i != r)b_i v({r,i})
+   =kappa_r-epsilon.                                     (NSAx)
+```
+
+Equivalently, the common tangent law `(OCD)` acquires exactly one defect:
+
+```text
+sum_(i != r)b_i(x_i-z_i)=a_r(x_r-z_r)-epsilon.          (NSAD)
+```
+
+Consequently this noncommon pair lift supplies the same valid rooted
+pair-floor inequality at Lmin exactly when
+
+```text
+kappa_r>=epsilon.                                       (ABS)
+```
+
+#### Proof
+
+Normalize by `theta=eta+theta_-` as in `(OCP)`.  No common-tightness premise is
+needed to obtain a rooted packing.  Multiply its `(RPL)` exact-game slack by
+`theta`.  Since every supported coalition is `z`-tight,
+
+```text
+sum_S lambda_S v(S)=eta T+M,
+```
+
+and the scaled slack reduces to `(NSA)`, proving nonnegativity and `(NSAz)`.
+At `x`, the same support evaluation is larger by exactly `epsilon`, proving
+`(NSAx)`.  Subtraction gives `(NSAD)`, and `(ABS)` is just nonnegativity of
+the Lmin-side expression.  QED.
+
+This theorem subsumes the common case `epsilon=0`, but it also pinpoints why
+common support mattered: noncommon mass consumes exact-cone facet slack
+one-for-one.  The remaining root-selection question is no longer “find a
+common certificate”; it is “find a certificate/root whose pair-lift slack
+absorbs its deficiency, or pay the unabsorbed defect with additional staged
+rows.”
+
+The unrestricted absorption claim is false.  Null-pad the exact five-player
+control at `verifiers/s5close/completeness3.json`, `$[3].audit`.  The padded
+six-player core forces the new payoff to zero and preserves
+
+```text
+x=(43/280,43/280,47/280,21/80,21/80,0),
+z=(1/10,29/140,31/140,33/140,33/140,0).
+```
+
+Its minimum deficiency is `epsilon_*=3/112`; both top roots `3,4` have
+`kappa_r=0`, so `(ABS)` fails at every top root.  Its overlap is `25/28`, well
+above the six-player target `2/3`; the null-player descent sends it to the
+proved five-player theorem.  Hence any absorption-root lemma needed for the
+all-`n` proof must be stated only after the zero-floor/null-player branch is
+removed.  Positive Lmin floor is not cosmetic.
+
+On the 374 archived six-player games, the minimum-dispersion certificate is
+also minimum-surplus in all 374 cases; 73 have positive `epsilon_*`, and some
+top root satisfies `(ABS)` in all 374.  The three noncommon hostile controls
+have
+
+```text
+epsilon_* = 17/36, 1/4, 3/4,
+```
+
+and each has at least one absorbing top root.  These are exact finite facts,
+not a positive-floor absorption theorem.
+
+### Proposition (best possible single capped spectral anchor)
+
+The scalar spectral route can be optimized exactly, so it need not be left
+as a choice of a convenient over-cover.  Apply the perspective scaling
+
+```text
+L=lambda/theta,       e=eta/theta,       u=alpha/theta,
+theta=max_i alpha_i.
+```
+
+Then the largest sharpened spectral excess obtainable from any one top
+over-cover is the linear-program value
+
+```text
+R_*=max sum_(i in H)u_i(x_i-mu)                       (BSA)
+
+subject to
+sum_S L_S 1_S=e 1_N+u,
+0<=u_i<=1             (i in H),
+L,e>=0,               supp(u) subset H.
+```
+
+For a positive optimum the cap is saturated, and conversely normalizing by
+`sum_i u_i` recovers a top over-cover.  Hence
+
+```text
+R_*=max_over_overcovers (M+epsilon-mu)/theta.
+```
+
+This proves that `(BSA)` is the strongest possible input to the existing
+single-anchor rearrangement theorem.  It still misses the hybrid target on
+all three noncommon hostile controls:
+
+| branch | best spectral bound | hybrid target | shortfall |
+|---|---:|---:|---:|
+| optimized label-free | `605/36` | `35/2` | `25/36` |
+| actual-top-fixed | `39/2` | `21` | `3/2` |
+| top-and-bottom-fixed | `47/2` | `49/2` | `1` |
+
+It also misses the neutral tied-common control.  Thus neither choosing a
+different over-cover nor optimizing surplus and dispersion jointly can
+rescue a one-scalar spectral proof.  The required advance is genuinely a
+multirow rooted/staged gluing theorem.
+
+Reproduce the deficiency, absorption, negative-control, and best-anchor
+audits by
+
+```bash
+PYTHONPATH=verifiers/divergence python3 \
+  verifiers/divergence/audit_surplus_absorption.py verifiers/s6 \
+  --output verifiers/divergence/surplus_absorption_audit.json
+
+PYTHONPATH=verifiers/divergence /tmp/coop-paper5-review/bin/python \
+  verifiers/divergence/verify_surplus_absorption_z3.py \
+  --output verifiers/divergence/surplus_absorption_z3.json
+```
+
+The second formulation independently checks every fixed-control deficiency
+optimum and every best-anchor optimum by feasibility at the reported rational
+value plus unsatisfiability of a strict improvement.
+
 This extra term is exactly the coalition premium lost when the exceptional
 root is transported through a deficit singleton.  For any nonempty set `J`
 of deficit players, add the zero incidence relation
