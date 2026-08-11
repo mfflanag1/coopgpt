@@ -45,6 +45,10 @@ run_python coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates
 
 run_python coopgames/verifiers/s6/reproduce_equality_exchange_classification.py
 run_python coopgames/verifiers/s6/verify_g23_witness.py
+run_python coopgames/verifiers/divergence/verify_ceiling_root_interpolation.py \
+  --output "$scratch_dir/ceiling-root-interpolation.json"
+cmp coopgames/verifiers/divergence/ceiling_root_interpolation.json \
+  "$scratch_dir/ceiling-root-interpolation.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

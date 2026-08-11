@@ -2085,6 +2085,67 @@ The theorem makes the root canonical up to the nonempty set
 R_M={r in H:x_r>=M}=argmax_i min(x_i,z_i).              (CRM)
 ```
 
+### Theorem (ceiling-root interpolation floor)
+
+Put `mu=min_i x_i>0`.  Every ceiling root `r in R_M` gives the
+dimension-free lower bound
+
+```text
+O(x,z)>=M-mu+T mu/M.                                  (CRI)
+```
+
+Indeed, at the root `min(x_r,z_r)=M`.  Off the root, `x_i>=mu` and
+`0<=z_i<=M`, so
+
+```text
+min(x_i,z_i)>=min(mu,z_i)>=(mu/M)z_i.
+```
+
+Summing and using `sum_(i!=r)z_i=T-M` proves `(CRI)`.  In normalized
+variables `t=M/T` and `u=mu/T`,
+
+```text
+O/T>=t-u+u/t.                                         (CRIN)
+```
+
+Consequently the target `O/T>=c_n` is automatic if `t>=c_n`; when `t<c_n`
+it is automatic if
+
+```text
+u>=t(c_n-t)/(1-t).                                    (CRIW)
+```
+
+Thus a remaining positive-floor counterexample must lie in the explicit
+wedge
+
+```text
+1/n<=t<c_n,       0<u<t(c_n-t)/(1-t).                 (CRIX)
+```
+
+For seven players this reads `1/7<=M/T<7/12` and
+
+```text
+mu/T < (M/T)(7/12-M/T)/(1-M/T).
+```
+
+The inequality also has a rigid equality pattern.  If `0<mu<M`, equality in
+`(CRI)` forces every nonroot `z_i` to lie in `{0,M}`, and every nonroot top
+player to have `x_i=mu`.  Hence `T=qM` for the integer top-block size `q`.
+This explains why the bound is generically strict, but it does not replace
+the rooted packet facets: on the sharp seven-player orientations `G(2,4)`
+and `G(3,3)`, its normalized values are respectively `79/144` and `37/72`,
+both strictly below `7/12`.  The facet rows supply the missing charge.
+
+The exact audit below verifies `(CRI)` on all eight archived hard controls
+and three rational equality patterns.  It closes none of the eight hard
+controls by itself, so it is a parameter-space reduction rather than the
+open hybrid theorem.
+
+```bash
+python3 verifiers/divergence/verify_ceiling_root_interpolation.py \
+  --output verifiers/divergence/ceiling_root_interpolation.json
+```
+
 It also couples root choice directly to the sparse over-cover: deleting a
 large load `alpha_r` replaces the global dispersion by the largest surviving
 load.  For `G(p,k)`, the exceptional head has `alpha_0=1/k` and every
