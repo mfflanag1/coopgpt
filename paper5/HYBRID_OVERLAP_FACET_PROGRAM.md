@@ -534,6 +534,78 @@ conversion.
 
 ## 6. Full-stage transport through pinning congestion
 
+### Rooted incidence Hall theorem for the first floor
+
+Before introducing congestion, the individual first-stage certificates admit
+an objective-free incidence characterization.  Let `T_x` be the proper
+coalitions tight at `x` and let `P={j:x_j=mu}`.
+
+### Theorem (first-floor incidence alternative)
+
+A player `i in P` is individually pinned at the first Lmin stage if and only
+if there are `lambda_S,q_j>=0` and a scalar `c` such that
+
+```text
+sum_(S in T_x)lambda_S 1_S + sum_(j in P)q_j e_j+e_i
+ = c 1_N.                                               (IH)
+```
+
+Every solution automatically has `c>=0` and automatically satisfies the
+usual certificate objective identity.  If `(IH)` is infeasible, there is a
+rational direction `d` such that
+
+```text
+d(N)=0,
+d(S)>=0       for every S in T_x,
+d_j>=0        for every j in P,
+d_i>0.                                                 (HD)
+```
+
+The direction `(HD)` is an explicit local Lmin improvement.  A
+support-minimal certificate in `(IH)` uses at most `n` positive incidence
+columns including the forced column `e_i`.
+
+### Proof
+
+The previously proved individual pinning certificate gives `(IH)`.  Conversely,
+dot `(IH)` with any core point `y` satisfying `y_j>=mu` on `P`.  Tightness at
+`x` and feasibility of `y` give
+
+```text
+cT
+ = sum_S lambda_S y(S)+sum_j q_j y_j+y_i
+ >= sum_S lambda_S v(S)+mu sum_j q_j+y_i.
+```
+
+Dotting `(IH)` with `x` shows
+
+```text
+cT=sum_S lambda_S v(S)+mu sum_j q_j+mu,
+```
+
+because `x(S)=v(S)` and `x_i=x_j=mu`.  Therefore `y_i<=mu`; together with
+the first-stage lower bound this pins `i`.
+
+For the alternative, project all incidence columns to
+`R^N/span{1_N}`.  Failure of the conic membership in `(IH)` and exact
+polyhedral separation give `d` with the signs in `(HD)`; conversely such a
+`d` separates the forced column.  A short step `x+epsilon d` preserves every
+tight core inequality, efficiency, and the bottom lower bounds while raising
+player `i`.  Nontight inequalities remain feasible for sufficiently small
+positive `epsilon`.  Finally, the quotient has dimension at most `n-1`, so a
+support-minimal positive dependence has at most `n` columns.  QED.
+
+This is a balanced incidence circuit on the full player set, not automatically
+an indecomposable semi-balanced system or a facet of the exact-game cone.  It
+does give an exact enumeration algorithm: enumerate conformal quotient
+circuits containing `e_i`, or solve the rational cone-membership LP.  The
+selection labels “tight protector” and “bottom completion” must be retained.
+
+In the singleton-exactified two-packet boundary, `(IH)` is feasible exactly
+for the actual first block `{0,1,2,5}` and infeasible for the false trial
+player `3`.  Thus this incidence alternative is the precise Hall-type gate
+that the aggregate under-cover omits.
+
 The first rigorous use of information beyond the aggregate bottom under-cover
 is a sign-aware congestion inequality.  Let `P={i:x_i=mu}` be the first Lmin
 block and put
