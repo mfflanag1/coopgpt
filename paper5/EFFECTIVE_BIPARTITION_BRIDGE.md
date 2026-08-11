@@ -1,4 +1,4 @@
-# Clipped effective bipartition and the all-dimension overlap bridge
+# Clipped effective bipartition: exact reduction and seven-player obstruction
 
 Date: 2026-08-11
 
@@ -17,16 +17,23 @@ O(x,z)>=n/floor(n^2/4).                              (H)
 ```
 
 This note proves a canonical fractional-role decomposition of every sparse
-Lmax top over-cover and isolates a stronger scalar inequality which would
-imply `(H)`.  The stronger inequality is exact on both balanced orientations
-of `G(p,k)`, explains the six-player handover from the starved/CFG family,
-fails at the five-player extremum, and survives the exact controls described
-below.  It is **not proved for all exact games**.
+Lmax top over-cover and the exact rooted-price dual of its minimum dispersion.
+It then records the failure of the stronger scalar inequality those objects
+suggested.  A two-generator singleton-normalized exact seven-player game has
 
-The point of the new formulation is not another label-free relaxation.  The
-fractional roles are extracted from the actual sparse Lmax incidence
-certificate; the still-missing step must couple them to the complete staged
-Lmin packet.
+```text
+theta_+=3/5,       a=5/3,
+O=613/782 < 63/80=1/a+1/(7-a).                       (CE7)
+```
+
+Thus the clipped effective-bipartition conjecture is false.  The example is
+not close to refuting `(H)`: `613/782>7/12` by `941/4692`.
+
+The fractional roles remain a valid incidence theorem, but no argument may
+use their two reciprocal masses as a universal overlap floor.  The exact
+counterexample has the complete staged Lmin packet, optimal primal and dual
+dispersion certificates, positive hinge surplus, and an atomic dispersion
+root which is also a ceiling root.  Those premises are jointly insufficient.
 
 ## 2. Sparse ceiling data
 
@@ -201,9 +208,9 @@ split, exactly the product needed for the sharp constant.  A theorem based
 on the strict sign counts instead predicts the false lower bound `3/4`; the
 actual overlap is `2/3`.
 
-## 4. The clipped effective-bipartition conjecture
+## 4. The refuted clipped effective-bipartition conjecture
 
-> **Conjecture (CEB).**  For every singleton-normalized exact game with
+> **False conjecture (CEB).**  For every singleton-normalized exact game with
 > `n>=6`, the clipped mass `(A)` satisfies
 >
 > ```text
@@ -236,7 +243,7 @@ O>=n/[a(n-a)]>=n/floor(n^2/4).
 The identity `||x-z||_1=2(1-O)` gives the equivalent sharp divergence bound.
 The displayed `G(p,k)` family attains it at the balanced integer split.  QED.
 
-### Equivalent missing charge lemma
+### The failed charge lemma
 
 For fixed `a`, `(CEB)` is the linear payoff inequality
 
@@ -244,7 +251,7 @@ For fixed `a`, `(CEB)` is the linear payoff inequality
 a(n-a) O(x,z)>=n.                                    (FRC)
 ```
 
-The dimension-free task is therefore:
+The proposed dimension-free task was:
 
 > **Clipped fractional-role coupling lemma.**  Couple the sparse over-cover
 > identity `(U2)` to the complete sign-coherent staged Lmin packet and the
@@ -252,7 +259,9 @@ The dimension-free task is therefore:
 
 Large primitive staged coefficients must be charged against the fractional
 capacities `u_i` and `1-u_i`, not against the number of strict gainers or an
-integral player partition.
+integral player partition.  The exact example `(CE7)` proves that even this
+fully labelled charge is too strong: `(FRC)` fails for the actual selections
+and their actual optimal dispersion certificate.
 
 ## 5. Why the bipartition geometry is natural
 
@@ -354,6 +363,98 @@ forcing a false uniform statement across the exceptional dimension.
 
 ## 7. Exact falsification controls and boundaries
 
+### Exact seven-player refutation
+
+Let
+
+```text
+g=(12/17,4/17,0,1/17,0,0,0),
+h=(0,0,6/23,0,6/23,10/23,1/23),
+v(S)=min(g(S),h(S)).                                  (V7)
+```
+
+Both generators have total one, lie in `Core(v)`, and one of them attains
+every coalition worth.  Hence `v` is exact directly from the definition;
+the disjoint supports also give `v({i})=0` for every player.  Exact staged
+incidence certificates give
+
+```text
+x=(227/782,48/391,48/391,1/34,48/391,13/46,1/34),
+z=(91,12,90,12,90,91,5)/391.                         (XZ7)
+```
+
+The solver-free selection proof has the dependency map
+
+```text
+v=min(g,h)
+  -> x-tight support {37,49,55,85}
+  -> Lmin blocks (3,6)|(1,2,4)|(5)|(0)
+  -> z-tight support {37,42,49,66,72,97,103,109,115,121}
+  -> Lmax blocks (0,5)|(2,4)|(1,3)|(6)
+  -> fourteen sign-correct staged incidence identities
+  -> x=Lmin(v), z=Lmax(v).                            (SEL7)
+```
+
+For example, the first Lmin relation is
+
+```text
+1_55+e_3+e_6=1_N,
+```
+
+with either player forced, while the first Lmax relation for player `0` is
+
+```text
+1_37+(1/2)1_42+1_49+(1/2)1_66+(1/2)1_72
+  -e_0-(3/2)e_5=1_N.
+```
+
+Every supported coalition is tight at the asserted point.  Dotting these
+relations with a core displacement proves the appropriate stage pinning; the
+remaining twelve identities are recorded literally in the verifier and are
+also replayed by a separately formulated exact feasibility LP.
+
+The minimum-dispersion primal certificate has
+
+```text
+eta=2/5,  alpha=(2/5,0,0,0,0,3/5,0),
+lambda_37=2/5, lambda_42=1/5, lambda_49=2/5,
+lambda_66=1/5, lambda_72=1/5.                        (P7)
+```
+
+The dual certificate `(DD)` is
+
+```text
+t=3/5,
+y=(-3,-1,1,-1,1,2,1)/5,
+q=e_5.                                                (D7)
+```
+
+The two witnesses prove `theta_+=3/5` exactly.  Therefore `a=5/3`, but
+
+```text
+O(x,z)=613/782,
+1/a+1/(7-a)=63/80,
+O-63/80=-113/31280.                                  (R7)
+```
+
+This refutes `(CEB)`.  The counterexample is unusually decisive about the
+premise: the dual price is atomic at player `5`, and player `5` is also a
+ceiling root because `x_5>z_5=max z`.  Root coalescence does not repair the
+false inequality.  Its positive hinge surplus is `9/170`; the already proved
+sharpened spectral bound is `234/391>7/12`, so the main target survives by a
+different mechanism.
+
+Reproduce exactness, all fourteen solver-free staged identities, fourteen
+independently formulated exact staged LP checks, both dispersion witnesses,
+and the strict rational comparison with
+
+```bash
+python3 verifiers/divergence/verify_n7_effective_bipartition_counterexample.py \
+  --output verifiers/divergence/n7_effective_bipartition_counterexample.json
+```
+
+### Earlier finite controls
+
 The exact audit
 
 ```bash
@@ -376,7 +477,8 @@ reports:
    both sharp seven-player orientations, and the nonuniform-generator
    seven-player control all pass.  The two sharp orientations attain equality.
 
-These are finite controls, not proof evidence for the unenumerated domain.
+These were finite controls, not proof evidence for the unenumerated domain;
+`(V7)--(R7)` is the exact out-of-bank counterexample they did not detect.
 
 The independent primal/dual audit
 
@@ -417,9 +519,10 @@ theta_+=1/3,      a=3,
 O=2/3=1/3+1/3.                                         (B2)
 ```
 
-Thus exactification does not refute `(CEB)`: it moves the dispersion toward
-the balanced role mass as overlap falls.  A proof of `(CEB)` must control this
-joint movement of `O` and `theta_+`; a fixed one-witness lower bound cannot.
+Thus this particular exactification does not refute `(CEB)`: it moves the
+dispersion toward the balanced role mass as overlap falls.  It remains a
+valid warning about treating the cap as fixed, but the independent game
+`(V7)` now refutes `(CEB)` outright without such movement.
 
 ## 8. Exact-cone and algorithmic interface
 
@@ -430,7 +533,8 @@ one optimal sparse primal over-cover, `u` is rational as well.  The target
 Its validity is decided by the same exact rational branch LP and
 affine-Farkas circuit machinery as the common-hinge program.
 
-This gives a finite exact algorithm at fixed `n`:
+This gives a finite exact diagnostic algorithm at fixed `n` for deciding the
+now-refuted inequality on every labelled branch:
 
 1. enumerate the Lmax top block and complete tight-coalition hypergraph;
 2. solve the primal/dual incidence pair `(OC)` and `(DD)` and compute
@@ -445,6 +549,10 @@ This gives a finite exact algorithm at fixed `n`:
    Studeny--Kratochvil indecomposable semi-balanced test before calling it a
    facet of the full exact-game cone.
 
+The seven-player witness shows that this algorithm can return a substantive
+target-containing separating model, not merely an infeasible or boundary
+branch.  It is not an algorithm for proving `(H)`.
+
 The relative circuit/facet support bounds already proved in
 `HYBRID_OVERLAP_FACET_PROGRAM.md` apply after the over-cover ray is fixed.
 The fractional role identity `(U2)` adds a distinguished capped incidence
@@ -458,31 +566,36 @@ ray; it does not make every relative proof a full exact-cone facet.
 - disjointness of the two ordered carrier packets;
 - `(CEB) => (H)`;
 - exact specialization to `G(p,k)` and the starved/CFG handover formulas.
+- the dispersion dual `(DD)--(DCS)` and its tight-hypergraph monotonicity.
 
 ### Exact rational evidence
 
 - the archived `n=6`, `n=5`, hostile `n=7/n=8`, and full-branch boundary
-  checks in `effective_bipartition_audit.json`.
+  checks in `effective_bipartition_audit.json`;
+- the exact seven-player refutation `(V7)--(R7)`, including two formulations
+  of the selection certificates and primal/dual dispersion witnesses.
 
-### Still conjectural
+### Refuted
 
-- `(CEB)` and its equivalent charge form `(FRC)` for every exact game with
-  `n>=6`;
-- a dimension-free construction of the required Farkas charge from the
-  complete staged Lmin packet;
+- `(CEB)` and its equivalent charge form `(FRC)`;
+- the price-completed fractional-role lemma proposed in the previous version;
+- identification of an atomic dispersion root with a ceiling root as a
+  sufficient repair—the counterexample has the same root.
+
+### Still open
+
+- the weaker universal target `(H)`;
+- a dimension-free construction of its Farkas charge from the complete
+  staged Lmin packet and sparse ceiling data;
 - a classification of which projected common-hinge circuits pass to
   indecomposable exact-cone facets.
 
-The highest-value next step is a **price-completed fractional-role coupling
-lemma**: express each sign-coherent staged Lmin transport as flow between the
-capacities `u` and `1-u`, while using the optimal dispersion prices `(y,q)`
-to charge any repeated carrier use and any movement of the ceiling tight
-hypergraph.  The resulting global price must be at most `a(n-a)-n`.  The
-three atomic/ceiling-root mismatches show that the proof must permit two
-distinct labelled roots; equality should force them to coalesce, as they do
-in both balanced orientations of `G(p,k)`.
-
-A failed version must be exactified immediately and `theta_+` recomputed.
-Boundary `(B2)` proves that a fixed-cap one-witness lemma omitting `(DD)` is
-strictly too strong: its relaxed minimizer lowers the overlap only by creating
-a tighter dispersion certificate and moving from `a=2` to `a=3`.
+The next live bridge is a **spectral-or-balanced disjunction**.  Positive
+hinge surplus already converts to a rigorous sharpened spectral lower bound;
+it closes `(V7)` at `234/391>7/12` and every positive-floor six-player
+archive record.  The three named seven-player spectral obstructions, however,
+are closed by their labelled common-hinge branches instead.  A dimension-free
+proof must show that failure of the sharpened spectral target forces enough
+zero-surplus/common-hinge structure for the rooted staged packet to prove
+`(H)`.  Unlike `(CEB)`, this asks only for the balanced universal constant and
+explicitly allows the two existing mechanisms to substitute for one another.

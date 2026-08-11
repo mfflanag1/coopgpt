@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact controls for the clipped effective-bipartition conjecture.
+"""Historical exact controls for the clipped effective-bipartition conjecture.
 
 For a nonuniform Lmax point let theta be the minimum maximum load in a
 first-stage top over-cover and put
@@ -10,8 +10,10 @@ The candidate inequality is
 
     overlap/T >= 1/a + 1/(n-a).
 
-This script audits actual selected pairs only.  Passing finite archives is
-not a proof.  It also records the n=5 failures and an exact n=6 branch showing
+The conjecture is now refuted by
+``verify_n7_effective_bipartition_counterexample.py``.  This script retains
+the earlier finite controls to document why they were insufficient.  It also
+records the n=5 failures and an exact n=6 branch showing
 that the stronger record-specific bound is not implied by the one-witness
 common-hinge relaxation, even though the fully exactified branch preserves
 the candidate after its dispersion changes.
@@ -283,15 +285,21 @@ def main():
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     report = {
-        "status": "exact finite controls for the clipped effective-bipartition conjecture",
+        "status": "historical exact finite controls; CEB is refuted by a separate n=7 witness",
         "formula": "O/T >= 1/a + 1/(n-a), a=min(1/theta_plus,floor(n/2))",
         "n6_archive": n6_archive(args.n6_paths),
         "n5_boundary": n5_boundary(args.n5_dir),
         "hostile_controls": hostile_cases(),
         "full_branch_boundary": branch_boundary(args.n6_paths[0]),
+        "known_counterexample": {
+            "verifier": "verify_n7_effective_bipartition_counterexample.py",
+            "overlap": "613/782",
+            "claimed_bound": "63/80",
+            "margin": "-113/31280",
+        },
         "scope": (
-            "actual selected pairs from finite archives and named exact controls; discovery "
-            "and falsification evidence only, not a proof for n>=6"
+            "actual selected pairs from finite archives and named controls; retained as a "
+            "warning that broad finite agreement did not detect the exact n=7 refutation"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

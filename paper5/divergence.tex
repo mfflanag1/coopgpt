@@ -2126,7 +2126,8 @@ some sparse over-cover always make this common-hinge relaxation attain at
 least $n/\lfloor n^2/4\rfloor$, or to produce an exact rational branch that
 refutes that statement.
 
-There is a sharper conjectural scalar bridge.  Minimize
+One sharper scalar bridge suggested by this reduction is now known to be
+false.  Minimize
 $\theta_+=\max_i\alpha_i$ over normalized first-stage ceiling over-covers
 $\sum_S\lambda_S\one_S=\eta\one_N+\alpha$, and put
 
@@ -2142,19 +2143,46 @@ Then $0\le u\le1$, $u(N)=a$, and scaling the incidence identity gives
 
 If $\epsilon=\sum_S\lambda_S[x(S)-z(S)]\ge0$, evaluation at the two
 selections gives $u\mathbin\cdot x=a(M+\epsilon)$ and
-$u\mathbin\cdot z=aM$, with complementary totals on $\one_N-u$.  The live
-conjecture is
+$u\mathbin\cdot z=aM$, with complementary totals on $\one_N-u$.  The
+proposed conjecture was
 
 \[
  \frac{O(x,z)}{T}\ \ge\ \frac1a+\frac1{n-a}.          \tag{CEB}
 \]
 
-The conjecture (CEB) implies the target because
+Condition (CEB) would imply the target because
 $a(n-a)\le\lfloor n^2/4\rfloor$, is exact on
 both balanced orientations of the displayed family, and has the correct
 five/six boundary.  Exact archived checks are falsification evidence only:
 (CEB) passes all $374$ stored six-player pairs and the named seven-player
 controls, while failing on $12$ of $124$ distinct stored five-player pairs.
+Those controls missed an exact seven-player counterexample.  For
+
+\[
+ g=(12/17,4/17,0,1/17,0,0,0),\qquad
+ h=(0,0,6/23,0,6/23,10/23,1/23),
+\]
+
+put $v(S)=\min\{g(S),h(S)\}$.  The generators have common total one, are
+core points, attain every coalition worth between them, and have
+coordinatewise minimum zero; hence $v$ is singleton-normalized and exact.
+Exact staged certificates give
+
+\[
+ x=(227/782,48/391,48/391,1/34,48/391,13/46,1/34),
+ \quad z=(91,12,90,12,90,91,5)/391.
+\]
+
+Exact primal and dual incidence witnesses give $\theta_+=3/5$ and $a=5/3$,
+but
+
+\[
+ O(x,z)=\frac{613}{782}<\frac{63}{80}
+       =\frac1a+\frac1{7-a}
+\]
+
+with margin $-113/31280$.  Thus (CEB) is refuted.  The example does not
+challenge the main target: $613/782-7/12=941/4692>0$.
 
 The cap in (CEB) is not an exogenous parameter.  If $\mathcal T_z$ is the
 family of proper coalitions tight at $z$ and $H$ is its top payoff block,
@@ -2166,14 +2194,45 @@ ordinary rational LP duality gives the human formula
  q\ge0,\quad\sum_{i\in H}q_i\le1.                    \tag{DD}
 \]
 
-Thus $\theta_+$ depends only on the labelled top block and its complete
+Formula (DD) remains valid: $\theta_+$ depends only on the labelled top block and its complete
 tight-coalition incidence hypergraph; adding a tight coalition can only
 lower it.  This explains why the fixed-cap one-witness relaxation is too
 strong on an exact six-player boundary: its minimizer lowers overlap only
-after $\theta_+$ moves from $1/2$ to $1/3$, preserving equality in (CEB).
-What remains is a price-completed coupling of (DD), the fractional capacities
-$u,\one_N-u$, and the complete staged leximin packet.  Neither (CEB) nor that
-coupling is claimed as proved.
+after $\theta_+$ moves from $1/2$ to $1/3$.  The seven-player example shows
+that retaining dispersion optimality still does not prove (CEB).  Its
+positive hinge surplus instead makes the already proved sharpened spectral
+floor exceed $7/12$.  The live route is therefore a spectral-or-common-hinge
+disjunction at the weaker universal target, not a reciprocal-mass theorem.
+
+The label loss in that disjunction has an exact layer-cake form.  Fix the
+actual ceiling block $H$, put $R=N\setminus H$ and $m=|R|$, and define
+$X_t=\{i\in R:x_i\ge t\}$ and $Z_t=\{i\in R:z_i\ge t\}$.  If $B_H$ is the
+spectral expression with $H$ fixed and the residual spectra oppositely
+paired, then
+
+\[
+ O-B_H=\int_0^\infty
+ \left(|X_t\cap Z_t|-\max\{0,|X_t|+|Z_t|-m\}\right)\,dt. \tag{LC}
+\]
+
+Indeed, the first term is the layer-cake formula for residual overlap, while
+the second is the Fr\'echet lower intersection bound attained simultaneously
+by opposite sorting.  The integrand is a nonnegative integer.  On a fixed
+pair of ordered payoff partitions, (LC) is therefore a finite nonnegative
+linear form in the consecutive merged stratum gaps.  If $B_*$ denotes the
+spectral minimum over admissible ceiling assignments, then
+
+\[
+ O=B_*+(B_H-B_*)+(O-B_H),
+\]
+
+separating top-selection currency from residual label currency.  This is a
+proved identity, not the missing inequality: the remaining common-hinge
+problem is to show that the two currencies cover
+$\max\{0,nT/\lfloor n^2/4\rfloor-B_*\}$.  It does, exactly, identify a
+linear stratum-gap target for the rooted branch-circuit and relative-facet
+program without conflating those relative circuits with facets of the full
+exact-game cone.
 
 \paragraph{Not claimed.}
 Exactness theory, lower-envelope exactification, and the characterizations of
@@ -2231,6 +2290,10 @@ trees are regenerated by \path{s6/audit_strict_exchange_p4_relay_trees.py}.
 Theorem~\ref{thm:cfg} is proved by hand; its superseded finite
 check and the hand proof's own symbolic guards are archived alongside.  The remaining
 programs are bug audits, not proof dependencies.  Exact rational programs in the same repository
+on branch \path{codex/hybrid-overlap-facets} archive the refuted
+effective-bipartition bridge, its exact seven-player counterexample, the
+dispersion primal/dual witnesses, and the threshold-label currency audit;
+none is a proof dependency for the open all-dimension target.  Other programs
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full
 coalition-inequality check and the tight-set prediction of

@@ -31,17 +31,18 @@ A literal partition of the players is already false at six players, while
 treating the Lmin packet itself as one exact-cone facet is also false in
 general.
 
-The companion note `EFFECTIVE_BIPARTITION_BRIDGE.md` now extracts a capped
+The companion note `EFFECTIVE_BIPARTITION_BRIDGE.md` extracts a capped
 fractional role of mass `a=min(1/theta_+,floor(n/2))` from the
-minimum-dispersion ceiling over-cover.  Its candidate bound
+minimum-dispersion ceiling over-cover.  The initially surviving candidate
 
 ```text
 O/T>=1/a+1/(n-a)
 ```
 
-would imply `(H)` and is exact on both balanced orientations of `G(p,k)`.
-The role decomposition and the exact dual formula for `theta_+` are proved;
-the displayed overlap bound remains conjectural.
+would imply `(H)` and is exact on both balanced orientations of `G(p,k)`, but
+is now refuted by an exact two-generator seven-player game.  The role
+decomposition and exact dual formula for `theta_+` remain proved; their two
+reciprocal masses are not a universal overlap floor.
 
 ## 2. Shared-hinge theorem for the sharp family
 
@@ -2302,7 +2303,7 @@ deleting the common hinges entirely is invalid.  This is meaningful
 structural progress and a substantially narrower missing lemma, but not yet
 the requested central breakthrough.
 
-## 9. Effective bipartition and dispersion-price completion
+## 9. Effective bipartition and its exact obstruction
 
 The newest reduction separates the ceiling certificate into a primal
 fractional role and a dual rooted price.  For a minimum-dispersion over-cover
@@ -2329,18 +2330,54 @@ u.x=a(M+epsilon),       u.z=aM,
 (1-u).x=T-a(M+epsilon), (1-u).z=T-aM.                 (EB2)
 ```
 
-The surviving scalar target is
+The proposed scalar target was
 
 ```text
 O/T>=1/a+1/(n-a).                                      (EB3)
 ```
 
-Since `a<=floor(n/2)`, `(EB3)` implies `(H)`.  It specializes to equality on
+Since `a<=floor(n/2)`, `(EB3)` would imply `(H)`.  It specializes to equality on
 the balanced `G(p,k)` orientations, reproduces the starved-family failure at
 five and equality at six, passes all `374` archived six-player pairs and the
 named seven/eight-player hostile controls, and fails on `12` of `124`
-distinct five-player pairs.  These finite facts are falsification evidence,
-not a proof of `(EB3)`.
+distinct five-player pairs.  Those finite facts did not detect the following
+exact seven-player counterexample.
+
+Let
+
+```text
+g=(12/17,4/17,0,1/17,0,0,0),
+h=(0,0,6/23,0,6/23,10/23,1/23),
+v(S)=min(g(S),h(S)).                                  (EB6)
+```
+
+The two generators have common total one, are core points, attain every
+coalition worth between them, and have coordinatewise minimum zero.  Thus
+`v` is singleton-normalized and exact directly from the definition.  Fourteen
+solver-free staged identities and an independent exact staged encoding give
+
+```text
+x=(227/782,48/391,48/391,1/34,48/391,13/46,1/34),
+z=(91,12,90,12,90,91,5)/391.                         (EB7)
+```
+
+Exact primal and dual incidence witnesses give
+
+```text
+theta_+=3/5,   a=5/3,
+alpha=(2/5,0,0,0,0,3/5,0),
+y=(-3,-1,1,-1,1,2,1)/5,   q=e_5.                    (EB8)
+```
+
+Nevertheless
+
+```text
+O=613/782 < 63/80=1/a+1/(7-a)                       (EB9)
+```
+
+with exact margin `-113/31280`.  Player `5` is both the atomic dispersion
+root and a ceiling root, so even root coalescence does not repair `(EB3)`.
+The main target remains safe with margin `613/782-7/12=941/4692`.
 
 The dispersion cap itself has the exact player-price dual
 
@@ -2375,26 +2412,150 @@ six-player records.  Although every record admits an atomic optimal price
 separation.  Thus identifying the two distinguished roots is another false
 shortcut.
 
-The precise live statement is now the **price-completed fractional-role
-coupling lemma**: combine `(EB1)--(EB2)`, the optimal dispersion prices
-`(EB4)`, and the complete sign-coherent staged Lmin packet to prove
+The proposed **price-completed fractional-role coupling lemma** was to combine
+`(EB1)--(EB2)`, the optimal dispersion prices `(EB4)`, and the complete
+sign-coherent staged Lmin packet to prove
 
 ```text
 a(n-a)O>=nT.                                           (EB5)
 ```
 
-Repeated carrier use must be paid by the same labelled capacities `u,1-u`,
-the hinge surplus, or the dispersion price `y`; movement of the complete
-Lmax tight hypergraph must be charged through `(EB4)`.  The record-13 branch
-boundary proves that omitting dispersion optimality is insufficient: its
-fixed-cap relaxation reaches overlap `2/3` below the record-specific `3/4`
-only by lowering `theta_+` from `1/2` to `1/3`, at which point `(EB3)` also
-moves to `2/3` and remains sharp.
+`(EB9)` refutes this lemma with every stated premise present.  The
+record-13 boundary remains a separate warning that omitting dispersion
+optimality is insufficient, but adding that optimality does not restore
+`(EB5)`.
 
-For fixed `n`, `(EB4)` improves the exact algorithmic interface: enumerate a
+For fixed `n`, `(EB4)` still improves the exact diagnostic interface:
+enumerate a
 complete labelled tight hypergraph, solve one rational primal/dual incidence
-pair for `theta_+`, and then test the linear inequality `(EB5)` on each
-rooted staged branch.  Target-containing positive circuits still classify
+pair for `theta_+`, and test any proposed linear inequality on each rooted
+staged branch.  It now returns `(EB6)--(EB9)` as a substantive separating
+model for `(EB5)`.
+
+The live direction is weaker and genuinely disjunctive.  The positive hinge
+surplus in `(EB6)` is `9/170`; the proved sharpened spectral theorem gives
+overlap floor `234/391>7/12` and closes the example.  Conversely, the three
+named seven-player spectral obstructions are closed by their labelled
+common-hinge branches.  The next candidate is therefore:
+
+> **Spectral-or-common-hinge conjecture.**  Failure of the sharpened spectral
+> floor at the universal target forces a maximum-overlap rooted common-hinge
+> branch whose exact minimum attains that target.
+
+This conjecture asks only for `(H)`, not the false dispersion-dependent floor.
+It must use the complete staged Lmin packet on the second branch and preserve
+the actual labels.  Target-containing positive circuits still classify its
 irreducible relative branch proofs.  Only projected coalition systems which
 pass the published indecomposable semi-balanced criterion may be called
 facets of the full exact-game cone.
+
+Reproduce the exact counterexample with
+
+```bash
+python3 verifiers/divergence/verify_n7_effective_bipartition_counterexample.py \
+  --output verifiers/divergence/n7_effective_bipartition_counterexample.json
+```
+
+## 10. Exact label currency and the surviving disjunction
+
+The spectral relaxation forgets labels in two distinct steps.  Both losses
+have exact nonnegative currencies.
+
+Fix the actual Lmax top block `H`.  Let `B_*` be the sharpened spectral bound,
+minimized over every top assignment allowed by the over-cover anchor, and let
+`B_H` be the same expression with the actual block `H` fixed.  Then
+
+```text
+O = B_* + C_top + C_label,
+C_top=B_H-B_*>=0,
+C_label=O-B_H>=0.                                    (LC1)
+```
+
+The first currency is the price of forgetting which Lmin labels occupy the
+actual ceiling block.  The second is the price of oppositely rearranging the
+remaining labels.
+
+### Theorem (threshold label currency)
+
+Let `R=N\H`, `m=|R|`, and for `t>=0` put
+
+```text
+X_t={i in R:x_i>=t},       Z_t={i in R:z_i>=t}.
+```
+
+Then
+
+```text
+C_label = integral_0^infinity
+  [ |X_t intersect Z_t|-max(0,|X_t|+|Z_t|-m) ] dt.   (LC2)
+```
+
+In particular the integrand is a nonnegative integer.  On a fixed pair of
+ordered payoff partitions, `(LC2)` is a finite nonnegative linear form in
+the consecutive merged Lmin/Lmax stratum gaps.
+
+#### Proof
+
+The layer-cake identity gives
+
+```text
+sum_(i in R) min(x_i,z_i)
+ = integral_0^infinity |X_t intersect Z_t| dt.        (LC3)
+```
+
+At every threshold, two subsets of an `m`-element set with cardinalities
+`|X_t|` and `|Z_t|` have intersection at least
+`max(0,|X_t|+|Z_t|-m)`.  Opposite sorting attains these lower bounds
+simultaneously at every threshold, so its overlap is the integral of that
+Frechet minimum.  Subtracting gives `(LC2)`.  The upper sets change only at a
+coordinate of `x` or `z`; splitting the integral at those finitely many
+levels gives the final linear-gap statement.  QED.
+
+This theorem puts the missing labelled information in the same coordinates
+as the staged packets.  The sets `X_t` and `Z_t` are complements/unions of
+their cumulative ordered strata, and common-hinge rows are the only retained
+coalition rows which glue the two labelled tangent blocks.  On a fixed
+branch, `C_top`, `C_label`, and the spectral deficit are all linear in payoff
+stratum gaps.  Therefore the surviving target is exactly
+
+```text
+C_top+C_label >= max(0,nT/floor(n^2/4)-B_*).          (LC4)
+```
+
+Unlike the false `(EB5)`, `(LC4)` is not advertised as a theorem: it is an
+identity-equivalent target.  Its value is structural.  It says precisely
+what a common-hinge/rooted-circuit proof must purchase and removes the false
+reciprocal-mass price.
+
+The three hostile spectral failures separate the two currencies:
+
+| control | spectral deficit | `C_top` | `C_label` |
+|---|---:|---:|---:|
+| optimized label-free failure | `5/216` | `1/30` | `4/15` |
+| actual-top-fixed failure | `1/24` | `0` | `5/12` |
+| top-and-bottom-fixed failure | `1/42` | `0` | `11/28` |
+
+The new effective-bipartition counterexample has no spectral deficit:
+`B_*=234/391>7/12`, while `C_label=145/782`.  Both sharp seven-player
+orientations have `B_*=O=7/12` and zero currencies.  Thus equality remains
+concentrated in the zero-currency common-hinge geometry, while every known
+spectral obstruction carries more labelled currency than its deficit.
+
+Reproduce the exact decomposition and the nonzero threshold layers with
+
+```bash
+python3 verifiers/divergence/audit_spectral_label_currency.py \
+  --output verifiers/divergence/spectral_label_currency_audit.json
+```
+
+### Facet interface
+
+Fix the actual and spectral-minimizing top blocks and both ordered payoff
+partitions.  The integers in `(LC2)` are constants, so `(LC4)` is a rational
+linear inequality in the stratum levels.  Pulling it back through the
+labelled generator coordinates gives exactly the target row for the
+common-hinge branch-circuit theorem.  Support-minimal proofs are positive
+circuits of that augmented relative configuration.  Projection to the game
+cone still requires the resulting coalition coefficients to pass the
+Studeny--Kratochvil indecomposable semi-balanced test; the threshold currency
+does not turn a relative labelled circuit into a full-cone facet by itself.
