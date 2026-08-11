@@ -4156,6 +4156,133 @@ witness-feasibility components are independently formulated.  The facet
 counts are finite controls, not evidence that a target-proving root exists in
 every dimension.
 
+#### Saturated rooted-star matrix classification
+
+The new facet and both sharp-family facets belong to one dimension-free
+matrix class.  Put `V=N\{r}` and let `A` be a `|V|` by `|V|` nonsingular
+zero-one matrix whose distinct columns are the incidences of proper nonempty
+sets `A_j subset V`.  The corresponding positive coalitions are
+`S_j={r} union A_j`.  Define
+
+```text
+lambda=A^(-1)1_V,              c=1.lambda-1.          (RSM1)
+```
+
+> **Theorem (saturated rooted-star facet criterion).**  Suppose
+> `lambda>0` and `c>0`.  Then
+>
+> ```text
+> sum_j lambda_j 1_(S_j)-c e_r=1_N                 (RSM2)
+> ```
+>
+> is a purely min-semi-balanced system with linearly independent support.
+> It is the completion of a saturated rooted-packing vertex and attains the
+> `n-1` positive-coalition support bound.  Rooted-pair shears enter this class
+> by treating their pair columns as members of the completed menu.  For a
+> proposed new exceptional
+> coalition `B`, write `beta=1_(r in B)`, let `b` be its incidence on `V`,
+> and put `u=A^(-1)b`.  Define
+>
+> ```text
+> L(B)=max_j {-u_j/lambda_j},
+> U(B)=(beta-1.u)/c.                                  (RSM3)
+> ```
+>
+> The system decomposes through `B` in the exact sense of
+> Studeny--Kratochvil if and only if `L(B)<=U(B)`.  Consequently `(RSM2)`
+> defines a facet of the exact-game cone exactly when
+>
+> ```text
+> L(B)>U(B)                                           (RSM4)
+> ```
+>
+> for every proper nonempty `B` outside its support.
+
+#### Proof
+
+The off-root coordinates of `(RSM2)` are `A lambda=1`; its root coordinate
+is `1.lambda-c=1`.  Nonsingularity of `A` makes the `n` columns consisting of
+`e_r` and the `1_(S_j)` independent.  Strict positivity and `c>0` give a
+purely min-semi-balanced system with sole exceptional coalition `{r}`.  The
+same equation says that `lambda` is the unique point at which all `n-1`
+off-root packing capacities are tight, hence a saturated packing vertex.
+
+For the published exceptional-set decomposition test, nonnegative
+coefficients `mu_0,mu_j` and a free common load `gamma` must satisfy
+
+```text
+mu_0 e_r+sum_j mu_j 1_(S_j)-1_B=gamma 1_N.           (RSM5)
+```
+
+Off the root this forces
+
+```text
+mu=A^(-1)b+gamma lambda=u+gamma lambda,
+```
+
+so `mu>=0` exactly when `gamma>=L(B)`.  The root coordinate forces
+
+```text
+mu_0=beta-1.u-gamma c,
+```
+
+so `mu_0>=0` exactly when `gamma<=U(B)`.  A decomposition therefore exists
+exactly when the interval `[L(B),U(B)]` is nonempty.  Applying the
+Studeny--Kratochvil indecomposability theorem gives `(RSM4)` and the facet
+claim.  QED.
+
+This yields an exact enumeration algorithm for the entire saturated
+rooted-star class: enumerate nonsingular zero-one matrices up to row and
+column permutations, retain those satisfying `(RSM1)`, and test the finitely
+many Boolean vectors `(beta,b)` by `(RSM3)--(RSM4)`.  Passing matrices give
+primitive facet normals after clearing denominators; equivalently they give
+extreme rays of the dual exact-game cone.  Equality in the associated game
+inequality is exactly
+
+```text
+sum_j lambda_j v(S_j)=v(N),                           (RSME)
+```
+
+under singleton normalization.
+
+For the mixed facet `(MCPF)`, the root-deleted matrix has determinant of
+absolute value `2`,
+
+```text
+A=
+[0 1 0 0 1 0
+ 0 1 1 0 0 0
+ 1 1 0 0 0 0
+ 0 0 1 0 1 0
+ 0 0 0 1 1 0
+ 0 0 0 0 0 1],
+```
+
+up to the displayed player/coalition order.  Formula `(RSM1)` gives weights
+`(1/2,1/2,1/2,1/2,1/2,1)` and `c=5/2`.  Every unsupported Boolean coalition
+has strict margin `L-U>=2/5`, giving a compact exact certificate of
+indecomposability rather than an opaque unsat result.
+
+For `G(p,k)`, the matrix is block diagonal with blocks `I_p` and `J_k-I_k`.
+Thus `(RSM1)` gives pair weights one, hinge weights `1/(k-1)`, and
+`c=p+1/(k-1)`, recovering the already proved sharp-family facet.  The matrix
+criterion therefore contains both balanced orientations and the first
+noncommon facet in one distinguished exact-cone class; it is a specialization
+of the published general indecomposability theory, not a replacement for it.
+
+The inverse formula and every Boolean margin are replayed exactly by
+
+```bash
+python3 verifiers/divergence/verify_rooted_star_matrix_facets.py \
+  --input verifiers/divergence/mixed_witness_projection.json \
+  --output verifiers/divergence/rooted_star_matrix_facets.json
+```
+
+The verifier agrees with the exact-LP counts for all four saturated systems
+extracted from the controls and checks `25` additional sharp-family matrices.
+Those finite rows audit the formulas; the theorem and criterion above are the
+dimension-free argument.
+
 This closes a real structural gap: noncommon support no longer prevents a
 single exactness witness from coupling the selections, extreme coupling has
 linear coalition support, and `(MWP2)` exhausts every inequality obtainable

@@ -627,6 +627,12 @@ ray; it does not make every relative proof a full exact-cone facet.
   seven independent columns, is indecomposable under the published test,
   defines an active exact-cone facet, and by itself raises the projected
   master to the exact `3/4` one-witness minimum.
+- the saturated rooted-star matrix theorem: an invertible root-deleted
+  zero-one matrix `A` with `lambda=A^{-1}1>0` and `1.lambda>1` gives a
+  maximal-support min-semi-balanced pair lift, and the closed inequalities
+  `max_j(-u_j/lambda_j)>(beta-1.u)/(1.lambda-1)` for
+  `u=A^{-1}b` characterize exactly when it is an exact-cone facet.  This
+  class contains every sharp `G(p,k)` facet and the new mixed facet.
 
 ### Exact rational evidence
 
@@ -672,6 +678,11 @@ ray; it does not make every relative proof a full exact-cone facet.
   projection cuts, seven rooted-pair exact-cone facets, and exactly one
   genuinely two-colour cut.  An independent Z3 exact-LRA formulation agrees
   with every decomposition count and facet decision.
+- exact inverse-matrix replay of the saturated rooted-star criterion: the
+  mixed facet has determinant of absolute value `2`, weights
+  `(1/2,1/2,1/2,1/2,1/2,1)`, exceptional coefficient `5/2`, and minimum
+  strict indecomposability margin `2/5`; all four extracted saturated systems
+  agree with the LP counts.
 
 ### Refuted
 
