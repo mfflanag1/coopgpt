@@ -263,6 +263,7 @@ Start with:
 
 ```text
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
+coopgames/paper5/S6_SPECIALIST_NOVELTY_SIGNOFF.md
 ```
 
 Search beyond its terminology in exact-partition games, antiduality,
@@ -299,6 +300,11 @@ missing translation.  The reviewer should answer these concrete questions:
 The current defensible statement is only: a targeted primary-source search
 did not locate an equivalent theorem.  Report correctness and novelty as two
 separate conclusions.
+
+The sign-off packet defines collision criteria and requires the reviewer to
+record identity, expertise, databases, search scope, the inspected commit,
+and either an explicit prior-theorem translation or a scoped negative-search
+opinion.  An unsigned repository copy is not external validation.
 
 For the base-polyhedron question, audit the elementary transfer obstruction
 recorded in `S6_LITERATURE_NOVELTY_AUDIT.md`: exactness plus a direct

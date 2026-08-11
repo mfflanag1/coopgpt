@@ -116,6 +116,7 @@ coopgames/verifiers/s6/strict_exchange_formula_interface.json
 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py
 coopgames/verifiers/s6/strict_exchange_semantic_interface.json
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
+coopgames/paper5/S6_SPECIALIST_NOVELTY_SIGNOFF.md
 ```
 
 The equality theorem is a useful differential check but is not a dependency:

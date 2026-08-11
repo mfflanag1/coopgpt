@@ -130,9 +130,47 @@ result under another formulation.
     result is stated.
     DOI: <https://doi.org/10.1016/j.orl.2024.107231>.
 
+15. **Schoot Uiterkamp (2024), “A Characterization of Simultaneous
+    Optimization, Majorization, and (Bi-)Submodular Polyhedra.”**  Theorem 5
+    characterizes compact convex sets admitting a least `(a,b)`-majorized
+    point for every positive scale and translation as base-polyhedra.
+    Theorem 9 translates this into cooperative-game language: a TU game is
+    convex exactly when every strategically equivalent game has an
+    egalitarian core solution.  This is the strongest checked
+    majorization/base-polyhedron transfer theorem.  It does not compare the
+    two opposing Lorenz selections of one nonconvex exact-game core, give a
+    normalized distance bound, or imply that an arbitrary exact-game core is
+    a base-polyhedron.
+    DOI: <https://doi.org/10.1287/moor.2023.0054>.
+
+16. **Izquierdo, Montes, and Rafels (2024), “Population Lorenz-monotonic
+    allocation schemes for TU-games.”**  Introduces Lorenz-monotonic
+    allocation schemes across nested coalitions and proves that the stronger
+    PLMAS-exactness property characterizes convex games.  Its use of
+    exactness and Lorenz order is terminologically close, but its object is a
+    family of allocations indexed by all subgames.  It neither defines the
+    `Lmin`/`Lmax` pair in a fixed core nor bounds their separation.
+    DOI: <https://doi.org/10.1007/s00355-024-01538-x>.
+
+17. **Vazirani (2024), “Equitable Core Imputations via a New Adaptation of
+    the Primal-Dual Framework.”**  Defines and computes leximin and leximax
+    core imputations for assignment games, gives an explicit example where
+    they differ, and lists structural comparison as an open direction.  The
+    paper supplies neither an exact-game fixed-dimensional extremum nor a
+    distance/ratio theorem.
+    Preprint: <https://arxiv.org/abs/2402.11437>.
+
+18. **Gangam, Garg, Shahkar, and Vazirani (2024), “Equitable Core
+    Imputations for Max-Flow, MST and b-Matching Games.”**  Studies algorithms
+    and hardness for leximin/leximax allocations in special combinatorial
+    cores (or tractable Owen subsets).  The conclusions concern computation,
+    not a quantitative comparison of the two allocations over the class of
+    exact games.
+    Preprint: <https://arxiv.org/abs/2403.06037>.
+
 ## Adjacent-language transfer audit
 
-The closest apparent transfers separate into five distinct levels:
+The closest apparent transfers separate into seven distinct levels:
 
 1. **Base-polyhedron decreasing minimization.**  This literature gives
    exchange and canonical-partition structure for one lexicographically
@@ -171,6 +209,22 @@ The closest apparent transfers separate into five distinct levels:
    language, as the exact-cone source records.  The targeted search found no
    selection-distance result there, but this is the least conclusive portion
    of the audit because the selectors may be named differently.
+
+6. **Translated majorization and Lorenz-monotonic schemes.**  The 2024
+   simultaneous-optimization theorem shows that requiring least-majorized
+   points after every strategic translation is exactly a base-polyhedron/
+   convex-game property.  The 2024 PLMAS theorem similarly characterizes
+   convexity after imposing Lorenz compatibility across all subgames.  Both
+   results sharpen the boundary of valid transfer arguments: they do not
+   turn ordinary exactness into convexity and therefore do not collapse the
+   present two-selector problem.
+
+7. **Equitable combinatorial cores.**  The 2024 assignment/flow/MST/
+   b-matching line uses the same plain-language names `leximin` and `leximax`.
+   Its results are algorithms, complexity statements, and examples on
+   special game classes or Owen sets.  No checked version states a normalized
+   `L1` distance, a fixed-player supremum, the six-player value `2/3`, or the
+   equality profiles studied here.
 
 ## Concrete transfer tests
 
@@ -224,6 +278,12 @@ distance between egalitarian core solutions
 leximin stable allocation leximax exact game
 six-player exact cooperative game egalitarian
 Lorenz dominance exact games Lmin Lmax
+exact games least-majorized
+exact game lexicographically optimal core
+Lorenz stable exact game bound distance
+semi-balanced egalitarian leximin core
+coherent lower probability leximin majorization
+cooperative game leximin leximax distance ratio
 ```
 
 and followed citations in the primary sources above.  A date refresh on
@@ -236,6 +296,16 @@ assignment/matching-game leximin/leximax work, and recent monotonicity papers.
 The adjacent-language pass additionally checked continuous and discrete
 decreasing minimization on base-polyhedra, M-convex exchange, totally balanced
 cone facets, semi-balanced systems, and coherent-lower-probability terminology.
+The refresh also checked the 2024 translated-majorization characterization,
+the 2024 population Lorenz-monotonic framework, and the current arXiv versions
+of the assignment/flow/MST/`b`-matching equitable-core papers.  The 2025 SIPTA
+seminar on exact-cone facets was checked as a current-author update; it
+reprises the 2022 facet classification and its at-most-six catalogue rather
+than introducing an egalitarian-selector theorem.
+
+For a reviewable record of collision criteria, expert scope, and permissible
+verdict wording, see `S6_SPECIALIST_NOVELTY_SIGNOFF.md`.  That file is a
+request for an external opinion, not an opinion already obtained.
 
 ## Claim discipline for the manuscript
 
