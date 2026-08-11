@@ -2257,17 +2257,221 @@ and `(GM)`.  This is the human structural explanation of why the exceptional
 head, the `k` common hinges, and the `p` outside players produce the sharp
 constant.
 
-### Theorem (rooted vertices are singleton-exceptional systems)
-
-The rooted packing has an exact, rather than metaphorical, interface with
-the exact-game cone.  For `u in K_r`, retain the notation above and write
+For later use, the definitions of `p,q,delta` give the coordinate identity
 
 ```text
 sum_S u_S 1_S
  +sum_(i != r)q_i e_i-delta e_r=1_N.                 (RMS)
 ```
 
-This identity holds coordinate by coordinate.  If `u` is a vertex of
+### Theorem (pair-floor rooted projection)
+
+The previous projection deliberately discarded most core rows of the
+singleton witness.  One exactness consequence can be retained at linear
+cost.  In a singleton-normalized game put
+
+```text
+m_i=v({r,i})                 (i != r),
+M_r=sum_(i != r)m_i.
+```
+
+Every core witness with `w_r=0` satisfies `w_i>=m_i`; existence of that
+witness implies `M_r<=T`.  A nonnegative total-`T` vector with these pair
+floors and the requirements `(RHP1)` exists if and only if, for every
+`u>=0`,
+
+```text
+sum_S u_S x(S)
+ <=sum_(i != r)p_i m_i
+   +(T-M_r) max_(i != r)p_i.                         (PFP)
+```
+
+After normalizing `u in K_r`, this is
+
+```text
+sum_S u_S x(S)<=T-sum_(i != r)q_i m_i,               (PFP1)
+```
+
+and the incidence identity `(RMS)` turns it into the sharpened root-deficit
+budget
+
+```text
+delta x_r+sum_(i != r)q_i v({r,i})
+ <=sum_(i != r)q_i x_i.                              (PFRDBx)
+```
+
+If the packing uses only common hinges, the same argument gives
+
+```text
+delta z_r+sum_(i != r)q_i v({r,i})
+ <=sum_(i != r)q_i z_i.                              (PFRDBz)
+```
+
+#### Proof
+
+Write `w_i=m_i+y_i` off the root.  Then `y>=0` and
+`sum y_i=T-M_r`.  The support function of this translated rooted simplex in
+direction `p` is
+
+```text
+sum_i p_i m_i+(T-M_r)max_i p_i.
+```
+
+The same down-set separation used for `(RHP2)` proves necessity and
+sufficiency.  Under `p_i<=1`, rearrangement gives `(PFP1)`.  Dotting `(RMS)`
+with `x` gives
+
+```text
+sum_S u_S x(S)=T+delta x_r-sum_i q_i x_i;
+```
+
+substitution proves `(PFRDBx)`.  Common-hinge equality transfers the left
+coalition sum from `x` to `z`, proving the mirror.  QED.
+
+### Theorem (rooted pair lifts and exact-cone facets)
+
+The pair-floor budget has a canonical full-cone lift different from the
+decomposable singleton-slack completion.  Put `Q=sum_(i != r)q_i` and replace
+each deficit singleton by its rooted pair:
+
+```text
+sum_S u_S 1_S
+ +sum_(i != r)q_i 1_{r,i}-(delta+Q)e_r=1_N.          (RPL)
+```
+
+If `u` is a vertex of `K_r`, the nonzero support of `(RPL)` is a
+min-semi-balanced system with at most `n` coalitions and exceptional
+coalition `{r}` whenever `delta+Q>0`.  On an Lmin-tight support, its induced
+exact-game inequality is precisely `(PFRDBx)`; on a common-hinge support the
+same inequality gives `(PFRDBz)`.  For `n>=3`, `(RPL)` defines a facet of the
+exact-game cone if and only if this pair-lifted system is indecomposable in
+the sense of Studeny--Kratochvil.
+
+#### Proof
+
+Use `1_{r,i}=e_r+e_i` in `(RPL)`; it reduces coordinatewise to `(RMS)`.
+In the standard-form vertex basis, replacing a positive slack column `e_i`
+by `e_r+e_i` is an invertible column shear while retaining the exceptional
+column `e_r`.  Hence linear independence and the support bound are
+preserved.  Lemma 2(c) of Studeny--Kratochvil gives minimal
+semi-balancedness, and their facet theorem gives the last equivalence.
+
+For the induced inequality, singleton normalization and Lmin tightness give
+
+```text
+0<=T-sum_S u_S v(S)-sum_i q_i v({r,i})
+  =sum_i q_i[x_i-v({r,i})]-delta x_r,
+```
+
+where the last equality is `(RMS)` dotted with `x`.  This is `(PFRDBx)`;
+common-hinge tightness permits the identical calculation at `z`.  QED.
+
+This yields the distinguished exact-cone class sought by the packet program:
+**rooted pair lifts of extreme staged Lmin packings**.  The common-hinge
+subclass evaluates at both selections.  For a fixed staged menu the full
+class is enumerated exactly by the vertices of `K_r`; support rank proves
+minimality, and the published exceptional-set test decides which are facets.
+The exact hostile replay produces eight nontrivial pair lifts.  Six are
+indecomposable full-cone facets, including both sharp seven-player
+orientations, both coefficient-two roots, one primitive coefficient-seven
+cut, and the neutral-endpoint cut.  The other two primitive
+coefficient-seven lifts have respectively `3` and `20` decompositions.
+An independently formulated Z3 enumeration agrees with every exact-LP facet
+verdict.  These finite verdicts audit the classification algorithm; the
+theorem itself is the incidence/shear argument above.
+
+### Theorem (dimension-free sharp-family pair-lift facet)
+
+For every `p>=1`, `k>=2`, let
+
+```text
+N={r} dot-union O dot-union B,       |O|=p, |B|=k,
+C_b={r} union (B\{b}).
+```
+
+The pair lift of the uniform sharp-family packing is
+
+```text
+sum_(b in B)1_{C_b}
+ +(k-1)sum_(o in O)1_{r,o}
+ -[p(k-1)+1]e_r=(k-1)1_N.                         (GPL)
+```
+
+Its support is an indecomposable min-semi-balanced system and therefore
+defines a facet of the exact-game cone for every `p,k`.  On `G(p,k)` this
+facet is active at both `Lmin` and `Lmax`; its two evaluations are exactly
+the hand inequalities `X<=p(k-1)q` and `M<=p(k-1)l`.
+
+#### Proof
+
+Identity and minimality follow from `(RPL)`.  For indecomposability, suppose
+a new proper coalition `E` were exceptional after adjoining it to the
+support.  Normalize its coefficient to `-1`.  Let `a_b,c_o,d>=0` be the
+coefficients on `C_b,{r,o},{r}`, let `rho` be the common load, and write
+
+```text
+e_r=1_{r in E},       b=|E intersect B|,       o=|E intersect O|,
+A=sum_b a_b.
+```
+
+The `B`, `O`, and root coordinates give
+
+```text
+A-a_b=rho+1_{b in E},
+c_o=rho+1_{o in E},
+A+(p-1)rho+o+d-e_r=0,
+A=(k rho+b)/(k-1).                                  (GPD)
+```
+
+The last left side before `d-e_r` is strictly increasing in `rho`.
+If `o<p`, nonnegativity of an excluded `O` coefficient gives `rho>=0`.
+For `b=0`, `(GPD)` permits only `E=emptyset`, `{r}`, or one supported pair
+`{r,o}`.  For `0<b<k`, nonnegativity gives
+`rho>=k-1-b`; the left side is at most one only when
+`b=k-1`, `o=0`, `rho=0`, yielding one supported `C_b`.  For `b=k` it already
+exceeds one.
+
+If `o=p`, then `rho>=-1`.  When `b=0`, the excluded `B` rows improve this to
+`rho>=0`, leaving only the supported pair in the special case `p=1`.
+For `0<b<k` the same bound `rho>=k-1-b` makes the root equation impossible.
+For `b=k`, its minimum occurs at `rho=-1` and equals one, yielding only
+`E=N`.  Thus no new nonempty proper exceptional coalition exists, proving
+indecomposability.  Activity on `G(p,k)` follows from `v({r,o})=0` and the
+two equality cases of `(PFRDB)` already computed symbolically in `(Gq)` and
+`(GM)`.  QED.
+
+This supplies a uniform exact-cone explanation of the whole extremal family,
+not just its two seven-player orientations: equality is carried by one
+rooted pair-lift facet whose `k` common hinges are selected simultaneously.
+
+This extra term is exactly the coalition premium lost when the exceptional
+root is transported through a deficit singleton.  For any nonempty set `J`
+of deficit players, add the zero incidence relation
+
+```text
+e_r+sum_(i in J)e_i-1_({r} union J)=0
+```
+
+to `(RMS)` with multiplier `delta`.  The exceptional set moves from `{r}`
+to `{r} union J`, while the induced exact-game inequality weakens by
+
+```text
+delta [v({r} union J)-v({r})-sum_(i in J)v({i})].    (ETP)
+```
+
+The bracket is nonnegative by total balancedness and equals
+`delta v({r} union J)` under singleton normalization.  Thus `(PFRDB)` retains
+precisely the single-player transport premiums that the canonical
+semi-balanced decomposition otherwise loses.  In all eight nontrivial
+hostile/sharp cuts the exact replay verifies `(PFRDBx)`; seven are equalities
+and the neutral-endpoint control has slack `9/9523`.  Both sharp orientations
+remain equalities because every relevant root--outside pair has value zero.
+
+### Theorem (rooted vertices are singleton-exceptional systems)
+
+The rooted packing has an exact, rather than metaphorical, interface with
+the exact-game cone.  Identity `(RMS)` holds coordinate by coordinate.  If
+`u` is a vertex of
 `K_r`, delete its zero coefficients and collect any repeated singleton
 columns.  The remaining incidence columns are linearly independent.  Hence:
 
@@ -2311,9 +2515,9 @@ replay currently produces eight nontrivial cuts across the hostile and sharp
 controls.  Every completion satisfies `(RMS)`, has full support rank, and is
 purely min-semi-balanced.  The published exceptional-set test nevertheless
 finds a decomposition for all eight.  An independently formulated Z3 check
-agrees with the exact-LP decomposition counts.  Thus the known sharp
-block-star cuts explain the overlap equality without themselves supplying
-new full exact-cone facets.
+agrees with the exact-LP decomposition counts.  Thus the singleton-slack
+versions explain the rooted budget without supplying full-cone facets; the
+pair shear `(RPL)` is the essential change that produces the facet class.
 
 ### Corollary (positive-root cuts never lift to exact-cone facets)
 
@@ -2335,10 +2539,11 @@ in the exact sense of Studeny--Kratochvil.  QED.
 Thus the rooted-packing construction yields a dimension-free relative
 inequality theorem and an exact finite enumeration algorithm, but its
 canonical singleton-slack lifts cannot be new exact-cone facets at the
-positive roots relevant to hybrid overlap.  Any successful full-cone facet
-route must first glue or factor these decomposable rooted systems into a
-different indecomposable coalition system; enumerating more vertices of
-`K_r` alone cannot accomplish that.
+positive roots relevant to hybrid overlap.  The rooted-pair shear `(RPL)`
+supplies the required different coalition lift and its exact facet filter.
+What remains is not to enumerate more singleton completions, but to prove
+that sparse Lmax gluing selects enough of the pair-lift inequalities to pay
+the universal hybrid target.
 
 The remaining all-dimension problem is now more specific: prove a
 spectral-or-rooted-packing disjunction whose packing branch supplies enough
@@ -2428,9 +2633,11 @@ In tangent variables, the missing human lemma is now a rooted common-hinge
 charge theorem: derive `(RTB)` from `a(S)>=0` on the complete Lmin support,
 the gluing equalities `a(S)=b(S)>=0` on `C_cap`, and the labelled
 stratum/sign rows.  It must explain why the sparse ceiling support meets the
-active indecomposable factors of the Lmin packet with sufficient rooted
-multiplicity.  The exact negative control above shows that a theorem using
-the Lmin packet alone would be too strong.
+rooted pair-lift systems `(RPL)` with sufficient weighted pair premium.
+One-sided pair lifts are available on all of `C_x`; precisely those supported
+on `C_cap` transmit the same facet inequality to `z`.  The exact negative
+control above shows that a theorem using the Lmin packet alone would be too
+strong.
 
 This gives a sharper exact-cone interface as well.  Common-hinge rows are
 diagonal gluing rows between the two generator blocks.  Target-containing
@@ -2484,10 +2691,15 @@ it does not supply the missing dimension-free reason that every branch is
 valid.
 
 The next human step is therefore sharper than an unlabelled search for a
-root: combine `(RC)` with the rooted marginal-completion coefficient of the
-active indecomposable Lmin factors, and prove that the common hinges selected
-by the sparse ceiling over-cover transmit enough exceptional-root
-multiplicity to pay the deficit in `(RTB)`.
+root.  For a maximum-overlap root, take the cone generated by the one-sided
+pair-lift rows `(PFRDBx)` from vertices of `K_r`, their two-sided copies
+`(PFRDBz)` when the support lies in `C_cap`, and the direct gluing,
+stratum/sign and efficiency rows.  Prove that either the direct rows already
+close `(RTB)`, or the target normal lies in this cone.  This **pair-lift
+gluing disjunction** is now the minimal missing lemma: it names both the
+full-cone facet atoms and their exact charge `q_i v({r,i})`.  The
+actual-top-fixed control forces the direct branch; the two sharp families
+force one indecomposable common-hinge pair lift at equality.
 
 Reproduce the fixed-support staged checks, exact primal minima, exact Farkas
 identities, and every one-witness relaxation with

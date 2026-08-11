@@ -2,8 +2,9 @@
 """Independent Z3 replay of rooted-completion decomposition counts.
 
 The primary rooted-hinge verifier uses the project's exact rational LP
-implementation.  This script reads only its emitted coalition supports and
-reformulates the Studeny--Kratochvil exceptional-set test directly in Z3.
+implementation.  This script reads only its emitted singleton-slack and
+rooted-pair coalition supports and reformulates the Studeny--Kratochvil
+exceptional-set test directly in Z3.
 Agreement is a cross-check of the finite audit, not a proof of the human
 singleton-slack completion theorem.
 """
@@ -45,6 +46,22 @@ def decomposition_count(n, support):
     return count
 
 
+def sharp_pair_lift_support(p, k):
+    n = 1 + p + k
+    root = 1
+    outside = tuple(range(1, p + 1))
+    block = tuple(range(p + 1, n))
+    hinges = []
+    for omitted in block:
+        coalition = root
+        for player in block:
+            if player != omitted:
+                coalition |= 1 << player
+        hinges.append(coalition)
+    pairs = [root | (1 << player) for player in outside]
+    return n, tuple(sorted(hinges + pairs + [root]))
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -67,6 +84,23 @@ def main():
                     raise AssertionError(
                         (case["name"], root["root"], cut_number, count)
                     )
+                pair_lifted = completion["pair_lifted_completion"]
+                pair_lifted_support = [
+                    row["coalition"] for row in pair_lifted["coefficients"]
+                ]
+                pair_lifted_count = decomposition_count(
+                    case["n"], pair_lifted_support
+                )
+                if pair_lifted_count != pair_lifted["decomposition_count"]:
+                    raise AssertionError(
+                        (
+                            case["name"],
+                            root["root"],
+                            cut_number,
+                            "pair_lifted",
+                            pair_lifted_count,
+                        )
+                    )
                 rows.append(
                     {
                         "case": case["name"],
@@ -78,16 +112,48 @@ def main():
                             "decomposition_count"
                         ],
                         "agreement": True,
+                        "pair_lifted_support": pair_lifted_support,
+                        "z3_pair_lifted_decomposition_count": pair_lifted_count,
+                        "exact_lp_pair_lifted_decomposition_count": pair_lifted[
+                            "decomposition_count"
+                        ],
+                        "pair_lifted_agreement": True,
+                        "pair_lifted_exact_cone_facet": pair_lifted_count == 0,
                     }
                 )
+    sharp_grid = []
+    for p in range(1, 4):
+        for k in range(2, 5):
+            n, support = sharp_pair_lift_support(p, k)
+            count = decomposition_count(n, support)
+            if count:
+                raise AssertionError(("sharp_pair_lift", p, k, count))
+            sharp_grid.append(
+                {
+                    "p": p,
+                    "k": k,
+                    "n": n,
+                    "support": list(support),
+                    "z3_decomposition_count": count,
+                    "indecomposable": True,
+                }
+            )
     report = {
         "status": "independent Z3 decomposition replay",
         "arithmetic": "exact rational linear arithmetic",
         "cut_count": len(rows),
         "all_counts_agree": all(row["agreement"] for row in rows),
+        "all_pair_lifted_counts_agree": all(
+            row["pair_lifted_agreement"] for row in rows
+        ),
         "all_completions_decomposable": all(
             row["z3_decomposition_count"] > 0 for row in rows
         ),
+        "pair_lifted_facet_count": sum(
+            row["pair_lifted_exact_cone_facet"] for row in rows
+        ),
+        "sharp_family_finite_bug_audit": sharp_grid,
+        "sharp_family_grid_is_not_proof": True,
         "cuts": rows,
     }
     rendered = json.dumps(report, indent=2) + "\n"

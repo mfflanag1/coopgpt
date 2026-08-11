@@ -38,6 +38,7 @@ from verify_labelled_branch_duals import (  # noqa: E402
 )
 from verify_n7_neutral_rectangle_control import (  # noqa: E402
     G as NEUTRAL_G,
+    H as NEUTRAL_H,
     X as NEUTRAL_X,
     Z as NEUTRAL_Z,
 )
@@ -46,6 +47,7 @@ from verify_n7_neutral_rectangle_control import (  # noqa: E402
 NEUTRAL_CASE = {
     "name": "neutral_rectangle_control",
     "g": NEUTRAL_G,
+    "h": NEUTRAL_H,
     "x": NEUTRAL_X,
     "z": NEUTRAL_Z,
     "support_x": (9, 10, 38, 70, 111),
@@ -110,7 +112,7 @@ def decomposition_witnesses(support, n):
     return witnesses
 
 
-def semi_balanced_completion(coalitions, weights, n, root):
+def semi_balanced_completion(coalitions, weights, n, root, case):
     """Audit the rooted packing's exact singleton-slack completion."""
     loads = [F(0)] * n
     coefficients = {}
@@ -164,22 +166,116 @@ def semi_balanced_completion(coalitions, weights, n, root):
         if player != root and deficit > 0
     ]
     forced_pair_decomposition = None
-    if root_advantage > 0 and positive_deficits:
-        player = positive_deficits[0]
-        exceptional_pair = root_singleton | (1 << player)
-        if exceptional_pair in coefficients:
-            raise AssertionError(
-                "root/deficit pair violates minimal-support independence"
+    exceptional_transports = []
+    generators = (tuple(map(F, case["g"])), tuple(map(F, case["h"])))
+
+    def game_value(coalition):
+        return min(
+            sum(
+                (generator[j] for j in range(n) if coalition >> j & 1),
+                F(0),
             )
-        if not any(
-            row["new_exceptional"] == exceptional_pair for row in decompositions
-        ):
-            raise AssertionError("forced root/deficit decomposition was not found")
+            for generator in generators
+        )
+
+    x = tuple(map(F, case["x"]))
+    pair_floors = [
+        F(0) if player == root else game_value(root_singleton | (1 << player))
+        for player in range(n)
+    ]
+    pair_floor_rdb_slack = (
+        sum((deficits[i] * x[i] for i in range(n) if i != root), F(0))
+        - root_advantage * x[root]
+        - sum(
+            (deficits[i] * pair_floors[i] for i in range(n) if i != root),
+            F(0),
+        )
+    )
+    if pair_floor_rdb_slack < 0:
+        raise AssertionError("pair-floor root-deficit inequality failed")
+    pair_lifted_coefficients = {}
+    for coalition, weight in zip(coalitions, weights):
+        if weight:
+            pair_lifted_coefficients[coalition] = (
+                pair_lifted_coefficients.get(coalition, F(0)) + weight
+            )
+    deficit_total = sum((deficits[i] for i in range(n) if i != root), F(0))
+    for player in positive_deficits:
+        pair = root_singleton | (1 << player)
+        pair_lifted_coefficients[pair] = (
+            pair_lifted_coefficients.get(pair, F(0)) + deficits[player]
+        )
+    pair_lifted_coefficients[root_singleton] = (
+        pair_lifted_coefficients.get(root_singleton, F(0))
+        - root_advantage
+        - deficit_total
+    )
+    pair_lifted_coefficients = {
+        coalition: coefficient
+        for coalition, coefficient in pair_lifted_coefficients.items()
+        if coefficient
+    }
+    pair_lifted_identity = [F(0)] * n
+    for coalition, coefficient in pair_lifted_coefficients.items():
+        for player in range(n):
+            if coalition >> player & 1:
+                pair_lifted_identity[player] += coefficient
+    if pair_lifted_identity != [F(1)] * n:
+        raise AssertionError("pair-lifted incidence identity failed")
+    pair_lifted_support = tuple(sorted(pair_lifted_coefficients))
+    pair_lifted_rank = matrix_rank(pair_lifted_support, n)
+    if pair_lifted_rank != len(pair_lifted_support):
+        raise AssertionError("pair-lifted completion is not minimal")
+    if len(pair_lifted_support) > n:
+        raise AssertionError("pair-lifted min-semi-balanced support exceeds n")
+    pair_lifted_negative = [
+        coalition
+        for coalition, coefficient in pair_lifted_coefficients.items()
+        if coefficient < 0
+    ]
+    if pair_lifted_negative != [root_singleton]:
+        raise AssertionError("pair-lifted exceptional coalition is not the root")
+    pair_lifted_decompositions = decomposition_witnesses(pair_lifted_support, n)
+    pair_lifted_game_slack = game_value((1 << n) - 1) - sum(
+        (
+            coefficient * game_value(coalition)
+            for coalition, coefficient in pair_lifted_coefficients.items()
+        ),
+        F(0),
+    )
+    if pair_lifted_game_slack != pair_floor_rdb_slack:
+        raise AssertionError("pair-lifted facet slack and pair-floor budget differ")
+    if root_advantage > 0 and positive_deficits:
+        for player in positive_deficits:
+            exceptional_pair = root_singleton | (1 << player)
+            if exceptional_pair in coefficients:
+                raise AssertionError(
+                    "root/deficit pair violates minimal-support independence"
+                )
+            if not any(
+                row["new_exceptional"] == exceptional_pair
+                for row in decompositions
+            ):
+                raise AssertionError("forced root/deficit decomposition was not found")
+            premium = (
+                game_value(exceptional_pair)
+                - game_value(root_singleton)
+                - game_value(1 << player)
+            )
+            if premium < 0:
+                raise AssertionError("exact-game coalition premium became negative")
+            exceptional_transports.append(
+                {
+                    "deficit_player": player,
+                    "new_exceptional": exceptional_pair,
+                    "coalition_premium": str(premium),
+                    "transport_slack_loss": str(root_advantage * premium),
+                    "verified": True,
+                }
+            )
         forced_pair_decomposition = {
-            "deficit_player": player,
-            "new_exceptional": exceptional_pair,
+            **exceptional_transports[0],
             "identity": "1_{root}+1_{deficit_player}-1_{pair}=0",
-            "verified": True,
         }
     return {
         "player_loads": [str(value) for value in loads],
@@ -201,6 +297,34 @@ def semi_balanced_completion(coalitions, weights, n, root):
         "decomposition_count": len(decompositions),
         "first_decomposition": decompositions[0] if decompositions else None,
         "forced_pair_decomposition": forced_pair_decomposition,
+        "all_single_deficit_transports": exceptional_transports,
+        "pair_floors": [str(value) for value in pair_floors],
+        "pair_floor_root_deficit_slack": str(pair_floor_rdb_slack),
+        "pair_floor_root_deficit_verified": True,
+        "pair_lifted_completion": {
+            "coefficients": [
+                {
+                    "coalition": coalition,
+                    "coefficient": str(pair_lifted_coefficients[coalition]),
+                }
+                for coalition in pair_lifted_support
+            ],
+            "incidence_identity": "sum coefficients*incidence = 1_N",
+            "incidence_rank": pair_lifted_rank,
+            "support_size": len(pair_lifted_support),
+            "exceptional_coalition": root_singleton,
+            "minimality_verified": True,
+            "game_inequality_slack": str(pair_lifted_game_slack),
+            "equals_pair_floor_root_deficit_slack": True,
+            "indecomposable": not pair_lifted_decompositions,
+            "decomposition_count": len(pair_lifted_decompositions),
+            "first_decomposition": (
+                pair_lifted_decompositions[0]
+                if pair_lifted_decompositions
+                else None
+            ),
+            "exact_cone_facet": not pair_lifted_decompositions,
+        },
     }
 
 
@@ -310,7 +434,7 @@ def projected_minimum(case, root):
                     for k in support
                 ],
                 "semi_balanced_completion": semi_balanced_completion(
-                    coalitions, weights, n, root
+                    coalitions, weights, n, root, case
                 ),
             }
         )
@@ -379,6 +503,16 @@ def main():
             "every generated positive-root completion has a nonroot deficit; "
             "the root and deficit singletons give an explicit two-singleton "
             "Studeny--Kratochvil decomposition"
+        ),
+        "pair_floor_projection_audited": (
+            "retaining witness bounds w_i>=v({r,i}) adds the exact weighted "
+            "exceptional-transport premium to root-deficit balance"
+        ),
+        "rooted_pair_lift_theorem_audited": (
+            "replacing deficit singleton columns by rooted-pair columns "
+            "preserves incidence rank and turns the pair-floor budget into a "
+            "min-semi-balanced exact-game inequality; indecomposability is "
+            "tested exhaustively"
         ),
         "scope": (
             "maximum-overlap roots of six hostile fixed branches and two sharp "

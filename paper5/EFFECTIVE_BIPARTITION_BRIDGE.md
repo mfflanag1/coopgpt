@@ -582,7 +582,20 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the positive-root nonfacet theorem: `(RDB)` forces a nonroot deficit, and
   its singleton together with the exceptional root singleton gives an
   explicit two-singleton decomposition, so no canonical rooted completion
-  can be an exact-cone facet at `x_r>0`.
+  can be an exact-cone facet at `x_r>0`;
+- the pair-floor rooted projection: retaining only
+  `w_i>=v({r,i})` from the singleton witness's core constraints sharpens
+  root-deficit balance by `sum_i q_i v({r,i})`; this term is exactly the
+  exceptional-set transport premium lost by the decomposable lift;
+- the rooted pair-lift theorem: the column shear
+  `e_i -> 1_{r,i}=e_r+e_i` turns an extreme packing into a
+  min-semi-balanced system of support at most `n`, whose exact-game
+  inequality is precisely the pair-floor budget and which is a full-cone
+  facet exactly when it passes the published indecomposability test;
+- the dimension-free sharp-family classification: the simultaneous
+  `k`-hinge pair lift is indecomposable for every `p>=1,k>=2`, is active at
+  both selections of `G(p,k)`, and supplies a uniform exact-cone facet
+  explanation of equality.
 
 ### Exact rational evidence
 
@@ -594,7 +607,13 @@ ray; it does not make every relative proof a full exact-cone facet.
   maximum-overlap roots of six hostile and two sharp fixed branches;
 - exact-LP and independently formulated Z3 agreement that all eight
   nontrivial rooted cuts in those controls are min-semi-balanced but
-  decomposable, including both sharp block-star cuts.
+  decomposable, including both sharp block-star cuts;
+- exact pair-floor root-deficit replay on all eight cuts: seven equalities,
+  with only `9/9523` slack in the neutral-endpoint control;
+- exact-LP and independent Z3 agreement that six of the eight rooted pair
+  lifts are indecomposable exact-cone facets, including both sharp
+  seven-player orientations; the other two have `3` and `20`
+  decompositions.
 
 ### Refuted
 
@@ -610,9 +629,10 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the weaker universal target `(H)`;
 - a dimension-free construction of its Farkas charge from the complete
   staged Lmin packet and sparse ceiling data;
-- a different gluing or factorization that converts the necessarily
-  decomposable positive-root systems into an indecomposable full-cone
-  system; further enumeration of canonical rooted completions cannot do so.
+- a dimension-free selection/gluing theorem guaranteeing that sparse Lmax
+  common hinges expose enough rooted pair-lift facet charge to prove the
+  hybrid target; the facet class and its quantitative currency
+  `v({r,i})` are now explicit.
 
 The next live bridge is a **spectral-or-balanced disjunction**.  Positive
 hinge surplus already converts to a rigorous sharpened spectral lower bound;
