@@ -53,6 +53,10 @@ run_python coopgames/verifiers/divergence/verify_mixed_block_star_boundary.py \
   --output "$scratch_dir/mixed-block-star-boundary.json"
 cmp coopgames/verifiers/divergence/mixed_block_star_boundary.json \
   "$scratch_dir/mixed-block-star-boundary.json"
+run_python coopgames/verifiers/divergence/verify_optimized_mixed_currency_certificate.py \
+  --output "$scratch_dir/optimized-mixed-currency-certificate.json"
+cmp coopgames/verifiers/divergence/optimized_mixed_currency_certificate.json \
+  "$scratch_dir/optimized-mixed-currency-certificate.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

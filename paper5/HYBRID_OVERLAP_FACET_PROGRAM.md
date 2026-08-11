@@ -4496,6 +4496,32 @@ minimum `3/4`, whereas the mixed packet together with direct `x`--`z`,
 stratum, nonnegativity, and efficiency rows gives an exact Farkas identity
 at `3/4`.
 
+That Farkas identity has now been distilled into a human nonnegative-slack
+proof.  Normalize `T=1` and write `w=w^3`.  On the fixed branch,
+
+```text
+O-3/4
+ =z_2+(1/2)w_2+(1/4)w_5+(1/4)w_6
+ +(1/4)[w(26)-x(26)]+(1/4)[w(57)-x(57)]
+ +(5/4)[x(52)-z(52)]+(1/2)[x(57)-z(57)]
+ +(1/4)[w(75)-z(75)]
+ +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (MCS)
+```
+
+Every summand is nonnegative by core/witness comparison, nonnegativity, or
+the fixed Lmin/Lmax order.  At the actual control all five coalition
+comparison brackets vanish.  Its margin `929/1080-3/4=119/1080` is exactly
+the weighted sum of `z_2` and the three displayed stratum gaps.  Thus the
+mixed packet buys the `3/4` baseline and ordered label currency pays all
+strictness.  The verifier below checks `(MCS)` as an exact coefficient
+identity and supplies a matching feasible primal, without calling an
+optimizer.
+
+```bash
+python3 verifiers/divergence/verify_optimized_mixed_currency_certificate.py \
+  --output verifiers/divergence/optimized_mixed_currency_certificate.json
+```
+
 The other two noncommon hostile spectral failures separate cleanly.  Their
 sparse certificates attain `7/10` and `2/3` using only direct
 `x`-to-`z`, stratum, nonnegativity, and efficiency rows; neither needs a

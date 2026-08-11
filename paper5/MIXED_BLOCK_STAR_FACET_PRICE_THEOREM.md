@@ -271,7 +271,33 @@ fourteen explicit staged identities for the actual selections and a
 hard-coded primal/dual identity for the relaxation optimum.  No optimization
 call is used for the latter certificate.
 
-## 6. Evidence and limitations
+## 6. Hand payment certificate for the hardest spectral branch
+
+The optimized label-free seven-player obstruction is the tested cut with a
+deficit on a gaining/later-stratum player.  Its root-`3` branch nevertheless
+has the following direct hand certificate, after normalizing `T=1` and
+writing `w=w^3`:
+
+```text
+O-3/4
+ =z_2+(1/2)w_2+(1/4)w_5+(1/4)w_6
+ +(1/4)[w(26)-x(26)]+(1/4)[w(57)-x(57)]
+ +(5/4)[x(52)-z(52)]+(1/2)[x(57)-z(57)]
+ +(1/4)[w(75)-z(75)]
+ +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (15)
+```
+
+Every term is nonnegative by a displayed core/witness comparison,
+nonnegativity, or branch order.  At the actual control every coalition
+bracket is zero.  Its strict margin `119/1080` consists only of `z_2` and
+three payoff-stratum gaps.  This proves by hand that the mixed packet fixes a
+baseline above the universal target while ordered label currency pays the
+multistage defect.
+
+The adjacent verifier checks (15) as a coefficient identity and verifies a
+matching feasible primal at `3/4`; it makes no optimization call.
+
+## 7. Evidence and limitations
 
 Human proof evidence:
 
@@ -298,13 +324,16 @@ stratum or pay its displacement using reserve overlap.
 The numerical search that exposed the control was used only for discovery
 and is not part of the evidence chain.
 
-## 7. Reproduction and review paths
+## 8. Reproduction and review paths
 
 Run from the repository root:
 
 ```bash
 python3 verifiers/divergence/verify_mixed_block_star_boundary.py \
   --output verifiers/divergence/mixed_block_star_boundary.json
+
+python3 verifiers/divergence/verify_optimized_mixed_currency_certificate.py \
+  --output verifiers/divergence/optimized_mixed_currency_certificate.json
 
 python3 verifiers/divergence/verify_rooted_star_matrix_facets.py \
   --input verifiers/divergence/mixed_witness_projection.json \
@@ -320,6 +349,8 @@ Primary files:
 - `paper5/divergence.tex` and `paper5/divergence.pdf` — manuscript;
 - `verifiers/divergence/verify_mixed_block_star_boundary.py` — exact audit;
 - `verifiers/divergence/mixed_block_star_boundary.json` — saved output;
+- `verifiers/divergence/verify_optimized_mixed_currency_certificate.py` —
+  solver-free hand-certificate audit;
 - `verifiers/divergence/verify_rooted_star_matrix_facets.py` — existing
   indecomposability audit.
 
