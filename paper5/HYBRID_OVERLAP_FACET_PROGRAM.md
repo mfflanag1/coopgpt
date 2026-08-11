@@ -534,6 +534,105 @@ conversion.
 
 ## 6. Full-stage transport through pinning congestion
 
+### General projected staged-circuit theorem
+
+The complete staged packets have an exact dimension-free incidence form.
+At a Lmin stage let `O` be the earlier pinned set, `B` the current block, and
+`T_x` the proper coalitions tight at `x`.  Let
+
+```text
+pi:R^N -> R^N/span({1_N} union {e_j:j in O})
+```
+
+be the quotient map.
+
+### Theorem (projected staged circuit)
+
+A player `i in B` is pinned at the current Lmin stage if and only if the
+projected configuration has a positive relation
+
+```text
+sum_(S in T_x)lambda_S pi(1_S)
+ +sum_(k in B)r_k pi(e_k)+pi(e_i)=0,                   (PC-min)
+```
+
+with `lambda,r>=0`.  If the relation is infeasible, there is a rational
+direction `d` satisfying
+
+```text
+d(N)=0,       d_j=0                  (j in O),
+d(S)>=0       (S in T_x),
+d_k>=0        (k in B),
+d_i>0.                                                  (PA-min)
+```
+
+Thus `(PA-min)` is an explicit improvement on the recursively restricted
+Lmin face.
+
+The Lmax mirror replaces every current-block column by its negative:
+
+```text
+sum_(S in T_z)lambda_S pi(1_S)
+ +sum_(k in B)r_k pi(-e_k)+pi(-e_i)=0.                 (PC-max)
+```
+
+Its infeasibility separator has `d_k<=0` on `B` and `d_i<0`, hence improves
+the decreasing lexicographic objective on the pinned Lmax face.
+
+Every support-minimal relation in either configuration uses at most
+
+```text
+n-|O|                                                     (PS)
+```
+
+projected columns, including the forced player column.
+
+### Proof
+
+The staged Farkas identity `(SP-min)` is exactly a lift of `(PC-min)`: the
+free efficiency multiplier and free old-pin multipliers disappear in the
+quotient.  Conversely, lifting a projected relation supplies those free
+multipliers and reconstructs the staged incidence identity.  Dotting that
+identity with `x` automatically gives the staged objective equation because
+all supported coalitions are `x`-tight, old coordinates equal their pinned
+values, and every current coordinate equals the stage level.  Hence no
+separate objective restriction remains.
+
+If the conic relation fails, exact separation in the quotient gives a dual
+vector in the annihilator of `1_N` and every old unit column.  Its signs on
+the remaining configuration are precisely `(PA-min)`.  The usual finite
+short-step argument preserves all nontight core inequalities and strictly
+improves player `i`.  This proves both directions.  The Lmax proof is the
+sign mirror.
+
+The quotient dimension is at most `n-|O|-1`.  A circuit in a configuration
+of that rank uses at most one more column, proving `(PS)`.  QED.
+
+### Exact enumeration algorithm and facet boundary
+
+For a fixed staged face:
+
+1. form the rational projected matrix with tight-coalition columns and the
+   appropriately signed current-block unit columns;
+2. enumerate conformal circuits containing the forced player column;
+3. normalize that coefficient to one and lift the circuit to recover the
+   efficiency and old-pin multipliers;
+4. retain the sparse extreme relations, with at most `n-|O|` columns;
+5. test any lifted semi-balanced system for indecomposability using the
+   Studeny--Kratochvil criterion before calling it an exact-cone facet.
+
+This is an exact facet/ray enumeration theorem for the **relative staged
+normal configuration**.  It is not a one-to-one correspondence with facets
+of the full exact-game cone: quotienting by pinned coordinates and retaining
+the labels “tight protector” and “current-side column” are selection-specific
+operations.  Some lifts are decomposable, as the three-trace example already
+shows; indecomposable lifts are genuine exact-cone facets by the published
+criterion.
+
+The all-player staged certificates in
+`verifiers/s6/two_packet_exactification_audit.json` and their separate replay
+checker are finite bug audits of these identities, not proof dependencies.
+
 ### Rooted incidence Hall theorem for the first floor
 
 Before introducing congestion, the individual first-stage certificates admit
