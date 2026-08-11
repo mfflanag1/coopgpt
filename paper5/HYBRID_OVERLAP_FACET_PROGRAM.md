@@ -988,6 +988,79 @@ remaining route is now precise: bound the congestion of the two acyclic
 nonnegative transports jointly with the sparse Lmax over-cover, or show that
 genuine multistage congestion purchases strict extra overlap.
 
+### A sharp surviving congestion target
+
+The next conjecture is one-sided.  At Lmin stage `t`, let
+
+```text
+I_t={i in B_t:z_i>x_i},       P_t=O_t union B_t.
+```
+
+Choose one sign-coherent relation `(SP)` for every `i in I_t`.  Define its
+joint auxiliary congestion as the largest, over `j in P_t`, of the sum of
+the `q_j` and `r_j` coefficients across the chosen relations, and minimize
+over all simultaneous choices.  Call the result `kappa_t`.
+
+> **Staged target-count congestion conjecture.**  For every
+> singleton-normalized exact game,
+>
+> ```text
+> kappa_t <= |I_t|                         for every Lmin stage. (TC)
+> ```
+
+This is sharp already at ordinary first floors and at later archived stages.
+It is not a consequence of sign coherence alone: it is a quantitative claim
+about how the individually feasible nested circuits can be chosen together.
+
+There is an exact price alternative.  Let `C_i` be the polytope of
+sign-coherent certificates for target `i`, written with auxiliary vector
+`a^i` on `P_t`.  Minimax and the individual incidence LP dual give
+
+```text
+kappa_t
+ = max_(p in Delta(P_t)) sum_(i in I_t)
+     max { y^i_i :
+           y^i(N)=0,
+           y^i(S)>=0       (S in T_x),
+           y^i_j>=-p_j     (j in P_t) }.               (TC-dual)
+```
+
+Thus `(TC)` is equivalent to a dimension-free unit-Lipschitz statement for
+the Lmin tangent cone under one common probability price.  This dual is the
+right interface for the exact-cone program: a failure has a rational price
+and sparse stage-improving directions, while a proof must explain why exact
+singleton witnesses or their indecomposable semi-balanced inequalities cap
+the summed target gain.
+
+The exact audit
+
+```bash
+python3 verifiers/divergence/audit_staged_target_congestion.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --n 6 --include-n7-control \
+  --output verifiers/divergence/staged_target_congestion_audit.json
+```
+
+finds zero `(TC)` failures in all `495` nontrivial Lmin stages of the `374`
+archived six-player pairs; the largest `kappa_t/|I_t|` is exactly one.  The
+nonuniform seven-player control has congestion `1` for its two first-stage
+targets and congestion `1` for its one second-stage target.  This is finite
+evidence only.
+
+The Lmax mirror is false and must not be imported into a proof.  The same
+audit finds `27` failures among `494` nontrivial Lmax stages.  In
+`verifiers/s6/harvest6_601.json`, record `21`,
+
+```text
+x=(1,1,1,1,2,1),
+z=(4/5,4/5,7/5,8/5,8/5,4/5),
+```
+
+the first Lmax stage has the single gaining target `3` but minimum mirror
+congestion `3/2`.  This exact negative control explains why the live program
+uses the complete staged **Lmin** packet together with the sparse first-stage
+Lmax over-cover rather than a symmetric pair of target-count bounds.
+
 ## 7. What one-packet theory gives on exact-cone facets
 
 The strongest correct statement is a relative circuit theorem, not a global
@@ -1065,8 +1138,9 @@ The minimal live target is therefore:
 > **Compatible fractional-hinge and acyclic-congestion lemma.**  From a
 > sparse Lmax top over-cover and the two sign-coherent nested incidence chains
 > in Section 6, construct nonnegative coupling weights whose normalized
-> first-stage loads pack as in `(FSP)` and whose acyclic carrier congestion
-> implies
+> first-stage loads pack as in `(FSP)`, prove or replace the one-sided
+> target-count bound `(TC)`, and control cross-stage source reuse so that the
+> resulting acyclic carrier congestion implies
 > `sum_i min(x_i,z_i)>=nT/floor(n^2/4)`.
 
 The theorem must allow multiple rooted facets and fractional sharing of a
