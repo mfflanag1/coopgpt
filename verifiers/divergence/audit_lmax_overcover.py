@@ -196,14 +196,19 @@ def top_certificate(v: tuple[F, ...], z: tuple[F, ...]) -> dict:
     }
 
 
-def spectral_bound(x: tuple[F, ...], z: tuple[F, ...], theta: F) -> F:
+def spectral_bound(
+    x: tuple[F, ...],
+    z: tuple[F, ...],
+    theta: F,
+    cross_surplus: F = F(0),
+) -> F:
     """Worst overlap after forgetting labels except the dispersed top anchor."""
     n = len(x)
     minimum = min(x)
     maximum = max(z)
     top_size = sum(value == maximum for value in z)
     lower_z = sorted((value for value in z if value < maximum), reverse=True)
-    required_excess = (maximum - minimum) / theta
+    required_excess = (maximum + cross_surplus - minimum) / theta
     candidates = []
     for chosen in itertools.combinations(range(n), top_size):
         if sum((x[i] - minimum for i in chosen), F(0)) < required_excess:

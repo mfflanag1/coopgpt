@@ -96,6 +96,10 @@ def audit(p: int, k: int):
         )
         assert load == xi - beta[player]
     assert sum((beta[i] * z[i] for i in range(n)), F(0)) == q
+    packing_loads = [
+        alpha[i] / F(1, k) + beta[i] / F(1, p + 1) for i in range(n)
+    ]
+    assert packing_loads == [F(1)] * n
 
     # Each hinge extends to a rooted block-star circuit.  Its budget is tight.
     rooted = []
@@ -145,6 +149,9 @@ def audit(p: int, k: int):
             "xi": str(xi),
             "beta": [str(value) for value in beta],
         },
+        "normalized_fractional_packing_loads": [
+            str(value) for value in packing_loads
+        ],
         "rooted_packets": rooted,
     }
 
