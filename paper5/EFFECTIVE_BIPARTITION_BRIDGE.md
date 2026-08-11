@@ -621,7 +621,12 @@ ray; it does not make every relative proof a full exact-cone facet.
   elimination of the entire root-zero witness block;
 - the first genuinely noncommon packet
   `1_26+1_57+1_75+2e_2+e_5+e_6=2 1_N+e_3`, yielding
-  `x(26)+x(57)+z(75)<=2T` in the optimized hostile branch.
+  `x(26)+x(57)+z(75)<=2T` in the optimized hostile branch;
+- an alternative extreme packet using tagged coalitions `x:26,x:57,z:15`;
+  its singleton completion is decomposable, while its rooted-pair shear has
+  seven independent columns, is indecomposable under the published test,
+  defines an active exact-cone facet, and by itself raises the projected
+  master to the exact `3/4` one-witness minimum.
 
 ### Exact rational evidence
 
@@ -662,6 +667,11 @@ ray; it does not make every relative proof a full exact-cone facet.
   branch proofs: the optimized branch uses one mixed-colour root-`3` packet,
   while the actual-top-fixed and top-and-bottom-fixed branches close by
   direct labelled rows without a witness packet.
+- independent cutting-plane/direct-witness agreement on every
+  maximum-overlap root of eight hostile/sharp controls: nine extreme mixed
+  projection cuts, seven rooted-pair exact-cone facets, and exactly one
+  genuinely two-colour cut.  An independent Z3 exact-LRA formulation agrees
+  with every decomposition count and facet decision.
 
 ### Refuted
 

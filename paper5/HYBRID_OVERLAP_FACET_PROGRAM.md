@@ -4109,6 +4109,53 @@ python3 verifiers/divergence/verify_mixed_packet_gluing.py \
   --output verifiers/divergence/mixed_packet_gluing.json
 ```
 
+An independently formulated cutting-plane elimination finds an alternative,
+facet-bearing mixed packet at the same root:
+
+```text
+(1/2)(1_26+1_57+1_15)+(1/2)e_2+(1/2)e_5+e_6
+  =1_N+(1/2)e_3.                                    (MCP7)
+```
+
+Here `26,57` are `x`-tagged and `15` is `z`-tagged.  This single cut raises
+the witness-free master from `25/34` to the direct one-witness optimum `3/4`.
+The canonical singleton completion is purely min-semi-balanced but has `48`
+exceptional-set decompositions, so it is not a full exact-cone facet.  Its
+rooted-pair shear is
+
+```text
+(1/2)(1_12+1_15+1_26+1_40+1_57)+1_72-(5/2)e_3=1_N. (MCPF)
+```
+
+The seven incidence columns have rank seven.  The published
+Studeny--Kratochvil exceptional-set test finds no decomposition, so `(MCPF)`
+defines a facet of the seven-player exact-game cone.  Its game-inequality
+slack is zero on the hostile control.  Thus the first genuinely noncommon
+mixed-witness cut has an active indecomposable rooted-pair factor; the colour
+labels explain its relative two-selection use, while the pair shear explains
+its full-cone facet content.
+
+Across the eight hostile/sharp controls, exact cutting planes reproduce every
+direct one-witness minimum.  They generate nine cuts: only `(MCP7)` uses both
+colours, no canonical singleton completion is a facet, and seven rooted-pair
+shears are facets.  Eight pair-lift inequalities are active; the neutral
+control has the sole positive slack `9/9523`.  A separately formulated Z3
+exact-LRA replay agrees with every decomposition count and with all seven
+facet decisions.  Reproduce with
+
+```bash
+python3 verifiers/divergence/verify_mixed_witness_projection.py \
+  --output verifiers/divergence/mixed_witness_projection.json
+python3 verifiers/divergence/verify_mixed_witness_projection_z3.py \
+  --input verifiers/divergence/mixed_witness_projection.json \
+  --output verifiers/divergence/mixed_witness_projection_z3.json
+```
+
+The two projection formulations share the labelled branch rows; only their
+witness-feasibility components are independently formulated.  The facet
+counts are finite controls, not evidence that a target-proving root exists in
+every dimension.
+
 This closes a real structural gap: noncommon support no longer prevents a
 single exactness witness from coupling the selections, extreme coupling has
 linear coalition support, and `(MWP2)` exhausts every inequality obtainable
