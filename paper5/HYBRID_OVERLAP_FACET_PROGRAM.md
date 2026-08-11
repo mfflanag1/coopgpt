@@ -3955,6 +3955,140 @@ python3 verifiers/divergence/verify_n7_neutral_rectangle_control.py \
 The control refutes only the opposite-sign restriction.  Its overlap exceeds
 the main seven-player target by `43349/114276`.
 
+### Mixed-colour rooted packets: the first noncommon gluing theorem
+
+The common-hinge projection is not the largest inequality obtainable from a
+single singleton witness.  Its restriction to `C_x`, followed by transfer to
+`z` only on `C_x intersect C_z`, unnecessarily discards packets containing
+different coalitions tight at the two selections.  The following extension
+is dimension-free.
+
+> **Theorem (mixed-colour rooted packet).**  Let `v` be a
+> singleton-normalized exact game, let `x,z` be core allocations, and fix a
+> root `r`.  Exactness supplies a core allocation `w^r` with `w^r_r=0`.
+> Let `D` be a finite multiset of tagged coalitions `(sigma,S)`, where
+> `sigma` is `x` or `z` and `S` is tight at the tagged selection.  Suppose
+> that nonnegative rational numbers `rho_(sigma,S)`, `q_i`, and scalars
+> `xi,tau` satisfy
+>
+> ```text
+> sum_((sigma,S) in D) rho_(sigma,S) 1_S + q
+>     = xi 1_N + tau e_r.                            (MCP1)
+> ```
+>
+> Then
+>
+> ```text
+> sum_((sigma,S) in D) rho_(sigma,S) sigma(S) <= xi T. (MCP2)
+> ```
+>
+> In particular, neither common support nor equality of `x(S)` and `z(S)`
+> is required.
+
+#### Proof
+
+Dot `(MCP1)` with `w^r`.  Since `w^r(N)=T` and `w^r_r=0`, the right side is
+`xi T`.  On the left, `q.w^r>=0` and
+
+```text
+w^r(S)>=v(S)=sigma(S)
+```
+
+for every tagged tight coalition.  Dropping the nonnegative singleton term
+proves `(MCP2)`.  QED.
+
+This is not a restatement of the common-hinge theorem.  A common hinge can
+be tagged either colour and transfers the same coalition sum between the
+selections.  A genuinely mixed packet may instead contain an `x`-only
+coalition and a different `z`-only coalition; the common exactness witness,
+not a common hinge, glues their values.
+
+#### Projection, support, and exact-cone interface
+
+Normalize the off-root load of a tagged weight vector by
+
+```text
+K_r^mix={rho>=0:
+  sum_((sigma,S):i in S)rho_(sigma,S)<=1  (i != r)}. (MCP3)
+```
+
+Every vertex has at most `n-1` positive tagged coalitions.  Indeed, after
+adjoining the off-root slack variables, `(MCP3)` is in standard form with
+`n-1` equations, so the positive columns of a basic feasible solution are
+linearly independent.  In particular, two differently tagged copies of the
+same coalition cannot both be positive at a vertex.  Root-only columns give
+the familiar rays and zero-right-hand-side inequalities.
+
+For a normalized point put `p_i=sum_(sigma,S:i in S)rho_(sigma,S)`,
+`q_i=1-p_i` off the root, and `delta=p_r-1`.  The incidence completion is
+
+```text
+sum_(sigma,S)rho_(sigma,S)1_S
+ +sum_(i != r)q_i e_i-delta e_r=1_N.                (MCP4)
+```
+
+Thus the colour labels disappear under projection to characteristic-function
+coordinates.  The same Studeny--Kratochvil classification applies to the
+underlying coalition incidence system: `(MCP4)` gives a finite list of
+min-balanced or singleton-exceptional min-semi-balanced candidates, and the
+published indecomposability test decides which candidates are facets of the
+full exact-game cone.  The rooted-pair shear can again replace singleton
+slack by pair columns before that test.  What is new is the **relative
+two-selection evaluation** of the same exact-game inequality: different
+coalitions may be evaluated at different tight selections.
+
+Consequently, for a fixed pair of staged supports, vertex/ray enumeration of
+`K_r^mix`, exact branch gluing, and the indecomposability filter form an exact
+finite algorithm for all one-witness mixed-packet factors.  This is an
+algorithmic and support theorem; it does not assert that those factors span
+the universal hybrid-overlap target.
+
+#### The first noncommon packet
+
+The optimized label-free spectral obstruction has a sparse one-witness proof
+at root `r=3`.  Three of its tight coalitions obey
+
+```text
+1_26+1_57+1_75+2e_2+e_5+e_6=2 1_N+e_3,            (MCP5)
+```
+
+where `26` and `57` are tight at `x`, while `75` is tight at `z`; only `57`
+is common.  The theorem gives the genuinely mixed inequality
+
+```text
+x(26)+x(57)+z(75)<=2T.                              (MCP6)
+```
+
+This is exactly the coalition part that the old common-hinge projection
+misses: at this root that projection has minimum `25/34`, below the branch
+minimum `3/4`, whereas the mixed packet together with direct `x`--`z`,
+stratum, nonnegativity, and efficiency rows gives an exact Farkas identity
+at `3/4`.
+
+The other two noncommon hostile spectral failures separate cleanly.  Their
+sparse certificates attain `7/10` and `2/3` using only direct
+`x`-to-`z`, stratum, nonnegativity, and efficiency rows; neither needs a
+witness packet.  Hence a universal theorem demanding a nontrivial rooted
+packet in every nonspectral branch would already be false.  The viable
+disjunction has at least two nonspectral closures: direct labelled gluing,
+or one or more mixed rooted packets.
+
+The exact coefficient identities, including every multiplier, and the
+integer incidence identity `(MCP5)` are replayed by
+
+```bash
+python3 verifiers/divergence/verify_mixed_packet_gluing.py \
+  --output verifiers/divergence/mixed_packet_gluing.json
+```
+
+This closes a real structural gap: noncommon support no longer prevents a
+single exactness witness from coupling the selections, and extreme coupling
+still has linear coalition support.  It does **not** prove `(H)`.  The next
+missing lemma is now a mixed-packet spanning statement: whenever the spectral
+floor fails, prove that the target normal is generated by direct labelled
+rows and a bounded collection of extreme mixed packets, or produce a branch
+whose exact Farkas dual necessarily uses more than this one-witness cone.
+
 The three hostile spectral failures separate the two currencies:
 
 | control | spectral deficit | `C_top` | `C_label` |

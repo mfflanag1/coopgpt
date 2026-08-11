@@ -611,7 +611,14 @@ ray; it does not make every relative proof a full exact-cone facet.
   is `kappa_r`, the Lmin-side slack is exactly `kappa_r-epsilon`, and common
   tangent balance acquires the exact defect `-epsilon`;
 - the best-single-anchor perspective LP, which optimizes
-  `(M+epsilon-mu)/theta` jointly over all sparse top over-covers.
+  `(M+epsilon-mu)/theta` jointly over all sparse top over-covers;
+- the mixed-colour rooted-packet theorem: a root-zero exactness witness
+  prices one nonnegative incidence packet containing different coalitions
+  tight at `x` and at `z`; extreme packets use at most `n-1` tagged
+  coalitions and project to the existing min-semi-balanced/facet filter;
+- the first genuinely noncommon packet
+  `1_26+1_57+1_75+2e_2+e_5+e_6=2 1_N+e_3`, yielding
+  `x(26)+x(57)+z(75)<=2T` in the optimized hostile branch.
 
 ### Exact rational evidence
 
@@ -648,6 +655,10 @@ ray; it does not make every relative proof a full exact-cone facet.
 - a null-padded exact five-player control gives an exact six-player negative
   control to unrestricted surplus absorption: `epsilon_*=3/112` but both top
   pair lifts have `kappa_r=0`.  Its overlap `25/28` is safely above `2/3`.
+- exact rational coefficient identities for the three noncommon hostile
+  branch proofs: the optimized branch uses one mixed-colour root-`3` packet,
+  while the actual-top-fixed and top-and-bottom-fixed branches close by
+  direct labelled rows without a witness packet.
 
 ### Refuted
 
@@ -677,6 +688,11 @@ ray; it does not make every relative proof a full exact-cone facet.
   surplus absorption for a suitable root or distribute the unabsorbed
   deficiency across multiple staged/facet rows; one scalar anchor is now
   proved insufficient.
+- a dimension-free spanning theorem showing that failure of the spectral
+  branch forces the target normal into the cone of direct labelled rows and
+  finitely many extreme mixed-colour rooted packets.  The packet inequality,
+  its `n-1` support bound, and its exact-cone projection are proved; this
+  spanning assertion is not.
 
 The next live bridge is a **spectral-or-balanced disjunction**.  Positive
 hinge surplus already converts to a rigorous sharpened spectral lower bound;
