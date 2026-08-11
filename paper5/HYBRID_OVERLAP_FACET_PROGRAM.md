@@ -4387,7 +4387,7 @@ O-[1-gp/{q(m-s)}]T
   +R_x+R_z.                                         (TDG)
 ```
 
-Thus `R_x,R_z>=0` imply
+Thus the weaker condition `R_x+R_z>=0` already implies
 
 ```text
 O/T>=1-gp/[(g+h)(p+g-s)].                            (TDGB)
@@ -4395,12 +4395,30 @@ O/T>=1-gp/[(g+h)(p+g-s)].                            (TDGB)
 
 The comparison is automatic if `H union J` is Lmin-tight, since `z` is a
 core allocation.  Equality in the bound requires `l=0`, a tight comparison,
-and both residuals zero.  The bound reaches the target exactly when
+and zero residual sum.  The bound reaches the target exactly when
 
 ```text
 floor(n^2/4)gp
  <=[floor(n^2/4)-n](g+h)(p+g-s).
 ```
+
+This criterion is a one-dimensional packet problem.  Put
+
+```text
+delta_i=z_i-x_i on G,       L_H=x(H)-z(H),
+U_s={(p-s)x(G)-g x(P)+(p-s)[z(H)-hb]+gsb}/g.
+```
+
+Then exact cancellation gives
+
+```text
+z(H union J)-x(H union J)=delta(J)-L_H,
+(m-s)(R_x+R_z)=g[U_s-delta(J)].
+```
+
+Hence the direct branch closes whenever some cardinality-`s` packet hits
+`L_H<=delta(J)<=U_s`.  Arbitrary multistratum geometry has therefore reduced
+to an explicit interval-hitting question on the gainer weights.
 
 There is a useful ordinal sufficient condition for the residual signs:
 
@@ -4425,11 +4443,15 @@ branch gives base `7/10`, `R_x=15/4`, and `R_z=111/20`.  The
 top-and-bottom-fixed branch gives base `2/3`, `R_x=1`, and `R_z=11`; here
 `s=3>p=1`, so only the exact residual criterion applies.
 
+In interval form, the two packets are respectively `1/2` in
+`[1/2,129/10]` and `3/2` in `[3/2,15/2]`; the fresh control is sharp at the
+singleton interval `[1/2,1/2]`.
+
 This is not yet a selection theorem.  The remaining direct-arm gap is now
-precise: prove that a complete staged Lmin packet supplies some partition and
-Lmin-tight `H union J` satisfying the target size inequality and
-`R_x,R_z>=0`, or show that every failure admits an affordable mixed-colour
-rooted packet.  No two-stratum Lmax premise remains.
+precise: prove that a complete staged Lmin packet supplies a target-reaching
+cardinality-`s` gainer packet in `[L_H,U_s]`, or show that every interval miss
+admits an affordable mixed-colour rooted packet.  No two-stratum Lmax premise
+remains.
 
 A fresh three-generator exact seven-player control with
 `(p,g,h,s)=(3,2,2,1)` has

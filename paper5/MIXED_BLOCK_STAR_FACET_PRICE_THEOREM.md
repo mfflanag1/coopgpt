@@ -319,7 +319,7 @@ O-[1-gp/{q(m-s)}]T
   +B[z(H union J)-x(H union J)]+R_x+R_z.             (17)
 ```
 
-Consequently, if `R_x>=0` and `R_z>=0`, then
+Consequently, the weaker condition `R_x+R_z>=0` already implies
 
 ```text
 O/T>=1-gp/[(g+h)(p+g-s)].                             (18)
@@ -356,9 +356,36 @@ the coefficient of `T` becomes `-[1-gp/{q(m-s)}]`.  The result is
 
 The low term is nonnegative because singleton normalization and core
 membership give `z>=0`; the comparison term is nonnegative by (15).  Thus
-nonnegative residuals prove (18), and clearing positive denominators gives
-(19).  Equality in (18) requires `l=0`, a tight comparison, `R_x=0`, and
-`R_z=0`.  QED.
+nonnegative residual sum proves (18), and clearing positive denominators gives
+(19).  Equality in (18) requires `l=0`, a tight comparison, and
+`R_x+R_z=0`.  QED.
+
+### Gain-packet interval reduction
+
+The residual criterion has a one-dimensional form.  Put
+
+```text
+delta_i=z_i-x_i>=0 on G,       L_H=x(H)-z(H)>=0,
+U_s={(p-s)x(G)-g x(P)+(p-s)[z(H)-hb]+gsb}/g.        (20)
+```
+
+Multiplication by `m-s` gives the exact reductions
+
+```text
+z(H union J)-x(H union J)=delta(J)-L_H,
+(m-s)(R_x+R_z)=g[U_s-delta(J)].                      (21)
+```
+
+Therefore a cardinality-`s` gainer packet closes the direct branch whenever
+
+```text
+L_H<=delta(J)<=U_s.                                  (22)
+```
+
+All multistratum dependence has collapsed into the scalar packet weights
+`delta_i` and the explicit interval `[L_H,U_s]`.  This does not prove that
+such a packet exists, but it converts the direct side of the missing
+selection theorem into a cardinality-constrained interval-hitting problem.
 
 ### Cross-ordered sufficient condition
 
@@ -369,7 +396,7 @@ Suppose
 s<=p,
 max x(P)<=min x(G),
 max z(G)<=min z(H),
-J consists of s lowest-z players of G.               (20)
+J consists of s lowest-z players of G.               (23)
 ```
 
 Since `s<=p`, `0<B<=1`.  Every payoff in `G` is at least the average payoff
@@ -381,7 +408,7 @@ R_x >=[s+(1-B)(g-s)-Bp] average(x(P))=0.
 
 The Lmax order implies `average(z(H))>=b>=average(z(G))`, while the choice of
 `J` gives `average(z(J))<=average(z(G))`.  Hence both brackets in `R_z` have
-the required signs and `R_z>=0`.  Thus (20) implies the master bound without
+the required signs and `R_z>=0`.  Thus (23) implies the master bound without
 assuming that Lmax has only two levels.
 
 When `x=a` on `P union G`, `x=c` on `H`, `z=l` on `P`, and `z=b` on
@@ -391,7 +418,7 @@ specialization is
 ```text
 O-[1-gp/{q(m-s)}]T
  =[gpn/{q(m-s)}]l
-  +[g/(m-s)][z(H union J)-x(H union J)].             (21)
+  +[g/(m-s)][z(H union J)-x(H union J)].             (24)
 ```
 
 This theorem supplies the direct-labelled arm of the surviving disjunction.
@@ -411,10 +438,10 @@ z=(4/3,2,4/3,2,2,4/3,2),
 ```
 
 and coalition `74={1,3,6}=H union J` is tight at both selections.  Formula
-(21) specializes to
+(24) specializes to
 
 ```text
-O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)].               (22)
+O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)].               (25)
 ```
 
 The lower-envelope game has three generators, actual overlap `11T/12`, and
@@ -424,9 +451,10 @@ control, not a premise of the theorem.
 
 The arbitrary-Lmax master also recovers the two archived direct hostile
 certificates.  For the actual-top-fixed branch it gives `7/10`, with
-`R_x=15/4` and `R_z=111/20`.  For the top-and-bottom-fixed branch it gives
-`2/3`, with `R_x=1` and `R_z=11`; here `s=3>p=1`, showing why the exact
-residual criterion is strictly stronger than sufficient condition (20).
+`R_x=15/4`, `R_z=111/20`, and packet `1/2` in `[1/2,129/10]`.  For the
+top-and-bottom-fixed branch it gives `2/3`, with `R_x=1`, `R_z=11`, and
+packet `3/2` in `[3/2,15/2]`; here `s=3>p=1`, showing why the exact
+residual criterion is strictly stronger than sufficient condition (23).
 
 ## 7. Hand payment certificate for the hardest spectral branch
 
@@ -441,7 +469,7 @@ O-3/4
  +(1/4)[w(26)-x(26)]+(1/4)[w(57)-x(57)]
  +(5/4)[x(52)-z(52)]+(1/2)[x(57)-z(57)]
  +(1/4)[w(75)-z(75)]
- +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (23)
+ +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (26)
 ```
 
 Every term is nonnegative by a displayed core/witness comparison,
@@ -451,7 +479,7 @@ three payoff-stratum gaps.  This proves by hand that the mixed packet fixes a
 baseline above the universal target while ordered label currency pays the
 multistage defect.
 
-The adjacent verifier checks (23) as a coefficient identity and verifies a
+The adjacent verifier checks (26) as a coefficient identity and verifies a
 matching feasible primal at `3/4`; it makes no optimization call.
 
 ## 8. Evidence and limitations
@@ -480,8 +508,8 @@ Exact audit evidence:
 
 The nine-cut statement is a finite coefficient audit, not a theorem.  Together
 with (17), it isolates the remaining obstacle as a direct-or-rooted selection
-lemma: either some Lmin-tight comparison reaches the target with
-`R_x,R_z>=0`, or failure of all such comparisons must produce an affordable
+lemma: either some Lmin-tight comparison supplies a cardinality-constrained
+gain packet satisfying (22), or failure of all such packets must produce an affordable
 mixed-colour rooted packet.  Neither alternative has been proved universally.
 
 The numerical search that exposed the control was used only for discovery

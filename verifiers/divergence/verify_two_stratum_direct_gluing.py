@@ -79,6 +79,20 @@ def master_identity(point_x, point_z, p_set, g_set, h_set, j_set):
         (F(1) - weight) * (point_sum(point_z, h_set) - h * high_z)
         - weight * (point_sum(point_z, j_set) - s * high_z)
     )
+    gainer_packet = point_sum(point_z, j_set) - point_sum(point_x, j_set)
+    h_loss = point_sum(point_x, h_set) - point_sum(point_z, h_set)
+    residual_budget = (
+        (p - s) * point_sum(point_x, g_set)
+        - g * point_sum(point_x, p_set)
+        + (p - s) * (point_sum(point_z, h_set) - h * high_z)
+        + g * s * high_z
+    ) / g
+    if comparison_slack != gainer_packet - h_loss:
+        raise AssertionError("gain-packet comparison reduction failed")
+    if denominator * (x_order_residual + z_order_residual) != g * (
+        residual_budget - gainer_packet
+    ):
+        raise AssertionError("gain-packet budget reduction failed")
     base = F(1) - F(g * p, q * denominator)
     low_weight = F(g * p * n, q * denominator)
     overlap = sum((min(a, b) for a, b in zip(point_x, point_z)), F(0))
@@ -98,6 +112,10 @@ def master_identity(point_x, point_z, p_set, g_set, h_set, j_set):
         "comparison_slack": str(comparison_slack),
         "x_order_residual": str(x_order_residual),
         "z_order_residual": str(z_order_residual),
+        "gainer_packet": str(gainer_packet),
+        "h_loss": str(h_loss),
+        "residual_budget": str(residual_budget),
+        "packet_hits_interval": h_loss <= gainer_packet <= residual_budget,
         "low_z_term": str(low_weight * low_z),
         "actual_overlap_ratio": str(overlap / total),
         "identity_margin": str(lhs),
@@ -344,8 +362,10 @@ def main():
             "for any sign partition P/G/H and comparison H+J, the exact "
             "master identity decomposes O-[1-gp/((g+h)(p+g-|J|))]T "
             "into a low-Lmax term, the comparison slack, and explicit "
-            "Lmin and Lmax dispersion residuals; nonnegative residuals "
-            "prove the displayed dimension-free overlap bound"
+            "Lmin and Lmax dispersion residuals; a nonnegative residual sum "
+            "prove the displayed dimension-free overlap bound, while the "
+            "comparison and residual-sum conditions reduce exactly to a "
+            "cardinality-constrained interval for the gainer packet"
         ),
         "two_stratum_parameter_rows": audit_symbolic_identity(),
         "multistage_order_parameter_rows": audit_multistage_identity(),
@@ -355,7 +375,8 @@ def main():
             "the master identity and residual criterion are dimension-free; "
             "the finite grids, two archived branches, and n=7 control audit "
             "arithmetic and do not prove that every exact game admits a sign "
-            "partition and Lmin-tight comparison with both residuals nonnegative"
+            "partition and Lmin-tight comparison whose gainer packet hits the "
+            "required exact interval"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"
