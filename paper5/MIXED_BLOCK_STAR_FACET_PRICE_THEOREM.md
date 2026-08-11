@@ -158,6 +158,16 @@ positive-floor tied common-hinge repair templates in the six-player census:
 `harvest6_601.json $.records[103]` and
 `harvest6_602.json $.records[129]`.
 
+Its exact-cone row is the `k=2`, `p=m` member of the dimension-free
+block-star facet family:
+
+```text
+1_{r,u}+1_{r,j}+sum_(q in Q)1_{r,q}-(m+1)e_r=1_N.    (TCSF)
+```
+
+Thus the repair is carried by an indecomposable purely min-semi-balanced
+facet, not merely by the witness inequality after singleton normalization.
+
 ### Six-player three-packet repair
 
 The remaining irregular template also has a hand proof.  On six players
@@ -190,6 +200,30 @@ This closes `harvest6_602.json $.records[82]`, whose actual overlap is
 six-player census now have human branch proofs.  The remaining open step is
 not their arithmetic but the general structural theorem selecting either a
 target-priced Lmin rooted packet or one of the repair geometries.
+
+The normalized three-row packing has root excess `1/2` and deficits one on
+`l_1` and one half on `l_2`.  Its rooted pair lift is
+
+```text
+1_{r,u,g,l_2}+1_{r,u,j}+1_{r,g,j}
+ +1_{r,l_2}+2 1_{r,l_1}-4e_r=2 1_N.                 (TPF)
+```
+
+The six support columns have full rank.  For a candidate exceptional set
+with indicators `(e_r,e_u,e_1,e_2,e_g,e_j)`, the published exceptional-set
+test reduces exactly to `L<=rho<=U`, where
+
+```text
+L=max{-e_u-e_g+e_j, -e_u-e_j+e_g,
+      -e_g-e_j+e_u, -2e_2+e_u+e_g-e_j, -e_1},
+U=(e_r-e_j-e_2-e_1)/2.
+```
+
+The only feasible coalitions are the six support coalitions and `N`.
+Therefore `(TPF)` is indecomposable and defines a facet of the exact-game
+cone by Studeny--Kratochvil.  An independent exact-LRA encoding confirms all
+56 unsupported proper candidates infeasible, but the displayed interval
+classification is the proof.
 
 ## 3. Rooted-facet price theorem
 
@@ -612,6 +646,40 @@ The first clause is a rooted semi-balanced facet-price assertion; the second
 is a support-selection and repair assertion.  The finite census verifies
 both only through the archived rooted LPs and does not prove either
 universally.
+
+There is nevertheless a strong exact-cone regularity.  Extracting one exact
+optimal witness packing from each of the 13 Lmin-only rows and applying the
+rooted pair shear produces 13 indecomposable facets and zero decomposable
+systems.  They occupy only five support orbits up to relabeling, with
+multiplicities `3,4,3,2,1`.  The two-spoke and three-packet repair facets
+fall into the first and fourth of those same orbits.  Thus all 16 live
+positive-floor archive rows use just five indecomposable rooted pair-lift
+support orbits, with combined multiplicities `5,4,3,3,1`.
+
+An independent exact-LRA formulation excludes all 282 unsupported proper
+exceptional candidates across the five representatives.  This is a finite
+facet atlas, not an exhaustive six-player theorem.  Its conceptual content
+is that the remaining universal statement should be a facet-selection
+theorem, not a coefficient bound: every positive-floor residual must expose
+a target-priced indecomposable rooted pair lift, and only an underpriced
+Lmin-only lift needs a common reverse comparison.
+
+The five-orbit regularity now has a dimension-free structural explanation.
+Given any indecomposable rooted-star system, replace each nonroot role by a
+nonempty block of clones and expand every positive coalition blockwise.  The
+incidence identity and minimality are preserved.  In the exceptional-set
+equations, two players in the same block have identical positive-support
+rows, so their candidate exceptional indicators must agree.  Expanded
+decompositions therefore correspond exactly to decompositions of the
+compressed base system.  Nonroot clone expansion consequently preserves
+indecomposability and exact-cone facets.
+
+All five atlas representatives are clone expansions of saturated rooted-star
+facets: three are already saturated and two compress along one clone pair to
+four-role bases.  This gives an exact fixed-`n` enumeration procedure for the
+clone-expanded class (enumerate saturated bases, then clone-block size
+compositions modulo automorphisms), but it is not a classification of all
+six-player facets and does not supply the open target-price selection lemma.
 
 ### Positive-Lmax equality exclusion
 

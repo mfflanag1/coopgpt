@@ -79,6 +79,10 @@ def main() -> None:
         "identity_equality_rows": equality_rows,
         "theorem_bound": "n/[2(n-2)]",
         "universal_comparison": "n/[2(n-2)] >= n/floor(n^2/4) for n>=4",
+        "exact_cone_facet": (
+            "the rooted incidence row is exactly the k=2, p=n-3 member of "
+            "the proved indecomposable block-star pair-lift facet family (GPL)"
+        ),
         "archived_repair_controls": {
             "harvest6_601.json $.records[103]": control_bounds[0],
             "harvest6_602.json $.records[129]": control_bounds[1],

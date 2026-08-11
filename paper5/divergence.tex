@@ -2323,6 +2323,14 @@ Finally $\lfloor n^2/4\rfloor\ge2(n-2)$ for $n\ge4$.
 This theorem humanly closes two of the three positive-floor tied-repair
 templates in the six-player census, records $601[103]$ and $602[129]$.
 The irregular record $602[82]$ does not have the same two-spoke form.
+The exact-cone row behind the theorem is
+\[
+ \one_{\{r,u\}}+\one_{\{r,j\}}
+ +\sum_{q\in Q}\one_{\{r,q\}}-(m+1)e_r=\one_N.       \tag{TCSF}
+\]
+This is the $k=2$, $p=m$ member of the dimension-free block-star family
+(GPL), so the theorem already proved that it is an indecomposable purely
+min-semi-balanced facet of the exact-game cone.
 
 That last template nevertheless has a separate human certificate.  On six
 players $\{r,u,g,j,l_1,l_2\}$, suppose
@@ -2351,6 +2359,31 @@ branch proofs.  What remains open is the structural selection theorem forcing
 an arbitrary residual into the Lmin-root-price or repair alternatives; these
 branch theorems do not show that every residual has one of the displayed
 geometries.
+
+The last repair also has an exact-cone explanation.  Giving the three witness
+rows in (TP) weight $1/2$ produces root excess $1/2$, deficit one on $l_1$,
+and deficit $1/2$ on $l_2$.  Its rooted pair lift is
+\[
+ \one_{\{r,u,g,l_2\}}+\one_{\{r,u,j\}}+\one_{\{r,g,j\}}
+ +\one_{\{r,l_2\}}+2\,\one_{\{r,l_1\}}-4e_r=2\,\one_N. \tag{TPF}
+\]
+The six support columns have rank six.  For a candidate exceptional
+coalition with indicators $(e_r,e_u,e_1,e_2,e_g,e_j)$, the
+Studen\'y--Kratochv\'il exceptional-set equations have nonnegative support
+weights exactly when $L\le\rho\le U$, where
+\[
+\begin{split}
+L=\max\{&-e_u-e_g+e_j,-e_u-e_j+e_g,-e_g-e_j+e_u,\\
+        &-2e_2+e_u+e_g-e_j,-e_1\},\\
+U={}&(e_r-e_j-e_2-e_1)/2.
+\end{split}                                             \tag{TPE}
+\]
+For binary indicators the feasible sets are precisely the six support
+coalitions and $N$.  Hence no new proper exceptional coalition exists:
+(TPF) is indecomposable and defines a facet of the exact-game cone.  An
+independently formulated exact-linear-arithmetic replay confirms all 56
+unsupported proper candidates infeasible; the displayed interval argument,
+not the solver result, is the proof.
 
 Only the scalar root estimate is special to the star.  More generally,
 suppose a branch has one root at $c$, $g$ players at $b$, and $m$ players at
@@ -3067,6 +3100,27 @@ target-priced complete Lmin rooted packet or a common root hinge whose
 reverse comparison repairs the deficit.  The repair branch must cover tied
 roots.  The audit verifies this only on the finite archive.
 
+The exact-cone structure of that finite residual is unexpectedly rigid.
+For each of the 13 rows closed by the complete Lmin packet alone, we extract
+one exact optimal one-witness Farkas dual, normalize its witness component to
+a rooted packing, and apply the pair shear (RPL).  Every resulting system has
+full support rank and passes the Studen\'y--Kratochv\'il indecomposability
+test: 13 facets and no decomposable row.  Up to relabeling there are only five
+support orbits, with multiplicities $3,4,3,2,1$.  The two-spoke and
+three-packet repair facets belong to the first and fourth of those same
+orbits.  Hence all 16 live positive-floor archive rows are carried by only
+five indecomposable rooted pair-lift support orbits, with combined
+multiplicities $5,4,3,3,1$.  An independently formulated exact-LRA replay
+excludes all 282 unsupported proper exceptional candidates for the five
+representatives.
+
+This is a finite facet atlas, not a six-player domain classification: the
+archive is not exhaustive and the extraction fixes one optimal dual per row.
+It does sharpen the missing statement to a \emph{facet-selection conjecture}:
+every positive-floor residual should expose a target-priced indecomposable
+rooted pair lift, with a common reverse comparison needed only when the
+Lmin-only price is insufficient.
+
 The rooted status of the sharp rows does have a dimension-free explanation.
 If every Lmax coordinate is positive, then $\ell=z(P)/p>0$ for every
 nonempty $P$.  Equation (TDG) is therefore strict whenever its comparison
@@ -3306,6 +3360,42 @@ zero-one matrices up to row and column permutations, retain (RS1), and test
 all Boolean $(\beta,b)$.  Passing matrices give primitive dual-cone extreme
 rays after clearing denominators.  Equality in the game inequality is
 $\sum_j\lambda_jv(\{r\}\cup A_j)=v(N)$.
+
+This saturated class has a dimension-free unsaturated closure.  Start from
+a purely min-semi-balanced rooted-star system and replace every nonroot role
+$q$ by a
+nonempty block $B_q$ of clones, expanding each positive coalition by taking
+the union of the blocks belonging to its roles.  The incidence identity is
+preserved coordinatewise.  Minimality is preserved because any relation
+among expanded columns restricts, on one representative per block, to a
+relation among the base columns.
+
+Moreover, this clone expansion is indecomposable if and only if its base is.
+Indeed, two players in the same clone block have identical rows in the
+positive-support incidence matrix.  Subtracting their coordinates in the
+Studen\'y--Kratochv\'il exceptional-set equations forces a proposed
+exceptional coalition to contain either the whole block or none of it.
+Every expanded decomposition therefore collapses to a base decomposition,
+and every base decomposition expands blockwise.  The published
+indecomposability criterion now implies:
+
+\begin{theorem}[nonroot clone expansion]
+Every nonroot clone expansion of a saturated rooted-star exact-cone facet is
+again an exact-cone facet.
+\end{theorem}
+
+For fixed $n$ this gives an exact enumeration algorithm for the enlarged
+class: enumerate the saturated bases using (RS1)--(RS3), then enumerate
+positive clone-block size compositions summing to $n-1$, modulo base
+automorphisms.  This is complete for the clone-expanded rooted-star class,
+not for all exact-cone facets.
+
+All five support orbits in the six-player positive-residual atlas belong to
+this class.  Three are already saturated.  The other two each compress one
+clone pair to a four-role saturated base, with determinants $1$ and $-2$.
+Thus one dimension-free facet construction explains the finite atlas, but
+does not yet prove that every residual branch exposes a member with enough
+hybrid-overlap price.
 
 For (MCF), $|\det A|=2$, the weights are
 $(1/2,1/2,1/2,1/2,1/2,1)$, $c=5/2$, and every unsupported

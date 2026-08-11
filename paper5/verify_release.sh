@@ -61,6 +61,10 @@ run_python coopgames/verifiers/divergence/verify_n6_three_packet_repair.py \
   --output "$scratch_dir/n6-three-packet-repair.json"
 cmp coopgames/verifiers/divergence/n6_three_packet_repair.json \
   "$scratch_dir/n6-three-packet-repair.json"
+run_python coopgames/verifiers/divergence/verify_n6_three_packet_facet_z3.py \
+  --output "$scratch_dir/n6-three-packet-facet-z3.json"
+cmp coopgames/verifiers/divergence/n6_three_packet_facet_z3.json \
+  "$scratch_dir/n6-three-packet-facet-z3.json"
 run_python coopgames/verifiers/divergence/verify_optimized_mixed_currency_certificate.py \
   --output "$scratch_dir/optimized-mixed-currency-certificate.json"
 cmp coopgames/verifiers/divergence/optimized_mixed_currency_certificate.json \
@@ -75,6 +79,20 @@ run_python coopgames/verifiers/divergence/audit_direct_ceiling_common_hinge_tric
   --output "$scratch_dir/direct-ceiling-common-hinge-trichotomy.json"
 cmp coopgames/verifiers/divergence/direct_ceiling_common_hinge_trichotomy.json \
   "$scratch_dir/direct-ceiling-common-hinge-trichotomy.json"
+run_python coopgames/verifiers/divergence/audit_n6_positive_residual_facet_atlas.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/n6-positive-residual-facet-atlas.json"
+cmp coopgames/verifiers/divergence/n6_positive_residual_facet_atlas.json \
+  "$scratch_dir/n6-positive-residual-facet-atlas.json"
+run_python coopgames/verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
+  --output "$scratch_dir/n6-positive-residual-facets-z3.json"
+cmp coopgames/verifiers/divergence/n6_positive_residual_facets_z3.json \
+  "$scratch_dir/n6-positive-residual-facets-z3.json"
+run_python coopgames/verifiers/divergence/verify_clone_expanded_rooted_star_facets.py \
+  --output "$scratch_dir/clone-expanded-rooted-star-facets.json"
+cmp coopgames/verifiers/divergence/clone_expanded_rooted_star_facets.json \
+  "$scratch_dir/clone-expanded-rooted-star-facets.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

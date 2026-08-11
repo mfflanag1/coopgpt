@@ -2188,6 +2188,25 @@ O-[m+3]/[2(m+1)] T
 
 Since `floor(n^2/4)>=2(n-2)` for every `n>=4`, `(TCS3)` follows.  QED.
 
+The exact-cone mechanism is not new notation for the same arithmetic.  In
+`K_r`, put unit weight on the two rooted spokes.  Then
+
+```text
+delta=1,       q_q=1 (q in Q),       q_u=q_j=0,
+```
+
+and its rooted pair lift is
+
+```text
+1_{r,u}+1_{r,j}+sum_(q in Q)1_{r,q}-(m+1)e_r=1_N.    (TCSF)
+```
+
+This is exactly `(GPL)` with `k=2` and `p=m`.  The dimension-free
+sharp-family facet theorem therefore proves that `(TCSF)` is an
+indecomposable purely min-semi-balanced system and a facet of the exact-game
+cone.  Thus the two-spoke repair is the smallest block-star facet coupled to
+one reverse Lmax comparison, rather than an unrelated branch inequality.
+
 This theorem humanly closes the tied-repair templates
 `harvest6_601.json $.records[103]` and
 `harvest6_602.json $.records[129]`.  Their actual normalized overlaps are
@@ -2257,9 +2276,47 @@ hinge repair templates isolated by the sequential census now have human
 proofs.  What remains open is the structural selection theorem forcing an
 arbitrary residual into the Lmin-root-price or repair branches.
 
+This repair is also carried by a genuine exact-cone facet.  Normalize the
+three witness rows in `(TP2)` with weight `1/2`.  Their nonroot loads are one
+on `u,g,j`, one half on `l_2`, and zero on `l_1`; the root load is `3/2`.
+The rooted pair lift, after multiplying by two, is
+
+```text
+1_{r,u,g,l_2}+1_{r,u,j}+1_{r,g,j}
+ +1_{r,l_2}+2 1_{r,l_1}-4e_r=2 1_N.                 (TPF)
+```
+
+Its six support columns have rank six.  The Studeny--Kratochvil
+exceptional-set test is closed-form here.  For a candidate coalition `E`
+with indicators `(e_r,e_u,e_1,e_2,e_g,e_j)`, the unique support weights are
+nonnegative for some common load `rho` exactly when
+
+```text
+L(E)<=rho<=U(E),
+L(E)=max{-e_u-e_g+e_j, -e_u-e_j+e_g,
+         -e_g-e_j+e_u, -2e_2+e_u+e_g-e_j, -e_1},
+U(E)=(e_r-e_j-e_2-e_1)/2.                            (TPE)
+```
+
+Checking the binary indicators in `(TPE)` leaves only
+
+```text
+{r}, {r,l_1}, {r,l_2}, {r,u,g,l_2}, {r,u,j},
+{r,g,j}, N.
+```
+
+Every proper set in this list is already in the support of `(TPF)`.  Hence
+there is no new proper exceptional coalition; `(TPF)` is indecomposable and
+defines a facet of the exact-game cone.  This proof uses exactly the
+published exceptional-set criterion, not an unsat-core inference.
+
 ```bash
 python3 verifiers/divergence/verify_n6_three_packet_repair.py \
   --output verifiers/divergence/n6_three_packet_repair.json
+
+PYTHONPATH=verifiers/divergence /tmp/coop-paper5-review/bin/python \
+  verifiers/divergence/verify_n6_three_packet_facet_z3.py \
+  --output verifiers/divergence/n6_three_packet_facet_z3.json
 ```
 
 The proof isolates a more general exact-cone price criterion.  Suppose a
@@ -4635,6 +4692,42 @@ first two arms must force either a target-priced complete Lmin rooted packet
 or a common root hinge whose reverse comparison repairs the deficit.  The
 repair branch must cover tied roots.
 
+The exact-cone audit is cleaner than the branch count suggests.  For each of
+the 13 positive-floor rows closed by the complete Lmin packet alone, extract
+one exact optimal one-witness Farkas dual, normalize its witness coefficients
+to a point of `K_r`, and apply the rooted pair shear `(RPL)`.  Every resulting
+system has full support rank and passes the Studeny--Kratochvil
+indecomposability test: 13 facets and no decomposable row.  Up to relabeling
+there are only five support orbits, with Lmin-only multiplicities
+`3,4,3,2,1`.
+
+The two-spoke repair facet belongs to the first orbit, and the irregular
+three-packet facet belongs to the fourth.  Consequently all 16 live
+positive-floor archive rows are carried by the same five indecomposable
+rooted pair-lift support orbits, with combined multiplicities `5,4,3,3,1`.
+An independently formulated exact-LRA replay proves all 282 unsupported
+proper exceptional-set candidates infeasible across the five orbit
+representatives.
+
+This is finite structural evidence, not a six-player domain classification:
+the archive is not exhaustive, and one extracted optimal dual does not prove
+that every admissible branch selects one of the five supports.  It does
+sharpen the missing theorem from an unnamed rooted packet to a
+**facet-selection conjecture**: a positive-floor residual must expose a
+target-priced indecomposable rooted pair lift, with a common reverse row only
+when its Lmin-only price is insufficient.
+
+```bash
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/audit_n6_positive_residual_facet_atlas.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/n6_positive_residual_facet_atlas.json
+
+/tmp/coop-paper5-review/bin/python \
+  verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
+  --output verifiers/divergence/n6_positive_residual_facets_z3.json
+```
+
 The rooted status of the sharp rows is nevertheless a theorem, not an atlas
 inference.  If every Lmax coordinate is positive, then every nonempty `P`
 has `l=z(P)/p>0`; hence `(TDG)` is strict whenever its comparison and
@@ -5018,6 +5111,55 @@ sum_j lambda_j v(S_j)=v(N),                           (RSME)
 ```
 
 under singleton normalization.
+
+#### Nonroot clone-expansion theorem
+
+The saturated matrix class has a dimension-free unsaturated closure.  Start
+from a purely min-semi-balanced rooted-star system on root `r` and nonroot
+roles `V`,
+
+```text
+sum_j lambda_j 1_({r} union A_j)-c e_r=1_({r} union V).  (CL1)
+```
+
+Replace every role `v in V` by a nonempty, pairwise-disjoint clone block
+`B_v`, and replace `A_j` by `union_(v in A_j) B_v`.
+
+> **Theorem (nonroot clone expansion preserves exact-cone facets).**  The
+> expanded system is purely min-semi-balanced and indecomposable if and only
+> if `(CL1)` is.  Hence every clone expansion of a saturated rooted-star facet
+> is again a facet of the exact-game cone.
+
+The incidence identity is preserved coordinatewise.  Minimality is also
+preserved: restricting a linear relation among expanded columns to one
+representative of each clone block gives a relation among the base columns.
+For indecomposability, players in one clone block have identical rows in the
+positive-coalition incidence matrix.  Subtracting their two coordinates in
+the Studeny--Kratochvil exceptional-set equations forces the candidate
+exceptional coalition to contain either the whole block or none of it.
+Every expanded decomposition therefore collapses to a base decomposition;
+conversely, every base decomposition expands blockwise.  This proves the
+equivalence and the facet assertion.  QED.
+
+There is consequently an exact fixed-dimension enumeration algorithm for
+this enlarged class: enumerate saturated rooted-star base matrices by
+`(RSM1)--(RSM4)`, enumerate positive clone-block size compositions summing to
+`n-1` modulo base automorphisms, and expand.  This is complete for the
+clone-expanded class, not for all exact-cone facets.
+
+The five support orbits in the six-player positive-residual atlas all belong
+to this class.  Three are already saturated; the other two compress along a
+single clone pair to four-role saturated bases.  Their compressed
+determinants are `1` and `-2`, respectively.  Thus the finite five-orbit
+regularity is explained by one dimension-free facet construction, although
+the open selection lemma must still prove that a sufficiently priced member
+is exposed for an arbitrary residual branch.  Reproduce the exact support
+audit with
+
+```bash
+python3 verifiers/divergence/verify_clone_expanded_rooted_star_facets.py \
+  --output verifiers/divergence/clone_expanded_rooted_star_facets.json
+```
 
 For the mixed facet `(MCPF)`, the root-deleted matrix has determinant of
 absolute value `2`,
