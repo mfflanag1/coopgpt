@@ -18,10 +18,12 @@ falsified strengthenings, and the exact boundary of what the one-packet
 theory currently gives on the facet side.  It does not claim a proof of
 `(H)`.
 
-The conclusion is that the correct missing object is a **fractional coupling
-of rooted Lmin circuits with an Lmax over-cover**.  A literal partition of
-the players is already false at six players, while treating the Lmin packet
-itself as one exact-cone facet is also false in general.
+The conclusion is that the correct missing object is a **fully labelled
+fractional coupling with a distinguished singleton root**.  The one-witness
+reduction in Section 8 turns it into a rooted two-tangent budget and gives a
+linear-support certificate if the correct root can be selected.  A literal
+partition of the players is already false at six players, while treating the
+Lmin packet itself as one exact-cone facet is also false in general.
 
 ## 2. Shared-hinge theorem for the sharp family
 
@@ -1704,6 +1706,236 @@ homogenized constant row `-1`.  Keeping these two circuit types separate
 prevents a vacuous branch implication from being mistaken for a substantive
 hybrid-overlap certificate.
 
+### Theorem (one-witness threshold reduction)
+
+Fix a genuine game, complete primitive staged circuits for its selections,
+and a player `r`.  Let `w^r` be a core allocation with `w^r_r=0`.  Define the
+three-generator relaxation `P_(B,r)` using only
+
+```text
+(x,z,w^r),
+```
+
+their three common-total equations, `w^r_r=0`, the actual stratum and hybrid
+sign rows, and the following tightness comparisons:
+
+```text
+x(S)<=z(S),w^r(S)       (S in the selected Lmin supports),
+z(S)<=x(S),w^r(S)       (S in the selected Lmax supports).              (OW)
+```
+
+If
+
+```text
+min_(P_(B,r)) {x(A)+z(N\A)} >= n/floor(n^2/4),          (OWC)
+```
+
+then the original game satisfies `(H)`.  Whenever `(OWC)` holds, it has an
+exact rational fully labelled circuit certificate using at most `3n-3`
+defining inequality rows in addition to the target row.
+
+#### Proof
+
+The actual triple `(x,z,w^r)` is feasible in `P_(B,r)`: every circuit-support
+coalition is tight at its selected point, while the other two core points
+have at least its game worth.  The objective is the actual hybrid overlap,
+so `(OWC)` proves `(H)`.
+
+The triple has `3n` coordinates.  Its three total equations and one witness
+zero equation are independent, leaving affine dimension at most `3n-4`;
+stratum equalities only lower it.  Apply the fully labelled branch-circuit
+dual theorem in this affine space.  A target-containing positive circuit has
+at most `3n-2` total rows, hence at most `3n-3` defining rows besides the
+target.  QED.
+
+#### Rooted two-tangent form
+
+The reduction has a useful human formulation.  Put
+
+```text
+a=w^r-x,                 b=w^r-z.                       (RT)
+```
+
+Then
+
+```text
+a(N)=b(N)=0,
+a(S)>=0                  on every selected x-tight support,
+b(S)>=0                  on every selected z-tight support,
+a_r=-x_r<=0,             b_r=-z_r<=0.                  (RTC)
+```
+
+Moreover `a-b=z-x`, so the actual hybrid cut is
+
+```text
+A={i:a_i>b_i}.
+```
+
+Coordinatewise,
+
+```text
+min(x_i,z_i)=w^r_i-max(a_i,b_i).
+```
+
+Summing gives the exact identity
+
+```text
+1-O(x,z)=sum_i max(a_i,b_i)
+        =a(A)+b(N\A).                                  (RTD)
+```
+
+Thus `(OWC)` is equivalently the following rooted two-tangent budget:
+
+```text
+sum_i max(a_i,b_i) <= 1-n/floor(n^2/4).                (RTB)
+```
+
+The common witness is not an auxiliary exactness nuisance: it is the common
+apex from which the two selection tangents are measured.  The support rows in
+`(RTC)` are precisely the nonnegative coalition slacks of those tangents, and
+the witness zero gives their shared negative root.  The Lmin/Lmax stratum rows
+orient `a-b`, preventing the relabelings that invalidated `(SRE)`.
+
+This also states the exact interface with rooted deficit completion.  On each
+staged subpacket having the protector/deficit form assumed by `(RMC)`, its
+`w^r`-slacks are the corresponding coordinates of `a` or `b`.  The two
+applications must retain their common root and the labelwise maximum in
+`(RTD)`.  What remains to be proved is that suitable rooted subpacket budgets
+can be coupled so their shared charge is at most the right side of `(RTB)`.
+Proving that shared-charge inequality would establish `(OWC)`; dropping the
+common root or replacing the maximum by separate total congestion recovers
+the already refuted relaxations.
+
+This changes the most promising missing statement.  It is sufficient to
+prove:
+
+> **One-witness threshold conjecture.**  For every feasible fully labelled
+> selection branch, some singleton root `r` satisfies `(OWC)`.
+
+Equivalently, if
+
+```text
+B_B(r)=min_(P_(B,r)) {x(A)+z(N\A)},
+```
+
+the desired root-selection theorem is
+
+```text
+max_(r in N) B_B(r) >= n/floor(n^2/4).                 (RSEL)
+```
+
+Each `B_B(r)` is an exact rational LP in only `3n` variables, and a successful
+root has a target certificate of linear support by the theorem above.
+
+Unlike target-count congestion, this conjecture does not bound primitive
+packet coefficients.  Unlike spectral or rearrangement bridges, it never
+forgets a player label.  Unlike the full `(n+2)`-generator alternative, it
+would give a linear-support target certificate and a genuinely rooted
+incidence object.  Its one witness supplies the distinguished root needed for
+a possible indecomposable semi-balanced factor, although the
+Studeny--Kratochvil test would still be required after projection.
+
+Five exact hostile branches now pass this stronger relaxation:
+
+| source obstruction | `n` | full branch minimum | weakest one-witness minimum | target |
+|---|---:|---:|---:|---:|
+| optimized label-free spectral failure | 7 | `3/4` | `25/34` | `7/12` |
+| actual-top-fixed failure | 7 | `7/10` | `7/10` | `7/12` |
+| top-and-bottom-fixed failure | 7 | `2/3` | `2/3` | `7/12` |
+| coefficient-two congestion failure | 7 | `9/11` | `16/25` | `7/12` |
+| primitive coefficient-seven circuit | 8 | `34/39` | `11/19` | `1/2` |
+
+Here "weakest" means the minimum over **every** choice of root `r`; thus all
+available roots pass in these five branches, not merely a favorably selected
+one.  Exact full-branch minimizers lower-envelope exactify and retain all
+staged selections.  Exact dual coefficient identities certify their optima.
+The one-witness numbers are minima of larger three-generator relaxations and
+are used only as sufficient bounds, not advertised as exact games.
+
+The equality family supplies the sharper root-selection test:
+
+| balanced `G(p,k)` | distinguished head root `0` | every non-head root | target |
+|---|---:|---:|---:|
+| `(p,k)=(2,4)` | `7/12` | `7/15` | `7/12` |
+| `(p,k)=(3,3)` | `7/12` | `7/16` | `7/12` |
+
+Thus the stronger statement that every root works is false, even on the
+sharp family.  The surviving existential conjecture selects exactly player
+`0`, the common exceptional root of the active block-star facets `(R_b)`.
+This is a structural, not numerical, indication of how the exact-cone side
+must choose the singleton witness: the appropriate root is the exceptional
+coalition shared by the indecomposable rooted factors.  With that root the
+one-witness relaxation is sharp, so the reduction specializes correctly to
+both balanced seven-player extremizers.
+
+In fact the specialization is dimension-free over the entire master family.
+
+> **Theorem (common-hinge one-witness sharpness).**  Normalize `G(p,k)` to
+> total one.  In the stratum/sign branch of its displayed selections, retain
+> only the `k` common hinge supports `C_b`, and choose the head-zero witness
+> `w^0=h/T`.  The resulting one-witness relaxation has exact minimum
+>
+> ```text
+> 1/k+1/(p+1)=n/[k(p+1)].                              (OWG)
+> ```
+
+#### Proof
+
+Write the normalized Lmin strata as `(X,q,...,q)`, and write the Lmax high
+and low levels as `M,l`; its high block is `{0} union B` and its low block is
+`O`.  Since `w^0_0=0`, nonnegativity and total one give `w^0(B)<=1`.  Summing
+the `k` Lmin hinge comparisons gives
+
+```text
+k[X+(k-1)q]
+ <=sum_b w^0(C_b)=(k-1)w^0(B)<=k-1.
+```
+
+Using `X+(p+k)q=1` therefore yields
+
+```text
+(p+1)q>=1/k.                                           (Gq)
+```
+
+The same sum on the Lmax side gives
+
+```text
+k^2 M<=k-1.                                            (GM)
+```
+
+The hybrid sign cut assigns the head and `O` to `z`, and `B` to `x`.  Since
+`(k+1)M+pl=1`, its overlap objective is
+
+```text
+M+pl+kq=1-kM+kq
+          >=1/k+1/(p+1).                               (GO)
+```
+
+The displayed normalized `x,z` and `w^0=h/T` attain equality in every hinge
+comparison and in `(Gq)--(GO)`.  Thus the relaxation minimum is exact.  QED.
+
+This proof uses exactly the exceptional head root shared by all block-star
+facets `(R_b)`.  Choosing a non-head zero witness destroys the summed-hinge
+identity at the required constant, matching the failed `7/15` and `7/16`
+relaxations above.  The distinguished-facet root is therefore necessary even
+inside the sharp family, not merely a convenient normalization.
+
+Reproduce the fixed-support staged checks, exact primal minima, exact Farkas
+identities, and every one-witness relaxation with
+
+```bash
+python3 verifiers/divergence/verify_labelled_branch_duals.py \
+  --output verifiers/divergence/labelled_branch_duals.json
+```
+
+This is strong falsification evidence for the new bridge, but only across
+seven fixed circuit branches: five hostile obstructions and two equality
+orientations.  It is not bounded-enumeration evidence for the all-`n`
+conjecture.  The next mathematical task is to prove that every feasible
+branch has a root distinguished by its indecomposable semi-balanced factors
+for which `(OWC)` holds, or to find one exact labelled branch for which every
+root has minimum below the sharp target.
+
 The theorem must allow multiple rooted facets and fractional sharing of a
 player between the two carrier roles.  It must specialize on `G(p,k)` to the
 common-hinge systems in Section 2.  Any proposed version must first reject:
@@ -1730,5 +1962,8 @@ disproved both `(UB)` and `(TC)`, then proved that even a support-minimal
 eight-player circuit can force coefficient seven, and has now disproved every
 partial relabeling shortcut through exact seven-player controls.  The final
 all-`n` inequality remains open: the fully labelled dual coupling `(FLC)` is
-not yet proved.  This is meaningful structural progress and a decisive
-pruning of the proof tree, but not yet the requested central breakthrough.
+not yet proved.  The one-witness reduction now isolates a linear-support
+rooted two-tangent budget `(RTB)`, passes five hostile branches, and selects
+the exact exceptional block-star root at both sharp seven-player equality
+orientations.  This is meaningful structural progress and a substantially
+narrower missing lemma, but not yet the requested central breakthrough.
