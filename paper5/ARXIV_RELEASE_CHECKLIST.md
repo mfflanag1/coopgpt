@@ -34,6 +34,7 @@ bash coopgames/paper5/build_arxiv_release.sh
 The builder copies the source to a fresh temporary directory as `main.tex`,
 runs PDFLaTeX three times with `-halt-on-error`, rejects LaTeX/package,
 reference, box, and rerun warnings, writes the final PDF and source archive,
+freezes the paper-date build metadata and gzip header for byte-reproducibility,
 and prints the archive inventory and PDF metadata.  It intentionally excludes
 the repository's 273 MB verification corpus from the arXiv upload; the paper
 links to that public corpus instead.

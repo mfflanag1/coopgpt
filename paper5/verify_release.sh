@@ -49,5 +49,12 @@ run_python coopgames/verifiers/s6/verify_g23_witness.py
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
   coopgames/paper5/arxiv_release/divergence-arxiv.pdf
+cp coopgames/paper5/divergence.pdf "$scratch_dir/first-build.pdf"
+cp coopgames/paper5/arxiv_release/divergence-arxiv-source.tar.gz \
+  "$scratch_dir/first-build-source.tar.gz"
+bash coopgames/paper5/build_arxiv_release.sh
+cmp "$scratch_dir/first-build.pdf" coopgames/paper5/divergence.pdf
+cmp "$scratch_dir/first-build-source.tar.gz" \
+  coopgames/paper5/arxiv_release/divergence-arxiv-source.tar.gz
 
 echo "PASS: paper5 reviewer/arXiv release suite"
