@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact audit for the multistage direct-gluing theorem.
+"""Exact audit for the arbitrary-Lmax direct-gluing master theorem.
 
 The theorem itself is the displayed algebraic slack identity.  This driver
 checks that identity over an exact parameter grid and verifies a fresh n=7
@@ -21,6 +21,7 @@ sys.path.insert(0, str(COOPGAMES / "src"))
 
 from audit_lmax_overcover import coalition_sum  # noqa: E402
 from verify_labelled_branch_duals import (  # noqa: E402
+    CASES,
     branch_system,
     one_witness_minimum,
     verify_complete_selection,
@@ -36,6 +37,114 @@ GENERATORS = (
 LMIN = (F(3, 2), F(3, 2), F(3, 2), F(9, 4), F(3, 2), F(3, 2), F(9, 4))
 LMAX = (F(4, 3), F(2), F(4, 3), F(2), F(2), F(4, 3), F(2))
 COMPARISON_COALITION = 74  # {1,3,6}=H union J.
+
+
+def master_identity(point_x, point_z, p_set, g_set, h_set, j_set):
+    p_set, g_set, h_set, j_set = map(tuple, (p_set, g_set, h_set, j_set))
+    if set(p_set) | set(g_set) | set(h_set) != set(range(len(point_x))):
+        raise AssertionError("P/G/H do not cover the players")
+    if set(p_set) & set(g_set) or set(p_set) & set(h_set) or set(g_set) & set(h_set):
+        raise AssertionError("P/G/H are not disjoint")
+    if not set(j_set) <= set(g_set):
+        raise AssertionError("J is not a subset of G")
+    p, g, h, s = len(p_set), len(g_set), len(h_set), len(j_set)
+    if min(p, g, h) < 1 or s >= g:
+        raise AssertionError("invalid block sizes")
+    total = sum(point_x, F(0))
+    if sum(point_z, F(0)) != total:
+        raise AssertionError("selection totals differ")
+    if any(point_z[i] > point_x[i] for i in p_set + h_set):
+        raise AssertionError("P or H contains a gainer")
+    if any(point_x[i] > point_z[i] for i in g_set):
+        raise AssertionError("G contains a nongainer")
+
+    def point_sum(point, players):
+        return sum((point[i] for i in players), F(0))
+
+    m, q, n = p + g, g + h, p + g + h
+    denominator = m - s
+    weight = F(g, denominator)
+    low_z = point_sum(point_z, p_set) / p
+    high_z = point_sum(point_z, g_set + h_set) / q
+    comparison_slack = (
+        point_sum(point_z, h_set + j_set)
+        - point_sum(point_x, h_set + j_set)
+    )
+    x_order_residual = (
+        point_sum(point_x, j_set)
+        + (F(1) - weight) * point_sum(point_x, tuple(i for i in g_set if i not in j_set))
+        - weight * point_sum(point_x, p_set)
+    )
+    z_order_residual = (
+        (F(1) - weight) * (point_sum(point_z, h_set) - h * high_z)
+        - weight * (point_sum(point_z, j_set) - s * high_z)
+    )
+    base = F(1) - F(g * p, q * denominator)
+    low_weight = F(g * p * n, q * denominator)
+    overlap = sum((min(a, b) for a, b in zip(point_x, point_z)), F(0))
+    lhs = overlap - base * total
+    rhs = (
+        low_weight * low_z
+        + weight * comparison_slack
+        + x_order_residual
+        + z_order_residual
+    )
+    if lhs != rhs:
+        raise AssertionError("arbitrary-Lmax master identity failed")
+    return {
+        "sizes": {"p": p, "g": g, "h": h, "s": s},
+        "base_bound_ratio": str(base),
+        "comparison_coalition": sum(1 << i for i in h_set + j_set),
+        "comparison_slack": str(comparison_slack),
+        "x_order_residual": str(x_order_residual),
+        "z_order_residual": str(z_order_residual),
+        "low_z_term": str(low_weight * low_z),
+        "actual_overlap_ratio": str(overlap / total),
+        "identity_margin": str(lhs),
+        "all_payment_terms_nonnegative": all(
+            value >= 0
+            for value in (
+                low_z,
+                comparison_slack,
+                x_order_residual,
+                z_order_residual,
+            )
+        ),
+    }
+
+
+def audit_archived_direct_branches():
+    cases = {case["name"]: case for case in CASES}
+    specifications = (
+        (
+            "actual_top_fixed_failure",
+            (5, 6),
+            (1, 3, 4),
+            (0, 2),
+            (4,),
+            F(7, 10),
+        ),
+        (
+            "top_and_bottom_fixed_failure",
+            (2,),
+            (0, 1, 3, 6),
+            (4, 5),
+            (0, 1, 3),
+            F(2, 3),
+        ),
+    )
+    rows = []
+    for name, p_set, g_set, h_set, j_set, expected in specifications:
+        case = cases[name]
+        row = master_identity(case["x"], case["z"], p_set, g_set, h_set, j_set)
+        if F(row["base_bound_ratio"]) != expected:
+            raise AssertionError("archived direct bound changed")
+        if row["comparison_coalition"] not in case["support_x"]:
+            raise AssertionError("comparison coalition is not Lmin-tight")
+        if not row["all_payment_terms_nonnegative"]:
+            raise AssertionError("archived direct branch has a negative payment term")
+        rows.append({"name": name, **row})
+    return rows
 
 
 def audit_symbolic_identity():
@@ -184,6 +293,16 @@ def audit_control():
         raise AssertionError("control coefficients changed")
     if comparison_slack:
         raise AssertionError("comparison should be tight on the control")
+    master = master_identity(
+        LMIN,
+        LMAX,
+        (0, 2, 5),
+        (1, 4),
+        (3, 6),
+        (1,),
+    )
+    if F(master["base_bound_ratio"]) != base:
+        raise AssertionError("master identity and specialization disagree")
 
     case = {
         "x": LMIN,
@@ -211,6 +330,7 @@ def audit_control():
         "hand_identity": "O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)]",
         "all_rooted_branch_minima": [str(q) for q in rooted_bounds],
         "selection_check": "fourteen exact restricted-support staged LP certificates",
+        "master_identity_terms": master,
     }
 
 
@@ -219,20 +339,23 @@ def main():
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     report = {
-        "status": "exact multistage direct-gluing audit",
+        "status": "exact arbitrary-Lmax direct-gluing master audit",
         "human_theorem": (
-            "for ordered P/G Lmin payoffs, a two-stratum Lmax, and one "
-            "comparison H+J with |J|<=p, O/T is at least "
-            "1-gp/[(g+h)(p+g-|J|)]"
+            "for any sign partition P/G/H and comparison H+J, the exact "
+            "master identity decomposes O-[1-gp/((g+h)(p+g-|J|))]T "
+            "into a low-Lmax term, the comparison slack, and explicit "
+            "Lmin and Lmax dispersion residuals; nonnegative residuals "
+            "prove the displayed dimension-free overlap bound"
         ),
         "two_stratum_parameter_rows": audit_symbolic_identity(),
         "multistage_order_parameter_rows": audit_multistage_identity(),
+        "arbitrary_lmax_archived_branches": audit_archived_direct_branches(),
         "control": audit_control(),
         "scope": (
-            "the displayed algebraic identity and order-residual argument are "
-            "dimension-free; the finite grids and n=7 control audit arithmetic "
-            "and do not prove universal availability of the comparison coalition "
-            "or a two-stratum Lmax"
+            "the master identity and residual criterion are dimension-free; "
+            "the finite grids, two archived branches, and n=7 control audit "
+            "arithmetic and do not prove that every exact game admits a sign "
+            "partition and Lmin-tight comparison with both residuals nonnegative"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

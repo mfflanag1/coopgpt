@@ -271,7 +271,7 @@ fourteen explicit staged identities for the actual selections and a
 hard-coded primal/dual identity for the relaxation optimum.  No optimization
 call is used for the latter certificate.
 
-## 6. Multistage direct-gluing theorem
+## 6. Multistage direct-gluing master theorem
 
 There is a second dimension-free closure mechanism that uses no exactness
 witness.  Partition
@@ -282,38 +282,44 @@ N=P disjoint-union G disjoint-union H,
 m=p+g, q=g+h, n=p+g+h,
 ```
 
-where `p,g,h>=1`.  Suppose `z` has two strata,
+where `p,g,h>=1`.  Let `P,H` be nongainers and `G` the gainers:
 
 ```text
-z_i=l on P,               z_i=b on G union H,
-0<=l<=min x(P),           max x(G)<=b<=min x(H),
-max x(P)<=min x(G).
+z_i<=x_i on P union H,       x_i<=z_i on G.
 ```
 
-Let `J` be a subset of `G`, put `s=|J|<g`, assume `s<=p`, and suppose the direct
-selection comparison
+Put
+
+```text
+l=z(P)/p,                     b=z(G union H)/q,
+B=g/(m-s).
+```
+
+Let `J` be a subset of `G`, put `s=|J|<g`, and suppose the direct selection
+comparison
 
 ```text
 x(H union J)<=z(H union J)                              (15)
 ```
 
 is valid.  For example, (15) is automatic when `H union J` is Lmin-tight,
-because `z` lies in the core.  Put
+because `z` lies in the core.  Define the two exact order/dispersion residuals
 
 ```text
-B=g/(m-s),
-R_x=x(J)+(1-B)x(G\J)-B x(P).                         (16)
+R_x=x(J)+(1-B)x(G\J)-B x(P),
+R_z=(1-B)[z(H)-hb]-B[z(J)-sb].                       (16)
 ```
 
-Then the exact multistage identity is
+Then, with no two-stratum assumption on either selection, the master identity
+is
 
 ```text
 O-[1-gp/{q(m-s)}]T
  =[gpn/{q(m-s)}]l
-  +B[z(H union J)-x(H union J)]+R_x.                 (17)
+  +B[z(H union J)-x(H union J)]+R_x+R_z.             (17)
 ```
 
-All three terms on the right are nonnegative.  Consequently
+Consequently, if `R_x>=0` and `R_z>=0`, then
 
 ```text
 O/T>=1-gp/[(g+h)(p+g-s)].                             (18)
@@ -331,39 +337,61 @@ floor(n^2/4)gp
 The sign branch gives
 
 ```text
-T=pl+qb=x(P)+x(G)+x(H),
-O=pl+x(G)+hb=T-gb+x(G).
+T=z(P)+z(G)+z(H)=x(P)+x(G)+x(H),
+O=z(P)+x(G)+z(H)=T-z(G)+x(G).
 ```
 
-Writing `C=H union J`, its comparison slack is
+Expand the comparison term and use `x(H)=T-x(P)-x(G)`.  Direct cancellation
+gives
 
 ```text
-z(C)-x(C)=(h+s)b-x(H)-x(J).
+B[z(H union J)-x(H union J)]+R_x+R_z
+ =x(G)+z(H)-BT-(1-B)hb+Bsb.
 ```
 
-Use `x(H)=T-x(P)-x(G)` and substitute `b=(T-pl)/q` in the
-right side of (17).  The `x(P)` terms cancel, the two pieces of `x(G)`
-combine to `x(G)`, and the remaining coefficients are `gp/q` on `l` and
-`h/q-[1-gp/{q(m-s)}]` on `T`.  These are precisely the coefficients of
-`O-[1-gp/{q(m-s)}]T`.
+Now substitute `b=(T-pl)/q`, `B=g/(m-s)`, and `q=g+h`.
+The coefficient of `l` after adding the first term in (17) becomes `p`, and
+the coefficient of `T` becomes `-[1-gp/{q(m-s)}]`.  The result is
+`pl+x(G)+z(H)-[1-gp/{q(m-s)}]T`, exactly the left side of (17).
 
-It remains only to check the order residual.  Since `s<=p`, `0<B<=1`.
-Every payoff in `G` is at least the average payoff on `P`, so
+The low term is nonnegative because singleton normalization and core
+membership give `z>=0`; the comparison term is nonnegative by (15).  Thus
+nonnegative residuals prove (18), and clearing positive denominators gives
+(19).  Equality in (18) requires `l=0`, a tight comparison, `R_x=0`, and
+`R_z=0`.  QED.
+
+### Cross-ordered sufficient condition
+
+The residual hypotheses have a simple purely ordinal sufficient condition.
+Suppose
+
+```text
+s<=p,
+max x(P)<=min x(G),
+max z(G)<=min z(H),
+J consists of s lowest-z players of G.               (20)
+```
+
+Since `s<=p`, `0<B<=1`.  Every payoff in `G` is at least the average payoff
+on `P`, so
 
 ```text
 R_x >=[s+(1-B)(g-s)-Bp] average(x(P))=0.
 ```
 
-This proves (17)--(18); clearing positive denominators gives (19).  Equality
-in (18) requires `l=0`, a tight comparison, and `R_x=0`.  QED.
+The Lmax order implies `average(z(H))>=b>=average(z(G))`, while the choice of
+`J` gives `average(z(J))<=average(z(G))`.  Hence both brackets in `R_z` have
+the required signs and `R_z>=0`.  Thus (20) implies the master bound without
+assuming that Lmax has only two levels.
 
-When `x=a` on `P union G` and `x=c` on `H`, the order residual vanishes
-identically.  Thus the two-stratum specialization is
+When `x=a` on `P union G`, `x=c` on `H`, `z=l` on `P`, and `z=b` on
+`G union H`, both residuals vanish identically.  Thus the two-stratum
+specialization is
 
 ```text
 O-[1-gp/{q(m-s)}]T
  =[gpn/{q(m-s)}]l
-  +[g/(m-s)][z(H union J)-x(H union J)].             (20)
+  +[g/(m-s)][z(H union J)-x(H union J)].             (21)
 ```
 
 This theorem supplies the direct-labelled arm of the surviving disjunction.
@@ -383,16 +411,22 @@ z=(4/3,2,4/3,2,2,4/3,2),
 ```
 
 and coalition `74={1,3,6}=H union J` is tight at both selections.  Formula
-(20) specializes to
+(21) specializes to
 
 ```text
-O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)].               (21)
+O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)].               (22)
 ```
 
 The lower-envelope game has three generators, actual overlap `11T/12`, and
 all seven one-witness branch relaxations have minimum `5/8`.  The hand bound
 is above the seven-player target `7/12`; the rooted LP values are a hostile
 control, not a premise of the theorem.
+
+The arbitrary-Lmax master also recovers the two archived direct hostile
+certificates.  For the actual-top-fixed branch it gives `7/10`, with
+`R_x=15/4` and `R_z=111/20`.  For the top-and-bottom-fixed branch it gives
+`2/3`, with `R_x=1` and `R_z=11`; here `s=3>p=1`, showing why the exact
+residual criterion is strictly stronger than sufficient condition (20).
 
 ## 7. Hand payment certificate for the hardest spectral branch
 
@@ -407,7 +441,7 @@ O-3/4
  +(1/4)[w(26)-x(26)]+(1/4)[w(57)-x(57)]
  +(5/4)[x(52)-z(52)]+(1/2)[x(57)-z(57)]
  +(1/4)[w(75)-z(75)]
- +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (22)
+ +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (23)
 ```
 
 Every term is nonnegative by a displayed core/witness comparison,
@@ -417,7 +451,7 @@ three payoff-stratum gaps.  This proves by hand that the mixed packet fixes a
 baseline above the universal target while ordered label currency pays the
 multistage defect.
 
-The adjacent verifier checks (22) as a coefficient identity and verifies a
+The adjacent verifier checks (23) as a coefficient identity and verifies a
 matching feasible primal at `3/4`; it makes no optimization call.
 
 ## 8. Evidence and limitations
@@ -436,17 +470,19 @@ Exact audit evidence:
 - 684 rational rows for the general facet-price identity;
 - exact lower-envelope, core, staged-selection, primal, dual, and root checks
   for the displayed seven-player control;
-- 1,080 exact two-stratum arithmetic rows and 680 nonuniform multistage order
-  rows for (17), plus fourteen exact staged selection certificates for its
-  fresh seven-player control;
+- 1,080 exact two-stratum arithmetic rows, 680 nonuniform multistage order
+  rows, and exact arbitrary-Lmax replays of both archived direct hostile
+  branches for (17), plus fourteen exact staged selection certificates for
+  its fresh seven-player control;
 - all nine extreme mixed-witness projection cuts have price within their
   dimensional threshold; eight have only nongaining deficits, but only five
   put every deficit on the first Lmin floor.
 
-The nine-cut statement is a finite coefficient audit, not a theorem.  It
-isolates the remaining obstacle: multistage payoff/sign alignment.  A general
-proof must either move an affordable rooted deficit onto the lower loss
-stratum or pay its displacement using reserve overlap.
+The nine-cut statement is a finite coefficient audit, not a theorem.  Together
+with (17), it isolates the remaining obstacle as a direct-or-rooted selection
+lemma: either some Lmin-tight comparison reaches the target with
+`R_x,R_z>=0`, or failure of all such comparisons must produce an affordable
+mixed-colour rooted packet.  Neither alternative has been proved universally.
 
 The numerical search that exposed the control was used only for discovery
 and is not part of the evidence chain.

@@ -4361,60 +4361,75 @@ the main seven-player target by `43349/114276`.
 ### Multistage direct gluing
 
 The direct-labelled arm of the surviving disjunction admits a clean
-dimension-free theorem.  Partition `N=P disjoint-union G disjoint-union H`,
-with sizes `p,g,h>=1`, and put `m=p+g`, `q=g+h`, `n=p+g+h`.  Suppose
+dimension-free master theorem.  Partition
+`N=P disjoint-union G disjoint-union H`, with sizes `p,g,h>=1`, and put
+`m=p+g`, `q=g+h`, `n=p+g+h`.  Let `P,H` be nongainers and `G` the gainers:
 
 ```text
-z=l on P,             z=b on G union H,
-0<=l<=min x(P),       max x(G)<=b<=min x(H),
-max x(P)<=min x(G).
+z_i<=x_i on P union H,       x_i<=z_i on G.
 ```
 
-If `J` is a subset of `G`, `s=|J|<g`, `s<=p`, and
-`x(H union J)<=z(H union J)`, put
+Put `l=z(P)/p`, `b=z(G union H)/q`.  If `J` is a subset of `G`,
+`s=|J|<g`, and `x(H union J)<=z(H union J)`, put
 
 ```text
 B=g/(m-s),
-R_x=x(J)+(1-B)x(G\J)-B x(P).
+R_x=x(J)+(1-B)x(G\J)-B x(P),
+R_z=(1-B)[z(H)-hb]-B[z(J)-sb].
 ```
 
-Direct substitution gives the exact identity
+Direct substitution, with no stratum assumption on either selection, gives
+the exact identity
 
 ```text
 O-[1-gp/{q(m-s)}]T
- =[gpn/{q(m-s)}]l
-  +B[z(H union J)-x(H union J)]+R_x.                (TDG)
+ =[gpn/{q(m-s)}]l+B[z(H union J)-x(H union J)]
+  +R_x+R_z.                                         (TDG)
 ```
 
-The first two terms are nonnegative by nonnegativity and core comparison.
-For the last, `s<=p` gives `0<B<=1`; every `G` payoff is at least the
-average `P` payoff, so
-
-```text
-R_x>=[s+(1-B)(g-s)-Bp] average(x(P))=0.
-```
-
-Hence
+Thus `R_x,R_z>=0` imply
 
 ```text
 O/T>=1-gp/[(g+h)(p+g-s)].                            (TDGB)
 ```
 
 The comparison is automatic if `H union J` is Lmin-tight, since `z` is a
-core allocation.  Equality requires `l=0`, a tight comparison, and
-`R_x=0`.  The bound reaches the target exactly when
+core allocation.  Equality in the bound requires `l=0`, a tight comparison,
+and both residuals zero.  The bound reaches the target exactly when
 
 ```text
 floor(n^2/4)gp
  <=[floor(n^2/4)-n](g+h)(p+g-s).
 ```
 
-This is not a root-selection theorem: a general staged packet need not
-contain a tight coalition of the required form, and Lmax can have more than
-two strata.  It is nevertheless a dimension-free multistage Lmin theorem and
-removes any need for a witness packet on branches satisfying its incidence
-and Lmax-ceiling premises.  When `x` is constant on `P union G`, `R_x=0`
-and the formula reduces to the two-stratum identity.
+There is a useful ordinal sufficient condition for the residual signs:
+
+```text
+s<=p,
+max x(P)<=min x(G),
+max z(G)<=min z(H),
+J consists of s lowest-z players of G.
+```
+
+Indeed `s<=p` gives `0<B<=1` and the Lmin order gives
+`R_x>=[s+(1-B)(g-s)-Bp] average(x(P))=0`.  The Lmax order gives
+`average(z(H))>=b>=average(z(G))`, while the lowest-`z` choice gives
+`average(z(J))<=average(z(G))`; hence `R_z>=0`.  The exact residual criterion
+is stronger: it can hold when `s>p` and without either displayed block order.
+
+When `x` is constant on `P union G` and on `H`, and `z` is constant on `P`
+and on `G union H`, both residuals vanish and `(TDG)` reduces to the earlier
+two-stratum identity.  More importantly, the arbitrary-Lmax formula exactly
+recovers both archived direct hostile certificates.  The actual-top-fixed
+branch gives base `7/10`, `R_x=15/4`, and `R_z=111/20`.  The
+top-and-bottom-fixed branch gives base `2/3`, `R_x=1`, and `R_z=11`; here
+`s=3>p=1`, so only the exact residual criterion applies.
+
+This is not yet a selection theorem.  The remaining direct-arm gap is now
+precise: prove that a complete staged Lmin packet supplies some partition and
+Lmin-tight `H union J` satisfying the target size inequality and
+`R_x,R_z>=0`, or show that every failure admits an affordable mixed-colour
+rooted packet.  No two-stratum Lmax premise remains.
 
 A fresh three-generator exact seven-player control with
 `(p,g,h,s)=(3,2,2,1)` has
@@ -4433,10 +4448,10 @@ Coalition `74={1,3,6}` is tight at both selections, so `(TDG)` reads
 O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)].
 ```
 
-An exact verifier checks 1,080 two-stratum parameter rows, 680 nonuniform
-multistage order rows, the lower envelope, fourteen staged selection
-certificates, and the fact that every rooted
-branch relaxation has minimum `5/8`:
+An exact verifier checks the arbitrary-Lmax identity on the two archived
+branches, 1,080 two-stratum parameter rows, 680 nonuniform order rows, the
+fresh lower envelope, fourteen staged selection certificates, and the fact
+that every rooted branch relaxation has minimum `5/8`:
 
 ```bash
 python3 verifiers/divergence/verify_two_stratum_direct_gluing.py \
