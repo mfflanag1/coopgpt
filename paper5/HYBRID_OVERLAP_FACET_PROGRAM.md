@@ -368,6 +368,58 @@ proves `(PD2)`.  QED.
 If `M=mu`, efficiency forces `x=z=(T/n)1_N`; this is the trivial zero-gap
 case and no proper extreme-stratum over-cover is needed.
 
+### Corollary (rigidity at full dispersion budget)
+
+If
+
+```text
+1/theta_+ + 1/theta_-=n,                               (DE)
+```
+
+then both hinge surpluses vanish and
+
+```text
+x_i>mu  =>  z_i=M and alpha_i=theta_+,
+z_i<M   =>  x_i=mu and beta_i=theta_-.                 (DR)
+```
+
+### Proof
+
+Write `a=1/theta_+`, `b=1/theta_-`.  The proof of `(DB+)` gives
+
+```text
+a(Delta+epsilon_+) <= T-nmu,
+b(Delta+epsilon_-) <= nM-T.
+```
+
+Under `(DE)`, adding the left sides gives
+`nDelta+a epsilon_++b epsilon_-`, while the right sides sum to `nDelta`.
+Nonnegativity forces both surpluses to vanish and both separate inequalities
+to be equalities.
+
+In the Lmax proof, equality in
+
+```text
+sum_i u_i s_i <= sum_i s_i
+```
+
+with `0<=u_i<=1` and `s_i=x_i-mu>=0` forces `u_i=1` whenever `x_i>mu`.
+Since `u` is supported on the Lmax top block, this gives the first implication
+in `(DR)` and `alpha_i=theta_+`.  The mirror argument with
+`r_i=M-z_i` gives the second.  QED.
+
+Thus every tight-dispersion pair has only three possible payoff cells:
+
+```text
+R: x_i>mu, z_i=M;
+L: x_i=mu, z_i<M;
+C: x_i=mu, z_i=M.
+```
+
+Both `G(p,k)` and the nonuniform seven-player control have this geometry.
+This characterizes equality in the dispersion budget, not yet equality in
+the hybrid-overlap theorem.
+
 For `G(p,k)`, the shared-hinge theorem gives
 
 ```text
