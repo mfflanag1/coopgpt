@@ -988,7 +988,7 @@ remaining route is now precise: bound the congestion of the two acyclic
 nonnegative transports jointly with the sparse Lmax over-cover, or show that
 genuine multistage congestion purchases strict extra overlap.
 
-### A sharp surviving congestion target
+### The individual unit-box and target-count bounds fail at seven players
 
 The next conjecture is one-sided.  At Lmin stage `t`, let
 
@@ -1001,16 +1001,116 @@ joint auxiliary congestion as the largest, over `j in P_t`, of the sum of
 the `q_j` and `r_j` coefficients across the chosen relations, and minimize
 over all simultaneous choices.  Call the result `kappa_t`.
 
-> **Staged target-count congestion conjecture.**  For every
-> singleton-normalized exact game,
+The six-player archive suggested the following strictly stronger route to
+`(TC)`.
+For every gaining target `i in I_t`, there is a normalized pinning relation
 >
 > ```text
-> kappa_t <= |I_t|                         for every Lmin stage. (TC)
+> sum_(S in T_x) lambda_S 1_S + e_i + sum_(j in P_t)a_j e_j
+>     = c 1_N,                 lambda>=0, 0<=a_j<=1.       (UB)
 > ```
 
-This is sharp already at ordinary first floors and at later archived stages.
-It is not a consequence of sign coherence alone: it is a quantitative claim
-about how the individually feasible nested circuits can be chosen together.
+If `(UB)` held, choosing one bounded relation for each target and summing
+would immediately give
+
+```text
+kappa_t <= |I_t|                         for every Lmin stage. (TC)
+```
+
+Its exact polar form is especially simple.  Let
+
+```text
+D_x={y:y(N)=0 and y(S)>=0 for every proper x-tight coalition S}
+```
+
+be the one-sided tangent cone of the core at `x`.  Finite-dimensional
+polyhedral separation shows that `(UB)` is equivalent to
+
+```text
+y_i <= sum_(j in P_t) max(-y_j,0).                    (BM)
+```
+
+for every `y in D_x`.  Indeed `(UB)` fails exactly when a separator satisfies
+
+```text
+-y_i < min_(0<=a<=1) sum_(j in P_t)a_j y_j
+     = -sum_(j in P_t)max(-y_j,0).
+```
+
+The tempting shortcut `y(P_t)<=0` is invalid: Lmin is lexicographically
+maximin but need not Lorenz-dominate every core point once the exact-partition
+property is lost.  Even the segment joining
+
+```text
+x=(1,2,7),                 w=(0,6,4)
+```
+
+has Lmin endpoint `x`, while its tangent `y=w-x=(-1,4,-3)` satisfies
+`y({0,1})=3>0` and violates `(BM)` for target `1`.  This is not asserted to be
+the core of a singleton-normalized exact game; it only proves that lex
+optimality and general tangent-cone geometry are insufficient.
+
+The stronger hope that exactness and `z_i>x_i` repair `(UB)` is also false.
+Let `v` be the lower envelope of the two common-total allocations
+
+```text
+g=(1,1,0,5,0,4,1),             h=(0,0,8,0,4,0,0).
+```
+
+This is a singleton-normalized exact seven-player game of total `12`.  Sparse
+staged incidence identities give
+
+```text
+x=Lmin(v)=(1,1,2,3,1,3,1),
+z=Lmax(v)=(8/9,8/9,8/3,8/3,4/3,8/3,8/9).
+```
+
+At Lmin stage `1`,
+
+```text
+P_1=(0,1,4,6,2),          B_1={2},          I_1={2}.
+```
+
+The exact primal packet
+
+```text
+1_24+1_44+1_48+2e_0+2e_1+2e_6+e_2=2 1_N              (P7)
+```
+
+uses masks `24={3,4}`, `44={2,3,5}`, and `48={4,5}`, all
+`x`-tight.  It has auxiliary congestion two.  This is optimal: put the entire
+price on player `0` in `P_1` and take
+
+```text
+p=(1,0,0,0,0),
+y=(-1,0,2,-1,1,-1,0).
+```
+
+Then `y(N)=0`, `y(S)>=0` for every proper `x`-tight coalition, and
+`y_j>=-p_j` on `P_1`, while `y_2=2`.  Weak duality with `(TC-dual)` and `(P7)`
+therefore gives
+
+```text
+kappa_1=2>|I_1|=1.                                    (N7-TC)
+```
+
+Thus both `(UB)` and `(TC)` are false, even for a two-generator exact game.
+Its overlap is `11`, far above the conjectured seven-player floor `7`; this
+is a counterexample to the proposed proof bridge, not to `(H)`.
+
+The compensation mechanism is already visible.  Coalition `44={2,3,5}` is
+tight at both selections, and
+
+```text
+(1/3)1_44=alpha,       alpha_2=alpha_3=alpha_5=1/3
+```
+
+is a zero-surplus Lmax over-cover with `theta=1/3`.  The sharpened spectral
+anchor of Section 4 evaluates to `11`, exactly the true overlap.  Thus the
+coefficient-two staged packet occurs only after the opposite certificate has
+already purchased four units of slack above the target.  This suggests a
+residual theorem: control congestion only on the regime not already closed by
+the spectral anchor, rather than impose a universal target-count cap.
 
 There is an exact price alternative.  Let `C_i` be the polytope of
 sign-coherent certificates for target `i`, written with auxiliary vector
@@ -1025,12 +1125,13 @@ kappa_t
            y^i_j>=-p_j     (j in P_t) }.               (TC-dual)
 ```
 
-Thus `(TC)` is equivalent to a dimension-free unit-Lipschitz statement for
-the Lmin tangent cone under one common probability price.  This dual is the
-right interface for the exact-cone program: a failure has a rational price
-and sparse stage-improving directions, while a proof must explain why exact
-singleton witnesses or their indecomposable semi-balanced inequalities cap
-the summed target gain.
+The seven-player dual above attains value two with a single target, so no
+termwise unit-Lipschitz proof of `(TC-dual)` is possible.  The remaining
+interface must retain the actual Lmax over-cover and hinge surplus: a costly
+Lmin tangent packet must be charged directly against overlap currency rather
+than bounded by target count alone.  Support-minimal realizations still are
+the rooted positive circuits of Section 7, but their coefficients cannot be
+discarded.
 
 The exact audit
 
@@ -1041,11 +1142,33 @@ python3 verifiers/divergence/audit_staged_target_congestion.py \
   --output verifiers/divergence/staged_target_congestion_audit.json
 ```
 
-finds zero `(TC)` failures in all `495` nontrivial Lmin stages of the `374`
-archived six-player pairs; the largest `kappa_t/|I_t|` is exactly one.  The
-nonuniform seven-player control has congestion `1` for its two first-stage
-targets and congestion `1` for its one second-stage target.  This is finite
-evidence only.
+recomputes `(UB)` target by target and finds zero failures on `854` gaining
+targets, as well as zero `(TC)` failures, in all `495` nontrivial Lmin stages
+of the `374` archived six-player pairs; the largest
+`kappa_t/|I_t|` is exactly one.  The older nonuniform seven-player control also
+passes.  The new exact obstruction shows why neither finite observation had
+dimension-free force.
+
+Reproduce the obstruction, including all fourteen solver-free staged
+selection identities and both sides of `kappa_1=2`, with
+
+```bash
+python3 verifiers/divergence/verify_n7_staged_congestion_obstruction.py \
+  --output verifiers/divergence/n7_staged_congestion_obstruction.json
+```
+
+A tempting stronger collapse to one common box vector is false.  In
+`verifiers/s6/harvest6_601.json`, record `0`, Lmin stage `1`,
+
+```text
+x=(3,3/2,5/2,3/2,3/2,0),
+z=(7/3,2/3,7/3,7/3,7/3,0),
+I_1={3,4},
+```
+
+there is no single relation with `0<=a<=1` and `a_3=a_4=1`, although separate
+unit-box packets happen to exist and the sharp joint congestion is `2`.  This
+older six-player negative control is now secondary to `(N7-TC)`.
 
 The Lmax mirror is false and must not be imported into a proof.  The same
 audit finds `27` failures among `494` nontrivial Lmax stages.  In
@@ -1136,11 +1259,13 @@ staged Lmin pinning data.
 The minimal live target is therefore:
 
 > **Compatible fractional-hinge and acyclic-congestion lemma.**  From a
-> sparse Lmax top over-cover and the two sign-coherent nested incidence chains
-> in Section 6, construct nonnegative coupling weights whose normalized
-> first-stage loads pack as in `(FSP)`, prove or replace the one-sided
-> target-count bound `(TC)`, and control cross-stage source reuse so that the
-> resulting acyclic carrier congestion implies
+> sparse Lmax top over-cover and the sign-coherent Lmin packets in Section 6,
+> first discharge every spectrum for which the sharpened spectral anchor
+> already proves `(H)`.  On the residual spectra, construct nonnegative
+> price-weighted coupling weights whose normalized loads pack as in `(FSP)`;
+> charge any coefficient above target count against spectral-anchor slack or
+> hinge surplus, and control cross-stage source reuse so that the resulting
+> carrier inequality implies
 > `sum_i min(x_i,z_i)>=nT/floor(n^2/4)`.
 
 The theorem must allow multiple rooted facets and fractional sharing of a
@@ -1151,12 +1276,17 @@ common-hinge systems in Section 2.  Any proposed version must first reject:
    overlap `1/2` before later-stage repair);
 2. the two integral-carrier failures in Section 3;
 3. the nonuniform seven-player majorization counterexample; and
-4. both balanced seven-player orientations `(2,4)` and `(3,3)` at equality.
+4. both balanced seven-player orientations `(2,4)` and `(3,3)` at equality;
+   and
+5. the coefficient-two seven-player obstruction `(N7-TC)`, which the spectral
+   anchor closes with four units of slack.
 
 The program has advanced beyond a bare outcome D: the common-hinge theorem,
 hinge-surplus spectral refinement, surplus dispersion budget, first-floor
-transport theorem, projected staged-circuit classification, and
-sign-coherent nested-incidence theorem are proved dimension-free.  The final
-all-`n` inequality remains outcome D because no sharp joint congestion bound
-has yet been proved.  This is meaningful structural progress, but not yet the
-requested central breakthrough.
+transport theorem, projected staged-circuit classification, and sign-coherent
+nested-incidence theorem are proved dimension-free.  The exact audit has now
+disproved both `(UB)` and `(TC)` sharply at seven players and exposed their
+opposite-certificate compensation.  The final all-`n` inequality remains
+open: the new residual price-weighted coupling lemma is not yet proved.  This
+is meaningful structural progress and a decisive pruning of the proof tree,
+but not yet the requested central breakthrough.

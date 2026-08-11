@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact audit of the staged target-count congestion conjecture.
+"""Exact audit of staged target-count congestion and its unit-box proof lemma.
 
 For every payoff stage and every player that gains from Lmin to Lmax, jointly
 choose sign-coherent pinning certificates and minimize the largest auxiliary
@@ -7,9 +7,12 @@ unit-column load.  The candidate Lmin inequality is
 
     minimum congestion <= number of gaining targets in the stage.
 
-The script also audits the formal Lmax mirror, which is false, and records an
-exact counterexample.  Finite success on the Lmin side is discovery evidence
-only; the conjecture remains unproved.
+The proposed reduction used an individual unit-box certificate: each gaining
+target would have a sign-coherent certificate whose auxiliary coefficients
+are at most one.  This script records why the six-player archive suggested
+that false conjecture.  The separate seven-player obstruction verifier refutes
+both it and target-count congestion exactly.  This audit also retains the
+formal Lmax mirror and common-certificate failures as negative controls.
 """
 
 from __future__ import annotations
@@ -122,6 +125,131 @@ def minimum_stage_congestion(
     return targets, optimum
 
 
+def unit_box_certificate_exists(
+    values: tuple[F, ...],
+    point: tuple[F, ...],
+    stage: int,
+    target: int,
+) -> bool:
+    """Test the normalized individual Lmin certificate with 0 <= a_j <= 1."""
+    n = len(point)
+    full = (1 << n) - 1
+    blocks = payoff_blocks(point, "min")
+    cumulative = tuple(i for block in blocks[: stage + 1] for i in block)
+    tight = tuple(
+        coalition
+        for coalition in range(1, full)
+        if coalition_sum(point, coalition) == values[coalition]
+    )
+    m = len(tight)
+    auxiliary_index = {player: m + pos for pos, player in enumerate(cumulative)}
+    efficiency_index = m + len(cumulative)
+    width = efficiency_index + 1
+
+    equalities: list[list[F]] = []
+    rhs: list[F] = []
+    for player in range(n):
+        row = [F(0)] * width
+        for coalition_pos, coalition in enumerate(tight):
+            row[coalition_pos] = F(int(bool(coalition >> player & 1)))
+        if player in auxiliary_index:
+            row[auxiliary_index[player]] = F(1)
+        row[efficiency_index] = F(-1)
+        equalities.append(row)
+        rhs.append(F(-int(player == target)))
+
+    inequalities: list[list[F]] = []
+    inequality_rhs: list[F] = []
+    for variable in range(m):
+        row = [F(0)] * width
+        row[variable] = F(-1)
+        inequalities.append(row)
+        inequality_rhs.append(F(0))
+    for player in cumulative:
+        row = [F(0)] * width
+        row[auxiliary_index[player]] = F(-1)
+        inequalities.append(row)
+        inequality_rhs.append(F(0))
+        row = [F(0)] * width
+        row[auxiliary_index[player]] = F(1)
+        inequalities.append(row)
+        inequality_rhs.append(F(1))
+
+    status, _optimum, _solution = exact_linprog(
+        [F(0)] * width,
+        inequalities,
+        inequality_rhs,
+        equalities,
+        rhs,
+    )
+    return status == "optimal"
+
+
+def common_unit_box_certificate_exists(
+    values: tuple[F, ...],
+    point: tuple[F, ...],
+    stage: int,
+    targets: tuple[int, ...],
+) -> bool:
+    """Test a stronger common-cover statement, retained as a negative control."""
+    n = len(point)
+    full = (1 << n) - 1
+    blocks = payoff_blocks(point, "min")
+    cumulative = tuple(i for block in blocks[: stage + 1] for i in block)
+    tight = tuple(
+        coalition
+        for coalition in range(1, full)
+        if coalition_sum(point, coalition) == values[coalition]
+    )
+    m = len(tight)
+    auxiliary_index = {player: m + pos for pos, player in enumerate(cumulative)}
+    efficiency_index = m + len(cumulative)
+    width = efficiency_index + 1
+
+    equalities: list[list[F]] = []
+    rhs: list[F] = []
+    for player in range(n):
+        row = [F(0)] * width
+        for coalition_pos, coalition in enumerate(tight):
+            row[coalition_pos] = F(int(bool(coalition >> player & 1)))
+        if player in auxiliary_index:
+            row[auxiliary_index[player]] = F(1)
+        row[efficiency_index] = F(-1)
+        equalities.append(row)
+        rhs.append(F(0))
+    for target in targets:
+        row = [F(0)] * width
+        row[auxiliary_index[target]] = F(1)
+        equalities.append(row)
+        rhs.append(F(1))
+
+    inequalities: list[list[F]] = []
+    inequality_rhs: list[F] = []
+    for variable in range(m):
+        row = [F(0)] * width
+        row[variable] = F(-1)
+        inequalities.append(row)
+        inequality_rhs.append(F(0))
+    for player in cumulative:
+        row = [F(0)] * width
+        row[auxiliary_index[player]] = F(-1)
+        inequalities.append(row)
+        inequality_rhs.append(F(0))
+        row = [F(0)] * width
+        row[auxiliary_index[player]] = F(1)
+        inequalities.append(row)
+        inequality_rhs.append(F(1))
+
+    status, _optimum, _solution = exact_linprog(
+        [F(0)] * width,
+        inequalities,
+        inequality_rhs,
+        equalities,
+        rhs,
+    )
+    return status == "optimal"
+
+
 def n7_control() -> tuple[tuple[F, ...], tuple[F, ...], tuple[F, ...]]:
     g = tuple(map(F, (0, 5, 0, 3, 2, 0, 0)))
     h = tuple(map(F, (1, 0, 2, 0, 0, 5, 2)))
@@ -152,6 +280,16 @@ def main() -> None:
         for mode in ("min", "max")
     }
     pair_count = 0
+    individual_unit_box = {
+        "targets_tested": 0,
+        "failures": 0,
+        "first_failure": None,
+    }
+    common_unit_box = {
+        "stages_tested": 0,
+        "failures": 0,
+        "first_failure": None,
+    }
     for source in args.paths:
         data = json.loads(source.read_text())
         for _source, trail, values, x, z in records(data, source):
@@ -182,6 +320,34 @@ def main() -> None:
                                 "target_count": len(targets),
                                 "minimum_congestion": str(congestion),
                             }
+                    if mode == "min":
+                        common_unit_box["stages_tested"] += 1
+                        common_ok = common_unit_box_certificate_exists(
+                            values, x, stage, targets
+                        )
+                        if not common_ok:
+                            common_unit_box["failures"] += 1
+                            if common_unit_box["first_failure"] is None:
+                                common_unit_box["first_failure"] = {
+                                    "source": str(source),
+                                    "trail": trail,
+                                    "stage": stage,
+                                    "targets": list(targets),
+                                }
+                        for target in targets:
+                            individual_unit_box["targets_tested"] += 1
+                            individual_ok = unit_box_certificate_exists(
+                                values, x, stage, target
+                            )
+                            if not individual_ok:
+                                individual_unit_box["failures"] += 1
+                                if individual_unit_box["first_failure"] is None:
+                                    individual_unit_box["first_failure"] = {
+                                        "source": str(source),
+                                        "trail": trail,
+                                        "stage": stage,
+                                        "target": target,
+                                    }
 
     n7_rows = []
     if args.include_n7_control:
@@ -192,18 +358,25 @@ def main() -> None:
                     values, x, z, mode, stage
                 )
                 if targets:
-                    n7_rows.append(
-                        {
-                            "mode": mode,
-                            "stage": stage,
-                            "targets": list(targets),
-                            "target_count": len(targets),
-                            "minimum_congestion": str(congestion),
-                        }
-                    )
+                    row = {
+                        "mode": mode,
+                        "stage": stage,
+                        "targets": list(targets),
+                        "target_count": len(targets),
+                        "minimum_congestion": str(congestion),
+                    }
+                    if mode == "min":
+                        row["individual_unit_box"] = [
+                            unit_box_certificate_exists(values, x, stage, target)
+                            for target in targets
+                        ]
+                        row["common_unit_box"] = common_unit_box_certificate_exists(
+                            values, x, stage, targets
+                        )
+                    n7_rows.append(row)
 
     report = {
-        "status": "exact rational conjecture audit with a negative mirror control",
+        "status": "exact rational regression with two negative controls",
         "archive_dimension": args.n,
         "archive_pairs": pair_count,
         "lmin": {
@@ -211,7 +384,15 @@ def main() -> None:
             "maximum_congestion_per_target": str(
                 summary["min"]["maximum_congestion_per_target"]
             ),
-            "interpretation": "finite evidence only; target-count cap remains conjectural",
+            "interpretation": "no archived n=6 failure, but the cap is false at n=7",
+        },
+        "individual_unit_box": {
+            **individual_unit_box,
+            "interpretation": "no archived n=6 failure, but the lemma is false at n=7",
+        },
+        "common_unit_box_negative_control": {
+            **common_unit_box,
+            "interpretation": "strictly stronger common-certificate statement is false",
         },
         "lmax_mirror": {
             **summary["max"],
