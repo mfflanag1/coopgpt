@@ -2548,6 +2548,60 @@ Hence `(OCP)` gives `q_b=0`, `q_o=1`, and
 root deletion gives `M/T<=theta_-`; these are precisely the two structural
 ingredients in the sharp hand proof.
 
+### Lemma (rooted-pair gauge quotient)
+
+Rooted-pair coalitions already present in a packing are redundant in `(RPL)`.
+If `t<=u_{r,i}`, replace
+
+```text
+u'_{r,i}=u_{r,i}-t,       q'_i=q_i+t,       delta'=delta-t.   (RPG)
+```
+
+All other coordinates are unchanged.  Then `u' in K_r`, and the merged
+coefficient system `(RPL)` is identical before and after `(RPG)`.  Indeed,
+the coefficient of `1_{r,i}` remains `u_{r,i}+q_i`, while
+
+```text
+delta'+sum_j q'_j=delta+sum_j q_j.
+```
+
+Repeating this operation deletes every rooted-pair column from the packing
+without changing either the exact-game inequality or its facet status.
+Consequently rooted pair-lift enumeration should be performed on the
+quotient menu
+
+```text
+C_x^red=C_x \ { {r,i}: i != r },
+```
+
+and only then should the deficit pair columns be restored.  Distinct packing
+vertices can otherwise encode the same exact-cone row.  This is a
+dimension-free reduction of the facet-enumeration problem, not merely a
+control-specific simplification.
+
+For the coefficient-two strict common certificate, the normalized packing is
+
+```text
+u_24=u_44=u_79=1/2,       r=3.
+```
+
+Mask `24` is the rooted pair `{3,4}`.  Gauge deletion leaves
+`u_44=u_79=1/2`, the midpoint of two reduced packing vertices.  The aggregate
+pair-lift row is therefore the half-sum of the following two distinct active
+rows:
+
+```text
+1_44+1_9+1_10+1_24+1_72-4e_3=1_N,                  (C2F1)
+1_79+1_24+1_40-2e_3=1_N.                            (C2F2)
+```
+
+Both supports are linearly independent and indecomposable, of sizes `6` and
+`4`; hence both are full exact-cone facets.  Exact-LP exceptional-set tests
+and an independently formulated Z3 replay agree that each has zero
+decompositions, and both game inequalities have zero slack.  Thus the
+coefficient-two strict leader supplies genuine facet currency, not merely a
+nonminimal aggregate inequality.
+
 This theorem does not by itself prove `(H)`.  Three genuinely separate
 failures remain possible: a sparse over-cover need not be entirely
 Lmin-tight; its ceiling root need not be a strict deleted-load leader; and
@@ -2628,7 +2682,8 @@ PYTHONPATH=verifiers/divergence /tmp/coop-paper5-review/bin/python \
 The second command independently reformulates every optimum and
 infeasibility in exact Z3 linear arithmetic.  For an optimum it checks both
 feasibility at the reported rational value and unsatisfiability of a strict
-improvement; the two formulations agree on all eleven roots.
+improvement; the two formulations agree on all eleven roots.  It also
+independently confirms indecomposability of `(C2F1)--(C2F2)`.
 
 This extra term is exactly the coalition premium lost when the exceptional
 root is transported through a deficit singleton.  For any nonempty set `J`

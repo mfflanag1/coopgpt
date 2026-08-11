@@ -600,7 +600,10 @@ ray; it does not make every relative proof a full exact-cone facet.
   with deleted-root load ceiling `theta_-` normalizes directly to a rooted
   packing with `delta=(alpha_r-theta_-)/(eta+theta_-)` and
   `q_i=(theta_--alpha_i)/(eta+theta_-)`, yielding explicit two-selection
-  exact-cone facet charge.
+  exact-cone facet charge;
+- the rooted-pair gauge quotient: packing weight on `{r,i}` can be transferred
+  to its deficit coefficient without changing the merged pair-lift system,
+  so rooted-pair columns should be deleted before vertex/facet enumeration.
 
 ### Exact rational evidence
 
@@ -626,7 +629,9 @@ ray; it does not make every relative proof a full exact-cone facet.
   have strict common leaders, the neutral control is necessarily tied, and
   three hostile branches admit no normalized common top over-cover.  An
   independently formulated Z3 exact-LRA replay agrees on all eleven optima
-  or infeasibilities.
+  or infeasibilities.  After the gauge quotient, the coefficient-two strict
+  certificate is the half-sum of two distinct active indecomposable facets;
+  exact-LP and Z3 both return zero decompositions for both supports.
 
 ### Refuted
 

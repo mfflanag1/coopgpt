@@ -6,8 +6,10 @@ script reconstructs the two over-cover systems directly in Z3's exact linear
 rational arithmetic.  For each recorded optimum it separately checks
 feasibility at the claimed value and unsatisfiability of every strictly better
 value.  For recorded common-support infeasibility it checks the unoptimized
-system itself.  Agreement is a finite cross-check, not a proof of the human
-over-cover-to-pair-lift theorem or the all-n hybrid bound.
+system itself.  It also independently applies the exceptional-set
+decomposition test to the two coefficient-two pair-lift facets.  Agreement is
+a finite cross-check, not a proof of the human over-cover-to-pair-lift theorem
+or the all-n hybrid bound.
 """
 
 from __future__ import annotations
@@ -105,6 +107,35 @@ def verify_optimum(values, z, root, support, mode, record, prefix):
     }
 
 
+def decomposition_count(n, support):
+    """Independent exceptional-set test for a min-semi-balanced support."""
+    full = (1 << n) - 1
+    count = 0
+    for exceptional in range(1, full):
+        if exceptional in support:
+            continue
+        solver = z3.Solver()
+        weights = [
+            z3.Real(f"facet_{exceptional}_weight_{j}")
+            for j in range(len(support))
+        ]
+        common = z3.Real(f"facet_{exceptional}_common")
+        solver.add(*(weight >= 0 for weight in weights))
+        for player in range(n):
+            load = z3.Sum(
+                [
+                    weight
+                    for coalition, weight in zip(support, weights)
+                    if coalition >> player & 1
+                ]
+            )
+            solver.add(
+                load - (1 if exceptional >> player & 1 else 0) == common
+            )
+        count += solver.check() == z3.sat
+    return count
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument(
@@ -153,6 +184,22 @@ def main():
                     "common_leader": leader,
                 }
             )
+    coefficient_facets = []
+    decomposition = primary["coefficient_two_pair_gauge_and_facet_decomposition"]
+    for number, facet in enumerate(decomposition["distinct_active_facets"], start=1):
+        support = tuple(row["coalition"] for row in facet["coefficients"])
+        count = decomposition_count(7, support)
+        if count != facet["decomposition_count"]:
+            raise AssertionError(("coefficient_two_facet", number, count))
+        coefficient_facets.append(
+            {
+                "facet": number,
+                "support": list(support),
+                "z3_decomposition_count": count,
+                "exact_lp_decomposition_count": facet["decomposition_count"],
+                "indecomposable_agreement": count == 0,
+            }
+        )
     report = {
         "status": "independent Z3 exact-LRA replay",
         "all_optima_and_infeasibilities_agree": all(
@@ -162,6 +209,7 @@ def main():
         ),
         "scope": "finite hostile controls; not an all-n proof",
         "roots": rows,
+        "coefficient_two_pair_lift_facets": coefficient_facets,
     }
     rendered = json.dumps(report, indent=2, sort_keys=True) + "\n"
     if args.output:

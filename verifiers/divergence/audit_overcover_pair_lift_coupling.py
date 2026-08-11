@@ -20,7 +20,8 @@ for *every* common normalized top over-cover at the fixed game and root.
 
 All returned witnesses are checked directly with Fraction arithmetic.  The
 finite controls test the premises of the human theorem; they are not evidence
-for the universal hybrid-overlap conjecture.
+for the universal hybrid-overlap conjecture.  The coefficient-two output also
+checks the rooted-pair gauge quotient and its two-facet decomposition.
 """
 
 from __future__ import annotations
@@ -39,7 +40,11 @@ from exactlp import exact_linprog  # noqa: E402
 
 from audit_lmax_overcover import coalition_sum  # noqa: E402
 from verify_labelled_branch_duals import CASES  # noqa: E402
-from verify_rooted_hinge_projection import NEUTRAL_CASE  # noqa: E402
+from verify_rooted_hinge_projection import (  # noqa: E402
+    NEUTRAL_CASE,
+    decomposition_witnesses,
+    matrix_rank,
+)
 
 
 CONTROL_CASES = CASES + (NEUTRAL_CASE,)
@@ -273,6 +278,115 @@ def audit_pair_lift(values, x, z, root, positive, eta, alpha, theta_minus):
     }
 
 
+def pair_lift_coefficients(n, root, coalition_weights):
+    """Form the merged rooted-pair lift of one rooted packing."""
+    loads = [F(0)] * n
+    coefficients = {}
+    for coalition, weight in coalition_weights:
+        if weight == 0:
+            continue
+        coefficients[coalition] = coefficients.get(coalition, F(0)) + weight
+        for player in range(n):
+            if coalition >> player & 1:
+                loads[player] += weight
+    deficits = [F(0) if i == root else F(1) - loads[i] for i in range(n)]
+    if any(value < 0 for value in deficits):
+        raise AssertionError("not a rooted packing")
+    delta = loads[root] - 1
+    root_mask = 1 << root
+    for player in range(n):
+        if player == root or deficits[player] == 0:
+            continue
+        pair = root_mask | (1 << player)
+        coefficients[pair] = coefficients.get(pair, F(0)) + deficits[player]
+    coefficients[root_mask] = coefficients.get(root_mask, F(0)) - delta - sum(
+        deficits, F(0)
+    )
+    return {
+        coalition: coefficient
+        for coalition, coefficient in coefficients.items()
+        if coefficient
+    }
+
+
+def coefficient_two_pair_gauge_audit():
+    """Exact quotient and facet decomposition of the strict common packet."""
+    case = next(
+        row for row in CASES if row["name"] == "coefficient_two_congestion_failure"
+    )
+    values = characteristic_function(case)
+    n, root = 7, 3
+    aggregate_packing = ((24, F(1, 2)), (44, F(1, 2)), (79, F(1, 2)))
+    reduced_packing = ((44, F(1, 2)), (79, F(1, 2)))
+    aggregate = pair_lift_coefficients(n, root, aggregate_packing)
+    reduced = pair_lift_coefficients(n, root, reduced_packing)
+    if aggregate != reduced:
+        raise AssertionError("root-pair gauge deletion changed the lifted row")
+
+    facets = []
+    component_coefficients = []
+    for coalition in (44, 79):
+        coefficients = pair_lift_coefficients(n, root, ((coalition, F(1)),))
+        support = tuple(sorted(coefficients))
+        if matrix_rank(support, n) != len(support):
+            raise AssertionError("coefficient-two component is not support-minimal")
+        decompositions = decomposition_witnesses(support, n)
+        if decompositions:
+            raise AssertionError("coefficient-two component is decomposable")
+        slack = values[(1 << n) - 1] - sum(
+            (
+                coefficient * values[mask]
+                for mask, coefficient in coefficients.items()
+            ),
+            F(0),
+        )
+        if slack != 0:
+            raise AssertionError("coefficient-two component facet is not active")
+        component_coefficients.append(coefficients)
+        facets.append(
+            {
+                "packing_vertex": [{"coalition": coalition, "weight": "1"}],
+                "coefficients": [
+                    {"coalition": mask, "coefficient": str(coefficients[mask])}
+                    for mask in support
+                ],
+                "support_size": len(support),
+                "incidence_rank": matrix_rank(support, n),
+                "decomposition_count": 0,
+                "indecomposable": True,
+                "exact_cone_facet": True,
+                "game_inequality_slack": "0",
+            }
+        )
+    averaged = {
+        mask: (component_coefficients[0].get(mask, F(0)) + component_coefficients[1].get(mask, F(0))) / 2
+        for mask in set(component_coefficients[0]).union(component_coefficients[1])
+    }
+    averaged = {mask: coefficient for mask, coefficient in averaged.items() if coefficient}
+    if averaged != aggregate:
+        raise AssertionError("two-facet average does not recover the aggregate row")
+    return {
+        "root": root,
+        "strict_common_overcover_normalized_packing": [
+            {"coalition": coalition, "weight": str(weight)}
+            for coalition, weight in aggregate_packing
+        ],
+        "root_pair_gauge_coalition": 24,
+        "gauge_deleted_packing": [
+            {"coalition": coalition, "weight": str(weight)}
+            for coalition, weight in reduced_packing
+        ],
+        "lift_unchanged_by_gauge_deletion": True,
+        "aggregate_coefficients": [
+            {"coalition": mask, "coefficient": str(aggregate[mask])}
+            for mask in sorted(aggregate)
+        ],
+        "facet_decomposition_weights": ["1/2", "1/2"],
+        "distinct_active_facets": facets,
+        "displayed_facet_count": 2,
+    }
+
+
 def audit_case(case):
     values = characteristic_function(case)
     x, z = tuple(map(F, case["x"])), tuple(map(F, case["z"]))
@@ -311,6 +425,9 @@ def main():
             "exact hostile premise audit; finite controls are not an all-n proof"
         ),
         "cases": [audit_case(case) for case in CONTROL_CASES],
+        "coefficient_two_pair_gauge_and_facet_decomposition": (
+            coefficient_two_pair_gauge_audit()
+        ),
     }
     rendered = json.dumps(payload, indent=2, sort_keys=True) + "\n"
     if args.output:
