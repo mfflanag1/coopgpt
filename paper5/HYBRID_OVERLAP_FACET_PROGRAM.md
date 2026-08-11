@@ -480,7 +480,106 @@ of `(PD2)` is to control the two fractional carrier budgets, while hinge
 surplus and later-stage rooted packets must supply the missing overlap
 conversion.
 
-## 6. What one-packet theory gives on exact-cone facets
+## 6. Full-stage transport through pinning congestion
+
+The first rigorous use of information beyond the aggregate bottom under-cover
+is a sign-aware congestion inequality.  Let `P={i:x_i=mu}` be the first Lmin
+block and put
+
+```text
+I_+={i in P:z_i>mu},       I_-={j in P:z_j<mu},
+P_+=sum_(i in I_+)(z_i-mu),
+D_-=sum_(j in I_-)(mu-z_j).
+```
+
+For every `i in I_+`, choose an individual first-floor pinning certificate
+
+```text
+sum_S lambda^i_S 1_S + sum_(j in P)q^i_j e_j+e_i=c_i 1_N,
+```
+
+with `lambda,q,c` nonnegative and the supported coalitions `x`-tight.  Define
+the minimum sign-aware column congestion
+
+```text
+kappa(P,z)=min max_(j in P) sum_(i in I_+)q^i_j,        (K)
+```
+
+where the minimum is over simultaneous choices of the exact pinning
+certificates.
+
+### Theorem (first-floor transport)
+
+```text
+P_+ <= kappa(P,z) D_-.                                 (FT)
+```
+
+### Proof
+
+Evaluate player `i`'s incidence identity at `z`.  Core feasibility of `z`,
+tightness of the supported coalitions at `x`, and the certificate objective
+identity give
+
+```text
+z_i-mu <= sum_(j in P)q^i_j(mu-z_j).
+```
+
+Sum over `i in I_+`.  For a fixed column `j`, its coefficient is at most
+`kappa(P,z)`.  Terms with `z_j>=mu` are nonpositive and may be deleted from
+the upper bound.  The remaining terms sum to `D_-`, proving `(FT)`.  QED.
+
+This directly controls the loss on the bottom block because
+
+```text
+sum_(i in P)min(mu,z_i)=mu|P|-D_-.
+```
+
+It does not yet upper-bound `D_-`; that is the next coupling needed from the
+Lmax over-cover or later Lmin stages.
+
+### Two sharp mechanisms
+
+For `G(p,k)`, the targets are the `k` players of `B` and the deficit columns
+are the `p` players of `O`.  For each `b in B`, the common hinge `C_b` gives
+the individual certificate
+
+```text
+1_(C_b)+sum_(o in O)e_o+e_b=1_N.
+```
+
+Thus every deficit column has load `k`, so `kappa<=k`.  The closed-form
+payoffs satisfy `P_+=kD_-`, proving `kappa=k` and equality in `(FT)`.
+
+For the singleton-exactified two-packet boundary, the actual bottom block is
+`{0,1,2,5}`, the surplus targets are `{1,5}`, and the deficit columns are
+`{0,2}`.  Both target certificates use those two deficit columns with unit
+weight, so `kappa=2` and again `P_+=2D_-`.
+
+The exact joint certificate audit is
+
+```bash
+python3 verifiers/divergence/audit_first_floor_congestion.py \
+  --output verifiers/divergence/first_floor_congestion_audit.json
+```
+
+It is an example replay, not evidence for a universal numerical bound on
+`kappa`.
+
+A tempting final shortcut is false: `D_-<=M-mu` holds in all 140 archived
+five-player records and 372 of 374 six-player records, and is sharp in both
+mechanisms above, but the remaining two exact pairs have, up to relabeling,
+
+```text
+x=(1,4/3,2/3,2/3,2/3,2/3),
+z=(1,1,1,0,1,1).
+```
+
+Here `D_-=2/3=2(M-mu)`, while `O/T=4/5`.  The larger first-floor deficit is
+more than compensated by overlap in the other strata.  Thus the correct
+conversion must sum the stagewise transport inequalities; it cannot cap the
+first floor in isolation.
+
+## 7. What one-packet theory gives on exact-cone facets
 
 The strongest correct statement is a relative circuit theorem, not a global
 facet correspondence.
@@ -520,7 +619,7 @@ standard exact-cone facet catalogue can classify the factors after the Lmin
 selection has produced them, but it cannot recover the staged selection
 labels or prove hybrid overlap on its own.
 
-## 7. The precise missing lemma
+## 8. The precise missing lemma
 
 The first-stage aggregate pair is insufficient even at six players, by
 `TWO_PACKET_EXACTIFICATION_BOUNDARY.md`.  The integral carrier theorem is
