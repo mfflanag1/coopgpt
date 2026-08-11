@@ -105,6 +105,7 @@ def best_admissible_marking(
     """Maximize price margin over pair origins allowed by x-tightness."""
     root_mask = 1 << root
     coefficients = {int(mask): F(value) for mask, value in pair_lift.items()}
+    exceptional_weight = -coefficients[root_mask]
     positive = {
         coalition: coefficient
         for coalition, coefficient in coefficients.items()
@@ -140,9 +141,18 @@ def best_admissible_marking(
     delta = nonpair_packing_mass + eligible_pair_mass - 1
     dimensional_price = (n * n // 4) - n + 1
     margin = dimensional_price * delta - deficit_mass
+    if exceptional_weight != delta + deficit_mass:
+        raise AssertionError("marked root/deficit balance failed")
+    if margin != dimensional_price * exceptional_weight - (dimensional_price + 1) * deficit_mass:
+        raise AssertionError("bad-spoke affordability identity failed")
     return {
+        "exceptional_weight": str(exceptional_weight),
         "eligible_rooted_pair_mass": str(eligible_pair_mass),
         "forced_deficit_mass": str(deficit_mass),
+        "forced_deficit_over_exceptional_weight": str(deficit_mass / exceptional_weight),
+        "maximum_affordable_deficit_fraction": str(
+            F(dimensional_price, dimensional_price + 1)
+        ),
         "root_excess": str(delta),
         "margin": str(margin),
         "affordable": margin >= 0 and delta > 0,

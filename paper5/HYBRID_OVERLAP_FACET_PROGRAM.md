@@ -3232,6 +3232,33 @@ Lmin point has a canonical best marking.  The all-dimensional problem can
 therefore be posed as finite labelled-facet selection, not as recovery of a
 particular Farkas-dual vertex.
 
+There is an even smaller scalar form.  Let `c` be the exceptional-root
+coefficient of the normalized completed row and let
+
+```text
+Q_bad=sum_{i: {r,i} is not x-tight} a_{r,i}.          (RPM4)
+```
+
+Root balance gives `c=delta_*+Q_bad` for the canonical best marking.  Hence
+
+```text
+K delta_*-Q_bad=Kc-(K+1)Q_bad.                        (RPM5)
+```
+
+> **Corollary (bad-spoke fraction criterion).**  A normalized rooted facet
+> active at `x` has an affordable admissible marking exactly when
+>
+> ```text
+> Q_bad/c <= K/(K+1),                                 (RPM6)
+> ```
+>
+> together with the required positive root excess `Q_bad<c`.
+
+Thus the selection problem no longer involves a continuum of gauges: after
+enumerating a rectangular facet, sum only the weights of its rooted-pair
+spokes that fail the Lmin tightness label.  This is an exact finite
+labelled-facet test at each fixed dimension.
+
 For the coefficient-two strict common certificate, the normalized packing is
 
 ```text
