@@ -111,6 +111,86 @@ b=a,       c=p(k-1)a,       a=T/[k(p+1)].           (5)
 
 The premises alone need not make all remaining Lmax levels unique.
 
+### Tied-ceiling two-spoke repair
+
+The repair branch also has a dimension-free pattern which does not require a
+strict over-cover leader.  Let
+
+```text
+N={r,u,j} disjoint-union Q,       |Q|=m>=1,       n=m+3,
+```
+
+and let nonnegative `x,z,w` have common total `T`, with `w_r=0`.  Suppose
+
+```text
+x_r=c,          x_u=x_j=b,        x_q<=b          (q in Q),
+z_r=z_u=z_j=A,  z_q<=x_q          (q in Q),
+b<=A<=c,
+```
+
+and
+
+```text
+x({r,u})<=w({r,u}),   x({r,j})<=w({r,j}),
+z({r,j})<=x({r,j}).                                  (TCS)
+```
+
+Then
+
+```text
+O(x,z)/T>=n/[2(n-2)]>=n/floor(n^2/4).                (TCB)
+```
+
+Indeed, the two witness rows give `T-2(c+b)=x(Q)-c>=0`,
+the Lmin order gives `mb-c>=0`, and the reverse common pair gives
+`c+b-2A>=0`.  Since `O=T-2A+2b`, the proof is the exact identity
+
+```text
+O-[m+3]/[2(m+1)] T
+ =[c+b-2A]
+  +2[mb-c]/(m+1)
+  +(m-1)[T-2(c+b)]/[2(m+1)].                         (TCI)
+```
+
+All three terms are nonnegative, and
+`floor(n^2/4)>=2(n-2)` for `n>=4`.  This theorem closes two of the three
+positive-floor tied common-hinge repair templates in the six-player census:
+`harvest6_601.json $.records[103]` and
+`harvest6_602.json $.records[129]`.
+
+### Six-player three-packet repair
+
+The remaining irregular template also has a hand proof.  On six players
+`{r,u,g,j,l_1,l_2}`, suppose
+
+```text
+x=(c,b,a,a,a,a)              on (r,u,l_1,l_2,g,j),
+z_r=z_u=z_g=A,   z_j=D,      z_l_1=z_l_2=E,
+0<=E<=a<=D,       a<=b<=A<=c,
+```
+
+and a nonnegative total-`T` witness with `w_r=0` satisfies
+
+```text
+x({r,u,g,l_2})<=w({r,u,g,l_2}),
+x({r,u,j})<=w({r,u,j}),
+x({r,g,j})<=w({r,g,j}),
+z({r,u,j})<=x({r,u,j}).                              (TP)
+```
+
+The first three rows give `3c+2b+5a<=2T`, hence `c<=3a`.  With
+`h=c+b+a-2A-D>=0`, exact cancellation gives
+
+```text
+O-(2/3)T=h+(a+b)/3+(2/3)(3a-c)>=0.                   (TPI)
+```
+
+This closes `harvest6_602.json $.records[82]`, whose actual overlap is
+`7/9`.  Thus all three common-hinge repair templates in the sequential
+six-player census now have human branch proofs.  The remaining open step is
+not their arithmetic but the general structural theorem selecting either a
+target-priced Lmin rooted packet or one of the repair geometries.
+
 ## 3. Rooted-facet price theorem
 
 The preceding proof uses the star only to establish (3).  Consider instead a
@@ -501,11 +581,37 @@ strengthening.  Both statements remain finite evidence, not a six-player
 domain proof.
 
 The proved ceiling-root interpolation bound closes 28 of the 78 direct
-failures.  The remaining 50 consist of 34 zero-floor rows, 14 strict
-positive-floor rows inside the interpolation wedge, and the two equality
-rows.  Every direct failure has a ceiling root.  Thus the live packet lemma
-only has to handle the zero-floor/positive-wedge residual plus equality; it
-need not reprove the 296 direct or 28 interpolation branches.
+failures.  Of the remaining 50, the zero-floor null-player theorem removes
+34 more.  The genuinely live archive region is therefore only 16
+positive-floor rows: 14 strict rows inside the interpolation wedge and the
+two equality rows.  Every direct failure has a ceiling root.  Thus the live
+packet lemma need not reprove the 296 direct, 28 interpolation, or 34
+dimension-descent branches.
+
+The sequential trichotomy audit extracts one complete staged Lmin support and
+one sparse Lmax top over-cover on every archive row.  All 50 pre-descent
+residual rows have a common hinge and the same unique ceiling/maximum-overlap
+root; their common-support sizes are `1` on 45 rows, `2` on three, and `3`
+on two.  More sharply, each of the 16 positive-floor residuals has a common
+hinge containing that root, and the corresponding common-hinge rooted
+relaxation reaches `2/3`.  Deleting every Lmax row still leaves a
+target-reaching complete-Lmin rooted packet on 13 of the 16.  Only three
+rows require the common-hinge repair, and all three have a tied over-cover
+root load.  Fifteen of the 16 have a tied load; only one has a strict leader.
+All 37 rows with empty common support were already closed by the direct or
+interpolation arm.  The minimal surviving human statement is therefore:
+
+> **Root-price/common-repair lemma (open).**  After zero-floor null-player
+> descent, if direct gluing and ceiling interpolation both miss the target,
+> either the complete staged Lmin packet at a ceiling root already has
+> target price, or a sparse Lmax top over-cover supplies a common coalition
+> containing that root whose reverse comparison repairs the deficit.  The
+> repair clause must allow a tied root load.
+
+The first clause is a rooted semi-balanced facet-price assertion; the second
+is a support-selection and repair assertion.  The finite census verifies
+both only through the archived rooted LPs and does not prove either
+universally.
 
 ### Positive-Lmax equality exclusion
 
@@ -626,6 +732,9 @@ Human proof evidence:
 
 - equations (3)--(4), proving the mixed block-star theorem in every
   dimension;
+- identity (TCI), proving the tied-ceiling two-spoke repair in every
+  dimension;
+- identity (TPI), proving the last irregular six-player repair template;
 - equations (6)--(8), proving the general rooted-facet price criterion;
 - the reserve argument (10);
 - the multistage direct-gluing identity (17), valid in every dimension.
@@ -633,6 +742,9 @@ Human proof evidence:
 Exact audit evidence:
 
 - 56 `(p,k)` parameter rows for the block-star identity;
+- 217,175 exact tied-ceiling two-spoke rows through dimension 20 and both
+  archived template mappings;
+- 1,418 exact six-player three-packet rows and the irregular template mapping;
 - 684 rational rows for the general facet-price identity;
 - exact lower-envelope, core, staged-selection, primal, dual, and root checks
   for the displayed seven-player control;
@@ -646,12 +758,14 @@ Exact audit evidence:
   dimensional threshold; eight have only nongaining deficits, but only five
   put every deficit on the first Lmin floor.
 
-The nine-cut statement is a finite coefficient audit, not a theorem.  Together
-with (17), it isolates the remaining obstacle as a direct-or-rooted selection
-lemma: either some Lmin-tight comparison supplies a cardinality-constrained
-gain packet satisfying (22), or failure of all such packets must produce an
-affordable mixed-colour rooted packet.  Neither alternative has been proved
-universally.
+The nine-cut statement is a finite coefficient audit, not a theorem.  The
+new sequential census and repair theorems sharpen the remaining obstacle to
+a root-price/common-repair selection lemma: after direct gluing, ceiling
+interpolation, and null descent, either the complete Lmin packet at a ceiling
+root already has target price, or a common reverse comparison must place the
+branch in an affordable repair geometry.  The two displayed repair
+geometries cover every archived six-player repair row, but exhaustiveness has
+not been proved even at fixed six, much less in every dimension.
 
 The numerical search that exposed the control was used only for discovery
 and is not part of the evidence chain.
@@ -669,6 +783,10 @@ python3 verifiers/divergence/verify_optimized_mixed_currency_certificate.py \
 
 python3 verifiers/divergence/verify_two_stratum_direct_gluing.py \
   --output verifiers/divergence/two_stratum_direct_gluing.json
+
+python3 verifiers/divergence/audit_direct_ceiling_common_hinge_trichotomy.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/direct_ceiling_common_hinge_trichotomy.json
 
 python3 verifiers/divergence/verify_rooted_star_matrix_facets.py \
   --input verifiers/divergence/mixed_witness_projection.json \

@@ -22,11 +22,17 @@ The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
 reduction in Section 8 turns it into a rooted two-tangent budget and gives a
 linear-support certificate if the correct root can be selected.  The newest
-premise ablation narrows the Lmax contribution further: only tight coalitions
-shared by a sparse ceiling over-cover and the complete Lmin packet need be
-retained in every tested branch.  This common-hinge reduction is proved as a
-sufficient implication and has a sharp exact negative control when all such
-hinges are deleted, but its dimension-free target bound remains conjectural.
+premise ablation narrows the tested Lmax contribution further: among the
+archived rows, only tight coalitions shared by a sparse ceiling over-cover
+and the complete Lmin packet ever need be retained.  The newest sequential
+census is sharper still.  After direct
+gluing, ceiling interpolation, and null-player descent, only 16 positive-floor
+six-player rows remain; 13 close with the complete Lmin packet and a ceiling
+root alone, while exactly three need a common-hinge repair, all at tied
+over-cover roots.  The common-hinge reduction is proved as a sufficient
+implication and has a sharp exact negative control when all such hinges are
+deleted, but the resulting root-price/common-repair disjunction remains
+conjectural in general dimension.
 A literal partition of the players is already false at six players, while
 treating the Lmin packet itself as one exact-cone facet is also false in
 general.
@@ -2125,6 +2131,136 @@ O=A+L+(k-1)b+a
 
 Finally the positive integers `k` and `p+1` sum to `n`, so
 `D=k(p+1)<=floor(n^2/4)`.  QED.
+
+### Theorem (tied-ceiling two-spoke repair)
+
+There is a second dimension-free repair pattern, and it does not require a
+strict over-cover leader.  Let
+
+```text
+N={r,u,j} disjoint-union Q,       |Q|=m>=1,       n=m+3,
+```
+
+and let nonnegative `x,z,w` have common total `T`, with `w_r=0`.  Suppose
+
+```text
+x_r=c,          x_u=x_j=b,        x_q<=b          (q in Q),
+z_r=z_u=z_j=A,  z_q<=x_q          (q in Q),
+b<=A<=c,                                                (TCS1)
+```
+
+and retain the two rooted spokes and one reverse common-pair comparison
+
+```text
+x({r,u})<=w({r,u}),   x({r,j})<=w({r,j}),
+z({r,j})<=x({r,j}).                                  (TCS2)
+```
+
+Then
+
+```text
+O(x,z)/T>=n/[2(n-2)]>=n/floor(n^2/4).                (TCS3)
+```
+
+#### Proof
+
+Put `X_Q=x(Q)`.  The two witness rows and `w_r=0` give
+
+```text
+2(c+b)<=w_u+w_j<=T=c+2b+X_Q,
+```
+
+so `X_Q>=c`; the Lmin order in `(TCS1)` also gives `c<=X_Q<=mb`.
+The reverse common pair gives `2A<=c+b`.  On the displayed sign branch,
+
+```text
+O=A+2b+z(Q)=T-2A+2b>=T-(c-b).                        (TCS4)
+```
+
+More sharply, the entire bound is the exact three-slack identity
+
+```text
+O-[m+3]/[2(m+1)] T
+ =[c+b-2A]
+  +2[mb-c]/(m+1)
+  +(m-1)[T-2(c+b)]/[2(m+1)] >=0.                     (TCS5)
+```
+
+Since `floor(n^2/4)>=2(n-2)` for every `n>=4`, `(TCS3)` follows.  QED.
+
+This theorem humanly closes the tied-repair templates
+`harvest6_601.json $.records[103]` and
+`harvest6_602.json $.records[129]`.  Their actual normalized overlaps are
+`15/16` and `11/14`; the branch theorem supplies the uniform `3/4` floor.
+The irregular `harvest6_602.json $.records[82]` template does not have this
+two-spoke form.  This is a branch reduction, not an assertion that every
+all-dimensional residual has two rooted spokes.
+
+Reproduce the symbolic identity, 217,175 exact parameter controls through
+dimension 20, and both archived mappings with
+
+```bash
+python3 verifiers/divergence/verify_tied_ceiling_two_spoke_repair.py \
+  --output verifiers/divergence/tied_ceiling_two_spoke_repair.json
+```
+
+### Theorem (six-player three-packet repair)
+
+The last common-hinge repair template has a different but still human
+certificate.  Let
+
+```text
+N={r,u,g,j,l_1,l_2},
+x=(c,b,a,a,a,a)              on (r,u,l_1,l_2,g,j),
+z_r=z_u=z_g=A,   z_j=D,      z_l_1=z_l_2=E,
+0<=E<=a<=D,       a<=b<=A<=c.                         (TP1)
+```
+
+Let `w>=0` have total `T=x(N)=z(N)` and `w_r=0`.  Suppose the complete Lmin
+packet supplies
+
+```text
+x({r,u,g,l_2})<=w({r,u,g,l_2}),
+x({r,u,j})<=w({r,u,j}),
+x({r,g,j})<=w({r,g,j}),                                (TP2)
+```
+
+and the common-hinge reverse comparison is
+
+```text
+z({r,u,j})<=x({r,u,j}).                                (TP3)
+```
+
+Then `O(x,z)>=2T/3`.
+
+#### Proof
+
+Summing `(TP2)`, every off-root witness coordinate has load at most two, so
+
+```text
+3c+2b+5a<=2T=2c+2b+8a,
+```
+
+and hence `c<=3a`.  Put
+`h=c+b+a-2A-D>=0`, the slack in `(TP3)`.  On the displayed sign branch,
+`T=3A+D+2E` and `O=A+b+2a+2E`, so exact cancellation gives
+
+```text
+O-(2/3)T = h+(a+b)/3+(2/3)(3a-c)>=0.                  (TP4)
+```
+
+QED.
+
+This proves the `harvest6_602.json $.records[82]` repair row, whose actual
+overlap is `7/9`.  Together with the two-spoke theorem, all three common-
+hinge repair templates isolated by the sequential census now have human
+proofs.  What remains open is the structural selection theorem forcing an
+arbitrary residual into the Lmin-root-price or repair branches.
+
+```bash
+python3 verifiers/divergence/verify_n6_three_packet_repair.py \
+  --output verifiers/divergence/n6_three_packet_repair.json
+```
 
 The proof isolates a more general exact-cone price criterion.  Suppose a
 labelled branch has one root at `c`, exactly `g` players at `b`, and exactly
@@ -4475,11 +4611,29 @@ common-hinge/root audit closes all 374 archived pairs with minimum exactly
 cover many branches, while rooted packets must also cover strict branches.
 
 The ceiling-root interpolation theorem closes 28 of the 78 direct failures.
-The 50 remaining rows split into 34 zero-floor cases, 14 strict
-positive-floor cases in the interpolation wedge, and two equality cases.
-All 78 have a ceiling root.  This finite decomposition identifies the live
-rooted-packet region without pretending that the archive proves it exhaustive
-in general dimension.
+Of the 50 remaining rows, null-player descent removes all 34 zero-floor
+cases.  The genuinely live archive region is only 14 strict positive-floor
+cases in the interpolation wedge and two equality cases.  All 78 have a
+ceiling root.  This finite decomposition identifies the live rooted-packet
+region without pretending that the archive proves it exhaustive in general
+dimension.
+
+The sequential support audit sharpens this further.  Every one of those 50
+pre-descent residual rows has a nonempty intersection between one complete
+staged Lmin support and one sparse Lmax top over-cover, and its ceiling root
+is the unique maximum-overlap root.  The common-support size is one on 45
+rows, two on three, and three on two.  Every one of the 16 positive-floor
+residuals has a common coalition containing that root, and the corresponding
+rooted relaxation reaches `2/3`.  Deleting every Lmax row still leaves a
+target-reaching complete-Lmin rooted packet on 13 of the 16.  Only three
+rows require the common-hinge repair, and all three have a tied over-cover
+root load; 15 of the 16 have a tied load in total.  Conversely, all 37
+archive rows with empty common support were already closed by direct gluing
+or ceiling interpolation.  This isolates the missing theorem as a
+**root-price/common-repair lemma**: after null-player descent, failure of the
+first two arms must force either a target-priced complete Lmin rooted packet
+or a common root hinge whose reverse comparison repairs the deficit.  The
+repair branch must cover tied roots.
 
 The rooted status of the sharp rows is nevertheless a theorem, not an atlas
 inference.  If every Lmax coordinate is positive, then every nonempty `P`

@@ -53,6 +53,14 @@ run_python coopgames/verifiers/divergence/verify_mixed_block_star_boundary.py \
   --output "$scratch_dir/mixed-block-star-boundary.json"
 cmp coopgames/verifiers/divergence/mixed_block_star_boundary.json \
   "$scratch_dir/mixed-block-star-boundary.json"
+run_python coopgames/verifiers/divergence/verify_tied_ceiling_two_spoke_repair.py \
+  --output "$scratch_dir/tied-ceiling-two-spoke-repair.json"
+cmp coopgames/verifiers/divergence/tied_ceiling_two_spoke_repair.json \
+  "$scratch_dir/tied-ceiling-two-spoke-repair.json"
+run_python coopgames/verifiers/divergence/verify_n6_three_packet_repair.py \
+  --output "$scratch_dir/n6-three-packet-repair.json"
+cmp coopgames/verifiers/divergence/n6_three_packet_repair.json \
+  "$scratch_dir/n6-three-packet-repair.json"
 run_python coopgames/verifiers/divergence/verify_optimized_mixed_currency_certificate.py \
   --output "$scratch_dir/optimized-mixed-currency-certificate.json"
 cmp coopgames/verifiers/divergence/optimized_mixed_currency_certificate.json \
@@ -61,6 +69,12 @@ run_python coopgames/verifiers/divergence/verify_two_stratum_direct_gluing.py \
   --output "$scratch_dir/two-stratum-direct-gluing.json"
 cmp coopgames/verifiers/divergence/two_stratum_direct_gluing.json \
   "$scratch_dir/two-stratum-direct-gluing.json"
+run_python coopgames/verifiers/divergence/audit_direct_ceiling_common_hinge_trichotomy.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/direct-ceiling-common-hinge-trichotomy.json"
+cmp coopgames/verifiers/divergence/direct_ceiling_common_hinge_trichotomy.json \
+  "$scratch_dir/direct-ceiling-common-hinge-trichotomy.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
