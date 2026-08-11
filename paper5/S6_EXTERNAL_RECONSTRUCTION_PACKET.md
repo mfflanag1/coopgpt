@@ -126,9 +126,12 @@ UNSAT of the stored formulas after the human-to-formula map is accepted.
 
 Reproduction command:
 
+First create the pinned review environment and set `PAPER5_PYTHON` as
+described in `coopgames/paper5/ENVIRONMENT.md`.
+
 ```bash
-python3 coopgames/verifiers/s6/verify_independent_bound_two.py
-python3 coopgames/verifiers/s6/verify_third_bound_two.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_independent_bound_two.py
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_third_bound_two.py \
   --output /tmp/third_bound_two_verification.json
 cmp /tmp/third_bound_two_verification.json \
   coopgames/verifiers/s6/third_bound_two/verification.json

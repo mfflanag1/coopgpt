@@ -188,8 +188,31 @@ systems are UNSAT in both solvers and have separate trust-disabled CPC proofs
 checked `correct` by Ethos.  Run:
 
 ```text
-python3 coopgames/verifiers/s6/verify_independent_bound_two.py
+"${PAPER5_PYTHON}" \
+  coopgames/verifiers/s6/verify_independent_bound_two.py
 ```
+
+That command is an **offline** audit: it byte-regenerates the formulas and
+checks the committed formula/proof hashes and recorded solver verdicts.  It
+does not execute cvc5 or Ethos.  For a fresh cvc5 proof and fresh Ethos replay,
+set the five paths described in `coopgames/paper5/ENVIRONMENT.md` and run, for
+example, the first coefficient-two case:
+
+```text
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/replay_core_closure_smt.py \
+  --formula coopgames/verifiers/s6/independent_bound_two/p2_n3_t1.smt2 \
+  --z3 "${PAPER5_Z3}" \
+  --cvc5 "${PAPER5_CVC5}" \
+  --ethos "${PAPER5_ETHOS}" \
+  --cpc-signatures "${PAPER5_CPC_SIGNATURES}" \
+  --timeout-seconds 900 \
+  --cpc-proof /tmp/p2_n3_t1-fresh.cpc \
+  --output /tmp/p2_n3_t1-fresh.json
+```
+
+Repeat with `p3_n3_t0.smt2`.  A successful fresh replay reports Z3 `unsat`,
+cvc5 `unsat`, CPC status `PASS`, and Ethos status `correct`; compare the
+formula and proof SHA-256 fields against the committed JSON record.
 
 A third lane under `../third_bound_two/` removes Z3 from formula generation
 entirely.  The standard-library generator serializes SMT-LIB directly, uses
@@ -200,7 +223,7 @@ encodings, checks both bases SAT and both full systems UNSAT, and detects
 non-strict-activation and cut-omission mutations on all 85 rows:
 
 ```text
-python3 coopgames/verifiers/s6/verify_third_bound_two.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_third_bound_two.py \
   --output /tmp/third_bound_two_verification.json
 cmp /tmp/third_bound_two_verification.json \
   coopgames/verifiers/s6/third_bound_two/verification.json

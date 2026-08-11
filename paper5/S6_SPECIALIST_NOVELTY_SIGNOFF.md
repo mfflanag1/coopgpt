@@ -34,6 +34,9 @@ exchange/blocker mechanism.
 
 Review branch: `codex/fixed-n-handover-facets`
 
+Public branch:
+<https://github.com/mfflanag1/counterexample-hunt/tree/codex/fixed-n-handover-facets>
+
 Baseline reviewed state when this packet was prepared: `410acdd` or later.
 The reviewer should record the full commit SHA actually inspected.
 
@@ -43,8 +46,8 @@ The reviewer should record the full commit SHA actually inspected.
 coopgames/paper5/S6_LITERATURE_NOVELTY_AUDIT.md
 coopgames/paper5/S6_EXTERNAL_RECONSTRUCTION_PACKET.md
 coopgames/paper5/S6_DIRECT_EXCHANGE_BOUND.md
-coopgames/paper5/paper.tex
-coopgames/paper5/paper.pdf
+coopgames/paper5/divergence.tex
+coopgames/paper5/divergence.pdf
 coopgames/MATHSCINET_CHECKLIST.md
 ```
 
@@ -82,6 +85,8 @@ to convex/two-bound/Owen-set cores are neighboring prior art, not collisions.
 | Frank--Murota | Dec-min/inc-max structure on base-polyhedra and M-convex sets | General exact-game cores are not directly base-polyhedra unless convex |
 | Schoot Uiterkamp | Translated least-majorization characterizes base-polyhedra/convex games | Applies to all translations and the convex boundary, not two selectors on arbitrary exact cores |
 | Gong--Dietzenbacher--Peters | Clipped egalitarian point on two-bound cores | The two selectors coincide there; general exact cores are not two-bound |
+| Gong--Dietzenbacher--Peters (one-bound) | Reduced-game-stable subclass of two-bound cores | Still a coincidence subdomain, not the full exact domain |
+| Dietzenbacher--Doğan | Population-monotonic egalitarian schemes | No comparison of the opposing selectors in one arbitrary exact core |
 | Izquierdo--Montes--Rafels | Lorenz-monotonic schemes and a convexity characterization | Allocations vary across subgames; no `Lmin`--`Lmax` distance |
 | Vazirani; Gangam et al. | Leximin/leximax algorithms and complexity on combinatorial cores/Owen sets | No normalized distance or exact-game supremum |
 | Coherent-lower-probability literature checked | Credal/core representations, coherence, extreme rays and normal fans | No located opposing-selector separation theorem |
@@ -171,6 +176,14 @@ cone.  Martijn Schoot Uiterkamp is a useful adjacent reader for the strongest
 majorization/base-polyhedron transfer.  Listing a person here is not evidence
 of contact, willingness to review, or endorsement.
 
+The most efficient first approach is to a specialist in the
+Arin--Iñarra--Kuipers--Vermeulen/Dietzenbacher line, because that reader can
+test both terminology drift and whether exact-partition or recent
+population-monotonicity results already contain the needed implication.  An
+exact-cone specialist is the preferred second check if the first reader finds
+no collision.  The project should not substitute an author, general
+mathematician, or automated literature search for either opinion.
+
 ## Short outreach text
 
 ```text
@@ -180,7 +193,8 @@ the manuscript claims that the normalized L1 separation between the Lmin and
 Lmax core selections has sharp six-player supremum 2/3 (with the small-n
 values and equality cases also classified).
 
-Would you review the novelty packet on branch codex/fixed-n-handover-facets,
+Would you review the novelty packet on branch codex/fixed-n-handover-facets at
+https://github.com/mfflanag1/counterexample-hunt/tree/codex/fixed-n-handover-facets,
 record the exact commit inspected, and state either (i) an equivalent prior
 theorem with an explicit translation, (ii) that no equivalent was located
 within your stated search scope, or (iii) that novelty remains indeterminate?

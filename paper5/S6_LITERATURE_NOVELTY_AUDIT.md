@@ -168,6 +168,45 @@ result under another formulation.
     exact games.
     Preprint: <https://arxiv.org/abs/2403.06037>.
 
+19. **Gong, Dietzenbacher, and Peters (2024), “One-bound core games.”**
+    Introduces a subclass of the two-bound-core domain and proves stability of
+    that structure under reduced games.  Because every one-bound core game is
+    two-bound, the same singleton-egalitarian-core observation applies: it is
+    a coincidence domain for the two Lorenz selectors, not a quantitative
+    theorem for arbitrary exact cores.
+    DOI: <https://doi.org/10.1007/s00182-024-00889-0>.
+
+20. **Dietzenbacher and Doğan (2025), “Population monotonicity and
+    egalitarianism.”**  Identifies the maximal domain on which population
+    monotonicity and egalitarian core selection are compatible and
+    characterizes the Dutta--Ray solution there.  The object is a
+    population-indexed allocation scheme on a special domain; it neither
+    compares `Lmin` with `Lmax` on one arbitrary exact core nor states a
+    fixed-dimensional distance bound.
+    DOI: <https://doi.org/10.1007/s00182-025-00966-y>.
+
+21. **Takanashi (2024), “Analysis of the core under inequality-averse utility
+    functions.”**  Replaces linear individual utility with Fehr--Schmidt
+    inequality-averse utility and studies the resulting stability set.  Its
+    egalitarian conclusions concern a different core concept and do not
+    compare the two standard Lorenz selections of a TU-game core.
+    DOI: <https://doi.org/10.1016/j.mathsocsci.2024.03.001>.
+
+22. **Finster, Goldberg, Lock, and Tullii (2026), “Decentralized Trading
+    Networks: Equilibria and Fairness.”**  Relates trading-network outcomes
+    to a cooperative core and proves coincidence of leximin and leximax in a
+    small-essential-agent special case.  This is a useful recent terminology
+    collision, but it does not treat the class of exact games, the six-player
+    extremum, or a normalized selector-distance bound.
+    Preprint: <https://arxiv.org/abs/2602.20868>.
+
+23. **Chai, Xu, Gong, and Li (2026), “Axiomatizations of the constrained equal
+    individual worth value.”**  Characterizes a coordinate-benchmark
+    egalitarian value for essential games.  It does not define the `Lmin` and
+    `Lmax` core selectors and therefore supplies no transfer to their
+    distance.
+    DOI: <https://doi.org/10.1016/j.orl.2026.107470>.
+
 ## Adjacent-language transfer audit
 
 The closest apparent transfers separate into seven distinct levels:
@@ -302,6 +341,19 @@ of the assignment/flow/MST/`b`-matching equitable-core papers.  The 2025 SIPTA
 seminar on exact-cone facets was checked as a current-author update; it
 reprises the 2022 facet classification and its at-most-six catalogue rather
 than introducing an egalitarian-selector theorem.
+
+The final refresh used an OpenAlex forward-citation sweep on 2026-08-10.  It
+checked all works indexed from 2024 onward that cite Arin--Iñarra (2001),
+Arin--Kuipers--Vermeulen (2003, 2008), or Dietzenbacher (2021).  The sweep
+returned the one-bound, translated-majorization, population-monotonicity,
+Lorenz-monotonicity, constrained-egalitarian, and inequality-averse-core
+papers discussed above, together with application papers not using the two
+selectors.  A separate title/abstract query for `leximin`, `leximax`, `core`,
+and `cooperative game` found the 2024--2026 assignment, flow, matching, and
+trading-network papers now listed.  No returned work stated an exact-game
+fixed-dimensional `L1` extremum or the value `2/3`.  OpenAlex coverage is not
+complete, so this record strengthens the scoped negative search but does not
+replace the specialist verdict form.
 
 For a reviewable record of collision criteria, expert scope, and permissible
 verdict wording, see `S6_SPECIALIST_NOVELTY_SIGNOFF.md`.  That file is a

@@ -162,8 +162,15 @@ def main():
 
     if total_equivalences != 458:
         raise AssertionError(f"unexpected semantic equivalence total: {total_equivalences}")
-    if not all(mutation_counts.values()):
-        raise AssertionError(f"a mutation was not detected: {mutation_counts}")
+    expected_mutation_counts = {
+        "drop_first_cut": 85,
+        "nonstrict_activation": 85,
+    }
+    if mutation_counts != expected_mutation_counts:
+        raise AssertionError(
+            "unexpected mutation-detection counts: "
+            f"expected {expected_mutation_counts}, got {mutation_counts}"
+        )
     report = {
         "schema": "third-bound-two-verification-v1",
         "status": "PASS",

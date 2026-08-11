@@ -381,100 +381,101 @@ lexicographic theorem is now irrelevant to the upper bound.
 
 ## 7. Reproduction
 
-Run from the repository root:
+Create the pinned review environment and set `PAPER5_PYTHON` as described in
+`coopgames/paper5/ENVIRONMENT.md`, then run from the repository root:
 
 ```text
-python3 coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
-python3 coopgames/verifiers/s6/verify_independent_bound_two.py
-python3 coopgames/verifiers/s6/verify_third_bound_two.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/reproduce_strict_exchange_bound.py
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_independent_bound_two.py
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_third_bound_two.py \
   --output /tmp/third_bound_two_verification.json
 cmp /tmp/third_bound_two_verification.json \
   coopgames/verifiers/s6/third_bound_two/verification.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_formula_interface.py \
   --output /tmp/strict_exchange_formula_interface.json
 cmp /tmp/strict_exchange_formula_interface.json \
   coopgames/verifiers/s6/strict_exchange_formula_interface.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_semantic_interface.py \
   --output /tmp/strict_exchange_semantic_interface.json
 cmp /tmp/strict_exchange_semantic_interface.json \
   coopgames/verifiers/s6/strict_exchange_semantic_interface.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
-python3 coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_orbit_core_certificates.py
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_anchor_core_certificate.py
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_p4_packet_classes.py \
   --output /tmp/strict_exchange_p4_packet_classes.json
 cmp /tmp/strict_exchange_p4_packet_classes.json \
   coopgames/verifiers/s6/strict_exchange_p4_packet_classes.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_p4_relay_trees.py \
   --output /tmp/strict_exchange_p4_relay_trees.json
 cmp /tmp/strict_exchange_p4_relay_trees.json \
   coopgames/verifiers/s6/strict_exchange_p4_relay_trees.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class4_hand_certificates.py \
   --output /tmp/strict_exchange_p4_class4_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class4_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class4_hand_certificates.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class11_hand_certificates.py \
   --output /tmp/strict_exchange_p4_class11_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class11_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class11_hand_certificates.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class7_hand_certificates.py \
   --output /tmp/strict_exchange_p4_class7_hand_certificates.json
 cmp /tmp/strict_exchange_p4_class7_hand_certificates.json \
   coopgames/verifiers/s6/strict_exchange_p4_class7_hand_certificates.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_p4_order_split_relays.py \
   --output /tmp/strict_exchange_p4_order_split_relays.json
 cmp /tmp/strict_exchange_p4_order_split_relays.json \
   coopgames/verifiers/s6/strict_exchange_p4_order_split_relays.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class9_hand_certificates.py \
   --output /tmp/strict_exchange_p4_class9_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class9_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class9_hand_certificate_audit.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class10_hand_certificates.py \
   --output /tmp/strict_exchange_p4_class10_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class10_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class10_hand_certificate_audit.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class1_hand_certificates.py \
   --output /tmp/strict_exchange_p4_class1_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class1_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class1_hand_certificate_audit.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class2_hand_certificates.py \
   --output /tmp/strict_exchange_p4_class2_hand_certificate_audit.json
 cmp /tmp/strict_exchange_p4_class2_hand_certificate_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class2_hand_certificate_audit.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class6_packet_skeleton.py \
   --output /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json
 cmp /tmp/strict_exchange_p4_class6_packet_skeleton_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_packet_skeleton_audit.json
-python3 coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_zero_anchor_overcover_duality.py \
   --output /tmp/zero_anchor_overcover_duality_audit.json
 cmp /tmp/zero_anchor_overcover_duality_audit.json \
   coopgames/verifiers/s6/zero_anchor_overcover_duality_audit.json
-python3 coopgames/verifiers/s6/verify_zero_anchor_facet_rays.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_zero_anchor_facet_rays.py \
   --output /tmp/zero_anchor_facet_rays.json
 cmp /tmp/zero_anchor_facet_rays.json \
   coopgames/verifiers/s6/zero_anchor_facet_rays.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --output /tmp/strict_exchange_p4_class6_overcovers.json
 cmp /tmp/strict_exchange_p4_class6_overcovers.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_overcovers.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_p4_class6_overcovers.py \
   --details --output /tmp/strict_exchange_p4_class6_overcovers_details.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class6_allocation_identities.py \
   --overcover-details /tmp/strict_exchange_p4_class6_overcovers_details.json \
   --output /tmp/strict_exchange_p4_class6_allocation_identity_audit.json
 cmp /tmp/strict_exchange_p4_class6_allocation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_allocation_identity_audit.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_p4_class6_activation_overcovers.py \
   --details --output /tmp/strict_exchange_p4_class6_activation_overcovers_details.json
-python3 coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/verify_strict_exchange_p4_class6_activation_identities.py \
   --overcover-details /tmp/strict_exchange_p4_class6_activation_overcovers_details.json \
   --output /tmp/strict_exchange_p4_class6_activation_identity_audit.json
 cmp /tmp/strict_exchange_p4_class6_activation_identity_audit.json \
   coopgames/verifiers/s6/strict_exchange_p4_class6_activation_identity_audit.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_p4_universal_order_relays.py \
   --output /tmp/strict_exchange_p4_universal_order_relays.json
 cmp /tmp/strict_exchange_p4_universal_order_relays.json \
   coopgames/verifiers/s6/strict_exchange_p4_universal_order_relays.json
-python3 coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
+"${PAPER5_PYTHON}" coopgames/verifiers/s6/audit_strict_exchange_large_case_templates.py \
   --output /tmp/strict_exchange_large_case_templates.json
 cmp /tmp/strict_exchange_large_case_templates.json \
   coopgames/verifiers/s6/strict_exchange_large_case_templates.json

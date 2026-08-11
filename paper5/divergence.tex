@@ -27,7 +27,7 @@
 \title{Maximal divergence of the leximin and leximax\\
 core selections in exact games}
 \author{Maxwell Flanagan}
-\date{Draft of August 10, 2026}
+\date{August 10, 2026}
 
 \begin{document}
 \maketitle
@@ -66,6 +66,10 @@ nineteen role-level exchange schemas and three negative-cut templates.  The
 human counterexample-to-relaxation implication, finite certificates, and
 novelty determination are kept as separate review obligations.
 \end{abstract}
+
+\noindent\textbf{Keywords:} cooperative games; exact games; core;
+leximin; leximax; Lorenz order; computer-assisted proof.\\
+\textbf{MSC 2020:} 91A12; 90C05; 52B12.
 
 \section{Introduction}
 
@@ -126,7 +130,13 @@ exact-cone sources found no prior fixed-dimensional separation bound
 \citep{ArinEtAl2008,DietzenbacherYanovskaya2020,StudenyKratochvil2022}.
 The closest adjacent base-polyhedron theory studies one decreasingly minimal
 or lexicographically optimal base and its canonical partitions
-\citep{FrankMurota2022}; the exact and totally balanced cone papers classify
+\citep{FrankMurota2022}.  More sharply, \citet{SchootUiterkamp2024}
+characterizes compact convex sets having a least translated and rescaled
+majorized point for every translation as base-polyhedra, and derives the
+corresponding characterization of convex TU games.  That theorem concerns a
+least-majorized point after every strategic translation, not the separation
+of two opposing selectors in one arbitrary exact-game core.  The exact and
+totally balanced cone papers classify
 facets in game-value space \citep{KroupaStudeny2019,StudenyKratochvil2022}.
 This is not a hidden change of vocabulary: if an exact game's core is directly
 the base-polyhedron $B(f)$ of a submodular $f$, exactness gives
@@ -136,12 +146,22 @@ exact games.
 On the special two-bound domain, where the core is a box intersected with the
 efficiency hyperplane, the egalitarian core is a singleton given by a clipped-
 level formula \citep{GongDietzenbacherPeters2022}; hence the opposing Lorenz
-selections coincide there.  Exact-core-bound reductions now extend to all
+selections coincide there.  The later one-bound class is a reduced-game-stable
+subclass of the same coincidence domain \citep{GongDietzenbacherPeters2024}.
+Exact-core-bound reductions now extend to all
 balanced games, but the resulting coordinate-bound equality values can lie
 outside the core already with three players \citep{GongDietzenbacher2026}.
 Thus neither checked formulation states or implies a distance theorem for the
 two opposing selections on arbitrary exact cores.  This negative search is
 not a novelty proof, and the claim remains subject to specialist review.
+The Lorenz-monotonic allocation-scheme framework of
+\citet{IzquierdoMontesRafels2024} is another close terminological neighbor:
+its allocations are indexed across subgames and its exactness strengthening
+characterizes convexity, rather than bounding the two selections within one
+exact core.  Likewise, the maximal population-monotonic egalitarian domain of
+\citet{DietzenbacherDogan2025} characterizes a Dutta--Ray allocation scheme
+across populations rather than the separation of the two selections in one
+core.
 
 The question of this paper is what happens after the rigidity breaks.  Write
 \[
@@ -1515,9 +1535,12 @@ game $G(2,3)$ supplies the matching lower bound.  The earlier generator
 census, equality census, continuity arguments, and support tables are
 historical discovery routes and are not used in this proof.
 
-The three large finite menus use only the following hand-checkable exchange
-calculus.  Naming it separately isolates what is conceptual from the later
-blocker-coexistence certificates.
+After orbit reduction, the nineteen-schema formulation of the three large
+sign cases uses only the following hand-checkable exchange calculus.  The
+original minimized labelled menus contain additional direction shapes; they
+are proof-checked in the fifteen-case formulation but are not being classified
+by this lemma.  Naming the reduced templates separately isolates what is
+conceptual from the later blocker-coexistence certificates.
 
 \begin{lemma}[Three exchange templates]\label{lem:orbittemplates}
 Let $y\in\mathbb R^6$ and let $h(N)=0$.
@@ -2091,37 +2114,39 @@ review.
 
 \section*{Reproducibility note}
 
-Sections~2--4 and~6 are proved by hand and depend on no program.
-Theorems~\ref{thm:n5closed}, \ref{thm:regime41}, \ref{thm:s5},
-and~\ref{thm:s6} are proved by exhaustive
+Every theorem not identified below is proved by hand and depends on no
+program.  Theorems~\ref{thm:n5closed}, \ref{thm:regime41}, \ref{thm:s5},
+and~\ref{thm:s6} depend on exhaustive
 finite exact-rational checks, described in their proofs; those checks are
-proof dependencies, archived in \texttt{../verifiers} with the
-theorem-to-driver map in its README (for Theorems~\ref{thm:regime41}
+proof dependencies, archived in the public repository
+\url{https://github.com/mfflanag1/counterexample-hunt} on branch
+\path{codex/fixed-n-handover-facets}, with the theorem-to-driver map in
+\path{coopgames/verifiers/README.md} (for Theorems~\ref{thm:regime41}
 and~\ref{thm:s5}, both pipelines, the coverage audit, and the full control
 suite; for Theorem~\ref{thm:s6}, the fifteen source-regenerated QF\_LRA
 formulas, Z3/cvc5 records, trust-disabled CPC proofs, and Ethos checks under
-\texttt{s6/strict\_exchange\_*}, plus the independently formulated
-bound-two reconstruction under \texttt{s6/independent\_bound\_two/} and the
+\path{s6/strict_exchange_*}, plus the independently formulated
+bound-two reconstruction under \path{s6/independent_bound_two/} and the
 standard-library direct SMT-LIB reconstruction under
-\texttt{s6/third\_bound\_two/}).
+\path{s6/third_bound_two/}).
 The literal 72-assertion human-to-machine map is audited under
-\texttt{s6/strict\_exchange\_formula\_interface.json}; a separately written
+\path{s6/strict_exchange_formula_interface.json}; a separately written
 semantic reconstruction is frozen as
-\texttt{s6/strict\_exchange\_semantic\_interface.json}.  These are
+\path{s6/strict_exchange_semantic_interface.json}.  These are
 transcription controls and do not replace external review of the human
 implication.  The orbit anatomy
-under \texttt{s6/strict\_exchange\_large\_case\_templates.json} is
+under \path{s6/strict_exchange_large_case_templates.json} is
 explanatory; the later 19-orbit formulas under
-\texttt{s6/orbit\_core\_certificates/} are separately proof-checked reduced
+\path{s6/orbit_core_certificates/} are separately proof-checked reduced
 alternatives for the three large cases.  The anchor-localized $(4,2,0)$
-alternative under \texttt{s6/p4\_anchor\_core\_certificates/} is separately
+alternative under \path{s6/p4_anchor_core_certificates/} is separately
 proof-checked and uses only one singleton exactness witness.  Its explanatory
 eleven-row forced-blocker decomposition is regenerated by
 \path{s6/audit_strict_exchange_p4_packet_classes.py}; its forced-exchange
 trees are regenerated by \path{s6/audit_strict_exchange_p4_relay_trees.py}.
 Theorem~\ref{thm:cfg} is proved by hand; its superseded finite
 check and the hand proof's own symbolic guards are archived alongside.  The remaining
-programs are bug audits, not proof dependencies.  Exact rational programs in the companion repository
+programs are bug audits, not proof dependencies.  Exact rational programs in the same repository
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full
 coalition-inequality check and the tight-set prediction of
@@ -2143,6 +2168,7 @@ cycles on these degenerate programs and was not used for any reported number.
 \bibitem[Arin and I\~narra(2001)]{ArinInarra2001}
 Arin J, I\~narra E (2001) Egalitarian solutions in the core.
 International Journal of Game Theory 30:187--193.
+\url{https://doi.org/10.1007/s001820100073}
 
 \bibitem[Arin et al.(2003)]{ArinKuipersVermeulen2003}
 Arin J, Kuipers J, Vermeulen D (2003) Some characterizations of egalitarian
@@ -2162,6 +2188,7 @@ exactness. Games and Economic Behavior 28:1--12.
 \bibitem[Cs\'oka et al.(2011)]{CsokaHeringsKoczy2011}
 Cs\'oka P, Herings PJJ, K\'oczy L\'A (2011) Balancedness conditions for exact
 games. Mathematical Methods of Operations Research 74:41--52.
+\url{https://doi.org/10.1007/s00186-011-0353-z}
 
 \bibitem[Fujishige(1980)]{Fujishige1980}
 Fujishige S (1980) Lexicographically optimal base of a polymatroid with
@@ -2175,6 +2202,11 @@ between discrete and continuous cases. Preprint, arXiv:2202.06561.
 Gangam RR, Garg N, Shahkar P, Vazirani VV (2024) Equitable core imputations
 for max-flow, MST and $b$-matching games. Preprint, arXiv:2403.06037.
 
+\bibitem[Izquierdo et al.(2024)]{IzquierdoMontesRafels2024}
+Izquierdo JM, Montes J, Rafels C (2024) Population Lorenz-monotonic
+allocation schemes for TU-games. Social Choice and Welfare 63:417--436.
+\url{https://doi.org/10.1007/s00355-024-01538-x}
+
 \bibitem[Gong and Dietzenbacher(2026)]{GongDietzenbacher2026}
 Gong D, Dietzenbacher B (2026) Core bound reduced games and consistency.
 International Journal of Game Theory 55:13.
@@ -2184,6 +2216,11 @@ International Journal of Game Theory 55:13.
 Gong D, Dietzenbacher B, Peters H (2022) Reduced two-bound core games.
 Mathematical Methods of Operations Research 96:447--457.
 \url{https://doi.org/10.1007/s00186-022-00800-1}
+
+\bibitem[Gong et al.(2024)]{GongDietzenbacherPeters2024}
+Gong D, Dietzenbacher B, Peters H (2024) One-bound core games.
+International Journal of Game Theory 53:859--878.
+\url{https://doi.org/10.1007/s00182-024-00889-0}
 
 \bibitem[Klijn et al.(2003)]{KlijnEtAl2003}
 Klijn F, Vermeulen D, Hamers H, Solymosi T, Tijs S, Villar JP (2003)
@@ -2217,6 +2254,11 @@ Dietzenbacher B, Yanovskaya E (2020) Antiduality in exact partition games.
 Mathematical Social Sciences 108:116--121.
 \url{https://doi.org/10.1016/j.mathsocsci.2020.04.006}
 
+\bibitem[Dietzenbacher and Do\u{g}an(2025)]{DietzenbacherDogan2025}
+Dietzenbacher B, Do\u{g}an E (2025) Population monotonicity and egalitarianism.
+International Journal of Game Theory 54, article 42.
+\url{https://doi.org/10.1007/s00182-025-00966-y}
+
 \bibitem[Flanagan(2026)]{Flanagan2026}
 Flanagan M (2026) Balanced transport at the egalitarian core: a complete
 boundary phase diagram. Preprint; companion paper.
@@ -2230,6 +2272,12 @@ solution. Mathematical Social Sciences 89:92--99.
 Studen\'y M, Kratochv\'il V (2022) Facets of the cone of exact games.
 Mathematical Methods of Operations Research 95:35--80.
 \url{https://doi.org/10.1007/s00186-022-00770-4}
+
+\bibitem[Schoot Uiterkamp(2024)]{SchootUiterkamp2024}
+Schoot Uiterkamp MHH (2024) A characterization of simultaneous optimization,
+majorization, and (bi-)submodular polyhedra. Mathematics of Operations
+Research 50:252--276.
+\url{https://doi.org/10.1287/moor.2023.0054}
 
 \end{thebibliography}
 }
