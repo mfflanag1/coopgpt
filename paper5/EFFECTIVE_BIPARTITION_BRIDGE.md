@@ -574,7 +574,11 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the canonical rank-pairing theorem recovering all label currency from
   clipped high--low rectangles;
 - the exact rooted-hinge witness-projection theorem and its `n-1` support
-  bound for two-colour fractional hinge packings.
+  bound for two-colour fractional hinge packings;
+- the singleton-slack completion theorem: each rooted packing vertex lifts
+  to a min-semi-balanced system, purely so with exceptional singleton root
+  exactly when its root advantage is positive; the published
+  indecomposability test is then the exact full-cone facet filter.
 
 ### Exact rational evidence
 
@@ -583,7 +587,10 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the exact seven-player refutation `(V7)--(R7)`, including two formulations
   of the selection certificates and primal/dual dispersion witnesses;
 - independent direct-witness and projected cutting-plane agreement on all
-  maximum-overlap roots of the seven hostile/sharp fixed branches.
+  maximum-overlap roots of six hostile and two sharp fixed branches;
+- exact-LP and independently formulated Z3 agreement that all eight
+  nontrivial rooted cuts in those controls are min-semi-balanced but
+  decomposable, including both sharp block-star cuts.
 
 ### Refuted
 
@@ -599,8 +606,9 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the weaker universal target `(H)`;
 - a dimension-free construction of its Farkas charge from the complete
   staged Lmin packet and sparse ceiling data;
-- a classification of which projected common-hinge circuits pass to
-  indecomposable exact-cone facets.
+- a structural criterion forcing an indecomposable member among the rooted
+  min-semi-balanced candidates (none of the eight current nontrivial cuts
+  passes that filter).
 
 The next live bridge is a **spectral-or-balanced disjunction**.  Positive
 hinge surplus already converts to a rigorous sharpened spectral lower bound;

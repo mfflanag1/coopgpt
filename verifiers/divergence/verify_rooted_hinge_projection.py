@@ -7,11 +7,13 @@ already identify ``x(S)=z(S)``, so the apparent second colour is redundant.
 This verifier
 uses an exact cutting-plane formulation of that projection and compares its
 minimum with the existing direct one-witness LP on every maximum-overlap root
-of five hostile branches and two sharp-family orientations.
+of six hostile branches and two sharp-family orientations.  For every cut it
+also forms the associated singleton-slack completion and checks the resulting
+semi-balanced incidence identity and linear-independence/minimality claim.
 
 The two formulations share the fixed labelled branch data, but their
 witness-feasibility components are independently formulated.  Agreement on
-these seven branches is a control, not proof of the human projection theorem
+these eight branches is a control, not proof of the human projection theorem
 or of the all-n hybrid-overlap conjecture.
 """
 
@@ -34,6 +36,148 @@ from verify_labelled_branch_duals import (  # noqa: E402
     branch_system,
     one_witness_minimum,
 )
+from verify_n7_neutral_rectangle_control import (  # noqa: E402
+    G as NEUTRAL_G,
+    X as NEUTRAL_X,
+    Z as NEUTRAL_Z,
+)
+
+
+NEUTRAL_CASE = {
+    "name": "neutral_rectangle_control",
+    "g": NEUTRAL_G,
+    "x": NEUTRAL_X,
+    "z": NEUTRAL_Z,
+    "support_x": (9, 10, 38, 70, 111),
+    "support_z": (9,),
+}
+CONTROL_CASES = CASES + (NEUTRAL_CASE,)
+
+
+def matrix_rank(columns, n):
+    """Exact rank of incidence columns in F^n."""
+    rows = [[F(column >> i & 1) for column in columns] for i in range(n)]
+    rank = 0
+    for column in range(len(columns)):
+        pivot = next((i for i in range(rank, n) if rows[i][column]), None)
+        if pivot is None:
+            continue
+        rows[rank], rows[pivot] = rows[pivot], rows[rank]
+        scale = rows[rank][column]
+        rows[rank] = [value / scale for value in rows[rank]]
+        for i in range(n):
+            if i == rank or rows[i][column] == 0:
+                continue
+            scale = rows[i][column]
+            rows[i] = [a - scale * b for a, b in zip(rows[i], rows[rank])]
+        rank += 1
+    return rank
+
+
+def decomposition_witnesses(support, n):
+    """Apply the Studeny--Kratochvil exceptional-set decomposition test."""
+    full = (1 << n) - 1
+    witnesses = []
+    width = len(support) + 1
+    for exceptional in range(1, full):
+        if exceptional in support:
+            continue
+        aub, bub = [], []
+        for variable in range(len(support)):
+            row = [F(0)] * width
+            row[variable] = F(-1)
+            aub.append(row)
+            bub.append(F(0))
+        aeq, beq = [], []
+        for player in range(n):
+            row = [F(coalition >> player & 1) for coalition in support]
+            row.append(F(-1))
+            aeq.append(row)
+            beq.append(F(exceptional >> player & 1))
+        status, _value, solution = exact_linprog(
+            [F(0)] * width, aub, bub, aeq, beq
+        )
+        if status == "optimal":
+            witnesses.append(
+                {
+                    "new_exceptional": exceptional,
+                    "common_load": str(solution[-1]),
+                    "support_weights": [str(value) for value in solution[:-1]],
+                }
+            )
+        elif status != "infeasible":
+            raise AssertionError(f"decomposition test is {status}")
+    return witnesses
+
+
+def semi_balanced_completion(coalitions, weights, n, root):
+    """Audit the rooted packing's exact singleton-slack completion."""
+    loads = [F(0)] * n
+    coefficients = {}
+    for coalition, weight in zip(coalitions, weights):
+        if weight == 0:
+            continue
+        coefficients[coalition] = coefficients.get(coalition, F(0)) + weight
+        for player in range(n):
+            if coalition >> player & 1:
+                loads[player] += weight
+    deficits = [F(0) if i == root else F(1) - loads[i] for i in range(n)]
+    if any(deficit < 0 for deficit in deficits):
+        raise AssertionError("nonroot packing capacity exceeded")
+    for player, deficit in enumerate(deficits):
+        if deficit:
+            singleton = 1 << player
+            coefficients[singleton] = coefficients.get(singleton, F(0)) + deficit
+    root_advantage = loads[root] - 1
+    root_singleton = 1 << root
+    coefficients[root_singleton] = (
+        coefficients.get(root_singleton, F(0)) - root_advantage
+    )
+    coefficients = {
+        coalition: coefficient
+        for coalition, coefficient in coefficients.items()
+        if coefficient
+    }
+    identity = [F(0)] * n
+    for coalition, coefficient in coefficients.items():
+        for player in range(n):
+            if coalition >> player & 1:
+                identity[player] += coefficient
+    if identity != [F(1)] * n:
+        raise AssertionError("singleton-slack incidence identity failed")
+    negative = [
+        coalition for coalition, coefficient in coefficients.items() if coefficient < 0
+    ]
+    if len(negative) > 1:
+        raise AssertionError("completion is not semi-conic")
+    columns = tuple(sorted(coefficients))
+    rank = matrix_rank(columns, n)
+    if rank != len(columns):
+        raise AssertionError("extreme-packing completion is not support-minimal")
+    if root_advantage > 0 and negative != [root_singleton]:
+        raise AssertionError("positive root advantage lacks exceptional root singleton")
+    kind = "purely_min_semi_balanced" if negative else "min_balanced"
+    decompositions = decomposition_witnesses(columns, n) if negative else []
+    return {
+        "player_loads": [str(value) for value in loads],
+        "nonroot_deficits": [str(value) for value in deficits],
+        "root_advantage": str(root_advantage),
+        "completion_coefficients": [
+            {"coalition": coalition, "coefficient": str(coefficients[coalition])}
+            for coalition in columns
+        ],
+        "incidence_identity": "sum coefficients*incidence = 1_N",
+        "incidence_rank": rank,
+        "support_size": len(columns),
+        "classification": kind,
+        "exceptional_coalition": negative[0] if negative else None,
+        "semi_balanced_identity_verified": True,
+        "minimality_verified": True,
+        "indecomposability_tested": bool(negative),
+        "indecomposable": bool(negative) and not decompositions,
+        "decomposition_count": len(decompositions),
+        "first_decomposition": decompositions[0] if decompositions else None,
+    }
 
 
 def master_without_witness(system):
@@ -141,6 +285,9 @@ def projected_minimum(case, root):
                     }
                     for k in support
                 ],
+                "semi_balanced_completion": semi_balanced_completion(
+                    coalitions, weights, n, root
+                ),
             }
         )
     raise AssertionError("rooted-hinge cutting plane did not terminate")
@@ -201,13 +348,14 @@ def main():
         "human_theorem_audited": (
             "after common rows identify x(S)=z(S), eliminating a singleton-zero "
             "witness gives all rooted fractional Lmin-support packing inequalities; "
-            "extreme packings use at most n-1 rows"
+            "extreme packings use at most n-1 rows, and their singleton-slack "
+            "completions are min-semi-balanced systems"
         ),
         "scope": (
-            "maximum-overlap roots of five hostile fixed branches and two sharp "
+            "maximum-overlap roots of six hostile fixed branches and two sharp "
             "orientations; exact controls only, not an all-n proof"
         ),
-        "cases": [audit_case(case) for case in CASES],
+        "cases": [audit_case(case) for case in CONTROL_CASES],
     }
     rendered = json.dumps(report, indent=2) + "\n"
     if args.output:

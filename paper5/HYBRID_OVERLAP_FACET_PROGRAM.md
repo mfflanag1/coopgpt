@@ -2257,6 +2257,64 @@ and `(GM)`.  This is the human structural explanation of why the exceptional
 head, the `k` common hinges, and the `p` outside players produce the sharp
 constant.
 
+### Theorem (rooted vertices are singleton-exceptional systems)
+
+The rooted packing has an exact, rather than metaphorical, interface with
+the exact-game cone.  For `u in K_r`, retain the notation above and write
+
+```text
+sum_S u_S 1_S
+ +sum_(i != r)q_i e_i-delta e_r=1_N.                 (RMS)
+```
+
+This identity holds coordinate by coordinate.  If `u` is a vertex of
+`K_r`, delete its zero coefficients and collect any repeated singleton
+columns.  The remaining incidence columns are linearly independent.  Hence:
+
+- if `delta>0`, their support is a purely min-semi-balanced system in the
+  terminology of Studeny--Kratochvil, with unique exceptional coalition
+  `{r}`;
+- if `delta<=0`, after omitting the zero root coefficient when necessary,
+  their support is min-balanced.
+
+For `n>=3`, the system in the first case defines a facet of the full exact
+game cone if and only if it passes the published indecomposability test.
+Consequently vertex enumeration in `K_r`, singleton-slack completion by
+`(RMS)`, and exceptional-set decomposition testing form an exact finite
+algorithm for all singleton-exceptional facet candidates exposed by the
+chosen Lmin menu.  This is a candidate-enumeration and facet-testing theorem,
+not a claim that every rooted packing cut is a facet or that this menu sees
+every exact-cone facet.
+
+#### Proof
+
+The root coordinate of `(RMS)` is `p_r-delta=1`; every other coordinate is
+`p_i+q_i=1`.  Introduce the nonroot slack variables `q`.  The map
+`u -> (u,q)` identifies `K_r` with the standard-form polyhedron
+
+```text
+A_(N\{r})u+q=1,                 u,q>=0.
+```
+
+At a vertex the columns belonging to positive variables are linearly
+independent.  Adding `e_r` when `delta!=0` preserves independence because
+its restriction to the nonroot rows is zero.  Thus all displayed nonzero
+columns are linearly independent and their union is `N`, by `(RMS)`.
+Lemma 2(c) of Studeny--Kratochvil therefore makes the support
+min-semi-balanced.  A positive `delta` gives its sole negative coefficient
+to `{r}`, so the system is purely min-semi-balanced; a nonpositive `delta`
+leaves a conic identity and hence a min-balanced system.  The final facet
+claim is exactly their indecomposability theorem.  QED.
+
+The distinction in the last paragraph is active, not cosmetic.  The exact
+replay currently produces eight nontrivial cuts across the hostile and sharp
+controls.  Every completion satisfies `(RMS)`, has full support rank, and is
+purely min-semi-balanced.  The published exceptional-set test nevertheless
+finds a decomposition for all eight.  An independently formulated Z3 check
+agrees with the exact-LP decomposition counts.  Thus the known sharp
+block-star cuts explain the overlap equality without themselves supplying
+new full exact-cone facets.
+
 The remaining all-dimension problem is now more specific: prove a
 spectral-or-rooted-packing disjunction whose packing branch supplies enough
 `delta` and a sufficiently concentrated deficit vector `q`, or show that
@@ -2268,26 +2326,32 @@ theorem demanding `delta>0` in every nonspectral branch would be false.
 The theorem also sharpens the relative facet interface.  Each nonredundant
 extreme packing gives a rooted two-selection inequality with at most `n-1`
 coalition rows.  Exact rank tests decide whether it is a facet of the
-projected common-hinge polytope.  It is still not automatically a facet of
-the exact-game cone: after eliminating the labelled selection coordinates,
-its coalition coefficients must pass the Studeny--Kratochvil
-indecomposable semi-balanced test.
+projected common-hinge polytope, while `(RMS)` supplies its canonical
+min-semi-balanced lift.  The separate indecomposability test decides whether
+that lift is a facet of the full exact-game cone.
 
 An independently formulated exact cutting-plane replay separates over
 `K_r`, adds violated inequalities `(RHP2)`, and compares the resulting
 two-generator minimum with the direct three-generator witness LP.  They agree
-on every maximum-overlap root of the five hostile branches and both sharp
-orientations.  The sharp orientations require exactly one cut, supported on
-`4` and `3` block-star hinges respectively, and recover `7/12` exactly.
+on every maximum-overlap root of six hostile branches (including the neutral
+seven-player control) and both sharp orientations.  The neutral control needs
+one two-coalition cut and returns `7/10`; the sharp orientations require
+exactly one cut, supported on `4` and `3` block-star hinges respectively, and
+recover `7/12` exactly.
 Reproduce with
 
 ```bash
 python3 verifiers/divergence/verify_rooted_hinge_projection.py \
   --output verifiers/divergence/rooted_hinge_projection.json
+python3 verifiers/divergence/verify_rooted_hinge_decompositions_z3.py \
+  --output verifiers/divergence/rooted_hinge_decompositions_z3.json
 ```
 
-These are exact controls of the projection and support bound, not evidence
-that a target-proving extreme packing exists for every game.
+The replay also constructs `(RMS)`, verifies incidence rank and minimality,
+and exhausts the exceptional-set decomposition test for every generated cut.
+These are exact controls of the projection, support bound, and candidate
+facet filter, not evidence that a target-proving extreme packing exists for
+every game.
 
 The reduction is sufficient, but deleting every Lmax row is false even in
 the archive.  In `harvest6_602.json`, record `82`, the maximum-overlap-root
