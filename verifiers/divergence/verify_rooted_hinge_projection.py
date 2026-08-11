@@ -158,6 +158,29 @@ def semi_balanced_completion(coalitions, weights, n, root):
         raise AssertionError("positive root advantage lacks exceptional root singleton")
     kind = "purely_min_semi_balanced" if negative else "min_balanced"
     decompositions = decomposition_witnesses(columns, n) if negative else []
+    positive_deficits = [
+        player
+        for player, deficit in enumerate(deficits)
+        if player != root and deficit > 0
+    ]
+    forced_pair_decomposition = None
+    if root_advantage > 0 and positive_deficits:
+        player = positive_deficits[0]
+        exceptional_pair = root_singleton | (1 << player)
+        if exceptional_pair in coefficients:
+            raise AssertionError(
+                "root/deficit pair violates minimal-support independence"
+            )
+        if not any(
+            row["new_exceptional"] == exceptional_pair for row in decompositions
+        ):
+            raise AssertionError("forced root/deficit decomposition was not found")
+        forced_pair_decomposition = {
+            "deficit_player": player,
+            "new_exceptional": exceptional_pair,
+            "identity": "1_{root}+1_{deficit_player}-1_{pair}=0",
+            "verified": True,
+        }
     return {
         "player_loads": [str(value) for value in loads],
         "nonroot_deficits": [str(value) for value in deficits],
@@ -177,6 +200,7 @@ def semi_balanced_completion(coalitions, weights, n, root):
         "indecomposable": bool(negative) and not decompositions,
         "decomposition_count": len(decompositions),
         "first_decomposition": decompositions[0] if decompositions else None,
+        "forced_pair_decomposition": forced_pair_decomposition,
     }
 
 
@@ -350,6 +374,11 @@ def main():
             "witness gives all rooted fractional Lmin-support packing inequalities; "
             "extreme packings use at most n-1 rows, and their singleton-slack "
             "completions are min-semi-balanced systems"
+        ),
+        "positive_root_nonfacet_theorem_audited": (
+            "every generated positive-root completion has a nonroot deficit; "
+            "the root and deficit singletons give an explicit two-singleton "
+            "Studeny--Kratochvil decomposition"
         ),
         "scope": (
             "maximum-overlap roots of six hostile fixed branches and two sharp "

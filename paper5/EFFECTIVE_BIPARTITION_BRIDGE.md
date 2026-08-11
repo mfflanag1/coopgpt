@@ -578,7 +578,11 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the singleton-slack completion theorem: each rooted packing vertex lifts
   to a min-semi-balanced system, purely so with exceptional singleton root
   exactly when its root advantage is positive; the published
-  indecomposability test is then the exact full-cone facet filter.
+  indecomposability test is then the exact full-cone facet filter;
+- the positive-root nonfacet theorem: `(RDB)` forces a nonroot deficit, and
+  its singleton together with the exceptional root singleton gives an
+  explicit two-singleton decomposition, so no canonical rooted completion
+  can be an exact-cone facet at `x_r>0`.
 
 ### Exact rational evidence
 
@@ -606,9 +610,9 @@ ray; it does not make every relative proof a full exact-cone facet.
 - the weaker universal target `(H)`;
 - a dimension-free construction of its Farkas charge from the complete
   staged Lmin packet and sparse ceiling data;
-- a structural criterion forcing an indecomposable member among the rooted
-  min-semi-balanced candidates (none of the eight current nontrivial cuts
-  passes that filter).
+- a different gluing or factorization that converts the necessarily
+  decomposable positive-root systems into an indecomposable full-cone
+  system; further enumeration of canonical rooted completions cannot do so.
 
 The next live bridge is a **spectral-or-balanced disjunction**.  Positive
 hinge surplus already converts to a rigorous sharpened spectral lower bound;

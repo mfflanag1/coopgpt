@@ -2315,6 +2315,31 @@ agrees with the exact-LP decomposition counts.  Thus the known sharp
 block-star cuts explain the overlap equality without themselves supplying
 new full exact-cone facets.
 
+### Corollary (positive-root cuts never lift to exact-cone facets)
+
+Let `n>=3`, and suppose the projected witness inequalities hold at a point
+with `x_r>0`.  No vertex of `K_r` has an indecomposable completion `(RMS)`.
+Indeed, `delta<=0` gives a min-balanced system, whose inequality is not a
+facet of the exact-game cone for `n>=3`.  If `delta>0`, `(RDBx)` and `x_r>0`
+force `q_i>0` for some nonroot player `i`.  The completion then contains both
+singletons `{r}` and `{i}`.  Linear independence excludes `{r,i}` from its
+support, while
+
+```text
+e_r+e_i-1_{r,i}=0
+```
+
+makes `{r,i}` exceptional in the enlarged system.  This is a decomposition
+in the exact sense of Studeny--Kratochvil.  QED.
+
+Thus the rooted-packing construction yields a dimension-free relative
+inequality theorem and an exact finite enumeration algorithm, but its
+canonical singleton-slack lifts cannot be new exact-cone facets at the
+positive roots relevant to hybrid overlap.  Any successful full-cone facet
+route must first glue or factor these decomposable rooted systems into a
+different indecomposable coalition system; enumerating more vertices of
+`K_r` alone cannot accomplish that.
+
 The remaining all-dimension problem is now more specific: prove a
 spectral-or-rooted-packing disjunction whose packing branch supplies enough
 `delta` and a sufficiently concentrated deficit vector `q`, or show that
