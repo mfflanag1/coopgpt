@@ -287,11 +287,86 @@ six-player pairs.  Concentrated bottom certificates are the simplest issue:
 distinct.  Full staged pinning cannot repair a scalar claim already false for
 the actual selected pair, so `(PD1)` is discarded.
 
-A different incidence-packing constraint survived every archived pair:
+A different incidence-packing constraint is true in every dimension:
 
 ```text
 1/theta_+ + 1/theta_- <= n.                            (PD2)
 ```
+
+### Theorem (dispersion budget)
+
+Suppose `x` and `z` are nonuniform, and put
+
+```text
+mu=min x,       M=max z,       Delta=M-mu>0.
+```
+
+Every pair of first-stage certificates with dispersions `theta_+` and
+`theta_-` and hinge surpluses `epsilon_+,epsilon_-` satisfies
+
+```text
+1/theta_+ <= (T-n mu)/(Delta+epsilon_+),
+1/theta_- <= (n M-T)/(Delta+epsilon_-).                (DB+)
+```
+
+Dropping the nonnegative surpluses gives
+
+```text
+1/theta_+ <= (T-n mu)/Delta,
+1/theta_- <= (n M-T)/Delta,                            (DB)
+```
+
+and consequently `(PD2)`, including for the dispersion-optimal certificates.
+
+### Proof
+
+Put
+
+```text
+s_i=x_i-mu>=0,       r_i=M-z_i>=0.
+```
+
+Their totals are
+
+```text
+sum_i s_i=T-n mu,    sum_i r_i=n M-T,
+sum_i(s_i+r_i)=n Delta.                                (T)
+```
+
+For an Lmax over-cover probability `alpha`, put
+`u=alpha/theta_+`.  Then `0<=u_i<=1`, `u` is supported on the Lmax top block,
+and `sum_i u_i=1/theta_+`.  On that block `z_i=M`, so
+
+```text
+x_i-z_i=s_i-Delta.
+```
+
+The exact hinge-surplus identity is `alpha.(x-z)=epsilon_+`.  Dividing by
+`theta_+` therefore yields
+
+```text
+sum_i u_i s_i
+ = (Delta+epsilon_+)sum_i u_i
+ = (Delta+epsilon_+)/theta_+.
+```
+
+Since `u_i<=1` and `s_i>=0`, the left side is at most `sum_i s_i=T-n mu`.
+This proves the first inequality in `(DB+)`.
+
+For a bottom under-cover probability `beta`, put `w=beta/theta_-`.  On its
+support `x_i=mu`, hence `x_i-z_i=r_i-Delta`, and the mirror hinge surplus is
+`beta.(x-z)=mu-beta.z=epsilon_-`.  The same argument gives
+
+```text
+(Delta+epsilon_-)/theta_-
+ <= sum_i w_i r_i <= sum_i r_i=n M-T.
+```
+
+This proves `(DB+)`.  Dropping both surpluses, adding `(DB)`, and using `(T)`
+proves `(PD2)`.  QED.
+
+If `M=mu`, efficiency forces `x=z=(T/n)1_N`; this is the trivial zero-gap
+case and no proper extreme-stratum over-cover is needed.
 
 For `G(p,k)`, the shared-hinge theorem gives
 
@@ -379,14 +454,30 @@ python3 verifiers/divergence/audit_paired_dispersion.py verifiers/s5close \
   --n 5 --output verifiers/divergence/paired_dispersion_n5_audit.json
 ```
 
-They report all `(PD1)` counterexamples, no `(PD2)` counterexample, no joint
-`(FSP)` failure, and the five six-player equality rows.  This remains finite
-discovery evidence.  `(FSP)` and `(PD2)` are theorem targets, not results.
+They report all `(PD1)` counterexamples, numerically replay the proved
+dispersion budget, find no joint `(FSP)` failure, and record the five
+six-player equality rows.  The audit evidence for `(FSP)` remains finite;
+`(PD2)` is the human theorem above.
 
-Even a proof of `(PD2)` would not finish `(H)`: the false statement `(PD1)`
-was the attempted conversion from certificate dispersion to actual overlap.
-The likely role of `(PD2)` is to control the two fractional carrier sizes,
-while hinge surplus and later-stage rooted packets supply the missing overlap
+The explicit nonuniform seven-player majorization counterexample supplies a
+solver-free hostile control:
+
+```bash
+PYTHONPATH=verifiers/divergence \
+python3 verifiers/divergence/verify_n7_dispersion_control.py \
+  --output verifiers/divergence/n7_dispersion_control.json
+```
+
+Using the already proved selection formulas, it reconstructs
+`theta_+=1/2`, `theta_-=1/5`, and a compatible normalized packing that tiles
+all seven players exactly.  Both hinge surpluses vanish and `(PD2)` is tight.
+This is qualitatively different from the balanced `G(p,k)` equality family,
+although its overlap `9T/10` is far from extremal.
+
+The proved `(PD2)` does not finish `(H)`: the false statement `(PD1)` was the
+attempted conversion from certificate dispersion to actual overlap.  The role
+of `(PD2)` is to control the two fractional carrier budgets, while hinge
+surplus and later-stage rooted packets must supply the missing overlap
 conversion.
 
 ## 6. What one-packet theory gives on exact-cone facets

@@ -220,6 +220,7 @@ def main() -> None:
     overlap_failure_count = 0
     overlap_failure_representatives = {}
     reciprocal_failures = []
+    surplus_budget_failures = []
     pointwise_packing_failures = []
     compatible_packing_failures = []
     repaired_independent_packings = 0
@@ -238,6 +239,17 @@ def main() -> None:
             minus = minus_certificate["theta"]
             total = sum(x, F(0))
             overlap = sum((min(a, b) for a, b in zip(x, z)), F(0))
+            minimum = min(x)
+            maximum = max(z)
+            delta = maximum - minimum
+            plus_surplus = sum(
+                (plus_certificate["alpha"][i] * x[i] for i in range(len(x))),
+                F(0),
+            ) - maximum
+            minus_surplus = minimum - sum(
+                (minus_certificate["beta"][i] * z[i] for i in range(len(x))),
+                F(0),
+            )
             row = {
                 "source": str(source),
                 "trail": trail,
@@ -246,6 +258,7 @@ def main() -> None:
                 "theta_sum": str(plus + minus),
                 "reciprocal_sum": str(1 / plus + 1 / minus),
                 "overlap_ratio": str(overlap / total),
+                "hinge_surpluses": [str(plus_surplus), str(minus_surplus)],
             }
             rows.append(row)
             if overlap / total < plus + minus:
@@ -256,6 +269,15 @@ def main() -> None:
                     overlap_failure_representatives[key] = row
             if 1 / plus + 1 / minus > len(x):
                 reciprocal_failures.append(row)
+            if delta > 0:
+                plus_budget = (total - len(x) * minimum) / (delta + plus_surplus)
+                minus_budget = (len(x) * maximum - total) / (delta + minus_surplus)
+                if 1 / plus > plus_budget or 1 / minus > minus_budget:
+                    failed = dict(row)
+                    failed["surplus_budget_rhs"] = [
+                        str(plus_budget), str(minus_budget)
+                    ]
+                    surplus_budget_failures.append(failed)
             packing_loads = [
                 plus_certificate["alpha"][i] / plus
                 + minus_certificate["beta"][i] / minus
@@ -284,6 +306,7 @@ def main() -> None:
             overlap_failure_representatives.values()
         ),
         "reciprocal_sum_failures": reciprocal_failures,
+        "surplus_dispersion_budget_failures": surplus_budget_failures,
         "pointwise_packing_failure_count": len(pointwise_packing_failures),
         "pointwise_packing_failure_examples": pointwise_packing_failures[:12],
         "independent_packings_repaired_by_joint_choice": repaired_independent_packings,
