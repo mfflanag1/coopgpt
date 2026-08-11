@@ -142,6 +142,26 @@ def incidence(mask: int, n: int) -> tuple[F, ...]:
     return tuple(F((mask >> i) & 1) for i in range(n))
 
 
+def rank(matrix) -> int:
+    rows = [list(map(F, row)) for row in matrix]
+    if not rows:
+        return 0
+    pivot_row = 0
+    for column in range(len(rows[0])):
+        pivot = next((i for i in range(pivot_row, len(rows)) if rows[i][column]), None)
+        if pivot is None:
+            continue
+        rows[pivot_row], rows[pivot] = rows[pivot], rows[pivot_row]
+        scale = rows[pivot_row][column]
+        rows[pivot_row] = [q / scale for q in rows[pivot_row]]
+        for i in range(len(rows)):
+            if i != pivot_row and rows[i][column]:
+                scale = rows[i][column]
+                rows[i] = [a - scale * b for a, b in zip(rows[i], rows[pivot_row])]
+        pivot_row += 1
+    return pivot_row
+
+
 def coalition_sum(point, mask: int) -> F:
     return sum((point[i] for i in range(len(point)) if mask >> i & 1), F(0))
 
@@ -188,6 +208,14 @@ def mixed_packet():
     rhs = [F(2)] * n
     rhs[root] += 1
     assert lhs == rhs
+    normalized_loads = [q / 2 for q in [F(2), F(2), F(0), F(3), F(2), F(1), F(1)]]
+    assert max(normalized_loads[i] for i in range(n) if i != root) == 1
+    active_rows = (0, 1, 4)
+    active_matrix = [
+        [incidence(mask, n)[i] for _colour, mask, _weight in coloured]
+        for i in active_rows
+    ]
+    assert rank(active_matrix) == len(coloured)
     return {
         "n": n,
         "root": root,
@@ -198,6 +226,16 @@ def mixed_packet():
         "nonroot_singleton_slack": {str(i): str(q) for i, q in singleton_slack.items()},
         "incidence_identity": "1_26+1_57+1_75+2e_2+e_5+e_6=2(1_N)+e_3",
         "incidence_identity_verified": True,
+        "normalized_extreme_packet": {
+            "coalition_weights": ["1/2", "1/2", "1/2"],
+            "player_loads": [str(q) for q in normalized_loads],
+            "offroot_load_ceiling": "1",
+            "root_excess_delta": "1/2",
+            "positive_coalition_support": 3,
+            "support_bound_n_minus_1": 6,
+            "independent_active_capacity_rows": list(active_rows),
+            "vertex_rank_verified": True,
+        },
         "witness_consequence": "v(26)+v(57)+v(75)<=2T",
         "selection_form": "x(26)+x(57)+z(75)<=2T",
         "common_coalitions": [57],

@@ -616,6 +616,9 @@ ray; it does not make every relative proof a full exact-cone facet.
   prices one nonnegative incidence packet containing different coalitions
   tight at `x` and at `z`; extreme packets use at most `n-1` tagged
   coalitions and project to the existing min-semi-balanced/facet filter;
+- the exact mixed-witness projection theorem: these extreme packets and rays
+  are sufficient as well as necessary, so they give a finite exact
+  elimination of the entire root-zero witness block;
 - the first genuinely noncommon packet
   `1_26+1_57+1_75+2e_2+e_5+e_6=2 1_N+e_3`, yielding
   `x(26)+x(57)+z(75)<=2T` in the optimized hostile branch.
@@ -688,11 +691,11 @@ ray; it does not make every relative proof a full exact-cone facet.
   surplus absorption for a suitable root or distribute the unabsorbed
   deficiency across multiple staged/facet rows; one scalar anchor is now
   proved insufficient.
-- a dimension-free spanning theorem showing that failure of the spectral
-  branch forces the target normal into the cone of direct labelled rows and
-  finitely many extreme mixed-colour rooted packets.  The packet inequality,
-  its `n-1` support bound, and its exact-cone projection are proved; this
-  spanning assertion is not.
+- a dimension-free root-selection theorem showing that failure of the
+  spectral branch leaves some root whose direct labelled rows plus exact
+  mixed-witness projection prove the target.  The projection, its `n-1`
+  support bound, and its exact-cone interface are proved; existence of a
+  target-valid root is not.
 
 The next live bridge is a **spectral-or-balanced disjunction**.  Positive
 hinge surplus already converts to a rigorous sharpened spectral lower bound;
