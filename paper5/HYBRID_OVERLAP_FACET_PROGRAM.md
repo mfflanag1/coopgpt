@@ -1347,18 +1347,78 @@ rooted-circuit enumeration: an alleged residual game comes with a checkable
 LP alternative saying precisely which bad spectral subsets survive every
 Lmax normal.
 
+The oracle in fact collapses to one scalar radius.  Define
+
+```text
+R_*(v)=max_(normalized over-covers) (alpha.x-mu)/theta. (RAD)
+```
+
+Put `u=alpha/theta`, `s=1/theta`, and scale `(lambda,eta)` by the same factor.
+After choosing a top coordinate `r` with `u_r=1`, `(RAD)` is the exact LP
+
+```text
+maximize     u.x-mu s
+subject to   sum_A lambda'_A 1_A=eta' 1_N+u,
+             sum_(i in H)u_i=s,
+             u_r=1,            0<=u_i<=1.
+```
+
+Thus no fractional or bilinear optimization remains.
+
+> **Corollary (spectral-radius formula).**  For every fixed rational game,
+>
+> ```text
+> B_spec(v)=min {B(J): |J|=|H| and
+>                       sum_(j in J)(x_j-mu)>=R_*(v)}.  (RF)
+> ```
+>
+> In particular, if
+>
+> ```text
+> E_bad(b)=max {sum_(j in J)(x_j-mu): |J|=|H|, B(J)<b},
+> ```
+>
+> with the maximum over an empty set omitted, then a sparse spectral
+> certificate proves threshold `b` exactly when the bad set is empty or
+> `R_*(v)>E_bad(b)`.
+
+To prove `(RF)`, observe that `(EJ)` says precisely `E_J>=R(alpha)` for a
+given certificate.  Increasing `R(alpha)` can only delete eligible subsets,
+so the best spectral minimum is attained at the maximum radius.  The scaled
+LP proves that the maximum is exact and attained.  The threshold criterion is
+then immediate, including the strict inequality required to exclude a subset
+with `B(J)<b`.
+
+Consequently `(SRE)` has a scalar residual form:
+
+```text
+R_*(v)>E_bad(nT/floor(n^2/4))                           (SRE-R)
+```
+
+whenever the bad family is nonempty.  This is now the narrowest missing
+inequality.  Its left side is an exact sparse Lmax incidence optimization;
+its right side is a finite statistic of the two spectra.  The complete staged
+Lmin circuits must be used only to rule out `R_*<=E_bad`, not to control every
+local packet coefficient.
+
 The verifier
 
 ```bash
 python3 verifiers/divergence/audit_spectral_threshold_oracle.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json --n 6 \
   --output verifiers/divergence/spectral_threshold_oracle_audit.json
 ```
 
 recomputes the two hostile controls.  At `n=7`, four below-target subsets are
-all excluded by the one-coalition over-cover with exact margin `5/3`.  At
-`n=8`, `Bad_8` is empty: even before using the over-cover eligibility filter,
-every spectral matching exceeds the required floor.  These controls validate
-the oracle's signs; they are not evidence for all-`n` `(SRE)`.
+all excluded by the one-coalition over-cover with exact margin `5/3`; the
+radius is `R_*=5` while `E_bad=0`.  At `n=8`, `R_*=100/21` and `Bad_8` is
+empty: even before using the over-cover eligibility filter, every spectral
+matching exceeds the required floor.  These controls validate the oracle's
+signs.  The same exact run covers `249` positive-floor pairs in the `374`-pair
+six-player archive: `157` have no bad spectral subset, `92` have a nonempty
+bad family, and all `92` satisfy `(SRE-R)`; the smallest positive radius gap
+is exactly one.  These counts are finite regression evidence, not evidence
+for all-`n` `(SRE)`.
 
 The last labels are essential and are not part of the ordinary exact cone.
 There are two sharp obstructions to a stronger claim:
