@@ -1920,6 +1920,59 @@ identity at the required constant, matching the failed `7/15` and `7/16`
 relaxations above.  The distinguished-facet root is therefore necessary even
 inside the sharp family, not merely a convenient normalization.
 
+### Maximum-overlap root candidate
+
+The tangent identity gives a payoff-visible candidate for the distinguished
+root.  At a witness zero,
+
+```text
+max(a_r,b_r)=max(-x_r,-z_r)=-min(x_r,z_r).              (RC)
+```
+
+Thus a player maximizing its coordinatewise overlap supplies the largest
+available negative root credit in `(RTD)`.  This suggests the stronger live
+form of `(RSEL)`:
+
+> **Maximum-overlap root conjecture.**  For
+> `R=argmax_i min(x_i,z_i)`, every feasible labelled selection system has
+> some `r in R` with
+>
+> ```text
+> B_B(r)>=n/floor(n^2/4).                              (MOR)
+> ```
+
+The two sharp-family orientations select their unique head in exactly this
+way.  A targeted audit of all five archived six-player equality records gives
+
+| record | root bounds | maximum-overlap roots | passing roots |
+|---|---|---|---|
+| `601[37]` | `(2/3,1/2,1/2,1/2,1/2,1/2)` | `{0}` | `{0}` |
+| `601[108]` | `(1/2,1/2,1/2,1/2,2/3,1/2)` | `{4}` | `{4}` |
+| `601[125]` | all `2/3` | `{0,4}` | all |
+| `602[168]` | all `2/3` | `{1,4}` | all |
+| `602[170]` | all `2/3` | `{4,5}` | all |
+
+So `(MOR)` selects the unique successful root in both rigid equality records
+and remains valid in the three degenerate ones.  Together with the two sharp
+orientations and five hostile branches, it has survived twelve deliberately
+hard fixed supports.  This is still finite branch evidence, not a proof, and
+the extracted basic staged circuits are one choice among potentially several.
+
+Reproduce the complete staged support extraction and all thirty exact rooted
+LPs with
+
+```bash
+python3 verifiers/divergence/audit_n6_equality_one_witness_roots.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/n6_equality_one_witness_roots.json
+```
+
+The next human step is therefore sharper than an unlabelled search for a
+root: combine `(RC)` with the rooted marginal-completion coefficient of the
+active indecomposable factors, and show that at least one maximum-overlap
+player receives enough exceptional-root multiplicity to pay the deficit in
+`(RTB)`.
+
 Reproduce the fixed-support staged checks, exact primal minima, exact Farkas
 identities, and every one-witness relaxation with
 
