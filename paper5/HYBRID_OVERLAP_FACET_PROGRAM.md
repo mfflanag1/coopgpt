@@ -579,6 +579,55 @@ more than compensated by overlap in the other strata.  Thus the correct
 conversion must sum the stagewise transport inequalities; it cannot cap the
 first floor in isolation.
 
+### Complete staged transport identity
+
+The exact form of that sum is now visible.  At Lmin stage `t`, let `O_t` be
+the earlier pinned players, let `B_t` be the current block at level `ell_t`,
+and choose the staged certificate for `i in B_t`:
+
+```text
+sum_S lambda_S 1_S + sum_(j in O_t)q_j e_j
+ +sum_(k in B_t)r_k e_k+e_i=c 1_N,                    (SP)
+```
+
+where `lambda,r>=0` while the old-pin weights `q` are free.  Its objective
+identity is
+
+```text
+cT-sum_S lambda_S v(S)-sum_(j in O_t)q_j x_j
+ -ell_t sum_(k in B_t)r_k=ell_t.                      (SO)
+```
+
+Evaluating `(SP)` at `z`, using `z(S)>=v(S)` on the `x`-tight supported
+coalitions, and substituting `(SO)` gives the exact stage inequality
+
+```text
+z_i-ell_t
+ <= sum_(j in O_t)q_j(x_j-z_j)
+   +sum_(k in B_t)r_k(ell_t-z_k).                     (ST)
+```
+
+For the first stage `O_t` is empty and `(ST)` reduces to the transport proof
+above.  For later stages, the sole new obstruction is the signed old-pin
+flow.  Summing over the players with `z_i>ell_t` again lets one delete the
+nonpositive current-block terms; the old terms cannot be discarded because
+the `q_j` are free.
+
+This isolates the multistage theorem target:
+
+> **Coherent staged-flow conjecture.**  The individual pinning certificates
+> can be chosen and nonnegatively combined so that every old-pin term in the
+> sum of `(ST)` is either cancelled or charged to a previously exposed
+> deficit with no increase in the sharp total carrier budget.
+
+The conjecture is linear once the stages and tight menus are fixed.  Its
+failure would have an exact rational price separator, just as in `(SEP)`.
+Both known sharp all-dimension mechanisms have a two-stratum Lmin point, so
+their only nontrivial transport is the first stage and the signed flow
+vanishes.  This suggests a second possible route: prove that any genuinely
+multistage signed flow creates strict extra overlap, reducing equality to the
+two-stratum mechanisms without assuming two-generator extremality.
+
 ## 7. What one-packet theory gives on exact-cone facets
 
 The strongest correct statement is a relative circuit theorem, not a global
@@ -628,10 +677,11 @@ staged Lmin pinning data.
 
 The minimal live target is therefore:
 
-> **Compatible fractional-hinge lemma.**  From a sparse Lmax top over-cover
-> and the complete staged rooted Lmin circuit chain, construct nonnegative
-> coupling weights, before inspecting `min(x_i,z_i)`, whose incidence loads
-> imply
+> **Compatible fractional-hinge and staged-flow lemma.**  From a sparse Lmax
+> top over-cover and the complete staged rooted Lmin circuit chain, construct
+> nonnegative coupling weights whose normalized first-stage loads pack as in
+> `(FSP)`, whose signed old-pin flows telescope as in Section 6, and whose
+> remaining incidence loads imply
 > `sum_i min(x_i,z_i)>=nT/floor(n^2/4)`.
 
 The theorem must allow multiple rooted facets and fractional sharing of a
@@ -644,7 +694,9 @@ common-hinge systems in Section 2.  Any proposed version must first reject:
 3. the nonuniform seven-player majorization counterexample; and
 4. both balanced seven-player orientations `(2,4)` and `(3,3)` at equality.
 
-This is outcome D in the research hierarchy: a precise minimal missing lemma,
-plus a new exact equality correspondence and two hostile falsification tests.
-It is meaningful structural progress, but not yet the requested all-`n`
+The program has advanced beyond a bare outcome D: the common-hinge theorem,
+hinge-surplus spectral refinement, surplus dispersion budget, and first-floor
+transport theorem are proved dimension-free.  The final all-`n` inequality
+remains outcome D because the coherent multistage conversion is still open.
+This is meaningful structural progress, but not yet the requested central
 breakthrough.
