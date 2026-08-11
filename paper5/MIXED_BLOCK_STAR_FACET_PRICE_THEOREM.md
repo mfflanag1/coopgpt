@@ -456,7 +456,140 @@ top-and-bottom-fixed branch it gives `2/3`, with `R_x=1`, `R_z=11`, and
 packet `3/2` in `[3/2,15/2]`; here `s=3>p=1`, showing why the exact
 residual criterion is strictly stronger than sufficient condition (23).
 
-## 7. Hand payment certificate for the hardest spectral branch
+### Fixed hostile direct/rooted atlas
+
+An exact finite falsification atlas now checks every sign-compatible `P/H`
+partition and every proper gainer packet on all seven fixed hostile branch
+selections.  The best certificates, preferring an Lmin-tight comparison, are
+
+```text
+branch                              direct base   comparison
+optimized spectral                    3/5         11, Lmin-tight
+actual top fixed                       3/4         47, Lmin-tight
+top and bottom fixed                   2/3         59, Lmin-tight
+coefficient-two congestion             5/8         44, Lmin-tight
+primitive coefficient-seven (n=8)      5/9        244, direct slack 5/39
+sharp G(2,4)                            none        rooted equality arm
+sharp G(3,3)                            none        rooted equality arm
+```
+
+The residual-sum strengthening is essential: the `3/4` actual-top proof has
+`R_x=15`, `R_z=-15/2`, while the primitive `5/9` proof has `R_x=-8/9`,
+`R_z=116/117`.  In both cases their sum is positive.  Thus every nonsharp
+fixed obstruction is now closed directly, whereas exactly the two sharp
+orientations require the rooted block-star arm.  This is strong branch-level
+falsification evidence for the direct-or-rooted disjunction, not a proof that
+the dichotomy holds for all exact games.
+
+The tempting stronger inference “every nonsharp branch is direct” is false.
+An exact census over all 374 archived six-player pairs finds 296 with a
+target-reaching direct packet, 282 of those with an Lmin-tight comparison,
+but 78 with no direct packet at all.  Seventy-six of the 78 lie strictly
+above the target; the first has
+
+```text
+x=(1,2,1,1,1,1),
+z=(3/2,3/2,3/2,5/6,5/6,5/6),
+O/T=6/7>2/3.
+```
+
+Thus strict slack does not force a direct certificate.  The independently
+formulated common-hinge/root audit already closes all 374 archived pairs and
+has exact minimum `2/3`.  Taken together, the two censuses support the
+direct-or-rooted disjunction while decisively refuting its direct-only
+strengthening.  Both statements remain finite evidence, not a six-player
+domain proof.
+
+The proved ceiling-root interpolation bound closes 28 of the 78 direct
+failures.  The remaining 50 consist of 34 zero-floor rows, 14 strict
+positive-floor rows inside the interpolation wedge, and the two equality
+rows.  Every direct failure has a ceiling root.  Thus the live packet lemma
+only has to handle the zero-floor/positive-wedge residual plus equality; it
+need not reprove the 296 direct or 28 interpolation branches.
+
+### Positive-Lmax equality exclusion
+
+The rooted status of the two sharp rows has a dimension-free human
+explanation.  If a direct certificate has base `beta`, comparison slack and
+residual sum nonnegative, and `z_i>0` for every player, then `l=z(P)/p>0`.
+Identity (17) therefore gives the strict inequality
+
+```text
+O>beta T.                                             (26)
+```
+
+Consequently, if `O=c_n T` and Lmax is strictly positive, no direct packet
+with `beta>=c_n` can exist.  The balanced `G(p,k)` extremizers have
+`k(p+1)=floor(n^2/4)`, overlap exactly `c_n T`, and strictly positive Lmax
+coordinates `p(k-1)/k` and `1/k`.  They are therefore forced onto the rooted
+arm.  The indecomposable block-star semi-balanced system from Section 4
+supplies that arm at equality.  This separates the mechanisms structurally:
+direct gluing can close nonsharp branches, but positive-Lmax equality is
+carried by the rooted exact-cone facet.
+
+### `G(p,k)` direct/rooted handover theorem
+
+The entire extremal family exhibits the same mechanism, including strict
+nonbalanced members.  Use its standard blocks `{r}`, `O`, and `B`, with
+`|O|=p`, `|B|=k`, and take in the master theorem
+
+```text
+P=O,        G=B,        H={r},        J=B\{b}.
+```
+
+The comparison coalition is the common block-star hinge `C_b`.  From the
+closed-form selections, putting
+
+```text
+d=[p(k-1)-1]/[k(p+1)],
+```
+
+each gainer has gain `pd`, the root has loss `p(k-1)d`, and the packet
+`J` has gain exactly `p(k-1)d`.  Thus its comparison is tight, its packet
+interval is a singleton, and both residuals vanish.  Formula (18) gives
+
+```text
+direct base = n/[(p+1)(k+1)].                        (GPD)
+```
+
+It reaches the universal target exactly when
+
+```text
+(p+1)(k+1)<=floor(n^2/4).                            (GPC)
+```
+
+By contrast, the rooted block-star theorem gives
+
+```text
+rooted base = n/[k(p+1)]>=n/floor(n^2/4)             (GPR)
+```
+
+for every `p,k`, because `k+(p+1)=n`.  The one-unit shift from `k` to
+`k+1` is the complete handover: direct gluing closes sufficiently unbalanced
+parameters, while the rooted facet supplies the missing factor near the
+balanced split and is sharp when `k(p+1)=floor(n^2/4)`.  For example,
+`G(3,2)` has direct base `1/2` but rooted base `3/4>2/3`; `G(2,4)` and
+`G(3,3)` have direct bases `7/15` and `7/16` but rooted base `7/12` at
+equality.  This is a human dimension-free classification of the two proof
+mechanisms on `G(p,k)`, not a classification of all exact games.
+
+The exact-cone interpretation is numerical as well as combinatorial.  The
+direct denominator and the rooted facet-price denominator are
+
+```text
+D_direct=(p+1)(k+1),
+D_root=p(k-1)+n-1=k(p+1),
+D_direct-D_root=p+1.
+```
+
+The pair-spoke shear of Section 4 is precisely the indecomposable
+semi-balanced atom realizing `D_root`; the direct identity retains the
+strictly positive low-Lmax payment on the `p` outside players.  Thus the
+root-zero exactness witness and its facet replace a visible `p+1` denominator
+penalty.  This is the exact-cone reason the common hinge alone is insufficient
+near balance.
+
+## 7. Hand payment certificate for the spectral branch
 
 The optimized label-free seven-player obstruction is the tested cut with a
 deficit on a gaining/later-stratum player.  Its root-`3` branch nevertheless
@@ -469,7 +602,7 @@ O-3/4
  +(1/4)[w(26)-x(26)]+(1/4)[w(57)-x(57)]
  +(5/4)[x(52)-z(52)]+(1/2)[x(57)-z(57)]
  +(1/4)[w(75)-z(75)]
- +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (26)
+ +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (27)
 ```
 
 Every term is nonnegative by a displayed core/witness comparison,
@@ -479,7 +612,12 @@ three payoff-stratum gaps.  This proves by hand that the mixed packet fixes a
 baseline above the universal target while ordered label currency pays the
 multistage defect.
 
-The adjacent verifier checks (26) as a coefficient identity and verifies a
+The new direct atlas also proves `O>=3T/5` on this fixed selection, already
+above the target `7T/12`.  Thus the stronger `3T/4` mixed certificate is no
+longer needed to close this control; it is retained as a human proof of the
+rooted mechanism that the positive-Lmax equality cases require.
+
+The adjacent verifier checks (27) as a coefficient identity and verifies a
 matching feasible primal at `3/4`; it makes no optimization call.
 
 ## 8. Evidence and limitations
@@ -499,9 +637,11 @@ Exact audit evidence:
 - exact lower-envelope, core, staged-selection, primal, dual, and root checks
   for the displayed seven-player control;
 - 1,080 exact two-stratum arithmetic rows, 680 nonuniform multistage order
-  rows, and exact arbitrary-Lmax replays of both archived direct hostile
-  branches for (17), plus fourteen exact staged selection certificates for
-  its fresh seven-player control;
+  rows, a complete direct-packet atlas on seven fixed hostile selections,
+  a 374-pair six-player direct census with 78 exact negative controls,
+  and exact arbitrary-Lmax replays of both archived direct hostile branches
+  for (17), plus fourteen exact staged selection certificates for its fresh
+  seven-player control;
 - all nine extreme mixed-witness projection cuts have price within their
   dimensional threshold; eight have only nongaining deficits, but only five
   put every deficit on the first Lmin floor.
@@ -509,8 +649,9 @@ Exact audit evidence:
 The nine-cut statement is a finite coefficient audit, not a theorem.  Together
 with (17), it isolates the remaining obstacle as a direct-or-rooted selection
 lemma: either some Lmin-tight comparison supplies a cardinality-constrained
-gain packet satisfying (22), or failure of all such packets must produce an affordable
-mixed-colour rooted packet.  Neither alternative has been proved universally.
+gain packet satisfying (22), or failure of all such packets must produce an
+affordable mixed-colour rooted packet.  Neither alternative has been proved
+universally.
 
 The numerical search that exposed the control was used only for discovery
 and is not part of the evidence chain.

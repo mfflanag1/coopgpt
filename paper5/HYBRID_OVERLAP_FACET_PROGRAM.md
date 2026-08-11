@@ -4447,6 +4447,75 @@ In interval form, the two packets are respectively `1/2` in
 `[1/2,129/10]` and `3/2` in `[3/2,15/2]`; the fresh control is sharp at the
 singleton interval `[1/2,1/2]`.
 
+Exhausting all sign-compatible partitions and proper gainer packets on the
+seven fixed hostile branch selections gives a clean finite atlas.  The five
+nonsharp obstructions have direct bases `3/5`, `3/4`, `2/3`, `5/8`, and
+`5/9` (the last at `n=8`); the first four comparisons are Lmin-tight, while
+the last has direct slack `5/39`.  Neither sharp `G(2,4)` nor sharp `G(3,3)`
+has any target-reaching direct packet.  Those are exactly the branches closed
+at equality by the rooted block-star theorem.  The sum criterion matters:
+the `3/4` certificate has `R_z=-15/2`, and the `5/9` certificate has
+`R_x=-8/9`, although the respective residual sums are positive.  This finite
+classification motivates the direct-or-rooted theorem but does not prove it.
+
+A broader exact six-player census prevents a false extrapolation from those
+seven rows.  Of 374 archived pairs, 296 admit a target-reaching direct packet
+and 282 admit one whose comparison is Lmin-tight.  The other 78 have no
+direct packet; 76 are strictly above `2/3`.  The first strict control is
+
+```text
+x=(1,2,1,1,1,1),
+z=(3/2,3/2,3/2,5/6,5/6,5/6),
+O/T=6/7.
+```
+
+Hence “nonsharp implies direct” is false.  The separately encoded
+common-hinge/root audit closes all 374 archived pairs with minimum exactly
+`2/3`.  The surviving candidate is genuinely disjunctive: direct packets
+cover many branches, while rooted packets must also cover strict branches.
+
+The ceiling-root interpolation theorem closes 28 of the 78 direct failures.
+The 50 remaining rows split into 34 zero-floor cases, 14 strict
+positive-floor cases in the interpolation wedge, and two equality cases.
+All 78 have a ceiling root.  This finite decomposition identifies the live
+rooted-packet region without pretending that the archive proves it exhaustive
+in general dimension.
+
+The rooted status of the sharp rows is nevertheless a theorem, not an atlas
+inference.  If every Lmax coordinate is positive, then every nonempty `P`
+has `l=z(P)/p>0`; hence `(TDG)` is strict whenever its comparison and
+residual-sum payments are nonnegative.  Thus a game with `O=c_n T` and
+strictly positive Lmax cannot admit a direct packet whose base reaches
+`c_n`.  Balanced `G(p,k)` has `k(p+1)=floor(n^2/4)`, overlap `c_n T`, and
+strictly positive Lmax.  Its rooted indecomposable block-star system is
+therefore structurally necessary within the direct-or-rooted framework.
+
+The handover extends to every `G(p,k)`, not only balanced equality.  In the
+master theorem take `P=O`, `G=B`, `H={r}`, and `J=B\{b}`.  The comparison is
+the common block-star hinge.  With
+`d=[p(k-1)-1]/[k(p+1)]`, each gainer has gain `pd`, the root loss and packet
+gain both equal `p(k-1)d`, and both residuals vanish.  Hence
+
+```text
+direct base=n/[(p+1)(k+1)],
+rooted block-star base=n/[k(p+1)].
+```
+
+The direct arm reaches the target iff
+`(p+1)(k+1)<=floor(n^2/4)`.  The rooted arm always reaches it because
+`k(p+1)<=floor(n^2/4)`.  Thus the exact one-unit denominator shift explains
+why sufficiently unbalanced parameters can be direct while near-balanced
+parameters, including strict `G(3,2)` and sharp `G(2,4),G(3,3)`, require the
+rooted facet.
+
+In facet-price notation the two denominators are
+`D_direct=(p+1)(k+1)` and
+`D_root=p(k-1)+n-1=k(p+1)`, differing by exactly `p+1`.  The rooted
+pair-spoke shear is the indecomposable semi-balanced atom that realizes the
+smaller denominator; the direct identity retains the positive low-Lmax
+payment on the outside block.  This makes the exact-cone role of the root
+witness explicit rather than merely algorithmic.
+
 This is not yet a selection theorem.  The remaining direct-arm gap is now
 precise: prove that a complete staged Lmin packet supplies a target-reaching
 cardinality-`s` gainer packet in `[L_H,U_s]`, or show that every interval miss
