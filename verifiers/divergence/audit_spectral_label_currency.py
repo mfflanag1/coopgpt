@@ -54,10 +54,14 @@ def threshold_currency(x, z, residual):
             continue
         upper_x = {i for i in residual if x[i] >= high}
         upper_z = {i for i in residual if z[i] >= high}
+        double_high = upper_x.intersection(upper_z)
+        double_low = set(residual).difference(upper_x.union(upper_z))
         frechet = max(0, len(upper_x) + len(upper_z) - m)
-        excess = len(upper_x.intersection(upper_z)) - frechet
+        excess = len(double_high) - frechet
         if excess < 0:
             raise AssertionError("Frechet lower bound failed")
+        if excess != min(len(double_high), len(double_low)):
+            raise AssertionError("high-high/low-low capacity identity failed")
         contribution = (high - low) * excess
         total += contribution
         if contribution:
@@ -67,8 +71,11 @@ def threshold_currency(x, z, residual):
                     "high": str(high),
                     "upper_x": sorted(upper_x),
                     "upper_z": sorted(upper_z),
+                    "double_high": sorted(double_high),
+                    "double_low": sorted(double_low),
                     "frechet": frechet,
                     "excess_intersection": excess,
+                    "threshold_capacity": min(len(double_high), len(double_low)),
                     "contribution": str(contribution),
                 }
             )

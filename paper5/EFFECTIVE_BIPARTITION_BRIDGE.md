@@ -565,8 +565,10 @@ ray; it does not make every relative proof a full exact-cone facet.
 - clipped fractional-role decomposition `(U1)--(U3)`;
 - disjointness of the two ordered carrier packets;
 - `(CEB) => (H)`;
-- exact specialization to `G(p,k)` and the starved/CFG handover formulas.
+- exact specialization to `G(p,k)` and the starved/CFG handover formulas;
 - the dispersion dual `(DD)--(DCS)` and its tight-hypergraph monotonicity.
+- the threshold label-currency and carrier-interval theorems in
+  `HYBRID_OVERLAP_FACET_PROGRAM.md`.
 
 ### Exact rational evidence
 
@@ -599,3 +601,12 @@ proof must show that failure of the sharpened spectral target forces enough
 zero-surplus/common-hinge structure for the rooted staged packet to prove
 `(H)`.  Unlike `(CEB)`, this asks only for the balanced universal constant and
 explicitly allows the two existing mechanisms to substitute for one another.
+
+In the threshold formulation, each poorer-in-`x` or richer-in-`z` carrier
+edge spans an interval on which one endpoint is high in both selections and
+the other low in both.  Label currency is exactly the integral of the smaller
+of those two threshold populations.  The precise missing lemma is therefore
+to pack staged carrier intervals, with no threshold over capacity, to cover
+the residual spectral deficit.  This formulation survives the former
+large-coefficient counterexamples because it controls geometric occupancy
+rather than raw circuit multipliers.

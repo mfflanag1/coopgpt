@@ -2511,6 +2511,89 @@ Frechet minimum.  Subtracting gives `(LC2)`.  The upper sets change only at a
 coordinate of `x` or `z`; splitting the integral at those finitely many
 levels gives the final linear-gap statement.  QED.
 
+There is a more revealing form of the integrand.  Partition `R` at threshold
+`t` into
+
+```text
+A_t=X_t intersect Z_t                    (high in both),
+D_t=R\(X_t union Z_t)                    (low in both),
+```
+
+and the two mixed cells.  Since
+
+```text
+|X_t|+|Z_t|-m=|A_t|-|D_t|,
+```
+
+one gets the exact capacity identity
+
+```text
+C_label=integral_0^infinity min(|A_t|,|D_t|) dt.      (LC5)
+```
+
+Thus label currency is literally the total threshold capacity for matching a
+simultaneously high player to a simultaneously low player.
+
+### Theorem (carrier intervals are label-currency rectangles)
+
+Put `d=x-z`.  Let `i` gain (`d_i<0`) and `j` lose (`d_j>0`).
+
+1. If `x_j<=x_i`, then throughout the interval
+
+   ```text
+   I^x_(i,j)=(x_j,x_i]
+   ```
+
+   player `i` is high in both selections and player `j` is low in both.
+
+2. If `z_j>=z_i`, the same is true with the roles reversed throughout
+
+   ```text
+   I^z_(i,j)=(z_i,z_j].
+   ```
+
+Consequently, when both endpoints lie in the residual set `R`, each interval
+is a unit rectangle under the capacity integrand `(LC5)`.  The two carrier
+packets supplied by the sign-coherent staged theorem consist entirely of
+intervals of these two respective forms.
+
+#### Proof
+
+In the first case the payoff chain is
+
+```text
+z_j<x_j<=x_i<z_i.
+```
+
+For `t in (x_j,x_i]`, player `i` lies in both upper sets while player `j`
+lies in neither.  In the second case,
+
+```text
+x_i<z_i<=z_j<x_j,
+```
+
+so on `(z_i,z_j]` player `j` lies in both upper sets and player `i` in
+neither.  The carrier-order assertions are exactly `(AT-min)` and `(AT-max)`.
+QED.
+
+### Corollary (fractional interval packing)
+
+Let `E` be any collection of such residual carrier intervals and give
+interval `e` weight `rho_e>=0`.  If at every threshold
+
+```text
+sum_(e:t in I_e) rho_e <= min(|A_t|,|D_t|),           (LC6)
+```
+
+then
+
+```text
+sum_e rho_e |I_e| <= C_label.                         (LC7)
+```
+
+This is immediate by integrating `(LC6)` and interchanging the finite sum
+and integral.
+
 This theorem puts the missing labelled information in the same coordinates
 as the staged packets.  The sets `X_t` and `Z_t` are complements/unions of
 their cumulative ordered strata, and common-hinge rows are the only retained
@@ -2526,6 +2609,17 @@ Unlike the false `(EB5)`, `(LC4)` is not advertised as a theorem: it is an
 identity-equivalent target.  Its value is structural.  It says precisely
 what a common-hinge/rooted-circuit proof must purchase and removes the false
 reciprocal-mass price.
+
+The minimal live lemma is now an **interval-packing lemma**: after crediting
+the sharpened spectral floor and `C_top`, select fractional intervals from
+the two sign-coherent staged carrier packets with total length at least the
+remaining target deficit and satisfying the threshold capacities `(LC6)`.
+Carrier intervals touching the removed ceiling block must instead be charged
+to `C_top` or to the explicit top contribution.  Large primitive staged
+coefficients are permitted; what must be controlled is their simultaneous
+threshold occupancy.  The previous coefficient-congestion counterexamples
+do not refute this formulation because `(LC6)` measures geometric occupancy,
+not the raw sum of circuit multipliers.
 
 The three hostile spectral failures separate the two currencies:
 
