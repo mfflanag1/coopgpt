@@ -1157,6 +1157,57 @@ python3 verifiers/divergence/verify_n7_staged_congestion_obstruction.py \
   --output verifiers/divergence/n7_staged_congestion_obstruction.json
 ```
 
+The coefficient growth is not a one-off normalization artifact.  A second
+two-generator exact game on eight players has
+
+```text
+g=(0,0,7,4,3,2,0,0),          h=(4,1,0,0,0,0,6,5),
+x=(8/3,2/3,7/3,4/3,1,2/3,4,10/3),
+z=(28/13,7/13,42/13,24/13,18/13,12/13,42/13,35/13).
+```
+
+Sixteen sparse staged identities prove the two selections.  At Lmin stage
+`3`, player `2` is the only member of its block and the only gaining target.
+Its optimal packet is
+
+```text
+3 1_9+3 1_85+2 1_104+1_165+4 1_176+2 1_204
+  +7e_1+e_2=7 1_N.                                  (P8)
+```
+
+The matching price is concentrated on player `1`, and the tangent
+
+```text
+y=g-h=(-4,-1,7,4,3,2,-6,-5)
+```
+
+is nonnegative on every `x`-tight coalition.  Hence primal and dual values
+coincide at
+
+```text
+kappa_3=7>|I_3|=1.                                   (N8-TC)
+```
+
+After projection modulo `1_N`, the six coalition columns together with
+`e_1,e_2` have rank seven.  Thus `(P8)` is a support-minimal positive circuit
+on exactly `n` columns, and the coefficient seven is intrinsic to its
+primitive circuit vector; it is not caused by a nonminimal certificate.
+
+Again the opposite certificate pays for the local coefficient.  The exact
+Lmax over-cover has `theta=7/13`, `eta=4/13`, zero hinge surplus, and spectral
+bound `139/13`, while the required eight-player floor is only `8`.  The true
+overlap is `544/39`.  Reproduce every identity with
+
+```bash
+python3 verifiers/divergence/verify_n8_coefficient_seven_obstruction.py \
+  --output verifiers/divergence/n8_coefficient_seven_obstruction.json
+```
+
+Consequently neither bounded support nor circuit minimality bounds the
+numerical congestion coefficients.  A future coupling may use the support
+cap `n`, but it must retain the primitive circuit weights and charge them
+against the opposite spectral certificate.
+
 A tempting stronger collapse to one common box vector is false.  In
 `verifiers/s6/harvest6_601.json`, record `0`, Lmin stage `1`,
 
@@ -1203,6 +1254,13 @@ therefore enumerates every irreducible **nested selection certificate**, not
 merely the certificates in the relative old-coordinate quotient.  This is a
 finite exact algorithm for the rooted incidence systems selected by a given
 lexicographic face.
+
+The coefficient-seven circuit `(P8)` is a sharp warning about what this
+algorithm returns.  The support theorem controls the **number** of columns,
+not the size of the primitive rational kernel vector.  Exact circuit
+enumeration must therefore output coefficients as well as supports; replacing
+each selected circuit by a uniform or unit-load generator loses valid staged
+geometry.
 
 It still does not identify a new class of full exact-cone facets.  On the
 Lmin side the added unit columns are ordinary singleton incidence columns,
@@ -1256,16 +1314,54 @@ The first-stage aggregate pair is insufficient even at six players, by
 also false by Section 3.  A valid all-dimension bridge must use the complete
 staged Lmin pinning data.
 
+For a fixed Lmax over-cover `(lambda,eta,alpha)`, let
+`B(lambda,alpha)` denote the sharpened spectral bound `(SR)`--`(SA)`, using
+its actual `theta=max alpha_i` and hinge surplus `epsilon_+`.  Define
+
+```text
+B_spec(v)=sup B(lambda,alpha)
+```
+
+over all normalized Lmax top over-covers.  Every term in the supremum is a
+proved lower bound for the true overlap.  The sharp family has
+`B_spec=O=nT/floor(n^2/4)`.  The new coefficient-two and coefficient-seven
+obstructions have, respectively,
+
+```text
+B_spec>=11>7,               B_spec>=139/13>8.
+```
+
+This isolates a cleaner surviving statement.
+
+> **Spectral-residual exclusion (SRE).**  For every singleton-normalized
+> exact game,
+>
+> ```text
+> B_spec(v)>=nT/floor(n^2/4).                           (SRE)
+> ```
+>
+> Equivalently, if a proposed pair of spectra makes every sparse Lmax
+> spectral certificate fall below the sharp constant, then the complete
+> staged Lmin rooted-circuit system and exactness witnesses are infeasible.
+
+`(SRE)` is stronger than `(H)` but is not a statement about arbitrary equal-
+sum spectra: the abstract counterexample in `LMAX_OVERCOVER_COUPLING.md`
+shows that exact-game and staged-selection structure is indispensable.  It
+also survives every known local-congestion counterexample because those
+examples are discharged before their large primitive coefficients need to be
+bounded.
+
 The minimal live target is therefore:
 
 > **Compatible fractional-hinge and acyclic-congestion lemma.**  From a
 > sparse Lmax top over-cover and the sign-coherent Lmin packets in Section 6,
-> first discharge every spectrum for which the sharpened spectral anchor
-> already proves `(H)`.  On the residual spectra, construct nonnegative
-> price-weighted coupling weights whose normalized loads pack as in `(FSP)`;
-> charge any coefficient above target count against spectral-anchor slack or
-> hinge surplus, and control cross-stage source reuse so that the resulting
-> carrier inequality implies
+> prove `(SRE)` directly, or first discharge every spectrum for which the
+> sharpened spectral anchor already proves `(H)` and show that the residual
+> spectra contradict an exact rooted Lmin circuit.  Equivalently, construct
+> nonnegative price-weighted coupling weights whose normalized loads pack as
+> in `(FSP)`; charge every large primitive coefficient against spectral-anchor
+> slack or hinge surplus, and control cross-stage source reuse so that the
+> resulting carrier inequality implies
 > `sum_i min(x_i,z_i)>=nT/floor(n^2/4)`.
 
 The theorem must allow multiple rooted facets and fractional sharing of a
@@ -1279,14 +1375,17 @@ common-hinge systems in Section 2.  Any proposed version must first reject:
 4. both balanced seven-player orientations `(2,4)` and `(3,3)` at equality;
    and
 5. the coefficient-two seven-player obstruction `(N7-TC)`, which the spectral
-   anchor closes with four units of slack.
+   anchor closes with four units of slack; and
+6. the primitive coefficient-seven eight-player circuit `(N8-TC)`, whose
+   spectral bound is `139/13>8`.
 
 The program has advanced beyond a bare outcome D: the common-hinge theorem,
 hinge-surplus spectral refinement, surplus dispersion budget, first-floor
 transport theorem, projected staged-circuit classification, and sign-coherent
 nested-incidence theorem are proved dimension-free.  The exact audit has now
-disproved both `(UB)` and `(TC)` sharply at seven players and exposed their
-opposite-certificate compensation.  The final all-`n` inequality remains
-open: the new residual price-weighted coupling lemma is not yet proved.  This
-is meaningful structural progress and a decisive pruning of the proof tree,
-but not yet the requested central breakthrough.
+disproved both `(UB)` and `(TC)`, then proved that even a support-minimal
+eight-player circuit can force coefficient seven while the opposite spectral
+certificate closes the target.  The final all-`n` inequality remains open:
+the new residual price-weighted coupling lemma is not yet proved.  This is
+meaningful structural progress and a decisive pruning of the proof tree, but
+not yet the requested central breakthrough.
