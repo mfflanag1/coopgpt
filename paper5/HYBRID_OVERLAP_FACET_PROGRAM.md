@@ -31,6 +31,18 @@ A literal partition of the players is already false at six players, while
 treating the Lmin packet itself as one exact-cone facet is also false in
 general.
 
+The companion note `EFFECTIVE_BIPARTITION_BRIDGE.md` now extracts a capped
+fractional role of mass `a=min(1/theta_+,floor(n/2))` from the
+minimum-dispersion ceiling over-cover.  Its candidate bound
+
+```text
+O/T>=1/a+1/(n-a)
+```
+
+would imply `(H)` and is exact on both balanced orientations of `G(p,k)`.
+The role decomposition and the exact dual formula for `theta_+` are proved;
+the displayed overlap bound remains conjectural.
+
 ## 2. Shared-hinge theorem for the sharp family
 
 For the master family `G(p,k)`, write
@@ -2289,3 +2301,100 @@ seven-player equality orientations; an exact negative control proves that
 deleting the common hinges entirely is invalid.  This is meaningful
 structural progress and a substantially narrower missing lemma, but not yet
 the requested central breakthrough.
+
+## 9. Effective bipartition and dispersion-price completion
+
+The newest reduction separates the ceiling certificate into a primal
+fractional role and a dual rooted price.  For a minimum-dispersion over-cover
+
+```text
+sum_S lambda_S 1_S=eta 1_N+alpha,
+theta_+=max_i alpha_i,
+a=min(1/theta_+,floor(n/2)),
+u=a alpha,
+```
+
+one has the human incidence theorem
+
+```text
+0<=u<=1,  sum_i u_i=a,
+a sum_S lambda_S 1_S+(1-u)=(1+a eta)1_N.              (EB1)
+```
+
+If `epsilon=sum_S lambda_S[x(S)-z(S)]`, evaluation at the two selections
+gives
+
+```text
+u.x=a(M+epsilon),       u.z=aM,
+(1-u).x=T-a(M+epsilon), (1-u).z=T-aM.                 (EB2)
+```
+
+The surviving scalar target is
+
+```text
+O/T>=1/a+1/(n-a).                                      (EB3)
+```
+
+Since `a<=floor(n/2)`, `(EB3)` implies `(H)`.  It specializes to equality on
+the balanced `G(p,k)` orientations, reproduces the starved-family failure at
+five and equality at six, passes all `374` archived six-player pairs and the
+named seven/eight-player hostile controls, and fails on `12` of `124`
+distinct five-player pairs.  These finite facts are falsification evidence,
+not a proof of `(EB3)`.
+
+The dispersion cap itself has the exact player-price dual
+
+```text
+theta_+=max t
+y(S)>=0                 (S proper and z-tight),
+y(N)<=0,
+t+y_i<=q_i              (i in the Lmax top block),
+q>=0, sum_i q_i<=1.                                    (EB4)
+```
+
+This follows directly by rational LP duality.  Complementary slackness makes
+`y(S)=0` on every positively weighted over-cover coalition and supports `q`
+on coordinates with `alpha_i=theta_+`.  Consequently `theta_+` is a
+combinatorial invariant of the labelled Lmax top block and its complete
+tight-coalition incidence hypergraph.  Adding a tight coalition can only
+lower it.  This is the missing sensitivity datum in the earlier fixed-cap
+one-witness relaxation.
+
+The exact audit
+
+```bash
+python3 verifiers/divergence/audit_overcover_dispersion_dual.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/overcover_dispersion_dual_audit.json
+```
+
+checks strong duality and complementary slackness on all `374` archived
+six-player records.  Although every record admits an atomic optimal price
+`q=e_r`, three have no atomic price root which is also a ceiling root
+`x_r>=M`; the optimized seven-player spectral obstruction has the same
+separation.  Thus identifying the two distinguished roots is another false
+shortcut.
+
+The precise live statement is now the **price-completed fractional-role
+coupling lemma**: combine `(EB1)--(EB2)`, the optimal dispersion prices
+`(EB4)`, and the complete sign-coherent staged Lmin packet to prove
+
+```text
+a(n-a)O>=nT.                                           (EB5)
+```
+
+Repeated carrier use must be paid by the same labelled capacities `u,1-u`,
+the hinge surplus, or the dispersion price `y`; movement of the complete
+Lmax tight hypergraph must be charged through `(EB4)`.  The record-13 branch
+boundary proves that omitting dispersion optimality is insufficient: its
+fixed-cap relaxation reaches overlap `2/3` below the record-specific `3/4`
+only by lowering `theta_+` from `1/2` to `1/3`, at which point `(EB3)` also
+moves to `2/3` and remains sharp.
+
+For fixed `n`, `(EB4)` improves the exact algorithmic interface: enumerate a
+complete labelled tight hypergraph, solve one rational primal/dual incidence
+pair for `theta_+`, and then test the linear inequality `(EB5)` on each
+rooted staged branch.  Target-containing positive circuits still classify
+irreducible relative branch proofs.  Only projected coalition systems which
+pass the published indecomposable semi-balanced criterion may be called
+facets of the full exact-game cone.
