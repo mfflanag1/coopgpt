@@ -1933,6 +1933,93 @@ Thus a player maximizing its coordinatewise overlap supplies the largest
 available negative root credit in `(RTD)`.  This suggests the stronger live
 form of `(RSEL)`:
 
+> **Theorem (ceiling root and root deletion).**  Let `H` be the Lmax top
+> block, with common value `M`, and let
+>
+> ```text
+> sum_S lambda_S 1_S=eta 1_N+alpha
+> ```
+>
+> be any normalized Lmax over-cover.  Then some `r in H` satisfies
+>
+> ```text
+> x_r>=M,             min(x_r,z_r)=M=max_i min(x_i,z_i). (CR)
+> ```
+>
+> For every such `r`, every singleton witness `w^r` with `w^r_r=0` satisfies
+>
+> ```text
+> M<=theta_(-r) T,       theta_(-r):=max_(i!=r) alpha_i. (RD)
+> ```
+
+#### Proof
+
+The hinge-surplus identity gives `alpha.x=M+epsilon_+>=M`.  Since `alpha` is
+a probability supported on `H`, some `r in H` has `x_r>=M`.  At that player
+`z_r=M`, while `z_i<=M` everywhere, proving `(CR)`.
+
+Every supported coalition is `z`-tight and `w^r` is a core point, so
+
+```text
+0<=sum_S lambda_S[w^r(S)-z(S)]
+  =alpha.w^r-alpha.z=alpha.w^r-M.
+```
+
+Because `w^r>=0`, `w^r(N)=T`, and `w^r_r=0`,
+
+```text
+alpha.w^r<=theta_(-r) sum_(i!=r)w^r_i=theta_(-r)T.
+```
+
+This proves `(RD)`.  QED.
+
+The theorem makes the root canonical up to the nonempty set
+
+```text
+R_M={r in H:x_r>=M}=argmax_i min(x_i,z_i).              (CRM)
+```
+
+It also couples root choice directly to the sparse over-cover: deleting a
+large load `alpha_r` replaces the global dispersion by the largest surviving
+load.  For `G(p,k)`, the exceptional head has `alpha_0=1/k` and every
+surviving block load is `(k-1)/k^2`; `(RD)` is exactly `(GM)`.  The remaining
+dimension-free task is to couple this deleted-load ceiling bound to the
+complete rooted Lmin packet and recover the complementary `q`-type term.
+
+The best deleted-load certificate is itself an exact sparse oracle.  For
+`r in R_M`, define `theta^del_r` by the rational LP
+
+```text
+minimize theta
+subject to sum_S lambda_S 1_S=eta 1_N+alpha,
+           sum_(i in H)alpha_i=1,
+           alpha_i<=theta              (i in H\{r}),
+           lambda,eta,alpha,theta>=0,
+```
+
+with `lambda` supported on the `z`-tight coalitions.  Then
+
+```text
+M/T<=theta^del_r,                                        (RDO)
+```
+
+the optimum is rational and attained for rational input, and its coalition
+support may be reduced to at most `n` without changing
+`(eta,alpha,theta)`.  Indeed `(RD)` proves the lower bound for every feasible
+certificate.  Rational LP duality gives attainment, and conic Caratheodory in
+`R^n` gives the support reduction.  For `G(p,k)` at the head root,
+
+```text
+theta^del_0=(k-1)/k^2=M/T.
+```
+
+Thus the sparse Lmax side of the proposed proof is now an exact root-indexed
+quantity.  The missing Lmin theorem can be stated without ambiguity: for at
+least one ceiling root `r`, its complete staged packet must contribute the
+complementary overlap needed beyond the root-deleted ceiling `(RDO)`.
+
+This suggests the stronger live form of `(RSEL)`:
+
 > **Maximum-overlap root conjecture.**  For
 > `R=argmax_i min(x_i,z_i)`, every feasible labelled selection system has
 > some `r in R` with
@@ -1966,6 +2053,23 @@ python3 verifiers/divergence/audit_n6_equality_one_witness_roots.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output verifiers/divergence/n6_equality_one_witness_roots.json
 ```
+
+A broader exact regression audit then tested every maximum-overlap root in
+all `374` archived six-player pairs: `703` exact rooted LPs, no failure, and
+minimum bound exactly `2/3`.  Forty records have at least one root attaining
+the floor, while in `108` records every tested root relaxation reproduces the
+actual overlap.  Reproduce it with
+
+```bash
+python3 verifiers/divergence/audit_n6_maximum_overlap_roots.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/n6_maximum_overlap_roots.json
+```
+
+This larger run still fixes one extracted basic staged-support system per
+record and covers only an archive.  It is a regression and falsification
+result, not evidence that the six-player domain, much less all dimensions,
+has been exhausted.
 
 The next human step is therefore sharper than an unlabelled search for a
 root: combine `(RC)` with the rooted marginal-completion coefficient of the
