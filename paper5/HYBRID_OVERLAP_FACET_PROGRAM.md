@@ -1,6 +1,6 @@
 # Hybrid overlap and rooted-facet program
 
-Date: 2026-08-10
+Date: 2026-08-11
 
 ## 1. Status
 
@@ -21,9 +21,15 @@ theory currently gives on the facet side.  It does not claim a proof of
 The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
 reduction in Section 8 turns it into a rooted two-tangent budget and gives a
-linear-support certificate if the correct root can be selected.  A literal
-partition of the players is already false at six players, while treating the
-Lmin packet itself as one exact-cone facet is also false in general.
+linear-support certificate if the correct root can be selected.  The newest
+premise ablation narrows the Lmax contribution further: only tight coalitions
+shared by a sparse ceiling over-cover and the complete Lmin packet need be
+retained in every tested branch.  This common-hinge reduction is proved as a
+sufficient implication and has a sharp exact negative control when all such
+hinges are deleted, but its dimension-free target bound remains conjectural.
+A literal partition of the players is already false at six players, while
+treating the Lmin packet itself as one exact-cone facet is also false in
+general.
 
 ## 2. Shared-hinge theorem for the sharp family
 
@@ -2071,11 +2077,167 @@ record and covers only an archive.  It is a regression and falsification
 result, not evidence that the six-player domain, much less all dimensions,
 has been exhausted.
 
+### Common-hinge premise reduction
+
+The complete Lmax staged packet is not needed in the archived root tests.
+More sharply, even the **z-only** part of a sparse first-stage Lmax
+over-cover can be discarded.  Let `C_x` be the union of one complete staged
+Lmin support, let `C_z` be the support of one sparse Lmax top over-cover, and
+put
+
+```text
+C_cap=C_x intersect C_z.                              (CHI)
+```
+
+> **Theorem (common-hinge one-witness reduction).**  Fix a player `r` and
+> retain the usual common-total, nonnegativity, witness-zero, stratum, and
+> hybrid-sign rows for `(x,z,w^r)`.  Impose
+>
+> ```text
+> x(S)<=z(S),w^r(S)                 (S in C_x),
+> z(S)<=x(S),w^r(S)                 (S in C_cap),       (CHW)
+> ```
+>
+> but impose no Lmax tightness comparison for `S in C_z\C_x`.  If the
+> minimum hybrid overlap in this relaxation is at least
+> `n/floor(n^2/4)`, then the original game satisfies `(H)`.  A
+> support-minimal proof uses at most `3n-3` defining inequality rows besides
+> the target.  Moreover `|C_cap|<=n` after sparse reduction of the selected
+> over-cover.
+
+#### Proof
+
+Every coalition in `C_x` is tight at `x`, and every coalition in `C_cap` is
+tight at both `x` and `z`.  The actual triple `(x,z,w^r)` therefore satisfies
+`(CHW)`, so a lower bound on this larger relaxation bounds its actual hybrid
+overlap.  Its affine ambient space is the same `3n-4` dimensional space as in
+the one-witness threshold theorem, hence the same affine-Farkas circuit bound
+applies.  Finally `C_cap` is a subset of the support of a sparse Lmax
+over-cover, whose support has at most `n` coalitions.  QED.
+
+On a common coalition, `(CHW)` says exactly
+
+```text
+x(S)=z(S)<=w^r(S),
+a(S)=b(S)>=0.                                         (CHE)
+```
+
+Thus the only surviving Lmax rows **glue the two rooted tangents on common
+tight coalitions**.  All other coalition-slack information comes from the
+complete Lmin packet.  This is a smaller structural interface than `(OW)`:
+the ceiling over-cover selects at most `n` possible gluing coalitions, and
+the complete Lmin packet decides which of them actually transmit charge.
+
+The reduction is sufficient, but deleting every Lmax row is false even in
+the archive.  In `harvest6_602.json`, record `82`, the maximum-overlap-root
+relaxation has exact minimum
+
+```text
+5/8<2/3
+```
+
+with no Lmax rows.  Its sparse over-cover support is `(23,27,35)`, its
+complete Lmin support is `(24,27,35,40,49)`, and retaining only the common
+coalitions `(27,35)` raises the exact minimum to `3/4`; the actual overlap is
+`7/9`.  One support-minimal dual uses the common coalition
+`35={0,1,5}`.  Hence the common-hinge gluing is not merely decorative: at
+least one archived branch provably loses the target when it is removed.
+
+An exact premise-ablation audit tested `(CHW)` at every maximum-overlap root
+of all `374` archived six-player pairs.  All `703` rational LPs pass and the
+minimum is exactly `2/3`.  The same script independently formulates the
+specialized three-generator LP and cross-checks every full sparse-support
+optimum against the general labelled-branch encoding.  Reproduce it with
+
+```bash
+python3 verifiers/divergence/audit_n6_sparse_lmax_complete_lmin_roots.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/n6_sparse_lmax_complete_lmin_roots.json
+```
+
+The common-hinge reduction also preserves the target on all five hostile
+fixed branches and both sharp seven-player orientations.  In the two sharp
+orientations it retains the exact root discrimination: the head root gives
+`7/12`, while every non-head root gives `7/15` or `7/16`.  Reproduce those
+exact controls with
+
+```bash
+python3 verifiers/divergence/verify_common_hinge_root_reduction.py \
+  --output verifiers/divergence/common_hinge_root_reduction.json
+```
+
+These computations motivate the strictly smaller live target:
+
+> **Common-hinge maximum-overlap conjecture.**  Every singleton-normalized
+> exact game admits a complete staged Lmin support, a sparse Lmax top
+> over-cover, and a root `r in argmax_i min(x_i,z_i)` for which the
+> common-hinge relaxation `(CHW)` has minimum at least
+> `n/floor(n^2/4)`.
+
+In tangent variables, the missing human lemma is now a rooted common-hinge
+charge theorem: derive `(RTB)` from `a(S)>=0` on the complete Lmin support,
+the gluing equalities `a(S)=b(S)>=0` on `C_cap`, and the labelled
+stratum/sign rows.  It must explain why the sparse ceiling support meets the
+active indecomposable factors of the Lmin packet with sufficient rooted
+multiplicity.  The exact negative control above shows that a theorem using
+the Lmin packet alone would be too strong.
+
+This gives a sharper exact-cone interface as well.  Common-hinge rows are
+diagonal gluing rows between the two generator blocks.  Target-containing
+positive circuits of the reduced rooted configuration enumerate irreducible
+**relative common-hinge proofs**, still with linear support.  After projection
+to characteristic-function coordinates, only factors whose coalition
+coefficients are indecomposable semi-balanced systems are facets of the full
+exact-game cone under the Studeny--Kratochvil criterion.  The reduction does
+not prove that every relative circuit projects to a facet; it isolates the
+small shared coalition set on which that projection and factorization must be
+audited.
+
+> **Theorem (relative common-hinge facet decision).**  Fix the ordered
+> strata, hybrid sign cut, root, complete Lmin support, and sparse ceiling
+> support.  The common-hinge feasible set `P_cap` defined by `(CHW)` is a
+> rational polytope.  Validity of the target inequality on `P_cap`, its exact
+> equality set, all equality vertices, and whether the target cuts a relative
+> facet are decidable by finite exact rational linear algebra.  If `d_cap` is
+> the affine dimension of `P_cap`, the target is a relative facet exactly
+> when
+>
+> ```text
+> min_(P_cap) c=0
+> and dim(P_cap intersect {c=0})=d_cap-1.              (CHF)
+> ```
+>
+> Every support-minimal validity proof is a target-containing positive
+> circuit of the homogenized common-hinge row configuration.
+
+#### Proof
+
+All rows in `(CHW)` and all branch rows are rational.  Each of the three
+generators is nonnegative with total one, so `P_cap` is a closed subset of a
+product of simplices and is bounded.  Exact rational LP decides feasibility
+and the target minimum.  On a zero minimum, append `c=0`; the affine hull of
+the resulting rational face is obtained by exact row reduction after testing
+which defining inequalities are equalities throughout the face.  The usual
+polytope facet criterion is exactly `(CHF)`.  Its vertices are the basic
+feasible solutions obtained from full-rank active-row subsets, hence are
+rational and finitely enumerable.  Finally affine Farkas duality and support
+minimality give the stated positive-circuit correspondence, exactly as in the
+fully labelled branch-circuit theorem.  QED.
+
+Consequently a fixed-`n` exact algorithm may enumerate common-hinge branches,
+solve the target LP, enumerate the equality bases, and apply `(CHF)`.  For
+each relative facet, eliminate the labelled generator coordinates and test
+each resulting coalition system for semi-balanced indecomposability.  Only
+the systems passing that last Studeny--Kratochvil test may be entered in the
+full exact-cone facet catalogue.  This is an exact algorithmic/facet theorem;
+it does not supply the missing dimension-free reason that every branch is
+valid.
+
 The next human step is therefore sharper than an unlabelled search for a
 root: combine `(RC)` with the rooted marginal-completion coefficient of the
-active indecomposable factors, and show that at least one maximum-overlap
-player receives enough exceptional-root multiplicity to pay the deficit in
-`(RTB)`.
+active indecomposable Lmin factors, and prove that the common hinges selected
+by the sparse ceiling over-cover transmit enough exceptional-root
+multiplicity to pay the deficit in `(RTB)`.
 
 Reproduce the fixed-support staged checks, exact primal minima, exact Farkas
 identities, and every one-witness relaxation with
@@ -2119,8 +2281,11 @@ disproved both `(UB)` and `(TC)`, then proved that even a support-minimal
 eight-player circuit can force coefficient seven, and has now disproved every
 partial relabeling shortcut through exact seven-player controls.  The final
 all-`n` inequality remains open: the fully labelled dual coupling `(FLC)` is
-not yet proved.  The one-witness reduction now isolates a linear-support
-rooted two-tangent budget `(RTB)`, passes five hostile branches, and selects
-the exact exceptional block-star root at both sharp seven-player equality
-orientations.  This is meaningful structural progress and a substantially
-narrower missing lemma, but not yet the requested central breakthrough.
+not yet proved.  The one-witness reduction isolates a linear-support rooted
+two-tangent budget `(RTB)`, and the common-hinge premise reduction now deletes
+every Lmax row except shared tight coalitions.  That smaller system survives
+all archived six-player roots, five hostile branches, and both sharp
+seven-player equality orientations; an exact negative control proves that
+deleting the common hinges entirely is invalid.  This is meaningful
+structural progress and a substantially narrower missing lemma, but not yet
+the requested central breakthrough.
