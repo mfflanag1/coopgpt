@@ -246,6 +246,7 @@ def audit_symbolic_identity():
                     raise AssertionError("mixed block-star polynomial identity failed")
             rows.append({"p": p, "k": k, "n": n, "denominator": D})
     price_rows = 0
+    penalty_rows = 0
     for g in range(1, 7):
         for m in range(1, 7):
             n = 1 + g + m
@@ -263,7 +264,23 @@ def audit_symbolic_identity():
                     if lhs != rhs or rhs < 0:
                         raise AssertionError("rooted facet-price identity failed")
                     price_rows += 1
-    return rows, price_rows
+                for excess, slack in ((F(1, 13), F(0)), (F(2, 17), F(1, 41))):
+                    a = F(1)
+                    b = a + F(1, 43)
+                    c = P * a + excess - slack
+                    if c < b:
+                        continue
+                    total = c + g * b + m * a
+                    Dp = P + n - 1
+                    lhs = (P - 1) * total - Dp * (c - b) + n * excess
+                    rhs = (
+                        (g * (P - 1) + Dp) * (b - a)
+                        + n * (P * a + excess - c)
+                    )
+                    if lhs != rhs or rhs < 0:
+                        raise AssertionError("multistage penalty identity failed")
+                    penalty_rows += 1
+    return rows, price_rows, penalty_rows
 
 
 def audit_facet_prices():
@@ -350,7 +367,7 @@ def main():
     if overlap != 22 or roots != (3,):
         raise AssertionError("control overlap/root changed")
     primal, root_optimum, dual_inequalities, dual_equalities = audit_root_primal_dual()
-    grid, price_rows = audit_symbolic_identity()
+    grid, price_rows, penalty_rows = audit_symbolic_identity()
     facet_prices = audit_facet_prices()
     report = {
         "status": "exact mixed block-star boundary audit",
@@ -367,6 +384,7 @@ def main():
                 "[kp(k-1)+p+1](b-a)+n[p(k-1)a-c]"
             ),
             "general_facet_price_rows": price_rows,
+            "multistage_penalty_rows": penalty_rows,
             "general_identity": (
                 "(P-1)T-(P+n-1)(c-b)="
                 "[g(P-1)+P+n-1](b-a)+n(Pa-c)"

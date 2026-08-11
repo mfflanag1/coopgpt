@@ -2192,6 +2192,38 @@ forced into the three-level block.  The two independent tasks in a general
 branch are now explicit: find a low-loss-supported rooted facet of affordable
 price `P`, and find one mixed row paying the total gain by `c-b`.
 
+The failure of first-floor alignment has an exact price.  For an arbitrary
+rooted pair lift define
+
+```text
+e_q=max(0, [sum_i q_i(x_i-a)-sum_i q_i v({r,i})]/delta). (MPE1)
+```
+
+Then `(PFRDBx)` gives `c<=Pa+e_q`.  Replacing `Pa-c` by
+`Pa+e_q-c-e_q` in `(MFP2)` proves
+
+```text
+O/T>=n/(P+n-1)-n e_q/[(P+n-1)T].                     (MPE2)
+```
+
+For a reserve subset of size `n_0`, the same proof gives
+
+```text
+O/T>=n_0(T-e_q)/[(P+n_0-1)T].                        (MPE3)
+```
+
+Thus the missing multistage theorem has a numerical target: label, spectral,
+or reserve currency must pay exactly the `e_q` term (or the pre-existing
+denominator margin must absorb it).  When the full structured dimension is
+`n` and `F=floor(n^2/4)`, `(MPE2)` reaches `(H)` whenever
+
+```text
+e_q/T<=1-(P+n-1)/F.                                  (MPE4)
+```
+
+This penalty is zero in every first-floor-aligned cut; nonnegative pair
+premiums can only reduce it.
+
 All nine extreme mixed-projection cuts in the hostile/sharp control suite
 have effective price at most their dimensional threshold (`6` at `n=7`,
 `9` at `n=8`).  This finite fact does not prove their required stratum/sign

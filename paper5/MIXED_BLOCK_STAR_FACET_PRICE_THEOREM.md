@@ -178,6 +178,37 @@ This reaches the `n`-player target when
 P<=n_0 floor(n^2/4)/n-n_0+1.                         (11)
 ```
 
+### Exact multistage penalty
+
+If rooted deficits do not all lie on the `a` floor, define
+
+```text
+e_q=max(0,[sum_i q_i(x_i-a)-sum_i q_i v({r,i})]/delta).
+```
+
+The rooted pair inequality gives `c<=Pa+e_q`.  Adding `n e_q` to the
+left side of (7) therefore gives
+
+```text
+O/T>=n/(P+n-1)-n e_q/[(P+n-1)T].                    (12)
+```
+
+For a reserve subset, the bound is
+
+```text
+O/T>=n_0(T-e_q)/[(P+n_0-1)T].                       (13)
+```
+
+In the full structured dimension, the universal target follows whenever
+
+```text
+e_q/T<=1-(P+n-1)/floor(n^2/4).                       (14)
+```
+
+Equations (12)--(14) are the quantitative interface for the four tested cuts
+whose deficits do not all lie on the first Lmin floor.  A multistage theorem
+must pay this exact penalty from label, spectral, or reserve currency.
+
 ## 4. Exact-cone interpretation
 
 The witness projection of the block-star packet has rooted packing excess
