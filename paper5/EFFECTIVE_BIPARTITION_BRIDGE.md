@@ -566,9 +566,13 @@ ray; it does not make every relative proof a full exact-cone facet.
 - disjointness of the two ordered carrier packets;
 - `(CEB) => (H)`;
 - exact specialization to `G(p,k)` and the starved/CFG handover formulas;
-- the dispersion dual `(DD)--(DCS)` and its tight-hypergraph monotonicity.
+- the dispersion dual `(DD)--(DCS)` and its tight-hypergraph monotonicity;
 - the threshold label-currency and carrier-interval theorems in
-  `HYBRID_OVERLAP_FACET_PROGRAM.md`.
+  `HYBRID_OVERLAP_FACET_PROGRAM.md`;
+- the normalized coefficient-supply collapse and complete strict carrier
+  support theorem;
+- the canonical rank-pairing theorem recovering all label currency from
+  clipped high--low rectangles.
 
 ### Exact rational evidence
 
@@ -582,7 +586,9 @@ ray; it does not make every relative proof a full exact-cone facet.
 - `(CEB)` and its equivalent charge form `(FRC)`;
 - the price-completed fractional-role lemma proposed in the previous version;
 - identification of an atomic dispersion root with a ceiling root as a
-  sufficient repair—the counterexample has the same root.
+  sufficient repair—the counterexample has the same root;
+- the complete carrier-packing route as an independent bridge: after neutral
+  endpoints are restored, it is identically equal to label currency.
 
 ### Still open
 
@@ -602,31 +608,40 @@ zero-surplus/common-hinge structure for the rooted staged packet to prove
 `(H)`.  Unlike `(CEB)`, this asks only for the balanced universal constant and
 explicitly allows the two existing mechanisms to substitute for one another.
 
-In the threshold formulation, each poorer-in-`x` or richer-in-`z` carrier
-edge spans an interval on which one endpoint is high in both selections and
-the other low in both.  Label currency is exactly the integral of the smaller
-of those two threshold populations.  The precise missing lemma is therefore
-to pack staged carrier intervals, with no threshold over capacity, to cover
-the residual spectral deficit.  This formulation survives the former
-large-coefficient counterexamples because it controls geometric occupancy
-rather than raw circuit multipliers.
+In the threshold formulation, put `a_i=min(x_i,z_i)` and
+`b_i=max(x_i,z_i)`.  Every pair with `b_j<a_i` gives the high--low rectangle
+`(b_j,a_i]`; it is staged-available because `x_j<x_i`.  Sorting the residual
+`a`-values downward and `b`-values upward and pairing equal ranks produces
+weight-one rectangles whose occupancy at every threshold is exactly the
+smaller of the high--high and low--low populations.  Hence their total length
+is all label currency.  Neutral endpoints are essential in general and were
+missing from the earlier opposite-sign formulation.
 
 For fixed payoff strata and fixed carrier supports this is now an exact
 algorithmic theorem.  The carrier-by-threshold matrix has consecutive-one
 columns and is totally unimodular.  The maximum weighted interval packing
 equals a minimum threshold cover, has an integral sparse optimum for integer
 capacities, and is exactly solvable in polynomial time for rational data.
-The dual cover is the sharp Hall-type obstruction for a specified staged
-packet.  What remains open is the game-theoretic input: prove that some
-carrier supports and supplies furnished by the complete staged circuits make
-this optimum pay the residual hybrid-overlap deficit.  The interval theorem
-alone is only a relative fixed-stratum result and does not identify facets of
-the full exact-game cone.
+The dual cover is the sharp Hall-type obstruction for a restricted packet.
+Normalized auxiliary coefficients are now proved to be either
+unavailable or unbounded: the duplicate forced-player column permits
+amplification while preserving normalization.  Consequently their magnitudes
+carry no congestion information.  Adding earlier player relations proves
+that every strict order-compatible carrier is available.  The canonical
+rank pairing then proves that the complete interval optimum equals label
+currency identically.  Thus asking it to pay the residual deficit is exactly
+the original hybrid-overlap inequality, not a stronger bridge.  The live
+input must instead couple sparse Lmax over-cover weights to common tight
+coalitions in the staged Lmin packet.
 
 The minimum-cover dual also has a rooted potential form.  After subtracting
 the physical threshold coordinate from cumulative cover prices, carrier
 constraints say that the potential cannot fall along carrier arcs.  Extreme
 covers are certified by tight rooted spanning trees made from carrier arcs
 and adjacent-threshold path arcs.  These threshold trees are the candidate
-interface to rooted semi-balanced systems; a lift and indecomposability test
-are still required before any exact-cone facet conclusion.
+interface to rooted semi-balanced systems for restricted families.  For the
+complete family the physical layer-width cover and canonical rank pairing
+are matching tautological optima.  There is no residual coefficient, support,
+or threshold-tree pattern to encode as the missing facet.  Any facet advance
+must come from the common-hinge coalition lift, followed by gluing and the
+published indecomposability test.

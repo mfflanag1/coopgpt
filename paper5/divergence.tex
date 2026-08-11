@@ -2236,24 +2236,25 @@ exact-game cone.
 
 There is also a direct bridge to the staged transports.  If $A_t$ denotes
 the players in $R$ high in both selections and $D_t$ those low in both, then
-the integrand in (LC) is exactly $\min\{|A_t|,|D_t|\}$.  Indeed
-$|X_t|+|Z_t|-m=|A_t|-|D_t|$.  If player $i$ gains from $x$ to $z$ and a
-losing carrier $j$ satisfies $x_j\le x_i$, then
+the integrand in (LC) is exactly $\min\{|A_t|,|D_t|\}$.  Put
+$a_i=\min\{x_i,z_i\}$ and $b_i=\max\{x_i,z_i\}$.  Whenever $b_j<a_i$, the
+interval $(b_j,a_i]$ is a unit high--low rectangle.  Moreover
+$x_j\le b_j<a_i\le x_i$, so the complete strict Lmin support theorem makes
+the pair $(i,j)$ staged-available.  This includes neutral players and is
+strictly larger than the opposite-sign carrier family used initially.
+
+Sort the residual $a$-values downward and $b$-values upward and pair equal
+ranks.  At threshold $t$, the active rank pairs form the intersection of an
+initial segment of size $|A_t|$ and one of size $|D_t|$; their number is
+therefore exactly $\min\{|A_t|,|D_t|\}$.  Integrating gives the human identity
 
 \[
- z_j<x_j\le x_i<z_i,
+ \sum_{k=1}^{m}(a_{[k]}-b_{[k]})_+=O-B_H. \tag{CS}
 \]
 
-so throughout $(x_j,x_i]$ player $i$ is high in both and $j$ low in both.
-The mirror carrier condition $z_j\ge z_i$ supplies the interval
-$(z_i,z_j]$.  Thus every sign-coherent staged carrier is a unit rectangle
-under the label-currency capacity.  Any fractional collection whose total
-occupancy at threshold $t$ is at most $\min\{|A_t|,|D_t|\}$ has total
-interval length at most $O-B_H$, by integration.  The remaining minimal
-lemma is to pack enough of these carrier intervals to cover the spectral
-deficit, charging intervals incident with the removed ceiling block to the
-top-selection currency.  This geometric occupancy statement replaces the
-false raw-coefficient congestion bound.
+Thus canonical weight-one rectangles saturate every label-currency layer.
+This corrects the omission of neutral endpoints and proves that the complete
+carrier packing is an identity, not the missing inequality.
 
 For fixed payoff strata this packing problem has an exact combinatorial
 min--max theorem.  Split the threshold line into the merged coordinate
@@ -2276,19 +2277,51 @@ Writing $r_k=\sum_{\ell\le k}p_\ell-\beta_k$ turns every carrier-cover
 constraint for $(\beta_s,\beta_t]$ into $r_t\ge r_s$ and nonnegativity into
 $r_k-r_{k-1}\ge-|J_k|$.  Hence an extreme cover has a rooted spanning-tree
 certificate in the graph of tight path and carrier arcs.
-This is a fixed-stratum packing theorem and an exact interface to the rooted
-incidence packets; it is not by itself a facet theorem for the exact-game
-cone.  The unresolved structural step is to prove that the intervals and
-supplies obtained from the staged circuits force the packing optimum to pay
-the post-spectral deficit.
+This is a fixed-stratum theorem for restricted rectangle families and an
+exact interface to rooted incidence packets; it is not by itself a facet
+theorem for the exact-game cone.  For the complete family, (CS) already gives
+the optimum $O-B_H$, so requiring it to pay the post-spectral deficit is
+exactly the original hybrid-overlap conjecture.  A deliberately restricted,
+transport-oriented family might still give a nontrivial sufficient condition,
+but staged availability alone neither selects it nor proves its adequacy.
 
-There is a precise linear version of this missing step.  Normalize every
-chosen staged relation at its forced player column and bound each carrier
-weight by the corresponding auxiliary-player coefficient.  Simultaneously
-choosing the staged relations and the packing is then one rational feasibility
-problem.  In the two hostile controls where the spectral and top-selection
-terms do not already reach the target, this strengthened system has short
-exact witnesses.  Respectively,
+In fact, normalized circuit coefficients do not impose finite supplies.
+Write either sign-coherent relation as
+
+\[
+ \sum_S\lambda_S\mathbf 1_S
+ +\sigma\left(e_i+\sum_{j\in P}a_je_j\right)=c\mathbf 1_N,
+ \qquad \lambda,a\ge0,
+\]
+
+where $\sigma=1$ for Lmin and $-1$ for Lmax.  If a normalized relation has
+$a_j>0$, then for $K\ge1$ multiplying all other coefficients by $K$ and
+replacing $a_i$ by $Ka_i+K-1$ gives another normalized relation with carrier
+coefficient $Ka_j$.  Convexly combine witnesses before amplifying to handle
+several carriers simultaneously.  Hence the projection of the joint
+certificate/supply system is exactly the nonnegative orthant on those
+carrier edges which occur with positive coefficient in some relation.
+Coefficient magnitude disappears; only rooted-circuit support remains.
+
+That support is actually complete.  If $x_j<x_i$, then $j$ was pinned at a
+strictly earlier Lmin stage.  Adding a positive multiple of $j$'s normalized
+relation to $i$'s preserves the forced coefficient of $e_i$ and gives $e_j$
+positive auxiliary coefficient.  The sign-reversed Lmax argument applies
+whenever $z_j>z_i$.  Hence every strict order-compatible residual pair is
+available; in particular every rectangle in (CS) is available through Lmin.
+Equality within a stratum gives only a zero-length interval.
+
+The joint LP dual reaches the same conclusion.  Dotting its staged price
+vector with a normalized relation forces the root price, and then every
+available carrier's supply price, to vanish.  What remains is precisely the
+threshold-cover dual.  On the complete family its optimum is the physical
+layer-width cover, while (CS) is the matching primal.  Consequently neither
+circuit coefficient magnitudes, support patterns, nor threshold-tree prices
+can furnish the missing exact-cone facet mechanism.
+
+In the two hostile controls where the spectral and top-selection terms do
+not reach the target, this complete-carrier system has short exact witnesses.
+Respectively,
 
 \[
  \mathbf 1_{\{0,2,4\}}+\mathbf 1_{\{0,1,2,3,6\}}
@@ -2296,26 +2329,42 @@ exact witnesses.  Respectively,
  +2e_5+e_1+e_3=2\cdot\mathbf 1_N
 \]
 
-supplies $(1/2,8]$ at weight $1/5$, paying the deficit $3/2$, and
+supplies $(1/2,8]$.  The old opposite-sign packing and corrected full
+rectangle packing both have optimum $15$, versus deficit $3/2$.
+Similarly,
 
 \[
  \mathbf 1_{\{1,3,4,5,6\}}+e_2+e_0=\mathbf 1_N
 \]
 
-supplies $(1/2,19/2]$ at weight $1/9$, paying the deficit $1$.
-These checks show that the staged-supply formulation survives the known
-controls; they do not prove its universal feasibility.
+supplies $(1/2,19/2]$.  Its old opposite-sign packing optimum is $9$, versus
+deficit $1$, while the corrected full rectangle optimum is the full label
+currency $33/2$.  Primal packing, threshold-cover dual, and exact
+staged-availability witnesses agree.  These
+historical opposite-sign checks are retained as regressions.  The complete
+clipped family saturates label currency universally by (CS), but that fact
+does not prove the hybrid-overlap inequality.
 
-The rooted-tree description also gives an exact fixed-dimension decision
-procedure.  Refine the exact-game cone into rational polyhedral cells fixing
-the active staged bases, payoff orders, ceiling block, spectral branch, and
-carrier endpoints.  On each cell the selections and interval lengths are
-rational linear in the game, whereas the interval and staged-incidence
-matrices are fixed.  Enumerating rooted cover trees (or bases of the supplied
-joint system) reduces the existence of a violating game to finitely many
-exact rational linear programs.  This procedure may be exponential or worse
-and its cellwise inequalities are only candidate full-cone facets: they must
-still glue across cells and lift to indecomposable semi-balanced systems.
+The neutral-endpoint correction has an exact seven-player stress test.  Its
+only residual gainer and loser satisfy $x_1=x_2$ and $z_1>z_2$, so the old
+opposite-sign family contains no strict interval.  Yet its label currency is
+$15167/38092$, exactly recovered by canonical rectangles of lengths
+$8081/38092$ and $7086/38092$ using neutral low endpoints.  Fourteen explicit
+staged identities and a separately formulated exact staged replay certify
+the selections.  The example does not threaten the main bound: its overlap
+exceeds $7/12$ by $43349/114276$.
+
+There is nevertheless an exact fixed-dimension decision procedure.  Refine
+the exact-game cone into rational polyhedral cells fixing the active staged
+bases, payoff orders, ceiling block, spectral branch, and endpoint comparisons.
+On each cell both selections and every term in the hybrid-overlap inequality
+are rational linear in the game.  Thus the existence of a violating game
+reduces to finitely many exact rational linear programs.  Rooted cover trees
+remain useful only for deliberately restricted rectangle subfamilies; the
+complete family is already exhausted by (CS).  This procedure may be
+exponential or worse, and a cellwise boundary row is only a candidate
+full-cone facet: it must still glue across cells and lift to an indecomposable
+semi-balanced system.
 
 \paragraph{Not claimed.}
 Exactness theory, lower-envelope exactification, and the characterizations of
@@ -2376,9 +2425,10 @@ programs are bug audits, not proof dependencies.  Exact rational programs in the
 on branch \path{codex/hybrid-overlap-facets} archive the refuted
 effective-bipartition bridge, its exact seven-player counterexample, the
 dispersion primal/dual witnesses, and the threshold-label currency audit;
-the latter also replays the exact interval-packing/cover duals and rooted
-potential trees.  A separate exact feasibility replay archives the two
-displayed staged-supply witnesses;
+the latter also replays canonical saturation, exact interval-packing/cover
+duals, and rooted potential trees.  Separate exact replays archive staged
+availability for the clipped rectangles and the neutral-endpoint
+seven-player stress test;
 none is a proof dependency for the open all-dimension target.  Other programs
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full

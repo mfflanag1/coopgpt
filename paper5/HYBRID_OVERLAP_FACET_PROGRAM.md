@@ -2534,47 +2534,75 @@ C_label=integral_0^infinity min(|A_t|,|D_t|) dt.      (LC5)
 Thus label currency is literally the total threshold capacity for matching a
 simultaneously high player to a simultaneously low player.
 
-### Theorem (carrier intervals are label-currency rectangles)
+### Theorem (all high--low rectangles are staged-available)
 
-Put `d=x-z`.  Let `i` gain (`d_i<0`) and `j` lose (`d_j>0`).
+For every residual player put
 
-1. If `x_j<=x_i`, then throughout the interval
+```text
+a_i=min(x_i,z_i),              b_i=max(x_i,z_i).
+```
 
-   ```text
-   I^x_(i,j)=(x_j,x_i]
-   ```
+Player `i` lies in `A_t` exactly when `t<=a_i`, and player `j` lies in `D_t`
+exactly when `b_j<t`.  Hence whenever `b_j<a_i`,
 
-   player `i` is high in both selections and player `j` is low in both.
+```text
+I_(i,j)=(b_j,a_i]                                      (HR)
+```
 
-2. If `z_j>=z_i`, the same is true with the roles reversed throughout
-
-   ```text
-   I^z_(i,j)=(z_i,z_j].
-   ```
-
-Consequently, when both endpoints lie in the residual set `R`, each interval
-is a unit rectangle under the capacity integrand `(LC5)`.  The two carrier
-packets supplied by the sign-coherent staged theorem consist entirely of
-intervals of these two respective forms.
+is a unit high--low rectangle under the capacity integrand `(LC5)`.
+Moreover `x_j<=b_j<a_i<=x_i`, so `x_j<x_i`.  The complete strict Lmin
+support theorem below therefore supplies the ordered pair `(i,j)`.  Thus
+neutral players (`x_j=z_j`) are legitimate rectangle endpoints; restricting
+to opposite signs of `x-z` discards valid staged-available rectangles.
 
 #### Proof
 
-In the first case the payoff chain is
+The threshold assertions follow directly from the definitions of `a_i` and
+`b_j`.  The displayed chain proves strict Lmin order compatibility.  Applying
+the complete-support theorem gives a normalized staged relation for `i` with
+positive auxiliary coefficient on `j`; clipping the geometric carrier to
+`(HR)` preserves the unit-rectangle property.  QED.
+
+### Theorem (canonical rectangles saturate label currency)
+
+Order the residual `a`-values downward and the residual `b`-values upward,
+with arbitrary deterministic tie breaking:
 
 ```text
-z_j<x_j<=x_i<z_i.
+a_[1]>=...>=a_[m],              b_[1]<=...<=b_[m].
 ```
 
-For `t in (x_j,x_i]`, player `i` lies in both upper sets while player `j`
-lies in neither.  In the second case,
+For each rank `k` with `b_[k]<a_[k]`, give the rectangle
+`(b_[k],a_[k]]` weight one.  Then at every threshold `t` their occupancy is
 
 ```text
-x_i<z_i<=z_j<x_j,
+#{k:b_[k]<t<=a_[k]}=min(|A_t|,|D_t|).                (CS1)
 ```
 
-so on `(z_i,z_j]` player `j` lies in both upper sets and player `i` in
-neither.  The carrier-order assertions are exactly `(AT-min)` and `(AT-max)`.
-QED.
+Consequently
+
+```text
+sum_(k=1)^m (a_[k]-b_[k])_+ = C_label,               (CS2)
+```
+
+and the complete staged-available rectangle packing has optimum exactly
+`C_label`.
+
+#### Proof
+
+Because both sorted conditions select initial rank segments,
+`{k:a_[k]>=t}` has size `|A_t|`, `{k:b_[k]<t}` has size `|D_t|`, and their
+intersection has the smaller of those two sizes.  This is `(CS1)`.
+Integrating it proves `(CS2)`.  The rectangles are staged-available by the
+preceding theorem and feasible because their occupancy equals the capacity
+on every layer.  Conversely `(LC7)` bounds every feasible packing by
+`C_label`.  QED.
+
+This theorem is important but negative for the proof program: complete
+carrier packing does not lower-bound label currency by a new quantity; it
+reconstructs label currency identically for every pair `x,z`.  Therefore
+`B_H+nu=B_H+C_label=O`, and asking the complete packing to pay the overlap
+deficit is exactly `(H)` again.
 
 ### Corollary (fractional interval packing)
 
@@ -2641,10 +2669,12 @@ Moreover:
    Hence `nu(E,c)<=C_label`, as required by `(LC7)`.  Equality holds exactly
    when some feasible packing saturates every positive-width layer with
    `c_l>0`.
-4. If interval supplies `0<=rho_e<=b_e` inherited from a chosen staged packet
-   are included, the augmented constraint matrix remains totally unimodular.
-   Integral `b,c` still give integral vertices; arbitrary rational supplies
-   still give an exact polynomial-time primal--dual certificate.
+4. If exogenous interval bounds `0<=rho_e<=b_e` are included, the augmented
+   constraint matrix remains totally unimodular.  Integral `b,c` still give
+   integral vertices; arbitrary rational bounds still give an exact
+   polynomial-time primal--dual certificate.  The staged coefficients below
+   do not produce such finite bounds: their normalized supply collapses to
+   support.
 
 #### Proof
 
@@ -2719,16 +2749,14 @@ indecomposable semi-balanced coalition system.
 
 ### Exact fixed-stratum algorithm and facet boundary
 
-For fixed payoff strata and fixed staged carrier supports, `(IPD)` is an
-exact algorithm, not an existence slogan:
+For fixed payoff strata and any deliberately restricted rectangle family,
+`(IPD)` is an exact diagnostic algorithm:
 
 1. construct the merged threshold layers and their integer capacities;
-2. obtain carrier intervals and any supplies from the exact staged incidence
-   rays;
+2. construct the chosen clipped high--low rectangles;
 3. solve the rational packing and cover pair and retain both checkable
    certificates;
-4. if the optimum pays the residual target, combine the packing with the
-   rooted staged identities and the sparse over-cover;
+4. compare the restricted optimum with the canonical full-currency packing;
 5. lift the resulting incidence inequality and apply the published
    indecomposable semi-balanced-system test before calling it a facet of the
    exact-game cone.
@@ -2738,9 +2766,9 @@ threshold-packing problem.  Its threshold rows are not coalition-incidence
 rows, and a support-minimal interval cover need not lift to an indecomposable
 semi-balanced system.  Thus this is a fixed-stratum algorithmic theorem and a
 facet-generation interface, not yet a facet characterization of the full
-exact-game cone.  Enumerating all projected staged circuits and all basic
-packings is finite and exact but can be exponential; no polynomial full
-facet-enumeration claim is made.
+exact-game cone.  For the complete staged-available family, the canonical
+rank pairing gives the optimum in sorting time and the interval LP adds no
+inequality.  No polynomial full facet-enumeration claim follows.
 
 ### Theorem (cellwise pullback and an exact fixed-`n` decision algorithm)
 
@@ -2750,12 +2778,12 @@ polyhedral cells on which all of the following data are fixed:
 - active staged bases and tight-coalition hypergraphs for Lmin and Lmax;
 - payoff orders and equality strata;
 - the actual Lmax ceiling block and the minimizing spectral branch;
-- the signs of `x_i-z_i` and the strict carrier endpoints.
+- the strict comparisons among the `a_i` and `b_j` endpoints.
 
 On each such cell, `x`, `z`, every threshold endpoint `beta_l`, `B_H`, and
 `delta` are rational linear functions of the game coordinates, while the
-capacity vector, interval incidence matrix, and staged incidence cones are
-constant.  For every rooted spanning tree in the threshold-potential graph,
+capacity vector and rectangle incidence matrix are constant.  For every
+rooted spanning tree in a restricted threshold-potential graph,
 solving its tight equalities makes `p` a rational linear function of those
 coordinates.  The conditions that this tree solution is cover-feasible and
 that
@@ -2766,14 +2794,14 @@ sum_l c_l p_l>=delta
 
 are therefore finitely many rational linear inequalities on the cell.
 Enumerating the rooted trees and checking these inequalities by exact LP
-decides the unsupplied interval-packing statement on that cell.  If staged
-coefficient supplies `(SS1)` are retained, enumerate bases of the combined
-staged-incidence/interval LP instead; the same parametric-LP argument gives a
-finite exact decision procedure.
+decides the restricted interval-packing statement on that cell.  For the
+complete family, canonical saturation reduces the displayed inequality to
+`B_H+C_label>=nT/floor(n^2/4)`, the original hybrid-overlap target rather
+than a new certificate.
 
-Consequently, for every fixed `n`, universal validity of `(SSP)` is decidable
-by a finite rational polyhedral computation, and every cellwise obstruction
-has an exact rooted-tree/basis certificate.  This is not advertised as an
+Consequently, for every fixed `n`, universal validity of `(H)` is decidable
+in principle by a finite rational polyhedral computation over selection
+cells.  This is not advertised as an
 efficient algorithm: the number of selection cells, staged circuits, and
 trees can be exponential or worse.  Nor does a cellwise boundary inequality
 automatically define a facet of the full exact-game cone.  A candidate full
@@ -2791,18 +2819,17 @@ constant.  The rooted-tree equalities are a nonsingular reduced incidence
 system, so their solution is rational linear in the threshold endpoints.
 All remaining feasibility and target tests are consequently linear.  There
 are finitely many bases and trees at fixed `n`, and exact rational LP decides
-each resulting implication on the cell.  The supplied version is the same
-standard parametric-basis argument applied to the combined linear system.
-QED.
+each resulting implication on the cell.  QED.
 
-This theorem answers the algorithmic half of the one-packet question: the
-theory gives an exact fixed-`n` decision and certificate-enumeration method.
-It does **not** yet answer the facet half with a one-to-one correspondence.
-The missing mathematical content is precisely the gluing and
-indecomposability theorem for the rooted threshold-tree lifts.
+This gives a finite exact fixed-`n` decision method, but the interval theory
+does **not** answer the facet half.  Canonical saturation shows that its full
+threshold-tree lift is only a decomposition of overlap.  Any distinguished
+exact-cone inequality must instead use coalition information coupling the
+sparse Lmax over-cover to the Lmin packet, then pass the usual gluing and
+indecomposability tests.
 
-For a desired residual amount `delta`, the exact remaining condition is now
-equivalent to either side of
+For a restricted rectangle family `E`, the recoverable amount is equivalent
+to either side of
 
 ```text
 nu(E,c)>=delta
@@ -2810,9 +2837,9 @@ nu(E,c)>=delta
 <=> every fractional threshold cover p has sum_l c_l p_l>=delta.  (IPC)
 ```
 
-This is the sharp Hall-type gate for a specified carrier family.  A cover
-with smaller cost is a checkable obstruction to that packet family, even
-when the main overlap inequality itself remains true.
+This is the sharp Hall-type gate for that restricted family.  For the full
+family, canonical saturation gives `nu(E,c)=C_label`, so `(IPC)` supplies no
+new gate for `(H)`.
 
 This theorem puts the missing labelled information in the same coordinates
 as the staged packets.  The sets `X_t` and `Z_t` are complements/unions of
@@ -2830,55 +2857,146 @@ identity-equivalent target.  Its value is structural.  It says precisely
 what a common-hinge/rooted-circuit proof must purchase and removes the false
 reciprocal-mass price.
 
-The minimal live lemma is now an **interval-packing lemma**: after crediting
-the sharpened spectral floor and `C_top`, select fractional intervals from
-the two sign-coherent staged carrier packets with total length at least the
-remaining target deficit and satisfying the threshold capacities `(LC6)`.
-Carrier intervals touching the removed ceiling block must instead be charged
-to `C_top` or to the explicit top contribution.  Large primitive staged
-coefficients are permitted; what must be controlled is their simultaneous
-threshold occupancy.  The previous coefficient-congestion counterexamples
-do not refute this formulation because `(LC6)` measures geometric occupancy,
-not the raw sum of circuit multipliers.
+The **complete-family** interval-packing lemma previously proposed here is
+therefore closed as a tautological reformulation.  A deliberately restricted,
+transport-oriented rectangle family could still yield a nontrivial sufficient
+condition, but staged availability alone neither selects such a family nor
+forces it to pay the deficit.  The minimal live lemma must use information
+that the scalars `a_i,b_i` forget: a common tight-coalition/hinge constraint
+linking the sparse Lmax over-cover weights to the complete staged Lmin
+relations.  It must lower-bound `B_H+C_label` without merely naming its
+canonical rectangle decomposition.
 
-### Precise staged-supply conjecture
+### Theorem (normalized coefficient supply collapses to support)
 
 The word "from" in that lemma can be made exact.  Normalize each selected
 sign-coherent staged relation by giving its forced player column coefficient
-one, as in `(SP)`.  If the auxiliary coefficient on a losing carrier `j` is
-`a_(i,j)`, permit the corresponding strict residual carrier interval to have
-supply
+one.  Write either orientation uniformly as
 
 ```text
-0<=rho_(i,j)<=a_(i,j).                                (SS1)
+sum_S lambda_S 1_S
+ +sigma(e_i+sum_(j in P)a_j e_j)=c 1_N,              (SCR)
 ```
 
-Choose the Lmin and Lmax relations, their auxiliary coefficients, and the
-interval weights simultaneously.  All incidence identities, sign
-restrictions, `(SS1)`, and the layer capacities `(LC6)` are linear rational
-constraints.  Put
+where `sigma=1` for Lmin, `sigma=-1` for Lmax, and `lambda,a>=0`.  Call a
+strict residual carrier `(i,j)` **available** if some normalized relation
+`(SCR)` has `a_j>0`.  If interval weights are conservatively required to obey
+
+```text
+0<=rho_(i,j)<=a_(i,j),                                (SS1)
+```
+
+then, for any finite `rho>=0`, simultaneously chosen normalized relations
+satisfying `(SS1)` exist if and only if every positive coordinate of `rho` is
+an available carrier.  Thus the projection of the joint
+staged-certificate/supply system onto the interval weights is exactly the
+nonnegative orthant on the available-edge set.
+
+#### Proof
+
+Necessity is immediate.  For sufficiency, fix one target `i`, choose a
+normalized relation witnessing each desired available carrier, and take a
+strict convex combination of those finitely many relations.  The result is
+still normalized and has positive coefficient on every desired carrier.  If
+its coefficients are `(lambda,a,c)`, then for every `K>=1`
+
+```text
+lambda'_S=K lambda_S,
+a'_j=K a_j                         (j != i),
+a'_i=K a_i+(K-1),
+c'=Kc
+```
+
+is again normalized: its left side is exactly `K` times the left side of
+`(SCR)`.  Choose `K` large enough to dominate all desired weights and repeat
+independently for every target.  QED.
+
+The duplicate auxiliary copy of the forced player column absorbs the extra
+`(K-1)e_i`.  This is a normalization trap with a useful conclusion: raw or
+normalized circuit magnitudes cannot provide a universal congestion bound.
+Only the zero/nonzero carrier-support pattern is invariant.
+
+### Theorem (complete strict carrier support)
+
+The available support itself is complete.  For every Lmin target `i` and
+every player `j` with `x_j<x_i`, there is a normalized sign-coherent relation
+for `i` whose auxiliary coefficient on `j` is positive.  For every Lmax
+target `i` and every `j` with `z_j>z_i`, the mirror statement holds.
+
+#### Proof
+
+Suppose `x_j<x_i`.  Player `j` belongs to a strictly earlier Lmin block.
+Take any normalized sign-coherent relation `R_i` that pins `i` and any such
+relation `R_j` from the earlier stage.  Every coalition in both relations is
+tight at the same point `x`, and all unit columns of `R_j` belong to the
+cumulative lower set for `i`.  Hence
+
+```text
+R_i+tau R_j,       tau>0,
+```
+
+is a valid sign-coherent relation for `i`: its forced `e_i` coefficient
+remains one, while the auxiliary coefficient of `e_j` is at least `tau`.
+The Lmax relations have the common negative unit-column orientation, so the
+same addition proves the mirror claim when `z_j>z_i`.  QED.
+
+Consequently every clipped high--low rectangle is available through Lmin:
+
+```text
+E_full={(i,j): b_j<a_i},       I_(i,j)=(b_j,a_i].     (EFULL)
+```
+
+Indeed `x_j<=b_j<a_i<=x_i`.  Equality creates a zero-length rectangle and is
+immaterial.  The opposite-sign carrier family used earlier is only a proper
+subfamily in general: neutral players may be essential endpoints.
+
+### Corollary (complete support packing is tautological)
+
+Put
 
 ```text
 delta=max(0, nT/floor(n^2/4)-B_H),
 ```
 
-where `B_H=B_*+C_top` uses the actual Lmax ceiling block.  The exact remaining
-packet statement is
+where `B_H=B_*+C_top` uses the actual Lmax ceiling block.  The proposed
+remaining packet statement becomes
 
 ```text
-there are normalized staged relations and rho satisfying
-sum_e rho_e |I_e|>=delta.                              (SSP)
+nu(E_full,c)>=delta.                                  (SSP)
 ```
 
-`(SSP)` implies the hybrid-overlap target immediately by `(LC7)`.  It is
-strictly stronger than the target and is not yet proved.  Its value is that
-it is no longer ambiguous about carrier availability, normalization, or
-coefficient supply.  Projecting the joint rational feasibility system onto
-the payoff-stratum coordinates gives the proposed exact-cone interface; a
-Farkas obstruction combines a rooted staged-incidence functional with a
-threshold-cover potential.  Showing that no such obstruction exists (or
-classifying its support-minimal forms as indecomposable semi-balanced lifts)
-is now the structural task.
+Canonical saturation gives `nu(E_full,c)=C_label`.  Therefore `(SSP)` is
+equivalent to `B_H+C_label>=nT/floor(n^2/4)`, namely `(H)` itself.  It is not
+a stronger intermediate lemma and cannot serve as its proof.
+
+The full joint LP dual confirms the collapse.  Give capacity rows prices
+`p_l>=0`, coefficient-supply rows prices `s_e>=0`, and the incidence equality
+for target `q=(sigma,i)` a free vector `y^q`.  Its constraints are
+
+```text
+p(I_e)+s_e>=|I_e|,
+y^q(N)=0,                    y^q(S)>=0  (S tight),
+sigma y^q_j>=sum_(e=(q,j))s_e             (j in P),   (SSD)
+```
+
+and its objective is
+
+```text
+sum_l c_l p_l-sum_q sigma y^q_i.
+```
+
+Dot a normalized relation `(SCR)` with `y^q`.  All terms are nonnegative and
+their sum is zero, so `sigma y^q_i=0`.  If `(q,j)` is available, use a
+relation with `a_j>0`; then `sigma y^q_j=0` and hence `s_e=0`.  The dual
+therefore reduces exactly to the ordinary threshold cover on `E_full`; its
+canonical optimum is the width vector `p_l=Delta_l`.
+
+The rooted incidence system and threshold tree interact **serially**, not by
+a new continuous coefficient price: the complete staged theorem supplies all
+high--low pairs and the canonical rank pairing exhausts every threshold
+capacity.  There is no residual coefficient, support, or threshold-tree
+pattern to classify as the missing facet.  This rules out that candidate
+mechanism, not `(H)`.
 
 The two hostile controls for which `delta>0` have exceptionally small exact
 witnesses.  In the actual-top-fixed control, the Lmin relation
@@ -2887,26 +3005,52 @@ witnesses.  In the actual-top-fixed control, the Lmin relation
 1_{0,2,4}+1_{0,1,2,3,6}+1_{4,6}+2e_5+e_1+e_3=2 1_N
 ```
 
-pins gainer `3` and supplies the interval `(x_5,x_3]=(1/2,8]`.  Giving it
-weight `1/5` packs `(15/2)(1/5)=3/2`, exactly the deficit.  In the
+pins gainer `3` and supplies the interval `(x_5,x_3]=(1/2,8]`.  The old
+opposite-sign packing already has exact optimum `15`, versus deficit `3/2`;
+the corrected full rectangle optimum is also `15`.  In the
 top-and-bottom-fixed control,
 
 ```text
 1_{1,3,4,5,6}+e_2+e_0=1_N
 ```
 
-supplies `(x_2,x_0]=(1/2,19/2]`; weight `1/9` packs `1`, again exactly the
-deficit.  Every coalition displayed is tight at the relevant Lmin point and
-the layer capacities are checked exactly.  The full simultaneous certificate
-replay is
+supplies `(x_2,x_0]=(1/2,19/2]`; the old opposite-sign packing has optimum
+`9`, versus deficit `1`, while the corrected full rectangle optimum is its
+entire label currency `33/2`.  Every coalition displayed is tight at the
+relevant Lmin point.  Exact packing/cover duals and staged-availability
+witnesses are replayed by
 
 ```bash
 python3 verifiers/divergence/verify_staged_interval_deficit_controls.py \
   --output verifiers/divergence/staged_interval_deficit_controls.json
 ```
 
-This proves only that the sharpened formulation survives the named hostile
-controls.  It is not finite evidence for universal `(SSP)`.
+These historical opposite-sign controls are retained as regression tests.
+They do not prove `(H)`; the full canonical family saturates label currency
+for every pair by the theorem above.
+
+An exact seven-player neutral-stratum control shows why the correction is
+necessary.  It has residual gainer `1`, loser `2`, and `x_1=x_2`, while
+`z_1>z_2`; hence both old opposite-sign carrier intervals have length zero.
+Nevertheless
+
+```text
+C_label=15167/38092,
+```
+
+and the canonical rectangles pair `(high 1,low 4)` and `(high 2,low 6)`,
+with lengths `8081/38092` and `7086/38092`.  Their unit occupancy saturates
+every nonzero threshold layer.  The displayed selections are certified by
+fourteen solver-free staged identities and independently replayed by the
+generic exact staged verifier.  Reproduce with
+
+```bash
+python3 verifiers/divergence/verify_n7_neutral_rectangle_control.py \
+  --output verifiers/divergence/n7_neutral_rectangle_control.json
+```
+
+The control refutes only the opposite-sign restriction.  Its overlap exceeds
+the main seven-player target by `43349/114276`.
 
 The three hostile spectral failures separate the two currencies:
 

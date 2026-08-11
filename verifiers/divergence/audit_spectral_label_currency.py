@@ -12,12 +12,13 @@ the threshold integral of the excess intersection of the residual upper
 contour sets over their Frechet lower bound.  This identity is a human
 layer-cake/rearrangement theorem; the named cases are exact controls only.
 
-The script also solves, in exact rational arithmetic, the primal interval
-packing and dual threshold-cover relaxation containing every strict residual
-order-compatible carrier pair.  It checks the shifted rooted-potential
-identity and a tight spanning-tree certificate for the returned dual vertex.
-This relaxation omits staged availability and supplies and is therefore only
-a necessary screen for the universal packet route.
+The script also checks the canonical saturation theorem.  For residual player
+``i`` put ``a_i=min(x_i,z_i)`` and ``b_i=max(x_i,z_i)``.  Sorting the ``a``
+values down and the ``b`` values up and pairing equal ranks gives the clipped
+rectangles ``(b_[k],a_[k]]``.  Their unit occupancy is exactly
+``min(|A_t|,|D_t|)`` at every threshold, so they recover all label currency.
+The exact packing/cover LP is retained as an independent finite audit of the
+named controls, together with its rooted-potential certificate.
 """
 
 from __future__ import annotations
@@ -105,13 +106,8 @@ def threshold_currency(x, z, residual):
     return total, sign_compatible_total, layers
 
 
-def order_compatible_interval_relaxation(x, z, residual):
-    """Solve the exact relaxation containing every order-compatible carrier.
-
-    This is deliberately a relaxation of the staged-packet problem: exactness
-    need not make every listed pair available in a pinning circuit, and no
-    packet-supply upper bounds are imposed here.
-    """
+def complete_carrier_interval_packing(x, z, residual):
+    """Audit all high--low rectangles and the canonical rank pairing."""
     levels = sorted({F(0)} | {x[i] for i in residual} | {z[i] for i in residual})
     layers = tuple((low, high) for low, high in zip(levels, levels[1:]) if low < high)
     capacities = []
@@ -122,15 +118,26 @@ def order_compatible_interval_relaxation(x, z, residual):
         double_low = set(residual) - (upper_x | upper_z)
         capacities.append(F(min(len(double_high), len(double_low))))
 
-    gainers = tuple(i for i in residual if z[i] > x[i])
-    losers = tuple(j for j in residual if x[j] > z[j])
     intervals = []
-    for i in gainers:
-        for j in losers:
-            if x[j] < x[i]:
-                intervals.append(("x", i, j, x[j], x[i]))
-            if z[i] < z[j]:
-                intervals.append(("z", i, j, z[i], z[j]))
+    for high_player in residual:
+        ceiling = min(x[high_player], z[high_player])
+        for low_player in residual:
+            floor = max(x[low_player], z[low_player])
+            if floor < ceiling:
+                intervals.append(
+                    ("clipped", high_player, low_player, floor, ceiling)
+                )
+
+    high_order = sorted(residual, key=lambda i: (min(x[i], z[i]), -i), reverse=True)
+    low_order = sorted(residual, key=lambda i: (max(x[i], z[i]), i))
+    canonical = []
+    for high_player, low_player in zip(high_order, low_order):
+        floor = max(x[low_player], z[low_player])
+        ceiling = min(x[high_player], z[high_player])
+        if floor < ceiling:
+            canonical.append(
+                ("canonical", high_player, low_player, floor, ceiling)
+            )
 
     if not intervals:
         prices = [F(0)] * len(layers)
@@ -191,8 +198,8 @@ def order_compatible_interval_relaxation(x, z, residual):
             support.append(
                 {
                     "kind": interval[0],
-                    "gainer": interval[1],
-                    "loser": interval[2],
+                    "high_player": interval[1],
+                    "low_player": interval[2],
                     "start": str(interval[3]),
                     "end": str(interval[4]),
                     "weight": str(weight),
@@ -218,6 +225,18 @@ def order_compatible_interval_relaxation(x, z, residual):
         capacity * (high - low)
         for capacity, (low, high) in zip(capacities, layers)
     )
+    canonical_value = sum((end - start for _, _, _, start, end in canonical), F(0))
+    canonical_occupancy = []
+    for low, high in layers:
+        occupancy = sum(
+            F(int(start <= low and high <= end))
+            for _, _, _, start, end in canonical
+        )
+        canonical_occupancy.append(occupancy)
+    if canonical_occupancy != capacities:
+        raise AssertionError("canonical rank pairing does not saturate every layer")
+    if canonical_value != full_currency or optimum != full_currency:
+        raise AssertionError("complete clipped rectangles do not recover label currency")
     potential_correction = sum(
         capacities[k] * (potential[k + 1] - potential[k])
         for k in range(len(layers))
@@ -254,8 +273,8 @@ def order_compatible_interval_relaxation(x, z, residual):
                     "kind": f"carrier_{kind}",
                     "left": s,
                     "right": t,
-                    "gainer": i,
-                    "loser": j,
+                    "high_player": i,
+                    "low_player": j,
                 }
             )
     tight_graph_connected = len({find(node) for node in range(len(levels))}) == 1
@@ -271,6 +290,18 @@ def order_compatible_interval_relaxation(x, z, residual):
         "dual_prices": prices,
         "shifted_potential": potential,
         "full_currency": full_currency,
+        "canonical_value": canonical_value,
+        "canonical_rectangles": [
+            {
+                "high_player": high_player,
+                "low_player": low_player,
+                "start": str(start),
+                "end": str(end),
+                "weight": "1",
+            }
+            for _, high_player, low_player, start, end in canonical
+        ],
+        "canonical_layer_occupancy": canonical_occupancy,
         "potential_correction": potential_correction,
         "dual_tight_graph_connected": tight_graph_connected,
         "dual_tight_edges": tight_edges,
@@ -312,7 +343,7 @@ def spectral_decomposition(name, values, x, z):
     threshold, sign_compatible_currency, layers = threshold_currency(
         x, z, tuple(i for i in range(n) if i not in actual_top)
     )
-    packing_audit = order_compatible_interval_relaxation(
+    packing_audit = complete_carrier_interval_packing(
         x, z, tuple(i for i in range(n) if i not in actual_top)
     )
     packing = packing_audit["optimum"]
@@ -321,8 +352,8 @@ def spectral_decomposition(name, values, x, z):
         raise AssertionError("currency decomposition failed")
     if overlap != spectral + top_currency + label_currency:
         raise AssertionError("currency sum does not recover overlap")
-    if packing != packing_dual or packing > label_currency:
-        raise AssertionError("carrier-complete packing audit failed")
+    if packing != packing_dual or packing != label_currency:
+        raise AssertionError("canonical saturation audit failed")
 
     target = F(n, (n * n) // 4) * total
     return {
@@ -346,26 +377,33 @@ def spectral_decomposition(name, values, x, z):
         "sign_compatible_currency_covers_post_top_deficit": (
             sign_compatible_currency >= max(F(0), target - actual_top_bound)
         ),
-        "order_compatible_relaxation_ratio": str(packing / total),
-        "order_compatible_relaxation_layer_count": packing_audit["layer_count"],
-        "order_compatible_relaxation_interval_count": packing_audit["interval_count"],
-        "order_compatible_relaxation_covers_post_top_deficit": (
+        "complete_carrier_packing_ratio": str(packing / total),
+        "canonical_rectangle_value_ratio": str(
+            packing_audit["canonical_value"] / total
+        ),
+        "canonical_rectangles": packing_audit["canonical_rectangles"],
+        "canonical_layer_occupancy": [
+            str(value) for value in packing_audit["canonical_layer_occupancy"]
+        ],
+        "complete_carrier_packing_layer_count": packing_audit["layer_count"],
+        "complete_carrier_packing_interval_count": packing_audit["interval_count"],
+        "complete_carrier_packing_covers_post_top_deficit": (
             packing >= max(F(0), target - actual_top_bound)
         ),
-        "order_compatible_relaxation_support": packing_audit["support"],
-        "order_compatible_relaxation_dual_prices": [
+        "complete_carrier_packing_support": packing_audit["support"],
+        "complete_carrier_packing_dual_prices": [
             str(value) for value in packing_audit["dual_prices"]
         ],
-        "order_compatible_relaxation_shifted_potential": [
+        "complete_carrier_packing_shifted_potential": [
             str(value) for value in packing_audit["shifted_potential"]
         ],
-        "order_compatible_relaxation_potential_correction_ratio": str(
+        "complete_carrier_packing_potential_correction_ratio": str(
             packing_audit["potential_correction"] / total
         ),
-        "order_compatible_relaxation_dual_tight_graph_connected": (
+        "complete_carrier_packing_dual_tight_graph_connected": (
             packing_audit["dual_tight_graph_connected"]
         ),
-        "order_compatible_relaxation_dual_tight_edges": packing_audit[
+        "complete_carrier_packing_dual_tight_edges": packing_audit[
             "dual_tight_edges"
         ],
         "currency_identity_verified": True,
@@ -401,9 +439,10 @@ def main():
         "scope": (
             "the layer-cake currency identity is a human theorem; these eight named "
             "pairs are exact structural controls, not proof of the all-n disjunction; "
-            "the order-compatible interval relaxation includes every residual "
-            "opposite-sign pair and omits staged-circuit availability and supplies, "
-            "so passing it is only a necessary feasibility screen for the packet route"
+            "the canonical rank-pairing theorem proves for every pair that all "
+            "label currency is recovered by clipped high--low rectangles; these "
+            "named cases are exact controls of that human identity, not evidence "
+            "for the unresolved hybrid-overlap inequality"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"
