@@ -587,6 +587,27 @@ n-|O|                                                     (PS)
 
 projected columns, including the forced player column.
 
+The bound is sharp.  If the current block is all `n-|O|` remaining players,
+their projected unit columns satisfy
+
+```text
+sum_(k notin O)pi(e_k)=0,                               (PX)
+```
+
+and every proper subcollection is independent in the quotient.  Thus `(PX)`
+is a circuit using exactly `n-|O|` columns.  The sign-reversed collection is
+the Lmax sharp example.
+
+The exact rank audit of this sharpness construction is reproduced by
+
+```bash
+python3 verifiers/divergence/verify_projected_staged_support_bound.py \
+  --output verifiers/divergence/projected_staged_support_bound.json
+```
+
+It is only a finite audit of the displayed circuit; the rank argument below
+is the proof for arbitrary `n` and `O`.
+
 ### Proof
 
 The staged Farkas identity `(SP-min)` is exactly a lift of `(PC-min)`: the
@@ -609,6 +630,19 @@ The quotient dimension is at most `n-|O|-1`.  A circuit in a configuration
 of that rank uses at most one more column, proving `(PS)`.  QED.
 
 ### Exact enumeration algorithm and facet boundary
+
+For a projected matrix `A`, the staged relation cone is
+
+```text
+K(A)={w>=0:A w=0}.
+```
+
+Its extreme rays are exactly the support-minimal nonnegative kernel vectors,
+equivalently the conformal positive circuits of the projected configuration.
+Indeed, a nonminimal support splits conformally into two nonproportional
+kernel vectors, while a support-minimal kernel is one-dimensional and cannot
+be so decomposed.  Thus circuit enumeration is not merely a support search:
+it enumerates every irreducible staged-selection ray.
 
 For a fixed staged face:
 
