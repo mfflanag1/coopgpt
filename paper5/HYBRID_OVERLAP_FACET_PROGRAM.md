@@ -12,10 +12,11 @@ O(x,z):=sum_i min(x_i,z_i)
 ```
 
 for `x=Lmin(v)`, `z=Lmax(v)`, and every singleton-normalized exact
-`n`-player game with `n>=6`.  This note records one new structural theorem
-for the sharp family, one falsified strengthening, and the exact boundary of
-what the one-packet theory currently gives on the facet side.  It does not
-claim a proof of `(H)`.
+`n`-player game with `n>=6`.  This note records a structural theorem for the
+sharp family, a dimension-free sign-coherent staged-incidence theorem,
+falsified strengthenings, and the exact boundary of what the one-packet
+theory currently gives on the facet side.  It does not claim a proof of
+`(H)`.
 
 The conclusion is that the correct missing object is a **fractional coupling
 of rooted Lmin circuits with an Lmax over-cover**.  A literal partition of
@@ -865,30 +866,157 @@ z_i-ell_t
 ```
 
 For the first stage `O_t` is empty and `(ST)` reduces to the transport proof
-above.  For later stages, the sole new obstruction is the signed old-pin
-flow.  Summing over the players with `z_i>ell_t` again lets one delete the
-nonpositive current-block terms; the old terms cannot be discarded because
-the `q_j` are free.
+above.  Although a raw later-stage dual has free old-pin weights, their signs
+are not an intrinsic obstruction.
 
-This isolates the multistage theorem target:
+### Theorem (sign-coherent staged lifts)
 
-> **Coherent staged-flow conjecture.**  The individual pinning certificates
-> can be chosen and nonnegatively combined so that every old-pin term in the
-> sum of `(ST)` is either cancelled or charged to a previously exposed
-> deficit with no increase in the sharp total carrier budget.
+Every Lmin staged pinning certificate can be chosen with
 
-The conjecture is linear once the stages and tight menus are fixed.  Its
-failure would have an exact rational price separator, just as in `(SEP)`.
+```text
+q_j>=0                    (j in O_t).                  (SC-min)
+```
+
+Every Lmax staged pinning certificate can be chosen with the mirror
+orientation
+
+```text
+q_j<=0                    (j in O_t).                  (SC-max)
+```
+
+Equivalently, put `P_t=B_1 union ... union B_t` for the cumulative Lmin lower
+set.  A player `i in B_t` is pinned if and only if there is a pure
+nonnegative incidence relation
+
+```text
+sum_(S in T_x)lambda_S 1_S + sum_(j in P_t)a_j e_j
+ = c 1_N,                 lambda,a>=0, a_i>0.          (NI-min)
+```
+
+For Lmax, with cumulative upper set `Q_t`, the mirror relation is
+
+```text
+sum_(S in T_z)lambda_S 1_S - sum_(j in Q_t)a_j e_j
+ = c 1_N,                 lambda,a>=0, a_i>0.          (NI-max)
+```
+
+Thus the free-coordinate quotient theorem has a globally sign-coherent lift:
+the price is the weaker global support cap `n`, rather than the sharp relative
+cap `n-|O_t|`.
+
+### Proof
+
+Proceed by induction over the Lmin stages.  The first-stage relation already
+has no old-pin coefficient.  Suppose all earlier player certificates have
+been made sign-coherent and start with any valid certificate at stage `t`.
+Process the earlier blocks from latest to earliest.  If the current
+coefficient of `e_j`, `j in B_s`, is negative, add a positive multiple of
+the sign-coherent certificate that pinned `j` at stage `s`, choosing the
+multiple to cancel that coefficient.  The coefficient of `e_j` in its own
+certificate is `1+r_j>0`.  Every other unit coefficient it introduces in
+`B_s` is nonnegative, and its coefficients on still earlier blocks are
+nonnegative by induction.  Hence cancellation never creates a new negative
+coefficient in a block already processed.  Coalition multipliers remain
+nonnegative, and the supported coalitions remain `x`-tight.  After finitely
+many cancellations all old coefficients are nonnegative, proving `(SC-min)`.
+
+The Lmax relation has current-block coefficients `-(r_j+1_(j=i))`.  Starting
+from the first stage and applying the same backward substitution cancels each
+positive old coefficient by adding a positive multiple of the earlier
+certificate.  It introduces only nonpositive unit coefficients, proving
+`(SC-max)`.
+
+Collecting the old and current unit coefficients gives `(NI-min)` and
+`(NI-max)`.  Conversely, evaluate `(NI-min)` at a core point on the stage
+face.  Earlier coordinates are fixed and current coordinates are at least
+their stage level.  Equality at `x` forces every current coordinate with
+positive `a_j` to equal that level; in particular it pins `i`.  The Lmax
+argument is the sign mirror.  Finally, project `(NI-min)` or `(NI-max)`
+modulo `1_N` and take a support-minimal positive subrelation containing the
+forced unit column.  The quotient has dimension `n-1`, so it uses at most
+`n` columns.  QED.
+
+The qualitative hierarchical tight-coalition characterization is established
+property I (Arin--Kuipers--Vermeulen, with Mauri's antidual Lmin form).  The
+claim here is only the explicit backward-elimination/sign-coherent incidence
+normal form and its transport consequence.  It should be treated as a
+constructive reformulation pending specialist review, not advertised as a
+new characterization of either selection.  See
+`paper3/PROPERTY_I_STRICT_COVER_AUDIT.md` for the prior-art boundary.
+
+### Corollary (two acyclic nonnegative transports)
+
+Put `d=x-z` and `d_j^+=max(d_j,0)`.  For every Lmin-stage player `i`, a
+sign-coherent certificate gives
+
+```text
+(z_i-x_i)^+
+ <= sum_(j in O_t)q_j d_j^+ + sum_(k in B_t)r_k d_k^+,
+ q,r>=0.                                                   (AT-min)
+```
+
+Every source on the right has `x_j<=x_i`.  The Lmax mirror gives
+
+```text
+(z_i-x_i)^+
+ <= sum_(j in O_t)(-q_j)d_j^+ + sum_(k in B_t)r_k d_k^+,
+ -q,r>=0,                                                  (AT-max)
+```
+
+where every source has `z_j>=z_i`.  Hence every player gaining from `x` to
+`z` has both a poorer-in-`x` carrier packet and a richer-in-`z` carrier
+packet supported on players losing from `x` to `z`.  This is stronger than
+the former signed-flow conjecture, but it still leaves a quantitative issue:
+recursive substitution can increase column congestion.
+
+The exact regression audit
+
+```bash
+python3 verifiers/divergence/audit_sign_coherent_staged_lifts.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --n 6 --include-n7-control \
+  --output verifiers/divergence/sign_coherent_staged_lifts_audit.json
+```
+
+finds sign-coherent lifts for all `4,488` stage/player certificates in the
+`374` archived six-player pairs and all `14` certificates of the nonuniform
+seven-player control.  This finite audit is not used in the proof.
+
 Both known sharp all-dimension mechanisms have a two-stratum Lmin point, so
-their only nontrivial transport is the first stage and the signed flow
-vanishes.  This suggests a second possible route: prove that any genuinely
-multistage signed flow creates strict extra overlap, reducing equality to the
-two-stratum mechanisms without assuming two-generator extremality.
+their nontrivial transport is already concentrated at the first stage.  The
+remaining route is now precise: bound the congestion of the two acyclic
+nonnegative transports jointly with the sparse Lmax over-cover, or show that
+genuine multistage congestion purchases strict extra overlap.
 
 ## 7. What one-packet theory gives on exact-cone facets
 
 The strongest correct statement is a relative circuit theorem, not a global
 facet correspondence.
+
+The sign-coherent theorem adds a second exact enumeration layer.  For a fixed
+tight menu and cumulative set `P_t`, project
+
+```text
+{1_S:S in T_x} union {e_j:j in P_t}
+```
+
+modulo `1_N`; use `-e_j` for Lmax.  The extreme rays of the nonnegative
+kernel cone are exactly the positive circuits containing the forced signed
+unit column, each with support at most `n`.  Enumerating those circuits
+therefore enumerates every irreducible **nested selection certificate**, not
+merely the certificates in the relative old-coordinate quotient.  This is a
+finite exact algorithm for the rooted incidence systems selected by a given
+lexicographic face.
+
+It still does not identify a new class of full exact-cone facets.  On the
+Lmin side the added unit columns are ordinary singleton incidence columns,
+so forgetting their selection role yields a balanced identity.  On the Lmax
+side a circuit may contain several negative singleton roots, whereas the
+published pure minimal semi-balanced facet correspondence has one
+distinguished exceptional coalition.  Only a lift or factor having the
+published indecomposability form may be called an exact-cone facet.  The
+nested-circuit algorithm supplies candidates and their selection labels; the
+Studeny--Kratochvil test remains a separate final filter.
 
 At a slack Lmin richer suffix `H`, the one-packet theorem selects a rooted
 signed incidence relation with at most `n` positive coalitions.  Projecting
@@ -934,11 +1062,11 @@ staged Lmin pinning data.
 
 The minimal live target is therefore:
 
-> **Compatible fractional-hinge and staged-flow lemma.**  From a sparse Lmax
-> top over-cover and the complete staged rooted Lmin circuit chain, construct
-> nonnegative coupling weights whose normalized first-stage loads pack as in
-> `(FSP)`, whose signed old-pin flows telescope as in Section 6, and whose
-> remaining incidence loads imply
+> **Compatible fractional-hinge and acyclic-congestion lemma.**  From a
+> sparse Lmax top over-cover and the two sign-coherent nested incidence chains
+> in Section 6, construct nonnegative coupling weights whose normalized
+> first-stage loads pack as in `(FSP)` and whose acyclic carrier congestion
+> implies
 > `sum_i min(x_i,z_i)>=nT/floor(n^2/4)`.
 
 The theorem must allow multiple rooted facets and fractional sharing of a
@@ -952,8 +1080,9 @@ common-hinge systems in Section 2.  Any proposed version must first reject:
 4. both balanced seven-player orientations `(2,4)` and `(3,3)` at equality.
 
 The program has advanced beyond a bare outcome D: the common-hinge theorem,
-hinge-surplus spectral refinement, surplus dispersion budget, and first-floor
-transport theorem are proved dimension-free.  The final all-`n` inequality
-remains outcome D because the coherent multistage conversion is still open.
-This is meaningful structural progress, but not yet the requested central
-breakthrough.
+hinge-surplus spectral refinement, surplus dispersion budget, first-floor
+transport theorem, projected staged-circuit classification, and
+sign-coherent nested-incidence theorem are proved dimension-free.  The final
+all-`n` inequality remains outcome D because no sharp joint congestion bound
+has yet been proved.  This is meaningful structural progress, but not yet the
+requested central breakthrough.
