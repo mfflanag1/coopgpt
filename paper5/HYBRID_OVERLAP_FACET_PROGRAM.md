@@ -1389,17 +1389,17 @@ LP proves that the maximum is exact and attained.  The threshold criterion is
 then immediate, including the strict inequality required to exclude a subset
 with `B(J)<b`.
 
-Consequently `(SRE)` has a scalar residual form:
+Consequently the label-free spectral method succeeds at the sharp threshold
+exactly when
 
 ```text
 R_*(v)>E_bad(nT/floor(n^2/4))                           (SRE-R)
 ```
 
-whenever the bad family is nonempty.  This is now the narrowest missing
-inequality.  Its left side is an exact sparse Lmax incidence optimization;
-its right side is a finite statistic of the two spectra.  The complete staged
-Lmin circuits must be used only to rule out `R_*<=E_bad`, not to control every
-local packet coefficient.
+whenever the bad family is nonempty.  Its left side is an exact sparse Lmax
+incidence optimization and its right side is a finite statistic of the two
+spectra.  The formula is correct, but the inequality is not universal: the
+label-relaxation controls below refute it at seven players.
 
 The verifier
 
@@ -1419,6 +1419,69 @@ six-player archive: `157` have no bad spectral subset, `92` have a nonempty
 bad family, and all `92` satisfy `(SRE-R)`; the smallest positive radius gap
 is exactly one.  These counts are finite regression evidence, not evidence
 for all-`n` `(SRE)`.
+
+### Exact boundary of every partial relabeling shortcut
+
+The six-player archive suggested that optimized spectral relabeling might be
+enough.  A targeted seven-player search found a two-generator exact game
+
+```text
+g=(0,0,3,17,0,9,1),       h=(14,4,0,0,12,0,0),
+x=(25/4,3/2,3/2,37/4,21/4,21/4,1),
+z=(64/9,32/9,2/9,64/9,19/3,49/9,2/9).
+```
+
+Exact staged incidence LPs certify both selections.  Here
+
+```text
+R_*=237/20,       B_spec=605/36<35/2,
+O(x,z)=929/36>35/2.
+```
+
+The minimizing eligible subsets are `{3,4}` and `{3,5}`, with excess `25/2`.
+They are hypothetical replacements for the actual Lmax top block `{0,3}`.
+Keeping the actual top labels raises the rearrangement bound to `641/36`.
+Thus `(SRE)` and `(SRE-R)` are false because the spectral minimum forgets
+which Lmin coordinates actually carry the Lmax top normal.
+
+Fixing the actual top block is still insufficient.  The exact game generated
+by
+
+```text
+g=(18,17,0,0,1,0,0),       h=(0,0,24,10,0,1,1),
+x=(9,8,19/2,8,1/2,1/2,1/2),
+z=(9,17/2,9,17/2,1,0,0)
+```
+
+has actual-top-fixed rearrangement `39/2<21`, whereas its true overlap is
+`69/2`.  Opposite sorting below the top block falsely assigns the two Lmax
+zeros to rich Lmin coordinates; the staged labels assign them to floor
+players.
+
+Even fixing both Lmax extreme blocks is insufficient.  For
+
+```text
+g=(10,1,0,1,21,0,9),        h=(0,0,1,0,0,41,0),
+x=(19/2,1/2,1/2,1/2,45/4,45/4,17/2),
+z=(10,1,0,1,21/2,21/2,9),
+```
+
+the top-and-bottom-fixed middle rearrangement is `24<49/2`, while the true
+overlap is `40`.
+
+Reproduce exactness, core membership, all `42` staged rational certificate
+LPs, every relaxation value, and every true overlap with
+
+```bash
+python3 verifiers/divergence/verify_n7_label_relaxation_obstructions.py \
+  --output verifiers/divergence/n7_label_relaxation_obstructions.json
+```
+
+These examples do not threaten `(H)`; each has enormous positive slack.  They
+prove a structural boundary: **no proof may freely permute any unprotected
+Lmax strata.**  The full label-specific Lmin packet is not merely needed to
+exclude a few bad top subsets.  It must be coupled directly to the actual
+hybrid sign cut.
 
 The last labels are essential and are not part of the ordinary exact cone.
 There are two sharp obstructions to a stronger claim:
@@ -1443,55 +1506,29 @@ The first-stage aggregate pair is insufficient even at six players, by
 also false by Section 3.  A valid all-dimension bridge must use the complete
 staged Lmin pinning data.
 
-For a fixed Lmax over-cover `(lambda,eta,alpha)`, let
-`B(lambda,alpha)` denote the sharpened spectral bound `(SR)`--`(SA)`, using
-its actual `theta=max alpha_i` and hinge surplus `epsilon_+`.  Define
-
-```text
-B_spec(v)=sup B(lambda,alpha)
-```
-
-over all normalized Lmax top over-covers.  Every term in the supremum is a
-proved lower bound for the true overlap.  The sharp family has
-`B_spec=O=nT/floor(n^2/4)`.  The new coefficient-two and coefficient-seven
-obstructions have, respectively,
-
-```text
-B_spec>=11>7,               B_spec>=139/13>8.
-```
-
-This isolates a cleaner surviving statement.
-
-> **Spectral-residual exclusion (SRE).**  For every singleton-normalized
-> exact game,
->
-> ```text
-> B_spec(v)>=nT/floor(n^2/4).                           (SRE)
-> ```
->
-> Equivalently, if a proposed pair of spectra makes every sparse Lmax
-> spectral certificate fall below the sharp constant, then the complete
-> staged Lmin rooted-circuit system and exactness witnesses are infeasible.
-
-`(SRE)` is stronger than `(H)` but is not a statement about arbitrary equal-
-sum spectra: the abstract counterexample in `LMAX_OVERCOVER_COUPLING.md`
-shows that exact-game and staged-selection structure is indispensable.  It
-also survives every known local-congestion counterexample because those
-examples are discharged before their large primitive coefficients need to be
-bounded.
-
 The minimal live target is therefore:
 
-> **Compatible fractional-hinge and acyclic-congestion lemma.**  From a
-> sparse Lmax top over-cover and the sign-coherent Lmin packets in Section 6,
-> prove `(SRE)` directly, or first discharge every spectrum for which the
-> sharpened spectral anchor already proves `(H)` and show that the residual
-> spectra contradict an exact rooted Lmin circuit.  Equivalently, construct
-> nonnegative price-weighted coupling weights whose normalized loads pack as
-> in `(FSP)`; charge every large primitive coefficient against spectral-anchor
-> slack or hinge surplus, and control cross-stage source reuse so that the
-> resulting carrier inequality implies
-> `sum_i min(x_i,z_i)>=nT/floor(n^2/4)`.
+> **Fully labelled fractional-hinge coupling lemma.**  Put
+> `A={i:z_i>x_i}`.  From one sparse Lmax top over-cover, the complete
+> label-specific sign-coherent Lmin packet, and exactness witnesses, construct
+> a nonnegative combination of their incidence and transport inequalities
+> whose payoff side is
+>
+> ```text
+> x(A)+z(N\A)>=nT/floor(n^2/4).                         (FLC)
+> ```
+>
+> The construction must preserve the actual player labels in every Lmax
+> stratum.  Large primitive packet coefficients must be charged against the
+> same labelled over-cover loads, hinge surplus, or already-counted overlap;
+> no residual group of coordinates may be oppositely rearranged.
+
+Since `x(A)+z(N\A)=sum_i min(x_i,z_i)`, `(FLC)` is exactly `(H)`, not a
+stronger label-free surrogate.  For a fixed sign pattern and fixed rooted
+circuit supports, finding the combination is an exact rational LP; the
+projected support theorem and the spectral-radius oracle make both sides
+sparse.  The missing dimension-free theorem is existence of a feasible dual
+combination for every exact labelled packet system.
 
 The theorem must allow multiple rooted facets and fractional sharing of a
 player between the two carrier roles.  It must specialize on `G(p,k)` to the
@@ -1506,15 +1543,18 @@ common-hinge systems in Section 2.  Any proposed version must first reject:
 5. the coefficient-two seven-player obstruction `(N7-TC)`, which the spectral
    anchor closes with four units of slack; and
 6. the primitive coefficient-seven eight-player circuit `(N8-TC)`, whose
-   spectral bound is `139/13>8`.
+   spectral bound is `139/13>8`;
+7. the optimized spectral-radius counterexample in Section 7;
+8. the actual-top-fixed rearrangement counterexample; and
+9. the top-and-bottom-fixed middle-rearrangement counterexample.
 
 The program has advanced beyond a bare outcome D: the common-hinge theorem,
 hinge-surplus spectral refinement, surplus dispersion budget, first-floor
 transport theorem, projected staged-circuit classification, and sign-coherent
 nested-incidence theorem are proved dimension-free.  The exact audit has now
 disproved both `(UB)` and `(TC)`, then proved that even a support-minimal
-eight-player circuit can force coefficient seven while the opposite spectral
-certificate closes the target.  The final all-`n` inequality remains open:
-the new residual price-weighted coupling lemma is not yet proved.  This is
-meaningful structural progress and a decisive pruning of the proof tree, but
-not yet the requested central breakthrough.
+eight-player circuit can force coefficient seven, and has now disproved every
+partial relabeling shortcut through exact seven-player controls.  The final
+all-`n` inequality remains open: the fully labelled dual coupling `(FLC)` is
+not yet proved.  This is meaningful structural progress and a decisive
+pruning of the proof tree, but not yet the requested central breakthrough.
