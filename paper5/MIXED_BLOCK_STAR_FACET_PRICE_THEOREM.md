@@ -681,6 +681,61 @@ clone-expanded class (enumerate saturated bases, then clone-block size
 compositions modulo automorphisms), but it is not a classification of all
 six-player facets and does not supply the open target-price selection lemma.
 
+The matrix theory is now complete for the positive-load
+singleton-exceptional class, not merely for those five supports.  If
+
+```text
+sum_j lambda_j 1_(S_j)-c e_r=1_N,      lambda_j,c>0,
+```
+
+is indecomposable, then every positive `S_j` contains `r`.  Otherwise
+`1_S+e_r-1_(S union {r})=0` either directly supplies a new exceptional-set
+decomposition or is a forbidden semi-balanced subsystem.  Writing the
+nonroot incidence matrix as `A`, minimality is exactly `rank(A)=k`, and
+
+```text
+A lambda=1,       c=1.lambda-1.
+```
+
+A candidate exceptional coalition `(beta,b)` decomposes the system exactly
+when `A mu-b=gamma 1`, `mu>=0`, and
+`beta+gamma-1.mu>=0`.  This gives a finite exact matrix enumeration of every
+singleton-root facet at fixed dimension and the support bound `k+1<=n`.
+It is the Studeny--Kratochvil criterion specialized to a rooted rectangular
+matrix, not a replacement for their theorem.
+
+This completely filters the projected pair-lift search.  If a rooted packing
+uses any positive coalition that omits its exceptional root, its pair lift is
+decomposable and cannot be a full exact-cone facet.  Thus the irreducible arm
+of the missing selection lemma may be restricted to root-containing
+Lmin-tight coalitions, plus the restored rooted pair spokes.  What remains is
+to prove that some ceiling root exposes an affordable member of that smaller
+menu, or that the direct/interpolation branches already close the target.
+
+Clone-expanded saturation is nevertheless not exhaustive.  The published
+catalogue has 23 singleton-exceptional types through six players and all are
+clone-saturated; a new infinite family therefore begins sharply at seven
+players.  Let nonroot players be the edges of
+`K_m` plus `p` outside players, and let `S_v` be the root together with the
+edges incident to vertex `v`.  For every `m>=4,p>=0`,
+
+```text
+sum_v 1_(S_v)+2 sum_o 1_{r,o}-(m-2+2p)e_r=2 1_N
+```
+
+is an indecomposable exact-cone facet.  Its exceptional-set equations reduce
+to a binary additive edge labelling of `K_m`; the only possibilities are
+empty, complete, a star, or a co-star, and the root equation leaves only the
+existing support and `N`.  Its `binom(m,2)` edge-incidence rows are distinct,
+so it cannot be clone-compressed to a saturated `m`-column base.  The first
+member is the seven-player `K_4` edge system.  An independent exact-LRA
+encoding excludes all 121 unsupported proper candidates for that member.
+
+This is a genuine enlargement of the exact-cone facet theory.  It does not
+close hybrid overlap: its rooted price is `P=2p/(m-2)`, but one still must
+prove that staged Lmin/Lmax selection exposes an appropriately aligned
+member.
+
 ### Positive-Lmax equality exclusion
 
 The rooted status of the two sharp rows has a dimension-free human

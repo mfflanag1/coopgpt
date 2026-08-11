@@ -3315,8 +3315,60 @@ the facet test, and (MC9) is the unique cut using both colours.  These are
 finite controls and do not prove existence of a target-valid root in every
 dimension.
 
-There is a closed dimension-free classification for the saturated rooted-star
-subclass containing (MCF) and the sharp-family facets.  Remove a root $r$ and
+There is first a complete rectangular description for the positive-load
+singleton-exceptional class.  Consider an indecomposable normalized identity
+
+\[
+ \sum_{j=1}^k\lambda_j\one_{S_j}-c e_r=\one_N,
+ \qquad \lambda_j,c>0.                               \tag{RR1}
+\]
+
+Every $S_j$ contains $r$.  Indeed, if $S$ omits $r$ and
+$S\cup\{r\}$ is an unsupported proper coalition, then
+$\one_S+e_r-\one_{S\cup\{r\}}=0$ is an exceptional-set decomposition.  If
+the union is supported, the same three columns form a forbidden
+semi-balanced subsystem.  If the union is $N$, the first two columns already
+form a balanced subsystem.  The degenerate cases in which these columns are
+the whole support cannot satisfy the positive-load identity (RR1).
+
+Write $S_j=\{r\}\cup A_j$ and let $A$ be the $(n-1)\times k$ nonroot
+incidence matrix.  Minimality is equivalent to $\operatorname{rank}A=k$, and the identity
+is
+
+\[
+ A\lambda=\one,\qquad c=\one^\mathsf T\lambda-1.     \tag{RR2}
+\]
+
+Thus $k\le n-1$.  For a proposed exceptional coalition with root indicator
+$\beta$ and nonroot incidence $b$, the Studen\'y--Kratochv\'il decomposition
+equations reduce exactly to
+
+\[
+ A\mu-b=\gamma\one,\qquad
+ \mu\ge0,\qquad \beta+\gamma-\one^\mathsf T\mu\ge0. \tag{RR3}
+\]
+
+Consequently (RR1) is a facet exactly when (RR3) is infeasible for every
+unsupported proper nonempty $(\beta,b)$.  This gives an exact enumeration
+algorithm for the entire positive-load singleton-exceptional class at fixed
+$n$: enumerate full-column-rank zero-one matrices up to row and column
+permutations, retain the positive solutions of (RR2), and test all Boolean
+vectors by (RR3).  Passing systems give primitive dual-cone extreme rays
+after clearing denominators.  This is a specialization of the published
+criterion, with a support bound and a concrete matrix enumeration, not a new
+general characterization of the exact-game cone.
+
+For the projected pair lifts this is also a decisive support filter.  If an
+extreme rooted packing uses any positive coalition omitting its exceptional
+root, its pair lift is decomposable and cannot define a full exact-cone
+facet.  Irreducible facet selection may therefore be restricted in advance
+to root-containing Lmin-tight coalitions, together with the restored rooted
+pair columns.  The remaining hybrid theorem must show that some ceiling root
+exposes a sufficiently priced member of this smaller menu, or that an earlier
+direct/interpolation branch closes the target.
+
+There is a closed inverse formula for the saturated rooted-star subclass
+containing (MCF) and the sharp-family facets.  Remove a root $r$ and
 let $A$ be a nonsingular $(n-1)\times(n-1)$ zero-one matrix whose columns are
 the incidences of sets $A_j\subset N\setminus\{r\}$.  Put
 
@@ -3397,6 +3449,84 @@ Thus one dimension-free facet construction explains the finite atlas, but
 does not yet prove that every residual branch exposes a member with enough
 hybrid-overlap price.
 
+The clone-expanded subclass is not exhaustive.  The published catalogue of
+\citet{StudenyKratochvil2022} shows that all 23 singleton-exceptional
+types through six players are clone-saturated, so the first failure is
+sharply at seven players.  For $m\ge4$ and $p\ge0$, take
+
+\[
+ N=\{r\}\mathbin{\dot\cup}E(K_m)\mathbin{\dot\cup}O,\qquad |O|=p,
+ \qquad S_v=\{r\}\cup\{e\in E(K_m):v\in e\}.
+\]
+
+Then the complete-graph rooted-pair identity is
+
+\[
+ \sum_{v\in K_m}\one_{S_v}+2\sum_{o\in O}\one_{\{r,o\}}
+ -(m-2+2p)e_r=2\one_N.                              \tag{KG1}
+\]
+
+\begin{theorem}[complete-graph rooted pair facets]
+For every $m\ge4$ and $p\ge0$, (KG1) is an indecomposable purely
+min-semi-balanced system and defines a facet of the exact-game cone.  It is
+not a clone expansion of a saturated rooted-star system.  The first member
+has $(m,p)=(4,0)$ and seven players.
+\end{theorem}
+
+The incidence identity is immediate: each edge lies in its two endpoint
+stars and each outside player in its rooted pair.  The unoriented
+vertex-edge incidence matrix of $K_m$ has rank $m$ because it contains an
+odd cycle; the pair and root columns raise the support rank to $m+p+1$.
+
+For the exceptional-set test, write its edge, outside, and root indicators
+as $b_{ij},o_a,\beta$.  The old-support coefficients obey
+
+\[
+ \mu_i+\mu_j-b_{ij}=\gamma,\qquad c_a=\gamma+o_a,\qquad
+ d=\beta+\gamma-\sum_i\mu_i-\sum_a c_a\ge0.          \tag{KG2}
+\]
+
+An elementary additive-binary graph lemma says that a zero-one edge
+labelling $b_{ij}=\mu_i+\mu_j-\gamma$ of $K_m$, $m\ge4$, is only empty,
+complete, a star, or the complement of a star.  If all potentials agree the
+labelling is constant.  Otherwise choose $\mu_j>\mu_k$.  For every other
+$i$, the binary difference
+$b_{ij}-b_{ik}=\mu_j-\mu_k$ is the same nonzero value, hence it is one and
+$(b_{ij},b_{ik})=(1,0)$.  All remaining potentials agree.  Two remaining
+vertices exist, and their mutual edge bit and $b_{jk}$ sum to one, giving
+exactly the star and co-star alternatives.  With a common gauge $t$, the four
+coefficient patterns are respectively
+
+\[
+ (\mu,\gamma)=(t\one,2t),\quad
+ (t\one+e_v,2t),\quad(t\one-e_v,2t-1),\quad
+ (t\one,2t-1).
+\]
+
+Put $o=\sum_a o_a$ and $D=m+2p-2$.  In the same four cases, (KG2) gives
+$d=\beta-o-Dt$, $\beta-o-1-Dt$, $\beta+p-o-Dt$, and
+$\beta+p-o-1-Dt$.  Nonnegativity of the other coefficients requires
+$t\ge0,0,1$, and either $t\ge1/2$ or all outside bits one, respectively.
+The only feasible candidates are the empty coalition, the supported root,
+one supported rooted pair, one supported vertex star, or $N$.  Hence there
+is no new proper exceptional coalition.  Finally the
+nonroot star rows are the $\binom m2$ distinct two-subset vectors.  Since
+$\binom m2>m$, no clone compression is saturated.
+
+In rooted-packing coordinates the star weights are $1/2$, the pair weights
+are one, and
+
+\[
+ \delta=m/2-1,\qquad Q=p,\qquad P=Q/\delta=2p/(m-2). \tag{KG3}
+\]
+
+The $p=0$ member belongs to the zero-root/null-floor mechanism when evaluated
+through a root-zero Lmin witness.  Members with $p>0$ are affordable
+positive-floor facet candidates, but the missing selection theorem is not
+implied by their existence.  Exact enumeration on twelve parameter controls
+and an independent Z3 replay of all 127 seven-player exceptional candidates
+serve only as audits of the displayed proof.
+
 For (MCF), $|\det A|=2$, the weights are
 $(1/2,1/2,1/2,1/2,1/2,1)$, $c=5/2$, and every unsupported
 Boolean coalition has strict margin at least $2/5$ in (RS3).  For
@@ -3426,8 +3556,9 @@ $n=5$ anomaly with a proof by hand, the one-coalition certificate theorem
 and the pinned extremal configuration at five players, the evaluation
 $s(5)=\tfrac12$ with the $(4,1)$-regime bound $\tfrac13$, and the two closed
 routes of Section~\ref{sec:obstruction}, together with the direct exactness-
-exchange evaluation $s(6)=\tfrac23$.  Novelty remains conditional on specialist
-review.
+exchange evaluation $s(6)=\tfrac23$, the singleton-root rectangular facet
+classification, and the complete-graph rooted-pair facet family.  Novelty
+remains conditional on specialist review.
 
 \section*{Reproducibility note}
 
@@ -3474,8 +3605,10 @@ seven-player stress test; an independently formulated cutting-plane replay
 audits the rooted-hinge witness projection.  A separate tagged cutting-plane
 replay audits the exact mixed-witness projection and rooted-pair facet filter,
 and an exact-LRA Z3 formulation independently checks every reported
-decomposition count;
-none is a proof dependency for the open all-dimension target.  Other programs
+decomposition count.  The complete-graph rooted-pair driver audits twelve
+finite parameter controls, and a separate exact-LRA encoding checks the first
+seven-player member; the graph case analysis is the proof.  None is a proof
+dependency for the open all-dimension target.  Other programs
 independently reconstruct all displayed games and coalition values, the
 closed forms of Theorem~\ref{thm:family} at twelve parameter pairs, the full
 coalition-inequality check and the tight-set prediction of

@@ -93,6 +93,14 @@ run_python coopgames/verifiers/divergence/verify_clone_expanded_rooted_star_face
   --output "$scratch_dir/clone-expanded-rooted-star-facets.json"
 cmp coopgames/verifiers/divergence/clone_expanded_rooted_star_facets.json \
   "$scratch_dir/clone-expanded-rooted-star-facets.json"
+run_python coopgames/verifiers/divergence/verify_complete_graph_rooted_pair_facets.py \
+  --output "$scratch_dir/complete-graph-rooted-pair-facets.json"
+cmp coopgames/verifiers/divergence/complete_graph_rooted_pair_facets.json \
+  "$scratch_dir/complete-graph-rooted-pair-facets.json"
+run_python coopgames/verifiers/divergence/verify_k4_edge_rooted_facet_z3.py \
+  --output "$scratch_dir/k4-edge-rooted-facet-z3.json"
+cmp coopgames/verifiers/divergence/k4_edge_rooted_facet_z3.json \
+  "$scratch_dir/k4-edge-rooted-facet-z3.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

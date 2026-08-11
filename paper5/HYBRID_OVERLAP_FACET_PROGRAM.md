@@ -5023,6 +5023,87 @@ witness-feasibility components are independently formulated.  The facet
 counts are finite controls, not evidence that a target-proving root exists in
 every dimension.
 
+#### Rectangular rooted-star classification
+
+The pair-lift class admits a complete fixed-dimension description whenever
+the exceptional coalition is a singleton.  Suppose a normalized purely
+min-semi-balanced identity has positive common load and exceptional root
+`{r}`:
+
+```text
+sum_(j=1)^k lambda_j 1_(S_j)-c e_r=1_N,
+lambda_j,c>0.                                         (RRC1)
+```
+
+> **Theorem (singleton-root rectangular classification).**  If `(RRC1)` is
+> indecomposable, every `S_j` contains `r`.  Write
+> `S_j={r} union A_j`, and let `A` be the `(n-1)` by `k` zero-one matrix of
+> the nonroot incidences.  Minimality is equivalent to `rank(A)=k`, and
+>
+> ```text
+> A lambda=1,             c=1.lambda-1.               (RRC2)
+> ```
+>
+> In particular `k<=n-1`.  For a proposed exceptional coalition with root
+> indicator `beta` and nonroot incidence `b`, a decomposition exists exactly
+> when there are `mu>=0` and a free common load `gamma` satisfying
+>
+> ```text
+> A mu-b=gamma 1,       beta+gamma-1.mu>=0.            (RRC3)
+> ```
+>
+> Thus `(RRC1)` defines an exact-cone facet exactly when `(RRC3)` is
+> infeasible for every unsupported proper nonempty `(beta,b)`.
+
+To prove rootedness, suppose a positive support coalition `S` omits `r`.
+If `S union {r}` is proper and unsupported, then
+`1_S+e_r-1_(S union {r})=0` is an exceptional-set decomposition.  If it is
+supported, the same three columns form a semi-balanced subsystem, contrary
+to minimality (and they cannot be the whole support because then no
+positive-load identity covers a player outside their union).  If
+`S union {r}=N`, the two columns `1_S,e_r` already form a proper balanced
+subsystem; a two-column support cannot satisfy `(RRC1)`.  Hence every
+positive coalition contains the root.
+
+Now the support columns are independent exactly when `A` has full column
+rank: a kernel vector of `A` can have its root load cancelled by `e_r`, and
+the converse is immediate.  The nonroot and root coordinates of `(RRC1)`
+give `(RRC2)`.  Finally a decomposition through `(beta,b)` has nonnegative
+old-support coefficients `mu_0,mu` and satisfies
+
+```text
+mu_0 e_r+sum_j mu_j 1_(S_j)-1_(beta,b)=gamma 1_N.
+```
+
+Its nonroot coordinates give the first part of `(RRC3)` and its root
+coordinate gives `mu_0=beta+gamma-1.mu`, proving the criterion.  The facet
+equivalence is precisely the published Studeny--Kratochvil
+indecomposability theorem.  QED.
+
+This gives an exact enumeration algorithm for the **entire positive-load
+singleton-exceptional class** at fixed `n`: enumerate full-column-rank
+zero-one matrices `A` up to row and column permutations, retain the systems
+with a positive solution of `(RRC2)` and `c>0`, and test every Boolean
+`(beta,b)` by `(RRC3)`.  Repeated rows are clone blocks.  After clearing
+denominators, each passing identity is a primitive extreme ray of the dual
+exact-game cone, and equality under singleton normalization is
+`sum_j lambda_j v(S_j)=v(N)`.
+
+Applied to `(RPL)`, rootedness is a decisive filter: an extreme packing whose
+positive support contains any coalition omitting `r` has a decomposable pair
+lift and cannot define a full exact-cone facet.  Hence irreducible facet
+selection may be restricted before enumeration to
+
+```text
+C_x^r={S in C_x: r in S},                            (RRC4)
+```
+
+together with the restored rooted pair columns.  The open hybrid theorem is
+therefore sharper: after direct/interpolation/null branches fail, prove that
+some ceiling root exposes a target-priced rectangular facet using only its
+root-containing Lmin-tight submenu, with common Lmax rows supplying any
+needed reverse repair.  No such selection theorem is inferred here.
+
 #### Saturated rooted-star matrix classification
 
 The new facet and both sharp-family facets belong to one dimension-free
@@ -5159,6 +5240,112 @@ audit with
 ```bash
 python3 verifiers/divergence/verify_clone_expanded_rooted_star_facets.py \
   --output verifiers/divergence/clone_expanded_rooted_star_facets.json
+```
+
+#### Complete-graph edge facets: sharp failure of clone saturation
+
+Clone expansion is not the whole rectangular class.  The published
+Studeny--Kratochvil catalogue shows that all 23 singleton-exceptional types
+through six players are clone-saturated; the first failure therefore occurs
+on seven players.  For integers `m>=4`, `p>=0`, take
+
+```text
+N={r} dot-union E(K_m) dot-union O,       |O|=p,
+S_v={r} union {e in E(K_m): v in e}.      (KRF1)
+```
+
+Thus graph edges are players and `S_v` is the rooted vertex star.  Then
+
+> **Theorem (complete-graph rooted pair facets).**  For every `m>=4,p>=0`,
+>
+> ```text
+> sum_(v in K_m)1_(S_v)+2 sum_(o in O)1_{r,o}
+>   -(m-2+2p)e_r=2 1_N                             (KRF2)
+> ```
+>
+> is an indecomposable purely min-semi-balanced system and defines a facet
+> of the exact-game cone.  None of these systems is a clone expansion of a
+> saturated rooted-star system.  The first member is `(m,p)=(4,0)` on seven
+> players.
+
+Every edge belongs to two vertex stars, every outside player to its rooted
+pair, and the root coordinate also has load two, proving `(KRF2)`.  The
+unoriented vertex-edge incidence matrix of `K_m` has rank `m` because
+`K_m` contains an odd cycle; adjoining the `p` pair columns and `e_r` gives
+support rank `m+p+1`.
+
+For indecomposability, label a candidate exceptional coalition by edge bits
+`b_ij`, outside bits `o_a`, and root bit `beta`.  Its old-support
+coefficients must satisfy
+
+```text
+mu_i+mu_j-b_ij=gamma,       c_a=gamma+o_a,
+d=beta+gamma-sum_i mu_i-sum_a c_a>=0.                (KRF3)
+```
+
+The elementary additive-binary graph lemma says that, for `m>=4`, a
+zero-one edge labelling of `K_m` of the form
+`b_ij=mu_i+mu_j-gamma` is only the empty graph, the complete graph, a star,
+or the complement of a star.  If all potentials agree, the labelling is
+constant.  Otherwise choose `mu_j>mu_k`.  For every `i` outside `{j,k}`,
+
+```text
+b_ij-b_ik=mu_j-mu_k,
+```
+
+so the common difference must be one, `b_ij=1`, `b_ik=0`, and all remaining
+potentials `mu_i` agree.  Taking two such remaining vertices shows that
+their mutual edge bit and `b_jk` sum to one.  The two choices give exactly
+the star at `j` and the complement of the star at `k`.
+
+Add the gauge parameter `t` simultaneously to every `mu_i` and `2t` to
+`gamma`.  For the four graph types, canonical coefficients are respectively
+
+```text
+empty:     mu_i=t,                              gamma=2t;
+star v:    mu_v=1+t, mu_i=t (i!=v),             gamma=2t;
+co-star v: mu_v=t-1, mu_i=t (i!=v),             gamma=2t-1;
+complete:  mu_i=t,                              gamma=2t-1.
+```
+
+Put `o=sum_a o_a` and `D=m+2p-2`.  Substitution in the last line of `(KRF3)`
+gives, in the same order,
+
+```text
+d=beta-o-Dt,
+d=beta-o-1-Dt,
+d=beta+p-o-Dt,
+d=beta+p-o-1-Dt.                                    (KRF5)
+```
+
+The empty and star cases require `t>=0`, leaving only the empty coalition,
+`{r}`, one supported pair `{r,o}`, or one supported star `S_v`.  The co-star
+case requires `t>=1`, so `(KRF5)` is negative.  In the complete case, if any
+outside bit is zero then `t>=1/2` and `(KRF5)` is negative; if all are one,
+only `beta=1,t=0` survives, giving `N`.  There is therefore no new proper
+exceptional set.
+
+Finally, the nonroot row configuration consists of all distinct two-subset
+incidence vectors of `[m]`, plus the pair-spoke unit rows.  Since
+`binom(m,2)>m` for `m>=4`, no clone compression can make the star block
+saturated.  This proves the strict enlargement.  In packing coordinates the
+star weights are `1/2`, the spoke weights are one,
+
+```text
+delta=m/2-1,       Q=p,       P=Q/delta=2p/(m-2).     (KRF4)
+```
+
+The `p=0` member forces a zero root when evaluated through a root-zero Lmin
+witness, so it belongs naturally to the null-floor branch.  Members with
+`p>0` have finite rooted price and are legitimate positive-floor facet
+candidates, but no selection theorem is claimed.  Reproduce the exact grid
+and the independent seven-player exceptional-set replay with
+
+```bash
+python3 verifiers/divergence/verify_complete_graph_rooted_pair_facets.py \
+  --output verifiers/divergence/complete_graph_rooted_pair_facets.json
+python3 verifiers/divergence/verify_k4_edge_rooted_facet_z3.py \
+  --output verifiers/divergence/k4_edge_rooted_facet_z3.json
 ```
 
 For the mixed facet `(MCPF)`, the root-deleted matrix has determinant of
