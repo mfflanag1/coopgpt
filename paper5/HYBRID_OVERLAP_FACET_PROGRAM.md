@@ -1530,6 +1530,180 @@ projected support theorem and the spectral-radius oracle make both sides
 sparse.  The missing dimension-free theorem is existence of a feasible dual
 combination for every exact labelled packet system.
 
+### Theorem (complete fixed-n labelled alternative)
+
+For every fixed `n`, the truth of `(H)` over singleton-normalized exact games
+is decidable by finitely many exact rational linear programs.  More precisely,
+exactly one of the following holds:
+
+1. every combinatorial branch has a rational Farkas certificate either of
+   infeasibility or, when feasible, proving `(FLC)` from its labelled
+   staged-selection and exactness constraints; or
+2. some branch has a rational model which lower-envelope exactification turns
+   into a singleton-normalized exact game with the displayed `Lmin,Lmax` and
+   strict violation of `(H)`.
+
+Every staged-selection normal in the branch may be chosen as a rooted
+positive circuit with at most `n` columns globally, or at most `n-|O_t|` in
+the relative quotient.  Every Lmax top incidence load may likewise be
+represented by at most `n` tight coalitions.
+
+#### Exact algorithm
+
+For fixed `n`:
+
+1. enumerate ordered player partitions for the Lmin and Lmax strata and a
+   hybrid sign cut `A`;
+2. enumerate, for every player at every lexicographic stage, a conformal
+   rooted circuit containing its forced signed unit column, retaining the
+   actual player labels and its primitive rational coefficients;
+3. introduce `x,z` and singleton-zero witnesses `w^1,...,w^n` of common total
+   `T=1`;
+4. for every coalition used by a selected Lmin (respectively Lmax) circuit,
+   impose that `x` (respectively `z`) has no larger coalition sum than any of
+   the other displayed generators; this is exactly tightness in the eventual
+   lower envelope;
+5. impose nonnegativity and common total, all selected stage-by-stage circuit
+   identities, the stratum orders, the hybrid sign inequalities, and
+   `w^i_i=0`;
+6. maximize
+
+   ```text
+   n/floor(n^2/4)-x(A)-z(N\A).                         (V)
+   ```
+
+All rows are rational and linear after the finite combinatorial choices are
+fixed.  Strict stratum and sign conditions are handled by maximizing a common
+rational margin; boundary points occur in a coarser ordered partition.
+
+#### Proof of completeness
+
+Given a genuine counterexample, use its selections, singleton exactness
+witnesses, ordered strata, and support-minimal staged certificates.  The
+`n+2`-generator normal-form theorem in `CORE_CLOSURE_REDUCTION.md` assigns an
+attaining displayed generator to every coalition and places the counterexample
+in one enumerated branch.  Its strict overlap violation gives a positive
+rational LP optimum after a sufficiently close rational choice in the same
+polyhedral cell.
+
+Conversely, a positive rational branch model defines
+
+```text
+v_G(S)=min{x(S),z(S),w^1(S),...,w^n(S)}.
+```
+
+Every displayed point lies in `Core(v_G)`, every coalition is attained, and
+the zero witnesses give singleton normalization.  The retained primitive
+circuit identities, one for every player at every stage, are the full Farkas
+optimality certificates for the successive lexicographic programs.  Their
+tight coalition inequalities therefore prove all stages of the two
+selections after closure, so the model is an exact rational counterexample,
+not merely a relaxation.
+
+If no branch has positive optimum, rational Farkas duality supplies an
+infeasibility certificate for every empty branch and a nonnegative row
+combination proving `(FLC)` on every feasible branch.  Finitely many branches
+cover the domain, proving `(H)`.  QED.
+
+This theorem is a completeness and proof-object result, not a proposal to
+make a large `n=7` census the research endpoint.  Its value is diagnostic: a
+dimension-free proof must explain the recurring Farkas combination shared by
+these finite branches, while any failed lemma can be challenged by extracting
+one exact rational branch model.
+
+The exact-cone relationship is now precise.  Rooted staged circuits classify
+the **relative selection normals**.  When a lifted circuit has the published
+indecomposable semi-balanced form, the Studeny--Kratochvil criterion identifies
+it as a facet of the full exact-game cone and removes redundant exactness
+rows.  Decomposable or multiply rooted selection circuits remain necessary
+labels in the branch LP but must not be advertised as new exact-cone facets.
+
+### Theorem (fully labelled branch-circuit dual)
+
+Fix one **feasible** branch from the preceding algorithm, including all
+ordered strata, the sign cut `A`, and one primitive staged circuit for each
+player and stage.
+Let
+
+```text
+Q=(x,z,w^1,...,w^n)
+```
+
+be the `(n+2)n` generator-coordinate vector.  In the affine subspace where
+every generator has total one and `w^i_i=0`, form the following labelled row
+system `R_B`:
+
+1. `q^a(S)-x(S)>=0` for every Lmin-circuit coalition `S` and every generator
+   `q^a` other than `x`;
+2. `q^a(S)-z(S)>=0` for every Lmax-circuit coalition `S` and every generator
+   `q^a` other than `z`;
+3. generator-coordinate nonnegativity, the fixed Lmin/Lmax stratum orders,
+   and the fixed inequalities `z_i-x_i>=0` on `A` and
+   `x_i-z_i>=0` off `A`.
+
+Equalities inside a stratum are put in the affine lineality space.  Write
+
+```text
+c_B(Q)=x(A)+z(N\A)-n/floor(n^2/4).
+```
+
+Then the branch implies `(FLC)` if and only if, modulo the affine equalities,
+the affine functional `c_B` belongs to the nonnegative cone generated by
+`R_B`.  Moreover every support-minimal proof of this implication is a
+positive circuit of the augmented labelled row configuration
+
+```text
+R_B union {-c_B}
+```
+
+that contains `-c_B`.  If the affine dimension of the branch is `d_B`, such a
+circuit uses at most `d_B+1` defining rows in addition to `-c_B`; in
+particular `d_B<=n^2-2` before additional stratum equalities are counted.
+
+#### Proof
+
+Once the primitive staged circuits are fixed, their stationarity equations
+contain no payoff variables.  The only payoff-dependent assertion needed to
+reuse each circuit is that every coalition in its positive support is tight
+at the selected generator.  In the finite lower-envelope normal form these
+are exactly rows 1 and 2.  The remaining branch information is exactly row 3
+and the stated affine equalities.  Thus the feasible generator tuples form a
+rational polyhedron `P_B` cut out by `R_B` in that affine space.
+
+The assertion `c_B(Q)>=0` on `P_B` is a linear implication.  Affine Farkas
+duality says it holds exactly when `c_B` is a nonnegative combination of the
+defining rows plus a linear combination of the affine equality rows.  After
+homogenizing the constant coordinate, removing rows from a support-minimal
+such combination gives a minimally dependent positive relation containing
+`-c_B`; conversely every such positive circuit is an irreducible Farkas
+proof.  Circuit support in a rank-`d_B+1` homogenized configuration is at
+most `d_B+2`, giving the stated count after the target row is removed.
+
+There are `(n+2)n` generator coordinates.  The `n+2` total equations and the
+`n` distinct witness-zero equations are independent, leaving dimension
+`n^2-2`; stratum equalities and any forced generator coincidences only lower
+it.  QED.
+
+This is the exact facet-enumeration interface supplied by the current work.
+Enumerating positive circuits of the augmented configuration enumerates the
+irreducible **fully labelled branch proofs**.  It does not by itself prove
+that `c_B` belongs to the row cone for every branch and every `n`; that is the
+dimension-free content still missing from `(FLC)`.
+
+Nor are these circuits automatically facets of the exact-game cone.  Rows 1
+and 2 live in separate labelled generator blocks, while stratum and hybrid
+sign rows record selection data absent from an ordinary characteristic
+function.  Only a projection or factor whose coalition coefficients form an
+indecomposable semi-balanced system passes to a Studeny--Kratochvil
+exact-cone facet.  The branch-circuit theorem therefore gives an exact
+algorithm and a sharp relative notion of irreducibility without conflating
+it with the published full-cone facet correspondence.
+
+An infeasible branch instead has the usual positive circuit containing the
+homogenized constant row `-1`.  Keeping these two circuit types separate
+prevents a vacuous branch implication from being mistaken for a substantive
+hybrid-overlap certificate.
+
 The theorem must allow multiple rooted facets and fractional sharing of a
 player between the two carrier roles.  It must specialize on `G(p,k)` to the
 common-hinge systems in Section 2.  Any proposed version must first reject:
