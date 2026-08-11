@@ -3196,8 +3196,8 @@ the packing/deficit origin of each rooted-pair coefficient---not of the facet
 normal alone.  Any all-dimensional selection theorem must retain this mark.
 
 The required mark can nevertheless be optimized without remembering a dual
-solver's history.  Fix a rooted completed row active at `x`, write `a_S>0`
-for its positive coefficients, and assume every nonpair `S` is `x`-tight.
+solver's history.  Fix a rooted completed row whose positive nonpair columns
+are `x`-tight, and write `a_S>0` for its positive coefficients.
 For the rooted pair `{r,i}`, split
 
 ```text
@@ -3227,8 +3227,8 @@ K delta(t)-Q(t)
 
 Every coefficient of `t_i` is positive, so each admissible coordinate is set
 to its upper endpoint.  This proves the lemma.  Notice the distinction: an
-unlabelled facet ray is insufficient, but a facet active at a specified
-Lmin point has a canonical best marking.  The all-dimensional problem can
+unlabelled facet ray is insufficient, but a rooted row labelled by a
+specified Lmin tight set has a canonical best marking.  The all-dimensional problem can
 therefore be posed as finite labelled-facet selection, not as recovery of a
 particular Farkas-dual vertex.
 
@@ -3245,8 +3245,9 @@ Root balance gives `c=delta_*+Q_bad` for the canonical best marking.  Hence
 K delta_*-Q_bad=Kc-(K+1)Q_bad.                        (RPM5)
 ```
 
-> **Corollary (bad-spoke fraction criterion).**  A normalized rooted facet
-> active at `x` has an affordable admissible marking exactly when
+> **Corollary (bad-spoke fraction criterion).**  A normalized rooted row
+> whose nonpair columns are `x`-tight has an affordable admissible marking
+> exactly when
 >
 > ```text
 > Q_bad/c <= K/(K+1),                                 (RPM6)
@@ -3258,6 +3259,85 @@ Thus the selection problem no longer involves a continuum of gauges: after
 enumerating a rectangular facet, sum only the weights of its rooted-pair
 spokes that fail the Lmin tightness label.  This is an exact finite
 labelled-facet test at each fixed dimension.
+
+### Theorem (labelled rooted-row packing/cover duality)
+
+The preceding test has a direct hypergraph dual.  Put `V=N\{r}` and let
+`G subset V` be the players whose rooted pair `{r,i}` is Lmin-tight;
+write `B=V\G`.  Let `H` consist of the offroot traces `A` of all
+root-containing Lmin-tight coalitions `{r} union A` of size at least three.
+For `a>=0` on `H`, impose the fractional-packing constraints
+
+```text
+sum_(A contains i) a_A <= 1                    (i in V),       (LPC1)
+```
+
+and complete the unused load by rooted pairs,
+
+```text
+q_i=1-sum_(A contains i)a_A.                                  (LPC2)
+```
+
+In the canonical marking, `q_i` is packing mass for `i in G` and deficit
+mass for `i in B`.  Define
+
+```text
+K=floor(n^2/4)-n+1,
+C=K(|G|-1)-|B|,
+w(A)=K(1-|A intersect G|)+|A intersect B|.                    (LPC3)
+```
+
+> The maximum canonical marked margin over this menu is
+>
+> ```text
+> C+max {sum_A w(A)a_A: a satisfies (LPC1)},                  (LPC4)
+> ```
+>
+> and, by exact fractional packing/cover duality, equals
+>
+> ```text
+> C+min {sum_(i in V)y_i:
+>        y>=0, sum_(i in A)y_i>=w(A) for every A in H}.        (LPC5)
+> ```
+>
+> An optimum may be chosen at a vertex.  In standard form `(a,q)`, that
+> vertex has at most `n-1` positive columns; its rooted completion therefore
+> has at most `n` support columns including the exceptional singleton.  It is
+> a min-semi-balanced atom, and it is a full exact-cone facet precisely when
+> it passes the Studeny--Kratochvil indecomposability criterion.
+
+Indeed, `(LPC2)` gives
+
+```text
+delta=|G|-1+sum_A[1-|A intersect G|]a_A,
+Q_bad=|B|-sum_A|A intersect B|a_A.                            (LPC6)
+```
+
+Expanding `K delta-Q_bad` gives `(LPC3)--(LPC4)`.  Ordinary rational LP
+duality gives `(LPC5)`.  Adding the slack coordinates `q` turns `(LPC1)`
+into `n-1` incidence equalities, so a basic feasible solution has at most
+`n-1` positive packing/slack columns.  The rooted-pair shear theorem then
+gives the semi-balanced and facet statements.  QED.
+
+This yields a useful dimension-free sufficient condition.  If `|G|>=2`,
+take `a=0`.  Then `delta=|G|-1>0`, and the worst case is `|G|=2`, where
+
+```text
+K delta-Q_bad >= K-(n-3)=floor(n^2/4)-2n+4.                   (LPC7)
+```
+
+For `n=2m` the right side is `(m-2)^2`; for `n=2m+1` it is
+`(m-1)(m-2)`.  It is positive for every `n>=6`.  Thus **two Lmin-tight
+rooted pairs automatically supply an affordable marked rooted row** in all
+target dimensions.
+
+Affordability is only the scalar price part of the hybrid proof.  Formula
+`(MFP)` still needs the forced deficits to occupy the required loss strata,
+or an Lmax comparison that pays the resulting multistratum defect.  The
+duality theorem must not be cited as an overlap proof without that alignment.
+Its value is to isolate the remaining obstruction: failure of price is
+exactly a low-cost weighted cover `(LPC5)`; when price succeeds, only
+stratum/sign alignment and the common-hinge repair remain.
 
 For the coefficient-two strict common certificate, the normalized packing is
 
@@ -4803,6 +4883,15 @@ canonical best marking is target-priced, with a common reverse row only when
 its Lmin-only marked price is insufficient.  The facet normal by itself does
 not retain this price.
 
+The labelled packing/cover audit sharpens the finite diagnosis.  Every one
+of the 16 positive-floor residual rows has an affordable canonical marked
+row, including the three rows that still require common-hinge repair.
+Therefore those three are not price failures: they are pure
+stratum/sign-alignment failures.  Across the fixed seven-player
+hostile/sharp suite, every branch either has a direct packet or an affordable
+labelled row at a maximum-overlap root.  These are finite controls, not the
+missing selection theorem.
+
 ```bash
 PYTHONPATH=verifiers/divergence:src python3 \
   verifiers/divergence/audit_n6_positive_residual_facet_atlas.py \
@@ -4813,6 +4902,11 @@ PYTHONPATH=verifiers/divergence:src python3 \
   verifiers/divergence/audit_affordable_rooted_packing.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output verifiers/divergence/affordable_rooted_packing.json
+
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/audit_labelled_facet_cover_duality.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/labelled_facet_cover_duality.json
 
 /tmp/coop-paper5-review/bin/python \
   verifiers/divergence/verify_n6_positive_residual_facets_z3.py \

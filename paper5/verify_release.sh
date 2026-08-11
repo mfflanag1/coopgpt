@@ -91,6 +91,12 @@ run_python coopgames/verifiers/divergence/audit_affordable_rooted_packing.py \
   --output "$scratch_dir/affordable-rooted-packing.json"
 cmp coopgames/verifiers/divergence/affordable_rooted_packing.json \
   "$scratch_dir/affordable-rooted-packing.json"
+run_python coopgames/verifiers/divergence/audit_labelled_facet_cover_duality.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/labelled-facet-cover-duality.json"
+cmp coopgames/verifiers/divergence/labelled_facet_cover_duality.json \
+  "$scratch_dir/labelled-facet-cover-duality.json"
 run_python coopgames/verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
   --output "$scratch_dir/n6-positive-residual-facets-z3.json"
 cmp coopgames/verifiers/divergence/n6_positive_residual_facets_z3.json \
