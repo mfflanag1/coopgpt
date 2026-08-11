@@ -271,7 +271,130 @@ fourteen explicit staged identities for the actual selections and a
 hard-coded primal/dual identity for the relaxation optimum.  No optimization
 call is used for the latter certificate.
 
-## 6. Hand payment certificate for the hardest spectral branch
+## 6. Multistage direct-gluing theorem
+
+There is a second dimension-free closure mechanism that uses no exactness
+witness.  Partition
+
+```text
+N=P disjoint-union G disjoint-union H,
+|P|=p, |G|=g, |H|=h,
+m=p+g, q=g+h, n=p+g+h,
+```
+
+where `p,g,h>=1`.  Suppose `z` has two strata,
+
+```text
+z_i=l on P,               z_i=b on G union H,
+0<=l<=min x(P),           max x(G)<=b<=min x(H),
+max x(P)<=min x(G).
+```
+
+Let `J` be a subset of `G`, put `s=|J|<g`, assume `s<=p`, and suppose the direct
+selection comparison
+
+```text
+x(H union J)<=z(H union J)                              (15)
+```
+
+is valid.  For example, (15) is automatic when `H union J` is Lmin-tight,
+because `z` lies in the core.  Put
+
+```text
+B=g/(m-s),
+R_x=x(J)+(1-B)x(G\J)-B x(P).                         (16)
+```
+
+Then the exact multistage identity is
+
+```text
+O-[1-gp/{q(m-s)}]T
+ =[gpn/{q(m-s)}]l
+  +B[z(H union J)-x(H union J)]+R_x.                 (17)
+```
+
+All three terms on the right are nonnegative.  Consequently
+
+```text
+O/T>=1-gp/[(g+h)(p+g-s)].                             (18)
+```
+
+This reaches the universal `n`-player target exactly when
+
+```text
+floor(n^2/4)gp
+ <=[floor(n^2/4)-n](g+h)(p+g-s).                     (19)
+```
+
+### Proof
+
+The sign branch gives
+
+```text
+T=pl+qb=x(P)+x(G)+x(H),
+O=pl+x(G)+hb=T-gb+x(G).
+```
+
+Writing `C=H union J`, its comparison slack is
+
+```text
+z(C)-x(C)=(h+s)b-x(H)-x(J).
+```
+
+Use `x(H)=T-x(P)-x(G)` and substitute `b=(T-pl)/q` in the
+right side of (17).  The `x(P)` terms cancel, the two pieces of `x(G)`
+combine to `x(G)`, and the remaining coefficients are `gp/q` on `l` and
+`h/q-[1-gp/{q(m-s)}]` on `T`.  These are precisely the coefficients of
+`O-[1-gp/{q(m-s)}]T`.
+
+It remains only to check the order residual.  Since `s<=p`, `0<B<=1`.
+Every payoff in `G` is at least the average payoff on `P`, so
+
+```text
+R_x >=[s+(1-B)(g-s)-Bp] average(x(P))=0.
+```
+
+This proves (17)--(18); clearing positive denominators gives (19).  Equality
+in (18) requires `l=0`, a tight comparison, and `R_x=0`.  QED.
+
+When `x=a` on `P union G` and `x=c` on `H`, the order residual vanishes
+identically.  Thus the two-stratum specialization is
+
+```text
+O-[1-gp/{q(m-s)}]T
+ =[gpn/{q(m-s)}]l
+  +[g/(m-s)][z(H union J)-x(H union J)].             (20)
+```
+
+This theorem supplies the direct-labelled arm of the surviving disjunction.
+It does not assert that every staged Lmin packet contains a coalition of the
+required form.  When it does, however, no rooted witness, full-cone facet, or
+rearrangement of unprotected labels is needed.
+
+A fresh exact seven-player control has
+
+```text
+(3,0,0,6,1,2,0),
+(1,0,2,0,0,3,6),
+(0,5,0,1,5,0,1),
+(p,g,h,s)=(3,2,2,1),
+x=(3/2,3/2,3/2,9/4,3/2,3/2,9/4),
+z=(4/3,2,4/3,2,2,4/3,2),
+```
+
+and coalition `74={1,3,6}=H union J` is tight at both selections.  Formula
+(20) specializes to
+
+```text
+O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)].               (21)
+```
+
+The lower-envelope game has three generators, actual overlap `11T/12`, and
+all seven one-witness branch relaxations have minimum `5/8`.  The hand bound
+is above the seven-player target `7/12`; the rooted LP values are a hostile
+control, not a premise of the theorem.
+
+## 7. Hand payment certificate for the hardest spectral branch
 
 The optimized label-free seven-player obstruction is the tested cut with a
 deficit on a gaining/later-stratum player.  Its root-`3` branch nevertheless
@@ -284,7 +407,7 @@ O-3/4
  +(1/4)[w(26)-x(26)]+(1/4)[w(57)-x(57)]
  +(5/4)[x(52)-z(52)]+(1/2)[x(57)-z(57)]
  +(1/4)[w(75)-z(75)]
- +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (15)
+ +(3/4)(x_0-x_4)+(1/2)(z_4-z_5)+(z_5-z_1).          (22)
 ```
 
 Every term is nonnegative by a displayed core/witness comparison,
@@ -294,17 +417,18 @@ three payoff-stratum gaps.  This proves by hand that the mixed packet fixes a
 baseline above the universal target while ordered label currency pays the
 multistage defect.
 
-The adjacent verifier checks (15) as a coefficient identity and verifies a
+The adjacent verifier checks (22) as a coefficient identity and verifies a
 matching feasible primal at `3/4`; it makes no optimization call.
 
-## 7. Evidence and limitations
+## 8. Evidence and limitations
 
 Human proof evidence:
 
 - equations (3)--(4), proving the mixed block-star theorem in every
   dimension;
 - equations (6)--(8), proving the general rooted-facet price criterion;
-- the reserve argument (10).
+- the reserve argument (10);
+- the multistage direct-gluing identity (17), valid in every dimension.
 
 Exact audit evidence:
 
@@ -312,6 +436,9 @@ Exact audit evidence:
 - 684 rational rows for the general facet-price identity;
 - exact lower-envelope, core, staged-selection, primal, dual, and root checks
   for the displayed seven-player control;
+- 1,080 exact two-stratum arithmetic rows and 680 nonuniform multistage order
+  rows for (17), plus fourteen exact staged selection certificates for its
+  fresh seven-player control;
 - all nine extreme mixed-witness projection cuts have price within their
   dimensional threshold; eight have only nongaining deficits, but only five
   put every deficit on the first Lmin floor.
@@ -324,7 +451,7 @@ stratum or pay its displacement using reserve overlap.
 The numerical search that exposed the control was used only for discovery
 and is not part of the evidence chain.
 
-## 8. Reproduction and review paths
+## 9. Reproduction and review paths
 
 Run from the repository root:
 
@@ -334,6 +461,9 @@ python3 verifiers/divergence/verify_mixed_block_star_boundary.py \
 
 python3 verifiers/divergence/verify_optimized_mixed_currency_certificate.py \
   --output verifiers/divergence/optimized_mixed_currency_certificate.json
+
+python3 verifiers/divergence/verify_two_stratum_direct_gluing.py \
+  --output verifiers/divergence/two_stratum_direct_gluing.json
 
 python3 verifiers/divergence/verify_rooted_star_matrix_facets.py \
   --input verifiers/divergence/mixed_witness_projection.json \
@@ -351,6 +481,8 @@ Primary files:
 - `verifiers/divergence/mixed_block_star_boundary.json` — saved output;
 - `verifiers/divergence/verify_optimized_mixed_currency_certificate.py` —
   solver-free hand-certificate audit;
+- `verifiers/divergence/verify_two_stratum_direct_gluing.py` — exact audit of
+  the dimension-free direct-gluing identity and its seven-player control;
 - `verifiers/divergence/verify_rooted_star_matrix_facets.py` — existing
   indecomposability audit.
 
@@ -368,3 +500,6 @@ Questions for hostile review:
    present in the cooperative-game/exact-cone literature?
 6. Can the four non-floor-aligned extreme cuts be handled by a known
    multistage transport or semi-balanced decomposition theorem?
+7. Is the multistage identity (17) already known as a labelled tight-set
+   gluing lemma, and can its coalition-existence premise be forced from a
+   complete staged Lmin packet?

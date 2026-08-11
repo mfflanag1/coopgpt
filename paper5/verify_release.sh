@@ -57,6 +57,10 @@ run_python coopgames/verifiers/divergence/verify_optimized_mixed_currency_certif
   --output "$scratch_dir/optimized-mixed-currency-certificate.json"
 cmp coopgames/verifiers/divergence/optimized_mixed_currency_certificate.json \
   "$scratch_dir/optimized-mixed-currency-certificate.json"
+run_python coopgames/verifiers/divergence/verify_two_stratum_direct_gluing.py \
+  --output "$scratch_dir/two-stratum-direct-gluing.json"
+cmp coopgames/verifiers/divergence/two_stratum_direct_gluing.json \
+  "$scratch_dir/two-stratum-direct-gluing.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

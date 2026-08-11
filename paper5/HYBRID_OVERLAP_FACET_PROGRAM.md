@@ -4358,6 +4358,91 @@ python3 verifiers/divergence/verify_n7_neutral_rectangle_control.py \
 The control refutes only the opposite-sign restriction.  Its overlap exceeds
 the main seven-player target by `43349/114276`.
 
+### Multistage direct gluing
+
+The direct-labelled arm of the surviving disjunction admits a clean
+dimension-free theorem.  Partition `N=P disjoint-union G disjoint-union H`,
+with sizes `p,g,h>=1`, and put `m=p+g`, `q=g+h`, `n=p+g+h`.  Suppose
+
+```text
+z=l on P,             z=b on G union H,
+0<=l<=min x(P),       max x(G)<=b<=min x(H),
+max x(P)<=min x(G).
+```
+
+If `J` is a subset of `G`, `s=|J|<g`, `s<=p`, and
+`x(H union J)<=z(H union J)`, put
+
+```text
+B=g/(m-s),
+R_x=x(J)+(1-B)x(G\J)-B x(P).
+```
+
+Direct substitution gives the exact identity
+
+```text
+O-[1-gp/{q(m-s)}]T
+ =[gpn/{q(m-s)}]l
+  +B[z(H union J)-x(H union J)]+R_x.                (TDG)
+```
+
+The first two terms are nonnegative by nonnegativity and core comparison.
+For the last, `s<=p` gives `0<B<=1`; every `G` payoff is at least the
+average `P` payoff, so
+
+```text
+R_x>=[s+(1-B)(g-s)-Bp] average(x(P))=0.
+```
+
+Hence
+
+```text
+O/T>=1-gp/[(g+h)(p+g-s)].                            (TDGB)
+```
+
+The comparison is automatic if `H union J` is Lmin-tight, since `z` is a
+core allocation.  Equality requires `l=0`, a tight comparison, and
+`R_x=0`.  The bound reaches the target exactly when
+
+```text
+floor(n^2/4)gp
+ <=[floor(n^2/4)-n](g+h)(p+g-s).
+```
+
+This is not a root-selection theorem: a general staged packet need not
+contain a tight coalition of the required form, and Lmax can have more than
+two strata.  It is nevertheless a dimension-free multistage Lmin theorem and
+removes any need for a witness packet on branches satisfying its incidence
+and Lmax-ceiling premises.  When `x` is constant on `P union G`, `R_x=0`
+and the formula reduces to the two-stratum identity.
+
+A fresh three-generator exact seven-player control with
+`(p,g,h,s)=(3,2,2,1)` has
+
+```text
+(3,0,0,6,1,2,0),
+(1,0,2,0,0,3,6),
+(0,5,0,1,5,0,1),
+x=(3/2,3/2,3/2,9/4,3/2,3/2,9/4),
+z=(4/3,2,4/3,2,2,4/3,2).
+```
+
+Coalition `74={1,3,6}` is tight at both selections, so `(TDG)` reads
+
+```text
+O-(5/8)T=(21/8)z_0+(1/2)[z(74)-x(74)].
+```
+
+An exact verifier checks 1,080 two-stratum parameter rows, 680 nonuniform
+multistage order rows, the lower envelope, fourteen staged selection
+certificates, and the fact that every rooted
+branch relaxation has minimum `5/8`:
+
+```bash
+python3 verifiers/divergence/verify_two_stratum_direct_gluing.py \
+  --output verifiers/divergence/two_stratum_direct_gluing.json
+```
+
 ### Mixed-colour rooted packets: the first noncommon gluing theorem
 
 The common-hinge projection is not the largest inequality obtainable from a
