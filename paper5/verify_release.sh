@@ -49,6 +49,10 @@ run_python coopgames/verifiers/divergence/verify_ceiling_root_interpolation.py \
   --output "$scratch_dir/ceiling-root-interpolation.json"
 cmp coopgames/verifiers/divergence/ceiling_root_interpolation.json \
   "$scratch_dir/ceiling-root-interpolation.json"
+run_python coopgames/verifiers/divergence/verify_mixed_block_star_boundary.py \
+  --output "$scratch_dir/mixed-block-star-boundary.json"
+cmp coopgames/verifiers/divergence/mixed_block_star_boundary.json \
+  "$scratch_dir/mixed-block-star-boundary.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

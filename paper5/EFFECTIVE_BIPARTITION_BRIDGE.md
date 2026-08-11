@@ -571,6 +571,10 @@ ray; it does not make every relative proof a full exact-cone facet.
   `u=min(x)/T`; it closes the target outside the explicit positive-floor
   wedge `1/n<=t<c_n`, `u<t(c_n-t)/(1-t)`, but none of the eight archived hard
   controls, so packet/facet charge remains necessary;
+- the one-common-hinge mixed block-star theorem: a complete `k`-hinge Lmin
+  star, a root-zero witness, and only one aligned Lmax-tight hinge prove
+  `O/T>=n/[k(p+1)]>=c_n`; witness elimination recovers the same
+  indecomposable rooted block-star facet as the sharp family;
 - clipped fractional-role decomposition `(U1)--(U3)`;
 - disjointness of the two ordered carrier packets;
 - `(CEB) => (H)`;

@@ -31,6 +31,19 @@ A literal partition of the players is already false at six players, while
 treating the Lmin packet itself as one exact-cone facet is also false in
 general.
 
+The newest positive result crosses that boundary on a dimension-free mixed
+class.  A complete Lmin block-star packet plus a root-zero witness and only
+one aligned Lmax-tight hinge already proves `(H)`; the other star hinges need
+not be common.  Its witness projection is the same indecomposable rooted
+block-star facet as in `G(p,k)`.  More generally, a rooted pair lift with
+deficit/root price `P=Q/delta` proves
+`O/T>=n_0/(P+n_0-1)` whenever its deficits lie on one lower loss stratum and
+one mixed row pays the total gain.  Every extreme cut in the current hostile
+suite has affordable price; multistage stratum/sign alignment is now the
+precise unresolved facet interface.
+The compact hostile-review packet is
+`MIXED_BLOCK_STAR_FACET_PRICE_THEOREM.md`.
+
 The companion note `EFFECTIVE_BIPARTITION_BRIDGE.md` extracts a capped
 fractional role of mass `a=min(1/theta_+,floor(n/2))` from the
 minimum-dispersion ceiling over-cover.  The initially surviving candidate
@@ -2025,6 +2038,217 @@ facets `(R_b)`.  Choosing a non-head zero witness destroys the summed-hinge
 identity at the required constant, matching the failed `7/15` and `7/16`
 relaxations above.  The distinguished-facet root is therefore necessary even
 inside the sharp family, not merely a convenient normalization.
+
+### Theorem (one-common-hinge mixed block-star bound)
+
+The full common-hinge hypothesis in `(OWG)` can be weakened to one common
+hinge, provided the complete Lmin star and its actual labels are retained.
+Let
+
+```text
+N={r} disjoint-union O disjoint-union B,
+|O|=p>=1,       |B|=k>=2,       n=p+k+1,
+```
+
+choose `b_0 in B` and `j in B\{b_0}`, and put
+`C_b={r} union (B\{b})`.  Suppose `x,z,w` have common total `T`, `w>=0`,
+`w_r=0`, and the labelled branch has
+
+```text
+x_r=c,
+x_b=b                         (b in B\{b_0}),
+x_i=a                         (i in O union {b_0}),
+0<=a<=b<=c,                                             (MBS1)
+
+z_r=z_b=A                     (b in B\{b_0}),
+z_(b_0)=B_0,                  z(O)=L,                  (MBS2)
+```
+
+where `z(O)` denotes the sum over `O`.  Assume the hybrid sign cut assigns
+`B` to `x` and `{r} union O` to `z`, and retain only
+
+```text
+x(C_b)<=w(C_b)                (b in B),
+z(C_j)<=x(C_j).                                        (MBS3)
+```
+
+Then
+
+```text
+O(x,z)>=nT/[k(p+1)]>=nT/floor(n^2/4).                 (MBS4)
+```
+
+#### Proof
+
+Sum the `k` witness comparisons.  Every block player occurs `k-1` times,
+while `w_r=0` and `w(B)<=T`, so
+
+```text
+k c+(k-1)[(k-1)b+a]<=(k-1)T.
+```
+
+Subtract `(k-1)` times
+
+```text
+T=c+(k-1)b+(p+1)a
+```
+
+to obtain
+
+```text
+c<=p(k-1)a.                                           (MBS5)
+```
+
+Put `P=p(k-1)` and `D=k(p+1)`.  Direct expansion gives the nonnegative
+identity
+
+```text
+(P-1)T-D(c-b)
+ =[kP+p+1](b-a)+n(Pa-c)>=0.                           (MBS6)
+```
+
+Hence `c-b<=(P-1)T/D`.  On the Lmax side,
+
+```text
+T=kA+B_0+L,
+z(C_j)=(k-1)A+B_0<=c+(k-2)b+a=x(C_j).
+```
+
+The fixed hybrid cut therefore has
+
+```text
+O=A+L+(k-1)b+a
+ =T-[(k-1)A+B_0-(k-1)b-a]
+ >=T-(c-b)
+ >=[D-P+1]T/D=nT/D.
+```
+
+Finally the positive integers `k` and `p+1` sum to `n`, so
+`D=k(p+1)<=floor(n^2/4)`.  QED.
+
+The proof isolates a more general exact-cone price criterion.  Suppose a
+labelled branch has one root at `c`, exactly `g` players at `b`, and exactly
+`m` players at `a`, so `n=1+g+m`, and its cross row still gives
+`O>=T-(c-b)`.  If a rooted pair-lift `(PFRDBx)` has root excess `delta>0`,
+all deficit weights supported on the `a`-level loss players, and total
+deficit weight `Q`, then nonnegativity of the pair premiums gives
+
+```text
+c<=(Q/delta)a=:P a.                                  (MFP1)
+```
+
+With `D_P=P+n-1`, the exact identity is
+
+```text
+(P-1)T-D_P(c-b)
+ =[g(P-1)+D_P](b-a)+n(Pa-c)>=0.                       (MFP2)
+```
+
+Therefore
+
+```text
+O/T>=n/(P+n-1).                                       (MFP3)
+```
+
+In particular the rooted facet proves the universal target whenever
+
+```text
+P=Q/delta<=floor(n^2/4)-n+1.                          (MFP4)
+```
+
+This gives a scalar meaning to the rooted exact-cone coefficients: `Q/delta`
+is the **effective facet price** paid by the lower loss block for one unit of
+exceptional-root load.  For the block-star lift, `Q=p`,
+`delta=1/(k-1)`, and `P=p(k-1)`, so `(MFP3)` is exactly `(MBS4)`.
+
+There is a useful reserve version.  Let the displayed root, `g` middle
+players, and `m` low players form only a structured subset `U` of size
+`n_0=1+g+m`; allow every player outside `U` to be a nongainer.  Let the full
+gain set consist of the `g` middle players and one low player, and suppose a
+mixed cross row proves
+
+```text
+z(G)-x(G)<=c-b.                                       (MFR1)
+```
+
+The same identity applies to `T_U=x(U)<=T`, while
+`O=T-[z(G)-x(G)]`.  Hence
+
+```text
+O/T>=n_0/(P+n_0-1).                                  (MFR2)
+```
+
+If `T_U=0`, the cross row gives `O=T` directly; otherwise
+`c>=b>=a` and `c<=Pa` force `P>=1`, as used in the division.
+
+It reaches the `n`-player target whenever
+
+```text
+P<=n_0 floor(n^2/4)/n-n_0+1.                         (MFR3)
+```
+
+Thus extra nongaining strata are a literal overlap reserve: they need not be
+forced into the three-level block.  The two independent tasks in a general
+branch are now explicit: find a low-loss-supported rooted facet of affordable
+price `P`, and find one mixed row paying the total gain by `c-b`.
+
+All nine extreme mixed-projection cuts in the hostile/sharp control suite
+have effective price at most their dimensional threshold (`6` at `n=7`,
+`9` at `n=8`).  This finite fact does not prove their required stratum/sign
+alignment: eight of the nine have every deficit on a nongaining player, but
+only five put every deficit on the first Lmin floor.  It shows that
+coefficient size itself is not the remaining obstruction; the four
+non-floor-aligned cuts require a genuinely multistage price theorem.
+
+Equality at the universal target requires the balanced product
+`k(p+1)=floor(n^2/4)`, equality in the cross-hinge row, and
+
+```text
+b=a,             c=p(k-1)a,             a=T/[k(p+1)]. (MBS7)
+```
+
+It also forces equality in the summed witness packet, hence `w(B)=T`.
+These conditions recover the sharp Lmin and root-zero witness of `G(p,k)`;
+the displayed sharp Lmax point is one realization, but `(MBS1)--(MBS3)`
+alone need not make its remaining levels unique.
+
+This is a genuinely mixed packet theorem.  Only `C_j` must be tight at both
+selections; the other `k-1` star hinges need only be Lmin-tight and compared
+to the root-zero witness.  Eliminating the witness's outside nonnegativity
+columns produces the same rooted pair-spoke shear `(GPL)`.  Thus its
+support-minimal exact-cone factor is the already classified indecomposable
+block-star facet, even though the labelled proof uses two colours.
+
+The theorem was exposed by a new three-generator seven-player exact control:
+
+```text
+g=(2,4,0,16,2,0,0),
+h=(0,8,5,0,0,8,3),
+k=(1,0,7,8,0,3,5),                                   (MBS8)
+```
+
+all of total `24`.  Its exact selections are
+
+```text
+x=(2,4,4,6,2,4,2),
+z=(7/4,9/2,9/2,9/2,7/4,9/2,5/2),                    (MBS9)
+```
+
+with actual overlap `22=11T/12` and unique maximum-overlap root `r=3`.
+Nevertheless its full rooted one-witness relaxation has exact optimum
+`7/12`.  The minimizing relaxation point is precisely the normalized
+`G(2,4)` sharp triple.  Fourteen explicit staged incidence identities certify
+the displayed selections, and a hard-coded rational primal/dual identity
+certifies the rooted optimum without invoking an optimizer.  This is a sharp
+branch boundary, not a new extremal game and not a proof of universal root
+selection.
+
+Reproduce with
+
+```bash
+python3 verifiers/divergence/verify_mixed_block_star_boundary.py \
+  --output verifiers/divergence/mixed_block_star_boundary.json
+```
 
 ### Maximum-overlap root candidate
 
