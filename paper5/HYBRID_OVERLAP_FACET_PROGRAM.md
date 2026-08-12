@@ -3804,6 +3804,65 @@ PYTHONPATH=verifiers/divergence:src python3 \
 Accordingly the next contraction theorem must be an overlap bound for
 four-or-more weighted roles; coincidence cannot be used beyond three.
 
+The four-role obstruction extends to every atomic dimension.  For `m>=2`,
+give the roles weights `(m,1,1,1)`, total `T=2m+4`, and take the lower
+envelope of
+
+```text
+(2m+4,0,0,0),       (2m,2,2,0),
+(2m+2,0,2,0),       (2m+2,2,0,0),
+(2m+3,0,0,1).                                      (W4F1)
+```
+
+Every displayed vector has total `T`; defining the game as their lower
+envelope makes it exact.  Its worth table is
+
+```text
+(0,2m,0,2m+2,0,2m+2,0,2m+3,
+ 0,2m,0,2m+2,0,2m+2,0,2m+4).                       (W4F2)
+```
+
+> **Theorem (weighted four-role divergence family).**  The weighted
+> selections in role totals are
+>
+> ```text
+> q^min=(2m+1,1,1,1),        q^max=(2m,2,2,0).      (W4F3)
+> ```
+>
+> Their canonical clone expansion is singleton-normalized exact on
+> `n=m+3` players and satisfies
+>
+> ```text
+> O/T=(m+1)/(m+2),          ||x-z||_1/T=2/(m+2).    (W4F4)
+> ```
+
+For weighted Lmin, the complement of coalition `7` gives `q_3<=1`, so the
+maximum minimum per-capita payoff is at most one.  At floor one, efficiency
+gives `q_0+q_1+q_2=2m+3`, while the tight lower bounds
+`q_0+q_1>=2m+2` and `q_0+q_2>=2m+2` imply `q_0>=2m+1`.  Hence
+`q_1+q_2<=2`; their floor bounds force `q_1=q_2=1`, and efficiency gives
+`q_0=2m+1`.  This pins all roles.
+
+For weighted Lmax, the singleton bound `q_0>=2m` makes the per-capita ceiling
+at least two.  At ceiling two, `q_0<=2m`, hence equality; the two pair bounds
+force `q_1,q_2>=2`, and efficiency plus nonnegativity forces
+`q_1=q_2=2,q_3=0`.  This again pins every role.  The overlap arithmetic is
+immediate, and `(CBE)` proves the clone statement.
+
+This family proves that the weighted four-role problem does not collapse to
+coincidence even as the clone multiplicity grows.  It is not an extremal
+family for `(H)`: `(m+1)/(m+2)` tends to one and lies far above the target.
+Its role is to force a quantitative four-role overlap theorem rather than a
+selector-equality theorem.
+
+Reproduce the lower envelope, pinning arithmetic, and parameter grid through
+`m=40` with
+
+```bash
+python3 verifiers/divergence/verify_weighted_four_role_family.py \
+  --output verifiers/divergence/weighted_four_role_family.json
+```
+
 At the exact-cone interface, contraction deletes duplicate player rows from
 both active incidence matrices and records their multiplicity.  It is the
 selection-face inverse of the clone expansion theorem below.  Hence a

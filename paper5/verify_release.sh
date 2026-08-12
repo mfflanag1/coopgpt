@@ -117,6 +117,10 @@ run_python coopgames/verifiers/divergence/verify_weighted_four_role_obstruction.
   --output "$scratch_dir/weighted-four-role-obstruction.json"
 cmp coopgames/verifiers/divergence/weighted_four_role_obstruction.json \
   "$scratch_dir/weighted-four-role-obstruction.json"
+run_python coopgames/verifiers/divergence/verify_weighted_four_role_family.py \
+  --output "$scratch_dir/weighted-four-role-family.json"
+cmp coopgames/verifiers/divergence/weighted_four_role_family.json \
+  "$scratch_dir/weighted-four-role-family.json"
 run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
   --output "$scratch_dir/complement-star-facets.json"
 cmp coopgames/verifiers/divergence/complement_star_facets.json \
