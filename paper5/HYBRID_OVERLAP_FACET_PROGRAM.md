@@ -3707,6 +3707,26 @@ not proved here.  Accordingly one may replace a common-module branch by its
 canonical block normal form, but may not assume that a minimal counterexample
 is role-irreducible.
 
+The two-role quotient boundary is closed.  If contraction leaves roles of
+weights `h,k`, singleton worths `a,b`, and total `T`, its role core is the
+interval
+
+```text
+a<=q_1<=T-b,                 q_2=T-q_1.
+```
+
+Both weighted lex objectives rank the per-capita pair
+`q_1/h,(T-q_1)/k` with multiplicities `h,k`.  Leximin maximizes the smaller
+and leximax minimizes the larger, so both choose the same clipped equalizer
+
+```text
+q_1=clip_[a,T-b](hT/(h+k)).                         (TQR)
+```
+
+Thus the expanded selections coincide and their overlap is `T`.  This closes
+only the case of two quotient roles; three or more weighted roles remain
+part of the open contraction branch.
+
 At the exact-cone interface, contraction deletes duplicate player rows from
 both active incidence matrices and records their multiplicity.  It is the
 selection-face inverse of the clone expansion theorem below.  Hence a
@@ -3837,10 +3857,13 @@ this; the normalization must come from a joint acyclic packing/cover dual or
 an indecomposable marked facet.  Thus `(ASB3)` is a real narrowing, not yet
 the gluing theorem.
 
-If no supported Lmax row splits `H`, `(ASB1)` factors through the contracted
-role system and `(CBE)` gives the canonical block normal form.  This is an
-exact separator-or-contraction handover for the next dual formulation, not a
-claim that the contraction arm is already closed by induction.
+If no supported Lmax coalition in `(ASB1)` splits `H`, its coalition-incidence
+part factors through the contracted role system and `(CBE)` gives the
+canonical block normal form.  The unit-column normalization still has to be
+expressed in weighted-role pinning coordinates; no general weighted
+affordability theorem is being assumed.  This is an exact
+separator-or-contraction handover for the next dual formulation, not a claim
+that the contraction arm is already closed by induction.
 
 There is a parallel exact reduction on the direct side.  Let `C` be any
 `x`-tight coalition meeting a carrier cycle.  The module property forces
