@@ -3529,11 +3529,13 @@ strictly improve the decreasing lexicographic objective.
 > every `r in R` is unaffordable on its full Lmin-tight menu.  Then at least
 > one of the following holds.
 >
-> 1. There are `r in R` and a full Lmin carrier `c notin R`, together with a
->    `z`-tight separator `D` such that `r in D` and `c notin D`.
+> 1. There is a full Lmin carrier arrow `r -> c` with `r in R` and
+>    `z_c<z_r`, together with a `z`-tight separator `D` such that `r in D`
+>    and `c notin D`.
 > 2. There is a directed carrier cycle `H subset R`.  The coordinates `x_i`
->    are constant on `H`, and every `x`-tight coalition meeting `H` contains
->    all of `H`.
+>    and `z_i` are each constant on `H`, every `x`-tight coalition meeting
+>    `H` contains all of `H`, and every member of `H` has the same
+>    gainer/nongainer sign.
 
 For the proof, if some root has no carrier in `R`, choose one outside.  By
 `(CMO)`, `x_c>=x_r`.  Since `c notin R` while `r` has maximum overlap,
@@ -3546,13 +3548,18 @@ and the Lmax tangent argument supplies `D`.  Otherwise choose one carrier in
 `R` for each root.  The resulting finite functional digraph has a directed
 cycle.  Coordinate monotonicity around the cycle forces equality of all its
 `x` coordinates.  If an `x`-tight coalition contains one cycle vertex, the
-carrier implications successively force every other vertex into it.  QED.
+carrier implications successively force every other vertex into it.  If `z`
+is not constant on the cycle, some carrier arrow descends strictly in `z`,
+and the Lmax tangent argument gives branch 1.  Otherwise `z` is constant as
+well.  Since every cycle vertex maximizes `min(x_i,z_i)`, the two common
+levels make all vertices gainers when the `z` level is higher and all
+nongainers when it is no higher.  QED.
 
 This theorem is the first genuine coupling between the complete Lmin packet
 and an Lmax row in the price-failure branch.  It still stops short of `(H)`:
 the separator branch needs a quantitative payment identity, while the cycle
-branch must show that the inseparable flat block has the nongainer/sign and
-cardinality structure needed for `(UBD)` or the exact direct interval.
+branch is already sign-coherent but must meet the cardinality and packet
+conditions in `(UBD)` or the exact direct interval.
 
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,
