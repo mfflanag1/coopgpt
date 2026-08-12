@@ -39,10 +39,10 @@ exactness, both weighted lex selections, total payoff, and overlap.  This
 falsifies “the cycle itself is always the direct block” on twelve exact
 archive rows and replaces it with a separator-or-weighted-contraction
 program.  Canonical block expansion proves that the weighted endowed quotient
-is equivalent to a singleton-normalized exact block game, yielding descent in
-the number of distinct incidence roles.  The remaining theorem on that arm
-is a role-irreducible separator/facet statement, not a scalar lower bound on
-one separator slack.
+is equivalent to a singleton-normalized exact block game, but does not yet
+yield an induction because the weighted affordability/carrier theorems have
+not been proved.  The remaining theorem on that arm is a normalized
+separator/facet coupling, not a scalar lower bound on one separator slack.
 
 The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
@@ -3692,15 +3692,20 @@ The overlap identity follows term by term.
 
 Applying `(CBE)` to a common-module quotient produces a canonical
 singleton-normalized exact game on the same `n` atomic players, with the same
-two selections and overlap as the original, but with a strictly smaller role
-incidence system: every coalition is a union of whole blocks.  Thus the
-cycle arm admits an exact **role-complexity descent**.  This does not prove
-`(H)` by ordinary induction on player number—the atomic target constant does
-not change—but it gives a genuine normal form.  A minimal counterexample to
-`(H)` may be assumed to have no common carrier module at its maximum-overlap
-price failures, unless it is already a nontrivial canonical block expansion.
-Equivalently, the remaining proof may be organized by the number of distinct
-active incidence rows rather than by `n`.
+two selections and overlap as the original, and with every coalition worth
+determined by its complete role blocks.  This is an exact normal-form
+replacement and proves that the weighted endowed quotient is not outside the
+original domain.
+
+It is **not yet a role-complexity induction**.  The members of `H` already
+have duplicate rows in both active tight-coalition matrices, so re-expansion
+does not strictly reduce their common active-incidence partition.  To iterate
+contraction on the quotient one would first need weighted versions of the
+labelled affordability classification and carrier-cycle/separator
+alternative, with the atomic target constant held at `n`; those theorems are
+not proved here.  Accordingly one may replace a common-module branch by its
+canonical block normal form, but may not assume that a minimal counterexample
+is role-irreducible.
 
 At the exact-cone interface, contraction deletes duplicate player rows from
 both active incidence matrices and records their multiplicity.  It is the
@@ -3802,34 +3807,84 @@ x_j=min(x_j,z_j)<=b<=a.                              (ASB4)
 ```
 
 If the block loss `L=a-b` is positive, every negative debt edge `j -> i`,
-`i in H`, is a strict high--low rectangle in the Lmin order.  By the complete
-sign-coherent Lmin theorem it is staged-available, and its length `a-x_j`
-dominates the overlap-level component `b-x_j`.  But
+`i in H`, is strict in the Lmin order and is available to the sign-coherent
+Lmin **transport**.  But it is not a high--low overlap rectangle: for the
+gainer `j`,
 
 ```text
-z_j-x_j=(z_j-b)+(b-x_j).                             (ASB5)
+max(x_j,z_j)=z_j>=b=min(x_i,z_i).
 ```
 
-The rectangle does not by itself pay the vertical earlier-stratum component
-`z_j-b`.  When `L=0`, there is no common block loss to purchase, and strict
-Lmin availability can likewise disappear at a tied maximum-overlap gainer.
+Thus the canonical label-currency family has no interval from `j` to `i`.
+The algebraic split
+
+```text
+z_j-x_j=(z_j-b)+(b-x_j)                              (ASB5)
+```
+
+does not turn either summand into separately countable overlap currency.
+When `L=0`, strict Lmin availability can also disappear at a tied
+maximum-overlap gainer.
 
 Consequently the carrier failure branch now has a fully identified two-colour
-coupling: Lmax pinning exposes the common block loss through `(ASB3)`, while
-the complete Lmin packet supplies the horizontal component of every earlier-
-gainer debt.  What remains is a **triangular normalized coefficient-matching
-theorem**: recursively discharge the vertical terms `C_j(z_j-b)` through
-strictly earlier Lmax strata, and absorb the horizontal terms
-`C_j(b-x_j)` without charging any labelled overlap layer more than once.
-Arbitrary circuit amplification cannot prove this; the normalization must
-come from a joint acyclic packing/cover dual or an indecomposable marked
-facet.  Thus `(ASB3)` is a real narrowing, not yet the gluing theorem.
+coupling problem: Lmax pinning exposes the common block loss through `(ASB3)`,
+and the complete Lmin packet provides exactly the opposite-sign transport
+edges on which its earlier-gainer debts can travel.  What remains is a
+**triangular normalized gain--loss matching theorem** that combines those
+two transports without reclassifying their mass as label currency or
+charging a payoff layer twice.  Arbitrary circuit amplification cannot prove
+this; the normalization must come from a joint acyclic packing/cover dual or
+an indecomposable marked facet.  Thus `(ASB3)` is a real narrowing, not yet
+the gluing theorem.
 
 If no supported Lmax row splits `H`, `(ASB1)` factors through the contracted
-role system and `(CBE)` applies.  In a role-minimal counterexample at least
-one positive-multiplier row in the aggregate packet must split `H`; otherwise
-the entire chosen packet descends.  This is the exact separator-or-contraction
-handover needed for the next dual formulation.
+role system and `(CBE)` gives the canonical block normal form.  This is an
+exact separator-or-contraction handover for the next dual formulation, not a
+claim that the contraction arm is already closed by induction.
+
+There is a parallel exact reduction on the direct side.  Let `C` be any
+`x`-tight coalition meeting a carrier cycle.  The module property forces
+`H subset C`.  Split
+
+```text
+C=H_C disjoint-union J_C,
+H_C={i in C:z_i<=x_i},       J_C={i in C:z_i>x_i}.
+```
+
+Then `H subset H_C`, and core feasibility of `z` gives
+
+```text
+z(C)-x(C)>=0.                                      (CTS)
+```
+
+Thus every supported Lmin row meeting the cycle already supplies the
+comparison premise of `(TDG)`, with `H=H_C` and `J=J_C`; no separate common
+hinge is needed.  The remaining conditions are exactly
+
+```text
+J_C is a proper subset of all gainers,
+F g p <=(F-n)(g+|H_C|)(p+g-|J_C|),
+R_x(C)+R_z(C)>=0,                                  (CTS2)
+```
+
+where `p` is the number of nongainers outside `C`, `g` is the total number
+of gainers, and `F=floor(n^2/4)`.  This isolates a finite labelled score on
+the actual Lmin-tight support.
+
+> **Carrier-support selection lemma (open).**  In the all-unaffordable
+> maximum-overlap-root branch, either a carrier cycle has an Lmax separator
+> whose payments close the triangular gain--loss matching, or some Lmin-tight
+> coalition meeting a carrier cycle satisfies `(CTS2)`; common-module cases
+> may first be put in canonical block form `(CBE)`.
+
+This formulation contains precisely the twelve archive repairs: the cycle
+alone is not always the correct nongainer block, but adjoining the other
+nongainers already present in a selected tight coalition is allowed.  On all
+228 archived six-player all-unaffordable rows, some such coalition satisfies
+`(CTS2)`; 216 use no extra nongainer and twelve use exactly one.  This is
+still finite evidence.  The prospective human proof must average or separate
+the support columns of a sign-coherent pinning relation while retaining the
+nonlinear cardinality term and exact residual sum.
 
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,
