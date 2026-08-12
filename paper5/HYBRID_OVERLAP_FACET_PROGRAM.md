@@ -4792,6 +4792,23 @@ Indeed `s<=p` gives `0<B<=1` and the Lmin order gives
 `average(z(J))<=average(z(G))`; hence `R_z>=0`.  The exact residual criterion
 is stronger: it can hold when `s>p` and without either displayed block order.
 
+This gives a convenient upper-block corollary.  Let `L` be the nongainers,
+choose a nonempty proper block `H subset L`, put `P=L\H`, and let `J` be the
+`s` lowest-`z` gainers.  If
+
+```text
+s<=|P|,  max x(P)<=min x(G),  max z(G)<=min z(H),
+H union J is Lmin-tight,
+floor(n^2/4)|G||P|
+ <=[floor(n^2/4)-n](|G|+|H|)(|P|+|G|-s),             (UBD)
+```
+
+then the target hybrid-overlap inequality holds.  Tightness makes the
+comparison term nonnegative by core feasibility, the first line makes both
+ordinal residuals nonnegative, and `(UBD)` is exactly the target cardinality
+test.  This is a proved conditional handover, not a theorem that such an
+upper block and packet must exist.
+
 When `x` is constant on `P union G` and on `H`, and `z` is constant on `P`
 and on `G union H`, both residuals vanish and `(TDG)` reduces to the earlier
 two-stratum identity.  More importantly, the arbitrary-Lmax formula exactly
@@ -4892,6 +4909,20 @@ hostile/sharp suite, every branch either has a direct packet or an affordable
 labelled row at a maximum-overlap root.  These are finite controls, not the
 missing selection theorem.
 
+A hostile audit tests the converse handover on the entire six-player
+archive.  There are 233 rows for which **every** maximum-overlap root has an
+unaffordable canonical labelled row; all 233 admit a target-reaching direct
+packet.  The tempting deterministic rule `H=R`, with `R` the entire
+maximum-overlap root block, is nevertheless false: it supplies an Lmin-tight
+direct packet on 228 rows and fails on five.  In every one of the five exact
+failures, adjoining one highest-`x` remaining nongainer to `R` leaves a
+singleton lower block `P`; a one-gainer packet then has an Lmin-tight
+comparison, zero `R_x`, positive `R_z`, and direct base `4/5`.  Thus the
+finite handover is not a fixed-root-block theorem.  The surviving conjecture
+must select an **upper nongainer block containing the roots**, and `(UBD)`
+identifies the clean ordinal branch of that selection problem.  The 233-row
+result remains archive evidence, not a six-player domain theorem.
+
 ```bash
 PYTHONPATH=verifiers/divergence:src python3 \
   verifiers/divergence/audit_n6_positive_residual_facet_atlas.py \
@@ -4907,6 +4938,11 @@ PYTHONPATH=verifiers/divergence:src python3 \
   verifiers/divergence/audit_labelled_facet_cover_duality.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output verifiers/divergence/labelled_facet_cover_duality.json
+
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/audit_cover_to_direct_handover.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/cover_to_direct_handover.json
 
 /tmp/coop-paper5-review/bin/python \
   verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
