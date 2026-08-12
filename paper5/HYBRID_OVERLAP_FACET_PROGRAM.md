@@ -3767,6 +3767,43 @@ python3 verifiers/divergence/verify_weighted_three_role_coincidence.py \
 The exchange proof is dimension-free in the integer weights; the grid is a
 falsification audit only.
 
+The three-role boundary is sharp.  On four roles with weights `(3,1,1,1)`,
+take the exact role game whose worths in binary coalition order are
+
+```text
+(0,11,0,14,0,14,0,16,0,12,0,15,0,15,0,18).        (W4O1)
+```
+
+Its weighted selections, in role totals, are
+
+```text
+q^min=(12,2,2,2),              q^max=(11,3,3,1).    (W4O2)
+```
+
+Thus weighted Lmin and Lmax already differ at four roles.  Canonical block
+expansion gives the singleton-normalized exact six-player game with
+
+```text
+x=(4,4,4,2,2,2),
+z=(11/3,11/3,11/3,3,3,1),
+T=18, O=16, O/T=8/9.                                (W4O3)
+```
+
+The example is a boundary control, not a threat to `(H)`: its overlap is far
+above `2/3`.  An exact verifier minimizes every one of the sixteen role
+coalitions, lifts those witnesses to all 64 clone coalitions by the `(CBE)`
+placement rule, and independently recomputes both complete lexicographic
+traces:
+
+```bash
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/verify_weighted_four_role_obstruction.py \
+  --output verifiers/divergence/weighted_four_role_obstruction.json
+```
+
+Accordingly the next contraction theorem must be an overlap bound for
+four-or-more weighted roles; coincidence cannot be used beyond three.
+
 At the exact-cone interface, contraction deletes duplicate player rows from
 both active incidence matrices and records their multiplicity.  It is the
 selection-face inverse of the clone expansion theorem below.  Hence a
