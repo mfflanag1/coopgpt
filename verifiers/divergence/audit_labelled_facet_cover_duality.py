@@ -149,6 +149,14 @@ def solve_labelled_cover(support: tuple[int, ...], root: int, n: int) -> dict:
         max_delta_on_top = F(len(good) - 1) - delta_objective
 
     affordable = margin > 0 or (margin == 0 and max_delta_on_top > 0)
+    common_nonpair_carriers = set(nonroots)
+    for trace in traces:
+        common_nonpair_carriers.intersection_update(
+            i for i in nonroots if trace >> i & 1
+        )
+    if not good and n >= 6:
+        if affordable == bool(common_nonpair_carriers):
+            raise AssertionError((root, "pair-free carrier alternative"))
     unique_pair_partner_escaped = None
     if len(good) == 1:
         partner = good[0]
@@ -172,6 +180,7 @@ def solve_labelled_cover(support: tuple[int, ...], root: int, n: int) -> dict:
         "max_root_excess_on_top_face": str(max_delta_on_top),
         "q_bad": str(q_bad),
         "affordable": affordable,
+        "common_nonpair_carriers": sorted(common_nonpair_carriers),
         "unique_pair_partner_escaped_by_nonpair": unique_pair_partner_escaped,
         "packing": [str(value) for value in primal_solution],
         "cover": [str(value) for value in cover_solution],
@@ -211,6 +220,18 @@ def main() -> None:
             )
             counts["n6_one_pair_roots_with_escaping_nonpair"] += sum(
                 row["unique_pair_partner_escaped_by_nonpair"] is True
+                for row in audits
+            )
+            counts["n6_pair_free_roots"] += sum(
+                not row["tight_rooted_pairs"] for row in audits
+            )
+            counts["n6_pair_free_affordable_roots"] += sum(
+                not row["tight_rooted_pairs"] and row["affordable"]
+                for row in audits
+            )
+            counts["n6_pair_free_roots_with_common_carrier"] += sum(
+                not row["tight_rooted_pairs"]
+                and bool(row["common_nonpair_carriers"])
                 for row in audits
             )
             counts["n6_records_with_some_affordable_root"] += any(
@@ -276,6 +297,11 @@ def main() -> None:
             "nonpair trace omits the unique tight-pair partner; otherwise "
             "that partner lies in every packing column and root excess is "
             "identically zero"
+        ),
+        "pair_free_common_carrier_theorem": (
+            "for n>=6 and |G|=0, a root is affordable iff the rooted "
+            "nonpair traces have empty total intersection; an unaffordable "
+            "pair-free root has a common carrier in every trace"
         ),
         "n6_four_arm_coverage": (
             "direct, then ceiling interpolation, then zero-floor null descent, "

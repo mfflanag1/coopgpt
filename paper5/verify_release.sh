@@ -103,6 +103,10 @@ run_python coopgames/verifiers/divergence/audit_cover_to_direct_handover.py \
   --output "$scratch_dir/cover-to-direct-handover.json"
 cmp coopgames/verifiers/divergence/cover_to_direct_handover.json \
   "$scratch_dir/cover-to-direct-handover.json"
+run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
+  --output "$scratch_dir/complement-star-facets.json"
+cmp coopgames/verifiers/divergence/complement_star_facets.json \
+  "$scratch_dir/complement-star-facets.json"
 run_python coopgames/verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
   --output "$scratch_dir/n6-positive-residual-facets-z3.json"
 cmp coopgames/verifiers/divergence/n6_positive_residual_facets_z3.json \

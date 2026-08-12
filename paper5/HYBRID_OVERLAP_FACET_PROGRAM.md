@@ -18,6 +18,18 @@ falsified strengthenings, and the exact boundary of what the one-packet
 theory currently gives on the facet side.  It does not claim a proof of
 `(H)`.
 
+The newest theorem completely classifies the **scalar affordability** of a
+labelled rooted row in every target dimension.  Two tight rooted pairs are
+automatically affordable; one pair fails exactly when its partner is locked
+into every larger rooted tight coalition; and a pair-free root fails exactly
+when all its larger rooted tight coalitions share a common carrier.  An
+empty-intersection family supplies a canonical minimal fractional packing,
+whose balanced equality support is a saturated indecomposable
+complement-star facet.  The all-dimensional overlap theorem is still open:
+the remaining task is to turn the discrete carrier structure of price
+failures into a direct upper-block packet, and to solve stratum alignment
+when a scalar-affordable row is selected.
+
 The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
 reduction in Section 8 turns it into a rooted two-tangent budget and gives a
@@ -3354,6 +3366,123 @@ This is a dimension-free structural handover.  It says that the direct arm
 must absorb a locked partner together with the root, but it does not by
 itself select the remaining upper nongainer block or a gainer packet.
 
+The pair-free branch has an exact hypergraph alternative as well.  Put
+`m=n-1`, so
+
+```text
+K=floor((m-1)^2/4)=max_(2<=t<=m)(t-1)(m-t),
+floor(n^2/4)=K+m.                                    (LPC9)
+```
+
+Assume `G` is empty and the total intersection of the nonpair traces is
+empty.  Choose an inclusion-minimal empty-intersection subfamily
+`A_1,...,A_t`.  Minimality supplies
+
+```text
+v_j in intersection_(k!=j) A_k \ A_j.
+```
+
+The witnesses are distinct.  Every `A_j` contains the other `t-1`
+witnesses, while every vertex occurs in at most `t-1` of the selected
+traces.  Therefore `a_(A_j)=1/(t-1)` is a feasible fractional packing, with
+root excess `1/(t-1)>0`, and
+
+```text
+sum_j [K+|A_j|]/(t-1)
+ >=t[K+t-1]/(t-1)
+ >=K+m=floor(n^2/4).                                 (LPC10)
+```
+
+The last difference, after multiplication by `t-1`, is exactly
+`K-(t-1)(m-t)>=0`.
+
+Conversely, if every nonpair trace contains a common player `c`, its packing
+constraint gives `sum_A a_A<=1`; since `G` is empty, `(LPC6)` gives
+`delta=sum_A a_A-1<=0` for every packing.
+
+> **Theorem (pair-free common-carrier alternative).**  For `n>=6`, a
+> pair-free root is affordably markable if and only if its larger rooted
+> Lmin-tight coalitions have empty offroot intersection.  Thus a pair-free
+> price failure is exactly a rooted star: some common carrier player belongs
+> to every larger rooted tight coalition.
+
+Equality in the constructed bound forces
+`K=(t-1)(m-t)` and `|A_j|=t-1` for every `j`.  Hence, with
+`W={v_1,...,v_t}`, the selected traces are exactly
+`A_j=W\{v_j}`, and `t-1` and `m-t` are the two balanced parts maximizing
+their product.  This is the complement-of-singletons block-star geometry of
+the sharp family.  It characterizes equality for this canonical packing;
+additional tight columns could still make the best marked margin positive.
+
+The canonical equality completion is itself a dimension-free exact-cone
+facet.  Write `p=m-t` (so `p>=1` in the target equality range),
+`U=V\W`, and put
+
+```text
+C_j={r} union (W\{v_j}),       P_u={r,u}.
+```
+
+Then the scaled incidence identity is
+
+```text
+sum_j 1_(C_j)+(t-1)sum_(u in U)1_(P_u)
+ -[p(t-1)+1]1_{r}=(t-1)1_N.                         (CSF)
+```
+
+> **Theorem (complement-star facet).**  For every `t>=2` and `p>=1`,
+> `(CSF)` is a saturated indecomposable purely min-semi-balanced system and
+> therefore defines a facet of the exact-game cone by the
+> Studeny--Kratochvil criterion.
+
+The support has exactly `1+t+p=n` columns.  On the nonroot coordinates its
+positive incidence matrix is block diagonal with blocks `J_t-I_t` and
+`I_p`, so it has full rank; the root singleton completes the rank to `n`.
+For indecomposability, let `E` be another feasible exceptional set and let
+`gamma` be its common load.  Write
+
+```text
+epsilon_r=1_{r in E},  q=|E intersect W|,  s=|E intersect U|.
+```
+
+Solving the witness and outside coordinate equations forces
+
+```text
+a_j=[gamma+q-(t-1)1_{v_j in E}]/(t-1),
+b_u=gamma+1_{u in E},
+lambda_r=epsilon_r-s-q/(t-1)
+         -[1+p(t-1)]gamma/(t-1).                    (CSX)
+```
+
+All three coefficient families must be nonnegative.  If `gamma<0`, the
+`b_u` and `a_j` inequalities force every nonroot player into `E`, and
+`(CSX)` leaves only `E=N`.  If `gamma>=0`, either `E` is empty, or
+`epsilon_r=1`.  For `q=0`, `(CSX)` permits only `{r}` and one pair `P_u`;
+for `0<q<t`, positivity of an included-witness coefficient gives
+`gamma>=t-1-q`, and `(CSX)` permits only `q=t-1`, `s=0`, `gamma=0`, namely
+one `C_j`; `q=t` is impossible.  Thus the only feasible exceptional sets
+are the displayed support, the empty set, and `N`, which is exactly the
+indecomposability test.  The assumption `p>=1` is essential to this short
+classification; the `p=0,t=3` system is decomposable.
+
+This adds an exact-cone explanation to the scalar equality mechanism: the
+minimal empty-intersection packing selects a distinguished saturated facet,
+not merely an arbitrary Farkas row.  It is a member of the published
+indecomposable semi-balanced framework; no literature-novelty claim is made
+for the family before specialist comparison.
+
+Together with `(LPC7)` and the locked-pair alternative, this completely
+classifies **scalar** affordability for every root when `n>=6`:
+
+1. two tight rooted pairs imply affordability;
+2. one tight rooted pair fails exactly when its partner is a common carrier;
+3. no tight rooted pairs fail exactly when some common carrier exists.
+
+The next selection problem is therefore discrete.  If every candidate root
+is unaffordable, choose a carrier for each root and show that the resulting
+carrier graph exposes an upper nongainer block and an Lmin-tight gainer
+packet satisfying `(UBD)` or the exact interval criterion.  No continuous
+facet-price optimization remains in the failure branch.
+
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,
 or an Lmax comparison that pays the resulting multistratum defect.  The
@@ -4974,6 +5103,10 @@ PYTHONPATH=verifiers/divergence:src python3 \
   verifiers/divergence/audit_cover_to_direct_handover.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output verifiers/divergence/cover_to_direct_handover.json
+
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/verify_complement_star_facets.py \
+  --output verifiers/divergence/complement_star_facets.json
 
 /tmp/coop-paper5-review/bin/python \
   verifiers/divergence/verify_n6_positive_residual_facets_z3.py \
