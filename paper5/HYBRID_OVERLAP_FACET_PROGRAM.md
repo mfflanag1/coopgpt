@@ -3855,6 +3855,64 @@ family for `(H)`: `(m+1)/(m+2)` tends to one and lies far above the target.
 Its role is to force a quantitative four-role overlap theorem rather than a
 selector-equality theorem.
 
+A natural stronger guess would be a universal `O/T>=3/4` theorem for exact
+weighted games on four roles.  That guess is false even under the
+normalization needed by `(CBE)`.  Give the roles weights `(m,1,1,1)`, where
+`m>=5`, and take the lower envelope of
+
+```text
+(0,5,3,4), (1,3,3,5), (2,4,3,3), (5,0,7,0), (0,6,0,6).       (W4N1)
+```
+
+The binary-order worth table is
+
+```text
+(0,0,0,4,0,0,6,6,0,4,0,5,6,6,7,12).                         (W4N2)
+```
+
+Every singleton worth is zero and every coalition minimum is attained by a
+displayed generator, so the game is nonnegative and exact.  For every
+`m>=5`, exact staged elimination gives
+
+```text
+q^min=(5,1,5,1),              q^max=(3,3,3,3),
+O=8,                           O/T=2/3.                        (W4N3)
+```
+
+For Lmin, complementing the triple worth `w(123)=7` gives `q_0<=5`, so the
+first floor is at most `5/m`; the displayed candidate attains it.  On the
+face `q_0=5`, efficiency gives `q_1+q_2+q_3=7`, while the pair bounds
+`q_1+q_2>=6` and `q_2+q_3>=6` give `q_3<=1` and `q_1<=1`.
+Thus the next floor is at most one; the candidate attains it and forces
+`(q_1,q_2,q_3)=(1,5,1)`.  When `m=5` these equal levels merge into one
+stage, without changing the selected point.
+
+For Lmax, `q_1+q_2>=6` forces the ceiling of the unit roles to be at least
+three.  The candidate `(3,3,3,3)` attains ceiling three because `m>=5`.
+On that face the same bound forces `q_1=q_2=3`, and
+`q_2+q_3>=6` then forces `q_3=3`; efficiency gives `q_0=3`.
+The verifier independently encodes every exact stage and is useful for
+hostilely auditing this short elimination.
+
+Canonical block expansion gives singleton-normalized exact games on every
+`n=m+3>=8`, with the same ratio.  These games do **not** challenge `(H)`:
+the conjectured atomic target is `1/2` at `n=8` and decreases
+thereafter.  They instead prove that contraction to four roles cannot be
+closed by an atomic-size-independent `3/4` estimate.  Any useful weighted
+four-role theorem must retain total atomic weight, largest-block weight, or
+additional carrier/label data.  This is a precise failure of the proposed
+local bridge, not a failure of the main conjecture.
+
+Reproduce the lower envelope, independently encoded staged selections, the
+parameter grid through `m=40`, and explicit attainment witnesses for all
+2,048 coalitions of the `m=8` canonical expansion with
+
+```bash
+PYTHONPATH=src python3 \
+  verifiers/divergence/verify_weighted_four_role_normalized_obstruction.py \
+  --output verifiers/divergence/weighted_four_role_normalized_obstruction.json
+```
+
 Reproduce the lower envelope, pinning arithmetic, and parameter grid through
 `m=40` with
 
