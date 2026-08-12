@@ -34,7 +34,7 @@ from audit_labelled_facet_cover_duality import (  # noqa: E402
     maximum_overlap_roots,
     solve_labelled_cover,
 )
-from audit_lmax_overcover import records  # noqa: E402
+from audit_lmax_overcover import coalition_sum, records  # noqa: E402
 from audit_n6_sparse_lmax_complete_lmin_roots import (  # noqa: E402
     complete_lmin_support,
 )
@@ -114,6 +114,10 @@ def main() -> None:
     repaired = []
     repaired_locked_pairs = 0
     repaired_pair_free = 0
+    unaffordable_roots = 0
+    unaffordable_roots_with_carrier_in_root_block = 0
+    full_tight_unaffordable_roots = 0
+    full_tight_unaffordable_roots_with_carrier_in_root_block = 0
 
     for path in args.paths:
         payload = json.loads(path.read_text())
@@ -123,6 +127,45 @@ def main() -> None:
             support = complete_lmin_support(values, x)
             roots = maximum_overlap_roots(x, z)
             audits = tuple(solve_labelled_cover(support, root, 6) for root in roots)
+            root_set = set(roots)
+            for audit in audits:
+                if audit["affordable"]:
+                    continue
+                unaffordable_roots += 1
+                if len(audit["tight_rooted_pairs"]) == 1:
+                    carriers = set(audit["tight_rooted_pairs"])
+                else:
+                    carriers = set(audit["common_nonpair_carriers"])
+                if not carriers:
+                    raise AssertionError((path.name, trail, "unaffordable root has no carrier"))
+                root = audit["root"]
+                if not all(x[carrier] >= x[root] for carrier in carriers):
+                    raise AssertionError((path.name, trail, "carrier order failure"))
+                if carriers & root_set:
+                    unaffordable_roots_with_carrier_in_root_block += 1
+
+            full = (1 << 6) - 1
+            full_tight_support = tuple(
+                coalition
+                for coalition in range(1, full)
+                if coalition_sum(x, coalition) == values[coalition]
+            )
+            full_audits = tuple(
+                solve_labelled_cover(full_tight_support, root, 6) for root in roots
+            )
+            for audit in full_audits:
+                if audit["affordable"]:
+                    continue
+                full_tight_unaffordable_roots += 1
+                if len(audit["tight_rooted_pairs"]) == 1:
+                    carriers = set(audit["tight_rooted_pairs"])
+                else:
+                    carriers = set(audit["common_nonpair_carriers"])
+                root = audit["root"]
+                if not carriers or not all(x[carrier] >= x[root] for carrier in carriers):
+                    raise AssertionError((path.name, trail, "full-tight carrier order failure"))
+                if carriers & root_set:
+                    full_tight_unaffordable_roots_with_carrier_in_root_block += 1
             if any(row["affordable"] for row in audits):
                 continue
             all_unaffordable += 1
@@ -161,7 +204,6 @@ def main() -> None:
             witness = repairs[0]
             if F(witness["base_bound_ratio"]) != F(4, 5):
                 raise AssertionError("unexpected one-step repair base")
-            root_set = set(roots)
             mutual_locked_pair = all(
                 len(audit["tight_rooted_pairs"]) == 1
                 and audit["tight_rooted_pairs"][0] in root_set
@@ -196,6 +238,20 @@ def main() -> None:
         raise AssertionError((root_block_successes, len(repaired)))
     if (repaired_locked_pairs, repaired_pair_free) != (4, 1):
         raise AssertionError((repaired_locked_pairs, repaired_pair_free))
+    if (unaffordable_roots, unaffordable_roots_with_carrier_in_root_block) != (560, 560):
+        raise AssertionError(
+            (unaffordable_roots, unaffordable_roots_with_carrier_in_root_block)
+        )
+    if (
+        full_tight_unaffordable_roots,
+        full_tight_unaffordable_roots_with_carrier_in_root_block,
+    ) != (554, 554):
+        raise AssertionError(
+            (
+                full_tight_unaffordable_roots,
+                full_tight_unaffordable_roots_with_carrier_in_root_block,
+            )
+        )
 
     report = {
         "status": "exact-rational discovery and hostile falsification audit",
@@ -208,6 +264,20 @@ def main() -> None:
         "n6_counterexamples_repaired_by_one_upper_nongainer": len(repaired),
         "n6_repaired_mutual_locked_pair_rows": repaired_locked_pairs,
         "n6_repaired_pair_free_rows": repaired_pair_free,
+        "n6_selected_menu_unaffordable_maximum_overlap_roots": unaffordable_roots,
+        "n6_selected_menu_unaffordable_roots_with_carrier_in_root_block": (
+            unaffordable_roots_with_carrier_in_root_block
+        ),
+        "n6_full_tight_unaffordable_maximum_overlap_roots": (
+            full_tight_unaffordable_roots
+        ),
+        "n6_full_tight_unaffordable_roots_with_carrier_in_root_block": (
+            full_tight_unaffordable_roots_with_carrier_in_root_block
+        ),
+        "carrier_order_human_theorem": (
+            "if every Lmin-tight coalition containing positive root r also "
+            "contains c, then Lmin optimality forces x_c>=x_r"
+        ),
         "counterexamples": repaired,
         "valid_conditional_statement": (
             "For any chosen H and J, the proved direct master identity reaches "

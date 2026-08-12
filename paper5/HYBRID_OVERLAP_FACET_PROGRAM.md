@@ -3483,6 +3483,77 @@ carrier graph exposes an upper nongainer block and an Lmin-tight gainer
 packet satisfying `(UBD)` or the exact interval criterion.  No continuous
 facet-price optimization remains in the failure branch.
 
+### Theorem (carrier monotonicity)
+
+Let `x=Lmin(v)` and suppose `x_r>0`.  If player `c` belongs to every
+`x`-tight coalition containing `r`, then
+
+```text
+x_c>=x_r.                                             (CMO)
+```
+
+Indeed, `d=e_c-e_r` has `d(S)>=0` on every tight coalition: the only negative
+case would contain `r` but omit `c`.  Since `x_r>0`, all slack coalition
+constraints and nonnegativity remain feasible for sufficiently small
+positive movement along `d`.  If `x_c<x_r`, choose the movement smaller than
+the payoff gap and all adjacent stratum gaps.  The first changed coordinate
+of the increasing rearrangement is then in the `x_c` stratum and increases;
+the decrease at the strictly higher `x_r` stratum occurs later.  This
+strictly improves the leximin vector, a contradiction.
+
+By the complete affordability classification, every positive root that is
+unaffordable on its **full tight menu** has such a carrier.  Thus full-menu
+carrier arrows point weakly upward through the Lmin strata; every directed
+carrier cycle lies in a single Lmin stratum.  This is the first general order
+structure on the failure branch.  A carrier found only in one selected
+staged support does not justify this tangent argument, because an omitted
+tight coalition could separate the two players.
+
+On the six-player archive there are 554 full-tight-menu unaffordable
+maximum-overlap roots.  Every one has at least one full-menu carrier that is
+itself another maximum-overlap root, so the finite carrier graph closes on
+that root block; all carrier orders satisfy `(CMO)`.  The narrower selected
+staged menus have 560 unaffordable roots and the same finite root-block
+closure, but only the full-menu count supports the tangent interpretation.
+Root-block closure remains discovery evidence.  Its dimension-free proof,
+or a sharp counterexample, is now the minimal bridge needed to turn a carrier
+cycle into the direct block `H`.
+
+In fact one need not assume root-block closure.  The mirror tangent argument
+for `z=Lmax(v)` says: if `z_c<z_r`, then some `z`-tight coalition contains
+`r` and omits `c`; otherwise `e_c-e_r` would be feasible at `z` and would
+strictly improve the decreasing lexicographic objective.
+
+> **Theorem (carrier-cycle/separator alternative).**  Let
+> `R=argmax_i min(x_i,z_i)`, assume its coordinates are positive, and suppose
+> every `r in R` is unaffordable on its full Lmin-tight menu.  Then at least
+> one of the following holds.
+>
+> 1. There are `r in R` and a full Lmin carrier `c notin R`, together with a
+>    `z`-tight separator `D` such that `r in D` and `c notin D`.
+> 2. There is a directed carrier cycle `H subset R`.  The coordinates `x_i`
+>    are constant on `H`, and every `x`-tight coalition meeting `H` contains
+>    all of `H`.
+
+For the proof, if some root has no carrier in `R`, choose one outside.  By
+`(CMO)`, `x_c>=x_r`.  Since `c notin R` while `r` has maximum overlap,
+
+```text
+z_c<min(x_r,z_r)<=z_r,
+```
+
+and the Lmax tangent argument supplies `D`.  Otherwise choose one carrier in
+`R` for each root.  The resulting finite functional digraph has a directed
+cycle.  Coordinate monotonicity around the cycle forces equality of all its
+`x` coordinates.  If an `x`-tight coalition contains one cycle vertex, the
+carrier implications successively force every other vertex into it.  QED.
+
+This theorem is the first genuine coupling between the complete Lmin packet
+and an Lmax row in the price-failure branch.  It still stops short of `(H)`:
+the separator branch needs a quantitative payment identity, while the cycle
+branch must show that the inseparable flat block has the nongainer/sign and
+cardinality structure needed for `(UBD)` or the exact direct interval.
+
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,
 or an Lmax comparison that pays the resulting multistratum defect.  The
