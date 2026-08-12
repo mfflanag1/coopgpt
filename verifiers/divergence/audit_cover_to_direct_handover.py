@@ -112,6 +112,8 @@ def main() -> None:
     all_unaffordable = 0
     root_block_successes = 0
     repaired = []
+    repaired_locked_pairs = 0
+    repaired_pair_free = 0
 
     for path in args.paths:
         payload = json.loads(path.read_text())
@@ -159,6 +161,22 @@ def main() -> None:
             witness = repairs[0]
             if F(witness["base_bound_ratio"]) != F(4, 5):
                 raise AssertionError("unexpected one-step repair base")
+            root_set = set(roots)
+            mutual_locked_pair = all(
+                len(audit["tight_rooted_pairs"]) == 1
+                and audit["tight_rooted_pairs"][0] in root_set
+                and not audit["unique_pair_partner_escaped_by_nonpair"]
+                for audit in audits
+            )
+            pair_free = all(not audit["tight_rooted_pairs"] for audit in audits)
+            if mutual_locked_pair:
+                repaired_locked_pairs += 1
+                classification = "mutual locked maximum-overlap pair"
+            elif pair_free:
+                repaired_pair_free += 1
+                classification = "pair-free maximum-overlap roots"
+            else:
+                raise AssertionError((path.name, trail, "unexpected repair type"))
             repaired.append(
                 {
                     "source": path.name,
@@ -166,6 +184,7 @@ def main() -> None:
                     "x": [str(value) for value in x],
                     "z": [str(value) for value in z],
                     "maximum_overlap_roots": list(roots),
+                    "root_block_classification": classification,
                     "root_audits": audits,
                     "repair": witness,
                 }
@@ -175,6 +194,8 @@ def main() -> None:
         raise AssertionError(f"expected 233 all-unaffordable rows, found {all_unaffordable}")
     if root_block_successes != 228 or len(repaired) != 5:
         raise AssertionError((root_block_successes, len(repaired)))
+    if (repaired_locked_pairs, repaired_pair_free) != (4, 1):
+        raise AssertionError((repaired_locked_pairs, repaired_pair_free))
 
     report = {
         "status": "exact-rational discovery and hostile falsification audit",
@@ -185,6 +206,8 @@ def main() -> None:
         "n6_rows_closed_by_tight_root_block_packet": root_block_successes,
         "n6_root_block_counterexamples": len(repaired),
         "n6_counterexamples_repaired_by_one_upper_nongainer": len(repaired),
+        "n6_repaired_mutual_locked_pair_rows": repaired_locked_pairs,
+        "n6_repaired_pair_free_rows": repaired_pair_free,
         "counterexamples": repaired,
         "valid_conditional_statement": (
             "For any chosen H and J, the proved direct master identity reaches "

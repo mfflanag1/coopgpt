@@ -3331,6 +3331,29 @@ For `n=2m` the right side is `(m-2)^2`; for `n=2m+1` it is
 rooted pairs automatically supply an affordable marked rooted row** in all
 target dimensions.
 
+The one-pair branch is equally rigid.  Suppose `|G|=1`, with unique partner
+`j`.  For a single nonpair trace `A`, the feasible packing `a_A=1` has
+
+```text
+margin=K |G\A|-|B\A|.                                (LPC8)
+```
+
+For `n>=6`, `K>=n-2=|B|`.  Hence if `j notin A`, this margin is nonnegative
+and the root excess is one, so the row is affordable.  Conversely, if every
+nonpair trace contains `j`, its packing constraint gives `sum_A a_A<=1`,
+and `(LPC6)` gives `delta=0` for every feasible packing.
+
+> **Corollary (locked-pair alternative).**  For `n>=6`, a root with exactly
+> one Lmin-tight rooted pair is affordable if and only if some larger rooted
+> Lmin-tight coalition omits the pair partner.  An unaffordable one-pair root
+> therefore has a locked partner contained in every rooted packing column;
+> the scalar obstruction is identically zero root excess, not merely an
+> unfavorable optimum.
+
+This is a dimension-free structural handover.  It says that the direct arm
+must absorb a locked partner together with the root, but it does not by
+itself select the remaining upper nongainer block or a gainer packet.
+
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,
 or an Lmax comparison that pays the resulting multistratum defect.  The
@@ -4922,6 +4945,14 @@ finite handover is not a fixed-root-block theorem.  The surviving conjecture
 must select an **upper nongainer block containing the roots**, and `(UBD)`
 identifies the clean ordinal branch of that selection problem.  The 233-row
 result remains archive evidence, not a six-player domain theorem.
+
+The locked-pair theorem explains four of the five failures more sharply: in
+those four rows the two maximum-overlap roots are each other's unique locked
+partner.  They must enter `H` together, after which one further upper
+nongainer completes the direct comparison.  The fifth failure has pair-free
+roots.  Thus, after the dimension-free `|G|>=2` affordability theorem and the
+one-pair locked-partner theorem, the genuinely unstructured price-failure
+branch is the pair-free rooted hypergraph.
 
 ```bash
 PYTHONPATH=verifiers/divergence:src python3 \

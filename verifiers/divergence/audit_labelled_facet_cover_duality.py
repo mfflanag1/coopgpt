@@ -148,6 +148,16 @@ def solve_labelled_cover(support: tuple[int, ...], root: int, n: int) -> dict:
             raise AssertionError((root, "top-face root excess", status))
         max_delta_on_top = F(len(good) - 1) - delta_objective
 
+    affordable = margin > 0 or (margin == 0 and max_delta_on_top > 0)
+    unique_pair_partner_escaped = None
+    if len(good) == 1:
+        partner = good[0]
+        unique_pair_partner_escaped = any(
+            not (trace >> partner & 1) for trace in traces
+        )
+        if n >= 6 and affordable != unique_pair_partner_escaped:
+            raise AssertionError((root, "locked-pair alternative"))
+
     return {
         "root": root,
         "tight_rooted_pairs": list(good),
@@ -161,7 +171,8 @@ def solve_labelled_cover(support: tuple[int, ...], root: int, n: int) -> dict:
         "root_excess": str(delta),
         "max_root_excess_on_top_face": str(max_delta_on_top),
         "q_bad": str(q_bad),
-        "affordable": margin > 0 or (margin == 0 and max_delta_on_top > 0),
+        "affordable": affordable,
+        "unique_pair_partner_escaped_by_nonpair": unique_pair_partner_escaped,
         "packing": [str(value) for value in primal_solution],
         "cover": [str(value) for value in cover_solution],
     }
@@ -191,6 +202,17 @@ def main() -> None:
             counts["n6_records"] += 1
             counts["n6_roots"] += len(roots)
             counts["n6_affordable_roots"] += sum(row["affordable"] for row in audits)
+            counts["n6_one_tight_pair_roots"] += sum(
+                len(row["tight_rooted_pairs"]) == 1 for row in audits
+            )
+            counts["n6_one_pair_affordable_roots"] += sum(
+                len(row["tight_rooted_pairs"]) == 1 and row["affordable"]
+                for row in audits
+            )
+            counts["n6_one_pair_roots_with_escaping_nonpair"] += sum(
+                row["unique_pair_partner_escaped_by_nonpair"] is True
+                for row in audits
+            )
             counts["n6_records_with_some_affordable_root"] += any(
                 row["affordable"] for row in audits
             )
@@ -248,6 +270,12 @@ def main() -> None:
         "two_tight_pair_automatic_threshold": (
             "for n>=6, |G|>=2 gives C=K(|G|-1)-|B|>=K-(n-3)>=0; "
             "the zero nonpair packing is affordable with positive root excess"
+        ),
+        "one_tight_pair_locked_partner_theorem": (
+            "for n>=6 and |G|=1, a root is affordable iff some rooted "
+            "nonpair trace omits the unique tight-pair partner; otherwise "
+            "that partner lies in every packing column and root excess is "
+            "identically zero"
         ),
         "n6_four_arm_coverage": (
             "direct, then ceiling interpolation, then zero-floor null descent, "
