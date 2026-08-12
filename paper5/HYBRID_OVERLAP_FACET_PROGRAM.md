@@ -41,7 +41,9 @@ archive rows and replaces it with a separator-or-weighted-contraction
 program.  Canonical block expansion proves that the weighted endowed quotient
 is equivalent to a singleton-normalized exact block game, but does not yet
 yield an induction because the weighted affordability/carrier theorems have
-not been proved.  The remaining theorem on that arm is a normalized
+not been proved.  Weighted quotients with at most three roles are now closed
+by a Lorenz-dominant clipped water-filling theorem.  The remaining theorem on
+that arm is a normalized
 separator/facet coupling, not a scalar lower bound on one separator slack.
 
 The conclusion is that the correct missing object is a **fully labelled
@@ -3707,25 +3709,63 @@ not proved here.  Accordingly one may replace a common-module branch by its
 canonical block normal form, but may not assume that a minimal counterexample
 is role-irreducible.
 
-The two-role quotient boundary is closed.  If contraction leaves roles of
-weights `h,k`, singleton worths `a,b`, and total `T`, its role core is the
-interval
+The contraction boundary is closed through three roles.
+
+> **Theorem (weighted three-role coincidence).**  Every nonempty core of a
+> TU game on at most three roles, with positive integer role weights, has the
+> same weighted Lmin and weighted Lmax.  Repeating each role's per-capita
+> payoff according to its weight, the common point Lorenz-dominates every
+> feasible role-core allocation.
+
+For three roles, every proper coalition is a singleton or the complement of
+a singleton.  Efficiency therefore turns the role core into
 
 ```text
-a<=q_1<=T-b,                 q_2=T-q_1.
+K={q: sum_a q_a=T, ell_a<=q_a<=u_a},
+ell_a=w({a}),                 u_a=T-w(R\{a}).        (W3R1)
 ```
 
-Both weighted lex objectives rank the per-capita pair
-`q_1/h,(T-q_1)/k` with multiplicities `h,k`.  Leximin maximizes the smaller
-and leximax minimizes the larger, so both choose the same clipped equalizer
+The one- and two-role cases are the same form.  There is a unique `lambda`
+(up to a harmless interval when all roles are clipped) such that
 
 ```text
-q_1=clip_[a,T-b](hT/(h+k)).                         (TQR)
+q_a^*=clip_[ell_a,u_a](h_a lambda),
+sum_a q_a^*=T.                                      (W3R2)
 ```
 
-Thus the expanded selections coincide and their overlap is `T`.  This closes
-only the case of two quotient roles; three or more weighted roles remain
-part of the open contraction branch.
+Suppose a feasible point has two unclipped roles with per-capita payoffs
+`q_a/h_a<q_b/h_b`.  Moving a sufficiently small amount from `b` to `a`
+preserves `(W3R1)` and is a Robin Hood transfer on the repeated atomic vector,
+strictly increasing at least one lower partial sum and decreasing no lower
+partial sum.  Iterate until every unequal pair is blocked by the lower bound
+of the higher role or the upper bound of the lower role.  The resulting
+no-exchange conditions are exactly `(W3R2)`.  Hence `q^*` Lorenz-dominates
+every feasible repeated vector.  A Lorenz-greatest point is simultaneously
+leximin and leximax-min, proving the theorem.
+
+For two roles of weights `h,k` this specializes to
+
+```text
+q_1^*=clip_[ell_1,u_1](hT/(h+k)).                   (TQR)
+```
+
+Canonical block expansion then makes the original clone selections coincide
+and gives overlap `T`.  Thus any contraction branch leaving at most three
+roles is completely harmless for `(H)`.  Four or more weighted roles remain
+open; this matches the known four-player coincidence boundary but is a
+separate weighted-role theorem.
+
+The exact regression verifier enumerates 170,244 feasible integer-bound
+weighted boxes, 311,364 vertices, and every role-weight composition through
+atomic weight eight.  It checks all repeated-vector Lorenz partial sums:
+
+```bash
+python3 verifiers/divergence/verify_weighted_three_role_coincidence.py \
+  --output verifiers/divergence/weighted_three_role_coincidence.json
+```
+
+The exchange proof is dimension-free in the integer weights; the grid is a
+falsification audit only.
 
 At the exact-cone interface, contraction deletes duplicate player rows from
 both active incidence matrices and records their multiplicity.  It is the
