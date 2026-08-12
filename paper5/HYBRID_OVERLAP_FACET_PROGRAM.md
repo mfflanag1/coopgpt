@@ -38,8 +38,11 @@ or the block contracts to one integer-weighted role while preserving
 exactness, both weighted lex selections, total payoff, and overlap.  This
 falsifies “the cycle itself is always the direct block” on twelve exact
 archive rows and replaces it with a separator-or-weighted-contraction
-program.  The new remaining theorem on that arm is an endowed weighted-role
-version of `(H)`, not a scalar lower bound on separator slack.
+program.  Canonical block expansion proves that the weighted endowed quotient
+is equivalent to a singleton-normalized exact block game, yielding descent in
+the number of distinct incidence roles.  The remaining theorem on that arm
+is a role-irreducible separator/facet statement, not a scalar lower bound on
+one separator slack.
 
 The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
@@ -3651,12 +3654,53 @@ The quotient need not be singleton-normalized: its singleton worth at `*`
 is `v(H)`, which is positive on 377 of the 420 carrier cycles in the archived
 six-player audit.  Subtracting that endowment can change the two lexicographic
 selections, so it is not legitimate to invoke the original conjecture on a
-naively normalized quotient.  The precise inductive extension is instead a
-**weighted endowed hybrid theorem**: prove the same `n/floor(n^2/4)` floor
-for exact role games of total integer weight `n`, allowing nonnegative role
-singleton worths and ranking per-capita role payoffs with multiplicity.  The
-common-module arm then reduces the number of roles without changing the
-target, total, or overlap.
+naively normalized quotient.  However the weighted endowed formulation is
+exactly equivalent to a block-symmetric singleton-normalized game, not a
+larger ungrounded domain.
+
+> **Theorem (canonical block expansion).**  Let `(R,w)` be a nonnegative
+> exact role game with positive integer role weights `h_a`, total atomic
+> weight `n=sum_a h_a`, and `w({a})=0` whenever `h_a=1`.  Replace role `a`
+> by a clone block `B_a` of size `h_a` and define
+>
+> ```text
+> w^uparrow(S)=w({a:B_a subset S}).                  (CBE)
+> ```
+>
+> Then `w^uparrow` is a singleton-normalized exact `n`-player game.  Its
+> core projects onto the role core by block summation; its Lmin and Lmax are
+> constant on every block and are precisely the clone repetitions of the
+> weighted Lmin and weighted Lmax of `w`.  Total payoff and overlap are
+> preserved.
+
+For core projection, a clone allocation `y` dominates `(CBE)` because every
+coalition contains its complete blocks and all clone coordinates are
+nonnegative.  Conversely split any nonnegative role-core allocation among
+the clones.  To prove exactness for a clone coalition `S`, put
+`A={a:B_a subset S}` and choose a role-core witness `q` with `q(A)=w(A)`.
+For every partially met block put all of `q_a` on a clone outside `S`; split
+the other role totals arbitrarily.  The resulting clone-core point has
+`y(S)=q(A)=w^uparrow(S)`.  Singleton normalization follows because a clone
+singleton contains a full block only when that block has weight one, where
+the assumed singleton worth is zero.
+
+The game is invariant under permutations inside each block.  Uniqueness of
+both lex selections therefore forces block constancy.  On the block-constant
+subspace, sorting clone coordinates is exactly sorting role per-capita
+coordinates with multiplicities `h_a`, so the two selections correspond.
+The overlap identity follows term by term.
+
+Applying `(CBE)` to a common-module quotient produces a canonical
+singleton-normalized exact game on the same `n` atomic players, with the same
+two selections and overlap as the original, but with a strictly smaller role
+incidence system: every coalition is a union of whole blocks.  Thus the
+cycle arm admits an exact **role-complexity descent**.  This does not prove
+`(H)` by ordinary induction on player number—the atomic target constant does
+not change—but it gives a genuine normal form.  A minimal counterexample to
+`(H)` may be assumed to have no common carrier module at its maximum-overlap
+price failures, unless it is already a nontrivial canonical block expansion.
+Equivalently, the remaining proof may be organized by the number of distinct
+active incidence rows rather than by `n`.
 
 At the exact-cone interface, contraction deletes duplicate player rows from
 both active incidence matrices and records their multiplicity.  It is the
@@ -3704,6 +3748,88 @@ PYTHONPATH=verifiers/divergence:src python3 \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output verifiers/divergence/carrier_separator_payment.json
 ```
+
+The same audit independently constructs `(CBE)` and recomputes both complete
+lexicographic selections with the separate exact-simplex implementation on
+six representative common-module controls.  All twelve recomputations return
+the archived `x,z` exactly.  This is a bounded regression check of the
+translation, not a premise of the block-expansion proof.
+
+### Aggregate separator budget from the Lmax staged packet
+
+The individually weak strict payments are not the whole Lmax information.
+Let `H subset R` be a nongainer carrier cycle with common coordinates
+
+```text
+x_i=a, z_i=b, d_i=x_i-z_i=L>=0       (i in H).
+```
+
+Let `Q` be the cumulative Lmax upper set through the stratum containing `H`.
+For each `i in H`, the sign-coherent Lmax theorem supplies
+
+```text
+sum_S lambda^i_S 1_S-sum_(j in Q)c^i_j e_j=k_i 1_N,
+lambda^i,c^i>=0,             c^i_i>0,              (ASB1)
+```
+
+with every supported `S` tight at `z`.  Dotting `(ASB1)` with `d=x-z`
+gives the exact identity
+
+```text
+sum_S lambda^i_S [x(S)-z(S)]=sum_(j in Q)c^i_j d_j. (ASB2)
+```
+
+All coalition brackets on the left are nonnegative.  Sum the relations over
+`i in H`, after arbitrary positive normalizations, and write
+`Lambda_S=sum_i lambda^i_S`, `C_j=sum_i c^i_j`, and
+`C_H=sum_(j in H)C_j>0`.  Then
+
+```text
+sum_S Lambda_S[x(S)-z(S)]
+ =L C_H
+  +sum_(j in Q\H,d_j>=0)C_j d_j
+  -sum_(j in Q,d_j<0)C_j(z_j-x_j).                  (ASB3)
+```
+
+This is a quantitative aggregate-separator budget.  If a supported coalition
+splits `H`, its bracket is strictly positive by `(SCP)`; whole-module rows
+remain valid nonnegative payments.  The only debt in `(ASB3)` is on earlier
+Lmax gainers.  For such a player `j`, `z_j>=b`; since every member of `H`
+maximizes overlap,
+
+```text
+x_j=min(x_j,z_j)<=b<=a.                              (ASB4)
+```
+
+If the block loss `L=a-b` is positive, every negative debt edge `j -> i`,
+`i in H`, is a strict high--low rectangle in the Lmin order.  By the complete
+sign-coherent Lmin theorem it is staged-available, and its length `a-x_j`
+dominates the overlap-level component `b-x_j`.  But
+
+```text
+z_j-x_j=(z_j-b)+(b-x_j).                             (ASB5)
+```
+
+The rectangle does not by itself pay the vertical earlier-stratum component
+`z_j-b`.  When `L=0`, there is no common block loss to purchase, and strict
+Lmin availability can likewise disappear at a tied maximum-overlap gainer.
+
+Consequently the carrier failure branch now has a fully identified two-colour
+coupling: Lmax pinning exposes the common block loss through `(ASB3)`, while
+the complete Lmin packet supplies the horizontal component of every earlier-
+gainer debt.  What remains is a **triangular normalized coefficient-matching
+theorem**: recursively discharge the vertical terms `C_j(z_j-b)` through
+strictly earlier Lmax strata, and absorb the horizontal terms
+`C_j(b-x_j)` without charging any labelled overlap layer more than once.
+Arbitrary circuit amplification cannot prove this; the normalization must
+come from a joint acyclic packing/cover dual or an indecomposable marked
+facet.  Thus `(ASB3)` is a real narrowing, not yet the gluing theorem.
+
+If no supported Lmax row splits `H`, `(ASB1)` factors through the contracted
+role system and `(CBE)` applies.  In a role-minimal counterexample at least
+one positive-multiplier row in the aggregate packet must split `H`; otherwise
+the entire chosen packet descends.  This is the exact separator-or-contraction
+handover needed for the next dual formulation.
 
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,

@@ -37,6 +37,7 @@ from audit_n6_sparse_lmax_complete_lmin_roots import (  # noqa: E402
 )
 from verify_two_stratum_direct_gluing import master_identity  # noqa: E402
 from verify_labelled_branch_duals import CASES  # noqa: E402
+from lexsimplex import lex_point  # noqa: E402
 
 
 def full_tight_support(values, allocation):
@@ -192,6 +193,19 @@ def partial_cycle_separator_rows(values, x, z, cycle, target):
     return rows
 
 
+def canonical_block_expansion(values, cycle):
+    """Expand the quotient role game by the canonical full-block rule."""
+    n = len(values).bit_length() - 1
+    full_cycle = sum(1 << i for i in cycle)
+    expanded = []
+    for coalition in range(1 << n):
+        completed = coalition & ~full_cycle
+        if coalition & full_cycle == full_cycle:
+            completed |= full_cycle
+        expanded.append(values[completed])
+    return tuple(expanded)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("paths", nargs="+", type=Path)
@@ -201,6 +215,7 @@ def main():
     target = F(2, 3)
     counts = Counter()
     exceptional = []
+    block_expansion_controls = []
     for path in args.paths:
         payload = json.loads(path.read_text())
         for _source, trail, values, x, z in records(payload, path):
@@ -285,6 +300,23 @@ def main():
                     )
                     counts["cycles_that_are_common_face_modules"] += not z_separators
                     counts["cycles_separated_by_lmax_face"] += bool(z_separators)
+                    if not z_separators and len(block_expansion_controls) < 6:
+                        expanded_values = canonical_block_expansion(values, cycle)
+                        recomputed_x = tuple(lex_point(6, expanded_values, "min"))
+                        recomputed_z = tuple(lex_point(6, expanded_values, "max"))
+                        if recomputed_x != tuple(x) or recomputed_z != tuple(z):
+                            raise AssertionError(
+                                ("canonical block expansion selection failure", trail, cycle)
+                            )
+                        block_expansion_controls.append(
+                            {
+                                "source": path.name,
+                                "trail": trail,
+                                "cycle": list(cycle),
+                                "lmin": [str(value) for value in recomputed_x],
+                                "lmax": [str(value) for value in recomputed_z],
+                            }
+                        )
                 counts["cycle_rows_with_nongainer_cycle"] += any(
                     row["sign"] == "n" for row in cycle_data
                 )
@@ -464,6 +496,7 @@ def main():
             "direct cardinality or order-residual requirements"
         ),
         "exceptional_rows": exceptional,
+        "canonical_block_expansion_controls": block_expansion_controls,
         "n7_hostile_and_sharp_controls": n7_controls,
     }
     rendered = json.dumps(report, indent=2) + "\n"
