@@ -103,6 +103,12 @@ run_python coopgames/verifiers/divergence/audit_cover_to_direct_handover.py \
   --output "$scratch_dir/cover-to-direct-handover.json"
 cmp coopgames/verifiers/divergence/cover_to_direct_handover.json \
   "$scratch_dir/cover-to-direct-handover.json"
+run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/carrier-separator-payment.json"
+cmp coopgames/verifiers/divergence/carrier_separator_payment.json \
+  "$scratch_dir/carrier-separator-payment.json"
 run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
   --output "$scratch_dir/complement-star-facets.json"
 cmp coopgames/verifiers/divergence/complement_star_facets.json \

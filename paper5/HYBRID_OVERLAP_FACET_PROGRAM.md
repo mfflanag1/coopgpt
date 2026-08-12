@@ -30,6 +30,17 @@ the remaining task is to turn the discrete carrier structure of price
 failures into a direct upper-block packet, and to solve stratum alignment
 when a scalar-affordable row is selected.
 
+The price-failure branch now has a second dimension-free reduction.  A
+descending carrier separator gives a strict direct-comparison payment after
+complementation.  A carrier cycle is an exact module of the Lmin active
+face; either the Lmax face separates it and gives the same strict payment,
+or the block contracts to one integer-weighted role while preserving
+exactness, both weighted lex selections, total payoff, and overlap.  This
+falsifies “the cycle itself is always the direct block” on twelve exact
+archive rows and replaces it with a separator-or-weighted-contraction
+program.  The new remaining theorem on that arm is an endowed weighted-role
+version of `(H)`, not a scalar lower bound on separator slack.
+
 The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
 reduction in Section 8 turns it into a rooted two-tangent budget and gives a
@@ -3560,6 +3571,139 @@ and an Lmax row in the price-failure branch.  It still stops short of `(H)`:
 the separator branch needs a quantitative payment identity, while the cycle
 branch is already sign-coherent but must meet the cardinality and packet
 conditions in `(UBD)` or the exact direct interval.
+
+The separator actually carries a strict, orientation-correct comparison
+after complementation.
+
+> **Lemma (strict complement payment).**  Suppose `c` belongs to every
+> `x`-tight coalition containing `r`.  If a `z`-tight coalition `D` contains
+> `r` and omits `c`, then
+>
+> ```text
+> x(D)>z(D),              z(N\D)-x(N\D)>0.           (SCP)
+> ```
+
+Indeed `z(D)=v(D)` and core feasibility gives `x(D)>=v(D)`.  Equality would
+make `D` an `x`-tight coalition containing `r` and omitting its carrier.
+The second inequality follows from `x(N)=z(N)`.  Thus the separator debt in
+the original orientation is a strict direct-comparison payment on the
+complement.  Its magnitude has no known dimension-free lower bound, so
+`(SCP)` alone does not pay a deficient cardinality base or a negative order
+residual in `(TDG)`.
+
+There is a stronger structural description of the cycle arm.  Call a set
+`H` a tight-face module at an allocation `y` if every `y`-tight proper
+coalition contains either all of `H` or none of it.
+
+> **Theorem (carrier modules and exact weighted contraction).**  A directed
+> carrier cycle `H` is a tight-face module at `x`.  Consequently, if
+>
+> ```text
+> U_H={d: supp(d) subset H, sum_(i in H)d_i=0},
+> ```
+>
+> then every `d in U_H` is in the two-sided lineality space of the active
+> core tangent cone at `x`; for sufficiently small `epsilon>0`, both
+> `x+epsilon d` and `x-epsilon d` are core allocations.  Moreover exactly
+> one of the following holds.
+>
+> 1. Some `z`-tight coalition separates `H`; every such partial coalition
+>    and its complement give a strict payment as in `(SCP)`.
+> 2. `H` is a tight-face module at both `x` and `z`.  Contracting `H` to one
+>    role of integer weight `h=|H|` gives an exact weighted quotient game in
+>    which the projections of `x` and `z` are respectively weighted Lmin and
+>    weighted Lmax.  The total and hybrid overlap are preserved when the
+>    quotient role's per-capita payoff is repeated `h` times.
+
+For the tangent assertion, every active coalition has zero incidence or
+full incidence on `H`, so `d(S)=0`; positivity of the cycle coordinates and
+the positive slack of every inactive constraint permit both signs locally.
+If a `z`-tight coalition contains a nonempty proper part of `H`, choose an
+included cycle member `r` and an omitted member `c`.  Successive carrier
+implications around the cycle say that every `x`-tight coalition containing
+`r` contains `c`, so `(SCP)` applies.
+
+For the contraction statement, replace `H` by a role `*` and expand a role
+coalition by replacing `*` with all of `H`.  Define
+
+```text
+v/H(A)=v(expand(A)),       pi(y)_*=y(H),
+```
+
+with unit weights off `*` and weight `h` at `*`.  Projection sends every
+core allocation of `v` into the quotient core.  Exactness also descends:
+for each quotient coalition, project an original exactness witness for its
+expansion.  If the projected `x` admitted a better weighted Lmin point,
+distribute the quotient-role displacement equally over `H`.  The direction
+is nonnegative on every active original constraint, while inactive
+constraints tolerate a small step.  Lex improvement is preserved for a
+small step by the concavity of the sums of the lowest repeated coordinates,
+contradicting Lmin optimality.  The convex sums-of-largest argument gives
+the Lmax mirror.  Finally
+
+```text
+pi(x)_*/h=x_i,  pi(z)_*/h=z_i  (i in H),
+```
+
+so repeating the role coordinate `h` times preserves both `T` and `O`.
+
+The quotient need not be singleton-normalized: its singleton worth at `*`
+is `v(H)`, which is positive on 377 of the 420 carrier cycles in the archived
+six-player audit.  Subtracting that endowment can change the two lexicographic
+selections, so it is not legitimate to invoke the original conjecture on a
+naively normalized quotient.  The precise inductive extension is instead a
+**weighted endowed hybrid theorem**: prove the same `n/floor(n^2/4)` floor
+for exact role games of total integer weight `n`, allowing nonnegative role
+singleton worths and ranking per-capita role payoffs with multiplicity.  The
+common-module arm then reduces the number of roles without changing the
+target, total, or overlap.
+
+At the exact-cone interface, contraction deletes duplicate player rows from
+both active incidence matrices and records their multiplicity.  It is the
+selection-face inverse of the clone expansion theorem below.  Hence a
+block-symmetric rooted-star marking can be classified on the contracted
+matrix and lifted through the already proved clone-expansion criterion.
+Root-specific singleton or pair shears that distinguish members of `H` must
+still be retained; the module theorem is not a claim that every marked facet
+is automatically symmetric.
+
+An exact archive audit now distinguishes the old qualitative alternative
+from these stronger statements.  Among the 228 archived six-player rows in
+which every maximum-overlap root is unaffordable on its full tight menu,
+all 228 enter the cycle arm and all have a nongainer cycle.  Across their 420
+directed cycles, 169 are separated by the Lmax face and 251 are common face
+modules.  Every row has a target-reaching Lmin-tight direct comparison whose
+nongainer block contains a cycle.  The cycle itself suffices on 216 rows;
+the remaining 12 require exactly one additional nongainer.  Full carrier
+closure does not repair those 12, so “take the cycle” and “take its forced
+closure” are both false universal selection rules.  This finite result
+supports the separator-or-weighted-contraction program but proves no
+unbounded-dimension inequality.
+
+Nor can the separator arm be closed by inserting one arbitrary strict
+complement into `(TDG)`.  Eighty-five of the 228 rows have an Lmax-tight
+coalition splitting at least one cycle, but its complement satisfies the
+target and the required order-residual sign in only one row.  Strict payment
+is therefore qualitative currency; a dimension-free proof must aggregate
+several separator rows, charge the negative residual elsewhere, or contract
+a common module.  This exact negative control rules out a single-separator
+local proof strategy.
+
+On the six fixed seven-player hostile/sharp controls, five have an affordable
+full-menu maximum-overlap root.  The sole all-unaffordable control is the
+top-and-bottom-fixed branch: roots `4,5` form a nongainer common-face module,
+and an independent direct packet reaches `7/12`.  Both sharp equality
+orientations stay on the affordable rooted-facet arm, as required; the new
+contraction branch is not being used to explain away sharp equality.
+
+Reproduce it exactly with
+
+```bash
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/audit_carrier_separator_payment.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/carrier_separator_payment.json
+```
 
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,
