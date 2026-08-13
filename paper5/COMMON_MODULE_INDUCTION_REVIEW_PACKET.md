@@ -104,6 +104,38 @@ has negative discriminant for even `n>=8` and odd `n>=7`, while `n=6` has the
 unique equality parameters `(p,g,h,s)=(2,2,2,1)`.  Accordingly strict-loss
 carrier cycles leave only the normalized residual-sum selection problem.
 
+That apparent label problem cancels in the exact direct identity.  With
+`B=g/(p+g-s)`, comparison payment `Delta(J)-L_H`, and residual budget `U_s`,
+
+```text
+B[Delta(J)-L_H]+R_x+R_z = B(U_s-L_H),
+U_(s+1)-U_s = [z(G)-x(G)]/g >= 0.
+```
+
+Thus the best proper packet has size `g-1`, its labels are irrelevant, and
+the only remaining direct condition is the scalar nongainer-block budget
+`U_(g-1)>=L_H`.  On all 65 role-irreducible archive rows, taking `H` to be
+the full nongainer maximum-overlap root block passes this budget; the cycle
+alone passes on 63.  This is finite evidence for the root-block budget
+statement, not a proof of it.
+
+Writing `M` for maximum overlap, `H` for all nongainer roots, `P` for the
+other nongainers, and
+
+```text
+U=sum_(P)(M-z_i),  R=sum_(G)(M-x_j),  D=z(G)-x(G),
+```
+
+the remaining budget is exactly
+
+```text
+U_(g-1)-L_H
+ =[g(g+h)U-gpR-[g+h(p+1)]D]/[g(g+h)].
+```
+
+The unresolved root-block theorem is precisely nonnegativity of this
+numerator under the role-irreducible all-unaffordable hypotheses.
+
 ## Hostile questions
 
 1. Does exactness descend under contraction for every quotient coalition,
@@ -126,5 +158,13 @@ carrier cycles leave only the normalized residual-sum selection problem.
    rooted proper row?
 9. Is the monotone reduction in the cardinality lemma valid when `p,g,h,s`
    are atomic block multiplicities rather than role counts?
+10. Does comparison--residual cancellation legitimately remove the need for
+    an Lmin-tight comparison row, or is some earlier use of tightness hidden
+    in the master identity?
+11. Can the root-block scalar budget be derived from maximum-overlap geometry
+    and the two staged pinning systems, or do the exact six-player controls
+    conceal a higher-dimensional marked-facet alternative?
+12. Is the aggregate reduction `(RBB)` algebraically correct when `H` has
+    several root strata in Lmin but one common overlap level?
 
 No novelty or external validation is claimed.

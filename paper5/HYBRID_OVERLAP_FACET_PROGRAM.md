@@ -5036,13 +5036,12 @@ maximum-overlap gainer.
 Consequently the carrier failure branch now has a fully identified two-colour
 coupling problem: Lmax pinning exposes the common block loss through `(ASB3)`,
 and the complete Lmin packet provides exactly the opposite-sign transport
-edges on which its earlier-gainer debts can travel.  What remains is a
-**triangular normalized gain--loss matching theorem** that combines those
-two transports without reclassifying their mass as label currency or
-charging a payoff layer twice.  Arbitrary circuit amplification cannot prove
-this; the normalization must come from a joint acyclic packing/cover dual or
-an indecomposable marked facet.  Thus `(ASB3)` is a real narrowing, not yet
-the gluing theorem.
+edges on which its earlier-gainer debts can travel.  The direct
+comparison--residual cancellation below shows that these pieces should not be
+matched separately: their aggregate is one scalar budget `U_s-L_H`.  The
+Lmax packet may still be needed to prove that budget for a selected
+nongainer block or to supply an indecomposable marked-facet alternative.
+Arbitrary circuit amplification cannot prove a normalized bound.
 
 If no supported Lmax coalition in `(ASB1)` splits `H`, its coalition-incidence
 part factors through the contracted role system and `(CBE)` gives the
@@ -5099,8 +5098,66 @@ has leading coefficient `4n` and discriminant
 -(n+1)(7n^3-47n^2+9n-1)<0                         (n>=7).
 ```
 
-Thus every strict-loss carrier-cycle branch has only the normalized residual
-matching left: contraction, packet properness, and cardinality are closed.
+Thus every strict-loss carrier-cycle branch has only one scalar block budget
+left: contraction, packet properness, and cardinality are closed.
+
+The direct master identity collapses that last apparent label problem.  Put
+`d=p+g-s`, `B=g/d`, let `Delta(J)=z(J)-x(J)`, and let
+`L_H=x(H)-z(H)`.  Its two exact reductions are
+
+```text
+d(R_x+R_z)=g[U_s-Delta(J)],
+z(H union J)-x(H union J)=Delta(J)-L_H.             (CB1)
+```
+
+Therefore
+
+```text
+B[z(H union J)-x(H union J)]+R_x+R_z=B(U_s-L_H).   (CB2)
+```
+
+The packet labels disappear.  Direct subtraction in the displayed formula
+for `U_s` gives
+
+```text
+U_(s+1)-U_s=[z(G)-x(G)]/g>=0.                       (CB3)
+```
+
+> **Lemma (comparison--residual cancellation).**  For fixed sign-compatible
+> nongainer blocks `P,H`, with `P` nonempty, the best proper gainer packet has
+> size `s=g-1`; every packet of that size has the same combined non-low
+> margin, and it closes exactly when `U_(g-1)>=L_H`.
+
+No tight comparison row and no separate residual-sign condition is needed
+after this cancellation.  The remaining choice is only the nongainer block
+`H` containing a carrier cycle.  On the 65 role-irreducible archived rows,
+the cycle alone satisfies the scalar budget on 63; taking `H` to be the full
+nongainer maximum-overlap root block closes all 65.  This is exact finite
+evidence for a root-block budget lemma, not its proof.
+
+The root-block statement reduces to three aggregate scalars.  Let `M` be the
+maximum overlap coordinate, let `H` be all nongainer roots, let `P` be the
+other nongainers, and define
+
+```text
+U=sum_(i in P)(M-z_i),
+R=sum_(j in G)(M-x_j),
+D=z(G)-x(G).
+```
+
+Total balance makes `D` the total nongainer loss.  Substitution into the
+formula for `U_(g-1)-L_H` gives
+
+```text
+U_(g-1)-L_H
+ =[g(g+h)U-gpR-[g+h(p+1)]D]/[g(g+h)].              (RBB)
+```
+
+Thus the remaining direct conjecture is the single linear aggregate
+inequality that the numerator of `(RBB)` is nonnegative on the
+role-irreducible all-unaffordable branch.  Maximum-overlap geometry alone
+does not imply it; this is exactly where a carrier/root selection theorem or
+priced separator facet must contribute.
 
 There is a parallel exact reduction on the direct side.  Let `C` be any
 `x`-tight coalition meeting a carrier cycle.  The module property forces
@@ -5117,34 +5174,29 @@ Then `H subset H_C`, and core feasibility of `z` gives
 z(C)-x(C)>=0.                                      (CTS)
 ```
 
-Thus every supported Lmin row meeting the cycle already supplies the
-comparison premise of `(TDG)`, with `H=H_C` and `J=J_C`; no separate common
-hinge is needed.  By `(CCC)`, a proper `J_C` automatically satisfies the
-target cardinality condition.  The remaining conditions are
+Thus every supported Lmin row meeting the cycle supplies a nonnegative
+comparison premise, but `(CB1)--(CB3)` show that using one such row is
+unnecessarily restrictive.  Once `H_C` is fixed, take any `g-1` gainers;
+`(CCC)` handles cardinality and the only test is
 
 ```text
-J_C is a proper subset of all gainers,
-R_x(C)+R_z(C)>=0,                                  (CTS2)
+U_(g-1)>=L_(H_C).                                  (CTS2)
 ```
-
-and in the strict-loss branch the first line is automatic by proper-packet
-support.  This isolates the residual sum as a finite labelled score on the
-actual Lmin-tight support.
 
 > **Carrier-support selection lemma (open).**  In the all-unaffordable
 > maximum-overlap-root branch, either a carrier cycle has an Lmax separator
-> whose payments close the triangular gain--loss matching, or some Lmin-tight
-> coalition meeting a carrier cycle satisfies `(CTS2)`; common-module cases
-> may first be put in canonical block form `(CBE)`.
+> or marked facet whose payments prove `(CTS2)`, or some nongainer block
+> containing a carrier cycle satisfies `(CTS2)` directly; common-module cases
+> are discharged by role induction.
 
 This formulation contains precisely the twelve archive repairs: the cycle
 alone is not always the correct nongainer block, but adjoining the other
 nongainers already present in a selected tight coalition is allowed.  On all
 228 archived six-player all-unaffordable rows, some such coalition satisfies
 `(CTS2)`; 216 use no extra nongainer and twelve use exactly one.  This is
-still finite evidence.  The prospective human proof must average or separate
-the support columns of a sign-coherent pinning relation while retaining the
-exact residual sum.
+still finite evidence.  The prospective human proof must derive the scalar
+root-block budget from the two staged pinning systems or expose its
+marked-facet alternative.
 
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,

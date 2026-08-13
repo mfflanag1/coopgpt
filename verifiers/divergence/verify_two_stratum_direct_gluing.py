@@ -94,6 +94,12 @@ def master_identity(point_x, point_z, p_set, g_set, h_set, j_set):
         residual_budget - gainer_packet
     ):
         raise AssertionError("gain-packet budget reduction failed")
+    combined_nonlow_margin = (
+        weight * comparison_slack + x_order_residual + z_order_residual
+    )
+    normalized_budget_margin = weight * (residual_budget - h_loss)
+    if combined_nonlow_margin != normalized_budget_margin:
+        raise AssertionError("comparison/residual cancellation failed")
     base = F(1) - F(g * p, q * denominator)
     low_weight = F(g * p * n, q * denominator)
     overlap = sum((min(a, b) for a, b in zip(point_x, point_z)), F(0))
@@ -116,6 +122,9 @@ def master_identity(point_x, point_z, p_set, g_set, h_set, j_set):
         "gainer_packet": str(gainer_packet),
         "h_loss": str(h_loss),
         "residual_budget": str(residual_budget),
+        "combined_nonlow_margin": str(combined_nonlow_margin),
+        "normalized_budget_margin": str(normalized_budget_margin),
+        "budget_closes_direct": residual_budget >= h_loss,
         "packet_hits_interval": h_loss <= gainer_packet <= residual_budget,
         "low_z_term": str(low_weight * low_z),
         "actual_overlap_ratio": str(overlap / total),
@@ -627,10 +636,10 @@ def main():
             "for any sign partition P/G/H and comparison H+J, the exact "
             "master identity decomposes O-[1-gp/((g+h)(p+g-|J|))]T "
             "into a low-Lmax term, the comparison slack, and explicit "
-            "Lmin and Lmax dispersion residuals; a nonnegative residual sum "
-            "prove the displayed dimension-free overlap bound, while the "
-            "comparison and residual-sum conditions reduce exactly to a "
-            "cardinality-constrained interval for the gainer packet"
+            "Lmin and Lmax dispersion residuals; comparison--residual "
+            "cancellation combines the last three terms as "
+            "B(U_s-L_H), and U_s grows by total gainer gain divided by g, "
+            "so the best proper packet has size g-1 and its labels are irrelevant"
         ),
         "two_stratum_parameter_rows": audit_symbolic_identity(),
         "multistage_order_parameter_rows": audit_multistage_identity(),
@@ -640,13 +649,12 @@ def main():
         "gpk_canonical_handover": audit_gpk_canonical_handover(),
         "control": audit_control(),
         "scope": (
-            "the master identity and residual criterion are dimension-free; "
+            "the master identity and comparison--residual cancellation are "
+            "dimension-free; "
             "the finite grids, seven-branch direct/rooted atlas, 374-pair n=6 "
             "direct census, two archived branches, and n=7 control audit "
-            "arithmetic and do not prove that "
-            "every exact game admits a sign "
-            "partition and Lmin-tight comparison whose gainer packet hits the "
-            "required exact interval"
+            "arithmetic and do not prove universal selection of a nongainer "
+            "block whose scalar budget U_(g-1)>=L_H"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

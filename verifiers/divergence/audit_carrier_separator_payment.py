@@ -206,6 +206,25 @@ def canonical_block_expansion(values, cycle):
     return tuple(expanded)
 
 
+def ordinal_direct_witness(row, x, z):
+    """Check the proved upper-block sufficient conditions for a direct row."""
+
+    p_set = tuple(row["P"])
+    g_set = tuple(row["G"])
+    h_set = tuple(row["H"])
+    j_set = tuple(row["J"])
+    if len(j_set) > len(p_set):
+        return False
+    if max(x[i] for i in p_set) > min(x[i] for i in g_set):
+        return False
+    if max(z[i] for i in g_set) > min(z[i] for i in h_set):
+        return False
+    outside_j = tuple(i for i in g_set if i not in j_set)
+    return not j_set or not outside_j or max(z[i] for i in j_set) <= min(
+        z[i] for i in outside_j
+    )
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("paths", nargs="+", type=Path)
@@ -215,6 +234,10 @@ def main():
     target = F(2, 3)
     counts = Counter()
     exceptional = []
+    role_irreducible_nonordinal = []
+    role_irreducible_tied = []
+    role_irreducible_budget_failures = []
+    role_irreducible_root_budget_margins = []
     block_expansion_controls = []
     for path in args.paths:
         payload = json.loads(path.read_text())
@@ -271,6 +294,7 @@ def main():
                 if not cycles:
                     raise AssertionError((path.name, trail, "alternative has neither branch"))
                 cycle_data = []
+                cycle_budget_rows = []
                 z_tight = full_tight_support(values, z)
                 for cycle in cycles:
                     x_levels = {x[i] for i in cycle}
@@ -328,6 +352,30 @@ def main():
                     )
                     counts["cycles_that_are_common_face_modules"] += not z_separators
                     counts["cycles_separated_by_lmax_face"] += bool(z_separators)
+                    gainers = tuple(i for i in range(6) if z[i] > x[i])
+                    nongainers = tuple(i for i in range(6) if z[i] <= x[i])
+                    p_set = tuple(i for i in nongainers if i not in cycle)
+                    if p_set and gainers:
+                        packet = gainers[:-1]
+                        budget_row = master_identity(
+                            x, z, p_set, gainers, cycle, packet
+                        )
+                        cycle_budget_rows.append(
+                            {
+                                "cycle": list(cycle),
+                                "proper_packet_size": len(packet),
+                                "loss": budget_row["h_loss"],
+                                "budget": budget_row["residual_budget"],
+                                "normalized_margin": budget_row[
+                                    "normalized_budget_margin"
+                                ],
+                                "closes": budget_row["budget_closes_direct"],
+                            }
+                        )
+                        counts["cycle_maximal_proper_budget_checks"] += 1
+                        counts["cycles_closed_by_maximal_proper_budget"] += (
+                            budget_row["budget_closes_direct"]
+                        )
                     if not z_separators and len(block_expansion_controls) < 6:
                         expanded_values = canonical_block_expansion(values, cycle)
                         recomputed_x = tuple(lex_point(6, expanded_values, "min"))
@@ -429,6 +477,62 @@ def main():
                 )
                 if not has_common_module:
                     counts["role_irreducible_rows"] += 1
+                    gainers = tuple(i for i in range(6) if z[i] > x[i])
+                    nongainer_roots = tuple(i for i in roots if z[i] <= x[i])
+                    p_roots = tuple(
+                        i
+                        for i in range(6)
+                        if z[i] <= x[i] and i not in nongainer_roots
+                    )
+                    root_budget_closes = False
+                    if gainers and p_roots and len(nongainer_roots) >= 2:
+                        root_budget = master_identity(
+                            x,
+                            z,
+                            p_roots,
+                            gainers,
+                            nongainer_roots,
+                            gainers[:-1],
+                        )
+                        maximum_overlap = max(
+                            min(x[i], z[i]) for i in range(6)
+                        )
+                        low_deficit = sum(
+                            (maximum_overlap - z[i] for i in p_roots), F(0)
+                        )
+                        gainer_deficit = sum(
+                            (maximum_overlap - x[i] for i in gainers), F(0)
+                        )
+                        transferred = sum((z[i] - x[i] for i in gainers), F(0))
+                        p_count = len(p_roots)
+                        g_count = len(gainers)
+                        h_count = len(nongainer_roots)
+                        rbb_numerator = (
+                            g_count * (g_count + h_count) * low_deficit
+                            - g_count * p_count * gainer_deficit
+                            - (g_count + h_count * (p_count + 1)) * transferred
+                        )
+                        scalar_budget = F(root_budget["residual_budget"]) - F(
+                            root_budget["h_loss"]
+                        )
+                        if scalar_budget != F(
+                            rbb_numerator, g_count * (g_count + h_count)
+                        ):
+                            raise AssertionError(
+                                (path.name, trail, "root-block aggregate mismatch")
+                            )
+                        root_budget_closes = root_budget["budget_closes_direct"]
+                        role_irreducible_root_budget_margins.append(
+                            {
+                                "source": path.name,
+                                "trail": trail,
+                                "margin": root_budget["normalized_budget_margin"],
+                            }
+                        )
+                        counts["role_irreducible_root_budget_checks"] += 1
+                        counts[
+                            "role_irreducible_rows_closed_by_root_budget"
+                        ] += root_budget_closes
                     has_tied_cycle = any(
                         row["sign"] == "n"
                         and x[row["cycle"][0]] == z[row["cycle"][0]]
@@ -446,6 +550,55 @@ def main():
                     counts[
                         "role_irreducible_rows_closed_by_tight_nongainer_superset"
                     ] += bool(containing_cycle_direct)
+                    ordinal_rows = [
+                        row
+                        for row in containing_cycle_direct
+                        if ordinal_direct_witness(row, x, z)
+                    ]
+                    counts["role_irreducible_rows_closed_by_ordinal_packet"] += bool(
+                        ordinal_rows
+                    )
+                    counts[
+                        "role_irreducible_rows_closed_by_cycle_budget"
+                    ] += any(row["closes"] for row in cycle_budget_rows)
+                    if not any(row["closes"] for row in cycle_budget_rows):
+                        role_irreducible_budget_failures.append(
+                            {
+                                "source": path.name,
+                                "trail": trail,
+                                "lmin": [str(value) for value in x],
+                                "lmax": [str(value) for value in z],
+                                "cycle_budgets": cycle_budget_rows,
+                            }
+                        )
+                    if has_tied_cycle:
+                        role_irreducible_tied.append(
+                            {
+                                "source": path.name,
+                                "trail": trail,
+                                "lmin": [str(value) for value in x],
+                                "lmax": [str(value) for value in z],
+                                "cycles": cycle_data,
+                                "ordinal_packet_exists": bool(ordinal_rows),
+                            }
+                        )
+                    if not ordinal_rows:
+                        counts["role_irreducible_nonordinal_strict_rows"] += (
+                            not has_tied_cycle
+                        )
+                        counts["role_irreducible_nonordinal_tied_rows"] += (
+                            has_tied_cycle
+                        )
+                        role_irreducible_nonordinal.append(
+                            {
+                                "source": path.name,
+                                "trail": trail,
+                                "lmin": [str(value) for value in x],
+                                "lmax": [str(value) for value in z],
+                                "cycles": cycle_data,
+                                "best_tight_direct": containing_cycle_direct[0],
+                            }
+                        )
                     counts[
                         "role_irreducible_rows_closed_by_one_separator_complement"
                     ] += any(
@@ -569,6 +722,22 @@ def main():
         ),
         "exceptional_rows": exceptional,
         "canonical_block_expansion_controls": block_expansion_controls,
+        "role_irreducible_nonordinal_rows": role_irreducible_nonordinal,
+        "role_irreducible_tied_rows": role_irreducible_tied,
+        "role_irreducible_cycle_budget_failures": (
+            role_irreducible_budget_failures
+        ),
+        "role_irreducible_root_budget_minimum": str(
+            min(
+                F(row["margin"])
+                for row in role_irreducible_root_budget_margins
+            )
+        ),
+        "role_irreducible_root_budget_equalities": [
+            row
+            for row in role_irreducible_root_budget_margins
+            if F(row["margin"]) == 0
+        ],
         "n7_hostile_and_sharp_controls": n7_controls,
     }
     rendered = json.dumps(report, indent=2) + "\n"
