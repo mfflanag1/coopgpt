@@ -53,9 +53,9 @@ now also closed whenever both selectors share even one pair endpoint: a
 weighted dispersion theorem forces a second shared endpoint, after which the
 endowed crossing matrix has no diagonal gap, its adjacent gaps have an exact
 atomic cost formula, and the unique target equality expands to the known
-six-player `(4,2)`/`(2,4)` profile.  The quotient residue consists only of
-opposite-endpoint face-changing stage patterns.  The remaining theorem on the
-carrier arm is a normalized
+six-player `(4,2)`/`(2,4)` profile.  A connected positive-Lorenz continuation
+then rules out every opposite-endpoint face change, completing the weighted
+four-role quotient theorem.  The remaining theorem on the carrier arm is a normalized
 separator/facet coupling together with that higher-dimensional quotient
 classification, not a scalar lower bound on one separator slack.
 
@@ -4068,9 +4068,69 @@ canonical noncommon cells for every ordered positive weight
 row through atomic weight seven; that audit is a hostile control, while
 `(FEC6)--(FEC9)` are the dimension-free proof for the common-face branch.
 
-This still does not prove the atomic-weight-aware overlap bound: the open
-four-role problem is the opposite-endpoint transition between two- or
-three-crossing-slab active edges, rather than a locally laminar selector.
+The opposite-endpoint residue disappears after connecting the two selectors
+inside the Lorenz frontier.  For a role point `q`, repeat `q_i/h_i` exactly
+`h_i` times and let `Lambda_k(q)` be the sum of its `k` smallest repeated
+coordinates, `1<=k<n`.  Each `Lambda_k` is a continuous concave polyhedral
+function: it is the minimum of the sums over all `k` clone coordinates.
+
+> **Lemma (connected positive-Lorenz continuation).**  Any two uniquely
+> specified lexicographic extremes of the Lorenz vector
+> `(Lambda_1,...,Lambda_(n-1))` lie in one connected set of
+> Lorenz-undominated core points.
+
+Indeed, the lower-comprehensive Lorenz image
+
+```text
+{u : exists q in K, u_k<=Lambda_k(q), 1<=k<n}
+```
+
+is a convex polyhedron, as the projection of the common hypograph of the
+concave polyhedral `Lambda_k`.  Its finite normal fan supplies strictly
+positive hierarchical vectors `a^x,a^z` for which the two extremes uniquely
+maximize
+
+```text
+F_a(q)=sum_(k=1)^(n-1) a_k Lambda_k(q).                 (FEC10)
+```
+
+For `a(t)=(1-t)a^x+t a^z`, let `A(t)=argmax_K F_(a(t))`.  Every `A(t)` is
+nonempty, compact, and convex, because `F_(a(t))` is concave.  Its graph is
+compact.  If that graph were the disjoint union of two nonempty closed sets,
+their projections would be closed sets covering `[0,1]`, hence would meet at
+some `t`; they would then disconnect the convex fiber `A(t)`, a contradiction.
+The graph, and therefore its projection to `K`, is connected.  Every point
+in the projection is Lorenz-undominated because every coefficient of `a(t)`
+is positive.  (If two allocations had the same full Lorenz vector, their
+midpoint would strictly Lorenz-improve them unless their repeated payoff
+vectors agreed; the canonical role point is therefore unique.)
+
+The two-active-crossing proof above applies verbatim to every
+Lorenz-undominated point, not only to the two canonical selectors.  Unless
+the core has a Lorenz-greatest point (which makes the selectors coincide),
+every point of the connected continuation lies on endpoints of at least two
+pair slabs.  It therefore lies in the one-skeleton of the three-dimensional
+pair-slab box.
+
+> **Theorem (weighted four-role edge confinement).**  In every compact
+> four-role core with positive integer role weights, weighted Lmin and
+> weighted Lmax either coincide or share endpoints of two independent
+> complementary pair slabs.
+
+If a pair slab has zero width, its endpoint is common to every point and
+common-face rigidity supplies the second endpoint.  Otherwise consider the
+connected continuation in the ordinary box one-skeleton.  A connected subset
+that meets interiors of two different box edges must meet interiors of two
+edges incident at some vertex.  Points on those incident edges share exactly
+one endpoint equality, contradicting weighted common-face rigidity.  Hence
+the continuation lies in one clipped box edge, and its endpoints share the
+two pair equalities defining that edge.  This proves the theorem and excludes
+types III and IV without enumerating weights or payoff strata.
+
+Thus no edge-transition residue remains.  The quantitative atomic theorem
+still uses the common-two cost argument and its finite exact audit below;
+the present result is the dimension-free structural bridge that makes that
+branch exhaustive.
 
 The three-role boundary is sharp.  On four roles with weights `(3,1,1,1)`,
 take the exact role game whose worths in binary coalition order are
@@ -4762,14 +4822,14 @@ the face-normalized human theorem supplies six-player survivor 1408, while
 the finite audit proves a bound and does not by itself classify every
 equality core.
 
-> **Corollary (atomic common-endpoint quotient bound).**  Under the same
-> hypotheses, `(EWS31)` holds whenever the two selectors share even one
-> pair-slab endpoint.  If they are distinct, `(FEC6)--(FEC9)` supplies the
-> second common endpoint and the theorem applies.
+> **Theorem (atomic weighted four-role quotient bound).**  Under the same
+> hypotheses, `(EWS31)` holds without an active-face hypothesis.  If the
+> selectors differ, weighted four-role edge confinement supplies two common
+> pair endpoints and the common-two theorem applies.
 
-Thus every edge transition having even one common endpoint is closed, not
-objective A.
-The opposite-endpoint types III and IV in `(FEC4)` remain open.
+This completes objective A.  It does not supply the carrier/separator
+selection and gluing theorem in objective B, nor a complete equality/facet
+classification in objective C.
 The result is computer-assisted only in the finite window `(EWS26)` and has
 not yet received external specialist review.
 

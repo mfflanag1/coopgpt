@@ -195,6 +195,66 @@ def polygon_frontier_audit(samples=5000, seed=20260813):
     return checked, multiple
 
 
+def cube_edge_confinement_audit():
+    """Enumerate the finite one-skeleton topology used after continuation."""
+
+    vertices = tuple(itertools.product((0, 1), repeat=3))
+    edges = []
+    for vertex in vertices:
+        for moving in range(3):
+            other = list(vertex)
+            other[moving] = 1 - other[moving]
+            other = tuple(other)
+            if vertex < other:
+                fixed = frozenset(
+                    (coordinate, vertex[coordinate])
+                    for coordinate in range(3)
+                    if coordinate != moving
+                )
+                edges.append((vertex, other, fixed))
+    if len(edges) != 12:
+        raise AssertionError(len(edges))
+
+    subsets_checked = 0
+    connected_subsets = 0
+    rigidity_compatible_connected = 0
+    for mask in range(1, 1 << len(edges)):
+        selected = [index for index in range(len(edges)) if mask >> index & 1]
+        subsets_checked += 1
+        reached = {selected[0]}
+        changed = True
+        while changed:
+            changed = False
+            for i in selected:
+                if i in reached:
+                    continue
+                if any(
+                    set(edges[i][:2]) & set(edges[j][:2])
+                    for j in reached
+                ):
+                    reached.add(i)
+                    changed = True
+        if len(reached) != len(selected):
+            continue
+        connected_subsets += 1
+        compatible = all(
+            not (set(edges[i][:2]) & set(edges[j][:2]))
+            or len(edges[i][2] & edges[j][2]) >= 2
+            for i, j in itertools.combinations(selected, 2)
+        )
+        if compatible:
+            rigidity_compatible_connected += 1
+            if len(selected) != 1:
+                raise AssertionError((selected, [edges[i] for i in selected]))
+    return {
+        "cube_edges": len(edges),
+        "nonempty_edge_subsets_checked": subsets_checked,
+        "connected_edge_subsets": connected_subsets,
+        "rigidity_compatible_connected_subsets": rigidity_compatible_connected,
+        "maximum_compatible_edge_count": 1,
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -202,21 +262,25 @@ def main():
     pair_checks = pair_transfer_audit()
     block_checks = block_sum_audit()
     polygon_checks, nonsingleton_frontiers = polygon_frontier_audit()
+    edge_audit = cube_edge_confinement_audit()
     report = {
-        "status": "weighted common-face rigidity identities verified",
+        "status": "weighted four-role edge confinement identities verified",
         "evidence_class": "exact symbolic identities plus finite rational regression",
         "human_proof": (
-            "block-diagonal Pigou--Dalton contraction and the two-dimensional "
-            "Pareto-frontier argument (FEC6)--(FEC9)"
+            "block-diagonal Pigou--Dalton contraction, two-dimensional "
+            "Pareto-frontier argument, and connected positive-Lorenz "
+            "continuation (FEC6)--(FEC10)"
         ),
         "pair_transfer_checks": pair_checks,
         "block_diagonal_lorenz_checks": block_checks,
         "exact_dispersion_polygons_checked": polygon_checks,
         "nonsingleton_pareto_frontiers_checked": nonsingleton_frontiers,
+        "edge_confinement_audit": edge_audit,
         "orthants": orthant_table(),
         "scope": (
-            "audits the algebra used by the dimension-free proof; it does not "
-            "prove the remaining opposite-endpoint types III and IV"
+            "audits the algebra and finite one-skeleton topology used by the "
+            "dimension-free proof; connected Lorenz continuation is the human "
+            "argument excluding opposite-endpoint types III and IV"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

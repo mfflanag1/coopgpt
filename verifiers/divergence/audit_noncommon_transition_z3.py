@@ -67,6 +67,42 @@ def pair_box_formula(prefix):
     return f"(and {' '.join(clauses)})"
 
 
+def restricted_fairness_formula(selector_prefix, weights, mode, trigger_roles):
+    """The selected trigger-role clauses of max-min/min-max fairness."""
+
+    clauses = []
+    for role in trigger_roles:
+        weight = weights[role]
+        y_value = f"y{role}" if weight == 1 else f"(/ y{role} {weight})"
+        selected = (
+            f"{selector_prefix}{role}"
+            if weight == 1
+            else f"(/ {selector_prefix}{role} {weight})"
+        )
+        if mode == "min":
+            trigger = f"(> {y_value} {selected})"
+        else:
+            trigger = f"(< {y_value} {selected})"
+        repairs = []
+        for j in range(4):
+            selected_j = (
+                f"{selector_prefix}{j}"
+                if weights[j] == 1
+                else f"(/ {selector_prefix}{j} {weights[j]})"
+            )
+            y_j = f"y{j}" if weights[j] == 1 else f"(/ y{j} {weights[j]})"
+            if mode == "min":
+                repairs.append(
+                    f"(and (<= {selected_j} {selected}) (< {y_j} {selected_j}))"
+                )
+            else:
+                repairs.append(
+                    f"(and (>= {selected_j} {selected}) (> {y_j} {selected_j}))"
+                )
+        clauses.append(f"(=> {trigger} (or {' '.join(repairs)}))")
+    return "true" if not clauses else f"(and {' '.join(clauses)})"
+
+
 def build_query(
     weights,
     transition: str | None,
@@ -76,6 +112,8 @@ def build_query(
     z_choice=None,
     pair_box_only=False,
     one_full_selector=None,
+    min_trigger_roles=(0, 1, 2, 3),
+    max_trigger_roles=(0, 1, 2, 3),
 ) -> str:
     lines = [
         "(set-logic LRA)",
@@ -120,22 +158,28 @@ def build_query(
         lines.append(f"(assert {selected_core_formula(f'w{witness}')})")
         lines.append(f"(assert (= w{witness}{attained_role} 0))")
 
-    min_at_z = fairness_formula("x", weights, "min").replace("y", "z")
-    max_at_x = fairness_formula("z", weights, "max").replace("y", "x")
+    min_formula = restricted_fairness_formula(
+        "x", weights, "min", min_trigger_roles
+    )
+    max_formula = restricted_fairness_formula(
+        "z", weights, "max", max_trigger_roles
+    )
+    min_at_z = min_formula.replace("y", "z")
+    max_at_x = max_formula.replace("y", "x")
     y_core = selected_core_formula("y")
     if pairwise_only or one_full_selector == "max":
         lines.append(f"(assert {min_at_z})")
     else:
         lines.append(
             f"(assert (forall ({' '.join(f'(y{i} Real)' for i in range(4))}) "
-            f"(=> {y_core} {fairness_formula('x', weights, 'min')})))"
+            f"(=> {y_core} {min_formula})))"
         )
     if pairwise_only or one_full_selector == "min":
         lines.append(f"(assert {max_at_x})")
     else:
         lines.append(
             f"(assert (forall ({' '.join(f'(y{i} Real)' for i in range(4))}) "
-            f"(=> {y_core} {fairness_formula('z', weights, 'max')})))"
+            f"(=> {y_core} {max_formula})))"
         )
 
     if x_choice is not None:
@@ -209,6 +253,8 @@ def main():
     parser.add_argument("--pairwise-only", action="store_true")
     parser.add_argument("--pair-box-only", action="store_true")
     parser.add_argument("--one-full-selector", choices=("min", "max"))
+    parser.add_argument("--min-trigger-roles", default="0,1,2,3")
+    parser.add_argument("--max-trigger-roles", default="0,1,2,3")
     parser.add_argument("--all-incidences", action="store_true")
     parser.add_argument("--x-cell", type=int)
     parser.add_argument("--z-cell", type=int)
@@ -236,6 +282,12 @@ def main():
     else:
         cells = tuple((transition, None) for transition in transitions)
     results = []
+    min_trigger_roles = tuple(
+        int(role) for role in args.min_trigger_roles.split(",") if role != ""
+    )
+    max_trigger_roles = tuple(
+        int(role) for role in args.max_trigger_roles.split(",") if role != ""
+    )
     counts = {"sat": 0, "unsat": 0, "unknown": 0}
     stop = False
     for weights in rows:
@@ -255,6 +307,8 @@ def main():
                 z_choice=z_choice,
                 pair_box_only=args.pair_box_only,
                 one_full_selector=args.one_full_selector,
+                min_trigger_roles=min_trigger_roles,
+                max_trigger_roles=max_trigger_roles,
             )
             with tempfile.NamedTemporaryFile(
                 "w", suffix=".smt2", delete=False
