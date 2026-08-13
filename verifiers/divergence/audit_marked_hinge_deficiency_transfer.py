@@ -115,6 +115,14 @@ def best_mixed_rooted_pair_packet(certificate, hinge, top, n):
                 "maximum_root_load": -negative_load,
                 "cover_value": cover_value,
                 "cover": tuple(zip(offroot, cover)),
+                "common_carriers": tuple(
+                    player
+                    for player in offroot
+                    if all(
+                        coalition >> player & 1
+                        for coalition in rooted_columns
+                    )
+                ),
             }
         )
         if best is None or excess > best["root_excess"]:
@@ -338,6 +346,13 @@ def audit_record(
                     raise AssertionError(
                         "finite tied aggregate has a genuinely fractional root cover"
                     )
+                if any(not cover["common_carriers"] for cover in nonzero_covers):
+                    raise AssertionError(
+                        "unit tied cover has no common aggregate carrier"
+                    )
+                counters[
+                    "tied_nonzero_roots_with_common_aggregate_carrier"
+                ] += len(nonzero_covers)
                 roots = maximum_overlap_roots(x, z)
                 affordable = any(
                     solve_labelled_cover(tuple(sorted(x_tight)), root, len(x))[
@@ -389,6 +404,9 @@ def audit_record(
                                     for player, value in cover["cover"]
                                     if value > 0
                                 },
+                                "common_aggregate_carriers": list(
+                                    cover["common_carriers"]
+                                ),
                             }
                             for cover in packet["root_covers"]
                         ],

@@ -6135,12 +6135,21 @@ L_r = min {sum_(i!=r) beta_i:
 ```
 
 So positive rooted excess is `L_r>1`; a tied root has a unit-cost fractional
-carrier cover.  This duality is dimension-free, but integrality is not.  In
-the ten tied archive rows, all 31 nonzero root covers have an integral
-single-player optimum: one aggregate carrier label belongs to every tagged
-row containing the root.  The next theorem must show that a unit fractional
-aggregate carrier cover forces a direct/interpolation/labelled arm, or turn
-its fractional labels into another priced packet.
+carrier cover.  Unit cost forces integrality: since total cover mass is one,
+every rooted-trace constraint can reach one only by containing the entire
+positive support of the cover.  Conversely a common label is a unit cover.
+Therefore
+
+```text
+L_r=1 iff intersection_(C in D:r in C)(C\{r}) is nonempty. (PXC48')
+```
+
+This is a dimension-free aggregate-carrier theorem, and all 31 nonzero tied
+archive roots satisfy it.  It does not yet permit contraction: the carrier is
+relative to the selected aggregate support, not the complete tight menu.
+The live bridge is now reselection—promote an aggregate carrier cycle to a
+full tight-face module, or use a tight row escaping it as a positive
+rooted/separator packet.
 
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
