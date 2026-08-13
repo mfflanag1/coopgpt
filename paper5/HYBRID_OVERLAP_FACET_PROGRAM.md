@@ -6218,6 +6218,40 @@ raises it to `5/6`.  Therefore a positive PXC49 packet does not force an
 Lmin-only target certificate.  A universal proof must use a genuinely
 coloured mixed-witness packet or a separate direct separator.
 
+The exact two-colour conservation law also identifies why comparison charge
+is not the final currency.  For any normalized mixed packet `(MCP4)`, set
+
+```text
+M = sum_(sigma,C) rho_(sigma,C) sigma(C),   S=T-M>=0,
+A = sum_(x,C) rho_(x,C)[z(C)-x(C)],
+B = sum_(z,C) rho_(z,C)[x(C)-z(C)].
+```
+
+Then tightness gives `A,B>=0`, while evaluating the same incidence completion
+at the two selections gives
+
+```text
+A = S + delta*z_r - sum_(i!=r) q_i*z_i,
+B = S + delta*x_r - sum_(i!=r) q_i*x_i.              (PXC52)
+```
+
+So both colours share the same unused mixed-core budget `S`.  On the neutral
+seven-player control, the maximum-root-load packet has `delta=1`, `A=B=0`,
+and `S=125/19046`.  Maximizing actual comparison charge over the whole rooted
+packing polytope still gives zero, with `delta=0` and `S=53/107`, although
+the full mixed one-witness relaxation is target-reaching.  Actual-selection
+comparison charge therefore cannot be the universal handover currency.  The
+essential quantity is the packet cut `M<=T` evaluated at a hypothetical bad
+branch point, exactly as in `(MWP2)`.  Ten maximum-overlap roots from six
+selected hard n=6 rows show the complementary tradeoff: every charge
+maximizer has zero excess although maximum root load is `3/2` or `2`.
+
+This redirects rather than weakens the live theorem.  Prove that for some
+distinguished root, mixed-packet cuts plus the direct and stratum rows exclude
+every below-target branch point; or produce one exact labelled branch for
+which each root admits a below-target one-witness point.  Scalar comparison
+charge at the actual selections is now a protected false shortcut.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
@@ -6235,6 +6269,12 @@ python verifiers/divergence/audit_pxc51_handover_controls.py \
   --output /tmp/pxc51_handover_controls.json
 cmp /tmp/pxc51_handover_controls.json \
   verifiers/divergence/pxc51_handover_controls.json
+python verifiers/divergence/audit_pxc52_coloured_charge.py \
+  --six-player verifiers/s6/harvest6_602.json \
+  --neutral-control verifiers/divergence/n7_neutral_rectangle_control.json \
+  --output /tmp/pxc52_coloured_charge.json
+cmp /tmp/pxc52_coloured_charge.json \
+  verifiers/divergence/pxc52_coloured_charge.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive

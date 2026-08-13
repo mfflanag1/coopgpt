@@ -216,6 +216,12 @@ The following must not be silently reintroduced.
   overlap `11/12`; it refutes the inference, not the atomic target.
 - Treating a finite n=6/n=7 census, solver agreement, or an unsat core as a
   dimension-free theorem.
+- Reducing the coloured mixed-witness handover to comparison charge evaluated
+  at the actual selections.  `(PXC52)` shows that both colour charges share
+  an unused mixed-core-budget slack.  The neutral seven-player control has
+  zero maximum rooted comparison charge but a target-reaching mixed-witness
+  projection; the decisive packet cut is evaluated at a hypothetical bad
+  branch point.
 
 ## Active dependency map
 
@@ -277,6 +283,12 @@ support-minimal two-colour **maximum**, not simultaneous positivity: the new
 exact n=7 control has `(PXC11)=13/24` and `(PXC6)=-1/12` on both minimum rows.
 Identities `(PXC13)--(PXC16)` now reduce that arrow exactly to the full-family
 inequality `min(Z_all,X_all)<=K_tau`; a failure produces strict dual
-obstructions in both colours.  Minimum deletion remains a strong finite
-subfamily, not the global hypothesis.  Objective C's full
+  obstructions in both colours.  Minimum deletion remains a strong finite
+  subfamily, not the global hypothesis.  `(PXC50)--(PXC51)` quantify the
+  positive-root comparison budget, while `(PXC52)` proves the exact
+  two-colour charge/slack conservation law and refutes actual-selection
+  comparison charge as a complete currency.  The active statement is now a
+  bad-point separation theorem: select a root whose full mixed-packet cuts,
+  combined with direct and stratum rows, exclude every below-target branch
+  point.  Objective C's full
 equality and facet identification also remain required.
