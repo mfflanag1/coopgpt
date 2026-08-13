@@ -6036,6 +6036,37 @@ five-role weight profile `(2,1,1,1,1)` satisfying `(PXC42)`.  This is the
 true residual normal form; it lies just beyond the proved four-role quotient
 theorem.
 
+The quotient has a dimension-free marked-row dichotomy.  Since the relation
+`j <=_xbar *` is one-way, there is an Lmin-tight row `A` which contains `*`
+and omits `j`.  For every such row, and every Lmax-tight row `D` splitting
+the locked block `{*,j}`, feasibility gives
+
+```text
+delta_A = z(A)-x(A) >= 0,
+sigma_D = x(D)-z(D) >= 0.                           (PXC44)
+```
+
+Zero means that the row is a common hinge.  A splitter containing `j` but
+omitting `*` has strictly positive `sigma_D`, because the carrier implication
+precludes Lmin tightness.  Therefore the locked satellite always reveals
+positive comparison payment in at least one colour or a labelled common
+hinge.  This theorem supplies sign and support, not universal affordability.
+
+In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
+`delta_A` or `sigma_D` in `[-B_I,Lambda_I]`: four are marked Lmin reverse
+payments and four are Lmax locked-block splitters.  The last two are the same
+record.  Their only marked row is coalition `22={1,2,4}`, a zero-payment
+common hinge, and
+
+```text
+x=(7/2,17/4,7/2,4,17/4,7/2),
+z=(3,4,4,4,4,4),  T=23,  O=22.
+```
+
+Thus the finite residue is now one common-hinge normal form, not a generic
+weighted five-role problem.  The live theorem must price the positive arm or
+activate a target-reaching common-hinge packet on the zero arm.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing

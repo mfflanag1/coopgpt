@@ -652,6 +652,93 @@ def audit_pair(
                         counters[
                             "pxc40_satellite_cycle_common_module_contracts"
                         ] += not cycle_split_payments
+                        marked_reverse_payments = ()
+                        locked_split_payments = ()
+                        common_hinge_rows = ()
+                        if not cycle_split_payments:
+                            locked = cycle_set | {j}
+                            z_support = full_tight_support(values, z)
+                            locked_split_rows = tuple(
+                                coalition
+                                for coalition in z_support
+                                if 0
+                                < len(
+                                    locked
+                                    & {
+                                        i
+                                        for i in range(n)
+                                        if coalition >> i & 1
+                                    }
+                                )
+                                < len(locked)
+                            )
+                            locked_split_payments = tuple(
+                                (
+                                    coalition,
+                                    coalition_sum(x, coalition)
+                                    - coalition_sum(z, coalition),
+                                )
+                                for coalition in locked_split_rows
+                            )
+                            if any(payment < 0 for _, payment in locked_split_payments):
+                                raise AssertionError(
+                                    "Lmax-tight locked-block splitter has negative payment"
+                                )
+                            marked_rows = tuple(
+                                coalition
+                                for coalition in full_support
+                                if all(coalition >> h & 1 for h in cycle)
+                                and not (coalition >> j & 1)
+                            )
+                            if not marked_rows:
+                                raise AssertionError(
+                                    "one-way satellite has no reverse-carrier witness"
+                                )
+                            marked_reverse_payments = tuple(
+                                (
+                                    coalition,
+                                    coalition_sum(z, coalition)
+                                    - coalition_sum(x, coalition),
+                                )
+                                for coalition in marked_rows
+                            )
+                            if any(payment < 0 for _, payment in marked_reverse_payments):
+                                raise AssertionError(
+                                    "Lmin-tight marked row has negative reverse payment"
+                                )
+                            common_hinge_rows = tuple(
+                                sorted(
+                                    {coalition for coalition, payment in locked_split_payments if payment == 0}
+                                    | {
+                                        coalition
+                                        for coalition, payment in marked_reverse_payments
+                                        if payment == 0
+                                        and coalition in z_support
+                                    }
+                                )
+                            )
+                            positive_mixed_payments = tuple(
+                                payment
+                                for _, payment in (
+                                    locked_split_payments + marked_reverse_payments
+                                )
+                                if payment > 0
+                            )
+                            counters[
+                                "pxc40_locked_satellite_positive_mixed_payment"
+                            ] += bool(positive_mixed_payments)
+                            counters[
+                                "pxc40_locked_satellite_common_hinge"
+                            ] += bool(common_hinge_rows)
+                            counters[
+                                "pxc40_locked_satellite_mixed_payment_bridges_base_within_currency"
+                            ] += any(
+                                -pxc39_bound <= payment <= label_currency
+                                for payment in positive_mixed_payments
+                            )
+                            counters[
+                                "pxc40_locked_satellite_only_common_hinge"
+                            ] += bool(common_hinge_rows) and not positive_mixed_payments
                         if cycle_split_payments:
                             counters[
                                 "pxc40_satellite_separator_bridges_base_within_currency"
@@ -676,6 +763,21 @@ def audit_pair(
                                     "lmax": [str(value) for value in z],
                                     "pxc39_bound": str(pxc39_bound),
                                     "pxc40_label_currency": str(label_currency),
+                                    "locked_block_lmax_split_payments": [
+                                        {
+                                            "coalition": coalition,
+                                            "payment": str(payment),
+                                        }
+                                        for coalition, payment in locked_split_payments
+                                    ],
+                                    "marked_lmin_reverse_payments": [
+                                        {
+                                            "coalition": coalition,
+                                            "payment": str(payment),
+                                        }
+                                        for coalition, payment in marked_reverse_payments
+                                    ],
+                                    "common_hinge_rows": list(common_hinge_rows),
                                 }
                             )
                         continue
@@ -1181,7 +1283,9 @@ def main():
             "reserve price is rowwise no larger than either certificate price "
             "and its full-menu optimum closes every archived cycle; tight "
             "co-singletons are exactly the retained nongainer coordinates "
-            "pinned at their individual core upper endpoint"
+            "pinned at their individual core upper endpoint; every archived "
+            "locked satellite has either a positive mixed-colour comparison "
+            "payment or a common hinge"
         ),
         "n6_extracted_support_counts": dict(extracted_counters),
         "n6_full_tight_menu_counts": dict(full_counters),
