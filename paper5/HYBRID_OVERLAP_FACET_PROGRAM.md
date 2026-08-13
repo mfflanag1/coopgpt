@@ -6093,12 +6093,62 @@ same top trace as the hinge.  The control `602[17]` needs the four-row support
 top trace.  Thus a one-row nested shear is false; the conversion must retain
 the full sparse over-cover.
 
+The full aggregate still has a canonical rooted conversion.  Adjoin the
+tagged common hinge to the optimal deficiency support, maximize one top-root
+load `p_r` subject to off-root loads at most one, and write
+`delta=p_r-1`, `q_i=1-p_i`.  For `delta>0`, colour erasure and the existing
+rooted-pair shear give
+
+```text
+sum_C rhobar_C 1_C + sum_(i!=r) q_i 1_{r,i}
+ -(delta+sum_(i!=r)q_i)e_r = 1_N.                  (PXC47)
+```
+
+This is a singleton-exceptional min-semi-balanced system.  The usual support
+rank and Studeny--Kratochvil indecomposability filters decide facet status.
+Of the 21 positive-deficiency transfer rows, 11 have positive root excess;
+all eleven pair shears are support-minimal exact-cone facets, confirmed by an
+independently formulated Z3 decomposition replay.  They form three rooted
+support orbits with multiplicities `(4,3,4)`.  Two already occur in the
+five-orbit n=6 atlas.  The third, canonical support `(1,3,13,49)`, is the
+saturated three-branch rooted star with off-root block sizes `(1,2,2)`.
+Thus the positive aggregate arm stays inside the proved
+saturated/clone-expanded rooted-star class.  The other ten rows have root
+excess exactly zero.  All ten are already closed by prior archive arms: eight
+have a direct target packet, three pass ceiling interpolation, and five have
+an affordable labelled root (counts overlap).  Thus they are not new finite
+hard cases.  The universal obligations are now: tied aggregate geometry must
+force an earlier arm, and the positive aggregate facet must receive enough
+hybrid-overlap price.  Indecomposability alone does not prove pricing.
+
+The tied cell has an exact rooted cover dual.  For aggregate tagged support
+`D` and top root `r`, let `L_r` maximize the total weight on rows containing
+`r` subject to unit incidence capacity at every off-root player.  Then
+
+```text
+L_r = min {sum_(i!=r) beta_i:
+ beta>=0, beta(C\{r})>=1 for C in D with r in C}.    (PXC48)
+```
+
+So positive rooted excess is `L_r>1`; a tied root has a unit-cost fractional
+carrier cover.  This duality is dimension-free, but integrality is not.  In
+the ten tied archive rows, all 31 nonzero root covers have an integral
+single-player optimum: one aggregate carrier label belongs to every tagged
+row containing the root.  The next theorem must show that a unit fractional
+aggregate carrier cover forces a direct/interpolation/labelled arm, or turn
+its fractional labels into another priced packet.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output /tmp/marked_hinge_deficiency_transfer_audit.json
 cmp /tmp/marked_hinge_deficiency_transfer_audit.json \
   verifiers/divergence/marked_hinge_deficiency_transfer_audit.json
+python verifiers/divergence/verify_marked_hinge_mixed_facets_z3.py \
+  --input /tmp/marked_hinge_deficiency_transfer_audit.json \
+  --output /tmp/marked_hinge_mixed_facets_z3.json
+cmp /tmp/marked_hinge_mixed_facets_z3.json \
+  verifiers/divergence/marked_hinge_mixed_facets_z3.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive

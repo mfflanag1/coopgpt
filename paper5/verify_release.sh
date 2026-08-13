@@ -121,6 +121,11 @@ run_python coopgames/verifiers/divergence/audit_marked_hinge_deficiency_transfer
   --output "$scratch_dir/marked-hinge-deficiency-transfer-audit.json"
 cmp coopgames/verifiers/divergence/marked_hinge_deficiency_transfer_audit.json \
   "$scratch_dir/marked-hinge-deficiency-transfer-audit.json"
+run_python coopgames/verifiers/divergence/verify_marked_hinge_mixed_facets_z3.py \
+  --input "$scratch_dir/marked-hinge-deficiency-transfer-audit.json" \
+  --output "$scratch_dir/marked-hinge-mixed-facets-z3.json"
+cmp coopgames/verifiers/divergence/marked_hinge_mixed_facets_z3.json \
+  "$scratch_dir/marked-hinge-mixed-facets-z3.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \
