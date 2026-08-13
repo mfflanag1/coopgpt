@@ -190,6 +190,45 @@ the one maximizing `z(H)`.  This is the new coupling point to the sparse Lmax
 packet.  It does not establish that the best support over all `h` reaches the
 threshold, nor that the globally largest `z`-block is staged-admissible.
 
+The cross-cardinality comparison also has an exact closed form.  With common
+total `T`, total gainer gain `D=z(G)-x(G)`, and
+`Q(P)=sum_(i in P)(T/n-z_i)`, total balance gives
+
+```text
+U_(g-1)-L_H
+ =[pT-nz(P)]/(n-p)-(p+1)D/g
+ =nQ(P)/(n-p)-(p+1)D/g.                              (EDQ)
+```
+
+Thus a selected support closes exactly when
+
+```text
+Q(P)>=[(n-p)(p+1)/(ng)]D.                            (EDQ2)
+```
+
+This is a dimension-free human identity and an exact decision algorithm on
+an explicit labelled selection cell: scan the complete staged support rows
+containing the cycle and test their excluded blocks.  It is not a theorem
+that one always passes and is not a full exact-cone facet classification.
+The exact six-player replay checks all 420 nongainer carrier cycles: 325 have
+a passing selected block with minimum `p=1`, while 95 require `p=2`.  The
+seven-player repair has `P={2}`, quota margin `17/35`, and budget margin
+`17/30`.  Root-exclusion transport supplies the right below-mean currency up
+to the mean-to-root premium and joint source congestion; those two charges
+are now the precise separator/marked-facet gap.
+
+Both balanced seven-player equality orientations were replayed.  Their only
+quota-closing selected rows have `h=1` and zero scalar margin, with direct
+bases `7/15` and `7/16`, below `7/12`.  Thus the new reduction preserves the
+necessity of the rooted block-star equality arm and does not misuse the
+`h>=2` carrier-cycle cardinality theorem.
+
+Combining `(CCC)` and `(EDQ)` also classifies equality on the direct carrier
+arm: it is strict except possibly at `(n,p,g,h,s)=(6,2,2,2,1)`, where
+equality forces `z(P)=0` and `D=T/3`.  This is deliberately not presented as
+a global equality classification because rooted facets attain the bound in
+the balanced seven-player orientations.
+
 Reproduce the counterexample and its independently formulated staged
 optimality checks with
 
@@ -241,5 +280,8 @@ cmp coopgames/verifiers/divergence/n7_root_block_budget_counterexample.json \
 15. Can the sparse Lmax over-cover prove the cardinality-dependent threshold
     in `(CRS)` for at least one staged-admissible cycle-containing trace, or
     does failure of that threshold itself yield the marked-facet alternative?
+16. Can the aggregate Lmax separator pay the mean-to-root premium and repeated
+    source congestion in `(EDQ3)`, thereby forcing `(EDQ2)`, or does a quota
+    failure expose a new indecomposable marked-facet class?
 
 No novelty or external validation is claimed.

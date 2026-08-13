@@ -132,6 +132,8 @@ equality and facet identification in objective C.
 | Effective fractional-role decomposition | **Proved exact reduction.** The clipped fractional-role/dispersion dual and disjoint carrier packets remain valid.  The stronger effective-bipartition overlap floor they motivated is false by an exact seven-player counterexample. | `paper5/EFFECTIVE_BIPARTITION_BRIDGE.md`; `verify_n7_effective_bipartition_counterexample.py` |
 | Six-player positive-residual facet atlas | **Exact finite theorem/audit.** Thirteen facets in five support orbits cover the live archived residuals; it is not an all-n class exhaustion. | `audit_n6_positive_residual_facet_atlas.py`; independent Z3 verifier |
 | Seven-player hostile and equality controls | **Exact falsification controls.** Every new general lemma must pass the fixed hostile cases and both balanced equality orientations `(2,4)` and `(3,3)`. | research note and adjacent n=7 verifiers |
+| Excluded-block deficit quota | **Proved dimension-free identity and fixed-cell decision criterion.** For a staged support `H=L\P`, `U_(g-1)-L_H=[pT-nz(P)]/(n-p)-(p+1)D/g`; hence the direct arm closes iff the excluded nongainers meet the exact below-mean Lmax deficit quota. This does not prove universal existence and is not a full-cone facet theorem. | `verify_excluded_block_deficit_quota.py`; `(EDQ)--(EDQ3)` |
+| Carrier-direct equality boundary | **Proved arm-specific equality theorem.** A target-reaching direct packet containing a carrier cycle is strict except possibly at `n=6`, `(p,g,h,s)=(2,2,2,2,1)`; equality there requires `z(P)=0` and total gainer gain `D=T/3`. Rooted seven-player equality remains outside this arm. | `(CCC)`, `(EDQ)`, `verify_excluded_block_deficit_quota.py` |
 
 ## Adjacent campaign results that must not be lost
 
@@ -159,6 +161,10 @@ The following must not be silently reintroduced.
 - Full nongainer maximum-overlap root-block selection.  The exact seven-player
   `(RBB-CE)` control has RBB numerator `-8`; its successful direct block is
   instead the nongainer part of labelled Lmin-tight coalition `59`.
+- Universal singleton excluded-block selection.  On the complete selected
+  six-player staged supports, 95 of 420 nongainer carrier cycles require an
+  excluded block of size two to meet `(EDQ2)`; the quota increment law, not a
+  one-source rule, governs the handover.
 - Closure by one arbitrary Lmax separator.
 - Gauge-invariant rooted-facet affordability.
 - Coefficient magnitude as invariant carrier currency; only normalized support
@@ -223,8 +229,8 @@ common-module contraction arm is now closed by strong induction on role
 count.  In a role-minimal hard branch every carrier cycle must therefore be
 split by an Lmax-tight separator.  The live arrow is the quantitative
 separator/direct/marked-facet selection theorem at the current role count.
-Comparison--residual cancellation reduces its direct arm to selecting a
-nongainer block containing a carrier cycle with scalar budget
-`U_(g-1)>=L_H`; the full root block passes all 65 role-irreducible six-player
-controls but is not yet a theorem.  Objective C's full equality and facet
-identification also remain required.
+Comparison--residual cancellation and the excluded-block deficit-quota
+identity reduce its direct arm to selecting a cycle-containing staged support
+whose excluded nongainers satisfy `(EDQ2)`.  The six-player and seven-player
+controls all have such a support, but universal existence remains open.
+Objective C's full equality and facet identification also remain required.

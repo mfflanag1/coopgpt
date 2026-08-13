@@ -5256,6 +5256,105 @@ optimization over arbitrary payoff labels.  It does not follow merely by
 taking the globally largest `z` coordinates, because that block need not be
 the nongainer trace of a cycle-containing staged support.
 
+The same identity has a stronger cross-cardinality form.  Put `T=x(N)=z(N)`,
+`D=z(G)-x(G)`, and
+
+```text
+Q(P)=sum_(i in P)[T/n-z_i]=pT/n-z(P).
+```
+
+Using total balance to replace `z(P)` in `(CRS)` gives
+
+```text
+U_(g-1)-L_H
+ =[pT-nz(P)]/(n-p)-(p+1)D/g
+ =nQ(P)/(n-p)-(p+1)D/g.                            (EDQ)
+```
+
+> **Lemma (excluded-block deficit quota).**  A staged-admissible nongainer
+> support `H=L\P` closes the maximal-proper scalar budget if and only if
+>
+> ```text
+> Q(P)>=[(n-p)(p+1)/(ng)]D.                         (EDQ2)
+> ```
+
+This subsumes cardinality ranking and removes the last opaque
+cross-cardinality comparison.  The selected support is good precisely when
+the nongainers it excludes carry enough Lmax deficit below the common mean.
+For a fixed labelled selection cell, the direct carrier arm is therefore
+decided by scanning the complete staged Lmin support rows containing the
+cycle, forming their excluded nongainer blocks, and testing `(EDQ2)`.  This
+is linear in the explicitly supplied support menu.  It is a relative
+selection-cell decision algorithm, not a polynomial enumeration theorem for
+the full exact-game cone and not evidence that `(EDQ)` is a full-cone facet.
+
+The quota schedule has an exact one-player increment law.  If
+`P_(p+1)=P_p union {i}` and `E_p` denotes the left side of `(EDQ2)` minus
+its right side, then
+
+```text
+E_(p+1)-E_p=T/n-z_i-[(n-2p-2)/(ng)]D.              (EDQ4)
+```
+
+Thus the required marginal deficit decreases linearly with `p` and becomes
+nonpositive after the midpoint.  This explains structurally why a pair can
+pass when neither singleton does in the six-player controls, while the
+seven-player repair can move in the opposite direction when enlarging the
+excluded block adds above-mean Lmax mass.  It does not make admissible
+supports nested.
+
+The exact archive replay finds `493` distinct excluded blocks across the
+`420` nongainer carrier cycles in the six-player all-unaffordable branch;
+`477` meet the quota, and every cycle has at least one.  The minimum closing
+size is `p=1` on `325` cycles and `p=2` on `95`.  In the seven-player
+full-root-block counterexample, the selected repair has `P={2}` and
+
+```text
+Q(P)=71/35, required=54/35,
+quota margin=17/35, budget margin=17/30.
+```
+
+These are finite controls, not the missing existence proof.  The remaining
+coupling is now especially concrete.  Root-exclusion transport says eligible
+sources occur among nonroot nongainers and, with `alpha=M-T/n`, obey
+
+```text
+T/n-z_i=(M-z_i)-alpha>=r_j+(x_i-z_i)-alpha.         (EDQ3)
+```
+
+Thus Lmin transport supplies the correct deficit currency, while the
+uncontrolled mean-to-root premium `alpha` and repeated source congestion are
+exactly what must be paid by the sparse Lmax separator/marked-facet arm.
+Neither `(RET)` nor `(EDQ3)` alone proves that a selected support meets the
+quota.
+
+Both balanced seven-player equality orientations provide the required
+boundary check.  Their complete staged supports contain quota-closing rows
+only with `h=1`, at scalar equality.  Their direct cardinality bases are
+respectively `7/15` for `G(2,4)` and `7/16` for `G(3,3)`, strictly below
+`7/12`.  Thus `(EDQ)` does not incorrectly discharge sharp equality: the
+carrier-cycle cardinality lemma requires `h>=2`, and the rooted block-star
+arm remains structurally necessary.
+
+There is also a dimension-free equality consequence on the carrier-direct
+arm.  By `(CCC)`, its cardinality base is strictly above the target unless
+
+```text
+(n,p,g,h,s)=(6,2,2,2,1).
+```
+
+In that cell the nonnegative direct remainder is the low-Lmax payment plus
+`[g/(p+1)](U_(g-1)-L_H)`.  Equality therefore forces `z(P)=0` and quota
+equality.  Substitution in `(EDQ2)` gives `D=T/3`.
+
+> **Corollary (carrier-direct equality).**  A target-reaching direct packet
+> whose nongainer support contains a carrier cycle is strict except possibly
+> at `n=6`, `(p,g,h)=(2,2,2)`.  Equality there requires
+> `z(P)=0` and `z(G)-x(G)=T/3`.
+
+This is an equality classification for the direct carrier arm, not for the
+whole theorem: rooted facets can and do attain equality in seven players.
+
 There is a parallel exact reduction on the direct side.  Let `C` be any
 `x`-tight coalition meeting a carrier cycle.  The module property forces
 `H subset C`.  Split
