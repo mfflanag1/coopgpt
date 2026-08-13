@@ -5560,16 +5560,6 @@ finite selector, but it is only a sufficient subfamily.  The dimension-free
 proof may and should use a larger deletion size whenever its weighted price is
 lower.
 
-This is not hypothetical.  On the full six-player tight menus, minimum
-deletion is globally hybrid-price optimal on `386/415` strict cycles; a larger
-deletion size strictly improves the price on `29/415`.  The extracted staged
-support reports `415/415` minimum optima only because it omits those improving
-rows.  Hence a proof restricted to the extracted basis or minimum deletion
-would be trapped at a genuine basis-induced local maximum.  `(PXC16)` is the
-correct basis-independent target.  All 29 strict handovers are `p=1 -> p=2`;
-global optima occur at `p=1` on 351 cycles and at `p=2` on 110, with ties
-across sizes on some cycles.
-
 The price theorem has a dimension-free equality corollary.  At `K_tau=0`,
 
 ```text
@@ -5582,6 +5572,93 @@ zero.  Equality selection on the carrier-direct arm therefore reduces to a
 zero-Lmax excluded block, with no gainer-label enumeration.  Together with
 `(CCC)` this recovers the unique six-player carrier-direct equality parameters;
 the rooted seven-player equality arm remains separate.
+
+The scan has an exact one-player exchange law.  Let `I` have excluded
+nongainer block `P`, `|P|=p`, and let a retained noncarrier nongainer `j`
+have an `x`-tight co-singleton `N\{j}`.  Exact uncrossing `(PXC4)` makes
+`J=I\{j}` tight and admissible.  With
+
+```text
+m=max_(i in P) z_i,   m'=max(m,z_j),   a_p=p(c_p-1)_+,
+```
+
+direct subtraction gives
+
+```text
+X_J-X_I=(c_(p+1)-c_p)[z(P)+sigma_I]+c_(p+1)x_j,
+Z_J-Z_I=z_j+a_(p+1)m'-a_p m,                         (PXC18)
+c_(p+1)/c_p-1=(2p+2-n)/[(p+2)(n-p-1)].              (PXC19)
+```
+
+Hence the Lmin colour cannot improve by another such deletion once
+`2p+2>=n`; before the midpoint it improves precisely when `x_j` is below the
+displayed coefficient-drop threshold.  The Lmax colour improves precisely
+when `z_j<a_p m-a_(p+1)m'`.  These identities isolate the local obstruction:
+an exchange-stable row must make every available tight-co-singleton deletion
+expensive in both colours.  They do not prove that arbitrary admissible rows
+are connected by these exchanges or that a required co-singleton is tight.
+
+This is not hypothetical.  On the full six-player tight menus, minimum
+deletion is globally hybrid-price optimal on `386/415` strict cycles; a larger
+deletion size strictly improves the price on `29/415`.  The extracted staged
+support reports `415/415` minimum optima only because it omits those improving
+rows.  Hence a proof restricted to the extracted basis or minimum deletion
+would be trapped at a genuine basis-induced local maximum.  `(PXC16)` is the
+correct basis-independent target.  All 29 strict handovers are `p=1 -> p=2`;
+global optima occur at `p=1` on 351 cycles and at `p=2` on 110, with ties
+across sizes on some cycles.  Every one of the 29 handovers is exactly an
+exchange `(PXC18)` through an `x`-tight co-singleton, and every newly deleted
+player has `x_j=z_j=0`.  In these cases `n=6,g=2,p=1`, so
+`(c_1,c_2)=(6/5,1)` and `(a_1,a_2)=(1/5,0)`.  The verifier checks `(PXC18)`
+on all 157 available full-menu co-singleton exchange pairs.  This explains
+the finite handover completely but is not an all-dimensions cheap-exchange
+supply theorem.
+
+The exchange-stability obstruction is now explicit.  Choose a global
+`X`-price minimizer and a global `Z`-price minimizer, possibly different.
+For each available tight-co-singleton deletion from the corresponding row,
+optimality and `(PXC18)` force
+
+```text
+x_j >= [(n-2p-2)/((n-p)(p+1))][z(P)+sigma_I]  (2p+2<n),
+z_j+a_(p+1) max(m,z_j) >= a_p m.                     (PXC20)
+```
+
+Here `p,P,m` belong to the minimizer in the relevant line.  If `z_j<=m`,
+the second condition is `z_j>=(a_p-a_(p+1))m`.  Strict one-colour descent
+must terminate because every step increases `p`.  Hence simultaneous global
+price failure yields two exchange-stable rows plus explicit positive
+player-price inequalities.  The remaining gluing obligation is correspondingly
+sharper: aggregate those payments with the staged Lmax separator, or prove
+that insufficient tight-co-singleton supply exposes an already classified
+rooted facet packet.  This is the next live proof step, not a completed
+separator theorem.
+
+The `X`-stability currency is already classified.  For an `X`-price
+minimizer with `2p+2<n`, let `R_X` be the retained noncarrier nongainers whose
+co-singletons `C_j=N\{j}` are `x`-tight.  Since
+`z(C_j)-x(C_j)=x_j-z_j`, summing `(PXC20)` gives
+
+```text
+z(R_X)+sum_(j in R_X)[z(C_j)-x(C_j)]
+ >= |R_X|[(n-2p-2)/((n-p)(p+1))][z(P)+sigma_I].    (PXC21)
+```
+
+Its incidence identity is
+
+```text
+sum_(j in R_X)1_(N\{j})+sum_(j in R_X)e_j=|R_X|1_N.
+```
+
+Hence every stable exchange price splits into retained Lmax mass and exact
+co-singleton comparison slack.  The packet is a decomposable sum of ordinary
+balanced partitions `(N\{j},{j})`; it is not the distinct indecomposable
+complement-star facet class proved earlier and is not a new exact-cone facet.
+Any new facet needed here must therefore enter through the remaining
+co-singleton supply-or-sufficiency obstruction, not through `(PXC21)` itself.
+The live numerical obligation is to prove that the available
+balanced-partition payment closes, or make its shortage/deficit expose a
+rooted or mixed packet.
 
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;

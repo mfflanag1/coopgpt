@@ -9,6 +9,8 @@ least one gainer, and exclude at least one nongainer.  For a row ``I`` write
 script checks exactly the two lower certificates (PXC6) and (PXC11).  It
 records simultaneous closure in the n=6 archive and exactifies a new n=7
 control which refutes simultaneous closure while preserving their maximum.
+It also checks the dimension-free tight-co-singleton exchange identities and
+shows that every strict n=6 deletion-size handover is one such exchange.
 
 The output is a finite archive theorem and hostile-control replay, not an
 all-n selection theorem.  In particular, the script retains every arbitrary
@@ -179,6 +181,7 @@ def audit_pair(
     profiles,
     require_both=False,
     residual_exceptions=None,
+    handover_details=None,
 ):
     n = len(x)
     if target != F(n, n * n // 4):
@@ -186,6 +189,7 @@ def audit_pair(
     if any(coalition_sum(x, coalition) != values[coalition] for coalition in selected_support):
         raise AssertionError("selected staged support contains a non-tight row")
     full_support = full_tight_support(values, x)
+    complete_menu = set(selected_support) == set(full_support)
     roots = maximum_overlap_roots(x, z)
     gates = tuple(solve_labelled_cover(full_support, root, n) for root in roots)
     if any(gate["affordable"] for gate in gates):
@@ -237,6 +241,64 @@ def audit_pair(
         best_all_max_certificate = max(F(row["hybrid_max_certificate"]) for row in rows)
         if best_all_max_certificate != overlap_surplus - min(z_all, x_all):
             raise AssertionError("PXC16 full-family price-selection identity failed")
+
+        # PXC18: if a retained nongainer j has an x-tight co-singleton,
+        # exact uncrossing makes I\{j} tight.  The two prices then obey exact
+        # one-player exchange laws.  Audit every such available exchange,
+        # not merely the price-improving ones.
+        row_by_support = {row["support_row"]: row for row in rows}
+        exchange_pairs = []
+        for parent in rows:
+            parent_support = parent["support_row"]
+            for j in sorted(nongainers - set(cycle)):
+                if not parent_support >> j & 1:
+                    continue
+                cosingleton = ((1 << n) - 1) ^ (1 << j)
+                if cosingleton not in full_support:
+                    continue
+                child_support = parent_support & ~(1 << j)
+                child = row_by_support.get(child_support)
+                if child is None:
+                    if complete_menu:
+                        raise AssertionError(
+                            (
+                                source,
+                                trail,
+                                cycle,
+                                parent_support,
+                                j,
+                                "PXC4 exchange child absent",
+                            )
+                        )
+                    continue
+                cp, cq = F(parent["coefficient"]), F(child["coefficient"])
+                if cq / cp - 1 != F(
+                    2 * parent["p"] + 2 - n,
+                    (parent["p"] + 2) * (n - parent["p"] - 1),
+                ):
+                    raise AssertionError("PXC19 coefficient exchange identity failed")
+                xp, xq = F(parent["lmin_omitted_price"]), F(child["lmin_omitted_price"])
+                zp, zq = F(parent["lmax_cut_price"]), F(child["lmax_cut_price"])
+                comparison_mass = xp / cp
+                if xq - xp != (cq - cp) * comparison_mass + cq * x[j]:
+                    raise AssertionError("PXC18 Lmin exchange identity failed")
+                parent_max = max(z[i] for i in parent["excluded_nongainers"])
+                child_max = max(parent_max, z[j])
+                ap = parent["p"] * max(cp - 1, F(0))
+                aq = child["p"] * max(cq - 1, F(0))
+                if zq - zp != z[j] + aq * child_max - ap * parent_max:
+                    raise AssertionError("PXC18 Lmax exchange identity failed")
+                exchange_pairs.append((parent, child, j))
+        counters["tight_cosingleton_exchange_pairs"] += len(exchange_pairs)
+        for parent, child, _j in exchange_pairs:
+            if F(parent["lmin_omitted_price"]) == x_all:
+                if F(child["lmin_omitted_price"]) < x_all:
+                    raise AssertionError("PXC20 Lmin minimizer is not exchange-stable")
+                counters["global_lmin_price_exchange_stability_checks"] += 1
+            if F(parent["lmax_cut_price"]) == z_all:
+                if F(child["lmax_cut_price"]) < z_all:
+                    raise AssertionError("PXC20 Lmax minimizer is not exchange-stable")
+                counters["global_lmax_price_exchange_stability_checks"] += 1
         all_both = not any(
             F(row["comparison_lower_bound"]) < 0
             or F(row["ordered_cut_lower_bound"]) < 0
@@ -294,6 +356,43 @@ def audit_pair(
             counters[
                 f"strict_price_handover_p_{minimum_p}_to_p_{min(optimal_deletion_sizes)}"
             ] += 1
+            witnesses = [
+                (parent, child, j)
+                for parent, child, j in exchange_pairs
+                if parent["p"] == minimum_p
+                and min(
+                    F(parent["lmax_cut_price"]),
+                    F(parent["lmin_omitted_price"]),
+                )
+                == min(z_star, x_star)
+                and min(
+                    F(child["lmax_cut_price"]),
+                    F(child["lmin_omitted_price"]),
+                )
+                == global_price
+            ]
+            if witnesses:
+                counters["strict_handovers_with_tight_cosingleton_exchange"] += 1
+                parent, child, j = witnesses[0]
+                zero_payoff = x[j] == 0 and z[j] == 0
+                counters["strict_handovers_deleting_zero_payoff_player"] += zero_payoff
+                if handover_details is not None:
+                    handover_details.append(
+                        {
+                            "source": source,
+                            "trail": trail,
+                            "cycle": list(cycle),
+                            "parent_support_row": parent["support_row"],
+                            "child_support_row": child["support_row"],
+                            "deleted_player": j,
+                            "deleted_lmin_payoff": str(x[j]),
+                            "deleted_lmax_payoff": str(z[j]),
+                            "parent_price": str(min(z_star, x_star)),
+                            "child_price": str(global_price),
+                        }
+                    )
+            else:
+                counters["strict_handovers_without_tight_cosingleton_exchange"] += 1
         counters["minimum_rows_zero_comparison_error"] += sum(
             F(row["comparison_error"]) == 0 for row in minimum_rows
         )
@@ -361,6 +460,7 @@ def main():
     full_counters, full_profiles = Counter(), Counter()
     extracted_negative_rows, full_negative_rows = [], []
     extracted_residual_exceptions, full_residual_exceptions = [], []
+    full_handover_details = []
     for path in args.paths:
         payload = json.loads(path.read_text())
         for _source, trail, values, x, z in records(payload, path):
@@ -394,6 +494,7 @@ def main():
                     full_profiles,
                     require_both=True,
                     residual_exceptions=full_residual_exceptions,
+                    handover_details=full_handover_details,
                 )
             )
 
@@ -506,7 +607,9 @@ def main():
             "in the n=6 archive, every minimum-deletion row simultaneously has "
             "nonnegative PXC6 and PXC11 lower certificates; a new exact n=7 "
             "control refutes simultaneous closure but every minimum row retains "
-            "a nonnegative max(PXC6,PXC11) certificate"
+            "a nonnegative max(PXC6,PXC11) certificate; all 29 strict n=6 "
+            "full-menu price handovers are exact tight-co-singleton exchanges "
+            "deleting a player with zero Lmin and Lmax payoff"
         ),
         "n6_extracted_support_counts": dict(extracted_counters),
         "n6_full_tight_menu_counts": dict(full_counters),
@@ -526,6 +629,7 @@ def main():
         "positive_comparison_error_minimum_rows_in_full_tight_menu": (
             full_residual_exceptions
         ),
+        "n6_full_menu_strict_handover_details": full_handover_details,
         "n7_hostile_and_sharp_controls": hostile,
         "limitations": (
             "the n=6 count uses two archived harvest files and one extracted "
