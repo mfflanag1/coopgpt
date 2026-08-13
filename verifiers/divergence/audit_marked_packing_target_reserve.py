@@ -320,6 +320,63 @@ def audit_root(values, x, z, support, root, gate, target):
         n,
         tuple(row["coalition"] for row in all_support_closers),
     )
+    co_singleton_probe = None
+    if (
+        len(packing) == 1
+        and packing[0][1] == 1
+        and packing[0][0].bit_count() == n - 1
+    ):
+        co_singleton = packing[0][0]
+        omitted = next(i for i in range(n) if not co_singleton >> i & 1)
+        proper_rows = []
+        for coalition in support:
+            comparison_gainers = tuple(i for i in gainers if coalition >> i & 1)
+            h_set = tuple(i for i in nongainers if coalition >> i & 1)
+            if not carriers <= set(h_set) or len(comparison_gainers) == len(gainers):
+                continue
+            intersection = coalition & co_singleton
+            p_set = tuple(i for i in nongainers if not intersection >> i & 1)
+            intersection_h = tuple(i for i in nongainers if intersection >> i & 1)
+            if not p_set:
+                continue
+            defect = coalition_sum(x, intersection) - values[intersection]
+            z_slack = coalition_sum(z, intersection) - values[intersection]
+            comparison_payment = coalition_sum(z, intersection) - coalition_sum(
+                x, intersection
+            )
+            if comparison_payment != z_slack - defect:
+                raise AssertionError("co-singleton uncrossing payment identity failed")
+            reserve = target_reserve_row(
+                x, z, p_set, gainers, intersection_h, target
+            )
+            proper_rows.append(
+                {
+                    "coalition": coalition,
+                    "intersection": intersection,
+                    "reintroduces_omitted_player": bool(coalition >> omitted & 1),
+                    "intersection_defect": str(defect),
+                    "intersection_lmax_slack": str(z_slack),
+                    "intersection_comparison_payment": str(comparison_payment),
+                    "intersection_target_reserve": reserve[
+                        "nonlow_target_reserve"
+                    ],
+                    "intersection_closes": (
+                        comparison_payment >= 0 and reserve["target_reserve_closes"]
+                    ),
+                }
+            )
+        co_singleton_probe = {
+            "coalition": co_singleton,
+            "omitted_player": omitted,
+            "proper_carrier_row_count": len(proper_rows),
+            "crossing_proper_carrier_row_count": sum(
+                row["reintroduces_omitted_player"] for row in proper_rows
+            ),
+            "intersection_closer_count": sum(
+                row["intersection_closes"] for row in proper_rows
+            ),
+            "proper_carrier_rows": proper_rows,
+        }
     return {
         "root": root,
         "affordable": gate["affordable"],
@@ -328,6 +385,7 @@ def audit_root(values, x, z, support, root, gate, target):
         "q_total": str(sum(q, F(0))),
         "packing_support_size": len(packing),
         "tight_rooted_pairs": list(gate["tight_rooted_pairs"]),
+        "common_nonpair_carriers": list(gate["common_nonpair_carriers"]),
         "weighted_z_complements": str(weighted_z_complements),
         "weighted_complement_sizes": str(weighted_complement_sizes),
         "tangent_slack": str(tangent_lhs - tangent_rhs),
@@ -344,6 +402,7 @@ def audit_root(values, x, z, support, root, gate, target):
             for coalition, weight in closer_face_packing
         ],
         "some_price_optimal_packing_contains_closer": closer_mass > 0,
+        "co_singleton_intersection_probe": co_singleton_probe,
         "same_packing_target_reserve_closes": any(
             row["target_reserve_closes"] for row in candidates
         ),
@@ -360,6 +419,7 @@ def main() -> None:
     counts = Counter()
     failures = []
     price_face_obstructions = []
+    price_face_obstruction_records = set()
     exchange_types = Counter()
     price_loss_distribution = Counter()
     for path in args.paths:
@@ -420,15 +480,26 @@ def main() -> None:
                     ]
                     chosen_closer = closest_rows[0]
                     chosen_exchange = chosen_closer["closest_packing_exchanges"][0]
+                    price_face_obstruction_records.add((path.name, trail))
                     price_face_obstructions.append(
                         {
                             "source": path.name,
                             "trail": trail,
                             "root": row["root"],
+                            "root_selector_loss": str(
+                                x[row["root"]] - z[row["root"]]
+                            ),
+                            "maximum_overlap_roots": list(roots),
                             "facet_margin": row["facet_margin"],
                             "delta": row["delta"],
                             "packing_support_size": row["packing_support_size"],
                             "tight_rooted_pairs": row["tight_rooted_pairs"],
+                            "common_nonpair_carriers": row[
+                                "common_nonpair_carriers"
+                            ],
+                            "co_singleton_intersection_probe": row[
+                                "co_singleton_intersection_probe"
+                            ],
                             "minimum_exchange": minimum_distance,
                             "closer": chosen_closer,
                             "exchange": chosen_exchange,
@@ -468,6 +539,35 @@ def main() -> None:
         raise AssertionError(("records_without_same_packing_reserve", len(failures)))
     if len(price_face_obstructions) != 73:
         raise AssertionError(("price_face_obstruction_count", len(price_face_obstructions)))
+    if len(price_face_obstruction_records) != 33:
+        raise AssertionError(
+            ("price_face_obstruction_record_count", len(price_face_obstruction_records))
+        )
+    obstruction_root_block_sizes = Counter(
+        len(row["maximum_overlap_roots"]) for row in price_face_obstructions
+    )
+    if obstruction_root_block_sizes != Counter({2: 52, 3: 21}):
+        raise AssertionError(
+            ("price_face_obstruction_root_blocks", obstruction_root_block_sizes)
+        )
+    obstruction_loss_types = Counter(
+        "strict" if F(row["root_selector_loss"]) > 0 else "tied"
+        for row in price_face_obstructions
+    )
+    if obstruction_loss_types != Counter({"strict": 71, "tied": 2}):
+        raise AssertionError(
+            ("price_face_obstruction_loss_types", obstruction_loss_types)
+        )
+    obstruction_crossing_counts = Counter(
+        row["co_singleton_intersection_probe"][
+            "crossing_proper_carrier_row_count"
+        ]
+        for row in price_face_obstructions
+    )
+    if obstruction_crossing_counts != Counter({0: 71, 1: 2}):
+        raise AssertionError(
+            ("price_face_obstruction_crossings", obstruction_crossing_counts)
+        )
     for obstruction in price_face_obstructions:
         exchange = obstruction["exchange"]
         if obstruction["facet_margin"] != "-1":
@@ -476,8 +576,18 @@ def main() -> None:
             raise AssertionError("obstruction optimizer is not a unit packing")
         if obstruction["tight_rooted_pairs"]:
             raise AssertionError("obstruction is not in the pair-free root branch")
+        expected_carriers = set(obstruction["maximum_overlap_roots"]) - {
+            obstruction["root"]
+        }
+        if set(obstruction["common_nonpair_carriers"]) != expected_carriers:
+            raise AssertionError("obstruction carrier is not the other root block")
         if int(exchange["packing_coalition"]).bit_count() != 5:
             raise AssertionError("obstruction packing is not co-singleton")
+        probe = obstruction["co_singleton_intersection_probe"]
+        if not probe or probe["proper_carrier_row_count"] == 0:
+            raise AssertionError("obstruction lacks a proper carrier row")
+        if probe["intersection_closer_count"] == 0:
+            raise AssertionError("co-singleton intersections do not close")
         if exchange["added"] or len(exchange["removed_gainers"]) != 1:
             raise AssertionError("obstruction is not a gainer deletion")
         if len(exchange["removed_nongainers"]) not in (0, 1):
@@ -494,9 +604,20 @@ def main() -> None:
         "minimum_exchange_type_distribution": dict(exchange_types),
         "minimum_exchange_price_loss_distribution": dict(price_loss_distribution),
         "price_face_obstruction_count": len(price_face_obstructions),
+        "price_face_obstruction_record_count": len(price_face_obstruction_records),
+        "price_face_obstruction_root_block_size_distribution": dict(
+            obstruction_root_block_sizes
+        ),
+        "price_face_obstruction_loss_type_distribution": dict(
+            obstruction_loss_types
+        ),
+        "price_face_obstruction_crossing_row_count_distribution": dict(
+            obstruction_crossing_counts
+        ),
         "price_face_obstruction_classification": (
-            "all 73 are pair-free roots of optimal margin -1 whose returned "
-            "optimizer is one unit of a co-singleton row; "
+            "all 73 roots in 33 records are pair-free roots of optimal margin "
+            "-1; their common carriers are exactly the other maximum-overlap "
+            "roots and their returned optimizer is one unit of a co-singleton row; "
             "25 properize by deleting one payoff gainer at price loss one, "
             "and 48 delete one gainer plus one nongainer at price loss two"
         ),

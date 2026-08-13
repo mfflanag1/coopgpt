@@ -5405,6 +5405,22 @@ This is a dimension-free conditional properization lemma.  The universal
 gap is now exactly selection of `C` and payment for any extra omitted
 nongainer.
 
+If an available proper tight row crosses the co-singleton, there is an exact
+payment identity.  Let `S=N\{j}`, let `C` be `x`-tight with `j in C`, put
+`I=S intersect C=C\{j}`, and write `sigma_x(I)=x(I)-v(I)` and similarly for
+`z`.  Tightness and incidence counting give
+
+```text
+sigma_x(I)=v(S)+v(C)-v(N)-v(I)>=0,
+z(I)-x(I)=sigma_z(I)-sigma_x(I).                    (PXC4)
+```
+
+Zero defect makes the intersection tight.  Positive defect is paid exactly
+by Lmax core slack.  Together with the telescoped reserve increments in
+`(PXC2)`, intersection succeeds iff its comparison payment and final reserve
+are both nonnegative; otherwise their negative parts are the two explicit
+separator/facet charges.  This uses no supermodular uncrossing assumption.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
@@ -5423,9 +5439,20 @@ optimal labelled-price faces have maximum root excess zero.  Every root
 nevertheless has a target-reserve closer in its complete staged support.  A
 row of the returned price-optimal packing closes at 444 roots, and some
 packing on the full optimal face closes at 448.  The remaining 73 are genuine
-price-face obstructions.  Every one is pair-free; the root optimum has
-labelled facet margin `-1`, and its returned optimizer is one unit of a
-co-singleton row.  Of the closest properizations, 25 delete one payoff gainer at
+price-face obstructions, spread over 33 records.  Every one is pair-free;
+its common carriers are exactly the other members of its maximum-overlap
+root block, the root optimum has labelled facet margin `-1`, and its returned
+optimizer is one unit of a co-singleton row.  There are 52 rooted instances
+with a two-player root block and 21 with a three-player block.  Selector loss
+is strict at 71 and tied at two.  Hence strict-loss proper-packet support
+already supplies a carrier-preserving proper tight row in 71 instances, but
+does not force that row to omit the player excluded by the co-singleton.
+In the archive 71 rooted instances have no crossing proper carrier row.  The
+other two have exactly one, whose co-singleton intersection satisfies both
+parts of `(PXC4)`.  Every one of the 73 instances has at least two closing
+carrier-row intersections.  This is finite compatibility evidence, not a
+dimension-free selection theorem.
+Of the closest properizations, 25 delete one payoff gainer at
 incidence distance and price loss one, while 48 delete one payoff gainer plus
 one nongainer at distance and price loss two.  The four other distance-two
 swaps have zero price loss and disappear after optimizing over the full face.
