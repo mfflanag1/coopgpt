@@ -107,6 +107,44 @@ def reserve_row(x, z, support_row, cycle, target):
     )
     if ordered > actual:
         raise AssertionError("PXC6 ordered-cut lower bound failed")
+    excluded_lmax_mass = sum((z[i] for i in excluded), F(0))
+    comparison_error = coefficient * payment
+    if coefficient <= 1:
+        ordered_error_formula = (F(1) - coefficient) * excluded_lmax_mass
+    else:
+        ordered_error_formula = (coefficient - 1) * (
+            p * next_level - excluded_lmax_mass
+        )
+    ordered_error = actual - ordered
+    if ordered_error != ordered_error_formula:
+        raise AssertionError("ordered-cut error formula failed")
+    minimum_error = min(comparison_error, ordered_error)
+    max_certificate = max(comparison, ordered)
+    if max_certificate != actual - minimum_error:
+        raise AssertionError("PXC12 hybrid minimum-error identity failed")
+    overlap_surplus = (F(1) - target) * total - total_gain
+    lmax_cut_price = excluded_lmax_mass + p * max(coefficient - 1, F(0)) * next_level
+    lmin_omitted_price = coefficient * (excluded_lmax_mass + payment)
+    retained_nongainers = tuple(i for i in nongainers if support_row >> i & 1)
+    included_gainers = tuple(i for i in gainers if support_row >> i & 1)
+    lmax_row_score = sum((z[i] for i in retained_nongainers), F(0)) - (
+        p * max(coefficient - 1, F(0)) * next_level
+    )
+    lmin_row_score = sum((x[i] for i in retained_nongainers), F(0)) - sum(
+        (z[i] - x[i] for i in included_gainers), F(0)
+    )
+    if lmax_cut_price != sum((z[i] for i in nongainers), F(0)) - lmax_row_score:
+        raise AssertionError("PXC15 Lmax score identity failed")
+    if lmin_omitted_price != coefficient * (
+        sum((x[i] for i in nongainers), F(0))
+        - total_gain
+        - lmin_row_score
+    ):
+        raise AssertionError("PXC15 Lmin score identity failed")
+    if ordered != overlap_surplus - lmax_cut_price:
+        raise AssertionError("PXC13 Lmax price identity failed")
+    if comparison != overlap_surplus - lmin_omitted_price:
+        raise AssertionError("PXC13 Lmin price identity failed")
     return {
         "support_row": support_row,
         "excluded_nongainers": list(excluded),
@@ -117,6 +155,15 @@ def reserve_row(x, z, support_row, cycle, target):
         "comparison_lower_bound": str(comparison),
         "ordered_cut_lower_bound": str(ordered),
         "comparison_payment": str(payment),
+        "comparison_error": str(comparison_error),
+        "ordered_cut_error": str(ordered_error),
+        "hybrid_minimum_error": str(minimum_error),
+        "hybrid_max_certificate": str(max_certificate),
+        "overlap_target_surplus": str(overlap_surplus),
+        "lmax_cut_price": str(lmax_cut_price),
+        "lmin_omitted_price": str(lmin_omitted_price),
+        "lmax_row_score": str(lmax_row_score),
+        "lmin_row_score": str(lmin_row_score),
     }
 
 
@@ -131,6 +178,7 @@ def audit_pair(
     counters,
     profiles,
     require_both=False,
+    residual_exceptions=None,
 ):
     n = len(x)
     if target != F(n, n * n // 4):
@@ -148,6 +196,7 @@ def audit_pair(
     }
     gainers = tuple(i for i in range(n) if z[i] > x[i])
     nongainers = set(range(n)) - set(gainers)
+    total_gain = sum((z[i] - x[i] for i in gainers), F(0))
     negative_rows = []
     for cycle in directed_cycles(graph):
         if not set(cycle) <= nongainers or x[cycle[0]] <= z[cycle[0]]:
@@ -161,6 +210,33 @@ def audit_pair(
             raise AssertionError((source, trail, cycle, "no admissible carrier row"))
         minimum_p = min(row["p"] for row in rows)
         minimum_rows = tuple(row for row in rows if row["p"] == minimum_p)
+        overlap_surpluses = {F(row["overlap_target_surplus"]) for row in minimum_rows}
+        if len(overlap_surpluses) != 1:
+            raise AssertionError("row-dependent global overlap surplus")
+        overlap_surplus = overlap_surpluses.pop()
+        z_star = min(F(row["lmax_cut_price"]) for row in minimum_rows)
+        x_star = min(F(row["lmin_omitted_price"]) for row in minimum_rows)
+        z_all = min(F(row["lmax_cut_price"]) for row in rows)
+        x_all = min(F(row["lmin_omitted_price"]) for row in rows)
+        if max(F(row["lmax_row_score"]) for row in minimum_rows) + z_star != sum(
+            (z[i] for i in nongainers), F(0)
+        ):
+            raise AssertionError("PXC15 family Lmax score optimum failed")
+        coefficient = F(minimum_rows[0]["coefficient"])
+        if coefficient * (
+            sum((x[i] for i in nongainers), F(0))
+            - total_gain
+            - max(F(row["lmin_row_score"]) for row in minimum_rows)
+        ) != x_star:
+            raise AssertionError("PXC15 family Lmin score optimum failed")
+        best_max_certificate = max(
+            F(row["hybrid_max_certificate"]) for row in minimum_rows
+        )
+        if best_max_certificate != overlap_surplus - min(z_star, x_star):
+            raise AssertionError("PXC13 family price-selection identity failed")
+        best_all_max_certificate = max(F(row["hybrid_max_certificate"]) for row in rows)
+        if best_all_max_certificate != overlap_surplus - min(z_all, x_all):
+            raise AssertionError("PXC16 full-family price-selection identity failed")
         all_both = not any(
             F(row["comparison_lower_bound"]) < 0
             or F(row["ordered_cut_lower_bound"]) < 0
@@ -189,6 +265,63 @@ def audit_pair(
             and F(row["ordered_cut_lower_bound"]) >= 0
             for row in minimum_rows
         )
+        counters["minimum_family_lmax_price_strictly_cheaper"] += z_star < x_star
+        counters["minimum_family_lmin_price_strictly_cheaper"] += x_star < z_star
+        counters["minimum_family_colour_price_tie"] += x_star == z_star
+        counters["minimum_family_best_max_certificate_closes"] += best_max_certificate >= 0
+        counters["full_family_best_max_certificate_closes"] += best_all_max_certificate >= 0
+        counters["minimum_deletion_globally_price_optimal"] += min(z_star, x_star) == min(
+            z_all, x_all
+        )
+        counters["larger_deletion_strictly_improves_price"] += min(z_all, x_all) < min(
+            z_star, x_star
+        )
+        counters["full_family_lmax_price_strictly_cheaper"] += z_all < x_all
+        counters["full_family_lmin_price_strictly_cheaper"] += x_all < z_all
+        counters["full_family_colour_price_tie"] += x_all == z_all
+        global_price = min(z_all, x_all)
+        optimal_deletion_sizes = sorted(
+            {
+                row["p"]
+                for row in rows
+                if min(F(row["lmax_cut_price"]), F(row["lmin_omitted_price"]))
+                == global_price
+            }
+        )
+        for optimal_p in optimal_deletion_sizes:
+            counters[f"cycles_with_global_optimum_at_p_{optimal_p}"] += 1
+        if global_price < min(z_star, x_star):
+            counters[
+                f"strict_price_handover_p_{minimum_p}_to_p_{min(optimal_deletion_sizes)}"
+            ] += 1
+        counters["minimum_rows_zero_comparison_error"] += sum(
+            F(row["comparison_error"]) == 0 for row in minimum_rows
+        )
+        counters["minimum_rows_zero_ordered_cut_error"] += sum(
+            F(row["ordered_cut_error"]) == 0 for row in minimum_rows
+        )
+        counters["minimum_rows_both_errors_zero"] += sum(
+            F(row["comparison_error"]) == 0
+            and F(row["ordered_cut_error"]) == 0
+            for row in minimum_rows
+        )
+        counters["cycles_all_minimum_rows_zero_comparison_error"] += all(
+            F(row["comparison_error"]) == 0 for row in minimum_rows
+        )
+        counters["cycles_some_minimum_row_zero_comparison_error"] += any(
+            F(row["comparison_error"]) == 0 for row in minimum_rows
+        )
+        if residual_exceptions is not None:
+            residual_exceptions.extend(
+                {
+                    "source": source,
+                    "trail": trail,
+                    "cycle": list(cycle),
+                    **row,
+                }
+                for row in minimum_rows
+                if F(row["comparison_error"]) > 0
+            )
         counters["arbitrary_negative_reserve_rows"] += sum(
             F(row["actual_target_reserve"]) < 0 for row in rows
         )
@@ -227,6 +360,7 @@ def main():
     extracted_counters, extracted_profiles = Counter(), Counter()
     full_counters, full_profiles = Counter(), Counter()
     extracted_negative_rows, full_negative_rows = [], []
+    extracted_residual_exceptions, full_residual_exceptions = [], []
     for path in args.paths:
         payload = json.loads(path.read_text())
         for _source, trail, values, x, z in records(payload, path):
@@ -244,6 +378,7 @@ def main():
                     extracted_counters,
                     extracted_profiles,
                     require_both=True,
+                    residual_exceptions=extracted_residual_exceptions,
                 )
             )
             full_negative_rows.extend(
@@ -258,6 +393,7 @@ def main():
                     full_counters,
                     full_profiles,
                     require_both=True,
+                    residual_exceptions=full_residual_exceptions,
                 )
             )
 
@@ -340,6 +476,8 @@ def main():
         F(row["actual_target_reserve"]) != F(13, 24)
         or F(row["comparison_lower_bound"]) != F(13, 24)
         or F(row["ordered_cut_lower_bound"]) != F(-1, 12)
+        or F(row["comparison_error"]) != 0
+        or F(row["ordered_cut_error"]) != F(5, 8)
         for row in control_rows
     ):
         raise AssertionError("new n=7 two-colour margins changed")
@@ -382,6 +520,12 @@ def main():
         },
         "negative_rows_in_extracted_support": extracted_negative_rows,
         "negative_rows_in_full_tight_menu": full_negative_rows,
+        "positive_comparison_error_minimum_rows_in_extracted_support": (
+            extracted_residual_exceptions
+        ),
+        "positive_comparison_error_minimum_rows_in_full_tight_menu": (
+            full_residual_exceptions
+        ),
         "n7_hostile_and_sharp_controls": hostile,
         "limitations": (
             "the n=6 count uses two archived harvest files and one extracted "

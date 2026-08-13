@@ -5476,6 +5476,113 @@ comparison payment, with no third residual currency.  They share the
 selected row but expose the two different currencies that the universal
 packet gluing must couple.
 
+The coupling can be written as one exact minimum-residual identity.  Set
+`Mminus=max_(i in P) z_i` and
+
+```text
+E_x(I)=c_p sigma_I,
+E_z(I)=(1-c_p)z(P)                    if c_p<=1,
+       (c_p-1)[p Mminus-z(P)]         if c_p>=1.
+```
+
+Then
+
+```text
+max(PXC6(I),PXC11(I))=R_tau(P)-min(E_z(I),E_x(I)). (PXC12)
+```
+
+Both errors are nonnegative.  Hence the max-certificate theorem is exactly
+`R_tau(P)>=min(E_z,E_x)`, not merely reserve nonnegativity.  At row level the
+two errors belong to the same row; the outer existence quantifier is handled
+separately below.
+
+For the corrected disjunction the price optimizations do decouple.  Put
+
+```text
+K_tau=(1-tau)T-D=O-tau T,
+Z_I=z(P)+(c_p-1)_+ p Mminus,
+X_I=c_p[z(P)+sigma_I]=c_p[x(P)-Delta(A)].
+```
+
+Then
+
+```text
+PXC6(I)=K_tau-Z_I,       PXC11(I)=K_tau-X_I,        (PXC13)
+
+max_(I in F) max(PXC6(I),PXC11(I))
+ =K_tau-min{ min_(I in F) Z_I, min_(I in F) X_I }. (PXC14)
+```
+
+This does not add certificates belonging to different rows.  Whichever of
+the two independently optimized prices is smaller supplies its own minimizing
+row.  The universal selection problem is therefore the single scalar
+hybrid-price inequality
+
+```text
+min(Z_star,X_star)<=K_tau.
+```
+
+Its failure supplies two separate strict dual obstructions, one in each
+colour, which is the precise input required by a separator/facet alternative.
+
+At fixed deletion cardinality the two prices are explicit maximum-weight row
+problems.  Let `L=N\G`, let `F_p` be the carrier-containing proper `x`-tight
+rows with `|L\I|=p`, and put `m_I=max_(i in L\I) z_i`.  Define
+
+```text
+S_z(I)=z(I intersect L)-(c_p-1)_+ p m_I,
+S_x(I)=x(I intersect L)-Delta(I intersect G).
+```
+
+Then
+
+```text
+Z_star=z(L)-max_(I in F_p) S_z(I),
+X_star=c_p[x(L)-D-max_(I in F_p) S_x(I)].           (PXC15)
+```
+
+For `c_p<=1`, `S_z` is just retained nongainer Lmax mass.  For `c_p>1`, scan
+the finitely many possible highest-excluded Lmax strata; the penalty is fixed
+inside each scan, leaving a linear maximum-weight tight-row problem.  This is
+an exact algorithm on an explicit selection-cell menu.  Its support-function
+duals give relative cell facets, not automatically facets of the full
+exact-game cone; the semi-balanced indecomposability test remains separate.
+
+Scanning all nonempty deletion classes gives
+
+```text
+Z_all=min_p Z_star(p),       X_all=min_p X_star(p). (PXC16)
+```
+
+By `(PXC14)`, an admissible carrier row has a nonnegative max-certificate if
+and only if `min(Z_all,X_all)<=K_tau`.  Minimum deletion is a rigid and useful
+finite selector, but it is only a sufficient subfamily.  The dimension-free
+proof may and should use a larger deletion size whenever its weighted price is
+lower.
+
+This is not hypothetical.  On the full six-player tight menus, minimum
+deletion is globally hybrid-price optimal on `386/415` strict cycles; a larger
+deletion size strictly improves the price on `29/415`.  The extracted staged
+support reports `415/415` minimum optima only because it omits those improving
+rows.  Hence a proof restricted to the extracted basis or minimum deletion
+would be trapped at a genuine basis-induced local maximum.  `(PXC16)` is the
+correct basis-independent target.  All 29 strict handovers are `p=1 -> p=2`;
+global optima occur at `p=1` on 351 cycles and at `p=2` on 110, with ties
+across sizes on some cycles.
+
+The price theorem has a dimension-free equality corollary.  At `K_tau=0`,
+
+```text
+max(PXC6(I),PXC11(I))>=0  iff  z(P)=0.              (PXC17)
+```
+
+Both prices are nonnegative, so a closing price must vanish and therefore
+`z(P)=0`.  Conversely `z(P)=0` forces `Mminus=0`, hence `Z_I=0` and PXC6 is
+zero.  Equality selection on the carrier-direct arm therefore reduces to a
+zero-Lmax excluded block, with no gainer-label enumeration.  Together with
+`(CCC)` this recovers the unique six-player carrier-direct equality parameters;
+the rooted seven-player equality arm remains separate.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
@@ -5537,6 +5644,16 @@ admissible and `829` minimum rows (`304/111` cycles by minimum size).  Thus
 the phenomenon is not an artifact of the extracted basis.  The rule is
 incidence-defined and is stronger than retrospectively maximizing reserve.
 
+The exact price decomposition explains this six-player phenomenon.  All
+`830` full-menu minimum rows have `E_z=0`; `828` also have `E_x=0`.  Each of
+the two cycles containing a positive-comparison minimum row has another
+minimum row with `E_x=0`.  Therefore `Z_star=X_star` on all `415` cycles.
+On the two exceptional cycles the two minima can occur on different rows,
+exactly as allowed by `(PXC14)`.  The new seven-player control instead has
+`X_star=35/8<Z_star=5`, so the Lmin
+colour takes over exactly when the ordered-cut coarsening becomes lossy.
+This is a finite structural handover, not a dimension-free zero-error lemma.
+
 Arbitrary proper rows are not safe: exactly six full-menu nonminimal `p=2`
 rows have actual reserve `-1/3`, with both lower certificates equal to
 `-1/3`; four occur in the extracted support, and each cycle has a closing
@@ -5562,13 +5679,15 @@ z=(5/3,5/3,5/3,2,2,2,2).
 Roots `3,5` are unaffordable and form a strict carrier cycle.  Its entire
 Lmin-tight menu is `{56,104}`; both minimum-deletion rows have `P={0,1,2}`,
 actual reserve and `(PXC11)` equal to `13/24`, but `(PXC6)=-1/12`.  Hence the
-two colours are genuinely disjunctive.  Overlap is safely `25/2>91/12`.
+two errors in `(PXC12)` are `E_x=0` and `E_z=5/8`: the colours are genuinely
+disjunctive.  Overlap is safely `25/2>91/12`.
 
-The corrected live **minimum-deletion max-certificate conjecture** says that
-some minimum-deletion row has `max(PXC6,PXC11)>=0`, or the sparse Lmax
-separator dual supplies the priced rooted-facet alternative.  The archive
-and the new control are falsification evidence, not a proof of that
-disjunction.  Reproduce the exact counts and negative controls with
+The corrected minimum-deletion max-certificate is a strong sufficient
+conjecture.  The actual live theorem is the weaker full-family inequality
+`min(Z_all,X_all)<=K_tau`, or the sparse Lmax separator dual supplies the
+priced rooted-facet alternative.  The archive and the new control are
+falsification evidence, not a proof of that disjunction.  Reproduce the exact
+counts and negative controls with
 
 ```bash
 python verifiers/divergence/audit_strict_carrier_minimum_deletion.py \

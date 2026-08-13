@@ -4041,6 +4041,112 @@ are not independent proof systems---both are algebraic consequences of the
 same selected tight row---but they expose the two currencies that a genuine
 Lmin/Lmax gluing theorem must couple.
 
+Their exact coupling is a minimum-residual identity.  Take
+$M^-=\max_{i\in P}z_i$ in (PXC6), and define
+\[
+ E_I^x=c_p\sigma_I,\qquad
+ E_I^z=
+ \begin{cases}
+ (1-c_p)z(P),&c_p\le1,\\
+ (c_p-1)[pM^--z(P)],&c_p\ge1.
+ \end{cases}
+\]
+Then (PXC5), (PXC6), and (PXC10) give, exactly,
+\[
+ \max\{\mathrm{PXC6}(I),\mathrm{PXC11}(I)\}
+ =\mathcal R_\tau(P)-\min\{E_I^z,E_I^x\}.          \tag{PXC12}
+\]
+Both errors are nonnegative.  Consequently the selected-row max-certificate
+is equivalent to the single hybrid inequality
+$\mathcal R_\tau(P)\ge\min\{E_I^z,E_I^x\}$.  This is stronger than mere
+nonnegativity of the reserve and is the precise load-bearing statement for a
+minimum-deletion exchange proof.  It also prevents a proof from silently
+combining two error terms on a fictitious row; the outer existence
+quantifier is handled separately below.
+
+For the corrected disjunction, however, the two optimizations themselves do
+decouple.  Put $K_\tau=(1-\tau)T-D=O-\tau T$ and define the two row prices
+\[
+ Z_I=z(P)+(c_p-1)_+pM^-,\qquad
+ X_I=c_p[z(P)+\sigma_I]=c_p[x(P)-\Delta(A)].
+\]
+Direct substitution gives
+\[
+ \mathrm{PXC6}(I)=K_\tau-Z_I,\qquad
+ \mathrm{PXC11}(I)=K_\tau-X_I.                    \tag{PXC13}
+\]
+Consequently, for any nonempty admissible row family $\mathcal F$, if
+$Z_*:=\min_{I\in\mathcal F}Z_I$ and
+$X_*:=\min_{I\in\mathcal F}X_I$, then
+\[
+ \max_{I\in\mathcal F}\max\{\mathrm{PXC6}(I),\mathrm{PXC11}(I)\}
+ =K_\tau-\min\{Z_*,X_*\}.                          \tag{PXC14}
+\]
+Thus a row closes precisely when the cheaper of the independently optimized
+Lmax cut price and Lmin omission price is at most the global overlap surplus.
+One does not add certificates from different rows: a minimizer of the cheaper
+price supplies the actual selected row.  This turns the missing gluing step
+into the scalar hybrid-price inequality
+$\min\{Z_*,X_*\}\le K_\tau$ and gives a direct interface to the two LP
+duals.
+
+At fixed deletion cardinality these two prices are ordinary maximum-weight
+row problems.  Let $L=N\setminus G$, let $\mathcal F_p$ be the
+carrier-containing proper $x$-tight rows with $|L\setminus I|=p$, and put
+$m_I=\max_{i\in L\setminus I}z_i$.  Define
+\[
+ S_z(I)=z(I\cap L)-(c_p-1)_+pm_I,\qquad
+ S_x(I)=x(I\cap L)-\Delta(I\cap G).
+\]
+Then direct complementation gives
+\[
+ Z_*=z(L)-\max_{I\in\mathcal F_p}S_z(I),\qquad
+ X_*=c_p\left[x(L)-D-max_{I\in\mathcal F_p}S_x(I)\right]. \tag{PXC15}
+\]
+For $c_p\le1$ the Lmax score is simply retained nongainer $z$-mass.  For
+$c_p>1$, stratifying by the highest excluded Lmax level makes the additional
+term constant on each stratum, so (PXC15) is still a finite sequence of
+linear maximum-weight row problems.  This proves an exact algorithm on an
+explicit tight menu and exposes two support-function duals.  Their extreme
+inequalities are relative selection-cell facets; promotion to facets of the
+full exact-game cone still requires the semi-balanced indecomposability test.
+Scanning every nonempty cardinality class gives
+\[
+ Z^{\rm all}_*=\min_p Z_{*,p},\qquad
+ X^{\rm all}_*=\min_p X_{*,p}.                     \tag{PXC16}
+\]
+By (PXC14), some admissible carrier row has a nonnegative two-colour
+max-certificate if and only if
+$\min\{Z^{\rm all}_*,X^{\rm all}_*\}\le K_\tau$.  Minimum deletion is a
+particularly rigid finite selector, but it is only a sufficient subfamily;
+the dimension-free proof should use the full scan and may close at a larger
+deletion size.
+
+The distinction is already active at six players.  On the full tight menu,
+minimum deletion is globally hybrid-price optimal on $386$ of the $415$
+strict cycles, while a larger deletion size strictly lowers
+$\min\{Z_I,X_I\}$ on the other $29$; every strict handover is from $p=1$ to
+$p=2$.  Global optima occur at $p=1$ on $351$ cycles and at $p=2$ on $110$,
+with both sizes optimal on some cycles.  On the extracted staged support the
+minimum class appears optimal on all $415$ only because those improving rows
+are absent.  Thus restricting the proof to the extracted basis or to minimum
+deletion would create a genuine local maximum; (PXC16) is the correct
+basis-independent target.
+
+There is a dimension-free equality consequence.  If $K_\tau=0$, then every
+$Z_I,X_I$ is nonnegative, and
+\[
+ \max\{\mathrm{PXC6}(I),\mathrm{PXC11}(I)\}\ge0
+ \quad\Longleftrightarrow\quad z(P)=0.             \tag{PXC17}
+\]
+Indeed either closing price must vanish, hence $z(P)=0$.  Conversely,
+nonnegativity of $z$ makes $z(P)=0$ imply $M^-=0$, so $Z_I=0$ and PXC6 is
+exactly zero.  Thus equality selection on the carrier-direct arm reduces to
+excluding only zero-Lmax nongainers; no gainer-label enumeration remains.
+Combined with (CCC), this recovers the existing unique six-player
+carrier-direct equality parameters, while leaving the rooted seven-player
+equality arm separate.
+
 The exact six-player replay finds 493 distinct selected-support blocks over
 420 nongainer carrier cycles; 477 meet the quota, and every cycle has at
 least one.  The smallest closing block has $p=1$ on 325 cycles and $p=2$ on
@@ -4108,6 +4214,17 @@ This is not the tautology of
 choosing a row with largest reserve: minimum deletion is defined using only
 the support incidence.
 
+The price decomposition explains the six-player coincidence.  Every one of
+the $830$ full-menu minimum rows has $E_I^z=0$; $828$ also have $E_I^x=0$.
+On each of the two cycles containing a positive-comparison minimum row,
+another minimum row has $E_I^x=0$.  Hence $Z_*=X_*$ on all $415$ cycles, and
+both equal-price routes close; the two exceptional cycles illustrate why the
+minima in (PXC14) may legitimately be attained on different rows.  At seven
+players the new control has instead
+$X_*=35/8<Z_*=5$: the Lmin colour takes over exactly when the ordered-cut
+coarsening becomes lossy.  This is a finite structural handover, not a proof
+that a zero-error minimum row exists in every dimension.
+
 The restriction matters.  Six full-menu nonminimal $p=2$ rows have actual target
 reserve $-1/3$ (and both lower certificates equal $-1/3$), while a
 minimum-deletion row closes the same cycle; four of those six rows occur in
@@ -4131,17 +4248,21 @@ Its maximum-overlap roots $3,5$ are both unaffordable and form a strict
 carrier cycle.  The full Lmin-tight menu consists of rows $56$ and $104$;
 both are minimum-deletion rows with $P=\{0,1,2\}$.  On each row the actual
 reserve and (PXC11) are $13/24$, whereas (PXC6) is $-1/12$.  Thus the two
-colours are genuinely disjunctive.  The game is safely above the target:
+errors in (PXC12) are $E_I^x=0$ and $E_I^z=5/8$: the two colours are
+genuinely disjunctive.  The game is safely above the target:
 $O=25/2>91/12$.
 
-The corrected live statement is that, in a role-minimal strict-loss branch,
-some minimum-deletion proper carrier row has
-$\max\{\mathrm{PXC6},\mathrm{PXC11}\}\ge0$, or the sparse Lmax separator
-dual yields the priced rooted-facet alternative.  Proving it requires an
-exchange or Farkas argument for the support-minimal rows; the counts and the
-new control do not prove it.  They are reproduced by
-\texttt{audit\_strict\_carrier\_minimum\_deletion.py} and its deterministic
-JSON artifact.
+The corrected sufficient statement is that some minimum-deletion proper
+carrier row has
+\[
+ \max\{\mathrm{PXC6},\mathrm{PXC11}\}\ge0.
+\]
+The actual
+dimension-free target is the weaker full-family inequality (PXC16), or the
+sparse Lmax separator dual must yield the priced rooted-facet alternative.
+Proving it requires an exchange or Farkas argument for the weighted row
+scores; the counts and the new control do not prove it.  They are reproduced by
+the archived deterministic verifier and JSON artifact.
 
 Of the closest properizations, 25 delete
 one payoff gainer at incidence distance and price loss one, while 48 delete
