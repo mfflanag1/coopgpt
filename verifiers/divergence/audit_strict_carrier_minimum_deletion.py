@@ -10,7 +10,9 @@ script checks exactly the two lower certificates (PXC6) and (PXC11).  It
 records simultaneous closure in the n=6 archive and exactifies a new n=7
 control which refutes simultaneous closure while preserving their maximum.
 It also checks the dimension-free tight-co-singleton exchange identities and
-shows that every strict n=6 deletion-size handover is one such exchange.
+shows that every strict n=6 deletion-size handover is one such exchange.  The
+weaker direct reserve price and its exchange law are checked separately from
+the two sufficient certificate prices.
 
 The output is a finite archive theorem and hostile-control replay, not an
 all-n selection theorem.  In particular, the script retains every arbitrary
@@ -25,6 +27,7 @@ import json
 import sys
 from collections import Counter
 from fractions import Fraction as F
+from itertools import combinations
 from pathlib import Path
 
 
@@ -127,6 +130,7 @@ def reserve_row(x, z, support_row, cycle, target):
     overlap_surplus = (F(1) - target) * total - total_gain
     lmax_cut_price = excluded_lmax_mass + p * max(coefficient - 1, F(0)) * next_level
     lmin_omitted_price = coefficient * (excluded_lmax_mass + payment)
+    direct_reserve_price = coefficient * excluded_lmax_mass
     retained_nongainers = tuple(i for i in nongainers if support_row >> i & 1)
     included_gainers = tuple(i for i in gainers if support_row >> i & 1)
     lmax_row_score = sum((z[i] for i in retained_nongainers), F(0)) - (
@@ -147,6 +151,10 @@ def reserve_row(x, z, support_row, cycle, target):
         raise AssertionError("PXC13 Lmax price identity failed")
     if comparison != overlap_surplus - lmin_omitted_price:
         raise AssertionError("PXC13 Lmin price identity failed")
+    if actual != overlap_surplus - direct_reserve_price:
+        raise AssertionError("PXC22 direct reserve price identity failed")
+    if direct_reserve_price > min(lmax_cut_price, lmin_omitted_price):
+        raise AssertionError("PXC22 direct price does not dominate both certificates")
     return {
         "support_row": support_row,
         "excluded_nongainers": list(excluded),
@@ -164,8 +172,12 @@ def reserve_row(x, z, support_row, cycle, target):
         "overlap_target_surplus": str(overlap_surplus),
         "lmax_cut_price": str(lmax_cut_price),
         "lmin_omitted_price": str(lmin_omitted_price),
+        "direct_reserve_price": str(direct_reserve_price),
         "lmax_row_score": str(lmax_row_score),
         "lmin_row_score": str(lmin_row_score),
+        "retained_nongainer_lmax_mass": str(
+            sum((z[i] for i in retained_nongainers), F(0))
+        ),
     }
 
 
@@ -222,6 +234,7 @@ def audit_pair(
         x_star = min(F(row["lmin_omitted_price"]) for row in minimum_rows)
         z_all = min(F(row["lmax_cut_price"]) for row in rows)
         x_all = min(F(row["lmin_omitted_price"]) for row in rows)
+        y_all = min(F(row["direct_reserve_price"]) for row in rows)
         if max(F(row["lmax_row_score"]) for row in minimum_rows) + z_star != sum(
             (z[i] for i in nongainers), F(0)
         ):
@@ -233,6 +246,15 @@ def audit_pair(
             - max(F(row["lmin_row_score"]) for row in minimum_rows)
         ) != x_star:
             raise AssertionError("PXC15 family Lmin score optimum failed")
+        for p_value in sorted({row["p"] for row in rows}):
+            p_rows = tuple(row for row in rows if row["p"] == p_value)
+            p_coefficient = F(p_rows[0]["coefficient"])
+            p_direct = min(F(row["direct_reserve_price"]) for row in p_rows)
+            if p_direct != p_coefficient * (
+                sum((z[i] for i in nongainers), F(0))
+                - max(F(row["retained_nongainer_lmax_mass"]) for row in p_rows)
+            ):
+                raise AssertionError("PXC22 fixed-cardinality direct score identity failed")
         best_max_certificate = max(
             F(row["hybrid_max_certificate"]) for row in minimum_rows
         )
@@ -241,6 +263,23 @@ def audit_pair(
         best_all_max_certificate = max(F(row["hybrid_max_certificate"]) for row in rows)
         if best_all_max_certificate != overlap_surplus - min(z_all, x_all):
             raise AssertionError("PXC16 full-family price-selection identity failed")
+        if y_all > min(z_all, x_all):
+            raise AssertionError("PXC22 direct family price domination failed")
+        if max(F(row["actual_target_reserve"]) for row in rows) != overlap_surplus - y_all:
+            raise AssertionError("PXC22 direct family selection identity failed")
+        counters["full_family_direct_price_closes"] += y_all <= overlap_surplus
+        counters["direct_price_strictly_cheaper_than_hybrid_price"] += y_all < min(
+            z_all, x_all
+        )
+        direct_optimal_sizes = sorted(
+            {
+                row["p"]
+                for row in rows
+                if F(row["direct_reserve_price"]) == y_all
+            }
+        )
+        for optimal_p in direct_optimal_sizes:
+            counters[f"cycles_with_direct_price_optimum_at_p_{optimal_p}"] += 1
 
         # PXC18: if a retained nongainer j has an x-tight co-singleton,
         # exact uncrossing makes I\{j} tight.  The two prices then obey exact
@@ -279,6 +318,7 @@ def audit_pair(
                     raise AssertionError("PXC19 coefficient exchange identity failed")
                 xp, xq = F(parent["lmin_omitted_price"]), F(child["lmin_omitted_price"])
                 zp, zq = F(parent["lmax_cut_price"]), F(child["lmax_cut_price"])
+                yp, yq = F(parent["direct_reserve_price"]), F(child["direct_reserve_price"])
                 comparison_mass = xp / cp
                 if xq - xp != (cq - cp) * comparison_mass + cq * x[j]:
                     raise AssertionError("PXC18 Lmin exchange identity failed")
@@ -288,8 +328,67 @@ def audit_pair(
                 aq = child["p"] * max(cq - 1, F(0))
                 if zq - zp != z[j] + aq * child_max - ap * parent_max:
                     raise AssertionError("PXC18 Lmax exchange identity failed")
+                excluded_mass = yp / cp
+                if yq - yp != (cq - cp) * excluded_mass + cq * z[j]:
+                    raise AssertionError("PXC23 direct-price exchange identity failed")
                 exchange_pairs.append((parent, child, j))
         counters["tight_cosingleton_exchange_pairs"] += len(exchange_pairs)
+
+        # PXC26--PXC27: all available tight co-singletons generate a Boolean
+        # deletion cube.  At fixed added deletion size, the direct-price
+        # optimum deletes the lowest-Lmax members of that cube.
+        if complete_menu:
+            for parent in rows:
+                parent_support = parent["support_row"]
+                available = tuple(
+                    j
+                    for j in sorted(nongainers - set(cycle))
+                    if parent_support >> j & 1
+                    and (((1 << n) - 1) ^ (1 << j)) in full_support
+                )
+                if not available:
+                    continue
+                counters["tight_cosingleton_boolean_cubes"] += 1
+                counters["largest_tight_cosingleton_boolean_cube_dimension"] = max(
+                    counters["largest_tight_cosingleton_boolean_cube_dimension"],
+                    len(available),
+                )
+                base_mass = sum(
+                    (z[i] for i in parent["excluded_nongainers"]), F(0)
+                )
+                ordered_available_mass = sorted(z[j] for j in available)
+                for q in range(len(available) + 1):
+                    q_rows = []
+                    for deleted in combinations(available, q):
+                        child_support = parent_support
+                        for j in deleted:
+                            child_support &= ~(1 << j)
+                        child = row_by_support.get(child_support)
+                        if child is None:
+                            raise AssertionError(
+                                (
+                                    source,
+                                    trail,
+                                    cycle,
+                                    parent_support,
+                                    deleted,
+                                    "PXC26 Boolean deletion vertex absent",
+                                )
+                            )
+                        q_rows.append(child)
+                    counters["tight_cosingleton_boolean_cube_vertices_checked"] += len(
+                        q_rows
+                    )
+                    coefficient_q = F(
+                        len(gainers) * n,
+                        (n - parent["p"] - q) * (parent["p"] + q + 1),
+                    )
+                    expected = coefficient_q * (
+                        base_mass + sum(ordered_available_mass[:q], F(0))
+                    )
+                    if min(F(row["direct_reserve_price"]) for row in q_rows) != expected:
+                        raise AssertionError("PXC27 order-statistic cube optimum failed")
+                    counters["boolean_cube_order_statistic_checks"] += 1
         for parent, child, _j in exchange_pairs:
             if F(parent["lmin_omitted_price"]) == x_all:
                 if F(child["lmin_omitted_price"]) < x_all:
@@ -299,6 +398,10 @@ def audit_pair(
                 if F(child["lmax_cut_price"]) < z_all:
                     raise AssertionError("PXC20 Lmax minimizer is not exchange-stable")
                 counters["global_lmax_price_exchange_stability_checks"] += 1
+            if F(parent["direct_reserve_price"]) == y_all:
+                if F(child["direct_reserve_price"]) < y_all:
+                    raise AssertionError("PXC24 direct minimizer is not exchange-stable")
+                counters["global_direct_price_exchange_stability_checks"] += 1
         all_both = not any(
             F(row["comparison_lower_bound"]) < 0
             or F(row["ordered_cut_lower_bound"]) < 0
@@ -609,7 +712,9 @@ def main():
             "control refutes simultaneous closure but every minimum row retains "
             "a nonnegative max(PXC6,PXC11) certificate; all 29 strict n=6 "
             "full-menu price handovers are exact tight-co-singleton exchanges "
-            "deleting a player with zero Lmin and Lmax payoff"
+            "deleting a player with zero Lmin and Lmax payoff; the exact direct "
+            "reserve price is rowwise no larger than either certificate price "
+            "and its full-menu optimum closes every archived cycle"
         ),
         "n6_extracted_support_counts": dict(extracted_counters),
         "n6_full_tight_menu_counts": dict(full_counters),

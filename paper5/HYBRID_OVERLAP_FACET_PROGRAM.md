@@ -5515,8 +5515,8 @@ max_(I in F) max(PXC6(I),PXC11(I))
 
 This does not add certificates belonging to different rows.  Whichever of
 the two independently optimized prices is smaller supplies its own minimizing
-row.  The universal selection problem is therefore the single scalar
-hybrid-price inequality
+row.  The sufficient max-certificate selection problem is therefore the
+single scalar hybrid-price inequality
 
 ```text
 min(Z_star,X_star)<=K_tau.
@@ -5660,6 +5660,81 @@ The live numerical obligation is to prove that the available
 balanced-partition payment closes, or make its shortage/deficit expose a
 rooted or mixed packet.
 
+The direct-versus-separator theorem has a weaker and cleaner price.  Put
+
+```text
+Y_I=c_p z(P).
+```
+
+Then
+
+```text
+R_tau(P)=K_tau-Y_I,       Y_I<=Z_I,       Y_I<=X_I. (PXC22)
+```
+
+The `X` comparison follows from `sigma_I>=0`.  If `c_p<=1`, then
+`Z_I=z(P)>=c_pz(P)`; if `c_p>=1`, use `p m_I>=z(P)` in the ordered-cut
+price.  Consequently
+
+```text
+Y_star(p)=c_p[z(L)-max_(I in F_p)z(I intersect L)],
+Y_all=min_p Y_star(p)<=min(Z_all,X_all),
+a direct row closes iff Y_all<=K_tau.               (PXC23)
+```
+
+This is the correct direct-versus-separator frontier.  Failure of the direct
+price implies failure of both certificate colours, while hybrid-certificate
+failure need not imply direct failure.  Thus `(PXC16)` remains a strong
+sufficient max-certificate conjecture; the hard branch for Objective B is
+`Y_all>K_tau`.  At fixed `p`, `(PXC23)` is a pure retained-Lmax-mass support
+function on the complete Lmin-tight menu, which is the cleanest interface to
+the sparse Lmax dual.
+
+The tight-co-singleton exchange law for this actual price is
+
+```text
+Y_J-Y_I=(c_(p+1)-c_p)z(P)+c_(p+1)z_j.              (PXC24)
+```
+
+At a global `Y`-minimizer before the coefficient midpoint, every available
+deletion, and their set `R_Y`, satisfy
+
+```text
+z_j >= [(n-2p-2)/((n-p)(p+1))]z(P),
+z(R_Y) >= |R_Y|[(n-2p-2)/((n-p)(p+1))]z(P).        (PXC25)
+```
+
+This payment is pure retained Lmax mass, not comparison slack, so it enters
+overlap directly.  The remaining theorem is exactly the supply-or-sufficiency
+step: show that enough such deletions exist and pay the direct price, or turn
+their shortage/deficit into the sparse separator and rooted/mixed packet arm.
+
+Available co-singletons are jointly compatible.  If `R` is any set of
+retained noncarrier nongainers of an admissible row `I` and every
+`N\{j}`, `j in R`, is `x`-tight, then repeated use of `(PXC4)` proves
+
+```text
+I\Q is x-tight and admissible for every Q subset R.              (PXC26)
+```
+
+After earlier deletions the current row still contains the next `j`, so its
+union with `N\{j}` remains `N`; induction gives the whole Boolean cube.  If
+`z_(1)<=...<=z_(|R|)` are the Lmax payoffs on `R`, then
+
+```text
+min_(Q subset R, |Q|=q) Y_(I\Q)
+ =c_(p+q)[z(P)+sum_(t<=q)z_(t)],
+min_(Q subset R)Y_(I\Q)
+ =min_(0<=q<=|R|) c_(p+q)[z(P)+sum_(t<=q)z_(t)].     (PXC27)
+```
+
+Thus the co-singleton-rich direct branch has an exact one-dimensional
+order-statistic algorithm.  The genuinely hard question is now supply: must
+some seed row have a cube large/cheap enough to close, or does cube shortage
+force a sparse separator/rooted packet?  The six-player replay checks all 157
+available cubes and 314 vertices/layers, but all observed cubes have dimension
+one; arbitrary-dimensional validity comes from the uncrossing induction.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
@@ -5760,9 +5835,9 @@ two errors in `(PXC12)` are `E_x=0` and `E_z=5/8`: the colours are genuinely
 disjunctive.  Overlap is safely `25/2>91/12`.
 
 The corrected minimum-deletion max-certificate is a strong sufficient
-conjecture.  The actual live theorem is the weaker full-family inequality
-`min(Z_all,X_all)<=K_tau`, or the sparse Lmax separator dual supplies the
-priced rooted-facet alternative.  The archive and the new control are
+conjecture.  The actual live theorem is the weaker direct-price alternative
+`Y_all<=K_tau`, or the sparse Lmax separator dual supplies the priced
+rooted-facet alternative.  The archive and the new control are
 falsification evidence, not a proof of that disjunction.  Reproduce the exact
 counts and negative controls with
 

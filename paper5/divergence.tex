@@ -4085,8 +4085,8 @@ $X_*:=\min_{I\in\mathcal F}X_I$, then
 Thus a row closes precisely when the cheaper of the independently optimized
 Lmax cut price and Lmin omission price is at most the global overlap surplus.
 One does not add certificates from different rows: a minimizer of the cheaper
-price supplies the actual selected row.  This turns the missing gluing step
-into the scalar hybrid-price inequality
+price supplies the actual selected row.  This turns the sufficient
+max-certificate selection step into the scalar hybrid-price inequality
 $\min\{Z_*,X_*\}\le K_\tau$ and gives a direct interface to the two LP
 duals.
 
@@ -4211,6 +4211,84 @@ Consequently any genuinely new facet needed here must enter through the
 remaining supply-or-sufficiency obstruction, not through (PXC21) itself.
 Inequality (PXC21) does not prove either that enough co-singletons are tight
 or that the available atoms have sufficient total weight to close the target.
+
+For the direct-versus-separator theorem, the exact reserve price is weaker
+than either certificate price and should be optimized first.  Define
+\[
+ Y_I=c_pz(P).
+\]
+Then (EDQ5) and (PXC13) give
+\[
+ \mathcal R_\tau(P)=K_\tau-Y_I,\qquad
+ Y_I\le Z_I,\qquad Y_I\le X_I.                   \tag{PXC22}
+\]
+The second inequality uses $\sigma_I\ge0$.  For the first, if $c_p\le1$
+then $Z_I=z(P)\ge c_pz(P)$; if $c_p\ge1$, then
+$pm_I\ge z(P)$ gives
+$Z_I=z(P)+(c_p-1)pm_I\ge c_pz(P)$.
+At fixed cardinality and over the full family, therefore,
+\[
+ \begin{split}
+ Y_{*,p}&=c_p\left[z(L)-
+       \max_{I\in\mathcal F_p}z(I\cap L)\right],\\
+ Y_*^{\rm all}&=\min_pY_{*,p}
+       \le\min\{Z_*^{\rm all},X_*^{\rm all}\},\\
+ \text{a direct row closes}&\quad\Longleftrightarrow\quad
+       Y_*^{\rm all}\le K_\tau.
+ \end{split}                                       \tag{PXC23}
+\]
+Thus failure of the direct price automatically implies failure of both
+certificate colours, but the converse need not hold.  The actual hard branch
+for the direct-or-separator theorem is $Y_*^{\rm all}>K_\tau$; (PXC16) is a
+stronger sufficient certificate conjecture, not the necessary direct target.
+Formula (PXC23) is a pure Lmax support function evaluated on the complete
+Lmin-tight menu, giving the cleanest interface to the sparse Lmax dual.
+
+The co-singleton exchange becomes correspondingly simpler:
+\[
+ Y_J-Y_I=(c_{p+1}-c_p)z(P)+c_{p+1}z_j.             \tag{PXC24}
+\]
+If $I_Y$ is a global direct-price minimizer with $2p+2<n$, every available
+deletion therefore satisfies, with
+$R_Y$ denoting all such retained nongainers,
+\[
+ z_j\ge\frac{n-2p-2}{(n-p)(p+1)}z(P),\qquad
+ z(R_Y)\ge |R_Y|\frac{n-2p-2}{(n-p)(p+1)}z(P).     \tag{PXC25}
+\]
+Unlike (PXC21), this payment is entirely retained Lmax mass and hence enters
+overlap directly.  What remains is still a supply-or-sufficiency theorem:
+neither (PXC23) nor (PXC25) proves that enough co-singleton deletions exist or
+that their aggregate mass forces $Y_*^{\rm all}\le K_\tau$.
+
+When the co-singletons do exist, their deletions are jointly compatible, not
+merely pairwise available.  Let $R$ be any set of retained noncarrier
+nongainers of an admissible row $I$ such that every
+$N\setminus\{j\}$, $j\in R$, is $x$-tight.  Repeatedly applying (PXC4) gives
+\[
+ I\setminus Q\text{ is $x$-tight and admissible for every }Q\subseteq R.
+                                                               \tag{PXC26}
+\]
+Indeed, after any earlier deletions the current row still contains the next
+$j$, so its union with $N\setminus\{j\}$ is again $N$.  Thus the available
+co-singletons generate a full Boolean deletion cube.  If
+$z_{(1)}\le\cdots\le z_{(|R|)}$ are their Lmax payoffs, then for every
+$0\le q\le|R|$,
+\[
+ \min_{\substack{Q\subseteq R\\|Q|=q}}Y_{I\setminus Q}
+  =c_{p+q}\left[z(P)+\sum_{t=1}^qz_{(t)}\right],
+ \qquad
+ \min_{Q\subseteq R}Y_{I\setminus Q}
+  =\min_{0\le q\le|R|}
+    c_{p+q}\left[z(P)+\sum_{t=1}^qz_{(t)}\right].   \tag{PXC27}
+\]
+For fixed $q$ the coefficient is constant, so the exchange argument is just
+the order-statistic choice of the $q$ cheapest players.  This proves an exact
+one-dimensional direct-price algorithm on every co-singleton cube.  It does
+not show that an arbitrary admissible row has a cube large enough to reach
+the coefficient midpoint.  The six-player full-menu replay checks all $157$
+available cubes and $314$ vertices/order-statistic layers; every archived
+cube has dimension one, so higher-dimensional coverage rests on the human
+uncrossing proof rather than that finite control.
 
 The distinction is already active at six players.  On the full tight menu,
 minimum deletion is globally hybrid-price optimal on $386$ of the $415$
@@ -4340,11 +4418,11 @@ carrier row has
 \[
  \max\{\mathrm{PXC6},\mathrm{PXC11}\}\ge0.
 \]
-The actual
-dimension-free target is the weaker full-family inequality (PXC16), or the
-sparse Lmax separator dual must yield the priced rooted-facet alternative.
-Proving it requires an exchange or Farkas argument for the weighted row
-scores; the counts and the new control do not prove it.  They are reproduced by
+The necessary direct target is the still weaker actual-price test (PXC23).
+If it fails, the sparse Lmax separator dual must yield the priced rooted-facet
+alternative.  Proving that disjunction requires an exchange or Farkas
+argument for the weighted row scores; the counts and the new control do not
+prove it.  They are reproduced by
 the archived deterministic verifier and JSON artifact.
 
 Of the closest properizations, 25 delete
