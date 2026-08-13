@@ -346,6 +346,8 @@ def audit_root(values, x, z, support, root, gate, target):
             )
             if comparison_payment != z_slack - defect:
                 raise AssertionError("co-singleton uncrossing payment identity failed")
+            if defect != 0:
+                raise AssertionError("exact-game tight co-singleton uncrossing failed")
             reserve = target_reserve_row(
                 x, z, p_set, gainers, intersection_h, target
             )

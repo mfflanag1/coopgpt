@@ -5405,21 +5405,23 @@ This is a dimension-free conditional properization lemma.  The universal
 gap is now exactly selection of `C` and payment for any extra omitted
 nongainer.
 
-If an available proper tight row crosses the co-singleton, there is an exact
-payment identity.  Let `S=N\{j}`, let `C` be `x`-tight with `j in C`, put
-`I=S intersect C=C\{j}`, and write `sigma_x(I)=x(I)-v(I)` and similarly for
-`z`.  Tightness and incidence counting give
+Exactness removes the apparent crossing obstruction.  More generally, let
+`S,C` be tight at one core point `x`, suppose `S union C=N`, and put
+`I=S intersect C`.  Core feasibility at `x` gives one inequality.  Exactness
+supplies a core point tight on `I`, giving the reverse inequality.  Hence
 
 ```text
-sigma_x(I)=v(S)+v(C)-v(N)-v(I)>=0,
-z(I)-x(I)=sigma_z(I)-sigma_x(I).                    (PXC4)
+v(S)+v(C)=v(N)+v(I),
+x(I)=v(I),
+z(I)-x(I)=[z(S)-x(S)]+[z(C)-x(C)]>=0.              (PXC4)
 ```
 
-Zero defect makes the intersection tight.  Positive defect is paid exactly
-by Lmax core slack.  Together with the telescoped reserve increments in
-`(PXC2)`, intersection succeeds iff its comparison payment and final reserve
-are both nonnegative; otherwise their negative parts are the two explicit
-separator/facet charges.  This uses no supermodular uncrossing assumption.
+Thus tight sets covering `N` intersect tightly in an exact game.  Intersecting
+a proper carrier row with a tight co-singleton preserves the carrier and
+properness and automatically supplies nonnegative comparison payment.  The
+only surviving charge is the telescoped reserve change in `(PXC2)`.  This is
+an elementary consequence in the standard exact-cone framework, not a
+novelty claim and not a supermodularity assumption.
 
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
@@ -5448,10 +5450,10 @@ is strict at 71 and tied at two.  Hence strict-loss proper-packet support
 already supplies a carrier-preserving proper tight row in 71 instances, but
 does not force that row to omit the player excluded by the co-singleton.
 In the archive 71 rooted instances have no crossing proper carrier row.  The
-other two have exactly one, whose co-singleton intersection satisfies both
-parts of `(PXC4)`.  Every one of the 73 instances has at least two closing
-carrier-row intersections.  This is finite compatibility evidence, not a
-dimension-free selection theorem.
+other two have exactly one, whose co-singleton intersection is tight by
+`(PXC4)`.  Every one of the 73 instances has at least two carrier-row
+intersections with nonnegative final reserve.  This is finite compatibility
+evidence, not a dimension-free reserve theorem.
 Of the closest properizations, 25 delete one payoff gainer at
 incidence distance and price loss one, while 48 delete one payoff gainer plus
 one nongainer at distance and price loss two.  The four other distance-two
