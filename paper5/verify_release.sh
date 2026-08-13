@@ -115,6 +115,12 @@ run_python coopgames/verifiers/divergence/audit_strict_carrier_minimum_deletion.
   --output "$scratch_dir/strict-carrier-minimum-deletion-audit.json"
 cmp coopgames/verifiers/divergence/strict_carrier_minimum_deletion_audit.json \
   "$scratch_dir/strict-carrier-minimum-deletion-audit.json"
+run_python coopgames/verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/marked-hinge-deficiency-transfer-audit.json"
+cmp coopgames/verifiers/divergence/marked_hinge_deficiency_transfer_audit.json \
+  "$scratch_dir/marked-hinge-deficiency-transfer-audit.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

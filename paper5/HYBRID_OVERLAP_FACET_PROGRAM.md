@@ -6064,6 +6064,43 @@ It has `theta=1/|A|` and zero cross-surplus because
 target price remains a separate inequality outside the already closed
 common-hinge classes.
 
+Failure of common support has a quantitative marked dual.  Let `H` be the
+Lmax top block and `(y,epsilon_star)` solve `(CSD-D)`.  For every common hinge
+`A`, zero Lmax slack gives `y(A)<=0`, while `y_i>=epsilon_star` on `H`.
+Consequently
+
+```text
+-y(A\H) >= |A cap H| epsilon_star,
+ y(H\A) >= |H\A| epsilon_star.                     (PXC46)
+```
+
+Hence a common marked row meeting and omitting `H` either belongs to the
+zero-deficiency common-over-cover arm or carries a signed labelled transfer:
+negative price on its off-top labels and positive price on every omitted top
+label.  This is an exact polar witness for the common-support deficiency
+problem at the mixed-support interface.  It is not yet a feasible polar of
+the full mixed-witness projection, a nonnegative mixed packet, a target
+price, or a full-cone facet.
+
+The exact six-player replay checks all 2,065 common rows in 374 records.
+There are 73 positive-deficiency records and 21 positive-deficiency common
+rows meeting and omitting the top.  Archive record `601[71]`, coalition `23`,
+is sharp on both transfers: `epsilon_star=1/6`, three retained top labels
+force off-top price `-1/2`, and the one omitted top label has price `1/6`.
+Only 11 of the 21 positive-transfer rows have any optimal primal row with the
+same top trace as the hinge.  The control `602[17]` needs the four-row support
+`(21,26,54,60)` with weights `(2/5,1/5,1/5,1/5)`, and none has the hinge's
+top trace.  Thus a one-row nested shear is false; the conversion must retain
+the full sparse over-cover.
+
+```bash
+python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output /tmp/marked_hinge_deficiency_transfer_audit.json
+cmp /tmp/marked_hinge_deficiency_transfer_audit.json \
+  verifiers/divergence/marked_hinge_deficiency_transfer_audit.json
+```
+
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
 `delta_A` or `sigma_D` in `[-B_I,Lambda_I]`: four are marked Lmin reverse
 payments and four are Lmax locked-block splitters.  The last two are the same
