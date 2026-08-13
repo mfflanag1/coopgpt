@@ -43,10 +43,11 @@ from audit_labelled_facet_cover_duality import (  # noqa: E402
     maximum_overlap_roots,
     solve_labelled_cover,
 )
-from audit_lmax_overcover import coalition_sum, records  # noqa: E402
+from audit_lmax_overcover import coalition_sum, records, top_certificate  # noqa: E402
 from audit_n6_sparse_lmax_complete_lmin_roots import (  # noqa: E402
     complete_lmin_support,
 )
+from exactlp import exact_linprog  # noqa: E402
 from verify_labelled_branch_duals import CASES, verify_complete_selection  # noqa: E402
 
 
@@ -61,6 +62,135 @@ N7_SIMULTANEOUS_COUNTEREXAMPLE = {
     "x": (F(7, 4), F(7, 4), F(7, 4), F(17, 8), F(7, 4), F(17, 8), F(7, 4)),
     "z": (F(5, 3), F(5, 3), F(5, 3), F(2), F(2), F(2), F(2)),
 }
+
+
+def endpoint_face_gap(values, shortage):
+    """Compute PXC29's exact common-endpoint Chebyshev gap."""
+    # PXC28/exactness supplies an endpoint witness for one co-singleton.
+    # Reserve the exact simplex solve for the genuinely aggregate case.
+    if len(shortage) == 1:
+        return F(0)
+    n = (len(values)).bit_length() - 1
+    full = (1 << n) - 1
+    total = values[full]
+    width = n + 1
+    t_index = n
+    inequalities = []
+    inequality_rhs = []
+    for coalition in range(1, full):
+        row = [F(0)] * width
+        for i in range(n):
+            if coalition >> i & 1:
+                row[i] = F(-1)
+        inequalities.append(row)
+        inequality_rhs.append(-values[coalition])
+    for j in shortage:
+        upper_endpoint = total - values[full ^ (1 << j)]
+        row = [F(0)] * width
+        row[j] = F(-1)
+        row[t_index] = F(-1)
+        inequalities.append(row)
+        inequality_rhs.append(-upper_endpoint)
+    equality = [[F(1)] * n + [F(0)]]
+    objective = [F(0)] * width
+    objective[t_index] = F(1)
+    status, optimum, _solution = exact_linprog(
+        objective,
+        inequalities,
+        inequality_rhs,
+        equality,
+        [total],
+    )
+    if status != "optimal" or optimum < 0:
+        raise AssertionError("PXC29 endpoint-face gap LP failed")
+    return optimum
+
+
+def multi_endpoint_separator_control():
+    """Sharp n=7 positive-gap control for PXC29, PXC30, and PXC36."""
+    n = 7
+    full = (1 << n) - 1
+    generators = (
+        (F(1), F(0), F(0), F(0), F(0), F(0), F(0)),
+        (F(0), F(1), F(0), F(0), F(0), F(0), F(0)),
+    )
+    values = tuple(
+        min(coalition_sum(generator, coalition) for generator in generators)
+        for coalition in range(1 << n)
+    )
+    shortage = (0, 1)
+    gap = endpoint_face_gap(values, shortage)
+    if gap != F(1, 2):
+        raise AssertionError("PXC29 multi-endpoint control gap is not 1/2")
+    z = (F(1, 2), F(1, 2), F(0), F(0), F(0), F(0), F(0))
+    certificate = top_certificate(values, z)
+    alpha = certificate["alpha"]
+    expected_alpha = (F(1, 2), F(1, 2), F(0), F(0), F(0), F(0), F(0))
+    if alpha != expected_alpha:
+        raise AssertionError("unexpected Lmax load in multi-endpoint control")
+    beta = (F(1, 2), F(1, 2))
+    outside_load = max(alpha[i] for i in range(n) if i not in shortage)
+    upper_endpoints = tuple(
+        values[full] - values[full ^ (1 << j)] for j in shortage
+    )
+    price = min(
+        (alpha[j] - outside_load) / beta[index]
+        for index, j in enumerate(shortage)
+    )
+    bound = (
+        outside_load * values[full]
+        + sum(
+            ((alpha[j] - outside_load) * upper_endpoints[index]
+             for index, j in enumerate(shortage)),
+            F(0),
+        )
+        - price * gap
+    )
+    if bound != max(z):
+        raise AssertionError("PXC36 is not sharp on multi-endpoint control")
+
+    # PXC30: (1/2)1_N plus one half of each dummy singleton equals
+    # (1/2)1_(N\{0})+(1/2)1_(N\{1}); its value gap is 1/2.
+    gamma = F(1, 2)
+    lambdas = {1 << j: F(1, 2) for j in range(2, n)}
+    for i in range(n):
+        left_load = gamma + sum(
+            (weight for coalition, weight in lambdas.items() if coalition >> i & 1),
+            F(0),
+        )
+        right_load = sum(
+            (beta[index] for index, j in enumerate(shortage)
+             if (full ^ (1 << j)) >> i & 1),
+            F(0),
+        )
+        if left_load != right_load:
+            raise AssertionError("PXC30 multi-endpoint incidence identity failed")
+    dual_gap = (
+        sum((weight * values[coalition] for coalition, weight in lambdas.items()), F(0))
+        + gamma * values[full]
+        - sum(
+            (beta[index] * values[full ^ (1 << j)]
+             for index, j in enumerate(shortage)),
+            F(0),
+        )
+    )
+    if dual_gap != gap:
+        raise AssertionError("PXC30 multi-endpoint value identity failed")
+    return {
+        "description": "dummy-extended exact two-player simplex; control only",
+        "endpoint_gap": str(gap),
+        "lmax_load": [str(value) for value in alpha],
+        "separator_beta": [str(value) for value in beta],
+        "separator_price": str(price),
+        "pxc36_bound": str(bound),
+        "lmax_ceiling": str(max(z)),
+        "pxc30_gamma": str(gamma),
+        "pxc30_dummy_singleton_weights": {
+            str(coalition.bit_length() - 1): str(weight)
+            for coalition, weight in lambdas.items()
+        },
+        "facet_scope": "decomposable sign-and-price control; not a new facet",
+    }
 
 
 def reserve_row(x, z, support_row, cycle, target):
@@ -194,6 +324,8 @@ def audit_pair(
     require_both=False,
     residual_exceptions=None,
     handover_details=None,
+    endpoint_gap_cache=None,
+    overcover_cache=None,
 ):
     n = len(x)
     if target != F(n, n * n // 4):
@@ -271,6 +403,7 @@ def audit_pair(
         total = sum(x, F(0))
         full_coalition = (1 << n) - 1
         for row in rows:
+            shortage = []
             for j in sorted(nongainers - set(cycle)):
                 if not row["support_row"] >> j & 1:
                     continue
@@ -284,7 +417,74 @@ def audit_pair(
                 if tight_cosingleton:
                     counters["retained_nongainer_upper_pinned_occurrences"] += 1
                 else:
+                    shortage.append(j)
                     counters["retained_nongainer_positive_upper_slack_occurrences"] += 1
+                    if z[j] == max(z):
+                        counters["positive_upper_slack_at_lmax_top_occurrences"] += 1
+                    else:
+                        counters["positive_upper_slack_off_lmax_top_occurrences"] += 1
+            if shortage:
+                counters[f"positive_upper_slack_shortage_sets_of_size_{len(shortage)}"] += 1
+                key = (values, tuple(shortage))
+                if endpoint_gap_cache is None:
+                    gap = endpoint_face_gap(values, shortage)
+                else:
+                    if key not in endpoint_gap_cache:
+                        endpoint_gap_cache[key] = endpoint_face_gap(values, shortage)
+                    gap = endpoint_gap_cache[key]
+                counters["positive_upper_slack_shortage_sets"] += 1
+                counters["shortage_sets_with_common_endpoint_witness"] += gap == 0
+                counters["shortage_sets_with_positive_sparse_separator_gap"] += gap > 0
+                if gap == 0:
+                    if overcover_cache is None:
+                        certificate = top_certificate(values, z)
+                    else:
+                        key = (values, z)
+                        if key not in overcover_cache:
+                            overcover_cache[key] = top_certificate(values, z)
+                        certificate = overcover_cache[key]
+                    alpha = certificate["alpha"]
+                    outside_load = max(alpha[i] for i in range(n) if i not in shortage)
+                    upper_mass = sum(
+                        (total - values[full_coalition ^ (1 << j)] for j in shortage),
+                        F(0),
+                    )
+                    coupling_bound = sum(
+                        (
+                            alpha[j]
+                            * (total - values[full_coalition ^ (1 << j)])
+                            for j in shortage
+                        ),
+                        F(0),
+                    ) + (total - upper_mass) * outside_load
+                    if max(z) > coupling_bound:
+                        raise AssertionError("PXC34 endpoint/over-cover coupling failed")
+                    counters["common_endpoint_overcover_coupling_checks"] += 1
+                    counters["pxc34_tight_coupling_bounds"] += max(z) == coupling_bound
+                    counters["pxc34_strict_coupling_bounds"] += max(z) < coupling_bound
+                    counters["alpha_dominant_common_endpoint_shortage_sets"] += all(
+                        alpha[j] >= outside_load for j in shortage
+                    )
+                    theta = max(alpha)
+                    dispersion_bound = theta * total - sum(
+                        (
+                            (theta - alpha[j])
+                            * (total - values[full_coalition ^ (1 << j)])
+                            for j in shortage
+                        ),
+                        F(0),
+                    )
+                    if max(z) > dispersion_bound:
+                        raise AssertionError("PXC35 endpoint dispersion bound failed")
+                    counters["pxc35_strict_dispersion_improvements"] += any(
+                        alpha[j] < theta
+                        and total - values[full_coalition ^ (1 << j)] > 0
+                        for j in shortage
+                    )
+                    counters["pxc35_tight_dispersion_bounds"] += max(z) == dispersion_bound
+                    counters["pxc34_strictly_sharper_than_pxc35"] += (
+                        coupling_bound < dispersion_bound
+                    )
         if y_all > min(z_all, x_all):
             raise AssertionError("PXC22 direct family price domination failed")
         if max(F(row["actual_target_reserve"]) for row in rows) != overlap_surplus - y_all:
@@ -586,6 +786,8 @@ def main():
     extracted_negative_rows, full_negative_rows = [], []
     extracted_residual_exceptions, full_residual_exceptions = [], []
     full_handover_details = []
+    endpoint_gap_cache = {}
+    overcover_cache = {}
     for path in args.paths:
         payload = json.loads(path.read_text())
         for _source, trail, values, x, z in records(payload, path):
@@ -604,6 +806,8 @@ def main():
                     extracted_profiles,
                     require_both=True,
                     residual_exceptions=extracted_residual_exceptions,
+                    endpoint_gap_cache=endpoint_gap_cache,
+                    overcover_cache=overcover_cache,
                 )
             )
             full_negative_rows.extend(
@@ -620,6 +824,8 @@ def main():
                     require_both=True,
                     residual_exceptions=full_residual_exceptions,
                     handover_details=full_handover_details,
+                    endpoint_gap_cache=endpoint_gap_cache,
+                    overcover_cache=overcover_cache,
                 )
             )
 
@@ -644,6 +850,8 @@ def main():
             F(7, 12),
             case_counters,
             case_profiles,
+            endpoint_gap_cache=endpoint_gap_cache,
+            overcover_cache=overcover_cache,
         )
         hostile.append(
             {
@@ -683,6 +891,8 @@ def main():
         F(7, 12),
         case_counters,
         case_profiles,
+        endpoint_gap_cache=endpoint_gap_cache,
+        overcover_cache=overcover_cache,
     )
     roots = maximum_overlap_roots(x, z)
     gates = tuple(solve_labelled_cover(support_x, root, 7) for root in roots)
@@ -760,6 +970,7 @@ def main():
         ),
         "n6_full_menu_strict_handover_details": full_handover_details,
         "n7_hostile_and_sharp_controls": hostile,
+        "n7_multi_endpoint_separator_control": multi_endpoint_separator_control(),
         "limitations": (
             "the n=6 count uses two archived harvest files and one extracted "
             "complete staged support per record; the n=7 replay is a fixed "

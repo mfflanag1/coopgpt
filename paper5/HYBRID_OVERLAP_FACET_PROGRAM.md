@@ -5766,7 +5766,150 @@ The six-player full-menu replay checks 497 retained noncarrier nongainer
 occurrences: 157 are upper-pinned and 340 have positive upper slack.  On the
 extracted staged supports the corresponding counts are 7 and 338 among 345
 checks.  These are finite diagnostic multiplicities; the displayed theorem
-comes from exactness, not enumeration.
+comes from exactness, not enumeration.  All 340 full-menu shortage sets and
+all 338 extracted-support shortage sets are singletons; hence every archived
+gap is zero by exactness and the positive-separator arm is not activated.
+Among the full-menu slack occurrences, 300 are in the Lmax top stratum and
+40 are off it.  The archive therefore tests only the one-direction endpoint
+arm, not nontrivial multi-endpoint compatibility.
+
+There is now a dimension-free aggregate endpoint alternative.  For a
+nonempty shortage set `R`, put
+
+```text
+s_j(y)=y(N\{j})-v(N\{j})=u_j-y_j,
+epsilon_R=min_(y in core(v)) max_(j in R)s_j(y).
+```
+
+Compact minimax duality gives
+
+```text
+epsilon_R=max_(beta in Delta(R)) min_(y in core(v))
+                    sum_(j in R)beta_j s_j(y).         (PXC29)
+```
+
+Hence `epsilon_R=0` exactly when the endpoint faces `y_j=u_j`, `j in R`,
+have a common core point.  If they do not, an optimizing `beta` and the dual
+of the inner core LP give `lambda_S>=0` and free `gamma` with
+
+```text
+sum_S lambda_S 1_S+gamma 1_N
+  =sum_(j in R)beta_j 1_(N\{j}),
+sum_S lambda_S v(S)+gamma T
+  -sum_(j in R)beta_j v(N\{j})=epsilon_R>0.           (PXC30)
+```
+
+For fixed `beta`, an extreme dual uses at most `n` positive coalition
+weights.  Complementary slackness puts them in the tight support of a core
+point minimizing aggregate endpoint slack.  Thus the shortage branch has a
+rigorous alternative: one common endpoint witness, or a sparse exact-core
+separator with positive payment.
+
+This still stops one interface short of Objective B.  The coalitions selected
+by `(PXC30)` are tight at the minimizing core point, not necessarily at Lmax
+or in the chosen sparse ceiling over-cover.  The next theorem must transfer
+this payment to the Lmax packet, or turn failure of that alignment into an
+already proved rooted-pair/mixed-witness packet.  Calling `(PXC30)` itself a
+sparse **Lmax** separator would overstate what has been proved.
+
+The common-endpoint arm has an exact mixed-packet projection.  Let `R` be
+nonempty and proper, let
+`U_R=sum_(j in R)u_j`, let the tagged requirements be
+`a_d<=w(S_d)`, and put `p_i(rho)=sum_(d:i in S_d)rho_d`.  A nonnegative
+total-`T` vector satisfying `w_j=u_j` on `R` and all requirements exists iff
+
+```text
+sum_d rho_d a_d
+ <=sum_(j in R)p_j(rho)u_j
+   +(T-U_R)max_(i notin R)p_i(rho)                    (PXC31)
+```
+
+for every `rho>=0`.  This is the support function of the endpoint-fixed
+simplex, so necessity is weighted summation and sufficiency is down-set
+separation.  Normalize the off-`R` loads by `p_i<=1`.  Extreme packings then
+use at most `n-|R|` positive tagged coalitions, aside from rays supported
+wholly on `R`.  With `q_i=1-p_i` off `R` and `delta_j=p_j-1` on `R`,
+
+```text
+sum_d rho_d 1_(S_d)+sum_(i notin R)q_i e_i
+  -sum_(j in R)delta_j e_j=1_N.                       (PXC32)
+```
+
+For all-`x` requirements the projected inequality becomes
+
+```text
+sum_(j in R)delta_j(x_j-u_j)
+ <=sum_(i notin R)q_i x_i.                            (PXC33)
+```
+
+Thus positive endpoint-root excess is subsidized by the shortage
+`x_j-u_j=-kappa_j`, while negative root excess is the actual charge.  This is
+an exact finite algorithm and linear-support theorem for the common-endpoint
+mixed-packet projection.  It is not a proof that the projected branch reaches
+the overlap target.  The multi-exception incidence system `(PXC32)` is also
+only a relative packet until its characteristic-function factor passes the
+Studeny--Kratochvil indecomposability criterion.
+
+The sparse Lmax over-cover now couples directly to both endpoint arms.  Let
+`(lambda,eta,alpha)` satisfy `(OC)`, so `alpha.y>=M` for every core point.
+For a common endpoint witness on a nonempty proper `R`, put
+`a_R=max_(i notin R)alpha_i`.  The endpoint-fixed simplex support function
+gives
+
+```text
+M<=sum_(j in R)alpha_j u_j+(T-U_R)a_R
+ =a_R T+sum_(j in R)(alpha_j-a_R)u_j.                (PXC34)
+```
+
+Consequently, with `theta=max_i alpha_i`,
+
+```text
+M<=theta T-sum_(j in R)(theta-alpha_j)u_j.           (PXC35)
+```
+
+An endpoint fixed below the maximum over-cover load therefore improves the
+old dispersion ceiling `M<=theta T` by an explicit amount.
+
+The positive separator gap is priced under the exact alignment condition.
+Let `beta` attain `(PXC29)`, put `d_j=alpha_j-a_R`, assume `d_j>=0` on `R`,
+and define
+
+```text
+q_R=min_(j in R, beta_j>0)d_j/beta_j.
+```
+
+At a core minimizer of the `beta`-weighted endpoint slack,
+
+```text
+M<=a_R T+sum_(j in R)d_j u_j-q_R epsilon_R.          (PXC36)
+```
+
+The proof writes `y_j=u_j-s_j`, allocates the remaining total mass at load
+`a_R`, and uses `sum d_j s_j>=q_R sum beta_j s_j=q_R epsilon_R`.  This is the
+first direct dimension-free coupling of the sparse Lmax over-cover to the
+endpoint-face Farkas separator.  The hypothesis `d_j>=0` is not cosmetic: a
+negatively aligned endpoint slack increases the upper bound.  The residual
+selection theorem is now sharply stated: find an alpha-dominant shortage
+block, close directly, or make failure of alpha-dominance expose the priced
+rooted/mixed packet arm.
+
+The full six-player menus verify `(PXC34)--(PXC35)` on all 340 common-endpoint
+shortage rows.  There are 276 alpha-dominant rows; the other 64 receive a
+strict improvement over `M<=theta T` from `(PXC35)`.  The corresponding
+extracted-support counts are 276 and 62 among 338 rows.  This is an exact
+finite check of both alignment branches.  Only two full-menu coupling bounds
+are tight; 338 retain positive upper-bound slack, and `(PXC34)` equals
+`(PXC35)` on every archived row.  The coupling is therefore a real structural
+interface, not by itself a numerically decisive target proof.
+
+The positive-gap arm has a sharp exact seven-player sign control.  Use the
+lower envelope of `(1,0,0,0,0,0,0)` and `(0,1,0,0,0,0,0)` with
+`R={0,1}`.  The endpoint faces are disjoint and `epsilon_R=1/2`.  The sparse
+load and separator weights are both `(1/2,1/2)` on `R`, `a_R=0`, and
+`q_R=1`, so `(PXC36)` gives equality at `M=1/2`.  The `(PXC30)` dual uses
+`gamma=1/2` and weight `1/2` on every dummy singleton.  This is deliberately
+a decomposable dummy-extension control of signs and pricing, not a carrier
+hard case or a new facet.
 
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
