@@ -10,6 +10,60 @@ be used subject to its stated hypotheses and scope.  Exact audits remain
 falsification/reproducibility evidence unless the human argument is named.
 Novelty and external validation are not asserted here.
 
+## Headline results that must survive every rewrite
+
+This short index is deliberately redundant with the detailed tables below.
+It is the pre-merge checklist for the campaign's largest established gains;
+none may be deleted, weakened, or promoted beyond its stated evidence class
+without an explicit note in this ledger.
+
+1. **Dimension thresholds and exact finite values.**  Singleton-normalized
+   exact games have `Lmin=Lmax` through four players and can diverge at five;
+   `s(5)=1/2` and `s(6)=2/3`.  The five-player exact-partition boundary,
+   starvation/configuration theorems, and the six-player equality profiles
+   are part of these results, not disposable census commentary.
+2. **The global separation picture.**  The universal normalized separation
+   bound is `rho<=2`, the proved family approaches `2`, and hence
+   `sup_n s(n)=2`.  The explicit sharp-candidate family `G(p,k)`, its shared
+   hinge/factorization, and its fixed-dimensional equality controls must stay
+   visible even though the matching all-`n` upper bound remains open.
+3. **Carrier and balanced-collection thresholds.**  The eta-dual vertices are
+   normalized minimal balanced collections containing the target coalition.
+   The exact carrier inequality holds through six and fails from seven on;
+   the exact seven-player outside-pair theorem survives, while total
+   balancedness alone has a sharp nonexact seven-player outside-pair
+   counterexample.  These are companion-paper results and must not be
+   conflated with the hybrid-overlap conjecture.
+4. **Hybrid packet/dual infrastructure.**  The complete staged Lmin packet,
+   sparse labelled Lmax over-cover, spectral-anchor bound, null-player descent,
+   interpolation floor, carrier/separator alternative, strict-complement
+   payment, common-carrier contraction, and canonical block expansion are
+   proved reusable components.  Their conjunction is not yet the missing
+   universal selection/gluing theorem.
+5. **Facet and algorithmic theory.**  The interval-packing min-max theorem,
+   mixed-colour packet/projection frameworks, complement-star, rooted-star,
+   clone-expanded, complete-graph rooted-pair, and rooted pair-lift facet
+   classes, plus fixed-cell/fixed-stratum decision procedures, are protected
+   contributions.  None is presently a classification of every exact-cone
+   facet.
+6. **Weighted quotient breakthroughs and obstructions.**  Weighted selectors
+   coincide through three roles and can diverge sharply at four.  The
+   normalized `(m,1,1,1)` family rules out an atomic-size-independent `3/4`
+   shortcut.  Nevertheless the balanced and fully endowed common-two-flat
+   four-role faces satisfy the complete atomic overlap target; the endowed
+   theorem has the exact adjacent-gap cost formula and unique six-player
+   equality weight pattern `(2,2,1,1)` up to orientation.
+7. **Hostile controls.**  The five-player large-core separation, `PART`/`ZP`
+   families, six-player residual facet atlas, seven-player effective-
+   bipartition counterexample, and both seven-player balanced equality
+   orientations remain mandatory tests for every proposed general lemma.
+
+The unresolved headline is equally protected: no dimension-free proof of the
+conjectured fixed-`n` upper formula has yet been obtained.  The live gap is the
+selection/gluing theorem for four-role quotient faces outside the proved
+common-two-flat and elementary/laminar cases, followed by full equality and
+facet identification.
+
 ## Protected mathematical inputs
 
 | Result | Status and scope | Primary repository evidence |
