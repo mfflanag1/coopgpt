@@ -5288,6 +5288,29 @@ is linear in the explicitly supplied support menu.  It is a relative
 selection-cell decision algorithm, not a polynomial enumeration theorem for
 the full exact-game cone and not evidence that `(EDQ)` is a full-cone facet.
 
+On the carrier-cycle arm, `(CCC)` makes the cardinality base target-reaching,
+so strict scalar closure is stronger than the target needs.  Put
+`tau_n=n/floor(n^2/4)` and retain the carrier cardinality-base surplus.  The
+maximal-proper weight is `g/(p+1)`, so `(EDQ)` gives
+
+```text
+R_tau(P)
+ =g(U_(g-1)-L_H)/(p+1)
+  +[1-gp/((n-p)(p+1))-tau_n]T
+ =(1-tau_n)T-D-gn z(P)/[(n-p)(p+1)].              (EDQ5)
+```
+
+> **Lemma (target-reserve quota).**  If `R_tau(P)>=0`, the maximal-proper
+> direct identity reaches the target even when the strict quota `(EDQ2)`
+> fails.
+
+The second line follows by substituting `Q(P)=pT/n-z(P)`; the low-Lmax term
+omitted from `R_tau` is nonnegative.  If the cardinality base is at least the
+target, as `(CCC)` guarantees here, this condition is no stronger than
+`(EDQ2)` and is strictly weaker when the base surplus is positive.  Outside
+that hypothesis the two tests need not be ordered.  It still needs an
+admissible staged support and the proved comparison premise.
+
 The quota schedule has an exact one-player increment law.  If
 `P_(p+1)=P_p union {i}` and `E_p` denotes the left side of `(EDQ2)` minus
 its right side, then
@@ -5327,6 +5350,59 @@ uncontrolled mean-to-root premium `alpha` and repeated source congestion are
 exactly what must be paid by the sparse Lmax separator/marked-facet arm.
 Neither `(RET)` nor `(EDQ3)` alone proves that a selected support meets the
 quota.
+
+The quota-closing alternative is genuinely disjunctive.  The exact
+seven-player lower envelope
+
+```text
+(6,7,1,0,1,0,1), (7,0,0,0,0,9,0), (0,0,0,5,3,6,2)
+```
+
+has
+
+```text
+x=(3,7/2,1,3,1,7/2,1),  z=(3,3,0,2,3,3,2).
+```
+
+Roots `1,5` form an unaffordable carrier cycle, and every one of the six
+Lmin-tight cycle-containing rows misses `(EDQ2)`.  The least miss has the
+first-floor singleton `P={2}`, quota margin `-2/7`, and scalar budget
+`-1/3`; the older interval-hitting filter finds no packet.  Nevertheless its
+base is `5/6`, whose reserve `4` gives `R_(7/12)({2})=11/3`.  Thus the row
+does prove the target under `(EDQ5)`.  The third tied maximum-overlap root
+`0` simultaneously has labelled margin `1`.  An extreme
+half-packing is
+
+```text
+u_59=u_73=u_81=1/2,
+```
+
+forced by `a+b=a+c=b+c=1`.  The rooted pair lift is
+
+```text
+(1/2)1_59+(1/2)1_73+(1/2)1_81+(1/2)1_3
+ +1_5+(1/2)1_33-(5/2)e_0=1_N.                    (QFH)
+```
+
+Its support rank and size are both seven and the exceptional-set test has
+zero decompositions.  Therefore it is an indecomposable exact-cone facet,
+tight at the displayed game.  Its canonical support
+`(1,3,5,9,49,81,103)` is distinct from the five `n=6` residual-atlas orbits
+but remains inside the already proved rooted pair-lift mechanism; this is not
+a novelty claim.  Since `D=3`, the actual overlap is simply
+`O=T-D=13`, safely above the target by `11/3`.
+
+The facet arm reaches the target independently.  Its price is `Q/delta=4`.
+At first floor `a=1`, its weighted floor distance is `5/2` and its rooted-pair
+premium is `3`, so `(MPE1)` has zero multistage penalty.  The rooted price
+theorem gives `O/T>=7/(4+7-1)=7/10>7/12`.
+
+This control falsifies both universal strict quota closure and the stronger
+first-floor-complement version, while proving that the target-reserve
+criterion is the correct next direct threshold.  It is a three-way boundary:
+strict quota fails, while target reserve and a priced indecomposable facet
+both close.  What remains open is universal selection of a target-reserve row
+or of the rooted alternative; the fixed example is not such a theorem.
 
 Both balanced seven-player equality orientations provide the required
 boundary check.  Their complete staged supports contain quota-closing rows

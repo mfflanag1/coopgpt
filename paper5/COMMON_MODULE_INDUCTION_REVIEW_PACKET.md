@@ -217,6 +217,19 @@ seven-player repair has `P={2}`, quota margin `17/35`, and budget margin
 to the mean-to-root premium and joint source congestion; those two charges
 are now the precise separator/marked-facet gap.
 
+An exact second seven-player control shows why strict quota is too strong.
+It has an unaffordable carrier cycle for which all six cycle-containing tight
+rows fail `(EDQ2)`; even the available first-floor singleton has quota margin
+`-2/7`.  Retaining the `5/6` cardinality base gives that row target reserve
+`11/3`, so it still proves `7/12`.  A third tied maximum-overlap root also has
+marked margin `1`.  An extreme
+half-packing lifts to an indecomposable rooted pair-lift facet with canonical
+support `(1,3,5,9,49,81,103)`, distinct from the five six-player atlas
+orbits and tight at the game.  Its price is `4`, the multistage penalty is
+zero, and the rooted theorem independently gives `7/10>7/12`.  This is a
+strict-quota/target-reserve/facet boundary, not proof of universal selection
+for either surviving arm.
+
 Both balanced seven-player equality orientations were replayed.  Their only
 quota-closing selected rows have `h=1` and zero scalar margin, with direct
 bases `7/15` and `7/16`, below `7/12`.  Thus the new reduction preserves the
@@ -238,6 +251,12 @@ python3 coopgames/verifiers/divergence/verify_n7_root_block_budget_counterexampl
 
 cmp coopgames/verifiers/divergence/n7_root_block_budget_counterexample.json \
   /tmp/n7-root-block-budget-counterexample.json
+
+python3 coopgames/verifiers/divergence/verify_n7_quota_reserve_facet_boundary.py \
+  --output /tmp/n7-quota-reserve-facet-boundary.json
+
+cmp coopgames/verifiers/divergence/n7_quota_reserve_facet_boundary.json \
+  /tmp/n7-quota-reserve-facet-boundary.json
 ```
 
 ## Hostile questions

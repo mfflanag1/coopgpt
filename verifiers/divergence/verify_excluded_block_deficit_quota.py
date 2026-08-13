@@ -14,6 +14,16 @@ if and only if the excluded nongainer block meets an explicit below-mean
 Lmax deficit quota.  This is a dimension-free identity, not a theorem that
 the complete staged support always contains a quota-meeting block.
 
+For a target ``tau``, retaining the cardinality-base reserve gives the
+sufficient nonlow margin
+
+    R_tau(P) = (base-tau)T + g(U_(g-1)-L_H)/(p+1)
+             = (1-tau)T-D-gn z(P)/[(n-p)(p+1)].
+
+When the cardinality base already reaches the target, as it does on the
+carrier-cycle arm, strict quota closure is not necessary for a direct target
+proof.  Without that base hypothesis the two tests need not be ordered.
+
 The coefficient calculation is the proof.  The six-player archive and the
 seven-player full-root-block counterexample are finite regression controls.
 """
@@ -103,6 +113,35 @@ def quota_row(x, z, p_set, g_set, h_set):
         "budget_margin": str(budget_margin),
         "base_bound_ratio": direct["base_bound_ratio"],
         "closes": budget_margin >= 0,
+    }
+
+
+def target_reserve_row(x, z, p_set, g_set, h_set, target):
+    """Return the nonlow target margin after retaining cardinality reserve."""
+
+    strict = quota_row(x, z, p_set, g_set, h_set)
+    n, p, g = len(x), len(p_set), len(g_set)
+    total = sum(x, F())
+    transfer = sum((z[i] - x[i] for i in g_set), F())
+    z_p = sum((z[i] for i in p_set), F())
+    normalized_budget = F(g, p + 1) * F(strict["budget_margin"])
+    base_reserve = (F(strict["base_bound_ratio"]) - target) * total
+    margin = base_reserve + normalized_budget
+    closed = (
+        (F(1) - target) * total
+        - transfer
+        - F(g * n, (n - p) * (p + 1)) * z_p
+    )
+    if margin != closed:
+        raise AssertionError(("target-reserve identity failed", p_set, margin, closed))
+    return {
+        **strict,
+        "target": str(target),
+        "cardinality_base_reserve": str(base_reserve),
+        "normalized_scalar_budget": str(normalized_budget),
+        "nonlow_target_reserve": str(margin),
+        "closed_form": str(closed),
+        "target_reserve_closes": margin >= 0,
     }
 
 
@@ -321,6 +360,7 @@ def main():
 
     checked = 0
     increment_checked = 0
+    target_reserve_checked = 0
     for n in range(3, 101):
         for p in range(1, n - 1):
             for g in range(1, n - p):
@@ -334,6 +374,12 @@ def main():
                     if following - current != F(n - 2 * p - 2, n * g):
                         raise AssertionError(("quota increment failure", p, g, h))
                     increment_checked += 1
+                denominator = (n - p) * (p + 1)
+                base_deficit = F(g * p, denominator)
+                q_coefficient = F(g * n, denominator)
+                if -base_deficit + q_coefficient * F(p, n) != 0:
+                    raise AssertionError(("target-reserve cancellation failure", p, g, h))
+                target_reserve_checked += 1
 
     report = {
         "status": "excluded-block deficit-quota identity verified exactly",
@@ -351,8 +397,20 @@ def main():
             "if P_(p+1)=P_p union {i}, its quota margin changes by "
             "T/n-z_i-[(n-2p-2)/(ng)]D"
         ),
+        "target_reserve_identity": (
+            "for target tau and base 1-gp/[(n-p)(p+1)], "
+            "R_tau(P)=(base-tau)T+g(U_(g-1)-L_H)/(p+1)="
+            "(1-tau)T-D-gn z(P)/[(n-p)(p+1)]"
+        ),
+        "target_reserve_scope": (
+            "if the cardinality base reaches tau, R_tau(P)>=0 is no stronger "
+            "than strict quota closure and is strictly weaker for positive base "
+            "surplus; without that base hypothesis the tests need not be ordered, "
+            "and neither identity proves selection of a suitable support"
+        ),
         "coefficient_rows_checked": checked,
         "nested_increment_rows_checked": increment_checked,
+        "target_reserve_coefficient_rows_checked": target_reserve_checked,
         "parameter_range": "all positive p,g,h with 3<=p+g+h<=100",
         "n7_full_root_block_counterexample": n7_control(),
         "balanced_n7_equality_orientations": balanced_equality_controls(),
@@ -360,14 +418,15 @@ def main():
         "algorithmic_boundary": (
             "on a fixed labelled selection cell, scan the complete staged "
             "Lmin support coalitions containing the carrier cycle, form their "
-            "excluded nongainer blocks P, and test the exact quota; this decides "
-            "the direct carrier arm in time linear in the explicit support menu, "
+            "excluded nongainer blocks P, and test first the weaker target reserve "
+            "and then the strict quota; this decides the displayed direct criteria "
+            "in time linear in the explicit support menu, "
             "but is not a full exact-game-cone facet enumeration theorem"
         ),
         "scope": (
-            "the coefficient identity and iff quota criterion are dimension-free; "
+            "the coefficient, strict-quota, and target-reserve identities are dimension-free; "
             "the finite parameter grid and n=6/n=7 replays do not prove that a "
-            "quota-meeting selected support exists in every hard branch"
+            "target-reserve or strict-quota selected support exists in every hard branch"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

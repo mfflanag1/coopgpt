@@ -123,6 +123,10 @@ run_python coopgames/verifiers/divergence/verify_excluded_block_deficit_quota.py
   --output "$scratch_dir/excluded-block-deficit-quota.json"
 cmp coopgames/verifiers/divergence/excluded_block_deficit_quota.json \
   "$scratch_dir/excluded-block-deficit-quota.json"
+run_python coopgames/verifiers/divergence/verify_n7_quota_reserve_facet_boundary.py \
+  --output "$scratch_dir/n7-quota-reserve-facet-boundary.json"
+cmp coopgames/verifiers/divergence/n7_quota_reserve_facet_boundary.json \
+  "$scratch_dir/n7-quota-reserve-facet-boundary.json"
 run_python coopgames/verifiers/divergence/verify_weighted_three_role_coincidence.py \
   --output "$scratch_dir/weighted-three-role-coincidence.json"
 cmp coopgames/verifiers/divergence/weighted_three_role_coincidence.json \

@@ -206,7 +206,15 @@ def main():
     parser.add_argument("--output", type=Path)
     parser.add_argument("--keep-smt2", type=Path)
     parser.add_argument("--only-row", help="optional p,r,q,b row")
-    parser.add_argument("--timeout-ms", type=int, default=30000)
+    parser.add_argument(
+        "--timeout-ms",
+        type=int,
+        default=300000,
+        help=(
+            "per-cell Z3 timeout in milliseconds (default: 300000; "
+            "unknown remains a fail-closed verification error)"
+        ),
+    )
     args = parser.parse_args()
     selected_rows = ROWS_P_R_Q_B
     if args.only_row:

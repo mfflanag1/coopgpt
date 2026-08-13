@@ -99,6 +99,7 @@ equality and facet identification in objective C.
 | Root-block aggregate reduction and failure | **Exact identity; universal sign disproved.** For the full nongainer maximum-overlap root block, the budget is `[g(g+h)U-gpR-[g+h(p+1)]D]/[g(g+h)]`.  All 65 role-irreducible six-player controls have nonnegative numerator, but an exact role-irreducible seven-player lower envelope has numerator `-8` and scalar margin `-1`.  Its overlap is safely `76/85`, and a labelled tight-support enlargement closes with margin `17/30`; only the full-root-block shortcut fails.  The repair row is selected by primitive first-floor circuit `1_59+e_2+e_6=1_N`, a relative selection-cell circuit rather than a new full-cone facet. | `paper5/divergence.tex`, `(RBB)--(RBB-C)`; `verify_n7_root_block_budget_counterexample.py`; exact JSON |
 | Root-exclusion transport | **Proved dimension-free support lemma.** For every gainer, positive-loss sources in any sign-coherent Lmin transport lie among nonroot nongainers, never in the nongainer maximum-overlap root block.  Each eligible source satisfies `M-z_i >= (M-x_j)+(x_i-z_i)`.  The lemma localizes the budget but does not bound joint transport congestion. | `paper5/divergence.tex`, `(RET)`; staged-transport theorem |
 | Cardinality-ranked carrier support | **Proved exact identity.** For fixed gainer set and fixed candidate-block size, `U_(g-1)-L_H` is affine in `z(H)` with positive coefficient `n/(g+h)` and all other terms constant.  Hence Lmax sum ranks all equal-size admissible staged Lmin supports exactly.  This reduces optimization but does not prove that an admissible block crosses the target threshold. | `paper5/divergence.tex`, `(CRS)`; `verify_cardinality_ranked_support.py` |
+| Target-reserve quota and seven-player facet boundary | **Proved dimension-free identity plus exact fixed example.** Retaining cardinality slack gives `R_tau(P)=(1-tau)T-D-gnz(P)/[(n-p)(p+1)]>=0`; when the cardinality base already reaches the target, as `(CCC)` guarantees on the carrier-cycle arm, this is no stronger than strict quota and is strictly weaker for positive base surplus.  Without that base hypothesis the tests need not be ordered.  In a three-generator exact game, all six carrier-cycle supports miss the strict quota, but the first-floor row `P={2}` has base `5/6` and target reserve `11/3`, so it closes `7/12`.  A third tied root simultaneously has margin `1` and exposes an indecomposable rooted pair-lift facet tight at the game.  Its price is `4`, its multistage penalty is zero, and the rooted theorem independently gives `7/10>7/12`.  Its canonical support is distinct from the five `n=6` residual-atlas orbits but uses the proved pair-lift mechanism; no novelty claim is made.  Universal selection remains open. | `paper5/divergence.tex`, `(EDQ5)`, `(QFH1)--(QFH4)`; `verify_excluded_block_deficit_quota.py`; `verify_n7_quota_reserve_facet_boundary.py`; exact JSON |
 | Common carrier contraction | **Proved.** A common x/z tight-face carrier module contracts to one weighted role while preserving exactness, weighted selectors, total, and overlap. | commits `5ac2ab8`, `fc28a1a`; research note |
 | Canonical block expansion | **Proved.** A nonnegative exact weighted role game expands to a singleton-normalized exact atomic game when every unit-weight role has zero singleton worth.  Weighted selectors and overlap are preserved. | commit `fc28a1a`; research note |
 | Common-module role induction | **Proved structural reduction.** Formulate the target for weighted games by number of roles while holding total atomic weight fixed.  A common selector module contracts to fewer roles without changing the target data, so strong induction discharges the contraction arm; the base through four roles is now complete.  A role-minimal counterexample is therefore common-module-free. | `paper5/divergence.tex`, Proposition `common-module-induction`; `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`; `audit_carrier_separator_payment.py` |
@@ -165,6 +166,11 @@ The following must not be silently reintroduced.
   six-player staged supports, 95 of 420 nongainer carrier cycles require an
   excluded block of size two to meet `(EDQ2)`; the quota increment law, not a
   one-source rule, governs the handover.
+- Universal cycle-supported quota closure, even when a first-floor complement
+  is available.  In `(QFH1)`, all six tight supports containing carrier cycle
+  `(1,5)` miss `(EDQ2)`; the first-floor choice `P={2}` has quota margin
+  `-2/7`.  The target-reserve criterion still closes with margin `11/3`, and
+  tied root `0` simultaneously supplies a marked facet boundary control.
 - Closure by one arbitrary Lmax separator.
 - Gauge-invariant rooted-facet affordability.
 - Coefficient magnitude as invariant carrier currency; only normalized support
@@ -229,8 +235,11 @@ common-module contraction arm is now closed by strong induction on role
 count.  In a role-minimal hard branch every carrier cycle must therefore be
 split by an Lmax-tight separator.  The live arrow is the quantitative
 separator/direct/marked-facet selection theorem at the current role count.
-Comparison--residual cancellation and the excluded-block deficit-quota
-identity reduce its direct arm to selecting a cycle-containing staged support
-whose excluded nongainers satisfy `(EDQ2)`.  The six-player and seven-player
-controls all have such a support, but universal existence remains open.
-Objective C's full equality and facet identification also remain required.
+Comparison--residual cancellation and the target-reserve identity reduce its
+direct arm to selecting a cycle-containing staged support satisfying `(EDQ5)`;
+strict quota `(EDQ2)` is only a stronger sufficient subarm.  Every six-player
+archive cycle has an `(EDQ2)` row, while `(QFH1)` has none but does have an
+`(EDQ5)` row and an independently target-priced rooted facet.  Universal
+selection of a target-reserve row or the separator/facet alternative remains
+open.  Objective C's full equality and facet identification also remain
+required.
