@@ -2,6 +2,12 @@
 
 Date: 2026-08-11
 
+The protected theorem inventory, scope boundaries, disproved shortcuts, and
+active dependency graph are maintained in
+`paper5/PROTECTED_RESULTS_LEDGER.md`.  New attacks must preserve that ledger:
+closing one branch is not permission to discard the other proved inputs or
+the remaining carrier-selection and full-cone-facet obligations.
+
 ## 1. Status
 
 The open target is
@@ -3766,6 +3772,93 @@ python3 verifiers/divergence/verify_weighted_three_role_coincidence.py \
 
 The exchange proof is dimension-free in the integer weights; the grid is a
 falsification audit only.
+
+Three further four-role coincidence reductions follow from the same proof
+and from the companion four-player theorem.
+
+> **Theorem (elementary four-role reductions).**  Let `K` be the nonempty
+> core of an exact game on four roles with positive integer role weights.
+> Weighted Lmin and weighted Lmax coincide in each of the following cases.
+>
+> 1. all four role weights are equal;
+> 2. one role total is constant on `K`;
+> 3. after writing the core as singleton lower bounds, complementary upper
+>    bounds, and three complementary pair-sum slabs, all pair slabs are
+>    redundant.
+> 4. at most one of the three complementary pair-sum slabs is
+>    nonredundant.
+
+For (1), repeating every role coordinate the same number of times preserves
+both the increasing and decreasing lexicographic order of the four role
+coordinates.  The two weighted selectors are therefore the ordinary
+four-role selectors, and those coincide by the exact-partition/Lorenz theorem
+for exact games on at most four players.
+
+For (2), suppose `q_r=c` throughout `K`.  Project away `r`.  The resulting
+three-role feasible set has efficiency `T-c` and, for every coalition `A` of
+the remaining roles, the lower bound
+
+```text
+q(A) >= max{w(A), w(A union {r})-c}.                (FRC1)
+```
+
+Thus the projection is a nonempty three-role TU core.  Its clipped weighted
+equalizer Lorenz-dominates every feasible repeated vector by the weighted
+three-role theorem.  Lorenz dominance is preserved when the same multiset of
+`h_r` copies of `c/h_r` is adjoined to both vectors: this follows immediately
+from the positive-part characterization of majorization, since the common
+summand is added to both threshold functions.  Hence the lifted equalizer is
+Lorenz-greatest in `K` and is both weighted selectors.
+
+For (3), the core is simply
+
+```text
+K={q: sum_a q_a=T, ell_a<=q_a<=u_a}.                (FRC2)
+```
+
+The water-filling point `q_a=clip_[ell_a,u_a](h_a lambda)` and the Robin Hood
+exchange proof of `(W3R2)` never used the number three once `(FRC2)` had been
+obtained.  It Lorenz-dominates every feasible repeated vector and therefore
+equals both selectors.
+
+For (4), retain the only nonredundant slab as
+
+```text
+L <= q(A) <= U,              A={0,1}, B={2,3}.       (FRC3)
+```
+
+Together with the coordinate intervals and efficiency, `(FRC3)` is a
+laminar weighted resource-allocation polytope: the constraint tree has root
+`R`, children `A,B`, and the four role leaves.  Progressive water filling on
+such a tree has a unique terminal point independent of whether it is run
+upward from the lower bounds or downward from the upper bounds.  At a
+feasible point, call a transfer from role `b` to role `a` a Robin Hood
+transfer if `q_a/h_a<q_b/h_b`, it preserves all interval constraints, and
+its amount is small enough not to reverse the two per-capita levels.  Within
+`A` or `B`, such a transfer is blocked only by a leaf bound.  Across `A|B`,
+it is blocked only by a leaf bound or by the active endpoint of `(FRC3)` in
+the transfer's direction.  Raise the currently lowest unblocked per-capita
+leaves together, freezing them when a leaf or group endpoint becomes tight.
+Laminarity means that a newly tight node is nested in or disjoint from every
+earlier node, so freezing never has to be undone.  Starting from the upper
+bounds and lowering the currently highest unblocked leaves freezes the same
+nested nodes in reverse order and reaches the same no-exchange point.
+
+To see that this point is Lorenz-greatest, compare it with any feasible
+`q`.  At the first repeated-coordinate partial sum where `q` could exceed
+it, the difference has a lower receiver and a higher donor not separated by
+a tight laminar node; otherwise summing the nested tight-node differences
+gives the opposite partial-sum inequality.  A small feasible Robin Hood
+transfer would result, contradicting termination.  Thus every lower partial
+sum of the terminal repeated vector is maximal, so it is both weighted
+selectors.
+
+Consequently a minimal weighted four-role obstruction to coincidence must
+have unequal weights, four nonconstant role totals, and at least two
+**crossing** nonredundant complementary pair slabs.  The `2/3` family
+`(W4N1)` has exactly two such slabs, so the crossing threshold is sharp.
+This still does not prove the atomic-weight-aware overlap bound: the open
+four-role problem is now the interaction of two or three crossing slabs.
 
 The three-role boundary is sharp.  On four roles with weights `(3,1,1,1)`,
 take the exact role game whose worths in binary coalition order are
