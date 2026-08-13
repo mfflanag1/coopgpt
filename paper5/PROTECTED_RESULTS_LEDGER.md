@@ -27,7 +27,7 @@ Novelty and external validation are not asserted here.
 | Common carrier contraction | **Proved.** A common x/z tight-face carrier module contracts to one weighted role while preserving exactness, weighted selectors, total, and overlap. | commits `5ac2ab8`, `fc28a1a`; research note |
 | Canonical block expansion | **Proved.** A nonnegative exact weighted role game expands to a singleton-normalized exact atomic game when every unit-weight role has zero singleton worth.  Weighted selectors and overlap are preserved. | commit `fc28a1a`; research note |
 | Weighted coincidence through three roles | **Proved dimension-free.** The core is a box intersected with efficiency and the clipped weighted equalizer Lorenz-dominates all feasible repeated vectors. | commit `36c13c6`; `verify_weighted_three_role_coincidence.py` |
-| Elementary/laminar four-role coincidence reductions | **Proved.** Weighted selectors coincide for equal role weights, when one role total is core-constant, or when at most one complementary pair slab is nonredundant.  Any hard quotient therefore has unequal weights, four variable roles, and at least two crossing pair slabs. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, elementary four-role reductions |
+| Elementary/laminar four-role coincidence reductions | **Proved.** Weighted selectors coincide when one role total is core-constant or when at most one complementary pair slab is nonredundant.  Equal weights also suffice only when all role singleton worths vanish.  Any hard quotient has four variable roles and at least two crossing pair slabs. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, elementary four-role reductions |
 | Four-role weighted divergence | **Proved sharp role threshold.** Weighted coincidence fails at four roles, including in every sufficiently large atomic dimension. | commits `569dd84`, `c5e71f8`; exact verifiers and JSON |
 | Normalized constant-overlap four-role family | **Proved.** For weights `(m,1,1,1)`, `m>=5`, an exact zero-singleton role game has weighted selections `(5,1,5,1)` and `(3,3,3,3)`, hence `O/T=2/3`.  It refutes a universal `3/4` quotient bound but satisfies the atomic conjecture. | commit `7a3a409`; `verify_weighted_four_role_normalized_obstruction.py` |
 | Complete strict carrier support | **Proved support theorem.** Normalized coefficient supply collapses to zero/nonzero support; coefficient magnitude is not invariant currency. | research note, complete strict-carrier-support section |
@@ -59,6 +59,9 @@ The following must not be silently reintroduced.
 - An atomic-size-independent weighted four-role overlap bound `O/T>=3/4`;
   commit `7a3a409` gives a normalized exact family at `2/3`.
 - Reduction of all weight vectors to `(m,1,1,1)` without proof.
+- Invoking four-player rigidity on an endowed weighted quotient merely because
+  its role weights are equal; the ordinary theorem requires role-level
+  singleton normalization, which `(CBE)` does not require for nonunit roles.
 - Treating a finite n=6/n=7 census, solver agreement, or an unsat core as a
   dimension-free theorem.
 

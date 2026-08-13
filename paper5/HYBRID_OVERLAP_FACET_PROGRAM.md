@@ -3780,7 +3780,8 @@ and from the companion four-player theorem.
 > core of an exact game on four roles with positive integer role weights.
 > Weighted Lmin and weighted Lmax coincide in each of the following cases.
 >
-> 1. all four role weights are equal;
+> 1. all four role weights are equal **and every role singleton worth is
+>    zero**;
 > 2. one role total is constant on `K`;
 > 3. after writing the core as singleton lower bounds, complementary upper
 >    bounds, and three complementary pair-sum slabs, all pair slabs are
@@ -3792,7 +3793,12 @@ For (1), repeating every role coordinate the same number of times preserves
 both the increasing and decreasing lexicographic order of the four role
 coordinates.  The two weighted selectors are therefore the ordinary
 four-role selectors, and those coincide by the exact-partition/Lorenz theorem
-for exact games on at most four players.
+for **singleton-normalized** exact games on at most four players.  The
+singleton hypothesis in this clause cannot be dropped: positive singleton
+endowments on nonunit contracted roles are permitted by `(CBE)`, and direct
+two-crossing-slab controls with equal weights already have distinct weighted
+selectors.  This is precisely why modularly normalizing a quotient is not a
+valid shortcut.
 
 For (2), suppose `q_r=c` throughout `K`.  Project away `r`.  The resulting
 three-role feasible set has efficiency `T-c` and, for every coalition `A` of
@@ -3854,9 +3860,11 @@ sum of the terminal repeated vector is maximal, so it is both weighted
 selectors.
 
 Consequently a minimal weighted four-role obstruction to coincidence must
-have unequal weights, four nonconstant role totals, and at least two
-**crossing** nonredundant complementary pair slabs.  The `2/3` family
-`(W4N1)` has exactly two such slabs, so the crossing threshold is sharp.
+have four nonconstant role totals and at least two **crossing** nonredundant
+complementary pair slabs.  If all role singleton worths vanish, equal weights
+are harmless; without that stronger normalization they need not be.  The
+`2/3` family `(W4N1)` has exactly two crossing slabs, so the crossing
+threshold is sharp.
 This still does not prove the atomic-weight-aware overlap bound: the open
 four-role problem is now the interaction of two or three crossing slabs.
 
