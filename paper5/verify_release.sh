@@ -138,6 +138,13 @@ run_python coopgames/verifiers/divergence/audit_pxc52_coloured_charge.py \
   --output "$scratch_dir/pxc52-coloured-charge.json"
 cmp coopgames/verifiers/divergence/pxc52_coloured_charge.json \
   "$scratch_dir/pxc52-coloured-charge.json"
+run_python coopgames/verifiers/divergence/audit_two_spoke_alignment_bound.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --neutral-control coopgames/verifiers/divergence/n7_neutral_rectangle_control.json \
+  --output "$scratch_dir/two-spoke-alignment-bound.json"
+cmp coopgames/verifiers/divergence/two_spoke_alignment_bound.json \
+  "$scratch_dir/two-spoke-alignment-bound.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

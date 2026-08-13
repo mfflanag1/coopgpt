@@ -138,6 +138,7 @@ equality and facet identification in objective C.
 | Interval-packing min-max | **Proved exact combinatorial theorem** with its stated fixed-stratum algorithm and integrality boundary.  It is not a full all-cell gluing theorem. | research note, interval-packing sections |
 | Mixed-colour packet and mixed-witness projection | **Proved projection frameworks.** They allow genuinely mixed x/z support; relative-cell validity does not automatically imply a full exact-cone facet. | `verify_mixed_packet_gluing.py`; `verify_mixed_witness_projection.py` and Z3 replay |
 | First genuinely noncommon mixed packet | **Proved branch certificate.** The explicit two-colour packet closes its optimized hostile branch; an alternative rooted-pair shear gives an active indecomposable exact-cone facet and reaches the exact `3/4` one-witness minimum.  This is a branch theorem, not universal gluing. | `paper5/EFFECTIVE_BIPARTITION_BRIDGE.md`; `mixed_packet_gluing.json`; `mixed_witness_projection*.json` |
+| Two-spoke alignment bound | **Proved dimension-free.** With exactly two gainers, two ordered Lmin-tight root spokes and one Lmax-aligned common spoke imply `O/T>=n/[2(n-2)]`, hence the hybrid target for every `n>=6`.  This gives a human explanation of the neutral seven-player mixed-witness bound and applies to 46 archived n=6 rows, but is not a universal spoke-selection theorem. | `(PXC53)` in `paper5/divergence.tex`; `audit_two_spoke_alignment_bound.py` |
 | Complement-star facets | **Proved dimension-free class** with exact indecomposability/facet criterion in its stated parameter range. | commit `cd5e947`; `verify_complement_star_facets.py` |
 | Rectangular and saturated rooted-star facets | **Proved class criteria.** These enumerate their distinguished classes, not every exact-cone facet. | `verify_rooted_star_matrix_facets.py`; research note |
 | Nonroot clone expansion of rooted-star facets | **Proved preservation theorem.** It applies to the stated nonroot clone expansion, not arbitrary marked shears. | commit `d3b4987`; `verify_clone_expanded_rooted_star_facets.py` |
@@ -290,5 +291,8 @@ inequality `min(Z_all,X_all)<=K_tau`; a failure produces strict dual
   comparison charge as a complete currency.  The active statement is now a
   bad-point separation theorem: select a root whose full mixed-packet cuts,
   combined with direct and stratum rows, exclude every below-target branch
-  point.  Objective C's full
+  point.  `(PXC53)` closes the complete two-gainer/two-spoke aligned class;
+  the next structural extension is a multi-gainer spoke/star alternative or
+  proof that failure forces a direct separator or quotient contraction.
+  Objective C's full
 equality and facet identification also remain required.

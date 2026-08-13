@@ -6252,6 +6252,44 @@ every below-target branch point; or produce one exact labelled branch for
 which each root admits a below-target one-witness point.  Scalar comparison
 charge at the actual selections is now a protected false shortcut.
 
+There is nevertheless a dimension-free target-reaching atom on the new
+bad-point side.  Suppose the gainers are exactly `{a,b}`, and a distinct root
+`r` obeys
+
+```text
+x_r >= x_a >= x_b >= x_j  (j outside {r,a,b}),
+z_r = z_a >= z_b.
+```
+
+If the two spokes `{r,a}` and `{r,b}` are Lmin-tight and `{r,a}` is also
+Lmax-tight, then a root-zero witness gives
+
+```text
+2x_r+x_a+x_b <= T.
+```
+
+The common aligned spoke gives `2z_a<=x_r+x_a`, so total gain is at most
+`x_r-x_b`.  Efficiency and the Lmin order give
+`T<=x_r+x_a+(n-2)x_b`.  Eliminating `x_a` yields
+
+```text
+x_r <= (n-3)x_b,       x_r+x_b <= T/2,
+x_r-x_b <= (n-4)T/[2(n-2)].
+```
+
+Therefore
+
+```text
+O/T >= n/[2(n-2)] >= n/floor(n^2/4),  n>=6.         (PXC53)
+```
+
+This is a human theorem, not a census.  It gives `7/10` on the neutral
+control with `(r,a,b)=(3,0,1)`, spokes `9,10`, and common spoke `9`, matching
+the exact one-witness optimum.  It also matches 46 of 374 archived n=6 rows
+with 90 rooted/oriented certificates.  The remaining universal selection
+problem must force this two-spoke atom, a multi-gainer extension, a direct
+separator, or quotient contraction.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
@@ -6275,6 +6313,12 @@ python verifiers/divergence/audit_pxc52_coloured_charge.py \
   --output /tmp/pxc52_coloured_charge.json
 cmp /tmp/pxc52_coloured_charge.json \
   verifiers/divergence/pxc52_coloured_charge.json
+python verifiers/divergence/audit_two_spoke_alignment_bound.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --neutral-control verifiers/divergence/n7_neutral_rectangle_control.json \
+  --output /tmp/two_spoke_alignment_bound.json
+cmp /tmp/two_spoke_alignment_bound.json \
+  verifiers/divergence/two_spoke_alignment_bound.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
