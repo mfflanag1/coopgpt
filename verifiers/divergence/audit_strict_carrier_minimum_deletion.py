@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 r"""Exact minimum-deletion audit for strict carrier-cycle packets.
 
-Fix one complete staged Lmin support.  For every strict-loss nongainer
-carrier cycle in the full-menu all-unaffordable branch, enumerate the
-support rows which contain the cycle, omit at least one gainer, and exclude
-at least one nongainer.  For a row ``I`` write ``P`` for its excluded
-nongainers and ``A`` for its omitted gainers.  This script checks exactly
-the two lower certificates (PXC6) and (PXC11), and asks whether all rows of
-minimum ``|P|`` close simultaneously under both certificates.
+For every strict-loss nongainer carrier cycle in the full-menu
+all-unaffordable branch, enumerate first one complete staged Lmin support and
+then the entire Lmin-tight menu.  Retain rows which contain the cycle, omit at
+least one gainer, and exclude at least one nongainer.  For a row ``I`` write
+``P`` for its excluded nongainers and ``A`` for its omitted gainers.  This
+script checks exactly the two lower certificates (PXC6) and (PXC11).  It
+records simultaneous closure in the n=6 archive and exactifies a new n=7
+control which refutes simultaneous closure while preserving their maximum.
 
 The output is a finite archive theorem and hostile-control replay, not an
 all-n selection theorem.  In particular, the script retains every arbitrary
@@ -41,7 +42,20 @@ from audit_lmax_overcover import coalition_sum, records  # noqa: E402
 from audit_n6_sparse_lmax_complete_lmin_roots import (  # noqa: E402
     complete_lmin_support,
 )
-from verify_labelled_branch_duals import CASES  # noqa: E402
+from verify_labelled_branch_duals import CASES, verify_complete_selection  # noqa: E402
+
+
+N7_SIMULTANEOUS_COUNTEREXAMPLE = {
+    "name": "minimum_deletion_simultaneous_certificate_counterexample",
+    "generators": (
+        (1, 5, 0, 7, 0, 0, 0),
+        (2, 0, 3, 1, 2, 3, 2),
+        (0, 2, 0, 0, 5, 4, 2),
+        (0, 1, 5, 6, 0, 1, 0),
+    ),
+    "x": (F(7, 4), F(7, 4), F(7, 4), F(17, 8), F(7, 4), F(17, 8), F(7, 4)),
+    "z": (F(5, 3), F(5, 3), F(5, 3), F(2), F(2), F(2), F(2)),
+}
 
 
 def reserve_row(x, z, support_row, cycle, target):
@@ -106,7 +120,18 @@ def reserve_row(x, z, support_row, cycle, target):
     }
 
 
-def audit_pair(source, trail, values, x, z, selected_support, target, counters, profiles):
+def audit_pair(
+    source,
+    trail,
+    values,
+    x,
+    z,
+    selected_support,
+    target,
+    counters,
+    profiles,
+    require_both=False,
+):
     n = len(x)
     if target != F(n, n * n // 4):
         raise AssertionError("wrong sharp target for player count")
@@ -136,17 +161,34 @@ def audit_pair(source, trail, values, x, z, selected_support, target, counters, 
             raise AssertionError((source, trail, cycle, "no admissible carrier row"))
         minimum_p = min(row["p"] for row in rows)
         minimum_rows = tuple(row for row in rows if row["p"] == minimum_p)
-        if any(
+        all_both = not any(
             F(row["comparison_lower_bound"]) < 0
             or F(row["ordered_cut_lower_bound"]) < 0
             for row in minimum_rows
-        ):
+        )
+        all_either = all(
+            max(
+                F(row["comparison_lower_bound"]),
+                F(row["ordered_cut_lower_bound"]),
+            )
+            >= 0
+            for row in minimum_rows
+        )
+        if not all_either:
+            raise AssertionError((source, trail, cycle, "minimum-deletion max-certificate failure"))
+        if require_both and not all_both:
             raise AssertionError((source, trail, cycle, "minimum-deletion failure"))
 
         counters["strict_carrier_cycles"] += 1
         counters["admissible_rows"] += len(rows)
         counters["minimum_deletion_rows"] += len(minimum_rows)
-        counters["cycles_all_minimum_rows_close_both_certificates"] += 1
+        counters["cycles_all_minimum_rows_close_either_certificate"] += all_either
+        counters["cycles_all_minimum_rows_close_both_certificates"] += all_both
+        counters["cycles_some_minimum_row_closes_both_certificates"] += any(
+            F(row["comparison_lower_bound"]) >= 0
+            and F(row["ordered_cut_lower_bound"]) >= 0
+            for row in minimum_rows
+        )
         counters["arbitrary_negative_reserve_rows"] += sum(
             F(row["actual_target_reserve"]) < 0 for row in rows
         )
@@ -182,14 +224,15 @@ def main():
     parser.add_argument("paths", nargs="+", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
-    counters, profiles = Counter(), Counter()
-    negative_rows = []
+    extracted_counters, extracted_profiles = Counter(), Counter()
+    full_counters, full_profiles = Counter(), Counter()
+    extracted_negative_rows, full_negative_rows = [], []
     for path in args.paths:
         payload = json.loads(path.read_text())
         for _source, trail, values, x, z in records(payload, path):
             if len(x) != 6:
                 continue
-            negative_rows.extend(
+            extracted_negative_rows.extend(
                 audit_pair(
                     path.name,
                     trail,
@@ -198,8 +241,23 @@ def main():
                     z,
                     complete_lmin_support(values, x),
                     F(2, 3),
-                    counters,
-                    profiles,
+                    extracted_counters,
+                    extracted_profiles,
+                    require_both=True,
+                )
+            )
+            full_negative_rows.extend(
+                audit_pair(
+                    path.name,
+                    trail,
+                    values,
+                    x,
+                    z,
+                    full_tight_support(values, x),
+                    F(2, 3),
+                    full_counters,
+                    full_profiles,
+                    require_both=True,
                 )
             )
 
@@ -233,19 +291,97 @@ def main():
             }
         )
 
+    case = N7_SIMULTANEOUS_COUNTEREXAMPLE
+    generators = tuple(tuple(map(F, row)) for row in case["generators"])
+    values = tuple(
+        min(coalition_sum(generator, coalition) for generator in generators)
+        for coalition in range(1 << 7)
+    )
+    if any(values[1 << i] != 0 for i in range(7)):
+        raise AssertionError("new control is not singleton-normalized")
+    for generator in generators:
+        if sum(generator, F(0)) != values[-1] or any(
+            coalition_sum(generator, coalition) < values[coalition]
+            for coalition in range(1 << 7)
+        ):
+            raise AssertionError("lower-envelope generator is not a core point")
+    x, z = case["x"], case["z"]
+    support_x = full_tight_support(values, x)
+    support_z = full_tight_support(values, z)
+    verify_complete_selection(values, x, "min", support_x)
+    verify_complete_selection(values, z, "max", support_z)
+    case_counters, case_profiles = Counter(), Counter()
+    found = audit_pair(
+        case["name"],
+        "exact lower-envelope control",
+        values,
+        x,
+        z,
+        support_x,
+        F(7, 12),
+        case_counters,
+        case_profiles,
+    )
+    roots = maximum_overlap_roots(x, z)
+    gates = tuple(solve_labelled_cover(support_x, root, 7) for root in roots)
+    graph = {
+        gate["root"]: tuple(carrier for carrier in carriers(gate) if carrier in roots)
+        for gate in gates
+    }
+    cycles = directed_cycles(graph)
+    if roots != (3, 5) or any(gate["affordable"] for gate in gates) or cycles != ((3, 5),):
+        raise AssertionError("new n=7 control lost its unaffordable carrier cycle")
+    control_rows = tuple(
+        row
+        for coalition in support_x
+        if (row := reserve_row(x, z, coalition, cycles[0], F(7, 12))) is not None
+    )
+    if len(control_rows) != 2 or any(
+        F(row["actual_target_reserve"]) != F(13, 24)
+        or F(row["comparison_lower_bound"]) != F(13, 24)
+        or F(row["ordered_cut_lower_bound"]) != F(-1, 12)
+        for row in control_rows
+    ):
+        raise AssertionError("new n=7 two-colour margins changed")
+    hostile.append(
+        {
+            "name": case["name"],
+            "generators": [[str(q) for q in row] for row in generators],
+            "lmin": [str(q) for q in x],
+            "lmax": [str(q) for q in z],
+            "overlap": str(sum((min(x[i], z[i]) for i in range(7)), F(0))),
+            "maximum_overlap_roots": list(roots),
+            "minimum_deletion_row_details": list(control_rows),
+            **dict(case_counters),
+            "negative_arbitrary_rows": found,
+            "interpretation": (
+                "every minimum-deletion row has PXC11=13/24 but PXC6=-1/12; "
+                "this refutes simultaneous closure, not the max-certificate"
+            ),
+        }
+    )
+
     report = {
         "status": "exact finite archive theorem; not an all-n selection proof",
         "inputs": [path.name for path in args.paths],
         "statement_checked": (
-            "in one extracted complete staged Lmin support, every admissible row "
-            "of minimum excluded-nongainer cardinality simultaneously has "
-            "nonnegative PXC6 and PXC11 lower certificates"
+            "in the n=6 archive, every minimum-deletion row simultaneously has "
+            "nonnegative PXC6 and PXC11 lower certificates; a new exact n=7 "
+            "control refutes simultaneous closure but every minimum row retains "
+            "a nonnegative max(PXC6,PXC11) certificate"
         ),
-        "n6_archive_counts": dict(counters),
-        "cycle_profiles_g_cycleSize_p_minA_maxA": {
-            ",".join(map(str, key)): value for key, value in sorted(profiles.items())
+        "n6_extracted_support_counts": dict(extracted_counters),
+        "n6_full_tight_menu_counts": dict(full_counters),
+        "extracted_cycle_profiles_g_cycleSize_p_minA_maxA": {
+            ",".join(map(str, key)): value
+            for key, value in sorted(extracted_profiles.items())
         },
-        "negative_rows_refuting_every_row_closure": negative_rows,
+        "full_menu_cycle_profiles_g_cycleSize_p_minA_maxA": {
+            ",".join(map(str, key)): value
+            for key, value in sorted(full_profiles.items())
+        },
+        "negative_rows_in_extracted_support": extracted_negative_rows,
+        "negative_rows_in_full_tight_menu": full_negative_rows,
         "n7_hostile_and_sharp_controls": hostile,
         "limitations": (
             "the n=6 count uses two archived harvest files and one extracted "

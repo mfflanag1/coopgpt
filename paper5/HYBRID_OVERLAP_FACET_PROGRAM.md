@@ -5528,23 +5528,47 @@ max-certificate theorem but is not a dimension-free disjunction proof.
 
 The complete strict-cycle replay supplies a sharper incidence selector.  In
 the two six-player archives there are `415` positive-loss nongainer carrier
-cycles and `862` admissible rows in one extracted complete staged Lmin
-support.  For each cycle retain only rows minimizing `p`, the number of
-excluded nongainers.  All `829` resulting minimum-deletion rows have **both**
-`(PXC6)>=0` and `(PXC11)>=0`.  The minimum is `p=1` on `304` cycles and `p=2`
-on `111`.  The rule is incidence-defined and is stronger than retrospectively
-maximizing reserve.
+cycles and `1,025` admissible rows in the full Lmin-tight menu.  For each
+cycle retain only rows minimizing `p`, the number of excluded nongainers.
+All `830` resulting minimum-deletion rows have **both** `(PXC6)>=0` and
+`(PXC11)>=0`.  The minimum is `p=1` on `380` cycles and `p=2` on `35`.
+One extracted complete staged support gives the same conclusion on its `862`
+admissible and `829` minimum rows (`304/111` cycles by minimum size).  Thus
+the phenomenon is not an artifact of the extracted basis.  The rule is
+incidence-defined and is stronger than retrospectively maximizing reserve.
 
-Arbitrary proper rows are not safe: exactly four nonminimal `p=2` rows have
-actual reserve `-1/3`, with both lower certificates equal to `-1/3`; each of
-their cycles has a closing minimum-deletion alternative.  The sole strict
+Arbitrary proper rows are not safe: exactly six full-menu nonminimal `p=2`
+rows have actual reserve `-1/3`, with both lower certificates equal to
+`-1/3`; four occur in the extracted support, and each cycle has a closing
+minimum-deletion alternative.  The sole strict
 cycle in the fixed seven-player hostile family has four admissible rows, all
 minimum-deletion and all closing under both certificates.  This motivates the
-live **minimum-deletion two-colour selection conjecture**: some
-minimum-deletion row closes simultaneously under `(PXC6)` and `(PXC11)`, or
-the sparse Lmax separator dual supplies the priced rooted-facet alternative.
-The archive is a falsification laboratory, not a proof of that disjunction.
-Reproduce the exact counts and the four negative controls with
+simultaneous version of a minimum-deletion conjecture, but an exact new
+seven-player control refutes that strengthening.  Take the lower envelope of
+
+```text
+(1,5,0,7,0,0,0), (2,0,3,1,2,3,2),
+(0,2,0,0,5,4,2), (0,1,5,6,0,1,0).
+```
+
+It is nonnegative, singleton-normalized, and exact.  Exact stage certificates
+give
+
+```text
+x=(7/4,7/4,7/4,17/8,7/4,17/8,7/4),
+z=(5/3,5/3,5/3,2,2,2,2).
+```
+
+Roots `3,5` are unaffordable and form a strict carrier cycle.  Its entire
+Lmin-tight menu is `{56,104}`; both minimum-deletion rows have `P={0,1,2}`,
+actual reserve and `(PXC11)` equal to `13/24`, but `(PXC6)=-1/12`.  Hence the
+two colours are genuinely disjunctive.  Overlap is safely `25/2>91/12`.
+
+The corrected live **minimum-deletion max-certificate conjecture** says that
+some minimum-deletion row has `max(PXC6,PXC11)>=0`, or the sparse Lmax
+separator dual supplies the priced rooted-facet alternative.  The archive
+and the new control are falsification evidence, not a proof of that
+disjunction.  Reproduce the exact counts and negative controls with
 
 ```bash
 python verifiers/divergence/audit_strict_carrier_minimum_deletion.py \
