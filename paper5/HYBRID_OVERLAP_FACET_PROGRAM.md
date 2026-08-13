@@ -5232,6 +5232,30 @@ This proves the correct support side of the coupling.  It does not bound the
 joint column congestion of the transports; that quantitative congestion, or
 a mixed marked-facet alternative, is the remaining dimension-free gap.
 
+The scalar objective on candidate supports has a sharper form.  Let `L` be
+the full nongainer set, choose `H subset L`, put `P=L\H`, and write
+`p=|P|`, `g=|G|`, `h=|H|`.  Direct simplification of the maximal-proper
+budget gives
+
+```text
+U_(g-1)-L_H
+ =n z(H)/(g+h)-x(L)+(p-g+1)x(G)/g
+  +[(g-1)(g+h)-hp]z(G)/[g(g+h)].                   (CRS)
+```
+
+> **Lemma (cardinality-ranked support).**  Within any family of admissible
+> nongainer blocks of one fixed cardinality `h`, a block maximizes the direct
+> scalar budget if and only if it maximizes `z(H)`.
+
+Indeed, every term in `(CRS)` except `n z(H)/(g+h)` is fixed at cardinality
+`h`, and its coefficient is positive.  This is a genuine coupling to Lmax:
+the staged Lmin circuit determines which labelled blocks are admissible, and
+Lmax ranks them by one ordinary coalition sum.  The remaining theorem is now
+an existence/threshold statement across the possible cardinalities, not an
+optimization over arbitrary payoff labels.  It does not follow merely by
+taking the globally largest `z` coordinates, because that block need not be
+the nongainer trace of a cycle-containing staged support.
+
 There is a parallel exact reduction on the direct side.  Let `C` be any
 `x`-tight coalition meeting a carrier cycle.  The module property forces
 `H subset C`.  Split

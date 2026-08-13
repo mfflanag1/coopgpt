@@ -113,6 +113,10 @@ run_python coopgames/verifiers/divergence/verify_n7_root_block_budget_counterexa
   --output "$scratch_dir/n7-root-block-budget-counterexample.json"
 cmp coopgames/verifiers/divergence/n7_root_block_budget_counterexample.json \
   "$scratch_dir/n7-root-block-budget-counterexample.json"
+run_python coopgames/verifiers/divergence/verify_cardinality_ranked_support.py \
+  --output "$scratch_dir/cardinality-ranked-support.json"
+cmp coopgames/verifiers/divergence/cardinality_ranked_support.json \
+  "$scratch_dir/cardinality-ranked-support.json"
 run_python coopgames/verifiers/divergence/verify_weighted_three_role_coincidence.py \
   --output "$scratch_dir/weighted-three-role-coincidence.json"
 cmp coopgames/verifiers/divergence/weighted_three_role_coincidence.json \

@@ -175,6 +175,21 @@ M-z_i >= (M-x_j)+(x_i-z_i).
 
 What remains unproved is the necessary joint column-congestion bound.
 
+The selected-support objective itself simplifies exactly.  If `L=N\G` is
+the nongainer set, `H subset L`, `P=L\H`, and `(p,g,h)` are the block sizes,
+then
+
+```text
+U_(g-1)-L_H
+ =n z(H)/(g+h)-x(L)+(p-g+1)x(G)/g
+  +[(g-1)(g+h)-hp]z(G)/[g(g+h)].
+```
+
+Therefore, at every fixed `h`, the best admissible staged support is exactly
+the one maximizing `z(H)`.  This is the new coupling point to the sparse Lmax
+packet.  It does not establish that the best support over all `h` reaches the
+threshold, nor that the globally largest `z`-block is staged-admissible.
+
 Reproduce the counterexample and its independently formulated staged
 optimality checks with
 
@@ -223,5 +238,8 @@ cmp coopgames/verifiers/divergence/n7_root_block_budget_counterexample.json \
 14. When the selected-support congestion condition fails, does the splitting
     Lmax packet necessarily expose an already classified mixed rooted-pair
     facet, or can a genuinely new indecomposable class occur?
+15. Can the sparse Lmax over-cover prove the cardinality-dependent threshold
+    in `(CRS)` for at least one staged-admissible cycle-containing trace, or
+    does failure of that threshold itself yield the marked-facet alternative?
 
 No novelty or external validation is claimed.
