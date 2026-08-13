@@ -210,6 +210,20 @@ def ceiling_interval_reaches_target(total, minimum, upper, target, n):
     return 4 * total * minimum >= (target * total + minimum) ** 2
 
 
+def reachable(graph, source, target):
+    frontier = [source]
+    seen = set()
+    while frontier:
+        node = frontier.pop()
+        if node == target:
+            return True
+        if node in seen:
+            continue
+        seen.add(node)
+        frontier.extend(graph.get(node, ()))
+    return False
+
+
 def reserve_row(x, z, support_row, cycle, target):
     n = len(x)
     gainers = tuple(i for i in range(n) if z[i] > x[i])
@@ -344,6 +358,7 @@ def audit_pair(
     endpoint_gap_cache=None,
     overcover_cache=None,
     pxc40_offtop_details=None,
+    pxc40_outside_scc_details=None,
 ):
     n = len(x)
     if target != F(n, n * n // 4):
@@ -610,6 +625,90 @@ def audit_pair(
                 counters["pxc40_negative_base_rows_with_zero_ordered_cut_error"] += (
                     F(row["ordered_cut_error"]) == 0
                 )
+                for j in expensive:
+                    if z[j] != max(z):
+                        continue
+                    if not all(
+                        reachable(graph, j, h) and reachable(graph, h, j)
+                        for h in cycle
+                    ):
+                        counters["pxc40_top_currency_outside_carrier_scc"] += 1
+                        cycle_set = set(cycle)
+                        cycle_split_payments = tuple(
+                            coalition_sum(x, coalition) - coalition_sum(z, coalition)
+                            for coalition in full_tight_support(values, z)
+                            if 0
+                            < len(
+                                cycle_set
+                                & {i for i in range(n) if coalition >> i & 1}
+                            )
+                            < len(cycle_set)
+                        )
+                        if any(payment <= 0 for payment in cycle_split_payments):
+                            raise AssertionError("one-way cycle separator is not strict")
+                        counters[
+                            "pxc40_satellite_cycle_has_lmax_separator"
+                        ] += bool(cycle_split_payments)
+                        counters[
+                            "pxc40_satellite_cycle_common_module_contracts"
+                        ] += not cycle_split_payments
+                        if cycle_split_payments:
+                            counters[
+                                "pxc40_satellite_separator_bridges_base_within_currency"
+                            ] += any(
+                                -pxc39_bound <= payment <= label_currency
+                                for payment in cycle_split_payments
+                            )
+                        if pxc40_outside_scc_details is not None:
+                            pxc40_outside_scc_details.append(
+                                {
+                                    "source": source,
+                                    "trail": trail,
+                                    "cycle": list(cycle),
+                                    "currency_player": j,
+                                    "carrier_graph": {
+                                        str(root): list(targets)
+                                        for root, targets in graph.items()
+                                    },
+                                    "support_row": row["support_row"],
+                                    "excluded_nongainers": list(excluded),
+                                    "lmin": [str(value) for value in x],
+                                    "lmax": [str(value) for value in z],
+                                    "pxc39_bound": str(pxc39_bound),
+                                    "pxc40_label_currency": str(label_currency),
+                                }
+                            )
+                        continue
+                    counters["pxc40_top_currency_in_carrier_scc"] += 1
+                    enlarged = set(cycle) | {j}
+                    splitting_payments = tuple(
+                        coalition_sum(x, coalition) - coalition_sum(z, coalition)
+                        for coalition in full_tight_support(values, z)
+                        if 0
+                        < len(enlarged & {i for i in range(n) if coalition >> i & 1})
+                        < len(enlarged)
+                    )
+                    if any(payment <= 0 for payment in splitting_payments):
+                        raise AssertionError("PXC40 enlarged-module separator is not strict")
+                    z_splits = bool(splitting_payments)
+                    counters["pxc40_enlarged_module_has_lmax_separator"] += z_splits
+                    counters["pxc40_enlarged_common_module_contracts"] += not z_splits
+                    if splitting_payments:
+                        counters[
+                            "pxc40_some_separator_payment_fits_label_currency"
+                        ] += any(payment <= label_currency for payment in splitting_payments)
+                        counters[
+                            "pxc40_some_separator_payment_covers_negative_base"
+                        ] += max(splitting_payments) >= -pxc39_bound
+                        counters[
+                            "pxc40_some_separator_payment_bridges_base_within_currency"
+                        ] += any(
+                            -pxc39_bound <= payment <= label_currency
+                            for payment in splitting_payments
+                        )
+                        counters[
+                            "pxc40_sum_separator_payments_covers_negative_base"
+                        ] += sum(splitting_payments, F(0)) >= -pxc39_bound
                 if pxc40_offtop_details is not None and any(
                     z[j] < max(z) for j in expensive
                 ):
@@ -917,6 +1016,7 @@ def main():
     extracted_residual_exceptions, full_residual_exceptions = [], []
     full_handover_details = []
     full_pxc40_offtop_details = []
+    full_pxc40_outside_scc_details = []
     endpoint_gap_cache = {}
     overcover_cache = {}
     for path in args.paths:
@@ -958,6 +1058,7 @@ def main():
                     endpoint_gap_cache=endpoint_gap_cache,
                     overcover_cache=overcover_cache,
                     pxc40_offtop_details=full_pxc40_offtop_details,
+                    pxc40_outside_scc_details=full_pxc40_outside_scc_details,
                 )
             )
 
@@ -1102,6 +1203,7 @@ def main():
         ),
         "n6_full_menu_strict_handover_details": full_handover_details,
         "n6_pxc40_offtop_residual_details": full_pxc40_offtop_details,
+        "n6_pxc40_outside_scc_residual_details": full_pxc40_outside_scc_details,
         "n7_hostile_and_sharp_controls": hostile,
         "n7_multi_endpoint_separator_control": multi_endpoint_separator_control(),
         "limitations": (

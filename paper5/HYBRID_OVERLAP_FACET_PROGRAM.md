@@ -5975,6 +5975,67 @@ have `z(P)=0`, hence zero direct price.  Thus every archived positive-price
 residual is visible at the first Lmax stage, but that visibility remains a
 finite fact rather than a dimension-free selection theorem.
 
+Carrier closure is governed by a preorder.  Define
+
+```text
+r <=_x c  iff  every x-tight coalition containing r also contains c. (PXC41)
+```
+
+It is reflexive and transitive.  Every strong equivalence class is therefore
+an `x` tight-face module, and carrier monotonicity in both directions makes
+`x` constant on the class.  If `z` is also constant there, the existing
+carrier-module theorem applies to the whole class: an Lmax-tight coalition
+splits it and pays strictly, or it contracts to one exact weighted role.
+
+A top-stratum PXC40 currency player is a maximum-overlap root because it is a
+nongainer with `z_j=M` and therefore `x_j>=M`.  When it lies in the carrier
+component of the chosen cycle, `(PXC41)` enlarges the module before invoking
+separator-or-contraction.  The theorem is dimension-free; adequate pricing
+of a splitting separator is still separate.
+
+The one-way case has a canonical quotient.  Let `E` be a carrier strong
+component and let `j notin E` carry every member of `E`, without the reverse
+relation.  If no Lmax-tight coalition splits `E`, contract it to a role `*`
+of weight `|E|`.  Then
+
+```text
+z_j=z_*=M,       x_*/|E|>=x_j>=M,       j <=_xbar *. (PXC42)
+```
+
+Exactness, weighted selectors, total, overlap, and the one-way carrier
+implication survive.  Therefore a top-currency satellite either has an Lmax
+splitter or becomes a weighted locked-satellite quotient.  Objective A closes
+this only when at most three other roles remain.
+
+There is a dimension-free atomic-size cutoff.  The module and satellite have
+total atomic multiplicity `W=|E|+1` and each contributes overlap `M`, while
+`M>=T/n`.  Therefore
+
+```text
+O/T>=W/n>=4n/[n^2-(n mod 2)]                        (PXC43)
+```
+
+for `W>=4` when `n` is even and `W>=5` when `n` is odd.  A surviving locked
+satellite consequently has `|E|<=2` in even dimension and `|E|<=3` in odd
+dimension.  This controls the locked block size, not the number of outside
+roles.
+
+Among the 236 archived top-currency occurrences, 222 join the carrier
+component.  Ninety are Lmax-common modules; contraction leaves four weighted
+roles and the proved four-role theorem closes them.  The other 132 have an
+Lmax-tight splitter, and in every finite case one separator payment lies in
+`[-B_I,Lambda_I]`, hence closes the negative base.  The remaining 14
+occurrences, across seven records, are one-way satellites: the currency root
+carries the two-cycle but the cycle does not carry it.  This isolates the
+next structural case without promoting finite separator magnitudes to a
+universal theorem.
+
+Of the 14 archived satellites, four have a cycle splitter with payment in
+`[-B_I,Lambda_I]` and close directly.  The remaining ten contract to the
+five-role weight profile `(2,1,1,1,1)` satisfying `(PXC42)`.  This is the
+true residual normal form; it lies just beyond the proved four-role quotient
+theorem.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
