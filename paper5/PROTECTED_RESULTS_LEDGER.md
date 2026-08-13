@@ -92,8 +92,11 @@ equality and facet identification in objective C.
 | Labelled rooted packing/cover duality | **Proved exact LP duality.** Facet price belongs to a labelled normal plus its Lmin-tight labels; it is not gauge invariant. | `verifiers/divergence/audit_labelled_facet_cover_duality.py`; research note |
 | Carrier cycle or separator | **Proved structural alternative.** A carrier cycle is a sign-coherent tight-face object; the alternative alone has no quantitative target price. | commits `00ea31b`, `21b2d23`; research note |
 | Strict complement payment | **Proved.** A z-tight coalition splitting an x-carrier gives strict payment on it and its complement.  One separator need not pay enough. | commit `5ac2ab8`; `audit_carrier_separator_payment.py` |
+| Strict-loss proper-packet support | **Proved.** If a nongainer carrier cycle has positive selector loss, then every gainer is omitted by some Lmin-tight coalition containing the cycle.  Carrier monotonicity proves this proper-packet existence; residual normalization remains open, as does the tied-loss analogue. | `paper5/divergence.tex`; `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`; `audit_carrier_separator_payment.py` |
+| Carrier-cycle cardinality theorem | **Proved dimension-free.** Any direct block containing a carrier cycle has atomic multiplicity at least two.  Once its gainer packet is proper, its direct cardinality base automatically reaches the target for every `n>=6`; the unique cardinality equality parameters are `(n,p,g,h,s)=(6,2,2,2,1)`.  Thus strict-loss carrier cycles leave only normalized residual matching. | `paper5/divergence.tex`, `(CCC)`; `verify_carrier_cycle_cardinality.py` |
 | Common carrier contraction | **Proved.** A common x/z tight-face carrier module contracts to one weighted role while preserving exactness, weighted selectors, total, and overlap. | commits `5ac2ab8`, `fc28a1a`; research note |
 | Canonical block expansion | **Proved.** A nonnegative exact weighted role game expands to a singleton-normalized exact atomic game when every unit-weight role has zero singleton worth.  Weighted selectors and overlap are preserved. | commit `fc28a1a`; research note |
+| Common-module role induction | **Proved structural reduction.** Formulate the target for weighted games by number of roles while holding total atomic weight fixed.  A common selector module contracts to fewer roles without changing the target data, so strong induction discharges the contraction arm; the base through four roles is now complete.  A role-minimal counterexample is therefore common-module-free. | `paper5/divergence.tex`, Proposition `common-module-induction`; `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`; `audit_carrier_separator_payment.py` |
 | Weighted coincidence through three roles | **Proved dimension-free.** The core is a box intersected with efficiency and the clipped weighted equalizer Lorenz-dominates all feasible repeated vectors. | commit `36c13c6`; `verify_weighted_three_role_coincidence.py` |
 | Elementary/laminar four-role coincidence reductions | **Proved.** Weighted selectors coincide when one role total is core-constant or when at most one complementary pair slab is nonredundant.  Equal weights also suffice only when all role singleton worths vanish.  Any hard quotient has four variable roles and at least two crossing pair slabs. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, elementary four-role reductions |
 | Two-active-crossing-partitions lemma | **Proved local structural reduction.** If the weighted selectors differ, each selector itself lies on endpoints of at least two independent pair-sum slabs.  Otherwise its active relaxation is laminar and its Lorenz-greatest water-filling point forces global selector coincidence.  Hence the residue is a transition between two-flat edges, not a locally laminar optimum. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, two-active-crossing-partitions lemma |
@@ -207,8 +210,10 @@ to that center is an active human-proof route.
 The main dimension-free overlap inequality, its equality characterization,
 and a complete carrier/separator selection theorem remain open.  Objective A
 is complete: connected edge confinement makes the common-two theorem
-exhaustive, including its exact six-player equality boundary.  The next live
-arrow is objective B: prove that every hard carrier branch selects a direct,
-separator, quotient, or priced-facet certificate and use the now-complete
-quotient theorem in its contraction arm.  Objective C's full equality and
-facet identification also remain required.
+exhaustive, including its exact six-player equality boundary.  Objective B's
+common-module contraction arm is now closed by strong induction on role
+count.  In a role-minimal hard branch every carrier cycle must therefore be
+split by an Lmax-tight separator.  The live arrow is the quantitative
+separator/direct/marked-facet selection and normalized matching theorem at
+the current role count.  Objective C's full equality and facet identification
+also remain required.

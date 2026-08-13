@@ -292,6 +292,34 @@ def main():
                             "lmax_separator_count": len(z_separators),
                         }
                     )
+                    if next(iter(signs)) == "n":
+                        loss = x[cycle[0]] - z[cycle[0]]
+                        if loss > 0:
+                            counts["strict_loss_nongainer_cycles"] += 1
+                            for gainer in (
+                                i for i in range(6) if z[i] > x[i]
+                            ):
+                                omitting = [
+                                    coalition
+                                    for coalition in x_tight
+                                    if coalition & cycle_mask == cycle_mask
+                                    and not (coalition >> gainer & 1)
+                                ]
+                                if not omitting:
+                                    raise AssertionError(
+                                        (
+                                            path.name,
+                                            trail,
+                                            cycle,
+                                            gainer,
+                                            "strict-loss cycle has no proper gainer omission",
+                                        )
+                                    )
+                                counts[
+                                    "strict_loss_gainer_omission_checks"
+                                ] += 1
+                        else:
+                            counts["tied_loss_nongainer_cycles"] += 1
                     counts["cycles_with_zero_coalition_worth"] += (
                         values[cycle_mask] == 0
                     )
@@ -323,6 +351,17 @@ def main():
                 counts["cycle_rows_with_gainer_cycle"] += any(
                     row["sign"] == "g" for row in cycle_data
                 )
+                has_common_module = any(row["lmax_module"] for row in cycle_data)
+                has_separated_cycle = any(
+                    not row["lmax_module"] for row in cycle_data
+                )
+                counts["cycle_rows_with_common_module"] += has_common_module
+                counts["cycle_rows_without_common_module"] += not has_common_module
+                counts["cycle_rows_with_separated_cycle"] += has_separated_cycle
+                if not has_common_module and not has_separated_cycle:
+                    raise AssertionError(
+                        (path.name, trail, "irreducible cycle row lacks separator")
+                    )
                 selected_support = complete_lmin_support(values, x)
                 direct = direct_witnesses(x, z, selected_support, target)
                 counts["cycle_rows_closed_by_some_direct_packet"] += bool(direct)
@@ -388,6 +427,31 @@ def main():
                 counts["cycle_rows_closed_by_partial_separator_complement"] += any(
                     row["target_reached_by_master"] for row in partial_separator_rows
                 )
+                if not has_common_module:
+                    counts["role_irreducible_rows"] += 1
+                    has_tied_cycle = any(
+                        row["sign"] == "n"
+                        and x[row["cycle"][0]] == z[row["cycle"][0]]
+                        for row in cycle_data
+                    )
+                    counts["role_irreducible_rows_with_tied_cycle"] += (
+                        has_tied_cycle
+                    )
+                    counts["role_irreducible_rows_with_strict_cycle_only"] += (
+                        not has_tied_cycle
+                    )
+                    counts["role_irreducible_rows_closed_with_cycle_as_H"] += bool(
+                        cycle_tight_direct
+                    )
+                    counts[
+                        "role_irreducible_rows_closed_by_tight_nongainer_superset"
+                    ] += bool(containing_cycle_direct)
+                    counts[
+                        "role_irreducible_rows_closed_by_one_separator_complement"
+                    ] += any(
+                        row["target_reached_by_master"]
+                        for row in partial_separator_rows
+                    )
                 if containing_cycle_direct:
                     least_extra = min(
                         len(row["H"]) - len(cycle)
@@ -418,6 +482,7 @@ def main():
                             "roots": list(roots),
                             "kind": "cycle itself has no tight target-reaching direct packet",
                             "cycles": cycle_data,
+                            "partial_separator_rows": partial_separator_rows,
                             "some_direct_witness": direct[0],
                         }
                     )
@@ -490,6 +555,13 @@ def main():
             "if r->c is a full Lmin carrier and z_c<z_r, every Lmax-tight "
             "separator D containing r and omitting c has x(D)>z(D), so its "
             "complement has strict positive direct-comparison payment"
+        ),
+        "role_induction_fact": (
+            "for the weighted-role formulation, a cycle that is a tight-face "
+            "module at both selectors contracts to fewer roles with the same "
+            "atomic weight, total, overlap, and weighted selectors; hence a "
+            "role-minimal counterexample has no common module and every one "
+            "of its carrier cycles is split by an Lmax-tight separator"
         ),
         "limitations": (
             "archived n=6 pairs only; complement payment need not satisfy the "

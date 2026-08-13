@@ -3712,17 +3712,34 @@ determined by its complete role blocks.  This is an exact normal-form
 replacement and proves that the weighted endowed quotient is not outside the
 original domain.
 
-It is **not yet a role-complexity induction**.  The members of `H` already
-have duplicate rows in both active tight-coalition matrices, so re-expansion
-does not strictly reduce their common active-incidence partition.  To iterate
-contraction on the quotient one would first need weighted versions of the
-labelled affordability classification and carrier-cycle/separator
-alternative, with the atomic target constant held at `n`; those theorems are
-not proved here.  Accordingly one may replace a common-module branch by its
-canonical block normal form, but may not assume that a minimal counterexample
-is role-irreducible.
+The correct induction parameter is the number of roles, not the atomic
+weight.  Let `P_r` be the target inequality for every nonnegative exact
+weighted game on at most `r` roles, with positive integer weights of total
+atomic weight `n>=6` and zero singleton worth on every unit-weight role.
 
-The contraction boundary is closed through three roles.
+> **Proposition (common-module induction).**  Assume `P_(r-1)`.  If an
+> `r`-role instance has a nontrivial common tight-face module `H` whose
+> per-capita coordinates are constant at each selector, then it satisfies
+> the atomic target.  Consequently a counterexample minimal in its number of
+> roles has no common selector module.
+
+Contract `H` to one role of weight `sum_(i in H) h_i`.  Exactness and
+nonnegativity descend, all remaining unit-role singleton worths stay zero,
+and the new role may have positive singleton worth because its weight is at
+least two.  The quotient has fewer roles and the same atomic weight `n`,
+while weighted Lmin, weighted Lmax, total, and overlap are preserved.  Thus
+`P_(r-1)` gives the original target.  Weighted coincidence through three
+roles and the atomic weighted four-role theorem below establish `P_4`.
+
+This closes the contraction arm in a strong-induction proof.  It does not
+require running the carrier machinery again after contraction: the entire
+smaller-role assertion is the induction hypothesis.  The selection step at
+the current role count still needs its weighted formulation.  Whenever that
+step supplies a carrier cycle, however, a role-minimal counterexample must
+have an Lmax-tight coalition splitting it; otherwise it is a common module
+and the proposition applies.
+
+The coincidence part of the induction base is closed through three roles.
 
 > **Theorem (weighted three-role coincidence).**  Every nonempty core of a
 > TU game on at most three roles, with positive integer role weights, has the
@@ -4902,7 +4919,16 @@ from these stronger statements.  Among the 228 archived six-player rows in
 which every maximum-overlap root is unaffordable on its full tight menu,
 all 228 enter the cycle arm and all have a nongainer cycle.  Across their 420
 directed cycles, 169 are separated by the Lmax face and 251 are common face
-modules.  Every row has a target-reaching Lmin-tight direct comparison whose
+modules.  At the row level, 163 expose at least one inductively contractible
+common module.  The other 65 are role-irreducible with respect to these
+cycles, and every one has an Lmax-tight separator.  This is the exact finite
+shadow of common-module induction, not proof that the payments close the
+target.  Of the 65 role-irreducible rows, 62 are closed by the cycle itself.
+In each of the remaining three, the unique splitting-row complement contains
+every gainer and is therefore inadmissible for the proper-packet direct
+identity; replacing at least one gainer by one additional upper nongainer
+gives an Lmin-tight block with cardinality base `4/5`.  Every row has a
+target-reaching Lmin-tight direct comparison whose
 nongainer block contains a cycle.  The cycle itself suffices on 216 rows;
 the remaining 12 require exactly one additional nongainer.  Full carrier
 closure does not repair those 12, so “take the cycle” and “take its forced
@@ -5020,11 +5046,61 @@ the gluing theorem.
 
 If no supported Lmax coalition in `(ASB1)` splits `H`, its coalition-incidence
 part factors through the contracted role system and `(CBE)` gives the
-canonical block normal form.  The unit-column normalization still has to be
-expressed in weighted-role pinning coordinates; no general weighted
-affordability theorem is being assumed.  This is an exact
-separator-or-contraction handover for the next dual formulation, not a claim
-that the contraction arm is already closed by induction.
+canonical block normal form.  Common-module induction discharges that branch.
+Hence, in a role-minimal counterexample, the aggregate packet may be
+restricted to cycles with a splitting Lmax row.  The unit-column
+normalization still has to be expressed in weighted-role pinning coordinates
+in the current-role selection step; no general weighted affordability
+theorem is being assumed.
+
+The proper-gainer-packet condition can be removed in the strict-loss branch.
+Suppose `L=a-b>0` and let `j` be any gainer.  Maximality of the overlap on
+`H` gives `x_j<=b<a=x_i` for `i in H`.  If every `x`-tight coalition
+containing `i` also contained `j`, carrier monotonicity would imply
+`x_j>=x_i`, a contradiction.  Therefore some `x`-tight coalition contains
+`i` and omits `j`; the module property makes it contain all of `H`.
+
+> **Lemma (strict-loss proper-packet support).**  For a nongainer carrier
+> cycle with `a-b>0`, every gainer is omitted by some Lmin-tight coalition
+> containing the whole cycle.  Its gainer part is therefore proper and its
+> comparison payment is nonnegative.
+
+The coalition may depend on the omitted gainer.  This does not prove the
+residual condition in `(CTS2)`, and the argument loses its strict Lmin order
+when `L=0`.  The cardinality condition is automatic:
+
+> **Lemma (carrier-cycle cardinality).**  Let `p,g,h` be the atomic
+> multiplicities of the three direct-identity sign blocks, with
+> `n=p+g+h>=6`, `p,g>=1`, and `h>=2` because the nongainer block contains a
+> carrier cycle.  For every proper gainer packet of atomic multiplicity
+> `0<=s<g`,
+>
+> ```text
+> 1-gp/[(g+h)(p+g-s)] >= 4n/[n^2-(n mod 2)].        (CCC)
+> ```
+>
+> Equality is possible only at `(n,p,g,h,s)=(6,2,2,2,1)`.
+
+The left side decreases with `s`, so the worst case is `s=g-1`.  At fixed
+`n,g`, the subtracted product `[g/(g+h)][p/(p+1)]`, with `p=n-g-h`,
+decreases with `h`, so the worst case is `h=2`.  Substituting `g=n-p-2`
+leaves `(n+p)/[(n-p)(p+1)]`.  For even `n`, its cross-product difference
+from `4/n` is `n` times
+
+```text
+4p^2+(4-3n)p+n^2-4n,
+```
+
+whose discriminant is `-7n^2+40n+16<0` for `n>=8`; direct substitution at
+`n=6` gives the unique zero `p=2`.  For odd `n`, the cross-product quadratic
+has leading coefficient `4n` and discriminant
+
+```text
+-(n+1)(7n^3-47n^2+9n-1)<0                         (n>=7).
+```
+
+Thus every strict-loss carrier-cycle branch has only the normalized residual
+matching left: contraction, packet properness, and cardinality are closed.
 
 There is a parallel exact reduction on the direct side.  Let `C` be any
 `x`-tight coalition meeting a carrier cycle.  The module property forces
@@ -5043,17 +5119,17 @@ z(C)-x(C)>=0.                                      (CTS)
 
 Thus every supported Lmin row meeting the cycle already supplies the
 comparison premise of `(TDG)`, with `H=H_C` and `J=J_C`; no separate common
-hinge is needed.  The remaining conditions are exactly
+hinge is needed.  By `(CCC)`, a proper `J_C` automatically satisfies the
+target cardinality condition.  The remaining conditions are
 
 ```text
 J_C is a proper subset of all gainers,
-F g p <=(F-n)(g+|H_C|)(p+g-|J_C|),
 R_x(C)+R_z(C)>=0,                                  (CTS2)
 ```
 
-where `p` is the number of nongainers outside `C`, `g` is the total number
-of gainers, and `F=floor(n^2/4)`.  This isolates a finite labelled score on
-the actual Lmin-tight support.
+and in the strict-loss branch the first line is automatic by proper-packet
+support.  This isolates the residual sum as a finite labelled score on the
+actual Lmin-tight support.
 
 > **Carrier-support selection lemma (open).**  In the all-unaffordable
 > maximum-overlap-root branch, either a carrier cycle has an Lmax separator
@@ -5068,7 +5144,7 @@ nongainers already present in a selected tight coalition is allowed.  On all
 `(CTS2)`; 216 use no extra nongainer and twelve use exactly one.  This is
 still finite evidence.  The prospective human proof must average or separate
 the support columns of a sign-coherent pinning relation while retaining the
-nonlinear cardinality term and exact residual sum.
+exact residual sum.
 
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,

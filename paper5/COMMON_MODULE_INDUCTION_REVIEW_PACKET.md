@@ -1,0 +1,130 @@
+# External review packet: common-module role induction
+
+## Claim to review
+
+Let `P_r` be the atomic overlap target for every nonnegative exact weighted
+game on at most `r` roles, with positive integer role weights of total `n`
+with `n>=6` and zero singleton worth on every unit-weight role.  Assume
+`P_(r-1)`.
+
+If an `r`-role instance has a nontrivial set of roles `H` that is a tight-face
+module at both weighted Lmin and weighted Lmax, and the per-capita selector
+coordinates are constant on `H` at each selector, then the instance satisfies
+the target.  Hence a counterexample minimal in its number of roles has no
+common selector module.
+
+This closes the contraction arm of objective B.  It does not prove the
+remaining separator/direct/marked-facet selection theorem.
+
+## Human proof
+
+Contract `H` to one role of weight
+
+```text
+h_* = sum_(i in H) h_i.
+```
+
+The previously proved common-module contraction theorem gives a nonnegative
+exact quotient.  The projections of the two selectors are its weighted Lmin
+and weighted Lmax; total payoff and hybrid overlap are unchanged.  Every
+unit-weight role outside `H` retains zero singleton worth.  The new role has
+weight at least two, so its possibly positive singleton worth is allowed by
+the weighted statement.
+
+The quotient has `r-|H|+1 <= r-1` roles and the same total atomic weight `n`.
+Applying `P_(r-1)` therefore gives exactly the target for the original
+instance.  Weighted coincidence through three roles and the atomic weighted
+four-role theorem establish the induction base `P_4`.
+
+The important logical point is that the quotient does not need a new local
+affordability analysis: the whole smaller-role theorem is the strong
+induction hypothesis.  The selection theorem at the current role count still
+needs a weighted formulation retaining block multiplicities and prices.
+
+## Consequence for carrier cycles
+
+A carrier cycle is already a tight-face module at Lmin.  If no Lmax-tight
+coalition splits it, it is a common selector module and the induction above
+applies.  Thus, whenever the current-role selection machinery produces a
+carrier cycle inside a role-minimal counterexample, some Lmax-tight coalition
+must split that cycle.  Its complement supplies the previously proved strict
+comparison payment.  The unresolved problem is to normalize and aggregate
+those payments with the staged Lmin packet without double charging a payoff
+layer.
+
+## Exact regression
+
+Run from the repository root in the pinned paper environment:
+
+```bash
+PYTHONPATH=coopgames/verifiers/divergence:coopgames/src \
+  /tmp/coop-paper5-review/bin/python \
+  coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output /tmp/carrier-separator-payment.json
+
+cmp coopgames/verifiers/divergence/carrier_separator_payment.json \
+  /tmp/carrier-separator-payment.json
+```
+
+On the 228 archived six-player all-unaffordable rows, the audit finds 420
+carrier cycles: 251 common modules and 169 split by the Lmax face.  At the row
+level, 163 have at least one inductively contractible common module.  The 65
+rows with no common module all have a splitting Lmax row.  These counts audit
+the structural handover only; the archive is not a census and does not prove
+the all-dimensional selection theorem.
+
+Among those 65 role-irreducible rows, 62 are already closed by a tight direct
+packet using the cycle itself.  In each of the remaining three, the unique
+splitting-row complement contains every gainer and so violates the direct
+identity's proper-gainer-packet hypothesis.  An Lmin-tight repair replaces at
+least one gainer with one additional upper nongainer and has cardinality base
+`4/5`.  This three-row separator-rotation pattern is the next falsification
+target, not a proved general lemma.
+
+There is one additional human reduction.  If a nongainer carrier cycle has
+strict loss `a-b>0`, then every gainer `j` is omitted by some Lmin-tight
+coalition containing the cycle.  Otherwise `j` would be a carrier of a cycle
+member, so carrier monotonicity would give `x_j>=a`; maximum-overlap geometry
+instead gives `x_j<=b<a`.  This proves proper-packet support in the strict
+branch, but not the residual inequality.  It also does not cover the tied
+case `a=b`.
+
+The cardinality inequality is independently automatic.  If the direct
+nongainer block contains a carrier cycle, its atomic multiplicity is at least
+two.  For any proper gainer packet, the direct base satisfies
+
+```text
+1-gp/[(g+h)(p+g-s)] >= 4n/[n^2-(n mod 2)].
+```
+
+Monotonicity reduces the worst case to `s=g-1,h=2`; the resulting quadratic
+has negative discriminant for even `n>=8` and odd `n>=7`, while `n=6` has the
+unique equality parameters `(p,g,h,s)=(2,2,2,1)`.  Accordingly strict-loss
+carrier cycles leave only the normalized residual-sum selection problem.
+
+## Hostile questions
+
+1. Does exactness descend under contraction for every quotient coalition,
+   including coalitions containing the new weighted role?
+2. Is the local selector-lifting argument sufficient to identify the
+   quotient projections with the full weighted lexicographic selectors?
+3. Does the unit-role singleton hypothesis survive exactly as stated, without
+   silently normalizing the positive singleton worth of the contracted role?
+4. Is total atomic weight, rather than role count, correctly retained in the
+   target constant?
+5. Is strong induction on role count logically valid without rerunning the
+   affordability/carrier machinery inside the contracted instance?
+6. Does the carrier-cycle consequence remain explicitly conditional on a
+   weighted current-role selection theorem, rather than claiming that theorem
+   has already been proved?
+7. Do either balanced seven-player equality orientation or the `G(p,k)` sharp
+   family get incorrectly removed by the minimal-counterexample reduction?
+8. Does the strict-loss carrier-monotonicity argument prove omission by a
+   proper tight coalition, including boundary cases with no initially listed
+   rooted proper row?
+9. Is the monotone reduction in the cardinality lemma valid when `p,g,h,s`
+   are atomic block multiplicities rather than role counts?
+
+No novelty or external validation is claimed.

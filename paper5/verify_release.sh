@@ -149,6 +149,10 @@ run_python coopgames/verifiers/divergence/verify_weighted_common_face_rigidity.p
   --output "$scratch_dir/weighted-common-face-rigidity.json"
 cmp coopgames/verifiers/divergence/weighted_common_face_rigidity.json \
   "$scratch_dir/weighted-common-face-rigidity.json"
+run_python coopgames/verifiers/divergence/verify_carrier_cycle_cardinality.py \
+  --output "$scratch_dir/carrier-cycle-cardinality.json"
+cmp coopgames/verifiers/divergence/carrier_cycle_cardinality.json \
+  "$scratch_dir/carrier-cycle-cardinality.json"
 run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
   --output "$scratch_dir/complement-star-facets.json"
 cmp coopgames/verifiers/divergence/complement_star_facets.json \
