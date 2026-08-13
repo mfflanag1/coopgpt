@@ -4014,6 +4014,103 @@ PYTHONPATH=src python3 \
   --output verifiers/divergence/weighted_four_role_normalized_obstruction.json
 ```
 
+The common crossing face of `(W4N1)` admits a complete atomic-weight-aware
+analysis.  It is useful beyond that family.
+
+> **Theorem (balanced weighted seesaw face).**  Let a weighted four-role
+> core have weighted Lmin `x` and weighted Lmax `z` on the same face
+>
+> ```text
+> q_0+q_1=W,             q_0+q_3=W,             T=2W.          (BWS1)
+> ```
+>
+> Let the intersection of that face with the core be nonempty.  If the role
+> weights are positive integers with sum `n`, then
+>
+> ```text
+> O(x,z)/T >= 4n/[n^2-(n mod 2)].                              (BWS2)
+> ```
+
+Efficiency and `(BWS1)` give
+
+```text
+q(t)=(t,W-t,t,W-t),                 l<=t<=u.                   (BWS3)
+```
+
+Write
+
+```text
+P=max(h_0,h_2),  p=min(h_0,h_2),
+Q=max(h_1,h_3),  q=min(h_1,h_3).                               (BWS4)
+```
+
+On the unrestricted line, the lowest rising per-capita coordinate is `t/P`
+and the lowest falling coordinate is `(W-t)/Q`; hence weighted Lmin is at
+
+```text
+t_min=W P/(P+Q).
+```
+
+The highest rising and falling coordinates are `t/p` and `(W-t)/q`, so
+weighted Lmax is at
+
+```text
+t_max=W p/(p+q).                                               (BWS5)
+```
+
+Restricting to `[l,u]` clips both displayed positions to the same interval,
+which cannot increase their distance.  Since changing `t` by `Delta`
+changes all four role totals by `|Delta|`,
+
+```text
+O/T = 1-|t_min-t_max|/W                                      (BWS6)
+```
+
+before clipping and is no smaller after clipping.  Orient the absolute
+difference.  If `t_min>=t_max`, then
+
+```text
+O/T = Q/(P+Q)+p/(p+q)
+    >= 1/(P+Q)+1/(p+q);                                      (BWS7)
+```
+
+the opposite orientation gives the same last bound using `P,q>=1`.  Put
+`A=P+Q`, `B=p+q`.  These are positive integers with `A+B=n`, so
+
+```text
+1/A+1/B = n/(AB) >= 4n/[n^2-(n mod 2)],                       (BWS8)
+```
+
+because the largest integer product with sum `n` is
+`floor(n^2/4)=[n^2-(n mod 2)]/4`.  This proves `(BWS2)`.
+
+The harmonic/product bound is tight only when the two numerator weights used
+in `(BWS7)` equal one and `A,B` are balanced.  The exact integer audit finds
+equality only at atomic weights four and five; for every `n>=6` this balanced
+seesaw branch has strict target slack.  In `(W4N1)`, both selectors lie on
+the common upper crossing face with `W=6`, and the remaining bounds merely
+clip the seesaw interval.  Thus its `2/3` ratio is explained by `(BWS3)--(BWS6)`
+and is automatically safe for every atomic multiplicity.
+
+At the exact-cone interface, each equality in `(BWS1)` is a flat complementary
+pair slab, equivalently an exact-partition equality
+`w(A)+w(R\A)=T`.  Their two incidence normals are modular face equalities.
+The inequality `(BWS2)` is therefore selection-order arithmetic on the
+intersection of two already understood exact-partition faces; it does not
+define or require a new full exact-game-cone facet.  Since its target margin
+is strict for `n>=6`, neither the six-player equality orbits nor the two
+balanced seven-player equality orientations can lie in this branch.  They
+must continue through the labelled rooted/mixed facet arms retained in the
+protected dependency map.
+
+Reproduce all 91,390 positive weight vectors through `n=40` and 4,112,550
+exact common-interval clipping controls with
+
+```bash
+python3 verifiers/divergence/verify_weighted_balanced_seesaw.py \
+  --output verifiers/divergence/weighted_balanced_seesaw.json
+```
+
 Reproduce the lower envelope, pinning arithmetic, and parameter grid through
 `m=40` with
 

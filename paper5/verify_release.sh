@@ -125,6 +125,10 @@ run_python coopgames/verifiers/divergence/verify_weighted_four_role_normalized_o
   --output "$scratch_dir/weighted-four-role-normalized-obstruction.json"
 cmp coopgames/verifiers/divergence/weighted_four_role_normalized_obstruction.json \
   "$scratch_dir/weighted-four-role-normalized-obstruction.json"
+run_python coopgames/verifiers/divergence/verify_weighted_balanced_seesaw.py \
+  --output "$scratch_dir/weighted-balanced-seesaw.json"
+cmp coopgames/verifiers/divergence/weighted_balanced_seesaw.json \
+  "$scratch_dir/weighted-balanced-seesaw.json"
 run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
   --output "$scratch_dir/complement-star-facets.json"
 cmp coopgames/verifiers/divergence/complement_star_facets.json \
