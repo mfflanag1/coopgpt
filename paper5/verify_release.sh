@@ -145,6 +145,10 @@ run_python coopgames/verifiers/divergence/verify_weighted_fairness_selector.py \
   --output "$scratch_dir/weighted-fairness-selector.json"
 cmp coopgames/verifiers/divergence/weighted_fairness_selector.json \
   "$scratch_dir/weighted-fairness-selector.json"
+run_python coopgames/verifiers/divergence/verify_weighted_common_face_rigidity.py \
+  --output "$scratch_dir/weighted-common-face-rigidity.json"
+cmp coopgames/verifiers/divergence/weighted_common_face_rigidity.json \
+  "$scratch_dir/weighted-common-face-rigidity.json"
 run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
   --output "$scratch_dir/complement-star-facets.json"
 cmp coopgames/verifiers/divergence/complement_star_facets.json \

@@ -49,12 +49,13 @@ is equivalent to a singleton-normalized exact block game, but does not yet
 yield an induction because the weighted affordability/carrier theorems have
 not been proved.  Weighted quotients with at most three roles are now closed
 by a Lorenz-dominant clipped water-filling theorem.  Four-role quotients are
-now also closed whenever both selectors share two independent crossing flats:
-the endowed crossing matrix has no diagonal gap, its adjacent gaps have an
-exact atomic cost formula, and the unique target equality expands to the
-known six-player `(4,2)`/`(2,4)` profile.  The quotient residue consists of
-higher-dimensional stage patterns in which the two selectors do not share
-those flats.  The remaining theorem on the carrier arm is a normalized
+now also closed whenever both selectors share even one pair endpoint: a
+weighted dispersion theorem forces a second shared endpoint, after which the
+endowed crossing matrix has no diagonal gap, its adjacent gaps have an exact
+atomic cost formula, and the unique target equality expands to the known
+six-player `(4,2)`/`(2,4)` profile.  The quotient residue consists only of
+opposite-endpoint face-changing stage patterns.  The remaining theorem on the
+carrier arm is a normalized
 separator/facet coupling together with that higher-dimensional quotient
 classification, not a scalar lower bound on one separator slack.
 
@@ -3966,7 +3967,8 @@ satisfy the sharper identity
 ||x-z||_1=2 max{|d_1|,|d_2|}.                              (FEC5)
 ```
 
-Their missing theorem is therefore a two-dimensional clipped-edge bound.
+The common-face rigidity theorem below closes both types without needing a
+quantitative displacement estimate.
 Types III and IV are the genuinely face-changing cases and require the full
 three-coordinate expression `(FEC3)`.  This table is a complete
 combinatorial classification of minimal active-edge incidences; it does not
@@ -3998,8 +4000,76 @@ endpoint active at one of the selectors, in which case it specializes the
 three-flat boundary of types II--IV.  The exclusion is qualitative; it does
 not yet supply the type-II displacement price.
 
+There is a stronger weighted argument that removes this entire common-face
+residue.  Fix a common endpoint, relabel its two sides as `{0,1}` and
+`{2,3}`, and write
+
+```text
+q_0=s,  q_1=W-s,  q_2=t,  q_3=T-W-t.                  (FEC6)
+```
+
+The weighted-equality splits of the two fixed-total pairs are
+
+```text
+s_* = h_0 W/(h_0+h_1),
+t_* = h_2(T-W)/(h_2+h_3),                             (FEC7)
+```
+
+and put `d_1=|s-s_*|`, `d_2=|t-t_*|`.  Moving either split toward its
+equality point is a Pigou--Dalton transfer between the corresponding clone
+blocks.  Hence if both `d_1,d_2` weakly decrease, with one strict, the full
+repeated payoff vector is strictly Lorenz improved: the two within-pair
+doubly stochastic maps combine block diagonally.
+
+> **Theorem (weighted common-face rigidity).**  Let `K` be a compact
+> four-role core with positive integer role weights.  If two Lorenz-undominated
+> points of `K` lie on the same endpoint of one complementary pair slab,
+> then either they coincide or they lie on the same endpoint of a second
+> independent complementary pair slab.  In particular, distinct weighted
+> Lmin and weighted Lmax cannot form type I or type II in `(FEC4)`.
+
+Work in the common face `(FEC6)`.  Two undominated points must lie in a
+common closed orthant about `(s_*,t_*)`.  Otherwise their segment crosses,
+say, `s=s_*`; there the first dispersion is zero and the second, by
+convexity of absolute value, is at most the larger endpoint dispersion.
+The crossing point therefore Lorenz-dominates whichever endpoint has that
+larger second dispersion.
+
+On a fixed orthant write
+
+```text
+s=s_*+epsilon_1 d_1,   t=t_*+epsilon_2 d_2,
+d_1,d_2>=0.                                              (FEC8)
+```
+
+The singleton/complement bounds in the common face give independent
+intervals for `d_1,d_2`.  The two remaining pair coordinates have normals
+
+```text
+(epsilon_1,epsilon_2),  (epsilon_1,-epsilon_2).          (FEC9)
+```
+
+Exactly one is a same-sign normal.  Two distinct coordinatewise-minimal
+points are incomparable, so the lower convex boundary between them has
+negative slope.  Coordinate boundaries are vertical or horizontal, and a
+boundary of the opposite-sign strip has positive slope; each contains at
+most one coordinatewise-minimal point.  The only available negative-slope
+boundary is therefore the unique inward endpoint of the same-sign pair
+strip, where `d_1+d_2` is fixed.  All negative-slope edges are parallel, so
+convexity makes them one collinear boundary rather than separate efficient
+pieces.  Every two distinct Lorenz-undominated points therefore share that
+second pair endpoint.
+
+Weighted Lmin and weighted Lmax are Lorenz-undominated, so every
+common-one-endpoint incidence returns to the proved common-two theorem
+`(EWS31)`.  The only quotient residue is now the opposite-endpoint
+face-changing types III and IV.  A quantified-LRA hostile audit checks the
+canonical noncommon cells for every ordered positive weight
+row through atomic weight seven; that audit is a hostile control, while
+`(FEC6)--(FEC9)` are the dimension-free proof for the common-face branch.
+
 This still does not prove the atomic-weight-aware overlap bound: the open
-four-role problem is the just-described transition between two- or
+four-role problem is the opposite-endpoint transition between two- or
 three-crossing-slab active edges, rather than a locally laminar selector.
 
 The three-role boundary is sharp.  On four roles with weights `(3,1,1,1)`,
@@ -4692,8 +4762,14 @@ the face-normalized human theorem supplies six-player survivor 1408, while
 the finite audit proves a bound and does not by itself classify every
 equality core.
 
-This is a complete closure of the common-two-flat branch, not of objective A.
-The hinged and opposite-endpoint edge transitions in `(FEC4)` remain open.
+> **Corollary (atomic common-endpoint quotient bound).**  Under the same
+> hypotheses, `(EWS31)` holds whenever the two selectors share even one
+> pair-slab endpoint.  If they are distinct, `(FEC6)--(FEC9)` supplies the
+> second common endpoint and the theorem applies.
+
+Thus every edge transition having even one common endpoint is closed, not
+objective A.
+The opposite-endpoint types III and IV in `(FEC4)` remain open.
 The result is computer-assisted only in the finite window `(EWS26)` and has
 not yet received external specialist review.
 

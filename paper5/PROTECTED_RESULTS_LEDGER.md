@@ -49,8 +49,10 @@ without an explicit note in this ledger.
 6. **Weighted quotient breakthroughs and obstructions.**  Weighted selectors
    coincide through three roles and can diverge sharply at four.  The
    normalized `(m,1,1,1)` family rules out an atomic-size-independent `3/4`
-   shortcut.  Nevertheless every common-two-flat face satisfying the
-   unit-singleton hypothesis satisfies the complete atomic overlap target;
+   shortcut.  Nevertheless every transition sharing even one pair endpoint
+   satisfies the complete atomic overlap target: weighted common-face
+   rigidity forces a second endpoint, and the resulting common-two-flat face
+   is covered under the unit-singleton hypothesis;
    the proof is human for `n>=10` and computer-assisted on six finite rows at
    `n=6..9`.  The face-normalized cost theorem retains its exact adjacent-gap
    formula and unique six-player equality weight pattern `(2,2,1,1)` up to
@@ -61,10 +63,10 @@ without an explicit note in this ledger.
    orientations remain mandatory tests for every proposed general lemma.
 
 The unresolved headline is equally protected: no dimension-free proof of the
-conjectured fixed-`n` upper formula has yet been obtained.  The live gap is the
-selection/gluing theorem for four-role quotient faces outside the proved
-common-two-flat and elementary/laminar cases, followed by full equality and
-facet identification.
+conjectured fixed-`n` upper formula has yet been obtained.  The live quotient
+gap is now only the opposite-endpoint face-changing types III and IV,
+followed by the carrier-selection/gluing theorem, full equality, and facet
+identification.
 
 ## Protected mathematical inputs
 
@@ -96,16 +98,17 @@ facet identification.
 | Elementary/laminar four-role coincidence reductions | **Proved.** Weighted selectors coincide when one role total is core-constant or when at most one complementary pair slab is nonredundant.  Equal weights also suffice only when all role singleton worths vanish.  Any hard quotient has four variable roles and at least two crossing pair slabs. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, elementary four-role reductions |
 | Two-active-crossing-partitions lemma | **Proved local structural reduction.** If the weighted selectors differ, each selector itself lies on endpoints of at least two independent pair-sum slabs.  Otherwise its active relaxation is laminar and its Lorenz-greatest water-filling point forces global selector coincidence.  Hence the residue is a transition between two-flat edges, not a locally laminar optimum. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, two-active-crossing-partitions lemma |
 | Four-role pair-coordinate distance identity | **Proved exact reformulation.** The three complementary pair sums turn the core into a box cut by four diagonal coordinate slabs, and selector displacement satisfies `||x-z||_1=max(sum |delta_j|,2 max |delta_j|)`.  This reduces the residue to a clipped-edge transition bound but does not supply that bound by itself. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(FEC1)--(FEC4)` |
-| Four-role minimal edge-transition classification | **Proved combinatorial reduction.** Up to pair-coordinate symmetries there are four noncommon minimal edge incidences.  The pure opposite-parallel common-face type is impossible by a laminar-relaxation Lorenz argument.  Hinged and opposite-endpoint/three-flat specializations remain open. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, edge-transition table and parallel-edge exclusion |
+| Four-role minimal edge-transition classification | **Proved combinatorial reduction.** Up to pair-coordinate symmetries there are four noncommon minimal edge incidences.  Weighted common-face rigidity closes both common-face types I and II, including all three-flat specializations.  Only the opposite-endpoint face-changing types III and IV remain. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(FEC1)--(FEC9)`; `paper5/divergence.tex`, weighted common-face rigidity theorem |
+| Weighted common-face rigidity | **Proved dimension-free structural theorem.** On a fixed complementary pair endpoint, the four roles split into two fixed-total pairs.  Their distances from weighted equality are two Lorenz dispersion coordinates.  Convexity puts all undominated points in one dispersion orthant, where only one remaining pair strip can carry a non-singleton Pareto frontier.  Thus two distinct undominated points share a second pair endpoint.  This is purely human geometry for positive integer role weights and does not use singleton normalization. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(FEC6)--(FEC9)`; `paper5/divergence.tex`, Theorem `common-face-rigidity` |
 | Four-role weighted divergence | **Proved sharp role threshold.** Weighted coincidence fails at four roles, including in every sufficiently large atomic dimension. | commits `569dd84`, `c5e71f8`; exact verifiers and JSON |
 | Normalized constant-overlap four-role family | **Proved.** For weights `(m,1,1,1)`, `m>=5`, an exact zero-singleton role game has weighted selections `(5,1,5,1)` and `(3,3,3,3)`, hence `O/T=2/3`.  It refutes a universal `3/4` quotient bound but satisfies the atomic conjecture. | commit `7a3a409`; `verify_weighted_four_role_normalized_obstruction.py` |
 | Balanced weighted seesaw face | **Proved atomic-weight-aware quotient theorem.** If both weighted selectors lie on two balanced common crossing flats, the face is `q(t)=(t,W-t,t,W-t)` and its exact selector formula plus the integer harmonic/product bound proves the full atomic target.  This includes the common face of the normalized `2/3` family and has strict target slack for `n>=6`.  The two flats are exact-partition face equalities, so no new full-cone facet is asserted. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(BWS1)--(BWS8)`; `verify_weighted_balanced_seesaw.py` |
 | Face-normalized endowed common-two-flat theorem | **Proved atomic-weight-aware quotient theorem under its explicit face hypothesis.** The selectors are the middle order statistics of the `2 by 2` crossing matrix; diagonal middle gaps are impossible; and every adjacent gap has the sharp cost formula `(EWS5)`.  If every unit-weight role has zero effective endowment on that line, integer weights prove the full target for `n>=6`.  Equality occurs only at `(2,2,1,1)` up to orientation, whose canonical expansion is six-player survivor 1408.  Role-level zero singleton worth does **not** automatically imply the face hypothesis. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS1)--(EWS18)`; `paper5/divergence.tex`, Theorem `endowed-seesaw`; `verify_weighted_endowed_seesaw.py`; common-face scope control |
-| Common-face hub payment | **Proved exactness inequality.** If the two tight pair coalitions defining a common line share hub `h` and omit opposite role `o`, singleton exactness gives `q_h-w(h)<=q_o-w(o)` throughout the face.  A normalized unit hub therefore has effective endowment `e_h<=e_o`.  This does not charge either arm role and does not close the unrestricted common-two-flat theorem. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS20)--(EWS21)`; `paper5/divergence.tex` |
+| Common-face hub payment | **Proved exactness inequality.** If the two tight pair coalitions defining a common line share hub `h` and omit opposite role `o`, singleton exactness gives `q_h-w(h)<=q_o-w(o)` throughout the face.  A normalized unit hub therefore has effective endowment `e_h<=e_o`.  This does not charge either arm role and did not by itself close the unrestricted common-two-flat theorem. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS20)--(EWS21)`; `paper5/divergence.tex` |
 | Unrestricted common-face large-`n` theorem | **Proved atomic-weight-aware reduction.** With no zero-effective-endowment assumptions, the exact adjacent unit-gap cost is `S_0=2+p/q+(p+q+b)/r`.  Integer inequalities prove the full target for every `n>=10`; only six ordered weight patterns at `n=6,7,8,9` require off-face exactness.  The six relaxed rows are not asserted realizable. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS22)--(EWS26)`; `verify_weighted_endowed_seesaw.py` |
-| Finite unit-hub closure | **Proved human inequality.** Every one of the six relaxed subtarget rows has `p=q=1`; if the unit low role is the common hub, exactness gives `e_p<=e_r` and restores the safe sharp cost `2(2r+b+1)/(r-1)`.  Only orientations where that low role is an arm or the role opposite the hub remain in the finite common-two residue. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS27)--(EWS28)`; `verify_weighted_endowed_seesaw.py` |
+| Finite unit-hub closure | **Proved human inequality.** Every one of the six relaxed subtarget rows has `p=q=1`; if the unit low role is the common hub, exactness gives `e_p<=e_r` and restores the safe sharp cost `2(2r+b+1)/(r-1)`.  At this intermediate human stage only arm/opposite orientations remained; the later quantified audit closes them. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS27)--(EWS28)`; `verify_weighted_endowed_seesaw.py` |
 | Weighted fairness selector encoding | **Proved convex characterization.** Weighted Lmin is max--min fair and weighted Lmax is min--max fair in role per-capita coordinates.  This gives a stratum-free quantified LRA encoding on the four-role interval/pair-slab core and retains unit-singleton exactness witnesses.  A separately formulated rational audit compares 236 staged selectors and 944 role implications. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS29)`; `verify_common_two_finite_z3.py`; `verify_weighted_fairness_selector.py` |
-| Atomic common-two-flat quotient theorem | **Proved for all `n>=6`, computer-assisted only on a finite residue.** The human unrestricted adjacent-gap theorem closes `n>=10` and all but six ordered rows at `n=6..9`.  A stratum-free quantified-LRA relaxation checks all `6*12*16=1,152` endpoint/sign cells for those rows and returns unsat with zero unknowns.  Hence every exact nonnegative weighted four-role game satisfying objective A's unit-singleton hypothesis reaches the atomic target whenever the selectors share two pair-slab endpoints.  Noncommon edge transitions remain open. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS22)--(EWS31)`; `paper5/divergence.tex`, Theorem `common-two-atomic`; `verify_common_two_finite_z3.py`; `common_two_finite_z3.json` |
+| Atomic common-two-flat quotient theorem | **Proved for all `n>=6`, computer-assisted only on a finite residue.** The human unrestricted adjacent-gap theorem closes `n>=10` and all but six ordered rows at `n=6..9`.  A stratum-free quantified-LRA relaxation checks all `6*12*16=1,152` endpoint/sign cells for those rows and returns unsat with zero unknowns.  Weighted common-face rigidity extends this target theorem to every selector transition sharing even one pair endpoint.  Only opposite-endpoint types III and IV remain. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(FEC6)--(FEC9)`, `(EWS22)--(EWS31)`; `paper5/divergence.tex`, Theorems `common-face-rigidity` and `common-two-atomic`; exact verifiers and JSON |
 | Complete strict carrier support | **Proved support theorem.** Normalized coefficient supply collapses to zero/nonzero support; coefficient magnitude is not invariant currency. | research note, complete strict-carrier-support section |
 | Interval-packing min-max | **Proved exact combinatorial theorem** with its stated fixed-stratum algorithm and integrality boundary.  It is not a full all-cell gluing theorem. | research note, interval-packing sections |
 | Mixed-colour packet and mixed-witness projection | **Proved projection frameworks.** They allow genuinely mixed x/z support; relative-cell validity does not automatically imply a full exact-cone facet. | `verify_mixed_packet_gluing.py`; `verify_mixed_witness_projection.py` and Z3 replay |
@@ -202,14 +205,13 @@ to that center is an active human-proof route.
 
 The main dimension-free overlap inequality, its equality characterization,
 and a complete carrier/separator selection theorem remain open.  Objective A
-is now proved on every common-two-flat face satisfying objective A's
-unit-singleton hypothesis, including its exact six-player equality boundary.
-This closure combines a human all-`n>=10` theorem with a finite quantified-LRA
-audit at `n=6..9`.  The remaining quotient problem is the noncommon hinged and
-opposite-endpoint edge-transition residue, followed by carrier gluing and
-facet/equality identification.  Outside a common edge, each selector has at least two active
-crossing partitions and the two systems share at least one partition, but
-they may use opposite endpoints there or share only one endpoint equality.
-No proof or exact counterexample is known for that edge-transition residue.
+is now proved whenever the selectors share even one pair endpoint: weighted
+common-face rigidity supplies the second endpoint and the common-two theorem
+then applies, including its exact six-player equality boundary.  The remaining
+quotient problem consists only of opposite-endpoint face-changing types III
+and IV, followed by carrier gluing and facet/equality identification.  Each
+selector has at least two active crossing partitions and their active systems
+share a partition, but in the residue they use opposite endpoints there.  No
+proof or exact counterexample is known for that residue.
 Closing these quotient branches and the carrier/separator gluing arrow is
 still required.
