@@ -48,9 +48,15 @@ program.  Canonical block expansion proves that the weighted endowed quotient
 is equivalent to a singleton-normalized exact block game, but does not yet
 yield an induction because the weighted affordability/carrier theorems have
 not been proved.  Weighted quotients with at most three roles are now closed
-by a Lorenz-dominant clipped water-filling theorem.  The remaining theorem on
-that arm is a normalized
-separator/facet coupling, not a scalar lower bound on one separator slack.
+by a Lorenz-dominant clipped water-filling theorem.  Four-role quotients are
+now also closed whenever both selectors share two independent crossing flats:
+the endowed crossing matrix has no diagonal gap, its adjacent gaps have an
+exact atomic cost formula, and the unique target equality expands to the
+known six-player `(4,2)`/`(2,4)` profile.  The quotient residue consists of
+higher-dimensional stage patterns in which the two selectors do not share
+those flats.  The remaining theorem on the carrier arm is a normalized
+separator/facet coupling together with that higher-dimensional quotient
+classification, not a scalar lower bound on one separator slack.
 
 The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
@@ -4137,51 +4143,200 @@ kappa_(rf)=[h_r(e_f+s)-h_f e_r]/(h_r+h_f).                    (EWS2)
 > t_min=clip_[0,s](max_r min_f kappa_(rf)),
 > t_max=clip_[0,s](max_f min_r kappa_(rf)).                    (EWS3)
 > ```
->
-> If the four clipped entries of the `2 by 2` crossing matrix are
-> `kappa_1<=kappa_2<=kappa_3<=kappa_4`, then
->
-> ```text
-> {t_min,t_max}={kappa_2,kappa_3},
-> O/T=1-2(kappa_3-kappa_2)/T.                                 (EWS4)
-> ```
 
 For Lmin, the lower envelope of the two rising per-capita lines is
 increasing and the lower envelope of the two falling lines is decreasing.
 Their last crossing is the row-max/min value in `(EWS3)`; common interval
 restriction clips it.  Dually, the upper rising envelope is increasing and
 the upper falling envelope is decreasing, giving the column-max/min value
-for Lmax.  For any `2 by 2` matrix, its row-max/min and column-max/min values
-are its two middle order statistics: after orienting either diagonal, a
-two-line case split leaves one value on each side of both extremes.  Applying
-the same monotone clipping to all four entries preserves this identity.
-Finally a parameter displacement `Delta` changes each of the four role
-totals by `|Delta|`; since overlap is total minus half the `l_1` distance,
-`(EWS4)` follows.
-
-Thus the entire endowed common-two-flat arm has been reduced to one scalar
-middle-gap inequality.  With
+for Lmax.  The crossing geometry now supplies the extra order fact that is
+false for a generic `2 by 2` matrix: the two low entries cannot be one
+diagonal while the two high entries are
+the other.  Otherwise, at any parameter strictly between the middle entries,
+the four per-capita lines would satisfy, after orienting the diagonal,
 
 ```text
-c_n=4n/[n^2-(n mod 2)],
+R_0>F_1>R_2>F_3>R_0,
 ```
 
-the remaining target on this arm is exactly
+an impossibility.  Thus the two middle entries are adjacent.  In that case
+the row-max/min and column-max/min values in `(EWS3)` are exactly those two
+entries.  If the four clipped crossings are
+`kappa_1<=kappa_2<=kappa_3<=kappa_4`, then
 
 ```text
-E+2[s-(kappa_3-kappa_2)] >= c_n(E+2s).                        (EWS5)
+{t_min,t_max}={kappa_2,kappa_3},
+O/T=1-2(kappa_3-kappa_2)/T.                                 (EWS4)
 ```
 
-Equation `(EWS5)` is **open** in general.  The unit-role endowment restriction
-is the atomic information that a proof must exploit.  The specialization
-`e=0` recovers `(BWS3)--(BWS8)`.  At `n=5`, weights `(1,1,1,2)`, endowment
-`(0,0,0,2)`, and `s=1` give overlap `3/4`, the known sharp five-player
-boundary.  At `n=6`, `(1,2,1,2)`, `(0,0,0,2)`, and `s=1` give overlap `2/3`,
-so the endowed reduction also contains target equality rather than merely a
-strictly safe branch.
+The overlap identity follows because a parameter displacement `Delta`
+changes all four role totals by `|Delta|`.  It remains to bound this now
+necessarily adjacent middle gap.  Swapping rows or columns and, for a
+column gap, reversing `t`, reduces it to a low row.  Write `p` for the weight
+of that low rising role, `r` for the other rising weight, and
+`q<=b` for the two falling weights.
 
-A constant half-overlap shortcut is already false at the abstract seesaw
-level.  For
+> **Theorem (exact endowed adjacent-gap cost).**  Normalize a positive
+> adjacent middle gap to length one.  Among all nonnegative endowments
+> satisfying `e_i=0` on unit-weight roles and all widths containing that
+> gap, the minimum total is
+>
+> ```text
+> S(p,r;q,b)=
+>   2+p/q+(p+q+b)/r,                 p>1;
+>   infinity,                        p=r=1;
+>   2(2r+b+1)/(r-1),                 p=1<r, q=1;
+>   (q+1)(2r+q+b)/[q(r-1)],          p=1<r, q>1.       (EWS5)
+> ```
+>
+> Consequently every endowed common-two-flat face with atomic weight
+> `n=p+r+q+b>=6` satisfies
+>
+> ```text
+> O/T >= c_n:=4n/[n^2-(n mod 2)].                         (EWS6)
+> ```
+
+Here is the gap-cost proof.  Let `l` and `l+1` be the two middle crossing
+times after scaling, and put `z_f=e_f+s` for `f in {q,b}`.  Clipping gives
+`l>=0` and `s>=l+1`, while the four crossing inequalities are
+
+```text
+p z_f-f e_p <=(p+f)l,
+r z_f-f e_r >=(r+f)(l+1).                              (EWS7)
+```
+
+The total has the cancellation
+
+```text
+T=e_p+e_r+z_q+z_b.                                      (EWS8)
+```
+
+If `p>1`, add the two high-row inequalities and use the low-row inequality
+in the smaller column `q`.  Exact simplification gives
+
+```text
+T >= 2+p/q+(p+q+b)/r + (n/r)(l+e_r).                    (EWS9)
+```
+
+Equality is attained at `l=e_r=0` by
+
+```text
+z_f=(r+f)/r,
+e_p=p(r+q)/(qr),
+s=z_q,
+e_q=0,
+e_b=(b-q)/r.                                           (EWS10)
+```
+
+Every positive endowment in `(EWS10)` lies on a nonunit role: `p>1`, and
+`b>q` implies `b>1`.  This proves the first line of `(EWS5)` sharply.
+
+If `p=1`, canonical normalization forces `e_p=0`.  When also `r=1`, the two
+crossing rows are identical and no positive gap exists.  For `r>1`, comparing
+the low and high inequalities in column `q` gives the sharper bound
+
+```text
+l >= [r+q+q e_r]/[q(r-1)].                              (EWS11)
+```
+
+When `q>1`, summing the two high inequalities and substituting `(EWS11)`
+gives the last line of `(EWS5)` plus a nonnegative multiple of `e_r`; both
+falling endowments are allowed, so the minimum has `e_r=0`.  It is attained
+by
+`l=(r+q)/[q(r-1)]`, `s=l+1`, and
+`z_f=(r+f)(l+1)/r`.  When `q=1`, its endowment must also vanish, so
+`z_q=s`.  Combining the low and high `q` inequalities gives
+
+```text
+l >= (r+1+e_r)/(r-1),
+```
+
+Adding the two high lower bounds to the total and substituting this inequality
+leaves the third line plus a nonnegative multiple of `e_r`.  Equality is
+attained at `e_r=0`, `l=(r+1)/(r-1)`, `s=2l`, and
+`z_b=2(r+b)/(r-1)`; the only possibly positive falling endowment belongs to
+`b>1`.  This proves all four sharp cost formulas.
+
+It remains only integer arithmetic.  Put
+
+```text
+F=floor(n^2/4),       H_n=2/(1-c_n)=2+2n/(F-n).          (EWS12)
+```
+
+Because `(EWS4)` gives `O/T=1-2d/T`, a unit-gap cost `S` proves `(EWS6)`
+exactly when `S>=H_n`.  For `p>1`, put `k=p+q+b=n-r`.  Since `q<=b` and
+`p>=2`,
+
+```text
+S-2=p/q+k/(n-k)
+   >=4/(k-2)+k/(n-k)
+   >=(2+sqrt(k))^2/(n-2)
+   >=16/(n-2).                                          (EWS13)
+```
+
+The last quantity is at least `2n/(F-n)`: for even `n` this is
+`16/(n-2)>=8/(n-4)`, and for odd `n>=7` it reduces to
+`n^2-6n-2>=0`.  If `p=q=1`, then
+
+```text
+S-2=2n/(r-1)>=2n/(n-4)>=2n/(F-n).                       (EWS14)
+```
+
+Finally take `p=1,q>1`.  Since `q<=b`, put
+`d=n-2q-2>=r-1>0`.  Dropping only positive terms and applying Engel's
+inequality gives
+
+```text
+S-2 >= 2/q+2(q+1)/d
+     >= 2/q+6/d
+     >= (sqrt(2)+sqrt(6))^2/(q+d)
+     > 14/(n-4) > 2n/(F-n).                             (EWS15)
+```
+
+This proves `(EWS6)`.  Equality throughout is possible only in `(EWS13)`
+at
+
+```text
+n=6,       (p,r,q,b)=(2,2,1,1),                         (EWS16)
+```
+
+up to row/column reversal.  The equality construction `(EWS10)`, scaled to
+width `s=3/2`, is the exact role interval with endpoints
+
+```text
+(3,3/2,0,3/2),              (9/2,0,3/2,0).              (EWS17)
+```
+
+Its lower-envelope role game is nonnegative and exact.  In binary role
+notation its worths satisfy
+`w(01)=w(03)=9/2`, `w(23)=w(12)=3/2`, and `w(R)=6`.
+Core feasibility therefore makes both complementary inequalities equalities;
+they force the displayed line, while the zero singleton bounds on roles `1`
+and `2` cut it to precisely `(EWS17)`.  Canonical block expansion at
+weights `(2,1,2,1)` is a singleton-normalized exact six-player game with
+
+```text
+Lmin=(2,2,1/2,1/2,1/2,1/2),
+Lmax=(3/2,3/2,3/2,0,0,3/2),
+O/T=2/3.                                                  (EWS18)
+```
+
+After sorting and normalizing, `(EWS18)` is exactly six-player equality
+survivor 1408, with strata `(4,2)` versus `(2,4)`.  Thus the endowed
+two-flat theorem gives a human structural realization of one of the two
+previously certified equality payoff profiles.  The other survivor and both
+seven-player equality orientations remain on the rooted/mixed arms: the
+sharp common-two-flat minimum at `n=7` is `5/8>7/12`, so neither seven-player
+equality orientation can enter this branch.
+
+For comparison, at `n=5`, weights `(1,1,1,2)`, endowment `(0,0,0,2)`, and
+`s=1` give overlap `3/4`; hence the restriction `n>=6` in `(EWS6)` is sharp.
+The exact-cone interpretation is unchanged: the two common flats are
+complementary exact-partition equalities, so `(EWS6)` is selection arithmetic
+on their intersection, not a new full-cone facet.
+
+A constant half-overlap shortcut remains false at the abstract seesaw level.
+For
 
 ```text
 h=(6,41,263,23),   e=(31,9,2,6),   s=59,
@@ -4194,11 +4349,17 @@ an abstract selector counterexample: no exact role-game realization is
 claimed here.  Its atomic target at `n=333` is much smaller and is safely
 satisfied.
 
-The exact verifier independently formulates eight complete staged LP controls
-and checks the formula.  Its bounded grid covers 2,484,224 rational cases for
-`5<=n<=20`, endowment coordinates `0..3`, and widths `1..4`; every tested
-case with `n>=6` satisfies `(EWS5)`.  This is falsification evidence, not a
-proof of the open middle-gap inequality.  Reproduce it with
+The exact verifier checks all four oriented formulas on 1,950,536 positive
+weight/orientation rows through `n=60`, recovers only `(EWS16)` at target
+equality, and independently minimizes the original six-variable unit-gap LP
+for all 4,844 positive weight vectors through `n=20`, recovering every
+closed-form optimum or infeasible equal-unit-row case.  It also recomputes
+all 64 coalition exactness minima and both complete staged selectors of
+`(EWS18)`, and formulates eight additional complete staged role LP controls.
+Its bounded endowment grid covers
+2,484,224 rational cases for `5<=n<=20`, coordinates `0..3`, and widths
+`1..4`.  These finite rows audit the formulas; `(EWS7)--(EWS15)` are the
+dimension-free proof.  Reproduce them with
 
 ```bash
 python3 verifiers/divergence/verify_weighted_endowed_seesaw.py \

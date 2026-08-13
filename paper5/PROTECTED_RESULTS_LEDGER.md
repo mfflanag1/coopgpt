@@ -41,7 +41,7 @@ Novelty and external validation are not asserted here.
 | Four-role weighted divergence | **Proved sharp role threshold.** Weighted coincidence fails at four roles, including in every sufficiently large atomic dimension. | commits `569dd84`, `c5e71f8`; exact verifiers and JSON |
 | Normalized constant-overlap four-role family | **Proved.** For weights `(m,1,1,1)`, `m>=5`, an exact zero-singleton role game has weighted selections `(5,1,5,1)` and `(3,3,3,3)`, hence `O/T=2/3`.  It refutes a universal `3/4` quotient bound but satisfies the atomic conjecture. | commit `7a3a409`; `verify_weighted_four_role_normalized_obstruction.py` |
 | Balanced weighted seesaw face | **Proved atomic-weight-aware quotient theorem.** If both weighted selectors lie on two balanced common crossing flats, the face is `q(t)=(t,W-t,t,W-t)` and its exact selector formula plus the integer harmonic/product bound proves the full atomic target.  This includes the common face of the normalized `2/3` family and has strict target slack for `n>=6`.  The two flats are exact-partition face equalities, so no new full-cone facet is asserted. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(BWS1)--(BWS8)`; `verify_weighted_balanced_seesaw.py` |
-| Endowed two-flat selector reduction | **Proved selector theorem.** On an arbitrary endowed common crossing interval, weighted Lmin and Lmax are the two middle order statistics of a `2 by 2` per-capita crossing-time matrix, and overlap is total minus twice their gap.  The atomic target is reduced exactly to `(EWS5)`, which remains open.  The bounded grid is falsification evidence only. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS1)--(EWS5)`; `paper5/divergence.tex`; `verify_weighted_endowed_seesaw.py` |
+| Endowed common-two-flat theorem | **Proved atomic-weight-aware quotient theorem.** The two selectors are the middle order statistics of the `2 by 2` crossing matrix; diagonal middle gaps are impossible; and every adjacent gap has the sharp cost formula `(EWS5)`.  Integer role weights and the prohibition on endowing unit roles then prove the full atomic target for every `n>=6`.  Equality occurs only at `(2,2,1,1)` up to orientation, whose canonical expansion is exactly six-player survivor 1408. | `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`, `(EWS1)--(EWS18)`; `paper5/divergence.tex`, Theorem `endowed-seesaw`; `verify_weighted_endowed_seesaw.py` |
 | Complete strict carrier support | **Proved support theorem.** Normalized coefficient supply collapses to zero/nonzero support; coefficient magnitude is not invariant currency. | research note, complete strict-carrier-support section |
 | Interval-packing min-max | **Proved exact combinatorial theorem** with its stated fixed-stratum algorithm and integrality boundary.  It is not a full all-cell gluing theorem. | research note, interval-packing sections |
 | Mixed-colour packet and mixed-witness projection | **Proved projection frameworks.** They allow genuinely mixed x/z support; relative-cell validity does not automatically imply a full exact-cone facet. | `verify_mixed_packet_gluing.py`; `verify_mixed_witness_projection.py` and Z3 replay |
@@ -133,9 +133,10 @@ to that center is an active human-proof route.
 
 The main dimension-free overlap inequality, its equality characterization,
 and a complete carrier/separator selection theorem remain open.  Objective A
-is reduced on every common two-flat quotient to the endowed middle-gap
-inequality `(EWS5)`, but no proof or exact counterexample is known for the
-required atomic-weight-aware four-role target in full.  The current bounded
-exact grid is only a hostile discovery check.  Success on the quotient theorem
-alone would not complete the project unless the carrier/separator gluing arrow
-is also proved.
+is now **proved on every common two-flat quotient**, including its exact
+six-player equality boundary.  The remaining four-role cases are those in
+which the two selectors do not share a pair of independent crossing flats;
+no proof or exact counterexample is known for that higher-dimensional
+stage-pattern residue.  Closing the common-two-flat quotient arm alone does
+not complete the project unless the remaining quotient patterns and the
+carrier/separator gluing arrow are also proved.

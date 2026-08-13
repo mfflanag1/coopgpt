@@ -3016,28 +3016,124 @@ gives
  \qquad
  t_{\max}=\operatorname{clip}_{[0,s]}\max_f\min_r\kappa_{rf}. \tag{EWS3}
 \]
-These two max--min values are the middle order statistics of the clipped
-$2\times2$ matrix.  If they are
-$\kappa_1\le\kappa_2\le\kappa_3\le\kappa_4$, then
+The crossing geometry supplies an order restriction not valid for a generic
+$2\times2$ matrix.  A positive gap cannot separate the two diagonals: at a
+parameter between them the four
+per-capita lines would form a strict cycle
+$R_0>F_1>R_2>F_3>R_0$.  Hence the low entries share a row or column.  After
+this exclusion, the two max--min values in (EWS3) are exactly the two middle
+clipped crossings.  Writing them as
+$\kappa_2\le\kappa_3$ gives
 \[
  \{t_{\min},t_{\max}\}=\{\kappa_2,\kappa_3\},\qquad
  \frac OT=1-\frac{2(\kappa_3-\kappa_2)}{T}.                \tag{EWS4}
 \]
-Thus the general common-two-flat quotient target is exactly the scalar
-middle-gap inequality
+The remaining adjacent middle-gap inequality admits a closed atomic proof.
+After
+row/column relabelling and, for a column, reversing the parameter, let $p$ be
+the low-row weight, $r$ the other row weight, and $q\le b$ the column
+weights.
+
+\begin{theorem}[endowed common-two-flat bound]\label{thm:endowed-seesaw}
+Normalize a positive adjacent middle gap to one.  The minimum possible total,
+over all nonnegative endowments with $e_i=0$ on every unit-weight role, is
 \[
- E+2\{s-(\kappa_3-\kappa_2)\}
- \ge \frac{4n}{n^2-(n\bmod2)}(E+2s).                       \tag{EWS5}
+ S(p,r;q,b)=
+ \begin{cases}
+  2+p/q+(p+q+b)/r,&p>1,\\
+  +\infty,&p=r=1,\\
+  2(2r+b+1)/(r-1),&p=1<r,\ q=1,\\
+  (q+1)(2r+q+b)/[q(r-1)],&p=1<r,\ q>1.
+ \end{cases}                                             \tag{EWS5}
 \]
-Unlike the selector reduction, (EWS5) remains open.  It recovers the sharp
-five-player ratio $3/4$ at
-$(h,e,s)=((1,1,1,2),(0,0,0,2),1)$ and six-player equality $2/3$ at
-$((1,2,1,2),(0,0,0,2),1)$.  A bounded exact grid of $2{,}484{,}224$ cases
-through $n=20$ finds no target violation, and eight independently formulated
-complete staged LP controls agree with (EWS3); these computations are
-falsification evidence only.  They also refute a constant half-overlap
-shortcut at the abstract seesaw level, without asserting an exact-game
-realization of that auxiliary row.
+Consequently every endowed common-two-flat weighted four-role face of total
+atomic weight $n\ge6$ satisfies
+\[
+ \frac OT\ge \frac{4n}{n^2-(n\bmod2)}.                   \tag{EWS6}
+\]
+Equality is possible only at $n=6$ and
+$(p,r,q,b)=(2,2,1,1)$, up to the displayed symmetries.
+\end{theorem}
+
+\begin{proof}
+Let $\ell,\ell+1$ be the scaled middle crossings and set
+$z_f=e_f+s$ for $f\in\{q,b\}$.  Clipping gives $\ell\ge0$ and
+$s\ge\ell+1$.  The crossing inequalities and total are
+\[
+ pz_f-fe_p\le(p+f)\ell,qquad
+ rz_f-fe_r\ge(r+f)(\ell+1),qquad
+ T=e_p+e_r+z_q+z_b.                                    \tag{EWS7}
+\]
+If $p>1$, add both high-row inequalities and substitute the low-row
+$q$-inequality.  This gives exactly
+\[
+ T\ge2+\frac pq+\frac{p+q+b}{r}
+        +\frac{n}{r}(\ell+e_r).                         \tag{EWS8}
+\]
+Equality is attained at $\ell=e_r=0$ by
+$z_f=(r+f)/r$, $e_p=p(r+q)/(qr)$, $s=z_q$; the remaining
+endowment is $(b-q)/r$ on role $b$, which is nonunit whenever positive.
+
+If $p=1$, then $e_p=0$.  For $r=1$ the two rows coincide.  Otherwise
+(EWS7) implies the sharper
+$\ell\ge[r+q+qe_r]/[q(r-1)]$.  Summing the high inequalities and substituting
+this bound gives the last line of (EWS5), plus a nonnegative multiple of
+$e_r$, when $q>1$.
+When $q=1$, also $e_q=0$ and $z_q=s$; the low and high $q$ inequalities give
+$\ell\ge(r+1+e_r)/(r-1)$.  Adding the two high lower bounds to the total and
+substituting this inequality yields the third line plus a nonnegative
+multiple of $e_r$.  Equality in both cases occurs at $e_r=0$; the remaining
+explicit choices are recorded in the exact verifier.
+
+Put $F=\lfloor n^2/4\rfloor$ and
+$H_n=2/(1-n/F)=2+2n/(F-n)$.  Since (EWS4) gives
+$O/T=1-2d/T$, it remains to prove $S\ge H_n$.  For $p>1$, set
+$k=p+q+b=n-r$.  Since $q\le b$ and $p\ge2$, Engel's inequality gives
+\[
+ S-2\ge\frac4{k-2}+\frac{k}{n-k}
+ \ge\frac{(2+\sqrt{k})^2}{n-2}\ge\frac{16}{n-2}
+ \ge\frac{2n}{F-n}.                                    \tag{EWS9}
+\]
+The last comparison is $16/(n-2)\ge8/(n-4)$ for even $n$; for odd
+$n\ge7$ it is equivalent to $n^2-6n-2\ge0$.  The $p=q=1$ line gives
+$S-2=2n/(r-1)\ge2n/(n-4)$.  Finally, if $p=1,q>1$, put
+$d=n-2q-2\ge r-1$.  Dropping positive terms and applying Engel again gives
+\[
+ S-2\ge\frac2q+\frac{2(q+1)}d
+ \ge\frac2q+\frac6d
+ \ge\frac{(\sqrt2+\sqrt6)^2}{q+d}
+ >\frac{14}{n-4}>\frac{2n}{F-n}.                       \tag{EWS10}
+\]
+Equality in the chain is therefore possible only in the first case at
+$n=6,(p,r,q,b)=(2,2,1,1)$.
+\end{proof}
+
+The equality role interval has endpoints
+$(3,3/2,0,3/2)$ and $(9/2,0,3/2,0)$.  Its lower-envelope role game is exact;
+the complementary values
+$w(01)=w(03)=9/2$, $w(23)=w(12)=3/2$, and $w(R)=6$ force its
+core onto the displayed line, and the zero singleton bounds cut out exactly
+that interval.  Canonical expansion at weights $(2,1,2,1)$ is
+singleton-normalized and has
+\[
+ \Lmin=(2,2,1/2,1/2,1/2,1/2),\qquad
+ \Lmax=(3/2,3/2,3/2,0,0,3/2).                           \tag{EWS11}
+\]
+Thus it is precisely six-player equality survivor 1408, the $(4,2)$ versus
+$(2,4)$ profile.  At $n=5$, the earlier
+$((1,1,1,2),(0,0,0,2),1)$ row gives $3/4$, so the dimensional threshold is
+sharp.  At $n=7$ the sharp bound within this branch is $5/8>7/12$, so neither
+seven-player equality orientation lies here.  The two common flats remain
+complementary exact-partition equalities;
+the theorem is not a new full exact-cone facet.  The verifier checks
+$1{,}950{,}536$ oriented formula rows through $n=60$ and independently solves
+the original six-variable unit-gap LP on all $4{,}844$ positive weights
+through $n=20$, recovering every formula optimum or infeasible equal-unit-row
+case.  It also checks all $64$ exactness minima and both staged selectors of
+(EWS11), eight independently formulated role controls, and the previous
+$2{,}484{,}224$ bounded endowment rows.  The displayed inequalities, not
+those finite checks, are the proof.  A constant
+half-overlap shortcut is still false at the abstract seesaw level.
 
 On the 228 archived six-player rows where all maximum-overlap roots are
 unaffordable on their full menus, every row enters the nongainer-cycle arm.
