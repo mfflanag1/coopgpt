@@ -5735,6 +5735,39 @@ force a sparse separator/rooted packet?  The six-player replay checks all 157
 available cubes and 314 vertices/layers, but all observed cubes have dimension
 one; arbitrary-dimensional validity comes from the uncrossing induction.
 
+Cube shortage has a precise exact-core witness.  Define
+
+```text
+u_j=T-v(N\{j}).
+```
+
+Core feasibility gives `y_j<=u_j` for every core allocation `y`, while
+exactness at `N\{j}` supplies a core witness `w^j` attaining
+`w^j_j=u_j`.  Therefore
+
+```text
+u_j=max_(y in core(v)) y_j,
+N\{j} is x-tight iff x_j=u_j.                       (PXC28)
+```
+
+Every missing deletion direction consequently has
+
+```text
+kappa_j=u_j-x_j=x(N\{j})-v(N\{j})>0
+```
+
+and an exact upper-endpoint witness `w^j`.  This converts the supply problem
+from an arbitrary support shortage into a witness-aggregation problem.  It
+does **not** yet imply that the separately selected `w^j` admit common
+normalized weights, produce a sparse Lmax separator, or define a new
+indecomposable facet.  Those are precisely the remaining obligations.
+
+The six-player full-menu replay checks 497 retained noncarrier nongainer
+occurrences: 157 are upper-pinned and 340 have positive upper slack.  On the
+extracted staged supports the corresponding counts are 7 and 338 among 345
+checks.  These are finite diagnostic multiplicities; the displayed theorem
+comes from exactness, not enumeration.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing

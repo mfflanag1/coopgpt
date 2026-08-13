@@ -263,6 +263,28 @@ def audit_pair(
         best_all_max_certificate = max(F(row["hybrid_max_certificate"]) for row in rows)
         if best_all_max_certificate != overlap_surplus - min(z_all, x_all):
             raise AssertionError("PXC16 full-family price-selection identity failed")
+
+        # PXC28: tight co-singletons are exactly the coordinates at their
+        # individual core upper endpoint T-v(N\{j}).  In an exact game a
+        # missing direction therefore comes with an exactness witness at that
+        # endpoint, rather than being an unexplained support accident.
+        total = sum(x, F(0))
+        full_coalition = (1 << n) - 1
+        for row in rows:
+            for j in sorted(nongainers - set(cycle)):
+                if not row["support_row"] >> j & 1:
+                    continue
+                upper_endpoint = total - values[full_coalition ^ (1 << j)]
+                if x[j] > upper_endpoint:
+                    raise AssertionError("PXC28 core upper endpoint violated")
+                tight_cosingleton = (full_coalition ^ (1 << j)) in full_support
+                if tight_cosingleton != (x[j] == upper_endpoint):
+                    raise AssertionError("PXC28 co-singleton/upper-pin equivalence failed")
+                counters["retained_noncarrier_nongainer_upper_endpoint_checks"] += 1
+                if tight_cosingleton:
+                    counters["retained_nongainer_upper_pinned_occurrences"] += 1
+                else:
+                    counters["retained_nongainer_positive_upper_slack_occurrences"] += 1
         if y_all > min(z_all, x_all):
             raise AssertionError("PXC22 direct family price domination failed")
         if max(F(row["actual_target_reserve"]) for row in rows) != overlap_surplus - y_all:
@@ -714,7 +736,9 @@ def main():
             "full-menu price handovers are exact tight-co-singleton exchanges "
             "deleting a player with zero Lmin and Lmax payoff; the exact direct "
             "reserve price is rowwise no larger than either certificate price "
-            "and its full-menu optimum closes every archived cycle"
+            "and its full-menu optimum closes every archived cycle; tight "
+            "co-singletons are exactly the retained nongainer coordinates "
+            "pinned at their individual core upper endpoint"
         ),
         "n6_extracted_support_counts": dict(extracted_counters),
         "n6_full_tight_menu_counts": dict(full_counters),
