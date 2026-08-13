@@ -317,6 +317,94 @@ def packet_comparison_budget(x, z, certificate, hinge, packet):
     }
 
 
+def best_aligned_full_menu_packet(x, z, certificate, hinge, roots):
+    r"""Lexicographically optimize root load, then the PXC51 defect."""
+    n = len(x)
+    tagged = tuple(certificate["support"]) + (hinge,)
+    candidates = []
+    maximum_loads = []
+    for root in sorted(roots):
+        active = tuple(
+            variable
+            for variable, coalition in enumerate(tagged)
+            if coalition >> root & 1
+        )
+        rooted = tuple(tagged[variable] for variable in active)
+        inequalities, rhs = [], []
+        for player in range(n):
+            if player == root:
+                continue
+            inequalities.append(
+                [F((coalition >> player) & 1) for coalition in rooted]
+            )
+            rhs.append(F(1))
+        for variable in range(len(rooted)):
+            inequalities.append(
+                [F(-1 if j == variable else 0) for j in range(len(rooted))]
+            )
+            rhs.append(F(0))
+        status, negative_load, _ = exact_linprog(
+            [F(-1)] * len(rooted), inequalities, rhs
+        )
+        if status != "optimal":
+            raise AssertionError("eligible full-menu root load did not optimize")
+        maximum_load = -negative_load
+        maximum_loads.append(maximum_load)
+        if maximum_load <= 1:
+            continue
+
+        fixed_inequalities = list(inequalities) + [
+            [F(1)] * len(rooted),
+            [F(-1)] * len(rooted),
+        ]
+        fixed_rhs = list(rhs) + [maximum_load, -maximum_load]
+        alignment_costs = [
+            sum(
+                (
+                    z[player] - x[player]
+                    for player in range(n)
+                    if player != root and coalition >> player & 1
+                ),
+                F(0),
+            )
+            for coalition in rooted
+        ]
+        status, _, rooted_weights = exact_linprog(
+            alignment_costs, fixed_inequalities, fixed_rhs
+        )
+        if status != "optimal":
+            raise AssertionError("alignment defect did not optimize on root face")
+        weights = [F(0)] * len(tagged)
+        for variable, weight in zip(active, rooted_weights):
+            weights[variable] = weight
+        packet = {
+            "root": root,
+            "root_excess": maximum_load - 1,
+            "weights": tuple(weights),
+        }
+        budget = packet_comparison_budget(x, z, certificate, hinge, packet)
+        budget["excess_alignment_defect"] = (
+            budget["alignment_defect"]
+            - packet["root_excess"] * budget["root_loss"]
+        )
+        candidates.append((packet, budget))
+    if not candidates:
+        return {
+            "root_excess": max(maximum_loads) - 1,
+            "maximum_root_loads": tuple(maximum_loads),
+        }
+    packet, budget = min(
+        candidates,
+        key=lambda candidate: (
+            candidate[1]["excess_alignment_defect"],
+            -candidate[0]["root_excess"],
+            candidate[0]["root"],
+        ),
+    )
+    packet["comparison_budget"] = budget
+    return packet
+
+
 def full_menu_marked_alternative(values, x, z, hinge):
     n = len(x)
     top = {i for i, value in enumerate(z) if value == max(z)}
@@ -445,21 +533,15 @@ def audit_record(
                 ] += 1
             else:
                 full_menu_certificate = {"support": tuple(sorted(z_tight))}
-                full_menu_packet = best_mixed_rooted_pair_packet(
+                full_menu_packet = best_aligned_full_menu_packet(
+                    x,
+                    z,
                     full_menu_certificate,
                     coalition,
-                    top,
-                    len(x),
-                    roots=eligible_roots,
+                    eligible_roots,
                 )
                 if full_menu_packet["root_excess"] > 0:
-                    budget = packet_comparison_budget(
-                        x,
-                        z,
-                        full_menu_certificate,
-                        coalition,
-                        full_menu_packet,
-                    )
+                    budget = full_menu_packet["comparison_budget"]
                     counters[
                         "eligible_full_menu_rows_with_positive_root_excess"
                     ] += 1
@@ -485,6 +567,9 @@ def audit_record(
                             "root_loss": str(budget["root_loss"]),
                             "alignment_defect": str(
                                 budget["alignment_defect"]
+                            ),
+                            "excess_alignment_defect": str(
+                                budget["excess_alignment_defect"]
                             ),
                             "normalized_payment_floor": str(
                                 budget["normalized_payment_floor"]

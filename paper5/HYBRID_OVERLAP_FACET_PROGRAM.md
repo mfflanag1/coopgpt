@@ -6198,15 +6198,25 @@ max_{rho_C>0} sigma_C >= Gamma/(1+delta).              (PXC51)
 ```
 
 This is the quantitative form of the alignment obstruction.  Positive root
-excess does **not** force `E=0`: among the 21 positive-deficiency marked
-archive rows, 6 have no eligible hinge-top maximum-overlap root, 7 are tied,
-and 8 have positive eligible excess; only 3/8 have zero defect and only 4/8
-have `Gamma>=D`.  The three positive-packet rows in the old tied residue are
-exactly the zero-defect cases, with `delta=1`, `D=5/4`, root loss `1/4`,
-`Gamma=3/2`, and normalized payment floor `3/4`.  The next theorem must
-absorb `E-delta(x_r-z_r)` by the direct/separator currency or prove a
-price-optimal packet with nonpositive excess defect; root excess by itself
-is a refuted route.
+excess does **not** force `E=0`, even after minimizing `E` over the entire
+maximum-root-load face and then across eligible roots: among the 21
+positive-deficiency marked archive rows, 6 have no eligible hinge-top
+maximum-overlap root, 7 are tied, and 8 have positive eligible excess; only
+3/8 lexicographic optima have zero defect and only 4/8 have `Gamma>=D`.
+The three positive-packet rows in the old tied residue are exactly the
+zero-defect cases, with `delta=1`, `D=5/4`, root loss `1/4`, `Gamma=3/2`, and
+normalized payment floor `3/4`.  The next theorem must absorb
+`E-delta(x_r-z_r)` by direct/separator currency; choosing a better packet on
+the same maximum-load face is an exactly refuted universal route.
+
+The seven-player neutral control also refutes the next handover shortcut.
+Its common hinges `10` and `26` have eligible positive full-menu packets with
+`delta=1`, but all positive rows are common, so `Gamma=0` and the excess
+alignment defect is the full gain `711/19046`.  The exact complete-Lmin
+one-witness bound is `8/15 < 7/12`; adjoining the full coloured Lmax menu
+raises it to `5/6`.  Therefore a positive PXC49 packet does not force an
+Lmin-only target certificate.  A universal proof must use a genuinely
+coloured mixed-witness packet or a separate direct separator.
 
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
@@ -6219,6 +6229,12 @@ python verifiers/divergence/verify_marked_hinge_mixed_facets_z3.py \
   --output /tmp/marked_hinge_mixed_facets_z3.json
 cmp /tmp/marked_hinge_mixed_facets_z3.json \
   verifiers/divergence/marked_hinge_mixed_facets_z3.json
+python verifiers/divergence/audit_pxc51_handover_controls.py \
+  --marked-audit /tmp/marked_hinge_deficiency_transfer_audit.json \
+  --neutral-control verifiers/divergence/n7_neutral_rectangle_control.json \
+  --output /tmp/pxc51_handover_controls.json
+cmp /tmp/pxc51_handover_controls.json \
+  verifiers/divergence/pxc51_handover_controls.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
