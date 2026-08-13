@@ -129,6 +129,10 @@ run_python coopgames/verifiers/divergence/verify_weighted_balanced_seesaw.py \
   --output "$scratch_dir/weighted-balanced-seesaw.json"
 cmp coopgames/verifiers/divergence/weighted_balanced_seesaw.json \
   "$scratch_dir/weighted-balanced-seesaw.json"
+run_python coopgames/verifiers/divergence/verify_weighted_endowed_seesaw.py \
+  --output "$scratch_dir/weighted-endowed-seesaw.json"
+cmp coopgames/verifiers/divergence/weighted_endowed_seesaw.json \
+  "$scratch_dir/weighted-endowed-seesaw.json"
 run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
   --output "$scratch_dir/complement-star-facets.json"
 cmp coopgames/verifiers/divergence/complement_star_facets.json \

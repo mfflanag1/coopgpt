@@ -4111,6 +4111,100 @@ python3 verifiers/divergence/verify_weighted_balanced_seesaw.py \
   --output verifiers/divergence/weighted_balanced_seesaw.json
 ```
 
+The balance assumption in `(BWS1)` is not needed to identify the selectors.
+It is needed only for the harmonic lower bound.  On an arbitrary common
+two-flat crossing face, choose the left endpoint and write the interval as
+
+```text
+q(t)=(e_0+t,e_1+s-t,e_2+t,e_3+s-t),      0<=t<=s,             (EWS1)
+T=E+2s,                                  E=sum_i e_i.
+```
+
+Here `e_i>=0` after canonical block expansion.  Moreover its normalization
+condition forces `e_i=0` whenever `h_i=1`; positive endowment can occur only
+on a role containing at least two atomic players.  For a rising role
+`r in {0,2}` and a falling role `f in {1,3}`, define the per-capita crossing
+time
+
+```text
+kappa_(rf)=[h_r(e_f+s)-h_f e_r]/(h_r+h_f).                    (EWS2)
+```
+
+> **Theorem (endowed two-flat selector reduction).**  On `(EWS1)`, the
+> weighted selections have parameters
+>
+> ```text
+> t_min=clip_[0,s](max_r min_f kappa_(rf)),
+> t_max=clip_[0,s](max_f min_r kappa_(rf)).                    (EWS3)
+> ```
+>
+> If the four clipped entries of the `2 by 2` crossing matrix are
+> `kappa_1<=kappa_2<=kappa_3<=kappa_4`, then
+>
+> ```text
+> {t_min,t_max}={kappa_2,kappa_3},
+> O/T=1-2(kappa_3-kappa_2)/T.                                 (EWS4)
+> ```
+
+For Lmin, the lower envelope of the two rising per-capita lines is
+increasing and the lower envelope of the two falling lines is decreasing.
+Their last crossing is the row-max/min value in `(EWS3)`; common interval
+restriction clips it.  Dually, the upper rising envelope is increasing and
+the upper falling envelope is decreasing, giving the column-max/min value
+for Lmax.  For any `2 by 2` matrix, its row-max/min and column-max/min values
+are its two middle order statistics: after orienting either diagonal, a
+two-line case split leaves one value on each side of both extremes.  Applying
+the same monotone clipping to all four entries preserves this identity.
+Finally a parameter displacement `Delta` changes each of the four role
+totals by `|Delta|`; since overlap is total minus half the `l_1` distance,
+`(EWS4)` follows.
+
+Thus the entire endowed common-two-flat arm has been reduced to one scalar
+middle-gap inequality.  With
+
+```text
+c_n=4n/[n^2-(n mod 2)],
+```
+
+the remaining target on this arm is exactly
+
+```text
+E+2[s-(kappa_3-kappa_2)] >= c_n(E+2s).                        (EWS5)
+```
+
+Equation `(EWS5)` is **open** in general.  The unit-role endowment restriction
+is the atomic information that a proof must exploit.  The specialization
+`e=0` recovers `(BWS3)--(BWS8)`.  At `n=5`, weights `(1,1,1,2)`, endowment
+`(0,0,0,2)`, and `s=1` give overlap `3/4`, the known sharp five-player
+boundary.  At `n=6`, `(1,2,1,2)`, `(0,0,0,2)`, and `s=1` give overlap `2/3`,
+so the endowed reduction also contains target equality rather than merely a
+strictly safe branch.
+
+A constant half-overlap shortcut is already false at the abstract seesaw
+level.  For
+
+```text
+h=(6,41,263,23),   e=(31,9,2,6),   s=59,
+```
+
+the clipped crossings are `0,0,8901/152,59`, so
+`O/T=3715/12616<1/2`.  All roles have weight greater than one, so this does
+not violate the canonical unit-role condition.  This row is recorded only as
+an abstract selector counterexample: no exact role-game realization is
+claimed here.  Its atomic target at `n=333` is much smaller and is safely
+satisfied.
+
+The exact verifier independently formulates eight complete staged LP controls
+and checks the formula.  Its bounded grid covers 2,484,224 rational cases for
+`5<=n<=20`, endowment coordinates `0..3`, and widths `1..4`; every tested
+case with `n>=6` satisfies `(EWS5)`.  This is falsification evidence, not a
+proof of the open middle-gap inequality.  Reproduce it with
+
+```bash
+python3 verifiers/divergence/verify_weighted_endowed_seesaw.py \
+  --output verifiers/divergence/weighted_endowed_seesaw.json
+```
+
 Reproduce the lower envelope, pinning arithmetic, and parameter grid through
 `m=40` with
 
