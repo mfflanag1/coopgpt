@@ -6052,6 +6052,18 @@ precludes Lmin tightness.  Therefore the locked satellite always reveals
 positive comparison payment in at least one colour or a labelled common
 hinge.  This theorem supplies sign and support, not universal affordability.
 
+If a zero-payment marked row `A` contains only Lmax-top players, it itself is
+a normalized common top over-cover:
+
+```text
+lambda_A=1/|A|, eta=0, alpha_i=1{i in A}/|A|.        (PXC45)
+```
+
+It has `theta=1/|A|` and zero cross-surplus because
+`x(A)=z(A)=|A|M`.  This gives the established spectral certificate, but its
+target price remains a separate inequality outside the already closed
+common-hinge classes.
+
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
 `delta_A` or `sigma_D` in `[-B_I,Lambda_I]`: four are marked Lmin reverse
 payments and four are Lmax locked-block splitters.  The last two are the same
@@ -6064,9 +6076,9 @@ z=(3,4,4,4,4,4),  T=23,  O=22.
 ```
 
 Thus the finite residue is now one common-hinge normal form, not a generic
-weighted five-role problem.  That record has an exact common top over-cover
-with `theta=1/4`, row `58={1,3,4,5}` at weight `1/4`, and zero cross-surplus.
-The proved spectral bound is exactly `22=O`, above the six-player target
+weighted five-role problem.  Its marked row `22={1,2,4}` is top-only, so
+`(PXC45)` gives an exact common top over-cover with `theta=1/3` and zero
+cross-surplus.  The proved spectral bound is `43/2`, above the six-player target
 `2T/3=46/3`.  Hence all ten finite quotient occurrences close: eight by
 priced mixed-colour payments and two duplicate occurrences by the same
 common-hinge/top-over-cover certificate.  Universally, the live theorem must

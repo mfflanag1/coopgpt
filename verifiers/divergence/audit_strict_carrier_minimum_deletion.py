@@ -746,43 +746,46 @@ def audit_pair(
                                 "pxc40_locked_satellite_only_common_hinge"
                             ] += bool(common_hinge_rows) and not positive_mixed_payments
                             if common_hinge_rows and not positive_mixed_payments:
-                                certificate = top_certificate(values, z)
-                                cross_surplus = sum(
-                                    (
-                                        certificate["alpha"][i] * x[i]
+                                top_only_hinges = tuple(
+                                    coalition
+                                    for coalition in common_hinge_rows
+                                    if all(
+                                        z[i] == max(z)
                                         for i in range(n)
-                                    ),
-                                    F(0),
-                                ) - max(z)
-                                support_is_common = all(
-                                    coalition in full_support
-                                    for coalition in certificate["support"]
+                                        if coalition >> i & 1
+                                    )
                                 )
-                                bound = spectral_bound(
-                                    x,
-                                    z,
-                                    certificate["theta"],
-                                    cross_surplus,
+                                hinge_bounds = tuple(
+                                    (
+                                        coalition,
+                                        F(1, coalition.bit_count()),
+                                        spectral_bound(
+                                            x,
+                                            z,
+                                            F(1, coalition.bit_count()),
+                                        ),
+                                    )
+                                    for coalition in top_only_hinges
                                 )
+                                if hinge_bounds:
+                                    coalition, theta, bound = max(
+                                        hinge_bounds, key=lambda item: item[2]
+                                    )
                                 common_hinge_overcover = {
-                                    "theta": str(certificate["theta"]),
-                                    "alpha": [
-                                        str(value) for value in certificate["alpha"]
-                                    ],
-                                    "support": list(certificate["support"]),
-                                    "weights": [
-                                        str(value) for value in certificate["weights"]
-                                    ],
-                                    "cross_surplus": str(cross_surplus),
-                                    "support_is_common": support_is_common,
-                                    "spectral_overlap_bound": str(bound),
+                                    "top_only_marked_hinges": list(top_only_hinges),
+                                    "selected_hinge": coalition if hinge_bounds else None,
+                                    "theta": str(theta) if hinge_bounds else None,
+                                    "cross_surplus": "0" if hinge_bounds else None,
+                                    "spectral_overlap_bound": (
+                                        str(bound) if hinge_bounds else None
+                                    ),
                                 }
                                 counters[
-                                    "pxc40_locked_satellite_common_top_overcover"
-                                ] += support_is_common
+                                    "pxc40_locked_satellite_top_only_marked_hinge"
+                                ] += bool(hinge_bounds)
                                 counters[
-                                    "pxc40_locked_satellite_common_top_overcover_reaches_target"
-                                ] += support_is_common and bound >= target * total
+                                    "pxc40_locked_satellite_marked_hinge_spectral_bound_reaches_target"
+                                ] += bool(hinge_bounds) and bound >= target * total
                         if cycle_split_payments:
                             counters[
                                 "pxc40_satellite_separator_bridges_base_within_currency"
