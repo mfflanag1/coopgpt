@@ -133,6 +133,18 @@ run_python coopgames/verifiers/divergence/verify_weighted_endowed_seesaw.py \
   --output "$scratch_dir/weighted-endowed-seesaw.json"
 cmp coopgames/verifiers/divergence/weighted_endowed_seesaw.json \
   "$scratch_dir/weighted-endowed-seesaw.json"
+run_python coopgames/verifiers/divergence/verify_common_face_endowment_scope.py \
+  --output "$scratch_dir/common-face-endowment-scope.json"
+cmp coopgames/verifiers/divergence/common_face_endowment_scope.json \
+  "$scratch_dir/common-face-endowment-scope.json"
+run_python coopgames/verifiers/divergence/verify_common_two_finite_z3.py \
+  --output "$scratch_dir/common-two-finite-z3.json"
+cmp coopgames/verifiers/divergence/common_two_finite_z3.json \
+  "$scratch_dir/common-two-finite-z3.json"
+run_python coopgames/verifiers/divergence/verify_weighted_fairness_selector.py \
+  --output "$scratch_dir/weighted-fairness-selector.json"
+cmp coopgames/verifiers/divergence/weighted_fairness_selector.json \
+  "$scratch_dir/weighted-fairness-selector.json"
 run_python coopgames/verifiers/divergence/verify_complement_star_facets.py \
   --output "$scratch_dir/complement-star-facets.json"
 cmp coopgames/verifiers/divergence/complement_star_facets.json \

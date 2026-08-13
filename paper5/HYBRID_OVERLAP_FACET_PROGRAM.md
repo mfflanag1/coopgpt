@@ -3871,8 +3871,136 @@ complementary pair slabs.  If all role singleton worths vanish, equal weights
 are harmless; without that stronger normalization they need not be.  The
 `2/3` family `(W4N1)` has exactly two crossing slabs, so the crossing
 threshold is sharp.
+
+The same argument localizes the crossing requirement at the selectors, not
+merely in the global description of the core.
+
+> **Lemma (two active crossing partitions).**  If the weighted Lmin and
+> weighted Lmax of an exact four-role core are distinct, then each selector
+> lies on endpoints of at least two independent complementary pair-sum
+> slabs.
+
+Indeed, let `q` be either selector and retain efficiency, all coordinate
+intervals, and only the pair slabs active at `q`.  If at most one independent
+pair slab remains, this active relaxation is the laminar polytope `(FRC3)`
+and therefore has a Lorenz-greatest weighted water-filling point `g`.  Both
+canonical selectors are Lorenz-undominated: strict Lorenz domination would
+improve their defining increasing or decreasing lexicographic vector.  If
+`g!=q`, the segment from `q` toward `g` strictly Lorenz-dominates `q`.
+Every dropped pair inequality is strict at `q`, so a sufficiently short
+initial segment is feasible in the original core, a contradiction.  Hence
+`g=q`; since the original core is contained in the active relaxation, `q`
+Lorenz-dominates the whole core and must be both selectors.
+
+There are only three complementary pair partitions.  Thus two distinct
+selectors necessarily have active two-flat edge systems with at least one
+partition in common.  What is not yet proved is that they use the same
+endpoint on two partitions.  The residual is now precise: opposite-endpoint
+motion on a shared partition, or a transition between two edges having only
+one common endpoint equality.  The common-two-endpoint case is closed by
+`(EWS1)--(EWS18)` below.
+
+There is an exact coordinate form for this residue.  Put
+
+```text
+y_0=q_0+q_1,       y_1=q_0+q_2,       y_2=q_0+q_3.             (FEC1)
+```
+
+The three complementary pair slabs are simply independent intervals for
+`y_0,y_1,y_2`, while efficiency inverts `(FEC1)` as
+
+```text
+2q_0=y_0+y_1+y_2-T,       2q_1=T+y_0-y_1-y_2,
+2q_2=T-y_0+y_1-y_2,       2q_3=T-y_0-y_1+y_2.                 (FEC2)
+```
+
+Thus every four-role core is a rectangular pair-slab box cut by four
+diagonal coordinate slabs obtained by substituting `(FEC2)` into
+`ell_i<=q_i<=u_i`.  A common-two-flat face is an edge of this box after
+diagonal clipping; the unresolved cases move between different clipped
+edges.
+
+For two efficient allocations let `delta_j=y_j(x)-y_j(z)`.  The inverse
+Hadamard transform `(FEC2)` gives the exact distance identity
+
+```text
+||x-z||_1
+ =1/2 (|d0+d1+d2|+|d0-d1-d2|+|-d0+d1-d2|+|-d0-d1+d2|)
+ =max{|d0|+|d1|+|d2|, 2 max_j |d_j|}.                         (FEC3)
+```
+
+For the last equality, order the absolute values as `a>=b>=c` and flip
+signs by the Hadamard symmetries.  If `a>=b+c`, the four terms sum to `4a`;
+otherwise they sum to `2(a+b+c)`.  Since
+`O=T-||x-z||_1/2`, objective A on the edge-transition residue is exactly
+
+```text
+max{sum_j |d_j|, 2 max_j |d_j|}
+ <=2[1-4n/(n^2-(n mod 2))]T.                                 (FEC4)
+```
+
+This is a reformulation, not yet the missing displacement bound.  It is
+useful because it separates the selection problem (which clipped edges are
+chosen) from the final overlap arithmetic and keeps the atomic weight `n`
+visible.
+
+The active-edge combinatorics are finite.  Choose two active endpoint labels
+at each selector, relabel the three pair coordinates, reverse individual
+interval orientations, and interchange the selectors when useful.  After
+putting the first edge at `y_0=L_0,y_1=L_1`, the second edge has exactly one
+of the following forms:
+
+| type | second edge | common endpoint equalities | distance consequence |
+|---|---|---:|---|
+| C | `y_0=L_0,y_1=L_1` | two | common-two-flat theorem |
+| I | `y_0=L_0,y_1=U_1` | one | `d_0=0` |
+| II | `y_0=L_0,y_2=L_2` | one | `d_0=0` |
+| III | `y_0=U_0,y_1=U_1` | zero | two shared partitions, opposite endpoints |
+| IV | `y_0=U_0,y_2=L_2` | zero | one shared partition, opposite endpoint |
+
+Extra active endpoints either put the row in type C or specialize one of
+I--IV.  Types I and II lie in one common pair-slab face.  By `(FEC3)` they
+satisfy the sharper identity
+
+```text
+||x-z||_1=2 max{|d_1|,|d_2|}.                              (FEC5)
+```
+
+Their missing theorem is therefore a two-dimensional clipped-edge bound.
+Types III and IV are the genuinely face-changing cases and require the full
+three-coordinate expression `(FEC3)`.  This table is a complete
+combinatorial classification of minimal active-edge incidences; it does not
+yet classify the weighted payoff strata inside each row.
+
+The pure type-I row is in fact impossible.
+
+> **Lemma (parallel-edge exclusion).**  Suppose two distinct weighted
+> canonical selectors share the endpoint equality `y_0=L_0`, have no active
+> endpoint of the third pair slab, and their remaining active pair equalities
+> are respectively `y_1=L_1` and `y_1=U_1`, with `L_1<U_1`.  This
+> configuration cannot occur.
+
+Restrict to the common face `y_0=L_0`, retain all coordinate intervals, and
+drop the `y_1,y_2` slabs.  This is the laminar fixed-pair relaxation from
+`(FRC3)` and has a Lorenz-greatest point `g`.  Let `x` be the selector on
+`y_1=L_1`.  If `y_1(g)>=L_1`, then either `g=x` (which already forces selector
+coincidence) or a short segment from `x` toward `g` strictly Lorenz-dominates
+`x`.  It remains in the `y_1` interval, and it remains in the dropped `y_2`
+slab because that slab is strict at `x`.  Both alternatives contradict the
+hypotheses.  Hence `y_1(g)<L_1`.  At the other selector `z`, where
+`y_1=U_1`, a short segment toward `g` moves strictly into the `y_1` interval;
+the `y_2` slab is again strict.  It is therefore feasible and strictly
+Lorenz-improves `z`, the final contradiction.  Reversing endpoints gives the
+same proof.
+
+Thus a genuine common-face transition is either type II or has a third pair
+endpoint active at one of the selectors, in which case it specializes the
+three-flat boundary of types II--IV.  The exclusion is qualitative; it does
+not yet supply the type-II displacement price.
+
 This still does not prove the atomic-weight-aware overlap bound: the open
-four-role problem is now the interaction of two or three crossing slabs.
+four-role problem is the just-described transition between two- or
+three-crossing-slab active edges, rather than a locally laminar selector.
 
 The three-role boundary is sharp.  On four roles with weights `(3,1,1,1)`,
 take the exact role game whose worths in binary coalition order are
@@ -4098,16 +4226,15 @@ the common upper crossing face with `W=6`, and the remaining bounds merely
 clip the seesaw interval.  Thus its `2/3` ratio is explained by `(BWS3)--(BWS6)`
 and is automatically safe for every atomic multiplicity.
 
-At the exact-cone interface, each equality in `(BWS1)` is a flat complementary
-pair slab, equivalently an exact-partition equality
-`w(A)+w(R\A)=T`.  Their two incidence normals are modular face equalities.
-The inequality `(BWS2)` is therefore selection-order arithmetic on the
-intersection of two already understood exact-partition faces; it does not
-define or require a new full exact-game-cone facet.  Since its target margin
-is strict for `n>=6`, neither the six-player equality orbits nor the two
-balanced seven-player equality orientations can lie in this branch.  They
-must continue through the labelled rooted/mixed facet arms retained in the
-protected dependency map.
+At the exact-cone interface, each equality in `(BWS1)` is a tight endpoint of
+a complementary pair slab.  It is an exact-partition equality
+`w(A)+w(R\A)=T` only when the opposite slab endpoints coincide.  The
+inequality `(BWS2)` is therefore selection-order arithmetic on the
+intersection of two core faces; it does not define or require a new full
+exact-game-cone facet.  Since its target margin is strict for `n>=6`, neither
+the six-player equality orbits nor the two balanced seven-player equality
+orientations can lie in this branch.  They must continue through the
+labelled rooted/mixed facet arms retained in the protected dependency map.
 
 Reproduce all 91,390 positive weight vectors through `n=40` and 4,112,550
 exact common-interval clipping controls with
@@ -4126,9 +4253,12 @@ q(t)=(e_0+t,e_1+s-t,e_2+t,e_3+s-t),      0<=t<=s,             (EWS1)
 T=E+2s,                                  E=sum_i e_i.
 ```
 
-Here `e_i>=0` after canonical block expansion.  Moreover its normalization
-condition forces `e_i=0` whenever `h_i=1`; positive endowment can occur only
-on a role containing at least two atomic players.  For a rising role
+The adjacent-gap theorem below assumes the stronger **face normalization**
+`e_i=0` whenever `h_i=1`.  This condition is sufficient for canonical block
+expansion but is not forced merely by zero singleton worth of a unit role:
+the minimum of that coordinate on this particular two-flat line can exceed
+its minimum on the full core.  Positive `e_i` is therefore prohibited on a
+unit role as an explicit hypothesis of this branch.  For a rising role
 `r in {0,2}` and a falling role `f in {1,3}`, define the per-capita crossing
 time
 
@@ -4189,8 +4319,8 @@ of that low rising role, `r` for the other rising weight, and
 >   (q+1)(2r+q+b)/[q(r-1)],          p=1<r, q>1.       (EWS5)
 > ```
 >
-> Consequently every endowed common-two-flat face with atomic weight
-> `n=p+r+q+b>=6` satisfies
+> Consequently every **face-normalized** endowed common-two-flat face with
+> atomic weight `n=p+r+q+b>=6` satisfies
 >
 > ```text
 > O/T >= c_n:=4n/[n^2-(n mod 2)].                         (EWS6)
@@ -4326,14 +4456,255 @@ survivor 1408, with strata `(4,2)` versus `(2,4)`.  Thus the endowed
 two-flat theorem gives a human structural realization of one of the two
 previously certified equality payoff profiles.  The other survivor and both
 seven-player equality orientations remain on the rooted/mixed arms: the
-sharp common-two-flat minimum at `n=7` is `5/8>7/12`, so neither seven-player
-equality orientation can enter this branch.
+sharp face-normalized common-two-flat minimum at `n=7` is `5/8>7/12`, so
+neither seven-player equality orientation can enter this branch.
 
 For comparison, at `n=5`, weights `(1,1,1,2)`, endowment `(0,0,0,2)`, and
 `s=1` give overlap `3/4`; hence the restriction `n>=6` in `(EWS6)` is sharp.
-The exact-cone interpretation is unchanged: the two common flats are
-complementary exact-partition equalities, so `(EWS6)` is selection arithmetic
-on their intersection, not a new full-cone facet.
+The exact-cone interpretation must distinguish a common tight face from a
+global exact-partition equality.  The two common endpoint equations are
+tight-coalition faces; only when both complementary endpoints coincide are
+they exact-partition equalities.  Thus `(EWS6)` is selection arithmetic on a
+face-normalized line and is not, by itself, a new full-cone facet.
+
+The face-normalization hypothesis is genuinely stronger than canonical
+role-singleton normalization.  At weights `(3,1,1,1)`, the lower envelope of
+
+```text
+(0,5,3,4), (0,3,5,4), (2,4,3,3), (5,0,7,0), (0,5,0,7)
+```
+
+has zero worth on all four role singletons and weighted selectors
+
+```text
+q_min=(9/2,3/2,7/2,5/2),       q_max=(4,2,3,3).
+```
+
+Both lie on the common upper endpoints of pair partitions `01|23` and
+`03|12`.  The maximal nonnegative extension of their common line has
+direction `(1,-1,1,-1)`, width five, and endowment `(1,0,0,1)`.  Role `3`
+has unit weight but positive face endowment.  Canonical expansion is an exact
+singleton-normalized six-player game, independently recomputed as
+
+```text
+Lmin=(3/2,3/2,3/2,3/2,7/2,5/2),
+Lmax=(4/3,4/3,4/3,2,3,3),       O/T=11/12>2/3.          (EWS19)
+```
+
+Thus `(EWS19)` refutes only the automatic face-normalization inference, not
+the atomic target.  The unrestricted common-two-flat branch must charge a
+positive unit-role face endowment to the off-face exactness witness attaining
+that singleton.  This is now part of the open quotient theorem rather than
+being hidden in `(EWS5)`.
+
+One part of that charge is forced by exactness.  Let the two tight pair
+coalitions defining the common line be
+
+```text
+C={h,a},                 D={h,b},                 o=R\(C union D),       (EWS20)
+```
+
+so that `h` is their common **hub** and `o` is the opposite role.  The hub
+and opposite coordinates move in the same direction on the line.  For any
+point `q` on the common face, exactify the singleton `{h}` at a core point
+`y`, so `y_h=w(h)`.  Tightness at `q` and core feasibility of `y` give
+
+```text
+y(C)+y(D) >= q(C)+q(D).
+```
+
+Because both sums count the hub twice and omit the opposite role, this is
+
+```text
+T-y_o+w(h) >= T-q_o+q_h,
+q_h-w(h) <= q_o-y_o <= q_o-w(o).                         (EWS21)
+```
+
+> **Lemma (common-face hub payment).**  On every exact common-two-flat
+> face, the singleton slacks of the common hub and opposite role satisfy
+> `(EWS21)` at every point of the face.  In particular, if the hub is a
+> unit-weight role in the normalization of objective A, then the maximal
+> nonnegative line extension has `e_h<=e_o`.
+
+The last assertion follows by evaluating `(EWS21)` at the common endpoint
+where the two same-direction coordinates are minimal, using `w(h)=0` and
+nonnegativity `w(o)>=0`.  This is a human consequence of an off-face
+exactness witness, not a sampled inequality.  It repairs the formerly hidden
+endowment only when that unit role is the hub.  It does **not** imply an
+analogous bound for either arm `a` or `b`; applying the singleton witness of
+an arm counts that arm in only one of the two tight equations.  Those two
+arm orientations are the remaining exactness-payment problem in the
+unrestricted common-two-flat branch.
+
+There is nevertheless no infinite-dimensional gap here.  If the restrictions
+`e_i=0` on unit roles are dropped entirely, the same LP projection used in
+the proof of `(EWS5)` has the exact cost
+
+```text
+S_0(p,r;q,b)=2+p/q+(p+q+b)/r,             q<=b.          (EWS22)
+```
+
+Indeed `(EWS9)` was derived without using `p>1` or any unit-endowment
+equality, so it is a universal lower bound.  The point `(EWS10)` is
+nonnegative for every `p>=1` and `q<=b` and attains it once unit endowments
+are unrestricted.  Thus `(EWS22)` is exact, rather than a relaxation chosen
+only for convenience.
+
+> **Theorem (unrestricted large-atomic common-face bound).**  Every endowed
+> common-two-flat weighted four-role face, with arbitrary nonnegative
+> effective endowments, satisfies the atomic overlap target `(EWS6)` whenever
+> `n>=10`.
+
+For `p>=2`, the proof `(EWS13)` applies verbatim.  Let `p=1`.  Then
+
+```text
+S_0-2=1/q+(n-r)/r.                                      (EWS23)
+```
+
+If `q=1`, the ordering `q<=b` gives `r<=n-3`, hence
+
+```text
+S_0-2 >= n/(n-3).                                       (EWS24)
+```
+
+If `q>=2`, then `b>=q`, so `2q+r<=n-1`; Engel's inequality gives
+
+```text
+S_0-2 >= 1/q+(2q+1)/r
+       >=(sqrt(2)+sqrt(2q+1))^2/(2q+r)
+       >(13)/(n-1).                                     (EWS25)
+```
+
+For even `n`, `(EWS24)` and `(EWS25)` are at least `8/(n-4)` for
+`n>=10`.  For odd `n`, comparison with
+`2n/(F-n)=8n/(n^2-4n-1)` reduces respectively to
+`n^2-12n+23>=0` and `5n^2-44n-13>=0`, again valid from `n=10` onward.
+By `(EWS12)`, this proves the theorem.
+
+Consequently exactness payment on common-two-flat faces is needed only in
+the finite atomic window `n=6,7,8,9`.  Up to ordering the two side weights,
+the unrestricted LP falls below the target only at
+
+```text
+n=6: (p,r;q,b)=(1,2;1,2),(1,3;1,1),
+n=7:                 (1,3;1,2),(1,4;1,1),
+n=8:                               (1,5;1,1),
+n=9:                               (1,6;1,1).            (EWS26)
+```
+
+This list does not assert realizability by an exact game.  It is the complete
+finite list on which hub/arm exactness and global selector optimality must be
+used; all other common-two-flat weights are already closed by human
+inequalities.
+
+The hub lemma removes one orientation of every row in `(EWS26)` by human
+algebra.  All six have `p=q=1`.  Suppose the unit low role `p` is the common
+hub.  Put `d=e_r-e_p>=0` by `(EWS21)`.  Comparing the low and high crossing
+inequalities in the unit side column gives
+
+```text
+e_p+l >=(r+1+d)/(r-1).                                  (EWS27)
+```
+
+Adding the two high crossing bounds to `(EWS8)` gives, with
+`A=2r+b+1`,
+
+```text
+T >=(A/r)(e_p+l+1)+[(r+b+1)/r]d
+  >=2A/(r-1).                                           (EWS28)
+```
+
+The last expression is exactly the face-normalized `p=q=1` cost in
+`(EWS5)`, hence it reaches the target on every row of `(EWS26)`.  Equality is
+feasible in this relaxation at `d=l=0`,
+`e_p=e_r=(r+1)/(r-1)`, so the price is exact.  Therefore only orientations
+in which the unit low role is **not the common hub** remain (it can be an arm
+or the opposite role).
+The exact seeded witness search described below retained divergence in only
+`9` of `1,836` lower-envelope games and found no target violation; that is
+discovery evidence, not the missing arm proof.
+
+The finite residue has an exact selector encoding that avoids guessing any
+payoff stratum.  On a compact convex weighted role core `K`, a point `x` is
+weighted Lmin if and only if it is max--min fair:
+
+```text
+for every y in K and every i with y_i/h_i>x_i/h_i,
+there is j with x_j/h_j<=x_i/h_i and y_j/h_j<x_j/h_j.    (EWS29)
+```
+
+Weighted Lmax has the reversed min--max condition: if
+`y_i/h_i<z_i/h_i`, some `j` with `z_j/h_j>=z_i/h_i` must satisfy
+`y_j/h_j>z_j/h_j`.  These conditions are equivalent to lexicographic
+optimality of the per-capita values repeated `h_i` times.  For one direction,
+a violating `y` gives, on a sufficiently short segment from the candidate
+toward `y`, a strict improvement at the first affected repeated-payoff
+level.  Conversely the direction from a candidate toward its lexicographic
+optimizer violates the displayed condition at the first improved level.
+The min--max statement follows by reversing signs.
+
+Together with `(FEC1)--(FEC2)`, `(EWS29)` gives a quantified linear-real
+formulation: four coordinate intervals and three pair slabs describe the
+entire core; the unit-singleton exactness witnesses are four-dimensional
+linear points; and both selector properties are universal linear
+implications.  Splitting only the `12` choices of two common endpoint labels
+and the `16` overlap sign cells removes every `min` and endpoint disjunction.
+No active coordinate face, payoff stratum, or dual support is assumed.
+
+The exact quantified-LRA audit is conclusive on the finite residue.  For each
+of the six rows `(EWS26)`, it checks all `12` choices of two common pair-slab
+endpoint labels and all `16` coordinatewise overlap sign cells.  All
+
+```text
+6*12*16=1,152                                             (EWS30)
+```
+
+linear-real sentences are unsatisfiable, with no unknown result.  The
+encoding keeps a core witness attaining every zero unit-role singleton and
+deliberately drops attainment of every other bound.  It is therefore a
+relaxation of objective A: unsatisfiability proves the exact-game statement
+without needing the omitted exactness witnesses.
+
+An independently formulated rational regression checks `(EWS29)` itself.
+On `118` deterministic exact lower-envelope games with atomic weights
+`4..8`, it computes `236` selectors by the staged lexicographic algorithm and
+then solves a separate LP for a violating no-repair direction at each role.
+All `944` role implications pass.  This finite agreement audits the encoding;
+the short convex argument above is the fairness proof.
+
+> **Theorem (atomic common-two-flat quotient bound).**  Let an exact
+> nonnegative weighted four-role game have positive integer weights of total
+> `n>=6`, and suppose every unit-weight role has zero singleton worth.  If
+> weighted Lmin and weighted Lmax lie on the same endpoints of two independent
+> complementary pair slabs, then
+>
+> ```text
+> O/T >=4n/[n^2-(n mod 2)].                              (EWS31)
+> ```
+
+For `n>=10`, this is the human unrestricted theorem `(EWS22)--(EWS25)`.
+For `n=6,7,8,9`, every relaxed weight row outside `(EWS26)` is already safe
+by the same formula, while `(EWS30)` excludes a strict violation on the six
+remaining rows.  Since the audit asks exactly for a strict violation, its
+unsatisfiability is the displayed weak bound.  This proves `(EWS31)`.
+Equality identification in this branch remains as before:
+the face-normalized human theorem supplies six-player survivor 1408, while
+the finite audit proves a bound and does not by itself classify every
+equality core.
+
+This is a complete closure of the common-two-flat branch, not of objective A.
+The hinged and opposite-endpoint edge transitions in `(FEC4)` remain open.
+The result is computer-assisted only in the finite window `(EWS26)` and has
+not yet received external specialist review.
+
+Reproduce all sixteen role minima, both exact weighted traces, all 64 clone
+attainment witnesses, and both independently recomputed atomic traces with
+
+```bash
+PYTHONPATH=verifiers/divergence:src python3 \
+  verifiers/divergence/verify_common_face_endowment_scope.py \
+  --output verifiers/divergence/common_face_endowment_scope.json
+```
 
 A constant half-overlap shortcut remains false at the abstract seesaw level.
 For
@@ -4354,6 +4725,10 @@ weight/orientation rows through `n=60`, recovers only `(EWS16)` at target
 equality, and independently minimizes the original six-variable unit-gap LP
 for all 4,844 positive weight vectors through `n=20`, recovering every
 closed-form optimum or infeasible equal-unit-row case.  It also recomputes
+`(EWS22)` on 14,665 independently formulated unrestricted rational LPs
+through `n=30`, recovers exactly the six subtarget rows `(EWS26)`, and applies
+the hub-payment inequality in every unit-hub orientation of those rows.  It
+also recomputes
 all 64 coalition exactness minima and both complete staged selectors of
 `(EWS18)`, and formulates eight additional complete staged role LP controls.
 Its bounded endowment grid covers
@@ -4364,6 +4739,9 @@ dimension-free proof.  Reproduce them with
 ```bash
 python3 verifiers/divergence/verify_weighted_endowed_seesaw.py \
   --output verifiers/divergence/weighted_endowed_seesaw.json
+
+python3 verifiers/divergence/verify_common_two_finite_z3.py \
+  --output verifiers/divergence/common_two_finite_z3.json
 ```
 
 Reproduce the lower envelope, pinning arithmetic, and parameter grid through

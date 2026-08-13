@@ -94,7 +94,14 @@ def exact_gap_ratio_bound(weights):
     return max((F(1) / cost for cost in costs), default=F(0))
 
 
-def independent_adjacent_gap_lp(low_weight, high_weight, side_a, side_b):
+def independent_adjacent_gap_lp(
+    low_weight,
+    high_weight,
+    side_a,
+    side_b,
+    enforce_unit_endowments=True,
+    unit_hub_role=None,
+):
     """Minimize total for a unit low-row gap in the original variables."""
 
     p, r = low_weight, high_weight
@@ -129,11 +136,21 @@ def independent_adjacent_gap_lp(low_weight, high_weight, side_a, side_b):
         bub.append(-(r + falling_weight))
     aeq, beq = [], []
     for role, weight in enumerate(weights):
-        if weight == 1:
+        if enforce_unit_endowments and weight == 1:
             row = [F(0)] * 6
             row[role] = F(1)
             aeq.append(row)
             beq.append(F(0))
+    if unit_hub_role is not None:
+        if weights[unit_hub_role] != 1:
+            raise ValueError("the hub-payment inequality requires a unit hub")
+        # Variable order is (p,r,q,b): p/r move together, as do q/b.
+        opposite = {0: 1, 1: 0, 2: 3, 3: 2}[unit_hub_role]
+        row = [F(0)] * 6
+        row[unit_hub_role] = F(1)
+        row[opposite] = F(-1)
+        aub.append(row)
+        bub.append(F(0))
     return exact_linprog(
         [F(1), F(1), F(1), F(1), F(2), F(0)],
         aub,
@@ -176,6 +193,107 @@ def independent_formula_lp_census(maximum_n=20):
                             )
                         )
     return checked, infeasible
+
+
+def unrestricted_adjacent_gap_cost(low_weight, high_weight, side_a, side_b):
+    """Exact unit-gap cost when no effective endowment is forced to zero."""
+
+    p, r = low_weight, high_weight
+    q, b = sorted((side_a, side_b))
+    return F(2) + F(p, q) + F(p + q + b, r)
+
+
+def unrestricted_formula_lp_census(maximum_n=30):
+    """Independently recover the unrestricted cost and its finite unsafe set."""
+
+    checked = 0
+    unsafe = []
+    for n in range(4, maximum_n + 1):
+        unsafe_at_n = []
+        for p in range(1, n - 2):
+            for r in range(1, n - p - 1):
+                for q in range(1, n - p - r):
+                    b = n - p - r - q
+                    if q > b:
+                        continue
+                    status, optimum, solution = independent_adjacent_gap_lp(
+                        p,
+                        r,
+                        q,
+                        b,
+                        enforce_unit_endowments=False,
+                    )
+                    expected = unrestricted_adjacent_gap_cost(p, r, q, b)
+                    checked += 1
+                    if status != "optimal" or optimum != expected:
+                        raise AssertionError(
+                            (
+                                "unrestricted unit-gap optimum",
+                                p,
+                                r,
+                                q,
+                                b,
+                                status,
+                                optimum,
+                                expected,
+                            )
+                        )
+                    ratio = F(1) - F(2, 1) / optimum
+                    if n >= 6 and ratio < atomic_target(n):
+                        unsafe_at_n.append(
+                            {
+                                "n": n,
+                                "weights_p_r_q_b": [p, r, q, b],
+                                "unit_gap_cost": str(optimum),
+                                "overlap_ratio": str(ratio),
+                                "atomic_target": str(atomic_target(n)),
+                                "lp_solution_e_p_e_r_e_q_e_b_s_l": [
+                                    str(value) for value in solution
+                                ],
+                            }
+                        )
+        unsafe.extend(unsafe_at_n)
+    if any(row["n"] >= 10 for row in unsafe):
+        raise AssertionError(("unrestricted target failure at n>=10", unsafe))
+    return checked, unsafe, 10
+
+
+def finite_hub_payment_controls(unsafe_rows):
+    """Apply e_h<=e_o to every unit hub of the six relaxed rows."""
+
+    controls = []
+    for unsafe in unsafe_rows:
+        p, r, q, b = unsafe["weights_p_r_q_b"]
+        weights = (p, r, q, b)
+        n = sum(weights)
+        for hub, weight in enumerate(weights):
+            if weight != 1:
+                continue
+            status, optimum, solution = independent_adjacent_gap_lp(
+                p,
+                r,
+                q,
+                b,
+                enforce_unit_endowments=False,
+                unit_hub_role=hub,
+            )
+            if status != "optimal":
+                raise AssertionError(("unit-hub payment LP", weights, hub, status))
+            ratio = F(1) - F(2, 1) / optimum
+            controls.append(
+                {
+                    "weights_p_r_q_b": list(weights),
+                    "unit_hub_in_p_r_q_b_order": hub,
+                    "unit_gap_cost": str(optimum),
+                    "overlap_ratio": str(ratio),
+                    "atomic_target": str(atomic_target(n)),
+                    "target_reached": ratio >= atomic_target(n),
+                    "lp_solution_e_p_e_r_e_q_e_b_s_l": [
+                        str(value) for value in solution
+                    ],
+                }
+            )
+    return controls
 
 
 def affine(role, endowments, width):
@@ -512,6 +630,10 @@ def main():
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     independent_lp_checked, impossible_lp_rows = independent_formula_lp_census()
+    unrestricted_lp_checked, unrestricted_unsafe, unrestricted_safe_from = (
+        unrestricted_formula_lp_census()
+    )
+    hub_payment_controls = finite_hub_payment_controls(unrestricted_unsafe)
     formula_checked, formula_rows, equalities = formula_census()
     checked, grid_rows = bounded_grid()
     if not equalities:
@@ -550,6 +672,20 @@ def main():
                 }
                 for n, weights, orientation, cost in equalities
             ],
+        },
+        "unrestricted_effective_endowments": {
+            "adjacent_unit_gap_cost": "2+p/q+(p+q+b)/r",
+            "convention": "q=min(side weights)<=b",
+            "human_target_range": "all positive integer weights with n>=10",
+            "independently_formulated_exact_lps_checked": unrestricted_lp_checked,
+            "first_uniformly_safe_atomic_weight": unrestricted_safe_from,
+            "subtarget_rows_before_n10": unrestricted_unsafe,
+            "unit_hub_payment_controls": hub_payment_controls,
+            "scope": (
+                "the unrestricted formula is a human LP projection; the rational "
+                "census checks its algebra and confirms that only n=6,7,8,9 "
+                "need an additional exactness payment"
+            ),
         },
         "canonical_six_player_equality_expansion": canonical_equality_expansion(),
         "independent_exact_staged_lp_controls": controls(),
