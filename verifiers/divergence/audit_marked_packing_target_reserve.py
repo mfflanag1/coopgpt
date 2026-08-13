@@ -17,10 +17,11 @@ If every packing column is Lmin-tight, core feasibility of Lmax also gives
 
 These are human identities; the script checks them with exact arithmetic on
 the labelled price-maximizing marked packings in the n=6 archive.  On rows
-where every maximum-overlap root is unaffordable, it additionally asks the
-strictly stronger finite question whether a *positive column of that same
-marked packing* supplies a carrier-containing proper comparison whose
-target reserve closes the sharp 2/3 bound.  This is finite evidence only.
+where every maximum-overlap root is unaffordable, it additionally asks first
+whether a positive column of the returned marked packing, and then whether a
+positive column of *some packing on the full optimal price face*, supplies a
+carrier-containing proper comparison whose target reserve closes the sharp
+2/3 bound.  This is finite evidence only.
 """
 
 from __future__ import annotations
@@ -44,6 +45,7 @@ from audit_lmax_overcover import coalition_sum, records  # noqa: E402
 from audit_n6_sparse_lmax_complete_lmin_roots import (  # noqa: E402
     complete_lmin_support,
 )
+from exactlp import exact_linprog  # noqa: E402
 from verify_excluded_block_deficit_quota import target_reserve_row  # noqa: E402
 
 
@@ -72,6 +74,53 @@ def marked_packing(support: tuple[int, ...], audit: dict, root: int) -> tuple[tu
         if residual:
             rows.append((root_mask | (1 << player), residual))
     return tuple(rows)
+
+
+def maximum_closer_mass_on_price_face(support, audit, root, n, closers):
+    """Maximize total reserve-closing mass over the full optimal price face."""
+    root_mask = 1 << root
+    good = set(audit["tight_rooted_pairs"])
+    bad = set(range(n)) - good - {root}
+    menu = tuple(
+        coalition
+        for coalition in support
+        if coalition & root_mask and coalition.bit_count() >= 3
+    )
+    traces = tuple(coalition & ~root_mask for coalition in menu)
+    dimensional_price = n * n // 4 - n + 1
+    weights = tuple(
+        F(
+            dimensional_price
+            * (1 - sum((trace >> i) & 1 for i in good))
+            + sum((trace >> i) & 1 for i in bad)
+        )
+        for trace in traces
+    )
+    inequalities = [
+        [F((trace >> player) & 1) for trace in traces]
+        for player in range(n)
+        if player != root
+    ]
+    rhs = [F(1)] * (n - 1)
+    for j in range(len(menu)):
+        inequalities.append([F(-1 if k == j else 0) for k in range(len(menu))])
+        rhs.append(F(0))
+    closer_set = set(closers)
+    objective = [F(-1 if coalition in closer_set else 0) for coalition in menu]
+    status, value, solution = exact_linprog(
+        objective,
+        inequalities,
+        rhs,
+        [[weight for weight in weights]],
+        [F(audit["packing_value"])],
+    )
+    if status != "optimal":
+        raise AssertionError((root, "closer mass on price face", status))
+    return -value, tuple(
+        (coalition, solution[j])
+        for j, coalition in enumerate(menu)
+        if solution[j] > 0
+    )
 
 
 def audit_root(values, x, z, support, root, gate, target):
@@ -140,6 +189,23 @@ def audit_root(values, x, z, support, root, gate, target):
         )
     all_support_closers = []
     packing_masks = tuple(coalition for coalition, _weight in packing)
+    good = set(gate["tight_rooted_pairs"])
+    bad = set(range(n)) - good - {root}
+    dimensional_price = n * n // 4 - n + 1
+    cover_values = tuple(map(F, gate["cover"]))
+    cover = {
+        player: cover_values[j]
+        for j, player in enumerate(i for i in range(n) if i != root)
+    }
+
+    def price_coefficient(coalition):
+        trace = set(i for i in range(n) if i != root and coalition >> i & 1)
+        return dimensional_price * (1 - len(trace & good)) + len(trace & bad)
+
+    def cover_slack(coalition):
+        trace = tuple(i for i in range(n) if i != root and coalition >> i & 1)
+        return sum((cover[i] for i in trace), F()) - price_coefficient(coalition)
+
     for coalition in support:
         comparison_gainers = tuple(i for i in gainers if coalition >> i & 1)
         h_set = tuple(i for i in nongainers if coalition >> i & 1)
@@ -153,6 +219,88 @@ def audit_root(values, x, z, support, root, gate, target):
         if not row["target_reserve_closes"]:
             continue
         distances = tuple((coalition ^ mask).bit_count() for mask in packing_masks)
+        minimum_distance = min(distances)
+        closest = tuple(
+            mask for mask, distance in zip(packing_masks, distances)
+            if distance == minimum_distance
+        )
+        exchange_rows = []
+        for mask in closest:
+            added = tuple(i for i in range(n) if coalition >> i & 1 and not mask >> i & 1)
+            removed = tuple(i for i in range(n) if mask >> i & 1 and not coalition >> i & 1)
+            packing_h = tuple(i for i in nongainers if mask >> i & 1)
+            packing_p = tuple(i for i in nongainers if not mask >> i & 1)
+            packing_reserve = None
+            if packing_p:
+                packing_reserve = target_reserve_row(
+                    x, z, packing_p, gainers, packing_h, target
+                )["nonlow_target_reserve"]
+            packing_trace = set(i for i in range(n) if i != root and mask >> i & 1)
+            closing_trace = set(
+                i for i in range(n) if i != root and coalition >> i & 1
+            )
+            price_loss_formula = dimensional_price * (
+                len(closing_trace & good) - len(packing_trace & good)
+            ) + len(packing_trace & bad) - len(closing_trace & bad)
+            price_loss = price_coefficient(mask) - price_coefficient(coalition)
+            if price_loss != price_loss_formula:
+                raise AssertionError("labelled-price exchange identity failed")
+            reserve_change = None
+            reserve_increment_formula = None
+            removed_nongainers = tuple(i for i in removed if i in nongainers)
+            added_nongainers = tuple(i for i in added if i in nongainers)
+            if packing_reserve is not None:
+                reserve_change = F(row["nonlow_target_reserve"]) - F(packing_reserve)
+                if not added_nongainers and not removed_nongainers:
+                    reserve_increment_formula = F(0)
+                elif not added_nongainers and len(removed_nongainers) == 1:
+                    player = removed_nongainers[0]
+                    p = len(packing_p)
+                    denominator = (
+                        (n - p) * (p + 1) * (n - p - 1) * (p + 2)
+                    )
+                    reserve_increment_formula = F(
+                        len(gainers) * n
+                        * (
+                            (n - 2 * p - 2)
+                            * sum((z[i] for i in packing_p), F(0))
+                            - (n - p) * (p + 1) * z[player]
+                        ),
+                        denominator,
+                    )
+                if (
+                    reserve_increment_formula is not None
+                    and reserve_change != reserve_increment_formula
+                ):
+                    raise AssertionError("target-reserve exchange identity failed")
+            exchange_rows.append(
+                {
+                    "packing_coalition": mask,
+                    "added": list(added),
+                    "removed": list(removed),
+                    "added_gainers": [i for i in added if i in gainers],
+                    "added_nongainers": [i for i in added if i in nongainers],
+                    "removed_gainers": [i for i in removed if i in gainers],
+                    "removed_nongainers": [i for i in removed if i in nongainers],
+                    "packing_price_coefficient": price_coefficient(mask),
+                    "closing_price_coefficient": price_coefficient(coalition),
+                    "price_coefficient_loss": price_loss,
+                    "price_coefficient_loss_formula": price_loss_formula,
+                    "packing_cover_slack": str(cover_slack(mask)),
+                    "closing_cover_slack": str(cover_slack(coalition)),
+                    "packing_target_reserve": packing_reserve,
+                    "closing_target_reserve": row["nonlow_target_reserve"],
+                    "target_reserve_change": (
+                        str(reserve_change) if reserve_change is not None else None
+                    ),
+                    "target_reserve_increment_formula": (
+                        str(reserve_increment_formula)
+                        if reserve_increment_formula is not None
+                        else None
+                    ),
+                    "same_excluded_cardinality": len(packing_p) == len(p_set),
+                }
+            )
         all_support_closers.append(
             {
                 "coalition": coalition,
@@ -161,9 +309,17 @@ def audit_root(values, x, z, support, root, gate, target):
                 "comparison_gainers": list(comparison_gainers),
                 "comparison_slack": str(comparison_slack),
                 "target_reserve": row["nonlow_target_reserve"],
-                "minimum_packing_column_exchange": min(distances),
+                "minimum_packing_column_exchange": minimum_distance,
+                "closest_packing_exchanges": exchange_rows,
             }
         )
+    closer_mass, closer_face_packing = maximum_closer_mass_on_price_face(
+        support,
+        gate,
+        root,
+        n,
+        tuple(row["coalition"] for row in all_support_closers),
+    )
     return {
         "root": root,
         "affordable": gate["affordable"],
@@ -171,6 +327,7 @@ def audit_root(values, x, z, support, root, gate, target):
         "delta": str(delta),
         "q_total": str(sum(q, F(0))),
         "packing_support_size": len(packing),
+        "tight_rooted_pairs": list(gate["tight_rooted_pairs"]),
         "weighted_z_complements": str(weighted_z_complements),
         "weighted_complement_sizes": str(weighted_complement_sizes),
         "tangent_slack": str(tangent_lhs - tangent_rhs),
@@ -181,6 +338,12 @@ def audit_root(values, x, z, support, root, gate, target):
             if all_support_closers
             else None
         ),
+        "maximum_closing_mass_on_price_face": str(closer_mass),
+        "price_face_closer_packing": [
+            {"coalition": coalition, "weight": str(weight)}
+            for coalition, weight in closer_face_packing
+        ],
+        "some_price_optimal_packing_contains_closer": closer_mass > 0,
         "same_packing_target_reserve_closes": any(
             row["target_reserve_closes"] for row in candidates
         ),
@@ -196,6 +359,9 @@ def main() -> None:
     target = F(2, 3)
     counts = Counter()
     failures = []
+    price_face_obstructions = []
+    exchange_types = Counter()
+    price_loss_distribution = Counter()
     for path in args.paths:
         payload = json.loads(path.read_text())
         for _source, trail, values, x, z in records(payload, path):
@@ -228,6 +394,46 @@ def main() -> None:
                     counts[
                         f"roots_minimum_closing_exchange_{row['minimum_closing_exchange']}"
                     ] += 1
+                    minimum_distance = row["minimum_closing_exchange"]
+                    closest_rows = [
+                        closer
+                        for closer in row["all_support_closers"]
+                        if closer["minimum_packing_column_exchange"] == minimum_distance
+                    ]
+                    exchange = closest_rows[0]["closest_packing_exchanges"][0]
+                    exchange_type = (
+                        f"addG{len(exchange['added_gainers'])}_"
+                        f"addL{len(exchange['added_nongainers'])}_"
+                        f"dropG{len(exchange['removed_gainers'])}_"
+                        f"dropL{len(exchange['removed_nongainers'])}"
+                    )
+                    exchange_types[exchange_type] += 1
+                    price_loss_distribution[str(exchange["price_coefficient_loss"])] += 1
+                if row["some_price_optimal_packing_contains_closer"]:
+                    counts["roots_with_price_face_reserve"] += 1
+                elif row["all_support_closers"]:
+                    minimum_distance = row["minimum_closing_exchange"]
+                    closest_rows = [
+                        closer
+                        for closer in row["all_support_closers"]
+                        if closer["minimum_packing_column_exchange"] == minimum_distance
+                    ]
+                    chosen_closer = closest_rows[0]
+                    chosen_exchange = chosen_closer["closest_packing_exchanges"][0]
+                    price_face_obstructions.append(
+                        {
+                            "source": path.name,
+                            "trail": trail,
+                            "root": row["root"],
+                            "facet_margin": row["facet_margin"],
+                            "delta": row["delta"],
+                            "packing_support_size": row["packing_support_size"],
+                            "tight_rooted_pairs": row["tight_rooted_pairs"],
+                            "minimum_exchange": minimum_distance,
+                            "closer": chosen_closer,
+                            "exchange": chosen_exchange,
+                        }
+                    )
             if closing_roots:
                 counts["records_with_same_packing_reserve"] += 1
             else:
@@ -253,17 +459,48 @@ def main() -> None:
         "roots_minimum_closing_exchange_2": 52,
         "records_with_same_packing_reserve": 199,
         "failed_records_all_roots_zero_excess": 34,
+        "roots_with_price_face_reserve": 448,
     }
     for key, value in expected.items():
         if counts[key] != value:
             raise AssertionError((key, counts[key], value))
     if len(failures) != 34:
         raise AssertionError(("records_without_same_packing_reserve", len(failures)))
+    if len(price_face_obstructions) != 73:
+        raise AssertionError(("price_face_obstruction_count", len(price_face_obstructions)))
+    for obstruction in price_face_obstructions:
+        exchange = obstruction["exchange"]
+        if obstruction["facet_margin"] != "-1":
+            raise AssertionError("noncanonical obstruction margin")
+        if obstruction["delta"] != "0" or obstruction["packing_support_size"] != 1:
+            raise AssertionError("obstruction optimizer is not a unit packing")
+        if obstruction["tight_rooted_pairs"]:
+            raise AssertionError("obstruction is not in the pair-free root branch")
+        if int(exchange["packing_coalition"]).bit_count() != 5:
+            raise AssertionError("obstruction packing is not co-singleton")
+        if exchange["added"] or len(exchange["removed_gainers"]) != 1:
+            raise AssertionError("obstruction is not a gainer deletion")
+        if len(exchange["removed_nongainers"]) not in (0, 1):
+            raise AssertionError("obstruction changes too many nongainers")
+        if exchange["price_coefficient_loss"] != obstruction["minimum_exchange"]:
+            raise AssertionError("exchange distance/price loss mismatch")
+        if F(exchange["packing_target_reserve"]) < 0:
+            raise AssertionError("improper co-singleton row lacks target reserve")
 
     report = {
         "status": "exact marked-packing complement and target-reserve audit",
         **dict(counts),
         "records_without_same_packing_reserve": len(failures),
+        "minimum_exchange_type_distribution": dict(exchange_types),
+        "minimum_exchange_price_loss_distribution": dict(price_loss_distribution),
+        "price_face_obstruction_count": len(price_face_obstructions),
+        "price_face_obstruction_classification": (
+            "all 73 are pair-free roots of optimal margin -1 whose returned "
+            "optimizer is one unit of a co-singleton row; "
+            "25 properize by deleting one payoff gainer at price loss one, "
+            "and 48 delete one gainer plus one nongainer at price loss two"
+        ),
+        "price_face_obstructions": price_face_obstructions,
         "first_failures": failures[:10],
         "scope": (
             "All-root-unaffordable records in the archived n=6 exact pairs. "

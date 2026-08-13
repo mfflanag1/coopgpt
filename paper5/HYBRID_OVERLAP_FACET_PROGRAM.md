@@ -5363,6 +5363,48 @@ dimension-free reserve/facet interface.  It does not prove the universal
 handover: the price-optimal packing can mix complement sizes or omit the
 proper rows, and a negative average supplies no facet conclusion.
 
+Properizing a row has an exact two-currency calculus.  To distinguish
+tight-pair labels from payoff gainers, put `Gamma_r=G` and `B_r=B` in the
+notation of `(LPC)`, and let `pi_r(S)=w(S\{r})`.  For rooted rows `S,C`,
+
+```text
+pi_r(S)-pi_r(C)
+ =K[|(C\{r}) intersect Gamma_r|-|(S\{r}) intersect Gamma_r|]
+  +|(S\{r}) intersect B_r|-|(C\{r}) intersect B_r|. (PXC1)
+```
+
+This is a labelled tight-pair price, not a payoff-stratum invariant.  If
+`P^+=P union {i}`, `i` is a nongainer outside `P`, and `p=|P|<=n-2`, direct
+subtraction in `(EDQ5)` gives
+
+```text
+R_tau(P^+)-R_tau(P)
+ =gn[(n-2p-2)z(P)-(n-p)(p+1)z_i]
+   /[(n-p)(p+1)(n-p-1)(p+2)].                       (PXC2)
+```
+
+Deleting payoff gainers alone leaves the excluded-nongainer reserve
+unchanged; deleting another nongainer changes it by exactly `(PXC2)`.  The
+missing theorem is therefore existence of a tight replacement whose exact
+reserve change pays its exact labelled-price charge, not another averaging
+identity.
+
+On the pair-free branch `Gamma_r` is empty, so
+`pi_r(S)=K+|S\{r}|`: the price charge of a deletion is exactly its incidence
+size.  Consequently, suppose an `x`-tight co-singleton `S=N\{j}` omits a
+nongainer, has `R_tau({j})>=0`, and has a carrier-preserving proper tight
+subset `C`.  If `S\C` contains only payoff gainers, `C` has unchanged reserve
+and closes.  If it also contains one nongainer `i`, closure is equivalent to
+nonnegativity after adding `(PXC2)`; for `n=6,p=1` the increment is
+
+```text
+(g/10)(z_j-5z_i).                                  (PXC3)
+```
+
+This is a dimension-free conditional properization lemma.  The universal
+gap is now exactly selection of `C` and payment for any extra omitted
+nongainer.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
@@ -5375,15 +5417,21 @@ quota margin=17/35, budget margin=17/30.
 ```
 
 These are finite controls, not the missing existence proof.  A stricter
-same-packing audit localizes the missing combinatorics.  Across the 233
+optimal-face audit localizes the missing combinatorics.  Across the 233
 archived records with every maximum-overlap root unaffordable, all 521
 optimal labelled-price faces have maximum root excess zero.  Every root
 nevertheless has a target-reserve closer in its complete staged support.  A
-row of the same price-optimal packing closes at 444 roots.  The other 77 need
-a support exchange of symmetric-difference distance one (25 roots) or two
-(52 roots), covering 34 records.  Thus the stronger same-optimal-packing
-handover is false; the live combinatorial step is a charged support-exchange
-theorem.  The distances are archive facts, not a dimension-free bound.
+row of the returned price-optimal packing closes at 444 roots, and some
+packing on the full optimal face closes at 448.  The remaining 73 are genuine
+price-face obstructions.  Every one is pair-free; the root optimum has
+labelled facet margin `-1`, and its returned optimizer is one unit of a
+co-singleton row.  Of the closest properizations, 25 delete one payoff gainer at
+incidence distance and price loss one, while 48 delete one payoff gainer plus
+one nongainer at distance and price loss two.  The four other distance-two
+swaps have zero price loss and disappear after optimizing over the full face.
+Thus the stronger full-optimal-face handover is false; the live combinatorial
+step is a charged properization theorem for the 73 rigid obstructions.  This
+classification is an archive fact, not a dimension-free theorem.
 
 The remaining coupling is now especially concrete.  Root-exclusion transport says eligible
 sources occur among nonroot nongainers and, with `alpha=M-T/n`, obey
