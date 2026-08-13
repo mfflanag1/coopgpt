@@ -193,6 +193,23 @@ def multi_endpoint_separator_control():
     }
 
 
+def ceiling_interval_reaches_target(total, minimum, upper, target, n):
+    """Minimize m-minimum+total*minimum/m on [total/n, upper] exactly."""
+    lower = total / n
+    if upper < lower:
+        raise AssertionError("invalid ceiling interval")
+    stationary_square = total * minimum
+    if upper * upper <= stationary_square:
+        bound = upper - minimum + total * minimum / upper
+        return bound >= target * total
+    if lower * lower >= stationary_square:
+        bound = lower - minimum + total * minimum / lower
+        return bound >= target * total
+    # The minimum is 2*sqrt(total*minimum)-minimum.  Both sides of the
+    # squared comparison below are nonnegative.
+    return 4 * total * minimum >= (target * total + minimum) ** 2
+
+
 def reserve_row(x, z, support_row, cycle, target):
     n = len(x)
     gainers = tuple(i for i in range(n) if z[i] > x[i])
@@ -326,6 +343,7 @@ def audit_pair(
     handover_details=None,
     endpoint_gap_cache=None,
     overcover_cache=None,
+    pxc40_offtop_details=None,
 ):
     n = len(x)
     if target != F(n, n * n // 4):
@@ -402,6 +420,8 @@ def audit_pair(
         # endpoint, rather than being an unexplained support accident.
         total = sum(x, F(0))
         full_coalition = (1 << n) - 1
+        pxc39_checked_cycle = False
+        pxc39_closes_cycle = False
         for row in rows:
             shortage = []
             for j in sorted(nongainers - set(cycle)):
@@ -485,6 +505,15 @@ def audit_pair(
                     counters["pxc34_strictly_sharper_than_pxc35"] += (
                         coupling_bound < dispersion_bound
                     )
+                    actual_cri = max(z) - min(x) + total * min(x) / max(z)
+                    counters["actual_ceiling_interpolation_reaches_target"] += (
+                        actual_cri >= target * total
+                    )
+                    counters["pxc35_ceiling_interval_reaches_target"] += (
+                        ceiling_interval_reaches_target(
+                            total, min(x), dispersion_bound, target, n
+                        )
+                    )
         if y_all > min(z_all, x_all):
             raise AssertionError("PXC22 direct family price domination failed")
         if max(F(row["actual_target_reserve"]) for row in rows) != overlap_surplus - y_all:
@@ -502,6 +531,107 @@ def audit_pair(
         )
         for optimal_p in direct_optimal_sizes:
             counters[f"cycles_with_direct_price_optimum_at_p_{optimal_p}"] += 1
+
+        # PXC37: at a globally direct-price-minimizing row before the
+        # coefficient midpoint, every player cheaper than the exchange
+        # threshold must be an unavailable co-singleton direction.
+        for row in rows:
+            if F(row["direct_reserve_price"]) != y_all:
+                continue
+            p = row["p"]
+            if 2 * p + 2 > n:
+                continue
+            excluded = tuple(row["excluded_nongainers"])
+            excluded_mass = sum((z[j] for j in excluded), F(0))
+            rho = F(n - 2 * p - 2, (n - p) * (p + 1))
+            cheap = tuple(
+                j
+                for j in sorted(nongainers - set(cycle))
+                if row["support_row"] >> j & 1 and z[j] < rho * excluded_mass
+            )
+            counters["direct_optimal_rows_through_midpoint"] += 1
+            for j in cheap:
+                if (full_coalition ^ (1 << j)) in full_support:
+                    raise AssertionError("PXC37 cheap available deletion at direct optimum")
+            if not cheap:
+                counters["direct_optimal_rows_with_no_cheap_shortage"] += 1
+            else:
+                counters["direct_optimal_rows_with_cheap_shortage"] += 1
+                counters[f"direct_optimal_cheap_shortage_size_{len(cheap)}"] += 1
+                counters["direct_optimal_cheap_shortage_at_lmax_top"] += sum(
+                    z[j] == max(z) for j in cheap
+                )
+                counters["direct_optimal_cheap_shortage_off_lmax_top"] += sum(
+                    z[j] < max(z) for j in cheap
+                )
+            retained_noncarrier = tuple(
+                j
+                for j in sorted(nongainers - set(cycle))
+                if row["support_row"] >> j & 1
+            )
+            expensive = tuple(j for j in retained_noncarrier if j not in cheap)
+            coefficient = F(row["coefficient"])
+            pxc39_bound = (
+                len(cycle) * z[cycle[0]]
+                + sum((x[j] for j in gainers), F(0))
+                - target * total
+                + sum((z[j] for j in cheap), F(0))
+                + (F(1) - coefficient + len(expensive) * rho) * excluded_mass
+            )
+            actual_reserve = F(row["actual_target_reserve"])
+            if actual_reserve < pxc39_bound:
+                raise AssertionError("PXC39 high-mass reserve bound failed")
+            label_currency = sum((z[j] for j in expensive), F(0)) - (
+                len(expensive) * rho * excluded_mass
+            )
+            if actual_reserve != pxc39_bound + label_currency:
+                raise AssertionError("PXC40 labelled-currency identity failed")
+            counters["pxc39_direct_optimal_reserve_checks"] += 1
+            counters["pxc39_high_mass_bound_closes"] += pxc39_bound >= 0
+            counters["pxc40_positive_label_currency"] += label_currency > 0
+            counters["pxc40_zero_label_currency"] += label_currency == 0
+            if pxc39_bound < 0:
+                counters[
+                    "pxc39_negative_profile_"
+                    f"g_{len(gainers)}_h_{len(cycle)}_p_{p}_r_{len(expensive)}"
+                ] += 1
+                counters["pxc40_label_currency_closes_negative_base"] += (
+                    actual_reserve >= 0
+                )
+                counters["pxc40_negative_base_expensive_players_at_lmax_top"] += sum(
+                    z[j] == max(z) for j in expensive
+                )
+                counters["pxc40_negative_base_expensive_players_off_lmax_top"] += sum(
+                    z[j] < max(z) for j in expensive
+                )
+                counters[
+                    "pxc40_offtop_negative_base_rows_with_zero_direct_price"
+                ] += any(z[j] < max(z) for j in expensive) and excluded_mass == 0
+                counters["pxc40_negative_base_rows_with_zero_ordered_cut_error"] += (
+                    F(row["ordered_cut_error"]) == 0
+                )
+                if pxc40_offtop_details is not None and any(
+                    z[j] < max(z) for j in expensive
+                ):
+                    pxc40_offtop_details.append(
+                        {
+                            "source": source,
+                            "trail": trail,
+                            "cycle": list(cycle),
+                            "support_row": row["support_row"],
+                            "excluded_nongainers": list(excluded),
+                            "retained_expensive_nongainers": list(expensive),
+                            "lmin": [str(value) for value in x],
+                            "lmax": [str(value) for value in z],
+                            "pxc39_bound": str(pxc39_bound),
+                            "pxc40_label_currency": str(label_currency),
+                            "actual_reserve": str(actual_reserve),
+                        }
+                    )
+            pxc39_checked_cycle = True
+            pxc39_closes_cycle |= pxc39_bound >= 0
+        counters["cycles_with_pxc39_direct_optimal_check"] += pxc39_checked_cycle
+        counters["cycles_some_direct_optimal_pxc39_bound_closes"] += pxc39_closes_cycle
 
         # PXC18: if a retained nongainer j has an x-tight co-singleton,
         # exact uncrossing makes I\{j} tight.  The two prices then obey exact
@@ -786,6 +916,7 @@ def main():
     extracted_negative_rows, full_negative_rows = [], []
     extracted_residual_exceptions, full_residual_exceptions = [], []
     full_handover_details = []
+    full_pxc40_offtop_details = []
     endpoint_gap_cache = {}
     overcover_cache = {}
     for path in args.paths:
@@ -826,6 +957,7 @@ def main():
                     handover_details=full_handover_details,
                     endpoint_gap_cache=endpoint_gap_cache,
                     overcover_cache=overcover_cache,
+                    pxc40_offtop_details=full_pxc40_offtop_details,
                 )
             )
 
@@ -969,6 +1101,7 @@ def main():
             full_residual_exceptions
         ),
         "n6_full_menu_strict_handover_details": full_handover_details,
+        "n6_pxc40_offtop_residual_details": full_pxc40_offtop_details,
         "n7_hostile_and_sharp_controls": hostile,
         "n7_multi_endpoint_separator_control": multi_endpoint_separator_control(),
         "limitations": (

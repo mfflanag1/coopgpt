@@ -5911,6 +5911,70 @@ load and separator weights are both `(1/2,1/2)` on `R`, `a_R=0`, and
 a decomposable dummy-extension control of signs and pricing, not a carrier
 hard case or a new facet.
 
+The scalar-ceiling closure route is now falsified as a universal proof.  If
+`(CRI)` is minimized over the full interval `T/n<=M<=M_PXC35`, the resulting
+bound reaches the six-player target on only 28 of the 340 full-menu shortage
+rows; even `(CRI)` at the actual ceiling closes only 165.  Hence strict
+improvement in `(PXC35)` is not enough.  The live route must retain the
+labelled direct-price or mixed-packet rows rather than optimize this scalar
+ceiling further.
+
+The endpoint shortage can now be chosen canonically at a global direct-price
+minimizer.  Let `H` be the retained carrier cycle,
+`C=(I intersect L)\H`, assume `2p+2<=n`, and put
+
+```text
+rho_p=(n-2p-2)/[(n-p)(p+1)],
+Rminus={j in C:z_j<rho_p z(P)},      Cplus=C\Rminus.
+```
+
+Global optimality and `(PXC24)` imply
+
+```text
+j in Rminus => N\{j} is not x-tight.                (PXC37)
+z(Cplus)>=|Cplus|rho_p z(P).                         (PXC38)
+```
+
+Thus `Rminus` is exactly the cheap set sent to the endpoint
+witness/separator alternative.  If it is empty, all retained noncarriers pay
+the exchange threshold.  Expanding the direct reserve gives
+
+```text
+R_tau(P)>=hM+x(G)-tau T+z(Rminus)
+          +[1-c_p+|Cplus|rho_p]z(P).                (PXC39)
+```
+
+This is the direct-price handover missing from the scalar ceiling route.  A
+negative right side is the precise amount still owed by the endpoint
+separator or labelled mixed packet.
+
+The omitted amount is the exact nonnegative label currency
+
+```text
+Lambda_I=z(Cplus)-|Cplus|rho_p z(P)>=0,
+R_tau(P)=B_I+Lambda_I,                               (PXC40)
+```
+
+where `B_I` is the right side of `(PXC39)`.  The remaining proof must certify
+this retained Lmax support-function excess using the sparse staged Lmax
+packet or a marked facet; there is no unidentified third residual.
+
+In the six-player full menus, all 920 direct-optimal rows through the midpoint
+have `Rminus` empty.  `(PXC39)` closes 682 rows and at least one optimum on
+296 of 415 cycles.  The remaining 238 rows span 119 cycles and require
+labelled currency.  Hence the endpoint shortages seen on arbitrary rows
+disappear at the canonical direct optimum in this archive; the remaining
+obstruction is not further endpoint aggregation but payment of the explicit
+labelled residual.
+
+Every one of the 238 negative-`B_I` rows has profile
+`(g,h,p,|Cplus|)=(2,2,1,1)` and zero ordered-cut error, so `(PXC40)` is exactly
+the existing PXC6/Lmax colour.  In 236 rows the retained currency player lies
+in the first Lmax top stratum.  The two off-top rows are the same record and
+have `z(P)=0`, hence zero direct price.  Thus every archived positive-price
+residual is visible at the first Lmax stage, but that visibility remains a
+finite fact rather than a dimension-free selection theorem.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
