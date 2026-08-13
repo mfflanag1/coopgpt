@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Exact audit of the marked-packing/target-reserve interface.
+r"""Exact audit of the marked-packing/target-reserve interface.
 
 For a root-containing fractional packing ``u`` put
 
@@ -46,7 +46,11 @@ from audit_n6_sparse_lmax_complete_lmin_roots import (  # noqa: E402
     complete_lmin_support,
 )
 from exactlp import exact_linprog  # noqa: E402
-from verify_excluded_block_deficit_quota import target_reserve_row  # noqa: E402
+from verify_excluded_block_deficit_quota import (  # noqa: E402
+    N7_LMAX,
+    N7_LMIN,
+    target_reserve_row,
+)
 
 
 def marked_packing(support: tuple[int, ...], audit: dict, root: int) -> tuple[tuple[int, F], ...]:
@@ -411,6 +415,112 @@ def audit_root(values, x, z, support, root, gate, target):
     }
 
 
+def ordered_cut_reserve_certificate(x, z, roots, intersection, target):
+    """Certify ordered-cut and root-only reserve bounds for one row.
+
+    If ``B`` is the maximum-overlap nongainer block retained by the row and
+    ``M_minus`` bounds every other nongainer coordinate of ``z``, then
+
+        R_tau(P) >= |B| M + z(H \\ B) + x(G) - tau T
+                    - |P| (c_p - 1)_+ M_minus.
+
+    Dropping the retained mass gives the root-only corollary audited on the
+    six-player obstruction rows.  The fixed seven-player control records why
+    that weaker corollary is not a universal replacement for the ordered cut.
+
+    This is a dimension-free algebraic certificate.  Its observed closure
+    below is only an exact audit of the archived six-player obstruction rows.
+    """
+
+    n = len(x)
+    gainers = tuple(i for i in range(n) if z[i] > x[i])
+    nongainers = tuple(i for i in range(n) if z[i] <= x[i])
+    block = tuple(roots)
+    block_set = set(block)
+    overlap = tuple(min(x[i], z[i]) for i in range(n))
+    maximum = max(overlap)
+    if any(overlap[i] != maximum or i not in nongainers for i in block):
+        raise AssertionError("root block is not a maximum-overlap nongainer block")
+    if any(intersection >> i & 1 == 0 for i in block):
+        raise AssertionError("intersection does not retain the full root block")
+    outside = tuple(i for i in nongainers if i not in block_set)
+    next_level = max((z[i] for i in outside), default=F(0))
+    if any(z[i] > next_level for i in outside):
+        raise AssertionError("invalid next nongainer level")
+    p_set = tuple(i for i in nongainers if not intersection >> i & 1)
+    if not p_set or any(i in block_set for i in p_set):
+        raise AssertionError("excluded block is empty or meets the root block")
+    p, g = len(p_set), len(gainers)
+    coefficient = F(g * n, (n - p) * (p + 1))
+    positive_charge = max(coefficient - 1, F(0))
+    total = sum(x, F(0))
+    gainer_lmin_mass = sum((x[i] for i in gainers), F(0))
+    coarse_bound = (
+        len(block) * maximum
+        + gainer_lmin_mass
+        - target * total
+        - p * positive_charge * maximum
+    )
+    stratum_gap_credit = p * positive_charge * (maximum - next_level)
+    root_only_lower_bound = coarse_bound + stratum_gap_credit
+    h_set = tuple(i for i in nongainers if intersection >> i & 1)
+    retained_outside_block = tuple(i for i in h_set if i not in block_set)
+    retained_extra_mass = sum((z[i] for i in retained_outside_block), F(0))
+    ordered_cut_lower_bound = root_only_lower_bound + retained_extra_mass
+    reserve = target_reserve_row(x, z, p_set, gainers, h_set, target)
+    actual = F(reserve["nonlow_target_reserve"])
+    omitted_gainers = tuple(i for i in gainers if not intersection >> i & 1)
+    total_gainer_gain = sum((z[i] - x[i] for i in gainers), F(0))
+    omitted_gainer_gain = sum((z[i] - x[i] for i in omitted_gainers), F(0))
+    excluded_lmin_mass = sum((x[i] for i in p_set), F(0))
+    comparison_lower_bound = (
+        (F(1) - target) * total
+        - total_gainer_gain
+        - coefficient * excluded_lmin_mass
+        + coefficient * omitted_gainer_gain
+    )
+    comparison_payment = coalition_sum(z, intersection) - coalition_sum(
+        x, intersection
+    )
+    exact_rewrite = (
+        -target * total
+        + gainer_lmin_mass
+        + sum((z[i] for i in h_set), F(0))
+        + (F(1) - coefficient) * sum((z[i] for i in p_set), F(0))
+    )
+    if exact_rewrite != actual:
+        raise AssertionError("ordered-cut reserve rewrite failed")
+    if ordered_cut_lower_bound > actual:
+        raise AssertionError("ordered-cut reserve lower bound failed")
+    if comparison_lower_bound > actual:
+        raise AssertionError("omitted-gainer comparison lower bound failed")
+    if actual - comparison_lower_bound != coefficient * comparison_payment:
+        raise AssertionError("comparison-payment reserve decomposition failed")
+    return {
+        "P": list(p_set),
+        "root_block_size": len(block),
+        "maximum_overlap_level": str(maximum),
+        "next_nongainer_level": str(next_level),
+        "excluded_price_coefficient": str(coefficient),
+        "gainer_lmin_mass": str(gainer_lmin_mass),
+        "coarse_maximum_level_bound": str(coarse_bound),
+        "lmax_stratum_gap_credit": str(stratum_gap_credit),
+        "retained_nongainer_mass_outside_root_block": str(retained_extra_mass),
+        "root_only_lower_bound": str(root_only_lower_bound),
+        "ordered_cut_lower_bound": str(ordered_cut_lower_bound),
+        "actual_target_reserve": str(actual),
+        "omitted_gainers": list(omitted_gainers),
+        "omitted_gainer_gain": str(omitted_gainer_gain),
+        "excluded_lmin_mass": str(excluded_lmin_mass),
+        "comparison_lower_bound": str(comparison_lower_bound),
+        "comparison_payment": str(comparison_payment),
+        "comparison_payment_credit": str(coefficient * comparison_payment),
+        "root_only_closes": root_only_lower_bound >= 0,
+        "ordered_cut_closes": ordered_cut_lower_bound >= 0,
+        "comparison_closes": comparison_lower_bound >= 0,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("paths", nargs="+", type=Path)
@@ -482,6 +592,15 @@ def main() -> None:
                     ]
                     chosen_closer = closest_rows[0]
                     chosen_exchange = chosen_closer["closest_packing_exchanges"][0]
+                    probe = row["co_singleton_intersection_probe"]
+                    if probe is None:
+                        raise AssertionError("price-face obstruction is not co-singleton")
+                    ordered_cut_certificates = [
+                        ordered_cut_reserve_certificate(
+                            x, z, roots, probe_row["intersection"], target
+                        )
+                        for probe_row in probe["proper_carrier_rows"]
+                    ]
                     price_face_obstruction_records.add((path.name, trail))
                     price_face_obstructions.append(
                         {
@@ -502,6 +621,7 @@ def main() -> None:
                             "co_singleton_intersection_probe": row[
                                 "co_singleton_intersection_probe"
                             ],
+                            "ordered_cut_reserve_certificates": ordered_cut_certificates,
                             "minimum_exchange": minimum_distance,
                             "closer": chosen_closer,
                             "exchange": chosen_exchange,
@@ -570,6 +690,71 @@ def main() -> None:
         raise AssertionError(
             ("price_face_obstruction_crossings", obstruction_crossing_counts)
         )
+    ordered_cut_certificates = [
+        certificate
+        for obstruction in price_face_obstructions
+        for certificate in obstruction["ordered_cut_reserve_certificates"]
+    ]
+    root_only_signs = Counter(
+        "zero" if F(row["root_only_lower_bound"]) == 0 else "positive"
+        if F(row["root_only_lower_bound"]) > 0
+        else "negative"
+        for row in ordered_cut_certificates
+    )
+    root_only_closing_roots = sum(
+        any(
+            row["root_only_closes"]
+            for row in obstruction["ordered_cut_reserve_certificates"]
+        )
+        for obstruction in price_face_obstructions
+    )
+    comparison_signs = Counter(
+        "zero" if F(row["comparison_lower_bound"]) == 0 else "positive"
+        if F(row["comparison_lower_bound"]) > 0
+        else "negative"
+        for row in ordered_cut_certificates
+    )
+    comparison_closing_roots = sum(
+        any(
+            row["comparison_closes"]
+            for row in obstruction["ordered_cut_reserve_certificates"]
+        )
+        for obstruction in price_face_obstructions
+    )
+    comparison_payment_signs = Counter(
+        "zero" if F(row["comparison_payment"]) == 0 else "positive"
+        if F(row["comparison_payment"]) > 0
+        else "negative"
+        for row in ordered_cut_certificates
+    )
+    if len(ordered_cut_certificates) != 150:
+        raise AssertionError(
+            ("ordered_cut_certificate_count", len(ordered_cut_certificates))
+        )
+    if root_only_signs != Counter({"positive": 142, "zero": 8}):
+        raise AssertionError(("root_only_certificate_signs", root_only_signs))
+    if root_only_closing_roots != 73:
+        raise AssertionError(("root_only_closing_roots", root_only_closing_roots))
+    if comparison_signs != Counter({"positive": 140, "zero": 8, "negative": 2}):
+        raise AssertionError(("comparison_certificate_signs", comparison_signs))
+    if comparison_closing_roots != 73:
+        raise AssertionError(("comparison_closing_roots", comparison_closing_roots))
+    if comparison_payment_signs != Counter({"zero": 148, "positive": 2}):
+        raise AssertionError(("comparison_payment_signs", comparison_payment_signs))
+    n7_ordered_cut_control = ordered_cut_reserve_certificate(
+        N7_LMIN, N7_LMAX, (1, 5), 59, F(7, 12)
+    )
+    expected_n7 = {
+        "root_only_lower_bound": "-59/60",
+        "retained_nongainer_mass_outside_root_block": "27/5",
+        "ordered_cut_lower_bound": "53/12",
+        "comparison_lower_bound": "289/60",
+        "comparison_payment": "0",
+        "actual_target_reserve": "289/60",
+    }
+    for key, value in expected_n7.items():
+        if n7_ordered_cut_control[key] != value:
+            raise AssertionError(("n7_ordered_cut_control", key, n7_ordered_cut_control[key], value))
     for obstruction in price_face_obstructions:
         exchange = obstruction["exchange"]
         if obstruction["facet_margin"] != "-1":
@@ -616,6 +801,15 @@ def main() -> None:
         "price_face_obstruction_crossing_row_count_distribution": dict(
             obstruction_crossing_counts
         ),
+        "ordered_cut_reserve_certificate_count": len(ordered_cut_certificates),
+        "root_only_reserve_certificate_sign_distribution": dict(root_only_signs),
+        "roots_closed_by_root_only_reserve_certificate": root_only_closing_roots,
+        "comparison_reserve_certificate_sign_distribution": dict(comparison_signs),
+        "roots_closed_by_comparison_reserve_certificate": comparison_closing_roots,
+        "proper_intersection_comparison_payment_sign_distribution": dict(
+            comparison_payment_signs
+        ),
+        "n7_ordered_cut_control": n7_ordered_cut_control,
         "price_face_obstruction_classification": (
             "all 73 roots in 33 records are pair-free roots of optimal margin "
             "-1; their common carriers are exactly the other maximum-overlap "

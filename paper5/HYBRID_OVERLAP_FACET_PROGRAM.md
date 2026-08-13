@@ -5423,6 +5423,59 @@ only surviving charge is the telescoped reserve change in `(PXC2)`.  This is
 an elementary consequence in the standard exact-cone framework, not a
 novelty claim and not a supermodularity assumption.
 
+The surviving charge has a sharper ordered-cut form.  Let `B subset H` be a
+retained block of `b` nongainers at Lmax level `M`, put `K=H\B`, suppose
+every excluded nongainer has Lmax coordinate at most `Mminus<=M`, and put
+`c_p=gn/[(n-p)(p+1)]`.  Eliminating `D` by total balance gives
+
+```text
+R_tau(P)=-tau T+x(G)+z(H)+(1-c_p)z(P),             (PXC5)
+
+R_tau(P)>=bM+z(K)+x(G)-tau T-p(c_p-1)_+ Mminus.    (PXC6)
+```
+
+Indeed `z(H)=bM+z(K)`; when `c_p<=1` the last term in `(PXC5)` is nonnegative,
+and when `c_p>1`, `z(P)<=p Mminus`.  Replacing `Mminus` by the coarse ceiling
+`M` loses exactly
+
+```text
+p(c_p-1)_+(M-Mminus).                              (PXC8)
+```
+
+If `Mminus` bounds every nongainer outside `B`, dropping `z(K)>=0` gives the
+root-block-only corollary
+
+```text
+R_tau(P)>=bM+x(G)-tau T-p(c_p-1)_+ Mminus.         (PXC7)
+```
+
+Thus the relevant currency is the complete ordered cut: both the additional
+high-Lmax mass retained in `K` and the gap down to the excluded block.  This
+is dimension-free algebra, not a theorem that every hard branch selects a
+row with nonnegative right side.  It gives a concrete interface to the
+staged Lmax separator packet, which records this ordering.
+
+There is a complementary Lmin-side certificate.  Let `I` be the selected
+tight row, let `A=G\I` be its omitted gainers, and put
+`ell(P)=x(P)-z(P)`, `Delta(A)=z(A)-x(A)`.  Total balance and the comparison
+premise give
+
+```text
+sigma_I=z(I)-x(I)=ell(P)-Delta(A)>=0,              (PXC9)
+
+R_tau(P)=(1-tau)T-D-c_p x(P)+c_p Delta(A)
+         +c_p sigma_I,                             (PXC10)
+
+R_tau(P)>=(1-tau)T-D-c_p x(P)+c_p Delta(A).       (PXC11)
+```
+
+Thus `(PXC6)` is the Lmax ordered-cut certificate and `(PXC11)` is the Lmin
+omitted-gainer certificate.  Identity `(PXC10)` proves that their latter
+certificate misses the true reserve by exactly the normalized Lmax
+comparison payment, with no third residual currency.  They share the
+selected row but expose the two different currencies that the universal
+packet gluing must couple.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
@@ -5454,6 +5507,24 @@ other two have exactly one, whose co-singleton intersection is tight by
 `(PXC4)`.  Every one of the 73 instances has at least two carrier-row
 intersections with nonnegative final reserve.  This is finite compatibility
 evidence, not a dimension-free reserve theorem.
+Taking `B` to be the full maximum-overlap root block, the weaker `(PXC7)` is already
+nonnegative on all 150 archived intersections: 142 bounds are positive and
+eight are zero, so all 73 rooted obstructions close.  The coarse
+`Mminus=M` version misses ten rows and leaves two roots uncovered.  In that
+last record the omitted nongainer has `z_i=0`, not the charged ceiling
+`M=5`, and its actual reserve is `10/3`.  This removes a spurious finite
+residue but proves no universal selector theorem; the live step is to derive
+the `(PXC6)` ordered-cut sign from staged support, or pay its negative part
+with the separator/marked-facet arm.  The fixed seven-player full-root-block
+control makes the distinction sharp: `(PXC7)=-59/60`, but its selected row
+has extra retained nongainer mass `27/5`, so `(PXC6)=53/12>0`; the exact
+reserve is `289/60`.  A universal argument cannot discard `z(K)`.
+The comparison certificate `(PXC11)` is nonnegative on 148 of the 150
+archived intersections and closes at least one row at all 73 roots.  Those
+148 rows have `sigma_I=0`, so the certificate is exact; the other two have
+`sigma_I=1/2` and are closed by `(PXC7)`.  On the selected seven-player repair
+it is again exact at `289/60`.  This complementary finite coverage motivates a
+max-certificate theorem but is not a dimension-free disjunction proof.
 Of the closest properizations, 25 delete one payoff gainer at
 incidence distance and price loss one, while 48 delete one payoff gainer plus
 one nongainer at distance and price loss two.  The four other distance-two
