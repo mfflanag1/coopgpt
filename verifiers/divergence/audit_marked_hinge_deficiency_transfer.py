@@ -68,11 +68,14 @@ def rooted_support_orbit(root, support, n):
     )
 
 
-def best_mixed_rooted_pair_packet(certificate, hinge, top, n):
+def best_mixed_rooted_pair_packet(certificate, hinge, top, n, roots=None):
     tagged = tuple(certificate["support"]) + (hinge,)
     best = None
     root_covers = []
-    for root in sorted(top):
+    candidate_roots = tuple(sorted(top if roots is None else roots))
+    if not candidate_roots:
+        raise ValueError("mixed rooted packet requires at least one root")
+    for root in candidate_roots:
         inequalities, rhs = [], []
         for player in range(n):
             if player == root:
@@ -208,23 +211,145 @@ def best_mixed_rooted_pair_packet(certificate, hinge, top, n):
     return best
 
 
+def packet_comparison_budget(x, z, certificate, hinge, packet):
+    r"""Return the exact mixed-packet comparison budget (PXC50)--(PXC51)."""
+    n = len(x)
+    root = packet["root"]
+    delta = packet["root_excess"]
+    if delta <= 0:
+        raise ValueError("comparison budget requires positive root excess")
+    tagged = tuple(certificate["support"]) + (hinge,)
+    weights = packet["weights"]
+    loads = tuple(
+        sum(
+            (
+                weight
+                for coalition, weight in zip(tagged, weights)
+                if coalition >> player & 1
+            ),
+            F(0),
+        )
+        for player in range(n)
+    )
+    if loads[root] != 1 + delta:
+        raise AssertionError("positive packet has inconsistent root load")
+    deficits = tuple(
+        F(0) if player == root else 1 - loads[player]
+        for player in range(n)
+    )
+    if any(deficit < 0 for deficit in deficits):
+        raise AssertionError("positive packet has a negative offroot deficit")
+    row_payments = tuple(
+        coalition_sum(x, coalition) - coalition_sum(z, coalition)
+        for coalition in tagged
+    )
+    if any(
+        payment < 0
+        for payment, weight in zip(row_payments, weights)
+        if weight
+    ):
+        raise AssertionError("Lmax-tight packet row has negative comparison payment")
+    comparison_charge = sum(
+        (weight * payment for weight, payment in zip(weights, row_payments)),
+        F(0),
+    )
+    spoke_charge = sum(
+        (
+            deficits[player] * (x[player] - z[player])
+            for player in range(n)
+            if player != root
+        ),
+        F(0),
+    )
+    root_loss = x[root] - z[root]
+    if comparison_charge + spoke_charge != delta * root_loss:
+        raise AssertionError("mixed-packet comparison conservation failed")
+
+    gainers = tuple(player for player in range(n) if z[player] > x[player])
+    other_nongainers = tuple(
+        player
+        for player in range(n)
+        if player != root and x[player] >= z[player]
+    )
+    total_gain = sum((z[player] - x[player] for player in gainers), F(0))
+    alignment_defect = sum(
+        (
+            (1 - deficits[player]) * (z[player] - x[player])
+            for player in gainers
+        ),
+        F(0),
+    ) + sum(
+        (
+            deficits[player] * (x[player] - z[player])
+            for player in other_nongainers
+        ),
+        F(0),
+    )
+    if root_loss < 0:
+        raise AssertionError("eligible comparison-budget root is a payoff gainer")
+    if comparison_charge != total_gain + delta * root_loss - alignment_defect:
+        raise AssertionError("mixed-packet alignment-defect identity failed")
+
+    positive_rows = tuple(
+        (coalition, weight, payment)
+        for coalition, weight, payment in zip(tagged, weights, row_payments)
+        if weight
+    )
+    if any(not (coalition >> root & 1) for coalition, _, _ in positive_rows):
+        raise AssertionError("root-load optimum retains a root-omitting row")
+    if sum((weight for _, weight, _ in positive_rows), F(0)) != 1 + delta:
+        raise AssertionError("positive rooted packet has wrong normalized mass")
+    largest_row_payment = max(payment for _, _, payment in positive_rows)
+    if largest_row_payment < comparison_charge / (1 + delta):
+        raise AssertionError("normalized packet payment averaging failed")
+    return {
+        "root": root,
+        "root_excess": delta,
+        "deficits": deficits,
+        "comparison_charge": comparison_charge,
+        "spoke_charge": spoke_charge,
+        "root_loss": root_loss,
+        "total_gain": total_gain,
+        "alignment_defect": alignment_defect,
+        "normalized_payment_floor": comparison_charge / (1 + delta),
+        "largest_row_payment": largest_row_payment,
+        "positive_rows": positive_rows,
+    }
+
+
 def full_menu_marked_alternative(values, x, z, hinge):
     n = len(x)
     top = {i for i, value in enumerate(z) if value == max(z)}
+    hinge_top = {
+        player for player in top if hinge >> player & 1
+    }
     z_tight = full_tight_support(values, z)
     packet = best_mixed_rooted_pair_packet(
-        {"support": z_tight}, hinge, top, n
+        {"support": z_tight}, hinge, top, n, roots=hinge_top
     )
     if packet["root_excess"] > 0:
-        return {
+        result = {
             "kind": "positive_full_menu_mixed_packet",
             "root": packet["root"],
             "root_excess": str(packet["root_excess"]),
         }
+        if x[packet["root"]] >= z[packet["root"]]:
+            budget = packet_comparison_budget(
+                x, z, {"support": z_tight}, hinge, packet
+            )
+            result.update(
+                {
+                    "comparison_charge": str(budget["comparison_charge"]),
+                    "total_gain": str(budget["total_gain"]),
+                    "root_loss": str(budget["root_loss"]),
+                    "alignment_defect": str(budget["alignment_defect"]),
+                    "normalized_payment_floor": str(
+                        budget["normalized_payment_floor"]
+                    ),
+                }
+            )
+        return result
 
-    hinge_top = {
-        player for player in top if hinge >> player & 1
-    }
     covers = {row["root"]: row for row in packet["root_covers"]}
     graph = {}
     for root in sorted(hinge_top):
@@ -280,6 +405,7 @@ def audit_record(
     controls,
     aggregate_controls,
     packet_rows,
+    full_menu_packet_rows,
     tied_rows,
 ):
     x_tight = set(full_tight_support(values, x))
@@ -312,6 +438,83 @@ def audit_record(
             epsilon > 0 and top_in and top_out
         )
         if epsilon > 0 and top_in and top_out:
+            eligible_roots = top_in & set(maximum_overlap_roots(x, z))
+            if not eligible_roots:
+                counters[
+                    "positive_transfer_rows_without_eligible_hinge_top_root"
+                ] += 1
+            else:
+                full_menu_certificate = {"support": tuple(sorted(z_tight))}
+                full_menu_packet = best_mixed_rooted_pair_packet(
+                    full_menu_certificate,
+                    coalition,
+                    top,
+                    len(x),
+                    roots=eligible_roots,
+                )
+                if full_menu_packet["root_excess"] > 0:
+                    budget = packet_comparison_budget(
+                        x,
+                        z,
+                        full_menu_certificate,
+                        coalition,
+                        full_menu_packet,
+                    )
+                    counters[
+                        "eligible_full_menu_rows_with_positive_root_excess"
+                    ] += 1
+                    counters[
+                        "eligible_positive_packets_with_zero_alignment_defect"
+                    ] += budget["alignment_defect"] == 0
+                    counters[
+                        "eligible_positive_packets_whose_charge_covers_total_gain"
+                    ] += budget["comparison_charge"] >= budget["total_gain"]
+                    full_menu_packet_rows.append(
+                        {
+                            "source": source,
+                            "trail": trail,
+                            "common_hinge": coalition,
+                            "eligible_roots": sorted(eligible_roots),
+                            "root": budget["root"],
+                            "root_excess": str(budget["root_excess"]),
+                            "comparison_charge": str(
+                                budget["comparison_charge"]
+                            ),
+                            "spoke_charge": str(budget["spoke_charge"]),
+                            "total_gain": str(budget["total_gain"]),
+                            "root_loss": str(budget["root_loss"]),
+                            "alignment_defect": str(
+                                budget["alignment_defect"]
+                            ),
+                            "normalized_payment_floor": str(
+                                budget["normalized_payment_floor"]
+                            ),
+                            "largest_row_payment": str(
+                                budget["largest_row_payment"]
+                            ),
+                            "offroot_deficits": {
+                                str(player): str(deficit)
+                                for player, deficit in enumerate(
+                                    budget["deficits"]
+                                )
+                                if deficit
+                            },
+                            "positive_rows": [
+                                {
+                                    "coalition": support,
+                                    "weight": str(weight),
+                                    "comparison_payment": str(payment),
+                                }
+                                for support, weight, payment in budget[
+                                    "positive_rows"
+                                ]
+                            ],
+                        }
+                    )
+                else:
+                    counters[
+                        "eligible_full_menu_rows_with_tied_root_excess"
+                    ] += 1
             top_trace = members & top
             same_top_trace = tuple(
                 support
@@ -545,6 +748,7 @@ def main():
     controls = []
     aggregate_controls = []
     packet_rows = []
+    full_menu_packet_rows = []
     tied_rows = []
     for path in args.paths:
         payload = json.loads(path.read_text())
@@ -559,6 +763,7 @@ def main():
                 controls,
                 aggregate_controls,
                 packet_rows,
+                full_menu_packet_rows,
                 tied_rows,
             )
     orbit_counts = Counter(
@@ -566,12 +771,17 @@ def main():
         for row in packet_rows
     )
     report = {
-        "status": "dimension-free dual identity with exact finite replay",
+        "status": (
+            "dimension-free dual and mixed-packet budget identities with "
+            "exact finite replay"
+        ),
         "statement_checked": (
             "a common hinge containing q Lmax-top labels carries at least "
             "q*epsilon_star of negative dual price on its off-top labels; "
             "every omitted top label separately carries price at least "
-            "epsilon_star"
+            "epsilon_star; an eligible positive full-menu rooted packet "
+            "obeys exact comparison-charge conservation and the derived "
+            "alignment-defect identity"
         ),
         "inputs": [path.name for path in args.paths],
         "counts": dict(counters),
@@ -583,12 +793,16 @@ def main():
         "aggregate_mixed_rooted_pair_facet_orbits": {
             orbit: count for orbit, count in sorted(orbit_counts.items())
         },
+        "eligible_full_menu_positive_packet_alignment_controls": (
+            full_menu_packet_rows
+        ),
         "tied_aggregate_rows_closed_by_earlier_arms": tied_rows,
         "limitations": (
             "the identity does not prove that the transferred price reaches "
-            "the hybrid-overlap target; the finite positive-root-excess "
-            "packets are facets and every finite tied row closes by an "
-            "earlier arm, but neither universal implication is proved"
+            "the hybrid-overlap target; positive full-menu root excess does "
+            "not force zero alignment defect, the finite aggregate packets "
+            "are facets, and every finite tied row closes by an earlier arm, "
+            "but neither universal closing implication is proved"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

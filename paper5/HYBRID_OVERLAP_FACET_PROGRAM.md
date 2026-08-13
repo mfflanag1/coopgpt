@@ -6173,6 +6173,41 @@ strict payment.  On the ten formerly tied archive rows, full-menu reselection
 produces three positive packets, two strict reverse-payment splitters, and
 five common modules.  Price/alignment, not existence of an arm, remains.
 
+The positive packet has an exact comparison budget.  Remove root-omitting
+rows from a maximum-root-load optimizer, put `q_i=1-p_i`,
+`delta=p_r-1`, `sigma_C=x(C)-z(C)`, and
+`Gamma=sum_C rho_C sigma_C`.  Subtracting the singleton-completed incidence
+identity at the two selections gives
+
+```text
+Gamma + sum_{i != r} q_i (x_i-z_i) = delta (x_r-z_r).   (PXC50)
+```
+
+For a maximum-overlap root, let `D` be total payoff gain and set
+
+```text
+E = sum_{i:z_i>x_i} (1-q_i)(z_i-x_i)
+    + sum_{i:z_i<=x_i, i!=r} q_i(x_i-z_i).
+```
+
+Then
+
+```text
+Gamma = D + delta(x_r-z_r) - E,
+max_{rho_C>0} sigma_C >= Gamma/(1+delta).              (PXC51)
+```
+
+This is the quantitative form of the alignment obstruction.  Positive root
+excess does **not** force `E=0`: among the 21 positive-deficiency marked
+archive rows, 6 have no eligible hinge-top maximum-overlap root, 7 are tied,
+and 8 have positive eligible excess; only 3/8 have zero defect and only 4/8
+have `Gamma>=D`.  The three positive-packet rows in the old tied residue are
+exactly the zero-defect cases, with `delta=1`, `D=5/4`, root loss `1/4`,
+`Gamma=3/2`, and normalized payment floor `3/4`.  The next theorem must
+absorb `E-delta(x_r-z_r)` by the direct/separator currency or prove a
+price-optimal packet with nonpositive excess defect; root excess by itself
+is a refuted route.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
