@@ -59,8 +59,9 @@ without an explicit note in this ledger.
    orientation.
 7. **Hostile controls.**  The five-player large-core separation, `PART`/`ZP`
    families, six-player residual facet atlas, seven-player effective-
-   bipartition counterexample, and both seven-player balanced equality
-   orientations remain mandatory tests for every proposed general lemma.
+   bipartition and full-root-block-budget counterexamples, and both
+   seven-player balanced equality orientations remain mandatory tests for
+   every proposed general lemma.
 
 The unresolved headline is equally protected: no dimension-free proof of the
 conjectured fixed-`n` upper formula has yet been obtained.  Objective A, the
@@ -95,7 +96,8 @@ equality and facet identification in objective C.
 | Strict-loss proper-packet support | **Proved.** If a nongainer carrier cycle has positive selector loss, then every gainer is omitted by some Lmin-tight coalition containing the cycle.  Carrier monotonicity proves this proper-packet existence; residual normalization remains open, as does the tied-loss analogue. | `paper5/divergence.tex`; `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`; `audit_carrier_separator_payment.py` |
 | Carrier-cycle cardinality theorem | **Proved dimension-free.** Any direct block containing a carrier cycle has atomic multiplicity at least two.  Once its gainer packet is proper, its direct cardinality base automatically reaches the target for every `n>=6`; the unique cardinality equality parameters are `(n,p,g,h,s)=(6,2,2,2,1)`. | `paper5/divergence.tex`, `(CCC)`; `verify_carrier_cycle_cardinality.py` |
 | Comparison--residual cancellation | **Proved exact identity.** In the direct master identity, the weighted comparison payment plus both order residuals equals `B(U_s-L_H)`.  The budget grows by total gainer gain divided by `g` when `s` increases, so the best proper packet has size `g-1` and its labels are irrelevant.  The remaining carrier choice is the scalar nongainer-block budget `U_(g-1)>=L_H`, not triangular labelled residual matching. | `paper5/divergence.tex`, `(CB1)--(CB3)`; `verify_two_stratum_direct_gluing.py`; `audit_carrier_separator_payment.py` |
-| Root-block aggregate reduction | **Proved exact reformulation, conjectural sign.** For the full nongainer maximum-overlap root block, the remaining budget is `[g(g+h)U-gpR-[g+h(p+1)]D]/[g(g+h)]`, with `U` the low-nongainer overlap deficit, `R` the gainer overlap deficit, and `D` total transferred mass.  All 65 role-irreducible six-player controls have nonnegative numerator, but the all-dimensional sign or its priced-facet alternative remains open. | `paper5/divergence.tex`, `(RBB)`; `audit_carrier_separator_payment.py` |
+| Root-block aggregate reduction and failure | **Exact identity; universal sign disproved.** For the full nongainer maximum-overlap root block, the budget is `[g(g+h)U-gpR-[g+h(p+1)]D]/[g(g+h)]`.  All 65 role-irreducible six-player controls have nonnegative numerator, but an exact role-irreducible seven-player lower envelope has numerator `-8` and scalar margin `-1`.  Its overlap is safely `76/85`, and a labelled tight-support enlargement closes with margin `17/30`; only the full-root-block shortcut fails.  The repair row is selected by primitive first-floor circuit `1_59+e_2+e_6=1_N`, a relative selection-cell circuit rather than a new full-cone facet. | `paper5/divergence.tex`, `(RBB)--(RBB-C)`; `verify_n7_root_block_budget_counterexample.py`; exact JSON |
+| Root-exclusion transport | **Proved dimension-free support lemma.** For every gainer, positive-loss sources in any sign-coherent Lmin transport lie among nonroot nongainers, never in the nongainer maximum-overlap root block.  Each eligible source satisfies `M-z_i >= (M-x_j)+(x_i-z_i)`.  The lemma localizes the budget but does not bound joint transport congestion. | `paper5/divergence.tex`, `(RET)`; staged-transport theorem |
 | Common carrier contraction | **Proved.** A common x/z tight-face carrier module contracts to one weighted role while preserving exactness, weighted selectors, total, and overlap. | commits `5ac2ab8`, `fc28a1a`; research note |
 | Canonical block expansion | **Proved.** A nonnegative exact weighted role game expands to a singleton-normalized exact atomic game when every unit-weight role has zero singleton worth.  Weighted selectors and overlap are preserved. | commit `fc28a1a`; research note |
 | Common-module role induction | **Proved structural reduction.** Formulate the target for weighted games by number of roles while holding total atomic weight fixed.  A common selector module contracts to fewer roles without changing the target data, so strong induction discharges the contraction arm; the base through four roles is now complete.  A role-minimal counterexample is therefore common-module-free. | `paper5/divergence.tex`, Proposition `common-module-induction`; `paper5/HYBRID_OVERLAP_FACET_PROGRAM.md`; `audit_carrier_separator_payment.py` |
@@ -153,6 +155,9 @@ The following must not be silently reintroduced.
 
 - Uniform generators or monotonicity under majorization.
 - Cycle-only or full-carrier-closure selection.
+- Full nongainer maximum-overlap root-block selection.  The exact seven-player
+  `(RBB-CE)` control has RBB numerator `-8`; its successful direct block is
+  instead the nongainer part of labelled Lmin-tight coalition `59`.
 - Closure by one arbitrary Lmax separator.
 - Gauge-invariant rooted-facet affordability.
 - Coefficient magnitude as invariant carrier currency; only normalized support

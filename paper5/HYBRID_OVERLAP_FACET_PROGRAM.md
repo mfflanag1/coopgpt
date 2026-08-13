@@ -44,7 +44,12 @@ or the block contracts to one integer-weighted role while preserving
 exactness, both weighted lex selections, total payoff, and overlap.  This
 falsifies “the cycle itself is always the direct block” on twelve exact
 archive rows and replaces it with a separator-or-weighted-contraction
-program.  Canonical block expansion proves that the weighted endowed quotient
+program.  A new exact seven-player role-irreducible control also falsifies
+the stronger “take every nongainer maximum-overlap root” rule: its aggregate
+root budget is `-1`, while one Lmin-tight support enlargement has margin
+`17/30` and closes at base `5/6`.  The surviving problem is therefore
+labelled tight-support selection, not root-set closure.  Canonical block
+expansion proves that the weighted endowed quotient
 is equivalent to a singleton-normalized exact block game, but does not yet
 yield an induction because the weighted affordability/carrier theorems have
 not been proved.  Weighted quotients with at most three roles are now closed
@@ -55,9 +60,10 @@ endowed crossing matrix has no diagonal gap, its adjacent gaps have an exact
 atomic cost formula, and the unique target equality expands to the known
 six-player `(4,2)`/`(2,4)` profile.  A connected positive-Lorenz continuation
 then rules out every opposite-endpoint face change, completing the weighted
-four-role quotient theorem.  The remaining theorem on the carrier arm is a normalized
-separator/facet coupling together with that higher-dimensional quotient
-classification, not a scalar lower bound on one separator slack.
+four-role quotient theorem.  The remaining theorem on the carrier arm is a
+normalized staged-support or separator/facet coupling together with that
+higher-dimensional quotient classification, not a scalar lower bound on one
+separator slack or the full root block.
 
 The conclusion is that the correct missing object is a **fully labelled
 fractional coupling with a distinguished singleton root**.  The one-witness
@@ -5133,9 +5139,11 @@ after this cancellation.  The remaining choice is only the nongainer block
 `H` containing a carrier cycle.  On the 65 role-irreducible archived rows,
 the cycle alone satisfies the scalar budget on 63; taking `H` to be the full
 nongainer maximum-overlap root block closes all 65.  This is exact finite
-evidence for a root-block budget lemma, not its proof.
+evidence for an `n=6` pattern; the seven-player counterexample below proves
+that pattern is not a dimension-free lemma.
 
-The root-block statement reduces to three aggregate scalars.  Let `M` be the
+The tempting full-root-block statement reduces to three aggregate scalars.
+Let `M` be the
 maximum overlap coordinate, let `H` be all nongainer roots, let `P` be the
 other nongainers, and define
 
@@ -5153,11 +5161,76 @@ U_(g-1)-L_H
  =[g(g+h)U-gpR-[g+h(p+1)]D]/[g(g+h)].              (RBB)
 ```
 
-Thus the remaining direct conjecture is the single linear aggregate
-inequality that the numerator of `(RBB)` is nonnegative on the
-role-irreducible all-unaffordable branch.  Maximum-overlap geometry alone
-does not imply it; this is exactly where a carrier/root selection theorem or
-priced separator facet must contribute.
+The aggregate identity is correct, but its proposed sign is false.  A
+singleton-normalized seven-player lower envelope of the three allocations
+
+```text
+(6,7,1,0,2,0,1), (7,0,0,0,0,10,0), (0,0,0,5,4,6,2)
+```
+
+has exact selections
+
+```text
+x=(3,7/2,1,3,2,7/2,1),
+z=(14/5,16/5,2/5,13/5,16/5,16/5,8/5).
+```
+
+Its maximum-overlap roots `H={1,5}` are mutually locked, both full menus are
+unaffordable, and Lmax-tight rows `33` and `101` split the carrier cycle, so
+the row is role-irreducible at that block.  Nevertheless
+
+```text
+M=16/5, P={0,2,3}, G={4,6},
+U=19/5, R=17/5, D=9/5,
+g(g+h)U-gpR-[g+h(p+1)]D=-8.                         (RBB-CE)
+```
+
+This disproves the universal full-root-block shortcut, not `(H)`: the actual
+overlap ratio is `76/85>7/12`.  In fact the unique target-reaching tight
+direct row is coalition `59`.  It enlarges the cycle by the labelled
+nongainers `0,3`, giving
+
+```text
+P={2}, G={4,6}, H={0,1,3,5}, J={4},
+base=5/6, U_(g-1)-L_H=17/30>0.                      (RBB-R)
+```
+
+The successful row is not an arbitrary favorable member of the full tight
+menu.  It is the coalition column in the primitive first-stage Lmin circuit
+
+```text
+1_59+e_2+e_6=1_N,                                  (RBB-C)
+```
+
+where `2,6` are the two first-floor players and `6` is the omitted gainer.
+Thus the complete staged packet itself selects the repair.  The unit columns
+in `(RBB-C)` are stage-floor columns, not tight singleton game inequalities;
+this is a relative selection-cell circuit and does not assert a new full
+exact-game-cone facet.
+
+Thus the correct direct arm is the carrier-**support** selection lemma below:
+one must select the nongainer part of a staged tight row, rather than apply a
+label-free closure rule to the root set.
+
+There is a dimension-free localization of the missing charge.  Let
+`d=x-z`, let `j` be a gainer, and use any sign-coherent Lmin transport for
+`j`.  Every positive-loss source `i` in that transport satisfies
+`x_i<=x_j<M`.  A nongainer maximum-overlap root has `x_i>=M`, so no member of
+the root block can be such a source; every source lies among the other
+nongainers `P`.  Moreover, writing `u_i=M-z_i` and `r_j=M-x_j`,
+
+```text
+u_i=(M-x_i)+(x_i-z_i)>=r_j+(x_i-z_i).               (RET)
+```
+
+> **Lemma (root-exclusion transport).**  Every gainer's sign-coherent Lmin
+> transport draws its positive loss currency entirely from nonroot
+> nongainers, and every eligible source carries both its own loss and the
+> gainer's root-distance reserve as in `(RET)`.
+
+This proves the correct support side of the coupling.  It does not bound the
+joint column congestion of the transports; that quantitative congestion, or
+a mixed marked-facet alternative, is the remaining dimension-free gap.
 
 There is a parallel exact reduction on the direct side.  Let `C` be any
 `x`-tight coalition meeting a carrier cycle.  The module property forces
@@ -5189,14 +5262,17 @@ U_(g-1)>=L_(H_C).                                  (CTS2)
 > containing a carrier cycle satisfies `(CTS2)` directly; common-module cases
 > are discharged by role induction.
 
-This formulation contains precisely the twelve archive repairs: the cycle
+This formulation contains precisely the twelve six-player archive repairs
+and the seven-player control `(RBB-CE)`: the cycle
 alone is not always the correct nongainer block, but adjoining the other
 nongainers already present in a selected tight coalition is allowed.  On all
 228 archived six-player all-unaffordable rows, some such coalition satisfies
-`(CTS2)`; 216 use no extra nongainer and twelve use exactly one.  This is
-still finite evidence.  The prospective human proof must derive the scalar
-root-block budget from the two staged pinning systems or expose its
-marked-facet alternative.
+`(CTS2)`; 216 use no extra nongainer and twelve use exactly one.  The new
+seven-player control needs two extra nongainers and proves that no bound of
+one is dimension-free.  This is still finite evidence.  The prospective
+human proof must derive selected-support congestion from the two staged
+pinning systems or expose its marked-facet alternative; it may not invoke the
+now-refuted full-root-block sign.
 
 Affordability is only the scalar price part of the hybrid proof.  Formula
 `(MFP)` still needs the forced deficits to occupy the required loss strata,

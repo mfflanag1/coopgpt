@@ -109,6 +109,10 @@ run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   --output "$scratch_dir/carrier-separator-payment.json"
 cmp coopgames/verifiers/divergence/carrier_separator_payment.json \
   "$scratch_dir/carrier-separator-payment.json"
+run_python coopgames/verifiers/divergence/verify_n7_root_block_budget_counterexample.py \
+  --output "$scratch_dir/n7-root-block-budget-counterexample.json"
+cmp coopgames/verifiers/divergence/n7_root_block_budget_counterexample.json \
+  "$scratch_dir/n7-root-block-budget-counterexample.json"
 run_python coopgames/verifiers/divergence/verify_weighted_three_role_coincidence.py \
   --output "$scratch_dir/weighted-three-role-coincidence.json"
 cmp coopgames/verifiers/divergence/weighted_three_role_coincidence.json \

@@ -116,8 +116,8 @@ Thus the best proper packet has size `g-1`, its labels are irrelevant, and
 the only remaining direct condition is the scalar nongainer-block budget
 `U_(g-1)>=L_H`.  On all 65 role-irreducible archive rows, taking `H` to be
 the full nongainer maximum-overlap root block passes this budget; the cycle
-alone passes on 63.  This is finite evidence for the root-block budget
-statement, not a proof of it.
+alone passes on 63.  This was only an `n=6` pattern, and the exact
+seven-player control below disproves its dimension-free extension.
 
 Writing `M` for maximum overlap, `H` for all nongainer roots, `P` for the
 other nongainers, and
@@ -126,15 +126,65 @@ other nongainers, and
 U=sum_(P)(M-z_i),  R=sum_(G)(M-x_j),  D=z(G)-x(G),
 ```
 
-the remaining budget is exactly
+the full-root-block budget is exactly
 
 ```text
 U_(g-1)-L_H
  =[g(g+h)U-gpR-[g+h(p+1)]D]/[g(g+h)].
 ```
 
-The unresolved root-block theorem is precisely nonnegativity of this
-numerator under the role-irreducible all-unaffordable hypotheses.
+The identity is correct, but its proposed sign is false.  The exact lower
+envelope of
+
+```text
+(6,7,1,0,2,0,1), (7,0,0,0,0,10,0), (0,0,0,5,4,6,2)
+```
+
+has
+
+```text
+x=(3,7/2,1,3,2,7/2,1),
+z=(14/5,16/5,2/5,13/5,16/5,16/5,8/5).
+```
+
+Roots `{1,5}` are mutually locked and unaffordable, while Lmax-tight rows
+`33,101` split them.  For the full root block,
+
+```text
+M=16/5, P={0,2,3}, G={4,6}, U=19/5, R=17/5, D=9/5,
+RBB numerator=-8, scalar margin=-1.
+```
+
+The main target is unharmed: `O/T=76/85>7/12`.  The unique target-reaching
+direct packet uses tight coalition `59` and
+
+```text
+P={2}, G={4,6}, H={0,1,3,5}, J={4},
+base=5/6, scalar margin=17/30.
+```
+
+Thus the surviving conjecture is selected tight-support congestion or a
+separator/marked-facet alternative, not full-root-block nonnegativity.  A
+new human support lemma helps: every positive-loss source in a gainer's
+sign-coherent Lmin transport satisfies `x_i<=x_j<M`, so it lies among the
+nonroot nongainers, and
+
+```text
+M-z_i >= (M-x_j)+(x_i-z_i).
+```
+
+What remains unproved is the necessary joint column-congestion bound.
+
+Reproduce the counterexample and its independently formulated staged
+optimality checks with
+
+```bash
+python3 coopgames/verifiers/divergence/verify_n7_root_block_budget_counterexample.py \
+  --output /tmp/n7-root-block-budget-counterexample.json
+
+cmp coopgames/verifiers/divergence/n7_root_block_budget_counterexample.json \
+  /tmp/n7-root-block-budget-counterexample.json
+```
 
 ## Hostile questions
 
@@ -161,10 +211,17 @@ numerator under the role-irreducible all-unaffordable hypotheses.
 10. Does comparison--residual cancellation legitimately remove the need for
     an Lmin-tight comparison row, or is some earlier use of tightness hidden
     in the master identity?
-11. Can the root-block scalar budget be derived from maximum-overlap geometry
-    and the two staged pinning systems, or do the exact six-player controls
-    conceal a higher-dimensional marked-facet alternative?
-12. Is the aggregate reduction `(RBB)` algebraically correct when `H` has
-    several root strata in Lmin but one common overlap level?
+11. Is the new seven-player control fully role-irreducible at the carrier
+    cycle, and do the dual staged certificates and primal Z3 direction checks
+    independently establish the displayed selectors within their stated
+    shared-core boundary?
+12. Does root-exclusion transport follow for every sign-coherent staged lift,
+    including tied Lmin stages, without assuming unit-box coefficients?
+13. What additional labelled Hall/congestion condition forces some
+    cycle-containing tight support to satisfy `(CTS2)` without reintroducing
+    the refuted full-root-block, cycle-only, or one-extra-player rules?
+14. When the selected-support congestion condition fails, does the splitting
+    Lmax packet necessarily expose an already classified mixed rooted-pair
+    facet, or can a genuinely new indecomposable class occur?
 
 No novelty or external validation is claimed.
