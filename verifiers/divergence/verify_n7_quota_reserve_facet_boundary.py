@@ -92,6 +92,40 @@ def pair_lift_facet(values):
     ):
         raise AssertionError("rooted packing deficits changed")
 
+    # Rooted complement averaging.  For the offroot nongainer set A, the
+    # packing-weighted excluded Lmax mass and cardinality are determined
+    # exactly by root excess and uncovered-player deficits.
+    offroot_nongainers = (1, 2, 3, 5)
+    excluded = {
+        coalition: tuple(i for i in offroot_nongainers if not coalition >> i & 1)
+        for coalition in packing
+    }
+    weighted_excluded_z = sum(
+        (
+            weight * sum((LMAX[i] for i in excluded[coalition]), F())
+            for coalition, weight in packing.items()
+        ),
+        F(),
+    )
+    weighted_excluded_size = sum(
+        (weight * len(excluded[coalition]) for coalition, weight in packing.items()),
+        F(),
+    )
+    excluded_z_rhs = root_excess * sum((LMAX[i] for i in offroot_nongainers), F())
+    excluded_z_rhs += sum((deficits[i] * LMAX[i] for i in offroot_nongainers), F())
+    excluded_size_rhs = root_excess * len(offroot_nongainers)
+    excluded_size_rhs += sum((deficits[i] for i in offroot_nongainers), F())
+    tangent_lhs = sum(
+        (deficits[i] * (LMIN[i] - LMAX[i]) for i in range(1, 7)), F()
+    )
+    tangent_rhs = root_excess * (LMIN[0] - LMAX[0])
+    if (
+        weighted_excluded_z != excluded_z_rhs
+        or weighted_excluded_size != excluded_size_rhs
+        or tangent_lhs < tangent_rhs
+    ):
+        raise AssertionError("rooted complement/tangent coupling changed")
+
     coefficients = dict(packing)
     for i, deficit in enumerate(deficits):
         if deficit:
@@ -144,6 +178,17 @@ def pair_lift_facet(values):
         "active_vertex_equations": ["a+b=1", "a+c=1", "b+c=1"],
         "root_excess": str(root_excess),
         "deficits": fraction_strings(deficits),
+        "rooted_complement_average": {
+            "offroot_nongainers": list(offroot_nongainers),
+            "excluded_sets": {str(k): list(v) for k, v in excluded.items()},
+            "weighted_excluded_z": str(weighted_excluded_z),
+            "excess_deficit_z_rhs": str(excluded_z_rhs),
+            "weighted_excluded_cardinality": str(weighted_excluded_size),
+            "excess_deficit_cardinality_rhs": str(excluded_size_rhs),
+            "tangent_lhs": str(tangent_lhs),
+            "tangent_rhs": str(tangent_rhs),
+            "tangent_slack": str(tangent_lhs - tangent_rhs),
+        },
         "price_Q_over_delta": str(price),
         "weighted_floor_distance": str(weighted_floor_distance),
         "rooted_pair_premium": str(rooted_pair_premium),

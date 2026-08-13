@@ -103,6 +103,12 @@ run_python coopgames/verifiers/divergence/audit_cover_to_direct_handover.py \
   --output "$scratch_dir/cover-to-direct-handover.json"
 cmp coopgames/verifiers/divergence/cover_to_direct_handover.json \
   "$scratch_dir/cover-to-direct-handover.json"
+run_python coopgames/verifiers/divergence/audit_marked_packing_target_reserve.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/marked-packing-target-reserve.json"
+cmp coopgames/verifiers/divergence/marked_packing_target_reserve.json \
+  "$scratch_dir/marked-packing-target-reserve.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

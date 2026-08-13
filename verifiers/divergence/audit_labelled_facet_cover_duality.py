@@ -130,14 +130,18 @@ def solve_labelled_cover(support: tuple[int, ...], root: int, n: int) -> dict:
     if margin != K * delta - q_bad:
         raise AssertionError("labelled-row elimination identity failed")
 
-    # On a zero-margin face, affordability also requires positive root excess.
+    # Optimize root excess over the entire price-optimal face.  On a
+    # zero-margin face this decides affordability; away from zero it records
+    # which price-maximizing marked decomposition carries the most rooted
+    # charge, rather than depending on an arbitrary LP optimizer.
     max_delta_on_top = delta
-    if margin == 0 and traces:
+    top_face_solution = primal_solution
+    if traces:
         delta_coefficients = tuple(
             F(1 - sum((trace >> i) & 1 for i in good_set))
             for trace in traces
         )
-        status, delta_objective, _ = exact_linprog(
+        status, delta_objective, top_face_solution = exact_linprog(
             [-coefficient for coefficient in delta_coefficients],
             primal_ub,
             primal_rhs,
@@ -183,6 +187,7 @@ def solve_labelled_cover(support: tuple[int, ...], root: int, n: int) -> dict:
         "common_nonpair_carriers": sorted(common_nonpair_carriers),
         "unique_pair_partner_escaped_by_nonpair": unique_pair_partner_escaped,
         "packing": [str(value) for value in primal_solution],
+        "max_root_excess_top_face_packing": [str(value) for value in top_face_solution],
         "cover": [str(value) for value in cover_solution],
     }
 

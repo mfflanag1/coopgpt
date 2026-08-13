@@ -5326,6 +5326,43 @@ seven-player repair can move in the opposite direction when enlarging the
 excluded block adds above-mean Lmax mass.  It does not make admissible
 supports nested.
 
+The rooted packing and excluded-block reserve have an exact common
+accounting law.  Let `u` be a root-containing fractional packing supported
+on `x`-tight rows, with
+
+```text
+delta=sum_S u_S-1,
+q_i=1-sum_(S:i in S)u_S                    (i != r). (RCA1)
+```
+
+For any offroot set `A` and `P_S=A\S`, coordinate counting gives
+
+```text
+sum_S u_S z(P_S)=delta z(A)+sum_(i in A)q_i z_i,
+sum_S u_S |P_S|=delta |A|+sum_(i in A)q_i.           (RCA2)
+```
+
+Because each supported row is `x`-tight and `z` is core-feasible,
+
+```text
+sum_(i != r)q_i(x_i-z_i)>=delta(x_r-z_r).            (RCA3)
+```
+
+If, in addition, every supported row contains the selected nongainer
+carrier, is proper on the gainer side, and has one excluded-block size `p`,
+then proper tightness supplies the comparison premise and
+
+```text
+sum_S u_S R_tau(P_S)
+ =(1+delta)[(1-tau)T-D]
+  -[gn/((n-p)(p+1))][delta z(A)+sum_(i in A)q_i z_i]. (RCA4)
+```
+
+A nonnegative right side selects a target-reaching row.  This is a genuine
+dimension-free reserve/facet interface.  It does not prove the universal
+handover: the price-optimal packing can mix complement sizes or omit the
+proper rows, and a negative average supplies no facet conclusion.
+
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;
 `477` meet the quota, and every cycle has at least one.  The minimum closing
@@ -5337,8 +5374,18 @@ Q(P)=71/35, required=54/35,
 quota margin=17/35, budget margin=17/30.
 ```
 
-These are finite controls, not the missing existence proof.  The remaining
-coupling is now especially concrete.  Root-exclusion transport says eligible
+These are finite controls, not the missing existence proof.  A stricter
+same-packing audit localizes the missing combinatorics.  Across the 233
+archived records with every maximum-overlap root unaffordable, all 521
+optimal labelled-price faces have maximum root excess zero.  Every root
+nevertheless has a target-reserve closer in its complete staged support.  A
+row of the same price-optimal packing closes at 444 roots.  The other 77 need
+a support exchange of symmetric-difference distance one (25 roots) or two
+(52 roots), covering 34 records.  Thus the stronger same-optimal-packing
+handover is false; the live combinatorial step is a charged support-exchange
+theorem.  The distances are archive facts, not a dimension-free bound.
+
+The remaining coupling is now especially concrete.  Root-exclusion transport says eligible
 sources occur among nonroot nongainers and, with `alpha=M-T/n`, obey
 
 ```text
