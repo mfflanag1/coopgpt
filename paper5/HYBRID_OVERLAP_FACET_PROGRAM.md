@@ -6113,13 +6113,17 @@ support orbits with multiplicities `(4,3,4)`.  Two already occur in the
 five-orbit n=6 atlas.  The third, canonical support `(1,3,13,49)`, is the
 saturated three-branch rooted star with off-root block sizes `(1,2,2)`.
 Thus the positive aggregate arm stays inside the proved
-saturated/clone-expanded rooted-star class.  The other ten rows have root
+saturated/clone-expanded rooted-star class.  Every one of the eleven finite
+markings is also scalar-affordable: with `K=4`, its effective price
+`Q/delta` is `1` or `2`, so `K delta-Q>0`.  Payoff-stratum alignment remains
+separate.  The other ten rows have root
 excess exactly zero.  All ten are already closed by prior archive arms: eight
 have a direct target packet, three pass ceiling interpolation, and five have
 an affordable labelled root (counts overlap).  Thus they are not new finite
 hard cases.  The universal obligations are now: tied aggregate geometry must
 force an earlier arm, and the positive aggregate facet must receive enough
-hybrid-overlap price.  Indecomposability alone does not prove pricing.
+hybrid-overlap price.  Indecomposability and scalar affordability alone do
+not prove the required alignment.
 
 The tied cell has an exact rooted cover dual.  For aggregate tagged support
 `D` and top root `r`, let `L_r` maximize the total weight on rows containing

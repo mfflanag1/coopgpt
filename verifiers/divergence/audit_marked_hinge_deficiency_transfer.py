@@ -188,6 +188,10 @@ def best_mixed_rooted_pair_packet(certificate, hinge, top, n):
             "decomposition_count": len(decompositions),
             "exact_cone_facet": minimal and not decompositions,
             "orbit": rooted_support_orbit(root, support, n),
+            "deficit_total": deficit_total,
+            "marked_margin": (n * n // 4 - n + 1)
+            * best["root_excess"]
+            - deficit_total,
         }
     )
     return best
@@ -273,6 +277,13 @@ def audit_record(
                 counters[
                     "positive_transfer_rows_with_indecomposable_pair_facet"
                 ] += 1
+                counters[
+                    "positive_transfer_facets_with_positive_marked_margin"
+                ] += packet["marked_margin"] > 0
+                if packet["marked_margin"] <= 0:
+                    raise AssertionError(
+                        "positive aggregate facet is not affordably marked"
+                    )
                 packet_rows.append(
                     {
                         "source": source,
@@ -280,6 +291,11 @@ def audit_record(
                         "common_hinge": coalition,
                         "root": packet["root"],
                         "root_excess": str(packet["root_excess"]),
+                        "deficit_total": str(packet["deficit_total"]),
+                        "effective_marked_price": str(
+                            packet["deficit_total"] / packet["root_excess"]
+                        ),
+                        "marked_margin": str(packet["marked_margin"]),
                         "support": list(packet["support"]),
                         "coefficients": [
                             {
