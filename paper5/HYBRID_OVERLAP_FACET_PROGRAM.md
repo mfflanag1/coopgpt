@@ -6064,8 +6064,14 @@ z=(3,4,4,4,4,4),  T=23,  O=22.
 ```
 
 Thus the finite residue is now one common-hinge normal form, not a generic
-weighted five-role problem.  The live theorem must price the positive arm or
-activate a target-reaching common-hinge packet on the zero arm.
+weighted five-role problem.  That record has an exact common top over-cover
+with `theta=1/4`, row `58={1,3,4,5}` at weight `1/4`, and zero cross-surplus.
+The proved spectral bound is exactly `22=O`, above the six-player target
+`2T/3=46/3`.  Hence all ten finite quotient occurrences close: eight by
+priced mixed-colour payments and two duplicate occurrences by the same
+common-hinge/top-over-cover certificate.  Universally, the live theorem must
+still price the positive arm or prove that zero marked payment forces a
+target-reaching common-support packet; `(PXC44)` alone gives only one hinge.
 
 The exact archive replay finds `493` distinct excluded blocks across the
 `420` nongainer carrier cycles in the six-player all-unaffordable branch;

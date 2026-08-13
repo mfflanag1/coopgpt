@@ -43,7 +43,12 @@ from audit_labelled_facet_cover_duality import (  # noqa: E402
     maximum_overlap_roots,
     solve_labelled_cover,
 )
-from audit_lmax_overcover import coalition_sum, records, top_certificate  # noqa: E402
+from audit_lmax_overcover import (  # noqa: E402
+    coalition_sum,
+    records,
+    spectral_bound,
+    top_certificate,
+)
 from audit_n6_sparse_lmax_complete_lmin_roots import (  # noqa: E402
     complete_lmin_support,
 )
@@ -655,6 +660,7 @@ def audit_pair(
                         marked_reverse_payments = ()
                         locked_split_payments = ()
                         common_hinge_rows = ()
+                        common_hinge_overcover = None
                         if not cycle_split_payments:
                             locked = cycle_set | {j}
                             z_support = full_tight_support(values, z)
@@ -739,6 +745,44 @@ def audit_pair(
                             counters[
                                 "pxc40_locked_satellite_only_common_hinge"
                             ] += bool(common_hinge_rows) and not positive_mixed_payments
+                            if common_hinge_rows and not positive_mixed_payments:
+                                certificate = top_certificate(values, z)
+                                cross_surplus = sum(
+                                    (
+                                        certificate["alpha"][i] * x[i]
+                                        for i in range(n)
+                                    ),
+                                    F(0),
+                                ) - max(z)
+                                support_is_common = all(
+                                    coalition in full_support
+                                    for coalition in certificate["support"]
+                                )
+                                bound = spectral_bound(
+                                    x,
+                                    z,
+                                    certificate["theta"],
+                                    cross_surplus,
+                                )
+                                common_hinge_overcover = {
+                                    "theta": str(certificate["theta"]),
+                                    "alpha": [
+                                        str(value) for value in certificate["alpha"]
+                                    ],
+                                    "support": list(certificate["support"]),
+                                    "weights": [
+                                        str(value) for value in certificate["weights"]
+                                    ],
+                                    "cross_surplus": str(cross_surplus),
+                                    "support_is_common": support_is_common,
+                                    "spectral_overlap_bound": str(bound),
+                                }
+                                counters[
+                                    "pxc40_locked_satellite_common_top_overcover"
+                                ] += support_is_common
+                                counters[
+                                    "pxc40_locked_satellite_common_top_overcover_reaches_target"
+                                ] += support_is_common and bound >= target * total
                         if cycle_split_payments:
                             counters[
                                 "pxc40_satellite_separator_bridges_base_within_currency"
@@ -778,6 +822,7 @@ def audit_pair(
                                         for coalition, payment in marked_reverse_payments
                                     ],
                                     "common_hinge_rows": list(common_hinge_rows),
+                                    "common_hinge_overcover": common_hinge_overcover,
                                 }
                             )
                         continue
