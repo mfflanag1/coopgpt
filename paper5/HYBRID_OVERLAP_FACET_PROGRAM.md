@@ -5525,6 +5525,35 @@ archived intersections and closes at least one row at all 73 roots.  Those
 `sigma_I=1/2` and are closed by `(PXC7)`.  On the selected seven-player repair
 it is again exact at `289/60`.  This complementary finite coverage motivates a
 max-certificate theorem but is not a dimension-free disjunction proof.
+
+The complete strict-cycle replay supplies a sharper incidence selector.  In
+the two six-player archives there are `415` positive-loss nongainer carrier
+cycles and `862` admissible rows in one extracted complete staged Lmin
+support.  For each cycle retain only rows minimizing `p`, the number of
+excluded nongainers.  All `829` resulting minimum-deletion rows have **both**
+`(PXC6)>=0` and `(PXC11)>=0`.  The minimum is `p=1` on `304` cycles and `p=2`
+on `111`.  The rule is incidence-defined and is stronger than retrospectively
+maximizing reserve.
+
+Arbitrary proper rows are not safe: exactly four nonminimal `p=2` rows have
+actual reserve `-1/3`, with both lower certificates equal to `-1/3`; each of
+their cycles has a closing minimum-deletion alternative.  The sole strict
+cycle in the fixed seven-player hostile family has four admissible rows, all
+minimum-deletion and all closing under both certificates.  This motivates the
+live **minimum-deletion two-colour selection conjecture**: some
+minimum-deletion row closes simultaneously under `(PXC6)` and `(PXC11)`, or
+the sparse Lmax separator dual supplies the priced rooted-facet alternative.
+The archive is a falsification laboratory, not a proof of that disjunction.
+Reproduce the exact counts and the four negative controls with
+
+```bash
+python verifiers/divergence/audit_strict_carrier_minimum_deletion.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output /tmp/strict_carrier_minimum_deletion_audit.json
+cmp /tmp/strict_carrier_minimum_deletion_audit.json \
+  verifiers/divergence/strict_carrier_minimum_deletion_audit.json
+```
+
 Of the closest properizations, 25 delete one payoff gainer at
 incidence distance and price loss one, while 48 delete one payoff gainer plus
 one nongainer at distance and price loss two.  The four other distance-two
