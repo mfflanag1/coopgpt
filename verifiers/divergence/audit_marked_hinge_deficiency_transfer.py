@@ -27,7 +27,10 @@ from pathlib import Path
 COOPGAMES = Path(__file__).resolve().parents[2]
 sys.path.insert(0, str(COOPGAMES / "src"))
 
-from audit_carrier_separator_payment import full_tight_support  # noqa: E402
+from audit_carrier_separator_payment import (  # noqa: E402
+    directed_cycles,
+    full_tight_support,
+)
 from audit_direct_ceiling_common_hinge_trichotomy import (  # noqa: E402
     has_direct_packet,
 )
@@ -203,6 +206,68 @@ def best_mixed_rooted_pair_packet(certificate, hinge, top, n):
         }
     )
     return best
+
+
+def full_menu_marked_alternative(values, x, z, hinge):
+    n = len(x)
+    top = {i for i, value in enumerate(z) if value == max(z)}
+    z_tight = full_tight_support(values, z)
+    packet = best_mixed_rooted_pair_packet(
+        {"support": z_tight}, hinge, top, n
+    )
+    if packet["root_excess"] > 0:
+        return {
+            "kind": "positive_full_menu_mixed_packet",
+            "root": packet["root"],
+            "root_excess": str(packet["root_excess"]),
+        }
+
+    hinge_top = {
+        player for player in top if hinge >> player & 1
+    }
+    covers = {row["root"]: row for row in packet["root_covers"]}
+    graph = {}
+    for root in sorted(hinge_top):
+        carriers = tuple(
+            carrier
+            for carrier in covers[root]["common_carriers"]
+            if carrier in hinge_top
+        )
+        if not carriers:
+            raise AssertionError("tied full-menu root has no top hinge carrier")
+        graph[root] = carriers
+    cycles = directed_cycles(graph)
+    if not cycles:
+        raise AssertionError("tied full-menu carrier graph has no cycle")
+    cycle = cycles[0]
+    cycle_set = set(cycle)
+    x_splitters = tuple(
+        coalition
+        for coalition in full_tight_support(values, x)
+        if 0
+        < len(
+            cycle_set
+            & {i for i in range(n) if coalition >> i & 1}
+        )
+        < len(cycle_set)
+    )
+    payments = tuple(
+        coalition_sum(z, coalition) - coalition_sum(x, coalition)
+        for coalition in x_splitters
+    )
+    if any(payment <= 0 for payment in payments):
+        raise AssertionError("full-menu module splitter lacks strict reverse payment")
+    if x_splitters:
+        return {
+            "kind": "lmin_splitter_strict_reverse_payment",
+            "carrier_cycle": list(cycle),
+            "splitters": list(x_splitters),
+            "payments": [str(payment) for payment in payments],
+        }
+    return {
+        "kind": "common_tight_face_module",
+        "carrier_cycle": list(cycle),
+    }
 
 
 def audit_record(
@@ -410,8 +475,19 @@ def audit_record(
                             }
                             for cover in packet["root_covers"]
                         ],
+                        "full_menu_marked_alternative": (
+                            full_menu_marked_alternative(
+                                values, x, z, coalition
+                            )
+                        ),
                     }
                 )
+                alternative_kind = tied_rows[-1][
+                    "full_menu_marked_alternative"
+                ]["kind"]
+                counters[
+                    f"tied_full_menu_alternative_{alternative_kind}"
+                ] += 1
             if (
                 not same_top_trace
                 and len(certificate["support"]) > 1

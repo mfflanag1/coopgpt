@@ -6151,6 +6151,28 @@ The live bridge is now reselection—promote an aggregate carrier cycle to a
 full tight-face module, or use a tight row escaping it as a positive
 rooted/separator packet.
 
+Full-menu reselection gives that alternative exactly.  Fix a common hinge
+`A` and take the tagged family consisting of `A` plus every proper Lmax-tight
+row.  Then
+
+1. some `r in A cap H` has `L_r>1`, yielding an extreme positive-root mixed
+   packet of support at most `n-1`; or
+2. a full Lmax carrier cycle `E subset A cap H` is split by an Lmin-tight row
+   `D`, with strict reverse payment `z(D)-x(D)>0`; or
+3. `E` is a common tight-face module and contracts to one weighted role.
+
+This is `(PXC49)`.  At tie, `(PXC48')` gives a carrier in the hinge and every
+full Lmax-tight row containing the root.  Lmax optimality forces that carrier
+to remain in the top block.  A carrier cycle follows.  Any Lmin-tight
+splitter must have strict reverse comparison—equality would make it an
+Lmax-tight splitter of the cycle—and absence of a splitter makes the cycle a
+common module, where the proved contraction theorem applies.
+
+This structural theorem is dimension-free but does not lower-bound the
+strict payment.  On the ten formerly tied archive rows, full-menu reselection
+produces three positive packets, two strict reverse-payment splitters, and
+five common modules.  Price/alignment, not existence of an arm, remains.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
