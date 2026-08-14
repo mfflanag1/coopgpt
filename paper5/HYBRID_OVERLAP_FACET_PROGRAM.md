@@ -6391,6 +6391,35 @@ explained by one all-dimensional human inequality in a known facet class.
 The live question is purely existence: force this co-star, `(PXC54)`, a
 direct/separator certificate, or quotient contraction in every hard branch.
 
+The structural existence half can be closed without assuming a co-star.
+Fix a positive pinned ceiling root `r`.  Every gainer `a` satisfies
+`x_a<z_a<=z_r<=x_r`, so carrier monotonicity guarantees an Lmin-tight row
+containing `r` and omitting `a`.  Let
+
+```text
+nu_r=max sum_C rho_C
+subject to rho>=0 and sum_(C contains i)rho_C<=1 (i!=r),
+```
+
+over the full proper Lmin-tight menu containing `r`.  Then:
+
+- if `nu_r>1`, an extreme optimizer has at most `n-1` rows and its singleton
+  completion is a sparse singleton-exceptional rooted packet;
+- if `nu_r=1`, the dual cover has total one.  Every positive cover player
+  must belong to every rooted row, hence is a common carrier.  Gainer
+  exclusion makes it a nongainer, and the existing carrier theorem supplies
+  a strict Lmax separator or common-module contraction.
+
+This is the ceiling-root gainer-exclusion trichotomy `(PXC56)`.  The two
+branches are exhaustive because any nonempty rooted row scales to load one.
+It closes structural existence, not target pricing of the positive packet.
+The exact n=6 replay has 703 ceiling roots: 149 positive packets and 554 tied
+common-carrier roots, exactly the earlier full-menu unaffordable count.  All
+16 live positive-floor residuals are on the positive-packet side.  Thus the
+remaining universal step is quantitative alignment/factorization of a
+positive PXC56 packet; `(PXC54)--(PXC55)` already handle the complete star
+and co-star classes.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
@@ -6431,6 +6460,11 @@ python verifiers/divergence/audit_ordered_costar_bound.py \
   --output /tmp/ordered_costar_bound.json
 cmp /tmp/ordered_costar_bound.json \
   verifiers/divergence/ordered_costar_bound.json
+python verifiers/divergence/audit_ceiling_root_gainer_exclusion.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output /tmp/ceiling_root_gainer_exclusion.json
+cmp /tmp/ceiling_root_gainer_exclusion.json \
+  verifiers/divergence/ceiling_root_gainer_exclusion.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive

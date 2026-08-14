@@ -158,6 +158,12 @@ run_python coopgames/verifiers/divergence/audit_ordered_costar_bound.py \
   --output "$scratch_dir/ordered-costar-bound.json"
 cmp coopgames/verifiers/divergence/ordered_costar_bound.json \
   "$scratch_dir/ordered-costar-bound.json"
+run_python coopgames/verifiers/divergence/audit_ceiling_root_gainer_exclusion.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/ceiling-root-gainer-exclusion.json"
+cmp coopgames/verifiers/divergence/ceiling_root_gainer_exclusion.json \
+  "$scratch_dir/ceiling-root-gainer-exclusion.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \
