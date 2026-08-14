@@ -263,6 +263,123 @@ def minimum_lmax_root_certificate(values, x, z, target, root):
     }
 
 
+def minimum_lmax_transport_cover(
+    certificates, gains, gainers, omitted, root_loss, objective_kind="net"
+):
+    """Cover every nonomitted gainer by normalized Lmax relation bundles."""
+    targets = tuple(gainers)
+    demanded = tuple(player for player in gainers if player != omitted)
+    bundle = {}
+    reverse_credit = {}
+    for target in targets:
+        certificate = certificates[target]
+        coefficients = {player: F(player == target) for player in gainers}
+        for term in certificate["pin_terms"]:
+            player = term["player"]
+            if player in coefficients:
+                coefficients[player] += term["multiplier"]
+        bundle[target] = coefficients
+        reverse_credit[target] = sum(
+            (term["payment"] for term in certificate["reverse_terms"]), F(0)
+        )
+        net_cost = certificate["price"] * root_loss - reverse_credit[target]
+        bundle_value = sum(
+            (coefficients[player] * gains[player] for player in gainers), F(0)
+        )
+        if net_cost != bundle_value:
+            raise AssertionError("Lmax relation bundle evaluation changed")
+        if net_cost < 0:
+            raise AssertionError("Lmax relation bundle has negative net cost")
+    inequalities = []
+    rhs = []
+    for player in demanded:
+        inequalities.append([-bundle[target][player] for target in targets])
+        rhs.append(F(-1))
+    for index in range(len(targets)):
+        row = [F(0)] * len(targets)
+        row[index] = F(-1)
+        inequalities.append(row)
+        rhs.append(F(0))
+    if objective_kind == "net":
+        objective = [
+            certificates[target]["price"] * root_loss - reverse_credit[target]
+            for target in targets
+        ]
+    elif objective_kind == "root":
+        objective = [certificates[target]["price"] for target in targets]
+    else:
+        raise ValueError(f"unknown transport-cover objective {objective_kind!r}")
+    status, optimum, solution = exact_linprog(objective, inequalities, rhs)
+    if status != "optimal":
+        raise AssertionError("Lmax transport bundle cover failed")
+    loads = {
+        player: sum(
+            (solution[index] * bundle[target][player] for index, target in enumerate(targets)),
+            F(0),
+        )
+        for player in gainers
+    }
+    if any(loads[player] < 1 for player in demanded):
+        raise AssertionError("Lmax transport bundle left a demanded gainer uncovered")
+    root_price = sum(
+        (
+            solution[index] * certificates[target]["price"]
+            for index, target in enumerate(targets)
+        ),
+        F(0),
+    )
+    reverse = sum(
+        (solution[index] * reverse_credit[target] for index, target in enumerate(targets)),
+        F(0),
+    )
+    net_cost = root_price * root_loss - reverse
+    if objective_kind == "net" and optimum != net_cost:
+        raise AssertionError("Lmax bundle-cover objective decomposition failed")
+    if objective_kind == "root" and optimum != root_price:
+        raise AssertionError("Lmax bundle-cover root objective changed")
+    if net_cost != sum((loads[player] * gains[player] for player in gainers), F(0)):
+        raise AssertionError("Lmax bundle-cover gainer value changed")
+    dual_prices = None
+    if objective_kind == "root":
+        dual_inequalities = []
+        dual_rhs = []
+        for target in targets:
+            dual_inequalities.append(
+                [bundle[target][player] for player in demanded]
+            )
+            dual_rhs.append(certificates[target]["price"])
+        for index in range(len(demanded)):
+            row = [F(0)] * len(demanded)
+            row[index] = F(-1)
+            dual_inequalities.append(row)
+            dual_rhs.append(F(0))
+        dual_status, dual_objective, dual_solution = exact_linprog(
+            [F(-1)] * len(demanded), dual_inequalities, dual_rhs
+        )
+        if dual_status != "optimal" or -dual_objective != optimum:
+            raise AssertionError("Lmax bundle-cover min-max identity failed")
+        dual_prices = {
+            player: dual_solution[index]
+            for index, player in enumerate(demanded)
+            if dual_solution[index]
+        }
+    return {
+        "omitted": omitted,
+        "weights": {
+            target: solution[index]
+            for index, target in enumerate(targets)
+            if solution[index]
+        },
+        "loads": loads,
+        "objective_kind": objective_kind,
+        "objective_value": optimum,
+        "net_cost": net_cost,
+        "root_price": root_price,
+        "reverse_credit": reverse,
+        "dual_prices": dual_prices,
+    }
+
+
 def root_rows(values, x, z):
     n = len(x)
     total = sum(x, F(0))
@@ -485,6 +602,103 @@ def root_rows(values, x, z):
                     for player in gainers
                     if z[player] - x[player] == maximum_individual_gain
                 )
+                gains = {
+                    player: z[player] - x[player] for player in gainers
+                }
+                transport_covers = tuple(
+                    minimum_lmax_transport_cover(
+                        root_certificates,
+                        gains,
+                        gainers,
+                        omitted,
+                        root_loss,
+                    )
+                    for omitted in maximum_gainers
+                )
+                transport_cover = min(
+                    transport_covers,
+                    key=lambda cover: (cover["net_cost"], cover["omitted"]),
+                )
+                root_price_covers = tuple(
+                    minimum_lmax_transport_cover(
+                        root_certificates,
+                        gains,
+                        gainers,
+                        omitted,
+                        root_loss,
+                        objective_kind="root",
+                    )
+                    for omitted in maximum_gainers
+                )
+                root_price_cover = min(
+                    root_price_covers,
+                    key=lambda cover: (cover["root_price"], cover["omitted"]),
+                )
+                dual_tau = root_price_cover["root_price"]
+                dual_y = {
+                    player: root_price_cover["dual_prices"].get(player, F(0))
+                    for player in gainers
+                }
+                if sum(dual_y.values(), F(0)) != dual_tau:
+                    raise AssertionError("bundle-cover dual prices do not sum to tau")
+                dual_separator_rows = {}
+                if dual_tau > 1:
+                    for relation_target, certificate in root_certificates.items():
+                        weighted_row_value = F(0)
+                        negative_rows = []
+                        for term in certificate["reverse_terms"]:
+                            coalition = term["coalition"]
+                            row_value = (
+                                -dual_tau * F(bool(coalition >> root & 1))
+                                + sum(
+                                    (
+                                        dual_y[player]
+                                        for player in gainers
+                                        if coalition >> player & 1
+                                    ),
+                                    F(0),
+                                )
+                            )
+                            weighted_row_value += term["multiplier"] * row_value
+                            if row_value < 0:
+                                omitted_price = sum(
+                                    (
+                                        dual_y[player]
+                                        for player in gainers
+                                        if not (coalition >> player & 1)
+                                    ),
+                                    F(0),
+                                )
+                                if not (coalition >> root & 1) or omitted_price <= 0:
+                                    raise AssertionError("dual separator lost its rooted omission label")
+                                negative_rows.append(
+                                    {
+                                        "coalition": coalition,
+                                        "multiplier": term["multiplier"],
+                                        "dual_row_value": row_value,
+                                        "omitted_dual_price": omitted_price,
+                                        "reverse_slack": term["reverse_slack"],
+                                    }
+                                )
+                        bundle_dual_value = dual_y[relation_target] + sum(
+                            (
+                                term["multiplier"] * dual_y[term["player"]]
+                                for term in certificate["pin_terms"]
+                                if term["player"] in dual_y
+                            ),
+                            F(0),
+                        )
+                        expected_row_value = (
+                            bundle_dual_value
+                            - certificate["price"] * dual_tau
+                        )
+                        if weighted_row_value != expected_row_value:
+                            raise AssertionError("bundle dual separator identity failed")
+                        if weighted_row_value > certificate["price"] * (1 - dual_tau):
+                            raise AssertionError("bundle dual constraint failed to separate")
+                        if not negative_rows:
+                            raise AssertionError("tau>1 relation has no negative rooted separator")
+                        dual_separator_rows[relation_target] = negative_rows
                 aggregate_candidates = {
                     omitted: sum(
                         (
@@ -504,6 +718,19 @@ def root_rows(values, x, z):
                 cardinality_slack = (
                     F(n, g * (n - g)) - F(n, (n * n) // 4)
                 ) * total
+                transport_cover_reserve = (
+                    root_loss + mu * average_decoration + cardinality_slack
+                )
+                transport_cover_margin = (
+                    transport_cover_reserve - transport_cover["net_cost"]
+                )
+                root_price_cover_margin = (
+                    transport_cover_reserve
+                    - root_price_cover["root_price"] * root_loss
+                )
+                actual_nonomitted_gain = total_gain - maximum_individual_gain
+                if transport_cover["net_cost"] < actual_nonomitted_gain:
+                    raise AssertionError("Lmax bundle cover underprices actual demand")
                 congestion_charge = (aggregate_root_price - 1) * root_loss
                 congestion_margin = (
                     mu * average_decoration + cardinality_slack - congestion_charge
@@ -684,6 +911,72 @@ def root_rows(values, x, z):
                                 ],
                             }
                             for player, certificate in root_certificates.items()
+                        }
+                    ),
+                    "lmax_transport_bundle_cover": (
+                        None
+                        if not ordered
+                        else {
+                            "omitted_maximum_gainer": transport_cover["omitted"],
+                            "weights": {
+                                str(player): str(weight)
+                                for player, weight in transport_cover["weights"].items()
+                            },
+                            "gainer_loads": {
+                                str(player): str(load)
+                                for player, load in transport_cover["loads"].items()
+                            },
+                            "root_price": str(transport_cover["root_price"]),
+                            "reverse_credit": str(transport_cover["reverse_credit"]),
+                            "net_cost": str(transport_cover["net_cost"]),
+                            "overcoverage_cost": str(
+                                transport_cover["net_cost"]
+                                - actual_nonomitted_gain
+                            ),
+                            "target_margin": str(transport_cover_margin),
+                            "closes_target": transport_cover_margin >= 0,
+                        }
+                    ),
+                    "lmax_root_price_bundle_cover": (
+                        None
+                        if not ordered
+                        else {
+                            "omitted_maximum_gainer": root_price_cover["omitted"],
+                            "weights": {
+                                str(player): str(weight)
+                                for player, weight in root_price_cover["weights"].items()
+                            },
+                            "gainer_loads": {
+                                str(player): str(load)
+                                for player, load in root_price_cover["loads"].items()
+                            },
+                            "root_price": str(root_price_cover["root_price"]),
+                            "reverse_credit": str(root_price_cover["reverse_credit"]),
+                            "net_cost": str(root_price_cover["net_cost"]),
+                            "dual_prices": {
+                                str(player): str(price)
+                                for player, price in root_price_cover[
+                                    "dual_prices"
+                                ].items()
+                            },
+                            "target_margin_without_reverse_credit": str(
+                                root_price_cover_margin
+                            ),
+                            "closes_target_without_reverse_credit": (
+                                root_price_cover_margin >= 0
+                            ),
+                            "dual_rooted_separator_rows": {
+                                str(player): [
+                                    {
+                                        key: (
+                                            value if key == "coalition" else str(value)
+                                        )
+                                        for key, value in term.items()
+                                    }
+                                    for term in rows
+                                ]
+                                for player, rows in dual_separator_rows.items()
+                            },
                         }
                     ),
                     "lmax_positive_reverse_rows": (
@@ -896,6 +1189,40 @@ def main():
         for row in archive_roots
         if row.get("mixed_lmin_lmax_congestion_margin") is not None
     )
+    archive_transport_cover_margins = tuple(
+        F(row["lmax_transport_bundle_cover"]["target_margin"])
+        for row in archive_roots
+        if row.get("lmax_transport_bundle_cover") is not None
+    )
+    archive_transport_cover_overcosts = tuple(
+        F(row["lmax_transport_bundle_cover"]["overcoverage_cost"])
+        for row in archive_roots
+        if row.get("lmax_transport_bundle_cover") is not None
+    )
+    archive_transport_cover_root_prices = tuple(
+        F(row["lmax_transport_bundle_cover"]["root_price"])
+        for row in archive_roots
+        if row.get("lmax_transport_bundle_cover") is not None
+    )
+    archive_transport_cover_reverse_credits = tuple(
+        F(row["lmax_transport_bundle_cover"]["reverse_credit"])
+        for row in archive_roots
+        if row.get("lmax_transport_bundle_cover") is not None
+    )
+    archive_root_price_cover_margins = tuple(
+        F(
+            row["lmax_root_price_bundle_cover"][
+                "target_margin_without_reverse_credit"
+            ]
+        )
+        for row in archive_roots
+        if row.get("lmax_root_price_bundle_cover") is not None
+    )
+    archive_root_price_cover_prices = tuple(
+        F(row["lmax_root_price_bundle_cover"]["root_price"])
+        for row in archive_roots
+        if row.get("lmax_root_price_bundle_cover") is not None
+    )
     congestion_failure_records = [
         {
             "source": record["source"],
@@ -918,6 +1245,28 @@ def main():
     congestion_failure_roots = tuple(
         row for record in congestion_failure_records for row in record["roots"]
     )
+    transport_overcoverage_records = [
+        {
+            "source": record["source"],
+            "trail": record["trail"],
+            "preclosure": record["preclosure"],
+            "roots": [
+                row
+                for row in record["roots"]
+                if row.get("lmax_transport_bundle_cover") is not None
+                and F(
+                    row["lmax_transport_bundle_cover"]["overcoverage_cost"]
+                )
+                > 0
+            ],
+        }
+        for record in archive
+        if any(
+            row.get("lmax_transport_bundle_cover") is not None
+            and F(row["lmax_transport_bundle_cover"]["overcoverage_cost"]) > 0
+            for row in record["roots"]
+        )
+    ]
 
     def distribution(rows):
         return Counter(
@@ -1021,6 +1370,39 @@ def main():
         "archive_mixed_congestion_minimum_margin": str(
             min(archive_mixed_congestion_margins)
         ),
+        "archive_transport_bundle_cover_closing": sum(
+            margin >= 0 for margin in archive_transport_cover_margins
+        ),
+        "archive_transport_bundle_cover_minimum_margin": str(
+            min(archive_transport_cover_margins)
+        ),
+        "archive_transport_bundle_cover_exact_demand": sum(
+            overcost == 0 for overcost in archive_transport_cover_overcosts
+        ),
+        "archive_transport_bundle_cover_maximum_overcost": str(
+            max(archive_transport_cover_overcosts)
+        ),
+        "archive_transport_bundle_cover_root_price_at_most_one": sum(
+            price <= 1 for price in archive_transport_cover_root_prices
+        ),
+        "archive_transport_bundle_cover_root_price_maximum": str(
+            max(archive_transport_cover_root_prices)
+        ),
+        "archive_transport_bundle_cover_with_reverse_credit": sum(
+            credit > 0 for credit in archive_transport_cover_reverse_credits
+        ),
+        "archive_root_price_bundle_cover_closing_without_reverse": sum(
+            margin >= 0 for margin in archive_root_price_cover_margins
+        ),
+        "archive_root_price_bundle_cover_minimum_margin": str(
+            min(archive_root_price_cover_margins)
+        ),
+        "archive_root_price_bundle_cover_at_most_one": sum(
+            price <= 1 for price in archive_root_price_cover_prices
+        ),
+        "archive_root_price_bundle_cover_maximum": str(
+            max(archive_root_price_cover_prices)
+        ),
         "archive_raw_congestion_failure_roots": len(congestion_failure_roots),
         "archive_raw_failure_with_positive_reverse_row": sum(
             bool(row["lmax_positive_reverse_rows"])
@@ -1114,6 +1496,17 @@ def main():
         "archive_lmax_congestion_minimum_margin": "-25/12",
         "archive_mixed_congestion_closing": 89,
         "archive_mixed_congestion_minimum_margin": "0",
+        "archive_transport_bundle_cover_closing": 89,
+        "archive_transport_bundle_cover_minimum_margin": "0",
+        "archive_transport_bundle_cover_exact_demand": 88,
+        "archive_transport_bundle_cover_maximum_overcost": "1/10",
+        "archive_transport_bundle_cover_root_price_at_most_one": 88,
+        "archive_transport_bundle_cover_root_price_maximum": "4/3",
+        "archive_transport_bundle_cover_with_reverse_credit": 0,
+        "archive_root_price_bundle_cover_closing_without_reverse": 89,
+        "archive_root_price_bundle_cover_minimum_margin": "0",
+        "archive_root_price_bundle_cover_at_most_one": 88,
+        "archive_root_price_bundle_cover_maximum": "4/3",
         "archive_raw_congestion_failure_roots": 10,
         "archive_raw_failure_with_positive_reverse_row": 3,
         "archive_raw_failure_with_pure_cross_gainer_surplus": 7,
@@ -1148,6 +1541,7 @@ def main():
             "exactly into root-price congestion minus nonnegative transport surplus"
         ),
         "counts": counts,
+        "transport_bundle_overcoverage_records": transport_overcoverage_records,
         "raw_congestion_failure_records": congestion_failure_records,
         "positive_residual_rows": positive_residual,
         "fixed_controls": fixed,

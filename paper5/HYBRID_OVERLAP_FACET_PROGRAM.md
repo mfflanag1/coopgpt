@@ -129,6 +129,31 @@ four positive-floor residual failures.  The active proof target is now the
 quantitative gluing step for this explicit separator/hinge/module/root-leaf
 handover, not further unlabelled census work.
 
+The first quantitative gluing theorem is now `(PXC67)`.  Treat every staged
+Lmax relation as a bundle with gainer incidence `B_ab=1[a=b]+p_ab` and root
+cost `c_a`.  The fractional cover of all gainers except one maximum-gain
+player has an exact player-price dual, and its optimum `tau` gives
+`sum(nonmaximum gains)<=tau*ell_r`.  Hence the target follows from
+`(tau-1)*ell_r<=mu*A+cardinality_slack`.  Exact primal/dual replay closes all
+89 ordered saturated roots: `tau<=1` on 88, while the sole `tau=4/3` case is
+direct-closed and paid by decoration reserve with margin `7/30`.  This is a
+dimension-free conditional theorem plus bounded evidence, not the universal
+budget.  The active attack is to couple the dual prices in `(PXC67a)` to the
+fractional co-star outsider capacities; failure must be converted into the
+already isolated separator/common-hinge/common-module alternatives.
+
+The dual now supplies the qualitative selection arrow `(PXC68)`.  If
+`tau>1`, put weight `-tau` on the root and the optimal cover-dual prices on
+the gainers.  Every normalized Lmax relation has strictly negative weighted
+coalition average and therefore contains a proper Lmax-tight rooted row
+omitting positive dual price.  Positive reverse slack is separator payment;
+zero slack selects a common co-star/hinge, rooted multi-omission row, or an
+unsplit common module.  The sole audited `tau>1` root returns common co-stars
+28, 45, and 46 and is already decoration-paid.  The next task is sharply
+localized: convert one PXC68-selected row into at least
+`(tau-1)*ell_r-mu*A-cardinality_slack` payment, or exhibit an exact branch
+where all selected arms underpay.
+
 A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked
