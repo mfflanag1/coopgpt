@@ -145,6 +145,13 @@ run_python coopgames/verifiers/divergence/audit_two_spoke_alignment_bound.py \
   --output "$scratch_dir/two-spoke-alignment-bound.json"
 cmp coopgames/verifiers/divergence/two_spoke_alignment_bound.json \
   "$scratch_dir/two-spoke-alignment-bound.json"
+run_python coopgames/verifiers/divergence/audit_multigainer_common_spoke_star.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --neutral-control coopgames/verifiers/divergence/n7_neutral_rectangle_control.json \
+  --output "$scratch_dir/multigainer-common-spoke-star.json"
+cmp coopgames/verifiers/divergence/multigainer_common_spoke_star.json \
+  "$scratch_dir/multigainer-common-spoke-star.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

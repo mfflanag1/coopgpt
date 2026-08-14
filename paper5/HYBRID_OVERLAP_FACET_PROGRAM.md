@@ -6290,6 +6290,61 @@ with 90 rooted/oriented certificates.  The remaining universal selection
 problem must force this two-spoke atom, a multi-gainer extension, a direct
 separator, or quotient contraction.
 
+The multi-gainer extension is now proved, and it needs only one Lmax-aligned
+spoke.  Let `G={i:z_i>x_i}`, `g=|G|>=2`, and choose `r` outside `G`.  Assume
+`x_r` is at least every gainer payoff, every gainer payoff is at least every
+other offroot payoff, and every `{r,i}` for `i in G` is Lmin-tight.  If one
+spoke `{r,a}` to a highest-Lmax gainer is also Lmax-tight and `z_r>=z_a`,
+then
+
+```text
+O/T >= n/[2(n-2)]       if g=2,
+O/T >= 2(g-1)/(n-2)     if g>=3.                     (PXC54)
+```
+
+Indeed, writing `X=x(G)` and `u=min_G x_i`, the root-zero witness and payoff
+order give
+
+```text
+g*x_r+X <= T,
+T <= x_r+X+(n-g-1)u,       X>=g*u.
+```
+
+The common highest-gainer spoke gives
+`z(G)<=g*z_a<=g(x_r+x_a)/2`, hence total gain is at most
+`g*x_r-X`.  Eliminating the three scalar variables yields
+
+```text
+g*x_r-X <= (n-2g)T/(n-2),
+```
+
+and the displayed bound follows.  For `g>=3` it dominates the hybrid target;
+for `g=2`, retaining the other gainer separately recovers the sharper
+`(PXC53)` calculation.
+
+The key improvement is structural: Lmax need align only one spoke, not the
+whole star.  The exact n=6 scan finds 90 orientations on 46 records and
+closes 8 of the 16 positive-floor residuals.  All finite matches have two
+gainers, while none of the seven fixed hostile/equality branches has a full
+star.  The next theorem must turn a missing Lmin spoke into a strict
+separator/marked facet, or force an aligned star after contraction.
+
+The packet introduces no new full exact-cone class.  Its singleton completion
+is
+
+```text
+sum_(i in G) 1_{r,i} + sum_(j outside G union {r}) e_j
+  -(g-1)e_r = 1_N.
+```
+
+The proved rooted-pair shear replaces every outside singleton by `{r,j}` and
+produces all root pairs with exceptional coefficient `-(n-2)`: exactly the
+already classified saturated rooted-star/complement-star facet.  The one
+common-spoke comparison remains a relative selection-label row.  Both PXC54
+bounds are strictly above the hybrid floor for `n>=6`, so this branch cannot
+contain equality.  The known balanced `G(p,k)` equality orientations remain
+in their distinct block-star class.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
@@ -6319,6 +6374,12 @@ python verifiers/divergence/audit_two_spoke_alignment_bound.py \
   --output /tmp/two_spoke_alignment_bound.json
 cmp /tmp/two_spoke_alignment_bound.json \
   verifiers/divergence/two_spoke_alignment_bound.json
+python verifiers/divergence/audit_multigainer_common_spoke_star.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --neutral-control verifiers/divergence/n7_neutral_rectangle_control.json \
+  --output /tmp/multigainer_common_spoke_star.json
+cmp /tmp/multigainer_common_spoke_star.json \
+  verifiers/divergence/multigainer_common_spoke_star.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
