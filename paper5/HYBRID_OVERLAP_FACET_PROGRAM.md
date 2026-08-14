@@ -115,6 +115,20 @@ bound.  It is a labelled support-factorization theorem for the transport
 surpluses, with the observed sparse common-co-star/multi-omission split as
 the falsification target.
 
+The labelled refinement `(PXC66)` now decomposes each transport surplus as
+nonnegative reverse-coalition payment plus gains imported from the same or a
+higher Lmax stratum.  Its cross-gainer graph is stratum-monotone, so only
+tied-stratum strongly connected components can cycle.  Zero-reverse
+components use common tight columns and therefore expose either a
+common-hinge splitter or a full-menu common module; the remaining terminal
+root-paid leaves still require joint pricing.  In the ten six-player raw
+congestion failures, the canonical exact relations split as three positive
+reverse-payment cases (two root-free, one rooted multi-omission) and seven
+pure-pin/common-face cases.  Nine have a sparse common co-star, including all
+four positive-floor residual failures.  The active proof target is now the
+quantitative gluing step for this explicit separator/hinge/module/root-leaf
+handover, not further unlabelled census work.
+
 A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked

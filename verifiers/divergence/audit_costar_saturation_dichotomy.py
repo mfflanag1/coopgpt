@@ -129,8 +129,8 @@ def hall_certificate(rooted, omitted, gainers, outsiders, g):
     }
 
 
-def minimum_lmax_root_price(values, z, target, root):
-    """Minimize the normalized root coefficient in target's Lmax pinning row."""
+def minimum_lmax_root_certificate(values, x, z, target, root):
+    """Minimize the Lmax root coefficient and expose its evaluated surplus."""
     n = len(z)
     full = (1 << n) - 1
     blocks = payoff_blocks(z, "max")
@@ -181,7 +181,7 @@ def minimum_lmax_root_price(values, z, target, root):
         objective[q_index[root]] = F(-1)
     else:
         objective[r_index[root]] = F(1)
-    status, optimum, _solution = exact_linprog(
+    status, optimum, solution = exact_linprog(
         objective,
         inequalities,
         inequality_rhs,
@@ -190,7 +190,77 @@ def minimum_lmax_root_price(values, z, target, root):
     )
     if status != "optimal" or optimum < 0:
         raise AssertionError("Lmax root-price minimization failed")
-    return optimum
+    reverse_terms = []
+    for index, coalition in enumerate(tight):
+        multiplier = solution[index]
+        reverse_slack = coalition_sum(x, coalition) - coalition_sum(z, coalition)
+        if multiplier < 0 or reverse_slack < 0:
+            raise AssertionError("invalid Lmax coalition surplus term")
+        if multiplier:
+            reverse_terms.append(
+                {
+                    "coalition": coalition,
+                    "multiplier": multiplier,
+                    "reverse_slack": reverse_slack,
+                    "payment": multiplier * reverse_slack,
+                }
+            )
+    pin_terms = []
+    for player, index in q_index.items():
+        multiplier = -solution[index]
+        gain = z[player] - x[player]
+        if multiplier < 0:
+            raise AssertionError("invalid old-pin Lmax surplus term")
+        if multiplier and gain:
+            if gain < 0 and player != root:
+                raise AssertionError("a nongainer other than the root entered Lmax transport")
+            pin_terms.append(
+                {
+                    "player": player,
+                    "stage_side": "old",
+                    "multiplier": multiplier,
+                    "gain": gain,
+                    "payment": multiplier * gain,
+                }
+            )
+    for player, index in r_index.items():
+        multiplier = solution[index]
+        gain = z[player] - x[player]
+        if multiplier < 0:
+            raise AssertionError("invalid current-pin Lmax surplus term")
+        if multiplier and gain:
+            if gain < 0 and player != root:
+                raise AssertionError("a nongainer other than the root entered Lmax transport")
+            pin_terms.append(
+                {
+                    "player": player,
+                    "stage_side": "current",
+                    "multiplier": multiplier,
+                    "gain": gain,
+                    "payment": multiplier * gain,
+                }
+            )
+    positive_surplus = sum(
+        (term["payment"] for term in reverse_terms), F(0)
+    ) + sum(
+        (
+            term["payment"]
+            for term in pin_terms
+            if term["player"] != root
+        ),
+        F(0),
+    )
+    root_terms = [term for term in pin_terms if term["player"] == root]
+    if sum((term["multiplier"] for term in root_terms), F(0)) != optimum:
+        raise AssertionError("reported Lmax root price misses the root pin term")
+    if positive_surplus != optimum * (x[root] - z[root]) - (z[target] - x[target]):
+        raise AssertionError("evaluated Lmax transport surplus decomposition failed")
+    return {
+        "price": optimum,
+        "reverse_terms": reverse_terms,
+        "pin_terms": pin_terms,
+        "surplus": positive_surplus,
+    }
 
 
 def root_rows(values, x, z):
@@ -397,9 +467,15 @@ def root_rows(values, x, z):
                 )
                 if actual_overlap < selection_free_floor:
                     raise AssertionError("selection-free fractional co-star bound failed")
-                root_prices = {
-                    player: minimum_lmax_root_price(values, z, player, root)
+                root_certificates = {
+                    player: minimum_lmax_root_certificate(
+                        values, x, z, player, root
+                    )
                     for player in gainers
+                }
+                root_prices = {
+                    player: certificate["price"]
+                    for player, certificate in root_certificates.items()
                 }
                 for player, price in root_prices.items():
                     if z[player] - x[player] > price * root_loss:
@@ -443,6 +519,54 @@ def root_rows(values, x, z):
                     ),
                     F(0),
                 )
+                decomposed_transport_surplus = sum(
+                    (
+                        root_certificates[player]["surplus"]
+                        for player in gainers
+                        if player != omitted_maximum_gainer
+                    ),
+                    F(0),
+                )
+                if transport_surplus != decomposed_transport_surplus:
+                    raise AssertionError("aggregate Lmax transport surplus changed")
+                positive_reverse_rows = []
+                positive_cross_gainer_pins = []
+                for player, certificate in root_certificates.items():
+                    if player == omitted_maximum_gainer:
+                        continue
+                    for term in certificate["reverse_terms"]:
+                        if term["payment"] <= 0:
+                            continue
+                        coalition = term["coalition"]
+                        missing_gainers = sum(
+                            not (coalition >> gainer & 1) for gainer in gainers
+                        )
+                        if not (coalition >> root & 1):
+                            pattern = "root_free"
+                        elif missing_gainers == 0:
+                            pattern = "rooted_all_gainers"
+                        elif missing_gainers == 1:
+                            pattern = "rooted_costar"
+                        else:
+                            pattern = "rooted_multiomission"
+                        positive_reverse_rows.append(
+                            {
+                                "target": player,
+                                "coalition": coalition,
+                                "payment": term["payment"],
+                                "root_pattern": pattern,
+                            }
+                        )
+                    for term in certificate["pin_terms"]:
+                        if term["player"] != root and term["payment"] > 0:
+                            positive_cross_gainer_pins.append(
+                                {
+                                    "target": player,
+                                    "source": term["player"],
+                                    "payment": term["payment"],
+                                    "stage_side": term["stage_side"],
+                                }
+                            )
                 mixed_congestion_margin = congestion_margin + transport_surplus
                 if mixed_congestion_margin != selection_free_floor - target:
                     raise AssertionError("mixed Lmin/Lmax congestion cancellation failed")
@@ -530,6 +654,67 @@ def root_rows(values, x, z):
                     ),
                     "lmax_transport_surplus": (
                         None if not ordered else str(transport_surplus)
+                    ),
+                    "lmax_transport_certificates": (
+                        None
+                        if not ordered
+                        else {
+                            str(player): {
+                                "price": str(certificate["price"]),
+                                "surplus": str(certificate["surplus"]),
+                                "reverse_terms": [
+                                    {
+                                        key: (
+                                            value if key == "coalition" else str(value)
+                                        )
+                                        for key, value in term.items()
+                                    }
+                                    for term in certificate["reverse_terms"]
+                                ],
+                                "pin_terms": [
+                                    {
+                                        key: (
+                                            value
+                                            if key in {"player", "stage_side"}
+                                            else str(value)
+                                        )
+                                        for key, value in term.items()
+                                    }
+                                    for term in certificate["pin_terms"]
+                                ],
+                            }
+                            for player, certificate in root_certificates.items()
+                        }
+                    ),
+                    "lmax_positive_reverse_rows": (
+                        None
+                        if not ordered
+                        else [
+                            {
+                                key: (
+                                    value
+                                    if key in {"target", "coalition", "root_pattern"}
+                                    else str(value)
+                                )
+                                for key, value in term.items()
+                            }
+                            for term in positive_reverse_rows
+                        ]
+                    ),
+                    "lmax_positive_cross_gainer_pins": (
+                        None
+                        if not ordered
+                        else [
+                            {
+                                key: (
+                                    value
+                                    if key in {"target", "source", "stage_side"}
+                                    else str(value)
+                                )
+                                for key, value in term.items()
+                            }
+                            for term in positive_cross_gainer_pins
+                        ]
                     ),
                     "lmax_congestion_charge": (
                         None if not ordered else str(congestion_charge)
@@ -711,6 +896,28 @@ def main():
         for row in archive_roots
         if row.get("mixed_lmin_lmax_congestion_margin") is not None
     )
+    congestion_failure_records = [
+        {
+            "source": record["source"],
+            "trail": record["trail"],
+            "preclosure": record["preclosure"],
+            "roots": [
+                row
+                for row in record["roots"]
+                if row.get("lmax_congestion_target_margin") is not None
+                and F(row["lmax_congestion_target_margin"]) < 0
+            ],
+        }
+        for record in archive
+        if any(
+            row.get("lmax_congestion_target_margin") is not None
+            and F(row["lmax_congestion_target_margin"]) < 0
+            for row in record["roots"]
+        )
+    ]
+    congestion_failure_roots = tuple(
+        row for record in congestion_failure_records for row in record["roots"]
+    )
 
     def distribution(rows):
         return Counter(
@@ -814,6 +1021,38 @@ def main():
         "archive_mixed_congestion_minimum_margin": str(
             min(archive_mixed_congestion_margins)
         ),
+        "archive_raw_congestion_failure_roots": len(congestion_failure_roots),
+        "archive_raw_failure_with_positive_reverse_row": sum(
+            bool(row["lmax_positive_reverse_rows"])
+            for row in congestion_failure_roots
+        ),
+        "archive_raw_failure_with_pure_cross_gainer_surplus": sum(
+            not row["lmax_positive_reverse_rows"]
+            for row in congestion_failure_roots
+        ),
+        "archive_raw_failure_with_root_free_reverse_row": sum(
+            any(
+                term["root_pattern"] == "root_free"
+                for term in row["lmax_positive_reverse_rows"]
+            )
+            for row in congestion_failure_roots
+        ),
+        "archive_raw_failure_with_rooted_multiomission_reverse_row": sum(
+            any(
+                term["root_pattern"] == "rooted_multiomission"
+                for term in row["lmax_positive_reverse_rows"]
+            )
+            for row in congestion_failure_roots
+        ),
+        "archive_raw_failure_with_sparse_common_costar": sum(
+            bool(row["sparse_common_positive_rows"])
+            for row in congestion_failure_roots
+        ),
+        "positive_residual_raw_congestion_failure_roots": sum(
+            record["preclosure"] == "positive_residual"
+            for record in congestion_failure_records
+            for _row in record["roots"]
+        ),
         "positive_residual_records": len(positive_residual),
         "positive_residual_roots": len(residual_roots),
         "positive_residual_regimes": dict(sorted(distribution(residual_roots).items())),
@@ -875,6 +1114,13 @@ def main():
         "archive_lmax_congestion_minimum_margin": "-25/12",
         "archive_mixed_congestion_closing": 89,
         "archive_mixed_congestion_minimum_margin": "0",
+        "archive_raw_congestion_failure_roots": 10,
+        "archive_raw_failure_with_positive_reverse_row": 3,
+        "archive_raw_failure_with_pure_cross_gainer_surplus": 7,
+        "archive_raw_failure_with_root_free_reverse_row": 2,
+        "archive_raw_failure_with_rooted_multiomission_reverse_row": 1,
+        "archive_raw_failure_with_sparse_common_costar": 9,
+        "positive_residual_raw_congestion_failure_roots": 4,
         "positive_residual_records": 16,
         "positive_residual_roots": 16,
         "positive_residual_regimes": {"saturated": 16},
@@ -902,6 +1148,7 @@ def main():
             "exactly into root-price congestion minus nonnegative transport surplus"
         ),
         "counts": counts,
+        "raw_congestion_failure_records": congestion_failure_records,
         "positive_residual_rows": positive_residual,
         "fixed_controls": fixed,
         "relaxed_nonselector_control": relaxed_nonselector_control(),
