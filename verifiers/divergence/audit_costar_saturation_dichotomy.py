@@ -37,6 +37,19 @@ def coalition_sum(point, coalition):
     )
 
 
+def strictly_lorenz_improving_tangent(point, direction):
+    """Exact small-step Lorenz test, sorting directions inside tied strata."""
+    order = tuple(sorted(range(len(point)), key=lambda i: (point[i], direction[i])))
+    prefix = F(0)
+    prefixes = []
+    for player in order[:-1]:
+        prefix += direction[player]
+        prefixes.append(prefix)
+    return all(value >= 0 for value in prefixes) and any(
+        value > 0 for value in prefixes
+    )
+
+
 def hall_certificate(rooted, omitted, gainers, outsiders, g):
     """Minimize the weighted Hall slack over normalized decoration prices."""
     if not outsiders:
@@ -215,11 +228,13 @@ def root_rows(values, x, z):
                 for donor in negative_donors
                 for recipient in positive_recipients
             )
-            if strict_transfer_order and not blockers:
-                raise AssertionError("strict Hall transfer lacks a tight blocker")
+            lorenz_improving = strictly_lorenz_improving_tangent(x, direction)
+            if lorenz_improving and not blockers:
+                raise AssertionError("Lorenz-improving Hall tangent lacks a blocker")
             row["hall_tangent"] = {
                 "direction": [str(value) for value in direction],
                 "strict_lorenz_transfer_order": strict_transfer_order,
+                "strictly_lorenz_improving": lorenz_improving,
                 "tight_blockers": list(blockers),
                 "root_free_blockers": [
                     coalition for coalition in blockers if not (coalition >> root & 1)
@@ -276,6 +291,18 @@ def root_rows(values, x, z):
             total_gain = sum((z[player] - x[player] for player in gainers), F(0))
             actual_overlap = total - total_gain
             target = F(n, (n * n) // 4) * total
+            maximum_individual_gain = max(z[player] - x[player] for player in gainers)
+            root_loss = x[root] - z[root]
+            noncommon_penalty = total_gain - maximum_individual_gain - root_loss
+            selection_free_floor = None
+            if ordered:
+                selection_free_floor = (
+                    F(n, g * (n - g)) * total
+                    + mu * average_decoration
+                    - noncommon_penalty
+                )
+                if actual_overlap < selection_free_floor:
+                    raise AssertionError("selection-free fractional co-star bound failed")
             for positive in positive_rows:
                 coalition = positive["coalition"]
                 omitted_gainer = positive["omitted_gainer"]
@@ -332,6 +359,18 @@ def root_rows(values, x, z):
                     },
                     "average_decoration_mass": str(average_decoration),
                     "packet_left": str(packet_left),
+                    "noncommon_penalty": str(noncommon_penalty),
+                    "selection_free_floor": (
+                        None if selection_free_floor is None else str(selection_free_floor)
+                    ),
+                    "selection_free_closes_target": (
+                        selection_free_floor is not None and selection_free_floor >= target
+                    ),
+                    "selection_free_target_margin": (
+                        None
+                        if selection_free_floor is None
+                        else str(selection_free_floor - target)
+                    ),
                     "aligned_rows": aligned,
                 }
             )
@@ -346,6 +385,61 @@ def lower_envelope_case(case):
         tuple(map(F, case["x"])),
         tuple(map(F, case["z"])),
     )
+
+
+def relaxed_nonselector_control():
+    """Ordered saturated packet showing that Lmax optimality is indispensable."""
+    x = (F(9),) + (F(1),) * 7
+    z = (F(7, 2),) + (F(25, 8),) * 4 + (F(0),) * 3
+    n, g = 8, 4
+    total = sum(x, F(0))
+    gainers = tuple(range(1, 5))
+    root = 0
+    packet_left = F(g, g - 1) * x[root] + sum(
+        (x[player] for player in gainers), F(0)
+    )
+    total_gain = sum((z[player] - x[player] for player in gainers), F(0))
+    maximum_gain = max(z[player] - x[player] for player in gainers)
+    root_loss = x[root] - z[root]
+    penalty = total_gain - maximum_gain - root_loss
+    base = F(n, g * (n - g)) * total
+    floor = base - penalty
+    target = F(n, (n * n) // 4) * total
+    actual = total - total_gain
+    costars = tuple(
+        (1 << root)
+        | sum(1 << player for player in gainers if player != omitted)
+        for omitted in gainers
+    )
+    slacks = tuple(
+        coalition_sum(z, coalition) - coalition_sum(x, coalition)
+        for coalition in costars
+    )
+    if total != sum(z, F(0)) or packet_left != total:
+        raise AssertionError("relaxed nonselector control lost efficiency or saturation")
+    if max(z) != z[root] or any(slack != penalty for slack in slacks):
+        raise AssertionError("relaxed nonselector ceiling/co-star comparison changed")
+    if not (floor <= actual < target):
+        raise AssertionError("relaxed nonselector no-go control no longer separates claims")
+    return {
+        "status": "exact relaxed allocation-level no-go; not asserted selector-realizable",
+        "x": [str(value) for value in x],
+        "z": [str(value) for value in z],
+        "root": root,
+        "gainers": list(gainers),
+        "clean_costars": list(costars),
+        "costar_slacks": [str(value) for value in slacks],
+        "packet_left": str(packet_left),
+        "total": str(total),
+        "noncommon_penalty": str(penalty),
+        "selection_free_floor": str(floor),
+        "actual_overlap": str(actual),
+        "hybrid_target": str(target),
+        "lesson": (
+            "ordered saturated packet geometry and core-side co-star comparisons "
+            "alone do not imply the target; Lmax optimality must be used"
+        ),
+    }
 
 
 def main():
@@ -398,6 +492,16 @@ def main():
         root for record in positive_residual for root in record["roots"]
     )
     fixed_roots = tuple(root for record in fixed for root in record["roots"])
+    archive_selection_free = tuple(
+        F(row["selection_free_target_margin"])
+        for row in archive_roots
+        if row.get("selection_free_target_margin") is not None
+    )
+    residual_selection_free = tuple(
+        F(row["selection_free_target_margin"])
+        for row in residual_roots
+        if row.get("selection_free_target_margin") is not None
+    )
 
     def distribution(rows):
         return Counter(
@@ -442,6 +546,19 @@ def main():
             row.get("hall_tangent", {}).get("strict_lorenz_transfer_order", False)
             for row in archive_roots
         ),
+        "archive_lorenz_improving_hall_roots": sum(
+            row.get("hall_tangent", {}).get("strictly_lorenz_improving", False)
+            for row in archive_roots
+        ),
+        "archive_saturated_selection_free_closing": sum(
+            row.get("regime") == "saturated"
+            and row.get("selection_free_closes_target", False)
+            for row in archive_roots
+        ),
+        "archive_minimum_selection_free_margin": str(min(archive_selection_free)),
+        "archive_selection_free_equalities": sum(
+            margin == 0 for margin in archive_selection_free
+        ),
         "positive_residual_records": len(positive_residual),
         "positive_residual_roots": len(residual_roots),
         "positive_residual_regimes": dict(sorted(distribution(residual_roots).items())),
@@ -453,6 +570,17 @@ def main():
             row.get("regime") == "saturated"
             and any(aligned["closes_target"] for aligned in row.get("aligned_rows", ()))
             for row in residual_roots
+        ),
+        "positive_residual_selection_free_closing": sum(
+            row.get("regime") == "saturated"
+            and row.get("selection_free_closes_target", False)
+            for row in residual_roots
+        ),
+        "positive_residual_minimum_selection_free_margin": str(
+            min(residual_selection_free)
+        ),
+        "positive_residual_selection_free_equalities": sum(
+            margin == 0 for margin in residual_selection_free
         ),
         "fixed_roots": len(fixed_roots),
         "fixed_regimes": dict(sorted(distribution(fixed_roots).items())),
@@ -477,11 +605,18 @@ def main():
         "archive_hall_roots_with_root_free_blocker": 0,
         "archive_hall_roots_with_rooted_all_gainer_blocker": 35,
         "archive_strict_order_hall_roots": 7,
+        "archive_lorenz_improving_hall_roots": 7,
+        "archive_saturated_selection_free_closing": 89,
+        "archive_minimum_selection_free_margin": "0",
+        "archive_selection_free_equalities": 30,
         "positive_residual_records": 16,
         "positive_residual_roots": 16,
         "positive_residual_regimes": {"saturated": 16},
         "positive_residual_saturated_with_aligned_row": 16,
         "positive_residual_saturated_closing": 16,
+        "positive_residual_selection_free_closing": 16,
+        "positive_residual_minimum_selection_free_margin": "0",
+        "positive_residual_selection_free_equalities": 7,
         "fixed_roots": 10,
         "fixed_regimes": {"multiomission": 4, "saturated": 4, "unit": 2},
         "fixed_hall_obstruction_roots": 2,
@@ -494,16 +629,19 @@ def main():
         "human_theorem": (
             "without a rooted multi-omission row, 1<=nu_r<=g/(g-1); "
             "equality forces a fractional decorated complete co-star with "
-            "omission weight 1/(g-1) for every gainer; a strict-order Hall "
-            "obstruction yields a root-free or rooted-all-gainer tight blocker"
+            "omission weight 1/(g-1) for every gainer; a Lorenz-improving Hall "
+            "obstruction yields a root-free or rooted-all-gainer tight blocker; "
+            "the saturated arm has a selection-free overlap bound priced by "
+            "D-d_max-root_loss"
         ),
         "counts": counts,
         "positive_residual_rows": positive_residual,
         "fixed_controls": fixed,
+        "relaxed_nonselector_control": relaxed_nonselector_control(),
         "scope": (
             "dimension-free counting theorem with exact finite scope audit; "
-            "does not eliminate tied-order Hall obstructions, price the blocker, "
-            "or force Lmax alignment"
+            "does not eliminate non-improving Hall obstructions, price the blocker, "
+            "or prove the selection-free concentration condition universally"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

@@ -70,12 +70,29 @@ all 16 positive-floor residuals, while every intermediate root is already
 direct-closed.  The active universal attack is therefore: prove order plus
 staged Lmin optimality forces Hall feasibility, or convert a strict Hall
 price into the established Lmax separator/contraction or mixed-facet arm.
-For a strict Hall price, `(PXC62)` constructs an explicit zero-sum
-rich-to-poor tangent and proves that Lmin optimality forces a tight blocker:
+For a strict Hall price, `(PXC62)` constructs an explicit zero-sum tangent.
+Whenever its exact increasing-order prefix sums are Lorenz-improving, Lmin
+optimality forces a tight blocker:
 either a root-free row or a rooted row containing every gainer.  Thus the
-remaining Hall arm has only two concrete subproblems: handle weak Lmin ties
-through stage pinning/contraction, and convert one of those blocker forms into
+remaining Hall arm has only two concrete subproblems: handle Hall directions
+outside the Lorenz tangent cone through stage pinning/contraction, and convert
+one of those blocker forms into
 direct or Lmax-coloured target payment.
+
+The saturated arm no longer needs a common Lmax-tight row.  `(PXC63)` proves
+the selection-free bound
+`O>=nT/[g(n-g)]+mu*A-(D-d_max-ell_r)`.  All 89 ordered saturated archive
+roots satisfy its target condition, including every positive-floor residual
+and both sharp orientations.  The principal saturated-arm objective is now
+the scalar concentration inequality `(PXC63b)`: dispersed gain after the
+largest individual gain and root loss must be paid by decoration mass plus
+unbalanced-cardinality slack.  This is the precise point at which the sparse
+Lmax over-cover should couple to the fractional Lmin packet.
+An exact relaxed eight-coordinate allocation pair satisfies order, clean
+saturation, efficiency, ceiling alignment, and all individual co-star core
+comparisons but violates the target.  It is not asserted selector-realizable;
+its role is to retire any attempt to prove `(PXC63b)` from packet geometry
+alone.  The next proof must consume a genuine Lmax optimality certificate.
 
 A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
