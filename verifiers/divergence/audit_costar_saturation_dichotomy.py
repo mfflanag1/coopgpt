@@ -24,8 +24,9 @@ sys.path.insert(0, str(COOPGAMES / "src"))
 from audit_carrier_separator_payment import full_tight_support  # noqa: E402
 from audit_ceiling_root_gainer_exclusion import rooted_packing  # noqa: E402
 from audit_direct_ceiling_common_hinge_trichotomy import has_direct_packet  # noqa: E402
-from audit_lmax_overcover import records  # noqa: E402
+from audit_lmax_overcover import records, top_certificate  # noqa: E402
 from audit_pxc52_coloured_charge import lower_envelope  # noqa: E402
+from audit_sign_coherent_staged_lifts import payoff_blocks  # noqa: E402
 from exactlp import exact_linprog  # noqa: E402
 from verify_labelled_branch_duals import CASES  # noqa: E402
 
@@ -128,6 +129,70 @@ def hall_certificate(rooted, omitted, gainers, outsiders, g):
     }
 
 
+def minimum_lmax_root_price(values, z, target, root):
+    """Minimize the normalized root coefficient in target's Lmax pinning row."""
+    n = len(z)
+    full = (1 << n) - 1
+    blocks = payoff_blocks(z, "max")
+    stage = next(index for index, block in enumerate(blocks) if target in block)
+    old = tuple(player for block in blocks[:stage] for player in block)
+    current = blocks[stage]
+    if root not in old and root not in current:
+        raise AssertionError("ceiling root is not in the Lmax cumulative upper set")
+    tight = tuple(
+        coalition
+        for coalition in range(1, full)
+        if coalition_sum(z, coalition) == values[coalition]
+    )
+    m = len(tight)
+    q_index = {player: m + index for index, player in enumerate(old)}
+    r_index = {
+        player: m + len(old) + index for index, player in enumerate(current)
+    }
+    c_index = m + len(old) + len(current)
+    width = c_index + 1
+    equalities = []
+    equality_rhs = []
+    for coordinate in range(n):
+        row = [F(0)] * width
+        for index, coalition in enumerate(tight):
+            row[index] = F((coalition >> coordinate) & 1)
+        if coordinate in q_index:
+            row[q_index[coordinate]] = F(1)
+        if coordinate in r_index:
+            row[r_index[coordinate]] = F(-1)
+        row[c_index] = F(-1)
+        equalities.append(row)
+        equality_rhs.append(F(coordinate == target))
+    inequalities = []
+    inequality_rhs = []
+    for variable in tuple(range(m)) + tuple(r_index.values()):
+        row = [F(0)] * width
+        row[variable] = F(-1)
+        inequalities.append(row)
+        inequality_rhs.append(F(0))
+    for variable in q_index.values():
+        row = [F(0)] * width
+        row[variable] = F(1)
+        inequalities.append(row)
+        inequality_rhs.append(F(0))
+    objective = [F(0)] * width
+    if root in q_index:
+        objective[q_index[root]] = F(-1)
+    else:
+        objective[r_index[root]] = F(1)
+    status, optimum, _solution = exact_linprog(
+        objective,
+        inequalities,
+        inequality_rhs,
+        equalities,
+        equality_rhs,
+    )
+    if status != "optimal" or optimum < 0:
+        raise AssertionError("Lmax root-price minimization failed")
+    return optimum
+
+
 def root_rows(values, x, z):
     n = len(x)
     total = sum(x, F(0))
@@ -136,6 +201,8 @@ def root_rows(values, x, z):
     gainer_set = set(gainers)
     support = tuple(full_tight_support(values, x))
     z_tight = set(full_tight_support(values, z))
+    overcover = top_certificate(values, z)
+    sparse_lmax_support = set(overcover["support"])
     answer = []
     for root in range(n):
         if z[root] != ceiling or x[root] < ceiling or root in gainer_set:
@@ -182,6 +249,33 @@ def root_rows(values, x, z):
         row["saturation_cap"] = str(cap)
         row["saturation_deficit"] = str(cap - nu)
         row["ordered"] = ordered
+        if ordered:
+            maximum_z = max(z)
+            if any(z[player] == maximum_z for player in outsiders):
+                raise AssertionError("an ordered outsider entered the Lmax top stratum")
+            alpha = tuple(overcover["alpha"])
+            root_loss = x[root] - z[root]
+            weighted_top_gain = sum(
+                (
+                    alpha[player] * (z[player] - x[player])
+                    for player in gainers
+                    if z[player] == maximum_z
+                ),
+                F(0),
+            )
+            top_payment = alpha[root] * root_loss - weighted_top_gain
+            anchor_surplus = sum(
+                (alpha[player] * x[player] for player in range(n)), F(0)
+            ) - maximum_z
+            if top_payment != anchor_surplus or top_payment < 0:
+                raise AssertionError("normalized Lmax top payment identity failed")
+            row["lmax_top_payment"] = {
+                "alpha": [str(value) for value in alpha],
+                "root_loss_payment": str(alpha[root] * root_loss),
+                "weighted_top_gainer_debt": str(weighted_top_gain),
+                "surplus": str(top_payment),
+                "nonroot_top_mass": str(1 - alpha[root]),
+            }
         hall = hall_certificate(rooted, omitted, gainers, outsiders, g)
         hall_obstructed = F(hall["obstruction_margin"]) > 0
         if hall_obstructed != (regime != "saturated"):
@@ -303,6 +397,55 @@ def root_rows(values, x, z):
                 )
                 if actual_overlap < selection_free_floor:
                     raise AssertionError("selection-free fractional co-star bound failed")
+                root_prices = {
+                    player: minimum_lmax_root_price(values, z, player, root)
+                    for player in gainers
+                }
+                for player, price in root_prices.items():
+                    if z[player] - x[player] > price * root_loss:
+                        raise AssertionError("minimal Lmax root price misses actual gain")
+                maximum_gainers = tuple(
+                    player
+                    for player in gainers
+                    if z[player] - x[player] == maximum_individual_gain
+                )
+                aggregate_candidates = {
+                    omitted: sum(
+                        (
+                            price
+                            for player, price in root_prices.items()
+                            if player != omitted
+                        ),
+                        F(0),
+                    )
+                    for omitted in maximum_gainers
+                }
+                omitted_maximum_gainer = min(
+                    aggregate_candidates,
+                    key=lambda player: (aggregate_candidates[player], player),
+                )
+                aggregate_root_price = aggregate_candidates[omitted_maximum_gainer]
+                cardinality_slack = (
+                    F(n, g * (n - g)) - F(n, (n * n) // 4)
+                ) * total
+                congestion_charge = (aggregate_root_price - 1) * root_loss
+                congestion_margin = (
+                    mu * average_decoration + cardinality_slack - congestion_charge
+                )
+                if noncommon_penalty > congestion_charge:
+                    raise AssertionError("staged Lmax congestion misses PXC63 penalty")
+                transport_surplus = sum(
+                    (
+                        root_prices[player] * root_loss
+                        - (z[player] - x[player])
+                        for player in gainers
+                        if player != omitted_maximum_gainer
+                    ),
+                    F(0),
+                )
+                mixed_congestion_margin = congestion_margin + transport_surplus
+                if mixed_congestion_margin != selection_free_floor - target:
+                    raise AssertionError("mixed Lmin/Lmax congestion cancellation failed")
             for positive in positive_rows:
                 coalition = positive["coalition"]
                 omitted_gainer = positive["omitted_gainer"]
@@ -371,6 +514,57 @@ def root_rows(values, x, z):
                         if selection_free_floor is None
                         else str(selection_free_floor - target)
                     ),
+                    "lmax_minimum_root_prices": (
+                        None
+                        if not ordered
+                        else {
+                            str(player): str(price)
+                            for player, price in root_prices.items()
+                        }
+                    ),
+                    "lmax_aggregate_root_price_excluding_max_gain": (
+                        None if not ordered else str(aggregate_root_price)
+                    ),
+                    "lmax_omitted_maximum_gainer": (
+                        None if not ordered else omitted_maximum_gainer
+                    ),
+                    "lmax_transport_surplus": (
+                        None if not ordered else str(transport_surplus)
+                    ),
+                    "lmax_congestion_charge": (
+                        None if not ordered else str(congestion_charge)
+                    ),
+                    "lmax_congestion_target_margin": (
+                        None if not ordered else str(congestion_margin)
+                    ),
+                    "lmax_congestion_closes_target": (
+                        ordered and congestion_margin >= 0
+                    ),
+                    "mixed_lmin_lmax_congestion_margin": (
+                        None if not ordered else str(mixed_congestion_margin)
+                    ),
+                    "sparse_lmax_support": list(overcover["support"]),
+                    "sparse_common_positive_rows": [
+                        positive["coalition"]
+                        for positive in positive_rows
+                        if positive["coalition"] in sparse_lmax_support
+                    ],
+                    "sparse_rooted_multiomission_rows": [
+                        coalition
+                        for coalition in overcover["support"]
+                        if coalition >> root & 1
+                        and sum(
+                            not (coalition >> player & 1) for player in gainers
+                        )
+                        >= 2
+                    ],
+                    "sparse_reverse_payments": {
+                        str(coalition): str(
+                            coalition_sum(x, coalition) - coalition_sum(z, coalition)
+                        )
+                        for coalition in overcover["support"]
+                        if coalition_sum(x, coalition) > coalition_sum(z, coalition)
+                    },
                     "aligned_rows": aligned,
                 }
             )
@@ -502,6 +696,21 @@ def main():
         for row in residual_roots
         if row.get("selection_free_target_margin") is not None
     )
+    archive_lmax_aggregate_prices = tuple(
+        F(row["lmax_aggregate_root_price_excluding_max_gain"])
+        for row in archive_roots
+        if row.get("lmax_aggregate_root_price_excluding_max_gain") is not None
+    )
+    archive_lmax_congestion_margins = tuple(
+        F(row["lmax_congestion_target_margin"])
+        for row in archive_roots
+        if row.get("lmax_congestion_target_margin") is not None
+    )
+    archive_mixed_congestion_margins = tuple(
+        F(row["mixed_lmin_lmax_congestion_margin"])
+        for row in archive_roots
+        if row.get("mixed_lmin_lmax_congestion_margin") is not None
+    )
 
     def distribution(rows):
         return Counter(
@@ -559,6 +768,52 @@ def main():
         "archive_selection_free_equalities": sum(
             margin == 0 for margin in archive_selection_free
         ),
+        "archive_ordered_saturated_with_sparse_common_row": sum(
+            row.get("regime") == "saturated"
+            and row.get("ordered", False)
+            and bool(row.get("sparse_common_positive_rows"))
+            for row in archive_roots
+        ),
+        "archive_ordered_saturated_without_common_with_sparse_multiomission": sum(
+            row.get("regime") == "saturated"
+            and row.get("ordered", False)
+            and not row.get("sparse_common_positive_rows")
+            and bool(row.get("sparse_rooted_multiomission_rows"))
+            for row in archive_roots
+        ),
+        "archive_ordered_saturated_with_nonroot_top_mass": sum(
+            row.get("regime") == "saturated"
+            and row.get("ordered", False)
+            and F(row.get("lmax_top_payment", {}).get("nonroot_top_mass", 0)) > 0
+            for row in archive_roots
+        ),
+        "archive_ordered_saturated_with_positive_top_surplus": sum(
+            row.get("regime") == "saturated"
+            and row.get("ordered", False)
+            and F(row.get("lmax_top_payment", {}).get("surplus", 0)) > 0
+            for row in archive_roots
+        ),
+        "archive_lmax_aggregate_root_price_at_most_one": sum(
+            price <= 1 for price in archive_lmax_aggregate_prices
+        ),
+        "archive_lmax_aggregate_root_price_minimum": str(
+            min(archive_lmax_aggregate_prices)
+        ),
+        "archive_lmax_aggregate_root_price_maximum": str(
+            max(archive_lmax_aggregate_prices)
+        ),
+        "archive_lmax_congestion_closing": sum(
+            margin >= 0 for margin in archive_lmax_congestion_margins
+        ),
+        "archive_lmax_congestion_minimum_margin": str(
+            min(archive_lmax_congestion_margins)
+        ),
+        "archive_mixed_congestion_closing": sum(
+            margin >= 0 for margin in archive_mixed_congestion_margins
+        ),
+        "archive_mixed_congestion_minimum_margin": str(
+            min(archive_mixed_congestion_margins)
+        ),
         "positive_residual_records": len(positive_residual),
         "positive_residual_roots": len(residual_roots),
         "positive_residual_regimes": dict(sorted(distribution(residual_roots).items())),
@@ -609,6 +864,17 @@ def main():
         "archive_saturated_selection_free_closing": 89,
         "archive_minimum_selection_free_margin": "0",
         "archive_selection_free_equalities": 30,
+        "archive_ordered_saturated_with_sparse_common_row": 88,
+        "archive_ordered_saturated_without_common_with_sparse_multiomission": 1,
+        "archive_ordered_saturated_with_nonroot_top_mass": 89,
+        "archive_ordered_saturated_with_positive_top_surplus": 2,
+        "archive_lmax_aggregate_root_price_at_most_one": 77,
+        "archive_lmax_aggregate_root_price_minimum": "1",
+        "archive_lmax_aggregate_root_price_maximum": "3",
+        "archive_lmax_congestion_closing": 79,
+        "archive_lmax_congestion_minimum_margin": "-25/12",
+        "archive_mixed_congestion_closing": 89,
+        "archive_mixed_congestion_minimum_margin": "0",
         "positive_residual_records": 16,
         "positive_residual_roots": 16,
         "positive_residual_regimes": {"saturated": 16},
@@ -632,7 +898,8 @@ def main():
             "omission weight 1/(g-1) for every gainer; a Lorenz-improving Hall "
             "obstruction yields a root-free or rooted-all-gainer tight blocker; "
             "the saturated arm has a selection-free overlap bound priced by "
-            "D-d_max-root_loss"
+            "D-d_max-root_loss; normalized Lmax transports split that penalty "
+            "exactly into root-price congestion minus nonnegative transport surplus"
         ),
         "counts": counts,
         "positive_residual_rows": positive_residual,
@@ -641,7 +908,7 @@ def main():
         "scope": (
             "dimension-free counting theorem with exact finite scope audit; "
             "does not eliminate non-improving Hall obstructions, price the blocker, "
-            "or prove the selection-free concentration condition universally"
+            "or prove the mixed congestion-surplus condition universally"
         ),
     }
     rendered = json.dumps(report, indent=2) + "\n"

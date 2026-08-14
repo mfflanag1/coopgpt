@@ -94,6 +94,27 @@ comparisons but violates the target.  It is not asserted selector-realizable;
 its role is to retire any attempt to prove `(PXC63b)` from packet geometry
 alone.  The next proof must consume a genuine Lmax optimality certificate.
 
+The normalized first-stage Lmax payment is `(PXC64)`:
+`alpha_r*ell_r>=sum alpha_a*d_a` on the Lmax top gainers.  It is tight on
+87/89 ordered saturated archive roots, so scalar top-anchor surplus is
+retired as the missing reserve.  The labelled support is more informative:
+88/89 sparse over-covers contain a fractional co-star row; the sole exception
+contains a rooted Lmax multi-omission row and has strict PXC63 reserve.  The
+active attack is to prove or correctly weaken this labelled support
+alternative, then price the noncommon multi-omission arm.
+
+Complete staged Lmax pinning now gives the exact congestion--surplus
+decomposition `(PXC65)`.  If `c_a` is the root price for gainer `a`, then
+`sigma_a=c_a*ell_r-d_a>=0`, and the PXC63 penalty equals
+`(sum c_a-1)*ell_r-sum sigma_a` after omitting one maximum-gain gainer.
+The six-player audit retires unit congestion (`77/89`) and raw priced
+congestion (`79/89`, minimum margin `-25/12`); the exact mixed expression
+closes all `89/89`, minimum margin zero.  Because this is algebraically
+equivalent to PXC63b, the active attack is no longer a scalar root-price
+bound.  It is a labelled support-factorization theorem for the transport
+surpluses, with the observed sparse common-co-star/multi-omission split as
+the falsification target.
+
 A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked
