@@ -60,6 +60,23 @@ packing-admissible family and a row satisfying `(PXC59d)`, or route failure to
 the already proved separator/contraction alternative.  On the facet side,
 nonclean decorated supports must be factored or tested for indecomposability.
 
+Integral decorated selection is no longer the right bottleneck.  In the
+no-multi-omission branch, `(PXC60)` proves `1<=nu_r<=g/(g-1)`, with equality
+forcing a fractional decorated complete co-star.  `(PXC61)` gives an exact
+weighted Hall criterion for that saturation; failure produces a rational
+outsider-price vector whose support is a collective carrier obstruction.
+Every ordered no-multi root in the six-player census is saturated, including
+all 16 positive-floor residuals, while every intermediate root is already
+direct-closed.  The active universal attack is therefore: prove order plus
+staged Lmin optimality forces Hall feasibility, or convert a strict Hall
+price into the established Lmax separator/contraction or mixed-facet arm.
+For a strict Hall price, `(PXC62)` constructs an explicit zero-sum
+rich-to-poor tangent and proves that Lmin optimality forces a tight blocker:
+either a root-free row or a rooted row containing every gainer.  Thus the
+remaining Hall arm has only two concrete subproblems: handle weak Lmin ties
+through stage pinning/contraction, and convert one of those blocker forms into
+direct or Lmax-coloured target payment.
+
 A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked
@@ -6514,6 +6531,11 @@ python verifiers/divergence/audit_priced_decorated_costar.py \
   --output /tmp/priced_decorated_costar.json
 cmp /tmp/priced_decorated_costar.json \
   verifiers/divergence/priced_decorated_costar.json
+python verifiers/divergence/audit_costar_saturation_dichotomy.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output /tmp/costar_saturation_dichotomy.json
+cmp /tmp/costar_saturation_dichotomy.json \
+  verifiers/divergence/costar_saturation_dichotomy.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
