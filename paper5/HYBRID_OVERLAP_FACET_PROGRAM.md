@@ -24,6 +24,22 @@ falsified strengthenings, and the exact boundary of what the one-packet
 theory currently gives on the facet side.  It does not claim a proof of
 `(H)`.
 
+The newest positive-packet reduction is the multi-omission direct-base gate
+`(PXC57)`.  Combined with ceiling-root gainer exclusion `(PXC56)`, it says
+that a rooted tight row omitting at least two gainers has enough cardinality
+to reach `(H)` in every `n>=8`; Lmin tightness supplies the lower comparison
+sign, leaving only the upper labelled comparison budget.  If no such row
+exists, the forced gainer-omitting rows form a decorated complete co-star.
+Thus the live positive arm is now: pay the upper budget of a multi-omission
+row, or remove/price the co-star's nongainer decorations and force one Lmax
+alignment.  This is a structural reduction, not a proof of `(H)`.
+
+The fixed primitive eight-player control is the hostile boundary: its five
+Lmin-tight multi-omission rows all clear the new base and lower comparison
+sign, but all fail the upper labelled budget.  The next attack must therefore
+couple that deficit to sparse Lmax colour or a separator; more cardinality
+optimization on the same rows is explicitly retired.
+
 The newest theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked
@@ -6465,6 +6481,10 @@ python verifiers/divergence/audit_ceiling_root_gainer_exclusion.py \
   --output /tmp/ceiling_root_gainer_exclusion.json
 cmp /tmp/ceiling_root_gainer_exclusion.json \
   verifiers/divergence/ceiling_root_gainer_exclusion.json
+python verifiers/divergence/audit_multiomission_direct_base.py \
+  --output /tmp/multiomission_direct_base.json
+cmp /tmp/multiomission_direct_base.json \
+  verifiers/divergence/multiomission_direct_base.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
