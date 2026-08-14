@@ -140,6 +140,7 @@ equality and facet identification in objective C.
 | First genuinely noncommon mixed packet | **Proved branch certificate.** The explicit two-colour packet closes its optimized hostile branch; an alternative rooted-pair shear gives an active indecomposable exact-cone facet and reaches the exact `3/4` one-witness minimum.  This is a branch theorem, not universal gluing. | `paper5/EFFECTIVE_BIPARTITION_BRIDGE.md`; `mixed_packet_gluing.json`; `mixed_witness_projection*.json` |
 | Two-spoke alignment bound | **Proved dimension-free.** With exactly two gainers, two ordered Lmin-tight root spokes and one Lmax-aligned common spoke imply `O/T>=n/[2(n-2)]`, hence the hybrid target for every `n>=6`.  This gives a human explanation of the neutral seven-player mixed-witness bound and applies to 46 archived n=6 rows, but is not a universal spoke-selection theorem. | `(PXC53)` in `paper5/divergence.tex`; `audit_two_spoke_alignment_bound.py` |
 | Multi-gainer one-aligned-spoke star | **Proved dimension-free.** An ordered Lmin-tight root star to all `g>=2` gainers plus only one common spoke to a highest-Lmax gainer gives `O/T>=n/[2(n-2)]` for `g=2` and `O/T>=2(g-1)/(n-2)` for `g>=3`, strictly above the hybrid target.  Its rooted-pair shear is the existing saturated rooted-star/complement-star facet, so it creates neither a new full-cone class nor an equality case.  It closes 8/16 archived positive-floor residuals but is not a universal star-selection theorem. | `(PXC54)` in `paper5/divergence.tex`; `audit_multigainer_common_spoke_star.py` |
+| Ordered co-star overlap theorem | **Proved dimension-free.** A complete ordered Lmin rooted co-star on the `g>=2` gainers plus one common co-star omitting a highest-Lmax gainer gives `O/T>=n/[g(n-g)]`, hence the target.  Its pair shear is exactly the known `G(p,k)` rooted block-star facet.  Equality forces balanced cardinality and the sharp-family Lmin profile.  It covers all 16 archived positive-floor residuals and accepts the two balanced n=7 equality controls while rejecting five fixed hostile controls; universal co-star selection remains open. | `(PXC55)` in `paper5/divergence.tex`; `audit_ordered_costar_bound.py` |
 | Complement-star facets | **Proved dimension-free class** with exact indecomposability/facet criterion in its stated parameter range. | commit `cd5e947`; `verify_complement_star_facets.py` |
 | Rectangular and saturated rooted-star facets | **Proved class criteria.** These enumerate their distinguished classes, not every exact-cone facet. | `verify_rooted_star_matrix_facets.py`; research note |
 | Nonroot clone expansion of rooted-star facets | **Proved preservation theorem.** It applies to the stated nonroot clone expansion, not arbitrary marked shears. | commit `d3b4987`; `verify_clone_expanded_rooted_star_facets.py` |
@@ -292,9 +293,10 @@ inequality `min(Z_all,X_all)<=K_tau`; a failure produces strict dual
   comparison charge as a complete currency.  The active statement is now a
   bad-point separation theorem: select a root whose full mixed-packet cuts,
   combined with direct and stratum rows, exclude every below-target branch
-  point.  `(PXC53)--(PXC54)` close the complete ordered gainer-star class
-  with only one Lmax-aligned spoke.  The next structural step is to prove
-  that a missing Lmin spoke forces a direct separator/marked facet, or that
-  contraction exposes such a star.
+  point.  `(PXC53)--(PXC54)` close the ordered gainer-star class, and
+  `(PXC55)` closes the ordered co-star class while explaining every archived
+  positive-floor residual and both balanced equality controls.  The live
+  step is now the universal star/co-star/separator/contraction existence
+  theorem, no longer a quantitative bound on the finite facet atlas.
   Objective C's full
 equality and facet identification also remain required.

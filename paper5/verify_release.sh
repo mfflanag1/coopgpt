@@ -152,6 +152,12 @@ run_python coopgames/verifiers/divergence/audit_multigainer_common_spoke_star.py
   --output "$scratch_dir/multigainer-common-spoke-star.json"
 cmp coopgames/verifiers/divergence/multigainer_common_spoke_star.json \
   "$scratch_dir/multigainer-common-spoke-star.json"
+run_python coopgames/verifiers/divergence/audit_ordered_costar_bound.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/ordered-costar-bound.json"
+cmp coopgames/verifiers/divergence/ordered_costar_bound.json \
+  "$scratch_dir/ordered-costar-bound.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

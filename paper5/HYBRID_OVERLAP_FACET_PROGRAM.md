@@ -6345,6 +6345,52 @@ bounds are strictly above the hybrid floor for `n>=6`, so this branch cannot
 contain equality.  The known balanced `G(p,k)` equality orientations remain
 in their distinct block-star class.
 
+The complementary ordered co-star gives the decisive consolidation.  Let
+`G={i:z_i>x_i}`, `g=|G|>=2`, choose `r` outside `G`, and assume
+
+```text
+x_r >= x_i >= x_j   (i in G, j outside G union {r}).
+```
+
+Put `C_a={r} union (G\{a})`.  If every `C_a` is Lmin-tight and one `C_a`
+omitting a highest-Lmax gainer is also Lmax-tight with `z_r>=z_a`, then
+
+```text
+O/T >= n/[g(n-g)] >= n/floor(n^2/4).                 (PXC55)
+```
+
+Indeed, with `X=x(G)`, `u=min_G x_i`, and `m=n-g-1`, the uniformly weighted
+co-star packet and a root-zero witness give
+
+```text
+[g/(g-1)]x_r+X<=T.
+```
+
+Efficiency gives `T<=x_r+X+mu`, while `X>=gu`; hence
+
+```text
+x_r-u <= [g(n-g)-n]T/[g(n-g)].
+```
+
+The common co-star and `z_a<=z_r` bound total gain by
+`x_r-x_a<=x_r-u`, proving `(PXC55)`.
+
+Its incidence completion, with hinge weights `1/(g-1)`, shears to outside
+root pairs of weight one and exceptional coefficient
+`-[m+1/(g-1)]`.  This is exactly the existing `G(p,k)` rooted block-star
+facet for `(p,k)=(m,g)`, not a new full-cone class.  Target equality forces a
+balanced product `g(n-g)=floor(n^2/4)` and the sharp-family Lmin profile
+`x_r=m(g-1)u`, with every nonroot coordinate equal to `u`.
+
+The finite audit now crosses an important boundary.  `(PXC55)` applies to 84
+of 374 archived n=6 records and all 16 positive-floor residual rows left by
+the earlier reductions.  It rejects all five fixed hostile branches and
+accepts exactly the two balanced n=7 sharp orientations.  This is not the
+universal selection theorem, but the whole five-orbit finite residue is now
+explained by one all-dimensional human inequality in a known facet class.
+The live question is purely existence: force this co-star, `(PXC54)`, a
+direct/separator certificate, or quotient contraction in every hard branch.
+
 ```bash
 python verifiers/divergence/audit_marked_hinge_deficiency_transfer.py \
   verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
@@ -6380,6 +6426,11 @@ python verifiers/divergence/audit_multigainer_common_spoke_star.py \
   --output /tmp/multigainer_common_spoke_star.json
 cmp /tmp/multigainer_common_spoke_star.json \
   verifiers/divergence/multigainer_common_spoke_star.json
+python verifiers/divergence/audit_ordered_costar_bound.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output /tmp/ordered_costar_bound.json
+cmp /tmp/ordered_costar_bound.json \
+  verifiers/divergence/ordered_costar_bound.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
