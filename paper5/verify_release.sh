@@ -168,6 +168,10 @@ run_python coopgames/verifiers/divergence/audit_multiomission_direct_base.py \
   --output "$scratch_dir/multiomission-direct-base.json"
 cmp coopgames/verifiers/divergence/multiomission_direct_base.json \
   "$scratch_dir/multiomission-direct-base.json"
+run_python coopgames/verifiers/divergence/audit_generalized_packet_deficit_quota.py \
+  --output "$scratch_dir/generalized-packet-deficit-quota.json"
+cmp coopgames/verifiers/divergence/generalized_packet_deficit_quota.json \
+  "$scratch_dir/generalized-packet-deficit-quota.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

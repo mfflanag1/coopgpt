@@ -70,16 +70,20 @@ def hostile_upper_budget_control():
         base = F(certificate["base_bound_ratio"])
         if base < target(len(x)):
             raise AssertionError("hostile multi-omission row lost its base bound")
-        if certificate["packet_hits_interval"]:
-            raise AssertionError("hostile upper-budget obstruction disappeared")
+        h_loss = sum((x[i] - z[i] for i in h_set), F(0))
+        combined_budget = F(certificate["residual_budget"]) - h_loss
+        if combined_budget >= 0 or F(certificate["normalized_budget_margin"]) >= 0:
+            raise AssertionError("hostile combined-budget obstruction disappeared")
         rows.append(
             {
                 "coalition": coalition,
                 "base": str(base),
                 "gainer_packet": certificate["gainer_packet"],
-                "upper_budget": certificate["residual_budget"],
+                "nongainer_loss": str(h_loss),
+                "residual_budget": certificate["residual_budget"],
+                "combined_budget_margin": str(combined_budget),
                 "lower_comparison_slack": certificate["comparison_slack"],
-                "upper_budget_holds": False,
+                "combined_budget_holds": False,
             }
         )
     expected_coalitions = [70, 85, 90, 104, 204]
@@ -92,7 +96,7 @@ def hostile_upper_budget_control():
         "tight_multiomission_rows": rows,
         "interpretation": (
             "all five Lmin-tight multi-omission rows clear the PXC57 base and "
-            "lower comparison sign but fail the upper labelled budget"
+            "lower comparison sign but fail the exact combined labelled budget"
         ),
     }
 

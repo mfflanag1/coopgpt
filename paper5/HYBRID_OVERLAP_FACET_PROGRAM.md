@@ -40,6 +40,15 @@ sign, but all fail the upper labelled budget.  The next attack must therefore
 couple that deficit to sparse Lmax colour or a separator; more cardinality
 optimization on the same rows is explicitly retired.
 
+That deficit is now exact rather than qualitative.  The generalized
+packet-deficit quota `(PXC58)` rewrites the combined direct budget as
+`n Q(P)/(n-p)-(p+g-s)D/g`.  Thus every additional omitted gainer has exact
+price `(n-p)D/(ng)`.  The primitive hostile rows have five negative quota
+margins, while every co-star row in both balanced equality orientations is
+quota-tight.  The active gluing problem is to pay this scalar with labelled
+Lmax colour or turn its failure into separator/contraction or aligned
+decorated-co-star selection.
+
 The newest theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked
@@ -6485,6 +6494,10 @@ python verifiers/divergence/audit_multiomission_direct_base.py \
   --output /tmp/multiomission_direct_base.json
 cmp /tmp/multiomission_direct_base.json \
   verifiers/divergence/multiomission_direct_base.json
+python verifiers/divergence/audit_generalized_packet_deficit_quota.py \
+  --output /tmp/generalized_packet_deficit_quota.json
+cmp /tmp/generalized_packet_deficit_quota.json \
+  verifiers/divergence/generalized_packet_deficit_quota.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive
