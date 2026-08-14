@@ -49,7 +49,18 @@ quota-tight.  The active gluing problem is to pay this scalar with labelled
 Lmax colour or turn its failure into separator/contraction or aligned
 decorated-co-star selection.
 
-The newest theorem completely classifies the **scalar affordability** of a
+The aligned decorated-co-star arm now has an exact price.  Under the natural
+offroot packing condition, `(PXC59)` proves
+`O>=nT/[g(n-g)]+mu*A-L_a`, where `A` is average Lmin decoration mass,
+`L_a` is the aligned row's Lmax decoration loss, and
+`mu=(g-1)n/[g(n-g)]`.  This strictly extends the clean co-star theorem on six
+genuinely decorated archive records and preserves the sharp equality cases.
+It does not prove universal selection: the live task is now to force a
+packing-admissible family and a row satisfying `(PXC59d)`, or route failure to
+the already proved separator/contraction alternative.  On the facet side,
+nonclean decorated supports must be factored or tested for indecomposability.
+
+A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked
 into every larger rooted tight coalition; and a pair-free root fails exactly
@@ -6498,6 +6509,11 @@ python verifiers/divergence/audit_generalized_packet_deficit_quota.py \
   --output /tmp/generalized_packet_deficit_quota.json
 cmp /tmp/generalized_packet_deficit_quota.json \
   verifiers/divergence/generalized_packet_deficit_quota.json
+python verifiers/divergence/audit_priced_decorated_costar.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output /tmp/priced_decorated_costar.json
+cmp /tmp/priced_decorated_costar.json \
+  verifiers/divergence/priced_decorated_costar.json
 ```
 
 In the ten archived `(2,1,1,1,1)` occurrences, eight have a positive

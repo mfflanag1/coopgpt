@@ -172,6 +172,12 @@ run_python coopgames/verifiers/divergence/audit_generalized_packet_deficit_quota
   --output "$scratch_dir/generalized-packet-deficit-quota.json"
 cmp coopgames/verifiers/divergence/generalized_packet_deficit_quota.json \
   "$scratch_dir/generalized-packet-deficit-quota.json"
+run_python coopgames/verifiers/divergence/audit_priced_decorated_costar.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/priced-decorated-costar.json"
+cmp coopgames/verifiers/divergence/priced_decorated_costar.json \
+  "$scratch_dir/priced-decorated-costar.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \
