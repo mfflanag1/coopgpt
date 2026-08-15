@@ -297,6 +297,45 @@ def audit_root(values, x, z, root, gainers, outsiders, average_decoration):
     if outsider_loss + root_loss != sum(gains.values(), F(0)):
         raise AssertionError("root/outsider loss accounting failed")
 
+    full = (1 << n) - 1
+    total_gain = sum(gains.values(), F(0))
+    strict_outsiders = tuple(
+        player for player in outsiders if x[player] > z[player]
+    )
+    x_support = set(full_tight_support(values, x))
+    aligned_rows = []
+    for coalition in range(1, full):
+        if coalition_sum(z, coalition) != values[coalition]:
+            continue
+        if not (coalition >> root & 1):
+            continue
+        if any(coalition >> player & 1 for player in strict_outsiders):
+            continue
+        for a_star in maximum_gainers:
+            if coalition >> a_star & 1:
+                continue
+            if any(
+                not (coalition >> player & 1)
+                for player in gainers
+                if player != a_star
+            ):
+                continue
+            slack = coalition_sum(x, coalition) - coalition_sum(z, coalition)
+            if slack != root_loss - (total_gain - gains[a_star]):
+                raise AssertionError("aligned-row evaluation identity failed")
+            if slack < 0:
+                raise AssertionError("aligned row lost its core comparison")
+            aligned_rows.append(
+                {
+                    "coalition": coalition,
+                    "omitted": a_star,
+                    "common": slack == 0,
+                    "lmin_tight": coalition in x_support,
+                }
+            )
+    if aligned_rows and total_gain - maximum_gain > root_loss:
+        raise AssertionError("aligned row failed to price the dispersed gain")
+
     certificates = {
         player: minimum_lmax_root_certificate(values, x, z, player, root)
         for player in gainers
@@ -337,6 +376,12 @@ def audit_root(values, x, z, root, gainers, outsiders, average_decoration):
         "maximum_gain": str(maximum_gain),
         "outsider_loss": str(outsider_loss),
         "unit_exchange_identity": outsider_loss == maximum_gain,
+        "aligned_costar_rows": aligned_rows,
+        "has_aligned_row": bool(aligned_rows),
+        "has_common_aligned_row": any(row["common"] for row in aligned_rows),
+        "has_lmin_tight_aligned_row": any(
+            row["lmin_tight"] for row in aligned_rows
+        ),
         "menu_root_price": str(tau),
         "canonical_root_price": str(best["canonical_root_price"]),
         "canonical_gap": str(best["canonical_root_price"] - tau),
@@ -431,6 +476,13 @@ def main():
         "archive_unit_exchange_identity": sum(
             row["unit_exchange_identity"] for row in archive_rows
         ),
+        "archive_aligned_row": sum(row["has_aligned_row"] for row in archive_rows),
+        "archive_common_aligned_row": sum(
+            row["has_common_aligned_row"] for row in archive_rows
+        ),
+        "archive_lmin_tight_aligned_row": sum(
+            row["has_lmin_tight_aligned_row"] for row in archive_rows
+        ),
         "residual_ordered_saturated_roots": len(residual_rows),
         "residual_closing": sum(row["closes"] for row in residual_rows),
         "residual_at_most_one": sum(row["at_most_one"] for row in residual_rows),
@@ -443,6 +495,8 @@ def main():
                 "target_margin": row["target_margin"],
                 "exchange_exact": row["exchange_exact"],
                 "unit_exchange_identity": row["unit_exchange_identity"],
+                "has_common_aligned_row": row["has_common_aligned_row"],
+                "has_lmin_tight_aligned_row": row["has_lmin_tight_aligned_row"],
                 "closes": row["closes"],
             }
             for row in fixed_rows
@@ -460,6 +514,9 @@ def main():
         "archive_maximum_canonical_gap": "1",
         "archive_positive_reverse_payment": 0,
         "archive_unit_exchange_identity": 89,
+        "archive_aligned_row": 89,
+        "archive_common_aligned_row": 89,
+        "archive_lmin_tight_aligned_row": 89,
         "residual_ordered_saturated_roots": 16,
         "residual_closing": 16,
         "residual_at_most_one": 16,
@@ -474,6 +531,8 @@ def main():
             and row["target_margin"] == "0"
             and row["exchange_exact"]
             and row["unit_exchange_identity"]
+            and row["has_common_aligned_row"]
+            and row["has_lmin_tight_aligned_row"]
             and row["closes"]
         ):
             raise AssertionError(f"sharp orientation control drifted: {row!r}")

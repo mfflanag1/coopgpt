@@ -179,8 +179,23 @@ loss 3 versus maximum gain 17/8), so Lmax optimality remains indispensable.
 The uniform archived equality is possibly a harvest artifact and is not a
 theorem.  The saturated-arm frontier is now one statement: prove the unit
 root-exchange bound `tau_menu<=1`, or its reserve-padded form `(PXC69c)`,
-at every ordered saturated ceiling root.  Reproduce the exact primal/dual
-solutions with
+at every ordered saturated ceiling root.
+
+The bound localizes further to one row `(PXC70)`.  An aligned co-star row
+is an Lmax-tight coalition containing the root and every gainer except one
+maximum-gain gainer and no strict outsider.  The exact identity
+`x(C)-z(C)=ell_r-(D-d_max)` plus core feasibility of the Lmin selector on
+the Lmax-tight row proves `D-d_max<=ell_r` and `tau_menu<=1` from one such
+row; an Lmin-tight co-star row of the same shape reverses the sign, so a
+common aligned row forces the exact equality observed archive-wide.  The
+audit finds a common, Lmin-tight aligned row at all 89 ordered saturated
+roots and both sharp orientations; the eight-player relaxed control has
+Lmax slack 7/8 on all four clean co-stars, so alignment genuinely consumes
+Lmax optimality.  The live selection statement: every ordered saturated
+ceiling root admits an Lmax-tight aligned co-star row at some maximum-gain
+gainer.  Candidate tools are the staged leximax pinning sets and the
+exactness intersection lemma `(PXC4)`.  Reproduce the exact primal/dual
+solutions and the aligned-row census with
 
 ```bash
 python3 verifiers/divergence/audit_menu_relaxed_root_exchange.py \
