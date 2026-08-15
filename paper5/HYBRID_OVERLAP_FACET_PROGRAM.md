@@ -154,6 +154,40 @@ localized: convert one PXC68-selected row into at least
 `(tau-1)*ell_r-mu*A-cardinality_slack` payment, or exhibit an exact branch
 where all selected arms underpay.
 
+The best cover-type certificate is itself one exact linear program on the
+full Lmax-tight menu `(PXC69)`.  A menu cover is any nonnegative
+combination of proper Lmax-tight rows equal to an ambient multiple of `1_N`
+plus at least one unit at every non-omitted gainer, a nonpositive
+coefficient at every strict outsider, and `q_r` at the root; the minimum
+`tau_menu` of `q_r` satisfies `tau_menu<=tau` for every admissible staged
+relation system and still prices the dispersed gain,
+`D-d_max<=tau_menu*ell_r`.  Its LP dual is the exact root-versus-gainer
+exchange rate of the Lmax tangent cone in the selector orthant: maximize
+total gainer decrease over core tangent directions at the Lmax point that
+raise the root by one unit, weakly raise strict outsiders, and freeze tied
+outsiders.  The selector direction `(x-z)/ell_r` is always dual-feasible,
+so `tau_menu>=(D-d_max)/ell_r`: no cover certificate can beat the truth,
+and the root loss is strictly positive on this arm.  The exact audit
+(`audit_menu_relaxed_root_exchange.py`) solves both sides at all 89 ordered
+saturated archive roots and both sharp seven-player orientations: every
+optimum is exchange-exact and equal to one, so outsider loss equals maximum
+gain at every audited root; every optimal cover is supported on common
+tight rows only; eleven roots beat the canonical staged cover, and the sole
+`tau=4/3` exception prices at `tau_menu=1` with no decoration reserve.  The
+eight-player relaxed control violates the unit-exchange bound (outsider
+loss 3 versus maximum gain 17/8), so Lmax optimality remains indispensable.
+The uniform archived equality is possibly a harvest artifact and is not a
+theorem.  The saturated-arm frontier is now one statement: prove the unit
+root-exchange bound `tau_menu<=1`, or its reserve-padded form `(PXC69c)`,
+at every ordered saturated ceiling root.  Reproduce the exact primal/dual
+solutions with
+
+```bash
+python3 verifiers/divergence/audit_menu_relaxed_root_exchange.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/menu_relaxed_root_exchange.json
+```
+
 A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked

@@ -185,6 +185,12 @@ run_python coopgames/verifiers/divergence/audit_costar_saturation_dichotomy.py \
   --output "$scratch_dir/costar-saturation-dichotomy.json"
 cmp coopgames/verifiers/divergence/costar_saturation_dichotomy.json \
   "$scratch_dir/costar-saturation-dichotomy.json"
+run_python coopgames/verifiers/divergence/audit_menu_relaxed_root_exchange.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/menu-relaxed-root-exchange.json"
+cmp coopgames/verifiers/divergence/menu_relaxed_root_exchange.json \
+  "$scratch_dir/menu-relaxed-root-exchange.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \
