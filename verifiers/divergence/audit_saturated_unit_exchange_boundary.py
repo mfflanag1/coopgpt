@@ -6,11 +6,15 @@ Lmax selector on any Lmin-tight rooted co-star row omitting exactly gainer
 `a` gives `z(C)-x(C)=(D-d_a)-ell_r-strictloss(C)>=0`.  Saturation supplies
 rows of every type, so `D-d_max>=ell_r` and the menu-relaxed root price is
 never below one.  This driver replays that identity on every positive-weight
-maximum-gain packet row of the six-player archive and then replays two exact
-seven-player lower-envelope controls that refute the unit-exchange bound,
-universal aligned-row existence, menu exchange-exactness, and the universal
-sufficiency of the menu-cover reserve condition (PXC69c), while both retain
-the raw dispersed-gain reserve bound (PXC63b) and the hybrid target.
+maximum-gain packet row of the six-player archive and then replays five
+exact seven-player lower-envelope controls with certified selectors.  The
+first two refute the unit-exchange bound, universal aligned-row existence,
+menu exchange-exactness, and universal (PXC69c) closure; the third and
+fourth refute the dispersed-gain reserve bound (PXC63b) itself, one of them
+outside every archived packet-side arm; the fifth is an exact zero-margin
+equality boundary.  Every control satisfies the hybrid target, and every
+common single-omission co-star row has its decoration loss pinned at
+`D-d_a-ell_r` by the common-row corollary of (PXC71).
 """
 
 from __future__ import annotations
@@ -28,6 +32,7 @@ sys.path.insert(0, str(COOPGAMES / "src"))
 from audit_carrier_separator_payment import full_tight_support  # noqa: E402
 from audit_ceiling_root_gainer_exclusion import rooted_packing  # noqa: E402
 from audit_costar_saturation_dichotomy import coalition_sum  # noqa: E402
+from audit_direct_ceiling_common_hinge_trichotomy import has_direct_packet  # noqa: E402
 from audit_lmax_overcover import records  # noqa: E402
 from audit_menu_relaxed_root_exchange import (  # noqa: E402
     audit_root,
@@ -44,14 +49,21 @@ WITNESSES = (
     {
         "name": "n7_symmetric_two_generator_exchange_boundary",
         "generators": ((2, 0, 6, 2, 0, 2, 0), (0, 4, 0, 0, 4, 0, 4)),
-        "x": ("4/3", "4/3", "4", "4/3", "4/3", "4/3", "4/3"),
-        "z": ("4/5", "12/5", "12/5", "4/5", "12/5", "4/5", "12/5"),
-        "root": 2,
-        "menu_root_price": "4/3",
-        "exchange_exact": True,
-        "pxc69c_margin": "9/5",
-        "pxc63b_margin": "9/5",
-        "overlap": "44/5",
+        "expected": {
+            "x": ["4/3", "4/3", "4", "4/3", "4/3", "4/3", "4/3"],
+            "z": ["4/5", "12/5", "12/5", "4/5", "12/5", "4/5", "12/5"],
+            "root": 2,
+            "menu_root_price": "4/3",
+            "exchange_exact": True,
+            "has_aligned_row": False,
+            "direct": False,
+            "preclosure": "ceiling",
+            "pxc69c_margin": "9/5",
+            "pxc63b_margin": "9/5",
+            "overlap": "44/5",
+            "top_omission_rows": 9,
+            "common_top_omission_rows": 9,
+        },
     },
     {
         "name": "n7_three_generator_cover_reserve_failure",
@@ -60,14 +72,82 @@ WITNESSES = (
             (4, 0, 0, 5, 0, 0, 3),
             (0, 11, 1, 0, 0, 0, 0),
         ),
-        "x": ("2", "4", "1", "2", "1", "1", "1"),
-        "z": ("14/5", "14/5", "3/5", "14/5", "3/5", "3/5", "9/5"),
-        "root": 1,
-        "menu_root_price": "2",
-        "exchange_exact": False,
-        "pxc69c_margin": "-37/60",
-        "pxc63b_margin": "11/60",
-        "overlap": "48/5",
+        "expected": {
+            "x": ["2", "4", "1", "2", "1", "1", "1"],
+            "z": ["14/5", "14/5", "3/5", "14/5", "3/5", "3/5", "9/5"],
+            "root": 1,
+            "menu_root_price": "2",
+            "exchange_exact": False,
+            "has_aligned_row": False,
+            "direct": True,
+            "preclosure": "direct",
+            "pxc69c_margin": "-37/60",
+            "pxc63b_margin": "11/60",
+            "overlap": "48/5",
+            "top_omission_rows": 3,
+            "common_top_omission_rows": 3,
+        },
+    },
+    {
+        "name": "n7_residual_all_certificate_failure",
+        "generators": ((2, 0, 7, 2, 0, 1, 0), (0, 4, 0, 0, 4, 0, 4)),
+        "expected": {
+            "x": ["4/3", "4/3", "13/3", "4/3", "4/3", "1", "4/3"],
+            "z": ["4/5", "12/5", "12/5", "4/5", "12/5", "4/5", "12/5"],
+            "root": 2,
+            "menu_root_price": "4/3",
+            "exchange_exact": False,
+            "has_aligned_row": False,
+            "direct": False,
+            "preclosure": "positive_residual",
+            "pxc69c_margin": "-29/45",
+            "pxc63b_margin": "-1/5",
+            "overlap": "44/5",
+            "top_omission_rows": 9,
+            "common_top_omission_rows": 3,
+        },
+    },
+    {
+        "name": "n7_clean_undecorated_reserve_failure",
+        "generators": ((0, 3, 0, 0, 0, 3, 6), (1, 0, 1, 2, 8, 0, 0)),
+        "expected": {
+            "x": ["1", "1", "1", "1", "4", "1", "3"],
+            "z": ["2/7", "17/7", "2/7", "2/7", "22/7", "17/7", "22/7"],
+            "root": 4,
+            "menu_root_price": "2",
+            "exchange_exact": False,
+            "has_aligned_row": False,
+            "direct": True,
+            "preclosure": "direct",
+            "pxc69c_margin": "-6/7",
+            "pxc63b_margin": "-5/7",
+            "overlap": "9",
+            "top_omission_rows": 0,
+            "common_top_omission_rows": 0,
+        },
+    },
+    {
+        "name": "n7_zero_margin_equality_boundary",
+        "generators": (
+            (0, 7, 2, 0, 1, 2, 0),
+            (3, 0, 0, 5, 1, 0, 3),
+            (0, 11, 1, 0, 0, 0, 0),
+        ),
+        "expected": {
+            "x": ["4/3", "10/3", "4/3", "7/3", "1", "4/3", "4/3"],
+            "z": ["2", "5/2", "1", "5/2", "1", "1", "2"],
+            "root": 1,
+            "menu_root_price": "1",
+            "exchange_exact": True,
+            "has_aligned_row": True,
+            "direct": True,
+            "preclosure": "direct",
+            "pxc69c_margin": "0",
+            "pxc63b_margin": "0",
+            "overlap": "21/2",
+            "top_omission_rows": 0,
+            "common_top_omission_rows": 0,
+        },
     },
 )
 
@@ -236,6 +316,7 @@ def witness_row(case):
         tuple(F(value) for value in generator) for generator in case["generators"]
     )
     n = len(generators[0])
+    expected = case["expected"]
     totals = {sum(generator, F(0)) for generator in generators}
     if len(totals) != 1:
         raise AssertionError("witness generators lost their common total")
@@ -250,67 +331,114 @@ def witness_row(case):
     z = leximax_core_certified(game)
     x = tuple(F(value) for value in x)
     z = tuple(F(value) for value in z)
-    if x != tuple(F(value) for value in case["x"]):
-        raise AssertionError("witness Lmin selector changed")
-    if z != tuple(F(value) for value in case["z"]):
-        raise AssertionError("witness Lmax selector changed")
     roots = ordered_saturated_roots(values, x, z)
-    if len(roots) != 1 or roots[0][0] != case["root"]:
-        raise AssertionError("witness ordered saturated root changed")
+    if len(roots) != 1:
+        raise AssertionError("witness ordered saturated root count changed")
     root, gainers, outsiders, average_decoration = roots[0]
     row = audit_root(values, x, z, root, gainers, outsiders, average_decoration)
-    if row["has_aligned_row"]:
-        raise AssertionError("witness unexpectedly grew an aligned co-star row")
-    if row["unit_exchange_identity"]:
-        raise AssertionError("witness unexpectedly satisfies unit exchange")
-    if row["menu_root_price"] != case["menu_root_price"]:
-        raise AssertionError("witness menu-relaxed root price changed")
-    if row["exchange_exact"] != case["exchange_exact"]:
-        raise AssertionError("witness exchange-exactness changed")
-    if F(row["menu_root_price"]) <= 1:
-        raise AssertionError("witness no longer refutes the unit bound")
-    if row["target_margin"] != case["pxc69c_margin"]:
-        raise AssertionError("witness PXC69c margin changed")
-    if (F(row["target_margin"]) >= 0) != (F(case["pxc69c_margin"]) >= 0):
-        raise AssertionError("witness PXC69c verdict changed")
 
-    n_players = len(x)
     g = len(gainers)
     total = sum(x, F(0))
     total_gain = sum((z[player] - x[player] for player in gainers), F(0))
     maximum_gain = max(z[player] - x[player] for player in gainers)
     root_loss = x[root] - z[root]
     penalty = total_gain - maximum_gain - root_loss
-    if penalty <= 0:
-        raise AssertionError("witness lost its strict reverse inequality")
-    mu = F((g - 1) * n_players, g * (n_players - g))
-    slack = (
-        F(n_players, g * (n_players - g)) - F(n_players, (n_players**2) // 4)
-    ) * total
+    if penalty < 0:
+        raise AssertionError("witness violated the reverse packet inequality")
+    mu = F((g - 1) * n, g * (n - g))
+    slack = (F(n, g * (n - g)) - F(n, (n**2) // 4)) * total
     margin63 = mu * average_decoration + slack - penalty
-    if str(margin63) != case["pxc63b_margin"] or margin63 < 0:
-        raise AssertionError("witness PXC63b margin changed")
     overlap = sum((min(a, b) for a, b in zip(x, z)), F(0))
-    target = F(n_players, (n_players**2) // 4) * total
-    if str(overlap) != case["overlap"] or overlap < target:
-        raise AssertionError("witness overlap or hybrid target changed")
+    target = F(n, (n**2) // 4) * total
+    if overlap < target:
+        raise AssertionError("witness violated the hybrid target")
+    direct = has_direct_packet(x, z, F(n, (n**2) // 4))
+    floor = min(x)
+    ceiling = max(z)
+    ceiling_closes = (
+        ceiling > 0
+        and ceiling - floor + total * floor / ceiling >= target
+    )
+    if direct:
+        preclosure = "direct"
+    elif ceiling_closes:
+        preclosure = "ceiling"
+    elif floor == 0:
+        preclosure = "null"
+    else:
+        preclosure = "positive_residual"
+
+    strict_outsiders = tuple(
+        player for player in outsiders if x[player] > z[player]
+    )
+    top_gain = max(z[player] for player in gainers)
+    top_gainers = tuple(
+        player for player in gainers if z[player] == top_gain
+    )
+    full = (1 << n) - 1
+    top_rows = 0
+    common_top_rows = 0
+    for coalition in range(1, full):
+        if coalition_sum(z, coalition) != values[coalition]:
+            continue
+        if not (coalition >> root & 1):
+            continue
+        omitted = tuple(
+            player for player in gainers if not (coalition >> player & 1)
+        )
+        common = coalition_sum(x, coalition) == values[coalition]
+        if common and len(omitted) == 1:
+            gain = z[omitted[0]] - x[omitted[0]]
+            strict_loss = sum(
+                (
+                    x[player] - z[player]
+                    for player in strict_outsiders
+                    if coalition >> player & 1
+                ),
+                F(0),
+            )
+            if strict_loss != (total_gain - gain) - root_loss:
+                raise AssertionError(
+                    "common co-star row lost its pinned decoration loss"
+                )
+        if len(omitted) == 1 and omitted[0] in top_gainers:
+            top_rows += 1
+            common_top_rows += common
+
+    observed = {
+        "x": [str(value) for value in x],
+        "z": [str(value) for value in z],
+        "root": root,
+        "menu_root_price": row["menu_root_price"],
+        "exchange_exact": row["exchange_exact"],
+        "has_aligned_row": row["has_aligned_row"],
+        "direct": direct,
+        "preclosure": preclosure,
+        "pxc69c_margin": row["target_margin"],
+        "pxc63b_margin": str(margin63),
+        "overlap": str(overlap),
+        "top_omission_rows": top_rows,
+        "common_top_omission_rows": common_top_rows,
+    }
+    mismatches = {
+        key: (observed[key], expected[key])
+        for key in expected
+        if observed[key] != expected[key]
+    }
+    if mismatches:
+        raise AssertionError(
+            f"witness {case['name']} drifted: {mismatches!r}"
+        )
     return {
         "name": case["name"],
         "generators": [
             [str(value) for value in generator] for generator in generators
         ],
-        "x": [str(value) for value in x],
-        "z": [str(value) for value in z],
-        "root": root,
         "gainers": list(gainers),
-        "menu_root_price": row["menu_root_price"],
-        "demand_ratio": row["demand_ratio"],
-        "exchange_exact": row["exchange_exact"],
         "reverse_penalty": str(penalty),
-        "pxc69c_margin": row["target_margin"],
-        "pxc63b_margin": str(margin63),
-        "overlap": str(overlap),
+        "demand_ratio": row["demand_ratio"],
         "hybrid_target": str(target),
+        **observed,
     }
 
 

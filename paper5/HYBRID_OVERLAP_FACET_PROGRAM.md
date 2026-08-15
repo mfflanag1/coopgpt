@@ -216,11 +216,25 @@ exact design search over singleton-normalized integer lower envelopes
 produced a two-generator seven-player control (`tau_menu=4/3`, no aligned
 row, decoration-paid) and a three-generator control (`tau_menu=2` above
 demand ratio `4/3`, `(PXC69c)` margin `-37/60`), both with certified
-selectors, both satisfying `(PXC63b)` and the hybrid target.  The live
-universal statement on the saturated arm is therefore `(PXC63b)`, now
-two-sided: the reverse inequality prices its left side from below by the
-strict decoration loss of every maximum-gain packet row.  Reproduce the
-archive replay and both controls with
+selectors, both satisfying `(PXC63b)` and the hybrid target.
+
+`(PXC72)` then closes the packet-side program.  The common-row corollary of
+`(PXC71)` pins the strict decoration loss of every common single-omission
+co-star row at exactly `D-d_a-ell_r`, so `(PXC55)`, `(PXC59)`, `(PXC63b)`,
+`(PXC67b)`, and `(PXC69c)` are one scalar family against the one reserve
+`mu*A_rho+slack`.  The extended design search (4,624 certified lower
+envelopes; 109 ordered saturated roots; every ordered no-multi root
+saturated) produced seven `(PXC63b)` violations and three pinned controls:
+a positive-floor residual escaping every packet-side arm at once (margins
+`-1/5` and `-29/45`, all common rows at the pinned loss `1/5`, overlap
+`44/5` against target `7`), a clean undecorated violation by `5/7` with no
+top-omission row (direct-closed), and an exact zero-margin equality
+boundary with `tau_menu=1` and an aligned row.  Coloured selection --- a
+rooted Lmax multi-omission row, a positive-reverse-slack separator, a hinge
+over-cover, or a mixed facet, i.e., the `(PXC66)`--`(PXC68)` handover ---
+is therefore necessary on this arm, and the residual control is the
+sharpest target for the next theorem.  Reproduce the archive replay and all
+five controls with
 
 ```bash
 python3 verifiers/divergence/audit_saturated_unit_exchange_boundary.py \
