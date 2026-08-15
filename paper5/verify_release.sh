@@ -191,6 +191,12 @@ run_python coopgames/verifiers/divergence/audit_menu_relaxed_root_exchange.py \
   --output "$scratch_dir/menu-relaxed-root-exchange.json"
 cmp coopgames/verifiers/divergence/menu_relaxed_root_exchange.json \
   "$scratch_dir/menu-relaxed-root-exchange.json"
+run_python coopgames/verifiers/divergence/audit_saturated_unit_exchange_boundary.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/saturated-unit-exchange-boundary.json"
+cmp coopgames/verifiers/divergence/saturated_unit_exchange_boundary.json \
+  "$scratch_dir/saturated-unit-exchange-boundary.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

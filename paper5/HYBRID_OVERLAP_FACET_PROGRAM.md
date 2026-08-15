@@ -203,6 +203,31 @@ python3 verifiers/divergence/audit_menu_relaxed_root_exchange.py \
   --output verifiers/divergence/menu_relaxed_root_exchange.json
 ```
 
+The boundary `(PXC71)` settles both halves of that statement.  The reverse
+packet inequality is unconditional: core feasibility of the Lmax selector
+on any Lmin-tight co-star row omitting exactly gainer `a` gives
+`z(C)-x(C)=(D-d_a)-ell_r-strictloss(C)>=0`, so saturation forces
+`D-d_max>=ell_r` and `tau_menu>=1` everywhere on the arm, and the unit
+bound, exact equality, aligned-row existence, commonness of every
+maximum-gain packet row, and `tau_menu=1` are equivalent.  All 202
+maximum-type packet rows of the six-player archive are aligned, so the
+archived equality had a trivially proved half.  The open half is false: an
+exact design search over singleton-normalized integer lower envelopes
+produced a two-generator seven-player control (`tau_menu=4/3`, no aligned
+row, decoration-paid) and a three-generator control (`tau_menu=2` above
+demand ratio `4/3`, `(PXC69c)` margin `-37/60`), both with certified
+selectors, both satisfying `(PXC63b)` and the hybrid target.  The live
+universal statement on the saturated arm is therefore `(PXC63b)`, now
+two-sided: the reverse inequality prices its left side from below by the
+strict decoration loss of every maximum-gain packet row.  Reproduce the
+archive replay and both controls with
+
+```bash
+python3 verifiers/divergence/audit_saturated_unit_exchange_boundary.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/saturated_unit_exchange_boundary.json
+```
+
 A prior theorem completely classifies the **scalar affordability** of a
 labelled rooted row in every target dimension.  Two tight rooted pairs are
 automatically affordable; one pair fails exactly when its partner is locked
