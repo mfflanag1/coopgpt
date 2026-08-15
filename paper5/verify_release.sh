@@ -169,6 +169,7 @@ run_python coopgames/verifiers/divergence/audit_multiomission_direct_base.py \
 cmp coopgames/verifiers/divergence/multiomission_direct_base.json \
   "$scratch_dir/multiomission-direct-base.json"
 run_python coopgames/verifiers/divergence/audit_generalized_packet_deficit_quota.py \
+  --max-n 96 \
   --output "$scratch_dir/generalized-packet-deficit-quota.json"
 cmp coopgames/verifiers/divergence/generalized_packet_deficit_quota.json \
   "$scratch_dir/generalized-packet-deficit-quota.json"
