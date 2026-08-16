@@ -398,8 +398,11 @@ class-A, nor family-closed (first mixed menus contain ROOTLESS rows
 theorem yet).  CLASS B CLOSED (PXC84): the singleton-cover principle
 is stratum-agnostic -- any tight row R with r in R subseteq T gives
 theta <= 1/|R| and the master chain (block size |T|); on split tops
-the tight top pair {r,h} does it with surplus x_r+x_h >= 2M.  41/41
-observed class-B violations have the top pair tight; first instance
+the tight top pair {r,h} does it with surplus x_r+x_h >= 2M.  Final design-search
+totals (archived): 810 split-top violations, 285 class-B, 285/285 with
+the top pair tight and the chain closed; zero partially fed, unfed, or
+multi-heavy violations, with the caveat that every observed violation
+has s=2, where partial feeding cannot occur.  First class-B instance
 pinned.  Class-B closure conjecture: class-A hypotheses or tight top
 pair.  Class C (multi-heavy tops) still unobserved at violations.  Reproduce with
 

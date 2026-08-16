@@ -45,3 +45,5 @@ The driver's disjunct list was then upgraded to the partially fed
 hypotheses for subsequent runs.
 
 - `probe_uncovered_outsider.py` + `probe_uncovered_outsider_run1.log` -- full two-generator grid sweep for the bipartite-pairing angle: 102 uniform-top violations, 18 pair-condition failures, 18/18 direct- and family-closed, every uncovered outsider at or below the Lmin floor (grid-wide).
+
+- `ds_split_partial.py`/`.json` + `ds_split_b.py`/`.json` (logs gzipped) -- split-top design searches (seeds 20260825/20260827, 8000+6000 rounds): 810 split-top violations, 285 with a slack heavy-block row (class B), 285/285 with the top pair Lmax-tight, dispersion under the class-A bound and chain closed everywhere; zero partially fed, zero unfed, zero multi-heavy violations -- caveat: every observed violation has s=2, where partial feeding is impossible, so the partial-feeding absence is scope-limited.
