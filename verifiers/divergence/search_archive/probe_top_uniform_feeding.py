@@ -10,7 +10,13 @@ violation.  Output on 2026-08-16:
 
 Together with the eighteen previously audited top-uniform violations,
 the conjecture "violation and top-uniformity force every decorated
-co-star Lmax-tight" stands at 38 for 38.  It remains a conjecture.
+co-star Lmax-tight" stands at 38 for 38.  A follow-up two-unit mutation
+probe (two sequential unit moves, seeded sample) added eighteen more
+top-uniform violations, all fed (56 for 56), and confirmed on each that
+no clean co-star and not the full top block is Lmax-tight, matching the
+proved decorated-rows lemma.  Scope caution: every probed instance is a
+two- or three-generator lower envelope, hence monotone; the implication
+is untested on non-monotone exact games.  It remains a conjecture.
 """
 import itertools
 import sys

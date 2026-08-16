@@ -324,6 +324,17 @@ python3 verifiers/divergence/audit_split_top_spectral_structure.py \
   --output verifiers/divergence/split_top_spectral_structure.json
 ```
 
+The consolidated, authoritative statement of the saturated arm ---
+surviving theorems, the six proved closure mechanisms, and the selection
+conjecture `(PXC79)` --- is the saturated-arm summary subsection of
+`divergence.tex`; the sections below are the working history behind it.
+One step of the feeding implication is now proved (at a violation no
+clean co-star and not the full top block is Lmax-tight, so every
+Lmax-tight type row is decorated), the probe count stands at 56/56 after
+two-unit mutations, and a scope caution is recorded: all designed
+evidence is monotone lower envelopes, so the implication should be
+probed on non-monotone exact games before proof investment.
+
 The observed coincidence of the two `(PXC75)` hypotheses at violations
 now has a directed probe: mutating the known top-uniform violation
 shapes one unit at a time (`search_archive/probe_top_uniform_feeding.py`)
