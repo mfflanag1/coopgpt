@@ -272,6 +272,60 @@ python3 verifiers/divergence/audit_two_stratum_spectral_closure.py \
   --output verifiers/divergence/two_stratum_spectral_closure.json
 ```
 
+The hostile audit then reversed the necessity conclusion `(PXC76)`: the
+`(PXC59)` decorated family is selectable, the `(PXC72)` invariant pins
+the aligned common row's loss at `D-d_a-ell_r` independently of its
+decorations, and exhaustive family enumeration closes every named uniform
+packet violation packet-side (mutation control margin `29/30`; battery
+`29/30..27/10`).  Only the split-top clean control leaves the
+certificate's hypotheses and is direct-closed.  No audited root forces
+the spectral arm; the refuted statements were the selection-free
+certificates, and the live arrow is universal selection of a chosen
+family, a direct packet, or the spectral closure.  Reproduce with
+
+```bash
+python3 verifiers/divergence/audit_chosen_family_costar_closure.py \
+  --output verifiers/divergence/chosen_family_costar_closure.json
+```
+
+Two edges of the partition are now probed.  First, across every audited
+packet violation --- the sixteen audited grid violations and the ten
+archived search generator classes
+(`search_archive/classify_violations.py`) --- top-uniformity and co-star
+feeding coincide: eighteen violations are top-uniform and fed, eight are
+split-top and unfed, and no mixed class occurs, so the two `(PXC75)`
+hypotheses stand or fall together and the remaining `(PXC73)` gap is one
+branch, not two.  Second, `(PXC75b)` is not the operative condition:
+eleven of the thirty-seven audited two-stratum roots fail it while the
+chain closes them, so future work should target the chain, not
+`(PXC75b)`.
+
+The split-top branch itself now has an exact structural atlas `(PXC77)`:
+the heavy gainer joins the root at the ceiling, the menu is built from
+double co-stars (root, heavy gainer, all sub-top gainers but one, one
+outsider), the canonical over-cover concentrates its largest weight on
+the heavy gainer (dispersion `4/7` with weights `(3/7,4/7)` at the
+canonical control), both spectral currencies vanish so the sharpened
+bound equals the actual-top bound, and the bound is exactly tight
+(`B=O=9`) at the control.  Any split-top closure theorem must therefore
+be sharp.  Reproduce with
+
+```bash
+python3 verifiers/divergence/audit_split_top_spectral_structure.py \
+  --output verifiers/divergence/split_top_spectral_structure.json
+```
+
+A bounded attack on the ordered-saturation blocker exclusion (the
+`(PXC74)` frontier) adds one exact constraint: at a weighted-Hall
+obstruction with a full-rooted blocker `D`, the exactness intersection
+lemma `(PXC4)` forbids any beta-minimal type row from decorating all of
+the outsiders left outside `D`, since intersecting it with `D` would
+produce a strictly cheaper row of the same omission type while the
+blocker leaves positive price outside `D`.  Every beta-minimal row
+therefore misses some positively priced outsider outside the blocker.
+Optimal-price perturbation arguments do not yet control the per-type
+minima; the exclusion remains open.
+
 Reproduce the archive replay and all
 five controls with
 

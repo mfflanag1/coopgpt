@@ -20,3 +20,13 @@ the full round budget.
 The pinned, release-replayed evidence lives in the adjacent `audit_*`
 verifiers; this directory only archives the discovery runs so that every
 printed count has a recorded artifact.
+
+## Violation classification
+
+`classify_violations.py` recomputes exact selectors for every distinct
+generator set among the archived finding lines and classifies each packet
+violation against the `(PXC75)` hypotheses.  Result (2026-08-16): the ten
+archived violation classes split as eight split-top-and-unfed and two
+top-uniform-and-fed; together with the sixteen audited grid violations
+(top-uniform and fed by construction), top-uniformity and co-star feeding
+coincide on every audited packet violation.
