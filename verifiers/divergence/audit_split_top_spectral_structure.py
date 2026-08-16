@@ -228,6 +228,11 @@ def main():
             for row in rows
             if row["pxc78"] is not None
         ),
+        "grid_class_bc_packet_closed": sum(
+            F(row["packet_margin"]) >= 0
+            for row in rows
+            if row["pxc78"] is None
+        ),
     }
     expected = {
         "grid_split_top_instances": 31,
@@ -239,6 +244,7 @@ def main():
         "grid_packet_violations": 2,
         "grid_class_a": 11,
         "grid_class_a_chain_closes": 11,
+        "grid_class_bc_packet_closed": 20,
     }
     for key, value in expected.items():
         if summary[key] != value:
