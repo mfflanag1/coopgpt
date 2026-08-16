@@ -204,6 +204,8 @@ run_python coopgames/verifiers/divergence/audit_spectral_or_reserve.py \
 cmp coopgames/verifiers/divergence/spectral_or_reserve.json \
   "$scratch_dir/spectral-or-reserve.json"
 run_python coopgames/verifiers/divergence/audit_two_stratum_spectral_closure.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
   --output "$scratch_dir/two-stratum-spectral-closure.json"
 cmp coopgames/verifiers/divergence/two_stratum_spectral_closure.json \
   "$scratch_dir/two-stratum-spectral-closure.json"

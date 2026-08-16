@@ -268,6 +268,7 @@ the archived `g=2` spectral failures.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_two_stratum_spectral_closure.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
   --output verifiers/divergence/two_stratum_spectral_closure.json
 ```
 

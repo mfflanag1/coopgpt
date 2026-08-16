@@ -38,6 +38,7 @@ from audit_lmax_overcover import top_certificate  # noqa: E402
 from audit_menu_relaxed_root_exchange import ordered_saturated_roots  # noqa: E402
 from audit_pxc52_coloured_charge import lower_envelope  # noqa: E402
 from audit_spectral_label_currency import spectral_decomposition  # noqa: E402
+from audit_lmax_overcover import records  # noqa: E402
 from audit_spectral_or_reserve import (  # noqa: E402
     family_instance,
     margins,
@@ -158,8 +159,50 @@ def audit_instance(a, H, w):
     }
 
 
+def archive_scope(paths):
+    """Count how the archived ordered saturated roots meet the hypotheses."""
+    counts = {"roots": 0, "qualify": 0, "top_split": 0, "unfed": 0}
+    for path in paths:
+        payload = json.loads(path.read_text())
+        for _source, _trail, values, x, z in records(payload, path):
+            for root, gainers, outsiders, _dec in ordered_saturated_roots(
+                values, x, z
+            ):
+                counts["roots"] += 1
+                n = len(x)
+                ceiling = max(z)
+                top_uniform = (
+                    z[root] == ceiling
+                    and all(z[p] == ceiling for p in gainers)
+                    and all(z[j] < ceiling for j in outsiders)
+                )
+                fed = True
+                for a in gainers:
+                    for j in outsiders:
+                        coalition = (1 << root) | (1 << j)
+                        for b in gainers:
+                            if b != a:
+                                coalition |= 1 << b
+                        if coalition_sum(z, coalition) != values[coalition]:
+                            fed = False
+                            break
+                    if not fed:
+                        break
+                hw = all(
+                    x[p] <= ceiling for p in range(n) if p != root
+                )
+                if not top_uniform:
+                    counts["top_split"] += 1
+                elif not fed:
+                    counts["unfed"] += 1
+                elif hw:
+                    counts["qualify"] += 1
+    return counts
+
+
 def main():
     parser = argparse.ArgumentParser()
+    parser.add_argument("paths", nargs="*", type=Path)
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
@@ -214,6 +257,13 @@ def main():
             min(F(row["chain"]) - F(row["target"]) for row in named)
         ),
     }
+    if args.paths:
+        scope = archive_scope(args.paths)
+        summary["archive_scope"] = scope
+        expected_scope = {"roots": 89, "qualify": 0, "top_split": 19,
+                          "unfed": 70}
+        if scope != expected_scope:
+            raise AssertionError(f"archive scope drifted: {scope!r}")
     payload = {
         "claim": (
             "two-stratum decorated-menu roots have dispersion (k-1)/(gk-g-1) "
