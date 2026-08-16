@@ -341,6 +341,62 @@ def audit_triple_menu_escape():
     }
 
 
+ORDERED_UNSATURATED_WITNESS = (
+    (0, 5, 5, 5, 5, 0, 0, 0), (5, 0, 0, 0, 0, 13, 1, 1),
+    (0, 5, 6, 5, 4, 0, 0, 0), (0, 5, 6, 4, 5, 0, 0, 0),
+    (5, 0, 0, 0, 0, 14, 0, 1), (6, 0, 0, 0, 0, 12, 0, 2),
+)
+
+
+def audit_ordered_unsaturated_witness():
+    """First ordered-but-unsaturated ceiling root ever observed.
+
+    Earlier searches found none in ~7,000 candidates; the n=8 probe
+    around the condition-failure seeds produced seven.  The witness has
+    an ordered ceiling root with rooted packing value 5/4, strictly
+    below the saturation value g/(g-1) = 4/3 at g = 4, so the ordered
+    geometry does not force saturation.  The target is safe: the
+    overlap is 50/3 against 10.  Scope control for the saturated-arm
+    theorems, which assume saturation."""
+    from audit_carrier_separator_payment import full_tight_support
+    from audit_ceiling_root_gainer_exclusion import rooted_packing
+    generators = tuple(
+        tuple(F(value) for value in generator)
+        for generator in ORDERED_UNSATURATED_WITNESS
+    )
+    n = len(generators[0])
+    values = lower_envelope(generators)
+    x, z = selectors(values, n)
+    ceiling = max(z)
+    gset = {i for i in range(n) if z[i] > x[i]}
+    if len(gset) != 4:
+        raise AssertionError("unsaturated witness: gainer count changed")
+    support = tuple(full_tight_support(values, x))
+    found = None
+    for root in range(n):
+        if z[root] != ceiling or x[root] < ceiling or root in gset:
+            continue
+        _rooted, nu, _w, _c = rooted_packing(support, n, root)
+        outsiders = [i for i in range(n)
+                     if i not in gset and i != root]
+        floor_g = min(x[a] for a in gset)
+        ordered = (all(x[root] >= x[a] for a in gset)
+                   and all(floor_g >= x[j] for j in outsiders))
+        if ordered:
+            found = (root, nu)
+    if found is None:
+        raise AssertionError("unsaturated witness: no ordered root")
+    root, nu = found
+    if str(nu) != "5/4":
+        raise AssertionError("unsaturated witness: packing value drifted")
+    overlap = sum(min(a, b) for a, b in zip(x, z))
+    target = F(n, (n * n) // 4) * sum(x, F(0))
+    if overlap < target:
+        raise AssertionError("unsaturated witness: target violated")
+    return {"name": "ordered_unsaturated_witness", "nu": "5/4",
+            "overlap": str(overlap), "target": str(target)}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -355,12 +411,14 @@ def main():
         for name, shape, packet, family in CONDITION_FAILURE_CONTROLS
     ]
     triple_row = audit_triple_menu_escape()
+    unsaturated_row = audit_ordered_unsaturated_witness()
     summary = {
         "controls": len(rows),
         "chain_closures": sum(row["chain_closes"] for row in rows),
         "dispersion_identity": "g(k-1)-1 for all fed counts >= 2",
         "condition_failure_controls": len(failure_rows),
         "triple_menu_escape": triple_row["name"],
+        "ordered_unsaturated_witness": unsaturated_row["nu"],
     }
     payload = {
         "claim": (
@@ -372,6 +430,7 @@ def main():
         "rows": rows,
         "condition_failure_rows": failure_rows,
         "triple_menu_escape_row": triple_row,
+        "ordered_unsaturated_witness_row": unsaturated_row,
     }
     rendered = json.dumps(payload, indent=2, default=str) + "\n"
     if args.output:

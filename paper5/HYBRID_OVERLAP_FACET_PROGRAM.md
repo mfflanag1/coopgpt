@@ -379,9 +379,18 @@ grid-wide, no exception); with the fifty re-audited n=8 probe
 violations the count is 68/68 direct.  The covered column is always
 the heavy outsider; fourteen distinct single-column graph shapes
 observed, including single-edge graphs.  Driver and log archived
-(probe_uncovered_outsider).  Second escape (six-generator n=8, same
-species) closed out-of-sample by PXC83: three tight rooted triples,
-surplus 5/4, chain 149/12 vs target 10.
+(probe_uncovered_outsider).  FINAL PROBE HARVEST (all archived):
+wide_probe_v2 20,000 rounds -- 1,724 violations, 3 escapes, ALL
+rooted-triple menus closed by PXC83 out-of-sample; n=8 probe 8,000
+rounds -- 998 violations, 2 more PXC83-closed escapes; ds_triple
+8,000 rounds -- 4,666/4,666 rooted menus closed by the PXC83 chain.
+Five escapes total, five closed by the sixth mechanism.  NEW SPECIES:
+seven ordered-but-unsaturated ceiling roots (nu = 5/4 < g/(g-1) = 4/3
+at g = 4) -- the first ever observed, refuting the earlier empirical
+uniformity (0 in ~7,000 candidates); all target-safe (overlap 50/3 vs
+10); one pinned as a verifier scope control.  The saturated-arm
+theorems assume saturation; the unsaturated ordered geometry is now a
+live scope question.
 
 THIRD REFUTATION (triple-menu escape, pinned): an 8-generator n=8
 envelope produces a uniform-top violation whose tight menu is five
