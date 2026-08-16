@@ -197,6 +197,12 @@ run_python coopgames/verifiers/divergence/audit_saturated_unit_exchange_boundary
   --output "$scratch_dir/saturated-unit-exchange-boundary.json"
 cmp coopgames/verifiers/divergence/saturated_unit_exchange_boundary.json \
   "$scratch_dir/saturated-unit-exchange-boundary.json"
+run_python coopgames/verifiers/divergence/audit_spectral_or_reserve.py \
+  coopgames/verifiers/s6/harvest6_601.json \
+  coopgames/verifiers/s6/harvest6_602.json \
+  --output "$scratch_dir/spectral-or-reserve.json"
+cmp coopgames/verifiers/divergence/spectral_or_reserve.json \
+  "$scratch_dir/spectral-or-reserve.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

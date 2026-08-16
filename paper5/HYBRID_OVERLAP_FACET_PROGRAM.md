@@ -232,8 +232,28 @@ top-omission row (direct-closed), and an exact zero-margin equality
 boundary with `tau_menu=1` and an aligned row.  Coloured selection --- a
 rooted Lmax multi-omission row, a positive-reverse-slack separator, a hinge
 over-cover, or a mixed facet, i.e., the `(PXC66)`--`(PXC68)` handover ---
-is therefore necessary on this arm, and the residual control is the
-sharpest target for the next theorem.  Reproduce the archive replay and all
+is therefore necessary on this arm.  `(PXC73)` identifies the paying
+colour: the sharpened spectral-anchor bound closes the residual control
+(`127T/180` at dispersion `2/5`) and every designed packet violation
+through `n=9`, where the packet violation grows with dimension.  On all
+audited and designed ordered saturated roots
+`max(packet margin, spectral margin)>=0`; the archived spectral failures
+are all `g=2` roots paid exactly by the normalized cardinality slack
+`T/12`, and the combined-failure hill-climb plateaus at the exact double
+boundary, whose instances have overlap exactly equal to the hybrid target
+and realize the scaled sharp selector profile in realizations outside
+`G(p,k)`.  The live saturated-arm conjecture is this spectral-or-reserve
+alternative; its open half is that packet-reserve failure forces spectral
+closure.  Reproduce the disjunction replay, family grid, and plateau
+witnesses with
+
+```bash
+python3 verifiers/divergence/audit_spectral_or_reserve.py \
+  verifiers/s6/harvest6_601.json verifiers/s6/harvest6_602.json \
+  --output verifiers/divergence/spectral_or_reserve.json
+```
+
+Reproduce the archive replay and all
 five controls with
 
 ```bash
