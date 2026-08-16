@@ -258,12 +258,13 @@ co-star fed root: uniform Lmax strata `M`/`zeta` and Lmax-tight decorated
 co-stars make the explicit symmetric over-cover feasible, so
 `theta<=(k-1)/(gk-g-1)`, and the sharpened spectral bound obeys the
 dimension-free chain `B>=(M-zeta)(gk-g-1)/(k-1)+n*zeta+M-x_r`, closing
-the target under the explicit `(PXC75b)`.  Every designed packet
-violation lies in this regime; the audited grid closes 27/27 qualifying
-roots, all 12 packet violations, and the six named controls.  The
-remaining spectral-or-reserve gap is the three-or-more-stratum Lmax
-branch (for example `(5,5,5;8;(4,2,1))`) and the archived `g=2` spectral
-failures.  Reproduce with
+the target under the explicit `(PXC75b)`.  The uniform outsider stratum is only a normal form: split strata
+satisfy the same chain with `zeta_min` via the block-independent residual
+bound.  Every designed packet violation lies in this regime; the audited
+grid closes 37/37 qualifying roots, all 16 packet violations, and nine
+named controls including the three-stratum `(5,5,5;8;(4,2,1))`.  The
+remaining spectral-or-reserve gap is split-top roots, unfed co-stars, and
+the archived `g=2` spectral failures.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_two_stratum_spectral_closure.py \

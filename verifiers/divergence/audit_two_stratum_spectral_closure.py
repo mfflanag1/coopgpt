@@ -48,6 +48,9 @@ from audit_spectral_or_reserve import (  # noqa: E402
 NAMED_CONTROLS = (
     ((4, 4, 4), 7, (3, 1, 1)),
     ((4, 4, 4), 7, (2, 2, 1)),
+    ((5, 5, 5), 8, (4, 2, 1)),
+    ((5, 5, 5), 8, (3, 3, 1)),
+    ((6, 6, 6), 10, (5, 2, 1)),
     ((6, 6, 6), 10, (4, 2, 2)),
     ((6, 6, 6), 10, (3, 3, 2)),
     ((4, 4, 4, 4), 11, (3, 1, 1)),
@@ -68,11 +71,11 @@ def audit_instance(a, H, w):
     M = z[0]
     if not all(z[i] == M for i in range(1, 1 + g)):
         return None
-    zeta = z[1 + g]
-    if not all(z[j] == zeta for j in range(1 + g, n)):
+    zetas = tuple(z[j] for j in range(1 + g, n))
+    if not all(M > value >= 0 for value in zetas):
         return None
-    if not (M > zeta >= 0):
-        return None
+    zeta_min = min(zetas)
+    uniform = len(set(zetas)) == 1
     full = (1 << n) - 1
     menu = {
         coalition
@@ -109,8 +112,8 @@ def audit_instance(a, H, w):
         raise AssertionError("over-cover surplus lost nonnegativity")
     total = sum(x, F(0))
     f = min(x)
-    if f < zeta:
-        raise AssertionError("Lmin floor fell below the outsider stratum")
+    if f < zeta_min:
+        raise AssertionError("Lmin floor fell below the outsider strata")
     required = (M + surplus - f) / theta
     values_nonroot = x[1:]
     best = None
@@ -122,12 +125,17 @@ def audit_instance(a, H, w):
     if best is None:
         raise AssertionError("no eligible spectral top block")
     bound = F(spec["sharpened_spectral_bound_ratio"]) * total
-    if bound != M + k * zeta + best:
+    if uniform and bound != M + k * zetas[0] + best:
         raise AssertionError("sharpened bound left the two-stratum form")
-    chain = (M - f) * F(delta, k - 1) + (g + 1) * f + k * zeta + M - x[0]
-    weak = (M - zeta) * F(delta, k - 1) + n * zeta + M - x[0]
+    residual_bound = sum(zetas, F(0)) - sum(
+        (max(value - f, F(0)) for value in zetas), F(0)
+    )
+    chain = (
+        (M - f) * F(delta, k - 1) + (g + 1) * f + residual_bound + M - x[0]
+    )
+    weak = (M - zeta_min) * F(delta, k - 1) + n * zeta_min + M - x[0]
     if not bound >= chain >= weak:
-        raise AssertionError("two-stratum spectral chain failed")
+        raise AssertionError("stratified spectral chain failed")
     target = F(n, (n * n) // 4) * total
     packet = margins(values, x, z)["packet_margin"]
     return {
@@ -140,6 +148,7 @@ def audit_instance(a, H, w):
         "weak_bound": str(weak),
         "target": str(target),
         "packet_margin": str(packet),
+        "uniform_outsiders": uniform,
         "exact_menu": not rooted_extras and menu == expected,
         "theta_equality": theta == F(k - 1, delta),
         "rooted_extras": len(rooted_extras),
@@ -193,6 +202,9 @@ def main():
         "grid_packet_violations_chain_closed": sum(
             F(row["packet_margin"]) < 0 and row["chain_closes"]
             for row in rows
+        ),
+        "grid_uniform_outsiders": sum(
+            row["uniform_outsiders"] for row in rows
         ),
         "grid_exact_menu": sum(row["exact_menu"] for row in rows),
         "grid_theta_equality": sum(row["theta_equality"] for row in rows),
