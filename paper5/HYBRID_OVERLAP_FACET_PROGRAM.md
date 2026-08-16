@@ -391,7 +391,13 @@ verbatim and closes the escape (65/6 vs 8).  PXC79 amended a third
 time (six mechanisms).  Watch for menus that are neither pair, rooted,
 class-A, nor family-closed (first mixed menus contain ROOTLESS rows
 {gainer, outsider, outsider} -- new tight-row species, no closure
-theorem yet).  Reproduce with
+theorem yet).  CLASS B CLOSED (PXC84): the singleton-cover principle
+is stratum-agnostic -- any tight row R with r in R subseteq T gives
+theta <= 1/|R| and the master chain (block size |T|); on split tops
+the tight top pair {r,h} does it with surplus x_r+x_h >= 2M.  41/41
+observed class-B violations have the top pair tight; first instance
+pinned.  Class-B closure conjecture: class-A hypotheses or tight top
+pair.  Class C (multi-heavy tops) still unobserved at violations.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \

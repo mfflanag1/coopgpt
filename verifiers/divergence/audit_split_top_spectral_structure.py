@@ -118,6 +118,81 @@ def split_partial_cover_infeasibility():
                     )
 
 
+CLASS_B_CONTROL = (
+    (0, 10, 5, 5, 0, 0, 0), (12, 0, 0, 0, 4, 2, 2),
+    (0, 10, 4, 6, 0, 0, 0), (0, 9, 6, 5, 0, 0, 0),
+    (0, 9, 5, 6, 0, 0, 0), (13, 0, 0, 0, 4, 1, 2),
+)
+
+
+def audit_class_b_control():
+    """PXC84 on the first class-B violation found by design search.
+
+    Split-top packet violation with a slack heavy-block row (class B).
+    The top pair {r,h} is Lmax-tight, and any tight row R with
+    r in R, R a subset of the top stratum T, is by itself an
+    over-cover with ambient level zero: theta <= 1/|R|.  With the
+    surplus hypothesis sum_R x >= |R| M and the nonroot Lmin cap, the
+    master chain B >= (M-f)/theta + |T| f + z(N-T) -
+    sum_{N-T}(z_i-f)_+ + M - x_r holds -- the (PXC75) argument
+    verbatim with |T| in place of g+1.  Pinned exactly."""
+    from audit_spectral_or_reserve import selectors as _selectors
+    generators = tuple(
+        tuple(F(value) for value in generator)
+        for generator in CLASS_B_CONTROL
+    )
+    n = len(generators[0])
+    values = lower_envelope(generators)
+    x, z = _selectors(values, n)
+    if [str(value) for value in x] != ["6", "4", "2", "2", "2", "2", "2"]:
+        raise AssertionError("class-B control: x drifted")
+    if [str(value) for value in z] !=             ["9/2", "9/2", "4", "4", "1", "1", "1"]:
+        raise AssertionError("class-B control: z drifted")
+    roots = ordered_saturated_roots(values, x, z)
+    if len(roots) != 1:
+        raise AssertionError("class-B control: root count changed")
+    root, gainers, outsiders, _dec = roots[0]
+    M = max(z)
+    tops = [i for i in range(n) if z[i] == M]
+    if sorted(tops) != [0, 1]:
+        raise AssertionError("class-B control: top stratum changed")
+    hb = sum(1 << a for a in tops if a != root)         + sum(1 << j for j in outsiders)
+    if coalition_sum(z, hb) == values[hb]:
+        raise AssertionError("class-B control: heavy block now tight")
+    pair = (1 << root) | (1 << 1)
+    if coalition_sum(z, pair) != values[pair]:
+        raise AssertionError("class-B control: top pair no longer tight")
+    packet = margins(values, x, z)["packet_margin"]
+    if str(packet) != "-1":
+        raise AssertionError("class-B control: packet margin drifted")
+    cert = top_certificate(values, z)
+    theta = F(cert["theta"])
+    if theta != F(1, 2):
+        raise AssertionError("class-B control: dispersion drifted")
+    surplus = x[root] + x[1] - 2 * M
+    if surplus != 1:
+        raise AssertionError("class-B control: surplus drifted")
+    f = min(x)
+    nontop = [i for i in range(n) if z[i] < M]
+    residual = sum(z[i] for i in nontop)         - sum(max(z[i] - f, F(0)) for i in nontop)
+    chain = 2 * (M - f) + 2 * f + residual + M - x[root]
+    total = sum(x, F(0))
+    target = F(n, (n * n) // 4) * total
+    spec = spectral_decomposition("b", values, x, z)
+    bound = F(spec["sharpened_spectral_bound_ratio"]) * total
+    if str(chain) != "29/2" or chain < target or bound < chain:
+        raise AssertionError("class-B control: PXC84 chain failed")
+    return {
+        "name": "class_b_top_pair",
+        "packet_margin": "-1",
+        "theta": "1/2",
+        "surplus": "1",
+        "chain": "29/2",
+        "bound": str(bound),
+        "chain_closes": True,
+    }
+
+
 def split_instance(heavy, light, count_light, H, w):
     a = (heavy,) + (light,) * count_light
     g = len(a)
@@ -245,6 +320,7 @@ def main():
     args = parser.parse_args()
 
     split_partial_cover_infeasibility()
+    class_b_row = audit_class_b_control()
     rows = []
     for light in range(2, 6):
         heavy = 2 * light
@@ -329,6 +405,7 @@ def main():
             )
 
     payload = {
+        "class_b_top_pair": class_b_row,
         "claim": (
             "split-top roots carry heavy-gainer-weighted over-covers with "
             "vanishing spectral currencies; the sharpened bound closes and "
