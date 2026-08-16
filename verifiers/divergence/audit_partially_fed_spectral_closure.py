@@ -220,6 +220,9 @@ def audit_condition_failure(name, shape, packet_expected, family_expected):
         raise AssertionError(f"{name}: pair condition no longer fails")
     if not has_direct_packet(x, z, F(n, (n * n) // 4)):
         raise AssertionError(f"{name}: direct arm no longer closes")
+    floor = min(x)
+    if any(z[j] > floor for j in set(outsiders) - columns):
+        raise AssertionError(f"{name}: uncovered outsider above the floor")
     family = best_family_margin(values, x, z, root, gainers, outsiders)
     if family is None or str(family) != family_expected or family < 0:
         raise AssertionError(f"{name}: chosen-family margin changed")

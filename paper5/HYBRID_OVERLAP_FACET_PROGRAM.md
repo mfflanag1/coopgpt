@@ -364,7 +364,20 @@ collapsing-denominator route to class-B split-top closure is closed
 sub-top types are mid-stratum, not top-stratum; a class-B theorem must
 use different support rows, or class-B violations must be excluded
 outright (the running split design search has yet to see one: all
-observed split-top violations are fully fed class-A).  Reproduce with
+observed split-top violations are fully fed class-A; update: one
+violation with a slack heavy-block row has now appeared, with canonical
+dispersion 1/2 under the class-A bound 4/7, chain closed, and
+direct-closed -- wider tight support substitutes for the heavy block).
+
+Sharpened bridge conjecture (bipartite-pairing angle): at a uniform-top
+packet violation, if the pair-graph condition (PXC81) fails then the
+direct packet exists.  Evidence: the three grid condition-failure
+controls and fifty re-audited condition-failing violations from the
+n=8 probe around them, all direct-closed; at every one, every uncovered
+outsider sits at or below the Lmin floor (z_j <= min x, pinned in the
+condition-failure controls), and the covered column is the heavy
+outsider.  Fourteen distinct single-column graph shapes observed,
+including single-edge graphs.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \
