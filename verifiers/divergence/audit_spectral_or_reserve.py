@@ -48,6 +48,11 @@ FAMILY = (
     ((5, 5, 5, 5), 13, (1, 1, 1, 4), "-1", "4", "5"),
     ((5, 5, 5, 5), 15, (1, 1, 1, 2), "0", "0", "0"),
     ((8, 4, 4, 4), 15, (1, 1, 1, 2), "-11/13", "0", "3"),
+    ((6, 6, 6, 6, 6), 25, (1, 1, 1, 2), "0", "1", "3/2"),
+    ((6, 6, 6, 6, 6), 23, (1, 1, 1, 4), "-4/7", "24/7", "31/7"),
+    ((6, 6, 6, 6, 6), 24, (1, 1, 1, 1, 2), "0", "0", "0"),
+    ((6, 6, 6, 6, 6), 22, (1, 1, 1, 1, 4), "-4/3", "14/3", "17/3"),
+    ((6, 6, 6, 6, 6, 6), 30, (1, 1, 1, 1, 2), "0", "0", "0"),
 )
 
 PLATEAU = (
@@ -227,9 +232,9 @@ def main():
         "archive_disjunction": 89,
         "archive_spectral_failures": 20,
         "archive_minimum_spectral_margin_ratio": "-2/21",
-        "family_instances": 10,
-        "family_packet_violations": 6,
-        "family_double_boundary": 4,
+        "family_instances": 15,
+        "family_packet_violations": 8,
+        "family_double_boundary": 6,
         "plateau_witnesses": 2,
         "plateau_target_margins": ["0", "0"],
     }
