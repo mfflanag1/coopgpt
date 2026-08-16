@@ -296,11 +296,48 @@ def audit_triple_menu_escape():
     family = best_family_margin(values, x, z, root, gainers, outsiders)
     if family is not None:
         raise AssertionError("triple-menu escape: chosen family now exists")
+    # PXC83: a single tight rooted undecorated row {r} u P is an
+    # over-cover with eta = 0 and theta = 1/(|P|+1); with the surplus
+    # hypothesis x_r - M >= sum_P (M - x_a) the PXC75 chain closes.
+    M = max(z)
+    best = None
+    for coalition in tight:
+        members = {p_ for p_ in range(n) if coalition >> p_ & 1}
+        if root not in members or not members <= set(gainers) | {root}:
+            continue
+        pset = members - {root}
+        if not pset or pset == set(gainers):
+            continue
+        surplus = (x[root] - M) - sum(M - x[a] for a in pset)
+        if surplus >= 0 and (best is None or len(pset) > best[0]):
+            best = (len(pset), surplus)
+    if best is None:
+        raise AssertionError("triple-menu escape: no surplus rooted row")
+    p_size, surplus = best
+    if p_size != 2 or str(surplus) != "1/2":
+        raise AssertionError("triple-menu escape: rooted row drifted")
+    theta = F(1, p_size + 1)
+    f = min(x)
+    g = len(gainers)
+    residual = sum(min(z[j], f) for j in outsiders)
+    chain = (M - f) / theta + (g + 1) * f + residual + M - x[root]
+    total = sum(x, F(0))
+    target = F(n, (n * n) // 4) * total
+    if str(chain) != "65/6" or chain < target:
+        raise AssertionError("triple-menu escape: rooted chain failed")
+    spec = spectral_decomposition("r", values, x, z)
+    bound = F(spec["sharpened_spectral_bound_ratio"]) * total
+    if bound < chain:
+        raise AssertionError("triple-menu escape: chain exceeds the bound")
     return {
         "name": "triple_menu_escape",
         "menu": [list(row) for row in triples],
         "packet_margin": "-2/3",
         "spectral_margin": "10/3",
+        "rooted_row_size": p_size,
+        "rooted_surplus": str(surplus),
+        "rooted_chain": str(chain),
+        "rooted_chain_closes": True,
     }
 
 

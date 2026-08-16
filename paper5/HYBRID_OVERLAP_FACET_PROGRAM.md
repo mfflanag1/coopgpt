@@ -383,10 +383,15 @@ THIRD REFUTATION (triple-menu escape, pinned): an 8-generator n=8
 envelope produces a uniform-top violation whose tight menu is five
 rooted triples {r,a,b} -- pair graph EMPTY, all five mechanisms fail
 simultaneously; spectral certificate closes (theta 1/3, eta 0, bound
-34/3 vs 8) so PXC73 survives.  The live problem is now the SIXTH
-mechanism: a closure chain for rooted sub-top menus (tight rows
-{r} u P, P a proper gainer subset, no outsider decoration, eta = 0),
-dispersion from the covering LP on the subset hypergraph.  Reproduce with
+34/3 vs 8) so PXC73 survives.  RESOLVED SAME SESSION: the sixth
+mechanism is a theorem (PXC83) -- one tight rooted undecorated row
+{r} u P is itself an over-cover (eta=0, theta<=1/(p+1)); with the
+surplus hypothesis x_r-M >= sum_P (M-x_a) the PXC75 chain holds
+verbatim and closes the escape (65/6 vs 8).  PXC79 amended a third
+time (six mechanisms).  Watch for menus that are neither pair, rooted,
+class-A, nor family-closed (first mixed menus contain ROOTLESS rows
+{gainer, outsider, outsider} -- new tight-row species, no closure
+theorem yet).  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \
