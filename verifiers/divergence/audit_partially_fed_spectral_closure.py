@@ -231,6 +231,79 @@ def audit_condition_failure(name, shape, packet_expected, family_expected):
             "chosen_family_margin": family_expected}
 
 
+TRIPLE_MENU_ESCAPE = (
+    (0, 4, 4, 4, 4, 0, 0, 0), (11, 0, 0, 0, 0, 2, 2, 1),
+    (10, 0, 0, 0, 0, 1, 4, 1), (11, 0, 0, 0, 0, 3, 2, 0),
+    (10, 0, 0, 0, 0, 3, 1, 2), (0, 5, 3, 5, 3, 0, 0, 0),
+    (12, 0, 0, 0, 0, 1, 1, 2), (12, 0, 0, 0, 0, 2, 1, 1),
+)
+
+
+def audit_triple_menu_escape():
+    """The third refutation round: an eight-generator envelope whose
+    uniform-top violation escapes reserve, direct, the pair-graph
+    condition, the split-top hypotheses, and the chosen family at once,
+    because its Lmax-tight menu consists of five rooted triples
+    {r,a,b} -- no decorated co-star is tight at all.  The spectral
+    certificate still closes it (bound 34/3 against target 8), so the
+    spectral-or-reserve disjunction survives."""
+    from audit_direct_ceiling_common_hinge_trichotomy import (
+        has_direct_packet,
+    )
+    from audit_chosen_family_costar_closure import best_family_margin
+    generators = tuple(
+        tuple(F(value) for value in generator)
+        for generator in TRIPLE_MENU_ESCAPE
+    )
+    n = len(generators[0])
+    values = lower_envelope(generators)
+    x, z = selectors(values, n)
+    if [str(value) for value in x] != ["11/2"] + ["3/2"] * 7:
+        raise AssertionError("triple-menu escape: x drifted")
+    if [str(value) for value in z] != ["8/3"] * 5 + ["8/9"] * 3:
+        raise AssertionError("triple-menu escape: z drifted")
+    roots = ordered_saturated_roots(values, x, z)
+    if len(roots) != 1:
+        raise AssertionError("triple-menu escape: root count changed")
+    root, gainers, outsiders, _dec = roots[0]
+    packet = margins(values, x, z)
+    if str(packet["packet_margin"]) != "-2/3":
+        raise AssertionError("triple-menu escape: packet margin drifted")
+    if str(packet["spectral_margin"]) != "10/3":
+        raise AssertionError("triple-menu escape: spectral margin drifted")
+    edges = [
+        (a, j) for a in gainers for j in outsiders
+        if coalition_sum(
+            z, (1 << root) | (1 << j)
+            | sum(1 << b for b in gainers if b != a)
+        ) == values[(1 << root) | (1 << j)
+                    | sum(1 << b for b in gainers if b != a)]
+    ]
+    if edges:
+        raise AssertionError("triple-menu escape: pair graph not empty")
+    tight = [
+        coalition for coalition in range(1, (1 << n) - 1)
+        if coalition_sum(z, coalition) == values[coalition]
+    ]
+    triples = sorted(
+        tuple(p_ for p_ in range(n) if coalition >> p_ & 1)
+        for coalition in tight
+    )
+    if triples != [(0, 1, 2), (0, 1, 3), (0, 1, 4), (0, 2, 3), (0, 3, 4)]:
+        raise AssertionError("triple-menu escape: menu drifted")
+    if has_direct_packet(x, z, F(n, (n * n) // 4)):
+        raise AssertionError("triple-menu escape: direct arm now closes")
+    family = best_family_margin(values, x, z, root, gainers, outsiders)
+    if family is not None:
+        raise AssertionError("triple-menu escape: chosen family now exists")
+    return {
+        "name": "triple_menu_escape",
+        "menu": [list(row) for row in triples],
+        "packet_margin": "-2/3",
+        "spectral_margin": "10/3",
+    }
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -244,11 +317,13 @@ def main():
         audit_condition_failure(name, shape, packet, family)
         for name, shape, packet, family in CONDITION_FAILURE_CONTROLS
     ]
+    triple_row = audit_triple_menu_escape()
     summary = {
         "controls": len(rows),
         "chain_closures": sum(row["chain_closes"] for row in rows),
         "dispersion_identity": "g(k-1)-1 for all fed counts >= 2",
         "condition_failure_controls": len(failure_rows),
+        "triple_menu_escape": triple_row["name"],
     }
     payload = {
         "claim": (
@@ -259,6 +334,7 @@ def main():
         "summary": summary,
         "rows": rows,
         "condition_failure_rows": failure_rows,
+        "triple_menu_escape_row": triple_row,
     }
     rendered = json.dumps(payload, indent=2, default=str) + "\n"
     if args.output:

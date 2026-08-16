@@ -377,7 +377,16 @@ n=8 probe around them, all direct-closed; at every one, every uncovered
 outsider sits at or below the Lmin floor (z_j <= min x, pinned in the
 condition-failure controls), and the covered column is the heavy
 outsider.  Fourteen distinct single-column graph shapes observed,
-including single-edge graphs.  Reproduce with
+including single-edge graphs.
+
+THIRD REFUTATION (triple-menu escape, pinned): an 8-generator n=8
+envelope produces a uniform-top violation whose tight menu is five
+rooted triples {r,a,b} -- pair graph EMPTY, all five mechanisms fail
+simultaneously; spectral certificate closes (theta 1/3, eta 0, bound
+34/3 vs 8) so PXC73 survives.  The live problem is now the SIXTH
+mechanism: a closure chain for rooted sub-top menus (tight rows
+{r} u P, P a proper gainer subset, no outsider decoration, eta = 0),
+dispersion from the covering LP on the subset hypergraph.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \
