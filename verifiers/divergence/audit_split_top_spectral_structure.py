@@ -14,8 +14,12 @@ canonical control.  This driver enumerates the split family
 checks the structural hypotheses instance by instance, and pins the
 closures; the canonical clean control is replayed with its exact
 dispersion, over-cover weights, and tight spectral value.  These are
-exact finite structure facts, not a split-top closure theorem; the
-general theorem must be sharp, since the bound is tight at the control.
+exact finite structure facts.  On the class-A geometry --- exactly one
+heavy gainer, double co-stars and the heavy-block row Lmax-tight ---
+the mixed over-cover is feasible, the dispersion obeys
+`theta<=s(k-1)/(sk+k-s)` (PXC78a), and the PXC75-style chain (PXC78)
+closes every audited class-A root, both packet violations included; the
+class-B/C sub-geometries stay outside the theorem.
 """
 
 from __future__ import annotations
@@ -84,12 +88,50 @@ def audit_instance(generators):
                     coalition |= 1 << a
             if coalition_sum(z, coalition) != values[coalition]:
                 fed = False
+    # heavy-block row {h} u O for the single-heavy geometry
+    heavy_block = None
+    if len(top_gainers) == 1:
+        coalition = 1 << top_gainers[0]
+        for j in outsiders:
+            coalition |= 1 << j
+        heavy_block = coalition_sum(z, coalition) == values[coalition]
     cert = top_certificate(values, z)
     theta = F(cert["theta"])
     alpha = [F(value) for value in cert["alpha"]]
     heavy_weighted = all(
         alpha[a] >= alpha[root] for a in top_gainers
     )
+    # PXC78 chain on the class-A geometry
+    s_count = len(sub_gainers)
+    k_count = len(outsiders)
+    pxc78 = None
+    if heavy_block and fed and s_count >= 2 and k_count >= 2:
+        denominator = s_count * k_count + k_count - s_count
+        theta_bound = F(s_count * (k_count - 1), denominator)
+        if theta > theta_bound:
+            raise AssertionError("class-A over-cover feasibility failed")
+        M = ceiling
+        f = min(x)
+        total = sum(x, F(0))
+        if any(x[i] > M for i in range(n) if i != root):
+            pxc78 = None
+        else:
+            residual_bound = s_count * f + sum(
+                min(z[j], f) for j in outsiders
+            )
+            chain = (
+                (M - f) / theta_bound + 2 * f + residual_bound + M - x[root]
+            )
+            spec_pre = spectral_decomposition("c", values, x, z)
+            bound_pre = F(spec_pre["sharpened_spectral_bound_ratio"]) * total
+            if bound_pre < chain:
+                raise AssertionError("class-A spectral chain failed")
+            target_pre = F(spec_pre["target_ratio"]) * total
+            pxc78 = {
+                "theta_bound": str(theta_bound),
+                "chain": str(chain),
+                "chain_closes": chain >= target_pre,
+            }
     spec = spectral_decomposition("t", values, x, z)
     total = sum(x, F(0))
     bound = F(spec["sharpened_spectral_bound_ratio"]) * total
@@ -109,6 +151,8 @@ def audit_instance(generators):
         "top_gainers": list(top_gainers),
         "sub_gainers": list(sub_gainers),
         "double_costars_fed": fed,
+        "heavy_block_row": heavy_block,
+        "pxc78": pxc78,
         "theta": str(theta),
         "heavy_weighted": heavy_weighted,
         "currencies_zero": currencies_zero,
@@ -178,6 +222,12 @@ def main():
         "grid_packet_violations": sum(
             F(row["packet_margin"]) < 0 for row in rows
         ),
+        "grid_class_a": sum(row["pxc78"] is not None for row in rows),
+        "grid_class_a_chain_closes": sum(
+            row["pxc78"]["chain_closes"]
+            for row in rows
+            if row["pxc78"] is not None
+        ),
     }
     expected = {
         "grid_split_top_instances": 31,
@@ -187,6 +237,8 @@ def main():
         "grid_bound_closes": 31,
         "grid_bound_tight": 14,
         "grid_packet_violations": 2,
+        "grid_class_a": 11,
+        "grid_class_a_chain_closes": 11,
     }
     for key, value in expected.items():
         if summary[key] != value:

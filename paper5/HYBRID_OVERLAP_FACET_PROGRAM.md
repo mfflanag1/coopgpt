@@ -308,7 +308,12 @@ the heavy gainer (dispersion `4/7` with weights `(3/7,4/7)` at the
 canonical control), both spectral currencies vanish so the sharpened
 bound equals the actual-top bound, and the bound is exactly tight
 (`B=O=9`) at the control.  Any split-top closure theorem must therefore
-be sharp.  Reproduce with
+be sharp.  The single-heavy geometry `(PXC78)` is now proved: with the
+double co-stars and the heavy-block row `{h} u O` Lmax-tight, the mixed
+over-cover is feasible, `theta<=s(k-1)/(sk+k-s)` with the heavy weight
+dominating, and the PXC75-style chain closes the class --- all eleven
+audited class-A roots, both packet violations included.  Class-B/C
+sub-geometries remain open.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_split_top_spectral_structure.py \
