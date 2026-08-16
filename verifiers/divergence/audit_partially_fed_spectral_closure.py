@@ -177,6 +177,57 @@ def audit_control(name, generators, expected):
     return {"name": name, **observed, "target": str(target)}
 
 
+CONDITION_FAILURE_CONTROLS = (
+    ("single_column_graph_g3k4", ((5, 5, 5), 8, (4, 1, 1, 1)),
+     "-1/14", "219/70"),
+    ("single_column_graph_g4k3_low", ((5, 5, 5, 5), 5, (13, 1, 1)),
+     "-1/3", "8/3"),
+    ("single_column_graph_g4k3_high", ((5, 5, 5, 5), 13, (5, 1, 1)),
+     "-1/3", "8/3"),
+)
+
+
+def audit_condition_failure(name, shape, packet_expected, family_expected):
+    """Uniform-top violations whose pair graph fails (PXC81) yet which
+    the direct arm and the chosen family both close."""
+    from audit_spectral_or_reserve import family_instance
+    from audit_direct_ceiling_common_hinge_trichotomy import (
+        has_direct_packet,
+    )
+    from audit_chosen_family_costar_closure import best_family_margin
+    a, H, w = shape
+    generators = family_instance(a, H, w)
+    n = len(generators[0])
+    values = lower_envelope(generators)
+    x, z = selectors(values, n)
+    roots = ordered_saturated_roots(values, x, z)
+    if len(roots) != 1:
+        raise AssertionError(f"{name}: root count changed")
+    root, gainers, outsiders, _dec = roots[0]
+    packet = margins(values, x, z)["packet_margin"]
+    if str(packet) != packet_expected or packet >= 0:
+        raise AssertionError(f"{name}: packet margin changed")
+    edges = [
+        (a_, j) for a_ in gainers for j in outsiders
+        if coalition_sum(
+            z, (1 << root) | (1 << j)
+            | sum(1 << b for b in gainers if b != a_)
+        ) == values[(1 << root) | (1 << j)
+                    | sum(1 << b for b in gainers if b != a_)]
+    ]
+    columns = {j for _a, j in edges}
+    if columns == set(outsiders):
+        raise AssertionError(f"{name}: pair condition no longer fails")
+    if not has_direct_packet(x, z, F(n, (n * n) // 4)):
+        raise AssertionError(f"{name}: direct arm no longer closes")
+    family = best_family_margin(values, x, z, root, gainers, outsiders)
+    if family is None or str(family) != family_expected or family < 0:
+        raise AssertionError(f"{name}: chosen-family margin changed")
+    return {"name": name, "packet_margin": packet_expected,
+            "uncovered_outsiders": len(set(outsiders) - columns),
+            "chosen_family_margin": family_expected}
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -186,10 +237,15 @@ def main():
     pair_graph_feasibility()
     rows = [audit_control(name, generators, expected)
             for name, generators, expected in CONTROLS]
+    failure_rows = [
+        audit_condition_failure(name, shape, packet, family)
+        for name, shape, packet, family in CONDITION_FAILURE_CONTROLS
+    ]
     summary = {
         "controls": len(rows),
         "chain_closures": sum(row["chain_closes"] for row in rows),
         "dispersion_identity": "g(k-1)-1 for all fed counts >= 2",
+        "condition_failure_controls": len(failure_rows),
     }
     payload = {
         "claim": (
@@ -199,6 +255,7 @@ def main():
         ),
         "summary": summary,
         "rows": rows,
+        "condition_failure_rows": failure_rows,
     }
     rendered = json.dumps(payload, indent=2, default=str) + "\n"
     if args.output:

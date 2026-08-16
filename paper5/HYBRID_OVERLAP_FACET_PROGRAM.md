@@ -354,8 +354,10 @@ over-cover has the forced dispersion `(k-1)/(g(k-1)-1)`, and existence
 collapses to two conditions --- every outsider in some tight pair, at
 least two types appearing --- verified by exhaustion for `g,k<=4`.  The
 selection conjecture's feeding disjunct is now this pair-graph
-condition; the live minimal bridge is to prove it at every uniform-top
-packet violation.  Reproduce with
+condition.  The condition is not universal at violations: three grid
+instances (single-column pair graphs on the heavy outsider) fail it and
+are closed by the direct arm and the chosen family, so the live problem
+is the full disjunction, not any single-disjunct bridge.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \
