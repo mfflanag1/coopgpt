@@ -413,7 +413,14 @@ the top pair tight and the chain closed; zero partially fed, unfed, or
 multi-heavy violations, with the caveat that every observed violation
 has s=2, where partial feeding cannot occur.  First class-B instance
 pinned.  Class-B closure conjecture: class-A hypotheses or tight top
-pair.  Class C (multi-heavy tops) still unobserved at violations.  Reproduce with
+pair.  Class C (multi-heavy tops) still unobserved at violations.
+PXC85 (strict Lmax separation, proved): z_i > z_j forces a tight
+coalition with i avoiding j; mirror at Lmin; NO separation between
+equal values (equal-top transfers worsen the egalitarian objective;
+the triple-menu escape realizes the freedom -- no tight gainer row
+avoids the root).  s=3 split search: 6,000 rounds, 89 roots, ZERO
+split violations -- s>=3 split-top violations remain unobserved, so
+class-B evidence stays s=2-scoped.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \

@@ -397,6 +397,33 @@ def audit_ordered_unsaturated_witness():
             "overlap": str(overlap), "target": str(target)}
 
 
+def strict_separation():
+    """PXC85: at the Lmax point, z_i > z_j forces a z-tight coalition
+    containing i and avoiding j (else the egalitarian transfer from i
+    to j stays in the core and lexicographically improves the sorted
+    vector).  Checked exhaustively on the pinned control games."""
+    for generators in (TRIPLE_MENU_ESCAPE, ORDERED_UNSATURATED_WITNESS):
+        generators = tuple(
+            tuple(F(value) for value in generator)
+            for generator in generators
+        )
+        n = len(generators[0])
+        values = lower_envelope(generators)
+        _x, z = selectors(values, n)
+        tight = [coalition for coalition in range(1, (1 << n) - 1)
+                 if coalition_sum(z, coalition) == values[coalition]]
+        for i in range(n):
+            for j in range(n):
+                if i == j or z[i] <= z[j]:
+                    continue
+                if not any(coalition >> i & 1
+                           and not coalition >> j & 1
+                           for coalition in tight):
+                    raise AssertionError(
+                        f"strict separation failed at ({i},{j})"
+                    )
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -404,6 +431,7 @@ def main():
 
     dispersion_identity()
     pair_graph_feasibility()
+    strict_separation()
     rows = [audit_control(name, generators, expected)
             for name, generators, expected in CONTROLS]
     failure_rows = [
