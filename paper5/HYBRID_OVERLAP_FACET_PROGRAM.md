@@ -357,7 +357,14 @@ selection conjecture's feeding disjunct is now this pair-graph
 condition.  The condition is not universal at violations: three grid
 instances (single-column pair graphs on the heavy outsider) fail it and
 are closed by the direct arm and the chosen family, so the live problem
-is the full disjunction, not any single-disjunct bridge.  Reproduce with
+is the full disjunction, not any single-disjunct bridge.  The
+collapsing-denominator route to class-B split-top closure is closed
+(PXC82): no pair-supported cover exists with an unfed sub-top type
+(exact-LP dichotomy: feasible iff t=s and (s-1)k>=s), because unfed
+sub-top types are mid-stratum, not top-stratum; a class-B theorem must
+use different support rows, or class-B violations must be excluded
+outright (the running split design search has yet to see one: all
+observed split-top violations are fully fed class-A).  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \

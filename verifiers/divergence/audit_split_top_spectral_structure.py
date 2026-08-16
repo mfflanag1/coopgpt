@@ -43,6 +43,81 @@ from audit_spectral_label_currency import spectral_decomposition  # noqa: E402
 from audit_spectral_or_reserve import margins, selectors  # noqa: E402
 
 
+def split_partial_cover_infeasibility():
+    """PXC82: no pair-supported cover with an unfed sub-top type.
+
+    In the single-heavy split-top geometry, any over-cover supported on
+    the fed double co-stars (t of the s sub-top omitted types) plus the
+    heavy-block row is infeasible whenever t < s: an unfed type lies in
+    every fed row and not in the heavy block, so its ambient equality
+    forces coverage(u) = L = coverage(r), hence alpha_r = 0 and every
+    fed type weight w_c = L - eta = 0, so L = eta = 0 and the
+    normalization alpha_r + alpha_h = 1 fails.  Feasible exactly when
+    t = s and (s-1)k >= s (the PXC78 cover).  Checked by exact LP.
+    """
+    from exactlp import exact_linprog
+
+    for s_count in range(2, 6):
+        for k in range(2, 5):
+            for t in range(1, s_count + 1):
+                m = t * k
+                nu_i, eta_i, ar_i, ah_i = m, m + 1, m + 2, m + 3
+                width = m + 4
+                eqs, rhs = [], []
+                base = [F(0)] * width
+                for c in range(t):
+                    for j in range(k):
+                        base[c * k + j] = F(1)
+                row = list(base)
+                row[eta_i], row[ar_i] = F(-1), F(-1)
+                eqs.append(row)
+                rhs.append(F(0))
+                row = list(base)
+                row[nu_i], row[eta_i], row[ah_i] = F(1), F(-1), F(-1)
+                eqs.append(row)
+                rhs.append(F(0))
+                for c in range(t):
+                    row = list(base)
+                    for j in range(k):
+                        row[c * k + j] = F(0)
+                    row[eta_i] = F(-1)
+                    eqs.append(row)
+                    rhs.append(F(0))
+                if t < s_count:
+                    row = list(base)
+                    row[eta_i] = F(-1)
+                    eqs.append(row)
+                    rhs.append(F(0))
+                for j in range(k):
+                    row = [F(0)] * width
+                    for c in range(t):
+                        row[c * k + j] = F(1)
+                    row[nu_i], row[eta_i] = F(1), F(-1)
+                    eqs.append(row)
+                    rhs.append(F(0))
+                row = [F(0)] * width
+                row[ar_i] = row[ah_i] = F(1)
+                eqs.append(row)
+                rhs.append(F(1))
+                ineqs, irhs = [], []
+                for variable in range(width):
+                    row = [F(0)] * width
+                    row[variable] = F(-1)
+                    ineqs.append(row)
+                    irhs.append(F(0))
+                status, _value, _solution = exact_linprog(
+                    [F(0)] * width, ineqs, irhs, eqs, rhs
+                )
+                expected = ("optimal"
+                            if t == s_count and (s_count - 1) * k >= s_count
+                            else "infeasible")
+                if status != expected:
+                    raise AssertionError(
+                        f"partial cover s={s_count} k={k} t={t}: "
+                        f"{status} != {expected}"
+                    )
+
+
 def split_instance(heavy, light, count_light, H, w):
     a = (heavy,) + (light,) * count_light
     g = len(a)
@@ -169,6 +244,7 @@ def main():
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
 
+    split_partial_cover_infeasibility()
     rows = []
     for light in range(2, 6):
         heavy = 2 * light
