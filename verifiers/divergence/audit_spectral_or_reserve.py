@@ -219,6 +219,10 @@ def main():
         "archive_minimum_spectral_margin_ratio": str(
             min(F(row["spectral_margin_ratio"]) for row in archive)
         ),
+        "archive_margin_coincidences": sum(
+            row["packet_margin_ratio"] == row["spectral_margin_ratio"]
+            for row in archive
+        ),
         "family_instances": len(family),
         "family_packet_violations": sum(
             F(row["packet_margin"]) < 0 for row in family
@@ -239,6 +243,7 @@ def main():
         "archive_disjunction": 89,
         "archive_spectral_failures": 20,
         "archive_minimum_spectral_margin_ratio": "-2/21",
+        "archive_margin_coincidences": 25,
         "family_instances": 18,
         "family_packet_violations": 8,
         "family_double_boundary": 6,
