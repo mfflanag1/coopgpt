@@ -328,12 +328,33 @@ The consolidated, authoritative statement of the saturated arm ---
 surviving theorems, the six proved closure mechanisms, and the selection
 conjecture `(PXC79)` --- is the saturated-arm summary subsection of
 `divergence.tex`; the sections below are the working history behind it.
-One step of the feeding implication is now proved (at a violation no
-clean co-star and not the full top block is Lmax-tight, so every
-Lmax-tight type row is decorated), the probe count stands at 56/56 after
-two-unit mutations, and a scope caution is recorded: all designed
-evidence is monotone lower envelopes, so the implication should be
-probed on non-monotone exact games before proof investment.
+One step of the feeding implication is proved (at a violation no clean
+co-star and not the full top block is Lmax-tight, so every Lmax-tight
+type row is decorated; likewise no rootless subset of the gainer block
+is ever Lmax-tight), and the probe count stands at 56/56 after two-unit
+mutations.  The earlier monotonicity caution is corrected: every
+singleton-normalized exact game is the envelope of its nonnegative core
+witnesses, so monotonicity is automatic and the genuine narrowness is
+generator count; the wide probe (`search_archive/wide_probe.py`)
+addresses this with 4--8-generator envelopes, whose first violations
+fail both spectral hypothesis sets and are closed by the chosen-family
+certificate alone.  The over-cover support-classification route to the
+feeding proof is closed off: on the family grid the canonical stage-1
+support is entirely single-omission single-decoration co-stars at only
+14 of 20 uniform-top violations
+(`search_archive/probe_overcover_support.py`); the six exceptions use
+rooted pairs, multi-omission top subsets, and rootless gainer--outsider
+rows while remaining fed.  The wide probe then settled the question the
+hard way: the feeding implication is FALSE in wider envelopes (185
+archived counterexamples), `(PXC79)` as first stated fails on fourteen
+escape roots, and `(PXC80)` repairs both --- two fed omission types
+suffice, the cover denominator collapses to `g(k-1)-1` independently of
+the fed count, and the chain closes every escape.  Reproduce with
+
+```bash
+python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \
+  --output verifiers/divergence/partially_fed_spectral_closure.json
+```
 
 The observed coincidence of the two `(PXC75)` hypotheses at violations
 now has a directed probe: mutating the known top-uniform violation

@@ -221,6 +221,10 @@ run_python coopgames/verifiers/divergence/audit_control_branch_projection.py \
   --output "$scratch_dir/control-branch-projection.json"
 cmp coopgames/verifiers/divergence/control_branch_projection.json \
   "$scratch_dir/control-branch-projection.json"
+run_python coopgames/verifiers/divergence/audit_partially_fed_spectral_closure.py \
+  --output "$scratch_dir/partially-fed-spectral-closure.json"
+cmp coopgames/verifiers/divergence/partially_fed_spectral_closure.json \
+  "$scratch_dir/partially-fed-spectral-closure.json"
 run_python coopgames/verifiers/divergence/audit_carrier_separator_payment.py \
   coopgames/verifiers/s6/harvest6_601.json \
   coopgames/verifiers/s6/harvest6_602.json \

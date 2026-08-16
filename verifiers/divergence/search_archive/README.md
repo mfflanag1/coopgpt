@@ -37,3 +37,9 @@ coincide on every audited packet violation.
 shapes one unit at a time: twenty more top-uniform packet violations, all
 co-star fed (38/38 total with the audited classes); the feeding
 implication remains a conjecture.
+
+`wide_probe_run1.log` (seed 20260822, stopped near round 2,400): the
+first many-generator run --- 185 feeding counterexamples and fourteen
+`(PXC79)` escapes, all on one selector profile, repaired by `(PXC80)`.
+The driver's disjunct list was then upgraded to the partially fed
+hypotheses for subsequent runs.
