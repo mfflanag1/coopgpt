@@ -14,6 +14,8 @@ the full round budget.
 | `ds_combined.log` | seed 20260817, n=7, total 14, stopped at round 6,300 | 151 roots, 141 packet-closed, 10 spectral-rescued, 0 combined failures |
 | `ds_pxc76.log` | seed 20260819, n=7, stopped at round 1,450 | split-top uncovered violations (3), 1 PXC75-covered violation, 0 target violations |
 | `ds_n8.log` | seed 20260818, n=8, total 16, stopped at round 875 | 10 ordered saturated roots, 0 failures |
+| `ds_n8b.log` | seed 20260820, n=8, total 16, stopped at round 2,375 | 38 ordered saturated roots, all packet-closed; 0 combined failures, 0 target violations, 0 ordered-unsaturated |
+| `split_top_extended_grid.json` | full split-family grid (12-minute run) | 75 split-top roots, sharpened bound closes all 75 |
 | `hillclimb_combined.log` | seeds = five violation shapes | the both-sided plateau at the exact double boundary |
 | `family_scan.log` | fixed parameter grid, n=7..9 | packet-violation growth and equality members quoted before the pinned grid replaced them |
 
