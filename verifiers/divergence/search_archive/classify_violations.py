@@ -11,7 +11,9 @@ violations split against the (PXC75) hypotheses.  Output on 2026-08-16:
 
 Together with the sixteen audited grid violations (top-uniform and fed by
 construction), top-uniformity and co-star feeding coincide on every
-audited packet violation; no mixed class occurs.
+audited packet violation; no mixed class occurs.  The class-A pass adds:
+
+    split-top violations: 8; class-A: 8; PXC78-chain-closed: 8
 """
 import json
 import sys
@@ -79,6 +81,53 @@ def main():
             ) + 1
     print("violation classes (top_uniform, fed) -> count:", classes)
     print("archived violation generator sets:", len(generator_sets))
+    # every split-top archived violation is class-A and PXC78-chain-closed
+    class_a = chain_closed = split_total = 0
+    for generators in sorted(generator_sets):
+        n = len(generators[0])
+        values = lower_envelope(
+            tuple(tuple(F(q) for q in g) for g in generators)
+        )
+        x, z = selectors(values, n)
+        for root, gainers, outsiders, _dec in ordered_saturated_roots(
+            values, x, z
+        ):
+            if margins(values, x, z)["packet_margin"] >= 0:
+                continue
+            M = max(z)
+            if (z[root] == M and all(z[a] == M for a in gainers)
+                    and all(z[j] < M for j in outsiders)):
+                continue
+            split_total += 1
+            tops = [a for a in gainers if z[a] == M]
+            subs = [a for a in gainers if z[a] < M]
+            if len(tops) != 1 or len({z[a] for a in subs}) != 1:
+                continue
+            if not all(z[j] < min(z[a] for a in subs) for j in outsiders):
+                continue
+            s_count, k_count = len(subs), len(outsiders)
+            fed = all(
+                coalition_sum(z, cl) == values[cl]
+                for c in subs for j in outsiders
+                for cl in [(1 << root) | (1 << j) | (1 << tops[0])
+                           | sum(1 << b for b in subs if b != c)]
+            )
+            hb_cl = (1 << tops[0]) | sum(1 << j for j in outsiders)
+            heavy = coalition_sum(z, hb_cl) == values[hb_cl]
+            hw = all(x[i] <= M for i in range(n) if i != root)
+            if not (fed and heavy and hw and s_count >= 2 and k_count >= 2):
+                continue
+            class_a += 1
+            f = min(x)
+            bound = F(s_count * (k_count - 1),
+                      s_count * k_count + k_count - s_count)
+            chain = ((M - f) / bound + 2 * f + s_count * f
+                     + sum(min(z[j], f) for j in outsiders) + M - x[root])
+            total = sum(x, F(0))
+            if chain >= F(n, (n * n) // 4) * total:
+                chain_closed += 1
+    print(f"split-top violations: {split_total}; class-A: {class_a}; "
+          f"PXC78-chain-closed: {chain_closed}")
 
 
 if __name__ == "__main__":
