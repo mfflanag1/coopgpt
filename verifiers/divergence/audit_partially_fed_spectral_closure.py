@@ -80,6 +80,35 @@ def dispersion_identity():
                     raise AssertionError("cover weight lost nonnegativity")
 
 
+def pair_graph_feasibility():
+    """PXC81: demands 1 per column, supplies k-1 per touched row.
+
+    Gale's condition over column subsets J reduces to: every column has
+    an edge, and at least two rows are touched, because a proper subset
+    has |J| <= k-1 <= (k-1)|N(J)| once N(J) is nonempty, while J equal
+    to all columns needs 2(k-1) >= k, i.e. k >= 2.  Verified here by
+    brute force on all bipartite graphs with g, k <= 4.
+    """
+    import itertools
+    for g in range(2, 5):
+        for k in range(2, 5):
+            cells = [(a, j) for a in range(g) for j in range(k)]
+            for mask in range(1 << (g * k)):
+                edges = [cells[i] for i in range(g * k) if mask >> i & 1]
+                columns = {j for _a, j in edges}
+                rows = {a for a, _j in edges}
+                simple = (columns == set(range(k)) and len(rows) >= 2)
+                gale = all(
+                    (k - 1) * len({a for a, j in edges if j in J}) >= len(J)
+                    for size in range(1, k + 1)
+                    for J in itertools.combinations(range(k), size)
+                )
+                if simple != gale:
+                    raise AssertionError(
+                        f"pair-graph characterization failed at {edges}"
+                    )
+
+
 def audit_control(name, generators, expected):
     generators = tuple(
         tuple(F(value) for value in generator) for generator in generators
@@ -154,6 +183,7 @@ def main():
     args = parser.parse_args()
 
     dispersion_identity()
+    pair_graph_feasibility()
     rows = [audit_control(name, generators, expected)
             for name, generators, expected in CONTROLS]
     summary = {

@@ -349,7 +349,13 @@ hard way: the feeding implication is FALSE in wider envelopes (185
 archived counterexamples), `(PXC79)` as first stated fails on fourteen
 escape roots, and `(PXC80)` repairs both --- two fed omission types
 suffice, the cover denominator collapses to `g(k-1)-1` independently of
-the fed count, and the chain closes every escape.  Reproduce with
+the fed count, and the chain closes every escape.  `(PXC81)` then pins the whole support class: every pair-supported
+over-cover has the forced dispersion `(k-1)/(g(k-1)-1)`, and existence
+collapses to two conditions --- every outsider in some tight pair, at
+least two types appearing --- verified by exhaustion for `g,k<=4`.  The
+selection conjecture's feeding disjunct is now this pair-graph
+condition; the live minimal bridge is to prove it at every uniform-top
+packet violation.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \
