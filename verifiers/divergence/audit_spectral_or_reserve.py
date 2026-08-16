@@ -53,6 +53,9 @@ FAMILY = (
     ((6, 6, 6, 6, 6), 24, (1, 1, 1, 1, 2), "0", "0", "0"),
     ((6, 6, 6, 6, 6), 22, (1, 1, 1, 1, 4), "-4/3", "14/3", "17/3"),
     ((6, 6, 6, 6, 6, 6), 30, (1, 1, 1, 1, 2), "0", "0", "0"),
+    ((5, 5, 5), 10, (2, 2, 1), "0", "-1/12", "1/4"),
+    ((6, 6, 6), 12, (3, 2, 1), "0", "-1/6", "1/2"),
+    ((6, 6, 6), 13, (2, 2, 1), "0", "-1/6", "1/2"),
 )
 
 PLATEAU = (
@@ -224,6 +227,10 @@ def main():
             F(row["packet_margin"]) == 0 and F(row["spectral_margin"]) == 0
             for row in family
         ),
+        "family_mirror_boundary": sum(
+            F(row["packet_margin"]) == 0 and F(row["spectral_margin"]) < 0
+            for row in family
+        ),
         "plateau_witnesses": len(plateau),
         "plateau_target_margins": [row["target_margin"] for row in plateau],
     }
@@ -232,9 +239,10 @@ def main():
         "archive_disjunction": 89,
         "archive_spectral_failures": 20,
         "archive_minimum_spectral_margin_ratio": "-2/21",
-        "family_instances": 15,
+        "family_instances": 18,
         "family_packet_violations": 8,
         "family_double_boundary": 6,
+        "family_mirror_boundary": 3,
         "plateau_witnesses": 2,
         "plateau_target_margins": ["0", "0"],
     }
