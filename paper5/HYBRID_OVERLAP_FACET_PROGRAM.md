@@ -371,13 +371,17 @@ direct-closed -- wider tight support substitutes for the heavy block).
 
 Sharpened bridge conjecture (bipartite-pairing angle): at a uniform-top
 packet violation, if the pair-graph condition (PXC81) fails then the
-direct packet exists.  Evidence: the three grid condition-failure
-controls and fifty re-audited condition-failing violations from the
-n=8 probe around them, all direct-closed; at every one, every uncovered
-outsider sits at or below the Lmin floor (z_j <= min x, pinned in the
-condition-failure controls), and the covered column is the heavy
-outsider.  Fourteen distinct single-column graph shapes observed,
-including single-edge graphs.
+direct packet exists.  Evidence now grid-complete: the full
+two-generator family grid has 102 uniform-top violations with 18
+pair-condition failures, all 18 direct-closed and family-closed, and
+every uncovered outsider at or below the Lmin floor (z_j <= min x --
+grid-wide, no exception); with the fifty re-audited n=8 probe
+violations the count is 68/68 direct.  The covered column is always
+the heavy outsider; fourteen distinct single-column graph shapes
+observed, including single-edge graphs.  Driver and log archived
+(probe_uncovered_outsider).  Second escape (six-generator n=8, same
+species) closed out-of-sample by PXC83: three tight rooted triples,
+surplus 5/4, chain 149/12 vs target 10.
 
 THIRD REFUTATION (triple-menu escape, pinned): an 8-generator n=8
 envelope produces a uniform-top violation whose tight menu is five

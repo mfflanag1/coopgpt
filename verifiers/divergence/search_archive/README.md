@@ -43,3 +43,5 @@ first many-generator run --- 185 feeding counterexamples and fourteen
 `(PXC79)` escapes, all on one selector profile, repaired by `(PXC80)`.
 The driver's disjunct list was then upgraded to the partially fed
 hypotheses for subsequent runs.
+
+- `probe_uncovered_outsider.py` + `probe_uncovered_outsider_run1.log` -- full two-generator grid sweep for the bipartite-pairing angle: 102 uniform-top violations, 18 pair-condition failures, 18/18 direct- and family-closed, every uncovered outsider at or below the Lmin floor (grid-wide).
