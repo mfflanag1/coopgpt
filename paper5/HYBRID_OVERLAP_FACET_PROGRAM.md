@@ -313,7 +313,11 @@ double co-stars and the heavy-block row `{h} u O` Lmax-tight, the mixed
 over-cover is feasible, `theta<=s(k-1)/(sk+k-s)` with the heavy weight
 dominating, and the PXC75-style chain closes the class --- all eleven
 audited class-A roots, both packet violations included.  Class-B/C
-sub-geometries remain open.  Reproduce with
+sub-geometries remain open but carry no packet violation on the grid.
+The mixed-witness projection also closes both named hostile controls'
+labelled branches (minima `11/15` and `16/25` against `7/12`;
+`audit_control_branch_projection.py`), so each control has three
+independent proved closures.  Reproduce with
 
 ```bash
 python3 verifiers/divergence/audit_split_top_spectral_structure.py \
