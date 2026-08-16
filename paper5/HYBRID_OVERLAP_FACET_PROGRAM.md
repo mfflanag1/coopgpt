@@ -253,6 +253,23 @@ python3 verifiers/divergence/audit_spectral_or_reserve.py \
   --output verifiers/divergence/spectral_or_reserve.json
 ```
 
+`(PXC75)` proves the open half of the alternative at every two-stratum
+co-star fed root: uniform Lmax strata `M`/`zeta` and Lmax-tight decorated
+co-stars make the explicit symmetric over-cover feasible, so
+`theta<=(k-1)/(gk-g-1)`, and the sharpened spectral bound obeys the
+dimension-free chain `B>=(M-zeta)(gk-g-1)/(k-1)+n*zeta+M-x_r`, closing
+the target under the explicit `(PXC75b)`.  Every designed packet
+violation lies in this regime; the audited grid closes 27/27 qualifying
+roots, all 12 packet violations, and the six named controls.  The
+remaining spectral-or-reserve gap is the three-or-more-stratum Lmax
+branch (for example `(5,5,5;8;(4,2,1))`) and the archived `g=2` spectral
+failures.  Reproduce with
+
+```bash
+python3 verifiers/divergence/audit_two_stratum_spectral_closure.py \
+  --output verifiers/divergence/two_stratum_spectral_closure.json
+```
+
 Reproduce the archive replay and all
 five controls with
 
