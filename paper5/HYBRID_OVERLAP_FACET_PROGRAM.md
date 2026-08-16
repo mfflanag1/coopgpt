@@ -320,6 +320,15 @@ python3 verifiers/divergence/audit_split_top_spectral_structure.py \
   --output verifiers/divergence/split_top_spectral_structure.json
 ```
 
+The observed coincidence of the two `(PXC75)` hypotheses at violations
+now has a directed probe: mutating the known top-uniform violation
+shapes one unit at a time (`search_archive/probe_top_uniform_feeding.py`)
+yields twenty more top-uniform packet violations, all co-star fed, so
+the feeding implication stands at 38 for 38.  Proof attempts through
+first-stage pinning and through the `(PXC72)` slack pattern have not yet
+closed it; it remains the sharpest conjectured bridge between the packet
+and spectral hypotheses.
+
 A bounded attack on the ordered-saturation blocker exclusion (the
 `(PXC74)` frontier) adds one exact constraint: at a weighted-Hall
 obstruction with a full-rooted blocker `D`, the exactness intersection

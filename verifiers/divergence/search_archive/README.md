@@ -32,3 +32,8 @@ archived violation classes split as eight split-top-and-unfed and two
 top-uniform-and-fed; together with the sixteen audited grid violations
 (top-uniform and fed by construction), top-uniformity and co-star feeding
 coincide on every audited packet violation.
+
+`probe_top_uniform_feeding.py` mutates the known top-uniform violation
+shapes one unit at a time: twenty more top-uniform packet violations, all
+co-star fed (38/38 total with the audited classes); the feeding
+implication remains a conjecture.
