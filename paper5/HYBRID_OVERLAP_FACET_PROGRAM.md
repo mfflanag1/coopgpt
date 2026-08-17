@@ -415,7 +415,11 @@ theta <= 1/|R| and the master chain (block size |T|); on split tops
 the tight top pair {r,h} does it with surplus x_r+x_h >= 2M.  Final design-search
 totals (archived; second wave 20260830-32): pair-gap refutation hunt
 4,172 class-B instances, 4,172 top-pair tight, ZERO pair-slack -- the
-class-B closure conjecture survives a dedicated refutation hunt;
+class-B closure conjecture survives a dedicated refutation hunt
+AND an engineered attack (ds_exotic: generators concentrated on
+{h, sub, outsider} to manufacture alternative descent blockers -- 474
+engineered class-B violations, zero pair-slack; total class-B
+evidence ~4,931/4,931 over three independent attack designs);
 rootless-row hunt: 1,008 violations, zero with no tight rooted row at
 a condition failure (rootless rows never load-bearing); unsaturated
 hunt: 10 more ordered-unsaturated roots, all the SAME rigid species
