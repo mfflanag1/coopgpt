@@ -369,9 +369,14 @@ violation with a slack heavy-block row has now appeared, with canonical
 dispersion 1/2 under the class-A bound 4/7, chain closed, and
 direct-closed -- wider tight support substitutes for the heavy block).
 
-Sharpened bridge conjecture (bipartite-pairing angle): at a uniform-top
-packet violation, if the pair-graph condition (PXC81) fails then the
-direct packet exists.  Evidence now grid-complete: the full
+Sharpened bridge conjecture REFUTED at scale (extended grid g<=5,
+a<=8, n<=9): of 508 uniform-top violations, 89 condition failures, 11
+without direct, 3 with neither direct nor chosen family (first on the
+family; rooted-triple menus, PXC83-closed, one pinned as
+family_rooted_control); uncovered z_j <= f also refuted (11
+instances).  Surviving statement: condition failure implies direct OR
+chosen family OR a rooted row -- i.e. the six-mechanism disjunction,
+89/89 on the grid.  Evidence now grid-complete: the full
 two-generator family grid has 102 uniform-top violations with 18
 pair-condition failures, all 18 direct-closed and family-closed, and
 every uncovered outsider at or below the Lmin floor (z_j <= min x --
@@ -408,7 +413,14 @@ theorem yet).  CLASS B CLOSED (PXC84): the singleton-cover principle
 is stratum-agnostic -- any tight row R with r in R subseteq T gives
 theta <= 1/|R| and the master chain (block size |T|); on split tops
 the tight top pair {r,h} does it with surplus x_r+x_h >= 2M.  Final design-search
-totals (archived): 810 split-top violations, 285 class-B, 285/285 with
+totals (archived; second wave 20260830-32): pair-gap refutation hunt
+4,172 class-B instances, 4,172 top-pair tight, ZERO pair-slack -- the
+class-B closure conjecture survives a dedicated refutation hunt;
+rootless-row hunt: 1,008 violations, zero with no tight rooted row at
+a condition failure (rootless rows never load-bearing); unsaturated
+hunt: 10 more ordered-unsaturated roots, all the SAME rigid species
+(nu=5/4, x-multiset {11/2,5/2x5,1,1}); first wave: 810 split-top
+violations, 285 class-B, 285/285 with
 the top pair tight and the chain closed; zero partially fed, unfed, or
 multi-heavy violations, with the caveat that every observed violation
 has s=2, where partial feeding cannot occur.  First class-B instance

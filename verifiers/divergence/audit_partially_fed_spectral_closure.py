@@ -341,6 +341,73 @@ def audit_triple_menu_escape():
     }
 
 
+def audit_family_rooted_control():
+    """Extended-grid bridge correction: on the family instance
+    a=(8,8,8,8), H=21, w=(9,2), the pair-graph condition fails and
+    NEITHER the direct arm NOR the chosen family closes -- the first
+    such instances on the two-generator family -- yet six rooted
+    triples are Lmax-tight and the (PXC83) chain closes at 131/6
+    against target 56/3.  The sharpened single-disjunct bridge
+    (condition failure implies direct) is refuted at this scale; the
+    six-mechanism disjunction is what survives."""
+    from audit_direct_ceiling_common_hinge_trichotomy import (
+        has_direct_packet,
+    )
+    from audit_chosen_family_costar_closure import best_family_margin
+    a_vec, H, w = (8, 8, 8, 8), 21, (9, 2)
+    g, k = len(a_vec), len(w)
+    n = 1 + g + k
+    gen1 = tuple([F(0)] + [F(q) for q in a_vec] + [F(0)] * k)
+    gen2 = tuple([F(H)] + [F(0)] * g + [F(q) for q in w])
+    values = lower_envelope((gen1, gen2))
+    x, z = selectors(values, n)
+    roots = ordered_saturated_roots(values, x, z)
+    if len(roots) != 1:
+        raise AssertionError("family rooted control: root count changed")
+    root, gainers, outsiders, _dec = roots[0]
+    packet = margins(values, x, z)["packet_margin"]
+    if str(packet) != "-1/3":
+        raise AssertionError("family rooted control: packet drifted")
+    edges = [
+        (a_, j) for a_ in gainers for j in outsiders
+        if coalition_sum(
+            z, (1 << root) | (1 << j)
+            | sum(1 << b for b in gainers if b != a_)
+        ) == values[(1 << root) | (1 << j)
+                    | sum(1 << b for b in gainers if b != a_)]
+    ]
+    if {j for _a, j in edges} == set(outsiders):
+        raise AssertionError("family rooted control: condition now holds")
+    if has_direct_packet(x, z, F(n, (n * n) // 4)):
+        raise AssertionError("family rooted control: direct now closes")
+    family = best_family_margin(values, x, z, root, gainers, outsiders)
+    if family is not None and family >= 0:
+        raise AssertionError("family rooted control: family now closes")
+    M = max(z)
+    tops = {i for i in range(n) if z[i] == M}
+    rooted = [
+        frozenset(p_ for p_ in range(n) if coalition >> p_ & 1)
+        for coalition in range(1, (1 << n) - 1)
+        if coalition_sum(z, coalition) == values[coalition]
+        and root in {p_ for p_ in range(n) if coalition >> p_ & 1}
+        and {p_ for p_ in range(n) if coalition >> p_ & 1} <= tops
+        and {p_ for p_ in range(n) if coalition >> p_ & 1} != tops
+    ]
+    if len(rooted) != 6:
+        raise AssertionError("family rooted control: menu drifted")
+    best = max(rooted, key=lambda R: sum(x[i] for i in R) - len(R) * M)
+    surplus = sum(x[i] for i in best) - len(best) * M
+    f = min(x)
+    residual = sum(min(z[j], f) for j in outsiders)
+    chain = (len(best)) * (M - f) + (len(gainers) + 1) * f         + residual + M - x[root]
+    total = sum(x, F(0))
+    target = F(n, (n * n) // 4) * total
+    if str(surplus) != "1/2" or str(chain) != "131/6" or chain < target:
+        raise AssertionError("family rooted control: chain drifted")
+    return {"name": "family_rooted_control", "surplus": "1/2",
+            "chain": "131/6", "target": str(target)}
+
+
 ORDERED_UNSATURATED_WITNESS = (
     (0, 5, 5, 5, 5, 0, 0, 0), (5, 0, 0, 0, 0, 13, 1, 1),
     (0, 5, 6, 5, 4, 0, 0, 0), (0, 5, 6, 4, 5, 0, 0, 0),
@@ -440,6 +507,7 @@ def main():
     ]
     triple_row = audit_triple_menu_escape()
     unsaturated_row = audit_ordered_unsaturated_witness()
+    family_rooted_row = audit_family_rooted_control()
     summary = {
         "controls": len(rows),
         "chain_closures": sum(row["chain_closes"] for row in rows),
@@ -447,6 +515,7 @@ def main():
         "condition_failure_controls": len(failure_rows),
         "triple_menu_escape": triple_row["name"],
         "ordered_unsaturated_witness": unsaturated_row["nu"],
+        "family_rooted_control": family_rooted_row["chain"],
     }
     payload = {
         "claim": (
@@ -459,6 +528,7 @@ def main():
         "condition_failure_rows": failure_rows,
         "triple_menu_escape_row": triple_row,
         "ordered_unsaturated_witness_row": unsaturated_row,
+        "family_rooted_control_row": family_rooted_row,
     }
     rendered = json.dumps(payload, indent=2, default=str) + "\n"
     if args.output:
