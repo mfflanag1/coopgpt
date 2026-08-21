@@ -221,6 +221,14 @@ run_python coopgames/verifiers/divergence/verify_class_b_pair_row_handover.py \
   --output "$scratch_dir/class-b-pair-row-handover.json"
 cmp coopgames/verifiers/divergence/class_b_pair_row_handover.json \
   "$scratch_dir/class-b-pair-row-handover.json"
+run_python coopgames/verifiers/divergence/audit_class_b_support_alternative.py \
+  --output "$scratch_dir/class-b-support-alternative.json"
+cmp coopgames/verifiers/divergence/class_b_support_alternative.json \
+  "$scratch_dir/class-b-support-alternative.json"
+run_python coopgames/verifiers/divergence/verify_class_b_matching_counterexample_independent.py \
+  --output "$scratch_dir/class-b-matching-counterexample-independent.json"
+cmp coopgames/verifiers/divergence/class_b_matching_counterexample_independent.json \
+  "$scratch_dir/class-b-matching-counterexample-independent.json"
 run_python coopgames/verifiers/divergence/audit_control_branch_projection.py \
   --output "$scratch_dir/control-branch-projection.json"
 cmp coopgames/verifiers/divergence/control_branch_projection.json \

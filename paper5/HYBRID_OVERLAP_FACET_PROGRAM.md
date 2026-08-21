@@ -9565,3 +9565,252 @@ circuits of that augmented relative configuration.  Projection to the game
 cone still requires the resulting coalition coefficients to pass the
 Studeny--Kratochvil indecomposable semi-balanced test; the threshold currency
 does not turn a relative labelled circuit into a full-cone facet by itself.
+
+## 2026-08-20: frozen class-B closure attack
+
+This attack is deliberately narrower than `(PXC79)`.  Let an ordered,
+saturated, single-heavy split-top root have top stratum `T={r,h}`, exactly
+two equal sub-top gainers `a,b`, and outsider set `O` (`|O|=k>=2`).  Write
+`M=z_r=z_h` and `m=z_a=z_b<M`.  Define the special Lmax slacks
+
+```text
+p   = 2M-v({r,h}),
+q   = M+z(O)-v({h} union O),
+c_aj=2M+m+z_j-v({r,h,b,j}),
+c_bj=2M+m+z_j-v({r,h,a,j}).                         (CB1)
+```
+
+All are nonnegative.  The frozen conjecture is
+
+```text
+packet margin < 0  ==>  p=0 or (q=0 and c_uj=0 for every u,j). (CB2)
+```
+
+The first conclusion invokes `(PXC84)` and the second is exactly the
+`s=2` hypothesis of `(PXC78)`.  The negation to be sought is therefore an
+exact selector pair with negative packet margin, `p>0`, and at least one of
+`q,c_uj` positive.  No weaker target, and no finite collection of successful
+examples, counts as closure.
+
+The symbolic alternative is now fixed before any further search.  Let
+`C_z={S: z(S)=v(S), empty!=S!=N}` and let
+
+```text
+K_z={d: d(N)=0 and d(S)>=0 for every S in C_z}
+```
+
+be the tangent cone of the core at `z`.  First-stage Lmax optimality says
+that `K_z` contains no direction with `d_r<0` and `d_h<0`.  By Farkas
+duality this is equivalent, in the normalization used throughout the
+paper, to a top over-cover
+
+```text
+sum_(S in C_z) lambda_S 1_S
+   = eta 1_N + alpha_r e_r + alpha_h e_h,
+lambda,eta,alpha>=0,       alpha_r+alpha_h=1.         (CB3)
+```
+
+The pair row gives the symmetric certificate
+`(eta,alpha_r,alpha_h)=(0,1/2,1/2)`.  The complete double-co-star plus
+heavy-block menu gives the asymmetric certificate
+
+```text
+alpha_r=k/(3k-2),   alpha_h=2(k-1)/(3k-2),
+eta=k/(3k-2).                                       (CB4)
+```
+
+Thus `(CB2)` asks for a *support theorem*, not merely existence of a top
+dual: at a packet violation, either the symmetric dual is exposed by the
+pair row, or the full asymmetric menu is tight.  Arbitrary top-dual
+feasibility alone cannot prove this.  For example, pair-star incidence
+menus can satisfy `(CB3)` without containing either special support.  The
+proof must therefore consume both the saturated Lmin packet and exactness;
+any argument using only the Lmax tangent cone is retired.
+
+For every top over-cover, common totals and `x(S)>=z(S)` on its support give
+the necessary selector-payment inequality
+
+```text
+alpha_r (x_r-M) >= alpha_h (M-x_h).                  (CB5)
+```
+
+The remaining load-bearing lemma is the following exact Farkas alternative.
+
+> **Class-B support alternative.**  Couple `(CB3)` to the saturated rooted
+> Lmin co-star packing and the singleton exactness witnesses.  If `p>0` and
+> one of `q,c_uj` is positive, then either the packet margin is nonnegative,
+> or the coupled system admits a direction in `K_z` that decreases both top
+> coordinates.
+
+The second outcome contradicts Lmax optimality and would prove `(CB2)`.
+Conversely, a feasible coupled system with negative packet margin is the
+precise specification of a counterexample and must be lifted to an exact
+game with independently recomputed selectors.
+
+The calibration is `(PXC86)`: on its pair branch `p=0`; on its heavy branch
+all `q,c_uj` vanish; at `t=1/7` both supports are active.  The pinned
+class-B, class-A, rooted-menu, exotic, and ordered-unsaturated controls are
+mandatory regression cases.  The next computation may be a targeted exact
+feasibility/elimination of the coupled system above; broad generator
+mutation remains out of scope until that encoding exists.
+
+### First elimination result: the reduced alternative has a third extreme ray
+
+The selector-comparison signs do **not** eliminate exotic top supports.  At
+the `k=3` PXC86 class-B selector difference
+
+```text
+x-z=(3/2,-1/2,-2,-2,1,1,1)
+```
+
+exclude the top pair and either the heavy block or any selected double
+co-star.  Exact rational elimination of `(CB3)` still returns the support
+
+```text
+{r,h,b,j_1},  {r,h,a,j_2},  {h,j_3},
+lambda=(1/3,1/3,1/3),
+eta=1/3,       (alpha_r,alpha_h)=(1/3,2/3).          (CB6)
+```
+
+Every supported row obeys `x(S)-z(S)>=0`; the two double co-stars have zero
+comparison slack and the heavy--outsider pair has slack `1/2`.  The
+incidence sum is exactly
+
+```text
+(1/3) sum_(S in (CB6)) 1_S
+ = (1/3)1_N+(1/3)e_r+(2/3)e_h.
+```
+
+This is a genuine third combinatorial top-dual ray: an outsider matching
+uses one double co-star of each omission type and feeds the remaining
+outsider through a heavy--outsider pair.  It survives top optimality,
+strict-stratum separation, and all selector-comparison signs while omitting
+the top pair, heavy block, and most double co-stars.  Therefore `(CB5)` and
+the Lmax tangent cone cannot prove `(CB2)`, even after their sign coupling to
+`x-z`.  Singleton exactness and the *complete* staged Lmin optimality
+conditions are now proved load-bearing, not merely suspected.
+
+The matching ray itself does lift to a singleton-normalized exact game.  Take
+the core polytope cut out by nonnegativity, total `20`, the three `(CB6)`
+rows at their displayed `z` values, and the three PXC86 Lmin rows
+`012>=12`, `013>=12`, `023>=10`; then define every coalition value as its
+minimum over that polytope.  Exact rational minimization of all `128`
+coalitions gives
+
+```text
+Lmin=(6,4,2,2,2,2,2),
+Lmax=(31/7,31/7,22/7,22/7,2,2,6/7).
+```
+
+All singleton minima are zero and the same ordered saturated root survives.
+The top-pair gap is `6/7`, the heavy-block gap is `4`, four of the six
+double co-stars are slack, and yet the packet margin is **exactly zero**.
+Thus `(CB6)` is a realizable boundary mechanism, not an allocation-level
+phantom and not a counterexample.  In its two common matched rows the
+comparison identities read
+
+```text
+ell_r=d_h+d_b,       ell_r=d_h+d_a,
+```
+
+so the dispersed-gain penalty `D-d_max-ell_r` vanishes.  This explains the
+boundary algebraically: the same matched rows that furnish the exotic Lmax
+dual pay the packet obstruction before a seventh closure arm is needed.
+The universal task is now to prove this payment for every exotic extreme
+support, or find an exact support whose comparison slack leaves a strictly
+positive unpaid residue.
+
+The next targeted test is correspondingly sharp: perturb the exact `(CB6)`
+boundary lift within the coupled polyhedral system and decide whether a
+negative packet margin is feasible while the pair and PXC78 menu remain
+slack.  A feasible perturbation refutes `(CB2)` and promotes the
+heavy--outsider matching cover to a candidate seventh mechanism.  If the perturbation
+cone has no such direction, its Farkas dual is the first candidate human
+payment lemma.  Only after that local cone is resolved should the other
+extreme top-support types be enumerated; a universal proof must cover them,
+not just `(CB6)`.
+
+### Refutation: a negative-margin exact split-matching lift
+
+The original dichotomy `(CB2)` is false.  Increase the two sub-top entries
+of the boundary lift by `1/7`, decrease the two matched outsiders by `1/7`,
+and add the two tight rows over the third outsider.  Equivalently, let `P`
+be the nonnegative total-`20` polytope defined by
+
+```text
+y(0134)>=14,       y(0125)>=14,       y(16)>=37/7,
+y(012)>=12,        y(013)>=12,        y(023)>=10,
+y(0126)>=13,       y(0136)>=13,                       (CB7)
+```
+
+and define `v(S)=min_{y in P}y(S)`.  Then `v` is exact by construction,
+all singleton minima are zero, and
+
+```text
+Lmin(v)=(6,4,2,2,2,2,2),
+Lmax(v)=(31/7,31/7,23/7,23/7,13/7,13/7,6/7).        (CB8)
+```
+
+The selector proof is short.  For Lmin, complements of `012` and `013`
+bound the minimum by two; equality pins players `2,...,6` at two, after
+which efficiency and `023>=10` pin `(y_0,y_1)=(6,4)`.  For Lmax, adding
+the first three rows of `(CB7)` gives
+
+```text
+20+y_0+2y_1 >= 233/7,
+```
+
+so the maximum is at least `31/7`.  Equality pins both top coordinates and
+all three rows; `16` then pins `y_6=6/7`, `0126` and `0136` pin
+`y_2=y_3=23/7`, and efficiency pins `y_4=y_5=13/7`.
+
+This is an ordered saturated single-heavy split-top packet violation with
+
+```text
+packet margin = -1/7,
+2M-v(01)=6/7,
+z(1456)-v(1456)=26/7,
+double-co-star gaps=(2,0,0,2,0,0).                  (CB9)
+```
+
+Thus neither the top pair nor the heavy block is tight and the full PXC78
+menu is absent.  The original claim “class-A hypotheses or tight top pair”
+is refuted.  The hybrid-overlap theorem is not: the overlap is `17` against
+target `35/3`, a margin of `16/3`.
+
+The missing support is now explicit.  The rows `0134`, `0125`, and `16`,
+each with weight `1/3`, satisfy `(CB3)` with
+
+```text
+eta=1/3,       (alpha_r,alpha_h)=(1/3,2/3),
+theta=2/3.                                             (PXC87)
+```
+
+More generally, with `k` outsiders, choose one tight double co-star of each
+of the two omission types on distinct outsiders and a tight heavy--outsider
+pair for every remaining outsider.  Uniform weight `1/k` gives
+`eta=1/k`, `(alpha_r,alpha_h)=(1/k,(k-1)/k)`, and
+`theta<=(k-1)/k`.  This **split-matching cover** is a third split-top Lmax
+support mechanism and a candidate seventh closure arm.  On the counterexample
+above the already proved direct packet applies, so this witness does not show
+that a seventh closure arm is necessary.  Its incidence theorem is
+dimension-free; universal selection or universal target closure by the
+split-matching cover is not claimed.
+
+The primary verifier reconstructs all coalition minima and both selectors
+with the project exact-LP stack.  The independent verifier instead
+enumerates the `80` core vertices with a local rational Gaussian eliminator
+and checks the human selector certificates.  Reproduce with
+
+```bash
+python3 verifiers/divergence/audit_class_b_support_alternative.py \
+  --output verifiers/divergence/class_b_support_alternative.json
+python3 verifiers/divergence/verify_class_b_matching_counterexample_independent.py \
+  --output verifiers/divergence/class_b_matching_counterexample_independent.json
+```
+
+The corrected live statement is no longer `(CB2)`: after first removing the
+already proved reserve and direct arms, prove selection of the PXC78 menu,
+the PXC84 top pair, a split-matching cover with a target-valid spectral
+chain, or another already proved mechanism.  The next counterexample attack
+must fail the direct arm while escaping all three split-top supports.
