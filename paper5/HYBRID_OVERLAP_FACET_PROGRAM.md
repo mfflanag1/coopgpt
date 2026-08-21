@@ -9868,7 +9868,7 @@ discarded) or a six-row one-sided-top cover.  Different selector profiles
 and saturated Lmin certificates also remain live; the finite census must not
 be promoted to a universal claim.
 
-### Strict-positive top dual and complete fixed-profile theorem
+### Strict-positive top dual and complete incidence census
 
 The one-sided-top exception above is removable.  When the Lmax top is exactly
 `{r,h}`, lexicographic optimality rules out every tangent direction with
@@ -9886,7 +9886,7 @@ incidence equalities then give the dimension-free support bound
 top pair slack  ==>  an extreme positive-top cover on at most n-2 rows. (PXC89)
 ```
 
-The nonsingleton census is now complete at the `(CB11)` selector profile.
+The nonsingleton incidence census is complete at the `(CB11)` coordinates.
 For support sizes one through five it contains respectively
 `1,6,66,312,2576` strictly-positive-top labelled covers in
 `1,2,20,96,719` symmetry orbits.  At sizes one and two all orbit lifts are
@@ -9894,13 +9894,13 @@ packet-boundary/top-pair-tight.  At sizes three and four, `16/20` and `92/96`
 representative minimal lifts fail singleton normalization; all survivors are
 top-pair-tight or retain a split-matching support.  At size five, `717/719`
 fail singleton normalization and the two surviving packet violations are
-top-pair-tight.  Adding further core
-inequalities cannot repair a positive singleton minimum or undo top-pair
-tightness while retaining `Z`.  Thus no singleton-normalized exact completion
-with the `(CB11)` selectors and the fixed staged Lmin rows escapes the pair,
-PXC78, PXC87, and direct arms.  This is a complete fixed-profile theorem; the
-universal classification still requires eliminating or classifying different
-selector profiles and different saturated Lmin certificates.
+top-pair-tight relative to their recomputed selectors.  Adding further core
+inequalities cannot repair a positive singleton minimum.  The other labels,
+however, were evaluated after recomputing each minimal lift's selectors; the
+audit did not assert that those selectors equal `(X,Z)`.  A mechanism tight at
+the recomputed point therefore need not transfer to prescribed `Z`.  The
+counts are a complete incidence/minimal-lift atlas, not a fixed-profile
+completion theorem.  PXC92a below is the explicit fidelity failure.
 
 ### Refutation of the corrected four-arm classification
 
@@ -9936,7 +9936,7 @@ replay are pinned.  The next valid selection statement must replace the named
 PXC78/PXC87 supports by a broader weighted bipartite-cover or spectral-payment
 condition; adding individual named menu shapes is no longer a credible route.
 
-### Exact scope of the fixed-profile theorem and the missing lift
+### Exact scope of the incidence census and the missing lift
 
 The proof now separates into a profile-independent theorem and a genuinely
 fixed-profile computation.  For any normalized `z`-tight top over-cover,
@@ -9973,20 +9973,66 @@ PXC90 keeps the same `x` and those three Lmin rows but changes `z`, and its
 forked five-row support defeats the named four-arm classification.  Hence the
 profile qualification is mathematically load-bearing.
 
-The exact open bridge is the **faithful sparse-lift conjecture**: for every
+The proposed **faithful sparse-lift conjecture** asked whether every
 singleton-normalized exact game on the ordered saturated single-heavy `s=2`
-arm, after reserve and direct failure, some strictly positive extreme top
-cover `R`, `|R|<=n-2`, has a minimal lift with the original selectors,
+arm, after reserve and direct failure, has some strictly positive extreme top
+cover `R`, `|R|<=n-2`, whose minimal lift keeps the original selectors,
 
 ```text
 Lmin(w_R)=x,              Lmax(w_R)=z.               (PXC91c)
 ```
 
-This is not yet proved.  If it holds, universal PXC79 selection reduces to a
-support-agnostic weighted-cover or spectral-payment theorem on
-selector-faithful sparse packet polytopes, after which `(PXC91b)` transfers
-the tight certificate to every completion.  PXC90 is the compulsory positive
-calibration for `(PXC91c)` and the compulsory negative calibration for every
-named-support strengthening: its forked rows are faithful, but pair, full
-PXC78, PXC87 matching, and direct all fail.  The next attack must therefore
-price arbitrary extreme covers, not append an eighth menu shape.
+This is **false**, and PXC88 itself is the counterexample.  Its only proper
+non-singleton `z`-tight rows are `0134,0125,16,0126,0136`.  If their cover
+weights are `(a,b,c,d,e)` and the outsider load is `eta`, the five outsider
+equations give
+
+```text
+a=eta, b=eta, b+d=eta, a+e=eta, c+d+e=eta.
+```
+
+Therefore `d=e=0`, `a=b=c=eta=1/3`: the unique positive extreme top cover is
+`R={0134,0125,16}`.  The lift from this `R` and the complete Lmin rows
+`012,013,023` preserves `x` but has
+
+```text
+Lmax(w_R)=(29,29,26,26,5,13,12)/7 != z.             (PXC92a)
+```
+
+The cover fixes only the first ceiling.  On its equality face,
+`y6=12/7`, `y2+y5=39/7`, and `y3+y4=31/7`; the Lmin rows place the second
+ceiling at `26/7`.  The zero-cover-weight rows `0126` and `0136` are
+individually indispensable and together restore the prescribed `z`.  PXC90
+remains the positive calibration: equality also pins both top coordinates;
+those two coordinate equalities, its five cover rows, and efficiency have
+rank seven and preserve both selectors.
+
+The corrected statement is a staged tangent/Farkas criterion.  If `T_H(z)`
+is the active tangent cone of a retained-row polytope, and the descending
+`z`-strata are `B_k` with earlier union `E_(k-1)`, then `Lmax(P_H)=z` iff for
+every stage/player there is no direction
+
+```text
+d in T_H(z), d|E_(k-1)=0, d_j<=0 on B_k, some designated d_i<0. (PXC92b)
+```
+
+The sign-reversed ascending statement characterizes Lmin.  A complete staged
+Lmin certificate automatically preserves `x`; a normalized top cover with
+both top coefficients strictly positive proves only the first Lmax stage.
+For each non-top player, choose a basic Farkas certificate for its later
+stage and let `A` be the union of its `z`-tight coalition supports outside
+`C_x union R`.  Original-game tightness keeps both `x,z` feasible, and
+retaining `A` restores every later stage.  Conic Caratheodory uses at most
+`n` coalition normals per non-top player, giving the safe dimension-only
+bound
+
+```text
+|A| <= n(n-2) additional rows.                       (PXC92c)
+```
+
+PXC88 needs exactly two auxiliaries; PXC90 needs none.  The new frontier is
+to reduce this quadratic price or couple the later-stage certificates
+directly to the hybrid-overlap inequality.  The counterexample is the
+smallest found, not a proved minimum: the exact n=6 archive and a 300-game
+seeded probe contain no reserve-failing root, but no n=6 exclusion theorem is
+known.

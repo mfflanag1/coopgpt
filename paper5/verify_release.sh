@@ -245,6 +245,14 @@ run_python coopgames/verifiers/divergence/verify_pxc89_classification_counterexa
   --output "$scratch_dir/pxc89-classification-counterexample-independent.json"
 cmp coopgames/verifiers/divergence/pxc89_classification_counterexample_independent.json \
   "$scratch_dir/pxc89-classification-counterexample-independent.json"
+run_python coopgames/verifiers/divergence/audit_faithful_sparse_lift_counterexample.py \
+  --output "$scratch_dir/faithful-sparse-lift-counterexample.json"
+cmp coopgames/verifiers/divergence/faithful_sparse_lift_counterexample.json \
+  "$scratch_dir/faithful-sparse-lift-counterexample.json"
+run_python coopgames/verifiers/divergence/verify_faithful_sparse_lift_counterexample_independent.py \
+  --output "$scratch_dir/faithful-sparse-lift-counterexample-independent.json"
+cmp coopgames/verifiers/divergence/faithful_sparse_lift_counterexample_independent.json \
+  "$scratch_dir/faithful-sparse-lift-counterexample-independent.json"
 run_python coopgames/verifiers/divergence/audit_control_branch_projection.py \
   --output "$scratch_dir/control-branch-projection.json"
 cmp coopgames/verifiers/divergence/control_branch_projection.json \

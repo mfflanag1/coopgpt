@@ -174,6 +174,8 @@ def classify_lift(rows: tuple[int, ...]) -> dict:
     result.update({
         "lmin": [str(value) for value in x],
         "lmax": [str(value) for value in z],
+        "lmin_matches_prescribed": x == X,
+        "lmax_matches_prescribed": z == Z,
         "ordered_saturated_roots": len(roots),
     })
     if not roots:
@@ -497,8 +499,9 @@ def main() -> None:
             "exhaustive for one- through five-row nonsingleton top covers "
             "compatible with the fixed direct-failing selector profile, with "
             "strictly positive weights on both top coordinates and exact "
-            "minimal lifts of every symmetry orbit; not a universal support "
-            "classification"
+            "minimal lifts of every symmetry orbit; selectors are recomputed "
+            "and fidelity flags are reported, so this is an incidence atlas, "
+            "not a fixed-profile or universal support classification"
         ),
     }
     rendered = json.dumps(payload, indent=2) + "\n"
