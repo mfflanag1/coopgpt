@@ -253,6 +253,19 @@ run_python coopgames/verifiers/divergence/verify_faithful_sparse_lift_counterexa
   --output "$scratch_dir/faithful-sparse-lift-counterexample-independent.json"
 cmp coopgames/verifiers/divergence/faithful_sparse_lift_counterexample_independent.json \
   "$scratch_dir/faithful-sparse-lift-counterexample-independent.json"
+run_python coopgames/verifiers/divergence/verify_n6_two_outsider_repair_obstruction.py \
+  --output "$scratch_dir/n6-two-outsider-repair-obstruction.json"
+cmp coopgames/verifiers/divergence/n6_two_outsider_repair_obstruction.json \
+  "$scratch_dir/n6-two-outsider-repair-obstruction.json"
+run_python coopgames/verifiers/divergence/verify_n6_split_cover_blocker_no_go.py \
+  --output "$scratch_dir/n6-split-cover-blocker-no-go.json"
+cmp coopgames/verifiers/divergence/n6_split_cover_blocker_no_go.json \
+  "$scratch_dir/n6-split-cover-blocker-no-go.json"
+run_python coopgames/verifiers/divergence/search_archive/faithful_sparse_lift_n6_search_v2.py \
+  --total-max 11 --random-rounds 1000 --seed 20260821 \
+  --output "$scratch_dir/faithful-sparse-lift-n6-run-v2.json"
+cmp coopgames/verifiers/divergence/search_archive/faithful_sparse_lift_n6_run_v2.json \
+  "$scratch_dir/faithful-sparse-lift-n6-run-v2.json"
 run_python coopgames/verifiers/divergence/audit_control_branch_projection.py \
   --output "$scratch_dir/control-branch-projection.json"
 cmp coopgames/verifiers/divergence/control_branch_projection.json \

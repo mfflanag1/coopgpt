@@ -6848,12 +6848,144 @@ Taking the union over the $n-2$ non-top players gives the safe bound
 on additional rows when the top stratum has two players.  Repeated rows can
 make the actual set much smaller: PXC88 needs exactly two and PXC90 needs
 none.  Thus sparse cover selection has been replaced by a rigorous bounded
-auxiliary-row theorem.  The remaining high-value problem is to reduce the
-quadratic bound, or to show that packet geometry makes the later-stage
-certificates pay the hybrid target directly.  The displayed counterexample
-is the smallest found in the residual branch; the exact six-player archive
-and a further seeded probe contain no reserve-failing root, but no theorem
-yet proves that dimension seven is minimal.
+auxiliary-row theorem.
+
+There is a genuine six-player obstruction to compressing the PXC88 failure.
+Write the roles as $r,h,a,b,j,k$, where $\{r,h\}$ is the top stratum,
+$z_a=z_b=q<M$, and $j,k$ are the two strict outsiders.  Work in the ordered
+saturated strict single-heavy cell: the game is exact and
+singleton-normalized, $x,z$ are efficient, $x_r>M>x_h$, the gainers are
+exactly $h,a,b$, the outsiders are nongainers, and the stated Lmin order
+holds.  Suppose the following two rows are $z$-tight.  The two-row split
+matching
+\[
+ R_j=\{r,h,b,j\},\qquad R_k=\{r,h,a,k\}
+\]
+has weights $1/2$, ambient load $1/2$, and top weights $(1/2,1/2)$.
+The only opposite-omission rows on the same two outsiders are
+\[
+ A_j=\{r,h,a,j\},\qquad B_k=\{r,h,b,k\}.
+\]
+But $A_j,B_k$, again with weights $1/2$, form a second normalized positive
+top cover.  Using the other assignment merely reproduces $R_j,R_k$.
+Consequently the two later-stage repair rows cannot both be forced to have
+zero coefficient in every positive cover, as $0126,0136$ are in PXC88.
+
+The two natural four-role alternatives are also impossible.  Put
+$d_i=z_i-x_i$ on the three gainers, $L_j=x_j-z_j$, $L_k=x_k-z_k$, and
+$\ell=x_r-M$.  Efficiency gives
+$d_h+d_a+d_b=\ell+L_j+L_k$.  Hence
+\[
+ z(\{h,a,b,j\})-x(\{h,a,b,j\})=\ell+L_k>0,
+ \qquad z(\{h,a,b,k\})-x(\{h,a,b,k\})=\ell+L_j>0,
+\]
+so neither row can be $z$-tight while $x$ remains in the core.  On the other
+hand the split cover implies $y_r+y_h\ge2M$ at every core point.  If, say,
+$\{r,a,b,j\}$ were $z$-tight, singleton exactness would supply a core point
+with $y_r=0$, and then
+\[
+ y(\{r,a,b,j\})\le T-2M=2q+z_j+z_k
+        < M+2q+z_j=z(\{r,a,b,j\}),
+\]
+a contradiction; the $\{r,a,b,k\}$ case is symmetric.
+
+In fact the literal two-row split cover admits a complete no-go theorem.
+On the face where the earlier Lmax stratum is pinned, a tangent direction
+$u$ has $u_r=u_h=0$.  Put $t=u_a$ and $s=u_b$.  Tightness of $R_j,R_k$
+forces
+\[
+ (u_a,u_b,u_j,u_k)=(t,s,-s,-t).
+\]
+Every later $z$-tight row therefore cuts this two-dimensional tangent cone
+by one of the eight nonzero forms
+\(
+ \pm t,\ \pm s,\ \pm(t-s),\ \pm(t+s).
+\)
+Any family excluding $(t,s)\in\mathbb R_-^2\setminus\{0\}$ has a closing
+subfamily of at most two.  After comparison compatibility with $x$, the
+canonical $a$-blocker types and their $b$-symmetric counterparts give the
+following pair table; the one-row $t+s$ variants are handled separately:
+\[
+\begin{array}{c|cccccccc}
+ &bk&hbk&rb&rab&rbk&rabk&rhb&rhbk\\ \hline
+aj   &I&I&F&X&I&F&X&I\\
+haj  &I&I&X&X&I&X&X&I\\
+ra   &F&X&F&X&F&F&X&F\\
+rab  &X&X&X&X&X&X&X&X\\
+raj  &I&I&F&X&I&F&X&I\\
+rabj &F&X&F&X&F&F&X&F\\
+rha  &X&X&X&X&X&X&X&X\\
+rhaj &I&I&F&X&I&F&X&I
+\end{array}                                             \tag{PXC93}
+\]
+Here $I$ means that a common negative ray remains, $X$ means that cover
+compatibility and the necessary reserve-failure inequality are inconsistent,
+and $F$ means scalar feasibility but failure at the exactness witness with
+$y_r=0$.  The load-bearing identities are short.  For example, compatibility
+of $rha$ gives $L_j+L_k\le d_b$, hence
+$d_h+d_a=\ell+L_j+L_k-d_b\le\ell$, contradicting reserve failure;
+compatibility of $rab$ gives $d_a+d_b\le\ell$.  In an $F$ cell the
+split cover first gives $y_h\ge2M$.  For $aj,rb$, the two blocker rows
+then give
+\[
+ T\ge3M+2q+z_j>2M+2q+z_j+z_k=T,
+\]
+and a row $rabj$ already gives the same contradiction by itself.  The swap
+$a,b\leftrightarrow b,a$, $j,k\leftrightarrow k,j$ supplies the genuine
+symmetric cases; no monotonicity in top membership is used.  An exact
+rational verifier classifies every displayed cell first without and then
+with the root witness, reproducing the table.  Independently of that
+canonicalization it enumerates all $44$ proper nonsingleton labelled
+coalition masks with nonzero tangent form and all $275$ closing labelled
+one- or two-row families, including the four one-row $t+s$ variants; none
+survives, while the weaker base necessary system is feasible.  It also
+exhausts all $192$ closing subfamilies of the eight-form set and verifies
+that no minimal closing family needs more than two rows.
+
+Thus, in the ordered saturated exact cell just fixed, reserve failure and the
+root singleton witness prevent the later $z$-tight rows from closing the
+second-stage Lmax tangent cone.  A six-player game cannot realize the PXC88
+failure through the literal two-row split cover at all.  The unused third
+outsider is genuinely load-bearing.  This excludes a whole cover mechanism,
+not the other nonsplit extreme-cover incidences through four rows.
+
+The remaining six-player question has now been reduced to an explicit
+two-outsider inequality.  Let $D=d_h+d_a+d_b$,
+$d_{\max}=\max(d_h,d_a,d_b)$, $E=D-d_{\max}$, and let $A_\rho$ be the
+saturated decorated co-star load.  Since $n=6$ and $g=3$, the cardinality
+term in (PXC63b) vanishes, so reserve failure is exactly
+\[
+ E-\ell>\frac43A_\rho.                              \tag{PXC93a}
+\]
+For $p\in\{j,k\}$ let $u$ denote the other outsider, take
+$P=\{p\}$, $H=\{r,u\}$, and omit a maximum-gain player from the direct
+packet.  The master identity has cardinality base $7/10>2/3$ and its exact
+admissible interval is
+\[
+ \ell+L_u\le E\le
+ B_p:=\frac{-x(G)-3x_p-(M+z_u)+\frac85(T-z_p)}3.    \tag{PXC93b}
+\]
+Therefore it would suffice to prove that (PXC93a) forces (PXC93b) for one
+of the two outsiders.  This statement is not a consequence of allocation
+arithmetic alone; exactness and staged Lmax optimality must supply the
+missing implication.  Equivalently, in the tangent formulation one must
+show that a later-stage blocker can be pivoted into some positive top-cover
+face when there are only four non-top coordinates.  PXC93 instead excludes
+the two-row split face outright; other nonsplit extreme faces through four
+rows remain live.
+
+The finite evidence is now definition-correct but remains bounded.  The two
+pinned six-player archives contain $89$ ordered saturated roots, including
+$35$ with three gainers and two outsiders, but none in the strict
+single-heavy two-player-top cell; every one of the $35$ satisfies the
+reserve.  A symmetry-reduced two-block integer grid through total $11$ plus
+$1{,}000$ seeded multigenerator envelopes gives $1{,}975$ exact games,
+$592$ divergent games, $104$ three-gainer/two-outsider roots, and four in
+the strict single-heavy cell; all $104$ satisfy the reserve.  These are an
+archive replay and an exhaustive bounded grid plus a random probe, not an
+all-game theorem.  Accordingly the displayed seven-player counterexample is
+still only the smallest found.  Dimension minimality is exactly the open
+implication (PXC93a)--(PXC93b), or its tangent-cover equivalent.
 
 The exact six-player census has $78$ rooted instances with a multi-omission
 row, $98$ saturated no-multi instances, $27$ intermediate instances, and

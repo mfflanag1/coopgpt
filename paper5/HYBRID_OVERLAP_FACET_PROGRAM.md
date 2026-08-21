@@ -10036,3 +10036,85 @@ directly to the hybrid-overlap inequality.  The counterexample is the
 smallest found, not a proved minimum: the exact n=6 archive and a 300-game
 seeded probe contain no reserve-failing root, but no n=6 exclusion theorem is
 known.
+
+### Six-player obstruction and exact remaining lemma
+
+The literal PXC88 mechanism cannot be compressed from three outsiders to
+two.  Label the n=6 roles `r,h,a,b,j,k`, with top `{r,h}`, tied sub-top
+gainers `{a,b}`, and strict outsiders `{j,k}`.  The split-matching rows
+`R_j=rhbj`, `R_k=rhak` carry the normalized cover with weights `1/2`,
+`eta=1/2`, and `alpha_r=alpha_h=1/2`.  The only two opposite-omission
+repairs on those outsiders, `A_j=rhaj` and `B_k=rhbk`, themselves carry a
+second positive normalized cover with the same weights.  The other matching
+duplicates `R_j,R_k`.  Hence two necessary later-stage rows cannot be hidden
+with zero coefficient in every positive cover in the PXC88 fashion.
+
+Two broader four-role repairs are excluded exactly.  With gainer gains
+`d_i`, outsider losses `L_j,L_k`, and root loss `ell`, efficiency gives
+`d_h+d_a+d_b=ell+L_j+L_k`, so
+
+```text
+z(habj)-x(habj)=ell+L_k>0,
+z(habk)-x(habk)=ell+L_j>0.
+```
+
+Such a row cannot be z-tight while x remains feasible.  Conversely the
+split cover forces `y_r+y_h>=2M` throughout the core.  At a singleton witness
+with `y_r=0`, a z-tight row `rabj` would require
+`y(rabj)>=M+2q+z_j`, while efficiency and nonnegativity give
+`y(rabj)<=T-2M=2q+z_j+z_k`; this is impossible because `z_k<M`.  The `rabk`
+case is symmetric.
+
+The full later-stage tangent classification is stronger.  On the equality
+face of `R_j,R_k`, every second-stratum tangent `u` is
+`(u_a,u_b,u_j,u_k)=(t,s,-s,-t)`.  Every active row has one of eight nonzero
+forms `+/-t`, `+/-s`, `+/-(t-s)`, `+/-(t+s)`, and any family excluding the
+open negative quadrant has a closing subfamily of at most two.  Exhausting
+the comparison-compatible row types gives a three-way table: insufficient
+pairs retain a common negative ray; scalar-incompatible pairs contradict
+cover compatibility plus the necessary reserve inequality
+`min pair-sum>ell`; and every remaining pair contradicts the root singleton
+witness after the cover forces `y_h>=2M`.  For example, `rha` compatibility
+gives `L_j+L_k<=d_b`, whence `d_h+d_a<=ell`, while `aj+rb` forces
+`T>=3M+2q+z_j>T` because `M>z_k`.
+
+An exact rational verifier independently enumerates all 44 nonzero row types
+and all 275 closing labelled one-/two-row families.  Zero survive; the base
+allocation system is feasible, and an exhaustive check of the eight-form
+set confirms that a minimal closing family never needs more than two rows.
+Thus no reserve-failing singleton-normalized six-player game can realize the
+literal two-row split cover at all.  This is `(PXC93)`.  It proves that the
+unused third outsider is load-bearing for the PXC88 mechanism, but it does
+not classify the other nonsplit extreme top-cover faces through four rows.
+
+The remaining n=6 theorem is a two-outsider implication.  Put
+`D=d_h+d_a+d_b`, `dmax=max d_i`, `E=D-dmax`, and let `A_rho` be the saturated
+decoration load.  Reserve failure is exactly
+
+```text
+E-ell > (4/3) A_rho.                                (PXC93a)
+```
+
+For outsider `p` and the other outsider `u`, the direct split
+`P={p}, H={r,u}, J=G\{a*}` has base `7/10>2/3` and interval
+
+```text
+ell+L_u <= E <= [-x(G)-3x_p-(M+z_u)+(8/5)(T-z_p)]/3. (PXC93b)
+```
+
+Proving that `(PXC93a)` forces `(PXC93b)` for one outsider would exclude the
+live reserve/direct-failing cell.  The tangent-equivalent statement is that
+a later-stage Lmax blocker can be pivoted into some positive top-cover face
+on the four non-top coordinates.  PXC93 instead excludes the two-row split
+face outright; PXC88 shows the analogous pivot statement is false with five
+non-top coordinates.  Other nonsplit six-player faces through four rows
+remain live.
+
+The corrected finite evidence is deliberately weaker.  Both pinned n=6
+archives contain 89 ordered saturated roots, 35 with `g=3,k=2`, zero in the
+strict single-heavy/top-size-two cell, and zero reserve failures.  A designed
+run of 1,975 exact games (an exhaustive symmetry-reduced two-block integer
+grid through total 11 plus 1,000 seeded multigenerator games) has 592
+divergent games, 104 `g=3,k=2` roots, four strict single-heavy roots, and zero
+reserve failures.  This is bounded falsification evidence, not dimension-six
+minimality.

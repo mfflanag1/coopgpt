@@ -71,7 +71,8 @@ def main() -> None:
     rng = random.Random(args.seed)
     stats = {
         "games": 0, "divergent": 0, "ordered_saturated_roots": 0,
-        "s2_k2_roots": 0, "reserve_failures": 0,
+        "g3_k2_roots": 0, "single_heavy_s2_roots": 0,
+        "reserve_failures": 0,
         "reserve_and_direct_failures": 0,
     }
     candidates = []
@@ -98,7 +99,19 @@ def main() -> None:
             # with n=6 the remaining outsider count is k=2.
             if len(gainers) != 3 or len(outsiders) != 2:
                 continue
-            stats["s2_k2_roots"] += 1
+            stats["g3_k2_roots"] += 1
+            ceiling = max(z)
+            top_gainers = tuple(i for i in gainers if z[i] == ceiling)
+            sub_gainers = tuple(i for i in gainers if z[i] < ceiling)
+            if len(top_gainers) != 1 or len(sub_gainers) != 2:
+                continue
+            sub_levels = {z[i] for i in sub_gainers}
+            if len(sub_levels) != 1:
+                continue
+            sub_level = next(iter(sub_levels))
+            if not all(z[i] < sub_level for i in outsiders):
+                continue
+            stats["single_heavy_s2_roots"] += 1
             margin = root_reserve_margin(x, z, root, gainers, decoration)
             if margin >= 0:
                 continue
