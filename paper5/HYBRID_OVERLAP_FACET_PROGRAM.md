@@ -438,6 +438,29 @@ avoids the root).  s=3 split search: 6,000 rounds, 89 roots, ZERO
 split violations -- s>=3 split-top violations remain unobserved, so
 class-B evidence stays s=2-scoped.  Reproduce with
 
+NEW EXACT HANDOVER THEOREM `(PXC86)`: a continuous one-parameter
+deformation of the pinned class-B control moves one unit from the heavy top
+coordinate of one generator to a sub-top coordinate.  The selectors are
+proved in closed form for every `0<=t<=1`.  The top-pair gap is
+`(t-1/7)_+`, while the heavy-block gap is `(1-7t)_+/2`; hence their product
+is identically zero.  The packet margin stays strictly negative throughout.
+PXC84 closes the pair-tight side, PXC78 closes the heavy-block-tight side,
+and both meet at `t=1/7`.  This gives the first human active-set explanation
+of the empirical class-A/class-B handover and explains why direct local
+attacks on the pinned control switch mechanisms instead of escaping.  It is
+a continuous seven-player family theorem, not the universal class-B
+disjunction.  The solver-free verifier partitions every affine envelope at
+all exact breakpoints and checks core membership on the full continuum.
+
+Reproduce the handover theorem with
+
+```bash
+python3 verifiers/divergence/verify_class_b_pair_row_handover.py \
+  --output verifiers/divergence/class_b_pair_row_handover.json
+```
+
+Reproduce the wider split-top audit with
+
 ```bash
 python3 verifiers/divergence/audit_partially_fed_spectral_closure.py \
   --output verifiers/divergence/partially_fed_spectral_closure.json

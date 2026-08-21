@@ -217,6 +217,10 @@ run_python coopgames/verifiers/divergence/audit_split_top_spectral_structure.py 
   --output "$scratch_dir/split-top-spectral-structure.json"
 cmp coopgames/verifiers/divergence/split_top_spectral_structure.json \
   "$scratch_dir/split-top-spectral-structure.json"
+run_python coopgames/verifiers/divergence/verify_class_b_pair_row_handover.py \
+  --output "$scratch_dir/class-b-pair-row-handover.json"
+cmp coopgames/verifiers/divergence/class_b_pair_row_handover.json \
+  "$scratch_dir/class-b-pair-row-handover.json"
 run_python coopgames/verifiers/divergence/audit_control_branch_projection.py \
   --output "$scratch_dir/control-branch-projection.json"
 cmp coopgames/verifiers/divergence/control_branch_projection.json \

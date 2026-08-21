@@ -6224,6 +6224,7 @@ Six closure mechanisms are proved, each with instance-checkable
 hypotheses:
 
 \begin{center}
+\footnotesize
 \begin{tabular}{lll}
 mechanism & hypotheses & audited closures \\[2pt]
 packet reserve (PXC63b) & none beyond the arm & all $89$ archive roots \\
@@ -6342,10 +6343,12 @@ arcs $E$; Gale's criterion over column subsets collapses, because a
 proper subset has at most $k-1$ columns and needs only one reachable
 type, while the full column set needs two:
 \[
- \boxed{\qquad
- \hbox{the cover exists iff every outsider lies in some tight pair}
- \hbox{ and at least two omission types appear.}
- \qquad}                                             \tag{PXC81}
+ \begin{gathered}
+ \text{the cover exists}\\
+ \Longleftrightarrow\ \text{every outsider lies in}\\
+ \text{some tight pair}\\
+ \text{and at least two omission types appear}
+ \end{gathered}                                      \tag{PXC81}
 \]
 This is strictly weaker than two fully fed types, the characterization
 is verified by exhaustion over all bipartite shapes with
@@ -6377,10 +6380,11 @@ equality gives $u$ the full row weight $L$, the same as the root's
 coverage; hence $\alpha_r=0$, each fed type's weight is $L-\eta=0$,
 so $L=\eta=0$ and the normalization $\alpha_r+\alpha_h=1$ fails:
 \[
- \boxed{\qquad
- \hbox{no pair-supported split-top cover exists with an unfed}
- \hbox{ sub-top type; feasible iff $t=s$ and $(s-1)k\ge s$.}
- \qquad}                                             \tag{PXC82}
+ \begin{gathered}
+ \text{no pair-supported cover exists}\\
+ \text{on a split top with an unfed sub-top type;}\\
+ \text{feasible iff }t=s\text{ and }(s-1)k\ge s
+ \end{gathered}                                      \tag{PXC82}
 \]
 The dichotomy is verified by exact linear programming over
 $2\le s\le5$, $2\le k\le4$, $1\le t\le s$ in the pinned split-top
@@ -6493,6 +6497,48 @@ tight row containing a gainer and avoiding the root.  The lemma
 bounds every future mechanism from below: the tight menu must
 separate every strictly ordered pair, so a violation's menu always
 carries at least the separating family.
+
+There is now a human explanation for the class-A/class-B handover on the
+continuous family through the pinned class-B control.  Replace only its
+fourth generator by
+\[
+ q^3(t)=(0,9-t,6,5+t,0,0,0),\qquad 0\le t\le1,
+\]
+leaving the other five generators displayed in the exact verifier.  The
+lower selector is constant, $x=(6,4,2,2,2,2,2)$, while the upper selector is
+\[
+ z(t)=
+ \begin{cases}
+ ((9-t)/2,(9-t)/2,4+2t,4+2t,1-t,1-t,1-t),&0\le t\le1/7,\\
+ (31/7,31/7,30/7,30/7,6/7,6/7,6/7),&1/7\le t\le1.
+ \end{cases}                                         \tag{PXC86a}
+\]
+This is not a sampled formula.  Three fixed lower rows, after
+complementation, successively pin the five coordinates at level $2$, the
+coordinate at level $4$, and the remaining coordinate at level $6$.  On the
+first upper branch $v(\{r,h\})=9-t$ pins both top coordinates; summing the six
+double-co-star inequalities pins the two sub-top coordinates, and efficiency
+then equalizes the outsiders.  On the second branch put
+$R=y_r+y_h$, $A=y_a+y_b$, and $O=\sum_jy_j$.  The heavy-block inequality and
+the same six double-co-star inequalities give
+\[
+ O\ge7-\max_i y_i,\qquad 4R+A\ge44,\qquad
+ 4R+A=3R+(R+A)\le13+7\max_i y_i,
+\]
+so $\max_i y_i\ge31/7$; equality pins $R$, then $A$, then $O$, giving the
+second line of (PXC86a).  Full affine-envelope checking verifies core
+membership on the entire two parameter intervals.  Consequently the two
+relevant row gaps are exactly
+\[
+ 2M-v(\{r,h\})=(t-1/7)_+,
+ \qquad z(\{h\}\cup O)-v(\{h\}\cup O)=\tfrac12(1-7t)_+ .  \tag{PXC86}
+\]
+The packet margin is $-(1+t)$ before the breakpoint and $-8/7$ after it.
+Thus (PXC84) closes the pair-tight class-B side, (PXC78) closes the
+heavy-block-tight class-A side, and both apply at the breakpoint: the two
+active sets meet with no local gap.  This continuous family theorem explains
+why direct perturbations of the control hand over between the two mechanisms;
+it does not prove the universal class-B closure conjecture.
 
 The exact six-player census has $78$ rooted instances with a multi-omission
 row, $98$ saturated no-multi instances, $27$ intermediate instances, and
