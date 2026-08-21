@@ -229,6 +229,14 @@ run_python coopgames/verifiers/divergence/verify_class_b_matching_counterexample
   --output "$scratch_dir/class-b-matching-counterexample-independent.json"
 cmp coopgames/verifiers/divergence/class_b_matching_counterexample_independent.json \
   "$scratch_dir/class-b-matching-counterexample-independent.json"
+run_python coopgames/verifiers/divergence/audit_class_b_three_row_supports.py \
+  --output "$scratch_dir/class-b-three-row-supports.json"
+cmp coopgames/verifiers/divergence/class_b_three_row_supports.json \
+  "$scratch_dir/class-b-three-row-supports.json"
+run_python coopgames/verifiers/divergence/verify_pxc87_necessity_independent.py \
+  --output "$scratch_dir/pxc87-necessity-independent.json"
+cmp coopgames/verifiers/divergence/pxc87_necessity_independent.json \
+  "$scratch_dir/pxc87-necessity-independent.json"
 run_python coopgames/verifiers/divergence/audit_control_branch_projection.py \
   --output "$scratch_dir/control-branch-projection.json"
 cmp coopgames/verifiers/divergence/control_branch_projection.json \

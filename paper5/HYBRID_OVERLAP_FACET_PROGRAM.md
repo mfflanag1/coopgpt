@@ -9814,3 +9814,52 @@ already proved reserve and direct arms, prove selection of the PXC78 menu,
 the PXC84 top pair, a split-matching cover with a target-valid spectral
 chain, or another already proved mechanism.  The next counterexample attack
 must fail the direct arm while escaping all three split-top supports.
+
+### PXC87 is necessary: a direct-failing split-matching control
+
+The direct arm is not a hidden replacement for the new support.  Keep the
+three Lmin rows of `(CB7)`, but use
+
+```text
+y(0134)>=89/7,  y(0125)>=97/7,  y(16)>=41/7,
+y(0126)>=97/7,  y(0136)>=97/7.                       (CB10)
+```
+
+The resulting exact game is singleton-normalized and has
+
+```text
+x=(6,4,2,2,2,2,2),
+z=(29,29,27,27,4,12,12)/7.                          (CB11)
+```
+
+The first three rows sum to `20+y0+2y1>=227/7`, giving the same short
+human Lmax proof; the original complement argument proves Lmin.  The packet
+margin is `-1/7`, exhaustive direct-packet enumeration returns false, the
+top-pair and heavy-block gaps are `4/7,16/7`, and the double-co-star gaps are
+`(5/7,0,0,13/7,0,0)`.  Thus only the split-matching disjunct survives among
+the four corrected alternatives.  The overlap remains safely above target,
+`113/7-35/3=94/21`.  The independent verifier enumerates 76 core vertices
+without the project LP stack and independently expands the direct criterion.
+This is a nonredundancy theorem for PXC87, not the desired selection theorem.
+
+The first exact support census is also complete.  At `(CB11)`, 65 proper
+rows obey the necessary comparison sign.  Among their three-row subsets,
+158 carry a positive normalized top cover.  Eighteen have all row sizes at
+least three and positive weights on both top coordinates; their exact minimal
+lifts split into 12 failures of singleton normalization and six valid ordered
+saturated roots.  Every valid lift has packet margin zero and a tight top
+pair.  Therefore no escape exists in this fixed-profile, three-row cell.
+The complete four-row census contains 714 positive-row-weight covers, 336
+with both top coefficients positive, and 168 all-large-row lift candidates.
+Their minimal lifts split into 156
+singleton failures and twelve valid roots; none of the twelve has negative
+packet margin.  At five rows, duplicate incidence columns and the exact
+`a<->b`, `5<->6` symmetries reduce 924 labelled covers to 252 orbits.  Of
+their representative lifts, 250 fail singleton normalization.  The other two
+are packet violations, so this is a nonvacuous test, but both make the top
+pair tight.  A positive-ambient extreme cover needs at most five rows by the
+six-equation rank bound.  Consequently the remaining fixed-profile cells
+must use two-player rows (PXC87 shows they cannot be discarded) or a
+zero-ambient six-row cover.  Different selector profiles and saturated Lmin
+certificates also remain live; the finite census must not be promoted to a
+universal claim.
