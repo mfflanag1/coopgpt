@@ -1,15 +1,15 @@
 #!/usr/bin/env python3
-"""Exact three-row attack on the corrected s=2 class-B classification.
+"""Exact sparse-support attack on the corrected s=2 classification.
 
 The universal classification is not assumed here.  The verifier freezes a
 direct-packet-failing selector profile with the same saturated Lmin point as
-PXC87, enumerates every positive normalized top over-cover on three rows
-compatible with the selector comparison, and lifts every incidence type whose
-three rows all have size at least three and put positive weight on both top
-coordinates.
+PXC87, enumerates every strictly positive-top normalized over-cover on one
+through five nonsingleton rows compatible with the selector comparison, and
+lifts one representative of every exact symmetry orbit.
 
-This is an exhaustive theorem for the stated three-row/profile cell only.  It
-is a falsification gate for the universal conjecture, not a proof of it.
+This is an exhaustive theorem for the stated selector-profile/minimal-lift
+cell only.  It is a falsification gate for the universal conjecture, not a
+proof of it.
 """
 
 from __future__ import annotations
@@ -21,6 +21,8 @@ import sys
 from collections import Counter
 from fractions import Fraction as F
 from pathlib import Path
+
+import numpy as np
 
 
 COOPGAMES = Path(__file__).resolve().parents[2]
@@ -154,12 +156,11 @@ def split_matching_tight(values, z) -> bool:
     return False
 
 
-def classify_lift(rows: tuple[int, int, int]) -> dict:
+def classify_lift(rows: tuple[int, ...]) -> dict:
     constraints = {row: coalition_sum(Z, row) for row in rows}
     constraints.update(LMIN_ROWS)
     minimize = coalition_minimizer(constraints)
-    values = tuple(minimize(coalition) for coalition in range(1 << N))
-    singletons = tuple(values[1 << player] for player in range(N))
+    singletons = tuple(minimize(1 << player) for player in range(N))
     result = {
         "rows": list(rows),
         "singleton_values": [str(value) for value in singletons],
@@ -167,6 +168,7 @@ def classify_lift(rows: tuple[int, int, int]) -> dict:
     if any(singletons):
         result["status"] = "singleton normalization fails"
         return result
+    values = tuple(minimize(coalition) for coalition in range(1 << N))
     x, z = selectors(values, N)
     roots = ordered_saturated_roots(values, x, z)
     result.update({
@@ -237,25 +239,72 @@ def canonical_rows(rows: tuple[int, ...]) -> tuple[int, ...]:
     )
 
 
-def five_row_orbit_census(compatible: tuple[int, ...]) -> dict:
-    """Exhaust the all-row-size-at-least-three five-row cell by symmetry."""
+def incidence_cover(rows: tuple[int, ...]):
+    """Solve the top-summed incidence equations before choosing top labels."""
+    integer_matrix = []
+    integer_rhs = []
+    for player in range(2, N):
+        integer_matrix.append([
+            *(int(bool(row >> player & 1)) for row in rows),
+            -1,
+        ])
+        integer_rhs.append(0)
+    integer_matrix.append([
+        *(int(bool(row & 1)) + int(bool(row & 2)) for row in rows),
+        -2,
+    ])
+    integer_rhs.append(1)
+
+    # This filter only rejects systems that are visibly rank-deficient,
+    # inconsistent, or sign-infeasible.  Every survivor is solved again over
+    # Q below.  The matrices are 0/1/-1 with at most six rows; the generous
+    # tolerance also sends every numerical boundary case to the exact path.
+    float_matrix = np.asarray(integer_matrix, dtype=float)
+    float_rhs = np.asarray(integer_rhs, dtype=float)
+    approximate, _, rank, _ = np.linalg.lstsq(
+        float_matrix, float_rhs, rcond=None
+    )
+    if rank != len(rows) + 1:
+        return None
+    residual = np.max(np.abs(float_matrix @ approximate - float_rhs))
+    if residual > 1e-9:
+        return None
+    if min(approximate[:-1]) < -1e-9 or approximate[-1] < -1e-9:
+        return None
+
+    matrix = [[F(value) for value in row] for row in integer_matrix]
+    rhs = [F(value) for value in integer_rhs]
+    solution = solve_overdetermined(matrix, rhs, len(rows) + 1)
+    if solution is None or min(solution[:-1]) <= 0 or solution[-1] < 0:
+        return None
+    return solution
+
+
+def support_orbit_census(
+    compatible: tuple[int, ...], support_size: int
+) -> dict:
+    """Exhaust one nonsingleton support size, quotienting exact symmetries."""
     columns: dict[tuple[int, ...], list[int]] = {}
     for coalition in compatible:
-        if coalition.bit_count() >= 3:
+        if coalition.bit_count() >= 2:
             columns.setdefault(incidence_key(coalition), []).append(coalition)
     column_items = tuple(columns.items())
     positive_column_covers = 0
     row_covers = set()
-    for indices in itertools.combinations(range(len(column_items)), 5):
+    for indices in itertools.combinations(
+        range(len(column_items)), support_size
+    ):
         representatives = tuple(column_items[index][1][0] for index in indices)
-        cover = normalized_cover(representatives)
-        if cover is None or min(cover[2]) <= 0:
+        if incidence_cover(representatives) is None:
             continue
         positive_column_covers += 1
         for rows in itertools.product(
             *(column_items[index][1] for index in indices)
         ):
-            row_covers.add(tuple(sorted(rows)))
+            rows = tuple(sorted(rows))
+            cover = normalized_cover(rows)
+            if cover is not None and min(cover[2]) > 0:
+                row_covers.add(rows)
 
     orbits: dict[tuple[int, ...], list[tuple[int, ...]]] = {}
     for rows in row_covers:
@@ -265,38 +314,96 @@ def five_row_orbit_census(compatible: tuple[int, ...]) -> dict:
     row_status = Counter()
     negative = []
     escapes = []
+    qualified = []
+    mechanism_counts = Counter()
     for representative, members in sorted(orbits.items()):
         result = classify_lift(representative)
         result["orbit_size"] = len(members)
         results.append(result)
         orbit_status[result["status"]] += 1
         row_status[result["status"]] += len(members)
+        if result["status"] == "qualified":
+            qualified.append(result)
+            mechanisms = tuple(
+                name for name in (
+                    "direct", "top_pair_tight", "pxc78_full", "split_matching"
+                ) if result[name]
+            )
+            mechanism_counts["+".join(mechanisms) or "none"] += 1
         if result["status"] == "qualified" and F(result["packet_margin"]) < 0:
             negative.append(result)
         if result.get("classification_escape"):
             escapes.append(result)
     if escapes:
-        raise AssertionError({"five-row classification escape": escapes})
+        raise AssertionError({
+            f"{support_size}-row classification escape": escapes
+        })
+    expected = {
+        1: (1, 1, {"qualified": 1}, 0),
+        2: (6, 2, {"qualified": 2}, 0),
+        3: (
+            66,
+            20,
+            {"singleton normalization fails": 16, "qualified": 4},
+            0,
+        ),
+        4: (
+            312,
+            96,
+            {"singleton normalization fails": 92, "qualified": 4},
+            0,
+        ),
+        5: (
+            2576,
+            719,
+            {"singleton normalization fails": 717, "qualified": 2},
+            2,
+        ),
+    }
+    expected_rows, expected_orbits, expected_status, expected_negative = (
+        expected[support_size]
+    )
     if (
-        len(columns) != 43
-        or positive_column_covers != 720
-        or len(row_covers) != 924
-        or len(orbits) != 252
-        or orbit_status != {
-            "singleton normalization fails": 250,
-            "qualified": 2,
-        }
-        or len(negative) != 2
+        len(columns) != 52
+        or len(row_covers) != expected_rows
+        or len(orbits) != expected_orbits
+        or orbit_status != expected_status
+        or len(negative) != expected_negative
+        or any(not (
+            result["direct"]
+            or result["top_pair_tight"]
+            or result["pxc78_full"]
+            or result["split_matching"]
+        ) for result in qualified)
         or any(not result["top_pair_tight"] for result in negative)
     ):
-        raise AssertionError("five-row census counts changed")
+        raise AssertionError({
+            "support_size": support_size,
+            "columns": len(columns),
+            "positive_column_covers": positive_column_covers,
+            "row_covers": len(row_covers),
+            "orbits": len(orbits),
+            "status": dict(orbit_status),
+            "negative": len(negative),
+            "qualified_unclassified": [
+                result for result in qualified
+                if not (
+                    result["direct"]
+                    or result["top_pair_tight"]
+                    or result["pxc78_full"]
+                    or result["split_matching"]
+                )
+            ],
+        })
     return {
+        "support_size": support_size,
         "incidence_columns": len(columns),
         "positive_column_covers": positive_column_covers,
         "expanded_row_covers": len(row_covers),
         "symmetry_orbits": len(orbits),
         "orbit_status_counts": dict(sorted(orbit_status.items())),
         "row_cover_status_counts": dict(sorted(row_status.items())),
+        "qualified_mechanism_counts": dict(sorted(mechanism_counts.items())),
         "qualified_packet_violations": negative,
         "classification_escapes": 0,
     }
@@ -365,59 +472,24 @@ def main() -> None:
         if coalition_sum(X, coalition) >= coalition_sum(Z, coalition)
     )
     censuses = {}
-    for support_size in (3, 4):
-        covers = []
-        strict_positive_top_covers = 0
-        lift_rows = []
-        for rows in itertools.combinations(compatible, support_size):
-            cover = normalized_cover(rows)
-            if cover is None:
-                continue
-            weights, eta, alpha = cover
-            covers.append((rows, weights, eta, alpha))
-            if min(alpha) > 0:
-                strict_positive_top_covers += 1
-            if min(row.bit_count() for row in rows) >= 3 and min(alpha) > 0:
-                lift_rows.append(rows)
-
-        lifts = [classify_lift(rows) for rows in lift_rows]
-        status_counts = Counter(result["status"] for result in lifts)
-        qualified = [
-            result for result in lifts if result["status"] == "qualified"
-        ]
-        negative = [
-            result for result in qualified if F(result["packet_margin"]) < 0
-        ]
-        escapes = [
-            result for result in qualified if result["classification_escape"]
-        ]
-        if escapes:
-            raise AssertionError({
-                f"{support_size}-row classification escape": escapes
-            })
-        censuses[str(support_size)] = {
-            "positive_row_weight_covers": len(covers),
-            "strict_positive_top_covers": strict_positive_top_covers,
-            "singleton_plausible_positive_top_covers": len(lift_rows),
-            "lift_status_counts": dict(sorted(status_counts.items())),
-            "qualified_packet_violations": len(negative),
-            "qualified_lifts": qualified,
-            "classification_escapes": 0,
-        }
+    for support_size in range(1, 6):
+        print(f"auditing support size {support_size}", file=sys.stderr)
+        censuses[str(support_size)] = support_orbit_census(
+            compatible, support_size
+        )
 
     payload = {
-        "claim": "exact direct-failing three-row support attack",
+        "claim": "exact direct-failing sparse-support attack",
         "calibration": direct_failing_matching_calibration(),
         "compatible_rows": len(compatible),
         "support_censuses": censuses,
-        "five_row_orbit_census": five_row_orbit_census(compatible),
         "classification_escapes": 0,
         "scope": (
-            "exhaustive for three-, four-, and five-row top covers compatible "
-            "with the fixed direct-failing selector profile, with exact lifts "
-            "of every all-row-size-at-least-three cover having positive weights "
-            "on both top coordinates; five-row lifts are symmetry reduced with "
-            "complete orbit expansion; not a universal support classification"
+            "exhaustive for one- through five-row nonsingleton top covers "
+            "compatible with the fixed direct-failing selector profile, with "
+            "strictly positive weights on both top coordinates and exact "
+            "minimal lifts of every symmetry orbit; not a universal support "
+            "classification"
         ),
     }
     rendered = json.dumps(payload, indent=2) + "\n"

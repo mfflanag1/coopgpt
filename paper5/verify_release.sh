@@ -237,6 +237,14 @@ run_python coopgames/verifiers/divergence/verify_pxc87_necessity_independent.py 
   --output "$scratch_dir/pxc87-necessity-independent.json"
 cmp coopgames/verifiers/divergence/pxc87_necessity_independent.json \
   "$scratch_dir/pxc87-necessity-independent.json"
+run_python coopgames/verifiers/divergence/audit_pxc89_classification_counterexample.py \
+  --output "$scratch_dir/pxc89-classification-counterexample.json"
+cmp coopgames/verifiers/divergence/pxc89_classification_counterexample.json \
+  "$scratch_dir/pxc89-classification-counterexample.json"
+run_python coopgames/verifiers/divergence/verify_pxc89_classification_counterexample_independent.py \
+  --output "$scratch_dir/pxc89-classification-counterexample-independent.json"
+cmp coopgames/verifiers/divergence/pxc89_classification_counterexample_independent.json \
+  "$scratch_dir/pxc89-classification-counterexample-independent.json"
 run_python coopgames/verifiers/divergence/audit_control_branch_projection.py \
   --output "$scratch_dir/control-branch-projection.json"
 cmp coopgames/verifiers/divergence/control_branch_projection.json \

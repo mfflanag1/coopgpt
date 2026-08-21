@@ -9858,8 +9858,80 @@ packet margin.  At five rows, duplicate incidence columns and the exact
 their representative lifts, 250 fail singleton normalization.  The other two
 are packet violations, so this is a nonvacuous test, but both make the top
 pair tight.  A positive-ambient extreme cover needs at most five rows by the
-six-equation rank bound.  Consequently the remaining fixed-profile cells
-must use two-player rows (PXC87 shows they cannot be discarded) or a
-zero-ambient six-row cover.  Different selector profiles and saturated Lmin
-certificates also remain live; the finite census must not be promoted to a
-universal claim.
+six-equation rank bound when both top coefficients are positive.  More
+precisely, zero ambient load would force all supported rows inside `{r,h}`;
+singleton normalization then leaves only the top pair, so pair slack forces
+positive ambient load.  If one top coefficient is zero, its active boundary
+equation can permit a six-row extreme support.  Consequently the remaining
+fixed-profile cells must use two-player rows (PXC87 shows they cannot be
+discarded) or a six-row one-sided-top cover.  Different selector profiles
+and saturated Lmin certificates also remain live; the finite census must not
+be promoted to a universal claim.
+
+### Strict-positive top dual and complete fixed-profile theorem
+
+The one-sided-top exception above is removable.  When the Lmax top is exactly
+`{r,h}`, lexicographic optimality rules out every tangent direction with
+`d_r,d_h<=0` and at least one strict inequality: a sufficiently small step
+preserves the gap to the next stratum and improves the sorted ceiling vector.
+The polyhedral Gordan--Stiemke alternative therefore supplies a normalized
+top over-cover with `alpha_r,alpha_h>0`.  On the single-heavy split arm,
+`x_r>M>x_h`, and `(CB5)` excludes `alpha_r=0` for *every* top over-cover.
+Decomposing the strict cover into extreme covers (recession rays have zero top
+weight) leaves an extreme cover with `alpha_h>0`, hence also `alpha_r>0`.
+Pair slack forces its ambient variable to be positive.  The `n-1` normalized
+incidence equalities then give the dimension-free support bound
+
+```text
+top pair slack  ==>  an extreme positive-top cover on at most n-2 rows. (PXC89)
+```
+
+The nonsingleton census is now complete at the `(CB11)` selector profile.
+For support sizes one through five it contains respectively
+`1,6,66,312,2576` strictly-positive-top labelled covers in
+`1,2,20,96,719` symmetry orbits.  At sizes one and two all orbit lifts are
+packet-boundary/top-pair-tight.  At sizes three and four, `16/20` and `92/96`
+representative minimal lifts fail singleton normalization; all survivors are
+top-pair-tight or retain a split-matching support.  At size five, `717/719`
+fail singleton normalization and the two surviving packet violations are
+top-pair-tight.  Adding further core
+inequalities cannot repair a positive singleton minimum or undo top-pair
+tightness while retaining `Z`.  Thus no singleton-normalized exact completion
+with the `(CB11)` selectors and the fixed staged Lmin rows escapes the pair,
+PXC78, PXC87, and direct arms.  This is a complete fixed-profile theorem; the
+universal classification still requires eliminating or classifying different
+selector profiles and different saturated Lmin certificates.
+
+### Refutation of the corrected four-arm classification
+
+The profile qualification above is load-bearing.  The nonnegative total-20
+polytope with the three fixed Lmin rows and
+
+```text
+0124,0134 >= 94/7;  0125,0136 >= 95/7;  1456 >= 55/7       (CB12)
+```
+
+is singleton-normalized and has
+
+```text
+x=(6,4,2,2,2,2,2),  z=(29,29,28,28,8,9,9)/7.             (PXC90)
+```
+
+The Lmin proof is unchanged.  Weighting the five displayed rows by
+`(1,1,2,2,1)/7` gives incidence
+`(3/7)1_N+(3/7)e_r+(4/7)e_h` and weighted bound `89/7`, forcing maximum
+at least `29/7`; equality pins both tops and all five rows, whose equations
+uniquely give `z`.  The packet margin is `-2/7`, yet the top-pair gap is
+`29/28`, two double co-stars have gap `11/7` so PXC78 is incomplete, no PXC87
+matching is tight, and the direct predicate is false.  Thus the corrected
+four-arm classification is **refuted at n=7**.
+
+The new support is a forked double-co-star cover plus the heavy block: both
+omission types meet one outsider, then split to separate outsiders, while the
+heavy block equalizes their loads.  Its weights are `(1,1,2,2,1)/7`, ambient
+load `3/7`, and top weights `(3/7,4/7)`.  This is a new support mechanism, not
+a counterexample to the hybrid bound: overlap is `111/7` against `35/3`, a
+margin of `88/21`.  Primary exact replay and an independent 84-vertex rational
+replay are pinned.  The next valid selection statement must replace the named
+PXC78/PXC87 supports by a broader weighted bipartite-cover or spectral-payment
+condition; adding individual named menu shapes is no longer a credible route.
