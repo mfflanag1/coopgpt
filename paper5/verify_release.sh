@@ -273,6 +273,10 @@ run_python coopgames/verifiers/divergence/verify_n6_top_pair_blocker_no_go.py \
   --output "$scratch_dir/n6-top-pair-blocker-no-go.json"
 cmp coopgames/verifiers/divergence/n6_top_pair_blocker_no_go.json \
   "$scratch_dir/n6-top-pair-blocker-no-go.json"
+run_python coopgames/verifiers/divergence/verify_faithful_sparse_lift_resolution.py \
+  --output "$scratch_dir/faithful-sparse-lift-resolution.json"
+cmp coopgames/verifiers/divergence/faithful_sparse_lift_resolution.json \
+  "$scratch_dir/faithful-sparse-lift-resolution.json"
 run_python coopgames/verifiers/divergence/search_archive/faithful_sparse_lift_n6_search_v2.py \
   --total-max 11 --random-rounds 1000 --seed 20260821 \
   --output "$scratch_dir/faithful-sparse-lift-n6-run-v2.json"

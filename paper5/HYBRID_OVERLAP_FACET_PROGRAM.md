@@ -10030,12 +10030,14 @@ bound
 |A| <= n(n-2) additional rows.                       (PXC92c)
 ```
 
-PXC88 needs exactly two auxiliaries; PXC90 needs none.  The new frontier is
-to reduce this quadratic price or couple the later-stage certificates
-directly to the hybrid-overlap inequality.  The counterexample is the
-smallest found, not a proved minimum: the exact n=6 archive and a 300-game
-seeded probe contain no reserve-failing root, but no n=6 exclusion theorem is
-known.
+PXC88 needs exactly two auxiliaries; PXC90 needs none.  The corrected general
+frontier is to reduce this quadratic price or couple the later-stage
+certificates directly to the hybrid-overlap inequality.  In the frozen
+ordered saturated single-heavy `s=2`, reserve/direct-failing domain, the
+restricted-domain dimension threshold is settled below by PXC94--PXC96: n=6
+is affirmative and PXC88 is the smallest counterexample at n=7.  Unrestricted
+PXC91c is already false by PXC88; what remains open globally is the minimum
+failure dimension outside this restricted domain.
 
 ### Six-player obstruction and exact remaining lemma
 
@@ -10087,7 +10089,9 @@ literal two-row split cover at all.  This is `(PXC93)`.  It proves that the
 unused third outsider is load-bearing for the PXC88 mechanism, but it does
 not classify the other nonsplit extreme top-cover faces through four rows.
 
-The remaining n=6 theorem is a two-outsider implication.  Put
+The formerly missing direct-route n=6 lemma is a two-outsider implication.
+It is retained because its exact interval remains useful, although PXC94
+bypasses it.  Put
 `D=d_h+d_a+d_b`, `dmax=max d_i`, `E=D-dmax`, and let `A_rho` be the saturated
 decoration load.  Reserve failure is exactly
 
@@ -10156,6 +10160,23 @@ root-zero exactness witness and zero after it `(PXC95)`.  Thus the tight-pair
 cell is always reserve- or direct-closed.  PXC84 independently closes it for
 the hybrid-overlap inequality.  Pure tight-pair selector fidelity outside
 this residual cell remains a different, open question.
+
+This proves the sharp dimension threshold for the restricted frozen-domain
+conjecture.  The
+single-heavy `s=2` arm has three gainers and at least two outsiders, so its
+smallest dimension is six.  At n=6, reserve/direct failure excludes the tight
+pair by PXC95 and pair slack gives the faithful cover by PXC94c.  PXC88 is an
+exact n=7 failure with a unique positive extreme cover.  Hence
+
+```text
+n=6: restricted PXC91c holds; n=7: restricted PXC91c can fail. (PXC96)
+```
+
+Here “restricted” means the ordered, saturated, single-heavy `s=2`, `k>=2`,
+reserve/direct-failing domain, not unrestricted PXC91c.  PXC88 is therefore
+the smallest exact counterexample in that stated restricted domain.
+Its indispensable omitted rows are `0126,0136`; adjoining them is the exact
+two-row repair, while PXC92c gives the general `n(n-2)` auxiliary-row bound.
 
 The corrected finite evidence below is deliberately weaker than PXC94.  Both pinned n=6
 archives contain 89 ordered saturated roots, 35 with `g=3,k=2`, zero in the

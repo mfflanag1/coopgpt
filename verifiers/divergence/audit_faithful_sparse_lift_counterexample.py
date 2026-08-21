@@ -157,6 +157,19 @@ def main() -> None:
     support_x = complete_lmin_support(values, x)
     if x_tight != LMIN_ROWS or support_x != LMIN_ROWS:
         raise AssertionError(("complete Lmin support changed", x_tight, support_x))
+    proper_subset_lmins = []
+    for size in range(len(LMIN_ROWS)):
+        for rows in itertools.combinations(LMIN_ROWS, size):
+            subset_constraints = {
+                row: coalition_sum(X, row) for row in rows
+            }
+            _subset_values, subset_x, _subset_z = selector_pair(subset_constraints)
+            if subset_x == X:
+                raise AssertionError(("proper Lmin-row subset still pins X", rows))
+            proper_subset_lmins.append({
+                "rows": list(rows),
+                "lmin": [str(value) for value in subset_x],
+            })
     if z_tight != tuple(sorted((*TOP_ROWS, *AUXILIARY_ROWS))):
         raise AssertionError(("PXC88 z-tight menu changed", z_tight))
 
@@ -234,9 +247,16 @@ def main() -> None:
         "full_lmax": [str(value) for value in z],
         "singleton_normalized": True,
         "ordered_saturated_single_heavy_s2": True,
+        "frozen_domain_role_count": {
+            "root": 1,
+            "gainers": len(roots[0][1]),
+            "outsiders": len(roots[0][2]),
+        },
         "packet_margin": str(packet_margin),
         "direct_packet_exists": False,
         "complete_lmin_support": list(support_x),
+        "every_proper_lmin_row_subset_changes_lmin": True,
+        "proper_lmin_row_subset_selectors": proper_subset_lmins,
         "all_proper_nonsingleton_z_tight_rows": list(z_tight),
         "positive_extreme_top_cover_count": 1,
         "unique_top_cover": {
