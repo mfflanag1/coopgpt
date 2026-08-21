@@ -10103,14 +10103,61 @@ ell+L_u <= E <= [-x(G)-3x_p-(M+z_u)+(8/5)(T-z_p)]/3. (PXC93b)
 ```
 
 Proving that `(PXC93a)` forces `(PXC93b)` for one outsider would exclude the
-live reserve/direct-failing cell.  The tangent-equivalent statement is that
-a later-stage Lmax blocker can be pivoted into some positive top-cover face
-on the four non-top coordinates.  PXC93 instead excludes the two-row split
-face outright; PXC88 shows the analogous pivot statement is false with five
-non-top coordinates.  Other nonsplit six-player faces through four rows
-remain live.
+live reserve/direct-failing cell, but this direct implication is not needed.
+The generic tangent-pivot formulation is also false: a transverse later-stage
+blocker can be forced to have zero cover coefficient, exactly as in PXC88.
 
-The corrected finite evidence is deliberately weaker.  Both pinned n=6
+### Positive-ambient n=6 rank theorem
+
+On the pair-slack arm, PXC89 supplies a positive-ambient extreme top cover
+with support at most four.  If `A` is its `4 x m` outsider incidence matrix,
+extremality and `A lambda=eta 1`, `eta>0`, imply
+
+```text
+rank(A)=m.                                           (PXC94a)
+```
+
+Thus support four is automatically faithful: equality in the first-ceiling
+cover pins both top coordinates and every cover row; invertibility of `A`
+then pins all four non-top coordinates, so `z` is the unique ceiling
+minimizer.  A complete staged `C_x` preserves `x`, and the original singleton
+witnesses remain feasible in the relaxed minimal lift.
+
+All smaller supports are excluded under reserve failure.  Support two reduces
+to complementary outsider partitions: the cross partitions are PXC93, while
+the zero-loss boundary `rhj | rhabk` has six tangent forms and 381 labelled
+closing one-/two-row families, none feasible after adding the blocker and
+root witness to the full necessary system.  Support three reduces to six
+colored placements of two complementary unweighted trace types,
+`{a,b,jk}`, `{a,j,bk}`, `{ab,j,k}` and their complements.  Scalar comparison
+eliminates all but one zero-loss equality boundary; there all 15 possible
+later blockers fail the full necessary system.  Zero-valued outsider
+singletons account for 41 covers already included in the 807 total: six
+size-three covers/two orbits and 35 size-four covers/12 orbits, all
+scalar-infeasible.
+
+The complete exact incidence census has 807 labelled covers in 259 safe
+colored orbits.  The sole eta-zero support is `{r,h}`; the remaining 806
+covers/258 orbits all have full outsider-incidence column rank.  Therefore
+
+```text
+pair slack + reserve failure => some |R|=4 cover with
+Lmin(w_R)=x and Lmax(w_R)=z.                          (PXC94c)
+```
+
+This makes the seven-player PXC88 example the first sparse-fidelity failure
+on the positive-ambient arm.  The top-pair-tight face is separate:
+`{r,h}` is the unique eta-zero cover and pins only the first Lmax stage.  In
+the target reserve/direct-failing cell it is now excluded directly.  There are
+11 inclusion-minimal second-stage trace families, at most three rows each;
+their 445 admissible top decorations and all 5,340 maximum-gainer/direct-side
+branches leave 642 feasible continuous rational cells before imposing the
+root-zero exactness witness and zero after it `(PXC95)`.  Thus the tight-pair
+cell is always reserve- or direct-closed.  PXC84 independently closes it for
+the hybrid-overlap inequality.  Pure tight-pair selector fidelity outside
+this residual cell remains a different, open question.
+
+The corrected finite evidence below is deliberately weaker than PXC94.  Both pinned n=6
 archives contain 89 ordered saturated roots, 35 with `g=3,k=2`, zero in the
 strict single-heavy/top-size-two cell, and zero reserve failures.  A designed
 run of 1,975 exact games (an exhaustive symmetry-reduced two-block integer

@@ -261,6 +261,18 @@ run_python coopgames/verifiers/divergence/verify_n6_split_cover_blocker_no_go.py
   --output "$scratch_dir/n6-split-cover-blocker-no-go.json"
 cmp coopgames/verifiers/divergence/n6_split_cover_blocker_no_go.json \
   "$scratch_dir/n6-split-cover-blocker-no-go.json"
+run_python coopgames/verifiers/divergence/verify_n6_extreme_cover_rank_fidelity.py \
+  --output "$scratch_dir/n6-extreme-cover-rank-fidelity.json"
+cmp coopgames/verifiers/divergence/n6_extreme_cover_rank_fidelity.json \
+  "$scratch_dir/n6-extreme-cover-rank-fidelity.json"
+run_python coopgames/verifiers/divergence/verify_n6_zero_loss_cover_boundaries.py \
+  --output "$scratch_dir/n6-zero-loss-cover-boundaries.json"
+cmp coopgames/verifiers/divergence/n6_zero_loss_cover_boundaries.json \
+  "$scratch_dir/n6-zero-loss-cover-boundaries.json"
+run_python coopgames/verifiers/divergence/verify_n6_top_pair_blocker_no_go.py \
+  --output "$scratch_dir/n6-top-pair-blocker-no-go.json"
+cmp coopgames/verifiers/divergence/n6_top_pair_blocker_no_go.json \
+  "$scratch_dir/n6-top-pair-blocker-no-go.json"
 run_python coopgames/verifiers/divergence/search_archive/faithful_sparse_lift_n6_search_v2.py \
   --total-max 11 --random-rounds 1000 --seed 20260821 \
   --output "$scratch_dir/faithful-sparse-lift-n6-run-v2.json"
