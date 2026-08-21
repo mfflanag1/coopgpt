@@ -255,26 +255,35 @@ def incidence_cover(rows: tuple[int, ...]):
     ])
     integer_rhs.append(1)
 
-    # This filter only rejects systems that are visibly rank-deficient,
-    # inconsistent, or sign-infeasible.  Every survivor is solved again over
-    # Q below.  The matrices are 0/1/-1 with at most six rows; the generous
-    # tolerance also sends every numerical boundary case to the exact path.
+    # Floating point is only a rational-reconstruction accelerator.  It never
+    # decides feasibility: a reconstructed solution is checked in Z, and every
+    # failed reconstruction falls back to exact Gaussian elimination.  Thus a
+    # numerical rank or sign error cannot remove a support from the census.
     float_matrix = np.asarray(integer_matrix, dtype=float)
     float_rhs = np.asarray(integer_rhs, dtype=float)
     approximate, _, rank, _ = np.linalg.lstsq(
         float_matrix, float_rhs, rcond=None
     )
-    if rank != len(rows) + 1:
-        return None
-    residual = np.max(np.abs(float_matrix @ approximate - float_rhs))
-    if residual > 1e-9:
-        return None
-    if min(approximate[:-1]) < -1e-9 or approximate[-1] < -1e-9:
-        return None
-
-    matrix = [[F(value) for value in row] for row in integer_matrix]
-    rhs = [F(value) for value in integer_rhs]
-    solution = solve_overdetermined(matrix, rhs, len(rows) + 1)
+    variable_count = len(rows) + 1
+    solution = None
+    if rank == variable_count:
+        reconstructed = tuple(
+            F(float(value)).limit_denominator(1_000_000)
+            for value in approximate
+        )
+        if all(
+            sum(
+                (F(coefficient) * value
+                 for coefficient, value in zip(row, reconstructed)),
+                F(0),
+            ) == F(target)
+            for row, target in zip(integer_matrix, integer_rhs)
+        ):
+            solution = reconstructed
+    if solution is None:
+        matrix = [[F(value) for value in row] for row in integer_matrix]
+        rhs = [F(value) for value in integer_rhs]
+        solution = solve_overdetermined(matrix, rhs, variable_count)
     if solution is None or min(solution[:-1]) <= 0 or solution[-1] < 0:
         return None
     return solution

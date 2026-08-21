@@ -9935,3 +9935,58 @@ margin of `88/21`.  Primary exact replay and an independent 84-vertex rational
 replay are pinned.  The next valid selection statement must replace the named
 PXC78/PXC87 supports by a broader weighted bipartite-cover or spectral-payment
 condition; adding individual named menu shapes is no longer a credible route.
+
+### Exact scope of the fixed-profile theorem and the missing lift
+
+The proof now separates into a profile-independent theorem and a genuinely
+fixed-profile computation.  For any normalized `z`-tight top over-cover,
+equal selector totals give the exact identity
+
+```text
+sum_S lambda_S (x(S)-z(S))
+  = alpha_r(x_r-M)-alpha_h(M-x_h) >= 0.              (PXC91a)
+```
+
+Lexicographic Lmax optimality, strict positivity of both top coefficients,
+pair-slack positivity of the ambient load, and the extreme support bound
+`|R|<=n-2` use no PXC88 coordinates.  Nor does the following minimal-lift
+monotonicity.  Retain one complete staged Lmin certificate `C_x` and the rows
+`R` of an extreme top cover, form their lower-envelope game `w_R`, and let
+`v` be any completion whose core is contained in the minimal polytope and
+still contains `z`.  Then
+
+```text
+w_R(Q) <= v(Q),
+w_R(Q)=z(Q)  ==>  v(Q)=z(Q).                         (PXC91b)
+```
+
+Thus a positive singleton minimum cannot be repaired, while a displayed
+`z`-tight closing row cannot be lost.  This is exactly what permits the
+PXC88 orbit census to speak about all completions of each representative.
+It does **not** make a nonnegative packet margin monotone.
+
+The following ingredients are fixed to PXC88 and do not transport: the 65
+comparison-compatible rows and 52 nonsingleton incidence columns; the
+`2<->3` and `5<->6` symmetry group; the three chosen Lmin rows; every
+minimal-lift selector calculation; and the labelled-cover/orbit counts.
+PXC90 keeps the same `x` and those three Lmin rows but changes `z`, and its
+forked five-row support defeats the named four-arm classification.  Hence the
+profile qualification is mathematically load-bearing.
+
+The exact open bridge is the **faithful sparse-lift conjecture**: for every
+singleton-normalized exact game on the ordered saturated single-heavy `s=2`
+arm, after reserve and direct failure, some strictly positive extreme top
+cover `R`, `|R|<=n-2`, has a minimal lift with the original selectors,
+
+```text
+Lmin(w_R)=x,              Lmax(w_R)=z.               (PXC91c)
+```
+
+This is not yet proved.  If it holds, universal PXC79 selection reduces to a
+support-agnostic weighted-cover or spectral-payment theorem on
+selector-faithful sparse packet polytopes, after which `(PXC91b)` transfers
+the tight certificate to every completion.  PXC90 is the compulsory positive
+calibration for `(PXC91c)` and the compulsory negative calibration for every
+named-support strengthening: its forked rows are faithful, but pair, full
+PXC78, PXC87 matching, and direct all fail.  The next attack must therefore
+price arbitrary extreme covers, not append an eighth menu shape.
