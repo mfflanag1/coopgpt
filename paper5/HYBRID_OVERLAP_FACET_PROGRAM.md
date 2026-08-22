@@ -10208,3 +10208,26 @@ every fixed complete Cx. The exact-cone proof exhausts all 3,840 joint
 stratum cells, with no unknowns, in both a raw PXC92b Farkas encoding and an
 independently normalized incidence encoding. Hence the unrestricted minimum
 failure dimension is exactly six.
+
+PXC101--PXC102 now show that this failure persists in a positive-dimensional
+rational chamber for every `n>=6`, without null-player padding. With
+`k=n-4` outsiders, the integer member has total `k+15`, rows
+`rha,rhb>=11`, `rj>=6`, `rhO>=k+9`, and Lmax
+`(4,4,3,3,2,1^(k-1))`; both covers replace the last block by its uniform
+average. PXC103 characterizes exactly the shared-direction forced-zero
+mechanism through the union of cover-eligible rows. PXC104 now proves that
+this explanation is not universal: a total-23 exact six-player game has three
+failing covers with zero common kernel. Its two positive-ambient covers leave
+different descents and cross-block one another through `rhaj` and `rhak`.
+Thus the six-player classification must include both forced-zero blockers and
+cross-cover blocker cycles. PXC105 strengthens the latter from one point to
+the rational chamber `4<A<11/2`, with constant complete-Cx and cover
+incidence and explicit affine full/reduced selectors.  The former remaining
+family question was a genuine all-dimension cross-cover lift, not positive
+dimension at six players. PXC106 answers it: replacing the two low
+outsiders by nonempty blocks `J,K` preserves the cover triangle and two-cycle,
+and `p=1,q=n-5,A=4+1/(n-3)` gives a non-null member for every `n>=6`.
+PXC107 now gives the exhaustive obstruction dichotomy: common forced-zero or
+a directed cycle in the cover-dependency graph. The apparent cover-local
+third branch is impossible, because nonnegativity on the cover union and the
+positive cover identities force the direction to be common.

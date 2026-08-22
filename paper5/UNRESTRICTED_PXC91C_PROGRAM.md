@@ -137,3 +137,65 @@ controls. PXC98 retains primary and independent selector/cover
 implementations. The remaining research opportunity is a short human proof
 of the three-outsider common-polar implication, not a missing correctness
 condition for the computer-assisted threshold theorem.
+
+## 2026-08-22 structural continuation: PXC101--PXC103
+
+PXC98 is now embedded in a positive-dimensional rational family for every
+`n>=6`; see `paper5/FORCED_ZERO_BLOCKER_PROGRAM.md`. The construction grows a
+genuine outsider block rather than adjoining null players. Its proper x-tight
+pool remains the unique complete pair `{rha,rhb}`, its z-tight menu remains the
+five incidence types `{rh,rha,rhb,rj,rhO}`, and outsider balance forces `rj`
+to coefficient zero in every top cover. Both extreme covers equalize the
+outsider block and therefore fail Lmax.
+
+PXC103 gives the exact iff criterion for a direction shared by every failing
+cover: after respecting common Cx and zero-coordinate normals, the direction
+must vanish on the union of all cover-eligible rows. Full-game Lmax then
+supplies a blocker outside that union.
+
+## 2026-08-22 second mechanism: PXC104
+
+The universal extension is false. PXC104 gives a total-23 exact
+singleton-normalized game with selectors
+`x=((41/6)^2,(7/3)^4)` and `z=(6,6,5,4,1,1)`, unique complete
+`Cx={rha,rhb}`, and three extreme covers `{rh}`, `{rhb,rhj,rhak}`, and
+`{rhb,rhaj,rhk}`. Every lift fails. The first positive cover leaves the
+`a -> k` descent, blocked by `rhaj` in the second cover; the second leaves the
+`a -> j` descent, blocked by `rhak` in the first. Their support union has full
+outsider rank, so there is no common forbidden direction and no load-bearing
+row forced zero in every cover. The revised classification problem is a
+dichotomy problem: common forced-zero blockers versus directed cycles of
+cross-cover blockers.
+
+## 2026-08-22 parametric cross-cover family: PXC105
+
+PXC104 is the `A=5` member of a rational open chamber `4<A<11/2`.  At total
+`18+A`, retain bounds `rha,rhb>=16`, `rhj,rhk>=13`, and
+`rhaj,rhak>=13+A`.  The selectors are
+`x=(((46-A)/6)^2,((A+2)/3)^4)` and `z=(6,6,A,4,1,1)`.  The unique complete
+Cx, six-row z-tight menu, and three-cover triangle stay constant.  Every
+cover still fails, with the same two-cycle and zero common kernel.  Exact
+endpoint interpolation certificates plus five interior rational audits are
+replayed by two separately formulated verifiers.  This proves positive
+dimension for the second mechanism; PXC106 below supplies its all-`n` lift.
+
+## 2026-08-22 all-dimension cross-cover lift: PXC106
+
+The low outsiders may be replaced by nonempty blocks `J,K`.  The two
+positive covers partition all non-top players as `{b}|J|({a} union K)` and
+`{b}|({a} union J)|K`.  The full game pins both block sums, whereas deleting
+one cross row moves the lost `a` mass uniformly into the opposite block.
+The specialization `p=1,q=n-5,A=4+1/(n-3)` satisfies the strict chamber for
+every `n>=6`; every added player has payoff one and lies in a load-bearing
+row.  Thus both the forced-zero mechanism and the cross-cover mechanism now
+have positive-dimensional and genuine all-dimension realizations.
+
+## 2026-08-22 exact obstruction dichotomy: PXC107
+
+For every qualifying extreme cover, form its full staged descent cone. All
+cover lifts fail exactly when every such cone is nonempty. PXC107 then gives
+an exhaustive dichotomy: a shared direction (PXC103), or a directed
+cross-cover blocker cycle. A direction nonnegative on the entire cover union
+would vanish on every positive cover by its dual identity and would therefore
+be shared; the apparent third branch is impossible. PXC98 and PXC104 realize
+the two cases.

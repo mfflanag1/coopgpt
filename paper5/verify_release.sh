@@ -402,6 +402,42 @@ run_python coopgames/verifiers/divergence/verify_k4_edge_rooted_facet_z3.py \
   --output "$scratch_dir/k4-edge-rooted-facet-z3.json"
 cmp coopgames/verifiers/divergence/k4_edge_rooted_facet_z3.json \
   "$scratch_dir/k4-edge-rooted-facet-z3.json"
+run_python coopgames/verifiers/divergence/verify_pxc101_forced_zero_family.py \
+  --output "$scratch_dir/pxc101-forced-zero-family.json"
+cmp coopgames/verifiers/divergence/pxc101_forced_zero_family.json \
+  "$scratch_dir/pxc101-forced-zero-family.json"
+run_python coopgames/verifiers/divergence/verify_pxc101_forced_zero_family_independent.py \
+  --output "$scratch_dir/pxc101-forced-zero-family-independent.json"
+cmp coopgames/verifiers/divergence/pxc101_forced_zero_family_independent.json \
+  "$scratch_dir/pxc101-forced-zero-family-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc104_cover_dependent_counterexample.py \
+  --output "$scratch_dir/pxc104-cover-dependent-counterexample.json"
+cmp coopgames/verifiers/divergence/pxc104_cover_dependent_counterexample.json \
+  "$scratch_dir/pxc104-cover-dependent-counterexample.json"
+run_python coopgames/verifiers/divergence/verify_pxc104_cover_dependent_counterexample_independent.py \
+  --output "$scratch_dir/pxc104-cover-dependent-counterexample-independent.json"
+cmp coopgames/verifiers/divergence/pxc104_cover_dependent_counterexample_independent.json \
+  "$scratch_dir/pxc104-cover-dependent-counterexample-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc105_cross_cover_family.py \
+  --output "$scratch_dir/pxc105-cross-cover-family.json"
+cmp coopgames/verifiers/divergence/pxc105_cross_cover_family.json \
+  "$scratch_dir/pxc105-cross-cover-family.json"
+run_python coopgames/verifiers/divergence/verify_pxc105_cross_cover_family_independent.py \
+  --output "$scratch_dir/pxc105-cross-cover-family-independent.json"
+cmp coopgames/verifiers/divergence/pxc105_cross_cover_family_independent.json \
+  "$scratch_dir/pxc105-cross-cover-family-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc106_cross_cover_dimension_lift.py \
+  --output "$scratch_dir/pxc106-cross-cover-dimension-lift.json"
+cmp coopgames/verifiers/divergence/pxc106_cross_cover_dimension_lift.json \
+  "$scratch_dir/pxc106-cross-cover-dimension-lift.json"
+run_python coopgames/verifiers/divergence/verify_pxc106_cross_cover_dimension_lift_independent.py \
+  --output "$scratch_dir/pxc106-cross-cover-dimension-lift-independent.json"
+cmp coopgames/verifiers/divergence/pxc106_cross_cover_dimension_lift_independent.json \
+  "$scratch_dir/pxc106-cross-cover-dimension-lift-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc107_obstruction_alternative.py \
+  --output "$scratch_dir/pxc107-obstruction-alternative.json"
+cmp coopgames/verifiers/divergence/pxc107_obstruction_alternative.json \
+  "$scratch_dir/pxc107-obstruction-alternative.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
