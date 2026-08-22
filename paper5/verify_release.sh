@@ -277,6 +277,30 @@ run_python coopgames/verifiers/divergence/verify_faithful_sparse_lift_resolution
   --output "$scratch_dir/faithful-sparse-lift-resolution.json"
 cmp coopgames/verifiers/divergence/faithful_sparse_lift_resolution.json \
   "$scratch_dir/faithful-sparse-lift-resolution.json"
+run_python coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_exact_search.py \
+  --output "$scratch_dir/unrestricted-pxc91c-exact-search.json"
+cmp coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_exact_search.json \
+  "$scratch_dir/unrestricted-pxc91c-exact-search.json"
+run_python coopgames/verifiers/divergence/verify_unrestricted_pxc91c_pxc98_independent.py \
+  --output "$scratch_dir/unrestricted-pxc91c-pxc98-independent.json"
+cmp coopgames/verifiers/divergence/unrestricted_pxc91c_pxc98_independent.json \
+  "$scratch_dir/unrestricted-pxc91c-pxc98-independent.json"
+run_python coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_n5_archive.py \
+  --output "$scratch_dir/unrestricted-pxc91c-n5-archive.json"
+cmp coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_n5_archive.json \
+  "$scratch_dir/unrestricted-pxc91c-n5-archive.json"
+run_python coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells.py \
+  --workers 4 --cell-timeout-ms 120000 \
+  --output "$scratch_dir/unrestricted-pxc91c-n5-all-cells.json"
+cmp coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells.json \
+  "$scratch_dir/unrestricted-pxc91c-n5-all-cells.json"
+run_python coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells.py \
+  --workers 4 --cell-timeout-ms 120000 \
+  --cell-driver coopgames/verifiers/divergence/search_archive/verify_unrestricted_pxc91c_n5_cell_ni.py \
+  --encoding-label independent-NI \
+  --output "$scratch_dir/unrestricted-pxc91c-n5-all-cells-ni.json"
+cmp coopgames/verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells_ni.json \
+  "$scratch_dir/unrestricted-pxc91c-n5-all-cells-ni.json"
 run_python coopgames/verifiers/divergence/search_archive/faithful_sparse_lift_n6_search_v2.py \
   --total-max 11 --random-rounds 1000 --seed 20260821 \
   --output "$scratch_dir/faithful-sparse-lift-n6-run-v2.json"

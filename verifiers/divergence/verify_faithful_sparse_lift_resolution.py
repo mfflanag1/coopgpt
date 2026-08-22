@@ -176,8 +176,9 @@ def main() -> None:
         "scope": (
             "dependency audit of exact component artifacts; PXC96 is confined "
             "to the ordered saturated single-heavy s=2, k>=2, "
-            "reserve/direct-failing domain; unrestricted PXC91c is false by "
-            "PXC88, while its global minimum failure dimension remains open"
+            "reserve/direct-failing domain; PXC98 separately proves unrestricted "
+            "PXC91c false at n=6, and PXC100 proves the canonical pair cover "
+            "faithful at n=5, making six the global minimum failure dimension"
         ),
     }
     rendered = json.dumps(payload, indent=2) + "\n"

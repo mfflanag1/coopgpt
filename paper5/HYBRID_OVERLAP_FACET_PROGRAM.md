@@ -10186,3 +10186,25 @@ grid through total 11 plus 1,000 seeded multigenerator games) has 592
 divergent games, 104 `g=3,k=2` roots, four strict single-heavy roots, and zero
 reserve failures.  This is bounded falsification evidence, not dimension-six
 minimality.
+
+### Unrestricted PXC91c now fails at six
+
+The restricted PXC96 threshold must not be confused with the unrestricted
+fixed-certificate statement. PXC98 gives an exact singleton-normalized
+six-player failure on total 17 with defining rows
+
+```text
+rha>=11, rhb>=11, rj>=6, rhjk>=11.
+```
+
+Its selectors are `x=(9/2,9/2,2,2,2,2)` and `z=(4,4,3,3,2,1)`. The only
+complete `Cx` is `{rha,rhb}`. The full normalized-cover equations on the
+z-tight menu `{rh,rha,rhb,rj,rhjk}` force the `rj` coefficient to zero and
+leave exactly two extreme covers: `{rh}` and `{rha,rhb,rhjk}`. Both minimal
+lifts have Lmax `(4,4,3,3,3/2,3/2)`. Hence both the universal fixed-Cx and
+weaker existential-Cx formulations fail at n=6. PXC100 closes the remaining
+five-player pair-tight residual: the canonical pair cover is faithful for
+every fixed complete Cx. The exact-cone proof exhausts all 3,840 joint
+stratum cells, with no unknowns, in both a raw PXC92b Farkas encoding and an
+independently normalized incidence encoding. Hence the unrestricted minimum
+failure dimension is exactly six.

@@ -27,7 +27,7 @@
 \title{Maximal divergence of the leximin and leximax\\
 core selections in exact games}
 \author{Maxwell Flanagan}
-\date{August 10, 2026}
+\date{August 21, 2026}
 
 \begin{document}
 \maketitle
@@ -59,6 +59,13 @@ two exact pipelines exhaust all configurations and use independently
 formulated Lmin-optimality components; they prove the sharp value and the
 $1/3$ bound
 in the leximin $(4,1)$ regime.
+For a separate sparse-lift question, we prove a sharp dimension threshold:
+every five-player exact game with distinct selectors and a two-player Lmax
+top has a faithful tight-pair lift for every fixed complete staged Lmin certificate, whereas an
+exact six-player game defeats every such certificate and every qualifying
+extreme top cover.  The positive half is a $3840$-cell exact-cone theorem
+replayed through two algebraically separate certificate encodings; the
+negative half has an exact primary replay and a standalone rational replay.
 At six players, singleton exactness and lexicographic optimality map a strict
 counterexample into one of fifteen sign-labelled blocker systems.  Exact
 proof objects certify all fifteen infeasible; the largest systems reduce to
@@ -1479,15 +1486,17 @@ $B_1\prec\cdots\prec B_k$ in increasing order of payoff.  Then
 $\phi=\Lmin(v)$ if and only if for every stage $t$ and every $i\in B_t$
 there exist multipliers $y_A\ge0$ supported on proper $\phi$-tight
 coalitions, $\eta\in\mathbb R$, $\rho_l\in\mathbb R$ for
-$l\in B_1\cup\cdots\cup B_{t-1}$ and $\sigma_c\ge0$ for $c\in B_t$ with,
-for every player $j$,
+$l\in B_1\cup\cdots\cup B_{t-1}$, $\sigma_c\ge0$ for $c\in B_t$, and
+$\gamma_j\ge0$ supported on the active coordinates $\phi_j=0$, with, for
+every player $j$,
 \[
  -\sum_{A\ni j}y_A+\eta+[\,j\in B_{<t}\,]\rho_j-[\,j\in B_t\,]\sigma_j
+ -[\,\phi_j=0\,]\gamma_j
  \ =\ [\,j=i\,].
 \]
 The mirror statement characterizes $\Lmax$, with the level sets taken in
-decreasing order, $\sigma$ entering with a plus sign, and right-hand side
-$-[\,j=i\,]$.
+decreasing order, $\sigma$ entering with a plus sign, the same negative
+active-coordinate term, and right-hand side $-[\,j=i\,]$.
 \end{lemma}
 
 \begin{proof}[Proof sketch]
@@ -1499,7 +1508,8 @@ $\max\{x_i:x\in\core(v),\ x_l=\phi_l\ (l\in B_{<t}),\ x_c\ge\mu_t\
 (c\in B_{\ge t})\}=\phi_i$ for $i\in B_t$.  Each is a linear program whose
 feasible set contains $\phi$; the constraints active at $\phi$ are
 efficiency, the $\phi$-tight coalitions, the pinned equalities, and the
-level bounds on $B_t$ itself.  Dualizing over the tangent cone at $\phi$
+level bounds on $B_t$ itself, together with $x_j\ge0$ whenever
+$\phi_j=0$.  Dualizing over the tangent cone at $\phi$
 and computing the polar cone gives exactly the displayed identity;
 complementary slackness confines the support of $y$ to tight coalitions
 and eliminates the bilinear terms $y_Av(A)$, which is what makes the
@@ -7104,6 +7114,246 @@ in that restricted domain.  Its unique
 positive extreme cover omits exactly the two indispensable later-stage rows
 $0126,0136$; (PXC92c) is the corrected lift theorem, with at most
 $n(n-2)$ additional rows in general and exactly those two rows in PXC88.
+
+For the remaining global minimum-dimension question, the quantifiers are
+fixed as follows.  An unrestricted instance is a tuple
+$(v,x,z,{\cal C}_x)$ on $4\le n\le6$ players such that $v$ is exact and
+singleton-normalized, $x=\Lmin(v)\ne z=\Lmax(v)$,
+$\operatorname{Top}(z)=\{r,h\}$, and ${\cal C}_x$ is any fixed collection of
+original $x$-tight nonempty proper-coalition rows whose retained polytope
+(with efficiency and nonnegativity) has Lmin equal to $x$.  Collections are
+identified when they define the same retained polytope, so repetitions and
+rows already supplied by efficiency or nonnegativity do not create distinct
+certificates.  Thus the strong question is
+universal over every such fixed ${\cal C}_x$; the weaker question permits
+choosing ${\cal C}_x$ after $(v,x,z)$ is known.  A qualifying top cover means
+an extreme normalized identity
+\[
+ \sum_{S\in\mathcal R}\lambda_S\one_S
+ =\eta\one_N+\alpha_r e_r+\alpha_h e_h,
+ \qquad \lambda_S,\alpha_r,\alpha_h>0,
+ \quad \eta\ge0,\quad \alpha_r+\alpha_h=1,
+                                                        \tag{PXC97a}
+\]
+using original $z$-tight proper-coalition rows and
+$|\mathcal R|\le n-2$.  Ambient positivity is not assumed: when the top pair
+is tight, $\mathcal R=\{rh\}$ is the canonical $\eta=0$ cover.  The strong
+unrestricted assertion in dimension $n$ is
+\[
+ \forall(v,x,z,{\cal C}_x)\ \exists\mathcal R:\qquad
+ \Lmin(w_{\mathcal R})=x,
+ \quad \Lmax(w_{\mathcal R})=z.                    \tag{PXC97b}
+\]
+No orderedness, saturation, gain/loss pattern, reserve or direct condition,
+named support shape, or later-stratum tie pattern is part of (PXC97b).
+The global minimum failure dimension is the least $n$ for which (PXC97b)
+fails; PXC88 previously proved only that it is at most seven.
+
+Three unrestricted reductions are immediate.  First, there are no instances
+of (PXC97b) for $n\le4$, because the small-game coincidence theorem gives
+$\Lmin=\Lmax$.  Second, suppose a qualifying cover has $\eta>0$ and its
+non-top incidence matrix $A_{\mathcal R}$ has full row rank $n-2$.  At any
+point with ceiling at most $M$, equality in the cover bound pins both top
+coordinates to $M$ and every positive-weight cover row to equality.  Hence
+$A_{\mathcal R}^{\mathsf T}(y_{N\setminus\{r,h\}}-
+z_{N\setminus\{r,h\}})=0$, so full row rank pins $y=z$.  Such a cover is
+faithful through every later stratum, independently of all role geometry.
+Third, if $\eta=0$, positivity and the outsider load equations force every
+support row to avoid all non-top players.  Singleton normalization excludes
+the top singletons from the $z$-tight menu, leaving only the tight pair
+$\{r,h\}$, with weight $1/2$.  Thus
+\[
+ \boxed{\ \operatorname{rank}A_{\mathcal R}=n-2
+         \Longrightarrow \mathcal R\text{ is faithful};\qquad
+         \exists\text{ a qualifying }\eta=0\text{ cover}
+         \Longleftrightarrow z(rh)=2M.\ }             \tag{PXC97c}
+\]
+At five players Theorem~\ref{thm:n5closed} gives $M=\nu$, and an attaining
+coalition lies inside the Lmax top stratum by
+Lemma~\ref{lem:anchors}(a).  With exactly two top players it must be
+$\{r,h\}$; consequently every five-player instance of (PXC97b) is in the
+pair-tight, $\eta=0$ cell.  The five-player statement is therefore precisely
+whether the common-tight rows of every fixed ${\cal C}_x$, together with the
+top pair and active nonnegativity, supply all PXC92b polars on the remaining
+three coordinates.
+
+The analogous six-player question is already false, however, and it fails in
+both the pair-tight and positive-ambient cells at once.  On players
+$(r,h,a,b,j,k)=(0,1,2,3,4,5)$ let $P$ be the nonnegative total-$17$
+polytope
+\[
+ y(rha)\ge11,\qquad y(rhb)\ge11,\qquad
+ y(rj)\ge6,\qquad y(rhjk)\ge11,                 \tag{PXC98a}
+\]
+and define $v(S)=\min_{y\in P}y(S)$.  The polytope is nonempty and compact,
+every minimum is attained at a point of $P\subseteq\core(v)$, and hence $v$
+is exact.  The points $(0,11,0,0,6,0)$ and $(17,0,0,0,0,0)$ give a zero
+witness for $r$ and for each other player respectively, so $v$ is
+singleton-normalized.  Exact staged optimization gives
+\[
+ x=\Lmin(v)=(9/2,9/2,2,2,2,2),\qquad
+ z=\Lmax(v)=(4,4,3,3,2,1).                     \tag{PXC98b}
+\]
+Indeed the complements of the first two rows in (PXC98a) have sums at most
+$6$, so the Lmin floor is at most $2$; equality pins $a,b,j,k$ at $2$ and
+then equalizes $r,h$ at $9/2$.  For Lmax, $v(rh)=8$ forces the first ceiling
+to be at least $4$.  At equality $r=h=4$; the first two rows force
+$a,b\ge3$, efficiency pins $a=b=3$ and $j+k=3$, and the last two rows then
+give $j=2,k=1$ by the later ceiling stages.
+
+The complete proper $x$-tight menu is exactly
+$\{rha,rhb\}$, and neither the empty row-set nor either one-row subset has
+Lmin equal to $x$.  Thus
+$\mathcal C_x=\{rha,rhb\}$ is the unique complete certificate even under the
+weaker existential-$\mathcal C_x$ reading.  The complete proper $z$-tight
+menu is
+\[
+ \{rh,rha,rhb,rj,rhjk\}.
+\]
+Writing its cover weights as $(A,B,C,D,E)$ in that order, the four outsider
+load equations and normalization reduce to
+\[
+ B=C=E=\eta,\qquad D=0,\qquad 2A+4\eta=1.       \tag{PXC98c}
+\]
+Consequently the normalized cover polytope is a segment and has exactly two
+positive extreme supports of size at most four:
+\[
+ \{rh\}:\ (A,\eta)=(1/2,0),\qquad
+ \{rha,rhb,rhjk\}:\ (B,C,E,\eta)=(1/4,1/4,1/4,1/4),
+\]
+both with $(\alpha_r,\alpha_h)=(1/2,1/2)$.  The later blocker $rj$ has
+coefficient zero in every normalized cover.  Retaining either extreme cover
+with the unique $\mathcal C_x$ preserves Lmin and singleton normalization but
+changes the upper selector to
+\[
+ \Lmax(w_{\mathcal R})=(4,4,3,3,3/2,3/2)\ne z,
+ \qquad
+ d=(0,0,0,0,-1/2,1/2).                         \tag{PXC98d}
+\]
+The direction $d$ fixes every earlier $z$-stratum and is invisible to all
+retained rows, while $d(rj)=-1/2$.  Thus (PXC98) refutes both the strong
+fixed-$\mathcal C_x$ and weak existential-$\mathcal C_x$ versions of
+(PXC97b) at $n=6$.  A standalone verifier exhausts all four $x$-tight
+subsets and every positive extreme top-cover support through size four, and
+an independent verifier imports no project LP, selector, cover, or game
+implementation.  Their reproduction commands are
+\begin{verbatim}
+cd verifiers/divergence/search_archive
+python3 unrestricted_pxc91c_exact_search.py \
+  --output unrestricted_pxc91c_exact_search.json
+cd ..
+python3 verify_unrestricted_pxc91c_pxc98_independent.py \
+  --output unrestricted_pxc91c_pxc98_independent.json
+\end{verbatim}
+Therefore the unrestricted minimum failure dimension is at most six.  Since
+$n\le4$ is impossible, the five-player pair-tight residual problem is the
+only remaining lower-dimensional case.
+As finite evidence on that last cell, an exact audit of the existing
+five-player bank finds $165$ distinct exact games, of which $36$ have a
+two-player Lmax top stratum.  It exhausts every $x$-tight row subset and all
+$37$ complete certificates and $146$ qualifying extreme covers across those
+games, with no strong or weak $\mathcal C_x$ failure.  This is an exhaustive
+audit of the pinned bank, not of the five-player exact cone.
+
+The remaining five-player statement has a compact exact polar form.  Put
+$U=\{a,b,c\}$, let
+${\cal C}_0=\{C\in\mathcal C_x:x(C)=z(C)\}$, let
+$Z_0=\{u\in U:z_u=0\}$, write
+$q_C=\one_{C\cap U}$, and define
+\[
+ K=\operatorname{cone}\bigl(\{q_C:C\in\mathcal C_0\}
+              \cup\{e_u:u\in Z_0\}\bigr).
+\]
+After the pair row pins $r=h=M$, the PXC92b tangent criterion and Farkas'
+lemma give the following necessary-and-sufficient list, modulo relabelling:
+\[
+\begin{array}{c|c}
+\text{residual strata of }z&\text{fidelity condition}\\ \hline
+\{a,b,c\}&\text{automatic},\\
+\{a\}>\{b,c\}&e_a\in\operatorname{span}\{\one_U\}+K,\\
+\{a,b\}>\{c\}&
+ \exists\theta\in(0,1):\
+ \theta e_a+(1-\theta)e_b\in\operatorname{span}\{\one_U\}+K,\\
+\{a\}>\{b\}>\{c\}&
+ e_a\in\operatorname{span}\{\one_U\}+K,\quad
+ e_b\in\operatorname{span}\{\one_U,e_a\}+K.
+\end{array}                                                   \tag{PXC99}
+\]
+The bank contains one important warning against a simpler argument: an
+$x$-tight row can be slack at $z$.  In that case a smaller common-tight
+subcollection is already complete, but this common-subcertificate property
+need not be assumed in the proof below.
+
+The finite exact-cone route closes the last case.  Normalize $v(N)=1$.
+For each residual order in (PXC99), enumerate every weak order of $x$ and
+introduce a Boolean selector for every nonempty proper coalition row.
+The selected rows are required to be $x$-tight, and the full staged Farkas
+identities require them to certify $x=\Lmin$ in their retained polytope.
+The mirror identities over all original $z$-tight rows require $z=\Lmax$.
+Finally impose one normalized forbidden direction from the applicable line
+of (PXC99), including every active zero-coordinate normal.  Exactness is
+encoded by the complete $280$-inequality rational description of the
+five-player exact cone.  Thus a feasible cell is exactly a failure of the
+canonical pair lift for some fixed complete $\mathcal C_x$, and is a PXC97b
+counterexample candidate whose other extreme covers would still require
+exhaustion; infeasibility of all cells is universal over the fixed certificate.
+
+For a transparent exhaustive indexing, relabel players so that the weak
+order of $x$ is increasing.  Its tie blocks are then one of the $16$
+compositions of five.  Independently choose the two top players of $z$ in
+$\binom52=10$ ways, order the other three in $3!=6$ ways, and choose their
+tie blocks from the four compositions of three.  This gives
+\[
+             16\binom52 3!\,4=3840                         \tag{PXC99a}
+\]
+cells.  (Tied outsider orders create harmless duplicate cells.)  Exact
+QF--LRA returns unsatisfiable in all $3840$, with no unknown or error.
+
+Two algebraically separate encodings give the same census.  The primary
+driver uses the raw PXC92b polar/Farkas identity at every stage, with free
+coefficients on earlier pinned coordinates.  The independent driver instead
+uses normalized nonnegative incidence identities: the designated current
+coefficient is scaled to one, other current coefficients are nonnegative,
+and coefficients on earlier pinned strata remain free.  Both include active
+nonnegativity normals at every zero coordinate, quantify an arbitrary
+Boolean subset of all $30$ proper rows for the fixed $\mathcal C_x$, and test
+every forbidden later-stage tangent.  In a representative strict residual
+cell, separately deleting either singleton normalization or the exact-game
+cone changes UNSAT to SAT with an exact rational model.  Thus the controls
+fail open rather than reporting UNSAT by construction.
+
+The two census artifacts pin both drivers, the exact-cone catalogue, cell
+keys, solver version, and verdict counts.  Consequently, for every five-player unrestricted
+instance (PXC97b) and every fixed complete staged Lmin certificate
+$\mathcal C_x$, the canonical tight-pair cover $\mathcal R=\{rh\}$ preserves
+both selectors.  Hence unrestricted PXC91c holds through five players.
+Together with the fixed- and existential-$\mathcal C_x$ failure in PXC98,
+this gives the sharp threshold
+\[
+ \boxed{\quad n\le5:\ \text{(PXC97b) holds};\qquad
+                n=6:\ \text{both formulations can fail}.\quad} \tag{PXC100}
+\]
+In particular, the global minimum failure dimension is exactly $6$.
+This is a computer-assisted theorem: the reduction to the pair cover and the
+polar criterion are conventional, while the last finite implication uses
+the exact five-player cone and the $3840$ rational cells.  Reproduction is
+\begin{verbatim}
+python3 \
+  verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells.py \
+  --workers 4 \
+  --cell-timeout-ms 120000 \
+  --output \
+  verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells.json
+python3 \
+  verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells.py \
+  --workers 4 \
+  --cell-timeout-ms 120000 \
+  --cell-driver \
+  verifiers/divergence/search_archive/verify_unrestricted_pxc91c_n5_cell_ni.py \
+  --encoding-label independent-NI \
+  --output \
+  verifiers/divergence/search_archive/unrestricted_pxc91c_n5_all_cells_ni.json
+\end{verbatim}
 
 The finite evidence is now definition-correct but remains bounded.  The two
 pinned six-player archives contain $89$ ordered saturated roots, including
