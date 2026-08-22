@@ -109,6 +109,26 @@ def point_digest(endpoint_points):
     return hashlib.sha256(rendered).hexdigest()
 
 
+def endpoint_trace_minimizers(endpoint_points, endpoint_values):
+    """Emit the sixteen load-bearing rh-trace minimizers explicitly."""
+    answer = []
+    for trace in range(16):
+        coalition = 3 | (trace << 2)
+        answer.append({
+            "trace_abjk": format(trace, "04b")[::-1],
+            "coalition_mask": coalition,
+            "A=4": {
+                "value": str(endpoint_values[0][coalition]),
+                "minimizer": list(map(str, endpoint_points[0][coalition])),
+            },
+            "A=11/2": {
+                "value": str(endpoint_values[1][coalition]),
+                "minimizer": list(map(str, endpoint_points[1][coalition])),
+            },
+        })
+    return answer
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -216,6 +236,14 @@ def main():
                 "coalition and every A in [4,11/2]"
             ),
             "endpoint_minimizer_sha256": point_digest(endpoint_points),
+            "explicit_rh_trace_minimizers": endpoint_trace_minimizers(
+                endpoint_points, endpoint_values
+            ),
+        },
+        "non_null_witnesses": {
+            "r,h": "v(N)-v(N\\{r or h})=18+A>0",
+            "a,b": "v(rha)-v(rh)=v(rhb)-v(rh)=4>0",
+            "j,k": "v(rhj)-v(rh)=v(rhk)-v(rh)=1>0",
         },
         "interior_exact_anchors": audits,
         "boundaries": {

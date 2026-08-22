@@ -69,6 +69,20 @@ def expected_value(A, coalition):
     return answer
 
 
+def lower_envelope_with_points(defining):
+    inequalities = independent.base_inequalities(defining)
+    equalities = [([F(1)] * N, independent.TOTAL)]
+    values, points = [], []
+    for coalition in range(1 << N):
+        objective = [F((coalition >> i) & 1) for i in range(N)]
+        optimum, point = independent.lp_active(
+            objective, inequalities, equalities, False
+        )
+        values.append(optimum)
+        points.append(tuple(point))
+    return tuple(values), tuple(points)
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -77,10 +91,24 @@ def main():
     endpoint_checks = []
     for A in (LO, HI):
         _total, defining, _x, _z = configure(A)
-        values = independent.lower_envelope(defining)
+        values, points = lower_envelope_with_points(defining)
         if any(values[s] != expected_value(A, s) for s in range(64)):
             raise AssertionError(("endpoint formula", A))
-        endpoint_checks.append({"A": str(A), "values": list(map(str, values))})
+        trace_minimizers = []
+        for trace in range(16):
+            coalition = 3 | (trace << 2)
+            if csum(points[coalition], coalition) != values[coalition]:
+                raise AssertionError(("endpoint minimizer", A, coalition))
+            trace_minimizers.append({
+                "trace_abjk": format(trace, "04b")[::-1],
+                "coalition": coalition,
+                "value": str(values[coalition]),
+                "point": list(map(str, points[coalition])),
+            })
+        endpoint_checks.append({
+            "A": str(A), "values": list(map(str, values)),
+            "explicit_rh_trace_minimizers": trace_minimizers,
+        })
 
     anchor_checks = []
     for A in ANCHORS:

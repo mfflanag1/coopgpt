@@ -9,6 +9,7 @@ from __future__ import annotations
 import argparse
 import json
 from fractions import Fraction as F
+from itertools import product
 from pathlib import Path
 
 
@@ -17,6 +18,63 @@ def players_mask(players):
     for player in players:
         answer |= 1 << player
     return answer
+
+
+def positive_part(value):
+    return max(F(0), F(value))
+
+
+def trace_value(A, p, q, include_a, include_b, full_J, full_K):
+    candidates = [F(12)]
+    if include_a or include_b:
+        candidates.append(F(16))
+    if full_J:
+        candidates.append(F(12 + p))
+    if include_a and full_J:
+        candidates.append(F(12 + p) + A)
+    if full_K:
+        candidates.append(F(12 + q))
+    if include_a and full_K:
+        candidates.append(F(12 + q) + A)
+    return max(candidates)
+
+
+def explicit_trace_minimizer(n, p, q, A, J, K, selected):
+    """Construct the promised lower-envelope minimizer for rh union U.
+
+    Selected members of a non-full block receive zero; the required aggregate
+    block mass is concentrated on one omitted member.  All remaining efficient
+    mass is then placed on any omitted non-top coordinate.
+    """
+    full_J = all(i in selected for i in J)
+    full_K = all(i in selected for i in K)
+    include_a, include_b = 2 in selected, 3 in selected
+    level = trace_value(A, p, q, include_a, include_b, full_J, full_K)
+    point = [F(0)] * n
+    point[0] = level
+    if not include_a:
+        point[2] = A
+    if not include_b:
+        point[3] = positive_part(16 - level)
+    if not full_J:
+        omitted = next(i for i in J if i not in selected)
+        point[omitted] = max(
+            F(0), F(12 + p) - level,
+            F(12 + p) + A - level - point[2],
+        )
+    if not full_K:
+        omitted = next(i for i in K if i not in selected)
+        point[omitted] = max(
+            F(0), F(12 + q) - level,
+            F(12 + q) + A - level - point[2],
+        )
+    used = sum(point)
+    total = F(16 + p + q) + A
+    if used > total:
+        raise AssertionError(("attainment mass budget", p, q, A, selected, used, total))
+    omitted = next(i for i in range(2, n) if i not in selected)
+    point[omitted] += total - used
+    return level, tuple(point)
 
 
 def verify_dimension(n):
@@ -119,16 +177,96 @@ def verify_dimension(n):
     }
 
 
+def verify_attainment_recipe(p, q, A):
+    n = p + q + 4
+    J = tuple(range(4, 4 + p))
+    K = tuple(range(4 + p, n))
+    rh = (0, 1)
+    bounds = {
+        players_mask(rh + (2,)): F(16),
+        players_mask(rh + (3,)): F(16),
+        players_mask(rh + J): F(12 + p),
+        players_mask(rh + (2,) + J): F(12 + p) + A,
+        players_mask(rh + K): F(12 + q),
+        players_mask(rh + (2,) + K): F(12 + q) + A,
+    }
+
+    def representatives(block):
+        answer = [()]
+        if len(block) > 1:
+            answer.append((block[0],))
+        answer.append(block)
+        return tuple(answer)
+
+    count = 0
+    for include_a, include_b, part_J, part_K in product(
+        (False, True), (False, True), representatives(J), representatives(K)
+    ):
+        selected = set(part_J) | set(part_K)
+        if include_a:
+            selected.add(2)
+        if include_b:
+            selected.add(3)
+        if len(selected) == n - 2:
+            continue
+        level, point = explicit_trace_minimizer(
+            n, p, q, A, J, K, frozenset(selected)
+        )
+        if sum(point) != F(16 + p + q) + A:
+            raise AssertionError(("attainment total", p, q, A, selected))
+        if any(
+            sum(point[i] for i in range(n) if mask >> i & 1) < bound
+            for mask, bound in bounds.items()
+        ):
+            raise AssertionError(("attainment feasibility", p, q, A, selected, point))
+        objective = point[0] + point[1] + sum(point[i] for i in selected)
+        if objective != level:
+            raise AssertionError(("attainment objective", p, q, A, selected, point))
+        count += 1
+    return count
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
     args = parser.parse_args()
     dimensions = [verify_dimension(n) for n in range(6, 65)]
+    attainment_grid_cases = 0
+    attainment_trace_classes = 0
+    for p in range(1, 9):
+        for q in range(1, 9):
+            m = p + q
+            for A in (F(17, 4), F(9, 2), F(5), F(21, 4), F(11, 2)):
+                if not (
+                    4 < A < 6
+                    and p * (A - 1) > (m + 1) * (A - 4)
+                    and q * (A - 1) > (m + 1) * (A - 4)
+                ):
+                    continue
+                attainment_grid_cases += 1
+                attainment_trace_classes += verify_attainment_recipe(p, q, A)
     payload = {
         "claim": "independent algebraic PXC106 all-n cross-cover audit",
         "dimensions_checked": [6, 64],
         "explicit_specialization": "p=1, q=n-5, A=4+1/(n-3)",
         "checks": dimensions,
+        "explicit_minimizer_recipe": {
+            "description": (
+                "put L on r; put A on omitted a; put (16-L)_+ on "
+                "omitted b; for each non-full block put the maximum row "
+                "deficit on one omitted member; put all unused total mass "
+                "on an omitted coordinate"
+            ),
+            "grid_parameter_cases": attainment_grid_cases,
+            "grid_trace_classes": attainment_trace_classes,
+            "grid_scope": "1<=p,q<=8 at five rational A anchors inside the chamber",
+        },
+        "non_null_witnesses": {
+            "r,h": "v(N)-v(N\\{r or h})=16+A+p+q>0",
+            "a,b": "v(rha)-v(rh)=v(rhb)-v(rh)=4>0",
+            "each i in J": "v(rhJ)-v(rh(J\\{i}))=p>0",
+            "each i in K": "v(rhK)-v(rh(K\\{i}))=q>0",
+        },
         "proof_interfaces": {
             "lmin": (
                 "R-sum(JK)>=16-A-(p+q) gives floor "

@@ -438,6 +438,14 @@ run_python coopgames/verifiers/divergence/verify_pxc107_obstruction_alternative.
   --output "$scratch_dir/pxc107-obstruction-alternative.json"
 cmp coopgames/verifiers/divergence/pxc107_obstruction_alternative.json \
   "$scratch_dir/pxc107-obstruction-alternative.json"
+run_python coopgames/verifiers/divergence/verify_pxc108_invariant_cover_blocker_circuits.py \
+  --output "$scratch_dir/pxc108-invariant-cover-blocker-circuits.json"
+cmp coopgames/verifiers/divergence/pxc108_invariant_cover_blocker_circuits.json \
+  "$scratch_dir/pxc108-invariant-cover-blocker-circuits.json"
+run_python coopgames/verifiers/divergence/verify_pxc108_invariant_cover_blocker_circuits_independent.py \
+  --output "$scratch_dir/pxc108-invariant-cover-blocker-circuits-independent.json"
+cmp coopgames/verifiers/divergence/pxc108_invariant_cover_blocker_circuits_independent.json \
+  "$scratch_dir/pxc108-invariant-cover-blocker-circuits-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

@@ -10231,3 +10231,47 @@ PXC107 now gives the exhaustive obstruction dichotomy: common forced-zero or
 a directed cycle in the cover-dependency graph. The apparent cover-local
 third branch is impossible, because nonnegativity on the cover union and the
 positive cover identities force the direction to be common.
+
+### Invariant cover--blocker circuits (PXC108)
+
+The choice-dependent PXC107 graph is now replaced by the invariant relation
+`R -> R'` iff some exact later-stage descent tangent to `Cx union R` is cut
+by a row used positively in `R'`. In the no-common-direction branch every
+vertex has positive outdegree, so a shortest directed cycle exists and is
+chordless. The canonical object is the full invariant graph and its set of
+shortest cycles; a symmetric instance need not select a unique cycle.
+
+For two top players, a positive-ambient extreme cover has independent
+outsider incidence columns. Its support is at most `n-2`, and a failing cover
+has support at most `n-3`; support `n-2` pins the entire non-top equality face
+and is faithful at every later Lmax stage. After adjoining the distinguished
+normalization target (and the ambient column when positive), each extreme
+cover support is a represented oriented-matroid circuit. Edge directions are
+covectors of the contracted coalition-normal arrangement. The resulting
+obstruction is therefore a circuit--covector incidence cycle, not generally
+one larger circuit, a semi-balanced atom, or a facet of the exact-game cone.
+The latter identification still requires the published indecomposability and
+projection tests.
+
+The exact recognizer enumerates covers, tests every later stratum, detects a
+union-common direction, constructs all invariant edges, and returns a
+shortest cycle with rational witnesses. An independently formulated
+solver-free verifier checks PXC101/PXC98 as the common branch, PXC104 as the
+minimal two-cycle, and PXC90 as the full-rank faithful control. PXC105 now
+records all 32 endpoint minimizers explicitly, and PXC106 has a uniform
+attainment recipe plus explicit positive marginal coalitions for every block
+player.
+
+The six-player search remains carefully scoped. In the complete both-top,
+nonempty-trace, no-active-Cx universe, all `8*(2^15-1)` labelled
+stratum/menu cells were enumerated: all 29,420 cyclic universal-failure cells
+contain a two-cycle, while 13,020 acyclic cells collapse to the common branch.
+With arbitrary top decorations and strict positive outsider strata, the
+complete 98-vertex potentially-failing cover graph has 367 asymmetric edges,
+and that asymmetric subgraph is a DAG; hence every cycle in that broader
+incidence universe also contains a two-cycle. A 50,000-union exact-cover-closed
+probe found 10,445 two-cycle controls and no longer pure cycle. These are an
+exact finite theorem for the stated incidence cells and broader discovery
+evidence, respectively—not an all-six-player exact-game classification,
+because active common-Cx inequalities, zero-coordinate normals, other strata,
+and exact realizability have not all been jointly exhausted.
