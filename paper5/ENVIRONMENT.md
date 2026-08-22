@@ -12,9 +12,10 @@ PAPER5_PYTHON=/tmp/coop-paper5-review/bin/python
 ```
 
 Use `"${PAPER5_PYTHON}"` for every Python command in the review packet.  The
-frozen coefficient-two formulas were generated with Z3 4.15.3; formula bytes
-are version-insensitive, but the pinned package reproduces the recorded
-provenance.
+frozen coefficient-two formulas and the PXC100 cell censuses were replayed
+with Z3 5.0.0 (`z3-solver==5.0.0.0`). The coefficient-formula bytes are
+version-insensitive, while the pinned package also reproduces the solver-version
+provenance recorded in both 3,840-cell artifacts.
 
 The proof-object lane additionally requires:
 
