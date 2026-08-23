@@ -95,3 +95,14 @@ hypotheses for subsequent runs.
   LP decisions; the null result motivated PXC114 but is not theorem evidence.
   The conventional descent-set inclusion proof and independent PXC114 audit
   supersede any attempt to promote this bounded search.
+- `audit_pxc119_spectral_deficit_mechanisms.py` +
+  `pxc119_spectral_deficit_mechanisms.json` -- exact diagnostic connecting two
+  named positive spectral-deficit controls to the PXC114 mechanism taxonomy.
+  It reconstructs the two-generator lower envelopes, exhausts the full
+  z-tight extreme-cover census, and recomputes exact staged descent graphs.
+  The optimized-top control has one faithful full-rank cover; the
+  actual-top-fixed control has positive post-top demand `1/24` but all twelve
+  covers are faithful.  This refutes a blocker-only price architecture and
+  forces the faithful/common/reciprocal trichotomy recorded in
+  `paper5/MECHANISM_PRICE_PROGRAM.md`.  It is a two-game falsification control,
+  not evidence for the all-dimensional overlap inequality.
