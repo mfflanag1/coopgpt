@@ -218,3 +218,34 @@ Lmin row is z-slack.  The exactifier searched the symmetric two-row-Cx integer
 cell through top payoff nine and found PXC104 after two faithful near-misses.
 These searches explain discovery and minimality within their stated cells;
 they are not a global six-player incidence classification.
+
+## Exact-cone projection result (PXC109--PXC111)
+
+The facet question is now resolved in both directions.
+
+- For every fixed selector/active-menu/cover-graph signature, the realization
+  locus is a relatively open rational polyhedral cone in `(v,x,z)`.  The
+  fixed-`n` failure locus is a finite union of its projections to game-value
+  space.  This is the correct parametric-LP interpretation of PXC108.
+- If `N\T` is partitioned into nonempty blocks `B_i`, then
+  `sum_i 1_(T union B_i) - (m-1)1_T = 1_N` is an indecomposable
+  semi-balanced system.  The exceptional-set proof is dimension-free, so it
+  defines a full exact-cone facet for every block size.
+- The PXC101 positive cover plus the tight top pair is one such facet; the
+  forced-zero blocker lies outside it.  The mechanism is a facet--blocker flag,
+  not a facet characterization.
+- The two PXC104 positive covers, completed with the top pair, are two
+  catalogue-type-33 facets.  Each cross blocker belongs to the opposite facet,
+  so the PXC108 two-cycle is exactly a minimal two-facet dependency cycle.
+  PXC106 promotes this statement to every `n>=6` and every nonempty `J,K`.
+- The unrestricted facet correspondence is false.  In PXC88 the unequal-top
+  cover rows and its two indispensable blockers have augmented incidence rank
+  six on six columns.  They contain no constant dependence and hence no
+  semi-balanced subsystem.  This is the smallest certified unequal-top
+  projection failure in the current record, not a proof of `n=7` minimality.
+
+The exact six-player face computation gives codimension 54 for the generic
+PXC101 anchor and codimension 53 for the PXC105 chamber.  Therefore the
+selector mechanisms live well inside high-codimension exact faces; they are
+not new exact-cone facets merely because their cover supports expose known
+partition-star facets.
