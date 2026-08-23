@@ -8896,7 +8896,7 @@ cover weights in the displayed order as
 \begin{gathered}
  B=\eta,\qquad J=Q,\qquad K=P,\qquad
  C+D=\eta-P-Q,\\
- A+2P+2Q+D=\tfrac12,qquad
+ A+2P+2Q+D=\tfrac12,\qquad
  A,C,D,P,Q\ge0.                                             \tag{PXC118d}
 \end{gathered}
 \end{equation}
@@ -8959,6 +8959,154 @@ and all eight certificate--cover lifts.  The independent audits use
 standalone rational active sets; the PXC115 audit additionally uses exact Z3
 checks for lower bounds and attainment of every mapped coalition.  They
 import no project game, simplex, selector, or cover implementation.
+
+The attempt to price only the two failure mechanisms of (PXC114) has a
+necessary correction.  For a fixed complete certificate there are three,
+not two, mutually exclusive branches: some qualifying extreme cover is
+faithful; every cover fails with a common staged descent; or every cover
+fails and a reciprocal pair exists.  The last two are (PXC114), while the
+first is its complement.  This matters quantitatively.  The
+actual-top-fixed seven-player spectral control has post-top spectral deficit
+(T/24), twelve qualifying extreme covers, and every one is faithful.  Thus
+an overlap price supported only on outside-union or cross-cover blockers is
+identically zero on a branch with positive demand.  Exact reconstruction of
+that game and the optimized-top control, full cover exhaustion, and staged
+tangent replay are recorded in the mechanism-price audit below.  This is a
+falsification of the blocker-only architecture, not a finite proof of the
+overlap bound.
+
+There is already a dimension-free labelled cell, containing the faithful
+actual-top control, on which the missing price has a closed form.  Let
+\[
+ N=\{u,v\}\mathbin{\dot\cup}G\mathbin{\dot\cup}\{c\}
+      \mathbin{\dot\cup}Q,\qquad |G|=g\ge1,\quad |Q|=s-1\ge1,
+ \qquad n=s+g+2\ge6.
+\]
+Suppose the labelled selector profiles are
+\[
+ x=(C,D,B^g,A^s),\qquad
+ z=(m,m,\ell^g,p,q^{s-1}),
+\]
+where the two first coordinates belong to \(u,v\), the next \(g\) to
+\(G\), the next to \(c\), and the last \(s-1\) to \(Q\).  Assume the
+displayed labels really select the coordinatewise minima:
+\[
+ C,D\ge m,\qquad \ell\ge B,\qquad p\ge A\ge q\ge0,
+ \qquad B\ge A,\qquad m\ge\ell,
+\]
+and suppose that, for some \(q_0\in Q\), the two rows
+\(\{u,v,c\}\) and \(\{c,q_0\}\) are tight at both selections.  Their
+equalities are
+\[
+ C+D+A=2m+p,\qquad 2A=p+q.                    \tag{PXC119a}
+\]
+Put
+\[
+ \delta=A-q,\qquad
+ \mathsf D_{s,g}=n+1+\frac{2(s-1)}g.
+\]
+Then
+\begin{equation}
+ \boxed{\quad
+ O-\left(1-\frac{s}{\mathsf D_{s,g}}\right)T
+ =\frac{s}{\mathsf D_{s,g}}
+   \left[2(m-\ell)+(g+2)(B-A)+nq\right]\ge0.
+ \quad}                                                \tag{PXC119b}
+\end{equation}
+Moreover
+\begin{equation}
+ 1-\frac{s}{\mathsf D_{s,g}}
+ \ge \frac{n}{\lfloor n^2/4\rfloor},\qquad n\ge6.     \tag{PXC119c}
+\end{equation}
+Thus the hybrid-overlap inequality holds throughout this labelled
+two-top ladder cell in every dimension.
+
+Here is the conventional proof.  The second equality in (PXC119a) gives
+\(p=A+\delta\).  Subtracting the two efficiency equations after using both
+common rows gives
+\[
+ \ell=B+\frac{s-1}{g}\delta,\qquad
+ O=T-s\delta.
+\]
+The first efficiency equation and \(C+D=2m+\delta\) then give the exact
+price identity
+\[
+ T-\mathsf D_{s,g}\delta
+ =2(m-\ell)+(g+2)(B-A)+nq\ge0,
+\]
+which is (PXC119b).  No overlap term is being renamed as payment: the right
+side consists only of two payoff-stratum gaps and the nonnegative bottom
+level, while (PXC119a) comes from the two explicitly common tight rows.
+
+For completeness, put \(F=\lfloor n^2/4\rfloor\) and
+\(g=n-s-2\).  After clearing the positive denominator,
+(PXC119c) is equivalent to
+\[
+ (F-n)[g(n-1)+2(n-3)]-Fg(n-g-2)\ge0.                 \tag{PXC119d}
+\]
+If \(n=2r\), the left side is
+\[
+ r\{rg^2-(3r-2)g+4r^2-14r+12\}.
+\]
+This convex integer quadratic has its minimum at \(g=1\), where its
+braced value is \(4r^2-16r+14\ge0\) for \(r\ge3\).  If \(n=2r+1\), the
+quadratic has vertex strictly between \(1\) and \(3/2\), so again its
+integer minimum is at \(g=1\), where it is
+\(4r^3-10r^2+4\ge0\) for \(r\ge3\).  This proves (PXC119c).
+
+The actual-top-fixed control has \((s,g)=(3,2)\) and
+\(\mathsf D_{s,g}=10\), so (PXC119b) gives the exact branch floor \(7T/10\),
+strictly above \(7T/12\).  The branch minimizer has \(q=0\), \(B=A\), and
+\(m=\ell\), making every displayed price zero.  Deleting only the order
+\(m\ge\ell\) admits an exact affine fail-open point with overlap \(4T/7\),
+so the top-order price is load-bearing.
+
+The exact audits are:
+\begin{verbatim}
+python3 verifiers/divergence/verify_pxc119_faithful_ladder_price.py \
+  --output verifiers/divergence/pxc119_faithful_ladder_price.json
+python3 \
+  verifiers/divergence/verify_pxc119_faithful_ladder_price_independent.py \
+  --output \
+  verifiers/divergence/pxc119_faithful_ladder_price_independent.json
+(
+  cd verifiers/divergence/search_archive
+  python3 audit_pxc119_spectral_deficit_mechanisms.py \
+    --case optimized_label_free_spectral_failure \
+    --case actual_top_fixed_failure \
+    --output pxc119_spectral_deficit_mechanisms.json
+)
+\end{verbatim}
+The first verifier checks the symbolic slack formula, the parity numerator
+through (n=256), the named faithful control, its equality branch point,
+and the fail-open point.  The second uses a separate formal-row-span
+encoding and independent rational spanning samples.  These computations
+audit the algebra; the displayed elimination and parity argument are the
+dimension-free proof.  The theorem is a whole labelled profile cell, not a
+proof for every faithful cover and not yet a common- or reciprocal-branch
+price theorem.
+
+The controls point to a sharper open architecture.  With \(B_H\) the
+actual-top spectral bound and
+\(D_H=(nT/\lfloor n^2/4\rfloor-B_H)_+\), ask whether
+\[
+ D_H>0\quad\Longrightarrow\quad
+ \text{for the fixed complete }{\cal C}_x,
+ \text{ some qualifying extreme top cover is faithful}.       \tag{PXC120?}
+\]
+If true, its contrapositive makes the incremental common and reciprocal
+prices zero: universal cover failure for that certificate would already
+imply that \(B_H\) meets
+the hybrid target.  This is not a theorem here.  The exact diagnostic finds
+faithful qualifying covers for both fixed labelled controls with positive
+post-top demand: the actual-top-fixed control has demand \(T/24\), while the
+top-and-bottom-fixed control has demand \(T/42\) and a basic cover on rows
+\((6,49,120)\) with weights \(1/2\).  In the opposite direction, the common
+PXC101/PXC116 and reciprocal PXC104/PXC118 controls all have \(D_H=0\), and
+none of the 374 archived six-player pairs has positive \(D_H\).  These are
+finite falsification checks only.  The live task is an exact-cone
+optimization of \(D_H\) under universal cover failure, not another
+incidence catalogue.
 
 The certificate-dependence falsifier, rank-potential audit, and their
 independent replays are:

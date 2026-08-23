@@ -106,3 +106,11 @@ hypotheses for subsequent runs.
   forces the faithful/common/reciprocal trichotomy recorded in
   `paper5/MECHANISM_PRICE_PROGRAM.md`.  It is a two-game falsification control,
   not evidence for the all-dimensional overlap inequality.
+- `audit_pxc120_positive_demand_faithfulness.py` +
+  `pxc120_positive_demand_faithfulness.json` -- targeted exact controls for
+  the open implication `D_H>0 => some qualifying extreme top cover is
+  faithful for the fixed complete Cx`.  Both fixed labelled positive-demand
+  controls have an explicit
+  basic faithful cover; the four canonical common/reciprocal obstructions
+  have zero demand; and no record in the 374-game n=6 archive has positive
+  demand.  This is finite falsification evidence only, not an all-n theorem.

@@ -233,7 +233,60 @@ If a branch lemma is false, the deliverable is its smallest exact rational
 counterexample with independently recomputed selectors, complete `Cx`
 exhaustion, full extreme-cover census, and the exact missing threshold layer.
 
-## 7. Immediate frontier
+## 7. First promoted quantitative cell: PXC119
+
+The actual-top-fixed faithful control generalizes to a dimension-free
+two-top ladder theorem.  For the notation and complete proof see PXC119 in
+the manuscript.  Its exact price identity is
+
+```text
+D=n+1+2(s-1)/g,
+O-(1-s/D)T=(s/D)[2(m-ell)+(g+2)(B-A)+nq]>=0,
+1-s/D >= n/floor(n^2/4)  (n>=6).                     (MP13)
+```
+
+The two affine equalities used to eliminate the selector levels are exactly
+the common tight rows `{u,v,c}` and `{c,q0}`.  The payment on the right is
+made entirely of explicit stratum gaps and the bottom level.  Thus `(MP13)`
+is non-tautological and dimension-free.  It proves the target on the whole
+labelled profile cell, not on the whole faithful branch.
+
+The affine fail-open point obtained by deleting `m>=ell` has overlap `4/7`,
+below the seven-player target.  This pins the load-bearing order price and
+prevents the common-row equalities alone from being overpromoted.
+
+## 8. Stronger architectural conjecture: positive demand forces fidelity
+
+The exact controls now suggest a sharper disjunction than separate positive
+prices for all three branches:
+
+```text
+D_H>0  ==>  for the fixed complete Cx, some qualifying
+            extreme top cover is faithful.                   (MP14?)
+```
+
+Equivalently, universal cover failure for that `Cx` would force
+`B_H>=c_n T`, making the
+required common and reciprocal incremental prices identically zero.  This is
+strictly stronger than assigning a positive blocker charge and would reduce
+the global theorem to the faithful branch.
+
+The evidence is targeted but finite.  The two fixed labelled controls with
+positive `D_H` have faithful qualifying extreme covers: the actual-top-fixed
+control has demand `1/24` and the tight top-pair cover; the top-and-bottom-
+fixed control has demand `1/42` and the extreme cover on rows
+`(6,49,120)` with weights `(1/2,1/2,1/2)`.  Conversely, PXC101 and PXC116
+(common direction) and PXC104 and PXC118 (reciprocal pair) all have zero
+post-top demand.  The 374-game n=6 archive contains no positive-`D_H` record.
+These facts are pinned by `audit_pxc120_positive_demand_faithfulness.py`.
+They do **not** prove `(MP14?)`.
+
+The two-sided next attack is therefore to optimize `D_H` over the exact
+selector cone with universal cover failure.  A positive optimum yields the
+first genuinely priced common/reciprocal control; an infeasibility proof or
+symbolic dual establishes the zero-demand obstruction theorem.
+
+## 9. Immediate frontier
 
 The immediate theorem target is now the faithful branch, not another blocker
 census:
@@ -244,7 +297,7 @@ census:
 > subset of the joint staged-polar transports carried by `Cx union R` has
 > threshold value at least `D_H`.
 
-If this fails, the counterexample will determine which additional exactness
-witness or facet row is indispensable.  Once branch F is settled, the same
-currency interface can be used for the common and reciprocal branches rather
-than attempting incompatible blocker-specific scalar formulas.
+If `(MP14?)` is proved, this faithful lemma is the only remaining quantitative
+branch.  If `(MP14?)` fails, its smallest exact counterexample determines
+which additional exactness witness or blocker facet must carry a genuinely
+positive common/reciprocal price.

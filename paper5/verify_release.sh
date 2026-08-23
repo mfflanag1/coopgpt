@@ -12,6 +12,9 @@ run_python() {
   "$python_bin" "$@"
 }
 
+run_python coopgames/verifiers/divergence/verify_tex_source_sanity.py \
+  coopgames/paper5/divergence.tex
+
 run_python coopgames/verifiers/s6/audit_lex_improvement_predicate.py \
   --output "$scratch_dir/lex.json"
 cmp coopgames/verifiers/s6/lex_improvement_predicate_audit.json \
@@ -494,6 +497,29 @@ run_python coopgames/verifiers/divergence/verify_pxc118_second_reciprocal_primit
   --output "$scratch_dir/pxc118-second-reciprocal-primitive-independent.json"
 cmp coopgames/verifiers/divergence/pxc118_second_reciprocal_primitive_independent.json \
   "$scratch_dir/pxc118-second-reciprocal-primitive-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc119_faithful_ladder_price.py \
+  --output "$scratch_dir/pxc119-faithful-ladder-price.json"
+cmp coopgames/verifiers/divergence/pxc119_faithful_ladder_price.json \
+  "$scratch_dir/pxc119-faithful-ladder-price.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc119_faithful_ladder_price_independent.py \
+  --output "$scratch_dir/pxc119-faithful-ladder-price-independent.json"
+cmp coopgames/verifiers/divergence/pxc119_faithful_ladder_price_independent.json \
+  "$scratch_dir/pxc119-faithful-ladder-price-independent.json"
+run_python \
+  coopgames/verifiers/divergence/search_archive/audit_pxc119_spectral_deficit_mechanisms.py \
+  --case optimized_label_free_spectral_failure \
+  --case actual_top_fixed_failure \
+  --output "$scratch_dir/pxc119-spectral-deficit-mechanisms.json"
+cmp \
+  coopgames/verifiers/divergence/search_archive/pxc119_spectral_deficit_mechanisms.json \
+  "$scratch_dir/pxc119-spectral-deficit-mechanisms.json"
+run_python \
+  coopgames/verifiers/divergence/search_archive/audit_pxc120_positive_demand_faithfulness.py \
+  --output "$scratch_dir/pxc120-positive-demand-faithfulness.json"
+cmp \
+  coopgames/verifiers/divergence/search_archive/pxc120_positive_demand_faithfulness.json \
+  "$scratch_dir/pxc120-positive-demand-faithfulness.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
