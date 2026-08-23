@@ -76,3 +76,22 @@ hypotheses for subsequent runs.
 - search_pxc108_both_top_complete.py + pxc108_both_top_complete.json -- complete incidence classification for the both-top four-outsider model: all 32,767 nonempty trace menus in each of eight residual stratum shapes, all 41 positive extreme covers, and every invariant cover--blocker edge. The 42,440 universal-failure cells split into 13,020 common-direction cells and 29,420 cells with a two-cycle; no longer shortest cycle occurs. This omits active common-Cx and zero-coordinate normals and is therefore a scoped incidence theorem, not a global six-player classification. Reproduce with /Users/maxf/miniforge3/bin/python3 verifiers/divergence/search_archive/search_pxc108_both_top_complete.py --output verifiers/divergence/search_archive/pxc108_both_top_complete.json.
 - search_pxc108_general_n6_cycles.py + pxc108_general_n6_cycles.json -- broader mixed-top-decoration discovery audit over all 766 nonsingleton extreme covers at one strict positive residual profile. Among the 98 potentially failing covers the exact invariant graph has 7,879 edges, including 3,756 reciprocal pairs, and its 367 asymmetric edges form a DAG. A 50,000-menu seeded union search finds no pure longer cycle. Active common-Cx rows can delete graph edges, so this is discovery evidence only and is intentionally not release-gated.
 - `unrestricted_pxc91c_random_envelopes.py` and `unrestricted_pxc91c_n6_minor_probe.py` -- seeded falsification and coordinate-minor discovery drivers. Their outputs are not theorem evidence; interrupted or bounded runs must retain their explicit scope.
+- search_pxc112_cx_dependence.py + pxc112_cx_dependence.json -- augmentation
+  discovery search around PXC98.  A floating tangent prefilter followed by
+  exact replay checks 31 retained candidate common-tight
+  additions and finds five singleton-normalized games with multiple complete
+  Cx families and certificate-dependent fidelity.  The promoted smallest
+  witness is independently and exhaustively replayed by the adjacent PXC112
+  primary/independent verifiers.
+- search_pxc113_u5_asymmetric_cycles.py +
+  pxc113_u5_asymmetric_cycles.json -- complete incidence discovery census of
+  all 315 positive independent rank-deficient both-top supports on five
+  outsiders.  Its floating LP edge decisions reproduce the exact PXC113
+  rank-transition counts and find no asymmetric cycle; theorem evidence is
+  the separate exact rational rank-potential verifier and human proof.
+- search_pxc114_active_cx_long_cycles.py + pxc114_active_cx_size3.json --
+  discovery-only extension to active common-Cx trace cones on four outsiders.
+  It checks all 576 common-trace families through size three and uses floating
+  LP decisions; the null result motivated PXC114 but is not theorem evidence.
+  The conventional descent-set inclusion proof and independent PXC114 audit
+  supersede any attempt to promote this bounded search.

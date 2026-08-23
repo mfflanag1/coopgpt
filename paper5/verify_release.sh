@@ -454,6 +454,30 @@ run_python coopgames/verifiers/divergence/verify_pxc109_exact_cone_projection_in
   --output "$scratch_dir/pxc109-exact-cone-projection-independent.json"
 cmp coopgames/verifiers/divergence/pxc109_exact_cone_projection_independent.json \
   "$scratch_dir/pxc109-exact-cone-projection-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc112_certificate_dependence.py \
+  --output "$scratch_dir/pxc112-certificate-dependence.json"
+cmp coopgames/verifiers/divergence/pxc112_certificate_dependence.json \
+  "$scratch_dir/pxc112-certificate-dependence.json"
+run_python coopgames/verifiers/divergence/verify_pxc112_certificate_dependence_independent.py \
+  --output "$scratch_dir/pxc112-certificate-dependence-independent.json"
+cmp coopgames/verifiers/divergence/pxc112_certificate_dependence_independent.json \
+  "$scratch_dir/pxc112-certificate-dependence-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc113_rank_potential_cycles.py \
+  --output "$scratch_dir/pxc113-rank-potential-cycles.json"
+cmp coopgames/verifiers/divergence/pxc113_rank_potential_cycles.json \
+  "$scratch_dir/pxc113-rank-potential-cycles.json"
+run_python coopgames/verifiers/divergence/verify_pxc113_rank_potential_cycles_independent.py \
+  --output "$scratch_dir/pxc113-rank-potential-cycles-independent.json"
+cmp coopgames/verifiers/divergence/pxc113_rank_potential_cycles_independent.json \
+  "$scratch_dir/pxc113-rank-potential-cycles-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc114_descent_set_potential.py \
+  --output "$scratch_dir/pxc114-descent-set-potential.json"
+cmp coopgames/verifiers/divergence/pxc114_descent_set_potential.json \
+  "$scratch_dir/pxc114-descent-set-potential.json"
+run_python coopgames/verifiers/divergence/verify_pxc114_descent_set_potential_independent.py \
+  --output "$scratch_dir/pxc114-descent-set-potential-independent.json"
+cmp coopgames/verifiers/divergence/pxc114_descent_set_potential_independent.json \
+  "$scratch_dir/pxc114-descent-set-potential-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

@@ -156,6 +156,16 @@ search result, not proof of novelty. A cooperative-game specialist must still
 check terminology, unpublished work, and whether the construction is an
 unrecognized reformulation of a known exact-game example.
 
+The PXC112--PXC114 follow-up additionally checked lexicographically perturbed
+multiparametric LP, oriented-matroid programming, and oriented-matroid linear
+complementarity. Jones--Kerrigan--Maciejowski (2007) confirms that degenerate
+critical-region descriptions need not be unique or facet-to-facet;
+Fukuda--Terlaky (1992) treats complementary solutions and criss-cross pivots;
+standard oriented-matroid-program cycles concern program pivots and
+Euclideaness. None uses the selector-specific graph between distinct positive
+cover circuits or states the descent-set inclusion potential. This remains a
+negative search, not an expert novelty verdict.
+
 ## Live classification frontier
 
 The third item in the original frontier has now been achieved.  PXC104 is an
@@ -249,3 +259,87 @@ PXC101 anchor and codimension 53 for the PXC105 chamber.  Therefore the
 selector mechanisms live well inside high-codimension exact faces; they are
 not new exact-cone facets merely because their cover supports expose known
 partition-star facets.
+
+## Certificate fiber and descent-set potential (PXC112--PXC114)
+
+The certificate-blind version of the proposed canonical obstruction graph is
+false.  Add the row `rhaj>=13` to the total-17 PXC98 lower-envelope
+presentation.  The resulting exact singleton-normalized six-player game keeps
+
+    Lmin = (9/2,9/2,2,2,2,2)
+    Lmax = (4,4,3,3,2,1),
+
+but has three complete proper-row certificates:
+
+    C1={rha,rhb}, C2={rhb,rhaj}, C3={rha,rhb,rhaj}.
+
+The same two extreme top covers have faithful-cover sets respectively empty,
+the positive-ambient cover alone, and both covers.  Thus one fixed game and
+selector pair realizes the universal common-blocker branch, a mixed
+cover-dependent branch, or no failure according to the retained complete
+certificate.  The independent verifier exhausts all eight subsets of the
+full x-tight menu, both extreme covers, every reduced selector, and explicit
+bad directions.
+
+The strongest canonical replacement is the finite certificate fiber.
+We call certificates equivalent when they generate the same staged tangent
+cones at both selectors.  Equivalent certificates remain equivalent
+after intersecting with any fixed active cover rows, so they have the same
+candidate-selector fidelity outcomes, PXC92b descent sets, and PXC108 graph.
+The local quotient does not claim equality of the eventual altered selector
+when fidelity fails, and it is not claimed to be the coarsest possible
+graph-preserving quotient.  In extended
+`(v,x,z)` space, the exact/core/efficiency cone cut by the central
+active-menu, payoff-order, zero-coordinate, and common-tight hyperplanes gives
+a finite rational fan.  Discarding faces on which `x,z` are not the claimed
+selectors leaves a canonical union-of-open-faces stratification on which the
+complete tangent-cone classes, extreme covers, and graph fiber are constant.
+The surviving cells need not form a subfan.  Projection to game space is
+therefore finite polyhedral but not single-valued unless this discrete fiber
+is retained.
+
+On the strict residual arm with no active common-Cx normals, PXC113 gives a
+dimension-free theorem.  For a positive balanced outsider matrix A and
+K=ker(A^T), the polar of the lex-negative half of K is
+col(A)+R_{<=0}e_p, where p is the first free coordinate.  Positivity of the
+balancing weights then proves
+
+    A -> B and not(B -> A)  implies  col(A) proper-subset col(B).
+
+Outsider rank is consequently a strict potential on asymmetric edges.  Every
+directed cycle contains a reciprocal pair, so every shortest cyclic
+obstruction in this arm has length two.  For partition covers, an edge occurs
+exactly when the target partition splits a source block; one-way edges are
+strict refinements and reciprocal edges are incomparable partition pairs.
+This identifies the PXC104--PXC106 cross-cover pattern as the primitive
+partition generator without claiming novelty for the partition-star facets.
+
+Exact audits enumerate all positive independent rank-deficient 0/1 supports
+through five outsiders and all partition pairs through six outsiders.  The
+u=5 graph has 315 supports, 89,610 edges, and 4,600 asymmetric edges, all
+strictly rank-increasing.  An independently formulated Z3/Fraction audit
+reconstructs the complete u=4 graph.
+
+PXC114 closes the first two items and supplies the dimension-free
+decomposition.  If R' has no edge to R, positivity of the R-cover identity
+forces every R-row derivative to vanish on every direction in D(R').  All
+other tangent and stage conditions are common inside the certificate fiber,
+so D(R') is contained in D(R).  A one-way edge makes this inclusion strict.
+Consequently an asymmetric-only cycle is impossible even with payoff ties,
+active common-Cx inequalities, zero-coordinate normals, or eta-zero covers.
+Combined with PXC107, universal failure is generated at the mechanism level
+by either a common descent and outside-union blocker or a reciprocal two-cover
+cycle.
+
+The remaining frontier is representational rather than graph-theoretic:
+
+1. determine whether the two mechanism types admit a useful oriented-matroid
+   minor operation beyond the proved circuit--covector coupling;
+2. classify deletion-minimal coalition-incidence realizations inside each
+   mechanism, without confusing that optional refinement with the now-proved
+   all-dimension decomposition;
+3. complete specialist novelty review of the fibered-selector fan and
+   descent-set potential terminology.
+
+The active-Cx size-three search remains discovery provenance.  Its 576-cell
+null result motivated PXC114 but is not needed as theorem evidence.
