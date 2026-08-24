@@ -622,6 +622,38 @@ of exceptional-set packets whose transported slacks can be assigned to
 disjoint threshold layers.  The packet identity is now solved; universal
 packet selection and aggregate payment remain open.
 
+### PXC132 forced-zero active-packet escape
+
+The mixed-packet route has a sharp support restriction. Let Q be the only
+proper z-tight row on which a staged direction d has nonzero derivative,
+with d(Q)<0 and d(N)=0. A reduced active exceptional packet containing Q
+cannot have all of its positive rows z-tight. If it did, activity at z
+would make the exceptional row z-tight as well; dotting the incidence
+identity with d would then read lambda_Q d(Q)=0.
+
+This applies in every dimension to both forced-zero common families:
+
+- PXC101 uses d_j=-(k-1) and d_o=1 on the other outsiders;
+- PXC125 uses d_b=t and d_k=-1 on the K block.
+
+Thus the common-direction proof cannot remain inside the active z-tight
+facet menu. It must import a non-z-tight row and price that row's actual
+core slack, or use staged threshold-label currency directly. PXC104 is the
+correct reciprocal fail-open control: its larger z-tight menu supplies the
+missing derivative, and each type-33 cross-cover facet is entirely
+z-tight.
+
+The six-player catalogue audit is only a calibration: PXC101 has 35 active
+blocker-containing catalogue facets and PXC125 has three, but zero in either
+common game have all positive rows z-tight. Each PXC104 blocker has one
+all-z-tight active cross-cover facet. The conventional dot-product theorem,
+not those counts, establishes the all-dimensional support escape.
+
+The live selection problem is now narrower: choose the imported non-tight
+rows so their slack decomposes across disjoint canonical threshold layers.
+An active-facet theorem confined to the z-tight menu cannot solve the
+common branch.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker

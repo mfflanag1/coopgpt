@@ -629,6 +629,16 @@ run_python \
   --output "$scratch_dir/pxc131-blocker-completion-no-go-independent.json"
 cmp coopgames/verifiers/divergence/pxc131_blocker_completion_no_go_independent.json \
   "$scratch_dir/pxc131-blocker-completion-no-go-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc132_forced_zero_packet_escape.py \
+  --output "$scratch_dir/pxc132-forced-zero-packet-escape.json"
+cmp coopgames/verifiers/divergence/pxc132_forced_zero_packet_escape.json \
+  "$scratch_dir/pxc132-forced-zero-packet-escape.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc132_forced_zero_packet_escape_independent.py \
+  --output "$scratch_dir/pxc132-forced-zero-packet-escape-independent.json"
+cmp coopgames/verifiers/divergence/pxc132_forced_zero_packet_escape_independent.json \
+  "$scratch_dir/pxc132-forced-zero-packet-escape-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
