@@ -706,6 +706,16 @@ run_python \
   --output "$scratch_dir/pxc138-diagonal-release-curve-independent.json"
 cmp coopgames/verifiers/divergence/pxc138_diagonal_release_curve_independent.json \
   "$scratch_dir/pxc138-diagonal-release-curve-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc139_strict_spectral_single_dual_no_go.py \
+  --output "$scratch_dir/pxc139-strict-spectral-single-dual-no-go.json"
+cmp coopgames/verifiers/divergence/pxc139_strict_spectral_single_dual_no_go.json \
+  "$scratch_dir/pxc139-strict-spectral-single-dual-no-go.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc139_strict_spectral_single_dual_no_go_independent.py \
+  --output "$scratch_dir/pxc139-strict-spectral-single-dual-no-go-independent.json"
+cmp coopgames/verifiers/divergence/pxc139_strict_spectral_single_dual_no_go_independent.json \
+  "$scratch_dir/pxc139-strict-spectral-single-dual-no-go-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

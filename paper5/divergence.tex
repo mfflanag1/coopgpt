@@ -10444,6 +10444,95 @@ has \(B_*=c_nT\), so it is a boundary obstruction rather than a
 counterexample to a conditional theorem under \(B_*<c_nT\).  Any such
 conditional theorem must exploit the strict spectral deficit quantitatively.
 
+In fact, strict spectral failure alone does not rescue the one-dual route.
+Consider the total-eight polytope on players \(0,\ldots,5\), with
+nonnegativity and the seven lower rows
+
+\begin{equation}
+\begin{array}{c|rrrrrrr}
+S&0123&0234&1234&025&125&245&01345\\ \hline
+v(S)&4&6&6&2&2&2&8 .
+\end{array}                                               \tag{PXC139a}
+\end{equation}
+
+Let \(v\) be its lower envelope.  Write
+\((a,b,0,d,e,f)\) for a feasible point; the last displayed row first fixes
+the third coordinate to zero.  The complements of \(0234\ge6\) and
+\(1234\ge6\), together with \(125\ge2\) and \(025\ge2\), give
+\(b+f=a+f=2\).  Efficiency then gives \(d=4+f-e\), while
+\(0123\ge4\) and \(245\ge2\) reduce to
+\(2-f\le e\le4-f\).  Consequently the polytope is exactly
+
+\[
+ \{(2-f,2-f,0,4+f-e,e,f):0\le f\le2,\quad
+       2-f\le e\le4-f\},
+\]
+
+and has exactly the four vertices
+
+\[
+ (0,0,0,4,2,2),\ (0,0,0,6,0,2),\
+ (2,2,0,0,4,0),\ (2,2,0,2,2,0).
+\]
+
+Each of the seven defining bounds is attained at a displayed vertex.  Hence
+the lower-envelope core contains the polytope by construction and is
+contained in it by those seven core inequalities; they are equal.  Every
+coalition minimum is attained and every coordinate is zero at one displayed
+point, proving exactness and singleton normalization.  The equalities above
+give \(y_1+y_5=y_0+y_5=2\), so the first nonfixed Lmin floor is at most one.
+Equality fixes
+\(y_0=y_1=y_5=1\), and the next stage equalizes the remaining total five.
+Conversely \(0234\ge6\) contains only three nonfixed coordinates and forces
+the Lmax ceiling to be at least two; at ceiling two, it and \(1234\ge6\)
+pin the allocation.  Therefore
+
+\begin{equation}
+ x=(1,1,0,5/2,5/2,1),\qquad z=(2,2,0,2,2,0).             \tag{PXC139b}
+\end{equation}
+
+The \(z\)-tight row \(134\ge6\), scaled by \(1/3\), is a top certificate
+with \(\theta=1/3\), zero ambient load, and top coefficients \(1/3\) on
+players \(1,3,4\).  Its hinge surplus is zero, so a four-player top
+assignment is admissible exactly when its \(x\)-sum is at least six.  Since
+clipping \(x\) at \(M=2\) removes at most one in total, every admissible
+spectral candidate is at least five; the assignment \(\{2,3,4,5\}\)
+attains five.  Thus
+
+\[
+ B_*=5<\frac{16}{3}=c_6T,\qquad B_H=O=6.                \tag{PXC139c}
+\]
+
+Matched exact stationary certificates give
+
+\[
+ \Psi_0=\frac{191}{34}>\frac{16}{3}.
+\]
+
+Let \(E_0\) be the minimum of \(E(q)\) over the optimal zero-diagonal dual
+face.  An explicit optimal dual has \(E(q)=54/17\).  Conversely an exact
+primal at \(t=1/20\) has
+
+\[
+ \Psi_{1/20}=\frac{491}{85}
+ =\Psi_0+\frac1{20}\frac{54}{17}.
+\]
+
+For any optimal zero-diagonal dual \(q\), (PXC138a) gives
+\(T+\Psi_{1/20}\le T+\Psi_0+E(q)/20\), so the displayed primal forces the
+reverse inequality \(E(q)\ge54/17\).  Hence
+
+\begin{equation}
+ E_0=\frac{54}{17}>\frac23=O-c_6T.                      \tag{PXC139d}
+\end{equation}
+
+This is a strict-spectral counterexample to the proposed pointwise theorem
+that some optimal stationary dual has \(E(q)\le O-c_nT\).  It is not a
+counterexample to the hybrid-overlap inequality: the stationary bridge
+itself exceeds the target by \(29/102\).  PXC139 therefore proves that the
+integrated formulation (PXC138d), or an equivalently global treatment of
+the release curve, is essential.
+
 The correct mechanism-to-price target is an integrated one.  When
 \(B_*<c_nT\), put \(D_*=c_nT-B_*\),
 \(C_{\rm top}=B_H-B_*\), and \(C_{\rm label}=O-B_H\).  By the proved
@@ -10535,6 +10624,10 @@ python3 verify_pxc138_diagonal_release_curve.py \
   --output pxc138_diagonal_release_curve.json
 python3 verify_pxc138_diagonal_release_curve_independent.py \
   --output pxc138_diagonal_release_curve_independent.json
+python3 verify_pxc139_strict_spectral_single_dual_no_go.py \
+  --output pxc139_strict_spectral_single_dual_no_go.json
+python3 verify_pxc139_strict_spectral_single_dual_no_go_independent.py \
+  --output pxc139_strict_spectral_single_dual_no_go_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary
@@ -10612,6 +10705,16 @@ game, selector, LP, or PXC136--PXC138 implementation and rechecks the same
 certificates against the six-row core description.  These controls audit the
 signs and strictness of the dimension-free parametric-duality proof; they do
 not prove (PXC138d)'s still-open mechanism charge.
+The PXC139 primary audit reconstructs the seven-row lower envelope, both
+selectors, and the sharpened spectral value \(B_*=5\), then replays the
+matched \(t=0\) primal--dual pair and the \(t=1/20\) released primal.  Its
+standalone companion imports no project implementation: it enumerates the
+four core vertices, reconstructs all \(64\) coalition values, proves the
+selector and spectral formulas directly, and checks every displayed
+stationary inequality.  The matching affine bounds prove
+\(\min_{{\cal D}_0}E=54/17\); the artifact is a conventional sublemma
+counterexample, not a census claim and not a counterexample to the main
+hybrid inequality.
 No novelty claim is made before specialist review.
 
 The certificate-dependence falsifier, rank-potential audit, and their

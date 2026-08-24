@@ -938,6 +938,52 @@ dual at `t=0`.  This is the next common/reciprocal mechanism-to-price
 theorem.  Parametric LP sensitivity itself is standard and is not claimed as
 novel.
 
+### PXC139 strict-spectral single-dual no-go
+
+Strict spectral failure does not make the initial diagonal shadow price
+small enough.  The exact singleton-normalized total-eight game defined by
+
+```text
+0123>=4, 0234>=6, 1234>=6,
+025>=2, 125>=2, 245>=2, 01345>=8
+```
+
+has
+
+```text
+x=(1,1,0,5/2,5/2,1),
+z=(2,2,0,2,2,0),
+B_star=5 < 16/3=c_6*T,
+O=6,
+Psi_stat=191/34 > 16/3.
+```
+
+Thus the main spectral--stationary disjunction succeeds.  Nevertheless the
+minimum product-weighted diagonal exposure on the optimal zero-diagonal
+dual face is exactly
+
+```text
+E_0=54/17 > 2/3=O-c_6*T.
+```
+
+The upper certificate is an explicit optimal dual of exposure `54/17`.  An
+exact released primal at `t=1/20` attains
+
+```text
+Psi_(1/20)=491/85=Psi_0+(1/20)(54/17),
+```
+
+which forces the matching lower bound on every optimal dual exposure by
+PXC138a.  Hence the pointwise theorem
+
+```text
+B_star<c_n*T => exists optimal q with E(q)<=O-c_n*T
+```
+
+is false.  The next attack must control the integral of the changing dual
+face, or an equivalent global release-curve quantity; optimizing one dual at
+`t=0` is a closed route.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker
