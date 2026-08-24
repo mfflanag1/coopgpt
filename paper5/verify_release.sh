@@ -696,6 +696,16 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc137_product_diagonal_obstruction_independent.json \
   "$scratch_dir/pxc137-product-diagonal-obstruction-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc138_diagonal_release_curve.py \
+  --output "$scratch_dir/pxc138-diagonal-release-curve.json"
+cmp coopgames/verifiers/divergence/pxc138_diagonal_release_curve.json \
+  "$scratch_dir/pxc138-diagonal-release-curve.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc138_diagonal_release_curve_independent.py \
+  --output "$scratch_dir/pxc138-diagonal-release-curve-independent.json"
+cmp coopgames/verifiers/divergence/pxc138_diagonal_release_curve_independent.json \
+  "$scratch_dir/pxc138-diagonal-release-curve-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

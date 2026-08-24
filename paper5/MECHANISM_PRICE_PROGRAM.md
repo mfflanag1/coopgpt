@@ -879,17 +879,64 @@ dual objective >= T+O-sum_r (x_r z_r/T^2)[Delta_r]_+.
 ```
 
 Hence every strict stationary loss has explicit root-labelled diagonal
-currency.  The live quantitative theorem is no longer an unspecified
-coupling of all exactness rows:
+currency.  PXC138 below shows that one optimal dual's defect is not equal to
+the total price: the sharp equality control misses by a factor of 27.  Since
+that control has `B_star=c_nT`, it does not refute a theorem under the strict
+hypothesis `B_star<c_nT`; it makes that hypothesis quantitatively
+load-bearing.  The integrated shadow-price target is the exact formulation
+that remains valid on both sides of the boundary.
 
-> **Forced-diagonal spectral price (open).** If `B_star<c_nT`, use the
-> staged common/reciprocal labels to bound the weighted positive diagonal
-> defects of an optimal stationary dual by `O-c_nT`.
+### PXC138 diagonal-release curve
 
-This statement uses only cover/blocker incidence, staged polar identities,
-and the PXC136 dual potentials.  It does not spend overlap as an unexplained
-payment.  The sharp total-four control has relaxed value `O=8/3` but true
-stationary value `45/17`, so the diagonal price is genuinely positive.
+The positive defect in PXC137d is only a marginal price.  For
+
+```text
+d_r=x_r z_r/T^2,  0<=t<=1,
+```
+
+replace the forbidden diagonal by `0<=F_rr<=t*d_r`, and call the bridge
+optimum `Psi_t`.  Eliminating the new diagonal-cap multipliers in the dual
+gives the exact envelope
+
+```text
+T+Psi_t = min_(q in D) { D(q)+t E(q) },
+E(q) = sum_r d_r [Delta_r(q)]_+.
+```
+
+Therefore `Psi_t` is nondecreasing, concave, and piecewise linear, with
+`Psi_0=Psi_stat` and `Psi_1=O`.  If `D_t` is the minimizing dual face, its
+right slope is `e_+(t)=min_(q in D_t) E(q)`, and
+
+```text
+O-Psi_stat = integral_0^1 e_+(t) dt.
+```
+
+This kills the unconditional identification of the integral with one defect
+at `t=0`.  On the sharp total-four equality control,
+
+```text
+Psi_t = 45/17 + min(9t/17,1/51).
+```
+
+The curve reaches overlap already at `t=1/27`; its initial optimal-face
+exposure is `9/17`, while its total price is only `1/51`.  The ratio is 27.
+Because this control has `B_star=c_nT`, it is not a counterexample to a
+strict-spectral-failure theorem; such a theorem must use the strict deficit
+and cannot follow from parametric LP duality alone.
+
+Under `B_star<c_nT`, the live theorem is now exactly
+
+```text
+integral_0^1 e_+(t) dt
+ <= C_top + C_label - (c_nT-B_star).
+```
+
+The left side is explicit root-labelled diagonal load.  The right side is
+the already-proved spectral top-selection and label currency.  PXC112/PXC114
+must control the *whole decreasing shadow-price curve*, not an arbitrary
+dual at `t=0`.  This is the next common/reciprocal mechanism-to-price
+theorem.  Parametric LP sensitivity itself is standard and is not claimed as
+novel.
 
 ## 12. Faithful complement
 

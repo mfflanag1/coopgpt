@@ -54,8 +54,14 @@ the root and off-diagonal arc inequalities gives
 D >= T+O-sum_r (x_r z_r/T^2)[Delta_r]_+ .       (PXC137d)
 ```
 
-The open theorem is to bound that weighted defect by `O-c_nT` whenever the
-best spectral bound is below `c_nT`. PXC137 does not claim this final bound.
+PXC138, added after this packet was first drafted, proves that the weighted
+defect of one optimal zero-diagonal dual is not the total stationary price.
+On the sharp control its minimum is `9/17`, whereas the true loss is `1/51`,
+a factor of 27.  That control has `B_star=c_nT`, so it does not refute a
+theorem under the strict hypothesis `B_star<c_nT`; it makes strict spectral
+failure load-bearing.  The exact open formulation bounds the integral of
+the decreasing diagonal shadow-price curve by `O-c_nT`.  Neither PXC137 nor
+PXC138 proves that final bound.
 
 ## Exact reproduction
 
@@ -114,8 +120,8 @@ only its exact-game selector use could be.
    informative, or is there a standard Markov occupation-measure theorem
    that makes this terminology misleading?
 6. Can the PXC114 common-direction blocker or reciprocal cross-cover facets
-   bound the weighted positive diagonal defects without using overlap as an
-   unexplained charge?
+   bound the integrated diagonal shadow-price curve without using overlap
+   as an unexplained charge?
 7. Is the product occupation construction already known in exact-game,
    balancedness, Markov-chain, or transportation-polytope literature under a
    standard name?

@@ -10371,12 +10371,12 @@ feasible PXC136 dual of objective \(D\),
 The cap inequalities give \(T+O\) because \(y^0\) is inside the selector
 box; the row and column potentials cancel off the diagonal.  Consequently
 every strict stationary loss has an explicit coefficient-bearing
-forced-diagonal charge.  This does not yet price that charge sharply: the
-live theorem is to show, under \(B_*<c_nT\), that the staged
-common/reciprocal labels bound the weighted diagonal charge in (PXC137d) by
-\(O-c_nT\).  Unlike a direct invocation of overlap, every term to be bounded
-is now a root-labelled coalition load or a row/column potential from the
-stationary dual.
+forced-diagonal charge.  This does not yet price that charge sharply.
+(PXC138c) below shows that the defect of one optimal stationary dual is not
+the total price, even on a sharp equality boundary.  Since that control has
+\(B_*=c_nT\), it does not refute a theorem using the strict hypothesis
+\(B_*<c_nT\); it proves that strict spectral failure must be load-bearing
+and that dual sensitivity alone is insufficient.
 
 The reduction is nonvacuous on every named mechanism control: the product
 flow recovers overlap exactly when the diagonal is relaxed, whereas fixing
@@ -10385,6 +10385,84 @@ PXC104, PXC118, PXC125, PXC90, and the sharp total-four control.  On the
 last game, the unrestricted stationary optimum is \(45/17\), so the
 forced-diagonal price is the positive amount \(1/51\).  These finite checks
 audit strictness only; (PXC137a)--(PXC137d) are the all-dimensional proof.
+
+The positive defect in (PXC137d) is a marginal price, not the total price.
+This distinction can be made exact.  Put
+
+\[
+ d_r^0=\frac{x_rz_r}{T^2},
+\]
+
+and, for \(0\le t\le1\), let \(\Psi_t\) be the bridge optimum obtained from
+(PXC136a) by replacing \(F_{rr}=0\) with
+\(0\le F_{rr}\le t d_r^0\).  Thus \(\Psi_0=\Psi\).  The product flow
+(PXC137a) is feasible at \(t=1\), while the pointwise bridge bound is still
+\(O\), so \(\Psi_1=O\).
+
+For a feasible point \(q\) of the zero-diagonal dual (PXC136e), write
+
+\[
+ D(q)=\vartheta+\sum_i(\alpha_ix_i+\beta_iz_i),\qquad
+ E(q)=\sum_r d_r^0[\Delta_r(q)]_+.
+\]
+
+Dualizing the diagonal caps introduces multipliers
+\(\gamma_r\ge0\) with \(\gamma_r\ge\Delta_r\) and objective contribution
+\(t d_r^0\gamma_r\).  Eliminating them gives the exact parametric identity
+
+\begin{equation}
+ T+\Psi_t=\min_{q\in{\cal D}}\{D(q)+tE(q)\}.             \tag{PXC138a}
+\end{equation}
+
+Consequently \(t\mapsto\Psi_t\) is a nondecreasing concave piecewise-linear
+function.  If \({\cal D}_t\) is its dual minimizing face, then its right
+derivative is
+
+\begin{equation}
+ e_+(t)=\min_{q\in{\cal D}_t}E(q),\qquad
+ O-\Psi=\int_0^1e_+(t)\,dt.                              \tag{PXC138b}
+\end{equation}
+
+The usual finite polyhedral subdivision proves the integral identity; values
+at the finitely many breakpoints are immaterial.  In particular
+\(e_+(0)\) is the minimum positive diagonal exposure on the optimal
+zero-diagonal dual face.  Formula (PXC137d) is its supporting line at zero,
+not an equality for the total loss.
+
+This correction is load-bearing even on the sharp total-four control.  Exact
+primal certificates at \(t=0\) and \(t=1/27\), together with an exact dual
+of exposure \(9/17\), give the entire curve
+
+\begin{equation}
+ \Psi_t=\frac{45}{17}+
+       \min\left\{\frac{9t}{17},\frac1{51}\right\}.      \tag{PXC138c}
+\end{equation}
+
+Thus \(e_+(0)=9/17\), whereas \(O-\Psi=1/51\): identifying the single-dual
+exposure with the true price overstates it by the factor \(27\).  This game
+has \(B_*=c_nT\), so it is a boundary obstruction rather than a
+counterexample to a conditional theorem under \(B_*<c_nT\).  Any such
+conditional theorem must exploit the strict spectral deficit quantitatively.
+
+The correct mechanism-to-price target is an integrated one.  When
+\(B_*<c_nT\), put \(D_*=c_nT-B_*\),
+\(C_{\rm top}=B_H-B_*\), and \(C_{\rm label}=O-B_H\).  By the proved
+spectral decomposition,
+
+\begin{equation}
+ \Psi\ge c_nT
+ \quad\Longleftrightarrow\quad
+ \int_0^1e_+(t)\,dt
+ \le C_{\rm top}+C_{\rm label}-D_*.                     \tag{PXC138d}
+\end{equation}
+
+Unlike an unexplained invocation of overlap, the left side is an integral
+of explicit root-labelled diagonal dual loads.  The unresolved theorem is
+to charge that decreasing shadow-price curve to the PXC112 staged polars and
+the PXC114 common/reciprocal labels.  Parametric LP sensitivity and shadow
+prices are classical; no novelty is claimed for (PXC138a)--(PXC138b) as
+optimization facts.  The candidate contribution is their selector-specific
+forced-diagonal application and the exact obstruction (PXC138c).
 
 The exact primary and independent audits are:
 \begin{verbatim}
@@ -10453,6 +10531,10 @@ python3 verify_pxc137_product_diagonal_obstruction.py \
   --output pxc137_product_diagonal_obstruction.json
 python3 verify_pxc137_product_diagonal_obstruction_independent.py \
   --output pxc137_product_diagonal_obstruction_independent.json
+python3 verify_pxc138_diagonal_release_curve.py \
+  --output pxc138_diagonal_release_curve.json
+python3 verify_pxc138_diagonal_release_curve_independent.py \
+  --output pxc138_diagonal_release_curve_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary
@@ -10521,6 +10603,15 @@ independently generated exact lower envelopes through dimension ten.  The
 product calculation and dual weighted-summation above, not those finite
 controls, prove (PXC137a)--(PXC137d).  Pricing the diagonal defects at the
 hybrid threshold remains open.
+The PXC138 primary audit replays the sharp \(t=0\) and \(t=1/27\) primals,
+every full-game witness row, and the exact zero-diagonal dual whose exposure
+is \(9/17\).  Convex interpolation and the matching affine dual prove the
+whole curve (PXC138c), including the factor-\(27\) failure of the
+single-optimal-dual strengthening.  The standalone audit imports no project
+game, selector, LP, or PXC136--PXC138 implementation and rechecks the same
+certificates against the six-row core description.  These controls audit the
+signs and strictness of the dimension-free parametric-duality proof; they do
+not prove (PXC138d)'s still-open mechanism charge.
 No novelty claim is made before specialist review.
 
 The certificate-dependence falsifier, rank-potential audit, and their
