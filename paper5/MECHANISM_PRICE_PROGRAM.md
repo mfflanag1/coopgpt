@@ -255,38 +255,101 @@ The affine fail-open point obtained by deleting `m>=ell` has overlap `4/7`,
 below the seven-player target.  This pins the load-bearing order price and
 prevents the common-row equalities alone from being overpromoted.
 
-## 8. Stronger architectural conjecture: positive demand forces fidelity
+## 8. PXC120 is false; PXC121 closes the old controls spectrally
 
-The exact controls now suggest a sharper disjunction than separate positive
-prices for all three branches:
+The exact controls initially suggested a sharper disjunction than separate
+positive prices for all three branches:
 
 ```text
 D_H>0  ==>  for the fixed complete Cx, some qualifying
             extreme top cover is faithful.                   (MP14?)
 ```
 
-Equivalently, universal cover failure for that `Cx` would force
-`B_H>=c_n T`, making the
-required common and reciprocal incremental prices identically zero.  This is
-strictly stronger than assigning a positive blocker charge and would reduce
-the global theorem to the faithful branch.
+PXC122 falsifies this implication: its six-player anchor has `D_H=2/3`, a
+unique complete `Cx`, five qualifying extreme top covers, and every cover
+fails in the same common direction.  The forced-zero row `rhaK` is the sole
+negative staged blocker and has coefficient zero throughout the normalized
+cover polytope.
 
-The evidence is targeted but finite.  The two fixed labelled controls with
-positive `D_H` have faithful qualifying extreme covers: the actual-top-fixed
-control has demand `1/24` and the tight top-pair cover; the top-and-bottom-
-fixed control has demand `1/42` and the extreme cover on rows
-`(6,49,120)` with weights `(1/2,1/2,1/2)`.  Conversely, PXC101 and PXC116
-(common direction) and PXC104 and PXC118 (reciprocal pair) all have zero
-post-top demand.  The 374-game n=6 archive contains no positive-`D_H` record.
-These facts are pinned by `audit_pxc120_positive_demand_faithfulness.py`.
-They do **not** prove `(MP14?)`.
+The earlier zero-demand evidence does promote parametrically in two important
+controls.  PXC121 proves by symbolic elimination that the entire PXC101
+common chamber and the entire PXC106 reciprocal chamber satisfy the target
+already at the actual-top spectral bound.  Thus their blocker prices are
+genuinely zero, not merely unobserved in sample points.
 
-The two-sided next attack is therefore to optimize `D_H` over the exact
-selector cone with universal cover failure.  A positive optimum yields the
-first genuinely priced common/reciprocal control; an infeasibility proof or
-symbolic dual establishes the zero-demand obstruction theorem.
+## 9. PXC122--PXC123: the first positive common price in every dimension
 
-## 9. Immediate frontier
+For every `t>=1`, PXC122 defines an exact singleton-normalized lower-envelope
+family on `n=t+5` players with unique complete certificate
+
+```text
+Cx={rhj,rhbK}.
+```
+
+The full typed z-tight menu has eight row types and exactly five normalized
+extreme top covers.  Every cover fails along the same one-dimensional
+exchange between `b` and the symmetric block `K`; the transverse row `rhaK`
+has forced coefficient zero in every cover.  The family contains both the
+old zero-demand PXC116 point and the positive-demand PXC122 anchor.
+
+PXC123 gives the price explicitly.  With `beta=min(B,C)`,
+
+```text
+t=1:   P_C=(B-A)+(beta-2A),
+t>=2:  P_C=(B-A)+(B-2A)=2B-3A.
+```
+
+These are the first two rank-paired stratum rectangles.  Their endpoints are
+fixed by `rhj`, `rhbK`, active nonnegativity, and the omitted blocker; no
+unexplained overlap term is used as currency.  For `t=1`, direct algebra
+proves `P_C>=D_H` whenever demand is positive.  For `t=2` and `t>=3`, the
+actual-top spectral bound itself is already above the hybrid target.  This is
+a conventional all-dimensional theorem for one open rational common family,
+not the universal common branch.
+
+## 10. Reciprocal affine no-go and the live theorem
+
+The most direct reciprocal deformation of PXC104 does not open a positive
+demand chamber.  In the one-parameter asymmetric selector profile audited as
+PXC124a, write
+
+```text
+x=(p,p,u+s,u,u,u),       z=(M,M,A,B,J,K),
+M>A>B>max(J,K)>=0,       0<=s<A-B,
+u=(A+J+K-s)/3,          2p+4u+s=T=2M+A+B+J+K,
+```
+
+and put `j=min(J,K)`, `k=max(J,K)`.  The three possible locations of `u`
+give the exact expressions
+
+```text
+u>=k and u<=B:  2T/3-B_H=(2B-2M-3j-3k+2s)/3,
+u<k:            2T/3-B_H=(-A+2B-2M-4j-k+3s)/3,
+u>B:            2T/3-B_H=(A-B-2M-2j-2k+s)/3.
+```
+
+Substituting `s<A-B` makes the respective numerators smaller than
+`2A-2M-3j-3k`, `2A-B-2M-4j-k`, and
+`2A-2B-2M-2j-2k`, all strictly negative.  Thus `B_H>2T/3` throughout this
+lane.  The exact grid of 5,004 profiles is a regression check, not the proof
+and not an exhaustive reciprocal-incidence theorem.
+
+The next common-branch target is therefore not another parametric family:
+
+> **Forced-zero blocker price theorem (open).**  Given a PXC114 common
+> direction with positive demand, derive from the outside-union blocker, its
+> singleton-attainment witnesses, the fixed complete Lmin certificate, and
+> the staged Farkas identity a predeclared collection of rank-paired
+> rectangles whose total is at least `D_H`.
+
+The theorem must specialize to PXC116 and PXC122/PXC123, and must either
+explain why the two-rung payment is universal or produce a smaller exact
+counterexample with a new payment mechanism.  Only after this common theorem
+is proved or sharply falsified should the search return to positive-demand
+reciprocal mechanisms; the naive PXC104 deformation is now a proved dead
+lane.
+
+## 11. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker
 census:
@@ -297,7 +360,7 @@ census:
 > subset of the joint staged-polar transports carried by `Cx union R` has
 > threshold value at least `D_H`.
 
-If `(MP14?)` is proved, this faithful lemma is the only remaining quantitative
-branch.  If `(MP14?)` fails, its smallest exact counterexample determines
-which additional exactness witness or blocker facet must carry a genuinely
-positive common/reciprocal price.
+PXC120 is false, so this faithful lemma is one branch of a genuine
+three-branch program rather than a consequence of a fidelity disjunction.
+The common branch now has its first positive all-dimensional calibration;
+the reciprocal positive-demand branch remains open.

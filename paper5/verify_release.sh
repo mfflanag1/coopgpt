@@ -520,6 +520,42 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/search_archive/pxc120_positive_demand_faithfulness.json \
   "$scratch_dir/pxc120-positive-demand-faithfulness.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc121_obstruction_spectral_closure.py \
+  --output "$scratch_dir/pxc121-obstruction-spectral-closure.json"
+cmp coopgames/verifiers/divergence/pxc121_obstruction_spectral_closure.json \
+  "$scratch_dir/pxc121-obstruction-spectral-closure.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc121_obstruction_spectral_closure_independent.py \
+  --output "$scratch_dir/pxc121-obstruction-spectral-closure-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc121_obstruction_spectral_closure_independent.json \
+  "$scratch_dir/pxc121-obstruction-spectral-closure-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc122_positive_common_price.py \
+  --output "$scratch_dir/pxc122-positive-common-price.json"
+cmp coopgames/verifiers/divergence/pxc122_positive_common_price.json \
+  "$scratch_dir/pxc122-positive-common-price.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc122_positive_common_price_independent.py \
+  --output "$scratch_dir/pxc122-positive-common-price-independent.json"
+cmp coopgames/verifiers/divergence/pxc122_positive_common_price_independent.json \
+  "$scratch_dir/pxc122-positive-common-price-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc123_dimension_free_common_price.py \
+  --output "$scratch_dir/pxc123-dimension-free-common-price.json"
+cmp coopgames/verifiers/divergence/pxc123_dimension_free_common_price.json \
+  "$scratch_dir/pxc123-dimension-free-common-price.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc123_dimension_free_common_price_independent.py \
+  --output "$scratch_dir/pxc123-dimension-free-common-price-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc123_dimension_free_common_price_independent.json \
+  "$scratch_dir/pxc123-dimension-free-common-price-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc124a_reciprocal_affine_no_go.py \
+  --output "$scratch_dir/pxc124a-reciprocal-affine-no-go.json"
+cmp coopgames/verifiers/divergence/pxc124a_reciprocal_affine_no_go.json \
+  "$scratch_dir/pxc124a-reciprocal-affine-no-go.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
