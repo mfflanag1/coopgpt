@@ -556,6 +556,26 @@ run_python \
   --output "$scratch_dir/pxc124a-reciprocal-affine-no-go.json"
 cmp coopgames/verifiers/divergence/pxc124a_reciprocal_affine_no_go.json \
   "$scratch_dir/pxc124a-reciprocal-affine-no-go.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc125_common_demand_localization.py \
+  --output "$scratch_dir/pxc125-common-demand-localization.json"
+cmp coopgames/verifiers/divergence/pxc125_common_demand_localization.json \
+  "$scratch_dir/pxc125-common-demand-localization.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc125_common_demand_localization_independent.py \
+  --output "$scratch_dir/pxc125-common-demand-localization-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc125_common_demand_localization_independent.json \
+  "$scratch_dir/pxc125-common-demand-localization-independent.json"
+run_python coopgames/verifiers/divergence/verify_pxc126_boolean_square_price.py \
+  --output "$scratch_dir/pxc126-boolean-square-price.json"
+cmp coopgames/verifiers/divergence/pxc126_boolean_square_price.json \
+  "$scratch_dir/pxc126-boolean-square-price.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc126_boolean_square_price_independent.py \
+  --output "$scratch_dir/pxc126-boolean-square-price-independent.json"
+cmp coopgames/verifiers/divergence/pxc126_boolean_square_price_independent.json \
+  "$scratch_dir/pxc126-boolean-square-price-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

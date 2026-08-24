@@ -307,7 +307,52 @@ actual-top spectral bound itself is already above the hybrid target.  This is
 a conventional all-dimensional theorem for one open rational common family,
 not the universal common branch.
 
-## 10. Reciprocal affine no-go and the live theorem
+## 10. PXC125: demand localizes to the two-rung chamber
+
+The inequalities `3A<B` and `2A<B` used to display PXC122 are not actually
+restrictions on its positive-demand problem.  On the full natural chamber
+
+```text
+0<A<B,
+B+A/(t+1)<K0<B+2A/t,
+M>max(K0,2A),
+C=A+(t+1)B-tK0,
+```
+
+the same lower-envelope game, complete certificate, eight-row tight menu,
+five extreme covers, forced-zero blocker, and common wrong Lmax persist.
+PXC125 counts the residual opposite-pair layers without assuming an order
+between `2A`, `B`, and `C`.  The declared subpacking is
+
+```text
+t=1:   P_C=(B-A)+(min(B,C)-2A)_+,
+t>=2:  P_C=(B-A)+(B-2A)_+.
+```
+
+These are at most two disjoint, predeclared rectangles.  They are selected by
+the two certificate rows, the active zero normal, and the blocker-separated
+`K` block; they are not the complete canonical packing.
+
+The sharp localization is:
+
+```text
+t>=2                         => D_H=0,
+t=1 and A>=B/3              => D_H=0,
+D_H>0                       => t=1 and B>3A.
+```
+
+In the last line `C>B-A>2A`, so the positive-part formula reduces exactly to
+the PXC123 two-rung price and pays `D_H`.  Thus PXC123 was already the whole
+positive-demand region of this maximal incidence chamber.  The independent
+audit integrates the threshold counts directly through `t=64`; removing the
+blocker/core-comparison upper endpoint gives a positive-demand seven-player
+fail-open point.
+
+This is a structural handover, not merely a larger parameter grid: the
+blocker comparison forces every dimension above six onto the spectral side,
+and the only residual price case has exactly two rungs.
+
+## 11. Reciprocal affine no-go and the live theorem
 
 The most direct reciprocal deformation of PXC104 does not open a positive
 demand chamber.  In the one-parameter asymmetric selector profile audited as
@@ -349,7 +394,44 @@ is proved or sharply falsified should the search return to positive-demand
 reciprocal mechanisms; the naive PXC104 deformation is now a proved dead
 lane.
 
-## 11. Faithful complement
+PXC125--PXC126 sharpen that target to a concrete structural statement.  This
+is **not** a player minor: PXC115 proves that restriction, contraction,
+amalgamation, and even null extension do not preserve the quantified sparse
+failure object.  Instead, take a retained common row `C` and an outside-union
+blocker `Q`.  Their traces partition the non-top players into the four cells
+`V11,V01,V10,V00`.  Choosing one player from each cell gives the
+Boolean-square price
+
+```text
+P_square=(a_11-b_01)_+ + (a_10-b_00)_+,
+a_i=min(x_i,z_i), b_i=max(x_i,z_i).
+```
+
+The two pairs are vertex-disjoint, so threshold counting proves
+`P_square <= O-B_H` for every allocation pair.  In the only positive-demand
+PXC125 case, `t=1`, use `C=rhbK`, `Q=rhaK`, and the four players
+`(K,a,b,j)`; the price is exactly `(B-A)+(min(B,C)-2A)_+`.  For `t>=2`
+this is merely a smaller valid subpacking than PXC125's two-distinct-`K`
+price, but those dimensions already have `D_H=0`.
+
+> **Boolean-square price extraction (open).**  Every positive-demand PXC114
+> common obstruction either has a retained common row, a basic staged
+> outside-union blocker, and four incidence-cell representatives with
+> `P_square >= D_H`, or its mixed singleton-witness projection supplies a
+> target-reaching price.
+
+The first exact falsification gate is the stronger square-only implication:
+enumerate every complete-certificate tangent class, every common direction,
+every outside-union blocker that occurs in a basic staged certificate, and
+every four-cell choice, and require `max P_square < D_H`.  A SAT witness must
+be reconstructed as an exact game and then tested against the mixed rooted
+packet projection; it is not automatically a counterexample to overlap.
+This is now the shortest route to a full common-branch theorem.  Do not call
+the Boolean square an oriented-matroid or player minor, and do not replace
+the blocker-generated family by all canonical rectangles, which would
+collapse back to the label-currency identity.
+
+## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker
 census:
