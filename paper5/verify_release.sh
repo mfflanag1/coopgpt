@@ -726,6 +726,16 @@ run_python \
   --output "$scratch_dir/pxc140-slope-saturation-price-independent.json"
 cmp coopgames/verifiers/divergence/pxc140_slope_saturation_price_independent.json \
   "$scratch_dir/pxc140-slope-saturation-price-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc141_n5_dimension_free_counterexample.py \
+  --output "$scratch_dir/pxc141-n5-dimension-free-counterexample.json"
+cmp coopgames/verifiers/divergence/pxc141_n5_dimension_free_counterexample.json \
+  "$scratch_dir/pxc141-n5-dimension-free-counterexample.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc141_n5_dimension_free_counterexample_independent.py \
+  --output "$scratch_dir/pxc141-n5-dimension-free-counterexample-independent.json"
+cmp coopgames/verifiers/divergence/pxc141_n5_dimension_free_counterexample_independent.json \
+  "$scratch_dir/pxc141-n5-dimension-free-counterexample-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

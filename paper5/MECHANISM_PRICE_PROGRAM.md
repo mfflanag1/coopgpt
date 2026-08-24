@@ -4,7 +4,8 @@ Date: 2026-08-23
 
 Starting checkpoint: `bd97ded7d0ebc1410305b9be8c01d01750524101`
 
-Status: active proof/counterexample program; no novelty claim.
+Status: literal target falsified at n=5 (PXC141); corrected n>=6 program
+active; no novelty claim for the five-player witness.
 
 ## 1. Frozen target and inputs
 
@@ -16,7 +17,15 @@ O(x,z) = sum_i min(x_i,z_i) >= c_n T,
 c_n = n/floor(n^2/4),  T=v(N).                         (MP0)
 ```
 
-The following are frozen inputs.
+As literally written, `(MP0)` is false.  The already-proved five-player
+extremal game has `T=4`, `O=3`, while `c_5*T=10/3`.  The proved n<=4
+coincidence theorem makes n=5 the smallest failure.  PXC141 independently
+replays all selector and certificate arithmetic and records that its Lmax
+top stratum has size four, outside PXC112/PXC114.  The rest of this program
+is therefore retained as the corrected **n>=6** target; this scope correction
+does not count as proving that corrected target.
+
+The following are frozen inputs for the corrected program.
 
 1. PXC112: complete Lmin certificates are quotiented by equality of their
    staged tangent cones at `x,z`.
@@ -1052,3 +1061,20 @@ PXC120 is false, so this faithful lemma is one branch of a genuine
 three-branch program rather than a consequence of a fidelity disjunction.
 The common branch now has its first positive all-dimensional calibration;
 the reciprocal positive-demand branch remains open.
+
+## 13. PXC141 literal-target resolution and successor frontier
+
+The literal all-n objective is resolved negatively by the existing n=5
+two-generator game:
+
+```text
+x=(1/2,1/2,5/4,1/2,5/4), z=(1,0,1,1,1),
+T=4, O=3 < (5/6)T=10/3.
+```
+
+Exact primary and standalone symbolic replays pin the 32 game values, both
+staged selectors, all 16 subfamilies of the proper x-tight pool, every
+complete subfamily, and the exhaustive spectral-top result.  Since n<=4 has
+Lmin=Lmax, this is the smallest counterexample.  The next goal is the
+explicit n>=6 theorem, using PXC140's product bound as the live sufficient
+route and retaining PXC141 as the fail-open domain guard.
