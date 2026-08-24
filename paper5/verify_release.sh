@@ -609,6 +609,26 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc129_carrier_cover_price_dichotomy_independent.json \
   "$scratch_dir/pxc129-carrier-cover-price-dichotomy-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc130_exceptional_slack_transport.py \
+  --output "$scratch_dir/pxc130-exceptional-slack-transport.json"
+cmp coopgames/verifiers/divergence/pxc130_exceptional_slack_transport.json \
+  "$scratch_dir/pxc130-exceptional-slack-transport.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc130_exceptional_slack_transport_independent.py \
+  --output "$scratch_dir/pxc130-exceptional-slack-transport-independent.json"
+cmp coopgames/verifiers/divergence/pxc130_exceptional_slack_transport_independent.json \
+  "$scratch_dir/pxc130-exceptional-slack-transport-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc131_blocker_completion_no_go.py \
+  --output "$scratch_dir/pxc131-blocker-completion-no-go.json"
+cmp coopgames/verifiers/divergence/pxc131_blocker_completion_no_go.json \
+  "$scratch_dir/pxc131-blocker-completion-no-go.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc131_blocker_completion_no_go_independent.py \
+  --output "$scratch_dir/pxc131-blocker-completion-no-go-independent.json"
+cmp coopgames/verifiers/divergence/pxc131_blocker_completion_no_go_independent.json \
+  "$scratch_dir/pxc131-blocker-completion-no-go-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

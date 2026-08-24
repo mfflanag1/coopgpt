@@ -550,6 +550,78 @@ is at least `D_H`.  PXC104 and PXC118 have zero positive canonical carrier
 length; they calibrate the incidence boundary but their reciprocal
 cross-cover price remains a separate obligation.
 
+### PXC130 exceptional-set slack transport
+
+The exact-facet experiments reduce to a conventional dimension-free packet
+identity.  If an exactness witness attains `v(E)` and
+
+```text
+sum_S lambda_S 1_S = rho 1 + beta 1_E,
+```
+
+then every core allocation `y` satisfies
+
+```text
+sum_S lambda_S [y(S)-v(S)] >= beta [y(E)-v(E)].
+```
+
+This is obtained by evaluating the incidence identity first at the witness
+and then at `y`; indecomposability is unnecessary.  For a singleton
+exceptional set it prices the positive coordinate `beta*y_r` using explicit
+coalition slacks.  Catalogue type 41 is the first carrier-search control: one
+such packet alone excludes a relaxed no-common-separator selector point by
+`609/178`.
+
+For a partition-star cover on exceptional top pair `T`, the transport becomes
+
+```text
+sum_s slack_y(T union B_s) >= (m-1) slack_y(T).
+```
+
+After normalized equal-top scaling, every such cover has exactly
+`Phi_R=(x(T)-z(T))/2`.  Hence the two PXC104 cross covers and PXC118's added
+two-block cover all expose the same `5/6` pair-shear budget.  Their facet
+inequalities cannot be summed as independent reciprocal payment without a
+new disjoint label-layer or witness argument.  This is a useful no-go: the
+cross-cover facets explain the dependency cycle but do not themselves create
+post-top currency.
+
+The six-player PXC101--PXC102 anchor gives the separate value `1/2`; the
+full PXC101 chamber retains the formula rather than that fixed number.
+
+### PXC131 nontrivial completion criterion and route no-go
+
+For a nonsingleton row `E`, delete only its inequality from the full core
+description. LP duality says that an active exceptional-set packet supported
+away from `E` exists exactly when the deleted inequality remains implied:
+
+```text
+min_(y in K_-E) y(E)=v(E)
+iff
+sum_(S!=E) lambda_S 1_S = rho 1 + 1_E,
+sum_(S!=E) lambda_S v(S) = rho T+v(E).
+```
+
+The tautological coefficient `lambda_E=1` is excluded. The canonical
+blockers are strict negative controls:
+
+- PXC101 `rj>=6`: deleted-row minimum `3`, gap `3`;
+- PXC104 `rhaj>=18`: deleted-row minimum `16`, gap `2`;
+- PXC104 `rhak>=18`: deleted-row minimum `16`, gap `2`.
+
+These minima satisfy every other proper core row and have independent dual
+lower-bound packets. Thus exactness does **not** automatically complete an
+outside or cross blocker into a useful packet. A successful price must keep
+the blocker as a tagged row in a mixed witness packet, change the exceptional
+coalition, or extract genuinely disjoint staged-label currency. This closes
+the naive direct-facet route without weakening the global objective.
+
+The live PXC130--PXC131 continuation is an **existence and congestion theorem**:
+derive, from the PXC128 carrier measure and actual staged blockers, a family
+of exceptional-set packets whose transported slacks can be assigned to
+disjoint threshold layers.  The packet identity is now solved; universal
+packet selection and aggregate payment remain open.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker
