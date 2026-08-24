@@ -639,6 +639,17 @@ run_python \
   --output "$scratch_dir/pxc132-forced-zero-packet-escape-independent.json"
 cmp coopgames/verifiers/divergence/pxc132_forced_zero_packet_escape_independent.json \
   "$scratch_dir/pxc132-forced-zero-packet-escape-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc133_two_allocation_packet_conservation.py \
+  --output "$scratch_dir/pxc133-two-allocation-packet-conservation.json"
+cmp coopgames/verifiers/divergence/pxc133_two_allocation_packet_conservation.json \
+  "$scratch_dir/pxc133-two-allocation-packet-conservation.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc133_two_allocation_packet_conservation_independent.py \
+  --output "$scratch_dir/pxc133-two-allocation-packet-conservation-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc133_two_allocation_packet_conservation_independent.json \
+  "$scratch_dir/pxc133-two-allocation-packet-conservation-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

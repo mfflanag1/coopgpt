@@ -9983,6 +9983,57 @@ type-\(33\) cross-cover facet.  These counts are finite calibrations only;
 the dot-product proof of (PXC132a)--(PXC132b) is dimension-free and does not
 use the catalogue.
 
+The imported slack must itself be audited against the two selector
+allocations.  For any packet (PXC130a), define its exactness gap
+\[
+ g({\cal P},E)=\rho T+\beta v(E)
+                 -\sum_{S\in{\cal P}}\lambda_Sv(S)\ge0.
+\]
+The proof of (PXC130b) actually gives the constant-gap identity
+\begin{equation}
+ \sum_{S\in{\cal P}}\lambda_S\sigma_y(S)
+      =\beta\sigma_y(E)+g({\cal P},E)
+      \qquad(y\in\core(v)).                            \tag{PXC133a}
+\end{equation}
+In particular, for any two efficient allocations \(x,z\),
+\begin{equation}
+ \sum_{S\in{\cal P}}\lambda_S[x(S)-z(S)]
+      =\beta[x(E)-z(E)].                               \tag{PXC133b}
+\end{equation}
+This second identity needs only the incidence equation: dot it with
+\(x-z\), and the ambient term vanishes by efficiency.  Exactness supplies
+the nonnegativity of \(g\), but it cannot turn \(g\) into new
+\(x\)-versus-\(z\) comparison currency.  Thus the full raw slack at \(x\)
+may not be charged to overlap without subtracting the same packet's
+exactness slack at \(z\).  The net two-allocation amount is exactly the
+single exceptional-set shear in (PXC133b).
+
+The controls make the distinction sharp.  The active PXC101 rooted packet
+\[
+ \one_{rha}+\one_{rj}+\one_{rbk}=\one_N+2e_r
+\]
+has positive-support slack \(9\) at \(x\) but \(8\) already at \(z\), so
+its comparison currency is only \(1=2(x_r-z_r)\).  At the positive-demand
+PXC125 point, the active mixed packet
+\[
+ \one_{rhaK}+\one_{rhbK}+\one_{rhjK}
+       =\one_N+2\one_{rhK}
+\]
+has raw slack \(22/5\) at \(x\) and \(4\) at \(z\).  Only the net amount
+\(2/5\) survives as exceptional-set comparison shear, strictly below
+\(D_H=2/3\).  The
+hybrid-overlap bound there is paid instead by the common-row/threshold
+price of (PXC125)--(PXC128).  By contrast, the PXC104 cross packet has all
+positive and exceptional rows \(z\)-tight; its \(z\)-slack is zero and its
+entire raw \(10/3\) comparison survives, or \(5/6\) after normalized cover
+scaling.
+
+Hence (PXC132)--(PXC133) close a broader invalid route.  A common-branch
+active facet must import a non-\(z\)-tight row, and its raw exactness slack
+cannot be counted as overlap payment.  What remains is not another facet
+census but a theorem assigning the exceptional shears in (PXC133b), or the
+staged blocker labels directly, to disjoint threshold rectangles.
+
 The exact primary and independent audits are:
 \begin{verbatim}
 python3 verify_pxc121_obstruction_spectral_closure.py \
@@ -10029,6 +10080,10 @@ python3 verify_pxc132_forced_zero_packet_escape.py \
   --output pxc132_forced_zero_packet_escape.json
 python3 verify_pxc132_forced_zero_packet_escape_independent.py \
   --output pxc132_forced_zero_packet_escape_independent.json
+python3 verify_pxc133_two_allocation_packet_conservation.py \
+  --output pxc133_two_allocation_packet_conservation.json
+python3 verify_pxc133_two_allocation_packet_conservation_independent.py \
+  --output pxc133_two_allocation_packet_conservation_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary

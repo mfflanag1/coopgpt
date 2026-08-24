@@ -654,6 +654,30 @@ rows so their slack decomposes across disjoint canonical threshold layers.
 An active-facet theorem confined to the z-tight menu cannot solve the
 common branch.
 
+### PXC133 two-allocation packet conservation
+
+Every exceptional packet has a constant exactness gap:
+
+    sum lambda_S sigma_y(S) = beta sigma_y(E) + g,
+    g = rho T + beta v(E) - sum lambda_S v(S) >= 0.
+
+Therefore comparison between the two selectors cancels the gap exactly:
+
+    sum lambda_S [x(S)-z(S)] = beta [x(E)-z(E)].
+
+Raw core slack is not automatically overlap currency. PXC101's active
+rooted mixed packet has slack 9 at x but 8 already at z, leaving comparison
+currency 1. More decisively, the positive-demand PXC125 mixed packet has
+raw slack 22/5 at x but slack 4 at z; its net comparison shear is only
+2/5, below D_H=2/3. PXC104 is the clean fail-open control: every row of its
+cross packet, including the exceptional pair, is z-tight, so all raw 10/3
+survives as comparison currency, or 5/6 after cover normalization.
+
+Together PXC132 and PXC133 rule out counting imported facet slack directly.
+The next theorem must assign exceptional comparison shears—or the staged
+labels that generate them—to vertex-disjoint threshold rectangles. Exactness
+slack already present at z is not spendable a second time.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker

@@ -1,4 +1,4 @@
-# Hostile external review — PXC132 forced-zero active-packet escape
+# Hostile external review — PXC132--PXC133 packet support and conservation
 
 Checkpoint date: 2026-08-24. Review PXC132 in paper5/divergence.tex,
 the matching section of paper5/MECHANISM_PRICE_PROGRAM.md, and the two
@@ -72,6 +72,10 @@ code. The catalogue counts are not used to prove the theorem.
   found no named cooperative-game statement about a unique-negative staged
   blocker, but only a specialist review can determine whether this
   specialization is already standard under another name.
+- PXC133 is an algebraic slack-conservation rewrite of the same incidence
+  identity. It should not be presented as a new facet theorem; the only
+  potentially useful content is its warning against spending exactness
+  slack already present at the comparison allocation.
 
 ## Hostile questions
 
@@ -99,3 +103,50 @@ PXC132 is a short support no-go. It rules out a tempting all-active-facet
 proof in the common-direction branch and identifies the precise resource
 that must enter next: non-z-tight row slack or disjoint staged-label
 currency. It does not prove the hybrid-overlap inequality.
+
+## PXC133 conservation claim
+
+For every packet, not only active ones, PXC133 defines
+
+    g = rho T + beta v(E) - sum lambda_S v(S)
+
+and claims
+
+    sum lambda_S sigma_y(S) = beta sigma_y(E) + g
+
+for every efficient core allocation y. Exactness gives g nonnegative.
+Subtracting the identities at x and z gives
+
+    sum lambda_S [x(S)-z(S)] = beta [x(E)-z(E)].
+
+The review should check the consequence drawn from this: raw core slack at
+x is not overlap currency until the same packet's slack at z is subtracted.
+In the positive-demand PXC125 control the active packet has raw x-slack
+22/5, z-slack 4, and comparison shear 2/5, which is below D_H=2/3.
+
+Additional reproduction:
+
+    python3 \
+      verifiers/divergence/verify_pxc133_two_allocation_packet_conservation.py \
+      --output /tmp/pxc133.json
+    cmp verifiers/divergence/pxc133_two_allocation_packet_conservation.json \
+      /tmp/pxc133.json
+
+    python3 \
+      verifiers/divergence/verify_pxc133_two_allocation_packet_conservation_independent.py \
+      --output /tmp/pxc133-independent.json
+    cmp \
+      verifiers/divergence/pxc133_two_allocation_packet_conservation_independent.json \
+      /tmp/pxc133-independent.json
+
+Additional hostile questions:
+
+9. Is PXC133a exactly a constant-gap identity, including for nonactive
+   packets?
+10. Is it legitimate to conclude that only PXC133b, rather than the raw
+    positive-support slack at x, can be assigned as x-versus-z label
+    currency?
+11. Do the PXC101 and PXC125 calculations correctly separate exactness
+    slack already present at z from comparison shear?
+12. Is this conservation observation standard in exact-game facet theory
+    under a named slack or complementary-slackness formulation?
