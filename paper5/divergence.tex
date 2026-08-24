@@ -9694,6 +9694,106 @@ $P_{\rm cut}(rhbk)=O-B_H=37/5$.  The same one-row certificate gives
 $\chi=1$ throughout the positive-demand PXC125 chamber.  These are positive
 calibrations, not a proof that $\chi$ is universally small.
 
+There is nevertheless a dimension-free bridge from an unseparated carrier
+to the two currencies allowed in the mechanism program.  Let
+${\cal T}_{\cap}$ be the family of proper rows tight at both $x$ and $z$,
+and fix a positive canonical carrier $e=i\to j$, so
+
+\[
+ \min\{x_i,z_i\}>\max\{x_j,z_j\}.
+\]
+
+Put $d_e=e_j-e_i$.  If no row of ${\cal T}_{\cap}$ separates $i$ and $j$,
+then the following assertions hold.
+
+First, some retained $x$-tight row contains $i$ and omits $j$, and some
+full-game $z$-tight row has the same orientation.  Indeed, otherwise $d_e$
+is respectively an admissible staged Lmin improvement at the stratum of
+$j$, or an admissible staged Lmax improvement at the stratum of $i$.
+The decreasing coordinate is positive under the displayed strict
+separation, so active nonnegativity causes no exception.  Neither separating
+row can be common.  Equivalently, for every $0<t<1$ the point
+$p_t=(1-t)x+tz$ admits a sufficiently small Pigou--Dalton transfer
+$p_t+\epsilon d_e$ inside the core: a row tight at an interior point is
+tight at both endpoints, and every row on which $d_e$ is negative has
+strict slack by hypothesis.
+
+Now let ${\cal R}$ be any normalized $z$-tight top cover,
+
+\[
+ \sum_{S\in{\cal R}}\lambda_S\one_S
+ =\eta\one+\sum_{u\in\operatorname{Top}(z)}\alpha_u e_u,
+ \qquad \lambda_S>0.
+\]
+
+Define
+
+\begin{equation}
+ q_{\cal R}(e)=
+ \sum_{\substack{S\in{\cal R}:\\i\in S, j\notin S}}\lambda_S,
+ \qquad
+ \Psi_{\cal R}(e)=
+ \sum_{\substack{S\in{\cal R}:\\one_S(i)\ne\one_S(j)}}
+       \lambda_S\,[x(S)-z(S)].                       \tag{PXC129a}
+\end{equation}
+
+The equal non-top loads in the cover identity give
+
+\begin{equation}
+ q_{\cal R}(e)=
+ \sum_{\substack{S\in{\cal R}:\\j\in S, i\notin S}}\lambda_S.
+                                                               \tag{PXC129b}
+\end{equation}
+
+Consequently exactly one of the following two alternatives holds:
+
+\begin{equation}
+\begin{array}{ll}
+q_{\cal R}(e)>0:
+ &0<\Psi_{\cal R}(e)\le\Phi_{\cal R},\\[2mm]
+q_{\cal R}(e)=0:
+ &d_e(S)=0\ (S\in{\cal R}),\quad
+   \text{and a $z$-tight row }B\notin{\cal C}_x\cup{\cal R}
+   \text{ has }i\in B, j\notin B,
+\end{array}                                                   \tag{PXC129c}
+\end{equation}
+
+where the total top-selection currency is the explicit cover slack
+
+\begin{equation}
+ \Phi_{\cal R}:=
+ \sum_{S\in{\cal R}}\lambda_S[x(S)-z(S)]
+ =\sum_{u\in\operatorname{Top}(z)}\alpha_u(x_u-z_u)\ge0. \tag{PXC129d}
+\end{equation}
+
+For the first alternative, (PXC129b) supplies both incidence orientations.
+Every separating support row is $z$-tight and cannot be $x$-tight, because
+there is no common separator.  Core feasibility of $x$ therefore makes its
+comparison slack strictly positive, proving
+$0<\Psi_{\cal R}(e)\le\Phi_{\cal R}$; dotting the cover identity with
+$x-z$ proves (PXC129d).  For the second alternative, (PXC129b) forces every
+cover row to give $i,j$ identical incidence.  Every ${\cal C}_x$ row active
+at $z$ is common and hence also gives identical incidence.  Thus $d_e$ is a
+later-stage Lmax descent tangent to the retained lift.  Full-game Lmax
+optimality forces an active row with negative derivative; it is precisely
+the displayed omitted outside blocker $B$.  This proves
+(PXC129a)--(PXC129d) without using overlap as payment.
+
+The result is a carrier-to-mechanism theorem, not yet the aggregate price
+theorem.  It says that every PXC128 carrier missed by the common rows is
+paid positively by a cover's actual top-selection slack or produces the
+outside-union blocker required in the common-direction branch.  What remains
+is to couple the PXC128 dual carrier measure to these coverwise charges
+without reusing $\Phi_{\cal R}$, and to prove that the resulting top plus
+blocker currency reaches $D_H$.  PXC127 has both positive carriers cut by
+common rows.  PXC116 likewise common-cuts both of its positive carriers,
+whereas PXC101 and the faithful PXC90 control have none.  PXC104 and PXC118
+sit on the zero-length carrier boundary: their pair and one positive-ambient
+cover realize the tangent alternative, while the opposite positive-ambient
+cover realizes the charged incidence alternative with
+$\Psi_{\cal R}=\Phi_{\cal R}=5/6$.  This boundary calibration is useful but
+does not replace the still-separate reciprocal cross-cover price theorem.
+
 The exact primary and independent audits are:
 \begin{verbatim}
 python3 verify_pxc121_obstruction_spectral_closure.py \
@@ -9724,6 +9824,10 @@ python3 verify_pxc128_fractional_common_cut_cover.py \
   --output pxc128_fractional_common_cut_cover.json
 python3 verify_pxc128_fractional_common_cut_cover_independent.py \
   --output pxc128_fractional_common_cut_cover_independent.json
+python3 verify_pxc129_carrier_cover_price_dichotomy.py \
+  --output pxc129_carrier_cover_price_dichotomy.json
+python3 verify_pxc129_carrier_cover_price_dichotomy_independent.py \
+  --output pxc129_carrier_cover_price_dichotomy_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary
@@ -9753,6 +9857,14 @@ genuinely fractional triangle with $\chi=3/2$, and an infeasible unseparated-
 carrier control.  Its standalone companion rebuilds the carriers and uses
 independent rational Gaussian vertex enumeration.  The weighted summation
 and LP duality above, not those finite controls, prove (PXC128b)--(PXC128c).
+The PXC129 primary audit evaluates the common rows, canonical carriers,
+every displayed cover load, comparison slack, and both alternatives on
+PXC101, PXC104, PXC116, PXC118, PXC127, and PXC90.  Its standalone companion
+exhausts positive integer weights on all four two-player incidence types and
+reconstructs the reciprocal boundary controls without project selector or
+cover code.  The staged-tangent and cover-identity argument above, not the
+finite controls, proves (PXC129a)--(PXC129d).  The quantitative aggregation
+to $D_H$ remains open.
 No novelty claim is made before specialist review.
 
 The certificate-dependence falsifier, rank-potential audit, and their

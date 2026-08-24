@@ -598,6 +598,17 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc128_fractional_common_cut_cover_independent.json \
   "$scratch_dir/pxc128-fractional-common-cut-cover-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc129_carrier_cover_price_dichotomy.py \
+  --output "$scratch_dir/pxc129-carrier-cover-price-dichotomy.json"
+cmp coopgames/verifiers/divergence/pxc129_carrier_cover_price_dichotomy.json \
+  "$scratch_dir/pxc129-carrier-cover-price-dichotomy.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc129_carrier_cover_price_dichotomy_independent.py \
+  --output "$scratch_dir/pxc129-carrier-cover-price-dichotomy-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc129_carrier_cover_price_dichotomy_independent.json \
+  "$scratch_dir/pxc129-carrier-cover-price-dichotomy-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

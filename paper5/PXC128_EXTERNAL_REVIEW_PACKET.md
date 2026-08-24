@@ -68,3 +68,23 @@ step is game-theoretic: use the outside-union blocker, its basic staged Lmax
 Farkas support, and singleton-attainment allocations to convert the dual
 carrier measure into a target-reaching mixed tagged packet.  The reciprocal
 PXC114 branch and final global synthesis remain open.
+
+## Dated prior-art screen (2026-08-24)
+
+- Fractional set-cover LP duality is standard; PXC128 does **not** claim it as
+  new.  See Chvátal, “A Greedy Heuristic for the Set-Covering Problem” (1979),
+  DOI `10.1287/moor.4.3.233`, for the classical set-cover LP setting.
+- Opposite-order assignment and sorted matching belong to the Monge and
+  rearrangement literature; see Burkard, Klinz, and Rudolf, “Perspectives of
+  Monge properties in optimization” (1996), DOI
+  `10.1016/0166-218X(95)00103-X`.  PXC128 claims no novelty for that ingredient.
+- The cooperative-game background was screened against Schmeidler, “Cores of
+  exact games, I” (1972), DOI `10.1016/0022-247X(72)90045-5`, and Studený and
+  Kratochvíl, “Facets of the cone of exact games” (2022), DOI
+  `10.1007/s00186-022-00770-4`.
+
+This screen did not locate a result coupling a fixed complete Lmin
+certificate, the Lmin/Lmax canonical carrier matching, fractional separation
+by common tight rows, and an outside-union staged-Lmax blocker.  That negative
+search is not a novelty determination.  A cooperative-game specialist must
+still review the selector-specific coupling before any novelty claim.

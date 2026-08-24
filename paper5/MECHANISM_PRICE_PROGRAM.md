@@ -524,6 +524,32 @@ one rooted tagged packet satisfying (MCP)--(MWP).  PXC128 does not yet prove
 that extension.  PXC122 and PXC127 both have `chi=1`; a separate triangle
 control has `chi=3/2`, so the reduction is not secretly integral.
 
+### PXC129 carrier-to-cover price dichotomy
+
+PXC129 supplies the local bridge for the unseparated-carrier outcome of
+PXC128.  For a positive carrier `i -> j`, put `d=e_j-e_i`.  If no row tight
+at both selectors separates its endpoints, staged optimality separately
+forces an `x`-tight and a `z`-tight oriented blocker, and every open point of
+the segment from `x` to `z` admits a small Pigou--Dalton transfer in direction
+`d`.
+
+For any normalized `z`-tight top cover, equal non-top loads imply that the
+total cover weight on rows containing `i` but not `j` equals the total weight
+in the reverse orientation.  Hence either both are positive, in which case
+the separated rows pay strictly positive comparison slack inside the exact
+top-selection identity, or both vanish, in which case `d` is tangent to the
+lift and full-game Lmax optimality forces an omitted oriented outside
+blocker.  Thus the PXC128 residue always yields one of the two permitted
+currencies.
+
+This is not the final price theorem.  The live arrow is now quantitative and
+aggregate: couple the PXC128 dual carrier measure to the coverwise selection
+charges and the staged Farkas/singleton-witness values of the forced blockers,
+without reusing a cover's total top currency, and prove the combined payment
+is at least `D_H`.  PXC104 and PXC118 have zero positive canonical carrier
+length; they calibrate the incidence boundary but their reciprocal
+cross-cover price remains a separate obligation.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker
