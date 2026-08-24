@@ -650,6 +650,29 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc133_two_allocation_packet_conservation_independent.json \
   "$scratch_dir/pxc133-two-allocation-packet-conservation-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc134_endpoint_congested_transport.py \
+  --output "$scratch_dir/pxc134-endpoint-congested-transport.json"
+cmp coopgames/verifiers/divergence/pxc134_endpoint_congested_transport.json \
+  "$scratch_dir/pxc134-endpoint-congested-transport.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc134_endpoint_congested_transport_independent.py \
+  --output "$scratch_dir/pxc134-endpoint-congested-transport-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc134_endpoint_congested_transport_independent.json \
+  "$scratch_dir/pxc134-endpoint-congested-transport-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc135_mechanism_labelled_canonical_transport.py \
+  --output "$scratch_dir/pxc135-mechanism-labelled-canonical-transport.json"
+cmp \
+  coopgames/verifiers/divergence/pxc135_mechanism_labelled_canonical_transport.json \
+  "$scratch_dir/pxc135-mechanism-labelled-canonical-transport.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc135_mechanism_labelled_canonical_transport_independent.py \
+  --output "$scratch_dir/pxc135-mechanism-labelled-canonical-transport-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc135_mechanism_labelled_canonical_transport_independent.json \
+  "$scratch_dir/pxc135-mechanism-labelled-canonical-transport-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

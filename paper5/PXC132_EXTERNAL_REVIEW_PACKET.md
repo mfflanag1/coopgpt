@@ -1,8 +1,9 @@
-# Hostile external review — PXC132--PXC133 packet support and conservation
+# Hostile external review — PXC132--PXC135 packet support and transport
 
-Checkpoint date: 2026-08-24. Review PXC132 in paper5/divergence.tex,
-the matching section of paper5/MECHANISM_PRICE_PROGRAM.md, and the two
-PXC132 verifiers. This packet makes no novelty claim.
+Checkpoint date: 2026-08-24. Review PXC132--PXC135 in
+paper5/divergence.tex, the matching section of
+paper5/MECHANISM_PRICE_PROGRAM.md, and all primary/independent verifiers
+listed below. This packet makes no novelty claim.
 
 ## Claimed theorem
 
@@ -76,6 +77,14 @@ code. The catalogue counts are not used to prove the theorem.
   identity. It should not be presented as a new facet theorem; the only
   potentially useful content is its warning against spending exactness
   slack already present at the comparison allocation.
+- PXC134 is the standard fractional-matching/vertex-cover LP dual combined
+  with the project's layer-cake identity. No novelty is claimed for that
+  optimization theorem. The research-specific question is whether exactness
+  and staged selector certificates force a target-reaching admissible edge
+  graph; PXC134 expressly does not answer it.
+- PXC135 is a synthesis of the already displayed PXC129 carrier dichotomy
+  with PXC134 and canonical opposite-rank pairing. No separate novelty claim
+  is made for this synthesis before specialist review.
 
 ## Hostile questions
 
@@ -124,6 +133,18 @@ x is not overlap currency until the same packet's slack at z is subtracted.
 In the positive-demand PXC125 control the active packet has raw x-slack
 22/5, z-slack 4, and comparison shear 2/5, which is below D_H=2/3.
 
+The primary audit also recomputes the full spectral decomposition. It finds
+
+    PXC101: B*=B_H=O=15, packet shear 1;
+    PXC104: B*=B_H=O=56/3, packet shear 10/3;
+    PXC125: B*=B_H=16, O=23, packet shear 2/5.
+
+Hence packet comparison shear is not automatically either `B_H-B*` or
+`O-B_H`. The first two shears are surplus in zero-demand controls; PXC125's
+positive demand is paid by a separate label-layer theorem. Reviewers should
+reject any language that identifies these quantities before an explicit
+demand-aware embedding has been proved.
+
 Additional reproduction:
 
     python3 \
@@ -150,3 +171,92 @@ Additional hostile questions:
     slack already present at z from comparison shear?
 12. Is this conservation observation standard in exact-game facet theory
     under a named slack or complementary-slackness formulation?
+13. Do the spectral controls decisively rule out interpreting packet shear
+    itself as top-selection or label currency, rather than merely showing
+    that one proposed normalization was poor?
+
+## PXC134 endpoint-congested transport
+
+For a predeclared family of residual pairs `i -> j` with
+`max(x_j,z_j)<min(x_i,z_i)`, PXC134 maximizes the clipped interval lengths
+over nonnegative edge weights having outgoing weight at most one and
+incoming weight at most one per player. It claims that this value is at most
+`O-B_H`, by integrating the endpoint constraints across threshold layers,
+and that its exact dual is the fractional bipartite source/sink cover
+`p_i+q_j>=ell_ij`.
+
+For the complete clipped graph the canonical opposite-rank edges attain
+`O-B_H`; this follows because they use every player at most once in each
+orientation. A three-residual chain control has restricted value `1` but
+complete-graph value `3/2=O-B_H`, and detects the invalid stronger choice of
+merging a player's two orientation capacities.
+
+The theorem is only an aggregation interface. It does not claim that every
+PXC114 blocker or cover pair generates a graph attaining `D_H`. The named
+controls are PXC125 (two rungs, value `7`), PXC127 (common-cut graph, value
+`37/5`), and the zero-demand PXC101/PXC104/PXC90 boundaries.
+
+Additional reproduction:
+
+    python3 verifiers/divergence/verify_pxc134_endpoint_congested_transport.py \
+      --output /tmp/pxc134.json
+    cmp verifiers/divergence/pxc134_endpoint_congested_transport.json \
+      /tmp/pxc134.json
+    python3 \
+      verifiers/divergence/verify_pxc134_endpoint_congested_transport_independent.py \
+      --output /tmp/pxc134-independent.json
+    cmp verifiers/divergence/pxc134_endpoint_congested_transport_independent.json \
+      /tmp/pxc134-independent.json
+
+Additional hostile questions:
+
+14. Does the layer proof correctly use one shared endpoint capacity across
+    all thresholds in each orientation, rather than silently assigning a
+    fresh player at each layer?
+15. Is it correct to keep a player's source and sink capacities separate
+    because their active threshold intervals are disjoint, and does the chain
+    control detect an accidental merger?
+16. Is the dual exactly the bipartite fractional matching dual, with no
+    missing blossom constraints or integrality claim?
+17. Are the blocker/Farkas-induced allowed edges defined independently of
+    the desired overlap conclusion, or would a future existence theorem be
+    tautological?
+
+## PXC135 mechanism-labelled canonical saturation
+
+PXC135 combines PXC129 and PXC134. For every positive canonical rank
+carrier, it selects a retained common separator when one exists. Otherwise
+PXC129 labels the carrier by either a separating positive cover row or the
+staged-Lmax blocker forced when that cover gives both endpoints identical
+incidence. The canonical carriers use each player at most once in each
+orientation, so their simultaneous PXC134 value is exactly `O-B_H`.
+
+This claims only qualitative attribution of the existing label currency. It
+does not claim `O-B_H>=D_H`, and it does not spend the packet shears from
+PXC133. The exact remaining question is whether the singleton witnesses and
+Farkas identities attached to these labels exclude a PXC134 dual
+source/sink cover of total below `D_H`.
+
+Additional reproduction:
+
+    python3 \
+      verifiers/divergence/verify_pxc135_mechanism_labelled_canonical_transport.py \
+      --output /tmp/pxc135.json
+    cmp verifiers/divergence/pxc135_mechanism_labelled_canonical_transport.json \
+      /tmp/pxc135.json
+    python3 \
+      verifiers/divergence/verify_pxc135_mechanism_labelled_canonical_transport_independent.py \
+      --output /tmp/pxc135-independent.json
+    cmp \
+      verifiers/divergence/pxc135_mechanism_labelled_canonical_transport_independent.json \
+      /tmp/pxc135-independent.json
+
+Additional hostile questions:
+
+18. Does PXC129 genuinely provide a label for every positive canonical
+    carrier after the common-row case is removed, for one fixed cover at a
+    time?
+19. Does the canonical rank construction use every player at most once in
+    each orientation even when a player appears once in both roles?
+20. Is PXC135 careful to claim only attribution of `O-B_H`, rather than the
+    still-open quantitative lower bound by `D_H`?

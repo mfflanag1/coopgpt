@@ -673,10 +673,94 @@ raw slack 22/5 at x but slack 4 at z; its net comparison shear is only
 cross packet, including the exceptional pair, is z-tight, so all raw 10/3
 survives as comparison currency, or 5/6 after cover normalization.
 
+The surviving amount is **cover-selection shear**, not automatically either
+term in the spectral decomposition. Exact controls give
+
+```text
+          B*     BH     O     BH-B*   O-BH   packet shear
+PXC101    15     15     15      0       0         1
+PXC104    56/3   56/3   56/3    0       0        10/3
+PXC125    16     16     23      0       7         2/5
+```
+
+Thus a positive shear can be entirely surplus when `D_H=0`, and even at
+positive demand it need not be the currency that closes the target. Any
+next theorem must construct an admissible map from selected shears or staged
+labels into the actual threshold layers; nomenclature cannot supply that
+map.
+
 Together PXC132 and PXC133 rule out counting imported facet slack directly.
 The next theorem must assign exceptional comparison shears—or the staged
 labels that generate them—to vertex-disjoint threshold rectangles. Exactness
 slack already present at z is not spendable a second time.
+
+### PXC134 endpoint-congested threshold transport
+
+For any predeclared family of high--low residual pairs `i -> j`, give the
+edge length
+
+    ell_ij = min(x_i,z_i) - max(x_j,z_j) > 0.
+
+Choose nonnegative edge weights with outgoing weight at most one and
+incoming weight at most one at every player. Layer-cake counting proves, in
+every dimension,
+
+    max sum ell_ij rho_ij <= O-B_H.
+
+The exact dual is a bipartite source/sink cover:
+
+    min sum_i (p_i+q_i)  subject to p_i+q_j >= ell_ij, p,q>=0.
+
+For the complete clipped graph, the canonical opposite-rank edges from
+`(CS)` are feasible and attain equality. Hence the LP loses value only when
+the structural mechanism rule omits needed edges.
+
+Hence a blocker/Farkas rule that generates an allowed graph with transport
+value at least `D_H` closes the target. If it fails, the dual potentials with
+total below `D_H` are the precise obstruction that the singleton witnesses
+must contradict. A player has separate high-source and low-sink capacities:
+using it once in each role is safe because the two threshold ranges are
+disjoint. This enforces cross-packet congestion without imposing the false
+stronger requirement that a player appear only once in total.
+
+PXC125's two predeclared rungs give value `7=O-B_H`; PXC127's common-cut
+graph gives `37/5=O-B_H`; both exceed `D_H=2/3`. PXC101, PXC104, and PXC90
+have no positive label layer and zero demand, so their positive packet
+shears do not enter this transport LP.
+An allocation-only chain control confirms that the split capacities retain
+two consecutive half-unit edges through the same physical player; merging
+the capacities would incorrectly lose one. Its restricted value is `1`;
+the complete clipped graph restores all `3/2` of its label currency.
+
+The remaining theorem is now exact: from a positive-demand PXC114 common
+blocker or reciprocal blocker pair, construct an allowed edge graph whose
+fractional matching value reaches `D_H`, or use the dual source/sink potentials
+to derive a contradiction from the staged Farkas identities and singleton-
+attainment witnesses.
+
+### PXC135 mechanism-labelled canonical saturation
+
+PXC129 and PXC134 remove the qualitative construction/congestion issue.
+Take every positive canonical rank carrier from `(CS)`. If a common tight
+row separates its endpoints, use that row as its label. Otherwise PXC129,
+applied to any qualifying cover, supplies either a separating positive cover
+row or the staged-Lmax blocker forced when the cover sees the endpoints
+identically. Thus every canonical carrier has a tight-row/polar mechanism
+label.
+
+The canonical carriers use each player at most once as source and once as
+sink, so all can be assigned weight one simultaneously in PXC134. Their
+value is exactly `O-B_H`. This proves a dimension-free mechanism attribution
+of all label currency in both PXC114 branches, without spending packet shear.
+A row label may repeat because it certifies incidence only; no row slack is
+being charged once per carrier.
+
+What remains is quantitative, not combinatorial selection: prove from the
+singleton-attainment and staged Farkas inequalities attached to those labels
+that no PXC134 source/sink dual cover of total below `D_H` can exist. In
+other words, the missing lemma must lower-bound the lengths of the already
+labelled canonical carriers; adding more labels or more packet catalogues
+cannot solve it.
 
 ## 12. Faithful complement
 

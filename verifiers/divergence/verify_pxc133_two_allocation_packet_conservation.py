@@ -19,6 +19,7 @@ ARCHIVE = HERE.parent / "search_archive"
 sys.path[:0] = [str(ARCHIVE), str(ROOT / "src")]
 
 from unrestricted_pxc91c_exact_search import lower_envelope  # noqa: E402
+from audit_spectral_label_currency import spectral_decomposition  # noqa: E402
 
 
 def csum(point, coalition):
@@ -84,6 +85,58 @@ def encode(value):
     return value
 
 
+def spectral_currency_controls():
+    games = [
+        (
+            "PXC101", F(17), {7: F(11), 11: F(11), 17: F(6), 51: F(11)},
+            tuple(F(v) for v in ("9/2", "9/2", 2, 2, 2, 2)),
+            tuple(F(v) for v in (4, 4, 3, 3, 2, 1)), F(1),
+        ),
+        (
+            "PXC104", F(23),
+            {7: F(16), 11: F(16), 19: F(13), 23: F(18), 35: F(13), 39: F(18)},
+            tuple(F(v) for v in ("41/6", "41/6", "7/3", "7/3", "7/3", "7/3")),
+            tuple(F(v) for v in (6, 6, 5, 4, 1, 1)), F(10, 3),
+        ),
+        (
+            "PXC125", F(25), {3: F(12), 19: F(14), 39: F(89, 5), 43: F(23)},
+            tuple(F(v) for v in ("13/2", "13/2", 1, 5, 1, 5)),
+            tuple(F(v) for v in (6, 6, 0, "26/5", 2, "29/5")), F(2, 5),
+        ),
+    ]
+    answer = []
+    expected = {
+        "PXC101": (F(15), F(15), F(15), F(0), F(0)),
+        "PXC104": (F(56, 3), F(56, 3), F(56, 3), F(0), F(0)),
+        "PXC125": (F(16), F(16), F(23), F(0), F(7)),
+    }
+    for name, total, constraints, x, z, packet_shear in games:
+        values = lower_envelope(constraints, 6, total)
+        item = spectral_decomposition(name, values, x, z)
+        b_star = F(item["sharpened_spectral_bound_ratio"]) * total
+        b_h = F(item["actual_top_bound_ratio"]) * total
+        overlap = F(item["overlap_ratio"]) * total
+        top_currency = F(item["top_selection_currency_ratio"]) * total
+        label_currency = F(item["label_currency_ratio"]) * total
+        actual = (b_star, b_h, overlap, top_currency, label_currency)
+        if actual != expected[name]:
+            raise AssertionError((name, actual, expected[name]))
+        answer.append({
+            "name": name,
+            "B_star": b_star,
+            "B_H": b_h,
+            "overlap": overlap,
+            "spectral_top_selection_currency": top_currency,
+            "residual_label_currency": label_currency,
+            "packet_net_comparison_shear": packet_shear,
+            "packet_shear_not_automatically_a_decomposition_currency": (
+                packet_shear > 0 and top_currency == 0 and
+                (label_currency == 0 or packet_shear != label_currency)
+            ),
+        })
+    return answer
+
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--output", type=Path)
@@ -124,6 +177,7 @@ def main():
             "= beta[x(E)-z(E)]; exactness gaps cancel between the two allocations"
         ),
         "records": records,
+        "spectral_currency_controls": spectral_currency_controls(),
         "positive_demand_control": {
             "required_D_H": demand,
             "raw_packet_slack_at_x": pxc125["raw_positive_slack_at_x"],
