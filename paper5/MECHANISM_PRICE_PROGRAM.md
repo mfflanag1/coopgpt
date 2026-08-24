@@ -762,6 +762,74 @@ other words, the missing lemma must lower-bound the lengths of the already
 labelled canonical carriers; adding more labels or more packet catalogues
 cannot solve it.
 
+### PXC136 stationary singleton-witness bridge
+
+The carrier dual factorizes because the canonical carriers form a matching.
+The first coefficient-bearing object that does not factor is instead the
+stationary circulation of all singleton-attainment witnesses.  With total
+`T`, use variables `pi_r,F_ri` satisfying
+
+```text
+sum_i F_ri = pi_r = sum_i F_ir,     F_rr=0,
+T F_r(S) >= pi_r v(S),              sum_r pi_r=1.
+```
+
+Exactness makes this system nonempty: normalize one zero-at-`r` core witness
+per row and take a stationary distribution of the resulting zero-diagonal
+Markov matrix.  Conversely every positive flow row is exactly such a core
+witness after rescaling.  The stationary core allocation `y=T*pi` satisfies
+`y_i<=T/2`.
+
+For any allocations `x,z`, define
+
+```text
+Psi_stat=max sum_i[min(x_i,y_i)+min(z_i,y_i)]-T.
+```
+
+Then
+
+```text
+Psi_stat
+ = O(x,z)-min sum_i dist(y_i,[min(x_i,z_i),max(x_i,z_i)])
+ <= O(x,z).
+```
+
+This is a conventional all-dimensional theorem, not a census.  Its LP dual
+has one family of exact-game row coefficients for every root, coupled by
+shared row/column potentials; it is the first candidate price that cannot be
+spent independently edge-by-edge.
+
+The live conjecture is the exact disjunction
+
+```text
+max(B_star,Psi_stat) >= c_n T.                         (PXC136?)
+```
+
+It passes the two six-player archive banks exactly: among 374 raw records
+(373 distinct selector triples), 321 are closed first by `B_star` and the
+other 52 have a target-reaching stationary bridge.  It also closes the
+positive-demand PXC125 control and every balanced `G(p,k)`; on the latter a
+two-witness bipartite stationary chain puts `T*pi` coordinatewise between
+the two selectors and hence recovers overlap exactly.  PXC101, PXC104 and
+PXC118 are positive controls; PXC90 is already a spectral/full-rank boundary.
+
+The arms are genuinely complementary.  A sharp total-four equality control
+has exact stationary optimum `45/17<8/3`, while its spectral bound equals
+`8/3`.  Exact primal/dual certificates use the six irredundant core rows;
+deleting the witness-core constraints raises the relaxed bridge to `8/3`.
+
+The next goal is no longer to construct more transport labels.  It is:
+
+> **Spectral-deficit stationary-dual theorem (open).**  Assume
+> `B_star<c_n T`.  Combine the complete staged Lmin/Lmax Farkas identities
+> with an arbitrary dual certificate for `Psi_stat` to prove that its dual
+> objective is at least `(1+c_n)T`.
+
+Falsification must search directly for an exact selector pair with both
+`B_star<c_nT` and `Psi_stat<c_nT`, then independently replay the selectors,
+the spectral certificate, and matched stationary primal/dual optima.  A
+six-player catalogue extension is not a substitute for this two-sided test.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker

@@ -673,6 +673,18 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc135_mechanism_labelled_canonical_transport_independent.json \
   "$scratch_dir/pxc135-mechanism-labelled-canonical-transport-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc136_stationary_witness_bridge.py \
+  --output "$scratch_dir/pxc136-stationary-witness-bridge.json"
+cmp coopgames/verifiers/divergence/pxc136_stationary_witness_bridge.json \
+  "$scratch_dir/pxc136-stationary-witness-bridge.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc136_stationary_witness_bridge_independent.py \
+  coopgames/verifiers/divergence/pxc136_stationary_witness_bridge.json \
+  --output "$scratch_dir/pxc136-stationary-witness-bridge-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc136_stationary_witness_bridge_independent.json \
+  "$scratch_dir/pxc136-stationary-witness-bridge-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
