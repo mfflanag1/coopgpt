@@ -1033,18 +1033,19 @@ The exact upper bound on `tau_star` is a box-saturating primal.  A left
 supporting dual with `D=469/34`, `E=81/68`, and
 `D+(14/81)E=T+O=14` proves the matching lower bound.
 
-The live theorem is now the product estimate
+The product estimate proposed at this checkpoint was
 
 ```text
 tau_star*e0
  <= C_top+C_label-(c_n*T-B_star).                     (PXC140?)
 ```
 
-It must be derived from PXC112/PXC114 currency.  This is a sufficient
-mechanism-to-price theorem, not an equivalent reformulation of the main
-inequality: the product may overestimate the true integrated price.  PXC139
-closes the initial-slope-only route; further work should bound the saturation
-factor, not search for a different stationary optimal dual.
+It is a sufficient mechanism-to-price theorem, not an equivalent
+reformulation of the main inequality: the product may overestimate the true
+integrated price.  PXC142 now falsifies it even in the strict-spectral n=6
+domain.  PXC139 closes the initial-slope-only route and PXC142 closes the
+uniform slope-times-saturation route; the surviving object is the integrated
+release price itself.
 
 ## 12. Faithful complement
 
@@ -1075,6 +1076,50 @@ T=4, O=3 < (5/6)T=10/3.
 Exact primary and standalone symbolic replays pin the 32 game values, both
 staged selectors, all 16 subfamilies of the proper x-tight pool, every
 complete subfamily, and the exhaustive spectral-top result.  Since n<=4 has
-Lmin=Lmax, this is the smallest counterexample.  The next goal is the
-explicit n>=6 theorem, using PXC140's product bound as the live sufficient
-route and retaining PXC141 as the fail-open domain guard.
+Lmin=Lmax, this is the smallest counterexample.  The corrected n>=6 theorem
+remains the live goal, with PXC141 as the mandatory domain guard.
+
+## 14. PXC142 structural saturation bound and product-route no-go
+
+Mixing any zero-diagonal stationary flow with the PXC137 product flow gives
+the dimension-free bound
+
+~~~text
+tau_star <= inf_F0 max_i q_i/(q_i+a_i),
+a_i=|x_i-z_i|/2,
+q_i=dist(T*pi_i,[min(x_i,z_i),max(x_i,z_i)]).
+~~~
+
+Equivalently, if a zero-diagonal stationary center lies in the selector box
+expanded by a factor kappa, then tau_star<=1-1/kappa.  This is a genuine
+structural theorem, but a complement-tight equal-coordinate can force
+tau_star=1.
+
+The exact n=6 blend
+
+~~~text
+v=(1/35)v_sharp+(34/35)(v_139/2)
+~~~
+
+has
+
+~~~text
+B_star=559/210 < 8/3,
+O=47/15,
+x_2=z_2=1/35,
+v(N\{2})=139/35.
+~~~
+
+The last two identities force the full product diagonal at player 2 in every
+overlap-attaining stationary bridge, hence tau_star=1.  Exact rational
+primal--dual certificates at t=1/4 and t=0 give
+
+~~~text
+e0 >= 1678344132/2126609611 > 7/15=O-c_6*T.
+~~~
+
+Thus PXC140e is false inside the corrected strict-spectral domain.  The game
+is not a counterexample to the main overlap inequality.  The next proof
+route must control the integrated shadow-price curve directly, exploiting
+how its active dual face changes, rather than multiplying a worst initial
+slope by a worst saturation time.
