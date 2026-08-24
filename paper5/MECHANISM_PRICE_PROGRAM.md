@@ -830,6 +830,67 @@ Falsification must search directly for an exact selector pair with both
 the spectral certificate, and matched stationary primal/dual optima.  A
 six-player catalogue extension is not a substitute for this two-sided test.
 
+### PXC137 product midpoint and forced-diagonal price
+
+The stationary relaxation is now exact.  Drop only `F_rr=0` from PXC136 and
+put
+
+```text
+pi_r=(x_r+z_r)/(2T),
+F_ri=(x_r z_i+z_r x_i)/(2T^2),
+y=(x+z)/2.
+```
+
+Row and column marginals are `pi`, and every root-labelled core row has the
+exact slack
+
+```text
+T F_r(S)-pi_r v(S)
+ = [x_r(z(S)-v(S))+z_r(x(S)-v(S))]/(2T) >= 0.
+```
+
+Because `y` lies in the coordinate box between the selectors, the relaxed
+bridge equals `O` exactly.  Thus the entire PXC136 loss is caused by the
+single structural constraint `F_rr=0`; it is not caused by aggregate core
+feasibility, row/column balance, or cap linearization.
+
+A fixed-midpoint repair is a matrix `R` with zero row/column sums,
+`R_rr=-x_r z_r/T^2`, `F+R>=0`, and each core-row derivative bounded below by
+the negative displayed slack.  Common-tight selector rows have zero slack,
+so the repair directions lie in the PXC112 common tangent.  This is the
+first exact algebraic interface from the stationary bridge to PXC114:
+PXC114 independently supplies common outside-union blockers or reciprocal
+cross-cover pairs on the universal-cover-failure branch.  Proving that those
+labels control the coupled diagonal repair is the next theorem; it is not
+claimed by PXC137.
+
+In the PXC136 dual define
+
+```text
+L_r(i)=sum_(S contains i) lambda_rS,
+Delta_r=T L_r(r)-A_r-B_r.
+```
+
+The diagonal-relaxed dual simply adds `Delta_r<=0`.  Weighting the existing
+dual by the product flow proves
+
+```text
+dual objective >= T+O-sum_r (x_r z_r/T^2)[Delta_r]_+.
+```
+
+Hence every strict stationary loss has explicit root-labelled diagonal
+currency.  The live quantitative theorem is no longer an unspecified
+coupling of all exactness rows:
+
+> **Forced-diagonal spectral price (open).** If `B_star<c_nT`, use the
+> staged common/reciprocal labels to bound the weighted positive diagonal
+> defects of an optimal stationary dual by `O-c_nT`.
+
+This statement uses only cover/blocker incidence, staged polar identities,
+and the PXC136 dual potentials.  It does not spend overlap as an unexplained
+payment.  The sharp total-four control has relaxed value `O=8/3` but true
+stationary value `45/17`, so the diagonal price is genuinely positive.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker

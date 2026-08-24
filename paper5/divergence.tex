@@ -10306,6 +10306,86 @@ combine the selector's staged Farkas identities with every feasible dual
 the coefficient-bearing mechanism-to-price theorem; it does not count raw
 packet shear or overlap as unexplained currency.
 
+There is an exact reduction of that coefficient theorem to the forbidden
+diagonal.  Temporarily drop only \(F_{rr}=0\) from \({\cal W}(v)\), and call
+the resulting bridge value \(\Psi^\Delta\).  For any two efficient core
+allocations \(x,z\), put
+
+\begin{equation}
+ \pi_r^0=\frac{x_r+z_r}{2T},\qquad
+ F^0_{ri}=\frac{x_rz_i+z_rx_i}{2T^2},\qquad
+ y^0=\frac{x+z}{2}.                                    \tag{PXC137a}
+\end{equation}
+
+The product occupation measure has row and column marginals \(\pi^0\).
+Moreover, for every root \(r\) and proper coalition \(S\),
+
+\begin{equation}
+ T F^0_r(S)-\pi_r^0v(S)
+ =\frac{x_r[z(S)-v(S)]+z_r[x(S)-v(S)]}{2T}\ge0.        \tag{PXC137b}
+\end{equation}
+
+Thus \(F^0\) satisfies every witness-core inequality.  Since \(y^0\) lies
+coordinatewise between \(x\) and \(z\), its relaxed bridge value is exactly
+\(O(x,z)\).  The pointwise inequality (PXC136d) gives the converse bound, so
+
+\[
+                         \Psi^\Delta(v;x,z)=O(x,z).
+\]
+
+This is stronger than saying that exactness supplies enough aggregate core
+mass: the displayed formula satisfies every root-labelled row separately.
+The sole violation of (PXC136a) is
+\(F^0_{rr}=x_rz_r/T^2\).  Equivalently, a zero-diagonal bridge with the same
+midpoint exists exactly when there is a repair matrix \(R\) satisfying
+
+\begin{align}
+ &R\one=0,\quad R^{\mathsf T}\one=0,\quad
+ R_{rr}=-x_rz_r/T^2,\quad F^0+R\ge0,\nonumber\\
+ &T R_r(S)\ge
+ -\frac{x_r[z(S)-v(S)]+z_r[x(S)-v(S)]}{2T}
+       \qquad(r,S).                                      \tag{PXC137c}
+\end{align}
+
+In particular every row common-tight at \(x,z\) has zero right-hand slack,
+so each repair row must lie in its common tangent halfspace.  This is the
+direct interface with the PXC112 quotient.  Failure of the coupled repair
+is therefore a forced-zero tangent obstruction.  Separately, PXC114 says
+that universal cover failure is exposed by a common outside-union blocker
+or a reciprocal cross-cover pair.  Showing that those labels control the
+repair obstruction is the remaining theorem, not a consequence asserted
+here.
+
+The same conclusion is visible in the dual.  Write
+\(L_r(i)=\sum_{S\ni i}\lambda_{rS}\) and
+\(\Delta_r=T L_r(r)-A_r-B_r\).  Dropping \(F_{rr}=0\) adds precisely the
+missing diagonal inequalities \(\Delta_r\le0\) to (PXC136e).  More
+quantitatively, multiply the root constraints by \(\pi_r^0\), the
+off-diagonal arc constraints by \(F^0_{ri}\), and use (PXC137b).  For every
+feasible PXC136 dual of objective \(D\),
+
+\begin{equation}
+ D\ge T+O(x,z)-\sum_r\frac{x_rz_r}{T^2}[\Delta_r]_+ .   \tag{PXC137d}
+\end{equation}
+
+The cap inequalities give \(T+O\) because \(y^0\) is inside the selector
+box; the row and column potentials cancel off the diagonal.  Consequently
+every strict stationary loss has an explicit coefficient-bearing
+forced-diagonal charge.  This does not yet price that charge sharply: the
+live theorem is to show, under \(B_*<c_nT\), that the staged
+common/reciprocal labels bound the weighted diagonal charge in (PXC137d) by
+\(O-c_nT\).  Unlike a direct invocation of overlap, every term to be bounded
+is now a root-labelled coalition load or a row/column potential from the
+stationary dual.
+
+The reduction is nonvacuous on every named mechanism control: the product
+flow recovers overlap exactly when the diagonal is relaxed, whereas fixing
+the same midpoint and restoring zero diagonal is infeasible on PXC101,
+PXC104, PXC118, PXC125, PXC90, and the sharp total-four control.  On the
+last game, the unrestricted stationary optimum is \(45/17\), so the
+forced-diagonal price is the positive amount \(1/51\).  These finite checks
+audit strictness only; (PXC137a)--(PXC137d) are the all-dimensional proof.
+
 The exact primary and independent audits are:
 \begin{verbatim}
 python3 verify_pxc121_obstruction_spectral_closure.py \
@@ -10369,6 +10449,10 @@ python3 verify_pxc136_stationary_witness_bridge.py \
 python3 verify_pxc136_stationary_witness_bridge_independent.py \
   pxc136_stationary_witness_bridge.json \
   --output pxc136_stationary_witness_bridge_independent.json
+python3 verify_pxc137_product_diagonal_obstruction.py \
+  --output pxc137_product_diagonal_obstruction.json
+python3 verify_pxc137_product_diagonal_obstruction_independent.py \
+  --output pxc137_product_diagonal_obstruction_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary
@@ -10429,6 +10513,14 @@ polytopes and rescales every displayed positive flow row into a
 singleton-zero core witness.  The stationary-distribution and scalar
 distance arguments above, not the finite controls, prove
 (PXC136a)--(PXC136e); the boxed disjunction remains open.
+The PXC137 primary audit checks the product-flow/slack identities on every
+archived selector triple, restores the zero diagonal at the fixed midpoint
+on the named controls, and evaluates the missing diagonal inequalities on
+the sharp dual.  Its standalone companion uses only Fraction arithmetic on
+independently generated exact lower envelopes through dimension ten.  The
+product calculation and dual weighted-summation above, not those finite
+controls, prove (PXC137a)--(PXC137d).  Pricing the diagonal defects at the
+hybrid threshold remains open.
 No novelty claim is made before specialist review.
 
 The certificate-dependence falsifier, rank-potential audit, and their

@@ -685,6 +685,17 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc136_stationary_witness_bridge_independent.json \
   "$scratch_dir/pxc136-stationary-witness-bridge-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc137_product_diagonal_obstruction.py \
+  --output "$scratch_dir/pxc137-product-diagonal-obstruction.json"
+cmp coopgames/verifiers/divergence/pxc137_product_diagonal_obstruction.json \
+  "$scratch_dir/pxc137-product-diagonal-obstruction.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc137_product_diagonal_obstruction_independent.py \
+  --output "$scratch_dir/pxc137-product-diagonal-obstruction-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc137_product_diagonal_obstruction_independent.json \
+  "$scratch_dir/pxc137-product-diagonal-obstruction-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
