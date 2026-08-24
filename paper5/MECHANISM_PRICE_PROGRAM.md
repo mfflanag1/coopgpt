@@ -414,6 +414,17 @@ PXC125 case, `t=1`, use `C=rhbK`, `Q=rhaK`, and the four players
 this is merely a smaller valid subpacking than PXC125's two-distinct-`K`
 price, but those dimensions already have `D_H=0`.
 
+For fixed `C,Q`, optimization over the four representatives separates:
+
+```text
+max P_square
+ = (max_V11 a - min_V01 b)_+ + (max_V10 a - min_V00 b)_+.
+```
+
+An empty cell means that row pair supplies no square.  Hence, after fixing
+payoff orders and a certificate/blocker menu, square failure is an explicit
+finite piecewise-linear system rather than a hidden combinatorial search.
+
 > **Boolean-square price extraction (open).**  Every positive-demand PXC114
 > common obstruction either has a retained common row, a basic staged
 > outside-union blocker, and four incidence-cell representatives with
@@ -430,6 +441,54 @@ This is now the shortest route to a full common-branch theorem.  Do not call
 the Boolean square an oriented-matroid or player minor, and do not replace
 the blocker-generated family by all canonical rectangles, which would
 collapse back to the label-currency identity.
+
+### PXC127 correction: square failure and the common-row cut
+
+The square-only implication is false.  The exact total-25 lower envelope
+
+```text
+rh>=12, rhj>=69/5, rhak>=89/5, rhbk>=23, rhajk>=99/5
+```
+
+has
+
+```text
+x=(32/5,32/5,1,51/10,1,51/10),
+z=(6,6,1/5,26/5,9/5,29/5).
+```
+
+Its unique complete proper-row certificate is `{rhj,rhbk}`, its sole extreme
+top cover is `{rh}`, and the reduced Lmax is
+`(6,6,1/5,11/2,9/5,11/2)`.  The common direction moves `b` up and `k` down;
+the two omitted negative blockers are `rhk,rhajk`.  Every certificate/blocker
+pair has an empty Boolean cell, so the maximum square price is zero although
+`D_H=2/3`.
+
+The same witness exposes the stronger price.  For a common row `C`, split the
+residual players into `I=C cap R` and `J=R minus C`.  Give every cross edge
+`ij` weight `max((a_i-b_j)_+,(a_j-b_i)_+)` and take a maximum-weight matching.
+This permits edgewise mixed orientations; every active edge still consumes a
+different high-high and low-low endpoint.  Hence
+`P_cut(C)<=O-B_H` by the same threshold count.  In PXC127, `C=rhbk` separates
+`{b,k}` from `{a,j}` and
+
+```text
+P_cut=(51/10-1)+(51/10-9/5)=37/5=O-B_H>D_H.
+```
+
+The next falsifiable common-branch target is therefore:
+
+> **Common-row cut-or-witness theorem (open).** Every positive-demand PXC114
+> common obstruction either has a retained common certificate row `C` with
+> `P_cut(C)>=D_H`, or an explicitly selected mixed singleton-attainment
+> packet satisfying (MCP)--(MWP) pays the residual demand.
+
+The pure cut implication must be attacked first.  A counterexample must have
+`max_C P_cut(C)<D_H`, not merely an empty Boolean cell.  If it exists, retain
+the smallest exact witness and derive the mixed packet from the actual
+outside-union blocker and its staged Farkas support.  Do not use the full
+unrestricted rectangle matching, since that is just the label-currency
+identity in disguise.
 
 ## 12. Faithful complement
 

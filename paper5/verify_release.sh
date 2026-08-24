@@ -576,6 +576,17 @@ run_python \
   --output "$scratch_dir/pxc126-boolean-square-price-independent.json"
 cmp coopgames/verifiers/divergence/pxc126_boolean_square_price_independent.json \
   "$scratch_dir/pxc126-boolean-square-price-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc127_common_row_cut_falsifier.py \
+  --output "$scratch_dir/pxc127-common-row-cut-falsifier.json"
+cmp coopgames/verifiers/divergence/pxc127_common_row_cut_falsifier.json \
+  "$scratch_dir/pxc127-common-row-cut-falsifier.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc127_common_row_cut_falsifier_independent.py \
+  --output "$scratch_dir/pxc127-common-row-cut-falsifier-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc127_common_row_cut_falsifier_independent.json \
+  "$scratch_dir/pxc127-common-row-cut-falsifier-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

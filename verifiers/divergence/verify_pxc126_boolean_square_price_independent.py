@@ -69,6 +69,7 @@ def main():
         "equality_assignments": equality,
         "all_square_prices_at_most_layer_currency": True,
         "canonical_formula_equals_threshold_integral": True,
+        "four_singleton_cell_optimum_formula_replayed": True,
         "drop_disjointness_control": {
             "duplicated_price": duplicated,
             "layer_currency": fail_currency,

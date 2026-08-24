@@ -49,6 +49,30 @@ def square(a: tuple[F, ...], b: tuple[F, ...], u: tuple[int, int, int, int]) -> 
     return positive(a[u11] - b[u01]) + positive(a[u10] - b[u00])
 
 
+def square_optimum(a, b, cell_of):
+    cells = {
+        key: tuple(i for i, cell in enumerate(cell_of) if cell == key)
+        for key in ((1, 1), (0, 1), (1, 0), (0, 0))
+    }
+    if any(not cell for cell in cells.values()):
+        return None
+    formula = positive(max(a[i] for i in cells[1, 1]) - min(
+        b[i] for i in cells[0, 1]
+    )) + positive(max(a[i] for i in cells[1, 0]) - min(
+        b[i] for i in cells[0, 0]
+    ))
+    brute = max(
+        square(a, b, (u11, u01, u10, u00))
+        for u11 in cells[1, 1]
+        for u01 in cells[0, 1]
+        for u10 in cells[1, 0]
+        for u00 in cells[0, 0]
+    )
+    if formula != brute:
+        raise AssertionError((formula, brute, cells))
+    return formula
+
+
 def pxc125(t: int, A: F, B: F, K0: F, M: F):
     C = A + (t + 1) * B - t * K0
     if not (
@@ -103,6 +127,7 @@ def main():
     args = parser.parse_args()
 
     profiles = []
+    closed_form_checks = 0
     for seed in range(1, 97):
         a = tuple(F((seed * (i + 3) + i * i) % 17, 3 + (i % 3)) for i in range(7))
         gaps = tuple(F((seed + 2 * i) % 11, 4 + (i % 2)) for i in range(7))
@@ -115,6 +140,12 @@ def main():
         paid = square(a, b, u)
         if canonical != layered or paid > canonical:
             raise AssertionError((seed, canonical, layered, paid))
+        pattern = ((1, 1), (0, 1), (1, 0), (0, 0))
+        cells = tuple(pattern[(i + seed) % 4] for i in range(7))
+        optimum = square_optimum(a, b, cells)
+        if optimum is None or optimum > canonical:
+            raise AssertionError((seed, cells, optimum, canonical))
+        closed_form_checks += 1
         profiles.append({"seed": seed, "square": paid, "currency": canonical})
 
     anchors = [
@@ -136,6 +167,7 @@ def main():
     payload = {
         "claim": "exact arithmetic audit of the PXC126 Boolean-square label subpacking",
         "deterministic_rational_profiles": len(profiles),
+        "closed_form_optimum_checks": closed_form_checks,
         "profile_digest_data": profiles,
         "pxc125_boolean_square_specializations": anchors,
         "fail_open": {

@@ -114,3 +114,13 @@ hypotheses for subsequent runs.
   basic faithful cover; the four canonical common/reciprocal obstructions
   have zero demand; and no record in the 374-game n=6 archive has positive
   demand.  This is finite falsification evidence only, not an all-n theorem.
+- `search_pxc126_boolean_square_falsifier.py` +
+  `pxc127_common_row_cut_search_run1.json` -- targeted exact discovery audit
+  for the Boolean-square and stronger common-row-cut extraction statements.
+  The named PXC122 calibration has square and cut price `7`; the named PXC127
+  calibration has positive demand `2/3`, square price zero, and cut price
+  `37/5`.  The retained local run uses seed 20260824 and 24 mutations.  It is
+  discovery provenance only: the PXC127 theorem/counterexample is replayed by
+  the adjacent primary and independent verifiers, and a null cut search is
+  not a universal theorem.  Reproduce with
+  `/Users/maxf/miniforge3/bin/python3 verifiers/divergence/search_archive/search_pxc126_boolean_square_falsifier.py --rounds 24 --seed 20260824 --mode local --output verifiers/divergence/search_archive/pxc127_common_row_cut_search_run1.json`.
