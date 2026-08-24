@@ -587,6 +587,17 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc127_common_row_cut_falsifier_independent.json \
   "$scratch_dir/pxc127-common-row-cut-falsifier-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc128_fractional_common_cut_cover.py \
+  --output "$scratch_dir/pxc128-fractional-common-cut-cover.json"
+cmp coopgames/verifiers/divergence/pxc128_fractional_common_cut_cover.json \
+  "$scratch_dir/pxc128-fractional-common-cut-cover.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc128_fractional_common_cut_cover_independent.py \
+  --output "$scratch_dir/pxc128-fractional-common-cut-cover-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc128_fractional_common_cut_cover_independent.json \
+  "$scratch_dir/pxc128-fractional-common-cut-cover-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

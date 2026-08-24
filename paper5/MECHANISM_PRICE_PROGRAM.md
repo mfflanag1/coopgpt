@@ -490,6 +490,40 @@ outside-union blocker and its staged Farkas support.  Do not use the full
 unrestricted rectangle matching, since that is just the label-currency
 identity in disguise.
 
+### PXC128 fractional cut-cover reduction
+
+Let `E` be the positive canonical rank carriers from (CS), with lengths
+`ell_e`, and let `delta_Ce` record whether common row `C` separates the two
+endpoints of carrier `e`.  The fractional set-cover number
+
+```text
+chi = min sum_C theta_C
+      s.t. theta>=0 and sum_C theta_C delta_Ce >= 1 for every e
+```
+
+gives the dimension-free lower bound
+
+```text
+max_C P_cut(C) >= (O-B_H)/chi.
+```
+
+This follows because the canonical edges crossing any fixed row are already
+a feasible matching for that row.  If the pure cut implication fails, then
+either one positive carrier is unseparated by every common row, or the exact
+dual produces rational weights `y_e` with
+
+```text
+sum_e y_e > (O-B_H)/D_H,
+sum_{e cut by C} y_e <= 1  for every common row C.
+```
+
+This is the next packet input: a carrier measure which is sparse across every
+common-certificate cut.  The live lemma is to combine that measure with the
+actual outside-union blocker and its basic staged Farkas support to construct
+one rooted tagged packet satisfying (MCP)--(MWP).  PXC128 does not yet prove
+that extension.  PXC122 and PXC127 both have `chi=1`; a separate triangle
+control has `chi=3/2`, so the reduction is not secretly integral.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker

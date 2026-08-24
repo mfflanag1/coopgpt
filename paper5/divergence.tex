@@ -9618,6 +9618,82 @@ $P_{\rm cut}(C)\ge D_H$, or whether the residual demand must instead be
 paid by an explicit mixed singleton-witness packet (MCP)--(MWP).  Neither
 alternative is claimed universally here.
 
+There is an exact dimension-free reduction of that question to one
+fractional separation parameter.  Take the canonical rank matching in (CS),
+delete its zero-length pairs, and call the resulting matching $E$.  If
+$e=ij\in E$ is oriented from its high endpoint to its low endpoint, write
+$\ell_e=a_i-b_j>0$; thus
+$\sum_{e\in E}\ell_e=O-B_H$.  For a predeclared family $\mathcal F$ of
+retained common rows, put
+$\delta_{Ce}=|\one_C(i)-\one_C(j)|$ and define the fractional cut-cover
+number
+
+\begin{equation}
+ \chi(\mathcal F,E)=
+ \min\left\{\sum_{C\in\mathcal F}\theta_C:
+       \theta_C\ge0,\quad
+       \sum_{C\in\mathcal F}\theta_C\delta_{Ce}\ge1
+       \quad(e\in E)\right\},                       \tag{PXC128a}
+\end{equation}
+
+with value $+\infty$ when the system is infeasible.  Whenever it is finite,
+
+\begin{equation}
+ \max_{C\in\mathcal F}P_{\rm cut}(C)
+ \ \ge\ \frac{O-B_H}{\chi(\mathcal F,E)}.           \tag{PXC128b}
+\end{equation}
+
+First note that the positive canonical carriers really are vertex-disjoint,
+despite being obtained from two orderings of the same player set.  A player
+$j$ cannot be the low endpoint at rank $p$ and the high endpoint at rank
+$q$: positivity of the incoming carrier gives
+$a_i>b_j\ge a_j$, so $p<q$ in the decreasing $a$-order, whereas the
+increasing $b$-order gives $b_j\le b_k$ and positivity of the outgoing
+carrier would give $a_j>b_k$, a contradiction.  The high endpoints and low
+endpoints are separately distinct by construction.  Hence the subset of
+canonical carrier edges crossing any fixed $C$ is a
+matching, so
+$P_{\rm cut}(C)\ge K_C:=\sum_e\ell_e\delta_{Ce}$.  Multiply every covering
+constraint in (PXC128a) by $\ell_e$, sum over $e$, and use an optimal
+$\theta$:
+
+\[
+ O-B_H=\sum_e\ell_e
+ \le\sum_C\theta_CK_C
+ \le\chi(\mathcal F,E)\max_C P_{\rm cut}(C).
+\]
+
+This is a proper subpacking theorem: only the canonical matching and the
+predeclared common rows occur.  It neither optimizes over all rectangles nor
+uses overlap as an unexplained payment.
+
+The exact alternative supplied by LP duality is equally useful.  If
+$O-B_H>0$ and every common-row cut is smaller than $D_H$, then either some
+positive carrier has identical incidence in every row of $\mathcal F$, or
+there are rational $y_e\ge0$ such that
+
+\begin{equation}
+ \sum_{e\in E}y_e>\frac{O-B_H}{D_H},\qquad
+ \sum_{e\in E}\delta_{Ce}y_e\le1
+       \quad(C\in\mathcal F).                        \tag{PXC128c}
+\end{equation}
+
+For if the cover is infeasible, an unseparated carrier is immediate.  If it
+is feasible, the dual of (PXC128a) maximizes $\sum_e y_e$ under the displayed
+row capacities.  The strict cut failure and (PXC128b) give
+$\chi>(O-B_H)/D_H$, and rational LP duality gives (PXC128c).  Thus failure of
+pure row extraction is no longer an unstructured search residue: it produces
+an exact carrier measure which is sparse across every common certificate
+cut.  The remaining mechanism-to-price lemma is to combine that measure
+with the actual outside-union blocker and its staged Farkas support in one
+rooted mixed packet satisfying (MCP)--(MWP).  This implication is still open.
+
+For (PXC127a), row $rhbk$ cuts both positive canonical carriers, so
+$\chi=1$ and (PXC128b) is sharp:
+$P_{\rm cut}(rhbk)=O-B_H=37/5$.  The same one-row certificate gives
+$\chi=1$ throughout the positive-demand PXC125 chamber.  These are positive
+calibrations, not a proof that $\chi$ is universally small.
+
 The exact primary and independent audits are:
 \begin{verbatim}
 python3 verify_pxc121_obstruction_spectral_closure.py \
@@ -9644,6 +9720,10 @@ python3 verify_pxc127_common_row_cut_falsifier.py \
   --output pxc127_common_row_cut_falsifier.json
 python3 verify_pxc127_common_row_cut_falsifier_independent.py \
   --output pxc127_common_row_cut_falsifier_independent.json
+python3 verify_pxc128_fractional_common_cut_cover.py \
+  --output pxc128_fractional_common_cut_cover.json
+python3 verify_pxc128_fractional_common_cut_cover_independent.py \
+  --output pxc128_fractional_common_cut_cover_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary
@@ -9667,8 +9747,13 @@ extreme cover, both reduced selectors, and the zero square price.  Its
 standalone companion uses a separate rational active-set and cover
 implementation.  Both reproduce the (37/5) cut price; the threshold
 argument is the dimension-free proof of (PXC127d).  The universal cut-or-
-witness extraction remains open.  No novelty claim is made before specialist
-review.
+witness extraction remains open.  The PXC128 primary audit solves the exact
+fractional cut-cover primal and dual on the PXC122 and PXC127 games, a
+genuinely fractional triangle with $\chi=3/2$, and an infeasible unseparated-
+carrier control.  Its standalone companion rebuilds the carriers and uses
+independent rational Gaussian vertex enumeration.  The weighted summation
+and LP duality above, not those finite controls, prove (PXC128b)--(PXC128c).
+No novelty claim is made before specialist review.
 
 The certificate-dependence falsifier, rank-potential audit, and their
 independent replays are:
