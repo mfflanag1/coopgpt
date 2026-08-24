@@ -10533,10 +10533,75 @@ itself exceeds the target by \(29/102\).  PXC139 therefore proves that the
 integrated formulation (PXC138d), or an equivalently global treatment of
 the release curve, is essential.
 
-The correct mechanism-to-price target is an integrated one.  When
-\(B_*<c_nT\), put \(D_*=c_nT-B_*\),
-\(C_{\rm top}=B_H-B_*\), and \(C_{\rm label}=O-B_H\).  By the proved
-spectral decomposition,
+There is nevertheless an exact two-factor reduction of that integral.
+Define the \emph{diagonal saturation time}
+
+\begin{equation}
+ \tau_*:=\min\{t\in[0,1]:\Psi_t=O\},
+ \qquad e_0:=e_+(0).                                  \tag{PXC140a}
+\end{equation}
+
+The minimum exists because \(\Psi_1=O\).  Monotonicity and the upper bound
+\(\Psi_t\le O\) imply \(\Psi_t=O\) for every \(t\ge\tau_*\), so (PXC138b)
+and concavity give
+
+\begin{equation}
+ O-\Psi=\int_0^{\tau_*}e_+(t)\,dt
+       \le \tau_*e_0.                                  \tag{PXC140b}
+\end{equation}
+
+This is dimension-free.  Equivalently, \(\tau_*\) is the optimum of the
+single linear program that minimizes \(t\) over the PXC138 primal system,
+adds the diagonal bounds \(F_{rr}\le t x_rz_r/T^2\), and requires the bridge
+objective to equal \(O\).  Thus the two factors have different structural
+meanings: \(e_0\) is the least staged-dual price per unit of initial diagonal
+release, whereas \(\tau_*\) is the least normalized diagonal capacity that
+permits a selector-box bridge.  In particular
+
+\begin{equation}
+ \boxed{\quad
+ \tau_*e_0\le O-c_nT\quad\Longrightarrow\quad
+ \Psi\ge c_nT .\quad}                                  \tag{PXC140c}
+\end{equation}
+
+The sharp total-four control attains equality in (PXC140b):
+\(\tau_*=1/27\), \(e_0=9/17\), and both the product and the true price are
+\(1/51\).  On the strict-spectral PXC139 game, an exact box-saturating
+primal gives \(\tau_*\le14/81\).  A feasible left supporting dual has
+
+\[
+ D_{\rm left}=\frac{469}{34},\qquad
+ E_{\rm left}=\frac{81}{68},\qquad
+ D_{\rm left}+\frac{14}{81}E_{\rm left}=T+O=14.
+\]
+
+Since \(E_{\rm left}>0\), (PXC138a) makes \(\Psi_t<O\) for every
+\(t<14/81\); hence \(\tau_*=14/81\).  Consequently
+
+\begin{equation}
+ O-\Psi=\frac{13}{34}
+ <\tau_*e_0=\frac{28}{51}
+ <\frac23=O-c_6T.                                      \tag{PXC140d}
+\end{equation}
+
+Thus PXC140 repairs precisely the PXC139 failure: the initial price alone
+is too large, but the capacity needed to saturate the selector box is small.
+It does not prove the hybrid inequality.  When \(B_*<c_nT\), put
+\(D_*=c_nT-B_*\), \(C_{\rm top}=B_H-B_*\), and
+\(C_{\rm label}=O-B_H\).  The remaining mechanism theorem is the
+non-tautological estimate
+
+\begin{equation}
+ \tau_*e_0\le
+ C_{\rm top}+C_{\rm label}-D_*                         \tag{PXC140e}
+\end{equation}
+
+from the PXC112 staged-tangent quotient and the PXC114 common-direction or
+reciprocal-pair labels.  No overlap term may be invoked as an unexplained
+payment in proving (PXC140e).
+
+With this notation the equivalent integrated target follows from the proved
+spectral decomposition:
 
 \begin{equation}
  \Psi\ge c_nT
@@ -10549,9 +10614,10 @@ Unlike an unexplained invocation of overlap, the left side is an integral
 of explicit root-labelled diagonal dual loads.  The unresolved theorem is
 to charge that decreasing shadow-price curve to the PXC112 staged polars and
 the PXC114 common/reciprocal labels.  Parametric LP sensitivity and shadow
-prices are classical; no novelty is claimed for (PXC138a)--(PXC138b) as
-optimization facts.  The candidate contribution is their selector-specific
-forced-diagonal application and the exact obstruction (PXC138c).
+prices are classical \citep{AdlerMonteiro1992}; no novelty is claimed for
+(PXC138a)--(PXC138b) as optimization facts.  The candidate contribution is
+their selector-specific forced-diagonal application and the exact
+obstruction (PXC138c).
 
 The exact primary and independent audits are:
 \begin{verbatim}
@@ -10628,6 +10694,10 @@ python3 verify_pxc139_strict_spectral_single_dual_no_go.py \
   --output pxc139_strict_spectral_single_dual_no_go.json
 python3 verify_pxc139_strict_spectral_single_dual_no_go_independent.py \
   --output pxc139_strict_spectral_single_dual_no_go_independent.json
+python3 verify_pxc140_slope_saturation_price.py \
+  --output pxc140_slope_saturation_price.json
+python3 verify_pxc140_slope_saturation_price_independent.py \
+  --output pxc140_slope_saturation_price_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary
@@ -10715,6 +10785,14 @@ stationary inequality.  The matching affine bounds prove
 \(\min_{{\cal D}_0}E=54/17\); the artifact is a conventional sublemma
 counterexample, not a census claim and not a counterexample to the main
 hybrid inequality.
+The PXC140 primary audit checks the dimension-free scalar implication and
+replays exact saturation primals and supporting duals on the sharp equality
+control and on PXC139.  The standalone companion imports no project Python
+module, reconstructs the PXC139 lower envelope from its four vertices, and
+checks every new flow, cap, core-row, and dual inequality with rational
+arithmetic.  These certificates prove the two displayed values of
+\(\tau_*\); concavity proves (PXC140b)--(PXC140c).  Deriving (PXC140e) from
+the frozen mechanism decomposition remains open.
 No novelty claim is made before specialist review.
 
 The certificate-dependence falsifier, rank-potential audit, and their
@@ -12206,6 +12284,11 @@ cycles on these degenerate programs and was not used for any reported number.
 \begin{thebibliography}{99}
 \setlength{\itemsep}{0pt}
 \setlength{\parsep}{0pt}
+
+\bibitem[Adler and Monteiro(1992)]{AdlerMonteiro1992}
+Adler I, Monteiro RDC (1992) A geometric view of parametric linear
+programming. Algorithmica 8:161--176.
+\url{https://doi.org/10.1007/BF01758841}
 
 \bibitem[Bj\"orner et al.(1999)]{BjornerEtAl1999}
 Bj\"orner A, Las Vergnas M, Sturmfels B, White N, Ziegler GM (1999)

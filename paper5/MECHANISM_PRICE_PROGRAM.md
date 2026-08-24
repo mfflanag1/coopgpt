@@ -984,6 +984,59 @@ is false.  The next attack must control the integral of the changing dual
 face, or an equivalent global release-curve quantity; optimizing one dual at
 `t=0` is a closed route.
 
+### PXC140 slope times saturation
+
+The integrated price has an exact two-factor upper bound.  Let
+
+```text
+tau_star=min{t in [0,1]: Psi_t=O},
+e0=Psi'_+(0).
+```
+
+Since the release curve is nondecreasing and concave, it is constant at
+`O` after `tau_star`, and its right slope is nonincreasing.  Therefore
+
+```text
+O-Psi_stat = integral_0^tau_star e_+(t) dt
+           <= tau_star*e0.                            (PXC140)
+```
+
+The threshold `tau_star` is itself a primal LP: minimize the common
+normalized diagonal-cap factor needed by a bridge attaining the selector
+box value `O`.  Thus `e0` is the initial staged-dual price and `tau_star` is
+the amount of the forbidden resource that must actually be released.
+
+This factorization is exact on the sharp equality control:
+
+```text
+tau_star=1/27, e0=9/17,
+tau_star*e0=O-Psi_stat=1/51.
+```
+
+It also repairs the strict-spectral PXC139 obstruction:
+
+```text
+tau_star=14/81, e0=54/17,
+O-Psi_stat=13/34 < tau_star*e0=28/51 < 2/3=O-c_6*T.
+```
+
+The exact upper bound on `tau_star` is a box-saturating primal.  A left
+supporting dual with `D=469/34`, `E=81/68`, and
+`D+(14/81)E=T+O=14` proves the matching lower bound.
+
+The live theorem is now the product estimate
+
+```text
+tau_star*e0
+ <= C_top+C_label-(c_n*T-B_star).                     (PXC140?)
+```
+
+It must be derived from PXC112/PXC114 currency.  This is a sufficient
+mechanism-to-price theorem, not an equivalent reformulation of the main
+inequality: the product may overestimate the true integrated price.  PXC139
+closes the initial-slope-only route; further work should bound the saturation
+factor, not search for a different stationary optimal dual.
+
 ## 12. Faithful complement
 
 The immediate theorem target is now the faithful branch, not another blocker
