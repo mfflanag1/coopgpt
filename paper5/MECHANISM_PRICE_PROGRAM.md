@@ -4,8 +4,9 @@ Date: 2026-08-23
 
 Starting checkpoint: `bd97ded7d0ebc1410305b9be8c01d01750524101`
 
-Status: literal target falsified at n=5 (PXC141); corrected n>=6 program
-active; no novelty claim for the five-player witness.
+Status: literal target falsified at n=5 (PXC141); corrected n>=6 target
+falsified at the dimension-minimal n=7 checkpoint (PXC143); the sharp n=7
+constant and structural classification remain open.
 
 ## 1. Frozen target and inputs
 
@@ -22,8 +23,8 @@ extremal game has `T=4`, `O=3`, while `c_5*T=10/3`.  The proved n<=4
 coincidence theorem makes n=5 the smallest failure.  PXC141 independently
 replays all selector and certificate arithmetic and records that its Lmax
 top stratum has size four, outside PXC112/PXC114.  The rest of this program
-is therefore retained as the corrected **n>=6** target; this scope correction
-does not count as proving that corrected target.
+was therefore retained as the corrected **n>=6** target; PXC143 below now
+falsifies that corrected target at seven players.
 
 The following are frozen inputs for the corrected program.
 
@@ -1077,7 +1078,8 @@ Exact primary and standalone symbolic replays pin the 32 game values, both
 staged selectors, all 16 subfamilies of the proper x-tight pool, every
 complete subfamily, and the exhaustive spectral-top result.  Since n<=4 has
 Lmin=Lmax, this is the smallest counterexample.  The corrected n>=6 theorem
-remains the live goal, with PXC141 as the mandatory domain guard.
+was the successor goal, with PXC141 as its mandatory domain guard; PXC143
+below now falsifies it at seven players.
 
 ## 14. PXC142 structural saturation bound and product-route no-go
 
@@ -1123,3 +1125,23 @@ is not a counterexample to the main overlap inequality.  The next proof
 route must control the integrated shadow-price curve directly, exploiting
 how its active dual face changes, rather than multiplying a worst initial
 slope by a worst saturation time.
+
+## 15. PXC143 exact seven-player counterexample
+
+The corrected `n>=6` overlap conjecture is now false.  PXC143 defines an
+exact singleton-normalized seven-player game as the lower envelope of nine
+explicit integer core allocations of total `119376`.  Exact staged
+certificates and an independently formulated Z3 selector replay give
+
+```text
+Lmin=(8507,24825,41719,17026,8555,8519,10225),
+Lmax=(36,132,25137,25137,25125,25113,18696).
+```
+
+Their distance is `99492`, twelve above `5T/6`; equivalently the overlap is
+`69630`, six below `7T/12`.  Sparse tight-row summations give a conventional
+stage-by-stage proof of both selectors.  The example is dimension-minimal
+inside the corrected domain because Theorem `s6` proves the six-player
+bound.  It does not identify the sharp seven-player constant.  The live
+frontier is now classification and sharpening of the seven-player failure,
+not another universal bridge inequality.

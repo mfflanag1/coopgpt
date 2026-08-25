@@ -746,6 +746,16 @@ run_python \
   --output "$scratch_dir/pxc142-saturation-lock-product-no-go-independent.json"
 cmp coopgames/verifiers/divergence/pxc142_saturation_lock_product_no_go_independent.json \
   "$scratch_dir/pxc142-saturation-lock-product-no-go-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc143_n7_hybrid_overlap_counterexample.py \
+  --output "$scratch_dir/pxc143-n7-hybrid-overlap-counterexample.json"
+cmp coopgames/verifiers/divergence/pxc143_n7_hybrid_overlap_counterexample.json \
+  "$scratch_dir/pxc143-n7-hybrid-overlap-counterexample.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc143_n7_hybrid_overlap_counterexample_independent.py \
+  --output "$scratch_dir/pxc143-n7-hybrid-overlap-counterexample-independent.json"
+cmp coopgames/verifiers/divergence/pxc143_n7_hybrid_overlap_counterexample_independent.json \
+  "$scratch_dir/pxc143-n7-hybrid-overlap-counterexample-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
