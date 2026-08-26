@@ -1192,9 +1192,9 @@ n=9, T=31: x=(1,9,15,1,1,1,1,1,1), B=(0,0,0,13,7,7,4,0,0), C=(0,11,20,0,0,0,0,0,
 against formula values `1` and `11/10`.  The loser side `{d,e,e',g}` is
 identical in all three games; only the number `m` of floor gainers grows.
 Reading off the entries gives the family `H_m` of (PXC145a) with
-`rho(H_m)=14(5m-1)/(5(9m+4))`, exact for `m=1,2,3` (n=7,8,9).  Checks at
-`m>=4` are pending (the n=10 twin split is running; the exact staged solver
-is slow beyond n=9), so the closed form is recorded as a conjecture.  Its
+`rho(H_m)=14(5m-1)/(5(9m+4))`, exact for `m=1,2,3,4` (n=7..10; `rho(H_4)=133/100>6/5`, 849 s of exact
+staged solving at n=10, and the independent n=10 twin-split search polished
+to the same 133/100).  Beyond `m=4` the closed form is a conjecture.  Its
 limit `14/9<2` shows that a loser side of fixed size cannot be the
 asymptotic answer; a two-parameter family growing both sides is the natural
 candidate for a corrected formula and was not searched in this round.

@@ -15,7 +15,8 @@ external specialist has reviewed these results.
    `rho=63/55`) and `n=9` (total 31, `rho=196/155`) exceed the formula values
    `2-8n/(n^2-(n mod 2))`, namely `1` and `11/10`.  They are the `m=2,3`
    members of the family `H_m` (PXC145a) whose closed forms are verified for
-   `m<=3` only and are conjectural beyond.
+   `m<=4` (`m=4`: ten players, `rho=133/100>6/5`, outside the release replay)
+   and are conjectural beyond.
 3. The balanced two-generator family `G(p,k)` is therefore not extremal at
    `n=7,8,9`; the formula `s(n)=2-8n/(n^2-(n mod 2))` is false for these `n`
    (it is correct at `n=6` by Theorem `s6`, and `s(5)=1/2` separately).
