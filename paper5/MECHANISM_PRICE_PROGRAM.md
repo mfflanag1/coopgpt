@@ -1145,3 +1145,67 @@ inside the corrected domain because Theorem `s6` proves the six-player
 bound.  It does not identify the sharp seven-player constant.  The live
 frontier is now classification and sharpening of the seven-player failure,
 not another universal bridge inequality.
+
+## 16. PXC144: the four-generator game `H_7`
+
+PXC143 was a threshold crossing, not the seven-player frontier.  Exact
+hill-climbing on the true selector distance (integer transfer moves on the
+generator entries, every step re-evaluated by staged exact LPs) climbs from
+`5/6+1/9948` to about `0.8417` within minutes, and a tangent linear program
+then jumps to a vertex of the combinatorial cell: freezing the attaining
+generator of every coalition, the tight rows of both selectors, the payoff
+weak orders and the zero pattern makes the selector pair an affine function
+of the generator entries, the staged Farkas identities keep certifying both
+selectors (they depend only on incidence), and maximizing the distance is a
+linear program.  Its optimum is the integer game
+
+```text
+T=13:  A=(1,4,7,0,0,0,1), B=(0,0,0,5,3,3,2), C=(0,5,8,0,0,0,0), D=(0,0,4,1,3,3,2)
+Lmin=(1,3,5,1,1,1,1),  Lmax=(1,3,13,13,13,13,9)/5,
+rho=56/65=5/6+11/390,  O/T=37/65<7/12.
+```
+
+The generator set is minimal.  Both selectors have an eight-value sparse
+hand proof (`v(235)=v(236)=7`, `v(146)=v(156)=5`, `v(12345)=11`,
+`v(2456)=8`, `v(0234)=v(0235)=8`).  The value `56/65` is stable under
+repeated polish--climb alternation from `H_7`; alternation started from the
+two-generator seeds `G(2,4)`, `G(3,3)`, `G(4,2)`, `G(1,5)` did not leave
+their own values in the same budget.  `s(7)>=56/65`; nothing is claimed
+about the sharp value.
+
+Method laws recorded: a first-crossing witness from a threshold search is
+never the supremum — polish it; freezing the cell is what makes the polish
+exact, and every polished point must be re-verified from scratch because
+the LP optimum may create new ties.
+
+## 17. PXC145: eight and nine players, and the family `H_m`
+
+Twin-splitting the floor gainer of `H_7` (halving its column into two
+players preserves equal totals; duplicating a column does not) and
+re-running polish--climb gives
+
+```text
+n=8, T=44: x=(2,12,20,2,2,2,2,2), B=(0,0,0,18,10,10,6,0), C=(0,16,28,0,0,0,0,0), D=(0,0,15,3,10,10,6,0)   rho=63/55
+n=9, T=31: x=(1,9,15,1,1,1,1,1,1), B=(0,0,0,13,7,7,4,0,0), C=(0,11,20,0,0,0,0,0,0), D=(0,0,11,2,7,7,4,0,0)  rho=196/155
+```
+
+against formula values `1` and `11/10`.  The loser side `{d,e,e',g}` is
+identical in all three games; only the number `m` of floor gainers grows.
+Reading off the entries gives the family `H_m` of (PXC145a) with
+`rho(H_m)=14(5m-1)/(5(9m+4))`, exact for `m=1,2,3` (n=7,8,9).  Checks at
+`m>=4` are pending (the n=10 twin split is running; the exact staged solver
+is slow beyond n=9), so the closed form is recorded as a conjecture.  Its
+limit `14/9<2` shows that a loser side of fixed size cannot be the
+asymptotic answer; a two-parameter family growing both sides is the natural
+candidate for a corrected formula and was not searched in this round.
+
+Upper-bound status: the threshold form of the s6-style exchange relaxation
+(x, z, seven singleton witnesses, anchors, full `{0,+1,-1}` menu, threshold
+`56/65`, tangent-separator CEGAR) remained SAT after two rounds
+(`3` and `10` minutes); no upper bound below `2` is known at `n=7` beyond
+the trivial `rho<=2`.
+
+Worked controls this round: the n=6 polish--climb alternation started from
+`G(2,3)` stays exactly at `2/3` (as Theorem s6 requires), and the
+two-generator n=7 seeds `G(2,4)`, `G(3,3)`, `G(4,2)`, `G(1,5)` stay at their
+own values under the same budget.

@@ -756,6 +756,26 @@ run_python \
   --output "$scratch_dir/pxc143-n7-hybrid-overlap-counterexample-independent.json"
 cmp coopgames/verifiers/divergence/pxc143_n7_hybrid_overlap_counterexample_independent.json \
   "$scratch_dir/pxc143-n7-hybrid-overlap-counterexample-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc144_h7_four_generator_counterexample.py \
+  --output "$scratch_dir/pxc144-h7-four-generator-counterexample.json"
+cmp coopgames/verifiers/divergence/pxc144_h7_four_generator_counterexample.json \
+  "$scratch_dir/pxc144-h7-four-generator-counterexample.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc144_h7_four_generator_counterexample_independent.py \
+  --output "$scratch_dir/pxc144-h7-four-generator-counterexample-independent.json"
+cmp coopgames/verifiers/divergence/pxc144_h7_four_generator_counterexample_independent.json \
+  "$scratch_dir/pxc144-h7-four-generator-counterexample-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc145_h8_h9_formula_failure.py \
+  --output "$scratch_dir/pxc145-h8-h9-formula-failure.json"
+cmp coopgames/verifiers/divergence/pxc145_h8_h9_formula_failure.json \
+  "$scratch_dir/pxc145-h8-h9-formula-failure.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc145_h8_h9_formula_failure_independent.py \
+  --output "$scratch_dir/pxc145-h8-h9-formula-failure-independent.json"
+cmp coopgames/verifiers/divergence/pxc145_h8_h9_formula_failure_independent.json \
+  "$scratch_dir/pxc145-h8-h9-formula-failure-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
