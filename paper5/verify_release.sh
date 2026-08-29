@@ -776,6 +776,16 @@ run_python \
   --output "$scratch_dir/pxc145-h8-h9-formula-failure-independent.json"
 cmp coopgames/verifiers/divergence/pxc145_h8_h9_formula_failure_independent.json \
   "$scratch_dir/pxc145-h8-h9-formula-failure-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc146_hm_all_m_symbolic.py \
+  --output "$scratch_dir/pxc146-hm-all-m-symbolic.json"
+cmp coopgames/verifiers/divergence/pxc146_hm_all_m_symbolic.json \
+  "$scratch_dir/pxc146-hm-all-m-symbolic.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc146_hm_all_m_symbolic_independent.py \
+  --output "$scratch_dir/pxc146-hm-all-m-symbolic-independent.json"
+cmp coopgames/verifiers/divergence/pxc146_hm_all_m_symbolic_independent.json \
+  "$scratch_dir/pxc146-hm-all-m-symbolic-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

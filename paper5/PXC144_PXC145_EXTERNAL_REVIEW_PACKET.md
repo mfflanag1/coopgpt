@@ -1,7 +1,7 @@
-# Hostile external review packet — PXC144 (`H_7`) and PXC145 (n=8, n=9)
+# Hostile external review packet — PXC144--PXC146 (`H_7` and `H_m`)
 
-Review target: the PXC144 and PXC145 blocks in `paper5/divergence.tex` on
-branch `cc/s7-sharp-frontier-20260825`, and the exact artifacts below.  No
+Review target: the PXC144--PXC146 blocks in `paper5/divergence.tex` on
+branch `codex/pxc146-hm-all-m`, and the exact artifacts below.  No
 external specialist has reviewed these results.
 
 ## Claimed results
@@ -11,12 +11,13 @@ external specialist has reviewed these results.
    is exact, singleton-normalized and generator-minimal, with
    `Lmin=(1,3,5,1,1,1,1)`, `Lmax=(1,3,13,13,13,13,9)/5`, hence
    `rho=56/65=5/6+11/390` and `O/T=37/65<7/12`.  Therefore `s(7)>=56/65`.
-2. **PXC145.**  Explicit exact singleton-normalized games at `n=8` (total 44,
+2. **PXC145--PXC146.**  Explicit exact singleton-normalized games at `n=8` (total 44,
    `rho=63/55`) and `n=9` (total 31, `rho=196/155`) exceed the formula values
    `2-8n/(n^2-(n mod 2))`, namely `1` and `11/10`.  They are the `m=2,3`
-   members of the family `H_m` (PXC145a) whose closed forms are verified for
-   `m<=4` (`m=4`: ten players, `rho=133/100>6/5`, outside the release replay)
-   and are conjectural beyond.
+   members of the family `H_m` (PXC145a).  PXC146 gives a conventional
+   incidence proof of its selectors for every integer `m>=1`, hence
+   `rho(H_m)=14(5m-1)/(5(9m+4))`.  It beats the balanced `G(p,k)` bound
+   exactly for `7<=n<=14` and tends to `14/9`.
 3. The balanced two-generator family `G(p,k)` is therefore not extremal at
    `n=7,8,9`; the formula `s(n)=2-8n/(n^2-(n mod 2))` is false for these `n`
    (it is correct at `n=6` by Theorem `s6`, and `s(5)=1/2` separately).
@@ -30,6 +31,8 @@ external specialist has reviewed these results.
 - `verifiers/divergence/verify_pxc144_h7_four_generator_counterexample_independent.py` (+ JSON)
 - `verifiers/divergence/verify_pxc145_h8_h9_formula_failure.py` (+ JSON)
 - `verifiers/divergence/verify_pxc145_h8_h9_formula_failure_independent.py` (+ JSON)
+- `verifiers/divergence/verify_pxc146_hm_all_m_symbolic.py` (+ JSON)
+- `verifiers/divergence/verify_pxc146_hm_all_m_symbolic_independent.py` (+ JSON)
 - `paper5/PROTECTED_RESULTS_LEDGER.md`, `paper5/MECHANISM_PRICE_PROGRAM.md` (§16–17)
 - `paper5/PXC144_NOVELTY_AUDIT_20260826.md`
 
@@ -45,6 +48,14 @@ for name in pxc144_h7_four_generator_counterexample pxc145_h8_h9_formula_failure
   python3 verifiers/divergence/verify_${name}_independent.py --output /tmp/${name}_independent.json
   cmp verifiers/divergence/${name}_independent.json /tmp/${name}_independent.json
 done
+python3 verifiers/divergence/verify_pxc146_hm_all_m_symbolic.py \
+  --output /tmp/pxc146_hm_all_m_symbolic.json
+cmp verifiers/divergence/pxc146_hm_all_m_symbolic.json \
+  /tmp/pxc146_hm_all_m_symbolic.json
+python3 verifiers/divergence/verify_pxc146_hm_all_m_symbolic_independent.py \
+  --output /tmp/pxc146_hm_all_m_symbolic_independent.json
+cmp verifiers/divergence/pxc146_hm_all_m_symbolic_independent.json \
+  /tmp/pxc146_hm_all_m_symbolic_independent.json
 bash paper5/verify_release.sh
 ```
 
@@ -52,7 +63,10 @@ The primary verifiers are LP-free (stdlib `fractions` only): they replay
 explicit staged Farkas identities.  The independent verifiers recompute
 both selectors from the coalition values with fresh Z3 optimization and
 audit every stage by an active-tangent query; they share no code with the
-primaries.
+primaries.  For PXC146, the universal proof is the displayed symbolic
+incidence argument: its stdlib audit checks affine identities for arbitrary
+`m`, while the independent Z3 audit is explicitly only a calibration at
+`m=1,2,3,4`.
 
 ## Hostile questions
 
@@ -72,3 +86,7 @@ primaries.
    (both split players carry positive `Lmin`).
 6. Assess novelty separately from correctness (see the dated audit).  Do not
    infer sharp values; the packet supplies lower bounds only.
+7. Check PXC146's eight symbolic coalition values, every incidence sum, the
+   convex-combination proof of Lmax feasibility, and the exact comparison
+   with `G(p,k)` for `1<=m<=8`.  The independent verifier is a finite
+   calibration; the displayed hand proof carries the all-`m` quantifier.

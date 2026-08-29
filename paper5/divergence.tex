@@ -75,10 +75,11 @@ novelty determination are kept as separate review obligations.
 At seven players, a nine-allocation integer lower envelope gives
 \(\rho=8291/9948>5/6\), disproving the previously conjectured
 \(7/12\) overlap floor, and a four-generator game of total \(13\) raises the
-seven-player value to \(56/65\).  Eight- and nine-player games of the same
-kind give \(63/55>1\) and \(196/155>11/10\), so the balanced
-two-generator family is not extremal at any of \(n=7,8,9\).  Sparse
-coalition summations prove every selector, and the six-player theorem
+seven-player value to \(56/65\).  These are members of an exact
+four-generator family \(H_m\), proved for every \(n=m+6\ge7\), with
+\(\rho(H_m)=14(5m-1)/(5(9m+4))\).  It beats the balanced two-generator
+bound exactly for \(7\le n\le14\).  Sparse coalition summations prove the
+selectors symbolically, and the six-player theorem
 makes seven the first failure dimension; the sharp values \(s(n)\),
 \(n\ge7\), remain open.
 For the dimension-free upper-bound program, we prove the conjectured atomic
@@ -257,8 +258,11 @@ The answer is: as large as arithmetically possible.
       overlap floor (PXC143); the four-generator game \(H_7\) of total
       \(13\) improves this to \(\rho=56/65\) (PXC144), and eight- and
       nine-player games give \(63/55\) and \(196/155\) against the
-      formula values \(1\) and \(11/10\) (PXC145).  Every selector has a
-      sparse hand proof and two independently formulated exact replays.
+      formula values \(1\) and \(11/10\) (PXC145).  The all-parameter
+      incidence theorem PXC146 proves the resulting four-generator family
+      for every \(n=m+6\ge7\); it beats the balanced bound through \(n=14\)
+      and tends to \(14/9\).  Every selector has a sparse hand proof, with
+      symbolic and independently formulated exact replays.
       The sharp values \(s(n)\) for \(n\ge7\) are not determined.
 \item In the weighted four-role quotient program, the conjectured atomic
       overlap bound holds for every exact nonnegative quotient satisfying
@@ -10895,8 +10899,9 @@ be the lower envelope of the four allocations (coordinates listed as the
 \]
 each of total \(T\) (double every entry when \(m\) is even to stay
 integral).  Every player has a zero coordinate in \(B\), \(C\) or \(D\), so
-\(H_m\) is exact and singleton-normalized.  Exact staged computation gives,
-for \(m=1,2,3,4\),
+\(H_m\) is exact and singleton-normalized.  Exact staged computation first
+gave the following formulas for \(m=1,2,3,4\); PXC146 below proves them for
+every \(m\ge1\):
 \begin{equation}
  \Lmin(H_m)=x,\qquad
  \Lmax(H_m)=\Bigl(\bigl[\tfrac1{5m}\bigr]^{m};\ \tfrac35,\ \tfrac{10m+3}5;\
@@ -10918,11 +10923,86 @@ Theorem~\ref{thm:s6} it is extremal at \(n=6\), and PXC141 records the
 separate five-player value.  Both eight- and nine-player selector pairs
 have explicit staged Farkas certificates (replayed by the PXC145 audits);
 neither game has a null player, and the twins are not null paddings since
-every gainer has positive \(\Lmin\).  The closed forms (PXC145a)--(PXC145c)
-are verified exactly for \(m\le4\) only (\(m\le3\) in the release replay,
-\(m=4\) by the archived exact staged solver); for larger \(m\) they are a
-conjecture, and even if true they saturate at \(14/9\), so this family
-beats \(G(p,k)\) only for \(7\le n\le14\).  The sharp values \(s(n)\),
+every gainer has positive \(\Lmin\).  The computations through \(m=4\)
+suggested the closed form; it in fact holds for every \(m\).
+
+\medskip
+\noindent\textbf{PXC146: the all-\(m\) selector theorem.}
+For every integer \(m\ge1\), the game \(H_m\) in (PXC145a) has the selectors
+in (PXC145b), and hence
+\begin{equation}
+ \rho(H_m)=\frac{14(5m-1)}{5(9m+4)},\qquad
+ O(H_m)=\frac{10m+27}{5}.                              \tag{PXC146a}
+\end{equation}
+In particular \(H_m\) beats the balanced \(G(p,k)\) lower bound exactly for
+\(1\le m\le8\), or \(7\le n=m+6\le14\), and
+\(\rho(H_m)\to14/9\).
+
+Here is a direct proof.  Write \(U\) for the \(m\) floor players and retain
+the labels \(b,c,d,e,e',g\) from (PXC145a).  The following eight
+lower-envelope values follow immediately by evaluating the four displayed
+generators:
+\begin{align*}
+ v(Ucde)=v(Ucde')&=6m+2,&v(bcdee')&=8m+3,\\
+ v(cdg)=v(cde')&=5m+2,&v(beg)=v(be'g)&=3m+2,\\
+ v(cee'g)&=5m+3.&&
+\end{align*}
+Here \(cde'\) is used with \(beg\) as the disjoint partition
+\(cde'\,\dot\cup\,beg=N\setminus U\).  Thus every core allocation \(y\)
+satisfies \(y(U)\le m\), so a common floor \(t\) obeys \(mt\le m\).
+At \(t=1\), all players of \(U\) are fixed at one.  The complement of
+\(bcdee'\), and the incidence sums
+\begin{align*}
+2N-(bcdee')-(cdg)-(be'g)&=2U+e,\\
+2N-(bcdee')-(cdg)-(beg)&=2U+e',\\
+4N-2(bcdee')-(cdg)-(beg)-(be'g)-(cee'g)&=4U+d
+\end{align*}
+have respective upper bounds \(m+1,2m+1,2m+1,4m+1\).
+They pin \(g,e,e',d\) at one.  The complement of \(cdg\) then gives
+\(y_b\le3m\), and efficiency gives \(y_c=5m\).  This proves the Lmin
+formula.
+
+For Lmax, adding \(Ucde,bcdee',cdg\) and subtracting efficiency gives
+\[
+ 2y_c+2y_d+y_e\ge10m+3;
+\]
+using \(Ucde'\) gives the same inequality with \(e'\).  A common ceiling is
+therefore at least \(L=(10m+3)/5\), and equality pins
+\(c,d,e,e'\) at \(L\).  The row \(cdg\) then pins
+\(g=(5m+4)/5\), while \(Ucde+bcdee'+beg-N\) gives
+\(y_b+y_c+y_d+2y_e\ge8m+3\) and pins \(b=3/5\).
+Efficiency leaves total \(1/5\) on \(U\), whose final ceiling is minimized
+only by the uniform vector \(1/(5m)\).  The displayed Lmax vector is core
+feasible without an exponential check: it is the convex combination of
+\(x,B,D\) with positive weights
+\[
+ \frac1{5m},\qquad
+ \frac{(3m+1)(5m-1)}{5m(7m+1)},\qquad
+ \frac{4(5m-1)}{5(7m+1)}.
+\]
+The three weights sum to one.  Exactness and singleton normalization follow
+from the lower-envelope construction and the displayed zero cover.  Finally,
+the positive part of \(x-z\) is \(7(5m-1)/5\), proving (PXC146a).
+Writing
+\(\rho_G(n)=2-8n/(n^2-(n\bmod2))\) for the best balanced
+\(G(p,k)\) value, subtraction gives
+\[
+ \rho(H_m)-\rho_G(m+6)=
+ \begin{cases}
+ \displaystyle\frac{-2(10m^2-93m+82)}{5(m+6)(9m+4)},&m\text{ even},\\[3pt]
+ \displaystyle\frac{-2(10m^3-33m^2-486m+465)}
+ {5(m+5)(m+7)(9m+4)},&m\text{ odd}.
+ \end{cases}
+\]
+The quadratic is negative at the even integers \(2,4,6,8\) and increasing
+positive from \(m=10\); the cubic is negative at \(1,3,5,7\) and increasing
+positive from \(m=9\).  This proves the stated exact range.
+
+This is an all-dimensional family, but not the asymptotic replacement for
+\(G(p,k)\): its loser side stays fixed at four players, forcing the limit
+\(14/9<2\), whereas the balanced two-generator bound tends to two.  Thus a
+family beating \(G(p,k)\) in infinitely many dimensions must grow the loser
+side as well as \(U\).  The sharp values \(s(n)\),
 \(n\ge7\), therefore remain open in both directions: a corrected
 closed-form conjecture needs a family whose loser side also grows, and an
 upper bound needs a seven-player analogue of the exchange relaxation of
@@ -11048,6 +11128,10 @@ python3 verify_pxc145_h8_h9_formula_failure.py \
   --output pxc145_h8_h9_formula_failure.json
 python3 verify_pxc145_h8_h9_formula_failure_independent.py \
   --output pxc145_h8_h9_formula_failure_independent.json
+python3 verify_pxc146_hm_all_m_symbolic.py \
+  --output pxc146_hm_all_m_symbolic.json
+python3 verify_pxc146_hm_all_m_symbolic_independent.py \
+  --output pxc146_hm_all_m_symbolic_independent.json
 \end{verbatim}
 The PXC122 independent audit reconstructs all coalition minima and both
 selectors by standalone exact active-set enumeration.  The PXC123 primary
@@ -11160,6 +11244,11 @@ recomputes both selectors from the coalition values by fresh exact SMT
 optimization and audits every stage by an active-tangent query.  The
 PXC145 audits repeat the same two designs for the eight- and nine-player
 games, and compare each \(\rho\) with the formula value \(2-8n/(n^2-(n\bmod2))\).
+The PXC146 stdlib audit checks every affine coalition value, incidence
+identity, cleared-denominator convex-combination identity, and comparison
+sign coefficientwise.  Its standalone Z3 companion independently checks
+all staged tangent conditions for (m=1,2,3,4); the printed incidence proof,
+not that finite calibration, carries the universal quantifier.
 No novelty claim is made before specialist review.
 
 The certificate-dependence falsifier, rank-potential audit, and their
@@ -12571,7 +12660,8 @@ and the pinned extremal configuration at five players, the evaluation
 $s(5)=\tfrac12$ with the $(4,1)$-regime bound $\tfrac13$, and the two closed
 routes of Section~\ref{sec:obstruction}, together with the direct exactness-
 exchange evaluation $s(6)=\tfrac23$, the singleton-root rectangular facet
-classification, and the complete-graph rooted-pair facet family.  Novelty
+classification, the complete-graph rooted-pair facet family, and the
+four-generator family \(H_m\) with its all-parameter selector theorem.  Novelty
 remains conditional on specialist review.
 
 Terminology is also prior-art sensitive.  The phrase \emph{exact cover}

@@ -1191,13 +1191,19 @@ n=9, T=31: x=(1,9,15,1,1,1,1,1,1), B=(0,0,0,13,7,7,4,0,0), C=(0,11,20,0,0,0,0,0,
 
 against formula values `1` and `11/10`.  The loser side `{d,e,e',g}` is
 identical in all three games; only the number `m` of floor gainers grows.
-Reading off the entries gives the family `H_m` of (PXC145a) with
-`rho(H_m)=14(5m-1)/(5(9m+4))`, exact for `m=1,2,3,4` (n=7..10; `rho(H_4)=133/100>6/5`, 849 s of exact
-staged solving at n=10, and the independent n=10 twin-split search polished
-to the same 133/100).  Beyond `m=4` the closed form is a conjecture.  Its
-limit `14/9<2` shows that a loser side of fixed size cannot be the
-asymptotic answer; a two-parameter family growing both sides is the natural
-candidate for a corrected formula and was not searched in this round.
+Reading off the entries gives the family `H_m` of (PXC145a).  PXC146 now
+proves conventionally, for every integer `m>=1`, that its displayed vectors
+are the two selectors and
+`rho(H_m)=14(5m-1)/(5(9m+4))`.  The proof uses eight affine coalition values:
+a partition cap pins the `m` floor players, three incidence sums pin the
+remaining Lmin floor, and two five-load inequalities pin the four-player
+Lmax top; the candidate Lmax is an explicit positive convex combination of
+three generators.  A stdlib affine-identity verifier audits the universal
+algebra and an independent Z3 tangent implementation calibrates `m=1..4`.
+The family beats balanced `G(p,k)` exactly for `m<=8` (`7<=n<=14`) and tends
+to `14/9<2`.  Hence its fixed four-player loser side is the precise
+obstruction to an asymptotic improvement; a two-parameter family growing
+both sides is the next construction target.
 
 Upper-bound status: the threshold form of the s6-style exchange relaxation
 (x, z, seven singleton witnesses, anchors, full `{0,+1,-1}` menu, threshold
