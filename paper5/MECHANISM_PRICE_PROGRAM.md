@@ -1215,3 +1215,39 @@ Worked controls this round: the n=6 polish--climb alternation started from
 `G(2,3)` stays exactly at `2/3` (as Theorem s6 requires), and the
 two-generator n=7 seeds `G(2,4)`, `G(3,3)`, `G(4,2)`, `G(1,5)` stay at their
 own values under the same budget.
+
+## 18. PXC147: two growing blocks force a four-generator no-go
+
+The incidence-faithful extension of `H_m` is now classified rather than
+left as a search prompt.  Replacing `{e,e'}` by an `r`-player symmetric
+block while retaining the PXC146 floor-pinning rows forces
+
+```text
+h=2m/(r-1),  p=rh+1,  q=h+1,  s=m+1,
+T=m+2rh+r+2.
+```
+
+For every ordered transfer `p/2<=t<=p`, PXC147 proves both selectors in two
+closed chambers (`h<=1` and `h>=1`).  Along `m/r -> a`, both chambers have
+
+```text
+rho -> 8a/(5a+1) < 8/5,
+```
+
+and the exact formula is below `8/5` throughout the `r>=3` class.  Thus the
+obvious four-generator extension cannot beat balanced `G` infinitely often;
+its failure is structural, not a failed coefficient search.
+
+The algebra identifies the broken dependency.  The rows `bcdE`, `cdg`,
+`be_i g`, and `cEg`, together with efficiency, force the linear total scale.
+Replacing only `cEg` by `c(E\i)g` still gives `X_c<=3m`, and merely adding a
+fifth point cannot repair an undercut already created by the unchanged
+`B`-generator.  The smallest live construction ansatz must therefore split
+the `B`-type load across two complementary growing loser subblocks and use a
+cross-block d-pinning row.  This is the next five-generator experiment.
+
+Evidence tier: conventional all-parameter proof plus a stdlib exact
+transcription audit; standalone Z3 role-orbit selector recomputation on 25
+calibration cases spanning both chambers and the PXC146 boundary; fail-open
+control below `t=p/2`.  External correctness and prior-art review remain
+required before treating the no-go mechanism as novel.

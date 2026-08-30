@@ -786,6 +786,16 @@ run_python \
   --output "$scratch_dir/pxc146-hm-all-m-symbolic-independent.json"
 cmp coopgames/verifiers/divergence/pxc146_hm_all_m_symbolic_independent.json \
   "$scratch_dir/pxc146-hm-all-m-symbolic-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc147_hmr_four_generator_no_go.py \
+  --output "$scratch_dir/pxc147-hmr-four-generator-no-go.json"
+cmp coopgames/verifiers/divergence/pxc147_hmr_four_generator_no_go.json \
+  "$scratch_dir/pxc147-hmr-four-generator-no-go.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc147_hmr_four_generator_no_go_independent.py \
+  --output "$scratch_dir/pxc147-hmr-four-generator-no-go-independent.json"
+cmp coopgames/verifiers/divergence/pxc147_hmr_four_generator_no_go_independent.json \
+  "$scratch_dir/pxc147-hmr-four-generator-no-go-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
