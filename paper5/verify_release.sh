@@ -812,6 +812,17 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc149_split_block_bottleneck_independent.json \
   "$scratch_dir/pxc149-split-block-bottleneck-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc150_pair_menu_three_generator.py \
+  --output "$scratch_dir/pxc150-pair-menu-three-generator.json"
+cmp coopgames/verifiers/divergence/pxc150_pair_menu_three_generator.json \
+  "$scratch_dir/pxc150-pair-menu-three-generator.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc150_pair_menu_three_generator_independent.py \
+  --output "$scratch_dir/pxc150-pair-menu-three-generator-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc150_pair_menu_three_generator_independent.json \
+  "$scratch_dir/pxc150-pair-menu-three-generator-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

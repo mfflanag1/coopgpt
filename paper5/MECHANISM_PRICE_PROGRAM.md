@@ -1295,3 +1295,32 @@ currently unexcluded option.  Evidence consists of the conventional
 two-witness and minimax-dual proofs, exact primary transcription, standalone
 Z3 role-orbit selector replay, and an `m<k` fail-open control.  Correctness
 and prior-art review remain pending.
+
+## 20. PXC150: the complete pair menu is sharply trapped
+
+The smallest pair-indexed replacement uses the tight rows
+`P_ij=bcdg a_i b_j`, `H_ij=cg a_i b_j`, `R3=bcdAB`, and `R5_e=beg`.
+For arbitrary `u,v>=2`, separate exactness witnesses with `b=0` and `c=0`
+force
+
+```text
+X_b <= m(u+v-1)/(u+v-2),
+X_c <= m-2+(m+u+v-2)/(min(u,v)-1).
+```
+
+These bounds do not assume a finite lower-envelope representation. In the
+balanced case `u=v=k`, both are sharp in the exact singleton-normalized
+three-generator family `Q_{m,k}`. A partition proves `Lmin=X`; a weighted
+cover on `bd`, every `cde`, and every `Ucdeg` proves
+
+```text
+Lmax=lambda X+(1-lambda)B,
+lambda=((2k-1)m+2(k-1))/(m(4k-1)),
+rho=12(2k-1)(km-k+1)/((4k-1)(4k^2+6km-3m-4)).
+```
+
+Along `m/k->a`, the ratio tends to `3a/(3a+2)<1`. Thus the complete pair
+menu is a constant-gap no-go. The next construction must drop at least one
+of `P,H,R3,R5` or use a fractional submenu whose Lmin proof does not make
+the entire family tight. This is not an upper bound for arbitrary pair
+menus or exact games. External correctness and prior-art review are pending.
