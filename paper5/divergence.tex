@@ -11416,6 +11416,126 @@ or arbitrary exact games.  Escaping it requires dropping at least one of
 make all four families simultaneously tight.  External correctness and
 prior-art review remain pending.
 
+\medskip
+\noindent\textbf{PXC151: a quadratic two-block handover beats the balanced
+benchmark infinitely often.}
+The obstruction in PXC150 disappears if the floor proof first pins the
+gainer block as a whole and only then pins the loser block.  For integers
+\(m\ge2\) and \(r\ge3\), let
+\[
+ N=U^m\,bcd\,E^r g,\qquad n=m+r+4,\qquad
+ T=2mr+m+r+1,\qquad y=m(2r-1),\qquad q=2m+1.
+\]
+Define \(K_{m,r}\) as the lower envelope of the following three efficient
+nonnegative allocations, with coordinates ordered as
+\(U^m;b,c;d;E^r;g\):
+\begin{align}
+ X&=(1^m;m-1,y;1,1^r,1),\notag\\
+ B_0&=(0^m;0,0;0,q^r,m+1),                         \tag{PXC151a}\\
+ C_0&=(0^m;m+1,rq;0,0^r,0).\notag
+\end{align}
+Every player has a zero coordinate in one of \(B_0,C_0\).  As for every
+finite lower-envelope construction used above, all three displayed
+allocations lie in the core and an attaining allocation witnesses every
+coalition value.  Thus \(K_{m,r}\) is exact and singleton-normalized.
+
+Here is a conventional Lmin proof.  The following coalition values are
+read directly from (PXC151a):
+\begin{align}
+ v(N\setminus U)&=T-m,&
+ v(bcdE)&=rq,\notag\\
+ v(bdg)&=v(be_i g)=m+1,&
+ v(c(E\setminus e_i)g)&=2mr-m+r.                  \tag{PXC151b}
+\end{align}
+The complement of \(N\setminus U\) shows that the common floor is at most
+one.  On the floor-one face it pins every member of \(U\) at one.  The
+complement of \(bcdE\) then pins \(g=1\).  Write
+\(S_E=\sum_{e\in E}z_e\).  The last three rows in (PXC151b), together with
+efficiency, give for every \(e_i\)
+\[
+ z_b+z_d\ge m,\qquad z_b+z_{e_i}\ge m,\qquad
+ z_b+z_d+z_{e_i}\le m+1.                           \tag{PXC151c}
+\]
+Because \(z_d,z_{e_i}\ge1\), these inequalities force
+\(z_b=m-1\) and \(z_d=z_{e_i}=1\).  The final row in (PXC151b) then gives
+\(z_c\ge y\), and efficiency gives equality.  Hence
+\[
+ \Lmin(K_{m,r})=X.                                  \tag{PXC151d}
+\]
+
+The Lmax selector also has a three-row certificate.  Put
+\[
+ \lambda=\frac{2m+1}{m(2r+1)},\qquad
+ M=\lambda m(2r-1)=\frac{(2m+1)(2r-1)}{2r+1},
+\]
+and
+\begin{equation}
+ Z=\lambda X+(1-\lambda)B_0
+  =\bigl(\lambda^m;\lambda(m-1),M;\lambda,M^r,
+          m+1-m\lambda\bigr).                       \tag{PXC151e}
+\end{equation}
+Thus \(Z\) is in the core, and its ceiling is \(M\), attained exactly by
+\(c\) and the members of \(E\).  Indeed,
+\[
+ M-z_g=\frac{2mr-m-1}{2r+1}>0,\qquad
+ M-z_b=\lambda\{2m(r-1)+1\}>0,\qquad
+ M-z_u=\lambda\{m(2r-1)-1\}>0.
+\]
+Let \(\eta=1/(2r+1)\).  Give weight
+\(\eta\) to each of the rows \(bcdE\) and \(U^m cE\), and distribute total
+weight \(\eta\) uniformly over the \(r\) rows
+\(c(E\setminus e_i)g\).  The incidence load is the constant load \(\eta\)
+on every player, plus excess load \(2\eta\) on \(c\) and total excess load
+\((2r-1)\eta\) on \(E\).  The excess loads sum to one, while the dual
+objective is
+\[
+ \eta\{(2mr-m+r)+rq+rq-T\}=M.
+\]
+Consequently no core allocation has ceiling below \(M\).
+
+At equality, \(c\) and every member of \(E\) equal \(M\), and all three
+positive-weight row families are tight.  They give \(z_g=m+1-m\lambda\),
+\(\sum_{u\in U}z_u=m\lambda\), and \(z_b+z_d=m\lambda\).  For each
+\(u_j\in U\), the two additional tight-at-\(Z\) core rows \(u_jbg\) and
+\((U\setminus u_j)cdE\) imply respectively \(z_{u_j}\ge z_d\) and
+\(z_d\ge z_{u_j}\).  Hence every \(z_{u_j}=z_d=\lambda\), and then
+\(z_b=\lambda(m-1)\).  This proves the full egalitarian min--max selector,
+not only its first ceiling stage:
+\[
+ \Lmax(K_{m,r})=Z.                                  \tag{PXC151f}
+\]
+
+Coordinate comparison now gives
+\begin{equation}
+ O(K_{m,r})=2m+r+2,\qquad
+ \rho(K_{m,r})=
+ \frac{2(2mr-m-1)}{2mr+m+r+1}.                     \tag{PXC151g}
+\end{equation}
+On the diagonal \(m=r=k\),
+\begin{equation}
+ \rho(K_{k,k})-\left(2-\frac{8(2k+4)}{(2k+4)^2}\right)
+ =\frac{2(k^2-4k-2)}{(k+2)(2k^2+2k+1)},             \tag{PXC151h}
+\end{equation}
+which is positive exactly for integers \(k\ge5\).  Thus the family beats
+the balanced \(G\)-benchmark for infinitely many player counts.  More
+generally, along \(m/r\to a>0\),
+\begin{equation}
+ 2-\rho(K_{m,r})\sim\frac{C(a)}n,\qquad
+ C(a)=\frac{(a+1)(2a+1)}a,\qquad
+ \min_{a>0}C(a)=3+2\sqrt2<8,                        \tag{PXC151i}
+\end{equation}
+with the minimum at \(a=1/\sqrt2\); the diagonal already gives \(C(1)=6\).
+
+For a single integer-indexed campaign define
+\(\widehat H_{m,2}:=H_m\) from PXC146 and
+\(\widehat H_{m,r}:=K_{m,r}\) for \(r\ge3\).  This is an exact boundary
+calibration with a structural handover at three losers, not an algebraic
+continuation of the PXC146 four-generator formula.  PXC151 proves an
+infinite improvement over the displayed balanced construction; it does not
+prove that \(K_{m,r}\) is globally optimal among exact games.  Correctness,
+significance, and prior-art review by an external cooperative-game
+specialist remain pending, so no field-level novelty claim is made here.
+
 With this notation the equivalent integrated target follows from the proved
 spectral decomposition:
 

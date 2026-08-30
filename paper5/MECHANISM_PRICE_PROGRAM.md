@@ -1324,3 +1324,35 @@ menu is a constant-gap no-go. The next construction must drop at least one
 of `P,H,R3,R5` or use a fractional submenu whose Lmin proof does not make
 the entire family tight. This is not an upper bound for arbitrary pair
 menus or exact games. External correctness and prior-art review are pending.
+
+## 21. PXC151: quadratic two-block handover and infinite benchmark improvement
+
+Dropping the complete pair-menu floor proof exposes a simpler three-generator
+family on `U^m,b,c,d,E^r,g`. For `m>=2,r>=3`, set
+
+```text
+T=2mr+m+r+1,
+X=(1^m; m-1,m(2r-1); 1,1^r,1),
+B=(0^m; 0,0; 0,(2m+1)^r,m+1),
+C=(0^m; m+1,r(2m+1); 0,0^r,0).
+```
+
+The `N\U` row pins the gainer block at floor one; `R3` pins `g`; and the
+`bdg`, `beg`, and `c(E\e)g` rows then pin `b,d,E,c`. A three-row minimax
+dual proves
+
+```text
+lambda=(2m+1)/(m(2r+1)),
+Lmax=lambda X+(1-lambda)B,
+O=2m+r+2,
+rho=2(2mr-m-1)/(2mr+m+r+1).
+```
+
+On `m=r=k`, the exact margin over the balanced `G` benchmark is
+`2(k^2-4k-2)/((k+2)(2k^2+2k+1))`, positive exactly for `k>=5`. Along
+`m/r->a`, the deficit coefficient is `(a+1)(2a+1)/a`, minimized at
+`3+2sqrt(2)<8`; the diagonal coefficient is 6. Define the `r=2` boundary
+separately as the existing PXC146 `H_m`: this is a proved mechanism
+handover, not an algebraic continuation. Internal symbolic and standalone
+Z3 verification are complete. External specialist correctness and
+prior-art review remain mandatory before any field-level novelty claim.

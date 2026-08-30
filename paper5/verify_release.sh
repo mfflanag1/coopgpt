@@ -823,6 +823,18 @@ run_python \
 cmp \
   coopgames/verifiers/divergence/pxc150_pair_menu_three_generator_independent.json \
   "$scratch_dir/pxc150-pair-menu-three-generator-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc151_quadratic_two_block_breakthrough.py \
+  --output "$scratch_dir/pxc151-quadratic-two-block-breakthrough.json"
+cmp \
+  coopgames/verifiers/divergence/pxc151_quadratic_two_block_breakthrough.json \
+  "$scratch_dir/pxc151-quadratic-two-block-breakthrough.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc151_quadratic_two_block_breakthrough_independent.py \
+  --output "$scratch_dir/pxc151-quadratic-two-block-breakthrough-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc151_quadratic_two_block_breakthrough_independent.json \
+  "$scratch_dir/pxc151-quadratic-two-block-breakthrough-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
