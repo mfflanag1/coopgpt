@@ -25,6 +25,9 @@ The four displayed generators and both selector formulas are in
 - `rho<8/5` throughout the `r>=3` class;
 - along `m/r->a`, `rho->8a/(5a+1)`;
 - the closest one-row replacement `c(E\i)g` still forces `X_c<=3m`.
+- PXC148 exhausts all 15 one-own-loser symmetric row types in the retained
+  dual form; only `be_i`, `be_i g`, and `bcde_i g` survive, and the
+  two new types force `(r-1)X_b\le m` and a linear upper bound on `X_c`.
 
 Consequently this incidence-faithful class cannot beat the balanced
 two-generator benchmark infinitely often.  No upper bound for arbitrary
@@ -51,6 +54,9 @@ exact games and no novelty claim is made.
    decoration that still deserves the phrase “incidence-faithful.”
 8. Check PXC147h and the precise statement about why merely adding a fifth
    lower-envelope point cannot undo an existing B-generated undercut.
+9. Independently solve the seven PXC148 load equations, audit the
+   nonnegativity quantifier, and check whether its retained-row dual form
+   omits a comparably natural one-row mechanism.
 
 ## Reproduction
 
@@ -66,6 +72,11 @@ python3 coopgames/verifiers/divergence/verify_pxc147_hmr_four_generator_no_go_in
   --output /tmp/pxc147-independent.json
 cmp coopgames/verifiers/divergence/pxc147_hmr_four_generator_no_go_independent.json \
   /tmp/pxc147-independent.json
+
+python3 coopgames/verifiers/divergence/verify_pxc148_one_row_escape_no_go.py \
+  --output /tmp/pxc148.json
+cmp coopgames/verifiers/divergence/pxc148_one_row_escape_no_go.json \
+  /tmp/pxc148.json
 ```
 
 The primary artifact is a stdlib exact transcription audit of the
@@ -94,5 +105,5 @@ The positive breakthrough target remains open.  The next construction
 experiment should split the B-type load across two complementary growing
 loser subblocks and add a cross-block d-pinning row.  It must reproduce the
 PXC146 `r=2` boundary and either yield `2-rho~C/n` with `C<8`, or produce a
-second structural no-go.  PXC147 should not be called a field-level
+second structural no-go.  PXC147--PXC148 should not be called a field-level
 breakthrough before specialist correctness and prior-art review.

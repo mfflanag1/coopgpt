@@ -796,6 +796,11 @@ run_python \
   --output "$scratch_dir/pxc147-hmr-four-generator-no-go-independent.json"
 cmp coopgames/verifiers/divergence/pxc147_hmr_four_generator_no_go_independent.json \
   "$scratch_dir/pxc147-hmr-four-generator-no-go-independent.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc148_one_row_escape_no_go.py \
+  --output "$scratch_dir/pxc148-one-row-escape-no-go.json"
+cmp coopgames/verifiers/divergence/pxc148_one_row_escape_no_go.json \
+  "$scratch_dir/pxc148-one-row-escape-no-go.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \

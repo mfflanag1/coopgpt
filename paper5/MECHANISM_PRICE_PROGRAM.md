@@ -1242,12 +1242,18 @@ The algebra identifies the broken dependency.  The rows `bcdE`, `cdg`,
 `be_i g`, and `cEg`, together with efficiency, force the linear total scale.
 Replacing only `cEg` by `c(E\i)g` still gives `X_c<=3m`, and merely adding a
 fifth point cannot repair an undercut already created by the unchanged
-`B`-generator.  The smallest live construction ansatz must therefore split
-the `B`-type load across two complementary growing loser subblocks and use a
-cross-block d-pinning row.  This is the next five-generator experiment.
+`B`-generator.  PXC148 exhausts the complementary one-row repair on the
+`be_i g` side as well: among all `F_i={e_i} union W`,
+`W subset {b,c,d,g}`, only `be_i`, `be_i g`, and `bcde_i g` admit
+the required nonnegative incidence identity, and the two new rows force
+`(r-1)X_b\le m` and a linear upper bound on `X_c`.  The smallest currently unexcluded construction ansatz must
+therefore change two dependencies, for example by splitting the `B`-type
+load across complementary growing loser subblocks and using a cross-block
+d-pinning row.
 
-Evidence tier: conventional all-parameter proof plus a stdlib exact
+Evidence tier: conventional all-parameter proofs plus a stdlib exact
 transcription audit; standalone Z3 role-orbit selector recomputation on 25
 calibration cases spanning both chambers and the PXC146 boundary; fail-open
-control below `t=p/2`.  External correctness and prior-art review remain
-required before treating the no-go mechanism as novel.
+control below `t=p/2`; exact 15-row incidence-cone classification with a
+signed-coefficient control.  External correctness and prior-art review
+remain required before treating either no-go mechanism as novel.

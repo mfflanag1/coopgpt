@@ -266,7 +266,9 @@ def archive_disjunction(paths):
         for source, trail, values, x, z in records(payload, path):
             if len(x) == 6 and sum(x, F(0)) == sum(z, F(0)) > 0:
                 raw_records += 1
-                unique[(values, x, z)] = (str(source), trail)
+                unique[(values, x, z)] = (
+                    str(source.relative_to(ROOT)), trail
+                )
     bridge_rescues = []
     spectral_closed = 0
     for (values, x, z), source in unique.items():
