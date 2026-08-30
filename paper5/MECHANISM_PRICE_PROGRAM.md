@@ -1257,3 +1257,41 @@ calibration cases spanning both chambers and the PXC146 boundary; fail-open
 control below `t=p/2`; exact 15-row incidence-cone classification with a
 signed-coefficient control.  External correctness and prior-art review
 remain required before treating either no-go mechanism as novel.
+
+## 19. PXC149: the primitive split-block escape is also trapped
+
+The first construction outside PXC148 splits the loser block into
+`A^u,B^v` and replaces the old one-own-loser rows by the genuinely
+cross-block families
+
+```text
+F^A_i = b a_i B,       F^B_j = b A b_j.
+```
+
+Together with `R3=bcdAB`, `R4=cdg`, and `R7=cABg`, these rows pin the
+Lmin floor without the PXC147 all-E identity.  Nevertheless exactness
+supplies separate `b=0` and `c=0` core witnesses.  Their row inequalities
+give the dimension-free sharp bounds
+
+```text
+X_b <= m(uv-1)/((u-1)(v-1)),
+X_c <= 2m + m(uv-1)/((u-1)(v-1)).
+```
+
+Thus adding more lower-envelope generators cannot restore the desired
+quadratic rich scale while this five-row skeleton remains tight.  The
+balanced sharp realization `J_{m,k}` (`u=v=k`, `m>=k`) has a conventional
+closed selector proof and
+
+```text
+rho(J_{m,k}) = 2(3km-k-m+1)/(2k^2+5km-m-2),
+rho -> 6a/(5a+2) < 6/5 when m/k -> a.
+```
+
+The next live construction cell is therefore not another whole-opposite-
+block row.  It must replace at least one family in the PXC149 skeleton,
+with a pair-indexed menu `b a_i b_j` and a fractional cover the smallest
+currently unexcluded option.  Evidence consists of the conventional
+two-witness and minimax-dual proofs, exact primary transcription, standalone
+Z3 role-orbit selector replay, and an `m<k` fail-open control.  Correctness
+and prior-art review remain pending.

@@ -801,6 +801,17 @@ run_python \
   --output "$scratch_dir/pxc148-one-row-escape-no-go.json"
 cmp coopgames/verifiers/divergence/pxc148_one_row_escape_no_go.json \
   "$scratch_dir/pxc148-one-row-escape-no-go.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc149_split_block_bottleneck.py \
+  --output "$scratch_dir/pxc149-split-block-bottleneck.json"
+cmp coopgames/verifiers/divergence/pxc149_split_block_bottleneck.json \
+  "$scratch_dir/pxc149-split-block-bottleneck.json"
+run_python \
+  coopgames/verifiers/divergence/verify_pxc149_split_block_bottleneck_independent.py \
+  --output "$scratch_dir/pxc149-split-block-bottleneck-independent.json"
+cmp \
+  coopgames/verifiers/divergence/pxc149_split_block_bottleneck_independent.json \
+  "$scratch_dir/pxc149-split-block-bottleneck-independent.json"
 
 bash coopgames/paper5/build_arxiv_release.sh
 cmp coopgames/paper5/divergence.pdf \
