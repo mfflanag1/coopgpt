@@ -1,0 +1,235 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref,microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,pdftitle={Sharp asymptotic separation of opposing egalitarian core selections},pdfauthor={Maxwell Flanagan}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\Lmin}{\operatorname{Lmin}}
+\newcommand{\Lmax}{\operatorname{Lmax}}
+\newcommand{\Core}{\operatorname{Core}}
+\title{Sharp asymptotic separation of opposing\\ egalitarian core selections}
+\author{Maxwell Flanagan}
+\date{September 4, 2026 --- Internal research draft}
+\begin{document}
+\maketitle
+\begin{abstract}
+For singleton-normalized exact transferable-utility games on $n$ players,
+let $s_n$ be the supremum of the normalized $\ell_1$ distance between the
+leximin and leximax-min core allocations. We prove
+\[
+ \lim_{n\to\infty}n(2-s_n)=2,
+ \qquad 2-s_n=\frac2n+O\!\left(\frac{\log n}{n^2}\right).
+\]
+The upper bound on separation is a short convexity argument. The matching
+construction is the minimum of two additive games, and its entire core is
+a line segment. Complementary coalition equalities encode a Fibonacci
+recurrence that determines the segment exactly. Both full selectors are
+unique at their first optimization stages. A separate three-generator
+construction reaches the same asymptotic constant and extends PXC151.
+Conventional proofs and finite exact computations are distinguished.
+External correctness, novelty, and significance assessment remain pending.
+\end{abstract}
+
+\section{Statement and scope}
+Write $y(S)=\sum_{i\in S}y_i$ and
+\[
+ \Core(v)=\{y\in\mathbb R^N:y(N)=v(N),\ y(S)\ge v(S)\ (S\subseteq N)\}.
+\]
+A game is \emph{exact} if each coalition value is attained by a core
+allocation. Singleton normalization means $v(\{i\})=0$ for every player,
+so every core allocation is nonnegative. Throughout $T=v(N)>0$.
+The allocation $x=\Lmin(v)$ lexicographically maximizes the increasing
+rearrangement of payoffs; $z=\Lmax(v)$ lexicographically minimizes their
+decreasing rearrangement. These are opposing egalitarian selections, not
+the coalition-excess nucleolus. Put
+\[
+ O(x,z)=\sum_i\min(x_i,z_i),\qquad
+ \rho(v)=\frac{\|x-z\|_1}{T}=2-\frac{2O(x,z)}T,
+ \qquad s_n=\sup_v\rho(v),
+\]
+where the supremum ranges over the stated exact games.
+\begin{theorem}\label{thm:main}
+For $n\ge2$, every such game satisfies $\rho(v)\le2-2/(n-1)$.
+For every integer $n\ge128$, writing $L=\lceil\log_2n\rceil$,
+\begin{equation}\label{eq:explicit}
+ \frac2{n-1}\le 2-s_n
+ \le\frac2{n-12L}+\frac2{n^2+1}.
+\end{equation}
+Consequently $\lim_{n\to\infty}n(2-s_n)=2$ and
+$2-s_n=2/n+O(\log n/n^2)$. The constructions use two nonnegative efficient
+generators and can be scaled to integer-valued games. Fixed-$n$ sharpness
+and uniqueness of asymptotic extremizers are not asserted.
+\end{theorem}
+Thus PXC151's coefficient $3+2\sqrt2$ is not globally optimal.
+
+\section{A generic overlap bound}
+\begin{lemma}\label{lem:generic}
+Let $K$ be a nonempty compact convex subset of
+$\{y\ge0:y(N)=T\}$, with $n\ge2$. If $x$ maximizes the minimum
+coordinate and $z$ minimizes the maximum coordinate on $K$, then
+$O(x,z)\ge T/(n-1)$.
+\end{lemma}
+\begin{proof}
+If $x=z$, the claim is immediate. Otherwise put $a=\min_i x_i$ and
+$M=\max_i z_i$; equal totals imply $a<M$. Some index $i$ with $x_i=a$
+has $z_i\le a$. Otherwise a sufficiently short move from $x$ toward $z$
+raises every minimum coordinate, while the finitely many other coordinates
+remain above $a$, contradicting maximin optimality. Similarly some index
+$j$ with $z_j=M$ has $x_j\ge M$. The indices are distinct. Therefore
+\[
+ O(x,z)\ge z_i+M,\qquad
+ T\le z_i+(n-1)M\le(n-1)(z_i+M)\le(n-1)O(x,z).
+\]
+\end{proof}
+Neither exactness nor later lexicographic stages are needed. This
+reconstructs and slightly strengthens the universal bound reported in the
+previous session; it does not certify that session's lost release run.
+
+\section{Realizing a segment by coalition equalities}
+\begin{lemma}\label{lem:matrix}
+Let $A$ be an invertible $p\times p$ zero-one matrix such that
+$d=A^{-1}\mathbf1>0$. Choose a positive integer $r$ with
+$H=r-\sum_i d_i\ge1$. On $p+1$ donor and $r$ receiver players, set
+\[
+ U=(H,d_1,\ldots,d_p;0^r),\quad V=(0^{p+1};1^r),\quad
+ v(S)=\min\{U(S),V(S)\}.
+\]
+Then $v$ is exact and singleton-normalized, with $\Core(v)=[U,V]$.
+If $\alpha=\min_i d_i$, its full selectors are $tU+(1-t)V$ at
+\[
+ t_{\min}=\frac1{1+\alpha},\qquad t_{\max}=\frac1{1+H},
+ \qquad 2-\rho(v)=2\left(\frac\alpha{1+\alpha}+\frac1{1+H}\right).
+\]
+\end{lemma}
+\begin{proof}
+Both nonnegative generators have total $r$, belong to the lower-envelope
+core, and collectively attain every coalition value. Their disjoint
+supports give singleton normalization. Each column of $A$ occurs in a row,
+so $Ad=\mathbf1$ and positivity imply $d_i\le1$.
+
+Let $D$ be the donor subset of any row of $A$. For each receiver $e$,
+both generators give $D\cup\{e\}$ value one and its complement value
+$r-1$. The two core inequalities and efficiency force $y(D)+y_e=1$.
+All receivers thus have a common payment $1-t$. The other donor coordinates
+satisfy $Ay_d=t\mathbf1$, hence $y_d=td$; efficiency gives $y_h=tH$.
+Nonnegativity implies $0\le t\le1$. Convexity gives the reverse containment.
+
+On this segment, the minimum coordinate is $\min(t\alpha,1-t)$ and
+the maximum is $\max(tH,1-t)$, since $0<\alpha\le d_i\le1\le H$.
+Each scalar optimum is unique, so already determines the full selector.
+The endpoint supports are disjoint with equal total, giving normalized
+distance $2(t_{\min}-t_{\max})$ and the formula.
+\end{proof}
+The structural content is preserving a segment under coalition closure;
+an arbitrary convex segment need not be the core of its lower envelope.
+
+\section{The Fibonacci family}
+Let $F_1=F_2=1$, $F_{j+2}=F_{j+1}+F_j$. For integers $m\ge2$,
+$r\ge m+1$, write
+\[
+ F=F_{m+1},\quad H=r-m,\quad
+ a_i=F_{m-i+1}/F,\quad b_i=1-a_i\quad(1\le i\le m).
+\]
+Define
+\begin{equation}\label{eq:fibfamily}
+ U=(H,a_1,\ldots,a_m,b_1,\ldots,b_m;0^r),\qquad
+ V=(0^{2m+1};1^r).
+\end{equation}
+There are $n=r+2m+1$ players and total $T=r$.
+\begin{proposition}\label{prop:fib}
+The lower envelope of \eqref{eq:fibfamily} has core exactly $[U,V]$, and
+\begin{equation}\label{eq:fibdef}
+ \rho=2\left(\frac F{F+1}-\frac1{r-m+1}\right),\qquad
+ 2-\rho=\frac2{F_{m+1}+1}+\frac2{r-m+1}.
+\end{equation}
+\end{proposition}
+\begin{proof}
+With donor labels $A_i,B_i$, these $2m$ subsets have weight one:
+\begin{align*}
+ &\{A_i,B_i\} &&(1\le i\le m),\\
+ &\{A_{i+1},A_{i+2},B_i\} &&(1\le i\le m-2),\\
+ &\{A_{m-1},B_m\},\qquad \{A_1,A_2\}.&&
+\end{align*}
+Their incidence matrix is invertible. The homogeneous equations eliminate
+the $B_i$ variables and give $A_i=A_{i+1}+A_{i+2}$,
+$A_{m-1}=A_m$, and $A_1+A_2=0$. Writing $A_m=u$ gives
+$A_i=F_{m-i+1}u$ and $F_{m+1}u=0$. Thus all variables vanish.
+This includes $m=2$, when there are no recurrence rows.
+The positive inhomogeneous solution $(a,b)$ has total $m$ and minimum
+$1/F$. Apply Lemma~\ref{lem:matrix}.
+\end{proof}
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Lemma~\ref{lem:generic} gives the lower bound on $2-s_n$.
+For $n\ge128$ choose $L=\lceil\log_2n\rceil$, $m=4L$, and
+$r=n-2m-1$. These satisfy $r\ge m+1$: at $n=128$ check directly;
+for $L\ge8$, $n\ge2^{L-1}+1\ge12L+2$. The recurrence implies
+$F_{2j+1}\ge2^j$ for $j\ge0$. Hence
+$F_{m+1}\ge2^{2L}\ge n^2$ and $r-m+1=n-12L>0$.
+Formula~\eqref{eq:fibdef} proves \eqref{eq:explicit}.
+Since $L=O(\log n)$, subtracting $2/n$ and squeezing proves the claims.
+\end{proof}
+Multiplication by $F$ makes all generator coordinates integral. Choosing
+instead the least $m\ge2$ with $F_{m+1}\ge n^2$ gives
+$m=O(\log n)$ and $n^2\le F_{m+1}<2n^2$ for large $n$. The scaled total
+is $rF=O(n^3)$, so every coordinate needs only $O(\log n)$ bits.
+
+\section{An independent extension of PXC151}
+A separate three-generator construction and full proof are included in
+\texttt{THREE\_GENERATOR\_PROOF.md}. For integers $k\ge1$,
+$m\ge\max(2,2k-2)$, $r\ge3$, put $q=(k+1)m-k+2$.
+Its $n=m+k+r+3$ players have total $T=rq+m+1$, both optimal first-stage
+faces are singletons, and its exact overlap is $O=q+r+1$. Thus
+\[
+ \rho=2-\frac{2(q+r+1)}{rq+m+1}.
+\]
+For fixed $k$, optimizing $m/r$ gives coefficient
+$2(1+1/\sqrt{k+1})^2$. At $k=1$ this is PXC151; it decreases to two as
+$k$ grows. The polynomial sequence $k=s^2,m=2s^2,r=2s^3$ gives
+$n(2-\rho)\to2$. This family increases the multiplicity of an existing
+payoff role, and uses a different mechanism from the Fibonacci segment.
+Its domain restriction is material: an exact negative control at
+$(m,k,r)=(3,3,3)$ falsifies the extrapolated leximin formula.
+
+\section{Verification and review boundary}
+The main theorem has a conventional all-parameter proof. A standalone
+rational Z3 replay reconstructs all coalition inequalities for five
+Fibonacci cases with $8\le n\le14$, proves that the whole core is the
+segment, and separately verifies both optimum values and uniqueness.
+A perturbed unit-sum system produces an off-segment core allocation,
+checking that coalition closure can enlarge a perturbed segment. Fibonacci identities are also calibrated
+for $2\le m\le64$; this is finite evidence, not an all-parameter proof.
+The separate three-generator replay checks all coalitions for four cases
+with $n=9,10,12,13$, excluding better floors, better ceilings, and distinct
+allocations on either optimal face. A parameter-domain falsifier gives
+an explicit improved core point. The generic near-extremizer's coalition
+closure is independently calibrated in 24 cases.
+
+These fairness selections are established concepts studied algorithmically
+in assignment-game cores and Owen sets~\cite{vazirani,gangam}.
+Classical exactness and lower envelopes are not asserted as novel.
+Exact-cone facets and majorization characterizations provide adjacent
+structural frameworks~\cite{studeny,uiterkamp}. The candidate contribution
+is the sharp asymptotic separation theorem and its explicit realizations.
+A targeted primary-source screen did not locate an equivalent quantitative
+result; that is not a novelty certification. Specialist correctness,
+prior-art, and significance review remain pending.
+\begin{thebibliography}{9}
+\bibitem{vazirani} V. V. Vazirani.
+\emph{Fair Core Imputations for the Assignment Game: New Solution Concepts
+and Efficient Algorithms}. arXiv:2402.11437, v6, 2025.
+\url{https://arxiv.org/abs/2402.11437}.
+\bibitem{gangam} R. R. Gangam et al.
+\emph{Equitable Core Imputations for Max-Flow, MST and $b$-Matching Games}.
+arXiv:2403.06037, v3, 2025. \url{https://arxiv.org/abs/2403.06037}.
+\bibitem{studeny} M. Studen\'y and V. Kratochv\'il.
+\emph{Facets of the cone of exact games}.
+Mathematical Methods of Operations Research 95 (2022), 35--80.
+\url{https://arxiv.org/abs/2103.02414}.
+\bibitem{uiterkamp} M. H. H. Schoot Uiterkamp.
+\emph{A Characterization of Simultaneous Optimization, Majorization, and
+(Bi-)Submodular Polyhedra}.
+Mathematics of Operations Research 50 (2025), 252--276.
+\url{https://doi.org/10.1287/moor.2023.0054}.
+\end{thebibliography}
+\end{document}
