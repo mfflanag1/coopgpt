@@ -1,0 +1,248 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,hyperref,microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,citecolor=blue,urlcolor=blue,pdftitle={Sharp disagreement between egalitarian core selections in assignment games},pdfauthor={Maxwell Flanagan}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\Lmin}{\operatorname{Lmin}}
+\newcommand{\Lmax}{\operatorname{Lmax}}
+\title{Sharp disagreement between egalitarian\\ core selections in assignment games}
+\author{Maxwell Flanagan}
+\date{September 4, 2026 --- Internal research draft}
+\begin{document}
+\maketitle
+\begin{abstract}
+For weighted bipartite assignment games on $n\ge4$ players, we determine
+the maximum normalized $\ell_1$ distance between the full leximin and
+leximax-min core allocations:
+\[
+ s_n^{\rm assign}=\frac{\lfloor n/2\rfloor}{\lfloor n/2\rfloor+1}.
+\]
+The main structural lemma states that leximin gives each player at least
+half their payoff in every other core allocation. Matching complementarity
+and a minimax directional witness yield the sharp finite bound. A complete
+market with identical rows and weights in $\{1,2\}$ attains it. Exact
+assignment games instead have coincident selections, a consequence of
+known pairwise egalitarian structure. External correctness and novelty
+review remain pending.
+\end{abstract}
+
+\section{Definitions and main result}
+Let $G=(L,R,E)$ be a finite bipartite graph with nonnegative real edge
+weights $w$. Its assignment game values a coalition by the maximum matching
+weight in its induced subgraph. Write $n=|L|+|R|$ and let $T>0$ be the
+maximum matching weight in $G$. Its entire core is
+\begin{equation}\label{eq:core}
+ C=\left\{p\ge0:\ \sum_a p_a=T,\quad p_u+p_v\ge w_{uv}
+          \ \text{for every }uv\in E\right\}.
+\end{equation}
+The edge inequalities imply all coalition inequalities by summing over a
+coalition's optimal matching; the reverse follows from two-player
+coalitions. Nonemptiness follows from bipartite matching LP duality.
+
+Let $x=\Lmin(C)$ lexicographically maximize the increasingly sorted
+payoffs, and let $z=\Lmax(C)$ lexicographically minimize the decreasingly
+sorted payoffs. Retaining players whose core payoff is identically zero
+does not change the other coordinates of either full selection. Define
+\[
+ \rho(C)=\frac{\|x-z\|_1}{T},\qquad
+ s_n^{\rm assign}=\sup_{G:\,|L|+|R|=n,\,T>0}\rho(C).
+\]
+Isolated players are allowed, and $n$ counts them. No exact-game hypothesis
+is imposed.
+\begin{theorem}\label{thm:sharp}
+Fix any optimal matching, delete its zero-weight edges, and let $k\ge1$
+be its number of remaining edges. For full leximin $x$ and \emph{any}
+core allocation $z$ minimizing the largest payoff,
+\[
+ \frac{\|x-z\|_1}{T}\le\frac{k}{k+1}.
+\]
+For $k=1$ the selections coincide. For every $k\ge2$ the bound is attained
+by a complete $k\times k$ market with weights in $\{1,2\}$. Hence
+$s_n^{\rm assign}=0$ for $n=2,3$, and
+$s_n^{\rm assign}=\lfloor n/2\rfloor/(\lfloor n/2\rfloor+1)$ for $n\ge4$.
+In particular, $s_n^{\rm assign}\to1$.
+\end{theorem}
+The result applies to nonunique optimal matchings and minimax faces.
+Full leximin is essential; a first-stage maximin point need not suffice.
+
+\section{A simultaneous half-payoff guarantee}
+Fix the matching from Theorem~\ref{thm:sharp}, with positive edge weights
+$s_1,\ldots,s_k$. Summing its inequalities in \eqref{eq:core} and using
+efficiency shows that every matched pair has total $s_i$, and every
+unmatched player receives zero throughout the core. These identities
+require no nondegeneracy or exactness assumptions.
+\begin{lemma}\label{lem:half}
+For every $y\in C$ and every player $a$, $y_a\le2x_a$.
+Consequently $x_a\ge\tfrac12\max_{y\in C}y_a$ simultaneously for all
+players, and $\|x-y\|_1/T\le1$ for every $y\in C$.
+\end{lemma}
+\begin{proof}
+Put $d=y-x$. Suppose first that $a\in L$ and $d_a=\delta>0$. Set
+\[
+ A=\{u\in L:d_u\ge\delta\},\qquad
+ B=\{v\in R:d_v\le-\delta\}.
+\]
+Matched-pair totals give opposite changes across each matching edge;
+all unmatched changes vanish. Thus the matching bijects $A$ and $B$.
+At an edge $uv$ tight at $x$, feasibility of $y$ implies
+$d_u+d_v\ge0$. Such an edge cannot have $u\notin A$ and $v\in B$.
+Therefore the direction $h=\mathbf1_A-\mathbf1_B$ preserves the total
+and harms no tight edge inequality. Every decreasing coordinate satisfies
+$x_v\ge\delta$ by nonnegativity of $y_v$. Finitely many slack constraints
+and positive decreasing coordinates ensure $x+\epsilon h\in C$ for all
+sufficiently small $\epsilon>0$.
+
+If $\min_Bx>\min_Ax$, a sufficiently small such step raises the lowest
+affected coordinates and decreases only strictly larger coordinates,
+strictly improving the ascending sorted vector. This contradicts full
+leximin optimality, including when smaller fixed coordinates occur
+elsewhere. Hence
+\[
+ \delta\le\min_Bx\le\min_Ax\le x_a,
+ \qquad y_a=x_a+\delta\le2x_a.
+\]
+Interchange the two market sides for positive right-side changes.
+Nonpositive changes satisfy the claim immediately. Finally
+$\min(x_a,y_a)\ge y_a/2$, so the overlap is at least $T/2$ and the
+normalized distance is at most one.
+\end{proof}
+The constant two in the coordinatewise comparison is tight: on a
+single positive edge, leximin splits its value equally while a core
+endpoint gives its entire value to one player.
+
+\section{The sharp finite bound and its attainment}
+\begin{proof}[Proof of Theorem~\ref{thm:sharp}: upper bound]
+On matched pair $i$, write the change from $x$ to $z$ as $(d_i,-d_i)$,
+and put
+\[
+ q_i=|d_i|,\quad D=\sum_iq_i,\quad M=\max_a z_a>0.
+\]
+Thus $\|x-z\|_1=2D$. Both $x$ payoffs in pair $i$ are at least $q_i$:
+the decreasing endpoint by nonnegativity of $z$, and the increasing
+endpoint by Lemma~\ref{lem:half}. The increasing endpoint's $z$ payoff
+is at least $2q_i$. Therefore
+\begin{equation}\label{eq:pair}
+ s_i\ge2q_i,\qquad q_i\le M/2,\qquad D\le kM/2.
+\end{equation}
+These statements also hold when $q_i=0$.
+
+Some player $a$ satisfies $z_a=M$ and $x_a\ge M$. Otherwise, a
+sufficiently short move from $z$ toward $x$ lowers every maximum
+coordinate and leaves every other coordinate below $M$, contradicting
+minimax optimality. Since $M>0$, this player belongs to a positive
+matched pair $p$. Its displacement is $q_p=x_a-M$; the other $x$
+payoff in that pair is at least $q_p$. Thus $s_p\ge M+2q_p$.
+Summing this strengthened inequality with \eqref{eq:pair} for the other
+pairs gives
+\[
+ T\ge2D+M\ge2D\left(1+\frac1k\right).
+\]
+This proves the bound, also when $D=0$.
+
+If $k=1$, all other payoffs are fixed at zero. The remaining two sum
+to $T$ and range over a closed interval of splits. Maximizing their
+minimum is the same as minimizing their maximum, and uniquely selects
+the feasible split closest to equality. Hence $x=z$ in this case.
+\end{proof}
+\begin{proof}[Attainment and player count]
+For $k\ge2$, take a complete $k\times k$ market with identical rows
+\[
+ (w_{i1},\ldots,w_{ik})=(1,\ldots,1,2).
+\]
+Every perfect matching has value $T=k+1$, and every edge belongs to one.
+Complementarity consequently makes every edge inequality tight throughout
+the core. Writing $c=(1,\ldots,1,2)$, the entire core is exactly
+\[
+ u_i=t\quad(1\le i\le k),\qquad
+ v_j=c_j-t\quad(1\le j\le k),\qquad0\le t\le1.
+\]
+Its minimum coordinate is $\min(t,1-t)$, uniquely maximized at $t=1/2$.
+Its maximum is $2-t$, uniquely minimized at $t=1$. Every coordinate
+changes by $1/2$, so $\|x-z\|_1=k$ and $\rho=k/(k+1)$.
+Adding one isolated player leaves the full selectors otherwise unchanged.
+Every matching on $n$ players has at most $\lfloor n/2\rfloor$ edges,
+which proves the exact $n$-player formula.
+\end{proof}
+
+\section{Why exact assignment games have zero divergence}
+A game is exact when each coalition's worth is attained by some core
+allocation. The following known structural implication explains the
+boundary with unrestricted exact TU games; it is not claimed as new
+\cite{llerena,solymosi-raghavan}.
+\begin{proposition}\label{prop:exact}
+If the matched-pair halfsplit $h$ belongs to an assignment-game core,
+then $\Lmin(C)=\Lmax(C)=h$. Every exact assignment game satisfies this
+hypothesis.
+\end{proposition}
+\begin{proof}
+For any core allocation $y$, let $P$ swap the endpoints of every fixed
+matched pair and fix unmatched coordinates. Then $h=(y+Py)/2$.
+Thus $h$ is majorized by $y$: pairwise averaging can only increase sums
+of the smallest coordinates and decrease sums of the largest coordinates.
+If $y\ne h$, strict convexity of squared norm implies
+$\|h\|_2^2<\|y\|_2^2$, so their sorted vectors cannot coincide.
+Therefore $h$ strictly improves both relevant lexicographic orders.
+
+For an exact assignment game, the two side coalitions $L$ and $R$ have
+worth zero and each attains that worth at a core allocation.
+Nonnegativity and matched-pair totals force these two allocations to
+put every $s_i$ entirely on opposite sides. Their midpoint is $h\in C$.
+\end{proof}
+The attaining markets above are nonexact: their distinguished right
+player always receives at least one, despite having singleton worth zero.
+Thus the comparison is between two different restrictions of cooperative
+games: general assignment games have maximum divergence tending to one;
+within exact assignment games it is zero.
+
+\section{Evidence, related work, and review status}
+The argument above is a conventional all-parameter proof. Exact rational
+replays reconstruct all coalition values by enumerating matchings,
+verify all full selector stages for 255 nonzero $2\times2$ matrices
+with entries $0,1,2,3$, and check the half-payoff guarantee by separately
+maximizing each coordinate over the entire core. They also exclude any
+violating minimax allocation, test rectangular and degenerate examples,
+and reconstruct attaining segment cores through $k=6$.
+A separate implementation verifies ten even/odd attaining-family cases.
+Negative controls distinguish full leximin from first-stage maximin and
+minimax comparison points from arbitrary core allocations. The code and
+exact outputs accompany this note; finite tests do not replace its proof.
+
+Sorted egalitarian selections and alternating-adjustment methods have
+older assignment-game precedents \cite{klijn}; recent work develops
+fair-core algorithms \cite{vazirani}. The fair-price midpoint already
+provides a half-core-maximum benchmark for another solution concept
+\cite{solymosi}. Our candidate contribution is the guarantee specifically
+for full leximin and the sharp finite distance to minimax selections.
+A dated primary-source audit located no equivalent quantitative theorem,
+but does not certify novelty. The audit also records an apparent mismatch
+between the graph and printed vectors of Example~1 in Vazirani's v6,
+with exact reconstructed selectors and an independent public implementation
+fixture corroborating the reconstructed leximin. This discrepancy is
+separate from the proof above. External correctness, prior-art, and
+significance review remain pending.
+
+\begin{thebibliography}{9}
+\bibitem{vazirani} V. V. Vazirani.
+\emph{Fair Core Imputations for the Assignment Game: New Solution Concepts
+and Efficient Algorithms}. arXiv:2402.11437v6 (2025).
+\url{https://arxiv.org/abs/2402.11437}.
+\bibitem{klijn} F. Klijn et al.
+\emph{Neighbour Games and the Leximax Solution}.
+Mathematical Methods of Operations Research 58 (2003), 191--208.
+\url{https://pure.uvt.nl/ws/files/533861/110.pdf}.
+\bibitem{llerena} F. Llerena.
+\emph{The pairwise egalitarian solution for the assignment game}.
+Operations Research Letters 40 (2012).
+\url{https://doi.org/10.1016/j.orl.2011.11.011}.
+\bibitem{solymosi-raghavan} T. Solymosi and T. E. S. Raghavan.
+\emph{Assignment games with stable core}.
+International Journal of Game Theory 30 (2001), 177--185.
+\url{https://doi.org/10.1007/s001820100072}.
+\bibitem{solymosi} T. Solymosi.
+\emph{Sensitivity of fair prices in assignment markets}.
+Mathematical Social Sciences 126 (2023), 1--12.
+\url{https://doi.org/10.1016/j.mathsocsci.2023.09.003}.
+\end{thebibliography}
+\end{document}
