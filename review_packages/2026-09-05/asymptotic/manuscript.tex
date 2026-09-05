@@ -1,0 +1,391 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm,booktabs,hyperref,microtype}
+\hypersetup{colorlinks=true,linkcolor=blue,urlcolor=blue,citecolor=blue,
+ pdftitle={Sharp asymptotic separation of opposing egalitarian core selections},
+ pdfauthor={Maxwell Flanagan}}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newcommand{\Lmin}{\operatorname{Lmin}}
+\newcommand{\Lmax}{\operatorname{Lmax}}
+\newcommand{\Core}{\operatorname{Core}}
+\newcommand{\one}{\mathbf1}
+\title{Sharp asymptotic separation of opposing\\egalitarian core selections}
+\author{Maxwell Flanagan}
+\date{September 5, 2026 --- Draft for specialist review}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+For singleton-normalized exact transferable-utility games on $n$ players,
+let $s_n$ denote the supremum of the normalized $\ell_1$ distance between
+the leximin core allocation and the core allocation that lexicographically
+minimizes decreasingly sorted payoffs. We prove
+\[
+ \lim_{n\to\infty}n(2-s_n)=2,
+ \qquad 2-s_n=\frac2n+O\!\left(\frac{\log n}{n^2}\right).
+\]
+The universal bound holds for opposing maximin and minimax points in every
+compact convex nonnegative constant-total set. For the matching asymptotic
+construction, we realize a line segment as the entire core of the minimum
+of two additive games. Complementary coalition equalities encode a
+Fibonacci recurrence. Both full selectors are uniquely determined at their
+first optimization stages. The construction exists for every sufficiently
+large $n$ and admits integer generators with polynomially bounded total.
+The argument is self-contained; finite exact computations are supplied as
+reproducibility checks.
+\end{abstract}
+
+\section{The question and the main result}
+
+The core imposes coalition stability but often leaves several efficient
+allocations available. Two egalitarian refinements compare those allocations
+in opposite orders: leximin first improves the poorest payoff, whereas the
+opposing selection first lowers the richest payoff. How far apart can their
+recommendations be, even when every coalition value is attained somewhere
+in the core?
+
+Let $N$ be a finite player set, $n=|N|$, and let a TU game be a function
+$v:2^N\to\mathbb R$ with $v(\varnothing)=0$. Write
+$y(S)=\sum_{i\in S}y_i$ and
+\[
+ \Core(v)=\{y\in\mathbb R^N:y(N)=v(N),\ y(S)\ge v(S)
+                                      \text{ for all }S\subseteq N\}.
+\]
+The game is \emph{exact} if its core is nonempty and, for every coalition
+$S$, some core allocation $y$ satisfies $y(S)=v(S)$. Throughout we impose
+\emph{singleton normalization}, $v(\{i\})=0$ for all $i$, and a positive
+grand total $T=v(N)$. Its core is then a compact convex subset of
+$\{y\ge0:y(N)=T\}$.
+
+For $y\in\mathbb R^N$, denote its increasingly and decreasingly sorted
+vectors by $y^\uparrow$ and $y^\downarrow$. We use the following explicit
+conventions:
+\[
+ x=\Lmin(v):\quad x^\uparrow
+       \text{ is lexicographically maximal over }\Core(v),
+\]
+\[
+ z=\Lmax(v):\quad z^\downarrow
+       \text{ is lexicographically minimal over }\Core(v).
+\]
+Thus $\Lmax$ means the lexicographic refinement of \emph{minimizing} the
+maximum payoff. Both rules sort all individual payoffs. Neither rule here
+sorts coalition excesses.
+
+These full selections exist and are unique on a nonempty compact convex
+set. Existence follows by successive optimization of continuous order
+statistics on compact sets. For uniqueness of the first rule, two distinct
+optimal points would have the same sorted vector. Consider the smallest
+payoff level whose assigned player sets differ. Their midpoint keeps all
+lower levels unchanged and has fewer coordinates at this level, strictly
+improving the sorted vector. Convexity gives a contradiction. Applying the
+same argument to the negative of the feasible set proves uniqueness of the
+second rule.
+
+Put
+\begin{equation}\label{eq:distance}
+ O(x,z)=\sum_{i\in N}\min(x_i,z_i),\qquad
+ \rho(v)=\frac{\|x-z\|_1}{T}=2-\frac{2O(x,z)}T,
+ \qquad s_n=\sup_v\rho(v),
+\end{equation}
+where the supremum ranges over all singleton-normalized exact games with
+$n$ players and positive total. Scaling the game by a positive constant
+leaves $\rho$ unchanged. No attainment of this supremum is assumed.
+
+\begin{theorem}\label{thm:main}
+For every $n\ge2$,
+\[
+ s_n\le2-\frac2{n-1}.
+\]
+For every integer $n\ge128$, let $L=\lceil\log_2 n\rceil$. Then
+\begin{equation}\label{eq:finite-squeeze}
+ \frac2{n-1}\le 2-s_n
+       \le\frac2{n-12L}+\frac2{n^2+1}.
+\end{equation}
+Consequently
+\begin{equation}\label{eq:asymptotic}
+ \lim_{n\to\infty}n(2-s_n)=2,
+ \qquad 2-s_n=\frac2n+O\!\left(\frac{\log n}{n^2}\right).
+\end{equation}
+The lower construction for $s_n$ uses two nonnegative efficient generators
+and has a one-dimensional entire core. It can be scaled to an integer-valued
+game; an alternative parameter choice gives integer generator coordinates
+of $O(\log n)$ bits and total $O(n^3)$.
+\end{theorem}
+
+The normalized vectors $x/T$ and $z/T$ are probability vectors, so
+$\rho/2$ is their total variation distance. The result concerns disagreement
+about distributing a fixed total: it does not assert a loss of aggregate
+worth. Fixed-$n$ sharpness, an exact second-order term, and uniqueness of
+asymptotic extremizers are not asserted.
+
+\paragraph{Relation to prior work.}
+The leximin stable allocation in the core is established in Arin and
+I\~narra~\cite{arin-inarra}. Vazirani~\cite{vazirani}, notably Sections 1.2
+and 5, studies the two opposing fairness criteria for assignment-game
+cores and gives efficient algorithms; his Lemma 3 also proves uniqueness
+of leximin. Gangam et al.~\cite{gangam} study corresponding algorithms for
+max-flow, MST, and $b$-matching games, with their constructive algorithms
+operating on Owen sets. These domains and algorithmic objectives differ
+from the unrestricted exact-game distance supremum considered here.
+
+Exactness and lower-envelope representations are classical. For example,
+Amarante et al.~\cite{amarante}, Section 2.2, record both the lower-envelope
+interpretation and the fact that its core may strictly contain the
+generating convex hull. Studen\'y and Kratochv\'il~\cite{studeny} give a
+facet description of the finite exact-game cone. Our proof uses neither a
+facet enumeration nor an unproved replacement of the core by its generators.
+The proposed contribution is the quantitative asymptotic theorem and the
+explicit whole-core realization below. A bounded source search did not
+identify an equivalent result; specialist assessment of priority and
+significance remains pending. The companion source ledger records the
+versions and access limitations of that search.
+
+\section{A universal overlap inequality}
+
+\begin{lemma}\label{lem:overlap}
+Let $n\ge2$, $T>0$, and let $K$ be a nonempty compact convex subset of
+$\{y\in\mathbb R^n:y\ge0,\ y(N)=T\}$. If
+\[
+ x\in\arg\max_{y\in K}\min_i y_i,
+ \qquad z\in\arg\min_{y\in K}\max_i y_i,
+\]
+then $\sum_i\min(x_i,z_i)\ge T/(n-1)$.
+\end{lemma}
+
+\begin{proof}
+If $x=z$, the overlap is $T$. Otherwise let $a=\min_i x_i$ and
+$M=\max_i z_i$. Since $a\le T/n\le M$, equality $a=M$ would force
+both points to be uniform; hence $a<M$.
+
+Some index $i$ with $x_i=a$ satisfies $z_i\le a$. If every minimum
+coordinate instead had $z_i>a$, a sufficiently small positive move from
+$x$ toward $z$ would raise all of them, while all other coordinates would
+remain above $a$. This contradicts maximin optimality. Similarly some
+index $j$ with $z_j=M$ has $x_j\ge M$: otherwise a small move from $z$
+toward $x$ lowers all maximum coordinates and keeps the others below $M$.
+The two indices are distinct because $x_i=a<M\le x_j$. Therefore
+\[
+ O(x,z)\ge z_i+M,
+\]
+and nonnegativity gives
+\[
+ T\le z_i+(n-1)M
+   \le(n-1)(z_i+M)
+   \le(n-1)O(x,z).
+\]
+\end{proof}
+
+By \eqref{eq:distance}, the lemma proves the upper bound on $s_n$ in
+Theorem~\ref{thm:main}. Exactness and all later lexicographic stages are
+unnecessary for this bound.
+
+\section{Realizing the entire core as a segment}
+
+\begin{lemma}\label{lem:segment}
+Let $p\ge1$ and let $A\in\{0,1\}^{p\times p}$ be invertible with
+$d=A^{-1}\one>0$. Choose an integer $r\ge1$ such that
+$H=r-\sum_i d_i\ge1$. On one distinguished donor, $p$ other donors, and
+$r$ receivers, define
+\[
+ U=(H,d_1,\ldots,d_p;0^r),\qquad
+ V=(0^{p+1};1^r),\qquad
+ v(S)=\min\{U(S),V(S)\}.
+\]
+Then $v$ is singleton-normalized and exact, has total $r$, and
+$\Core(v)=[U,V]$. If $\alpha=\min_i d_i$, its full selectors equal
+$tU+(1-t)V$ at
+\begin{equation}\label{eq:selector-t}
+ t_{\min}=\frac1{1+\alpha},\qquad
+ t_{\max}=\frac1{1+H}.
+\end{equation}
+In particular,
+\begin{equation}\label{eq:segment-deficit}
+ 2-\rho(v)=2\left(\frac\alpha{1+\alpha}+\frac1{1+H}\right).
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Both generators are nonnegative, have total $r$, and satisfy all coalition
+lower bounds. Every coalition value is attained by one of them, establishing
+exactness. Their supports are disjoint, establishing singleton normalization.
+Since every column of $A$ is nonzero, positivity and $Ad=\one$ imply
+$d_i\le1$ for every $i$.
+
+Let $D$ be the subset of nondistinguished donors specified by any row of
+$A$, and let $e$ be any receiver. Both generators give $D\cup\{e\}$
+value one, and give its complement value $r-1$. Thus efficiency and these
+two coalition inequalities force, at every core point,
+\[
+ y(D)+y_e=1.
+\]
+Fixing a row and varying $e$ shows that all receivers have a common
+coordinate, say $1-t$. Varying the row gives $Ay_d=t\one$, whence
+$y_d=td$. Efficiency gives $y_h=tH$ for the distinguished donor.
+Nonnegativity now implies $0\le t\le1$. Conversely every point of
+$[U,V]$ is in the core by convexity. This proves the whole-core equality.
+
+On the segment the smallest and largest coordinates are
+\[
+ \min\{t\alpha,1-t\},\qquad \max\{tH,1-t\},
+\]
+because $0<\alpha\le d_i\le1\le H$. Each has a unique relevant scalar
+optimum, giving \eqref{eq:selector-t}. These unique first-stage optima
+determine the full lexicographic selectors. Since
+$\|U-V\|_1=2r$ and $t_{\min}\ge t_{\max}$,
+\[
+ \rho(v)=2(t_{\min}-t_{\max}),
+\]
+which rearranges to \eqref{eq:segment-deficit}.
+\end{proof}
+
+The essential restriction is the system of unit-weight donor subsets.
+Merely defining a game as a lower envelope proves exactness but does not
+generally prove that its core is the generating segment.
+
+\section{The Fibonacci construction and all player counts}
+
+Let $F_1=F_2=1$ and $F_{j+2}=F_{j+1}+F_j$. For integers $m\ge2$ and
+$r\ge m+1$, set
+\[
+ F=F_{m+1},\quad H=r-m,\quad
+ a_i=F_{m-i+1}/F,\quad b_i=1-a_i\quad(1\le i\le m).
+\]
+Use donor labels $h,A_1,\ldots,A_m,B_1,\ldots,B_m$ and $r$ receivers,
+and define
+\begin{equation}\label{eq:generators}
+ U=(H,a_1,\ldots,a_m,b_1,\ldots,b_m;0^r),\qquad
+ V=(0^{2m+1};1^r).
+\end{equation}
+Thus $n=r+2m+1$ and $T=r$.
+
+\begin{proposition}\label{prop:fibonacci}
+The game $v(S)=\min\{U(S),V(S)\}$ from \eqref{eq:generators} is
+singleton-normalized and exact, its entire core is $[U,V]$, and
+\begin{equation}\label{eq:fibonacci-deficit}
+ \rho(v)=2\left(\frac{F}{F+1}-\frac1{r-m+1}\right),
+ \qquad 2-\rho(v)=\frac2{F_{m+1}+1}+\frac2{r-m+1}.
+\end{equation}
+\end{proposition}
+
+\begin{proof}
+The following $2m$ subsets of the nondistinguished donors have $U$-weight
+one:
+\begin{align*}
+ &\{A_i,B_i\} &&(1\le i\le m),\\
+ &\{A_{i+1},A_{i+2},B_i\} &&(1\le i\le m-2),\\
+ &\{A_{m-1},B_m\},\qquad \{A_1,A_2\}.&&
+\end{align*}
+The pair rows are immediate; the other equalities are the recurrence and
+the identities $a_{m-1}=a_m$ and $a_1+a_2=1$.
+
+Their incidence matrix is invertible. In its homogeneous system the pair
+rows eliminate $B_i=-A_i$. The other rows then give
+\[
+ A_i=A_{i+1}+A_{i+2},\qquad A_{m-1}=A_m,
+ \qquad A_1+A_2=0.
+\]
+Writing $A_m=u$ gives $A_i=F_{m-i+1}u$ and $F_{m+1}u=0$, so every
+coordinate vanishes. This also covers $m=2$, when recurrence rows are
+absent. The positive inhomogeneous solution $(a,b)$ has total $m$ and
+minimum $1/F$: the smallest $a_i$ is $1/F$, while
+$\min_i b_i=F_{m-1}/F\ge1/F$. Apply Lemma~\ref{lem:segment} with
+$p=2m$, $\alpha=1/F$, and $H=r-m$.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:main}]
+Lemma~\ref{lem:overlap} gives the left inequality in
+\eqref{eq:finite-squeeze}. For its right inequality choose, for every
+$n\ge128$,
+\[
+ L=\lceil\log_2 n\rceil,\qquad m=4L,\qquad r=n-8L-1.
+\]
+We need $r\ge m+1$, equivalently $n\ge12L+2$. At $n=128$ this is a
+direct check. For $L\ge8$, the least possible $n$ is $2^{L-1}+1$;
+$2^{L-1}+1\ge12L+2$ holds at $L=8$ and its left side grows faster
+thereafter. Also $F_{2j+1}\ge2^j$ for $j\ge0$, by induction from
+$F_{2j+3}\ge2F_{2j+1}$. Hence
+\[
+ F_{m+1}\ge2^{2L}\ge n^2,\qquad r-m+1=n-12L>0.
+\]
+Proposition~\ref{prop:fibonacci} proves the required upper bound on the
+deficit for this exact game. Taking the supremum of separation gives
+\eqref{eq:finite-squeeze}. Finally,
+\[
+ \frac2{n-12L}-\frac2n=\frac{24L}{n(n-12L)},
+\]
+and $L=O(\log n)$, proving \eqref{eq:asymptotic} by squeezing.
+
+Multiplication by $F$ makes every generator coordinate integral. For the
+polynomial-total claim choose instead the least $m\ge2$ with
+$F_{m+1}\ge n^2$ and again put $r=n-2m-1$. For sufficiently large $n$,
+$m=O(\log n)$, $r\ge m+1$, and
+$n^2\le F_{m+1}<2n^2$. The scaled total is $rF_{m+1}=O(n^3)$, and
+every nonnegative coordinate is bounded by that total. Thus each coordinate
+uses $O(\log n)$ bits. The two vectors are a compact representation of
+the game; listing all coalition values would still require exponentially
+many entries.
+\end{proof}
+
+\section{Verification and scope of the evidence}
+
+The proof above does not depend on a computational census.
+The companion code reconstructs every proper coalition inequality directly
+from the two rational generators. Run \texttt{run\_checks.py} in the
+\texttt{verification} directory to check the cases
+\[
+ (m,r)\in\{(2,3),(2,4),(3,4),(3,5),(4,5)\}.
+\]
+These cases have $8,9,11,12,14$ players. Exact rational Z3 queries exclude
+every off-segment core allocation, compute both first-stage optimum values,
+and exclude every other point on either optimal face. Generator feasibility
+and convexity establish the opposite core containment algebraically.
+Arithmetic checks also cover $2\le m\le64$ and displayed large-$n$
+parameter choices.
+
+A deliberate perturbation of one donor pair at $(m,r)=(2,3)$ preserves
+the common generator total and singleton normalization but breaks the
+unit-sum realization. The verifier finds and checks an explicit core point
+outside the proposed segment. This guards against treating every lower
+envelope as the convex hull of its generators. The code uses explicit
+exceptions, rejects UNKNOWN and timeouts, and has been replayed with and
+without Python optimization. Its JSON records are finite corroboration;
+they are not a formal proof of the all-parameter theorem. Specialist
+correctness and priority review remain pending.
+
+\begin{thebibliography}{9}
+\bibitem{arin-inarra}
+J. Arin and E. I\~narra.
+\emph{Egalitarian solutions in the core}.
+International Journal of Game Theory 30 (2001), 187--193.
+\url{https://doi.org/10.1007/s001820100073}.
+
+\bibitem{vazirani}
+V. V. Vazirani.
+\emph{Fair Core Imputations for the Assignment Game: New Solution Concepts
+and Efficient Algorithms}.
+arXiv:2402.11437, version 6 (2025).
+\url{https://arxiv.org/html/2402.11437v6}.
+
+\bibitem{gangam}
+R. R. Gangam, N. Garg, P. Shahkar, and V. V. Vazirani.
+\emph{Equitable Core Imputations for Max-Flow, MST and $b$-Matching Games}.
+arXiv:2403.06037, version 3 (2025).
+\url{https://arxiv.org/pdf/2403.06037v3}.
+
+\bibitem{amarante}
+M. Amarante, F. Maccheroni, M. Marinacci, and L. Montrucchio.
+\emph{Cores of Non-Atomic Market Games}.
+The Carlo Alberto Notebooks 13, May 2006, Section 2.2.
+\url{https://www.carloalberto.org/wp-content/uploads/2018/11/no.13.pdf}.
+
+\bibitem{studeny}
+M. Studen\'y and V. Kratochv\'il.
+\emph{Facets of the cone of exact games}.
+Mathematical Methods of Operations Research 95 (2022), 35--80.
+\url{https://doi.org/10.1007/s00186-022-00770-4}.
+\end{thebibliography}
+\end{document}
