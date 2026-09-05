@@ -1,0 +1,501 @@
+\documentclass[11pt]{article}
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath,amssymb,amsthm,booktabs,microtype,needspace}
+\usepackage[colorlinks=true,urlcolor=blue,citecolor=blue,linkcolor=blue]{hyperref}
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}{Lemma}
+\newtheorem{proposition}{Proposition}
+\newcommand{\Lmin}{\operatorname{Lmin}}
+\newcommand{\Lmax}{\operatorname{Lmax}}
+\title{Fair core selections:\\a sharp boundary between pairs and triples}
+\author{Research consolidation --- internal draft}
+\date{5 September 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We compare full leximin and descending-lexicographic-minimum core payoffs
+in unit-capacity matching markets. For every graph matching game with nonempty
+core, leximin guarantees half of each player's maximum core payoff and the
+sharp normalized distance is $\lfloor n/2\rfloor/(\lfloor n/2\rfloor+1)$ for
+$n\ge4$. Three-sided assignment games instead permit distance tending to two
+and no positive dimension-independent individual guarantee, already with
+weights in $\{0,1,2,3\}$. Complete additive three-sided markets with equal sector sizes retain
+a one-third guarantee and a sharp distance supremum of $4/3$.
+The proofs use the entire core and count every player. A priority audit
+identifies the bipartite half-guarantee as a short consequence of existing
+algorithmic invariants; the sharp distance comparison and sparse triple
+construction are the principal candidate contributions. External priority
+and significance are not established.
+\end{abstract}
+
+\section{One question, three market classes}
+The two fairness rules are established objects: leximin raises the lowest
+payoffs successively, while leximax-min lowers the highest successively.
+Older egalitarian work and recent combinatorial algorithms motivate their
+comparison \cite{klijn,vazirani}. We ask how much the choice of rule can alter
+who receives a fixed surplus, and whether leximin protects each player's
+share of their own best stable outcome.
+
+A unit-capacity matching game has a finite player set $N$ and nonnegative
+weights on feasible teams. A coalition earns the maximum weight of disjoint
+teams contained in it. Teams are edges of a graph in the pairwise model, and
+triples containing one player from each of three sectors in the three-sided
+model. Let $T>0$ be the \emph{integral} matching value. The entire core is
+\begin{equation}\label{eq:core}
+ C=\{p\ge0:\ \textstyle\sum_{i\in N}p_i=T,\quad
+                    \sum_{i\in e}p_i\ge w_e\text{ for every team }e\}.
+\end{equation}
+These inequalities imply all coalition inequalities by summing over an
+optimal coalition matching. We assume $C\ne\varnothing$. Bipartite graphs
+ensure this, whereas general graphs and triple arrays need not.
+
+Write $x=\Lmin(C)$ for the lexicographic maximum of ascending sorted payoffs,
+$z=\Lmax(C)$ for the lexicographic minimum of descending sorted payoffs, and
+\[
+ \rho(C)=\frac{\|x-z\|_1}{T},\qquad
+ H_i(C)=\max_{y\in C}y_i.
+\]
+All players count toward $n=|N|$, including fixed-zero players. These are full
+selectors, not arbitrary first-stage maximin or minimax points. If $H_i=0$,
+any fractional guarantee for that coordinate is vacuous.
+
+The quantity $\rho/2$ has a direct accounting interpretation:
+\[
+ \frac{\rho}{2}=\frac1T\sum_{i:z_i>x_i}(z_i-x_i).
+\]
+It is the minimum fraction of total surplus that must change recipients when
+moving between the two allocations. Thus the two-sided bound approaches
+one-half of the surplus, whereas three-way cooperation can require moving
+almost all of it. This is a worst-case statement, not an empirical claim.
+
+\begin{theorem}\label{thm:sharp}
+For any unit-capacity graph matching game with nonempty core, fix an optimal
+matching and let $k\ge1$ count its positive-weight edges. Then
+\[
+ x_i\ge H_i(C)/2\quad\hbox{for every }i,\qquad
+ \|x-z\|_1/T\le k/(k+1).
+\]
+The distance bound holds for any minimax core point $z$. For $k=1$ the full
+selectors coincide. For each $k\ge2$ a bipartite market attains the bound.
+Consequently the exact $n$-player maximum is zero for $n=2,3$ and
+$\lfloor n/2\rfloor/(\lfloor n/2\rfloor+1)$ for $n\ge4$, both for bipartite
+markets and for all nonempty-core graph matching games.
+\end{theorem}
+
+\begin{theorem}\label{thm:main}
+For all integers $L\ge1,R\ge0$, a three-sided assignment game with nonempty
+entire core and weights in $\{0,1,2,3\}$ has
+\[
+ n=9(L+R)+12,\qquad T=3(L+R+2),
+\]
+\begin{equation}\label{eq:rho}
+ \rho(L,R)=\frac{2((R+2)2^L-1)}{(2^L+2)(L+R+2)}.
+\end{equation}
+A player has $H_i=1$ and $x_i=2/(2^L+2)$. Hence no positive
+ dimension-independent individual fraction survives, and $R=L^2$ gives
+$\rho\to2$, the sharp supremum. The family has equally sized sectors and
+only $12(L+R)+9$ positive triples.
+\end{theorem}
+
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+Entire-core domain & Uniform $x_i/H_i$ guarantee & Distance supremum\\
+\midrule
+Graph matching, nonempty core & $1/2$ & $1$\\
+Equal-sized complete additive triples & $1/3$ & $4/3$\\
+Arbitrary three-sided, nonempty core & none positive & $2$\\
+\bottomrule
+\end{tabular}
+\end{center}
+The middle row is proved below. It shows why the additive benchmark does not
+settle the unrestricted question. The graph extension shows that
+bipartiteness itself is not the transfer mechanism. These statements concern
+unit capacity and do not assert analogous results for $b$-matching games.
+
+\section{Pairwise transfer and half domination}
+Summing the inequalities of any optimal positive matching in \eqref{eq:core}
+shows that each matched pair has its designated total $s_i$ and every
+unmatched player is fixed at zero.
+\begin{lemma}\label{lem:half}
+For every $y\in C$, $y_i\le2x_i$ for every player $i$. In particular
+$\|x-y\|_1/T\le1$ for every core allocation $y$.
+\end{lemma}
+\begin{proof}
+Put $d=y-x$ and suppose $d_a=\delta>0$. Define global vertex sets
+\[
+ A=\{i:d_i\ge\delta\},\qquad B=\{i:d_i\le-\delta\}.
+\]
+Matched-pair changes are opposite and unmatched changes are zero, so matching
+edges biject $A$ and $B$. At a tight edge $uv$, feasibility of $y$ gives
+$d_u+d_v\ge0$. If $u\in B$ and $v\notin A$, then
+$d_u+d_v<0$, a contradiction. Therefore the direction
+$h=\mathbf1_A-\mathbf1_B$ preserves the total and harms no tight inequality.
+Every decreasing coordinate has $x_i\ge\delta$ because $y_i\ge0$.
+Finiteness of the slack constraints yields $x+\epsilon h\in C$ for all
+sufficiently small $\epsilon>0$.
+
+If $\min_Bx>\min_Ax$, this step raises the smallest affected payoffs while
+lowering only strictly larger ones, contradicting full leximin even when
+smaller fixed payoffs occur elsewhere. Hence
+\[
+ \delta\le\min_Bx\le\min_Ax\le x_a,
+ \qquad y_a=x_a+\delta\le2x_a.
+\]
+The other coordinates follow by repeating the argument or by $y_i\le x_i$.
+The overlap is at least $T/2$, giving the distance statement.
+No bipartition was used.
+\end{proof}
+The fraction is sharp on a single edge. In the bipartite case it also follows
+from Vazirani's algorithmic invariants; Section~\ref{sec:priority} makes this
+priority qualification explicit. The proof above is a direct geometric proof
+and also handles nonbipartite nonempty-core games.
+
+\section{The sharp finite bound and its attainment}
+\begin{proof}[Proof of Theorem~\ref{thm:sharp}: upper bound]
+On matched pair $i$, write the change from $x$ to $z$ as $(d_i,-d_i)$,
+and put
+\[
+ q_i=|d_i|,\quad D=\sum_iq_i,\quad M=\max_a z_a>0.
+\]
+Thus $\|x-z\|_1=2D$. Both $x$ payoffs in pair $i$ are at least $q_i$:
+the decreasing endpoint by nonnegativity of $z$, and the increasing
+endpoint by Lemma~\ref{lem:half}. The increasing endpoint's $z$ payoff
+is at least $2q_i$. Therefore
+\begin{equation}\label{eq:pair}
+ s_i\ge2q_i,\qquad q_i\le M/2,\qquad D\le kM/2.
+\end{equation}
+These statements also hold when $q_i=0$.
+
+Some player $a$ satisfies $z_a=M$ and $x_a\ge M$. Otherwise, a
+sufficiently short move from $z$ toward $x$ lowers every maximum
+coordinate and leaves every other coordinate below $M$, contradicting
+minimax optimality. Since $M>0$, this player belongs to a positive
+matched pair $p$. Its displacement is $q_p=x_a-M$; the other $x$
+payoff in that pair is at least $q_p$. Thus $s_p\ge M+2q_p$.
+Summing this strengthened inequality with \eqref{eq:pair} for the other
+pairs gives
+\[
+ T\ge2D+M\ge2D\left(1+\frac1k\right).
+\]
+This proves the bound, also when $D=0$.
+
+If $k=1$, all other payoffs are fixed at zero. The remaining two sum
+to $T$ and range over a closed interval of splits. Maximizing their
+minimum is the same as minimizing their maximum, and uniquely selects
+the feasible split closest to equality. Hence $x=z$ in this case.
+\end{proof}
+\begin{proof}[Attainment and player count]
+For $k\ge2$, take a complete $k\times k$ market with identical rows
+\[
+ (w_{i1},\ldots,w_{ik})=(1,\ldots,1,2).
+\]
+Every perfect matching has value $T=k+1$, and every edge belongs to one.
+Complementarity consequently makes every edge inequality tight throughout
+the core. Writing $c=(1,\ldots,1,2)$, the entire core is exactly
+\[
+ u_i=t\quad(1\le i\le k),\qquad
+ v_j=c_j-t\quad(1\le j\le k),\qquad0\le t\le1.
+\]
+Its minimum coordinate is $\min(t,1-t)$, uniquely maximized at $t=1/2$.
+Its maximum is $2-t$, uniquely minimized at $t=1$. Every coordinate
+changes by $1/2$, so $\|x-z\|_1=k$ and $\rho=k/(k+1)$.
+Adding one isolated player leaves the full selectors otherwise unchanged.
+Every matching on $n$ players has at most $\lfloor n/2\rfloor$ edges,
+which proves the exact $n$-player formula.
+\end{proof}
+
+
+\section{An explicit market}
+All color indices are modulo three. Introduce global players $G_i$ of color
+$i$. At levels $\ell=0,\ldots,L$ introduce $U_{\ell i},V_{\ell i},D_{\ell i}$
+for $i=0,1,2$. At even levels their colors are $i,i+1,i+2$; at odd levels
+the colors of $U$ and $V$ are interchanged. Put $s_0=2$ and $s_\ell=1$
+for $\ell\ge1$. Assign the following positive triple values:
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Triple & Value\\
+\midrule
+$\{U_{\ell i},V_{\ell i},D_{\ell i}\}$ & $s_\ell$\\
+$\{U_{\ell i},V_{\ell i},G_{i+2}\}$ & $s_\ell$\\
+$\{U_{0i},G_{i+1},G_{i+2}\}$ & $1$\\
+$\{U_{\ell i},V_{\ell-1,j},V_{\ell-1,k}\}$, $\ell\ge1$ & $2$\\
+$\{V_{\ell i},U_{\ell-1,j},U_{\ell-1,k}\}$, $\ell\ge1$ & $3$ if $\ell=1$, else $1$\\
+\bottomrule
+\end{tabular}
+\end{center}
+In the last two rows, $\{j,k\}=\{0,1,2\}\setminus\{i\}$.
+Each listed triple has exactly one player of each color.
+
+For every $i$ introduce $R$ copies $(U'_{ri},V'_{ri},D'_{ri})$ with the same
+colors as its top-level triple. Give value $1$ to each copy's local and global
+pair triples $\{U'_{ri},V'_{ri},D'_{ri}\}$ and
+$\{U'_{ri},V'_{ri},G_{i+2}\}$, and to its cross-triples
+\[
+ \{U'_{ri},V_{Li},G_{i+2}\},\qquad
+ \{V'_{ri},U_{Li},G_{i+2}\}.
+\]
+Every unlisted triple has value zero. There are $3(L+R)+4$ players per sector.
+
+\section{Integral value and entire core}
+The triples using each pair's own $D$ form a disjoint integral matching with
+weight $6+3L+3R=T$. Consider the allocation assigning $1$ to both root
+$U$ and root $V$, $0$ to every subsequent $U$, $1$ to every subsequent $V$,
+the analogous values to copies, and $0$ to every dummy. It has total $T$
+and covers every weighted triple. Summing its payoffs over any disjoint
+matching bounds that matching's weight by $T$. Hence the displayed integral
+matching is optimal and this allocation belongs to the entire core.
+
+\Needspace{12\baselineskip}
+\begin{lemma}\label{lem:core}
+Every core allocation, and only a core allocation, has all dummy payoffs zero
+and the following form:
+\begin{align*}
+ U_{0i}&=1+q_{0i}, & V_{0i}&=1-q_{0i},\\
+ U_{\ell i}&=q_{\ell i}, &V_{\ell i}&=1-q_{\ell i}\quad(\ell\ge1),\\
+ U'_{ri}&=q_{Li}, &V'_{ri}&=1-q_{Li},
+\end{align*}
+where $0\le q_{\ell i}\le1$ and
+\begin{equation}\label{eq:rec}
+ q_{\ell i}=q_{\ell-1,j}+q_{\ell-1,k},\qquad
+ q_\ell=(J-I)q_{\ell-1}.
+\end{equation}
+Here $J$ is the $3\times3$ all-ones matrix.
+\end{lemma}
+\begin{proof}
+Sum the inequalities of the displayed matching. Efficiency and nonnegativity
+force every unmatched $G$ to zero and every matching triple to equality.
+The alternative pair triple using $G$ then forces its local $D$ to zero and
+its pair to total $s_\ell$. Root lower-bound triples give $U_{0i}\ge1$.
+At level one, the two recurrence inequalities become respectively
+$q_{1i}\ge q_{0j}+q_{0k}$ and $q_{1i}\le q_{0j}+q_{0k}$ after substituting
+the root offsets. At subsequent levels the same substitutions give these
+opposite inequalities without offsets. Cross-triples give opposite inequalities
+between a copied $U$ and its original top $U$, hence equality.
+Nonnegativity supplies the stated bounds.
+
+Conversely, the parameterization satisfies every displayed triple inequality,
+has total $T$, and is nonnegative. All omitted zero-weight triple inequalities
+are automatic. It therefore satisfies every coalition inequality by summing
+over a matching. This proves equality with the entire core.
+\end{proof}
+
+\section{The full selectors and quantitative separation}
+For minimax, every root $U$ is at least $1$. The allocation just used, denoted
+$z$, has maximum payoff $1$. Any core allocation with maximum at most $1$
+must have $U_{0i}=1$ for all $i$, hence $q_0=0$. Lemma~\ref{lem:core} then
+fixes every coordinate. Thus $z$ is the unique minimax allocation and the
+full descending-lexicographic minimum.
+
+For leximin, all $D,G$ are fixed at zero. Every other coordinate can
+simultaneously be positive by taking $q_0=t(1,1,1)$ with $0<t<2^{-L}$.
+Consequently the full procedure first fixes exactly the dummy coordinates
+at zero, then maximizes a common floor $\eta$ for all remaining coordinates.
+If such a floor is feasible, level-one $U$ and top-level $V$ imply
+\[
+ 2\sum_iq_{0i}=\sum_iq_{1i}\ge3\eta,\qquad
+ 2^L\sum_iq_{0i}=\sum_iq_{Li}\le3(1-\eta).
+\]
+Combining gives $\eta\le2/(2^L+2)$. Equality is attained by
+\begin{equation}\label{eq:x}
+ t=\frac1{2^L+2},\qquad q_{\ell i}=2^\ell t.
+\end{equation}
+The least nonroot $U$ is $2t$ and the least $V$ is $1-2^Lt=2t$;
+root and copy payoffs also respect this floor. Equality forces
+$q_{1i}=\eta$ for all three $i$. Since $J-I$ is invertible, with eigenvalues
+$2,-1,-1$, it then forces $q_0=t(1,1,1)$. Thus the optimal positive-floor
+face is a singleton and \eqref{eq:x} gives the full leximin allocation $x$.
+No symmetry restriction on the feasible core was imposed.
+
+Every level-$\ell$ pair changes from $z$ to $x$ by
+$(2^\ell t,-2^\ell t)$, including the offset root pair. Each copied pair
+changes by $(2^Lt,-2^Lt)$. Therefore
+\[
+ \|x-z\|_1=6t\left(\sum_{\ell=0}^{L}2^\ell+R2^L\right)
+ =\frac{6((R+2)2^L-1)}{2^L+2}.
+\]
+Dividing by $T$ proves \eqref{eq:rho}. With $R=L^2$, both the amplified
+payoff fraction and the share of copied pairs tend to one, giving $\rho\to2$.
+Conversely, nonnegative vectors of total $T$ always satisfy
+$\|x-z\|_1\le2T$, proving the sharp supremum.
+For example, $L=4,R=16$ gives $\rho=287/198>4/3$.
+Finally, every top $V$ has core maximum $1$, attained at $z$, but payoff
+$2/(2^L+2)$ at $x$. This proves the individual conclusion separately.
+
+\begin{proposition}\label{prop:dimension}
+Let $S_n$ be the supremum for total player count $n$, allowing arbitrary sector
+sizes. For $n\ge30$, put $k=\lfloor(n-12)/9\rfloor$. Then
+\[
+ 0\le2-S_n\le
+ \frac{2\lceil\log_2 k\rceil+4}{k+2}+\frac{2}{(k+2)^2}
+ =O(\log n/n).
+\]
+\end{proposition}
+\begin{proof}
+Choose $L=\lceil\log_2 k\rceil$ and $R=k-L\ge0$, and add the remaining
+at most eight players with zero incident values. Matching efficiency forces
+these players to zero in the entire core, preserving both full selectors.
+Subtracting \eqref{eq:rho} from two gives
+\[
+ 2-\rho=\frac{2L2^L}{(2^L+2)(k+2)}
+       +\frac4{2^L+2}+\frac2{(2^L+2)(k+2)}.
+\]
+Use $2^L\ge k$ and bound the first fraction by $2L/(k+2)$.
+\end{proof}
+
+
+
+\section{Additive triples and a separate individual-failure control}
+\begin{proposition}\label{prop:additive}
+For a complete three-sided market with $m$ players per sector and
+additive nonnegative values $w_{ijk}=a_i+b_j+c_k$, full leximin satisfies
+$x_i\ge H_i/3$ and $\|x-y\|_1/T\le4/3$ for every core point $y$.
+Both constants are sharp across this class.
+\end{proposition}
+\begin{proof}
+Subtract each sector's minimum from its coefficients. Write the resulting
+nonnegative offsets as $b_{si}$, and let $S$ be the sum of the three original
+minima. Complete-array nonnegativity implies $S\ge0$. Every perfect matching
+has the same value, and each triple lies in one, so every triple inequality
+is tight throughout the core. Subtracting these equalities shows that the
+entire core is exactly
+\[
+ p_{si}=b_{si}+t_s,\qquad t_s\ge0,\qquad\sum_{s=1}^3t_s=S.
+\]
+Here $T=\sum_{s,i}b_{si}+mS$. This additive-core simplex is established
+structure \cite{assortative}; its quantitative consequences are immediate. Each sector contains an offset-zero
+player, so leximin uniquely sets all $t_s=S/3$ (also trivially when $S=0$).
+Then $H_{si}=b_{si}+S\le3x_{si}$ and
+\[
+ \|x-y\|_1=m\sum_s|t_s-S/3|\le4mS/3\le4T/3.
+\]
+An offset-zero player makes the individual fraction sharp when $S>0$.
+For $m\ge2$, the family $w_{ijk}=1+\mathbf1_{i=1}+\mathbf1_{j=1}$ has $T=m+2$,
+leximin shifts $(1/3,1/3,1/3)$ and minimax shifts $(0,0,1)$. Its distance is
+$4m/[3(m+2)]\to4/3$.
+\end{proof}
+
+Individual loss does not imply large selector disagreement. In the triple
+recurrence construction, remove copies and root offsets, set every pair total
+to one, remove root lower-bound triples, and change the level-one reverse
+weight from three to one. The core is then $U_\ell=(J-I)^\ell U_0$,
+$V_\ell=1-U_\ell$ with all dummy payoffs zero. A common floor $\eta$ implies
+$\sum U_0\ge3\eta$ and $2^L\sum U_0\le3(1-\eta)$, so
+$\eta\le1/(2^L+1)$. A ceiling $M$ implies $\sum U_0\ge3(1-M)$ and
+$2^L\sum U_0\le3M$, so $M\ge2^L/(2^L+1)$. Both optima are unique at
+$U_{\ell i}=2^\ell/(2^L+1)$. Thus $x=z$ although a top $V$ has
+$x_i/H_i=1/(2^L+1)$.
+
+\section{Separation from previously studied subclasses}
+The recurrence array has genuine three-way interaction. Take sector coordinates
+$A=(G_0,U_{00})$, $B=(G_1,V_{00})$, $C=(G_2,D_{00})$ and index the eight
+corners by zeros and ones. Only $w_{111}=2$, $w_{110}=2$ and $w_{100}=1$
+are nonzero. Its third mixed difference is
+\[
+ w_{111}-w_{110}-w_{101}-w_{011}+w_{100}+w_{010}+w_{001}-w_{000}=1.
+\]
+Every decomposition $w_{abc}=f_{ab}+g_{ac}+h_{bc}$ gives zero by cancellation.
+Thus the family is outside even the pair-additive class, irrespective of
+relabeling; it is not a pair market represented using decorative dummy agents.
+
+A recent result for supermodular multisided arrays satisfying local monotonicity
+ gives simultaneous attainment of all coordinate maxima within any one sector
+\cite[Theorem~3.2]{extrema}. Our core violates this property for $L\ge2$.
+Since $(J-I)^2=J+I$, every entry of $(J-I)^L$ is strictly positive. A top $V$
+attains its maximum one only at $q_0=0$, while a root $U$ in the same sector
+has maximum greater than one, attained at a small positive feasible $q_0$.
+Every sector contains both types. Hence no ordering of this array satisfies
+that theorem's hypotheses. These are explicit exclusions of inspected
+subclasses, not a proof of priority against all possible representations.
+
+\section{Priority and interpretation}\label{sec:priority}
+\paragraph{What is already established.}
+Core/optimal-dual descriptions, matched-team complementarity, and the
+multisided model are established background \cite{quint,atay}.
+Sorted egalitarian selection is not new \cite{klijn,vazirani}.
+Feasible pairwise equal splits are Lorenz-best, and exact assignment games
+have coincident selections \cite{llerena,solymosi-raghavan}. These facts are
+not candidate contributions here. Both extremal families are nonexact TU games:
+a distinguished player has core minimum one despite singleton worth zero.
+
+\paragraph{A direct dependence discovered in this audit.}
+For the bipartite half-guarantee, start Vazirani's Algorithm~1 from an arbitrary
+core point $y$ in its rational-weight domain. Its clock starts at the minimum
+initial essential payoff $\Omega_0\ge0$; nonfixed payoffs move at
+speed at most one, and upon permanent freezing at clock value $t_i$ the final
+payoff obeys $x_i\ge t_i$. The update, freezing and floor invariants imply
+\[
+ |x_i-y_i|\le t_i-\Omega_0\le x_i-\Omega_0,
+ \qquad 2x_i\ge y_i+\Omega_0\ge y_i.
+\]
+Initially fixed coordinates are unchanged. Relevant anchors in
+\cite{vazirani} are Definition~19, Algorithm~1, Remark~1, Lemmas~5 and~9,
+and Theorem~8 (printed pp.~17--18, 20, 22, 25, 27, 29--30). The inequality is our deduction from these statements, not a
+located explicit theorem in that source. Accordingly the bipartite half
+bound is best positioned as a short corollary with an elementary proof,
+not as a wholly independent fairness discovery.
+
+\paragraph{Candidate contribution and limits.}
+The sharp finite distance bound, its attainment, the sparse bounded-integer
+three-sided recurrence, and the combined comparison are the main candidates.
+No equivalent quantitative theorem was located in the dated source audit.
+That statement does not certify priority: original Quint and Lucas full texts
+remain unavailable, and the preserved audit records exact access and citation
+chain coverage. Existing assortative and local-monotonicity results impose
+extra hypotheses; a three-way transportation-polytope representation also
+would not automatically preserve player coordinates and full selectors.
+
+The economic content is a worst-case dependence on nonadditive three-way
+cooperation. The entire core has only three degrees of freedom.
+The construction uses forced-zero dummies, exact constraints and
+replicated top pairs. It does not show that these extremes are common in
+observed markets or robust to arbitrary perturbations. The additive result
+isolates a simple protected subclass; it makes no assertion about every
+assortative market. Field-level significance and external correctness remain
+unverified. A combined theoretical paper is a more coherent next object for
+review than separate numerical refinements.
+
+\paragraph{Verification and provenance.}
+The preserved campaigns contain exhaustive bounded $2\times2$ and
+$2\times2\times2$ calibrations, sampled nonadditive $3\times3\times3$ cases,
+independent raw generators and full-selector checks through 192 players.
+New checks target only the general-graph extension and additive proposition.
+All-parameter conclusions rest on the conventional proofs. Earlier research
+checkpoints remain unchanged; the companion priority matrix distinguishes
+explicit prior theorems, derived corollaries, and unverified priority claims.
+No external contact or publication has occurred.
+
+\begin{thebibliography}{9}
+\small
+\bibitem{vazirani} V.~V.~Vazirani. \emph{Fair Core Imputations for the Assignment
+Game: New Solution Concepts and Efficient Algorithms}. arXiv:2402.11437v6,
+20 November 2025. \url{https://arxiv.org/abs/2402.11437}.
+\bibitem{klijn} F.~Klijn et al. \emph{Neighbour Games and the Leximax Solution}.
+Mathematical Methods of Operations Research 58 (2003), 191--208.
+Linked text is the 1999 working-paper version.
+\url{https://pure.uvt.nl/ws/files/533861/110.pdf}.
+\bibitem{llerena} F.~Llerena. \emph{The pairwise egalitarian solution for the
+assignment game}. Operations Research Letters 40 (2012), 84--88.
+\url{https://doi.org/10.1016/j.orl.2011.11.011}.
+\bibitem{solymosi-raghavan} T.~Solymosi and T.~E.~S.~Raghavan.
+\emph{Assignment games with stable core}. International Journal of Game
+Theory 30 (2001), 177--185. \url{https://doi.org/10.1007/s001820100072}.
+\bibitem{quint} T.~Quint. \emph{The core of an $m$-sided assignment game}.
+Games and Economic Behavior 3 (1991), 487--503.
+\url{https://doi.org/10.1016/0899-8256(91)90017-9}.
+\bibitem{atay} A.~Atay and M.~N\'u\~nez. \emph{A note on the relationship
+between the core and stable sets in three-sided markets}.
+Mathematical Social Sciences 98 (2019), 10--14.
+\url{https://doi.org/10.1016/j.mathsocsci.2018.12.002}.
+\bibitem{assortative} J.~Mart\'inez-de-Alb\'eniz, C.~Rafels and N.~Ybern.
+\emph{Assortative multisided assignment games: The extreme core points}.
+Games and Economic Behavior 120 (2020), 144--153.
+\url{https://doi.org/10.1016/j.geb.2020.01.001}.
+\bibitem{extrema} F.~J.~Mart\'inez-de-Alb\'eniz, C.~Rafels and N.~Ybern.
+\emph{Maximum and minimum core payoffs for supermodular multisided assignment
+markets with local monotonicity}. Discrete Applied Mathematics 379 (2026),
+605--612. \url{https://doi.org/10.1016/j.dam.2025.10.006}.
+\end{thebibliography}
+\end{document}
