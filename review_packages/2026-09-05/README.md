@@ -22,7 +22,7 @@ Build the manuscript with a LaTeX installation containing `latexmk`:
 bash build.sh
 ```
 
-The archives are independently extracted and tested before release. `BUILD_AND_REPLAY.json` records the actual results and scope; these are finite corroborations of the conventional proofs, not exhaustive enumeration of every game or external novelty certification.
+The verification code was tested from clean archive extractions. A subsequent documentation update closed the implementation-thesis text gap and corrected the final 2025 article access statement; fresh archive checks confirmed that all scientific files and PDFs remain byte-identical to the tested release. `BUILD_AND_REPLAY.json` records the actual results and scope; these are finite corroborations of the conventional proofs, not exhaustive enumeration of every game or external novelty certification.
 
 The [specialist shortlist](coordination/SPECIALISTS.md) uses verified institutional contacts. The [exact proposed requests](coordination/OUTREACH.md), [review status](coordination/EXTERNAL_REVIEW_STATUS.json), and [preliminary paper decisions](coordination/DECISIONS.md) keep external evidence distinct from preparation. Actual responses must identify the assessed manuscript version and be addressed before the goal can be completed.
 

@@ -10,7 +10,7 @@ Subject: Priority question on stable cores and egalitarian stability
 
 Dear Dr Dietzenbacher,
 
-I have prepared a short draft addressing the stable-core question in your 2021 paper, *Monotonicity and Egalitarianism*. It gives a six-player game with a von Neumann–Morgenstern stable core whose procedural egalitarian claims are inefficient. The construction is an additive translation of a known stable-core segment; the draft includes a direct stability proof and exact verification code.
+I have prepared a short draft addressing the stable-core question in your 2021 paper, *Monotonicity and Egalitarianism*. It gives a six-player game with a von Neumann–Morgenstern stable core whose procedural egalitarian claims are inefficient. The construction is an additive translation of a known stable-core segment; it allows nonzero singleton values. The draft includes a direct stability proof and exact verification code.
 
 The proposed contribution is the stable-core separation. The draft explicitly credits Mauri's earlier exact-game example and does not claim that half of the question as new.
 
