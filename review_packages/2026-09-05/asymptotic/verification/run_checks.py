@@ -15,8 +15,6 @@ import json
 from pathlib import Path
 import sys
 
-import z3
-
 
 CASES = ((2, 3), (2, 4), (3, 4), (3, 5), (4, 5))
 TIMEOUT_MS = 120_000
@@ -210,6 +208,7 @@ def arithmetic_checks():
 
 
 def main():
+    global z3
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--output", type=Path,
                         default=Path(__file__).resolve().parent / "results" / "verification.json")
@@ -218,15 +217,16 @@ def main():
         "status": "RUNNING",
         "started_utc": datetime.now(timezone.utc).isoformat(),
         "evidence_scope": "Finite rational corroboration; all-parameter proof is in manuscript.tex",
-        "runtime": {"python": sys.version, "optimization": sys.flags.optimize,
-                    "z3": z3.get_version_string()},
+        "runtime": {"python": sys.version, "optimization": sys.flags.optimize},
         "verifier_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
     }
     args.output.parent.mkdir(parents=True, exist_ok=True)
-    # Replace any old success before starting scientific work. Failed or
+    # Replace any old success before importing scientific dependencies. Failed or
     # interrupted checks must not leave a previous PASS as this run's result.
     args.output.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     try:
+        import z3
+        payload["runtime"]["z3"] = z3.get_version_string()
         records = []
         for m, r in CASES:
             records.append(check_case(m, r))

@@ -1,0 +1,55 @@
+--- a/coopgames/review_packages/2026-09-05/stable_core/verification/run_checks.py
++++ b/coopgames/review_packages/2026-09-05/stable_core/verification/run_checks.py
+@@ -18,5 +17,0 @@
+-from data import require, parse_game, strict_json_load
+-import verify_claims
+-import verify_additive_ray
+-import verify_stability
+-
+@@ -35,0 +31,6 @@
++    # Load scientific dependencies only after main has invalidated old results.
++    from data import require, parse_game, strict_json_load
++    import verify_claims
++    import verify_additive_ray
++    import verify_stability
++
+@@ -93 +94 @@
+-    # Invalidate a shipped or earlier PASS before any data parsing or checks.
++    # Invalidate a shipped or earlier PASS before scientific imports or checks.
+--- a/coopgames/review_packages/2026-09-05/asymptotic/verification/run_checks.py
++++ b/coopgames/review_packages/2026-09-05/asymptotic/verification/run_checks.py
+@@ -17,2 +16,0 @@
+-
+-import z3
+@@ -212,0 +211 @@
++    global z3
+@@ -221,2 +220 @@
+-        "runtime": {"python": sys.version, "optimization": sys.flags.optimize,
+-                    "z3": z3.get_version_string()},
++        "runtime": {"python": sys.version, "optimization": sys.flags.optimize},
+@@ -226 +224 @@
+-    # Replace any old success before starting scientific work. Failed or
++    # Replace any old success before importing scientific dependencies. Failed or
+@@ -229,0 +228,2 @@
++        import z3
++        payload["runtime"]["z3"] = z3.get_version_string()
+--- a/coopgames/review_packages/2026-09-05/assignment/verification/run_checks.py
++++ b/coopgames/review_packages/2026-09-05/assignment/verification/run_checks.py
+@@ -11,2 +10,0 @@
+-import z3
+-from verification_io import RESULTS
+@@ -65 +63,3 @@
+-    summary = dict(status='RUNNING', python=platform.python_version(), z3=z3.get_version_string(),
++    results_dir = HERE / 'results'
++    results_dir.mkdir(exist_ok=True)
++    summary = dict(status='RUNNING', python=platform.python_version(),
+@@ -67 +67,2 @@
+-    summary_path = RESULTS / 'verification_summary.json'
++    summary_path = results_dir / 'verification_summary.json'
++    # Persist RUNNING before importing any scientific or package-local dependency.
+@@ -69,0 +71,3 @@
++        import z3
++        from verification_io import RESULTS
++        summary['z3'] = z3.get_version_string()
+@@ -92,0 +97 @@
++        summary['error_type'] = type(exc).__name__

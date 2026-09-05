@@ -8,8 +8,6 @@ import platform
 import subprocess
 import sys
 import time
-import z3
-from verification_io import RESULTS
 
 HERE = Path(__file__).resolve().parent
 STAGES = (
@@ -62,11 +60,17 @@ def coverage(name, record):
 
 
 def main():
-    summary = dict(status='RUNNING', python=platform.python_version(), z3=z3.get_version_string(),
+    results_dir = HERE / 'results'
+    results_dir.mkdir(exist_ok=True)
+    summary = dict(status='RUNNING', python=platform.python_version(),
                    child_optimization=True, stages=[], evidence_scope='Finite exact rational/SAT corroboration; conventional all-parameter proofs remain essential.')
-    summary_path = RESULTS / 'verification_summary.json'
+    summary_path = results_dir / 'verification_summary.json'
+    # Persist RUNNING before importing any scientific or package-local dependency.
     summary_path.write_text(json.dumps(summary, indent=2)+'\n')
     try:
+        import z3
+        from verification_io import RESULTS
+        summary['z3'] = z3.get_version_string()
         require(sys.version_info >= (3,10), 'Python 3.10 or later required')
         for path in HERE.glob('*.py'):
             require(not any(isinstance(node, ast.Assert) for node in ast.walk(ast.parse(path.read_text()))), f'assert proof gate in {path.name}')
@@ -90,6 +94,7 @@ def main():
         summary['status'] = 'PASS'
     except BaseException as exc:
         summary['status'] = 'FAIL'
+        summary['error_type'] = type(exc).__name__
         summary['error'] = str(exc)
         summary_path.write_text(json.dumps(summary,indent=2)+'\n')
         raise

@@ -15,11 +15,6 @@ import time
 import sys
 from datetime import datetime, timezone
 
-from data import require, parse_game, strict_json_load
-import verify_claims
-import verify_additive_ray
-import verify_stability
-
 HERE = Path(__file__).resolve().parent
 PACKAGE = HERE.parent
 
@@ -33,6 +28,12 @@ def expect_failure(action, label):
 
 
 def _run_checks():
+    # Load scientific dependencies only after main has invalidated old results.
+    from data import require, parse_game, strict_json_load
+    import verify_claims
+    import verify_additive_ray
+    import verify_stability
+
     started = time.monotonic()
     with (HERE / "supplement_data.json").open() as stream:
         data = strict_json_load(stream)
@@ -90,7 +91,7 @@ def main():
     log_path = results_dir / "verification.log"
     attempt = {"status":"RUNNING", "started_utc":datetime.now(timezone.utc).isoformat(),
                "python":platform.python_version(), "optimization_level":sys.flags.optimize}
-    # Invalidate a shipped or earlier PASS before any data parsing or checks.
+    # Invalidate a shipped or earlier PASS before scientific imports or checks.
     result_path.write_text(json.dumps(attempt,indent=2)+'\n')
     log_path.write_text("RUNNING: previous result invalidated.\n")
     try:

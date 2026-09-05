@@ -564,9 +564,10 @@ Finally, since $v_t(N)=4+2t$, the excess of the claim sum over the grand worth i
  \frac12,&1\leq t.
  \end{cases}
 \]
-It is zero only at $t=0$.  The package's
-\texttt{verification/verify\_additive\_ray.py} checks the affine maximization inequalities
-over all three intervals in exact rational arithmetic.
+It is zero only at $t=0$. The finite exact certificate in
+\texttt{verification/verify\_additive\_ray.py} checks all affine comparisons
+on each interval using endpoints and unbounded-cell slopes, and tests every
+finite comparison boundary separately.
 \end{proof}
 
 
@@ -649,7 +650,7 @@ $x_t=A+td$ for $0\le t\le1$. Let
  E=\{y:y(N)=v(N)\},\qquad
  I=\{y\in E:y_i\ge v(\{i\})\ \forall i\}.
 \]
-For a coalition $S$, let
+For a nonempty coalition $S$, let
 $F_S=\{x\in[A,B]:x(S)=v(S)\}$. Since $x_t(S)-v(S)$ is affine and
 nonnegative on $[0,1]$, $F_S$ is empty, $\{A\}$, $\{B\}$, or the entire
 segment. A core element that dominates through $S$ must belong to $F_S$,
@@ -668,7 +669,7 @@ and, for $i\in P_S$, $j\in M_S$, define
 \]
 
 \begin{lemma}\label{lem:domformula}
-If $F_S=[A,B]$, then a point $y\in I$ is dominated through $S$ by a point of
+Let $S\ne\varnothing$. If $F_S=[A,B]$, then a point $y\in I$ is dominated through $S$ by a point of
 the segment if and only if
 \[
 \begin{aligned}
@@ -710,11 +711,12 @@ that lies in $I\setminus[A,B]$ is dominated by a point of $[A,B]$.
 \end{proposition}
 
 \begin{proof}
-For each $S$, Lemma~\ref{lem:domformula} expresses the set $D_S$ of
-imputations dominated through $S$ as an intersection of open halfspaces whose
-boundaries belong to ${\cal H}$; the endpoint and empty-face cases have the
-same property. Hence $I\setminus D_S$ is a finite union of closed halfspaces
-bounded by ${\cal H}$. The undominated set
+For nonempty proper $S$ with $F_S\ne\varnothing$, Lemma~\ref{lem:domformula}
+gives $D_S=I\cap C_S$, where $C_S$ is an intersection of open halfspaces
+bounded by ${\cal H}$. Thus $I\setminus D_S$ is a finite union of $I$
+intersected with closed halfspaces bounded by ${\cal H}$. If
+$F_S=\varnothing$, then $D_S=\varnothing$ and no restriction on $I$ is imposed.
+The undominated set
 \[
  U=I\cap\bigcap_{\emptyset\ne S\subsetneq N}(I\setminus D_S)
 \]
