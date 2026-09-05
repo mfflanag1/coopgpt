@@ -1,5 +1,8 @@
 # Claims, sources, and priority boundary
 
+**Updated priority assessment, 5 September 2026:** see [deep claim-by-claim review](PRIORITY_REVIEW.md) and `priority_review/` for the wider search, precise source access and adverse deductions. This revision supersedes earlier access-gap and construction-novelty assessments where explicitly noted below. No external specialist verdict has been received.
+
+
 Audit date: 2026-09-05. The comparison below separates facts verified in
 primary sources from mathematical claims proved in this manuscript.
 
@@ -10,10 +13,10 @@ primary sources from mathematical claims proved in this manuscript.
 | The two selections are established fairness concepts | Primary sources S1 and S2 below; definitions repeated explicitly | Not claimed as new. `Lmax` here means decreasing-sort **minimization**. |
 | Full selectors exist and are unique on compact convex sets | Short compactness/midpoint proof in §1; S2 Lemma 3 is a prior leximin uniqueness statement | Background, reproved for self-containment. |
 | Every opposing maximin/minimax pair in the nonnegative constant-total simplex overlaps by at least `T/(n-1)` | Lemma 2 and its directional proof | Conventional proof checked; exactness and later stages are unnecessary. No equivalent quantitative result identified in the bounded screen. |
-| The stated matrix construction is an entire-core segment | Lemma 3: complementary coalition equalities plus invertibility, and converse generator feasibility | Conventional all-parameter proof. Lower-envelope exactness alone is not enough. |
-| Fibonacci family has `2-rho=2/(F_{m+1}+1)+2/(r-m+1)` | Proposition 4; exact incidence recurrence and unique first-stage optima | Conventional proof plus five raw-core finite replays. |
+| The stated matrix construction is an entire-core segment | Lemma 3: complementary coalition equalities plus invertibility, and converse generator feasibility | Specific sufficient embedding proved directly; a standard active-constraint method. Bifocal games and entire-core segment examples already occur in prior work. Lower-envelope exactness alone is not enough. |
+| Fibonacci family has `2-rho=2/(F_{m+1}+1)+2/(r-m+1)` | Proposition 4; exact incidence recurrence and unique first-stage optima | Specific formula proved and checked. The required Fibonacci inverse-one ingredient is supplied by older parsimonious weighted-majority matrices; plugging it into the segment lemma gives the same rate and coefficient. |
 | `lim n(2-s_n)=2` with `2/n+O(log n/n^2)` deficit | Theorem 1; explicit construction for every `n>=128` and universal bound | Main candidate contribution. Supremum attainment, finite-n sharpness, and an exact second-order term are not asserted. |
-| Polynomially bounded integer generators are possible | Final paragraph of Theorem 1 proof | Representation uses two vectors. Listing all coalition values is still exponential. |
+| Polynomially bounded integer generators are possible | Final paragraph of Theorem 1 proof | Quantitative corollary; the old voting gadget also gives total below 2n^3 after integer scaling. Listing all coalition values remains exponential. |
 | Code corroborates the manuscript | Five cases, closure negative control, arithmetic identities; explicit proof gates | Finite rational checks, not proof-assistant certification or a global computational census. |
 
 ## Primary-source comparison
@@ -113,3 +116,7 @@ task as a priority lead; it was not independently evaluated here.
 
 No specialist response has been received as part of this package. The
 integration task handles any authorized outreach and its evidence record.
+
+## Current construction and access correction
+
+The full author Studený–Kratochvíl2022 PDF is now inspected. The wider audit also reads the 2010 bifocal working paper, Shellshear–Sudhölter2008 Example4.3, Pressacco–Ziani2015 and Pressacco–Plazzotta–Ziani2014 Theorem4.2. The older matrices supply the needed positive binary inverse-one vectors and the same quantitative order after our embedding; this is our verified inference, not a located prior selector-distance theorem. Original Isbell1956 and Rosenmüller2000 full text remain uninspected. `GENERIC_FAIRNESS_COMPARISON.md` separates older optimization/price-of-fairness metrics from the present metric.

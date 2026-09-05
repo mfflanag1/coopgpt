@@ -1,5 +1,8 @@
 # Source follow-up after the initial consolidation
 
+**Historical retrieval layer:** the later deep priority review supersedes current-access and novelty assessments here. See `PRIORITY_REVIEW.md` in each package and `priority_review/REVIEW.md` at release root. Full final2025 population text and the 2008 segment paper are now inspected.
+
+
 5 September 2026; based on local commit `a72e315f`. External specialist review remains **pending**, and all three requests remain unsent drafts.
 
 - The [stable-core note](../stable_core/SOURCE_ACCESS_FOLLOWUP.md) locates the final 2025 journal PDF in Maastricht's repository. Retrieval remains blocked, so the final text has not been inspected. The ledger now distinguishes that access failure from publication behind the publisher's subscription page.

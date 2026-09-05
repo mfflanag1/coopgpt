@@ -1,5 +1,8 @@
 # Stable-core source-access follow-up — 2026-09-05
 
+**Historical retrieval layer:** the later deep priority review supersedes current-access and novelty assessments here. See `PRIORITY_REVIEW.md` in each package and `priority_review/REVIEW.md` at release root. Full final2025 population text and the 2008 segment paper are now inspected.
+
+
 Bounded read-only follow-up. No theory, original-worktree/package edits, or external correspondence. This is not specialist review.
 
 ## Final 2025 Dietzenbacher–Doğan article

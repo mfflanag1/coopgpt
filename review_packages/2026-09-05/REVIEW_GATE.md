@@ -13,3 +13,7 @@ The full goal remains active until actual specialist assessments have been obtai
 | Revision and decision | Every substantive expert issue addressed by a source correction, proof repair, withdrawal, or reasoned response; final submission/further-work decision for each package. |
 
 Before marking the goal complete, inspect the current files, verification outputs and external messages against every row. Missing external assessments mean incomplete work even if the internal packages are ready.
+
+## Deep priority revision
+
+The source audit is complete within its recorded bounds; global novelty and external specialist review remain unresolved. Use `priority_review/REVIEW.md` and the revised claim/request documents before outreach. The stable-core existence and supporting matrix/half-guarantee claims have been downgraded. No new research branch is authorized by these findings.

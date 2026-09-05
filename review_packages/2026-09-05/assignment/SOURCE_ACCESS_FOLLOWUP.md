@@ -1,5 +1,8 @@
 # Santamaria Riba thesis: assignment priority comparison
 
+**Historical retrieval layer:** the later deep priority review supersedes current-access and novelty assessments here. See `PRIORITY_REVIEW.md` in each package and `priority_review/REVIEW.md` at release root. Full final2025 population text and the 2008 segment paper are now inspected.
+
+
 **5 September 2026.** Inspected the substantive theoretical, implementation, validation, experiment and conclusion sections of Lluc Santamaria Riba's *Implementation and Experimental Analysis of Leximin Fair Core Imputations for the Assignment Game*.
 
 **Source:** [immutable primary TeX](https://github.com/Lluc24/leximin-docs/blob/3e201fa6064532fa24375d3cb70442240aa55572/memory/final-milestone/thesis.tex), repository commit dated 23 June 2026. Verified local 110,103-byte blob: `152a1ba66799e5b59ba37321732fa0637467c612`; SHA-256: `5ce4d4b0d3223528187be323432f3147bab38d5f76fc86c641badf298824365d`. README says June 2026; TeX cover line 131 says 01/07/2026. Neither establishes an official award date. These are source-line anchors; the compiled PDF was not inspected.

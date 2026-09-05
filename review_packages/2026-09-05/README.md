@@ -1,5 +1,8 @@
 # CoopGPT specialist review packages
 
+**Latest assessment:** [deep priority review](priority_review/REVIEW.md) materially narrows the claims. Stable-core existence is an elementary classical synthesis; Fibonacci matrices and graph half guarantees have prior ingredients. The exact quantitative comparisons remain candidates, with explicit source gaps. All outreach remains unsent.
+
+
 Prepared 5 September 2026 from the portfolio audit at commit `21443c59`.
 
 This release consolidates three research lines into focused manuscripts with local source comparisons, portable verification code, and precise requests for specialist review. External review is **pending**. Neither successful internal checks nor a prepared email counts as a specialist assessment.

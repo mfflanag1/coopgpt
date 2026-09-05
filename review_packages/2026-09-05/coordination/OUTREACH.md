@@ -56,3 +56,7 @@ The work was developed with AI assistance and has undergone internal mathematica
 
 Thank you for considering it,
 Maxwell Flanagan
+
+## Priority revision before sending
+
+The existing three drafts have been synchronized with the revised manuscripts and narrowed claims from `../priority_review/REVIEW.md`. The stable-core existence result is an elementary classical synthesis; the exact ray is the narrow review target. The asymptotic packet credits older voting matrices, and the assignment packet credits the double-cover deduction and older additive geometry. Drafts remain unsent.

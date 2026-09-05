@@ -94,3 +94,7 @@ Build the paper with `bash build.sh`; the PDF is
 `output/pdf/manuscript.pdf`. The enclosing release records PDF inspection
 and clean-archive replay in `BUILD_AND_REPLAY.json`. `SHA256SUMS` identifies
 the files supplied in this package.
+
+## Revised priority assessment
+
+Read `PRIORITY_REVIEW.md` before making novelty claims. It records the deeper 5September2026 source comparisons and material downgrades; `priority_review/` preserves authored evidence and normalized ledgers. Mathematical correctness and priority are separate. No outreach has been sent and no external review is recorded.

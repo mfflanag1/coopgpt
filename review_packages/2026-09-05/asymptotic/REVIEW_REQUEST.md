@@ -32,8 +32,10 @@ We would value an independent opinion on these concrete questions:
 3. **Asymptotics:** Does the all-integer-n parameter choice prove the exact
    first-order coefficient, rather than only a subsequence or a loose rate?
 4. **Priority:** Is this coefficient or an equivalent distance theorem known?
-   Are there existing representation results that make the construction or
-   its asymptotic consequence immediate?
+   The revised packet credits the older bifocal framework, entire-core
+   segments and Fibonacci–Isbell voting matrices. Is the specific sufficient
+   embedding lemma subsumed by Rosenmüller’s finite MIN-game theory, or has
+   this application of the known matrices already appeared?
 5. **Significance and attribution:** Which parts, if any, merit an independent
    contribution claim? Which primary references and venue/audience should
    govern the presentation?
