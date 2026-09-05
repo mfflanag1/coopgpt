@@ -1,5 +1,15 @@
 # Protected results ledger for the hybrid-overlap program
 
+**Current-status override — 2026-09-05.** This is a historical dependency
+ledger. The old all-n hybrid-overlap target and a fixed-n upper bound matching
+the balanced G family are false (PXC143–PXC146). Statements below calling
+their universal selection/gluing step "open" describe the abandoned program,
+not a live conjecture. Scoped conditional lemmas are retained. The unrestricted
+first-order deficit is now proved to be 2; see `asymptotic_constant_two/`.
+For assignment results and revised attribution see `assignment_comparison/`.
+The current portfolio audit and identified errata are in
+`../portfolio_review_2026-09-05/REVIEW.md`.
+
 Status: working theorem/dependency ledger on `codex/hybrid-overlap-facets`.
 Baseline: immutable tag `paper5-arxiv-review-v1`.
 Current continuation baseline: commit `7a3a409`.

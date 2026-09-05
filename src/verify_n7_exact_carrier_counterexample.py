@@ -7,6 +7,13 @@ i-1, with S={1,2,3} and P={4,5,6,7}.
 """
 from __future__ import annotations
 
+import sys
+
+if sys.flags.optimize:
+    raise SystemExit(
+        "This verifier requires assertions enabled; run without -O, -OO, or PYTHONOPTIMIZE."
+    )
+
 import json
 from fractions import Fraction
 

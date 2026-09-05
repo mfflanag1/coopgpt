@@ -4,6 +4,13 @@ Status: candidate conventional lemma for hostile audit, 2026-08-30.  This is
 part of the sharp asymptotic gap campaign.  It does not modify or strengthen
 PXC151 and does not supply an asymptotic bound.
 
+**Review update, 2026-09-05: not an established theorem.** The proof below
+does not justify joint linearity with variable primal and dual certificates,
+or the closed weak-polyhedral graph across strict non-forcing strata.
+Consequently fixed-n attainment and rationality are not certified by this
+note. See `../portfolio_review_2026-09-05/REVIEW.md` and its unrestricted
+audit. The separate constant-two theorem does not depend on this candidate.
+
 ## Statement
 
 Fix `n`.  Let `E_n` be the set of singleton-normalized exact `n`-player

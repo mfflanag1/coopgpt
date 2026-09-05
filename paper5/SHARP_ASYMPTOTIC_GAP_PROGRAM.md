@@ -56,12 +56,15 @@ checkable and whose conclusion is `O >= cT/(2n)`.
 First reduction (proved): if `mu=min_i x_i>0` and `M=max_i z_i`, then
 
 ```
-O >= mu |supp(z)| >= mu T/M.
+O >= mu T/M.
 ```
 
-Indeed `min(x_i,z_i)>=mu` on `supp(z)` and
-`T=sum_i z_i<=M|supp(z)|`.  Therefore `M<=Cn mu` would imply the universal
-gap `2-rho>=2/(Cn)`.
+Since `0<mu<=M`, `x_i>=mu`, and `0<=z_i<=M`, one has
+`min(x_i,z_i)>=(mu/M) z_i` coordinatewise. Summing proves the bound.
+The stronger support-cardinality step formerly printed here is false:
+the Fibonacci segment with `m=2,r=4` has `mu=1/3`, full support of `z`,
+and `O=8/3<3=mu |supp(z)|`. Therefore `M<=Cn mu` would imply the universal
+gap `2-rho>=2/(Cn)`. Corrected in the portfolio audit of 2026-09-05.
 
 This scalar route is globally false.  Take the direct sum of two normalized
 two-player unanimity games of totals `epsilon` and `1`.  Its core is the

@@ -42,10 +42,11 @@ pdflatex -interaction=nonstopmode -halt-on-error partition.tex
 pdflatex -interaction=nonstopmode -halt-on-error partition.tex
 ```
 
-Twelve pages, one open TODO: prior-art positioning, marked in the introduction
-for the lead's citation verification pass. The bibliography deliberately lists
-only the three works actually cited, each carried over verbatim from paper4's
-bibliography; nothing was reconstructed from memory.
+Twelve pages. The earlier prior-art TODO was addressed by the citation pass
+in commit `1061fc4c` (2026-08-09); the current manuscript contains that
+positioning and an expanded bibliography. This is not external novelty
+confirmation. The central characterization was reviewed again internally on
+2026-09-05; see `../portfolio_review_2026-09-05/REVIEW.md` for the exact scope.
 
 Everything in the main theorem is proved by hand. The single
 machine proof dependency is the frontier dichotomy (Theorem 23), a finite check

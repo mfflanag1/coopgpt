@@ -1,86 +1,154 @@
 #!/usr/bin/env python3
-"""Regenerate and verify the three reduced large-case orbit-core records."""
-from __future__ import annotations
+"""Regenerate three orbit-core formulas and validate complete proof records.
 
+Ordinary guards remain active under Python -O. External CPC checking is
+recorded evidence, not rerun by this record-integrity wrapper.
+"""
+from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
-
-from audit_strict_exchange_large_case_orbit_cores import SELECTED, build_reduced
+from audit_strict_exchange_large_case_orbit_cores import SELECTED, build_reduced, rendered_signature
 from export_core_closure_smt import qf_lra_smt2
-
 
 HERE = Path(__file__).resolve().parent
 CERTIFICATES = HERE / "orbit_core_certificates"
+
+
+def require(condition, message):
+    if not condition:
+        raise RuntimeError(message)
 
 
 def sha256(path):
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+EXPECTED_CASES = {
+    f"p{positive}_n{negative}_t{6-positive-negative}"
+    for positive in range(1, 6)
+    for negative in range(1, 7-positive)
+}
+
+
+def complete_rows(audit, expected, label):
+    require(audit.get("status") == "PASS", f"{label}: status is not PASS")
+    rows = audit.get("rows")
+    require(isinstance(rows, list), f"{label}: rows must be a list")
+    require(len(rows) == len(expected), f"{label}: actual row count changed")
+    require(all(isinstance(row, dict) and isinstance(row.get("case"), str) for row in rows), f"{label}: invalid case row")
+    cases = [row["case"] for row in rows]
+    require(len(set(cases)) == len(cases), f"{label}: duplicate case")
+    require(set(cases) == set(expected), f"{label}: missing or unexpected case")
+    if "case_count" in audit:
+        require(audit["case_count"] == len(rows), f"{label}: declared row count changed")
+    return rows
+
+
+def direction_rows(audit, schema, relation):
+    require(audit.get("schema") == schema, "direction audit schema changed")
+    require(audit.get("case_count") == 15, "direction audit case count changed")
+    require(audit.get("distance_relation", "eq") == relation, "direction audit relation changed")
+    rows = complete_rows(audit, EXPECTED_CASES, "direction audit")
+    for row in rows:
+        positive, negative, tied = row["positive_count"], row["negative_count"], row["tie_count"]
+        require(all(type(v) is int for v in (positive, negative, tied)), "invalid role counts")
+        require(positive >= 1 and negative >= 1 and tied >= 0 and positive+negative+tied == 6, "invalid six-player roles")
+        require(row["case"] == f"p{positive}_n{negative}_t{tied}", "case label disagrees with roles")
+        require(row.get("rebuilt_verdict") == "unsat", "direction rebuild is not UNSAT")
+        require(row.get("distance_relation", "eq") == relation, "row distance relation changed")
+        menu = row.get("retained_menu")
+        require(isinstance(menu, list), "missing retained menu")
+        require(row.get("retained_direction_count") == len(menu), "retained direction count disagrees with menu")
+        signatures = []
+        for item in menu:
+            direction = item.get("direction")
+            require(item.get("side") in ("min", "max"), "invalid menu side")
+            require(isinstance(direction, list) and len(direction) == 6, "invalid direction length")
+            require(all(type(v) is int for v in direction) and any(direction) and sum(direction) == 0, "invalid transfer direction")
+            signatures.append((item["side"], tuple(direction)))
+        require(len(set(signatures)) == len(signatures), "duplicate retained direction")
+    return rows
+
+
+def proof_record(record, formula, proof):
+    require(record.get("status") == "PASS", "record status is not PASS")
+    for solver in ("z3", "cvc5"):
+        require(record[solver].get("status") == "unsat", f"{solver}: recorded status is not UNSAT")
+        require(record[solver].get("exit_code") == 0, f"{solver}: recorded nonzero exit")
+    require(record.get("formula_sha256") == sha256(formula), "formula hash mismatch")
+    require(record.get("formula_bytes") == formula.stat().st_size, "formula byte count mismatch")
+    cpc = record["cpc_proof"]
+    require(cpc.get("status") == "PASS", "CPC status is not PASS")
+    require(cpc["ethos"].get("status") == "correct" and cpc["ethos"].get("exit_code") == 0, "Ethos record is not correct")
+    require(cpc.get("forbidden_markers") == [], "CPC record contains forbidden markers")
+    require(cpc.get("proof_sha256") == sha256(proof), "proof hash mismatch")
+    require(cpc.get("proof_bytes") == proof.stat().st_size, "proof byte count mismatch")
+    return cpc
+
+
 def main():
     audit = json.loads((HERE / "strict_exchange_large_case_orbit_cores.json").read_text())
     original = json.loads((HERE / "strict_exchange_direction_cores.json").read_text())
-    orbit_counts = {
-        row["case"]: row["sign_preserving_orbit_count"]
-        for row in json.loads((HERE / "strict_exchange_sign_orbits.json").read_text())["rows"]
-    }
-    source_rows = {row["case"]: row for row in original["rows"]}
-    assert audit["schema"] == "strict-exchange-large-case-orbit-cores-v1"
-    assert audit["status"] == "PASS"
-    assert audit["base_assertion_count_per_case"] == 71
-    assert audit["original_role_orbit_count"] == 44
-    assert audit["selected_role_orbit_count"] == 19
-    assert audit["selected_labeled_direction_count"] == 136
+    original_rows = direction_rows(original, "exactness-exchange-direction-cores-v1", "gt")
+    source_rows = {row["case"]: row for row in original_rows}
+    orbit_audit = json.loads((HERE / "strict_exchange_sign_orbits.json").read_text())
+    orbit_rows = complete_rows(orbit_audit, EXPECTED_CASES, "sign-orbit audit")
+    orbit_counts = {row["case"]: row["sign_preserving_orbit_count"] for row in orbit_rows}
+    require(audit.get("schema") == "strict-exchange-large-case-orbit-cores-v1", "orbit-core schema changed")
+    rows = complete_rows(audit, set(SELECTED), "selected orbit audit")
+    require(audit.get("base_assertion_count_per_case") == 71, "base assertion count changed")
+    require(audit.get("original_role_orbit_count") == 44, "original role count changed")
+    require(audit.get("selected_role_orbit_count") == 19, "selected role count changed")
+    require(audit.get("selected_labeled_direction_count") == 136, "selected direction count changed")
+    totals = {"original_labeled_direction_count": 0, "original_role_orbit_count": 0,
+              "selected_labeled_direction_count": 0, "selected_role_orbit_count": 0}
     checked = []
-    for row in audit["rows"]:
+    for row in rows:
         case = row["case"]
         source = dict(source_rows[case])
         source["sign_preserving_orbit_count"] = orbit_counts[case]
-        solver, _ = build_reduced(source, SELECTED[case])
+        solver, groups = build_reduced(source, SELECTED[case])
+        expected_orbits = [rendered_signature(item) for item in SELECTED[case]]
+        counts = {"original_labeled_direction_count": source["retained_direction_count"],
+                  "original_role_orbit_count": len(groups),
+                  "selected_role_orbit_count": len(SELECTED[case]),
+                  "selected_labeled_direction_count": sum(len(groups[item]) for item in SELECTED[case])}
+        require(row.get("selected_orbits") == expected_orbits, f"{case}: selected orbit list changed")
+        require(row.get("unguarded_rebuild_verdict") == "unsat", f"{case}: rebuild record not UNSAT")
+        require(len(solver.assertions()) == 71+counts["selected_labeled_direction_count"], f"{case}: rebuilt assertion count changed")
+        for field, value in counts.items():
+            require(row.get(field) == value, f"{case}: {field} disagrees with rebuilt data")
+            totals[field] += value
         formula = CERTIFICATES / f"strict_exchange_orbit_core_{case}.smt2"
-        if formula.read_text() != qf_lra_smt2(solver):
-            raise AssertionError(f"{case} formula did not byte-regenerate")
+        require(row.get("formula") == formula.name, f"{case}: formula filename changed")
+        require(formula.read_text() == qf_lra_smt2(solver), f"{case}: formula did not byte-regenerate")
         proof = CERTIFICATES / f"strict_exchange_orbit_core_{case}.cpc"
         record = json.loads((CERTIFICATES / f"strict_exchange_orbit_core_{case}.json").read_text())
-        assert record["status"] == "PASS"
-        assert record["z3"]["status"] == "unsat"
-        assert record["cvc5"]["status"] == "unsat"
-        assert record["formula_sha256"] == sha256(formula)
-        cpc = record["cpc_proof"]
-        assert cpc["status"] == "PASS"
-        assert cpc["ethos"]["status"] == "correct"
-        assert cpc["forbidden_markers"] == []
-        assert cpc["proof_sha256"] == sha256(proof)
-        assert all(item["verdict"] == "sat" for item in row["single_orbit_ablations"])
-        assert [item["removed"] for item in row["single_cross_anchor_ablations"]] == [
-            "lmax_top_cross",
-            "lmin_bottom_cross",
-        ]
-        assert all(item["verdict"] == "sat" for item in row["single_cross_anchor_ablations"])
-        expected_sources = ["opposite", "q0", "q1", "q2", "q3"]
-        if case != "p4_n2_t0":
-            expected_sources += ["q4", "q5"]
-        assert row["blocker_comparison_sources"] == expected_sources
+        cpc = proof_record(record, formula, proof)
+        ablations = row.get("single_orbit_ablations", [])
+        require([item.get("removed") for item in ablations] == expected_orbits, f"{case}: incomplete orbit ablations")
+        require(all(item.get("verdict") == "sat" for item in ablations), f"{case}: orbit ablation not SAT")
+        anchors = row.get("single_cross_anchor_ablations", [])
+        require([item.get("removed") for item in anchors] == ["lmax_top_cross", "lmin_bottom_cross"], f"{case}: incomplete anchor ablations")
+        require(all(item.get("verdict") == "sat" for item in anchors), f"{case}: anchor ablation not SAT")
+        sources = ["opposite", "q0", "q1", "q2", "q3"]
+        if case != "p4_n2_t0": sources += ["q4", "q5"]
+        require(row.get("blocker_comparison_sources") == sources, f"{case}: blocker source list changed")
+        blockers = row.get("single_blocker_source_ablations", [])
         if case == "p4_n2_t0":
-            assert [item["removed"] for item in row["single_blocker_source_ablations"]] == row[
-                "blocker_comparison_sources"
-            ]
-            assert all(
-                item["verdict"] == "sat" for item in row["single_blocker_source_ablations"]
-            )
+            require([item.get("removed") for item in blockers] == sources, f"{case}: incomplete blocker ablations")
+            require(all(item.get("verdict") == "sat" for item in blockers), f"{case}: blocker ablation not SAT")
         else:
-            assert row["single_blocker_source_ablations"] == []
-        checked.append(
-            {
-                "case": case,
-                "selected_role_orbits": row["selected_role_orbit_count"],
-                "selected_labeled_directions": row["selected_labeled_direction_count"],
-                "formula_sha256": record["formula_sha256"],
-                "proof_bytes": cpc["proof_bytes"],
-                "proof_sha256": cpc["proof_sha256"],
-            }
-        )
+            require(blockers == [], f"{case}: unexpected blocker ablations")
+        checked.append({"case": case,
+                        "selected_role_orbits": row["selected_role_orbit_count"],
+                        "selected_labeled_directions": row["selected_labeled_direction_count"],
+                        "formula_sha256": record["formula_sha256"],
+                        "proof_bytes": cpc["proof_bytes"],
+                        "proof_sha256": cpc["proof_sha256"]})
+    for field, value in totals.items():
+        require(audit.get(field) == value, f"aggregate {field} disagrees with complete rows")
     print(json.dumps({"status": "PASS", "checked": checked}, indent=2))
 
 

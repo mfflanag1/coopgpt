@@ -2,6 +2,8 @@
 set -euo pipefail
 
 python_bin="${1:-python3}"
+# Legacy release stages use assertions as proof gates.
+"$python_bin" -c 'import sys; sys.exit("This release requires assertions enabled; unset PYTHONOPTIMIZE and use Python without -O or -OO.") if sys.flags.optimize else None'
 repo_root="$(CDPATH= cd -- "$(dirname -- "$0")/../.." && pwd)"
 scratch_dir="$(mktemp -d "${TMPDIR:-/tmp}/paper5-verify.XXXXXX")"
 trap 'rm -rf "$scratch_dir"' EXIT

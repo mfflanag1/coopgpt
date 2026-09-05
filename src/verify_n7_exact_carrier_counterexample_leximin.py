@@ -1,6 +1,13 @@
 """Exact-rational leximin check for the sharp seven-player counterexample."""
 from __future__ import annotations
 
+import sys
+
+if sys.flags.optimize:
+    raise SystemExit(
+        "This verifier requires assertions enabled; run without -O, -OO, or PYTHONOPTIMIZE."
+    )
+
 import json
 from fractions import Fraction as F
 
