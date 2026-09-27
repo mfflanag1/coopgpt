@@ -1,0 +1,359 @@
+Task and review objective:
+Audit the full proposed tree/cyclic dichotomy. Four-sector milestone already passed before this expansion. Focus on whether selective subdivision really generalizes to arbitrary k and can be iterated preserving the support labels, integral matching shortfall, entire-first-face pinning and target ideal; check zero-sector embedding into every connected cyclic allowed graph and quantifiers. Tree proof and full-core cut representation are included: flag any load-bearing error there too. Check the direct floor formula against induction. The prior C4 result is not sufficient by itself; seek an actual failing longer-cycle team or other counterexample. No novelty verdict requested.
+
+
+FILE GRAPH_DICHOTOMY.md
+1: # Acyclicity characterizes uniform leximin-to-ideal protection
+2: 
+3: Candidate conventional classification. The required four-sector milestone was completed first in ../selective_c4/MILESTONE.md. No unconditional priority or field-level significance claim.
+4: 
+5: ## Exact statement
+6: 
+7: Let G be a fixed finite connected simple graph on K>=2 sectors. Every sector has the same finite size m>=1. Each allowed edge carries an arbitrary nonnegative real m-by-m pair matrix; a zero matrix is permitted. Only complete K-sector teams are productive, their values are the sums of their edge pair values, and arbitrary coalition worth is maximum weight integral matching of contained complete teams. Restrict to positive grand worth and nonempty ENTIRE core. Keep all labeled coordinates in full ascending sorted (nominal-payoff) leximin x, and define H_i as the maximum of coordinate i on that same entire core.
+8: 
+9: The greatest uniform constant satisfies
+10:     c(G)=1/K if G is a tree;
+11:     c(G)=0 if G contains a cycle.
+12: For H_i=0 the inequality x_i>=c(G)H_i is automatic, and such coordinates are not removed from the optimization. In the cyclic witnesses every ideal is positive. This theorem is about an allowed interaction graph with nonnegative matrices, not a requirement that every allowed pair entry be positive.
+13: 
+14: The tree half, including all lexicographic stages and zero ideals, is the existing [strict-core clipping theorem](ALL_TREES.md), with its [full-core cut representation](TREE_CORE_AND_PATH.md). Its sharpness uses m=1 and a unit full-team simplex. We prove the cyclic half below rather than assuming graph subdivision preserves the core.
+15: 
+16: ## 1. Selective edge subdivision: cover and matching transfer
+17: 
+18: Take ANY strict k-sector market of the stated kind, with an optimal perfect matching relabeled to the diagonal, worth T, and an edge joining sectors u,v with nonnegative pair matrix B(i,j). Choose D_j>=max_i B(i,j). Insert a new sector d, replace uv by ud with matrix B, and by dv with diagonal matrix D_j*1_(i=j). All other pair matrices stay unchanged. Write w0(t) for an old full team's value, with u-label i and v-label j, and let h be the new label. Then
+19:     w1(t,h)=w0(t)-B(i,j)+B(i,h)+D_h*1_(h=j).
+20: For any old entire-core point z, the lift (z,D) covers every new full team:
+21: * h=j: z(t)+D_h>=w0(t)+D_h=w1(t,h).
+22: * h!=j: z(t)+D_h>=w0(t)+D_h>=w0(t)-B(i,j)+B(i,h), using B(i,j)>=0 and D_h>=B(i,h).
+23: The lift is nonnegative with sum T+sum D; the extended diagonal integral matching has exactly that value. Thus the new integral worth equals T+sum D, the lifted point is in the new ENTIRE core, and every extended diagonal team is tight throughout it.
+24: 
+25: If z has floor tau, set t=k*tau/(k+1) and define the shifted lift
+26:     z'_i=z_i-t/k for each old coordinate,
+27:     z'_d(j)=D_j+t.
+28: Every full-team sum stays unchanged; equal sector sizes make the total change -km*(t/k)+mt=0. Old coordinates are >=tau-t/k=t, and new coordinates >=t. Thus this is a core point with floor at least t.
+29: 
+30: Now suppose an old partial matching P contains r teams, has value T-delta, and its unmatched set U includes a target. Extend each team by choosing the new label equal to its v-label. The new labels are distinct, so this remains a partial matching. Assume every label j with D_j>0 occurs as a v-label in P. Then its added bonus is sum D, and its shortfall from the new grand worth stays exactly delta. Its unmatched set has (k+1)(m-r) players.
+31: 
+32: If the old floor was tau=delta/[k(m-r)], the displayed new cover attains floor t=delta/[(k+1)(m-r)]. The unmatched budget is <=delta throughout the new entire core, hence forces every unmatched coordinate to t on the ENTIRE first optimal face. The old target, which remains unmatched, consequently has full-leximin payoff t.
+33: 
+34: Suppose additionally that the old target's diagonal team has value H, that an old core witness attains target H, and that D_j0=0 at this diagonal team's label j0. The new diagonal target-team value stays H and gives the same ideal upper bound. The unshifted old ideal witness lifts with target H. Thus the target's whole-core ideal stays exactly H. No equality of the entire two cores, or preservation of other ideals, is claimed or needed.
+35: 
+36: ## 2. Start with the proved triangular family
+37: 
+38: Use the [symbolic source family](SOURCE_FAMILY_PROOF.md), for each q>=1:
+39: - k=3, m=3q+1, labels L0 and O_s,L_s,R_s (1<=s<=q);
+40: - pair entries in {0,1,2}, diagonal worth6q+1, positive core floor1/[3(q+1)];
+41: - r=2q disjoint critical triples N_s=(O_s,R_s,L_s), E_s=(L_(s-1),L_(s-1),O_s), of total value6q;
+42: - unmatched target c_L0, diagonal target-team value1, and a core witness giving that target1.
+43: 
+44: Use the edge B from sector a to sector c. Its only nonzero columns are Hset={O_s,L_s:1<=s<=q}; their column maxima are2. The critical partial matching uses every Hset label exactly once in sector c. Define D=2 on Hset and0 on L0 and every R_s. Then sum D=4q, all transfer hypotheses hold, delta=1, and m-r=q+1.
+45: 
+46: Subdivide this B-edge once to obtain the already reviewed C4 family. For each further subdivision, subdivide the edge still carrying the original B matrix, oriented from a to its current neighboring sector. That neighbor's labels in the extended partial matching are still exactly Hset, and the target diagonal label remains L0 with D_L0=0. Thus the hypotheses propagate at every step; this is an induction on proved cover/matching properties, not an assumed subdivision invariance.
+47: 
+48: After ell-3 subdivisions, for ANY fixed ell>=3, the support is a simple ell-cycle. It has
+49:     T_ell(q)=6q+1+4q(ell-3),
+50:     partial matching value T_ell(q)-1,
+51:     unmatched cardinality ell(q+1),
+52:     full-leximin target 1/[ell(q+1)], target ideal1.
+53: All matrices still have entries in {0,1,2}; each cycle-edge matrix is nonzero. Every added diagonal matrix has value2 only on Hset.
+54: 
+55: For a direct floor formula, start with the old triangular floor witness z of floor tau3=1/[3(q+1)]. Let t_ell=1/[ell(q+1)]. Pay every original coordinate z_i-(ell-3)t_ell/3 and pay each inserted-sector label j the amount D_j+t_ell. This is the result of the inductive shifts, or follows by summing them; its total and every full-team sum match an unshifted iterated lift. Old coordinates are at least t_ell and the new ones at least t_ell. The target ideal witness is the original triangular ideal witness with D appended in each inserted sector.
+56: 
+57: ## 3. Zero-valued added sectors and a general cyclic allowed graph
+58: 
+59: Adding a new sector with only zero interactions leaves full-team weights unchanged. An old nonnegative cover z lifts to (z,0), with unchanged total and a diagonal integral matching of that value. If z has floor tau, use z'_old=z-t/k and z'_new=t with t=k*tau/(k+1); the same team-sum, total and positivity calculation gives a core point at floor t.
+60: 
+61: Extend the critical partial matching by any r distinct labels in the new sector. Its worth and its unit shortfall are unchanged; its unmatched set gains m-r=q+1 players. Hence the whole-first-face pinning proof applies again, and the target ideal stays1 because its diagonal team retains value1 and the ideal witness extends by zero. Multiple zero sectors can be added sequentially. These are constructed witnesses and entire-core upper certificates, not an assertion that arbitrary selector coordinates are preserved.
+62: 
+63: Every connected cyclic G on K sectors contains a simple cycle of some length ell between3 and K. Relabel the ell-cycle construction onto those vertices, add the remaining K-ell sectors as above, and assign zero matrices to all other allowed edges, including any cycle chords and edges incident to the additional sectors. The full-team values therefore remain exactly those already covered. This produces, for every q>=1,
+64:     T(q)=6q+1+4q(ell-3)>0,
+65:     x_target/H_target = 1/[K(q+1)],   H_target=1.
+66: There is a strictly positive core point; all sectors have3q+1 players and all pair values lie in {0,1,2}. Given any proposed c>0 choose q with K(q+1)>1/c. Its target violates c-protection. Nonnegativity trivially gives c(G)>=0, so c(G)=0. Combined with the tree theorem, this proves the classification.
+67: 
+68: ## 4. The structural mechanism and its boundaries
+69: 
+70: The preserved quantity is a UNIT residual budget from an actual partial matching. Selective bonuses are fully collected by that matching, while each added sector supplies q+1 additional unmatched players. The full ascending leximin floor therefore falls, but a value-one optimal diagonal team and an explicit ideal witness keep the target ideal at1.
+71: 
+72: Pairwise incompatibility is not required. The source diagonal matching attains the row-maximum upper bound separately on A,B,C; every inserted diagonal matrix and every zero matrix has the same property. Thus the counterexamples admit simultaneously optimal pairwise diagonal matchings on every allowed edge. They do not exploit a fractional/integral worth gap.
+73: 
+74: This is not a theorem about games with productive partial-sector coalitions, normalized leximin of ratios, a selected proper core face, strictly positive entries on every allowed edge, or unequal sector sizes. No assertion of historical priority follows. Original-source limitations remain material and must be retained beside this classification.
+75: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE SOURCE_FAMILY_PROOF.md
+1: # Vanishing leximin protection with nonnegative pair-additive triples
+2: 
+3: **Theorem.** For every integer q>=1 there is a complete strict three-sided assignment market with 9q+3 players, nonnegative pair entries in {0,1,2}, positive integral worth 6q+1, and nonempty full core, such that one player's full ascending-leximin payoff is 1/[3(q+1)] and its maximum whole-core payoff is 1. The target is fixed at the positive first global leximin level. Consequently the best size-independent protection fraction for this class is
+4: 
+5: \[
+6: c_{\mathrm{pair}}=0.
+7: \]
+8: 
+9: Every induced triple has integer value at most 5. There are no permanently zero-ideal players: the core contains an allocation positive in every coordinate. This proves the mathematical vanishing-family target. It does not prove priority, minimum market size, optimal finite-size ratios, or a new selector-distance result.
+10: 
+11: ## Construction
+12: 
+13: Use the common team-label set
+14: 
+15: \[
+16: \mathcal T=\{L_0\}\cup\{O_s,L_s,R_s:1\le s\le q\}.
+17: \]
+18: 
+19: For every label t, create players a_t,b_t,c_t in the three respective sectors. Thus each sector has 3q+1 players. Every full triple has value
+20: 
+21: \[
+22: w(a_t,b_u,c_v)=A_{tu}+B_{tv}+C_{uv}.
+23: \]
+24: 
+25: Only full triples produce output. Coalition worth is maximum integral disjoint-triple output. Define the pair matrices by the following nonzero entries, and set every other entry to zero:
+26: 
+27: | Entries | Range | Value |
+28: |---|---|---|
+29: | \(C_{L_s,L_s}\) | \(0\le s\le q\) | 1 |
+30: | \(C_{R_s,R_s}\) | \(1\le s\le q\) | 1 |
+31: | \(A_{O_s,O_s},\ B_{O_s,O_s}\) | \(1\le s\le q\) | 2 |
+32: | \(A_{O_s,R_s},\ B_{O_s,L_s}\) | \(1\le s\le q\) | 2 |
+33: | \(C_{R_s,L_s},\ C_{L_{s-1},O_s}\) | \(1\le s\le q\) | 1 |
+34: 
+35: There are 8q+1 nonzero pair entries. The diagonal perfect matching consists of all teams \((a_t,b_t,c_t)\). Each L or R team has value 1 and each O team value 4. Its total is
+36: 
+37: \[
+38: T=1+6q.
+39: \]
+40: 
+41: ## Two complete core covers
+42: 
+43: Put \(\tau=1/[3(q+1)]\). In (a,b,c) order define a floor witness u and an ideal witness y by
+44: 
+45: \[
+46: \begin{array}{c|c|c}
+47: \text{team}&u&y\\\hline
+48: L_s&\bigl(\tau,\ 1-(3s+2)\tau,\ (3s+1)\tau\bigr)&(0,0,1)\\
+49: R_s&\bigl(\tau,\ 1-2\tau,\ \tau\bigr)&(0,1,0)\\
+50: O_s&\bigl(4-(3s-1)\tau,\ \tau,\ (3s-2)\tau\bigr)&(3,0,1).
+51: \end{array}
+52: \]
+53: 
+54: Use 0<=s<=q for L and 1<=s<=q otherwise. Every coordinate of u is at least tau. For instance, its smallest L-side b payoff occurs at s=q and equals tau; its smallest O-side c payoff occurs at s=1 and equals tau. Each diagonal team's payoff sum equals its value, at both points, so both totals are T.
+55: 
+56: We verify **every** mixed triple. If its a-player is from an L or R team, it has no positive A or B pair entry, and the triple value is its C entry. The possible positive C pairs and their u-payoff sums are
+57: 
+58: \[
+59: \begin{array}{c|c|c}
+60: (b,c)\text{ labels}&u_b+u_c&y_b+y_c\\\hline
+61: (L_s,L_s)&1-\tau&1\\
+62: (R_s,R_s)&1-\tau&1\\
+63: (R_s,L_s)&1+(3s-1)\tau&2\\
+64: (L_{s-1},O_s)&1-\tau&1.
+65: \end{array}
+66: \]
+67: 
+68: Each corresponding C entry is 1. Adding u_a=tau or y_a=0 proves the cover. Zero C entries follow from nonnegativity.
+69: 
+70: If the a-player is a_(O_s), its only positive pair entries are the two specified A entries and two specified B entries, all of value 2. With at most one such entry, the triple value is at most 3, covered by
+71: 
+72: \[
+73: u_{a_{O_s}}\ge3+4\tau,\qquad y_{a_{O_s}}=3.
+74: \]
+75: 
+76: With both entries positive, exactly four cases remain:
+77: 
+78: \[
+79: \begin{array}{c|c|c|c}
+80: (b,c)\text{ labels}&w&u_a+u_b+u_c&y_a+y_b+y_c\\\hline
+81: (O_s,O_s)&4&4&4\\
+82: (O_s,L_s)&4&4+3\tau&4\\
+83: (R_s,O_s)&4&5-3\tau&5\\
+84: (R_s,L_s)&5&5&5.
+85: \end{array}
+86: \]
+87: 
+88: Since tau<=1/6, all these are covers. This exhausts all triples and also proves w<=5.
+89: 
+90: The integral matching gives worth at least T, while either complete nonnegative cover bounds every integral matching by T. Thus the actual integral worth is T. Summing triple covers over arbitrary coalition matchings proves all coalition inequalities, including unmatched players by nonnegativity. Both u and y belong to the entire core, and its raw triple-cover description is exact. No fractional matching value is substituted for T.
+91: 
+92: ## A near-optimal partial matching fixes the target
+93: 
+94: For each s take the two triples
+95: 
+96: \[
+97: N_s=(a_{O_s},b_{R_s},c_{L_s}),\qquad
+98: E_s=(a_{L_{s-1}},b_{L_{s-1}},c_{O_s}).
+99: \]
+100: 
+101: Their values are respectively 5 and 1. These 2q triples are pairwise player-disjoint: the used a labels are the O labels and L_0,...,L_(q-1); the used b labels are the R labels and L_0,...,L_(q-1); the used c labels are L_1,...,L_q and the O labels. They form an actual partial matching of value 6q.
+102: 
+103: Its unmatched player set is
+104: 
+105: \[
+106: U=\{c_{L_0},a_{L_q},b_{L_q}\}
+107: \cup\{a_{R_s},b_{O_s},c_{R_s}:1\le s\le q\},
+108: \]
+109: 
+110: with exactly 3q+3 players. At every core point p, summing the partial-matching covers and subtracting from efficiency gives
+111: 
+112: \[
+113: \sum_{i\in U}p_i\le T-6q=1.\tag{1}
+114: \]
+115: 
+116: Hence a common payoff floor is at most 1/(3q+3). The point u attains this bound, so it is exactly the first global leximin level tau. On the whole first optimal face, all coordinates are at least tau. Since |U|tau=1, inequality (1) forces every U coordinate to equal tau there. In particular, the target c_(L_0) remains tau through every subsequent refinement of full leximin. No claim that u is the entire final selector is needed.
+117: 
+118: The diagonal L_0 team is tight at every core point, so nonnegativity gives H_(c_(L_0))<=1. The cover y attains target payoff 1. Therefore
+119: 
+120: \[
+121: H_{c_{L_0}}=1,\qquad
+122: x_{c_{L_0}}=\frac1{3(q+1)},\qquad
+123: \frac{x_{c_{L_0}}}{H_{c_{L_0}}}=\frac1{3(q+1)}\longrightarrow0.
+124: \]
+125: 
+126: The first-face statement follows from the entire-core inequality, rather than the output of a finite numerical selector computation. For each desired epsilon>0, choosing an integer q with 3(q+1)>1/epsilon supplies the required market, proving c_pair=0.
+127: 
+128: ## Evidence and priority boundary
+129: 
+130: The construction route supplies an all-parameter proof and exact finite calibrations; root independently derived the cover cases and a telescoping version of (1). The construction route then identified the simpler disjoint partial-matching certificate, which root and the independent audit checked separately. Finite checks corroborate the formulas; they are not the proof of the limit.
+131: 
+132: The earlier 21-player example and this family's q=2 market are distinct constructions. The latter has pair entries at most 2 and 17 positive pair entries, while the earlier example has entries at most 3 and 16 positive pair entries. No isomorphism or player-minimality claim is made.
+133: 
+134: Coordinate-ideal protection and vanishing protection in broader games have prior precedents. The surviving priority question is the realization in complete, fixed three-sector, nonnegative pair-additive strict markets. See the cycle's claim-priority audit before asserting novelty or field-level significance. External specialist review remains pending.
+135: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE ALL_TREES.md
+1: # Sharp leximin protection for every strict tree market
+2: 
+3: Conventional proof, September 6, 2026. Claude independently rederived the argument and found no correctness defect; 120 exact clipping checks against raw full-team constraints pass. No priority claim. Standing model and exact tree-cut representation are in TREE_CORE_AND_PATH.md from the structural classification checkpoint: k>=2 sectors, equal finite size m>=1, nonnegative pair matrices on a connected tree, only full k-tuples productive, integral coalition worth, T>0. Core coordinates include every player, and full ascending sorted leximin is used. Ideals are maxima over that same entire core.
+4: 
+5: ## Theorem
+6: 
+7: For every tree G on k vertices, c(G)=1/k. In particular c(K1,3)=1/4. Branching does not destroy size-independent protection in this model.
+8: 
+9: ## A closure fact
+10: 
+11: If two vectors a,b obey all inequalities u(i)-u(j)>=c_ij, then their coordinatewise minimum obeys them too. Indeed a(i)>=a(j)+c and b(i)>=b(j)+c imply min(a(i),b(i))>=min(a(j),b(j))+c. Adding a uniform constant to every coordinate of a vector also preserves all such inequalities.
+12: 
+13: ## Tree coordinates, rooted at the target sector
+14: 
+15: Root G at an arbitrary sector r. Choose edgewise optimal perfect matchings and consistently relabel so they are diagonal. This is possible on a tree and gives T=sum of the edge matching optima. For each nonroot vertex v let S_v be its descendant subtree, s_v=|S_v|, and d_vb(j) the diagonal pair value on edge v->b. For a core point p put
+16: 
+17:     U_v^p(j)=sum_(a in S_v) p_a(j)-sum_(edges internal to S_v) d_edge(j),
+18:     U_r^p(j)=0.
+19: 
+20: The exact full-core representation is:
+21: 
+22:     U_b(i)-U_b(j)>=A_vb(j,i)-d_vb(j)         for each edge v->b,
+23:     p_v(j)=U_v(j)-sum_(b child of v)U_b(j)+sum_(b child of v)d_vb(j)>=0.
+24: 
+25: Every feasible cut vector reconstructs an efficient nonnegative cover of all full teams; conversely every core point gives such a vector. Thus the representation preserves the entire core and ideals. Its proof is reproduced in the preceding checkpoint and is not a hypothesis about a smaller partial-coalition core.
+26: 
+27: ## Clipping lemma
+28: 
+29: Let x,y be any two core points (in particular x,y>=0) and beta>=0. Define, independently on each nonroot cut layer,
+30: 
+31:     Z_v(j)=min(U_v^x(j), U_v^y(j)+s_v*beta),
+32:     Z_r(j)=0.
+33: 
+34: Let z be the payoff reconstructed from Z. Closure under uniform translation and minimum proves every structural difference constraint for Z.
+35: 
+36: For a nonroot v and label j, if Z_v(j)=U_v^x(j), then Z_b(j)<=U_b^x(j) for each child, so z_v(j)>=x_v(j). If instead Z_v(j)=U_v^y(j)+s_v*beta, then Z_b(j)<=U_b^y(j)+s_b*beta and s_v=1+sum_b s_b, so z_v(j)>=y_v(j)+beta. These cover ties as well. Therefore
+37: 
+38:     z_v(j)>=min(x_v(j),y_v(j)+beta)>=min(x_v(j),beta)       (v != r).
+39: 
+40: At the root, each child cut is at most its x cut, hence
+41: 
+42:     z_r(j)>=x_r(j).
+43: 
+44: Each child cut is also at most its shifted y cut, and the child subtrees partition k-1 nonroot vertices. Hence
+45: 
+46:     z_r(j)>=y_r(j)-(k-1)*beta.
+47: 
+48: These bounds prove every reconstructed payoff nonnegative. The exact representation then proves z is in the full core, with no fractional/integral substitution and no loss of efficiency. This lemma does not require x to be leximin or have positive minimum payoff.
+49: 
+50: ## Protection proof, including all lexicographic stages
+51: 
+52: Let x be the full leximin point and let the target player belong to sector r, at label j. Write alpha=x_r(j). If H_r(j)>k*alpha, choose an ideal-attaining core point y and a number beta with
+53: 
+54:     alpha<beta<H_r(j)/k.
+55: 
+56: Apply the clipping lemma. The target payoff satisfies
+57: 
+58:     z_r(j)>=H_r(j)-(k-1)*beta>beta>alpha.
+59: 
+60: Every other root payoff weakly increases. At a nonroot coordinate with x_i<=alpha, we have y_i+beta>=beta>alpha>=x_i; the lemma therefore gives z_i>=x_i. At a coordinate with x_i>alpha, both x_i and y_i+beta exceed alpha, so z_i>alpha. Thus no old payoff at or below alpha decreases, all old payoffs above alpha stay above alpha, and the target strictly increases.
+61: 
+62: This strictly improves the sorted payoff vector: if any entry below alpha increases, use the smallest old value at which an increase occurs; no lower entry changes and no old higher entry falls to that value. Otherwise all entries below alpha are unchanged and the number of entries equal to alpha strictly decreases. Both cases contradict full leximin. Consequently H_i<=k*x_i for every player. The argument also covers alpha=0 and shows x_i=0 implies H_i=0; zero-ideal players are not deleted.
+63: 
+64: For sharpness, take m=1 and nonnegative edge weights totaling1 (for example one edge has value1 and the others zero). The only full team has worth1 and every proper coalition has worth0. The full core is the k-player unit simplex, x_i=1/k and H_i=1. This works on every connected tree, hence c(G)=1/k.
+65: 
+66: ## Scope
+67: 
+68: The theorem supplies the acyclic sufficient side for connected sector graphs. It does not prove that every cyclic G has c(G)=0. C4 still has only a finite upper bound (now5/44 in the companion certificate), so the four-sector milestone and general classification remain incomplete. Cut-variable decomposition, difference-constraint lattice closure and matching duality are established types of tools; novelty of this precise application is not yet established.
+69: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE TREE_CORE_AND_PATH.md
+1: # Tree core representation and path protection: candidate proof
+2: 
+3: Status: conventional proof; Claude found no correctness defect in the reviewed argument, and finite raw-core equivalence and explicit path-cycle checks pass. No novelty claim. Model: k>=2 fixed sectors of equal size m>=1, complete k-tuples only productive, nonnegative pair matrices on the edges of a connected tree, and positive total worth T. Coalition values use integral matchings. Root the tree at vertex 0 and orient every edge parent a to child b, with matrix A_ab(parent label, child label). Define c(G) as the infimum of x_i/H_i over all admissible markets on fixed G and players with positive full-core ideal H_i. Zero-ideal coordinates remain in the full leximin optimization; their ratios are not formed.
+4: 
+5: ## Integral worth and simultaneous diagonalization
+6: 
+7: Choose an optimal perfect matching for each edge. Root-label the players and propagate labels along each chosen matching. There is no conflicting propagation because the sector graph is a tree. All chosen edge matchings are now diagonal. Write d_ab(j)=A_ab(j,j). Any full-team matching projects to edge matchings, so its worth is at most the sum of their optima. The diagonal full-team matching attains this bound. Thus T=sum_j sum_edges d_ab(j). Nonnegative weights and equal sizes allow completion of partial matchings without loss. Assume T>0.
+8: 
+9: The core is precisely p>=0, sum p=T, and all full-team covers: singleton and team coalitions imply necessity, and summing team inequalities over any integral coalition matching, with nonnegative unmatched payoffs, proves sufficiency. Every diagonal team is tight at every core point because summing its inequalities exhausts T. Put s(j)=sum_edges d_ab(j); then sum_v p_v(j)=s(j).
+10: 
+11: ## Exact cut-variable representation
+12: 
+13: For each nonroot vertex b, let S_b be its descendant subtree, and define
+14: 
+15:     U_b(j) = sum_{v in S_b} p_v(j) - sum_{edges internal to S_b} d_edge(j).
+16: 
+17: Set U_0(j)=0. The entire core is affinely represented by
+18: 
+19:     U_b(i)-U_b(j) >= A_ab(j,i)-d_ab(j)       (a parent of b; all i,j),
+20:     p_v(j)=U_v(j)-sum_{b child of v} U_b(j)+sum_{b child of v} d_vb(j) >=0.
+21: 
+22: Necessity: use the full team with label i on S_b and label j on its complement. Subtract the tight diagonal team j. The only edge crossing the cut is ab. Internal diagonal terms cancel after substituting the definition of U_b, leaving the claimed difference inequality. The formula for p is immediate by subtracting child-subtree sums from the parent-subtree sum. At the root it follows from the tight diagonal identity.
+23: 
+24: Sufficiency: start with arbitrary U satisfying these constraints and reconstruct p by the displayed formula. Summing over vertices at a common label j telescopes to s(j), giving efficiency. For an arbitrary full team with label i_v at vertex v, sum its payoffs:
+25: 
+26:     sum_v p_v(i_v)
+27:       = sum_{a->b} [U_b(i_b)-U_b(i_a)+d_ab(i_a)]
+28:       >= sum_{a->b} A_ab(i_a,i_b).
+29: 
+30: This proves every team cover. The transformation is invertible: descendant sums of the reconstructed p recover each U_b. The representation thus preserves labeled coordinates and their full-core ideals.
+31: 
+32: Nonemptiness is classical matching duality: sum nonnegative optimal bilateral vertex covers over incident edges to obtain full-team covers with total T. This observation and the cut algebra are not asserted to be new.
+33: 
+34: ## Path theorem
+35: 
+36: For the path 0-1-...-(k-1), rooted at 0, the representation is a potential network. Use nodes (r,j), 1<=r<=k-1, and a single anchor of potential zero. Node (r,j) has potential U_r(j). An arc tail->head of constant c has slack c+U_tail-U_head.
+37: 
+38: Payoff arcs at each label j:
+39: 
+40:     anchor -> (1,j), constant d_01(j), payoff p_0(j);
+41:     (r,j) -> (r+1,j), constant d_r,r+1(j), payoff p_r(j), 1<=r<k-1;
+42:     (k-1,j) -> anchor, constant 0, payoff p_{k-1}(j).
+43: 
+44: Structural arcs stay inside one layer r: (r,i)->(r,j), constant d_(r-1),r(j)-A_(r-1),r(j,i). Their nonnegative slacks are exactly the cut inequalities. Omit i=j zero-slack self-loops, which impose no restriction.
+45: 
+46: The nonempty core is compact since p>=0 and sum p=T. Each sorted coordinate is continuous, so successive maximization on nested compact sets gives full leximin existence. For uniqueness, if two distinct labeled vectors have the same optimal sorted vector, their average preserves all coordinates below the smallest level at which they differ and reduces the multiplicity of that level, a contradiction to optimality. Thus x is well-defined.
+47: 
+48: Apply the selected-payoff-slack argument (classical slack-balancing ingredient): for each payoff arc e at full leximin x, a simple directed cycle through e exists whose structural arcs are tight and whose payoff arcs f satisfy x_f<=x_e. To prove it, let eligible arcs be tight structural arcs and payoff arcs with value at most alpha=x_e, and let R be the vertices reaching tail(e) through eligible arcs. If head(e) lies in R, take a simple path from head(e) to tail(e). This path cannot use e because it first reaches tail(e) at its endpoint. Adding e gives the required simple cycle.
+49: 
+50: Otherwise increase potentials on R by epsilon>0, then subtract the new anchor potential from every potential. No eligible arc enters R from outside, so all eligible slacks weakly increase; e strictly increases. Any omitted structural slack was strictly positive. Any omitted payoff slack exceeded alpha. Finiteness permits epsilon small enough to preserve feasibility and keep every previously higher payoff strictly above alpha. To see strict lexicographic improvement, either an entry below alpha increases, in which case the smallest such changed level has reduced multiplicity and no lower change, or all lower entries stay unchanged and increasing e reduces the multiplicity of alpha. The sorted vector strictly improves, a contradiction.
+51: 
+52: Any directed cycle containing a payoff arc advances through every layer and the anchor. A simple cycle visits the anchor only once; structural arcs do not change layers, and payoff arcs advance one layer. It therefore has exactly k payoff arcs. On the cycle, slack sums telescope to a fixed constant. At x this is the sum of its payoff entries because structural slacks vanish. For any other feasible y, all slacks are nonnegative, so
+53: 
+54:     y_e <= sum_cycle constants = sum_{payoff f in cycle} x_f <= k*x_e.
+55: 
+56: Taking the full-core maximum gives H_e<=k*x_e, including the case x_e=0. This uses all lexicographic stages, not merely the first floor. For m=1 and total edge value 1, the strict core is the k-player unit simplex, whose leximin is uniformly 1/k and each ideal is 1. Hence c(path_k)=1/k for every k>=2.
+57: 
+58: ## Unresolved branching and cycle cases
+59: 
+60: At a branching vertex, p_v contains one positive U and multiple negative child U variables; it is not the slack of an ordinary potential arc. The preceding cycle argument does not prove a bound for stars. It does not disprove one either. The four-star and four-cycle remain open in this campaign. No contraction, dummy-sector embedding, or inheritance of the three-cycle example is assumed to preserve the full core, ideals, and full leximin without a separate proof.
+61: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

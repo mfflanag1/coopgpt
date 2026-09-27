@@ -1,0 +1,11 @@
+# Bounded source follow-up for cycle2
+
+September 5, 2026. The previous campaign's primary-source comparison and original-text access gaps remain in force. This short follow-up does not certify novelty of the coupled construction, the limiting1/6 ratio, or the cloning reduction.
+
+Six targeted queries were run: assignment/leximin/pair/one-sixth; multisided assignment/egalitarian/core/ratio; assignment-game replication/core/equal treatment; the exact Bejan–Gómez title; pair-additive/leximin/assignment; and multisided assignment/one-sixth. No inspected result supplied the new coupled family's formula. Search non-findings are not evidence of priority; unrelated allocation models and excerpts were not treated as mathematical precedents.
+
+An adverse methodological finding concerns cloning. The author-posted January17,2017 version of Camelia Bejan and Juan Camilo Gómez, [Equal Treatment at Core Allocations](https://www.researchgate.net/publication/309650476_Equal_Treatment_at_Core_Allocations), Proposition5.7, already gives equal treatment to substitute players within the same family in multisided assignment games. Its replica-game discussion also studies core embeddings. The equal-treatment ingredient in the matched-team cloning proof should therefore receive prior attribution. This inspection does not establish an earlier occurrence of the particular unequal matched-team multiplicity construction, full-selector consequence, or local-distance extremum formula. Those are deductions whose priority remains unresolved.
+
+The 2026 article [The Banzhaf value for2×2 exact assignment games is replication invariant](https://www.sciencedirect.com/science/article/pii/S0165176526000698) concerns a different solution concept and a two-sided exact-game class; its abstract and exposed sections were inspected. It does not establish replication behavior of the full sorted core selectors used here.
+
+No outreach was performed. Original Quint/Stuart/Lucas coverage and the newer extreme-core preprint remain incomplete as documented in the first source gate. The correct current description is an internally verified candidate construction in an established model, accompanied by a classical equal-treatment ingredient and explicitly unresolved priority.

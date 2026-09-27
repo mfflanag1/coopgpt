@@ -1,0 +1,552 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={A chain-cycle separation for leximin protection in three-sided assignment markets},pdfsubject={Anonymous manuscript for specialist review}}
+\usepackage{enumitem}
+\setlist{nosep}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\core}{\mathcal C}
+\newcommand{\lex}{\operatorname{leximin}}
+\newcommand{\R}{\mathbb R}
+\newcommand{\N}{\mathbb N}
+\title{A chain--cycle separation for leximin protection\\in three-sided assignment markets}
+\author{}
+\date{September 6, 2026}
+\begin{document}
+\maketitle
+\begin{abstract}
+We compare a player's leximin payoff with its largest payoff in the same
+assignment-game core. In complete strict three-sided markets with nonnegative
+pair values along a chain, every player receives at least one third of this
+core ideal. The constant is sharp. Allowing the third pair interaction
+eliminates every positive guarantee independent of market size. For each
+integer $q\geq1$, we construct a market with $9q+3$ players, pair entries in
+$\{0,1,2\}$, and a strictly positive core allocation, in which a player's
+full leximin payoff is $1/[3(q+1)]$ while its core ideal is one. The chain
+bound follows from a classical potential-slack balancing certificate whose
+cycles contain three payoff arcs. The cyclic construction is certified by
+two explicit full-core allocations and a disjoint partial matching one unit
+below optimum. The proofs are valid for every parameter value; exact rational
+checks and optional raw-core satisfiability checks accompany the manuscript.
+\end{abstract}
+
+\noindent\textbf{Keywords:} assignment game; core; leximin; ideal payoff;
+pair-additive value; lexicographic slack balancing.
+
+\section{Introduction}
+A core allocation protects every coalition against a profitable deviation.
+Leximin additionally favors the worst-paid individuals, successively through
+all payoff levels. These two requirements do not by themselves say how much
+of an individual's feasible bargaining range is retained. For a full core
+$\core$ and its full ascending leximin allocation $x$, we study the fraction
+$x_i/H_i$, where $H_i=\max\{y_i:y\in\core\}$ is the ideal payoff of player $i$.
+The maximization defining $H_i$ permits all other payoffs to change.
+
+Our comparison keeps the number of sectors fixed at three. Only complete
+triples produce value; a pair does not earn its pair contribution on its own.
+Each triple value is the sum of nonnegative values on its three pair
+interactions. A chain uses two of these interactions, while the full class
+also permits the third. We prove that the best uniform ideal-protection
+fraction is $1/3$ for chains and zero for the full pair-additive class.
+Thus a restriction on the interaction structure has a consequence that
+cannot be recovered from nonemptiness of the core alone.
+
+\paragraph{Contributions and established ingredients.}
+The main construction realizes a vanishing fraction using a fixed integer
+alphabet of pair values, three equal sectors, and a core allocation positive
+in every labeled coordinate. Its target is already fixed on the first
+optimal leximin face, so no arbitrary choice among max-min optimizers is
+involved. The positive chain theorem provides the comparison: a
+self-contained specialization of classical selected-arc slack balancing
+gives the factor three. The underlying fairness benchmark, assignment
+models, LP duality, and slack-balancing method are established ingredients.
+We do not claim a new general fairness criterion or the first vanishing
+example across all cooperative games. Historical priority of the precise
+restricted-class separation is the question addressed by the accompanying
+source-comparison and specialist-review packet; no external priority
+endorsement is asserted here.
+
+\paragraph{Related work.}
+Multisided assignment cores have a substantial literature, including
+Quint~\cite{Quint1991} and Lucas~\cite{Lucas1995}. The strict
+supplier--firm--buyer model is associated with Stuart~\cite{Stuart1997};
+Atay and Solymosi~\cite{AtaySolymosi2018}, Definition~3 and equations~(1)--(2),
+give a precise later formulation allowing signed adjacent-pair values and
+replacing negative triple totals by zero. Their core and bargaining-set
+results concern stability sets, rather than the coordinate-ideal fraction
+studied here. Nonnegative chain values are a subclass of that model.
+Generalized assignment markets in which smaller teams also produce value
+have additional coalition constraints and must be distinguished from our
+strict model~\cite{AtayNunez2020}.
+
+Ideal-based core protection is explicit in N\'u\~nez and
+Rafels~\cite{NunezRafels2004}, Definition~6, in their bilateral bargaining
+analysis. A unit-capacity path in Gangam et al.~\cite{Gangam2025},
+Section~3.1.4, has uniform equitable payoff $1/r$ on its $r$ edges.
+Its full core is the unit simplex, so each ideal is one: vanishing
+protection in a broader game class follows immediately. That path uses a
+productive coalition whose size grows with $r$. Our construction instead
+uses only strict triples and pair values in $\{0,1,2\}$.
+
+The potential argument for chains belongs to classical lexicographic
+slack balancing. Held et al.~\cite{Held2003}, Section~3.2, explicitly
+optimize ascending-sorted slacks on selected arcs while retaining other
+potential inequalities. We use a cut perturbation and cycle telescoping
+to give the needed optimality certificate directly. This is an
+application-specific proof, not a methodological novelty claim.
+
+Extreme-core descriptions for assortative multisided
+markets~\cite{Martinez2020} and supermodular markets with local
+monotonicity~\cite{Martinez2026} impose restrictions different from
+nonnegative pair additivity. We make no assertion that arbitrary extreme-core
+or transportation representations preserve the entire labeled payoff core,
+the raw sorted selector, and our pair-value restrictions. The distinct
+2023 manuscript on extreme core points~\cite{Martinez2023} is now available
+for comparison. Its Theorem~2 redescribes the full core through cumulative
+sums of auxiliary-game core allocations, retaining nonnegativity and the
+triple inequalities outside a central strip. Theorems~3--4 simplify this
+under additional restrictions. These are core descriptions; they do not
+state the vanishing family or its full-leximin ideal ratio. The original
+texts of~\cite{Quint1991,Lucas1995,Stuart1997} remain access gaps at the
+date of this version. No theorem below relies on an uninspected statement
+from these originals.
+
+\section{Model and the separation theorem}
+Let $I,J,K$ be disjoint sectors of equal finite size $m\geq1$, and put
+$N=I\cup J\cup K$. Every triple $(i,j,k)\in I\times J\times K$ is
+available and has nonnegative value $w_{ijk}$. A matching is a collection of
+player-disjoint triples, possibly empty. For $S\subseteq N$, define
+\[
+ v(S)=\max\left\{\sum_{(i,j,k)\in M}w_{ijk}:
+       M\text{ is a matching contained in }S\right\}.
+\]
+In particular, singletons and pairs have value zero. Write $T=v(N)>0$.
+The full payoff core is
+\begin{equation}\label{eq:core}
+ \core=\left\{p\in\R_+^N:\sum_{a\in N}p_a=T,
+                \quad p_i+p_j+p_k\geq w_{ijk}
+                \ \forall(i,j,k)\right\}.
+\end{equation}
+This is exactly the coalitional core: necessity follows from individual
+rationality and triple coalitions, and sufficiency follows by summing
+triple inequalities over a matching of any coalition and using
+nonnegativity for unmatched players. Equal sector sizes and nonnegative
+values allow every partial matching to be completed without loss, so
+$T$ is attained by a perfect matching.
+
+For $p\in\R^N$, let $p^\uparrow$ be its coordinates sorted in
+nondecreasing order. The full leximin allocation is the point $x\in\core$
+that lexicographically maximizes $p^\uparrow$ over $p\in\core$.
+Throughout, all labeled coordinates remain in this optimization, including
+coordinates with zero ideal.
+
+\begin{lemma}\label{lem:unique}
+Every nonempty compact convex subset of $\R^N$ has a unique labeled full
+leximin allocation.
+\end{lemma}
+\begin{proof}
+Each sorted coordinate is continuous. Maximizing these coordinates
+successively over nested nonempty compact sets gives existence.
+For uniqueness, suppose distinct $x,y$ have the same optimal sorted vector.
+Let $\alpha$ be the smallest value among $x_a,y_a$ at coordinates where
+they differ. At every coordinate with a value below $\alpha$, the two
+entries agree. At every remaining
+coordinate, $(x_a+y_a)/2\geq\alpha$, and equality holds only when both
+entries equal $\alpha$. Since $x$ and $y$ have the same multiplicities of
+each value and differ at level $\alpha$, their average has strictly fewer
+entries at that level, with all lower levels unchanged. Its sorted vector
+is lexicographically larger, contradicting convexity and optimality.
+\end{proof}
+
+When $\core\ne\varnothing$, it is compact by~\eqref{eq:core}.
+Set $H_a=\max_{p\in\core}p_a$ and only form $x_a/H_a$ when $H_a>0$.
+A \emph{chain market} has
+\begin{equation}\label{eq:chain}
+ w_{ijk}=P_{ij}+Q_{jk},\qquad P,Q\geq0.
+\end{equation}
+A \emph{pair-additive market} has
+\begin{equation}\label{eq:pair}
+ w_{ijk}=A_{ij}+B_{ik}+C_{jk},\qquad A,B,C\geq0.
+\end{equation}
+The chain class is contained in the pair-additive class after renaming the
+matrices. Let $c_{\rm chain}$ and $c_{\rm pair}$ be the infima of $x_a/H_a$
+over the respective classes with $T>0$, nonempty full core, and $H_a>0$.
+
+\begin{theorem}[Chain--cycle separation]\label{thm:main}
+\hfill
+\begin{enumerate}[label=(\roman*)]
+\item Every chain market has nonempty core, and its full leximin allocation
+      satisfies $x_a\geq H_a/3$ for every player. The constant is sharp.
+\item For every integer $q\geq1$, there is a pair-additive market with
+      $9q+3$ players, all pair entries in $\{0,1,2\}$, and every triple
+      value at most $5$, with integral worth $T=6q+1$, a strictly positive
+      core allocation, and a target player satisfying
+      \[
+             x_a=\frac{1}{3(q+1)},\qquad H_a=1.
+      \]
+      The target is fixed at this value throughout the entire first
+      optimal max-min face of the core.
+\end{enumerate}
+Consequently $c_{\rm chain}=1/3$ and $c_{\rm pair}=0$.
+\end{theorem}
+
+Part~(ii) shows that \emph{allowing} a cyclic interaction removes the
+class-wide guarantee. It does not assert that every cyclic market has weak
+protection, or classify interaction graphs with more than three sectors.
+The fixed integer alphabet is substantive: merely bounding real weights
+could be achieved by rescaling each instance without changing $x_a/H_a$.
+
+\section{The chain bound}
+\subsection{The entire core as a potential system}
+Choose maximum-weight perfect matchings in $P$ and $Q$. Their values sum
+to $T$: any triple matching projects to two bilateral matchings, and the
+two chosen matchings can be joined through their common middle players.
+Relabel the outer sectors independently so both chosen matchings are
+diagonal, and set $s_j=P_{jj}+Q_{jj}$. Write payoffs $(u,v,z)$ in sector
+order. At every core point, summing the diagonal triple inequalities and
+using efficiency makes each one tight. Thus
+\begin{equation}\label{eq:diag}
+                 u_j+v_j+z_j=s_j.
+\end{equation}
+The full core is precisely the set defined by
+\begin{align}
+ u_j,z_j&\geq0, & v_j=s_j-u_j-z_j&\geq0,\label{eq:nonneg}\\
+ u_i-u_j&\geq P_{ij}-P_{jj} &&(i,j),\label{eq:U}\\
+ z_k-z_j&\geq Q_{jk}-Q_{jj} &&(j,k).\label{eq:Z}
+\end{align}
+Indeed, the triples $(i,j,j)$ and $(j,j,k)$ imply the two differences;
+adding them and substituting~\eqref{eq:diag} gives the inequality for an
+arbitrary triple. Totals in~\eqref{eq:diag} add to $T$.
+
+Nonemptiness follows also from standard bipartite matching duality. The
+maximum-weight matching LP with incidence constraints at most one has
+nonnegative dual vertex prices and an integral optimum. For nonnegative
+weights on a complete equal-sided graph, that optimum is also the perfect
+matching optimum. Take optimal nonnegative covers $(\alpha_i,\beta_j)$
+for $P$ and $(\gamma_j,\delta_k)$ for $Q$. Then
+$(\alpha_i,\beta_j+\gamma_j,\delta_k)$ is a nonnegative triple cover
+of total $T$, hence a point of~\eqref{eq:core}. This uses classical
+matching integrality and LP duality, not a new balance criterion.
+
+\subsection{A cycle certificate for selected payoff slacks}
+Consider a finite directed graph, a distinguished anchor with potential
+zero, and slacks
+\[
+       \sigma_e(q)=c_e+q_{\mathrm{tail}(e)}-q_{\mathrm{head}(e)}\geq0.
+\]
+Some arcs are designated as player payoffs; the others are structural
+constraints. Parallel arcs are allowed. We use the following elementary
+optimality certificate for classical selected-slack balancing.
+
+\begin{lemma}\label{lem:cycle}
+Suppose a feasible potential vector realizes the full leximin payoff $x$.
+For a payoff arc $e$ with distinct endpoints, there is a simple directed
+cycle containing $e$ such that all its structural arcs are tight at $x$
+and all its payoff arcs $f$ satisfy $x_f\leq x_e$. If that cycle has $r$
+payoff arcs, then every feasible payoff vector $y$ satisfies $y_e\leq r x_e$.
+\end{lemma}
+\begin{proof}
+Put $\alpha=x_e$. Form a directed subgraph $D$ consisting of the tight
+structural arcs and all payoff arcs with value at most $\alpha$. Suppose
+there is no path in $D$ from the head of $e$ to its tail. Let $S$ be the
+nodes that can reach the tail in $D$, including the tail itself. The head
+does not belong to $S$. No arc of $D$ enters $S$ from its complement.
+
+Set a potential direction $h$ equal to one on $S$ and zero outside it;
+subtract its anchor value everywhere to preserve the anchor. Every arc
+of $D$ then has nonnegative slack derivative, and $e$ has derivative one.
+All omitted structural arcs have strictly positive slack. All omitted
+payoff arcs have value strictly above $\alpha$. Since there are finitely
+many arcs, a sufficiently small positive step preserves feasibility and
+keeps every decreasing payoff above $\alpha$. Let $k$ be the number of
+payoffs initially at most $\alpha$. None of the first $k$ order statistics
+can decrease: selected payoffs do not decrease, and omitted payoffs stay
+above $\alpha$. The target moves above $\alpha$, leaving at most $k-1$
+payoffs at or below that level. The $k$th order statistic therefore
+strictly increases, a contradiction.
+
+There is consequently a head-to-tail path in $D$. Take a simple one.
+It cannot contain $e$, since that would revisit its starting head or
+reach its terminal tail before the end. Appending $e$ gives a simple
+cycle $Z$. Potential differences telescope around this cycle. At $x$
+its structural slacks vanish, so for every feasible $y$,
+\[
+ \sum_{\substack{f\in Z\\f\text{ payoff}}}y_f
+ \leq\sum_{f\in Z}c_f
+ =\sum_{\substack{f\in Z\\f\text{ payoff}}}x_f
+ \leq r x_e.
+\]
+The first inequality discards nonnegative structural slacks at $y$.
+Nonnegativity of the other payoff slacks then gives $y_e\leq r x_e$.
+\end{proof}
+
+Neither connectedness of $D$ nor positive payoff levels were assumed.
+If $x_e=0$, the same certificate implies that the coordinate is zero at
+every feasible point.
+
+\subsection{Exactly three payoff arcs}
+Introduce nodes $0,U_j,Z_j$ with potentials
+$q_0=0$, $q_{U_j}=u_j$, and $q_{Z_j}=-z_j$.
+The payoff arcs are
+\begin{center}
+\begin{tabular}{lll}\toprule
+Arc & Constant & Slack\\\midrule
+$U_j\to0$ & $0$ & $u_j$\\
+$0\to Z_j$ & $0$ & $z_j$\\
+$Z_j\to U_j$ & $s_j$ & $v_j=s_j-u_j-z_j$\\\bottomrule
+\end{tabular}
+\end{center}
+Structural arcs $U_i\to U_j$ have constants $P_{jj}-P_{ij}$;
+structural arcs $Z_j\to Z_k$ have constants $Q_{jj}-Q_{jk}$.
+Their nonnegative slacks give~\eqref{eq:U}--\eqref{eq:Z}.
+Diagonal structural loops may be omitted. Structural constants may be
+negative; only slacks are constrained to be nonnegative.
+
+Every simple directed cycle containing a payoff arc has exactly three
+payoff arcs. Structural arcs remain in one layer. The only transition
+from the $Z$ layer to the $U$ layer is a middle-player arc; the return
+passes through $0$, using one arc from each outer sector. A simple cycle
+visits $0$ at most once, so it cannot make two such transitions.
+Lemma~\ref{lem:cycle} gives $y_a\leq3x_a$ for every $y\in\core$.
+Maximizing over $y$ proves part~(i) of Theorem~\ref{thm:main}.
+
+For sharpness, use one player in each sector with $P_{11}=1$ and
+$Q_{11}=0$. Its full core is the three-coordinate unit simplex,
+$x=(1/3,1/3,1/3)$, and every ideal is one. Thus no larger uniform
+fraction is possible.
+
+\begin{corollary}\label{cor:distance}
+For every chain market and every $y\in\core$,
+\[
+                    \frac{\|x-y\|_1}{T}\leq\frac43.
+\]
+This bound is attained for a finite market.
+\end{corollary}
+\begin{proof}
+The theorem implies $\min(x_a,y_a)\geq y_a/3$ for every $a$.
+Since both totals are $T$,
+$\|x-y\|_1=2(T-\sum_a\min(x_a,y_a))\leq4T/3$.
+The preceding simplex and $y=(1,0,0)$ give equality.
+\end{proof}
+
+\section{A cyclic family with vanishing protection}
+Fix an integer $q\geq1$. Use the common team-label set
+\[
+           \mathcal T=\{L_0\}\cup\{O_s,L_s,R_s:1\leq s\leq q\}.
+\]
+For every label $t$, create players $a_t,b_t,c_t$ in the respective
+sectors. Each sector has $3q+1$ players. Define
+$w(a_t,b_u,c_v)=A_{tu}+B_{tv}+C_{uv}$ by the following nonzero entries;
+all unspecified pair entries are zero.
+\begin{center}
+\begin{tabular}{lll}\toprule
+Pair entries & Range & Value\\\midrule
+$C_{L_s,L_s}$ & $0\leq s\leq q$ & $1$\\
+$C_{R_s,R_s}$ & $1\leq s\leq q$ & $1$\\
+$A_{O_s,O_s},\ B_{O_s,O_s}$ & $1\leq s\leq q$ & $2$\\
+$A_{O_s,R_s},\ B_{O_s,L_s}$ & $1\leq s\leq q$ & $2$\\
+$C_{R_s,L_s},\ C_{L_{s-1},O_s}$ & $1\leq s\leq q$ & $1$\\\bottomrule
+\end{tabular}
+\end{center}
+There are $8q+1$ nonzero entries. The diagonal perfect matching consists
+of $(a_t,b_t,c_t)$ for all $t\in\mathcal T$. Each $L$ or $R$ triple has
+value one and each $O$ triple has value four, so this matching is worth
+$6q+1$.
+
+\subsection{Two explicit full-core covers}
+Put $\tau=1/[3(q+1)]$. Define allocations $u$ and $y$ in $(a,b,c)$ order:
+\begin{equation}\label{eq:witnesses}
+\begin{array}{c|c|c}
+\text{team}&u&y\\\hline
+L_s&\bigl(\tau,\ 1-(3s+2)\tau,\ (3s+1)\tau\bigr)&(0,0,1)\\
+R_s&\bigl(\tau,\ 1-2\tau,\ \tau\bigr)&(0,1,0)\\
+O_s&\bigl(4-(3s-1)\tau,\ \tau,\ (3s-2)\tau\bigr)&(3,0,1).
+\end{array}
+\end{equation}
+The $L$ row uses $0\leq s\leq q$; the other rows use $1\leq s\leq q$.
+Every coordinate of $u$ is at least $\tau>0$, and $y$ is nonnegative.
+The smallest $L$-sector $b$ coordinate is attained at $s=q$ and equals
+$\tau$; the smallest $O$-sector $c$ coordinate is attained at $s=1$
+and also equals $\tau$. Each diagonal triple receives its value at
+both points, so both allocations have total $6q+1$.
+
+We check every triple cover, including all mixed-team triples. If its
+$a$ player has an $L$ or $R$ label, its $A$ and $B$ entries are zero.
+The possible positive $C$ pairs and the associated two-player sums are
+\begin{center}
+\begin{tabular}{lll}\toprule
+$(b,c)$ labels & $u_b+u_c$ & $y_b+y_c$\\\midrule
+$(L_s,L_s)$ & $1-\tau$ & $1$\\
+$(R_s,R_s)$ & $1-\tau$ & $1$\\
+$(R_s,L_s)$ & $1+(3s-1)\tau$ & $2$\\
+$(L_{s-1},O_s)$ & $1-\tau$ & $1$\\\bottomrule
+\end{tabular}
+\end{center}
+All four pair values are one. Adding $u_a=\tau$ or $y_a=0$ covers the
+triple. Zero $C$ entries are covered by nonnegativity.
+
+Now suppose its $a$ player is $a_{O_s}$. If at most one of its $A$ and
+$B$ entries is positive, the triple value is at most three, covered by
+$u_{a_{O_s}}\geq3+4\tau$ and $y_{a_{O_s}}=3$.
+If both entries are positive, exactly four cases remain:
+\begin{center}
+\begin{tabular}{llll}\toprule
+$(b,c)$ labels & $w$ & $u_a+u_b+u_c$ & $y_a+y_b+y_c$\\\midrule
+$(O_s,O_s)$ & $4$ & $4$ & $4$\\
+$(O_s,L_s)$ & $4$ & $4+3\tau$ & $4$\\
+$(R_s,O_s)$ & $4$ & $5-3\tau$ & $5$\\
+$(R_s,L_s)$ & $5$ & $5$ & $5$\\\bottomrule
+\end{tabular}
+\end{center}
+Since $\tau\leq1/6$, all are covers. The cases also show that every
+triple value is at most five.
+
+The matching gives worth at least $6q+1$, while either nonnegative
+cover bounds every matching by its total $6q+1$. Hence the true integral
+worth is $T=6q+1$ and both $u,y$ belong to the entire core. No fractional
+matching value is substituted for coalition worth.
+
+\subsection{A partial matching determines the target}
+For each $s=1,\ldots,q$, take the triples
+\[
+ N_s=(a_{O_s},b_{R_s},c_{L_s}),\qquad
+ E_s=(a_{L_{s-1}},b_{L_{s-1}},c_{O_s}).
+\]
+Their values are five and one, respectively. They form a player-disjoint
+partial matching: the used $a$ labels are the $O$ labels and
+$L_0,\ldots,L_{q-1}$; the used $b$ labels are the $R$ labels and the same
+$L$ labels; the used $c$ labels are $L_1,\ldots,L_q$ and the $O$ labels.
+Its total is $6q$. Its unmatched players are exactly
+\begin{equation}\label{eq:unmatched}
+ U=\{c_{L_0},a_{L_q},b_{L_q}\}
+       \cup\{a_{R_s},b_{O_s},c_{R_s}:1\leq s\leq q\},
+       \qquad |U|=3q+3.
+\end{equation}
+Summing the partial-matching inequalities and subtracting from efficiency
+gives, at every core point $p$,
+\begin{equation}\label{eq:budget}
+                       \sum_{a\in U}p_a\leq1.
+\end{equation}
+Thus a common payoff floor cannot exceed $1/(3q+3)=\tau$. The point
+$u$ attains this floor, so the first global leximin level is exactly
+$\tau$. At every point of the first optimal face, all coordinates are
+at least $\tau$, and $|U|\tau=1$. Inequality~\eqref{eq:budget} therefore
+fixes every coordinate of $U$ at $\tau$ on that entire face. In particular,
+the full leximin target $c_{L_0}$ is fixed at $\tau$ through every later
+refinement. We do not need, and do not assert, that $u$ is the complete
+final leximin vector.
+
+The diagonal $L_0$ triple is tight at every core point and has value one.
+Nonnegativity implies $H_{c_{L_0}}\leq1$, while the cover $y$ attains
+one at that coordinate. Consequently
+\[
+       H_{c_{L_0}}=1,\qquad x_{c_{L_0}}=\frac{1}{3(q+1)}.
+\]
+This proves part~(ii) of Theorem~\ref{thm:main}. Ratios are nonnegative,
+and choosing arbitrarily large $q$ makes this ratio arbitrarily small;
+hence $c_{\rm pair}=0$.
+
+\section{Scope and certificates}
+\paragraph{The construction uses the cyclic class essentially.}
+The displayed presence of three matrices alone would not rule out another
+chain representation of the same tensor. A direct slice obstruction does.
+Here the signed chain extension means exactly
+$w_{ijk}=\max\{P_{ij}+Q_{jk},0\}$.
+If $M_{ij}=\max\{r_i+s_j,0\}$ and both diagonal entries of a $2\times2$
+slice are positive, then
+$M_{11}+M_{22}\leq M_{12}+M_{21}$: the underlying diagonal sums equal
+the underlying off-diagonal sums, and taking positive parts cannot reduce
+the latter. For every $q\geq1$, our tensor has the following slices:
+\begin{center}
+\begin{tabular}{llll}\toprule
+Varied sectors & Fixed player & Row; column labels & Slice\\\midrule
+$a,b$ & $c_{L_0}$ & $(O_1,L_0);(O_1,L_0)$ & $\left(\begin{smallmatrix}2&1\\0&1\end{smallmatrix}\right)$\\[3pt]
+$a,c$ & $b_{L_0}$ & $(O_1,L_0);(O_1,L_0)$ & $\left(\begin{smallmatrix}3&1\\1&1\end{smallmatrix}\right)$\\[3pt]
+$b,c$ & $a_{L_0}$ & $(L_0,R_1);(L_0,R_1)$ & $\left(\begin{smallmatrix}1&0\\0&1\end{smallmatrix}\right)$\\\bottomrule
+\end{tabular}
+\end{center}
+Every slice violates the necessary inequality. Whatever sector is chosen
+as the middle of a chain, the other two would give a truncated-separable
+slice. Thus no sector ordering or within-sector relabeling makes this
+tensor a strict chain, even allowing signed adjacent-pair entries with
+zero-truncated triple values. This does not exclude a representation
+using additional players or a different payoff core.
+
+\paragraph{Reproducible evidence.}
+The supplementary certificate package uses exact rational arithmetic.
+Its default verifier reconstructs the cyclic family independently and
+checks every triple against both covers at $q=1,2,3,4$, along with
+matching values, disjointness, the unmatched budget and ideal attainment.
+It performs $7208$ triple-cover checks. Frozen input files are also
+verified independently against their recorded quantities. An optional
+Z3 check at $q=4$ starts only from nonnegativity, efficiency and all raw
+triple inequalities and excludes: a larger common floor; a target above
+$\tau$ anywhere on the first optimal face; and a target ideal above one.
+The optional check also computes full leximin and every ideal from raw
+core constraints in three representative chain markets and verifies a
+three-payoff-arc cycle certificate for each player.
+The chain controls include simplex sharpness and a core with permanent
+zeros in which arbitrary first-stage maximizers need not satisfy the
+bound. The all-size assertions follow from the proofs above, not from
+extrapolating these finite checks. The certificates are exact arithmetic
+and solver checks, not a formalization in a proof assistant.
+
+\paragraph{Limits and further questions.}
+The construction does not prove a best finite-size ratio or a minimum
+number of players. Corollary~\ref{cor:distance} concerns chains and makes
+no new claim about opposing selectors in the cyclic class. Classification
+for more general interaction graphs, robustness of the construction to
+perturbations, and independent historical priority assessment remain
+separate questions.
+
+\begin{thebibliography}{99}
+\small\setlength{\itemsep}{1pt}
+\bibitem{Quint1991} T. Quint. The core of an $m$-sided assignment game.
+\emph{Games and Economic Behavior} 3(4):487--503, 1991.
+\href{https://doi.org/10.1016/0899-8256(91)90017-9}{doi:10.1016/0899-8256(91)90017-9}.
+\bibitem{Lucas1995} W. F. Lucas. Core theory for multiple-sided assignment
+games. \emph{Duke Mathematical Journal} 81(1):55--65, 1995.
+\href{https://doi.org/10.1215/S0012-7094-95-08106-X}{doi:10.1215/S0012-7094-95-08106-X}.
+\bibitem{Stuart1997} H. W. Stuart, Jr. The supplier--firm--buyer game and
+its $m$-sided generalization. \emph{Mathematical Social Sciences}
+34(1):21--27, 1997.
+\href{https://doi.org/10.1016/S0165-4896(96)00830-X}{doi:10.1016/S0165-4896(96)00830-X}.
+\bibitem{AtaySolymosi2018} A. Atay and T. Solymosi. On bargaining sets of
+supplier-firm-buyer games. \emph{Economics Letters} 167:99--103, 2018.
+\href{https://ataatay.github.io/webpage/Atay_Solymosi_2018_EL.pdf}{Author-hosted final article}.
+\bibitem{AtayNunez2020} A. Atay and M. N\'u\~nez. Multi-sided assignment
+games on $m$-partite graphs. \emph{Annals of Operations Research}
+279:271--290, 2019.
+\href{https://doi.org/10.1007/s10479-019-03256-5}{doi:10.1007/s10479-019-03256-5}.
+\bibitem{NunezRafels2004} M. N\'u\~nez and C. Rafels. Bargained stable
+allocations in assignment markets. Barcelona Economics Working Paper 153,
+December 2004. \href{https://www.bse.eu/sites/default/files/working_paper_pdfs/153.pdf}{Working version}.
+\bibitem{Gangam2025} R. R. Gangam, N. Garg, P. Shahkar, and V. V. Vazirani.
+Equitable core imputations for max-flow, MST and $b$-matching games.
+arXiv:2403.06037v3, February 2025.
+\href{https://arxiv.org/abs/2403.06037v3}{Version inspected}.
+\bibitem{Held2003} S. Held, B. Korte, J. Ma\ss berg, M. Ringe, and
+J. Vygen. Clock scheduling and clocktree construction for high performance
+ASICs. In \emph{Proceedings of ICCAD}, pp.232--239, 2003.
+\href{https://www.cs.york.ac.uk/rts/docs/SIGDA-Compendium-1994-2004/papers/2003/iccad03/pdffiles/03d_4.pdf}{Conference text}.
+\bibitem{Martinez2020} F. J. Mart\'inez-de-Alb\'eniz, C. Rafels, and N. Ybern.
+Assortative multisided assignment games: The extreme core points.
+\emph{Games and Economic Behavior} 120:144--153, 2020.
+\href{https://doi.org/10.1016/j.geb.2020.01.001}{doi:10.1016/j.geb.2020.01.001}.
+\bibitem{Martinez2026} F. J. Mart\'inez-de-Alb\'eniz, C. Rafels, and N. Ybern.
+Maximum and minimum core payoffs for supermodular multisided assignment
+markets with local monotonicity. \emph{Discrete Applied Mathematics}
+379:605--612, 2026.
+\href{https://doi.org/10.1016/j.dam.2025.10.006}{doi:10.1016/j.dam.2025.10.006}.
+\bibitem{Martinez2023} F. J. Mart\'inez-de-Alb\'eniz, C. Rafels, and N. Ybern.
+Extreme core points in multisided assignment problems. Working paper,
+SSRN4369524, 2023.
+\href{https://doi.org/10.2139/ssrn.4369524}{doi:10.2139/ssrn.4369524}.
+\end{thebibliography}
+\end{document}

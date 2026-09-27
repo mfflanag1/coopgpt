@@ -1,0 +1,153 @@
+Task and review objective:
+Audit the proposed all-q all-positive-M uniform protection theorem for this exact C4 family. Focus on exhaustive weak-player coverage by partial matchings, terminal replacement coverage of every full team including the diagonal bonus, full sorted leximin implication, and the final 1/676 constant. Identify missing hypotheses or counterexamples. Source-family certificate included as an established dependency; do not infer general C4 protection or novelty.
+
+
+FILE UNIFORM_BOUND.md
+1: # The entire diagonal-subdivision family has uniform protection
+2: 
+3: Candidate conventional proof; specific family only, no general C4 claim and no priority claim.
+4: 
+5: Use q>=1, m=3q+1, labels L_0=0 and O_s=3s-2,L_s=3s-1,R_s=3s. Nonzero source matrices are
+6: A(O_s,O_s)=A(O_s,R_s)=2; B(O_s,O_s)=B(O_s,L_s)=2;
+7: C(L_s,L_s)=1 (0<=s<=q), C(R_s,R_s)=C(R_s,L_s)=C(L_(s-1),O_s)=1 (1<=s<=q).
+8: The strict four-sector market has full-team value
+9: w(a,b,c,d)=A(a,b)+C(b,c)+B(a,d)+M*1_(c=d), M>0.
+10: Only full teams are productive; each coalition's worth is its maximum integral matching value. All sectors have m players, and the entire core consists of nonnegative covers with sum T=6q+1+mM. The diagonal matching attains the sum of all four edge row maxima, proving this value. Every diagonal team is tight in every core point. Ideals H_i use the entire core; x is the full ascending sorted leximin allocation, retaining all labeled coordinates.
+11: 
+12: ## Theorem
+13: 
+14: For every q>=1 and every M>0, every player satisfies x_i/H_i >= 1/676.
+15: In particular no target choice and no positive sequence M(q), including M(q)->0, yields vanishing protection in this exact family. This closes this construction; it does not settle c(C4).
+16: 
+17: ## 1. Uniform floor, recalled with proof
+18: 
+19: The three-sector source has a core point z at floor tau=1/[3(q+1)]: at L_s its a,b,c entries are tau,1-(3s+2)tau,(3s+1)tau; at R_s they are tau,1-2tau,tau; at O_s they are 4-(3s-1)tau,tau,(3s-2)tau. Its full-team cover proof is in the prior frozen source-family certificate.
+20: At M=2, p^2=(z+1/2 on a,b,c; 1/2 on d) covers every team: B(a,d)-B(a,c)<=2, with equality of the B terms when c=d. Its sum is T(2).
+21: At M=0, p^0 assigns rowmax A+rowmax B to a, rowmax C to b, and zero to c,d, hence is a core point. For 0<M<2 interpolate (1-M/2)p^0+(M/2)p^2. Coverage and efficiency are preserved since both w(M) and T(M) are affine. Every coordinate is at least M/4. For M>=2 the direct point (z+M/4 on a,b,c; M/4 on d) covers by the same comparison. Thus all H_i are positive and x_i>=M/4 for all M>0. Diagonal tightness also gives H_i<=4+M.
+22: 
+23: ## 2. A uniform ideal bound for all weak players
+24: 
+25: Call these players weak:
+26: * a_j for j not an O-label;
+27: * b_(O_s), all s;
+28: * c_(O_s), all s, c_(L_s) for 0<=s<q, c_(R_s) for 1<=s<q;
+29: * every d-player.
+30: All remaining players are strong. We prove H_i<=3M for each weak player using explicit partial matchings worth T-3M.
+31: 
+32: A partial matching missing a player i with value T-3M implies p_i<=3M for every core point: sum its cover inequalities, subtract from efficiency, and use nonnegativity of every other unmatched payoff.
+33: 
+34: For each s, gadget U_s starts from all diagonal teams, deletes those at L_(s-1),O_s,L_s,R_s, and inserts
+35: (O_s,R_s,R_s,L_s), (L_(s-1),L_(s-1),O_s,O_s), (L_s,L_s,L_s,R_s).
+36: The deleted value is 7+4M; inserted values are 5,1+M,1. The unmatched players are a_(R_s),b_(O_s),c_(L_(s-1)),d_(L_(s-1)).
+37: 
+38: Gadget V_s deletes just diagonal teams O_s,L_s,R_s and inserts
+39: (O_s,R_s,R_s,L_s), (L_s,L_s,L_s,R_s).
+40: The deleted value is 6+3M and the inserted value 6. Unmatched players are a_(R_s),b_(O_s),c_(O_s),d_(O_s).
+41: Changing the second inserted team's d-label from R_s to O_s preserves its value1 and makes d_(R_s) unmatched. Alternatively changing the first team's d-label from L_s to O_s preserves its value5 and makes d_(L_s) unmatched. These are separate variants, not simultaneous edits.
+42: 
+43: For 1<=s<q, start with U_(s+1) and replace its still-present diagonal team (R_s,R_s,R_s,R_s) by (R_s,R_s,L_s,L_s). Its value remains 1+M. This makes c_(R_s) and d_(R_s) unmatched, instead of c_(L_s),d_(L_s).
+44: 
+45: Finally all non-O a-rows are identically zero on both incident matrices. To omit any such a-player j, start with V_1, whose unmatched a-player is R_1. If j is already unmatched do nothing; otherwise replace j in its unique matched team by R_1. This preserves weight and disjointness, and leaves a_j unmatched. These gadgets cover every weak player and prove the bound, uniformly in q and M.
+46: 
+47: ## 3. Strong players away from the terminal block
+48: 
+49: At any core point p, diagonal tightness and the weak bounds give
+50: p_(a,O_s)>=4+M-9M=4-8M.
+51: For s<q, p_(b,L_s)>=1-8M; for 1<=s<q, p_(b,R_s)>=1-8M.
+52: The only remaining strong players are b_(L_q),b_(R_q),c_(L_q),c_(R_q).
+53: Write L=L_q,R=R_q and S_L=p_(b,L)+p_(c,L), S_R=p_(b,R)+p_(c,R).
+54: Both S_j=1+M-p_(a,j)-p_(d,j) lie in [1-5M,1+M].
+55: 
+56: ## 4. A terminal replacement that preserves every other payoff
+57: 
+58: Assume 0<M<=1/42. Starting from ANY core point p, replace only four coordinates by
+59:     y_(c,L)=1/2+7M,  y_(c,R)=1/2-7M,
+60:     y_(b,L)=S_L-y_(c,L),  y_(b,R)=S_R-y_(c,R).
+61: All four are at least 1/2-12M>=3/14; all other coordinates remain exactly p's. Sum and nonnegativity are preserved. We verify every full-team inequality.
+62: 
+63: For every a,b,d, the unchanged a-payoff obeys
+64:     p_a >= A(a,b)+B(a,d)-8M:
+65: for O-rows this follows from p_a>=4-8M and A+B<=4; other rows have A+B=0 and p_a>=0.
+66: 
+67: A team whose b,c labels are both nonterminal is unchanged. A team with b=c=L or b=c=R has unchanged b+c sum, hence is covered. For the cross pair b=R,c=L, C=1 and
+68:     y_(b,R)+y_(c,L)=S_R+14M>=1+9M.
+69: Together with the displayed a bound and d>=0 this covers A+B+C+M*1_(c=d).
+70: For every other changed team, C(b,c)=0: no nonterminal row has a positive C-entry in a terminal column; terminal rows only have positive entries in terminal columns; and C(L,R)=0. Such a team includes at least one changed coordinate, so y_b+y_c>=1/2-12M>=9M. Again the a bound and d>=0 cover A+B+M*1_(c=d). These cases exhaust all teams. Therefore y is a core point.
+71: 
+72: Apply this replacement to the full leximin point x. If any terminal coordinate were below3/14, the replacement would leave every nonterminal coordinate unchanged and place all four terminal coordinates at or above3/14. In ascending sorted order this is a strict lexicographic improvement (the smallest changed value below3/14 is removed, and no value below that threshold is introduced). Contradiction. Thus every terminal coordinate of x is at least3/14.
+73: 
+74: ## 5. Combine the regimes
+75: 
+76: For 0<M<=1/42, weak players have x_i/H_i>=1/12. Nonterminal strong players have x_i>=1-8/42=17/21; terminal strong players have x_i>=3/14. All strong ideals are <=4+1/42=169/42, so all strong ratios are at least9/169.
+77: For M>=1/42, the floor and diagonal ideal bound give
+78:     x_i/H_i >= M/[4(4+M)] >= 1/676.
+79: Since both1/12 and9/169 exceed1/676, this proves the theorem. The constant is deliberately conservative; no sharpness is claimed. The M=0 endpoint separately has the established tree1/4 guarantee on positive ideals.
+80: 
+81: ## Scope and evidence
+82: 
+83: This is a route-specific elementary proof, not a new classification or a novelty claim. Its source-family floor is an existing proved ingredient. New steps here are the all-weak-player partial matchings and terminal replacement. Exact arithmetic tests complement, but do not replace, the all-q proof. C4 remains unresolved in general.
+84: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE source_family.py
+1: """Frozen witness verifier, extracted from the prior exact recurrence verifier."""
+2: from fractions import Fraction as F
+3: from itertools import product
+4: import json
+5: def require(ok,msg):
+6:     if not ok:raise RuntimeError(msg)
+7: def save(path,obj):path.write_text(json.dumps(obj,indent=2,default=str)+'\n')
+8: def output(s):return 3*s-2
+9: def left(s):return 0 if s==0 else 3*s-1
+10: def right(s):return 3*s
+11: 
+12: def construct(q):
+13:     require(isinstance(q,int) and q>=1,'positive integer depth')
+14:     m=3*q+1;n=3*m;tau=F(1,3*q+3)
+15:     A=[['0']*m for _ in range(m)];B=[['0']*m for _ in range(m)];C=[['0']*m for _ in range(m)]
+16:     u=[[F(0)]*m for _ in range(3)];y=[[F(0)]*m for _ in range(3)]
+17:     for s in range(q+1):
+18:         ell=left(s);C[ell][ell]='1'
+19:         u[0][ell]=tau;u[1][ell]=1-(3*s+2)*tau;u[2][ell]=(3*s+1)*tau
+20:         y[2][ell]=1
+21:     critical=[]
+22:     for s in range(1,q+1):
+23:         o,ell,r,prev=output(s),left(s),right(s),left(s-1)
+24:         A[o][o]=B[o][o]='2';C[r][r]='1'
+25:         A[o][r]=B[o][ell]='2';C[r][ell]='1';C[prev][o]='1'
+26:         u[0][o]=4-(3*s-1)*tau;u[1][o]=tau;u[2][o]=(3*s-2)*tau
+27:         u[0][r]=tau;u[1][r]=1-2*tau;u[2][r]=tau
+28:         y[0][o]=3;y[2][o]=1;y[1][r]=1
+29:         critical.extend([[o,r,ell],[prev,prev,o]])
+30:     return dict(depth=q,m=m,matrices=[A,B,C],matching=[[i,i,i] for i in range(m)],critical_partial_matching=critical,T=str(6*q+1),first_floor=str(tau),target=2*m+left(0),target_ideal='1',ratio=str(tau),floor_witness=[str(v) for sector in u for v in sector],ideal_witness=[str(v) for sector in y for v in sector])
+31: 
+32: def verify(r):
+33:     q=r['depth'];m=r['m'];n=3*m;require(m==3*q+1,'sector size')
+34:     M=[[[F(v) for v in row] for row in mat] for mat in r['matrices']]
+35:     require(len(M)==3 and all(len(mat)==m and all(len(row)==m and all(v.denominator==1 and 0<=v<=2 for v in row) for row in mat) for mat in M),'nonnegative integer pair matrices')
+36:     def ids(t):i,j,k=t;return (i,m+j,2*m+k)
+37:     def w(t):i,j,k=t;return M[0][i][j]+M[1][i][k]+M[2][j][k]
+38:     matching=r['matching'];require(sorted(i for t in matching for i in ids(t))==list(range(n)),'perfect matching partition')
+39:     T=sum(map(w,matching));require(T==6*q+1==F(r['T']),'matching total')
+40:     u=list(map(F,r['floor_witness']));y=list(map(F,r['ideal_witness']));tau=F(1,3*q+3);checks=0
+41:     for p in (u,y):
+42:         require(len(p)==n and all(v>=0 for v in p) and sum(p)==T,'point total/nonnegativity')
+43:         for t in product(range(m),repeat=3):
+44:             require(sum(p[i] for i in ids(t))>=w(t),'mixed triple cover');checks+=1
+45:         require(all(sum(p[i] for i in ids(t))==w(t) for t in matching),'matching efficiency')
+46:     critical=r['critical_partial_matching'];covered=[i for t in critical for i in ids(t)]
+47:     require(len(critical)==2*q and len(set(covered))==len(covered),'critical triples not a partial matching')
+48:     require([w(t) for t in critical]==[5,1]*q,'critical matching weights')
+49:     require(sum(map(w,critical))==6*q,'critical matching value')
+50:     unmatched=sorted(set(range(n))-set(covered));require(len(unmatched)==3*q+3,'unmatched budget cardinality')
+51:     target=r['target'];require(target==2*m and target in unmatched,'target not budgeted')
+52:     require(all(v>=tau for v in u) and all(u[i]==tau for i in unmatched),'firstfloor attainment/pinning')
+53:     require(y[target]==1 and all(y[i]==0 for i in unmatched if i!=target),'ideal attainment')
+54:     require(w(matching[0])==1 and target in ids(matching[0]),'matching ideal upper bound')
+55:     require(tau==F(r['first_floor'])==F(r['ratio']) and F(r['target_ideal'])==1,'reported quantities')
+56:     return dict(status='PASS',depth=q,players=n,sector_size=m,nonzero_pair_entries=sum(v!=0 for mat in M for row in mat for v in row),T=str(T),all_triple_checks=checks,partial_matching_teams=2*q,partial_matching_value=str(6*q),unmatched_players=unmatched,budget_rhs='1',first_positive_floor=str(tau),full_leximin_target=str(tau),target_ideal='1',ratio=str(tau))
+57: 
+58: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

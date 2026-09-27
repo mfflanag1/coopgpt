@@ -1,0 +1,21 @@
+# Goal completion audit
+
+The objective is the full graph classification, not merely the C4 subproblem or a finite numerical improvement. Evidence below is inspected at the delivered checkpoint; BUILD.log and AUDIT_RESULTS.json record final execution.
+
+| Requirement | Evidence and conclusion |
+|---|---|
+| Every fixed connected allowed graph | GRAPH_DICHOTOMY.md gives the sharp tree side and an explicit all-q construction for every cyclic graph via a contained simple cycle. K=1 has no positive-worth edge-sum instance; K>=2 is the substantive domain. |
+| Equal finite sector sizes, nonnegative matrices, complete teams only, integral coalition worth | Definitions and transfer proofs state these conventions. family.py uses m=3q+1 on every sector and alphabet {0,1,2}; exact covers and an integral perfect matching sandwich the grand worth. No partial-sector coalition inequalities are substituted. |
+| Positive grand worth and nonempty entire core | Cyclic worth is6q+1+4q(ell-3)>0; the explicit floor witness has every coordinate at least1/[K(q+1)]>0. Tree proof covers every admissible core under the same model. |
+| Full ascending sorted leximin, every labeled coordinate | Tree clipping treats all levels and zero ideals. Cyclic target is fixed on the entire FIRST optimal face by an unmatched-player budget, hence remains fixed through every later refinement; no coordinate is deleted. |
+| Ideals over the same entire core | Target ideal upper bound comes from an optimal value-one diagonal full team, valid throughout the entire core. Explicit lifted y attains1. Tree ideal-attaining point is selected from the entire core. |
+| Sharp tree constant and acyclic/cyclic dichotomy | ALL_TREES.md proves1/K and its unit-simplex sharpness. GRAPH_DICHOTOMY.md proves cyclic ratios1/[K(q+1)] with ideal1 for arbitrary q, so no positive constant exists. |
+| Four-sector milestone before general expansion | ../selective_c4/MILESTONE.md and its review/build records completed C4 and all six types before the general review/campaign. General transfer was separately proved, not assumed from C4. |
+| Complete conventional proofs | GRAPH_DICHOTOMY.md plus ALL_TREES.md, TREE_CORE_AND_PATH.md and SOURCE_FAMILY_PROOF.md give every load-bearing argument. Stale scope notes are updated in the copied dependencies. |
+| Exact independently reproducible certificates | Explicit CERTIFICATES.json, standard-library rational checker, four negative controls, and12 independent raw-core queries pass. The C5 full-selector replay computes all levels and ideals. Root build replays earlier tree and source checks. Clean-directory standard-library replay confirms no hidden project import is required for cyclic certificates. |
+| Governing mechanism | Unit residual budget is preserved by consuming all selective bonuses in a partial matching; unmatched count grows by q+1 per sector while target ideal remains1. Pairwise matching incompatibility is unnecessary, as separately checked. |
+| Original-source/novelty audit, qualified priority | SOURCE_STATUS.md links the current primary-read audit and the original-source ledger. Quint, Lucas and Stuart gaps remain explicit under the user's no-purchase instruction. No worldwide novelty or field-level significance claim is made. The goal expressly permits recorded unresolved comparisons; they are not silently marked resolved. |
+| Claude review and independently checked findings | review/review.md checks both halves and all transfers; REVIEW_RESPONSE.md resolves its scope-text and target-hypothesis remarks and records the independent C5 replay. C4 received its own earlier review. |
+| No purchases or outreach | Only authorized model-review exchanges occurred. The specialist packet is a local unsent document; no purchase, external communication or submission was made. |
+
+This is completion of the mathematical classification and its requested proof/certificate/audit deliverables at a conventional-proof evidence tier. It is not a claim of formal proof-assistant verification, external specialist endorsement, historical novelty, publication readiness, or a field-level breakthrough. Those distinctions are preserved; they do not change the proven classification.

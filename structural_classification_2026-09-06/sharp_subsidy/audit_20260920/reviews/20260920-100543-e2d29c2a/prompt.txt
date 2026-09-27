@@ -1,0 +1,824 @@
+Task and review objective:
+Audit the donor-slack implication Q/T <= 60g in Section 6 of CORE_COMPATIBILITY_UPPER.md independently from its construction. Focus ONLY on whether each donor other-sector player load is at most 1-z_ij, averaging leaf rows is valid, and all constants and prerequisite localization hypotheses suffice. Read supporting MIXED_DONOR_UPPER, CORE_SLACK_LOCALIZATION, EXTREMAL_LOCALIZATION and FINITE_UPPER_CORRECTION. Identify a concrete gap/counterexample or spell out why the implication holds. Claimed test successes are not proof. No delegation.
+
+
+FILE coopgames/structural_classification_2026-09-06/sharp_subsidy/CORE_COMPATIBILITY_UPPER.md
+1: # Uniform improvement using actual original-core compatibility
+2: 
+3: 2026-09-08 UTC. Conventional proof with exact scalar and local-module
+4: certificates. Independent specialist review and novelty assessment are pending.
+5: This is the main target of the active exploratory goal, not a replacement goal.
+6: 
+7: **Theorem (internally checked; external review pending).** In the original strict three-sector nonnegative
+8: pair-additive model, with equal finite sector sizes, nonempty original entire
+9: core and positive ordinary matching worth T,
+10: 
+11:     1/3 <= S_3 <= 39999/100000 = 2/5 - 1/100000.           (A)
+12: 
+13: The lower bound is the existing certified family. H_i always means the maximum
+14: in the ORIGINAL entire core. This proof changes no floor, coalition worth, or
+15: subsidy convention. The numerical improvement is small; field-level significance
+16: and novelty are not asserted. The substantive mechanism couples different
+17: original-core allocations through cloning and value-weighted incidence counting.
+18: 
+19: ## 1. Established reductions and notation
+20: 
+21: Use the exact replication, sparsification and component reductions of
+22: REDUCTIONS.md. It suffices to bound
+23: 
+24:     J = w(P)+sum_{i unmatched by P} H_i/3-T
+25: 
+26: for every connected diagonal/P reduction with positive T, where P is an ordinary
+27: partial matching and the diagonal matching is optimal. The elementary cases
+28: P empty and h=m-|P|<=1 have nonpositive obstruction. Consider h>=2.
+29: 
+30: Let d_j be a diagonal label's worth and k_j its number of players used by P.
+31: Nontrivial connectedness gives k_j in {1,2,3}. Call labels with k_j=1 leaves and
+32: those with k_j=2 or 3 internal. Put
+33: 
+34:     D=sum_{j internal}d_j, D_2=sum_{k_j=2}d_j, D_L=T-D.
+35: 
+36: Incidences, including repeated labels within a P-team, are counted with
+37: multiplicity. Let I be the internal labels. Whenever I is nonempty, every
+38: P-team has an internal player: otherwise its three leaf incidences form a
+39: separate connected component. Let tau=min_{j in I}d_j/T.
+40: 
+41: Choose ANY three original core allocations y^s, indexed by sectors s, and put
+42: 
+43:     Q_j=sum_s(d_j-y^s_{s,j}), Q=sum_{j in I}Q_j.
+44: 
+45: Each Q_j is nonnegative by diagonal tightness. Also
+46: sum_s H_{s,j}>=3d_j-Q_j. This is not simultaneous attainment of the ideals.
+47: 
+48: ## 2. Three-core compatibility inequalities
+49: 
+50: For a P-team t, let b(t) be the minimum d_j among its internal players. Define
+51: 
+52:     B_all=sum_{t in P}b(t),
+53:     B_3=sum_{t in P with all players internal}b(t),
+54:     B_n=B_all-B_3,
+55:     M_3=sum_{t in P with all players internal}sum_{j in t}d_j,
+56:     W_3=sum_{t in P with all players internal}w(t).
+57: 
+58: The inner sum in M_3 counts incidences, including repeated labels. We have
+59: 
+60:     w(P)<=D_L+B_3+Q,             W_3<=B_3+Q.              (2.1)
+61: 
+62: For a team with a leaf, choose a sector absent among its internal players and
+63: apply the corresponding y^s. Bound leaf payoffs by their diagonal worths. All
+64: remaining internal payoffs have sectors other than s. For an all-internal team,
+65: choose the sector of its minimum-worth internal player, bound that player's
+66: payoff by b(t), and retain the other two payoffs. Summing these inequalities
+67: counts each leaf once. For each fixed s the retained internal player payoffs
+68: are bounded by sum_j sum_{r!=s}y^s_{r,j}=sum_j(d_j-y^s_{s,j}), because P is
+69: player-disjoint. This proves the first inequality and, by restricting the sum
+70: to all-internal teams, the second.
+71: 
+72: We also have
+73: 
+74:     M_3>=3B_3,                 B_n<=3D-D_2-M_3.          (2.2)
+75: 
+76: The first is immediate. For the second, bound each b(t) on a non-all-internal
+77: team by the sum of its internal diagonal worths. Total internal incidence worth
+78: is exactly 3D-D_2; removing all-internal teams removes M_3.
+79: 
+80: ## 3. Weighted incidence counting, with cycles retained
+81: 
+82: The following bound holds for arbitrary cycles and repeated incidences:
+83: 
+84:     B_all <= 2D-D_2+min_{j in I}d_j.                     (3.1)
+85: 
+86: Remove the leaf vertices and their incidences from the connected bipartite
+87: label/P graph. The remaining internal-label/P multigraph is connected, and each
+88: P-node has at least one incidence. Internal-label degrees remain k_j.
+89: 
+90: For a nonempty proper subset S of internal labels, include the P-nodes all of
+91: whose internal neighbors belong to S. Let K be their number, kappa the number
+92: of components of this induced graph (including isolated labels in S), beta its
+93: cycle rank, and bnd the number of incidences from S to omitted P-nodes. Counting
+94: edges and vertices gives
+95: 
+96:     K=sum_{j in S}(k_j-1)+kappa-beta-bnd.
+97: 
+98: Connectedness of the whole internal/P graph implies bnd>=kappa: every induced
+99: component must have an incidence to an omitted P-node on a path to a label
+100: outside S. Therefore K<=sum_{j in S}(k_j-1). For S=I the same count instead gives
+101: K=sum_j(k_j-1)+1-beta<=sum_j(k_j-1)+1.
+102: 
+103: Apply these bounds to S_t={j:d_j>t} and integrate over t>=0. The integral of K(t)
+104: is B_all, and the integral of sum_{j in S_t}(k_j-1) is 2D-D_2. The extra full-set
+105: term is integrated only for 0<=t<min_j d_j. This proves (3.1) even with arbitrary
+106: concentration of value. It does not remove cycles or assume continuity of ideals.
+107: 
+108: ## 4. A verified affine bound for a three-label component
+109: 
+110: For any nonnegative pair-additive three-label market supported on the diagonal
+111: and P0=(1,2,0), with nonempty original core and diagonal worths d_0,d_1,d_2,
+112: 
+113:     J(M,P0) <= T/18+(17/18)d_0.                          (4.1)
+114: 
+115: Here is an explicit weighted-team proof. For each unmatched player i, the
+116: following row lists teams and integer multiplicities; divide every multiplicity
+117: by 18. Sector letters identify the excluded player; teams give their three
+118: label indices in sector order.
+119: 
+120: | Excluded player | Teams with multiplicities (all divided by 18) |
+121: | --- | --- |
+122: | A0 | 6(111), 6(222) |
+123: | A2 | 1(022), 1(111), 5(120) |
+124: | B0 | 6(111), 6(222) |
+125: | B1 | 1(101), 3(120), 1(121), 1(122), 2(202), 1(222) |
+126: | C1 | 2(110), 4(120), 2(222) |
+127: | C2 | 2(011), 2(111), 4(120), 2(220) |
+128: 
+129: Each row avoids its excluded player and loads every other player by at most
+130: 1/3. Across the six rows, every pair of P0 is covered at least once, and each
+131: pair in diagonal teams 111 and 222 at least 17/18 times. All other pair coverage
+132: is nonnegative. For an original core point attaining H_i, that row's weighted
+133: team worth is therefore at most (T-H_i)/3. Summing over the six excluded players
+134: and using pair additivity gives
+135: 
+136:     2T-sum_{i not in P0}H_i/3 >= w(P0)+(17/18)(d_1+d_2).
+137: 
+138: Rearranging proves (4.1). This certificate in fact remains valid with additional
+139: nonnegative pair entries; only its sparse case is needed here. Sector and
+140: label permutations permit any one label to be designated 0. Zero-total
+141: components contribute zero.
+142: 
+143: `FULL_AFFINE_MODULE.json` records these weights and their equivalent exact LP
+144: dual; `verify_full_affine_module.py` reconstructs all 27 teams directly, without
+145: using the compressed core formulation. It checks rational coefficient
+146: domination with no rounding correction and rejects both an empty dual and a
+147: removed affine term. The separate zero-boundary certificate independently
+148: recovers the 17/18 affine coefficient from a different LP formulation.
+149: 
+150: ## 5. Clone internal labels and bound the resulting components
+151: 
+152: Replace each internal label j by k_j full diagonal copies, with every copied
+153: pair value inherited from its original players. Leave leaf labels single.
+154: The new grand worth and entire core are
+155: 
+156:     T'=T+2D-D_2,
+157:     C'={original core allocations with copied coordinates repeated}.
+158: 
+159: Proof: repeated diagonal teams attain T', and repeating any original core point
+160: covers all copied teams at total T'. Conversely, each copied diagonal is tight
+161: at every copied core point. Swapping same-sector original/copy players between
+162: their tight diagonal teams forces equal payoffs in both directions. Restriction
+163: therefore has total T and satisfies the original full-team inequalities. This
+164: is selective diagonal replication; it proves the ideal identity before any
+165: subsequent sparsification.
+166: 
+167: Assign each P-incidence at j to a different copy. P remains player-disjoint,
+168: its worth is unchanged, and now each diagonal copy has exactly one used player.
+169: This splits repeated-label teams as well. Sparsify to the copied diagonal and
+170: relocated P. The grand worth remains T', and ideals weakly increase. Each
+171: original coordinate at j gains k_j-1 unmatched copies; hence the new obstruction
+172: J' satisfies
+173: 
+174:     J' >= J+sum_{j internal}(k_j-1)
+175:                     [sum_s H_{s,j}/3-d_j]
+176:        >= J-(2/3)Q.                                    (5.1)
+177: 
+178: The sparse label components are now three-label, one-P-team components. Each
+179: component's entire-core ideals dominate the corresponding global copied ideals,
+180: by restriction and diagonal tightness, exactly as in REDUCTIONS.md. Thus J' is
+181: at most the sum of their local obstructions; no product-core claim is needed.
+182: 
+183: For a component with at least one leaf, apply (4.1), designating a minimum-worth
+184: internal copy. For an all-internal component, simply use H_i<=d_label for its
+185: six unmatched players, giving J_component<=w(t)-T_component/3. Summing gives
+186: 
+187:     J <= T/18+D/9-D_2/18+(17/18)B_n
+188:                     +W_3-(7/18)M_3+(2/3)Q.             (5.2)
+189: 
+190: Here the non-all-internal components have total worth T'-M_3. Insert (2.1)-(2.2)
+191: and (3.1) into (5.2). Normalize
+192: 
+193:     R=J/T, q=D/T, p=D_2/T, v=B_3/T, z=Q/T.
+194: 
+195: Two valid bounds result:
+196: 
+197:     R<=1/18+2q-p-(10/9)v+(17/18)tau+(5/3)z,             (5.3)
+198:     R<=1/18+(53/18)q-p-3v+(5/3)z.                      (5.4)
+199: 
+200: Indeed use B_n<=2D-D_2+T tau-B_3 for the first, or
+201: B_n<=3D-D_2-M_3 for the second; in both cases M_3>=3B_3.
+202: 
+203: Since there are two unmatched players at each leaf and one at each degree-two
+204: label, their diagonal caps together with (2.1) also give
+205: 
+206:     R<=2/3-(5/3)q+p/3+v+z.                              (5.5)
+207: 
+208: Multiply (5.5),(5.3),(5.4) respectively by 26/47, 333/799 and 24/799 and add.
+209: The positive coefficients sum to one; q and v cancel exactly. We obtain the
+210: MASTER INEQUALITY, valid for any three original core points:
+211: 
+212:     R <= 37/94-(37/141)p+(61/47)z+(37/94)tau
+213:        <=37/94+(61/47)z+(37/94)tau.                      (5.6)
+214: 
+215: This step is independently checked by exact rational coefficient identities
+216: and an exact real-arithmetic counterexample query.
+217: 
+218: ## 6. Near the old ceiling, the actual attainment witnesses make Q small
+219: 
+220: Suppose, for contradiction, that
+221: 
+222:     0<g=2/5-R<=1/100000.                                 (6.1)
+223: 
+224: Strict positivity follows from the existing finite upper correction. The
+225: localization theorem EXTREMAL_LOCALIZATION.md and FINITE_UPPER_CORRECTION.md give,
+226: with a=1/h, B=ell/h, x_s=L_s/h, and c the incidence cycle rank,
+227: 
+228:     a<=60g,   3/2-B<=1125g,
+229:     (x_s-B/3)^2<=300g,    0<=c/h<=300g.                 (6.2)
+230: 
+231: These conditions imply I is nonempty. Use the original t=4/5 mixed-donor packing,
+232: and choose each deletion witness x^i in the ORIGINAL core attaining H_i. Its
+233: exact slack identity from CORE_SLACK_LOCALIZATION.md is
+234: 
+235:     3gT=C_player+C_team+C_pair,                           (6.3)
+236: 
+237: with all three terms nonnegative. Denote total donor budget by Gamma and the
+238: sector transfer shortfall by Delta_s. The exact construction gives
+239: 
+240:     Gamma/h=(4/5)B-3/5-(6/5)a+(6/5)c/h,
+241:     Delta_s/h=x_s(B-x_s)-B/5-a(x_s+B).                   (6.4)
+242: 
+243: There is no positive-part ambiguity here: (6.1)-(6.2) force
+244: 
+245:     Gamma>0, Delta_s/Gamma>=1/4,
+246:     1/5+a < x_s < 1-a,
+247:     |I|/h=2-B-a+c/h >=1/3.                              (6.5)
+248: 
+249: For explicit elementary bounds: B>=37/25, 11/25<=x_s<=14/25 and a<=3/5000.
+250: The quadratic x(B-x) is increasing on this interval at the minimum permitted B,
+251: so Delta_s/h>= (11/25)(26/25)-3/10-(3/5000)(103/50)
+252: =0.156364>31/200. Also Gamma/h<=0.6036<31/50. This proves the ratio bound.
+253: The remaining inequalities follow from these same intervals. The full real
+254: domains in (6.1)-(6.2), not only these rounded intervals, are checked by SMT.
+255: 
+256: Degree-two unmatched rows have zero extra transfer. All leaf rows within a
+257: sector have the same positive headroom, so their extra transfer is Delta_s/n_s,
+258: where n_s is that sector's number of unmatched leaf rows. Define y^s as the
+259: average of x^i over those n_s rows. They are original core points.
+260: 
+261: For an internal donor label j, let gamma_j be 1/5 at degree two and 6/5 at degree
+262: three. In a sector-s leaf row the donor reduction is
+263: 
+264:     z_ij=(Delta_s/n_s) gamma_j/Gamma.
+265: 
+266: At each of the donor's OTHER two sector players the packing load is at most
+267: 1-z_ij: those players receive only their diagonal mass and, when used, their
+268: P mass. Residual-pair completions occur at leaf labels, and donor completions
+269: add only the sector-s donor player. The excluded label is a leaf, so cannot be
+270: the donor. Consequently the player-capacity slack obeys
+271: 
+272:     C_player >= sum_s (Delta_s/Gamma)
+273:                       sum_{j internal}gamma_j(d_j-y^s_{s,j})
+274:              >= Q/20.                                  (6.6)
+275: 
+276: Thus (6.3) yields z=Q/T<=60g. This controls actual coordinate-attaining witnesses,
+277: including markets whose degree-two labels carry disproportionate value.
+278: 
+279: The final bound in (6.5) and (6.2) give
+280: 
+281:     tau<=1/|I|<=3/h<=180g.                               (6.7)
+282: 
+283: No weight-uniformity or cycle deletion is assumed.
+284: 
+285: ## 7. Contradiction and return to the original class
+286: 
+287: Insert (6.6)-(6.7) into (5.6):
+288: 
+289:     2/5-g <=37/94+(6990/47)g.
+290: 
+291: Therefore g>=3/70370>1/100000, contradicting (6.1). Every connected reduction
+292: has R<39999/100000 (or is an elementary nonpositive case). Taking the supremum
+293: and applying the exact fractional-packing replication reduction proves (A).
+294: An explicit lower extremal family remains the existing one-third sequence;
+295: this result does not establish the sharp constant.
+296: 
+297: ## Verification scope and remaining review
+298: 
+299: The conventional proof above is the all-size argument. The local affine module
+300: is supported by an exact rational LP dual covering all its nonnegative weights.
+301: `verify_core_compatibility_upper.py --smt` checks five full-domain scalar claims
+302: and requires UNSAT; a widened-range control must be SAT. Unknown fails closed.
+303: The original full project checks remain required. Computational checks do not
+304: replace the cloning, component, coarea or donor-load arguments.
+305: 
+306: The earlier Claude review of the preliminary compatibility result timed out
+307: at 60.01 seconds; it supplied no review or approval. The final combined proof has passed the internal audit recorded in
+308: CORE_COMPATIBILITY_AUDIT.md and the full build with --smt (exit 0). The separate
+309: free-source comparison is in CORE_COMPATIBILITY_SOURCE_AUDIT.md; it does not
+310: confirm novelty. External review remains unavailable: the Claude CLI reports
+311: loggedIn=false. A prepared packet is not a completed review.
+312: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+
+
+FILE coopgames/structural_classification_2026-09-06/sharp_subsidy/MIXED_DONOR_UPPER.md
+1: # Universal upper bound 2/5 using degree-two and degree-three donors
+2: 
+3: Date: 2026-09-07. **Goal active.** Conventional all-size theorem, independent rational coefficient checks, and optional exact real-arithmetic checks of its scalar inequalities. Sharpness, novelty and specialist review remain unresolved.
+4: 
+5: **Theorem.** In the frozen original strict three-sector nonnegative pair-additive model,
+6: 
+7:     1/3 <= S_3 <= 2/5.
+8: 
+9: This improves the preceding upper bound 5/12. Equal finite sector sizes, positive original integral grand worth T, and nonempty original entire core are retained. H_i always denotes the original entire-core maximum.
+10: 
+11: ## 1. Reduction and target
+12: 
+13: Use the replication, sparsification and component reduction in REDUCTIONS.md. Fix an optimal diagonal matching mu and a partial matching P in one nontrivial connected label component. Let h=m-|P|, u=3h, and U be the unmatched players. The elementary cases P empty, h=0 or h=1 have nonpositive obstruction. Assume h>=2 and label used degrees in {1,2,3}.
+14: 
+15: As in the preceding deletion proofs, it suffices to construct one fractional matching avoiding each i in U with aggregate pair coverage
+16: 
+17:     (u-21/5) a_mu(e) + 3 a_P(e).                         (1)
+18: 
+19: Original-core coverage bounds its value by T-H_i. Hence (1) gives
+20: 
+21:     sum_U H_i <= (21/5)T-3w(P),
+22:     J(M,P)=w(P)+sum_U H_i/3-T <= (2/5)T.
+23: 
+24: Nonnegative pair weights and additive counting of shared mu/P pairs are essential here. The coefficient construction below uses no modified ideals.
+25: 
+26: ## 2. Counts and the transfer shortfall
+27: 
+28: Let ell,n_2,n_3 be the numbers of labels of degrees 1,2,3. Connectedness and incidence counting, exactly as proved in SURPLUS_UPPER.md, give
+29: 
+30:     2ell+n_2=3h,      n_3>=ell-h-1.
+31: 
+32: For sector s let L_s count degree-one labels whose unique used player is in s, and N_s count unmatched sector-s players at degree-two labels. Then
+33: 
+34:     ell=h-N_s+L_s,      sum_s L_s=ell.
+35: 
+36: Set t=4/5, alpha=1/h, beta=1-alpha, and delta=max(0,t-2alpha). For fixed sector write L=L_s,N=N_s. Each of its h unmatched rows has initial transfer capacity
+37: 
+38:     c_i=min(L alpha,beta)        at a degree-two label,
+39:     c_i=min(L alpha,beta-delta)  at a degree-one label.
+40: 
+41: Its residual-pair columns require total L delta. Define D_s=[L delta-sum_i c_i]_+, or zero when L=0 or delta=0.
+42: 
+43: If L=h, N=h and there is no shortfall. If L<=h-1, degree-two rows already have maximal column capacity L alpha. If all degree-one rows also have this capacity, there is no shortfall. In the remaining branch, put B=ell/h and x_s=L_s/h. Substitution gives
+44: 
+45:     D_s=[h f_B(x_s)-(x_s+B)]_+,
+46:     f_B(x)=x(B-x)-B/5.                                  (2)
+47: 
+48: Also 0<=B<=3/2, sum_s x_s=B, and x_s>=B-1 when B>=1. A positive shortfall implies delta>0, so h>=3.
+49: 
+50: ## 3. The mixed donor budget
+51: 
+52: Give every degree-two label budget 1/5 and every degree-three label budget 6/5. Their total is
+53: 
+54:     C=(n_2+6n_3)/5.                                     (3)
+55: 
+56: We prove sum_s D_s<=C.
+57: 
+58: Let q in {1,2,3} count sectors with positive D_s. If q=0 the claim is immediate. For q positive, sum (2) only over these sectors. Let X be their sum of x_s. Concavity gives sum x_s(B-x_s)<=BX-X^2/q.
+59: 
+60: First suppose B<=1. The following upper bounds on sum f_B(x_s) hold for q=1,2,3 respectively:
+61: 
+62:     F_1=B^2/4-B/5,
+63:     F_2=B^2/2-2B/5,
+64:     F_3=2B^2/3-3B/5.
+65: 
+66: For q=1 maximize a single quadratic freely. For q=2, X<=B and BX-X^2/2 is increasing up to B. For q=3, X=B. Each F_q is at most (3-2B)/5 on [0,1]. More precisely their gaps are at least 3/20, 1/10 and 2/15. Thus sum D_s<=h(3-2B)/5=n_2/5<=C.
+67: 
+68: Now suppose 1<=B<=3/2. Connectedness yields
+69: 
+70:     C>=h G(B)-6/5,       G(B)=4B/5-3/5.                 (4)
+71: 
+72: For q=1 retain F_1. On this interval G-F_1>=3/20. The correction subtracted in (2) is x_s+B>=B>=1. Since h>=3,
+73: 
+74:     h(G-F_1)+(x_s+B) >= 9/20+1 > 6/5.
+75: 
+76: This absorbs the finite subtraction in (4).
+77: 
+78: For q=2 the remaining sector has x>=B-1, so X<=1. Since BX-X^2/2 is increasing for X<=1<=B,
+79: 
+80:     sum f_B(x_s) <= F_2'=3B/5-1/2,
+81:     G-F_2'=B/5-1/10>=1/10.
+82: 
+83: The correction X+2B is at least 2, again absorbing 6/5.
+84: 
+85: For q=3 retain F_3. Here
+86: 
+87:     G-F_3=(2/3)(3/2-B)(B-3/5)>=0.
+88: 
+89: The correction is X+3B=4B>=4, also sufficient. This proves (3) covers all shortfalls. All scalar inequalities are elementary quadratic bounds; verify_mixed_budget.py independently asks for counterexamples on their full real domains.
+90: 
+91: ## 4. Explicit allocation of transfers
+92: 
+93: For each sector with no shortfall, scale the capacities by theta=L delta/sum c_i, set b_i=theta c_i and e_i=0. If L=0 or delta=0 set both to zero.
+94: 
+95: For a sector with shortfall D_s>0, set b_i=c_i and define q_i=L alpha-c_i. The total headroom is L-sum c_i>=D_s. Set
+96: 
+97:     e_i=D_s q_i/sum_j q_j.
+98: 
+99: Then sum_i(b_i+e_i)=L delta and b_i+e_i<=L alpha. Crucially, degree-two rows have q_i=0, so **every row with e_i>0 is at a degree-one label**. Further,
+100: 
+101:     e_i<=q_i=L alpha-(beta-delta)<=delta<beta.
+102: 
+103: The last inequality uses L<=h-1 in the positive-shortfall branch.
+104: 
+105: For every donor label d of degree two or three let gamma_d be its budget 1/5 or 6/5. Allocate the row reduction proportionally:
+106: 
+107:     z_{i,d}=e_i gamma_d/C.
+108: 
+109: If there is no shortfall use zero reductions. When a shortfall exists, C>0 by Section 3. Each z_{i,d}<=e_i<beta and each donor's aggregate reduction is at most gamma_d. A row needing transfers is a leaf row, so its excluded label is never a donor. No missing-diagonal or forbidden-player exception arises.
+110: 
+111: ## 5. Fractional deletion matching
+112: 
+113: For i in sector s at label j, use:
+114: 
+115: 1. beta on all diagonal teams except j, subtracting z_{i,d} at each donor label d;
+116: 2. alpha on every P-team;
+117: 3. mass beta-b_i on the pair of other-sector players at j, and mass b_i/L on each residual-pair column; complete each pair uniformly with the h-1 sector-s players in U other than i;
+118: 4. for each donor d and residual-pair column l, mass z_{i,d}/L on the triple with sector-s player d and the two residual players at l.
+119: 
+120: Terms with L in the denominator are omitted when L=0. Step 4 is omitted when e_i=0. The step-3 masses total beta. Each column's combined extra load is (b_i+e_i)/L<=alpha, and its sum across rows is delta.
+121: 
+122: The capacity proof from SURPLUS_UPPER.md applies with one additional case: a degree-two donor's sector-s player can itself be unmatched. Such a player previously receives beta from its diagonal and alpha from step 3; subtracting z_{i,d} from its diagonal and adding exactly z_{i,d} in step 4 preserves load one. Used donor players likewise have load beta-z+alpha+z=1. At the other sectors of a donor label, load only decreases. Donors cannot equal the excluded label in a nonzero-transfer row.
+123: 
+124: All other capacity cases are unchanged: each residual-column player has beta+(b_i+e_i)/L<=1; partners at the excluded label have at most beta plus any P load alpha; all other players have at most their diagonal and P loads. Coefficients are nonnegative and the excluded player is absent.
+125: 
+126: ## 6. Aggregate pair coverage and subsidy consequence
+127: 
+128: The P contribution is u alpha=3 copies. A degree-three diagonal label starts with u-3 copies of each pair and loses at most 6/5, leaving u-21/5. A degree-two label starts with u-4+alpha and loses at most 1/5, also sufficient.
+129: 
+130: Leaf labels are never donors. Their initial coverage is u-5+2alpha, with deficit delta. For either pair incident to the unique used player, the opposite unmatched player's deletion row supplies beta-b_i>=delta. The residual pair receives column sum delta. This proves (1), and therefore S_3<=2/5 for the whole original market class through the established reduction.
+131: 
+132: The original protected-allocation primal LP remains the constructive allocation procedure. Strong duality and this all-size coefficient construction bound its required subsidy by 2T/5. The LP formulation itself is an established ingredient, not a novelty claim.
+133: 
+134: ## 7. Verification and next obstruction
+135: 
+136: mixed_donor_template.py generates 14 rational certificates. The independent verify_mixed_donor.py checks 127,618 packing entries against every deletion exclusion, player capacity and demanded pair coefficient. Its examples include degree-two-only cycles that need the new transfer, shared pairs, and multiple-junction trees. With --smt, verify_mixed_budget.py returns UNSAT for counterexamples to all six scalar budget estimates. These finite certificates and scalar checks support, but do not replace, the full proof above.
+137: 
+138: A balanced multiple-junction tree with h=2b+2 has L_s=h/2,N_s=0 in every sector, n_2=0 and n_3=b=h/2-1. Raising t in the same construction would require total extra mass
+139: 
+140:     D_total=h(9t/2-3)-6
+141: 
+142: when all three shortfalls are positive. Degree-three donor capacity would be
+143: 
+144:     (2-t)(h/2-1).
+145: 
+146: Their difference is h(5t-4)-(4+t), positive for sufficiently large h whenever t>4/5. For h=30,t=5/6 it is exactly 1/6. This is a limitation of the present row-capacity and diagonal-surplus construction, not a lower bound above one-third for the actual subsidy problem.
+147: 
+148: The next direction must change the coupling of transfers, for example recovering pair coverage from the other two players at a reduced donor label. Simply raising t in this same budget is ruled out by that family. The global gap is now 1/3 to 2/5; the sharp constant, matching extremal family, complete free-original priority audit and specialist review remain open. No paid consultation, purchase or outreach occurred.
+149: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+
+
+FILE coopgames/structural_classification_2026-09-06/sharp_subsidy/CORE_SLACK_LOCALIZATION.md
+1: # Core compatibility and weighted localization: first exploratory result
+2: 
+3: 2026-09-07 America/New_York / 2026-09-08 UTC. The bounded two-hour phase started
+4: at 03:05:49 UTC and has its checkpoint at 05:05:49 UTC. This note records progress
+5: inside that phase, not completion of the global goal. The target remains a
+6: size-independent improvement below 2/5 for the full original market class, or
+7: an exactly certified sequence approaching 2/5. Global bounds remain 1/3 to 2/5.
+8: 
+9: ## 1. Exact slack identity for the existing upper-bound proof
+10: 
+11: Use REDUCTIONS.md and MIXED_DONOR_UPPER.md. Fix mu, P and unmatched set U, u=|U|.
+12: For each i in U choose a separate ORIGINAL core allocation x^i attaining H_i.
+13: No simultaneous attainment assumption is made. Let lambda^i be the existing
+14: fractional deletion packing avoiding i, load l_iv<=1, team worth w(t), pair
+15: weights a_e, and aggregate pair coverage A_e. Define
+16: 
+17:     C = sum_i sum_{v != i} (1-l_iv) x^i_v,
+18:     F = sum_i sum_t lambda^i_t [x^i(t)-w(t)],
+19:     E = sum_e [A_e-(u-21/5)a_mu(e)-3a_P(e)] a_e.
+20: 
+21: Here a_mu(e),a_P(e) are pair incidence counts, not monetary weights. All three
+22: quantities are nonnegative, by player capacity, original-core coverage, and
+23: pair domination respectively. Direct expansion gives the exact identity
+24: 
+25:     3[(2/5)T-J] = C+F+E.                                  (1)
+26: 
+27: Indeed sum_i[T-H_i-w(lambda^i)]=C+F, while
+28: sum_i w(lambda^i)=(u-21/5)T+3w(P)+E. This is ordinary LP slack bookkeeping,
+29: not a new general duality principle. It identifies the actual original-core
+30: constraints that any near-extremizing sequence would have to make nearly tight.
+31: 
+32: ## 2. Compatibility of three core allocations with hub value
+33: 
+34: Assume every diagonal label has P-degree one (a leaf) or three (a hub).
+35: This section does not require acyclicity. Write d_j for its diagonal worth,
+36: D_H for total hub worth and D_L=T-D_H for leaf worth. Let y^0,y^1,y^2 be ANY
+37: three original core allocations and define
+38: 
+39:     Q = sum_{s=0}^2 [D_H - sum_{j hub} y^s_{s,j}] >= 0,
+40:     B_3 = sum_{t in P, all three labels hubs} min_{j in t} d_j.
+41: 
+42: Then the following weighted compatibility inequality holds:
+43: 
+44:     w(P) <= D_L+B_3+Q.                                    (2)
+45: 
+46: Proof. For each P-team with a leaf, choose a sector s absent among its hub
+47: players. In y^s, cap each leaf player's payoff by its diagonal worth and retain
+48: the hub payoffs; all retained hub payoffs have sector different from s. For an
+49: all-hub P-team, choose the sector s whose player's diagonal worth is smallest.
+50: Cap that player's payoff by d_j and retain the other two hub payoffs. These
+51: choices bound w(t) by leaf diagonal worths, or its contribution to B_3, plus
+52: hub payoffs in sectors different from the selected core allocation's index.
+53: Sum over P. Every leaf label contributes once because its P-degree is one.
+54: For any fixed s, player-disjointness of P bounds retained hub payoffs by
+55: sum_{j hub} sum_{r != s} y^s_{r,j}=D_H-sum_j y^s_{s,j}.
+56: Summing over s proves (2). The y^s need not be common maximizers.
+57: 
+58: If the whole incidence multigraph is a tree, also
+59: 
+60:     B_3 <= D_H/2.                                        (3)
+61: 
+62: Proof by threshold integration. For each t>=0 keep hub labels with d_j>t and
+63: all-hub P-teams whose three labels survive. This incidence subgraph is a forest.
+64: If it has v surviving labels and k team nodes, 3k<=v+k, so k<=v/2. Integrating
+65: k(t)<=v(t)/2 gives sum_team min_j d_j <= sum_hub d_j/2. This argument controls
+66: arbitrary nonnegative weights, including concentration. It does not extend (3)
+67: to cyclic supports merely because their unweighted cycle density is small.
+68: 
+69: ## 3. Connect compatibility to the deleted-player packing
+70: 
+71: Now assume a connected incidence TREE with only leaves and b degree-three hubs,
+72: b>=5. Counting gives h=m-|P|=2b+2 and L_s=h/2 in all three sectors. Define
+73: 
+74:     y^s = (1/h) sum_{i in U, sector(i)=s} x^i,
+75:     e = 1/5-2/h > 0,
+76:     k_b = eh/b = 2(b-4)/(5b).
+77: 
+78: The y^s are original core points, so (2) applies. In the original t=4/5
+79: construction every unmatched row has extra donor transfer e, allocated equally
+80: across the b hubs. In a sector-s deletion row, each hub's sector-s player has
+81: load one; its other two players have load 1-e/b. Therefore the hub contribution
+82: to C is EXACTLY
+83: 
+84:     C_H = (e/b) sum_s sum_{i in U_s}
+85:                     [D_H-sum_{j hub}x^i_{s,j}]
+86:         = k_b Q.                                        (4)
+87: 
+88: This follows directly from the packing coefficients and uses actual payoffs.
+89: Combining (1), (2) and (4) gives
+90: 
+91:     3[(2/5)T-J] >= k_b [w(P)-D_L-B_3]_+.                 (5)
+92: 
+93: The retained packing is not improved here. The new information is the lower
+94: bound on slack that its actual coordinate-attaining core allocations must leave.
+95: 
+96: ## 4. A weighted restriction on possible near-extremizing trees
+97: 
+98: Normalize q=D_H/T, R=J/T, g=2/5-R. Since every unmatched player is at a leaf,
+99: there are two such players per leaf, and H_i<=d_label. Thus
+100: 
+101:     R <= w(P)/T - 1 + (2/3)(1-q).                        (6)
+102: 
+103: Equations (3), (5) and (6) imply
+104: 
+105:     g >= [k_b/(3+k_b)] [(7/6)q-4/15]_+.                 (7)
+106: 
+107: To check the elimination, put a=(7/6)q-4/15. The bracket in (5), divided by T,
+108: is at least a-g. Thus 3g>=k_b[a-g]_+. If a<=0, (7) is trivial; if g>=a it is
+109: also immediate; otherwise solve (3+k_b)g>=k_b a.
+110: 
+111: Consequently, any sequence of these leaf/hub trees with J/T approaching 2/5
+112: must have
+113: 
+114:     limsup D_H/T <= 8/35.
+115: 
+116: Here b tends to infinity by the existing finite-size correction, and k_b tends
+117: to 2/5. If P has NO all-hub teams, B_3=0 instead gives the stronger version
+118: 
+119:     g >= [k_b/(3+k_b)] [(5/3)q-4/15]_+,
+120:     limsup D_H/T <= 4/25.                                (8)
+121: 
+122: These are weight restrictions in a specific live class, not the desired uniform
+123: global improvement. In particular, small hub-weight markets remain entirely
+124: live. General near-extremizers may have degree-two labels and cycles; count
+125: localization alone does not transfer (7) to them. No cycle-removal assertion is
+126: made. Establishing a new bound in that remaining region is the next obligation.
+127: 
+128: ## 5. Exact checks and unsuccessful computation
+129: 
+130: Four balanced branching chain supports have b=2,4,8,12 hubs and m=11,19,35,51
+131: labels. The all-weight synthesis LP keeps a separate full-core witness for every
+132: unmatched ideal and uses the exact sector-minimum projection from
+133: SECTOR_MINIMUM_CORE.md. The numerical discovery optima were respectively
+134: 10/33, 6/19, 34/105 and 50/153. These are fixed-P optimization results, not an
+135: exhaustive support classification or full-subsidy upper bound for every market
+136: on those supports.
+137: 
+138: The stored primal examples were rounded to integer weights/payoffs at T=3m and
+139: then verified EXACTLY against every full team. Every relevant ideal equals its
+140: diagonal cap and has its own attaining witness. The numerical duals were rounded
+141: to denominator 10^12, clipped to the required nonnegative sign, and checked by
+142: reconstructing every coefficient. Residual deficits are paid explicitly using
+143: the valid normalized variable bound [0,1] for weights, payoffs and sector minima.
+144: The resulting rational upper bounds are slightly larger than the displayed
+145: primal values; no exact optimality equality is claimed. All four certified
+146: upper bounds are below 1/3.
+147: 
+148: The verifier also checks the exact slack identity, (2), (3), and the coefficient
+149: identity (4) on these original-core witnesses. For b=2,4 the donor coefficient
+150: is zero; these calibrate the inactive branch rather than (7). For b=8 and 12,
+151: respectively, normalized slack decomposes as
+152: 
+153:     b=8:  C=272/4725,  F=32/945,   E=24/175;
+154:     b=12: C=160/1989, F=448/9945,  E=8/85.
+155: 
+156: In both cases C+F+E=3(2/5-J/T) exactly. The independent checker covers 12,891,756
+157: full-team inequalities and rejects an empty dual. These four optimization examples have no all-hub teams. Three additional
+158: constructed markets (with one, two and three all-hub P-teams) check original
+159: core feasibility and (2) with Q=0 and B_3>0. Uniform, varying, and concentrated
+160: hub weights additionally calibrate (3). These finite checks supplement, and
+161: do not replace, the conventional proofs of the general branches.
+162: 
+163: A b=16, m=67 synthesis hit its 45-second solver limit. That is inconclusive,
+164: not a counterexample, feasible witness, or a bound. An initial attempt to
+165: rationalize the smaller duals without residual correction failed exact residual
+166: checks; the corrected certificates explicitly include that residual payment.
+167: 
+168: ## 6. Research status and checkpoint
+169: 
+170: The substantive first-phase output is (2) coupled to (4), yielding (7)-(8).
+171: It meets the proposed progress gate of a precisely stated compatibility
+172: inequality with exact supporting checks. It does not complete the original
+173: goal. The two-hour checkpoint remains in force; a continuation should now test
+174: small hub-weight configurations and concentrated cyclic value, rather than
+175: repeat these chain instances or optimize finite-size constants.
+176: 
+177: No novelty is asserted for these elementary consequences of original-core
+178: constraints. Independent review and free-original source comparison remain
+179: pending before promotion. No purchase or outreach occurred.
+180: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+
+
+FILE coopgames/structural_classification_2026-09-06/sharp_subsidy/EXTREMAL_LOCALIZATION.md
+1: # Necessary structure for approaching the current two-fifths ceiling
+2: 
+3: 2026-09-07. This is a localization lemma within the three-sector sharp-constant problem, not a claim of a sharp graph-dependent curve. Global bounds remain 1/3 <= S_3 <= 2/5. External review and novelty are unconfirmed.
+4: 
+5: ## Main consequence
+6: 
+7: Consider any sequence of connected diagonal/P reductions with J/T tending to 2/5. Let h=m-|P|, ell be the number of degree-one labels, n2,n3 the degree-two/three counts, c the incidence multigraph cycle rank, and L_s the number of leaf labels whose used player is in sector s. Then necessarily
+8: 
+9:     h -> infinity,
+10:     ell/h -> 3/2,
+11:     n2/h -> 0,
+12:     c/h -> 0,
+13:     n3/h -> 1/2,
+14:     L_s/h -> 1/2 for each sector s.
+15: 
+16: The unmatched degree-two counts N_s/h also tend to zero. Thus a potential sequence reaching the present ceiling must have asymptotically balanced leaf sectors and almost entirely degree-one/degree-three labels, with cycle rank negligible relative to h. This is a necessary condition, not existence of such a sequence. It does not prove that replacing those cycles by trees preserves subsidy.
+17: 
+18: If any original market sequence approaches 2/5, replication, sparsification and component selection from REDUCTIONS.md produce a sequence of reductions to which this statement applies. It is not a classification of every obstruction on the original unreplicated markets.
+19: 
+20: ## Proof estimate
+21: 
+22: Put B=ell/h, x_s=L_s/h, g=c/h. Incidence counting, including parallel incidences, gives
+23: 
+24:     n2/h=3-2B, n3/h=B-1-1/h+g,
+25:     sum_s x_s=B, 0<=B<=3/2,
+26:     x_s>=B-1 when B>=1.
+27: 
+28: For 1<=B<=3/2 define
+29: 
+30:     A(B)=(2/3)(3/2-B)(B-3/5),
+31:     V=sum_s (x_s-B/3)^2, eta=A(B)+V+g.
+32: 
+33: Use the same deletion construction as MIXED_DONOR_UPPER.md with t=4/5+d, where
+34: 
+35:     d=1/100                  if B<=1,
+36:     d=min(1,eta)/100         if B>=1.
+37: 
+38: Either choice is valid at B=1; no continuity claim is needed. Donor budgets are 1-t and 2-t. We show they cover the shortfalls. This internal estimate implies J/T<=2/5-d/3 and is used only to derive the necessary asymptotic conditions.
+39: 
+40: For positive-shortfall sectors, h>=3 and
+41: 
+42:     D_s=h[x_s(B-x_s)-B/5]-(x_s+B)+d h B.
+43: 
+44: The formula applies to sectors active at the new t; no assumption about activity at t=4/5 is made. The no-shortfall branches and all capacity arguments are unchanged. In particular t<=81/100<1 and all donor masses remain nonnegative. When h=2, delta=max(0,t-2/h)=0.
+45: 
+46: If B<=1, ignore degree-three donors. The old quadratic budget gap is at least h/10 for each possible number q of active sectors. The increased t costs at most d h[3+(q-2)B]<=4dh. The remaining gap is positive.
+47: 
+48: If B>=1, the exact total donor budget at t=4/5 is hG(B)-6/5+(6/5)c, where G(B)=4B/5-3/5. Increasing t consumes h d[2+(q-1)B-1/h+g] in the combined budget-demand comparison. For q=1 and q=2, respectively, the old inequalities and d<=1/100 give lower gaps
+49: 
+50:     (13/100)h-1/5+(119/100)h g >0,
+51:     (13/200)h+4/5+(119/100)h g >0.
+52: 
+53: For q=3, the quadratic concavity gap is retained exactly rather than discarded:
+54: 
+55:     G(B)-sum_s[x_s(B-x_s)-B/5] = A(B)+V.
+56: 
+57: Thus budget minus demand is at least
+58: 
+59:     h[A(B)+V+(6/5)g-d(5+g)]+4B-6/5.
+60: 
+61: Write z=A(B)+V>=0. The bracket is nonnegative because
+62: 
+63:     min(1,z+g)(5+g)/100 <= z+(6/5)g.
+64: 
+65: For z+g<=1 use 5+g<=6. For z+g>=1 use 1<=z+g to bound (5+g)/100 by z/20+3g/50. Both are at most the right side. The remaining finite correction is positive. This covers all branches and establishes feasible deletion packings. Their aggregate pair domination gives the stated internal obstruction estimate, retaining each original coordinate-attaining core witness.
+66: 
+67: ## Deduction and quantitative check
+68: 
+69: Let e=2/5-J/T. If e<1/300, the B<=1 branch is excluded. Then min(1,eta)<=300e<1, hence eta<=300e. Since A(B)>=(4/15)(3/2-B),
+70: 
+71:     c/h <=300e,
+72:     3/2-B <=1125e,
+73:     |x_s-B/3| <=sqrt(300e).
+74: 
+75: The finite correction from FINITE_UPPER_CORRECTION.md gives h>=1/(60e). Letting e tend to zero proves all stated limits, using N_s/h=1-B+x_s and the exact incidence identities. These constants are deliberately conservative; optimizing them is not a research goal.
+76: 
+77: ## Verification and implication for the next proof
+78: 
+79: `verify_extremal_localization.py --smt` checks eight scalar implications over their full real domains. The coefficient construction is the original mixed-donor construction with the displayed parameter; the same capacity and pair-coverage proof applies. The auxiliary parameter is calculated exactly using rational arithmetic in localization_parameter.py. `localization_certificates.py --generate` reconstructs fourteen sample certificates; its independent checker recomputes the parameter from incidence counts and verifies 127,618 rational packing entries. An empty-certificate negative control is rejected.
+80: 
+81: This lemma narrows attempts to improve the global upper bound: persistent cycle density, degree-two density or sector leaf imbalance cannot produce the current ceiling. The remaining difficult region is balanced branching structure with vanishing cycle density. A size-uniform improvement there would need an additional argument controlling actual original ideals. Neither count localization nor the finite-size correction provides that argument, and neither settles the one-third conjecture.
+82: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+
+
+FILE coopgames/structural_classification_2026-09-06/sharp_subsidy/FINITE_UPPER_CORRECTION.md
+1: # Finite correction to the universal two-fifths bound
+2: 
+3: 2026-09-07. Conventional proof with exact coefficient and real-domain checks. External review and novelty remain unconfirmed. The supremum bounds remain 1/3 <= S_3 <= 2/5.
+4: 
+5: ## Statement
+6: 
+7: For a nontrivial connected diagonal/P reduction with h=m-|P|>=2 unmatched players per sector,
+8: 
+9:     J(M,P)/T <= 2/5 - 1/(60h).
+10: 
+11: Consequently no finite market in the original class attains subsidy ratio 2/5. A size-only consequence, for m original players per sector, is
+12: 
+13:     s_3(M)/T <= 2/5 - 1/(60m * 3^(3m/2)) < 2/5.
+14: 
+15: These are finite-size improvements. They do not imply S_3<2/5: the correction tends to zero with size. The lower family, sharp-constant target and frozen original ideals are unchanged.
+16: 
+17: ## Improved donor budget
+18: 
+19: Use the notation and construction of MIXED_DONOR_UPPER.md. Put epsilon=1/20 and
+20: 
+21:     t=4/5+epsilon/h, alpha=1/h, beta=1-alpha,
+22:     delta=max(0,t-2/h).
+23: 
+24: Give a degree-two donor budget 1-t, and a degree-three donor budget 2-t. Both are positive. All transfer and capacity arguments in the original construction continue to apply whenever the total donor budget covers the shortfall. In particular t<1, delta<beta, extra-transfer rows are leaves, and a donor is never the excluded label of such a row.
+25: 
+26: For a sector with positive shortfall, h>=3. With B=ell/h and x=L/h, the exact positive-branch shortfall is
+27: 
+28:     D=h[x(B-x)-B/5]-(x+B)+epsilon B.
+29: 
+30: This follows by substituting beta-delta=1-t+1/h into the original row capacities. The branch L=h and the branch where every row has capacity L/h have no shortfall, exactly as before. Let q be the number of positive-shortfall sectors, and X their sum of x. Then their total demand is at most
+31: 
+32:     h F_q(B)-X-qB+epsilon qB,
+33: 
+34: using the same quadratic upper functions F as the original proof. This estimate does not assume the corresponding shortfalls were positive at t=4/5; it applies to the newly selected positive sectors directly.
+35: 
+36: For 0<=B<=1, discard degree-three donors. The remaining donor budget is
+37: 
+38:     h(3-2B)/5-epsilon(3-2B).
+39: 
+40: The original three quadratic estimates each have gap at least 1/10 against (3-2B)/5. Discarding the nonnegative X+qB correction gives budget minus demand at least
+41: 
+42:     h/10-epsilon[3+(q-2)B] >= 3/10-4/20 > 0.
+43: 
+44: For 1<=B<=3/2, use n3>=h(B-1)-1 and n2=h(3-2B). Since 2-t>0, even when this lower bound on n3 is negative it yields the valid budget lower bound
+45: 
+46:     h G(B)-6/5-epsilon(2-B-1/h), G(B)=4B/5-3/5.
+47: 
+48: The total additional penalty relative to the original q-sector budget comparison is at most
+49: 
+50:     epsilon[2+(q-1)B-1/h] <=5epsilon=1/4.
+51: 
+52: The original proof's lower slack estimates, valid on these domains, are respectively:
+53: 
+54: * q=1: h(3/20)+B-6/5 >=1/4;
+55: * q=2: h(1/10)+2B-6/5 >=11/10;
+56: * q=3: 4B-6/5 >=14/5.
+57: 
+58: Thus the finite penalty is absorbed in all cases. For q=3, the original quadratic gap is nonnegative; for q=2, use X<=1 in the quadratic bound and X>=0 in the correction. For h=2, delta=0, so no donor-budget estimate is needed. This proves the increased-parameter construction feasible for every reduced support, including shared diagonal/P pairs and cycles.
+59: 
+60: ## Aggregate coverage and obstruction
+61: 
+62: The P contribution remains three copies. At a degree-three label, starting coverage u-3 loses at most 2-t and leaves u-5+t. At a degree-two label, starting coverage u-4+alpha loses at most 1-t and leaves at least u-5+t. Leaf deficits are handled by delta and the unchanged row/column transfer construction. Thus aggregate deletion coverage is at least
+63: 
+64:     (u-5+t) a_mu(e)+3 a_P(e)
+65: 
+66: for every pair e, counting overlap additively. Apply each deletion packing to its own original core point attaining H_i. Nonnegative pair weights give sum_U H_i <=(5-t)T-3w(P). Therefore J/T <=(2-t)/3=2/5-1/(60h).
+67: 
+68: ## Original finite markets and fractional obstructions
+69: 
+70: If subsidy is zero the displayed size bound holds immediately. Otherwise choose a rational optimal vertex lambda of the team-packing dual. The incidence matrix is integral with at most three unit entries per column. If its positive support has k columns, a vertex admits a nonsingular k-by-k submatrix of tight player constraints. Cramer's rule permits a common denominator D equal to the absolute determinant; Hadamard gives D<=3^(k/2)<=3^(3m/2).
+71: 
+72: Replicate D times as in REDUCTIONS.md. The rational obstruction becomes an integral P, with h'=D(m-sum lambda)<=Dm. Sparsification and component restriction retain or increase the obstruction. Each component's unmatched count is at most Dm. Nonpositive elementary components satisfy the same positive upper bound automatically; every other component satisfies 2/5-1/(60Dm). Weighting by component worth and using the replication identity proves the original ratio bound. Substituting the determinant bound gives the displayed size-only correction. All ideals in these comparisons are original core ideals of the relevant markets; none are recomputed during subsidy intervention.
+73: 
+74: ## Reproduction and limits
+75: 
+76: The existing mixed-donor generator now accepts the original parameter or the proved finite parameter; its default is unchanged. `finite_mixed_donor.py` generates the finite versions of the existing fourteen test supports. `verify_finite_mixed_donor.py` checks deletion exclusion, all player capacities and aggregate pair coverage using exact rational arithmetic. With --smt, six real-domain inequalities are checked over all real h>=3 and the stated B intervals. These computations corroborate the conventional all-size proof above.
+77: 
+78: The strict finite bound explains why finite searches cannot attain the present upper constant. It supplies no uniform positive gap below 2/5 as m grows. Do not report it as an improved bound on S_3 or as a sharp finite-size theorem.
+79: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):

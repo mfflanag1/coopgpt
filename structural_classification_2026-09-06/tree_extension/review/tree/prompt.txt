@@ -1,0 +1,141 @@
+Task and review objective:
+Adversarial review of the NEW all-tree protection theorem, including branching stars. Verify the coordinatewise-minimum closure, subtree shift coefficients, nonnegative reconstructed payoff bounds, root ideal comparison, efficiency/full-core preservation, and all-stage sorted leximin contradiction. The prior path proof and exact tree representation are provided for context. Seek counterexamples or hidden assumptions. This would settle c(G)=1/k for every fixed tree, but not cyclic graphs. No tools and no novelty certification. Give concrete findings.
+
+
+FILE ALL_TREES.md
+1: # Sharp leximin protection for every strict tree market
+2: 
+3: Candidate conventional proof, September 6, 2026. Requires adversarial review. No priority claim. Standing model and exact tree-cut representation are in TREE_CORE_AND_PATH.md from the structural classification checkpoint: k>=2 sectors, equal finite size m>=1, nonnegative pair matrices on a connected tree, only full k-tuples productive, integral coalition worth, T>0. Core coordinates include every player, and full ascending sorted leximin is used. Ideals are maxima over that same entire core.
+4: 
+5: ## Theorem
+6: 
+7: For every tree G on k vertices, c(G)=1/k. In particular c(K1,3)=1/4. Branching does not destroy size-independent protection in this model.
+8: 
+9: ## A closure fact
+10: 
+11: If two vectors a,b obey all inequalities u(i)-u(j)>=c_ij, then their coordinatewise minimum obeys them too. Indeed a(i)>=a(j)+c and b(i)>=b(j)+c imply min(a(i),b(i))>=min(a(j),b(j))+c. Adding a uniform constant to every coordinate of a vector also preserves all such inequalities.
+12: 
+13: ## Tree coordinates, rooted at the target sector
+14: 
+15: Root G at an arbitrary sector r. Choose edgewise optimal perfect matchings and consistently relabel so they are diagonal. This is possible on a tree and gives T=sum of the edge matching optima. For each nonroot vertex v let S_v be its descendant subtree, s_v=|S_v|, and d_vb(j) the diagonal pair value on edge v->b. For a core point p put
+16: 
+17:     U_v^p(j)=sum_(a in S_v) p_a(j)-sum_(edges internal to S_v) d_edge(j),
+18:     U_r^p(j)=0.
+19: 
+20: The exact full-core representation is:
+21: 
+22:     U_b(i)-U_b(j)>=A_vb(j,i)-d_vb(j)         for each edge v->b,
+23:     p_v(j)=U_v(j)-sum_(b child of v)U_b(j)+sum_(b child of v)d_vb(j)>=0.
+24: 
+25: Every feasible cut vector reconstructs an efficient nonnegative cover of all full teams; conversely every core point gives such a vector. Thus the representation preserves the entire core and ideals. Its proof is reproduced in the preceding checkpoint and is not a hypothesis about a smaller partial-coalition core.
+26: 
+27: ## Clipping lemma
+28: 
+29: Let x,y be any two core points and beta>=0. Define, independently on each nonroot cut layer,
+30: 
+31:     Z_v(j)=min(U_v^x(j), U_v^y(j)+s_v*beta),
+32:     Z_r(j)=0.
+33: 
+34: Let z be the payoff reconstructed from Z. Closure under uniform translation and minimum proves every structural difference constraint for Z.
+35: 
+36: For a nonroot v and label j, if Z_v(j)=U_v^x(j), then Z_b(j)<=U_b^x(j) for each child, so z_v(j)>=x_v(j). If instead Z_v(j)=U_v^y(j)+s_v*beta, then Z_b(j)<=U_b^y(j)+s_b*beta and s_v=1+sum_b s_b, so z_v(j)>=y_v(j)+beta. These cover ties as well. Therefore
+37: 
+38:     z_v(j)>=min(x_v(j),y_v(j)+beta)>=min(x_v(j),beta)       (v != r).
+39: 
+40: At the root, each child cut is at most its x cut, hence
+41: 
+42:     z_r(j)>=x_r(j).
+43: 
+44: Each child cut is also at most its shifted y cut, and the child subtrees partition k-1 nonroot vertices. Hence
+45: 
+46:     z_r(j)>=y_r(j)-(k-1)*beta.
+47: 
+48: These bounds prove every reconstructed payoff nonnegative. The exact representation then proves z is in the full core, with no fractional/integral substitution and no loss of efficiency. This lemma does not require x to be leximin or have positive minimum payoff.
+49: 
+50: ## Protection proof, including all lexicographic stages
+51: 
+52: Let x be the full leximin point and let the target player belong to sector r, at label j. Write alpha=x_r(j). If H_r(j)>k*alpha, choose an ideal-attaining core point y and a number beta with
+53: 
+54:     alpha<beta<H_r(j)/k.
+55: 
+56: Apply the clipping lemma. The target payoff satisfies
+57: 
+58:     z_r(j)>=H_r(j)-(k-1)*beta>beta>alpha.
+59: 
+60: Every other root payoff weakly increases. At a nonroot coordinate with x_i<=alpha, we have y_i+beta>=beta>alpha>=x_i; the lemma therefore gives z_i>=x_i. At a coordinate with x_i>alpha, both x_i and y_i+beta exceed alpha, so z_i>alpha. Thus no old payoff at or below alpha decreases, all old payoffs above alpha stay above alpha, and the target strictly increases.
+61: 
+62: This strictly improves the sorted payoff vector: if any entry below alpha increases, use the smallest old value at which an increase occurs; no lower entry changes and no old higher entry falls to that value. Otherwise all entries below alpha are unchanged and the number of entries equal to alpha strictly decreases. Both cases contradict full leximin. Consequently H_i<=k*x_i for every player. The argument also covers alpha=0 and shows x_i=0 implies H_i=0; zero-ideal players are not deleted.
+63: 
+64: For sharpness, take m=1 and nonnegative edge weights totaling1 (for example one edge has value1 and the others zero). The only full team has worth1 and every proper coalition has worth0. The full core is the k-player unit simplex, x_i=1/k and H_i=1. This works on every connected tree, hence c(G)=1/k.
+65: 
+66: ## Scope
+67: 
+68: The theorem supplies the acyclic sufficient side for connected sector graphs. It does not prove that every cyclic G has c(G)=0. C4 still has only the finite upper bound9/40, so the four-sector milestone and general classification remain incomplete. Cut-variable decomposition, difference-constraint lattice closure and matching duality are established types of tools; novelty of this precise application is not yet established.
+69: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE TREE_CORE_AND_PATH.md
+1: # Tree core representation and path protection: candidate proof
+2: 
+3: Status: conventional proof; Claude found no correctness defect in the reviewed argument, and finite raw-core equivalence and explicit path-cycle checks pass. No novelty claim. Model: k>=2 fixed sectors of equal size m>=1, complete k-tuples only productive, nonnegative pair matrices on the edges of a connected tree, and positive total worth T. Coalition values use integral matchings. Root the tree at vertex 0 and orient every edge parent a to child b, with matrix A_ab(parent label, child label). Define c(G) as the infimum of x_i/H_i over all admissible markets on fixed G and players with positive full-core ideal H_i. Zero-ideal coordinates remain in the full leximin optimization; their ratios are not formed.
+4: 
+5: ## Integral worth and simultaneous diagonalization
+6: 
+7: Choose an optimal perfect matching for each edge. Root-label the players and propagate labels along each chosen matching. There is no conflicting propagation because the sector graph is a tree. All chosen edge matchings are now diagonal. Write d_ab(j)=A_ab(j,j). Any full-team matching projects to edge matchings, so its worth is at most the sum of their optima. The diagonal full-team matching attains this bound. Thus T=sum_j sum_edges d_ab(j). Nonnegative weights and equal sizes allow completion of partial matchings without loss. Assume T>0.
+8: 
+9: The core is precisely p>=0, sum p=T, and all full-team covers: singleton and team coalitions imply necessity, and summing team inequalities over any integral coalition matching, with nonnegative unmatched payoffs, proves sufficiency. Every diagonal team is tight at every core point because summing its inequalities exhausts T. Put s(j)=sum_edges d_ab(j); then sum_v p_v(j)=s(j).
+10: 
+11: ## Exact cut-variable representation
+12: 
+13: For each nonroot vertex b, let S_b be its descendant subtree, and define
+14: 
+15:     U_b(j) = sum_{v in S_b} p_v(j) - sum_{edges internal to S_b} d_edge(j).
+16: 
+17: Set U_0(j)=0. The entire core is affinely represented by
+18: 
+19:     U_b(i)-U_b(j) >= A_ab(j,i)-d_ab(j)       (a parent of b; all i,j),
+20:     p_v(j)=U_v(j)-sum_{b child of v} U_b(j)+sum_{b child of v} d_vb(j) >=0.
+21: 
+22: Necessity: use the full team with label i on S_b and label j on its complement. Subtract the tight diagonal team j. The only edge crossing the cut is ab. Internal diagonal terms cancel after substituting the definition of U_b, leaving the claimed difference inequality. The formula for p is immediate by subtracting child-subtree sums from the parent-subtree sum. At the root it follows from the tight diagonal identity.
+23: 
+24: Sufficiency: start with arbitrary U satisfying these constraints and reconstruct p by the displayed formula. Summing over vertices at a common label j telescopes to s(j), giving efficiency. For an arbitrary full team with label i_v at vertex v, sum its payoffs:
+25: 
+26:     sum_v p_v(i_v)
+27:       = sum_{a->b} [U_b(i_b)-U_b(i_a)+d_ab(i_a)]
+28:       >= sum_{a->b} A_ab(i_a,i_b).
+29: 
+30: This proves every team cover. The transformation is invertible: descendant sums of the reconstructed p recover each U_b. The representation thus preserves labeled coordinates and their full-core ideals.
+31: 
+32: Nonemptiness is classical matching duality: sum nonnegative optimal bilateral vertex covers over incident edges to obtain full-team covers with total T. This observation and the cut algebra are not asserted to be new.
+33: 
+34: ## Path theorem
+35: 
+36: For the path 0-1-...-(k-1), rooted at 0, the representation is a potential network. Use nodes (r,j), 1<=r<=k-1, and a single anchor of potential zero. Node (r,j) has potential U_r(j). An arc tail->head of constant c has slack c+U_tail-U_head.
+37: 
+38: Payoff arcs at each label j:
+39: 
+40:     anchor -> (1,j), constant d_01(j), payoff p_0(j);
+41:     (r,j) -> (r+1,j), constant d_r,r+1(j), payoff p_r(j), 1<=r<k-1;
+42:     (k-1,j) -> anchor, constant 0, payoff p_{k-1}(j).
+43: 
+44: Structural arcs stay inside one layer r: (r,i)->(r,j), constant d_(r-1),r(j)-A_(r-1),r(j,i). Their nonnegative slacks are exactly the cut inequalities. Omit i=j zero-slack self-loops, which impose no restriction.
+45: 
+46: The nonempty core is compact since p>=0 and sum p=T. Each sorted coordinate is continuous, so successive maximization on nested compact sets gives full leximin existence. For uniqueness, if two distinct labeled vectors have the same optimal sorted vector, their average preserves all coordinates below the smallest level at which they differ and reduces the multiplicity of that level, a contradiction to optimality. Thus x is well-defined.
+47: 
+48: Apply the selected-payoff-slack argument (classical slack-balancing ingredient): for each payoff arc e at full leximin x, a simple directed cycle through e exists whose structural arcs are tight and whose payoff arcs f satisfy x_f<=x_e. To prove it, let eligible arcs be tight structural arcs and payoff arcs with value at most alpha=x_e, and let R be the vertices reaching tail(e) through eligible arcs. If head(e) lies in R, take a simple path from head(e) to tail(e). This path cannot use e because it first reaches tail(e) at its endpoint. Adding e gives the required simple cycle.
+49: 
+50: Otherwise increase potentials on R by epsilon>0, then subtract the new anchor potential from every potential. No eligible arc enters R from outside, so all eligible slacks weakly increase; e strictly increases. Any omitted structural slack was strictly positive. Any omitted payoff slack exceeded alpha. Finiteness permits epsilon small enough to preserve feasibility and keep every previously higher payoff strictly above alpha. To see strict lexicographic improvement, either an entry below alpha increases, in which case the smallest such changed level has reduced multiplicity and no lower change, or all lower entries stay unchanged and increasing e reduces the multiplicity of alpha. The sorted vector strictly improves, a contradiction.
+51: 
+52: Any directed cycle containing a payoff arc advances through every layer and the anchor. A simple cycle visits the anchor only once; structural arcs do not change layers, and payoff arcs advance one layer. It therefore has exactly k payoff arcs. On the cycle, slack sums telescope to a fixed constant. At x this is the sum of its payoff entries because structural slacks vanish. For any other feasible y, all slacks are nonnegative, so
+53: 
+54:     y_e <= sum_cycle constants = sum_{payoff f in cycle} x_f <= k*x_e.
+55: 
+56: Taking the full-core maximum gives H_e<=k*x_e, including the case x_e=0. This uses all lexicographic stages, not merely the first floor. For m=1 and total edge value 1, the strict core is the k-player unit simplex, whose leximin is uniformly 1/k and each ideal is 1. Hence c(path_k)=1/k for every k>=2.
+57: 
+58: ## Unresolved branching and cycle cases
+59: 
+60: At a branching vertex, p_v contains one positive U and multiple negative child U variables; it is not the slack of an ordinary potential arc. The preceding cycle argument does not prove a bound for stars. It does not disprove one either. The four-star and four-cycle remain open in this campaign. No contraction, dummy-sector embedding, or inheritance of the three-cycle example is assumed to preserve the full core, ideals, and full leximin without a separate proof.
+61: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

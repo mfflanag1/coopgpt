@@ -1,0 +1,134 @@
+Task and review objective:
+Focused follow-up on the materially NEW final section: family-specific interpolation extends the no-go from M>=2 to every fixed M>0. Verify simultaneous diagonal edge optima from source_family.py, row-price cover at M=0, affine core interpolation between M=0 and2, and bound M/[4(4+M)] for allq andM>0. Check precise remaining scope M(q)->0. Earlier general lemma reviewed already. No novelty certification.
+
+
+FILE DIAGONAL_SUBDIVISION_NO_GO.md
+1: # A uniform bound for the diagonal-bonus subdivision route
+2: 
+3: Conventional no-go lemma, reviewed by Claude with no correctness defect, for a specific C4 construction. It is not a bound on all C4 markets.
+4: 
+5: ## Construction and hypotheses
+6: 
+7: Let a strict three-sector source market of equal size m have pair matrices A(a,b), B(a,c), C(b,c), all nonnegative, positive grand worth T computed by integral matching, and nonempty entire core. Only full teams produce value; arbitrary coalition worth is the maximum weight of a matching of full teams contained in it. In particular pairs have zero worth, while larger coalitions can have positive worth. Nonnegative values and equal sizes allow completion of an optimal matching without loss; relabel an optimal perfect full-team matching to the diagonal. Let
+8: 
+9:     D=max_j [A(j,j)+B(j,j)+C(j,j)].
+10: 
+11: Choose M>0 such that B(a,d)-B(a,c)<=M for every a,c,d. Form a strict four-sector C4 market on edges ab,bc,cd,ad with matrices A,C,M*identity,B respectively. Thus
+12: 
+13:     w'(a,b,c,d)=A(a,b)+C(b,c)+B(a,d)+M*1_{c=d}.
+14: 
+15: This is the usual attempt to replace the old ac edge by a path through a duplicate-index sector d. The hypothesis on M is sufficient for the following bound; no assertion is made when it is dropped.
+16: 
+17: ## Exact worth and a uniform floor
+18: 
+19: For any source-core payoff z=(z_a,z_b,z_c), define extended payoffs
+20: 
+21:     p_a=z_a+M/4, p_b=z_b+M/4, p_c=z_c+M/4,
+22:     p_d=M/4 for every new player.
+23: 
+24: Their total is T+mM. For any full four-team, the source core inequality gives
+25: 
+26:     p_a+p_b+p_c+p_d
+27:       >= A(a,b)+C(b,c)+B(a,c)+M
+28:       >= A(a,b)+C(b,c)+B(a,d)+M*1_{c=d}.
+29: 
+30: When c=d the last comparison is equality. When c!=d it follows from the defining bound on M. Thus p is a nonnegative full-team cover. The diagonal integral matching has worth T+mM, so weak duality proves the exact grand worth is T+mM and p is an entire-core point.
+31: 
+32: In particular the extended first optimal floor is at least M/4, and every coordinate of full leximin x' is at least M/4, including all later stages. No identification of p with full leximin is needed.
+33: 
+34: Every core point makes each team of the diagonal optimal matching tight. Individual nonnegativity therefore bounds every whole-core ideal by D+M. Hence every player with positive ideal satisfies
+35: 
+36:     x'_i/H'_i >= M/[4(D+M)].
+37: 
+38: Across a family, this is a positive uniform bound whenever D/M is bounded above. An upper bound on M is not necessary. In fact every ideal here is positive because it is at least M/4.
+39: 
+40: ## Application to the existing vanishing family
+41: 
+42: The source family has pair entries {0,1,2}, diagonal team values1 or4, and nonempty positive core. Thus B has row range at most2 and D=4. Taking M=2 gives
+43: 
+44:     x'_i/H'_i >= 1/12
+45: 
+46: for every player and every family depth q, although the source target ratio tends to zero. Taking any M>=2 only increases this lower bound. Uniform rescaling of the entire construction leaves the ratio bound unchanged.
+47: 
+48: Therefore this diagonal-bonus subdivision of the existing family cannot establish c(C4)=0. This does not rule out smaller bonuses, anisotropic reweighting with a new proof, a different subdivision gadget, or a new C4 family. In particular it does not contradict the known C4 example at5/44>1/12 and is not a universal1/12 theorem for C4.
+49: 
+50: ## Consequence for the campaign
+51: 
+52: Retire this specific transfer route. An amplification proof must change the mechanism rather than assume that a large diagonal consistency bonus preserves source fairness ratios. The first-face mapping proved for zero-valued added sectors does not apply here: these new sectors carry a nonzero diagonal interaction, which supplies a new payoff floor.
+53: 
+54: ## Family-specific refinement: every fixed positive bonus
+55: 
+56: For the particular source family, the diagonal matching attains the row-maximum bound on every edge separately: A and B each contribute2q, C contributes2q+1, and M*identity contributes mM. Hence T(M)=6q+1+mM for every M>=0, not merely M>=2.
+57: 
+58: At M=0, use the row-price core point p^0 assigning max_b A(a,b)+max_d B(a,d) to each a-player, max_c C(b,c) to each b-player, and zero to every c- and d-player. It covers every team, and its total is6q+1. At M=2, the preceding construction gives p^2>=1/2 in every coordinate, total6q+1+2m.
+59: 
+60: For 0<M<2, the point p^M=(1-M/2)p^0+(M/2)p^2 covers every M-market team because its value and T(M) are affine in M. It is efficient and nonnegative, and each coordinate is at least M/4. The preceding proof already gives that floor for M>=2. Therefore, for this diagonal subdivision of the specified family, at every q and every M>0,
+61: 
+62:     x_i(M)/H_i(M) >= M/[4(4+M)].
+63: 
+64: In particular no fixed M>0, or sequence bounded away from zero, yields vanishing protection as q increases. This argument does not settle sequences M(q)->0; its lower bound then tends to zero. It also does not bound arbitrary C4 markets. The only live parameter regime within this exact family that could still produce vanishing is a bonus tending to zero, with a separate analysis of full leximin and ideals.
+65: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE source_family.py
+1: """Frozen witness verifier, extracted from the prior exact recurrence verifier."""
+2: from fractions import Fraction as F
+3: from itertools import product
+4: import json
+5: def require(ok,msg):
+6:     if not ok:raise RuntimeError(msg)
+7: def save(path,obj):path.write_text(json.dumps(obj,indent=2,default=str)+'\n')
+8: def output(s):return 3*s-2
+9: def left(s):return 0 if s==0 else 3*s-1
+10: def right(s):return 3*s
+11: 
+12: def construct(q):
+13:     require(isinstance(q,int) and q>=1,'positive integer depth')
+14:     m=3*q+1;n=3*m;tau=F(1,3*q+3)
+15:     A=[['0']*m for _ in range(m)];B=[['0']*m for _ in range(m)];C=[['0']*m for _ in range(m)]
+16:     u=[[F(0)]*m for _ in range(3)];y=[[F(0)]*m for _ in range(3)]
+17:     for s in range(q+1):
+18:         ell=left(s);C[ell][ell]='1'
+19:         u[0][ell]=tau;u[1][ell]=1-(3*s+2)*tau;u[2][ell]=(3*s+1)*tau
+20:         y[2][ell]=1
+21:     critical=[]
+22:     for s in range(1,q+1):
+23:         o,ell,r,prev=output(s),left(s),right(s),left(s-1)
+24:         A[o][o]=B[o][o]='2';C[r][r]='1'
+25:         A[o][r]=B[o][ell]='2';C[r][ell]='1';C[prev][o]='1'
+26:         u[0][o]=4-(3*s-1)*tau;u[1][o]=tau;u[2][o]=(3*s-2)*tau
+27:         u[0][r]=tau;u[1][r]=1-2*tau;u[2][r]=tau
+28:         y[0][o]=3;y[2][o]=1;y[1][r]=1
+29:         critical.extend([[o,r,ell],[prev,prev,o]])
+30:     return dict(depth=q,m=m,matrices=[A,B,C],matching=[[i,i,i] for i in range(m)],critical_partial_matching=critical,T=str(6*q+1),first_floor=str(tau),target=2*m+left(0),target_ideal='1',ratio=str(tau),floor_witness=[str(v) for sector in u for v in sector],ideal_witness=[str(v) for sector in y for v in sector])
+31: 
+32: def verify(r):
+33:     q=r['depth'];m=r['m'];n=3*m;require(m==3*q+1,'sector size')
+34:     M=[[[F(v) for v in row] for row in mat] for mat in r['matrices']]
+35:     require(len(M)==3 and all(len(mat)==m and all(len(row)==m and all(v.denominator==1 and 0<=v<=2 for v in row) for row in mat) for mat in M),'nonnegative integer pair matrices')
+36:     def ids(t):i,j,k=t;return (i,m+j,2*m+k)
+37:     def w(t):i,j,k=t;return M[0][i][j]+M[1][i][k]+M[2][j][k]
+38:     matching=r['matching'];require(sorted(i for t in matching for i in ids(t))==list(range(n)),'perfect matching partition')
+39:     T=sum(map(w,matching));require(T==6*q+1==F(r['T']),'matching total')
+40:     u=list(map(F,r['floor_witness']));y=list(map(F,r['ideal_witness']));tau=F(1,3*q+3);checks=0
+41:     for p in (u,y):
+42:         require(len(p)==n and all(v>=0 for v in p) and sum(p)==T,'point total/nonnegativity')
+43:         for t in product(range(m),repeat=3):
+44:             require(sum(p[i] for i in ids(t))>=w(t),'mixed triple cover');checks+=1
+45:         require(all(sum(p[i] for i in ids(t))==w(t) for t in matching),'matching efficiency')
+46:     critical=r['critical_partial_matching'];covered=[i for t in critical for i in ids(t)]
+47:     require(len(critical)==2*q and len(set(covered))==len(covered),'critical triples not a partial matching')
+48:     require([w(t) for t in critical]==[5,1]*q,'critical matching weights')
+49:     require(sum(map(w,critical))==6*q,'critical matching value')
+50:     unmatched=sorted(set(range(n))-set(covered));require(len(unmatched)==3*q+3,'unmatched budget cardinality')
+51:     target=r['target'];require(target==2*m and target in unmatched,'target not budgeted')
+52:     require(all(v>=tau for v in u) and all(u[i]==tau for i in unmatched),'firstfloor attainment/pinning')
+53:     require(y[target]==1 and all(y[i]==0 for i in unmatched if i!=target),'ideal attainment')
+54:     require(w(matching[0])==1 and target in ids(matching[0]),'matching ideal upper bound')
+55:     require(tau==F(r['first_floor'])==F(r['ratio']) and F(r['target_ideal'])==1,'reported quantities')
+56:     return dict(status='PASS',depth=q,players=n,sector_size=m,nonzero_pair_entries=sum(v!=0 for mat in M for row in mat for v in row),T=str(T),all_triple_checks=checks,partial_matching_teams=2*q,partial_matching_value=str(6*q),unmatched_players=unmatched,budget_rhs='1',first_positive_floor=str(tau),full_leximin_target=str(tau),target_ideal='1',ratio=str(tau))
+57: 
+58: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

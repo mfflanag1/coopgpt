@@ -1,0 +1,151 @@
+# CoopGPT paper index
+
+Updated 20 September 2026. Six focused manuscript candidates are listed below.
+Completed manuscript means the exposition and PDF exist; it does not imply
+publication, confirmed novelty, or independent human endorsement. The current
+structural paper replaces the earlier chain-cycle manuscript in this list.
+
+## Current focused manuscripts
+
+### 1. Acyclicity and simultaneous protection of individual core maxima
+
+[Current PDF](paper5/graph_core_protection/output/pdf/manuscript.pdf) · [Source and verification package](paper5/graph_core_protection/README.md)
+
+High level: the sector interaction graph determines whether stable allocations
+can guarantee everyone a fixed fraction of their own best stable payoff.
+Trees permit protection; cycles can defeat even the best choice of allocation.
+
+Technical: under equal sector sizes, nonnegative pair matrices (zero matrices
+allowed), productive full teams only, positive integral worth and nonempty
+entire core, c(G)=R(G)=1/K for trees and zero for cyclic graphs. The source
+triangle has an entire-core simplex of dimension 4q+2 and exact optimal
+simultaneous fraction 1/(2q+3). The proofs combine tree cut coordinates,
+clipping, a unit partial-matching budget and selective subdivision.
+
+Status: consolidated technical manuscript, incorporating the former chain-cycle,
+graph-classification and simultaneous-protection results. Scoped model review
+and exact checks are documented in the package. Novelty and specialist review
+remain qualified; no field-level breakthrough is established.
+
+### 2. Sharp asymptotic separation of opposing egalitarian core selections
+
+[Current PDF](review_packages/2026-09-05/asymptotic/output/pdf/manuscript.pdf) · [Package](review_packages/2026-09-05/asymptotic/README.md)
+
+High level: two fairness rules can allocate almost all the same surplus to
+different people; the paper determines the rate at which maximal disagreement
+is approached as the population grows.
+
+Technical: for singleton-normalized exact games with n players and
+s_n=sup ||Lmin-Lmax||_1/T, the theorem is
+2-s_n=2/n+O(log(n)/n^2), hence n(2-s_n) tends to 2. A universal compact-convex
+constant-total overlap inequality matches a whole-core Fibonacci segment
+construction for every sufficiently large n. Here Lmax minimizes descending
+sorted payoffs; it does not maximize an individual's payoff.
+
+Status: self-contained quantitative manuscript. Segment and Fibonacci ingredients
+have prior precedents; the precise opposing-selector comparison is the candidate
+contribution. Human specialist review and global priority remain unconfirmed.
+
+### 3. Fair core selections: a sharp boundary between pairs and triples
+
+[Current PDF](review_packages/2026-09-05/assignment/output/pdf/manuscript.pdf) · [Package](review_packages/2026-09-05/assignment/README.md)
+
+High level: changing from pairwise cooperation to three-way cooperation sharply
+increases how much two fairness rules can disagree.
+
+Technical: graph matching games with nonempty core have sharp normalized
+selector distance floor(n/2)/(floor(n/2)+1) for n>=4. Sparse strict three-sided
+markets with bounded team values approach distance 2. Equal-sided complete
+additive triples retain a 1/3 ideal guarantee and sharp distance supremum 4/3.
+This paper permits arbitrary triple arrays, unlike the pair-additive restriction
+in Paper 1 above.
+
+Status: consolidated manuscript. Half-of-ideal guarantees have prior algorithmic
+and matching-reduction antecedents. The finite distance comparison and sparse
+triple family are the principal proposed contributions; original-source gaps remain.
+
+### 4. Balanced transport at the egalitarian core: a complete boundary phase diagram
+
+[PDF](paper4/threshold.pdf) · [Source](paper4/threshold.tex)
+
+High level: determines exactly when a richer group's coalition constraint can
+remain slack at the leximin allocation of an exact game.
+
+Technical: with m poorer and h richer players, slack richer suffixes exist
+exactly for m>=m_min(h), where m_min(1)=4, m_min(2)=m_min(3)=3 and
+m_min(h)=2 for h>=4. The main proof uses tight-coalition normal-cone geometry,
+balanced transport and explicit all-parameter realizing families.
+
+Status: coherent structural manuscript; main theorem survived the portfolio
+audit. Some auxiliary finite-certificate claims have narrower replay coverage.
+Exact partitions and their Lorenz consequences have prior antecedents.
+
+### 5. Boundary partitions at the leximin core: a two-parameter characterization
+
+[PDF](paper6/partition.pdf) · [Package](paper6/README.md)
+
+High level: identifies when two tight coalitions can divide all players across
+a slack fairness boundary, with one richer player in each coalition.
+
+Technical: the numbers p,q of poorer players on the two sides are feasible
+exactly when p,q>=1 and p+q>=4. Necessity and sufficiency have closed-form
+proofs and explicit constructions, including the (2,2) case that corrected
+an earlier conjecture.
+
+Status: completed specialized manuscript, naturally a companion to or section
+of Paper 4 above. It should not be counted as an unrelated major research program.
+
+### 6. Stable core without egalitarian stability
+
+[Current PDF](review_packages/2026-09-05/stable_core/output/pdf/manuscript.pdf) · [Package](review_packages/2026-09-05/stable_core/README.md)
+
+High level: stability of the core does not ensure that a procedural egalitarian
+rule selects a stable allocation.
+
+Technical: a six-player entire core segment is von Neumann-Morgenstern stable,
+but final procedural claims sum to 13/2 against total worth 6. The manuscript
+gives a direct stability proof and a three-regime additive ray. Six-player
+minimality uses established low-player implications.
+
+Status: focused manuscript, with downgraded novelty claims. Bare existence is a
+short synthesis of classical ingredients; the explicit example and complete ray
+are narrower worked-result candidates. The exact-game counterexample has earlier
+precedent in Mauri's thesis and is not claimed new.
+
+## Broader archived manuscripts
+
+- [Coalitional monotonicity and the core](paper/main.pdf): counterexamples to
+  surplus-distributor and other proposed selectors, minimal family obstructions,
+  and bounded exact-game feasibility. It does not resolve existence of a
+  universally coalitionally monotone selector on all exact games.
+- [Normalized Lmin on exact games](paper3/wrapper.pdf): four/five-player
+  monotonicity and six/seven-player carrier thresholds, boundary geometry and
+  later credal-set work. A large research archive; it overlaps Papers 4-5 and
+  contains material with differing review coverage.
+- [Maximal divergence of leximin and leximax](paper5/divergence.pdf): finite
+  s_5=1/2 and s_6=2/3 results, equality classifications and the long PXC history.
+  Contains superseded frontier language; Paper 2 above is the preferred
+  presentation of the sharp asymptotic result.
+
+## Earlier presentations, not extra independent papers
+
+- [Original stable-core manuscript](paper2/main.pdf).
+- [Original short asymptotic note](paper5/asymptotic_constant_two/output/pdf/sharp_asymptotic_separation.pdf).
+- [Pairwise assignment note](paper5/assignment_separation/output/pdf/sharp_assignment_separation.pdf).
+- [Three-sided assignment note](paper5/three_sided_separation/output/pdf/three_sided_separation.pdf).
+- [Earlier assignment consolidation](paper5/assignment_comparison/output/pdf/pairs_and_triples.pdf).
+- [Earlier chain-cycle manuscript](paper5/chain_cycle_separation/paper/manuscript.pdf),
+  now incorporated into Paper 1 above.
+
+## Separate ongoing theorem package
+
+[Protected subsidy and September 20 audit](structural_classification_2026-09-06/sharp_subsidy/audit_20260920/AUDIT.md):
+1/3<=S_3<=39999/100000, sharp local affine coefficient 13/18 at intercept 1/18,
+and an exact barrier at 29/82 for the specified idealized aggregate relaxation.
+This is not a finished paper or a proof of the global 1/3 conjecture. The scalar
+barrier is not an actual market counterexample.
+
+The general graph and simultaneous-protection theorem notes are now incorporated
+in Paper 1 and should not be counted as additional papers. Earlier portfolio
+and priority reviews are retained in portfolio_review_2026-09-05/REVIEW.md and
+review_packages/2026-09-05/priority_review/REVIEW.md.

@@ -1,0 +1,322 @@
+Task and review objective:
+Review the newly found four-cycle counterexample, its conventional certificate proof, and stdlib checker. Verify the six rational dual weights and stated identity against the JSON if feasible, integral worth argument, first-face target pinning, ideal upper bound and attainment. Look for missing hypotheses or false implications. This materially new result was not in the prior path review. No tools, no novelty certification; distinguish hand review from execution.
+
+
+FILE FOUR_CYCLE.md
+1: # Four-cycle counterexample to one-quarter protection
+2: 
+3: This is a finite exact certificate, not a vanishing family or a computation of c(C4). Use four sectors of three players each, in order 0,1,2,3, and edges 01,12,23,03. The four 3x3 matrices, with parent/first-sector row index and second-sector column index, are recorded in FOUR_CYCLE_CERTIFICATE.json. All pair entries are in {0,1,2}. Only full four-player teams are productive.
+4: 
+5: The certificate provides an integral perfect matching of worth T=18 and a nonnegative full-team cover x of total 18. Hence integral matching worth is exactly 18 and x is a core point. Its minimum coordinate is tau=9/8. Player 3 in zero-based flattened indexing (sector 1, local label 0) is the target.
+6: 
+7: Let lambda_t>=0 be the six positive fractional team weights in residual_dual. Their player loads are at most one. Put d_i=1-sum_(t contains i)lambda_t. The recorded rational weights satisfy d_target>0 and
+8: 
+9:     T-sum_t lambda_t*w_t = tau*sum_i d_i.
+10: 
+11: For every full-core payoff p, efficiency gives the exact identity
+12: 
+13:     sum_i d_i*p_i + sum_t lambda_t*(sum_(i in t)p_i-w_t)
+14:       = T-sum_t lambda_t*w_t.
+15: 
+16: All cover slacks and all deficits are nonnegative. As sum d>0, no core point can have every payoff strictly above tau. Since x attains floor tau, this is the optimal first floor. On the whole face p>=tau, the identity forces p_i=tau whenever d_i>0. In particular, the target's full leximin payoff is 9/8, irrespective of later stages.
+17: 
+18: The target's team in the recorded optimal perfect matching has value 5. Every core point makes each team in this matching tight; nonnegative teammate payoffs therefore imply H_target<=5. The recorded ideal_witness is a full-team cover of total 18 with target payoff 5. Thus H_target=5 and the full-leximin ratio is 9/40<1/4.
+19: 
+20: The standard-library check_cycle.py verifies all these rational identities, disjointness, and 162 full-team covers. No optimizer is needed to replay the target result. The saved complete x and H arrays also come from full raw-core exact optimization, but the proof above needs only x as a floor witness and the one target ideal; it does not infer the entire leximin vector from the floor witness.
+21: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE FOUR_CYCLE_CERTIFICATE.json
+1: {
+2:   "edges": [
+3:     [
+4:       0,
+5:       1
+6:     ],
+7:     [
+8:       1,
+9:       2
+10:     ],
+11:     [
+12:       2,
+13:       3
+14:     ],
+15:     [
+16:       0,
+17:       3
+18:     ]
+19:   ],
+20:   "matrices": [
+21:     [
+22:       [
+23:         0,
+24:         1,
+25:         1
+26:       ],
+27:       [
+28:         0,
+29:         1,
+30:         1
+31:       ],
+32:       [
+33:         1,
+34:         1,
+35:         0
+36:       ]
+37:     ],
+38:     [
+39:       [
+40:         0,
+41:         1,
+42:         2
+43:       ],
+44:       [
+45:         2,
+46:         2,
+47:         0
+48:       ],
+49:       [
+50:         1,
+51:         2,
+52:         1
+53:       ]
+54:     ],
+55:     [
+56:       [
+57:         0,
+58:         1,
+59:         2
+60:       ],
+61:       [
+62:         2,
+63:         1,
+64:         0
+65:       ],
+66:       [
+67:         1,
+68:         2,
+69:         2
+70:       ]
+71:     ],
+72:     [
+73:       [
+74:         2,
+75:         0,
+76:         2
+77:       ],
+78:       [
+79:         1,
+80:         0,
+81:         0
+82:       ],
+83:       [
+84:         2,
+85:         0,
+86:         1
+87:       ]
+88:     ]
+89:   ],
+90:   "m": 3,
+91:   "k": 4,
+92:   "T": 18,
+93:   "x": [
+94:     "17/8",
+95:     "9/8",
+96:     "13/8",
+97:     "9/8",
+98:     "13/8",
+99:     "9/8",
+100:     "9/8",
+101:     "13/8",
+102:     "9/8",
+103:     "17/8",
+104:     "9/8",
+105:     "17/8"
+106:   ],
+107:   "H": [
+108:     "6",
+109:     "9/2",
+110:     "5",
+111:     "5",
+112:     "5",
+113:     "5",
+114:     "5",
+115:     "5",
+116:     "5",
+117:     "6",
+118:     "9/2",
+119:     "6"
+120:   ],
+121:   "ratio": "9/40",
+122:   "levels": [
+123:     {
+124:       "value": "9/8",
+125:       "players": [
+126:         1,
+127:         3,
+128:         5,
+129:         6,
+130:         8,
+131:         10
+132:       ]
+133:     },
+134:     {
+135:       "value": "13/8",
+136:       "players": [
+137:         2,
+138:         4,
+139:         7
+140:       ]
+141:     },
+142:     {
+143:       "value": "17/8",
+144:       "players": [
+145:         0,
+146:         9,
+147:         11
+148:       ]
+149:     }
+150:   ],
+151:   "target": 3,
+152:   "floor": "9/8",
+153:   "ideal_witness": [
+154:     "1",
+155:     "0",
+156:     "0",
+157:     "5",
+158:     "5",
+159:     "4",
+160:     "0",
+161:     "0",
+162:     "0",
+163:     "2",
+164:     "0",
+165:     "1"
+166:   ],
+167:   "residual_dual": [
+168:     {
+169:       "team": [
+170:         0,
+171:         1,
+172:         0,
+173:         2
+174:       ],
+175:       "weight": "3/4"
+176:     },
+177:     {
+178:       "team": [
+179:         0,
+180:         2,
+181:         1,
+182:         0
+183:       ],
+184:       "weight": "1/4"
+185:     },
+186:     {
+187:       "team": [
+188:         1,
+189:         2,
+190:         1,
+191:         0
+192:       ],
+193:       "weight": "1/2"
+194:     },
+195:     {
+196:       "team": [
+197:         2,
+198:         0,
+199:         2,
+200:         1
+201:       ],
+202:       "weight": "1/2"
+203:     },
+204:     {
+205:       "team": [
+206:         2,
+207:         0,
+208:         2,
+209:         2
+210:       ],
+211:       "weight": "1/4"
+212:     },
+213:     {
+214:       "team": [
+215:         2,
+216:         1,
+217:         1,
+218:         0
+219:       ],
+220:       "weight": "1/4"
+221:     }
+222:   ],
+223:   "optimal_matching": [
+224:     [
+225:       0,
+226:       1,
+227:       0,
+228:       2
+229:     ],
+230:     [
+231:       1,
+232:       2,
+233:       1,
+234:       0
+235:     ],
+236:     [
+237:       2,
+238:       0,
+239:       2,
+240:       1
+241:     ]
+242:   ],
+243:   "raw_exclusions": 3,
+244:   "scope": "Refutes 1/4 for this four-cycle; does not prove vanishing or determine c(C4)"
+245: }
+246: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE check_cycle.py
+1: """Standard-library certificate: integral worth, positive floor, target pinning, ideal."""
+2: from fractions import Fraction as F
+3: from itertools import product
+4: from pathlib import Path
+5: import json
+6: 
+7: def require(ok,msg):
+8:     if not ok:raise RuntimeError(msg)
+9: 
+10: def check(r):
+11:     m,k=r['m'],r['k'];n=m*k;T=F(r['T']);tau=F(r['floor']);target=r['target']
+12:     def w(t):return sum(A[t[a]][t[b]]for (a,b),A in zip(r['edges'],r['matrices']))
+13:     teams=list(product(range(m),repeat=k))
+14:     matching=r['optimal_matching']
+15:     require(len(matching)==m and all(sorted(t[v]for t in matching)==list(range(m))for v in range(k)),'Not perfect matching')
+16:     require(sum(w(t)for t in matching)==T,'Matching worth')
+17:     def covers(point):
+18:         require(len(point)==n and min(point)>=0 and sum(point)==T,'Efficiency or nonnegativity')
+19:         for t in teams:require(sum(point[v*m+t[v]]for v in range(k))>=w(t),'Uncovered team')
+20:     x=list(map(F,r['x']));y=list(map(F,r['ideal_witness']));covers(x);covers(y)
+21:     require(min(x)==tau>0,'Positive floor')
+22:     loads=[F(0)]*n;dual_w=F(0)
+23:     for row in r['residual_dual']:
+24:         t=row['team'];weight=F(row['weight'])
+25:         require(tuple(t)in teams and weight>=0,'Invalid dual term')
+26:         for v in range(k):loads[v*m+t[v]]+=weight
+27:         dual_w+=weight*w(t)
+28:     d=[1-v for v in loads];require(min(d)>=0 and d[target]>0,'Dual loads or target deficit')
+29:     require(T-dual_w==tau*sum(d),'Dual objective identity')
+30:     # For every core p: sum(d_i p_i)+sum(lambda_t*(p(t)-w(t)))=T-lambda.w.
+31:     # All terms are nonnegative. Thus p>=tau forces p_i=tau whenever d_i>0.
+32:     target_team=next(t for t in matching if t[target//m]==target%m)
+33:     H=w(target_team)
+34:     require(y[target]==H and x[target]==tau,'Ideal attainment or target payoff')
+35:     require(tau/H==F(r['ratio'])<F(1,k),'Protection ratio')
+36:     return {'status':'PASS','team_cover_checks':2*len(teams),'target':target,'ratio':str(tau/H),'ideal':str(H),'dual_terms':len(r['residual_dual'])}
+37: 
+38: if __name__=='__main__':
+39:     print(json.dumps(check(json.loads((Path(__file__).parent/'FOUR_CYCLE_CERTIFICATE.json').read_text()))))
+40: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

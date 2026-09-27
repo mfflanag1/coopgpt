@@ -1,0 +1,64 @@
+Task and review objective:
+Adversarially review this candidate conventional proof. Check full-core equivalence, integral matching versus fractional, cut index signs, affine invertibility, all-stage leximin perturbation, and exact k payoff-arc count. Seek a concrete counterexample or invalid implication. Also assess whether the branching star obstacle is real, without assuming it implies failure. No tools; do not certify novelty. Return concise findings with severity and exact missing hypotheses.
+
+
+FILE TREE_CORE_AND_PATH.md
+1: # Tree core representation and path protection: candidate proof
+2: 
+3: Status: conventional derivation awaiting adversarial review and independent finite equivalence checks. No novelty claim. Model: k fixed sectors of equal size m, complete k-tuples only productive, nonnegative pair matrices on the edges of a connected tree. Coalition values use integral matchings. Root the tree at vertex 0 and orient every edge parent a to child b, with matrix A_ab(parent label, child label).
+4: 
+5: ## Integral worth and simultaneous diagonalization
+6: 
+7: Choose an optimal perfect matching for each edge. Root-label the players and propagate labels along each chosen matching. There is no conflicting propagation because the sector graph is a tree. All chosen edge matchings are now diagonal. Write d_ab(j)=A_ab(j,j). Any full-team matching projects to edge matchings, so its worth is at most the sum of their optima. The diagonal full-team matching attains this bound. Thus T=sum_j sum_edges d_ab(j). Nonnegative weights and equal sizes allow completion of partial matchings without loss. Assume T>0.
+8: 
+9: The core is precisely p>=0, sum p=T, and all full-team covers. Every diagonal team is tight at every core point because summing its inequalities exhausts T. Put s(j)=sum_edges d_ab(j); then sum_v p_v(j)=s(j).
+10: 
+11: ## Exact cut-variable representation
+12: 
+13: For each nonroot vertex b, let S_b be its descendant subtree, and define
+14: 
+15:     U_b(j) = sum_{v in S_b} p_v(j) - sum_{edges internal to S_b} d_edge(j).
+16: 
+17: Set U_0(j)=0. The entire core is affinely represented by
+18: 
+19:     U_b(i)-U_b(j) >= A_ab(j,i)-d_ab(j)       (a parent of b; all i,j),
+20:     p_v(j)=U_v(j)-sum_{b child of v} U_b(j)+sum_{b child of v} d_vb(j) >=0.
+21: 
+22: Necessity: use the full team with label i on S_b and label j on its complement. Subtract the tight diagonal team j. The only edge crossing the cut is ab. Internal diagonal terms cancel after substituting the definition of U_b, leaving the claimed difference inequality. The formula for p is immediate by subtracting child-subtree sums from the parent-subtree sum. At the root it follows from the tight diagonal identity.
+23: 
+24: Sufficiency: start with arbitrary U satisfying these constraints and reconstruct p by the displayed formula. Summing over vertices at a common label j telescopes to s(j), giving efficiency. For an arbitrary full team with label i_v at vertex v, sum its payoffs:
+25: 
+26:     sum_v p_v(i_v)
+27:       = sum_{a->b} [U_b(i_b)-U_b(i_a)+d_ab(i_a)]
+28:       >= sum_{a->b} A_ab(i_a,i_b).
+29: 
+30: This proves every team cover. The transformation is invertible: descendant sums of the reconstructed p recover each U_b. The representation thus preserves labeled coordinates and their full-core ideals.
+31: 
+32: Nonemptiness is classical matching duality: sum nonnegative optimal bilateral vertex covers over incident edges to obtain full-team covers with total T. This observation and the cut algebra are not asserted to be new.
+33: 
+34: ## Path theorem
+35: 
+36: For the path 0-1-...-(k-1), rooted at 0, the representation is a potential network. Use nodes (r,j), 1<=r<=k-1, and a single anchor of potential zero. Node (r,j) has potential U_r(j). An arc tail->head of constant c has slack c+U_tail-U_head.
+37: 
+38: Payoff arcs at each label j:
+39: 
+40:     anchor -> (1,j), constant d_01(j), payoff p_0(j);
+41:     (r,j) -> (r+1,j), constant d_r,r+1(j), payoff p_r(j), 1<=r<k-1;
+42:     (k-1,j) -> anchor, constant 0, payoff p_{k-1}(j).
+43: 
+44: Structural arcs stay inside one layer r: (r,i)->(r,j), constant d_(r-1),r(j)-A_(r-1),r(j,i). Their nonnegative slacks are exactly the cut inequalities.
+45: 
+46: Apply the selected-payoff-slack lemma proved in the chain-cycle manuscript (classical slack-balancing ingredient): for each payoff arc e at full leximin x, a simple directed cycle through e exists whose structural arcs are tight and whose payoff arcs f satisfy x_f<=x_e. Brief justification: otherwise the vertices reaching tail(e) through eligible arcs omit head(e); increasing their potentials (and resetting the anchor) improves e, weakly improves all payoff entries <=x_e, preserves tight structural constraints, and for sufficiently small positive perturbation preserves all omitted constraints and higher payoff levels. This contradicts full sorted leximin.
+47: 
+48: Any directed cycle containing a payoff arc advances through every layer and the anchor. A simple cycle visits the anchor only once; structural arcs do not change layers, and payoff arcs advance one layer. It therefore has exactly k payoff arcs. On the cycle, slack sums telescope to a fixed constant. At x this is the sum of its payoff entries because structural slacks vanish. For any other feasible y, all slacks are nonnegative, so
+49: 
+50:     y_e <= sum_cycle constants = sum_{payoff f in cycle} x_f <= k*x_e.
+51: 
+52: Taking the full-core maximum gives H_e<=k*x_e, including the case x_e=0. This uses all lexicographic stages, not merely the first floor. For m=1 and total edge value 1, the strict core is the k-player unit simplex, whose leximin is uniformly 1/k and each ideal is 1. Hence c(path_k)=1/k for every k>=2.
+53: 
+54: ## Unresolved branching and cycle cases
+55: 
+56: At a branching vertex, p_v contains one positive U and multiple negative child U variables; it is not the slack of an ordinary potential arc. The preceding cycle argument does not prove a bound for stars. It does not disprove one either. The four-star and four-cycle remain open in this campaign. No contraction, dummy-sector embedding, or inheritance of the three-cycle example is assumed to preserve the full core, ideals, and full leximin without a separate proof.
+57: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
