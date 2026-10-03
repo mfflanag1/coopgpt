@@ -1,18 +1,19 @@
-# Live proof state
+# Final mathematical proof state
 
-## Established in this campaign
+## Proved within this project
 
-- Independently checked full-witness finite formulation and certificates; calibration gate passed.
-- Six newly registered fixed supports have rational upper certificates below1/3, three with matching primal/dual bounds. This is a finite result, not a global improvement.
-- All six old ideal-difference diagnostic points exceed1/3. Their h vectors are not accepted as actual ideals.
-- Residual-budget propagation and path/diagonal-complement inequalities have conventional proofs and explicit diagnostic separations, with focused Fable review and adjudication. They are consequences of established completion/deletion tools, not claimed original mathematical mechanisms.
-- Independent raw-matrix checker verifies33 exact unmatched ideals in CW01/CW04 diagnostic markets,57024full-team covers, and132rejected corruptions. Their true named-P objectives are11/153 and-8/7083. These do not give full subsidy values.
+The [all-size direct fractional argument](sharp_result/SHARP_ONE_THIRD.md) proves **S3=1/3**, with **s/T<1/3 in every finite market** of the frozen class. The retained chain construction supplies the matching supremum. This supersedes the earlier global upper bound 39999/100000.
 
-## Two bounded formulations and decisions
+The proof combines six ideal comparisons with weighted residual budgets at separately attaining original-core witnesses. It preserves the full original core and original ideals. No cloning or sparse-support reduction is needed. Exact symbolic identities and independent rederivations support the conventional proof; the finite certificates are not its universal justification.
 
-1. Residual-propagation sufficiency: OPEN CONJECTURE, frozen before the reserved-support tests. The enriched diagnostic searches were below1/3 on CW01,CW04,CW05,CW06 numerically; exact recovered points are feasible lower evidence only. Next: extract at most one exact enriched dual from CW01, charged to the recovery/retry allowance if re-solving is necessary, then attempt an all-size coefficient aggregation with explicit dependence on label counts and weights. Do not add supports or silently assume uniform weights. Success requires a proved new implication; failure requires an exact obstruction or a precisely stated remaining inequality.
-2. Sector projection/path-plus-loop: conventional exact reformulation, but the useful five-label motif equals an integral deletion certificate. Complete motif census separatesCW01 but notCW04. STOP this route at the reformulation; do not spend budget enumerating more cycle shapes without a new coefficient-cancellation argument.
+The integral-P bound 2(k-1)/(3(2k-1)) is sharp for each k>=2 across market sizes. It must not be transferred to fractional residual mass. The previously frozen RP-sufficiency conjecture is proved by this aggregation. The generic sector-projection route remains stopped.
 
-## Gates and boundaries
+## Calibration and finite claims
 
-The phase1 calibration gate passed. The substantive hour20 mechanism gate is not declared passed merely from the old derived inequalities or finite examples. The original1/3<=S3<=39999/100000frontier is unchanged; no field-level breakthrough, novelty confirmation, external review, or mathematical completion is claimed. The next analytic attempt must justify any continuation before the gate. At most40accounted hours,2local solver processes,2total recovery retries, and the existing30minute solve/recovery and8hour aggregate phase limits remain in force. No purchases, outreach, or cloud jobs.
+All six registered supports have exact full-model upper certificates below 1/3; CW-01, CW-04 and CW-06 have matching full-model optima. All six old relaxed points exceed 1/3 and are not accepted as actual ideals. Independent diagnostic ideal checks cover 33 coordinates, 57,024 full-team covers and 132 corruptions. The RP-enriched CW-01 relaxation has exact optimum 211/714, independently checked through 89 dual rows and all 126 coefficients, with 15 corruption rejections.
+
+## Gates and unresolved work
+
+The calibration gate passed before support optimization. The substantive mechanism gate now passes through the universal derivation, exact identities and applications to both previously held-out enriched points; finite below-threshold examples alone did not pass it. Forty hours is a ceiling, not a requirement to continue after resolving the target.
+
+Historical novelty, independent human specialist assessment and publication readiness remain unresolved. The free-source ledger lists original-source gaps. No field-level breakthrough is established merely by internal proof and model review. No purchases, outreach, cloud compute, new computational supports or scheduled runs were performed.

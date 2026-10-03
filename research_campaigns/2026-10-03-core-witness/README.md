@@ -1,6 +1,6 @@
 # Exact core-witness compatibility campaign
 
-Started 3 October 2026 under the [frozen contract](CONTRACT.md), with a 40-hour ceiling and an 8-hour calibration gate. [Phase 1 passed](PHASE1_GATE.md); see [STATUS.json](STATUS.json). The goal is active; no new theorem or novelty claim yet. Gates are maximum effort allowances, not minimum waiting periods.
+Completed 3 October 2026 under the [frozen contract](CONTRACT.md), with a 40-hour ceiling and an 8-hour calibration gate. [Phase 1 passed](PHASE1_GATE.md); see [STATUS.json](STATUS.json). **The mathematical target is resolved internally: S3=1/3, strictly unattained at finite size.** See the [complete proof and sharp examples](sharp_result/SHARP_ONE_THIRD.md), [review packet](sharp_result/SPECIALIST_PACKET.md), and [source comparison](sharp_result/SOURCE_COMPARISON.md). Novelty and human specialist review remain unresolved. Gates are maximum effort allowances, not minimum waiting periods. See the [completion audit](COMPLETION_AUDIT.md).
 
 ## Calibration checkpoint
 
@@ -14,11 +14,13 @@ The known eight-label diagnostic is reproduced: the insufficient relaxation perm
 
 ## Paired results and live obligation
 
-All six supports now have exact rational full-model upper certificates below1/3; CW-01,CW-04,CW-06 have matching primal/dual values. See [initial results](PAIRED_RESULTS.md) and [reserved-support results](HELDOUT_RESULTS.md). The global bounds are unchanged.
+All six supports now have exact rational full-model upper certificates below1/3; CW-01,CW-04,CW-06 have matching primal/dual values. See [initial results](PAIRED_RESULTS.md) and [reserved-support results](HELDOUT_RESULTS.md). These historical finite results are now supplemented by the universal proof linked above.
 
-Two elementary explanations of the relaxation gap were proved, checked and reviewed. They remain consequences of established deletion/path tools. The [proof-state ledger](PROOF_STATE.md) leaves one concrete all-size relaxation-sufficiency conjecture open and stops the generic sector-projection route. The substantive mechanism gate has not been declared passed. No further supports may be added.
+Two elementary explanations of the relaxation gap were proved, checked and reviewed. They remain consequences of established deletion/path tools. The [proof-state ledger](PROOF_STATE.md) records the successful all-size aggregation of these constraints; the relaxation-sufficiency conjecture is proved and the substantive mechanism gate passes. The generic sector-projection route remains stopped. No further supports may be added.
 
 The independent diagnostic checker verifies33 coordinate maxima and132negative controls. Its [output](interpretation/DIAGNOSTIC_QA.json) distinguishes actual fixed-market objectives from the all-weight support optimization and from full subsidy values. Reproduce using `python3 -B -O research_campaigns/2026-10-03-core-witness/src/check_diagnostic_ideals.py` in the recorded checkout; the source retains the explicit audited project path.
+
+The final [reproduction guide](sharp_result/REPRODUCE.md) includes symbolic identities, exact dual checks and the sharp family. The [approach ledger](APPROACH_LEDGER.md) records stopped routes.
 
 ## Reproduce
 

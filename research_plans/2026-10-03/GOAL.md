@@ -1,6 +1,6 @@
 # Proposed long research goal: exact core-witness compatibility
 
-Prepared 3 October 2026. **Planned, not started.** Suggested budget: at most 40 active research hours, with a hard continuation gate at hour 8. This is a proposed execution budget, not a claim that a theorem can be completed in that time. Count elapsed campaign work, including solver waits and delegated work, against the 40-hour ceiling; parallel work does not extend a phase. Use at most two local solver processes. No paid sources, cloud compute, outreach or scheduled runs are authorized by this plan.
+Prepared 3 October 2026. **Execution completed:** see the [campaign audit](../../research_campaigns/2026-10-03-core-witness/COMPLETION_AUDIT.md). The text below records the original plan; its unchanged launch snapshot is `CONTRACT.md` in that campaign. Suggested budget: at most 40 active research hours, with a hard continuation gate at hour 8. This is a proposed execution budget, not a claim that a theorem can be completed in that time. Count elapsed campaign work, including solver waits and delegated work, against the 40-hour ceiling; parallel work does not extend a phase. Use at most two local solver processes. No paid sources, cloud compute, outreach or scheduled runs are authorized by this plan.
 
 ## Objective and frozen statement
 

@@ -2,13 +2,13 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
-[October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Outreach remains unsent. The [core-witness campaign](research_campaigns/2026-10-03-core-witness/README.md) was started on October 3 with a 40-hour ceiling and an 8-hour calibration gate.
+[October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Outreach remains unsent. The [core-witness campaign](research_campaigns/2026-10-03-core-witness/README.md) completed on October 3 before its 40-hour ceiling, with the sharp result below and all required gates documented.
 
 [September 27 project review and repository audit](project_review_2026-09-27/REVIEW.md).
 
 [Current paper index and summaries](PAPERS.md). The September 20 [consolidated graph-protection manuscript](paper5/graph_core_protection/README.md) now incorporates the chain-cycle, general graph, and simultaneous-protection results, with a ten-page PDF, portable verification package, and completed scoped model review. Human specialist review and novelty remain unresolved.
 
-The [September 20 frozen-ideal subsidy audit](structural_classification_2026-09-06/sharp_subsidy/audit_20260920/AUDIT.md) establishes **1/3 <= S_3 <= 39999/100000**, improving the earlier universal upper bound of 2/5. The sharp constant, novelty and external review remain unresolved.
+The [October 3 sharp subsidy theorem](research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md) now establishes **S_3=1/3**, with every finite-market ratio strictly smaller, under the original strict three-sector pair-additive model. The direct fractional proof supersedes the [September 20 bound](structural_classification_2026-09-06/sharp_subsidy/audit_20260920/AUDIT.md). Exact symbolic checks and independent model reviews are recorded; historical novelty and human specialist validation remain unresolved.
 
 The [simultaneous-protection theorem](structural_classification_2026-09-06/simultaneous_protection/README.md), proved September 7, strengthens the graph result to **every core selection**: the best uniform fraction of individual core maxima is 1/K on trees and zero on cyclic allowed graphs. The existing triangle family has exact best fraction 1/(2q+3), so no positive K-only bound survives for arbitrary K≥3 markets. The new entire-core simplex proof and exact certificates are complete; the bilateral half-optimal core is credited, and novelty and specialist assessment remain unresolved. The consolidated manuscript now has a completed scoped cross-model proof review; independent human review remains pending.
 

@@ -1,6 +1,8 @@
-# Frozen-ideal subsidy: active research checkpoint
+# Frozen-ideal subsidy: sharpness family and historical checkpoint
 
-**September20 audit update:** [independent audit and exact local refinement](audit_20260920/AUDIT.md). The global bound survives scoped model review with an explicit all-leaf-case repair. The local coefficient improves to13/18; global sharpness and novelty remain unresolved.
+**October 3 update:** The [direct fractional theorem](../../research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md) proves **S_3=1/3**, with strict inequality in every finite market. The complete lower-family proof below remains valid and was rechecked. Subsequent September checkpoint language is historical; source novelty and human review remain unresolved.
+
+**September20 historical audit update:** [independent audit and exact local refinement](audit_20260920/AUDIT.md). The global bound survives scoped model review with an explicit all-leaf-case repair. The local coefficient improves to13/18; global sharpness and novelty remain unresolved.
 
 Date: 2026-09-08 UTC. Status: **sharp constant unresolved; uniform improvement internally checked.**
 
@@ -19,7 +21,7 @@ For q>=1 set m=2q+1, with labels 0,...,2q in each sector. Initialize all three p
     e_s=(s, q+s, s-1) for s>0;
     e_0=(0, q, 2q).
 
-For every e=(a,b,c), set A_ab=2, B_ac=1, C_bc=2. All three labels within each e are distinct. The e_s are disjoint as actual teams (each sector's labels are distinct). Their label hypergraph has a tree incidence graph: consecutive edges share one label, each edge has a private b label, and the endpoints have the remaining private labels.
+For every e=(a,b,c), set A_ab=2, B_ac=1, C_bc=2. All three labels within each e are distinct, so the special pair positions are off-diagonal. Their actual-player disjointness makes those positions distinct within each pair matrix; no diagonal entry is overwritten. The e_s are disjoint as actual teams (each sector's labels are distinct). Their label hypergraph has a tree incidence graph: consecutive edges share one label, each edge has a private b label, and the endpoints have the remaining private labels.
 
 **Claim.** T=3m, every original ideal is 3, and s_3=2q. Consequently s_3/T=2q/[3(2q+1)] tends to 1/3.
 
@@ -51,7 +53,7 @@ Set y_i=max(p_i,H_i/3). Coordinatewise increase preserves all original coalition
 
 The second inequality follows by maximizing a convex function over the nonnegative three-coordinate simplex of total w_e: at a vertex its value is 5w_e/3. Summing gives sum y<=5T/3. This proves S_3<=2/3 and gives an explicit allocation method. This older bound does not exploit pair additivity. It is superseded by [the improved universal bound](MIXED_DONOR_UPPER.md).
 
-## Exact unresolved inequality
+## Formerly unresolved inequality (now proved)
 
 Let lambda_t>=0 be any fractional partial matching: d_i=sum_{t containing i}lambda_t<=1. Linear programming duality gives
 
@@ -61,7 +63,7 @@ The floor vector need not cover teams; the dual remains valid after substituting
 
     3*sum_t lambda_t*w_t + sum_i (1-d_i)*H_i <= 4T
 
-for every such lambda and every market in the frozen class. This statement is a target, not an established lemma. Proving it, or producing a certified counterexample, is the primary live task. Establishing it only for integral partial matchings at a fixed size does not suffice. However, the replication theorem in REDUCTIONS.md shows that an all-size integral-partial-matching proof is sufficient, and sparsification further reduces the relevant class.
+for every such lambda and every market in the frozen class. The October 3 direct fractional proof establishes this statement for the frozen class. The following reduction discussion records the historical route. Establishing it only for integral partial matchings at a fixed size does not suffice. However, the replication theorem in REDUCTIONS.md shows that an all-size integral-partial-matching proof is sufficient, and sparsification further reduces the relevant class.
 
 ## Prior family and route ledger
 
@@ -69,7 +71,7 @@ The earlier triangle family has exact s=2q/3 and T=6q+1; reducing its positive A
 
 Floating random screening tested 1,600 arbitrary or compatible diagonal markets without exceeding the already known lower bound. LP synthesis instead optimized pair entries and independent core witnesses for uncovered players for fixed partial matchings; 700 such trials found the new construction. Neither campaign is exhaustive. Discovery scripts and JSON outputs are retained under discovery/ and may refer to scratch dependencies; the certificate build is self-contained.
 
-Next: attack the fractional inequality using pair-additive structure, while extending synthesis to genuinely fractional obstruction supports. After two failed variants of one mechanism, record the failure and pivot. Do not generalize K or rewrite the goal to declare completion of these bounds.
+Historical next-step note, superseded October 3: attack the fractional inequality using pair-additive structure, while extending synthesis to genuinely fractional obstruction supports. After two failed variants of one mechanism, record the failure and pivot. Do not generalize K or rewrite the goal to declare completion of these bounds.
 
 ## Free-source and priority status
 

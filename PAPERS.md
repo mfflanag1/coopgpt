@@ -1,6 +1,6 @@
 # CoopGPT paper index
 
-Updated 20 September 2026. Six focused manuscript candidates are listed below.
+Updated 3 October 2026. Six focused manuscript candidates are listed below.
 Completed manuscript means the exposition and PDF exist; it does not imply
 publication, confirmed novelty, or independent human endorsement. The current
 structural paper replaces the earlier chain-cycle manuscript in this list.
@@ -137,15 +137,14 @@ precedent in Mauri's thesis and is not claimed new.
 - [Earlier chain-cycle manuscript](paper5/chain_cycle_separation/paper/manuscript.pdf),
   now incorporated into Paper 1 above.
 
-## Separate ongoing theorem package
+## Separate sharp theorem package
 
-[Protected subsidy and September 20 audit](structural_classification_2026-09-06/sharp_subsidy/audit_20260920/AUDIT.md):
-1/3<=S_3<=39999/100000, sharp local affine coefficient 13/18 at intercept 1/18,
-and an exact barrier at 29/82 for the specified idealized aggregate relaxation.
-This is not a finished paper or a proof of the global 1/3 conjecture. The scalar
-barrier is not an actual market counterexample.
+[Sharp one-third subsidy theorem](research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md) · [Specialist packet](research_campaigns/2026-10-03-core-witness/sharp_result/SPECIALIST_PACKET.md) · [Exact checks](research_campaigns/2026-10-03-core-witness/sharp_result/REPRODUCE.md)
 
-The general graph and simultaneous-protection theorem notes are now incorporated
-in Paper 1 and should not be counted as additional papers. Earlier portfolio
-and priority reviews are retained in portfolio_review_2026-09-05/REVIEW.md and
-review_packages/2026-09-05/priority_review/REVIEW.md.
+High level: external money can restore a one-third guarantee of each participant's best original stable payoff. The worst-case required subsidy is exactly one third of original surplus as a supremum; no finite market attains that ratio.
+
+Technical: for strict three-sector nonnegative pair-additive markets with positive integral worth and nonempty original core, S3=1/3. The proof aggregates six ideal comparisons with residual budgets at individual attaining witnesses for arbitrary fractional packings. It also gives the sharp integral-obstruction bound 2(k-1)T/[3(2k-1)] for k unmatched players per sector. The pre-existing chain family supplies tightness.
+
+Status: complete conventional proof note with exact symbolic and witness checks, independent model review and a source-comparison ledger. It is not yet a separate submission manuscript or an externally validated breakthrough. Novelty and unread original-source comparisons remain open. This result supersedes the former 1/3<=S3<=39999/100000 frontier.
+
+The general graph and simultaneous-protection theorem notes are incorporated in Paper 1 and should not be counted as additional papers. Earlier portfolio and priority reviews remain in `portfolio_review_2026-09-05/REVIEW.md` and `review_packages/2026-09-05/priority_review/REVIEW.md`. The September affine coefficient and scalar no-go results remain in the historical sharp-subsidy audit; the scalar 29/82 barrier is not an actual market.

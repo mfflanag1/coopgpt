@@ -1,6 +1,6 @@
 # Free-source ledger — 3 October 2026
 
-This campaign has not produced a new theorem. Searches do not certify absence of prior work. Earlier source comparisons in sharp_subsidy remain relevant; the original Quint/Lucas/Stuart gaps remain unresolved under the no-purchase instruction.
+**Final update:** The campaign produced the internally proved sharp theorem; the claim-specific [source comparison](sharp_result/SOURCE_COMPARISON.md) supersedes the initial-refresh access statuses below. Historical novelty remains unconfirmed. The following entries retain their chronological read scope. Searches do not certify absence of prior work. Earlier source comparisons in sharp_subsidy remain relevant; the original Quint/Lucas/Stuart gaps remain unresolved under the no-purchase instruction.
 
 - Nguyen and Zick, *Resource Based Cooperative Games: Optimization, Fairness and Stability*, free author PDF: https://people.umass.edu/yzick/papers/resource.coopgames.comsoc2018.pdf . Opened successfully. Section2 p3 defines cost of stability by minimum stable total divided by optimal coalition-structure value; it does not impose frozen original-core coordinate floors in that definition. It studies resource/threshold-task games. This establishes a model/objective distinction for that definition, not a completed comparison of every theorem or a novelty claim.
 - *Maximum and minimum core payoffs for supermodular multisided assignment markets with local monotonicity*, Martinez-de-Albeniz, Rafels, Ybern, Discrete Applied Mathematics379(2026)605-612. Institutional indexed PDF lead https://upcommons.upc.edu/server/api/core/bitstreams/fcec9d22-f4b5-4826-a5d4-d7e585b218cb/content . Search exposed title/abstract: coordinate extremum formulas under supermodularity and local monotonicity. Direct full-document fetch failed (cache miss). Exact hypotheses/theorem comparison still required before any claim involving those formulas. Do not infer that the unrestricted present model meets those assumptions.
@@ -15,3 +15,8 @@ Searches included assignment games/ideal/subsidy, multisided assignment/core/sub
 - Reattempted the previously identified2026 supermodular multisided extrema original through its institutional bitstream. Web retrieval still failed; the original-theorem comparison remains open. No purchase made.
 
 These checks constrain attribution; they do not confirm novelty of any campaign result.
+
+
+## Final adjudicated comparison
+
+The 2026 extrema original was retained locally from the earlier campaign and re-read here; a direct curl fetch also succeeded after web-cache failures. The source task's half-optimal-core miss was corrected by reopening WP153. New Meir, Atay and 2026 stable-payoff-guarantee comparisons were checked with the stated scope. Quint/Lucas/Stuart and Marchi–Oviedo remain incomplete. See `sharp_result/SOURCE_COMPARISON.md` and `reviews/literature/ADJUDICATION.md`. No novelty confirmation follows.
