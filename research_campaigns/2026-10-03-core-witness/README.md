@@ -1,6 +1,6 @@
 # Exact core-witness compatibility campaign
 
-Started 3 October 2026 under the [frozen contract](CONTRACT.md), with a 40-hour ceiling and an 8-hour calibration gate. See [STATUS.json](STATUS.json). The goal is active; no new theorem or novelty claim yet. Gates are maximum effort allowances, not minimum waiting periods.
+Started 3 October 2026 under the [frozen contract](CONTRACT.md), with a 40-hour ceiling and an 8-hour calibration gate. [Phase 1 passed](PHASE1_GATE.md); see [STATUS.json](STATUS.json). The goal is active; no new theorem or novelty claim yet. Gates are maximum effort allowances, not minimum waiting periods.
 
 ## Calibration checkpoint
 
