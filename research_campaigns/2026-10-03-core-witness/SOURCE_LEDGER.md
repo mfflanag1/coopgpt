@@ -7,3 +7,11 @@ This campaign has not produced a new theorem. Searches do not certify absence of
 - Priority-game free VU repository lead https://research.vu.nl/files/383916636/Priority_coalitional_games_and_claims_problems.pdf . Search indexed the original; direct fetch failed. The earlier accepted-manuscript comparison remains the accepted evidence, not a new Version-of-Record clearance.
 
 Searches included assignment games/ideal/subsidy, multisided assignment/core/subsidy, core maxima/assignment, and cost of stability/fairness. Broad searches returned unrelated material; only the primary sources above are retained as evidence or explicit unresolved leads. This is an initial refresh, not the final claim-specific priority audit.
+
+## 3 October follow-up: projection and path ingredients
+
+- Tamás Solymosi, *Sensitivity of fair prices in assignment markets*, Mathematical Social Sciences126(2023),1–12. Freely retrieved [institutional full text](https://unipub.lib.uni-corvinus.hu/9034/1/Sensitivity_of_fair_prices_in_assignment_market_ST_23.pdf). Section4 and Lemma1 on printedp9 explicitly connect longest paths to two-sided minimum/maximum core payoffs. This establishes that the graph/potential technique is an existing ingredient. It does not cover our arbitrary three-sector frozen-floor bound; no priority claim for the projection technique is warranted.
+- Shapley–Shubik, *The assignment game I: The core*, free [original full text](https://www.math.utoronto.ca/mccann/assignments/477/ShapleyShubik72.pdf), Theorem2 on printedp118. The core/assignment-dual identification is established background. Its two-sided integrality and sidewise extrema must not be transferred to three sectors without proof.
+- Reattempted the previously identified2026 supermodular multisided extrema original through its institutional bitstream. Web retrieval still failed; the original-theorem comparison remains open. No purchase made.
+
+These checks constrain attribution; they do not confirm novelty of any campaign result.

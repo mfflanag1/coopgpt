@@ -10,7 +10,15 @@ The known eight-label diagnostic is reproduced: the insufficient relaxation perm
 
 ## Frozen registry and scope
 
-[Six supports](registry/supports.json) were frozen before optimization: four one-cycle supports and two cycle-rank-three supports, all 12 labels; CW-05 and CW-06 are held out. [Provenance limits](registry/PROVENANCE_GAPS.md) qualify historical newness. All incidence trees were conservatively excluded by this bounded selection, not proved universally safe. The full-witness LP itself already exists in September work; the intended new contribution must be a reusable compatibility constraint, counterexample or precise obstruction.
+[Six supports](registry/supports.json) were frozen before optimization: four one-cycle supports and two cycle-rank-three supports, all 12 labels; CW-05 and CW-06 were reserved and then tested only after a candidate conjecture was written and hashed. [Provenance limits](registry/PROVENANCE_GAPS.md) qualify historical newness. All incidence trees were conservatively excluded by this bounded selection, not proved universally safe. The full-witness LP itself already exists in September work; the intended new contribution must be a reusable compatibility constraint, counterexample or precise obstruction.
+
+## Paired results and live obligation
+
+All six supports now have exact rational full-model upper certificates below1/3; CW-01,CW-04,CW-06 have matching primal/dual values. See [initial results](PAIRED_RESULTS.md) and [reserved-support results](HELDOUT_RESULTS.md). The global bounds are unchanged.
+
+Two elementary explanations of the relaxation gap were proved, checked and reviewed. They remain consequences of established deletion/path tools. The [proof-state ledger](PROOF_STATE.md) leaves one concrete all-size relaxation-sufficiency conjecture open and stops the generic sector-projection route. The substantive mechanism gate has not been declared passed. No further supports may be added.
+
+The independent diagnostic checker verifies33 coordinate maxima and132negative controls. Its [output](interpretation/DIAGNOSTIC_QA.json) distinguishes actual fixed-market objectives from the all-weight support optimization and from full subsidy values. Reproduce using `python3 -B -O research_campaigns/2026-10-03-core-witness/src/check_diagnostic_ideals.py` in the recorded checkout; the source retains the explicit audited project path.
 
 ## Reproduce
 
