@@ -1,0 +1,911 @@
+diff --git a/research_campaigns/2026-10-03-core-witness/src/check_certificate.py b/research_campaigns/2026-10-03-core-witness/src/check_certificate.py
+new file mode 100644
+index 0000000..3ba2af8
+--- /dev/null
++++ b/research_campaigns/2026-10-03-core-witness/src/check_certificate.py
+@@ -0,0 +1,385 @@
++#!/usr/bin/env python3
++"""Independent exact checker for 'core-witness-v1' certificates.
++
++Standard library only.  Does not import the solver or generator and shares
++no layout or coefficient code with them.  Every scientific check raises
++CertificateError (a ValueError) explicitly; no check relies on ``assert``,
++so behaviour is identical under ``python -O``.
++
++Conventions (reconstructed from CHECKER_CONTRACT.md / FORMULATION.md):
++  * three sectors A, B, C with m players each; global id = sector*m + label;
++  * pair types 0 = AB, 1 = AC, 2 = BC; matrices[t][row][col] is indexed by
++    the labels of the first and second sector named in the type;
++  * a team (a, b, c) has worth AB[a][b] + AC[a][c] + BC[b][c];
++  * the support is the set of pairs of the diagonal teams (j, j, j) and of
++    the teams of P.
++
++Public API: ``check(data) -> dict``; raises on any invalid certificate.
++CLI: ``python check_certificate.py CERT.json`` (exit 0 accepted, 1 rejected).
++"""
++
++import json
++import re
++import sys
++from fractions import Fraction
++
++SCHEMA = "core-witness-v1"
++
++# Exact rational strings only: integer, integer/integer, or plain decimal.
++# Exponent forms, nan/inf, underscores and whitespace are rejected.
++_RATIONAL_RE = re.compile(r"[+-]?[0-9]+(?:/[0-9]+|\.[0-9]+)?\Z")
++_MAX_RATIONAL_CHARS = 4000
++
++
++class CertificateError(ValueError):
++    """Raised when a certificate is malformed or fails an exact check."""
++
++
++def _fail(message):
++    raise CertificateError(message)
++
++
++def _is_int(value):
++    # bool is a subclass of int and is forbidden everywhere.
++    return type(value) is int
++
++
++def _rational(value, where):
++    if type(value) is int:
++        return Fraction(value)
++    if type(value) is str:
++        if len(value) > _MAX_RATIONAL_CHARS:
++            _fail("%s: rational string too long" % where)
++        if _RATIONAL_RE.match(value) is None:
++            _fail("%s: not an exact rational string: %r" % (where, value))
++        try:
++            return Fraction(value)
++        except (ValueError, ZeroDivisionError):
++            _fail("%s: not an exact rational string: %r" % (where, value))
++    _fail(
++        "%s: rational must be an int or a rational string, got %s"
++        % (where, type(value).__name__)
++    )
++
++
++def _field(mapping, key, where):
++    if key not in mapping:
++        _fail("%s: missing field %r" % (where, key))
++    return mapping[key]
++
++
++def _list(value, where, length=None):
++    if type(value) is not list:
++        _fail("%s: expected a list, got %s" % (where, type(value).__name__))
++    if length is not None and len(value) != length:
++        _fail("%s: expected length %d, got %d" % (where, length, len(value)))
++    return value
++
++
++def _team_pairs(a, b, c):
++    """The three (pair_type, row, col) positions of team (a, b, c)."""
++    return ((0, a, b), (1, a, c), (2, b, c))
++
++
++def check(data):
++    """Verify a core-witness-v1 certificate exactly.
++
++    Returns a dict with exact rational strings 'lower', 'upper', 'gap', the
++    boolean 'equal' (lower == upper) and dimensions.  Raises CertificateError
++    (a ValueError) on any defect.  No threshold such as upper < 1/3 and no
++    optimality (lower == upper) is required for acceptance.
++    """
++    if type(data) is not dict:
++        _fail("certificate must be a JSON object")
++
++    if _field(data, "schema", "certificate") != SCHEMA:
++        _fail("schema must be %r" % SCHEMA)
++
++    m = _field(data, "m", "certificate")
++    if not _is_int(m) or m < 1:
++        _fail("m must be a positive integer (bool forbidden)")
++
++    # ---- P: sector-wise disjoint partial matching --------------------
++    raw_p = _list(_field(data, "P", "certificate"), "P")
++    if len(raw_p) > m:
++        _fail("P has more than m triples")
++    p_teams = []
++    used = (set(), set(), set())
++    for idx, triple in enumerate(raw_p):
++        where = "P[%d]" % idx
++        _list(triple, where, 3)
++        for sector in range(3):
++            label = triple[sector]
++            if not _is_int(label) or label < 0 or label >= m:
++                _fail("%s: label out of range or not an integer" % where)
++            if label in used[sector]:
++                _fail("%s: P is not sector-wise disjoint" % where)
++            used[sector].add(label)
++        p_teams.append((triple[0], triple[1], triple[2]))
++
++    # ---- unmatched set ------------------------------------------------
++    unmatched = [
++        sector * m + label
++        for sector in range(3)
++        for label in range(m)
++        if label not in used[sector]
++    ]
++    raw_unmatched = _list(_field(data, "unmatched", "certificate"), "unmatched")
++    for value in raw_unmatched:
++        if not _is_int(value):
++            _fail("unmatched: entries must be integers")
++    if raw_unmatched != unmatched:
++        _fail("unmatched does not match the sorted reconstruction from P")
++
++    # ---- support ------------------------------------------------------
++    support_set = set()
++    for j in range(m):
++        support_set.update(_team_pairs(j, j, j))
++    for (a, b, c) in p_teams:
++        support_set.update(_team_pairs(a, b, c))
++    support = sorted(support_set)
++    raw_support = _list(_field(data, "support", "certificate"), "support")
++    if len(raw_support) != len(support):
++        _fail("support does not match the reconstruction (wrong size)")
++    for idx, entry in enumerate(raw_support):
++        _list(entry, "support[%d]" % idx, 3)
++        for value in entry:
++            if not _is_int(value):
++                _fail("support[%d]: entries must be integers" % idx)
++        if (entry[0], entry[1], entry[2]) != support[idx]:
++            _fail(
++                "support[%d] does not match the sorted reconstruction" % idx
++            )
++
++    # ---- matrices -----------------------------------------------------
++    raw_matrices = _list(_field(data, "matrices", "certificate"), "matrices", 3)
++    mats = []
++    for t in range(3):
++        rows = _list(raw_matrices[t], "matrices[%d]" % t, m)
++        mat = []
++        for r in range(m):
++            row = _list(rows[r], "matrices[%d][%d]" % (t, r), m)
++            parsed = []
++            for col in range(m):
++                where = "matrices[%d][%d][%d]" % (t, r, col)
++                value = _rational(row[col], where)
++                if value < 0:
++                    _fail("%s: negative weight" % where)
++                if (t, r, col) in support_set:
++                    if value > 1:
++                        _fail("%s: supported weight exceeds 1" % where)
++                elif value != 0:
++                    _fail("%s: nonzero weight outside the support" % where)
++                parsed.append(value)
++            mat.append(parsed)
++        mats.append(mat)
++
++    def worth(a, b, c):
++        return mats[0][a][b] + mats[1][a][c] + mats[2][b][c]
++
++    diagonal_total = sum((worth(j, j, j) for j in range(m)), Fraction(0))
++    if diagonal_total != 1:
++        _fail("diagonal team values sum to %s, not 1" % diagonal_total)
++
++    # ---- witness targets ---------------------------------------------
++    dummy = len(unmatched) == 0
++    targets = [-1] if dummy else list(unmatched)
++    raw_targets = _list(
++        _field(data, "witness_targets", "certificate"), "witness_targets"
++    )
++    for value in raw_targets:
++        if not _is_int(value):
++            _fail("witness_targets: entries must be integers")
++    if raw_targets != targets:
++        _fail("witness_targets does not match the reconstruction")
++    target_index = {}
++    for idx, target in enumerate(targets):
++        target_index[target] = idx
++    n_targets = len(targets)
++
++    # ---- witnesses: nonnegative, total 1, cover every triple ---------
++    raw_witnesses = _list(
++        _field(data, "witnesses", "certificate"), "witnesses", n_targets
++    )
++    witnesses = []
++    for idx in range(n_targets):
++        where = "witnesses[%d]" % idx
++        raw_x = _list(raw_witnesses[idx], where, 3 * m)
++        x = []
++        for k in range(3 * m):
++            value = _rational(raw_x[k], "%s[%d]" % (where, k))
++            if value < 0:
++                _fail("%s[%d]: negative payoff" % (where, k))
++            if value > 1:
++                _fail("%s[%d]: payoff exceeds 1" % (where, k))
++            x.append(value)
++        total = sum(x, Fraction(0))
++        if total != 1:
++            _fail("%s: payoffs sum to %s, not 1" % (where, total))
++        for a in range(m):
++            xa = x[a]
++            for b in range(m):
++                xab = xa + x[m + b]
++                wab = mats[0][a][b]
++                for c in range(m):
++                    if xab + x[2 * m + c] < wab + mats[1][a][c] + mats[2][b][c]:
++                        _fail(
++                            "%s: core violation at team (%d, %d, %d)"
++                            % (where, a, b, c)
++                        )
++        witnesses.append(x)
++
++    # ---- primal objective --------------------------------------------
++    lower = sum((worth(a, b, c) for (a, b, c) in p_teams), Fraction(0))
++    if not dummy:
++        own = Fraction(0)
++        for idx, target in enumerate(targets):
++            own += witnesses[idx][target]
++        lower += own / 3
++    lower -= 1
++    claimed_j = _rational(_field(data, "primal_J", "certificate"), "primal_J")
++    if claimed_j != lower:
++        _fail(
++            "primal_J mismatch: claimed %s, recomputed %s" % (claimed_j, lower)
++        )
++
++    # ---- dual certificate --------------------------------------------
++    dual = _field(data, "dual", "certificate")
++    if type(dual) is not dict:
++        _fail("dual must be a JSON object")
++    nu0 = _rational(_field(dual, "normalization", "dual"), "dual.normalization")
++    raw_totals = _list(_field(dual, "totals", "dual"), "dual.totals", n_targets)
++    nus = [
++        _rational(raw_totals[idx], "dual.totals[%d]" % idx)
++        for idx in range(n_targets)
++    ]
++    claimed_upper = _rational(_field(dual, "upper", "dual"), "dual.upper")
++
++    # Residual r = c - A^T lambda - B^T nu, one entry per LP variable.
++    res_w = {}
++    for position in support:
++        res_w[position] = Fraction(0)
++    res_x = [[Fraction(0)] * (3 * m) for _ in range(n_targets)]
++
++    # Objective 3*w(P) + sum of true target coordinates.
++    for (a, b, c) in p_teams:
++        for position in _team_pairs(a, b, c):
++            res_w[position] += 3
++    if not dummy:
++        for idx, target in enumerate(targets):
++            res_x[idx][target] += 1
++
++    # Inequality rows: team weight minus witness payoff <= 0.
++    raw_lambda = _list(_field(dual, "lambda", "dual"), "dual.lambda")
++    seen_rows = set()
++    for idx, entry in enumerate(raw_lambda):
++        where = "dual.lambda[%d]" % idx
++        _list(entry, where, 5)
++        target, a, b, c = entry[0], entry[1], entry[2], entry[3]
++        if not _is_int(target) or target not in target_index:
++            _fail("%s: target is not a witness target" % where)
++        for label in (a, b, c):
++            if not _is_int(label) or label < 0 or label >= m:
++                _fail("%s: invalid team label" % where)
++        key = (target, a, b, c)
++        if key in seen_rows:
++            _fail("%s: duplicate (target, a, b, c)" % where)
++        seen_rows.add(key)
++        mass = _rational(entry[4], "%s mass" % where)
++        if mass < 0:
++            _fail("%s: negative multiplier" % where)
++        for position in _team_pairs(a, b, c):
++            if position in res_w:
++                res_w[position] -= mass
++        row = res_x[target_index[target]]
++        row[a] += mass
++        row[m + b] += mass
++        row[2 * m + c] += mass
++
++    # Equality rows: diagonal total, then each witness total.
++    for j in range(m):
++        for position in _team_pairs(j, j, j):
++            res_w[position] -= nu0
++    for idx in range(n_targets):
++        nu = nus[idx]
++        row = res_x[idx]
++        for k in range(3 * m):
++            row[k] -= nu
++
++    positive = Fraction(0)
++    for value in res_w.values():
++        if value > 0:
++            positive += value
++    for row in res_x:
++        for value in row:
++            if value > 0:
++                positive += value
++
++    upper = (nu0 + sum(nus, Fraction(0)) + positive) / 3 - 1
++    if claimed_upper != upper:
++        _fail(
++            "dual upper mismatch: claimed %s, exact residual bound %s"
++            % (claimed_upper, upper)
++        )
++    if lower > upper:
++        _fail("primal_J %s exceeds dual upper bound %s" % (lower, upper))
++
++    return {
++        "schema": SCHEMA,
++        "accepted": True,
++        "m": m,
++        "lower": str(lower),
++        "upper": str(upper),
++        "gap": str(upper - lower),
++        "equal": lower == upper,
++        "dummy_witness": dummy,
++        "num_P": len(p_teams),
++        "num_unmatched": len(unmatched),
++        "num_targets": n_targets,
++        "num_support": len(support),
++        "num_triples": m * m * m,
++        "num_cover_checks": n_targets * m * m * m,
++        "num_lambda": len(raw_lambda),
++        "num_variables": len(support) + n_targets * 3 * m,
++    }
++
++
++def _reject_constant(name):
++    raise CertificateError("non-finite JSON constant %s is not allowed" % name)
++
++
++def _unique_object(pairs):
++    result = {}
++    for key, value in pairs:
++        if key in result:
++            raise CertificateError("duplicate JSON key %r" % key)
++        result[key] = value
++    return result
++
++
++def load(path):
++    """Load certificate JSON, rejecting NaN/Infinity and duplicate keys."""
++    with open(path, "r", encoding="utf-8") as handle:
++        return json.load(
++            handle,
++            parse_constant=_reject_constant,
++            object_pairs_hook=_unique_object,
++        )
++
++
++def main(argv=None):
++    args = sys.argv[1:] if argv is None else list(argv)
++    if len(args) != 1:
++        sys.stderr.write("usage: check_certificate.py CERTIFICATE.json\n")
++        return 2
++    try:
++        result = check(load(args[0]))
++    except Exception as exc:  # fail closed on anything unexpected
++        sys.stderr.write("REJECTED: %s: %s\n" % (type(exc).__name__, exc))
++        return 1
++    sys.stdout.write(json.dumps(result, sort_keys=True) + "\n")
++    return 0
++
++
++if __name__ == "__main__":
++    sys.exit(main())
+diff --git a/research_campaigns/2026-10-03-core-witness/src/test_check_certificate.py b/research_campaigns/2026-10-03-core-witness/src/test_check_certificate.py
+new file mode 100644
+index 0000000..354200f
+--- /dev/null
++++ b/research_campaigns/2026-10-03-core-witness/src/test_check_certificate.py
+@@ -0,0 +1,514 @@
++"""Focused tests for check_certificate.py.
++
++All expected values are hand-computed; no LP search and no production
++coefficient logic is used.  Only unittest assertion methods are used (no
++bare ``assert``), so the tests remain meaningful under ``python -O``.
++"""
++
++import copy
++import json
++import os
++import subprocess
++import sys
++import tempfile
++import unittest
++
++HERE = os.path.dirname(os.path.abspath(__file__))
++if HERE not in sys.path:
++    sys.path.insert(0, HERE)
++
++import check_certificate  # noqa: E402
++from check_certificate import check  # noqa: E402
++
++CHECKER_PATH = os.path.join(HERE, "check_certificate.py")
++M1_SUPPORT = [[0, 0, 0], [1, 0, 0], [2, 0, 0]]
++M2_DIAG_SUPPORT = [
++    [0, 0, 0], [0, 1, 1], [1, 0, 0], [1, 1, 1], [2, 0, 0], [2, 1, 1],
++]
++
++
++def m1_perfect():
++    # P = diagonal, no unmatched players, dummy witness; J = 1 - 1 = 0.
++    # Residuals: each P pair 3 - nu0 = 0; payoffs 0.  upper = 3/3 - 1 = 0.
++    return {
++        "schema": "core-witness-v1",
++        "m": 1,
++        "P": [[0, 0, 0]],
++        "unmatched": [],
++        "support": copy.deepcopy(M1_SUPPORT),
++        "matrices": [[[1]], [[0]], [[0]]],
++        "witness_targets": [-1],
++        "witnesses": [[1, 0, 0]],
++        "primal_J": 0,
++        "dual": {"lambda": [], "normalization": 3, "totals": [0], "upper": 0},
++    }
++
++
++def m1_empty():
++    # Empty P; J = 0 + (1 + 1 + 1)/3 - 1 = 0.
++    # Residuals: own coordinate 1 - 1 = 0, others -1.  upper = 3/3 - 1 = 0.
++    return {
++        "schema": "core-witness-v1",
++        "m": 1,
++        "P": [],
++        "unmatched": [0, 1, 2],
++        "support": copy.deepcopy(M1_SUPPORT),
++        "matrices": [[[1]], [[0]], [[0]]],
++        "witness_targets": [0, 1, 2],
++        "witnesses": [[1, 0, 0], [0, 1, 0], [0, 0, 1]],
++        "primal_J": 0,
++        "dual": {
++            "lambda": [],
++            "normalization": 0,
++            "totals": [1, 1, 1],
++            "upper": 0,
++        },
++    }
++
++
++def m2_empty():
++    # Empty P, AB diagonal entries 1/2.  Players A0=0 A1=1 B0=2 B1=3 C0=4 C1=5.
++    # Each witness pays 1/2 to one endpoint of each diagonal AB pair, so all
++    # 8 triples are covered.  Own coordinates: 1/2 for the four A/B targets,
++    # 0 for the C targets, so J = (4 * 1/2)/3 - 1 = -1/3.
++    # Dual with totals all 1: residuals <= 0, upper = 6/3 - 1 = 1.
++    h = "1/2"
++    return {
++        "schema": "core-witness-v1",
++        "m": 2,
++        "P": [],
++        "unmatched": [0, 1, 2, 3, 4, 5],
++        "support": copy.deepcopy(M2_DIAG_SUPPORT),
++        "matrices": [
++            [[h, 0], [0, h]],
++            [[0, 0], [0, 0]],
++            [[0, 0], [0, 0]],
++        ],
++        "witness_targets": [0, 1, 2, 3, 4, 5],
++        "witnesses": [
++            [h, h, 0, 0, 0, 0],
++            [h, h, 0, 0, 0, 0],
++            [0, h, h, 0, 0, 0],
++            [h, 0, 0, h, 0, 0],
++            [h, h, 0, 0, 0, 0],
++            [h, h, 0, 0, 0, 0],
++        ],
++        "primal_J": "-1/3",
++        "dual": {
++            "lambda": [],
++            "normalization": 0,
++            "totals": [1, 1, 1, 1, 1, 1],
++            "upper": 1,
++        },
++    }
++
++
++def m2_offdiag_p():
++    # P = {(A0, B1, C1)}; unmatched A1=1, B0=2, C0=4.  All weight on AB[0][0].
++    # w(P) = AB[0][1] + AC[0][1] + BC[1][1] = 0.
++    # Own coordinates 0, 1, 0, so J = 0 + 1/3 - 1 = -2/3.
++    # Dual nu0 = 0, totals 1: the three P pairs keep residual 3 each,
++    # upper = (3 + 9)/3 - 1 = 3.
++    return {
++        "schema": "core-witness-v1",
++        "m": 2,
++        "P": [[0, 1, 1]],
++        "unmatched": [1, 2, 4],
++        "support": [
++            [0, 0, 0], [0, 0, 1], [0, 1, 1],
++            [1, 0, 0], [1, 0, 1], [1, 1, 1],
++            [2, 0, 0], [2, 1, 1],
++        ],
++        "matrices": [
++            [[1, 0], [0, 0]],
++            [[0, 0], [0, 0]],
++            [[0, 0], [0, 0]],
++        ],
++        "witness_targets": [1, 2, 4],
++        "witnesses": [
++            [1, 0, 0, 0, 0, 0],
++            [0, 0, 1, 0, 0, 0],
++            [1, 0, 0, 0, 0, 0],
++        ],
++        "primal_J": "-2/3",
++        "dual": {
++            "lambda": [],
++            "normalization": 0,
++            "totals": [1, 1, 1],
++            "upper": 3,
++        },
++    }
++
++
++class AcceptTests(unittest.TestCase):
++    def test_m1_perfect(self):
++        result = check(m1_perfect())
++        self.assertEqual(result["lower"], "0")
++        self.assertEqual(result["upper"], "0")
++        self.assertEqual(result["gap"], "0")
++        self.assertIs(result["equal"], True)
++        self.assertIs(result["dummy_witness"], True)
++        self.assertEqual(result["num_unmatched"], 0)
++        self.assertEqual(result["num_targets"], 1)
++        self.assertEqual(result["num_support"], 3)
++
++    def test_m1_empty(self):
++        result = check(m1_empty())
++        self.assertEqual(result["lower"], "0")
++        self.assertEqual(result["upper"], "0")
++        self.assertIs(result["equal"], True)
++        self.assertIs(result["dummy_witness"], False)
++        self.assertEqual(result["num_unmatched"], 3)
++        self.assertEqual(result["num_P"], 0)
++
++    def test_m2_empty_valid_gap(self):
++        result = check(m2_empty())
++        self.assertEqual(result["lower"], "-1/3")
++        self.assertEqual(result["upper"], "1")
++        self.assertEqual(result["gap"], "4/3")
++        self.assertIs(result["equal"], False)
++        self.assertEqual(result["num_triples"], 8)
++        self.assertEqual(result["num_cover_checks"], 48)
++        self.assertEqual(result["num_variables"], 6 + 36)
++
++    def test_m2_offdiagonal_p(self):
++        result = check(m2_offdiag_p())
++        self.assertEqual(result["lower"], "-2/3")
++        self.assertEqual(result["upper"], "3")
++        self.assertEqual(result["num_support"], 8)
++        self.assertEqual(result["num_unmatched"], 3)
++
++    def test_upper_above_one_third_is_not_rejected(self):
++        # The checker must not impose upper < 1/3.
++        self.assertEqual(check(m2_offdiag_p())["upper"], "3")
++
++    def test_lambda_row_used(self):
++        # m=1 empty P with one multiplier on (target 0, team 000), nu0 = -1,
++        # totals [2, 1, 1].  Pair residuals: 0 - 1 + 1 = 0.  Target 0
++        # payoffs: (1 + 1 - 2, 1 - 2, 1 - 2) = (0, -1, -1); others as before.
++        # upper = (-1 + 4 + 0)/3 - 1 = 0.
++        cert = m1_empty()
++        cert["dual"] = {
++            "lambda": [[0, 0, 0, 0, 1]],
++            "normalization": -1,
++            "totals": [2, 1, 1],
++            "upper": 0,
++        }
++        result = check(cert)
++        self.assertEqual(result["upper"], "0")
++        self.assertEqual(result["num_lambda"], 1)
++
++    def test_lambda_positive_residual(self):
++        # Same multiplier but nu0 = 0, totals all 1: pair residuals -1,
++        # target-0 payoffs (1, 0, 0) -> positive part 1.
++        # upper = (3 + 1)/3 - 1 = 1/3.
++        cert = m1_empty()
++        cert["dual"]["lambda"] = [[0, 0, 0, 0, 1]]
++        cert["dual"]["upper"] = "1/3"
++        self.assertEqual(check(cert)["upper"], "1/3")
++        cert["dual"]["upper"] = 0
++        self.assertRaises(ValueError, check, cert)
++
++    def test_lambda_on_dummy_target(self):
++        # Perfect P, multiplier 1 on (dummy, 000), nu0 = 2, total -1 ... :
++        # pair residuals 3 - 1 - 2 = 0; payoffs 1 - 1 = 0.
++        # upper = (2 + 1 + 0)/3 - 1 = 0.
++        cert = m1_perfect()
++        cert["dual"] = {
++            "lambda": [[-1, 0, 0, 0, 1]],
++            "normalization": 2,
++            "totals": [1],
++            "upper": 0,
++        }
++        self.assertEqual(check(cert)["upper"], "0")
++
++    def test_rational_strings(self):
++        cert = m1_empty()
++        cert["matrices"] = [[["1/2"]], [["0.25"]], [["1/4"]]]
++        self.assertEqual(check(cert)["lower"], "0")
++
++    def test_extra_metadata_is_ignored(self):
++        cert = m1_perfect()
++        cert["metadata"] = {"status": "infeasible", "objective": 0.5}
++        self.assertEqual(check(cert)["upper"], "0")
++
++
++class RejectTests(unittest.TestCase):
++    def reject(self, cert):
++        self.assertRaises(ValueError, check, cert)
++
++    def test_not_an_object(self):
++        self.reject([])
++        self.reject(None)
++
++    def test_schema(self):
++        cert = m1_perfect()
++        cert["schema"] = "core-witness-v2"
++        self.reject(cert)
++
++    def test_missing_fields(self):
++        for key in sorted(m1_perfect()):
++            cert = m1_perfect()
++            del cert[key]
++            self.reject(cert)
++        for key in ("lambda", "normalization", "totals", "upper"):
++            cert = m1_perfect()
++            del cert["dual"][key]
++            self.reject(cert)
++
++    def test_bad_m(self):
++        for bad in (True, 0, -1, 1.0, "1", None):
++            cert = m1_perfect()
++            cert["m"] = bad
++            self.reject(cert)
++
++    def test_core_violation(self):
++        cert = m2_empty()
++        # Total still 1 but team (1, 1, c) of worth 1/2 is uncovered.
++        cert["witnesses"][0] = [1, 0, 0, 0, 0, 0]
++        cert["primal_J"] = "-1/6"
++        self.reject(cert)
++
++    def test_bad_diagonal_total(self):
++        cert = m1_empty()
++        cert["matrices"] = [[["1/2"]], [[0]], [[0]]]
++        self.reject(cert)
++        cert = m2_empty()
++        cert["matrices"][1][0][0] = "1/2"
++        self.reject(cert)
++
++    def test_objective_mismatch(self):
++        cert = m1_empty()
++        cert["primal_J"] = "1/3"
++        cert["dual"]["upper"] = "1/3"
++        self.reject(cert)
++        cert = m1_perfect()
++        # A dummy target must contribute nothing: J is 0, not 1/3.
++        cert["primal_J"] = "1/3"
++        self.reject(cert)
++
++    def test_witness_total(self):
++        cert = m1_empty()
++        cert["witnesses"][0] = [1, 1, 0]
++        self.reject(cert)
++        cert = m1_empty()
++        cert["witnesses"][0] = ["1/2", 0, 0]
++        self.reject(cert)
++
++    def test_witness_negative_or_wrong_shape(self):
++        cert = m1_empty()
++        cert["witnesses"][0] = [2, -1, 0]
++        self.reject(cert)
++        cert = m1_empty()
++        cert["witnesses"][0] = [1, 0]
++        self.reject(cert)
++        cert = m1_empty()
++        cert["witnesses"] = cert["witnesses"][:2]
++        self.reject(cert)
++
++    def test_p_overlap(self):
++        cert = m2_offdiag_p()
++        cert["P"] = [[0, 1, 1], [1, 0, 1]]  # C label 1 used twice
++        self.reject(cert)
++        cert = m2_offdiag_p()
++        cert["P"] = [[0, 1, 1], [0, 1, 1]]
++        self.reject(cert)
++
++    def test_p_bad_labels(self):
++        for bad in ([0, 1, 2], [0, 1], [0, 1, True], [0, -1, 1], [0, 1, "1"]):
++            cert = m2_offdiag_p()
++            cert["P"] = [bad]
++            self.reject(cert)
++
++    def test_off_support_nonzero(self):
++        cert = m2_empty()
++        cert["matrices"][0][0][1] = "1/2"
++        self.reject(cert)
++        cert = m2_empty()
++        cert["matrices"][2][1][0] = "1/1000000"
++        self.reject(cert)
++
++    def test_negative_weight(self):
++        cert = m2_empty()
++        cert["matrices"][0] = [["3/2", 0], [0, "-1/2"]]
++        self.reject(cert)
++
++    def test_matrix_shape(self):
++        cert = m2_empty()
++        cert["matrices"] = cert["matrices"][:2]
++        self.reject(cert)
++        cert = m2_empty()
++        cert["matrices"][0][0] = [0]
++        self.reject(cert)
++
++    def test_unmatched_wrong(self):
++        cert = m1_empty()
++        cert["unmatched"] = [0, 1]
++        self.reject(cert)
++        cert = m2_offdiag_p()
++        cert["unmatched"] = [4, 2, 1]  # right set, not sorted
++        self.reject(cert)
++        cert = m1_perfect()
++        cert["unmatched"] = [0]
++        self.reject(cert)
++
++    def test_support_wrong(self):
++        cert = m2_offdiag_p()
++        cert["support"] = copy.deepcopy(M2_DIAG_SUPPORT)
++        self.reject(cert)
++        cert = m2_empty()
++        cert["support"] = cert["support"] + [[0, 0, 1]]
++        self.reject(cert)
++        cert = m2_empty()
++        cert["support"] = list(reversed(cert["support"]))
++        self.reject(cert)
++
++    def test_witness_targets_wrong(self):
++        cert = m1_perfect()
++        cert["witness_targets"] = []
++        cert["witnesses"] = []
++        cert["dual"]["totals"] = []
++        self.reject(cert)
++        cert = m1_perfect()
++        cert["witness_targets"] = [0]
++        self.reject(cert)
++        cert = m1_empty()
++        cert["witness_targets"] = [-1]
++        self.reject(cert)
++
++    def test_empty_dual_claiming_false_upper(self):
++        # No multipliers at all: residual on each own coordinate is 1, so
++        # the exact bound is 3/3 - 1 = 0 for m=1 ... and 6/3 - 1 = 1 for m=2.
++        cert = m2_empty()
++        cert["dual"] = {
++            "lambda": [],
++            "normalization": 0,
++            "totals": [0, 0, 0, 0, 0, 0],
++            "upper": "-1/3",
++        }
++        self.reject(cert)
++        cert["dual"]["upper"] = 1
++        self.assertEqual(check(cert)["upper"], "1")
++
++    def test_wrong_exact_upper_zero(self):
++        cert = m2_empty()
++        cert["dual"]["upper"] = 0
++        self.reject(cert)
++
++    def test_upper_below_primal(self):
++        cert = m1_perfect()
++        cert["dual"]["normalization"] = 0
++        # Exact bound is (0 + 0 + 9)/3 - 1 = 2; claiming -1 must fail.
++        cert["dual"]["upper"] = -1
++        self.reject(cert)
++
++    def test_totals_length(self):
++        cert = m1_empty()
++        cert["dual"]["totals"] = [1, 1]
++        self.reject(cert)
++
++    def test_bad_lambda(self):
++        bad_rows = [
++            [[0, 0, 0, 0, -1]],                    # negative mass
++            [[0, 0, 0, 0, 1], [0, 0, 0, 0, 0]],    # duplicate row
++            [[5, 0, 0, 0, 1]],                     # not a target
++            [[-1, 0, 0, 0, 1]],                    # dummy not a target here
++            [[0, 0, 1, 0, 1]],                     # label out of range
++            [[0, 0, 0, 1]],                        # wrong arity
++            [[0, 0, 0, 0, 0.0]],                   # float mass
++            [[True, 0, 0, 0, 1]],                  # bool target
++        ]
++        for rows in bad_rows:
++            cert = m1_empty()
++            cert["dual"]["lambda"] = rows
++            self.reject(cert)
++
++    def test_float_rejected_everywhere(self):
++        cert = m1_empty()
++        cert["matrices"][0][0][0] = 1.0
++        self.reject(cert)
++        cert = m1_empty()
++        cert["witnesses"][0][0] = 1.0
++        self.reject(cert)
++        cert = m1_empty()
++        cert["primal_J"] = 0.0
++        self.reject(cert)
++        for key in ("normalization", "upper"):
++            cert = m1_empty()
++            cert["dual"][key] = 0.0
++            self.reject(cert)
++        cert = m1_empty()
++        cert["dual"]["totals"][0] = 1.0
++        self.reject(cert)
++
++    def test_bool_and_bad_strings_rejected(self):
++        for bad in (True, "1e0", "nan", "inf", "1/0", " 1", "1_0", "", None):
++            cert = m1_empty()
++            cert["matrices"][0][0][0] = bad
++            self.reject(cert)
++
++
++class CliOptimizedTests(unittest.TestCase):
++    """Run the CLI under ``python -O`` to prove checks are not asserts."""
++
++    def run_cli(self, text):
++        handle, path = tempfile.mkstemp(suffix=".json")
++        try:
++            with os.fdopen(handle, "w", encoding="utf-8") as out:
++                out.write(text)
++            return subprocess.run(
++                [sys.executable, "-O", CHECKER_PATH, path],
++                stdout=subprocess.PIPE,
++                stderr=subprocess.PIPE,
++                universal_newlines=True,
++                timeout=120,
++            )
++        finally:
++            os.unlink(path)
++
++    def test_accepts_valid(self):
++        proc = self.run_cli(json.dumps(m2_empty()))
++        self.assertEqual(proc.returncode, 0, proc.stderr)
++        result = json.loads(proc.stdout)
++        self.assertEqual(result["lower"], "-1/3")
++        self.assertEqual(result["upper"], "1")
++
++    def test_rejects_invalid_under_O(self):
++        mutations = []
++        cert = m2_empty()
++        cert["witnesses"][0] = [1, 0, 0, 0, 0, 0]
++        cert["primal_J"] = "-1/6"
++        mutations.append(cert)
++        cert = m2_empty()
++        cert["matrices"][0][0][1] = "1/2"
++        mutations.append(cert)
++        cert = m2_empty()
++        cert["dual"]["upper"] = 0
++        mutations.append(cert)
++        cert = m1_empty()
++        cert["unmatched"] = [0, 1]
++        mutations.append(cert)
++        cert = m1_empty()
++        cert["matrices"][0][0][0] = 1.0
++        mutations.append(cert)
++        for cert in mutations:
++            proc = self.run_cli(json.dumps(cert))
++            self.assertEqual(proc.returncode, 1, proc.stdout)
++            self.assertIn("REJECTED", proc.stderr)
++
++    def test_rejects_bad_json(self):
++        good = json.dumps(m1_perfect())
++        self.assertEqual(self.run_cli(good).returncode, 0)
++        self.assertEqual(self.run_cli("{not json").returncode, 1)
++        nan_text = good.replace('"primal_J": 0', '"primal_J": NaN')
++        self.assertNotEqual(nan_text, good)
++        self.assertEqual(self.run_cli(nan_text).returncode, 1)
++        dup_text = good[:-1] + ', "m": 1}'
++        self.assertEqual(self.run_cli(dup_text).returncode, 1)
++
++    def test_usage(self):
++        self.assertEqual(check_certificate.main([]), 2)
++
++
++if __name__ == "__main__":
++    unittest.main()

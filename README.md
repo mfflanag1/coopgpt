@@ -2,7 +2,7 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
-[October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Prepared, not sent or started.
+[October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Outreach remains unsent. The [core-witness campaign](research_campaigns/2026-10-03-core-witness/README.md) was started on October 3 with a 40-hour ceiling and an 8-hour calibration gate.
 
 [September 27 project review and repository audit](project_review_2026-09-27/REVIEW.md).
 
