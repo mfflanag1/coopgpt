@@ -2,6 +2,8 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
+[October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Prepared, not sent or started.
+
 [September 27 project review and repository audit](project_review_2026-09-27/REVIEW.md).
 
 [Current paper index and summaries](PAPERS.md). The September 20 [consolidated graph-protection manuscript](paper5/graph_core_protection/README.md) now incorporates the chain-cycle, general graph, and simultaneous-protection results, with a ten-page PDF, portable verification package, and completed scoped model review. Human specialist review and novelty remain unresolved.
