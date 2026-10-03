@@ -1,0 +1,255 @@
+--- reviewed_manuscript.tex
++++ manuscript.tex
+@@ -65,14 +65,14 @@
+ 
+ The proof uses two estimates for the same dual expression. If $W$ is a
+ fractional matching's value, $S$ the sum of residual-weighted individual
+-maxima and $B$ a residual-weighted diagonal pair budget, then
+-\[
+-                 3W+S\le5T-B,
+-        \qquad   3W+S\le3T+B.
++maxima and $\beta$ a residual-weighted diagonal pair budget, then
++\[
++                 3W+S\le5T-\beta,
++        \qquad   3W+S\le3T+\beta.
+ \]
+ The first estimate aggregates six comparisons between individual maxima;
+ the second uses a different original-core witness for each maximum.
+-Averaging eliminates $B$. Retaining the slack terms proves strictness in
++Averaging eliminates $\beta$. Retaining the slack terms proves strictness in
+ every finite market and the sharper integral bound.
+ 
+ \paragraph{Related work and contribution.}
+@@ -85,9 +85,10 @@
+ fractional protection is introduced here.
+ 
+ External payments to stabilize a game are studied through the cost of
+-stability~\cite{Bachrach2009}. Meir, Rosenschein and Malizia
++stability~\cite{Bachrach2009,Bachrach2018}. Meir, Rosenschein and Malizia
+ \cite[Section~2.2]{Meir2011} also define the cost of extending a given
+-efficient payoff vector to a stable one. Their input vector has total $T$;
++efficient payoff vector to a stable one; the same definition appears in
++Bachrach et al.~\cite[Section~5]{Bachrach2018}. Their input vector has total $T$;
+ our floor vector $H/3$ may have smaller total. Section~\ref{sec:framework}
+ records the exact comparison. Priority-game transformations provide another
+ precedent for adding individual claims~\cite{Priority2024}.
+@@ -108,14 +109,16 @@
+ Historical priority of the precise result remains under review. In
+ particular, full-original comparisons with Quint~\cite{Quint1991},
+ Lucas~\cite{Lucas1995} and Stuart~\cite{Stuart1997} remain incomplete.
++Other original-source leads and general implication routes are listed in
++the companion source ledger; no exhaustive priority clearance is claimed.
+ 
+ \section{Model and subsidy duality}\label{sec:model}
+ Let $N_1,N_2,N_3$ be disjoint sectors of size $n\ge1$, and put
+ $N=N_1\cup N_2\cup N_3$. A market $M$ is specified by nonnegative real
+ matrices $A,B,C$ on $N_1\times N_2$, $N_1\times N_3$, and
+-$N_2\times N_3$, respectively. A full team $e=(a,b,c)$ has value
++$N_2\times N_3$, respectively. A full team $e=(i_1,i_2,i_3)$ has value
+ \begin{equation}\label{eq:team}
+-                  v(e)=A_{ab}+B_{ac}+C_{bc}.
++                  v(e)=A_{i_1i_2}+B_{i_1i_3}+C_{i_2i_3}.
+ \end{equation}
+ For a coalition $Q\subseteq N$, its worth $v(Q)$ is the maximum sum of
+ values of player-disjoint full teams contained in $Q$. The empty matching
+@@ -257,7 +260,7 @@
+ Fix $\lambda\in\pack$. In addition to~\eqref{eq:dualquantities}, write
+ \begin{equation}\label{eq:residual}
+  k=n-\sum_e\lambda_e,\qquad
+- B=\sum_iq_iu_i,\qquad C_2=\sum_iq_i^2u_i.
++ \beta=\sum_iq_iu_i,\qquad C_2=\sum_iq_i^2u_i.
+ \end{equation}
+ Here and below $u_i=u_{a,j}$ when $i=(a,j)$. Every sector has the same
+ residual mass: $\sum_{i\in N_a}q_i=k\ge0$. In particular $\sum_iq_i=3k$.
+@@ -272,7 +275,7 @@
+ \begin{lemma}[Aggregate ideal comparison]\label{lem:aggregate}
+ Every fractional partial matching satisfies
+ \begin{equation}\label{eq:aggregate}
+-                          V\le5T-B-\frac E2.
++                          V\le5T-\beta-\frac E2.
+ \end{equation}
+ \end{lemma}
+ \begin{proof}
+@@ -305,8 +308,8 @@
+  3H_p+2S-\sum_jn_jH_j^\Sigma
+        =2\sum_{a,j}q_{a,j}d_j-E.
+ \]
+-Finally $D_p+\sum_{a,j}q_{a,j}d_j=3T$ and $U_p=2T-B$.
+-Thus $2V\le10T-2B-E$, as required. In particular the sign of the
++Finally $D_p+\sum_{a,j}q_{a,j}d_j=3T$ and $U_p=2T-\beta$.
++Thus $2V\le10T-2\beta-E$, as required. In particular the sign of the
+ deficit term does not depend on integrality of $n_j$.
+ \end{proof}
+ 
+@@ -317,7 +320,7 @@
+ \end{equation}
+ Consequently,
+ \begin{equation}\label{eq:residualbound}
+-                         V\le3T+B-\frac{C_2}{k}.
++                         V\le3T+\beta-\frac{C_2}{k}.
+ \end{equation}
+ \end{lemma}
+ \begin{proof}
+@@ -331,7 +334,7 @@
+ other $h\in N_a$. Since residual weights and all other-sector payoffs
+ are nonnegative,
+ \[
+- R\ge\sum_hq_hx_h\ge q_iH_i+(k-q_i)(H_i-u_i)
++ R\ge\sum_{h\in N}q_hx_h\ge q_iH_i+(k-q_i)(H_i-u_i)
+                          =kH_i-(k-q_i)u_i.
+ \]
+ Here $k-q_i=\sum_{h\in N_a\setminus\{i\}}q_h\ge0$. The lower bound
+@@ -342,7 +345,7 @@
+ scalar inequalities concern the fixed numbers $H_i$, so different witnesses
+ can be used. Since $\sum_iq_i=3k$,
+ \[
+-                 kS\le3k(T-W)+kB-C_2.
++                 kS\le3k(T-W)+k\beta-C_2.
+ \]
+ Dividing by $k$ proves~\eqref{eq:residualbound}.
+ \end{proof}
+@@ -354,7 +357,7 @@
+ \end{equation}
+ If $C_2>0$, this is strictly less than $4T$. If $C_2=0$, each
+ nonnegative summand $q_i^2u_i$ is zero, hence each $q_iu_i$ is zero
+-and $B=0$. Equation~\eqref{eq:residualbound} then gives
++and $\beta=0$. Equation~\eqref{eq:residualbound} then gives
+ $V\le3T<4T$. If $k=0$, every $q_i=0$ and
+ \eqref{eq:residualcover} gives $W\le T$, again implying $V\le3T<4T$.
+ 
+@@ -382,10 +385,10 @@
+ in~\eqref{eq:integral} occurs in a market with $n=2k-1$.
+ \end{theorem}
+ \begin{proof}
+-For the indicator packing, $q_i\in\{0,1\}$ and $C_2=B$. The two
++For the indicator packing, $q_i\in\{0,1\}$ and $C_2=\beta$. The two
+ aggregate bounds imply
+ \[
+-               V\le3T+\frac{k-1}{k}B,\qquad V\le5T-B.
++               V\le3T+\frac{k-1}{k}\beta,\qquad V\le5T-\beta.
+ \]
+ Weight these inequalities by $k/(2k-1)$ and $(k-1)/(2k-1)$,
+ respectively, and add. This gives
+@@ -404,8 +407,8 @@
+  e_0=(0,\ell,2\ell),\qquad
+  e_s=(s,\ell+s,s-1)\quad(1\le s\le\ell-1).
+ \end{equation}
+-For every $e=(a,b,c)$ in this list set
+-$A_{ab}=2$, $B_{ac}=1$, and $C_{bc}=2$.
++For every $e=(j_1,j_2,j_3)$ in this list set
++$A_{j_1j_2}=2$, $B_{j_1j_3}=1$, and $C_{j_2j_3}=2$.
+ All labels within a special team are distinct, so these entries are
+ off-diagonal. The special teams are player-disjoint: their sectorwise
+ label sets are $\{0,\ldots,\ell-1\}$,
+@@ -423,8 +426,9 @@
+ Consider the bipartite incidence graph with one vertex for each label
+ and one vertex for each special team, joined by label membership.
+ Consecutive special teams share one label; nonconsecutive special teams
+-share none, and each has a private second-sector label. The graph is
+-connected and has $(2\ell+1)+\ell$ vertices and $3\ell$ edges, so it
++share none, and each has a private second-sector label. Their label sets
++together contain every label $0,\ldots,2\ell$. Thus the graph is connected
++and has $(2\ell+1)+\ell$ vertices and $3\ell$ edges, so it
+ is a tree. This also covers $\ell=1$.
+ 
+ Fix a label $r$ and a sector $a_0\in\{1,2,3\}$. Root this incidence
+@@ -486,16 +490,16 @@
+ $k=1$. Its six residual players have $q_i=1/2$ and $H_i=3$, so $S=9$
+ and $W+S/3-T=1$. Substituting $k=1$ in~\eqref{eq:integral} would
+ incorrectly give zero. The fractional proof instead retains $C_2$,
+-which need not equal $B$.
++which need not equal $\beta$.
+ \end{remark}
+ 
+ \section{An exact slack certificate}\label{sec:slack}
+ For a team $e$ and a sector permutation $(a,b,c)$, let
+ \[
+- \ell_{e;a,b,c}
++ \sigma_{e;a,b,c}
+     =d_{j_b}+u_{a,j_a}+H_{c,j_c}-H_{c,j_b}-v(e)\ge0,
+  \qquad
+- L=\sum_e\lambda_e\sum_{(a,b,c)}\ell_{e;a,b,c}.
++ L=\sum_e\lambda_e\sum_{(a,b,c)}\sigma_{e;a,b,c}.
+ \]
+ When $k>0$, define
+ \[
+@@ -503,13 +507,13 @@
+ \]
+ The two aggregations give the exact equalities
+ \[
+-       E+L=10T-2B-2V,\qquad F=3kT+kB-C_2-kV.
+-\]
+-Eliminating $B$ yields the nonnegative slack certificate
++       E+L=10T-2\beta-2V,\qquad F=3kT+k\beta-C_2-kV.
++\]
++Eliminating $\beta$ yields the nonnegative slack certificate
+ \begin{equation}\label{eq:slack}
+                  2k(4T-V)=\frac{k}{2}(E+L)+C_2+F.
+ \end{equation}
+-For an integral partial matching, $C_2=B$ and the corresponding identity is
++For an integral partial matching, $C_2=\beta$ and the corresponding identity is
+ \begin{equation}\label{eq:integralslack}
+                  (8k-5)T-(2k-1)V=\frac{k-1}{2}(E+L)+F.
+ \end{equation}
+@@ -519,7 +523,7 @@
+ consistent with equality in the integral bound.
+ 
+ The same calculation has a useful necessary-condition interpretation.
+-For an integral $P$, suppose numbers $h_{a,j}$ obey the diagonal caps
++For an integral $P$ with $k\ge1$, suppose numbers $h_{a,j}$ obey the diagonal caps
+ $h_{a,j}\le d_j$, the six comparisons~\eqref{eq:comparison} for every
+ $e\in P$ with $h$ replacing $H$, and
+ $kh_i\le T-v(P)+(k-1)u_i$ for every unmatched player.
+@@ -530,7 +534,8 @@
+ 
+ \section{Relation to subsidy frameworks and scope}\label{sec:framework}
+ Let $l_i=H_i/3$. From diagonal caps, $\sum_i l_i\le T$.
+-In the notation of Meir et al.~\cite[Section~2.2]{Meir2011}, let
++Following Meir et al.~\cite[Section~2.2]{Meir2011} and
++Bachrach et al.~\cite[Section~5]{Bachrach2018}, let
+ $\operatorname{CoS}(x,G)$ be the least subsidy allowing a stable payoff
+ vector above an efficient preimputation $x$, with $\sum_ix_i=T$.
+ The following identity is a direct comparison of feasible sets:
+@@ -565,7 +570,8 @@
+ The proofs above are conventional all-parameter arguments. The accompanying
+ standard-library Python package verifies the coefficient identities in
+ \eqref{eq:coefficient}, \eqref{eq:slack} and~\eqref{eq:integralslack},
+-including all $27$ three-label coincidence patterns in the sixfold count.
++including all $27$ ordered label triples over three symbols in the sixfold
++count (covering every coincidence type).
+ For $\ell=1,\ldots,12$, it reconstructs each separate ideal-attaining
+ core witness and a matching optimal subsidy allocation from the raw pair
+ matrices. That check covers $3{,}603{,}804$ full-team inequalities and rejects
+@@ -581,6 +587,7 @@
+ and historical priority assessment remain pending. This working manuscript
+ has not been submitted for publication.
+ 
++\clearpage
+ \begin{thebibliography}{99}
+ \small
+ \bibitem{ShapleyShubik1971}
+@@ -598,14 +605,22 @@
+ \bibitem{Bachrach2009}
+ Y. Bachrach, E. Elkind, R. Meir, D. Pasechnik, M. Zuckerman,
+ J. Rothe, and J.~S. Rosenschein.
+-The cost of stability and its application to weighted voting games.
++The cost of stability in coalitional games.
+ arXiv:0907.4385, 2009.
+ \href{https://arxiv.org/abs/0907.4385}{arXiv record}.
++
++\bibitem{Bachrach2018}
++Y. Bachrach, E. Elkind, E. Malizia, R. Meir, D. Pasechnik,
++J.~S. Rosenschein, J. Rothe, and M. Zuckerman.
++Bounds on the cost of stabilizing a cooperative game.
++\emph{Journal of Artificial Intelligence Research} 63:987--1023, 2018.
++\href{https://doi.org/10.1613/jair.1.11270}{doi:10.1613/jair.1.11270}.
+ 
+ \bibitem{Meir2011}
+ R. Meir, J.~S. Rosenschein, and E. Malizia.
+ Subsidies, stability, and restricted cooperation in coalitional games.
+-2011. \href{https://www.cs.huji.ac.il/~jeff/papers/coopmas11meir.pdf}{Author-hosted extended manuscript, Section 2.2}.
++\emph{Proceedings of IJCAI 2011}, pp.~301--306.
++\href{https://www.cs.huji.ac.il/~jeff/papers/coopmas11meir.pdf}{Author-hosted extended manuscript, Section 2.2}.
+ 
+ \bibitem{Priority2024}
+ I. N\'u\~nez Lugilde, A. Est\'evez-Fern\'andez, and E. S\'anchez-Rodr\'iguez.

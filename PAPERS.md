@@ -1,6 +1,6 @@
 # CoopGPT paper index
 
-Updated 3 October 2026. Six focused manuscript candidates are listed below.
+Updated 3 October 2026. Seven focused manuscript candidates are listed below.
 Completed manuscript means the exposition and PDF exist; it does not imply
 publication, confirmed novelty, or independent human endorsement. The current
 structural paper replaces the earlier chain-cycle manuscript in this list.
@@ -112,6 +112,29 @@ short synthesis of classical ingredients; the explicit example and complete ray
 are narrower worked-result candidates. The exact-game counterexample has earlier
 precedent in Mauri's thesis and is not claimed new.
 
+### 7. Sharp subsidies for protecting core maxima in three-sided assignment markets
+
+[Current PDF](paper5/sharp_subsidy/output/pdf/manuscript.pdf) · [Source, audit, and verification package](paper5/sharp_subsidy/README.md)
+
+High level: external money can restore a one-third guarantee of each participant's
+best original stable payoff. The worst-case required subsidy is one third of
+original surplus as a supremum; no finite market attains that ratio.
+
+Technical: for strict three-sector nonnegative pair-additive markets with positive
+integral worth and nonempty original entire core, S3=1/3. The direct fractional
+proof combines six comparisons of individual maxima with residual budgets at
+separate attaining core points. It also proves the sharp integral-obstruction
+bound 2(k-1)T/[3(2k-1)] for k unmatched players per sector. A family with pair
+values in {0,1,2} supplies sharpness, with full coordinate-attainment witnesses.
+
+Status: ten-page self-contained manuscript, freshly audited by the coordinator
+and Fable 5.1; notation, explanatory steps, and attribution disclosures repaired.
+Portable exact checks include 3,603,804 full-team inequalities. Human specialist
+validation and historical novelty remain pending. The prior
+[theorem package](research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md)
+is its research archive, not an additional paper. This result supersedes the
+former 1/3<=S3<=39999/100000 frontier.
+
 ## Broader archived manuscripts
 
 - [Coalitional monotonicity and the core](paper/main.pdf): counterexamples to
@@ -136,15 +159,5 @@ precedent in Mauri's thesis and is not claimed new.
 - [Earlier assignment consolidation](paper5/assignment_comparison/output/pdf/pairs_and_triples.pdf).
 - [Earlier chain-cycle manuscript](paper5/chain_cycle_separation/paper/manuscript.pdf),
   now incorporated into Paper 1 above.
-
-## Separate sharp theorem package
-
-[Sharp one-third subsidy theorem](research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md) · [Specialist packet](research_campaigns/2026-10-03-core-witness/sharp_result/SPECIALIST_PACKET.md) · [Exact checks](research_campaigns/2026-10-03-core-witness/sharp_result/REPRODUCE.md)
-
-High level: external money can restore a one-third guarantee of each participant's best original stable payoff. The worst-case required subsidy is exactly one third of original surplus as a supremum; no finite market attains that ratio.
-
-Technical: for strict three-sector nonnegative pair-additive markets with positive integral worth and nonempty original core, S3=1/3. The proof aggregates six ideal comparisons with residual budgets at individual attaining witnesses for arbitrary fractional packings. It also gives the sharp integral-obstruction bound 2(k-1)T/[3(2k-1)] for k unmatched players per sector. The pre-existing chain family supplies tightness.
-
-Status: complete conventional proof note with exact symbolic and witness checks, independent model review and a source-comparison ledger. It is not yet a separate submission manuscript or an externally validated breakthrough. Novelty and unread original-source comparisons remain open. This result supersedes the former 1/3<=S3<=39999/100000 frontier.
 
 The general graph and simultaneous-protection theorem notes are incorporated in Paper 1 and should not be counted as additional papers. Earlier portfolio and priority reviews remain in `portfolio_review_2026-09-05/REVIEW.md` and `review_packages/2026-09-05/priority_review/REVIEW.md`. The September affine coefficient and scalar no-go results remain in the historical sharp-subsidy audit; the scalar 29/82 barrier is not an actual market.
