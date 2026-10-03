@@ -4,6 +4,8 @@
 
 [October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Outreach remains unsent. The [core-witness campaign](research_campaigns/2026-10-03-core-witness/README.md) completed on October 3 before its 40-hour ceiling, with the sharp result below and all required gates documented.
 
+The next [six-to-eight-hour breadth-scoping goal](research_plans/2026-10-03-breadth-scope/GOAL.txt), with a [copyable launch prompt](research_plans/2026-10-03-breadth-scope/PASTE_GOAL.txt), is prepared and independently reviewed as a research plan; it has **not started**. Its purpose is to decide whether a transferable theorem or a sourced open problem warrants a longer campaign.
+
 [September 27 project review and repository audit](project_review_2026-09-27/REVIEW.md).
 
 [Current paper index and summaries](PAPERS.md). The September 20 [consolidated graph-protection manuscript](paper5/graph_core_protection/README.md) now incorporates the chain-cycle, general graph, and simultaneous-protection results, with a ten-page PDF, portable verification package, and completed scoped model review. Human specialist review and novelty remain unresolved.
