@@ -4,7 +4,7 @@
 
 [October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Outreach remains unsent. The [core-witness campaign](research_campaigns/2026-10-03-core-witness/README.md) completed on October 3 before its 40-hour ceiling, with the sharp result below and all required gates documented.
 
-The next [six-to-eight-hour breadth-scoping goal](research_plans/2026-10-03-breadth-scope/GOAL.txt), with a [copyable launch prompt](research_plans/2026-10-03-breadth-scope/PASTE_GOAL.txt), is prepared and independently reviewed as a research plan; it has **not started**. Its purpose is to decide whether a transferable theorem or a sourced open problem warrants a longer campaign.
+The [six-to-eight-hour breadth-scoping campaign](research_campaigns/2026-10-03-breadth-scope/STATUS.json) started on October 3 at 22:47 UTC under the [reviewed goal](research_plans/2026-10-03-breadth-scope/GOAL.txt). It has a sharp unit-capacity short-flow theorem with internal proof review and exact checks; general rational capacities and novelty remain unresolved. The campaign is active, with no final research decision yet.
 
 [September 27 project review and repository audit](project_review_2026-09-27/REVIEW.md).
 
