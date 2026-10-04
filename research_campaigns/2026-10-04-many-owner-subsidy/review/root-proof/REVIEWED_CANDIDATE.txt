@@ -1,0 +1,75 @@
+COORDINATOR CANDIDATE: SHARP1/2 SHAPLEY COALITION FACTOR -- 2026-10-04
+Not yet independently reviewed. Proposed proof on arbitrary finite two-pool games.
+
+Setup: L,R finite disjoint, capacities c>=0. v(S)=min(c(S intersect L),c(S intersect R)).
+phi denotes ordinary individual Shapley value. Original core ideals H_i.
+
+1. UNIVERSAL LOWER FACTOR
+For positive-capacity i in L and j in R, write a=c_i,b=c_j. The independent
+uniform-arrival representation of Shapley gives, conditional on own arrival t,
+Bernoulli(t) predecessor indicators for all other owners. Excluding i,j let
+D=right predecessor capacity minus left predecessor capacity, and f_a(z)=min(a,max(z,0)).
+Then, at this t, expected marginal of i is
+ E[(1-t)f_a(D)+t f_a(D+b)],
+and expected marginal of j is
+ E[(1-t)f_b(-D)+t f_b(a-D)].
+The distributions of the OTHER owners are the same in both expressions.
+For every D, f_a(D+b)/a+f_b(a-D)/b>=1: if D>=a-b the first term is1,
+and if D<=a-b the second is1. Non-t terms are nonnegative. Integrating gives
+ phi_i/a+phi_j/b>=integral_0^1 t dt=1/2.
+
+For any coalition S with V=v(S)>0, choose nonnegative bilateral quantities q_ij
+between its left and right owners with row sums<=c_i, column sums<=c_j and
+sum q=V. Such a fractional matching exists by filling the two resource pools
+until the smaller is exhausted. Zero-capacity owners carry no flow.
+Summing q_ij times the pair-price inequality gives
+ (1/2)V <= sum q_ij(phi_i/c_i+phi_j/c_j) <= sum_{i in S}phi_i.
+This allocation of quantities is a proof device; owners are not cloned.
+Thus phi(S)>=v(S)/2 for ALL coalitions and owner counts. T=0 is immediate.
+
+2. UNIVERSAL INDIVIDUAL FLOOR
+Fix i capacity a, total same-pool capacity of others A, opposite total B, D=B-A.
+For predecessor subset U, let z=opposite capacity in U minus same capacity in U.
+Its marginal is f_a(z). The complementary predecessor subset has marginal f_a(D-z).
+For every real z,D, f_a(z)+f_a(D-z)>=f_a(D): trivial when D<=0; when D>0,
+if either argument>=a the result holds, otherwise their positive parts sum>=D
+until the cap a is reached. Complementary subsets have equal Shapley weights.
+Averaging yields phi_i>=f_a(D)/2=[T-v(N\{i})]/2>=H_i/2.
+Nonempty original core follows from a bottleneck-pool capacity vector.
+
+3. SHARPNESS FAMILY (capacity profile, not a cloning equivalence)
+For integer q>=2 put m=q^4, r=q^4-q^3. There are m left owners of capacity1,
+r right owners of capacity1, and one additional right owner b of capacity m.
+Let S be all left owners plus b. Then v(S)=T=m. Put delta=m-r=q^3 and
+D0=m-1-r=q^3-1>0.
+
+A given left unit earns1 if b arrives before it (probability1/2). If b arrives
+later, it earns1 exactly when strictly more right units than other left units
+have preceded it. Conditional on its arrival t, the counts X,Y are independent
+Binomial(m-1,t), Binomial(r,t). Therefore phi_left=1/2+eta, where
+ eta=integral_0^1 (1-t) Pr(Y>X)dt.
+The variable Y-X has mean -D0*t and variance (m-1+r)t(1-t)<=m/2.
+Chebyshev gives Pr(Y>X)<=min(1,m/(2 D0^2 t^2)) for t>0. With
+h=sqrt(m/2)/D0, integration yields eta<=2h=sqrt(2m)/D0 (also valid if h>=1).
+
+At b's arrival t, let X~Binomial(m,t),Y~Binomial(r,t). Its marginal is(X-Y)_+,
+whose mean is at most delta*t+sqrt(m/2) by Cauchy-Schwarz applied to centered
+fluctuations. Thus phi_b<=delta/2+sqrt(m/2).
+Combining,
+ phi(S)/m=1/2+eta+phi_b/m
+ <=1/2+sqrt(2)*q^2/(q^3-1)+1/(2q)+1/(sqrt(2)*q^2) ->1/2.
+Together with1, the optimal universal coalition factor is exactly1/2 (infimum).
+
+CONSEQUENCE
+Every constant scalar multiple lambda*phi that covers every coalition for all
+owner counts requires lambda>=2, and lambda=2 works. The rule2phi is truthful
+under binding underreports/no costs, covers coalitions, protects H and spends2T.
+This100% subsidy is WORSE than the existing50% aggregate-price construction.
+The sharp factor is a structural obstruction to uniform Shapley scaling, not
+an impossibility for other mechanisms or proof that50% is globally optimal.
+
+CALIBRATION
+For(1,1|1,1,2), phi=(41/60,41/60,11/60,11/60,4/15).
+For S=the two left owners plus the right owner of capacity2, phi(S)=49/30,
+v(S)=2 and phi(S)/v(S)=49/60. Scaling by6/5 pays49/25<2.
+All capacities are positive. This refutes an arbitrary-owner extension of20%.

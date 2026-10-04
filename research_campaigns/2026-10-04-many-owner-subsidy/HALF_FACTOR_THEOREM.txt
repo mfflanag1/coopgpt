@@ -1,0 +1,165 @@
+SHARP SHAPLEY COALITION FACTOR FOR WEIGHTED GLOVE GAMES -- 2026-10-04
+Checked research note. Historical novelty and human specialist review unresolved.
+The model and Shapley truthfulness are established ingredients; see SOURCES.txt.
+
+1. SETUP AND STATEMENT
+Let N=L union R be a finite partition into nonempty pools. Each original owner i
+has real capacity c_i>=0 and belongs to exactly one pool. For S subset N define
+ v(S)=min(sum_{i in S intersect L} c_i, sum_{j in S intersect R} c_j), T=v(N).
+The original efficient core is
+ C(v)={x: sum_i x_i=T, sum_{i in S} x_i>=v(S) for every S subset N}.
+Let H_i=max{x_i:x in C(v)} and M_i=T-v(N without i).
+No owner is replaced by independently acting clones.
+
+The core is nonempty: pay capacities to the pool with the smaller grand total,
+and zero to the other pool. This vector is efficient and covers every coalition.
+The core is compact because singleton constraints give x_i>=0 and efficiency
+bounds every coordinate by T. For every core vector x,
+ x_i=T-x(N without i)<=T-v(N without i)=M_i, so H_i<=M_i.
+
+Let phi denote ordinary individual Shapley value, with n=|N|:
+ phi_i=sum_{U subset N without i} |U|!(n-|U|-1)!/n! [v(U+i)-v(U)].
+It is nonnegative and efficient. The following hold for all real nonnegative
+capacity profiles and all finite owner counts:
+ (A) phi_i >= M_i/2 >= H_i/2 for each owner;
+ (B) phi(S) >= v(S)/2 for each coalition;
+ (C) the universal coalition factor 1/2 is sharp as an infimum over finite games.
+The individual H/2 factor is also sharp at the two-owner profile (1|1).
+
+Consequently a single constant multiple lambda*phi covers every coalition for
+all profiles and owner counts if and only if lambda>=2. The rule 2phi is truthful
+under binding capacity underreports with no operating costs, covers coalitions,
+protects H, and spends 2T. This is a 100% subsidy, worse than the existing 50%
+aggregate-price rule. It is an obstruction to Shapley scaling, not a general
+mechanism lower bound. Arbitrary-mechanism bounds remain [1/8,1/2]; see the proofs/certificates in
+../2026-10-04-truthful-subsidy/ and ../2026-10-04-ownership-subsidy/.
+
+2. COMPLEMENTARY PREDECESSOR PAIRING: INDIVIDUAL FLOOR
+Fix i of capacity a. Let A be the total same-pool capacity of all other owners,
+B the total opposite-pool capacity, and D=B-A. Define
+ f_a(z)=min(a,max(z,0)).
+For a predecessor subset U, write z=opposite-pool capacity in U minus same-pool
+capacity in U. The marginal of i is f_a(z). The complementary predecessor subset
+U'=(N without i) without U has marginal f_a(D-z).
+
+For all real z,D and all a>=0,
+ f_a(z)+f_a(D-z)>=f_a(D).
+If D<=0 the right side is zero. If D>0 and either argument is at least a, the
+left side is at least a. Otherwise neither positive part is truncated and their
+sum is at least z+(D-z)=D, which is at least f_a(D).
+
+The Shapley weight of U equals that of U': the two factorial factors swap.
+Pairing, summing, and using that the weights sum to one proves
+ 2phi_i>=f_a(D)=min(A+a,B)-min(A,B)=M_i>=H_i.
+This covers a=0 and every tie. At (1|1), H_i=1 and phi_i=1/2.
+
+3. COALITION FLOOR: A SHORT CONSEQUENCE
+Assume by pool symmetry that c(L)<=c(R). For every i in L, removing i reduces
+T=c(L) by exactly c_i. Thus M_i=c_i and part (A) gives phi_i>=c_i/2.
+For every S, nonnegativity and part (A) imply
+ phi(S)>=phi(S intersect L)>=c(S intersect L)/2>=v(S)/2.
+The last inequality uses v(S)<=c(S intersect L), regardless of which pool is
+smaller INSIDE S. If T=0 all coalition values and Shapley payments vanish.
+This proof was also obtained independently in the delegated derivation.
+
+4. ALTERNATIVE PAIR-PRICE PROOF
+This gives a useful independently checked local inequality. Let i in L and j in R
+have positive capacities a,b. Represent Shapley by independent uniform arrival
+times on [0,1]. Conditional on an owner's arrival t, all other predecessor
+indicators are independent Bernoulli(t). Excluding i,j, let D be right predecessor
+capacity minus left predecessor capacity. Conditional expected marginals are
+ E[(1-t)f_a(D)+t f_a(D+b)] for i,
+ E[(1-t)f_b(-D)+t f_b(a-D)] for j.
+The OTHER-owner distribution D is the same in these two separate expectations.
+For every D,
+ f_a(D+b)/a+f_b(a-D)/b>=1:
+if D>=a-b the first term is 1; if D<=a-b the second is 1.
+Dropping nonnegative (1-t) terms and integrating gives
+ phi_i/a+phi_j/b>=integral_0^1 t dt=1/2.
+For S, choose nonnegative bilateral quantities q_ij among its positive-capacity
+owners with row sums<=c_i, column sums<=c_j and total v(S). Such quantities exist
+by exhausting the smaller pool. Multiplying the pair inequality by q_ij and
+summing yields v(S)/2<=phi(S). These quantities are a proof device, not a change
+in who owns or reports capacity. Section 3 is sufficient without this argument.
+
+5. EXPLICIT ASYMPTOTIC SHARPNESS FAMILY
+For integer q>=2 let m=q^4 and r=q^4-q^3. There are m left owners of capacity 1,
+r right owners of capacity 1, and one additional right owner b of capacity m.
+Take S=all left owners together with b. Then v(S)=T=m. Put
+ delta=m-r=q^3 and D0=m-1-r=q^3-1>0.
+
+Fix a left unit. If b precedes it, its marginal is 1: the right-minus-left
+predecessor capacity is at least m-(m-1)=1. If b is later, its marginal is 1
+exactly when Y>X, where at arrival t the independent predecessor counts satisfy
+ X~Binomial(m-1,t), Y~Binomial(r,t).
+Consequently
+ phi_left=1/2+eta, eta=integral_0^1 (1-t) Pr(Y>X) dt.
+The strict inequality follows from integer unit counts. The variable Y-X has
+mean -D0*t and variance (m-1+r)t(1-t)<=m/2. For t>0 Chebyshev gives
+ Pr(Y>X)<=min(1,m/(2D0^2 t^2)).
+Let h=sqrt(m/2)/D0. When 0<h<1, the integral of min(1,h^2/t^2) on [0,1]
+is h+h^2(1/h-1)=2h-h^2<=2h. When h>=1 it is at most 1<=2h. Therefore
+ eta<=2h=sqrt(2m)/D0.
+
+At b's arrival t, let X~Binomial(m,t),Y~Binomial(r,t) independently. Its marginal
+is min(X,Y+m)-min(X,Y)=(X-Y)_+, since X<=m. Its mean is bounded by
+ E[(X-Y)_+] <= delta*t+E[|(X-Y)-delta*t|]
+              <= delta*t+sqrt(Var(X-Y)) <= delta*t+sqrt(m/2).
+Here the first inequality uses delta*t>=0, the second is Cauchy-Schwarz, and
+Var(X-Y)=(m+r)t(1-t)<=m/2. Integration gives phi_b<=delta/2+sqrt(m/2).
+
+Combining the two estimates,
+ 1/2 <= phi(S)/m = phi_left+phi_b/m
+     <= 1/2+sqrt(2)*q^2/(q^3-1)+1/(2q)+1/(sqrt(2)*q^2),
+which converges to 1/2. This establishes the infimum, not finite attainment.
+This constructs different finite ownership profiles; it does not identify the
+Shapley payment of a large owner with payments to independently acting units.
+
+For an explicit finite consequence, sqrt(2)<3/2 and 1/sqrt(2)<3/4 give
+ phi(S)/m <= 1/2+3q^2/[2(q^3-1)]+1/(2q)+3/(4q^2).
+At q=13 this rational bound is strictly below 2/3 (EXACT_CHECKS.json checks the
+arithmetic). Thus even 3phi/2 fails coalition coverage on a specific finite game
+with 28,561 left units, 26,364 right units and one right owner of capacity 28,561.
+The 54,926-owner game is certified by the proof, not enumerated by the verifier.
+
+6. FIVE-OWNER CALIBRATION AND SCALING CONSEQUENCES
+At c=(1,1|1,1,2), exact Shapley payments are
+ phi=(41/60,41/60|11/60,11/60,4/15).
+The coalition formed by the two left owners and the right owner of capacity 2
+has value 2 and Shapley payment 49/30: its ratio is 49/60<5/6.
+Multiplying by 6/5 pays only 49/25<2. This disproves the arbitrary-owner extension
+of the preceding 20% rule on five owners, with every capacity positive.
+Independent delegated witness: (2|2,1,1,1), coalition of the two capacity-2 owners,
+has phi(S)/v(S)=33/40<5/6. Both are checked by all 120 individual arrival orders.
+The preceding 2+2 theorem has its separate proof in
+../2026-10-04-ownership-subsidy/SHAPLEY_THEOREM.txt. As a calibration only, at
+(2,1|1,1), the small left owner and either right owner have Shapley payment 5/6
+and coalition value 1.
+
+For every constant lambda<2, Section 5 supplies q large enough that
+lambda*phi(S)<v(S); lambda=2 works by Section 3. Moreover, allowing a scalar
+lambda(c) to depend on the profile does not allow any UNIFORM budget bound
+kappa*T with kappa<2: coverage requires lambda(c)>=v(S)/phi(S), and Shapley efficiency gives
+sum_i lambda(c)phi_i=lambda(c)T. Along the family this necessary multiplier
+approaches 2. This observation does not exclude smaller multipliers on particular
+profiles, improvements for fixed owner counts, or a non-scalar payment mechanism.
+
+Own-report truthfulness is an established ingredient and also follows directly:
+for each predecessor subset U the own marginal f_a(z) is nondecreasing in a,
+with z independent of the owner's report. Therefore phi_i, and any nonnegative
+CONSTANT multiple, is nondecreasing in its own reported capacity. With binding
+underreports and no costs, truthful reporting maximizes utility. No claim of
+monotonicity is made for arbitrary profile-dependent multipliers.
+
+7. EVIDENCE AND SCOPE
+The universal and asymptotic arguments are conventional proofs. Finite exact
+checks are stress tests and calibration, not substitutes for these proofs.
+A Fable independent derivation and Codex QA agree on the principal theorem; the
+raw derivation had auxiliary omissions that are not incorporated here. A separate
+Fable review of the coordinator proof found no invalid step and requested explicit
+core-bound and monotonicity explanations, which are supplied above.
+See review/ for raw reports, evidence adjudications, and final verifier review.
+
+This does not establish a field-level breakthrough, resolve the unrestricted
+subsidy optimum, or confirm historical novelty. It gives a precise stopping
+criterion for uniform-budget scalar Shapley approaches under this contract.

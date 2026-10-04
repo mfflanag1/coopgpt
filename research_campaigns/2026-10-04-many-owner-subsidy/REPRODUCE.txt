@@ -1,0 +1,47 @@
+REPRODUCIBILITY -- from repository root, Python3 standard library only
+
+ python3 -B -O research_campaigns/2026-10-04-many-owner-subsidy/verify_many_owner.py
+
+The verifier writes EXACT_CHECKS.json with its own SHA256. It checks4,923 integer
+profiles: capacities{0,1,2}, every pool split and every owner count2 through6.
+It also checks150 seeded rational profiles with2 through8 owners. The5073 profiles
+give273,691 nonempty-coalition inequalities,28,609 removal-marginal floors and
+14,670 positive-capacity cross-pair price inequalities. There are716 strict report
+reductions by halving a positive capacity; the required payment response is WEAK
+monotonicity. Eleven zero-capacity halvings are skipped.
+
+Two five-owner witnesses are independently checked against all120 permutations,
+and the old2+2 calibration against all24. Coalition bit masks use zero-based owner
+indices, with the left pool first. These3 extra witness profiles are not included
+in the5073 stress-profile count.
+
+The symmetric-count calculation is cross-checked against the individual-subset
+formula on16 families(m=1..4,r=0..3). It then computes exact Shapley values for
+q=2,3,5 in the explicit family m=q^4,r=q^4-q^3. The q=2,3 rational upper bounds
+exceed1 and are vacuous as upper-bound tests; the q=5 bound is below1. All three
+cases additionally check the individual fluctuation estimates by exact squared
+inequalities. No floating-point number decides a PASS result; decimal ratios are
+for display only. The q=5 exact ratio is also checked to be below2/3.
+
+The q=13 rational proof bound162883/247416<2/3 is checked arithmetically. The
+54,926-owner game itself is NOT enumerated. The conventional proof, not these
+finite computations, establishes the universal half factor and sharp infimum.
+Fairness tests use M_i=T-v(N without i), with H_i<=M_i proved separately; they
+are not LP computations of original-core ideals.
+
+OPTIONAL DISCOVERY REPLAY
+ python3 -B research_campaigns/2026-10-04-many-owner-subsidy/discover_many_owner.py
+
+This writes DISCOVERY.json. It covers4^5 profiles on2+3 owners,4^6 on3+3, and
+seeded random samples of1000(3+4),1500(4+4),500(5+5), with capacities drawn from
+{0,1,2,3,5,8,13,21,55,144}. It found the five-owner witness before the all-profile
+proof. Search minima describe those finite runs only. Discovery and verification
+use different implementations; neither establishes novelty.
+
+AUDIT HISTORY
+The first verifier run failed because the old2+2 calibration used coalition mask13
+instead of6. The theorem's original calibration is the small left owner plus one
+right owner. The fixture was corrected, all exact checks rerun, and the reviewed
+passing snapshot preserved. The final review noticed the vacuous q=2,3 upper
+comparisons; q=5 and exact intermediate bounds were added, factorial/binomial
+values cached without altering formulas, and the complete verifier rerun.
