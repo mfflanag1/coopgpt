@@ -1,0 +1,65 @@
+REPRODUCE THE CERTIFIED CHECKS -- Python 3 standard library only
+Run from repository root:
+ python3 -B -O research_campaigns/2026-10-04-mechanism-frontier/verify_frontier.py
+
+Expected output: EXACT_CHECKS.json with status PASS and the verifier source SHA256.
+No floating-point calculation decides PASS, and explicit exceptions remain active
+under Python optimization. The exponentials are certified as rational intervals.
+
+EXPONENTIAL ENCLOSURES
+For rational q>=0, let P_N=sum_{k=0}^N q^k/k!, a=q^(N+1)/(N+1)! and
+r=q/(N+2)<1. All terms of exp(q) are positive and each successive tail ratio is
+at most r, so P_N<=exp(q)<=P_N+a/(1-r). Invert positive endpoints to obtain
+ 1/[P_N+a/(1-r)] <= exp(-q) <= 1/P_N.
+The verifier takes N=max(80,ceil(q)+64). Payment inequalities are finite rational
+linear combinations of exp(-q). Identical exponents are combined EXACTLY first;
+coefficient signs select the appropriate interval endpoints. Exact symbolic zero
+or nonnegative coefficients are immediate certificates. Otherwise the lower bound
+must be nonnegative. An unresolved interval raises an error; it never becomes PASS.
+
+MECHANISM CHECK COVERAGE
+1,278 profiles: all capacities {0,1,2}, every nonempty pool split, every owner count
+2 through 5. Plus 200 rational profiles with 2 through 8 owners, seed 20261004.
+Together: 1,478 full-profile checks, 48,274 nonempty-coalition inequalities against
+ORIGINAL untruncated worths, 7,000 removal-marginal-half floors, and 1,478 budget bounds.
+Original H is never replaced in the theorem; M>=H supplies a stronger tested floor.
+
+Monotonicity: 4,008 adjacent integer-grid report comparisons, 983 positive-capacity
+halvings on the rational profiles, and 222 seam/kink comparisons from 30 listed
+chains. The latter cover both ownership sides, bottleneck crossings, clipping at
+an opposite owner's capacity, saturation at own capacity T, and already-capped
+pool-mates. Total: 5,213 own-report comparisons. Boundary identities independently
+check exact worst-budget attainment at (1,1|1) and saturation at (1000000|1).
+These finite checks do NOT prove the real-capacity theorem; see its conventional
+proof, especially the two monotonicity regions and their matching boundary values.
+
+EXACT LOWER-BOUND CERTIFICATES
+Every saved lp-*.json contains rationalized candidate multipliers from discovery.
+The verifier imports NO discovery code or solver. It reconstructs each budget,
+coalition and monotonicity row directly from original capacities and combines
+positive rational multipliers. A positive beta coefficient, nonpositive payment
+coefficients and the resulting right side imply the certified bound. All 5 support
+combinations give beta>=1/8. Eight corruptions are rejected for specific reasons.
+LOWER_BOUND.txt gives the existing 11-row proof in conventional three-profile form.
+
+NUMERICAL DISCOVERY ONLY -- optional pinned SciPy 1.18.1 replay
+ uv run --with scipy==1.18.1 python research_campaigns/2026-10-04-mechanism-frontier/discover_frontier.py --left 2 --right 2 --grid 0,1,2 --output /tmp/coopgt-frontier-2x2.json
+Repeat for (left,right,grid):
+ (2,3,0,1,2,4), (3,3,0,1,2,4), (3,4,0,1,2), (4,4,0,1,2).
+Here the grid after the first two numbers is passed as one comma-separated value.
+Each solve has a 120-second ceiling. Profiles/rows by run:
+ 2+2:81/697; 2+3:1024/19957; 3+3:4096/172297;
+ 3+4:2187/170473; 4+4:6561/1123153.
+All 5 HiGHS objectives were 0.125. They omitted H/3 constraints, making these
+lower-bound RELAXATIONS. No exact primal optimality or finite-domain upper bound
+is claimed. Numeric optima alone do not prove an absence of stronger certificates.
+The theoretical mechanism improvement satisfied the stopping gate, so the further
+selected giant/fringe profile search was not needed or represented as completed.
+
+PROVENANCE
+review/delegation retains Fable's independent derivation, opposite-model Codex QA,
+request, metrics and verified acceptance record. review/verifier retains Fable's
+static proof/verifier review and original reviewed inputs. That review did not run
+code. Its verified test-coverage gaps were repaired and the full verifier rerun.
+The final report is tied to the final verifier by SHA256. Python sources compile.
+No novelty, proof-assistant formalization or human-review claim follows from PASS.

@@ -1,0 +1,141 @@
+OWNERSHIP-DEPENDENT EXPONENTIAL PAYMENTS -- 2026-10-04
+Conventional theorem with model QA and independent rational-interval checks.
+Historical novelty and independent human specialist validation are unresolved.
+
+1. EXACT MODEL
+Let N=L union R be a finite partition into nonempty owner pools. Each original
+owner i has capacity c_i>=0 in exactly one pool. Put A=c(L), B=c(R), T=min(A,B),
+and v(S)=min(c(S intersect L),c(S intersect R)). Capacities are real.
+The ORIGINAL efficient real TU core is
+ C(v)={x:x(N)=T and x(S)>=v(S) for every S subset N}.
+Define H_i=max{x_i:x in C(v)} and M_i=T-v(N without i).
+The bottleneck-pool capacity vector belongs to C(v), so C(v) is nonempty.
+Singleton constraints imply x>=0; efficiency makes C(v) compact. For every x
+in C(v), x_i=T-x(N without i)<=M_i; hence H_i<=M_i.
+
+Payments are nonnegative functions of reported capacities. Utility is payment;
+reports cannot exceed actual capacity; there are no operating costs. The required
+incentive condition is monotonicity of each payment in its OWN report. Coalition
+coverage uses the original v and fairness uses the original H. Ownership is fixed.
+No group-report truthfulness, overreport robustness or cloning invariance is claimed.
+
+2. RULE
+If T=0, set every payment to zero. If T>0, let
+ d_i=min(c_i,T).
+Call a pool with total T short and the other long. Short owners are untruncated.
+Write C=sum_{i in long} d_i, rho=C/T, u=rho-1, and p=(1/2)exp(-u).
+Pay
+ y_i=(1-p)c_i      for i in short,
+ y_i=p d_i         for i in long.
+When A=B, each owner's capacity is at most T, C=T, rho=1 and p=1/2. The
+formula gives y_i=c_i/2 independently of which pool is called short.
+
+THEOREM. For every such finite ownership instance and every real c>=0:
+ (a) y_i>=0 and y(S)>=v(S) for every coalition S;
+ (b) y_i is nondecreasing in c_i, keeping all other reports fixed;
+ (c) y_i>=M_i/2>=H_i/2;
+ (d) T<=sum_i y_i<=(1+1/(2e))T.
+The upper subsidy constant1/(2e) is attained by this rule at(1,1|1).
+It is NOT asserted to be optimal among arbitrary mechanisms.
+
+Consequently the unrestricted project minimax interval with original H/3 floors
+is now[1/8,1/(2e)], approximately[12.5%,18.394%]. The exact1/8 certificates are
+retained and independently rechecked. The new upper bound also improves the
+separate2+2 bound1/5 for the H/3 contract. That older rule protects3H/5, whereas
+this theorem protectsH/2; no dominance at the stronger3H/5 floor is asserted.
+
+3. COALITION COVERAGE AND CAPACITY CAPPING
+First C>=T. If any long owner has capacity at least T, its capped capacity is T.
+Otherwise none is capped and C equals the long total, which is at least T.
+Thus rho>=1 and0<p<=1/2.
+
+For every owner subset X, min(sum_{i in X}d_i,T)=min(sum_{i in X}c_i,T).
+Indeed, if X contains an owner of capacity>=T, both sides equal T; otherwise
+all capacities in X are unchanged. Also v(S)<=T for every coalition, because
+its capacity in the globally short pool is at most T. Therefore
+ v(S)=min(c(S intersect L),c(S intersect R),T)
+     =min(d(S intersect L),d(S intersect R),T)
+     =min(d(S intersect L),d(S intersect R)).
+The final equality uses d(S intersect short)<=T. In particular, capping preserves
+the entire characteristic function at this fixed profile and does not split owners.
+
+Now y(S)=(1-p)d(S intersect short)+p d(S intersect long), a convex combination
+of the two capped totals, so y(S)>=v(S). Nonnegativity follows from0<p<=1/2.
+When T=0 every coalition value and every original-core ideal is zero, so all
+claims about coverage and floors are immediate.
+
+4. EXACT SUBSIDY IDENTITY
+Since d(short)=T and d(long)=rho T,
+ sum_i y_i=(1-p)T+p rho T=T[1+(1/2)u exp(-u)].
+For u>=0 the derivative of u exp(-u) is exp(-u)(1-u), so its maximum is1/e,
+attained at u=1. This proves(d), including its lower bound.
+At(1,1|1), the left pool is long, C=2, T=1, u=1, and payments are
+ (1/(2e),1/(2e)|1-1/(2e)). Total payment is exactly1+1/(2e).
+Each cross pair receives exactly1, so this is compatible with coalition coverage.
+
+5. ORIGINAL-CORE FAIRNESS
+For a short owner, M_i=c_i. Hence y_i=(1-p)c_i>=c_i/2=M_i/2.
+For a long owner i, let a be the total of the other owners in its pool. Since
+its pool total is at least T, M_i=(T-a)_+.
+If a>=T, then M_i=0 and the claim follows from y_i>=0.
+If a<T, every other owner in its pool is uncapped. Put m=d_i. Then
+ C=a+m, M_i=T-a, M_i<=m<=T, and u=(m-M_i)/T.
+Its payment is
+ y_i=(1/2)exp(M_i/T) m exp(-m/T).
+The derivative of t exp(-t/T) on[0,T] is exp(-t/T)(1-t/T)>=0. Since m>=M_i,
+ y_i>=(1/2)exp(M_i/T) M_i exp(-M_i/T)=M_i/2>=H_i/2.
+We used H_i<=M_i as a bound, not as a replacement definition of H_i.
+
+6. OWN-REPORT MONOTONICITY
+Fix an owner in L. Let x be its report, a the fixed sum of the other L capacities,
+and B the fixed right total. If B=0, every payment is zero for all x.
+Assume B>0 and put A=x+a.
+
+LONG REGION A>=B: T=B is fixed. Let alpha=sum_{k in L without i}min(c_k,B),
+which is fixed as x varies, and m=min(x,B). The own payment is
+ y_i(x)=(1/2)exp(1-alpha/B) m exp(-m/B).
+The last factor is nondecreasing in m on[0,B], and m is nondecreasing in x.
+This also handles the kink at x=B and the zero report of a redundant owner.
+
+SHORT REGION 0<A<=B: define
+ rho(x)=sum_{j in R}min(c_j/A,1), p(x)=(1/2)exp(1-rho(x)).
+The own payment is y_i(x)=x[1-p(x)]. It is continuous on this region and C^1
+away from the finitely many points A=c_j. On each smooth interval,
+ rho'(x)=-sum_{j:c_j<A}c_j/A^2,
+so0>=rho'(x)>=-rho(x)/A. Since p'=-p rho' and0<=x<=A,
+ y_i'=1-p+x p rho' >=1-p(1+rho).
+For rho>=1, h(rho)=(1/2)(1+rho)exp(1-rho) has h(1)=1 and
+h'(rho)=-(1/2)rho exp(1-rho)<=0. Thus y_i'>=0 on each smooth interval.
+Continuity and the finite number of kinks give monotonicity throughout this region.
+
+SEAM A=B: no owner on either side exceeds T=B; both formulas pay x/2. Thus
+monotonicity holds across the change of bottleneck. At A=0, necessarily x=a=0;
+the assigned payment0 is at most every later nonnegative payment. This covers the
+remaining boundary. The argument applies symmetrically to owners in R. Under
+binding underreports/no costs, truthful reporting is therefore a dominant strategy.
+
+7. WHY THIS AVOIDS THE EARLIER OBSTRUCTIONS
+The capped long total depends on individual ownership. For example,(2|1) and
+(1,1|1) have identical raw pool totals but different capped totals and different
+payments. Long owners' payments saturate when their own capacity reaches T.
+Hence this is not a per-unit rule whose prices depend only on raw pool totals,
+nor a scalar multiple of individual Shapley. The earlier50% and100% restricted-
+class lower bounds do not apply to this rule. This is a direct class comparison,
+not an assertion that those earlier results were incorrect.
+
+8. PROVENANCE AND LIMITS
+The independent Fable research task derived the rule and full proof. Opposite-
+model Codex QA found no defect. The coordinator rechecked every displayed
+inequality, explicitly added the capping identity and unchanged strategic scope,
+and executed an independent rational-interval verifier plus exact dual checks.
+See review/ for the frozen raw result, QA and verified adjudications.
+Finite checks supplement the conventional proof; they are not a proof assistant
+formalization or human specialist review. No exact computational implementation
+of irrational payments or guarantee for arbitrary floating-point rounding is
+claimed. The mathematical rule uses real payments.
+
+The bounded campaign stops with this proved upper-bound improvement. Exact
+unrestricted optimality, broader network classes and historical priority remain
+open. The explicitly marked auxiliary optimality heuristic in the raw delegated
+response is not promoted to a theorem here. See SOURCES.txt for free original-
+source comparisons and priority gaps.
