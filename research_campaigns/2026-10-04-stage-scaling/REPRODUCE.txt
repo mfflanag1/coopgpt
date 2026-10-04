@@ -1,0 +1,68 @@
+REPRODUCTION -- Python 3 standard library for all certifiers
+Run from the repository root. Each verifier exits nonzero on a failed or
+unresolved check; Python -O does not disable its explicit requirements.
+
+ python3 -B -O research_campaigns/2026-10-04-stage-scaling/verify_duals.py
+ python3 -B -O research_campaigns/2026-10-04-stage-scaling/verify_thresholds.py
+ python3 -B -O research_campaigns/2026-10-04-stage-scaling/verify_softmax.py
+
+They rewrite the corresponding EXACT_*.json reports with source hashes and PASS.
+verify_softmax.py imports the preceding mechanism-frontier/verify_frontier.py
+rational exponential enclosure primitive and records its hash. Other certifiers
+import no solver, numerical discovery driver or third-party package.
+
+EXACT OWNER-THRESHOLD PROBABILITIES
+For positive normalized widths a_1,...,a_m, the sum of independent uniforms on
+[0,a_i] has CDF
+ F(t)=[1/(m! product a_i)] sum_{S subset [m]}(-1)^|S|(t-a(S))_+^m.
+The density is its derivative on each subset-sum interval. A short pool has
+support within [0,1], so the winning probability for pool j is exactly
+ integral_0^1 f_j(t) product_{l!=j}(1-F_l(t)) dt.
+The verifier enumerates signed knots, multiplies rational polynomials and
+integrates exactly. Zero widths are omitted from integration, but owners are
+not removed from payments or original coalition inequalities. No simulation.
+
+Coverage: 4,227 full profiles (4,167 integer profiles over listed pool shapes,
+plus 60 reproducibly seeded rational profiles); 221,253 coalition inequalities,
+23,736 M/k floors, 16,040 own-report comparisons, and exact top-up bounds.
+Positive seam bases cover each ownership position, bottleneck changes, clipping,
+saturation and capped peers. Three-owner pool grids are included. Four separate
+large-fringe profiles have capped pool ratios up to 12, beyond the loose budget
+cutoffs; they test meaningful budgets plus individual and aggregate tail bounds.
+For rho=m/n, the exact inequality p^n rho^m <= a Taylor LOWER bound for exp(m)
+certifies the Chernoff upper bound without irrational comparisons. These stress
+profiles do not enumerate all their exponentially many coalitions.
+The floor-omission witness and a corrupted CDF coefficient are negative controls.
+
+SOFTMAX
+1,141 full profiles, 56,611 coalition inequalities, 6,269 M/3 floor checks,
+4,328 own-report comparisons. Exponential expressions use rational Taylor
+intervals, combine equal exponents, and compare ratios by positive-denominator
+cross multiplication. Overlapping/unresolved sign intervals fail. The root is
+certified in [0.4630,0.4631]. A four-stage underreport gain is explicitly detected.
+The conventional theorem proves all-real claims and exact own-rule attainment.
+
+DUALS
+The independent verifier reconstructs each original capacity-profile row. Positive
+multipliers, positive beta coefficient, and nonpositive residual payment coefficients
+prove the reported lower bound. Named calibration/three-stage/four-stage files must
+exist, have the exact advertised bound, and omit fairness rows where promised.
+All 15 negative controls must fail with their expected error. Zero numerical
+objectives without a dual are recorded as NO_NONTRIVIAL_DUAL, not an upper theorem.
+
+DISCOVERY ONLY -- optional, SciPy 1.18.1
+ uv run --with scipy==1.18.1 python research_campaigns/2026-10-04-stage-scaling/discover_stages.py --sizes 2,2,2 --fairness none --output /tmp/coopgt-stage-replay.json
+Other saved files record their --sizes, --grid and --fairness arguments. Every
+solve has a 120-second ceiling. Fairness mode bottleneck includes only original
+H/k floors certified by bottleneck-pool core allocations; other floors are omitted,
+so this remains a lower-bound relaxation. Numerical optima are not exact primal
+certificates. The symmetry discovery can be replayed with:
+ uv run --with scipy==1.18.1 python research_campaigns/2026-10-04-stage-scaling/discover_symmetry.py
+Its all-k implications are proved analytically in LOWER_BOUND_FAMILIES.txt.
+
+BUILD CHECK
+All five campaign Python files were compiled in memory with Python compile(...).
+No test relies on assertions disabled by optimization. Final report hashes match
+sources. Review records distinguish static model checks from executed verification.
+Conventional proofs, not finite tests, establish the continuum and asymptotic claims.
+Novelty, human review, polynomial runtime and rounded-payment guarantees are open.

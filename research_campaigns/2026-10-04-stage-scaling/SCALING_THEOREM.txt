@@ -1,0 +1,146 @@
+ALL-STAGE SUBSIDY THEOREM -- 2026-10-04
+Conventional proof with independent model review and exact finite checks.
+Capped owner-level continuous Banzhaf payments: sublinear subsidy and sharp order.
+Based on independent delegated construction plus coordinator tail refinement.
+
+MODEL AND RULE
+Let N be partitioned into k>=2 finite nonempty fixed owner pools N_j.
+For nonnegative real capacities c_i, write A_j=sum_{i in N_j}c_i,
+v(S)=min_j sum_{i in S intersect N_j}c_i and T=v(N)=min_j A_j.
+The original efficient real TU core is C(v)={x:x(N)=T, x(S)>=v(S) for all S};
+H_i=max_{x in C(v)}x_i. The bottleneck-pool vector is a core allocation, so
+this compact core is nonempty. Binding underreports and no use costs are assumed.
+Define
+d_i=min(c_i,T), D_j=sum_{i in N_j}d_i, rho_j=D_j/T when T>0.
+M_i=T-v(N without i) bounds original H_i from above. Draw independent U_i uniform
+on [0,1] only as an analysis device, let X_j=sum_{i in N_j}U_i d_i,
+p_j=P(X_j<X_l for every l!=j), and pay
+ y_i=max(d_i p_j, M_i/k).
+These are deterministic expected-value payments, not realized randomized payments.
+Set y=0 at T=0. Each nonzero-T pool has a positive-capacity owner, so X_j is
+continuous, independent across pools; ties have probability zero and sum p_j=1.
+
+THEOREM A: COVERAGE, MONOTONICITY AND ORIGINAL-CORE FLOOR
+Capping preserves every coalition value: min(c(X),T)=min(d(X),T), v(S)<=T,
+and the globally short pool has d(N_j)=T. Hence v(S)=min_j d(S intersect N_j).
+The base payments d_i p_j cover every coalition as a convex combination of its
+capped pool totals. The max operation only increases payments.
+
+M_i is nondecreasing in own report: v(N without i) does not depend on it and
+T does. For the base payment, fix owner i in pool j, report x, other own-pool
+capacity a, and least other pool total B. If B=0 all payments vanish. Otherwise
+T(x)=min(x+a,B), d_i(x)=min(x,B). Write
+ R=sum_{h in N_j without i} U_h min(c_h,T(x)),
+ Y(x)=min_{l!=j}sum_{h in N_l}U_h min(c_h,T(x)).
+R is INDEPENDENT of x: if a<=B, T(x)>=a>=each other own capacity; if a>B,
+T(x)=B throughout. Y(x) is pointwise nondecreasing. Conditional on U_{-i},
+ d_i P(U_i d_i<Y-R | U_{-i})=min(d_i,(Y-R)_+).
+This also holds at d_i=0 with both sides zero. Its expectation is d_i p_j and
+is nondecreasing in x. Taking max with M_i/k preserves monotonicity everywhere,
+including clipping kinks, bottleneck changes and zero reports.
+Finally any original-core allocation has x_i<=T-v(N without i)=M_i, so H_i<=M_i.
+
+LEMMA B: FAIRNESS TOP-UP COST AT MOST T
+In each pool j let delta=A_j-T>=0. Then M_i=(c_i-delta)_+.
+If r>=1 terms are positive, their sum is at most A_j-r delta<=T; if r=0 the
+sum is zero. Thus sum_i M_i/k<=T. The max operation increases total payment by
+at most T. This proves an additive budget bound, not that full T is always needed.
+
+THEOREM C: OWNER-COUNT-INDEPENDENT TAIL
+Normalize d_i by T, so a_i in [0,1] and sum_{i in N_j}a_i=rho_j. Let W be the
+almost surely unique winning pool, so the normalized base total payment is
+sum_j p_j rho_j=E[rho_W]. A short pool s has X_s/T<=1, hence
+ p_j <= P(sum_{i in N_j}a_i U_i<=1).
+For t>0 and a in [0,1], Jensen applied to the concave function z^a gives
+ E exp(-taU) <= [E exp(-tU)]^a = [(1-exp(-t))/t]^a <= t^(-a).
+Independence and exponential Markov therefore give
+ P(sum a_i U_i<=1) <= exp(t)t^(-rho_j).
+Taking t=rho_j gives p_j<=(e/rho_j)^(rho_j).
+For r>=e, the function (e/r)^r is decreasing, so
+ P(rho_W>r)<=min(1, k(e/r)^r).
+Let R_k>e be the unique solution R_k log(R_k/e)=log k. Then
+k(e/R_k)^(R_k)=1. For r>=R_k, log[k(e/r)^r] has derivative -log r<=-log R_k,
+so P(rho_W>r)<=exp(-(r-R_k)log R_k). Tail integration yields
+ E[rho_W]<=R_k+1/log R_k.
+Adding Claim B, the rule has
+ sum_i y_i <= [1+R_k+1/log R_k]T,
+ beta <= R_k+1/log R_k = (1+o(1)) log k/log log k.
+The last equivalence follows directly from R log(R/e)=log k (or Lambert W).
+There is no polynomial-time evaluation claim: the present exact verifier uses
+piecewise polynomial integration with exponentially many subset-sum knots.
+
+THEOREM D: THE GROWTH ORDER IS SHARP FOR THIS RULE, NOT FOR ALL MECHANISMS
+Take one unit owner in pool 1, and r unit owners in each of pools 2,...,k, r>=2.
+T=1. On 0<=u<=1 the CDF of the sum of r independent uniform [0,1] variables
+is u^r/r!: volume of an r-simplex. Thus
+ p_1=integral_0^1 (1-u^r/r!)^(k-1) du.
+The base subsidy is (r-1)(1-p_1); the fairness top-up cannot reduce it.
+For every delta in (0,1),
+ p_1<=delta+exp(-(k-1)delta^r/r!).
+Fix epsilon in (0,1), L=log k, and r=floor((1-epsilon)L/log L). For sufficiently
+large k, r>=2, r!<=r^r and r log r<=(1-epsilon)L. Also r log delta=o(L).
+Therefore log((k-1)delta^r/r!)>=epsilon L+o(L), which tends to infinity.
+Consequently limsup p_1<=delta for every fixed delta>0, and p_1 tends to zero.
+Taking the supremum over ALL finite owner counts and profiles at each k,
+the worst-case subsidy of this particular rule is at least
+ (1-epsilon+o(1))log k/log log k.
+Together with Claim C, and then epsilon down to zero, its worst-case ratio is
+ (1+o(1))log k/log log k.
+The unrestricted optimum may still be uniformly bounded. This construction
+cannot answer that question positively, even though it improves the known upper
+scaling within this project from linear to sublinear.
+
+THEOREM E: WHY CAPPED POOL-TOTAL PRICES CANNOT MATCH THIS ORDER
+Restrict to y_i=d_i p_j(rho_1,...,rho_k), with nonnegative prices independent of
+within-pool distribution (labels and fixed owner counts may enter). Prices need
+not sum to one; coalition coverage and own-report monotonicity are assumed.
+Let k=q^2 and each pool have n owners, n divisible by q. Let B=1+beta be a
+uniform budget factor. At the profile where every capacity is 1/n, rho=(1,...,1),
+coverage gives sum p_j>=1 and budget sum p_j<=B, so some p_j<=B/k.
+Now retain these same fixed owners, put capacity x in one owner of that pool j
+and zero in its other owners; other pools keep n owners of capacity 1/n.
+At x=1 the ratio vector is again all ones. At x=1/q, the j pool is short and
+other rho values equal 1/x. By own monotonicity x p_j(low)<=p_j(high)<=B/k.
+A coalition of the one positive j owner and n/q owners from every other pool
+has value x and payment x sum_l p_l(low), so sum_l p_l(low)>=1.
+Total payment at this low profile is x p_j + sum_{l!=j}p_l,
+which is >=1-(1-x)p_j >=1-(1-x)B/(kx), and is at most Bx.
+Hence B>=1/[x+(1-x)/(kx)]=k/(2 sqrt(k)-1)>sqrt(k)/2.
+Along perfect-square k, with at least sqrt(k) owners in every pool, this
+restricted class requires Omega(sqrt(k)) budget factor. This proves no uniformly
+bounded or O(log k/log log k) guarantee is possible for the entire restricted
+class. No fixed-small-owner-count lower bound is claimed. The random
+owner-threshold rule escapes by using within-pool capacity distributions.
+This no-go permits zero capacities, as the frozen contract does. It makes no
+claim for classes requiring all capacities to be strictly positive without
+continuity assumptions or a separate argument.
+
+COMPARISON WITH THE EXISTING BASELINE
+The old uniform-threshold rule gives beta<=(k-1)/2 with the same H/k floor.
+Choose the rule by k alone (not by reported capacities), using whichever of
+these proved bounds is smaller. This yields
+ beta <= min{(k-1)/2, R_k+1/log R_k}.
+The new result improves the asymptotic order, not every small-k constant.
+For k=2 the earlier 1/(2e) rule is better; for k=3 use THREE_STAGE_THEOREM.txt.
+
+PROVENANCE, ESTABLISHED INGREDIENTS AND LIMITS
+The raw expectation-valued payment is exactly T times the established absolute
+continuous Banzhaf index of a normalized capped owner-coordinate minimum game.
+BANZHAF_IDENTIFICATION.txt proves the identity from Kurz Definition 6.11.
+The weighted multi-glove model and nonempty-core result are established; see
+Moretti-Norde (2021), cited in SOURCES.txt. No functional or model novelty claim.
+
+The independent Fable task proposed the mechanism, monotonicity/top-up proofs,
+a looser O(log k) bound and the capped-ratio obstruction. Opposite-model Codex
+QA accepted those arguments. The coordinator proved the sharper tail and matching
+asymptotic analysis, rechecked the obstruction, and obtained a separate Fable
+proof review. Exact rational integration checks cover coalition inequalities,
+M/k floors and own-report comparisons, including seams and large-tail instances.
+Finite tests supplement these conventional proofs; they do not establish their
+universal or asymptotic quantifiers. Review artifacts and adjudications are saved.
+
+The unrestricted optimum may be bounded in k; this theorem does not decide it.
+The sharp asymptotic statement concerns THIS rule over unrestricted finite owner
+counts. Computation may be exponential. No polynomial-time, realized-random-payment,
+arbitrary-network, positive-cost, group-report, split/merge or overreport guarantee
+is claimed. Novelty and human specialist validation remain unresolved.
