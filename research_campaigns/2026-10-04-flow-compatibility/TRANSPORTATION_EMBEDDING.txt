@@ -1,0 +1,58 @@
+EXACT CORE EMBEDDING OF UNWEIGHTED TRANSPORTATION
+Coordinator conventional derivation, 2026-10-04. Initial independent Fable
+snapshot audit found no invalid step; see review/coordinator-proof/review.md. No historical novelty claimed. This is a reduction, not a settlement
+of endpoint compatibility or C2.
+
+Base game. A and B are disjoint finite player sets with rational capacities
+r_i,c_j>=0; E subset A x B is an allowed-pair graph. For Q subset A, R subset B,
+w(Q union R) is max sum z_ij subject to z>=0, allowed pairs, row sums<=r_i for
+present i, column sums<=c_j for present j. All feasible trade units have value1;
+several units may trade with the same partner. Assume T=w(A union B)>0.
+This is unweighted transportation, not arbitrary weighted assignment, and not
+the multiple-partners model with an extra one-unit bound per pair.
+
+Construction. Let M=min(sum r_i,sum c_j), which is at least T and bounds every
+coalition flow. Create source arc a_i=(s,L_i) capacity r_i and sink arc
+b_j=(R_j,t) capacity c_j. For each allowed pair (i,j), introduce TWO parallel
+arcs L_i->R_j, each capacity M and each owned by a distinct new player. Let D
+be the set of these middle-arc players. All players own exactly one arc;
+the network is acyclic and every s-t path has exactly3 arcs. Parallel arcs
+are permitted, as in the campaign bundle fixtures and previous flow conventions.
+
+Claim. Identifying base players with endpoint arcs,
+  C(flow) = { (x,0_D): x in C(w) }.
+Consequently the endpoint-coordinate ideals and their joint-attainment question
+are preserved exactly; every new middle arc has original core ideal zero.
+
+Proof. With all middle arcs present, the row/column constraints are precisely
+the endpoint flow constraints. M is sufficient for every possible flow on any
+pair, so the middle capacities never restrict a feasible transportation plan.
+Thus v(Q union R union D)=w(Q union R), including grand value T.
+
+Deleting any one middle arc leaves its parallel twin with capacity M. Therefore
+v(N minus {d})=T. For any core allocation y, nonnegativity and efficiency imply
+0<=y_d<=T-v(N minus {d})=0. Thus all y_D=0. Taking coalitions Q union R union D
+shows y(Q union R)>=w(Q union R), with endpoint total T, so its endpoint
+restriction belongs to C(w).
+
+Conversely, extend x in C(w) by zero on D. For every flow coalition K,
+v(K)<=w(K intersect (A union B)): adding every middle arc can only increase
+flow. Hence extended x(K)=x(K intersect (A union B))>=v(K), and efficiency
+and nonnegativity hold. This proves both inclusions and the ideal claim. QED.
+
+What this does and does not establish.
+- Any endpoint incompatibility in unweighted transportation would yield an
+  in-class flow counterexample. A universal positive flow theorem would settle
+  this transportation special case. ENDPOINT_COUNTEREXAMPLE.txt subsequently
+  supplies such a failure for the complete allowed-pair transportation game;
+  its direct two-hop realization already refutes the campaign target.
+- The extra arcs are NOT null/dummy players in the characteristic function:
+  they may contribute to coalitions lacking their twins. They have zero payoff
+  in every grand core allocation, which is the only property used.
+- This does not clone an original capacity owner into independent players or
+  identify the full core with an Owen subset. It constructs a new game and
+  proves the full-core correspondence in both directions.
+- There is no claim that all three-hop flow games reduce back to this model;
+  separately owned capacity-limited middle arcs remain an additional difficulty.
+- Historical many-to-many open-problem statements cover larger weighted models.
+  This reduction neither verifies current openness nor resolves those models.

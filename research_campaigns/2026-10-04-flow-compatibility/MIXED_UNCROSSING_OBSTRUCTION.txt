@@ -1,0 +1,104 @@
+MIXED UNCROSSING: A CLASSICAL INEQUALITY AND A TIGHTNESS OBSTRUCTION
+Coordinator corrected derivation, 2026-10-04. Independent Fable audit found no
+material error; see review/final-repair/ADJUDICATION.txt. Not formally verified.
+This records a blocked proof step, not a counterexample to endpoint compatibility.
+The rank inequality is classical polylinking/bimatroid structure; no novelty claim.
+
+MODEL AND INEQUALITY.
+Sources I own separate arcs s->L_i of capacities r_i; sinks J own separate arcs
+R_j->t of capacities c_j. Public middle arcs have capacities p_ij>=0. Parallel
+public arcs may be combined by summing capacities. All trade units have value1.
+Let w(Q,R) be maxflow with precisely Q subset I and R subset J endpoints active.
+This is the public-middle endpoint game; it is not the full coalition game of
+G04-G08, where middle arcs are independently owned players. G01 has no middle
+players, so its certificate below needs no such distinction.
+For any Q,Q',R,R',
+ w(Q,R)+w(Q',R') >=
+ w(Q intersect Q', R union R') + w(Q union Q', R intersect R').             (M)
+
+DIRECT CUT PROOF WITH THE CORRECT CUT PAIRING.
+Use the full fixed vertex set, even when endpoint arcs are inactive. Let U,V be
+minimum-cut source sides for w(Q,R),w(Q',R'), with s in and t out. Use U intersect V
+for (Q intersect Q',R union R') and U union V for
+(Q union Q',R intersect R'). Both are valid cuts on that full vertex set.
+The fixed public-middle cut-capacity function is submodular. This follows by
+checking the four membership indicators of each directed arc and summing with
+nonnegative capacities. For source i let a=1_(i in Q), a'=1_(i in Q'), and
+u=1_(L_i notin U), v=1_(L_i notin V). Its two original cut contributions divided
+by r_i sum to a*u+a'*v, while the two new contributions sum to
+ (a AND a')*max(u,v) + (a OR a')*min(u,v).
+The former is at least the latter: equality when a=a', otherwise min(u,v) is at
+most the selected original indicator. This includes r_i=0 without division by
+interpreting the inequality before multiplying by r_i.
+For sink j put b=1_(j in R), b'=1_(j in R'), u=1_(R_j in U), v=1_(R_j in V).
+The crossed terms are
+ (b OR b')*min(u,v) + (b AND b')*max(u,v),
+again at most b*u+b'*v. Sum these inequalities and the middle-cut submodularity.
+The sum of original minimum-cut capacities is at least the sum of the two
+crossed-cut capacities, each at least its crossed maximum-flow value. This is(M).
+
+LITERATURE CHECK.
+Goemans-Iwata-Zenklusen, A flow model based on polylinking systems,
+Math Programming, DOI10.1007/s10107-011-0446-2, accepted2011.
+https://math.mit.edu/~goemans/PAPERS/GoemansIZ-2011-MathProg.pdf
+Coordinator inspected Section2, Definition1, Example3, Proposition2(F3) and
+Proposition4. The paper presents network-induced polylinking systems and the
+same bisubmodularity condition, attributing the general framework to Schrijver.
+Our proof is included for scope and verification, not as new mathematics.
+The terms core payoffs and physical endpoint flow vectors must not be identified.
+
+WHY CORE TIGHTNESS DOES NOT UNCROSS THIS WAY.
+For any additive payoff (x,y), the sum of its payments to(Q,R),(Q',R') equals
+the sum on the two crossed coalitions. If the originals are tight, (M) permits
+STRICTLY SMALLER total worth on the crossed pair, so their payments may have
+positive slack. Usual tight-set closure would need the opposite inequality.
+
+EXACT CERTIFICATE USING THE ALREADY REGISTERED G01.
+The network is the two-hop bundle with sources a1,a2:s->u capacity3 each, and
+sinks b1,b2,b3:u->t capacities2,2,1. Thus
+ w(Q,R)=min(3*|Q|,2*1_(b1 in R)+2*1_(b2 in R)+1_(b3 in R)).
+Equivalently, these endpoint values are unrestricted unweighted transportation.
+The payoff z=(0,0;2,2,1) is a core point: total5 and every coalition's payoff is
+its available sink capacity, which is at least its maximum flow. Now take
+ Q={a1}, R={b1,b3}; Q'={a1,a2}, R'={b2,b3}.
+Both originals have worth3 and payoff3, hence are tight.
+The crossed pair is
+ ({a1},{b1,b2,b3}) with worth3 and payoff5,
+ ({a1,a2},{b3}) with worth1 and payoff1.
+Total worth drops from6 to4, while total payment remains6. The original
+coalitions overlap, and neither contains the other. This is a strict obstruction
+to mixed-crossed tight-set closure in an actual already-certified flow game, not merely a
+pathological abstract game. It is an analytic derivation, not a new LP or census.
+This same game DOES have joint endpoint maxima; it refutes no compatibility claim.
+
+CORRECTION OF THE DELEGATE PROOF.
+The raw delegate report used restricted cuts X subset Q,Y subset R and paired
+(X intersect X',Y union Y') with(X union X',Y intersect Y'). Its asserted
+middle-arc indicator inequality is false. Counter-pattern: i in X but not X';
+j in R intersect R', j in Y but not Y'. The original middle indicators sum0,
+whereas the reported second crossed indicator is1. The theorem(M) remains true,
+but that proof must not be used. The full-vertex proof above avoids the problem.
+
+COMPLEMENTED UPPER CONSTRAINTS DO NOT REVERSE THIS SIGN PROBLEM.
+Writing core constraints as payoff(A)<=g(A), where g(A)=T-w(N minus A),
+turns(M) into g(A)+g(B)<=g(A crossed B)+g(B crossed A): the two complements
+exchange which crossed coalition is which, without changing their sum. Thus
+tight original UPPER constraints still allow slack in the crossed upper bounds.
+For the G01 tight pair above, complementing gives coalitions {a2,b2} and {b1}.
+Both have payment2 and upper bound5-3=2. Their crossed pair, in either order,
+is {a2} (payment0, upper bound5-3=2) and {b1,b2} (payment4, upper bound5-1=4).
+Total upper bound rises from4 to6 while payment stays4. For column complementation set rho(A)=w(A intersect I,J minus A),
+z=(x,-y), and B=y(J). Then the core inequality is exactly
+ z(A)+B >= rho(A),
+with equality at A=I. By(M), rho is submodular. This is a lower bound plus a
+payoff-dependent constant B, whereas the usual base-polyhedron description is
+z(A)<=rho(A), z(I union J)=rho(I union J). Here z(I union J)=T-2B.
+Thus this particular substitution does not by itself give that base-polyhedron
+system. No claim excludes other transformations or arguments.
+
+STOPPING CONCLUSION.
+(M) is stronger than separate submodularity but already established mathematics.
+Its strict-slack example rules out directly transferring the usual mixed-crossed
+core tight-set uncrossing argument. It does NOT prove that bisubmodularity is logically
+insufficient for every possible endpoint-directedness theorem. A different
+argument controlling slack might work; none has been established in this attempt.

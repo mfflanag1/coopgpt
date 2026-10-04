@@ -1,0 +1,33 @@
+WHY THE AGGREGATE-CAPACITY RELAXATION DOES NOT PROVE COMPATIBILITY
+Coordinator exact derivation, 2026-10-04. Uses the ALREADY registered G01;
+no new instance or optimizer run. This is a proof-route obstruction, not a
+counterexample to endpoint compatibility.
+
+For a family of coalitions A with nonnegative weights lambda_A, assume every
+non-source arc has total coalition coverage at most1. Let w_i be total coverage
+of source i and V=sum lambda_A v(A). Pick a maximum flow for each coalition.
+Their weighted sum is a flow whose non-source arc usage is at most original
+capacity, and whose source i usage is at most c_i*w_i. Thus V is at most the
+ordinary maxflow with scaled source capacities. This relaxation is valid but
+forgets the fact that a capacity owner must be activated as a whole in each
+coalition. We test its adequacy against an existing exact core certificate.
+
+G01 has source capacities(3,3), sink capacities(2,2,1), T=5, source ideals(1,1),
+and core point z=(1,1;1,1,1), all independently certified in DISCOVERY.json.
+Set both source coverages to w_i=9/10 and non-source coverages<=1. Summing the
+core inequalities z(A)>=v(A) against lambda gives, for EVERY such family,
+  V <= (9/10)*1+(9/10)*1+1+1+1 = 24/5.
+
+But the scaled-capacity relaxation has source capacities(27/10,27/10), with
+sinks(2,2,1). Its maximum flow is5: use5/2 on each source and(2,2,1) on sinks.
+The sink cut is the matching upper certificate. Hence the relaxation returns
+5 >24/5, the actual weighted-coalition upper bound. In this same instance the
+endpoint ideal-support inequality would require
+  V + sum_i(1-w_i)H_i <= T,
+namely V<=24/5. The capacity relaxation alone cannot supply it.
+
+Even capping each source by its maximum achievable flow when it is the only
+source does not help: each G01 source alone supplies3, its existing capacity.
+A proposed repair must retain information about coalition activation beyond
+plain aggregate arc capacity. Defining that information by the entire reduced
+core merely restates the target and is not counted as progress.
