@@ -1,0 +1,54 @@
+REPRODUCTION -- run from the repository root
+Standard library exact certifiers (Python optimization does not remove checks):
+ python3 -B -O research_campaigns/2026-10-04-constant-subsidy/verify_lower.py
+ python3 -B -O research_campaigns/2026-10-04-constant-subsidy/verify_auxiliary.py
+Each exits nonzero on failure and rewrites its EXACT_*.json with a source SHA256.
+
+LOWER CERTIFICATES
+For each k,m, construct the original positive-capacity profiles X and Y. Coalition
+rows use actual owner subsets; values are computed by minimum pool total. Payment
+roles are derived from capacity multisets and owner values, justified by the written
+symmetrization proof. The one-owner increase is applied to Y and checked to match
+X up to pool/owner permutations. Positive integer combinations cancel every payment
+variable and leave a positive beta coefficient with the advertised rational bound.
+53 instantiated cases include m=2 and k=3 boundaries and the 19/21 diagonal witness.
+Large diagonal identities are arithmetic only, with no implied profile enumeration.
+16 negative controls include a coefficient-preserving loss of coalition worth,
+wrong owner/report, hidden floor, absent budget, bad multiplier and altered claim.
+
+AUXILIARY
+The simple d/k rule is exhaustively checked on capacities {0,1,2} for pool shapes
+(1,1),(2,2),(3,1,1),(2,2,2),(2,1,1,1): 1,305 profiles, 63,540 coalitions, 7,146
+M/k floors, 4,764 report comparisons. A fixed random seed supplies 200 knapsack
+comparisons, including 140 positive-T cases, 164 true and 36 false coverage verdicts.
+Exact maximum-statistic probabilities at r=2,3,4 compare polynomial integration
+with the closed form and the class lower bound. A constant-statistic rule evaluates
+actual payments to test the least-favored tie convention and reject its reversal.
+Softmax tests compute capped capacities, ratios, rational exponential weights,
+normalized payments and budgets for six compressed profile families. Pool
+multiplicities avoid constructing billions of identical pools. Zero padding keeps
+ownership fixed. Actual all-tight marginal-vector witnesses verify the kT total.
+All-real, all-statistic, asymptotic and envelope-equivalence claims rest on proofs.
+
+DISCOVERY ONLY -- SciPy 1.18.1, 120-second ceiling for each solve
+ uv run --with scipy==1.18.1 python research_campaigns/2026-10-04-constant-subsidy/discover_two_types.py 16 3 1,2,4 /tmp/coopgt-replay-stars.json
+ uv run --with scipy==1.18.1 python research_campaigns/2026-10-04-constant-subsidy/discover_binary.py 128 3 /tmp/coopgt-replay-binary.json
+All saved files record k,m,grid, source hash, SciPy version, status and dual guesses.
+The two-types search allows any two sorted pool types from the input grid, with
+all multiplicities. The binary search uses only (1,1,2,...,2^(m-2)) and
+(1,2,...,2^(m-1)). Both include only one-owner changes between retained profiles,
+all fairness omitted. Symmetrized coalition constraints select a subset per pool
+type; the knapsack equivalence explains that projection. These are relaxations of
+the all-profile problem. No numerical optimum is an exact primal upper theorem.
+The final analytical family uses repeated 2-capacities, unlike the binary driver;
+its validity is established separately by LOWER_BOUND and verify_lower.py.
+
+The nine retained searches: two-types (k,m,grid) = (2,2,1/2), (4,2,1/2/4),
+(16,2,1/2/4/8), (16,3,1/2/4), (64,3,1/2/4); binary (k,m) = (128,3), (128,4),
+(128,5), (1024,4). Slash-separated grid notation here denotes entries, not fractions.
+Calibration reproduced 1/8 and 3/14. All nine replayed with final source hashes.
+
+BUILD / REVIEW
+All four Python sources are compiled in memory. Git whitespace and final source
+hash checks complete delivery. Static model reviews did not execute code; actual
+coordinator runs, frozen review inputs, repairs and exclusions are recorded.

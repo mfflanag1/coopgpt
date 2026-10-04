@@ -1,0 +1,91 @@
+REDUCTIONS AND FAILED CONSTRUCTIONS -- 2026-10-04
+Supporting lemmas, not a resolution of the unrestricted target or novelty claims.
+
+1. BOUNDED OWNERS PER POOL CANNOT YIELD DIVERGENCE
+Let m bound the owner count of every pool. The simple rule y_i=d_i/k, where
+d_i=min(c_i,T), covers every coalition: each pool contributes at least v(S)/k.
+For an owner reporting x with least other pool total B, d_i=min(x,B), hence own
+monotonicity. H_i<=M_i<=min(c_i,T)=d_i follows from the core complement inequality
+and the capacity bound on the marginal contribution. Thus H/k is protected.
+Choose one distinguished minimum-total pool, including when minima tie. Its
+capped sum equals T; every other capped sum is at most mT. Therefore
+ sum y <=[1+(k-1)m]T/k, beta<=(k-1)(m-1)/k.
+This proves that a divergent family must let both k and the maximum owners per
+pool grow: bounded k is handled by the old (k-1)/2 rule, bounded m by this rule.
+No assertion that the efficient-core ideal is zero in nonminimum pools is used.
+The delegated raw report's missing floor proof and tied-minimum wording are fixed.
+
+2. FAIRNESS DOES NOT CHANGE THE CONSTANT-EXISTENCE QUESTION
+Any floor-free nonnegative monotone covering rule with constant budget C*T can
+be replaced by max(y_i,M_i/k). The old Lemma B bounds the added total by T, and
+M_i is own-monotone and >=H_i. Thus a constant floor-free rule exists iff a
+constant rule with H/k exists (possibly a different constant). The forward
+implication pays at most (C+1)T; the reverse simply forgets the floor.
+The 100% lower bound already omits fairness and survives this distinction.
+
+3. COVERAGE IS EXACTLY A COLLECTION OF POOL KNAPSACK INEQUALITIES
+For s in (0,T], put K_j(s)=min{y(S_j): S_j subset N_j, c(S_j)>=s}.
+There are finitely many subsets and full pool capacity is >=T, so minima exist.
+Coverage of all coalitions is equivalent to sum_j K_j(s)>=s for every s in (0,T].
+Forward: unite the minimizing subsets; their coalition worth is >=s.
+Reverse: a coalition of worth s has payment >=sum_j K_j(s)>=s.
+For finite verification it suffices to use the attained subset-capacity levels
+in (0,T]; each coalition value is one such level. This is a useful reformulation,
+not an incentive guarantee or an algorithm with claimed polynomial complexity.
+
+4. MONOTONE ENVELOPE REDUCTION
+For any nonnegative covering base rule z, define
+ E_i(c)=sup_{0<=x<=c_i} z_i(x,c_-i).
+E is own-monotone and covers because E_i(c)>=z_i(c). If z vanishes at every
+zero-T profile, so does E: lowering cannot increase T from zero. If E has a
+constant budget, it solves the floor-free problem and point 2 supplies H/k.
+Conversely any monotone rule equals its own envelope. This is equivalent to the
+budget question; it must not be counted as solving the missing budget inequality.
+
+5. BOTTLENECK CORE ENVELOPE FAILS LINEARLY
+Let z pay c_i in one minimum-total pool chosen by a fixed tie order, zero elsewhere.
+Fix an owner's other-own total a and least other pool total B. It can be paid x
+when x+a<B; at equality the tie affects attainment but not the supremum. Hence
+ E_i(c)=min(c_i,(B-a)_+)=M_i.
+When B<=a this is zero; when c_i=0 it is zero, including the degenerate boundary.
+Every pool contributes at most T to sum M_i, and at all-tight profiles all owners
+have M_i=c_i. Thus worst-case total is exactly kT, subsidy k-1.
+
+6. SOFTMAX ENVELOPES ALSO CANNOT HAVE A CONSTANT BUDGET
+Take z_i=d_i p_j with p_j proportional to exp(-lambda(k)*(rho_j-1)); lambda>=0
+may depend on k but not on reports or owner counts. Suppose its envelope has
+budget factor B=B(k) uniformly over all owner counts and all profiles.
+At the profile with two positive half-unit owners per pool, plus zero padding if
+needed, T=1. Lower one owner to 1/6. Then T'=2/3, own rho=1, other rho=3/2, and
+ z_i=(1/6)/[1+(k-1)exp(-lambda/2)].
+At the original tight profile each of 2k owners has at least that envelope payment,
+so B >= (k/3)/[1+(k-1)exp(-lambda/2)].
+If B>=k/6, this already grows at least linearly. Otherwise k>6B gives
+ exp(-lambda/2) >=(k/(3B)-1)/(k-1)>1/(6B),
+and therefore lambda<2 log(6B).
+If lambda=0, one unit owner in the short pool and R unit owners in each other
+pool have total payment [1+(k-1)R]/k, unbounded as R grows at fixed k.
+For lambda>0, take R=floor(1+log(k-1)/lambda), a positive integer. Use one unit
+owner in pool 1 and R unit owners elsewhere. Their total base budget factor is
+ (1+R w)/(1+w), w=(k-1)exp(-lambda(R-1))>=1,
+so it is >=R/2>=log(k-1)/(2lambda). Base payments are bounded by their envelopes.
+In the B<k/6 case we therefore obtain
+ B log(6B) > log(k-1)/4.
+Together the cases exclude any constant B uniformly in k and owners. They imply
+an Omega(log k/log log k) envelope budget lower order; no matching upper is proved.
+This repairs and strengthens the raw delegated asymptotic calculation, whose
+lambda=0 case and nonuniform o(1) were flagged by QA. It does not rule out
+report-dependent temperatures, ownership-dependent temperatures or other bases.
+
+Exact witnesses in verify_auxiliary.py: fixed lambda=2 log 2, k=4^r+1, R=r+1
+has base budget (r+2)/2; lambda(k)=2 log(k-1) has tight-envelope budget >=k/6.
+These are auxiliary demonstrations. The case-split argument proves the full
+stated one-parameter-family obstruction, not arbitrary mechanism impossibility.
+
+PROPOSED NEXT ATTACK, NOT LAUNCHED
+Seek a covering base rule using report-dependent ownership information whose
+coordinatewise envelopes have total O(T), or an unrestricted multistep dual family
+forcing beta to diverge. The current two-profile family tends only to 1, and
+fixed-statistic independent thresholds are order-optimal within their class.
+A missing envelope bound is still the original problem, not a proved reduction
+in difficulty. No constant rule or unrestricted growing lower bound was obtained.

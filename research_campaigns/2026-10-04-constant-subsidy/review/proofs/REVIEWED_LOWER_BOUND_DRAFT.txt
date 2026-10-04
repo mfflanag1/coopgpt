@@ -1,0 +1,75 @@
+UNRESTRICTED LOWER BOUND APPROACHING 100% -- CANDIDATE 2026-10-04
+Coordinator derivation from exact-shaped LP support; pending review/certification.
+
+MODEL
+Use CONTRACT.txt. No fairness floors are needed. k>=3 pools, each with m>=2
+fixed original owners. Put q=m-2 and t=2m-2=2q+2. Two pool types are
+ L=(1,1,2,...,2) with q copies of 2, total t;
+ H=(1,2,...,2,t) with q copies of 2, total 2t-1.
+For m=2 these are (1,1) and (1,2); formulas with q=0 omit the 2-owner role.
+All profiles in the proof are strictly positive. No cloning or owner removal.
+
+THEOREM
+Every nonnegative, coalition-covering, own-report-monotone rule with budget
+sum y<=(1+beta)T on all real profiles satisfies
+ beta >= (k-1)(t-1) / [t(k-1+2t)].
+Therefore any subsidy constant uniform in both stages AND owner counts is >=1.
+This does not prove divergence or existence of a constant. For m=3, t=4,
+ beta >=3(k-1)/(4k+28), tending to 3/4 and exceeding 1/2 when k>17.
+
+SYMMETRIZATION
+Average an arbitrary rule over all pool permutations and all within-pool owner
+permutations. Each preserves the fixed partition, values, budgets and own-report
+order, so the averaged rule has the same guarantees. It suffices to prove the
+bound for that invariant rule. Labels and all original owners remain fixed;
+permutations are only a proof device, not a permitted strategic report.
+
+PROFILE X: one L pool, k-1 H pools; T=t.
+Payments in L: a to each capacity-1 owner, b to each capacity-2 owner.
+Payments in H: u to its capacity-1 owner, v to each of its q capacity-2 owners,
+and w to the capacity-t owner. P=2a+q b, Q=u+q v+w.
+Budget: P+(k-1)Q <=t(1+beta).
+The following actual coalitions give:
+ C1: a+(k-1)u >=1.
+ C2: 2a+(k-1)v >=2.                     [used only if q>0]
+ C3: a+q b+(k-1)(u+q v) >=t-1.
+ C4: P+(k-1)w >=t.
+C1 selects one unit owner in L and the unit owner in each H.
+C2 selects both unit owners in L and one 2-owner in each H.
+C3 selects one unit and all 2-owners in every pool.
+C4 selects all L owners and the t-owner in every H.
+Take C1 + q*C2 + (t-1)*C3 + C4. Since 2q=t-2, its left side is
+ t[P+(k-1)Q] -(t-1)(k-1)w,
+and its right side is t^2. Thus
+ (t-1)(k-1)w <=t^2 beta.                 (X)
+
+PROFILE Y: two L pools, k-2 H pools; T=t.
+Payments in L: A to each unit owner, B to each 2-owner.
+Payments in H: U,V,W for the corresponding three roles.
+Budget: 2(2A+q B)+(k-2)(U+q V+W) <=t(1+beta).
+Coalitions give:
+ D1: 2A+(k-2)U >=1,
+ D2: 4A+(k-2)V >=2,                     [used only if q>0]
+ D4: 2(2A+q B)+(k-2)W >=t.
+D1 uses one unit owner in each L; D2 uses both units in each L; D4 uses all
+owners in both L. Each H supplies respectively its unit, one 2-owner, or t-owner.
+Adding D1+q*D2+D4, the left side is the budget sum plus 2(t-1)A,
+and the right side is 2t-1. Consequently
+ 2(t-1)A >=t-1-t beta.                  (Y)
+
+ONE-OWNER REPORT COMPARISON
+Raise one unit owner in one L pool of Y from 1 to t. That pool becomes H;
+the resulting profile is X up to relabeling. Own monotonicity gives w>=A.
+Combine (X), (Y), and w>=A:
+ (k-1)(t-1-t beta) <=2(t-1)(k-1)A
+ <=2(t-1)(k-1)w <=2t^2 beta.
+Rearrange to the stated bound. No sign assumption on t-1-t beta is necessary.
+
+QUANTIFIERS AND LIMITS
+For every fixed even t>=2, taking k to infinity gives beta_uniform>=1-1/t.
+Then take even t to infinity to obtain beta_uniform>=1. Equivalently a diagonal
+choice t->infinity with t/k->0 makes the displayed exact lower bound tend to 1.
+All witnesses have k*m finite original owners and positive integer capacities.
+This is a lower bound on the UNRESTRICTED rule class, unlike threshold or ratio
+obstructions. It sharpens the preceding 1/2 necessary constant to 1; the existence
+of any constant remains unresolved. Source priority remains unconfirmed.

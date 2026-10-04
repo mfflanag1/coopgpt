@@ -1,0 +1,73 @@
+INDEPENDENT-THRESHOLD CLASS OBSTRUCTION -- 2026-10-04
+Independent Fable derivation, Codex QA, coordinator proof checks and a separate
+Fable proof review. Conventional proof; finite tests do not certify all statistics.
+
+CLASS
+Fix k, a finite owner partition, and for each pool a finite-real-valued Borel-measurable
+statistic Phi_j on nonnegative owner-coordinate vectors, coordinatewise
+nondecreasing. These functions may depend on fixed labels, ownership and k, but
+NOT separately on reports, d or T: their only varying inputs are Z_j=(d_i U_i).
+Let U_i be mutually independent uniform [0,1], d_i=min(c_i,T), and choose the pool
+W minimizing Phi_j(Z_j), with a fixed total priority order for ties. Pay
+b_i=d_i P(W=j) in pool j; optionally max with M_i/k as in the preceding campaign.
+At T=0 pay zero. Deterministic expectations, not realized lottery payments.
+
+GUARANTEES
+Coverage: the winning probabilities sum to one; capping preserves every coalition
+value, so sum b_i over S is a convex combination of the capped pool totals and
+is at least v(S).
+Own monotonicity: fix an owner report x, other own-pool total a, and least other
+pool total B. If B=0 all payments vanish. Otherwise T(x)=min(x+a,B), d_i=min(x,B).
+Other own-pool capped coordinates are constant in x, as proved in the preceding
+SCALING_THEOREM.txt. Every other pool coordinate is nondecreasing in x.
+Conditional on U_-i, the set E_x of z>=0 for which pool j wins is a down-set
+because Phi_j is nondecreasing in that coordinate. As x grows, E_x expands
+because the other pool statistics do not decrease and the fixed tie order stays.
+Conditional b_i equals Lebesgue length of E_x intersect [0,d_i(x)]. This is
+nondecreasing. Endpoints have measure zero; d_i=0 gives zero. Taking expectations
+proves monotonicity. The M/k top-up preserves it, covers H/k, and adds at most T.
+
+CLASS-WIDE LOWER BOUND
+Suppose r>=2 and every pool has at least r fixed owner slots. If
+ k-1 >= 2 r^r,
+then for EVERY family of statistics and priority order in this class there is
+a profile whose base subsidy is at least (r-1)/4.
+Use r designated owners per pool; set extra owners to zero. For each j, let
+F_j be the distribution of Phi_j when its designated coordinates are uniform
+on the r-dimensional small box [0,1/r]^r, with extra coordinates zero.
+Fix a finite median a_j for every pool BEFORE choosing s, so both
+P(Phi_j<=a_j)>=1/2 and P(Phi_j>=a_j)>=1/2.
+Choose s with maximum median, taking the least favored tie priority among maximizers.
+Pool s has capacity 1/r on each designated owner (total T=1); all other pools
+have capacity 1 on each designated owner (capped total r).
+With probability >=1/2, Phi_s(Z_s)>=a_s. Independently each other pool has a
+chance >=p=1/(2 r^r) of both falling in the small box and having Phi_j<=a_j.
+If either such pool event occurs and Phi_s>=a_s, pool s loses: a_j<a_s gives
+strict comparison; equal medians use the chosen priority, including atoms.
+Thus P(W!=s)>= [1-(1-p)^(k-1)]/2 >=1/4.
+The last inequality follows from (1-p)^n <=1/(1+n p), n=k-1 and n p>=1.
+The normalized base total is 1+(r-1)P(W!=s), giving the claimed lower bound.
+The stronger original constant (1-exp(-1))/2 also follows, but is unnecessary.
+
+ASYMPTOTIC CONSEQUENCE
+For every fixed epsilon>0 and sufficiently large k, take
+r=floor((1-epsilon)log k/log log k). Then 2r^r<=k-1.
+The class needs Omega(log k/log log k) subsidy over unbounded finite owner counts.
+The previous sum-statistic rule achieves O(log k/log log k) including H/k.
+Hence its growth ORDER is optimal within this full fixed-statistic independent-
+threshold class. The leading constant is not matched by this class lower bound.
+No report-dependent statistic, correlated threshold mechanism, nonlinear owner
+payment rule, or arbitrary mechanism is ruled out. The witness is not an
+unrestricted lower bound: the marginal vector M costs only T there.
+Novelty remains unconfirmed; continuous Banzhaf and minimum-sum case are established
+functional ingredients, while this class obstruction is a proposed contribution.
+
+DEPENDENCY CHECK
+In ../2026-10-04-stage-scaling/SCALING_THEOREM.txt, Theorem A proves the
+capping identity and own-coordinate cap invariance used here; Lemma B proves
+M/k monotonicity, H/k protection and the additive T bound; Theorem C proves
+the uniform O(log k/log log k) upper bound. Phi_j=sum is finite, Borel and
+coordinatewise nondecreasing and uses only Z_j, so it belongs to this class.
+The coordinator inspected these dependencies; that earlier proof has its own
+independent review and exact finite checks. The new reviewer did not have the
+earlier theorem in its packet and did not independently verify those imports.
