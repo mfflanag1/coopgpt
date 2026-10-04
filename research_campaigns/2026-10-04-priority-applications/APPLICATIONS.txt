@@ -1,0 +1,125 @@
+APPLICATION SCOUT -- 2026-10-04T13:13:58.102782+00:00
+User request: check current novelty of the endpoint counterexample and brainstorm
+applications beyond transportation. This is a bounded source audit/scout, not a
+new eight-hour proof campaign. Previous manuscripts/campaign artifacts preserved.
+These are proposed directions, not established applications or novelty claims.
+
+RECOMMENDATION
+The most useful new research target is the quantitative interaction of fair
+payments, coalition stability and truthful capacity reporting in resource-pooling
+networks. The strongest exact interpretation already available is a limitation
+on bargaining in multi-unit labor/resource markets. Compute pooling is a plausible
+motivating application only under an explicitly checked production model. General
+machine-learning utility or allocation without money is a larger model change.
+
+1. ALGORITHMIC GAME THEORY: THE SUBSIDY PRICE OF INCENTIVES.
+Problem: resource owners can withhold capacity. We want them to report honestly,
+remain in the cooperative system, and receive a guaranteed fraction of their
+best payoff in the original core. What external budget is sufficient/necessary?
+Huang-Mei-Yang-Cao2025, Mechanism Design in Max-Flows, already disproves truthful
+core selection and gives a truthful alternative outside the core. Repeating that
+impossibility is not a contribution. Read Sections2.1-2.2, Example1, Proposition1,
+Theorem1 and conclusion:
+https://arxiv.org/html/2502.08248v1
+
+Precise candidate target, NOT a proved general theorem. Fix depth<=3 acyclic directed multigraphs (parallel arcs permitted),
+one capacity owner per arc and no edge-use costs. Reports are binding capacities;
+over-reporting is infeasible. Utility equals the report-dependent monetary payment,
+with no additional utility from unused capacity or delivered flow. Incentives concern
+unilateral report deviations, not coordinated misreports. For every reported capacity
+vector c, keep original entire-core H(c) fixed before subsidy. Seek a payment
+rule y(c)>=0 satisfying:
+  y(c)(S)>=v_c(S) for EVERY coalition S;
+  y_i(c)>=H_i(c)/3;
+  y_i(c_i,c_-i)>=y_i(c'_i,c_-i) whenever0<=c'_i<=c_i;
+  sum_i y_i(c)<= (1+beta)*T(c).
+The third condition is own-report monotonicity and hence DSIC in the specified
+under-report-only, no-cost model. Study the smallest universal beta, or prove
+that no graph-size-independent beta exists. Coalitional rationality is imposed
+at every profile; the fairness benchmark is never recomputed after adding money.
+Computability and split/merge-proofness are later questions, not bundled into
+the first target. No claim that beta=1/3 survives truthfulness is made.
+
+Useful entry gate: reproduce the published four-player truthfulness obstruction,
+then match or improve a certified lower/upper bound on a narrowly stated graph
+family. CALIBRATION_LEMMA.txt gives a hand-derived1/8 lower bound using five
+capacity profiles as a sanity check; this is tight ONLY on that finite domain,
+with the witness checked by exact arithmetic. Its priority is not asserted. The12-player
+endpoint counterexample checks that no proof assumes simultaneous sector maxima.
+Stop if the proposed theorem is only a restatement of the2025 impossibility,
+or an LP formulation without a new bound/construction. A strong eventual result
+would be a sharp general tradeoff with an implementable mechanism, not merely
+a renamed transportation example. Current assessment: best substantive AGT fit,
+but the exact new target's priority and solvability remain to be established.
+
+2. AI COMPUTE / INFRASTRUCTURE POOLING: A CONCRETE PRODUCTION MODEL.
+Take owners of compute capacity g_i and owners of a complementary bandwidth or
+power service b_j. Assume fixed conversion rates, a homogeneous workload,
+linear per-job revenue p, divisible work, unrestricted compatibility, no costs,
+and transferable monetary payments. Then coalition revenue can be modelled as
+ p*min(sum g_i, sum b_j) after choosing consistent per-job units.
+Under precisely these assumptions the existing counterexample transfers by
+scaling, so individually best stable owner revenues need not coexist. This is
+an EXACT MODEL INTERPRETATION, not a validated claim about GPU clusters.
+A network version can represent separately owned service stages; the graph and
+subsidy papers may apply only after proving their production-model hypotheses.
+
+The next substantive question would be a sharp fairness/stability/incentive
+bound for owners with heterogeneous capacities and genuine complementary stages,
+plus a defensible workload/revenue model. It must account for utilization costs,
+location constraints, heterogeneity and demand if those are claimed empirically.
+Known comparator: Ghodsi et al2011 Dominant Resource Fairness studies allocating
+multiple resources to users and gives strategyproof/sharing guarantees in its
+model. It does NOT directly price coalition-owned resources with transferable
+money. We are not disproving DRF:
+https://www.usenix.org/legacy/events/nsdi11/tech/full_papers/Ghodsi.pdf
+Current assessment: appealing application for direction1, with model-validation
+work required. Relabelling capacity as GPUs does not create a new theorem.
+
+3. LABOR / PLATFORM BARGAINING: STRONGEST IMMEDIATE INTERPRETATION.
+Firms purchase divisible work, workers provide multiple units, and a firm-worker
+pair may trade multiple units. With identical per-unit income, coalition output
+is the smaller total work supply/demand. The counterexample therefore shows
+that no single stable allocation need maximize every firm's payoff simultaneously.
+It is about internal conflict on the same side of a market, even before strategic
+reports. Source/sink reversal gives the analogous role reversal.
+This is the all-productivity-one specialization of Model2 in Nunez2013,
+not an extra theorem. PRIORITY_CHECK.txt gives the explicit LP reduction.
+It does NOT transfer to one-to-one matching, pair-capacity1 multiple partnerships,
+or workers who each supply only one unit. Strongest current significance lead:
+compare the exact negative result with the historically open sector-optimal
+question, then establish present priority. The same general open question is documented
+in the inspected 2016 Robles-Nunez manuscript and Robles2017 thesis. The interpretation requires neither
+physical transportation nor a new ML model.
+https://archive.illc.uva.nl/COST-IC1205/documents/Budapest-2013-Slides/Nunez.pdf
+
+4. DATA / FEDERATED-LEARNING REWARDS: INTERESTING, MORE DISTANT.
+Question: can contributors receive a stable share of jointly created model value
+and an individual guarantee without excessive external budget? The relevant
+mathematical object is a transferable-utility revenue game only if model quality
+can defensibly be mapped to money and coalition retraining values are specified.
+The min-of-two-capacities counterexample does not establish a claim about arbitrary
+learning curves, nonconvex training or heterogeneous client utilities.
+Existing work already uses the least core for data valuation (Yan-Procaccia2021)
+and coalition fairness for federated learning (Ray Chaudhury et al2024). A new
+contribution would need a structural or statistical theorem beyond those results,
+for example verifiable individual guarantees with uncertain coalition values.
+No such theorem or new algorithm has been established here.
+https://cdn.aaai.org/ojs/16721/16721-13-20215-1-2-20210518.pdf
+https://proceedings.mlr.press/v235/ray-chaudhury24a.html
+The latter uses ordinal model preferences/proportional veto core, not our TU
+money-allocation core. Current assessment: potentially broad relevance but lower
+immediate proof fit; do not turn the existing result into an AI claim by analogy.
+
+METHOD-LEVEL BACKUP
+The Isbell1959 construction suggests seeking a reusable bridge from weighted
+voting representation obstructions to stable-payoff geometry. A real-valued
+transfer theorem, demonstrated on a family or a second independent phenomenon,
+could be more valuable than many hand-crafted instances. No general bridge is
+proved by the present example; integer representation nonuniqueness alone is
+insufficient. This is a speculative method programme, not an established result.
+
+Prior no-go routes remain closed: global endpoint compatibility, unit-player
+cloning, Owen-set substitution for entire-core H, generic LP reformulations,
+and a claim that 'core for ML' or 'truthfulness conflicts with stability' is new.
+No goal set, outreach, literature purchase, solver campaign or empirical claim.

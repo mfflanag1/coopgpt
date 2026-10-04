@@ -1,0 +1,18 @@
+Verdict: **revise**
+
+The candidate adds one useful primary-source comparison, but it does not adequately complete the requested priority audit.
+
+Concrete findings:
+
+- The Sotomayor 2012/2013 working paper is genuinely new full-text evidence. The candidate appropriately distinguishes its own inference that \(a_{pq}\equiv1\) yields the target game and limits the negative finding to inspected pages.
+- However, the claimed inspection is incomplete: pp. 21–26 and appendix proofs were not read. Therefore it cannot exclude a relevant side-optimality result elsewhere in the same paper. Its scoped wording mostly avoids overclaiming, but this remains an unresolved comparison rather than a closed gap.
+- “Most named gaps stayed closed to free access” is materially misleading for the one-seller literature. A free repository copy of the later full paper is readily available, and its abstract explicitly discusses buyers- and seller-optimal core allocations. The repository also hosts a freely accessible 2017 thesis containing the one-seller chapter. These should have been inspected and compared theorem-by-theorem, even if the one-seller model ultimately cannot settle a five-source counterexample. See the [free 2016 manuscript](https://diposit.ub.edu/dspace/bitstream/2445/150705/1/685586.pdf) and [2017 thesis record](https://diposit.ub.edu/items/677714f5-e404-4e45-b5e9-208cc899d855).
+- The candidate reports the 2014 repository item only through a tool paraphrase, then gives a substantive lattice and marginal-contribution conclusion. That is not acceptable primary-source evidence. It should either inspect a free manuscript/thesis or label every such conclusion as unverified metadata.
+- The 2024-online/2026 article was not closed. The publisher abstract confirms only that complete characterization of the transportation-game core remains open; it says nothing specific about existence of whole-core side-optimal points. The candidate correctly avoids treating it as a matching open-question statement, but the requested full comparison remains unresolved. [Publisher abstract](https://link.springer.com/article/10.1007/s10479-024-06341-6).
+- The ICERM slides are secondary presentation material and concern the pair-cap-one replicated model. They contribute little to the exact unrestricted transportation comparison.
+- The task expressly requested searches for the exact weights and Isbell connections. The candidate admits that it performed none. That is a direct coverage failure, not merely a limitation.
+- No page- or theorem-specific evidence was produced for Sánchez-Soriano et al. 2001, Sotomayor 2002/2007, the agents-game article, or the alleged companion paper. Those remain the central unread gaps.
+- “No recognised-open-question claim for 2026 is supported” is defensible only as a statement about inspected evidence. It should not sound like a literature-wide conclusion.
+- The final priority conclusion—undetermined, with no novelty certification from absence—is correct and appropriately cautious.
+
+Required revision: inspect the freely available one-seller manuscript or thesis; run and document exact-weight/Isbell searches; tighten the Sotomayor model-equivalence explanation; and present the remaining named originals as unresolved after source-specific retrieval attempts. The present report is useful partial evidence, but not sufficient coverage of the assigned audit.
