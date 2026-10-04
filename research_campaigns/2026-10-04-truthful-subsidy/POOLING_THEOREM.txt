@@ -1,0 +1,117 @@
+ALL-PROFILE POOLING THEOREMS -- 2026-10-04
+Coordinator proofs checked independently by Fable 5.1; exact finite stress checks
+passed. Conventional proofs, not formal verification. No priority claim.
+The pool-total functional is established continuous Banzhaf; see BANZHAF_COMPARISON.txt.
+
+MODEL
+There are k>=1 disjoint finite owner sets N_1,...,N_k, with each owner i in
+exactly one pool j and capacity c_i>=0. Put A_j=sum_{i in N_j}c_i and
+T=min_j A_j. Coalition value is v(S)=min_j sum_{i in S intersect N_j}c_i.
+For k stages, this is exactly a series of k parallel-arc bundles, with distinct
+arc owners. It is a subclass, not all networks of path length k. Payments are
+deterministic functions of reports, utility is payment, underreports only, no costs.
+C and H are the ORIGINAL efficient real TU core and its coordinate maxima.
+A bottleneck-pool cut payment (c_i in that pool, zero elsewhere) proves C nonempty.
+
+THEOREM1. A UNIFORM-THRESHOLD PRICE FORMULA
+If T=0 set y=0. Otherwise, for each pool j define
+ p_j(A) = (1/A_j) integral_0^T product_{l != j}(1-t/A_l) dt,
+ y_i(c)=c_i p_j(A) for i in N_j.
+Then, at every real nonnegative capacity profile:
+ (a) y>=0 and y(S)>=v(S) for every coalition S;
+ (b) y_i is nondecreasing in c_i with every other capacity fixed;
+ (c) y_i>=H_i/k;
+ (d) T<=sum_i y_i<=((k+1)/2)T.
+Thus underreporting is not profitable, all coalition outside options are covered,
+and the external subsidy is at most (k-1)T/2. For k=2 it protects H/2 with
+subsidy<=T/2; for k=3 it protects H/3 with subsidy<=T. The proofs below cover
+all real profiles, independently of the finite stress tests. These are not
+optimality claims over arbitrary mechanisms.
+
+Proof of(a). Every p_j>=0. Differentiating P(t)=product_l(1-t/A_l) gives
+ -P'(t)=sum_j (1/A_j)product_{l != j}(1-t/A_l).
+Integrating from0 toT gives sum_j p_j=P(0)-P(T)=1. For any coalition,
+ y(S)=sum_j p_j sum_{i in S intersect N_j}c_i >= sum_j p_j v(S)=v(S).
+At T=0 every coalition value is0, so y=0 works.
+Equivalent interpretation: p_j is the probability that independent uniform
+U_l in[0,A_l] have their minimum at j. This is an analysis device; payments
+use exact deterministic prices, not a lottery realized after reporting.
+
+Proof of(b). Fix i in pool j, write A_j=x+a where x=c_i and a>=0 is fixed.
+For all other pool totals positive, define
+ g(t)=product_{l != j} max(1-t/A_l,0), t>=0.
+Then y_i(x)=x/(x+a) integral_0^(x+a) g(t)dt.
+Both factors are nonnegative and nondecreasing in x, hence so is their product.
+This expression agrees with the displayed price formula, since g vanishes above
+the least other total. If k=1 the empty product is1 and y_i=x. At x=a=0
+define y_i=0, and the inequality across that boundary follows by nonnegativity.
+If another pool has total0, all payments stay0 as x varies. No overreport, cost,
+or group-report truthfulness is proved.
+
+Proof of(c). For every x in C, x_i=T-x(N\{i})<=T-v(N\{i}). Put
+ B=min_{l != j}A_l for k>=2. If A_j<=B, the resulting marginal bound is c_i.
+If A_j>B, it is max(0,c_i-A_j+B), which is <=c_i*B/A_j because c_i<=A_j.
+Thus H_i<=c_i*T/A_j in both cases. For0<=t<=T every A_l>=T gives
+ product_{l != j}(1-t/A_l)>=(1-t/T)^(k-1).
+Consequently p_j >= T/(k*A_j) and y_i>=c_i*T/(k*A_j)>=H_i/k.
+For k=1 the core is the unique additive payoff c and the same claim holds.
+For T=0 the original core is{0}, so the floor is0.
+
+Proof of(d). Fix j* with A_j*=T. Since each factor lies in[0,1] on[0,T],
+ A_j* p_j* <=T. For every j != j*, the integrand includes1-t/T, hence
+ A_j p_j<=integral_0^T(1-t/T)dt=T/2. Sum these k inequalities.
+The lower bound is the grand-coalition case of(a).
+For this particular formula the upper constant is a supremum: take A_1=1 and
+A_2=...=A_k=M and let M grow. The first integral tends1 and every other
+integral tends1/2. This does not prove optimality among other mechanisms. QED.
+
+TWO-POOL CLOSED FORM
+For totals A,B>0 with A>=B,
+ p_L=B/(2A), p_R=1-B/(2A),
+ total payment=3B/2-B^2/(2A), subsidy ratio=(1-B/A)/2.
+For A<=B interchange sides. At A=B both prices are1/2 and subsidy0.
+
+THEOREM2. SHARP FAIRNESS/SUBSIDY TRADEOFF IN A SPECIFIED PRICING CLASS
+Restrict to two-pool payment families, valid for EVERY finite partition of
+capacities into owners, of the form
+ y_i=c_i p(A,B) on the left, y_i=c_i q(A,B) on the right.
+The same nonnegative price functions p,q depend only on the two totals, not
+on the number, identities, or partition of owners. This is an EXTRA assumption;
+it is not asserted to follow merely from DSIC, anonymity or split-proofness.
+For any fixed alpha in[0,1], require all coalition inequalities, own-report
+monotonicity, and original-core floors y_i>=alpha H_i for all these instances.
+The infimum worst-case subsidy factor in this class is max(1/2,alpha).
+Thus fairness up to H/2 is free within this class; above 1/2 the optimal worst-case
+subsidy factor increases exactly with alpha.
+
+Upper bound. Theorem1 with k=2 gives alpha=1/2 and beta=1/2, hence every
+alpha<=1/2. The auxiliary rule z_i=c_i*T/A_j pays each pool total T. It is
+own-report monotone: holding other capacities fixed, z_i=x*min(1,B/(x+a));
+this increases as x or x/(x+a) in its two regimes and agrees at the boundary.
+It covers coalitions because the bottleneck pool alone receives its capacities.
+The marginal bound above gives z_i>=H_i, and total z=2T. For alpha>=1/2,
+ y^alpha=(2-2alpha)y+(2alpha-1)z
+is a convex combination preserving monotonicity and coalition covering. It
+protects alpha H and has subsidy factor at most alpha. At zero flow use0.
+
+Lower bound. At totals(1,1) with one owner in each pool, original ideals are(1,1).
+Thus p(1,1),q(1,1)>=alpha and p(1,1)+q(1,1)>=1. One of these prices is at
+least r=max(1/2,alpha); interchange pool names if necessary. Suppose p>=r.
+Raise the sole left owner's capacity from1 to M>1, keeping the right capacity1.
+Own-report monotonicity implies M*p(M,1)>=r. Now consider instead two left
+owners of capacities1 and M-1, and the same right owner of capacity1. Because
+prices depend only on totals, they remain p(M,1),q(M,1). The coalition of the
+unit left owner and the right owner has value1, implying p(M,1)+q(M,1)>=1.
+Therefore total payment at these totals is
+ M*p(M,1)+q(M,1)>=1+(M-1)*p(M,1)>=1+r*(1-1/M).
+Here T=1. Let M tend to infinity. Every universal beta is >=r. The argument
+uses at most two owners per pool, but crucially uses partition-independent
+prices across ownership instances. It does NOT prove beta>=1/2 for arbitrary
+profile-dependent payments in the fixed four-player model. QED.
+
+LIVE GAP
+For arbitrary payment rules in the two-pool class with alpha=1/3, only the
+general lower bound1/8 and constructive upper bound1/2 are established here.
+The exact minimax constant, improvements using ownership information, and the
+entire depth3 graph class remain unresolved. Priority of these mechanism guarantees remains unconfirmed. The underlying
+continuous Banzhaf functional is established; see BANZHAF_COMPARISON.txt.
