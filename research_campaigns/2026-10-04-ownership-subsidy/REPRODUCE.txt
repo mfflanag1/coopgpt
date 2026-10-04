@@ -1,0 +1,39 @@
+REPRODUCIBILITY -- run from repository root
+
+Final evidence uses Python3 standard library only:
+ python3 -B -O research_campaigns/2026-10-04-ownership-subsidy/verify_shapley.py
+
+Expected report: EXACT_CHECKS.json, including source SHA256.
+625 profiles from{0,1/2,1,2,5}^4, plus200 rational profiles from seed20261004.
+Direct averaging over all24 orders is checked against the analytic formula.
+All15 nonempty coalitions per profile are checked for factor5/6 and scaled coverage.
+Fairness is checked against the removal marginal, a proved upper bound on H,
+not an LP-computed core ideal. Adjacent own-report changes and rational halving
+changes are checked. These finite stress checks do not prove the continuum theorem.
+
+The same script independently reconstructs the >= rows in lp-012.json and
+lp-01234.json and combines their nonnegative rational dual multipliers. It requires
+coefficient1 on beta, nonpositive coefficients on all nonnegative payments, and
+right side1/8. Hence both supports certify beta>=1/8 using only listed profiles.
+The11-row certificate uses3 profiles; the13-row certificate uses5 profiles.
+No solver, solver status, full-grid enumeration claim or floating-point optimality
+is needed by these certificate checks. Eleven corruptions across six failure types are rejected; see the exact report.
+
+OPTIONAL DISCOVERY REPLAY (not needed to verify the result)
+ uv run --with scipy==1.18.1 python research_campaigns/2026-10-04-ownership-subsidy/discover_profile_lp.py --grid 0,1,2 --output /tmp/coopgt-lp-012-replay.json
+ uv run --with scipy==1.18.1 python research_campaigns/2026-10-04-ownership-subsidy/discover_profile_lp.py --grid 0,1,2,3,4 --output /tmp/coopgt-lp-01234-replay.json
+
+Executed with SciPy1.18.1, HiGHS via scipy.optimize.linprog.81/625 profiles and
+697/6721 rows. Both numerical objectives were0.125. This LP OMITTED fairness floors,
+so it is a relaxation used only for lower-bound discovery; no exact finite-domain
+primal feasibility/optimality is claimed from its floating-point output. Output
+JSON includes a rationalized dual guess, which becomes evidence only after exact
+verification. These grids did not improve the known lower bound.
+
+Both Python sources compile. The saved exact-check report matches the verifier's
+SHA256. Existing manuscripts and mathematical implementations were preserved; repository
+indexes link the new note.
+
+Final counts:12,375 coalition inequalities,3,300 marginal floors,2,782 strict
+own-report comparisons;18 zero-capacity halvings skipped. Equivalent scaled
+identities are checked but not counted as independent extra evidence.
