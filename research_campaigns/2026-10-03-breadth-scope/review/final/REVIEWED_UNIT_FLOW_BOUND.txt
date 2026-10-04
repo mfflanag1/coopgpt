@@ -1,0 +1,91 @@
+Sharp subsidy for short unit-capacity flow games -- candidate conventional proof
+3 October 2026. Fable supplied the T/3 proof and independently found the chain
+family. Codex QA found proof-completeness issues; the coordinator supplies those
+steps here and strengthens the finite bound. A fresh model review found no
+mathematical error; see review/candidate_proofs/ADJUDICATION.txt for its scope.
+Historical novelty is NOT established. The unequal-capacity conjecture is open
+within this campaign and is not replaced by this special-case theorem.
+
+THEOREM. Let a finite DAG have distinct source s and sink t, unit arc capacities,
+positive maximum flow T, and every directed s-t path of length at most three.
+Players are arcs; coalition value is maximum flow using its own arcs. Let H_e be
+the maximum over the original entire core. Then
+                 s_(1/3) <= (T-1)/3.
+For every positive integer T this bound is attained by the chain family in
+FLOW_CHAIN_CANDIDATE.txt. In particular the supremum of s/T is 1/3.
+Parallel arcs are allowed and counted as distinct players. Unused arcs are not
+removed from the game. No core=Owen-set characterization is assumed.
+
+1. Core points and individual ideals.
+For any minimum cut K, its capacity is T. Its indicator x^K has total T. For
+every arc coalition A, the flow across this same vertex cut uses only A intersect
+K, so v(A)<=|A intersect K|=x^K(A). Thus x^K belongs to the original entire core.
+Fix any integral maximum flow f and decompose it into T arc-disjoint s-t paths;
+acyclicity precludes flow cycles. Removing a used arc's entire path leaves a
+feasible flow of value T-1. An unused arc can be deleted without losing flow.
+For every x in the core, x_e<=T-v(N\{e})<=f_e. Hence H_e<=f_e<=1.
+The deletion marginal is an integer in {0,1}. If H_e>0, it equals 1. Take a
+minimum cut after deleting e. Its capacity is T-1. Reinserting e must increase
+that cut capacity by 1 (otherwise the original maximum flow would be <=T-1),
+so it is an original minimum cut containing e. Its indicator attains payoff 1.
+Therefore H_e is exactly the deletion marginal, belongs to {0,1}, and H_e=1
+iff e belongs to some minimum cut. This proves attainment using the entire core.
+
+2. The first and last residual cuts.
+Let R be the residual graph of f. There is no residual s-t path. Let S0 be the
+nodes reachable from s in R, and let S1 be the complement of nodes that can reach
+t in R. They satisfy s in S0 subset S1, t outside S1. Both sets are closed under
+outgoing residual arcs. Consequently their outgoing original arcs are saturated
+and their incoming original arcs carry zero flow. Conservation shows both cuts
+K0=delta+(S0) and K1=delta+(S1) have capacity T.
+Along any used flow path, membership of either set can change from inside to
+outside but cannot re-enter: an incoming positive-flow arc would give a reverse
+residual arc from inside to outside, violating closure. Thus each path crosses
+each cut exactly once. If positions are k and l respectively, inclusion gives
+k<=l. This proves the cut-crossing assertion explicitly.
+
+3. Ideals vanish before the first and after the last cut on a used path.
+Write a path P as n0=s,n1,...,nm=t, arcs e1,...,em, where m<=3. Let ek be its
+K0 crossing. If k=1 there is nothing before it. Otherwise choose a simple residual
+path R0 from s to n_(k-1). Every vertex on R0 lies in S0. It cannot traverse any
+forward arc of P, all of which are saturated. It cannot traverse a reverse e_j
+for j>=k, whose tail n_j is outside S0. It cannot traverse reverse e_(k-1),
+which leaves R0's endpoint; simplicity excludes an earlier visit to that endpoint.
+The only other possible reversed P arc is reverse e1 when k=3, and it enters s,
+which a simple path starting at s cannot do. Thus R0 uses no arc of P in either
+direction. Delete P's unit of flow and augment by one along R0 followed by the
+suffix ek,...,em. All residual capacities on R0 remain sufficient, and the suffix
+has just been freed. The two path pieces do not meet except at their junction:
+R0 lies in S0 while suffix vertices after the cut lie outside S0. This gives a
+value-T feasible flow avoiding e1,...,e_(k-1). Their deletion marginals and H vanish.
+For the other end, reverse all network arcs, swap source and sink, and reverse f.
+The new residual graph is the reversal of R. Its source-reachable set is exactly
+the original set of nodes that residual-reach t, namely the complement of S1.
+Its first cut corresponds to K1. Applying the just-proved prefix argument in the
+reversed network proves H_ej=0 for j>l in the original network.
+
+4. Two cuts leave at most one positive ideal per flow path.
+An arc with H_e=1 belongs to f. If it is outside K0 union K1, paragraph 3 puts
+it strictly between positions k and l on its used path. A path of length <=3
+has at most one such position. Consequently the set
+                 B={e:H_e=1, e not in K0 union K1}
+has size r<=T. This is the structural lemma that improves the elementary bound.
+It uses unit saturation in paragraph 3, not just the path-length bound.
+
+5. A third cut yields the finite correction.
+If r=0, x=(x^K0+x^K1)/2 is already a core point above H/3, so subsidy is zero.
+Otherwise choose e in B. Paragraph 1 supplies a minimum cut K2 containing e.
+Let z=(x^K0+x^K1+x^K2)/3, a core point. Every arc in these three cuts has
+z_e>=1/3>=H_e/3. At most r-1 positive-ideal arcs lie outside their union.
+Set y=max(z,H/3). This covers every coalition because y>=z, and adds exactly
+1/3 for each of those outside arcs. Hence s_(1/3)<=(r-1)/3<=(T-1)/3.
+Together with the chain family this proves the theorem.
+
+SCOPE FAILURE FOR UNEQUAL CAPACITIES.
+A serial three-arc path with capacities (2,2,1) is a unanimity game of worth 1,
+so the entire core is the unit simplex and H=(1,1,1). Only the final arc is in
+a minimum cut. Its Owen payoff (0,0,1), clipped to H/3, has total 5/3 and subsidy
+2/3, while the true protected subsidy is zero at (1/3,1/3,1/3). Thus our residual
+cut covering lemma and cut-only clipping construction do not extend as stated.
+Splitting capacities into independent unit-arc players changes the core and H;
+it is not an authorized equivalence. This example does not refute C2.

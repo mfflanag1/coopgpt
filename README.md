@@ -4,7 +4,7 @@
 
 [October 3 graph-paper review packet and specialist shortlist](review_packages/2026-10-03/README.md), with a [proposed bounded research goal](research_plans/2026-10-03/GOAL.md). Outreach remains unsent. The [core-witness campaign](research_campaigns/2026-10-03-core-witness/README.md) completed on October 3 before its 40-hour ceiling, with the sharp result below and all required gates documented.
 
-The [six-to-eight-hour breadth-scoping campaign](research_campaigns/2026-10-03-breadth-scope/STATUS.json) started on October 3 at 22:47 UTC under the [reviewed goal](research_plans/2026-10-03-breadth-scope/GOAL.txt). It has a sharp unit-capacity short-flow theorem with internal proof review and exact checks; general rational capacities and novelty remain unresolved. The campaign is active, with no final research decision yet.
+The [breadth-scoping campaign](research_campaigns/2026-10-03-breadth-scope/DECISION.txt) completed early under its reviewed six-to-eight-hour ceiling. It proves a sharp unit-capacity short-flow subsidy bound and an obstruction to a generic substitutes argument; general rational capacities and novelty remain unresolved. The decision is **conditional go for one bounded flow-specific attempt**, with no open-ended expansion. The [reviewed follow-on goal](research_campaigns/2026-10-03-breadth-scope/FOLLOW_ON_GOAL.txt) is proposed, not active. [Proofs, sources and exact checks](research_campaigns/2026-10-03-breadth-scope/INDEX.txt).
 
 [September 27 project review and repository audit](project_review_2026-09-27/REVIEW.md).
 

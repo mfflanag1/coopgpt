@@ -67,6 +67,27 @@ def max_flow(edges,mask=None):
             f[j]+=d*delta
     value=flow_value(edges,f)
     validate_flow(edges,f,value)
+    # A feasible flow and an equal-capacity cut certify the coalition value.
+    # Recompute reachability independently of the augmenting-path BFS.
+    allowed = (1 << len(edges))-1 if mask is None else mask
+    reachable = {'s'}
+    changed = True
+    while changed:
+        changed = False
+        for j,(u,v,c) in enumerate(edges):
+            if not (allowed >> j & 1):
+                require(f[j] == 0, 'Flow uses an absent coalition arc')
+                continue
+            if u in reachable and f[j] < c and v not in reachable:
+                reachable.add(v)
+                changed = True
+            if v in reachable and f[j] > 0 and u not in reachable:
+                reachable.add(u)
+                changed = True
+    require('t' not in reachable, 'Computed flow is augmentable')
+    cut_capacity = sum(c for j,(u,v,c) in enumerate(edges)
+                       if allowed >> j & 1 and u in reachable and v not in reachable)
+    require(value == cut_capacity, 'Max-flow/min-cut certificate mismatch')
     return value,f
 
 
@@ -120,6 +141,7 @@ def verify_capacities():
         x=verify_lp(case['protected_certificate'],[1]*m,[v/3 for v in h],values,False)
         require(sum(x)-values[-1]==F(case['subsidy']),'Subsidy mismatch')
         require(F(case['ratio'])==F(case['subsidy'])/values[-1],'Ratio mismatch')
+        require(set(case['joint_attainment']) == {'source','sink'}, 'Missing or extra joint-witness role')
         for role,record in case['joint_attainment'].items():
             ids=[j for j,(u,v,c) in enumerate(edges) if (u=='s' if role=='source' else v=='t')]
             require(record['status']=='EXACT_FEASIBLE' and record['indices']==ids,'Unverified joint claim')

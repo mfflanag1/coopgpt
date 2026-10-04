@@ -8,19 +8,24 @@ python3 -B -O research_campaigns/2026-10-03-breadth-scope/verify_four_sector.py
 
 Compare the resulting JSON with INITIAL_CHECKS.json, INDEPENDENT_CHECKS.json,
 and FOUR_SECTOR_CHECKS.json respectively. Source and certificate hashes appear
-in the reports. All three reproduced exactly under -O on 3 October2026; explicit
+in the reports. All three reproduced exactly under -O; the strengthened certificate checker
+was rerun after final review with unchanged case outcomes and an updated source hash; explicit
 require checks remain active with Python assertions disabled.
 
 Initial checks: F01-F03 unit chains and A04-A05 assignment geometry. All2,312
 coalitions checked; min-cut values independently compared with arc-disjoint path
 packing in the unit games. Four damaged primal allocations rejected.
-Independent checks: F06-F10 unequal-capacity cases, all2,328 coalitions recomputed
+Independent checks: F06-F10 unequal-capacity cases, all 2,328 coalitions recomputed
 by residual augmenting max-flow rather than the discovery cut enumeration.
+Every computed flow is now matched to an equal-capacity cut, checked separately
+with coalition masking. Both source and sink witness records must be present.
 32 ideal primal-dual certificates,5 subsidy primal-dual certificates and10
 source/sink joint witnesses are checked with exact Fraction arithmetic. Five
 altered dual objectives rejected. The unit construction is separately replayed
-on F01-F03,F11,F12, including4 actual residual reroutings and both r branches.
-F11/F12 contribute2,304 new coalitions. Across all12 distinct games,6,944 distinct
+on F01-F03,F11,F12, including 4 actual residual reroutings and both r branches. These reroutings
+cover only two-arc parallel alternatives; the difficult three-arc late-cut case
+is not computationally covered. The shorter lattice proof establishes the theorem.
+F11/F12 contribute2,304 new coalitions. Across all 12 distinct games,6,944 distinct
 coalitions were checked; rechecking initial games is not counted as new coverage.
 Four-sector checker:256 ordered label patterns and4 formal coefficient identities.
 No finite four-sector game search, sharpness search, or new instance census.
@@ -29,7 +34,7 @@ Discovery is optional, not needed to verify the saved result. probe_capacities.p
 uses pre-existing SciPy/NumPy to solve only F06-F10, then recovers and exactly
 checks primal-dual certificates. Existing local interpreter used during discovery:
 /Users/maxf/projects/economics-research/macro-productivity/gpt-break-detection/.venv/bin/python
-Do not rerun discovery with changed parameters under this campaign: all12
+Do not rerun discovery with changed parameters under this campaign: all 12
 preregistered instance slots are consumed. No retries were used.
 
 Scope: these are exact checks of fixed games and algebraic identities. The
