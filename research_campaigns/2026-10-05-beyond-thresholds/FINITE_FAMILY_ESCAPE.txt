@@ -1,0 +1,65 @@
+WHY THE NEW CHAINS DO NOT PROVE UNRESTRICTED DIVERGENCE
+2026-10-05 -- coordinator construction; independent reading review completed
+
+This is a payment assignment on a FINITE PROFILE FAMILY, not a mechanism on all
+reports. It covers every coalition and satisfies every own-report comparison
+between retained profiles at budget <=2T. A fairness top-up gives <=3T. Thus no
+unrestricted lower-bound certificate supported only on this family can diverge.
+
+FAMILY
+Fix k>=2,r>=2; k pools have r owners each. H has all capacities 1. Every other
+profile has one special pool j with h unit owners and r-h owners of capacity
+1/r, for 0<=h<r. All other pools have r unit owners. Include ALL choices of j
+and of its h high-owner labels, so all orders of the linked increases occur.
+Set T_h=h+(r-h)/r, delta_h=(r-h)/r, z_h=T_h/r. Pay:
+  each small owner in the special pool: a_h=(delta_h-z_h)_+/(r-h);
+  each unit owner in the special pool: b_h=1-z_h;
+  each owner in any other pool: c_h=z_h/(k-1).
+At H pay every owner 1/k. All payments are nonnegative.
+
+COVERAGE
+For a coalition let b be its unit-owner count in the special pool and let s be
+its total small-owner capacity, 0<=s<=delta_h. Let n be the smallest selected
+owner count among the other pools; n is an integer. The coalition is worth
+min(b+s,n). Its payment is at least
+  b*(1-z_h)+s*(1-z_h/delta_h)_+ + n*z_h.
+If n<=b, the first and last terms alone are >=n. Otherwise n>=b+1, so the
+payment is >=b+z_h+s*(1-z_h/delta_h)_+ >=b+s: if z_h<=delta_h use s<=delta_h;
+if z_h>=delta_h use s<=delta_h<=z_h. This proves coverage. At H, paying 1/k
+per owner covers because the average of the k selected-owner counts is at least
+their minimum, and the budget is exactly T=r.
+
+BUDGET
+Off H the total is
+  h*(1-z_h)+(delta_h-z_h)_+ + r*z_h.
+If z_h<=delta_h this equals T_h+(r-h-1)*z_h<=2*T_h.
+If z_h>=delta_h it equals h+(r-h)*z_h<=T_h+T_h=2*T_h.
+
+ALL RETAINED OWN-REPORT COMPARISONS
+The only possible increase between retained profiles changes a small special-pool
+owner from 1/r to 1. Thus we need a_h<=b_{h+1} for h<r-1, and a_{r-1}<=1/k.
+Always a_h<=1/r. For h<=r-3,
+  b_{h+1}=(r-h-1)*(r-1)/r**2 >=2*(r-1)/r**2 >=1/r.
+For h=r-2 and r>=4, delta_h-z_h=4/r-1-2/r**2<=0, so a_h=0.
+The remaining cases are r=2,h=0: a_h=b_{h+1}=1/4; and r=3,h=1:
+a_h=1/18<=b_{h+1}=2/9. Finally delta_{r-1}-z_{r-1}=-(r-1)**2/r**2<0,
+so a_{r-1}=0. This proves all required inequalities, including all owner labels.
+There are no additional retained edges obtained by changing a different pool:
+that would leave two nonunit pools, except when both endpoints are H and a
+single-small-owner profile, which is already covered.
+
+FAIRNESS AND LIMIT
+At each profile replace the above payment with max(y_i,M_i/k), where
+M_i=T-v(N without i). This is still monotone on retained edges, covers all
+coalitions, protects H_i/k, and costs at most 3T by the established sum M_i<=kT.
+For completeness, x_i=T-x(N without i)<=T-v(N without i)=M_i for every
+original efficient core vector x. In a pool of total C>=T, write delta=C-T;
+then M_i=(c_i-delta)_+. If q>=1 terms are positive, their sum is at most
+C-q*delta<=T; if none are positive the bound is immediate. This supplies both
+facts used in the preceding top-up argument.
+
+For the coefficient certificate in PROPORTIONAL_THEOREM.txt to extend to the
+unrestricted class, it MUST introduce additional profiles or additional legitimate
+constraints: these same paths, even with all owner permutations and the original
+floor, cannot suffice. No extension of this assignment to all real reports has
+been proved. A finite-family witness is not a universal constant mechanism.

@@ -1,0 +1,77 @@
+REPORT-INDEPENDENT RANDOM-ORDER PAYMENTS REQUIRE DIVERGING SCALE
+2026-10-05 -- independent Fable construction, Codex QA and coordinator derivation
+
+CLASS AND STATUS
+Fix the owner slots and a report-independent probability distribution mu on their
+permutations; it may correlate arbitrary owners and need not respect any labels.
+Let phi_i(c)=E_mu[v_c(Pred_i union {i})-v_c(Pred_i)]. Pay y_i=lambda*phi_i,
+where lambda>=1 is fixed for this ownership. Marginal contributions are nonlinear
+in capacity and the earlier proportional-payment theorem does not cover this class.
+This is another restricted-class obstruction, not the requested unrestricted one.
+
+VALID PROPERTIES
+For a fixed permutation the marginal of owner i in pool j is
+min(a+c_i,B)-min(a,B), with a the preceding own-pool capacity and B the minimum
+preceding capacity of the other pools. It is nonnegative and nondecreasing in c_i.
+The distribution is report-independent, so expectation preserves this property.
+Telescoping gives total y=lambda*T. At T=0 each nonnegative marginal is zero.
+Coalition coverage is the condition that fails at bounded lambda.
+
+THEOREM
+Write Lambda=ceil(lambda), L=2*Lambda, g=8*Lambda, n=2*L*g=32*Lambda**2,
+p=(16*Lambda)**(-2*Lambda), G=ceil(log(8*Lambda)/p).
+If every pool has at least n fixed slots and k>4*Lambda*G, some profile and
+coalition violate coverage. Thus a covering family of such rules over arbitrary
+finite owner counts must have lambda=Omega(log(k)/log(log(k))).
+
+PROOF
+Choose n designated slots in every pool, leaving any others at capacity zero.
+For each choice of a special pool s, independently assign its single unit to one
+uniform designated slot, and assign L units in each other pool to a uniform
+L-subset of its designated slots. All other capacities are zero. T=1.
+For any permutation the game value jumps exactly once: when the first positive
+owner of the last pool arrives. That owner receives the sole nonzero marginal.
+Let P_s be the probability that the special pool arrives last, averaging over
+both these independent capacity placements and the fixed order distribution.
+
+Form a coalition by taking the special unit owner and one uniformly selected
+positive owner from every other pool. Its value is 1. Its expected UNscaled
+payment is P_s+(1-P_s)/L<=P_s+1/L. If every deterministic placement and coalition
+were covered, lambda*(P_s+1/L)>=1, hence
+  P_s>=1/lambda-1/L>=1/(2*Lambda).                              (1)
+
+Now condition on one fixed permutation. In each pool j let b_j be the position
+of the first of its last n/g designated slots. These positions are distinct.
+The special pool's unit position X_s satisfies Pr[X_s>=b_s]=1/g.
+For an ordinary pool j, its first positive position X_j satisfies
+ Pr[X_j>=b_j]=choose(n/g,L)/choose(n,L)>=(1/(2*g))**L=p.
+Indeed each factor in the ratio of falling factorials is >=1/(2*g), since
+n/g=2L and n=2Lg. Placements in different pools are independent conditional on
+the permutation.
+
+Unless s is among the G pools with largest b_j, there are at least G other
+pools with b_j>b_s. If X_s<b_s and any such pool has X_j>=b_j, s cannot be last.
+Consequently its conditional last probability is <=1/g+(1-p)**G.
+Averaging over s and then the fixed permutation distribution yields
+ (1/k)*sum_s P_s <=G/k+1/(8*Lambda)+exp(-p*G)
+                 <=G/k+1/(4*Lambda)<1/(2*Lambda),
+contradicting (1). Random placements only prove existence of a deterministic
+bad capacity assignment for the fixed distribution mu; the mechanism is not
+allowed to choose its order distribution after seeing that assignment.
+
+Taking logs of k<=4*Lambda*ceil(log(8*Lambda)*(16*Lambda)**(2*Lambda)) for any
+covering rule gives log k<=O(Lambda log Lambda), and hence the claimed scaling.
+If lambda stays bounded the finite theorem already contradicts arbitrarily large k.
+Both k and the available owner counts must grow in this argument. Zero reports
+are allowed by the frozen model. No strictly-positive-only version is asserted.
+
+PROVENANCE AND LIMITS
+The independent construction delegate supplied this argument. Opposite-model QA
+found its core proof sound, requesting explicit quantifiers and removal of other
+unsupported claims. The coordinator checked the conditional independence, each
+averaging order, constants, and the inversion; the exact verifier checks the
+binomial inequality for Lambda=1,...,8. That finite check is not the theorem.
+Shapley/random-order marginal values themselves are established. Historical
+priority of this coverage obstruction remains unconfirmed. Report-dependent
+order distributions, arbitrary nonlinear payments and unrestricted mechanisms
+remain outside this theorem.

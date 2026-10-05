@@ -1,0 +1,71 @@
+A SINGLE-SINK, SINGLE-EXPORTER CERTIFICATE CANNOT EXCEED FACTOR TWO
+2026-10-05 -- corrected extraction from independent lower-bound attempt
+
+TRANSPORT NOTATION
+For profile c and nonnegative weights w define
+F_c(w)=min{w*x:x>=0 and x(S)>=v_c(S) for every coalition S}.
+A finite profile certificate has budget weights mu_c>0 and nonnegative flows
+rho on own-report-increase edges. Let w_c(i)=mu_c+out_c(i)-in_c(i)>=0.
+Since own monotonicity gives sum_c (w_c-mu_c)*y_c<=0,
+ B*sum_c mu_c*T_c >= sum_c mu_c*sum_i y_c(i)
+                   >= sum_c w_c*y_c >= sum_c F_c(w_c).
+This is weak duality only, with no claim about completeness on infinite domains.
+
+COVER LEMMA
+For E contained in one pool A put tau=c(E). For any other pool D, pay c_i on
+A minus E, min(c_i,tau) on D, and zero elsewhere. This covers, because for every
+S, v(S)<=min(c(S intersect (A minus E))+tau,c(S intersect D))
+<=c(S intersect (A minus E))+sum_{i in S intersect D}min(c_i,tau).
+In particular it avoids paying any owner in E.
+
+THEOREM AND PRECISE SCOPE
+There is one sink c' with weight mu', no exports, and finitely many distinct
+sources c^s. Each source differs from c' only by lowering one owner i_s from
+a_s to sigma_s, and has exactly one flow rho_s into the sink and no imports.
+Owners may repeat across sources. Nonnegative sink weights mean
+sum_{s:i_s=i}rho_s<=mu' for every owner. Then
+  sum_s F_{c^s}(w_s)+F_{c'}(w') <=2*(sum_s mu_s*T_s+mu'*T').
+Disjoint unions have the same bound. It omits the fairness floor; this is a
+barrier for this specified floor-free certificate construction, not a universal
+claim about all certificates, multi-exporter sources, cascades, or floor duals.
+
+PROOF
+Call a source active when i_s is in its unique minimum-total pool. Otherwise
+some minimum pool omits i_s and its bottleneck core cover costs mu_s*T_s.
+If there are no active sources, that bound and F_sink<=mu'*T' suffice.
+
+For an active source write D_s for the sink total of its pool minus a_s;
+T_s=D_s+sigma_s. Choose an active i_* minimizing D_s and call its pool A_*.
+For an active source whose changing owner lies outside A_*, use the cover lemma
+with E={i_s}, D=A_*. Pool A_* is unchanged from the sink, and the truncated
+sum there is <=D_*+sigma_s. All paid owners have source weight mu_s, so
+ F_s<=mu_s*(D_s+D_*+sigma_s)<=2*mu_s*T_s.
+
+For an active source whose changing owner lies in A_*, the bottleneck-pool core
+cover costs mu_s*T_s+rho_s*sigma_s. We handle these extra terms jointly.
+If A_* is minimum at the sink, paying capacities just on A_* has weighted cost
+mu'*T'-sum_{s:i_s in A_*}rho_s*a_s. Since a_s>=sigma_s, this cancels every
+active A_* extra term (and possibly more).
+Otherwise let C'>T' be the sink total of A_*. Activity gives
+sigma_s<T'-D_s=T'-C'+a_s. For each owner all incoming flows sum to <=mu'. Thus
+the active A_* extras are <=mu'*sum_{i in A_*}(T'-C'+a_i)_+<=mu'*T'.
+The last inequality follows: if n terms are positive their sum is
+<=C'+n*(T'-C')=T'+(n-1)*(T'-C')<=T'; zero terms are immediate.
+Finally F_sink<=mu'*T' using any bottleneck-pool core cover, because w'<=mu'.
+Combining gives the theorem.
+
+REJECTED CLAIM IN THE RAW DELEGATE OUTPUT
+The proposed exact formula F_source=mu*min(T+epsilon*sigma,c(R)+m*sigma)
+was false. Take A={R,e} both capacity 1; another pool has m>=2 unit owners;
+weights w_e=m, all other weights 1. Paying the entire unit pool costs m and
+covers. Conversely m unit-weight coalitions {e, distinct unit owner} give a
+feasible covering dual of value m. Thus F_source=m exactly; the proposed
+formula gives m+1. The raw lower-bound attempt is therefore not accepted as a
+whole. Only this corrected star theorem and cover lemma are retained; its
+unsupported general cascade and exact source-value claims are not used.
+
+PROVENANCE AND LIMITS
+The independent Fable lower-bound attempt supplied the star proof; Codex QA and
+the coordinator checked it and independently refuted the source equality.
+The verifier checks matching exact primal/dual witnesses for m=2,...,6.
+No claim that unrestricted divergence is impossible follows from this theorem.

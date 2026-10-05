@@ -1,0 +1,35 @@
+REPRODUCIBILITY -- run from the repository root
+
+EXACT (Python standard library only)
+python3 -B -O research_campaigns/2026-10-05-beyond-thresholds/verify_beyond.py
+
+This overwrites EXACT_CHECKS.json. Explicit exceptions remain active with -O.
+Checks reconstruct six proportional certificates from labeled capacities,
+coalition and own-report inequalities; reject eight specified corruptions;
+check the nonlinear assignment by coalition-count reduction for r=2,...,20
+and k in {2,3,8,216}; and independently enumerate all labeled profiles,
+coalitions and base/fair report edges for (k,r)=(2,2),(2,3),(3,2),(3,3), including H.
+The failed nonlinear rule is integrated exactly, the rejected weighted source
+formula is refuted by matching primal/dual witnesses, and random-order binomial
+bounds are checked at eight parameters. The conventional proofs establish the
+all-parameter conclusions. The stored self-hash identifies the executed source;
+it is not an independent signature or a proof of correctness.
+
+NUMERICAL DISCOVERY ONLY (optional; SciPy 1.18.1; each solve <=120 seconds)
+uv run --with scipy==1.18.1 python -B research_campaigns/2026-10-05-beyond-thresholds/discover_three_types.py 4 2 1,2 /tmp/coopgt-triple-calibration.json
+uv run --with scipy==1.18.1 python -B research_campaigns/2026-10-05-beyond-thresholds/discover_three_types.py 12 4 1,4 /tmp/coopgt-triple-12-4.json
+uv run --with scipy==1.18.1 python -B research_campaigns/2026-10-05-beyond-thresholds/discover_cascade.py 16 4 1,2,6 /tmp/coopgt-cascade-16-4.json
+uv run --with scipy==1.18.1 python -B research_campaigns/2026-10-05-beyond-thresholds/discover_cascade.py 64 4 1,2,6 /tmp/coopgt-cascade-64-4.json
+
+Three-type search: all profiles with at most three pool types from the specified
+capacity grid. Cascade search: exactly the three available types
+L=(1,1,2,...,2), H=(1,2,...,2,t), G=(2,...,2,t,t), t=2m-2,
+with all type-count compositions. Fixed owners; only one-owner report changes
+whose endpoints are retained. Fairness omitted. Symmetry averaging is legitimate
+for these finite, fully label-symmetric families; retained coalitions use the
+same subset type in identical pools, which includes the cheapest admissible
+subset for each threshold. Rationalized floating optima remain DISCOVERY ONLY.
+The two cascade runs return beta 25/54 and 7/10, equal to earlier bounds for those
+parameters. They do not prove a global cascade barrier or a universal upper rule.
+Saved JSON source hashes match the committed scripts; no newly promoted theorem
+relies on their numerical primal/dual output.
