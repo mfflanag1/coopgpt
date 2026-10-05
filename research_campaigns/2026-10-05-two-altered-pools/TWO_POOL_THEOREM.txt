@@ -1,0 +1,146 @@
+TWO ALTERED POOLS AT THE SAME FACTOR TWO
+2026-10-05 -- conventional coordinator proof, independently reviewed
+
+STATEMENT
+For every k>=2,r>=2, the complete labeled family in CONTRACT.txt admits a
+nonnegative covering payment assignment, monotone along all retained own-report
+increases, with total payment <=2T. It agrees EXACTLY with the earlier nonlinear
+assignment on the zero/one-altered boundary. Max with M_i/k gives the original
+H_i/k floor and total payment <=3T. This is NOT an all-real-report mechanism.
+
+DEFINITIONS
+For 0<=h<r define
+ T_h=1+(r-1)*h/r, delta_h=(r-h)/r, z_h=T_h/r,
+ a_h=(delta_h-z_h)_+/(r-h), b_h=1-z_h, c_h=z_h/(k-1).
+An altered pool with h unit owners has r-h low owners, each capacity 1/r.
+For such pool j define the vector R^j on ALL owners: give its own low owners
+ a_h, its own unit owners b_h, and every owner outside j the SAME amount c_h,
+even when some of those other owners have low reports. Its total cost is
+ F_h=h*b_h+(r-h)*a_h+(k-1)*r*c_h.
+
+For 0<=s<=r-2 define q_s=a_s/b_{s+1}; the denominator is strictly positive.
+For 0<=g<h<r put
+ e(h,g)=(1/2)*product_{s=g}^{h-1}q_s.
+The assignment is:
+ * No altered pool: pay every owner 1/k.
+ * One altered pool j: use R^j, exactly as before.
+ * Two altered pools with the same h: use (R^j+R^l)/2.
+ * Two altered pools with h>g: give the h-pool vector weight e(h,g), and
+   the g-pool vector weight 1-e(h,g).
+T=T_g when h>=g. No division by a vanishing q_s is ever used; a zero product
+simply assigns zero weight to the more advanced pool.
+
+LEMMA 1: EACH R^j COVERS THE ACTUAL TWO-POOL-ALTERED GAME
+Temporarily set every report outside j to 1, keeping j unchanged. On this
+auxiliary profile the previous one-pool covering proof applies to R^j.
+Every actual outside report is <=1, so every actual coalition value is <= its
+auxiliary value, while R^j itself is unchanged. Hence R^j covers every actual
+coalition. Nonnegative convex combinations preserve this property.
+For completeness, if a coalition takes b unit owners and low capacity s from
+j, and n is the minimum selected-owner count outside j, its auxiliary worth is
+min(b+s,n). Its payment is >=b*(1-z_h)+s*(1-z_h/delta_h)_++n*z_h.
+If n<=b this is >=n; if n>=b+1 it is >=b+s since s<=delta_h. Thus all labeled
+coalitions, including ones omitting pools, are covered.
+
+LEMMA 2: PAYMENT RATIOS AND SINGLE-POOL COST
+For 0<=s<=r-2, direct substitution yields
+ q_s = (1/(r-1))*[1-s**2/((r-s)*(r-s-1))]_+.
+Consequently 0<=q_s<=1/(r-1)<=1, and b_{s+1}>=(r-1)*a_s.
+Also a_{r-1}=0. As in the earlier proof, F_h<=2*T_h.
+
+We will use the slightly more precise facts:
+ (i) 2*T_g-F_g >=1/r for every integer 0<=g<r;
+ (ii) F_h-F_g <=2*(h-g) whenever h>g;
+ (iii) if a_g>0, F_g=T_g*(2-(g+1)/r).
+To prove these, extend h to a real x in [0,r), using the same definitions.
+Where delta_x>=z_x,
+ F(x)=T_x*(2-(x+1)/r), so 2*T_x-F(x)=T_x*(x+1)/r>=1/r,
+ and F'(x)=((r-1)/r)*(2-(x+1)/r)-T_x/r<=2.
+Where delta_x<=z_x,
+ F(x)=x+(r-x)*T_x/r and F'(x)=2*(r-1)/r*(1-x/r)<=2.
+For (i) at an integer g in the second region,
+ 2*T_g-F_g=(T_g-g)+g*T_g/r=(r-g)/r+g*T_g/r>=1/r.
+The formulas agree at their transition, so their derivative bounds prove (ii).
+They also immediately prove (iii), including equality cases by continuity.
+
+LEMMA 3: EVERY RETAINED OWN-REPORT EDGE IS MONOTONE
+An increase changes one low report to 1, so its pool count advances h to h+1.
+Other owners need not retain their payments; the proof imposes no such condition.
+All edges with two altered pools have the following four forms.
+
+A. Tied counts s,s become s+1,s, with s<=r-2.
+The changing owner's old payment is (a_s+c_s)/2. Its new payment is
+ e(s+1,s)*b_{s+1}+(1-e(s+1,s))*c_s
+ =a_s/2+(1-e(s+1,s))*c_s >=(a_s+c_s)/2,
+since e(s+1,s)=q_s/2<=1/2.
+
+B. The changing pool is already ahead: h>g and h<=r-2.
+Write e=e(h,g), e'=e(h+1,g)=e*q_h<=e. Its old payment is
+ e*a_h+(1-e)*c_g. Its new payment is
+ e'*b_{h+1}+(1-e')*c_g=e*a_h+(1-e')*c_g, which is at least as large.
+This equality also holds when a_h=0 or the earlier product has become zero.
+
+C. The changing pool is behind: g<h and g<=r-2.
+Let e=e(h,g). If g+1<h set e'=e(h,g+1); if g+1=h set e'=1/2.
+The product definition gives e=e'*q_g<=e'<=1/2, even if q_g=0.
+The changing owner's old payment is (1-e)*a_g+e*c_h; its new payment is
+ (1-e')*b_{g+1}+e'*c_h.
+For r>=3, b_{g+1}>=(r-1)*a_g>=2*a_g, so the new own-pool term is >=a_g,
+while the old own-pool term is <=a_g; the external term also increases.
+For r=2 the only such pair is g=0,h=1, with q_0=1 and e=e'=1/2;
+b_1=a_0=1/4, so equality holds.
+
+D. The changing pool's last low owner becomes unit: h=r-1 -> r.
+Its own R^j payment before the change is a_{r-1}=0. If the other altered pool
+has count g, the old payment is a weight <=1 times c_g; after deletion of this
+altered pool it is exactly c_g under the old one-pool rule. Thus it increases.
+This includes a tie at r-1. The last-low edge from one altered pool to none
+has old payment zero and new payment 1/k.
+
+For the remaining one-altered internal edges, the old proof gives a_s<=b_{s+1}
+(the ratio bound suffices), and the boundary assignment is identical. There are
+no other directed one-report increases inside this binary profile family.
+
+THEOREM BUDGET PROOF
+One or zero altered pools were already bounded by 2T. Equal altered counts
+also satisfy the bound, since the two vectors have the same cost F_g<=2T_g.
+For h>g the cost is F_g+e(h,g)*(F_h-F_g). If the difference is negative, the
+bound is immediate. Otherwise put d=h-g and use
+ e(h,g)<=1/[2*(r-1)**d], F_h-F_g<=2*d.
+
+Case 1: r>=4 and d>=2. Then the extra cost is <=d/(r-1)**d<=2/(r-1)**2<=1/r,
+which is paid for by Lemma 2(i). The middle sequence decreases for d>=2;
+the last inequality is 2r<=(r-1)**2, valid for r>=4.
+
+Case 2: d=1 and g>=1. If a_g=0 then e=0. Otherwise the slack is
+T_g*(g+1)/r>=2/r, whereas the extra cost is <=1/(r-1)<=2/r.
+
+Case 3: d=1,g=0,r>=3. Here e=1/[2*(r-1)], F_0=2-1/r,
+F_1-F_0=(2r-1)*(r-2)/r**2. The extra cost is at most 1/r because
+(2r-1)*(r-2)<=2r*(r-1). This is precisely the available slack at g=0.
+
+Case 4: the two small exceptions. For r=2,h=1,g=0, the cost is
+(F_1+F_0)/2=(7/4+3/2)/2=13/8<=2*T_0.
+For r=3,h=2,g=0, q_0=1/2,q_1=1/4, e=1/16,
+F_0=5/3,F_2=25/9, hence the cost is 5/3+(1/16)*(10/9)=125/72<2*T_0.
+These cases exhaust all integer r>=2,0<=g<h<r, proving total payment <=2T.
+
+FAIRNESS AND SHARPNESS OF THIS BOUNDARY-PRESERVING ASSIGNMENT
+Let M_i=T-v(N without i) and replace each payment by max(y_i,M_i/k).
+M_i is own-report monotone; max preserves this property on retained edges.
+Every original efficient core allocation has x_i<=M_i. In a pool of total C,
+M_i=(c_i-(C-T))_+ and sum_pool M_i<=T, hence the top-up adds at most T overall.
+Thus the original H_i/k floor is obtained with total payment <=3T.
+At the one-altered boundary h=0 the base cost is (2-1/r)*T, tending to 2T.
+So the factor 2 is sharp for any assignment required to agree exactly with that
+boundary, and for the specific assignment above. This is NOT a minimax lower
+bound over all assignments allowed to change the boundary.
+
+SCOPE
+Both altered pools may change in any order, and the construction uses all owner
+labels. Raising a capacity remains inside this family, but some underreports
+would create a third altered pool and leave it; those deviations are not covered.
+It is a proof for the complete binary profile family, not merely one
+path or a numerical grid. Arbitrary intermediate real reports, three or more
+altered pools, arbitrary owner counts per pool, and the unrestricted constant
+question remain unresolved by this theorem. No historical novelty claim.

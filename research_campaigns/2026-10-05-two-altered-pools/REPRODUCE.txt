@@ -1,0 +1,36 @@
+EXACT REPRODUCTION -- from the repository root
+
+python3 -B -O research_campaigns/2026-10-05-two-altered-pools/verify_two_pools.py
+
+Python standard library only. No solver, floating point tolerance, network or
+external data. This writes EXACT_CHECKS.json next to the script. Explicit checks
+remain enabled with -O. Every payment is a Fraction, enforced in labeled tests.
+Capacities 1,r represent actual reports 1/r,1. Coalition comparisons multiply
+all rational quantities by their least common denominator, so are integer-exact.
+
+COMPLETE LABELED ENUMERATION
+(k,r)=(2,2),(2,3),(2,4),(3,2),(3,3),(4,2),(3,4).
+For each pair the profile count is exactly
+1+k*(2^r-1)+choose(k,2)*(2^r-1)^2.
+The script explicitly constructs every labeled profile with <=2 altered pools,
+including H; enumerates all 2^(kr) coalition masks at each; computes actual
+minimum-pool coalition capacities; and checks base/fair budgets and coverage.
+It computes M_i directly by owner removal. It then raises every low owner once,
+requires the resulting profile to be retained, and checks base/fair own payments.
+Total: 1,330 profiles, 3,129,152 coalition/profile checks, and 5,008 directed
+one-owner edges. These are direct tests, not symmetry-quotient coalition tests.
+
+WIDER PARAMETER CHECKS
+For r=2,...,40, check all count pairs' exact budget and slack inequalities,
+780 exact ratio identities, and 88,556 changing-owner role cases at k=2,3,8,216.
+These use the analytic role formulas and are explicitly distinguished from full
+labeled enumeration. There are 11,479 two-pool count-pair budget cases.
+The old zero/one-pool boundary is directly compared at 24 non-H types and four
+H profiles. The failed minimum-selector edge 1/4 -> 1/6 and its product-weight
+repair 5/24 -> 5/24 are reproduced exactly.
+
+LIMITS
+Finite checks do not prove every k,r. The conventional proof does that; the
+reviews are independent reading reviews and did not execute these checks.
+The source self-hash identifies a version; it is not a correctness certificate.
+No all-real-report or three-altered-pool guarantee is implied.

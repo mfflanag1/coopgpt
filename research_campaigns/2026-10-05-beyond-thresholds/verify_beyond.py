@@ -127,7 +127,7 @@ def escape_payments(k, r, h):
     delta = Q(r - h, r)
     T = h + delta
     z = T / r
-    return max(delta - z, 0) / (r - h), 1 - z, z / (k - 1), T
+    return max(delta - z, Q(0)) / (r - h), 1 - z, z / (k - 1), T
 
 
 def escape_checks():
@@ -138,6 +138,7 @@ def escape_checks():
             previous = None
             for h in range(r):
                 a, b, c, T = escape_payments(k, r, h)
+                require(all(isinstance(x, Q) for x in (a, b, c)), 'non-rational escape payment')
                 require(min(a, b, c) >= 0, 'negative escape payment')
                 paid = (r - h) * a + h * b + (k - 1) * r * c
                 largest_ratio = max(largest_ratio, paid / T)
@@ -156,7 +157,7 @@ def escape_checks():
                 # Marginals: special owners lose their full capacity on removal;
                 # other unit owners lose max(0,T-(r-1)). Check the fair top-up.
                 ma, mb = Q(1, r), Q(1)
-                mc = max(T - (r - 1), 0)
+                mc = max(T - (r - 1), Q(0))
                 fair = (r - h) * max(a, ma / k) + h * max(b, mb / k)
                 fair += (k - 1) * r * max(c, mc / k)
                 require(fair <= 3 * T, 'fair escape budget')
