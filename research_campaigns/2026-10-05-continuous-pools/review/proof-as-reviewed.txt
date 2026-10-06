@@ -1,0 +1,105 @@
+A CONSTANT BUDGET FOR REAL REPORTS IN AT MOST TWO ALTERED POOLS
+2026-10-05 -- candidate conventional proof, pending independent audit
+
+THEOREM
+Let k>=2 pools have r>=2 fixed labeled owners each. Allow every real capacity
+c_i in [0,1], and retain all profiles with at most m altered pools, where a pool
+is altered if at least one report differs from 1. Define
+ v(S)=min_j sum_{i in S intersect N_j} c_i,  T=v(N).
+There is an explicit nonnegative payment rule covering every coalition and
+monotone in each owner's own report on this whole domain, with total cost
+ <=(2m+4)T, or <=(2m+5)T with the original-core floor H_i/k.
+On the subdomain c_i in [1/r,1], the bounds improve to (2m+3)T and (2m+4)T.
+In particular m=2 gives base <=7T and fair <=8T on the requested domain,
+independent of k,r and every report grid. Allowing zero reports gives base <=8T
+and fair <=9T. These constants are not claimed sharp.
+
+EXPLICIT RULE
+For i in pool j, write
+ C_j=sum_{h in N_j}c_h, A_i=sum_{h in N_j, h!=i}c_h,
+ E_i=sum_{h in N_j, h!=i}(1-c_h)=r-1-A_i.
+For T>0, set
+ b(c)=(1/k)*min(1, 2T/(r-1)),
+ q_i(c)=[2E_i/(r-1)] * [T*c_i/C_j],
+ y_i(c)=b(c)+q_i(c).
+When T=0 set all these payments to zero. Because C_j>=T>0, no denominator
+vanishes in the positive branch. The coefficient E_i depends only on OTHER
+owners' reports. Every owner in an unaltered pool has E_i=0 and hence q_i=0.
+The formula itself is defined on the full cube [0,1]^(kr); m only enters its
+budget guarantee. It does not select, relabel, or drop an altered pool.
+
+NONNEGATIVITY AND EVERY OWN-REPORT EDGE
+Fix all reports except c_i=t. Then E_i and A_i are constant, E_i>=0, and
+ T(t)=min(A_i+t, min_{l!=j}C_l)
+is nondecreasing. The function t/(A_i+t) is nondecreasing where its denominator
+is positive (derivative A_i/(A_i+t)^2>=0). Thus q_i is a nonnegative constant
+times the product of two nonnegative nondecreasing functions, and is itself
+nondecreasing. b is nondecreasing in T. At T=0 payment is zero, so a transition
+into the positive branch cannot decrease it. This proves monotonicity along
+all real increases, including disappearance of an altered pool. In particular
+if i was its pool's last non-unit owner, E_i=0 throughout its own report edge.
+The proof is on the full cube, so every retained edge in the at-most-m domain
+is covered, in either direction when interpreted as no profitable underreport.
+
+COVERAGE: TWO REGIMES EXHAUST EVERY PROFILE
+If T=0 then every coalition has value zero.
+If T>=(r-1)/2, then b=1/k. For any S put n_j=|S intersect N_j| and x_j=c(S
+intersect N_j). Since c_i<=1, v(S)=min_j x_j<=min_j n_j. Hence
+ sum_{i in S} b=(1/k)*sum_j n_j>=min_j n_j>=v(S).
+Nonnegative q payments preserve coverage.
+
+If 0<T<=(r-1)/2, choose any pool j with C_j=T. For each i in that pool,
+ E_i=r-1-(T-c_i)>=r-1-T>=(r-1)/2.
+Consequently q_i=[2E_i/(r-1)]*c_i>=c_i. Therefore
+ y(S)>=sum_{i in S intersect N_j}q_i>=x_j>=min_l x_l=v(S).
+The two regimes agree at equality; their overlapping proofs cover the boundary.
+No condition on coalition size, owner labels, or discrete report levels is used.
+
+UNIFORM BUDGET
+Because 0<=E_i<=r-1,
+ sum_{i in N_j}q_i <= 2T*sum_{i in N_j}c_i/C_j=2T.
+Unaltered pools have q=0, so sum_i q_i<=2mT. The uniform part satisfies
+ kr*b=r*min(1,2T/(r-1))<=2r*T/(r-1)<=4T.
+This proves (2m+4)T on [0,1].
+
+On [1/r,1], every C_j>=1, so T>=1. If r=2 the uniform part is at most
+r=2<=2T. If r>=3, 2r/(r-1)<=3, so it is at most 3T. Thus in all cases
+sum_i y_i<=(2m+3)T. No discretization or limiting theorem is needed.
+
+ORIGINAL CORE AND FAIRNESS
+The core is nonempty: pick a minimum-total pool j, pay c_i to its owners and
+zero to others. Total is T and every coalition is covered. Every efficient
+core vector x satisfies x_i=T-x(N without i)<=T-v(N without i)=M_i.
+For an owner i of pool total C_j, let B_j=min_{l!=j} C_l. Then
+ M_i=min(C_j,B_j)-min(C_j-c_i,B_j)
+     =min(c_i, (B_j-A_i)_+)=(c_i-(C_j-T))_+.
+Holding all other reports fixed, the middle expression shows M_i is
+nondecreasing in c_i. Define Y_i=max(y_i,M_i/k). It remains nonnegative,
+covering and own-monotone, and Y_i>=H_i/k.
+For s=C_j-T>=0, sum_{i in N_j}(c_i-s)_+<=T: if no term is positive the
+claim is immediate; otherwise with p>=1 positive terms their sum is at most
+C_j-p*s<=C_j-s=T. Therefore sum_i M_i<=kT, and
+sum_i Y_i<=sum_i y_i+(1/k)sum_i M_i<=sum_i y_i+T.
+When T=0 these statements and the zero-payment convention still hold.
+
+BOUNDARY REVISION, CONTINUITY AND SCOPE
+The new rule need not equal the previous binary construction. For example,
+k=2,r=2, pools (1/2,1/2),(1,1), T=1: the new base vector is
+(1,1,1/2,1/2), total 3; the old base is (1/4,1/4,1/2,1/2), total 3/2.
+The all-unit profile still pays 1/k to every owner. We have not proved that
+preserving the old binary boundary is impossible or that factor 2 cannot hold.
+
+The formula is continuous wherever T>0. At T=0, the full-cube bound with m=k
+forces every nonnegative coordinate to tend to zero, so it is continuous there
+as well. The original M_i and max operation are continuous too. Thus it gives
+one explicit real-report rule whose restriction works on every grid; there is
+no inference from finite feasibility, no compactness claim, and no unproved
+exchange of limits.
+
+The whole continuous cube with at most two altered pools is included, so lower
+bounds diverging with k cannot be supported solely on this family. For general
+m the proven bound grows linearly with m; this does not prove a constant bound
+when arbitrarily many pools are altered. The original stronger binary factor2
+result remains separate and valid. Unequal owners per pool, capacities above
+the fixed reference 1, split/merge/group incentives, and historical novelty are
+not asserted by this theorem. No field-level breakthrough is claimed.

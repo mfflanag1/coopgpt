@@ -1,0 +1,33 @@
+REPRODUCING THE CONTINUOUS-REPORT CHECKS
+
+From the repository root, with standard Python 3.9 or later:
+ python3 -B -O research_campaigns/2026-10-05-continuous-pools/verify_continuous.py
+
+No third-party dependencies, network, solver, or floating-point tolerances.
+The command writes EXACT_CHECKS.json next to the verifier. Exceptions remain
+active under -O. The report records Python version and the verifier SHA-256.
+On this run the Python version was 3.14.3.
+
+Fifteen exhaustive finite instances cover all labeled profiles with at most
+two altered pools on the specified three-level, five-level and nine-level grids,
+plus two instances allowing all three pools to be altered. The report states
+all k,r,grid,m values. Every coalition (including zero-valued coalitions) and
+every increasing one-owner edge between grid reports is directly checked for
+both the base and fair payment vectors. The number of profiles is checked by
+sum_{a=0}^{min(k,m)} choose(k,a)*(L^r-1)^a, where L is grid size.
+
+The three-level cases exercise k=2,3,4, r=2,3,4 and several intermediate u.
+Zero-report and positive-below-1/r cases separately exercise [0,1]. Both coverage
+regimes and the zero branch are represented. Refinements on [1/2,1] use three,
+five and nine nested levels. Full enumeration is finite; the all-real-report
+and all-parameter quantifiers rest on CONTINUOUS_THEOREM.txt, not on these tests.
+
+Saved totals: 24,135 labeled profiles; 3,463,360 coalition/profile inequalities
+for each payment vector; 235,523 directed own-report edges for each vector.
+Also: 24 all-unit parameter cases, exact boundary-revision and rejected-mixture
+witnesses, and explicit fail-closed arithmetic/violation sanity checks.
+
+The general-m stopping witness is separately reproduced by:
+ python3 -B -O research_campaigns/2026-10-05-continuous-pools/verify_scope.py
+Its formulas are proved in SCOPE_LIMIT.txt; the finite parameter checks do not
+establish the unbounded quantifier by themselves.
