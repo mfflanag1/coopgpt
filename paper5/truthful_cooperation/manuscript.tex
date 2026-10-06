@@ -1,0 +1,720 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,booktabs,array}
+\usepackage[margin=1in]{geometry}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Subsidies for truthful cooperation: sharp proportional bounds and nonlinear escape},pdfauthor={Maxwell Flanagan}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\E}{\mathbb E}
+\newcommand{\Prob}{\mathbb P}
+\newcommand{\core}{\mathcal C}
+\newcommand{\pos}[1]{(#1)_+}
+\newcommand{\ind}{\mathbf 1}
+\title{Subsidies for truthful cooperation:\\sharp proportional bounds and nonlinear escape}
+\author{Maxwell Flanagan}
+\date{October 2026\\[3pt]\small Working manuscript for correctness, priority, and significance review}
+\begin{document}
+\maketitle
+\begin{abstract}
+Fixed owners supply capacities to $k$ complementary resource pools; a
+coalition's worth is the minimum of its pool totals. We study nonnegative
+payments that cover every coalition and are nondecreasing in each owner's
+own capacity report. An optional floor protects $1/k$ of each owner's maximum
+payoff in the original efficient core. We prove an all-profile total-payment
+bound of order $\log k/\log\log k$, independent of owner counts, using capped
+owner coordinates and the established absolute continuous Banzhaf functional.
+Every universal total-payment constant must be at least two. Within the
+floor-free class of payments proportional to capped capacities in each pool,
+we determine the sharp first-order worst-case factor
+$(1+o(1))\log k/\log\log k$, even when pool prices depend on the entire labeled
+profile. Nonlinear payments cover the complete linked-profile family used
+in that lower bound at factor two; this extends to two altered pools with
+binary reports. A different nonlinear rule handles reports in $[0,1]$ with equal pool sizes
+and a fixed public reference capacity when the number of altered pools is bounded. Thus the proportional lower bound does
+not establish unrestricted divergence. Complete proofs and exact verification
+scripts are provided. Whether an absolute budget factor works on all profiles
+remains unresolved, as does historical priority for the proposed results.
+\end{abstract}
+\noindent\textbf{Keywords:} weighted multi-glove game; capacity reporting;
+coalition coverage; subsidy; continuous Banzhaf index; proportional payments.
+
+\section{Introduction}
+Complementary production creates a tension between coalitional stability and
+incentives to reveal capacity. A minimum-total pool can receive the entire
+surplus in a stable allocation, but increasing an owner's reported capacity
+can change which pool receives it. An external subsidy permits payment rules
+that retain coalition coverage while relaxing efficiency.
+
+This paper quantifies that tradeoff in weighted multi-glove games. Owners and
+pool memberships remain fixed. A player can underreport its own capacity,
+and its utility is its payment; there are no operating costs. We require a
+single payment rule across all report profiles, rather than independently
+choosing a core allocation at each profile. When requested, the rule also
+protects a fraction of an individual's best payoff in the \emph{original}
+core. We never recompute this benchmark in a subsidized game.
+
+Our central comparison is between proportional and nonlinear owner payments.
+A capped proportional rule achieves a sublogarithmic budget factor, and an
+explicit sequence of report changes proves that its first-order growth is
+optimal throughout the proportional class. The same report sequences admit
+bounded nonlinear payments. This supplies a precise limitation of the lower
+bound and motivates the remaining unrestricted question.
+
+\paragraph{Results and their domains.}
+Let $T$ denote the grand coalition's worth, $B$ the total-payment factor, and
+$\beta=B-1$ the subsidy factor. These quantities are distinct.
+\begin{itemize}
+\item On all nonnegative real profiles, with arbitrary finite owner counts,
+the capped Banzhaf base has factor at most $R_k+1/\log R_k$, where
+$R_k>e$ solves $R_k\log(R_k/e)=\log k$. The original-core floor adds at most
+one to that factor (Theorem~\ref{thm:upper}).
+\item Every constant $B$ uniform in both pool and owner counts satisfies
+$B\ge2$, even without the floor (Theorem~\ref{thm:unrestricted}).
+\item Floor-free capped-proportional rules have optimal first-order factor
+$(1+o(1))\log k/\log\log k$ (Corollary~\ref{cor:minimax}). This is a class
+minimax statement, not the unrestricted optimum.
+\item On the binary linked-profile family, nonlinear payments have factor
+$2$, or $3$ with the floor (Theorem~\ref{thm:escape}). The factor survives two
+simultaneously altered pools (Appendix~\ref{app:binary}).
+\item With $r$ owners per pool, reports in $[1/r,1]$, and at most $m$ pools
+altered from all-unit, a different rule has base factor $2m+3$ and fair factor
+$2m+4$ (Theorem~\ref{thm:continuous}). Its constants are uniform in $k,r$
+and the report grid when $m$ is fixed.
+\end{itemize}
+The last two results are restricted-domain feasibility theorems. They do not
+assert that a bounded nonlinear rule exists on all report profiles.
+
+\subsection{Established ingredients and proposed contribution}
+Moretti and Norde~\cite[Definition~3.1, Theorem~3.2]{MorettiNorde} define the
+weighted multi-glove model and prove total balancedness. Their final remark
+already extends the results to positive real weights and discusses zeros.
+We give the minimum-pool core construction directly for nonnegative capacities.
+Huang et al.~\cite{Huang} study binding capacity underreports without use
+costs in max-flow games and prove that efficient core selection need not be
+truthful. Our game is the specialization to serial bundles of parallel edges.
+We relax efficiency and retain coverage of the original coalition values.
+
+The raw integral functional in our upper rule is the absolute continuous
+Banzhaf index of Kurz~\cite[Definition~6.11, arXiv v1, p.~17]{Kurz}. We prove the exact
+identification in Section~\ref{sec:banzhaf}; we do not claim to introduce
+that index. The proposed contributions are the joint report-monotonicity,
+coverage and budget guarantees after capping, the quantitative unrestricted
+lower family, the sharp proportional-class asymptotic, and the nonlinear
+feasible assignments that delimit the obstruction.
+
+Cost-of-stability work~\cite{Bachrach} studies subsidies for stabilizing a
+fixed game. Here every fixed game already has a nonempty core; the positive
+budget requirement arises from linking its allocations to other report
+profiles. Population or cross-monotonic sharing schemes, including the
+max-flow setting in Immorlica et al.~\cite{Immorlica}, impose comparisons
+across participating-player sets. Those comparisons are not assumed here.
+A capacity unit is not a separately strategic clone of its owner.
+
+These distinctions identify the claim being submitted for review. They do
+not certify priority. The accompanying source ledger records the original
+passages inspected and the remaining literature questions.
+
+\section{Model and two reductions}\label{sec:model}
+Let $N=N_1\sqcup\cdots\sqcup N_k$ be a fixed finite partition with
+$k\ge2$ and nonempty pools. Reports are $c\in\R_+^N$. Write
+\[
+ C_j=\sum_{i\in N_j}c_i,\qquad
+ v_c(S)=\min_j\sum_{i\in S\cap N_j}c_i,\qquad T=\min_j C_j.
+\]
+A payment rule $y(c)\in\R_+^N$ \emph{covers coalitions} if
+$y(c)(S)\ge v_c(S)$ for every $S\subseteq N$. It is \emph{own-report
+monotone} if $y_i(t,c_{-i})$ is nondecreasing in $t$. Under binding
+underreports and payment utility, this is exactly the required no-profitable-
+underreport condition. We impose no overreport, group-report, split, merge,
+or population-change guarantee. On a restricted domain, all comparisons
+whose endpoints belong to that domain are required.
+
+The original efficient core and coordinate benchmarks are
+\[
+ \core(c)=\{x:x(N)=T,\ x(S)\ge v_c(S)\ \forall S\subseteq N\},
+ \qquad H_i(c)=\max_{x\in\core(c)}x_i.
+\]
+Paying capacities in one minimum-total pool and zero elsewhere gives a core
+allocation. Singleton constraints imply $x_i\ge0$, so this nonempty core is
+compact. Our optional fairness requirement is $y_i(c)\ge H_i(c)/k$.
+A factor $B$ means $y(c)(N)\le BT$ at every profile in the stated domain.
+At $T=0$ we set payments to zero.
+
+\begin{lemma}[Marginal floor]\label{lem:floor}
+Put $M_i=T-v_c(N\setminus\{i\})$. Then $H_i\le M_i$, $M_i$ is own-report
+monotone, and $\sum_iM_i\le kT$. If a nonnegative covering own-monotone base
+has factor $B$, replacing $y_i$ by $\max\{y_i,M_i/k\}$ gives the original
+floor with factor at most $B+1$.
+\end{lemma}
+\begin{proof}
+Core efficiency and the complementary coalition constraint give
+$x_i=T-x(N\setminus\{i\})\le M_i$. If $i\in N_j$, set
+$A_i=C_j-c_i$ and $D_j=\min_{\ell\ne j}C_\ell$. Then
+\[
+ M_i=\min\{c_i,(D_j-A_i)_+\}=(c_i-(C_j-T))_+.
+\]
+The first form proves own-monotonicity. For $s=C_j-T\ge0$, if $p\ge1$
+terms $(c_i-s)_+$ in pool $j$ are positive, their sum is at most
+$C_j-ps\le C_j-s=T$; if none is positive it is zero. Sum over pools.
+The maximum of two own-monotone functions is own-monotone, and its additional
+cost is at most $\sum_iM_i/k\le T$.
+\end{proof}
+Consequently the existence of a universal constant factor with this floor
+is equivalent to its existence without the floor, although the best constants
+need not coincide.
+
+\begin{lemma}[Capping]\label{lem:cap}
+Let $d_i=\min\{c_i,T\}$ and $D_j=\sum_{i\in N_j}d_i$. Then
+\[
+ v_c(S)=\min_j\sum_{i\in S\cap N_j}d_i,\qquad \min_jD_j=T.
+\]
+\end{lemma}
+\begin{proof}
+For any owner set $A$, $\min\{c(A),T\}=\min\{d(A),T\}$: if it contains
+an owner above $T$, both truncated sums are $T$; otherwise the sums agree.
+Coalition values are at most $T$. A minimum-total original pool has no
+capacity above $T$, and has capped total $T$. Taking minima proves the claim.
+\end{proof}
+
+\section{An all-profile upper bound}\label{sec:banzhaf}
+For $T>0$, draw independent $U_i\sim\operatorname{Unif}[0,1]$ as an
+integration device and define
+\[
+ X_j=\sum_{i\in N_j}d_iU_i,\qquad
+ p_j=\Prob(X_j<X_\ell\text{ for all }\ell\ne j),\qquad z_i=d_ip_j
+ \quad(i\in N_j).
+\]
+Every pool has a positive capped capacity. Its sum $X_j$ is continuous, and
+the pool sums are independent. Thus ties have probability zero and
+$\sum_jp_j=1$. The mechanism pays deterministic expectations, not random
+realizations of these amounts. Let $y_i=\max\{z_i,M_i/k\}$.
+
+\begin{theorem}\label{thm:upper}
+The base $z$ covers every coalition and is own-report monotone on all
+nonnegative real profiles. For $R_k>e$ defined by
+$R_k\log(R_k/e)=\log k$,
+\[
+ \sum_i z_i\le\left(R_k+\frac1{\log R_k}\right)T,
+ \qquad
+ \sum_i y_i\le\left(1+R_k+\frac1{\log R_k}\right)T.
+\]
+Both factors are $(1+o(1))\log k/\log\log k$ as $k\to\infty$,
+uniformly over all finite owner counts. The second rule meets $H_i/k$.
+\end{theorem}
+\begin{proof}
+By Lemma~\ref{lem:cap}, for every $S$,
+\[
+ z(S)=\sum_jp_jd(S\cap N_j)\ge\min_jd(S\cap N_j)=v_c(S).
+\]
+For own-monotonicity, fix $i\in N_j$, write its report as $x$, let
+$a=\sum_{h\in N_j\setminus\{i\}}c_h$ and
+$b=\min_{\ell\ne j}C_\ell$. If $b=0$ all payments vanish. Otherwise
+$T(x)=\min\{x+a,b\}$ and $d_i(x)=\min\{x,b\}$. Conditional on $U_{-i}$,
+put
+\[
+ R=\sum_{h\in N_j\setminus\{i\}}U_h\min\{c_h,T(x)\},\qquad
+ Y(x)=\min_{\ell\ne j}\sum_{h\in N_\ell}U_h\min\{c_h,T(x)\}.
+\]
+Here $R$ is independent of $x$: if $a\le b$, every other own-pool capacity
+is at most $a\le T(x)$; if $a>b$, $T(x)=b$ throughout. Also $Y(x)$ is
+nondecreasing. Integrating only $U_i$ gives
+\[
+ d_i\Prob(U_id_i<Y-R\mid U_{-i})=\min\{d_i,(Y-R)_+\}.
+\]
+At $d_i=0$ both sides are zero. The expression is nondecreasing in $x$;
+its expectation is $z_i$. Lemma~\ref{lem:floor} proves the floor assertions.
+
+For the budget, normalize $a_i=d_i/T\in[0,1]$, put $\rho_j=D_j/T$, and
+let $W$ be the winning pool. Then $z(N)/T=\E\rho_W$. A short pool has
+$X_s/T\le1$, so
+$p_j\le\Prob(\sum_{i\in N_j}a_iU_i\le1)$.
+For $t>0$ and $a\in[0,1]$, concavity of $u\mapsto u^a$ gives
+\[
+ \E e^{-taU}\le(\E e^{-tU})^a
+ =\left(\frac{1-e^{-t}}t\right)^a\le t^{-a}.
+\]
+Independence and exponential Markov imply
+$p_j\le e^t t^{-\rho_j}$. Set $t=\rho_j$. Because $(e/s)^s$ decreases
+for $s\ge e$,
+\[
+ \Prob(\rho_W>s)\le\min\{1,k(e/s)^s\},\qquad s\ge e.
+\]
+At $s=R_k$ the second expression is one; its logarithmic derivative is
+$-\log s\le-\log R_k$ thereafter. Tail integration therefore yields
+\[
+ \E\rho_W\le R_k+\int_{R_k}^{\infty}
+ e^{-(s-R_k)\log R_k}\,ds=R_k+\frac1{\log R_k}.
+\]
+Finally, $R_k\log(R_k/e)=\log k$ implies
+$R_k\sim\log k/\log\log k$. Add the floor cost from
+Lemma~\ref{lem:floor}.
+\end{proof}
+
+\paragraph{Identification with an established index.}
+For a fixed profile define the continuous monotone game
+\[
+ f_d(u)=\frac1T\min_j\sum_{i\in N_j}d_iu_i,\qquad u\in[0,1]^N.
+\]
+It has endpoint values zero and one. Kurz's absolute continuous Banzhaf
+index integrates $f_d(1,u_{-i})-f_d(0,u_{-i})$ over the other coordinates.
+With $R,Y$ as above,
+\[
+ T\bigl[f_d(1,u_{-i})-f_d(0,u_{-i})\bigr]
+ =\min\{R+d_i,Y\}-\min\{R,Y\}=\min\{d_i,(Y-R)_+\}.
+\]
+Hence $z_i=T\operatorname{BZI}_i(f_d)$. This pointwise identity does not
+by itself prove monotonicity across reports, since $f_d$ changes with $c$;
+the preceding conditional integration argument supplies that step.
+Exact evaluation can require exponentially many subset-sum knots. No
+polynomial-time or arbitrary rounded-payment implementation is claimed.
+
+\section{An unrestricted necessary factor of two}\label{sec:lower}
+The next theorem uses neither proportionality nor a fairness floor.
+\begin{theorem}\label{thm:unrestricted}
+Fix $k\ge3$ and $r\ge2$ owners per pool, and set $t=2r-2$. Every
+nonnegative covering own-monotone rule with factor $1+\beta$ on all real
+profiles satisfies
+\[
+ \beta\ge\frac{(k-1)(t-1)}{t(k-1+2t)}.
+\]
+Therefore any total-payment constant uniform over both pool and owner counts
+must be at least two.
+\end{theorem}
+\begin{proof}
+Average the rule over all pool permutations and all within-pool owner
+permutations. Relabeling and averaging preserve the guarantees, so a bound
+for the resulting invariant rule bounds the original rule. This is a proof
+device on fixed owners, not permission for an owner to split or merge.
+Put $q=r-2$, so $t=2q+2$. Use two pool types
+\[
+ L=(1,1,\underbrace{2,\ldots,2}_{q}),\qquad
+ H=(1,\underbrace{2,\ldots,2}_{q},t).
+\]
+Their totals are $t$ and $2t-1$, respectively. All capacities are positive.
+At profile $X$ with one $L$ and $k-1$ copies of $H$, let the payments be
+$a,a,b,\ldots,b$ in $L$ and $u,v,\ldots,v,w$ in each $H$. Write
+$P=2a+qb$, $Q=u+qv+w$. The budget is $P+(k-1)Q\le t(1+\beta)$.
+Actual coalitions give
+\begin{align*}
+ a+(k-1)u&\ge1, &2a+(k-1)v&\ge2,\\
+ a+qb+(k-1)(u+qv)&\ge t-1, &P+(k-1)w&\ge t.
+\end{align*}
+The inequality involving $v$ is used only if $q>0$. The choices in the $L$ pool are,
+respectively, one unit owner, both unit owners, one unit plus all 2-owners,
+and all owners. Each $H$ contributes its unit owner, one 2-owner, the unit
+plus all 2-owners, or its $t$-owner. Combine these inequalities with weights
+$1,q,t-1,1$. The left side is
+$t[P+(k-1)Q]-(t-1)(k-1)w$ and the right side is $t^2$. Hence
+\begin{equation}\label{eq:X}
+ (t-1)(k-1)w\le t^2\beta.
+\end{equation}
+At profile $Y$ with two $L$ pools and $k-2$ copies of $H$, denote analogous
+payments by $A,B,U,V,W$. Its budget is
+$2(2A+qB)+(k-2)(U+qV+W)\le t(1+\beta)$. Coalitions selecting one unit,
+both units, or all owners from each $L$ yield
+\[
+ 2A+(k-2)U\ge1,\quad4A+(k-2)V\ge2,\quad
+ 2(2A+qB)+(k-2)W\ge t.
+\]
+Again omit the middle inequality if $q=0$. Their combination with weights
+$1,q,1$ is the budget sum plus $2(t-1)A\ge2t-1$, so
+\begin{equation}\label{eq:Y}
+ 2(t-1)A\ge t-1-t\beta.
+\end{equation}
+Raising one unit report in an $L$ pool of $Y$ from $1$ to $t$ gives $X$
+up to relabeling. Own-monotonicity gives $w\ge A$. Equations
+\eqref{eq:X}--\eqref{eq:Y} therefore imply
+\[
+ (k-1)(t-1-t\beta)\le2(t-1)(k-1)A
+ \le2(t-1)(k-1)w\le2t^2\beta,
+\]
+which rearranges to the claim. No sign assumption on $t-1-t\beta$ is needed.
+For $r=n+1$, $t=2n$, $k=8n^2+1$, the displayed lower bound is
+$(2n-1)/(2n+1)\to1$.
+\end{proof}
+The limit proves a necessary constant; it proves neither that a factor-two
+rule exists nor that the unrestricted optimum diverges.
+
+\section{Sharp asymptotics for proportional payments}\label{sec:prop}
+Consider final base payments of the form
+\[
+ z_i(c)=d_i(c)\pi_j(c),\qquad i\in N_j,
+\]
+where $\pi_j$ is an arbitrary nonnegative function of the whole labeled
+profile and fixed ownership. There is no normalization, anonymity,
+continuity, locality, or independence assumption on these prices.
+
+\begin{theorem}\label{thm:prop}
+On $k\ge2$ pools with $r\ge2$ owners each, every covering own-monotone
+capped-proportional rule with factor $B$ satisfies
+\begin{equation}\label{eq:prop}
+ B\ge\frac{kr}{k+(r-1)r^r}.
+\end{equation}
+The same lower bound holds for raw-capacity-proportional payments $c_i\pi_j$.
+\end{theorem}
+\begin{proof}
+Let $H$ be the all-unit profile. Its value is $r$, and its budget implies
+$\sum_j\pi_j(H)\le B$. Let $L_j$ have all owners of pool $j$ at $1/r$
+and all other owners at $1$. It has value one. The coalition containing all
+of pool $j$ and one owner of each other pool has worth one, so
+\[
+ \pi_j(L_j)+\sum_{\ell\ne j}\pi_\ell(L_j)\ge1,
+ \qquad \pi_j(L_j)+r\sum_{\ell\ne j}\pi_\ell(L_j)\le B.
+\]
+Multiply the first by $r$ and subtract the second:
+\begin{equation}\label{eq:price-low}
+ B+(r-1)\pi_j(L_j)\ge r.
+\end{equation}
+Raise each of pool $j$'s reports successively from $1/r$ to $1$, obtaining
+$P_{j,0}=L_j,\ldots,P_{j,r}=H$. Every capacity is at most one and every
+profile value is at least one, so capping changes no report. At step $h$,
+own-monotonicity of the changing owner gives
+\[
+ \pi_j(P_{j,h+1})\ge\pi_j(P_{j,h})/r,
+ \qquad\text{hence}\qquad r^r\pi_j(H)\ge\pi_j(L_j).
+\]
+This transports a \emph{common pool price} between changes made by different
+owners; that identity is precisely where proportionality is used. Substitute
+in \eqref{eq:price-low}, sum over $j$, and use the budget at $H$:
+\[
+ kr\le kB+(r-1)r^r\sum_j\pi_j(H)
+ \le[k+(r-1)r^r]B.
+\]
+The uncapped version has the same proof because the witness capacities are
+never capped.
+\end{proof}
+
+\paragraph{A nonnegative inequality certificate.}
+Write all constraints as left side at least right side. For each $j$, use
+$r$ times its $L_j$ coverage row, once its budget row
+$B-\pi_j-r\sum_{\ell\ne j}\pi_\ell\ge0$, and for each $h=0,\ldots,r-1$
+use $(r-1)r^{h+1}$ times the actual monotonicity row
+$\pi_j(P_{j,h+1})-\pi_j(P_{j,h})/r\ge0$. Add once in total
+$(r-1)r^r$ times $B-\sum_j\pi_j(H)\ge0$. Prices cancel, leaving
+\eqref{eq:prop}. All weights are nonnegative integers.
+
+\begin{corollary}\label{cor:minimax}
+Let $A_k$ be the infimum of worst-case total-payment factors among families
+of floor-free capped-proportional rules, defined for every finite fixed
+ownership with $k$ pools and all nonnegative real capacities, covering all
+coalitions and satisfying own-monotonicity. Explicitly, if $\mathfrak P_k$
+contains all finite ownership partitions with $k$ nonempty pools and
+$\mathcal F=(z^P)_{P\in\mathfrak P_k}$ ranges over such rule families, then
+\[
+ A_k=\inf_{\mathcal F}\ \sup_{P\in\mathfrak P_k}\ \sup_{c:T(c)>0}
+ \frac{z^P(c)(N)}{T(c)}.
+\]
+Rules for different fixed ownerships need not satisfy cross-ownership
+consistency. We have
+\[
+ A_k=(1+o(1))\frac{\log k}{\log\log k}.
+\]
+\end{corollary}
+\begin{proof}
+For fixed $\epsilon>0$, let $L=\log k$ and
+$r=\lfloor(1-\epsilon)L/\log L\rfloor$. For all sufficiently large $k$,
+$r\ge2$ and
+$\log((r-1)r^r)\le(1-\epsilon)L+o(L)$.
+Thus $(r-1)r^r/k\to0$, and Theorem~\ref{thm:prop} gives
+$A_k\ge(1-o(1))r$. Take the lower limit and then $\epsilon\downarrow0$.
+The base of Theorem~\ref{thm:upper} belongs to this class and gives the
+matching upper limit.
+\end{proof}
+The floor-restoring maximum need not remain proportional. Accordingly the
+corollary is floor-free; it is not a claim about the minimax among final
+proportional rules also meeting the floor, nor about unrestricted rules.
+
+\section{A nonlinear escape on the linked profiles}\label{sec:escape}
+Fix equal pool size $r$. Let $\mathcal D_1$ contain \emph{every labeled}
+profile with reports in $\{1/r,1\}$ and at most one pool containing a low
+report. The family includes all orders of the report changes in
+Theorem~\ref{thm:prop}.
+
+\begin{theorem}\label{thm:escape}
+On $\mathcal D_1$ there are nonnegative covering payments that are own-monotone
+on every retained report edge and have factor at most $2$. The original-core
+floor can be added with factor at most $3$.
+\end{theorem}
+\begin{proof}
+At $H$, pay $1/k$ to each owner. Otherwise let the altered pool have $h$
+unit owners, $0\le h<r$, and define
+\[
+ T_h=h+(r-h)/r,\quad \delta_h=(r-h)/r,\quad z_h=T_h/r,
+\]
+\begin{equation}\label{eq:abc}
+ a_h=\frac{(\delta_h-z_h)_+}{r-h},\qquad
+ b_h=1-z_h,\qquad e_h=\frac{z_h}{k-1}.
+\end{equation}
+Pay its low owners $a_h$, its unit owners $b_h$, and every outside owner
+$e_h$. For a coalition, let $b$ be its unit-owner count in the altered pool,
+$s$ its selected low capacity, and $n$ the smallest selected-owner count
+outside that pool. Its worth is $\min\{b+s,n\}$, and its payment is at least
+\[
+ b(1-z_h)+s(1-z_h/\delta_h)_++nz_h.
+\]
+If $n\le b$, the first and last terms already give at least $n$. Otherwise
+$n\ge b+1$ because $n,b$ are integers. It suffices that
+$z_h+s(1-z_h/\delta_h)_+\ge s$, which follows from $s\le\delta_h$ in
+both cases $z_h\le\delta_h$ and $z_h\ge\delta_h$. At $H$, the average
+selected-owner count bounds its minimum, proving coverage there too.
+
+The total off $H$ is
+$F_h=h(1-z_h)+(\delta_h-z_h)_++rz_h$.
+If $z_h\le\delta_h$, this equals $T_h+(r-h-1)z_h\le2T_h$.
+Otherwise it equals $h+(r-h)z_h\le T_h+T_h$.
+
+Every retained increase raises a low owner to one. For $0\le s\le r-2$,
+direct substitution in \eqref{eq:abc} gives
+\begin{equation}\label{eq:ratio}
+ \frac{a_s}{b_{s+1}}=
+ \frac1{r-1}\left(1-\frac{s^2}{(r-s)(r-s-1)}\right)_+\le1,
+\end{equation}
+with $b_{s+1}>0$. Also $a_{r-1}=0$. Thus $a_s\le b_{s+1}$ for internal
+edges and $a_{r-1}\le1/k$ on the last-low boundary. This exhausts all labeled
+retained edges. Apply Lemma~\ref{lem:floor}.
+\end{proof}
+The preceding certificate cannot show unrestricted divergence on these same
+profiles, even after adding the stated fairness floor. This is a separation
+\emph{on the witness family}; it is not a separation between two global
+minimax asymptotics. Appendix~\ref{app:binary} extends the factor-two base to
+two altered binary pools while preserving this boundary.
+
+\section{Continuous reports with a bounded number of altered pools}
+Here equal pool size $r\ge2$ and the fixed public reference capacity $1$ are
+assumptions. A pool is altered if at least one report differs from $1$.
+There is no data-dependent choice of reference or ownership.
+
+\begin{theorem}\label{thm:continuous}
+For reports in $[0,1]$ and at most $m$ altered pools, the following rule is
+nonnegative, covering and own-monotone, with factor at most $2m+4$:
+\[
+ b=\frac1k\min\left\{1,\frac{2T}{r-1}\right\},\quad
+ E_i=\sum_{h\in N_j\setminus\{i\}}(1-c_h),\quad
+ y_i=b+\frac{2E_i}{r-1}\frac{Tc_i}{C_j}\quad(i\in N_j).
+\]
+Set all payments to zero at $T=0$. On $[1/r,1]$, the factor improves to
+$2m+3$. The original-core floor adds at most one in either domain.
+\end{theorem}
+\begin{proof}
+When $T>0$, $C_j\ge T$ so all denominators are positive. Fixing other
+reports makes $E_i$ constant and nonnegative. If their own-pool sum is $A_i$,
+both $T(t)$ and $t/(A_i+t)$ are nonnegative and nondecreasing wherever the
+ratio is defined. Their product is nondecreasing; so is $b(T(t))$. At a
+zero-value endpoint all payments are zero. This proves own-monotonicity on
+the full cube, including all boundary transitions. If the changing owner
+was its pool's last non-unit owner, $E_i=0$ throughout that change.
+
+If $T\ge(r-1)/2$, then $b=1/k$ and, writing
+$n_j=|S\cap N_j|$, the uniform payments give
+$|S|/k\ge\min_j n_j\ge v_c(S)$ because capacities are at most one.
+If $0<T\le(r-1)/2$, choose a pool with $C_j=T$. For each of its owners,
+$E_i=r-1-(T-c_i)\ge(r-1)/2$, so its additional payment is at least $c_i$.
+Payments in this one pool alone cover every coalition. These two regimes
+include their common boundary; $T=0$ is immediate.
+
+Because $0\le E_i\le r-1$, the additional payments in any pool sum to at
+most $2T$. They vanish in unaltered pools. The uniform part costs
+$r\min\{1,2T/(r-1)\}\le4T$. This proves the first bound.
+On $[1/r,1]$ we have $T\ge1$: for $r=2$ the uniform part is at most
+$2\le2T$; for $r\ge3$ it is at most $2rT/(r-1)\le3T$.
+Lemma~\ref{lem:floor} proves the floor claim.
+\end{proof}
+For two altered pools this gives base $7T$ and fair $8T$ on $[1/r,1]$.
+It revises the earlier binary payments: at $k=r=2$, on
+$((1/2,1/2),(1,1))$, the new base is $(1,1,1/2,1/2)$, whereas
+Theorem~\ref{thm:escape} gives $(1/4,1/4,1/2,1/2)$.
+Preservation of the old boundary on continuous reports is not proved
+impossible, and none of these constants is asserted to be minimax sharp.
+
+The formula is continuous when $T>0$; at $T=0$ its full-cube bound with
+$m=k$ forces every coordinate to tend to zero. Thus a single direct
+continuous rule works on every finite report grid. No inference from grid
+feasibility or exchange of limiting operations is required.
+
+\paragraph{An exact limitation of this formula.}
+Take $r=3$, any $k\ge2$, and $c_i=1/3$ everywhere. Then $T=1$, $E_i=4/3$,
+$b=1/k$, and $y_i=1/k+4/9$. Total payment is exactly $3+4k/3$.
+The floor is inactive since $M_i/k=1/(3k)<b$. Therefore this particular
+rule has genuinely growing cost when all pools are altered. This says nothing
+about the best possible unrestricted rule.
+
+\section{What remains open}
+The unrestricted question is whether an absolute $B<\infty$ works for all
+$k$, all finite fixed pool sizes, and every nonnegative real profile. Our
+necessary factor two and general upper factor of order $\log k/\log\log k$
+leave that question unresolved. The floor does not change constant existence
+by Lemma~\ref{lem:floor}.
+
+Any constant-budget construction must leave the capped-proportional class.
+The class lower proof cannot simply be relabeled as an unrestricted lower
+proof: a common price lets it transport constraints between different owners,
+and Theorem~\ref{thm:escape} supplies a feasible obstruction to that transfer.
+Theorem~\ref{thm:continuous} similarly rules out divergent certificates
+supported solely on a fixed number of altered pools in its normalized,
+equal-size domain. These exclusions do not select between global feasibility
+and global divergence.
+
+Three independent review questions remain: whether earlier work implies the
+joint guarantees or sharp class bound; whether a general nonlinear construction
+or unrestricted growing certificate is accessible; and whether this collection
+has significance beyond a specialized model. We make no claim to have resolved
+a recognized major open problem, to have established data-center applicability,
+or to have obtained human specialist endorsement.
+
+\paragraph{Verification and assistance.}
+The accompanying package contains standard-library exact-arithmetic programs,
+source hashes and reproducible commands. Tests check finite profiles and
+certificates; the universal and asymptotic claims rest on the written proofs.
+AI systems assisted the research, drafting and internal review. Independent
+model reviews are recorded as such and do not substitute for specialist review.
+The manuscript is a review draft, with historical novelty expressly unsettled.
+
+\appendix
+\section{Two simultaneously altered binary pools}\label{app:binary}
+Use \eqref{eq:abc} and put $F_h=h b_h+(r-h)a_h+rz_h$. For an altered pool
+$j$ with $h$ unit owners, let $R^j$ pay $a_h,b_h$ to its own low and unit
+owners and $e_h$ to \emph{every} outside owner, including outside low owners.
+This vector covers the actual two-altered-pool game: set every outside report
+to one, apply Theorem~\ref{thm:escape}, and observe that actual coalition
+values only decrease.
+
+For $0\le s\le r-2$, let $q_s=a_s/b_{s+1}$. Equation~\eqref{eq:ratio}
+gives $0\le q_s\le1/(r-1)$ and $b_{s+1}\ge(r-1)a_s$.
+For $0\le g<h<r$ define
+\[
+ w(h,g)=\frac12\prod_{s=g}^{h-1}q_s.
+\]
+A zero factor gives weight zero; no reciprocal of $q_s$ is used.
+For two altered pools with equal counts, use their equal mixture. With counts
+$h>g$, give the $h$-pool component weight $w(h,g)$ and the $g$-pool component
+the remaining weight. With zero or one altered pool use the previous rule.
+
+\begin{theorem}\label{thm:binary-two}
+This assignment covers all coalitions, is own-monotone on every retained
+binary edge, preserves Theorem~\ref{thm:escape} on its entire boundary,
+and has base factor at most $2$, or factor $3$ with the floor.
+\end{theorem}
+\begin{proof}
+Coverage follows from the component argument and convexity. Check the changing
+owner's payment on each possible increase.
+\begin{itemize}
+\item Equal counts $s,s$ become $s+1,s$: the old payment is
+$(a_s+e_s)/2$, and the new one is
+$(q_s/2)b_{s+1}+(1-q_s/2)e_s=a_s/2+(1-q_s/2)e_s$, which is larger.
+\item An already larger count $h>g$ increases internally: writing
+$w=w(h,g)$ and $w'=wq_h\le w$, old and new payments are
+$wa_h+(1-w)e_g$ and $w'b_{h+1}+(1-w')e_g$
+$=wa_h+(1-w')e_g$, respectively.
+\item A smaller count $g<h$ increases: put $w'=w(h,g+1)$, or $1/2$ at a
+tie, so $w=w'q_g\le w'\le1/2$. The old payment is
+$(1-w)a_g+we_h$ and the new one is $(1-w')b_{g+1}+w'e_h$.
+For $r\ge3$, $b_{g+1}\ge2a_g$ makes the new own-component term at least
+$a_g$, while the outside term increases. For $r=2$, the only case is
+$g=0,h=1$, where $q_0=1$ and $b_1=a_0=1/4$, giving equality.
+\item The last low owner reaches one: $a_{r-1}=0$, so its old payment is
+at most the other component's outside payment, which it receives exactly
+after its pool becomes unaltered. With no other altered pool its payment
+instead increases from zero to $1/k$.
+\end{itemize}
+One-altered internal edges were proved in Theorem~\ref{thm:escape}.
+
+For the budget we use, for integers $0\le g<h<r$,
+\begin{equation}\label{eq:slack}
+ 2T_g-F_g\ge1/r,\quad F_h-F_g\le2(h-g),\quad
+ a_g>0\Longrightarrow F_g=T_g\bigl(2-(g+1)/r\bigr).
+\end{equation}
+Here is a direct verification. Extend $h$ to real $x\in[0,r)$ in the formulas.
+Where $\delta_x\ge z_x$, $F(x)=T_x(2-(x+1)/r)$ and $F'(x)\le2$;
+its slack is $T_x(x+1)/r\ge1/r$. Where $\delta_x\le z_x$,
+$F(x)=x+(r-x)T_x/r$ and
+$F'(x)=2(r-1)(1-x/r)/r\le2$. The formulas agree at the transition.
+At integer $g$ in the latter region,
+$2T_g-F_g=(r-g)/r+gT_g/r\ge1/r$. This proves \eqref{eq:slack}.
+
+Equal counts cost $F_g\le2T_g$. Otherwise actual $T=T_g$, and total cost is
+$F_g+w(h,g)(F_h-F_g)$. A nonpositive difference is harmless. Set $d=h-g$.
+The excess is at most $d/(r-1)^d$ by \eqref{eq:slack} and the product bound.
+If $r\ge4,d\ge2$, this is at most $2/(r-1)^2\le1/r$, within the slack.
+If $d=1,g\ge1$, either $a_g=0$ and the weight is zero, or the slack is
+$T_g(g+1)/r\ge2/r$ and the excess is at most $1/(r-1)\le2/r$.
+If $d=1,g=0,r\ge3$, then
+\[
+ w=\frac1{2(r-1)},\quad F_0=2-1/r,\quad
+ F_1-F_0=\frac{(2r-1)(r-2)}{r^2},
+\]
+and the excess is at most $1/r$ since
+$(2r-1)(r-2)\le2r(r-1)$.
+The two remaining cases are $r=2,h=1,g=0$, with cost $13/8\le2$, and
+$r=3,h=2,g=0$, with cost
+$5/3+(1/16)(10/9)=125/72\le2$. These exhaust the parameters.
+Apply Lemma~\ref{lem:floor}.
+\end{proof}
+The one-altered $h=0$ boundary costs $(2-1/r)T$, tending to $2T$.
+Thus factor two is sharp \emph{for rules required to preserve this boundary}.
+No minimax lower bound over freely chosen nonlinear boundaries follows.
+
+\section{Reproducible evidence}\label{app:verification}
+The self-contained verification directory contains the following programs.
+Each runs with standard Python, uses exact rationals or integers, and retains
+explicit checks under \texttt{-O}. Counts describe finite evidence only.
+\begin{center}
+\small
+\begin{tabular}{p{0.29\linewidth}p{0.62\linewidth}}
+\toprule
+Program & Principal covered claims\\
+\midrule
+\texttt{verify\_thresholds.py} & Capped Banzhaf probabilities by exact polynomial
+integration; 4,227 full profiles, 221,253 coalition checks, 16,040 own-report
+comparisons; four additional tail stress cases.\\[3pt]
+\texttt{verify\_lower.py} & 53 exact unrestricted lower certificates and 16
+specified rejected corruptions.\\[3pt]
+\texttt{verify\_beyond.py} & Six proportional certificates, eight corruptions,
+one-pool nonlinear coalition and edge checks; auxiliary archive checks.\\[3pt]
+\texttt{verify\_two\_pools.py} & 1,330 complete labeled binary profiles,
+3,129,152 coalition/profile pairs and 5,008 directed report edges.\\[3pt]
+\texttt{verify\_continuous.py} & 24,135 labeled profiles on fifteen grids,
+3,463,360 coalition/profile pairs and 235,523 directed report edges, including
+zero and below-$1/r$ reports.\\[3pt]
+\texttt{verify\_scope.py} & Exact substitutions for the continuous rule's
+many-altered-pool limitation and an alternative mixture's failure.\\
+\bottomrule
+\end{tabular}
+\end{center}
+The command \texttt{python3 -B -O verification/run\_all.py} executes these
+scripts in isolated output directories and verifies report/source hashes.
+The verification archive records its file manifest and clean replay result.
+These checks supplement rather than replace each proof. They do not certify
+novelty, rounded implementations, or the unproved unrestricted dichotomy.
+
+\begin{thebibliography}{9}
+\bibitem{MorettiNorde}
+S. Moretti and H. Norde.
+A note on weighted multi-glove games.
+\emph{Social Choice and Welfare}, 2021.
+\href{https://doi.org/10.1007/s00355-021-01337-8}{doi:10.1007/s00355-021-01337-8}.
+\bibitem{Huang}
+S. Huang, W. Mei, X. Yang and Z. Cao.
+Mechanism Design in Max-Flows.
+\href{https://arxiv.org/abs/2502.08248}{arXiv:2502.08248v1}, 2025.
+\bibitem{Kurz}
+S. Kurz. Measuring voting power in convex policy spaces.
+\href{https://arxiv.org/abs/1312.5936}{arXiv:1312.5936v1}, 2013.
+\bibitem{Bachrach}
+Y. Bachrach, E. Elkind, E. Malizia, R. Meir, D. Pasechnik,
+J. S. Rosenschein, J. Rothe and M. Zuckerman.
+Bounds on the Cost of Stabilizing a Cooperative Game.
+\emph{Journal of Artificial Intelligence Research} 63:987--1023, 2018.
+\href{https://doi.org/10.1613/jair.1.11270}{doi:10.1613/jair.1.11270}.
+\bibitem{Immorlica}
+N. Immorlica, M. Mahdian and V. S. Mirrokni.
+Limitations of Cross-Monotonic Cost-Sharing Schemes.
+\emph{ACM Transactions on Algorithms} 4(2), Article 24, 2008.
+\href{https://doi.org/10.1145/1361192.1361201}{doi:10.1145/1361192.1361201}.
+\end{thebibliography}
+\end{document}

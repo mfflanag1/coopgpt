@@ -1,6 +1,6 @@
 # CoopGPT paper index
 
-Updated 3 October 2026. Seven focused manuscript candidates are listed below.
+Updated 6 October 2026. Eight focused manuscript candidates are listed below.
 Completed manuscript means the exposition and PDF exist; it does not imply
 publication, confirmed novelty, or independent human endorsement. The current
 structural paper replaces the earlier chain-cycle manuscript in this list.
@@ -134,6 +134,29 @@ validation and historical novelty remain pending. The prior
 [theorem package](research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md)
 is its research archive, not an additional paper. This result supersedes the
 former 1/3<=S3<=39999/100000 frontier.
+
+### 8. Subsidies for truthful cooperation: sharp proportional bounds and nonlinear escape
+
+[Current PDF](paper5/truthful_cooperation/output/pdf/manuscript.pdf) · [Specialist brief](paper5/truthful_cooperation/output/pdf/specialist_brief.pdf) · [Source and verification package](paper5/truthful_cooperation/README.md)
+
+High level: how much extra money is needed to keep every coalition satisfied
+while preventing owners from gaining by hiding capacity? Proportional payments
+need a growing budget; nonlinear payments avoid that obstruction on the exact
+family used to prove it.
+
+Technical: fixed-owner weighted multi-glove games admit an all-profile capped
+continuous-Banzhaf rule with total factor O(log k/log log k). Every universal
+constant must be at least 2. The floor-free capped-proportional minimax factor
+is (1+o(1)) log k/log log k. Nonlinear rules have factor 2 on up to two altered
+binary pools and factor 2m+3 on [1/r,1] with at most m altered equal-size pools.
+The original H/k floor adds at most one. The unrestricted constant-versus-
+divergence question remains open.
+
+Status: complete review manuscript consolidating the October 4–5 AGT results,
+with exact portable checks and a fresh Fable 5.1 proof review. The established
+game and Banzhaf functional are credited; novelty and human specialist
+significance review remain unresolved. Outreach is prepared and unsent.
+These extensions are one paper candidate, not multiple additional papers.
 
 ## Broader archived manuscripts
 
