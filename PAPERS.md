@@ -135,31 +135,29 @@ validation and historical novelty remain pending. The prior
 is its research archive, not an additional paper. This result supersedes the
 former 1/3<=S3<=39999/100000 frontier.
 
-### 8. Subsidies for truthful cooperation: sharp proportional bounds and nonlinear escape
+### 8. Subsidies for truthful cooperation: sharp unrestricted bounds in weighted multi-glove games
 
-**New theorem supplement:** [Unrestricted hierarchy result](research_campaigns/2026-10-06-unrestricted-attack/HIERARCHY_THEOREM.txt) and [review packet](research_campaigns/2026-10-06-unrestricted-attack/REVIEW_PACKET.txt). The preserved PDF below predates this result.
+[Current manuscript source](paper5/truthful_cooperation/manuscript.tex) · [Current specialist brief](paper5/truthful_cooperation/specialist_brief.tex) · [Review and verification package](paper5/truthful_cooperation/README.md)
 
-[Current PDF](paper5/truthful_cooperation/output/pdf/manuscript.pdf) · [Specialist brief](paper5/truthful_cooperation/output/pdf/specialist_brief.pdf) · [Source and verification package](paper5/truthful_cooperation/README.md)
+High level: keeping every coalition satisfied while preventing owners from
+gaining by hiding capacity requires a growing external budget. This holds
+even for nonlinear payments when both owner counts and pool counts grow.
 
-High level: how much extra money is needed to keep every coalition satisfied
-while preventing owners from gaining by hiding capacity? Proportional payments
-need a growing budget; nonlinear payments avoid that obstruction on the exact
-family used to prove it.
+Technical: the unrestricted minimax total-payment factor is
+(1+o(1)) log k/log log k. A fixed-owner hierarchy of binary reports, averaged
+with truncated-Poisson type weights, gives the matching lower, and the capped continuous-Banzhaf
+rule gives the upper for arbitrary unequal finite pools and all nonnegative
+real profiles. A pairwise probability bound strictly tightens the finite-k
+upper. The proportional class has sharp leading constant 1; nonlinear rules
+escape that class's witnesses on bounded-altered-pool domains. The original
+H/k floor adds at most one and leaves leading coefficients unchanged.
 
-Technical: fixed-owner weighted multi-glove games admit an all-profile capped
-continuous-Banzhaf rule with total factor O(log k/log log k). Every universal
-constant must be at least 2. The floor-free capped-proportional minimax factor
-is (1+o(1)) log k/log log k. Nonlinear rules have factor 2 on up to two altered
-binary pools and factor 2m+3 on [1/r,1] with at most m altered equal-size pools.
-The original H/k floor adds at most one. The new supplement now proves unrestricted growth of order log k/log log k,
-with coefficient bounds1/2 and1, using growing owner and pool counts. It
-supersedes the PDF's open-question statement; the PDF has not yet been revised.
-
-Status: complete review manuscript consolidating the October 4–5 AGT results,
-with exact portable checks and a fresh Fable 5.1 proof review. The established
-game and Banzhaf functional are credited; novelty and human specialist
-significance review remain unresolved. Outreach is prepared and unsent.
-These extensions are one paper candidate, not multiple additional papers.
+Status: integrated complete proofs and portable exact checks; internal
+integration and sharp-theorem reviews recorded with the package. The
+leading-constant gap is closed; historical novelty and human specialist
+assessment remain open. Existing PDF
+exports predate the hierarchy and are labeled historical; use the current
+sources. These developments remain one paper candidate. Outreach is unsent.
 
 ## Broader archived manuscripts
 

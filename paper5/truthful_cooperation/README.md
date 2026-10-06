@@ -1,46 +1,44 @@
 # Subsidies for truthful cooperation
 
-A consolidated review manuscript by Maxwell Flanagan, 6 October 2026.
+**Sharp unrestricted bounds in weighted multi-glove games** — Maxwell Flanagan, 6 October 2026.
 
-**Subsequent theorem supplement:** the [unrestricted hierarchy proof](../../research_campaigns/2026-10-06-unrestricted-attack/HIERARCHY_THEOREM.txt) establishes growing budget of order log k/log log k for arbitrary own-report-monotone rules. The source/PDF and open specialist brief here are preserved; their statement that constant feasibility is unresolved is superseded. Read the [new specialist packet](../../research_campaigns/2026-10-06-unrestricted-attack/REVIEW_PACKET.txt) alongside them. Human review and historical priority remain pending.
+The [current manuscript source](manuscript.tex) and [current specialist brief](specialist_brief.tex)
+now incorporate the unrestricted hierarchy theorem and its complete proof:
+the minimax total-payment factor is **(1+o(1)) log k/log log k**.
+The new profile-averaged hierarchy closes the leading-constant gap at 1.
+Historical novelty and human specialist assessment remain open.
 
-- [Manuscript PDF](output/pdf/manuscript.pdf) · [LaTeX source](manuscript.tex).
-- [Two-page specialist brief](output/pdf/specialist_brief.pdf) · [Source](specialist_brief.tex).
-- [Portable review and verification archive](truthful_cooperation_review.zip).
+- [Current portable source and verification packet](truthful_cooperation_review.zip).
 - [Source comparisons](SOURCE_COMPARISON.txt), [reviewer recommendations](REVIEWERS.txt), and [unsent outreach drafts](OUTREACH_DRAFTS.txt).
-- [Internal audit](review/RESOLUTION.txt) and [validation record](validation/VALIDATION.json).
+- [Sharp-theorem audit](review/SHARP_RESOLUTION.txt) and [earlier integration audit](review/INTEGRATION_RESOLUTION.txt) and [current validation](validation/INTEGRATION_VALIDATION.json).
+- [Leading-constant campaign and sharp proof](../../research_campaigns/2026-10-06-leading-constant/CONTRACT.txt).
 
-The paper combines the all-profile capped continuous-Banzhaf upper bound,
-the unrestricted necessary total factor two, the sharp floor-free proportional
-asymptotic, and nonlinear escapes on restricted profile families. It includes
-complete proofs and the two-altered-binary-pool extension in an appendix.
-The established game, Banzhaf functional, and strategic-report convention are
-credited. This is a candidate contribution: historical novelty, significance,
-and human specialist validation remain unresolved. At this manuscript snapshot,
-the unrestricted constant-budget question was open; the supplement above
-resolves it and awaits integration into this manuscript.
+The existing [manuscript PDF](output/pdf/manuscript.pdf) and
+[brief PDF](output/pdf/specialist_brief.pdf) are **historical pre-hierarchy snapshots**.
+They are not the current review packet and must not be sent as the revised result.
+The existing LaTeX sources compile in the native editor, including the already-open
+brief. No separate PDF was compiled or new editor tab opened for this revision.
+Export refreshed PDFs from the native editor before sending PDF attachments.
 
-Run from this directory with Python 3.9 or later (standard library only):
+The paper also retains the all-profile capped continuous-Banzhaf upper bound,
+a strict finite-k probability refinement, the sharp proportional-class leading
+constant, and restricted-domain nonlinear constructions. Model and functional
+precedents are explicitly credited. All are parts of one manuscript candidate.
+
+Run with Python 3.9 or later (standard library only):
 
 ```sh
+python3 -B -O verification/run_sharp.py
+python3 -B -O verification/run_hierarchy.py
 python3 -B -O verification/run_all.py
 ```
 
-The runner checks copied-source hashes, executes all six verifiers in temporary
-directories, requires fresh PASS reports, and compares their canonical hashes
-against the archived results. Only Python-version metadata is excluded from
-report identity. Reports and logs go to `validation/replay` by default; use
-`--output /tmp/coopgt-replay` to choose another destination. Checks remain active
-under `-O`. Hashes and finite tests are reproducibility evidence, not formal
-proofs of the universal theorems or priority.
-
-Build each standalone `.tex` source with the Codex LaTeX editor or two passes
-of `pdflatex`. The supplied PDFs were compiled and visually inspected. No
-third-party articles are redistributed. The archive contains the manuscript,
-brief, source ledger and exact verifiers; internal model-review transcripts
-and contact drafts remain separately available in the repository.
-
-This package consolidates the relevant October 4–5 research campaigns. It is
-one manuscript candidate, not a separate paper for each extension. Earlier
-two-pool exponential-payment and random-order results remain in the campaign
-archive and are not claimed as included here. External outreach is unsent.
+The first verifies 24 exact weighted-profile duals and 168 corruptions.
+The second checks source hashes, 14 exact single-base hierarchy certificates (including padding
+and 98 rejected corruptions), and 24 exact pairwise probabilities in fresh temporary
+directories. The third replays the six earlier verifiers and compares canonical
+report hashes. Use `--output /tmp/coopgt-checks` to choose an output location.
+Finite checks support the full written proofs; they do not certify novelty or a
+universal theorem by themselves. The packet contains sources and executable certificates,
+without third-party articles, stale PDFs, contacts or private review transcripts.
+External outreach remains unsent.

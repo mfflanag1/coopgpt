@@ -2,9 +2,18 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
-The [unrestricted campaign theorem](research_campaigns/2026-10-06-unrestricted-attack/HIERARCHY_THEOREM.txt) now proves that **no universal constant payment factor works**: the unrestricted optimum has order **log k / log log k**, with leading coefficient between **1/2 and 1**, as both pool and owner counts grow. The parameterized proof survived independent model review and exact dual checks. A [strict finite-k upper refinement](research_campaigns/2026-10-06-unrestricted-attack/SMALL_BALL_THEOREM.txt) and [specialist packet](research_campaigns/2026-10-06-unrestricted-attack/REVIEW_PACKET.txt) are also available. Historical novelty, human validation and field-level significance remain unconfirmed. The [campaign decision](research_campaigns/2026-10-06-unrestricted-attack/DECISION.txt) closes the fixed attack early after this decisive resolution.
+The [sharp unrestricted theorem](research_campaigns/2026-10-06-leading-constant/SHARP_THEOREM.txt)
+now proves a minimax payment factor of **(1+o(1)) log k / log log k**. A profile-averaged
+hierarchy closes the earlier 1/2-to-1 leading-constant gap. The proof survived an independent
+deep model audit and 24 exact weighted-profile certificates with 168 rejected corruptions.
+The [earlier single-base hierarchy](research_campaigns/2026-10-06-unrestricted-attack/HIERARCHY_THEOREM.txt)
+remains valid. Historical novelty, human validation and field-level significance remain unconfirmed.
 
-The [consolidated truthful-cooperation manuscript](paper5/truthful_cooperation/README.md) and its [two-page specialist brief](paper5/truthful_cooperation/output/pdf/specialist_brief.pdf) are preserved snapshots of the preceding results. **Read the new theorem supplement first:** it supersedes their statement that unrestricted constant feasibility is open. Incorporating it into the manuscript is a separate next editing step. Outreach remains unsent.
+The [consolidated truthful-cooperation manuscript](paper5/truthful_cooperation/manuscript.tex) and
+[specialist brief source](paper5/truthful_cooperation/specialist_brief.tex) now include the unrestricted
+hierarchy proof. The old PDF exports remain explicitly labeled historical snapshots; the
+current review packet uses revised sources and exact checks. The [new leading-constant goal](research_campaigns/2026-10-06-leading-constant/CONTRACT.txt)
+has produced the matching leading-constant proof. Human outreach remains unsent.
 
 Historical campaign entries below describe the frontier at their respective dates; the unrestricted question they left open is resolved by the supplement above.
 
