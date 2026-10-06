@@ -1,0 +1,61 @@
+FULL BINARY HISTOGRAM SEARCH — exact lower certificate encoding
+This is a new SEARCH, not a proved unrestricted improvement.
+
+There are k pools of m fixed original owners each. Reports are 1 or H>=2.
+A pool type h has h high owners and m-h low owners; a state s=(s_0,...,s_m)
+contains s_h pools of each type, sum s_h=k. By default ALL states are included.
+The optional --strip mode keeps s_0 in {0,1,2}, arbitrary s_1 and s_2 summing
+to k-s_0, and s_h=0 for h>=3. Edges leaving this set are omitted. This only
+drops valid necessary constraints, so any resulting accepted dual remains
+a lower certificate. The number of type-1/type-2 pools can grow with k;
+no upper claim or asymptotic theorem follows from this restricted search. This is a restricted
+report alphabet used for necessary conditions on arbitrary all-report rules;
+it cannot by itself prove an unrestricted upper theorem.
+
+Any proposed all-report rule may be averaged over permutations of equal-size
+pools and independently over owners within each pool. For each group element,
+relabel inputs and outputs together. Nonnegativity, budgets and all coalition
+inequalities are linear and relabel invariant. An increase of a fixed original
+owner relabels to an increase of one owner, preserving own monotonicity. Hence
+the average is a valid mechanism with the same bound. At each binary state,
+payment depends only on h and whether the owner is low/high. This is a proof
+device, not splitting or merging strategic owners.
+
+Valid constraints for invariant payments a_(s,h), b_(s,h):
+Budget: T_s B - sum_h s_h[(m-h)a_(s,h)+h b_(s,h)] >=0,
+where T_s=min_(s_h>0)(m-h+Hh).
+Coverage: choose u_h low and v_h high owners from EACH type-h pool. Their actual
+coalition worth is min_h(u_h+Hv_h), and payment is
+sum_h s_h(u_h a_(s,h)+v_h b_(s,h)). Thus each recorded coverage row is actual.
+Monotonicity: raise one low owner in a type-h pool to H, changing state to
+s'=s-e_h+e_(h+1). The owner's payment comparison is b_(s',h+1)-a_(s,h)>=0.
+The exact checker also permits an empty selection in a present type, yielding
+a valid zero-worth coalition; the discovery driver only needs positive-worth
+coalitions. No other owner's payment is constrained by that edge. These are fixed-owner
+report changes. A sequence of state types need not retain common pool prices.
+
+Each exact certificate uses a finite nonnegative combination of these rows.
+If the sum is alpha B + sum_v d_v y_v >= q with alpha>0 and all d_v<=0,
+nonnegativity gives alpha B>=q. Equivalently add -d_v times each nonnegativity
+row to cancel all payment coordinates. verify.py reconstructs all coefficients
+from state/coalition/edge descriptors and uses Fraction only. It does not import
+the driver or depend on its floating matrix. A positive uncancelled payment
+coefficient rejects the certificate. Altered descriptors are negative controls.
+
+The numerical driver rounds candidate nonnegative dual weights. Any positive
+residual payment coefficients are canceled by adding valid budget rows at that
+state; the necessary extra coefficient is max_v d_v/(s_h owner_count_v).
+This can weaken the lower bound but cannot invalidate it. The separate checker
+still reconstructs and verifies the resulting certificate without trusting this
+repair recipe or solver status. It is a practical rational certificate extraction
+step, not a claimed novel theorem advancing the research gate.
+
+Cut separation: for each possible worth threshold t<=T_s, choose the cheapest
+subset of each present pool type among all count pairs u+Hv>=t. Repeating that
+choice across its s_h copies minimizes payment at that threshold. Its actual
+worth is the minimum of the selected capacities. Every violated coalition is
+captured at its own worth threshold, since independent minimizers cost no more.
+This justifies numerical completeness when every state/threshold was examined
+and there are no violated rows. Numerical primal feasibility remains approximate
+and restricted-domain, never an all-profile result. Partial cutting planes still
+produce valid lower certificates if the exact checker accepts their actual rows.

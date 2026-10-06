@@ -1,0 +1,80 @@
+HIERARCHICAL MULTIPLE-EXPORT LOWER — COORDINATOR PROOF CANDIDATE
+6 October 2026. Needs independent audit before promotion.
+
+Claim: the unrestricted optimum grows as Theta(log k/log log k).
+Specifically B_k >= (1/2-o(1)) log k/log log k, matching the known upper
+order with a factor-two leading-constant gap. No novelty/field claim yet.
+
+Fix integers d>=1, m>d, H=m. There are k pools, m fixed owners per pool.
+Every report is 1 or m. Type h has h high owners and m-h low owners,
+for h=0,...,d. Select counts n_0>=2, n_h>=1, sum n_h=k.
+For any unrestricted mechanism with worst-case factor B on this ownership,
+average over pool and within-pool owner permutations. This preserves every
+coalition constraint, nonnegative payments, budgets and own-report comparisons.
+At any histogram let x_h be a low owner's payment, z_h a high owner's payment.
+This is a proof by symmetrization; no anonymity assumption or strategic cloning.
+
+Base profile S has counts n_0,...,n_d. Its T=m because n_0>=2.
+For each h<d, increase ONE low original owner in a type-h pool from1 to m.
+The destination S_h has counts n_h-1, n_(h+1)+1 (others unchanged).
+It still has an all-low pool, hence T=m. At S_h, symmetry and its budget give
+ (h+1)(n_(h+1)+1) z_(h+1)(S_h) <= Bm.
+Own monotonicity therefore bounds the BASE low payment by
+ x_h(S) <= Bm / [(h+1)(n_(h+1)+1)].                         (1)
+This bounds low payments in ALL earlier types at the SAME base profile.
+No other owner's payment is transported between profiles.
+
+Two actual base coalitions:
+ C0 chooses one low owner from every pool (possible since m>d):
+       sum_(h=0)^d n_h x_h >=1.                            (2)
+ C1 chooses m-d+1 low owners from every type h<d, and one high owner
+ from every type-d pool. Its worth is m-d+1 (all former pools supply that,
+ latter pools supply m):
+       (m-d+1) sum_(h<d)n_h x_h + n_d z_d >= m-d+1.         (3)
+Let A=(m-d)+d(m-d+1)=(d+1)m-d^2.
+Multiply (2) by m-d, (3) by d. The type-d payment coefficients are exactly
+its full budget coefficients, yielding
+ A <= A sum_(h<d)n_h x_h + n_d[(m-d)x_d+d z_d]
+   <= A sum_(h<d)n_h x_h + Bm
+   <= Bm [1 + A sum_(h<d) n_h/((h+1)(n_(h+1)+1))].          (4)
+Thus the explicit general lower bound is
+ B >= A / {m [1+A sum_(h<d) n_h/((h+1)(n_(h+1)+1))]}.       (5)
+Every used coefficient is nonnegative; dropping earlier-type budget costs
+only weakens the conclusion. Equation(4) uses no unproved cross-profile
+retention, report-dependent normalization or proportionality.
+
+Elementary divergence family: choose m=2d, A=d(d+2), L=2Ad,
+n_h=2 L^h (h=0,...,d), k_d=2 sum_(h=0)^d L^h.
+Since n_h/(n_(h+1)+1)<1/L,
+ A sum n_h/((h+1)(n_(h+1)+1)) < A H_d/L <= A d/L=1/2.
+Therefore B > (d+2)/3. Both pool and original-owner counts grow.
+For any k>=k_d, add k-k_d pools of type d. The same proof applies;
+the final ratio only decreases, and all earlier ratios are unchanged.
+This is an explicit padded construction, not assumed monotonicity of B_k.
+
+Sharper asymptotics: for d>=2 choose
+ q_d=ceil(log(d+1)), m=d q_d,
+ A=(d+1)m-d^2,
+ L=ceil[A(1+log d)^2], n_h=2 L^h.
+Then the bracket in(5) is <=1+1/(1+log d), because H_d<=1+log d.
+Moreover A/m=d+1-d/q_d=(1-o(1))d,
+ log L=(2+o(1))log d, log k_d=(2+o(1))d log d.
+For any fixed epsilon>0 and sufficiently large k, take
+ d=floor((1/2-epsilon) log k/log log k), so k_d<=k.
+Pad type-d pools as above. Then B_k >=(1/2-epsilon-o(1))log k/log log k.
+Since epsilon is arbitrary, B_k >=(1/2-o(1))log k/log log k.
+Together with the existing manuscript upper this gives the claimed Theta order.
+
+How this escapes the old star barrier: a single base profile has d distinct
+exporting owner types, with different donor destinations each containing many
+owners of the corresponding new high type. The old barrier restricts a single
+exporting owner/star architecture. Here the same base low-payment mass is
+bounded simultaneously for every h<d and the final type retains both low and
+high coalition demands. Need audit the exact stated old hypothesis; the proof
+above stands independently of that explanatory comparison.
+
+Next verification: reconstruct a nonnegative dual using the two cover rows,
+base budget, all d destination budgets and d own-report edges; cancel the
+remaining low coordinates using nonnegativity rows. Check integer examples
+with exact arithmetic, including a d=5 example forcing B>2 and growing d.
+No finite computation substitutes for the all-d proof.
