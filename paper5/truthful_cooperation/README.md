@@ -2,6 +2,8 @@
 
 A consolidated review manuscript by Maxwell Flanagan, 6 October 2026.
 
+**Subsequent theorem supplement:** the [unrestricted hierarchy proof](../../research_campaigns/2026-10-06-unrestricted-attack/HIERARCHY_THEOREM.txt) establishes growing budget of order log k/log log k for arbitrary own-report-monotone rules. The source/PDF and open specialist brief here are preserved; their statement that constant feasibility is unresolved is superseded. Read the [new specialist packet](../../research_campaigns/2026-10-06-unrestricted-attack/REVIEW_PACKET.txt) alongside them. Human review and historical priority remain pending.
+
 - [Manuscript PDF](output/pdf/manuscript.pdf) · [LaTeX source](manuscript.tex).
 - [Two-page specialist brief](output/pdf/specialist_brief.pdf) · [Source](specialist_brief.tex).
 - [Portable review and verification archive](truthful_cooperation_review.zip).
@@ -14,8 +16,9 @@ asymptotic, and nonlinear escapes on restricted profile families. It includes
 complete proofs and the two-altered-binary-pool extension in an appendix.
 The established game, Banzhaf functional, and strategic-report convention are
 credited. This is a candidate contribution: historical novelty, significance,
-and human specialist validation remain unresolved. The unrestricted constant-
-budget question remains open.
+and human specialist validation remain unresolved. At this manuscript snapshot,
+the unrestricted constant-budget question was open; the supplement above
+resolves it and awaits integration into this manuscript.
 
 Run from this directory with Python 3.9 or later (standard library only):
 

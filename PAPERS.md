@@ -137,6 +137,8 @@ former 1/3<=S3<=39999/100000 frontier.
 
 ### 8. Subsidies for truthful cooperation: sharp proportional bounds and nonlinear escape
 
+**New theorem supplement:** [Unrestricted hierarchy result](research_campaigns/2026-10-06-unrestricted-attack/HIERARCHY_THEOREM.txt) and [review packet](research_campaigns/2026-10-06-unrestricted-attack/REVIEW_PACKET.txt). The preserved PDF below predates this result.
+
 [Current PDF](paper5/truthful_cooperation/output/pdf/manuscript.pdf) · [Specialist brief](paper5/truthful_cooperation/output/pdf/specialist_brief.pdf) · [Source and verification package](paper5/truthful_cooperation/README.md)
 
 High level: how much extra money is needed to keep every coalition satisfied
@@ -149,8 +151,9 @@ continuous-Banzhaf rule with total factor O(log k/log log k). Every universal
 constant must be at least 2. The floor-free capped-proportional minimax factor
 is (1+o(1)) log k/log log k. Nonlinear rules have factor 2 on up to two altered
 binary pools and factor 2m+3 on [1/r,1] with at most m altered equal-size pools.
-The original H/k floor adds at most one. The unrestricted constant-versus-
-divergence question remains open.
+The original H/k floor adds at most one. The new supplement now proves unrestricted growth of order log k/log log k,
+with coefficient bounds1/2 and1, using growing owner and pool counts. It
+supersedes the PDF's open-question statement; the PDF has not yet been revised.
 
 Status: complete review manuscript consolidating the October 4–5 AGT results,
 with exact portable checks and a fresh Fable 5.1 proof review. The established

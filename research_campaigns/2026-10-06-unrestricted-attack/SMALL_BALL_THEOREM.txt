@@ -1,0 +1,72 @@
+SHARP PAIRWISE SMALL-BALL BOUND AND A STRICT GENERAL UPPER REFINEMENT
+6 October 2026. Minor quantitative tightening; historical novelty unconfirmed.
+The rule remains the existing capped-Banzhaf construction. Main advance of this
+campaign is HIERARCHY_THEOREM.txt, not this refinement.
+
+Normalize the capped capacities by T>0: a_i in[0,1], pool totals rho_j,
+minimum rho_s=1. Let X_j=sum_(i in N_j)a_i U_i with independent uniform[0,1]
+variables. The existing payment rule has total factor E[rho_W], where W is
+the uniquely smallest X_j (ties have probability zero).
+
+For rho>=2 define n=floor rho, theta=rho-n, and
+ q(n)=1/(n+1)!;
+ q(n+theta)=[1-(1-theta)^(n+2)]/[theta*(n+2)!], 0<theta<1.
+For every pool j with rho_j>=2, P(X_j<X_s)<=q(rho_j), with equality attainable
+in this PAIRWISE comparison. Consequently its all-profile total factor is at most
+ Q(k)=2+integral_2^infinity min{1,(k-1)q(t)} dt,
+and Q(k)<U(k)=R_k+1/log R_k for every k>=2, R_k log(R_k/e)=log k.
+Unequal owner counts and zero reports are allowed, as in the original upper.
+This does not assert that Q(k) is an optimal mechanism bound or that its
+additive gap from U(k) converges to any specified constant.
+
+PROOF
+Drop zero coefficients. A sum of independent uniform summands has a density
+symmetric about rho/2 and nondecreasing to its left. For completeness, center
+each summand. If f is even and nonincreasing on the positive half-line, its
+convolution with uniform[-a/2,a/2] is even and has derivative
+ [f(x+a/2)-f(x-a/2)]/a <=0 for almost every x>=0.
+Thus convolution preserves symmetric unimodality; induction starts with one
+uniform density. Its CDF F_j is convex on (-infinity,rho_j/2], hence on[0,1]
+when rho_j>=2.
+
+The coefficients b_i of the short pool sum to1. Jensen pointwise gives
+ F_j(sum b_i U_i)<=sum b_i F_j(U_i).
+Independence and continuity give P(X_j<X_s)=E F_j(X_s), so
+ P(X_j<X_s)<=integral_0^1 F_j(u)du=E[(1-X_j)_+].
+The latter is a convex symmetric function of the coefficients of X_j.
+On the compact polytope {a in[0,1]^r:sum a=rho}, its maximum is achieved at
+a vertex. Vertices have n unit coefficients, one theta if nonzero and zeros
+otherwise (two fractional coordinates permit opposite perturbations).
+This comparison changes only distributions in a bound, not strategic owners.
+
+For S_n=sum_(i=1)^n U_i and 0<=t<=1, simplex integration gives
+ E[(t-S_n)_+]=t^(n+1)/(n+1)!.
+At theta=0 this is1/(n+1)!; conditioning on theta*U gives precisely q above.
+This construction attains equality with a singleton short pool. Coupling shows
+q decreases continuously as rho increases, including at integer endpoints.
+
+At most k-1 pools have rho>t for t>=2, hence
+ P(rho_W>t)<=min{1,(k-1)q(t)}.
+Tail integration and the bound1 on lower tails yield E rho_W<=Q(k).
+For t>=2 and n=floor t,
+ q(t)<=1/(n+1)! < (e/(n+1))^(n+1) <=(e/t)^t.
+The strict factorial inequality follows from the exponential series; the last
+step uses monotonic decrease of (e/x)^x for x>1. Therefore
+ Q(k)<=e+integral_e^infinity min{1,k(e/t)^t}dt
+      =R_k+integral_(R_k)^infinity k(e/t)^t dt
+      <=R_k+1/log R_k.
+On (R_k,infinity) the first integrand comparison is strict, so Q(k)<U(k).
+The last tail estimate is the same elementary tangent bound as in the existing
+upper proof. The optional core floor costs at most one additional T.
+
+VERIFICATION AND PROVENANCE
+The probability ingredients (symmetric unimodality, Jensen, polytope convexity,
+uniform simplex volume) are established; the proposed application is the pool
+comparison and budget bound. The proof here is self-contained for these uses.
+The coordinator's candidate was expanded by a Fable research delegate; opposite
+Codex QA confirmed the central theorem and rejected an unsupported additive-gap
+heuristic. The heuristic and all unverified hand numerical tables are excluded.
+verify_small_ball.py independently checked24 exact rational pairwise examples,
+including fractional totals, unequal counts and extremal equality. These checks
+support implementation; the written proof supplies the all-profile guarantee.
+See review/SMALL_BALL_RESOLUTION.txt and SMALL_BALL_CHECKS.json.
