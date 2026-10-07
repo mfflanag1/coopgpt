@@ -2,6 +2,17 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
+The [monotone-envelope theorem](research_campaigns/2026-10-06-monotone-envelope/THEOREM.txt)
+now gives an all-profile truthful, coalition-covering repair on **every finite
+directed acyclic network**, with total payments **at most 2K²T**, independent of
+owner count. Here K is the number of structural minimal cuts and T is grand
+flow. The sharper structural bound is 2H(G)T. This settles boundedness for the
+specified envelope, but is weaker than the known marginal-contribution budget
+and leaves the **C log K / log log K** target open. An exact path example shows
+why the current proof relaxation cannot reach that target. The [record](research_campaigns/2026-10-06-monotone-envelope/INDEX.txt)
+includes the conventional proof, independent model audit, exact checks, source
+comparisons and limitations; novelty and human review remain unconfirmed.
+
 The [Wheatstone follow-on](research_campaigns/2026-10-06-wheatstone/INDEX.txt)
 identifies a precise boundary: the effective-capacity rule remains truthful on
 a parallel-bundled bridge with arbitrary owner count, but its truthfulness is

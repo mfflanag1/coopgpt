@@ -1,0 +1,185 @@
+THE OWN-REPORT ENVELOPE ON ALL FINITE DIRECTED ACYCLIC NETWORKS
+Conventional proof, 6 October 2026. Independent deep Fable audit found no
+invalid step; coordinator verified the argument and added clarifications.
+Exact checks support the implementation. Human/formal review remains open.
+
+1. MODEL AND PRECISE CLAIM
+G is a finite directed acyclic s-t network with at least one s-t path; every
+edge lies on an s-t path. Parallel edges are permitted and retain distinct
+fixed original owners. Each owner controls exactly one edge. Capacities c are
+arbitrary finite nonnegative reals. Coalition S has value v_c(S), its maximum
+s-t flow; T(c)=v_c(E). Reports may only understate capacity, and utility is
+payment, with no operating cost. No group, identity, split/merge or overreport
+incentive claim is made.
+
+Let C be the report-independent family of inclusion-minimal structural s-t
+edge cutsets, K=|C|. Let L be the largest number of edges in an s-t path.
+For a structural cut C, let h(C) be the largest number of its edges lying on
+one s-t path, and H(G)=sum_(C in C) h(C). These are structural parameters.
+They obey H<=KL<=K^2.
+
+For any profile define D_e(c)=max_f f_e over all feasible s-t flows, permitting
+any total. Use independent uniform U_e in [0,1], and a fixed order to select
+a minimum structural cut W for capacities D_e(c)U_e. Define deterministic
+base payments z_e(c)=D_e(c) Pr(e in W), and their own-report envelopes
+ y_e(c)=sup_(0<=t<=c_e) z_e(t,c_-e).
+
+CLAIM. At every real report profile y is nonnegative, covers every coalition,
+and is nondecreasing in each owner's own report with others fixed. Moreover
+ sum_e y_e(c) <= 2 H(G) T(c) <= 2 K L T(c) <= 2 K^2 T(c).       (1)
+Thus external subsidy, total payments minus T, is at most (2H-1)T.
+This is an owner-independent bound for THIS envelope on ALL finite DAGs.
+It is much weaker than the still unproved target C*U(K)T with absolute C and
+U(K)~log K/log log K. It does not improve the known L*T budget of the different
+marginal-contribution mechanism. No sharpness or historical novelty is claimed.
+
+2. FLOW NORMALIZATION AND ENVELOPE REGULARITY
+All feasible flows decompose into nonnegative s-t path flows because G is a
+DAG. Hence 0<=D_e<=min(c_e,T). The maximum exists by compactness. Every feasible
+coalition flow is a feasible grand-network flow, so capping all edges at their
+D_e simultaneously preserves every coalition's ENTIRE feasible flow set.
+Consequently v_D(S)=v_c(S), and maxflow(D)=T.
+
+D_h is nondecreasing in every report. For c^t=(t,c_-e), 0<=t<=c_e,
+ D_e(c^t)=min(t,D_e(c)).                                      (2)
+For the lower bound retain only e-containing paths of a flow attaining D_e,
+then scale to total min(t,D_e); every edge flow in it is at most that total.
+The reverse bound follows from t and feasible-set inclusion. The same argument
+retaining h-containing paths proves the useful, but unused in (1), inequality
+ D_h(c^t)>=min(t,D_h(c)) for every h.                          (3)
+If t>=D_e(c), all original feasible flows already satisfy f_e<=t. Thus their
+feasible set, every D_h, and z are unchanged. The envelope may restrict its
+search to 0<=t<=D_e(c).
+
+The rule is well defined even at ties or zero capacities. More explicitly,
+for fixed U_-e let A be the minimum cut score excluding the e term among
+cuts containing e, and B the minimum score among cuts not containing e,
+where B=+infinity if that family is empty. Conditional integration in U_e gives
+ z_e(c)=E[min(D_e(c),(B-A)_+)].                               (4)
+Here A and B depend on c through all D, unlike in the safe TTSP argument.
+When D_e>0 equality of containing/excluding scores has probability zero in
+U_e; when D_e=0 both sides are zero. If B=infinity the integrand is D_e.
+
+Each D_h is continuous in c: for h=(a,b),
+ D_h=min(c_h,maxflow(s,a),maxflow(b,t)),
+with coincident-terminal bounds omitted. Prefix and suffix paths cannot share
+a vertex in a DAG; scaled maximum flows can be joined through h. Each maxflow
+is a minimum of finitely many cut sums and hence continuous. Formula (4) and
+dominated convergence make z_e continuous. Writing t=r*c_e with r in [0,1]
+shows the envelope is a maximum over a fixed compact interval of a continuous
+function. It is continuous, finite, and the supremum is attained. Attainment
+and continuity are not needed for the budget comparison below.
+
+Nonnegativity is immediate, and y>=z because t=c_e is admissible. For any
+selected structural cut and any S, D(S intersect W)>=v_D(S)=v_c(S), by the
+cut bound in the coalition network. Averaging proves coverage for z and y.
+Own-report monotonicity of y follows from nested intervals [0,c_e], with
+the same fixed other reports. At T=0 all D, z and y are zero.
+
+3. PATH-INCOMPARABLE OWNERS HAVE INDEPENDENT EFFECTIVE CAPS
+Say e precedes h if there is an s-t path containing e before h. On distinct
+edges this is a strict partial order: concatenating the intervening paths
+in a DAG cannot create repetition; every edge lies on an s-t path. A chain
+can be put on one s-t path by the same concatenation argument.
+
+If e and h are incomparable, no s-t path contains both. In computing D_h,
+take any maximizing flow and discard its paths not containing h. The retained
+flow still attains D_h and uses no e. It is feasible for EVERY report on e,
+including zero. Conversely a flow attaining D_h at the changed profile can
+be restricted to h-containing paths and is feasible at the original profile.
+Thus both inequalities hold. Therefore D_h is independent of c_e, for all report vectors.
+
+Restrict this edge order to a cut C. Assign each e in C its longest-chain
+rank within C (ending at e). Edges of one rank are incomparable. The ranks
+partition C into h(C) nonempty antichains A; the equality with the path-based
+definition of h(C) follows from the preceding concatenation observation.
+For a focal e in such an A, all D_h for h in A without e remain fixed under
+every own-report change of e. Edges outside A can change; no independence
+claim is made about them.
+
+4. A UNIFORM-SUM BUDGET LEMMA
+For independent uniforms and nonnegative weights a_i with a=sum_i a_i,
+put X=sum_i a_i U_i. For every b>=0,
+ a*Pr(X<=b)<=2b.                                            (5)
+If a=0 this is immediate. If a<=2b it follows from probability<=1. Suppose
+a>2b. Omit zero weights. The density of X is symmetric about a/2 and
+nondecreasing from 0 to a/2, so its CDF F is convex there, with F(0)=0 and
+F(a/2)=1/2. The chord bound gives F(b)<=b/a; in fact aF(b)<=b in this case.
+
+Here is a direct justification of the density property. A centered uniform
+density is even and nonincreasing on [0,infinity). If f has these properties,
+convolution with a centered uniform of width w gives
+ g(x)=(1/w) integral_(x-w/2)^(x+w/2) f(v)dv.
+It is even, and for x>=0 its a.e. derivative is
+ (f(x+w/2)-f(x-w/2))/w<=0,
+since |x+w/2|>=|x-w/2|. Induct on the number of positive weights, then translate
+the centered sum by a/2. This also covers a single positive uniform weight.
+There are no atoms for a>0. This elementary probability lemma is not claimed new.
+
+5. THE KEY COMPARISON USES ONE COMMON PROFILE
+Fix c with T>0, one cut C, and one antichain A in its partition. For focal
+e in A, take ANY allowed t, and let W^t be the selected cut at c^t. Its score
+is at most T(c^t)<=T: a minimum cut for D(c^t) has deterministic sum T(c^t),
+and its random score can only be smaller since every U<=1. Here one may
+choose a STRUCTURAL minimal cut attaining the deterministic minimum:
+every cutset contains such a cutset of no larger score because all weights
+are nonnegative. Hence minimizing over structural minimal cuts is valid.
+
+Put d=D_e(c^t)<=D_e(c) and S_-e=sum_(h in A without e) D_h(c)U_h. Independence
+of effective caps from section 3 is essential here. If W^t=C, dropping the
+other nonnegative terms of its score gives S_-e+d U_e<=T. Consequently
+ d Pr(W^t=C)
+ <= d Pr(S_-e+d U_e<=T)
+  = E[min(d,(T-S_-e)_+)]
+ <= E[min(D_e(c),(T-S_-e)_+)]
+  = D_e(c) Pr(sum_(h in A) D_h(c)U_h<=T).                    (6)
+For d=0 or D_e(c)=0 use zero on the corresponding side; (6) still holds.
+All quantities on the last line use the SAME original profile c and are
+independent of t. The event on the last line is common to every e in A.
+
+For fixed e, z_e(c^t)=sum_(C contains e) D_e(c^t)Pr(W^t=C).
+Use (6) in every term BEFORE taking the supremum. There are finitely many
+cuts; their antichain partitions are fixed by the graph. Then sum over e
+and group by (C,A), obtaining
+ sum_e y_e(c)
+ <= sum_C sum_(A in its partition)
+      [sum_(e in A)D_e(c)] Pr(sum_(h in A)D_h(c)U_h<=T)
+ <= 2 sum_C h(C) T = 2H(G)T,                               (7)
+by (5). No base budgets from different unilateral profiles were combined.
+This is the point at which the possible number of owners disappears.
+
+6. REDUCING THE STRUCTURAL BOUND TO CUT COUNT
+Clearly h(C)<=L. Also L<=K. To prove the latter, take any s-t path P. For
+each e in P the set (E without P) union {e} cuts every s-t path, because after
+its removal only P without e remains. Choose an inclusion-minimal cut C_e
+inside it. Since E without P does not cut P, C_e must contain e, and
+C_e intersect P={e}. Different e give distinct structural cuts. Therefore
+|P|<=K. Apply this to a longest path to obtain H<=KL<=K^2, completing (1).
+
+7. CALIBRATION AND WHAT REMAINS OPEN
+On TTSP graphs z is already own-report monotone by the earlier co-cut theorem,
+so y=z and the sharper U(K) budget survives exactly. In particular K=1 gives
+efficient payments. On the previously certified augmented Wheatstone example,
+y_x(x_high,c_-x)>=z_x(x_low,c_-x)>z_x(x_high,c_-x); the problematic underreport
+is necessarily repaired. The two envelope values need not coincide; their
+monotonic ordering follows from the definition for ALL reports.
+
+The coarse proof discards (i) score contributions outside one antichain and
+(ii) competition between different cuts. Replacing the sum over cuts by the
+earlier small-ball tail argument would require a single selected random cut
+at a common profile; the separate own-report suprema do not supply that object.
+No obstruction to a C*U(K) bound has been proved. The sharp target therefore
+remains open, even if the present cut-count-only bound is verified.
+
+Because y is the pointwise LEAST own-report-monotone majorant of z (with others
+fixed), any own-report-monotone rule p satisfying p>=z everywhere also satisfies
+p>=y everywhere: p_e(c)>=p_e(t,c_-e)>=z_e(t,c_-e), then take sup. Thus an eventual
+large lower bound for y would obstruct every pointwise-majorant repair of z,
+not all truthful coalition-covering mechanisms. This is an elementary envelope
+fact, not a new impossibility result.
+
+The classical mincut/flow facts, elementary monotone-envelope facts, uniform
+convolution lemma, and prior continuous Banzhaf functional are established
+ingredients. The proposed contribution is the antichain comparison (6)-(7)
+for this effective-capacity payment envelope. Historical novelty, formal
+verification and human specialist review remain unestablished.
