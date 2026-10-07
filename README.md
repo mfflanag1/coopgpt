@@ -2,6 +2,15 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
+The [Wheatstone follow-on](research_campaigns/2026-10-06-wheatstone/INDEX.txt)
+identifies a precise boundary: the effective-capacity rule remains truthful on
+a parallel-bundled bridge with arbitrary owner count, but its truthfulness is
+**not preserved by series/parallel composition**. An exact counterexample also
+holds on simple DAGs with growing vertices and owners; the audited example has
+**21 vertices and 37 owners**. This refutes that rule's unrestricted extension,
+while leaving the earlier TTSP theorem intact. Proofs, rational certificates,
+independent model audits and the proposed monotone-envelope target are recorded.
+
 The [series-parallel extension](research_campaigns/2026-10-06-series-parallel/THEOREM.txt)
 proves an all-profile truthful, coalition-covering rule for every finite directed
 two-terminal series-parallel network with one fixed owner per edge. In the number

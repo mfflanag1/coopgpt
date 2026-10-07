@@ -1,0 +1,68 @@
+SIMPLE-DAG EXTENSION OF THE PAYMENT OBSTRUCTION
+6 October2026. Candidate for focused audit.
+
+For every k>=14 the obstruction persists on a SIMPLE directed acyclic network
+with k+7 vertices and 2k+9 fixed original edge owners. Thus both vertex count
+and owner count grow, with arbitrarily many overlapping subdivided Wheatstone
+bridges. There are no parallel edges, zero capacities, changed owner identities,
+or coordinated report changes.
+
+Start with the augmented graph in OBSTRUCTION_CANDIDATE.txt. Replace each
+parallel z_j:u->q edge by a two-edge path u->b_j->q with its own new vertex;
+both edges have capacity2 and distinct fixed owners. Replace each downstream
+r_i:q->t edge by q->a_i->t through a new vertex; both edges have capacity1/2.
+Retain x,y,w,h,p and their same capacities: x0=9/10 versus x1=19/20,
+y=epsilon=1/20, w=h=p=2. This is a fixed graph for every given k. Both grand
+values are1. Maximum path length is5, so a factor5 truthful marginal baseline
+still exists. No all-mechanism impossibility is asserted.
+
+Each z-path edge has effective capacity x (incoming x bottleneck); each r-path
+edge has effective capacity1/2. All other effective capacities are unchanged.
+Attainability follows by sending x through the specified z path, or1/2 through
+the specified downstream path, using p for the latter. Thus random path
+capacities in the normalized rule are
+ Z=x sum_(j=1)^k min(U_j,V_j),
+ R=(min(U_1',V_1')+min(U_2',V_2'))/2.
+Distinct uniforms belong to distinct fixed original edges. A=min(epsilon U_y,
+(x+epsilon)U_w), H=xU_h and P=U_p remain as before. The conditional x payment
+formula(3) in OBSTRUCTION_CANDIDATE holds with these new Z and R, because the
+flow function replaces each series path by its minimum capacity.
+
+As before, I(x)-Pr(Z<1)<=z_x(x)<=I(x), where
+ I(x)=E[min(x,(R-P-A)_+)].
+Each min(U,V) has density2(1-u)<=2 on[0,1]. The product density is at most2^k,
+so the enclosing simplex gives
+ Pr(Z<1)<=2^k/(k!x^k).                                        (S1)
+This bound is used only at x0=9/10.
+
+EXACT IDEAL INTEGRAL, DERIVED WITHOUT A NUMERICAL SOLVER
+Each downstream path capacity has density4-8r on[0,1/2]. Their independent sum
+R has CDF F_R(r)=8r^2-(32/3)r^3+(8/3)r^4 for0<=r<=1/2, and survival
+1-F_R(r)=(8/3)(1-r)^4 for1/2<=r<=1. These follow by convolving the two affine
+densities; the second follows equally by reflecting around the upper endpoint.
+
+For P uniform[0,1] independent of R, put g(a)=E[(R-P-a)_+]. Because0<=R<=1,
+ g(a)=E[(R-a)_+^2]/2.
+For0<=a<=1/2, integrate g''(a)=1-F_R(a), using
+g(0)=E[R^2]/2=5/72 and g'(0)=-E[R]=-1/3, to get
+ g0(a)=5/72-a/3+a^2/2-(2/3)a^4+(8/15)a^5-(4/45)a^6.
+For1/2<=a<=1, direct integration gives g1(a)=(4/45)(1-a)^6.
+
+With b=x+epsilon and moments M_j(b) from equation(6) of the main obstruction,
+ I(x)=E[g0(A)]-(4/45)E[(1-x-A)^6].                             (S2)
+All arguments use their stated intervals: A<=1/20 and A+x>=9/10. Expand the
+sixth power by the binomial theorem and substitute rational moments. The values
+are
+ I(x0)=11809546127/191520000000,
+ I(x1)=14797313/240000000,
+ I(x0)-I(x1)=1290353/191520000000.
+Therefore, for every k>=14,
+ z_x(x0)-z_x(x1)>=1290353/191520000000-(20/9)^k/k!
+ >=700533736635095043154291/118415105665157830969440000000 >0.    (S3)
+The last bound uses k=14. The error decreases thereafter since its consecutive
+ratio is (20/9)/(k+1)<1. At k=14 there are21 vertices and37 original owners.
+
+This is a conventional all-k proof backed by exact rational evaluation of(S2)
+using both moments and independently implemented CDF convolution. It is an
+actual expected-payment obstruction to the specified rule. No extrapolation
+from a finite sample or conditional-only violation is used.

@@ -1,0 +1,114 @@
+EFFECTIVE-CAPACITY PAYMENTS FAIL ON OVERLAPPING WHEATSTONE NETWORKS
+Conventional proof and rational certificate, 6 October 2026.
+Independently audited conventional proof; exact rational checks passed.
+No impossibility claim for all mechanisms, formal verification or human review.
+
+THEOREM
+For every integer k>=10 there is a fixed edge-owned directed acyclic network
+with k+7 original owners and two strictly positive capacity profiles differing
+only in one owner's report, such that the effective-capacity continuous-Banzhaf
+rule strictly decreases that owner's payment when its report increases.
+Both grand maxflows equal1. The decrease is at least
+ delta=553/136800000 - (10/9)^10/10!
+      =97726081746439/30050502681578400000 >0.
+This refutes extension of THAT RULE to arbitrary DAGs. It does not refute the
+existence of other truthful subsidized mechanisms, or the earlier TTSP theorem.
+
+1. FIXED GRAPH AND REPORTS
+Vertices s,u,v,q,t. Edges/owners:
+ x:s->u; y:s->v; z_1,...,z_k:u->q (distinct parallel original edges);
+ w:v->q; h:u->v; p:s->q; r_1,r_2:q->t.
+Each five-edge subgraph (x,y,z_j,w,h) is a Wheatstone bridge. These k bridges
+share four edges and interact with the outer bypass p and downstream cut r.
+Every owner is fixed throughout its two-profile comparison. Varying k indexes
+different fixed networks, not strategic splitting/cloning during a comparison.
+All edges are on an s-t path; the graph is acyclic; path length is at most4.
+
+Set epsilon=1/20, x0=9/10, x1=19/20, y=epsilon,
+ z_j=w=h=p=2, and r_1=r_2=1/2.
+Only x changes between the two profiles. There are exactly five inclusion-
+minimal structural cuts, writing Z for the SET of all k z edges:
+ {x,y,p}, {Z,w,p}, {y,Z,h,p}, {x,w,p}, {r_1,r_2}.                  (1)
+Here {Z,w,p} means Z union {w,p}. Consequently the grand maxflow is1 at
+both profiles (the downstream cut binds, and p alone supplies at least1).
+Owner count grows without bound even though this family's cut count is5.
+
+2. EFFECTIVE CAPACITIES
+For any x in[x0,x1], the maximum feasible flow through each edge, allowing any
+total feasible flow, is
+ D_x=x, D_y=epsilon, D_zj=x, D_w=x+epsilon,
+ D_h=x, D_p=1, D_r1=D_r2=1/2.                                  (2)
+Upper bounds follow from the incoming x cut, the incoming x+y cut at v,
+individual reports, and the downstream cut. They are attainable: direct
+z_j routes carry x; the route x,h,w carries x; combining it with y carries
+x+epsilon<=1 through w; p supports total1 and either downstream edge's1/2.
+Every such construction respects the fixed original capacities. Thus (2)
+uses actual effective capacities, not the rejected global cap min(c_e,T).
+
+3. EXACT CONDITIONAL PAYMENT
+All following uniforms are independent uniform[0,1]. Write
+ Y=epsilon U_y, W=(x+epsilon)U_w, H=xU_h,
+ Z=x sum_(j=1)^k U_zj, P=U_p, R=(U_r1+U_r2)/2,
+ A=min(Y,W).
+Integrating out U_x in the minimum-cut rule gives the exact deterministic
+payment z_x(x)=E[q_k(x)] with
+ q_k(x)=min(x, ( min(Z+min(H,(W-Y)_+), R-P-A) )_+).               (3)
+Indeed the minimum containing-cut score excluding x is P+min(Y,W), and the
+minimum excluding-cut score is min(P+Z+min(W,Y+H),R); subtract and integrate
+the affine term xU_x. This argument handles the fixed cut family and all ties
+in the same way as the previous endpoint formula.
+
+4. IDEAL COMPARISON WITH A CERTIFIED ERROR
+Define q_infinity(x)=min(x,(R-P-A)_+) and I(x)=E[q_infinity(x)].
+Then q_k<=q_infinity always. Whenever Z>=1, the first entry in the minimum
+in(3) is >=1 while R-P-A<=1, so equality holds. Since both q's lie in[0,1],
+ I(x)-Pr(Z<1) <= z_x(x) <= I(x).                               (4)
+An enclosing nonnegative simplex in R^k gives
+ Pr(Z<1) <= 1/(k! x^k).                                       (5)
+This is an UPPER bound, not an equality: the simplex may extend beyond the
+unit cube. Its k-dimensional volume is (1/x)^k/k!. No probabilistic limit
+or unquantified concentration approximation is used.
+
+5. EXACT IDEAL INTEGRALS
+For b=x+epsilon, A=min(epsilon U,bV) has support[0,epsilon] and moments
+ M_0(b)=1,
+ M_j(b)=epsilon^j/(j+1)
+       -j epsilon^(j+1)/((j+1)(j+2)b), j>=1.                    (6)
+This follows by integrating j a^(j-1)(1-a/epsilon)(1-a/b).
+For t>=epsilon define
+ P4(t,b)=sum_(j=0)^4 binom(4,j)(-1)^j t^(4-j) M_j(b).
+This equals E[(t-A)^4]. At x0,x1, the exact integral is
+ I(x)=[P4(1,b)-2P4(1/2,b)-P4(1-x,b)]/6.                        (7)
+Derivation: R-P has the same distribution as S-1, where S is the sum of
+independent uniforms of widths1/2,1/2,1. Reflection and the simplex
+inclusion-exclusion formula give
+ E[(R-P-a)_+]=[(1-a)^4-2(1/2-a)^4]/6 for0<=a<=epsilon.
+For x in{x0,x1}, 0<=1-x-a<=1/10<1/2, so
+ E[(R-P-a-x)_+]=(1-x-a)^4/6.
+Subtract these two positive-part expectations and then average A to obtain(7).
+
+Exact rational substitution yields
+ I(x0)-I(x1)=553/136800000 >0.                                 (8)
+From(4)-(5), with x0=9/10,
+ z_x(x0)-z_x(x1) >=553/136800000-(10/9)^k/k!.
+At k=10 this equals the positive delta in the theorem. For k>=10 the error
+bound decreases, because its ratio at k+1 versus k is(10/9)/(k+1)<1.
+Thus every k>=10 has the same strictly positive certified payment drop.
+
+6. WHAT THIS ESTABLISHES
+At true capacity19/20 the reporting owner benefits by reporting9/10; all other
+original reports remain fixed, and both profiles have value1. Coverage and the
+U(5) budget argument of the effective-capacity rule survive, but truthfulness
+fails. Consequently preserving coalition values and bounding each effective
+capacity by T are insufficient to extend the mechanism beyond its proved class.
+The bare five-edge Wheatstone bridge DOES admit the rule at every profile, by
+the separately checked conditional formulas. Interaction with other flow routes
+is essential to this displayed obstruction; no assertion of minimality is made.
+
+Known monotone marginal-contribution payments still provide a factor at most4
+on this depth4 family. Hence this cannot be used as a growing lower bound on
+optimal subsidies or an impossibility result for all truthful mechanisms.
+No priority or field-breakthrough claim is made.
+
+DAG_BASELINE.txt supplies the generic coverage/budget argument. See
+SIMPLE_DAG.txt for a version with no parallel edges and growing vertices.

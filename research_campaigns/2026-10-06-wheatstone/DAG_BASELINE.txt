@@ -1,0 +1,49 @@
+WHAT STILL HOLDS ON EVERY FIXED FINITE DAG
+6 October2026. Elementary reductions; not claimed new.
+
+Assume every edge lies on an s-t path, and one fixed owner per edge. Define
+D_e(c) as the maximum feasible s-t flow through edge e, allowing any total.
+All reports are arbitrary nonnegative finite capacities. Because a DAG has no
+circulations, edge flow is at most total flow, so0<=D_e<=T. Also D_e<=c_e and
+D_e is nondecreasing in every report by inclusion of feasible flow sets.
+
+Every coalition flow is a grand-network feasible flow. Therefore simultaneously
+capping all edges at their D_e preserves the ENTIRE feasible flow set of every
+coalition: one inclusion uses the definition of D_e; the other uses D<=c.
+In particular all coalition values and the grand value T are preserved.
+
+For edge e=(a,b), a useful independent DAG formula is
+ D_e=min(c_e,maxflow(s,a),maxflow(b,t)),
+omitting a prefix/suffix bound if its terminals coincide. Any s->a path and
+b->t path are disjoint: a shared vertex would create a directed cycle through
+a->b. Scaled prefix/suffix maximum flows can thus be joined through e, proving
+attainability of the displayed minimum. The reverse upper bounds are immediate.
+This is the graph-based formula used by the exact verifier.
+
+Let C range over the K structural minimal cuts. For ANY selected cut C*, the
+vector D_e 1(e in C*) covers all coalitions, since C* meets every coalition's
+s-t path and maxflow/mincut bounds its value by D(C* intersect S). Selecting
+a minimum cut under random capacities D_e U_e and averaging therefore gives
+nonnegative coalition-covering deterministic payments.
+
+For T>0 let a_e=D_e/T<=1 and rho_C=sum_(e in C)a_e. Some cut has rho=1.
+The winning random cut W has random score<=1. For each fixed C, independence
+inside that cut and the uniform Laplace bound give
+ Pr(sum_(e in C)a_e U_e<=1)<=(e/rho_C)^rho_C.
+A union bound gives Pr(rho_W>s)<=min(1,K(e/s)^s) for s>=e. Tail integration
+therefore yields total payment<=U(K)T, with U defined in the prior TTSP theorem.
+This proof requires no independence between different cuts. T=0 gives D=0.
+
+These statements survive on the augmented overlapping-bridge graph at K=5.
+What FAILS there is own-report monotonicity of the averaged payment. Thus these
+coverage/budget statements alone are not a truthful mechanism theorem.
+
+AN ELIGIBLE BASELINE REMAINS AVAILABLE
+For any flow game with nonempty core, M_e(c)=T-v_c(E without e) is nonnegative
+and own-report monotone. A minimum-cut allocation gives a core vector a. Every
+core coordinate obeys a_e<=M_e, so the vector M covers every coalition.
+For a cycle-free maximum flow f, delete all path flows using e to see
+v(E without e)>=T-f_e; thus M_e<=f_e. If all s-t paths have length at most L,
+sum_e M_e<=sum_e f_e<=L*T. The displayed obstruction family has L=4, hence it
+still admits truthful payments with factor at most4 by this baseline.
+The failure of the tested rule is not divergence or impossibility for all rules.
