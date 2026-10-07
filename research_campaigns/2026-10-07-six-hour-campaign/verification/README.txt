@@ -53,7 +53,7 @@ temporary paths or numerical solvers; they are not needed for this replay.
 
 Evidence files:
  working_replay.json records the earlier 24-script working-tree run.
- clean_archive_replay.json will record the final 26-script archive run.
+ clean_archive_replay.json records the final 26-script archive run, all PASS.
  Individual *_result.json files retain their original scoped run metadata;
  consult the final replay hashes when checking later portability edits.
  review/portability_* records the AST-preserving conversion of 124 assertions
