@@ -1,0 +1,255 @@
+UNIFORM FINITE-SAMPLE IMPLEMENTATION OF THE RAW-CAPPED HYBRID
+7 October 2026. Conventional proof; independent cross-model audit completed without a correctness finding.
+
+VERDICT
+The proposed simultaneous-in-all-reports guarantee is valid for a FIXED finite
+nonnegative min-linear technology, fixed owner identities, and a sampling law
+chosen independently of reports. An explicit pseudodimension and sample bound
+are given below. The proof counts all hyperplane faces, including ties; it does
+not infer an infinite-profile statement from a finite computational experiment.
+
+1. EXACT STATEMENT AND QUANTIFIERS
+
+Fix n,d>=1, a nonempty ordered set V={w^1,...,w^K} contained in R_+^d,
+and F(c)=min_{v in V} w^v.c for c in R_+^d. The order on V is fixed before
+reports. Owner i reports b_i in R_+^d; total resources are c=sum_i b_i.
+Write b=(b_1,...,b_n), T(b)=F(c), and v_b(S)=F(sum_{i in S} b_i).
+This includes the finite-LP dual-vertex model already under study.
+
+Fix j>=2, independently of reports. One random observation s=(q,B) is drawn by
+  q ~ Uniform(0,1/j),
+  conditional on q, B_1,...,B_n independently satisfy Pr(B_h=0)=q.
+For each i, ignore B_i and set
+  c^-_i(s,b)=sum_{h!=i} B_h b_h,
+  c^+_i(s,b)=c^-_i(s,b)+b_i.
+Let w^-_i(s,b) be the FIRST vertex minimizing w.c^-_i. Define
+  a^-_i(s,b)=min(w^-_i.b_i,T(b)),
+  Delta_i(s,b)=F(c^+_i)-F(c^-_i),
+  X_i(s,b)=q a^-_i(s,b)+(1-q)Delta_i(s,b).
+Thus 0<=X_i(s,b)<=T(b). Its expectation M_i(b)=E_s X_i(s,b) is exactly the
+uniformly q-averaged capped hybrid, using a common sample for all coordinates.
+
+Assume the established exact-mechanism theorem:
+  M(S;b)>=v_b(S) for every S,b,
+  sum_i M_i(b)<=B_j(K) T(b),
+where
+  B_j(K)=j+[ln K+2 ln j+1]/ln[j^3/(j^2+j-1)].
+The new sampling result below is a corollary of those exact guarantees.
+
+Let 0<eta<=1 and 0<delta<1. Put
+  p=nd,
+  D=ceil(16 p log_2(8pK)),
+  epsilon=eta/n,
+  A=32e/epsilon=32en/eta.
+It suffices to take an integer sample size
+  N >= (128/epsilon^2) [ D ln(A ln A)+ln(8n/delta) ].                 (1)
+Draw s_1,...,s_N independently ONCE, before any reports. Publish/freeze them.
+Define the deterministic rule associated with that seed by
+  Mhat_i(b)=N^{-1} sum_l X_i(s_l,b)+(eta/n)T(b).                      (2)
+
+Then:
+  (a) EVERY seed gives a nonnegative rule, own-vector componentwise monotone
+      at EVERY profile. Thus the payment-only underreporting incentives hold
+      exactly and universally over the sampling randomness.
+  (b) With probability at least 1-delta over the ONE initial seed, simultaneously
+      for EVERY b in (R_+^d)^n and EVERY S subseteq[n],
+         Mhat(S;b)>=v_b(S),
+         sum_i Mhat_i(b)<=[B_j(K)+2eta]T(b).                        (3)
+      In fact the same event gives Mhat_i(b)>=M_i(b) for every i,b.
+
+This is polynomial sample complexity in n,d,log K,1/eta,log(1/delta). In order
+notation, with logarithms bounded below by positive constants, (1) is
+  O( n^2/eta^2 * [ nd log(8ndK) log(en/eta)+log(n/delta) ] ).
+No union bound over the 2^n coalitions or over report profiles is needed.
+
+2. INCENTIVES, RANGE, AND THE ZERO-VALUE CASE
+
+Fix an observation s and all reports except b_i. The off vector c^-_i and its
+fixed-priority minimizer w^-_i are entirely independent of b_i, including at
+b_i=0 and all tie cases. As b_i increases componentwise, w^-_i.b_i and T(b)
+both weakly increase, because every vertex is nonnegative. Their minimum
+a^-_i is therefore nondecreasing. Also F(c^+_i) is nondecreasing while
+F(c^-_i) is fixed, so Delta_i is nondecreasing. The coefficients q,1-q are
+nonnegative. The sample average and the added eta*T/n inherit monotonicity.
+
+The same monotonicity of F gives 0<=Delta_i<=T. By definition 0<=a^-_i<=T,
+so X_i is bounded by T. If T(b)=0, every masked/subcoalition value is also zero;
+both a^-_i and Delta_i are zero for every observation. Consequently X_i=M_i=
+Mhat_i=0 exactly at all such profiles; no division by zero is used operationally.
+
+For analysis define
+  h_{b,i}(s)=X_i(s,b)/T(b) if T(b)>0, and h_{b,i}(s)=0 otherwise.
+Thus h_{b,i} takes values in [0,1]. Let H_i={h_{b,i}:b in R_+^{nd}}.
+The normalization is only a proof device; the implemented payment is (2).
+
+3. A TIE-SAFE SUBGRAPH GROWTH BOUND
+
+Fix coordinate i, m observations s_l=(q_l,B_l), and arbitrary real subgraph
+thresholds u_1,...,u_m. Regard the p=nd real report coordinates as parameters.
+All the following are homogeneous linear forms in those parameters:
+  C_v(b)=w^v.sum_h b_h,
+  L^-_{l,v}(b)=w^v.sum_{h!=i} B_{l,h} b_h,
+  L^+_{l,v}(b)=L^-_{l,v}(b)+w^v.b_i,
+  A_{i,v}(b)=w^v.b_i.
+
+Make a first arrangement consisting of:
+  - comparisons C_v-C_t for all v<t;
+  - comparisons L^-_{l,v}-L^-_{l,t} for all l and v<t;
+  - comparisons L^+_{l,v}-L^+_{l,t} for all l and v<t;
+  - cap comparisons A_{i,v}-C_t for all ordered pairs v,t.
+The number H0 of hyperplanes is at most
+  H0=(2m+1) binom(K,2)+K^2 <= 3mK^2.                              (4)
+Identically zero forms may simply be omitted.
+
+Count ALL sign faces, not just full-dimensional open cells. The number of
+nonempty ternary sign patterns of H real hyperplanes in R^p is at most
+  F(H,p)=sum_{k=0}^p 2^k binom(H,k) <= (1+2H)^p.                   (5)
+Here binom(H,k)=0 for k>H. One elementary proof of the first bound uses
+F(H,p)<=F(H-1,p)+2F(H-1,p-1), with F(0,p)=F(H,0)=1: inserting a hyperplane
+replaces an intersected relative-open face by at most three pieces. Degeneracy
+can only reduce the count. The second inequality follows from binom(H,k)<=H^k
+and comparison with the binomial expansion of (1+2H)^p. Restricting the
+parameters to the nonnegative orthant cannot create new sign patterns.
+
+On each first-arrangement face the fixed-priority minimizers for T, off, and
+on are fixed, and every cap branch is fixed. Equality signs specify ties
+exactly; the prescribed first-minimizer order resolves them. Therefore, on
+that face, each X_i(s_l,b) is a fixed homogeneous linear form U_l(b), and
+T(b) is a fixed homogeneous linear form C_t(b).
+
+Restrict momentarily to T(b)>0. Then
+  h_{b,i}(s_l)>u_l  iff  U_l(b)-u_l C_t(b)>0.
+These are m more linear threshold tests within that face. Their label patterns
+are bounded by F(m,p), again including equality faces. Multiplying the two
+arrangement bounds and adding the single label pattern supplied by T=0 yields
+the uniform subgraph-growth bound
+  Pi_i(m) <= 1+F(H0,p)F(m,p)
+          <= 1+[(1+6mK^2)(1+2m)]^p
+          <= 1+(21m^2K^2)^p
+          <= 2(21m^2K^2)^p,     m>=1.                            (6)
+The thresholds may differ at every observation, so this is a pseudodimension
+argument, not merely a bound for one common threshold.
+
+If m points were pseudo-shattered, (6) would imply
+  m <= 1+p log_2 21+2p log_2 K+2p log_2 m.
+Put r=m/p and L=log_2(8pK)>=3. This inequality implies
+  r < 2L+2log_2 r,
+because 1/p+log_2 21-6<0. If r>=16L, then r>=48,
+2L<=r/8, and 2log_2 r<=r/2, which contradicts the preceding inequality.
+Thus Pdim(H_i)<16p log_2(8pK), and D in (1) is a valid upper bound.
+Constants are deliberately conservative; no optimal dimension claim is made.
+
+4. UNIFORM CONCENTRATION AND SOURCE CHECK
+
+Free primary source: David Haussler, "Decision Theoretic Generalizations of
+the PAC Model for Neural Net and Other Learning Applications," January 1992
+revision, subsequently Information and Computation 100 (1992), 78-150.
+https://www.cis.upenn.edu/~mkearns/teaching/COLT/haussler.pdf
+Relevant locations in that free manuscript: Corollary 1, PDF page 26;
+Theorem 6, PDF page 31; Theorem 12 and Definition 11, PDF pages 54-55.
+
+For permissible [0,1]-valued classes, Corollary 1 bounds uniform empirical-mean
+deviation by 4 times the expected L1 covering number at epsilon/16, multiplied
+by exp(-N epsilon^2/128). Theorems 6 and 12 bound that covering number by
+2[(32e/epsilon)ln(32e/epsilon)]^D when pseudodimension is at most D.
+These are the only imported probability/covering results.
+
+The source's measurability condition holds here. Joint evaluation (s,b)->h is
+Borel: fixed-priority selection has finitely many polynomial inequality/equality
+branches; on T>0 the formula is a ratio of continuous linear/polynomial forms,
+and on T=0 it is explicitly zero. Moreover h is invariant under positive
+scaling of the entire report vector. Hence the same class can be indexed by
+the compact nonnegative simplex sum_{i,h}b_{ih}=1 together with the zero vector.
+This meets the permissible-class definition directly. In particular, ties
+and unbounded original report magnitudes create no measurability gap.
+
+Applying those results separately to H_i gives
+  Pr{sup_b |N^{-1}sum_l h_{b,i}(s_l)-E h_{b,i}|>epsilon}
+     <=8[A ln A]^D exp(-N epsilon^2/128).
+A union bound over the n coordinates gives a failure probability at most
+  8n[A ln A]^D exp(-N epsilon^2/128),
+which is at most delta under (1). Coordinates need not be independent;
+the observations s_l must be independent across l.
+
+On this ONE event, for every b with T>0 and every i,
+  |N^{-1}sum_l X_i(s_l,b)-M_i(b)|<=eta*T(b)/n.                     (7)
+At T=0 the same inequality holds exactly. Adding eta*T/n makes each coordinate
+at least M_i and at most M_i+2eta*T/n. Summing over a coalition proves coverage;
+summing over all owners and using the exact-mechanism budget proves (3).
+
+5. WHAT THIS DOES AND DOES NOT ESTABLISH
+
+The random seed can be public and reused for arbitrarily many, even adaptively
+chosen, report profiles: the high-probability event already quantifies over all
+profiles. Incentives hold for every seed, whereas simultaneous coverage/budget
+hold on the event of probability at least 1-delta. A positive-probability good
+seed exists, but this proof gives no deterministic certificate that a particular
+observed seed is good and no derandomization procedure. Testing finitely many
+profiles is not a certificate of the uniform property.
+
+The technology V, its ordering, n,d,j,eta, and the sampling law must be fixed
+independently of reports. The theorem is uniform in reports for that technology;
+it does not assert one seed works for every different technology. A certified
+upper bound on K can replace K in the dimension/sample/budget bounds. Computing
+K or optimizing j is a separate problem; j may simply be supplied ex ante.
+
+Polynomial sample count does not by itself imply polynomial total running time
+in log K, or efficient access to V. Each observation requires off/on values
+and a canonical off minimizer for each owner; oracle implementation and exact
+tie resolution are separate computational obligations. The statement above uses
+real-arithmetic sampling. Section6 below supplies an exact finite-law implementation using the
+posterior-mean sampler, rather than an unverified discretization of q.
+
+The adjustment in (2) may pay eta*T/n to an owner reporting a zero bundle.
+If zero payment to that owner is desired, replace the adjustment by
+(eta*T/n) 1{b_i!=0}: X_i=M_i=0 exactly when b_i=0, and the modified adjustment
+is still own-vector monotone, so the same conclusions follow.
+
+No claim of historical priority, asymptotic lower-bound novelty, or machine-
+checked proof is made. This is a conventional proof of the stated sampling
+corollary using a source-verified uniform-convergence theorem.
+
+6. EXACT RATIONAL ONE-SEED IMPLEMENTATION
+
+Use the discrete law in SAMPLING_COROLLARY.txt Section4. For a subset S of
+size k, its individual probability is pi_k=j integral_0^(1/j) q^(n-k)(1-q)^k dq.
+Conditional on that full mask, replace q by
+ theta_k = integral q^(n-k+1)(1-q)^k dq / integral q^(n-k)(1-q)^k dq,
+with both integrals over(0,1/j). Define
+ Xtilde_i(S,b)=theta_k a_i^-(S,b)+(1-theta_k)Delta_i(S,b).
+The full-mask conditional expectation identity gives E Xtilde_i=M_i exactly;
+it does not rely on treating theta_k as independent of the mask. Each fixed
+mask still has nonnegative report-independent weights and own-off selection,
+so every realized rule is own-vector monotone and 0<=Xtilde_i<=T.
+
+The entire Section3 growth bound applies verbatim to observations S_l, with
+q_l replaced by the fixed scalar theta_|S_l|. No new report-dependent surface
+is introduced. Thus the same sample size(1) gives(3) simultaneously over all
+real report profiles for this finite sample space. The canonical mask law is
+drawn once independently of reports and reused. A positive-probability good
+finite seed exists; no efficient deterministic good-seed certification follows.
+
+The exact law has a common integer denominator H=(n+2)!j^(n+2). Cardinality
+weights and posterior coefficients use O(n(log j+log(n+2))) bits. Exact
+fair-bit sampling has expected polynomial cost using rejection sampling;
+the rejection count is not bounded in the worst case, but terminates almost
+surely. Rational reports and technology give rational exact payments.
+
+With a canonical value/minimizer oracle, evaluation uses at most
+ 1+N(n+1)
+queries. For a rational production LP with d resource-price coordinates,
+lexicographic optimal-face minimization uses at most d+1 ordinary exact LP
+calls per canonical query, hence at most1+N(n+1)(d+1) LP calls overall.
+This is polynomial in the displayed input/sample parameters, assuming j and
+a certified K upper bound are supplied independently of reports. A computable
+bound K<=binom(m+d,d) is available for m activities; using it tunes the result
+to that upper bound, not necessarily to the smaller unknown actual K.
+
+Polynomial arithmetic evaluation is distinct from verifying that a randomly
+chosen seed is good. No deterministic polynomial construction, practical
+sample-size claim, or machine-checked uniform theorem is asserted.
+
+AUDIT RECORD
+See review/sampling_review.md and review/sampling_adjudication.txt. The root
+independently checked the cited primary-source constants and the finite-law
+combination. Finite tests are in verification/sampling_result.json.

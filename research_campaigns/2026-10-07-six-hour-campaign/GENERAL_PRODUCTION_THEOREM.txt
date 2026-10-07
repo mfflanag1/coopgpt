@@ -1,0 +1,458 @@
+SHARP BUDGETS FOR FINITE NONNEGATIVE MIN-LINEAR PRODUCTION
+7 October 2026. Standalone conventional proof with independent model review and exact checks.
+No novelty or efficient-computation claim is made.
+
+CORE THEOREM: OWNERS MAY REPORT ARBITRARY RESOURCE BUNDLES
+Let I be a finite nonempty set of fixed owners and E a finite nonempty resource
+set. Fix nonnegative finite vectors V={w^1,...,w^K} in R_+^E, K>=1. Define
+
+ f(x)=min_(w in V) w.x  for every finite x>=0.
+
+Each owner i reports an arbitrary finite vector b_i in R_+^E. Resource types
+may be shared across owners. Supplies are pooled additively. At the full
+profile b=(b_i) define
+
+ T(b)=f(sum_i b_i),      v_b(S)=f(sum_(i in S) b_i).
+
+Owners may simultaneously underreport any subset of their own coordinates:
+the comparison is b'_i<=b_i componentwise, with other owners' reports fixed.
+The owner set, resource set, permitted report coordinates, and V remain fixed.
+For every integer j>=2 there is a nonnegative deterministic payment rule M
+covering every coalition, satisfying
+
+ M_i(b'_i,b_-i)<=M_i(b_i,b_-i) whenever 0<=b'_i<=b_i,
+
+and with the same finite bound (1) and report-independent choice (2) below.
+Thus the sharp leading upper coefficient remains one and depends only on K,
+uniformly over owner counts, resource counts, resource bundles, and profiles.
+It covers nonnegative production LPs with positive activity profits, provided
+every activity consumes a positive amount of at least one resource.
+It gives an individual incentive guarantee for each owner's entire vector;
+it does not assert coordinated group-strategyproofness across owners.
+
+The scalar resource-owner theorem proved in detail afterward is the special
+case b_i=c_i times the ith resource unit vector. The following complete
+owner-bundle proof uses no effective capacities or special ownership pattern.
+
+0. PROOF OF THE OWNER-BUNDLE THEOREM
+Fix a report-independent priority on V. For independent OWNER bits with
+Pr(B_i=0)=q, select the first minimizer of the RAW score
+
+ W(b,B)=first argmin_(w in V) sum_i B_i (w.b_i).
+
+For every fixed form w put a_i(w,b)=min{w.b_i,T(b)}. Define
+
+ z_i^q=E[a_i(W,b)],
+ p_i^q=E[a_i(W,b)|B_i=0],
+ m_i^q=E_(B_-i)[f(b_i+sum_(h!=i)B_h b_h)-f(sum_(h!=i)B_h b_h)],
+ r_i^q=q p_i^q+(1-q)m_i^q,
+ M_i=j integral_0^(1/j) r_i^q dq.                         (V1)
+
+Selection is uncapped; only a_i is capped. Every expectation here is finite.
+
+Incentives: with B_i=0 every candidate raw score omits b_i, so the entire
+minimizing family and the chosen W are independent of the whole report b_i.
+For fixed W, both W.b_i and T(b) are componentwise nondecreasing because all
+forms are nonnegative. Hence p_i^q is componentwise nondecreasing. In m_i^q,
+the subtracted off value is independent of b_i and the on value is monotone.
+The nonnegative report-independent mixtures r_i^q and M_i inherit this.
+
+Coverage: for any w and S, if some w.b_i>=T for i in S, then a_i=T>=v_b(S).
+Otherwise every S contribution is uncapped and
+sum_(i in S)a_i=w.(sum_(i in S)b_i)>=v_b(S).
+Thus every a(w,b) covers every coalition, and so does z^q. For each fixed
+B_-i, let w1 be the raw minimizer with B_i=1. Its on value is its selected
+linear score, while the off value is at most the same form's off score.
+Subtracting gives
+
+ f(b_i+sum_(h!=i)B_h b_h)-f(sum_(h!=i)B_h b_h)>=w1.b_i.
+
+Moreover w1.b_i<=the selected on value<=T, so this equals a_i(w1,b).
+Averaging proves r_i^q>=z_i^q. Therefore r^q and M cover every coalition.
+
+Budget: fix b. Write g(q)=E f(sum_i B_i b_i), Z(q)=sum_i z_i^q and R(q)=sum_i r_i^q.
+All are finite polynomials in q, and g(0)=T. Every open raw owner contribution
+is a nonnegative summand of the selected value, which is at most T. Hence
+
+ sum_i B_i a_i(W,b)=f(sum_i B_i b_i),
+ q sum_i p_i^q=Z(q)-g(q),     sum_i m_i^q=-g'(q).
+
+These give R=Z-g-(1-q)g' and, for b0 in (0,1),
+
+ integral_0^b0 R(q)dq
+   =integral_0^b0 Z(q)dq+T-(1-b0)g(b0)-2integral_0^b0 g(q)dq
+   <=integral_0^b0 Z(q)dq+T.                              (V2)
+
+For T>0 and each FIXED form define d_i(w)=a_i(w,b)/T in [0,1] and
+rho_w=sum_i d_i(w). The selected form has sum_i B_i d_i(W)<=1.
+For lambda>0, alpha=-log(q+(1-q)e^(-lambda)), convexity of
+a -> log(q+(1-q)e^(-lambda a)) on [0,1] gives
+
+ Pr(sum_i d_i(w)B_i<=1)<=exp(lambda-alpha rho_w).
+
+A union over K forms and tail integration yield
+
+ Z(q)/T<= [log K+lambda+1]/alpha.                         (V3)
+
+Taking b0=1/j and lambda=2log j gives uniformly for 0<q<=b0
+alpha>=log[j^3/(j^2+j-1)]. Combine (V2) and (V3) to obtain (1).
+The choice (2) and the asymptotic calculation in Section 7 are unchanged.
+When T=0, every capped a_i and every masked production value is zero, so all
+payments vanish. If K=1, no owner contribution is capped, every payment is
+w.b_i, and their total is T.
+
+The mixture has an exact finite representation: for each subset S of the
+other owners, its contribution is q^(n-1-|S|)(1-q)^|S| times
+[q a_i(W(b,(1_S,0)),b)+(1-q)(v_b(S union {i})-v_b(S))].
+This is a polynomial of degree at most n=|I|. Integration to 1/j is exact
+with rational coefficients. For rational technologies and bundles the payment
+is rational. No complexity bound or numerical integration is presumed.
+This completes the owner-bundle proof.
+
+SCALAR COROLLARY AND DETAILED ESTIMATES
+Let E be a finite nonempty owner set. Fix a finite nonempty indexed family
+V={w^1,...,w^K} of finite nonnegative vectors in R_+^E. For every finite
+nonnegative report vector c define
+
+ F(c)=min_(w in V) c.w,       v_c(S)=F(c*1_S),       T=F(c).
+
+For every fixed integer j>=2 there is a nonnegative deterministic payment
+rule, defined on ALL such c, which is nondecreasing in each owner's own report,
+covers every coalition, and has total payment at most
+
+ T [ j + (log K + 2 log j + 1)/alpha_j ],                    (1)
+ alpha_j=log(j^3/(j^2+j-1))>0.
+
+With L=log K and the report-independent choice
+
+ j(K)=max{2,ceil[L/(log(2+L))^2]},                          (2)
+
+the bound is (1+o(1)) T log K/log log K as K tends to infinity.
+The error depends only on K, uniformly over vectors, reports, and owner counts.
+Every payment is zero when T=0. If K=1 the constructed rule actually has
+total payment exactly T, although the displayed universal finite bound is looser.
+
+The vectors need not be dual vertices or integral. K counts the chosen fixed
+family; one may discard redundant forms ONCE to tighten this complexity.
+One must not redefine K or the family from the current report profile.
+F has no additive offsets: F(0)=0 and positive homogeneity follow from its
+definition. The theorem does not silently cover fixed production constraints,
+free-production offsets, or nonlinear production values outside this model.
+
+1. RULE: RAW SELECTION, CAPPED PAYMENT CONTRIBUTIONS
+Fix a total priority on V independent of reports and all random choices.
+For q in (0,1), independently draw B_e with Pr(B_e=0)=q, Pr(B_e=1)=1-q.
+Select the first RAW-objective minimizer
+
+ w*(c,B)=first argmin_(w in V) sum_e c_e B_e w_e.           (3)
+
+For each form define its payment contribution
+
+ a_e(w,c)=min{c_e w_e,T(c)}.                               (4)
+
+Only the contributions in (4) are capped. The selection in (3) is ALWAYS
+by the uncapped raw objective. Selecting by the capped objective is a
+different rule and is not justified by this proof. No effective-capacity
+normalization, path-flow interpretation, or strict-support lemma is used.
+
+Define deterministic payments by finite expectations:
+
+ z_e^q(c)=E_q[a_e(w*(c,B),c)],
+ p_e^q(c)=E_q[a_e(w*(c,B),c) | B_e=0],                    (5)
+ m_e^q(c)=E_(B_-e)[F(c*(B_-e,1))-F(c*(B_-e,0))],          (6)
+ r_e^q(c)=q p_e^q(c)+(1-q)m_e^q(c).                        (7)
+
+Here (B_-e,b_e) denotes the full mask with the specified own bit. The raw
+own report c_e is retained when b_e=1 and replaced by zero when b_e=0.
+Finally fix an integer j>=2 from the technology alone and put
+
+ M_e(c)=j integral_0^(1/j) r_e^q(c)dq.                     (8)
+
+Thus the final payment is a deterministic expectation over a common q drawn
+uniformly from (0,1/j), then over the masks used in the displayed formulas.
+No realized-random coverage guarantee is claimed or needed.
+
+2. NONNEGATIVITY AND ALL-PROFILE OWN-REPORT MONOTONICITY
+Every vector w is nonnegative, so F is nonnegative and coordinatewise
+nondecreasing. The contributions a and the endpoint differences m are
+therefore nonnegative.
+
+Fix e, c_-e, and a mask of the other owners. With B_e=0, EVERY raw score in
+(3) is independent of c_e. Hence the entire minimizing family and the
+fixed-priority selected w* are independent of c_e, including at c_e=0.
+For this fixed selected vector, both c_e w*_e and T(c) are nondecreasing
+in c_e. Their minimum is nondecreasing. Taking conditional expectation proves
+that p_e^q is own-report nondecreasing on [0,infinity).
+
+In (6), the off value is independent of c_e and the on value is nondecreasing
+in c_e. Thus m_e^q is own-monotone. Equations (7) and (8) preserve the property
+because all mixture weights are nonnegative and report-independent.
+Under binding underreports and payment-only utility, this is the required
+incentive guarantee. The owner-bundle theorem above establishes the corresponding
+simultaneous componentwise guarantee for each owner's multiple coordinates;
+neither statement asserts group-strategyproofness across owners.
+
+3. CAPPED FORMS STILL COVER EVERY COALITION
+Fix c, w in V, and S subset E. If some e in S has c_e w_e>=T, then its
+capped contribution is T, and by monotonicity
+
+ sum_(e in S) a_e(w,c) >= T >= F(c*1_S).
+
+If no such e exists, none of S's contributions are capped and
+
+ sum_(e in S) a_e(w,c)=sum_(e in S)c_e w_e >= F(c*1_S),
+
+by the definition of F as a minimum of the forms. Thus EVERY capped vector
+a(w,c) covers every coalition. In particular z^q(S)>=v_c(S).
+This argument also covers T=0 and S empty, since F(0)=0.
+
+4. ENDPOINT MARGINALS DOMINATE THE ON CONTRIBUTIONS
+Fix c and B_-e, and let w1 be the vector selected when B_e=1. Its selected
+raw objective is
+
+ F(c*(B_-e,1))=sum_(h!=e)c_h B_h w1_h+c_e w1_e.
+
+The same vector is an admissible competitor for the off value, so
+
+ F(c*(B_-e,0))<=sum_(h!=e)c_h B_h w1_h.
+
+Subtracting gives the exact endpoint inequality
+
+ F(c*(B_-e,1))-F(c*(B_-e,0))>=c_e w1_e.                   (9)
+
+In particular the right side is at least a_e(w1,c). In fact they are equal:
+the selected masked value is at most F(c)=T by monotonicity, and all of its
+summands are nonnegative, so c_e w1_e<=T whenever B_e=1.
+
+Conditioning (5) on the own bit and averaging (9) therefore yields
+
+ r_e^q(c)>=q E[a_e(w*,c)|B_e=0]
+             +(1-q)E[a_e(w*,c)|B_e=1]
+           =z_e^q(c).                                    (10)
+
+By Section 3, r^q and then M cover every coalition. No derivative, generic
+position, or special tie-breaking assumption is needed for (9).
+
+5. EXACT AGGREGATE IDENTITY AND INTEGRATION
+Fix c and define
+
+ g(q)=E_q F(c*B),       Z(q)=sum_e z_e^q(c),
+ R(q)=sum_e r_e^q(c).
+
+All of these are finite polynomials in q. The conditional p expectation is
+a finite sum over the other bits, so it also extends polynomially to q=0,1.
+In particular g(0)=T, g(1)=0, and g(q)>=0.
+
+For every selected mask, each OPEN raw contribution c_e B_e w*_e is between
+zero and the selected total F(c*B)<=T. Capping leaves every open term
+unchanged. Therefore
+
+ sum_e B_e a_e(w*(c,B),c)=F(c*B).                          (11)
+
+Taking expectation of the complementary, closed terms gives
+
+ q sum_e p_e^q(c)=Z(q)-g(q).                              (12)
+
+Differentiating the finite multiaffine mask expectation in the common zero
+probability q gives one conditional off-minus-on value for each coordinate:
+
+ g'(q)=-sum_e m_e^q(c).                                   (13)
+
+This is a finite polynomial identity, not an interchange of an infinite
+series or a limit with an expectation. Consequently
+
+ R(q)=Z(q)-g(q)-(1-q)g'(q).                               (14)
+
+For any b in (0,1), direct integration by parts gives
+
+ integral_0^b R(q)dq
+   = integral_0^b Z(q)dq+T-(1-b)g(b)-2 integral_0^b g(q)dq
+   <= integral_0^b Z(q)dq+T.                             (15)
+
+Both the minus sign and the factor 2 in this equality are essential.
+
+6. CHERNOFF BOUND FOR THE CAPPED CONTRIBUTIONS
+Suppose T>0. For each fixed w let
+
+ d_e(w)=a_e(w,c)/T in [0,1],        rho_w=sum_e d_e(w).
+
+Although w* was selected using RAW scores, equation (11) shows that its
+CAPPED normalized masked score satisfies
+
+ sum_e d_e(w*)B_e=F(c*B)/T<=1.                            (16)
+
+For lambda>0 define alpha(q,lambda)=-log[q+(1-q)e^(-lambda)]>0.
+Convexity of a -> log[q+(1-q)e^(-lambda a)] on [0,1] bounds it above
+by its endpoint chord -alpha(q,lambda)*a. Hence for every fixed vector w,
+independence and Markov's inequality imply
+
+ Pr_q(sum_e d_e(w)B_e<=1)
+   <=e^lambda product_e [q+(1-q)e^(-lambda d_e(w))]
+   <=exp(lambda-alpha(q,lambda)rho_w).                   (17)
+
+For x>=0, if rho_(w*)>=x, some form with rho_w>=x satisfies the event in
+(17). A union over at most K forms and tail integration give
+
+ Pr_q(rho_(w*)>=x)<=min{1,K exp(lambda-alpha(q,lambda)x)},
+ Z(q)/T=E_q rho_(w*)<=(log K+lambda+1)/alpha(q,lambda).    (18)
+
+The proof requires only that the selected form satisfies (16); it does NOT
+require selection to minimize the capped score. The capped coefficients
+are fixed after c is fixed, so independence of the bits in (17) is valid.
+
+Set b=1/j and lambda=2log j. For 0<q<=b,
+
+ q+(1-q)e^(-lambda)<=b+(1-b)b^2=(j^2+j-1)/j^3,
+
+so alpha(q,lambda)>=alpha_j and (18) holds uniformly with denominator alpha_j.
+Combining this with (8) and (15) proves the finite bound (1).
+
+7. EDGE CASES, PARAMETER CHOICE, AND FINITE REPRESENTATION
+If T=0, every a_e is zero. Every masked profile is at most c, so all masked
+production values and all endpoint differences are zero. Thus all payments
+are exactly zero, without dividing by T.
+
+If K=1 with form w, F(c)=c.w. Every c_e w_e<=T, so no contribution is capped.
+Each p_e^q and m_e^q equals c_e w_e, as do r_e^q and M_e. Total payment is T.
+
+The choice (2) is defined for every K>=1 and never uses log log K at small K.
+For L=log K tending to infinity,
+
+ j~L/(log L)^2,
+ log j=log L-2log log L+o(1),
+ alpha_j=log j-log(1+1/j-1/j^2)~log L.
+
+Thus j=o(L/log L), while the fraction in (1) is (1+o(1))L/log L. This proves
+the stated asymptotic bound with leading coefficient one.
+
+For a subset S of E\{e}, put
+
+ u_e(S)=a_e(w*(c,(1_S,0)),c),
+ delta_e(S)=F(c*(1_S,1))-F(c*(1_S,0)).
+
+Then r_e^q is the finite polynomial
+
+ sum_(S subset E\{e}) q^(n-1-|S|)(1-q)^|S|
+                  [q u_e(S)+(1-q)delta_e(S)],             (19)
+
+where n=|E|. Its degree is at most n. With j integer, integration in (8)
+has exact rational coefficients; rational vectors and reports give rational
+payments. For integer A,B>=0 and b=1/j,
+
+ integral_0^b q^A(1-q)^B dq
+   =sum_(h=0)^B (-1)^h binom(B,h)b^(A+h+1)/(A+h+1).
+
+This establishes an exact finite representation, not computational efficiency.
+The number of forms and masks may be exponential.
+
+8. GENERAL NONNEGATIVE RESOURCE TECHNOLOGIES AND POSITIVE PROFITS
+Let A be a fixed finite nonnegative n-by-m matrix, with every activity column
+nonzero, and let pi_j>0 be fixed finite activity profits. At aggregate resource
+capacity c define
+
+ F(c)=max {pi.x : x>=0, A x<=c}.
+
+For each activity j choose a resource e with A_ej>0; feasibility bounds
+x_j<=c_e/A_ej. The feasible packing polytope is thus compact for every finite
+c, so production is finite and attained. Its dual is
+
+ Q={w>=0 : A^T w>=pi}.
+
+Q is nonempty (a sufficiently large multiple of the all-ones vector works),
+pointed, and polyhedral. A bounded nonnegative linear objective attains an
+optimum at a vertex. By strong duality,
+
+ F(c)=min_(w vertex of Q) c.w.
+
+There are finitely many such vertices, all nonnegative. Let any finite set
+of fixed owners report resource bundles b_i>=0 and take c=sum_i b_i; coalition
+S controls exactly sum_(i in S)b_i. Apply the owner-bundle theorem with this
+fixed vertex family, or any fixed irredundant subfamily representing the same
+production function. Neither A's positive entries nor
+the profits need obey a common ratio bound. No bound on an uncapped product
+c_e w_e or D_e w_e is assumed. Zero resource rows are harmless. An empty
+activity set gives the identically zero production function.
+
+No owner, resource, or activity identities change when an owner changes its
+report. The theorem permits arbitrary real nonnegative coefficients, positive
+profits, shared resource types, and owners with multiple resource coordinates
+under componentwise binding underreports. It does not cover positive-profit
+zero-resource activities (which would be unbounded), fixed capacity-independent
+production restrictions that introduce dual offsets, or report comparisons
+that exchange one resource for another rather than decrease componentwise.
+
+For directed single-commodity flow, the dual vertices are the characteristic
+vectors of minimal structural edge cuts. In that special case K is the usual
+structural cut count. For general production or multicommodity packing these
+vertices are fractional resource prices, and K is NOT an ordinary graph-cut count.
+
+9. WHY CAPPING IS NECESSARY FOR THE UNMODIFIED HYBRID
+The following counterfamily diagnoses the earlier uncapped construction;
+it does not obstruct the new capped rule or all possible payment mechanisms.
+
+There are two fixed resource owners and two unit-profit activities with
+resource-use columns (1,1) and (M,0), where M>1. The dual constraints are
+
+ w1+w2>=1,   M w1>=1,   w>=0.
+
+There are exactly TWO dual vertices
+
+ a=(1,0),     b=(1/M,1-1/M).
+
+At capacities c=(M,1), production is T=2-1/M and effective usages are D=c.
+When B1=0 and B2=1, a is the UNIQUE minimizing form, so its uncapped
+resource-1 contribution is M. This event among the conditional off masks
+has probability 1-q. Therefore, for every fixed tie priority,
+
+ p1_uncapped^q >= (1-q)M,
+ r1_uncapped^q >= q(1-q)M.
+
+The uniform-q mixed rule on (0,b0) consequently pays at least
+
+ M (b0/2-b0^2/3).
+
+The earlier K=2 choice j=2 has b0=1/2, giving total at least M/6 and a
+payment/value ratio at least M/[6(2-1/M)], which diverges at fixed K=2 and
+fixed owner count 2. No row-rescaling of units removes this example's
+relative activity-intensity ratio M. The cap (4) replaces the problematic
+closed contribution M by T.
+
+This is strictly a mechanism obstruction. Indeed the same technology has
+
+ F(c1,c2)=c1/M+(1-1/M)min(c1,c2).
+
+The payments
+
+ y1=c1/M+(1-1/M)min(c1,c2)/2,
+ y2=(1-1/M)min(c1,c2)/2
+
+are own-monotone, cover its two singleton coalitions and the grand coalition,
+and total exactly F. Thus the example itself admits a truthful core rule.
+
+10. BENCHMARK AND AUDIT SCOPE
+The existing coefficient-one unrestricted serial-pool lower bound transfers
+to this class with exactly K=k: k serial bundles of parallel owned edges have
+one minimal structural cut per bundle and represent the same all-profile
+coalition game. The imported project result is in
+paper5/truthful_cooperation/manuscript.tex (relative to the repository root),
+Lemma lem:weighted-hierarchy and Theorem thm:order. Combining that lower with
+the upper proved here yields a worst-case leading coefficient one for finite
+nonnegative min-linear production when complexity is K and arbitrary finite
+ownership sizes are allowed. The lower theorem is not re-proved in this file.
+
+SIMPLE_DAG_SHARP_LOWER.txt separately proves a matching simple-DAG lower
+using shared fans and explicitly accounts for all auxiliary strategic owners.
+Naive parallel-edge subdivision would be invalid: it changes the owner set
+and can make truthful efficient allocation possible.
+There is no asserted exact finite-K minimax formula or efficient evaluation.
+
+The new proof uses raw selection throughout, so none of its incentives,
+coverage, or budget steps depend on effective-usage preservation. It extends
+the previous hybrid integration argument by capping each form's individual
+payment contributions at the same grand-coalition value T(c). Independent
+Fable proof audit and coordinator checks found no gap in this upper theorem;
+see review/general_production_{review.md,adjudication.txt}. The dedicated
+exact verifier passed under python3 -B -O, including overlapping owner bundles,
+heterogeneous coefficients/profits, polynomial identities and negative controls;
+see verification/general_production_result.json. These are conventional proof
+and bounded computational evidence, not formal verification or novelty confirmation.

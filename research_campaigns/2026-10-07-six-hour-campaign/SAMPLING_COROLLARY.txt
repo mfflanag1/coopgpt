@@ -1,0 +1,266 @@
+FINITE SAMPLING OF THE RAW-CAPPED OWNER-BUNDLE MECHANISM
+7 October 2026. Conventional algorithmic corollary with independent model audit.
+
+SCOPE AND RESULT
+This is a finite-sample evaluator for the exact mechanism in
+GENERAL_PRODUCTION_THEOREM.txt. It preserves own-report incentives for EVERY
+realization of its report-independent randomness. At ANY ONE FIXED profile,
+it simultaneously covers every coalition with probability at least 1-delta.
+It does not establish that one sampled rule covers all real report profiles
+simultaneously. It is not a replacement for the exact deterministic all-profile
+coverage theorem.
+
+Let n>=1 fixed owners report resource bundles b_i>=0 in d>=1 resource types.
+Fix a finite family V of K>=1 nonnegative forms and a report-independent
+priority. Write
+
+ f(x)=min_(w in V) w.x,
+ v_b(S)=f(sum_(i in S)b_i),       T(b)=v_b(I).
+
+All supplies, ownership permissions, and technology remain fixed under reports.
+Choose an integer j>=2 and accuracy parameters eta>0, 0<delta<1 independently
+of the reports. Let
+
+ C_j(K)=j+(log K+2log j+1)/log[j^3/(j^2+j-1)].
+
+The exact mechanism M^j has nonnegative, componentwise own-monotone payments,
+covers every coalition at every profile, and sums to at most C_j(K)T.
+For
+
+ N >= n^2/(2eta^2) * log(2n/delta),                         (1)
+
+the sampled rule below has all of these guarantees:
+
+ (a) Every fixed random realization is componentwise own-report monotone.
+ (b) For any fixed profile b, with probability >=1-delta it simultaneously
+     covers all 2^n coalitions and pays at most [C_j(K)+2eta]T(b).
+ (c) Its expected total is at most [C_j(K)+eta]T(b).
+ (d) It uses at most 1+N(n+1) canonical value-and-minimizer oracle queries,
+     counting the grand value as at most one such query.
+
+There is an exact rational sampler with the same expectations, range bounds,
+and incentive properties. It needs no real-valued q sample or numerical
+quadrature. Oracle and parameter-selection qualifications appear below.
+
+1. ONE CONTINUOUS MIXTURE SAMPLE
+First draw q uniformly from (0,1/j), then independently mask OWNERS with
+Pr(B_i=0|q)=q. Put S={i:B_i=1}. For each i let
+
+ S_i^-=S\{i},       S_i^+=S union {i},
+ W_i^-=first argmin_(w in V) w.(sum_(h in S_i^-)b_h),
+ A_i(S,b)=min{W_i^-.b_i,T(b)},
+ Delta_i(S,b)=v_b(S_i^+)-v_b(S_i^-),
+ X_i(q,S,b)=q A_i(S,b)+(1-q)Delta_i(S,b).                  (2)
+
+The selection of W_i^- uses the RAW linear objective. Its payment contribution
+is capped afterward. Since S_i^- excludes i, W_i^- is independent of i's
+entire own bundle when the other reports and sampled S are fixed.
+Thus A_i is componentwise own-monotone: both W_i^-.b_i and T are monotone.
+Delta_i is also own-monotone: its off term omits i, while its on term is
+monotone in b_i. Hence each fixed-sample X_i is own-monotone.
+
+Both A_i and Delta_i lie in [0,T]. For Delta, both endpoint coalition values
+are nonnegative, the on value is at most T, and it is at least the off value.
+Consequently
+
+ 0<=X_i(q,S,b)<=T(b).                                     (3)
+
+Conditional on q, the distribution of B_-i is the independent q-mask used in
+the exact mechanism. The own sampled bit has no effect on A_i or Delta_i.
+Therefore E[X_i|q]=r_i^q(b) and
+
+ E[X_i]=j integral_0^(1/j) r_i^q(b)dq=M_i^j(b).            (4)
+
+2. SAMPLED RULE AND UNIVERSAL OWN-REPORT INCENTIVES
+Draw N independent samples of (q,S) by the preceding procedure, all using
+report-independent parameters. Define
+
+ Mhat_i(b)=(1/N)sum_(ell=1)^N X_i(q_ell,S_ell,b)+eta*T(b)/n. (5)
+
+Every X_i is own-monotone for each fixed sample, and so is the common-value
+cushion eta*T/n. Thus (5) is componentwise own-monotone for EVERY fixed sample
+sequence, simultaneously for all report profiles. This is universal individual
+truthfulness under componentwise binding underreports and payment-only utility.
+It does not mean group-strategyproofness across owners.
+
+The random sequence must be independent of reports and is held fixed when
+comparing counterfactual reports. Equivalently, the randomized mechanism is
+a distribution over deterministic own-monotone rules. This also implies own-
+report monotonicity of expected payment if fresh independent seeds are used.
+The theorem does not permit profile-dependent choices of j, N, eta, or a
+different active-owner count after removing zero reporters.
+
+3. FIXED-PROFILE HIGH-PROBABILITY COVERAGE AND BUDGET
+Fix a profile b independently of the samples. If T=0, every sample and cushion
+is zero and all assertions hold surely. Otherwise divide (3) by this fixed
+positive T. Hoeffding's inequality, applied across independent samples for
+each owner, gives
+
+ Pr(|(1/N)sum_ell X_i - M_i^j|>eta*T/n)
+   <=2 exp(-2N eta^2/n^2).
+
+The n coordinates within one sample may be dependent; no independence across
+owners is required. A union bound over owners and (1) give an event of
+probability at least 1-delta on which ALL coordinate errors are at most eta*T/n.
+On that event,
+
+ Mhat_i>=M_i^j for every i,
+ sum_i Mhat_i<=sum_i M_i^j+2eta*T<= [C_j(K)+2eta]T.
+
+Coordinatewise domination of the exact covering vector proves every coalition
+constraint simultaneously, with no additional 2^n union bound.
+For expected total, unbiasedness (4) gives the exact identity
+
+ E sum_i Mhat_i=sum_i M_i^j+eta*T,
+
+which proves (c). Expected payments also cover every coalition at every fixed
+profile, since they equal the exact covering payments plus the nonnegative cushion.
+
+The probability statement is pointwise in b. It does not control a profile
+chosen adaptively after observing the sampled rule, and does not assert one
+sample sequence is covering on the whole uncountable report domain.
+For L predetermined profiles, an additional union bound would replace the
+logarithm in (1) by log(2nL/delta). No uniform-all-profile statement is inferred.
+
+4. EXACT DISCRETE IMPLEMENTATION
+Let b0=1/j and, for integers a,k>=0, define
+
+ I_(a,k)=integral_0^b0 q^a(1-q)^k dq
+        =sum_(h=0)^k (-1)^h binom(k,h)b0^(a+h+1)/(a+h+1).  (6)
+
+For a full mask S of size k its marginal probability in the continuous
+experiment is
+
+ pi_k=j I_(n-k,k).                                        (7)
+
+This is the probability of ONE PARTICULAR size-k subset, not the probability
+of cardinality k. Conditional on that full mask, the posterior mean of q is
+
+ theta_k=I_(n-k+1,k)/I_(n-k,k),                           (8)
+
+which belongs to (0,1/j). In particular it depends only on cardinality, not
+on reports or the identity of the owners in S.
+
+To draw one discrete sample:
+ 1. Draw k in {0,...,n} with probability binom(n,k)pi_k.
+ 2. Draw a uniform k-subset S of the fixed owner set.
+ 3. For every i compute
+
+    Xtilde_i(S,b)=theta_k A_i(S,b)+(1-theta_k)Delta_i(S,b).  (9)
+
+The cardinality probabilities sum to one because
+
+ sum_k binom(n,k)pi_k
+   =j integral_0^b0 [q+(1-q)]^n dq=1.
+
+For fixed S and profile b, A_i and Delta_i do not depend on q. Therefore (9)
+is exactly E[X_i(q,S,b)|S]. Taking expectation proves E[Xtilde_i]=M_i^j.
+Each fixed-S estimator is still own-monotone and in [0,T], since its weights
+are report-independent, nonnegative, and sum to one. Thus all results above
+hold with N iid discrete samples in place of the continuous samples.
+Conditioning on the full mask, rather than on only B_-i, is legitimate and
+allows the SAME sampled S and theta_k to be used for every owner.
+
+5. RATIONAL BIT LENGTH AND SAMPLING COST
+For integer j, all pi_k and theta_k are positive rationals. Put
+
+ H=(n+2)! * j^(n+2).
+
+Every denominator of a summand in either j I_(n-k,k) or j I_(n-k+1,k)
+divides H: the integer factor a+h+1 is at most n+2 and the j-power is at
+most n+2. Hence
+
+ u_k=H*pi_k,
+ t_k=H*j*I_(n-k+1,k)
+
+are integers, with u_k>0 and theta_k=t_k/u_k. The positive cardinality
+weights U_k=binom(n,k)u_k satisfy sum_k U_k=H.
+All have O(n(log j+log(n+2))) bits, as do the intermediate common-denominator
+terms up to the same polynomial order. Formula (6) computes all of them
+using O(n^2) exact arithmetic operations on polynomial-length integers.
+Alternating terms should be summed exactly, not by unverified floating-point
+subtraction.
+
+Draw a uniform integer in {0,...,H-1} and use the cumulative U_k intervals
+to select k. Then draw a uniform integer in {0,...,binom(n,k)-1} and unrank a
+k-subset, or use any exact uniform-subset algorithm. Uniform integers can be
+generated from fair bits by rejection, with fewer than two attempts on average
+when using the next power-of-two range. Thus sampling has expected polynomial
+random-bit and arithmetic cost in n and log j. Its worst-case number of
+rejection attempts is unbounded, with almost-sure termination.
+
+If eta and delta are rational, a conservative integer sample size can also
+be selected without evaluating a real logarithm exactly: replace log(2n/delta)
+in (1) by ceil(log_2(2n/delta)), then round N upward. The replacement is larger,
+and the ceiling of the base-two logarithm is found by exact integer comparisons.
+
+6. ORACLE COUNT AND CANONICAL TIES
+For a sampled full set S, the only coalition masks needed are
+
+ S and S symmetric-difference {i}, for i=1,...,n.
+
+These are n+1 distinct masks. When i is in S, the off coalition is S\{i}
+and the on coalition is S. When i is outside S, the off coalition is S and
+the on coalition is S union {i}. A canonical value-and-minimizer oracle at
+these masks therefore supplies every Delta_i and every W_i^-.
+The grand value T is queried once for the profile. This proves the bound
+1+N(n+1) canonical queries. Caching repeated masks can reduce this count.
+
+For an explicitly listed family V, such a query enumerates the K raw scores
+and applies the fixed priority, using O(Kd) arithmetic operations.
+
+For a rational production LP with resource-price polyhedron
+Q={w>=0:A^T w>=pi}, a conservative way to obtain a fixed canonical VERTEX is:
+first minimize the queried aggregate-resource objective over Q; restrict to
+its optimal face; then successively minimize w_1,...,w_d, preserving all prior
+optimal values as equalities. Every coordinate objective is bounded below by
+zero. At the end the point is unique and is a vertex of Q: any decomposition
+into two feasible points would force equality at every successive minimum,
+then equality of every coordinate. This returns the lexicographically first
+optimal vertex and depends only on the queried aggregate vector and technology.
+
+This procedure takes at most d+1 exact LP optimization calls per canonical
+query. Accordingly a conservative bound is
+
+ 1+N(n+1)(d+1)
+
+ordinary exact LP calls, allowing the grand value to use one value-only solve.
+Rational inputs yield rational vertices and values. Implementations need exact
+or suitably certified solves; approximate numerical tie-breaking is not silently
+assumed to preserve the universal monotonicity or exact-unbiasedness claims.
+An arbitrary nonvertex optimal point is not automatically an allowed substitute
+when the complexity K counts dual vertices.
+
+7. PARAMETER AND EFFICIENCY QUALIFICATIONS
+The stated evaluator is polynomial in its displayed sampling parameters for
+supplied j and a suitable exact canonical oracle. In particular its canonical
+query count is O(n^3 eta^(-2) log(n/delta)). No factor K occurs in that query
+count, although a naive explicitly listed-form oracle itself costs O(Kd).
+
+The evaluator does NOT compute K. Choosing the sharp j(K) requires knowing
+K or otherwise providing that parameter. Counting or enumerating all dual
+vertices is a separate task, so this corollary alone is not a polynomial-time
+algorithm for finding the sharp K-sensitive tuning from an arbitrary LP input.
+
+One may instead use any report-independent supplied integer j, or choose it
+from a known structural upper bound Kbar>=K. For a d-variable dual defined
+by m activity inequalities plus d nonnegativity constraints,
+K<=binom(m+d,d), since every vertex has a linearly independent active set of
+d inequalities. This computable bound can supply Kbar. The resulting guarantee
+uses C_j(K)<=C_j(Kbar), and its asymptotic tuning is in Kbar rather than an
+uncomputed exact K. It need not retain a sharp bound in the smaller actual K.
+
+This is a useful algorithmic follow-up in the oracle/high-probability sense:
+it replaces exponentially many mask evaluations by a polynomial number of
+LP queries, retains universal individual incentives, and covers all coalitions
+simultaneously at any fixed profile with explicit confidence. It does not
+give deterministic realized coverage, uniform coverage over all profiles on
+one sampled rule, an efficient exact evaluator of M, or an algorithm for
+computing the true structural complexity K.
+
+AUDIT STATUS
+All sampling, bias, range, union-bound, and oracle-count claims above follow
+from the displayed finite formulas. Independent Fable/root proof audit found no gap; the dedicated exact sampler
+verifier passed. See review/sampling_adjudication.txt and verification/sampling_result.json.
+The finite checks supplement the proof. UNIFORM_SAMPLING_THEOREM.txt separately
+proves the stronger one-seed, all-profile result and its exact rational implementation.

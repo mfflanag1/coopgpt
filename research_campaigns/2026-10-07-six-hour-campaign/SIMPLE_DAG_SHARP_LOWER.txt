@@ -1,0 +1,217 @@
+LEADING-ONE WEIGHTED-HIERARCHY LOWER BOUND ON SIMPLE EDGE-OWNED DAGS
+7 October 2026. Structural cuts mean inclusion-minimal source-sink edge cuts. Bounded derivation by personal_ceiling; coordinator review
+pending. Only this /tmp file is owned by this task. No novelty claim.
+
+RESULT AND QUANTIFIERS
+Let b(G) be the infimum, over all nonnegative own-report-monotone payment
+rules on a fixed graph G that cover every coalition at every nonnegative
+capacity profile, of their worst total-payment/grand-flow ratio. There is
+a sequence of finite SIMPLE DAGs G_d with one distinct fixed original
+owner per edge, and structural-cut counts K_d, such that
+ b(G_d) >= (1-o(1)) log K_d / log log K_d.                 (1)
+All report profiles needed for the certificate are strictly positive.
+
+More generally, if b_simple_at_most(K)=sup_{G simple, cuts(G)<=K} b(G), then
+ liminf_{K->infinity} b_simple_at_most(K) log log K/log K >=1. (2)
+This is an AT MOST K statement. No exact-cut-count padding is asserted.
+Together with a valid leading-one upper bound on all DAGs, (2) would give
+the sharp leading constant for this natural simple-DAG complexity budget.
+The candidate hybrid upper is being reviewed separately; it is not used here.
+
+The construction is a shared-fan replacement for each parallel-edge pool.
+All auxiliary arcs are strategic owners. Their compensation is explicitly
+accounted for, and every transported inequality changes ONE actual owner's
+report. The argument does not aggregate private owner identities.
+
+1. WHY ORDINARY TWO-OWNED-EDGE SUBDIVISION CANNOT WORK
+This is a separate exact obstruction to the naive reduction.
+
+Replace every edge e of ANY original graph by a two-edge path, with reports
+(a_e,b_e) belonging to two distinct owners. Put d_e=min(a_e,b_e). Choose any
+deterministic core allocation Q(d) for the original edge game, for example
+capacity allocation on a fixed-priority minimum cut. It need not be truthful.
+Pay Q_e(d) entirely to the higher-report member of the pair, splitting it
+equally at equality; pay its lower-report member zero.
+
+For a fixed report of the mate, an owner's payment is zero below its mate's
+report, half Q_e at equality, and Q_e above it. Above the mate, d_e and all
+other virtual capacities are independent of the owner's report. Thus its
+payment is nondecreasing in its own report, even if Q itself is not truthful.
+At zero virtual capacity Q_e=0 (in particular for the chosen mincut rule),
+so zero-capacity ties cause no difficulty.
+
+For a coalition S of the subdivided owners, let S* contain exactly the
+original edges whose BOTH members belong to S. Its coalition flow is exactly
+v_d(S*). Moreover p(S)>=sum_{e in S*}Q_e(d)>=v_d(S*). Total payment is T.
+Thus every fully two-edge-subdivided network has an efficient truthful
+covering rule. Restricting to equal paired reports and adding the pair's
+payments therefore cannot preserve a nontrivial lower bound.
+
+2. SIMPLE SHARED-FAN MODULE
+Fix integers d>=1 and m>d. Choose an integer R>=1 and H=m^2. A module with
+terminals a,b has four internal vertex layers:
+ left fan vertices L_1,...,L_R;
+ input vertices u_1,...,u_m;
+ output vertices v_1,...,v_m;
+ right fan vertices W_1,...,W_R.
+Its edges are exactly
+ a->L_i; L_i->u_j; u_j->v_j; v_j->W_l; W_l->b,
+for all indicated i,j,l, with only matching middle edges u_j->v_j.
+There are 2R+2m internal vertices and 2Rm+2R+m edges. Every edge has its own
+fixed original owner. The m middle edges are called variable owners, and
+all other edges auxiliary owners. The graph is simple and acyclic.
+
+Take k>=2 copies in series, identifying only consecutive terminal vertices.
+There are no parallel arcs and no additional connector owner between copies.
+Hold every auxiliary report at the strictly positive value H. Variable
+reports will lie in {1,m}. A type-h module has h high variables of report m
+and m-h low variables of report 1, with 0<=h<=d.
+
+Every selected subset J of a module's variable edges can be supported by
+choosing ONE left fan i and ONE right fan l and taking exactly these owners:
+ a->L_i, all L_i->u_j with j in J, all variables j in J,
+ all v_j->W_l with j in J, and W_l->b.
+This coalition has module flow sum_{j in J} c_j. The middle-edge cut bounds
+it above; sending c_j along each chosen branch achieves it, since their
+total is at most m^2=H. This also proves the full module flow is its variable
+total, m+(m-1)h. The full series graph therefore has
+ T=m+(m-1) min_{1<=i<=k} H_i.                            (3)
+
+Choose the left and right fans independently and uniformly among the R
+possibilities. For ANY fixed J, every particular auxiliary edge is included
+with probability at most 1/R. Source/final fan edges have probability 1/R;
+the other auxiliary edges have that probability if their variable is in J,
+and zero otherwise. This bound is independent of all auxiliary payments.
+
+3. VALID FINITE SYMMETRIZATION
+Average any eligible rule over permutations of the k identical modules and
+over permutations of the m variable branches within each module, relabeling
+the incident auxiliary owners along with their branches. These operations
+preserve every coalition flow for every profile. Branch permutations are
+module isomorphisms; permuting entire two-terminal modules in a series
+composition preserves the minimum of their individual coalition flows.
+They are permutations of the finite original owner set, not splitting or
+merging owners. Relabeling and averaging preserve own-report monotonicity,
+nonnegativity, all coalition constraints, and the same budget factor B.
+
+At a histogram n=(n_0,...,n_d), sum n_h=k, a present low variable in a type-h
+module consequently has a common payment x_h(n), and a high variable has
+payment z_h(n). Values for absent types are set to zero. Let
+ Y(n)=sum_h n_h[(m-h)x_h(n)+h z_h(n)]
+be the total VARIABLE-owner budget, and Q(n) the total AUXILIARY-owner budget.
+The two sets of owners are disjoint, so Y+Q is the entire payment budget.
+
+4. TWO ACTUAL COALITION FAMILIES, INCLUDING ALL AUXILIARY PAYMENTS
+At any histogram n choose one low variable in every module. This is possible
+because m>d. Supply their selected branches with the random fans from
+section 2. Each resulting actual coalition has worth one. Average its
+coverage inequality over these finite fan choices. Its variable-payment
+sum is sum_h n_h x_h; its expected auxiliary-payment sum is at most Q/R.
+Nonnegativity therefore gives
+ sum_h n_h x_h + Q/R >=1.                               (4)
+
+For the second coalition, put q0=m-d+1. In every type-h module with h<d,
+choose q0 low variables; there are enough. In each type-d module choose one
+high variable. Supply them with independent uniform fans as before. Its
+worth is q0 if a type below d is present, and m otherwise. Thus
+ q0 sum_{h<d}n_h x_h + n_d z_d + Q/R >=q0.               (5)
+
+Multiply (4) by m-d and (5) by d. With
+ A=(d+1)m-d^2,
+the result is
+ A <= A sum_{h<d}n_h x_h
+      +n_d[(m-d)x_d+d z_d] +(m/R) Q.                    (6)
+This is the original weighted-hierarchy coalition inequality with an explicit
+auxiliary-owner term. No auxiliary owner was declared public or free.
+
+5. WEIGHTED-PROFILE TRANSPORT CHANGES ONLY VARIABLE OWNERS
+Fix alpha>0 and put
+ lambda=A/alpha, Z=sum_{h=0}^d lambda^h/h!,
+ p_h=lambda^h/(h! Z).
+Draw the k module types independently with probabilities p_h as an averaging
+device over profiles; write their multinomial histogram weights as mu(n).
+
+For h<d, increasing one actual low VARIABLE report from 1 to m changes its
+module from type h to type h+1 and leaves EVERY other report, including all
+auxiliary reports H, unchanged. If n'=n-e_h+e_{h+1}, own-monotonicity gives
+ x_h(n)<=z_{h+1}(n').
+The exact multinomial identity
+ mu(n)n_h=(p_h/p_{h+1})mu(n')n'_{h+1}
+then gives E[n_h x_h]<=(p_h/p_{h+1}) E[n_{h+1}z_{h+1}].
+Since A p_h/p_{h+1}=alpha(h+1), averaging (6) yields
+ A <= alpha E[sum_{r=1}^d r n_r z_r]
+      +E[n_d((m-d)x_d+d z_d)] +(m/R)E Q
+   <= (1+alpha)E Y +(m/R)E Q
+   <= max(1+alpha,m/R) B E T.                           (7)
+The penultimate line uses only subsets of the VARIABLE-owner budget Y.
+The last line accounts for the disjoint auxiliary budget Q. In particular,
+taking R=m preserves the original coefficient 1+alpha exactly; there is
+no need to add m/R to that coefficient or to make m/R vanish.
+
+By (3), the same tail-sum formula as in the original hierarchy gives
+ E T = m+(m-1) sum_{r=1}^d [sum_{h=r}^d p_h]^k
+     <= m[1+d exp(-k/Z)].                               (8)
+Thus the finite, all-rules lower bound on this SIMPLE graph is
+ B >= A / {max(1+alpha,m/R) E T}.                        (9)
+No unchanged owner's payment is transported between profiles.
+
+6. CUT COUNT AND LEADING-CONSTANT CHOICE
+Let C_{m,R} be the number of minimal structural cuts of one module. Each
+structural minimal cut is an s-side cut for some subset of its internal
+vertices, so
+ 1<=C_{m,R}<=2^(2R+2m).
+A minimal cut of the series composition lies entirely in one module: if
+every module retains an a-b path, those paths concatenate, while once one
+module is disconnected every edge removed elsewhere is extraneous. Hence
+the total number of structural cuts is EXACTLY
+ K=k C_{m,R}.                                          (10)
+
+For d>=2 choose
+ g=ceil(sqrt(log(d+1))), m=dg, R=m, alpha=1/g,
+ ell=ceil(log(d+1)), lambda=A g,
+ k_d=ceil(2 ell Z).
+Here g>=2, m>d, g->infinity, and g=o(log d). Notice that the multiplier in
+k_d is ell of order log d, NOT g: this ensures the required tail error tends
+to zero even though g grows slowly. From k_d/Z>=2ell and (8)-(9),
+ B >= [d+1-d/g] / [(1+1/g)(1+d exp(-2ell))]
+   = (1-o(1))d.                                        (11)
+
+Also lambda=(d+1)d g^2-d^2 g>d, so the terms lambda^h/h! increase through d.
+Thus lambda^d/d! <= Z <= (d+1)lambda^d/d!, and Stirling gives
+ log lambda=(2+o(1))log d,
+ log Z=d log lambda-log(d!)+O(log d)=(1+o(1))d log d,
+ log k_d=(1+o(1))d log d.
+Since R=m=dg, (10) gives
+ log k_d <=log K_d<=log k_d+4m log 2
+                         =(1+o(1))d log d,             (12)
+because m=o(d log d). Equations (11)-(12) prove (1).
+
+For any fixed epsilon in (0,1) and all sufficiently large external budgets K,
+choose d=floor((1-epsilon)log K/log log K). Equation (12) implies K_d<=K
+eventually. Equation (11) supplies the lower coefficient at least 1-epsilon
+for b_simple_at_most(K). Letting epsilon decrease to zero proves (2).
+Adding serial padding owners is neither needed nor claimed valid.
+
+7. CHECKS, LIMITATIONS, AND AUDIT TARGETS
+Independent exact integer maxflow checks were run for k=2, (m,d,R)=(2,1,2)
+and (3,2,3), over all type profiles and all left/right fan choices for both
+coalition families. All 1,586 coalition-flow checks passed, and every
+auxiliary inclusion count was at most its number of fan choices divided
+by R. Direct structural-cut enumeration of small modules gave
+ C_{1,1}=5, C_{2,2}=39, C_{3,3}=689,
+consistent with the upper bound 2^(4m). These finite checks are supplementary;
+sections 2-6 provide the proof for unbounded parameters.
+
+Review should especially check: preservation of all-owner game values under
+module/branch symmetrization; coalition fan support and probability bound;
+the disjoint Y/Q budget accounting in (7); and the slowly growing g with
+the separate ell multiplier in k_d. No exact-K theorem, computational claim,
+historical priority, or general upper-bound validation is asserted here.
+
+AUDIT CHECKPOINT, 08:13 UTC
+Independent Fable and coordinator proof checks found no correctness gap.
+The symmetrization does not permute fan indices; Q is simply the total of all
+auxiliary payments at the profile, so their lack of symmetry is harmless.
+The original serial parallel-pool benchmark has exactly k structural cuts.
+Portable finite verification: verification/simple_dag_lower.py; see the
+associated result JSON and review/simple_dag_lower_adjudication.txt for scope.
