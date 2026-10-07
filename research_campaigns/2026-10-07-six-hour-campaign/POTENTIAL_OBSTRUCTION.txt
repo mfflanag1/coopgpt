@@ -1,0 +1,83 @@
+ROUTE C/A: A TRUTHFUL POTENTIAL REPAIR AND AN EXACT LINEAR-COST OBSTRUCTION
+7 October 2026. Coordinator candidate; independent audit pending.
+
+1. A NATURAL ALTERNATIVE THAT REALLY IS TRUTHFUL AND COVERS COALITIONS
+Let U have independent Uniform[0,1] coordinates. Define
+ Psi(c)=E F(D(c)*U),
+where F is maxflow and D is the effective-capacity normalization. All capacities
+are nondecreasing in every report, so Psi is nondecreasing. For c^0 obtained by
+setting only owner e's report to zero, define
+ p_e(c)=2[Psi(c)-Psi(c^0)].
+This is nonnegative and nondecreasing in c_e, because its second term does not
+depend on c_e. It is also a pointwise majorant of the base z, and hence of y.
+
+Proof of domination. For fixed U_-e, set
+ g(u)=F(D_-e(c)*U_-e, u D_e(c))-F(D_-e(c)*U_-e,0).
+The maxflow is a minimum of affine cut scores, hence g is concave on [0,1],
+nonnegative, with g(0)=0. Thus g(u)>=u g(1), and E_Ue g(U_e)>=g(1)/2.
+Coordinatewise D_h(c^0)<=D_h(c), with D_e(c^0)=0, implies
+ Psi(c^0)<=E F(D_-e(c)*U_-e,0).
+Subtract and integrate: Psi(c)-Psi(c^0)>=z_e(c)/2, where z_e=E g(1).
+Consequently p>=z and p covers every coalition. Since p is own-report monotone,
+the least-majorant property of y gives p>=y. This uses fixed original owners.
+
+2. WHY THE PROMISING COLLECTIVE BOUND IS FALSE
+An attempted bound was sum_e[Psi(c)-Psi(c^0)]<=sum_e z_e(c), which would have
+implied the desired 2U(K)T result. It is false, even in the already safe TTSP
+class. Small numerical samples did not show an aggregate violation; they did
+show coordinatewise violations. The following exact family supersedes that
+exploration as an obstruction to this proposed collective inequality.
+
+Take a branch A consisting of k serial edges, each report 1, in parallel with
+a single edge b of capacity beta=1/2. Put a final single edge r of capacity 1
+in series after that parallel composition. Every edge has its own fixed owner.
+There are k+2 owners, k+2 vertices (including the junction and final terminal),
+K=k+1 minimal structural cuts, L=k+1, and T=1. The cuts are {r} and
+{a_j,b}, j=1,...,k. Parallel edges are allowed at k=1; the family is simple
+for k>=2. D_a=1 for all A edges, D_b=beta, and D_r=1.
+
+Write A_k=min(U_1,...,U_k), B=beta U_b and V=U_r. Then
+ Psi(c)=E min(A_k+B,V).
+When ANY A-edge owner is erased, the whole A branch carries no flow. Effective
+caps on B and r both become beta, and all A caps become zero. Therefore
+ Psi(c^0)=E min(beta U_b,beta U_r)=beta/3.
+On the other hand, since A_k>=0,
+ Psi(c)>=E min(beta U_b,U_r)=beta/2-beta^2/6.
+Every one of the k A owners has a potential deletion marginal at least
+ beta(1-beta)/6=1/24.
+Thus sum_e p_e>=k/12, while T=1 and K=k+1. This linear lower bound rules out
+an O(U(K)) budget for p. It is an obstruction to THIS potential repair only.
+
+In fact A_k tends to zero almost surely and bounded convergence gives
+Psi(c)->5/24. Removing b leaves k+1 serial uniform edges, so Psi(c with b=0)
+=1/(k+2); removing r gives zero. Hence the exact total is
+ sum_e p_e=2[(k+2)Psi(c)-k/6-1/(k+2)] ~ k/12 ~ K/12.
+The original envelope on this TTSP graph equals z. Since the possible selected
+cut weights are 1 and 3/2, its total is at most 3/2 for EVERY k at this profile.
+Thus the potential repair can overpay its intended envelope by a linear factor.
+Neither the general sharp envelope conjecture nor the sharp minimax conjecture
+is disproved by this example.
+
+3. OPTIONAL EXACT INTEGRAL FORMULAS FOR REPRODUCTION
+For any 0<beta<=1 let phi_k=E min(A_k+beta U,V). With X=1-A_k having density
+k x^(k-1), conditional expectation is 1/2-x^3/(6 beta) for x<=beta and
+1/2-x^2/2+beta x/2-beta^2/6 for x>=beta. Integrating gives
+ phi_k=beta^k/2-k beta^(k+2)/(6(k+3))
+       +(1/2-beta^2/6)(1-beta^k)
+       -k(1-beta^(k+2))/(2(k+2))
+       +k beta(1-beta^(k+1))/(2(k+1)).
+The probability q_k that a cut {a_j,b} wins is
+ q_k=k beta^(k+1)/(2(k+2))
+     +k(1-beta^(k+1))/(k+1)-beta(1-beta^k)/2.
+The base total is exactly 1+beta q_k; each A edge receives q_k/k.
+Both identities admit an independent rational CDF-algebra check.
+
+4. ROUTE DECISION
+Reject this potential's deletion marginals as a sharp general repair, even
+though its incentive and coverage properties are valid. The mechanism reacts
+to deletion-induced changes of normalization on a shared downstream edge, once
+for EVERY series edge in the long branch. Its base random flow was already
+insensitive to that branch when k was large. This repeats the same induced loss
+across many owners. Any new potential must prevent this repeated charge.
+No novelty or field-level significance claim is made for these elementary
+mechanism and obstruction observations. They are an exact no-go for this route.

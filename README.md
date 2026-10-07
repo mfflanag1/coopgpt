@@ -2,6 +2,8 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
+The [six-hour follow-on campaign](research_campaigns/2026-10-07-six-hour-campaign/CONTRACT.txt) is active until **7 October 2026, 09:54 UTC**. It attacks the sharp envelope bound, alternative general mechanisms and growing fixed-owner lower bounds; [current state](research_campaigns/2026-10-07-six-hour-campaign/STATE.txt) distinguishes verified lemmas, failed routes and pending reviews. The eight-hour plan reserves two further hours that are not active without an extension.
+
 The [monotone-envelope theorem](research_campaigns/2026-10-06-monotone-envelope/THEOREM.txt)
 now gives an all-profile truthful, coalition-covering repair on **every finite
 directed acyclic network**, with total payments **at most 2K²T**, independent of

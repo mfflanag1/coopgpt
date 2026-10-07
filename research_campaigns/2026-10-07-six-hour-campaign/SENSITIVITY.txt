@@ -1,0 +1,76 @@
+ROUTE A/B: EXACT UNILATERAL SENSITIVITY
+Conventional lemmas, 7 October 2026. Independent Fable review and exact
+checks completed; coordinator supplied the requested hypothesis clarifications.
+Model is CONTRACT.txt. These are infrastructure for a general bound, not yet
+a breakthrough or an improvement of the proved budget.
+
+1. EVERY UNILATERAL CAP RESPONSE IS A SINGLE HINGE
+Fix c and original owner e; write c^t=(t,c_-e), 0<=t<=c_e. For every edge h,
+ D_h(c^t)=min(D_h(c), t+D_h(c^0)).                            (A1)
+In particular, after computing D(c) and D(c^0), the full continuous report
+response needs no further flow optimizations. This keeps all owners fixed.
+
+Proof for h!=e. On a DAG,
+ D_h(c^t)=min(c_h, maxflow(s,tail(h);c^t),
+                  maxflow(head(h),t_terminal;c^t)),
+omitting coincident-terminal terms. Every maxflow is the minimum of finitely
+many cut-capacity sums. Since the focal capacity appears at most once in each
+sum, each such flow is min(alpha+t,beta), with alpha,beta independent of t,
+allowing +infinity for an empty cut family. Taking all minima together gives
+ D_h(c^t)=min(A+t,B), with A,B>=0.
+If A>=B the function is constant and (A1) is immediate. If A<B, its value at
+zero is A and its value at c_e is min(A+c_e,B); for 0<=t<=c_e, taking the
+minimum of that terminal value and A+t gives the same function. For h=e,
+D_e(c^t)=min(t,D_e(c)), while D_e(c^0)=0, proving (A1).
+
+Define delta_eh=D_h(c)-D_h(c^0). Then
+ D_h(c)-D_h(c^t)=(delta_eh-t)_+.                            (A2)
+The own coordinate has delta_ee=D_e(c). Every delta lies in [0,D_e(c)].
+For the upper bound, retain only h-containing paths of a flow attaining D_h;
+the total flow on e is at most D_e(c). Removing those paths leaves a feasible
+h-flow in c^0. If e,h are path-incomparable then delta_eh=0.
+
+2. ANTICHAIN COLUMN BUDGET FOR THE INFLUENCE MATRIX
+For every path antichain A (no s-t path contains two edges of A) and every h,
+ sum_(e in A) delta_eh <= D_h(c).                           (A3)
+Fix a single feasible flow f attaining D_h(c), retaining only h-containing
+paths. For each e, removing paths through e proves delta_eh<=f_e. Because A
+is an antichain, each retained path meets it at most once; sum_(e in A)f_e
+<=total(f)=D_h(c). Sum the coordinatewise inequalities. This same f works
+simultaneously for all e; it is not a sum of distinct optimization budgets.
+On all edges, sum_e delta_eh<=L D_h(c) by the analogous path-length bound.
+
+3. CORRECT GAIN LOCALIZATION; THE COLLECTIVE STEP REMAINS OPEN
+Use independent Uniform[0,1] variables U, the payment D_e times the probability
+of membership in the selected minimum structural cut, and fixed cut tie order.
+The envelope is y_e=sup_(0<=t<=c_e) z_e(c^t). For t>=D_e(c), every original
+feasible flow already has f_e<=t, so all D and z remain unchanged. Its supremum
+therefore reduces to [0,D_e(c)]. Conditional ties between containing and
+excluding cuts have measure zero when D_e>0; when D_e=0 payments are zero.
+Fix U_-e and use A_e(c), B_e(c) for the smallest containing-cut score excluding
+the focal term and the smallest excluding-cut score, respectively. Set
+theta_e=B_e-A_e. Under a lower report B_e cannot increase. Also
+ A_e(c)-A_e(c^t)
+ <=max_(C contains e) sum_(h in C without e) (delta_eh-t)_+ U_h
+ =:Delta_e(t,U).
+Thus theta_e(c^t)<=theta_e(c)+Delta_e(t,U). The conditional payment is
+q_e(c)=min(D_e(c),(theta_e(c))_+). For t<=D_e(c),
+ q_e(c^t)-q_e(c) <= min(t,Delta_e(t,U)).
+Indeed q_e(c^t)<=min(t,(theta_e(c))_++Delta), while q_e(c)>=
+min(t,(theta_e(c))_+). Taking positive part, expectation, and the report
+supremum gives the rigorous but not yet collective estimate
+ 0<=y_e(c)-z_e(c)<=sup_(0<=t<=D_e) E[min(t,Delta_e(t,U))].     (A4)
+If there is no excluding cut, q_e=D_e is monotone and the excess is zero;
+handle that case separately instead of subtracting infinite thresholds.
+
+Do NOT replace E max_C(...) by max_C E(...), or by half the maximum
+cardinality times a cap change. That step was rejected in the prior campaign.
+Do NOT sum (A3) over independent cuts and call the result sharp: a chain of
+modules can have large influence while only one cut wins at a time.
+
+NEXT LOAD-BEARING OBLIGATION
+Use the actual winning-cut events, A1's simultaneous threshold structure, and
+A3 to control the SUM of gains in A4 by O(U(K))T, or prove an exact obstruction
+to a specific attempted collective inequality. A1/A3 alone do not imply it.
+At this point they enable a parametric exact search and identify a possible
+charging constraint; they are not promoted as a new general subsidy theorem.
