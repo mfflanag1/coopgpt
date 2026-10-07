@@ -2,6 +2,18 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
+The [series-parallel extension](research_campaigns/2026-10-06-series-parallel/THEOREM.txt)
+proves an all-profile truthful, coalition-covering rule for every finite directed
+two-terminal series-parallel network with one fixed owner per edge. In the number
+**K of structural minimal cuts**, the worst optimal total-payment factor is
+**(1+o(1)) log K / log log K**: the new effective-capacity/co-cut argument supplies
+the upper, and the existing weighted report-transition theorem supplies the lower
+on the layered subclass. Both owners and network size may grow. The separate
+[research record](research_campaigns/2026-10-06-series-parallel/INDEX.txt) includes
+proofs, exact checks, an obstruction to the old global cap, and source comparisons.
+This extension has not yet been integrated into the manuscript; novelty and human
+specialist review remain unconfirmed.
+
 The [sharp unrestricted theorem](research_campaigns/2026-10-06-leading-constant/SHARP_THEOREM.txt)
 now proves a minimax payment factor of **(1+o(1)) log k / log log k**. A profile-averaged
 hierarchy closes the earlier 1/2-to-1 leading-constant gap. The proof survived an independent

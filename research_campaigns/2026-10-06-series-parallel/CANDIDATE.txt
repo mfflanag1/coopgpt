@@ -1,0 +1,154 @@
+EFFECTIVE-CAPACITY BANZHAF PAYMENTS ON SERIES-PARALLEL NETWORKS
+Candidate conventional proof, 6 October 2026. Not yet promoted.
+
+MODEL AND STATEMENT
+G is a finite directed two-terminal series-parallel (TTSP) network. Construct it
+from single directed edges by binary series and parallel composition; components
+have disjoint edge sets and disjoint internal vertices before their terminals
+are identified. Distinct edge leaves are distinct fixed original owners.
+The graph and decomposition tree do not depend on reports. Edge reports c>=0
+are arbitrary real capacities. For S subset E, v_c(S) is the maximum s-t flow
+using edges in S only; T=F(c)=v_c(E). Payments are nonnegative deterministic
+functions of c, cover every coalition, and are nondecreasing in an owner's
+own capacity holding all other original reports fixed. This is binding
+underreport truthfulness with payment utility, without use costs.
+
+Let C(G) be the family of inclusion-minimal s-t edge cutsets of the graph,
+independent of capacities, and K=|C(G)|. Equivalently these are the minimal
+edge sets meeting every s-t path. The cut recursion is:
+ single edge e: {{e}};
+ series(A,B): C(A) disjoint-union C(B);
+ parallel(A,B): {CA union CB : CA in C(A), CB in C(B)}.
+Consequently K_leaf=1, K_series=K_A+K_B, K_parallel=K_A*K_B.
+Every cut is nonempty; all edges are on s-t paths. Zero capacities do not change
+this structural family. Min-cut/max-flow gives F(c)=min_C sum_(e in C)c_e.
+
+For K>=2, define R_K>e by R_K log(R_K/e)=log K and U(K)=R_K+1/log R_K.
+Claim: a deterministic nonnegative coalition-covering own-report-monotone rule
+has total payment <=U(K)T for every profile, regardless of owner count.
+For K=1 the construction is efficient. Moreover the worst optimum over all
+TTSP graphs with at most K minimal cuts has leading asymptotic
+ (1+o(1))*log K/log log K.
+The matching lower bound is INHERITED from the existing weighted multi-glove
+report-transition theorem. The proposed extension is the new cap/monotonicity
+argument and upper bound on the larger TTSP class, not a new lower construction.
+
+1. EFFECTIVE CAPACITIES AND EVERY-COALITION PRESERVATION
+Write F_H(c) for the maximum terminal flow in a component H. It obeys
+F_leaf=c_e, F_series=min(F_A,F_B), F_parallel=F_A+F_B.
+For each edge e define
+ L_e(c_-e)=min{F_B(c): B is the sibling of the child containing e at a
+                         SERIES ancestor of e in the fixed tree},
+with empty minimum infinity, and D_e=min(c_e,L_e).
+Thus D_e is nondecreasing in every report and, in its own report,
+D_e=min(c_e,constant). All capacities are finite even when L_e=infinity.
+
+Claim: D_e is the maximum feasible amount of s-t flow through e, allowing any
+total flow value (not restricting to maximum-value flows). Proof by the tree.
+Inside a leaf the possible edge flow interval is [0,c_e]. At a parallel parent,
+route a desired amount through the chosen child and zero through the other.
+At a series parent, the same total must cross its sibling; any amount at most
+F_sibling can be routed there by scaling a maximum flow. Proceed from the leaf
+to the root. This constructs an s-t flow of total exactly D_e through e.
+Conversely every path decomposition of a feasible flow using e must traverse
+each series sibling, whose total flow capacity is at most F_sibling(c).
+Hence its edge-e flow cannot exceed any of the displayed bounds.
+
+In particular D_e<=T. Every feasible coalition flow under c has every edge flow
+at most D_e(c), because it is also a feasible grand-network flow. Conversely
+D<=c. Therefore the entire feasible flow set of EVERY coalition is unchanged
+when capacities c are replaced by D(c):
+ v_c(S)=v_D(S) for every S, and F(D)=T.
+This is simultaneous capping with fixed original edges, not owner cloning.
+It also proves D=0 whenever T=0.
+
+2. CO-CUT INDEPENDENCE
+If two distinct edges e,h belong to a common C in C(G), their lowest common
+ancestor in the composition tree is PARALLEL. At a series node a minimal cut
+is wholly in just one child, so it cannot contain one edge in each child.
+Now D_h depends only on c_h and the report vectors in siblings at SERIES
+ancestors of h. Such a sibling contains e exactly when e and h first diverge
+at a series node. This is impossible for edges in a common minimal cut.
+Consequently D_h is independent of c_e whenever e and h occur in a common cut.
+All other D_h remain nondecreasing as c_e increases.
+This lemma is the additional structure absent from the unrestricted graph case.
+
+3. RULE AND COVERAGE
+Use independent U_e uniform[0,1] as an integration device. Select a minimizer
+ C_*(U,c) in argmin_(C in C(G)) sum_(e in C)D_e(c)U_e,
+breaking ties by a fixed order of the finite structural cut family. Define
+ z_e(c)=D_e(c)*P(e in C_*).
+These are deterministic expectations, not realized random payments. At T=0
+set z=0, which agrees with D=0. For each realized selected cut and every S,
+ sum_(e in S intersect C_*)D_e >= min_C sum_(e in S intersect C)D_e
+ =v_D(S)=v_c(S).
+Taking expectation proves coverage, including singleton and grand coalitions.
+Nonnegativity is immediate. The finite piecewise-linear comparisons are measurable.
+
+4. ALL-PROFILE OWN MONOTONICITY
+Fix e, all reports c_-e, and U_-e. Write x=c_e and d(x)=D_e(c). Let
+ A=min_(C contains e) sum_(h in C without e)D_h(c)U_h,
+ B(x)=min_(C does not contain e) sum_(h in C)D_h(c)U_h,
+with B=+infinity if every cut contains e. The containing-cut family is nonempty.
+By co-cut independence A is independent of x. B is nondecreasing in x because
+every D_h is. The smallest containing-cut score is d(x)U_e+A.
+If d(x)>0 and B is finite, equality to B occurs at at most one U_e, hence with
+probability0 under its uniform law, irrespective of ties within either family.
+Conditional integration gives
+ D_e P(e in C_* | U_-e)=min(d(x),(B(x)-A)_+).
+For B=+infinity this equals d(x). For d=0 both sides equal0. Every expression
+is nondecreasing in x. Integrating U_-e proves own-report monotonicity for all
+nonnegative real reports, including changing bottlenecks, zero reports and ties.
+No payment of an unchanged owner is transported or assumed monotone in this step.
+
+5. BUDGET DEPENDING ONLY ON NUMBER OF MINIMAL CUTS
+For T>0 set a_e=D_e/T in[0,1], rho_C=sum_(e in C)a_e. A minimum cut for D has
+rho_C0=1; all rho_C>=1. Put W=C_* and X_C=sum_(e in C)a_eU_e. Then
+ z(E)/T=E[rho_W], and X_W<=X_C0<=1 for every U.
+For any C and t>0, independence within C and concavity of q->q^a for a in[0,1]
+give
+ E exp(-t X_C) <= product_(e in C) (E exp(-t U_e))^a_e
+ <=t^(-rho_C).
+Thus P(X_C<=1)<=exp(t)t^(-rho_C); put t=rho_C. For s>=e, a union bound over
+the K cuts gives
+ P(rho_W>s)<=min(1,K*(e/s)^s).
+The cuts MAY OVERLAP: no independence between their scores is used.
+At s=R_K the second term is1; its logarithmic derivative is -log s, at most
+-log R_K thereafter. Tail integration gives
+ E rho_W <= R_K+integral_(R_K)^infinity exp(-(s-R_K)log R_K)ds
+          =R_K+1/log R_K.
+For K=1 the sole cut has rho=1 and the rule is efficient. The standard
+asymptotic inversion gives U(K)~log K/log log K.
+
+6. SHARPNESS OF THE CLASS MINIMAX
+Define B_SP(K)=sup_(fixed finite TTSP G with |C(G)|<=K) inf_(eligible
+all-profile rules on its fixed edge owners) sup_(c:T>0) z(E,c)/T.
+Upper: the preceding construction gives B_SP(K)<=U(K), since the tail union
+bound can use K even if a graph has fewer cuts. Lower: realize k=K multi-glove
+pools as K serial layers of parallel original edges, one distinct owner per
+edge. The structural minimal cuts are exactly those K layers; every coalition
+value is precisely its minimum selected pool sum. Owner identities, capacity
+reports and unilateral comparisons coincide with the original model.
+Therefore B_SP(K)>=B_K from the prior paper, whose proved asymptotic leading
+constant is1 by weighted report-transition certificates. The two bounds imply
+B_SP(K)~log K/log log K. No consistency across different graphs is required.
+
+7. CALIBRATION AND LIMITS
+In a K-layer parallel-edge chain, the series-sibling bounds give
+D_e=min(c_e,min(other pool totals))=min(c_e,T). Thus both caps and payments
+recover the prior mechanism exactly. In a pure parallel network K=1, D=c and
+z=c, an efficient rule. Nested example: F=min(a+min(b,c),d+e) has the three
+minimal cuts {a,b},{a,c},{d,e}; its overlapping-cut structure is outside a
+partition into disjoint complementary pools. The class allows arbitrarily
+large such nesting and arbitrarily many original owners.
+
+K is a structural cut COUNT, not edge connectivity, longest path or treewidth.
+It can be exponential in graph size, so the bound is not a sublogarithmic bound
+in the number of owners. No polynomial-time exact integration is asserted.
+General directed networks, Wheatstone interactions, multiple edges per strategic
+owner, costs, overreports, group reports and split/merge remain outside the claim.
+The core exists by the classical mincut allocation, but these payments use
+external subsidy; B is total-payment factor, subsidy factor is B-1.
+The continuous Banzhaf functional, min-cut theorem, composition recursions and
+small-ball tail bound are established/previous ingredients. Novelty of this
+effective-capacity co-cut argument and its application remains to be checked.
