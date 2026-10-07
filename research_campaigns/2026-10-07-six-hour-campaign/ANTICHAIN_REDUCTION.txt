@@ -1,0 +1,82 @@
+LOCAL-RANK AND SIMULTANEOUS-PROFILE REDUCTION FOR A MINIMAL ENVELOPE COUNTEREXAMPLE
+7 October2026. Coordinator checked conventional proof; independent audit completed, no invalid step found.
+This narrows the unresolved actual-envelope antichain problem. It does not solve it.
+
+1. LOCAL THROUGH-ANTICHAIN RANK
+For a path-antichain A, let G_A be the subgraph consisting of edges on paths
+which meet A. Every s-t path of G_A meets A. Indeed each such edge is either
+in A, before an A-edge, or after an A-edge. No vertex can be both after one
+A-edge and before another, since this would create a path containing two
+A-edges (or a directed cycle). A path cannot pass from the before region to
+the after region on an edge outside A: that edge's membership in an A-path
+would force its head to be before an A-edge or its tail to be after one.
+Every vertex lies before (including a tail) or after (including a head) an
+A-edge; s is before-only and t after-only. Thus every s-t path must cross
+between the disjoint regions, and this crossing occurs through A.
+
+Define R(B), B subset A, as maximum total flow on paths meeting B. Equivalently
+it is maxflow in G_B. Each such path avoids A\B. Values are attained and
+remain unchanged when reports in A\B are reduced. R({e})=D_e of the full graph.
+Effective-capacity normalization preserves all restricted-subgraph flows,
+because these are also feasible full-network flows.
+
+The rival-flow bound in ANTICHAIN_CASES.txt improves to
+ y_e<=min(D_e, max(R(A)-R(A\{e}), R(A)/2)).              (1)
+Proof: at an own underreport, every cut of G_A containing e has its non-e
+capacity at least R(A\{e}). Above d_e>R(A)-R(A\{e}), a deterministic minimum
+cut C0 of G_A excludes e and has D-capacity<=R(A). It need not cut the FULL
+network, but it blocks every e-containing path. For any maximum full-network
+flow, remove its e-containing path flows. The endpoint maxflow marginal from
+adding e is at most their total, which is at most the random capacity of C0.
+Therefore the conditional endpoint marginal defining z_e has expectation at
+most R(A)/2. The other case has payment<=d_e<=R(A)-R(A\{e}). Taking the own
+supremum gives(1). No claim B_e(random full excluding-cut score)<=C0 is needed.
+
+The pair proof now yields y_e+y_f<=R({e,f}) for any two incomparable owners.
+For a three-owner A, if any pair B has R(B)<=R(A)/2, then (1) for its remaining
+owner and the local pair bound give sum_A y<=R(A).
+
+2. STRUCTURE OF ANY INCLUSION-MINIMAL COUNTEREXAMPLE
+Suppose A is an inclusion-minimal antichain with Y(A):=sum_A y_e>R(A).
+Every proper B subset A obeys Y(B)<=R(B); singletons and pairs cannot be A.
+For every e in A, write delta_e=R(A)-R(A\{e}). Then
+ y_e>delta_e,                                           (2)
+because Y(A)>R(A) and Y(A\{e})<=R(A\{e}). Any report t_e witnessing its
+envelope satisfies t_e>=z_e(c^{t_e})=y_e>delta_e (attainment is already proved;
+near-maximizers would suffice with strict margins). In particular c_e>delta_e.
+
+The single-coordinate maxflow hinge on G_A is
+ R_A(c^t)=min(R(A),R(A\{e})+t), 0<=t<=c_e.
+Thus each witnessing underreport preserves R(A). Also no original minimum cut
+of G_A can contain e: a minimum cut containing it would have deletion value
+R(A)-c_e, whereas the hinge forces c_e=delta_e. Consequently ANY original
+minimum cut C* of G_A is disjoint from the entire set A.
+
+3. A COMMON JOINT PROFILE REALLY EXISTS
+Set every report e in A simultaneously to y_e and keep all other reports.
+For a cut C of G_A let B=C intersect A. A flow of value R(A\B) on paths
+meeting A\B avoids every B-edge and is blocked by C\B. Hence the unchanged
+non-A capacity of C is at least R(A\B). If B is nonempty, its new cut sum is
+ >=Y(B)+R(A\B)>=Y(A)>R(A),
+where the middle inequality uses minimality for the proper set A\B (including
+the empty set). If B is empty, its unchanged sum is>=R(A). The disjoint C*
+still has capacity exactly R(A). Thus the JOINT y-profile has through-A value
+exactly R(A), and every cut meeting A has strictly larger capacity.
+The same is true for simultaneous witnessing reports t_e>=y_e by monotonicity.
+
+At each of these profiles, a through-A maximum flow saturates every edge of C*.
+Because C* is disjoint from A, their reports are unchanged. Therefore each full-
+network effective cap on C* is exactly its original report c_h, at the original,
+individual-witness and simultaneous-witness profiles. Its random score
+ S*=sum_{h in C*} c_h U_h
+is one fixed barrier, independent of U_A, with mean R(A)/2. It bounds the
+endpoint marginal through every e, not necessarily the FULL minimum cut score.
+
+4. THE EXACT UNRESOLVED STEP
+If one could compare each separate optimizing payment to its coordinate at
+the joint profile in the favorable direction, the base-flow antichain bound
+would contradict Y(A)>R(A). That comparison is NOT proved. Constant through-A
+value and a common fixed disjoint cut do not by themselves imply the necessary
+cross-substitutes property; CONSTANT_VALUE_CROSS_OBSTRUCTION.txt disproves
+that shortcut. The extra self-consistency of the joint y-targets remains unused.
+No field-level or historical-novelty claim is made.

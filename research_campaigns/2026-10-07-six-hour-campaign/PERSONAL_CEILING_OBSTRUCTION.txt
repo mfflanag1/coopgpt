@@ -1,0 +1,100 @@
+OWNER-INDEPENDENT PERSONAL CEILINGS: TRUTHFUL, SMALL BUDGET, UNBOUNDED COVERAGE LOSS
+7 October2026. Conventional proof, independently derived/checked by coordinator;
+focused cross-model audit found no invalid step. This is a mechanism-class obstruction, not
+an impossibility for truthful subsidy mechanisms in general.
+
+1. CANDIDATE AND VALID PROPERTIES
+For owner e define B_e=min_{C not containing e} c(C), with B_e=infinity if
+no structural minimal cut avoids e. This equals the limiting maxflow when
+c_e tends to infinity and is independent of e's report. Put
+ a_h^(e)=min(c_h,B_e), interpreting min(c_h,infinity)=c_h,
+ p_e(c)=a_e^(e) Pr(e belongs to the minimum cut under a^(e)*U).
+Each owner's expectation is deterministic; owners and the network stay fixed.
+The random multipliers are independent uniform variables, with fixed tie order.
+
+Own-report monotonicity is immediate from the conditional clamp formula:
+all a_h^(e) for h!=e are fixed, and the focal cap min(c_e,B_e) is nondecreasing.
+At a fixed profile with T>0, every B_e>=T. If B_e=T, p_e agrees with the
+common-grand-flow clipped base w_e. If B_e>T, every deterministic minimum cut
+contains e. All such exceptional owners therefore lie in one common minimum
+cut C*, have c_e<=T, and satisfy sum_exceptional p_e<=c(C*)=T.
+The remaining payments are a subset of the nonnegative w vector, whose budget
+is<=U(K)T. Consequently
+ sum_e p_e(c)<=(U(K)+1)T.                                 (1)
+At T=0, any clipped coalition game has zero maxflow and all the conditional
+marginals vanish. Thus zero profiles cause no exception.
+This proof is useful despite failure of the coverage condition below.
+
+2. FINITE TTSP COUNTERFAMILY
+Fix integer q>=4 and define
+ m=q^2, delta=1/q^2, N=m! q^m.
+The initial two-terminal component has two parallel branches: one owner e
+of capacity delta, and a path comprising owner a of capacity1-delta followed
+by m owners h_1,...,h_m, each of capacity m. After this component put N
+components in series, each a bundle of m parallel unit-capacity owners b_jk.
+All edges and owners are fixed for this network. Its structural minimal cuts
+are exactly
+ {e,a}, {e,h_i} (1<=i<=m), and C_j={b_j1,...,b_jm} (1<=j<=N).
+Therefore
+ T=1, K=N+m+1, vertices=m+N+2, owners=m+2+Nm, L=m+1+N.
+The personal ceilings are
+ B_e=B_a=m, B_hi=B_bjk=1.                                 (2)
+For e only the bundle cuts avoid it. For a the alternatives have costs m or
+m+delta. The unit cut{e,a} avoids every h_i and every bundle owner.
+
+Choose coalition S consisting of e and one fixed original owner from every
+bundle. It forms a single s-t path, so v_c(S)=delta.
+
+3. EXACT COALITION PAYMENT AND PROBABILITY BOUNDS
+Use one common uniform sample space to express the expectations. Define
+ Y=min_{1<=i<=m} U_hi,
+ Z=min_{1<=j<=N} sum_{k=1}^m U_jk,
+ X_r=delta U_e+min((1-delta)U_a,rY).
+The focal owner e uses ceiling m; every coalition bundle owner uses ceiling1.
+All cuts and scores have continuous nondegenerate distributions, so ties have
+probability zero. Since every winning bundle contains exactly one S owner,
+ p(S)=delta Pr(X_m<Z)+Pr(Z<X_1).                          (3)
+
+For 0<=z<=1, the m-uniform sum CDF is z^m/m!. Our N gives
+ Pr(Z<1/(2q))<=N*(1/(2q))^m/m!=2^-m,
+ Pr(Z>2/q)=(1-(2/q)^m/m!)^N<=1/(1+2^m).                 (4)
+The second inequality follows from (1-x)^N<=1/(1+Nx), for0<=x<1,
+by Bernoulli applied to (1-x)^(-N), or by (1-x)^(-1)>=1+x.
+
+If X_m<Z<=2/q, then either (1-delta)U_a<2/q or mY<2/q.
+A union bound on the m uniforms therefore yields
+ Pr(X_m<Z)<=2q/(q^2-1)+2/q+1/(1+2^m).                   (5)
+Also X_1<=delta+Y. Set t=1/(2q)-delta=(q-2)/(2q^2)>0.
+If Z>=1/(2q) and Y<=t, then X_1<=Z. Thus
+ Pr(Z<X_1)<=2^-m+(1-t)^m.                               (6)
+Combining(3)-(6) and dividing by delta gives the wholly rational bound
+ p(S)/v_c(S)<=R_q:=
+ 2q/(q^2-1)+2/q+1/(1+2^(q^2))
+ +q^2[2^(-q^2)+(1-(q-2)/(2q^2))^(q^2)].                 (7)
+Since (1-t)^m<=exp(-mt)=exp(1-q/2),
+ R_q=(4+o(1))/q ->0.                                    (8)
+No universal constant multiplying p restores coalition coverage on all DAGs,
+or even on all TTSP graphs. In particular the exact rational verifier gives
+ R_16<1/2, R_32<1/4, R_64<1/8.
+These are finite explicit networks, even though their owner counts are enormous.
+
+4. RELATION TO CUT COUNT AND SCOPE
+Stirling gives log K~3q^2 log q and log log K~2 log q, hence
+ log K/log log K~(3/2)q^2.
+Thus this rule's necessary coverage multiplier is
+ Omega(sqrt(log K/log log K)).
+This does not improve the existing general truthful-mechanism lower bound.
+In fact these are TTSP networks, where the original effective-capacity rule
+already achieves the optimal asymptotic order. The obstruction explains why
+owner-by-owner normalizations lose the common cut mixture needed for coverage,
+even when their truthfulness and total-payment bound are easy to prove.
+No historical novelty or specialist endorsement is claimed.
+
+AUDIT CLARIFICATIONS
+Run20261007-013454-b16dda6a rederived the analytic probability model and found
+no invalid step. The exact certificate checks only arithmetic in(7), not the
+probability model or enormous graph; both are proved analytically above.
+The finite Bernoulli checks are sanity checks, not a proof for all N.
+The U(K) transfer is explicit: clipping at T cannot lower any cut sum below T,
+and an original minimum cut keeps its T capacity because each of its reports
+is<=T. Thus weights<=T and a cut of sumT satisfy the prior tail proof.

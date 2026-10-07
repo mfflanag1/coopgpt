@@ -1,0 +1,77 @@
+A COMMON-SCALE ENVELOPE IS TRUTHFUL AND COVERING, BUT COSTS LINEARLY IN K
+7 October2026. Conventional proof, coordinator checked; independent audit completed, no invalid step found.
+This rejects another mechanism, not the effective-capacity own-report envelope.
+
+1. CANDIDATE AND WHY IT LOOKED PROMISING
+For a fixed external scale r>=0 put a_h^r=min(c_h,r), and let
+ w_e^r(c)=a_e^r Pr(e is in a minimum cut under independent a_h^r U_h).
+Define the TRUNCATED scale envelope
+ P_e(c)=sup_{0<=r<=T(c)}w_e^r(c).
+Each fixed-r coordinate is own-report nondecreasing by the conditional clamp:
+all other clipped capacities are independent of the focal report. The allowed
+scale interval also expands when that report increases. Thus P is truthful.
+At r=T all coalition flows are preserved, so w^T covers and P>=w^T covers.
+For every r<=T, all clipped cuts have capacity>=r: sum min(c_h,r)>=
+min(sum c_h,r)>=r. Thus clipped grandflow T_r>=r, every a_h^r<=T_r, and the
+usual uniform-tail argument gives sum w^r<=U(K)T_r<=U(K)T at each single scale.
+Here U(1)=1; for K>=2 let a_K>e solve a_K log(a_K/e)=log K and put
+U(K)=a_K+1/log(a_K). In particular U(K)~log K/log log K=o(K). The base
+uniform-tail proof is in ../2026-10-06-wheatstone/DAG_BASELINE.txt and
+../2026-10-06-series-parallel/THEOREM.txt section5.
+The supremum over different scales destroys this common budget, as follows.
+
+2. EXPLICIT FAMILY WITH POLYNOMIALLY MANY OWNERS
+Fix integer K>=1, M=64K^4, N=256K^6. Put K parallel-edge bundles in series.
+Bundle j=1,...,K contains N light owners each of capacity b_j/N, where
+ b_j=3/4+j^2/(4K^2),
+and n_j=M(K-j) heavy owners each of capacity1. The structural minimal cuts
+are exactly these K bundles. Bundle K has total capacity1; every earlier
+bundle has capacity>1. Hence T=1. All individual capacities are already<=T.
+The number of owners is KN+MK(K-1)/2=O(K^7), vertices K+1, and path length K.
+These are fixed original owners, never substituted during report comparisons.
+
+For target bundle i choose scale r_i=i/(2K^2M)<=1. Every light capacity is
+fully present because b_j/N<=1/N=r_1/2. Every heavy capacity is clipped to r_i.
+The deterministic clipped total in bundle j is g_j(r_i)=b_j+n_jr_i. Algebra gives
+ g_j(r_i)-g_i(r_i)=(j-i)^2/(4K^2),
+ g_i(r_i)=1-(K-i)^2/(4K^2)>=3/4.                         (1)
+Every cut uniquely minimizes deterministic clipped capacity at its own scale.
+
+3. CONCENTRATION AND LINEAR BUDGET
+Let Z_j^(i) be the random uniform score of bundle j at scale r_i. Its mean
+is g_j(r_i)/2, and independence inside that cut gives
+ Var(Z_j^(i))=[b_j^2/N+n_j r_i^2]/12
+             <=1/(12N)+1/(48KM).                         (2)
+Take eta=1/(16K^2). Chebyshev and a union bound over the K cut scores give
+ Pr(some j has |Z_j^(i)-E Z_j^(i)|>=eta)
+ <=K[1/(12N)+1/(48KM)]/eta^2
+ =1/(12K)+1/12<=1/6.                                    (3)
+On the complementary event all deviations are STRICTLY less than eta. The
+mean gap in(1) is at least1/(8K^2)=2eta, so bundle i wins strictly. Consequently
+Pr(bundle i wins at r_i)>=5/6. This remains valid for K=1, trivially.
+
+For each edge of bundle i, its envelope dominates its payment at r_i. Bundles
+have disjoint owners, so
+ sum_e P_e>=sum_i g_i(r_i) Pr(bundle i wins at r_i)
+           >=K*(3/4)*(5/6)=5K/8.                         (4)
+Thus P cannot satisfy C U(K)T for any absolute C. This failure already occurs
+on TTSP networks with polynomial owner growth and reports bounded by T.
+
+4. BALANCED VARIANT (OPTIONAL)
+For j<K replace every heavy report1 by
+ h_j=(K+j)/(4K^2M).
+Then n_j h_j=1-b_j, so EVERY original cut has capacity1. At target i<K,
+clipped totals are min(1,g_j(r_i)). The target i is unsaturated, and every
+other cut has gap at least1/(4K^2): for saturated cuts this is
+1-g_i=(K-i)^2/(4K^2); for unsaturated cuts use(1). Variances only decrease,
+since every heavy clipped cap is<=r_i. The same proof yields5(K-1)/8.
+This variant is not needed for the primary obstruction.
+
+5. SCOPE
+The original effective-capacity rule z is truthful and sharp-order on this
+TTSP family. The failure concerns adding a supremum over common clipping
+scales: a different cut earns nearly a full payment at each of many scales.
+An untruncated scale envelope also fails on a much simpler path (one cap1
+owner and m serial cap m owners each receive at least1/3 at scale m), but
+that does not prove(4); the bounded-scale family above is the relevant result.
+No priority or human-review claim is made.

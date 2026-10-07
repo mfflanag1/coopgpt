@@ -1,0 +1,73 @@
+COMMON-GRAND-FLOW CLIPPING IS ALSO NOT TRUTHFUL
+7 October 2026. Coordinator proof and exact arithmetic; focused independent audit found no invalid step.
+This closes an alternative normalization, not the actual-envelope question.
+
+Candidate mechanism: a_e(c)=min(c_e,T(c)); select a minimum structural cut
+under independent a_e U_e and pay w_e=a_e Pr(e is in that cut). Common clipping
+preserves every coalition flow and satisfies the same U(K) budget argument as
+effective clipping, since a_e<=T and an original minimum cut still sums to T.
+The missing incentive property fails already on a ten-owner, four-cut DAG.
+
+1. FIXED NETWORK
+Use vertices s,A,B,t. Owners are x:s->A with report1; z:A->t with report3;
+g:A->B with report delta=1/10; focal h:B->t with varying report h; and N=6
+parallel owners Y_i:s->B each report1/N. Compare h0=3/4 with h1=1.
+The four structural minimal cuts are
+ {x} union Y; {x,h}; {z,h}; {z,g} union Y.
+Hence T(h)=min(2,1+h) on the interval and the common clipped caps are
+ a_x=1, a_z=1+h, a_g=delta, a_h=h, a_Yi=1/N.
+All ten owners stay fixed and all edges are on s-t paths; longest path is3.
+
+2. CONDITIONAL PAYMENT FORMULA
+Write X=U_x, Z=(1+h)U_z, G=delta U_g, and Y=N^(-1)sum_i U_i.
+The cheapest h-containing intercept is min(X,Z). The cheapest h-excluding
+cut is Y+min(X,Z+G). The elementary identity
+ min(X,Z+G)-min(X,Z)=min(G,(X-Z)_+)
+therefore gives
+ w_h(h)=E min(h,Y+W_T), W_T=min(delta U_g,(U_x-T U_z)_+), T=1+h. (1)
+Y is independent of W_T. Since T>=1, the latter has survival function
+ Pr(W_T>r)=(1-r/delta)(1-r)^2/(2T), 0<=r<=delta,
+and zero survival for r>delta. In particular
+ E W_T=(delta/4-delta^2/6+delta^3/24)/T=187/(8000T).    (2)
+As h increases, the varying common cap of z lowers this bonus. For sufficiently
+concentrated Y, the increased focal cap h does not offset that decrease.
+
+3. EXACT TEN-OWNER CERTIFICATE
+Let
+ F_N(u)=N^N/N! sum_{j=0}^N (-1)^j binom(N,j)(u-j/N)_+^N,
+ L_N(u)=N^N/(N+1)! sum_{j=0}^N (-1)^j binom(N,j)(u-j/N)_+^(N+1).
+These are respectively Pr(Y<=u) and E(u-Y)_+ for the uniform average Y.
+Symmetry Y=distribution 1-Y gives
+ E min(h,Y)=1/2-L_N(1-h).
+Integrating the bonus in(1) yields the finite rational formula
+ w_h(h)=1/2-L_N(1-h)
+       +integral_0^delta [(1-r/delta)(1-r)^2/(2T)] F_N(h-r) dr. (3)
+Every integral is a polynomial on rational intervals. At N=6, direct exact
+integration, independently checked using the density and atom of W_T, gives
+ w_h(3/4)-w_h(1)=587847649425223/914457600000000000>0.    (4)
+Thus common-grand-value clipping violates own-report monotonicity. The proof
+is finite and exact; the discovery QMC scans are not used to certify(4).
+
+4. OPTIONAL ELEMENTARY LARGE-N CHECK
+For N=10000, Y has mean1/2 and variance1/(12N). At h0=3/4, the unclamped
+value Y+W_T differs only if Y>13/20, since W_T<=1/10; the loss is at most1.
+Chebyshev bounds its expectation by1/2700. Ignoring the high-profile clamp
+only raises the high payment. From(2), therefore,
+ w_h(3/4)-w_h(1)>=187/112000-1/2700=3929/3024000>0.
+This independent argument confirms the mechanism of failure; N=6 gives the
+smaller exact certificate above.
+
+5. SCOPE
+This rule is distinct from z based on effective capacities D. On this particular
+interval the effective caps are unchanged except D_h=h, so the original rule's
+focal payment is monotone. This example therefore is NOT another counterexample
+for z or y, and does not refute a sharp budget for either monotone envelope.
+
+AUDIT: Fable run20261007-012707-237cbb14 found no invalid step. Coordinator
+verified the referenced effective-capacity definitions and preservation facts
+in ../2026-10-06-wheatstone/DAG_BASELINE.txt; the reviewer accepted these as
+dependencies rather than auditing them anew. Common clipping at T preserves
+all flows (each edge flow<=total<=T); every original minimum cut has all
+capacities<=T and therefore stays a T-cut. This verifies the common-clipping
+budget premise by the earlier uniform-tail argument. No tool execution was
+claimed by the static reviewer.

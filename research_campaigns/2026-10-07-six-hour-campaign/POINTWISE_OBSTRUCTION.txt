@@ -1,0 +1,126 @@
+UNBOUNDED COORDINATEWISE INFLATION UNDER THE OWN-REPORT ENVELOPE
+7 October 2026. Conventional proof, coordinator checked; focused cross-model audit found no invalid step.
+No novelty claim. This is an obstruction to a proof strategy, NOT an aggregate
+subsidy lower bound and NOT an impossibility for other truthful mechanisms.
+
+Definitions are those of BASE_FLOW_DOMINATION.txt. For effective capacities D,
+z_e=D_e Pr(e belongs to the selected minimum random cut), with independent
+uniform capacity multipliers; y_e(c)=sup_{0<=t<=c_e}z_e(t,c_-e).
+The frozen marginal r obeys z<=r<=2z at every profile.
+
+THEOREM. There is no universal finite C for either coordinatewise assertion
+ y_e(c)<=C z_e(c), or y_e(c)<=C r_e(c).
+This holds on finite DAGs with longest path4 and minimal-cut height at most2.
+Owners are fixed throughout each report comparison. Structural cut count grows.
+It does NOT disprove sum_e y_e(c)<=C U(K)T(c).
+
+1. GRAPH AND EFFECTIVE CAPACITIES
+For integer m>=1 use vertices s,A,B_1,...,B_m,q,t and these distinct owners:
+ x:s->A (the focal report),
+ y_i:s->B_i with capacity epsilon=1/10,
+ g_i:A->B_i and h_i:B_i->q, each with capacity2,
+ k parallel Z_j:A->q, each with capacity2,
+ N parallel P_j:s->q, each capacity(1-2b)/N,
+ N parallel R_j:q->t, each capacity1/N.
+Take 0<b<=1/100, k>=1, and compare x0=1/10 with x1=9/10.
+Indeed all focal reports 0<=x<=9/10 have total maxflow T=1: the direct P
+bundle supplies1-2b, and the y_i branches supply at least2b to q. The R bundle
+is the unit bottleneck. The individual effective caps are exactly
+ D_x=x, D_yi=epsilon, D_gi=D_Zj=x, D_hi=x+epsilon,
+ D_Pj=(1-2b)/N, D_Rj=1/N.                              (1)
+Each equality follows by sending the specified amount on paths through that
+edge, together with the evident prefix/suffix bottleneck upper bound.
+
+Writing a bundle symbol for all its edges, the structural minimal cuts are:
+ (a) R;
+ (b) P union{x} union one choice of {y_i} or {h_i} for every i;
+ (c) P union Z union one choice of {h_i} or {y_i,g_i} for every i.
+Every minimal cut comes from q outside the source side (and either A outside
+or A inside), or is R. The displayed cuts are minimal: each edge has an s-t
+path meeting its cut only at that edge. They are distinct, so
+ K=2^(m+1)+1, L=4, and H=sum_C h(C)=3*2^m.               (2)
+In (b), all but the all-y cut have height2; all other cuts have height1.
+The number of owners is 1+3m+k+2N, fixed between the two profiles.
+
+2. REDUCING THE FOCAL PAYMENT TO A SIMPLEX INTEGRAL
+Let P,R,Z also denote their independent random capacity score sums. Put
+ B=R-P, A_i=min(epsilon U_i,(x+epsilon)V_i), A=sum_i A_i.
+Then EB=b and Var(B)=[1+(1-2b)^2]/(12N)<=1/(6N).
+The minimum containing-cut intercept is P+A. The minimum excluding-cut
+score is min(R, P+Z+sum_i min((x+epsilon)V_i,epsilon U_i+x W_i)).
+Integrating out the focal uniform yields exactly
+ z_x=E min(x,[min(B-A,
+          Z+sum_i min(x W_i,((x+epsilon)V_i-epsilon U_i)_+))]_+).  (3)
+On Z>=1 the second argument cannot bind, since B-A<=R<=1. Hence with
+ J_x(s)=E_A min(x,(s-A)_+),
+ |z_x-J_x(b)|<= E|B-b|+Pr(Z<1)
+              <=1/sqrt(6N)+10^k/k!.                     (4)
+The first step uses that the clamp is 1-Lipschitz in s. The truncation error
+is at most its probability, because 0<=payment<=x<=1. The Z lower-tail
+bound is the simplex-volume bound for x sum_j U_j, with x>=1/10.
+
+For 0<=a<=epsilon the density of A_i is
+ f_x(a)=alpha_x-beta_x a,
+ alpha_x=10+1/(x+epsilon), beta_x=20/(x+epsilon).
+When 0<b<=min(epsilon,x), no upper density breakpoints enter and
+ J_x(b)=integral_{a_i>=0,sum a_i<=b}(b-sum a_i) product_i f_x(a_i) da.
+The unweighted simplex integral is I=b^(m+1)/(m+1)!.
+For exact finite checks the polynomial identity is
+ J_x(b)=sum_{j=0}^m binom(m,j) alpha_x^(m-j)(-beta_x)^j
+                         b^(m+j+1)/(m+j+1)!.            (5)
+
+3. EXPLICIT FINITE PARAMETERS AND DIVERGENCE
+Set
+ b=1/(100m), Q=11^m b^(m+1)/(m+1)!,
+ N=ceil(16/Q^2), k=2 ceil(8/Q).
+At low x0, each density on the integration simplex is >=15-1/m, so
+ J_low(b)>=(15-1/m)^m I>=(14/15)15^m I.                 (6)
+At high x1, each density is at most11 and at least11-1/(5m), whence
+ (54/55)Q<=J_high(b)<=Q.                                (7)
+The lower estimates use (1-u/m)^m>=1-u.
+Our N gives1/sqrt(6N)<=Q/8. Also Q<=11/20000<0.0011, hence k>=800.
+For even k>=800, k!>=(k/2)^(k/2), and therefore
+ 10^k/k!<=(200/k)^(k/2)<=2^(-k)<=1/k<=Q/16.
+Consequently (4) is at most3Q/16<=Q/4 at either profile. In particular
+ z_high >=(54/55-1/4)Q=161Q/220>0.
+Because x0 is an admissible underreport at the high profile,
+ y_x(c_high)/z_x(c_high)
+ >= [(14/15)(15/11)^m-1/4]/(5/4)
+ = (56/75)(15/11)^m-1/5 ->infinity.                     (8)
+Since r_high<=2z_high, y_x/r_high is unbounded too. All parameters are finite
+for each m, all changes are focal underreports, and no owner is introduced
+or removed during an incentive comparison.
+
+4. SMALLER FINITE COUNTEREXAMPLE TO FACTOR2
+Take m=3, b=1/20, N=100000, k=50, and the same x0,x1. Here P has total9/10.
+Equations(1)-(5) remain valid; m epsilon>=2b guarantees T=1.
+Formula(5) gives
+ J_low=2299/3225600, J_high=132247/403200000,
+ J_low-2J_high=7627/134400000.
+The density of A=sum_i A_i is bounded by alpha_x, since convolution with
+probability densities does not increase the sup norm. Distributionally
+ J_x''(s)=f_A(s)-f_A(s-x), so |J_x''|<=alpha_x, globally almost everywhere.
+Thus |E J_x(B)-J_x(b)|<=alpha_x Var(B)/2<=alpha_x/(12N).
+Ignoring Z can only increase the actual payment. Consequently
+ z_low-2z_high >=7627/134400000-37/(12N)-10^50/50!
+              =1161/44800000-10^50/50! >0.              (9)
+This K=17, 200060-owner graph directly gives y_x>2z_x>=r_x.
+
+5. SCOPE AND RESEARCH CONSEQUENCE
+The multiplying effect concerns extremely small focal payments. In this entire
+family L=4, and no aggregate lower bound growing with K has been established.
+The result closes a coordinatewise comparison shortcut to the sharp aggregate
+bound; it does not reject the envelope, a simultaneous antichain estimate, or
+an argument charging different optimized owners to shared cut competition.
+The separate frozen-r nonmonotonicity certificate remains valid but is weaker
+for the coordinatewise-domination question. See FROZEN_NONMONOTONICITY.txt.
+
+AUDIT AND SCOPE CLARIFICATION
+The focused Fable audit completed at run20261007-010513-76f96c67. Its factual
+proof checks agree with independent exact arithmetic. The ratio in(8) is
+Omega(K^alpha), alpha=log_2(15/11)>0, so it also rules out y_e<=C U(K)z_e.
+The reviewer additionally mentioned the selected mean flow fbar in its final
+sentence; that extension does NOT follow: r<=fbar supplies no upper bound
+fbar<=Cz. We reject that unsupported extension. The antichain/common-flow
+domination question remains open. Prototype checks supplement analytic bounds;
+no large-owner Monte Carlo is needed or claimed as certification.

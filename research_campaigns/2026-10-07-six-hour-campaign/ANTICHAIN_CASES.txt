@@ -1,0 +1,96 @@
+ACTUAL ENVELOPE BUDGETS FOR TWO INCOMPARABLE OWNERS AND PARALLEL BUNDLES
+7 October 2026. Conventional proof, coordinator checked; focused independent audit found no invalid step.
+These are structural lemmas for the original effective-capacity envelope y.
+They do not establish the full antichain conjecture or sharp aggregate budget.
+
+Use the fixed DAG, fixed owners, arbitrary nonnegative capacity reports, effective
+caps D, base random-cut payments z and own-report envelope y from CONTRACT.txt.
+T denotes the ORIGINAL grand maxflow. A path-antichain A is a set of edges such
+that no s-t path contains two of them. In particular every path containing one
+of its edges avoids all other edges of A. All flows can be decomposed into paths.
+
+1. RIVAL-FLOW BOUND
+For e in A let R_{-e} be the maximum total flow using ONLY s-t paths which meet
+A\{e}. This is a finite path-flow LP, and every such path avoids e. Consequently
+R_{-e} is unchanged by any own underreport of e and satisfies0<=R_{-e}<=T.
+Then
+ y_e(c)<=min(D_e(c), max(T-R_{-e},T/2)).                 (1)
+
+Proof. Fix an arbitrary underreport t and write c^t and d=D_e(c^t). A flow
+attaining R_{-e} is still feasible under c^t, avoids e, and remains feasible under
+the effective caps D(c^t). Every structural cut C containing e must block it;
+therefore D(c^t)(C\{e})>=R_{-e}. If d>T-R_{-e}, every such containing cut has
+deterministic effective-capacity sum greater than T. The minimum effective cut
+has capacity T(c^t)<=T, so at least one minimum cut C0 excludes e. With A_t the
+minimum random containing-cut intercept and B_t the minimum excluding-cut score,
+the conditional formula and nonnegativity imply
+ z_e(c^t)=E min(d,(B_t-A_t)_+)<=E B_t
+         <=E sum_{h in C0}D_h(c^t)U_h=T(c^t)/2<=T/2.
+If d<=T-R_{-e}, simply z_e(c^t)<=d<=T-R_{-e}. This proves the maximum bound
+uniformly in t. The independent bound y_e<=D_e(c) completes(1).
+
+2. EVERY TWO-OWNER ANTICHAIN IS SAFE
+For any two path-incomparable owners e,f,
+ y_e(c)+y_f(c)<=T(c).                                  (2)
+
+The effective cap D_f can be attained by retaining only paths through f from
+an attaining flow. These paths avoid e, so R_{-e}>=D_f. Hence(1) gives
+ y_e<=max(T-D_f,T/2), and symmetrically with e,f exchanged.
+If D_f<=T/2 then y_e<=T-D_f and y_f<=D_f. If only D_e<=T/2, exchange names.
+If both exceed T/2, each envelope is<=T/2. All zero and equality cases are
+included. This proves(2) for arbitrary interacting surroundings, not only TTSP.
+
+3. EVERY PARALLEL-EDGE BUNDLE IS SAFE
+Let X be the complete set of parallel owners from u to v. Put
+ q=sum_{i in X}c_i,
+ B=min(maxflow(s,u),maxflow(v,t)),
+omitting a prefix/suffix bound whose terminals coincide. If both are omitted
+put B=infinity. These prefix/suffix flows are independent of all X reports;
+their path regions are disjoint because G is acyclic. Thus
+ D_i=min(c_i,B), and the maximum total flow through X is min(q,B)<=T.
+We claim
+ sum_{i in X}y_i(c)<=min(q,B).                           (3)
+
+If q<=B, sum y_i<=sum c_i=q. If B=0 all D_i and payments vanish. Thus assume
+0<B<q. Replace the parallel bundle temporarily by one aggregate capacity q
+when considering feasible flows on external edges. This aggregation preserves
+exactly their feasible flow projections: total bundle flow can always be split
+among its original owners according to their capacities. Every such total flow
+is at most B. Therefore all EXTERNAL effective caps depend on the bundle only
+through q and are constant whenever q>=B. Each other bundle owner's effective
+cap is min(c_j,B), independently of i's report.
+
+Every structural minimal cut contains either the entire parallel bundle or none
+(use its source-side boundary representation). Thus at the current profile
+ z_i=D_i p, with one common cut-inclusion probability p. Write W=sum_i D_i>0.
+BASE_FLOW_DOMINATION.txt gives a single feasible flow dominating all base z;
+its total through X is at most B, hence Wp<=B.
+
+For a fixed owner i put s_i=q-c_i and delta_i=(B-s_i)_+. At every underreport
+t>=delta_i, total bundle capacity stays>=B. All effective caps other than i's
+remain fixed, and the usual conditional clamp formula makes its base payment
+nondecreasing in t. Thus these underreports cannot exceed z_i(c). For t<delta_i,
+the payment is at most t<=delta_i. We conclude y_i<=max(z_i,delta_i).
+If delta_i=0, the first term is<=BD_i/W. If delta_i>0, all other c_j<=s_i<B,
+so W=D_i+s_i and D_i>=B-s_i=delta_i. Consequently
+ delta_i W=(B-s_i)(D_i+s_i)<=B D_i.
+Both terms in the maximum are<=BD_i/W; summing proves(3).
+For a subset of parallel owners, apply the whole-bundle bound and also the
+individual bounds y_i<=c_i, obtaining min(sum_subset c_i,B).
+
+4. EXACT LIMIT OF THIS ADVANCE
+Any counterexample to sum_{e in A}y_e<=T requires at least three positive
+path-incomparable owners, not all belonging to one parallel bundle, with
+sum_{e in A}D_e>T. For three or more owners, (1) can leave each payment bounded
+only by T/2. A common feasible flow dominating all separately optimized payments
+has not been constructed. The above results do not prove such a flow exists.
+No historical-priority claim is made.
+
+AUDIT: Fable run20261007-012707-237cbb14 found no invalid step. Coordinator
+verified the referenced effective-capacity definitions and preservation facts
+in ../2026-10-06-wheatstone/DAG_BASELINE.txt; the reviewer accepted these as
+dependencies rather than auditing them anew. Common clipping at T preserves
+all flows (each edge flow<=total<=T); every original minimum cut has all
+capacities<=T and therefore stays a T-cut. This verifies the common-clipping
+budget premise by the earlier uniform-tail argument. No tool execution was
+claimed by the static reviewer.
