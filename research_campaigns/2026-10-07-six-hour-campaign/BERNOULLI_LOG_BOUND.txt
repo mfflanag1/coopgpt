@@ -1,0 +1,155 @@
+A LOGARITHMIC TRUTHFUL COALITION-COVERING MECHANISM ON EVERY FINITE DAG
+7 October2026. Proof independently derived by coordinator and Codex reviewer; Fable audit
+completed without mathematical findings. Strengthened exact verification passed.
+
+THEOREM AND MODEL
+Fix a finite directed acyclic s-t graph, with one fixed original owner per
+edge and arbitrary nonnegative real capacity reports c. Owners may only
+underreport; utility is payment, without operating costs. Let T(c) be grand
+maxflow and v_c(S) the maxflow using coalition S. Let K be the number of
+inclusion-minimal structural s-t cuts, fixed by the topology, not the reports.
+There is a deterministic nonnegative payment rule p satisfying, at EVERY
+profile and for every owner and coalition:
+ (i) p_e(t,c_-e) is nondecreasing in t;
+ (ii) sum_{e in S}p_e(c)>=v_c(S);
+ (iii) sum_e p_e(c)<=(exp(1)+o(1)) T(c) log K as K tends to infinity.
+The rule uses exact finite expectations, not realized random payments.
+No computational-efficiency claim, historical novelty confirmation, or
+field-level breakthrough claim is made. This improves the project's known
+general K-only existence bound from K to O(log K). The established glove
+lower bound is (1-o(1))log K/log log K; a log log K factor remains unresolved.
+
+More explicitly, fix ANY q in(0,1). The mechanism below obeys, for every
+lambda>0 and every K>=1,
+ sum p <= T * (log K+lambda+1)
+              / [q*(-log(q+(1-q)exp(-lambda)))].        (1)
+Use the single fixed q=exp(-1) for (iii). Only the analysis parameter lambda
+depends on K; the mechanism's noise law remains fixed for all topologies.
+If there is no structural s-t path, set all payments zero and exclude that
+trivial topology from the definition of K. If T=0, the same rule gives zero.
+
+1. EFFECTIVE CAPACITIES AND MASKS
+Let D_h(c) be the largest flow through h among all feasible s-t flows of any
+total, not just maximum flows. This maximum is attained. DAG path decomposition
+gives 0<=D_h(c)<=min(c_h,T(c)). The map D_h is nondecreasing in each report.
+Every feasible flow for c is bounded coordinatewise by D(c), and D(c)<=c,
+so the two capacity vectors define the same feasible-flow set. More strongly,
+for ANY edge mask b in{0,1}^E, the capacity vectors c*b and D(c)*b define
+the same feasible-flow set: any feasible masked raw flow is feasible in c,
+and hence bounded by D(c); the reverse inclusion is immediate.
+In particular, F(D(c)*b)=F(c*b), including all coalitions and zero masks.
+
+Fix a report-independent total priority order on the K structural cuts.
+Sample iid Bernoulli B_h with Pr(B_h=0)=q and Pr(B_h=1)=1-q. Select W(c,B)
+as the first minimum-scoring structural cut for scores D_h(c)B_h.
+Structural minimal cuts suffice to attain every nonnegative-capacity mincut.
+Define the auxiliary covering rule and the proposed mechanism by
+ z_e(c)=D_e(c)Pr(e in W(c,B)),
+ p_e(c)=D_e(c)Pr(e in W(c,B) | B_e=0).                 (2)
+This is a finite, everywhere-defined, deterministic expectation rule.
+
+2. THE STRICT SUPPORT LEMMA
+Fix c_-e, a positive high report u>0, and any0<t<=u. Write D_h(s) for the
+effective capacity when c_e=s. Then
+ D_h(t)>=D_h(0)+(t/u)(D_h(u)-D_h(0)).                   (3)
+Indeed mix a flow attaining D_h(0) and a flow attaining D_h(u), with weight
+t/u on the latter. Every other capacity is fixed; flow through e in the mix
+is at most (t/u)u=t. The mixed flow is feasible at report t and proves (3).
+Monotonicity also gives D_h(0)<=D_h(t)<=D_h(u). Consequently
+ D_h(t)>D_h(0) iff D_h(u)>D_h(0), for EVERY0<t<=u.       (4)
+Thus a cap that increases at any positive report has already increased
+strictly at every positive report, however small. No differentiability or
+nondegeneracy assumption is used.
+
+3. CONDITIONING ON THE OWNER'S ZERO MASK REMOVES OWN-REPORT DEPENDENCE
+Fix a mask b with b_e=0. Let V=F(c*b); it is independent of c_e because e
+is masked out. By Section1, at every report s>=0,
+ min_C sum_{h in C}D_h(s)b_h=V.                         (5)
+At report0 every cut has score at least V. At a positive report t, a cut C
+has score exactly V if and only if BOTH
+ (a) sum_{h in C}D_h(0)b_h=V;
+ (b) D_h(t)=D_h(0) for every open h in C.
+This follows because all score increments are nonnegative. By (4), condition
+(b) is the same for every positive t: compare any pair using their maximum u.
+The ENTIRE family of minimizing structural cuts is therefore independent of
+the positive own report. Its first member in the fixed priority order is also
+independent. Hence a_e(c_-e)=Pr(e in W | B_e=0) is constant on c_e>0.
+For positive own reports, p_e(c)=a_e(c_-e)D_e(c) is nondecreasing. At c_e=0,
+D_e=0 and p_e=0, so the endpoint also obeys monotonicity. This proves (i),
+with all ties, zero other reports, and arbitrary fixed owner identities allowed.
+
+4. COALITION COVERAGE AND THE POINTWISE SANDWICH
+At fixed c and B_-e, changing B_e from1 to0 lowers every e-containing cut
+score by exactly D_e and leaves all other cut scores unchanged. If D_e>0,
+an e-containing cut selected before this change remains the selected member
+of the containing class and becomes strictly cheaper than every excluding
+competitor. Thus conditional membership probabilities satisfy a_0>=a_1.
+If D_e=0 the desired payment inequalities are trivial. Equation(2) gives
+ z_e=D_e[q a_0+(1-q)a_1], p_e=D_e a_0,
+ so z_e<=p_e<=z_e/q.                                  (6)
+Every structural cut C satisfies
+ sum_{e in C intersect S}D_e(c)>=v_c(S),                (7)
+because D preserves coalition flow values and C cuts the coalition subgraph.
+Taking the expectation of (7) for W proves z(S)>=v_c(S), hence p(S)>=v_c(S).
+This proves (ii). It also shows p is a truthful pointwise majorant of the
+BERNOULLI base rule, and its least own-report envelope y^Bern satisfies
+ y_e^Bern<=p_e<=z_e^Bern/q.                             (8)
+This does not contradict the polynomial obstruction for strictly positive
+noise: Bernoulli's positive atom at zero is precisely the excluded hypothesis.
+
+5. LOGARITHMIC BUDGET, INDEPENDENT OF OWNER COUNT
+Assume T>0, put a_e=D_e/T in[0,1], and rho_C=sum_{e in C}a_e. An original
+minimum-capacity structural cut A has D(A)=T: D(A)<=c(A)=T and every cut
+has D-capacity>=T. Its masked score is at most T. Hence the selected W has
+normalized masked score sum_{e in W}a_eB_e<=1, in every realization.
+
+For lambda>0 put alpha=-log(q+(1-q)exp(-lambda))>0. The function
+ f(x)=log(q+(1-q)exp(-lambda x))
+is convex on[0,1], with f(0)=0 and f(1)=-alpha, so f(x)<=-alpha x there.
+For any fixed cut C, exponential Markov and independence yield
+ Pr(sum_C a_eB_e<=1)
+ <=exp(lambda) product_C [q+(1-q)exp(-lambda a_e)]
+ <=exp(lambda-alpha rho_C).                           (9)
+If rho_W>s, some cut with rho_C>s has masked score<=1. A union over the K
+structural cuts therefore gives
+ Pr(rho_W>s)<=min(1,K exp(lambda-alpha s)).             (10)
+Integrating this tail from0 to infinity, split at s0=(log K+lambda)/alpha:
+ E rho_W<=s0+1/alpha=(log K+lambda+1)/alpha.            (11)
+Since sum z=T E rho_W and sum p<=sum z/q, (11) proves (1).
+At T=0, every D_e=0, so p=0 as already stated.
+
+Take q=exp(-1) and lambda=log(2+log K)>0, valid for every K>=1. Then
+ q alpha=exp(-1)*[1-log(1+(exp(1)-1)/(2+log K))],
+which tends to exp(-1), while log K+lambda+1=(1+o(1))log K. This proves
+(iii). The chosen denominator is positive even at K=1 because
+1+(exp(1)-1)/2=(exp(1)+1)/2<exp(1).
+The coefficient exp(1) is an upper-bound coefficient for THIS proof, not an
+optimality statement. Indeed maximizing q log(1/q) gives exp(-1); improving
+the particular domination/tail analysis or changing the mechanism may improve it.
+
+6. VERIFICATION, ESTABLISHED INGREDIENTS, AND REMAINING QUESTIONS
+Established ingredients: maxflow/mincut, path decomposition, convex flow
+mixtures, exponential Markov/Chernoff bounds, and tail integration. The proposed
+contribution is the conditioned-zero cut selection, its exact own-report
+invariance, and the resulting owner-independent logarithmic subsidy bound.
+The exact rational verifier checks masked-flow preservation, whole minimizing
+families, strict-cap support, cut-membership domination, every coalition, and
+selected positive unilateral reports on small graph families. It is a check
+of implementation/algebra and corner cases, not proof by finite extrapolation.
+Unresolved: sharp general K-order between log K/log log K and log K; efficient
+exact computation; specialist review and priority. The method's extension to
+general binary resource-packing games is being checked separately.
+
+APPENDIX: THE PREVIOUS GENERAL MARGINAL BOUND
+For context define m_e(c)=T(c)-F(c with e deleted). It is nonnegative and
+own-report nondecreasing because the deletion value does not depend on c_e.
+For any original minimum-capacity structural cut C, deleting e in C gives
+F(c with e deleted)<=T-c_e; deleting e-containing path flows from a maximum
+flow loses at most c_e, giving the reverse inequality. Thus m_e=c_e on C,
+and m(S)>=c(C intersect S)>=v_c(S). For ANY maximum flow f, the same path
+deletion argument gives m_e<=f_e. DAG path decomposition implies sum m<=LT,
+where L is the longest s-t path length. Finally L<=K: for each edge e of a
+fixed length-L path, a vertex cut separating that path's prefix through the
+tail of e from its remaining vertices meets the path exactly in e; a minimal
+subcut still contains e. These L subcuts are distinct. Thus KT was an
+elementary general K-only existence bound, independently of the envelope.

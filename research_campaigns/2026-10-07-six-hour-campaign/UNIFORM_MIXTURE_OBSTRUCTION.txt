@@ -1,0 +1,98 @@
+UNIFORM-q MIXTURE OF CONDITIONED-ZERO PAYMENTS HAS THETA(K) WORST ORDER
+7 October 2026. Exact proof and small rational checks by personal_ceiling.
+Scope: finite directed multigraphs, fixed owners, nonnegative reports, a fixed
+report-independent total priority on structural cuts. Zero reports are used.
+No lower bound on arbitrary mechanisms is claimed.
+
+RULE AND PERMUTATION IDENTITY
+At a profile c let D_e be the largest feasible s-t flow through e, T the
+grand flow, and K the number of structural minimal cuts. Independently set
+B_e=0 with probability q and B_e=1 otherwise. Let W be the first minimum
+structural cut for scores D_e B_e. The conditioned-zero payment is
+ p_e^q=D_e Pr(e in W | B_e=0).
+Its uniform mixture is pbar_e=integral_0^1 p_e^q dq.
+
+Give owners independent uniform arrival times U_e in (0,1). Immediately
+before owner e arrives, select the first minimum cut for the D-weight of
+already arrived owners, and charge D_e if that cut contains e. Conditional
+on U_e=t, each other owner has independently arrived with probability t,
+and e is absent. Integrating over t, with q=1-t, proves that the expected
+charge vector is exactly pbar. Random times have a uniform permutation;
+there is no tie in arrival times almost surely.
+
+LINEAR LOWER BOUND, ROBUST TO EVERY FIXED CUT PRIORITY
+Fix integers K>=2 and B>=3. Use K serial pools, each having
+ M=B^(K-1)
+parallel edges with distinct fixed original owners. The only minimal
+structural cuts are the K complete pools. After reading the rule's fixed
+cut priority, enumerate the pools in that priority as i=1,...,K. In pool i
+activate m_i=B^(K-i) owners with capacity one and give the remaining owners
+capacity zero. This is a report profile on one fixed equal-pool topology;
+the owner identities and structural cuts do not change.
+
+The last-priority pool has one active owner. Hence T=1. Every active owner
+can carry a unit flow by selecting one active edge in every other pool, so
+D_e=c_e for every owner. Zero-capacity owners can be omitted from the
+arrival calculation: their positions affect no cut score or payment, and
+the relative order of active owners is still uniform.
+
+Let tau_i be the first arrival time among the m_i active owners in pool i.
+If tau_i>max_{j<i}tau_j, all earlier-priority cuts have strictly positive
+score immediately before tau_i, while cut i has score zero. It is the
+selected zero-score cut, and its arriving owner is charged one. Therefore
+ pbar(E) >= sum_i Pr(tau_i>max_{j<i}tau_j).
+For j<i, the earliest owner among the two pools is uniform among their
+m_i+m_j active owners. Consequently
+ Pr(tau_i<tau_j)=m_i/(m_i+m_j)<=B^{-(i-j)}.
+A union bound now proves the exact lower bound
+ pbar(E) >= K - sum_{i=1}^K sum_{d=1}^{i-1} B^{-d}
+          >= K(1-1/(B-1)).                              (1)
+B=3 gives K/2; allowing B to grow makes the lower coefficient approach one.
+The argument counts only charges at zero-score cuts. Any later charges,
+including those created by positive-score ties, are nonnegative and may be
+discarded. Thus arbitrary fixed tie priority is fully accounted for.
+
+DETERMINISTIC 2KT UPPER BOUND
+For ANY profile and ANY owner permutation, allocate each charge to the
+selected cut that caused it. At every such selection its current revealed
+score is at most T, because a fixed minimum D-capacity cut has full score T.
+At the last positively charged arrival for a particular cut, adding the
+new owner increases that cut's revealed score by at most D_e<=T. All charges
+ever allocated to that cut are distinct nonnegative revealed increments
+included in its score immediately after this last charge. Their sum is
+therefore at most 2T. Cut reappearances cause no gap in this argument.
+Summing over the K cuts gives total charge<=2KT for every permutation.
+Taking expectations proves pbar(E)<=2KT. Together with (1), worst order is
+Theta(K), not O(log K).
+
+The upper argument also applies to K binary packing dual vertices provided
+each owner's single-step dual loss lies in [0,T] and some full dual objective
+equals T. It makes no additional claim for nonbinary dual coefficients.
+
+EXACT CHECKS AND CORRECTION RECORD
+The accompanying verifier uses rational arithmetic to sum over every
+predecessor subset. It also compares direct permutation sums on small cases.
+Unit active pool sizes:
+ (2,1): pbar(E)=7/3;
+ (3,1): pbar(E)=9/4;
+ (9,3,1): pbar(E)=2193/715.
+For the last example the first-arrival-only lower bound is 161/65.
+Singleton pools (a K-edge path) recover H_K exactly.
+
+An earlier exploratory message described 1+m/(m+1) as the exact budget of
+an m-unit heavy pool followed by an R-owner tiny pool of total capacity one,
+with heavy-first priority. That omitted a possible extra unit charge when
+the tiny pool is fully revealed and the heavy score is exactly one. For
+m>=2 the correct exact expression is
+ 1+m/(m+1) + m! (R+1)!/(m+R)!.
+In particular R=1 gives 2+1/(m+1), and R->infinity gives the former expression
+only as a limit. For m=1 the exact value is 3/2. This correction has no
+effect on the scalable lower proof, which uses only zero-score events.
+
+REPRESENTATION AND SCOPE
+K counts structural cuts before zero reports, not only cuts left after
+deleting zero-capacity owners. The topology has exactly K cuts and K M
+owners. It is a directed acyclic multigraph; ordinary subdivision changes
+the structural-cut count and is not claimed to preserve this theorem for
+simple DAGs. The rule remains truthful and coalition covering; its uniform
+q mixture simply has a linear worst-case budget.

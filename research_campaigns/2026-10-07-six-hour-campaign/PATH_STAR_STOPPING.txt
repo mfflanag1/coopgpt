@@ -1,0 +1,144 @@
+BOUNDED COMPLETE-ORDERED-DAG LOWER-BOUND ATTACK: STOPPING LEMMAS
+7 October 2026. Read-only research result, recorded in /tmp by personal_ceiling.
+Scope: stopping statements for specified lower-bound patterns, not a general
+upper bound on all capacity profiles and not a novelty claim.
+
+MODEL AND NOTATION
+A finite directed acyclic s-t graph has one fixed owner per edge. Reports are
+arbitrary nonnegative capacities. Write T=F(c)>0 at a base profile c. A proposed
+B-subsidy rule has nonnegative payments, covers every coalition, is nondecreasing
+in each owner's own report, and has total payment at most B F at every profile.
+Let L be the maximum number of edges on an s-t path. Define
+ M_e = T - F(c with edge e deleted).
+For any maximum flow f, deleting every path-flow component using e leaves a
+flow of value T-f_e that avoids e. Thus M_e<=f_e, and summing gives
+ sum_e M_e <= sum_e f_e <= L T.                           (A)
+The same marginal vector M(c) is a globally own-monotone coalition-covering
+rule. Indeed F(c without e) is independent of c_e, so M_e is own-monotone.
+A minimum-cut allocation is a core allocation a of this flow game; its
+coalition E\{e} constraint gives a_e<=T-v(E\{e})=M_e. Thus M dominates a core
+allocation coordinatewise and covers all coalitions.
+
+1. HIGH-CAPACITY CROSSARCS MAKE THE COMPLETE-DAG PATTERN EASY
+Consider the complete ordered DAG on s,1,...,r,t. Its maximum path length
+is r+1 and it has exactly 2^r structural minimal cuts: every internal-vertex
+subset specifies an s-side, and each crossing arc lies on a three-or-fewer
+edge s-t path that crosses this cut only on that arc. Thus every such cut
+is inclusion-minimal; the source arcs distinguish all the subsets.
+Suppose every arc between internal vertices has capacity at least the grand
+flow T at the profile in question. Boundary capacities are unrestricted.
+
+Take a path decomposition of any maximum flow. A path whose first and last
+internal vertices are i,j can be replaced by s->i->j->t when i<j, by s->i->t
+when i=j, or by s->t when it has no internal vertex. Boundary-edge flows are
+preserved. Every shortcut arc receives at most the total flow T and hence
+respects its capacity. The resulting maximum flow has total edge-flow at most
+3T. By M_e<=f_e for every maximum flow, sum_e M_e<=3T.
+
+Consequently any attempted all-profile lower-bound certificate supported
+entirely on such high-crossarc profiles cannot force subsidy above 3. The
+globally eligible marginal rule witnesses this directly. Treating the
+crossarcs as public-like, unconstrained support therefore cannot prove an
+Omega(r) lower bound. Finite-capacity internal congestion and payments to
+its original owners must enter any different argument.
+
+2. TIGHT SINGLE-BASE PATH-STAR CERTIFICATE
+Fix one base profile c. For each target owner e choose one lower report
+0<=t_e<=c_e and m_e>=2 s-t path coalitions through e. Their edge sets outside
+e are pairwise disjoint, and each has value at least delta_e at the lowered
+profile. Write T_e for that profile's grand flow. In particular
+ delta_e<=t_e and delta_e<=T_e.
+
+Summing their coalition constraints and using the lower-profile budget gives
+ m_e delta_e <= (m_e-1) p_e(lowered) + B T_e.
+Own-report monotonicity transports the resulting lower bound to c:
+ p_e(c) >= f_e := [(m_e delta_e-B T_e)/(m_e-1)]_+.        (B)
+This is the tight direct budget estimate; an earlier message used the valid
+but weaker delta_e-B T_e/m_e estimate.
+
+For EVERY choice of these witnesses and EVERY B>1,
+ sum_e f_e <= T [1 + L B/(4(B-1)^2)].                    (C)
+Proof: choose a minimum-capacity structural cut C at c. For e in C,
+f_e<=delta_e<=c_e, so their total contribution is at most T. For e outside C,
+the sets C intersect each of its m_e paths are disjoint. The cut bound on
+their values therefore gives m_e delta_e<=T.
+
+If f_e>0, then B T_e<m_e delta_e<=T, so T_e<T/B. Also
+T_e>=F(c without e)=T-M_e, whence M_e>(1-1/B)T. By (A), there are at most
+LB/(B-1) such outside targets. Finally, when f_e>0,
+ f_e <= delta_e (m_e-B)/(m_e-1)
+     <= T (m_e-B)/(m_e(m_e-1))
+     <= T/[4(B-1)].
+The last inequality follows on putting u=m_e-1 and beta=B-1:
+(u-beta)/(u(u+1)) <= (u-beta)/u^2 <= 1/(4 beta).
+Multiplying the number of eligible targets by their per-target bound proves C.
+
+Thus this direct one-base path-star certificate cannot contradict a subsidy
+B whenever 4(B-1)^3>=LB. In particular B=2+(1/2)sqrt(L) suffices. The leading
+crossing scale is (1/2+o(1))sqrt(L). For the ordered DAG, L=r+1, so this
+specified pattern cannot prove Omega(r), even using all O(r^2) owners.
+The reason is explicit: a positive forced charge requires an owner whose
+deletion loses almost all grand flow, and the sum of these marginal losses
+is limited by path length.
+
+3. STRONGER STAR-DOMAIN FEASIBILITY STATEMENT
+This separate lemma covers arbitrary coalitions rather than only the path
+families in section 2. It is limited to one base profile and its unilateral
+underreports; it is NOT a global mechanism theorem.
+
+Let X(c) contain c and every profile obtained by lowering one coordinate of c.
+There exist nonnegative, coalition-covering payments at all profiles in X(c),
+own-monotone on every unilateral comparison within X(c), with total payment
+at most B times the local grand flow, whenever
+ B >= 1 + LB/[4(B-1)^2], B>1.                            (D)
+For example B=2+(1/2)sqrt(L) satisfies D. This shows that even all coalition
+constraints and all focal-owner monotonicity comparisons on a one-base star
+of profiles cannot establish an Omega(L) lower bound.
+
+Construction and proof. Fix a base mincut C. Its allocation a_e=c_e 1(e in C)
+covers the base game, costs T, and also covers every underreported game.
+For e outside C let T_e(t)=F(t,c_-e). Because the cut C avoids e, the cuts
+excluding e have minimum capacity exactly T, while the containing cuts have
+minimum capacity b_e+t for a constant b_e>=0. Hence
+ T_e(t)=min(T,b_e+t).
+If b_e>=T put h_e=0. Otherwise define, for 0<t<T-b_e,
+ g_e(t)=t [(T-B T_e(t))/(T-T_e(t))]_+,
+and let h_e be the supremum of g_e(t) over that interval. Values with
+B T_e(t)>=T contribute zero. We have h_e<=T-b_e=M_e.
+
+If h_e>0 then b_e<T/B, so M_e>(1-1/B)T. At a point contributing to the
+supremum, x=T_e(t)/T and t<=Tx. Therefore
+ g_e(t)/T <= x(1-Bx)/(1-x)
+             <= (sqrt(B)-sqrt(B-1))^2
+             <= 1/[4(B-1)].
+The middle maximum is attained at x=1-sqrt(1-1/B). By A,
+ sum_{e outside C} h_e <= LT B/[4(B-1)^2].              (E)
+
+At the base give a_e to e in C and h_e to e outside C. This covers the base
+and has the budget in D by E.
+
+Consider a proper underreport of an owner e in C. The old cut C now has
+capacity T-c_e+t<T, whereas every cut avoiding e keeps its base capacity
+at least T. Thus every minimum cut at this profile contains e. Use a
+minimum-cut allocation, whose payment to e is t and total is T_e(t). The
+focal payment is monotone along this entire ray and ends at c_e at the base.
+
+Next let e be outside C. If T_e(t)=T, reuse the base payment vector; it covers
+the smaller game and obeys the budget. Its e-payment is h_e, and here
+t>=T-b_e>=h_e. If T_e(t)<T and t>0, choose a mincut allocation z(t). Every
+mincut contains e, so z_e(t)=t and its total is T_e(t). Put
+ alpha=min(h_e,t)/t, and pay alpha z(t)+(1-alpha)a.
+This mixture covers the lowered game and pays e exactly min(h_e,t).
+Its total is T-alpha(T-T_e(t)). When B T_e(t)<T, the definition of h_e gives
+alpha>=(T-B T_e(t))/(T-T_e(t)), so the budget is at most B T_e(t). When
+B T_e(t)>=T the budget bound is immediate. At t=0 use any minimum-cut
+allocation; it pays e zero. Thus the focal payment is min(h_e,t) until the
+flow plateaus and then h_e, an own-monotone function. Different proper rays
+differ in two coordinates, so create no additional unilateral comparisons.
+This proves the star-domain statement, including zero-capacity endpoints.
+
+STATUS
+The bounded attack stops here. No growing general-mechanism lower bound on
+the complete ordered DAG was established. Sections 1-3 are explicit stopping
+results; they leave multi-base profile transport and other certificate
+structures open. No broad profile enumeration or repository edit was made.

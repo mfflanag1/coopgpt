@@ -1,0 +1,71 @@
+SHAPLEY PAYMENTS CAN MISS COALITION COVERAGE BY A POLYNOMIAL CUT FACTOR
+7 October2026. Conventional proof and independent exact computation checked;
+cross-model audit completed; no invalid step found. No claim of historical novelty.
+
+1. CANDIDATE AND MODEL
+For a fixed directed network with one original owner per edge, let phi_e(c)
+be the Shapley value of its capacity-induced flow game. The model permits only
+binding underreports and has no operating costs, as specified in CONTRACT.txt.
+Payments are nonnegative
+and sum to grand flow T. For each predecessor set R not containing e, the
+marginal F(R+e)-F(R) is nondecreasing in c_e, so phi is own-report truthful
+on all nonnegative real profiles. The difficulty is coalition coverage.
+An all-profile constant multiplier depending only on the fixed topology would
+preserve truthfulness, if that multiplier provided adequate coverage.
+
+2. SIMPLE TWO-PATH FAMILY
+Put a unit-capacity veto edge e from s to u, followed by two internally disjoint
+u-t paths of lengths n and l, with every edge capacity1 and a distinct owner.
+For n,l>=2 this is a simple DAG. There are n+l+1 owners, n+l+1 vertices, and
+K=1+n*l inclusion-minimal structural cuts: the veto singleton and all pairs
+of one edge from each path. T=1. Coalition S contains the veto and every owner
+of the length-n path, hence v(S)=1.
+
+Generate the uniform random order by independent uniform arrival times. The
+veto is pivotal at time t precisely if at least one path is already complete:
+ phi_e=integral_0^1 [t^n+t^l-t^(n+l)]dt
+      =1/(n+1)+1/(l+1)-1/(n+l+1).
+For an owner of the length-l path to be pivotal, the veto and its other l-1
+path edges must have arrived, while the length-n path must be incomplete.
+Its Shapley share is
+ integral_0^1 t*t^(l-1)*(1-t^n)dt
+ =1/(l+1)-1/(n+l+1).
+By efficiency, subtracting the l such outsider shares yields exactly
+ phi(S)=1/(l+1)+l/(n+l+1).                              (1)
+
+Set n=l^2. Then K=l^3+1 and
+ phi(S)<2/l,  v(S)/phi(S)>l/2=(K-1)^(1/3)/2.             (2)
+Thus no absolute constant rescaling covers all coalitions. More strongly,
+no multiplier C*U(K), U(K)~log K/log log K, suffices. This already fails on
+unit-capacity simple TTSP networks, so neither general Wheatstone interactions
+nor large unequal reports cause the obstruction. All owners remain fixed.
+
+3. SMALL EXACT WITNESS
+Take n=9,l=3. There are13 owners,13 vertices,K28,T1. Exact Shapley shares:
+ veto71/260; each of9 long-path owners3/130;
+ each of3 short-path owners9/52.
+They sum to1, whereas phi(S)=25/52<1/2, deficit1/52 below half coverage.
+Independent subset enumeration and the arrival-time formulas agree exactly.
+
+4. SEPARATE BALANCED-POOL CALIBRATION
+Even requiring every serial pool to have equal total capacity does not put
+Shapley in the core. Three pools (1,1,1),(1,1,1),(1,2) all total3. The first
+six owners each receive9/28, the last unit owner7/20, the weight2 owner101/140.
+A coalition taking one unit from each pool has value1 and payment139/140.
+Hand integration: for the last unit owner at priority u, its pivotal probability
+is (1-u)[1-(1-u)^3]^2+u*u^6, integrating to7/20. For the weight2 owner define
+p1=1-(1-u)^3,p2=3u^2-2u^3,p3=u^3. Its expected marginal is
+(1-u)(p1^2+p2^2)+u(p2^2+p3^2), integrating to101/140. Symmetry and efficiency
+give the other six shares. Exact subset and permutation checks independently
+recover this vector. This small witness does not refute a factor2 bound on
+balanced serial pools; that separate gate remains under investigation.
+
+5. SCOPE AND SOURCES
+The Shapley definition, random-priority representation, and basic network
+counterexample method are classical. Hoffmann-Sudholter2005 section5 already
+gives a balanced minimum-of-three-additive-games noncore example; see SOURCES.
+Its arbitrary overlapping additive rows are not automatically a singleton-edge
+network realization. We do not claim priority for the family or asymptotic.
+This is a rule-specific obstruction. It does not lower-bound the optimal subsidy
+of all truthful mechanisms, and it does not refute the actual own-report
+envelope y. The latter has a sharp logarithmic budget on these TTSP graphs.

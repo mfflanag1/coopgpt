@@ -1,0 +1,112 @@
+FIXED RANDOMIZATION LAWS CANNOT REPAIR THE ENVELOPE
+7 October 2026. Candidate extension independently derived by Codex agents;
+coordinator checked constants and flow formulas. Fable proof audit completed
+without substantive findings; review/fixed_noise_review.md records its scope.
+
+MODEL AND CLAIM
+Fix a nonconstant probability law X with 0<X<=1 almost surely. The law does
+not change with the graph, capacities, number of owners, or structural cuts.
+For a fixed edge-owned DAG and report profile c, D_e(c) is the largest flow
+through e among all feasible s-t flows, of any total. Independently sample
+one X_e per original owner and select a minimum structural cut W for scores
+D_e(c)X_e, using any fixed tie order. Define
+ z_e^X(c)=D_e(c) Pr(e in W),
+ y_e^X(c)=sup_{0<=t<=c_e} z_e^X(t,c_-e).
+There are constants eta_X>0 and A_X>0 and fixed-owner simple DAGs with
+growing structural cut count K, for all sufficiently large family parameters
+r>=r0(X), and profiles with grand value T=1 such that
+ sum_e y_e^X >= A_X K^{eta_X}/log K.
+Every all-profile own-report-monotone pointwise majorant of z^X has the
+same lower bound. Thus no single fixed law in this class gives an O(U(K))
+envelope budget, U(K)~log K/log log K. This is a method obstruction, not a
+general mechanism impossibility. The law may have atoms; tie-breaking is
+irrelevant on the strict-separation event used below. No novelty claim.
+
+PARAMETERS, ALL FINITE AND LAW-DEPENDENT
+Let mu=EX, nu=E min(X,X'), and d=mu-nu. For independent copies,
+ nu=mu-(1/2)E|X-X'|, so 0<nu<mu and d>0.
+Put a=(mu+nu)/(2nu)>1, b=d/(4mu)>0, delta=d/40>0.
+The low mean lambda=E min(aX,(a+b)X') obeys
+ lambda<=a nu+b mu=mu-d/4=mu-10delta.                  (1)
+The pointwise increment of min(aX,aX') when its second argument increases
+by bX' is at most bX'. This proves the inequality.
+The high mean H_m=E min(aX,mX') increases to a mu, by strict positivity
+and dominated convergence. Since a mu-mu=mu d/(2nu)>d/2=20delta,
+choose an integer m0 with H_m>=mu+10delta for all m>=m0.
+Choose positive integers C,M and then B satisfying
+ C >= (mu+10delta)/(b mu),   M >= delta^{-2},
+ gamma=min{32delta^2/a^2, 32delta^2/(C b^2)},
+ B >= max{1,m0,a+b,b/delta,2/gamma}.
+For integer r>=4 put N=2^r, m=Br, k=Cm, and t=b/m.
+
+MULTIGRAPH CONSTRUCTION AND EFFECTIVE CAPS
+Use the modules of AGGREGATE_ENVELOPE_OBSTRUCTION.txt: N in series, each
+with focal e:s->A of report1; m edges y_i:s->B_i of capacity a/m;
+g_i:A->B_i and h_i:B_i->exit of capacity2; and k parallel Z_l:A->exit
+of capacity2. Finish with M parallel R owners of capacity1/M each.
+All original owners remain fixed in every comparison. For each j separately
+lower only its e_j to t. Raw module flow with focal report q in {1,t} is
+a+q>1. Indeed all y-flow fits through h (a/m<=1), and q fits through Z.
+Global T=1; neither prefix nor suffix flow below1 arises in other modules.
+Thus
+ D_e=D_g=D_Z=q, D_y=a/m, D_h=min(1,q+a/m), D_R=1/M.
+For h this uses the final suffix bound1: a raw prefix may be truncated by
+an earlier module but that earlier module has value>1, so cannot affect D_h.
+This avoids requiring a raw prefix equality beyond the relevant range.
+Because m>=a+b, low D_h=(a+b)/m. Every other module's effective caps are
+unchanged under the separate focal underreport. The structural cut count is
+ K=N2^{m+1}+1=2^{(B+1)r+1}+1.                          (2)
+
+STRICT CUT COMPETITION
+In one module the minimum containing-cut score is qX_e+A_q, where
+ A_q=sum_i min((a/m)X_{y_i},D_{h_i}X_{h_i}).
+Every excluding-cut score is at least Z_q=q sum_l X_{Z_l}.
+At the high report E A_high=H_m>=mu+10delta.
+At the low report E A_low=lambda<=mu-10delta.
+The independent A summands have squared-range sum a^2/m. Hoeffding yields
+ Pr(A_high<=mu+6delta)<=exp(-gamma m),
+ Pr(A_low>=mu-6delta)<=exp(-gamma m).                  (3)
+Low Z has mean Cb mu>=mu+10delta and squared-range sum Cb^2/m, hence
+ Pr(Z_low<=mu+6delta)<=exp(-gamma m).                 (4)
+High Z stochastically dominates low Z. The final score Q is the average
+of M iid X copies. Since Var(X)<=1/4, Chebyshev gives
+ Pr(|Q-mu|>2delta)<=1/(16M delta^2)<=1/16.              (5)
+Fix one focal underreport. A union over all N relevant A variables and N
+Z variables costs at most 2N exp(-gamma m). Each N exp(-gamma m) is at most
+2^r exp(-2r)<=2^{-r}<=1/16. With probability at least13/16, therefore,
+the low containing score is at most mu-6delta+t<=mu-5delta, the final cut
+scores at least mu-2delta, and every other/excluding module cut scores
+above mu+6delta. Every minimum cut contains the lowered focal owner.
+Consequently y_{e_j}(c)>=t/2 and, at the ONE common original profile,
+ sum_e y_e(c)>=Nb/(2m)=b2^r/(2Br).                    (6)
+Combining (2) and (6) proves the claim with eta=1/(B+1) for multigraphs.
+
+SIMPLE DAGS WITH THE SAME ORIGINAL NOISE LAW
+Apply the parameter selection above afresh to the law V=min(X_1,X_2).
+It is positive almost surely and nonconstant: its survival function is
+Pr(V>x)=Pr(X>x)^2. Subdivide each y,h,Z,R edge into a private two-edge
+path, both original owners having the unsplit capacity. Keep e,g unsplit.
+The resulting DAG is simple. Scores of the subdivided paths use independent
+V copies. The primitive noise of every owner is still the ORIGINAL X.
+The proof requires only X_e<=1 for the focal edge and X_g>=0 for g; all
+mean and concentration comparisons now use V and its chosen constants.
+Every original cut lifts by choosing one serial copy of each subdivided
+edge. The structural cut count is exactly
+ K=N4^m(1+2^{Cm})+2^M
+  =2^{(1+2B)r}+2^{[1+(C+2)B]r}+2^M.                  (7)
+For all sufficiently large r this lies between 2^{pr} and 3*2^{pr},
+p=1+(C+2)B. Equation (6) gives eta=1/p>0 as claimed.
+
+SCOPE AND A CONSTANT-COST ALTERNATIVE
+No continuity of X, of the envelope, or attainment of its supremum is used.
+Strict inequalities separate cut classes even when there are within-class
+ties. The result does not yet cover atom-zero laws, or laws depending on K.
+The constants, exponent, and onset are law-dependent, not uniform in X.
+The final fixed cut has M owners (one serial copy per path in the simple
+variant). The fixed-cut clipped rule in FIXED_CUT_BASELINE.txt covers all
+coalitions truthfully with budget <=MT on these same topologies, at every
+profile. Thus the bad envelope is unboundedly worse than a constant-budget
+alternative on the constructed family; it is not an intrinsic subsidy lower
+bound. Maxflow/mincut, bounded convergence, Hoeffding and Chebyshev are the
+established ingredients. The proposed new ingredient is serial amplification
+of report-dependent effective-capacity competition. Priority is unconfirmed.

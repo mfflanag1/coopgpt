@@ -1,0 +1,117 @@
+NO CONSTANT SHAPLEY COVERAGE EVEN WHEN EVERY SERIAL POOL IS BALANCED
+7 October2026. Conventional proof checked by coordinator; independent audit
+completed; no invalid step found. This is a rule-specific obstruction, not a lower bound for all mechanisms.
+
+1. FAMILY AND CLAIM
+Fix integers M>=2,L>=2. Let a=1/(4M^2), q_n=2M(n+1)-1 and K_n=L^{q_n}.
+For each n=1,...,M place K_n pools of type n in series. A type-n pool contains
+one distinguished owner of capacity a and n outside owners of capacity
+b_n=(1-a)/n. Every pool has total1, so T=1 and every structural minimal cut
+has capacity1. There are K=sum K_n cuts and sum(n+1)K_n fixed original owners.
+Let S contain the distinguished owner of EVERY pool. Its coalition value is a.
+The graph is a directed serial composition of parallel-edge bundles; no owner
+is cloned or changed during the evaluation or any report comparison.
+
+We prove, writing Sh for the usual Shapley value,
+ 2/(M+1) <= Sh(S)/a <= 2/(M+1)+E(M,L),                    (1)
+where
+ E(M,L)=(M-1)L^{-1/[M(M+1)]}+L^{-1/(2M)}
+        +(M-1)L^{-2M}
+        +[M(M-1)/2](2^{M+1}+1)L^{-1/2}.                 (2)
+Consequently the ratio tends to2/(M+1) as L tends to infinity at fixed M.
+Letting M grow disproves every positive constant coverage guarantee.
+
+2. THRESHOLD DECOMPOSITION AND PIVOTAL POOLS
+For every coalition X, write
+ v(X)=integral_0^1 g_theta(X)dtheta,
+ g_theta(X)=1{each pool's X-capacity is at least theta}.
+All games here are finite, so the finite Shapley sum commutes with this integral.
+Use independent uniform arrival times to generate the random owner order.
+Each pool completes its threshold at an order statistic of its own priorities.
+Different pools have independent continuous completion times. The last pool
+to complete supplies the unique global pivotal owner, almost surely.
+
+The distinguished owner in a type-n pool can matter only on the bands
+ I_{n,j}=(j*b_n,j*b_n+a), j=0,...,n.                      (3)
+On this band the requirement is exactly j+1 of the n+1 owners: with the small
+owner, j outsiders suffice; without it, j+1 outsiders are necessary. All owner
+labels are thus interchangeable in this Boolean game, despite unequal weights.
+On the gaps the distinguished owner is a dummy. Endpoint bands (0,a) and
+(1-a,1) coincide for every type. Other bands lie strictly between them.
+Band endpoints form a finite set and do not affect the integrals.
+
+3. EVERY INTERIOR BAND HAS A DOMINATING OUTSIDER-ONLY TYPE
+For I_{n,j}, 1<=j<n, put d=n-j, r=d+1, and m=ceil(n/d)-1. Then1<=m<n and
+ m*d<n<=(m+1)*d,
+ j/n-(m-1)/m=(n-m*d)/(m*n)>=1/M^2.
+Since a<(1-a)/M^2, the whole band lies strictly above (m-1)b_m+a and below
+1-a. It is therefore inside the type-m gap requiring ALL m outsiders, while
+its distinguished owner is a dummy. (The upper inclusion also uses a<b_n.)
+
+A type-n pool completes at the (j+1)th order statistic of n+1 uniforms. For
+0<delta<1, at least r priorities must exceed1-delta for completion to be late:
+ Pr(tau_n>1-delta)<=2^{n+1}delta^r.
+The competing type-m pool completes at the maximum of m outsider priorities.
+Its multiplicity exponent wins because
+ Q=q_m*r-q_n=2M[(m+1)d+m-n]-d>=2M*m-d>=M+1.              (4)
+Set beta=(q_n/r+q_m)/2 and delta=L^{-beta}. A union bound over type-n copies gives
+ Pr(max type-n completion>1-delta)<=2^{n+1}L^{-Q/2}.
+Independence across type-m pools gives
+ Pr(all type-m complete<=1-delta)
+ =(1-delta)^{m K_m}<=exp(-m L^{Q/(2r)}).
+If the global latest pool has type n, one of these two events must occur.
+Since r<=M and Q>=M+1, and exp(-x)<=1/x for x>0, its probability is at most
+ (2^{M+1}+1)L^{-1/2}.                                   (5)
+The probability the pivotal owner belongs to S and has type n is no larger.
+There are M(M-1)/2 interior bands, each of length a. Integrating (5) and summing
+gives the last term in (2). Overlaps only overcount and cause no problem.
+
+4. LOWER ENDPOINT
+On (0,a), type n is OR of its n+1 owners. Its completion is their minimum,
+with late tail delta^{n+1}. Define alpha_n=q_n/(n+1)=2M-1/(n+1), and take
+ beta=(alpha_M+alpha_{M-1})/2, delta=L^{-beta}.
+For each n<M,
+ q_n-beta(n+1)<=-1/[M(M+1)],
+so the chance any lower-type completion exceeds1-delta is at most
+ (M-1)L^{-1/[M(M+1)]}.
+All type-M completions precede1-delta with probability at most
+ exp(-L^{q_M-beta(M+1)})=exp(-L^{1/(2M)})<=L^{-1/(2M)}.
+Thus type M supplies the latest pool except for the first two error terms.
+Conditional on that pool having type n, its first-arriving owner label is
+uniform among its n+1 labels, independently of its completion time and the
+other pools. The S-pivotal probability is therefore at most1/(M+1) plus
+these errors, and at least1/(M+1). It converges to1/(M+1).
+
+5. UPPER ENDPOINT
+On (1-a,1), every owner of every pool is required: the whole threshold game
+is unanimity. The S share is exactly
+ R=sum_n K_n / sum_n (n+1)K_n >=1/(M+1).
+It is at most1/(M+1)+(M-1)L^{-2M}, since K_n/K_M<=L^{-2M} for n<M;
+indeed subtracting1/(M+1) yields
+ sum_{n<M}(M-n)K_n / [(M+1)sum_n(n+1)K_n],
+which is bounded by sum_{n<M}K_n/K_M.
+Integrating over the two endpoint intervals, each of length a, and adding
+the nonnegative interior contribution proves both sides of (1).
+
+6. FULLY EXPLICIT PARAMETERS
+For M=4,L=10^40,a=1/64, q=(15,23,31,39). The upper bound is
+ 2/5+3/100+1/100000+3/10^320+198/10^20<431/1000<1/2.
+The pool counts are10^600,10^920,10^1240,10^1560. This enormous but finite
+exact witness needs no numerical integration or approximate probabilities.
+
+For one explicit growing diagonal put
+ R_M=4(M+1)M(2^{M+1}+1), L_M=R_M^{2M(M+1)}.
+The four error terms in (2) are respectively bounded by
+ (M-1)/R_M^2, 1/R_M, (M-1)/R_M^2,
+ [M(M-1)/2](2^{M+1}+1)/R_M^2,
+each at most1/[4(M+1)]. Hence Sh(S)/v(S)<=3/(M+1)->0.
+
+7. INTERPRETATION
+This closes the proposed constant-factor Shapley route even on balanced
+serial pools. The simpler unbalanced two-path family in SHAPLEY_OBSTRUCTION
+already rules out the desired logarithmic guarantee for general networks.
+Neither result refutes the existing truthful continuous Banzhaf rule on TTSP,
+nor supplies a lower bound applying to every truthful mechanism. Exact
+balanced min-game noncore examples were already known; historical priority
+of this quantitative family has not been established. No external review
+or manuscript submission is claimed.

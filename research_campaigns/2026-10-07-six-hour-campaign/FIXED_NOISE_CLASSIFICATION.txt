@@ -1,0 +1,120 @@
+FIXED IID NOISE: A SHARP DISTINCTION BETWEEN BERNOULLI AND POSITIVE VARIATION
+7 October2026. Coordinator and independent Codex proofs checked; this full
+classification extends the separately audited positive-noise theorem and
+awaits its own opposite-model review. No priority claim.
+
+Use the definitions of AGGREGATE_ENVELOPE_OBSTRUCTION.txt, replacing Uniform
+noise with one fixed iid law X on[0,1]. Select by a fixed report-independent
+cut priority. Let y be the true own-report envelope of z_e=D_e Pr(e in W).
+The law is fixed as graphs, owners, reports and cut count K vary.
+
+RESULTS (WORST CASE OVER FIXED-OWNER DAG TOPOLOGIES AND PROFILES)
+* X=0 almost surely: no owner-independent K-only bound with parallel owners,
+  already at K=2. Simple DAGs still give Omega(log K) and defeat O(U(K)).
+* X=c>0 almost surely: exact worst-case factor K on directed multigraphs;
+  simple DAGs have a lower bound K/4 along a growing family.
+* X in{0,c}, both probabilities positive: Theta_q(1+log K), with
+  q=Pr(X=0). Upper covers all DAGs; logarithmic lower also uses simple DAGs.
+* X conditioned on X>0 is nonconstant: law-dependent polynomial lower
+  Omega_X(K^{eta_X}/log K), eta_X>0, even simple DAGs; O_X(K) general upper.
+Here U(K)~log K/log log K. Thus every fixed law has a lower bound exceeding
+U(K); among fixed iid-noise pointwise-majorant repairs, Bernoulli achieves
+the best order found here and the other law classes cannot improve it.
+These statements concern this repair class, not optimal arbitrary mechanisms.
+
+1. EVERY NONZERO LAW HAS AN O_X(K) ENVELOPE BOUND
+Let mu=EX>0 and A_mu=max{2/mu,2/(exp(1)mu^2)}. Then
+ sum y<=A_mu K T.                                    (1)
+For T>0 fix a cut C, w_h=D_h/T<=1, d=sum_C w_h=D(C)/T>=1,
+and S=sum_C w_h X_h. At an own underreport t=xD_e,0<x<=1,
+homothetic scaling of feasible flows gives D_h(c^t)>=xD_h(c). Selection of C
+implies its new random score is at most T, by comparison with an original
+minimum-capacity cut. Hence xS<=1. Put u=1/x>=1.
+If u>=mu d/2, then (d/u)Pr(S<=u)<=2/mu. Otherwise Hoeffding, using
+sum_C w_h^2<=d, gives Pr(S<=u)<=exp(-mu^2 d/2), and therefore
+ (d/u)Pr(S<=u)<=d exp(-mu^2d/2)<=2/(exp(1)mu^2).
+Consequently
+ t Pr(W(c^t)=C)<=A_mu T D_e/D(C).
+Sum over cuts containing e before taking the own supremum, then over owners;
+each cut contributes A_mu T. Reports above D_e leave the entire feasible-flow
+set and hence all effective capacities unchanged; report0 payszero. This proves
+(1), including atoms and ties. At T0 every effective cap vanishes.
+
+2. POSITIVE DETERMINISTIC NOISE
+Scaling all scores by c>0 has no effect. The same homothety proof now has
+selection implying xD(C)<=T deterministically, so the constant in(1) is1.
+For equality use K serial pools of two parallel owners, each report1/2.
+T1. Lowering one owner to t in(0,1/2) leaves all other effective caps1/2,
+makes its pool uniquely cheapest and pays that owner t. Every envelope is
+1/2 and sum y=K. Supremum attainment is not needed.
+For simple DAGs use N serial diamonds, each two private two-edge paths with
+every owner report1/2. K=4N. The first-priority local cut in each diamond has
+two owners. Lowering either of these two separately makes this module uniquely
+cheapest, preserves equality of the serial copies on each path, and selects
+that same local cut. Each selected owner's envelope is1/2, yielding sum y>=N.
+
+3. BERNOULLI LOGARITHMIC UPPER AND LOWER
+Scaling the nonzero support point to1 leaves W unchanged. The conditioned-
+zero mechanism in BERNOULLI_LOG_BOUND.txt proves
+ y_e<=p_e<=z_e/q, sum p=O_q((1+log K)T).                (2)
+For a lower bound take N=ceil(q^{-m}) serial pools of m unit-capacity owners,
+followed by a singleton unit-capacity bottleneck. T1 and every D_e=1.
+On the event that the singleton is open and some heavy pool entirely closed,
+every minimum cut is a heavy all-zero cut with unmasked D-weight m. Therefore
+ sum z=E D(W)>=(1-q)[1-(1-q^m)^N]m
+ >=(1-q)(1-exp(-1))m=Omega_q(log K), K=N+1.
+For simple DAGs subdivide every heavy edge into a private two-edge path,
+leaving the singleton final edge unchanged. A path's minimum score iszero
+with probability q'=1-(1-q)^2. Set N=ceil((q')^{-m}); each winning heavy
+cut still has m unit-effective-cap owners, and K=N2^m+1. Again m=Theta_q(log K).
+
+4. AN ATOM AT ZERO DOES NOT RESCUE NONCONSTANT POSITIVE NOISE
+Let s=Pr(X>0)>0, mu=EX, nu=E min(X,X'), and assume the conditional positive
+law is nonconstant. Conditioning on both copies being positive yields
+nu<mu*s. Put d=mu-nu/s>0 and
+ a=(1/s+mu/nu)/2>1, b=d/(4mu), delta=d/40.
+Then
+ E min(aX,(a+b)X')<=a nu+b mu=mu-10delta,
+ H_m=E min(aX,mX') increases to a mu*s>mu+20delta.
+The high limit has the factor s because X'=0 forces the minimum tozero;
+omitting that factor would be wrong. Choose finite m0 with H_m>=mu+10delta
+for m>=m0. Choose integers
+ C>=(mu+10delta)/(b mu), M>=delta^{-2},
+ gamma=min{32delta^2/a^2,32delta^2/(C b^2)},
+ B>=max{1,m0,a+b,b/delta,2/gamma}.
+Use exactly the graph, effective caps and cut classes of FIXED_NOISE_OBSTRUCTION:
+N=2^r,m=Br,k=Cm,r>=4, final M owners totaling1, focal low reportt=b/m.
+Raw module value a+q>1 ensures fixed globalT1 and unchanged other modules.
+The low/high mean separation, Hoeffding and Chebyshev calculations are now
+identical to that proof: all relevant A/Z failures together cost<=1/8;
+final-average failure costs<=1/16. On the good event every winning cut
+contains the separately lowered focal owner. Thus
+ sum y>=b2^r/(2Br), K=2^{(B+1)r+1}+1,
+yielding exponent1/(B+1)>0. The parameters are fixed by the law, not by K.
+For simple DAGs apply the constants afresh to V=min(X1,X2), then subdivide
+y,h,Z,R only as in the previous proof. Conditional on V>0, V is the minimum
+of two iid positive conditional draws and is still nonconstant. The original
+owner noise remains X. K=2^{(1+2B)r}+2^{[1+(C+2)B]r}+2^M gives positive
+exponent1/[1+(C+2)B]. Strict cut-class separation handles all atoms and ties.
+
+For a pure Bernoulli law nu=mu*s; the above mean gap vanishes. The O(log K)
+upper in(2) shows this is a genuine structural distinction, not merely an
+inconvenient choice of proof constants.
+
+5. IDENTICALLY ZERO NOISE
+Take two serial pools of m parallel owners. The fixed cut priority selects
+one pool regardless of reports. Give every owner in that pool report1 and
+every owner in the other pool report1/m. Then T1, each chosen owner hasD1,
+and every random score is always0. Hence z=y on the chosen cut and sum y=m,
+with K2. This uses the report-independent priority assumption explicitly.
+For a simple-DAG lower, use two pools of m private two-edge paths. K=2^{m+1}.
+The selected fixed cut lies in one pool; give both copies of every path there
+report1 and both copies in the other pool1/m. Selected owners again haveD1,
+so sum y=m=Omega(log K). No fixed-K simple-DAG failure is asserted.
+
+LIMITATIONS
+No claim is made about arbitrary K-dependent positive laws, topology-dependent
+heterogeneous noises, correlated laws, or mechanisms allowed to pay below z.
+The new Bernoulli rule is a valid escape from the positive-noise obstruction,
+but the unrestricted sharp-order question remains open. Each growing family
+fixes its complete owner set before making any unilateral report comparison.

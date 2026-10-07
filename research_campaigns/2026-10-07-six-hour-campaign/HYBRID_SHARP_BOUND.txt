@@ -1,0 +1,343 @@
+MIXING CONDITIONED-ZERO AND ENDPOINT-MARGINAL PAYMENTS
+7 October 2026. Independently audited proof; exact mechanism checks recorded
+in verification/hybrid_result.json after coordinator execution.
+No historical novelty, efficient-computation, or field-level claim is made.
+
+RESULT
+For a fixed binary resource-packing technology with K dual-cover vertices,
+for every integer j>=2 there is a nonnegative deterministic payment rule on
+ALL nonnegative real capacity reports that is own-report nondecreasing and
+covers every coalition. The rule indexed by j has total payment at most
+
+ T [ j + (log K + 2 log j + 1) / alpha_j ],                    (A)
+ alpha_j = log(j^3/(j^2+j-1)) > 0,
+
+where T is the grand coalition's production value and logarithms are natural.
+The choice
+
+ L=log K,
+ j(K)=max{2, ceil[L/(log(2+L))^2]}                            (B)
+
+is valid for every K>=1, depends only on the fixed technology, and yields
+
+ total payment <= (1+o(1)) T log K / log log K                (C)
+
+as K tends to infinity, uniformly over capacities and owner counts.
+When T=0 all payments are exactly zero. The construction applies to directed
+single-commodity flow games, where K is the number of inclusion-minimal
+STRUCTURAL edge cutsets and each edge has one fixed owner. The upper proof
+also applies to arbitrary finite binary resource-packing technologies.
+
+The successful rule is a report-independent mixture of the hybrid rules
+r^q. This is not a claim that every individual fixed-q hybrid has bound (C),
+nor is it a new bound for the old uniform-noise monotone envelope.
+
+1. MODEL, FIXED TECHNOLOGY, AND DUAL VERTICES
+Let E be a finite nonempty resource set, one fixed distinct owner per resource.
+Let P be a finite family of nonempty subsets of E. For finite c>=0 define
+
+ F(c)=max {sum_(P in P) x_P : x>=0,
+          sum_(P containing e) x_P <= c_e for every e}.
+
+Every activity yields one unit of value and uses one unit of each resource
+it contains. Empty P is the trivial zero technology. Empty individual
+activities are excluded, since they would make production unbounded.
+The coalition value is v_c(S)=F(c*1_S). All reports belong to the SAME fixed
+technology and owner set. Owners may underreport their own capacity and have
+payment-only utility without usage costs; own-report nondecreasing payments
+give the required incentive guarantee.
+
+The dual polyhedron is
+
+ Q={w>=0 : sum_(e in P) w_e >= 1 for all P in P}.
+
+It is nonempty and pointed and has finitely many vertices V. Every nonnegative
+linear objective attains its finite minimum at a vertex, so
+
+ F(c)=min_(w in V) c.w.                                     (1)
+
+Every vertex coordinate lies in [0,1]. If w_e>1, all covering constraints
+containing e, and the e nonnegativity constraint, are slack. Constraints
+not containing e do not change when that coordinate changes. Small changes
+of both signs would remain feasible, contradicting extremality.
+Set K=|V|>=1. Fix one total priority order on V ONCE, independently of reports,
+mask outcomes, and q. In particular zero reports do not delete resources,
+activities, vertices, or structural cuts from the definition of K.
+
+2. EFFECTIVE USAGE AND EVERY MASK
+Define
+
+ D_e(c)=max {sum_(P containing e) x_P : x feasible at c}.
+
+The bounded packing polytope is compact, so these maxima exist. They satisfy
+
+ 0 <= D_e(c) <= min{c_e,F(c)},                               (2)
+
+because resource usage never exceeds total production in a binary activity
+packing. Each D_e is nondecreasing in every capacity.
+
+The feasible packing polytopes at c and D(c) are identical. Every packing
+at c obeys all effective upper bounds by their definition, and D(c)<=c gives
+the converse inclusion. The same fact holds after EVERY binary mask b:
+a packing feasible at c*b is feasible at c, hence obeys every D bound, and
+has zero usage on every masked-out resource. Conversely D*b<=c*b. Thus
+
+ F(c*b)=F(D(c)*b) for every b in {0,1}^E,                    (3)
+
+and equality holds for the entire feasible packing polytopes, not just values.
+
+For a fixed owner e write D_h(t) for the effective usage at (t,c_-e).
+For u>0 and 0<t<=u, convexly mix usage-maximizing feasible plans at 0 and u.
+Their mixture is feasible at t and gives
+
+ D_h(t)>=D_h(0)+(t/u)[D_h(u)-D_h(0)].                        (4)
+
+Consequently D_h(t)>D_h(0) if and only if D_h(u)>D_h(0).
+By comparing any two positive reports to their maximum, the set of coordinates
+strictly above their report-zero values is the SAME for all positive own reports.
+
+3. THE FIXED-q HYBRID
+Fix q in (0,1), put s=1-q, and independently sample bits with Pr(B_e=0)=q.
+At profile c let w*(c,B) be the first vertex minimizing D(c)*B.w. Define
+
+ z_e^q(c)=D_e(c) E[w*_e(c,B)],
+ p_e^q(c)=D_e(c) E[w*_e(c,B) | B_e=0],                     (5)
+ m_e^q(c)=E_(B_-e)[F(c*(B_-e,1))-F(c*(B_-e,0))],          (6)
+ r_e^q(c)=q p_e^q(c)+(1-q)m_e^q(c).                        (7)
+
+In (6), notation c*(B_-e,b_e) means c_e b_e in the own coordinate and
+c_h B_h elsewhere. These are raw-capacity endpoint values. All payments are
+expectations, hence deterministic; realized-mask coverage is not required.
+
+3a. Nonnegativity and own-report incentives.
+Nonnegativity is immediate. The off value in (6) does not depend on c_e,
+whereas the on value is nondecreasing in c_e, so m_e^q is own-monotone.
+
+For p fix a mask b with b_e=0. By (3) its minimum objective is F(c*b), independent
+of the own report. Starting from own report zero, every vertex objective is
+nondecreasing as the own report rises. A vertex is minimizing at a positive
+report t exactly when it was minimizing at zero and every h with b_h w_h>0
+has D_h(t)=D_h(0). Equation (4) makes this condition independent of the positive
+report t. Thus the ENTIRE minimizing vertex family, and then the fixed-priority
+selected vertex, are the same for all positive own reports. The conditional
+coefficient E[w*_e|B_e=0] is therefore own-report independent on (0,infinity).
+Since D_e is own-monotone and D_e=0 at own report zero, p_e^q is own-monotone
+on the entire nonnegative report domain. Equation (7) preserves that property.
+
+3b. Domination and every coalition's coverage.
+Fix c and B_-e, keeping D=D(c) fixed in this comparison. Let w1 be the selected
+vertex when B_e=1. Dual feasibility gives
+
+ F(D*(B_-e,0)) <= sum_(h!=e) D_h B_h w1_h,
+ F(D*(B_-e,1))  = sum_(h!=e) D_h B_h w1_h + D_e w1_e.
+
+Subtracting and applying (3) to the two endpoints shows
+
+ F(c*(B_-e,1))-F(c*(B_-e,0)) >= D_e w1_e.                  (8)
+
+This is the endpoint supergradient inequality for the concave production
+value, written directly so no differentiability or tie assumption is needed.
+After expectation over B_-e,
+
+ r_e^q >= q D_e E[w*_e|B_e=0]+s D_e E[w*_e|B_e=1]
+        = z_e^q.                                          (9)
+
+For each coalition S and every dual vertex w, weak duality and (3) imply
+
+ sum_(e in S) D_e w_e >= F(D*1_S)=F(c*1_S)=v_c(S).
+
+Expectation gives z^q(S)>=v_c(S); hence r^q(S)>=v_c(S) by (9).
+No report comparison for unchanged owners is used.
+
+4. EXACT AGGREGATE IDENTITY
+For the rest of the budget proof fix c. Write T=F(c), D=D(c), and
+
+ g(q)=E_q F(c*B)=E_q F(D*B),
+ Z(q)=sum_e z_e^q(c),
+ R(q)=sum_e r_e^q(c).
+
+These functions are finite polynomials in q except that the displayed
+conditional-expectation notation for p initially uses q>0. That conditional
+expectation itself is a finite product-probability polynomial in the other
+bits, so p, m and r extend polynomially to both endpoints as well.
+In particular g(0)=T, g(q)>=0, and g(1)=0.
+
+The selected masked objective is exactly the masked production value, so
+
+ E_q sum_e D_e B_e w*_e = g(q),
+ q sum_e p_e^q = E_q sum_e D_e(1-B_e)w*_e = Z(q)-g(q).      (10)
+
+Differentiate the multiaffine expectation in the common zero probability q.
+Differentiating coordinate e contributes its conditional off value minus
+its conditional on value. Summing coordinates gives the exact identity
+
+ g'(q)=-sum_e m_e^q(c).                                    (11)
+
+Equations (7), (10), and (11) yield
+
+ R(q)=Z(q)-g(q)-(1-q)g'(q).                                (12)
+
+There is no interchange of infinite sums or limiting random objects in (11).
+It is an identity for finite polynomials. For any b in (0,1), integration
+by parts in (12) gives the more precise equality
+
+ integral_0^b R(q)dq
+   = integral_0^b Z(q)dq + T -(1-b)g(b)-2 integral_0^b g(q)dq
+   <= integral_0^b Z(q)dq + T.                            (13)
+
+The minus sign and the factor 2 in this identity are intentional.
+
+5. A UNIFORM BOUND FOR Z ON A SHORT q INTERVAL
+Suppose T>0. For a fixed vertex w let
+
+ a_e(w)=D_e w_e/T in [0,1],   rho_w=sum_e a_e(w).
+
+An unmasked optimum has objective T, and masking cannot increase its objective.
+Therefore the selected masked vertex always satisfies
+
+ sum_e a_e(w*)B_e <= 1.                                   (14)
+
+For any lambda>0 set
+
+ alpha(q,lambda)=-log[q+(1-q)exp(-lambda)] > 0.
+
+The function a -> log[q+(1-q)exp(-lambda a)] is convex on [0,1]. Its value
+at zero is zero, so its chord from zero to one bounds it above by
+-alpha(q,lambda)*a. Independence and Markov's inequality give, for each w,
+
+ Pr_q(sum_e a_e(w)B_e <= 1)
+   <= exp(lambda) product_e [q+(1-q)exp(-lambda a_e(w))]
+   <= exp(lambda-alpha(q,lambda)rho_w).                    (15)
+
+For every x>=0, the event rho_(w*)>=x is contained in the union of the events
+in (15) over vertices with rho_w>=x. There are at most K vertices. Thus
+
+ Pr_q(rho_(w*)>=x) <= min{1, K exp(lambda-alpha(q,lambda)x)}.
+
+Tail integration, splitting at (log K+lambda)/alpha(q,lambda), yields
+
+ Z(q)/T=E_q rho_(w*) <= (log K+lambda+1)/alpha(q,lambda).   (16)
+
+This estimate includes ties because (14) holds for every selected optimum.
+It makes no independence assumption about the selected vertex and the bits.
+
+For integer j>=2 set b=1/j and lambda=2 log j. For 0<q<=b,
+
+ q+(1-q)exp(-lambda)
+   <= b+(1-b)b^2=(j^2+j-1)/j^3 < 1.
+
+Hence alpha(q,lambda)>=alpha_j=log[j^3/(j^2+j-1)]>0, and (16) is uniformly
+bounded on this entire interval by
+
+ Z(q)/T <= (log K+2 log j+1)/alpha_j.                      (17)
+
+6. THE MIXED RULE, FINITE BOUND, AND ALL-PROFILE PARAMETER
+Choose j solely from the fixed technology, and define
+
+ M_e(c)=j integral_0^(1/j) r_e^q(c)dq.                     (18)
+
+This is a fixed convex mixture of nonnegative deterministic own-monotone,
+coalition-covering rules. It therefore has all those same properties. One
+can interpret (18) as first drawing a common q uniformly from (0,1/j) and
+then taking all expectations, but the final payment is deterministic.
+Selecting q or j from the reported capacities is not part of this mechanism.
+
+Combining (13) and (17) gives precisely
+
+ sum_e M_e(c)
+   <= j integral_0^(1/j) Z(q)dq + jT
+   <= T [j+(log K+2 log j+1)/alpha_j],
+
+proving (A).
+
+If T=0, (2) gives D=0. Every masked raw profile also has production zero by
+monotonicity, so m=p=r=M=0. This deals with the zero-value domain directly,
+without division by T. K=1 is also covered by (A) and (B); no log log K is
+used in their finite definitions. The asymptotic notation is only for K->infinity.
+
+Now choose j(K) from (B). For L=log K tending to infinity,
+
+ j ~ L/(log L)^2,
+ log j = log L - 2 log log L + o(1),
+ alpha_j = log j - log(1+1/j-1/j^2) ~ log L.
+
+Thus j=o(L/log L), the numerator L+2log j+1 is (1+o(1))L, and (A) proves (C).
+The o(1) depends only on K, since the finite bound contains no report or
+owner-count term. The leading coefficient in this upper bound is one.
+
+7. FINITE EXACT REPRESENTATION; COMPUTATIONAL LIMITS
+For n=|E| and a subset S of the other n-1 owners, define
+
+ u_e(S)=D_e w*_e(c,(1_S,0)),
+ delta_e(S)=F(c*(1_S,1))-F(c*(1_S,0)).
+
+Writing a=n-1-|S| and d=|S| gives
+
+ r_e^q(c)=sum_(S subset E\{e}) q^a(1-q)^d
+                       [q u_e(S)+(1-q)delta_e(S)].         (19)
+
+This is a polynomial of degree at most n. For b=1/j, the positive weights
+in its mixed representation are
+
+ j integral_0^b q^(a+1)(1-q)^d dq,
+ j integral_0^b q^a(1-q)^(d+1) dq.
+
+They can be evaluated by finite binomial expansion; for example
+
+ integral_0^b q^A(1-q)^B dq
+   = sum_(h=0)^B (-1)^h binom(B,h) b^(A+h+1)/(A+h+1).
+
+Thus rational reports and fixed integer j admit rational payments by finite
+LP and mask enumeration. There is no need for numerical quadrature or a
+positive lower cutoff in q. This is an existence/exact-finite representation,
+not an efficient algorithm: vertex counts and mask enumeration may be exponential.
+
+8. SINGLE-COMMODITY GRAPHS AND THE LOWER-BOUND COMPARISON
+Take the activities to be all simple directed s-t paths of a fixed finite
+directed graph, with one fixed owner per edge. Their packing value is maxflow.
+The path-cover polyhedron Q is the s-t cut dominant; by maxflow/mincut and LP
+duality its vertices are exactly the 0/1 incidence vectors of inclusion-minimal
+structural edge cutsets. Therefore the K in this proof is exactly the fixed
+structural cut count. This includes parallel-edge DAGs, simple DAGs, and cyclic
+graphs, with D defined by path packings rather than arbitrary circulations.
+Unused edges have D_e=0 and cause no difficulty.
+
+The larger binary-packing statement also covers fractional unit-value
+multicommodity path packing, using all allowable paths as activities and K
+equal to the number of fractional cover vertices. It does not identify that
+K with an ordinary graph-cut count. Unequal activity values, arbitrary
+nonbinary coefficients, and owners controlling several independently reported
+resources are outside the stated theorem.
+
+The existing project manuscript states the unrestricted serial-pool minimax
+lower bound (1-o(1)) log k/log log k; see
+paper5/truthful_cooperation/manuscript.tex,
+Lemma labelled lem:weighted-hierarchy and Theorem labelled thm:order (lines
+413-515 in the version inspected on 7 October). This is the profile-averaged
+hierarchy result with coefficient one, stronger than the earlier one-profile
+hierarchy coefficient one-half. It allows arbitrary nonanonymous payment
+rules, all nonnegative reports, and arbitrary finite fixed pool ownerships.
+
+Its transfer to the present graph class is exact: realize k pools as k serial
+bundles of parallel edges, each owned by the corresponding fixed agent. Every
+minimal structural cut is exactly one whole bundle, so K=k. An underreport
+changes the same single original edge owner's report. Coalition values and
+own-report comparisons are identical to those in the pool theorem.
+Consequently that already-established lower, together with the new upper here,
+gives the sharp leading coefficient one for the unrestricted worst-case factor
+over this general directed-graph class, and for the encompassing binary-packing
+class, when complexity is K and arbitrary finite owner counts are allowed.
+The lower result is an imported project theorem, not newly proved in this file.
+
+This transfer alone does not establish a matching leading coefficient when
+the admissible graph class forbids parallel edges: serial subdivision changes
+the owner set and the structural cut count. The present UPPER remains valid
+on simple DAGs, but a matching simple-DAG lower needs its own parameter accounting.
+Nor is (A) claimed to equal or improve every finite-K pool-specific bound U(K).
+
+AUDIT STATUS
+The core proposed advance is (12)-(18): the derivative term from truthful
+endpoint marginals has a report-independent integrated budget of at most jT.
+The effective-usage and conditioned-zero ingredients have separate exact finite
+checks. This integrated theorem needs its own independent proof audit and
+mechanism checks; finite checks alone do not establish its universal bound.

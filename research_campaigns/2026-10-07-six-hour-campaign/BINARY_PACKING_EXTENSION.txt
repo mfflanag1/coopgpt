@@ -1,0 +1,136 @@
+CONDITIONED-ZERO PAYMENTS FOR BINARY RESOURCE-PACKING GAMES
+7 October2026. Coordinator and independent Codex derivations agree. Exact
+checks pass; opposite-model review found no substantive gap. Application
+proof and tests were strengthened following its two low-severity suggestions.
+
+MODEL
+Let E be a finite set of resources, each owned by one fixed distinct agent.
+Let P be a finite family of NONEMPTY subsets of E. A production plan consists
+of nonnegative real x_P: one unit of activity P consumes one unit of every
+resource in P and yields one unit of value. For reports c>=0 define
+ F(c)=max {sum_P x_P: x>=0, sum_{P containing e}x_P<=c_e for every e}.
+The coalition value is v_c(S)=F(c*1_S). Owners may underreport their single
+resource capacity and receive payment-only utility, with no operating costs.
+All resource identities, activities and technology remain fixed across reports.
+Nonempty activities ensure bounded primal variables and finite attained F.
+An empty activity family gives the trivial zero game and can be treated separately.
+
+The dual cover polyhedron is
+ Q={w>=0: sum_{e in P}w_e>=1 for every activity P}.
+It is nonempty and pointed; let V be its finite set of vertices and K=|V|.
+Every nonnegative objective has an optimal vertex, so
+ F(c)=min_{w in V}sum_e c_e w_e.                       (1)
+Every vertex satisfies 0<=w_e<=1. If w_e>1, all cover inequalities containing
+e and the e-nonnegativity inequality are slack; other constraints ignore e.
+Both sufficiently small positive and negative changes of that coordinate
+would be feasible, contradicting extremality. K depends only on technology.
+
+THEOREM
+There exists an all-profile own-report-monotone nonnegative deterministic
+payment rule covering every coalition with total payment
+ <= (exp(1)+o(1))F(c) log K as K tends to infinity.
+The same explicit finite-K bound (1) of BERNOULLI_LOG_BOUND.txt applies.
+No efficient exact computation, priority, or field-level breakthrough claim
+is included. The number K counts dual vertices here, not graph cuts unless
+the technology is a single-commodity network.
+
+1. EFFECTIVE RESOURCE USAGE
+Define
+ D_e(c)=max {sum_{P containing e}x_P: x is feasible at c}.
+It is attained, nondecreasing in every report, and satisfies0<=D_e<=min(c_e,F(c)):
+usage of a resource is at most total production in any feasible plan. The
+feasible production polytopes at c and D(c) are identical. Indeed every plan
+feasible at c satisfies every effective usage bound by definition, and D<=c.
+For every binary mask b the feasible polytopes at c*b and D(c)*b are likewise
+identical, by the same inclusion argument. Thus
+ F(c*b)=F(D(c)*b).                                    (2)
+For a fixed owner e, high report u>0, and0<t<=u, convex mixtures of usage-
+maximizing plans at0 and u show
+ D_h(t)>=D_h(0)+(t/u)(D_h(u)-D_h(0)).                  (3)
+Hence D_h(t)>D_h(0) iff D_h(u)>D_h(0). This is precisely the strict-support
+lemma of the graph proof, now applied to the production polytope.
+
+2. MECHANISM AND INCENTIVES
+Fix a report-independent total priority on V and q in(0,1). Independently mask
+each resource with Pr(B_e=0)=q. Let w*(c,B) be the first vertex minimizing
+sum_e D_e(c)B_e w_e. Put
+ z_e(c)=D_e(c) E[w*_e(c,B)],
+ p_e(c)=D_e(c) E[w*_e(c,B) | B_e=0].                  (4)
+The expectation is a deterministic payment; no realized-random guarantee is claimed.
+
+Fix a mask with b_e=0. By (2), the minimum dual value equals F(c*b), which
+does not depend on the own report c_e. Every vertex's objective is at least
+this value at report0 and has only nonnegative increments as c_e increases.
+At a positive report t a vertex attains the value precisely when it attained
+it at0 and every h with b_h w_h>0 has D_h(t)=D_h(0). By (3) this is the SAME
+condition for all positive own reports. The entire optimal-vertex family,
+and then the fixed-priority selected vertex, are invariant. In particular
+E[w*_e|B_e=0] is independent of positive own reports. Since D_e is own-monotone
+and D_e=0 at ownreport0, p_e is own-report nondecreasing everywhere.
+
+3. DOMINATION AND COALITION COVERAGE
+Fix c and B_-e. Let w0,w1 be selected when B_e is0,1. The two optimality
+inequalities, written with A(w)=sum_{h!=e}D_h B_h w_h, are
+ A(w0)<=A(w1),
+ A(w1)+D_e w1_e<=A(w0)+D_e w0_e.
+If D_e>0 they imply w1_e<=w0_e. If D_e=0 all related payments vanish. Thus
+ z_e<=p_e<=z_e/q.                                    (5)
+For every coalition S, every w in Q weak-dually bounds production under
+capacities D*1_S:
+ sum_{e in S}D_e w_e >= F(D*1_S)=F(c*1_S)=v_c(S).
+Taking expectation for w* proves z(S)>=v_c(S), hence p(S)>=v_c(S).
+Nonnegativity is immediate. The least own-report envelope of z is also
+bounded by p, as in the graph theorem.
+
+4. BUDGET
+Let T=F(c)>0. For every vertex w define
+ a_e(w)=D_e(c)w_e/T in[0,1], rho_w=sum_e a_e(w).
+An unmasked minimizing vertex has D-weight T, so the selected masked objective
+is always <=T. For each fixed vertex, the independent-mask Chernoff argument
+in BERNOULLI_LOG_BOUND.txt gives
+ Pr(sum_e a_e(w)B_e<=1)<=exp(lambda-alpha rho_w),
+ alpha=-log(q+(1-q)exp(-lambda)).
+A union over K vertices and tail integration yield
+ sum_e z_e/T=E rho_{w*}<=(log K+lambda+1)/alpha.
+Equation(5) proves the same finite-K bound for p divided byq. With fixed
+q=exp(-1) and analysis-only lambda=log(2+log K), total p is
+ <=(exp(1)+o(1))T log K. When T=0 all D and payments are zero.
+
+5. APPLICATION SCOPE
+For a finite directed single-commodity network, use its finite family of
+simple s-t paths as activities. Fractional path packing has value maxflow.
+Its dual vertices are exactly characteristic vectors of inclusion-minimal
+structural cuts: maxflow/mincut for every nonnegative objective identifies
+the dual dominant as the convex hull of those cut vectors plus the nonnegative
+orthant. Here are details: both polyhedra are closed upper polyhedra and have
+the same minimum for every nonnegative objective by maxflow/mincut. If they
+differed, separation from the cut dominant would give a nonnegative objective
+with unequal minima, a contradiction. Vertices of a finite convex hull plus
+the orthant belong to its generating cut vectors. Conversely each minimal
+cut C is uniquely optimal among cut vectors for objective 1 on C and M>|C|
+outside: another minimal cut must contain an outside edge. Strictly positive
+objectives exclude a nonzero recession direction. Thus every minimal cut
+vector is indeed a vertex. Therefore this is the graph theorem, including
+graphs with directed
+cycles if D is defined through PATH PACKINGS as above. In cyclic graphs do
+not define D by allowing arbitrary circulations, and do not import the DAG
+prefix/suffix formula without proof.
+
+For unit-value splittable multicommodity throughput, let activities be all
+simple paths joining any of the fixed terminal pairs. Value is total units
+delivered, with no compulsory per-commodity demand, no unequal revenues,
+and no budget/operating costs. The theorem applies with K fractional-cover
+vertices; these need not be integral cuts. No graph-cut-count bound is claimed
+for the multicommodity case.
+
+More generally, the technology describes fractional production from unit
+bundles of complementary resources. Arbitrary nonbinary resource-consumption
+coefficients or unequal activity revenues need additional scaling analysis;
+they are not silently included. One owner controlling multiple independently
+reported resource capacities would be a different incentive model.
+
+Established ingredients are linear-programming duality and classical core
+coverage by dual prices. The candidate new mechanism uses effective usage
+and conditioning on an owner's zero mask to obtain all-profile incentives,
+then bounds the subsidy by logarithmic dual-vertex complexity. Source and
+specialist comparisons are pending; a lack of a located match is not priority.

@@ -1,0 +1,93 @@
+A SHARED RANDOM CUT GIVES THE ACTUAL MONOTONE ENVELOPE A K*T BUDGET
+7 October2026. Coordinator and independent Codex proof checks complete;
+opposite-model audit completed; no invalid step found. This improves this rule's bound, not the best
+known existence bound for arbitrary truthful mechanisms.
+
+THEOREM
+In the fixed-edge-owner DAG model of CONTRACT.txt, with arbitrary nonnegative
+real capacity reports, let K be the number of inclusion-minimal structural
+s-t cuts and let T(c) be grand maxflow. Let D_e(c) be maximum feasible edge
+flow (any total), z_e(c)=D_e(c)Pr(e belongs to the selected random minimum cut
+under independent D_h(c)U_h), and y_e(c)=sup_{0<=t<=c_e}z_e(t,c_-e).
+The selection minimizes over exactly the K structural minimal cuts, with a
+fixed cut tie order. This includes zero-capacity profiles without ambiguity.
+Then y is nonnegative, own-report truthful under binding underreports,
+coalition-covering, and
+ sum_e y_e(c)<=K*T(c).                                   (1)
+More precisely, writing d_C=sum_{h in C}D_h(c), for T>0,
+ y_e(c)<=T*D_e(c)*sum_{C containing e}1/d_C.              (2)
+All owners and the graph are fixed during each unilateral comparison.
+
+1. ELEMENTARY UNIFORM COMPARISON
+For nonnegative finite coefficient vectors a,b and independent U_i uniform
+on[0,1], put A=sum a_i,B=sum b_i. Then
+ A*Pr(sum a_iU_i<=sum b_iU_i)<=B.                        (3)
+If A<=B, probability<=1 proves it, including A=B and identical vectors.
+If A>B, put N=sum(b_i-a_i)_+, W=sum|a_i-b_i|=A-B+2N.
+Reflect each U_i whose coefficient a_i-b_i is negative. Independence and the
+uniform laws are preserved; the event becomes
+ sum |a_i-b_i|V_i<=N.
+Here W>0 and 0<=N<W/2. A positive weighted sum of independent uniforms has
+a symmetric unimodal density about W/2. Its CDF F is convex on[0,W/2], with
+F(0)=0 and F(W/2)=1/2. The chord bound gives F(N)<=N/W. Since N<=B,
+ N/(A-B+2N)<=B/(A+B),
+and therefore A*Pr<=AB/(A+B)<=B. This includes B=0. Zero weights are omitted.
+
+For completeness, uniform convolution preserves symmetric unimodality here
+without any external theorem. Center the variables. If f is even and
+nonincreasing on[0,infinity), its convolution with a centered uniform density
+on[-r,r] is even and has derivative [f(x+r)-f(x-r)]/(2r)<=0 for x>=0,
+almost everywhere, because |x+r|>=|x-r|. The convolution is absolutely
+continuous, so the derivative proves monotonicity. Induct from one uniform.
+This also establishes the lower-half CDF convexity used above.
+
+2. ALL UNILATERAL PROFILES SHARE ONE ORIGINAL RANDOM BENCHMARK
+Fix c with T>0 and write D=D(c). Flow preservation under effective capping
+implies d_C>=T for every structural cut and permits a fixed minimum cut A
+with d_A=T. Define original-profile random scores
+ Z_C=sum_{h in C}D_hU_h.
+Take e with D_e>0. Reports t>=D_e leave every feasible flow unchanged, so
+the envelope may be restricted to0<=t<=D_e. The case t=0 pays0. For t>0 set
+x=t/D_e and c^t=(t,c_-e). For every edge h,
+ xD_h(c)<=D_h(c^t)<=D_h(c), and D_e(c^t)=t.               (4)
+The upper bound is feasible-set inclusion. To prove the lower one, take any
+flow attaining D_h(c) and scale it by x. Its e-coordinate is at most xD_e=t
+and every other coordinate stays feasible. To get equality for h=e, use a
+flow attaining D_e. This proof scales flows, not owners or their identities.
+
+Couple all profiles through the same independent uniforms. If the selected
+minimum cut at c^t is C, then
+ xZ_C<=score_{c^t}(C)<=score_{c^t}(A)<=Z_A.               (5)
+Apply(3) to a_h=xD_h*1_{h in C}, b_h=D_h*1_{h in A}.
+Their totals are x d_C and T. Weak event inclusion in(5) gives
+ x d_C*Pr(W^{c^t}=C)<=T,
+ t*Pr(W^{c^t}=C)<=T D_e/d_C.                            (6)
+No independence between cuts is assumed: overlap is handled by subtracting
+coefficients in(3). Selection ties are harmless because(5) is weak.
+
+3. SUM BEFORE TAKING THE OWN SUPREMUM
+For every t in the allowed range,
+ z_e(c^t)=sum_{C containing e}t*Pr(W^{c^t}=C)
+          <=T D_e sum_{C containing e}1/d_C.
+The right-hand side is independent of t, proving(2). Summing over owners,
+ sum_e y_e<=T sum_C [sum_{e in C}D_e]/d_C=KT.
+Zero-D owners pay0. If T=0 then all D vanish on a DAG, so all payments vanish.
+Truthfulness follows because the own-report supremum domain expands with
+the report; coalition coverage follows from y>=z and the existing cut-based
+coverage proof. All these statements apply on the entire report domain.
+
+4. EXACT SCOPE OF THE IMPROVEMENT
+This supersedes the earlier 2H(G)T envelope accounting, including its campaign
+improvement H=O(K^(3/2)). The cut-height theorem remains true and sharp for H,
+but no longer supplies the best bound on this particular envelope.
+A different grand-deletion marginal mechanism already has budget L*T<=K*T.
+Thus(1) does not improve the general mechanism-existence bound. Its value is
+a substantially simpler bound on the mechanism targeted by this campaign,
+using a shared random benchmark instead of bounding every score by T.
+The sharp logarithmic O(U(K)) target remains open, as does an aggregate
+counterexample. This does not confirm historical novelty or field significance.
+
+An optional profile-dependent consequence is
+ sum_e y_e<=T+T sum_{C!=A}D(C\A)/d_C.                    (7)
+Indeed sum_{e in A}y_e<=sum_{e in A}D_e=T, while summing(2) only over e outside
+A gives the second term. Formula(7) is not claimed asymptotically sharper in K.
