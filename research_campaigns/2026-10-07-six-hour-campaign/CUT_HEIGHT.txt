@@ -1,0 +1,94 @@
+CUT HEIGHT VERSUS THE NUMBER OF MINIMAL CUTS
+7 October 2026. Conventional proof, coordinator inspected; independent focused audit found
+no invalidating step. Historical novelty unconfirmed. Fibonacci graphs and their
+quadratic minimal-cut count are established literature, not a new construction.
+
+1. DEFINITIONS AND CLAIM
+G is a finite directed acyclic s-t multigraph. Every edge lies on an s-t path.
+C(G) is its family of inclusion-minimal structural s-t edge cutsets; K=|C(G)|.
+h(C)=max_P |P intersect C| over s-t paths, and H=sum_C h(C).
+These are inclusion-minimal cuts, not only minimum-capacity cuts at a profile.
+
+For every C, K>=h(C)(h(C)+1)/2. Consequently, writing
+R_K=floor((sqrt(8K+1)-1)/2),
+ H <= K R_K <= sqrt(2) K^(3/2).                              (1)
+The previously proved own-report-envelope estimate sum_e y_e<=2HT therefore
+improves to 2 K R_K T. This remains weaker than the separate marginal rule's
+K*T budget; it improves the analysis of this particular envelope only.
+
+There is an unbounded Fibonacci DAG family with K=r^2 and
+ H=r(r+1)(2r+1)/6 ~ K^(3/2)/3.                              (2)
+Thus the exponent 3/2 is sharp for a universal order bound on H. This is NOT
+a lower bound on envelope payments: the prior accounting may be very loose.
+
+2. PRIVATE PATHS AND CANONICAL PARTITIONS
+For C inclusion-minimal, let R be the vertices reachable from s after deleting C.
+For every e in C minimality gives an s-t path Q_e meeting C exactly at e.
+Its prefix to tail(e) is inside R. Its suffix from head(e) is outside R: a
+reachable suffix vertex followed by that suffix would give an s-t walk avoiding
+C, and hence an s-t path avoiding C. Thus C=delta^+(R). The reverse inclusion
+also holds because any edge from a reachable to an unreachable vertex was deleted.
+We call Q_e a private witness path for e.
+
+3. THE INTERVAL INJECTION
+Fix a topological order tau and a path P meeting C in e_1,...,e_r in this order,
+where r=h(C). Write e_k=(a_k,b_k). For 1<=i<=j<=r put
+ S_ij = {v:tau(v)<=tau(a_i)} union {v in R:tau(v)<tau(b_j)}.
+This contains s and excludes t. On P all vertices before a_i are inside S_ij;
+between a_i and b_j membership is exactly membership in R; from b_j onward
+all vertices are outside S_ij. Consequently
+ delta^+(S_ij) intersect P = {e_i,...,e_j}.                  (3)
+
+For i<=k<=j, the prefix of Q_(e_k) consists of vertices in R whose topological
+times are at most tau(a_k)<tau(b_j); all are in S_ij. Its suffix consists of
+vertices outside R with times at least tau(b_k)>tau(a_i); all are outside S_ij.
+Hence Q_(e_k) meets delta^+(S_ij) exactly at e_k.
+Choose any inclusion-minimal cut D_ij inside delta^+(S_ij). It must hit every
+Q_(e_k), so contains all e_i,...,e_j; by (3) these are exactly its P-edges.
+Distinct intervals have distinct P-intersections and hence give distinct minimal
+cuts. There are r(r+1)/2 intervals. This proves (1).
+
+4. MATCHING EXPONENT VIA THE CLASSICAL FIBONACCI DAG
+For r>=1 take vertices 0,...,2r-1 with arcs i->i+1 and i->i+2 whenever defined.
+Use s=0,t=2r-1. Every edge lies on an s-t path. Encode the canonical reachable
+partition of a minimal cut by an S/T word in vertex order, with first letter S
+and last letter T. Two consecutive T vertices block all S-only routes to a later
+S, because arcs jump at most two; hence TT cannot precede a later S. The first
+T is the head of a boundary edge from its S predecessor, and the private-path
+property gives it a T-only route to t. Two consecutive later S vertices would
+block that route, so SS cannot occur after the first T.
+It follows that the word has precisely the form
+ S^a (TS)^b T^c,  a,c>=1, b>=0, a+c+2b=2r.                 (4)
+Conversely every such word makes every S vertex reachable within S and every T
+vertex able to reach t within T. Each boundary edge then has a private path,
+so the boundary is inclusion-minimal. Its canonical reachable set is exactly S,
+and distinct words give distinct cuts.
+
+There are b+1 S-runs. A directed path can leave each run at most once, so its
+cut intersection has at most b+1 edges. The backbone path visits all vertices
+and achieves b+1. For h=b+1 there are 2r-2h+1 choices of positive a,c. Thus
+ #{C:h(C)=h}=2r-2h+1 (1<=h<=r),
+ K=sum_h(2r-2h+1)=r^2,
+ H=sum_h h(2r-2h+1)=r(r+1)(2r+1)/6.
+In particular max h=sqrt(K); h<=log_2 K and H=O(K log K) are false in general.
+
+5. SOURCE AND CLAIM BOUNDARY
+Korenblit and Levit's Fibonacci graph work already establishes the graph family,
+the quadratic count floor(n^2/4), and size distributions. Free original inspected:
+https://www.wseas.us/e-library/conferences/digest2003/papers/459-144.pdf
+The st-connectedness original is freely available at
+https://www.wseas.us/e-library/conferences/poland2002/papers/446-139.pdf
+Precise source comparison for the height statistic and the general interval
+injection remains pending. No historical novelty is claimed for either.
+The explicit proposed application here is to the prior envelope's H budget.
+This does not establish the desired O(log K/log log K) envelope bound, improve
+the already available K-budget mechanism, or constitute a field-level breakthrough.
+
+6. FINITE REFINEMENT (COORDINATOR CHECKED AFTER AUDIT)
+If the witnessing path P has length ell and crosses C r times, each of its
+ell-r edges outside C has a minimal cut with singleton P-trace. These are
+distinct from the triangular interval witnesses. Thus K>=ell+r(r-1)/2.
+Successive exits from R require an intervening edge, so ell>=2r-1, whence
+K>=(r^2+3r-2)/2. Therefore h(C)<=floor((sqrt(8K+17)-3)/2), improving R_K
+in (1) by a finite amount. The audit covered the interval proof, not this
+subsequently added elementary refinement. Exact checks include both bounds.

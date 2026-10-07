@@ -1,0 +1,68 @@
+FROZEN-COORDINATE MAJORANT r IS NOT OWN-REPORT MONOTONE
+7 October 2026. Conventional finite certificate, coordinator checked; independent
+audit pending. This rejects truthfulness of r, NOT a possible direct bound y<=r.
+
+Use the r definition in BASE_FLOW_DOMINATION.txt: r_e=2E[F(D(c)U)-F(D(c)U
+with coordinate e zeroed)], without recomputing other effective caps.
+For focal e with D_e=x and conditional threshold t=B-A, its integrated payment
+is ell_x(t), where ell_x(t)=0 for t<=0, 2t-t²/x for 0<t<x, and x for t>=x.
+
+1. FINITE GRAPH AND REPORTS
+Vertices s,u,v,q,t. Edges x:s->u (focal report x), y:s->v (epsilon=1/10),
+k=20 parallel edges Z_j:u->q of report2, h:u->v and w:v->q of report2.
+Add N=100000 parallel owners P_j:s->q, each capacity(9/10)/N, and N owners
+R_j:q->t, each capacity1/N. These 200024 original owners stay fixed throughout.
+Compare only the focal reports x0=1/2 and x1=3/5. All edges lie on s-t paths.
+
+Writing P,Z,R for whole edge bundles, the structural minimal cuts are exactly
+ {x,y} union P; {x,w} union P; {y,h} union Z union P;
+ {w} union Z union P; R.
+Thus K=5. T=1 at both profiles, and the effective caps are
+ D_x=x, D_y=epsilon, D_(Z_j)=D_h=x, D_w=x+epsilon,
+ D_(P_j)=(9/10)/N, D_(R_j)=1/N.
+These follow by prefix/suffix maxflow or explicit path flows; the downstream
+bundle is the unit bottleneck, while s-to-q supply exceeds1 at both reports.
+
+2. CONDITIONAL LIMIT AND EXACT INTEGRAL
+Let P and R now denote the independent random score sums of their bundles.
+B=R-P has mean b=1/20 and variance (1+(9/10)²)/(12N)<=1/(6N).
+Let A=min(epsilon U,(x+epsilon)V), independent of B. On the event that the
+random Z-bundle sum is at least1, excluding cuts involving Z cannot beat R,
+and the focal conditional payment is exactly ell_x(B-A).
+For J_x(s)=E_A ell_x(s-A), at 0<b<=min(epsilon,x) direct integration gives
+ J_x(b)=(1/epsilon+1/(x+epsilon))*b²
+        -2b³/[3epsilon(x+epsilon)]
+        -(1/epsilon+1/(x+epsilon))*b³/(3x)
+        +b⁴/[6epsilon(x+epsilon)x].                         (1)
+The density used on [0,b] is
+ f_A(a)=1/epsilon+1/(x+epsilon)-2a/[epsilon(x+epsilon)].
+Independent rational polynomial integration gives
+ J_(1/2)(1/20)=773/28800,
+ J_(3/5)(1/20)=1073/40320,
+ their difference=23/100800.                               (2)
+
+3. FINITE CONCENTRATION AND TRUNCATION ERRORS
+At either report f_A<=12. Distributionally ell_x''=2delta_0-(2/x)1_(0,x),
+so J_x''(s)=2f_A(s)-(2/x)Pr(s-x<A<s) almost everywhere. As 2/x<=4,
+|J_x''|<=24 everywhere in the almost-everywhere sense, and J_x' is globally
+24-Lipschitz. Taylor with remainder and E(B-b)=0 therefore gives
+ |E J_x(B)-J_x(b)|<=12 Var(B)<=2/N.                         (3)
+
+The Z score is x sum_(j=1)^k U_j. Since x>=1/2, a simplex-volume bound gives
+ Pr(Z<1)<=2^k/k!.
+Ignoring the Z truncation changes the focal payment by at most this probability:
+the conditional payment is in [0,x] subset[0,1], and agrees outside that event.
+Combining both profiles, (2)-(3), and this conservative truncation bound yields
+ r_x(x0)-r_x(x1)
+ >=23/100800-4/100000-2*(2^20/20!)
+ =558850546697/2969851084200000 >0.                         (4)
+This is a finite exact nonmonotonicity certificate, not a limiting or numerical
+counterexample. The large number of owners is explicit and remains unchanged
+between reports. K stays5.
+
+4. WHAT REMAINS OPEN
+All the r bounds from BASE_FLOW_DOMINATION.txt survive, including z<=r<=2z
+and domination by a single feasible flow. Equation(4) means r itself is not
+a truthful repair. It does NOT disprove z_e(t,c_-e)<=r_e(c) for all underreports,
+or the weaker z_e(t,c_-e)<=2z_e(c). Either direct inequality, if proved, would
+give the desired sharp-order bound for y; these are now active research targets.

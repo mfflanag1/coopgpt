@@ -1,0 +1,71 @@
+SIMULTANEOUS FLOW DOMINATION OF THE BASE PAYMENTS
+7 October 2026. Conventional proof, coordinator verified; focused audit found no invalid mathematical step.
+No novelty claim. This does not yet give a bound for the monotone envelope.
+
+Use fixed DAG G, arbitrary real report c, effective caps D=D(c), and independent
+uniform U. Put X=D*U and F(x)=maxflow at capacities x. Choose a measurable
+maximum flow f(X), for example the unique lexicographic optimizer on its compact
+optimal face in a fixed edge order. Define the FROZEN deletion marginal
+ m_e(X)=F(X)-F(X with ONLY coordinate e replaced by zero),
+ r_e(c)=2 E m_e(X).
+Other effective caps are NOT recomputed after this deletion. This is different
+from the failed normalized-deletion potential in POTENTIAL_OBSTRUCTION.txt.
+
+CLAIM: z<=r<=2z coordinatewise, and there is one feasible flow fbar under D
+such that r<=fbar coordinatewise. Consequently every path-antichain A obeys
+ sum_(e in A) r_e<=T, hence sum_(e in A) z_e<=T.
+Moreover sum_e r_e<=min(2U(K),L)*T by the earlier base budget and path length.
+
+PROOF. Remove from f(X) all path flows that use e. The remainder is feasible
+with capacity e set to zero and has total F(X)-f_e(X). Thus m_e(X)<=f_e(X)
+SIMULTANEOUSLY for every e, using the same selected flow f(X).
+
+Condition on U_-e and define
+ g(u)=F(X_-e,u D_e)-F(X_-e,0), 0<=u<=1.
+The function is nonnegative, concave, and nondecreasing, with g(0)=0.
+The conditional cut formula gives g(1)=min(D_e,(B-A)_+). Therefore E g(1)=z_e.
+Concavity and monotonicity give g(1)/2<=integral_0^1 g(u)du<=g(1).
+After averaging over U_-e this proves z_e<=2E m_e(X)<=2z_e.
+
+Set fbar=2E f(X). Conservation is linear, and 0<=f_e(X)<=D_e U_e implies
+0<=fbar_e<=D_e. Thus fbar is one feasible s-t flow under D and hence under c.
+The pointwise deletion comparison yields r<=fbar. Any path meets an antichain
+at most once, so its fbar-edge sum over A is at most the flow's total, which
+is at most T. Summing over all edges gives <=L*T. The alternative 2U(K) bound
+uses r<=2z and the previously proved base budget. Zero D_e is immediate.
+
+CONDITIONAL FORMULA FOR COMPUTATION
+Let a=min(D_e,(B-A)_+). If D_e>0, then
+ r_e=E_(U_-e)[2a-a^2/D_e].                                (1)
+For D_e=0 set r_e=0; for B=infinity formula gives r_e=D_e.
+
+OPEN GATE / DO NOT OVERCLAIM
+Own-report monotonicity of r has not been proved. Increasing c_e changes many
+effective caps, so both terms defining m_e change. If r were monotone it would
+dominate y and prove an O(U(K)) envelope budget, but a concentration-based
+Wheatstone counterexample is currently under investigation. Likewise separate
+underreport suprema of z are dominated by different fbar flows: taking their
+coordinatewise maximum is not known to preserve feasibility or antichain bounds.
+The candidate antichain inequality sum_A y<=T remains unproved.
+A finite own-report counterexample to r is now in FROZEN_NONMONOTONICITY.txt;
+that certificate is coordinator-checked and awaiting focused audit.
+
+FAILED SHORTCUT: CROSS-SUBSTITUTES
+The base z_e is not nonincreasing in another incomparable owner's report.
+In two serial pools take A=(e capacity1,h capacity0 or1) and B=(two capacity2
+owners). At h=0, z_e=5/6. At h=1, z_e=41/48>5/6, by the uniform-sum CDF for
+weights (1,1,2,2). Thus a common lowered profile need not dominate all the
+separately optimized antichain payments. This TTSP example does not itself
+contradict the antichain-envelope conjecture.
+
+COMPLETENESS CLARIFICATIONS AFTER AUDIT
+For K>=2, U(K)=a_K+1/log(a_K), where a_K>e solves a_K log(a_K/e)=log K;
+put U(1)=1. The general-DAG base budget is proved in
+../2026-10-06-wheatstone/DAG_BASELINE.txt, using the tail calculation in
+../2026-10-06-series-parallel/THEOREM.txt section5 (same effective caps and cuts).
+A measurable maximum-flow selection exists explicitly: the bounded flow LP has
+a fixed coefficient matrix and finitely many candidate bases. Each candidate
+vertex is affine in the capacity RHS on its feasibility domain. Selecting a
+feasible objective-maximizing vertex and resolving ties lexicographically is
+a Borel selection among finitely many affine candidates. This also handles
+zero-capacity degeneracy. No external measurable-selection theorem is needed.
