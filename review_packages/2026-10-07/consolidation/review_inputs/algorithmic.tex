@@ -1,0 +1,389 @@
+\section{Finite sampling and exact certification}\label{alg:section}
+The expectation defining the hybrid mechanism is finite, but its direct
+expansion can have exponentially many terms.  We give a polynomial sample
+bound, followed by an exact certification procedure whose preprocessing cost
+can be exponential.  These are different computational guarantees.
+Throughout this section, fix the owner set $I=[n]$, the resource dimension $d$,
+an ordered family $V=(w^1,\ldots,w^K)\subseteq\R_+^d$, and an integer $j\ge2$,
+all independently of reports.  Set
+\[
+ f(c)=\min_{w\in V}w\cdot c,\qquad
+ v_b(U)=f\Bigl(\sum_{i\in U}b_i\Bigr),\qquad T=T(b)=v_b(I),
+\]
+where $b\in(\R_+^d)^n$.  Write $M_i=M_i^j$ for the exact hybrid payments
+and recall their coalition coverage and budget bound
+\begin{equation}\label{alg:exact-budget}
+ \sum_{i\in U}M_i(b)\ge v_b(U),\qquad
+ \sum_iM_i(b)\le C_j(K)T(b),\qquad
+ C_j(K)=j+\frac{\ln K+2\ln j+1}{\ln(j^3/(j^2+j-1))}.
+\end{equation}
+The family and its priority remain fixed even at zero reports and ties.
+
+\subsection{An exact finite sampling law}
+For a mask $S\subseteq I$, put $S_i^-=S\setminus\{i\}$ and
+$S_i^+=S\cup\{i\}$.  Let $W^-_{i,S}(b)$ be the first minimizer of the
+\emph{raw} score $w\cdot\sum_{h\in S_i^-}b_h$, and define
+\begin{equation}\label{alg:sample-components}
+ A_i(S,b)=\min\{W^-_{i,S}(b)\cdot b_i,T(b)\},\qquad
+ \Delta_i(S,b)=v_b(S_i^+)-v_b(S_i^-).
+\end{equation}
+Thus capping occurs after selection.  For nonnegative integers $a,k$, set
+\begin{equation}\label{alg:integrals}
+ J_{a,k}=\int_0^{1/j}q^a(1-q)^k\,dq
+ =\sum_{h=0}^k(-1)^h\binom kh\frac{j^{-(a+h+1)}}{a+h+1},
+ \quad \pi_k=jJ_{n-k,k},\quad
+ \theta_k=\frac{J_{n-k+1,k}}{J_{n-k,k}}.
+\end{equation}
+Draw a cardinality $k$ with probability $\binom nk\pi_k$, then a uniformly
+random $k$-subset $S$.  Define the vector associated with that mask by
+\begin{equation}\label{alg:finite-sample}
+ X_i(S,b)=\theta_{|S|}A_i(S,b)+(1-\theta_{|S|})\Delta_i(S,b).
+\end{equation}
+For $N$ independent masks, drawn once before any reports, let
+\begin{equation}\label{alg:sample-payment}
+ \widehat M_i(b)=\frac1N\sum_{\ell=1}^N X_i(S_\ell,b)
+                       +\frac{\eta}{n}T(b),\qquad \eta>0.
+\end{equation}
+
+\begin{lemma}[Exact mean, bounded range, and every-seed incentives]
+\label{alg:finite-law}
+The probabilities in \eqref{alg:integrals} are rational and sum to one over
+all masks.  Moreover, $0<\theta_k<1/j$, $0\le X_i(S,b)\le T(b)$, and
+$\E_S X_i(S,b)=M_i(b)$.  For every fixed seed $(S_1,\ldots,S_N)$,
+\eqref{alg:sample-payment} is nonnegative and componentwise nondecreasing
+in each owner's entire own report, simultaneously at all profiles.
+\end{lemma}
+\begin{proof}
+Consider first the experiment that draws $q$ uniformly from $(0,1/j)$ and,
+conditionally on $q$, includes each owner independently with probability
+$1-q$.  The probability of one particular mask of size $k$ is $\pi_k$,
+and
+\[
+ \sum_{k=0}^n\binom nk\pi_k
+ =j\int_0^{1/j}[q+(1-q)]^n\,dq=1.
+\]
+The posterior mean of $q$ conditional on that full mask is exactly
+$\theta_k$.  In the continuous experiment the vector
+$qA_i+(1-q)\Delta_i$ has conditional expectation
+$q p_i^q+(1-q)m_i^q=r_i^q$: the owner's own sampled bit affects neither
+term in \eqref{alg:sample-components}.  Taking expectations over $q$ gives
+$M_i$.  Conditional expectation given the full mask gives
+\eqref{alg:finite-sample}, hence its mean is also $M_i$.
+This reasoning does not assume that $\theta_{|S|}$ is independent of $S$.
+
+Both $A_i$ and $\Delta_i$ lie in $[0,T]$.  The former is capped; for the
+latter, monotonicity gives $0\le v_b(S_i^- )\le v_b(S_i^+)\le T$.
+The coefficients in \eqref{alg:finite-sample} are nonnegative and sum to one.
+With the other reports and $S$ fixed, $W^-_{i,S}$ is independent of $b_i$.
+Both its nonnegative linear score on $b_i$ and $T$ are nondecreasing, so
+$A_i$ is own-report monotone.  The subtracted value in $\Delta_i$ omits $i$,
+whereas its first value is nondecreasing in $b_i$.  The average and the
+cushion in \eqref{alg:sample-payment} preserve this property.
+At $T=0$ all values, samples, and payments vanish.
+\end{proof}
+
+\begin{proposition}[Rational sampling and evaluation]\label{alg:cost}
+The mask law has an exact fair-bit sampler with expected cost polynomial in
+$n$ and $\log j$.  A seed of length $N$ can be evaluated using at most
+$1+N(n+1)$ canonical value-and-minimizer queries.  With a rational production
+LP in $d$ resource-price coordinates and lexicographic priority on its dual
+vertices, at most $1+N(n+1)(d+1)$ ordinary exact LP calls suffice.
+These bit-model assertions concern rationally encoded technology and reports.
+\end{proposition}
+\begin{proof}
+Let $H=(n+2)!j^{n+2}$.  Every denominator of a summand of
+$jJ_{n-k,k}$ or $jJ_{n-k+1,k}$ divides $H$.  Therefore
+\[
+ u_k=H\pi_k>0,\qquad t_k=HjJ_{n-k+1,k},\qquad
+ U_k=\binom nk u_k
+\]
+are integers, $\theta_k=t_k/u_k$, and $\sum_kU_k=H$.
+Their bit lengths are $O(n(\log j+\log(n+2)))$; computing the alternating
+sums exactly takes $O(n^2)$ operations on polynomial-length integers.
+Draw a uniform integer below $H$ to choose a cardinality by the intervals
+of lengths $U_k$, then a uniform integer below $\binom nk$ and unrank its
+subset.  Rejection from a power-of-two range takes fewer than two attempts
+in expectation.  It terminates almost surely, with no bounded worst-case
+number of attempts.  Floating-point subtraction is unnecessary.
+
+For one mask, the coalitions $S$ and $S\mathbin{\triangle}\{i\}$,
+$i\in I$, supply all off/on values and all off minimizers; there are $n+1$
+such coalitions.  Query $T$ once.  An explicitly listed $V$ permits a canonical
+query by scanning $K$ scores in $O(Kd)$ arithmetic operations.
+For the rational dual polyhedron $Q=\{w\ge0:A^\top w\ge\rho\}$,
+first minimize the queried resource objective.  On its optimal face minimize
+$w_1$, then $w_2$, and so on, retaining previous optimum values as equalities.
+Each optimization is attained and bounded below by zero.  The final point
+is unique and is a vertex: any nontrivial feasible convex decomposition
+would preserve each successive minimum and finally every coordinate.
+It is the lexicographically first optimal vertex, a fixed priority independent
+of reports.  This takes at most $d+1$ LP calls per canonical query; the grand
+value needs one value-only solve.  Exact rational LP optimization preserves
+the required ties.  An arbitrary priority on an implicit vertex family need
+not admit this compact oracle.
+\end{proof}
+
+\begin{proposition}[One fixed report profile]\label{alg:pointwise}
+For $0<\delta<1$, if
+\[
+ N\ge \frac{n^2}{2\eta^2}\ln\frac{2n}{\delta},
+\]
+then at any fixed profile, with probability at least $1-\delta$, the rule
+\eqref{alg:sample-payment} covers every coalition and has total at most
+$(C_j(K)+2\eta)T$.  Its expected total is at most $(C_j(K)+\eta)T$.
+\end{proposition}
+\begin{proof}
+For $T>0$, apply Hoeffding's inequality to $X_i/T\in[0,1]$ and union bound
+over the $n$ owners.  With the stated probability each coordinate error is
+at most $\eta T/n$.  Adding the cushion makes $\widehat M_i\ge M_i$ and
+$\widehat M_i\le M_i+2\eta T/n$ for every $i$; now use
+\eqref{alg:exact-budget}.  The expected-total assertion follows from
+$\E\widehat M_i=M_i+\eta T/n$.  The case $T=0$ is exact.
+\end{proof}
+The last proposition holds for a profile fixed independently of the seed.
+The next theorem permits the seed to be public and profiles to be selected
+adaptively, because its event quantifies over every profile at once.
+
+\subsection{One seed for every real report profile}
+\begin{theorem}[Uniform finite-sample implementation]\label{alg:uniform}
+Let $0<\eta\le1$, $0<\delta<1$, and put
+\[
+ p=nd,\quad D=\lceil16p\log_2(8pK)\rceil,\quad
+ \varepsilon=\eta/n,\quad A_0=32e/\varepsilon.
+\]
+If the integer sample size satisfies
+\begin{equation}\label{alg:sample-size}
+ N\ge\frac{128}{\varepsilon^2}
+       \left[D\ln(A_0\ln A_0)+\ln\frac{8n}{\delta}\right],
+\end{equation}
+then with probability at least $1-\delta$ over the single initial seed,
+\emph{simultaneously for all real $b\ge0$ and all $U\subseteq I$},
+\[
+ \widehat M_i(b)\ge M_i(b)\quad(i\in I),\qquad
+ \sum_{i\in U}\widehat M_i(b)\ge v_b(U),\qquad
+ \sum_i\widehat M_i(b)\le(C_j(K)+2\eta)T(b).
+\]
+Incentives hold for every seed, whether or not this event occurs.
+The sample size is polynomial in $n,d,\log K,1/\eta,\log(1/\delta)$.
+\end{theorem}
+\begin{proof}
+For owner $i$, consider the $[0,1]$-valued class
+\[
+ h_{b,i}(S)=\begin{cases}X_i(S,b)/T(b),&T(b)>0,\\0,&T(b)=0.
+ \end{cases}
+\]
+We bound its pseudodimension, meaning the largest number of observations
+that can be shattered using a separate real threshold at each observation.
+Fix $m$ masks $S_\ell$ and thresholds $a_\ell$.
+As functions of the $p$ report coordinates, use the linear forms
+\[
+ C_v=w^v\cdot\sum_h b_h,\quad
+ L^-_{\ell,v}=w^v\cdot\sum_{h\in S_\ell\setminus\{i\}}b_h,
+ \quad L^+_{\ell,v}=L^-_{\ell,v}+w^v\cdot b_i.
+\]
+Partition report space by all pairwise comparisons of the $C_v$, all pairwise
+comparisons within each off/on family, and all cap comparisons
+$w^v\cdot b_i-C_t$.  The number of hyperplanes is at most
+\[
+ H_0=(2m+1)\binom K2+K^2\le3mK^2.
+\]
+Count all ternary sign faces, including lower-dimensional tie faces.
+For $H$ hyperplanes in $\R^p$ their number is at most
+\begin{equation}\label{alg:faces}
+ F(H,p)=\sum_{r=0}^p2^r\binom Hr\le(1+2H)^p.
+\end{equation}
+Indeed, insertion of the last hyperplane gives the recurrence
+$F(H,p)\le F(H-1,p)+2F(H-1,p-1)$, with the usual zero-dimensional
+and zero-hyperplane initial conditions; degeneracy only reduces the count.
+The displayed sum solves this recurrence.  The second inequality follows
+by comparison with the binomial expansion of $(1+2H)^p$.
+
+On each first-arrangement face, all priority winners and cap branches are
+fixed, including ties.  Thus $X_i(S_\ell,b)$ is a fixed linear form
+$U_\ell(b)$ and $T$ is a fixed form $C_t(b)$ there.
+On $T>0$, the subgraph tests become
+$U_\ell(b)-a_\ell C_t(b)>0$.  These $m$ additional hyperplanes give at
+most $F(m,p)$ label patterns on the face.  All $T=0$ profiles supply one
+additional label pattern.  Hence, for $m\ge1$, the subgraph growth function
+satisfies
+\[
+ \Pi_i(m)\le1+F(H_0,p)F(m,p)\le2(21m^2K^2)^p.
+\]
+If $m$ observations were shattered, taking base-two logarithms gives
+$m\le1+p\log_2 21+2p\log_2K+2p\log_2m$.
+With $r=m/p$ and $L=\log_2(8pK)\ge3$, this implies
+$r<2L+2\log_2r$.  For $r\ge16L$ we have $r\ge48$,
+$2L\le r/8$, and $2\log_2r\le r/2$, a contradiction.
+Consequently $D$ is an upper bound on the pseudodimension.
+
+The bounded-class uniform-deviation inequality and pseudodimension covering
+bound of Haussler~\cite{Haussler1992} give
+\begin{equation}\label{alg:uniform-tail}
+ \Prob\left\{\sup_b\left|\frac1N\sum_\ell h_{b,i}(S_\ell)
+                  -\E h_{b,i}\right|>\varepsilon\right\}
+ \le8[A_0\ln A_0]^D e^{-N\varepsilon^2/128}.
+\end{equation}
+Specifically, Corollary~1 of the January 1992 manuscript gives the factor
+$4$, covering radius $\varepsilon/16$, and exponent $128$; its Theorems~6
+and~12 bound that covering number by $2[A_0\ln A_0]^D$.
+There is no measurability difficulty here: masks, and hence length-$N$
+experiments, have finite sample spaces.  The finite-branch parametrization
+is also Borel, including the explicitly defined $T=0$ branch.
+A union bound over owners and \eqref{alg:sample-size} make the failure
+probability at most $\delta$.  On this single event every $i,b$ satisfies
+\[
+ \left|N^{-1}\sum_\ell X_i(S_\ell,b)-M_i(b)\right|
+       \le\eta T(b)/n.
+\]
+Use the cushion and \eqref{alg:exact-budget} as in
+Proposition~\ref{alg:pointwise}.  No union bound over coalitions is required.
+\end{proof}
+The rule can pay $\eta T/n$ to an owner reporting zero.  If zero payment to
+that owner is desired, replace this cushion by
+$(\eta T/n)\ind\{b_i\ne0\}$.  Since $X_i=M_i=0$ at $b_i=0$, the same
+concentration argument works, and the modified cushion is own-report monotone.
+We use the unmodified rule in the certification statement below.
+
+\subsection{Exact certification, including every tie face}
+Uniform good-seed existence does not by itself certify a sampled seed.
+For this purpose assume that the complete ordered list $V$ is rational.
+Fix any masks $S_1,\ldots,S_N$, rational $\theta_0,\ldots,\theta_n\in[0,1]$,
+$\eta\ge0$, and rational budget threshold $\overline C$.
+The checker below does not require that the seed was randomly generated.
+
+\begin{theorem}[Sound and complete all-profile seed certification]
+\label{alg:certification}
+There is a terminating exact algorithm deciding whether
+\eqref{alg:sample-payment} covers every coalition and pays at most
+$\overline C T$, at every real nonnegative report profile.
+On rejection it returns a rational violating profile and constraint.
+With $p=nd$ and
+\[
+ H\le 2^n\binom K2+nK^2,
+\]
+a conservative running-time bound is
+\begin{equation}\label{alg:cert-cost}
+ (2^n+1)(1+H)^{O(nd)}\operatorname{poly}(N,n,d,K,L),
+\end{equation}
+where $L$ bounds rational input bit lengths.  In particular this is not a
+polynomial preprocessing bound.  Incentives already hold for every seed.
+\end{theorem}
+\begin{proof}
+All relevant functions are positively homogeneous in the entire report
+vector.  The zero vector is harmless.  It therefore suffices to check
+\[
+ \mathcal D=\{b\in\R_+^p:\textstyle\sum_{i,e}b_{ie}=1\}.
+\]
+Normalize by total report mass, not by $T$: nonzero profiles with $T=0$
+remain in this compact simplex.  For every $U\subseteq I$ define
+$L_{U,v}(b)=w^v\cdot\sum_{i\in U}b_i$.  Form the arrangement of
+\[
+ L_{U,v}-L_{U,t}=0\quad(U\subseteq I,\ v<t),\qquad
+ w^v\cdot b_i-L_{I,t}=0\quad(i\in I,\ v,t\in[K]).
+\]
+Omit identically zero forms.  These at most $H$ hyperplanes fix every
+coalition's minimizing family and every possible cap branch.
+
+Write the retained forms as $\ell_1,\ldots,\ell_H$.
+For a ternary sign pattern $\sigma$, let $C_\sigma\subseteq\mathcal D$
+be the region with $\ell_h=0$ when $\sigma_h=0$ and
+$\sigma_h\ell_h>0$ otherwise.  Let $P_\sigma$ replace all these strict
+inequalities by weak ones.  Determine nonemptiness of $C_\sigma$ by the
+rational LP
+\[
+ \max\tau:\quad b\in\mathcal D,\quad0\le\tau\le1,\quad
+ \ell_h(b)=0\ (\sigma_h=0),\quad
+ \sigma_h\ell_h(b)\ge\tau\ (\sigma_h\ne0).
+\]
+Retain exactly those patterns with a positive optimum, storing a rational
+strict witness $z_\sigma$.  If there are no strict constraints, the optimum
+is one whenever the equality-constrained simplex is nonempty.
+The criterion is exact because finitely many positive margins have a positive
+minimum.  The compact rational LP supplies rational witnesses.
+
+For a retained pattern,
+\begin{equation}\label{alg:closure}
+ \overline{C_\sigma}=P_\sigma.
+\end{equation}
+Indeed, for any $x\in P_\sigma$ and $0<t\le1$, the point
+$(1-t)x+t z_\sigma$ satisfies every strict sign and tends to $x$.
+This also covers proper coordinate faces and degeneracies.
+At $z_\sigma$, record the priority winners and cap branches.  They give
+fixed rational linear formulas $V_{U,\sigma}$ for coalition values and
+$P_{i,\sigma}$ for payments throughout $C_\sigma$.
+For every $U$, and also for the budget, minimize over $P_\sigma$ the slacks
+\[
+ G_{U,\sigma}=\sum_{i\in U}P_{i,\sigma}-V_{U,\sigma},\qquad
+ G_{0,\sigma}=\overline C V_{I,\sigma}-\sum_iP_{i,\sigma}.
+\]
+Accept exactly when all these LP minima are nonnegative.
+Crucially, the objective on the closure is the \emph{frozen formula from
+$C_\sigma$}.  Do not recompute a boundary point's tie-resolved payment:
+that could belong to a different branch.  Every tie region is checked
+separately under its own actual formula.
+
+A linear form is nonnegative on $C_\sigma$ if and only if it is nonnegative
+on its closure; \eqref{alg:closure} proves exactness of these tests.
+If a rational closure optimizer $x$ has $G(x)<0$, choose
+\[
+ 0<t=\min\left\{\frac12,
+       \frac{-G(x)}{2(1+|G(x)|+|G(z_\sigma)|)}\right\}.
+\]
+Then $(1-t)x+t z_\sigma$ is a rational point of the original strict region
+and still has negative slack.  It is an actual violating profile, not merely
+a violation of an inactive boundary formula.  Regions partition the simplex,
+so the algorithm is sound and complete.  At $T=0$ the actual rule vanishes;
+no division by $T$ is used by the checker.
+
+To obtain \eqref{alg:cert-cost}, enumerate signs incrementally.  Insert each
+hyperplane, try the three extensions of every retained prefix, and use the
+margin LP to discard unrealizable extensions.  Formula~\eqref{alg:faces}
+bounds the number of prefixes at each stage by $(1+2H)^p$.
+At most $3H(1+2H)^p$ margin LPs and
+$(2^n+1)(1+2H)^p$ slack LPs suffice.  Each has at most $p+1$ variables,
+$O(p+H)$ constraints, and polynomial input bit length.  Exact rational LP
+algorithms yield the bound.  One may retain the exhaustive branching tree,
+margin witnesses or rejection certificates, frozen formulas, and rational
+LP dual certificates.  Their verification is polynomial in this explicit
+certificate's length, which can itself be exponential.
+\end{proof}
+For the optional zero-reporter cushion, add the $n$ arrangement forms
+$\sum_e b_{ie}=0$; these determine its indicator on the nonnegative domain.
+If a compact production LP is given instead of $V$, complete vertex
+enumeration is additional preprocessing: solve all independent active
+$d$-tuples of its dual constraints, retain feasible solutions, and deduplicate.
+No polynomial vertex-enumeration claim is needed.
+
+\begin{corollary}[Always-correct finite implementation after preprocessing]
+\label{alg:las-vegas}
+Fix rational $0<\eta\le1$, $0<\delta<1$, $j$, and a sample size satisfying
+\eqref{alg:sample-size}.  Supply a certified rational threshold
+$\overline C\ge C_j(K)+2\eta$.
+Repeated independent sampling followed by Theorem~\ref{alg:certification}
+returns a certified seed almost surely, after at most $1/(1-\delta)$ trials
+in expectation.  Every output rule is own-report monotone and satisfies its
+coverage and budget guarantees at all real profiles.  Its subsequent
+rational-input evaluation obeys Proposition~\ref{alg:cost}.
+\end{corollary}
+\begin{proof}
+Every seed in Theorem~\ref{alg:uniform}'s event passes the exact checker.
+Thus each independent trial succeeds with probability at least $1-\delta$.
+The geometric tail proves almost-sure termination and the expected-trial
+bound.  Every accepted seed has an exact certificate, regardless of the
+randomness used to find it.  Sampling and certification precede all reports,
+so freezing the accepted seed preserves its every-seed incentives.
+\end{proof}
+A rational threshold can be certified using rigorous logarithm enclosures,
+with arbitrarily small extra budget slack.  A certified upper bound on $K$
+may replace $K$ throughout, but this tunes the result to that bound rather
+than to an unknown smaller actual count.  For a production LP with $m$
+activities, the elementary bound $K\le\binom{m+d}{d}$ is available.
+Choosing $j$ and bounding $K$ are technology-side tasks, never report-dependent
+adjustments.  Parameters $n,d$ count the fixed domain; zero reporters are not
+removed after reports arrive.
+The construction has polynomial sample count and polynomial evaluation in
+the displayed sample and rational-input parameters, using the stated oracle.
+Its generally exponential certification preprocessing is separate.  There is
+no practical sample-size, polynomial preprocessing, or efficient deterministic
+seed-construction claim.  Nor does this finite-form implementation provide an
+oracle for arbitrary concave production functions.

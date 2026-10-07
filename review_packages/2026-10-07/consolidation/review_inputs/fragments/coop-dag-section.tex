@@ -1,0 +1,152 @@
+\section{A matching lower bound on simple networks}\label{dag:section}
+A network has one distinct fixed strategic owner per edge, and coalition
+worth is its maximum source--sink flow using only its owned edges. Structural
+cuts are inclusion-minimal edge sets disconnecting source from sink; their
+number depends on the fixed graph, not its reported capacities. Define
+$\mathcal B_{\rm dag}(K)$ as the supremum, over simple finite DAGs having at
+most $K$ structural cuts, of the best all-profile eligible total-payment
+factor on that graph. The analogous quantity for finite nonnegative
+min-linear technologies with at most $K$ forms is $\mathcal B_{\rm prod}(K)$;
+owner counts and dimensions are unrestricted finite integers.
+
+\begin{theorem}[Sharp first-order worst-case factors]\label{dag:sharp}
+As $K\to\infty$,
+\[
+ \mathcal B_{\rm dag}(K)=(1+o(1))\frac{\log K}{\log\log K},\qquad
+ \mathcal B_{\rm prod}(K)=(1+o(1))\frac{\log K}{\log\log K}.
+\]
+The lower holds along an explicit sequence of simple DAGs at their exact cut
+counts, and for the worst case with \emph{at most} $K$ cuts. It does not
+assert an exact-count padding theorem for every integer $K$.
+\end{theorem}
+
+\begin{proof}
+The upper follows from Theorem~\ref{prod:upper}. We give the simple-DAG lower,
+which also supplies the production lower. Fix integers $d_0\ge1$, $m>d_0$,
+$R\ge1$, and $k\ge2$. (Here $d_0$ is hierarchy height, not resource dimension.)
+One module with terminals $a,b$ has vertices $L_1,\ldots,L_R$,
+$u_1,\ldots,u_m$, $v_1,\ldots,v_m$, $W_1,\ldots,W_R$ and edges
+\[
+ aL_s,\quad L_su_j,\quad u_jv_j,\quad v_jW_t,\quad W_tb
+ \quad(1\le s,t\le R,\ 1\le j\le m).
+\]
+Take $k$ copies in series by identifying consecutive terminals. Each middle
+edge $u_jv_j$ has report in $\{1,m\}$; all auxiliary edges have report
+$H=m^2$. Every edge, including every auxiliary edge, is a strategic original
+owner whose full report domain is nonnegative. Only the finite profiles
+used in this proof keep auxiliary reports fixed.
+
+A type-$h$ module has $h$ high middle edges, $0\le h\le d_0$. For any subset
+$J$ of middle edges, choose one left fan and one right fan, and include the
+source/final fan edges plus the incident edges supporting exactly $J$.
+This actual coalition has module flow $\sum_{j\in J}c_j$: the middle cut
+bounds it above, and the selected branches carry it because their total is
+at most $m^2$. In particular the full graph has
+\begin{equation}\label{dag:value}
+ T=m+(m-1)\min_{1\le l\le k}H_l.
+\end{equation}
+Choosing the two fans independently uniformly, any particular auxiliary
+edge is included with probability at most $1/R$.
+
+Symmetrize an arbitrary eligible factor-$B$ rule over module permutations
+and branch permutations, relabeling each branch's incident auxiliary edges.
+These are permutations of the fixed owner set preserving every coalition's
+flow at all profiles: module flows combine by their minimum, so even module
+permutations preserve coalition values. Averaging preserves all required
+inequalities. At a histogram $\nu=(\nu_0,\ldots,\nu_{d_0})$ of module types,
+write $x_h(\nu),z_h(\nu)$ for low and high variable-owner payments, and
+\[
+ Y(\nu)=\sum_h\nu_h[(m-h)x_h(\nu)+hz_h(\nu)],\qquad
+ Q(\nu)=\text{total auxiliary-owner payment}.
+\]
+No auxiliary-payment symmetry is assumed; $Y+Q\le BT$.
+
+First choose one low variable in each module, supported by random fans.
+Averaged coalition coverage and nonnegativity give
+$\sum_h\nu_hx_h+Q/R\ge1$. Next put $q_0=m-d_0+1$ and choose $q_0$ low
+variables in each type below $d_0$, and one high variable in each type
+$d_0$. These exist because $m>d_0$. The resulting coalition has worth at
+least $q_0$, giving
+$q_0\sum_{h<d_0}\nu_hx_h+\nu_{d_0}z_{d_0}+Q/R\ge q_0$.
+Multiply the first inequality by $m-d_0$ and the second by $d_0$. With
+$A=(d_0+1)m-d_0^2$,
+\begin{equation}\label{dag:coalitions}
+ A\le A\sum_{h<d_0}\nu_hx_h+
+ \nu_{d_0}[(m-d_0)x_{d_0}+d_0z_{d_0}]+(m/R)Q.
+\end{equation}
+
+Fix $\alpha>0$, set $\lambda=A/\alpha$,
+$Z=\sum_{h=0}^{d_0}\lambda^h/h!$, and $p_h=\lambda^h/(h!Z)$.
+Average profiles with independent module types of probabilities $p_h$;
+let $\mu(\nu)$ be their multinomial histogram weights. Raising one actual
+low variable owner from $1$ to $m$ gives
+$x_h(\nu)\le z_{h+1}(\nu')$ at
+$\nu'=\nu-e_h+e_{h+1}$. Every other report, including every auxiliary report,
+is unchanged. The exact identity
+\[
+ \mu(\nu)\nu_h=(p_h/p_{h+1})\mu(\nu')\nu'_{h+1},\qquad
+ A p_h/p_{h+1}=\alpha(h+1)
+\]
+transports only this changing owner's payment. Averaging
+\eqref{dag:coalitions} therefore yields
+\begin{align}
+ A&\le\alpha\E\sum_{h=1}^{d_0}h\nu_hz_h+
+ \E\nu_{d_0}[(m-d_0)x_{d_0}+d_0z_{d_0}]+(m/R)\E Q\notag\\
+ &\le(1+\alpha)\E Y+(m/R)\E Q
+ \le\max\{1+\alpha,m/R\}B\E T.\label{dag:transport}
+\end{align}
+The last step uses the disjoint budgets $Y,Q$; their coefficients are not
+added. By the tail-sum formula and $p_0=1/Z$,
+\begin{equation}\label{dag:mean}
+ \E T=m+(m-1)\sum_{r=1}^{d_0}\left(\sum_{h=r}^{d_0}p_h\right)^k
+ \le m[1+d_0 e^{-k/Z}].
+\end{equation}
+
+Let $C_{m,R}$ be the number of structural cuts of one module. Any minimal
+cut is the outgoing cut of its reachable source side after deletion, so
+$1\le C_{m,R}\le2^{2R+2m}$. A minimal cut in a series composition lies
+entirely in one module: otherwise each module retains a path, or an edge
+removed elsewhere is redundant. Hence the full cut count is exactly
+$K=kC_{m,R}$.
+For $d_0\ge2$ choose
+\[
+ g=\lceil\sqrt{\log(d_0+1)}\rceil,\quad
+ m=d_0g,\quad R=m,\quad \alpha=1/g,\quad
+ \ell=\lceil\log(d_0+1)\rceil,\quad k=\lceil2\ell Z\rceil.
+\]
+The separate multiplier $\ell$, rather than $g$, ensures the tail error
+vanishes. Equations~\eqref{dag:transport}--\eqref{dag:mean} give
+\[
+ B\ge\frac{d_0+1-d_0/g}{(1+1/g)(1+d_0e^{-2\ell})}=(1-o(1))d_0.
+\]
+Here $\lambda=(d_0+1)d_0g^2-d_0^2g>d_0$, so
+$\lambda^{d_0}/d_0!\le Z\le(d_0+1)\lambda^{d_0}/d_0!$.
+Stirling's estimate implies
+$\log k=(1+o(1))d_0\log d_0$; since $m=o(d_0\log d_0)$,
+\[
+ \log k\le\log K\le\log k+4m\log2=(1+o(1))d_0\log d_0.
+\]
+This proves the lower along the sequence $K_{d_0}$. For any fixed
+$\varepsilon>0$ and large external cut budget $K$, take
+$d_0=\lfloor(1-\varepsilon)\log K/\log\log K\rfloor$.
+Then $K_{d_0}\le K$ eventually, yielding lower coefficient $1-\varepsilon$.
+Letting $\varepsilon$ decrease to zero proves the at-most-$K$ assertion.
+\end{proof}
+
+\begin{proposition}[A subdivision that destroys the lower bound]\label{dag:subdivision}
+Fully subdividing every edge of any finite directed network into two edges
+owned separately produces a network with an efficient eligible rule.
+\end{proposition}
+\begin{proof}
+For pair reports $(a_e,b_e)$ set $d_e=\min(a_e,b_e)$. Choose the original
+network's fixed-priority minimum-cut core allocation $Q(d)$, which pays
+$d_e$ on the selected cut and zero elsewhere. Pay $Q_e(d)$ to the higher
+reporting member of pair $e$, split equally at equality, and pay the lower
+member zero. Holding the mate's report fixed, the payment is zero below it,
+half the fixed $Q_e$ at equality and the fixed $Q_e$ above it: in the last
+two cases all virtual capacities are fixed. Thus it is own-monotone, even
+if $Q$ is not. For a coalition $S$, let $S^*$ contain the original edges
+whose two members both lie in $S$. Its value is exactly $v_d(S^*)$, and
+$p(S)\ge Q(S^*)\ge v_d(S^*)$. Total payment is $T$. This shows why the naive subdivision reduction fails and motivates the
+explicit auxiliary-budget accounting in the shared-fan construction.
+\end{proof}

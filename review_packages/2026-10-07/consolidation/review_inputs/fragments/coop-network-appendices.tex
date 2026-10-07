@@ -1,0 +1,616 @@
+\section{Effective capacities: a successful class and its boundary}
+\label{net:effective}
+These results analyze an earlier continuous-random-cut rule.  The general
+hybrid in Theorem~\ref{prod:upper} does not require its structural incentive
+argument.  All networks below are finite directed acyclic $s$--$t$ graphs,
+every edge lies on an $s$--$t$ path, and each edge has one distinct fixed owner.
+The topology and owners are fixed during every report comparison.  Parallel
+edges are permitted unless a graph is explicitly called simple.
+Write $F(c)$ for maximum flow, $T=F(c)$, and $v_c(S)=F(c\ind_S)$.
+Let $\mathcal C$ be the inclusion-minimal structural edge cutsets and
+$K=|\mathcal C|$; this family is independent of capacities, including zero
+capacities.  Then $F(c)=\min_{C\in\mathcal C}\sum_{e\in C}c_e$.
+
+Define $D_e(c)$ as the greatest flow through edge $e$ among all feasible
+$s$--$t$ flows, without requiring their total value to be maximal.
+For independent uniform $U_e\in[0,1]$, choose the first cut $W$ minimizing
+$\sum_{e\in C}D_e(c)U_e$, using a fixed priority on $\mathcal C$, and put
+\begin{equation}\label{net:base-rule}
+ z_e(c)=D_e(c)\Prob(e\in W).
+\end{equation}
+These are deterministic expectations; the uniforms are an integration device.
+A useful graph formula, also proving continuity, is
+$D_e=\min\{c_e,F_{s,\mathrm{tail}(e)},F_{\mathrm{head}(e),t}\}$,
+omitting a prefix or suffix with coincident terminals.  An upstream path and
+a downstream path cannot share a vertex, since that would create a cycle
+through $e$.  Scaled maximum prefix and suffix flows therefore join through
+$e$ and attain the formula; the reverse bounds are immediate.
+
+\begin{lemma}[Effective-capacity preservation and budget]
+\label{net:preservation}
+On every such DAG, $D\le c$, each $D_e$ is nondecreasing in every report,
+$0\le D_e\le T$, and replacing $c$ by $D(c)$ preserves the complete feasible
+flow set of every coalition.  Consequently \eqref{net:base-rule} is
+nonnegative and coalition-covering.  For $K\ge2$ let $R_K>e$ solve
+$R_K\ln(R_K/e)=\ln K$ and set
+\[
+ U(K)=R_K+1/\ln R_K.
+\]
+Then $\sum_ez_e(c)\le U(K)T$; for $K=1$ the rule is efficient.
+Here $U(K)\sim\ln K/\ln\ln K$.  No incentive assertion is made in this lemma.
+\end{lemma}
+\begin{proof}
+Inclusion of feasible flow sets proves monotonicity of $D$.  A DAG has no
+circulations, so path decomposition bounds edge flow by total flow and hence
+by $T$.  Every coalition flow is grand-network feasible, so it respects all
+$D_e$; the reverse inclusion uses $D\le c$.
+For every selected cut and every coalition,
+$\sum_{e\in S\cap W}D_e\ge F(D\ind_S)=v_c(S)$.
+The equality follows from preservation and max-flow/min-cut on the fixed
+graph after giving nonmembers capacity zero.  Taking expectations proves
+coverage.  If $T=0$, all $D_e$ and payments are zero.
+
+For $T>0$ put $a_e=D_e/T\in[0,1]$ and $\rho_C=\sum_{e\in C}a_e$.
+Some cut $C_0$ has $\rho_{C_0}=1$.  Its random score is at most one, so the
+winning cut has $X_W=\sum_{e\in W}a_eU_e\le1$.
+For $t>0$, concavity of $x\mapsto x^{a_e}$ gives
+\[
+ \E e^{-tX_C}\le\prod_{e\in C}(\E e^{-tU_e})^{a_e}
+ \le t^{-\rho_C},\qquad
+ \Prob(X_C\le1)\le e^t t^{-\rho_C}.
+\]
+Set $t=\rho_C$.  Since $(e/s)^s$ decreases for $s>1$, a union bound gives
+$\Prob(\rho_W>s)\le\min\{1,K(e/s)^s\}$ for $s\ge e$.
+Beyond $R_K$ the logarithm of the second bound has derivative
+$-\ln s\le-\ln R_K$.  Therefore
+\[
+ \frac{\sum_ez_e}{T}=\E\rho_W
+ \le R_K+\int_{R_K}^\infty e^{-(s-R_K)\ln R_K}\,ds=U(K).
+\]
+Cut scores may overlap; no independence between cuts was used.
+With one cut, its $D$-sum is $T$.  Finally the defining equation implies
+$R_K\sim\ln K/\ln\ln K$, and $1/\ln R_K=o(R_K)$.
+\end{proof}
+
+\subsection{Series-parallel networks and co-cut independence}
+A two-terminal series-parallel (TTSP) network is built from directed edge
+leaves by series and parallel composition of components with disjoint edges
+and internal vertices.  Fix its decomposition tree.  Component flow satisfies
+$F_{A\parallel B}=F_A+F_B$ and $F_{A;B}=\min(F_A,F_B)$.
+Minimal cuts form disjoint alternatives at a series node and unions of one
+cut from each child at a parallel node.  Thus
+$K_{A;B}=K_A+K_B$ and $K_{A\parallel B}=K_AK_B$.
+
+\begin{theorem}[TTSP incentives]\label{net:ttsp}
+On every fixed TTSP network, the rule \eqref{net:base-rule} is own-report
+monotone at every nonnegative real profile, and hence satisfies coverage and
+the $U(K)T$ budget bound with binding-underreport incentives.
+\end{theorem}
+\begin{proof}
+For an edge $e$, let $L_e$ be the minimum of $F_B(c)$ over the sibling
+components $B$ at all series ancestors of $e$, with empty minimum $+\infty$.
+Then
+\begin{equation}\label{net:ttsp-cap}
+ D_e=\min(c_e,L_e).
+\end{equation}
+For attainability, route exactly this amount through the leaf.  At a parallel
+ancestor use zero flow in its other child; at a series ancestor route the same
+amount through the sibling by scaling its maximum flow.  Each ancestor's
+bound is respected.  Conversely, every path carrying flow through $e$ crosses
+each such series sibling, giving all the displayed upper bounds.
+
+If distinct edges $e,h$ share a minimal cut, their lowest common ancestor
+must be parallel: at a series node a minimal cut lies wholly in one child.
+Formula~\eqref{net:ttsp-cap} shows that $D_h$ depends on $c_e$ only if $e$
+lies in a sibling at a series ancestor of $h$.  This is impossible for a pair
+sharing a cut.  Thus $D_h$ is independent of $c_e$ for co-cut pairs.
+
+Fix $c_{-e},U_{-e}$ and write $x=c_e$, $d(x)=D_e(c)$.  Put
+\[
+ A=\min_{C\ni e}\sum_{h\in C\setminus\{e\}}D_hU_h,\qquad
+ B(x)=\min_{C\not\ni e}\sum_{h\in C}D_hU_h,
+\]
+with $B=+\infty$ if no excluding cut exists.
+Co-cut independence makes $A$ constant in $x$; $B$ and $d$ are nondecreasing.
+Integration over the single uniform $U_e$ gives
+\begin{equation}\label{net:conditional}
+ D_e\Prob(e\in W\mid U_{-e})=\min\{d(x),(B(x)-A)_+\}.
+\end{equation}
+When $d>0$ a tie between the containing and excluding scores occurs at at
+most one value of $U_e$, hence has measure zero.  The formula also holds for
+$d=0$ and $B=+\infty$ under their evident conventions.
+Its right side is nondecreasing in $x$.  Average over $U_{-e}$.
+\end{proof}
+The same proof applies to any fixed cut representation with a normalization
+that preserves every coalition, is coordinatewise nondecreasing and bounded
+by $T$, and has co-cut independence.  The condition is sufficient, not necessary.
+Serial layers of parallel edges recover multi-glove games.  Their lower
+bound and Theorem~\ref{net:ttsp} give sharp worst-case TTSP order
+$(1+o(1))\ln K/\ln\ln K$.  This lower construction is inherited; the general
+upper and simple-DAG lower are now Theorems~\ref{prod:upper} and~\ref{dag:sharp}.
+
+\begin{proposition}[A global cap does not replace effective capacities]
+\label{net:global-cap}
+Globally replacing each edge by $\min(c_e,T)$ before applying the continuous
+random-cut rule can violate own-report monotonicity even on TTSP graphs
+with three structural cuts and arbitrarily many owners.
+\end{proposition}
+\begin{proof}
+Use the flow function
+$F(x,a,b,d_1,\ldots,d_n)=\min\{x+\min(a,b),\sum_jd_j\}$.
+For $n\ge4$, set $\epsilon=1/10$, $a=\epsilon$, $b=n+\epsilon$,
+$d_j=1$, and compare $x_0=n-2\epsilon$ with $x_1=n-\epsilon$.
+Then $T_0=n-\epsilon$, $T_1=n$.  Under the global cap only $b$ is changed,
+to $T$.  If $S_n$ is a sum of $n$ independent unit uniforms and
+$A_T=\min(\epsilon U,TV)$ is independent, the focal payment is
+\[
+ z(x,T)=\E\min\{x,(S_n-A_T)_+\}.
+\]
+Write $\delta=n-T\in\{\epsilon,0\}$, $t=\epsilon+\delta$, so $x=n-t$.
+For $0\le u\le1$, simplex integration gives
+$\E(u-S_n)_+=u^{n+1}/(n+1)!$; also $n-S_n$ has the same law as $S_n$.
+Since $0\le A_T\le\epsilon\le t<1$, subtraction of the two positive parts
+therefore yields
+\[
+ z(x,T)=\frac n2-\E A_T+
+ \frac{\E A_T^{n+1}-\E(t-A_T)^{n+1}}{(n+1)!}.
+\]
+The survival law $(1-u/\epsilon)(1-u/T)$ on $[0,\epsilon]$ gives
+\[
+ \E A_T^r=\frac{\epsilon^r}{r+1}
+ -\frac{r\epsilon^{r+1}}{(r+1)(r+2)T},\quad r\ge1.
+\]
+Thus the mean increases by $\epsilon^3/[6n(n-\epsilon)]$ between profiles.
+Bounding the two positive remainder terms separately gives
+\[
+ z(x_1,T_1)-z(x_0,T_0)
+ \le-\frac{\epsilon^3}{6n(n-\epsilon)}
+       +\frac{2(2\epsilon)^{n+1}}{(n+1)!}<0.
+\]
+For the last inequality, the ratio of the positive bound to
+$\epsilon^3/(6n^2)$ is
+$r_n=6n^2 2^{n+2}\epsilon^{n-2}/(n+1)!$.
+It equals $64/125<1$ at $n=4$ and decreases, since
+$r_{n+1}/r_n=2\epsilon(n+1)^2/[n^2(n+2)]<1$.
+Effective capping instead fixes the detour capacity at $a$, as required by
+Theorem~\ref{net:ttsp}.  This is a failure of a specific formula, not a
+lower bound for all mechanisms.
+\end{proof}
+
+\subsection{A bundled Wheatstone bridge works, but composition fails}
+Let $H_k$ have vertices $s,u,v,q$ and edges
+$x:s\to u$, $y:s\to v$, $z_j:u\to q$ ($1\le j\le k$),
+$w:v\to q$, and $h:u\to v$.  These are distinct fixed owners.
+Its four minimal cuts are
+$\{x,y\}$, $\{z_1,\ldots,z_k,w\}$,
+$\{y,z_1,\ldots,z_k,h\}$, and $\{x,w\}$.
+
+\begin{proposition}[Bundled bridge]\label{net:bundle}
+For every $k\ge1$, effective-capacity payments are own-report monotone on
+$H_k$, at every nonnegative real profile, and pay at most $U(4)T$.
+\end{proposition}
+\begin{proof}
+Writing $C=\sum_jz_j$, the effective capacities are
+\[
+ \begin{aligned}
+ d_x&=\min(x,C+\min(h,w)),&d_y&=\min(y,w),\\
+ d_{z_j}&=\min(z_j,x),&d_w&=\min(w,y+\min(x,h)),\\
+ d_h&=\min(h,x,w).
+ \end{aligned}
+\]
+Each formula is the maximum amount that can be routed through its specified
+edge: the displayed upstream/downstream bounds are necessary and attained
+by routing that amount along the indicated direct and bridge paths.
+Put $X=d_xU_x$, $Y=d_yU_y$, $Z=\sum_jd_{z_j}U_{z_j}$,
+$W=d_wU_w$, $H=d_hU_h$.  Formula~\eqref{net:conditional}, applied to the
+four cuts and integrating only the focal uniform, gives the integrands.
+Here the containing intercept may depend on the report: only the conditional
+probability identity is used, and monotonicity is checked directly below.
+The resulting expressions are
+\[
+ \begin{aligned}
+ q_x&=\min(d_x,Z+\min((W-Y)_+,H)),\\
+ q_w&=\min(d_w,Y+\min((X-Z)_+,H)),\\
+ q_y&=\min(d_y,(W-\min((X-Z)_+,H))_+),\\
+ q_{z_j}&=\min(d_{z_j},(X-Z_{-j}-\min((W-Y)_+,H))_+),\\
+ q_h&=\min(d_h,(X-Z)_+,(W-Y)_+).
+ \end{aligned}
+\]
+Here $Z_{-j}$ excludes the focal summand.  For example, for $z_j$ the
+least containing score without $z_j$ is $Z_{-j}+\min(W,Y+H)$ and the least
+excluding score is $X+\min(Y,W)$, which gives the stated cancellation.
+The other expressions follow by the same subtraction of the four cut scores.
+When $x$ grows, only $d_x,Z,W,H$ can increase and $Y$ stays fixed; all occur
+positively in $q_x$.  When $w$ grows, $d_w,Y,X,H$ can increase and $Z$ is
+fixed.  When $y$ grows, only $d_y,W$ can increase in its expression.
+When $z_j$ grows, only $d_{z_j},X$ can increase; $Z_{-j},W,Y,H$ are fixed.
+When $h$ grows, $d_h,X,W$ can increase and $Y,Z$ remain fixed.
+Every integrand is therefore own-report monotone.  Average and apply
+Lemma~\ref{net:preservation}.
+\end{proof}
+This is an unbounded-owner, four-cut class outside TTSP, not a theorem about
+arbitrarily many interacting bridge structures.
+
+\begin{theorem}[Actual expected-payment failures]
+\label{net:wheatstone-failure}
+There are fixed edge-owned DAGs with five structural cuts and arbitrarily
+many owners on which \eqref{net:base-rule} decreases an owner's expected
+payment when only its own report increases.  There are also simple DAGs
+with growing vertex and owner counts with the same property.  In both
+constructions the two grand values are one and all capacities are positive.
+\end{theorem}
+\begin{proof}
+Add an edge $p:s\to q$ in parallel with $H_k$, then two parallel edges
+$r_1,r_2:q\to t$.  The structural cuts are the four bridge cuts with $p$
+adjoined, and $\{r_1,r_2\}$.  Set
+\[
+ \epsilon=1/20,\quad x_0=9/10,\quad x_1=19/20,\quad y=\epsilon,
+ \quad z_j=w=h=p=2,\quad r_1=r_2=1/2.
+\]
+Only $x$ changes.  Both values are one.  For $x\in[x_0,x_1]$ the effective
+capacities are
+\[
+ D_x=x,\ D_y=\epsilon,\ D_{z_j}=D_h=x,\ D_w=x+\epsilon,
+ \ D_p=1,\ D_{r_i}=1/2.
+\]
+The incoming $x$ and $x+y$ cuts and downstream capacity one give the upper
+bounds; routes through an individual $z_j$, through $h,w$, and through $p$
+attain them.  Let independent uniforms define
+\[
+ Y=\epsilon U_y,\quad W=(x+\epsilon)U_w,\quad H=xU_h,\quad
+ Z=x\sum_{j=1}^kU_{z_j},\quad P=U_p,\quad
+ R=(U_{r_1}+U_{r_2})/2,\quad A=\min(Y,W).
+\]
+The containing-cut score without $x$ is $P+A$; the least excluding score
+is $\min\{P+Z+\min(W,Y+H),R\}$.  Thus its actual payment is $\E q_k(x)$,
+where
+\begin{equation}\label{net:wheatstone-q}
+ q_k(x)=\min\{x,[\min\{Z+\min(H,(W-Y)_+),R-P-A\}]_+\}.
+\end{equation}
+Compare $I(x)=\E\min\{x,(R-P-A)_+\}$.  The integrands agree when $Z\ge1$
+and are otherwise between zero and one, so
+\begin{equation}\label{net:ideal-error}
+ I(x)-\Prob(Z<1)\le z_x(x)\le I(x),\qquad
+ \Prob(Z<1)\le\frac1{k!x^k}.
+\end{equation}
+The second inequality bounds the relevant portion of the unit cube by the
+nonnegative simplex of coordinate sum below $1/x$; it is not an equality.
+
+For $b=x+\epsilon$ write
+\[
+ M_0(b)=1,\qquad
+ M_j(b)=\E A^j=\frac{\epsilon^j}{j+1}
+       -\frac{j\epsilon^{j+1}}{(j+1)(j+2)b},\quad j\ge1,
+ \qquad P_4(t,b)=\sum_{j=0}^4\binom4j(-1)^jt^{4-j}M_j(b).
+\]
+For $0\le a\le\epsilon$, convolution of independent uniforms of widths
+$1/2,1/2,1$ (or simplex inclusion-exclusion) gives
+\[
+ \E(R-P-a)_+=\frac{(1-a)^4-2(1/2-a)^4}{6}.
+\]
+At $x_0,x_1$, its truncated part is
+$\E(R-P-a-x)_+=(1-x-a)^4/6$.
+Consequently
+\[
+ I(x)=\frac{P_4(1,b)-2P_4(1/2,b)-P_4(1-x,b)}6,
+ \qquad I(x_0)-I(x_1)=\frac{553}{136800000}.
+\]
+By \eqref{net:ideal-error}, the actual payment drop is at least
+$553/136800000-(10/9)^k/k!$.
+At $k=10$ this is
+$97726081746439/30050502681578400000>0$; the error decreases thereafter.
+This proves the first assertion for every $k\ge10$.
+
+For the simple version, replace each $z_j$ by a private two-edge path with
+both capacities two and distinct owners.  Replace each $r_i$ by a private
+two-edge path with both capacities $1/2$.  The other edges are unchanged.
+There are $k+7$ vertices and $2k+9$ owners; there are no parallel edges.
+The effective capacities of each pair equal the original effective capacity,
+and \eqref{net:wheatstone-q} holds with
+\[
+ Z=x\sum_{j=1}^k\min(U_j,V_j),\qquad
+ R=\bigl(\min(U'_1,V'_1)+\min(U'_2,V'_2)\bigr)/2.
+\]
+Each minimum has density $2(1-u)\le2$, so the error in
+\eqref{net:ideal-error} is now at most $2^k/(k!x^k)$.
+Each downstream path has density $4-8r$ on $[0,1/2]$.
+Convolution gives
+\[
+ F_R(r)=8r^2-\tfrac{32}{3}r^3+\tfrac83r^4\quad(0\le r\le1/2),
+ \qquad 1-F_R(r)=\tfrac83(1-r)^4\quad(1/2\le r\le1).
+\]
+Since $P$ is uniform, $g(a)=\E(R-P-a)_+=\E(R-a)_+^2/2$.
+Integrating $g''=1-F_R$, with $g(0)=5/72$, $g'(0)=-1/3$, yields
+\[
+ g_0(a)=\tfrac5{72}-\tfrac a3+\tfrac{a^2}2-\tfrac23a^4
+               +\tfrac8{15}a^5-\tfrac4{45}a^6\quad(0\le a\le1/2),
+ \qquad g_1(a)=\tfrac4{45}(1-a)^6\quad(1/2\le a\le1).
+\]
+Using $A\le1/20$ and $A+x\ge9/10$ therefore gives
+\[
+ I(x)=\E g_0(A)-\tfrac4{45}\E(1-x-A)^6,
+\]
+where every moment is the rational $M_j(b)$ above.  Expansion gives
+\[
+ I(x_0)=\frac{11809546127}{191520000000},\quad
+ I(x_1)=\frac{14797313}{240000000},\quad
+ I(x_0)-I(x_1)=\frac{1290353}{191520000000}.
+\]
+The actual drop is at least
+$1290353/191520000000-(20/9)^k/k!$.
+At $k=14$ this equals
+$700533736635095043154291/118415105665157830969440000000>0$,
+and it increases thereafter.  The structural cut count is
+$2^{k+1}+6$: each of the two cut types involving the $z$ bundle chooses one
+edge of each path, the other two upstream types are unchanged, and the
+final pair contributes four cuts.  This proves the simple-DAG assertion.
+\end{proof}
+The obstruction concerns an actual integrated payment, not only a conditional
+integrand.  Coverage and the cut-count budget still hold by
+Lemma~\ref{net:preservation}; incentives fail.  In particular, the successful
+bundled bridge rule is not preserved by arbitrary series/parallel composition
+with other modules.  This does not preclude other mechanisms on these graphs.
+
+\section{The own-report envelope: a linear upper bound and growing obstruction}
+\label{net:envelope}
+For the rule \eqref{net:base-rule}, its actual own-report monotone envelope is
+\[
+ y_e(c)=\sup_{0\le t\le c_e}z_e(t,c_{-e}).
+\]
+It is automatically own-report monotone and dominates the covering vector $z$.
+The supremum is attained and defines a continuous function: the graph formula
+above makes every $D_e$ continuous.  The conditional formula
+$z_e=\E\min\{D_e,(B-A)_+\}$ makes $z_e$ continuous by dominated
+convergence, with $A,B$ the containing/excluding scores at the given profile.
+Writing $t=\lambda c_e$ with $0\le\lambda\le1$ gives a maximum of a
+continuous function over a fixed compact interval, which is continuous.
+These regularity observations are not needed for the budget proof.
+The next bounds concern this specific repair; they are not bounds on the
+optimal subsidy among all truthful mechanisms.
+
+\begin{lemma}[A shared-uniform comparison]\label{net:uniform-comparison}
+For finite nonnegative coefficient vectors $a,b$ and independent unit
+uniforms, if $A=\sum_i a_i$, $B=\sum_i b_i$, then
+\[
+ A\Prob\Bigl(\sum_i a_iU_i\le\sum_i b_iU_i\Bigr)\le B.
+\]
+\end{lemma}
+\begin{proof}
+If $A\le B$, the assertion is immediate.  Otherwise put
+$N=\sum_i(b_i-a_i)_+$ and $W=\sum_i|a_i-b_i|=A-B+2N>0$.
+Reflect uniforms whose coefficient $a_i-b_i$ is negative.  The event becomes
+$\sum_i|a_i-b_i|V_i\le N$, where $N<W/2$.
+The resulting positive weighted uniform sum has a symmetric unimodal density
+about $W/2$.  To check this directly, a centered uniform is even and
+nonincreasing on the positive half-line.  If $f$ has these properties,
+convolution with the centered uniform on $[-r,r]$ has derivative
+$[f(x+r)-f(x-r)]/(2r)\le0$ for $x\ge0$ almost everywhere and is even;
+absolute continuity proves the assertion by induction.
+Its CDF is convex on $[0,W/2]$, vanishes at zero, and equals $1/2$ at $W/2$.
+Thus its value at $N$ is at most $N/W$.
+Since $N\le B$ and $A>B$, $N/(A-B+2N)\le B/(A+B)$.
+Multiplication by $A$ proves the claim, including $B=0$.
+\end{proof}
+
+\begin{theorem}[Linear budget for the actual envelope]\label{net:envelope-upper}
+For every fixed edge-owned DAG and every nonnegative real profile,
+$\sum_ey_e(c)\le KT(c)$.  More precisely, if $T>0$ and
+$d_C=\sum_{h\in C}D_h(c)$, then
+\begin{equation}\label{net:envelope-coordinate}
+ y_e(c)\le T D_e(c)\sum_{C\ni e}\frac1{d_C}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Fix $c$, with $T>0$, and a minimum cut $A$ for $D(c)$, so $d_A=T$.
+Write $Z_C=\sum_{h\in C}D_h(c)U_h$ using one common uniform vector.
+If $D_e=0$, all own underreports pay zero.
+Reports $t\ge D_e$ leave every feasible flow unchanged, so it suffices to
+consider $0<t\le D_e$.  Set $x=t/D_e$ and $c^t=(t,c_{-e})$.
+Feasible-set inclusion and scaling a flow attaining each effective cap give
+\[
+ xD_h(c)\le D_h(c^t)\le D_h(c),\qquad D_e(c^t)=t.
+\]
+If the selected cut at $c^t$ is $C$, its score is no larger than that of $A$,
+and hence $xZ_C\le Z_A$.  Lemma~\ref{net:uniform-comparison}, with totals
+$xd_C$ and $T$, yields
+\[
+ t\Prob(W(c^t)=C)\le TD_e/d_C.
+\]
+Sum over cuts containing $e$ before taking its own supremum, obtaining
+\eqref{net:envelope-coordinate}.  Summing the resulting bounds gives
+$\sum_ey_e\le T\sum_C\sum_{e\in C}D_e/d_C=KT$.
+For $T=0$, all effective capacities vanish.  Coverage and incentives follow
+from domination and the expanding supremum domain.
+\end{proof}
+For comparison with earlier accounting, let $L$ be the longest path length,
+$h(C)=\max_P|P\cap C|$, and $H=\sum_Ch(C)$.
+Since $H\ge K$, Theorem~\ref{net:envelope-upper} immediately implies the
+archived weaker bound $2HT$.  Also $H\le KL$ and $L\le K$: for each edge
+of a fixed path, deleting that edge and every edge outside the path contains
+a minimal cut whose trace on the path is exactly that edge, giving $L$
+distinct cuts.  Hence the former $2KLT$ and $2K^2T$ conclusions are preserved.
+The earlier structural estimate $H=O(K^{3/2})$ and its sharp Fibonacci-family
+example concern the statistic $H$; their archived proofs are independent
+of the improved envelope estimate.  They do not supply an envelope lower
+bound and are not repeated here.  The sharp general mechanism theorem uses
+a different payment rule.
+
+\begin{theorem}[Growing lower bounds for the envelope]
+\label{net:envelope-lower}
+There are explicit fixed-owner DAG families at positive profiles with $T=1$
+and growing cut count $K$ for which
+\[
+ \sum_ey_e=\Omega\!\left(\frac{K^{1/401}}{\ln K}\right).
+\]
+There are also explicit simple-DAG families with
+$\sum_ey_e=\Omega(K^{1/19201}/\ln K)$.
+Both statements apply to every own-report monotone pointwise majorant of $z$.
+They do not apply to arbitrary truthful coalition-covering mechanisms.
+\end{theorem}
+\begin{proof}
+First take an integer $r\ge4$ and set
+\[
+ N=2^r,\qquad m=400r,\qquad k=10m,\qquad
+ a=6/5,\qquad b=3/10,\qquad t=b/m.
+\]
+Place $N$ modules in series.  Module $j$, with entry $s_j$, exit $q_j$,
+vertex $A_j$ and vertices $B_{j,i}$, has edges and capacities
+\[
+ \begin{array}{c|c|c}
+ \text{edge}&\text{endpoints}&\text{capacity}\\\hline
+ e_j&s_j\to A_j&1\\
+ y_{j,i}&s_j\to B_{j,i}&a/m\\
+ g_{j,i}&A_j\to B_{j,i}&2\\
+ h_{j,i}&B_{j,i}\to q_j&2\\
+ Z_{j,\ell}&A_j\to q_j&2\quad(1\le\ell\le k).
+ \end{array}
+\]
+After the modules add a final parallel bundle of $100000$ edges, each of
+capacity $1/100000$.  All listed edges have distinct original owners.
+For each $j$ separately compare the common original profile with the profile
+lowering only $e_j$ to $t$.
+
+A module has $2^{m+1}$ minimal cuts.  A cut containing $e$ chooses one of
+$y_i,h_i$ in each branch.  A cut excluding $e$ contains all $Z$ edges and
+chooses either $h_i$ or both $y_i,g_i$ in each branch.
+These are necessary to block the direct and branch paths, sufficient to block
+all paths, and minimal because each chosen edge has an unblocked-path witness
+when removed.  A series-composition minimal cut lies in one component, so
+\begin{equation}\label{net:aggregate-K}
+ K=N2^{m+1}+1=2^{401r+1}+1.
+\end{equation}
+If a module's focal report is $q\in\{1,t\}$, its raw value is $a+q$:
+the source cut is an upper bound, attained by routing $q$ along $e,Z$ and
+each $y_i$ along $h_i$.  Thus all modules remain above one, and the final
+bundle fixes global value one at every comparison.
+The effective capacities inside this module are
+\[
+ D_e=D_{g_i}=D_{Z_\ell}=q,\quad D_{y_i}=a/m,\quad
+ D_{h_i}=\min(1,q+a/m).
+\]
+Incoming cuts and the final bound give necessity.  Prefix/suffix routes
+attain each bound; all other modules retain raw value greater than one, so
+changing the focal report changes no effective capacity in those modules.
+
+Let
+\[
+ A_q=\sum_{i=1}^m\min((a/m)U_{y_i},D_{h_i}U_{h_i}),
+ \qquad Z_q=q\sum_{\ell=1}^kU_{Z_\ell}.
+\]
+The least containing score is $qU_e+A_q$; every excluding score is at least
+$Z_q$.  For $0<u\le v$, integrating the product survival function gives
+$\E\min(uU,vV)=u/2-u^2/(6v)$.  Therefore
+\[
+ \E A_{\rm high}=\frac35-\frac6{25m}\ge\frac{59}{100},
+ \qquad \E A_{\rm low}=\frac{11}{25}.
+\]
+The summands lie in $[0,a/m]$.  The bounded-sum inequality
+$\Prob(\sum(X_i-\E X_i)\ge s)\le
+\exp(-2s^2/\sum_i\operatorname{range}(X_i)^2)$, and its lower-tail version,
+give
+\[
+ \Prob(A_{\rm high}\le.53)\le e^{-m/200},\quad
+ \Prob(A_{\rm low}\ge.47)\le e^{-m/800},\quad
+ \Prob(Z_{\rm low}\le.53)\le e^{-9409m/4500}\le e^{-2m}.
+\]
+Here $\E Z_{\rm low}=3/2$ and its sum of squared ranges is $9/(10m)$;
+high $Z$ stochastically dominates low $Z$.
+For completeness, the bounded-sum inequality follows by convexity reducing
+each variable to its endpoints: the centered Bernoulli log-mgf has second
+derivative at most one quarter, so it is at most $\lambda^2/8$ after unit
+scaling.  Multiply the mgf bounds and optimize the exponential Markov bound.
+The final-bundle random score $Q$ has mean $1/2$ and variance $1/1200000$.
+Chebyshev gives $\Prob(Q\notin[.49,.51])\le1/120$.
+
+At the profile lowering $e_j$, union bound the event that its $A_{\rm low}$
+is below $.47$, every other $A_{\rm high}$ exceeds $.53$, all $Z$ exceed
+$.53$, and $Q\in[.49,.51]$.  Its failure probability is at most
+\[
+ e^{-m/800}+Ne^{-m/200}+Ne^{-2m}+1/120
+ \le1/4+1/16+1/16+1/120=23/60.
+\]
+The last inequalities follow from $m=400r$, $r\ge4$, and $e>2$.
+On the good event the focal containing score is at most $.47+t<.48$,
+whereas its excluding and all other module scores exceed $.53$ and the
+final score is at least $.49$.  The global winner therefore contains $e_j$
+for every realization of its own uniform.  Thus
+\[
+ z_{e_j}(c^{t,j})\ge37t/60>t/2,\qquad
+ \sum_ey_e(c)\ge Nt/2=\frac{3\,2^r}{8000r}.
+\]
+Together with \eqref{net:aggregate-K} this proves the first bound.
+The separate underreport comparisons justify different own suprema at the
+one original profile; they do not sum actual payments from different profiles.
+
+For the simple construction set $m=1600r$, retaining $N,k,a,b,t$ as above.
+Replace every $y_i,h_i,Z_\ell$ by a private two-edge path, each copy with
+the original capacity and its own fixed owner.  Keep $e,g_i$ unsplit.
+Use $2000$ private final two-edge paths in parallel, each copy of capacity
+$1/2000$.  All private vertices are distinct.  There are
+$N(25m+1)+4000$ owners, and the graph is simple and acyclic.
+Raw values and effective-capacity bounds are unchanged for each copy.
+The random capacity of a replaced path is its cap times
+$V=\min(U_1,U_2)$, with mean $1/3$, variance $1/18$, and survival $(1-v)^2$.
+Different paths give independent variables.  Direct integration yields
+\[
+ \E\min(uV_1,vV_2)=u\left[\frac13-\frac{u}{6v}
+                                      +\frac{u^2}{30v^2}\right],\quad u\le v.
+\]
+Thus
+\[
+ \E A_{\rm high}=\frac25-\frac6{25m}+\frac{(6/5)^3}{30m^2}
+       \ge.39,\qquad \E A_{\rm low}=166/625.
+\]
+The same range bounds and bounded-sum inequality give
+\[
+ \Prob(A_{\rm high}\le.36)\le e^{-m/800},\quad
+ \Prob(A_{\rm low}\ge.30)\le e^{-1849m/1125000}\le e^{-m/800},
+ \quad \Prob(Z_{\rm low}\le.36)\le e^{-1024m/1125}\le e^{-m/2}.
+\]
+Now $\E Z_{\rm low}=1$, with squared ranges still $9/(10m)$.
+The final score has mean $1/3$ and variance $1/(18\cdot2000)$, so
+$\Prob(Q\notin[47/150,53/150])\le5/72$.
+The corresponding good event fails with probability at most
+\[
+ 1/16+1/256+1/16+5/72=457/2304<1/2.
+\]
+Indeed $Ne^{-m/800}\le2^{-r}$, $e^{-m/800}\le2^{-2r}$, and
+$Ne^{-m/2}\le2^{-r}$.  The focal score is at most
+$.30+t<.31<47/150$; its excluding and all other module scores exceed
+$.36>53/150$.  Hence it wins with probability greater than one half and
+\[
+ \sum_ey_e(c)\ge\frac{3\,2^r}{32000r}.
+\]
+Containing cuts now have four choices per branch.  Excluding cuts have
+four per branch and two choices on each of the $k$ direct paths.  The final
+paths contribute $2^{2000}$ cuts.  Therefore
+\[
+ K=N4^m(1+2^k)+2^{2000}
+   =2^{19201r}+2^{3201r}+2^{2000},\qquad
+ 2^{19201r}\le K\le3\,2^{19201r},
+\]
+which proves the second asymptotic bound.
+Finally, if a rule $p$ is own-report monotone and $p\ge z$ pointwise, then
+$p_e(c)\ge p_e(t,c_{-e})\ge z_e(t,c_{-e})$ for every $t\le c_e$;
+taking suprema gives $p\ge y$.
+\end{proof}
+
+\begin{remark}[Why this is a mechanism-specific separation]
+\label{net:fixed-cut}
+Fix a cut $C$ from topology alone and pay
+$p_e=\ind\{e\in C\}\min(c_e,T(c))$.
+Both arguments of the minimum are own-report nondecreasing.  For a coalition,
+\[
+ \sum_{e\in S}p_e\ge
+ \min\left\{\sum_{e\in C\cap S}c_e,T\right\}\ge v_c(S),
+\]
+because either a capped summand already reaches $T$, or none is capped.
+Total payment is at most $|C|T$.  The two lower-bound families above have
+fixed final cuts of sizes $100000$ and $2000$, respectively, and therefore
+admit constant-factor truthful covering rules on their entire report domains.
+The envelope nevertheless grows without bound on them.  Its exact worst-case
+growth between Theorems~\ref{net:envelope-upper} and~\ref{net:envelope-lower}
+remains open.  The latter blocks the sharp-order target for every monotone
+pointwise majorant of the original rule, while Theorem~\ref{prod:upper}
+attains that target by departing from this class.
+\end{remark}

@@ -14,10 +14,11 @@
 \newcommand{\core}{\mathcal C}
 \newcommand{\pack}{\mathcal P}
 \newcommand{\one}{\mathbf 1}
+\newcommand{\E}{\mathbb E}
 \DeclareMathOperator{\supp}{supp}
 \title{Sharp subsidies for protecting core maxima\\in three-sided assignment markets}
 \author{Maxwell Flanagan}
-\date{October 3, 2026\\[3pt]\small Working manuscript for proof and priority review}
+\date{October 7, 2026\\[3pt]\small Working manuscript for proof and priority review}
 \begin{document}
 \maketitle
 
@@ -36,7 +37,9 @@ separately attaining core allocations. For an integral partial matching
 leaving $k\ge1$ players unmatched in each sector, the associated subsidy
 obstruction is at most $2(k-1)T/[3(2k-1)]$. This bound is sharp for every
 $k\ge2$. We give complete proofs, a family with pair values in
-$\{0,1,2\}$, and reproducible exact checks.
+$\{0,1,2\}$, and reproducible exact checks. Appendices extend the upper comparison to
+more sectors and develop separate protected-ideal results for short flow
+and transportation games, with explicit limitations and ancillary certificates.
 \end{abstract}
 \noindent\textbf{Keywords:} assignment game; core; individual payoff maximum;
 subsidy; cost of stability; fractional matching.
@@ -74,6 +77,17 @@ The first estimate aggregates six comparisons between individual maxima;
 the second uses a different original-core witness for each maximum.
 Averaging eliminates $\beta$. Retaining the slack terms proves strictness in
 every finite market and the sharper integral bound.
+
+\paragraph{Consolidated extensions and boundaries.}
+Appendix~\ref{four:section} gives a general sector-count upper bound, with no
+sharpness claim beyond three sectors. Appendix~\ref{flow:section} addresses
+pointwise original-core protection in short flow and transportation games:
+it proves the sharp unit-capacity bound and a one-sided quota extension,
+then gives an exact endpoint-ideal incompatibility example. That example has
+zero protected subsidy and does not resolve the general rational-capacity
+flow conjecture. The final technical appendix records sparse core descriptions,
+coattainment and finite/family obstructions. These have their stated narrower
+domains; none asserts truthful reporting across profiles.
 
 \paragraph{Related work and contribution.}
 The assignment-game connection between core allocations and linear-programming
@@ -588,6 +602,1162 @@ and historical priority assessment remain pending. This working manuscript
 has not been submitted for publication.
 
 \clearpage
+\appendix
+\section{A general bound for more than three sectors}\label{four:section}
+The same comparison and witness arguments extend to any fixed number of
+sectors. The resulting bound is sharp when there are three sectors, by the
+main theorem, but no sharpness assertion is made for more than three.
+This extension concerns the same pointwise protection of original core
+maxima; it imposes no strategic reporting or incentive requirement.
+
+Let $K\ge3$ and let $N_1,\ldots,N_K$ be disjoint sectors, each of size
+$n\ge1$. For each unordered pair of distinct sectors fix a nonnegative
+real pair-value matrix. A productive full team contains one player from
+every sector, and its worth is the sum of all its pair values. Coalition
+worth is the largest total worth of player-disjoint full teams it contains.
+All smaller teams have worth zero. Assume $T=v(N)>0$ and that the entire
+original core $\core$ is nonempty. Define $H_i=\max_{x\in\core}x_i$ and
+\[
+ s_K(M)=\min\left\{\sum_i y_i-T:
+       y_i\ge H_i/K\ (i\in N),\quad y(e)\ge v(e)
+       \text{ for every full team }e\right\}.
+\]
+As in the three-sector model, these constraints imply nonnegativity and
+coverage of every original coalition.
+
+\begin{theorem}[General sector-count bound]\label{four:main}
+Every finite market in the preceding class satisfies
+\begin{equation}\label{four:universal}
+             s_K(M)<\frac{2(K-2)}{K(K-1)}\,T.
+\end{equation}
+For an integral partial matching $P$ leaving $k=n-|P|\ge1$ unmatched
+players in each sector, put
+\[
+ J_K(M,P)=v(P)+\frac1K\sum_{i\notin\cup P}H_i-T.
+\]
+Then
+\begin{equation}\label{four:integral}
+ J_K(M,P)\le
+       \frac{2(K-2)(k-1)}{K\bigl(k(K-1)-1\bigr)}\,T.
+\end{equation}
+If $k=0$, then $J_K(M,P)\le0$.
+\end{theorem}
+
+We give the proof because the fractional-packing step and the use of
+separate witnesses are essential. Choose an optimal integral matching,
+complete it to a perfect matching, and relabel its full teams by
+$j=0,\ldots,n-1$. Completion preserves optimality: the sector sizes are
+equal, and the added full teams have nonnegative worth. Write $d_j$ for
+the worth of diagonal team $j$, and $u_{a,j}$ for the sum of its pair
+values incident with its sector-$a$ player. Thus
+\begin{equation}\label{four:budgets}
+       \sum_j d_j=T,\qquad \sum_{a,j}u_{a,j}=2T.
+\end{equation}
+Every diagonal team is tight at every $x\in\core$. In particular,
+\[
+   \sum_{a=1}^Kx_{a,j}=d_j,\qquad
+   0\le H_{a,j}\le d_j,\qquad
+   \delta_{a,j}=d_j-H_{a,j}\ge0.
+\]
+Replacing player $(a,j)$ in its diagonal team by $(a,h)$ leaves all
+pairs not incident with sector $a$ intact. Nonnegativity of the new
+pairs therefore gives
+\begin{equation}\label{four:range}
+             x_{a,j}-x_{a,h}\le u_{a,j}
+             \qquad(x\in\core).
+\end{equation}
+There is no division by $d_j$, so zero diagonal values are allowed.
+
+\begin{lemma}[Aggregate comparisons for $K$ sectors]\label{four:aggregate}
+Let $\lambda$ be any fractional partial matching, with
+\[
+ p_i=\sum_{e\ni i}\lambda_e\le1,\quad q_i=1-p_i,\quad
+ W=\sum_e\lambda_ev(e),\quad S=\sum_iq_iH_i,\quad V_K=KW+S.
+\]
+Set
+\[
+ k=n-\sum_e\lambda_e,\qquad
+ \beta=\sum_iq_iu_i,\qquad C_2=\sum_iq_i^2u_i,
+\]
+where $u_i=u_{a,j}$ for $i=(a,j)$, and put
+\[
+ E=\sum_{a,j}\left(\sum_{b\ne a}q_{b,j}\right)\delta_{a,j}\ge0.
+\]
+Then
+\begin{align}
+ V_K&\le (3K-4)T-(K-2)\beta-\frac{E}{K-1},
+        \label{four:first}\\
+ V_K&\le KT+\beta-\frac{C_2}{k}\qquad(k>0).
+        \label{four:second}
+\end{align}
+\end{lemma}
+\begin{proof}
+For a full team $e=((1,j_1),\ldots,(K,j_K))$ and distinct sectors
+$b,c$, subtract diagonal tightness at $j_b$ from coverage of $e$.
+For every $x\in\core$, apply~\eqref{four:range} to the other $K-2$
+sectors to obtain
+\[
+ x_{c,j_c}-x_{c,j_b}
+ \ge v(e)-d_{j_b}-\sum_{a\notin\{b,c\}}u_{a,j_a}.
+\]
+Choose an original core point attaining the subtracted maximum
+$H_{c,j_b}$, while bounding its other coordinate by $H_{c,j_c}$.
+This proves the same inequality for the difference of those two maxima.
+Each ordered pair $(b,c)$ may use a different attaining core point.
+Sum over all $K(K-1)$ ordered pairs, writing
+$H_j^\Sigma=\sum_aH_{a,j}$:
+\begin{equation}\label{four:team-comparison}
+\begin{split}
+ K(K-1)v(e)\le{}&(K-1)\sum_a d_{j_a}
+       +(K-1)(K-2)\sum_a u_{a,j_a}\\
+       &+K\sum_aH_{a,j_a}-\sum_aH_{j_a}^\Sigma.
+\end{split}
+\end{equation}
+Here every incident budget occurs $(K-1)(K-2)$ times, and the ideal
+terms are $K\sum_aH_{a,j_a}-\sum_aH_{j_a}^{\Sigma}$.
+The count preserves multiplicities when some team labels coincide.
+
+Multiply~\eqref{four:team-comparison} by $\lambda_e$ and sum over
+teams. Add $(K-1)S$. If $n_j=\sum_bp_{b,j}$, the resulting coefficient
+of $H_{a,j}$ is
+\[
+       Kp_{a,j}+(K-1)q_{a,j}-n_j
+                   =\sum_{b\ne a}q_{b,j}.
+\]
+Replacing $H_{a,j}$ by $d_j-\delta_{a,j}$ gives an ideal contribution
+$(K-1)\sum_{a,j}q_{a,j}d_j-E$. The other diagonal contribution is
+$(K-1)\sum_{a,j}p_{a,j}d_j$. These sum to $K(K-1)T-E$.
+The budget contribution is
+$(K-1)(K-2)(2T-\beta)$ by~\eqref{four:budgets}.
+The left-hand side is $(K-1)V_K$, proving~\eqref{four:first}.
+
+Every sector has residual mass $k$: each full team uses exactly one
+player per sector. For every original core point $x$, fractional team
+coverage gives $\sum_i p_ix_i\ge W$, and hence
+\begin{equation}\label{four:residual}
+                   \sum_iq_ix_i\le T-W.
+\end{equation}
+In particular $W\le T$. Fix a player $i$ and choose a core point
+attaining $H_i$. Its other same-sector coordinates are at least
+$H_i-u_i$ by~\eqref{four:range}, while all other-sector coordinates
+are nonnegative. Therefore
+\[
+        T-W\ge q_iH_i+(k-q_i)(H_i-u_i),
+        \qquad
+        kH_i\le T-W+(k-q_i)u_i.
+\]
+The factor $k-q_i$ is the sum of the other residual weights in $i$'s
+sector and is nonnegative. Multiplying by $q_i$, summing the resulting
+scalar inequalities, and using $\sum_iq_i=Kk$ yields
+\[
+                    kS\le Kk(T-W)+k\beta-C_2.
+\]
+For $k>0$, division by $k$ proves~\eqref{four:second}. Separate
+maximizing witnesses suffice because only the fixed numbers $H_i$
+appear in these scalar inequalities.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{four:main}]
+The shifted covering-program dual is
+\begin{equation}\label{four:dual}
+ s_K(M)=\max_{\lambda\in\pack_K}\left(W+\frac SK-T\right)
+       =\max_{\lambda\in\pack_K}\left(\frac{V_K}{K}-T\right),
+\end{equation}
+where $\pack_K$ is the fractional partial-matching polytope just defined.
+Indeed, substitute $y_i=H_i/K+z_i$, $z_i\ge0$, in the covering program;
+its dual has the load constraints $p_i\le1$. Adding the constant
+$\sum_iH_i/K-T$ gives~\eqref{four:dual}. The primal is feasible and
+bounded below, while $\pack_K$ is compact, so both optima are attained.
+
+For $k>0$, take weights $1/(K-1)$ and $(K-2)/(K-1)$ on
+\eqref{four:first} and~\eqref{four:second}, respectively. The
+$\beta$ terms cancel, giving
+\begin{equation}\label{four:fractional-combination}
+ V_K\le\left(K+\frac{2(K-2)}{K-1}\right)T
+         -\frac{E}{(K-1)^2}
+         -\frac{(K-2)C_2}{(K-1)k}.
+\end{equation}
+If $C_2>0$, this is strictly smaller than the displayed leading term.
+If $C_2=0$, nonnegativity of each $q_i^2u_i$ implies $\beta=0$, so
+\eqref{four:second} gives $V_K\le KT$, again strictly smaller since
+$K\ge3$ and $T>0$. When $k=0$, all residual weights vanish and
+\eqref{four:residual} gives $W\le T$, so $V_K\le KT$ as well.
+Apply this strict bound at a maximizing point of the compact dual
+polytope to prove~\eqref{four:universal}. A pointwise strict inequality
+without attained maximization would not by itself justify this step.
+
+For an integral partial matching with $k\ge1$, residual weights belong
+to $\{0,1\}$ and $C_2=\beta$. Drop $E\ge0$ from
+\eqref{four:first} and take weights
+\[
+       \frac{k-1}{k(K-1)-1},\qquad
+       \frac{k(K-2)}{k(K-1)-1}
+\]
+on~\eqref{four:first} and~\eqref{four:second}. They are nonnegative
+and sum to one. The $\beta$ terms again cancel, giving
+\[
+       V_K\le\left(K+
+           \frac{2(K-2)(k-1)}{k(K-1)-1}\right)T.
+\]
+Since $J_K=V_K/K-T$, this proves~\eqref{four:integral}, including
+$k=1$. For $k=0$, the matching is perfect and $J_K=v(P)-T\le0$.
+\end{proof}
+
+\begin{remark}[Four sectors and the scope of sharpness]\label{four:scope}
+For $K=4$, the theorem gives $s_4(M)<T/3$ and
+$J_4(M,P)\le(k-1)T/(3k-1)$. It therefore gives a supremum upper bound
+$\sup_M s_4(M)/T\le1/3$; it does not prove that this supremum equals
+$1/3$, nor a smaller fixed gap below $1/3$ uniform over market sizes.
+The analogous distinction applies for every $K>3$. The integral bound
+is an upper bound on one integral dual obstruction, not on the full
+fractional optimum. When $K=3$, both formulas recover the sharp bounds
+already proved in the main text. Sparse allowed sector graphs are
+included by setting the unused pair matrices to zero.
+\end{remark}
+
+\begin{remark}[What the exchange budgets provide]\label{four:exchange}
+More generally, the same argument works for full-team games with a tight
+optimal block partition and nonnegative numbers $u_i$ satisfying the
+directed same-sector range bound~\eqref{four:range}. If
+$B=\sum_i u_i$, the first bound becomes
+\[
+       V_K\le KT+(K-2)(B-\beta)-E/(K-1),
+\]
+and the same weighted combination gives
+$s_K(M)\le (K-2)B/[K(K-1)]$.
+Pair nonnegativity supplies these range bounds through an actual
+replacement-team calculation, and pair additivity supplies $B=2T$.
+These hypotheses cannot be replaced merely by assumed versions of the
+two aggregate inequalities. This is a direct extension of the proof,
+not a separately established sharpness or historical-priority claim.
+\end{remark}
+
+\section{Protected ideals in short flow and transportation games}\label{flow:section}
+This appendix concerns a different cooperative technology from the
+pair-additive assignment model. It tests which protection statements extend
+to arc-player flow games. The results are pointwise statements about each
+original entire core. No incentive guarantee across capacity reports is
+asserted. In particular, the counterexample below refutes simultaneous
+endpoint-ideal attainment while having zero protected subsidy itself.
+
+\subsection{The model and the sharp unit-capacity bound}
+Let $G$ be a finite directed acyclic network with distinct source $s$ and
+sink $t$. Each arc is owned by a distinct player; parallel arcs are
+permitted. A coalition's worth is its maximum $s$--$t$ flow using only its
+arcs. Write $T=v(N)>0$, let $\core$ be the entire original core, and set
+$H_e=\max_{x\in\core}x_e$. For this appendix define
+\[
+ s_{1/3}(G)=\min\{y(N)-T:y\ge H/3,\ y(A)\ge v(A)
+                                   \text{ for every }A\subseteq N\}.
+\]
+For any minimum cut, paying each of its arcs its capacity and all other
+arcs zero gives a core allocation: its total is $T$, and each coalition's
+flow is at most the capacity of its available arcs in that cut. This
+also proves nonemptiness of the original core. The core is compact, so
+all the maxima defining $H$ are attained.
+
+\begin{lemma}[Deletion and unit ideals]\label{flow:ideals}
+For every grand maximum flow $f$ and arc $e$,
+\[
+                    H_e\le T-v(N\setminus\{e\})\le f_e.
+\]
+If all capacities are one, $H_e\in\{0,1\}$, and $H_e=1$ precisely
+when $e$ belongs to some minimum cut.
+\end{lemma}
+\begin{proof}
+The first inequality follows by combining core coverage of
+$N\setminus\{e\}$ with efficiency. Decompose $f$ into paths and remove
+all paths using $e$; the lost value is $f_e$, giving the second inequality.
+With unit capacities, integral maximum flows show that the deletion
+marginal is zero or one. If it is one, a minimum cut after deleting $e$
+has capacity $T-1$. The restored arc must cross that cut and makes it a
+minimum cut of the original network. Its cut allocation attains payoff
+one at $e$. Conversely, membership in a minimum cut gives that same
+attainment. If the deletion marginal is zero, so is $H_e$.
+\end{proof}
+The unit-ideal characterization, cut allocations, and minimum-cut lattice
+are classical flow-game ingredients~\cite{flow:Fang2010,flow:KalaiZemel1980}.
+They are included to separate them from the protected-subsidy conclusion.
+
+\begin{theorem}[Short unit-capacity flows]\label{flow:unit}
+Suppose every directed $s$--$t$ path has at most three arcs, and all arc
+capacities are one. Then
+\begin{equation}\label{flow:unit-bound}
+                     s_{1/3}(G)\le\frac{T-1}{3}.
+\end{equation}
+For every positive integer $T$, equality occurs in a network whose
+$s$--$t$ paths all have three arcs. Consequently the supremum of
+$s_{1/3}(G)/T$ in this class is $1/3$.
+\end{theorem}
+\begin{proof}[Upper bound]
+Directed cut capacity is submodular in the source-side vertex set.
+The intersection and union of two minimum-cut source sides are therefore
+also minimum-cut source sides: both crossed cuts have capacity at least
+$T$, while submodularity bounds their sum by $2T$. Since the network is
+finite, the intersection $U_-$ and union $U_+$ of all minimum-cut source
+sides define minimum cuts $C_-$ and $C_+$.
+
+Every source arc $(s,u)$ with ideal one crosses some minimum cut, so $u$
+is missing from at least one source side and hence from $U_-$. Thus
+$C_-$ simultaneously contains every positive-ideal source arc. Similarly,
+$C_+$ contains every positive-ideal sink arc $(u,t)$. Direct $s$--$t$
+arcs cause no difficulty and can be in both cuts.
+
+Let $B$ be the positive-ideal arcs outside $C_-\cup C_+$. Such arcs are
+strictly internal. Fix an integral grand maximum flow decomposed into
+$T$ arc-disjoint paths. Lemma~\ref{flow:ideals} implies that every arc
+in $B$ is used by this flow. Each path has at most one strictly internal
+arc, so $r:=|B|\le T$. If $r=0$, the average of the two cut allocations
+already dominates $H/3$ and has zero subsidy. If $r>0$, choose $e\in B$
+and a minimum cut $C_e$ containing it. Average the allocations of
+$C_-,C_+,C_e$, and raise any remaining coordinates to their floors $H/3$.
+Only the at most $r-1$ positive-ideal arcs outside these three cuts can
+need a raise, of at most $1/3$ each. Raising coordinates preserves every
+coalition inequality. This proves~\eqref{flow:unit-bound}.
+\end{proof}
+
+\begin{proposition}[A sharp chain family]\label{flow:chain}
+For $n\ge1$, use vertices $s,L_1,\ldots,L_n,R_1,\ldots,R_n,t$ and
+unit-capacity arcs
+\[
+ a_i=sL_i,\quad b_i=L_iR_i,\quad c_i=R_it\quad(1\le i\le n),
+ \qquad d_i=L_iR_{i+1}\quad(1\le i<n).
+\]
+Then $T=n$, the ideals of the $3n$ arcs $a_i,b_i,c_i$ are one, all
+$d_i$ ideals are zero, and $s_{1/3}(G)=(n-1)/3$.
+\end{proposition}
+\begin{proof}
+The diagonal paths attain flow $n$, matching the source cut. Their
+maximum flow avoids the $d_i$, so Lemma~\ref{flow:ideals} gives
+$H_{d_i}=0$. The source and sink cuts attain all $a_i$ and $c_i$ ideals.
+For $b_i$, the vertex set
+\[
+           \{s,L_i,\ldots,L_n,R_{i+1},\ldots,R_n\}
+\]
+has boundary $\{a_j:j<i\}\cup\{b_i\}\cup\{c_j:j>i\}$, a minimum
+cut of size $n$. Hence all $b_i$ ideals are also one.
+
+The $n-1$ cross paths $(a_i,d_i,c_{i+1})$ are arc-disjoint. Their union
+has worth $n-1$ and leaves $n+2$ positive-ideal arcs outside it. Its
+coalition inequality and those exterior floors force protected total at
+least $n-1+(n+2)/3$, giving subsidy at least $(n-1)/3$.
+For the reverse bound pay $1/3$ to every $a_i,b_i,c_i$, an additional
+$1/3$ to $a_i$ for $i<n$, and zero to $d_i$. Every diagonal or cross
+path receives at least one. Every coalition's unit-capacity integral
+maximum flow decomposes into arc-disjoint such paths, so summing path
+inequalities covers every coalition. The total is $n+(n-1)/3$.
+\end{proof}
+This proves the equality and supremum statements in
+Theorem~\ref{flow:unit}. The direct path-cover argument just used depends
+on unit capacities; it is not a proof for arbitrary capacities.
+
+\subsection{Prerequisite transfers and a one-sided quota extension}
+\begin{lemma}[Prerequisite transfer]\label{flow:transfer}
+Let $v$ be a nonnegative monotone game with a nonempty nonnegative core.
+Suppose distinct players $a,e$ satisfy
+$v(A)=v(A\setminus\{e\})$ whenever $a\notin A$. Transferring all of
+$e$'s payoff to $a$ preserves core membership.
+\end{lemma}
+\begin{proof}
+Efficiency and nonnegativity are preserved. Coalitions containing both
+or neither player have unchanged payoff, and coalitions containing $a$
+only gain. For a coalition containing $e$ but not $a$, the new payoff is
+$x(A\setminus\{e\})\ge v(A\setminus\{e\})=v(A)$.
+\end{proof}
+
+In a pure three-layer network $s\to L\to R\to t$, let $M$ be the
+middle-arc players and $D$ the endpoint-arc players. Define the endpoint
+game $w(Q)=v(Q\cup M)$ for $Q\subseteq D$. Its entire core describes
+exactly the zero-middle face:
+\begin{equation}\label{flow:face}
+ \core\cap\{x_M=0\}=\{(z,0_M):z\in\core(w)\}.
+\end{equation}
+To see this, restrict by testing coalitions $Q\cup M$; conversely, for
+any original coalition $A$ use
+$v(A)\le w(A\cap D)$. Grand values agree. If every $R_j$ has a unique
+sink arc, each middle arc ending there requires that sink arc on any
+productive path. Lemma~\ref{flow:transfer} moves all middle payments
+sinkward, leaves every source payoff unchanged, and weakly increases
+every sink payoff. Thus the source projections of the full core and
+this face coincide, and every endpoint coordinate ideal is preserved.
+Unique source arcs give the symmetric conclusion by sourceward transfer.
+Neither statement changes any original owner or capacity. If both
+endpoint ports have parallel owners, neither map is automatically valid.
+
+\begin{theorem}[One-sided quotas]\label{flow:quota}
+Fix a rational $q>0$. Consider a pure three-layer network with one or more source
+arcs into each $L$ vertex, source capacities $q r_i$ for integers
+$r_i\ge0$, exactly one sink arc of capacity $q$ out of each $R$ vertex,
+and each rational middle capacity either zero or at least $q$. Parallel source
+and middle arcs are allowed; each arc remains a distinct player.
+All source ideals are jointly attained in the original core, and all
+sink ideals are jointly attained at another core point. If $m$ middle
+arcs have positive ideal, then
+\begin{equation}\label{flow:quota-bound}
+ s_{1/3}(G)\le\frac q3\max\{0,m-1\}\le\frac{T-q}{3}.
+\end{equation}
+This last bound is attained for every positive integer $T/q$.
+\end{theorem}
+\begin{proof}
+Scale to $q=1$. Because the only arc out of each $R$ vertex has capacity
+one, capping every positive middle capacity at one preserves every
+coalition value. Zero-capacity arcs have zero core payoff. The normalized
+network is integral, so $T$ is a positive integer. The sinkward transfer
+and~\eqref{flow:face} preserve all endpoint ideals.
+
+With all middle arcs available, treat each source arc as a firm with
+quota $r_i$ and each sink arc as a unit worker. Their assignment value
+$a_{ij}$ is one if a positive middle arc links their endpoints, and zero
+otherwise. Integral flows give matchings of this many-to-one market.
+Conversely, each allowed firm--worker match can be routed through an
+available middle arc; a worker is used at most once, so no middle arc
+of capacity one restricts the matching. Distinct source arcs sharing a
+head are distinct firms with the same allowable workers, not clones
+introduced by the proof.
+
+For completeness, we give the classical assignment-game salary-lattice
+argument behind side-optimality; a recent reference for this geometry is
+\cite{flow:AtayNunezSolymosi2026}. It works for any
+nonnegative assignment matrix $a$. Remove zero-quota firms, and balance
+total firm quota and worker count by adding zero-value dummy workers
+or a zero-value dummy firm. These are null players; their core payoffs
+are zero and projecting them away preserves the original core. Complete
+an optimal matching $\mu$ to fill every quota and assign every worker.
+The added matches have value zero. Let $\mu(i)$ be the workers matched
+to firm $i$, and $i(j)$ worker $j$'s matched firm.
+
+A payoff vector $(x,y)$ is in the balanced core precisely when
+\begin{align}
+ 0&\le y_j\le a_{i(j),j},\label{flow:salary-box}\\
+ y_k-y_j&\ge a_{ik}-a_{ij}
+         &&(j\in\mu(i),\ k\notin\mu(i)),\label{flow:salary-diff}\\
+ x_i&=\sum_{j\in\mu(i)}(a_{ij}-y_j).\label{flow:salary-firm}
+\end{align}
+Indeed, the disjoint coalitions $\{i\}\cup\mu(i)$ attain the grand
+value, so their core inequalities are all tight, giving
+\eqref{flow:salary-firm}. Deleting one matched worker gives the upper
+bound in~\eqref{flow:salary-box}; replacing that worker by an unmatched
+worker gives~\eqref{flow:salary-diff}. These use feasible matching
+lower bounds, without asserting that a replacement is itself optimal.
+Conversely, for any firm $i$ and worker set $U$ of size at most $r_i$,
+pair each $k\in U\setminus\mu(i)$ with a distinct
+$j\in\mu(i)\setminus U$. Equation~\eqref{flow:salary-diff} gives
+$a_{ik}-y_k\le a_{ij}-y_j$, and all remaining matched surpluses are
+nonnegative by~\eqref{flow:salary-box}. Hence
+\[
+                   x_i\ge\sum_{k\in U}(a_{ik}-y_k).
+\]
+Every feasible coalition matching partitions into disjoint one-firm
+teams; summing these inequalities, together with nonnegative unmatched
+payoffs, proves all core constraints. Efficiency follows from
+\eqref{flow:salary-firm}.
+
+The nonempty compact salary set defined by
+\eqref{flow:salary-box}--\eqref{flow:salary-diff} is closed under both
+coordinatewise minimum and maximum. For example, two inequalities
+$y_k\ge y_j+d$ and $z_k\ge z_j+d$ imply the corresponding minimum
+and maximum inequalities. Taking the minimum of finitely many
+coordinate-minimizing salary vectors therefore minimizes every salary
+simultaneously; by~\eqref{flow:salary-firm} it maximizes every firm's
+payoff simultaneously. Coordinate maxima give a point maximizing every
+worker payoff. Project away null players and lift through
+\eqref{flow:face} to obtain the two asserted original-core endpoint
+allocations.
+
+For a normalized middle arc, deletion lowers the integral maximum flow
+by zero or one. If it lowers it by one, a minimum cut after deletion,
+with the arc restored, is an original minimum cut attaining payoff one
+there. Thus each middle ideal is zero or one. Every positive-ideal
+middle arc is used by every integral grand maximum flow. Each unit of
+flow uses one middle arc, so $m\le T$.
+
+If $m=0$, average the two side-optimal endpoint allocations; this already
+dominates $H/3$. If $m>0$, average these two core points and a core point
+attaining one positive middle ideal, then raise the other middle
+coordinates to their floors. At most $m-1$ coordinates require a raise
+of at most $1/3$ each. Rescale by $q$ to obtain~\eqref{flow:quota-bound}.
+The chain in Proposition~\ref{flow:chain}, scaled by $q$, lies in this
+class and proves sharpness.
+\end{proof}
+The proof allows parallel source owners because the unique sink supplies
+the prerequisite. Arbitrary capacities on both endpoint sides are not
+covered: then an endpoint owner may serve several opposite owners, and
+the disjoint one-firm-team salary argument need not apply. Splitting
+that owner into independent players would change the entire core.
+
+\subsection{An exact transportation embedding}
+\begin{proposition}[Embedding without cloning endpoint owners]\label{flow:embedding}
+Let disjoint endpoint sets $I,J$ have capacities $r_i,c_j\ge0$ and
+allowed pairs $E\subseteq I\times J$. A coalition's worth $w$ is the
+maximum transported amount on its allowed pairs, subject to these row
+and column capacities, with no separate pair-capacity restriction.
+Assume $T=w(I\cup J)>0$. There is a three-layer arc-player flow game
+whose entire core is exactly
+\[
+                  \{(x,0_D):x\in\core(w)\},
+\]
+where endpoint players retain their identities and $D$ consists of new
+middle-arc owners.
+\end{proposition}
+\begin{proof}
+Set $M=\min\{\sum_i r_i,\sum_j c_j\}$. Use source arc $sL_i$ of
+capacity $r_i$, sink arc $R_jt$ of capacity $c_j$, and for every allowed
+pair two parallel middle arcs $L_iR_j$, each of capacity $M$ and with
+its own new owner. With every middle arc available, their capacities
+cannot restrict any transportation plan, so endpoint coalitions with
+all middle owners have worth $w$.
+Deleting any one middle arc leaves its twin of capacity $M$, and hence
+does not change the grand value. Every such arc therefore has payoff
+zero at every original core point by the deletion bound. Testing endpoint
+coalitions together with all middle owners shows that the endpoint
+restriction belongs to $\core(w)$. Conversely, extend any point of
+$\core(w)$ by zero. The value of any flow coalition is at most the
+transportation value of its endpoint restriction, so every original
+coalition is covered. Efficiency gives the claimed equality of cores.
+\end{proof}
+These new middle owners need not be null players of the characteristic
+function: they can help coalitions lacking their twins. Only their
+zero payoff in every grand-core allocation is used. All returns per
+transported unit are one; weighted transportation and a one-unit
+constraint per pair are different models.
+
+\subsection{Endpoint ideals need not be jointly attainable}
+\begin{theorem}[Twelve-owner endpoint counterexample]\label{flow:endpoint}
+In the two-hop network $s\to u\to t$, give the five source arcs
+$P,A,G,M,B$ capacities
+\[
+                         (2,12,46,62,75)
+\]
+and the seven sink arcs $Q,R,D,E,F,L,N$ capacities
+\[
+                         (6,10,16,22,24,56,62).
+\]
+Every arc has a separate owner. Then $T=196$, and the entire-core ideals
+are
+\[
+ H_{\rm source}=(1,6,23,31,38),\qquad
+ H_{\rm sink}=(6,10,16,22,24,56,62).
+\]
+The largest total source payoff is $98$, although the source ideals sum
+to $99$. Already $\max_{x\in\core}(x_A+x_B)=43< H_A+H_B=44$.
+Nevertheless $s_{1/3}(G)=0$.
+\end{theorem}
+\begin{proof}
+The source capacity sum is $197$ and the sink capacity sum is $196$.
+For source set $S$ and sink set $R$, the coalition value is
+$\min\{c(S),c(R)\}$. Introduce baseline weights
+\[
+ a=(1,6,23,31,37),\qquad b=(3,5,8,11,12,28,31),
+                  \qquad a(\mathrm{sources})=b(\mathrm{sinks})=98.
+\]
+Source capacities are $2a$, except that $B$ has one extra unit; sink
+capacities are $2b$. We will prove that
+\begin{equation}\label{flow:UV}
+         U=(a;b),\qquad V=(1,5,23,31,38;b)
+\end{equation}
+are core allocations, and then prove the matching real-valued upper
+bounds on all individual and joint source payoffs.
+
+Let $C_0$ denote the ten players other than $A,B$. Their baseline
+weights are $(1,3,5,8,11,12,23,28,31,31)$, of total $153$.
+They have no subset of weight $61$, and therefore none of weight $92$.
+Here is a direct check. The smaller weights
+$D_0=(1,3,5,8,11,12)$, of total $40$, have no subset of weight
+$2,7,10$: for $2$ only $1$ fits; for $7$, the weights $1,3,5$ do
+not suffice exactly; for $10$, using $8$ leaves $2$, while the smaller
+weights total $9$. A subset of weight $61$ uses at most one $31$.
+With a $31$, the remaining $30$ either uses $28$ and leaves $2$, uses
+$23$ and leaves $7$, or uses only $D_0$ whose complement would have
+weight $10$. Without a $31$, using both $28,23$ leaves $10$; using
+only $28$ leaves a $D_0$ subset of weight $33$ with complement $7$;
+using only $23$ leaves weight $38$ with complement $2$; using neither
+cannot reach $61$. These exhaust the cases. Consequently every subset
+of all twelve baseline weights of sum $98$ contains $A,B$ either both
+or neither: including only $A$ would require a $C_0$ subset of weight
+$92$, and including only $B$ would require one of weight $61$.
+
+For arbitrary $S,R$, put $d=a(S)-b(R)\in\mathbb Z$ and
+$\delta=\mathbf1_{B\in S}$. If $d\le-1$, coalition worth is
+$2a(S)+\delta$, and $U$'s slack is $-d-\delta\ge0$.
+If $d\ge0$, worth is $2b(R)$ and its slack is $d\ge0$.
+For $V$, these slacks become $-d-\mathbf1_{A\in S}$ when $d\le-1$
+and $d+\mathbf1_{B\in S}-\mathbf1_{A\in S}$ when $d\ge0$.
+They are nonnegative unless possibly $d=0$. In that case the subset
+$S\cup(\mathrm{sinks}\setminus R)$ has baseline weight $98$,
+so $A,B$ have equal membership and the slack is zero.
+Thus both nonnegative total-$196$ vectors in~\eqref{flow:UV} cover
+every coalition.
+
+Now let $x$ be any original core point. For sources define loss
+$z_i=c_i-x_i$, and for sinks put $t_j=x_j$. Efficiency yields
+\begin{equation}\label{flow:loss-total}
+                       \sum_i z_i-\sum_j t_j=1.
+\end{equation}
+The complement constraint for source $P$ gives $z_P\ge1$;
+all source losses are nonnegative by their complement constraints.
+Let $\theta$ equal $z$ on sources and $t$ on sinks, and write
+\[
+ p=\theta_P,\ q=\theta_Q,\ r=\theta_R,\ d_0=\theta_D,
+ \ e=\theta_E,\ f=\theta_F,\ g=\theta_G,\ l=\theta_L,
+ \ m=\theta_M,\ n=\theta_N,\quad
+ \alpha=\theta_A,\ \beta=\theta_B.
+\]
+These are proof variables only; in particular $p\ge1$.
+
+Whenever $a(S)=b(R)$, both $(S,R)$ and its complement have worth
+equal to their sink capacity, and their worths sum to $196$.
+Efficiency makes both core inequalities tight, so
+$z(S)-t(R)=\mathbf1_{B\in S}$. Equivalently, if a subset $W$ of all
+players has baseline weight $98$, then
+$\theta(W)=\sum_jt_j+\mathbf1_{B\in W}$.
+For every $C_0$ subset $K$ of baseline weight $55$, apply this to
+$W=\{A,B\}\cup K$ and use~\eqref{flow:loss-total} to obtain
+\[
+                     \theta(K)=k_0:=p+g+m.
+\]
+The eight such subsets
+\[
+ PGM,\ PGN,\ PEFM,\ PQDFM,\ RDEM,\ PQGL,\ PQREFG,\ PDEFG
+\]
+therefore have equal $\theta$-sum. In succession, these equalities give
+\[
+ m=n,\quad g=e+f,\quad e=q+d_0,\quad p+f=r+d_0,
+ \quad m=q+l,\quad m=q+r+g,\quad m=d_0+g.
+\]
+Solving them yields
+\begin{align}
+ d_0&=q+r,&e&=2q+r,&f&=q+2r-p,&g&=3q+3r-p,\notag\\
+ l&=3q+4r-p,&m=n&=4q+4r-p,&k_0&=7q+7r-p.
+       \label{flow:identities}
+\end{align}
+Thus $\theta(C_0)=-4p+19q+20r$. Combining this with efficiency gives
+\begin{equation}\label{flow:loss-formulas}
+ \alpha+\beta=1-2p+5q+6r,\qquad
+                 \sum_i z_i=1-3p+12q+13r.
+\end{equation}
+
+If $W$ has baseline weight $97$, take $S=W\cap\mathrm{sources}$
+and $R=\mathrm{sinks}\setminus W$. Then $a(S)-b(R)=-1$, so its
+actual source capacity is strictly smaller than its sink capacity.
+Core coverage gives $z(S)\le t(R)$, or
+$\theta(W)\le\sum_jt_j$. Hence for every $C_0$ subset $K$ of
+weight $54$,
+\[
+                         \theta(K)\le k_0-1.
+\]
+Use $K_1=\{M,E,D,Q,P\}$ and $K_2=\{L,F,D,R,P\}$.
+Their $\theta$-sums from~\eqref{flow:identities} are $8q+6r$ and
+$5q+8r-p$, respectively, so
+\[
+              r-q\ge p+1,\qquad r\le2q-1.
+\]
+Consequently
+\begin{equation}\label{flow:qr}
+                     q\ge p+2,\qquad r\ge2p+3,\qquad p\ge1.
+\end{equation}
+For the weight-$97$ subset $\{B,M,L,P\}$, whose $C_0$ portion has
+$\theta$-sum $k_0+r$, the same strict-coalition inequality gives
+$\alpha\ge r+1\ge6$. For the weight-$97$ subset
+$\{A\}\cup(C_0\setminus\{M,N\})$, it gives
+\[
+                    \beta\ge -p+4q+5r+1\ge37.
+\]
+Also~\eqref{flow:identities} and~\eqref{flow:qr} imply
+$g\ge8p+15\ge23$ and $m\ge11p+20\ge31$.
+Thus every source payoff is coordinatewise bounded above by
+$(1,6,23,31,38)$. Vector $U$ attains the first four bounds and $V$
+attains the fifth. For each sink, deletion gives $H_j\le c_j$;
+the all-sink cut allocation attains all those bounds at once.
+
+Finally~\eqref{flow:loss-formulas}--\eqref{flow:qr} give
+\[
+             \sum_i z_i\ge35p+64\ge99,
+              \qquad \alpha+\beta\ge15p+29\ge44.
+\]
+Source total is therefore at most $197-99=98$, and $x_A+x_B$ at
+most $12+75-44=43$. Both $U,V$ attain those support bounds. This
+proves the claimed incompatibility. Vector $U$ already dominates
+$H/3$ on every source and sink and is efficient, so the protected
+subsidy is zero.
+\end{proof}
+
+The baseline pattern is drawn from Isbell's integer majority-weight
+representations~\cite[p.~27]{flow:Isbell1959}; the weights are not
+claimed as a new construction ingredient. Integer nonuniqueness alone
+would not prove Theorem~\ref{flow:endpoint}, which uses additional
+all-coalition and real-valued core arguments. With all allowed-pair
+returns one, this is also unrestricted unweighted transportation.
+It matches the historical side-optimal-core question stated in
+N\'u\~nez's 2013 lecture slides~\cite[pp.~37--40]{flow:Nunez2013}.
+Neither its novelty relative to later or unread literature nor the
+current openness of that historical question is established here.
+The weighted multiple-partners model with capacity one per pair is
+different and is not settled by this example.
+
+\subsection{Why mixed tight-set uncrossing is insufficient}
+For endpoint sources $I$, sinks $J$, and fixed public middle capacities,
+let $w(Q,R)$ be the flow value when endpoint sets $Q\subseteq I$ and
+$R\subseteq J$ are active. The established network-rank inequality is
+\begin{equation}\label{flow:mixed}
+ w(Q,R)+w(Q',R')\ge
+ w(Q\cap Q',R\cup R')+w(Q\cup Q',R\cap R').
+\end{equation}
+This is the mixed submodularity of network linking
+ranks~\cite{flow:Goemans2011}. A direct cut proof also fixes the direction
+needed here. Use the full fixed vertex set, minimum-cut source sides
+$U,V$ for the original two endpoint profiles, and source sides
+$U\cap V,U\cup V$ for the two crossed profiles in the order displayed.
+The public-middle cut contributions satisfy submodularity. For a source
+arc, write $a,a'$ for its activity indicators and $u,v$ for the
+indicators that its head is outside $U,V$. Then
+\[
+ au+a'v\ge (a\wedge a')\max(u,v)+(a\vee a')\min(u,v).
+\]
+For a sink arc use activity indicators $b,b'$ and tail-membership
+indicators $u,v$; its crossed contribution is
+$(b\vee b')\min(u,v)+(b\wedge b')\max(u,v)$, also at most
+$bu+b'v$. Multiply by nonnegative capacities, add the middle-arc
+inequality, and bound each crossed cut below by its maximum-flow value.
+This proves~\eqref{flow:mixed}.
+
+Additive payoffs have equal total payment on an original pair and its
+mixed-crossed pair. The inequality~\eqref{flow:mixed} has the wrong
+direction to force the crossed coalitions tight when the originals are
+tight. The failure occurs even in a two-hop game: two source owners have
+capacities $3,3$, three sink owners capacities $2,2,1$, and the core
+allocation is $(0,0;2,2,1)$. The coalitions
+\[
+ (\{a_1\},\{b_1,b_3\}),\qquad
+ (\{a_1,a_2\},\{b_2,b_3\})
+\]
+each have worth and payment $3$. Their crossed pair has worths $3,1$
+but payments $5,1$. Thus total worth falls from $6$ to $4$ while
+payment stays $6$, although the original coalitions overlap and neither
+contains the other. This disproves mixed-crossed tight-set closure, not
+every conceivable use of mixed submodularity or side-optimality.
+
+\paragraph{Remaining scope.}
+The general rational-capacity conjecture
+$s_{1/3}(G)\le T/3$ for all arc-player networks of path length at most
+three remains unresolved by these results. The endpoint example has
+subsidy zero, and the unit and quota theorems make restricted assumptions.
+For example, the serial path of capacities $(2,2,1)$ has the unit-simplex
+entire core and $H=(1,1,1)$, although only its last arc lies in a minimum
+cut. Clipping that cut allocation at $H/3$ costs $2/3$, whereas the
+protected subsidy is zero at $(1/3,1/3,1/3)$. This illustrates why
+entire-core maxima cannot be replaced by cut or optimal-dual maxima at
+unequal capacities. No owner cloning, simple-graph transfer, or all-profile
+truthfulness assertion is implicit in this appendix.
+
+\section{Additional structure of frozen-ideal protection}\label{anc:section}
+The results below retain structural information from the sharp-subsidy
+program that is not implied by the numerical bound alone. The compact-core
+representation and the finite cyclic example concern sparse supports;
+the incompatibility and perturbation results are all-size statements.
+They remain parts of the same protected-ideal question.
+
+\subsection{A compact entire-core representation on sparse supports}
+Suppose the three pair matrices have support contained in the pairs of
+an optimal diagonal matching $\mu$ on $m$ labels and an ordinary
+player-disjoint partial matching $P$ of $r$ full teams. A pair is called
+supported if it appears in $\mu$ or $P$, even when its value is zero.
+Teams of $P$ may repeat diagonal labels or share pairs with $\mu$.
+Let $T$ be the diagonal matching's worth and assume the entire core is
+nonempty.
+
+\begin{proposition}[Sector-minimum representation]\label{anc:compression}
+A vector $x$ is in the entire original core if and only if there exist
+three variables $\ell_A,\ell_B,\ell_C$ such that
+\begin{enumerate}
+\item $x\ge0$, $\ell_s\ge0$, and $\ell_s\le x_i$ for every sector-$s$
+player $i$;
+\item for each supported pair $\{i,j\}$ of value $a_{ij}$, whose missing
+sector is $u$, $x_i+x_j+\ell_u\ge a_{ij}$;
+\item the full-team inequalities hold for every team of $\mu\cup P$;
+\item for each supported off-diagonal pair joining labels $a\ne b$, its
+two full-team inequalities obtained by completing it at label $a$ or
+label $b$ hold;
+\item $x(N)=T$.
+\end{enumerate}
+The system uses $3m+3$ variables, at most $7m+10r$ inequalities apart
+from variable nonnegativity, and one total equality. No equality forcing
+$\ell_s$ to be a coordinate minimum is needed.
+\end{proposition}
+\begin{proof}
+Given a core point, take the actual sector minima for $\ell$.
+Completing a supported pair with a player attaining the missing-sector
+minimum gives the pair inequality, because all other pair values are
+nonnegative. The listed full-team constraints and efficiency also hold.
+
+Conversely, consider an arbitrary full team. If it has two supported
+off-diagonal pairs, their common player belongs to one team of the
+actual partial matching $P$, so both pairs belong to that same team.
+Their union is therefore a team of $P$ already listed. If it has one
+supported off-diagonal pair, a third label equal to one endpoint label
+gives a listed local completion. Otherwise there is no diagonal pair,
+the remaining off-diagonal pairs are unsupported, and its worth equals
+that single pair value. The pair inequality and $\ell_u\le x_k$
+then give its full-team inequality. With no supported off-diagonal
+pair, the team is either diagonal, or has at most one supported diagonal
+pair, or has worth zero. The listed diagonal inequality, pair-plus-minimum
+inequality, or nonnegativity covers these cases. Summing over disjoint
+full teams proves every coalition constraint.
+
+There are $3m$ lower-envelope inequalities, at most $3m+3r$ pair
+inequalities, $m+r$ diagonal or $P$ team inequalities, and at most
+$6r$ completion inequalities. Their total is $7m+10r$; duplicates can
+only reduce it.
+\end{proof}
+For example, a supported off-diagonal $AB$ pair with labels $a\ne b$
+gives, by comparing its two completions with tight diagonals,
+\begin{align*}
+ x_B(b)-x_B(a)&\ge AB[a,b]+BC[b,a]-AB[a,a]-BC[a,a],\\
+ x_A(a)-x_A(b)&\ge AB[a,b]+AC[a,b]-AB[b,b]-AC[b,b].
+\end{align*}
+The cross terms must be retained for repeated-label $P$ teams. Any valid
+core inequality $x_i\ge x_j+c$ also yields $H_i\ge H_j+c$ by using
+a core point attaining $H_j$. A cycle of such difference inequalities
+has total right-hand side at most zero; if the total is zero, every
+inequality is tight at every core point. These are useful consequences,
+but discarding the remaining team constraints need not describe the
+entire core or its ideals. The compressed system is not claimed for
+arbitrary dense supports.
+
+\subsection{Linearly many incompatible ideal faces}
+\begin{proposition}\label{anc:attainment}
+In the family of Proposition~\ref{prop:family}, let $U$ be the players
+outside its $\ell$ special teams. Any original core allocation attains
+$H_i=3$ for at most one $i\in U$. Exactly $3(\ell+1)$ core allocations
+are necessary and sufficient to attain all those unmatched ideals
+collectively.
+\end{proposition}
+\begin{proof}
+There are $\ell+1$ unmatched players in each sector. If player $(s,j)$
+receives three at a core point, diagonal tightness makes the other two
+coordinates at label $j$ zero. Complete their opposite-sector diagonal
+pair of value one with any sector-$s$ player. Its team inequality forces
+every sector-$s$ payoff to be at least one.
+A second ideal three in another sector would likewise force every
+payoff in that sector to be at least one, contradicting its zero payoff
+at $j$. If two unmatched ideals in the same sector were attained, that
+sector's $\ell+1$ unmatched players would receive at least
+$(\ell+1)+4=\ell+5$ in total. But summing the $\ell$ disjoint
+special-team constraints gives
+\[
+                  x(U)\le T-5\ell=\ell+3,
+\]
+a contradiction. Each unmatched ideal face is nonempty by the witnesses
+in Proposition~\ref{prop:family}; choosing one witness per face attains
+the lower bound $|U|=3(\ell+1)$ on the required number of points.
+\end{proof}
+A bounded collection of allocations that exactly attain the ideals
+cannot therefore work uniformly over this family. This does not exclude
+fractional protection obtained from nonmaximizing allocations. In
+contrast, if one core point simultaneously attains every ideal of each
+sector, the average of the three points already protects $H/3$ with
+zero subsidy. Published side-optimality in the square supermodular class
+with local monotonicity~\cite[Theorem~3.2]{Martinez2026} supplies such a
+safe class under that theorem's additional hypotheses; neither the
+side-optimality concept nor this elementary averaging observation is
+claimed as a new contribution.
+
+\subsection{A ring and the effect of weakening one pair}
+For $b\ge2$, take $m=4b$ labels and initialize all three pair matrices
+to the identity. Let the actual partial matching $P$ consist of
+\[
+ e_j=(j,(j+1)\bmod b,b+j),\qquad
+ f_j=(2b+2j,2b+2j+1,j),\qquad 0\le j<b.
+\]
+For every displayed team set its off-diagonal pair values, in order
+$AB,AC,BC$, to $(2,1,2)$; other off-diagonal values are zero.
+Call the resulting market $R_b$. Call $R'_b$ the market obtained by
+lowering the single entry $AB[0,1]$ from two to zero. The teams in $P$
+are player-disjoint and have three distinct labels.
+
+\begin{theorem}[An all-size perturbation family]\label{anc:ring}
+Both $R_b$ and $R'_b$ have nonempty original cores and grand worth
+$T=12b$. Their protected subsidies are
+\[
+                          s(R_b)=0,\qquad s(R'_b)=4b-2.
+\]
+Every ideal of $R'_b$ equals three. Each market's ideals are calculated
+in its own original core and then frozen during protection.
+\end{theorem}
+\begin{proof}[The unmodified ring]
+At each hub label $j<b$ pay $4/3,4/3,1/3$ in sectors $A,B,C$.
+At each other label pay $7/3$ to its unique $P$-used player and $1/3$
+to its other two players. Denote this vector by $y$. Every diagonal
+team receives three, every $P$ team receives five, and $y(N)=12b$.
+Two positive off-diagonal pairs in a team force it to be a $P$ team,
+because $P$ is a partial matching. Any other nondiagonal team has at
+most one such pair and at most one diagonal pair. For a pair of value
+two, its endpoints receive at least $8/3$ and its third player at least
+$1/3$, covering total worth at most three. For a pair of value one,
+the endpoints receive at least $8/3$, covering total worth at most two.
+With no off-diagonal pair, worth is at most one, again covered. Hence
+$y$ covers every team and every coalition. Together with the diagonal
+matching this proves grand worth $12b$ and core nonemptiness.
+
+At any original core point, diagonal tightness and the completion
+inequalities for $(j,j+1,j)$ and $(j,j+1,j+1)$, with hub indices taken
+modulo $b$, give $x_B(j+1)\ge x_B(j)$ and $x_A(j)\ge x_A(j+1)$.
+Around the ring these become equalities. Write the common hub payoffs
+as $A,B,C$ with $A+B+C=3$, and put $c=\min_k x_C(k)$.
+The ring-team inequality gives $x_C(b+j)\ge2+C$.
+Completing the diagonal $AB$ pair at $b+j$ with a sector-$C$ minimum
+gives
+\[
+       1-c\le x_A(b+j)+x_B(b+j)=3-x_C(b+j)\le1-C.
+\]
+Thus $c=C$, $x_C(b+j)=2+c$, and the other two payoffs there sum to
+$1-c$. In particular $0\le c\le1$ and those two coordinates are at
+most one.
+
+For attached labels $u=2b+2j$, $v=2b+2j+1$, let
+$a=\min_kx_A(k)$ and $d=\min_kx_B(k)$. With $p=x_A(u)$ and
+$q=x_B(v)$, the attached-team inequality is $p+q+c\ge5$.
+Diagonal tightness gives $q\le3-a-c$ and $p\le3-d-c$.
+Hence $p\ge2+a$, $q\ge2+d$, and each of the other coordinates at
+$u,v$ is at most one. All these estimates hold on the entire core.
+Thus unmatched players and hub-$C$ players have ideal at most one;
+all other players have ideal at most three by diagonal tightness.
+Vector $y$ pays the former group $1/3$ and every other player at least
+one, so it is already an efficient protected allocation.
+\end{proof}
+
+\begin{proof}[The broken ring]
+Put $z=b$; the altered team is $e_0=(0,1,z)$, of worth three.
+The other $2b-1$ teams in $P$, called hard teams, have worth five.
+Removing $e_0$ from the label--team incidence graph leaves $z$ isolated
+and a tree on the other $4b-1$ labels: the remaining ring is a path,
+and each $f_j$ attaches two leaves to a hub. Call this the main tree.
+Root it at any label with any sector color. Traversing outward, color
+each newly visited label by its sector position in the traversed team.
+Every hard team then has at least two endpoints with their designated
+colors, so every pair in it has at least one correctly colored endpoint.
+Let $c^A$ be the coloring rooted at $0$ with color $A$, and $c^B$
+the coloring rooted at $1$ with color $B$. The ring path gives
+\[
+                c^A(0)=c^A(1)=A,\qquad c^B(0)=c^B(1)=B.
+\]
+
+To attain ideal three at coordinate $(k,v)$ with $v\ne z$, root the
+main tree at $v$ with color $k$, extend its coloring by $c(z)=C$,
+and pay
+\[
+                        x_{s,j}=\one_{\{s=k\}}+2\one_{\{c(j)=s\}}.
+\]
+For a target at $z$, pay three to its target sector there and zero to
+the other two sectors. On every main-tree label use, respectively,
+\begin{align*}
+ \text{target }A:\quad x_{s,j}&=\one_{\{s=A\}}
+                         +\one_{\{c^A(j)=s\}}+\one_{\{c^B(j)=s\}},\\
+ \text{target }B:\quad x_{s,j}&=\one_{\{s=B\}}+2\one_{\{c^B(j)=s\}},\\
+ \text{target }C:\quad x_{s,j}&=\one_{\{s=C\}}+2\one_{\{c^A(j)=s\}}.
+\end{align*}
+Every label has total three, the target receives three, and every player
+in the target sector receives at least one.
+
+We check all team inequalities. A hard team receives at least four
+coloring units and one base unit, covering five. Endpoints of a hard
+pair receive at least two coloring units, covering its value at most
+two. If a team containing that pair also has a diagonal pair, its three
+labels lie on the main tree, so it also receives a base unit and covers
+worth at most three.
+
+The only positive soft pairs are $AC(0,z)=1$ and $BC(1,z)=2$.
+For a target on the main tree, $C_z$ has two coloring units and every
+full team has a base unit, so any team containing a soft pair receives
+at least three. For target $C$ at $z$, $C_z=3$ gives the same coverage.
+For target $B$ at $z$, labels $0,1,z$ all have vector $(0,3,0)$.
+The soft $BC$ pair receives three; the soft $AC$ pair receives zero
+but every $B$ coordinate is at least one, and if there is also a diagonal
+pair its $B$ label is $0$ or $z$, where it receives three. For target
+$A$ at $z$, labels $0,1$ have vector $(2,1,0)$ and $z$ has vector
+$(3,0,0)$. The soft $AC$ pair receives two. The soft $BC$ pair
+receives one and every $A$ coordinate is at least one; with an additional
+diagonal pair, the $A$ label is $1$ or $z$ and the team receives at
+least three. The soft team itself receives three in each case.
+
+Two positive off-diagonal pairs still force a $P$ team. Every other
+nondiagonal team has at most one such pair and at most one diagonal
+pair, so the preceding checks exhaust these cases. Without off-diagonal
+pairs its worth is at most one, covered by the target-sector lower
+bound. Diagonal teams receive exactly three. Thus every displayed
+witness is a total-$12b$ core point. The diagonal matching has this
+value, and its tightness bounds every ideal by three. Separate witnesses
+attain three at every coordinate.
+
+For the exact subsidy, start with one per player and add two to the
+$A$ player of each hard team. These players are distinct. Hard teams
+receive five, the soft team receives three, and all other teams have
+worth at most three. This covers all coalitions and the floors, with
+total $12b+2(2b-1)$. Conversely, the disjoint teams in $P$ have total
+worth $5(2b-1)+3=10b-2$, and their $6b$ unmatched players require one
+each. The resulting lower bound on protected total is $16b-2$, matching
+the construction.
+\end{proof}
+
+\begin{corollary}[No modulus uniform over market size]\label{anc:modulus}
+Scale $R_b,R'_b$ by $1/(12b)$, giving grand worth one in both games,
+and put $\delta_b=1/(6b)$. Their pair-matrix entrywise $\ell_1$
+distance and their characteristic-function supremum distance both equal
+$\delta_b$, whereas their protected subsidies differ by
+$1/3-\delta_b$. Consequently no function $\omega(\delta)\to0$ as
+$\delta\to0$ uniformly bounds this subsidy difference over all finite
+market sizes in either distance.
+\end{corollary}
+\begin{proof}
+Only one pair changes, by $\delta_b$. An integral matching uses that
+pair at most once, so every coalition worth changes by an amount in
+$[0,\delta_b]$. The three-player coalition $e_0$ changes by exactly
+$\delta_b$. Positive scaling scales the core, ideals and subsidy,
+so Theorem~\ref{anc:ring} gives the asserted subsidy difference.
+\end{proof}
+This is a failure of a size-independent modulus, not discontinuity at a
+fixed market size. It also shows why removing a small pair value cannot
+be charged a universal proportional cost when the original ideals change
+with the market. Instability of selected assignment-core allocations
+has established precedents~\cite[Example~3]{anc:KumabeYoshida2024}; the
+scalar protected-subsidy statement and its priority require their own
+comparison.
+
+\subsection{An optimal obstruction that must contain cycles}
+\begin{proposition}[A finite certificate]\label{anc:cycles}
+There is a three-sector market with $m=11$ labels, grand worth $T=1$,
+nonempty entire core and subsidy $76/303$, whose unique optimal grand
+matching is diagonal. Every optimal team-form subsidy dual contains six
+specified disjoint teams, each with multiplier one. Their connected
+label--team incidence graph has cycle rank two. In particular, no
+forest-supported optimal team-form dual exists, including fractional
+duals or a change to another optimal grand matching.
+\end{proposition}
+The statement is computer-assisted through a supplied rational
+certificate, not an asymptotic conclusion from experiments. We specify
+the market and the finite proof obligations explicitly. All entries in
+the following tables are divided by $5252$; every omitted pair entry
+is zero. The diagonal $AB,AC,BC$ entries are
+\[
+\begin{array}{c|rrr@{\qquad}c|rrr}
+ j&AB&AC&BC&j&AB&AC&BC\\\hline
+ 0&108&234&144&6&153&153&144\\
+ 1&252&144&90 &7&189&144&153\\
+ 2&144&198&198&8&144&144&198\\
+ 3&90&108&108 &9&198&144&198\\
+ 4&154&144&148&10&198&144&198\\
+ 5&108&234&144&&&&
+\end{array}
+\]
+and the six off-diagonal teams $P$ have pair entries
+\[
+\begin{array}{c|rrr}
+ (A,B,C)\text{ labels}&AB&AC&BC\\\hline
+ (1,0,2)&252&288&252\\
+ (3,4,1)&158&144&234\\
+ (0,5,3)&252&198&108\\
+ (6,3,7)&153&297&153\\
+ (8,9,5)&288&234&306\\
+ (7,10,8)&333&198&342
+\end{array}
+\]
+
+\begin{proof}[Certificate proof]
+The record \texttt{CYCLIC\_FRONTIER\_6\_2\_0} in the supplied file
+\texttt{CYCLIC\_FRONTIER\_CERTIFICATES.json} contains all $33$ exact
+ideals, a separate original-core point attaining each, their matching
+upper certificates, and a protected allocation $y$ with a matching dual
+of total $1+76/303$. Each core witness has nonnegative coordinates,
+total one and all full-team inequalities. For the upper certificate of coordinate $i$, the stored multipliers
+$\lambda_t\ge0$ and the efficiency multiplier $\nu$ satisfy
+\[
+ \nu-\sum_{t\ni j}\lambda_t\ge\one_{\{j=i\}}
+ \quad(j\in N),\qquad
+ \nu-\sum_t\lambda_tv(t)=H_i.
+\]
+Since $x\ge0$, $x(N)=1$ and $x(t)\ge v(t)$, these equations imply
+$x_i\le\nu-\sum_t\lambda_tv(t)=H_i$. The multiplier on efficiency
+is unrestricted; no unsupported joint ideal attainment is assumed. The protected vector satisfies all
+floors and full-team inequalities, while the dual multipliers satisfy
+the player-load bounds and the displayed objective. These exact finite
+checks prove $T=1$, all declared ideals and the subsidy value; they do
+not substitute a numerical solver tolerance for an inequality.
+
+Average the $33$ original-core witnesses. Direct rational checks show
+that the resulting point $x$ is strictly positive and its only tight
+full teams are the eleven diagonals and $(1,0,2),(7,10,8)$.
+A grand matching of worth one must cover every player and use only
+$x$-tight teams: its value deficit is the sum of team slacks and
+unmatched positive payoffs. At each label there is a player appearing
+in no other tight team. Sectors
+\[
+                       A,B,A,A,A,A,A,B,A,A,A
+\]
+provide such a player at labels $0,\ldots,10$, respectively.
+Their diagonal teams are all forced, proving uniqueness. This reasoning
+also rules out another fractional perfect optimum.
+
+For the protected problem use full-team multipliers $\lambda_t\ge0$
+and floor multipliers $\mu_i\ge0$, with
+$\sum_{t\ni i}\lambda_t+\mu_i\le1$. The primal--dual difference
+at the certified $y$ is
+\begin{align*}
+ &\sum_t\lambda_t\bigl(y(t)-v(t)\bigr)
+ +\sum_i\mu_i\bigl(y_i-H_i/3\bigr)\\
+ &\hspace{25mm}+\sum_i y_i
+                  \left(1-\sum_{t\ni i}\lambda_t-\mu_i\right).
+\end{align*}
+All terms are nonnegative. The certificate has $y_i>0$ for every
+player, and exactly twelve full-team constraints are tight. The diagonal
+teams through the six forcing players listed below are not among them;
+this is included in the exact strict/tight checks. At any
+optimal dual, non-tight teams have multiplier zero, strict-floor
+players have $\mu_i=0$, and every player load is one. In order, the
+following strict-floor players each occur in exactly one still
+available tight team:
+\[
+\begin{array}{c|c}
+ \text{player}&\text{forced team}\\ \hline
+ A_0&(0,5,3)\\
+ A_1&(1,0,2)\\
+ B_9&(8,9,5)\\
+ B_{10}&(7,10,8)\\
+ C_1&(3,4,1)\\
+ C_7&(6,3,7)
+\end{array}
+\]
+Its multiplier is therefore one. All teams sharing any of its players
+then have multiplier zero, justifying the exclusions before the next
+step. The exact checker verifies each strict inequality and each unique
+choice, rather than trusting the listed dual. Thus every optimal dual
+contains all six teams with multiplier one. Their incidence graph is
+connected with $18$ edges and $17$ vertices, so its cycle rank is
+$18-17+1=2$. Adding further positive teams cannot remove these cycles.
+\end{proof}
+The certificate and checker are retained in
+\nolinkurl{structural_classification_2026-09-06/sharp_subsidy/}.
+The solver-free command
+\texttt{python3 -B -O verify\_cyclic\_necessity.py}
+reconstructs the market, verifies the original ideals and primal--dual
+value, checks all strict/tight sets and forcing steps, and rejects a
+false forcing step. Its direct dependency is
+\texttt{verify\_cyclic\_frontier.py}, with its retained checker imports
+and the named JSON certificate; run from the complete supplied directory.
+This result rules out a forest-only optimal-dual restriction on the
+same market. It does not exclude a transformation that changes the
+market while correctly tracking all changes to its original ideals.
+
+\paragraph{Reproducibility and claim boundaries.}
+The same retained directory contains separate exact checkers for
+Proposition~\ref{anc:compression}, Proposition~\ref{anc:attainment}
+and Theorem~\ref{anc:ring}: respectively
+\texttt{verify\_sector\_min\_core.py},
+\texttt{verify\_coattainability.py}, and
+\texttt{verify\_broken\_ring.py} together with \texttt{ring\_zero.py}.
+They have been run with Python assertions disabled. The all-size
+statements rely on the written proofs; the cyclic-optimum proposition
+is expressly a finite certificate proof. Historical priority and
+independent human specialist assessment remain open.
+
 \begin{thebibliography}{99}
 \small
 \bibitem{ShapleyShubik1971}
@@ -656,5 +1826,52 @@ W.~F. Lucas. Core theory for multiple-sided assignment games.
 H.~W. Stuart, Jr. The supplier--firm--buyer game and its $m$-sided generalization.
 \emph{Mathematical Social Sciences} 34(1):21--27, 1997.
 \href{https://doi.org/10.1016/S0165-4896(96)00830-X}{doi:10.1016/S0165-4896(96)00830-X}.
+\bibitem{flow:Fang2010}
+Q. Fang, R. Fleischer, J. Li, and X. Sun.
+Algorithms for core stability, core largeness, exactness, and extendability
+of flow games.
+\emph{Frontiers of Mathematics in China} 5(1):47--63, 2010.
+\href{https://doi.org/10.1007/s11464-009-0048-y}{doi:10.1007/s11464-009-0048-y}.
+
+\bibitem{flow:KalaiZemel1980}
+E. Kalai and E. Zemel.
+Generalized network problems yielding totally balanced games.
+Northwestern University discussion paper 425, 1980.
+\href{https://www.econstor.eu/bitstream/10419/220785/1/cmsems-dp0425.pdf}{Primary working-paper version inspected}.
+Published in \emph{Operations Research} 30(5):998--1008, 1982,
+\href{https://doi.org/10.1287/opre.30.5.998}{doi:10.1287/opre.30.5.998}.
+
+\bibitem{flow:AtayNunezSolymosi2026}
+A. Atay, M. N\'u\~nez, and T. Solymosi.
+On the vertices of the core of a many-to-one assignment game.
+\emph{Journal of Global Optimization}, published online August 29, 2026.
+\href{https://doi.org/10.1007/s10898-026-01632-7}{doi:10.1007/s10898-026-01632-7}.
+
+\bibitem{flow:Isbell1959}
+J.~R. Isbell.
+On the enumeration of majority games.
+\emph{Mathematical Tables and Other Aids to Computation}
+13(65):21--28, 1959.
+\href{https://doi.org/10.1090/S0025-5718-1959-0103129-5}{doi:10.1090/S0025-5718-1959-0103129-5}.
+
+\bibitem{flow:Nunez2013}
+M. N\'u\~nez.
+Lecture slides, Budapest Summer School, 2013, pp.~37--40.
+\href{https://archive.illc.uva.nl/COST-IC1205/documents/Budapest-2013-Slides/Nunez.pdf}{Author's historical transportation-model statement}.
+
+\bibitem{flow:Goemans2011}
+M.~X. Goemans, S. Iwata, and R. Zenklusen.
+A flow model based on polylinking system.
+\emph{Mathematical Programming} 135:1--23, 2012
+(published online March 5, 2011).
+\href{https://doi.org/10.1007/s10107-011-0446-2}{doi:10.1007/s10107-011-0446-2}.
+
+\bibitem{anc:KumabeYoshida2024}
+S. Kumabe and Y. Yoshida.
+Lipschitz continuous allocations for optimization games.
+\emph{51st International Colloquium on Automata, Languages, and Programming
+(ICALP 2024)}, LIPIcs 297, Article 102, 2024.
+\href{https://drops.dagstuhl.de/storage/00lipics/lipics-vol297-icalp2024/LIPIcs.ICALP.2024.102/LIPIcs.ICALP.2024.102.pdf}{Open-access original, Example 3}.
+
 \end{thebibliography}
 \end{document}

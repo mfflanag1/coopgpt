@@ -1,0 +1,313 @@
+\section{General production: a sharp complexity bound}\label{prod:section}
+There are $n$ fixed owners and $d$ fixed resource types. Owner $i$ reports
+$b_i\in\R_+^d$; write $c=\sum_i b_i$. Fix a nonempty finite family
+$V=\{w^1,\ldots,w^K\}\subseteq\R_+^d$, with a report-independent priority,
+and define
+\[
+ f(c)=\min_{w\in V}w\cdot c,\qquad
+ v_b(S)=f\left(\sum_{i\in S}b_i\right),\qquad T=f(c).
+\]
+A rule is eligible if its payments are nonnegative, cover every coalition,
+and are componentwise nondecreasing in each owner's whole bundle, with all
+other reports fixed. These conditions hold on all of $(\R_+^d)^n$.
+They express truthfulness for binding underreports and payment-only utility;
+there are no operating costs, overreport, false-name, population-change or
+coordinated-report guarantees. A factor $C$ bounds \emph{total payment} by
+$CT$; external subsidy is at most $(C-1)T$. The family $V$ remains fixed
+across reports. Its size may be exponential in a compact description.
+
+\begin{theorem}[General sharp-order upper bound]\label{prod:upper}
+For every integer $j\ge2$, an eligible deterministic rule has factor
+\begin{equation}\label{prod:constant}
+ C_j(K)=j+\frac{\log K+2\log j+1}{\alpha_j},\qquad
+ \alpha_j=\log\frac{j^3}{j^2+j-1}>0.
+\end{equation}
+With $L=\log K$ and
+$j=\max\{2,\lceil L/[\log(2+L)]^2\rceil\}$, this factor is
+$(1+o(1))\log K/\log\log K$, uniformly over owner counts, dimensions,
+technologies and reports. Zero-value profiles receive zero; for $K=1$ the
+constructed rule is efficient.
+\end{theorem}
+
+\paragraph{The mechanism.}
+For $q\in(0,1)$ let independent owner bits satisfy $\Prob(B_i=0)=q$.
+Choose the first minimizer of the \emph{uncapped} objective,
+\[
+ W(b,B)=\operatorname*{first\,argmin}_{w\in V}
+               \sum_i B_i(w\cdot b_i),\qquad
+ a_i(w,b)=\min\{w\cdot b_i,T\}.
+\]
+Only the payment contribution $a_i$ is capped. Put
+\begin{align}
+ z_i^q&=\E a_i(W,b),&
+ p_i^q&=\E[a_i(W,b)\mid B_i=0],\label{prod:p}\\
+ m_i^q&=\E_{B_{-i}}\left[f\left(b_i+\sum_{h\ne i}B_hb_h\right)
+                         -f\left(\sum_{h\ne i}B_hb_h\right)\right],
+ &r_i^q&=qp_i^q+(1-q)m_i^q.\label{prod:hybrid}
+\end{align}
+The final payment is the deterministic finite expectation
+\begin{equation}\label{prod:payment}
+ M_i(b)=j\int_0^{1/j}r_i^q(b)\,dq.
+\end{equation}
+These quantities are finite polynomials in $q$ at a fixed profile; no
+continuity or generic-position assumption about the reports is required.
+
+\begin{proof}[Proof of Theorem~\ref{prod:upper}]
+Conditional on $B_i=0$, every score and the selected form are independent of
+$b_i$. For that fixed nonnegative form, both $w\cdot b_i$ and $T$ are
+nondecreasing in $b_i$, so their minimum is nondecreasing. In $m_i^q$ the
+off term is independent of $b_i$ and the on term is nondecreasing. The
+nonnegative fixed mixtures preserve this property and nonnegativity.
+
+For any $w,S$, if some $i\in S$ has $w\cdot b_i\ge T$, then
+$\sum_{i\in S}a_i(w,b)\ge T\ge v_b(S)$. Otherwise no term in $S$ is capped,
+and the sum is $w\cdot\sum_{i\in S}b_i\ge v_b(S)$. Thus every capped form
+covers coalitions. Fix $B_{-i}$ and let $w_1$ be the on minimizer. The off
+optimum is at most the off objective of this same form, whence
+\begin{equation}\label{prod:endpoint}
+ f\left(b_i+\sum_{h\ne i}B_hb_h\right)-f\left(\sum_{h\ne i}B_hb_h\right)
+ \ge w_1\cdot b_i=a_i(w_1,b).
+\end{equation}
+The equality holds because the contribution is a nonnegative summand of
+the selected on value, which is at most $T$. Averaging proves $r_i^q\ge z_i^q$,
+and hence coverage for $r^q$ and $M$.
+
+For the budget define $g(q)=\E f(\sum_iB_ib_i)$, $Z(q)=\sum_i z_i^q$,
+and $R(q)=\sum_i r_i^q$. Capping leaves every open contribution unchanged:
+\[
+ \sum_iB_i a_i(W,b)=f\left(\sum_iB_ib_i\right).
+\]
+Consequently $q\sum_i p_i^q=Z-g$. Differentiating the finite mask polynomial
+gives $\sum_i m_i^q=-g'$, so $R=Z-g-(1-q)g'$. Since $g(0)=T$ and $g\ge0$,
+for $0<\eta<1$ integration by parts gives the exact identity
+\begin{equation}\label{prod:integral}
+ \int_0^\eta R\,dq=\int_0^\eta Z\,dq+T-(1-\eta)g(\eta)
+                         -2\int_0^\eta g\,dq
+ \le\int_0^\eta Z\,dq+T.
+\end{equation}
+Both the sign and the factor two in this identity matter.
+
+Suppose $T>0$. For each fixed form let
+$d_i(w)=a_i(w,b)/T\in[0,1]$ and $\rho_w=\sum_i d_i(w)$.
+The selected form satisfies $\sum_iB_id_i(W)\le1$. For $\lambda>0$ put
+$\alpha=-\log(q+(1-q)e^{-\lambda})$. The convex function
+$u\mapsto\log(q+(1-q)e^{-\lambda u})$ lies below its endpoint chord
+$-\alpha u$ on $[0,1]$. Independence and Markov's inequality give
+\[
+ \Prob\left(\sum_iB_id_i(w)\le1\right)
+ \le e^\lambda\prod_i(q+(1-q)e^{-\lambda d_i(w)})
+ \le e^{\lambda-\alpha\rho_w}.
+\]
+A union over the fixed family and integration of the resulting tail yield
+\begin{equation}\label{prod:chernoff}
+ \Prob(\rho_W\ge x)\le\min\{1,K e^{\lambda-\alpha x}\},\qquad
+ \frac{Z(q)}T\le\frac{\log K+\lambda+1}{\alpha}.
+\end{equation}
+Take $\eta=1/j$ and $\lambda=2\log j$. For $q\le1/j$,
+$q+(1-q)e^{-\lambda}\le(j^2+j-1)/j^3$, so
+\eqref{prod:integral}--\eqref{prod:chernoff} give \eqref{prod:constant}.
+For the displayed choice of $j$, as $L\to\infty$,
+$j\sim L/(\log L)^2$, $\alpha_j\sim\log L$, and
+$j=o(L/\log L)$, proving the asserted asymptotic.
+
+If $T=0$, all masked production values and capped contributions vanish.
+If $K=1$, no contribution is capped, $p_i^q=m_i^q=w\cdot b_i$, and
+$M_i=w\cdot b_i$. Finally each finite-mask term is
+$q^{n-1-|S|}(1-q)^{|S|}[q a_i(W(b,1_S),b)+(1-q)(v_b(S\cup\{i\})-v_b(S))]$.
+Its integral is a finite sum with rational coefficients when $j$ is integer.
+This gives exact rational payments for rational input, without an efficiency
+claim about enumeration of masks or forms.
+\end{proof}
+
+\begin{corollary}[Production LPs and networks]\label{prod:lp}
+The theorem applies to
+$f(c)=\max\{\pi\cdot x:x\ge0,Ax\le c\}$ for fixed $A\ge0$, with every
+activity column nonzero and fixed positive profits $\pi$. Here $V$ can be
+the vertices of $\{w\ge0:A^Tw\ge\pi\}$. For single-commodity directed flow,
+one may instead use the characteristic vectors of the inclusion-minimal
+structural source--sink edge cuts.
+\end{corollary}
+\begin{proof}
+Each activity is bounded by a positive entry in its column, so every feasible
+production set is compact at finite $c$. The dual is nonempty, pointed and
+polyhedral. Strong duality and attainment at a vertex give the claimed finite
+min-linear representation, including boundary capacities. Network max-flow/
+min-cut gives the cut representation directly. Redundant nonminimal cuts may
+be removed once and for all because capacities are nonnegative. All owners
+and forms remain fixed across profiles. A positive-profit zero-resource
+activity is excluded because it would make production unbounded.
+\end{proof}
+Dual core allocations are established ingredients~\cite{Owen,SametZemel}.
+General dual vertices may be fractional; their count is not an ordinary
+network-cut count. Constraints introducing capacity-independent dual offsets
+are outside the homogeneous model here.
+
+\begin{proposition}[Why the payment cap is essential]\label{prod:uncapped}
+Removing the cap from the own-excluded contribution in
+\eqref{prod:p} makes the uniform-$q$ hybrid unbounded even with two owners
+and two supporting forms.
+\end{proposition}
+\begin{proof}
+Take unit-profit activity columns $(1,1)$ and $(M,0)$, $M>1$, and reports
+$c=(M,1)$. The two dual vertices are $(1,0)$ and $(1/M,1-1/M)$, and
+$T=2-1/M$. If owner 1 is off and owner 2 on, $(1,0)$ uniquely minimizes the
+raw score, giving uncapped contribution $M$. Thus $r_1^q\ge q(1-q)M$;
+with $j=2$ its average is at least $M/6$, an unbounded ratio to $T$.
+This obstructs only the uncapped rule: since
+$f(c)=c_1/M+(1-1/M)\min(c_1,c_2)$, paying the linear part to owner 1 and
+splitting the remaining term equally gives an efficient eligible rule.
+\end{proof}
+
+\section{A matching lower bound on simple networks}\label{dag:section}
+A network has one distinct fixed strategic owner per edge, and coalition
+worth is its maximum source--sink flow using only its owned edges. Structural
+cuts are inclusion-minimal edge sets disconnecting source from sink; their
+number depends on the fixed graph, not its reported capacities. Define
+$\mathcal B_{\rm dag}(K)$ as the supremum, over simple finite DAGs having at
+most $K$ structural cuts, of the best all-profile eligible total-payment
+factor on that graph. The analogous quantity for finite nonnegative
+min-linear technologies with at most $K$ forms is $\mathcal B_{\rm prod}(K)$;
+owner counts and dimensions are unrestricted finite integers.
+
+\begin{theorem}[Sharp first-order worst-case factors]\label{dag:sharp}
+As $K\to\infty$,
+\[
+ \mathcal B_{\rm dag}(K)=(1+o(1))\frac{\log K}{\log\log K},\qquad
+ \mathcal B_{\rm prod}(K)=(1+o(1))\frac{\log K}{\log\log K}.
+\]
+The lower holds along an explicit sequence of simple DAGs at their exact cut
+counts, and for the worst case with \emph{at most} $K$ cuts. It does not
+assert an exact-count padding theorem for every integer $K$.
+\end{theorem}
+
+\begin{proof}
+The upper follows from Theorem~\ref{prod:upper}. We give the simple-DAG lower,
+which also supplies the production lower. Fix integers $d_0\ge1$, $m>d_0$,
+$R\ge1$, and $k\ge2$. (Here $d_0$ is hierarchy height, not resource dimension.)
+One module with terminals $a,b$ has vertices $L_1,\ldots,L_R$,
+$u_1,\ldots,u_m$, $v_1,\ldots,v_m$, $W_1,\ldots,W_R$ and edges
+\[
+ aL_s,\quad L_su_j,\quad u_jv_j,\quad v_jW_t,\quad W_tb
+ \quad(1\le s,t\le R,\ 1\le j\le m).
+\]
+Take $k$ copies in series by identifying consecutive terminals. Each middle
+edge $u_jv_j$ has report in $\{1,m\}$; all auxiliary edges have report
+$H=m^2$. Every edge, including every auxiliary edge, is a strategic original
+owner whose full report domain is nonnegative. Only the finite profiles
+used in this proof keep auxiliary reports fixed.
+
+A type-$h$ module has $h$ high middle edges, $0\le h\le d_0$. For any subset
+$J$ of middle edges, choose one left fan and one right fan, and include the
+source/final fan edges plus the incident edges supporting exactly $J$.
+This actual coalition has module flow $\sum_{j\in J}c_j$: the middle cut
+bounds it above, and the selected branches carry it because their total is
+at most $m^2$. In particular the full graph has
+\begin{equation}\label{dag:value}
+ T=m+(m-1)\min_{1\le l\le k}H_l.
+\end{equation}
+Choosing the two fans independently uniformly, any particular auxiliary
+edge is included with probability at most $1/R$.
+
+Symmetrize an arbitrary eligible factor-$B$ rule over module permutations
+and branch permutations, relabeling each branch's incident auxiliary edges.
+These are permutations of the fixed owner set preserving every coalition's
+flow at all profiles: module flows combine by their minimum, so even module
+permutations preserve coalition values. Averaging preserves all required
+inequalities. At a histogram $\nu=(\nu_0,\ldots,\nu_{d_0})$ of module types,
+write $x_h(\nu),z_h(\nu)$ for low and high variable-owner payments, and
+\[
+ Y(\nu)=\sum_h\nu_h[(m-h)x_h(\nu)+hz_h(\nu)],\qquad
+ Q(\nu)=\text{total auxiliary-owner payment}.
+\]
+No auxiliary-payment symmetry is assumed; $Y+Q\le BT$.
+
+First choose one low variable in each module, supported by random fans.
+Averaged coalition coverage and nonnegativity give
+$\sum_h\nu_hx_h+Q/R\ge1$. Next put $q_0=m-d_0+1$ and choose $q_0$ low
+variables in each type below $d_0$, and one high variable in each type
+$d_0$. These exist because $m>d_0$. The resulting coalition has worth at
+least $q_0$, giving
+$q_0\sum_{h<d_0}\nu_hx_h+\nu_{d_0}z_{d_0}+Q/R\ge q_0$.
+Multiply the first inequality by $m-d_0$ and the second by $d_0$. With
+$A=(d_0+1)m-d_0^2$,
+\begin{equation}\label{dag:coalitions}
+ A\le A\sum_{h<d_0}\nu_hx_h+
+ \nu_{d_0}[(m-d_0)x_{d_0}+d_0z_{d_0}]+(m/R)Q.
+\end{equation}
+
+Fix $\alpha>0$, set $\lambda=A/\alpha$,
+$Z=\sum_{h=0}^{d_0}\lambda^h/h!$, and $p_h=\lambda^h/(h!Z)$.
+Average profiles with independent module types of probabilities $p_h$;
+let $\mu(\nu)$ be their multinomial histogram weights. Raising one actual
+low variable owner from $1$ to $m$ gives
+$x_h(\nu)\le z_{h+1}(\nu')$ at
+$\nu'=\nu-e_h+e_{h+1}$. Every other report, including every auxiliary report,
+is unchanged. The exact identity
+\[
+ \mu(\nu)\nu_h=(p_h/p_{h+1})\mu(\nu')\nu'_{h+1},\qquad
+ A p_h/p_{h+1}=\alpha(h+1)
+\]
+transports only this changing owner's payment. Averaging
+\eqref{dag:coalitions} therefore yields
+\begin{align}
+ A&\le\alpha\E\sum_{h=1}^{d_0}h\nu_hz_h+
+ \E\nu_{d_0}[(m-d_0)x_{d_0}+d_0z_{d_0}]+(m/R)\E Q\notag\\
+ &\le(1+\alpha)\E Y+(m/R)\E Q
+ \le\max\{1+\alpha,m/R\}B\E T.\label{dag:transport}
+\end{align}
+The last step uses the disjoint budgets $Y,Q$; their coefficients are not
+added. By the tail-sum formula and $p_0=1/Z$,
+\begin{equation}\label{dag:mean}
+ \E T=m+(m-1)\sum_{r=1}^{d_0}\left(\sum_{h=r}^{d_0}p_h\right)^k
+ \le m[1+d_0 e^{-k/Z}].
+\end{equation}
+
+Let $C_{m,R}$ be the number of structural cuts of one module. Any minimal
+cut is the outgoing cut of its reachable source side after deletion, so
+$1\le C_{m,R}\le2^{2R+2m}$. A minimal cut in a series composition lies
+entirely in one module: otherwise each module retains a path, or an edge
+removed elsewhere is redundant. Hence the full cut count is exactly
+$K=kC_{m,R}$.
+For $d_0\ge2$ choose
+\[
+ g=\lceil\sqrt{\log(d_0+1)}\rceil,\quad
+ m=d_0g,\quad R=m,\quad \alpha=1/g,\quad
+ \ell=\lceil\log(d_0+1)\rceil,\quad k=\lceil2\ell Z\rceil.
+\]
+The separate multiplier $\ell$, rather than $g$, ensures the tail error
+vanishes. Equations~\eqref{dag:transport}--\eqref{dag:mean} give
+\[
+ B\ge\frac{d_0+1-d_0/g}{(1+1/g)(1+d_0e^{-2\ell})}=(1-o(1))d_0.
+\]
+Here $\lambda=(d_0+1)d_0g^2-d_0^2g>d_0$, so
+$\lambda^{d_0}/d_0!\le Z\le(d_0+1)\lambda^{d_0}/d_0!$.
+Stirling's estimate implies
+$\log k=(1+o(1))d_0\log d_0$; since $m=o(d_0\log d_0)$,
+\[
+ \log k\le\log K\le\log k+4m\log2=(1+o(1))d_0\log d_0.
+\]
+This proves the lower along the sequence $K_{d_0}$. For any fixed
+$\varepsilon>0$ and large external cut budget $K$, take
+$d_0=\lfloor(1-\varepsilon)\log K/\log\log K\rfloor$.
+Then $K_{d_0}\le K$ eventually, yielding lower coefficient $1-\varepsilon$.
+Letting $\varepsilon$ decrease to zero proves the at-most-$K$ assertion.
+\end{proof}
+
+\begin{proposition}[A subdivision that destroys the lower bound]\label{dag:subdivision}
+Fully subdividing every edge of any finite directed network into two edges
+owned separately produces a network with an efficient eligible rule.
+\end{proposition}
+\begin{proof}
+For pair reports $(a_e,b_e)$ set $d_e=\min(a_e,b_e)$. Choose the original
+network's fixed-priority minimum-cut core allocation $Q(d)$, which pays
+$d_e$ on the selected cut and zero elsewhere. Pay $Q_e(d)$ to the higher
+reporting member of pair $e$, split equally at equality, and pay the lower
+member zero. Holding the mate's report fixed, the payment is zero below it,
+half the fixed $Q_e$ at equality and the fixed $Q_e$ above it: in the last
+two cases all virtual capacities are fixed. Thus it is own-monotone, even
+if $Q$ is not. For a coalition $S$, let $S^*$ contain the original edges
+whose two members both lie in $S$. Its value is exactly $v_d(S^*)$, and
+$p(S)\ge Q(S^*)\ge v_d(S^*)$. Total payment is $T$. This proves why the
+shared fans above, and their explicit auxiliary budgets, are necessary for
+the stated simple-graph reduction.
+\end{proof}

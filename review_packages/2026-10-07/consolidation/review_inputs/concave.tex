@@ -1,0 +1,445 @@
+\section{Owner-count and resource-dimension extensions}\label{ext:sec}
+The hybrid of Section~\ref{prod:section} extends to every finite monotone,
+concave, degree-one homogeneous production function, including discontinuities
+at boundary faces.  Its budget can also count the selected forms rather than
+the entire technology.  We obtain an $n/\log n$ owner-count upper bound,
+an imported $\log n/\log\log n$ lower bound, and a dimension fallback that is
+sharp without concavity.  The sharp rates in owners and in concave resource
+dimension remain open.
+
+Throughout, $f:\R_+^d\to\R$ is finite, coordinatewise nondecreasing and
+positively homogeneous of degree one; concavity is assumed where stated.
+Homogeneity forces $f(0)=0$, hence monotonicity gives $f\ge0$.
+There are $n$ fixed owners $N=[n]$, with arbitrary bundles $b_i\ge0$;
+$c=\sum_i b_i$, $T=f(c)$, $v_b(S)=f(\sum_{i\in S}b_i)$, and
+$x_B=\sum_iB_i b_i$.  An eligible rule is nonnegative, coalition-covering,
+and componentwise nondecreasing in each owner's whole report at every real
+profile, as in Section~\ref{prod:section}.  All domains and owners remain fixed.
+Use $\alpha_j,C_j(H)$ from \eqref{prod:constant}, with $H\ge1$ in place of $K$.
+
+\subsection{Reusable estimates and the selected range}
+\begin{lemma}[Fixed-vector Chernoff bound]\label{ext:lem:chernoff}
+Let independent bits have $\Prob(B_i=0)=q\in(0,1)$ and put
+$\alpha=-\log(q+(1-q)e^{-\lambda})$ for $\lambda>0$.
+For every fixed $\delta\in[0,1]^n$,
+\[
+ \Prob\Bigl(\sum_iB_i\delta_i\le1\Bigr)
+ \le e^{\lambda-\alpha\sum_i\delta_i}.
+\]
+If $\mathcal L\subseteq[0,1]^n$ has at most $H$ elements and a mask-dependent
+choice $\delta^B\in\mathcal L$ always satisfies
+$\sum_iB_i\delta_i^B\le1$, then
+$\E\sum_i\delta_i^B\le(\log H+\lambda+1)/\alpha$.
+For $q\le1/j$, $\lambda=2\log j$, one has $\alpha\ge\alpha_j$.
+\end{lemma}
+\begin{proof}
+The fixed-vector exponential calculation in \eqref{prod:chernoff} uses only
+$\delta_i\in[0,1]$ and independence, so applies verbatim.
+The event $\sum_i\delta_i^B\ge x$ implies that some vector in the fixed
+list with sum at least $x$ has sampled score at most one.
+A union bound gives $\min\{1,He^{\lambda-\alpha x}\}$; its integral is
+$(\log H+\lambda+1)/\alpha$.  Finally
+$q+(1-q)/j^2\le(j^2+j-1)/j^3$ when $q\le1/j$.
+The list must be fixed before sampling, but may depend on the full profile.
+\end{proof}
+
+\begin{lemma}[Budget from capped mask contributions]\label{ext:lem:budget}
+Fix a profile and, for every mask, a vector $a(B)\in[0,T]^n$ satisfying
+\begin{equation}\label{ext:eq:open-sum}
+ \sum_iB_i a_i(B)=f(x_B).
+\end{equation}
+Define $z_i^q=\E a_i(B)$, $p_i^q=\E[a_i(B)\mid B_i=0]$, and use the endpoint
+marginal $m_i^q$ and hybrid $r_i^q=qp_i^q+(1-q)m_i^q$ of
+\eqref{prod:hybrid}.  With $g=\E f(x_B)$, $Z=\sum_i z_i^q$, $R=\sum_i r_i^q$,
+all these functions are finite mask polynomials and
+\[
+ q\sum_i p_i^q=Z-g,\qquad \sum_i m_i^q=-g',\qquad R=Z-g-(1-q)g'.
+\]
+Thus $\int_0^{b_0}R\le\int_0^{b_0}Z+T$ for $0<b_0<1$.
+If the vectors $a(B)$ take at most $H$ values, then for $0<q\le1/j$,
+$Z(q)\le T(\log H+2\log j+1)/\alpha_j$, and
+$j\int_0^{1/j}R(q)\,dq\le C_j(H)T$.
+\end{lemma}
+\begin{proof}
+Condition on the own bit and sum \eqref{ext:eq:open-sum} to obtain the first
+identity.  Differentiating the finite multiaffine expectation on its diagonal
+gives the second.  The exact integration identity \eqref{prod:integral}
+then applies, since $g(0)=T$ and $g\ge0$.
+If $T>0$, the fixed list $\{a(B)/T\}$ lies in $[0,1]^n$, and its selected
+score is $f(x_B)/T\le1$.  Apply Lemma~\ref{ext:lem:chernoff}, then integrate.
+For $T=0$, monotonicity makes every masked value and contribution zero.
+\end{proof}
+
+\begin{proposition}[Selected-range refinement]\label{ext:prop:range}
+For a finite min-linear family $V$ of size $K$, the unchanged hybrid rule
+of Section~\ref{prod:section} satisfies
+\[
+ \sum_iM_i(b)\le\min\{n,C_j(\min\{K,2^n\})\}T.
+\]
+One may choose $j$ in advance using $\min\{K,2^n\}$; zero-report owners
+are not removed and the selected range is not used to retune after reports.
+\end{proposition}
+\begin{proof}
+At a fixed profile, $\{W(b,B):B\in\{0,1\}^n\}$ has at most
+$\min\{K,2^n\}$ elements.  Its capped vectors satisfy
+\eqref{ext:eq:open-sum}, because each nonnegative open contribution is a
+summand of the selected value $f(x_B)\le T$ and hence is uncapped.
+Apply Lemma~\ref{ext:lem:budget}.  Also $a_i,m_i^q\in[0,T]$, so
+$r_i^q,M_i\le T$ and the total is at most $nT$.
+\end{proof}
+
+\subsection{General concave homogeneous production}
+\begin{lemma}[Relative supporting forms]\label{ext:lem:support}
+Assume $f$ is concave.  For $x\ge0$ let $J=\operatorname{supp}(x)$ and
+$F_J=\{y\ge0:\operatorname{supp}(y)\subseteq J\}$.
+If $J\ne\emptyset$, the set of $u\in\R_+^J$ satisfying
+\[
+ u\cdot x_J=f(x),\qquad f(y)\le u\cdot y_J\quad(y\in F_J)
+\]
+is nonempty, compact and convex.  Its unique minimum-norm element $u(x)$
+therefore defines a choice depending only on $f,x$.
+Set $\ell_x(y)=u(x)\cdot y_J$ on $F_J$ and $+\infty$ outside it.
+For $x=0$, instead set $\ell_0(0)=0$, $\ell_0(y)=+\infty$ for $y\ne0$.
+Then $\ell_x$ is componentwise nondecreasing, majorizes $f$ everywhere,
+and touches it at $x$.  On its finite face it is an ordinary nonnegative
+linear form.  No boundary continuity is required.
+\end{lemma}
+\begin{proof}
+On the relative interior of $F_J$, finiteness and concavity supply a finite
+supergradient $u$ at $x$~\cite{BoydSubgradients}:
+$f(y)\le f(x)+u\cdot(y_J-x_J)$.
+Putting $y=\lambda x$ with both $\lambda>1$ and $0<\lambda<1$ yields
+$u\cdot x_J=f(x)$.  Monotonicity applied to $y=x+te_e$ gives $u_e\ge0$.
+For any boundary point $y\in F_J$ and $0<\epsilon<1$, the point
+$y_\epsilon=(1-\epsilon)y+\epsilon x$ is in the relative interior.
+Concavity and the supporting inequality give
+\[
+ (1-\epsilon)f(y)+\epsilon f(x)\le f(y_\epsilon)
+ \le(1-\epsilon)u\cdot y_J+\epsilon f(x).
+\]
+Cancel and divide by $1-\epsilon$ to obtain the boundary inequality.
+The admissible set is an intersection of closed half-spaces and the touching
+hyperplane.  It is bounded by $0\le u_e\le f(x)/x_e$, so is compact;
+strict convexity of squared norm gives the unique choice.
+The extension majorizes $f$ trivially outside its face.  Increasing an argument
+within the face increases its nonnegative linear value; leaving the face
+changes that value to infinity.  The zero-face convention has the same
+properties.  In particular, no subtraction of infinite quantities is needed.
+\end{proof}
+
+\begin{definition}[Relative-support hybrid]\label{ext:def:general}
+For each profile and mask choose the form $\ell_{x_B}$ above and set
+$a_i(B)=\min\{\ell_{x_B}(b_i),T\}$.
+Define $z_i^q,p_i^q,m_i^q,r_i^q$ as in Lemma~\ref{ext:lem:budget} and
+$M_i=j\int_0^{1/j}r_i^q\,dq$, with $j\ge2$ fixed independently of reports.
+The capped coefficients are finite, so these are finite sums and exact
+integrals of polynomials, defining deterministic payments.
+\end{definition}
+
+\begin{theorem}[General concave homogeneous production]\label{ext:thm:general}
+For every finite, monotone, concave, degree-one homogeneous $f$, the rule of
+Definition~\ref{ext:def:general} is eligible at every real bundle profile and
+\[
+ 0\le M_i(b)\le T,\qquad
+ \sum_iM_i(b)\le\min\{n,C_j(2^n)\}T.
+\]
+A zero bundle receives zero, and every zero-value profile receives zero.
+\end{theorem}
+\begin{proof}
+Both capped contributions and endpoint marginals belong to $[0,T]$, so the
+same holds for their mixtures.  If $b_i=0$, then $\ell(0)=0$ and its on/off
+aggregates coincide.  If $T=0$, monotonicity makes every masked value zero.
+
+For incentives, fix $b_{-i},B_{-i}$ with $B_i=0$.
+The aggregate $x_B$ and its selected form are independent of the entire own
+bundle $b_i$.  Both $\ell_{x_B}(b_i)$ and $T$ increase weakly with $b_i$,
+including finite-to-infinite transitions; their capped minimum is therefore
+nondecreasing.  The off term of $m_i^q$ is fixed and the on term increases.
+Averaging with report-independent nonnegative weights proves own-bundle
+monotonicity on the whole domain.
+
+For coverage, fix a selected form $\ell$ and coalition $S$.
+If $\ell(b_i)\ge T$ for some $i\in S$, that capped term alone covers
+$v_b(S)\le T$.  Otherwise all coalition terms are finite, uncapped and on
+the same face, so their sum is $\ell(\sum_{i\in S}b_i)\ge v_b(S)$.
+Thus every vector $a(B)$, and hence $z^q$, covers coalitions.
+For a fixed $B_{-i}$ select $\ell=\ell_x$ at the on aggregate
+$x=b_i+\sum_{h\ne i}B_hb_h$.  The bundles $b_i,x-b_i$ lie on its finite face.
+Touching, majorization and finite additivity give
+\begin{equation}\label{ext:eq:endpoint}
+ f(x)-f(x-b_i)\ge\ell(x)-\ell(x-b_i)=\ell(b_i)\le f(x)\le T.
+\end{equation}
+The middle term is the uncapped on contribution.  Averaging implies
+$m_i^q\ge\E[a_i(B)\mid B_i=1]$, hence $r_i^q\ge z_i^q$ and coverage of $M$.
+
+For the budget, every open bundle lies on the finite face of $\ell_{x_B}$.
+Its nonnegative contributions sum to $\ell_{x_B}(x_B)=f(x_B)\le T$,
+so \eqref{ext:eq:open-sum} holds.  At the fixed profile there are at most
+$2^n$ capped vectors.  Lemma~\ref{ext:lem:budget} gives the $C_j(2^n)$ bound;
+$M_i\le T$ gives the other bound.  All endpoint arithmetic above is finite.
+\end{proof}
+
+\begin{corollary}[Owner-count upper bound]\label{ext:cor:owner-upper}
+Let $L_n=n\log2$ and $j_n=\max\{2,\lceil L_n/[\log(2+L_n)]^2\rceil\}$.
+The rule with this report-independent parameter satisfies
+\[
+ \sum_iM_i(b)\le C_{j_n}(2^n)T
+   =(\log2+o(1))\frac n{\log n}T,
+\]
+uniformly in dimension, technology and profiles.  For $n=1$ it is efficient.
+\end{corollary}
+\begin{proof}
+Here $j_n\sim L_n/(\log L_n)^2$, $\alpha_{j_n}\sim\log n$, and
+$j_n=o(n/\log n)$; substitute into $C_j$.
+For $n=1$ and $b_1\ne0$, the off form is $\ell_0$, so its capped
+contribution is $T$, and the endpoint marginal is also $T$.
+Thus $r_1^q=M_1=T$; the zero bundle is immediate.
+\end{proof}
+\begin{remark}\label{ext:rem:direct}
+The direct construction covers downward boundary discontinuities, for example
+$f(x_1,x_2)=x_1$ when $x_2>0$ and zero otherwise.
+It avoids limits of approximating technologies.  The canonical relative
+support is a mathematical definition, not an efficient oracle; no regularity
+or measurability of the resulting all-profile payment map is asserted.
+\end{remark}
+
+\subsection{Owner-count and dimension lower bounds}
+\begin{definition}[Total-payment factors]\label{ext:def:factors}
+Let $\mathcal Y_n(f)$ denote eligible rules on all of $(\R_+^d)^n$ and put
+\[
+ \mathfrak b_n(f)=\inf_{y\in\mathcal Y_n(f)}\sup_{b:T(b)>0}\frac{y(b)(N)}{T(b)}.
+\]
+The inner supremum is zero if $f\equiv0$.  These are total-payment factors,
+not subsidy quantities.  Let $\mathfrak M_d$ be finite nonnegative min-linear
+technologies on $\R_+^d$, and $\mathfrak F_d$ all finite monotone concave
+homogeneous technologies there.  Define
+\[
+ B_n^{\rm own}=\sup_{d\ge1,f\in\mathfrak M_d}\mathfrak b_n(f),\quad
+ B_n^{\rm conc}=\sup_{d\ge1,f\in\mathfrak F_d}\mathfrak b_n(f),\quad
+ B_d^{\rm dim}=\sup_{n\ge1,f\in\mathfrak M_d}\mathfrak b_n(f).
+\]
+Owners, resources and technology are fixed inside each infimum; different
+problems need not share a rule.  The first two suprema allow dimension to
+grow; the last fixes dimension and permits arbitrarily many owners.
+\end{definition}
+
+\begin{theorem}[Owner-count range]\label{ext:thm:owner-range}
+As $n\to\infty$ along all integers,
+\[
+ (1-o(1))\frac{\log n}{\log\log n}\le B_n^{\rm own}
+ \le B_n^{\rm conc}\le\min\{n,C_{j_n}(2^n)\}
+       =(\log2+o(1))\frac n{\log n}.
+\]
+The lower bound is a parameter translation of the weighted hierarchy,
+not a new construction; it permits dimension to grow with $n$.
+\end{theorem}
+\begin{proof}
+The upper follows from Theorem~\ref{ext:thm:general} and
+$\mathfrak M_d\subseteq\mathfrak F_d$.
+For the lower, use $f_k(x)=\min_{1\le e\le k}x_e$.
+Restrict $km$ owners to axis-supported bundles, with $m$ owners per axis.
+An eligible all-bundle rule restricts to a valid scalar-report multi-glove
+rule, and its restricted total-payment factor cannot be larger.
+Thus Lemma~\ref{lem:weighted-hierarchy} applies to $\mathfrak b_{km}(f_k)$.
+If $n\ge n'$, restricting an $n$-owner rule to zero reports for the last
+$n-n'$ owners and discarding their nonnegative payments yields an eligible
+$n'$-owner rule.  All original coalition constraints and unilateral comparisons
+remain, so $\mathfrak b_n(f)\ge\mathfrak b_{n'}(f)$ without population incentives.
+
+For an integer $h\ge2$ set
+\[
+ R=\lceil\log(h+1)\rceil,\quad s=\lceil\sqrt R\rceil,\quad
+ m=hs,\quad\alpha=1/s,\quad A=(h+1)m-h^2,\quad\lambda=As,
+ \quad Z=\sum_{r=0}^h\frac{\lambda^r}{r!},\quad
+ K_h=\lceil2RZ\rceil,\quad\nu_h=K_hm.
+\]
+Here $s\ge2$, so $m>h$, and $K_hp_0=K_h/Z\ge2R\ge2\log(h+1)$.
+Equation~\eqref{eq:weighted-bound}, with hierarchy height $h$, yields
+\begin{equation}\label{ext:eq:owner-lower-finite}
+ \mathfrak b_{\nu_h}(f_{K_h})
+ \ge\frac{h+1-h/s}{(1+1/s)(1+h/(h+1)^2)}=(1-o(1))h.
+\end{equation}
+Also $\log\lambda=2\log h+O(\log\log h)$ and $\lambda\ge h$.
+The terms of $Z$ increase up to index $h$, so
+$\lambda^h/h!\le Z\le(h+1)\lambda^h/h!$.
+Stirling's formula gives $\log Z=(1+o(1))h\log h$ and hence
+$\log\nu_h=(1+o(1))h\log h$.
+For fixed $0<\epsilon<1$ choose
+$h=\lfloor(1-\epsilon)\log n/\log\log n\rfloor$.
+Then $\log\nu_h\le(1-\epsilon+o(1))\log n<\log n$ for all large $n$.
+Padding to $n$ owners and \eqref{ext:eq:owner-lower-finite} give
+$B_n^{\rm own}\ge(1-\epsilon-o(1))\log n/\log\log n$.
+Taking the liminf and then $\epsilon\downarrow0$ proves the all-integer lower.
+\end{proof}
+
+\subsection{Marginal floors for the original core}
+At a profile define the original efficient core and its coordinate benchmarks
+by $\core(b)=\{y:y(N)=T,\ y(S)\ge v_b(S)\ \forall S\}$ and
+$H_i(b)=\max_{y\in\core(b)}y_i$.  Put
+\begin{equation}\label{ext:eq:marginal}
+ U_i=T-f(c-b_i),\qquad
+ \rho_i=\max_{e:c_e>0}b_{ie}/c_e\quad(\rho_i=0\text{ if }c=0).
+\end{equation}
+
+\begin{lemma}[Marginal contributions]\label{ext:lem:marginal}
+For concave $f$, the core is nonempty and compact,
+$0\le H_i\le U_i\le T$, and $U$ is eligible.  Furthermore
+\[
+ \sum_iU_i\le\min\{d,n\}T,\qquad
+ \sum_iU_i\le\min\{K,d,n\}T\quad\text{for a finite family of $K$ forms}.
+\]
+\end{lemma}
+\begin{proof}
+The grand relative support gives the finite allocation $y_i=\ell_c(b_i)$.
+It is nonnegative, sums to $\ell_c(c)=T$, and covers each coalition by
+majorization.  Singleton constraints make the core a closed subset of
+$[0,T]^n$, hence compact.  Its complementary-coalition constraint gives
+$y_i\le T-v_b(N\setminus\{i\})=U_i$.  Thus $U$ dominates a covering core
+allocation.  Also $0\le U_i\le T$ and its subtracted term omits the whole
+own bundle, proving own-report monotonicity.
+Since $c-b_i\ge(1-\rho_i)c$, monotonicity and homogeneity imply
+$U_i\le\rho_iT$.  Moreover
+\[
+ \sum_i\rho_i\le\sum_{e:c_e>0}\sum_i b_{ie}/c_e
+   =|\operatorname{supp}(c)|\le d,\qquad \rho_i\le1.
+\]
+For finite $V$, group owners by a chosen off minimizer $w$ of $w\cdot(c-b_i)$.
+For a nonempty group $G$, writing $A=w\cdot c\ge T$ gives
+\[
+ \sum_{i\in G}U_i=|G|(T-A)+w\cdot\sum_{i\in G}b_i
+ \le|G|T-(|G|-1)A\le T.
+\]
+There are at most $\min\{K,n\}$ groups.  This last cancellation is used only
+for ordinary finite forms, never for extended forms taking infinity at $c$.
+\end{proof}
+
+\begin{proposition}[Original-core floors]\label{ext:prop:floor}
+For concave $f$, let a fixed $D\ge1$ satisfy $\sum_iU_i\le DT$ at every
+profile.  One may use $D=d$, $D=n$, or $D=K$ for finite min-linear $f$.
+For any eligible $y$, the rule $y_i'=y_i+U_i/D$ is eligible, protects
+$y_i'\ge H_i/D$, and costs at most $y(N)+T$ in total.
+With $D=K$ this preserves the sharp leading coefficient of
+Section~\ref{prod:section}.  The benchmarks use the original core.
+\end{proposition}
+\begin{proof}
+Adding nonnegative own-report monotone payments preserves eligibility.
+The inequalities $U_i\ge H_i$ and $\sum_iU_i\le DT$ give the assertions.
+One additional factor of $T$ is lower order than $T\log K/\log\log K$.
+\end{proof}
+
+\subsection{Resource dimension and technology-aware fallbacks}
+\begin{theorem}[Dimension fallback without concavity]\label{ext:thm:dimension}
+For every finite monotone homogeneous $f$, even without concavity,
+$P_i=T\rho_i$ is eligible and
+\[
+ \sum_iP_i\le\min\{n,d_+(c)\}T\le dT,
+ \qquad d_+(c)=|\operatorname{supp}(c)|.
+\]
+Thus $\mathfrak b_n(f)\le\min\{n,d\}$.
+\end{theorem}
+\begin{proof}
+With other reports fixed, every ratio is $a/(a+A)$, where $A\ge0$ is fixed
+and $a$ increases with the corresponding own coordinate; use $0/0=0$.
+If $A=0$, the ratio jumps from zero to one and remains monotone.
+Thus both $\rho_i$ and $T$ increase weakly with $b_i$, and their nonnegative
+product does too.  For a coalition put $r_S=\sum_{i\in S}\rho_i$.
+The coordinate inequalities $b_i\le\rho_ic$ imply
+$v_b(S)\le f(r_Sc)=r_ST=\sum_{i\in S}P_i$.
+If $r_S=0$ this uses $f(0)=0$; at $T=0$ all worths vanish.
+The budget is $\sum_i\rho_i\le\min\{n,d_+(c)\}$, proved above without
+concavity.  Zero aggregate coordinates contribute nothing.
+\end{proof}
+The maximum normalized coordinate share is familiar from multi-resource
+allocation~\cite{Ghodsi}.  That literature's demand-report allocation model
+and strategy-proofness claim differ from these supplier-side payments.
+
+\begin{proposition}[Exact dimension factor without concavity]\label{ext:prop:sharp-d}
+For every dimension $d$, the worst optimal total-payment factor over all
+finite monotone homogeneous technologies and all owner counts is exactly $d$.
+This does not establish a sharp dimension factor for concave technologies.
+\end{proposition}
+\begin{proof}
+Take $f(x)=\max_ex_e$ and $d$ unit-basis owner bundles.
+Then $T=1$ and every singleton has value one, forcing payment at least $d$.
+The upper is Theorem~\ref{ext:thm:dimension}.
+The example persists with strictly positive bundles: for $0<\epsilon\le1$,
+let $b_i=e_i+\epsilon\sum_{e\ne i}e_e$.  Every singleton still has value one,
+while $T=1+(d-1)\epsilon$, forcing factor at least
+$d/[1+(d-1)\epsilon]$.  With $\epsilon=d^{-2}$ this is $(1-o(1))d$.
+For $d\ge2$ this technology is convex and not concave, so the argument does
+not apply to $\mathfrak M_d$ or $\mathfrak F_d$.
+\end{proof}
+
+\begin{theorem}[Concave dimension gap]\label{ext:thm:dim-gap}
+As $d\to\infty$ along all integers,
+\[
+ (1-o(1))\frac{\log d}{\log\log d}\le B_d^{\rm dim}\le d.
+\]
+The lower already holds for $f(x)=\min_ex_e$ with axis-supported owners.
+Whether an $o(d)$ dimension-only upper bound holds for $\mathfrak M_d$ or
+$\mathfrak F_d$ is not determined here.
+\end{theorem}
+\begin{proof}
+The upper is Theorem~\ref{ext:thm:dimension}.
+Use the parameters $R,s,m,\alpha,A,\lambda,Z,K_h$ from
+Theorem~\ref{ext:thm:owner-range}.  For every integer $D\ge K_h$, the weighted
+hierarchy with $k=D$ pools still has $Dp_0=D/Z\ge2R$.
+The same bound \eqref{ext:eq:owner-lower-finite} therefore yields
+$\mathfrak b_{Dm}(f_D)\ge(1-o(1))h$; the owner count $Dm$ is allowed to grow
+in $B_D^{\rm dim}$.  Since $\log K_h=(1+o(1))h\log h$, choosing
+$h=\lfloor(1-\epsilon)\log D/\log\log D\rfloor$ gives $D\ge K_h$ for all
+large $D$.  The resulting liminf is at least $1-\epsilon$;
+let $\epsilon\downarrow0$.
+\end{proof}
+
+\begin{proposition}[Technology-aware refinements]\label{ext:prop:dual-share}
+For finite min-linear $f$ define, with $0/0=0$,
+\[
+ \theta_i=\max_{w\in V}\frac{w\cdot b_i}{w\cdot c},\qquad Q_i=T\theta_i.
+\]
+The rule $Q$ is eligible, $\theta_i\le\rho_i$, and
+$\sum_iQ_i\le\min\{n,d_+(c)\}T$.  For $|V|=1$ it is efficient.
+If every $w\in V$ lies in the nonnegative cone of fixed vectors
+$a_1,\ldots,a_r\in\R_+^d$, where $r\ge1$ is an integer, then
+\[
+ \theta_i\le\sigma_i:=\max_{1\le l\le r}\frac{a_l\cdot b_i}{a_l\cdot c},
+ \qquad\sum_i\theta_i\le\sum_i\sigma_i\le r,
+\]
+so the budget improves to $\min\{n,d_+(c),r\}T$.
+The marginal rule also satisfies $U_i\le P_i=T\rho_i$, with total
+$\min\{K,d,n\}T$.
+\end{proposition}
+\begin{proof}
+For fixed $w$, its ratio has the same $a/(a+A)$ monotonicity as above.
+Taking the maximum and multiplying by monotone nonnegative $T$ preserves it.
+For $T>0$, choose a form $w^*$ with $w^*\cdot c=T$.  Then
+\[
+ v_b(S)\le w^*\cdot\sum_{i\in S}b_i
+     =T\sum_{i\in S}\frac{w^*\cdot b_i}{w^*\cdot c}
+     \le\sum_{i\in S}Q_i.
+\]
+At $T=0$ all payments and worths vanish.
+Each nonzero-denominator dual ratio is a weighted average of the coordinate
+shares $b_{ie}/c_e$, using weights $w_ec_e$, so is at most $\rho_i$.
+For one form its shares sum to one at $T>0$, proving efficiency.
+If $w=\sum_l\mu_la_l$ with $\mu_l\ge0$, its ratio is similarly a weighted
+average of generator ratios, with weights $\mu_l(a_l\cdot c)$.
+Zero denominators also have zero numerators.  Finally
+$\sum_i\sigma_i\le\sum_l\sum_i(a_l\cdot b_i)/(a_l\cdot c)\le r$.
+The marginal claims are Lemma~\ref{ext:lem:marginal}.
+No bound in terms of ordinary signed linear rank is asserted.
+\end{proof}
+
+\begin{remark}[Rule limitations and ex ante choice]\label{ext:rem:limits}
+For $f(x)=\sum_ex_e$ and unit-basis owners, $P$ costs $dT$ whereas $Q$ is
+efficient.  For $f(x)=\min_ex_e$ at that profile, $U$ costs $dT$ although
+an efficient core allocation exists.  These are limitations of particular
+rules, not lower bounds on all eligible rules.
+Choosing among the valid rules in advance from fixed $n,d,K$ gives factor
+$\min\{n,d,C_j(2^n)\}$ for general concave $f$, and
+$\min\{n,d,C_j(\min\{K,2^n\})\}$ for finite min-linear $f$.
+Coordinatewise minima or report-dependent switching are not asserted valid.
+The convex-analysis, marginal/core, normalized-share, and Chernoff ingredients
+are established tools; no historical priority, sharp owner/dimension rate,
+or efficient evaluation for arbitrary $f$ is claimed.
+\end{remark}

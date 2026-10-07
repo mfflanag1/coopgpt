@@ -1,0 +1,363 @@
+% Consolidated earlier incentive results; insert before reproducible evidence.
+\section{Finite-pool mechanisms and limits of restricted rules}\label{hist:appendix}
+This appendix collects nonredundant results from the earlier incentive
+campaigns. All guarantees use the fixed-owner, binding-underreport,
+payment-only model of Section~\ref{sec:model}. The subsidy factor is
+$\beta=B-1$, not $B$. The mechanisms and their restricted-class comparisons
+remain useful even where later theorems improve the asymptotic frontier.
+The weighted-glove model, ordinary Shapley value, and continuous Banzhaf
+functional are established ingredients; the comparisons below make no
+historical-priority claim.
+
+\subsection{Aggregate prices and an exact restricted-class tradeoff}
+\begin{proposition}\label{hist:aggregate}
+For $T>0$, write $C_j=c(N_j)$ and define
+\[
+ p_j=\frac1{C_j}\int_0^T\prod_{\ell\ne j}(1-t/C_\ell)\,dt,
+ \qquad y_i=c_ip_j\quad(i\in N_j).
+\]
+The rule covers coalitions, is own-report monotone, protects $H_i/k$, and
+has total payment at most $(k+1)T/2$. This budget bound is a supremum for
+this rule. For two pools and $\alpha\in[0,1]$, the optimal worst-case
+subsidy factor among rules $y_i=c_ip(C_1,C_2)$ in pool one and
+$y_i=c_iq(C_1,C_2)$ in pool two is
+$\max\{1/2,\alpha\}$, provided the same nonnegative prices are used for
+\emph{every} finite ownership partition and the rule protects $\alpha H$.
+\end{proposition}
+\begin{proof}
+Differentiating $P(t)=\prod_j(1-t/C_j)$ and integrating gives
+$\sum_jp_j=P(0)-P(T)=1$. Thus payments to a coalition are a convex
+combination of its pool totals. For an owner reporting $x$ with fixed
+same-pool remainder $a$, set
+$g(t)=\prod_{\ell\ne j}(1-t/C_\ell)_+$. Its payment is
+\[
+ \frac{x}{x+a}\int_0^{x+a}g(t)\,dt.
+\]
+Both factors are nonnegative and nondecreasing in $x$. Assign zero at
+$x=a=0$; if another pool has zero total all payments stay zero. This proves
+monotonicity at every boundary as well.
+The complementary-coalition constraint gives
+$H_i\le T-v_c(N\setminus\{i\})\le c_iT/C_j$.
+For the last inequality, it is equality as an upper bound when $C_j=T$;
+otherwise the marginal is $(c_i-C_j+T)_+\le c_iT/C_j$.
+Also $p_j\ge T/(kC_j)$, since every factor in the integral is at least
+$1-t/T$. Choose a pool of total $T$. Its payment is at most $T$;
+every other pool receives at most $\int_0^T(1-t/T)dt=T/2$.
+Totals $(1,M,\ldots,M)$ approach this bound as $M\to\infty$.
+
+For the two-pool upper bound, the displayed rule gives $\beta=1/2$ and
+$H/2$. The auxiliary rule $z_i=c_iT/C_j$ gives $H$, covers coalitions,
+and spends $2T$. Its own payment is $x\min\{1,D/(x+a)\}$, where $D$ is
+the other pool total, so it is nondecreasing. For $\alpha\ge1/2$, the
+convex combination $(2-2\alpha)y+(2\alpha-1)z$ gives $\alpha H$ and
+$\beta\le\alpha$; for smaller $\alpha$, use $y$ itself.
+
+For the lower bound, one owner per pool at totals $(1,1)$ gives
+$p,q\ge\alpha$ and $p+q\ge1$. One price is at least
+$r=\max\{1/2,\alpha\}$; suppose it is $p$.
+Raising that owner's report to $M$ gives $Mp(M,1)\ge r$.
+Now partition the left total into owners of capacities $1,M-1$.
+Partition-independent prices are unchanged. The unit left owner together
+with the right owner imply $p(M,1)+q(M,1)\ge1$. Hence total payment is
+at least $1+(M-1)p(M,1)\ge1+r(1-1/M)$. Let $M\to\infty$.
+This argument uses the stated comparison \emph{across} ownership
+partitions; it is not an unrestricted fixed-owner lower bound.
+\end{proof}
+
+For clarity, these pool totals are themselves the established absolute
+continuous Banzhaf functional \cite[Definition~6.11]{Kurz}. For
+$F(z)=\min_j C_jz_j/T$, the zero endpoint is zero and the other endpoint
+has tail integral
+\[
+ T\operatorname{BZI}_j(F)
+ =\E\min\{C_j,\min_{\ell\ne j}C_\ell U_\ell\}
+ =\int_0^T\prod_{\ell\ne j}(1-t/C_\ell)dt=C_jp_j.
+\]
+Here the coordinates are \emph{pools}. The owner-coordinate identification
+in Section~\ref{sec:banzhaf} concerns a different continuous game.
+
+\subsection{What ordinary Shapley scaling can and cannot achieve}
+Let $\phi$ be the ordinary individual Shapley value, with fixed weights
+$|U|!(n-|U|-1)!/n!$ on predecessor sets $U\subseteq N\setminus\{i\}$.
+Nonnegativity and efficiency follow by monotonicity and telescoping along
+each arrival order. Each own marginal is nondecreasing in its owner's
+capacity, so $\phi_i$, and every nonnegative constant multiple of it, is
+own-report monotone; this truthfulness argument is established in
+\cite[Proposition~1]{Huang}.
+
+\begin{proposition}\label{hist:shapley-half}
+In every finite two-pool game,
+$\phi_i\ge M_i/2\ge H_i/2$ and $\phi(S)\ge v_c(S)/2$.
+Both constants $1/2$ are sharp over finite ownerships. Consequently a
+constant multiple $\lambda\phi$ covers every coalition at every profile
+and ownership if and only if $\lambda\ge2$. Even a profile-dependent
+scalar multiplier cannot have a uniform budget factor less than two.
+\end{proposition}
+\begin{proof}
+Fix an owner of capacity $a$, same-pool remainder $A$, and opposite total
+$D+A$. Put $f_a(z)=\min\{a,z_+\}$. A predecessor subset with opposite-minus-
+same capacity $z$ gives marginal $f_a(z)$, while its complement gives
+$f_a(D-z)$. For all real $z,D$,
+\[
+ f_a(z)+f_a(D-z)\ge f_a(D).
+\]
+If $D\le0$ this is immediate; if either argument is at least $a$ it is
+also immediate. Otherwise the positive parts are untruncated and their
+sum is at least $D$. Complementary predecessor sets have equal Shapley
+weights, so $2\phi_i\ge f_a(D)=M_i$. The profile $(1\mid1)$ attains
+$\phi_i=H_i/2$. If $L$ is a globally minimum-total pool, every $i\in L$
+has $M_i=c_i$; hence
+$\phi(S)\ge\phi(S\cap L)\ge c(S\cap L)/2\ge v_c(S)/2$.
+
+For sharpness of the coalition constant, choose an integer $q\ge2$,
+$m=q^4$, $r=q^4-q^3$, and a game with $m$ left unit owners, $r$ right
+unit owners, and one right owner $b$ of capacity $m$. Let $S$ contain all
+left owners and $b$, so $v_c(S)=T=m$. Independent uniform arrival times
+represent a uniform random order. For a left unit arriving at time $t$,
+its marginal is one if $b$ has arrived; otherwise it is one precisely
+when $Y>X$, with independent $X\sim\operatorname{Bin}(m-1,t)$ and
+$Y\sim\operatorname{Bin}(r,t)$. Thus
+\[
+ \phi_{\rm left}=\tfrac12+\eta,
+ \qquad \eta=\int_0^1(1-t)\Prob(Y>X)dt.
+\]
+Writing $D_0=m-1-r=q^3-1$, the difference has mean $-D_0t$ and variance
+at most $m/2$. Chebyshev gives
+$\Prob(Y>X)\le\min\{1,m/(2D_0^2t^2)\}$, whose integral is at most
+$\sqrt{2m}/D_0$. At $b$'s arrival, its marginal is $(X-Y)_+$ for counts
+with parameters $m,r$; Cauchy--Schwarz bounds its expectation by
+$(m-r)t+\sqrt{m/2}$. Therefore
+\[
+ \frac{\phi(S)}m\le\frac12+
+ \frac{\sqrt2q^2}{q^3-1}+\frac1{2q}+\frac1{\sqrt2q^2}\longrightarrow\frac12.
+\]
+This proves an infimum over finite games, without splitting any actual
+owner. Coverage forces any scalar multiplier to be at least
+$v_c(S)/\phi(S)$, and efficiency identifies that multiplier with its
+budget factor, proving the last two claims.
+\end{proof}
+
+\begin{proposition}\label{hist:four-shapley}
+With exactly two owners in each of two pools, $(6/5)\phi$ covers all
+coalitions, is own-report monotone, protects $3H/5$, and spends $6T/5$.
+The multiplier $6/5$ is sharp for constant Shapley scaling on this domain.
+It fails for some five-owner games.
+\end{proposition}
+\begin{proof}
+Write capacities $(a,b\mid c,d)$, set $m_{ij}=\min(c_i,c_j)$, and
+$w_i=v_c(N\setminus\{i\})$. Directly grouping the predecessor subsets gives
+\[
+ \phi_1=\frac{m_{13}+m_{14}+w_4-m_{23}+w_3-m_{24}+w_2}{12}
+          +\frac{T-w_1}{4},
+\]
+with the other coordinates obtained by pool-preserving relabelings.
+Only cross pairs and triples need a nontrivial coverage check.
+For $S=\{2,3\}$,
+\[
+ 6\phi(S)=m_{23}+w_4+w_1-m_{14}+3T-w_2-w_3.
+\]
+Exchange pools if needed so $a+b\le c+d$. Then $T=a+b,w_1=b,w_2=a$,
+and
+\[
+ 3T+w_1+w_4-w_2-w_3-m_{14}
+ \ge3b+\min(a+b,c)\ge4\min(b,c).
+\]
+Here $w_3\le a+b$ and $m_{14}\le a$. Thus $\phi(S)\ge5v_c(S)/6$.
+For $S=\{1,2,3\}$ the desired inequality, after using efficiency, is
+\[
+ K=9T-7w_4-w_1-w_2-w_3-m_{14}-m_{24}+m_{13}+m_{23}\ge0.
+\]
+Put $L=a+b,R=c+d$. If $L\le R$ and $c\ge L$, this expression is
+$[L-\min(L,d)]+[a-\min(a,d)]+[b-\min(b,d)]\ge0$.
+If $L\le R$ and $c<L$, bounding $w_3,m_{14},m_{24}$ by $L,a,b$ gives
+$K\ge6(L-c)+\min(a,c)+\min(b,c)-c\ge0$.
+If $L>R$, use $w_4=c,w_3=d$,
+$\min(x,c+d)\le\min(x,c)+d$ for $x=a,b$, and $m_{14},m_{24}\le d$;
+then $K\ge2c+4d\ge0$. These cases include zeros and ties.
+Every other cross pair or triple follows by relabeling.
+Proposition~\ref{hist:shapley-half} supplies the claimed fairness floor.
+At $(2,1\mid1,1)$,
+$\phi=(7/12,1/4\mid7/12,7/12)$, so a pair containing the unit left
+owner and a right owner has worth one and payment $5/6$.
+At $(1,1\mid1,1,2)$ the Shapley vector is
+$(41/60,41/60\mid11/60,11/60,4/15)$, obtained by the same predecessor
+formula. The two left owners and the capacity-two right owner have worth
+two but receive only $49/25$ after scaling by $6/5$.
+\end{proof}
+
+\subsection{The ownership-dependent exponential two-pool rule}
+\begin{theorem}\label{hist:exponential}
+For arbitrary finite owners in two pools, let $d_i=\min(c_i,T)$.
+Call a minimum-total pool short, put
+$\rho=d(N_{\rm long})/T$, and $p=\tfrac12e^{1-\rho}$.
+Pay $(1-p)c_i$ to short owners and $pd_i$ to long owners, with zero
+payments at $T=0$. This rule covers coalitions, is own-report monotone,
+protects $M_i/2\ge H_i/2$, and has subsidy at most $1/(2e)$.
+The constant is attained for this rule. Every admissible rule, even
+without a floor, has worst-case subsidy at least $1/8$ on two pools
+with two fixed owners each.
+\end{theorem}
+\begin{proof}
+Capping preserves worth by Lemma~\ref{lem:cap}, and $\rho\ge1$, so the
+payments are a convex combination of the two capped pool totals. At a
+tie, each owner is paid $c_i/2$, independently of the selected short pool.
+Writing $u=\rho-1\ge0$, total payment is
+$T[1+ue^{-u}/2]\le T[1+1/(2e)]$, with equality at $(1,1\mid1)$.
+Short owners have $M_i=c_i$ and $1-p\ge1/2$. For a long owner, let $a$
+be the total of its same-pool companions. If $a\ge T$ its marginal is
+zero. Otherwise its companions are uncapped, and with $m=d_i$,
+$M_i=T-a\le m\le T$ and $u=(m-M_i)/T$. Since $t e^{-t/T}$ increases
+on $[0,T]$, its payment is at least $M_i/2$.
+
+For own-monotonicity, fix a left owner reporting $x$, same-pool remainder
+$a$, and other pool total $D>0$. In the long region $x+a\ge D$, put
+$m=\min(x,D)$ and $\gamma=\sum_{h\ne i,\,h\in L}\min(c_h,D)$.
+Its payment is $\tfrac12e^{1-\gamma/D}m e^{-m/D}$, nondecreasing in $x$.
+In the short region $0<x+a\le D$, put $A=x+a$ and
+$\rho(x)=\sum_{h\in R}\min(c_h/A,1)$.
+Away from finitely many clipping points,
+$0\ge\rho'\ge-\rho/A$, and the derivative of $x(1-p)$ is
+\[
+ 1-p+xp\rho'\ge1-p(1+\rho)\ge0,
+\]
+where the last inequality follows because
+$(1+\rho)e^{1-\rho}/2$ decreases from one on $[1,\infty)$.
+The payment is continuous at all clipping points and at $A=D$, where
+both formulas give $x/2$. If $D=0$ payments remain zero; if $A=0$ the
+assigned zero payment is no greater than any later payment.
+
+For the lower bound, use fixed owners $0,1\mid2,3$ and profiles
+$c=(1,1\mid1,1)$, $a=(1,1\mid1,2)$, $b=(2,1\mid1,1)$.
+At $a$, coverage of $\{0,2\},\{1,2\},\{0,1,3\}$ implies
+$2y(a)(N)-y_3(a)\ge4$. The budget $y(a)(N)\le2+2\beta$ gives
+$y_3(a)\le4\beta$. At $b$, coverage of
+$\{1,2\},\{1,3\},\{0,2,3\}$ similarly gives $y_0(b)\le4\beta$.
+Own-monotonicity and the base coalition $\{0,3\}$ give
+$1\le y_0(c)+y_3(c)\le y_0(b)+y_3(a)\le8\beta$.
+\end{proof}
+The resulting interval $[1/8,1/(2e)]$ holds for the two-pool minimax
+subsidy with any fixed floor fraction $0\le\alpha\le1/2$.
+Neither endpoint is asserted to be the unrestricted optimum. The price
+here depends on individual clipping, so Proposition~\ref{hist:aggregate}'s
+partition-independent-price lower bound does not apply. The smaller
+budget does not dominate Proposition~\ref{hist:four-shapley}'s stronger
+$3H/5$ fairness guarantee.
+
+\subsection{Small-stage guarantees and failed exponential extensions}
+\begin{proposition}\label{hist:softmax}
+For $k=2$ or $3$, put $\rho_j=\sum_{i\in N_j}d_i/T$, $u_j=\rho_j-1$,
+$w_j=e^{-u_j}$, $p_j=w_j/\sum_\ell w_\ell$, and $y_i=d_ip_j$.
+This rule is own-report monotone, covers coalitions, protects $M_i/k$,
+and has exact worst-case subsidy $b_k$, where
+$b_ke^{b_k}=(k-1)/e$. The same unit-rate formula fails own-report
+monotonicity when $k=4$.
+\end{proposition}
+\begin{proof}
+Coverage is immediate from capping and $\sum p_j=1$.
+For an owner with $M_i>0$, same-pool remainder $a<T$, and $m=d_i$, one
+has $u_j=(m-M_i)/T$ and $\sum w_j\le k$. Hence
+$y_i\ge m e^{-(m-M_i)/T}/k\ge M_i/k$ by the preceding monotonicity of
+$t e^{-t/T}$. The assertion is immediate if $M_i=0$.
+In the long region of an own report, $T$ is fixed, and differentiation
+with respect to $m$ gives $p_j[1-(m/T)(1-p_j)]\ge0$.
+In the short region, $T=x+a$, $u_j=0$, and
+$0\ge\rho_\ell'\ge-\rho_\ell/T$ off clipping points. Therefore
+\[
+ \frac{d}{dx}(xp_j)
+ \ge p_j\left[1-\sum_{\ell\ne j}p_\ell\rho_\ell\right]\ge0,
+\]
+since the last bracket is nonnegative precisely when
+$\sum_{\ell\ne j}u_\ell e^{-u_\ell}\le1$, and each term is at most
+$1/e$. For $k\le3$, $(k-1)/e<1$. Continuity handles clipping points
+and the bottleneck seam; the zero boundary is handled by $0\le y_i\le x$.
+
+The subsidy is $F=\sum_j u_je^{-u_j}/\sum_j e^{-u_j}$, with some
+$u_s=0$. For $b=b_k$, the elementary maximum
+$(u-b)e^{-u}\le e^{-1-b}$ implies
+\[
+ \sum_j(u_j-b)e^{-u_j}\le-b+(k-1)e^{-1-b}=0.
+\]
+Thus $F\le b$. Equality holds when $u_s=0$ and every other $u_j=1+b$:
+use one unit owner in pool $s$ and three owners of capacity $(2+b)/3<1$
+in each other pool. Here $b<1$ follows from $k\le3$.
+
+For failure at $k=4$, use one owner reporting $x$ in the first pool and
+three owners of capacity $2/3$ in each other pool. Near $x=1$ the first
+owner's payment is
+$y(x)=x/[1+3e^{1-2/x}]$, whose derivative at one is
+$(1-3/e)/(1+3/e)^2<0$. Thus some strict underreport increases payment.
+\end{proof}
+A different extension also fails: assigning each nonshort pool price
+$e^{-u_j}/k$ and the residual to the short pool is not truthful even for
+three pools. At $(x\mid1/2,1/2\mid1/2,1/2)$, the first payment is
+$1/3$ when $x=1$, but at $x=99/100$ it is
+\[
+ x\left[1-\tfrac23 e^{-(1-x)/x}\right]
+ \ge x(1-2x/3)=1683/5000>1/3,
+\]
+using $e^{-q}\le1/(1+q)$. These are obstructions to the stated formulas,
+not to all mechanisms with more pools.
+
+\begin{proposition}\label{hist:small-stage-lower}
+For $k\ge3$ and two owners per pool, every admissible rule has
+\[
+ \beta\ge\max\left\{\frac{k-1}{2(k+3)},\frac{k-2}{2k+3}\right\}.
+\]
+In particular the lower bounds are $1/6$ at $k=3$ and $3/14$ at $k=4$;
+the latter exceeds the two-pool upper bound $1/(2e)$.
+\end{proposition}
+\begin{proof}
+Average over pool permutations and within-pool swaps, preserving every
+guarantee on the same fixed ownership. The first displayed bound is
+Theorem~\ref{thm:unrestricted} with $r=2,t=2$.
+For the second, take profile $X$ with one pool $(1,1)$ and $k-1$ pools
+$(1,2)$. Let $a$ be the former owners' common payment, and $b,d$ the
+unit and capacity-two payments in each mixed pool. Coalitions selecting
+all unit owners or both short owners and every capacity-two owner give
+\[
+ a+(k-1)b\ge1,\quad 2a+(k-1)d\ge2,\quad
+ 2a+(k-1)(b+d)\le2+2\beta.
+\]
+Subtracting the first inequality from the budget and comparing with the
+second gives $a\ge1-2\beta$. At the profile $Z$ of all mixed pools,
+write the payments $b_Z,d_Z$. Then $kb_Z\ge1$ and
+$k(b_Z+d_Z)\le3+3\beta$, so $kd_Z\le2+3\beta$.
+Raising one unit owner in $X$'s short pool to two produces $Z$;
+own-monotonicity gives $d_Z\ge a$. Thus
+$k(1-2\beta)\le2+3\beta$. Finally $e>5/2>7/3$ proves
+$3/14>1/(2e)$ without numerical approximation.
+\end{proof}
+
+\subsection{An obstruction to capped-total-only prices}
+\begin{proposition}\label{hist:capped-totals}
+Suppose payments have the form $y_i=d_ip_j(\rho_1,\ldots,\rho_k)$,
+where $\rho_j=d(N_j)/T$ and the nonnegative prices do not depend on
+within-pool capacity distributions. Fixed owner counts and pool labels
+may enter the prices. Coalition coverage and own-monotonicity imply,
+for $k=q^2$ and $n$ owners per pool with $q\mid n$, the budget bound
+\[
+ B\ge\frac{k}{2\sqrt{k}-1}>\frac{\sqrt{k}}2.
+\]
+Prices need not sum to one. Zero reports are allowed.
+\end{proposition}
+\begin{proof}
+At the profile with every owner reporting $1/n$, all ratios equal one
+and the budget gives $\sum_jp_j\le B$. Choose a pool $j$ with
+$p_j\le B/k$. Within this same fixed ownership, concentrate its capacity
+in one owner, leaving its others zero and every other pool unchanged.
+At the concentrated report one, the ratio vector is still all ones.
+Lowering this owner's report to $x=1/q$ therefore gives
+$xp_j(\rho^{\rm low})\le B/k$. A coalition containing this owner and
+$n/q$ owners in each other pool has worth $x$ and payment
+$x\sum_\ell p_\ell(\rho^{\rm low})$, so that sum is at least one.
+The low-profile total payment is consequently at least
+\[
+ xp_j+\sum_{\ell\ne j}p_\ell
+ \ge1-(1-x)p_j\ge1-\frac{(1-x)B}{kx}.
+\]
+Its budget is at most $Bx$, proving
+$B\ge[x+(1-x)/(kx)]^{-1}=k/(2\sqrt{k}-1)$.
+No independently strategic clones or comparison across ownerships is
+used here. The restriction to ratio-only prices is essential; the
+owner-coordinate Banzhaf rule uses the full within-pool distribution.
+\end{proof}

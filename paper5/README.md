@@ -1,6 +1,13 @@
 # Separation program: current results and archival status
 
-Current as of 5 September 2026.
+Current manuscript index: [the eight-paper portfolio](../PAPERS.md).
+The [7 October consolidation](../review_packages/2026-10-07/consolidation/README.md)
+incorporates the general truthful-production/network theorem and all surviving
+static-protection extensions into [truthful cooperation](truthful_cooperation/README.md)
+and [sharp subsidies](sharp_subsidy/README.md). Current sources are authoritative;
+older PDFs are explicitly historical. Human specialist review remains pending.
+
+The dated 5 September separation-program status below is retained as history.
 
 The sharp unrestricted theorem is in [asymptotic_constant_two](asymptotic_constant_two/README.md): `lim n(2-s_n)=2`, with deficit `2/n+O(log(n)/n^2)`. The current assignment paper is [the pairs/triples comparison](assignment_comparison/README.md), which incorporates the two individual assignment notes and their revised prior-art positioning.
 

@@ -1,0 +1,158 @@
+INDEPENDENT ADJUDICATION: ANTICHAIN REDUCTION AND TWO AUXILIARY CHECKS
+7 October 2026
+
+SUMMARY
+No mathematical blocker found in the antichain reduction. The reported graph
+is not a counterexample: its cited cut {e,f,g} is inclusion-minimal but NOT
+minimum-capacity. The proof concerns minimum-capacity cuts of the local graph
+G_A. Make that local-graph scope and the word 'minimum-capacity' explicit.
+The independent-threshold closure lemma is valid under its stated fixed-statistic
+assumptions. The endpoint verifier matches the static theorem's fixture and
+limited claimed scope, and passes actual execution under Python -B -O.
+No canonical source edits, model calls, or external outreach were performed.
+
+1. ANTICHAIN: ORIGINAL PROOF ADJUDICATION
+Read the complete ANTICHAIN_REDUCTION.txt and its integration in
+/tmp/coop-noise-boundaries.tex, noise:antichain.
+
+(a) Local graph and deletion value.
+G_A is the structural union of paths meeting path-antichain A. Every path of G_A
+meets A: before and after regions cannot overlap or cross outside A, because
+that would concatenate a path meeting two A edges or create a directed cycle.
+Deleting e in A therefore leaves precisely the through-(A minus e) flow problem:
+F_{G_A}(c with e deleted)=R(A minus e). Setting capacities outside A-supported
+paths to zero or omitting those edges makes the equivalence explicit.
+
+(b) Why a minimum-capacity cut containing e forces c_e=delta_e.
+This elementary statement holds in ANY fixed local graph, not just this reduction.
+Let R=F_{G_A}(c) and R_-=F_{G_A}(c with e deleted). If a minimum-capacity cut
+C of G_A contains e, then c(C)=R and deleting e gives a cut of capacity R-c_e.
+Therefore R_-<=R-c_e. Conversely, remove all e-containing path flows from a
+maximum flow of G_A. At most c_e units are removed, proving R_->=R-c_e.
+Hence equality holds and delta_e=R-R_-=c_e.
+Minimal counterexample assumptions give y_e>delta_e and y_e<=c_e, so no
+minimum-capacity cut of G_A can contain e. Doing this for every e in A makes
+any original local minimum-capacity cut disjoint from A.
+
+Equivalent hinge check: a single-edge capacity change gives a minimum of affine
+cut sums with slope zero or one. On 0<=t<=c_e it equals
+min{R, R_-+t}. Thus reports t>delta_e preserve the through-A value R.
+The hinge does not license treating an arbitrary inclusion-minimal cut as a
+minimum-capacity one.
+
+(c) The reviewer graph.
+Edges m:s->u, e:u->t, uv:u->v, f,g:v->t all have capacity one. At e=1 the
+four source-side vertex cuts have capacities:
+  {m}:1; {m,f,g}:3; {e,uv}:2; {e,f,g}:3.
+Thus R=1 and {e,f,g} is not a minimum-capacity cut. Deleting e keeps maxflow
+one via m,uv,f, so delta_e=0; this is entirely consistent with no original
+minimum-capacity cut containing e. In particular it does not refute (b).
+I independently enumerated the four cuts at e=0 and e=1 with an inline exact
+integer script. Both minima equal one. This is an exact finite check of the
+reported graph, not the proof of the general claim.
+
+(d) Simultaneous target profile.
+For a cut C of G_A, let B=C intersection A. A flow realizing R(A minus B)
+avoids B, so it is blocked by C minus B; hence its unchanged non-A capacity
+is at least R(A minus B). At the joint profile c_e=y_e(c), the cut costs at
+least Y(B)+R(A minus B). If B is nonempty, inclusion-minimality of the violating
+A gives R(A minus B)>=Y(A minus B), so this is >=Y(A)>R(A). A cut disjoint
+from A is unchanged. The original local minimum-capacity cut C* remains at R(A),
+proving that the joint through-A value equals R(A). The empty complement case
+uses R(empty)=Y(empty)=0 and is valid.
+A through-A flow of value R(A) saturates every edge of C*: its total crossing
+flow is at least R(A), the sum of capacities is exactly R(A), and nonnegative
+flows cannot exceed their capacities. It is also a feasible full-network flow,
+so each full-network effective cap on C* equals its unchanged original report.
+The random barrier on C* is therefore fixed and independent of U_A.
+This does NOT make C* a cut of the full graph; it only blocks every through-A
+path and therefore every focal e-containing path.
+
+(e) Local rival-flow estimate and unresolved step.
+When the current focal effective cap exceeds R(A)-R(A minus e), every containing
+cut of G_A has capacity greater than R(A). A local minimum-capacity cut excluding
+e exists with effective-capacity sum at most R(A). For any full-network flow,
+its e-path flow is bounded by that cut's random score; deleting those paths
+bounds the endpoint maxflow marginal by the same score. Its expectation is at
+most R(A)/2. This proves the local-rank bound without claiming that the local
+cut bounds the full network's minimum-cut score.
+The missing separate-witness-to-joint-payment comparison remains explicitly
+unproved. Constant local rank and the shared barrier do not prove substitutes.
+Thus no antichain theorem for arbitrary size is accidentally established.
+
+2. SUGGESTED LOCAL-G_A WORDING (NO SOURCE EDIT PERFORMED)
+Proposition statement: replace the last part by
+  'At that profile, every s--t edge cut of G_A meeting A has capacity strictly
+   greater than R(A), and one unchanged minimum-capacity cut of G_A is disjoint
+   from A. This cut need not be a cut of the full network.'
+
+Proof, replacing the paragraph beginning 'The own-report maxflow hinge':
+
+The own-report maxflow hinge in the fixed local graph $G_A$ is
+$F_{G_A}(c^t)=\min\{R(A),R(A\setminus\{e\})+t\}$.
+Thus each witness with $z_e(c^t)>\delta_e$ preserves $R(A)$.
+If a minimum-capacity cut $C$ of $G_A$ at the original profile contained $e$,
+then deleting $e$ would give $R(A\setminus\{e\})\le R(A)-c_e$.
+Removing the $e$-path flows from a local maximum flow gives the reverse
+inequality, so $c_e=\delta_e$, contradicting $c_e\ge y_e>\delta_e$.
+Consequently every original minimum-capacity cut $C^*$ of $G_A$ is disjoint
+from $A$. All cuts in the following joint-profile argument are cuts of $G_A$;
+no assertion that $C^*$ cuts the full graph is used.
+
+Then retain the existing cut-sum argument, preferably writing 'a local
+through-A maximum flow saturates C*' at its conclusion. Near-maximizing
+witnesses can be chosen with the sum of their attained payoffs exceeding R(A)
+if simultaneous witness profiles are discussed without attainment; the exact
+joint y-target profile itself is well-defined even without attained suprema.
+
+3. QUICK INDEPENDENT AUDIT: /tmp/coop-threshold-class.tex
+VERDICT: accepted, no defect found.
+- Coalition representation is preserved by d_i=min(c_i,T); a chosen pool's
+  capped coalition sum always bounds min_j c(S intersection N_j), so any winning
+  probabilities give covering payments regardless of the chosen monotone statistic.
+- For focal x, d_i=min(x,B). Other own-pool caps are fixed: if a<=B then
+  T(x)>=a>=each other own capacity; if a>B then T(x)=B. Rival caps increase.
+- Conditioning on U_-i leaves the own-pool statistic a fixed nondecreasing
+  Borel function of z. Winning z values form a Borel down-set, including flat
+  regions and ties handled by fixed priority. As rival statistics increase,
+  this set expands. The conditional payment d_i P(win) equals its Lebesgue
+  length inside [0,d_i]; this proves monotonicity even with statistic atoms.
+- Finite real-valued statistics ensure all comparisons are defined. Their
+  only varying inputs are the normalized own-pool coordinate vectors; allowing
+  additional report-dependent parameters would invalidate the proof, but is
+  expressly excluded.
+- The floor uses M_i=(c_i-(C_j-T))_+, sum over each pool <=T, hence sum M_i/k<=T.
+  The coordinatewise maximum with M_i/k is own-report monotone, covers coalitions,
+  protects original H_i/k, and adds <=T. This is a maximum, not the invalid
+  coordinatewise minimum of distinct covering rules.
+- The lemma correctly makes no generic budget-factor claim for arbitrary Phi_j.
+This was an analytic proof check; no numerical experiment was needed or performed.
+
+4. QUICK AUDIT AND ACTUAL EXECUTION: /tmp/coop-verify-endpoint.py
+Compared the entire script against the twelve-owner theorem/proof in
+/tmp/coop-static-flow-appendix.tex and the original
+research_campaigns/2026-10-04-flow-compatibility/ENDPOINT_COUNTEREXAMPLE.txt.
+The labels, capacities, ownership, coalition worth, U,V,H fixtures and every
+listed weight-55/54/97 subset match. Source-mask and sink-mask indexing is correct.
+All assertions use explicit exceptions and stay active under optimization.
+
+ACTUAL command: python3 -B -O /tmp/coop-verify-endpoint.py
+Result PASS:
+  4,096 coalition checks for U and 4,096 for V (8,192 total);
+  12 U>=H/3 checks;
+  64 small-subset checks; 1,024 C0 subsets; 4,096 baseline subsets;
+  26 weight-98 subsets have equal A/B membership;
+  8 listed weight-55, 2 weight-54 and 2 additional weight-97 checks;
+  one budget-feasible non-covering counterfeit correctly rejected.
+Script SHA256 returned by actual run:
+  3ff40be7d7ea2aefc50b6c0b429f8bf8496946ffce68b482eccd04fce97bc689
+Fixture SHA256:
+  9aab12ea44ac68aea5323264bb0d5f6ab35028996228792d2cb3fc636e34f569
+
+The script correctly labels H as supplied and does not claim to compute core
+ideals or optimize supports. Its finite enumeration validates witness feasibility,
+attainment values, and the subset facts used in the written real-valued upper
+proof. I also checked the displayed algebraic loss identities and the implication
+q>=p+2, r>=2p+3 -> source loss>=35p+64>=99 and A+B loss>=15p+29>=44.
+The static proof, not the script, supplies upper bounds against every real core
+allocation. No inflated LP-solver or global optimality claim appears in the report.

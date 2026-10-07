@@ -1,0 +1,516 @@
+\section{Protected ideals in short flow and transportation games}\label{flow:section}
+This appendix concerns a different cooperative technology from the
+pair-additive assignment model. It tests which protection statements extend
+to arc-player flow games. The results are pointwise statements about each
+original entire core. No incentive guarantee across capacity reports is
+asserted. In particular, the counterexample below refutes simultaneous
+endpoint-ideal attainment while having zero protected subsidy itself.
+
+\subsection{The model and the sharp unit-capacity bound}
+Let $G$ be a finite directed acyclic network with distinct source $s$ and
+sink $t$. Each arc is owned by a distinct player; parallel arcs are
+permitted. A coalition's worth is its maximum $s$--$t$ flow using only its
+arcs. Write $T=v(N)>0$, let $\core$ be the entire original core, and set
+$H_e=\max_{x\in\core}x_e$. For this appendix define
+\[
+ s_{1/3}(G)=\min\{y(N)-T:y\ge H/3,\ y(A)\ge v(A)
+                                   \text{ for every }A\subseteq N\}.
+\]
+For any minimum cut, paying each of its arcs its capacity and all other
+arcs zero gives a core allocation: its total is $T$, and each coalition's
+flow is at most the capacity of its available arcs in that cut. This
+also proves nonemptiness of the original core. The core is compact, so
+all the maxima defining $H$ are attained.
+
+\begin{lemma}[Deletion and unit ideals]\label{flow:ideals}
+For every grand maximum flow $f$ and arc $e$,
+\[
+                    H_e\le T-v(N\setminus\{e\})\le f_e.
+\]
+If all capacities are one, $H_e\in\{0,1\}$, and $H_e=1$ precisely
+when $e$ belongs to some minimum cut.
+\end{lemma}
+\begin{proof}
+The first inequality follows by combining core coverage of
+$N\setminus\{e\}$ with efficiency. Decompose $f$ into paths and remove
+all paths using $e$; the lost value is $f_e$, giving the second inequality.
+With unit capacities, integral maximum flows show that the deletion
+marginal is zero or one. If it is one, a minimum cut after deleting $e$
+has capacity $T-1$. The restored arc must cross that cut and makes it a
+minimum cut of the original network. Its cut allocation attains payoff
+one at $e$. Conversely, membership in a minimum cut gives that same
+attainment. If the deletion marginal is zero, so is $H_e$.
+\end{proof}
+The unit-ideal characterization, cut allocations, and minimum-cut lattice
+are classical flow-game ingredients~\cite{flow:Fang2010,flow:KalaiZemel1980}.
+They are included to separate them from the protected-subsidy conclusion.
+
+\begin{theorem}[Short unit-capacity flows]\label{flow:unit}
+Suppose every directed $s$--$t$ path has at most three arcs, and all arc
+capacities are one. Then
+\begin{equation}\label{flow:unit-bound}
+                     s_{1/3}(G)\le\frac{T-1}{3}.
+\end{equation}
+For every positive integer $T$, equality occurs in a network whose
+$s$--$t$ paths all have three arcs. Consequently the supremum of
+$s_{1/3}(G)/T$ in this class is $1/3$.
+\end{theorem}
+\begin{proof}[Upper bound]
+Directed cut capacity is submodular in the source-side vertex set.
+The intersection and union of two minimum-cut source sides are therefore
+also minimum-cut source sides: both crossed cuts have capacity at least
+$T$, while submodularity bounds their sum by $2T$. Since the network is
+finite, the intersection $U_-$ and union $U_+$ of all minimum-cut source
+sides define minimum cuts $C_-$ and $C_+$.
+
+Every source arc $(s,u)$ with ideal one crosses some minimum cut, so $u$
+is missing from at least one source side and hence from $U_-$. Thus
+$C_-$ simultaneously contains every positive-ideal source arc. Similarly,
+$C_+$ contains every positive-ideal sink arc $(u,t)$. Direct $s$--$t$
+arcs cause no difficulty and can be in both cuts.
+
+Let $B$ be the positive-ideal arcs outside $C_-\cup C_+$. Such arcs are
+strictly internal. Fix an integral grand maximum flow decomposed into
+$T$ arc-disjoint paths. Lemma~\ref{flow:ideals} implies that every arc
+in $B$ is used by this flow. Each path has at most one strictly internal
+arc, so $r:=|B|\le T$. If $r=0$, the average of the two cut allocations
+already dominates $H/3$ and has zero subsidy. If $r>0$, choose $e\in B$
+and a minimum cut $C_e$ containing it. Average the allocations of
+$C_-,C_+,C_e$, and raise any remaining coordinates to their floors $H/3$.
+Only the at most $r-1$ positive-ideal arcs outside these three cuts can
+need a raise, of at most $1/3$ each. Raising coordinates preserves every
+coalition inequality. This proves~\eqref{flow:unit-bound}.
+\end{proof}
+
+\begin{proposition}[A sharp chain family]\label{flow:chain}
+For $n\ge1$, use vertices $s,L_1,\ldots,L_n,R_1,\ldots,R_n,t$ and
+unit-capacity arcs
+\[
+ a_i=sL_i,\quad b_i=L_iR_i,\quad c_i=R_it\quad(1\le i\le n),
+ \qquad d_i=L_iR_{i+1}\quad(1\le i<n).
+\]
+Then $T=n$, the ideals of the $3n$ arcs $a_i,b_i,c_i$ are one, all
+$d_i$ ideals are zero, and $s_{1/3}(G)=(n-1)/3$.
+\end{proposition}
+\begin{proof}
+The diagonal paths attain flow $n$, matching the source cut. Their
+maximum flow avoids the $d_i$, so Lemma~\ref{flow:ideals} gives
+$H_{d_i}=0$. The source and sink cuts attain all $a_i$ and $c_i$ ideals.
+For $b_i$, the vertex set
+\[
+           \{s,L_i,\ldots,L_n,R_{i+1},\ldots,R_n\}
+\]
+has boundary $\{a_j:j<i\}\cup\{b_i\}\cup\{c_j:j>i\}$, a minimum
+cut of size $n$. Hence all $b_i$ ideals are also one.
+
+The $n-1$ cross paths $(a_i,d_i,c_{i+1})$ are arc-disjoint. Their union
+has worth $n-1$ and leaves $n+2$ positive-ideal arcs outside it. Its
+coalition inequality and those exterior floors force protected total at
+least $n-1+(n+2)/3$, giving subsidy at least $(n-1)/3$.
+For the reverse bound pay $1/3$ to every $a_i,b_i,c_i$, an additional
+$1/3$ to $a_i$ for $i<n$, and zero to $d_i$. Every diagonal or cross
+path receives at least one. Every coalition's unit-capacity integral
+maximum flow decomposes into arc-disjoint such paths, so summing path
+inequalities covers every coalition. The total is $n+(n-1)/3$.
+\end{proof}
+This proves the equality and supremum statements in
+Theorem~\ref{flow:unit}. The direct path-cover argument just used depends
+on unit capacities; it is not a proof for arbitrary capacities.
+
+\subsection{Prerequisite transfers and a one-sided quota extension}
+\begin{lemma}[Prerequisite transfer]\label{flow:transfer}
+Let $v$ be a nonnegative monotone game with a nonempty nonnegative core.
+Suppose distinct players $a,e$ satisfy
+$v(A)=v(A\setminus\{e\})$ whenever $a\notin A$. Transferring all of
+$e$'s payoff to $a$ preserves core membership.
+\end{lemma}
+\begin{proof}
+Efficiency and nonnegativity are preserved. Coalitions containing both
+or neither player have unchanged payoff, and coalitions containing $a$
+only gain. For a coalition containing $e$ but not $a$, the new payoff is
+$x(A\setminus\{e\})\ge v(A\setminus\{e\})=v(A)$.
+\end{proof}
+
+In a pure three-layer network $s\to L\to R\to t$, let $M$ be the
+middle-arc players and $D$ the endpoint-arc players. Define the endpoint
+game $w(Q)=v(Q\cup M)$ for $Q\subseteq D$. Its entire core describes
+exactly the zero-middle face:
+\begin{equation}\label{flow:face}
+ \core\cap\{x_M=0\}=\{(z,0_M):z\in\core(w)\}.
+\end{equation}
+To see this, restrict by testing coalitions $Q\cup M$; conversely, for
+any original coalition $A$ use
+$v(A)\le w(A\cap D)$. Grand values agree. If every $R_j$ has a unique
+sink arc, each middle arc ending there requires that sink arc on any
+productive path. Lemma~\ref{flow:transfer} moves all middle payments
+sinkward, leaves every source payoff unchanged, and weakly increases
+every sink payoff. Thus the source projections of the full core and
+this face coincide, and every endpoint coordinate ideal is preserved.
+Unique source arcs give the symmetric conclusion by sourceward transfer.
+Neither statement changes any original owner or capacity. If both
+endpoint ports have parallel owners, neither map is automatically valid.
+
+\begin{theorem}[One-sided quotas]\label{flow:quota}
+Fix a rational $q>0$. Consider a pure three-layer network with one or more source
+arcs into each $L$ vertex, source capacities $q r_i$ for integers
+$r_i\ge0$, exactly one sink arc of capacity $q$ out of each $R$ vertex,
+and each rational middle capacity either zero or at least $q$. Parallel source
+and middle arcs are allowed; each arc remains a distinct player.
+All source ideals are jointly attained in the original core, and all
+sink ideals are jointly attained at another core point. If $m$ middle
+arcs have positive ideal, then
+\begin{equation}\label{flow:quota-bound}
+ s_{1/3}(G)\le\frac q3\max\{0,m-1\}\le\frac{T-q}{3}.
+\end{equation}
+This last bound is attained for every positive integer $T/q$.
+\end{theorem}
+\begin{proof}
+Scale to $q=1$. Because the only arc out of each $R$ vertex has capacity
+one, capping every positive middle capacity at one preserves every
+coalition value. Zero-capacity arcs have zero core payoff. The normalized
+network is integral, so $T$ is a positive integer. The sinkward transfer
+and~\eqref{flow:face} preserve all endpoint ideals.
+
+With all middle arcs available, treat each source arc as a firm with
+quota $r_i$ and each sink arc as a unit worker. Their assignment value
+$a_{ij}$ is one if a positive middle arc links their endpoints, and zero
+otherwise. Integral flows give matchings of this many-to-one market.
+Conversely, each allowed firm--worker match can be routed through an
+available middle arc; a worker is used at most once, so no middle arc
+of capacity one restricts the matching. Distinct source arcs sharing a
+head are distinct firms with the same allowable workers, not clones
+introduced by the proof.
+
+For completeness, we give the classical assignment-game salary-lattice
+argument behind side-optimality; a recent reference for this geometry is
+\cite{flow:AtayNunezSolymosi2026}. It works for any
+nonnegative assignment matrix $a$. Remove zero-quota firms, and balance
+total firm quota and worker count by adding zero-value dummy workers
+or a zero-value dummy firm. These are null players; their core payoffs
+are zero and projecting them away preserves the original core. Complete
+an optimal matching $\mu$ to fill every quota and assign every worker.
+The added matches have value zero. Let $\mu(i)$ be the workers matched
+to firm $i$, and $i(j)$ worker $j$'s matched firm.
+
+A payoff vector $(x,y)$ is in the balanced core precisely when
+\begin{align}
+ 0&\le y_j\le a_{i(j),j},\label{flow:salary-box}\\
+ y_k-y_j&\ge a_{ik}-a_{ij}
+         &&(j\in\mu(i),\ k\notin\mu(i)),\label{flow:salary-diff}\\
+ x_i&=\sum_{j\in\mu(i)}(a_{ij}-y_j).\label{flow:salary-firm}
+\end{align}
+Indeed, the disjoint coalitions $\{i\}\cup\mu(i)$ attain the grand
+value, so their core inequalities are all tight, giving
+\eqref{flow:salary-firm}. Deleting one matched worker gives the upper
+bound in~\eqref{flow:salary-box}; replacing that worker by an unmatched
+worker gives~\eqref{flow:salary-diff}. These use feasible matching
+lower bounds, without asserting that a replacement is itself optimal.
+Conversely, for any firm $i$ and worker set $U$ of size at most $r_i$,
+pair each $k\in U\setminus\mu(i)$ with a distinct
+$j\in\mu(i)\setminus U$. Equation~\eqref{flow:salary-diff} gives
+$a_{ik}-y_k\le a_{ij}-y_j$, and all remaining matched surpluses are
+nonnegative by~\eqref{flow:salary-box}. Hence
+\[
+                   x_i\ge\sum_{k\in U}(a_{ik}-y_k).
+\]
+Every feasible coalition matching partitions into disjoint one-firm
+teams; summing these inequalities, together with nonnegative unmatched
+payoffs, proves all core constraints. Efficiency follows from
+\eqref{flow:salary-firm}.
+
+The nonempty compact salary set defined by
+\eqref{flow:salary-box}--\eqref{flow:salary-diff} is closed under both
+coordinatewise minimum and maximum. For example, two inequalities
+$y_k\ge y_j+d$ and $z_k\ge z_j+d$ imply the corresponding minimum
+and maximum inequalities. Taking the minimum of finitely many
+coordinate-minimizing salary vectors therefore minimizes every salary
+simultaneously; by~\eqref{flow:salary-firm} it maximizes every firm's
+payoff simultaneously. Coordinate maxima give a point maximizing every
+worker payoff. Project away null players and lift through
+\eqref{flow:face} to obtain the two asserted original-core endpoint
+allocations.
+
+For a normalized middle arc, deletion lowers the integral maximum flow
+by zero or one. If it lowers it by one, a minimum cut after deletion,
+with the arc restored, is an original minimum cut attaining payoff one
+there. Thus each middle ideal is zero or one. Every positive-ideal
+middle arc is used by every integral grand maximum flow. Each unit of
+flow uses one middle arc, so $m\le T$.
+
+If $m=0$, average the two side-optimal endpoint allocations; this already
+dominates $H/3$. If $m>0$, average these two core points and a core point
+attaining one positive middle ideal, then raise the other middle
+coordinates to their floors. At most $m-1$ coordinates require a raise
+of at most $1/3$ each. Rescale by $q$ to obtain~\eqref{flow:quota-bound}.
+The chain in Proposition~\ref{flow:chain}, scaled by $q$, lies in this
+class and proves sharpness.
+\end{proof}
+The proof allows parallel source owners because the unique sink supplies
+the prerequisite. Arbitrary capacities on both endpoint sides are not
+covered: then an endpoint owner may serve several opposite owners, and
+the disjoint one-firm-team salary argument need not apply. Splitting
+that owner into independent players would change the entire core.
+
+\subsection{An exact transportation embedding}
+\begin{proposition}[Embedding without cloning endpoint owners]\label{flow:embedding}
+Let disjoint endpoint sets $I,J$ have capacities $r_i,c_j\ge0$ and
+allowed pairs $E\subseteq I\times J$. A coalition's worth $w$ is the
+maximum transported amount on its allowed pairs, subject to these row
+and column capacities, with no separate pair-capacity restriction.
+Assume $T=w(I\cup J)>0$. There is a three-layer arc-player flow game
+whose entire core is exactly
+\[
+                  \{(x,0_D):x\in\core(w)\},
+\]
+where endpoint players retain their identities and $D$ consists of new
+middle-arc owners.
+\end{proposition}
+\begin{proof}
+Set $M=\min\{\sum_i r_i,\sum_j c_j\}$. Use source arc $sL_i$ of
+capacity $r_i$, sink arc $R_jt$ of capacity $c_j$, and for every allowed
+pair two parallel middle arcs $L_iR_j$, each of capacity $M$ and with
+its own new owner. With every middle arc available, their capacities
+cannot restrict any transportation plan, so endpoint coalitions with
+all middle owners have worth $w$.
+Deleting any one middle arc leaves its twin of capacity $M$, and hence
+does not change the grand value. Every such arc therefore has payoff
+zero at every original core point by the deletion bound. Testing endpoint
+coalitions together with all middle owners shows that the endpoint
+restriction belongs to $\core(w)$. Conversely, extend any point of
+$\core(w)$ by zero. The value of any flow coalition is at most the
+transportation value of its endpoint restriction, so every original
+coalition is covered. Efficiency gives the claimed equality of cores.
+\end{proof}
+These new middle owners need not be null players of the characteristic
+function: they can help coalitions lacking their twins. Only their
+zero payoff in every grand-core allocation is used. All returns per
+transported unit are one; weighted transportation and a one-unit
+constraint per pair are different models.
+
+\subsection{Endpoint ideals need not be jointly attainable}
+\begin{theorem}[Twelve-owner endpoint counterexample]\label{flow:endpoint}
+In the two-hop network $s\to u\to t$, give the five source arcs
+$P,A,G,M,B$ capacities
+\[
+                         (2,12,46,62,75)
+\]
+and the seven sink arcs $Q,R,D,E,F,L,N$ capacities
+\[
+                         (6,10,16,22,24,56,62).
+\]
+Every arc has a separate owner. Then $T=196$, and the entire-core ideals
+are
+\[
+ H_{\rm source}=(1,6,23,31,38),\qquad
+ H_{\rm sink}=(6,10,16,22,24,56,62).
+\]
+The largest total source payoff is $98$, although the source ideals sum
+to $99$. Already $\max_{x\in\core}(x_A+x_B)=43< H_A+H_B=44$.
+Nevertheless $s_{1/3}(G)=0$.
+\end{theorem}
+\begin{proof}
+The source capacity sum is $197$ and the sink capacity sum is $196$.
+For source set $S$ and sink set $R$, the coalition value is
+$\min\{c(S),c(R)\}$. Introduce baseline weights
+\[
+ a=(1,6,23,31,37),\qquad b=(3,5,8,11,12,28,31),
+                  \qquad a(\mathrm{sources})=b(\mathrm{sinks})=98.
+\]
+Source capacities are $2a$, except that $B$ has one extra unit; sink
+capacities are $2b$. We will prove that
+\begin{equation}\label{flow:UV}
+         U=(a;b),\qquad V=(1,5,23,31,38;b)
+\end{equation}
+are core allocations, and then prove the matching real-valued upper
+bounds on all individual and joint source payoffs.
+
+Let $C_0$ denote the ten players other than $A,B$. Their baseline
+weights are $(1,3,5,8,11,12,23,28,31,31)$, of total $153$.
+They have no subset of weight $61$, and therefore none of weight $92$.
+Here is a direct check. The smaller weights
+$D_0=(1,3,5,8,11,12)$, of total $40$, have no subset of weight
+$2,7,10$: for $2$ only $1$ fits; for $7$, the weights $1,3,5$ do
+not suffice exactly; for $10$, using $8$ leaves $2$, while the smaller
+weights total $9$. A subset of weight $61$ uses at most one $31$.
+With a $31$, the remaining $30$ either uses $28$ and leaves $2$, uses
+$23$ and leaves $7$, or uses only $D_0$ whose complement would have
+weight $10$. Without a $31$, using both $28,23$ leaves $10$; using
+only $28$ leaves a $D_0$ subset of weight $33$ with complement $7$;
+using only $23$ leaves weight $38$ with complement $2$; using neither
+cannot reach $61$. These exhaust the cases. Consequently every subset
+of all twelve baseline weights of sum $98$ contains $A,B$ either both
+or neither: including only $A$ would require a $C_0$ subset of weight
+$92$, and including only $B$ would require one of weight $61$.
+
+For arbitrary $S,R$, put $d=a(S)-b(R)\in\mathbb Z$ and
+$\delta=\mathbf1_{B\in S}$. If $d\le-1$, coalition worth is
+$2a(S)+\delta$, and $U$'s slack is $-d-\delta\ge0$.
+If $d\ge0$, worth is $2b(R)$ and its slack is $d\ge0$.
+For $V$, these slacks become $-d-\mathbf1_{A\in S}$ when $d\le-1$
+and $d+\mathbf1_{B\in S}-\mathbf1_{A\in S}$ when $d\ge0$.
+They are nonnegative unless possibly $d=0$. In that case the subset
+$S\cup(\mathrm{sinks}\setminus R)$ has baseline weight $98$,
+so $A,B$ have equal membership and the slack is zero.
+Thus both nonnegative total-$196$ vectors in~\eqref{flow:UV} cover
+every coalition.
+
+Now let $x$ be any original core point. For sources define loss
+$z_i=c_i-x_i$, and for sinks put $t_j=x_j$. Efficiency yields
+\begin{equation}\label{flow:loss-total}
+                       \sum_i z_i-\sum_j t_j=1.
+\end{equation}
+The complement constraint for source $P$ gives $z_P\ge1$;
+all source losses are nonnegative by their complement constraints.
+Let $\theta$ equal $z$ on sources and $t$ on sinks, and write
+\[
+ p=\theta_P,\ q=\theta_Q,\ r=\theta_R,\ d_0=\theta_D,
+ \ e=\theta_E,\ f=\theta_F,\ g=\theta_G,\ l=\theta_L,
+ \ m=\theta_M,\ n=\theta_N,\quad
+ \alpha=\theta_A,\ \beta=\theta_B.
+\]
+These are proof variables only; in particular $p\ge1$.
+
+Whenever $a(S)=b(R)$, both $(S,R)$ and its complement have worth
+equal to their sink capacity, and their worths sum to $196$.
+Efficiency makes both core inequalities tight, so
+$z(S)-t(R)=\mathbf1_{B\in S}$. Equivalently, if a subset $W$ of all
+players has baseline weight $98$, then
+$\theta(W)=\sum_jt_j+\mathbf1_{B\in W}$.
+For every $C_0$ subset $K$ of baseline weight $55$, apply this to
+$W=\{A,B\}\cup K$ and use~\eqref{flow:loss-total} to obtain
+\[
+                     \theta(K)=k_0:=p+g+m.
+\]
+The eight such subsets
+\[
+ PGM,\ PGN,\ PEFM,\ PQDFM,\ RDEM,\ PQGL,\ PQREFG,\ PDEFG
+\]
+therefore have equal $\theta$-sum. In succession, these equalities give
+\[
+ m=n,\quad g=e+f,\quad e=q+d_0,\quad p+f=r+d_0,
+ \quad m=q+l,\quad m=q+r+g,\quad m=d_0+g.
+\]
+Solving them yields
+\begin{align}
+ d_0&=q+r,&e&=2q+r,&f&=q+2r-p,&g&=3q+3r-p,\notag\\
+ l&=3q+4r-p,&m=n&=4q+4r-p,&k_0&=7q+7r-p.
+       \label{flow:identities}
+\end{align}
+Thus $\theta(C_0)=-4p+19q+20r$. Combining this with efficiency gives
+\begin{equation}\label{flow:loss-formulas}
+ \alpha+\beta=1-2p+5q+6r,\qquad
+                 \sum_i z_i=1-3p+12q+13r.
+\end{equation}
+
+If $W$ has baseline weight $97$, take $S=W\cap\mathrm{sources}$
+and $R=\mathrm{sinks}\setminus W$. Then $a(S)-b(R)=-1$, so its
+actual source capacity is strictly smaller than its sink capacity.
+Core coverage gives $z(S)\le t(R)$, or
+$\theta(W)\le\sum_jt_j$. Hence for every $C_0$ subset $K$ of
+weight $54$,
+\[
+                         \theta(K)\le k_0-1.
+\]
+Use $K_1=\{M,E,D,Q,P\}$ and $K_2=\{L,F,D,R,P\}$.
+Their $\theta$-sums from~\eqref{flow:identities} are $8q+6r$ and
+$5q+8r-p$, respectively, so
+\[
+              r-q\ge p+1,\qquad r\le2q-1.
+\]
+Consequently
+\begin{equation}\label{flow:qr}
+                     q\ge p+2,\qquad r\ge2p+3,\qquad p\ge1.
+\end{equation}
+For the weight-$97$ subset $\{B,M,L,P\}$, whose $C_0$ portion has
+$\theta$-sum $k_0+r$, the same strict-coalition inequality gives
+$\alpha\ge r+1\ge6$. For the weight-$97$ subset
+$\{A\}\cup(C_0\setminus\{M,N\})$, it gives
+\[
+                    \beta\ge -p+4q+5r+1\ge37.
+\]
+Also~\eqref{flow:identities} and~\eqref{flow:qr} imply
+$g\ge8p+15\ge23$ and $m\ge11p+20\ge31$.
+Thus every source payoff is coordinatewise bounded above by
+$(1,6,23,31,38)$. Vector $U$ attains the first four bounds and $V$
+attains the fifth. For each sink, deletion gives $H_j\le c_j$;
+the all-sink cut allocation attains all those bounds at once.
+
+Finally~\eqref{flow:loss-formulas}--\eqref{flow:qr} give
+\[
+             \sum_i z_i\ge35p+64\ge99,
+              \qquad \alpha+\beta\ge15p+29\ge44.
+\]
+Source total is therefore at most $197-99=98$, and $x_A+x_B$ at
+most $12+75-44=43$. Both $U,V$ attain those support bounds. This
+proves the claimed incompatibility. Vector $U$ already dominates
+$H/3$ on every source and sink and is efficient, so the protected
+subsidy is zero.
+\end{proof}
+
+The baseline pattern is drawn from Isbell's integer majority-weight
+representations~\cite[p.~27]{flow:Isbell1959}; the weights are not
+claimed as a new construction ingredient. Integer nonuniqueness alone
+would not prove Theorem~\ref{flow:endpoint}, which uses additional
+all-coalition and real-valued core arguments. With all allowed-pair
+returns one, this is also unrestricted unweighted transportation.
+It matches the historical side-optimal-core question stated in
+N\'u\~nez's 2013 lecture slides~\cite[pp.~37--40]{flow:Nunez2013}.
+Neither its novelty relative to later or unread literature nor the
+current openness of that historical question is established here.
+The weighted multiple-partners model with capacity one per pair is
+different and is not settled by this example.
+
+\subsection{Why mixed tight-set uncrossing is insufficient}
+For endpoint sources $I$, sinks $J$, and fixed public middle capacities,
+let $w(Q,R)$ be the flow value when endpoint sets $Q\subseteq I$ and
+$R\subseteq J$ are active. The established network-rank inequality is
+\begin{equation}\label{flow:mixed}
+ w(Q,R)+w(Q',R')\ge
+ w(Q\cap Q',R\cup R')+w(Q\cup Q',R\cap R').
+\end{equation}
+This is the mixed submodularity of network linking
+ranks~\cite{flow:Goemans2011}. A direct cut proof also fixes the direction
+needed here. Use the full fixed vertex set, minimum-cut source sides
+$U,V$ for the original two endpoint profiles, and source sides
+$U\cap V,U\cup V$ for the two crossed profiles in the order displayed.
+The public-middle cut contributions satisfy submodularity. For a source
+arc, write $a,a'$ for its activity indicators and $u,v$ for the
+indicators that its head is outside $U,V$. Then
+\[
+ au+a'v\ge (a\wedge a')\max(u,v)+(a\vee a')\min(u,v).
+\]
+For a sink arc use activity indicators $b,b'$ and tail-membership
+indicators $u,v$; its crossed contribution is
+$(b\vee b')\min(u,v)+(b\wedge b')\max(u,v)$, also at most
+$bu+b'v$. Multiply by nonnegative capacities, add the middle-arc
+inequality, and bound each crossed cut below by its maximum-flow value.
+This proves~\eqref{flow:mixed}.
+
+Additive payoffs have equal total payment on an original pair and its
+mixed-crossed pair. The inequality~\eqref{flow:mixed} has the wrong
+direction to force the crossed coalitions tight when the originals are
+tight. The failure occurs even in a two-hop game: two source owners have
+capacities $3,3$, three sink owners capacities $2,2,1$, and the core
+allocation is $(0,0;2,2,1)$. The coalitions
+\[
+ (\{a_1\},\{b_1,b_3\}),\qquad
+ (\{a_1,a_2\},\{b_2,b_3\})
+\]
+each have worth and payment $3$. Their crossed pair has worths $3,1$
+but payments $5,1$. Thus total worth falls from $6$ to $4$ while
+payment stays $6$, although the original coalitions overlap and neither
+contains the other. This disproves mixed-crossed tight-set closure, not
+every conceivable use of mixed submodularity or side-optimality.
+
+\paragraph{Remaining scope.}
+The general rational-capacity conjecture
+$s_{1/3}(G)\le T/3$ for all arc-player networks of path length at most
+three remains unresolved by these results. The endpoint example has
+subsidy zero, and the unit and quota theorems make restricted assumptions.
+For example, the serial path of capacities $(2,2,1)$ has the unit-simplex
+entire core and $H=(1,1,1)$, although only its last arc lies in a minimum
+cut. Clipping that cut allocation at $H/3$ costs $2/3$, whereas the
+protected subsidy is zero at $(1/3,1/3,1/3)$. This illustrates why
+entire-core maxima cannot be replaced by cut or optimal-dual maxima at
+unequal capacities. No owner cloning, simple-graph transfer, or all-profile
+truthfulness assertion is implicit in this appendix.

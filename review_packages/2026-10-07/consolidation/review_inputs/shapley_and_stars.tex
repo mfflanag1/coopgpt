@@ -1,0 +1,161 @@
+\section{Shapley obstructions beyond two pools}\label{noise:shapley}
+\begin{proposition}\label{noise:shapley-paths}
+Ordinary individual Shapley value can require a coverage multiplier
+$\Omega(K^{1/3})$ on unit-capacity simple TTSP graphs. Even on serial
+parallel pools all of total one, no positive constant coalition-coverage
+fraction is valid over all finite ownerships.
+\end{proposition}
+\begin{proof}
+For the first statement, place a unit veto edge before two internally disjoint
+unit paths of lengths $n,\ell\ge2$. There are $K=1+n\ell$ structural cuts.
+Let $S$ consist of the veto and the length-$n$ path, so $v(S)=1$.
+By independent uniform arrival times, the veto share is
+$1/(n+1)+1/(\ell+1)-1/(n+\ell+1)$, and every outsider on the other path
+has share $1/(\ell+1)-1/(n+\ell+1)$: it is pivotal exactly when the veto
+and its companions have arrived but the other path is incomplete.
+Efficiency gives
+$\phi(S)=1/(\ell+1)+\ell/(n+\ell+1)$.
+For $n=\ell^2$ this is less than $2/\ell$, proving the claimed multiplier.
+For example $n=9,\ell=3$ gives $K=28$ and $\phi(S)=25/52<1/2$.
+
+For balanced pools fix integers $M,L\ge2$, put $a=1/(4M^2)$,
+$q_n=2M(n+1)-1$, and take $K_n=L^{q_n}$ pools of type $n=1,\ldots,M$.
+Each has one distinguished owner of report $a$ and $n$ outsiders of report
+$b_n=(1-a)/n$. All pool totals are one. Let $S$ consist of the distinguished
+owners, so $v(S)=a$. We prove
+\[
+ \frac2{M+1}\le\frac{\phi(S)}a\le\frac2{M+1}+E(M,L),\qquad
+ E=(M-1)L^{-1/[M(M+1)]}+L^{-1/(2M)}+(M-1)L^{-2M}
+ +\frac{M(M-1)}2(2^{M+1}+1)L^{-1/2}.                 \tag{D}
+\]
+Write $v(X)=\int_0^1\ind\{\text{every pool has $X$-capacity}\ge\theta\},d\theta$.
+Finite Shapley summation commutes with this integral. Pool completion times
+are independent continuous order statistics; the last completing pool
+supplies the global pivotal owner. A distinguished type-$n$ owner matters
+only on bands $(jb_n,jb_n+a)$, $j=0,\ldots,n$. On such a band the Boolean
+pool game requires $j+1$ of its $n+1$ owners, so labels are symmetric;
+in the gaps the distinguished owner is a dummy.
+
+For an interior band $1\le j<n$, put $d=n-j$, $r=d+1$ and
+$m=\lceil n/d\rceil-1<n$. Then $md<n\le(m+1)d$ and
+$j/n-(m-1)/m\ge1/M^2$. Since $a<(1-a)/M^2$, the whole band lies in
+the type-$m$ gap requiring all $m$ outsiders, where its distinguished owner
+is a dummy. A type-$n$ completion is late beyond $1-\delta$ with probability
+at most $2^{n+1}\delta^r$. Set
+$Q=q_mr-q_n\ge M+1$ and $\beta=(q_n/r+q_m)/2$,
+$\delta=L^{-\beta}$. A union over type-$n$ pools bounds the probability
+any is late by $2^{n+1}L^{-Q/2}$. All type-$m$ pools complete before that
+threshold with probability at most $e^{-mL^{Q/(2r)}}$.
+Thus the global last pool has type $n$ with probability at most
+$(2^{M+1}+1)L^{-1/2}$. There are $M(M-1)/2$ interior bands, each of
+length $a$; their total contribution gives the last error in (D).
+
+On the common lower endpoint band $(0,a)$ each pool is an OR game.
+Its completion late tail is $\delta^{n+1}$. Set
+$\alpha_n=q_n/(n+1)=2M-1/(n+1)$ and
+$\beta=(\alpha_M+\alpha_{M-1})/2$, $\delta=L^{-\beta}$.
+The probability any lower-type pool is late is at most
+$(M-1)L^{-1/[M(M+1)]}$, and that no type-$M$ pool is late is at most
+$e^{-L^{1/(2M)}}\le L^{-1/(2M)}$.
+Conditional on the latest pool's type $n$, the pivotal label is uniform
+among $n+1$ owners, independently of its completion time. Its distinguished
+share is at least $1/(M+1)$ and at most that plus these errors.
+On the upper endpoint band $(1-a,1)$, the entire game is unanimity; the
+$S$ share is $\sum K_n/\sum(n+1)K_n$, between $1/(M+1)$ and that plus
+$(M-1)L^{-2M}$. These bands each have length $a$; nonnegative interior
+contributions prove (D). For each fixed $M$, let $L\to\infty$, and then
+let $M\to\infty$. All witnesses are finite. Explicitly $M=4,L=10^{40}$
+gives a ratio below $431/1000$, and taking
+$L=[4(M+1)M(2^{M+1}+1)]^{2M(M+1)}$ gives ratio at most $3/(M+1)$.
+\end{proof}
+The ordinary Shapley rule remains own-report monotone; these statements
+concern its coverage, not its incentives. A smaller noncore calibration is
+three balanced pools $(1,1,1)$, $(1,1,1)$, $(1,2)$: the six first owners
+receive $9/28$ each, and the last two $7/20,101/140$. A coalition with one
+unit owner from each pool receives $139/140$ for worth one. For direct
+verification, at arrival time $u$ let $p_1=1-(1-u)^3$, $p_2=3u^2-2u^3$,
+$p_3=u^3$. The last unit owner's marginal integrates
+$(1-u)p_1^2+u^7$, and the weight-two owner's integrates
+$(1-u)(p_1^2+p_2^2)+u(p_2^2+p_3^2)$; efficiency determines the others.
+Balanced noncore examples are already in the literature; no priority
+claim for this calibration or the quantitative families is made.
+
+\section{Limits of single-base lower-bound certificates}\label{noise:stars}
+\begin{proposition}\label{noise:star-domain}
+Fix a DAG and one base profile $c$ of value $T>0$. Let $X(c)$ consist of
+$c$ and all its unilateral underreports. There are coalition-covering
+payments, monotone along every unilateral comparison within $X(c)$, with
+budget factor $B$ whenever
+\[
+ B>1,\qquad B\ge1+\frac{LB}{4(B-1)^2}.
+\]
+In particular $B=2+\sqrt L/2$ suffices. This is a restricted-domain
+feasibility result, not a globally defined mechanism.
+\end{proposition}
+\begin{proof}
+Write $M_e=T-F(c_{-e},0)$. Removing paths through $e$ from a single
+maximum flow gives $M_e\le f_e$ simultaneously, so $\sum_eM_e\le LT$.
+Fix a base minimum cut $C$ and its capacity allocation $a$, costing $T$.
+It covers the base game and every underreported game.
+For $e\notin C$, the own-report value is
+$T_e(t)=\min(T,b_e+t)$. If $b_e\ge T$ put $h_e=0$; otherwise set
+\[
+ h_e=\sup_{0<t<T-b_e}
+ t\left[\frac{T-BT_e(t)}{T-T_e(t)}\right]_+.
+\]
+Then $h_e\le M_e$. If $h_e>0$, $b_e<T/B$ and
+$M_e>(1-1/B)T$, so there are at most $LB/(B-1)$ such owners.
+Writing $x=T_e(t)/T$ and using $t\le Tx$ gives
+\[
+ h_e/T\le\max_{0<x<1/B}\frac{x(1-Bx)}{1-x}
+ =(\sqrt B-\sqrt{B-1})^2\le\frac1{4(B-1)}.
+\]
+Thus $\sum_{e\notin C}h_e\le LTB/[4(B-1)^2]$.
+Pay $a_e$ on $C$ and $h_e$ outside it at the base.
+
+For a proper underreport by $e\in C$, the old cut now costs less than $T$
+while every avoiding cut costs at least $T$. Every new minimum cut contains
+$e$, so use a minimum-cut allocation paying it $t$ and costing $T_e(t)$.
+For $e\notin C$ with $T_e(t)=T$, reuse the base allocation. Otherwise
+choose a minimum-cut allocation $z(t)$, whose focal coordinate is $t$.
+For $t>0$ pay $\alpha z(t)+(1-\alpha)a$, with
+$\alpha=\min(h_e,t)/t$. It covers the lowered game and costs
+$T-\alpha(T-T_e(t))\le BT_e(t)$ by the definition of $h_e$ when
+$BT_e(t)<T$, and trivially otherwise. At zero use any minimum-cut allocation.
+The focal payment is $\min(h_e,t)$ until the value plateaus, then $h_e$;
+since $h_e\le M_e=T-b_e$, this is monotone. Different proper rays differ
+in two coordinates, so no other unilateral comparisons arise.
+\end{proof}
+
+For completeness, the direct path-star certificate has an explicit bound.
+For each target $e$ choose an underreport $t_e$ and $m_e\ge2$ path coalitions
+through $e$, pairwise disjoint outside it, each of worth at least $\delta_e$.
+Writing $T_e$ for the lowered grand value, summed coverage and budget force
+at the base only
+\[
+ p_e(c)\ge f_e=\left[\frac{m_e\delta_e-BT_e}{m_e-1}\right]_+.
+\]
+With a fixed base mincut $C$, its targets contribute at most $T$.
+For $e\notin C$, disjointness gives $m_e\delta_e\le T$.
+A positive $f_e$ requires $T_e<T/B$, hence $M_e>(1-1/B)T$; there are
+at most $LB/(B-1)$ such targets. Moreover
+$f_e\le T(m_e-B)/[m_e(m_e-1)]\le T/[4(B-1)]$, by maximizing
+$(u-(B-1))/u^2$ for $u=m_e-1$.
+Thus $\sum_ef_e\le T[1+LB/(4(B-1)^2)]$; this specified certificate
+cannot contradict budget $B$ whenever $4(B-1)^3\ge LB$.
+The stronger star-domain proposition permits arbitrary coalitions.
+
+A separate useful stopping case concerns the complete ordered DAG with
+$r$ internal vertices. It has $K=2^r$ minimal cuts: each internal-vertex
+subset defines a source side, and every crossing edge has a private path
+of length at most three. If every internal crossarc has capacity at least
+$T$, shortcut each maximum-flow path to its first and last internal
+vertices. Boundary flows are preserved and each shortcut carries at most
+$T$, so the resulting maximum flow has total edge flow at most $3T$.
+The globally truthful marginal rule $M_e=F(c)-F(c_{-e},0)$ is coalition
+covering and satisfies $M_e\le f_e$ for every maximum flow: on any original
+minimum cut it pays the full cut capacities, which already cover coalitions.
+Consequently $\sum_eM_e\le3T$ on all such high-crossarc profiles.
+A lower-bound certificate supported only on those profiles cannot force a
+factor above three. Multi-base transport with genuine internal congestion
+is not excluded by either stopping statement.

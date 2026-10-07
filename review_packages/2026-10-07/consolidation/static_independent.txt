@@ -1,0 +1,106 @@
+INDEPENDENT STATIC / ANCILLARY PROOF AUDIT -- 2026-10-07
+
+Files reviewed:
+ /tmp/coop-sharp-ancillary-appendix.tex
+ /tmp/coop-static-flow-appendix.tex
+Canonical model/family read:
+ paper5/sharp_subsidy/manuscript.tex, model and prop:family proof.
+Original quota proof and retained verifier definitions/dependencies also read.
+No canonical edits. No delegation. Own artifact: this report only.
+
+BLOCKERS: NONE VERIFIED.
+
+The review checked rather than assumed the following potentially fragile points:
+- Sparse compression uses actual player-disjoint P teams, including repeated
+  diagonal labels. Two off-diagonal supported pairs sharing a player must belong
+  to that same P team. The pair-plus-sector-minimum inequalities are justified
+  by full-team completion; productive pairs are NOT silently introduced.
+- Incompatible ideal faces use T=3(2ell+1), ell special teams, and ell+1
+  unmatched players per sector. Two same-sector ideal attainments force ell+5
+  unmatched payoff against the ell+3 budget, while cross-sector attainments
+  conflict with zeros at the first tight diagonal. Separate witnesses suffice.
+- Ring color constructions preserve fixed players. The soft deleted pair leaves
+  one isolated label and a tree; all target-at-isolated-label cases cover the
+  soft pair, possible diagonal completion, and other full teams. No assumption
+  of simultaneous ideal attainment slips into the argument. Scaling changes
+  both original cores before freezing the corresponding ideals.
+- The finite cyclic result is explicitly computer-assisted. Its full core
+  upper certificates have the correct sign with unrestricted efficiency dual,
+  and positivity/tightness forces the unique diagonal optimum, including a
+  fractional perfect optimum. Complementary-slackness loads correctly force
+  each of the six disjoint team multipliers to one. No forest conclusion is
+  extended to different transformed markets.
+- Static flow assumptions are separated from all-profile incentives. The unit
+  proof uses the directed mincut lattice correctly, covers direct s-t arcs,
+  and bounds remaining internal positive-ideal edges through one integral
+  maximum flow. Chain lower bound uses a real coalition and exterior floors.
+- Quota normalization preserves EVERY coalition via the unique unit sink.
+  Sinkward prerequisite transfer preserves source projections and endpoint
+  coordinate maxima. Parallel source owners are distinct firms; no owner
+  cloning occurs. The salary difference constraints have the correct direction;
+  completing with null dummy players and pairing replacement workers yields
+  the full-core characterization, not merely a dual/Owen subset.
+- Transportation embedding uses redundant twin middle owners to force zero
+  payoff in every grand core; it does not incorrectly call those owners null.
+- Endpoint counterexample: independently rederived no-subset61/92 argument,
+  U/V signed-difference feasibility, eight tie relations, weight54/97 inequalities,
+  source ideal/support upper bounds, and H/3 zero-subsidy conclusion.
+- Mixed-rank inequality direction and explicit failed tightness closure agree;
+  neither is advertised as a general side-optimality impossibility beyond the
+  constructed endpoint game. Final arbitrary-capacity conjecture remains open.
+
+ADDITIONAL EXECUTED CHECK (this audit, not inherited)
+Inline standard-library integer enumeration verified all 4,096 coalition
+inequalities separately for U and V in the 12-owner endpoint example: 8,192
+checks PASS. Checked both totals equal196 and all12 U>=H/3 floors PASS.
+This checks feasibility/floors only; ideal/support upper bounds were checked
+analytically as above. No LP call or claim of computational optimality.
+
+EXECUTABLE VERIFICATION COMMANDS / DEPENDENCIES
+Run from /Users/maxf/projects/economics-research/game-theory/coopgpt.
+All commands below are standard-library Python in their default mode, and checks
+are explicit require/raise conditions that remain active with -O. Keep the repo
+layout and fixture files. These commands are identified, NOT rerun in this audit.
+
+Static unit/capacity calibration:
+ python3 -B -O research_campaigns/2026-10-03-breadth-scope/verify_initial.py
+  - self-contained fixtures, standard library; outputs JSON to stdout.
+ python3 -B -O research_campaigns/2026-10-03-breadth-scope/verify_certificates.py
+  - same directory INITIAL_CHECKS.json and CAPACITY_PROBES.json.
+  - residual maxflow/cut dual checks, stored ideal/protected LP certificates;
+    no optimizer needed. Discovery probe_capacities.py uses SciPy/NumPy only if
+    independently re-running discovery, which is not needed here.
+ python3 -B -O research_campaigns/2026-10-03-breadth-scope/verify_four_sector.py
+  - algebraic K4 calibration, not static-flow/all-size proof.
+
+Quota/transport/endpoint stored finite calibration:
+ python3 -B -O research_campaigns/2026-10-04-flow-compatibility/verify.py
+  - same directory INSTANCES.json, DISCOVERY.json, discover.py (hash input only).
+  - standard-library verifier, no discovery execution, current file prints JSON.
+  - IMPORTANT: its eight stored cases do NOT include the decisive 12-owner
+    endpoint counterexample and do NOT prove the universal quota theorem or
+    transportation embedding. The analytic proofs and this audit's separate
+    U/V enumeration must not be conflated with the eight-case PASS.
+  - REPRODUCE.txt still says writes EXACT_CHECKS.json; the inspected verifier's
+    current main instead prints JSON, so capture stdout if storing a new report.
+
+Ancillary compact core / incompatible ideals / rings / cyclic finite certificate:
+ cd structural_classification_2026-09-06/sharp_subsidy
+ python3 -B -O verify_sector_min_core.py
+  - sector_min_core.py; CYCLIC_FRONTIER_CERTIFICATES.json.
+ python3 -B -O verify_coattainability.py
+  - TREE_CERTIFICATES.json; optional --smt additionally requires z3-solver.
+ python3 -B -O verify_broken_ring.py
+  - BROKEN_RING_CERTIFICATES.json.
+ python3 -B -O ring_zero.py
+  - self-contained default; optional --smt requires z3-solver.
+ python3 -B -O verify_cyclic_necessity.py
+  - verify_cyclic_frontier.py -> verify_cyclic_patterns.py;
+    CYCLIC_FRONTIER_CERTIFICATES.json.
+No SMT or numerical discovery is needed for the default retained exact checks.
+Coordinator's earlier fresh replay is in /tmp/coop-ancillary-checks.json; this
+review read the dependency information but does not claim to have rerun it.
+
+Scope: no verified blockers found after this bounded independent proof audit.
+This is neither a formal proof-assistant check nor external human review or
+historical novelty confirmation. No new theorem is proposed here.

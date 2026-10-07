@@ -1,42 +1,19 @@
 # Sharp subsidies for protecting core maxima
 
-**Working manuscript, 3 October 2026.** [Read the ten-page PDF](output/pdf/manuscript.pdf) or [edit the standalone LaTeX source](manuscript.tex).
+**Consolidated working manuscript, 7 October 2026 — Maxwell Flanagan.**
 
-In a strict three-sector assignment market, how much external money is needed to give every player one third of their best original stable payoff? The sharp worst-case subsidy is one third of the original surplus, as a supremum over finite markets. Every individual finite market needs strictly less.
+[Current LaTeX source](manuscript.tex) · [Portable review packet](sharp_subsidy_review.zip) · [Consolidation ledger and audits](../../review_packages/2026-10-07/consolidation/README.md)
 
-The assumptions are equal finite sector sizes, nonnegative pair-additive full-team values, integral matching worth, positive grand worth, and a nonempty original entire core. Only full triples are productive. The individual maxima are frozen before intervention. The manuscript includes the direct fractional upper proof, the all-parameter sharpness construction, the sharp bound for integral partial-matching obstructions, and exact slack identities.
+The main theorem is unchanged: in the stated strict three-sector pair-additive model, the supremal subsidy needed to protect one third of every original-core ideal is **S3=1/3**; every finite-market ratio is strictly smaller. The matching construction and full proof remain in the main text.
 
-## Review and scope
+New appendices consolidate all surviving unincorporated results from this track: the general sector-count upper and integral-obstruction bound; sharp unit-capacity short-flow and one-sided-quota results; an entire-core transportation embedding; a rational endpoint-ideal incompatibility example; sparse core representation; incompatible ideal faces; an all-size ring perturbation with no size-uniform subsidy modulus; and a computer-assisted 33-player obstruction to forest-only optimal duals.
 
-- [Coordinator self-audit and adjudication](review/SELF_AUDIT.md): every load-bearing step, boundary case, and independently checked reviewer finding.
-- [Fresh Fable 5.1 manuscript review](review/fable_review.md): no mathematical error found; low-severity exposition, notation, and attribution findings were addressed. This review executed no code and did not assess novelty.
-- [Source comparison update](review/SOURCE_SCOPE.md): established ingredients, original passages checked, and unresolved comparisons.
-- [Verification report](review/VERIFICATION.json) and [build and visual-inspection record](review/BUILD_QA.json).
+These are pointwise original-core protection results. They do not assert truthful reporting across profiles. The general rational-capacity short-flow bound and sharpness beyond three sectors remain open. The endpoint-incompatibility example itself has zero protected subsidy. Established max-flow/min-cut, salary-lattice, side-optimality and cut-ideal ingredients are credited.
 
-Human specialist validation and historical priority remain pending. This is not a claim of a field-level breakthrough, formal verification, or publication readiness following journal review. No outreach or submission was made. The original theorem package remains a [historical proof archive](../../research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md); this manuscript supersedes its presentation, not its mathematical claims.
+The [existing ten-page PDF](output/pdf/manuscript.pdf) is a **historical 3 October export** containing the original sharp theorem; it does not contain the new appendices. Use the current source/native preview and export a refreshed PDF before sending. Earlier `review/BUILD_QA.json`, `review/VERIFICATION.json` and `MANIFEST.json` describe that historical release, not this source revision. The current hashes and validation are in the linked consolidation record.
 
-## Reproduce the checks
+## Reproduce
 
-Python 3, standard library only; no solver or network is needed. From this directory:
+The portable packet preserves repository paths. Its `REPRODUCE.txt` lists the standard-library and optional solver-dependent commands separately. The main sharp theorem's standard-library verifier still checks 3,603,804 full-team inequalities, 27 label patterns, 48 rational packing cases and negative controls with assertions disabled. Additional structural and flow verifiers cover their separate finite certificates; written proofs establish the all-size statements.
 
-```sh
-python3 -B -O verification/verify.py --output /tmp/coopgt-sharp-verification.json
-```
-
-The runner also works from an arbitrary directory using an absolute script path. It verifies hashes, runs the checks with Python assertions disabled, and writes intermediate files only to a temporary directory. It checks 27 ordered label triples, four per-label identities, two global identities, 48 rational packing cases, four enriched diagnostic points, and 3,603,804 full-team inequalities across twelve construction sizes. It rejects 28 altered symbolic identities, twelve damaged allocations, and two false relaxed points; a further scope control disproves applying the integral formula to fractional residual mass.
-
-The enriched points are necessary-condition diagnostics; their inclusion does not certify that every stored vector is realizable as a market's core maxima. All-size validity comes from the written proofs.
-
-The two mathematical checkers and six fixtures are unchanged copies of earlier project files. Their origins and hashes are in [verification/PROVENANCE.json](verification/PROVENANCE.json). In those historical scripts, `B` means the manuscript's scalar `beta`, and their construction parameter `q` means the manuscript's `ell`; neither is a player residual weight there.
-
-## Build the PDF
-
-Open `manuscript.tex` in the Codex LaTeX editor, or use an existing TeX installation:
-
-```sh
-latexmk -pdf -interaction=nonstopmode -halt-on-error \
-  -outdir=/tmp/coopgt-sharp-build \
-  -pdflatex='pdflatex -no-shell-escape %O %S' manuscript.tex
-```
-
-The source is standalone and requires no bibliography file. The release PDF was also rendered and visually inspected page by page. The package's file hashes are in [MANIFEST.json](MANIFEST.json).
+Historical novelty and independent human specialist review remain **pending**. No journal submission or human endorsement is implied by model audits. The separate truthful-cooperation paper studies incentives and has a separate specialist request.

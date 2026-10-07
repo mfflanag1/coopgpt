@@ -1,0 +1,856 @@
+% Additional Oct7 structural results and boundaries; not separate paper claims.
+\section{Structural facts for effective-capacity cut payments}\label{noise:structure}
+Throughout these appendices, $G$ is a finite directed acyclic $s$--$t$
+multigraph with one fixed owner per edge, and every edge lies on an $s$--$t$
+path. Let $F(c)$ be maxflow, $T=F(c)$, $D_e(c)$ the largest feasible flow
+through edge $e$, $\mathcal C$ the structural inclusion-minimal cuts,
+$K=|\mathcal C|$, and $L$ the longest path length. With independent uniforms
+$U_e$ and a fixed report-independent cut priority, let $W$ minimize
+$\sum_{e\in C}D_eU_e$ and put
+\[
+ z_e=D_e\Prob(e\in W),\qquad y_e(c)=\sup_{0\le t\le c_e}z_e(t,c_{-e}).
+\]
+Thus $y$ is the least own-report-monotone pointwise majorant of $z$.
+For other noise laws the superscript specifies the law. Set $U(1)=1$ and,
+for $K\ge2$, $U(K)=a_K+1/\log a_K$, where
+$a_K\log(a_K/e)=\log K$ and $a_K>e$.
+The usual uniform-noise tail calculation gives $z(E)\le U(K)T$:
+normalized weights lie in $[0,1]$, some cut has total one, and
+$\Prob(\sum a_eU_e\le1)\le(e/\rho)^\rho$ when $\sum a_e=\rho$.
+These appendices distinguish bounds on a particular rule from bounds on
+all eligible mechanisms. The latter sharp theorem is Theorem~\ref{prod:upper}.
+
+\begin{lemma}[Sensitivity and a simultaneous flow]\label{noise:sensitivity}
+Writing $c^t=(t,c_{-e})$ and $\delta_{eh}=D_h(c)-D_h(c^0)$, one has
+\[
+ D_h(c^t)=\min\{D_h(c),t+D_h(c^0)\},\quad
+ 0\le\delta_{eh}\le D_e(c).
+\]
+For every path antichain $A$, $\sum_{e\in A}\delta_{eh}\le D_h(c)$;
+for all edges the analogous bound is $\sum_e\delta_{eh}\le LD_h(c)$.
+Furthermore, if
+$r_e=2\E[F(DU)-F((DU)_{-e},0)]$, then
+$z\le r\le2z$, and a single feasible flow $\bar f$ at capacities $D$
+satisfies $r\le\bar f$. Consequently $r(A)\le T$ and
+$r(E)\le\min\{L,2U(K)\}T$.
+\end{lemma}
+\begin{proof}
+On a DAG, the maximum possible flow through $h=(u,v)$ is the minimum of
+$c_h$, the $s$--$u$ maxflow and the $v$--$t$ maxflow, omitting trivial
+terminal terms. The prefix and suffix regions are disjoint by acyclicity,
+so their attaining flows concatenate through $h$. Each relevant cut
+contains the changing edge at most once. Its minimum therefore has form
+$\min\{A+t,B\}$, which gives the displayed hinge on $[0,c_e]$;
+for $h=e$ it is $\min\{t,D_e(c)\}$.
+Choose one flow attaining $D_h$ and retain only its paths through $h$.
+Deleting paths through $e$ proves $\delta_{eh}\le f_e$ simultaneously
+for every $e$. Summing over an antichain or all edges gives the bounds.
+
+At capacities $X=DU$, choose one maximum flow $f(X)$. Removing its paths
+through $e$ proves $F(X)-F(X_{-e},0)\le f_e(X)$ simultaneously.
+Conditionally on $U_{-e}$, the gain from setting the focal multiplier to
+$u$ is a nonnegative increasing concave function $g(u)$ with $g(0)=0$.
+Its endpoint is $g(1)=\min\{D_e,(B_e-A_e)_+\}$, where $A_e$ is the
+cheapest containing-cut intercept and $B_e$ the cheapest excluding-cut
+score. Conditional integration gives $\E g(1)=z_e$ and
+$g(1)/2\le\int_0^1g(u)du\le g(1)$. Thus $z\le r\le2z$.
+The flow $\bar f=2\E f(DU)$ conserves flow and obeys
+$\bar f_e\le2D_e\E U_e=D_e$. A measurable selection is obtained from
+the finitely many affine LP bases by lexicographic tie-breaking.
+Path decomposition now gives the remaining claims.
+\end{proof}
+The hinge also gives a valid, though noncollective, gain estimate. Put
+\[
+ \Delta_e(t,U)=\max_{C\ni e}\sum_{h\in C\setminus\{e\}}
+                         (\delta_{eh}-t)_+U_h.
+\]
+The excluding score cannot increase under an underreport, and the containing
+intercept decreases by at most $\Delta_e$. The clamp is increasing and
+one-Lipschitz, whence
+\[
+ 0\le y_e-z_e\le\sup_{0\le t\le D_e}\E\min\{t,\Delta_e(t,U)\}.
+\]
+Reports above $D_e$ preserve the feasible-flow set. If no excluding cut
+exists, the excess is zero. An expectation of a maximum cannot be replaced
+by a maximum of expectations; no sharp aggregate gain bound follows here.
+
+\begin{proposition}[Antichains and a conditional reduction]\label{noise:antichain}
+For incomparable edges $e,f$, $y_e+y_f\le R(\{e,f\})$, where $R(A)$ is
+the maximum flow on paths meeting the antichain $A$. For a complete parallel
+bundle $X$ from $u$ to $v$, with total capacity $q$ and external prefix/suffix
+bottleneck $B$, one has $y(X)\le\min\{q,B\}$.
+If an inclusion-minimal antichain $A$ violates $y(A)\le R(A)$, then
+$|A|\ge3$ and the simultaneous profile setting $c_e=y_e(c)$ for $e\in A$
+preserves $R(A)$. At that profile every cut of $G_A$ meeting $A$ costs
+strictly more than $R(A)$, and $G_A$ has a common unchanged minimum cut
+disjoint from $A$. Here $G_A$ is the union of paths meeting $A$; this cut
+need not disconnect the full network.
+This reduction does not assert existence or impossibility of such an $A$.
+\end{proposition}
+\begin{proof}
+The union $G_A$ of paths meeting $A$ has no path avoiding $A$: vertices before
+and after $A$ cannot overlap, and an edge crossing between those regions
+must belong to $A$, by acyclicity and the antichain property.
+Fix $e\in A$, put $R=R(A)$ and $R_-=R(A\setminus\{e\})$. Under an
+own underreport, if the effective focal capacity is at most $R-R_-$ its
+payment is at most that quantity. Otherwise every containing cut in $G_A$
+has capacity greater than $R$, since its other edges block an $R_-$ flow.
+A minimum cut $C_0$ of $G_A$ excludes $e$ and has capacity at most $R$.
+It blocks every path through $e$, so the endpoint flow marginal defining
+$z_e$ is at most its random capacity. Taking its mean gives $R/2$. Hence
+\[
+ y_e\le\min\{D_e,\max(R-R_-,R/2)\}.                 \tag{A}
+\]
+For two edges, $R_-=D_f$. If either $D_f\le R/2$, then
+$y_e\le R-D_f$ and $y_f\le D_f$; if both effective capacities exceed
+$R/2$, each payment is at most $R/2$.
+
+For a parallel bundle, $D_i=\min(c_i,B)$. External feasible flows depend
+on its reports only through $\min(q,B)$. If $q\le B$, use $y_i\le c_i$.
+Otherwise write $W=\sum_iD_i$. Every minimal cut contains the whole bundle
+or none, so $z_i=D_ip$ for a common $p$; the simultaneous flow lemma gives
+$Wp\le B$. With $s_i=q-c_i$ and $\delta_i=(B-s_i)_+$, underreports
+$t\ge\delta_i$ keep every other effective cap fixed, and conditional
+clamping implies payment at most $z_i(c)$. Smaller reports pay at most
+$\delta_i$. Thus $y_i\le\max(z_i,\delta_i)$. If $\delta_i>0$, then
+$W=D_i+s_i$ and $D_i\ge B-s_i$, giving
+$\delta_iW\le BD_i$. Summing $y_i\le BD_i/W$ proves the bundle claim.
+
+For a minimal violating $A$, write $Y(B)=\sum_{e\in B}y_e$ and
+$\delta_e=R(A)-R(A\setminus\{e\})$. Minimality gives $y_e>\delta_e$.
+The own-report maxflow hinge in $G_A$ is
+$\min\{R(A),R(A\setminus\{e\})+t\}$, so any witness with
+$z_e(c^t)>\delta_e$ preserves $R(A)$. All minimum cuts in the rest of this argument are in
+$G_A$. If an original minimum cut contains $e$, deleting $e$ lowers its
+capacity from $R(A)$ to $R(A)-c_e$, so
+$R(A\setminus\{e\})\le R(A)-c_e$. Removing the paths through $e$
+from an original maximum flow gives the reverse inequality. Hence
+$\delta_e=c_e$, contradicting $c_e\ge y_e>\delta_e$.
+Thus every original minimum cut $C^*$ of $G_A$ is disjoint from all of $A$.
+For a cut $C$ of $G_A$ let $B=C\cap A$. Its unchanged non-$A$ capacity is at least
+$R(A\setminus B)$, by a flow meeting $A\setminus B$ and avoiding $B$.
+At the joint $y$-profile its capacity, if $B\ne\varnothing$, is at least
+$Y(B)+R(A\setminus B)\ge Y(A)>R(A)$. Cuts avoiding $A$ retain their
+capacities and $C^*$ stays tight. It is saturated by a through-$A$ flow,
+so its full-network effective capacities remain its original reports.
+Near-maximizing separate witnesses suffice; no attainment is needed.
+\end{proof}
+
+\begin{proposition}[Cut height]\label{noise:height}
+For $h(C)=\max_P|P\cap C|$ and $H=\sum_Ch(C)$,
+\[
+ h(C)\le\left\lfloor\frac{\sqrt{8K+17}-3}{2}\right\rfloor,
+ \qquad H=O(K^{3/2}).
+\]
+The exponent for $H$ is attained in order by the classical Fibonacci DAG:
+vertices $0,\ldots,2r-1$ and arcs of lengths one and two have
+$K=r^2$ and $H=r(r+1)(2r+1)/6$.
+\end{proposition}
+\begin{proof}
+For a minimal cut $C$, let $R$ be the vertices reachable after deleting it.
+Minimality gives, for each $e\in C$, a private path meeting $C$ only in $e$;
+its prefix lies in $R$ and suffix outside $R$, so $C=\delta^+(R)$.
+Fix a path $P$ meeting $C$ in $e_i=(a_i,b_i)$, $i=1,\ldots,r$, and a
+topological order $\tau$. For $i\le j$, the vertex set
+\[
+ S_{ij}=\{v:\tau(v)\le\tau(a_i)\}
+       \cup\{v\in R:\tau(v)<\tau(b_j)\}
+\]
+has boundary trace on $P$ exactly $e_i,\ldots,e_j$. Each corresponding
+private path meets that boundary only at its own edge, so every minimal
+subcut contains the full interval. Distinct intervals give distinct cuts.
+Every edge outside $C$ on $P$ also has a minimal cut with singleton $P$ trace,
+obtained by a topological-prefix boundary. If $P$ has length $\ell$,
+$K\ge\ell+r(r-1)/2$; successive exits from $R$ imply $\ell\ge2r-1$.
+This proves the stated finite bound.
+
+For the Fibonacci DAG, a canonical cut partition in vertex order has word
+$S^a(TS)^bT^c$ with $a,c\ge1$: two consecutive $T$'s prevent a later
+reachable $S$, while two consecutive $S$'s after the first $T$ prevent its
+private suffix to the sink. Conversely such words make every $S$ reachable
+within $S$ and every $T$ able to reach the sink within $T$, proving minimality.
+The height is $h=b+1$, achieved by the backbone path. There are
+$2r-2h+1$ such cuts, giving both sums. The graph and quadratic cut count
+are established; no priority is asserted for them or the height comparison.
+\end{proof}
+
+\begin{proposition}[Serial blocks and failure of a maximum-module bound]
+\label{noise:series}
+If an edge is replaced by $k$ serial owners with no internal attachments,
+their total envelope payment is at most their common effective capacity.
+Nevertheless no constant multiple of the largest standalone module payment
+bounds envelope payment after arbitrary series composition.
+\end{proposition}
+\begin{proof}
+Let $q$ be the least report in the serial block. All its effective capacities
+are a common $d(q)$, and external capacities depend only on $q$. Minimal cuts
+use either no block edge or one arbitrary member. The smallest of its $k$
+uniforms selects a uniformly distributed member, independently of that
+minimum and all external uniforms. Thus every member has base payment
+$Z(q)/k$, where $Z(q)=d(q)\Prob(W\text{ meets the block})$.
+Each member's underreports realize exactly bottlenecks $q'\in[0,q]$;
+therefore the sum of their envelopes is $\sup_{q'\le q}Z(q')\le d(q)$.
+The collapsed noise is $\operatorname{Beta}(1,k)$, not uniform.
+
+For the second claim, fix $m\ge2$, $r=4^m m!$, $M=16r$. Each of $r$
+modules has two serial bundles: $M$ owners of capacity $1/M$ and $m$
+owners of capacity one. Let their uniform scores be $L_i,H_i$.
+Standalone payment is $1+(m-1)\Prob(H_i<L_i)\le1+(m-1)/m!\le2$.
+In the composition, some $H_i\le1/4$ has probability at least $1/2$,
+whereas $\Prob(\min_iL_i<1/4)\le r\,4/(3M)=1/12$.
+A heavy cut therefore wins with probability at least $5/12$, giving payment
+at least $5m/12$. The base equals its envelope at these profiles: underreporting
+a light owner leaves all other owners of its containing cut unclipped, as
+the resulting grand flow stays at least $1/M$; underreporting a heavy owner
+leaves its pool total at least one. The containing intercept is fixed and
+the other caps are nondecreasing, so conditional clamping proves monotonicity.
+For general serial modules, $K=\sum_iK_i$ and global caps are
+$D_{i,e}=\min\{d_{i,e},\min_jT_j\}$; this bookkeeping alone supplies no
+maximum-module estimate.
+\end{proof}
+
+\section{What fixed noise and Bernoulli conditioning can achieve}\label{noise:laws}
+\begin{theorem}[Conditioned-zero binary production]\label{noise:bernoulli}
+Consider finitely many nonempty resource bundles $P$, each consuming one
+unit of its resources and producing one unit of value. Each resource has
+one owner. Let $V$ be the vertices of
+$\{w\ge0:\sum_{e\in P}w_e\ge1\ \forall P\}$ and $K=|V|$.
+Let $D_e$ be maximum feasible resource usage and $w^*$ the fixed-priority
+minimizer of $\sum_eD_eB_ew_e$, where $\Prob(B_e=0)=q\in(0,1)$ independently.
+Then
+\[
+ p_e=D_e\E[w_e^*\mid B_e=0]
+\]
+is own-report monotone, covers every coalition, and for every $\lambda>0$
+obeys
+\[
+ p(E)\le\frac{T(\log K+\lambda+1)}
+ {q[-\log(q+(1-q)e^{-\lambda})]}.
+\]
+For fixed $q=e^{-1}$ this is $(e+o(1))T\log K$. In the network subclass,
+optimizing one common $q=q(K)$ cannot improve the leading constant $e$.
+This class bound is superseded as an unrestricted existence bound by
+Theorem~\ref{prod:upper}, but its formula and class limitation are distinct.
+\end{theorem}
+\begin{proof}
+LP duality gives $F(c)=\min_{w\in V}c\cdot w$ and $0\le w_e\le1$:
+a vertex coordinate exceeding one could be perturbed both ways without
+violating an active constraint. Nonempty activities bound every primal
+variable. Effective usage satisfies $D_e\le\min(c_e,T)$ and preserves
+the entire feasible polytope, also after any binary mask. Convex mixtures
+of feasible plans at own reports zero and $u$ imply, for $0<t\le u$,
+\[
+ D_h(t)\ge D_h(0)+(t/u)[D_h(u)-D_h(0)].
+\]
+Thus $D_h(t)>D_h(0)$ is independent of the positive own report. With $B_e=0$
+the minimum masked value is independent of that report. A vertex remains
+optimal precisely when it was optimal at zero and every coordinate with
+$B_hw_h>0$ has no effective-usage increase. Hence the whole minimizing
+family and its fixed-priority selection are invariant on positive own
+reports. Multiplication by nondecreasing $D_e$ proves incentives, including
+zero where the payment vanishes.
+If $w_0,w_1$ are selected with $B_e=0,1$, their two optimality inequalities
+give $w_{0e}\ge w_{1e}$ when $D_e>0$. Therefore for
+$z_e^q=D_e\E w_e^*$, one has $z_e^q\le p_e\le z_e^q/q$.
+For every dual vertex $w$ and coalition $S$, binary-mask preservation gives
+$\sum_{e\in S}D_ew_e\ge F(D\mathbf1_S)=F(c\mathbf1_S)$.
+Thus every selected dual allocation covers the original coalition values,
+so the same is true of $z^q$ and $p$.
+
+For $a_e=D_ew_e/T\in[0,1]$ and $\rho_w=\sum a_e$, convexity gives
+$\log(q+(1-q)e^{-\lambda a_e})\le-\alpha a_e$, where
+$\alpha=-\log(q+(1-q)e^{-\lambda})$. Some unmasked objective equals $T$,
+so the winning masked objective is at most $T$. Chernoff and a union over
+vertices yield $\Prob(\rho_{w^*}>s)\le\min(1,Ke^{\lambda-\alpha s})$.
+Integrating gives $\E\rho_{w^*}\le(\log K+\lambda+1)/\alpha$.
+Take $q=e^{-1}$ and $\lambda=\log(2+\log K)$ for the asymptotic bound.
+
+In graphs, $V$ consists exactly of minimal-cut vectors: maxflow/mincut
+identifies the cut dominant with the path-cover polyhedron by separation
+with nonnegative objectives; each minimal cut is uniquely exposed by
+cost one on itself and a sufficiently large cost outside. With directed
+cycles, define usage by path packings, excluding circulations. The same
+binary theorem also covers unit-value splittable multicommodity paths,
+where dual vertices can be fractional and $K$ is not a cut count.
+
+For the sharp constant, the network identity
+\[
+ p^q(E)=q^{-1}\E\sum_{e\in W}D_e(1-B_e)                 \tag{B}
+\]
+is immediate by conditioning. With $K$ serial two-owner pools, each report
+$1/2$, $T=1$ and
+$p^q(E)=[1-\tfrac12(1-q^2)^K-\tfrac12(1-q)^{2K}]/q
+\ge K/(1+2Kq)$, by $(1-q)^{-2K}\ge1+2Kq$.
+Put $N=K-1$, $A=\log N\ge16$. If $q\ge A^{-2}$, write
+$h=\log(1/q)$, $m=\lfloor(A-\sqrt A)/h\rfloor$,
+$R=\lceil\sqrt A/h\rceil$. Use $N$ serial pools of $m$ unit owners
+and a final pool of $R$ owners of report $1/R$.
+When the final score is positive and some heavy pool is all closed, the
+winning cut has closed weight $m$. By (B),
+\[
+ p^q(E)\ge\frac m q(1-q^R)[1-(1-q^m)^N]
+ \ge e(A-\sqrt A-2\log A)(1-e^{-\sqrt A})(1-e^{-e^{\sqrt A}}),
+\]
+since $Nq^m\ge e^{\sqrt A}$, $q^R\le e^{-\sqrt A}$ and
+$q\log(1/q)\le1/e$. If $q<A^{-2}$ the two-owner family gives
+$p^q(E)\ge A^2/3\ge eA$. The lower is uniform in $q$, proving class
+optimality on multigraphs, without claiming its simple-DAG conversion.
+\end{proof}
+
+\begin{theorem}[Fixed iid-law classification]\label{noise:classification}
+Fix a law $X$ on $[0,1]$, independent of graph size, and replace uniforms
+in $z,y$ by iid $X$. On DAGs the worst envelope factor has these properties:
+identically zero noise has no owner-independent bound already at $K=2$;
+constant positive noise has exact worst factor $K$ on multigraphs;
+a nondegenerate law on $\{0,c\}$ has order $\Theta_q(1+\log K)$;
+and a nonconstant conditional positive law has a lower bound
+$\Omega_X(K^{\eta_X}/\log K)$ for some $\eta_X>0$, even on simple DAGs.
+Every nonzero law has an $O_X(K)$ upper bound. These statements concern
+pointwise-majorant repairs of that fixed base, not arbitrary mechanisms.
+\end{theorem}
+\begin{proof}
+Let $\mu=\E X>0$. For a cut $C$, set $w_h=D_h/T\le1$,
+$d=\sum_Cw_h$ and $S=\sum_Cw_hX_h$. At a report $t=xD_e$, $0<x\le1$,
+homothetic scaling of feasible flows gives $D_h(c^t)\ge xD_h(c)$.
+Selection of $C$ implies $xS\le1$. For $u=1/x$, if $u\ge\mu d/2$,
+$(d/u)\Prob(S\le u)\le2/\mu$; otherwise Hoeffding gives a bound
+$d e^{-\mu^2d/2}\le2/(e\mu^2)$. Thus
+\[
+ t\Prob(W(c^t)=C)\le A_\mu T\frac{D_e}{D(C)},\qquad
+ A_\mu=\max\{2/\mu,2/(e\mu^2)\}.
+\]
+Summing over containing cuts before taking suprema proves $y(E)\le A_\mu KT$.
+Constant positive noise makes the same argument deterministic with constant
+one. Equality is approached with $K$ serial two-owner pools of reports
+$1/2$: lowering either owner makes its pool uniquely cheapest. On simple
+DAGs $N$ serial diamonds give $K=4N$ and factor at least $N$, by lowering
+an owner of each module's first-priority local cut.
+Zero noise always selects the fixed first cut: two serial pools of $m$
+owners, with reports one in that cut and $1/m$ in the other, give factor
+$m$ at $K=2$. Subdivision into two-edge private paths gives a simple-DAG
+lower of order $\log K$.
+For $X\in\{0,c\}$, Theorem~\ref{noise:bernoulli} majorizes its envelope
+and proves the logarithmic upper. For the lower, take
+$N=\lceil q^{-m}\rceil$ pools of $m$ unit owners and a final unit singleton.
+When the singleton is open and some heavy pool is closed, the winning
+uncensored cut weight is $m$, so $z(E)\ge(1-q)(1-e^{-1})m$.
+Subdivision of heavy edges replaces $q$ by $q'=1-(1-q)^2$ and gives
+$K=N2^m+1$, still $m=\Theta_q(\log K)$ on simple DAGs.
+
+It remains to handle a nonconstant conditional positive law. Let
+$s=\Prob(X>0)$, $\nu=\E\min(X,X')$ and $d=\mu-\nu/s>0$;
+strictness follows by conditioning on both draws being positive. Put
+$a=(1/s+\mu/\nu)/2$, $b=d/(4\mu)$, $\delta=d/40$.
+Then
+\[
+ \E\min(aX,(a+b)X')\le a\nu+b\mu=\mu-10\delta,
+ \qquad \E\min(aX,mX')\uparrow a\mu s>\mu+20\delta.
+\]
+Choose $m_0$ making the second expectation at least $\mu+10\delta$;
+integers $B,C,M$ satisfying $C\ge(\mu+10\delta)/(b\mu)$, $M\ge\delta^{-2}$; and
+\[
+ \gamma=\min\{32\delta^2/a^2,32\delta^2/(Cb^2)\},\qquad
+ B\ge\max\{1,m_0,a+b,b/\delta,2/\gamma\}.
+\]
+For integer $r\ge4$ use $N=2^r$ modules in series, $m=Br$,
+$k=Cm$, and a final $M$-owner pool of total one. In each module put
+$e:s\to A$ of report one, $y_i:s\to B_i$ of report $a/m$,
+$g_i:A\to B_i,h_i:B_i\to t$ of report two, and $k$ parallel
+$Z:A\to t$ owners of report two. Under a separate focal report $q$,
+$T=1$ and
+$D_e=D_g=D_Z=q$, $D_y=a/m$, $D_h=\min(1,q+a/m)$.
+These values follow from explicit paths; each raw module has flow $a+q>1$.
+There are $2^{m+1}$ cuts per module, according as $e$ is included or
+excluded, so $K=N2^{m+1}+1$.
+
+Lower one focal report to $t=b/m$. Its cheapest containing score is
+$tX_e+A_{\rm low}$, where
+$A_q=\sum_i\min((a/m)X_{y_i},D_{h_i}X_{h_i})$.
+The high and low means are at least $\mu+10\delta$ and at most
+$\mu-10\delta$. Every excluding score is at least $q\sum_ZX_Z$,
+whose low mean is at least $\mu+10\delta$.
+The squared-range sums are $a^2/m$ and $Cb^2/m$. Hoeffding bounds each
+wrong-side deviation to $\mu\pm6\delta$ by $e^{-\gamma m}$.
+The final score is an average of $M$ draws and lies within $2\delta$
+of $\mu$ except with probability $1/16$. A union over at most $2N$
+other failures costs at most $1/8$. Since $t\le\delta$, every winning
+cut contains the lowered focal owner on this event. Hence at the single
+original profile $y(E)\ge Nb/(2m)$, proving a positive polynomial exponent.
+
+For a simple DAG, choose the constants afresh for $V=\min(X_1,X_2)$,
+whose conditional positive law is still nonconstant. Subdivide each
+$y,h,Z$ and final edge into a private two-edge path, retaining $e,g$.
+The primitive owner noise is still $X$, while those path scores use $V$.
+The proof used only $X_e\le1$ and nonnegativity of $X_g$ for the remaining
+edges. Now
+$K=2^{(1+2B)r}+2^{[1+(C+2)B]r}+2^M$ and the same payment lower holds,
+giving exponent $1/[1+(C+2)B]>0$. Strict cut-class separation makes all
+arguments valid with atoms and any fixed tie priority.
+\end{proof}
+
+The classification fixes the law as $K$ grows. One particular variable-law
+escape also fails: if $q=K^{-1/2}$ and
+$X\sim(1-q)\delta_1+q\operatorname{Unif}(0,\epsilon)$ with
+$0<\epsilon\le1/8$, use $K$ serial pools of reports $(3/4,1/4)$.
+Lower each small owner separately to $1/8$. Its pool wins strictly when
+the companion has low noise, the focal noise is one, and no other pool has
+two low noises. Its score is at most $7/32$, while competitors cost at least
+$1/4$. Effective capacities remain the reports. Summing gives
+\[
+ y(E)\ge(K/8)q(1-q)(1-q^2)^{K-1}\ge\sqrt K/64\quad(K\ge4).
+\]
+This does not classify arbitrary $K$-dependent noise laws.
+
+\begin{proposition}[Uniform mixture of Bernoulli parameters]\label{noise:uniform-mixture}
+The truthful covering rule $\bar p=\int_0^1p^q\,dq$ has worst-case
+budget order $\Theta(K)$ on multigraphs.
+\end{proposition}
+\begin{proof}
+Under a uniform random arrival order, before owner $e$ arrives select the
+first cut minimizing the revealed $D$-weight and charge $D_e$ if it contains
+$e$. Conditioning on its arrival time gives exactly $\bar p$.
+At the last positive charge assigned to a particular cut, its revealed score
+was at most $T$ before arrival and increases by at most $D_e\le T$.
+All charges previously assigned to that cut are included in its revealed
+score, even if the cut ceased to win and returned. Thus each cut is charged
+at most $2T$, proving $\bar p(E)\le2KT$.
+For the lower, take $K$ serial pools of $B^{K-1}$ owners, with $B\ge3$.
+Enumerate pools in their fixed priority order. In pool $i$ give
+$m_i=B^{K-i}$ owners report one and all others zero. Then $T=1$ and $D=c$.
+Let $\tau_i$ be its first positive-owner arrival. If
+$\tau_i>\max_{j<i}\tau_j$, cut $i$ is selected just before that arrival
+and charges one. Since
+$\Prob(\tau_i<\tau_j)=m_i/(m_i+m_j)\le B^{-(i-j)}$ for $j<i$,
+\[
+ \bar p(E)\ge K-\sum_i\sum_{d=1}^{i-1}B^{-d}
+             \ge K(1-1/(B-1)).
+\]
+Zero owners remain part of the fixed topology. This construction has
+$n=KB^{K-1}$ owners and does not refute an $O(\log n)$ bound.
+\end{proof}
+
+\section{Truthful repairs that lose their budget or coalition guarantee}
+\label{noise:repairs}
+\begin{proposition}[Deletion repairs can have linear cost]\label{noise:deletion}
+Both of the following rules are truthful pointwise majorants of $z$, and
+hence cover coalitions and majorize $y$:
+\[
+ p_e^{\rm pot}=2[\Psi(c)-\Psi(c^0)],\quad
+ \Psi(c)=\E F(D(c)U),
+ \qquad
+ p_e^{\rm one}=\E\min\{D_e(c),(B_e(c)-A_e(c^0))_+\}.
+\]
+Here $A_e$ omits the focal term from containing cuts, and $B_e$ minimizes
+over excluding cuts. If no excluding cut exists, set $p_e^{\rm one}=D_e$.
+Each rule nevertheless has examples with total payment $\Omega(KT)$.
+\end{proposition}
+\begin{proof}
+$\Psi$ is coordinatewise increasing, so its own deletion difference is
+own-monotone. At fixed other uniforms, concavity of the focal flow gain
+implies its average is at least half its endpoint. Since recomputing $D$
+after deletion only decreases other capacities, $p^{\rm pot}\ge z$.
+For the one-sided rule, $A_e(c^0)$ is independent of $c_e$, whereas $D_e$
+and $B_e(c)$ are nondecreasing. Also $A_e(c^0)\le A_e(c)$, proving domination.
+
+For the potential example, put a branch of $k$ unit serial owners in parallel
+with a single owner of capacity $\beta=1/2$, followed by a final unit edge.
+Then $T=1,K=k+1$. With $A_k=\min_{i\le k}U_i$,
+$\Psi=\E\min(A_k+\beta U,V)$. Deleting any serial owner leaves effective
+capacities $\beta$ on the other branch and final edge, so its deletion
+potential is $\beta/3$. Meanwhile
+$\Psi\ge\E\min(\beta U,V)=\beta/2-\beta^2/6$.
+Each serial owner receives at least $\beta(1-\beta)/3=1/12$.
+Indeed $A_k\to0$ and deletion of the parallel owner leaves potential
+$1/(k+2)$, yielding
+$p^{\rm pot}(E)=2[(k+2)\Psi-k/6-1/(k+2)]\sim k/12$.
+The original envelope on this TTSP graph equals $z$ and has total at most
+$3/2$, the largest effective weight of a selected cut.
+
+For the one-sided example, put $k$ unit serial owners $X$ on $s\to A$,
+add $b:s\to B$ of capacity $\beta\in(0,1)$, and unit edges
+$a:A\to t,g:A\to B,h:B\to t$. Then $T=1+\beta$, $K=2k+2$; cuts are
+$\{x_i,b\},\{x_i,h\},\{a,h\},\{a,b,g\}$.
+Deleting $x_i$ leaves only $b+h$, so
+$A_i(c^0)=\beta\min(U_b,U_h)$, while
+$B_i(c)\ge m=\min(\beta U_b,U_h)$. Therefore
+\[
+ p_i^{\rm one}\ge\E[m-\beta\min(U_b,U_h)]
+ =\beta/2-\beta^2/6-\beta/3=\beta(1-\beta)/6.
+\]
+For $k\ge2$, $B_i\le m+\min_{j\ne i}U_j$ and the expected error is
+$1/k$. The four other payments sum to at most $3+\beta$, so
+$p^{\rm one}(E)=k\beta(1-\beta)/6+O(1)$.
+At $\beta=1/2$ the normalized asymptotic is $K/72$.
+By contrast, when $x_i$ underreports, all serial effective caps become equal;
+its selection requires the smallest of their uniforms. Hence $y_i\le1/k$
+and $y(E)\le4+\beta$ on this family.
+\end{proof}
+
+\begin{proposition}[Common scales]\label{noise:scales}
+Common clipping $a_e=\min(c_e,T)$ preserves coalition coverage and the
+$U(K)T$ base budget but its uniform-cut payment need not be own-monotone.
+The truncated scale envelope
+\[
+ P_e=\sup_{0\le r\le T}\min(c_e,r)
+       \Prob\bigl(e\in W(\min(c,r)U)\bigr)
+\]
+is truthful and covering, but can cost at least $5KT/8$ with $O(K^7)$ owners.
+\end{proposition}
+\begin{proof}
+Every feasible DAG flow has each coordinate at most its total, at most $T$,
+so common clipping preserves all feasible flows. A minimum cut retains
+weight $T$, proving the usual tail-budget premise.
+For nonmonotonicity, use $x:s\to A$ of capacity one, $z:A\to t$ of
+capacity three, $g:A\to B$ of capacity $\delta=1/10$, focal $h:B\to t$,
+and $N$ parallel $s\to B$ owners of report $1/N$.
+The four cuts are $\{x\}\cup Y$, $\{x,h\}$, $\{z,h\}$,
+$\{z,g\}\cup Y$. For $h\in[3/4,1]$, $T=1+h$.
+The focal payment is
+\[
+ w_h(h)=\E\min(h,Y+W_T),\qquad
+ W_T=\min(\delta U_g,(U_x-TU_z)_+),\quad
+ Y=N^{-1}\sum U_i.
+\]
+Direct tail integration gives
+$\Prob(W_T>r)=(1-r/\delta)(1-r)^2/(2T)$ on $[0,\delta]$ and
+$\E W_T=187/(8000T)$. At $h=3/4$, clamping loses at most
+$\Prob(Y>13/20)\le1/2700$ when $N=10000$, by variance $1/(12N)$.
+Ignoring the high-profile clamp only raises its payment. Thus
+\[
+ w_h(3/4)-w_h(1)\ge187/112000-1/2700=3929/3024000>0.
+\]
+A smaller exact certificate uses $N=6$. With
+$F_N(u)=N^N\sum_{j=0}^N(-1)^j\binom Nj(u-j/N)_+^N/N!$ and
+$L_N(u)=N^N\sum_{j=0}^N(-1)^j\binom Nj(u-j/N)_+^{N+1}/(N+1)!$,
+the exact expression is
+$w_h=1/2-L_N(1-h)+\int_0^\delta
+(1-r/\delta)(1-r)^2F_N(h-r)/(2T)\,dr$.
+Piecewise polynomial integration gives the positive difference
+$587847649425223/914457600000000000$.
+
+For a fixed external $r$, conditional clamping proves own-monotonicity;
+the interval $[0,T]$ expands with the own report. The supremum is therefore
+truthful and includes the covering rule at $r=T$.
+For its lower bound, use $K$ serial bundles. Put $M=64K^4$, $N=256K^6$,
+$b_j=3/4+j^2/(4K^2)$. Bundle $j$ has $N$ owners of report $b_j/N$ and
+$n_j=M(K-j)$ owners of report one. Then $T=1$.
+At scale $r_i=i/(2K^2M)$ all light owners are unclipped, and the clipped
+bundle totals $g_j=b_j+n_jr_i$ satisfy
+\[
+ g_j-g_i=(j-i)^2/(4K^2),\qquad g_i=1-(K-i)^2/(4K^2)\ge3/4.
+\]
+Each random score has variance at most $1/(12N)+1/(48KM)$.
+Chebyshev and a union bound with $\eta=1/(16K^2)$ give failure probability
+at most $1/(12K)+1/12\le1/6$ for all deviations being less than $\eta$.
+The mean gaps are at least $2\eta$, so bundle $i$ wins with probability
+at least $5/6$. Summing its scale-$r_i$ payments over disjoint bundles
+proves $P(E)\ge5K/8$.
+The same obstruction can be made balanced: replace heavy reports in
+$j<K$ by $(K+j)/(4K^2M)$. Every raw pool then totals one; for $i<K$
+the clipped totals become $\min(1,g_j)$, preserve the stated gap, and have
+no larger variance. This gives $P(E)\ge5(K-1)/8$.
+\end{proof}
+
+\begin{proposition}[Personal ceilings lose coverage]\label{noise:ceilings}
+Let $B_e=\min_{C\not\ni e}c(C)$, allowing $\infty$, and use for owner
+$e$ the clipped vector $a_h^{(e)}=\min(c_h,B_e)$ and payment
+$p_e=a_e^{(e)}\Prob(e\in W(a^{(e)}U))$.
+This is truthful and spends at most $(U(K)+1)T$, but no universal constant
+multiple covers every coalition, even on TTSP graphs.
+\end{proposition}
+\begin{proof}
+$B_e$ is independent of $c_e$, proving incentives by conditional clamping.
+If $B_e=T$, its coordinate equals the common-clipped payment. If $B_e>T$,
+every minimum cut contains $e$, so all such exceptional edges belong to one
+minimum cut and their payments sum to at most $T$. The rest sum to at most
+$U(K)T$. At $T=0$ the corresponding endpoint marginals vanish.
+
+For a counterfamily, fix $q\ge4$, $m=q^2$, $\delta=q^{-2}$,
+$N=m!q^m$. The initial component has parallel branches: an edge $e$ of
+capacity $\delta$, and a serial path with first capacity $1-\delta$ and
+$m$ further owners of report $m$. Follow it by $N$ serial bundles of $m$
+unit owners each. Cuts are $\{e,a\}$, $\{e,h_i\}$ and those bundles;
+$T=1,K=N+m+1$. Personal ceilings are $B_e=B_a=m$ and all others one.
+Take $S$ to contain $e$ and one owner from every bundle, so $v(S)=\delta$.
+With $Y=\min_{i\le m}U_{h_i}$,
+$Z=\min_{j\le N}\sum_{k\le m}U_{jk}$ and
+$X_r=\delta U_e+\min((1-\delta)U_a,rY)$, its payment is exactly
+\[
+ p(S)=\delta\Prob(X_m<Z)+\Prob(Z<X_1).
+\]
+The simplex CDF $z^m/m!$ for $z\le1$ gives
+$\Prob(Z<1/(2q))\le2^{-m}$ and
+$\Prob(Z>2/q)\le(1+2^m)^{-1}$.
+On $X_m<Z\le2/q$, either $(1-\delta)U_a<2/q$ or $mY<2/q$.
+Also $X_1\le\delta+Y$. Hence
+\[
+ \frac{p(S)}{v(S)}\le
+ \frac{2q}{q^2-1}+\frac2q+\frac1{1+2^{q^2}}
+ +q^2\left[2^{-q^2}+
+  \left(1-\frac{q-2}{2q^2}\right)^{q^2}\right]
+ =\frac{4+o(1)}q\longrightarrow0.
+\]
+Indeed the last power is at most $e^{1-q/2}$.
+Stirling gives $\log K/\log\log K\sim3q^2/2$, so the necessary scalar
+coverage repair is at least order $\sqrt{\log K/\log\log K}$.
+This is a limitation of owner-dependent normalization, not a lower bound
+on optimal mechanisms.
+\end{proof}
+
+\subsection{Failure of coordinatewise and cross-owner comparisons}
+\begin{proposition}\label{noise:pointwise}
+Neither $y_e\le Cz_e$ nor $y_e\le Cr_e$ holds for a universal constant
+$C$. This already fails for DAGs of longest path four and cut height at
+most two. The frozen marginal $r$ itself need not be own-monotone.
+\end{proposition}
+\begin{proof}
+Use vertices $s,A,B_1,\ldots,B_m,q,t$: focal $x:s\to A$;
+$y_i:s\to B_i$ of report $\epsilon=1/10$;
+$g_i:A\to B_i,h_i:B_i\to q$ of report two;
+$k$ parallel $Z:A\to q$ owners of report two;
+$N$ direct $P:s\to q$ owners of report $(1-2b)/N$;
+and $N$ final $R:q\to t$ owners of report $1/N$.
+Whenever $m\epsilon\ge2b$ and $x\in[0,9/10]$, $T=1$ and
+$D_x=x,D_y=\epsilon,D_g=D_Z=x,D_h=x+\epsilon$, with $D_P,D_R$ unchanged.
+Cut families are $R$; $P\cup\{x\}$ plus one of $y_i,h_i$ per branch;
+and $P\cup Z$ plus one of $h_i,\{y_i,g_i\}$ per branch.
+Thus $K=2^{m+1}+1$, and private paths verify every listed cut is minimal.
+
+Let $B=R-P$ now denote random score sums, so $\E B=b$ and
+$\operatorname{Var}B\le1/(6N)$. Put
+$A_i=\min(\epsilon U_i,(x+\epsilon)V_i)$ and
+$J_x(s)=\E\min(x,(s-\sum_iA_i)_+)$.
+If the random $Z$ score is at least one, the only competing excluding
+threshold is $R$. Conditional integration and Lipschitzness therefore give
+\[
+ |z_x-J_x(b)|\le1/\sqrt{6N}+10^k/k!.
+\]
+For $b\le\min(\epsilon,x)$ the density of each $A_i$ on the relevant
+simplex is $\alpha_x-\beta_xa$, with
+$\alpha_x=10+1/(x+\epsilon)$, $\beta_x=20/(x+\epsilon)$. Thus
+\[
+ J_x(b)=\sum_{j=0}^m\binom mj\alpha_x^{m-j}(-\beta_x)^j
+                      \frac{b^{m+j+1}}{(m+j+1)!}.       \tag{C}
+\]
+Set $b=1/(100m)$, $I=b^{m+1}/(m+1)!$, $Q=11^mI$,
+$N=\lceil16/Q^2\rceil$, $k=2\lceil8/Q\rceil$.
+At $x_0=1/10$, density is at least $15-1/m$, so
+$J_{x_0}\ge(14/15)15^mI$; at $x_1=9/10$ it gives
+$(54/55)Q\le J_{x_1}\le Q$.
+The error is at most $Q/4$: the variance term is at most $Q/8$, and
+$10^k/k!\le(200/k)^{k/2}\le2^{-k}\le1/k\le Q/16$ since $k\ge800$.
+Consequently $z_{x_1}>0$ and
+\[
+ \frac{y_x(c^{x_1})}{z_x(c^{x_1})}
+ \ge\frac{56}{75}(15/11)^m-\frac15\longrightarrow\infty.
+\]
+The comparison with $r$ fails because $r\le2z$.
+An exact smaller factor-two certificate uses $m=3,b=1/20,N=100000,k=50$;
+(C) gives $J_{x_0}-2J_{x_1}=7627/134400000$.
+The convolution density bound implies $|J_x''|\le\alpha_x$, so centering
+at $b$ improves the error to $\alpha_x/(12N)$ and yields
+$z_{x_0}-2z_{x_1}\ge1161/44800000-10^{50}/50!>0$.
+
+For nonmonotonicity of $r$, use the same graph with $m=1,b=1/20$,
+$N=100000,k=20$, and compare $x_0=1/2,x_1=3/5$.
+Conditional frozen payment is
+$\ell_x(t)=0$ for $t\le0$, $2t-t^2/x$ for $0<t<x$, and $x$ thereafter.
+With $A=\min(\epsilon U,(x+\epsilon)V)$, direct integration gives
+\[
+ \E\ell_x(b-A)=(\epsilon^{-1}+(x+\epsilon)^{-1})b^2
+ -\frac{2b^3}{3\epsilon(x+\epsilon)}
+ -\frac{(\epsilon^{-1}+(x+\epsilon)^{-1})b^3}{3x}
+ +\frac{b^4}{6\epsilon(x+\epsilon)x}.
+\]
+Its low-minus-high value is $23/100800$. The averaged function has
+second derivative $2f_A(s)-(2/x)\Prob(s-x<A<s)$, bounded in absolute value
+by $24$, so centering error per profile is at most $2/N$.
+Truncation error is at most $2^{20}/20!$ per profile. Therefore
+\[
+ r_x(x_0)-r_x(x_1)\ge23/100800-4/100000-2^{21}/20!>0.
+\]
+These are finite fixed-owner examples, not limit-only counterexamples.
+\end{proof}
+
+Even a constant through-antichain value and a common disjoint minimum cut
+do not imply cross-substitutes. Here is an exact separating construction.
+Take two source owners $e,h$ of reports $1,h$ in parallel, followed by two
+owners of report two in parallel. In parallel with that whole branch put a
+100-edge path with every report ten. Follow both by $N=10000$ parallel
+owners of total $21/2$. The source antichain is $\{e,h,p_1\}$.
+On the joint box $e\in[.99,1]$, $h\in[.1,1]$, $p_1\in[9.9,10]$,
+every upstream cut costs at least $10.99$, so the final cut fixes both
+$T$ and through-antichain rank at $10.5$.
+At $e=1,p_1=10$, the isolated first branch gives
+\[
+ q_h=\Prob(U_e+hU_h<(1+h)(U_{b_1}+U_{b_2}))
+     =5/6+h/[12(1+h)^2],\quad q_1-q_{.1}=27/1936.
+\]
+In the full graph the additional condition is that this winning score plus
+$10\min_{j\le100}U_{p_j}$ is below the final score. Failure probability
+is at most $(9/10)^{100}+49/(27N)<1/4000$, by Chebyshev below three for
+the final score. Thus $z_e(h=1)-z_e(h=.1)>27/1936-1/2000>0$.
+The graph is TTSP and its envelope is safe; this only rejects the proposed
+comparison and does not contradict Proposition~\ref{noise:antichain}.
+
+\section{Shapley obstructions beyond two pools}\label{noise:shapley}
+\begin{proposition}\label{noise:shapley-paths}
+Ordinary individual Shapley value can require a coverage multiplier
+$\Omega(K^{1/3})$ on unit-capacity simple TTSP graphs. Even on serial
+parallel pools all of total one, no positive constant coalition-coverage
+fraction is valid over all finite ownerships.
+\end{proposition}
+\begin{proof}
+For the first statement, place a unit veto edge before two internally disjoint
+unit paths of lengths $n,\ell\ge2$. There are $K=1+n\ell$ structural cuts.
+Let $S$ consist of the veto and the length-$n$ path, so $v(S)=1$.
+By independent uniform arrival times, the veto share is
+$1/(n+1)+1/(\ell+1)-1/(n+\ell+1)$, and every outsider on the other path
+has share $1/(\ell+1)-1/(n+\ell+1)$: it is pivotal exactly when the veto
+and its companions have arrived but the other path is incomplete.
+Efficiency gives
+$\phi(S)=1/(\ell+1)+\ell/(n+\ell+1)$.
+For $n=\ell^2$ this is less than $2/\ell$, proving the claimed multiplier.
+For example $n=9,\ell=3$ gives $K=28$ and $\phi(S)=25/52<1/2$.
+
+For balanced pools fix integers $M,L\ge2$, put $a=1/(4M^2)$,
+$q_n=2M(n+1)-1$, and take $K_n=L^{q_n}$ pools of type $n=1,\ldots,M$.
+Each has one distinguished owner of report $a$ and $n$ outsiders of report
+$b_n=(1-a)/n$. All pool totals are one. Let $S$ consist of the distinguished
+owners, so $v(S)=a$. We prove
+\[
+ \frac2{M+1}\le\frac{\phi(S)}a\le\frac2{M+1}+E(M,L),\qquad
+ E=(M-1)L^{-1/[M(M+1)]}+L^{-1/(2M)}+(M-1)L^{-2M}
+ +\frac{M(M-1)}2(2^{M+1}+1)L^{-1/2}.                 \tag{D}
+\]
+Write $v(X)=\int_0^1\ind\{\text{every pool has $X$-capacity}\ge\theta\},d\theta$.
+Finite Shapley summation commutes with this integral. Pool completion times
+are independent continuous order statistics; the last completing pool
+supplies the global pivotal owner. A distinguished type-$n$ owner matters
+only on bands $(jb_n,jb_n+a)$, $j=0,\ldots,n$. On such a band the Boolean
+pool game requires $j+1$ of its $n+1$ owners, so labels are symmetric;
+in the gaps the distinguished owner is a dummy.
+
+For an interior band $1\le j<n$, put $d=n-j$, $r=d+1$ and
+$m=\lceil n/d\rceil-1<n$. Then $md<n\le(m+1)d$ and
+$j/n-(m-1)/m\ge1/M^2$. Since $a<(1-a)/M^2$, the whole band lies in
+the type-$m$ gap requiring all $m$ outsiders, where its distinguished owner
+is a dummy. A type-$n$ completion is late beyond $1-\delta$ with probability
+at most $2^{n+1}\delta^r$. Set
+$Q=q_mr-q_n\ge M+1$ and $\beta=(q_n/r+q_m)/2$,
+$\delta=L^{-\beta}$. A union over type-$n$ pools bounds the probability
+any is late by $2^{n+1}L^{-Q/2}$. All type-$m$ pools complete before that
+threshold with probability at most $e^{-mL^{Q/(2r)}}$.
+Thus the global last pool has type $n$ with probability at most
+$(2^{M+1}+1)L^{-1/2}$. There are $M(M-1)/2$ interior bands, each of
+length $a$; their total contribution gives the last error in (D).
+
+On the common lower endpoint band $(0,a)$ each pool is an OR game.
+Its completion late tail is $\delta^{n+1}$. Set
+$\alpha_n=q_n/(n+1)=2M-1/(n+1)$ and
+$\beta=(\alpha_M+\alpha_{M-1})/2$, $\delta=L^{-\beta}$.
+The probability any lower-type pool is late is at most
+$(M-1)L^{-1/[M(M+1)]}$, and that no type-$M$ pool is late is at most
+$e^{-L^{1/(2M)}}\le L^{-1/(2M)}$.
+Conditional on the latest pool's type $n$, the pivotal label is uniform
+among $n+1$ owners, independently of its completion time. Its distinguished
+share is at least $1/(M+1)$ and at most that plus these errors.
+On the upper endpoint band $(1-a,1)$, the entire game is unanimity; the
+$S$ share is $\sum K_n/\sum(n+1)K_n$, between $1/(M+1)$ and that plus
+$(M-1)L^{-2M}$. These bands each have length $a$; nonnegative interior
+contributions prove (D). For each fixed $M$, let $L\to\infty$, and then
+let $M\to\infty$. All witnesses are finite. Explicitly $M=4,L=10^{40}$
+gives a ratio below $431/1000$, and taking
+$L=[4(M+1)M(2^{M+1}+1)]^{2M(M+1)}$ gives ratio at most $3/(M+1)$.
+\end{proof}
+The ordinary Shapley rule remains own-report monotone; these statements
+concern its coverage, not its incentives. A smaller noncore calibration is
+three balanced pools $(1,1,1)$, $(1,1,1)$, $(1,2)$: the six first owners
+receive $9/28$ each, and the last two $7/20,101/140$. A coalition with one
+unit owner from each pool receives $139/140$ for worth one. For direct
+verification, at arrival time $u$ let $p_1=1-(1-u)^3$, $p_2=3u^2-2u^3$,
+$p_3=u^3$. The last unit owner's marginal integrates
+$(1-u)p_1^2+u^7$, and the weight-two owner's integrates
+$(1-u)(p_1^2+p_2^2)+u(p_2^2+p_3^2)$; efficiency determines the others.
+Balanced noncore examples are already in the literature; no priority
+claim for this calibration or the quantitative families is made.
+
+\section{Limits of single-base lower-bound certificates}\label{noise:stars}
+\begin{proposition}\label{noise:star-domain}
+Fix a DAG and one base profile $c$ of value $T>0$. Let $X(c)$ consist of
+$c$ and all its unilateral underreports. There are coalition-covering
+payments, monotone along every unilateral comparison within $X(c)$, with
+budget factor $B$ whenever
+\[
+ B>1,\qquad B\ge1+\frac{LB}{4(B-1)^2}.
+\]
+In particular $B=2+\sqrt L/2$ suffices. This is a restricted-domain
+feasibility result, not a globally defined mechanism.
+\end{proposition}
+\begin{proof}
+Write $M_e=T-F(c_{-e},0)$. Removing paths through $e$ from a single
+maximum flow gives $M_e\le f_e$ simultaneously, so $\sum_eM_e\le LT$.
+Fix a base minimum cut $C$ and its capacity allocation $a$, costing $T$.
+It covers the base game and every underreported game.
+For $e\notin C$, the own-report value is
+$T_e(t)=\min(T,b_e+t)$. If $b_e\ge T$ put $h_e=0$; otherwise set
+\[
+ h_e=\sup_{0<t<T-b_e}
+ t\left[\frac{T-BT_e(t)}{T-T_e(t)}\right]_+.
+\]
+Then $h_e\le M_e$. If $h_e>0$, $b_e<T/B$ and
+$M_e>(1-1/B)T$, so there are at most $LB/(B-1)$ such owners.
+Writing $x=T_e(t)/T$ and using $t\le Tx$ gives
+\[
+ h_e/T\le\max_{0<x<1/B}\frac{x(1-Bx)}{1-x}
+ =(\sqrt B-\sqrt{B-1})^2\le\frac1{4(B-1)}.
+\]
+Thus $\sum_{e\notin C}h_e\le LTB/[4(B-1)^2]$.
+Pay $a_e$ on $C$ and $h_e$ outside it at the base.
+
+For a proper underreport by $e\in C$, the old cut now costs less than $T$
+while every avoiding cut costs at least $T$. Every new minimum cut contains
+$e$, so use a minimum-cut allocation paying it $t$ and costing $T_e(t)$.
+For $e\notin C$ with $T_e(t)=T$, reuse the base allocation. Otherwise
+choose a minimum-cut allocation $z(t)$, whose focal coordinate is $t$.
+For $t>0$ pay $\alpha z(t)+(1-\alpha)a$, with
+$\alpha=\min(h_e,t)/t$. It covers the lowered game and costs
+$T-\alpha(T-T_e(t))\le BT_e(t)$ by the definition of $h_e$ when
+$BT_e(t)<T$, and trivially otherwise. At zero use any minimum-cut allocation.
+The focal payment is $\min(h_e,t)$ until the value plateaus, then $h_e$;
+since $h_e\le M_e=T-b_e$, this is monotone. Different proper rays differ
+in two coordinates, so no other unilateral comparisons arise.
+\end{proof}
+
+For completeness, the direct path-star certificate has an explicit bound.
+For each target $e$ choose an underreport $t_e$ and $m_e\ge2$ path coalitions
+through $e$, pairwise disjoint outside it, each of worth at least $\delta_e$.
+Writing $T_e$ for the lowered grand value, summed coverage and budget force
+at the base only
+\[
+ p_e(c)\ge f_e=\left[\frac{m_e\delta_e-BT_e}{m_e-1}\right]_+.
+\]
+With a fixed base mincut $C$, its targets contribute at most $T$.
+For $e\notin C$, disjointness gives $m_e\delta_e\le T$.
+A positive $f_e$ requires $T_e<T/B$, hence $M_e>(1-1/B)T$; there are
+at most $LB/(B-1)$ such targets. Moreover
+$f_e\le T(m_e-B)/[m_e(m_e-1)]\le T/[4(B-1)]$, by maximizing
+$(u-(B-1))/u^2$ for $u=m_e-1$.
+Thus $\sum_ef_e\le T[1+LB/(4(B-1)^2)]$; this specified certificate
+cannot contradict budget $B$ whenever $4(B-1)^3\ge LB$.
+The stronger star-domain proposition permits arbitrary coalitions.
+
+A separate useful stopping case concerns the complete ordered DAG with
+$r$ internal vertices. It has $K=2^r$ minimal cuts: each internal-vertex
+subset defines a source side, and every crossing edge has a private path
+of length at most three. If every internal crossarc has capacity at least
+$T$, shortcut each maximum-flow path to its first and last internal
+vertices. Boundary flows are preserved and each shortcut carries at most
+$T$, so the resulting maximum flow has total edge flow at most $3T$.
+The globally truthful marginal rule $M_e=F(c)-F(c_{-e},0)$ is coalition
+covering and satisfies $M_e\le f_e$ for every maximum flow: on any original
+minimum cut it pays the full cut capacities, which already cover coalitions.
+Consequently $\sum_eM_e\le3T$ on all such high-crossarc profiles.
+A lower-bound certificate supported only on those profiles cannot force a
+factor above three. Multi-base transport with genuine internal congestion
+is not excluded by either stopping statement.

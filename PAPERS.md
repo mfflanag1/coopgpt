@@ -1,7 +1,7 @@
 # CoopGPT paper index
 
 Updated 7 October 2026. Eight focused manuscript candidates are listed below.
-Completed manuscript means the exposition and PDF exist; it does not imply
+The current LaTeX sources are authoritative; some PDF exports are historical. A completed draft does not imply
 publication, confirmed novelty, or independent human endorsement. The current
 structural paper replaces the earlier chain-cycle manuscript in this list.
 
@@ -114,7 +114,7 @@ precedent in Mauri's thesis and is not claimed new.
 
 ### 7. Sharp subsidies for protecting core maxima in three-sided assignment markets
 
-[Current PDF](paper5/sharp_subsidy/output/pdf/manuscript.pdf) · [Source, audit, and verification package](paper5/sharp_subsidy/README.md)
+[Current source](paper5/sharp_subsidy/manuscript.tex) · [Historical 3 October PDF](paper5/sharp_subsidy/output/pdf/manuscript.pdf) · [Source, audit, and verification package](paper5/sharp_subsidy/README.md)
 
 High level: external money can restore a one-third guarantee of each participant's
 best original stable payoff. The worst-case required subsidy is one third of
@@ -127,39 +127,19 @@ separate attaining core points. It also proves the sharp integral-obstruction
 bound 2(k-1)T/[3(2k-1)] for k unmatched players per sector. A family with pair
 values in {0,1,2} supplies sharpness, with full coordinate-attainment witnesses.
 
-Status: ten-page self-contained manuscript, freshly audited by the coordinator
-and Fable 5.1; notation, explanatory steps, and attribution disclosures repaired.
-Portable exact checks include 3,603,804 full-team inequalities. Human specialist
-validation and historical novelty remain pending. The prior
-[theorem package](research_campaigns/2026-10-03-core-witness/sharp_result/SHARP_ONE_THIRD.md)
-is its research archive, not an additional paper. This result supersedes the
-former 1/3<=S3<=39999/100000 frontier.
+Status: the complete main theorem is retained, and all surviving static-protection extensions are now consolidated in appendices: general sector bounds, unit/quota flow, transportation-core comparison, endpoint incompatibility, sparse core representation, coattainment, perturbation instability and the finite cyclic-optimum obstruction. [Current consolidation record](review_packages/2026-10-07/consolidation/README.md). The old ten-page PDF predates these additions. Priority and human review remain pending.
 
-### 8. Subsidies for truthful cooperation: sharp unrestricted bounds in weighted multi-glove games
+### 8. Sharp subsidies for truthful production and network cooperation
 
-[Current manuscript source](paper5/truthful_cooperation/manuscript.tex) · [Current specialist brief](paper5/truthful_cooperation/specialist_brief.tex) · [Review and verification package](paper5/truthful_cooperation/README.md)
+[Current manuscript](paper5/truthful_cooperation/manuscript.tex) · [Current specialist brief](paper5/truthful_cooperation/specialist_brief.tex) · [Review package](paper5/truthful_cooperation/README.md)
 
-High level: keeping every coalition satisfied while preventing owners from
-gaining by hiding capacity requires a growing external budget. This holds
-even for nonlinear payments when both owner counts and pool counts grow.
+High level: preventing gains from hidden resources while protecting every coalition requires an external budget that grows with production complexity. The paper gives the sharp growth rate, including for ordinary simple directed networks.
 
-Technical: the unrestricted minimax total-payment factor is
-(1+o(1)) log k/log log k. A fixed-owner hierarchy of binary reports, averaged
-with truncated-Poisson type weights, gives the matching lower, and the capped continuous-Banzhaf
-rule gives the upper for arbitrary unequal finite pools and all nonnegative
-real profiles. A pairwise probability bound strictly tightens the finite-k
-upper. The proportional class has sharp leading constant 1; nonlinear rules
-escape that class's witnesses on bounded-altered-pool domains. The original
-H/k floor adds at most one and leaves leading coefficients unchanged.
+Technical: for every finite nonnegative min-linear technology with K fixed supporting forms, the worst all-profile total-payment factor is **(1+o(1)) log K/log log K**. A capped own-excluded/endpoint hybrid proves the general upper; weighted report transitions through shared-fan networks give the matching simple-DAG lower with strategic auxiliary owners. The theorem permits arbitrary overlapping whole-owner resource bundles. The worst-case parameter uses at most K forms/cuts; it does not settle rates in owner count or resource dimension.
 
-Status: integrated complete proofs and portable exact checks; internal
-integration and sharp-theorem reviews recorded with the package. The
-leading-constant gap is closed; historical novelty and human specialist
-assessment remain open. Existing PDF
-exports predate the hierarchy and are labeled historical; use the current
-sources. These developments remain one paper candidate. Outreach is unsent.
+Further results include an O(n/log n) bound for all finite-valued monotone concave homogeneous production functions, resource-dimension bounds, exact finite sampling and all-profile certification, and the earlier sharp multi-glove hierarchy. Certification can require exponential preprocessing. Appendices consolidate the finite-pool mechanisms, network subclasses, monotone-envelope obstruction and scoped method boundaries; these do not inflate the paper count.
 
-The [October 7 research supplement](research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt) substantially extends this candidate: a raw-capped hybrid proves the sharp leading-one log K/log log K total-payment bound for all finite nonnegative min-linear production technologies, including arbitrary overlapping owner bundles and general networks. A separate shared-fan lower reaches the same leading constant on simple DAGs. Further results cover all concave homogeneous production functions with O(n/log n) payments and provide finite sampling with exact all-profile certification after potentially exponential preprocessing. These have conventional proofs, scoped independent model audits and portable exact checks, but are **not yet integrated into the manuscript**. They are not counted as extra completed papers; historical novelty and human review remain unresolved.
+Status: complete consolidated source with conventional proofs, exact finite certificates and scoped model audits. The [October 7 campaign](research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt) is now its research archive. Current sources supersede the pre-hierarchy PDF exports. Historical novelty, significance and human specialist assessment remain unconfirmed. Outreach is prepared and unsent.
 
 ## Broader archived manuscripts
 
