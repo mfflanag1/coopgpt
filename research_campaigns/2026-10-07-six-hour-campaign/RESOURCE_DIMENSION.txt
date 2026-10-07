@@ -1,0 +1,170 @@
+RESOURCE-DIMENSION FALLBACK AND ITS LIMITS
+7 October 2026. Bounded independent check by personal_ceiling.
+Scope: exact elementary fallback, sharp obstruction without concavity,
+technology-aware refinement, and an explicitly imported min-linear lower
+baseline. No new sharp dimension theorem for concave technologies is claimed.
+
+1. MODEL AND UNIVERSAL NORMALIZED-SHARE RULE
+There are n fixed owners and d fixed resource coordinates. Owner i reports
+b_i in R_+^d and may only decrease its own bundle componentwise. Let
+c=sum_i b_i. Assume f:R_+^d->R_+ is finite-valued, coordinatewise monotone,
+and positively homogeneous of degree one. Concavity is NOT assumed.
+Set T=f(c) and v(S)=f(sum_{i in S}b_i). Finite homogeneity implies f(0)=0.
+
+Define 0/0=0 in the following normalized shares:
+ rho_i(b)=max_{1<=e<=d} b_ie/c_e,
+ P_i(b)=T rho_i(b).                                     (1)
+Then (1) is nonnegative, own-vector-monotone, and covers every coalition.
+Its total payment obeys the pointwise bound
+ sum_i P_i <= min(n,d_+(c)) T <= d T,                    (2)
+where d_+(c) is the number of positive aggregate resource coordinates.
+
+Own-vector monotonicity. Holding every other report fixed, write
+b_ie/c_e=b_ie/(b_ie+c_-i,e). This is nondecreasing in b_ie. If the other
+aggregate is zero, its value is zero at b_ie=0 and one at every positive
+b_ie, which is still nondecreasing. Increasing the entire own vector
+componentwise therefore increases rho_i weakly. It also increases T weakly.
+Both factors are nonnegative, so their product is nondecreasing. This proves
+the exact underreport incentive condition, including zero boundaries.
+
+Coverage. Each coordinate satisfies b_ie<=rho_i c_e, also when c_e=0.
+For a coalition S put r_S=sum_{i in S}rho_i. Then c(S)<=r_S c, and
+ v(S)<=f(r_S c)=r_S T=sum_{i in S}P_i.
+When r_S=0 this uses f(0)=0; when T=0 coverage also follows immediately
+from monotonicity and 0<=c(S)<=c. No differentiability, support prices,
+continuity, or concavity was used.
+
+Budget. Each rho_i<=1, so their sum is at most n. Also
+ sum_i rho_i <=sum_{e:c_e>0}sum_i b_ie/c_e=d_+(c).
+If c=0 both sides of the payment guarantee are zero.
+
+2. d IS EXACTLY OPTIMAL IN THE STATED NONCONCAVE CLASS
+For every d take f(c)=max_e c_e and d owners b_i equal to the d unit vectors.
+Then T=1 and v({i})=1 for every owner. Singleton coverage alone forces
+sum_i P_i>=d, independently of truthfulness or computational restrictions.
+Thus the optimal universal factor over ALL finite monotone homogeneous
+technologies is exactly d, for every resource dimension d.
+
+The obstruction is not an artifact of zeros. Give owner i amount one in its
+own coordinate and epsilon>0 in every other coordinate. Every singleton is
+still worth one, while T=1+(d-1)epsilon. The necessary factor is at least
+d/[1+(d-1)epsilon], tending to d as epsilon decreases. For epsilon=d^(-2),
+it grows as (1-o(1))d with strictly positive bundles.
+
+This f is convex and is not min-linear for d>=2: it is not superadditive.
+Therefore section 2 does NOT give a lower bound for the concave/min-linear
+class. That distinction is essential.
+
+3. TWO EXACT REFINEMENTS FOR NONNEGATIVE MIN-LINEAR f
+Suppose f(c)=min_{w in V} w dot c for a fixed finite nonempty set V of
+nonnegative vectors. The dimension fallback can be refined without changing
+its d-only worst guarantee.
+
+(a) Marginal/utopia vector. Put
+ M_i=f(c)-f(c-b_i).
+The second term is independent of i's report, so M_i is own-vector-monotone.
+Choose an optimal w at c and use the core allocation a_i=w dot b_i. Its
+coalition-complement inequality yields
+ a_i<=T-v(N\{i})=M_i.
+Consequently M covers all coalitions. Further,
+ c-b_i >= (1-rho_i)c
+implies f(c-b_i)>=(1-rho_i)T, and hence
+ 0<=M_i<=T rho_i.
+Thus the standard marginal rule is already bounded by the new elementary
+dimension fallback. This is consistent with the project's earlier marginal
+flow baseline, and is not claimed as a new mechanism.
+
+(b) Technology-aware maximum normalized dual share. Define
+ theta_i=max_{w in V} (w dot b_i)/(w dot c), with 0/0=0,
+ Q_i=T theta_i.                                        (3)
+Every ratio is of the form a/(a+A), with A=w dot c_-i fixed and a=w dot b_i
+nondecreasing in the own vector. Thus theta_i and Q_i are own-vector-monotone.
+If T>0 and w* is optimal at c, then for every S,
+ f(c(S))<=w* dot c(S)
+         =T sum_{i in S}(w* dot b_i)/(w* dot c)
+         <=sum_{i in S}Q_i.
+For T=0 all payments and coalition values are zero. Moreover each normalized
+dual share is a weighted average of the coordinate shares b_ie/c_e, so
+theta_i<=rho_i. Thus Q is a pointwise improvement of (1), with the same dT
+bound. It is exactly efficient for a single linear form, since its normalized
+shares then sum to one whenever T>0. This is a simple refinement, not a
+sublinear-in-d theorem.
+
+If the forms in V belong to the nonnegative cone of r fixed nonnegative
+vectors a_1,...,a_r, the same weighted-average argument bounds theta_i by
+max_l (a_l dot b_i)/(a_l dot c), and sum_i theta_i<=r. This merely expresses
+the fallback in nonnegative projected resource coordinates; it does not
+establish a bound from ordinary signed linear rank alone.
+
+The d-only bound can be tight for rule (1) even when a much better rule exists:
+with f(c)=sum_e c_e and one unit-basis owner per resource, (1) costs dT,
+while paying each owner's linear contribution costs exactly T. Similarly,
+the marginal vector costs dT for f(c)=min_e c_e at the unit-basis profile,
+although that profile has an efficient core allocation. These are method
+limitations, not lower bounds against all truthful mechanisms.
+
+4. ESTABLISHED GROWING LOWER FOR THE MIN-LINEAR DIMENSION PROBLEM
+The existing weighted-glove hierarchy already supplies an unbounded
+dimension-only obstruction. This section is a reformulation of an established
+project result, not a new lower construction.
+
+Use D resource types and production f(c)=min_{1<=j<=D}c_j. Give each resource
+type m separate fixed owners whose bundles are confined to that coordinate.
+The total owner count is Dm but RESOURCE DIMENSION IS D. Any mechanism for
+arbitrary owner bundles restricts to a valid scalar-own-report mechanism on
+these axis-supported bundles.
+
+For integers h>=1,m>h, alpha>0, define
+ A=(h+1)m-h^2, lambda=A/alpha,
+ Z=sum_{r=0}^h lambda^r/r!, p_r=lambda^r/(r!Z).
+The established weighted-profile hierarchy proves, for any D>=2,
+ B >= A / ((1+alpha) E T),
+ E T=m+(m-1)sum_{r=1}^h (sum_{s=r}^h p_s)^D
+     <=m[1+h exp(-D/Z)].                               (4)
+The finite certificate uses reports 1 and m, two actual coalition families,
+and only a changing original owner's monotonicity comparison. Resource
+aggregation does not merge owner identities or add any incentive assumption.
+
+For h>=2, q=ceil(log(h+1)), m=hq, alpha=1/q, and D_h=ceil(2qZ), equation (4) gives
+ B >= [h+1-h/q]/[(1+1/q)(1+h exp(-2q))]=(1-o(1))h,
+while log D_h=(1+o(1))h log h. The all-D version of the same proof yields
+ B_dimension(D) >= (1-o(1)) log D/log log D.              (5)
+Thus no constant, or o(log D/log log D), dimension-only guarantee can hold
+even for the single-product Leontief technology and axis-supported owners.
+
+The baseline source is
+ research_campaigns/2026-10-06-leading-constant/SHARP_THEOREM.txt
+and the weighted-hierarchy subsection of
+ paper5/truthful_cooperation/manuscript.tex.
+The present bounded investigation did not improve (5), and did not prove a
+sublinear dimension-only upper bound for arbitrary nonnegative min-linear f.
+The gap between this imported lower and the elementary d upper remains open
+in this note. The separate sharp K-complexity theorem can be used alongside
+the dimension rule by selecting a mechanism in advance from the fixed values
+of d and K; coordinatewise minima of different payment rules are not asserted
+to preserve coalition coverage.
+
+5. PRIMARY-SOURCE CHECK AND TERMINOLOGY
+The statistic max_e b_ie/c_e is the familiar dominant share from the
+multi-resource-allocation literature. A primary source is Ali Ghodsi et al.,
+"Dominant Resource Fairness: Fair Allocation of Multiple Resource Types,"
+NSDI 2011, section 4:
+ https://www.usenix.org/conference/nsdi11/dominant-resource-fairness-fair-allocation-multiple-resource-types
+ https://static.usenix.org/event/nsdi11/tech/full_papers/Ghodsi.pdf
+That paper allocates resources to users reporting requirements; its own
+strategy-proofness theorem concerns that different model. Its terminology
+does not establish historical priority for payments (1), coalition coverage,
+or the present underreport-only supplier model. No novelty inference is made.
+
+STATUS
+Verified: the fallback including all zero cases; exact d necessity in the
+nonconcave class; the two min-linear refinements; and applicability of the
+already established growing hierarchy lower to resource dimension D.
+The portable checker verification/resource_dimension.py enumerates all 729
+three-owner/two-resource profiles in {0,1,2}^6 for four technologies. It checks
+58,320 coalition inequalities and 43,740 own-coordinate inequalities, including
+all 0-to-2 jumps, as well as zero cases, cone refinements and four substantive
+negative controls. Actual execution is recorded separately. These bounded
+checks do not establish the universal or asymptotic claims, which use proofs.
+Not established: an improved general dimension rate for min-linear f, a
+stronger min-linear dimension obstruction, or historical novelty.

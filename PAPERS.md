@@ -1,6 +1,6 @@
 # CoopGPT paper index
 
-Updated 6 October 2026. Eight focused manuscript candidates are listed below.
+Updated 7 October 2026. Eight focused manuscript candidates are listed below.
 Completed manuscript means the exposition and PDF exist; it does not imply
 publication, confirmed novelty, or independent human endorsement. The current
 structural paper replaces the earlier chain-cycle manuscript in this list.
@@ -158,6 +158,8 @@ leading-constant gap is closed; historical novelty and human specialist
 assessment remain open. Existing PDF
 exports predate the hierarchy and are labeled historical; use the current
 sources. These developments remain one paper candidate. Outreach is unsent.
+
+The [October 7 research supplement](research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt) substantially extends this candidate: a raw-capped hybrid proves the sharp leading-one log K/log log K total-payment bound for all finite nonnegative min-linear production technologies, including arbitrary overlapping owner bundles and general networks. A separate shared-fan lower reaches the same leading constant on simple DAGs. Further results cover all concave homogeneous production functions with O(n/log n) payments and provide finite sampling with exact all-profile certification after potentially exponential preprocessing. These have conventional proofs, scoped independent model audits and portable exact checks, but are **not yet integrated into the manuscript**. They are not counted as extra completed papers; historical novelty and human review remain unresolved.
 
 ## Broader archived manuscripts
 

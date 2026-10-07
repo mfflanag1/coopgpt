@@ -69,6 +69,11 @@ def run():
 
 
 if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,help='Optionally also write the JSON result to this path')
+    args=parser.parse_args()
     result=run();content=json.dumps(result,indent=2)+'\n'
-    Path('/tmp/coopgt_potential_result.json').write_text(content)
+    if args.output is not None:
+        args.output.write_text(content)
     print(content,end='')

@@ -2,18 +2,13 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
-The [six-hour follow-on campaign](research_campaigns/2026-10-07-six-hour-campaign/CONTRACT.txt) is active until **7 October 2026, 09:54 UTC**. It attacks the sharp envelope bound, alternative general mechanisms and growing fixed-owner lower bounds; [current state](research_campaigns/2026-10-07-six-hour-campaign/STATE.txt) distinguishes verified lemmas, failed routes and pending reviews. The eight-hour plan reserves two further hours that are not active without an extension.
+The [six-hour campaign report](research_campaigns/2026-10-07-six-hour-campaign/REPORT.txt) now establishes a **sharp general payment bound**. For every finite nonnegative min-linear production technology with at most K supporting forms, fixed owners can report whole resource bundles while a deterministic rule covers every coalition and prevents profitable binding underreports. Worst-case total payments are **(1+o(1)) T log K / log log K**. The matching lower holds even on **simple directed acyclic networks**, with all auxiliary owners strategic. [Proof and verification index](research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt).
 
-The [monotone-envelope theorem](research_campaigns/2026-10-06-monotone-envelope/THEOREM.txt)
-now gives an all-profile truthful, coalition-covering repair on **every finite
-directed acyclic network**, with total payments **at most 2K²T**, independent of
-owner count. Here K is the number of structural minimal cuts and T is grand
-flow. The sharper structural bound is 2H(G)T. This settles boundedness for the
-specified envelope, but is weaker than the known marginal-contribution budget
-and leaves the **C log K / log log K** target open. An exact path example shows
-why the current proof relaxation cannot reach that target. The [record](research_campaigns/2026-10-06-monotone-envelope/INDEX.txt)
-includes the conventional proof, independent model audit, exact checks, source
-comparisons and limitations; novelty and human review remain unconfirmed.
+The same work gives an **O(n/log n)** owner-count upper for every finite monotone concave homogeneous production function, plus a finite-sample rule with an exact all-profile certification procedure. Certification can require exponential preprocessing; subsequent evaluation uses polynomially many LP calls. Conventional proofs, independent model reviews and exact checks are recorded. Novelty, human specialist validation and field-level significance remain unconfirmed. These are research supplements; they have not yet been integrated into the open manuscript or specialist brief. The authorized campaign remains in final verification until **7 October 2026, 09:54 UTC**; its two proposed extra hours are not active.
+
+The original [monotone-envelope route](research_campaigns/2026-10-06-monotone-envelope/THEOREM.txt) is now understood more precisely: its universal upper improves from 2K²T to **KT**, but an [exact growing obstruction](research_campaigns/2026-10-07-six-hour-campaign/AGGREGATE_ENVELOPE_OBSTRUCTION.txt) prevents the desired log K/log log K bound for that envelope or any truthful pointwise majorant of the original rule. The successful general mechanism uses a different construction.
+
+Earlier campaign entries below describe the frontier at their respective dates.
 
 The [Wheatstone follow-on](research_campaigns/2026-10-06-wheatstone/INDEX.txt)
 identifies a precise boundary: the effective-capacity rule remains truthful on

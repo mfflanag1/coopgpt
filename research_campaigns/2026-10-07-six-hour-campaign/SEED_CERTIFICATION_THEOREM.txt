@@ -1,0 +1,279 @@
+EXACT ALL-REAL-PROFILE CERTIFICATION AND SEARCH FOR A FINITE MASK SEED
+7 October 2026. Conventional proof; independent cross-model audit completed.
+
+VERDICT
+The proposed certificate is valid. It gives an exact terminating decision
+procedure for one seed, and—combined with the uniform good-seed theorem—a
+Las Vegas preprocessing algorithm that eventually returns a certified seed.
+The key requirements are (i) rational technology/weights/budget threshold,
+(ii) all tie faces, and (iii) FROZEN face formulas when optimizing over a face
+closure. Efficient derandomization is not established.
+
+There is no hidden incompatibility between the posterior-mean finite sampler
+and the uniform theorem. Although theta_|S| depends on the full mask, including
+the sampled own bit, it does not depend on reports. Conditional expectation
+preserves the exact mean; the weights remain in [0,1]; and the growth argument
+treats theta_|S| as a fixed scalar for each observation. None of those arguments
+requires theta to be independent of S.
+
+1. FIX THE EXACT INPUT
+
+Let n,d>=1 and V=(w^1,...,w^K) be an ordered, COMPLETE finite list of rational
+vectors in Q_+^d, with K>=1. Define
+  F(c)=min_v w^v.c,
+  v_b(U)=F(sum_{i in U}b_i),     T(b)=v_b(I),
+where owner reports b_i range over ALL of R_+^d and I={1,...,n}.
+The priority on V is fixed independently of reports.
+
+The seed consists of N>=1 masks S_1,...,S_N. The finite-law coefficients
+theta_0,...,theta_n are supplied rationals in [0,1], and eta>=0 and Cbar are
+supplied rationals. For the posterior sampler they are the exact theta_k in
+SAMPLING_COROLLARY.txt, and eta>0 in the uniform theorem. The checker itself
+does not require that the seed was randomly drawn.
+
+For mask S and owner i, let
+  W^-_{i,S}(b)=first argmin_v w^v.sum_{h in S\{i}}b_h,
+  A_{i,S}(b)=min(W^-_{i,S}(b).b_i,T(b)),
+  Delta_{i,S}(b)=v_b(S union {i})-v_b(S\{i}),
+  Xtilde_i(S,b)=theta_|S| A_{i,S}(b)+(1-theta_|S|)Delta_{i,S}(b).
+The frozen-seed payment is
+  P_i(b)=N^{-1}sum_l Xtilde_i(S_l,b)+(eta/n)T(b).
+
+The exact checker decides whether BOTH of the following hold:
+  sum_{i in U} P_i(b)>=v_b(U) for every U subseteq I and every real b>=0;
+  sum_i P_i(b)<=Cbar*T(b) for every real b>=0.                       (1)
+It is sound and complete for (1), not merely a sufficient finite test.
+Universal own-vector monotonicity follows separately for every seed from the
+mechanism formula and need not be re-certified by this checker.
+
+If technology is supplied by a rational production LP rather than an explicit
+V, one may first enumerate its dual vertices exactly. For Q={w>=0:A^T w>=r},
+enumerate all linearly independent active d-tuples, solve them rationally,
+retain feasible solutions, and deduplicate. Under the stated bounded packing
+model this gives all vertices. This enumeration is a preprocessing cost, not
+an assumed polynomial-time vertex-counting algorithm.
+
+2. HOMOGENEOUS NORMALIZATION AND THE ARRANGEMENT
+
+Every payment, coalition value, and budget slack in (1) is positively
+homogeneous of degree one in the entire report vector. Scaling preserves
+every score tie, fixed-priority winner, and cap branch. The zero report vector
+has zero payments and values. Thus it suffices to check the compact simplex
+  Delta={b in R_+^{p}:sum_{i,h} b_{ih}=1},      p=nd.                (2)
+Normalize by total report mass, NOT by T. Nonzero profiles with T=0 remain
+inside the domain and cause no division-by-zero issue.
+
+For every coalition U and vertex v, define the rational homogeneous form
+  L_{U,v}(b)=w^v.sum_{i in U} b_i.
+Make an arrangement with the following rational homogeneous hyperplanes:
+  L_{U,v}-L_{U,t}=0       for all U subseteq I and v<t;
+  w^v.b_i-L_{I,t}=0       for all i and all v,t.
+Omit identically zero forms if desired. The number H satisfies
+  H<=2^n binom(K,2)+nK^2.                                         (3)
+The first family fixes the entire minimizing family and priority winner for
+EVERY coalition, including every sampled off/on coalition and the grand
+coalition. The second fixes all possible cap branches. No report-dependent
+sampling coefficients occur.
+
+If the optional zero-reporter cushion eta*T/n * 1{b_i!=0} is used instead,
+add the n forms sum_h b_{ih}=0. On the nonnegative domain these identify
+zero bundles exactly; the rest of the proof is unchanged.
+
+3. EXACT STRICT-FACE FEASIBILITY
+
+Write the retained arrangement forms as ell_1,...,ell_H. For each ternary
+sign pattern sigma in {-1,0,+1}^H define its relatively strict region
+  C_sigma={b in Delta:
+      ell_h(b)=0 when sigma_h=0,
+      sigma_h ell_h(b)>0 when sigma_h!=0}.
+These regions partition Delta. A region may lie on a proper coordinate face
+of the nonnegative simplex; that creates no difficulty.
+
+Let P_sigma be the relaxed polytope obtained by replacing each strict >0
+with >=0. Determine whether C_sigma is nonempty using this rational LP:
+  maximize tau,
+  b in Delta,
+  ell_h(b)=0                         if sigma_h=0,
+  sigma_h ell_h(b)>=tau              if sigma_h!=0,
+  0<=tau<=1.                                                      (4)
+If the LP is infeasible or its optimum is zero, discard the pattern.
+If its optimum is positive, retain it and a rational feasible witness z_sigma
+with tau>0. If there are no strict constraints, (4) has optimum 1 exactly
+when its equality-constrained simplex is nonempty, so this case is covered.
+
+The criterion is exact: a point satisfying finitely many strict rational
+inequalities has a positive minimum margin; conversely tau>0 enforces them.
+LP (4) has rational data and a compact feasible set. Feasible optima and
+positive-margin witnesses can be represented exactly by rational vectors.
+
+The tiny exact checker uses an equivalent vertex-average criterion: enumerate
+all vertices of P_sigma and average them. Every signed strict form is already
+nonnegative on P_sigma. It is positive somewhere iff it is positive at some
+vertex. Thus all strict forms can simultaneously be positive iff their values
+at the average of ALL vertices are positive. This average supplies the needed
+strict witness; the margin LP is one implementation, not a requirement.
+
+IMPORTANT CLOSURE LEMMA. For every retained pattern,
+  closure(C_sigma)=P_sigma.                                      (5)
+To prove the nontrivial inclusion, take x in P_sigma and the strict witness
+z_sigma. For every 0<t<=1, b_t=(1-t)x+t z_sigma belongs to Delta, satisfies
+the equality signs, and satisfies every strict sign, since
+  sigma_h ell_h(b_t)>=(t) sigma_h ell_h(z_sigma)>0.
+Thus b_t is in C_sigma and tends to x. This proof handles simplex boundaries,
+lower-dimensional faces, degeneracy, and arbitrary rational hyperplane scales.
+
+4. FROZEN LINEAR FORMULAS AND THE DECISION LPS
+
+Evaluate the coalition winners and cap branches at z_sigma using exact
+arithmetic. Their identities are the same throughout C_sigma, with equality
+ties resolved by the prescribed priority. Hence, on C_sigma, each coalition
+value is a fixed rational linear form V_{U,sigma}, T is V_{I,sigma}, and each
+seed payment P_i is a fixed rational linear form P_{i,sigma}.
+
+For every U subseteq I form the linear coverage slack
+  G_{U,sigma}=sum_{i in U}P_{i,sigma}-V_{U,sigma},
+and form the linear budget slack
+  G_{budget,sigma}=Cbar*V_{I,sigma}-sum_i P_{i,sigma}.
+For each of these finitely many slacks solve the exact rational LP
+  minimize G(b) subject to b in P_sigma.                         (6)
+Accept the seed iff every optimum in (6) is nonnegative, for every retained
+pattern and every coverage/budget slack.
+
+The objective in (6) is the FROZEN FACE FORMULA evaluated on the closure.
+At a boundary point outside C_sigma it need not equal the actual payment
+computed using the boundary's different tie-resolved winner. Re-running the
+mechanism at closure vertices and ignoring their originating face would not
+be a valid substitute. All lower-dimensional tie regions are checked under
+their own actual formulas as separate retained patterns.
+
+Why the closure LP is nevertheless equivalent: a linear form is continuous,
+so it is nonnegative on C_sigma iff it is nonnegative on closure(C_sigma).
+Equation (5) identifies that closure with the LP polytope. Thus (6) has a
+negative optimum iff the original inequality fails somewhere in C_sigma.
+
+An explicit rational violating profile can also be returned. Let x be a
+rational closure optimizer with G(x)<0 and let z=z_sigma. Choose a sufficiently
+small positive rational t, for example
+  t=min(1/2, -G(x)/(2[1+|G(x)|+|G(z)|])).
+Then b_t=(1-t)x+t z is a rational point in C_sigma and G(b_t)<0. Its actual
+mechanism branch is exactly the frozen branch, so it is a genuine violation.
+Checking the other tie faces is essential for completeness, not an optional
+generic-position assumption.
+
+T=0 requires no exceptional optimization. Every coalition value then vanishes
+by monotonicity, each capped term is zero, every marginal is zero, and every
+payment is zero. On a retained face closure, its selected value forms remain
+valid minimizing forms; a cap branch using w.b_i still obeys w.b_i<=T there.
+Consequently the frozen payment forms also vanish at closure points with T=0.
+No spurious strict violation is created by such a point.
+
+Combining normalization, exhaustive face partition, and (5)-(6) proves the
+checker is sound and complete for all real report profiles.
+
+5. WHAT AN EXACT FINITE CERTIFICATE CAN CONTAIN
+
+A verifiable certificate can include:
+  - an exhaustive face-enumeration tree;
+  - positive rational margin witnesses for retained branches;
+  - exact infeasibility or upper-bound-zero certificates for discarded
+    margin branches;
+  - the frozen winner/cap identities and rational linear formulas at leaves;
+  - rational LP dual certificates establishing nonnegative lower bounds for
+    every slack in (6).
+These use only rational equalities and inequalities. Standard LP duality
+provides the dual certificates for feasible bounded rational LPs. One can
+instead enumerate vertices of each compact P_sigma exactly and evaluate the
+frozen forms there, retaining the originating-face labels. Either method is
+finite. Certificate checking is polynomial in the explicit certificate length;
+that length can be exponential in the original problem parameters.
+
+A smaller SUFFICIENT certificate is possible if desired. On the same faces,
+the exact mean mechanism M_i is a rational linear form because the full mask
+law has only 2^n masks and rational probabilities/weights. Certify P_i>=M_i for
+each i, plus the budget inequality. This uses n+1 objective checks per face
+instead of 2^n+1. It is not complete for coverage itself, but every seed in the
+uniform concentration event satisfies this stronger condition, so the search
+termination argument below still applies.
+
+6. HONEST PREPROCESSING COMPLEXITY
+
+Blind enumeration of all 3^H sign assignments is finite but may be DOUBLY
+exponential in n because H already contains 2^n. It is unnecessary.
+
+Enumerate only realizable signs incrementally. Start with Delta; insert one
+hyperplane at a time. For each retained prefix try its three sign extensions
+and apply the margin LP to the prefix forms. Inductively every nonempty
+region is kept, and every point of Delta has its sign path represented.
+
+The number of nonempty ternary sign faces of h hyperplanes in R^p is at most
+  sum_{k=0}^p 2^k binom(h,k) <= (1+2h)^p.
+Therefore at most 3H(1+2H)^p margin LPs suffice. At the end at most
+(1+2H)^p faces require at most 2^n+1 slack LPs each. Every LP has p or p+1
+variables and O(p+H) constraints. Coefficients have bit length polynomial in
+the explicit rational technology, seed, eta, Cbar, and finite-law weights.
+
+Using exact rational LP algorithms, or even active-set enumeration on these
+compact polytopes, gives a conservative total bound of the form
+  (2^n+1)(1+H)^{O(nd)} * poly(N,n,d,K,L),                          (7)
+where L bounds the relevant rational input bit lengths. In particular, the
+combinatorial factor is singly exponential in a polynomial of n,d,log K:
+  2^{O(nd[n+log(K+1)+log(n+1)]+n)}.
+This is not a polynomial preprocessing claim. The cost of enumerating V from
+a compact LP input is additional; it too has a finite active-set bound.
+Arrangement geometry, face witnesses, and closure constraints depend only on
+technology and can be reused across candidate seeds.
+
+7. CERTIFIED SEED SEARCH AND SUBSEQUENT EVALUATION
+
+Choose 0<eta<=1, j, a sample size N meeting the uniform theorem, and 0<delta<1,
+all independently of reports. The restriction eta<=1 belongs to the quoted
+uniform sample bound; the seed-agnostic checker itself permits any eta>=0.
+Supply a CERTIFIED rational bound
+  Cbar >= B_j(K)+2eta
+(or use a certified upper bound on K). A rational bound avoids inserting
+transcendental coefficients into the exact LP tests. If needed, an arbitrarily
+small additional budget slack permits a rational Cbar certified by rigorous
+logarithm enclosures.
+
+Repeat:
+  1. Draw a fresh length-N iid seed from the exact finite mask law.
+  2. Run the exact all-profile checker.
+  3. Reject on a genuine violation; output the seed and certificate on success.
+
+The uniform theorem says each trial is accepted with probability at least
+1-delta: all good concentration seeds satisfy both (1) inequalities. Trials
+are independent. Thus termination is almost sure, expected trials are at most
+1/(1-delta), and every returned seed is correct, regardless of the randomness.
+Taking delta=1/2 makes the expected number of verification runs at most two.
+Exact finite-law fair-bit sampling has expected polynomial cost; its rejection
+loops also terminate almost surely. Combining these facts with (7) gives
+finite expected, generally exponential, preprocessing. There is no finite
+worst-case bound on the number of independent random trials.
+
+Alternatively enumerate the finite seed space deterministically. Existence
+of a good seed implies eventual success, after at most 2^(nN) candidate
+sequences. This is a finite exhaustive construction, not efficient
+derandomization. A smaller Cbar lacking the stated guarantee can still be
+tested exactly, but the probability theorem would no longer guarantee search
+termination or the expected-trial bound.
+
+Preprocessing and certification use the technology and ALL-profile conditions,
+not the actual owners' reports. Freezing the accepted seed consequently
+preserves the already established universal individual incentives.
+
+Subsequent evaluation need not revisit the exponential certificate. It uses
+at most 1+N(n+1) canonical value/minimizer queries. For a compact rational
+production LP with lexicographic priority on dual vertices, each canonical
+query needs at most d+1 exact LP calls, giving at most
+  1+N(n+1)(d+1)
+ordinary LP calls. This is polynomial evaluation for rationally encoded
+reports in the displayed sample/input parameters. An arbitrary supplied
+priority over an explicit V is evaluable by scanning V, polynomial in its
+explicit size K; it does not automatically admit the same compact-LP oracle.
+For all real reports the certified mechanism is mathematically well-defined;
+bit-model running time is asserted only for finite rational encodings.
+
+The result upgrades random good-seed existence to an exact, always-correct
+output after potentially enormous preprocessing. It does not establish
+polynomial preprocessing, a practical certificate size, or an efficient
+deterministic construction of a good seed.

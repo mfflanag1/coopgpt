@@ -1,0 +1,68 @@
+OWNER-COUNT LOWER: CONSEQUENCE OF THE EXISTING WEIGHTED HIERARCHY
+7 October 2026. Parameter translation, not a new lower-bound construction.
+
+Let B_n be the worst optimal total-payment factor among finite nonnegative
+min-linear technologies with n fixed owners; resource dimension and technology
+may grow. Every mechanism must cover all coalitions and be componentwise
+own-report monotone on every nonnegative real bundle profile. The broader
+concave homogeneous class contains this class, so the same lower applies.
+
+The existing sharp weighted-glove theorem implies
+  B_n >= (1-o(1)) log n/loglog n.
+Together with OWNER_COUNT_EXTENSION.txt the current general owner-count range is
+  (1-o(1)) log n/loglog n <= B_n <= (log 2+o(1)) n/log n.
+No sharp owner-count order or constant is established.
+
+IMPORTED LEMMA
+For K complementary resource pools, m fixed axis-supported owners per pool,
+and hierarchy height h<m, choose alpha>0 and put
+  A=(h+1)m-h^2, lambda=A/alpha,
+  Z=sum_(r=0)^h lambda^r/r!, p_r=lambda^r/(r! Z).
+The fixed-owner weighted report-transition certificate gives
+  B >= A/[(1+alpha) E T],
+  E T=m+(m-1) sum_(r=1)^h (sum_(s=r)^h p_s)^K
+      <=m[1+h exp(-K/Z)].
+This is the previously audited hierarchy, not re-proved by a parameter change.
+Sources within the repository:
+  research_campaigns/2026-10-06-leading-constant/SHARP_THEOREM.txt
+  paper5/truthful_cooperation/manuscript.tex (weighted hierarchy)
+  paper5/truthful_cooperation/verification/sharp/poisson_certificate.py
+  research_campaigns/2026-10-07-six-hour-campaign/review/hybrid_review.md
+
+PARAMETERS
+For integers h>=2 define
+  R=ceil(log(h+1)), s=ceil(sqrt(R)), m=h s, alpha=1/s,
+  A=(h+1)m-h^2, lambda=A s,
+  Z=sum_(r=0)^h lambda^r/r!, K_h=ceil(2 R Z), n_h=K_h m.
+Here s>=2, so m>h as required. The coefficient R in K_h is important:
+using 2sZ instead would not make h exp(-K_h/Z) vanish for this choice of s.
+
+Since K_h/Z>=2R>=2 log(h+1), the lemma yields
+  B_(n_h) >= (h+1-h/s)/[(1+1/s)(1+h/(h+1)^2)]
+           = (1-o(1))h.
+Also lambda~h^2 log h, and eventually lambda>=h. Therefore the terms
+lambda^r/r! are increasing up to r=h, and
+  lambda^h/h! <= Z <= (h+1)lambda^h/h!.
+Using log(h!)=h log h-h+O(log h),
+  log Z=h log lambda-log(h!)+O(log h)=(1+o(1))h log h.
+Consequently log K_h~h log h and log n_h~h log h, because log m=O(log h).
+Thus h~log n_h/loglog n_h, proving the lower on this sequence.
+
+ALL LARGE OWNER COUNTS
+For fixed epsilon in (0,1) and large n, set
+  h=floor((1-epsilon)log n/loglog n).
+The preceding asymptotic gives log n_h=(1-epsilon+o(1))log n<log n,
+so n_h<=n. Append n-n_h fixed extra owners and examine only profiles in which
+their bundles are zero. Any valid n-owner mechanism, restricted to this
+subdomain and with the extra owners' nonnegative payments discarded, is a
+valid n_h-owner mechanism: all original coalition constraints and unilateral
+report comparisons remain, and the original total payment is no larger.
+Therefore B_n>=B_(n_h)>=(1-epsilon-o(1))log n/loglog n. Let epsilon decrease
+to zero to obtain the displayed all-n lower. No owner identity changes within
+any compared report profile, and no false-name or population-entry incentive
+assumption is used.
+
+LIMITS
+The lower allows resource dimension to grow with n. It does not settle the
+dimension-only problem, establish necessity of n/log n, or demonstrate a new
+recognized open-problem resolution. Historical novelty remains unconfirmed.

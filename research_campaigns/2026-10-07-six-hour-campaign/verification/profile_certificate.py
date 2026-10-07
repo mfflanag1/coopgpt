@@ -8,41 +8,50 @@ from fractions import Fraction as Q
 import importlib.util,json,copy
 
 
+def _verify_assert(condition, message=None):
+    """Always-active assertion; evaluate an optional message only on failure."""
+    if not condition:
+        if message is None:
+            raise AssertionError
+        raise AssertionError(message())
+
+
 def helper():
-    parents=Path(__file__).resolve().parents
-    repo=parents[3] if len(parents)>3 else Path('/Users/maxf/projects/economics-research/game-theory/coopgpt')
+    repo=Path(__file__).resolve().parents[3]
     p=repo/'research_campaigns/2026-10-06-monotone-envelope/verification/verify.py'
+    if not p.is_file():
+        raise FileNotFoundError(f'Required verifier dependency not found: {p}')
     s=importlib.util.spec_from_file_location('flow',p);v=importlib.util.module_from_spec(s);s.loader.exec_module(v)
     return v
 
 
 def check(row,v):
-    cert=row['certificate'];assert cert is not None
+    cert=row['certificate'];_verify_assert((cert is not None))
     n=row['n'];es=row['edges'];m=len(es);beta=(1<<m)*m
     totals={};constant=Q(0)
     for key,wtext in cert['multipliers'].items():
-        w=Q(wtext);assert w>=0
+        w=Q(wtext);_verify_assert((w>=0))
         desc=row['certificate_rows'][key];kind=desc['type'];p=kind[1]
-        assert 0<=p<1<<m
+        _verify_assert((0<=p<1<<m))
         c=[Q(row['high'][e] if p>>e&1 else row['low'][e]) for e in range(m)]
         if kind[0]=='cover':
-            S=kind[2];assert 0<S<1<<m
+            S=kind[2];_verify_assert((0<S<1<<m))
             coeff=[(p*m+e,-1) for e in range(m) if S>>e&1]
             rhs=-v.maxflow(n,es,[ce if S>>e&1 else Q(0) for e,ce in enumerate(c)])
         elif kind[0]=='budget':
             coeff=[(p*m+e,1) for e in range(m)]+[(beta,-v.maxflow(n,es,c))];rhs=Q(0)
         else:
-            assert kind[0]=='monotone';e=kind[2]
-            assert 0<=e<m and not p>>e&1 and row['low'][e]<row['high'][e]
+            _verify_assert((kind[0]=='monotone'));e=kind[2]
+            _verify_assert((0<=e<m and not p>>e&1 and row['low'][e]<row['high'][e]))
             coeff=[(p*m+e,1),((p|(1<<e))*m+e,-1)];rhs=Q(0)
-        assert coeff==[tuple(pair) for pair in desc['coeff']]
-        assert rhs==Q(desc['rhs'])
+        _verify_assert((coeff==[tuple(pair) for pair in desc['coeff']]))
+        _verify_assert((rhs==Q(desc['rhs'])))
         constant-=w*rhs
         for col,a in coeff:totals[col]=totals.get(col,Q(0))+w*a
-    assert all(a>=0 for col,a in totals.items() if col!=beta)
-    assert totals[beta]<0 and constant>0
+    _verify_assert((all(a>=0 for col,a in totals.items() if col!=beta)))
+    _verify_assert((totals[beta]<0 and constant>0))
     bound=constant/-totals[beta]
-    assert bound==Q(cert['bound'])
+    _verify_assert((bound==Q(cert['bound'])))
     return bound
 
 
@@ -66,7 +75,7 @@ def run(data):
         try:check(bad,v)
         except AssertionError:corruptions+=1
         else:raise AssertionError('inflated ratio accepted')
-    assert checked and corruptions==3*checked
+    _verify_assert((checked and corruptions==3*checked))
     return dict(status='PASS',certificates=checked,rejected_corruptions=corruptions,max_certified_bound=str(best),
                 scope='Finite report restrictions only; no all-profile mechanism or new growing-family bound.')
 

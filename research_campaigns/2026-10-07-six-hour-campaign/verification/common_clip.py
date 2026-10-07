@@ -4,6 +4,14 @@ from math import comb,factorial
 import json
 
 
+def _verify_assert(condition, message=None):
+    """Always-active assertion; evaluate an optional message only on failure."""
+    if not condition:
+        if message is None:
+            raise AssertionError
+        raise AssertionError(message())
+
+
 def monomial_integral(a,lo,hi,power,k,sign):
     return sum((comb(power,j)*a**(power-j)*sign**j*(hi**(j+k+1)-lo**(j+k+1))/Q(j+k+1)
                 for j in range(power+1)),Q())
@@ -43,13 +51,13 @@ def run():
     rows=[]
     for n in range(1,13):
         a=by_survival(n,Q(3,4));b=by_survival(n,Q(1))
-        assert a==by_density(n,Q(3,4)) and b==by_density(n,Q(1))
+        _verify_assert((a==by_density(n,Q(3,4)) and b==by_density(n,Q(1))))
         rows.append(dict(N=n,low_payment=str(a),high_payment=str(b),gap=str(a-b)))
     gap=Q(rows[5]['gap'])
-    assert gap==Q(587847649425223,914457600000000000)>0
-    assert Q(rows[4]['gap'])<0
+    _verify_assert((gap==Q(587847649425223,914457600000000000)>0))
+    _verify_assert((Q(rows[4]['gap'])<0))
     large=Q(187,112000)-Q(1,2700)
-    assert large==Q(3929,3024000)>0
+    _verify_assert((large==Q(3929,3024000)>0))
     return dict(status='PASS',exact_gap=str(gap),owners=10,K=4,rows=rows,
                 independent_large_N_bound=str(large),
                 scope='Two independent exact integral representations; graph proof in companion note.')

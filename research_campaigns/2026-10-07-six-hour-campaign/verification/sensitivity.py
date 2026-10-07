@@ -90,7 +90,12 @@ def run():
 
 
 if __name__=='__main__':
+    import argparse
+    parser=argparse.ArgumentParser()
+    parser.add_argument('--output',type=Path,help='Optionally also write the JSON result to this path')
+    args=parser.parse_args()
     result=run()
     out=json.dumps(result,indent=2)+'\n'
-    Path('/tmp/coopgt_sensitivity_result.json').write_text(out)
+    if args.output is not None:
+        args.output.write_text(out)
     print(out,end='')

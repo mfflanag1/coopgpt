@@ -3,6 +3,14 @@ from fractions import Fraction as Q
 from math import factorial
 import json
 
+
+def _verify_assert(condition, message=None):
+    """Always-active assertion; evaluate an optional message only on failure."""
+    if not condition:
+        if message is None:
+            raise AssertionError
+        raise AssertionError(message())
+
 def mul(a,b):
     out=[Q(0)]*(len(a)+len(b)-1)
     for i,x in enumerate(a):
@@ -23,14 +31,14 @@ def run():
     eps=Q(1,10);b=Q(1,20);N=100000;k=20
     x0=Q(1,2);x1=Q(3,5)
     j0=integral(x0,eps,b);j1=integral(x1,eps,b)
-    assert j0==formula(x0,eps,b)==Q(773,28800)
-    assert j1==formula(x1,eps,b)==Q(1073,40320)
-    assert j0-j1==Q(23,100800)
+    _verify_assert((j0==formula(x0,eps,b)==Q(773,28800)))
+    _verify_assert((j1==formula(x1,eps,b)==Q(1073,40320)))
+    _verify_assert((j0-j1==Q(23,100800)))
     var=(1+Q(9,10)**2)/(12*N)
-    assert var<=Q(1,6*N)
-    assert all(1/eps+1/(x+eps)<=12 and 2/x<=4 for x in (x0,x1))
+    _verify_assert((var<=Q(1,6*N)))
+    _verify_assert((all(1/eps+1/(x+eps)<=12 and 2/x<=4 for x in (x0,x1))))
     bound=j0-j1-Q(4,N)-2*Q(2**k,factorial(k))
-    assert bound==Q(558850546697,2969851084200000)>0
+    _verify_assert((bound==Q(558850546697,2969851084200000)>0))
     return {'status':'PASS','J0':str(j0),'J1':str(j1),'limit_gap':str(j0-j1),
             'variance':str(var),'certified_finite_gap':str(bound),
             'K':5,'owners':2*N+k+4,

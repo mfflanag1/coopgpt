@@ -11,6 +11,14 @@ from math import comb
 import importlib.util,json
 
 
+def _verify_assert(condition, message=None):
+    """Always-active assertion; evaluate an optional message only on failure."""
+    if not condition:
+        if message is None:
+            raise AssertionError
+        raise AssertionError(message())
+
+
 def mean_min(u,v,p):
     coeff=[Q(0)]*(2*p+1)
     for i in range(p+1):
@@ -65,7 +73,7 @@ def expected_cuts(groups,final):
                   for y,g,h in zip(ys,gs,hs)]
         cuts+=masks_from_options(zoptions+branches)
     cuts+=masks_from_options([[[x] for x in path] for path in final])
-    assert len(cuts)==len(set(cuts))
+    _verify_assert((len(cuts)==len(set(cuts))))
     return sorted(cuts)
 
 
@@ -79,53 +87,53 @@ def run():
            (2,1,1,2,True),(2,2,1,2,True)]
     for m,count,k,R,simple in cases:
         n,edges,c,records,groups,final=graph(m,count,k,R,simple)
-        if simple:assert len(edges)==len(set(edges))
+        if simple:_verify_assert((len(edges)==len(set(edges))))
         cuts=expected_cuts(groups,final)
         target=count*(4**m*(1+2**k) if simple else 2**(m+1))+(2**R if simple else 1)
-        assert len(cuts)==target
+        _verify_assert((len(cuts)==target))
         # The second simple case has many subdivision vertices: cap checks
         # remain exact; avoid exponential vertex-cut enumeration there.
         if n<=16:
-            assert v.cutsets(n,edges)==cuts;cutchecks+=1
+            _verify_assert((v.cutsets(n,edges)==cuts));cutchecks+=1
         for focal in [-1]+list(range(count)):
             ct=list(c);q=Q(3,10*m)
             if focal>=0:ct[groups[focal][0][0]]=q
             D=v.effective(n,edges,ct)
-            assert v.maxflow(n,edges,ct)==1
+            _verify_assert((v.maxflow(n,edges,ct)==1))
             want=[]
             for kind,j in records:
                 local=q if j==focal else Q(1)
                 want.append(Q(1,R) if kind=='R' else Q(6,5*m) if kind=='y'
                             else min(Q(1),local+Q(6,5*m)) if kind=='h' else local)
-            assert D==want;capchecks+=len(D)
-            assert min(v.weighted_sum(ct,C) for C in cuts)==1
-            assert min(v.weighted_sum(D,C) for C in cuts)==1
+            _verify_assert((D==want));capchecks+=len(D)
+            _verify_assert((min(v.weighted_sum(ct,C) for C in cuts)==1))
+            _verify_assert((min(v.weighted_sum(D,C) for C in cuts)==1))
         prototypes.append(dict(m=m,modules=count,Z_paths=k,R_paths=R,simple=simple,
                                vertices=n,owners=len(edges),K=target))
     algebra=0
     for r in range(4,61):
         m=400*r;a=Q(6,5);b=Q(3,10);t=b/m
         high=m*mean_min(a/m,Q(1),1);low=m*mean_min(a/m,(a+b)/m,1)
-        assert high==Q(3,5)-Q(6,25*m)>=Q(59,100)
-        assert low==Q(11,25)
-        assert 2*Q(6,100)**2/(a*a/m)==Q(m,200)
-        assert 2*Q(3,100)**2/(a*a/m)==Q(m,800)
-        assert 2*(Q(3,2)-Q(53,100))**2/Q(9,10*m)==Q(9409*m,4500)>=2*m
-        assert Q(47,100)+t<Q(48,100)<Q(49,100)
-        assert Q(1,12*100000)/Q(1,100)**2==Q(1,120)
+        _verify_assert((high==Q(3,5)-Q(6,25*m)>=Q(59,100)))
+        _verify_assert((low==Q(11,25)))
+        _verify_assert((2*Q(6,100)**2/(a*a/m)==Q(m,200)))
+        _verify_assert((2*Q(3,100)**2/(a*a/m)==Q(m,800)))
+        _verify_assert((2*(Q(3,2)-Q(53,100))**2/Q(9,10*m)==Q(9409*m,4500)>=2*m))
+        _verify_assert((Q(47,100)+t<Q(48,100)<Q(49,100)))
+        _verify_assert((Q(1,12*100000)/Q(1,100)**2==Q(1,120)))
         error=Q(1,2**(r//2))+Q(1,2**r)+Q(1,2**(2*m-r))+Q(1,120)
-        assert error<=Q(23,60)<Q(1,2)
-        assert r+m+1==401*r+1
+        _verify_assert((error<=Q(23,60)<Q(1,2)))
+        _verify_assert((r+m+1==401*r+1))
         m=1600*r;t=b/m
         high=m*mean_min(a/m,Q(1),2);low=m*mean_min(a/m,(a+b)/m,2)
-        assert high==a/3-a*a/(6*m)+a**3/(30*m*m)>=Q(39,100)
-        assert low==Q(166,625)
-        assert 2*(Q(3,10)-low)**2/(a*a/m)==Q(1849*m,1125000)>=Q(m,800)
-        assert 2*(Q(1)-Q(36,100))**2/Q(9,10*m)==Q(1024*m,1125)>=Q(m,2)
-        assert Q(3,10)+t<Q(31,100)<Q(47,150)<Q(53,150)<Q(36,100)
-        assert Q(1,18*2000)/Q(1,50)**2==Q(5,72)
-        assert Q(1,16)+Q(1,256)+Q(1,16)+Q(5,72)==Q(457,2304)<Q(1,2)
-        assert r+12*m==19201*r and r+2*m==3201*r and 19201*r>=2000
+        _verify_assert((high==a/3-a*a/(6*m)+a**3/(30*m*m)>=Q(39,100)))
+        _verify_assert((low==Q(166,625)))
+        _verify_assert((2*(Q(3,10)-low)**2/(a*a/m)==Q(1849*m,1125000)>=Q(m,800)))
+        _verify_assert((2*(Q(1)-Q(36,100))**2/Q(9,10*m)==Q(1024*m,1125)>=Q(m,2)))
+        _verify_assert((Q(3,10)+t<Q(31,100)<Q(47,150)<Q(53,150)<Q(36,100)))
+        _verify_assert((Q(1,18*2000)/Q(1,50)**2==Q(5,72)))
+        _verify_assert((Q(1,16)+Q(1,256)+Q(1,16)+Q(5,72)==Q(457,2304)<Q(1,2)))
+        _verify_assert((r+12*m==19201*r and r+2*m==3201*r and 19201*r>=2000))
         algebra+=1
     return dict(status='PASS',graph_prototypes=prototypes,independent_vertex_cut_checks=cutchecks,
                 exact_effective_capacity_checks=capchecks,parameter_cases=algebra,

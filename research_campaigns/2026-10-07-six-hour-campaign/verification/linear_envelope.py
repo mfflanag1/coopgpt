@@ -5,6 +5,14 @@ from math import factorial,prod
 import importlib.util,json,random
 
 
+def _verify_assert(condition, message=None):
+    """Always-active assertion; evaluate an optional message only on failure."""
+    if not condition:
+        if message is None:
+            raise AssertionError
+        raise AssertionError(message())
+
+
 def cdf(weights,q):
     w=[x for x in weights if x]
     if not w:return Q(int(q>=0))
@@ -18,8 +26,8 @@ def cdf(weights,q):
 def comparison(a,b):
     A=sum(a);B=sum(b);weights=[abs(x-y) for x,y in zip(a,b)]
     N=sum(max(y-x,0) for x,y in zip(a,b));p=cdf(weights,N)
-    assert 0<=p<=1 and A*p<=B
-    if A>B:assert p<=Q(N,A-B+2*N)<=Q(B,A+B)
+    _verify_assert((0<=p<=1 and A*p<=B))
+    if A>B:_verify_assert((p<=Q(N,A-B+2*N)<=Q(B,A+B)))
     return p
 
 
@@ -45,23 +53,23 @@ def run():
             c=[Q(rng.randrange(0,10),3) for e in edges]
             D=v.effective(n,edges,c);T=v.maxflow(n,edges,c);cuts=v.cutsets(n,edges)
             dc={C:v.weighted_sum(D,C) for C in cuts}
-            assert min(dc.values())==T;profiles+=1
-            if T==0:assert not any(D);continue
+            _verify_assert((min(dc.values())==T));profiles+=1
+            if T==0:_verify_assert((not any(D)));continue
             A=min(cuts,key=lambda C:(dc[C],C))
             bound=[T*D[e]*sum((1/dc[C] for C in cuts if C>>e&1),Q(0)) for e in range(len(edges))]
-            assert sum(bound)==len(cuts)*T
+            _verify_assert((sum(bound)==len(cuts)*T))
             for e,De in enumerate(D):
                 if not De:continue
                 for x in [Q(1,5),Q(1,2),Q(1)]:
                     ct=list(c);ct[e]=x*De;Dt=v.effective(n,edges,ct)
-                    assert Dt[e]==ct[e]
-                    assert all(x*dh<=dht<=dh for dh,dht in zip(D,Dt));hinges+=1
+                    _verify_assert((Dt[e]==ct[e]))
+                    _verify_assert((all(x*dh<=dht<=dh for dh,dht in zip(D,Dt))));hinges+=1
                     for _ in range(3):
                         U=[Q(rng.randrange(11),10) for h in edges]
                         current=[dh*u for dh,u in zip(Dt,U)]
                         original=[dh*u for dh,u in zip(D,U)]
                         C=min(cuts,key=lambda B:(v.weighted_sum(current,B),B))
-                        assert x*v.weighted_sum(original,C)<=v.weighted_sum(current,C)<=v.weighted_sum(current,A)<=v.weighted_sum(original,A)
+                        _verify_assert((x*v.weighted_sum(original,C)<=v.weighted_sum(current,C)<=v.weighted_sum(current,A)<=v.weighted_sum(original,A)))
                         events+=1
     return dict(status='PASS',exact_uniform_comparisons=comparisons,flow_profiles=profiles,
                 unilateral_homothety_checks=hinges,exact_coupled_cut_event_checks=events,

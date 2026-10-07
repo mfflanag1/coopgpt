@@ -5,6 +5,14 @@ from collections import Counter
 import json
 import random
 
+
+def _verify_assert(condition, message=None):
+    """Always-active assertion; evaluate an optional message only on failure."""
+    if not condition:
+        if message is None:
+            raise AssertionError
+        raise AssertionError(message())
+
 def reachable(n, edges, deleted):
     r = [False] * n
     r[0] = True
@@ -64,8 +72,8 @@ def run():
         cs = cuts(n, es)
         hist = Counter(sum(C >> e & 1 for e in path_maximizing_cut(n, es, C)) for C in cs)
         H = sum(h * number for h, number in hist.items())
-        assert len(cs) == r*r and H == r*(r+1)*(2*r+1)//6
-        assert hist == {h: 2*r-2*h+1 for h in range(1, r+1)}
+        _verify_assert((len(cs) == r*r and H == r*(r+1)*(2*r+1)//6))
+        _verify_assert((hist == {h: 2*r-2*h+1 for h in range(1, r+1)}))
         rows.append({'r': r, 'K': len(cs), 'H': H, 'height_histogram': dict(sorted(hist.items()))})
     rng = random.Random(20261007)
     count = intervals = independent = 0
@@ -76,7 +84,7 @@ def run():
             es = sorted(es + [rng.choice(es)])
         cs = cuts(n, es)
         if len(es) <= 10:
-            assert cs == cuts_by_edge_subsets(n, es)
+            _verify_assert((cs == cuts_by_edge_subsets(n, es)))
             independent += 1
         K = len(cs)
         for C in cs:
@@ -84,10 +92,10 @@ def run():
             P = path_maximizing_cut(n, es, C)
             chain = [e for e in P if C >> e & 1]
             r = len(chain)
-            assert 2*K >= r*(r+1)
+            _verify_assert((2*K >= r*(r+1)))
             # Further refinement counts singleton witnesses for P\C.
-            assert K >= len(P) + r*(r-1)//2
-            assert len(P) >= 2*r-1
+            _verify_assert((K >= len(P) + r*(r-1)//2))
+            _verify_assert((len(P) >= 2*r-1))
             witnesses = set()
             pm = sum(1 << e for e in P)
             for a in range(r):
@@ -97,12 +105,12 @@ def run():
                     side = [v <= x or (rr[v] and v < y) for v in range(n)]
                     B = sum(1 << e for e,(u,v) in enumerate(es) if side[u] and not side[v])
                     intended = sum(1 << e for e in chain[a:b+1])
-                    assert B & pm == intended
+                    _verify_assert((B & pm == intended))
                     ds = [D for D in cs if D & B == D]
-                    assert ds and all(D & pm == intended for D in ds)
+                    _verify_assert((ds and all(D & pm == intended for D in ds)))
                     witnesses.add(ds[0])
                     intervals += 1
-            assert len(witnesses) == r*(r+1)//2
+            _verify_assert((len(witnesses) == r*(r+1)//2))
             count += 1
     return {'status': 'PASS', 'family': rows, 'random_graphs': 300,
             'cuts_checked': count, 'intervals_checked': intervals,

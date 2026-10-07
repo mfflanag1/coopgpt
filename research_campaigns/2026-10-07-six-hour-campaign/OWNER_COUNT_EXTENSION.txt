@@ -1,0 +1,350 @@
+OWNER-COUNT BOUNDS AND GENERAL CONCAVE HOMOGENEOUS PRODUCTION
+7 October 2026. Conventional proof; independent cross-model audit completed
+without a correctness finding. See review/owner_extension_adjudication.txt.
+
+MAIN RESULTS AND SCOPE
+(i) In the finite min-linear mechanism, the budget's union bound may use
+min{K,2^n}, where n is the fixed owner count. The mechanism and its selection
+rule are unchanged; only the budget analysis improves.
+(ii) A direct version exists for EVERY finite-valued, coordinatewise-monotone,
+concave, positively homogeneous f:R_+^d -> R, with d,n finite and positive.
+It does not require continuity at the boundary. It uses a relative supporting
+form on each positive-coordinate face, extended by +infinity outside that face,
+and caps owner contributions at the finite grand value.
+(iii) A compactness proof also works for boundary-continuous f and is recorded
+as an independent fallback. It requires a subnet on the space of all profiles,
+not an unjustified subsequence argument on an uncountable product.
+(iv) Classical marginal/core bounds supply optional fairness floors at an
+additional total cost at most T, with precise denominators given below.
+
+For any integer j>=2 define
+
+ alpha_j=log[j^3/(j^2+j-1)]>0,
+ C_j(H)=j+(log H+2log j+1)/alpha_j.
+
+The direct general mechanism has total payment at most
+
+ min{n,C_j(2^n)} T.                                       (1)
+
+All its payments are nonnegative and deterministic, it covers every coalition,
+and each owner's payment is componentwise nondecreasing in its entire report
+bundle. Owners, resources and technology remain fixed across reports.
+For the report-independent choice
+
+ L_n=n log 2,
+ j_n=max{2,ceil[L_n/(log(2+L_n))^2]},                       (2)
+
+the owner-count upper bound is
+
+ (log 2+o(1)) n/log n * T                                  (3)
+
+as n tends to infinity, uniformly in d, f, ownership and profiles.
+This is an UPPER BOUND complementary to the sharper K-sensitive theorem.
+There is no claim of necessity, optimality, or sharp leading constant as a
+function of n. No measurability or efficient-evaluation conclusion is claimed.
+
+1. FINITE MIN-LINEAR CASE: COUNT THE ACTUAL SELECTED RANGE
+Fix a profile b=(b_1,...,b_n), b_i in R_+^d, and a finite family of K nonnegative
+forms. The raw minimizer W(b,B) uses one report-independent priority, also
+independent of q. Define its range over all owner masks by
+
+ V_b={W(b,B):B in {0,1}^n}.
+
+Then |V_b|<=min{K,2^n}. Once b is fixed, V_b is a fixed set independent of q
+and of the subsequent random mask. Its dependence on b is irrelevant to a
+pointwise-in-profile probability bound.
+
+For each w in this range set
+
+ a_i(w,b)=min{w.b_i,T},     d_i(w)=a_i(w,b)/T,
+ rho_w=sum_i d_i(w),
+
+when T>0. Every d_i is in [0,1]. The chosen form satisfies sum_i B_i d_i(W)<=1.
+For lambda>0 and alpha=-log(q+(1-q)e^(-lambda)), the fixed-form bound is
+
+ Pr(sum_i B_i d_i(w)<=1)<=exp(lambda-alpha rho_w).
+
+Thus
+
+ Pr(rho_W>=x)<=min{1, |V_b| exp(lambda-alpha x)}.
+
+All remaining integration and budget steps of the raw-capped theorem apply
+with H=min{K,2^n} replacing K. One can tune j from H, which is fixed by the
+technology and owner set, or tune from 2^n alone for (1)-(3).
+There is no profile-dependent retuning of j or deletion of zero-report owners.
+
+2. GENERAL PRODUCTION AND RELATIVE SUPPORTING FORMS
+Now let f be finite-valued, concave, coordinatewise nondecreasing and positively
+homogeneous of degree one on R_+^d. Positive homogeneity and finiteness imply
+f(0)=0; monotonicity then implies f>=0.
+
+For x>=0 let J={e:x_e>0}. Its coordinate face is
+
+ F_J={y>=0:y_e=0 for e outside J}.
+
+If J is nonempty, x is in the relative interior of this face. The restriction
+of f to its relative interior is a finite concave function on an open positive
+orthant, so it has a finite relative supergradient u at x. Initially its
+support inequality is on the relative interior:
+
+ f(y)<=f(x)+u.(y_J-x_J).
+
+Monotonicity makes every u_e nonnegative: apply this inequality to x+t e_e,
+which has value at least f(x), for t>0. Homogeneity applied to y=lambda x,
+first lambda>1 and then 0<lambda<1, gives Euler's identity
+
+ u.x_J=f(x).                                             (4)
+
+The supporting inequality extends to ALL of F_J even without boundary
+continuity. For boundary y in F_J and epsilon in (0,1), put
+y_epsilon=(1-epsilon)y+epsilon x, which is in the relative interior.
+Concavity and the interior support inequality give
+
+ (1-epsilon)f(y)+epsilon f(x)
+   <=f(y_epsilon)
+   <=u.y_epsilon=(1-epsilon)u.y+epsilon f(x).
+
+Cancel and divide by 1-epsilon to obtain f(y)<=u.y.
+
+There is a canonical choice of u if desired. The relative supergradient set
+at x is nonempty, closed and convex. All its coordinates are nonnegative and
+obey (4), so 0<=u_e<=f(x)/x_e for each e in J. It is compact. Its unique element
+of minimum Euclidean norm defines a deterministic choice depending only on
+f and x. This is a mathematical definition, not a promised finite-time oracle.
+
+Define the extended nonnegative linear form
+
+ ell_x(y) = u.y_J if supp(y) is contained in J,
+            +infinity otherwise.                         (5)
+
+For x=0 use ell_0(0)=0 and ell_0(y)=+infinity for every nonzero y.
+Equivalently, the coefficients outside J are +infinity, with infinity*0=0.
+This notation never requires subtracting infinities.
+
+Every ell_x globally majorizes f and attains it at x:
+
+ ell_x(y)>=f(y) for all y>=0,      ell_x(x)=f(x).           (6)
+
+It is additive and coordinatewise monotone on the nonnegative cone in the
+extended-value sense. On its finite face it is an ordinary finite linear form.
+
+3. DIRECT MECHANISM FOR GENERAL f
+There are n fixed owners with bundles b_i>=0. Write
+
+ c=sum_i b_i,     T=f(c),     v_b(S)=f(sum_(i in S)b_i).
+
+For q in (0,1) draw independent owner bits with Pr(B_i=0)=q, and let
+x_B=sum_i B_i b_i. Select the form ell_(x_B) from (5), independently of q.
+For a selected form ell and full profile b put
+
+ a_i(ell,b)=min{ell(b_i),T}.                               (7)
+
+All these numbers are finite, including when ell(b_i)=+infinity. Define
+
+ z_i^q=E a_i(ell_(x_B),b),
+ p_i^q=E[a_i(ell_(x_B),b)|B_i=0],
+ m_i^q=E_(B_-i)[f(b_i+sum_(h!=i)B_h b_h)-f(sum_(h!=i)B_h b_h)],
+ r_i^q=q p_i^q+(1-q)m_i^q,
+ M_i=j integral_0^(1/j) r_i^q dq.                         (8)
+
+These are finite deterministic payments. In fact 0<=a_i<=T and 0<=m_i^q<=T,
+so 0<=r_i^q<=T and 0<=M_i<=T individually.
+
+Incentives: conditional on B_i=0, x_B and its selected form are independent
+of the entire own report b_i. For this fixed extended nonnegative form both
+ell(b_i) and T are nondecreasing under componentwise increases of b_i. Their
+minimum is nondecreasing, including a transition from finite to infinite
+form value. Thus p_i^q is own-monotone. The off value in m_i^q is independent
+of b_i and its on value is monotone. The mixtures in (8) preserve incentives.
+At b_i=0 both contributions and the final payment are zero.
+
+Coverage: for any form ell selected at any mask, and any coalition S, if some
+ell(b_i)>=T for i in S, then that owner's capped contribution alone is T>=v_b(S).
+Otherwise all coalition form values are finite and uncapped, and (6) gives
+
+ sum_(i in S)a_i=ell(sum_(i in S)b_i)>=v_b(S).
+
+Thus every capped vector covers all coalitions, and so does z^q.
+
+For the endpoint inequality, fix B_-i and select ell at the ON aggregate
+x=b_i+sum_(h!=i)B_h b_h. Every on owner's bundle and the off aggregate have
+support contained in supp(x). Their form values are therefore FINITE and
+add to ell(x)=f(x). By (6),
+
+ f(x)-f(x-b_i)>=ell(x)-ell(x-b_i)=ell(b_i).                 (9)
+
+Moreover ell(b_i)<=f(x)<=T. Hence this is exactly the capped on contribution.
+Averaging proves r_i^q>=z_i^q; consequently M covers every coalition.
+No expression in (9) contains an infinite term.
+
+4. GENERAL BUDGET: FINITE PAYMENTS AND AT MOST 2^n FORMS
+Fix b. The forms {ell_(x_B):B in {0,1}^n} constitute a set of at most 2^n
+extended forms, independent of q. For each form, its normalized CAPPED
+contributions d_i=a_i/T lie in [0,1] when T>0, regardless of any infinite
+uncapped coefficients.
+
+For the selected mask, every OPEN form contribution is finite and their
+sum is ell_(x_B)(x_B)=f(x_B)<=T. Capping leaves them unchanged. Therefore
+
+ sum_i B_i a_i(ell_(x_B),b)=f(x_B).                        (10)
+
+Let g(q)=E f(x_B), Z(q)=sum_i z_i^q and R(q)=sum_i r_i^q. All coefficients
+of these finite mask polynomials are finite, so their usual identities hold:
+
+ q sum_i p_i^q=Z(q)-g(q),     sum_i m_i^q=-g'(q),
+ R(q)=Z(q)-g(q)-(1-q)g'(q),
+ integral_0^b0 R(q)dq
+   =integral_0^b0 Z(q)dq+T-(1-b0)g(b0)-2integral_0^b0 g(q)dq
+   <=integral_0^b0 Z(q)dq+T.                              (11)
+
+The Chernoff union in Section 1 applies to the capped finite coefficients
+of these at most 2^n forms. With b0=1/j and lambda=2log j it gives
+
+ Z(q)/T<=[n log 2+2log j+1]/alpha_j  for 0<q<=1/j.
+
+Equation (11) proves the C_j(2^n) bound. The individual bound M_i<=T proves
+the minimum with n in (1). If T=0, all capped contributions are zero and
+monotonicity forces all masked production values to be zero. Thus all payments
+are zero and the theorem covers zero-grand-value profiles directly.
+
+For (2), j_n~n log 2/(log n)^2, alpha_(j_n)~log n, and
+j_n=o(n/log n). This proves (3). For n=1, the simpler rule M_1=f(b_1) is
+efficient and own-monotone; the universal finite bound is not advertised as
+optimal for small n.
+
+5. CONTINUOUS-f COMPACTNESS FALLBACK
+This provides a separate existence proof under the stronger assumption that
+f is continuous on the entire closed nonnegative orthant.
+
+Enumerate all positive rational points q_1,q_2,... in R_+^d. At each q_k use
+a finite nonnegative supporting form w^k, with w^k.q_k=f(q_k). Its support
+inequality holds globally by Section 2. Put
+
+ F_m(x)=min_(1<=k<=m) w^k.x.
+
+Then F_m>=f, F_m decreases, and F_m(x)->f(x) for EVERY x>=0. To verify the last
+claim even at the boundary, choose positive rational q>=x approaching x.
+The corresponding nonnegative form obeys
+
+ f(x)<=w^q.x<=w^q.q=f(q)->f(x).
+
+Each such q appears at a finite index in the enumeration, so the decreasing
+prefix minima have the claimed limit. This uses boundary continuity; an
+interior-only continuity assertion would not justify the last arrow.
+
+Apply the finite min-linear rule to each F_m using the SAME j=j_n and the
+same fixed owner set. Let M^(m) be its full all-profile payment function.
+At every profile b,
+
+ 0<=M_i^(m)(b)<=F_m(sum_h b_h)<=F_1(sum_h b_h),
+ sum_i M_i^(m)(b)<=C_j(2^n)F_m(sum_h b_h).
+
+Consider the product over ALL pairs (i,b) of compact intervals
+
+ X=product_(i,b) [0,F_1(sum_h b_h)].
+
+By Tychonoff's theorem X is compact. The sequence of mechanisms, viewed as
+a net, has a convergent subnet. Its index map is cofinal, so the original
+indices tend to infinity along the subnet. Denote the simultaneous coordinatewise
+limit by M. For each own-report comparison, its two coordinates converge on
+this SAME subnet; every monotonicity inequality survives. Each coalition sum
+and budget sum contains only finitely many owner coordinates, so coverage
+and budgets also pass to the limit. The right-hand production values converge
+to f at every relevant aggregate. Therefore
+
+ M(S;b)>=v_b(S),       sum_i M_i(b)<=C_j(2^n)f(sum_i b_i).
+
+When the limiting grand value is zero this last inequality forces all limiting
+payments to zero, even if some approximating grand values were positive.
+
+Choosing a different limit independently at each profile would not preserve
+cross-profile incentives. Nor is sequential compactness of this uncountable
+product available merely from Tychonoff; a countable rational-profile diagonal
+argument alone does not prove the requested all-real-profile statement.
+No joint measurability or algorithm follows from this compactness construction.
+The direct construction in Sections 2-4 avoids the product limit and, unlike
+this fallback, also covers downward discontinuities at boundary faces.
+
+6. OPTIONAL ORIGINAL-CORE FLOORS VIA MARGINAL CONTRIBUTIONS
+At profile b, put c=sum_i b_i and
+
+ U_i(b)=f(c)-f(c-b_i)=T-f(sum_(h!=i)b_h).                   (12)
+
+This is nonnegative, at most T, and componentwise own-monotone: its off term
+is independent of the whole own report. The original core consists of efficient
+vectors y with y(S)>=v_b(S) for every S. It is nonempty here: take the supporting
+form ell_c from Section 2 and set y_i=ell_c(b_i). Every b_i lies in supp(c),
+so these numbers are finite, nonnegative, sum to ell_c(c)=T, and cover each
+coalition by (6). The core is compact, since y_i>=0 and sum_i y_i=T.
+
+Let H_i(b) be the maximum of coordinate i over this ORIGINAL core. The coalition
+constraint for I\{i} gives the classical marginal upper bound
+
+ H_i(b)<=T-v_b(I\{i})=U_i(b).                             (13)
+
+For a FINITE family of K ordinary nonnegative forms, choose an off minimizer
+w_i for each owner. Group owners G by their chosen form w. Set A=w.c>=T.
+For a nonempty group, every term is finite and
+
+ sum_(i in G) U_i
+   =|G|(T-A)+w.(sum_(i in G)b_i)
+   <=|G|T-(|G|-1)A<=T.
+
+There are at most min{K,n} nonempty groups, giving
+
+ sum_i U_i<=min{K,n}T.                                   (14)
+
+Do not apply this algebra with extended forms whose value at c is infinity;
+it would introduce undefined infinity-minus-infinity expressions.
+
+An independent DIMENSION bound works for every f in this note. If c has at
+least one positive coordinate, define
+
+ rho_i=max_(e:c_e>0) b_ie/c_e.
+
+Then 0<=rho_i<=1 and c-b_i>=(1-rho_i)c. Monotonicity and homogeneity imply
+U_i<=rho_i T. Also
+
+ sum_i rho_i<=sum_(e:c_e>0)sum_i b_ie/c_e
+            =|supp(c)|<=d.
+
+If c=0 all U_i are zero. Thus in general sum_i U_i<=min{d,n}T, and for finite
+K one has the combined bound min{K,d,n}T.
+
+Consequently, in the finite-K setting adding U_i/K to the hybrid payment
+protects H_i/K, retains every own-report incentive and coalition guarantee,
+and adds total payment at most T. K is the fixed family/cut count, not a
+report-dependent count. This preserves the prior sharp K-asymptotic leading
+coefficient one. For the broader owner-count theorem, adding U_i/d analogously
+protects H_i/d at cost at most T; d is fixed across reports. One can instead
+use n, or any justified fixed smaller denominator with the corresponding sum
+bound. No subsidized core is recomputed in any of these comparisons.
+
+7. ESTABLISHED INGREDIENTS TO CITE; LIMITS OF THE RESULT
+The following are standard ingredients, not new claims of this supplement:
+ - Existence of a finite supergradient for a finite concave function at a
+   relative-interior point of its domain (the subgradient existence theorem
+   applied to -f; a convex-analysis text such as Rockafellar is appropriate).
+ - Euler's identity for a supporting form of a degree-one homogeneous concave
+   function; the elementary two-scaling proof is included above.
+ - Tychonoff product compactness and the characterization of compactness by
+   existence of convergent subnets; a standard general-topology reference is
+   needed if the fallback is retained.
+ - Core-coordinate upper bounds by grand-minus-complement coalition worth;
+   this follows directly from the defining core inequality, as shown above.
+ - The finite Bernoulli Chernoff and tail-integration argument from the main
+   theorem; all uses here involve finite capped coefficients despite the
+   extended supporting-form notation.
+
+The relative-interior supporting theorem is documented, after identifying the
+coordinate face with its own Euclidean space, in Boyd, Duchi, Pilanci and
+Vandenberghe, Subgradients (Stanford EE364b notes), Section 2.1, printed page3:
+ https://web.stanford.edu/class/ee364b/lectures/subgradients_notes.pdf
+The coordinator directly inspected this free original. The proof above derives
+the remaining support properties explicitly. A standard topology reference
+is still needed if the optional compactness fallback is used in a manuscript. The note makes no claim of a new convex-analysis or topology
+theorem, or of an optimal dependence on the number of owners.
+The direct general mechanism is mathematically specified using relative
+supporting forms. Computing those forms for an arbitrary production function,
+or obtaining regularity of the whole selected payment rule, requires additional
+assumptions and is not supplied by this proof.
