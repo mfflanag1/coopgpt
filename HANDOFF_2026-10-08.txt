@@ -1,0 +1,267 @@
+CoopGPT research handoff
+8 October 2026
+
+Repository: https://github.com/mfflanag1/coopgpt
+Paper index: https://github.com/mfflanag1/coopgpt/blob/main/PAPERS.md
+Scientific baseline for this handoff: ce1f073937ecb8d7a1f7a0193a8aef305827e594.
+
+CoopGPT studies how cooperative surplus can be allocated fairly, stably, and without rewarding participants for hiding resources. It began with counterexamples to proposed fairness and monotonicity rules. It now contains eight focused manuscript candidates, with the strongest recent work giving a sharp general subsidy theorem for truthful production and network cooperation.
+
+The portfolio has conventional proofs, exact computational certificates, and substantial internal audits. Historical novelty and independent human specialist validation remain unresolved. Several earlier novelty claims were narrowed after finding prior work. No recognized major-open-problem resolution, journal acceptance, or field-level breakthrough is established by the available record.
+
+1. The mathematical thread connecting the project
+
+A cooperative game assigns a value v(S) to each coalition S of players. Write T=v(N) for the value produced by everyone. Its core consists of allocations that divide T while giving each coalition at least what it could produce alone:
+
+  C(v) = {x : sum_i x_i = T, sum_{i in S} x_i >= v(S) for every S}.
+
+In the nonnegative, singleton-normalized models used in much of the project, core payoffs are nonnegative. An exact game is one in which every coalition's inequality is attained by some core allocation; those allocations may differ between coalitions.
+
+Two fairness selections recur. Lmin lexicographically maximizes the increasingly sorted payoff vector: maximize the poorest payoff, then the next poorest, and so on. The project's Lmax lexicographically minimizes the decreasingly sorted payoff vector: minimize the richest payoff, then the next richest, and so on. Both tend toward equality, but their labeled allocations can differ substantially. Lmax does not mean maximizing an individual's payoff.
+
+For each participant define the individual ideal H_i=max{x_i:x in C(v)}. These maxima generally cannot all be achieved together. A central question is whether one stable allocation can guarantee x_i>=alpha H_i to everyone.
+
+The later work permits payments y whose total exceeds T while retaining all coalition inequalities. This separates two problems. Static protection asks how much extra money is needed at one fixed game to meet ideal floors. Truthful cooperation asks for one payment rule across every report profile, with no participant benefiting by concealing resources. Efficient core allocations can exist separately at every profile even when no truthful selection of them exists across profiles.
+
+A total-payment factor B means sum_i y_i<=BT. The corresponding additional subsidy is at most (B-1)T. These quantities must not be interchanged.
+
+2. How the research evolved
+
+The original sessions explored coalitional monotonicity: if a coalition becomes more productive, can an allocation rule avoid making its members worse off? Counterexamples defeated several proposed selectors. That produced sharper, narrower questions about population size, fairness boundaries, and core geometry.
+
+A long subsequent PXC campaign pursued the maximal disagreement between opposing fairness selections. Many pricing, packet, gluing, transport, and stationary reformulations returned to essentially the same unresolved overlap inequality. Later counterexamples invalidated the old upper-bound target. Progress resumed through a change of representation: a universal convex overlap inequality and explicit games whose entire cores are Fibonacci-based segments.
+
+The assignment-market branch then investigated the effect of moving from pairs to triples, and from tree-shaped sector interactions to cycles. It produced both a structural classification of ideal protection and a sharp static subsidy theorem.
+
+The mechanism-design branch began with weighted multi-glove games, extended to increasingly general networks, and eventually reached arbitrary finite nonnegative min-linear production. Weighted transitions between report profiles supplied lower bounds. A new capped hybrid payment rule supplied the matching general upper bound.
+
+The historical recovery indexed 574 turns from the two old sessions. Those records contain selected, explicitly truncated excerpts, not every historical tool output. The project moved from counterexample-hunt/coopgames into the standalone private coopgpt repository. Older manuscript counts include overlapping drafts and supplements; the current eight-paper index is the appropriate portfolio count.
+
+3. The early monotonicity and boundary program
+
+The broad original question remains unresolved: does some universally coalitionally monotone core selector exist on all exact games? Refuting particular selectors does not settle that question. Nor does feasibility on small finite families establish a globally consistent selection.
+
+The archive contains exact four-player counterexamples for surplus-distributor-based rules, including a case where a participant's payment falls by 1/24 after the relevant coalition value rises. It also contains bounded finite-family feasibility results and additional permutation-game examples with differing audit coverage.
+
+For normalized Lmin on exact games, the project establishes positive coalitional-monotonicity behavior through four players and sharp failures at five. Singleton-value increases have a separate positive theorem. In one five-player proper-coalition example, only the value of coalition {1,3,4,5} rises, from 18 to 20, while Lmin changes from
+
+  (1,1,13/2,5,13/2) to (2,0,6,6,6).
+
+Members 3 and 5 each lose 1/2. A separate example shows failure when grand-coalition worth increases.
+
+A related carrier inequality has a different threshold. For exact games through six players, at any core reference psi and for every proper nonsingleton coalition S, the carrier slack margin gamma_S(psi) is no greater than the largest feasible gain eta_S(psi) that weakly improves all its members. A seven-player exact game violates this inequality even at normalized Lmin. This is a structural obstruction to a proposed adjustment argument; it is not itself a universal selector impossibility.
+
+Two focused manuscripts extract the fairness-boundary geometry:
+
+- Balanced transport at the egalitarian core: a complete boundary phase diagram. With m poorer and h richer players at a strict leximin boundary, a slack richer suffix is possible exactly when m>=m_min(h), where m_min(1)=4, m_min(2)=m_min(3)=3, and m_min(h)=2 for h>=4. The proof uses tight-coalition normal cones, balanced transport, and explicit realizing families.
+  Source: https://github.com/mfflanag1/coopgpt/blob/main/paper4/threshold.tex
+
+- Boundary partitions at the leximin core: a two-parameter characterization. For complementary tight coalitions with one richer player on each side and p,q poorer players, feasibility is exactly p,q>=1 and p+q>=4. The (2,2) construction corrected an earlier false conjecture. This is naturally a companion to the phase-diagram paper.
+  Source: https://github.com/mfflanag1/coopgpt/blob/main/paper6/partition.tex
+
+The large paper3 archive also translates some geometry into credal sets, with fairness, Lorenz, entropy, and defect statements. That late material has not received the same focused proof and priority audit and should be treated as an exploratory branch.
+
+An important repaired error was identifying normalized Lmin with ordinary Dutta-Ray allocation on every convex game. With singleton values 10 and 0 and grand value 12, normalized Lmin is (11,1), whereas ordinary Lmin/Dutta-Ray is (10,2). The valid identification requires the appropriate normalization. Current zero-singleton counterexamples and boundary theorems retain their force.
+
+4. Stable core versus procedural egalitarian stability
+
+The focused manuscript Stable core without egalitarian stability gives a six-player game whose entire core is a von Neumann-Morgenstern stable segment, while the procedural egalitarian rule generates final claims totaling 13/2 against available worth 6. The manuscript includes a direct stability argument and a complete three-regime additive family.
+
+The significance is a separation between stability of a set of allocations and stability of the outcome of a particular procedure. This procedural rule is distinct from the Lmin/Lmax comparisons elsewhere.
+
+Priority review substantially downgraded the initial novelty framing. Mauri's earlier thesis already gives an exact game without procedural egalitarian stability. The stable-core existence argument is a short synthesis of classical ingredients. The explicit six-player example and complete additive ray are narrower candidates for a worked note; low-player minimality relies on established implications.
+
+Source: https://github.com/mfflanag1/coopgpt/blob/main/review_packages/2026-09-05/stable_core/manuscript.tex
+
+5. Sharp disagreement between fairness selections
+
+Sharp asymptotic separation of opposing egalitarian core selections asks how far Lmin and Lmax can be apart, measured by labeled normalized L1 distance. For singleton-normalized exact n-player games with T>0, define
+
+  s_n = sup ||Lmin(v)-Lmax(v)||_1 / T.
+
+The manuscript proves
+
+  2-s_n = 2/n + O(log(n)/n^2), hence n(2-s_n) -> 2.
+
+Distance 2 would mean completely disjoint allocations of the same total. The result says disagreement can approach that extreme and identifies the sharp first-order deficit.
+
+The upper argument is more general than cooperative games: opposing maximin/minimax points in a compact convex nonnegative constant-total set have overlap at least T/(n-1). The lower construction realizes entire exact-game cores as explicit Fibonacci segments for every sufficiently large n. Checking the entire core is essential: a few chosen generators do not by themselves exclude additional allocations that change the fairness selectors.
+
+Earlier finite results include s_5=1/2 and s_6=2/3, with six-player equality classifications. Their historical computational evidence has narrower replay scope than the new conventional asymptotic proof.
+
+The old construction coefficient 3+2 sqrt(2) was valid but superseded by the sharp coefficient 2. Segment-core constructions and the relevant Fibonacci matrix ingredients have prior precedents. The candidate contribution is the precise selector-distance theorem and comparison, not invention of those ingredients.
+
+Source: https://github.com/mfflanag1/coopgpt/blob/main/review_packages/2026-09-05/asymptotic/manuscript.tex
+
+6. Assignment markets and the tree-cycle classification
+
+Fair core selections: a sharp boundary between pairs and triples establishes that the organization of cooperation strongly constrains fairness disagreement. For n>=4 in graph matching games with nonempty core, the sharp normalized L1 distance is
+
+  floor(n/2)/(floor(n/2)+1).
+
+Sparse strict three-sided markets with bounded team values can instead approach distance 2. Equal-sided complete additive triples retain a 1/3 individual-ideal guarantee and sharp distance supremum 4/3. These are different model classes: arbitrary triple arrays are broader than the pair-additive sector models below. Earlier algorithms and classical matching reductions already imply half-of-ideal guarantees in the pair setting; those are supporting ingredients rather than a new headline.
+
+Source: https://github.com/mfflanag1/coopgpt/blob/main/review_packages/2026-09-05/assignment/manuscript.tex
+
+Acyclicity and simultaneous protection of individual core maxima gives a structural classification. Fix a connected allowed interaction graph G on K sectors, equal finite sector sizes, nonnegative pair matrices, and productive full teams only. Coalition worth is integral matching worth; require positive grand worth and a nonempty entire core. Zero matrices on allowed edges are permitted.
+
+For a market M, let rho(M)=max_{x in C(v)} min_{i:H_i>0} x_i/H_i. Let c(G) be the worst leximin ideal fraction and R(G) the worst rho(M), allowing market size to grow while G stays fixed. Then
+
+  c(G)=R(G)=1/K if G is a tree;
+  c(G)=R(G)=0 if G contains a cycle.
+
+Trees therefore permit a size-independent guarantee; cycles can defeat even the best simultaneous choice of core allocation. This is stronger than showing that one named fairness rule behaves badly. Every fixed finite market still has a positive simultaneous fraction. Zero is the infimum over growing markets.
+
+The source triangle has an explicitly characterized entire-core simplex and optimal fraction 1/(2q+3). Selective subdivision transfers the obstruction to general cyclic graphs. Witnesses use pair entries in {0,1,2} and have strictly positive core allocations, so the failure is not explained by an empty core or forced-zero payoffs.
+
+This manuscript consolidates the earlier chain-cycle, graph-classification, and simultaneous-protection notes. They are not three extra papers.
+
+Source: https://github.com/mfflanag1/coopgpt/blob/main/paper5/graph_core_protection/paper/manuscript.tex
+
+7. The sharp static subsidy theorem
+
+Sharp subsidies for protecting core maxima in three-sided assignment markets asks what happens if external funding restores individual-ideal protection while every coalition remains covered. Freeze ideals H_i from the ORIGINAL efficient core and define
+
+  s_alpha(v) = min {sum_i y_i-T : y(S)>=v(S) for all S, y_i>=alpha H_i}.
+
+For strict equal-sized three-sector nonnegative pair-additive markets with positive integral worth and nonempty original core, the sharp worst-case ratio is
+
+  sup_v s_(1/3)(v)/T = 1/3.
+
+Every finite market is strictly below 1/3; an explicit growing family approaches it. Total payment is therefore below 4T/3. This is a fixed-game theorem, with no reporting-incentive claim.
+
+The proof combines a fractional packing dual with six comparisons of individual maxima at separately attaining core points. It does not assume the ideals are simultaneously attained. A matching family uses pair values in {0,1,2} and explicit coordinate-attainment witnesses. Earlier 5/12 and 2/5 upper bounds were superseded.
+
+Distinct surviving extensions are now appendices in the same manuscript:
+
+- For K>=3 sectors, an upper bound s_(1/K)(v)<2(K-2)T/[K(K-1)]; sharpness beyond three sectors remains open.
+- Unit-capacity DAGs with every source-sink path of length at most three satisfy s_(1/3)<= (T-1)/3, with sharp examples. A one-sided quota extension has additional structural hypotheses; arbitrary rational capacities on both sides remain open.
+- Whole-core transportation embeddings, endpoint incompatibility, sparse core representations, and lower bounds on how many core points are needed to attain specified ideals.
+- Growing ring families show that normalized sensitivity cannot be bounded uniformly over market size; this is not a claim of discontinuity in a fixed finite market.
+- A computer-assisted 33-player example forces cycles in every optimal team dual, blocking a forest-only optimal-dual approach.
+
+The endpoint incompatibility example has zero required subsidy. It is not a counterexample to the general T/3 subsidy bound. Several ancillary obstructions concern proof methods rather than the theorem itself.
+
+Source: https://github.com/mfflanag1/coopgpt/blob/main/paper5/sharp_subsidy/manuscript.tex
+
+8. Truthful cooperation and the strongest current general theorem
+
+Sharp subsidies for truthful production and network cooperation fixes n owners, d resource types, and a technology. Owner i reports its entire nonnegative bundle b_i. Initially consider
+
+  f(c)=min_{1<=k<=K} w^k.c, with fixed nonnegative forms w^k;
+  v_b(S)=f(sum_{i in S} b_i), T=f(sum_i b_i).
+
+We require one deterministic payment rule on ALL nonnegative real profiles, including ties and zeros, satisfying nonnegative payments, coalition coverage y(S)>=v_b(S), and own-report monotonicity:
+
+  b'_i<=b_i componentwise implies y_i(b'_i,b_-i)<=y_i(b_i,b_-i).
+
+This gives truthfulness for binding underreports when utility is payment and there are no operating costs. Owners remain fixed strategic entities; their resource units are not silently turned into different players. The theorem allows overlapping whole-owner bundles. It does not establish incentives for arbitrary overreports, private costs, coordinated deviations, or identity splitting and merging.
+
+The main result is a sharp worst-case TOTAL-payment factor
+
+  B_K = (1+o(1)) log K / log log K.
+
+The upper applies to every finite nonnegative min-linear technology. The matching lower holds even on simple directed acyclic flow networks, with all auxiliary edge owners strategic. The worst-case parameter is AT MOST K forms or structural minimal cuts, not every exact cut count. K can be exponential in a compact network or production description.
+
+A useful explicit finite upper, valid for every integer j>=2, is
+
+  C_j(K)=j+(log K+2 log j+1)/log[j^3/(j^2+j-1)].
+
+Choosing j on the order of log K/(log log K)^2 gives leading constant one.
+
+The upper mechanism has three essential pieces. Randomly omit whole owners and choose a supporting form using the uncapped production scores. Cap each owner's selected price contribution at T. Combine the own-excluded payment p_i^q with an endpoint marginal contribution m_i^q, then average over a short interval of omission probabilities:
+
+  r_i^q=q p_i^q+(1-q)m_i^q;
+  M_i=j integral_(0)^(1/j) r_i^q dq.
+
+The displayed expectation/integral defines a deterministic rule. Own-exclusion and endpoint marginals give monotonicity in the owner's entire bundle. The hybrid dominates a covering capped-form allocation. Integration controls the marginal budget; a concentration bound over the K fixed forms supplies the sharp rate. The cap is essential: the uncapped version can blow up with only two owners and two forms, even though that example admits an efficient truthful rule. This is a failure of that mechanism, not an unrestricted lower bound.
+
+The lower uses weighted transitions between actual unilateral reports, propagating inequalities only for the owner whose report changes. A hierarchy of profiles forces cumulative payments. Shared fan modules embed the hierarchy into simple DAGs while explicitly accounting for auxiliary owners. Naive subdivision into separately owned serial edges fails as a reduction: that subdivided family admits an efficient truthful rule.
+
+A reusable certificate template sums coalition constraints and legal unilateral incentive inequalities across profiles. If the coefficient left on each payment at profile c is at most a nonnegative profile-budget weight b_c, nonnegative coalition weights a_(c,S) give
+
+  B >= [sum_(c,S) a_(c,S) v_c(S)] / [sum_c b_c v_c(N)],
+
+when the denominator is positive and all included profiles satisfy the budget constraints. This is classical weak duality. The research content is constructing certificates that scale to unbounded families while preserving owner identity and accounting for all payments.
+
+The closest inspected strategic comparison is Huang, Mei, Yang and Cao's Mechanism Design in Max-Flows, which studies capacity underreports and proves failure of efficient core selection while constructing other truthful efficient mechanisms. CoopGPT retains EVERY coalition inequality and pays the subsidy needed to do so. This difference in requirements matters; it is not evidence by itself of historical novelty.
+
+Primary comparison: https://arxiv.org/html/2502.08248v1
+Current manuscript: https://github.com/mfflanag1/coopgpt/blob/main/paper5/truthful_cooperation/manuscript.tex
+Specialist brief: https://github.com/mfflanag1/coopgpt/blob/main/paper5/truthful_cooperation/specialist_brief.tex
+
+9. What led to that theorem and what remains open within it
+
+Weighted multi-glove games, v(S)=min_j sum_{i in S intersect N_j} c_i, were the initial laboratory. The work includes explicit few-pool mechanisms and lower bounds, a capped continuous-Banzhaf construction, and weighted report-transition hierarchies. The asymptotic gap between leading constants 1/2 and 1 was eventually closed to one.
+
+Restricted proportional mechanisms had stronger impossibilities than general nonlinear rules. Nonlinear constructions on profiles with only one or two altered pools showed why the proportional obstruction could not settle the unrestricted problem. Those constructions remain useful scoped results, but allowing both pool and owner counts to grow required the hierarchy argument.
+
+Network work moved through series-parallel structure and interacting Wheatstone bridges. A structural incentive argument that worked in a narrower class did not survive general composition. Taking the own-report monotone envelope automatically restored incentives and coverage, but the envelope's actual subsidy has polynomial-in-K obstructions, even on simple DAGs. Every truthful pointwise majorant of that original rule inherits the obstruction. A general KT upper is available for the envelope, but it cannot achieve the sharp logarithmic rate.
+
+Other routes also have precise limits: ordinary Shapley can fail coalition coverage; one fixed Bernoulli probability has a leading e log K barrier within that rule class; a full uniform mixture of the own-excluded term alone can cost Theta(K). These are scoped method boundaries, not impossibility results for all mechanisms. The successful hybrid changes the rule instead of repairing it pointwise.
+
+The current manuscript also extends the construction to every finite-valued monotone concave degree-one homogeneous production function, including boundary discontinuities. Its owner-count upper is
+
+  B_n <= (log 2+o(1)) n/log n.
+
+An imported hierarchy gives a lower (1-o(1))log n/log log n. The lower is already in finite min-linear technologies; the upper covers the broader concave class. The conversion to owner count is not a new independent lower construction.
+
+In resource dimension d, the available owner-independent upper is d. A growing lower of (1-o(1))log d/log log d already holds for the min-linear subclass. Concavity may permit a substantially better upper, but that is unresolved. Factor d is sharp for a larger NONCONCAVE class, using f(c)=max_j c_j; this does not close the concave gap.
+
+For general concave production, adding U_i/D, where U_i=T-f(c-b_i), protects H_i/D whenever sum_i U_i<=DT throughout the domain. One may take D=d or D=n, and D=K for finite min-linear technologies. This costs at most T extra in total. In particular, adding H_i/K protection retains the sharp leading asymptotic rate in K; it does not purchase all ideals for T.
+
+10. Algorithmic game theory and reproducibility
+
+The truthful-production paper is directly an algorithmic game theory project: it combines strategic reports, coalition constraints, mechanism design, optimization, lower bounds, and implementation complexity.
+
+For rational finite technologies, an exact finite mask law supports sampling. Every seed preserves exact incentives; the hard part is simultaneous coalition coverage across all real profiles. Uniform convergence proves existence of a single frozen seed with that property, including tie faces. An exact rational arrangement/LP procedure can certify it.
+
+Repeated sampling and certification gives Las Vegas preprocessing: every returned certified mechanism is correct, but preprocessing can be exponential. Subsequent evaluation is polynomial in the stated representation and sample parameters. This is not an end-to-end polynomial-time algorithm or a practical sample-size guarantee. Fixed-profile simulations alone would not establish the all-profile theorem.
+
+The October 6 assessment of the openai/math collection found useful connections to formal statement checking, multiscale selection, global budget accounting, and all-cut rounding. It identified no direct theorem transfer that proved or superseded the then-current CoopGPT result. Lean/Comparator-style verification was recommended, but the assessment did not build those Lean projects or formally verify our proofs. Its older statement that the upper remained restricted to multi-glove games was superseded by the next day's general-production theorem.
+Assessment: https://github.com/mfflanag1/coopgpt/blob/main/review_packages/2026-10-06/openai_math/ASSESSMENT.txt
+
+The October 7 consolidation integrated the surviving research supplements into the truthful-production and static-protection manuscripts. Its ledger maps 41 result groups plus a threshold-class lemma. Seven bounded Fable snapshot audits, additional Codex checks, and coordinator adjudications are recorded. Incorrect draft ranges and an invalid review objection were both addressed explicitly; reviews were not accepted automatically. One initial QA call failed at model capacity and was completed through a fallback review.
+
+The release records successful native compilation of both manuscripts and the specialist brief, and 26 top-level reproduction commands passing from disposable archives. Those commands include the separate 26-checker campaign suite and earlier static, hierarchy, network, and ancillary suites. Selected earlier work also has SMT certificates and independently replayed proof objects. The entire portfolio is not formally verified, and older papers were not all re-audited during the October consolidation.
+
+Some historical verifier wrappers could accept incomplete case inventories or lose assertions under Python optimization. The audits repaired the identified wrappers or added guards. Modern campaign checks remain active under -O. A recorded PASS must always be interpreted with its actual case coverage and proof dependence.
+
+Consolidation record: https://github.com/mfflanag1/coopgpt/blob/main/review_packages/2026-10-07/consolidation/README.md
+Campaign entry: https://github.com/mfflanag1/coopgpt/blob/main/research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt
+Reproduce the modern campaign from a complete checkout:
+  python3 -B -O research_campaigns/2026-10-07-six-hour-campaign/verification/run_all.py
+
+Current LaTeX sources are authoritative. In particular, the exported static-subsidy and truthful-cooperation PDFs predate important additions and must not be circulated as the expanded manuscripts. Historical campaign reports saying the results are still supplements are superseded by the October 7 consolidation.
+
+11. Novelty, significance, and the handoff state
+
+The strongest current general candidate is the truthful-production theorem and its matching simple-DAG lower bound. The cleanest structural classification is the tree-cycle ideal-protection theorem. The static 1/3 subsidy theorem and asymptotic fairness-distance theorem are further focused quantitative candidates. The early phase diagram is a coherent structural contribution; the stable-core note carries a more modest novelty claim after correction.
+
+Classical ingredients include dual-price cores, max-flow/min-cut, assignment core geometry, probabilistic marginal values, weighted multi-glove games, the continuous Banzhaf index, concentration inequalities, and uniform convergence. Those should receive credit independently of the proposed synthesis and quantitative conclusions.
+
+The free-source audits found relevant antecedents and changed the claims. Some original-source comparisons remain incomplete, including the older Quint, Lucas, and Stuart texts. Other access gaps were later closed, so old priority tables are historical snapshots. No paid-source purchase is authorized; the user explicitly declined it. The 2013 transportation question is useful historical motivation, not proof that the question remains open in 2026.
+
+No independent human specialist feedback is recorded in the latest consolidation. Prepared outreach names Zhigang Cao for truthful production/networks and Marina Nunez for static protection. These are proposed recipients, not reviewers who have endorsed the work. Outreach remains prepared and unsent in that record. A private GitHub link alone is insufficient for an outside recipient without access.
+
+The next researcher should begin with PAPERS.md, the current two subsidy manuscripts, the graph manuscript, and the consolidation adjudication. Read the older PXC and broad paper3 archives when a specific lemma or counterexample is needed. Preserve fixed owners, whole-core versus dual-core distinctions, all-profile quantifiers, and the separation of subsidy from total payment. Do not count rewritten presentations or method failures as additional papers.
+
+12. Directions worth exploring next
+
+First priority: resource dimension. Determine the optimal owner-independent factor for concave production in d resources. The current range is roughly log d/log log d to d. A general o(d) upper would already be substantive; a much stronger lower could show that the apparent simplicity of the resource space is misleading. Examine whether the geometry of support forms in d dimensions can replace the crude dependence on their count. Both resources and owners must be allowed to grow.
+
+Second priority: efficient implementation. Remove exponential preprocessing, construct explicit deterministic or certifiable seeds, or prove a precise computational obstruction under a specified encoding or oracle model. A useful theorem must retain exact incentives and coverage across all profiles. A hardness result for one existing certification procedure would not automatically rule out a different efficient mechanism.
+
+Third priority: owner count. Close the gap between logarithmic-over-loglog growth and n/log n. The upper currently counts up to 2^n selected forms at a profile. A structural restriction on this selected family, or a stronger genuinely interacting report hierarchy, could improve the bound. Merely finding another few-owner example does not advance this asymptotic question.
+
+Fourth priority: stronger strategic models. Investigate coalition underreports, identity splitting/merging, or private operating costs, one change at a time. First fix the utility and feasible-deviation model and test whether any finite bound is possible. The current own-report theorem is a foundation, not a solution to those stronger requirements.
+
+Fifth priority: a concrete shared-compute model. A coalition pooling GPU time, memory, storage, and bandwidth is a promising application direction for divisible production with complementary resources. Start with a precisely specified fractional production LP and identify who owns what, what can be hidden, and why a coalition could operate independently. Indivisible jobs, latency, energy costs, topology, and demand uncertainty require additional modeling. No validated data-center application or empirical benefit is established yet. This direction matches the user's greater interest in compute than transportation.
+
+Sixth priority: focused static extensions. Resolve sharpness of the general-sector ideal-protection bound for K>3, or extend short-flow protection to general rational capacities without unjustified cloning. These are close to existing techniques and suitable for bounded campaigns, though likely narrower than resolving a general production gap.
+
+A further high-risk return would be the original universal coalitionally monotone-selector question. Before restarting, check its current literature status and formulate a finite obstruction or a consistency theorem for arbitrary families. More counterexamples to named selectors would not resolve it. The credal-set branch is another possible pivot after a dedicated audit, rather than a ready-made paper claim.
+
+Alongside one mathematical campaign, obtain specialist correctness and priority scrutiny of the present sharp theorem and target fragile lemmas for formal verification. These increase confidence and clarify significance without being counted as new research theorems.
+
+Recommended allocation: pursue the resource-dimension gap as the main mathematical target and efficient implementation as the strongest algorithmic alternative. Continue a route only for an improved GENERAL bound, a growing lower bound, or a new structural lemma with a demonstrated consequence for those bounds. Retire bounded-family constructions and blocked-envelope variations when they cannot meet that gate. A field-level breakthrough would require a result whose novelty, breadth, and importance survive that external assessment; the existing sharp general theorem is the strongest candidate to take into that process.
