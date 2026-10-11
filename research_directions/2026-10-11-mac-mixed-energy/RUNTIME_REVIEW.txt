@@ -1,0 +1,112 @@
+PRE-EXECUTION RUNTIME AUDIT — MIXED MAC STUDY
+11 October 2026. Read-only review of runstudy.py, power_capture.py, client.py,
+CONFIG.json, PLAN.json, build_design.py and the energy interval contract.
+No hardware/API/model calls or edits to study files. One isolated mock of window()
+was run with process, socket, state and API-facing setup dependencies replaced;
+its temporary RUN fixture was deleted afterward. Line references below refer to
+the source snapshot reviewed, before parent repairs.
+
+Fix before relying on unattended collection
+
+1. Owned runner cleanup is skipped after the server leader exits.
+runstudy.py:41-60,109-111 condition kill_owned, stop_server, and finally cleanup
+on proc.poll() being None. If the server leader crashes while a runner remains
+in its process group, every cleanup path skips signalling that group. Readiness
+correctly aborts, but the GPU-owning child can survive and affect later work.
+Confirmed isolated mock: proc.poll()=1 before readiness produces "Server exited
+before readiness", retained aborted RUN, and ZERO os.killpg calls.
+Repair: track the dedicated group/runner identity, attempt owned-group cleanup
+regardless of leader status, escalate if required, and verify the owned runner
+has gone. Do not broaden cleanup to unrelated/user Ollama processes. Successful
+wait() on the group leader alone does not establish child termination.
+
+2. The supposed bounded watchdog is only one SIGTERM.
+runstudy.py:90-94 calls kill_owned once from a Timer. client.run_trace then joins
+all worker threads without a join deadline. No second timer sends SIGKILL and
+no independent whole-window supervisor bounds setup/warmup; state() also calls
+pmset without a subprocess timeout. The global2700-second limit is checked only
+between windows with a300-second reserve, so it is not an actual global kill
+supervisor. Ordinary successful runs should finish, but the advertised hard
+operational bound does not follow from this code if a process/read hangs.
+Repair the directly controlled failures: finite TERM grace followed by owned-
+group KILL, guarded metadata subprocesses, bounded warmup and workload handling,
+and explicit remaining-budget checks. Do not claim exact real-time cancellation;
+record overshoot. The privileged power supervisor has the analogous pattern:
+a single SIGINT followed by unbounded wait. Add finite escalation for its own
+child rather than claiming that3000 loop ticks guarantee3000 wall seconds.
+
+3. Interrupted runs can lose observed requests and mislabel campaign status.
+runstudy.py:94 writes REQUESTS.json only after run_trace returns; client stores
+all progress only in memory until all threads join. KeyboardInterrupt during
+collection therefore leaves no REQUESTS file despite potentially many completed
+or partially streamed jobs. except Exception does not catch KeyboardInterrupt,
+so RUN can remain status='starting' and CAMPAIGN status='running' in finally.
+The asynchronous watchdog normally closes connections and lets rows return,
+but this does not cover orchestrator interruption or failure.
+Repair: prewrite the planned trace/IDs, atomically checkpoint partial results or
+append per-request lifecycle records, and record interruption/abort status while
+still re-raising cancellation. Preserve each occurred offer and partial chunks;
+retain future not-yet-offered IDs separately. Cleanup/telemetry archive failure
+must not prevent the final campaign metadata write. Avoid blanket retries.
+
+4. Last full-episode energy lacks guaranteed trailing coverage.
+runstudy.py:103 marks episode_end after post_idle, then the campaign immediately
+calls stop_and_archive; power_capture.py:48 immediately sets the sampler stop
+flag. The energy contract requires last earliest-possible sample end >= the
+window end, with +/-1-second uncertainty in whole-second printed timestamps.
+The last episode can therefore lack guaranteed outer coverage even when the
+meter collected continuously through the workload. Ten seconds of idle BEFORE
+episode_end does not supply samples AFTER episode_end.
+Repair: capture at least3 additional seconds after the final scientific phase,
+or wait for a valid sample whose earliest possible end brackets that phase,
+before requesting sampler stop. Keep this tail outside the stated episode.
+The workload-and-drain endpoint has the10-second post-idle buffer, so this
+specific issue is about final full_episode coverage, not automatically all
+workload energy. Startup already waits for meter samples before the first phase.
+
+Prospective clarification, not a reason to discard valid timings
+
+5. The45-second client timeout changes queue behavior before the final drain.
+CONFIG timeout_s=45 is both socket inactivity timeout and per-request elapsed
+budget checked between received lines. A job offered at t=0 can be cancelled
+around t=45 while offers continue until t=90. This is different from one common
+135-second administrative cutoff after all arrivals. Socket/line semantics can
+overshoot45 seconds; watchdog_s=145 is a further separate bound.
+All response SLOs are at most30 seconds, so these cancellations occur after the
+scientific deadline, but dropping an old job may improve later jobs' queueing.
+Freeze and describe a finite-patience serving contract if retaining this design.
+Do not call it uncensored natural completion of the whole offered queue. The
+client request rows retain errors and actual termination times on normal return;
+keep them in all offered denominators. Do not select timeout-free windows only.
+
+Checks that look sound in the reviewed design
+- PLAN has18 windows; each rate/repetition uses the same trace for P1/P2/P4,
+  with reversed within-rate order across repetitions and reversed rate order.
+- CONFIG schedules four simultaneous, distinct nontrace warmups in every arm;
+  completion checks plus actual runtime-parallel evidence address the P4 warmup
+  asymmetry. This is equal warmup work, not proof of equal thermal/cache state.
+- Per-job output caps override the common num_predict correctly in client.py
+  and are saved in request_options. Every worker uses its fixed arrival, not
+  a previous response. There is no client semaphore that silently serializes.
+- The largest frozen prompt is5194 characters with192 rows; the largest expected
+  answer is239 characters. Context4096 with max384 output tokens is plausible
+  for these compact numeric records. I found no demonstrated overflow. This is
+  not an exact tokenizer certificate; verify full input/context accounting and
+  preserve any truncation warnings rather than inferring safety from HTTP200.
+- The format task is feasible under generous output caps; it does not repeat
+  the earlier100-word request under a64-token limit. Exact answer matching must
+  remain distinct from terminal/API completion.
+- The power launcher shell-quotes the stop-file path and does not execute its
+  contents. Its root-owned mktemp directory is narrowly used for samples/logs.
+  The scientific energy scope remains CPU/GPU/ANE domain telemetry on a shared
+  Mac, not total machine, billing, GPU-process-attributed, or battery energy.
+- full_episode and workload-plus-drain have variable durations across settings.
+  Such gross totals describe the recorded episode; do not silently treat them
+  as matched fixed-horizon power savings or subtract unloaded post-idle as if
+  it were the same resident baseline. Preserve duration and exposure definitions.
+
+Review disposition
+The concrete cleanup, watchdog, partial-data, and trailing-coverage issues above
+should be addressed before claiming the corresponding collection guarantees.
+No change to the fixed workload, SLOs, or outcome threshold is proposed. Re-freeze
+implementation only after verified repairs and before any workload outcomes.

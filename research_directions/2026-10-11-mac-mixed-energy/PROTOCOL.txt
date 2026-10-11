@@ -1,0 +1,99 @@
+Prospective Mac mixed-length serving and component-energy study
+Frozen before any study requests; capability checks are separate.
+
+Question: On this one Apple M3 Max, how does serving concurrency (1, 2, 4
+slots) change useful responses, latency, and estimated component energy under
+longer mixed-size offered workloads? This is a single-device configuration
+experiment, not evidence of cooperation between resource owners or GPUs.
+
+Design: two repetitions of three deterministic 90-second open-loop arrival
+traces, rates 0.3, 0.6, 1.2 requests/second, N=27,54,108 respectively. Cross
+all three slot counts: 18 windows, 1,134 planned requests. CONFIG and PLAN fix
+all choices. Seeded first-repetition order is reversed in the second. Identical
+traces across slot counts within repetition/rate; nested prefixes across rates.
+Input length (32/96/192 records) and output cap (64/192/384 tokens) are crossed
+and balanced in every nine-request block, independently of arrival timing.
+
+Task: copy the 4/12/24 KEEP records to ID=value pairs in source order. Fixed
+three-digit values, unique IDs, explicit separators. Task-quality success is
+exact gold equality after removing whitespace, one optional bare triple-backtick
+wrapper, and one optional trailing semicolon. No fuzzy or manual grading.
+Output caps are not promises of actual generated length. Classifying completed
+API calls or done_reason=length as useful work without quality is prohibited.
+
+Primary response: exact-quality-correct AND client end-to-end latency from
+scheduled arrival <= 8/16/30 seconds for cap 64/192/384 respectively. Every
+planned request stays in denominators, including absent, failed, or unfinished
+ones. Per-window counts/fractions, input/cap/cross-class breakdown, matched
+P2-P1 and P4-P1 within repetition/rate differences. No population confidence
+interval or steady-state capacity extrapolation from two traces/windows.
+A configuration at a rate meets the finite-window criterion only if BOTH
+windows are valid, have no API errors, >=90% quality-plus-SLO overall, >=80%
+in EACH cap class, and unfinished at 90 seconds <=ceil(0.1*N). This is a
+study-defined descriptive operating criterion, not production SLA validation.
+Secondary: API completion, task quality, SLO alone, terminal reason, token
+counts, scheduling lag, TTFT, nearest-rank latency quantiles among API
+completions, unfinished requests at 30/60/90/120/135 seconds, early/late cohorts.
+Never treat these conditional quantiles as including failed/missing requests.
+
+Execution: model llama3.2:3b Q4_K_M, Ollama0.20.0, checked manifest and binary,
+context4096, temperature0, seed0. Hardware/inventory inherited in MODEL_LOCK
+and previous pilot; current RUN records power/thermal/load state. Fresh own
+server on127.0.0.1:11562 per window, original11434 must remain idle. Verify
+runtime slot count, model digest/context/GPU load. Four simultaneous distinct
+nontrace warmups in EVERY arm, then10s loaded idle. Keep model resident through
+workload/drain. Wait to90s if work completes early. Unload and stop own process
+group; verify unloaded. Then10s quiescent baseline. Queue256; fixed documented
+server settings; no retuning during collection. No change to user server. Dispatch lag>100ms is a reported diagnostic,
+not an exclusion criterion; scheduled-arrival latency includes all such delays.
+An unexpectedly absent original server causes preflight abort, by design.
+
+Per-request timeout45s is socket inactivity/soft wall budget, not a scientific
+SLO or a guarantee of strict cancellation. At145s after workload starts, a
+watchdog terminates only this window's owned server process group. Keep all
+returned failure/censoring rows. Setup/warmup/runtime/cleanup failure aborts
+campaign rather than selectively skipping or replacing difficult windows.
+The watchdog escalates TERM to KILL after3s; collector hard bound155s.
+Warmup collector hard bound55s. Atomic snapshots every<=5s retain partial
+request streams if interrupted; final completed capture replaces checkpoints.
+The45s per-request patience applies even before90s and can cancel early jobs
+during arrivals, changing later queueing. This is part of the fixed policy.
+Global collection budget45min after power readiness; start another window only
+with>=360s remaining. Any unrun planned windows remain explicit missing data.
+If interrupted, preserve the initial attempt; any amended continuation needs a
+new dated explanation before new requests. No outcome-dependent rerun.
+
+Energy: a continuous authenticated read-only powermetrics cpu_power,gpu_power
+capture,1s target interval, max3000samples and bounded supervisor with SIGINT then SIGKILL after5s if needed. Root owns
+capture file; user stop sentinel can only stop its own sampler. Capture starts
+before any windows, includes startup/warmup/loaded idle/requests/drain/unload/
+quiescence, adds>=3s tail after the final phase, then stops. Raw text preserved compressed. Integrate first
+Processor usage CPU/GPU/ANE/Combined explicit mW times actual elapsed_ms*1e-6.
+Ignore duplicate GPU usage section and aggregate summaries. Printed Combined
+may differ from rounded component sum by<=3mW. Parse errors, continuity/clock
+gaps, missing phase coverage, or nonfinite/negative values invalidate energy.
+
+Reported phase bounds use whole measured interval energy: a lower sum from
+intervals guaranteed inside the phase, upper from intervals possibly touching
+it, assuming printed whole-second sample endpoints are within +/-1second.
+No constant-power interpolation at phase edges. Bounds are conditional on a complete uninterrupted sampler capture. Rounded
+timestamps cannot prove absence of one short missing interval; continuity
+checks are diagnostics, not a completeness proof. Direct root-owned raw capture
+provenance is retained. A common continuous timeline must fit ALL endpoint
+uncertainty intervals (prefix residual range<=2s). Require complete outer
+coverage and documented continuity checks in ENERGY_CONTRACT. This timestamp
+assumption is not a bound on Apple's calibration error. Windows: loaded-idle,
+workload through drain, unload, post-idle, and whole episode from loaded-idle
+start through post-idle end. Report gross CPU/GPU/ANE/Combined joules and gross
+energy divided by quality-plus-SLO count only if denominator>0; zero success
+means undefined, not zero energy per success. Startup/warmup energy exists in
+raw capture but is outside primary episode. No baseline subtraction as a
+primary endpoint. Background apps/OS are included; no process-level inference
+attribution, wall-power, battery, cross-device, or data-center extrapolation.
+The short capability check already showed substantial background CPU power.
+
+Interpretation gate: test descriptive latency/quality and energy tradeoffs;
+even a measured improvement on this host does not demonstrate multi-owner
+pooling gains, causal energy savings, or incentive-compatible allocation.
+Any subsequent pooling model needs compatible independent hardware workloads,
+actual ownership/deviations, and an economically justified cost measure.

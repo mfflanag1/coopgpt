@@ -1,0 +1,196 @@
+PROSPECTIVE DESIGN AUDIT — MIXED-LENGTH LOCAL MAC SERVING
+11 October 2026. Independent design recommendation, before any new outcomes.
+Destination: /tmp/mac-mixed-design-audit.txt. No hardware or model calls made.
+Prior evidence reviewed: the eight-window Mac pilot protocol, report, and my
+independent raw-data audit. This recommendation is informed by that pilot;
+it is not an independent confirmation of its observations.
+
+Recommended minimum experiment
+Use three arrival rates, 0.3, 0.6, and 1.2 requests/second; three actual server
+parallel-slot configurations, P=1,2,4; and two distinct trace repetitions.
+This is 18 windows. Each window has a 90-second open-loop offered interval,
+with arrivals k/rate for k=0,...,N-1 and exact N=27,54,108 respectively. There
+are no offers at t=90. A complete campaign has 1,134 offered requests: 378 per
+parallel setting. This is 27 minutes of offered time, not 27 minutes elapsed.
+
+Allow at most 45 seconds after t=90 for drain, plus bounded cleanup. The worst
+workload-plus-drain time across all 18 windows is 40.5 minutes; fresh startup,
+warmup, snapshots, and cleanup add overhead. Typical completion around 35-45
+minutes is plausible, not guaranteed. Freeze a 45-minute collection supervision
+budget and report unrun cells if it is exhausted. Do not promise all 18 windows
+within that bound under arbitrary startup or overload. Check remaining budget
+before launching each window; reserve at least its full operational allowance.
+A hard schedule requiring all cells with more margin can use 60-second windows
+instead (18,36,72 jobs; 756 total); choose once before collection, not after
+seeing slow results. My preference is the longer 90-second design with honest
+incompleteness handling. The older 7.5-second offered interval was too brief
+to map accumulating backlog meaningfully.
+
+Keep the existing cached model and pinned binary/manifest. Fresh dedicated
+server and runner for each window, same decoding seed, temperature, input
+context, KV dtype, flash-attention choice, server-queue limit, and client
+transport options. Verify actual P=4 from runner n_seq_max and runtime load
+records, just as for P=1 and P=2; setting an environment variable is insufficient.
+P changes the full serving configuration, including KV allocation, not just an
+abstract number of free workers. Keep the context per sequence constant.
+
+Workload: genuinely varied, feasible bounded tasks
+Cross three input-size levels with three output caps, 64,192,384. Balance all
+nine input-by-cap cells in each window: 3,6,12 requests per crossed cell for
+rates 0.3,0.6,1.2 respectively. This avoids assigning every long input a long
+output cap and then mislabeling the source of its service cost. Randomize the
+nine classes in balanced blocks, not long runs of one length. Use distinct
+synthetic contents in the two repetitions; within a rate/repetition, every P
+receives the identical trace, contents, caps, arrivals, and request IDs.
+
+A concrete task family is extracting specified records from a synthetic table:
+input tables of 24,48,96 rows; output 4,12,24 selected records respectively
+for caps 64,192,384. A compact row might be row03|B|017. Request exactly those
+selected rows in the specified order, with no commentary. The selected IDs and
+expected values are known before inference. Each prompt has an early unique
+nonce and independently generated table values. The source table always has
+at least the requested number of output records. Output constraints are counts
+and a compact format, not a 100-word request under a 64-token cap.
+
+This example is a synthetic extraction/serialization workload, not production
+traffic and not a broad language-quality benchmark. The caps are generous
+ceilings, not claims that every response will generate exactly that many tokens.
+Freeze a deterministic scorer accepting only the requested rows/values, with
+explicit harmless whitespace normalization and rejection of missing, duplicate,
+wrong, reordered, or extra records. Publish expected answers and scorer tests
+before collection. If implementation cannot support a credible quality scorer,
+label the primary endpoint capped API completion and explicitly leave useful-
+work capacity unestablished; do not equate task completion with done=true.
+
+Input levels should be named by actual constructed rows or bytes unless a local
+pinned tokenizer gives exact full prompt counts. Save observed prompt-evaluation
+counts and generated counts, but do not assume the former always measures the
+entire uncached prompt. Check the full input-plus-generation context requirement
+before collection with available tokenizer metadata, or use a conservative
+construction and a fixed larger context from the start. Never silently truncate
+long inputs. If using 2048 context, enforce a verified margin for the complete
+templated input plus the 384-token generation allowance. A report of successful
+HTTP status alone does not prove no context truncation.
+
+Counterbalancing and replication
+For each arrival rate, choose one seeded permutation of P1,P2,P4 for repetition1
+and reverse that exact order in repetition2. Each configuration then occupies
+symmetrically opposed positions within that rate's two triplets. Randomize rate
+triplet order in repetition1 and reverse it in repetition2. Freeze the complete
+18-window order and random seed. This provides counterbalancing and explicit
+randomization without choosing a favorable order after outcomes. It does not
+remove time variation on the shared host, and two repetitions are very few.
+
+The replication unit is the matched rate-by-repetition triplet, with six such
+triplets total and two at each rate. Compare P2-P1 and P4-P1 within those triplets.
+Do not pool all 1,134 requests as independent randomized units. Report every
+triplet and length stratum; no request-level confidence interval or significance
+claim is warranted for a population. Do not substitute P4-P2 as the headline
+contrast after observing which contrast is largest. It can be a predeclared
+secondary comparison. No multiple-testing search for a winning cell.
+
+Warmup and source-state controls
+Warm all four potential slots in EVERY arm by simultaneously offering the same
+four unrelated short warmup tasks. P1 queues them; P4 may execute together.
+Require valid terminal replies, then use a fixed two-second idle interval.
+The warmup input does not occur in the measured trace. Preserve warmup duration,
+outputs, token counts, and the loaded model's memory observations. Four warmups
+do not prove identical thermal or OS-cache state, so retain that limitation.
+Use the repaired asynchronous unload polling from the outset. Check original
+endpoint idle and owned-process cleanup at boundaries; never stop user processes.
+Record AC/charging state, thermal-warning snapshots, and aggregate load before
+and after. These snapshots are state covariates, not energy measurements.
+
+Outcomes and deadlines
+Use new prospective engineering response allowances rather than modifying the
+old five-second threshold to make its failed screen pass. A transparent default
+is 8 seconds for cap64, 16 seconds for cap192, and 30 seconds for cap384, all
+measured from intended arrival. State that these allowances are engineering
+choices, not measured user valuations or production SLA evidence. Apply the
+same allowance to every P at a given class, including long-input cases.
+
+Primary: fraction of ALL offered requests whose complete response is valid,
+passes the frozen task scorer, and arrives by its class deadline. If there is
+no scorer, name this endpoint valid capped API response explicitly. Report the
+API-only SLO fraction separately to locate quality versus scheduling failures.
+Also report on-time goodput = on-time valid-task completions/90 seconds, class
+fractions, transport errors, task failures, generation-length stops, and the
+full distribution of actual output counts. A rate that sends twice the work
+may increase raw on-time count despite a much worse success fraction; retain
+both rather than substituting the favorable one.
+
+Secondary: client first-content delays, completion latency, natural drain time,
+unfinished offered counts at t=30,60,90,120,135, and completions per successive
+30-second intervals. Call this unfinished-count trace a client backlog proxy,
+not the unobserved server queue length. It includes active service. For class
+quantiles, show n and the quantile rule; tiny strata cannot estimate stable tails.
+No first-chunk timestamp is a true per-token execution-start instrument.
+
+Bounded overload and missingness contract
+Retain an immutable planned manifest before launching workers and write events
+incrementally. All jobs whose scheduled arrival has occurred remain in the
+offered denominator even if client dispatch fails or the server rejects them.
+No retries, response-triggered offers, response-based reordering, or replacing
+rejected jobs. A client concurrency cap below the possible 108 outstanding jobs
+silently adds another queue; avoid it or explicitly make it a common measured
+part of the configuration. Keep any server admission/queue cap identical across
+P and count queue-overflow rejections as outcomes, not invalid windows.
+
+Scientific deadlines never cancel requests. Let requests finish naturally until
+t=135. Since the last arrival is before90 and the largest allowance is30, every
+job's SLO deadline has passed before that administrative cutoff. Still-running
+jobs are known SLO misses; their eventual natural completion latency is unknown,
+not135 and not a completed latency sample. Preserve a timeout/censoring record
+and partial chunks, then stop only the dedicated experiment process group.
+The fixed drain cap is a legitimate overload endpoint, not a reason to delete
+that window or rerun it with fewer jobs. Distinguish transport failure, server
+rejection, deadline miss, quality failure, and administrative censoring.
+
+Socket inactivity timeout and between-line elapsed checks are not exact elapsed-
+time limits. Use bounded process supervision for the campaign; preserve observed
+overshoot rather than promising hard-real-time behavior. A safety interruption
+before t=90 produces an incomplete window: report planned, offered, dispatched,
+returned, and not-yet-offered counts separately. Do not invent completions or
+count future unsent jobs as observed server failures. Mark primary full-window
+comparisons incomplete and retain the raw records. Avoid starting a new window
+when the global budget cannot accommodate its fixed collection allowance.
+
+Validity and interpretation
+Failures of immutable model/trace/options, unverified actual parallelism,
+missing/duplicated request IDs, malformed or reversed clocks, context overflow,
+failed warmup, background original-model residency, or incomplete required
+metadata invalidate a window. Transport rejection and slow service under an
+otherwise valid setup are substantive outcomes. Dispatch lag over100 ms is a
+predeclared implementation-quality failure; retain the data and do not silently
+start another window to repair the result. Use the same validity rule across P.
+
+A useful positive outcome is a REPRODUCIBLE FINITE-WINDOW BOUNDARY: at an adjacent
+pair of tested rates, both repetitions at the lower rate meet a frozen target
+(suggested90% valid-task responses within their class allowances), while both
+repetitions at the higher rate fail it. Publish per-cap results to expose an
+acceptable aggregate masking an unacceptable class. For a stronger service
+contract require the90% target in every cap class as well; if chosen, freeze
+that rule and accept the severe integer granularity at low rate (only9 jobs
+per cap in a27-job window). Do not choose aggregate versus classwise after results.
+
+This brackets the tested workload's90-second operating envelope, not a proved
+stationary capacity or a production limit. If all rates pass, capacity lies
+beyond the tested grid; if all fail, it lies below it or quality itself fails.
+If repetitions disagree or invalidity breaks a triplet, the boundary remains
+unresolved. If P4 reverses an apparent P2 benefit, report the reversal. Backlog
+trajectories and natural drain distinguish a transient latency effect from
+clear overload, but cannot prove infinite-horizon stability in90 seconds.
+No minimum improvement from the old pilot is imported as this study's target.
+
+Energy comes after valid serving measurement
+Do not infer joules from service time, GPU nameplate, charging change, or the
+previous NVIDIA dataset. The next energy step needs authenticated same-device
+or wall-meter telemetry with timestamps, enough sampling resolution, and a
+stated hardware scope. Run both idle-resident and full workload/drain windows;
+retain baseline and total energy separately. On an AC-powered charging laptop,
+wall power includes charging and the rest of the system. Without controlling or
+measuring battery charging, it is a whole-system operating-context measurement,
+not GPU energy. Energy comparison needs a common defined horizon and the same
+offered trace; do not drop late or rejected work or double-count window energy.
+A new measured energy campaign should repeat selected fixed conditions, not
+retroactively attach an assumed energy coefficient to this timing-only study.

@@ -1,0 +1,39 @@
+Stored-data checks (no model, network or administrator privilege needed):
+  cd research_directions/2026-10-11-mac-mixed-energy
+  python3 -B -m unittest test_analysis test_energy test_runstudy
+  python3 -B analyze.py capture --output /tmp/coop-mixed-abort1-summary.json
+  python3 -B analyze.py capture-ac-restart --output /tmp/coop-mixed-abort2-summary.json
+Both summaries are correctly invalid:0 requests dispatched, all1,134 planned
+outcomes missing. Do not interpret planned_count as actual offers sent.
+
+Full48-test suite additionally opens a loopback HTTP fixture:
+  python3 -B -m unittest discover -s . -p 'test_*.py'
+  python3 -O -B -m unittest discover -s . -p 'test_*.py'
+
+No workload replay is part of reproduction. To actually collect new data,
+first verify ON THE HOST (not the misleading sandbox) pmset -g batt reports
+AC Power and pmset -g ac confirms the adapter. Keep the original Ollama server
+on11434 idle;11562 must be free. Preserve the fixed FREEZE hashes. Run:
+  python3 -B runstudy.py --output /absolute/new/capture-directory
+This explicitly starts workload and authenticates a read-only powermetrics
+supervisor using the standard macOS password dialog. Credentials never enter
+chat or stored files. Estimated35–45min; max45min collection budget, only start
+another window with>=360s remaining. Use a new output directory every attempt.
+If any setup/window fails, capture is retained and the campaign aborts.
+
+After collection:
+  python3 -B analyze.py /absolute/new/capture-directory
+Inspect all window validity, exact-quality+SLO denominators, class failures,
+matched contrasts, complete energy coverage, sampler stop and original-server
+idle state. Independent recount and review are required before interpretation.
+
+FREEZE.json fixes protocol/traces/collector/analysis before any study requests.
+ARTIFACT_MANIFEST.json hashes all delivered files except itself. Raw power
+text is gzip-compressed without modification. Apple power estimates are
+component-domain telemetry; calibration, causal attribution, background load,
+wall power and independent-owner pooling are outside these measurements.
+
+Independent recount (imports neither analyze.py nor energy.py):
+  python3 -B independent_check.py --self-test
+  python3 -B independent_check.py . capture --output /tmp/coop-mixed-independent1.json
+  python3 -B independent_check.py . capture-ac-restart --output /tmp/coop-mixed-independent2.json

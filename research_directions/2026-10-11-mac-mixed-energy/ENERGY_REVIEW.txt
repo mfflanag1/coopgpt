@@ -1,0 +1,175 @@
+INDEPENDENT CODEX ADJUDICATION — OFFLINE DOMAIN-ENERGY BOUNDS
+11 October 2026. Reviewed /tmp/coop-mac-mixed/energy.py, its contract/tests,
+and the capture wrapper. No workload captures, model endpoints, GPU calls,
+or new telemetry were accessed. The energy implementation was not edited.
+The findings below describe the implementation before the root agent's planned
+prefix-alignment repair. Findings and witnesses were sent to root immediately.
+
+Decision
+The interval-selection arithmetic is correct as a CONDITIONAL allocation bound
+on the reported interval-energy estimates. The current checks are insufficient
+to certify continuous, complete sampling, and the existing method/docstring
+wording is stronger than those checks justify. Retain an explicit uninterrupted,
+complete, nonoverlapping-capture assumption. Add the global prefix-alignment
+feasibility check described below before treating valid=true as clock-consistent.
+Neither improvement turns the result into a calibrated bound on physical joules.
+
+1. Material issue: missing internal samples can pass all current checks
+
+For sample headers at whole seconds 10,11,...,20, give each retained sample
+elapsed_s=1 and CPU/GPU/ANE/Combined power zero. Use analysis window [12,18].
+
+Observed offline results:
+  Dropped endpoints        parse errors    energy_bounds valid    CPU upper J
+  none                     none            true                   0
+  15                       none            true                   0
+  14 and 15                none            true                   0
+  13,14,15                 none            false                  null
+
+One omission gives a two-second header gap with a one-second elapsed field;
+the adjacent discrepancy and final cumulative deficit are each one second.
+Two omissions give a deficit of two seconds. Both satisfy the 2.05-second
+threshold. The absence of text is not itself a malformed-header error.
+
+A one-second omitted interval [14,15] can carry arbitrarily large positive
+energy. For example, an omitted 1000mW CPU interval carries 1J, while all
+observed intervals carry 0J. The implementation returns upper_cpu_j=0 with
+valid=true for [12,18], which does not bound the omitted energy. Outer coverage
+at the first/last retained sample does not fix the internal hole.
+
+This is not resolved merely by reducing the tolerance or adding the stronger
+prefix feasibility check: uncertain whole-second timestamps can make one or
+two omitted samples observationally compatible with a different continuous
+timeline. The capture's completeness must remain an external assumption or
+be supported by stronger acquisition metadata, such as reliable sequence IDs
+or trusted monotonic interval endpoints. One raw file from one supervised
+powermetrics process is useful provenance; the time-consistency checks alone
+are not a proof that nothing was omitted.
+
+2. Material implementation issue: existing checks can accept an impossible
+   continuous timeline under the stated +/-1-second alignment assumption
+
+Verified synthetic witness:
+  Printed endpoint seconds: 10,11,12,13,14,15,16,17,18,19,20
+  elapsed_s, same order:    1, 2, 2, 2, .25,.25,.25,.25,1,1,1
+
+Every adjacent discrepancy |header difference - current elapsed| is <=1s.
+The sum of elapsed durations after the first sample is 10s, exactly matching
+the first-to-last printed endpoint span. Both current continuity checks pass,
+and energy_bounds returns valid=true with no errors.
+
+Let S_0=0 and S_i=sum(elapsed_j for j=1,...,i), excluding the first sample's
+elapsed duration. A continuous sequence must have actual endpoint
+E_i=E_0+S_i. Each printed endpoint T_i requires
+  E_0 in [T_i - 1 - S_i, T_i + 1 - S_i].
+All of these intervals must have a common intersection.
+
+For the witness, the residuals relative to printed T_0 are
+  [0,-1,-2,-3,-2.25,-1.5,-.75,0,0,0,0].
+The common-anchor lower limit is max(residual-1)=-1; the upper limit is
+min(residual+1)=-2. The intersection [-1,-2] is empty. Thus no contiguous
+sequence of the stated durations can fit all +/-1s endpoint bands.
+
+Recommended repair: accumulate every prefix duration; intersect the implied
+interval for the first actual endpoint at each sample; reject an empty
+intersection. This is necessary and sufficient for existence of a contiguous
+endpoint sequence under the specified timing model. A floating-point precision
+allowance should be explicitly distinguished from a physical clock tolerance;
+using 2.05s while claiming an exact +/-1s model also needs explanation.
+
+This repair establishes feasibility, not actual continuity or capture completeness.
+The missing-sample limitation in finding 1 remains.
+
+3. Why nonoverlap matters for the lower bound as well
+
+Alignment uncertainty alone permits overlapping sample intervals. The lower
+sum is valid only when selected interval energies do not double-count the
+underlying domain energy.
+
+Verified witness with printed headers 10,...,20 and all elapsed_s=1:
+  Set printed CPU power to 800mW for endpoints 14 and 15; all others are zero.
+  Combined matches CPU, GPU/ANE are zero.
+  For [12,18], the implementation returns lower_cpu_j=1.6, valid=true.
+
+Actual endpoints 14.4 and 14.6 both satisfy their printed +/-1s bands. Their
+one-second intervals [13.4,14.4] and [13.6,14.6] overlap. A 1W pulse confined to
+[13.6,14.4] gives .8J in each sample interval and .8J in the whole analysis
+window, while the lower sum counts it twice as 1.6J. Other sample intervals
+can avoid the pulse. This is deliberately inconsistent with a genuine
+contiguous counter-sampling partition; it demonstrates why that partition
+assumption must be explicit rather than inferred from alignment alone.
+
+4. Conditional proof of the arithmetic
+
+Assume for each reported domain:
+  (a) retained samples form a complete, contiguous, nonoverlapping partition
+      covering the analysis interval;
+  (b) each reported power times elapsed duration represents that sample's
+      additive nonnegative interval-energy estimate;
+  (c) actual endpoint is within +/-1s of the printed endpoint, with its
+      beginning shifted by the same amount and stated elapsed duration;
+  (d) the first/last intervals satisfy the implemented guaranteed outer coverage.
+
+A sample whose earliest possible beginning is >=window start and whose latest
+possible end is <=window end lies inside the window for every allowed alignment.
+Its entire nonnegative interval energy therefore belongs inside the window.
+Summing those disjoint interval energies gives a lower bound.
+
+Every sample that can actually intersect the window satisfies latest possible
+end >window start and earliest possible beginning <window end. The implemented
+upper set therefore contains every interval contributing to window energy.
+Adding whole nonnegative interval energies, including potentially irrelevant
+edge portions, gives an upper bound. No constant-power interpolation is needed.
+
+The strict overlap inequalities correctly exclude intervals that can only
+touch a boundary, under ordinary time-integrated power with no point mass.
+The per-component arithmetic and use of the explicitly reported Combined field
+are consistent with this conditional argument. Rounded Combined need not equal
+the sum of rounded CPU/GPU/ANE fields; treating it separately is appropriate.
+
+5. Recommended report/protocol wording
+
+"We report conditional bounds on the allocation of powermetrics-reported
+CPU, GPU, ANE, and Combined interval-energy estimates to each episode. The
+bounds sum whole intervals and assume a complete, uninterrupted sequence of
+nonoverlapping measurement intervals, the reported elapsed durations, and
+at most one second of endpoint alignment uncertainty. They do not include
+telemetry calibration/model error, rounding error, missing samples, clock
+jumps outside that assumption, process attribution, or whole-machine energy.
+Continuity diagnostics reject some inconsistencies but do not establish the
+uninterrupted-capture assumption."
+
+Prefer naming valid=true as "capture passed the stated diagnostics" rather
+than "continuous capture proven". Keep gross baseline, workload/drain, unload,
+post-idle, and full-episode results separate. Do not subtract baseline power or
+label reported component energy as experiment-attributed energy. If capture
+provenance is doubtful or diagnostics fail, return missing bounds, not zero.
+
+6. Other verified behavior and minor limitation
+
+- All six current test_energy tests passed. They include read-only preflight
+  parsing; preflight is not workload evidence.
+- A 3W constant CPU fixture with complete endpoints 10..20 and window [12,18]
+  returned [12,24]J, containing the known 18J synthetic integral.
+- A repeated GPU Power=99999mW line in the GPU usage section did not contribute:
+  GPU upper bound remained zero when Processor usage GPU power was zero.
+- Passing the full parse result containing a malformed/missing ANE field caused
+  energy_bounds to reject the data. Callers must continue propagating parse
+  errors; silently extracting only valid samples would reopen missingness risk.
+  The stored-data analyzer currently refuses bounds when parse errors exist.
+- "Mon Oct 11 ... 2026" is accepted although that calendar date is Sunday.
+  The numeric date still parses to the correct specified timestamp, so this is
+  an integrity diagnostic omission rather than a changed energy formula. It is
+  lower priority than continuity/completeness. Root already knew this limitation.
+- The capture wrapper uses one directly written powermetrics output file and
+  gzip archival without resampling. That supports provenance but does not
+  mathematically certify complete intervals; retain stop status and raw bytes.
+
+Separately requested analyzer interval-label change
+Only analyze.py/test_analysis.py were edited for this requested adjustment:
+  loaded_idle_baseline = loaded_idle_start -> workload_start
+  workload_and_drain   = workload_start -> workload_drained
+  unload               = workload_drained -> server_quiescent
+  post_idle            = server_quiescent -> episode_end
+  full_episode         = loaded_idle_start -> episode_end
+All 18 offline analyzer tests still pass. No energy implementation was edited.

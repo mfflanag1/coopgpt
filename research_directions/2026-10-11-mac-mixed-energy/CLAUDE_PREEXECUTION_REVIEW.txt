@@ -1,0 +1,26 @@
+**Provisional verdict: findings — one launch-blocking defect (checkpoint serialization vs. 0.1 s dispatch-lag invalidation), plus unverifiable energy-endpoint coverage.**
+
+## Findings
+
+**1. HIGH — Checkpoint serialization can invalidate whole windows (client.py:357-365, runstudy.py:103, analyze.py:109-110,198).**
+`run_trace` calls `checkpoint(...)` every ≤5 s from the controller thread; `write()` does `json.dumps(sort_keys=True)` on the full `results` list (at 1.2 rps, up to 108 rows × ≤384 chunk dicts ≈ several MB) and holds the GIL throughout (C encoder does not release it). Any worker whose `arrival_offset_s` falls inside that serialization/`write_text` window wakes late. analyze.py treats a single `dispatch lag > 0.1 s` as a *validity* error and line 198 merges validity errors into `errors`, so one late wake → `valid=False` for the window → matched contrast lost. This is outcome-correlated attrition (heavier windows checkpoint larger files). Fix before launch: serialize off the dispatch path (e.g., snapshot/encode in a separate thread, or checkpoint less data), and/or report dispatch lag as a flagged diagnostic rather than a window-invalidating error. Verify: time `write()` on a synthetic 108×384-chunk `REQUESTS.json` under load.
+
+**2. MEDIUM — Energy endpoints incomplete and unverifiable in packet (analyze.py:285-296, 502; PROTOCOL 79-83).**
+`energy.py` (parse_text, energy_bounds, continuity/coverage checks) is not supplied; the “missingness ≠ zero energy” guarantee depends entirely on it. In analyze.py itself: only three intervals are computed (loaded-idle, workload+drain, full episode); PROTOCOL’s *unload* and *post-idle* windows and the “gross J ÷ quality+SLO count (undefined if 0)” endpoint are absent. analyze.py never reads `POWER_STOP.json`/`POWER_exit_status.txt`, so an unconfirmed stop (power_capture.py:50-52, partial `samples.txt` copied while powermetrics still writes) or `-n 3000` exhaustion mid-campaign is detected only if `energy_bounds` enforces outer coverage. Add explicit checks and the missing intervals.
+
+**3. MEDIUM — `thermal_ok` may reject normal output (analyze.py:228-233).**
+On Apple Silicon `pmset -g therm` commonly prints `CPU_Scheduler_Limit`/`CPU_Speed_Limit` lines even when nominal; the residual regex would then flag every window invalid. Confirm against the capability-check capture before launch.
+
+**4. LOW — Provenance/robustness gaps.**
+- `original_idle()` returns `None` (→ abort) if 11434 is simply not running, though that is “idle” (runstudy.py:16-18,72). Decide intentionally.
+- `power_capture.py`, `energy.py`, `analyze.py` are not in the required FREEZE set (analyze.py:435); collection/analysis code can change undetected.
+- `json.dumps` (ensure_ascii) in the AppleScript literal (power_capture.py:25) would `\uXXXX`-escape a non-ASCII output path, making the root loop never see the stop sentinel. Current path is ASCII; add an assertion.
+- Drain check tolerance of 1 ms compares wall-clock phase stamps against a monotonic-derived sleep (analyze.py:332 vs runstudy.py:99-106); fragile to clock steps.
+
+Owned-process cleanup (TERM→wait→KILL on own session, two-stage `killpg` verify, keep_alive=0 unload with 15 s verify) and the root helper (only `powermetrics` and `kill` on its own child; sentinel path only tested with `-f`) look correct as written.
+
+## Scope limitations
+Static review only; `energy.py`, `PLAN.json`, traces, `FREEZE.json`, `MODEL_LOCK.json`, and the capability-check outputs were not supplied. Ollama 0.20.0 log formats (`n_seq_max`, `--parallel`) and powermetrics output flushing with `-o` were not verified.
+
+## Verdict
+**Findings.** Correct #1 (and decide #2/#3) before collection.

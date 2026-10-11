@@ -1,0 +1,40 @@
+Pre-execution implementation verification (2026-10-11; no study outcomes seen)
+
+Fable5.1 implemented energy.py in isolated cross-model run
+20261011-163409-3a748894, selected four files, stdlib only. Supplied five tests
+passed under the controller; model itself honestly reported only hand traces.
+Fresh independent Codex QA found silently ignored malformed headers and lax
+weekday/timezone syntax. Coordinator reproduced/fixed both and added a test.
+Independent Codex energy audit additionally gave a prefix-drift counterexample:
+previous pairwise/final-total checks did not ensure a common timeline fitting
+all +/-1s endpoint uncertainties. Added prefix-residual range<=2s validation and
+an adversarial regression. Energy bounds explicitly assume complete continuous
+raw capture; whole-second text cannot exclude one short dropped interval.
+Seven energy tests pass, including original three actual capability samples.
+An independent nine-sample start/stop instrument check parses without errors.
+
+Runtime audit repaired crashed-leader process-group cleanup, TERM-to-KILL
+watchdog escalation, atomic five-second checkpoints, hard collector timeouts,
+and >=3s power tail. The original telemetry helper used nohup, which failed on
+macOS without a console; the failed preflight is retained. Replaced with ignored
+HUP in the bounded supervisor; second preflight recorded nine samples and
+confirmed normal sampler exit0. These were instrumentation tests, no model
+workloads, before prospective design freeze.
+
+Local HTTP collector tests cover clocks, open-loop dispatch, failures, worker
+start failures, per-job caps, and hard timeout preserving a partial checkpoint.
+Synthetic analysis tests cover denominators/missingness, trace/metadata/freeze
+provenance, immutable deadlines, exact quality, and energy absence/error paths.
+Static reviews do not substitute for real measurements or mathematical proof.
+
+Final standalone Claude review20261011-164603-d5c09563 found potential GIL
+checkpoint-induced dispatch delay; prospectively changed lag>100ms from a
+window exclusion to a diagnostic. Scheduled-arrival latency still penalizes it.
+Added missing unload/post-idle intervals, per-success gross ratios, normal
+power-stop validation, and mandatory freeze entries for all analysis/power code.
+Actual pmset thermal output matches accepted nominal form. ASCII paths required
+for AppleScript literal portability. Review energy-module omission is covered
+by the separate delegated implementation, opposite-model QA and independent
+energy counterexample audit above. Metadata reads now have5s timeouts; power
+supervisor escalates after5s; campaign metadata survives archive exceptions.
+Final suite:48 tests in normal and optimized Python; verify TEST_RESULTS.txt.

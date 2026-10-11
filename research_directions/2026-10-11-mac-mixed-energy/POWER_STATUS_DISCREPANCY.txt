@@ -1,0 +1,24 @@
+Observed2026-10-11, during study launch; no workload requests dispatched.
+
+20:51:04UTC direct-host RUN snapshot:
+Now drawing from 'Battery Power';65%;discharging;0:53remaining.
+Subsequent sandbox call:AC Power;64%;discharging;0:54remaining.
+Three sandbox checks20:51:49,20:51:59,20:52:09UTC reportedAC Power.
+The restart's20:52:52UTC direct-host RUN snapshot:
+Now drawing from 'Battery Power';63%;discharging;0:55remaining.
+
+20:53:34UTC require_escalated host Python subprocess pmset-gbatt:
+Battery Power;62%;discharging;0:53remaining.
+Same host command pmset-gac:No adapter attached.
+Immediately subsequent sandbox pmset-gbatt:
+AC Power;62%;discharging;0:53remaining.
+
+A final direct host pmset-gac again saidNo adapter attached. Original endpoint
+11434 returned models:[], and process inspection found only the original
+Ollama server, no study runner or powermetrics sampler.
+
+The cause of sandbox misreporting is not established. Do not treat itsAC label
+as evidence that a charger is connected. The actual run uses direct-host
+checks and correctly refused to start in both attempts. No change to power
+settings or permissions was made to bypass this check. Battery identifiers
+are redacted in savedRUN snapshots.

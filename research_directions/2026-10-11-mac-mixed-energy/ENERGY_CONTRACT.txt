@@ -1,0 +1,43 @@
+Implement energy.py only, stdlib only, no subprocess/network/measurement.
+Inputs: text from installed powermetrics with samplers cpu_power,gpu_power, 1000ms.
+ENERGY_PREFLIGHT.txt is actual read-only preflight, not empirical workload evidence.
+
+API parse_text(text) -> {'samples': [...], 'errors': [...]}. Every sample header
+*** Sampled system activity (Sun Oct 11 16:29:16 2026 -0400) (1015.30ms elapsed) ***
+starts one record. Parse timezone-aware endpoint, elapsed_ms positive, CPU Power,
+GPU Power, ANE Power, Combined Power (CPU + GPU + ANE), each explicitly mW.
+IMPORTANT GPU Power is repeated later under GPU usage and may differ by1mW due
+counter timing. Read ONLY the Processor usage block before GPU usage. Never add
+second GPU or summary. Ignore preamble but preserve errors for malformed/missing
+required sample fields, duplicate headers, negative/nonfinite powers/timings.
+Report each valid sample as end_utc ISO, elapsed_s, cpu_mw,gpu_mw,ane_mw,combined_mw,
+plus each cpu_j,gpu_j,ane_j,combined_j = mW * elapsed_ms * 1e-6. Combined is explicitly
+reported; do not silently replace by rounded component sum. Allow roundoff ≤3mW.
+Only literal Sampled system activity headers are intervals, not summary blocks.
+
+API energy_bounds(samples,start_utc,end_utc) -> dict valid,errors,duration_s,
+lower_j/upper_j dictionaries with keys cpu,gpu,ane,combined, fully_inside_count,
+possibly_overlapping_count. Treat each printed whole-second sample endpoint as
+uncertain ±1second. Its actual beginning shares that uncertainty, subtract elapsed.
+Lower: sum entire interval energy ONLY if earliest possible beginning >=windowstart
+and latest possible end <=windowend. Upper: sum whole energy of every sample whose
+latest possible end >windowstart and earliest possible beginning <windowend.
+This uses nonnegative interval energy and makes no constant-power allocation across
+edge intervals. It is conservative within the stated one-second clock alignment
+assumption; not a calibration uncertainty bound. Require guaranteed outer coverage:
+first latest possible beginning <=start, last earliest possible end >=end.
+Require positive finite time window, chronological distinct header times, positive
+elapsed, consecutive header differences consistent with next elapsed within2.05s,
+and cumulative durations vs first-to-last endpoint difference within2.05s (detect
+missing samples/clock jumps); identify invalid coverage instead of reporting zero.
+If input empty or invalid still return explicit valid:false/errors, no claimed
+energy bounds (lower_j and upper_j may be null). No interpolation, baseline
+subtraction, per-request allocation or cross-device/whole-machine energy claims.
+
+Own energy.py only. Do not change tests or contract. Do not delegate/review recursively.
+
+Precollection review amendment: bounds are conditional on an uninterrupted,
+complete, contiguous, non-overlapping capture. Rounded headers cannot exclude
+one short omitted interval. Additionally require every endpoint to fit a
+common continuous timeline: range of (header offset minus cumulative elapsed
+after first) <=2s. Pairwise and final-total checks alone were insufficient.

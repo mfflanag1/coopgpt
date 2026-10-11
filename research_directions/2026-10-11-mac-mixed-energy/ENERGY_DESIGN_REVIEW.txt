@@ -1,0 +1,141 @@
+MAC SERVING ENERGY CAPTURE DESIGN — 2026-10-11
+
+READ-ONLY FINDINGS
+The local OS reports macOS 26.6.2. /usr/bin/powermetrics is installed. macmon,
+mactop and asitop were not found on PATH or in their standard Homebrew Cellar
+locations; macmon was also absent from /usr/local/bin. This is a bounded tooling
+check, not an inventory of every file on the machine.
+
+Only help, documentation, executable strings and file metadata were inspected.
+No sampler was launched, no root authentication attempted, no package installed,
+and no existing project artifact modified. Coordinate with the serving-run owner
+before collecting even a preflight sample so concurrent experiments are avoided.
+
+PRIMARY LOCAL SOURCES
+/usr/share/man/man1/powermetrics.1
+  SHA256 91e6ae3f17f97a24d1ada3d7867e0c64f038641ec5820cee19f47c38aea346a1
+/usr/bin/powermetrics --help
+/usr/bin/powermetrics (read-only executable-string inspection)
+  SHA256 b762e5bf7628e77d279012882c096e922633a47aa38bd5f05c0381cfb21330c5
+The installed help is more current for supported options than some older manual
+sections. In particular, use an explicit positive sample count rather than the
+manual's obsolete infinite-count convention.
+
+WHAT POWERMETRICS CAN SUPPLY
+The installed supported samplers include cpu_power, gpu_power, ane_power and
+thermal. Its text labels identify CPU, GPU and ANE power in mW and a combined
+CPU + GPU + ANE value. These are systemwide component estimates, not per-request
+energy and not necessarily all SoC or machine consumption. Do not label them
+GPU-board energy, wall-plug energy, electricity-meter readings, or complete host
+energy. The combined value must not be added to its component values again.
+
+Apple's help/man explicitly cautions that average power estimates may be
+inaccurate and should not be compared between devices. They are useful for
+same-device application optimization. A within-M3-Max scheduling comparison can
+therefore report estimated component energy with this limitation. It does not
+calibrate Apple estimates against NVIDIA NVML or MLPerf wall measurements.
+
+The executable contains the requirement to invoke the program as superuser.
+An authorized administrator launch is needed for the installed sampler; only
+the sampler would require that privilege, not the request driver or analyzer.
+No assumption is made that cached sudo credentials or user authentication are
+available. No privileged launch is part of this audit.
+
+FORMATS, TIMING AND UNITS
+Default interval: 5000 ms. --sample-rate N sets milliseconds; a predeclared
+1000 ms interval is a reasonable starting point for multi-minute workloads,
+subject to a later overhead check. --sample-count N provides a finite stop.
+--poweravg 0 disables the additional every-N-samples power summary, avoiding
+double integration. Omit --show-initial-usage, which covers machine uptime, and
+omit --show-usage-summary from the stream used for integration.
+
+Supported formats are text and machine-readable plist; plist records are
+NUL-separated. Executable strings expose timestamp and elapsed_ns plist fields,
+plus cpu_power, gpu_power and ane_power names. This static inspection establishes
+candidate fields, not a verified runtime schema or numeric-unit contract for
+each plist field. The text format explicitly labels mW and elapsed milliseconds;
+use that self-labeled output initially, or validate the plist schema and units
+in a coordinated preflight before analysis. Preserve raw output either way.
+
+For interval-average power P_k in mW over the actual sample duration d_k in ms,
+  estimated energy in J = sum_k P_k * d_k * 1e-6.
+If using a verified elapsed_ns duration, the conversion factor is 1e-12.
+Use actual durations, not the requested interval or elapsed time between output
+file reads. Integrate periodic interval averages once; do not trapezoid those
+averages as if they were instantaneous endpoint power. If an analysis boundary
+splits a sample, disclose any within-interval allocation assumption and provide
+a boundary sensitivity check, or use full sample intervals bracketing the run.
+
+The manual describes per-process energy impact as a weighted proxy. It is not
+joules and cannot be substituted when privileged component telemetry is missing.
+Battery readings can be out of phase with sampling, alias at short intervals,
+and be distorted by charging/sleep events; they are not a replacement for a
+calibrated power trace in this experiment.
+
+UNPRIVILEGED ALTERNATIVE: NOT CURRENTLY INSTALLED
+Official project documentation: https://github.com/vladkens/macmon
+The project advertises rootless IOReport-based CPU/GPU/ANE estimates and JSON
+output, with watt-valued component fields. It uses private macOS APIs. Current
+documentation warns that unsupported counters can yield unavailable/stale or
+zero values, including changes in newer macOS releases; zero is not by itself
+evidence of zero consumption. Its additional sys_power field is not an external
+wall-meter calibration. None of these capabilities was tested locally because
+macmon is not installed. No IOReport helper was built, installed or run. A future
+installation would need a pinned version and a local counter-validity audit;
+switching tools does not remove Apple's estimation/scope limitations.
+
+MINIMUM VALID FULL-HORIZON CAPTURE
+1. Freeze exact model digest, quantization, Ollama version, context/output limits,
+   seed/decoding settings, residency/cache policy, concurrency setting, request
+   IDs and the mixed-length arrival trace. Predeclare service thresholds, finite
+   offered duration, bounded drain/cancellation policy and denominator handling.
+   Rates must be compared with the same workload contract. Keep failures and
+   rejected requests in the offered denominator.
+2. Coordinate a quiet measurement window. Record AC/battery state, power mode,
+   thermal pressure and memory/swap state; do not silently change OS settings.
+   Keep the request driver and measurement overhead consistent. Browser, Codex
+   and other background work can affect these systemwide estimates; attribution
+   to serving remains conditional on controlled background activity.
+3. Start telemetry before the first measured request. Capture at least 30 valid
+   one-second samples of loaded-model idle, then every offered request, all
+   in-flight work through the predeclared drain, and at least 30 valid post-run
+   idle samples after work has ceased. If studying loading, separately mark and
+   retain the unloaded-to-loaded transition; do not mix cold and warm conditions.
+4. Log wall-clock and monotonic anchors in the request trace and preserve sampler
+   timestamps/durations. Record scheduled arrival, actual dispatch, first
+   nonempty received content, completion and final status. Stream chunks must
+   not be presented as individual tokens. Retain server token counts separately.
+5. Ensure the finite sampler budget covers baseline, offered window, maximum
+   drain and post-idle with margin. If it stops before work ends, coverage fails;
+   do not extrapolate power into the missing tail. Keep canceled/timed-out work
+   in the energy ledger until its termination is observed or explicitly mark
+   the endpoint unverified. Separate baseline, offered, drain and post-idle
+   phase totals while preserving one full-horizon total.
+6. Primary energy accounting is the gross observed component estimate including
+   idle within the declared comparison horizon. Pre/post baseline subtraction
+   may be a labeled sensitivity analysis, with both baselines and drift shown;
+   never silently clip a negative incremental estimate to zero. For fixed-time
+   comparisons retain idle until the common horizon ends, even if requests
+   finish sooner. Do not sum overlapping per-request allocations of device
+   energy. Report energy and SLO attainment jointly.
+7. Reject missing, invalid, nonfinite, stale, nonmonotone or unexplained-gap
+   telemetry and mark absent channels unavailable. A zero ANE value can be real
+   under GPU serving, but validity must come from the channel's functioning and
+   observed workload, not the numeric zero alone. Counterbalance configuration/
+   rate order and repeat runs; a single thermal trajectory is not replication.
+
+PLANNED SAMPLER OPTIONS — NOT EXECUTED
+After coordination and legitimate administrator authorization, an invocation
+would select cpu_power,gpu_power,ane_power,thermal; sample-rate 1000; an explicit
+finite sample-count covering the full horizon; poweravg 0; format text; and a
+dedicated output file. Run only the sampler with elevated privilege. Do not
+launch an unbounded monitor or change persistent system settings for this study.
+
+GATE AND NEXT STEP
+The useful immediate result is a real same-device serving/SLO comparison over
+long mixed workloads and several rates. Add coordinated component telemetry
+before claiming even within-device estimated energy differences. If legitimate
+sampler access is unavailable, keep energy unmeasured and continue the latency
+analysis. Neither software concurrency modes nor logical tenants constitute two
+independent physical owners. Pooling claims and cross-device calibrated energy
+comparisons remain outside what this one-Mac experiment can establish.

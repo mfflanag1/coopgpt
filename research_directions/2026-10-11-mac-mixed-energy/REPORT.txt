@@ -1,0 +1,71 @@
+Mixed-length Mac serving and component-energy study — prepared; collection blocked
+2026-10-11
+
+Status
+The longer study is implemented, independently reviewed, tested and frozen.
+No new workload requests were sent. Both collection attempts stopped at the
+AC-power preflight before server creation, warmups or request dispatch. All
+failure evidence remains in capture/ and capture-ac-restart/. Their analyses
+explicitly show missing planned outcomes, not invented failures or successes.
+
+Direct host checks say Battery Power / No adapter attached. A sandboxed pmset
+check misleadingly returned AC Power while the battery percentage/discharge
+state matched the host. Only direct host power checks should govern resumption.
+The first restart followed three misleading sandbox AC readings; its actual
+host preflight correctly stopped it too. RESTART_RECORD.json preserves that
+chronology. No selective data rerun or outcome-based retuning occurred.
+
+What is ready
+-18 fixed windows:1,2,4 serving slots x0.3,0.6,1.2 requests/second x2 repetitions.
+-Each trace offers requests over90 seconds;1,134 planned offers total.
+-Input32/96/192 records crossed with output caps64/192/384 tokens; identical
+ matched traces across slot counts, with reversed order in repetition2.
+-Exact extraction quality checked against source KEEP records, alongside
+ prospective cap-specific8/16/30-second scheduled-arrival latency requirements.
+-Four concurrent nontrace warmups per arm; fresh owned server; fixed model,
+ context, queue/cache settings; pre/post idle periods; retained errors/checkpoints.
+-Continuous1-second-target powermetrics CPU/GPU/ANE capture through warmup,
+ workload, drain and quiescence, with raw samples and conservative phase bounds.
+
+Energy instrumentation is now functional
+The authenticated capability probe recorded3 actual samples. A separate
+start/stop test recorded9 actual samples and confirmed normal sampler exit.
+Each stopped study attempt also retained its preflight-only telemetry. These
+are instrument checks/background measurements, not serving-energy results.
+The first detached-helper preflight failed because macOS nohup could not detach
+from the console; it is preserved. The repaired bounded supervisor passed.
+
+Report gross component estimates, not wall energy or inference-attributed
+energy. Conditional interval bounds use reported power x measured elapsed and
+whole-interval inclusion under +/-1s timestamp alignment; they assume a complete
+continuous capture and do not bound calibration error. Independent audits found
+and repaired malformed-header handling and a prefix-alignment counterexample.
+Rounded timestamps alone cannot prove that no short interval was omitted.
+
+Verification
+48 tests pass in normal and optimized Python. An independent recount script
+also passes33 synthetic checks in both modes and confirms zero actual dispatches
+in each stopped attempt. They cover open-loop dispatch,
+stream/error accounting, per-job caps, bounded collection and interrupted-data
+retention, owned-process cleanup, quality/scoring/missingness, provenance, and
+energy units/duplicate fields/coverage/prefix alignment. Separate Codex/Fable
+implementation and review records are retained. No review verdict substitutes
+for the still-unrun measured study.
+
+Interpretation
+No longer-workload performance result, energy-saving result, or new pooling
+conclusion is established. The completed earlier128-request pilot is unchanged.
+This experiment compares serving configurations on one inventoried Apple M3 Max
+(30-core GPU,96GB), not two independently owned machines. Even favorable results
+would support only a qualified same-device configuration finding. Representative
+workload quality, independent hardware, credible ownership/deviations and actual
+resource-cost measurement remain requirements for a pooling claim.
+
+Next action
+Restore a charger connection verified directly on the host, then run the same
+frozen18-window design in a NEW capture directory. Preserve both aborted
+attempts. Expected collection time roughly35–45 minutes; explicit45-minute
+budget and per-window timeouts apply. Do not overwrite prior captures or change
+thresholds based on results. Analyze and independently recount before claiming
+any gain; obtain focused review of the eventual measured conclusions.
+See REPRODUCE.txt and PROTOCOL.txt.
