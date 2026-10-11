@@ -1,0 +1,25 @@
+**Provisional verdict: no consequential findings in reviewed scope.** The repaired consistency screen, TOTAL-window PID residency check, prefix-caching prohibition, timeout alignment and 7-setting pair match are implemented as described, and the tests exercise them. Most important residual point: the validator's per-GPU screen and residency checks depend on `telemetry.py` output shapes (`per_gpu[...]['energy_j'|'power_integral_j'|'counter_energy_j']`, `sample_monotonic`, `readings`) that are not in the packet, so correctness there is inferred from the claimed passing tests, not verified.
+
+## Findings
+
+**Low — compare_bundles can crash instead of reporting on malformed `settings`**
+`validate.py:363-365`: `a.get('settings',{}).get(setting)` raises `AttributeError` if `settings` is a non-dict (e.g. a list), which is not in the caught tuple at line 372. `validate_bundle` would already record `data_quality_pass=False`, so the pair verdict is unaffected, but `main()` would exit with a traceback rather than a report. Verification: write a bundle with `"settings": []` and run `--compare`.
+
+**Low — boundary test relies on exact float equality at the 20% threshold**
+`test_validate.py:165-173`: factor `.8` yields `delta = 80.0` vs `threshold = 0.2*400.0`. This passes only because both round to exactly `80.0`; if `integrate_energy` ever interpolates counter values at window edges or the fixture duration changes, the "boundary" case may flip. Not a bug in the validator (the rule is `<=`), but the test encodes a knife-edge. Consider `factor=.801`-style margins if the test is meant to be stable.
+
+**Informational — looser validator than collector on two attestation fields (pre-existing, not introduced)**
+`validate.py:114` accepts `repo@sha256:…` while `collect.py:68` requires bare `sha256:…`; `validate.py:148` strips a leading `v` while `collect.py:252` requires exact equality. Hand-edited bundles could pass validation that the collector would have refused. Not consequential for collector-produced bundles.
+
+**Informational — phase-level selected energy may be 0 J where power integral is positive**
+`test_validate.py:174-182` confirms `idle_before` reports 0 J when the counter is flat but power is 100 W. This is the disclosed "TOTAL-only screen"; note that `resident_idle_average_w` (`validate.py:296`) inherits that 0 W and must not be consumed without the phase diagnostics, as the runbook already says.
+
+Checked and found consistent with claims: TOTAL positivity + `max(1 J, 20%)` per board (`validate.py:302-316`); masking test uses a second board with flat counter (`test_validate.py:183-195`); residency check iterates every total-window sample including both idle phases (`validate.py:319-343`, tests at indices 1 and 15); `enable_prefix_caching is False` in both layers; `urlopen(..., timeout=timeout)` with elapsed check between lines (`collect.py:115-122`), 10.1 s/12 s test; `COLLECTION_SETTINGS` has 7 entries, all compared and all tested across two tests.
+
+## Scope limitations
+- `telemetry.py` (`integrate_energy`, `SamplingThread`, `NVMLBackend`), `VERIFICATION.json`, `fixture_capture/`, `config.example.json` not supplied; could not confirm the per-GPU energy dict shape, counter handling for flat/unsupported counters, or that the 70-test claim includes other test modules.
+- No tests executed; no hardware; deployment/calibration gates not assessed (remain hard-coded false as stated).
+- Did not review HTTP server robustness, authentication, or NVML calibration, per task.
+
+## Verdict
+No findings of consequence in the reviewed repairs; two low-severity robustness/fragility notes and two informational observations. Evidence insufficient to independently verify behavior that depends on the absent `telemetry.py`.

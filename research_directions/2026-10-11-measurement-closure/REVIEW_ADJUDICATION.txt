@@ -1,0 +1,65 @@
+CROSS-MODEL REVIEW ADJUDICATION — 11 October 2026
+
+Initial reviewer: Claude Fable 5.1, static selected-file snapshot, completed in
+138.43 seconds. No reviewer-executed tests or live GPU measurements. Original
+snapshot hashes are in REVIEW_REQUEST.json; findings in CROSS_MODEL_REVIEW.txt.
+This standalone review does not update the cross-model routing-quality ledger.
+
+1. Stuck/stale cumulative counter: VERIFIED AND REPAIRED.
+Independently reproduced a passing corrupted fixture with 0 J counter energy
+versus 400 J power integral. New full-TOTAL per-board checks require positive
+energy/power and compare counter/power at max(1 J,20% of power integral). Tests
+reject stuck and half-rate counters, zero watts and masking by another GPU.
+The screen is an explicit conservative policy, not a calibrated error bound.
+It is deliberately applied to the total horizon, not every short subinterval
+where counter granularity can distort phase allocation. Raw phase diagnostics
+remain and must be inspected before scientific use of idle-power estimates.
+
+2. Worker residency outside workload: PARTLY VERIFIED AND REPAIRED.
+A foreign PID during idle incorrectly passed before the fix; independently
+reproduced. Checks now cover every sample midpoint within the total window,
+including both idle intervals. The review's additional assertion that drain-only
+time was omitted is incorrect: workload [b,c] already included drain. Sampling
+cannot prove absence of jobs between observations, graphics activity or serving
+boards omitted from the operator declaration. Those limits remain explicit.
+
+3. Prefix-cache warmup contamination: VERIFIED DESIGN RISK, CONTRACT NARROWED.
+Warmup reused the first offered prompt. No physical contamination experiment was
+run, but inspection verifies that this could prime prefixes if caching were on.
+Collector and validator now require enable_prefix_caching=false. They do not
+claim results extend to cache-enabled serving. Regression checks reject true.
+
+4. Undeclared ten-second transport cutoff: VERIFIED AND REPAIRED.
+The former min(request_timeout,10) socket policy could truncate a valid slow
+prefill. The socket inactivity timeout now follows the declared request budget.
+A real loopback test delays first content 10.1 seconds with a 12-second request
+budget and verifies a successful observed response. Elapsed deadlines are checked
+between complete lines; no hard real-time timeout guarantee is claimed. True
+transport failures remain failures rather than being relabeled successes.
+
+5. Incomplete pair-settings match: VERIFIED AND REPAIRED.
+Independently reproduced acceptance of mismatched polling. Pair validation now
+matches concurrency, idle interval, polling, gap/read tolerances and request/drain
+timeouts. Positive timeout values are required. Gap/read tolerances remain exposed
+operator collection policies; matching them does not prove physical accuracy.
+
+6. Quantization null/string mismatch: VERIFIED AND REPAIRED.
+Both layers now require a concrete string, including explicit "none". The
+collector's revision regex was also aligned with the validator's 40/64-hex pins.
+
+Tests and source inspection verify these repairs; they do not authenticate a
+running checkpoint/container or convert fixtures into measured evidence. See
+VERIFICATION.json for executed final checks. A focused follow-up review is recorded
+separately if obtained; it must not be confused with hardware validation.
+
+FOLLOW-UP REVIEW
+Fable 5.1 completed the focused repair review in 79.22 seconds, finding no
+consequential defect in the reviewed repairs. It did not receive telemetry.py in
+this second packet; root verified its output shapes through the full integration
+suite. A low-severity malformed pair-settings crash was verified and repaired
+with a regression returning a failed report. The exact 20% boundary fixture is
+intentional and retained; it is not a statistical floating-point tolerance claim.
+Pre-existing acceptance of a repository-prefixed container digest or v-prefixed
+version in the validator remains; collector-produced bundles use stricter forms.
+Phase/idle-energy estimates now carry an explicit machine-readable diagnostic
+warning. No extra hardware or deployment claim follows from the review.

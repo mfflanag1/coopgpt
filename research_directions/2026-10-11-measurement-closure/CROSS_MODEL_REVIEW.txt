@@ -1,0 +1,26 @@
+**Provisional verdict: findings.** Most important: a stuck or non-updating NVML cumulative-energy counter is silently preferred over the power integral and yields 0 J (or underestimated) whole-horizon energy that passes every validator check.
+
+## Findings
+
+**1. High — stuck/stale energy counter accepted as valid whole-horizon energy.**
+`telemetry.py:332-345`: when every selected sample has a counter, counter differences are used; the only checks are non-negativity and no decrease. A counter that returns the same value on every read (virtualized hosts, boards whose counter updates only every few hundred ms with coarse polling, or a driver that latches) gives `counter_energy=0` while `power_integral_j` shows real draw. `validate.py:283-291` only reconciles phases against total and never compares `counter_minus_power_j` to a tolerance or requires positive energy. Verification: in `test_validate.py` fixture, set every `cumulative_energy_j` to `100.0` (constant); `validate_bundle` should still report `data_quality_pass=True` with `energy.total.aggregate_board_energy_j == 0`. Similar: `power_w: 0.0` everywhere also passes.
+
+**2. Medium — worker residency is unverified in idle windows and during drain-only time.**
+`validate.py:293-317` checks compute PIDs only for samples with `sample_monotonic` in `[b,c]`. `idle_before`/`idle_after` energy is reported as "resident idle" (`resident_idle_average_w`) with no evidence the declared workers (or only them) were resident; a foreign compute job during idle inflates baseline undetected. Verification: alter PIDs in power rows at t=0.5 or t=3.5 in the fixture — validation still passes.
+
+**3. Medium — warmup contaminates the measured workload under prefix caching.**
+`collect.py:255` sends `trace[0]['prompt']` three times before measurement, and `enable_prefix_caching=True` is permitted by both validators. The first offered request (and any sharing its prefix) is served warm, biasing TTFT/energy relative to the rest; nothing records this. Verification: static read; no test covers it.
+
+**4. Medium — slow-TTFT requests are recorded as failures, not slow successes.**
+`collect.py:110` sets the socket timeout to `min(timeout,10)`. Under concurrency with queued prefill, >10 s to first byte raises `socket.timeout` → `status:'error'` while the server keeps generating. RUNBOOK §4 admits this, but it conflates "SLO miss" with "failed demand" in `failed_requests`, and the pooled-vs-separate comparison will inherit the distortion. Verification: fixture handler sleeping 11 s before first `emit` → `status=='error'`.
+
+**5. Low — pair compatibility omits collector settings that change accounting.**
+`validate.py:337-339` compares only `concurrency`/`idle_seconds`; `request_timeout_s`, `drain_timeout_s`, `poll_seconds` can differ between configurations (affecting failure counts per finding 4 and counter interpolation). Also `max_gap_seconds`/`max_read_seconds` are read from the bundle with only `>0` checks (`validate.py:170`), so coverage strictness is bundle-controlled.
+
+**6. Low — collector/validator disagree on `quantization`.** `collect.py:64` requires a non-empty string; `validate.py:105` accepts `None`. Not acceptance-affecting but inconsistent attestation rules.
+
+## Scope limitations
+Static review only; no tests executed. I cannot confirm vLLM gauge staleness in `/metrics` after the final step (if `num_requests_running` isn't re-emitted at 0, `wait_until_idle` would time out rather than falsely pass, so this is a liveness, not acceptance, risk). SSE parsing, timeline checks, truncated-stream/missing-usage handling, failed-demand retention in `collect()`'s `finally`, and counter-reset detection look correct as written.
+
+## Verdict
+**Findings.** The kit does not accept synthetic data as measured and retains failed demand, but finding 1 allows a hardware bundle with zero/understated board energy to pass `measured_data_ready`; findings 2–4 weaken the research validity of idle baselines, first-request timing, and failure accounting.

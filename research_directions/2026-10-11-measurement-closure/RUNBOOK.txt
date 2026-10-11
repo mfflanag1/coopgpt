@@ -1,0 +1,135 @@
+LOCAL MEASUREMENT RUNBOOK — 11 October 2026
+
+Purpose: collect two compatible single-host serving configurations, with client
+request events and whole-window selected-GPU energy. This does not implement live
+pooled dispatch, establish forecast accuracy, or validate a deployment advantage.
+All commands assume this directory as the working directory.
+
+1. VERIFY THE KIT WITHOUT GPU HARDWARE
+
+Python 3.10+ and its standard library suffice for the tests. The tests create a
+local HTTP server and fake NVML responses; permit loopback socket binding.
+
+    python3 -m unittest discover -v
+    python3 -O -m unittest discover
+    python3 validate.py fixture_capture/run --output /tmp/fixture-validation.json
+
+The saved fixture must report data_quality_pass=true and measured_data_ready=false.
+It has two offered requests: one succeeds, one intentionally omits server token
+usage and fails. Its emulated 10-watt readings are NOT physical measurements.
+A zero validator exit code means structural quality only, never deployment success.
+
+2. PREPARE EXISTING HARDWARE
+
+Use two available NVIDIA compute configurations, separately or simultaneously.
+Run the collector on each serving host. It needs an operational NVIDIA driver,
+NVML and the Python binding supplied by nvidia-ml-py. The package does not install
+dependencies, rent machines, download models, or launch/stop serving containers.
+No hardware run or nvidia-ml-py installation was performed during kit development.
+
+Have an existing dedicated vLLM server exposing /version, /v1/models, /metrics and
+/v1/completions at a loopback HTTP URL. The code currently accepts exactly one
+served model and non-chat text completions. If an endpoint/API is unsupported,
+record the incompatibility; do not bypass validation to obtain a passing result.
+Use an otherwise idle compute host: graphics processes, CPU and network activity
+are outside the selected-board process checks and energy boundary.
+
+3. FREEZE THE EXPERIMENT BEFORE MEASURING
+
+Copy config.example.json to a new local manifest. Its deliberate placeholders
+must be replaced with actual model/tokenizer immutable revisions, model dtype and
+quantization, serving version, container image digest and full launch settings.
+Record all server launch options, including defaults that affect execution; the
+validator only mechanically requires a minimum set, not an exhaustive vLLM schema.
+Ensure the actual processes use these settings; /v1/models only exposes a label.
+Retain independent launch/provenance records for any later publication.
+Disable prefix caching in both runs. The initial contract rejects it because
+warmup reuses the first trace prompt; enabling it would prime heldout prefixes.
+
+List every full-board GPU UUID used by the server, and host-namespace NVML-visible
+GPU worker PIDs in server_gpu_worker_pids. Exclude unrelated GPUs. Check the
+server's entire device inventory manually: observing PIDs on selected boards does
+not prove that all serving boards were selected. Container-local PIDs may differ
+from NVML host PIDs. MIG, unsupported process inspection, shared servers and
+unexplained extra compute PIDs are outside the initial acceptance contract.
+
+The three example prompts are smoke tests, not a representative workload.
+Prepare a frozen JSONL trace with unique request_id, prompt, arrival_offset_s.
+Use the identical bytes on both configurations. Freeze prompt distribution,
+generation cap, seed, ignore_eos and temperature before outcomes. Do not select
+requests by identical observed outputs or favorable realized lengths.
+
+Predeclare independent calibration and heldout windows, repeat count, arrival
+loads, allowed client concurrency, and service thresholds. The optional slo block
+uses response_seconds, first_content_seconds and client_tpot_seconds; no defaults
+are invented. First-content timing is a client observable and the token metric
+is an average proxy, not an instrumented per-token trace. Remove an unsuitable
+proxy threshold prospectively rather than retuning it after seeing outcomes.
+
+4. COLLECT EACH CONFIGURATION
+
+    python3 collect.py --config config-A.json --trace heldout.jsonl \
+      --output runs/A-serial-01 --base-url http://127.0.0.1:8000 \
+      --concurrency 1 --idle-seconds 30 --poll-seconds 0.1
+
+Repeat on B with its manifest and the same trace/settings. For concurrency tests,
+repeat both at the same predeclared cap (for example --concurrency 8), using new
+output directories. Requests beyond the cap wait in the local dispatch queue;
+their service times include that wait from the frozen arrival timestamp.
+
+Three warmup requests use the first trace prompt, then a separate measured idle
+interval begins. Workload energy includes all offered arrivals, client terminal
+events and subsequent server-drain checks. A second measured idle follows. Keep
+every generated file, including failed requests, failed telemetry and partial runs.
+The collector never overwrites a run directory. Failed preflight may still create
+an invalid bundle that preserves the offered request denominator.
+
+Default client elapsed budget and socket inactivity timeout are both 120
+seconds (--request-timeout). There is no separate ten-second truncation cap.
+The elapsed-budget check runs between completed lines and can overshoot during a
+blocking read; this is not a hard real-time guarantee. Client failures and slow
+successful responses stay distinct; both stay in the offered denominator. Server
+drain is checked independently (--drain-timeout, default 120 seconds). Use the
+same predeclared timeout, polling and quality-threshold settings on both runs.
+
+5. VALIDATE AND KEEP THE LEVELS DISTINCT
+
+    python3 validate.py runs/A-serial-01 --output A-validation.json
+    python3 validate.py runs/A-serial-01 --compare runs/B-serial-01 \
+      --output pair-validation.json
+
+Raw run.json retains execution attestations, live probes, hardware identity,
+window boundaries and collection settings. requests.jsonl records every offered
+ID, received content chunks, server-reported token counts and failures. power.jsonl
+contains timed NVML power/counter/process observations; warmup.jsonl is separate.
+trace.jsonl preserves offered demand. Review all failures and assumptions.
+
+Energy covers selected GPU boards, including resident idle; it excludes CPU,
+network, cooling and facility power. Cumulative counters are preferred when valid;
+the reported-power integral is retained as a diagnostic. Inspect counter/power
+disagreement and sensor resolution before scientific use. Several GPUs expose
+one-second averaged power: 100 ms polling cannot validate 100 ms power peaks.
+No concurrent request receives a separate copy of overlapping board energy.
+The validator rejects nonpositive total-window energy or power, and screens each
+board's total counter/power disagreement at max(1 joule, 20% of power integral).
+This conservative fixed screen detects stuck/grossly inconsistent counters; it
+is not a sensor calibration or proof of 20% measurement accuracy. Telemetry gap
+and read-latency tolerances remain explicit collection policies. Idle and workload
+process inventories must both match the declared resident server workers.
+
+measured_data_ready means only a bundle labeled hardware_collection passes the
+implemented checks. It does not authenticate files against deliberate falsification
+or independently verify loaded model/container identity. The paired check matches
+recorded settings and requires an observed hardware model/memory/power difference.
+It never marks forecast_calibration_gate or deployment_gate true.
+
+6. NEXT EMPIRICAL GATE
+
+After qualifying paired measurements exist, calibrate forecasts on training
+windows, test them on independent concurrent heldout windows, and implement an
+actual separate-versus-pooled dispatcher. Match offered demand and comparison
+horizons, report all latency failures/rejections and full-horizon energy, and
+retain any deferred work/debt. The earlier five-percentage-point service screen
+is unchanged. A successful data collection alone does not pass it.
+
+Only then consider scarce peak power, private costs and strategic participation.

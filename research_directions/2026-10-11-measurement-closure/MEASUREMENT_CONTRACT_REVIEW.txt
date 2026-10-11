@@ -1,0 +1,175 @@
+Independent measurement-contract proposal — 11 October 2026
+Scope: minimal prospective NVIDIA/vLLM collection contract. No GPU run, deployment,
+purchase, collection code, or previous study result is supplied by this review.
+
+1. Observable claims and official documentation
+NVIDIA distinguishes last-second averaged board power from the last instantaneous
+board reading; average-power support excludes GA100. NVML's general power query is
+architecture-dependent. Polling every 100 ms does not turn a one-second averaged
+sensor into independent 100 ms observations. Select and record the exact field,
+driver, architecture and averaging semantics. Keep raw samples and read errors.
+Source: https://docs.nvidia.com/deploy/nvidia-smi/index.html#gpu-power-readings
+
+Prefer cumulative energy-counter differences for full-run energy when supported;
+NVIDIA describes this counter in mJ since the last driver reload. Record start/end
+reads and query intervals, UUID, counter resets, and capability failures. Convert
+mJ/1000 to joules. Otherwise integrate timestamped board watts over a declared
+window, treating the result as a telemetry estimate with boundary/averaging limits.
+Source: https://docs.nvidia.com/deploy/archive/R550/nvml-api/group__nvmlDeviceQueries.html
+
+vLLM supports streamed chunks containing delta token IDs and a configurable stream
+interval that batches tokens. Ordinary text chunks therefore do not establish
+individual token production times. Receiving an empty role chunk is not receiving
+first content. Record client-observed first-content latency, inter-content-chunk
+latencies, completion latency, and chunk sizes. Do NOT label inter-chunk latency
+as inter-token latency or true TPOT. Even token IDs bundled in a chunk provide
+receipt times for groups, not hidden generation timestamps. Token-level timing is
+an optional server-instrumentation extension, not a prerequisite for this harness.
+Source: https://docs.vllm.ai/en/stable/serving/online_serving/openai_compatible_server/
+
+2. Smallest useful experiment
+Two single-GPU NVIDIA configurations, one model that fits both without undocumented
+offload. Pin checkpoint/artifact hashes, tokenizer/chat-template hashes, dtype,
+quantization, engine build/container digest and generation policy. Keep warmup out
+of evaluated demand but measure/label its energy. Use no unrelated GPU work; record
+process inventory and residency snapshots. Different GPU power caps are allowed
+only as explicit complete-configuration differences, never an unmentioned treatment.
+
+Collect (a) resident-idle intervals before and after, (b) serial calibration runs,
+and (c) independent held-out open-loop arrival windows with realistic concurrency.
+A practical initial idle interval is 30 seconds before/after, with the engine and
+model resident. This is a prospective design choice, not a hardware guarantee.
+Use a declared fixed offered-demand window plus measured drain/cancellation tail.
+Energy coverage begins before the first offered request and ends after all server
+work terminates. A timed-out HTTP client does not prove its GPU work has stopped.
+Retain quiescence/cancellation evidence; otherwise mark total energy incomplete.
+
+The same request manifest and arrival schedule are used for both configurations
+and each dispatch-policy comparison. IDs can recur across separate experimental
+runs, but each offered ID appears once within one arm. Avoid implicit SDK retries;
+or give retries attempt IDs linked to one logical request and count all time and
+energy. Do not use completion-triggered arrivals as if they were fixed offered load.
+Same generation policy does not guarantee identical realized outputs across GPUs;
+retain output hashes/counts and assess comparability rather than discarding every
+different response after observing outcomes. Fix calibration/holdout by prompt ID
+before fitting, preserving all repeated prompt groups on the same side.
+
+3. Required records and evidence status
+manifest.json:
+ schema_version, study_id, run_id, configuration_id, arm, repeat_id, dataset/hash,
+ split_rule/hash, request_manifest_hash, collector_commit, protocol_hash,
+ time_units, energy_scope='gpu_board', run_mode, configured sampling period,
+ evaluation_start/end policy, drain/cancellation policy, admission/objective/SLA,
+ node_count, GPU UUIDs/model/memory, driver/CUDA/NVML versions, MIG state,
+ power field and averaging interval, configured/enforced power limits,
+ engine/version/container digest, command/config digest, checkpoint revision and
+ local artifact hash, tokenizer/chat-template hashes, dtype/quantization,
+ CPU offload, tensor/pipeline parallelism, maximum context/batched tokens/sequences,
+ prefix-cache policy, speculative-decoding policy, stream interval, generation
+ parameters, warmup/residency policy, CPU/host memory, host/clock IDs.
+
+For every metadata assertion retain evidence_status and evidence_ref:
+ local_probe, captured_server_config, operator_attestation, or unavailable.
+A GET /v1/models model label is endpoint-observed identity text, not proof of
+checkpoint/quantization/GPU identity. A filled operator form is not verified local
+measurement. Missing metadata must prevent a 'verified matched configurations'
+label, while still permitting storage of partial diagnostic measurements.
+Do not place API keys, authorization headers or full environment secrets in logs.
+
+requests.jsonl, one logical request plus optional linked attempts:
+ run_id, request_id, prompt_group_id/hash, input record hash, requested model,
+ generation-options hash, configured max output tokens, planned_arrival_offset_s,
+ actual_send_monotonic_ns, HTTP_status, first_nonempty_content_monotonic_ns,
+ last_content_monotonic_ns, stream_terminal_monotonic_ns, outcome timestamp,
+ outcome enum [success,rejected,http_error,timeout,stream_error,cancelled,unsent],
+ finish_reason, usage_prompt/completion_tokens if provided, output hash,
+ measured_dispatch_lag_s, error category, retry count and cancellation evidence.
+Unknown actual generation length cannot enter prospective dispatch features.
+Finish timestamp must have one frozen definition; terminal-stream receipt is the
+simplest reproducible client-completion measure. It is not server execution time.
+
+stream_events.jsonl:
+ run_id/request_id/attempt_id, sequence number, monotonic receipt time,
+ event kind [role,content,finish,usage,error,done], content-byte count/hash,
+ delta token IDs/count ONLY when explicitly returned; otherwise null.
+Keep sufficient parsed/raw SSE evidence to audit split frames and terminal state.
+Timing is client receipt time including transport/proxy buffering. Record client
+placement/network path. Do not manufacture token times by dividing a chunk evenly.
+
+power.jsonl, every device and sample:
+ run_id, host_id, GPU_UUID, read_begin/read_end_monotonic_ns, timestamp_utc_ns,
+ power_field, watts or null, energy_counter_mj or null, read status/error,
+ enforced power limit, memory resident/used and process-inventory evidence at
+ phase boundaries. Preserve per-device rows; sum distinct measured UUIDs once.
+Record phase markers for warmup, pre-idle, offered window, drain and post-idle.
+Averaged telemetry is not instantaneous peak-power evidence.
+
+Use one host monotonic clock for load generation and telemetry if possible.
+Otherwise record per-host monotonic/UTC anchors and synchronization uncertainty;
+never subtract monotonic values belonging to different clocks. Record uncertainty
+and forbid precise per-request cross-host energy attribution without alignment.
+
+4. Accounting and gate logic
+Primary energy: total measured board energy for the complete declared window,
+including idle gaps, rejected/failed-job execution and drain. Retain per-phase
+energy separately. No silent multiplication/division by an assumed GPU count.
+Under concurrency, per-request energies are not directly identified by whole-board
+power: do not split energy proportionally to tokens and call it measured.
+
+Resident-idle measurements describe an observed baseline, not a proof that total
+power equals idle plus independent additive job costs. Optional incremental
+estimates must specify the counterfactual baseline/interpolation, use the same
+horizon, retain negative residuals and uncertainty, and carry an estimated label.
+No per-request subtraction from an unmatched idle number or fixture is acceptable.
+
+Separately report schema/instrument validity, hardware-model comparability,
+forecast calibration and application performance. A structurally valid experiment
+with HTTP failures or late requests remains valid adverse evidence; do not erase
+it or rerun only until a favorable draw occurs. Freeze repeat count and run order.
+For measured validation, fit on declared calibration windows and compare forecasts
+against independently collected held-out runs on BOTH configurations. State <=10%
+throughput/energy gates as prospective choices; do not assess only conditional
+energy given realized duration/count. Goodput denominator includes all offered IDs.
+Withholding/core theorems do not transfer automatically to finite-request games.
+
+5. Hard validator failures or promotion blockers
+Hard malformed-record failures: duplicate logical IDs in an arm; missing offered
+IDs without explicit unsent outcomes; unknown/nonfinite units; negative power;
+nonmonotone same-clock times; finish before send; inconsistent stream sequence;
+malformed/unterminated successful SSE; mismatched manifest/hash; GPU UUID repeated
+in a device sum; unlinked retries; explicit telemetry reset or negative energy delta.
+Do not call an API-failure record malformed merely because usage is unavailable.
+
+Energy promotion blockers: missing device coverage; unsupported readings treated
+as zero; unbracketed run window; telemetry gaps over a predeclared threshold;
+missing/uncertain drain; clock mismatch; unexplained background work; unknown sensor
+semantics; idle placeholders; unexpected hardware/power-cap/config changes.
+A practical power-sampling contract might target <=100 ms reads, reject gaps >1 s
+and collect >=2 s guard samples at both boundaries. These are design thresholds;
+they do not override the one-second averaging behavior or sensor accuracy.
+
+Comparability blockers: unknown checkpoint/tokenizer/quantization; incompatible
+prompt/template policy; changed split or tuning on held-out outcomes; unmatched
+engine/offload state; only attested critical configuration with no supporting log.
+Streaming-only collection cannot claim true per-token latency. Lateness or rejected
+requests are performance gate failures, not grounds to delete a run from analysis.
+
+6. Necessary tests before anyone uses the harness
+- SSE packets split across network reads, combined events, empty role/usage chunks,
+  multiple content tokens per chunk, Unicode boundaries, explicit errors, EOF without
+  terminal marker, disconnect after partial output, valid zero/one-token output.
+- HTTP 429/500, timeout, cancellation without server-stop evidence, duplicate retry,
+  missing usage, multiple response choices if supported (otherwise explicitly reject).
+- Power N/A/error, unsupported counter, counter reset, mJ/J and W/kW conversion,
+  nonuniform sample spacing, missing boundary samples, telemetry gap, duplicate UUID,
+  two-device sum, averaged-versus-instant field, unrelated clock IDs.
+- Common offered demand, late client sends, rejected/unsent request retention,
+  distinct warmup IDs, prompt-group holdout leakage, no outcome features available
+  to the online controller, no fixture/synthetic file accepted as a real measurement.
+- Exact integration fixture: constant 100 W for 10 seconds yields 1,000 J; linear
+  ramp 100 to 200 W over 10 seconds gives 1,500 J under trapezoidal integration.
+  These test arithmetic only and must never be reported as hardware observations.
+
+Recommendation: implement collection/validation and an explicit readiness report
+now. Actual closure requires access to two qualifying NVIDIA hosts and real runs.
+The present Mac workspace can exercise fixtures but cannot produce those GPU data.

@@ -1,0 +1,86 @@
+Measurement closure contract — 11 October 2026
+
+STATUS AND SCOPE
+This package acquires calibration evidence on an existing local NVIDIA host with
+an already running, dedicated vLLM completions server. Run the SAME pinned trace
+and execution settings separately on two hardware configurations. No GPU rental,
+model download, model server start, remote access, external message or paid API is
+performed automatically. This collector alone is NOT a live pooled-dispatch
+experiment, proof of energy savings, or evidence that the promotion gate passed.
+Tests and emulated streams are never recorded as measured hardware evidence.
+
+CLOCKS AND WORKLOAD
+Use one client monotonic clock for scheduled arrivals, HTTP dispatch, received
+nonempty output chunks, terminal response, telemetry and idle boundaries. Run the
+client and GPU telemetry on the server host; allow only loopback HTTP endpoints.
+Do not claim actual GPU execution-start or individual-token timestamps from HTTP.
+Scheduled arrival to first nonempty output includes local queueing and network
+latency. Per-request TPOT=(last_nonempty_output-first_nonempty_output)/(reported
+completion_tokens-1), only for token count>1. Record chunk gaps separately; one SSE
+chunk can contain multiple tokens. Usage counts must come from the server, not
+character counts. Missing usage, truncated streams and failed requests remain
+visible. Do not silently discard failed/unstarted demand or reconstruct token
+arrivals from average throughput.
+
+METADATA AND MATCHING
+Operator manifest records model/checkpoint revision, tokenizer revision, dtype,
+quantization, engine/version/container digest, full launch configuration, GPU
+UUIDs, parallelism, cache/speculation/offload policy, declared power settings,
+workload provenance and measurement cohort. Capture live server /version,/v1/models,
+GPU identity, memory, driver and power limits; save manifest hash. Operator
+attestations and observed fields are separate. A digest string is not verification
+that the running process used it. Unknown settings keep compatibility unconfirmed.
+Do not require model outputs identical after the fact or filter by performance.
+Compare immutable prompt/arrival trace hash, decoding payload and reported model
+across configurations, with all trace IDs retained exactly once. Hardware and
+hardware driver/power settings may differ but must be explicitly recorded.
+
+Declare every serving GPU worker's host PID by full-board UUID. Retain NVML
+compute-process observations; every full-window sample must match that declaration
+exactly. Unsupported inspection or unknown/extra/missing workers prevents
+acceptance. This establishes observed residency, not authenticated process roles,
+loaded weights or a guarantee that no serving device was omitted. Use a dedicated
+compute host; graphics activity is not captured by this process check.
+
+ENERGY BOUNDARY
+Explicitly selected full GPU boards only. Never sum every visible GPU by default.
+NVML reported board power includes memory/other board circuitry; depending on the
+GPU it may be averaged over a second. Faster polling does NOT create independent
+instantaneous power measurements or validate peak-power constraints. Retain
+read start/end timestamps, gaps, failures and optional cumulative energy counters.
+Use cumulative-energy differences where available and monotone; separately report
+trapezoidal reported-power integration with bracketed boundaries. Counter reset,
+missing selected GPU, unsupported power, invalid values or excess gaps/read delay
+invalidate accounting. CPU/network/cooling/wall energy remain excluded.
+
+Warmup precedes measured resident idle. Server request metrics must establish no
+running/waiting jobs before and after warmup and before final idle. Preserve raw
+sampled telemetry across idle-before, offered arrival window, request completion
+and drain, and idle-after. Full measured GPU energy includes ALL those intervals.
+Do not subtract baseline for headline energy. Report idle averages separately;
+never allocate overlapping batch power independently to each concurrent request.
+Client completion/timeout does not prove the server has drained; quiescence must
+be checked separately. Unknown or failed quiescence prevents acceptance.
+
+Require positive full-window board energy/power and screen counter-versus-power
+disagreement at max(1 J, 20% of power integral) per board. This fixed quality
+screen is not a physical error bound or sensor calibration. Sensor averaging and
+boundary uncertainty remain. Compare all declared collection tolerances and
+timeout policies across the pair. Disable prefix caching because warmup uses
+the first trace prompt; no heldout-prefix priming is allowed in this initial kit.
+
+VALIDATION LEVELS
+(1) structural/data-quality validation; (2) paired compatibility, with attestations
+explicit; (3) independently measured heldout workload calibration; (4) actual
+separate-vs-pooled dispatch with identical offered demand, predeclared SLOs,
+full-horizon energy accounting, no debt, and meaningful on-time gain. Earlier
+stages cannot mark later ones passed. A synthetic fixture may pass schema/math
+checks but can NEVER satisfy measured-data readiness. Our previous pilot's
+five-percentage-point screen and unresolved physics remain unchanged.
+
+Minimum future collection: two hardware configurations x serial/calibration and
+concurrent heldout traces x repeated windows. Freeze trace generation, server
+settings, independent train/test windows, response/TTFT/TPOT thresholds and pooling
+comparison before measured outcomes. Select generation caps prospectively; hide
+realized output length from any online controller. Operating costs, outside
+options, incentives and scarce peak power remain subsequent work.

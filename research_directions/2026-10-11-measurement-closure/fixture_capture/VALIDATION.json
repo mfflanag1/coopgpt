@@ -1,0 +1,222 @@
+{
+  "bundle": "fixture_capture/run",
+  "data_quality_pass": true,
+  "measured_data_ready": false,
+  "deployment_gate": false,
+  "forecast_calibration_gate": false,
+  "failures": [],
+  "attestation_limits": [
+    "Checkpoint, tokenizer, quantization, launch arguments and container are operator attestations; endpoint labels do not verify loaded artifacts.",
+    "This validator checks recorded evidence and cannot authenticate the physical origin of a bundle.",
+    "No per-request GPU energy or server token-generation timestamps are inferred.",
+    "Observed compute PID residency is matched to operator-declared worker PIDs; serving roles and loaded checkpoint identity remain attestations."
+  ],
+  "evidence_kind": "synthetic_fixture",
+  "trace_sha256": "ebbf97129b376427af70d33942abb3aa3cb821e50eb5f0b3bdf60cc91744bcd9",
+  "hardware_observed": [
+    {
+      "gpu_uuid": "GPU-fixture",
+      "name": "Synthetic GPU",
+      "memory_total_bytes": 1024,
+      "power_limit_w": 20,
+      "default_power_limit_w": 20,
+      "power_limit_constraints_w": [
+        10,
+        30
+      ]
+    }
+  ],
+  "operator_collection_settings": {
+    "concurrency": 2,
+    "idle_seconds": 0.05,
+    "poll_seconds": 0.005,
+    "max_gap_seconds": 1.0,
+    "max_read_seconds": 0.5,
+    "request_timeout_s": 120.0,
+    "drain_timeout_s": 2
+  },
+  "telemetry_threshold_scope": "Polling, gap/read and timeout settings are operator-selected acceptance limits, not objective sensor accuracy, latency or measurement-completeness guarantees.",
+  "metrics": {
+    "offered_requests": 2,
+    "successful_requests": 1,
+    "failed_requests": 1,
+    "not_dispatched_requests": 0,
+    "successful_fraction_of_offered": 0.5,
+    "slo_evaluated": true,
+    "slo_successful_requests": 1,
+    "slo_success_fraction_of_offered": 0.5,
+    "successful_client_response_seconds": {
+      "n": 1,
+      "mean": 0.02589608309790492,
+      "p50": 0.02589608309790492,
+      "p95": 0.02589608309790492,
+      "maximum": 0.02589608309790492
+    },
+    "successful_client_first_content_seconds": {
+      "n": 1,
+      "mean": 0.01331379171460867,
+      "p50": 0.01331379171460867,
+      "p95": 0.01331379171460867,
+      "maximum": 0.01331379171460867
+    },
+    "successful_inter_content_chunk_gap_seconds": {
+      "n": 1,
+      "mean": 0.012553916312754154,
+      "p50": 0.012553916312754154,
+      "p95": 0.012553916312754154,
+      "maximum": 0.012553916312754154
+    },
+    "successful_client_average_output_token_proxy_seconds": {
+      "n": 1,
+      "mean": 0.004184638770918052,
+      "p50": 0.004184638770918052,
+      "p95": 0.004184638770918052,
+      "maximum": 0.004184638770918052
+    },
+    "token_proxy_warning": "(last content receipt - first content receipt)/(server completion_tokens - 1), not measured individual token times; stream chunks can contain multiple tokens.",
+    "per_request": [
+      {
+        "request_id": "0",
+        "status": "ok",
+        "response_seconds": 0.02589608309790492,
+        "first_content_seconds": 0.01331379171460867,
+        "client_tpot_seconds": 0.004184638770918052,
+        "meets_configured_slo": true
+      },
+      {
+        "request_id": "1",
+        "status": "error",
+        "response_seconds": 0.026863541919738054,
+        "first_content_seconds": 0.014297833200544119,
+        "client_tpot_seconds": null,
+        "meets_configured_slo": false
+      }
+    ]
+  },
+  "total_energy_consistency_screen": {
+    "scope": "Full TOTAL window only, per selected GPU, for this resident-compute collection contract.",
+    "absolute_floor_j": 1.0,
+    "relative_fraction_of_power_integral": 0.2,
+    "rule": "Positive selected energy and power integral; when available, positive counter energy with absolute counter-power difference <= max(1 J, 20% of power integral).",
+    "interpretation": "Fixed conservative data-quality screen; not a calibration, sensor-error bound or statistical confidence guarantee.",
+    "per_gpu": {
+      "GPU-fixture": {
+        "selected_energy_j": 5.432480305433273,
+        "power_integral_j": 5.4324904177337885,
+        "counter_energy_j": 5.432480305433273,
+        "absolute_difference_j": 1.0112300515174866e-05,
+        "allowed_difference_j": 1.0864980835467577,
+        "counter_comparison_applied": true
+      }
+    }
+  },
+  "gpu_worker_residency": {
+    "total_window_samples_checked": 88,
+    "operator_declared_pid_mapping": {
+      "GPU-fixture": [
+        123
+      ]
+    },
+    "scope": "Exact observed compute PID sets across the TOTAL window, including both idle phases and workload/completion/drain; process-to-serving-role and checkpoint associations remain operator attestations."
+  },
+  "energy": {
+    "idle_before": {
+      "start_monotonic": 2593025.734211958,
+      "end_monotonic": 2593025.784804833,
+      "duration_seconds": 0.050592875108122826,
+      "gpu_uuids": [
+        "GPU-fixture"
+      ],
+      "per_gpu": {
+        "GPU-fixture": {
+          "energy_j": 0.5059237368404865,
+          "method": "interpolated_cumulative_counter",
+          "counter_energy_j": 0.5059237368404865,
+          "power_integral_j": 0.5059287510812283,
+          "counter_minus_power_j": -5.014240741729736e-06
+        }
+      },
+      "aggregate_board_energy_j": 0.5059237368404865,
+      "aggregate_power_integral_j": 0.5059287510812283,
+      "selected_sample_count": 10,
+      "power_warning": "NVML power may be averaged over a one-second hardware interval; dense polling does not establish instantaneous power. Energy is selected GPU-board energy, not whole-server/facility energy or per-request attribution.",
+      "boundary_method": "linear interpolation within observed midpoint brackets",
+      "scope": "selected GPU boards only; no per-request attribution"
+    },
+    "workload": {
+      "start_monotonic": 2593025.784804833,
+      "end_monotonic": 2593026.222968166,
+      "duration_seconds": 0.438163333106786,
+      "gpu_uuids": [
+        "GPU-fixture"
+      ],
+      "per_gpu": {
+        "GPU-fixture": {
+          "energy_j": 4.381634455174208,
+          "method": "interpolated_cumulative_counter",
+          "counter_energy_j": 4.381634455174208,
+          "power_integral_j": 4.38163333106786,
+          "counter_minus_power_j": 1.1241063475608826e-06
+        }
+      },
+      "aggregate_board_energy_j": 4.381634455174208,
+      "aggregate_power_integral_j": 4.38163333106786,
+      "selected_sample_count": 73,
+      "power_warning": "NVML power may be averaged over a one-second hardware interval; dense polling does not establish instantaneous power. Energy is selected GPU-board energy, not whole-server/facility energy or per-request attribution.",
+      "boundary_method": "linear interpolation within observed midpoint brackets",
+      "scope": "selected GPU boards only; no per-request attribution"
+    },
+    "idle_after": {
+      "start_monotonic": 2593026.222968166,
+      "end_monotonic": 2593026.277461,
+      "duration_seconds": 0.05449283355847001,
+      "gpu_uuids": [
+        "GPU-fixture"
+      ],
+      "per_gpu": {
+        "GPU-fixture": {
+          "energy_j": 0.5449221134185791,
+          "method": "interpolated_cumulative_counter",
+          "counter_energy_j": 0.5449221134185791,
+          "power_integral_j": 0.5449283355847001,
+          "counter_minus_power_j": -6.222166121006012e-06
+        }
+      },
+      "aggregate_board_energy_j": 0.5449221134185791,
+      "aggregate_power_integral_j": 0.5449283355847001,
+      "selected_sample_count": 11,
+      "power_warning": "NVML power may be averaged over a one-second hardware interval; dense polling does not establish instantaneous power. Energy is selected GPU-board energy, not whole-server/facility energy or per-request attribution.",
+      "boundary_method": "linear interpolation within observed midpoint brackets",
+      "scope": "selected GPU boards only; no per-request attribution"
+    },
+    "total": {
+      "start_monotonic": 2593025.734211958,
+      "end_monotonic": 2593026.277461,
+      "duration_seconds": 0.5432490417733788,
+      "gpu_uuids": [
+        "GPU-fixture"
+      ],
+      "per_gpu": {
+        "GPU-fixture": {
+          "energy_j": 5.432480305433273,
+          "method": "interpolated_cumulative_counter",
+          "counter_energy_j": 5.432480305433273,
+          "power_integral_j": 5.4324904177337885,
+          "counter_minus_power_j": -1.0112300515174866e-05
+        }
+      },
+      "aggregate_board_energy_j": 5.432480305433273,
+      "aggregate_power_integral_j": 5.4324904177337885,
+      "selected_sample_count": 90,
+      "power_warning": "NVML power may be averaged over a one-second hardware interval; dense polling does not establish instantaneous power. Energy is selected GPU-board energy, not whole-server/facility energy or per-request attribution.",
+      "boundary_method": "linear interpolation within observed midpoint brackets",
+      "scope": "selected GPU boards only; no per-request attribution"
+    },
+    "resident_idle_average_w": {
+      "idle_before": 9.999900890377726,
+      "idle_after": 9.999885816799848
+    },
+    "phase_accounting_note": "Phase/idle estimates are diagnostics, not separately validated by the TOTAL consistency screen; counter update granularity can shift energy across phase boundaries."
+  },
+  "readiness_reason": "Synthetic fixtures cannot establish measured-data readiness."
+}
