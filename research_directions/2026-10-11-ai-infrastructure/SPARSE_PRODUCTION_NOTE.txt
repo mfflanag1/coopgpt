@@ -1,0 +1,108 @@
+A computable baseline for supplier payments in sparse production
+11 October 2026. Conventional derivation; no novelty claim.
+
+Let A be a fixed finite nonnegative d by m matrix, with every activity column
+nonzero, let p>0 be fixed, and let F(c)=max{p.x: x>=0, Ax<=c}. Owners i=1,...,n
+have whole resource bundles b_i>=0, c=sum_i b_i, T=F(c). Every coalition S has
+exactly v_b(S)=F(sum_(i in S)b_i). All constrained resource capacities must be
+owned/additive; there is no public capacity, demand cap, or other fixed RHS
+available in full independently to every coalition.
+Let r=max_j |{e:A_ej>0}|, for a nonempty activity set.
+
+Define U_i(b)=F(c)-F(c-b_i).
+Then on every nonnegative real profile:
+  U_i>=0;
+  sum_(i in S) U_i >= v_b(S) for all S;
+  b'_i<=b_i implies U_i(b'_i,b_-i)<=U_i(b_i,b_-i);
+  sum_i U_i <= min(n,r) T.
+With explicit rational A,p,b, n+1 ordinary LP value computations suffice,
+polynomial in the complete encoded input length. This does not assert polynomial
+access to exponentially many implicit configurations. It is a bound for this
+particular payment rule, NOT an optimal-mechanism lower bound.
+
+PROOF
+Every x_j is bounded by c_e/A_ej for at least one positive row coefficient;
+the feasible polytope is nonempty and compact. Strong duality gives w*>=0,
+A^T w*>=p and w*.c=T. Set z_i=w*.b_i. For each S,
+F(sum_(i in S)b_i)<=sum_(i in S)z_i and sum_i z_i=T. Thus z is a core vector.
+In particular F(c-b_i)<=T-z_i, whence U_i>=z_i and U covers coalitions.
+Fixing others gives U_i=F(c_-i+b_i)-F(c_-i), proving nonnegative own monotonicity.
+
+For the budget choose an optimal primal x*. Put
+  delta_ij=max_{e:A_ej>0, c_e>0} b_ie/c_e,
+with empty maximum zero. On row e with c_e>0, shrinking activity j by
+1-delta_ij gives
+  sum_j A_ej(1-delta_ij)x*_j
+  <= (1-b_ie/c_e) sum_j A_ej x*_j <= c_e-b_ie.
+A zero-capacity row has b_ie=0 and A_ej x*_j=0 for every j, so it remains feasible.
+Consequently F(c-b_i)>=sum_j p_j(1-delta_ij)x*_j, and
+  U_i<=sum_j p_j x*_j delta_ij.
+For each j,
+  sum_i delta_ij <=sum_{e:A_ej>0,c_e>0}sum_i b_ie/c_e <=r.
+Sum over owners and activities to get rT; U_i<=T also gives nT.
+If T=0, every payment is zero. An empty activity set also gives the zero rule.
+
+The rT bound is attained by THIS RULE when one unit-profit activity needs one
+unit of each of r resources, with one separate owner per resource. Then T=1 and
+every U_i=1. This does not prove that all truthful covering rules need factor r.
+For example with two essential resources and one owner per resource, splitting
+min(b_1,b_2) equally is truthful and efficient throughout that restricted domain.
+
+ESTABLISHED ANTECEDENT
+Ezra, Feldman, Neyman, Talgam-Cohen and Weinberg, arXiv:1811.09871, Lemma 6.2
+(printed p24), gives the same sum-of-grand-marginals bound for MPH-r valuations:
+https://arxiv.org/pdf/1811.09871 . Thus the bounded-complementarity inequality
+is established. The sparse-LP derivation here is elementary; its use with the
+classical LP-core allocation yields the stated supplier-payment baseline.
+
+A direct bridge to MPH-r: fix any coalition C and an optimal plan x^C. For each
+used activity j, independently choose an owner for every required resource e,
+with probability b_ie/c_Ce among i in C. Used means x^C_j>0, so every required
+row has c_Ce>=A_ej x^C_j>0 and those fractions are defined. The selected owner set has size<=r.
+Assign that hyperedge weight p_j x^C_j times its selection probability. For any
+S, the probability all selected owners lie in S is the product of the fractions
+c_(S intersect C),e/c_Ce; it is at most each individual fraction. Hence scaling
+activity j by that product is feasible with resources of S intersect C. The
+positive-hypergraph value h_C(S) is <=F(c_S) and h_C(C)=F(c_C). Maximize over
+all C (include h_empty=0) to obtain v_b=max_C h_C, an MPH-r representation.
+MPH membership alone DOES NOT establish coalition coverage; LP-core existence
+is a separate ingredient. The max-singleton valuation is a counterexample to
+that inference.
+
+A FIXED BUDGET/COVERAGE TRADEOFF
+For a fixed domain-wide lambda in [0,1], lambda U is own-monotone, covers
+lambda v_b(S), and totals at most lambda min(n,r)T. Choosing lambda=1/r gives
+no external funding (total<=T) and 1/r coalition coverage, with possible retained
+surplus. This is not exact coalition stability or exact exhaustion of revenue.
+A profile-dependent scaling needs a separate incentive proof; it is not implied
+by this statement.
+
+PHYSICAL AND STRATEGIC LIMITS
+r counts actual resource rows per activity, including locations, time slots,
+links, memory restrictions and enforceable power rights. It is not simply the
+number of words GPU/memory/bandwidth/power. Fixed local warm-replica plans can
+have small r; whole schedules, gang configurations and time-expanded plans may
+not. Fractional feasibility does not by itself ensure an executable schedule.
+
+Truthfulness means weak individual binding capacity-underreport monotonicity
+with payment-only utility. Overreports must be excluded or constrained by
+verifiable delivery; otherwise fictitious capacity can produce fictitious
+budgets and profitable overreports. No strict incentive to reveal all capacity
+is guaranteed. For utility y_i+outside_i(c_i-b_i)-cost_i(dispatch), the
+conclusion requires new analysis. Actual audited cost reimbursement may cancel
+cost_i, but does not cancel private opportunity costs. A committed reservation
+window with no outside use is an additional institutional assumption.
+
+Coalition coverage does not imply group strategyproofness. With F=min(c1,c2),
+b1=b2=(1,0), b3=(0,1), U=(0,0,1). If owner1 hides its resource, U=(0,1,1), so
+the coalition {1,2} benefits without a member losing.
+
+SHARED-RESOURCE OBSTRUCTION
+If n owners each have one GPU and every nonempty coalition may separately use
+the SAME one-unit public power connection, v(S)=1 for all nonempty S. Singleton
+coverage forces total>=n, while grand output is1. For n>=2 every U_i=0 and U
+fails coverage. A fixed common demand cap gives the same issue. This is a known
+kind of common-pool/externality problem, not a new impossibility theorem.
+Assigning additive power rights or adding a consenting infrastructure owner
+changes coalition opportunities and can restore the LP model only if those
+rights are institutionally valid.

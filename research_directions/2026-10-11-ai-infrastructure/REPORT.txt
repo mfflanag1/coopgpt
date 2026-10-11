@@ -1,0 +1,367 @@
+CoopGPT directions in AI infrastructure and energy
+11 October 2026
+
+DECISION
+The best first project is incentive-compatible revenue sharing for a consortium
+of committed GPU, facility-power and network reservations. Start with warm local
+inference replicas and an auditable production model, then investigate shared
+infrastructure rights and private flexibility costs. This combines a direct use
+of CoopGPT with genuinely unresolved modeling and mathematical questions.
+
+The broad opportunity is to determine when independent infrastructure owners
+can share capacity without rewarding withholding or causing coalitions to leave,
+and what funding or relaxation of stability is necessary. A scheduling speedup,
+a deployment of GPU sharing, and a truthful supplier-payment mechanism are three
+different contributions. None of the current results establishes an operating
+market or a validated energy application.
+
+The source screen found substantial prior art in cloud federations, fairness,
+energy communities, truthful demand response and common-pool production. The
+strongest proposed contributions concern their intersection with fixed-owner,
+all-profile supplier incentives and coalitional outside options. Historical
+novelty is not confirmed. All sources used were freely inspectable; no article
+was purchased, gated dataset obtained, outside researcher contacted, deployment
+made, or long research goal started.
+
+1. Why this is a credible application
+
+Real institutions already pool compute, and power flexibility is a real
+engineering capability. The National Research Platform lets institutions
+contribute nodes while retaining owner-priority reservations and using spare
+cycles opportunistically [S01]. This gives a concrete ownership setting, but
+also exposes the value of keeping capacity for one's own jobs. It validates
+pooling, not the payment-only incentive assumptions of our theorem.
+
+OpenTela documents a research serving federation across three administratively
+independent subclusters within CSCS Alps, with low intercluster latency [S02].
+It is not evidence that VRAM is freely pooled across distant data centers.
+Petals has measured multi-institution, geographically distributed inference by
+placing model stages on independent servers; each stage retains its own attention
+cache [S03]. Its contributor rewards are a proposal rather than a validated
+financial settlement. These are different production technologies and should
+not share a single undifferentiated GPU-capacity variable.
+
+Google reports that 1 GW of demand-response capacity has been included in
+long-term utility contracts [S10]. That is contracted capacity, not proof of
+1 GW simultaneously delivered. A June 2026 Emerald-and-partners preprint studies
+a 96-GPU, 130 kW test cluster over five days, with 22 dispatch events derived from
+historical cases and more than 200 targets/ramp constraints [S11]. This is useful
+physical evidence; its geography experiment uses generated inference demand,
+and it is not an estimate of systemwide welfare or causal emissions savings.
+
+2. The institution and exact ownership model
+
+Use a short, precommitted operating window. Participants hold enforceable rights
+to deploy particular hardware, consume reserved facility power, and use specified
+network paths. Resources are indexed by site, hardware type, time and entitlement
+where those distinctions constrain production. A power entitlement at one site
+cannot power an unconnected GPU at another site.
+
+The clean initial institution is a consortium with public contractual output
+prices and a sufficiently backlogged workload within its declared physical
+capacity domain. Providers contribute already committed reservations, with no
+concurrent own-use or outside rental opportunity during the window. Prices can
+also be declared common experimental weights, but then the results concern that
+objective, not measured willingness to pay. Monetary payments and service credits
+are not interchangeable without a utility model for the credits.
+
+A feasible unilateral deviation is to offer less usable owned capacity to the
+pool. It must respect the contract: do not describe breaking an accepted delivery
+obligation as an available strategic action. Overreporting is excluded by the
+binding-report assumption and would require measurement or enforcement in an
+implementation. Hardware identity, feasible configurations and quality coefficients
+are initially verified/public; hidden quality and false identities are extensions.
+
+This baseline is narrower than a general marketplace for idle GPUs. If a provider
+can keep withheld GPUs for its own profitable jobs, utility is instead
+  utility_i = payment_i + outside_i(withheld capacity) - cost_i(actual dispatch).
+Monotonicity of payment alone does not make truthful contribution optimal there.
+Audited reimbursement can cancel a realized operating cost if the contract truly
+provides it; it cannot cancel private foregone job value. Private costs and delay
+preferences are a major next project, not an innocuous parameter change.
+
+3. A physical production model that connects to CoopGPT
+
+Catalogue admissible service activities j: a fixed model and request-size bucket,
+a hardware/configuration type, site, batching policy and any allowed network route.
+Let A_ej>=0 be its resource requirement and p_j>0 its fixed distributable value.
+For aggregate committed resources c, start with
+  F(c)=max {p.x : x>=0, Ax<=c}.
+For coalition S, v_b(S)=F(sum_(i in S)b_i). No coalition receives another owner's
+hardware, licenses, power entitlement or fabric capacity without consent.
+
+Every column must consume a positive resource. LP duality then gives
+  F(c)=min {w.c : w>=0, A^T w>=p},
+and a finite representation by dual vertices. This is precisely the existing
+min-linear production model. The existing sharp form-count theorem applies to
+this abstraction. Constructing the LP alone is an application of established
+linear-production and systems optimization, not a new mathematical discovery.
+
+Use warm complete replicas at first, with cross-owner request routing. Actual
+memory constraints, tensor parallelism, placement, batching, startup and tail
+latency must determine which activities are admissible. Do not assume aggregate
+GB and FLOPs certify physical feasibility. Gavel already separates fractional
+allocations from actual placement/scheduling [S04]. A configuration master LP can
+encode simultaneous feasible schedules, but the catalogue may be exponentially
+large and each column may use many distinct resource rows.
+
+Disaggregated prefill/decode is a later extension inside measured high-bandwidth
+locality domains. DistServe and Mooncake demonstrate why transfer traffic, cache
+location and topology matter [S05,S06]. Pooling HBM on a GPU, host DRAM, and a
+remote KV cache are different physical claims. A fluid LP must be calibrated and
+validated against an executable schedule; it is not itself a serving system.
+
+Fixed demand caps, public power caps, fixed setup costs, integer replicas and
+storage balance equations do not automatically fit this nonnegative homogeneous
+packing model. Demand caps can be harmless on a bounded feasible-report domain
+only after establishing that backlog never binds there. Alternatively, demand
+or license rights can be endowed to explicit actors, but this changes the game
+and requires an honest outside-option interpretation. Profits p_j must use a
+consistent cost accounting convention; subtracting private costs from p does not
+by itself establish truthful reporting of those costs.
+
+4. A concrete computable mathematical baseline
+
+This exploration derives the following elementary structural corollary. Let r be
+the maximum number of resource rows used by one activity, i.e. maximum column
+support of A. Pay each owner its grand-coalition marginal contribution:
+  U_i(b)=F(c)-F(c-b_i), c=sum_i b_i.
+Then, for the model above and all nonnegative real reports,
+  U_i>=0,
+  sum_(i in S)U_i >= v_b(S) for every coalition S,
+  U_i is nondecreasing in the owner's whole bundle,
+  sum_i U_i <= min(n,r) F(c).
+Only n+1 explicit LP value computations are needed. For rational explicitly
+encoded data these have polynomial bit complexity. This does not solve implicit
+exponential configuration enumeration, integer scheduling, or the sharp general
+form-count algorithmic problem.
+
+The core guarantee follows from an optimal dual-price core allocation z:
+U_i>=z_i. The budget proof removes each owner's resource share from an optimal
+production plan; each activity's lost value is charged across at most r resource
+rows. SPARSE_PRODUCTION_NOTE.txt supplies the complete proof including zeros.
+
+The same marginal-sum inequality has an established antecedent in MPH-r
+(bounded-complementarity) valuations: Ezra et al., Lemma 6.2 [S19]. A sparse LP
+game has such a representation, but MPH membership alone does not imply core
+coverage. The LP-core property is the separate essential ingredient. We claim
+an elementary usable baseline, not a new general theorem or a breakthrough.
+
+This is nevertheless useful: the budget can depend on a serving plan's resource
+requirements rather than every owner, site or dual price in the system. r is NOT
+just the count of words GPU/memory/bandwidth/power. A route across many links, a
+plan spanning many named GPUs or a long time-expanded schedule may have large r.
+The rule can pay rT, requiring subsidy (r-1)T; this is a worst-case ceiling, not
+an economically acceptable funding estimate. The r bound is tight for this rule,
+not proved necessary for every rule.
+
+For a fixed domain-wide scalar lambda, lambda U remains own-monotone and covers
+lambda v(S) with budget <=lambda rT. In particular U/r spends at most T and
+provides 1/r coalition coverage. That is a baseline funding/stability tradeoff,
+not exact stability or guaranteed exhaustion of the revenue. Profile-dependent
+normalization requires its own incentive proof.
+
+A promising new mathematical target is the optimal factor for sparse production:
+allow arbitrarily many owners, resources and activities while each column uses
+at most r resources. The established rT baseline may be far from optimal. Try
+to improve the general r dependence, or resolve a nontrivial fixed-r class while
+all other counts grow. A sharp classification or polynomial mechanism improving
+this baseline would advance the application more than another small example.
+The existing multi-glove lower bounds supply logarithmic-over-loglog growth in r
+when one activity uses r essential resources; they do not match the linear upper.
+
+5. Three exact examples explain the real issues
+
+Complementarity: with F(G,P)=min(G,P), two owners holding (8,4) and (4,8) can
+produce 4 each alone and 12 together. The pooling surplus is4. This is normalized
+compute/power arithmetic, not a calibrated hardware measurement.
+
+Withholding under dual prices: GPU owners have capacities2 and1; the power owner
+has capacity2. Grand output is2 and an efficient binding-price allocation pays
+(0,0,2). If the first GPU owner reports1/2, output becomes3/2 and the same
+minimum-resource price rule pays (1/2,1,0). Both allocations cover every coalition
+at their own profiles, but withholding earns that owner an extra1/2. This is a
+counterexample to the rule, not to all efficient mechanisms on every domain.
+
+Common-access obstruction: n GPU owners each have one GPU, while every nonempty
+coalition can separately claim the same unit of public power or customer demand.
+Then v(S)=1 for every nonempty S, T=1, and singleton coverage forces payment>=n.
+For n>=2 every grand marginal is zero and fails coverage. No report manipulation
+is needed. This is a classical kind of common-pool/externality issue [S16], not
+a new novelty claim. Assigning access rights changes the outside options; one
+must not invent rights solely to recover a convenient theorem.
+
+Coverage also differs from coordinated incentive resistance. With F=min(G,P),
+GPU owners1 and2 each own1 and power owner3 owns1. Grand marginals are(0,0,1).
+Owner1 withholding makes payments(0,1,1), so the GPU coalition benefits even
+though no individual can improve its OWN payment by withholding alone.
+
+6. Ranked research projects
+
+A. Committed-capacity supplier payments: best starting point.
+Question: under realistic local serving configurations, what payment and funding
+rules keep contributions truthful and make shared production attractive?
+Deliverable: explicit contract model, physical configuration benchmark, n+1-LP
+marginal baseline, exact small-instance coalition/deviation checker, and a
+measured budget-versus-coalition-protection frontier. A research contribution
+requires a better general guarantee, robust implementation theorem, or a new
+empirical finding with genuine owner data; a rebranded LP does not suffice.
+
+B. Shared power, fabric and interconnection rights: strongest economic extension.
+Question: how does the institution assigning a common bottleneck change the
+additional price of truthful participation?
+Compare fixed additive entitlements, an infrastructure owner whose consent is
+needed, and genuine common access with outsider-dependent rationing. First
+measure the static minimum covering cost at each profile, then the extra cost
+of choosing payments consistently across reports. Cost-of-stability and common-
+pool LP games are established [S16,S17]; the candidate addition is the incentive
+premium under a specified realistic access rule. Seek an unbounded separation
+or structural bound, not the elementary public-capacity example alone.
+
+C. Flexibility procurement from AI tenants: highest direct energy relevance.
+Question: how to pay for deliverable load reduction and recovery when tenants
+have private delay costs and own jobs?
+Start with one site, short events, a public workload model and one private scalar
+cost per tenant. Explicitly include deferred-job recovery, SLA losses, private
+outside value and the operator's utility agreement. Existing FairDR/MEDR and
+core-selecting electricity mechanisms already address costly strategic responses
+[S14,S15,S18]. A new target could be complementary flexibility across time/sites,
+coalition stability, or a sharp cost/coverage/incentive tradeoff. Generic truthful
+curtailment procurement would duplicate existing work.
+
+D. Cooperation among local inference services: strong systems collaboration.
+Question: which routing or cache-sharing arrangements generate robust surplus
+once ownership and outside options are counted?
+Start with warm complete replicas, then within-site prefill/decode separation.
+Study who gets the value created by a model provider, KV-cache host, GPU provider
+and network operator. Fixed data/model-license rights must be explicit. Prefix
+cache data can support physical replay; public traces do not reveal the values
+or legal rights of these participants. A topology-sensitive production and
+payment result would be more meaningful than optimizing raw token throughput.
+
+E. Repeated lending and contribution credits: plausible but already occupied.
+Question: can multi-period contribution accounting stabilize participation when
+hardware availability fluctuates? Credit Fairness (IJCAI2026) already gives an
+axiomatic model and an impossibility under anonymity, efficiency and strategy-
+proofness [S21]. A new project must distinguish supplier contributions, coalition
+coverage and intertemporal outside options. Credits are promises on future scarce
+service, not free money that eliminates a budget constraint.
+
+F. Investment, reliability and energy infrastructure: high-value later program.
+Question: should a consortium acquire GPUs, additional power rights, cooling or
+battery capacity, and how should it divide the risk and future value? This needs
+capex, stochastic availability, reliability, financing and long-run contracts.
+It is a different stage from allocating today's surplus. A reliability guarantee
+or fixed interconnection right cannot be treated as a freely additive present
+resource without its physical and contractual conditions. Do not begin with a
+full power-market equilibrium and GPU investment model before the smaller
+participation model is credible.
+
+7. Data we can actually use
+
+Azure LLM2024 has direct public CSVs with invocation times and context/output
+token counts [S07]. It is a good initial arrival/length workload. It lacks owner
+endowments, payments, values, energy and counterfactual hardware service rates.
+
+Mooncake's FAST25 release has two real one-hour request traces with prefix hashes
+and a separately labeled synthetic trace [S08]. These can test cache locality;
+short traces do not establish long-run welfare or representative demand.
+
+Alibaba GPU2023 supplies a tractable node/task release, with hardware and QoS
+information [S09]. Requested resources and observed runtime are not counterfactual
+performance profiles on every GPU. The much larger2026 release deliberately
+removes calendar dates and owner organizations; its pod-hourly archive is about
+352GB. It cannot be naively joined to historical electricity prices or weather.
+We have not downloaded it and it is unnecessary for a first experiment.
+
+ML.ENERGY provides measured inference power/performance data, but its v3 raw
+Hugging Face dataset is free-but-gated and requires login/contact-data agreement
+[S12]. It has not been accessed here. Use openly reported configurations first,
+and distinguish an access dependency from available data.
+
+OpenG2G is an Apache-licensed GPU-to-grid simulation platform with power controls
+and feeder constraints [S13]. Its inference replay uses measured benchmark data;
+its training power traces are synthetic. It is useful for a later physical
+stress test, not proof of commercial demand-response savings. No installation
+or full benchmark was run during this exploration.
+
+The first study would be a calibrated simulation with real workload shapes and
+explicitly synthetic owner/endowment scenarios. Calling trace user IDs hardware
+owners, or interpreting tokens as willingness to pay, would be invalid. Causal
+claims about grid reliability, electricity prices or emissions require a separate
+identification design and additional data.
+
+8. The first bounded pilot and its promotion gates
+
+Step1: freeze the contract and outside options. Choose committed colocated
+reservations, an explicit power-entitlement rule, public output values and a
+bounded physical report domain with sufficient backlog. List which actor holds
+every right. If valuable withheld-resource use cannot be excluded, switch to
+projectC rather than claim the current theorem applies.
+
+Step2: build a small configuration catalogue with 2 hardware types and a handful
+of local service plans. Preserve memory and placement constraints. Start with
+3-6 synthetic owners so every coalition and finite-grid unilateral deviation
+can be checked exactly. Declare the grid a finite diagnostic, not a proof over
+all real reports; the mathematical guarantees require the written argument.
+
+Step3: calibrate on one workload segment and freeze the held-out segments before
+headline comparisons. Retain nonsharing, contributor-priority scheduling and a
+strong heterogeneity-aware planner. On the SAME production plans compare
+proportional payments, LP dual prices, Shapley where computable, grand marginals,
+and small-instance exact versions of the existing sharp mechanism. Distinguish
+the production gain from the allocation of that gain.
+
+Step4: report completed SLO-compliant requests, dollar/objective value, peak kW,
+kWh, recovery/rebound load, worst coalition deficit, maximum individual incentive
+gain, total subsidy, and runtime. Carbon is a separate scenario-dependent metric;
+carbon intensity and electricity price are not interchangeable. Show sensitivity
+to valuation assumptions, hardware coefficients, topology and ownership rights.
+
+Go only if the physical model predicts held-out feasible service adequately under
+thresholds fixed before that test, and the economic conclusion survives plausible
+outside options and coefficient uncertainty. A failed test can still yield a
+valuable model-boundary result. Do not retrofit the contract after observing the
+headline outcome just to make the payment theorem apply.
+
+The mathematical promotion gate is an improved uniform bound or a structural
+separation for a growing class, or an implementation theorem beyond the baseline.
+For sparse production, try r=2/3 while owner/resource/activity counts grow, then
+seek a general r dependence. For common access, isolate the incentive premium
+beyond the static instability. None of these questions is declared a recognized
+major open problem or a confirmed novel theorem yet.
+
+9. Priority and evidence boundaries
+
+DRF and Themis concern tenant requirements and scheduling fairness [S20,S23].
+Truthful double auctions for federated clouds already combine VM trading and
+electricity costs [S22]. Energy-community stability is established under explicit
+tariff/scheduling assumptions [S25]. Population cross-monotonic profit sharing
+faces strong existing budget barriers [S24]; this is a different condition from
+our own-report monotonicity. Adding private consumer values as well as provider
+costs introduces classical bilateral-trade impossibilities [S26]. These sources
+make broad novelty claims untenable without an exact comparison of types,
+feasible deviations, outside options, budget definitions and efficiency goals.
+
+This is a scoped source exploration, not an exhaustive priority clearance. The
+report contains proposed designs, not measured cost savings. check_models.py
+reproduces exact finite examples and tests two sparse LP families on1024 binary
+profiles in total:8192 coalition inequalities and7296 strict unilateral report
+pairs, with independent primal/dual vertex values. Checks remain active under
+Python -O. These corroborate the formulas; the universal sparse-production bound
+is supported by the conventional proof and separately reviewed as recorded in
+REVIEW.txt. No paid data, human outreach or full serving benchmark was used.
+
+Reproduce finite checks from this directory:
+  python3 -B -O check_models.py
+Read SPARSE_PRODUCTION_NOTE.txt for assumptions and proof, SOURCE_LEDGER.tsv
+for direct primary links/access limits, and CHECK_RESULTS.json for bounded output.
+
+RECOMMENDATION
+Lead with committed-capacity GPU/power cooperation, using the sparse-production
+payment rule as a transparent calibrated baseline. Make common-infrastructure
+access rights the main economic theory extension, and private costly flexibility
+the next stage once the institutional model is fixed. This gives a coherent
+research program connecting useful AI systems to coalition stability, strategic
+participation and energy constraints without promising that a resource-allocation
+theorem already solves an electricity market.
