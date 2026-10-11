@@ -1,0 +1,120 @@
+Audit excerpt, verbatim lines 160-275 of paper5/truthful_cooperation/manuscript.tex.
+Source SHA256: 4786126d3a4473bf04b06384ad7151a83576321c4734718f26f29ba6ff13e67f
+The authoritative manuscript is unchanged.
+
+There are $n$ fixed owners and $d$ fixed resource types. Owner $i$ reports
+$b_i\in\R_+^d$; write $c=\sum_i b_i$. Fix a nonempty finite family
+$V=\{w^1,\ldots,w^K\}\subseteq\R_+^d$, with a report-independent priority,
+and define
+\[
+ f(c)=\min_{w\in V}w\cdot c,\qquad
+ v_b(S)=f\left(\sum_{i\in S}b_i\right),\qquad T=f(c).
+\]
+A rule is eligible if its payments are nonnegative, cover every coalition,
+and are componentwise nondecreasing in each owner's whole bundle, with all
+other reports fixed. These conditions hold on all of $(\R_+^d)^n$.
+They express truthfulness for binding underreports and payment-only utility;
+there are no operating costs, overreport, false-name, population-change or
+coordinated-report guarantees. A factor $C$ bounds \emph{total payment} by
+$CT$; external subsidy is at most $(C-1)T$. The family $V$ remains fixed
+across reports. Its size may be exponential in a compact description.
+
+\begin{theorem}[General sharp-order upper bound]\label{prod:upper}
+For every integer $j\ge2$, there exists an eligible deterministic rule with factor
+\begin{equation}\label{prod:constant}
+ C_j(K)=j+\frac{\log K+2\log j+1}{\alpha_j},\qquad
+ \alpha_j=\log\frac{j^3}{j^2+j-1}>0.
+\end{equation}
+With $L=\log K$ and
+$j=\max\{2,\lceil L/[\log(2+L)]^2\rceil\}$, this factor is
+$(1+o(1))\log K/\log\log K$, uniformly over owner counts, dimensions,
+technologies and reports. Zero-value profiles receive zero; for $K=1$ the
+constructed rule is efficient.
+\end{theorem}
+
+\paragraph{The mechanism.}
+For $q\in(0,1)$ let independent owner bits satisfy $\Prob(B_i=0)=q$.
+Choose the first minimizer of the \emph{uncapped} objective,
+\[
+ W(b,B)=\operatorname*{first\,argmin}_{w\in V}
+               \sum_i B_i(w\cdot b_i),\qquad
+ a_i(w,b)=\min\{w\cdot b_i,T\}.
+\]
+Only the payment contribution $a_i$ is capped. Put
+\begin{align}
+ z_i^q&=\E a_i(W,b),&
+ p_i^q&=\E[a_i(W,b)\mid B_i=0],\label{prod:p}\\
+ m_i^q&=\E_{B_{-i}}\left[f\left(b_i+\sum_{h\ne i}B_hb_h\right)
+                         -f\left(\sum_{h\ne i}B_hb_h\right)\right],
+ &r_i^q&=qp_i^q+(1-q)m_i^q.\label{prod:hybrid}
+\end{align}
+The final payment is the deterministic finite expectation
+\begin{equation}\label{prod:payment}
+ M_i(b)=j\int_0^{1/j}r_i^q(b)\,dq.
+\end{equation}
+These quantities are finite polynomials in $q$ at a fixed profile; no
+continuity or generic-position assumption about the reports is required.
+
+\begin{proof}[Proof of Theorem~\ref{prod:upper}]
+Conditional on $B_i=0$, every score and the selected form are independent of
+$b_i$. For that fixed nonnegative form, both $w\cdot b_i$ and $T$ are
+nondecreasing in $b_i$, so their minimum is nondecreasing. In $m_i^q$ the
+off term is independent of $b_i$ and the on term is nondecreasing. The
+nonnegative fixed mixtures preserve this property and nonnegativity.
+
+For any $w,S$, if some $i\in S$ has $w\cdot b_i\ge T$, then
+$\sum_{i\in S}a_i(w,b)\ge T\ge v_b(S)$. Otherwise no term in $S$ is capped,
+and the sum is $w\cdot\sum_{i\in S}b_i\ge v_b(S)$. Thus every capped form
+covers coalitions. Fix $B_{-i}$ and let $w_1$ be the on minimizer. The off
+optimum is at most the off objective of this same form, whence
+\begin{equation}\label{prod:endpoint}
+ f\left(b_i+\sum_{h\ne i}B_hb_h\right)-f\left(\sum_{h\ne i}B_hb_h\right)
+ \ge w_1\cdot b_i=a_i(w_1,b).
+\end{equation}
+The equality holds because the contribution is a nonnegative summand of
+the selected on value, which is at most $T$. Averaging proves $r_i^q\ge z_i^q$,
+and hence coverage for $r^q$ and $M$.
+
+For the budget define $g(q)=\E f(\sum_iB_ib_i)$, $Z(q)=\sum_i z_i^q$,
+and $R(q)=\sum_i r_i^q$. Capping leaves every open contribution unchanged:
+\[
+ \sum_iB_i a_i(W,b)=f\left(\sum_iB_ib_i\right).
+\]
+Consequently $q\sum_i p_i^q=Z-g$. Differentiating the finite mask polynomial
+gives $\sum_i m_i^q=-g'$, so $R=Z-g-(1-q)g'$. Since $g(0)=T$ and $g\ge0$,
+for $0<\eta<1$ integration by parts gives the exact identity
+\begin{equation}\label{prod:integral}
+ \int_0^\eta R\,dq=\int_0^\eta Z\,dq+T-(1-\eta)g(\eta)
+                         -2\int_0^\eta g\,dq
+ \le\int_0^\eta Z\,dq+T.
+\end{equation}
+Both the sign and the factor two in this identity matter.
+
+Suppose $T>0$. For each fixed form let
+$d_i(w)=a_i(w,b)/T\in[0,1]$ and $\rho_w=\sum_i d_i(w)$.
+The selected form satisfies $\sum_iB_id_i(W)\le1$. For $\lambda>0$ put
+$\alpha=-\log(q+(1-q)e^{-\lambda})$. The convex function
+$u\mapsto\log(q+(1-q)e^{-\lambda u})$ lies below its endpoint chord
+$-\alpha u$ on $[0,1]$. Independence and Markov's inequality give
+\[
+ \Prob\left(\sum_iB_id_i(w)\le1\right)
+ \le e^\lambda\prod_i(q+(1-q)e^{-\lambda d_i(w)})
+ \le e^{\lambda-\alpha\rho_w}.
+\]
+A union over the fixed family and integration of the resulting tail yield
+\begin{equation}\label{prod:chernoff}
+ \Prob(\rho_W\ge x)\le\min\{1,K e^{\lambda-\alpha x}\},\qquad
+ \frac{Z(q)}T\le\frac{\log K+\lambda+1}{\alpha}.
+\end{equation}
+Take $\eta=1/j$ and $\lambda=2\log j$. For $q\le1/j$,
+$q+(1-q)e^{-\lambda}\le(j^2+j-1)/j^3$, so
+\eqref{prod:integral}--\eqref{prod:chernoff} give \eqref{prod:constant}.
+For the displayed choice of $j$, as $L\to\infty$,
+$j\sim L/(\log L)^2$, $\alpha_j\sim\log L$, and
+$j=o(L/\log L)$, proving the asserted asymptotic.
+
+If $T=0$, all masked production values and capped contributions vanish.
+If $K=1$, no contribution is capped, $p_i^q=m_i^q=w\cdot b_i$, and
+$M_i=w\cdot b_i$. Finally each finite-mask term is
+$q^{n-1-|S|}(1-q)^{|S|}[q a_i(W(b,1_S),b)+(1-q)(v_b(S\cup\{i\})-v_b(S))]$.
+Its integral is a finite sum with rational coefficients when $j$ is integer.

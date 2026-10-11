@@ -1,0 +1,194 @@
+First inference-consortium pilot: results and next decision
+11 October 2026
+
+DECISION
+Proceed to measured service/energy calibration and request-level replay before
+expanding the economic mechanism. The pilot successfully connects the existing
+CoopGPT payment rules to a physically consistent, deliberately narrow capacity
+model. It exposes real mathematical differences between payment rules. It does
+not establish a practical market, measured throughput gains, historical novelty,
+or a field-level breakthrough.
+
+A necessary modeling correction: this first implementation pools additive ENERGY
+allowances (kWh). Its separate engineering peak-power envelope is safe and
+nonbinding. The same GPU-hours LP cannot simply be relabeled as an allocation of
+scarce instantaneous kW. Scarce peak power remains a substantive next extension.
+
+1. What was built
+
+Three fixed owners hold flexible one-hour reservations in two local hardware
+bundle types and incremental energy allowances at one meter. Each hardware bundle
+contains its GPU, local memory and complete warm model replica. No memory or power
+is implicitly transferred between sites. Reported node time can be scheduled
+anywhere in the window. Owners have already committed the underlying reservations;
+their modeled utility is payment only, without concurrent own-use or outside rental.
+
+Let c=(H,L,E) be pooled node-hours and incremental kWh. The synthetic technology is
+  F(c)=max {6*x_H+2*x_L : 0<=x_H<=H, 0<=x_L<=L, 2*x_H+x_L<=E}
+      =min {6H+2L, 2H+2E, 3E}.
+Every coalition S has value F(sum_{i in S} b_i), using only its members' rights.
+The numbers 6,2,2,1 are declared synthetic value/energy parameters, not benchmarks
+for named GPUs. Public output values measure service-capacity points, not dollars
+or completed requests. The production technology, proportional weights and hybrid
+parameter were frozen before outcome computation in PROTOCOL.txt and its hash.
+
+For each profile, a separate primal-vertex calculation agrees exactly with the
+dual value. The optimal runtimes are assigned to named owner/type/node intervals.
+Every interval respects reported and installed node-hour capacity; incremental
+energy and peak-envelope accounting are checked. The peak bound is redundant by
+construction: it is the draw of all installed nodes at maximum operation, so this
+check does not test allocation under scarce power or validate an actual feeder.
+Idle warm-node power is a
+synthetic 0.1 kW per installed node and is accounted for separately as a committed
+baseline. The resulting certificates validate the continuous capacity schedule.
+They do not validate token-level completions, batching, startup or latency SLAs.
+
+Installed inventory is now a mandatory, explicit schedule input and cannot be
+inferred from a changed report. The design grid fixes six nodes throughout. Each
+four-owner stress case has its own fixed inventory derived from the predeclared
+true endowment; the energy-only case has none. Baseline energy is therefore not
+comparable across different physical scenarios. It never enters the payment game.
+
+2. The predeclared example
+
+Owner bundles (H hours,L hours,E kWh):
+  A=(1,0,1), B=(0,1,2), C=(1,1,1).
+Operating separately produces 8 value points. Serving each owner's standalone
+plan first and then pooling residual resources produces 11. Joint optimization
+produces 12: a 50% improvement over autarky in THIS SYNTHETIC EXAMPLE.
+The optimum runs two H nodes for one hour each and leaves L nodes idle. It consumes
+4 incremental kWh, plus 0.6 kWh of committed idle baseline across the fixed six-node
+inventory. Peak node load is 4.6 kW, below the declared safe 9.6 kW feeder envelope.
+These are model calculations, not measured facility electricity consumption.
+
+All payment comparisons below use the SAME jointly optimal coalition game:
+  rule            total paid    external subsidy    largest coalition deficit
+  proportional    12            0                   1/2
+  dual prices     12            0                   0
+  Shapley         12            0                   0
+  grand marginal  14            2                   0
+  sharp hybrid    83/6           11/6                0
+
+The hybrid requires about 1.833 additional value points in this example, against
+2 for grand marginals. It is not claimed to dominate marginals pointwise. A public
+sponsor or an explicit relaxation of coalition coverage is needed to fund subsidy;
+creating extra accounting entries is not a balanced-budget market implementation.
+Comparing these value points with real subsidy dollars requires an economic model.
+
+'Standalone-first sharing' is a feasible dispatch comparator, not a claim to
+implement owner-priority policies at a real consortium. There are no owner-specific
+private jobs in this model. Dispatch comparisons and payment comparisons are kept
+separate so a scheduling difference does not masquerade as a payment advantage.
+
+3. Exhaustive design-grid evidence
+
+Enumerated 1,728 three-owner profiles, each owner's H,L in {0,1} and E in {0,1,2}.
+Of these, 1,638 have positive production. For EACH payment rule, checks cover 13,824
+coalitions and 18,144 strict componentwise-lower report pairs. All 1,728 capacity
+schedules passed. Observed results:
+
+  rule            profiles with       profiles with       maximum total
+                  coalition deficit   withholding gain    payment / F
+  proportional    1,335               0                   1
+  dual prices     0                   138                 1
+  Shapley         504                 0                   1
+  grand marginal  0                   0                   2
+  sharp hybrid    0                   0                   19/12
+
+These counts are frequencies in a uniform ARTIFICIAL STRESS GRID, not estimated
+probabilities of real-world failure. Maximum hybrid subsidy in ratio terms is
+7/12, about 58.3% of production, versus 100% for marginals on this grid. The observed
+19/12 is not a new universal upper bound and is not an optimal-mechanism claim.
+For grand marginals the pre-existing sparse-production result gives the universal
+2F total-payment bound under these hypotheses because every activity uses two
+resource rows. The existing manuscript gives the hybrid's all-profile guarantees;
+the grid tests its implementation rather than proving those guarantees anew.
+
+Exact adverse witnesses are retained. One dual-price example has owners
+  (0,0,1), (0,0,2), (1,1,0).
+Truthful production is 8 and fixed-priority dual payments are (2,4,2). If the third
+owner withholds its L reservation, production falls to 6, but its payment rises
+to 6: an individual gain of 4. This is a failure of this fixed-priority price rule,
+not a theorem that all efficient mechanisms fail in this specific three-form class.
+Proportional allocation's worst deficit is 24/7; Shapley's is 1. Full exact reports,
+coalitions and payments are in RESULTS.json; every design-profile payment vector
+and diagnostics are in PAYMENTS.csv.
+
+4. Validation beyond the design grid
+
+Six predeclared four-owner stress profiles cover fractional ownership, redundant
+hardware, balanced ownership, energy without hardware, hardware without energy,
+and separated complementary endowments. Each checks all 16 coalitions and every
+unilateral report with coordinates zero, half or all of that owner's true quota:
+96 coalitions and 110 strict report pairs per rule across these cases. All intended
+mechanism checks and all six base capacity schedules passed. These are structural
+holdout checks, not a statistical test of performance on sampled market data.
+
+The exact LP oracle evaluated 368 distinct aggregate inputs; the driver cached
+9,220 payment vectors. The run takes about 4-5 seconds on this machine. Hybrid and
+Shapley enumerate subsets and are exponential in owner count; this prototype does
+not demonstrate scalable deployment. The grand-marginal payment formula needs
+n+1 production values, but this tiny oracle uses vertex enumeration rather than a
+production-grade polynomial LP solver. Normal and optimized Python runs reproduce
+identical mathematical results and CSV; runtime is intentionally variable.
+
+5. What the real trace does and does not add
+
+A bounded download from the official Azure LLM 2024 Code trace provided the first
+source minute: 1,537 request records, timestamps and input/output token lengths.
+The selected minute has 25.62 arrivals/second, context-token median 1,767 and p99
+7,685, generated-token median 9 and p99 259. This is a chronological convenience
+sample, not representative of all Azure service and not a held-out serving test.
+Source, CC BY 4.0 attribution, selection, unchanged-row sample hash and transport
+metadata are retained. The acquisition reads only 512 KiB of the large source.
+
+Crucially, the trace does not measure our hardware service rates, energy, owners,
+values, costs or private preferences. It does not enter or calibrate the economic
+results above. It supplies a real workload-shape input for the NEXT replay stage.
+No empirical throughput, energy savings, revenue or carbon claim follows yet.
+Dataset: https://github.com/Azure/AzurePublicDataset/blob/master/AzureLLMInferenceDataset2024.md
+Accompanying paper: https://arxiv.org/abs/2408.00741
+
+6. Recommended next milestone and stopping gates
+
+First obtain an openly usable, measured serving-mode table for two local hardware
+configurations on the SAME model, recording memory fit, throughput versus input/
+output length and batch size, incremental and idle power, and latency conditions.
+A paper figure can motivate scenarios, but an incompatible pair of benchmark
+numbers must not be sold as one calibrated system. If no coherent free data are
+available, retain the synthetic label and specify the minimal local experiment.
+
+Before inspecting replay outcomes, freeze hardware configurations, workload split,
+public objective, available capacities, deadline definition, and validation gates.
+Use additional chronological windows for evaluation rather than tuning to this
+one-minute descriptive prefix. A reasonable proposed promotion gate is: zero
+resource/deadline violations for admitted requests, at most 10% throughput and
+energy prediction error on declared held-out windows, and a stated procedure for
+rejected requests. Those tolerances are a prospective engineering choice, not a
+result already established or a universal statistical standard.
+
+Then evaluate whether feasible pooling gains survive queueing, request granularity,
+heterogeneous memory fit, and the subsidy required by a credible committed-rights
+contract. Do not claim payment-only incentives for a market where participants can
+use withheld capacity privately. Private opportunity costs, scarce peak power,
+and buyer demand require explicit extensions to the model or its theorem.
+
+The most promising new mathematical target after this gate is a mechanism for
+validated simultaneous serving configurations under a genuinely scarce shared
+power limit, with explicitly owned rights and fixed-owner incentives. The current
+linear capacity model provides a baseline and falsification harness; it does not
+resolve that target. Owner-count scaling, private flexibility costs, and temporal
+energy shifting are follow-ons rather than parameters silently added here.
+
+7. Contribution and review status
+
+This is an application prototype and reproducible comparison of existing payment
+rules. LP duality, linear-production core reasoning, Shapley allocation, and the
+grand-marginal baseline have established antecedents (see the prior scoping source
+ledger). The sharp hybrid comes from the existing CoopGPT manuscript. No new
+mathematical theorem or historical novelty is asserted by this pilot. A completed
+Fable 5.1 audit found no consequential errors in its supplied scope, with two low-
+severity physical-accounting clarifications now addressed. The sparse-production
+bound was outside that packet; its written proof was independently checked here.
+Verification and review limitations are recorded in REVIEW.txt. Internal AI review
+is not external human specialist endorsement.

@@ -1,0 +1,50 @@
+Reproduce the committed local inference consortium pilot
+
+Python 3.10 or newer, standard library only. From this directory:
+
+  python3 -m unittest discover -v
+  python3 trace_ingest.py --self-test
+  python3 run_pilot.py --output-dir /tmp/coopgpt-pilot-rerun
+
+The first command tests exact mechanisms and the capacity schedule. The second
+uses the COMMITTED sample offline, checks its SHA-256, and reproduces descriptive
+trace statistics. The third regenerates RESULTS.json and PAYMENTS.csv in the chosen output directory
+using only
+synthetic coefficients and the predeclared ownership grid. Network access and
+an LP package are not needed for normal reproduction. Runtime fields can change;
+all mathematical values, counterexamples and certificates should match exactly.
+
+Use python3 -O with the same commands to check that essential guards survive
+optimization. Unit-test assertions use unittest; runtime verification uses
+explicit exceptions, not removable Python assert statements.
+
+Optional, separate network acquisition:
+  python3 trace_ingest.py --fetch --directory /tmp/coopgpt-trace-refresh
+
+This downloads at most 512 KiB of response body and selects the first source
+minute, failing if its right boundary is not observed within that prefix. It
+writes new provenance and a sample to the chosen output directory. Compare with
+the committed source hash; upstream assets can change. --fetch is not needed to
+reproduce the pilot. Do not overwrite the frozen sample to make a mismatch pass.
+
+PAYMENT SCOPE
+All five payment rules share the same joint-production characteristic function.
+The proportional rule fixes unit weights (1,1,1); changing physical units requires
+transforming these normative weights. Dual priority is fixed lexicographically.
+The sharp hybrid evaluates all 2^n masks with exact rational polynomial integrals,
+j=2. Shapley also enumerates subsets. This implementation is deliberately small-n,
+not a polynomial scalable implementation of those two subset-enumerating rules.
+The marginal rule needs n+1 value queries; this prototype's generic exact vertex
+oracle is for tiny LPs, not a polynomial-time LP solver implementation.
+
+DATA CREDIT AND LICENSE
+trace_sample.csv is an unchanged-row subset of the Azure LLM inference Code trace
+2024, released by AzurePublicDataset under CC BY 4.0. Credit Jovan Stojkovic,
+Chaojie Zhang, Inigo Goiri, Josep Torrellas, and Esha Choukse, DynamoLLM: Designing
+LLM Inference Clusters for Performance and Energy Efficiency, HPCA 2025.
+Paper: https://arxiv.org/abs/2408.00741
+Dataset: https://github.com/Azure/AzurePublicDataset/blob/master/AzureLLMInferenceDataset2024.md
+License: https://creativecommons.org/licenses/by/4.0/
+Full download metadata, attribution, source URL and selection: TRACE_PROVENANCE.json.
+No prompt text is included. These data do not calibrate synthetic throughput,
+energy, values, owners, or willingness to participate.

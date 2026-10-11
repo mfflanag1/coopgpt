@@ -1,0 +1,27 @@
+**Provisional verdict: no consequential findings in reviewed scope.** Most important observation: the "engineering peak" certificate is vacuous by construction (model.py:119–124), so the report's "incremental energy and the engineering peak bound are checked" (REPORT.txt:37–38) verifies nothing about peak power. This is disclosed as "nonbinding", so it is a wording/evidence-strength issue, not an error.
+
+## Findings
+
+**1. Low — Peak check is tautological (model.py:119–124, PROTOCOL.txt:36–37).** `safe_peak = idle + Σ(2H_inst + L_inst)` and every interval starts at t=0 with duration ≤1, so `peak ≤ safe_peak` cannot fail for any input. The protocol's "verify both energy and peak draw" is satisfied only formally. Verification: a test that constructs a profile where the check *could* fail would be impossible; recommend the report state the check is an identity, not a constraint.
+
+**2. Low — Inconsistent installed-inventory convention between grid and held-out (run_pilot.py:192 vs 235; model.py:89).** Design grid fixes six installed nodes regardless of reported hardware (e.g. design_0177 charges 0.6 kWh baseline for two hardware-less owners), while held-out uses `installed = ceil(report)` (stranded_energy: 0 kW baseline, zero nodes). Also `ceil(report)` makes installed counts report-dependent, contrary to PROTOCOL.txt:31/model docstring:82–83 if ever applied to underreports (not currently done). Baseline kWh figures are therefore not comparable across sections. Not a correctness bug for the economic results, which exclude baseline.
+
+**3. Informational — Claims relying on external results not in packet.** REPORT.txt:93–95 ("pre-existing sparse-production result gives the universal 2F bound") and the hard-coded `min(n,2)*total` assertion (run_pilot.py:132) cannot be verified here. Marginal coalition coverage is independently sound: for the grand-coalition minimizer w_N, v(N)−v(N∖i) ≥ w_N·b_i and Σ_{i∈S} w_N·b_i ≥ v(S).
+
+## Verified (hand-computed from packet)
+
+- Dual vertices {(0,0,3),(2,0,2),(6,2,0)} are exactly the feasible basic solutions of A^T w ≥ p, w ≥ 0; F = min of three forms.
+- Declared example: autarky 8, standalone-first 11, joint 12; dual (3,6,3) with lexicographic tie to (0,0,3); marginal (4,6,4); Shapley (23/6,13/3,23/6); proportional (3,9/2,9/2) with AB deficit 1/2; hybrid owner A = 1/4+1+1/2+7/3 = 49/12 via the manuscript's mask formula (MECHANISM_SPEC_EXCERPT.txt:119) — implementation (payments.py:139–144) matches, including uncapped selection and own-cap at T.
+- Hybrid payment_ratio witness design_0015: payments (0,5/3,3/2), ratio 19/12 reproduced term by term.
+- Counts: 1638 positive profiles (1728−27−64+1), 13,824 coalitions, 18,144 = 3·42·144 grid deviations, 110 held-out deviations (32+8+44+8+6+12), 96 coalitions.
+- Dual witness (0,0,1),(0,0,2),(1,1,0): (2,4,2) → (0,0,6), gain 4. Proportional worst deficit 24/7 and Shapley worst 1 reproduce from witnesses.
+- Proportional own-monotonicity holds generally (F·s_i/Σs nondecreasing in b_i), so grid pass is not accidental.
+- Trace: 1537/60 = 25.617 req/s; 512 KiB ≈ 8 minutes at 41 B/record, so first minute fully captured. Report does not claim calibration from trace.
+
+## Scope limitations
+
+Cannot run code; counts such as 1335/138/504 deficit/withholding profiles, 368 oracle inputs, 9,220 cached vectors, and CSV reproducibility are taken from RESULTS.json. Full manuscript, prior "source ledger", REVIEW.txt, PAYMENTS.csv and trace_sample.csv not in packet.
+
+## Verdict
+
+No findings of consequential error in reviewed scope. Two low-severity presentation/consistency issues (vacuous peak check; mixed installed-inventory convention) and one unverifiable external dependency. Report hedging on trace, calibration and novelty is consistent with the artifacts.
