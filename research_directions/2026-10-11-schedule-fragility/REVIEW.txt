@@ -1,0 +1,57 @@
+Review and adjudication — 11 October 2026
+
+INDEPENDENT DESIGN AND TEST LANE
+A separate Codex agent read the saved replay/protocol before implementation,
+checked the energy-window interpretation and derived the max-plus threshold.
+Its report is preserved as DESIGN_AUDIT.txt. It subsequently owned only
+test_fragility.py and wrote 15 focused tests, including 360 independent exact
+suffix-expansion comparisons on varied toy chains. Root inspected and executed
+those tests normally and under Python -O; all passed. Synthetic test fixtures
+are not additional empirical observations.
+
+CROSS-MODEL STATIC REVIEW
+Fable 5.1 completed one 99.36-second static review of analysis.py, tests, protocol,
+report, SUMMARY.json, CHECKS.json and the original measured-serving report.
+The raw answer is CROSS_MODEL_REVIEW.txt. REVIEW_REQUEST.json locks the selected
+file hashes and task; REVIEW_STATUS.json records completion and actual model.
+The reviewer had no tools and did not run tests or inspect full certificate files.
+It reported no substantive findings, with three low-severity clarity suggestions.
+
+ROOT ADJUDICATION
+1. Horizon dependence — accepted. Frontiers divide budget slack by omitted time;
+   top-ups increase with H at a fixed nonnegative outside-window rate. Report now
+   says absolute funding numbers depend on H=970, unlike the between-arm energy
+   difference. The review's example of extending to the last slot end was not
+   copied: the original H ALREADY includes both arms' last slot ends. No code or
+   numerical result changed. Negative-budget cases remain infeasible at p=0.
+2. Arrival-relative deadline wording — accepted. Report now states the equivalent
+   21.180682552-second latency threshold and q>=0.353011376 (rounded upward).
+   A separate source-only calculation reproduces that maximum latency and the
+   separate plan's 61.632770241-second maximum. See REPORT_NUMBER_CHECKS.json.
+3. Slowdown headroom rounding — accepted. The seven separate-plan boundaries
+   span 1.019485... to 1.031767..., so report now says 1.9–3.2% rather than 2–3%.
+4. Minor tabular transcription — root corrected four six-decimal omitted-duration
+   entries by at most a few millionths of a second against exact SUMMARY values.
+   Affine coefficients, funding totals and conclusions were unchanged.
+
+The reviewer could not recompute detailed primary and nine-case boundary claims
+from its limited packet. Root reconciled them to FRONTIERS/THRESHOLDS and checked
+the primary pooled boundary using a separate forward recurrence on original
+source inputs without importing analysis.py: all 71 jobs are on time at exact
+r=10937500000/6419227459, and only 70 remain on time at r+1e-6.
+
+REPRODUCTION
+The clean-directory run regenerated six decisive outputs and matched their
+stored content. gzip JSONL is compared after decompression to avoid irrelevant
+zlib encoding differences; the archived compressed file also has a SHA-256 hash.
+The driver verified 11,023 original admissions, 44,092 exact threshold equalities,
+264,552 threshold/recurrence classifications and 2,916 energy-grid identities.
+VERIFICATION.json records these executed checks and preserved gate failures.
+
+No implementation, protocol, frozen input or generated result changed after the
+review snapshot. Only the report clarifications above and audit/manifest records
+were added. No follow-up review was needed for the three presentation corrections.
+This review does not prove source measurements transport to concurrent serving,
+does not validate a deployment, and is not external human specialist review.
+Standalone claude-review does not update the cross-model routing-quality ledger;
+no such update is claimed here.

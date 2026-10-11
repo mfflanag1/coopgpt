@@ -1,0 +1,146 @@
+Independent design audit: saved-schedule fragility and measurement priorities
+2026-10-11. Source: saved measured-serving protocol, replay.py, event records,
+report and primary diagnostic summary. No implementation or new replay outcomes.
+
+VERDICT
+Proceed with the proposed bounded, expressly post-result audit. The useful result
+is a transparent boundary on what the saved schedules would require, not a newly
+validated GPU consortium, fresh holdout, improved online scheduler, or formal
+expected value of information. Keep baseline-energy completion and timing stress
+separate. Do not extrapolate request energy when perturbing service durations.
+
+A. Fix the objects before calculating additional outcomes
+For each original case, preserve every admitted ID, assigned server, original start
+time, per-server order, measured energy, and original rejections. Preserve existing
+late jobs, negative pooling differences and debt cases. Each arm uses both resident
+nodes through a COMMON horizon H. A suitable definition is
+ H=max(last OFFERED arrival + that case's relative deadline,
+       largest saved slot_end in either arm).
+Use the complete offered manifest, not the last admitted/served request. Time starts
+at zero. This horizon is part of the diagnostic and must not vary by arm. Timing
+stress below has its own completion times; it does not silently redefine baseline
+energy H. Report timing-stressed drain separately if useful, without costing it.
+
+B. Correct missing-time energy without double counting
+For a saved request j on node h, the existing event schema means:
+ d_j=actual_service_seconds_j-4 is API duration;
+ slot=[t_j,t_j+d_j+4]; response=t_j+d_j+0.5;
+ already-charged measurement window=[t_j,t_j+d_j+1]
+                                      =[start,slot_end-3].
+The full API+1 window, including both half-second measurement buffers, already has
+its entire reported GPU energy W_j charged. Do NOT add an idle baseline on top of
+that same interval. Its source measurement and exact collector revision remain
+uncertain; this is an audit conditional on the frozen window convention.
+
+Let L_ah be the length of the union of those measurement windows in arm a on node
+h, and W_ah the sum of its saved window energies. Check containment in [0,H],
+nonoverlap and uniqueness before replacing union length with sum(d_j+1). Define
+ I_ah=H-L_ah >=0.
+At assumed constant nonnegative omitted-time mean board power p_h,
+ E_ah(p_h)=W_ah+p_h I_ah,
+ E_a(p)=sum_h W_ah + sum_h p_h I_ah.
+Watts times seconds are joules. This is a conditional completion of missing data,
+not measured energy, and not a per-request incremental-cost estimate.
+
+The omitted time includes three seconds of modeled cooldown per admitted job;
+cooldown may consume more power than resident idle. For precision, define
+ C_ah=3*n_started,ah and Z_ah=H-sum_j(d_j+4).
+Then E_ah=W_ah+p_idle,h Z_ah+p_cool,h C_ah. The simple one-rate analysis explicitly
+sets p_idle,h=p_cool,h=p_h. Call p_h assumed mean power OUTSIDE measured windows,
+not a measured resident-idle power estimate.
+
+C. What cancels, and what cannot be concluded
+For the two saved arms with the same nodes and H,
+ E_pool-E_autarky = (W_pool-W_autarky)
+                    -sum_h p_h(L_pool,h-L_autarky,h).
+The common sum_h p_h H cancels. Higher omitted-time power need not erase a pooling
+advantage or worsen relative total energy: extra measured-window coverage replaces
+some unmeasured time. Compare energy and on-time requests separately; more requests
+and more energy are neither an energy saving nor automatically a welfare improvement.
+Fixed-schedule completion counts do not change merely because p is changed. Mark a
+schedule budget-infeasible; do not silently delete served requests until it fits.
+
+D. Funding interpretations and exact frontier
+The original B_h allowances explicitly funded MEASURED WINDOWS ONLY. Treating the
+same numerical B_h as full-horizon energy allowances is a NEW hypothetical budget
+contract. It can expose a missing funding requirement but cannot refute the old
+window-only result. Report at least these two interpretations separately:
+
+1. Reuse original allowances as gross whole-horizon budgets. Autarky feasibility:
+ W_aut,h+p_h I_aut,h <= B_h for each owner h.
+For I>0, its exact owner threshold is p_h <= (B_h-W_aut,h)/I_aut,h. Negative slack
+means already infeasible at p=0. If I=0, the condition is W<=B and there is no idle
+power threshold. Pool feasibility is the halfspace
+ sum_h p_h I_pool,h <= sum_h B_h-W_pool.
+For a shared scalar p, the threshold is remaining total allowance / sum_h I_pool,h.
+For independent p_0,p_1, preserve the halfspace rather than claiming a scalar bound.
+
+2. Show additional funding required to preserve each saved outcome:
+ autarky external topup=sum_h max(0,E_aut,h-B_h),
+ pooled external topup=max(0,E_pool-sum_h B_h).
+Also show per-owner requirements; pooling may legitimately use one owner's energy
+allowance to fund execution on the other node. If existing unused credits are
+transferable in the supposedly separate case, that changes its institution.
+
+Final gross-energy feasibility is NECESSARY for the exact saved outcome. It does
+not prove the old online controller would select the same requests after adding
+idle charges. Reservations and eligibility would change. Do not call these bounds
+an online-policy robustness result. With nonnegative continuous charges and no
+borrowing, final actual energy bounds suffice for actual cumulative expenditure,
+but not for every forecast reservation or reproducing the original dispatch path.
+
+E. Unavoidable-idle language must be qualified
+For a particular fixed schedule, p*I>B already rules it out even before charging
+its nonnegative measured-window energy. For an empty always-resident system the
+cost is sum_h p_h H. If this exceeds B, even leaving the nodes idle is unfunded.
+Do not infer that EVERY possible active schedule is infeasible unless p_h is also
+assumed/proved a lower bound on power during activity. A resident-idle reading is
+not automatically such a bound. Under an explicit constant baseline floor valid
+at all times, sum_h p_h H>B is a schedule-independent impossibility. Without that
+extra assumption, label it an empty-resident-baseline funding failure instead.
+
+F. Timing-only perturbation: correct causal propagation
+Multiplying durations while leaving original starts fixed usually creates overlaps
+as soon as a back-to-back slot is slowed. Never count those overlapping schedules.
+The root's proposed fixed-assignment/order repair is mathematically correct:
+ S_j(r)=max(t_j,C_{j-1}(r)),
+ C_j(r)=S_j(r)+4+r*d_j,
+ R_j(r)=C_j(r)-3.5=S_j(r)+0.5+r*d_j.
+Use each server's original chronological job order independently. No rejected job
+is newly admitted, no assignment changes, and no future output enters a dispatch
+policy: this is post-hoc execution of a fixed saved plan, not a new online policy.
+The release floors t_j prevent starts earlier than the saved trace.
+
+Unrolling the recurrence gives, for each job j,
+ R_j(r)=max_{k<=j}[t_k+4(j-k)+0.5+r*sum_{ell=k..j}d_ell].
+Because every d_ell>0, the exact slowdown deadline threshold is
+ r_j*=min_{k<=j}[(D_j-t_k-4(j-k)-0.5)/sum_{ell=k..j}d_ell].
+Thus j is on time iff r<=r_j*. Save a minimizing k and numerator/denominator as a
+witness. Values below one correctly retain jobs already late in the base trace.
+Do not round critical ratios before classification.
+
+For relative deadline tightening q, let A_j be arrival and L_j=D_j-A_j>0:
+ D_j(q)=A_j+q L_j,
+ r_j*(q)=min_k[(A_j+q L_j-t_k-4(j-k)-0.5)/sum d].
+Equivalently, at fixed r, q_j*(r)=(R_j(r)-A_j)/L_j and the job is on time iff
+q>=q_j*(r). Declared grids r in {1,1.05,1.10,1.25,1.5,2} and q in {1,.9,.8,.5}
+are transparent deterministic stress cases, not probabilities or confidence bounds.
+Uniform slowdown and deadline tightening make each arm's on-time count nonincreasing,
+but their DIFFERENCE need not be monotone. No energy extrapolation accompanies them.
+
+G. Independent verification and interpretation
+Verify recurrence and closed-form response/threshold agreement on toy chains and
+all saved jobs. At r=q=1 reconcile recorded starts, response times, outcomes and
+counts. Inputs use serialized floats: exact decimal-rational arithmetic can certify
+the stored numbers, or use a declared small absolute tolerance for reconstruction
+without rounding threshold witnesses. Validate IDs/arrival/order/slot nonoverlap.
+Check energy p=0 recovers original energies, added p charges only uncovered time,
+common-H cancellation holds, and budget-boundary equality is accepted consistently.
+Stress tests should include no jobs on a node, zero budget slack, negative slack,
+zero uncovered time, consecutive jobs, idle gaps and already-late jobs.
+
+The boundary indicates WHICH missing measurement could change a funding or timing
+conclusion and the accuracy/resolution needed near that boundary. Without a prior
+on unknown power/durations, a measurement cost, and an explicit decision objective,
+this is a measurement-priority or sensitivity analysis—not a numerical expected
+value-of-information calculation. It cannot choose the best real GPU deployment.

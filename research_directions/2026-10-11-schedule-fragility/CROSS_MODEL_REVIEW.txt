@@ -1,0 +1,25 @@
+**Provisional verdict: no substantive findings in reviewed scope.** Most important observation: the max-plus threshold, energy accounting, and reported numbers reconcile with SUMMARY.json and the stated identities; the only items worth tightening are presentational (H-dependence of gross-budget frontiers/top-ups is not stated; one unverifiable latency figure).
+
+## Findings
+
+**1. Low — REPORT.txt lines 108–119: gross-budget frontiers and top-ups are H-dependent, but REPORT does not say so.**
+Evidence: `uniform_frontier` slacks divide by `omitted_s = H − L` (analysis.py:48, 258–259), and `autarky_topup_j`/`pool_topup_j` use `W + p·I` (263–272). H is the protocol convention "last offered arrival + deadline" (185–187). REPORT correctly notes that the *common p·H term cancels* for ΔE (line 101), but the frontiers 0.0879/0.0284 W and the 14,100/14,909 J top-ups scale inversely/linearly with the chosen H, which is a convention rather than a measured quantity. Suggested correction: add one sentence after line 113 or 119 stating that, unlike ΔE, frontiers and funding gaps depend on the H convention (e.g. extending H to the last slot end plus any drain time lowers all frontiers).
+
+**2. Low — REPORT.txt lines 36–37: "meets any common relative deadline at least that large" is slightly ambiguous.**
+Evidence: FRONTIERS computes `(response−arrival)/(deadline−arrival)` (analysis.py:213–215); with a 60 s deadline, 21.18 s corresponds to q ≥ 0.353. The phrase could be read as an absolute deadline. Suggest "any arrival-relative deadline ≥ 21.18 s (q ≥ 0.353 of the 60 s deadline)". Consistent with SUMMARY q=.5, r=1 pool_late=0.
+
+**3. Low — REPORT.txt line 145: "about 2–3% separate-plan slowdown headroom".**
+Table values are 1.019485–1.031767, i.e. 1.9–3.2%. Minor rounding; suggest "about 2–3%, minimum 1.9%".
+
+**Checked and found consistent (no action):**
+- Threshold derivation (analysis.py:83–101): R_j = max_k[t_k+4(j−k)+0.5+r·Σd] follows from C_j=S_j+4+r·d_j, R=C−3.5; division by positive Σd preserves direction; equality included matches `<=` in `timing_trace` (line 79).
+- Energy: window_s = end−start−3 = d+1 matches the measured-serving "0.5 before/0.5 after" window; I = C + Z verified (200–201); ΔE = ΔW − Σ p_h ΔL_h (266) with coefficients 97.295, −10.372, +81.529 and slope 71.157 matching SUMMARY lines 51–53, 675; p=(10,0) cell gives −6.42 J ✓.
+- Frontiers: separate min(80.45/914.97, 59.28/509.02)=0.0879; pooled 42.44/1495.15=0.0284 ✓; medians 0.0698/0.0672 ✓.
+- Timing table (REPORT 26–32) matches primary_timing; "2 of 9 at r=1.05", "3 at q=.9", "2 at q=.8", "0 at r=2,q=.5", 37/22/22 all match timing_grid_summary; the "seven with separate lateness, three with pooled lateness" claim matches the limits table.
+- Tests: 15 methods present; hand-checked threshold fixtures (11/6, 3/2, 7/8, 3/8) are correct; brute-force count 360 = 15 jobs × 24 cells.
+
+## Scope limitations
+FRONTIERS.json, ENERGY.json, THRESHOLDS.jsonl.gz, REVIEW.txt, reproduce.py and source data were not supplied; the 1.703865468 threshold, 21.180682552 s latency, 61.63 s baseline response and the nine per-case limits (REPORT 60–68) cannot be independently recomputed here. I did not execute anything.
+
+## Verdict
+No substantive findings in reviewed scope; three low-severity clarity corrections suggested above.

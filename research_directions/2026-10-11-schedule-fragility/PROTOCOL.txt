@@ -1,0 +1,82 @@
+Saved-schedule fragility audit: protocol, 11 October 2026
+
+STATUS AND SCOPE
+Exploratory follow-up after all original measured-serving replay outcomes were
+known. Freeze this plan before computing its new sensitivity results. This is not
+a new holdout, randomized experiment, deployment, online-policy evaluation, or
+novel mathematical contribution. No old outcomes, schedules or methods change.
+Reuse all 81 cases and 162 saved schedules. Show the original primary case and
+all nine previously passing strict-screen cases, preserving adverse results.
+No paid compute, new source search, outreach or manuscript edits are involved.
+
+INPUTS
+Immutable REPLAY_EVENTS.jsonl, REPLAY_TABLE.csv and COHORT.csv from the adjacent
+2026-10-11-measured-serving package. Record SHA-256 values before new computation.
+Original primary: gap10_deadline60_budget0.75_share0.5. Offered requests: 92.
+Each request has one original assignment/order/dispatch release floor; rejected
+requests remain rejected. Parse source decimal strings as rational numbers.
+Use original cohort API duration d, checking saved slot duration d+4 and response
+completion start+d+0.5 to absolute 1e-8 seconds. Source floating arithmetic causes
+tiny endpoint discrepancies; require exact baseline outcome agreement as well.
+
+A. ENERGY OF THE UNCHANGED SAVED SCHEDULE
+Keep both configurations resident over the SAME horizon [0,H] for both arms.
+H=max(last OFFERED arrival + original deadline length, both arms' last slot end).
+The measured energy window is [saved start, saved slot end - 3], length API+1.
+Use union length L_ah (verify no overlaps) and recorded window energy W_ah on
+owner h in arm a. Omitted duration I_ah=H-L_ah includes cooldown. One-rate model:
+ E_ah(p_h)=W_ah+p_h I_ah, p_h>=0.
+p_h is an assumed mean board power OUTSIDE measured windows, not a measured idle
+power or a calibrated plausible range. Do not add it inside measured windows.
+Also save omitted time split into non-slot resident time Z and cooldown time C,
+where I=Z+C and C=3 times started count. This enables later separate idle/cooldown
+rates; this audit's grid assumes those two rates equal on each owner.
+
+Hypothetically reuse the original window-only B_h as GROSS full-horizon budgets:
+separate accounts require E_aut,h<=B_h individually; pooling requires sum E_pool,h
+<=sum B_h. These are ex-post fixed-schedule funding constraints, not online
+reservation guarantees, and do NOT correct or refute the original window contract.
+Compute exact uniform-p upper frontiers, handling negative slack and zero omitted
+time explicitly. Save full two-rate affine constraints rather than a scalar-only
+result. Extra funding preserving each saved outcome is respectively
+ sum_h max(0,E_aut,h-B_h) and max(0,sum_h E_pool,h-sum_h B_h).
+For p0,p1 in {0,1,5,10,25,50} watts save all 36 scenarios per case.
+The comparison is Delta E=Delta W-sum_h p_h Delta L_h: common p_h H cancels.
+Save nonnegative uniform-p energy-equality crossings or their absence. More
+completions and more energy do not themselves identify economic welfare.
+
+B. TIMING ONLY: FIXED ADMISSIONS, ASSIGNMENTS, ORDER AND RELEASE FLOORS
+On each owner, saved start t_j is a release floor, not a forced overlapping start.
+For a common API duration multiplier r>=1 and unchanged 4-second overhead:
+ S_j(r)=max(t_j,C_{j-1}(r)); C_j(r)=S_j(r)+4+r*d_j;
+ R_j(r)=C_j(r)-3.5.
+Deadlines tighten relative to arrival: D_j(q)=A_j+q*(D_j-A_j), 0<q<=1.
+Evaluate r in {1,1.05,1.10,1.25,1.5,2}, q in {1,.9,.8,.5}.
+No energy extrapolation is made for changed duration. Timing and energy analyses
+are SEPARATE conditional calculations, not a joint physical model.
+
+Unrolling the recurrence gives an exact deadline threshold:
+ R_j(r)=max_{k<=j}[t_k+4(j-k)+.5+r*sum_{ell=k..j}d_ell];
+ r*_j(q)=min_{k<=j}[(D_j(q)-t_k-4(j-k)-.5)/sum_{ell=k..j}d_ell].
+Then j is on time iff r<=r*_j(q), equality included. Save a minimizing k, its
+numerator and duration denominator for every admitted job and q. Negative or
+sub-unit thresholds preserve already-late jobs. Do not round before classifying.
+Report counts and on-time difference; each arm's count is nonincreasing with
+stress, but their difference need not be. Show survival of the old strict screen
+using its UNCHANGED original window-energy debt flag only, never a stressed-energy
+claim. Do not identify this fixed-plan calculation as rerunning the online policy.
+
+VERIFICATION AND DECISION
+Validate IDs, offered partition, source durations/energies, original labels,
+common horizons, nonoverlap, measured-window/cooldown separation, budgets and
+baseline sums. Independently check recurrence against threshold classifications
+on all grid cells and exact witness equality at every saved threshold. Test gaps,
+queue propagation, endpoint equality, pre-existing lateness, no-job nodes, negative
+slack and zero omitted time. Run focused tests normally and with Python -O;
+reproduce decisive outputs into a clean directory and compare hashes. Obtain a
+bounded cross-model adversarial review; verify its findings before integration.
+
+Use results only to prioritize missing measurement and decide whether further
+simulation has value. No prior over parameters, measurement cost or economic
+objective is available, so no numerical expected value of information is claimed.
+No new empirical or theorem gate is passed by these calculations alone.

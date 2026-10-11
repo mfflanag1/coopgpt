@@ -1,0 +1,184 @@
+Saved-schedule fragility and measurement priorities — 11 October 2026
+
+DECISION
+The saved pooled primary schedule has substantial conditional timing headroom,
+but the earlier evidence still does not establish a practical energy-saving or
+economic pooling effect. The next decisive evidence is a paired full-window
+measurement, including idle/cooldown draw and concurrent serving. Further tuning
+on these same 92 selected requests cannot substitute for that evidence.
+
+This analysis completes a useful offline step while hardware access is absent.
+It audits 81 previously saved scenarios; no GPU experiment or new data acquisition
+occurred. The new protocol was frozen before these calculations, AFTER original
+results were known. Everything below is exploratory fixed-schedule sensitivity,
+not a fresh holdout, a new controller, or an empirical promotion gate.
+
+TIMING: THE PRIMARY POOLED PLAN HAS HEADROOM
+Keep admissions, GPU assignment, per-GPU job order and original start times as
+release floors. Lengthen API service durations, propagating queue delays through
+each GPU. Keep the declared four seconds of slot overhead unchanged. Rejected
+requests remain rejected; all late completions remain visible.
+
+Primary case: 92 offered requests, ten seconds between arrivals, 60-second
+response deadline, equal shares of 5,426.966 J of request-window allowance.
+At the original deadline, on-time completions under common API-duration slowdown:
+
+ Slowdown       Separate       Pooled       Separate late       Pooled late
+ 1.00              69            71               1                  0
+ 1.05              69            71               1                  0
+ 1.10              66            71               4                  0
+ 1.25              64            71               6                  0
+ 1.50              63            71               7                  0
+ 2.00              50            55              20                 16
+
+The primary pooled plan's exact first-lateness threshold is r=1.703865468...:
+all 71 admitted requests meet their deadlines up to and including that multiplier.
+At unchanged service durations, its largest response latency is 21.180682552 s;
+thus this SAME plan meets any arrival-relative deadline at least 21.180682552 s
+(q >= 0.353011376 of the original 60-second allowance, rounded upward here).
+The separate plan already has one 61.632770241-second response at baseline.
+These are exact properties of rationalized saved inputs, NOT forecasts that
+real pooled serving will tolerate a 70.4% slowdown or achieve a 21.2-second SLA.
+Durations, concurrency effects and a re-executed online policy remain unmeasured.
+
+The increasing on-time difference at moderate slowdown largely reflects worsening
+separate-account performance. It does not pass the original two-sided screen:
+the primary case originally had only +2/92 = 2.17 percentage points of gain and
+one late separate response. At doubled service time both plans have late jobs.
+
+TIMING: SEVEN OF NINE EARLIER PASSES ARE FRAGILE
+The original strict screen required at least five percentage points of on-time
+gain, no late admissions in EITHER arm, and no actual window-budget debt. Of the
+nine cases that passed originally, only two still pass at 5% slower API service.
+All seven failures include separate-plan lateness; three also have pooled-plan
+lateness. Thus loss of the two-sided screen must not be described as seven pooled
+systems failing. All nine gain differences remain represented in the full output.
+
+For each original passing case, maximum common slowdown preserving zero lateness
+in that arm (rounded here; exact certificates classify without rounding):
+
+ Gap   Deadline  Budget factor  Owner-0 share  Separate limit  Pooled limit
+ 30       120        .75             .8          3.670641       2.379236
+ 30        60        .75             .8          2.877081       1.546892
+  3       120        .5              .2          1.019667       1.564463
+  3       120       1                .2          1.020754       1.217442
+  3       120       1                .5          1.019485       1.217442
+  3        30        .5              .5          1.024816       1.051632
+  3        60        .75             .2          1.031767       1.024211
+  3        60        .75             .5          1.030640       1.024211
+  3        60       1                .5          1.030989       1.035408
+
+With unchanged service but deadlines shortened by 10%, three of the nine still
+pass; with deadlines shortened by 20%, two pass. With doubled service and halved
+deadlines, none passes. Across all 81 cases at that last stress, 37 have positive
+on-time differences, 22 zero and 22 negative. Positive differences alone are not
+an SLA, welfare or energy-saving result. These scenarios reuse the SAME requests.
+The original window-budget debt flag is held fixed only as a reference component
+of the old screen; no stressed-energy or stressed-reservation claim is made.
+
+ENERGY: COMMON RESIDENT COST CANCELS, BUT MISSING FUNDING IS LARGE
+Use the same two resident configurations and horizon for both alternatives.
+Primary horizon H=970 seconds, including the last offered request's deadline.
+Each recorded energy window spans API duration plus one second. The subsequent
+three-second cooldown and other resident gaps were NOT measured by those windows.
+Add hypothetical mean board power p_h only outside charged windows on owner h.
+It includes cooldown; it is not independently measured idle power. The grid
+{0,1,5,10,25,50} W is an illustrative axis, not a calibrated plausible range.
+
+For arm a and owner h, let W_ah be observed window joules, L_ah measured-window
+coverage, and I_ah=H-L_ah omitted time. Then E_ah=W_ah+p_h I_ah.
+This neither subtracts a baseline from observed energy nor double-counts it.
+Output also separates cooldown seconds from non-slot resident seconds, enabling
+different rates later. This audit uses equal omitted-time mean rates across
+those two phases on each owner, which is an assumption requiring measurement.
+
+Primary omitted seconds:
+                         Owner 0             Owner 1
+ Separate               914.970219           509.022411
+ Pooled                 904.598285           590.551432
+
+For the primary case the energy difference, in joules, is
+ E_pool-E_separate = 97.295033 - 10.371934*p_0 + 81.529021*p_1.
+The common p_h*H term cancels. If both owners have the same omitted-time rate p,
+the difference is 97.295033 + 71.157087*p: pooling uses more energy for every
+nonnegative p in THIS conditional model. With unequal unknown rates the ranking
+can change. This is neither measured gross energy nor a clean GPU-only comparison.
+More completions at higher energy could still be valuable; no economic objective
+or valuation data has been supplied to decide that tradeoff.
+
+The original budgets explicitly funded REQUEST WINDOWS ONLY. Reusing the same
+numerical allowances as GROSS full-horizon budgets is a new hypothetical contract.
+Under that reinterpretation, the primary separate plan is funded only up to a
+uniform p=0.087930772 W and the pooled plan up to p=0.028382794 W. These small
+frontiers reflect unbudgeted omitted time; they do not invalidate the old contract
+and are not estimates of real GPU power. Across 81 cases the median respective
+frontiers are 0.0698 and 0.0672 W; negative frontiers retain original budget debt.
+
+These absolute funding numbers depend on the chosen H=970-second horizon.
+Extending the shared resident period adds p_h times the extra seconds to each
+owner's energy, while leaving the between-arm energy difference unchanged.
+
+For illustration only, at p_0=p_1=10 W the unchanged schedules require:
+                         Separate             Pooled
+ Conditional gross J     19,527.161            20,336.027
+ Additional funding J    14,100.195            14,909.061
+
+Separate funding is sum_h max(0,E_h-B_h); pooled funding is max(0,sum E-sum B).
+The original separate accounts cannot transfer their unused credits. These are
+ex-post funding needs for fixed outcomes, not sufficient guarantees that a new
+controller charging idle energy would make the same admissions or reservations.
+No started request is deleted when its schedule becomes hypothetically unfunded.
+
+EXACT TIMING CERTIFICATE
+On one server, let t_j be saved start, d_j the positive API duration and A_j arrival.
+The fixed plan executes S_j=max(t_j,C_{j-1}), C_j=S_j+4+r*d_j and responds at
+R_j=C_j-3.5. Induction unrolls the recurrence to
+ R_j(r)=max_{k<=j}[t_k+4(j-k)+0.5+r*sum_{l=k..j} d_l].
+For D_j(q)=A_j+q*(D_j-A_j), it follows that the job is on time iff
+ r <= min_{k<=j} [D_j(q)-t_k-4(j-k)-0.5] / sum_{l=k..j} d_l.
+Every denominator is positive. The minimum is attained; a minimizing first job
+and exact numerator/denominator are saved for every admitted job and deadline
+multiplier. This is an elementary recurrence identity, not a novelty claim.
+Negative/sub-unit limits preserve pre-existing lateness. Energy is NOT
+extrapolated when service changes; the timing and energy studies stay separate.
+
+WHAT TO MEASURE NEXT, AND WHAT TO STOP INFERRING
+1. Full-run board energy, resident gaps and cooldown on a compatible hardware
+   pair. The affine energy boundary shows why one source's fitted idle proxy
+   cannot settle the ranking for these other configurations.
+2. Actual queue/tail response under representative concurrent demand. Seven
+   previously passing comparisons have only 1.9–3.2% separate-plan slowdown
+   headroom, while the primary pooled plan has much more. Measure both arms;
+   a larger difference caused by baseline lateness is not two-sided SLA success.
+3. A budget/ownership contract grounded in a real scarce resource or expense.
+   The earlier nonbinding-budget ablation served all 92 jobs in both arms;
+   artificial account stranding remains a major mechanism in these replays.
+
+These results support keeping the AI-infrastructure application as a measurement
+candidate. They do not yet support advancing to private opportunity costs,
+scarce peak-power incentives, causal energy-saving claims or a serving paper
+presented as measured deployment validation. No expected-value-of-information
+number is identified without measurement costs, parameter priors and an objective.
+
+REPRODUCTION AND LIMITS
+Run python3 reproduce.py --output /tmp/new-fragility-check from this directory.
+The original source hash lock, 15 independently written tests (normal and -O),
+11,023 saved admissions, 44,092 exact threshold witnesses, 264,552 grid
+classifications and 2,916 energy grid cells are checked. Source floating endpoint
+reconstruction permits absolute 1e-8 seconds; threshold decisions use EXACT
+rational arithmetic with no rounding tolerance. These checks establish internal
+consistency of saved inputs and model, not validity of missing physical premises.
+See REVIEW.txt for the completed cross-model review and adjudication. Internal
+model review is not external specialist review or a novelty certification.
+
+FILES
+PROTOCOL.txt / PROTOCOL_FREEZE.json: post-result design and locked source hashes.
+analysis.py / test_fragility.py / reproduce.py: standard-library implementation.
+results/ENERGY.json: all accounts, exact affine coefficients and 36 power pairs.
+results/TIMING.json: 24 timing stress cells for each of 81 cases.
+results/FRONTIERS.json: all-job zero-lateness boundaries and binding witnesses.
+results/THRESHOLDS.jsonl.gz: 44,092 per-job rational certificates, gzip-compressed.
+results/SUMMARY.json / CHECKS.json: primary results, full grid counts and checks.
+DESIGN_AUDIT.txt / REVIEW.txt / VERIFICATION.json: audit and executed-check records.
+FILE_SHA256.json: package content manifest. Original measured-serving artifacts
+are referenced by their frozen hashes and were not modified.
