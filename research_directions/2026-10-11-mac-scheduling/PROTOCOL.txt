@@ -1,0 +1,87 @@
+Local Mac server-slot pilot — design frozen before the eight workload windows
+
+Scope: prospective engineering pilot informed by the earlier three-request smoke
+check. Same active desktop, not independent users, hardware, or production demand.
+No energy samples or owner-level pooling claims. No paid services or downloads.
+
+Model: locally cached llama3.2:3b, Q4_K_M, immutable manifest SHA-256
+a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72.
+MODEL_LOCK.json hashes all six cached blobs and the Ollama executable (0.20.0).
+Hardware inventoried as M3 Max, 30 GPU cores, 96 GB unified memory, macOS26.6.2.
+
+Intervention: dedicated temporary loopback Ollama server, actual maximum server
+parallel slots P=1 versus P=2. Fresh server and model runner for EVERY window.
+Both use context2048 per sequence, temperature0, seed0, num_predict64, the same
+pinned default prompt template,
+flash attention disabled, f16 KV cache, maximum one loaded model and queue64.
+The generated-token count is NOT fixed at64; preserve all actual counts/output
+hashes without filtering differing outputs. This compares full configurations,
+including their different KV memory/cache behavior, not pure parallel arithmetic.
+Prompt cache is not disabled globally; restarting the runner resets cross-window
+state. Unique workload prompts and unrelated warmups reduce repeated prefixes.
+
+Four paired repetitions in fixed counterbalanced order (not randomized):
+ pair1:1,2; pair2:2,1; pair3:1,2; pair4:2,1.
+Same16 generated nonprivate prompts (TRACE.json) and input order in every window;
+arrival offsets0,.5,...,7.5 seconds. No outcome-dependent choice or replacement.
+128 total offered requests,64 per arm; 16 repeated prompts, FOUR paired windows.
+Pairs, not requests, are the replication unit. No population confidence intervals
+or significance tests. No independent experimental holdout is claimed.
+
+Before each workload: concurrently submit both fixed nontrace warmups in both
+arms, require their successful terminal responses, then wait two seconds. This
+allows P=2 to warm both slots; P=1 queues the same warmups. Keep model resident.
+Observe actual runner parallel setting in logs (not just desired environment),
+same loaded model digest, GPU residency and2048 per-sequence context. Save cache
+memory observations. Check that the user's original server has no resident model
+before and after each window; do not stop or modify that original server.
+
+Client: one independent worker per offered job, dispatched against a common
+monotonic epoch (no response-triggered arrivals). Record intended arrival,
+actual dispatch, first nonempty received content, all streaming JSON chunks,
+terminal event, error and server usage. First content is not instrumented TTFT;
+client latency includes queueing, but precise server queue delay is not observed.
+No retries or retrospective admission changes. Scientific response deadline is
+FIVE seconds from intended arrival; classify late completions and failures in
+the offered denominator. It never cancels a request at five seconds.
+Socket inactivity timeout and between-line elapsed guard are60 seconds; this
+is not a hard real-time cutoff. Record actual elapsed time even if it overshoots.
+After complete client drain, wait two seconds; unload only the experiment's
+model and terminate only the dedicated experiment process group. Stop campaign
+on failed setup or incomplete window; preserve abort and all offered IDs.
+
+Primary descriptive endpoint: paired difference P2-P1 in fraction of the16
+offered requests receiving successful complete responses within5 seconds.
+Report each of the four paired differences and their mean. Secondary: completion
+and failure counts; per-window p50 and nearest-rank p95 arrival-to-completion and
+first-content latency among completed jobs; last terminal time from first offer;
+actual output tokens and paired output equality; dispatch lag; reported GPU/KV
+memory. Conditional-on-completion quantiles never replace offered-denominator
+SLO counts. No energy, welfare, pricing or output-quality benefit is inferred.
+
+Interpretation gate: an operationally promising local effect requires at least
+two extra on-time completions per16 offered on average, at least three of four
+paired differences nonnegative, and no transport/terminal-validation failures.
+This is an engineering follow-up threshold, not the original project's empirical
+promotion gate. Report outcomes even if this screen fails or effects reverse.
+
+Validity checks: immutable model/settings/trace; actual P; complete offered-ID
+accounting; increasing per-request clocks; dispatch lag<=0.1s; all warmups pass;
+no resident model on the original endpoint during boundary checks; AC source
+reported before/after; no reported thermal warning at snapshots. Preserve power
+source, battery status, aggregate load and thermal snapshots. Unobserved desktop
+activity, thermal trajectories and request-level service starts remain uncontrolled.
+If a validity condition fails, retain the window and label it invalid; do not
+silently rerun it. Abort on setup failure or missing required parallelism evidence.
+
+Verification: fake HTTP tests exercise the collector's open-loop schedule,
+streaming/terminal rules and retained failures; no fixture is empirical data.
+Independently recompute results from stored raw captures. Obtain opposite-model
+QA of delegated code and a focused study-claims review; adjudicate findings.
+New physical timings are not byte-reproducible; the stored-data analysis must be.
+
+Freeze scope: PROTOCOL_FREEZE.json binds the design, workload, model lock, collector,
+orchestrator and their existing tests before the first workload. Stored-data
+analysis code and its tests may finish during collection, using these predeclared
+endpoint definitions; the analysis developer is not supplied run outcomes before
+finishing. The final artifact manifest binds the reviewed analysis and raw data.

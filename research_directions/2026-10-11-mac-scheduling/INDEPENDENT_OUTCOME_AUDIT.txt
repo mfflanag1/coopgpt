@@ -1,0 +1,193 @@
+INDEPENDENT OUTCOME AUDIT — LOCAL MAC SCHEDULING PILOT
+Audit date: 11 October 2026
+Auditor: independent Codex sub-agent; no external model review in this audit.
+Artifact root: /tmp/coop-mac-scheduling
+
+Scope and independence
+I independently parsed TRACE.json, OFFERED_TRACE.json, all eight RUN.json,
+REQUESTS.json, WARMUP.json and SERVER.log files, both freezes, PROTOCOL.txt,
+AMENDMENT_01.txt, and retained preflight-abort metadata. I computed endpoints
+with Python standard-library expressions entered separately at the shell; I did
+not read, import, or run analyze.py. I subsequently compared the independently
+computed endpoints with METRICS.json and read REPORT.txt. No hardware/model/API
+calls, capture edits, extra workload, or external review occurred.
+
+Decision
+The captured data support a narrow descriptive statement: under this fixed
+64-token-capped workload, two server slots produced fewer deadline misses and
+shorter recorded response latencies than one slot. The predeclared engineering
+follow-up screen FAILS. The average extra on-time response count is 1.25 per 16,
+below the frozen threshold of 2, and the first window does not satisfy the strict
+immediate post-unload observation check. There is no basis here for energy,
+owner-pooling, production-quality, population, or causal claims.
+
+Independent full-cohort recount
+All eight windows contain exactly the 16 trace IDs r01 through r16 once each,
+with offsets 0, 0.5, ..., 7.5 seconds. There are 128 offered records, 64 per arm.
+All 128 have HTTP 200, no recorded error, nonempty received content, exactly one
+terminal done=true chunk at the end, and matching saved final and terminal
+chunk payloads/timestamps. None hit the recorded operational timeout condition.
+All 128 return valid terminal API responses; this is not task-quality success.
+
+Arrival-to-completion is terminal_offset_s minus the frozen arrival offset.
+The five-second test is inclusive. No dispatch-time substitution or filtering
+was used. First-content latency likewise subtracts intended arrival. Quantiles
+below use nearest rank, including p50, to match the explicitly labeled analysis.
+With n=16 the p95 is the maximum, not a reliable population tail estimate.
+
+Window  Pair P   On time  Late  Errors   p50(s)    p95(s)    Last terminal(s)
+1       1    1   14/16    2     0        2.997490  5.485228  12.985228
+2       1    2   16/16    0     0        2.051457  2.885552  10.324555
+3       2    2   16/16    0     0        2.150092  3.065194  10.489861
+4       2    1   15/16    1     0        2.736040  5.159866  12.659866
+5       3    1   16/16    0     0        2.710372  4.851373  12.351373
+6       3    2   16/16    0     0        2.075819  2.840128  10.287452
+7       4    2   16/16    0     0        2.281144  3.193828  10.644888
+8       4    1   14/16    2     0        3.031408  5.470104  12.970104
+
+P1: 59/64 on time, 5 late; P2: 64/64 on time, 0 late.
+Paired P2-P1 extra-response counts: +2, +1, 0, +2.
+Paired fraction differences: 0.125, 0.0625, 0, 0.125.
+Mean: 1.25 responses per 16 = 0.078125 = 7.8125 percentage points.
+Four pairs are nonnegative, but only three are strictly positive. Transport and
+terminal-failure count is zero. The >=2 extra-response threshold fails.
+
+The five late responses are window1/r15 (5.126258 s), window1/r16 (5.485228 s),
+window4/r16 (5.159866 s), window8/r15 (5.162965 s), window8/r16 (5.470104 s).
+They remain in every offered denominator. Their natural late completion is
+correctly retained rather than being censored at five seconds.
+
+Strict-validity analysis
+Window1 has a nonempty loaded_after_unload.models snapshot. Windows2-8 have
+empty post-unload snapshots. On the specified strict interpretation, window1
+fails and pair1 is not a wholly valid pair. Its 16 observations remain visible.
+The seven individually valid windows contain 112 offered requests, but they
+are not a balanced four-pair experiment: P1 contributes 48 and P2 contributes
+64. Comparing those unmatched totals is not the paired estimand.
+
+Use the three fully valid pairs 2, 3, and 4 for the strict paired sensitivity:
+P1 45/48 on time; P2 48/48 on time; extra counts +1, 0, +2; mean 1 per 16,
+or 6.25 percentage points. This also falls below the numerical threshold.
+These three pairs do not turn the original four-pair validity screen into a
+pass, and the omitted pair was not replaced. Both analyses must be labeled.
+
+Amendment and lifecycle evidence
+The retained preflight-abort directory contains only CAMPAIGN.json and the
+aborted second RUN.json, with EADDRINUSE. It contains no server log, warmup, or
+request file for that aborted attempt. The stored record shows no server PID
+or workload dispatch for it. It adds zero offered requests, not sixteen failed
+requests. The completed first RUN equals the first run embedded in the original
+aborted campaign. Observed later order is exactly P2,P2,P1,P1,P2,P2,P1.
+
+Both freeze manifests still match every listed file byte-for-byte. The original
+freeze is dated 19:33:05 UTC; the amendment freeze is dated 19:36:07 UTC, before
+the continued second window. This verifies stored freeze consistency, not a
+cryptographic guarantee that nobody viewed outcomes. The statement that the
+repair was selected before inspecting performance remains procedural provenance.
+
+The first server log itself records runner 38944 being stopped and then
+"runner terminated and removed from list" at 19:33:43.010 UTC, after the immediate
+nonempty snapshot. RUN records dedicated-server return code 0. This supports
+asynchronous cleanup as the narrow explanation and avoids implying that the
+model was demonstrably left serving during the second window. The strict
+historical snapshot still fails and should not be relabeled empty. Later ps,
+lsof, and connection-refusal observations are described by AMENDMENT_01; I did
+not execute those checks or independently recover their original command output.
+
+From window1's after snapshot to window2's before snapshot the interruption is
+144.645879 seconds. From the first workload start to the second workload start
+it is about 164 seconds. Either anchor must be stated if quoting an exact gap.
+This is an additional temporal discontinuity within pair1, not proof that the
+observed response improvement was caused by server parallelism.
+
+Configuration and timing checks
+All raw logs show actual llama_context n_seq_max equal to the assigned P,
+n_ctx_seq=2048, and 29/29 layers offloaded to the Apple M3 Max GPU. The engine
+commit-load records and runner-parallel records corroborate these settings.
+P1 total context is 2048; P2 total context is 4096. The API's per-sequence
+context remains 2048 in both arms. The literal runner model-blob hash is the
+same dde5aa...ccdff in every window and belongs to MODEL_LOCK.json. All tag and
+before/after loaded-model snapshots match manifest a80c4f17...b5b8b72, model
+llama3.2:3b, and Q4_K_M; all version observations are Ollama 0.20.0.
+
+The stored option objects are identical: num_ctx=2048, num_predict=64, seed=0,
+temperature=0. Server-setting dictionaries differ only in OLLAMA_NUM_PARALLEL.
+No discrepancy was found in the retained model/engine/config records. Actual
+HTTP request bodies are not separately persisted in REQUESTS.json: full prompt
+and option transmission is supported by the frozen collector/trace design and
+server evidence rather than an independent wire capture. This audit does not
+re-hash the live model cache or binary or attest to live machine inventory.
+The raw server logs independently identify M3 Max; the 30-core/96-GB inventory
+is prior project provenance rather than a fresh hardware measurement here.
+
+All eight windows have two successful nontrace warmups, both offered at zero.
+Warmup dispatch offsets are below 0.6 ms. Every workload begins at least 2 s
+after the recorded warmup client finishes (2.005963-2.011831 s from UTC records).
+Each after snapshot is at least 2 s after workload drain (2.022470-2.033133 s).
+The first warmup window takes 20.222 s; all later warmups take 2.086-2.460 s.
+That is evidence of an unbalanced initial cache/startup history, despite fixed
+warmup request counts and fresh runners. Workload timing correctly excludes
+warmup, but fresh runners do not reset OS, Metal, filesystem, or thermal state.
+
+All request clocks inspected are finite and ordered; nonempty first-content
+and terminal timestamps agree with corresponding stored chunk offsets.
+The largest dispatch lag is 10.318250 ms, below the frozen 100-ms condition.
+No request dispatch precedes its own offered offset. The trace copied into
+capture is structurally identical to TRACE.json. All retained original-endpoint
+idle-before/after booleans are true. Boundary observations are not continuous
+proof of host exclusivity.
+
+All before/after snapshots report AC power and no recorded thermal or performance
+warning. The first begins AC-attached/not-charging and ends charging; subsequent
+snapshots report charging. One-minute load averages range from 8.887695 to
+16.032715 and vary during collection. These observations neither measure energy
+nor eliminate desktop/Codex background work, transient throttling, or charging
+power changes. No energy telemetry exists in this pilot.
+
+Memory and outputs
+P1 reported resident allocation is 2,515,380,224 bytes and KV cache 224 MiB;
+P2 allocation is 2,750,261,248 bytes and KV cache 448 MiB. The difference is
+234,881,024 bytes, exactly 224 MiB, in these API totals. Those are reported
+allocations, not independently metered memory use or energy.
+
+All 128 responses report exactly 64 generated tokens and done_reason=length.
+Each window reports 1,024 output tokens and 935 prompt-evaluation tokens; the
+per-ID prompt counts agree across windows. The reconstructed response strings
+match for all 16 IDs across all eight windows: all 64 within-pair output
+comparisons match without any output-equality selection. This helps separate
+observed timing differences from different generated output lengths/content.
+It does not demonstrate correctness, utility, or general decoding determinism.
+
+CONSEQUENTIAL INTERPRETATION CHECK (now addressed in REPORT.txt): The trace requests explanatory paragraphs of
+at least 100 words. Every output is truncated by the 64-token cap and contains
+only 54-60 whitespace-delimited words. Consequently, do not describe the 128
+responses as successfully fulfilling their tasks or as useful work completed.
+Use "128 valid terminal API responses, all stopped at the generation cap."
+The predeclared endpoint permits capped terminal completion, so this fact does
+not invalidate that timing calculation. A production or economic objective
+needs an independent quality/completeness requirement; do not retrofit one and
+relabel this pilot as meeting it.
+
+Comparison with root-generated analysis
+After my independent recount, I compared METRICS.json against raw calculations.
+There are zero discrepancies in per-window offered/complete/on-time/late/error
+counts, nearest-rank completion and first-content quantiles, prompt/output token
+totals, maximum dispatch lag, last-terminal time, pair differences, or validity
+classification. REPORT.txt states the failed screen and distinguishes strict
+validity. The parent revised its initial broad success wording to make capped
+API completion explicit and disclose the unfulfilled 100-word request before
+finishing this audit. This is a resolved wording issue, not a new readiness
+block or a reason to discard measurements. Conventional statistical medians would
+average the eighth and ninth observations; the report uses and labels nearest
+rank instead. This is a definition difference, not a discovered arithmetic bug.
+
+Claim boundary
+Keep four paired windows as the unit of the full descriptive comparison and
+three as the strictly valid paired sensitivity. Do not treat 128 repeated jobs
+as independent experiments; do not infer the latency effect causally from the
+fixed order on a shared host. Do not convert the five avoided deadline misses
+into welfare, energy savings, owner pooling, or output-quality benefit. The
+failed engineering threshold is informative and must not be retuned. A later
+load/length/concurrency study would require a new prospective design, sustained
+windows, and an appropriate quality objective. Energy and separate-resource
+pooling require the still-missing corresponding hardware measurements.

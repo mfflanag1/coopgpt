@@ -1,0 +1,32 @@
+Primary sources inspected for this pilot, 2026-10-11
+
+https://raw.githubusercontent.com/ollama/ollama/v0.20.0/envconfig/config.go
+Pinned version configuration: OLLAMA_NUM_PARALLEL, queue/loaded-model limits,
+context, cache and offline settings. Actual runtime evidence is preserved per run;
+setting an environment variable alone is not treatment verification.
+
+https://raw.githubusercontent.com/ollama/ollama/v0.20.0/llm/server.go
+Load requests use KvSize = context per sequence * parallel slots and carry Parallel.
+ContextLength reports the per-sequence option. This supports interpreting P2 as a
+configuration/memory intervention rather than extra capacity at identical memory.
+
+https://raw.githubusercontent.com/ollama/ollama/v0.20.0/runner/llamarunner/runner.go
+Runner reads load-request Parallel, creates that many sequence slots, and logs
+load requests. This grounds the runtime Parallel/n_seq_max log checks.
+
+https://docs.ollama.com/api/generate
+Streaming responses and terminal usage counts/durations. Client-observed first
+nonempty content is kept distinct from token-instrumented TTFT and server timing.
+
+https://docs.ollama.com/faq
+Concurrent request processing and memory requirements. Mutable documentation is
+secondary to the pinned source and observed runner metadata in this artifact.
+
+https://docs.ollama.com/gpu
+Apple Metal support. This pilot also requires observed nonzero GPU residency and
+keeps runner offload logs; platform documentation is not a benchmark result.
+
+Installed /usr/bin/powermetrics help, previously captured in the adjacent
+2026-10-11-mac-feasibility artifact: component power is estimated, with qualifications
+against cross-device comparison. No power sampling ran in this pilot. AC/battery
+status snapshots are operating context, not joules or energy calibration.

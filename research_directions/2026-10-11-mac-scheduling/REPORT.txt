@@ -1,0 +1,116 @@
+Local Mac scheduling pilot — 11 October 2026
+
+Result and decision
+Two actual Ollama serving slots gave better descriptive latency than one slot on
+this fixed local workload: 64/64 versus 59/64 requests completed within five seconds
+of intended arrival. All 128 capped API requests completed successfully. All 64 paired output
+comparisons were byte-identical, and every request generated 64 reported tokens.
+Every terminal reason is length: success means completion of the configured capped
+API response, not answer-quality success. The answers contain 54–60 whitespace
+words, so they do not fulfill the prompts' request for at least 100 words.
+
+The predeclared engineering screen FAILS. The four paired on-time count gains
+(P2 minusP1) are +2,+1,0,+2, averaging 1.25 extra requests per 16, below the threshold
+of 2. This is +7.8125 percentage points over all four pairs. Window 1 also fails the
+strict post-unload observation screen; its original record is retained. The three
+fully valid pairs have gains +1,0,+2, averaging 1, also below the original threshold.
+This is useful local evidence and a working measurement harness, not an empirical
+promotion, a pooling theorem, or evidence of energy savings.
+
+Observed comparison
+Window Pair Slots On-time/16 Completed/16 Completion p50(s) p95(s) Last terminal(s)
+1      1    1     14         16           2.997             5.485  12.985
+2      1    2     16         16           2.051             2.886  10.325
+3      2    2     16         16           2.150             3.065  10.490
+4      2    1     15         16           2.736             5.160  12.660
+5      3    1     16         16           2.710             4.851  12.351
+6      3    2     16         16           2.076             2.840  10.287
+7      4    2     16         16           2.281             3.194  10.645
+8      4    1     14         16           3.031             5.470  12.970
+
+Quantiles use nearest rank within 16 successful requests; here p95 is each window's
+maximum. Averaging those four window-specific p95 values gives 5.242s for P1 and
+2.996s for P2. This is not a pooled population p95 estimate. Mean window drain time
+from first offered arrival is 12.742s versus 10.437s. The latest scheduled arrival
+is 7.5s. Maximum observed dispatch lag across all windows is 10.32 milliseconds.
+No retry, admitted-request filtering, output matching filter or deadline tuning
+was performed. Full received chunks, final usage and failure fields are retained.
+
+Machine and intervention
+The inspected machine identifies as Apple M3 Max, 30 GPU cores, 96 GB unified memory
+(the user had described it as M3 Pro). Ollama 0.20.0 and cached llama3.2:3b/Q4_K_M
+were already installed. The manifest, all six cached blobs and the Ollama binary
+were hashed. No model download, paid service, remote host or GPU rental was used.
+
+The 16 artificial prompts arrive every 0.5s; the same ordered trace is used in every
+window. Model options are temperature 0, seed 0, num_predict 64, num_ctx 2048. Each window
+starts a dedicated fresh server/runner, submits two simultaneous nontrace warmups,
+then waits 2s. Actual runner Parallel and n_seq_max evidence confirms P1 or P2; client
+thread concurrency alone is not the treatment. All windows report the same digest
+and 2048 context per sequence. Reported GPU-resident size is 2,515,380,224 bytes for P1
+and 2,750,261,248 bytes for P2. KV cache is 224 MiB versus 448 MiB. This compares complete
+serving configurations, including changed memory allocation, not free extra slots.
+
+The four window pairs follow fixed AB/BA/AB/BA order, not random assignment. The
+unit of replication is the paired window, not 128 independent samples. All battery
+snapshots report AC source; the first moves from AC-attached/not-charging to
+charging, later windows remain charging. No thermal/performance warning is reported
+at snapshots. The original user's Ollama endpoint is idle at all boundary checks.
+These observations do not measure continuous thermal state or eliminate desktop
+background activity. First content is a received chunk observation, not measured
+token-level TTFT. The request deadline labels outcomes; it does not cancel at 5s.
+
+Recorded interruption and strict validity
+The original collector completed window 1, then aborted before window 2 server
+launch because a plain bind probe treated a recently closed socket as unavailable.
+The dedicated port refused connections, lsof found no listener, and neither exact
+recorded experiment server nor runner PID remained. Before performance outcomes
+were read, AMENDMENT_01 recorded a SO_REUSEADDR probe repair and a continuation of
+only the seven unrun windows. No workload was replaced or repeated. The original
+aborted campaign and empty second setup are preserved under capture/preflight_abort.
+About 164 seconds separated the first two workload starts, an unplanned within-pair interruption.
+
+Ollama's unload response is asynchronous: the first immediate /api/ps snapshot
+still showed the model even though the process group subsequently exited. The
+continuation waits for /api/ps to become empty before terminating its own process
+group. Window 1's historical snapshot is not overwritten or retroactively certified
+empty; it remains invalid under the strict analysis check. Windows 2–8 pass. The
+raw four-pair comparison is descriptive; the fully valid pair results are shown
+separately above. The numerical improvement threshold fails either way.
+
+What this establishes and what remains open
+This Mac can produce genuinely observed, request-level, queue-inclusive serving
+measurements. Concurrent serving improves the observed completion-time distribution
+on this short capped workload, but this pilot does not establish generalization,
+optimal concurrency, production output quality or a new research contribution.
+The fixed model/template and identical outputs make the comparison interpretable;
+the small artificial trace, active host, charging variation, fixed order and setup
+interruption limit it. Fresh runners do not reset OS/Metal/filesystem/thermal caches. The first
+warmup took 20.22s versus 2.09–2.46s subsequently; workload timing begins after
+warmup, but startup/cache histories are not identical.
+
+Energy remains entirely unmeasured. No Apple power estimate, NVIDIA coefficient,
+nameplate power or inferred joule value fills the gap. There are no separate owners
+or two independently measured hardware resources. The earlier consortium project's
+paired serving-and-energy and live pooled-dispatch gates remain open.
+
+Recommended next experiment
+Freeze a small matrix of offered loads and mixed input/output lengths, retain every
+request, and measure where P1/P2/P4 saturate under response deadlines. Use the repaired
+lifecycle checks from the outset and sufficiently long repeated windows. Add
+explicitly authenticated same-device power telemetry or a wall meter before making
+energy claims. Select a new workload and acceptance rule prospectively; do not tune
+this pilot's deadline or relabel the failed screen. Only after that local calibration
+should the project test genuinely separate hardware/owners and pooled admission.
+
+Verification and reviews
+All 27 collector, orchestration and offline-analysis tests pass normally and with
+Python optimization. An independent Codex agent parsed all raw captures without
+importing the analyzer and found no numerical discrepancies. A separate Fable 5.1
+static review found no material defect in the supplied code, metrics and claims;
+its limited packet did not contain raw captures. Low-severity reproducibility
+observations are addressed by verify.py, which checks amendment hashes, preserved
+abort/no replacement offers, all terminal reasons and the observed word-count range.
+The review/adjudication records distinguish executed checks from model opinions.
+Artifact verification passing does not convert the failed scientific/engineering
+screen into a pass. See REPRODUCE.txt for commands and FILE_SHA256.json for integrity.

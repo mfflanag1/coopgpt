@@ -1,0 +1,44 @@
+Implement ONLY client.py. Other work proceeds in parallel; do not modify tests
+or contract. Python standard library, no installations, tools or delegation.
+
+run_trace(base_url, trace, model, options, timeout_s=60) returns dict containing
+started_utc (ISO8601 timezone-aware), elapsed_seconds, requests (input trace order).
+Trace: list of dict request_id, prompt, arrival_offset_s. Require unique nonempty
+IDs, string prompts, finite nonnegative arrival offsets; invalid input raises
+ValueError before dispatch. Accept only HTTP literal loopback hosts 127.0.0.1 or
+localhost or [::1], no userinfo/path/query/fragment (optional slash permitted).
+Use standard HTTP port80 if omitted; actualpilot always passes an explicitport.
+Require a nonempty string model. Keep exactly the specified public signature,
+and require trace to be a list. Preserve thread creation/start failures as rows
+with dispatch_offset_s=None; still dispatch remaining jobs and join only started
+workers. Never lose the result dictionary because an individual worker cannot start.
+
+One worker per offered job starts from a common monotonic epoch, sleeps until its
+scheduled offset and dispatches independently of earlier responses (open loop).
+POST /api/generate: model, prompt, options (passed unchanged), stream=true,
+keep_alive='120s'. No retry, filtering, token-length peeking or admission changes.
+Server parallelism is controlled externally, NEVER by this client worker count.
+
+Every offered job produces one result even on HTTP, stream, server, usage or
+timeout error. Fields: request_id, arrival_offset_s, dispatch_offset_s,
+first_content_offset_s (None if none), terminal_offset_s, completed (bool), error
+(None on success else string), chunks (list of offset_s,data items), final (dict
+or None). Relative offsets are against same epoch. Preserve received JSON stream
+objects. First content is first nonempty string response; thinking alone is not
+response content. It is NOT an instrumented first-token event.
+
+Success requires done=true, nonempty content, correct model string, and integer
+(not bool) nonnegative prompt_eval_count, eval_count, total_duration,
+load_duration, prompt_eval_duration, eval_duration, with eval_count>0. Preserve
+done_reason without filtering length termination. Nonterminal end of stream is
+failure. A server error object is failure. Malformed JSON is failure. Never
+erase already received chunks when an error follows.
+
+Timeout is per-socket inactivity plus an elapsed-budget check between received
+lines, NOT a hard real-time deadline. Record actual terminal time, keep deadline
+classification for later analysis. Bound line length (e.g.1MiB) against runaway
+responses. Never expose task credentials or inspect environment secrets. Empty
+trace may return empty result. All request outcomes survive in input order.
+
+Meaningful checks: test_client.py supplied; execute via python3 -B -m unittest
+test_client. It uses a local fake HTTP server, not a GPU and not empirical data.

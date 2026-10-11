@@ -1,0 +1,156 @@
+Independent pre-outcome design audit: local Mac/Ollama concurrency pilot
+2026-10-11. Read-only design review; no network access, model execution, repository
+edit, hardware measurement or inspection of new pilot outcomes performed.
+
+VERDICT
+Proceed as a bounded local engineering experiment comparing configured serving
+concurrency on this Mac. The fixed trace, four paired repetitions, AB/BA/AB/BA order,
+fresh server per window, recorded outcomes and no energy claim are appropriate.
+This is not two independent owners or two GPU hardware configurations; it does not
+close the earlier energy/calibration/pooling gate. No population generalization,
+carbon/energy saving, private-cost result or new theorem follows from this pilot.
+
+1. Freeze the exact offered workload and what completion means
+Save an immutable ordered manifest of 16 request IDs, prompts and offsets
+0,0.5,...,7.5 seconds, plus the complete generation payload. Hash it before runs.
+Every arm/window offers every ID exactly once; include window/run ID in the key.
+The original arrival schedule remains the denominator even if dispatch is delayed,
+transport fails, a worker never starts or the window is aborted. No SDK retries,
+or else preserve linked attempt IDs and count their full time/traffic.
+
+num_predict=64 is a generation CAP, not proof of exactly 64 output tokens. Even a
+fixed seed and temperature zero do not justify assuming bit-identical responses
+across concurrency/engine paths. Keep server-reported eval_count/prompt_eval_count,
+finish reason, output SHA-256, payload hash and matching request IDs. Do not select
+only matching outputs after outcomes. Report differing output counts/hashes so an
+apparent latency difference is not silently interpreted as identical realized work.
+
+Use a frozen useful-completion definition: successful HTTP, parsed terminal
+Ollama done=true event, no error, and valid response/usage fields. Report empty
+outputs separately; transport completion and useful nonempty completion need not
+be identical. Do not mark EOF after partial text or timeout as successful. A capped
+length stop is a normal completed capped request, if that definition is frozen.
+The response deadline is scheduled arrival +5 seconds, not dispatch +5 seconds.
+Equality counts on time. Report late successful jobs separately from failed jobs.
+
+2. Timing must be what the client actually observes
+Use one monotonic clock for scheduled arrival, dispatch attempt, first nonempty
+response content, last content, terminal event and window start/end. Ignore empty
+metadata chunks for first content. Report dispatch lag, end-to-end completion
+latency and client first-content latency. Stream chunks can contain multiple
+tokens; do not relabel chunk gaps as measured inter-token latencies. Server ns
+fields can be retained as diagnostics but are not necessarily client queue time
+or independently observed GPU execution timestamps.
+
+A socket read timeout is not a hard elapsed request deadline: activity can keep
+resetting it. The implemented policy may legitimately combine socket inactivity
+timeouts, an elapsed guard between streamed lines, and bounded process supervision.
+Describe those mechanisms accurately; do not advertise an exact 60-second hard
+cancellation guarantee they cannot implement. The scientific five-second response
+SLO only labels outcomes and must not cancel them. Preserve naturally completed
+late jobs. All observed requests finishing promptly with exact recorded timestamps
+can provide valid timing evidence without a hard-real-time cancellation mechanism.
+
+A shrinking per-read remaining budget is a robustness improvement, particularly
+against pathological streams, rather than a necessary condition for interpreting
+complete observed runs of this trusted local capped model. Keep an operational
+supervision bound and record any abort, partial stream, termination delay or cleanup
+failure. A client cancellation does not establish server quiescence; reap the
+owned server/runner before the next window. Never stop unrelated processes.
+
+The client should be able to have all 16 requests in flight. Thread creation or
+sleep scheduling must not inadvertently serialize submissions. Use absolute
+offset scheduling rather than repeated relative sleeps. Proposed prospective
+quality screen: no send earlier than its planned arrival by >5 ms; any dispatch
+lag >100 ms flags a timing-compromised window. These are engineering choices, not
+measurement-error guarantees. They must be accepted/frozen before outcomes and
+reported; do not silently replace a compromised window with a favorable rerun.
+
+3. Warmup and prefix effects are the main design risk
+Submit the two distinct, nontrace warmup requests concurrently in BOTH arms. With
+parallel=1 they queue; with parallel=2 they can populate both slots. Sequential
+warmups may leave the second parallel slot cold. Await both terminal completions
+and quiescence, then hold a fixed two-second idle interval. Keep the model resident
+explicitly with the same keep_alive policy. Log any later model loading/unloading.
+A cache/residency inspection or server log is preferable to assuming that a warmup
+request necessarily exercised every allocated slot.
+
+Use warmup prompts with no long shared prefix with the measured trace. Repeated
+trace prompts and common formatting/system prefixes can still induce prompt-cache
+reuse. Record the exact prompt format and cache policy if controllable. Fresh
+servers reset per-server context but do not reset filesystem, compiled Metal,
+OS page or thermal caches. Counterbalanced order reduces a simple order bias; it
+does not prove the absence of carryover. Avoid a deterministic warmup based on the
+first test prompt, which would selectively prime measured demand.
+
+4. Verify the treatment rather than its environment-variable request
+Record the actual Ollama binary path/hash and version 0.20.0; the cached model tag,
+quantization, and full digest
+ a80c4f17acd55265feec403c7aef86be0c25983ab279d83f3bcd3abbcb5b8b72.
+Verify the full digest in the dedicated endpoint inventory before every window.
+Do not rely on the tag alone or silently pull/replace a model. Preserve the complete
+environment and launch argv after removing secrets. Record actual context per
+sequence, total context, loaded model and GPU/CPU offload information where logs
+expose them. The configured parallel=2 treatment can increase KV memory; describe
+it as a complete serving configuration change, not cost-free extra capacity.
+
+Require logs from THAT server/runner confirming the requested --parallel or
+n_seq_max of 1/2. Associate log, endpoint port, server PID and runner PID. Contradictory
+or absent confirmation means parallel configuration unverified; API requests merely
+overlapping in time cannot prove simultaneous GPU execution. If a runner silently
+reduces parallel slots, retain the evidence but do not call that a valid A/B contrast.
+
+Use only the unused loopback endpoint owned by this experiment. Restrict allowed
+model names/count to the selected model on that server. Ensure no separate model
+runner from a previous window remains, and never stop an unrelated user's server.
+Record existing Ollama processes and unrelated compute load, AC-power state,
+memory pressure and available thermal diagnostics before/after each window.
+Unavailable thermal/power information remains unavailable, not a stability claim.
+The same Mac has uncontrolled background activity, including the active Codex
+application. This is a descriptive paired pilot, not an isolated causal or
+population experiment. Retain charging/discharging and AC-state telemetry when
+available; those status observations are not measured GPU or whole-device energy.
+
+5. Invalidation and retention rules
+Hard treatment/data-quality failures: wrong model digest or binary version; unknown
+parallel setting; conflicting runner log; shared/incorrect endpoint; missing or
+duplicate request IDs; changed trace/payload/options; nonmonotonic timestamps;
+terminal state without evidence; missing results after a supervised abort; mixed time units; an old
+runner overlapping the next window; or unreconciled process cleanup.
+
+Report AC interruption, significant background model/compute activity, memory
+pressure, thermal throttling when observable, client dispatch violations and
+failed warmup as compromised context. Do not discard these observations after
+seeing which arm won. Choose in advance whether such events stop the campaign or
+complete the fixed eight windows with an invalid/compromised label. Replacements,
+if ever authorized, need a recorded rule and remain additional runs.
+
+A slow run, a missed 5-second deadline, an HTTP error or a long output is NOT itself
+an excuse to invalidate or delete the result. They are the relevant outcomes.
+All deadlines/errors stay in the offered-demand denominator. If one window of a
+pair is compromised, present both outcomes but exclude that pair from a clean
+paired-effect summary under the declared quality rule. Do not re-pair windows
+based on outcomes. Preserve the original eight-window order and all logs.
+
+6. Analysis that the design supports
+There are 128 offered requests total: 64 per arm, in four paired repetitions of
+16 repeated prompts. The independent unit is at best the paired WINDOW, not 128
+independent natural requests. Show all four signed paired on-time-count differences,
+all eight outcome tables, per-window latency summaries and dispatch lag. Aggregate
+on-time/64 is descriptive. Do not treat queue-coupled requests within a window as
+independent samples for tiny standard errors or a population p-value.
+
+The fixed 5-second SLO is an engineering choice. Its failure/success can be useful,
+but a two-configuration comparison does not identify optimal concurrency or how
+sensitive that conclusion is to other arrival rates, contexts, models or machines.
+Do not tune the arrival spacing/deadline after outcomes. If all requests pass or
+all fail, preserve that result; any new regime is a separately frozen follow-up.
+Report generated token counts and workload completion/drain time alongside request
+counts. Distinguish throughput over the offered window from completed requests
+divided by the full window-plus-drain duration; specify each denominator.
+
+Energy is unmeasured. AC connection, nominal model size, token counts, activity
+monitor percentages and lower latency are not joules. Do not import the earlier
+NVIDIA/MELODI energy coefficients or Mac nameplate power to fill that gap. This
+experiment can establish a reproducible local scheduling observation and validate
+the measurement harness, while the energy/ownership consortium question stays open.

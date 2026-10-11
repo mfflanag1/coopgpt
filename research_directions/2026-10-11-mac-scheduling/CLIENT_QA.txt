@@ -1,0 +1,14 @@
+Verdict: **accept**
+
+No acceptance-blocking findings.
+
+- Worker construction and `start()` failures are caught per job, converted into retained failure rows, and do not prevent later jobs from starting.
+- Only threads whose `start()` returned successfully are joined.
+- Results remain in input order, with one row per offered request.
+- Public signature exactly matches the contract; trace requires a list.
+- Omitted HTTP ports resolve to port 80.
+- Existing streaming, timing, chunk-retention, usage-validation, and open-loop dispatch logic remains unchanged.
+- URL validation limits networking to loopback HTTP endpoints, and imports are standard-library only.
+- The supplied check reports all nine tests passing, including injected thread-start failure.
+
+Residual, non-blocking coverage gap: the tests inject `Thread.start()` failure but not `Thread(...)` construction failure. The same guarded block covers both, and inspection shows the constructor-failure path retains the job correctly.

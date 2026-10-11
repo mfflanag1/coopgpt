@@ -1,0 +1,23 @@
+**Provisional verdict: no material findings in reviewed scope.** The fixed 16-offset trace × 8 windows gives the 128-offered denominator; analyze.py enumerates `EXPECTED` planned IDs (not captured rows), so missing/duplicate/invalid captures stay as failures. Reported counts (59/64 vs 64/64; +2,+1,0,+2; mean 1.25; 7.8125 pp; p95 = window max for n=16; P1/P2 p95 means 5.242/2.996; drain 12.742/10.437; max lag 10.32 ms) are arithmetically consistent with METRICS.json. Gate fails on `mean_at_least_two_extra_on_time` independently of the window‑1 validity failure. Most important observation below is low severity.
+
+## Findings
+
+**1. Low — Analyzer does not independently verify the amendment layer.**
+`analyze.py:25-26` `REQUIRED_FREEZE` covers PROTOCOL/TRACE/MODEL_LOCK/pilot.py/client.py only; `continue_pilot.py` and `AMENDMENT_01*.json` are checked solely by `continue_pilot.py:149-152` (self-check at run time). `analyze()` also does not look for `preflight_abort/` or the `amendment`/`prior_abort` campaign keys (`analyze.py:401-403` checks only status/order/offered). So REPORT's "aborted campaign and empty second setup are preserved" (REPORT:69-70) is asserted by the orchestrator, not reproduced by the stored-data analysis. Verification: confirm `capture/preflight_abort/CAMPAIGN.json` (status aborted, one window) and `preflight_abort/window-02-p2/RUN.json` with no WARMUP/REQUESTS exist; hash `continue_pilot.py` against AMENDMENT_01_FREEZE.json.
+
+**2. Low — Two REPORT claims are not produced by the analyzer.**
+"Every terminal reason is length" and "54–60 whitespace words" (REPORT:8-10) have no counterpart in `inspect_request` (no `done_reason` capture, no word count) or METRICS. They rest on manual inspection. Not outcome-changing (success is already defined as capped terminal response), but should be flagged as not part of the deterministic analysis. Verification: grep `done_reason` across all 128 `final` objects in REQUESTS.json.
+
+**3. Low — P1 on-time counts sit at the deadline edge.**
+P1 window maxima are 5.485, 5.160, 4.851, 5.470 s (METRICS:67,153,181,265) vs the 5.0 s rule; window 5 (P1) scored 16/16 while windows 1/8 scored 14/16 with ~0.5 s differences. The paired differences are therefore sensitive to sub-second drift (thermal, background load). This is consistent with the report's descriptive framing and the counterbalanced order, but any reader should treat +2/+1/0/+2 as threshold-crossing counts, not stable effect sizes. No action beyond the existing caveat.
+
+**4. Informational — `deadline_exceeded` field is misnamed.**
+`client.py:163-166` sets it from `budget_s` (60 s, from dispatch), not the 5 s scientific deadline from intended arrival. The analyzer correctly ignores it and recomputes `on_time` from `terminal - arrival <= 5` (`analyze.py:208`), so no effect on results.
+
+## Scope limitations
+- No access to raw REQUESTS.json/RUN.json/SERVER.log, PROTOCOL_FREEZE.json, AMENDMENT_01_FREEZE.json, TRACE.json, MODEL_LOCK.json, or `preflight_abort/`.
+- Cannot confirm tests were run or that the independent recomputation occurred; I only checked internal consistency of METRICS/REPORT and code logic.
+- Did not evaluate CLIENT_CONTRACT.txt (not supplied).
+
+## Verdict
+**No material findings in reviewed scope.** The amendment preserves the first window and the failed setup (`continue_pilot.py:154-164`), continues only `ORDER[1:]`, and window 1 remains invalid via the strict unload check while the numeric threshold fails regardless. Claims are appropriately limited to descriptive capped-API completion counts on one device.

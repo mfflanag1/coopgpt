@@ -1,0 +1,31 @@
+Stored-data reproduction (no GPU, model download or energy meter required)
+
+From this directory:
+  python3 -B -m unittest discover -s . -p 'test_*.py'
+  python3 -B -O -m unittest discover -s . -p 'test_*.py'
+  python3 -B analyze.py capture --output /tmp/coop-mac-summary.json
+  cmp capture/SUMMARY.json /tmp/coop-mac-summary.json
+  python3 -B verify.py
+
+The fake HTTP tests need permission to bind a loopback test socket. Synthetic
+fixtures are never used in the empirical tables. Analysis is stdlib-only and
+reads saved files; it does not import the collector or call a serving endpoint.
+
+Collection provenance
+- PROTOCOL_FREEZE.json binds the original design and collector before the first
+  workload. pilot.py is the exact original implementation, including the later
+  discovered stale-socket probe and asynchronous-unload observation limitations.
+- AMENDMENT_01.txt and AMENDMENT_01_FREEZE.json bind the narrowly repaired
+  continue_pilot.py before the seven remaining workload windows.
+- capture/preflight_abort retains the original aborted campaign and window2
+  setup failure. It contains no second-window warmup or workload requests.
+- The first workload was not repeated. All128 prescribed jobs in the eight
+  actual workload windows remain in the planned denominator.
+- Model blobs remain in the local Ollama cache, not the repository. MODEL_LOCK
+  records their verified SHA-256 and the binary hash. Timing cannot be reproduced
+  byte-for-byte by another physical run. File manifests reproduce the stored-data
+  calculation, not the machine's future performance.
+
+These archived collection entry points document this run. A new physical study
+must have a new output directory and a separately frozen protocol; do not overwrite
+this capture or treat the continuation entry point as a fresh-run command.
