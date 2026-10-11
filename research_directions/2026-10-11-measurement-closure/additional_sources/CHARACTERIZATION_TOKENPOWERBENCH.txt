@@ -1,0 +1,98 @@
+SOURCE AUDIT: CHARACTERIZATION OF REQUEST/TOKEN ENERGY + TOKENPOWERBENCH
+Date: 11 October 2026. Bounded public-source inspection; no GPU execution,
+installation, login, outreach, purchase, or repository edits.
+
+DECISION
+No compatible released pair meets the request-level measurement gate. Do not build
+an adapter that turns aggregate profiler cells into arrival/first-content/finish
+records. The sources support methodology and profiling comparisons, not an honest
+measured request-queue/SLA replay with complete offered-request accounting.
+
+1. CHARACTERIZATION PAPER, arXiv:2608.28044v1
+Primary: https://arxiv.org/abs/2608.28044
+Full original: https://arxiv.org/html/2608.28044v1
+Authors: Prabhu Vellaisamy, Vanessa Lam, Shawn Blanton, John Paul Shen.
+
+This is fixed-shape synchronous profiling on single H100 SXM80GB and H200 NVL141GB
+platforms. Same-model BF16 comparisons include Llama and MoE models, with PyTorch
+2.9.0+cu128 and Transformers4.57.3; eager and FlashAttention sweeps must remain
+separate. Prompts are synthetic random token tensors; EOS is disabled. Ten warmups
+precede ten profiled runs. Latency is averaged over profiled runs, energy over the
+last five. N=1 is a prefill/first-token-oriented complete generation window, not an
+online first-content arrival log. Resident-floor and isolated-kernel measurements
+are diagnostic. The reported per-request energy divides batch energy by batch
+size; it is not request-specific instrumentation in a concurrent queue.
+
+Availability verification:
+- Inspected the original HTML's complete external-link inventory. No associated
+  data, repository, Zenodo, Hugging Face, or artifact link is present.
+- Inspected the first author's public publications page:
+  https://prabsy96.github.io/publications/
+  The paper entry links arXiv, not a measurement dataset.
+- Queried https://api.github.com/users/prabsy96/repos?per_page=100. Eight public
+  repositories were returned. The relevant one is SODA, below.
+- Exact paper-title/arXiv-ID/author source searches found the paper and indexes,
+  but no free original data release that adds the missing timelines.
+This is a bounded failure to locate data, not proof no dataset exists elsewhere.
+
+2. AUTHOR'S SODA REPOSITORY
+https://github.com/prabsy96/SODA---System-Offload-Dynamics-Analyzer
+Snapshot: cca2b8d9d971f60fe89cc80ecbaf327af91d256b
+README: https://github.com/prabsy96/SODA---System-Offload-Dynamics-Analyzer/blob/cca2b8d9d971f60fe89cc80ecbaf327af91d256b/README.md
+Public recursive tree:213 entries.
+
+README describes full-model/kernel tracing and energy replay; it cites earlier
+ISPASS characterization and TaxBreak papers. Tree inspection found profiling
+source (src/soda/power_sampler.py and src/soda/taxbreak/kernel_power_replay.py),
+not emitted H100/H200 original request-energy records. No matching raw CSV/JSON/
+Parquet dataset was in the inspected public tree. Code capability does not supply
+measurements. Did not run or install the GPU profiler.
+
+3. TOKENPOWERBENCH: FOLLOW-UP REQUESTED BY PARENT
+Official repository: https://github.com/chenxuniu/TokenPowerBench
+Frozen snapshot:9a50272213885bd9bba8427e34ebdf345c2204fe
+README: https://github.com/chenxuniu/TokenPowerBench/blob/9a50272213885bd9bba8427e34ebdf345c2204fe/README.md
+Reproduction notes: https://github.com/chenxuniu/TokenPowerBench/blob/9a50272213885bd9bba8427e34ebdf345c2204fe/docs/reproducing.md
+GH200 validation: https://github.com/chenxuniu/TokenPowerBench/blob/9a50272213885bd9bba8427e34ebdf345c2204fe/docs/gh200-validation.md
+
+Public inventory:
+-182 JSON files under results/, mostly approximately3.6KB legacy aggregates.
+-GitHub releases API returned an empty list: no downloadable release assets.
+-Recursive tree includes no saved new-format raw-sensor/request-phase run folders.
+-The current harness advertises generated per-request phase data, raw sensor
+  readings, explicit sensor availability, environment and interruption status.
+  These are output capabilities of a future execution, not the schema of the
+  checked-in legacy result files.
+-GH200 validation notes describe small functional experiments and caution that
+  host timestamps do not establish sensor refresh or physical phase resolution.
+  The note does not expose a compatible two-hardware raw measurement pair.
+
+Representative original result files actually fetched and inspected:
+A. https://github.com/chenxuniu/TokenPowerBench/blob/9a50272213885bd9bba8427e34ebdf345c2204fe/results/vllm_models--Llama-3.1-8B_128_1000_20250610_095633.json
+B. https://github.com/chenxuniu/TokenPowerBench/blob/9a50272213885bd9bba8427e34ebdf345c2204fe/results/vllm_models--Llama-3.2-3B_32-64_200_20250529_040524.json
+
+These hold model/batch/engine aggregates: duration, output-token count, responses,
+average power, energy, formatted summaries. A has one row; B has two batch rows.
+Neither contains ordered arrivals, first-content times, request finishes, failures,
+raw sensor timelines, pinned model revision, or a fixed GPU UUID/name inventory.
+A includes averaged gpu0 through gpu3 power and their aggregate, without proving
+which devices execute the model. B includes only gpu0 power. That is insufficient
+to identify compatible isolated hardware configurations or idle/control windows.
+
+A consistency warning from the actual numeric fields in A:
+  gpu_energy=3690.5537917166257 J; responses=32;
+  gpu_energy_per_response=160.4588605094185 J.
+The first two imply115.32980599114455 J/response, so the reported per-response
+field is not this simple ratio. No inferred denominator repair was attempted.
+CPU/DRAM zero fields in these legacy records are not evidence of zero consumption.
+
+ADAPTER/ANALYSIS GATE
+Status: NOT JUSTIFIED for the requested measured request-level consortium test.
+Missing information cannot be recovered by a file-format adapter. Interpolation
+of averages, fabricated request arrivals, or replacing unknown GPU scope with a
+hardware guess would change the evidentiary claim. Useful next action is to use
+these primary methods as references for a prospective two-configuration capture,
+or ingest an original release only when it includes the required fields.
+
+No new claim of measured pooling gains, SLA feasibility, empirical truthfulness,
+market participation, or whole-facility energy follows from this audit.

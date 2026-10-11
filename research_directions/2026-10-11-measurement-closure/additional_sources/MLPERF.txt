@@ -1,0 +1,132 @@
+MLPERF INFERENCE SERVER POWER — BOUNDED PUBLIC SOURCE AUDIT
+Access date: 2026-10-11. Search began 17:36:31 UTC and stopped within ten minutes.
+
+DISPOSITION
+Public MLPerf submissions do contain directly measured, sampled whole-system
+power associated with LLM Server performance runs. They are substantially richer
+than aggregate energy tables. However, the three representative power submissions
+inspected below do not expose request-level arrival/first-token/completion events.
+Their public performance subtrees lack mlperf_log_trace.json. Their detailed logs
+contain run metadata, dataset sample sets, counts and latency summaries, not the
+individual query timing observations needed for request-level scheduling replay.
+The requested measurement gate remains open. This is an inspected-example result,
+not a claim that no MLPerf submission anywhere contains usable request traces.
+
+OFFICIAL SEMANTICS AND RULES
+https://mlcommons.org/benchmarks/inference-datacenter/
+The official benchmark page identifies reported power as full-system AC power
+measured at the wall during the accompanying performance benchmark. This is not
+GPU-board energy, and neither idle nor CPU/fan/memory consumption should silently
+be subtracted. A whole-system energy accounting adapter would be legitimate if
+the study explicitly adopted that scope; TensorRT rather than vLLM is not itself
+a reason to reject these observations.
+
+https://github.com/mlcommons/inference_policies/blob/master/power_measurement.adoc
+The inspected official historical document is labeled v2.0, updated January 2022;
+it must not be presented as a fully audited v5.1 rulebook. It explicitly requires
+power and performance from the same run, uses LoadGen start/end timestamps, and
+separates performance from accuracy/compliance. Current official power workflow
+documentation describes distinct ranging and testing phases:
+https://github.com/mlcommons/inference/blob/3fbc329939999c13d0a7b5e67fb2092287e06047/docs/power/index.md
+No proprietary power software was obtained and no EULA was accepted. Inspecting
+public result logs did not require either action.
+
+REPRESENTATIVE RAW OBSERVATIONS
+All examples concern closed-division llama2-70b-99, Server, performance/run_1.
+For each base URL below, the inspected files are:
+  run_1/mlperf_log_detail.txt
+  run_1/spl.txt
+  run_1/mlperf_log_accuracy.json
+  power/client.json
+These are immutable public URLs when appended to the base URL.
+
+A. NVIDIA 8x H200-SXM-141GB, MaxQ, MLPerf v4.1
+Revision: 198fc46799b3328b36ee4bcbdebfa2db5a8e6183
+Base URL:
+https://raw.githubusercontent.com/mlcommons/inference_results_v4.1/198fc46799b3328b36ee4bcbdebfa2db5a8e6183/closed/NVIDIA/results/H200-SXM-141GBx8_TRT_MaxQ/llama2-70b-99/Server/performance/
+119 MLLOG records; 3,056 nonempty sampled-power records. Median sample interval
+is 1 second. Samples extend approximately 519 seconds before power_begin and
+36 seconds after power_end. Software metadata: TensorRT 10.2.0, CUDA 12.4.
+Measurement JSON declares weight_data_types=fp16 and also lists quantization in
+weight_transformations; this alone does not establish actual kernel precision.
+Detail SHA256: 7d11395f841c51841260c2856072c3217c48e88f727086c206de8144f8e1371d
+Power SHA256: e8d56187e15d54436bc26e084d70a7a2a31ea4c1b0b9057df4f7b0143465e225
+
+B. Fujitsu 8x H100-NVL-94GB, MLPerf v5.0
+Revision: 0bc17ab3f4b33f730d7869e04cc29cb70835e513
+Base URL:
+https://raw.githubusercontent.com/mlcommons/inference_results_v5.0/0bc17ab3f4b33f730d7869e04cc29cb70835e513/closed/Fujitsu/results/H100-NVL-94GBx8_TRT/llama2-70b-99/Server/performance/
+121 MLLOG records; 3,052 nonempty sampled-power records. Median interval 1 second;
+approximately 184 seconds before power_begin and 317 seconds after power_end.
+Software metadata: TensorRT 10.8, CUDA 12.8. Declared weight data type: fp8.
+Detail SHA256: a91090ee39c550dfc70d9c363b66053d14bc56e0b5809663e22acb9ea369886f
+Power SHA256: 9ca2f27674b59fe9e44926c0bd2dba4d4fdbdd0a5dd2d98ac1127be6ebd1ce7a
+
+C. Lenovo SR680a V3, 8x B200-SXM-180GB, MLPerf v5.1
+Revision: 5ea4f62ef62536e6bf4d78a9b440fb9035ddfb4a
+Base URL:
+https://raw.githubusercontent.com/mlcommons/inference_results_v5.1/5ea4f62ef62536e6bf4d78a9b440fb9035ddfb4a/closed/Lenovo/results/SR680a_V3_B200SXMx8_TRT/llama2-70b-99/Server/performance/
+122 MLLOG records; 2,790 nonempty sampled-power records. Median interval 1 second;
+approximately 296 seconds before power_begin and 28 seconds after power_end.
+TensorRT 10.8 is declared. The system JSON inconsistently lists CUDA 12.8 in
+framework and CUDA 12.9 in other_software_stack. Declared weight type: fp4.
+Detail SHA256: 294883e88d522484c56628f333ff19f0e4b2c945734ef9ffc836e8b6f50a77d9
+Power SHA256: 040c73a6453ca15a6ac3e498eb167537b9b71b3dc3f9b75bf61e517d0751ff34
+
+SAME-RUN AND REQUEST IDENTITY AUDIT
+For all three examples, the SHA-1 of the fetched run_1 detail file matched the
+corresponding entry in power/client.json. Sample timestamps bracket the detail
+log's power_begin/power_end, and samples are marked as the testing phase.
+This establishes documented session association; it is not an independent audit
+of the original instruments. The pre/post samples are observed power, but were
+not independently certified here as a clean dedicated-idle calibration interval.
+The ranging files are a separate meter-ranging run and must not be substituted
+for testing power. Separate accuracy/compliance outputs must not be paired to
+performance timing by position. Each inspected run_1 accuracy file is an empty
+JSON array.
+
+The detail logs expose loaded_qsl_set (dataset indices) and random seeds. Those
+are not an observed per-request dispatch/completion table. Seeds or source-code
+reconstruction cannot recover missing realized latency events. No per-query
+arrival, first-token or completion records were present in the inspected logs.
+Percentiles also cannot recover the joint distribution of first-token and total
+latency per request. GPU execution-start timestamps are not required for this
+study; their absence is not the decisive obstacle.
+
+COMPATIBILITY AND USE
+All three use the same named MLPerf model/accuracy benchmark, but different
+release versions, traffic rates, sample RNG seeds and declared precisions. The
+H200 software differs from H100/B200; the B200 CUDA metadata also needs resolving.
+Thus these examples do not establish a controlled paired workload with identical
+execution settings. They may support carefully scoped comparisons of complete
+submitted configurations under the MLPerf quality contract; they cannot isolate
+GPU hardware effects or supply the missing request-level observations.
+
+No new throughput, energy-saving, or pooling-benefit estimates were calculated.
+The useful result is a concrete source of same-run wall-power samples and the
+precise remaining barrier: public per-request timing traces for a compatible
+pair. An adapter cannot reconstruct unobserved timing data.
+
+REPRODUCIBILITY AND LIMITS
+Subtree inventories, not the truncated whole-repository tree, established file
+absence for these three performance directories. Their tree hashes are:
+v4.1: e2eaad7d26d11e7d1fe5253f922ba5aed48decf3
+v5.0: 8eab1a630357bd85f1f8da1dbe2de1bfde21d885
+v5.1: db9d66ffd5945e809abe9c8ea8d380f0f3ef4177
+Use the official GitHub API endpoint /repos/mlcommons/inference_results_VERSION/
+git/trees/TREEHASH?recursive=1 to reproduce these small directory listings.
+System metadata lives at closed/SUBMITTER/systems/SYSTEM.json; measurement
+metadata at closed/SUBMITTER/measurements/SYSTEM/llama2-70b-99/Server/
+SYSTEM_Server.json, under the same revisions above.
+
+Only this original audit report is saved for delivery. Raw files were inspected
+in memory, not packaged. The immutable links and hashes permit independent
+retrieval without claiming that unavailable local cache files are supplied.
+
+INDEPENDENT COORDINATOR CHECK
+The coordinator separately retrieved the frozen Fujitsu detail, power and
+client-manifest files in memory. Reproduced both reported SHA256 values, the
+121 MLLOG records, 3,052 nonempty power rows and the detail SHA1 association in
+client.json. Inspection of the full detail-key list confirms run metadata and
+aggregate latency results, with no realized per-query timing table. No physical
+instrument or counterfactual pooling experiment was validated by this check.
