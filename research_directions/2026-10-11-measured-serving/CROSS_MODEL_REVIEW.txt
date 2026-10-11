@@ -1,0 +1,28 @@
+**Provisional verdict: no consequential findings in reviewed scope.** The replay engine, accounting, and the figures in REPORT.txt reconcile with REPLAY_SUMMARY.json / REPLAY_TABLE.csv; the report's claims are, if anything, under-stated. Most important observation: the primary +2/92 is a budget-stranding artifact, not a scheduling effect (see F1).
+
+## Findings
+
+**F1 (Low — interpretation). Primary gain is almost entirely reservation-stranding, both arms are budget-saturated.**
+REPLAY_SUMMARY.json:35-37, 73-74: autarky minimum available per account 28.8 J / 8.3 J; pool 6.6 J. Every account ends below one p90 reservation (97–181 J, MELODI_CALIBRATION.json:45,52,89,96). Rejections (22 vs 21) are budget-driven, not deadline-driven, so the headline measures how two split accounts strand remainders, not deadline-aware pooling. REPORT.txt:105-110 correctly disclaims "not an energy saving" but should say this explicitly. Verification: count rejections whose waiting-time feasibility held but energy check failed at each dispatch (REPLAY_EVENTS.jsonl, not in packet).
+
+**F2 (Low — research validity). Watt held-out "<10%" gate has near-zero discriminating power.**
+watt_validation.py:125-132: 6 training runs per GPU at only two rate levels (0.017, 0.33 qps) fit a two-coefficient no-intercept model; held-out runs are repeats at the same two rates. With N ≈ rate×duration inside each group, the fit is effectively two group means and the hold-out tests repeat-to-repeat variance. REPORT.txt:62 states "all eight held-out errors under 10%" and line 63 correctly labels them conditional, but the pass should not be cited as model validation. Verification: refit on one rate, test on the other; expect failure.
+
+**F3 (Info). Reconciliation does not re-derive reservation feasibility.**
+run_study.py:82-83 checks deadline eligibility at each start; energy eligibility (`forecast.energy_j <= available[account]`, replay.py:88) is checked only via final balances (lines 94-101) and unit test test_replay.py:89-92. A reservation-ordering bug that over-admits then settles correctly would pass `independently_check`. Suggested: replay reservations chronologically in the checker.
+
+**Checked and consistent (no finding):**
+- No future leakage: `_choose_dispatch` (replay.py:68-92) reads only predictions, `available`, idle set; completion times/energy enter only via event layer (lines 141-154, 193-196); guarded by test_replay.py:56-64.
+- Same-timestamp ordering (completion→arrival→expiration→dispatch, replay.py:133-134) matches docstring; expiration cannot race dispatch since `tail < service` (line 64-65).
+- Response end = start+API+0.5 s, slot = API+4 s (prepare_melodi.py:96,121; run_study.py:49 tail 3.5) matches PROTOCOL.txt:39-40.
+- Duplicate demand: unique IDs enforced (replay.py:50-52; run_study.py:107); 92 ids sorted once.
+- Settlement charges actual once (replay.py:142-145); checker line 92.
+- Budget reference excludes held-out hash bucket (run_study.py:25); 368 count matches calibration.
+- Family summary counts (58/18/5, 9 passes, 12/21 late, 4 overrun, −5/+52) and primary deltas (97.295 J) recomputed from REPLAY_TABLE.csv — all match REPORT.txt:94-118.
+- Pool/autarky share identical controller, demand, hardware; only account index differs (replay.py:86,140,177).
+
+## Scope limitations
+Cannot verify: tests executed, byte-identical regeneration, protocol/cohort hashes, REPLAY_EVENTS.jsonl (61.633 s late case), WATT_VALIDATION.json numbers (66.148 W, 5.163%), raw MELODI/Watt data, p95 latencies, or the protocol freeze timing relative to outcomes. Count of 162 reconciled schedules (81×2) is consistent with run_study.py:118-120 only by construction.
+
+## Verdict
+No findings of correctness defects in reviewed scope; two interpretive cautions (F1, F2) and one checker gap (F3). The report's decision (gate unmet, no deployment/energy claim) is supported by the supplied artifacts.

@@ -1,0 +1,78 @@
+MEASURED SERVING / ENERGY GATE — frozen analysis contract
+Date: 2026-10-11. This is an internally frozen protocol, not external registration.
+Source schemas and descriptive compatibility were inspected before this freeze.
+No headline pooling replay outcomes or prediction fits have been inspected.
+
+QUESTION AND DECISION
+Can two fixed owners gain on-time completed requests from transferable metered
+energy allowances after finite requests, online scheduling, and response deadlines?
+Keep hardware fixed. Both arms share the same dispatch algorithm and demand queue.
+Only the budget accounting changes. This is a conditional numerical diagnostic;
+physical compatibility and independent full-horizon measurements are mandatory
+before promoting a real inference consortium or extending to private costs/power.
+
+TWO EVIDENCE LANES
+1. WattGPU: authors' common-protocol single A100-SXM4-40GB / H100NVL94GB,
+Llama-3.1-8B-Instruct. First3 source-ID repeats per server rate train, last2 test.
+Fit E_run = P_proxy * duration + e_proxy * N with no intercept and no clipping.
+Holdout success requires nonnegative coefficients and <=10% absolute relative
+energy error on EACH heldout run; failure or missing inputs is retained.
+Illustrative observed SLO: TTFT<=1s and E2E<=15s, report joint proportions.
+No arbitrary request-index cross-GPU pairing. Batch is descriptive only.
+P_proxy is NOT directly measured idle power; e_proxy is NOT measured job energy.
+2. MELODI: complete QuadroRTX4000 laptop / RTXA2000 workstation configurations,
+reported gemma:7b alias. Exact checkpoint, quantization, offload, versions absent.
+Select same prompt tokens, identical response text, warm loadfraction<=1% on both,
+finite positive API duration and GPU joules. No energy/latency gain selection.
+This retrospective identical-response cohort is a selected benchmark, not natural
+production demand or proof of identical model configuration/quality.
+Hash split int(prompt_sha256[:8],16)%5 ==0 heldout, allothers train. Predictions use
+ONLY input tokens, fixed bins [0,32),[32,64),[64,128),[128,256),[256,infinity).
+Use each training bin's 90th percentile separately for duration/energy; n<10 uses
+globaltraining90th percentile. Unknown output length never reaches online policy.
+Actual heldout measurements only enter completion events and settlement.
+
+REQUEST REPLAY
+Each unique heldout job arrives once; order is lexicographic prompt SHA256.
+Deterministic interarrival seconds:30,10,3. Absolute response deadline is
+arrival +30,60,120 seconds. No batching; one serial job per configuration.
+Physicalslot=API duration+4s: .5sprebuffer + .5spostbuffer +3scooldown.
+Response endpoint=start+API duration+.5s, which excludes3.5s post-response tail.
+This conservative experimental padding is an assumption, not new measured latency.
+Source energy is the GPU request-window quantity including default +/- .5s
+buffers. Do NOT subtract an invented baseline. Between-window idle/cooldown energy
+is UNMEASURED and excluded. Therefore the energy allowances in this diagnostic
+cover measured windows only, not a deployment electricity budget.
+Queue: oldest eligible waiting job; among idle eligible configurations choose
+smallest predicted GPU joules, tie by index. Eligibility requires forecast
+response<=deadline and sufficient predicted energy reservation. Actual energy
+settled on slotcompletion; budget overruns and actual late completions retained,
+never retroactively rejected or clipped. Controller cannot inspect future events.
+Autarky reserves each owner's allowance; pooling shares their sum. Demand, resource
+inventory, admission information, predictions, and policy are identical. Pooling
+means rights to energy on the same accounting boundary can move across nodes.
+This is not necessarily a globally optimal online policy in either arm.
+
+BUDGETS AND PRIMARY ESTIMAND
+Training referencejoules = average over eligible training pairs of
+(E_laptop + E_workstation)/2. Totalbudget = factor*N_heldout*referencejoules.
+Factors0.5,0.75,1.0; owner0 shares0.2,0.5,0.8; owner1getsremainder.
+Primary case: interarrival10s, response deadline60s, factor0.75, owner0share0.5.
+Fullcrossproduct81cases is a prespecified sensitivity family, not81replications.
+Headline outcome is pooled minusautarky on-timecompleted unique jobs. Also report
+alloffered, admitted, ontime, late, rejected, request-windowGPUjoules and budget
+overruns. Do NOT hide negativegain orzero service. No p-values/causalclaims.
+Protocol-success for conditional case requires >=5 percentage-point improvement
+in ontime/offered, zeroactual latejobs amongstarted, and no actualbudgetoverrun.
+This is a local screening criterion and does not imply deploymentvalidation.
+
+GATES / STOPPING
+Productionpromotion additionally requires pinned comparable execution, measured
+residentidle and entire-horizonpower, requestarrival/start/token/finishtimestamps,
+heldout representative streaming workload with TTFT/TPOT and throughput validation,
+and <=10% independently measured energy calibration error. Existing missing data
+already make that gate incomplete. Conditional positive replay cannot override it.
+Do not extend to scarce peak power/private opportunity costs in this study.
+Do not apply the earlier homogeneous production/payment theorem to finite-jobs
+scheduler values without a separate proof. No inferred truthfulness/core claim.
+Preserve source hashes/licenses, program and output hashes, testresults, audit.

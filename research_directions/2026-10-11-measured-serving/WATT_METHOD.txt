@@ -1,0 +1,48 @@
+WattGPU held-out aggregate validation: frozen method
+Frozen before coefficient estimation: 2026-10-11
+
+Input is the fixed, previously audited 30-row Llama-3.1-8B-Instruct subset from
+WattGPU revision4e010359c167ac8c65b55aabd1aafbf765ae5d91, A100SXM4-40GB andH100NVL.
+Source rows are selected by model and hardware, without outcome filtering.
+
+Within each GPU and each of the two server arrival rates0.017 and0.33requests/s,
+sort rows by numeric source-row ID. First3repetitions train; last2holdout. Fit
+one ordinary least-squares model per GPU using all6training runs:
+  measured_GPU_joules = idle_proxy_W * measured_duration_s
+                       + joules_per_request_proxy * completed_request_count.
+No intercept. Coefficients are unconstrained: retain any negative coefficient
+and classify that model physically invalid; do not clip or refit. The2x2normal
+equations are solved using a closed form, with singularity guard.
+
+Neither coefficient is independently measured idle power or per-request energy.
+The fit omits overlapping execution, prompt/output variations, and dynamic GPU
+states. It is an aggregate empirical approximation at these measured loads.
+No request service time is derived from energy or vice versa.
+
+Holdout gate: absolute relative energy prediction error at most10% for EVERY
+holdout run, together with nonnegative coefficients. Report every heldout error,
+training source IDs, coefficient values, per-GPU gate, and combined gate.
+No coefficient re-estimation after observing holdout outcomes.
+
+Latency audit independently describes allserver observations and heldoutserver
+observations for eachGPU/rate. Illustrative fixed SLO: TTFT<=1second AND total
+e2e<=15seconds. These thresholds are declared before outcome computation and
+are not claims about a contractual SLA. Exact denominator is count of completed
+requests with arrays aligned within eachrun; missing/invalidentries fail checks.
+Report nearest-rank p50,p95,p99 plusmin/max forTTFT ande2e. Individual requests
+are not paired acrossGPUs byarrayposition because stableIDsareabsent. No formal
+independent-request confidence interval: repeatedshortprompts and five runs
+provide limited independent information, particularly atlowload.
+
+Energy audit reports sourceGPUenergy against reportedmeanGPUwatts*duration,
+relative discrepancy for eachrun; these quantities need not match exactly
+because sampledmean andintegratedenergy mayhave different endpoint treatment.
+Reportall values andmaxdiscrepancy; do not silentlyadjust sourceobservations.
+Offline batchrecords remainseparate descriptive summaries, neverindividualSLOs.
+
+Interpretation gate: a passed aggregate test establishes only within-source
+heldout predictive performance on these shortprompt/load settings. Missing
+arrival timestamps, individualrequestenergy, isolatedidlecalibration, exact
+softwareversion, powertrace, dynamicbatchtrace, and requestIDs prevent claiming
+validation ofa pooleddeployment, arbitrarynewloads, Azurelongprompts, peakpower,
+or privateopportunitycosts. No pooling outcomes willbecomputed here.

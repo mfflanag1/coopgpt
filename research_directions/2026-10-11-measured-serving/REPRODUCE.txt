@@ -1,0 +1,45 @@
+Measured serving / energy study — reproduction
+
+Python 3.10+ standard library only; no GPU, network, model weights or paid access
+needed for the saved experiment. From this directory:
+
+    python3 reproduce.py --output /tmp/coopgpt-measured-rebuild
+
+Choose an output directory that does not yet exist. This runs 22 focused tests,
+normally and with Python assertions disabled; regenerates calibration and all
+162 request schedules; then byte-compares seven decisive artifacts to the saved
+release. It verifies that the main protocol hash is unchanged. The full event
+record is REPLAY_EVENTS.jsonl, one JSON object per sensitivity case with both arms.
+REPLAY_TABLE.csv is the compact comparison. REPORT.txt supplies interpretation.
+
+Optional upstream refresh, with internet access and a new output directory:
+
+    python3 acquire_data.py --cache /tmp/coopgpt-source-cache --output /tmp/coopgpt-source-refresh
+
+This retrieves two immutable MELODI CSVs (about 21 MB total) and the 22.3 MB
+WattGPU source table, verifies full SHA-256 digests, then regenerates numeric
+pairs and the 30-run selection. Downloads are free and ungated. Source refresh
+does not overwrite committed data. Compare refreshed PAIRED_MEASUREMENTS.csv and
+llama31_8b_a100_h100_runs.csv to the corresponding data subdirectories.
+
+Source units: MELODI energy is kWh, multiplied by 3,600,000 for joules; durations
+were Ollama nanoseconds, divided by 1e9. WattGPU energy is already joules, power
+watts and time seconds. Do not combine their observations into one serving model.
+
+Attribution and licensing:
+- WattGPU/Watt Counts: Mauricio Fadel Argerich, Jonathan Fuerst, Marta Patino-Martinez;
+  https://github.com/maufadel/wattgpu
+  Revision 4e010359c167ac8c65b55aabd1aafbf765ae5d91. Apache-2.0 license included at
+  data/wattgpu/WATTGPU_LICENSE; exact source manifest in the same directory.
+- MELODI / LLM Inference Energy Consumption Dataset: Erik Johannes Husom,
+  Arda Goknil, Lwin Khin Shar, Sagar Sen (2024).
+  https://huggingface.co/datasets/ejhusom/llm-inference-energy-consumption
+  Revision eb9597d939e5ed3e4a775a8de104e64e28eef671.
+  Dataset and our derived numeric MELODI data/results: CC BY-SA 4.0,
+  https://creativecommons.org/licenses/by-sa/4.0/ . Transformations and original
+  hashes are in data/melodi/PROVENANCE.json and extract_pairs.py. Text is replaced
+  by SHA-256 identifiers; fields are converted, filtered, split and replayed as
+  documented. Original authors have not endorsed this derivative study.
+
+This is an offline conditional diagnostic. Running the code does not constitute
+a new measurement, an all-profile incentive proof, or human specialist review.

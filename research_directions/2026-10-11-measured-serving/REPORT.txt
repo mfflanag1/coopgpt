@@ -1,0 +1,166 @@
+Measured serving and energy study — 11 October 2026
+
+DECISION
+The full promotion gate is NOT met. We obtained free measured evidence for two
+hardware pairs, implemented a request-level online scheduler, and ran the frozen
+study. The primary conditional replay improves on-time completions from 69/92 to
+71/92 (2.17 percentage points of offered demand), below the declared 5-point gate.
+It is useful engineering evidence, not validation of the earlier synthetic gain,
+a pooled deployment, an energy saving, or a new theorem. Do not extend this result
+to scarce peak power or private opportunity costs yet.
+
+WHAT WAS ACQUIRED
+WattGPU / Watt Counts supplies 30 measured runs of the same reported
+meta-llama/Llama-3.1-8B-Instruct model on a single A100-SXM4-40GB and single H100NVL.
+The authors report a common FP16/vLLM protocol: five repeats each at 0.017 requests/s,
+0.33 requests/s, and offline batch. Energy is whole-run GPU board joules, including
+idle in server mode. The 20 server runs contain 1,016 completed-request timing
+observations across both GPUs; batch timings are not per-request observations.
+
+This is a credible within-source hardware comparison with limitations: missing
+exact software/checkpoint revision, arrival timestamps, request identities, raw
+power timeline and isolated resident-idle measurements. High-load arrays cannot
+be paired by index. Prompts are very short; the low-load sample has only 30 timings
+per GPU with repeated questions. It does not identify a realistic long-context
+concurrent server or transferable per-request costs.
+
+MELODI supplies 5,099 exact-prompt pairs on two complete reported gemma:7b/Ollama
+configurations: Quadro RTX 4000 laptop and RTX A2000 workstation. It has request
+execution times and request-window GPU energy, but not pinned checkpoint,
+quantization, engine, offload or power-limit metadata. These are NOT clean
+GPU-only interventions or interchangeable measurements of the A100/H100 system.
+Only 461 pairs have identical response text. The frozen warm-and-comparable filter
+retains 460; a prompt-hash split gives 368 training and 92 held-out requests. This
+retrospectively selected 9.02% subset is not representative production demand or a
+prospective eligibility rule. Identity of responses does not establish model
+identity, quality, or functional equivalence on excluded prompts.
+
+The source collector's contemporaneous code integrates from 0.5 seconds before
+request start through 0.5 seconds after finish; its exact deployed version is
+unrecorded. Source requests are serial and have gaps exceeding 3 seconds. Our
+replay therefore assumes an API-duration + 4-second slot: 0.5 seconds before, 0.5 seconds after, and 3 seconds of
+cooldown. Response completion occurs before the 3.5-second trailing tail. Stored
+window energy is charged once. Between-window idle and cooldown energy remain
+unmeasured and EXCLUDED. A diagnostic on all matched rows bounds clock-minus-API
+overhead below 0.014 seconds; this small client overhead is not in the replay.
+CPU energy is not used: historical subprocess accounting is uncertain. The paper
+also reports background GPU processes on the workstation. No facility-energy,
+carbon, GPU-only efficiency, or real economic-budget interpretation is established.
+
+Other free candidates were checked, not silently substituted: Splitwise has zero
+H100 power placeholders; BEAM has incompatible hardware bundles plus energy/latency
+window and GPU-inventory issues; ML.ENERGY public summaries lack the required raw
+request associations and its fuller current dataset is gated. No paid/gated data,
+new GPU rentals, or actual hardware experiment were used.
+
+HELD-OUT A100/H100 CHECK
+For each GPU, the first three source-ID repeats at each server rate train
+E_run = P_proxy * observed_duration + e_proxy * observed_completed_requests.
+The last two repeats per rate are held out, giving four test runs per GPU.
+The fit is ordinary least squares with no extra intercept and no coefficient
+clipping. A100 gives 66.148 W and 426.145 J/request; H100 gives 89.073 W and 356.078 J/request.
+All eight held-out errors are under 10%; maximum 5.163% for A100 and 2.433% for H100.
+These are CONDITIONAL energy reconstructions given realized count and duration,
+not advance workload forecasts, independently measured idle power or job energy.
+The heldout runs repeat the same two offered-load regimes; this checks repeat-to-repeat stability, not generalization to new loads. The fitted coefficients cannot be carried unverified into the MELODI replay.
+
+All 508 recorded server requests per GPU satisfy the illustrative TTFT <= 1 second
+AND completion <= 15 seconds thresholds. Among the 175 held-out completions per GPU,
+high-load p95 completion is 3.313 seconds for A100 and 1.530 seconds for H100. These
+are descriptive completed-request samples, not an offered-demand loss audit,
+stable population p99, independent natural requests, or a pooled deployment SLA.
+
+REQUEST-LEVEL EXPERIMENT
+Two fixed owners retain one serial configuration each. Both arms share exactly
+the same demand queue, forecasts, admission policy, hardware and deadlines.
+Autarky means separate energy accounts, not disconnected demand queues; pooling
+allows their request-window energy allowances to transfer. Every unique request
+arrives once, with no duplicated standalone demand. Synthetic fixed-spacing
+arrivals are declared rather than inferred from service-dependent source times.
+
+The controller sees 90th-percentile training reservations by input-token bin for
+service and energy. It does NOT see held-out output lengths, true service costs,
+or future completion events. It chooses the oldest currently feasible request;
+among eligible idle configurations it chooses the lower forecast energy. At
+slot completion, realized energy settles the reservation. Lateness and debt remain
+in the outcome; no actual request is clipped or retrospectively rejected.
+
+This conservative forecast covers 89–91% of held-out duration/energy observations.
+Its aggregate energy reservations exceed actual totals by 48–49%, as one would
+expect of quantile reservations rather than mean estimates. That is not evidence
+that every predictor fails, and not a 10% accurate advance total-energy model.
+It also offers no deterministic guarantee against unseen long jobs or budget debt.
+
+PRIMARY RESULT
+92 unique requests, 10 seconds apart, 60-second response deadline, equal owner shares,
+and total measured-window allowance 5,426.966 J. The allowance is 0.75 times 92 times
+the TRAINING average uniform-routing energy 78.651684 J; no held-out costs tune it.
+                              Separate accounts       Pooled account
+On-time completions                  69                     71
+Late completions                      1                      0
+Rejected without starting            22                     21
+Request-window GPU joules        5,287.235              5,384.530
+Actual budget overrun                 0                      0
+
+Pooling adds two on-time completions (+2.17 points of offered demand, +2.90% relative
+to 69), using 97.295 J more measured-window energy. This is not an energy saving.
+The separate-account late response took 61.633 seconds from arrival despite a
+50.231-second forecast. Pooling meets this case's response/budget constraints but
+misses the 5-point gain threshold; the stricter two-arm screen also retains that
+baseline lateness. No finite-job payment or core guarantee is asserted.
+
+POST-REVIEW DIAGNOSTIC (EXPLORATORY)
+With the same primary arrivals and deadlines but nonbinding energy accounts,
+both arms complete all 92 requests on time. With the original budgets and a
+nonbinding deadline, separate accounts complete 69 and pooling 71. Thus the
+primary restriction is the artificial window-energy allowance, with residual
+reservations and routing affecting the result; it is not evidence that pooling
+solves a difficult physical-capacity or tail-latency bottleneck. The original
++2 on-time difference contains one extra admission and one fewer late completion.
+Changing deadlines changes dispatch order, so this ablation does not identify a
+pure causal contribution of each mechanism. See PRIMARY_DIAGNOSTICS.json and
+run python3 diagnose_primary.py. These checks followed independent review and
+were not part of the frozen sensitivity family.
+
+PRESPECIFIED SENSITIVITY FAMILY
+Cross product: interarrival 30/10/3 seconds; deadline 30/60/120 seconds; total allowance
+factor 0.5/0.75/1; owner 0 share 0.2/0.5/0.8: 81 cases, each with both arms.
+Positive on-time gain in 58 cases, zero in 18, negative in 5. Differences range from -5 to +52
+requests. Nine pass the conditional 5-point/zero-lateness/no-debt screen in both
+arms. Pooling has late completions in 12 cases; separate accounts in 21. At least
+one arm exceeds its actual account budget in 4 cases. All adverse cases are saved.
+These are sensitivities of the SAME 92 held-out records, not 81 independent replications.
+Skewed allowance ownership can create large artificial stranding; cherry-picking
+the maximum would not validate a consortium. Negative cases show this greedy
+online policy need not improve when constraints relax; they do not prove that an
+optimal pooling scheduler has lower feasible value than an optimal separate one.
+
+INTERPRETATION AND NEXT DECISIVE EXPERIMENT
+The earlier synthetic pooling story survives only as a possibility, not a verified
+practical effect. Request uncertainty, demand timing, scheduler choices and quota
+placement materially change it. The immediate frontier is trustworthy measurement
+and a stronger deadline-aware scheduler, before more elaborate economic theory.
+
+A closing experiment needs two documented nodes running the SAME pinned checkpoint,
+tokenizer, quantization, engine and decoding policy; explicit CPU/GPU offload and
+power limits; separate warmup; resident-idle measurements before/after; timestamped
+board power over the entire run (preferably wall power too); and unique request
+arrival/start/first-token/token/finish timestamps. Run identical prompt/generation
+policies first serially, then in held-out representative concurrent arrival windows.
+Hide realized output length from the controller. Compare both quota rules on the
+same offered demand, including rejections, late requests, idle and drain energy.
+A new source release with those fields could substitute for new hardware access.
+No external contact or spending was initiated.
+
+VERIFICATION / ARTIFACTS
+22 focused unit tests pass, including hidden-outcome guards, nonoverlap, unique
+requests, exact event ordering, retained debt/lateness, response-vs-cooldown timing,
+quantile bins, unit conversion, held-out budget exclusion and signed OLS recovery.
+The driver independently reconciles request IDs, slots, measured costs, terminal
+outcomes, chronological energy reservations and final account balances for all 162 replays. A separate agent checked
+primary physical records, the training-only forecasts and budget reference.
+Completed cross-model review and clean-directory reproduction are recorded in
+REVIEW.txt and VERIFICATION.json. Internal model audit is not human peer review.
+PROTOCOL.txt was frozen before replay outcomes; source descriptive inspection was
+already known. Source-lane methods were frozen before their own fitting. All
+outcomes, extraction/replay code, licenses and immutable data hashes are retained.

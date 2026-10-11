@@ -1,0 +1,113 @@
+Independent serving-and-energy source search: 11 October 2026
+
+Conclusion
+----------
+The best free candidate located outside ML.ENERGY is BEAM's public Qwen2.5-14B
+profiling package. It contains two compatible model-serving hardware configurations
+with measured power and latency summaries, but it does NOT expose the underlying
+per-request timing/power records needed for the requested request-level replay.
+A measured summary-screen is supported. A new per-request SLA validation is not.
+
+Downloaded artifact snapshots and checksums are in DOWNLOAD_MANIFEST.json. Files
+were fetched anonymously from public GitHub, with no GPU execution or paid access.
+
+BEAM: promising measured matched summaries, request-level gate remains open
+-------------------------------------------------------------------------
+Primary repository https://github.com/jlee335/BEAM-artifact
+Frozen commit 0febb08e7446c9826bff5fce93e0e8a2deab5e5f
+License Apache-2.0 (README states inherited vLLM license; LICENSE downloaded).
+README describes a vLLM v0.11+ fork with energy-aware scheduler.
+
+Complete-serving files:
+  benchmarks/energy/dynamollm_profiles/
+  dynamo_dvfs_profile_NVIDIA A100 80GB PCIe_Qwen_Qwen2.5-14B.csv
+  dynamo_dvfs_profile_NVIDIA RTX A6000_Qwen_Qwen2.5-14B.csv
+
+Both name Qwen/Qwen2.5-14B. A100 uses TP1 PP1 (one GPU), A6000 uses TP1 PP4
+(four GPUs). These are valid distinct complete-replica configurations, not an
+apples-to-apples single-GPU hardware comparison. Exact weight revision and actual
+resolved dtype are not in the CSV. Collection script uses --dtype auto and
+--kv-cache-dtype auto. Do not label measured BF16 absent additional evidence.
+
+A100 has 24 rows: clocks 800,1000,1200,1400 MHz; offered nominal input token rate
+400,800,1200,1600,2000,2400 tokens/s. A6000 has36 rows, adding1600,1800 MHz.
+24 matched (clock,tps) pairs exist. These tps values are OFFERED input load, not
+achieved output throughput. Request rate is floored to two decimals from
+(tps/1050), so .38,.76,1.14,1.52,1.90,2.28 req/s.
+
+Script uses random dataset nominal input1050/output150, range-ratio0.3, seed42,
+Poisson burstiness1, ignoreEOS, and microbatch-size=PP. Hence request generation
+may itself differ with PP; do not assume paired identical request sequences without
+examining generation and raw logs. These are workload summaries, not fixed exact
+1050/150 per-request service measurements.
+
+Collection code: benchmarks/energy/dynamollm_profiles/collect.py
+  ttft_mean,ttft_p99,ttft_std: milliseconds, from requests arriving and receiving
+  first token before60seconds. tbt fields: milliseconds, flattened inter-token
+  intervals included up to60sec (tbt_p90 is a token-interval, not request quantile).
+  gpu_power: watts, calculated from cumulative NVML energy difference / elapsed
+  time /1000 over first30seconds, summed across available GPU columns0..7.
+  Different power and latency windows and right censoring prevent an exact
+  complete-request energy or success-rate claim from aggregate rows.
+  gpu_energy_monitor.py observes ALL visible GPUs, so active GPU count equals
+  TP*PP only if that was the complete visible device set. Raw inventory absent.
+  The raw field gpu_*_joules actually stores millijoules; collector converts.
+
+Example source rows at1200MHz, offered400 inputtokens/sec (illustration only):
+  A100 TP1PP1:161.8777W; TTFTmean253.36ms,p99456.77ms;TBTmean26.8066ms,p9028.4343ms.
+  A6000 TP1PP4:250.7508W; TTFTmean282.05ms,p99447.37ms;TBTmean68.3802ms,p9079.961ms.
+No pooling, gains, or calibrated simulation computed in this search lane.
+
+Offline profiles available for A100PCIe TP1PP1, A100SXM TP1PP2,
+and A6000 TP1PP2,TP1PP4,TP2PP2, all same Qwen14B.
+Columns clock,batch_size,decode_tokens,total_ctx_len,time_taken,
+energy_consumption,num_trials,valid. time_taken is seconds; energy_consumption
+is millijoules, averaged over50 iterations for batch<128 or25 for>=128.
+Collection invokes _dummy_run_mixed; batch<128 means uniform decode only,
+and batch>=128 uses one prefill chunk plus60 decode sequences. total_ctx_len
+2048 or40000 is TOTAL across decode sequences, not each request's input length.
+These tables are microbenchmarks of one iteration/stage, not end-to-end requests.
+The code monitors only GPU indices range(TP), even when PP>1; per-stage energy
+requires a pipeline model to become complete-replica energy. Source's own energy
+model adds scheduling-overhead constants and multiplies stage models byPP.
+Do not silently treat those derived models as measured complete-request data.
+
+The complete public recursive tree contains shipped profile summaries and input
+workload traces but no end-to-end results JSON/energy logs. Scripts can generate
+those, requiring GPU runs. No such runs were performed.
+
+Splitwise: usable measured latency, no matched measured energy pair
+-----------------------------------------------------------------
+Primary repository https://github.com/Mutinifni/splitwise-sim
+Frozen commit8f99e7dc9b407f4ce2488d03dd44c0b8b946dab0
+MIT license (downloaded).
+Measured data/perf_model.csv has1260 rows covering llama2-70b/bloom-176b and
+A100-80GB,H100-80GB,H100-80GB-pcap, prompt lengths,batch sizes,TP degrees.
+All H100 and H100-pcap average_power and peak_power entries are zero placeholders.
+Only260 A100 rows have positive average_power. The simulator's fixed stage power
+config uses A100 idle63/prefill400/decode250W and H10075/700/380W, which do not
+supply missing measured H100 energy. Thus reject this as joint measured pair.
+
+Other search outcomes (not exhaustive; no broad absence claim)
+------------------------------------------------------------
+DynamoLLM primary paper https://arxiv.org/abs/2408.00741 documents experiments and
+releases Azure arrival traces, but no official raw serving+power artifact found
+in this bounded search. BEAM's DynamoLLM-named profiles are BEAM reproductions,
+not original DynamoLLM measurements.
+https://github.com/grantwilkins/powertrace-sim returned404 via both web and API.
+Associated paper https://arxiv.org/abs/2603.18383 remains a good methodological lead.
+NLR https://arxiv.org/abs/2604.07345 publishes H100-node power profiles but is
+not a matched two-hardware serving pair by itself.
+https://doi.org/10.5281/zenodo.18714476 is an open CC-BY4 H100-only TensorRT-LLM
+energy/timing dataset (single hardware type; not pursued over BEAM).
+https://github.com/usatie/prefill-decode-accelerator-evaluation has A100/Groq timing
+CSVs, but no clearly usable measured Groq energy pair found in initial inventory.
+
+Recommended honest use
+----------------------
+Retain BEAM summaries as compatibility evidence and an explicit data-quality
+screen. Finish free raw-data search via ML.ENERGY public artifacts independently.
+If no suitable per-request records exist, record gate not established and supply
+an exact profiling protocol for two complete local replicas. A simulation
+parameterized by BEAM stage averages may still be useful, but must be labeled
+modeled, with calibration and validation sets distinct and uncertainty explicit.

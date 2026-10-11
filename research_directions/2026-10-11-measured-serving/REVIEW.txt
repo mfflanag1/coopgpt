@@ -1,0 +1,64 @@
+Internal review and verification — 11 October 2026
+
+Independent snapshot review: Fable 5.1, medium effort, completed in 99.66 seconds.
+Run 20261011-124842-265fbe6f. Verdict: no consequential findings in reviewed scope;
+two interpretive cautions and one independent-checker gap. This was a tool-free
+source snapshot. It did not execute tests, inspect the large raw datasets or full
+event log, or verify source access. It is not external human specialist review.
+Original response: CROSS_MODEL_REVIEW.txt. Request/file hashes: REVIEW_MANIFEST.json.
+
+VERIFIED FINDINGS / DISPOSITION
+F1. Reservation stranding and artificial allowance scarcity dominate the primary
+case: accepted with qualifications. We independently ran post-outcome ablations
+(diagnose_primary.py, PRIMARY_DIAGNOSTICS.json). Nonbinding energy accounts with
+the original 60-second deadline complete all 92 requests on time in both arms.
+Nonbinding deadlines with the original accounts complete 69 separately and 71
+pooled. In the actual primary case the +2 on-time difference is one extra started
+request and one fewer late completion. Thus quota/dispatch interaction, not a
+proven physical capacity bottleneck, drives this example. We do NOT adopt the
+stronger unverified assertion that every rejection has an exclusively budget-only
+cause, or that the entire difference is independent of scheduling. Deadline
+relaxation changes request ordering; no pure mechanism decomposition is proved.
+
+F2. Narrow WattGPU validation: accepted the scope caution. The training and heldout
+runs occupy the same two offered-load regimes; heldout errors assess conditional
+repeat-to-repeat reconstruction, not novel-load generalization, advance energy
+forecasting, or independent idle/marginal cost identification. The report already
+conditioned on observed N/duration; it now also says explicitly that load regimes
+repeat. We did not adopt the reviewer's untested prediction that training on one
+rate must fail on the other, nor a quantitative 'near-zero discriminating power'
+claim. No out-of-design fit was used to replace the frozen estimates.
+
+F3. Chronological reservations missing from independent checker: confirmed and
+fixed. The simulator already enforces this condition, but final balances alone
+would not catch a bug that over-reserved then settled to low actual costs. The
+checker now replays completion refunds/charges before starts at each timestamp,
+then checks forecast reservation availability. A new independent malformed-record
+fixture has two six-joule simultaneous reservations against ten pooled joules,
+with actual costs only one joule each; the checker rejects it even though final
+energy/balance totals are feasible. All 162 original schedules pass the stronger
+check, and all seven decisive output artifacts remain byte-identical.
+
+ADDITIONAL INDEPENDENT CHECKS
+A separate agent recomputed the eligible/train/heldout counts 460/368/92, every
+training-only input-bin forecast, and training budget reference 78.65168385738195J
+from the paired data; inspected primary physical records and source energy units;
+verified unique jobs, no overlap, response timings and budgets. It found no
+consequential implementation mismatch. Its two interpretation cautions (observed
+N/duration conditioning and p90 reservations vs mean prediction) were incorporated.
+
+POST-REVIEW VERIFICATION
+22 unit tests pass normally and with python -O. The final independent driver
+verifies unique demand, physical slots, response deadlines, measured energy
+charged once, chronological reservations, terminal counts and account balances.
+An isolated output-directory rebuild reproduced COHORT.csv, MELODI_CALIBRATION.json,
+WATT_VALIDATION.json, REPLAY_RESULTS.json, REPLAY_SUMMARY.json,
+REPLAY_EVENTS.jsonl and REPLAY_TABLE.csv byte-for-byte. VERIFICATION.json records
+hashes. Protocol freeze unchanged. Source re-extraction from the cached immutable,
+checksum-verified full raw CSVs also reproduced both committed selected datasets
+and the MELODI compatibility audit exactly. No new data/source model was tuned.
+
+The original snapshot predates the checker regression test, explanatory report
+additions, and exploratory ablations; these were checked by the coordinating
+agent as described, not sent for a second model review. No numerical headline or
+scientific conclusion changed. The promotion gate remains unmet.

@@ -1,0 +1,90 @@
+Measured-data source audit — 11 October 2026
+
+DECISION
+Usable measured hardware evidence exists, freely and without authentication.
+The best source found is the original authors' WattGPU release of Watt Counts
+measurements. It supports a carefully qualified, measurement-informed scheduling
+experiment. It does NOT identify full per-request energy/service behavior under a
+new load or certify a production SLA by itself.
+
+PREFERRED PAIR
+Model: meta-llama/Llama-3.1-8B-Instruct.
+Hardware: one NVIDIA A100-SXM4-40GB and one NVIDIA H100 NVL (94 GB).
+Both are single-GPU complete replicas in the common Watt Counts protocol, which
+reports FP16/vLLM, SQuAD questions, context cap1024, generation cap256. The public
+subset omits exact software version and per-run dtype. Mark these as author-
+reported shared protocol, not independently verified run-level metadata.
+
+All30 records are preserved: five repetitions for each GPU at offline batch,
+0.017 requests/s, and0.33 requests/s. The released CSV and WattGPU paper specify
+0.33; the older Watt Counts paper says0.3. Use the raw CSV0.33. Keep the batch
+records as a separate mode: they have one entire-batch duration and no per-request
+TTFT, so they cannot supply individual response-time observations.
+
+AT THE REQUEST LEVEL
+Each server record has equally sized arrays of TTFT, end-to-end response time,
+input token count, and output token count. The authors' notebook treats these
+arrays as aligned and computes (e2e-TTFT)/(output_tokens-1). Low-load Llama data
+are especially clean: five repeats have8,3,9,7,3 completed requests per GPU;
+corresponding input lengths match and all output counts are256. This provides
+30 timing observations per GPU, heavily reusing the first questions. It does
+not establish30 independent natural-workload draws or a stable p99 estimate.
+
+Higher-load data have108,97,108,97,68 completed requests per GPU,478 total each.
+Input arrays are sometimes reordered, consistent with completion order, and
+output lengths differ on a few requests. No request IDs or arrival timestamps
+are released. Do not pair arbitrary row-index positions across GPUs; repeated
+input lengths are not unique IDs. Qwen2.5-7B was also inspected but has materially
+more output-length variability, making Llama the cleaner first comparison.
+
+The low-load prompt lengths are11–19 tokens, high-load9–28; this is a very narrow
+short-question workload. The batch input lengths are6–30. Direct use on existing
+Azure traces with long prompts would extrapolate well outside measured support.
+Offline output-token fields sometimes exceed the stated generation cap
+(observed maximum261). Retain raw values, flag the mode discrepancy, and avoid
+using batch records to invent streaming service times.
+
+ENERGY ACCOUNTING
+GPU energy is measured at run level in joules; server energy includes idle
+intervals. Mean/min/max/std board power and measured duration are included.
+There is no per-request energy, no pure resident-idle calibration, and no power
+timeline in the released subset. CPU, network, cooling, and facility overhead
+are excluded. Run energy divided by request count is a load-specific average,
+not an invariant marginal energy for scheduling another request. Likewise,
+meanGPU power times per-request decode duration is not measured request energy.
+The WattGPU paper explicitly cautions against multiplying server mean power by
+active decode ITL as an efficiency metric.
+
+WHAT THE SOURCE CAN SUPPORT NOW
+- Reproduce each observed configuration's latency and energy summaries.
+- Test measured TTFT/e2e thresholds at those exact low/high load regimes.
+- Fit a clearly labeled approximate service/energy model using declared splits
+  and test it on held-out runs, allowing the model to fail.
+- Conduct synthetic arrival/ownership replay with these measured inputs only
+  if the missing assumptions (new queueing, concurrency, idle cost, no startup)
+  are explicit and sensitivity-tested.
+
+WHAT IT CANNOT SUPPORT WITHOUT ADDITIONAL INFORMATION
+- Claiming a replay is an observed pooled deployment.
+- Exact counterfactual completion time or energy of a request routed elsewhere.
+- Validating latency under high concurrency or long Azure prompts from the
+  tiny low-load short-question sample alone.
+- Claiming the scarce-peak-power/private-opportunity-cost extension passed.
+
+IMMUTABLE PROVENANCE AND LICENSE
+https://github.com/maufadel/wattgpu/tree/4e010359c167ac8c65b55aabd1aafbf765ae5d91
+https://arxiv.org/html/2607.02391v1 (release/metric definitions)
+https://arxiv.org/html/2604.09048v1 (measurement protocol)
+Repository-root Apache-2.0 license copied without modification.
+Full CSV22,255,570 bytes,4,798 rows; SHA256 inSOURCE_MANIFEST.json.
+Selected30-run CSV retains source row IDs and exact cell strings. Downloader
+verifies full source hash before extracting a fixed model/hardware selection.
+No headline pooling outcome was computed in this source lane.
+
+FALLBACKS INSPECTED
+ML.ENERGYv3 public leaderboard: matched H100/B200 measurements and percentile
+ITL, but noTTFT/per-request associations; underlyingHFdataset gated. Did not
+attempt access. ML.ENERGYv2 immutable GitHub data: matched A100/H100 energy/request
+and averageTPOT, but only small aggregate files, not usable request-level tails.
+Grant Wilkins' energy-inference repo is open but uses older offline measurement
+protocol and provides a less suitable first pairing for this serving target.

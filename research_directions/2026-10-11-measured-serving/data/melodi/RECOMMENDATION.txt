@@ -1,0 +1,59 @@
+MELODI measured-pair compatibility audit — 2026-10-11
+
+Direct request-level data acquired, but promotion gate NOT met.
+
+The delivered PAIRED_MEASUREMENTS.csv has 5,099 exact unique-prompt pairs on two
+complete reported configurations. No raw prompt/response text is redistributed;
+SHA-256 keys and zero-based source row numbers permit checking. All rows retained.
+The accompanying extractor reproduces the numeric artifact from the two checksum-
+verified raw files. Derived data are CC BY-SA 4.0; attribution is in PROVENANCE.json.
+
+Same label gemma:7b and Ollama, but exact checkpoint digest, quantization, decoding
+parameters, software version, CPU/GPU offload, and configured power limit remain
+unverified. Four pairs even differ in input token count; only 802 pairs have equal
+output count, and 461 have identical response text. These are candidate complete-
+configuration response measurements, not a matched hardware-only intervention or
+fixed identical realized computational workload. Output quality is not validated.
+
+Requests were serial in each source: no overlaps and minimum gaps exceeding three
+seconds. The underlying experiment is not a continuous back-to-back serving run.
+There are 5,093/5,099 laptop and 8,734/8,735 workstation rows with load fraction <=1%.
+Those diagnostics do not authorize deleting loading energy from measured totals.
+No data were filtered by these diagnostics; parent must freeze replay selection.
+
+Contemporaneous repository source defaults to integrating power from request start
+minus 0.5s through end plus 0.5s. Default monitoring waits one second before and two
+after. The exact collector version used for individual rows is absent. Stored
+energy may therefore include an extra second of baseline/tail energy. No idle
+baseline or raw power samples accompany these CSVs. Treating their energy as warm
+incremental request energy would be unsupported. A model that charges the whole
+observed buffered transaction must preserve those intervals and still cannot
+claim total horizon energy, since between-transaction idle energy is missing.
+
+The old CPU filter matches ollamaserve, whereas current code aggregates all Ollama
+processes including runners. Missing runner energy is a concrete concern, not a
+verified error in these particular measurements. Workstation energy divided by
+API duration plus default 1s buffer has median GPU draw around 5.74 W; laptop about
+62.07 W. This is an accounting/placement warning rather than proof of CPU offload.
+The paper also acknowledges workstation GPU background processes. Combined CPU+
+GPU numbers are not whole-node or facility electricity measurements.
+
+Recommendation: use MELODI to build/check the paired-request ingestion and offline
+prediction harness, and potentially report a narrowly labeled measured-record
+replay sensitivity analysis. It has richer per-request structure than a batch-
+aggregate-only source. Do NOT use it to declare compatible measured warm GPU
+energy, validated batching, queueing, TTFT/TPOT, or proven real pooling savings.
+A WattGPU source with pinned execution settings and raw board telemetry may be
+stronger for hardware/energy comparability; it must be audited on its own facts.
+Neither missing timestamps nor missing baseline can be repaired by combining
+unmatched datasets. No predictor fitting or pooling results were computed here.
+
+Minimum closing experiment: same checkpoint+tokenizer+quantization+engine pinned
+on two documented nodes; fixed power/offload settings; warmup separate; idle power
+sample before/after; raw timestamped board (prefer wall) power; identical prompts
+and fixed generation policy; one serial run and held-out representative arrival
+windows with arrival/start/TTFT/token/finish timestamps; original request IDs;
+measure actual power over the full horizon including idle/drain. Fit on one set,
+validate throughput/energy/latency on independent runs. Output length is hidden
+from online admission, except a declared generation maximum. No paid experiment
+was started or authorized by this audit.

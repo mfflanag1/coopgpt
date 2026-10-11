@@ -1,0 +1,56 @@
+MELODI conditional measured-record calibration: frozen method
+Frozen 2026-10-11 before preparation script fitting or outcome computation.
+
+Source: melodi_sources/delivery/PAIRED_MEASUREMENTS.csv, derived by exact unique
+prompt-text joining the measured laptop2 and workstation gemma:7b records.
+Source rows, attribution and checksums are in the preceding provenance package.
+
+Cohort: require same_prompt_tokens=1 AND same_response_text=1; verify equal prompt
+counts and response hashes across configurations. Require finite positive API
+request duration and GPU energy; finite load fraction in [0,0.01] on BOTH configs.
+No selection uses which configuration is faster, lower-energy, or more profitable.
+This is a RETROSPECTIVELY SELECTED identical-response/warm-load subset. Membership
+uses future response information. It is not a prospective admissible-request
+filter or a representative workload sample. No causal hardware effect is claimed.
+All source rows have unique prompt IDs; duplicates cause an explicit failure.
+
+Split: int(prompt_sha256[:8],16) modulo 5 equals 0 means HELDOUT; 1--4 mean TRAIN.
+Split at prompt level, ensuring neither configuration of a held-out request is
+used for fitting. No subsequent split tuning or testing of alternative bins.
+
+Features: known input token count only. Unknown realized output count is NEVER a
+prediction or dispatch input. Fixed bins: [0,32), [32,64), [64,128), [128,256), and
+[256,infinity). Fit each configuration separately. Forecast API service duration
+and GPU request-window joules using the nearest-rank empirical training p90,
+rank ceil(0.9*n) among ascending values. Use a bin forecast only if its training
+count is at least ten; otherwise use the global training p90. No model selection.
+
+Units: API duration seconds from source Ollama total_duration, originally ns.
+GPU energy is the source's measured GPU kWh times 3,600,000, yielding joules.
+This includes the published-era default +/-0.5-second measurement buffers; it is
+neither incremental above idle nor a complete horizon energy measurement.
+CPU, wall/node, and between-request idle energy are omitted, not estimated.
+
+Physical replay slot: realized API duration plus FOUR seconds; predicted slot
+is predicted API duration plus FOUR seconds. The four consist of one second of
+measured padding and three seconds of modeled cooldown. These slots conservatively
+separate measurement windows in the conditional replay. No real hardware run,
+validated cooling model, continuous batching, TTFT or TPOT guarantee is implied.
+
+Held-out diagnostics: request count, per-configuration sum of actual and predicted
+API durations/slots/energy, mean/median/p90 per-request absolute relative error,
+aggregate absolute relative error |sum(pred)-sum(actual)|/sum(actual), and fraction
+actual <= forecast. A p90 forecast is a conservative admission estimate rather
+than a fitted conditional mean. A sum-forecast error below ten percent, if found,
+does not by itself close the missing physical compatibility/idle-energy gate.
+
+COHORT.csv contains HELDOUT rows only, sorted by prompt SHA-256: ID, input tokens,
+fixed bin, and per-configuration predicted/actual API duration, physical slot,
+measured request-window GPU joules, and forecast origin/bin sample count.
+No raw text, output token count, or payment/pooling outcomes are included.
+Prediction evaluation against held-out measured records is conditional calibration;
+it is not actual serving of held-out arrivals and cannot validate queueing SLAs.
+
+Stop on duplicate prompt IDs, invalid SHA identifiers, empty training/heldout, or
+any inconsistent claimed identity/token count. Excluded rows remain counted with
+reasons. Preserve this method file unchanged, and record its SHA-256 with results.
