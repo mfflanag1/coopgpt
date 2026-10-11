@@ -1,0 +1,21 @@
+**Provisional verdict: findings (one medium, rest low).** Most important: the "only one continuation" rule is stated in the amendment but not enforced in code — a second (or retry) run against the same original directory is accepted.
+
+## Findings
+
+**1. Medium — no single-shot enforcement / retry loophole.** `continue_study.py:25–28` validates `previous` and only requires `out` to be new. Nothing is written back to `previous` and nothing checks for an existing continuation. If the continuation aborts (e.g. `runstudy.window` raises "AC power absent" or watchdog fires on the first suffix window), rerunning with a fresh `out` name produces a second eligible attempt at the same suffix — exactly the "failed window replaced" scenario the amendment forbids (lines 16–17, 26). Chaining a continuation off a continuation *is* blocked, but only incidentally (line 14 expects dirs `window-01..n`; a continuation's dirs start at n+1). Verification: confirm no sentinel exists; suggested fix is writing `previous/CONTINUATION_CLAIMED.json` (atomic `open(..., 'x')`) before `out.mkdir`, and refusing when present. Until then, enforcement rests on operator discipline; the analyst reviewing afterward should check for multiple continuation directories.
+
+**2. Low — hardcoded `full_planned_offered=1134`** (`continue_study.py:33`) is a literal rather than `config['planned_offered']`. If the frozen CONFIG value differs, the mismatch is silent. Also `planned_offered` in the continuation CAMPAIGN.json means the *suffix* sum, whereas in the original it means the full campaign — same key, different semantics; any analyzer reading `planned_offered` must know which segment it is reading. Verify CONFIG.json `planned_offered == 1134`.
+
+**3. Low — segment binding metadata is weak.** `continuation_of=previous.name` records only a directory name (`:30`). No hash of the original `CAMPAIGN.json`/`POWER.txt.gz` is stored, and `continue_study.py`'s own hash is not recorded (only the amendment and FREEZE hashes are). Suggest adding `previous_campaign_sha256` and the script's own sha256 so the two segments and the executing code are provably linked. Cannot verify from the packet whether `continue_study.py` is listed in FREEZE.json.
+
+**4. Low — eligibility gating on `returncode==0`** (`:20`). If powermetrics exits nonzero on SIGINT, continuation is refused. This is conservative (no loophole), but worth knowing before invoking, since the amendment would then be moot.
+
+**No findings** on: budget arithmetic (`deadline = monotonic()+900` set after sampler readiness; 360s start headroom mirrors original; supervisor cap of 3000s comfortably exceeds 15min); per-window bounds (unchanged `runstudy.window` with watchdog, `check_lock` executed first); prefix validation (status, plan-field equality, CAMPAIGN/RUN agreement, REQUESTS.json presence, exact directory set); amendment language (two-segment disclosure, no cross-segment steady-state/causal claim, no concatenation of power logs, confound reporting).
+
+## Scope limitations
+- Static read only; did not execute anything or inspect the active campaign's outputs.
+- `client.run_trace`, CONFIG.json, PLAN.json, FREEZE.json contents not in packet; assumed unchanged per task statement.
+- Cannot verify powermetrics SIGINT exit code behavior or that the amendment timestamp predates the second repetition.
+
+## Verdict
+**Findings.** Code is functionally sound and scientifically conservative in selection logic, but the amendment's "only budget continuation / no replacement of failed windows" guarantee is not mechanically enforced (Finding 1). Recommend adding a single-use sentinel before invoking.

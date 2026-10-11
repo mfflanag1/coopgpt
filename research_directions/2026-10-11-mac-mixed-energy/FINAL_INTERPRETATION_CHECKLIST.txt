@@ -1,0 +1,189 @@
+PRE-INTERPRETATION CHECKLIST — FROZEN MAC MIXED SERVING/ENERGY STUDY
+Prepared from frozen PROTOCOL.txt, analyze.py, and independent_check.py only.
+The active capture-ac-confirmed directory and its outcomes were NOT inspected.
+No analyses, tests, hardware calls, network calls, or cloud delegation ran.
+No code or frozen file was changed. Use this checklist after explicit release
+of the completed capture for interpretation.
+
+A. Identify the evidence and verify completion before reading a headline
+[ ] Name the final capture directory, collection status, start/end times, and
+    number of completed, aborted, invalid, and unrun windows. Preserve all
+    attempts and any restart explanation. Earlier preflight failures are not
+    successful workload observations or empirical repetitions.
+[ ] Verify source hashes against the frozen design and collector manifest;
+    verify captured CONFIG/PLAN against source. Record final analysis/checker
+    versions and raw-capture hashes. Do not modify thresholds after outcomes.
+[ ] Account for 18 planned windows and 1,134 planned requests: N=27/54/108 at
+    rates 0.3/0.6/1.2; three P settings; two repetitions; 378 planned requests
+    per P. Missing or unrun jobs remain explicit rather than disappearing.
+[ ] Distinguish planned requests, arrived schedule slots, recorded offers,
+    dispatches, terminal events, API failures, and unverified/missing records.
+    An absent REQUESTS file alone does not prove zero offers or server failure;
+    use campaign/RUN/checkpoint evidence to classify an interruption.
+[ ] Report preserved preflight aborts separately. Do not fold zero-work aborted
+    attempts into measured throughput, episode energy, or replication counts.
+
+B. Independent recount and request integrity
+[ ] Run the frozen analyzer and independent checker only after capture release.
+    Compare all window/API/quality/SLO counts, input/cap/cross totals, exact
+    nearest-rank quantiles, and the 12 matched contrasts. Resolve every
+    disagreement at raw request ID/stream level before interpreting results.
+[ ] Confirm source KEEP rows independently reconstruct the supplied gold,
+    including record count, values, order, and table IDs. Preserve any mismatch
+    as a design error; no manual or fuzzy answer rescue is allowed.
+[ ] Confirm one expected ID and exact arrival offset per planned request,
+    monotone clocks, HTTP200, nonempty response content, correct model,
+    unique terminal done=true, consistent raw/final objects, and valid integer
+    usage fields. Actual merged request options must include the job's cap.
+[ ] Do not infer useful work from completed=true, done_reason=length, a nonempty
+    response, or a particular token count. Quality normalization permits only
+    whitespace, one enclosing bare triple-backtick wrapper, and one terminal
+    semicolon. Extra/missing/wrong/reordered/duplicate records fail quality.
+[ ] Keep raw output hashes, token counts, and output differences across matched
+    IDs. Identical task quality can coexist with different raw whitespace/hash;
+    neither differing outputs nor length stops justify dropping observations.
+[ ] The independent checker expressly does not assess metadata validity or
+    energy. Agreement of recounts is not an all-validity certificate.
+
+C. Response tables and finite-window classification
+[ ] Show each repetition for every rate/P cell before pooled summaries.
+    Columns: planned N; API completions/failures/unverified; exact-quality
+    passes; API-only SLO; quality-plus-SLO count and fraction; unfinished at90;
+    validity; finite-window criterion result and failed conditions.
+[ ] Deadlines remain 8/16/30 seconds for caps64/192/384, measured from intended
+    arrival to terminal event, inclusive at the boundary. Dispatch delay is
+    included. The fixed45s soft patience and watchdog policy are different
+    from the scientific SLO; do not substitute either for a response deadline.
+[ ] Report all three cap classes, all three input sizes, and all nine crossed
+    classes, with denominators. Per-window cross-cell N is3/6/12, per-cap N is
+    9/18/36, and per-input N is9/18/36 at the respective rates.
+[ ] A rate/P cell is acceptable only if BOTH repetitions independently meet
+    every frozen condition. Integer equivalents per repetition are:
+      rate    N     quality+SLO overall    each cap        unfinished at90
+      0.3     27    >=25 of27              >=8 of9        <=3
+      0.6     54    >=49 of54              >=15 of18      <=6
+      1.2     108   >=98 of108             >=29 of36      <=11
+    Both repetitions must also be valid and have zero API errors/unverified
+    outcomes. Pooling two repetitions cannot repair a failing repetition or
+    failing cap class. Distinguish invalid/incomplete evidence from valid
+    evidence that fails the criterion.
+[ ] Show on-time useful goodput Q/90s together with Q/N. Doubling the offered
+    rate can raise the count while lowering the success fraction; neither
+    metric should replace the other because it looks favorable.
+[ ] Show completion and first-content p50/p95 with sample n and nearest-rank
+    rule. They condition on validated API completion, including completions
+    with incorrect task answers; they exclude API failures/missing outcomes.
+    Small-class p95 may be the maximum and is not a stable population tail.
+[ ] Use the name "client first-content latency". The protocol's secondary
+    shorthand "TTFT" is not instrumented token-generation start time.
+[ ] Show early/middle/late offered cohorts and unfinished counts at30/60/90/
+    120/135s. Unfinished includes active service, not just server waiting.
+    Identify known dispatched unfinished jobs separately from an upper proxy
+    containing unverified records. Do not present that proxy as queue length.
+[ ] Preserve observed soft-timeout/administrative-censoring times and any
+    overshoot. Do not impute a successful completion at135s or another cutoff.
+    The frozen watchdog starts at145s, escalates after3s, and the collector
+    has a155s hard bound;135s is a reported checkpoint, not the final cutoff.
+
+D. Matched P2/P4 comparisons and replication
+[ ] For each of the six rate-by-repetition triplets, report P2-P1 and P4-P1
+    quality-plus-SLO differences in both count and fraction; also show API-only
+    differences to separate scheduling failures from task-quality failures.
+[ ] Report the two contrasts for each rate individually, with their mean if
+    useful. Retain sign reversals and disagreement between repetitions.
+    Do not replace the planned contrasts with whichever pair performs best.
+[ ] Verify matched settings receive the exact same trace, arrivals, caps, and
+    prompts. Rate traces are nested prefixes and reuse tasks; requests and
+    rates do not provide independent experimental replications.
+[ ] For any pooled rate/P cell, label pooled counts and quantiles descriptive.
+    Counts differ mechanically across rates because N differs. A cross-rate
+    average of count differences is not the same estimand as a mean of paired
+    fraction differences; do not interchange them without explicit labeling.
+[ ] A largest tested acceptable rate is an observed finite90s operating point.
+    A boundary requires the stated adjacent-rate pattern in both repetitions.
+    Nonmonotone results or invalid/missing cells leave a boundary unresolved.
+    Passing all rates does not identify capacity; failing all rates may reflect
+    task quality rather than congestion. Do not infer steady-state capacity.
+
+E. Validity and protocol deviations
+[ ] Enumerate every global and per-window validation error, even for windows
+    with attractive outcomes. Preserve their metrics with an invalid label.
+    Identify setup, warmup, runtime, collector, and cleanup failures separately
+    from substantive transport/terminal outcomes under a valid setup.
+[ ] Check frozen manifest/binary/model/options, actual runtime P evidence,
+    context4096, GPU residency, no input truncation, fixed queue256/settings,
+    four valid concurrent warmups in every arm, and fixed10s loaded idle.
+[ ] Check fresh owned-server provenance, original endpoint idle at boundaries,
+    ordered phase clocks matching the client epoch, post-workload model state,
+    verified unload/owned-process termination, and10s post-idle.
+[ ] Preserve host-recorded AC/charging/battery, thermal/performance, and load
+    snapshots. Earlier sandbox power readings were misleading; interpret the
+    actual collector/host evidence and recorded restart provenance. Snapshot
+    absence of warnings does not establish an unobserved benign trajectory.
+[ ] The CURRENT frozen protocol treats dispatch lag>100ms as a diagnostic,
+    not an exclusion. Report its distribution/count/max and include its effect
+    in scheduled-arrival latency. Do not import the old pilot's exclusion rule.
+[ ] Any watchdog/hard bound/budget stop remains part of the evidence. Do not
+    rerun, retune, omit, or replace a difficult window because of its result.
+
+F. Gross component-energy evidence and arithmetic
+[ ] Check raw gzip/readability, all parser errors, normal sampler termination,
+    sample chronology, nonnegative finite values, elapsed units, outer phase
+    coverage, and the common continuous timeline/prefix feasibility check.
+    Report energy validity separately from serving-window validity: top-level
+    summary.valid does not establish that the energy intervals are valid.
+[ ] Use only first Processor usage CPU/GPU/ANE/Combined mW times elapsed_ms
+    times1e-6. Do not add the later duplicate GPU section or aggregate summary.
+    Combined is separately printed, not an additional component to add to
+    CPU+GPU+ANE. Preserve the allowed small rounding difference.
+[ ] Name every horizon exactly:
+      loaded_idle_baseline: loaded_idle_start -> workload_start
+      workload_and_drain:   workload_start -> workload_drained
+      unload:               workload_drained -> server_quiescent
+      post_idle:            server_quiescent -> episode_end
+      full_episode:         loaded_idle_start -> episode_end
+    Startup/warmup occur in raw capture but are outside the primary episode.
+[ ] Report lower/upper gross CPU, GPU, ANE, and Combined joules, plus duration,
+    for valid intervals. Missing or invalid energy is null/unavailable, not0.
+    Whole-interval edge sums are bounds under stated assumptions, not point
+    estimates or statistical confidence intervals. Adjacent phase edge bounds
+    can reuse samples; do not add them and claim equality to the independently
+    bounded full episode.
+[ ] State the conditional assumptions: complete uninterrupted nonoverlapping
+    sampler intervals; reported elapsed durations and interval-energy estimates;
+    +/-1s printed-endpoint alignment; no undiscovered clock jumps. Diagnostic
+    consistency does not prove no short missing sample. Bounds do not cover
+    telemetry calibration/model/rounding error in physical energy.
+[ ] Gross energy per useful on-time success uses the SAME window's Q. For
+    Q>0, present [lower_j/Q, upper_j/Q]; for Q=0 it is undefined. Label the
+    numerator's horizon explicitly. For a pooled ratio, use sum energy divided
+    by sum Q over the same valid evidence set; do not silently average ratios.
+[ ] For matched energy differences, interval arithmetic gives
+    [L_treatment-U_baseline, U_treatment-L_baseline]. Overlapping intervals
+    cannot establish a sign. Even separated descriptive bounds do not establish
+    causal energy savings or calibrated physical-energy superiority.
+[ ] Show quality/SLO counts and actual token counts beside energy. Less gross
+    energy may accompany less successful work or earlier cancellation. Ratio
+    changes do not prove equal work, equal response quality beyond this scorer,
+    a marginal per-request energy cost, or a process-attributable saving.
+[ ] No primary idle subtraction, phase-edge constant-power interpolation,
+    per-request allocation, nameplate conversion, wall/battery-energy claim,
+    tariff/profit inference, or cross-device/data-center extrapolation.
+
+G. Final claim language and delivery
+[ ] Lead with measured descriptive outcomes, both repetitions, unresolved
+    validity/missingness, and whether the frozen finite-window criterion was
+    met. Do not characterize a failed criterion as a broadly positive result.
+[ ] The intervention changes full server configurations, including KV memory
+    behavior. One active M3 Max with background OS/apps, two task repetitions,
+    fixed patience, and counterbalanced order is not a population sample,
+    independent holdout, production SLA validation, or clean causal estimate.
+[ ] No request-level population CI/significance claim; no owner pooling,
+    multi-GPU cooperation, strategic incentive, welfare, pricing, or allocation
+    theorem follows from these serving measurements.
+[ ] Archive reproducible raw inputs, summaries, independent comparison results,
+    errors/adjudications, and final hashes. Distinguish deterministic stored-data
+    reproduction from a claim that physical timings can be reproduced exactly.
+[ ] Do not call prior test/preflight fixtures empirical workload observations.
+    Existing48+33 verification is supporting implementation evidence only;
+    it is not a substitute for the completed capture's validity review.

@@ -1,0 +1,30 @@
+**Provisional verdict: no material findings in reviewed scope.** The denominators, strata, matched contrasts, failure decomposition, and energy sums in REPORT.txt are internally consistent with RESULTS.txt and ACTUAL_DATA_AUDIT.txt; the interpretation does not overclaim. Most important item: a minor misattribution of the posthoc diagnostic count (10 vs 7), which does not change any conclusion.
+
+## Findings
+
+**1. Minor (REPORT.txt:15–17) — posthoc diagnostic description conflates two diagnostics.**
+REPORT states a diagnostic "accepting alternate separators found exact ordered record/value content in only 10/183… 173 still differed." ACTUAL_DATA_AUDIT.txt:41 distinguishes: separator-only repair → **7** exact (all the same rep1 r0010 task), and a *very loose* pair extraction → **10** ordered-gold matches. REPORT's wording ("accepting alternate separators") matches the 7-count diagnostic, not the 10. Both remain failures under the frozen score, so no outcome changes; but the sentence should either say 7 (separator repair) or describe the 10 as loose pair extraction. Verification: compare REPORT line 15–17 to AUDIT line 41.
+
+**2. Suggestion, not error (REPORT.txt:26–27).** "Inputs 32/96/192 … crossed with output caps 64/192/384; the corresponding extraction targets contained 4/12/24 KEEP records" could be read as KEEP count tracking input rows. AUDIT:40 clarifies KEEP count tracks the cap, not rows (e.g., 32-row/cap-384 tasks require 24 pairs). Rewording would avoid misreading.
+
+## Checks performed on supplied text (arithmetic/consistency)
+- Attempted N: 3×27+3×108+3×216 = 1,053; planned 1,134 − 81 unrun = 1,053. ✓
+- API completed by cell (20+27+27+21+21+12+18+24+13) = 183; per-window sum = 183; cap/row/cross strata each sum to 183 and 47 SLO. ✓
+- 807 + 63 = 870; 183 + 870 = 1,053; unverified = 0 in every window. ✓
+- Excluding window 7: 999 requests, 179 completions. ✓
+- All ten matched deltas recompute correctly from per-window table. ✓
+- Episode Combined lower bounds sum to 25,881.46 J; 25,881–26,971 J ≈ 7.19–7.49 Wh. ✓ Rate/P energy sums (e.g., 0.6/P1 = 3,423.197) match. ✓
+- 600 = 15 windows × 5 intervals × 4 components × 2 edges. ✓
+- Window 7: 133.339326 − 133.318943 = 0.020383 s > 1 ms tolerance; retained as invalid, not relabeled. ✓
+- Budget: 22:25:40→23:05:40 = 40 min; with 360 s headroom under a 45-min budget, no further window could start. ✓ Energy span 22:25:50→23:05:39 = 2,389 s. ✓
+- Finite-window criterion: unfinished90 (e.g., 9 > ceil(0.1·27)=3) and quality 0% fail everywhere; 0.3 cells lack rep2; 0.6/P4 includes invalid window 7. ✓
+
+No false completeness (study explicitly incomplete; continuation sent zero requests and is not counted), no posthoc rescue (diagnostics labeled non-replacement), no causal energy, pooling, or capacity claims, and joules/success correctly reported as undefined rather than zero. Next-gate reasoning (calibrate task/model accuracy first, fix clock bridge and power auth on a short run, then complete sweep) follows directly from the observed failure modes.
+
+## Scope limitations
+- Only REPORT, RESULTS, PROTOCOL, ACTUAL_DATA_AUDIT text was reviewed; COMBINED.json, raw captures, scorers, and energy parsers were not inspected. Agreement of 5,841 recounts and 600 energy sums is accepted as supplied evidence.
+- Cannot verify FREEZE hash claims, timing provenance, or that no outcome-dependent edits occurred beyond the documents' assertions.
+- Correctness of the 1,134 gold reconstructions is taken from the audit, not re-derived.
+
+## Verdict
+**No material findings in reviewed scope.** One minor wording imprecision (Finding 1) and one clarity suggestion; neither affects denominators, validity labels, or conclusions.

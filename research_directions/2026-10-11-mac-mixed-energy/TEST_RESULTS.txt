@@ -1,10 +1,32 @@
-................................................
-----------------------------------------------------------------------
-Ran 48 tests in 3.177s
+Verification after physical collection ended, 2026-10-11
 
-OK
-................................................
-----------------------------------------------------------------------
-Ran 48 tests in 3.156s
+python3 -B -m unittest discover -s . -p 'test_*.py'
+Ran89 tests in8.277s: OK
 
-OK
+python3 -O -B -m unittest discover -s . -p 'test_*.py'
+Ran89 tests in7.683s: OK
+
+python3 -B independent_check.py --self-test
+33 assertion groups; passed=true; synthetic_only=true
+python3 -O -B independent_check.py --self-test
+33 assertion groups; passed=true; synthetic_only=true
+
+python3 -B combine_analysis.py . capture-ac-confirmed capture-final-suffix --output /tmp/coop-mixed-combined.json
+full_collection_completed=false; reproduction_passed=true
+Actual-data reproduction:5,841 exact comparisons, no mismatches.
+
+These are implementation checks, not successful empirical outcomes.
+
+Stored-data serialization verification:
+COMBINED.json exactly matches a fresh two-segment combine (cmp exit0).
+RESULTS.txt exactly matches report_tables.py output (cmp exit0).
+Single actual-segment reproduction matches all480 top-level measured-window
+fields, including all75 energy intervals;5841 independent recount checks pass.
+
+Independent raw energy/quality audit helper:
+reproduce_audit.py, normal Python by independent auditor and -O by root.
+1,134 source-gold controls,600 component energy-bound checks exactly equal;
+serialized outputs match byte-for-byte. No new hardware measurements.
+
+Git diff whitespace check passes for authored source/docs. Raw Ollama SERVER.log
+files retain30 original trailing-space lines; they are intentionally not rewritten.

@@ -1,0 +1,29 @@
+**Provisional verdict: no false-validity or silent-loss path found in reviewed scope; two low/medium hardening findings.** Most important: the combiner runs `independent_check.py` (and itself) without requiring either to be covered by any freeze manifest, so the "independent recount" is only post-hoc auditable, not enforced.
+
+## Findings
+
+**1. Medium — independent_check.py / combine_analysis.py / continue_study.py are not freeze-enforced.**
+`combine_analysis.py:75` requires only CONFIG/PLAN/analyze/energy/traces in FREEZE. `independent_check.py` is merely hashed into provenance (`:87-91`); `CONTINUATION_FREEZE.json` is optional (`:184`). A modified checker that echoes analyzer output would pass `compare_recounts` trivially. The recorded hash permits later audit but does not stop it. Verification: require `CONTINUATION_FREEZE.json` (or FREEZE entries) covering `independent_check.py`, `combine_analysis.py`, `continue_study.py` whenever two segments are supplied; add a test that absence is rejected.
+
+**2. Low — single empty segment accepted.**
+`:142` accepts `first['indices'] == []` for a one-segment run (the `0 < len` guard at `:150` applies only to two segments). Result is all-unrun, `summary.valid=False`, so not a false validity, but it silently produces a 1134-denominator "analysis" of nothing. Suggest rejecting an empty sole segment.
+
+**3. Low — test gaps.**
+- `full_collection_completed` (`:326`) with a `completed`/`budget_stopped` suffix containing a failed window is never exercised through `combine()`; only `validate_segments` partial-suffix acceptance is tested (`test_combine_analysis.py:116-124`).
+- `test_reject_missing_or_changed_amendment` (`:187`) tests only "missing"; "changed" is covered indirectly via `amendment_sha256='bad'`, but not a changed file with stale recorded hash on disk — would be caught by `:169`, so fine, just mislabelled.
+- No test that a second segment whose POWER capture lacks coverage for its windows yields `valid=False` energy rather than borrowing prefix telemetry (the code path at `:313-316` is correct by construction, but untested).
+
+**4. Informational — correctness confirmed.**
+- Overlap/gap/duplicate/lineage/chronology checks (`:138-200`) are consistent and tested.
+- Energy is recomputed per segment (`:301`, `:313-316`); phase coverage checks in `energy.energy_bounds` (`energy.py:493-506`) invalidate any window whose phases fall outside its segment's capture, so cross-gap misattribution cannot yield numbers.
+- Power-stop errors feed `parsed['errors']`, which `energy_diagnostics` (`analyze.py:291`) turns into `valid=False` for all intervals — no zeros.
+- `compare_recounts` covers `planned_count`, `api_completed_count`, `api_failure_or_unverified_count`, quality/SLO counts and nearest-rank quantiles for every window, cell, cross-class and matched difference; missing independent entries compare as `None` and fail.
+- Replacement of `window['energy']` occurs inside the `frozen_modules` context (`:300-324`), so `import energy` resolves to the frozen module.
+
+## Scope limitations
+- `independent_check.py`, `continue_study.py`, `test_analysis.py` fixture and the wrapper's atomic-claim logic are not in the packet; I cannot verify the checker actually re-reads REQUESTS.json independently, or that the wrapper never deletes an attempted window before recording it (the combiner cannot detect that; `__doc__:10-12` correctly states this).
+- Tests not executed; the "19 pass" claim is taken as reported.
+- Real capture data unavailable by design; not treated as a finding.
+
+## Verdict
+**Findings** — one medium (unenforced freeze of recount/combiner modules), minor hardening and test-coverage gaps. No path identified by which the combiner reports `full_collection_completed=True`, `summary.valid=True`, or non-null energy from overlapping, skipped, substituted, or cross-gap data.

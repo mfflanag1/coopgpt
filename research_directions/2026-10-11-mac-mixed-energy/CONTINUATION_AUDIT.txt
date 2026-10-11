@@ -1,0 +1,77 @@
+CONTINUATION WRAPPER — INDEPENDENT OFFLINE AUDIT
+11 October 2026
+
+Scope
+Reviewed continue_study.py and CONTINUATION_PROTOCOL.txt only, plus tiny synthetic
+fixtures. Did not inspect any actual capture directory, active outcome, request,
+quality result, latency, energy value, hardware endpoint, or server. The test
+module injects stand-in runstudy and power_capture modules before loading the
+wrapper, so even importing the tests cannot import the real collection runtime.
+No canonical file was edited by this auditor. Owned artifacts are only
+/tmp/test_coop_continue.py and this report. Tests took under one second of test
+runtime per final invocation; no workload or heavy analysis was run.
+
+Verified defects and repairs
+1. Initial wrapper allowed repeated invocations against the same original
+campaign with new output directories, reoffering the same suffix. The parent
+added an atomic exclusive-create CONTINUATION_CLAIM.json in the original capture
+before any new meter or serving launch. Verified: a preexisting claim rejects
+without launching either meter or workload; a second invocation after a first
+synthetic continuation also rejects. The claim stays consumed after an attempt;
+a failed invocation must not be retried merely under a new output name.
+
+2. Initial sampler-stop validation accepted a normal POWER_STOP.json even when
+CAMPAIGN.power_stop contradicted it, and Python equality accepted False and0.0
+as zero return codes. The parent added JSON type-sensitive comparisons, matching
+campaign/file stop metadata, rejection of recorded power_stop_error, and strict
+integer returncode=0 with stop_confirmed literally True. All mutations now reject.
+
+3. The parent added original-campaign, original-power-archive, and wrapper-source
+SHA256 fields, plus full planned count from CONFIG instead of a hardcoded1134.
+The successful synthetic suffix test independently recalculates and verifies
+those hashes and counts. It also confirms all preexisting original files are
+byte-identical afterward; the only authorized original-directory addition is
+the one-time continuation claim.
+
+Tests
+Final command: PYTHONDONTWRITEBYTECODE=1 python3 /tmp/test_coop_continue.py
+Result: 19 tests passed (0.722 seconds reported test runtime).
+Optimized command: PYTHONDONTWRITEBYTECODE=1 python3 -O /tmp/test_coop_continue.py
+Result: 19 tests passed (0.662 seconds reported test runtime).
+
+Coverage includes: eligible nonempty prefix; aborted/running/completed/starting
+campaign rejection before launch; empty/full prefix rejection; unfinished prior
+attempt; missing/extra attempted directories; duplicated/reordered records;
+CAMPAIGN/RUN mismatch; missing REQUESTS artifact; source CONFIG/PLAN mismatch
+including type changes; abnormal/unconfirmed/noninteger sampler stops; stop-
+metadata contradiction and recorded stop errors; exact suffix-only execution;
+prior-file preservation; provenance hashes; repeat/preexisting claim rejection;
+and a new-window failure retaining its abort without launching a later window.
+All fixtures have only four planned windows and one synthetic request per trace.
+
+Disposition and limits
+No unresolved blocking issue was found in the reviewed continuation eligibility
+or one-attempt controls after these repairs. The wrapper follows the original
+order, refuses to replace attempted windows, uses the frozen runtime, and keeps
+the continuation in a separate output directory. Eligibility is structural;
+it does not certify the scientific validity of earlier completed windows. Their
+measurements must remain subject to the frozen analysis, including invalidity.
+
+The15-minute deadline is checked between windows with360-second headroom and
+relies on the already frozen runtime's per-window operational bounds; it is not
+a new independent real-time process supervisor. Authentication and startup
+outside that clock should not be represented as exactly15 minutes wall time.
+The parent should freeze the final wrapper/protocol before executing it. The
+protocol's statement about no earlier outcome inspection is procedural provenance,
+not something unit tests can prove; this audit itself did not access outcomes.
+
+Any combined report must show both chronological segments, missing cells if any,
+per-window segment identity, and the extra timing/thermal/background confound.
+Parse and bound each power capture separately. Do not concatenate intervals
+across the restart gap or let continuation retrospectively relabel the original
+45-minute campaign as complete. These limitations are already stated in the
+continuation protocol and are consistent with the repaired wrapper.
+
+Audited source hashes:
+continue_study.py 904eb4deee7f30035e4e36267e082d8540c2212de90d966a9a78ba15c959653d
+CONTINUATION_PROTOCOL.txt ed35390e0736ab4bc43eb641b749983362367d0ae55ee7f013f6983f972604ec

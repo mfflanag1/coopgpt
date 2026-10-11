@@ -1,71 +1,153 @@
-Mixed-length Mac serving and component-energy study — prepared; collection blocked
-2026-10-11
+Mixed-length Mac serving and component-energy study — measured, incomplete, quality gate failed
+11 October 2026
 
-Status
-The longer study is implemented, independently reviewed, tested and frozen.
-No new workload requests were sent. Both collection attempts stopped at the
-AC-power preflight before server creation, warmups or request dispatch. All
-failure evidence remains in capture/ and capture-ac-restart/. Their analyses
-explicitly show missing planned outcomes, not invented failures or successes.
+Finding
+The longer study produced 1,053 actual requests in 15 of 18 planned windows.
+There were 183 validated API completions and 870 recorded timeouts. None of the
+183 completed responses passed the frozen exact-answer test, so useful on-time
+success was 0/1,053. There were 47 API completions within their latency deadlines,
+but their answers were incorrect under the declared task contract. This does
+not establish a useful-work scheduling gain, energy saving, or pooling benefit.
+The study is incomplete: 81 planned requests in windows16–18 were never sent.
 
-Direct host checks say Battery Power / No adapter attached. A sandboxed pmset
-check misleadingly returned AC Power while the battery percentage/discharge
-state matched the host. Only direct host power checks should govern resumption.
-The first restart followed three misleading sandbox AC readings; its actual
-host preflight correctly stopped it too. RESTART_RECORD.json preserves that
-chronology. No selective data rerun or outcome-based retuning occurred.
+The negative result is not explained solely by answer formatting. An independent
+raw audit reconstructed every gold answer from the input KEEP records. No completed
+output contained the required Rdddd=ddd pair syntax. Loose posthoc extraction of
+ID/value pairs matched the exact ordered gold content in only10/183 completed
+outputs;173 still differed. Merely repairing the ID/value separator gives seven
+exact answers; the other three loose matches retain extra labels or formatting.
+These diagnostics are NOT replacement scores.
+All183 remain quality failures under the original protocol. Examples and the
+independent audit are retained. The model/task pair needed an accuracy-calibration
+stage before this longer measurement campaign; generic warmups did not supply it.
 
-What is ready
--18 fixed windows:1,2,4 serving slots x0.3,0.6,1.2 requests/second x2 repetitions.
--Each trace offers requests over90 seconds;1,134 planned offers total.
--Input32/96/192 records crossed with output caps64/192/384 tokens; identical
- matched traces across slot counts, with reversed order in repetition2.
--Exact extraction quality checked against source KEEP records, alongside
- prospective cap-specific8/16/30-second scheduled-arrival latency requirements.
--Four concurrent nontrace warmups per arm; fresh owned server; fixed model,
- context, queue/cache settings; pre/post idle periods; retained errors/checkpoints.
--Continuous1-second-target powermetrics CPU/GPU/ANE capture through warmup,
- workload, drain and quiescence, with raw samples and conservative phase bounds.
+What ran
+One inventoried Apple M3 Max,30GPU cores,96GB unified memory; Ollama0.20.0 and
+llama3.2:3b Q4_K_M. This is the same host under1,2,4 serving-slot configurations.
+Each window had90 seconds of scheduled open-loop arrivals, at0.3,0.6 or1.2
+requests/second. Inputs32/96/192 records were crossed with output caps64/192/384.
+The output cap determines the4/12/24 KEEP target count, independently of input
+rows; corresponding deadlines were8/16/30 seconds from scheduled arrival.
+Output caps do not fix actual length.
+A45-second soft/socket patience policy was fixed in advance. Early cancellation
+can affect subsequent queueing; these are finite-window policy outcomes.
 
-Energy instrumentation is now functional
-The authenticated capability probe recorded3 actual samples. A separate
-start/stop test recorded9 actual samples and confirmed normal sampler exit.
-Each stopped study attempt also retained its preflight-only telemetry. These
-are instrument checks/background measurements, not serving-energy results.
-The first detached-helper preflight failed because macOS nohup could not detach
-from the console; it is preserved. The repaired bounded supervisor passed.
+The full plan contained two repetitions per rate/configuration,1,134 requests.
+Collection in capture-ac-confirmed ran22:25:40–23:05:40 UTC and stopped under its
+unchanged45-minute budget with360-second start headroom. Windows1–15 completed
+operationally. At0.3 there is only repetition1; at0.6 and1.2 both repetitions ran.
+No performance, quality or energy outcomes were inspected during collection.
 
-Report gross component estimates, not wall energy or inference-attributed
-energy. Conditional interval bounds use reported power x measured elapsed and
-whole-interval inclusion under +/-1s timestamp alignment; they assume a complete
-continuous capture and do not bound calibration error. Independent audits found
-and repaired malformed-header handling and a prefix-alignment counterexample.
-Rounded timestamps alone cannot prove that no short interval was omitted.
+A one-time conditional completion amendment was recorded at22:48:48 UTC, before
+repetition2, based only on collection pace. The original run stopped as designed.
+The frozen continuation attempted to start at23:07:54 UTC but macOS power-sampler
+authorization timed out135 seconds later. It sent NO requests and created no
+power capture. Its terminal aborted record is retained in capture-final-suffix.
+The permitted continuation was not repeated. Its absent telemetry is unavailable,
+not zero energy. Earlier request-free charger/preflight aborts in capture/ and
+capture-ac-restart/ are also retained; none count as experimental repetitions.
+The design and scoring were not changed after seeing outcomes.
 
-Verification
-48 tests pass in normal and optimized Python. An independent recount script
-also passes33 synthetic checks in both modes and confirms zero actual dispatches
-in each stopped attempt. They cover open-loop dispatch,
-stream/error accounting, per-job caps, bounded collection and interrupted-data
-retention, owned-process cleanup, quality/scoring/missingness, provenance, and
-energy units/duplicate fields/coverage/prefix alignment. Separate Codex/Fable
-implementation and review records are retained. No review verdict substitutes
-for the still-unrun measured study.
+Observed counts (P=serving slots; N counts only actually attempted windows)
+rate   P   reps   N    API completed  API within SLO  exact quality + SLO
+0.3    1     1    27         20              6                  0
+0.3    2     1    27         27             16                  0
+0.3    4     1    27         27              2                  0
+0.6    1     2   108         21              5                  0
+0.6    2     2   108         21              5                  0
+0.6    4     2   108         12              1                  0 *
+1.2    1     2   216         18              4                  0
+1.2    2     2   216         24              6                  0
+1.2    4     2   216         13              2                  0
+*Includes window7, which fails a frozen clock-consistency check; retained, not
+  silently excluded or relabeled valid. See below. The other14 attempted windows
+  pass serving metadata validation. No tested cell meets the finite-window gate.
 
-Interpretation
-No longer-workload performance result, energy-saving result, or new pooling
-conclusion is established. The completed earlier128-request pilot is unchanged.
-This experiment compares serving configurations on one inventoried Apple M3 Max
-(30-core GPU,96GB), not two independently owned machines. Even favorable results
-would support only a qualified same-device configuration finding. Representative
-workload quality, independent hardware, credible ownership/deviations and actual
-resource-cost measurement remain requirements for a pooling claim.
+Restricting descriptively to the14 serving-valid windows leaves999 requests,
+179 API completions and still zero exact-quality or useful on-time successes.
+The full-attempt accounting above remains authoritative; no data were discarded.
 
-Next action
-Restore a charger connection verified directly on the host, then run the same
-frozen18-window design in a NEW capture directory. Preserve both aborted
-attempts. Expected collection time roughly35–45 minutes; explicit45-minute
-budget and per-window timeouts apply. Do not overwrite prior captures or change
-thresholds based on results. Analyze and independently recount before claiming
-any gain; obtain focused review of the eventual measured conclusions.
-See REPRODUCE.txt and PROTOCOL.txt.
+The870 failures comprise807 socket inactivity timeouts and63 elapsed-budget
+failures between stream lines. All1,053 dispatched requests have recorded terminal
+outcomes; there are no unverified outcomes among attempted requests. Missing81
+planned requests are separately retained in full-design denominators. In every
+measured input/cap/cross class, exact quality and useful on-time counts are zero.
+RESULTS.txt supplies per-window repetitions, all strata, matched contrasts,
+conditional nearest-rank completion/first-content quantiles, unfinished counts,
+cohorts, failed criterion conditions, and phase/component energy bounds.
+
+The low-rate P2 window has a favorable API-only comparison, but only one repetition
+and zero correct answers. At0.6 the P2-P1 API completion difference reverses from
++3 to-3 between repetitions; the corresponding API-deadline difference is+1 then-1.
+These secondary results cannot establish a robust useful-work advantage. There is
+no population confidence interval, sustained capacity estimate, or best production
+configuration claim. The requests and nested rate traces are not independent
+experimental replications.
+
+Energy measurement
+The successful segment contains2,346 raw powermetrics samples, no parser errors,
+and a confirmed normal sampler shutdown. All75 measured phase intervals (five
+per window) pass the frozen coverage and common-timeline consistency diagnostics.
+For the15 full episodes, gross Combined CPU/GPU/ANE interval estimates sum to
+25,881–26,971 joules, or about7.19–7.49Wh. This sum includes the separately labeled
+serving-invalid window7; its telemetry interval itself passes energy validation.
+It is a sum of loaded-idle-through-post-idle episodes, not the entire campaign:
+startup, warmup, inter-window gaps and authentication time are outside that sum.
+
+These are conditional whole-sample interval bounds under the stated complete,
+continuous, nonoverlapping capture and +/-1-second timestamp alignment assumptions.
+They do not bound physical calibration error; rounded timestamps alone cannot
+prove absence of a short missing sample. Raw reported milliwatts are multiplied
+by actual interval milliseconds, with duplicate GPU sections excluded. CPU/GPU/ANE
+and Combined are shown separately in RESULTS.txt. Adjacent phase edge bounds may
+overlap and must not be added to reconstruct a full-episode bound.
+
+The estimates include other apps and OS activity, with no process attribution
+or baseline subtraction. The Mac was charging and not an isolated inference
+appliance. Brief synthetic verification checks also ran during collection and
+are part of the background activity, not separately metered. Component telemetry
+is not wall energy, battery energy, charger input, or data-center power. Since
+useful on-time success is zero, joules per useful success is undefined in EVERY
+observed window. A smaller gross episode total cannot be called an efficiency
+gain when the useful-output gate fails. No power logs were joined across segments.
+
+Clock validation finding
+Window7 (P4,0.6,rep1) reports133.339326 seconds of monotonic client elapsed time
+but133.318943 seconds between wall-clock workload phases, a20.383ms discrepancy.
+This exceeds the frozen1ms tolerance. Collector code records the drain phase after
+the client returns, so this disagreement does not by itself demonstrate premature
+drain; a cross-clock issue is plausible. The cause is unproved. Window7 remains
+invalid under the unchanged check. Future collection should use paired monotonic
+phase clocks, with an explicit wall-clock bridge for telemetry, before freezing
+a new protocol. We did not relax this check retrospectively.
+
+Verification and provenance
+All89 unit/integration tests pass in normal and optimized Python. The separate
+independent checker passes33 synthetic assertion groups in both modes. The actual
+combined analysis agrees with independent recounts on5,841 exact comparisons,
+including counts, strata, conditional quantiles and matched differences, with zero
+mismatches. An independent parse of all2,346 raw energy blocks also reproduces
+all600 component lower/upper sums across the75 measured phase intervals exactly. Test success does not make the incomplete study complete or remove
+window7's invalid label. Original FREEZE.json and CONTINUATION_FREEZE.json match
+their files. COMBINED.json retains complete analysis, independent counts, errors,
+source identities, both campaign records and completeness. ARTIFACT_MANIFEST.json
+hashes delivered artifacts. REPRODUCE.txt describes stored-data checks.
+
+Cleanup was checked directly on the host after the authorization timeout: no
+owned serving/telemetry/collector process remained, original Ollama11434 was idle,
+and the Mac reported AC charging. A stop sentinel prevents any late continuation
+sampler from running on. No user Ollama server or unrelated app was stopped.
+
+Decision and next gate
+Do not extend these observations to resource pooling or choose a concurrency
+winner. The next bounded experiment should first qualify a realistic, exactly
+scorable workload/model pair at negligible queueing on fresh calibration tasks.
+Require a predeclared high correctness rate and sufficient answer token budgets
+across every intended input/output class; retain failures and freeze a separate
+holdout before measuring any schedule. Repair and test the clock bridge and
+power-authentication startup on a short capability run first. Then repeat a
+complete, adequately budgeted rate sweep, bracketing saturation from below, with
+request quality, latency and full-horizon energy measured together. Only after
+that gate should we add a second compatible independently owned configuration
+and test economically meaningful pooling/deviation/cost assumptions. No further
+hardware run is automatically started by this report.

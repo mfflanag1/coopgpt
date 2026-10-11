@@ -1,39 +1,82 @@
-Stored-data checks (no model, network or administrator privilege needed):
-  cd research_directions/2026-10-11-mac-mixed-energy
-  python3 -B -m unittest test_analysis test_energy test_runstudy
-  python3 -B analyze.py capture --output /tmp/coop-mixed-abort1-summary.json
-  python3 -B analyze.py capture-ac-restart --output /tmp/coop-mixed-abort2-summary.json
-Both summaries are correctly invalid:0 requests dispatched, all1,134 planned
-outcomes missing. Do not interpret planned_count as actual offers sent.
+Stored-data reproduction — no hardware workload or administrator privilege required
 
-Full48-test suite additionally opens a loopback HTTP fixture:
+From research_directions/2026-10-11-mac-mixed-energy:
+  python3 -B combine_analysis.py . capture-ac-confirmed --output /tmp/coop-mixed-measured.json
+This verifies frozen source identity and analyzes all15 actual windows, preserving
+windows16–18 as unrun. It performs5,841 exact comparisons with an independent
+request recount. All measured-window fields, including75 phase-energy intervals,
+agree with COMBINED.json. This single-segment path works from a relocated clone.
+The aborted suffix contains no requests or telemetry; it supplies no observations.
+
+To additionally verify the entire original continuation lineage on the original
+checkout, including its exclusive absolute-path claim:
+  python3 -B combine_analysis.py . capture-ac-confirmed capture-final-suffix --output /tmp/coop-mixed-combined.json
+  cmp COMBINED.json /tmp/coop-mixed-combined.json
+Expected: exact byte agreement, full_collection_completed=false, reproduction_passed=true.
+The strict two-segment command intentionally checks the recorded absolute output
+path in CONTINUATION_CLAIM.json; it will reject a relocated checkout. Do not edit
+raw provenance to bypass it. Use the single actual segment above to reproduce
+all measured outcomes on another machine; both campaign/claim records remain
+available for inspection. Missing suffix power is a recorded absence, not zero.
+
+Recreate the delivered descriptive tables from the delivered full analysis:
+  python3 -B report_tables.py COMBINED.json /tmp/coop-mixed-results.txt
+  cmp RESULTS.txt /tmp/coop-mixed-results.txt
+RESULTS uses attempted-window denominators and labels the three unrun windows.
+Full-design planned denominators and all missingness diagnostics remain in
+COMBINED.json. Do not read synthesized unrun zeros as observed zero performance.
+
+Independent raw-energy and answer-diagnostic reproduction:
+  python3 -B reproduce_audit.py . --output /tmp/coop-mixed-audit-checks.json
+  cmp AUDIT_CHECKS.json /tmp/coop-mixed-audit-checks.json
+Expected1,134 source-gold controls,183 completions,870 failures,0exact quality,
+7separator-only and10loose-extraction diagnostic matches, and600component bounds
+with maximum difference exactly0J. Diagnostics do not replace primary quality.
+The raw parser/integrator does not call the frozen energy parser for its sums;
+frozen analysis supplies reference values only. This is a check of this preserved
+capture, not an independently validated general telemetry parser. Root reran it
+with -O and obtained identical serialized results. On a relocated clone the JSON
+source_dir field changes; compare the checked counts and hashes, not that path.
+
+Implementation checks:
   python3 -B -m unittest discover -s . -p 'test_*.py'
   python3 -O -B -m unittest discover -s . -p 'test_*.py'
-
-No workload replay is part of reproduction. To actually collect new data,
-first verify ON THE HOST (not the misleading sandbox) pmset -g batt reports
-AC Power and pmset -g ac confirms the adapter. Keep the original Ollama server
-on11434 idle;11562 must be free. Preserve the fixed FREEZE hashes. Run:
-  python3 -B runstudy.py --output /absolute/new/capture-directory
-This explicitly starts workload and authenticates a read-only powermetrics
-supervisor using the standard macOS password dialog. Credentials never enter
-chat or stored files. Estimated35–45min; max45min collection budget, only start
-another window with>=360s remaining. Use a new output directory every attempt.
-If any setup/window fails, capture is retained and the campaign aborts.
-
-After collection:
-  python3 -B analyze.py /absolute/new/capture-directory
-Inspect all window validity, exact-quality+SLO denominators, class failures,
-matched contrasts, complete energy coverage, sampler stop and original-server
-idle state. Independent recount and review are required before interpretation.
-
-FREEZE.json fixes protocol/traces/collector/analysis before any study requests.
-ARTIFACT_MANIFEST.json hashes all delivered files except itself. Raw power
-text is gzip-compressed without modification. Apple power estimates are
-component-domain telemetry; calibration, causal attribution, background load,
-wall power and independent-owner pooling are outside these measurements.
-
-Independent recount (imports neither analyze.py nor energy.py):
   python3 -B independent_check.py --self-test
-  python3 -B independent_check.py . capture --output /tmp/coop-mixed-independent1.json
-  python3 -B independent_check.py . capture-ac-restart --output /tmp/coop-mixed-independent2.json
+  python3 -O -B independent_check.py --self-test
+Expected89 tests and33 independent synthetic assertion groups per Python mode.
+The full suite uses a temporary loopback HTTP fixture, not a model or new study.
+A sandbox may require permission for that local listener. See TEST_RESULTS.txt.
+
+Prior preflight-only attempts remain independently reproducible:
+  python3 -B analyze.py capture --output /tmp/coop-mixed-abort1.json
+  python3 -B analyze.py capture-ac-restart --output /tmp/coop-mixed-abort2.json
+Their invalid analyses contain zero actual dispatches. Neither is a repetition.
+The continuation authentication timeout also dispatched zero requests.
+
+Integrity:
+python3 -B - <<'PY'
+import hashlib,json,pathlib
+base=pathlib.Path('.')
+for manifest in ('FREEZE.json','CONTINUATION_FREEZE.json','ARTIFACT_MANIFEST.json'):
+    data=json.loads((base/manifest).read_text())
+    bad=[name for name,value in data['sha256'].items()
+         if hashlib.sha256((base/name).read_bytes()).hexdigest()!=value]
+    if bad: raise SystemExit((manifest,bad))
+    print(manifest,len(data['sha256']),'hashes match')
+PY
+FREEZE fixes the original precollection protocol/traces/collector/scoring.
+CONTINUATION_FREEZE fixes the prospectively declared suffix wrapper/combiner.
+ARTIFACT_MANIFEST hashes all delivered study files except itself. Original raw
+JSON and gzip-compressed powermetrics text have not been rewritten.
+
+No physical replay is part of these commands. The original study terminated after
+its time budget, and its sole continuation was exhausted by authentication timeout.
+Do not invoke the old continuation again or replace unfavorable/invalid windows.
+Any future physical experiment needs a new prospectively frozen calibration and
+holdout design, paired monotonic/wall clocks, adequate collection budget, a working
+power-authentication capability check, and direct host AC verification. Outcome
+thresholds must not be relaxed to rescue this study. See REPORT.txt's next gate.
+
+Measured energy is gross CPU/GPU/ANE telemetry under conditional timing bounds,
+not wall power or process attribution. All useful-success denominators are zero.
+Neither code tests nor a faithful stored-data reproduction establish pooling gains.
