@@ -1,0 +1,2260 @@
+{
+  "controls": [
+    {
+      "case": {
+        "acceptable_evidence": [],
+        "author_id": "ray_i1",
+        "claim": "Both statements hold: (a1) The `max_concurrency` setting of a running Ray actor can be changed after the actor is created. (a2) Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+        "components": [
+          {
+            "claim": "The `max_concurrency` setting of a running Ray actor can be changed after the actor is created.",
+            "contradict": [],
+            "id": "a1",
+            "label": "insufficient",
+            "rationale": "The packet neither confirms nor denies this behavior.",
+            "support": []
+          },
+          {
+            "claim": "Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D1"
+              ]
+            ]
+          }
+        ],
+        "label": "insufficient",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 4538,
+            "source_char_start": 4052,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "8db48c1d65893cf0dd57ce9645b9506ba406d63c4bdcc4f6eb0f566f0117377a",
+            "text": "(async-ref-to-futures)=\n(objectrefs-as-concurrentfuturesfutures)=\n### Object refs as `concurrent.futures.Future` objects\nYou can also wrap object refs in `concurrent.futures.Future` objects to work with existing `concurrent.futures` APIs:\n\n```{testcode}\nimport concurrent\n\nrefs = [some_task.remote() for _ in range(4)]\nfuts = [ref.future() for ref in refs]\nfor fut in concurrent.futures.as_completed(futs):\n    assert fut.done()\n    print(fut.result())\n```\n\n```{testoutput}\n1\n1\n1\n1\n```\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 7123,
+            "source_char_start": 6198,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "cf8dbe212082aec446ea9f804938acaf2e66ceb696fa9936c9594264497a7291",
+            "text": "(setting-concurrency-in-async-actors)=\n### Set concurrency in async actors\n\nUse the `max_concurrency` flag to set how many \"concurrent\" tasks run at once. By default, 1000 tasks can run concurrently.\n\n```{testcode}\nimport asyncio\nimport ray\n\n@ray.remote\nclass AsyncActor:\n    def __init__(self, batch_size: int):\n        self._event = asyncio.Event()\n        self._curr_tasks = 0\n        self._batch_size = batch_size\n\n    async def run_task(self):\n        print(\"Started task\")\n        self._curr_tasks += 1\n        if self._curr_tasks == self._batch_size:\n            self._event.set()\n        else:\n            await self._event.wait()\n            self._event.clear()\n            self._curr_tasks = 0\n\n        print(\"Finished task\")\n\nactor = AsyncActor.options(max_concurrency=2).remote(2)\n\n# Only 2 tasks will run concurrently.\n# Once 2 finish, the next 2 should run.\nray.get([actor.run_task.remote() for _ in range(8)])\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 3361,
+            "source_char_start": 2955,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "d4947ff334fb9c6f2f9e494069a7b0a349f62fd1386cb3b36f66e65a573fa536",
+            "text": "(objectrefs-as-asynciofutures)=\n### Object refs as `asyncio.Future` objects\nYou can use object refs as `asyncio.Future` objects, which means you can `await` Ray futures in existing concurrent applications.\n\nInstead of:\n\n```{testcode}\nimport ray\n\n@ray.remote\ndef some_task():\n    return 1\n\nray.get(some_task.remote())\nray.wait([some_task.remote()])\n```\n\nyou can await the object ref in Python 3.9 and 3.10:\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [],
+        "request_id": "b4d53981f8cef6bc7568",
+        "source_id": "ray_async"
+      },
+      "outcome": {
+        "case_id": "b4d53981f8cef6bc7568",
+        "correct_decision": false,
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": null,
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "setting-concurrency-in-async-actors"
+                  ]
+                ],
+                "support": []
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "async-ref-to-futures"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": false
+          },
+          "reason": "inventory_unusable"
+        },
+        "error_group": "unsupported_decisive",
+        "expected_accept": true,
+        "pair_id": "pair_b4d53981f8cef6bc7568",
+        "request_id": "c_df38c3c0ebe804d91665"
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "kube_c1",
+        "claim": "Both statements hold: (a1) A Kubernetes memory quantity of `400m` denotes 400 mebibytes. (a2) Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+        "components": [
+          {
+            "claim": "A Kubernetes memory quantity of `400m` denotes 400 mebibytes.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 9692,
+            "source_char_start": 8704,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "9dc7003f2a302a856cac3c4264a61f17cb00799d75a24792677cc3cc22fc6752",
+            "text": "### Memory resource units {#meaning-of-memory}\n\nLimits and requests for `memory` are measured in bytes. You can express memory as\na plain integer or as a fixed-point number using one of these\n[quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) suffixes:\nE, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi,\nMi, Ki. The Kubernetes API also allows m as a suffix (for millibytes: 1/1000 of a byte),\nbut this isn't useful to specify: you must always assign whole numbers of bytes, or sometimes larger chunks such as multiples of 1 gibibyte.\n\nHere are some examples of memory quantities that represent roughly the same value:\n\n```shell\n128974848, 129e6, 129M,  128974848000m, 123Mi\n```\n\nPay attention to the case of the suffixes. \"M\" means megabytes, while \"m\" means millibytes. If you request `400m` of memory, this is a request for 0.4 bytes. Someone who types that probably meant to ask for 400 mebibytes (`400Mi`)\nor 400 megabytes (`400M`).\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 8703,
+            "source_char_start": 7374,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "f3f1acef6191d21eb0a4007f3311c2de74f0fb4e61aede93c051fd1f6cf4b0bc",
+            "text": "Fractional requests are allowed. When you define a container with\n`spec.containers[].resources.requests.cpu` set to `0.5`, you are requesting half\nas much CPU time compared to if you asked for `1.0` CPU.\nFor CPU resource units, the [quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) expression `0.1` is equivalent to the\nexpression `100m`, which can be read as \"one hundred millicpu\". Some people say\n\"one hundred millicores\", and this is understood to mean the same thing.\n\nCPU resource is always specified as an absolute amount of resource, never as a relative amount. For example,\n`500m` CPU represents the roughly same amount of computing power whether that container\nruns on a single-core, dual-core, or 48-core machine.\n\n{{< note >}}\nKubernetes doesn't allow you to specify CPU resources with a precision finer than\n`1m` or `0.001` CPU. To avoid accidentally using an invalid CPU quantity, it's useful to specify CPU units using the milliCPU form \ninstead of the decimal form when using less than 1 CPU unit. \n\nFor example, you have a Pod that uses `5m` or `0.005` CPU and would like to decrease\nits CPU resources. By using the decimal form, it's harder to spot that `0.0005` CPU\nis an invalid value, while by using the milliCPU form, it's easier to spot that\n`0.5m` is an invalid value.\n{{< /note >}}\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 10047,
+            "source_char_start": 9693,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "8e0c5738468a690c4bfd02e9fd97f948bbf7b81471d852d40526ff71aee34624",
+            "text": "## Container resources example {#example-1}\n\nThe following Pod has two containers. Both containers are defined with a request for\n0.25 CPU\nand 64MiB (2<sup>26</sup> bytes) of memory. Each container has a limit of 0.5\nCPU and 128MiB of memory. You can say the Pod has a request of 0.5 CPU and 128\nMiB of memory, and a limit of 1 CPU and 256MiB of memory.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "b0cb35844fe9a7384577",
+        "source_id": "kube_limits"
+      },
+      "outcome": {
+        "case_id": "b0cb35844fe9a7384577",
+        "correct_decision": false,
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": null,
+            "conflict": true,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": [
+                  [
+                    "D1"
+                  ]
+                ]
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D2"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": false
+          },
+          "reason": "inventory_unusable"
+        },
+        "error_group": "false_insufficient",
+        "expected_accept": true,
+        "pair_id": "pair_b0cb35844fe9a7384577",
+        "request_id": "c_e7bae3d88bf992ded0ac"
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [],
+        "author_id": "ray_i1",
+        "claim": "Both statements hold: (a1) The `max_concurrency` setting of a running Ray actor can be changed after the actor is created. (a2) Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+        "components": [
+          {
+            "claim": "The `max_concurrency` setting of a running Ray actor can be changed after the actor is created.",
+            "contradict": [],
+            "id": "a1",
+            "label": "insufficient",
+            "rationale": "The packet neither confirms nor denies this behavior.",
+            "support": []
+          },
+          {
+            "claim": "Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D1"
+              ]
+            ]
+          }
+        ],
+        "label": "insufficient",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 4538,
+            "source_char_start": 4052,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "8db48c1d65893cf0dd57ce9645b9506ba406d63c4bdcc4f6eb0f566f0117377a",
+            "text": "(async-ref-to-futures)=\n(objectrefs-as-concurrentfuturesfutures)=\n### Object refs as `concurrent.futures.Future` objects\nYou can also wrap object refs in `concurrent.futures.Future` objects to work with existing `concurrent.futures` APIs:\n\n```{testcode}\nimport concurrent\n\nrefs = [some_task.remote() for _ in range(4)]\nfuts = [ref.future() for ref in refs]\nfor fut in concurrent.futures.as_completed(futs):\n    assert fut.done()\n    print(fut.result())\n```\n\n```{testoutput}\n1\n1\n1\n1\n```\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 7123,
+            "source_char_start": 6198,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "cf8dbe212082aec446ea9f804938acaf2e66ceb696fa9936c9594264497a7291",
+            "text": "(setting-concurrency-in-async-actors)=\n### Set concurrency in async actors\n\nUse the `max_concurrency` flag to set how many \"concurrent\" tasks run at once. By default, 1000 tasks can run concurrently.\n\n```{testcode}\nimport asyncio\nimport ray\n\n@ray.remote\nclass AsyncActor:\n    def __init__(self, batch_size: int):\n        self._event = asyncio.Event()\n        self._curr_tasks = 0\n        self._batch_size = batch_size\n\n    async def run_task(self):\n        print(\"Started task\")\n        self._curr_tasks += 1\n        if self._curr_tasks == self._batch_size:\n            self._event.set()\n        else:\n            await self._event.wait()\n            self._event.clear()\n            self._curr_tasks = 0\n\n        print(\"Finished task\")\n\nactor = AsyncActor.options(max_concurrency=2).remote(2)\n\n# Only 2 tasks will run concurrently.\n# Once 2 finish, the next 2 should run.\nray.get([actor.run_task.remote() for _ in range(8)])\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 3361,
+            "source_char_start": 2955,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "d4947ff334fb9c6f2f9e494069a7b0a349f62fd1386cb3b36f66e65a573fa536",
+            "text": "(objectrefs-as-asynciofutures)=\n### Object refs as `asyncio.Future` objects\nYou can use object refs as `asyncio.Future` objects, which means you can `await` Ray futures in existing concurrent applications.\n\nInstead of:\n\n```{testcode}\nimport ray\n\n@ray.remote\ndef some_task():\n    return 1\n\nray.get(some_task.remote())\nray.wait([some_task.remote()])\n```\n\nyou can await the object ref in Python 3.9 and 3.10:\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [],
+        "request_id": "b4d53981f8cef6bc7568",
+        "source_id": "ray_async"
+      },
+      "outcome": {
+        "case_id": "b4d53981f8cef6bc7568",
+        "correct_decision": false,
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": null,
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "setting-concurrency-in-async-actors"
+                  ]
+                ],
+                "support": []
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "async-ref-to-futures"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": false
+          },
+          "reason": "inventory_unusable"
+        },
+        "error_group": "unsupported_decisive",
+        "expected_accept": false,
+        "pair_id": "pair_b4d53981f8cef6bc7568",
+        "request_id": "c_7dd9da3696af52c5ada6"
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "kube_c1",
+        "claim": "Both statements hold: (a1) A Kubernetes memory quantity of `400m` denotes 400 mebibytes. (a2) Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+        "components": [
+          {
+            "claim": "A Kubernetes memory quantity of `400m` denotes 400 mebibytes.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 9692,
+            "source_char_start": 8704,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "9dc7003f2a302a856cac3c4264a61f17cb00799d75a24792677cc3cc22fc6752",
+            "text": "### Memory resource units {#meaning-of-memory}\n\nLimits and requests for `memory` are measured in bytes. You can express memory as\na plain integer or as a fixed-point number using one of these\n[quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) suffixes:\nE, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi,\nMi, Ki. The Kubernetes API also allows m as a suffix (for millibytes: 1/1000 of a byte),\nbut this isn't useful to specify: you must always assign whole numbers of bytes, or sometimes larger chunks such as multiples of 1 gibibyte.\n\nHere are some examples of memory quantities that represent roughly the same value:\n\n```shell\n128974848, 129e6, 129M,  128974848000m, 123Mi\n```\n\nPay attention to the case of the suffixes. \"M\" means megabytes, while \"m\" means millibytes. If you request `400m` of memory, this is a request for 0.4 bytes. Someone who types that probably meant to ask for 400 mebibytes (`400Mi`)\nor 400 megabytes (`400M`).\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 8703,
+            "source_char_start": 7374,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "f3f1acef6191d21eb0a4007f3311c2de74f0fb4e61aede93c051fd1f6cf4b0bc",
+            "text": "Fractional requests are allowed. When you define a container with\n`spec.containers[].resources.requests.cpu` set to `0.5`, you are requesting half\nas much CPU time compared to if you asked for `1.0` CPU.\nFor CPU resource units, the [quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) expression `0.1` is equivalent to the\nexpression `100m`, which can be read as \"one hundred millicpu\". Some people say\n\"one hundred millicores\", and this is understood to mean the same thing.\n\nCPU resource is always specified as an absolute amount of resource, never as a relative amount. For example,\n`500m` CPU represents the roughly same amount of computing power whether that container\nruns on a single-core, dual-core, or 48-core machine.\n\n{{< note >}}\nKubernetes doesn't allow you to specify CPU resources with a precision finer than\n`1m` or `0.001` CPU. To avoid accidentally using an invalid CPU quantity, it's useful to specify CPU units using the milliCPU form \ninstead of the decimal form when using less than 1 CPU unit. \n\nFor example, you have a Pod that uses `5m` or `0.005` CPU and would like to decrease\nits CPU resources. By using the decimal form, it's harder to spot that `0.0005` CPU\nis an invalid value, while by using the milliCPU form, it's easier to spot that\n`0.5m` is an invalid value.\n{{< /note >}}\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 10047,
+            "source_char_start": 9693,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "8e0c5738468a690c4bfd02e9fd97f948bbf7b81471d852d40526ff71aee34624",
+            "text": "## Container resources example {#example-1}\n\nThe following Pod has two containers. Both containers are defined with a request for\n0.25 CPU\nand 64MiB (2<sup>26</sup> bytes) of memory. Each container has a limit of 0.5\nCPU and 128MiB of memory. You can say the Pod has a request of 0.5 CPU and 128\nMiB of memory, and a limit of 1 CPU and 256MiB of memory.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "b0cb35844fe9a7384577",
+        "source_id": "kube_limits"
+      },
+      "outcome": {
+        "case_id": "b0cb35844fe9a7384577",
+        "correct_decision": false,
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": null,
+            "conflict": true,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": [
+                  [
+                    "D1"
+                  ]
+                ]
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D2"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": false
+          },
+          "reason": "inventory_unusable"
+        },
+        "error_group": "false_insufficient",
+        "expected_accept": false,
+        "pair_id": "pair_b0cb35844fe9a7384577",
+        "request_id": "c_e37a3bb6670ee7e7fe81"
+      }
+    }
+  ],
+  "inventories": [
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "kube_c1",
+        "claim": "Both statements hold: (a1) A Kubernetes memory quantity of `400m` denotes 400 mebibytes. (a2) Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+        "components": [
+          {
+            "claim": "A Kubernetes memory quantity of `400m` denotes 400 mebibytes.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 9692,
+            "source_char_start": 8704,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "9dc7003f2a302a856cac3c4264a61f17cb00799d75a24792677cc3cc22fc6752",
+            "text": "### Memory resource units {#meaning-of-memory}\n\nLimits and requests for `memory` are measured in bytes. You can express memory as\na plain integer or as a fixed-point number using one of these\n[quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) suffixes:\nE, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi,\nMi, Ki. The Kubernetes API also allows m as a suffix (for millibytes: 1/1000 of a byte),\nbut this isn't useful to specify: you must always assign whole numbers of bytes, or sometimes larger chunks such as multiples of 1 gibibyte.\n\nHere are some examples of memory quantities that represent roughly the same value:\n\n```shell\n128974848, 129e6, 129M,  128974848000m, 123Mi\n```\n\nPay attention to the case of the suffixes. \"M\" means megabytes, while \"m\" means millibytes. If you request `400m` of memory, this is a request for 0.4 bytes. Someone who types that probably meant to ask for 400 mebibytes (`400Mi`)\nor 400 megabytes (`400M`).\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 8703,
+            "source_char_start": 7374,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "f3f1acef6191d21eb0a4007f3311c2de74f0fb4e61aede93c051fd1f6cf4b0bc",
+            "text": "Fractional requests are allowed. When you define a container with\n`spec.containers[].resources.requests.cpu` set to `0.5`, you are requesting half\nas much CPU time compared to if you asked for `1.0` CPU.\nFor CPU resource units, the [quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) expression `0.1` is equivalent to the\nexpression `100m`, which can be read as \"one hundred millicpu\". Some people say\n\"one hundred millicores\", and this is understood to mean the same thing.\n\nCPU resource is always specified as an absolute amount of resource, never as a relative amount. For example,\n`500m` CPU represents the roughly same amount of computing power whether that container\nruns on a single-core, dual-core, or 48-core machine.\n\n{{< note >}}\nKubernetes doesn't allow you to specify CPU resources with a precision finer than\n`1m` or `0.001` CPU. To avoid accidentally using an invalid CPU quantity, it's useful to specify CPU units using the milliCPU form \ninstead of the decimal form when using less than 1 CPU unit. \n\nFor example, you have a Pod that uses `5m` or `0.005` CPU and would like to decrease\nits CPU resources. By using the decimal form, it's harder to spot that `0.0005` CPU\nis an invalid value, while by using the milliCPU form, it's easier to spot that\n`0.5m` is an invalid value.\n{{< /note >}}\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 10047,
+            "source_char_start": 9693,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "8e0c5738468a690c4bfd02e9fd97f948bbf7b81471d852d40526ff71aee34624",
+            "text": "## Container resources example {#example-1}\n\nThe following Pod has two containers. Both containers are defined with a request for\n0.25 CPU\nand 64MiB (2<sup>26</sup> bytes) of memory. Each container has a limit of 0.5\nCPU and 128MiB of memory. You can say the Pod has a request of 0.5 CPU and 128\nMiB of memory, and a limit of 1 CPU and 256MiB of memory.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "b0cb35844fe9a7384577",
+        "source_id": "kube_limits"
+      },
+      "outcome": {
+        "all_alternatives_recovered": false,
+        "case_id": "b0cb35844fe9a7384577",
+        "components": [
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a1",
+            "correct": false
+          },
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a2",
+            "correct": false
+          }
+        ],
+        "parsed": {
+          "aggregate": null,
+          "conflict": true,
+          "prediction": {
+            "a1": {
+              "contradict": [
+                [
+                  "D1"
+                ]
+              ],
+              "support": [
+                [
+                  "D1"
+                ]
+              ]
+            },
+            "a2": {
+              "contradict": [],
+              "support": [
+                [
+                  "D2"
+                ]
+              ]
+            }
+          },
+          "schema_valid": true,
+          "usable": false
+        },
+        "quality_pass": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [],
+        "author_id": "ray_i1",
+        "claim": "Both statements hold: (a1) The `max_concurrency` setting of a running Ray actor can be changed after the actor is created. (a2) Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+        "components": [
+          {
+            "claim": "The `max_concurrency` setting of a running Ray actor can be changed after the actor is created.",
+            "contradict": [],
+            "id": "a1",
+            "label": "insufficient",
+            "rationale": "The packet neither confirms nor denies this behavior.",
+            "support": []
+          },
+          {
+            "claim": "Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D1"
+              ]
+            ]
+          }
+        ],
+        "label": "insufficient",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 4538,
+            "source_char_start": 4052,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "8db48c1d65893cf0dd57ce9645b9506ba406d63c4bdcc4f6eb0f566f0117377a",
+            "text": "(async-ref-to-futures)=\n(objectrefs-as-concurrentfuturesfutures)=\n### Object refs as `concurrent.futures.Future` objects\nYou can also wrap object refs in `concurrent.futures.Future` objects to work with existing `concurrent.futures` APIs:\n\n```{testcode}\nimport concurrent\n\nrefs = [some_task.remote() for _ in range(4)]\nfuts = [ref.future() for ref in refs]\nfor fut in concurrent.futures.as_completed(futs):\n    assert fut.done()\n    print(fut.result())\n```\n\n```{testoutput}\n1\n1\n1\n1\n```\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 7123,
+            "source_char_start": 6198,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "cf8dbe212082aec446ea9f804938acaf2e66ceb696fa9936c9594264497a7291",
+            "text": "(setting-concurrency-in-async-actors)=\n### Set concurrency in async actors\n\nUse the `max_concurrency` flag to set how many \"concurrent\" tasks run at once. By default, 1000 tasks can run concurrently.\n\n```{testcode}\nimport asyncio\nimport ray\n\n@ray.remote\nclass AsyncActor:\n    def __init__(self, batch_size: int):\n        self._event = asyncio.Event()\n        self._curr_tasks = 0\n        self._batch_size = batch_size\n\n    async def run_task(self):\n        print(\"Started task\")\n        self._curr_tasks += 1\n        if self._curr_tasks == self._batch_size:\n            self._event.set()\n        else:\n            await self._event.wait()\n            self._event.clear()\n            self._curr_tasks = 0\n\n        print(\"Finished task\")\n\nactor = AsyncActor.options(max_concurrency=2).remote(2)\n\n# Only 2 tasks will run concurrently.\n# Once 2 finish, the next 2 should run.\nray.get([actor.run_task.remote() for _ in range(8)])\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 3361,
+            "source_char_start": 2955,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "d4947ff334fb9c6f2f9e494069a7b0a349f62fd1386cb3b36f66e65a573fa536",
+            "text": "(objectrefs-as-asynciofutures)=\n### Object refs as `asyncio.Future` objects\nYou can use object refs as `asyncio.Future` objects, which means you can `await` Ray futures in existing concurrent applications.\n\nInstead of:\n\n```{testcode}\nimport ray\n\n@ray.remote\ndef some_task():\n    return 1\n\nray.get(some_task.remote())\nray.wait([some_task.remote()])\n```\n\nyou can await the object ref in Python 3.9 and 3.10:\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [],
+        "request_id": "b4d53981f8cef6bc7568",
+        "source_id": "ray_async"
+      },
+      "outcome": {
+        "all_alternatives_recovered": false,
+        "case_id": "b4d53981f8cef6bc7568",
+        "components": [
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a1",
+            "correct": false
+          },
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a2",
+            "correct": false
+          }
+        ],
+        "parsed": {
+          "aggregate": null,
+          "conflict": false,
+          "prediction": {
+            "a1": {
+              "contradict": [
+                [
+                  "setting-concurrency-in-async-actors"
+                ]
+              ],
+              "support": []
+            },
+            "a2": {
+              "contradict": [],
+              "support": [
+                [
+                  "async-ref-to-futures"
+                ]
+              ]
+            }
+          },
+          "schema_valid": true,
+          "usable": false
+        },
+        "quality_pass": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ],
+          [
+            "D2"
+          ]
+        ],
+        "author_id": "vopt_c1",
+        "claim": "Both statements hold: (a1) In vLLM, the API server and engine core always run inside the same operating-system process. (a2) With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+        "components": [
+          {
+            "claim": "In vLLM, the API server and engine core always run inside the same operating-system process.",
+            "contradict": [
+              [
+                "D1"
+              ],
+              [
+                "D2"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D1"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 22519,
+            "source_char_start": 21089,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "7a70b88fb1b59a9705a4cd64e91f530ccda26e035e0ef3183bdb01193ff43a24",
+            "text": "## CPU Resources for GPU Deployments\n\nvLLM V1 uses a multi-process architecture (see [V1 Process Architecture](../design/arch_overview.md#v1-process-architecture)) where each process requires CPU resources. Underprovisioning CPU cores is a common source of performance degradation, especially in virtualized environments.\n\n### Minimum CPU Requirements\n\nFor a deployment with `N` GPUs, there are at minimum:\n\n- **1 API server process** -- handles HTTP requests, tokenization, and input processing\n- **1 engine core process** -- runs the scheduler and coordinates GPU workers\n- **N GPU worker processes** -- one per GPU, executes model forward passes\n\nThis means there are always at least **`2 + N` processes** competing for CPU time.\n\n!!! warning\n    Using fewer physical CPU cores than processes will cause contention and significantly degrade throughput and latency. The engine core process runs a busy loop and is particularly sensitive to CPU starvation.\n\nThe minimum is `2 + N` physical cores (1 for the API server, 1 for the engine core, and 1 per GPU worker). In practice, allocating more cores improves performance because the OS, PyTorch background threads, and other system processes also need CPU time.\n\n!!! important\n    Please note we are referring to **physical CPU cores** here. If your system has hyperthreading enabled, then 1 vCPU = 1 hyperthread = 1/2 physical CPU core, so you need `2 x (2 + N)` minimum vCPUs.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 18132,
+            "source_char_start": 17208,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "605003bb19a52382fa936acfb64534d7bf2f55c83fd62847754da10b762e9d5a",
+            "text": "### Parallel Processing\n\nYou can run input processing in parallel via [API server scale-out](../serving/data_parallel_deployment.md#internal-load-balancing).\nThis is useful when input processing (which is run inside the API server)\nbecomes a bottleneck compared to model execution (which is run inside engine core)\nand you have excess CPU capacity.\n\n```console\n# Run 4 API processes and 1 engine core process\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4\n\n# Run 4 API processes and 2 engine core processes\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4 -dp 2\n```\n\n!!! note\n    API server scale-out is only available for online inference.\n\n!!! warning\n    By default, 8 CPU threads are used in each API server to load media items (e.g. images)\n    from request data.\n\n    If you apply API server scale-out, consider adjusting `VLLM_MEDIA_LOADING_THREAD_COUNT`\n    to avoid CPU resource exhaustion.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 6120,
+            "source_char_start": 5498,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "317385575fdcd6d6e2971b8e99a90b93a2851f75fa5336b548b917a629a5f3a2",
+            "text": "### Performance Tuning with Chunked Prefill\n\nYou can tune the performance by adjusting `max_num_batched_tokens`:\n\n- Smaller values (e.g., 2048) achieve better ITL because there are fewer prefills slowing down decodes.\n- Higher values achieve better time to first token (TTFT) as you can process more prefill tokens in a batch.\n- For optimal throughput, we recommend setting `max_num_batched_tokens > 8192` especially for smaller models on large GPUs.\n- If `max_num_batched_tokens` is the same as `max_model_len`, that's almost the equivalent to the V0 default scheduling policy (except that it still prioritizes decodes).\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1",
+          "D2"
+        ],
+        "request_id": "f764cbc9ba492cfdea21",
+        "source_id": "vllm_opt"
+      },
+      "outcome": {
+        "all_alternatives_recovered": false,
+        "case_id": "f764cbc9ba492cfdea21",
+        "components": [
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a1",
+            "correct": true
+          },
+          {
+            "all_alternatives_recovered": true,
+            "component_id": "a2",
+            "correct": true
+          }
+        ],
+        "parsed": {
+          "aggregate": "contradicted",
+          "conflict": false,
+          "prediction": {
+            "a1": {
+              "contradict": [
+                [
+                  "D1"
+                ]
+              ],
+              "support": []
+            },
+            "a2": {
+              "contradict": [],
+              "support": [
+                [
+                  "D1"
+                ]
+              ]
+            }
+          },
+          "schema_valid": true,
+          "usable": true
+        },
+        "quality_pass": true
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "ray_c1",
+        "claim": "Both statements hold: (a1) A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor. (a2) Ray directly supports defining an `async def` function as a remote task.",
+        "components": [
+          {
+            "claim": "A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor.",
+            "contradict": [],
+            "id": "a1",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          },
+          {
+            "claim": "Ray directly supports defining an `async def` function as a remote task.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a2",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 9310,
+            "source_char_start": 8938,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "304e21054618a56d55c7882f0a866661b06ee84b92d4a8554a530f1f0e73099f",
+            "text": "## `asyncio` for remote tasks\n\nRay doesn't support `asyncio` for remote tasks. The following snippet fails:\n\n```{testcode}\n:skipif: True\n\n@ray.remote\nasync def f():\n    pass\n```\n\nInstead, wrap the `async` function in a wrapper that runs the task synchronously:\n\n```{testcode}\nasync def f():\n    pass\n\n@ray.remote\ndef wrapper():\n    import asyncio\n    asyncio.run(f())\n```\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 8395,
+            "source_char_start": 7734,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "0354bcb8a4c223406187cf55e98f4fe7fedd7f3bedafc3dd51e850eede73db82",
+            "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 1201,
+            "source_char_start": 401,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+            "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "5e724c5af39b3b353db7",
+        "source_id": "ray_async"
+      },
+      "outcome": {
+        "all_alternatives_recovered": false,
+        "case_id": "5e724c5af39b3b353db7",
+        "components": [
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a1",
+            "correct": false
+          },
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a2",
+            "correct": false
+          }
+        ],
+        "parsed": {
+          "aggregate": null,
+          "conflict": true,
+          "prediction": {
+            "a1": {
+              "contradict": [],
+              "support": [
+                [
+                  "D2"
+                ]
+              ]
+            },
+            "a2": {
+              "contradict": [
+                [
+                  "D1"
+                ]
+              ],
+              "support": [
+                [
+                  "D4"
+                ]
+              ]
+            }
+          },
+          "schema_valid": true,
+          "usable": false
+        },
+        "quality_pass": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D2"
+          ]
+        ],
+        "author_id": "vopt_c2",
+        "claim": "Both statements hold: (a1) vLLM expert parallelism uses the same degree of parallelism configured for tensor parallelism. (a2) Multi-modal encoder batch-level data parallelism is controlled by `data_parallel_size`.",
+        "components": [
+          {
+            "claim": "vLLM expert parallelism uses the same degree of parallelism configured for tensor parallelism.",
+            "contradict": [],
+            "id": "a1",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D3"
+              ]
+            ]
+          },
+          {
+            "claim": "Multi-modal encoder batch-level data parallelism is controlled by `data_parallel_size`.",
+            "contradict": [
+              [
+                "D2"
+              ]
+            ],
+            "id": "a2",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 14203,
+            "source_char_start": 13081,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "747aa1dfdbdae86dd91d0c9d34fb379db6c48d0b309755a7c34fee9c49a3fea1",
+            "text": "### Batch-level DP for Multi-Modal Encoders\n\nBy default, TP is used to shard the weights of multi-modal encoders just like for language decoders,\nin order to reduce the memory and compute load on each GPU.\n\nHowever, since the size of multi-modal encoders is very small compared to language decoders,\nthere is relatively little gain from TP. On the other hand, TP incurs significant communication\noverhead because of all-reduce being performed after every layer.\n\nGiven this, it may be advantageous to instead shard the batched input data using TP, essentially\nperforming batch-level DP. This has been shown to improve the throughput and TTFT by around 10% for\n`tensor_parallel_size=8`. For vision encoders that use hardware-unoptimized Conv3D operations,\nbatch-level DP can provide another 40% improvement compared to regular TP.\n\nNevertheless, since the weights of the multi-modal encoder are replicated across each TP rank,\nthere will be a minor increase in memory consumption and may cause OOM if you can barely fit the model already.\n\nYou can enable batch-level DP by setting `mm_encoder_tp_mode=\"data\"`, for example:\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 15118,
+            "source_char_start": 14742,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "a59c773b786deddb720ec90f5ab9491a563aff33c158ea526f1612f3108614f8",
+            "text": "!!! important\n    Batch-level DP is not to be confused with API request-level DP\n    (which is instead controlled by `data_parallel_size`).\n\nBatch-level DP needs to be implemented on a per-model basis,\nand enabled by setting `supports_encoder_tp_data = True` in the model class.\nRegardless, you need to set `mm_encoder_tp_mode=\"data\"` in engine arguments to use this feature.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 9262,
+            "source_char_start": 8087,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "e5faa4e32b3bfbd234b30e80754c8c2c563f4c483b7b41e7e2b1e132bd776fdf",
+            "text": "### Expert Parallelism (EP)\n\nExpert parallelism is a specialized form of parallelism for Mixture of Experts (MoE) models, where different expert networks are distributed across GPUs.\n\n**When to use:**\n\n- Specifically for MoE models (like DeepSeekV3, Qwen3MoE, Llama-4)\n- When you want to balance the expert computation load across GPUs\n\nExpert parallelism is enabled by setting `enable_expert_parallel=True`, which will use expert parallelism instead of tensor parallelism for MoE layers.\nIt will use the same degree of parallelism as what you have set for tensor parallelism.\n\n### Data Parallelism (DP)\n\nData parallelism replicates the entire model across multiple GPU sets and processes different batches of requests in parallel.\n\n**When to use:**\n\n- When you have enough GPUs to replicate the entire model\n- When you need to scale throughput rather than model size\n- In multi-user environments where isolation between request batches is beneficial\n\nData parallelism can be combined with the other parallelism strategies and is set by `data_parallel_size=N`.\nNote that MoE layers will be sharded according to the product of the tensor parallel size and data parallel size.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D2"
+        ],
+        "request_id": "0f63a77cf61a3eb92b66",
+        "source_id": "vllm_opt"
+      },
+      "outcome": {
+        "all_alternatives_recovered": false,
+        "case_id": "0f63a77cf61a3eb92b66",
+        "components": [
+          {
+            "all_alternatives_recovered": true,
+            "component_id": "a1",
+            "correct": true
+          },
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a2",
+            "correct": false
+          }
+        ],
+        "parsed": {
+          "aggregate": "contradicted",
+          "conflict": false,
+          "prediction": {
+            "a1": {
+              "contradict": [],
+              "support": [
+                [
+                  "D3"
+                ]
+              ]
+            },
+            "a2": {
+              "contradict": [
+                [
+                  "D1",
+                  "D2"
+                ]
+              ],
+              "support": []
+            }
+          },
+          "schema_valid": true,
+          "usable": true
+        },
+        "quality_pass": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ],
+          [
+            "D3"
+          ]
+        ],
+        "author_id": "slurm_c2",
+        "claim": "Both statements hold: (a1) A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully. (a2) The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+        "components": [
+          {
+            "claim": "A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully.",
+            "contradict": [
+              [
+                "D1"
+              ],
+              [
+                "D3"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 12841,
+            "source_char_start": 11783,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "304433aa68863e0a685db48340bf576b28b016276126bd6bc1a21663c703c23d",
+            "text": "Job Dependencies A job which is to be dependent upon an entire job array should specify itself dependent upon the ArrayJobID. Since each array element can have a different exit code, the interpretation of the afterok and afternotok clauses will be based upon the highest exit code from any task in the job array. When a job dependency specifies the job ID of a job array: The after clause is satisfied after all tasks in the job array start. The afterany clause is satisfied after all tasks in the job array complete. The aftercorr clause is satisfied after the corresponding task ID in the specified job has completed successfully (ran to completion with an exit code of zero). The afterok clause is satisfied after all tasks in the job array complete successfully. The afternotok clause is satisfied after all tasks in the job array complete with at least one tasks not completing successfully.",
+            "transformation": "strip_html_and_collapse_whitespace"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 5726,
+            "source_char_start": 4886,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "d5f14d4137ad1d5dfdb7d745806f583d7431dce2e917e0945907cbca92b10ae2",
+            "text": "File Names Two additional options are available to specify a job's stdin, stdout, and stderr file names: %A will be replaced by the value of SLURM_ARRAY_JOB_ID (as defined above) and %a will be replaced by the value of SLURM_ARRAY_TASK_ID (as defined above). The default output file format for a job array is \"slurm-%A_%a.out\". An example of explicit use of the formatting is: sbatch -o slurm-%A_%a.out --array=1-3 -N1 tmp which would generate output files names of this sort \"slurm-36_1.out\", \"slurm-36_2.out\" and \"slurm-36_3.out\". If these file name options are used without being part of a job array then \"%A\" will be replaced by the current job ID and \"%a\" will be replaced by 4,294,967,294 (equivalent to 0xfffffffe or NO_VAL).",
+            "transformation": "strip_html_and_collapse_whitespace"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 13368,
+            "source_char_start": 12842,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "2451c6f88ea389d755a40409237f5efceb06ed5f11497f6ca225127468d3df37",
+            "text": "Examples of use are shown below: # Wait for specific job array elements sbatch --depend=after:123_4 my.job sbatch --depend=afterok:123_4:123_8 my.job2 # Wait for entire job array to complete sbatch --depend=afterany:123 my.job # Wait for corresponding job array elements sbatch --depend=aftercorr:123 my.job # Wait for entire job array to complete successfully sbatch --depend=afterok:123 my.job # Wait for entire job array to complete and at least one task fails sbatch --depend=afternotok:123 my.job",
+            "transformation": "strip_html_and_collapse_whitespace"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1",
+          "D3"
+        ],
+        "request_id": "3d216ef6efe9dd5eb376",
+        "source_id": "slurm_array"
+      },
+      "outcome": {
+        "all_alternatives_recovered": false,
+        "case_id": "3d216ef6efe9dd5eb376",
+        "components": [
+          {
+            "all_alternatives_recovered": false,
+            "component_id": "a1",
+            "correct": true
+          },
+          {
+            "all_alternatives_recovered": true,
+            "component_id": "a2",
+            "correct": true
+          }
+        ],
+        "parsed": {
+          "aggregate": "contradicted",
+          "conflict": false,
+          "prediction": {
+            "a1": {
+              "contradict": [
+                [
+                  "D1"
+                ]
+              ],
+              "support": []
+            },
+            "a2": {
+              "contradict": [],
+              "support": [
+                [
+                  "D2"
+                ]
+              ]
+            }
+          },
+          "schema_valid": true,
+          "usable": true
+        },
+        "quality_pass": true
+      }
+    }
+  ],
+  "native": [
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "kube_c1",
+        "claim": "Both statements hold: (a1) A Kubernetes memory quantity of `400m` denotes 400 mebibytes. (a2) Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+        "components": [
+          {
+            "claim": "A Kubernetes memory quantity of `400m` denotes 400 mebibytes.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 9692,
+            "source_char_start": 8704,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "9dc7003f2a302a856cac3c4264a61f17cb00799d75a24792677cc3cc22fc6752",
+            "text": "### Memory resource units {#meaning-of-memory}\n\nLimits and requests for `memory` are measured in bytes. You can express memory as\na plain integer or as a fixed-point number using one of these\n[quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) suffixes:\nE, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi,\nMi, Ki. The Kubernetes API also allows m as a suffix (for millibytes: 1/1000 of a byte),\nbut this isn't useful to specify: you must always assign whole numbers of bytes, or sometimes larger chunks such as multiples of 1 gibibyte.\n\nHere are some examples of memory quantities that represent roughly the same value:\n\n```shell\n128974848, 129e6, 129M,  128974848000m, 123Mi\n```\n\nPay attention to the case of the suffixes. \"M\" means megabytes, while \"m\" means millibytes. If you request `400m` of memory, this is a request for 0.4 bytes. Someone who types that probably meant to ask for 400 mebibytes (`400Mi`)\nor 400 megabytes (`400M`).\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 8703,
+            "source_char_start": 7374,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "f3f1acef6191d21eb0a4007f3311c2de74f0fb4e61aede93c051fd1f6cf4b0bc",
+            "text": "Fractional requests are allowed. When you define a container with\n`spec.containers[].resources.requests.cpu` set to `0.5`, you are requesting half\nas much CPU time compared to if you asked for `1.0` CPU.\nFor CPU resource units, the [quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) expression `0.1` is equivalent to the\nexpression `100m`, which can be read as \"one hundred millicpu\". Some people say\n\"one hundred millicores\", and this is understood to mean the same thing.\n\nCPU resource is always specified as an absolute amount of resource, never as a relative amount. For example,\n`500m` CPU represents the roughly same amount of computing power whether that container\nruns on a single-core, dual-core, or 48-core machine.\n\n{{< note >}}\nKubernetes doesn't allow you to specify CPU resources with a precision finer than\n`1m` or `0.001` CPU. To avoid accidentally using an invalid CPU quantity, it's useful to specify CPU units using the milliCPU form \ninstead of the decimal form when using less than 1 CPU unit. \n\nFor example, you have a Pod that uses `5m` or `0.005` CPU and would like to decrease\nits CPU resources. By using the decimal form, it's harder to spot that `0.0005` CPU\nis an invalid value, while by using the milliCPU form, it's easier to spot that\n`0.5m` is an invalid value.\n{{< /note >}}\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 10047,
+            "source_char_start": 9693,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "8e0c5738468a690c4bfd02e9fd97f948bbf7b81471d852d40526ff71aee34624",
+            "text": "## Container resources example {#example-1}\n\nThe following Pod has two containers. Both containers are defined with a request for\n0.25 CPU\nand 64MiB (2<sup>26</sup> bytes) of memory. Each container has a limit of 0.5\nCPU and 128MiB of memory. You can say the Pod has a request of 0.5 CPU and 128\nMiB of memory, and a limit of 1 CPU and 256MiB of memory.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "b0cb35844fe9a7384577",
+        "source_id": "kube_limits"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": false,
+          "prediction": {
+            "evidence": [
+              "D1",
+              "D2"
+            ],
+            "verdict": "supported"
+          },
+          "quality_pass": false,
+          "schema_valid": true,
+          "verdict_correct": false
+        },
+        "case_id": "b0cb35844fe9a7384577",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": null,
+            "conflict": true,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": [
+                  [
+                    "D1"
+                  ]
+                ]
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D2"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": false
+          },
+          "reason": "inventory_unusable"
+        },
+        "format_referral": false,
+        "label": "contradicted",
+        "lost_correct": false,
+        "retained_correct": false,
+        "semantic_catch": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [],
+        "author_id": "ray_i1",
+        "claim": "Both statements hold: (a1) The `max_concurrency` setting of a running Ray actor can be changed after the actor is created. (a2) Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+        "components": [
+          {
+            "claim": "The `max_concurrency` setting of a running Ray actor can be changed after the actor is created.",
+            "contradict": [],
+            "id": "a1",
+            "label": "insufficient",
+            "rationale": "The packet neither confirms nor denies this behavior.",
+            "support": []
+          },
+          {
+            "claim": "Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D1"
+              ]
+            ]
+          }
+        ],
+        "label": "insufficient",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 4538,
+            "source_char_start": 4052,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "8db48c1d65893cf0dd57ce9645b9506ba406d63c4bdcc4f6eb0f566f0117377a",
+            "text": "(async-ref-to-futures)=\n(objectrefs-as-concurrentfuturesfutures)=\n### Object refs as `concurrent.futures.Future` objects\nYou can also wrap object refs in `concurrent.futures.Future` objects to work with existing `concurrent.futures` APIs:\n\n```{testcode}\nimport concurrent\n\nrefs = [some_task.remote() for _ in range(4)]\nfuts = [ref.future() for ref in refs]\nfor fut in concurrent.futures.as_completed(futs):\n    assert fut.done()\n    print(fut.result())\n```\n\n```{testoutput}\n1\n1\n1\n1\n```\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 7123,
+            "source_char_start": 6198,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "cf8dbe212082aec446ea9f804938acaf2e66ceb696fa9936c9594264497a7291",
+            "text": "(setting-concurrency-in-async-actors)=\n### Set concurrency in async actors\n\nUse the `max_concurrency` flag to set how many \"concurrent\" tasks run at once. By default, 1000 tasks can run concurrently.\n\n```{testcode}\nimport asyncio\nimport ray\n\n@ray.remote\nclass AsyncActor:\n    def __init__(self, batch_size: int):\n        self._event = asyncio.Event()\n        self._curr_tasks = 0\n        self._batch_size = batch_size\n\n    async def run_task(self):\n        print(\"Started task\")\n        self._curr_tasks += 1\n        if self._curr_tasks == self._batch_size:\n            self._event.set()\n        else:\n            await self._event.wait()\n            self._event.clear()\n            self._curr_tasks = 0\n\n        print(\"Finished task\")\n\nactor = AsyncActor.options(max_concurrency=2).remote(2)\n\n# Only 2 tasks will run concurrently.\n# Once 2 finish, the next 2 should run.\nray.get([actor.run_task.remote() for _ in range(8)])\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 3361,
+            "source_char_start": 2955,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "d4947ff334fb9c6f2f9e494069a7b0a349f62fd1386cb3b36f66e65a573fa536",
+            "text": "(objectrefs-as-asynciofutures)=\n### Object refs as `asyncio.Future` objects\nYou can use object refs as `asyncio.Future` objects, which means you can `await` Ray futures in existing concurrent applications.\n\nInstead of:\n\n```{testcode}\nimport ray\n\n@ray.remote\ndef some_task():\n    return 1\n\nray.get(some_task.remote())\nray.wait([some_task.remote()])\n```\n\nyou can await the object ref in Python 3.9 and 3.10:\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [],
+        "request_id": "b4d53981f8cef6bc7568",
+        "source_id": "ray_async"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": true,
+          "prediction": {
+            "evidence": [],
+            "verdict": "insufficient"
+          },
+          "quality_pass": true,
+          "schema_valid": true,
+          "verdict_correct": true
+        },
+        "case_id": "b4d53981f8cef6bc7568",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": null,
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "setting-concurrency-in-async-actors"
+                  ]
+                ],
+                "support": []
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "async-ref-to-futures"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": false
+          },
+          "reason": "inventory_unusable"
+        },
+        "format_referral": false,
+        "label": "insufficient",
+        "lost_correct": true,
+        "retained_correct": false,
+        "semantic_catch": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ],
+          [
+            "D2"
+          ]
+        ],
+        "author_id": "vopt_c1",
+        "claim": "Both statements hold: (a1) In vLLM, the API server and engine core always run inside the same operating-system process. (a2) With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+        "components": [
+          {
+            "claim": "In vLLM, the API server and engine core always run inside the same operating-system process.",
+            "contradict": [
+              [
+                "D1"
+              ],
+              [
+                "D2"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D1"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 22519,
+            "source_char_start": 21089,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "7a70b88fb1b59a9705a4cd64e91f530ccda26e035e0ef3183bdb01193ff43a24",
+            "text": "## CPU Resources for GPU Deployments\n\nvLLM V1 uses a multi-process architecture (see [V1 Process Architecture](../design/arch_overview.md#v1-process-architecture)) where each process requires CPU resources. Underprovisioning CPU cores is a common source of performance degradation, especially in virtualized environments.\n\n### Minimum CPU Requirements\n\nFor a deployment with `N` GPUs, there are at minimum:\n\n- **1 API server process** -- handles HTTP requests, tokenization, and input processing\n- **1 engine core process** -- runs the scheduler and coordinates GPU workers\n- **N GPU worker processes** -- one per GPU, executes model forward passes\n\nThis means there are always at least **`2 + N` processes** competing for CPU time.\n\n!!! warning\n    Using fewer physical CPU cores than processes will cause contention and significantly degrade throughput and latency. The engine core process runs a busy loop and is particularly sensitive to CPU starvation.\n\nThe minimum is `2 + N` physical cores (1 for the API server, 1 for the engine core, and 1 per GPU worker). In practice, allocating more cores improves performance because the OS, PyTorch background threads, and other system processes also need CPU time.\n\n!!! important\n    Please note we are referring to **physical CPU cores** here. If your system has hyperthreading enabled, then 1 vCPU = 1 hyperthread = 1/2 physical CPU core, so you need `2 x (2 + N)` minimum vCPUs.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 18132,
+            "source_char_start": 17208,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "605003bb19a52382fa936acfb64534d7bf2f55c83fd62847754da10b762e9d5a",
+            "text": "### Parallel Processing\n\nYou can run input processing in parallel via [API server scale-out](../serving/data_parallel_deployment.md#internal-load-balancing).\nThis is useful when input processing (which is run inside the API server)\nbecomes a bottleneck compared to model execution (which is run inside engine core)\nand you have excess CPU capacity.\n\n```console\n# Run 4 API processes and 1 engine core process\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4\n\n# Run 4 API processes and 2 engine core processes\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4 -dp 2\n```\n\n!!! note\n    API server scale-out is only available for online inference.\n\n!!! warning\n    By default, 8 CPU threads are used in each API server to load media items (e.g. images)\n    from request data.\n\n    If you apply API server scale-out, consider adjusting `VLLM_MEDIA_LOADING_THREAD_COUNT`\n    to avoid CPU resource exhaustion.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 6120,
+            "source_char_start": 5498,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "317385575fdcd6d6e2971b8e99a90b93a2851f75fa5336b548b917a629a5f3a2",
+            "text": "### Performance Tuning with Chunked Prefill\n\nYou can tune the performance by adjusting `max_num_batched_tokens`:\n\n- Smaller values (e.g., 2048) achieve better ITL because there are fewer prefills slowing down decodes.\n- Higher values achieve better time to first token (TTFT) as you can process more prefill tokens in a batch.\n- For optimal throughput, we recommend setting `max_num_batched_tokens > 8192` especially for smaller models on large GPUs.\n- If `max_num_batched_tokens` is the same as `max_model_len`, that's almost the equivalent to the V0 default scheduling policy (except that it still prioritizes decodes).\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1",
+          "D2"
+        ],
+        "request_id": "f764cbc9ba492cfdea21",
+        "source_id": "vllm_opt"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": true,
+          "prediction": {
+            "evidence": [
+              "D1",
+              "D2"
+            ],
+            "verdict": "contradicted"
+          },
+          "quality_pass": true,
+          "schema_valid": true,
+          "verdict_correct": true
+        },
+        "case_id": "f764cbc9ba492cfdea21",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": "contradicted",
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": []
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D1"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": true
+          },
+          "reason": "evidence_mismatch"
+        },
+        "format_referral": false,
+        "label": "contradicted",
+        "lost_correct": true,
+        "retained_correct": false,
+        "semantic_catch": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "vmem_c1",
+        "claim": "Both statements hold: (a1) vLLM uses CUDA graphs by default, and those graphs consume extra GPU memory. (a2) The default value of `VLLM_CPU_KVCACHE_SPACE` is 4 GiB.",
+        "components": [
+          {
+            "claim": "vLLM uses CUDA graphs by default, and those graphs consume extra GPU memory.",
+            "contradict": [],
+            "id": "a1",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          },
+          {
+            "claim": "The default value of `VLLM_CPU_KVCACHE_SPACE` is 4 GiB.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a2",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 3939,
+            "source_char_start": 2991,
+            "source_file": "sources/vllm_memory.md",
+            "source_text_sha256": "02920534ecf943b810568ff8826a9c4c2760d784fe88da9976b026bb33c828d7",
+            "text": "## Adjust cache size\n\nIf you run out of CPU RAM, try the following options:\n\n- (Multi-modal models only) you can set the size of multi-modal cache by setting `mm_processor_cache_gb` engine argument (default 4 GiB).\n- (CPU backend only) you can set the size of KV cache using `VLLM_CPU_KVCACHE_SPACE` environment variable, in GiB (default 0, meaning vLLM doesn't override the KV cache size through this variable).\n\n## Multi-modal input limits\n\nYou can allow a smaller number of multi-modal items per prompt to reduce the memory footprint of the model:\n\n```python\nfrom vllm import LLM\n\n# Accept up to 3 images and 1 video per prompt\nllm = LLM(\n    model=\"Qwen/Qwen2.5-VL-3B-Instruct\",\n    limit_mm_per_prompt={\"image\": 3, \"video\": 1},\n)\n```\n\nYou can go a step further and disable unused modalities completely by setting its limit to zero.\nFor example, if your application only accepts image input, there is no need to allocate any memory for videos.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 2990,
+            "source_char_start": 2176,
+            "source_file": "sources/vllm_memory.md",
+            "source_text_sha256": "dab9c2953bbb6111149d4683c86f9d4a671ed1a8826907377afa5c162dbbf089",
+            "text": "## Reduce CUDA Graphs\n\nBy default, we optimize model inference using CUDA graphs which take up extra memory in the GPU.\n\nYou can adjust `compilation_config` to achieve a better balance between inference speed and memory usage:\n\n??? code\n\n    ```python\n    from vllm import LLM\n    from vllm.config import CompilationConfig, CompilationMode\n\n    llm = LLM(\n        model=\"meta-llama/Llama-3.1-8B-Instruct\",\n        compilation_config=CompilationConfig(\n            mode=CompilationMode.VLLM_COMPILE,\n            # By default, it goes up to max_num_seqs\n            cudagraph_capture_sizes=[1, 2, 4, 8, 16],\n        ),\n    )\n    ```\n\nYou can disable graph capturing completely via the `enforce_eager` flag:\n\n```python\nfrom vllm import LLM\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", enforce_eager=True)\n```\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 2175,
+            "source_char_start": 1864,
+            "source_file": "sources/vllm_memory.md",
+            "source_text_sha256": "28e1f8cf1cf37a0db2f76ee2107798998dc0425f32d6060ade5a09a961a41a30",
+            "text": "## Context length and batch size\n\nYou can further reduce memory usage by limiting the context length of the model (`max_model_len` option)\nand the maximum batch size (`max_num_seqs` option).\n\n```python\nfrom vllm import LLM\n\nllm = LLM(model=\"Qwen/Qwen2.5-VL-3B-Instruct\", max_model_len=2048, max_num_seqs=2)\n```\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "acc76e00b447ea9a610e",
+        "source_id": "vllm_memory"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": false,
+          "prediction": {
+            "evidence": [
+              "D1",
+              "D2"
+            ],
+            "verdict": "contradicted"
+          },
+          "quality_pass": false,
+          "schema_valid": true,
+          "verdict_correct": true
+        },
+        "case_id": "acc76e00b447ea9a610e",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": "contradicted",
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D2"
+                  ]
+                ]
+              },
+              "a2": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": []
+              }
+            },
+            "schema_valid": true,
+            "usable": true
+          },
+          "reason": "evidence_mismatch"
+        },
+        "format_referral": false,
+        "label": "contradicted",
+        "lost_correct": false,
+        "retained_correct": false,
+        "semantic_catch": true
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "slurm_c1",
+        "claim": "Both statements hold: (a1) Most Slurm commands recognize an array job ID and task ID joined by an underscore as an array element identifier. (a2) The Slurm `sstat` command accepts `ArrayJobID_TaskID` as an array-element identifier.",
+        "components": [
+          {
+            "claim": "Most Slurm commands recognize an array job ID and task ID joined by an underscore as an array element identifier.",
+            "contradict": [],
+            "id": "a1",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          },
+          {
+            "claim": "The Slurm `sstat` command accepts `ArrayJobID_TaskID` as an array-element identifier.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a2",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 13986,
+            "source_char_start": 13369,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "2fc6975674420845a8b83e7b837eb37531854a95c4906b616048904c44bbf0cf",
+            "text": "Other Command Use The following Slurm commands do not currently recognize job arrays and their use requires the use of Slurm job IDs, which are unique for each array element: sbcast, sprio, sreport, sshare and sstat. The sacct, sattach and strigger commands have been modified to permit specification of either job IDs or job array elements. The sview command has been modified to permit display of a job's ArrayJobId and ArrayTaskId fields. Both fields are displayed with a value of \"N/A\" if the job is not part of a job array.",
+            "transformation": "strip_html_and_collapse_whitespace"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 4885,
+            "source_char_start": 4089,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "94c00fc6b2cb5497c01bbfbb50f2fe5568ec6c02a9643f1376ac7c4cd07869f6",
+            "text": "All Slurm commands and APIs recognize the SLURM_JOB_ID value. Most commands also recognize the SLURM_ARRAY_JOB_ID plus SLURM_ARRAY_TASK_ID values separated by an underscore as identifying an element of a job array. Using the example above, \"37\" or \"36_1\" would be equivalent ways to identify the second array element of job 36. A set of APIs has been developed to operate on an entire job array or select tasks of a job array in a single function call. The function response consists of an array identifying the various error codes for various tasks of a job ID. For example the job_resume2() function might return an array of error codes indicating that tasks 1 and 2 have already completed; tasks 3 through 5 are resumed successfully, and tasks 6 through 99 have not yet started.",
+            "transformation": "strip_html_and_collapse_whitespace"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 14541,
+            "source_char_start": 14090,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "ee6137164bb7424abac18548392c0d306a8b1a7557518000b62c6dc894a89fdb",
+            "text": "A new configuration parameter has been added to control the maximum job array size: MaxArraySize . The smallest index that can be specified by a user is zero and the maximum index is MaxArraySize minus one. The default value of MaxArraySize is 1001. The maximum MaxArraySize supported in Slurm is 4000001. Be mindful about the value of MaxArraySize as job arrays offer an easy way for users to submit large numbers of jobs very quickly.",
+            "transformation": "strip_html_and_collapse_whitespace"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "266ea11d8ba3f77cc292",
+        "source_id": "slurm_array"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": false,
+          "prediction": {
+            "evidence": [
+              "D1",
+              "D2"
+            ],
+            "verdict": "contradicted"
+          },
+          "quality_pass": false,
+          "schema_valid": true,
+          "verdict_correct": true
+        },
+        "case_id": "266ea11d8ba3f77cc292",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": "contradicted",
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D2"
+                  ]
+                ]
+              },
+              "a2": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": []
+              }
+            },
+            "schema_valid": true,
+            "usable": true
+          },
+          "reason": "evidence_mismatch"
+        },
+        "format_referral": false,
+        "label": "contradicted",
+        "lost_correct": false,
+        "retained_correct": false,
+        "semantic_catch": true
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ]
+        ],
+        "author_id": "ray_c1",
+        "claim": "Both statements hold: (a1) A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor. (a2) Ray directly supports defining an `async def` function as a remote task.",
+        "components": [
+          {
+            "claim": "A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor.",
+            "contradict": [],
+            "id": "a1",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          },
+          {
+            "claim": "Ray directly supports defining an `async def` function as a remote task.",
+            "contradict": [
+              [
+                "D1"
+              ]
+            ],
+            "id": "a2",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 9310,
+            "source_char_start": 8938,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "304e21054618a56d55c7882f0a866661b06ee84b92d4a8554a530f1f0e73099f",
+            "text": "## `asyncio` for remote tasks\n\nRay doesn't support `asyncio` for remote tasks. The following snippet fails:\n\n```{testcode}\n:skipif: True\n\n@ray.remote\nasync def f():\n    pass\n```\n\nInstead, wrap the `async` function in a wrapper that runs the task synchronously:\n\n```{testcode}\nasync def f():\n    pass\n\n@ray.remote\ndef wrapper():\n    import asyncio\n    asyncio.run(f())\n```\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 8395,
+            "source_char_start": 7734,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "0354bcb8a4c223406187cf55e98f4fe7fedd7f3bedafc3dd51e850eede73db82",
+            "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 1201,
+            "source_char_start": 401,
+            "source_file": "sources/ray_async.md",
+            "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+            "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1"
+        ],
+        "request_id": "5e724c5af39b3b353db7",
+        "source_id": "ray_async"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": false,
+          "prediction": {
+            "evidence": [
+              "D1",
+              "D2"
+            ],
+            "verdict": "contradicted"
+          },
+          "quality_pass": false,
+          "schema_valid": true,
+          "verdict_correct": true
+        },
+        "case_id": "5e724c5af39b3b353db7",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": null,
+            "conflict": true,
+            "prediction": {
+              "a1": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D2"
+                  ]
+                ]
+              },
+              "a2": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": [
+                  [
+                    "D4"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": false
+          },
+          "reason": "inventory_unusable"
+        },
+        "format_referral": false,
+        "label": "contradicted",
+        "lost_correct": false,
+        "retained_correct": false,
+        "semantic_catch": false
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [],
+        "author_id": "kube_i2",
+        "claim": "Both statements hold: (a1) The Vertical Pod Autoscaler performs every recommendation through the Pod `/resize` subresource. (a2) An in-place Kubernetes Pod resize updates container CPU or memory specifications through the Pod `/resize` subresource.",
+        "components": [
+          {
+            "claim": "The Vertical Pod Autoscaler performs every recommendation through the Pod `/resize` subresource.",
+            "contradict": [],
+            "id": "a1",
+            "label": "insufficient",
+            "rationale": "The packet neither confirms nor denies this behavior.",
+            "support": []
+          },
+          {
+            "claim": "An in-place Kubernetes Pod resize updates container CPU or memory specifications through the Pod `/resize` subresource.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D1"
+              ]
+            ]
+          }
+        ],
+        "label": "insufficient",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 15378,
+            "source_char_start": 14409,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "b9b9f43f8e7c4ca968a7fdf9c3ceac30f4a7976c0fa13e5802eb672e22df4481",
+            "text": "### Resizing container resources\n\nAfter creating a Pod, you may need to adjust its CPU or memory resources based on\nactual usage patterns. Kubernetes provides two approaches for resizing Pod resources:\n\n#### In-place resize {#pod-resize-inplace}\n{{< feature-state feature_gate_name=\"InPlacePodVerticalScaling\" >}}\n\nYou can modify the CPU and memory `requests` and `limits` of containers\nin a running Pod without recreating it. This is called _in-place Pod vertical scaling_\nor _in-place Pod resize_. To perform an in-place resize, update the container's resource\nspecifications using the Pod's `/resize` subresource. You can control whether a container\nrestart is required by setting the `resizePolicy` field in the container specification.\n\n{{< note >}}\nIn-place resize currently applies to container-level resources. For resizing Pod-level\nresources, see [Resize Pod CPU and Memory Resources](/docs/tasks/configure-pod-container/resize-pod-resources/).\n{{< /note >}}\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 2073,
+            "source_char_start": 1254,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "77c12f52519123ab495b8ab5d4d7a986bd4d17b0b1af1fefbb0ce77b04393564",
+            "text": "## Requests and limits\n\nIf the node where a Pod is running has enough of a resource available, it's possible (and\nallowed) for a container to use more resource than its `request` for that resource specifies.\n\nFor example, if you set a `memory` request of 256 MiB for a container, and that container is in\na Pod scheduled to a Node with 8GiB of memory and no other Pods, then the container can try to use\nmore RAM.\n\nLimits are a different story. Both `cpu` and `memory` limits are applied by the kubelet (and\n{{< glossary_tooltip text=\"container runtime\" term_id=\"container-runtime\" >}}),\nand are ultimately enforced by the kernel. On Linux nodes, the Linux kernel\nenforces limits with\n{{< glossary_tooltip text=\"cgroups\" term_id=\"cgroup\" >}}.\nThe behavior of `cpu` and `memory` limit enforcement is slightly different.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 4027,
+            "source_char_start": 3100,
+            "source_file": "sources/kube_limits.md",
+            "source_text_sha256": "d9e79262135a6fbf7a78ea08547c3e96e4833f2fad7d21dc129b284ebafeb835",
+            "text": "{{< note >}}\nIf you specify a limit for a resource, but do not specify any request, and no admission-time\nmechanism has applied a default request for that resource, then Kubernetes copies the limit\nyou specified and uses it as the requested value for the resource.\n{{< /note >}}\n\n## Resource types\n\nA *resource type* has a base unit and can be requested, limited, or both.\nKubernetes has the following built-in resource types:\n\n| Resource type | Description | Base unit |\n|---|---|---|\n| `cpu` | Compute processing | cpu (core) |\n| `memory` | RAM | Bytes |\n| `ephemeral-storage` | [Local ephemeral storage](/docs/concepts/storage/ephemeral-storage/) | Bytes |\n| `hugepages-<size>` | [Huge pages](#huge-pages) (Linux only) | Bytes |\n\nClusters can also provide\n[extended resources](/docs/concepts/configuration/manage-resources-containers/#extended-resources)\n(resources with a custom name, typically exposed by device plugins).\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [],
+        "request_id": "1ed27c633bc3c2d2129c",
+        "source_id": "kube_limits"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": false,
+          "prediction": {
+            "evidence": [
+              "D1"
+            ],
+            "verdict": "supported"
+          },
+          "quality_pass": false,
+          "schema_valid": true,
+          "verdict_correct": false
+        },
+        "case_id": "1ed27c633bc3c2d2129c",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": "insufficient",
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [],
+                "support": []
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D1"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": true
+          },
+          "reason": "verdict_mismatch"
+        },
+        "format_referral": false,
+        "label": "insufficient",
+        "lost_correct": false,
+        "retained_correct": false,
+        "semantic_catch": true
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D2"
+          ]
+        ],
+        "author_id": "vopt_c2",
+        "claim": "Both statements hold: (a1) vLLM expert parallelism uses the same degree of parallelism configured for tensor parallelism. (a2) Multi-modal encoder batch-level data parallelism is controlled by `data_parallel_size`.",
+        "components": [
+          {
+            "claim": "vLLM expert parallelism uses the same degree of parallelism configured for tensor parallelism.",
+            "contradict": [],
+            "id": "a1",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D3"
+              ]
+            ]
+          },
+          {
+            "claim": "Multi-modal encoder batch-level data parallelism is controlled by `data_parallel_size`.",
+            "contradict": [
+              [
+                "D2"
+              ]
+            ],
+            "id": "a2",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 14203,
+            "source_char_start": 13081,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "747aa1dfdbdae86dd91d0c9d34fb379db6c48d0b309755a7c34fee9c49a3fea1",
+            "text": "### Batch-level DP for Multi-Modal Encoders\n\nBy default, TP is used to shard the weights of multi-modal encoders just like for language decoders,\nin order to reduce the memory and compute load on each GPU.\n\nHowever, since the size of multi-modal encoders is very small compared to language decoders,\nthere is relatively little gain from TP. On the other hand, TP incurs significant communication\noverhead because of all-reduce being performed after every layer.\n\nGiven this, it may be advantageous to instead shard the batched input data using TP, essentially\nperforming batch-level DP. This has been shown to improve the throughput and TTFT by around 10% for\n`tensor_parallel_size=8`. For vision encoders that use hardware-unoptimized Conv3D operations,\nbatch-level DP can provide another 40% improvement compared to regular TP.\n\nNevertheless, since the weights of the multi-modal encoder are replicated across each TP rank,\nthere will be a minor increase in memory consumption and may cause OOM if you can barely fit the model already.\n\nYou can enable batch-level DP by setting `mm_encoder_tp_mode=\"data\"`, for example:\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 15118,
+            "source_char_start": 14742,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "a59c773b786deddb720ec90f5ab9491a563aff33c158ea526f1612f3108614f8",
+            "text": "!!! important\n    Batch-level DP is not to be confused with API request-level DP\n    (which is instead controlled by `data_parallel_size`).\n\nBatch-level DP needs to be implemented on a per-model basis,\nand enabled by setting `supports_encoder_tp_data = True` in the model class.\nRegardless, you need to set `mm_encoder_tp_mode=\"data\"` in engine arguments to use this feature.\n",
+            "transformation": "verbatim"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 9262,
+            "source_char_start": 8087,
+            "source_file": "sources/vllm_opt.md",
+            "source_text_sha256": "e5faa4e32b3bfbd234b30e80754c8c2c563f4c483b7b41e7e2b1e132bd776fdf",
+            "text": "### Expert Parallelism (EP)\n\nExpert parallelism is a specialized form of parallelism for Mixture of Experts (MoE) models, where different expert networks are distributed across GPUs.\n\n**When to use:**\n\n- Specifically for MoE models (like DeepSeekV3, Qwen3MoE, Llama-4)\n- When you want to balance the expert computation load across GPUs\n\nExpert parallelism is enabled by setting `enable_expert_parallel=True`, which will use expert parallelism instead of tensor parallelism for MoE layers.\nIt will use the same degree of parallelism as what you have set for tensor parallelism.\n\n### Data Parallelism (DP)\n\nData parallelism replicates the entire model across multiple GPU sets and processes different batches of requests in parallel.\n\n**When to use:**\n\n- When you have enough GPUs to replicate the entire model\n- When you need to scale throughput rather than model size\n- In multi-user environments where isolation between request batches is beneficial\n\nData parallelism can be combined with the other parallelism strategies and is set by `data_parallel_size=N`.\nNote that MoE layers will be sharded according to the product of the tensor parallel size and data parallel size.\n",
+            "transformation": "verbatim"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D2"
+        ],
+        "request_id": "0f63a77cf61a3eb92b66",
+        "source_id": "vllm_opt"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": false,
+          "prediction": {
+            "evidence": [
+              "D1",
+              "D2",
+              "D3"
+            ],
+            "verdict": "contradicted"
+          },
+          "quality_pass": false,
+          "schema_valid": true,
+          "verdict_correct": true
+        },
+        "case_id": "0f63a77cf61a3eb92b66",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": "contradicted",
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D3"
+                  ]
+                ]
+              },
+              "a2": {
+                "contradict": [
+                  [
+                    "D1",
+                    "D2"
+                  ]
+                ],
+                "support": []
+              }
+            },
+            "schema_valid": true,
+            "usable": true
+          },
+          "reason": "evidence_mismatch"
+        },
+        "format_referral": false,
+        "label": "contradicted",
+        "lost_correct": false,
+        "retained_correct": false,
+        "semantic_catch": true
+      }
+    },
+    {
+      "case": {
+        "acceptable_evidence": [
+          [
+            "D1"
+          ],
+          [
+            "D3"
+          ]
+        ],
+        "author_id": "slurm_c2",
+        "claim": "Both statements hold: (a1) A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully. (a2) The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+        "components": [
+          {
+            "claim": "A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully.",
+            "contradict": [
+              [
+                "D1"
+              ],
+              [
+                "D3"
+              ]
+            ],
+            "id": "a1",
+            "label": "contradicted",
+            "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+            "support": []
+          },
+          {
+            "claim": "The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+            "contradict": [],
+            "id": "a2",
+            "label": "supported",
+            "rationale": "The cited passage explicitly states this fact.",
+            "support": [
+              [
+                "D2"
+              ]
+            ]
+          }
+        ],
+        "label": "contradicted",
+        "max_output_tokens": 256,
+        "passages": [
+          {
+            "id": "D1",
+            "source_char_end": 12841,
+            "source_char_start": 11783,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "304433aa68863e0a685db48340bf576b28b016276126bd6bc1a21663c703c23d",
+            "text": "Job Dependencies A job which is to be dependent upon an entire job array should specify itself dependent upon the ArrayJobID. Since each array element can have a different exit code, the interpretation of the afterok and afternotok clauses will be based upon the highest exit code from any task in the job array. When a job dependency specifies the job ID of a job array: The after clause is satisfied after all tasks in the job array start. The afterany clause is satisfied after all tasks in the job array complete. The aftercorr clause is satisfied after the corresponding task ID in the specified job has completed successfully (ran to completion with an exit code of zero). The afterok clause is satisfied after all tasks in the job array complete successfully. The afternotok clause is satisfied after all tasks in the job array complete with at least one tasks not completing successfully.",
+            "transformation": "strip_html_and_collapse_whitespace"
+          },
+          {
+            "id": "D2",
+            "source_char_end": 5726,
+            "source_char_start": 4886,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "d5f14d4137ad1d5dfdb7d745806f583d7431dce2e917e0945907cbca92b10ae2",
+            "text": "File Names Two additional options are available to specify a job's stdin, stdout, and stderr file names: %A will be replaced by the value of SLURM_ARRAY_JOB_ID (as defined above) and %a will be replaced by the value of SLURM_ARRAY_TASK_ID (as defined above). The default output file format for a job array is \"slurm-%A_%a.out\". An example of explicit use of the formatting is: sbatch -o slurm-%A_%a.out --array=1-3 -N1 tmp which would generate output files names of this sort \"slurm-36_1.out\", \"slurm-36_2.out\" and \"slurm-36_3.out\". If these file name options are used without being part of a job array then \"%A\" will be replaced by the current job ID and \"%a\" will be replaced by 4,294,967,294 (equivalent to 0xfffffffe or NO_VAL).",
+            "transformation": "strip_html_and_collapse_whitespace"
+          },
+          {
+            "id": "D3",
+            "source_char_end": 13368,
+            "source_char_start": 12842,
+            "source_file": "sources/slurm_array.shtml",
+            "source_text_sha256": "2451c6f88ea389d755a40409237f5efceb06ed5f11497f6ca225127468d3df37",
+            "text": "Examples of use are shown below: # Wait for specific job array elements sbatch --depend=after:123_4 my.job sbatch --depend=afterok:123_4:123_8 my.job2 # Wait for entire job array to complete sbatch --depend=afterany:123 my.job # Wait for corresponding job array elements sbatch --depend=aftercorr:123 my.job # Wait for entire job array to complete successfully sbatch --depend=afterok:123 my.job # Wait for entire job array to complete and at least one task fails sbatch --depend=afternotok:123 my.job",
+            "transformation": "strip_html_and_collapse_whitespace"
+          }
+        ],
+        "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+        "relevant_evidence": [
+          "D1",
+          "D3"
+        ],
+        "request_id": "3d216ef6efe9dd5eb376",
+        "source_id": "slurm_array"
+      },
+      "outcome": {
+        "accepted_error": false,
+        "automatic": false,
+        "baseline": {
+          "evidence_correct": false,
+          "prediction": {
+            "evidence": [
+              "D1",
+              "D2"
+            ],
+            "verdict": "contradicted"
+          },
+          "quality_pass": false,
+          "schema_valid": true,
+          "verdict_correct": true
+        },
+        "case_id": "3d216ef6efe9dd5eb376",
+        "decision": {
+          "accept": false,
+          "inventory": {
+            "aggregate": "contradicted",
+            "conflict": false,
+            "prediction": {
+              "a1": {
+                "contradict": [
+                  [
+                    "D1"
+                  ]
+                ],
+                "support": []
+              },
+              "a2": {
+                "contradict": [],
+                "support": [
+                  [
+                    "D2"
+                  ]
+                ]
+              }
+            },
+            "schema_valid": true,
+            "usable": true
+          },
+          "reason": "evidence_mismatch"
+        },
+        "format_referral": false,
+        "label": "contradicted",
+        "lost_correct": false,
+        "retained_correct": false,
+        "semantic_catch": true
+      }
+    }
+  ]
+}

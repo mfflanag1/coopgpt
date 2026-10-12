@@ -1,0 +1,31 @@
+**Provisional verdict: no findings in reviewed scope.** Every quantitative claim in REPORT.txt that I could recompute from RESULTS.json / RESULT_DETAILS.json / FAILURES.json reconciles exactly, the gate table matches PROTOCOL.txt's predeclared thresholds without modification, and the report's qualifications (no causal, pooling, improvement, or operator-benefit claim) are consistent with the protocol's stated limits.
+
+## Cross-check summary (recomputed from `natural`, `controlled`, `inventories` arrays)
+
+| Report claim | Recomputed | Match |
+|---|---|---|
+| 22/24 verdicts correct | `verdict_correct=false` only for b0cb…, 1ed2… | ✓ |
+| 17/24 joint correct; 7 failures | `quality_pass=false`: b0cb, acc7, 266e, 5e72, 1ed2, 0f63, 3d21 | ✓ |
+| All 7 failures referred | all 7 have `accept=false` | ✓ |
+| 5 credited semantic catches | `semantic_catch=true`: acc7, 266e, 1ed2, 0f63, 3d21; b0cb/5e72 unusable → uncredited | ✓ |
+| 15 kept, 0 wrong accepted, 9 referrals, 2 lost correct (b4d5, f764) | `retained_correct` count 15; `accepted_error` all false; `lost_correct` exactly b4d5, f764 | ✓ |
+| 15/17 = 88.24% | ✓ |
+| 12/12 invalid controls withheld, 10 credited | all `expected_accept=false` have `accept=false`; b4d5 (c_7dd9…) and b0cb (c_e37a…) via `inventory_unusable` | ✓ |
+| 10/12 valid controls retained | b4d5, b0cb valid controls rejected via unusable | ✓ |
+| 3 unusable = 2 conflicts (b0cb, 5e72) + 2 unknown-ID (b4d5, 5e72), overlap 1 | ✓; D4 + both polarities on 5e72 a2 | ✓ |
+| 20 quality-pass, 18 all-alternatives, 41/48 components | false quality: b0cb, b4d5, 5e72, 0f63; alt-missing adds f764, 3d21; component zeros 2+2+2+1 | ✓ |
+| Per-class 8/8→8/8, 2/8→1/8, 7/8→6/8; 7 of 9 referrals contradicted | matches RESULT_DETAILS and per-case labels | ✓ |
+| Control selection (4 per label; first two false_insufficient, next two citation) | b770,f8df,a8b3,b0cb / 5c9e,1f89,acc7,f764 / 4 insufficient unsupported_decisive | ✓ per PROTOCOL L74–81 |
+| 96 presentation checks, 0 failures | ✓ |
+
+Narrative checks: the f764 explanation (gold accepts [D1] or [D2]; inventory lists only D1 on contradiction polarity; D2 cited → `evidence_mismatch`) follows PROTOCOL L46–47 and L52–54. The five "correct verdict, extra citation" cases each cite support for the true component (D2/D3), matching the report's characterization. The 0f63 note (proof [D1,D2] vs acceptable [D2], a2 scored incorrect while verdict stands) is accurate. The statement that 41/48 zeroes both atoms of unusable inventories is confirmed by the `components` arrays for b0cb, b4d5, 5e72.
+
+No post-hoc gate change: the Required column (24/24, 0, ≥18, ≥90%, 12/12, ≥11/12, 0) matches PROTOCOL L110–117. The DECISION section claims no improvement over the prior cohort and explicitly disclaims pooling, consistent with PROTOCOL L27–29, L84–85, L134–137. Line 69–71 reports correct-per-offered (62.5%) rather than only conditional accuracy, as PROTOCOL L129–130 requires.
+
+## Scope limitations
+- Provenance assertions (commit 0d3cf39, 177 tests passing under normal/-O, byte-identical audit files, 70-file freeze binding, model lock) are not verifiable from this packet; only the freeze SHA, `audit_faults: []`, 96 host checks, AC power, and timestamps are corroborated by RESULT_DETAILS.json.
+- Raw capture files, INDEPENDENT_ANALYSIS.json, REPRODUCE.txt, FREEZE.json, and the decision/scoring code are not in the packet; I assume the `decision` fields reflect the frozen rule rather than re-deriving them from code.
+- Gold annotations themselves (e.g., that f764 D2 is genuinely decisive) are accepted as frozen; semantic correctness of annotations is out of scope per task.
+
+## Verdict
+**No findings in reviewed scope.** Conclusions follow from the data; counts, distinctions (22 vs 17; 7 referred vs 5 credited; 12 withheld vs 10 credited; 3 unusable with 1 overlap), and limitation language are correct and non-overreaching.
