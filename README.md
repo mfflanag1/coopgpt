@@ -2,7 +2,22 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
-The [11 October grounded-QA qualification](research_directions/2026-10-11-mac-grounded-qa/REPORT.txt) is complete: **Qwen3:32b scored 8/12 exact, below the fixed 11/12 gate**, with all 12 responses schema-valid and no independent capture-audit faults. Two misses are overlong answer spans; two violate the official abstention labels, including a question with an intent-versus-outcome ambiguity. These post-result observations do not change the frozen score. The 36-question confirmation and further energy/load testing did not run. All 118 preparation tests passed; the frozen implementation is unchanged. [Raw outcomes and reproduction](research_directions/2026-10-11-mac-grounded-qa/REPRODUCE.txt).
+**Latest result — 11 October 2026:** the local grounded-QA experiment is complete. Qwen3:32b returned valid JSON for all 12 scored requests, but **8/12 passed the frozen exact-match/abstention test**, below the required **11/12**. The configuration did not qualify for further testing.
+
+| Accuracy check | Observed | Required |
+| --- | --- | --- |
+| Exact answers or correct abstentions | 8/12 | At least 11/12 |
+| Answerable questions | 4/6 | At least 5/6 |
+| Correct abstentions on unanswerable questions | 4/6 | At least 5/6 |
+| Valid response schema | 12/12 | 12/12 |
+
+Two misses contain the annotated answer inside an overly long passage span; two answered questions whose official labels require abstention. One of those questions admits an intent-versus-outcome ambiguity, but its official label is defensible. These observations do not change the fixed score. **The 36-question confirmation stage was not activated, and no further energy or arrival-load sweep ran.** This is a completed negative qualification result; it does not establish useful-work, energy-efficiency or pooling gains.
+
+The independent raw-response audit found no capture or protocol faults, and the dedicated model and server shut down cleanly. All **118 preparation tests** passed in normal and optimized Python; the frozen implementation was unchanged during collection. [Full report](research_directions/2026-10-11-mac-grounded-qa/REPORT.txt) · [Results](research_directions/2026-10-11-mac-grounded-qa/RESULTS.json) · [Independent audit](research_directions/2026-10-11-mac-grounded-qa/reviews/independent-outcome-audit.txt) · [Raw captures](research_directions/2026-10-11-mac-grounded-qa/capture/) · [Reproduction](research_directions/2026-10-11-mac-grounded-qa/REPRODUCE.txt).
+
+**Next planned step:** define an application-specific correctness rubric and independently validate answers and answerability on fresh cases before inspecting model predictions. Fix the success threshold before collection, distinguishing factual support, abstention and required output shape. Only after a new configuration qualifies should the project measure useful completions under arrival rates and latency requirements, with full-horizon energy on AC. This next experiment has not started. Compatible measurements from two hardware configurations and evidence of independent-owner pooling remain open requirements.
+
+The entries below retain earlier results and the mathematical research history.
 
 The [11 October serial quality calibration](research_directions/2026-10-11-mac-quality-calibration/REPORT.txt) is complete. With structured JSON output, larger token allowances and strictly serial requests, the cached local model passed **1/9 development cases with candidate A and 0/9 with candidate B**. All 18 API calls completed; neither candidate qualified for the 27-case confirmation. The independent raw audit agrees, all 90 tests pass, and the paired-clock checks pass. No further load/energy sweep ran. These are synthetic accuracy diagnostics, not a pooling or efficiency result. [Reproduction](research_directions/2026-10-11-mac-quality-calibration/REPRODUCE.txt).
 
