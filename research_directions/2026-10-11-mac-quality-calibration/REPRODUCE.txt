@@ -1,0 +1,32 @@
+Stored-data reproduction — no new model requests
+
+From research_directions/2026-10-11-mac-quality-calibration:
+  python3 -B check_design.py
+  python3 -B -m unittest discover -s . -p "test_*.py"
+  python3 -B -O -m unittest discover -s . -p "test_*.py"
+The tests use mocks and a temporary loopback HTTP server; a sandbox may require local-listener permission. They do not run Ollama. check_design.py requires the neighboring prior study traces to establish disjointness.
+
+Independent saved-data audit:
+  python3 -B analyze.py . capture --output /tmp/coop-quality-audit.json
+  cmp INDEPENDENT_ANALYSIS.json /tmp/coop-quality-audit.json
+Expected data_complete_valid=true, qualified=false, selected=null; development18
+requests/18 API completions/1 exact answer (A1/9,B0/9); confirmation0 observed.
+The zero confirmation planned count means no confirmation stage was activated;
+27 frozen holdout tasks remain unattempted. It is not an observed0/27 result.
+The analyzer does not import the collector or primary scorer.
+
+Source integrity:
+  python3 -B -c "from calibrate import check_freeze; print(check_freeze())"
+FREEZE.json fixes the precollection protocol, model configuration, source, tests, and task inputs. Its creation precedes every measured request. The independent offline analyzer and final report were added later; they do not alter the frozen selection rule or scorer. ARTIFACT_MANIFEST.json hashes final delivered artifacts except itself.
+
+The original serving study and its exhausted continuation remain unchanged. This calibration is a new prospective experiment, not a replacement score or rerun of that study. Do not rerun calibrate.py as part of reproduction: it starts real hardware work and a new output directory would constitute a new experiment. Raw captures preserve prompts, structured-output schema, requested options, streaming chunks, terminal fields, paired clocks, host checks, and server lifecycle.
+
+Interpretation: candidate selection uses development only; confirmation, if reached, is separate. A transport, context, host or cleanup fault is an infrastructure abort, not a semantic prompt rejection. Aborted stages may contain a saved raw request that is absent from their STAGE rows; the independent checker must count that raw evidence. Missing confirmation is unavailable data, not zero correct observations. These are serial synthetic answer-quality checks and supply no energy, capacity or pooling estimate.
+
+Reproduce independent failure classifications:
+  python3 -B diagnose.py --source-dir . > /tmp/coop-quality-diagnosis.json
+Compare stage counts and per-request diagnostics with DIAGNOSIS.json. Absolute
+source_dir/capture_dir fields differ on relocated clones; all diagnostic contents
+remain the same. This script is descriptive for the retained development capture;
+it is not the qualification authority (use analyze.py for the decision tree).
+It imports neither the primary scorer nor the independent gate analyzer.

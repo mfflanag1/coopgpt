@@ -1,0 +1,103 @@
+Serial Mac answer-quality calibration — completed; qualification gate failed
+11 October 2026 local time (collection 12 October UTC)
+
+Finding
+The local model/task pair remains unqualified for the planned serving-and-energy
+study. Candidate A produced 1 exact answer out of9 development cases; candidate B
+produced0 out of9. All18 measured API requests completed. Neither reached the
+predeclared9/9 development gate, so no candidate was selected and none of the27
+fresh confirmation tasks was sent. Confirmation accuracy is unobserved, not0/27.
+No further rate sweep, energy collection, or pooling experiment was started.
+
+The fixed experiment ran00:01:48–00:03:52 UTC on12October, about124seconds from
+campaign start through saved completion. Two separate nontrial warmups are retained
+and excluded from the18 scored requests. All18 terminal reasons were stop; none
+was length or a transport timeout. The observed output counts were below their
+requested192/512/1024 token allowances. This makes exhausted output caps and
+request timeouts unsupported explanations for the observed failures. It does
+not establish why the model chose the wrong records.
+
+Independent raw-response diagnosis
+All18 outputs are schema-valid JSON. The response failures are therefore not merely
+JSON syntax failures. An independent prompt/response inspection finds omitted KEEP
+records, included DROP records and wrong values. One extra answer, A dev-004, has
+exactly the right pairs but returns R0020 before R0019, violating the frozen sorted
+array contract. It remains a failure; there is no retrospective order-insensitive
+rescoring. Detailed reproducible diagnostics are retained separately.
+
+What changed prospectively
+The previous study's183 completed answers still score0 under its frozen contract.
+This new calibration uses fresh tables, strict JSON semantic scoring, a public
+structured-output schema, explicit KEEP/DROP instructions, and larger output
+allowances. A fixed example is added only for candidate B. These changes form a
+bundle: the experiment does not isolate the effect of JSON constraints, tokens,
+prompt wording, or serialization relative to the earlier concurrent study.
+B reused the same9 development inputs by design;18 calls are not18 unique tasks
+or independent replications. Each candidate covers32/96/192 rows crossed with
+4/12/24 KEEP records, one development case percell. The only exact success was
+A's32-row,24-KEEP case. No easier subset was retrospectively qualified.
+
+Hardware and execution
+Same inventoried Apple M3 Max,30 GPU cores,96GB unified memory; cached
+llama3.2:3b Q4_K_M through Ollama0.20.0, temperature0, seed0,4096 context.
+Each stage used a fresh dedicated one-slot server11562. Requests were strictly
+serial with0.2seconds between them and no intentional queue. The original11434
+server was checked idle before/after every request. This does not isolate the
+Mac from other applications or establish capacity. Battery operation was explicitly
+allowed before the source freeze because this stage tests answer correctness only.
+Recorded charge remained75–78%; direct-host power/thermal checks all passed.
+No energy sampler ran, and battery percentage change is not an energy estimate.
+
+Both stages verified model/context/runtime parallelism and clean unload, then
+terminated their owned process groups successfully with server exit0. A separate
+postflight confirmed original11434 idle and dedicated11562 closed. Observed margins after subtracting reported prompt tokens and the requested
+output allowance from4096 ranged902–3414 tokens, with no detected
+truncation warning. Those counts are diagnostics and may omit cached prefix
+accounting; they are not a tokenizer certificate.
+
+Clock repair
+The new collector brackets wall reads with monotonic timestamps; all elapsed and
+ordering checks use monotonic time. Maximum observed brackets were21.583microseconds
+(A) and2.75microseconds (B). Sampled wall/monotonic offset spans were1.105083ms and
+0.848ms, passing the prospective10ms bracket and50ms offset-span checks. This
+fixes the measurement design for future work, but does not retrospectively change
+the old study's invalid window or prove absence of unsampled clock jumps.
+
+Provenance and review
+FREEZE.json fixed22 protocol/input/code/test files at00:01:39.250996 UTC, before
+campaign start and any model response. Design checks establish9 unique new
+development tables and27 disjoint confirmation tables, all disjoint from216 unique
+original-study tables. The old22-file source freeze and6-file continuation freeze
+still verify unchanged. All90 collector/controller/design/clock/independent-audit tests pass
+normally and with Python -O. Local loopback test fixtures are not model measurements.
+
+The separate offline analyzer reconstructs gold from the captured dispatched
+prompts, excluding the demonstration. It independently reproduces18 API completions,
+A1/9 and B0/9, all18 summary rows, the closed gate, saved host/clock/identity evidence
+and source hashes with zero discrepancies. Its serialized result is identical under
+Python -O. All19 analyzer-specific synthetic tests also pass. This checks the saved
+capture; it cannot attest unseen requests or physical hardware calibration.
+
+The initial Fable review and focused battery/config/budget review found no blocking
+defects within their snapshots. Minor findings were verified and repaired before
+freezing. A separately delegated clock helper was rejected as delivered after
+Codex QA found a huge-integer tolerance bug; root repaired and regression-tested
+it. Both the rejection and resolution are retained. Model review is not human
+specialist review or proof of empirical generalizability.
+
+Decision
+Do not use the current task/model configuration to compare useful-work energy or
+infer pooling gains. The failure occurs even in this serial calibration. Under the frozen gate,
+further concurrency testing is unwarranted without first qualifying accuracy. A future
+bounded project should select a stronger task/model pairing and qualify it on fresh
+held-out tasks before measuring scheduling. A more production-relevant workload
+could be considered, but its economic value and correctness criterion must be
+specified beforehand; lowering the present threshold or rescuing an easy subset
+would not qualify this experiment. The economics direction remains open, while
+these measurements provide no evidence of an infrastructure pooling benefit.
+
+The final scoped Fable claims review found no blocking inconsistencies in the
+supplied report/tables/independent analysis. Root verified the ordering example
+directly in its raw response and clarified requested-cap context accounting.
+FAILURE_AUDIT.txt and DIAGNOSIS.json retain reproducible failure classifications.
+Raw filenames are scoped by candidate-stage directories.

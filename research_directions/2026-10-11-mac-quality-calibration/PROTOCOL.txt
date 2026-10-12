@@ -1,0 +1,81 @@
+Prospective bounded quality calibration — 11 October 2026
+
+Question: Can the pinned local model accurately perform the prior selection task
+when tested serially with structured JSON output and adequate output allowances?
+The prior study's zero exact-quality result remains unchanged. This is an
+engineering qualification, not an estimate of energy savings, production
+reliability, owner pooling, or a causal effect of syntax constraints alone.
+
+Hardware/model: same Apple M3 Max and cached llama3.2:3b Q4_K_M, Ollama0.20.0,
+context4096, temperature0, seed0, verified manifest/binary and runtime metadata.
+Fresh owned server11562 at P1 for each stage. Original11434 must be idle. Direct
+host power and thermal/load checks before/after every request; no sandbox power
+substitute. This quality-only design allows AC, or battery power with>=60% charge
+and ioreg confirming no external adapter. Both power and percentage are recorded.
+Battery qualification makes no AC performance claim. A low-charge or thermal fault
+aborts and leaves the gate closed. This permission was set before any new outcomes.
+No new model downloads. No power sampler, authentication dialog, or energy claim
+is part of this quality-only stage. A later energy study needs its own capability
+check before any workload, rather than authenticating in a mid-study restart.
+
+Data: development.json has9 new synthetic tables, one each32/96/192input rows x
+4/12/24KEEP rows. confirmation.json has27 disjoint tables, three eachcell. Seeds
+202610111 and202610112 and ordering are fixed by design.py before responses.
+Values are three-digit strings. Compare content hashes with each other and the
+old traces before execution; examples R9001–R9003 never occur in trial tables.
+Later load traces must be fresh too. These are template-based synthetic tasks,
+not representative production data or independent hardware replications.
+
+Two candidates, fixed before any response:
+A: explicit selection/copy instructions, public JSON schema echoed in the prompt
+   and sent via /api/generate format. Output is {"records":[{"id":...,"value":...}]}.
+B: the same, plus one fixed example with two KEEP rows and one DROP row.
+The schema restricts types/fieldnames/public ID syntax only, never gold IDs,
+values or cardinality. Prompt transmits all raw rows, not the scoring expected
+object. Per-target caps192/512/1024 correspond to4/12/24KEEP rows. They allow
+headroom, do not promise a length or prove a context bound. Reported prompt tokens
+plus requested output allowance must be<=4096-128, with no truncation log warning;
+abort on a detected violation. This is an observed diagnostic, not a tokenizer
+certificate or proof that cached/template tokens are included in the count.
+
+Score: one complete JSON document, standard whitespace and object key order
+allowed. Duplicate keys, missing/extra keys, non-string ID/value types, malformed
+or trailing text fail. Array order and every ID/value must match independently
+reconstructed KEEP rows exactly. No prefix/fuzzy acceptance, delimiter repair,
+manual rescue, missing-item acceptance, or numeric coercion. Valid complete JSON
+with exact gold can pass even if terminal reason is length; report that reason.
+Successful transport alone is not a correct response.
+
+Decision tree: run all9 A development cases. If9/9 correct under valid collection,
+selectA and run only its27-case confirmation. Otherwise run all9 B development
+cases; only9/9 letsB reach its27-case confirmation. At most one confirmation.
+Qualification requires27/27 exact correct plus valid completed collection. Any
+confirmation failure closes promotion; no fallback toB after A confirmation fails.
+No third candidate, prompt/cap/schema change, subset qualification or retry.
+Development and confirmation must not be pooled as independent validation.
+A setup, transport, identity, context, clock or cleanup fault aborts the campaign,
+with missing cases explicit. Such a fault is not a semantic rejection of a prompt.
+
+Execution: requests are strictly serial; next job begins only after the previous
+terminal response, with0.2s spacing. One fixed nontrial warmup per stage is retained
+separately.90s soft/socket timeout;95s collector hard bound;100s watchdog may stop
+only the owned process group. Warmup30s soft/35s collector bound. Calibration has1800s operational budget, with300s reserved headroom before stage
+setup or another request; retained bounded cleanup can outlast the work budget. All responses/checkpoints and
+failures retained, no retries. A budget stop leaves confirmation incomplete.
+This is response-triggered calibration, not an open-loop capacity/load test.
+
+Clock repair: paired monotonic-before/wall/monotonic-after readings bracket the
+wall timestamp. Request and phase elapsed ordering use the monotonic clock only.
+Store raw integer nanoseconds and conservative duration bounds. A separate clock
+alignment diagnostic requires observed bracket widths<=10ms and the conservative
+span of sampled wall/monotonic offset intervals<=50ms. This checks sampled points;
+it cannot exclude unobserved jumps. No retrospective1ms wall-duration equality
+check. Deliberate wall-jump test must leave monotonic duration unchanged.
+
+Promotion:27/27 is a narrow finite engineering gate, not a95% reliability claim;
+only three cases percell and shared synthetic templates. If it passes, keep
+checking correctness in any new concurrent workload. Calibration latency may
+inform a newly frozen sweep's rates, but does not establish capacity itself.
+A later rate sweep needs fresh traces, enough time to finish its full design,
+energy readiness and the repaired clocks. If either selection/confirmation gate
+fails, do not launch that sweep. Preserve the failed gate and report why.

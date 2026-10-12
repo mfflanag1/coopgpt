@@ -1,0 +1,181 @@
+INDEPENDENT DESIGN AUDIT — QUALITY CALIBRATION BEFORE ANOTHER LOAD SWEEP
+Prospective follow-up planning; no new experiment performed by this auditor.
+Output: /tmp/coop-calibration-design-audit.txt
+
+Scope and judgment
+Read the previous mixed-study report and task/protocol source to understand the
+failure mechanism; did not recount its already audited results or inspect raw
+captures. No code edits, hardware calls, workload, delegation, or external model
+review were performed. This is a prospective design recommendation, not a claim
+that either new candidate will work.
+
+The proposed bounded gate is appropriate as an engineering screen: improve the
+same selection task's response interface, require complete correctness on fresh
+calibration examples, and stop before another expensive sweep if correctness
+fails. The important competing explanations are (a) formatting/decoding failures,
+(b) semantic selection/value-copying failures, and (c) resource or collection
+failures. JSON grammar can address (a); it does not imply (b) is solved. The prior
+semantic diagnostics make that distinction material. Preserve these categories
+without changing the primary exact-correctness score after observing outputs.
+
+Freeze one decision tree, not two opportunities to pass the holdout
+Before any new task response, freeze and hash both prompt candidates, the common
+schema, task generator, seed namespaces, all development/confirmation prompts,
+expected answers, scorer, caps, engine/model settings, and this selection rule:
+
+1. Candidate A = current selection instructions adapted to the fixed JSON array
+   schema. Run all nine development cells once, serially at negligible queueing.
+2. If A is correct on 9/9 under valid collection, select A. Do not test B merely
+   to search for better latency, shorter outputs, or a more attractive story.
+3. Only if A fails development may candidate B = the prewritten clarified
+   instructions plus fixed worked examples run on the SAME nine development
+   tables. Require 9/9. If B fails, stop. No third prompt/schema/cap candidate.
+4. The selected candidate gets ONE confirmation using 27 disjoint tasks, three
+   per crossed input-size/KEEP-count cell. Require 27/27 correct. Any incorrect,
+   incomplete, timed-out, or otherwise unverified confirmation closes the gate.
+5. Do not try B after A passes development but fails confirmation. Do not choose
+   candidates separately by cell. Do not modify the scorer, examples, caps,
+   tolerance, ordering rule, or few-shot wording after seeing confirmation.
+
+Running both candidates on the same development tables is legitimate development
+selection, not two independent replications. It must not be pooled with confirmation
+to report 36/36 or 45/45 validation. It is simplest to run every planned development
+case despite an early wrong answer, provided operational bounds permit, so the
+failure pattern is visible. A technical setup/identity failure is an abort, not
+evidence that the model is bad or that a different prompt fixes infrastructure.
+
+Schema and gold separation
+Use the final agreed data-independent schema: an array of objects with required
+id:string and value:string fields and no extra fields. A universal three-digit
+value shape is an acceptable public task constraint. Keep IDs generic strings
+without per-job gold enumeration. The final worked example uses R9001-R9003,
+which are disjoint from job IDs R0001-R0192 and fit the same public ID syntax.
+Do NOT enumerate the actual correct IDs/values, embed an expected object list,
+or set minItems=maxItems equal to the hidden correct KEEP count. The actual
+cardinality and contents must be inferred from the input. Fixed domain-wide
+bounds may prevent runaway output, but cannot encode the answer for that case.
+
+Gold answers live in scoring artifacts only. Audit the serialized model request:
+only the task prompt, public schema, model, and frozen decoding settings go to
+Ollama; the job's expected/gold fields must not be transmitted. Save the actual
+schema hash and transmitted options. A documented schema request is not proof
+that a particular engine enforces every keyword, so record structural violations
+as failures rather than assuming they are impossible.
+
+Worked examples must be complete, correct, small, fixed before development,
+and disjoint from trial table contents. Include both KEEP and DROP rows, and
+show that DROP rows are omitted and output order follows the requested order.
+The final proposed example has two KEEP and one DROP row, with R9001-R9003
+IDs that are not job IDs. Avoid a literal trial answer, confirmation table, or
+matching nonce in an example. Examples can teach the desired syntax; that is the declared candidate
+change, not a claim of unchanged unconstrained generation capability.
+
+Exact but task-appropriate scoring
+Parse exactly one full JSON document, allowing only the predeclared ordinary
+JSON whitespace. Validate schema types, reject duplicate object keys, missing
+or extra properties, malformed/trailing text, and wrong IDs/values. Compare the
+ordered array against gold reconstructed independently from input KEEP flags.
+Duplicate records, wrong order, omissions, DROP inclusions, and invented records
+fail. JSON object key order and permitted insignificant whitespace are not task
+errors. Values are exactly the source three-digit strings. Do not coerce JSON numbers
+to strings or relax extraction rules after observing answers.
+
+Test the scorer before any model call with small fixtures for every failure
+class, including syntactically valid but semantically wrong arrays. Keep API
+completion, valid JSON, schema validity, complete semantic correctness, output
+cap hit, transport failure, and setup validity as separate descriptive fields.
+Only the declared conjunction determines the gate. A length stop with the entire
+correct answer present needs a fixed rule now: simplest require a valid terminal
+response plus exactly the complete correct JSON, and report its finish reason;
+no truncation repair or prefix acceptance. An incomplete final array always fails.
+
+Tasks, leakage, and task feasibility
+Retain the 32/96/192-row inputs crossed with 4/12/24 KEEP records. Use nine balanced
+cells in development and exactly three per cell in confirmation. Randomize case
+order with a separate frozen order seed. Use separate generation namespaces for
+old-study, development, examples, confirmation, and later load traces; verify
+actual table-content/prompt hashes are disjoint, not merely that seed integers
+differ. Shared row-ID vocabulary or task template is expected and is not by
+itself leakage, but confirmation answers must not inform candidate construction.
+
+The final proposed 192/512/1024 caps are generous headroom for the JSON
+representation, not a proved feasibility certificate or fixed generated lengths.
+If a pinned local tokenizer is available, check full templated prompts and gold
+serialization before calls. The final operational design otherwise requires
+reported prompt-evaluation tokens plus the requested output cap to be at most
+4096-128, with no server-log truncation warning, for each qualified response.
+Stop on a detected violation; do not raise a failing task's cap during a trial.
+
+This is an empirical stop rule. Unless the reported token field is verified to
+include cached prefixes and template tokens, do not call it an exact full-context
+certificate. Absence of a log warning is useful evidence, not a theorem that
+truncation cannot happen. Record counts, exact prompt/schema hashes, and the
+limits honestly. More generous output caps change the serving/energy workload
+relative to the earlier study and must be counted in any later comparison.
+
+What 27/27 can justify
+This is an exact finite-test permission gate, not a production reliability or
+semantic-correctness guarantee. Even under an illustrative independent identically
+distributed Bernoulli model,27 successes have a one-sided 95% exact lower bound
+0.05^(1/27)=0.894981. Three successes within one cell give only 0.368403. The fixed
+balanced, highly structured templates and shared host further limit applying
+that illustrative iid confidence statement literally. No per-cell 95% reliability
+claim or general language-capability claim follows from three successes.
+
+I would keep 27/27 if the claim is only "qualified this narrowly defined workload
+for a new descriptive experiment." If the intended claim instead requires at
+least 90% correctness supported by a conventional one-sided 95% binomial bound,
+change the confirmation BEFORE collection to 36 cases (four per cell);36/36 has
+an illustrative lower bound 0.920153. Even that is conditional on suitable sampling
+assumptions and says little about each individual cell. A95%-correctness lower
+bound needs at least 59 all-success independent cases, so 27/27 must not be marketed
+as 95% reliability. More cases are not necessary merely to authorize an engineering
+pilot; the bounded 27-case plan is defensible with appropriately narrow language.
+
+Operational calibration and clocks
+Use actual P1 and one outstanding request at a time, with the next request offered
+only after the previous request has a terminal outcome and the server is quiescent.
+This response-triggered serial calibration is intentional; it is NOT a load or
+capacity measurement. A nominally low fixed arrival rate can still accumulate
+queueing for long outputs. Warm the model with fixed nontrial examples, preserve
+all offered IDs, and do not retry failures under the same request ID.
+
+Freeze per-request operational bounds and an overall calibration budget. If the
+budget or supervision interrupts confirmation, classify the gate as incomplete
+and closed; do not count only completed responses. Record actual timeouts and
+cleanup. Keep dedicated-process ownership, runtime identity, model digest, schema,
+options, context, source trace hashes, original-endpoint idle checks, AC status,
+and available thermal/background snapshots. Time endpoints and phase-consistency
+checks use the SAME monotonic clock. At phases, retain paired UTC and monotonic
+observations with explicit bracketing uncertainty for later telemetry alignment;
+do not repeat a 1 ms equality test between independent wall and monotonic durations.
+No energy attribution, energy-per-answer estimate, or physical power inference
+is made from these quality-only calibration calls.
+
+Limits of passing and the next sweep
+A low-queueing P1 pass does not establish correctness at P2/P4 or under saturation:
+concurrent kernels, cache state, cancellations, and overload can change outputs.
+Every new load-study request must therefore still be scored, and its primary
+endpoint must remain correct AND timely output over all offered requests.
+Do not use the calibration pass to replace quality checking with API completion.
+A small predeclared concurrency canary could be useful, but is optional additional
+qualification; it cannot be improvised to rescue a failed confirmation.
+
+After qualification, use fresh sweep tasks and freeze the entire rate/configuration
+plan before its outcomes. The old 0.3/0.6/1.2 rates should not automatically be
+reused after changing output budgets and decoding grammar. Serial calibration
+service observations can legitimately inform a prospective rate-selection rule
+that starts well below saturation; document that use as design development, not
+independent validation of the resulting rate boundary. Keep all cells and failure
+denominators, allow reversals, and retain unrun cells if the bounded sweep stops.
+Qualified calibration + an informative new sweep would establish a narrow tested
+operating envelope, not a new model, general reliability, optimal scheduling,
+owner-pooling benefit, or field-level economic result.
+
+Recommendation
+Proceed with the fixed A-then-optional-B development rule and one 27-case confirmation,
+using strict semantic scoring and verified gold/schema separation. The mandatory
+corrections are explicit no fallback after confirmation failure, truly serial
+quality testing, sufficient token/context headroom, and modest claims for 27/27.
+If neither candidate passes development or the selected candidate fails confirmation,
+stopping before another long sweep is the scientifically useful result.
