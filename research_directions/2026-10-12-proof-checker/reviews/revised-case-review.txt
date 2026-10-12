@@ -1,0 +1,26 @@
+**Provisional verdict: no consequential findings in reviewed scope.** Most notable observation: vopt_c1's second contradiction alternative (D2 alone) never names "vLLM V1", so its sufficiency against a V1-scoped claim rests on an implicit version assumption — low severity, noted below.
+
+## Findings
+
+**1. Low — vopt_c1/a1 alternative [D2] relies on implicit V1 scoping** (`final-revised-cases.json` lines 77–85, 122)
+D2 shows "Run 4 API processes and 1 engine core process" and says input processing runs "inside the API server" while model execution runs "inside engine core", which does contradict "always the same OS process". But D2 never mentions V1; only D1 does. A strict annotator or the inventory model may decline to list D2 as a standalone contradiction because the claim is version-qualified. This is defensible as a gold alternative (the `--api-server-count` feature is V1-only at the pinned commit), but if the primary cites only D2 and the inventory omits it, that becomes a counted loss by design. Verification: confirm the authors accept this as an intended risk rather than a proof-sufficiency error; no change strictly required.
+
+**Checks passed (no finding):**
+- **vopt_c1 D3** (line 131): now pure chunked-prefill tuning text; contains no process/caching conditional. No competing entailment reading against a1 or a2. a2 `2 * (2 + N)` is literally supported by D1's "`2 x (2 + N)` minimum vCPUs".
+- **torch_i1/a2** (line 233): "always reduces CPU time spent serializing" — D1 discusses file size only; D2/D3 describe archive format/alignment. Nothing supports or contradicts CPU time. Genuinely insufficient relative to the packet. `acceptable_evidence`/`relevant_evidence` empty, consistent with the insufficient citation rule (PROTOCOL line 48).
+- **ray_i2/a2** (line 20): D3 (lines 55) no longer contains any `max_concurrency` default; D2 states only that `max_concurrency` limits pool size. Default-1000 remains absent → insufficient is correct.
+- **ray_c1**: a1 ← D2 warning verbatim; a2 ← D1 "Ray doesn't support `asyncio` for remote tasks… fails". D3 is complete prose, not a truncated class definition.
+- **slurm_c2**: D1 ("afterok… after all tasks… complete successfully") and D3 ("Wait for entire job array to complete successfully … afterok:123") independently contradict any-one-task reading; both listed. a2 ← D2 exact string `slurm-%A_%a.out`.
+- **torch_s1**: a1 ← D1, a2 ← D2, premises genuinely different; minimal union [D1,D2] fits three-citation allowance. D2 begins with a complete sentence ("When saving, PyTorch will ensure…").
+- **Component separability**: all six are conjunctions of independent factual statements; no "not both A and B" joint constraint or cross-component disjunction present.
+- **Antecedents**: all passages open on complete sentences/headings; slurm D3's "Examples of use" follows its own dependency paragraph context sufficiently.
+- **Label semantics**: whole labels follow the conjunction rule (supported/supported→supported; any contradicted→contradicted; else insufficient) in all six.
+
+## Scope limitations
+- Only the six cases in `final-revised-cases.json` were reviewed; the remaining 18 cases, 4/source and 8/label balance, and "false/unknown position 4/4" claims (semantic-resolution line 13) are unverifiable here.
+- Source hashes, character slices, and word counts (100–450) cannot be verified without the source files; slice lengths appear internally consistent with shown text.
+- vopt_c2 observation (semantic-resolution line 11) is out of scope.
+- No tools executed; no model or hardware inference reviewed.
+
+## Verdict
+**No consequential findings in reviewed scope.** One low-severity sufficiency note on vopt_c1 D2's implicit V1 scope; otherwise the six corrections resolve the earlier issues as described.

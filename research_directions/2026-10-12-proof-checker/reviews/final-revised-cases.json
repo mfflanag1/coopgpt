@@ -1,0 +1,430 @@
+[
+  {
+    "acceptable_evidence": [],
+    "author_id": "ray_i2",
+    "claim": "Both statements hold: (a1) Neither Ray's threaded-actor model nor its async-actor model bypasses Python's GIL. (a2) A threaded Ray actor has a default `max_concurrency` of 1000.",
+    "components": [
+      {
+        "claim": "Neither Ray's threaded-actor model nor its async-actor model bypasses Python's GIL.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "A threaded Ray actor has a default `max_concurrency` of 1000.",
+        "contradict": [],
+        "id": "a2",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1201,
+        "source_char_start": 401,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+        "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8937,
+        "source_char_start": 7734,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "b42dd4587cf36ebcc8d40ac12f84948cc349a25892aad6dbddbf8e30fe7ce39b",
+        "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n\n\n```{testcode}\n@ray.remote\nclass ThreadedActor:\n    def task_1(self): print(\"I'm running in a thread!\")\n    def task_2(self): print(\"I'm running in another thread!\")\n\na = ThreadedActor.options(max_concurrency=2).remote()\nray.get([a.task_1.remote(), a.task_2.remote()])\n```\n\n```{testoutput}\n:options: +MOCK\n\n(ThreadedActor pid=4822) I'm running in a thread!\n(ThreadedActor pid=4822) I'm running in another thread!\n```\n\nEach invocation of a threaded actor runs in a thread pool. The `max_concurrency` value limits the size of the thread pool.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6198,
+        "source_char_start": 5828,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "9dd5377ba7a7a9a8117e168ac0a8ff0a10966f3835863c95ead6287ccf486496",
+        "text": "Ray runs all of the methods inside a single Python event loop. Don't run blocking `ray.get` or `ray.wait` calls inside an async actor method, because `ray.get` blocks the event loop.\n\nAn async actor runs only one task at any point in time, though Ray can multiplex tasks on it. An async actor has only one thread. If you want a thread pool, see {ref}`threaded-actors`.\n\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "958e8523bc1437259f1a",
+    "source_id": "ray_async"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ],
+      [
+        "D2"
+      ]
+    ],
+    "author_id": "vopt_c1",
+    "claim": "Both statements hold: (a1) In vLLM V1, the API server and engine core always run inside the same operating-system process. (a2) With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+    "components": [
+      {
+        "claim": "In vLLM V1, the API server and engine core always run inside the same operating-system process.",
+        "contradict": [
+          [
+            "D1"
+          ],
+          [
+            "D2"
+          ]
+        ],
+        "id": "a1",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      },
+      {
+        "claim": "With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 22519,
+        "source_char_start": 21089,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "7a70b88fb1b59a9705a4cd64e91f530ccda26e035e0ef3183bdb01193ff43a24",
+        "text": "## CPU Resources for GPU Deployments\n\nvLLM V1 uses a multi-process architecture (see [V1 Process Architecture](../design/arch_overview.md#v1-process-architecture)) where each process requires CPU resources. Underprovisioning CPU cores is a common source of performance degradation, especially in virtualized environments.\n\n### Minimum CPU Requirements\n\nFor a deployment with `N` GPUs, there are at minimum:\n\n- **1 API server process** -- handles HTTP requests, tokenization, and input processing\n- **1 engine core process** -- runs the scheduler and coordinates GPU workers\n- **N GPU worker processes** -- one per GPU, executes model forward passes\n\nThis means there are always at least **`2 + N` processes** competing for CPU time.\n\n!!! warning\n    Using fewer physical CPU cores than processes will cause contention and significantly degrade throughput and latency. The engine core process runs a busy loop and is particularly sensitive to CPU starvation.\n\nThe minimum is `2 + N` physical cores (1 for the API server, 1 for the engine core, and 1 per GPU worker). In practice, allocating more cores improves performance because the OS, PyTorch background threads, and other system processes also need CPU time.\n\n!!! important\n    Please note we are referring to **physical CPU cores** here. If your system has hyperthreading enabled, then 1 vCPU = 1 hyperthread = 1/2 physical CPU core, so you need `2 x (2 + N)` minimum vCPUs.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 18132,
+        "source_char_start": 17208,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "605003bb19a52382fa936acfb64534d7bf2f55c83fd62847754da10b762e9d5a",
+        "text": "### Parallel Processing\n\nYou can run input processing in parallel via [API server scale-out](../serving/data_parallel_deployment.md#internal-load-balancing).\nThis is useful when input processing (which is run inside the API server)\nbecomes a bottleneck compared to model execution (which is run inside engine core)\nand you have excess CPU capacity.\n\n```console\n# Run 4 API processes and 1 engine core process\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4\n\n# Run 4 API processes and 2 engine core processes\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4 -dp 2\n```\n\n!!! note\n    API server scale-out is only available for online inference.\n\n!!! warning\n    By default, 8 CPU threads are used in each API server to load media items (e.g. images)\n    from request data.\n\n    If you apply API server scale-out, consider adjusting `VLLM_MEDIA_LOADING_THREAD_COUNT`\n    to avoid CPU resource exhaustion.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6120,
+        "source_char_start": 5498,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "317385575fdcd6d6e2971b8e99a90b93a2851f75fa5336b548b917a629a5f3a2",
+        "text": "### Performance Tuning with Chunked Prefill\n\nYou can tune the performance by adjusting `max_num_batched_tokens`:\n\n- Smaller values (e.g., 2048) achieve better ITL because there are fewer prefills slowing down decodes.\n- Higher values achieve better time to first token (TTFT) as you can process more prefill tokens in a batch.\n- For optimal throughput, we recommend setting `max_num_batched_tokens > 8192` especially for smaller models on large GPUs.\n- If `max_num_batched_tokens` is the same as `max_model_len`, that's almost the equivalent to the V0 default scheduling policy (except that it still prioritizes decodes).\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "c4e966ece67f95e03665",
+    "source_id": "vllm_opt"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "ray_c1",
+    "claim": "Both statements hold: (a1) A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor. (a2) Ray directly supports defining an `async def` function as a remote task.",
+    "components": [
+      {
+        "claim": "A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      },
+      {
+        "claim": "Ray directly supports defining an `async def` function as a remote task.",
+        "contradict": [
+          [
+            "D1"
+          ]
+        ],
+        "id": "a2",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 9310,
+        "source_char_start": 8938,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "304e21054618a56d55c7882f0a866661b06ee84b92d4a8554a530f1f0e73099f",
+        "text": "## `asyncio` for remote tasks\n\nRay doesn't support `asyncio` for remote tasks. The following snippet fails:\n\n```{testcode}\n:skipif: True\n\n@ray.remote\nasync def f():\n    pass\n```\n\nInstead, wrap the `async` function in a wrapper that runs the task synchronously:\n\n```{testcode}\nasync def f():\n    pass\n\n@ray.remote\ndef wrapper():\n    import asyncio\n    asyncio.run(f())\n```\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8395,
+        "source_char_start": 7734,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "0354bcb8a4c223406187cf55e98f4fe7fedd7f3bedafc3dd51e850eede73db82",
+        "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 1201,
+        "source_char_start": 401,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+        "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "5e724c5af39b3b353db7",
+    "source_id": "ray_async"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "torch_i1",
+    "claim": "Both statements hold: (a1) Cloning a tensor before saving can reduce the saved file size when the tensor has fewer elements than its storage object. (a2) Cloning a tensor before saving always reduces the CPU time spent serializing it.",
+    "components": [
+      {
+        "claim": "Cloning a tensor before saving can reduce the saved file size when the tensor has fewer elements than its storage object.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "Cloning a tensor before saving always reduces the CPU time spent serializing it.",
+        "contradict": [],
+        "id": "a2",
+        "label": "insufficient",
+        "rationale": "The packet states a possible file-size reduction, but gives no serialization CPU-time comparison or guarantee.",
+        "support": []
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3315,
+        "source_char_start": 2301,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "67a48db3dc934d2bb983836f7116ebd5aaf67d44cbfd282db83fcade48205a40",
+        "text": "Instead of saving only the five values in the `small` tensor to 'small.pt,'\nthe 999 values in the storage it shares with `large` were saved and loaded.\n\nWhen saving tensors with fewer elements than their storage objects, the size of\nthe saved file can be reduced by first cloning the tensors. Cloning a tensor\nproduces a new tensor with a new storage object containing only the values\nin the tensor:\n\n```\n>>> large = torch.arange(1, 1000)\n>>> small = large[0:5]\n>>> torch.save(small.clone(), 'small.pt')  # saves a clone of small\n>>> loaded_small = torch.load('small.pt')\n>>> loaded_small.storage().size()\n5\n```\n\nSince the cloned tensors are independent of each other, however, they have\nnone of the view relationships the original tensors did. If both file size and\nview relationships are important when saving tensors smaller than their\nstorage objects, then care must be taken to construct new tensors that minimize\nthe size of their storage objects but still have the desired view relationships\nbefore saving.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6765,
+        "source_char_start": 5941,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "fbbb1dce5ddf62a3165ad455d9da331e082cdb89a22db2bb745ec0de722a20f3",
+        "text": "(serialized-file-format)=\n\n## Serialized file format for `torch.save`\n\nSince PyTorch 1.6.0, `torch.save` defaults to returning an uncompressed ZIP64\narchive unless the user sets `_use_new_zipfile_serialization=False`.\n\nIn this archive, the files are ordered as such\n\n```text\ncheckpoint.pth\n\u251c\u2500\u2500 data.pkl\n\u251c\u2500\u2500 byteorder  # added in PyTorch 2.1.0\n\u251c\u2500\u2500 data/\n\u2502   \u251c\u2500\u2500 0\n\u2502   \u251c\u2500\u2500 1\n\u2502   \u251c\u2500\u2500 2\n\u2502   \u2514\u2500\u2500 \u2026\n\u2514\u2500\u2500 version\n```\n\nThe entries are as follows:\n\n- `data.pkl` is the result of pickling the object passed to `torch.save`\n  excluding `torch.Storage` objects that it contains\n- `byteorder` contains a string with the `sys.byteorder` when saving (\u201clittle\u201d or \u201cbig\u201d)\n- `data/` contains all the storages in the object, where each storage is a separate file\n- `version` contains a version number at save time that can be used at load time\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 7148,
+        "source_char_start": 6766,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "4b240dd25363f7d2daeaba20dd8023fa8258ddcf97fe2012976ac3aed0d88f3b",
+        "text": "When saving, PyTorch will ensure that the local file header of each file is padded\nto an offset that is a multiple of 64 bytes, ensuring that the offset of each file\nis 64-byte aligned.\n\n```{note}\nTensors on certain devices such as XLA are serialized as pickled numpy arrays. As\nsuch, their storages are not serialized. In these cases `data/` might not exist\nin the checkpoint.\n```\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "f9957d13bc8f41e9120d",
+    "source_id": "torch_serialization"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ],
+      [
+        "D3"
+      ]
+    ],
+    "author_id": "slurm_c2",
+    "claim": "Both statements hold: (a1) A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully. (a2) The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+    "components": [
+      {
+        "claim": "A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully.",
+        "contradict": [
+          [
+            "D1"
+          ],
+          [
+            "D3"
+          ]
+        ],
+        "id": "a1",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      },
+      {
+        "claim": "The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 12841,
+        "source_char_start": 11783,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "304433aa68863e0a685db48340bf576b28b016276126bd6bc1a21663c703c23d",
+        "text": "Job Dependencies A job which is to be dependent upon an entire job array should specify itself dependent upon the ArrayJobID. Since each array element can have a different exit code, the interpretation of the afterok and afternotok clauses will be based upon the highest exit code from any task in the job array. When a job dependency specifies the job ID of a job array: The after clause is satisfied after all tasks in the job array start. The afterany clause is satisfied after all tasks in the job array complete. The aftercorr clause is satisfied after the corresponding task ID in the specified job has completed successfully (ran to completion with an exit code of zero). The afterok clause is satisfied after all tasks in the job array complete successfully. The afternotok clause is satisfied after all tasks in the job array complete with at least one tasks not completing successfully.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5726,
+        "source_char_start": 4886,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "d5f14d4137ad1d5dfdb7d745806f583d7431dce2e917e0945907cbca92b10ae2",
+        "text": "File Names Two additional options are available to specify a job's stdin, stdout, and stderr file names: %A will be replaced by the value of SLURM_ARRAY_JOB_ID (as defined above) and %a will be replaced by the value of SLURM_ARRAY_TASK_ID (as defined above). The default output file format for a job array is \"slurm-%A_%a.out\". An example of explicit use of the formatting is: sbatch -o slurm-%A_%a.out --array=1-3 -N1 tmp which would generate output files names of this sort \"slurm-36_1.out\", \"slurm-36_2.out\" and \"slurm-36_3.out\". If these file name options are used without being part of a job array then \"%A\" will be replaced by the current job ID and \"%a\" will be replaced by 4,294,967,294 (equivalent to 0xfffffffe or NO_VAL).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 13368,
+        "source_char_start": 12842,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "2451c6f88ea389d755a40409237f5efceb06ed5f11497f6ca225127468d3df37",
+        "text": "Examples of use are shown below: # Wait for specific job array elements sbatch --depend=after:123_4 my.job sbatch --depend=afterok:123_4:123_8 my.job2 # Wait for entire job array to complete sbatch --depend=afterany:123 my.job # Wait for corresponding job array elements sbatch --depend=aftercorr:123 my.job # Wait for entire job array to complete successfully sbatch --depend=afterok:123 my.job # Wait for entire job array to complete and at least one task fails sbatch --depend=afternotok:123 my.job",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D3"
+    ],
+    "request_id": "3d216ef6efe9dd5eb376",
+    "source_id": "slurm_array"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "torch_s1",
+    "claim": "Both statements hold: (a1) Since PyTorch 1.6.0, `torch.save` defaults to an uncompressed ZIP64 archive unless `_use_new_zipfile_serialization=False` is set. (a2) When saving, PyTorch pads each local file header to an offset that is a multiple of 64 bytes.",
+    "components": [
+      {
+        "claim": "Since PyTorch 1.6.0, `torch.save` defaults to an uncompressed ZIP64 archive unless `_use_new_zipfile_serialization=False` is set.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "When saving, PyTorch pads each local file header to an offset that is a multiple of 64 bytes.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "D2 explicitly describes padding each file header to a 64-byte-aligned offset.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 6159,
+        "source_char_start": 5941,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "a0a76283fa72d0e68e252535567c1db8c21563439e0b694d4ca6aefbc24e4251",
+        "text": "(serialized-file-format)=\n\n## Serialized file format for `torch.save`\n\nSince PyTorch 1.6.0, `torch.save` defaults to returning an uncompressed ZIP64\narchive unless the user sets `_use_new_zipfile_serialization=False`.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6953,
+        "source_char_start": 6766,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "bfba48d74949b3ecc40357005dba487579e730356f87764033643d78b212f199",
+        "text": "When saving, PyTorch will ensure that the local file header of each file is padded\nto an offset that is a multiple of 64 bytes, ensuring that the offset of each file\nis 64-byte aligned.\n\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 8015,
+        "source_char_start": 7149,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "12bc66f26bc419b09ff4a7937bb6e582fc0a7d35e000fb0b527e5d84500ead1d",
+        "text": "(layout-control)=\n\n## Layout Control\n\nThe `mmap` argument in {func}`torch.load` allows for lazy loading of tensor storages.\n\nIn addition, there are some advanced features that allow for more fine-grained\ncontrol and manipulation of a `torch.save` checkpoint.\n\nThe {class}`torch.serialization.skip_data` context manager enables\n\n- Saving a checkpoint with `torch.save` that includes empty space for data bytes\n  to be written later.\n- Loading a checkpoint with `torch.load` and filling in the data bytes of tensors later.\n\nTo inspect tensor metadata in a `torch.save` checkpoint without allocating memory for storage\ndata, use `torch.load` within the `FakeTensorMode` context manager. On top of skipping loading\nstorage data similar to `skip_data` above, it additionally tags storages with their offset within\nthe checkpoint, enabling direct checkpoint manipulation.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "01e3cf5f9bc4b50e59ca",
+    "source_id": "torch_serialization"
+  }
+]

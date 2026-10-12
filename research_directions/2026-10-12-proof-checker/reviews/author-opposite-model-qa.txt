@@ -1,0 +1,30 @@
+**Static review (no tools run; I inspected only the supplied text — the diff, the embedded sources, `verify_author.py`, and `checks.json`). I cannot independently recompute offsets/SHA‑256s; I rely on the attached checker run (`returncode 0`, balanced counts, `source_slices_valid: true`) for mechanical provenance.**
+
+## Structural / mechanical (from supplied artifacts)
+- 24 cases, 4 per source, 8/8/8 labels — matches the task allocation (kube 1S1C2I, ray 1S1C2I, torch 2S1C1I, slurm 1S2C1I, vmem 2S1C1I, vopt 1S2C1I).
+- False components in C cases sit at a1/a2 = 4/4 (kube_c1, torch_c1, slurm_c2, vopt_c1 at a1; ray_c1, slurm_c1, vmem_c1, vopt_c2 at a2). Unknown components in I cases also 4/4. Good.
+- Only `AUTHOR_CASES.json` appears in the diff. Cannot verify absence of temp files beyond the result.md assertion.
+- Every passage text I spot-checked against the embedded sources is a contiguous slice; Slurm passages are consistent with the declared strip/collapse transform.
+- No overlap with the 48 prior propositions (those concern NCCL, allocator, sleep mode, GRES, NFD, Ray GPU/resources, APC, Mamba).
+
+## Semantic inspection of all 24 — findings
+
+Sound as written: kube_s1, kube_c1, kube_i1, kube_i2, ray_s1, ray_i1, torch_s1, torch_s2, torch_c1, slurm_s1, slurm_c1, slurm_i1, vmem_s1, vmem_s2, vmem_c1, vmem_i1, vopt_s1, vopt_c2 (minor note below), vopt_i1. Supports are explicit, contradictions are explicit (e.g. "400m … 0.4 bytes"; "default 0"; "only if `weights_only` was not passed"; "sbcast, sprio, sreport, sshare and sstat" do not recognize arrays), S‑cases use distinct excerpts with union ≤ 2.
+
+Problems:
+
+1. **ray_i2 (a2 insufficient: "threaded actor default `max_concurrency` of 1000")** — D3 (5828–6398) includes the "Set concurrency in async actors" paragraph: "Use the `max_concurrency` flag … By default, 1000 tasks can run concurrently." The draft deliberately excluded this to keep the unknown genuinely unknown; the delivered packet reintroduces it. A labeler can reasonably read the 1000 default as applying to the `max_concurrency` flag generally → ambiguous insufficient. Fix: trim D3 to 5828–6198 (the ray_s1 D1 slice) or swap in a different filler.
+
+2. **torch_i1 (a2 insufficient: `torch.save` dedups equal values across two distinct storages)** — D2 states "`data/` contains all the storages in the object, where each storage is a separate file." That implies two distinct storages → two files, i.e. no dedup; arguably an implied contradiction rather than "neither confirmed nor denied." Fix: replace D2 with a neutral filler (e.g. the Layout Control slice 7149–8015).
+
+3. **slurm_c2 (a1 contradicted)** — D3 (dependency examples) contains "# Wait for entire job array to complete successfully / sbatch --depend=afterok:123". That is a plausible standalone contradict proof for "afterok satisfied when any one task succeeds," but only `[D1]` is enumerated. The task requires all genuine minimal alternatives. Fix: add `["D3"]` or replace D3 with unrelated filler.
+
+4. **vopt_c1 (a1 contradicted: API server and engine core always in the same OS process)** — D2 ("Run 4 API processes and 1 engine core process"; input processing "inside the API server" vs execution "inside engine core") and D3 ("one-to-one correspondence between API (`P0`) and engine core (`P1`) processes") each independently contradict a1. Only `[D1]` is listed. Fix: enumerate `[D2]`, `[D3]` or choose process‑agnostic fillers.
+
+5. **ray_c1 D3 (4539–4818)** ends mid‑class definition (`def __init__(…):` with no body). Task says avoid code includes whose contents aren't present / use complete excerpts. Not load‑bearing (filler), but should be extended to a complete snippet or replaced.
+
+6. Minor: **vopt_c2** D1 ("shard the batched input data using TP … enable batch-level DP by setting `mm_encoder_tp_mode="data"`") is a weak possible alternative contradiction for a2; acceptable but worth a second look. All component/case rationales are boilerplate ("The cited passage explicitly states this fact."), which meets the schema but gives a reviewer no per‑claim justification.
+
+## Verdict: **revise**
+
+The file is structurally complete, passes the supplied checker run, respects allocation/freshness/position‑balance, and most labels are semantically correct. However, four cases (ray_i2, torch_i1, slurm_c2, vopt_c1) contain packet content that either makes an "insufficient" component ambiguous or constitutes un‑enumerated alternative contradict proofs — precisely the ambiguities the task instructs to discard. These are localized passage‑selection fixes; after re‑slicing, offsets/hashes must be recomputed and the checker re‑run.

@@ -1,0 +1,90 @@
+[
+  {
+    "claim": "Both statements hold: (a1) Neither Ray's threaded-actor model nor its async-actor model bypasses Python's GIL. (a2) A threaded Ray actor has a default `max_concurrency` of 1000.",
+    "components": [
+      {
+        "claim": "Neither Ray's threaded-actor model nor its async-actor model bypasses Python's GIL.",
+        "id": "a1"
+      },
+      {
+        "claim": "A threaded Ray actor has a default `max_concurrency` of 1000.",
+        "id": "a2"
+      }
+    ],
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1201,
+        "source_char_start": 401,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+        "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8937,
+        "source_char_start": 7734,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "b42dd4587cf36ebcc8d40ac12f84948cc349a25892aad6dbddbf8e30fe7ce39b",
+        "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n\n\n```{testcode}\n@ray.remote\nclass ThreadedActor:\n    def task_1(self): print(\"I'm running in a thread!\")\n    def task_2(self): print(\"I'm running in another thread!\")\n\na = ThreadedActor.options(max_concurrency=2).remote()\nray.get([a.task_1.remote(), a.task_2.remote()])\n```\n\n```{testoutput}\n:options: +MOCK\n\n(ThreadedActor pid=4822) I'm running in a thread!\n(ThreadedActor pid=4822) I'm running in another thread!\n```\n\nEach invocation of a threaded actor runs in a thread pool. The `max_concurrency` value limits the size of the thread pool.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6198,
+        "source_char_start": 5828,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "9dd5377ba7a7a9a8117e168ac0a8ff0a10966f3835863c95ead6287ccf486496",
+        "text": "Ray runs all of the methods inside a single Python event loop. Don't run blocking `ray.get` or `ray.wait` calls inside an async actor method, because `ray.get` blocks the event loop.\n\nAn async actor runs only one task at any point in time, though Ray can multiplex tasks on it. An async actor has only one thread. If you want a thread pool, see {ref}`threaded-actors`.\n\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "request_id": "958e8523bc1437259f1a",
+    "source_id": "ray_async"
+  },
+  {
+    "claim": "Both statements hold: (a1) A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor. (a2) Ray directly supports defining an `async def` function as a remote task.",
+    "components": [
+      {
+        "claim": "A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor.",
+        "id": "a1"
+      },
+      {
+        "claim": "Ray directly supports defining an `async def` function as a remote task.",
+        "id": "a2"
+      }
+    ],
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 9310,
+        "source_char_start": 8938,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "304e21054618a56d55c7882f0a866661b06ee84b92d4a8554a530f1f0e73099f",
+        "text": "## `asyncio` for remote tasks\n\nRay doesn't support `asyncio` for remote tasks. The following snippet fails:\n\n```{testcode}\n:skipif: True\n\n@ray.remote\nasync def f():\n    pass\n```\n\nInstead, wrap the `async` function in a wrapper that runs the task synchronously:\n\n```{testcode}\nasync def f():\n    pass\n\n@ray.remote\ndef wrapper():\n    import asyncio\n    asyncio.run(f())\n```\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8395,
+        "source_char_start": 7734,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "0354bcb8a4c223406187cf55e98f4fe7fedd7f3bedafc3dd51e850eede73db82",
+        "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 1201,
+        "source_char_start": 401,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+        "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "request_id": "5e724c5af39b3b353db7",
+    "source_id": "ray_async"
+  }
+]

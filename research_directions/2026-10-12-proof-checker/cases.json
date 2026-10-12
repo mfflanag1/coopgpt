@@ -1,0 +1,1680 @@
+[
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "torch_s2",
+    "claim": "Both statements hold: (a1) Starting with PyTorch 2.6, `torch.load` uses `weights_only=True` when no `pickle_module` argument is passed. (a2) The `weights_only` unpickler is not allowed to dynamically import anything during unpickling.",
+    "components": [
+      {
+        "claim": "Starting with PyTorch 2.6, `torch.load` uses `weights_only=True` when no `pickle_module` argument is passed.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "The `weights_only` unpickler is not allowed to dynamically import anything during unpickling.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 8887,
+        "source_char_start": 8714,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "24872f964e2413c56e324e3369b70ef57d4e4e2ca6a5359cd3beb043e245dce1",
+        "text": "(weights-only)=\n\n## `torch.load` with `weights_only=True`\n\nStarting in version 2.6, `torch.load` will use `weights_only=True` if the `pickle_module`\nargument is not passed.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 9367,
+        "source_char_start": 8888,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "889fc6e51080a618ee837a8c983315b7851516294caf064a3922d91a4660373b",
+        "text": "(weights-only-security)=\n\n### weights_only security\n\nAs discussed in the documentation for {func}`torch.load`, `weights_only=True` restricts\nthe unpickler used in `torch.load` to only executing functions/building classes required for\n`state_dicts` of plain `torch.Tensors` as well as some other primitive types. Further,\nunlike the default `Unpickler` provided by the `pickle` module, the `weights_only` Unpickler\nis not allowed to dynamically import anything during unpickling.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 10355,
+        "source_char_start": 9368,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "ce433110dbcbc8b8c837401c35d2fe4424fa2c14f20ba8dda02d113e33f068bf",
+        "text": "`weights_only=True` narrows the surface of remote code execution attacks but has the following limitations:\n\n1. `weights_only=True` does not guard against denial of service attacks.\n2. We try to prevent memory corruptions during `torch.load(weights_only=True)` but they might still be possible.\n\nNote that even if memory corruption does not occur during `torch.load` itself, loading CAN create\nunexpected objects for the downstream code that can also lead to memory corruption (e.g. a Tensor of\nindices and values made to a sparse Tensor in user code might write/read out of bounds).\n\n(weights-only-allowlist)=\n\n### weights_only allowlist\n\nAs mentioned above, saving a module's `state_dict` is a best practice when using `torch.save`. If loading an old\ncheckpoint that contains an `nn.Module`, we recommend `weights_only=False`. When loading a checkpoint that contains\ntensor subclasses, there will likely be functions/classes that need to be allowlisted, see below for further details.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "b770cf636d51006de738",
+    "source_id": "torch_serialization"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "kube_s1",
+    "claim": "Both statements hold: (a1) For Kubernetes containers, CPU limits are enforced by CPU throttling. (a2) Kubernetes memory limits are enforced reactively and an over-limit container may be killed when memory pressure is detected.",
+    "components": [
+      {
+        "claim": "For Kubernetes containers, CPU limits are enforced by CPU throttling.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "Kubernetes memory limits are enforced reactively and an over-limit container may be killed when memory pressure is detected.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 2376,
+        "source_char_start": 1669,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "cb671dfe4f39fdbd5185a68016dea2f87636c04c728c289e1a7740a3becb9a06",
+        "text": "Limits are a different story. Both `cpu` and `memory` limits are applied by the kubelet (and\n{{< glossary_tooltip text=\"container runtime\" term_id=\"container-runtime\" >}}),\nand are ultimately enforced by the kernel. On Linux nodes, the Linux kernel\nenforces limits with\n{{< glossary_tooltip text=\"cgroups\" term_id=\"cgroup\" >}}.\nThe behavior of `cpu` and `memory` limit enforcement is slightly different.\n\n`cpu` limits are enforced by CPU throttling. When a container approaches\nits `cpu` limit, the kernel will restrict access to the CPU corresponding to the\ncontainer's limit. Thus, a `cpu` limit is a hard limit the kernel enforces.\nContainers may not use more CPU than is specified in their `cpu` limit.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3099,
+        "source_char_start": 2377,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "90ee4bf6c3f8c2d71da13df3bfa04ee2c6c8ea4c00453b7c2eb75ad102fca179",
+        "text": "`memory` limits are enforced by the kernel with out of memory (OOM) kills. When\na container uses more than its `memory` limit, the kernel may terminate it. However,\nterminations only happen when the kernel detects memory pressure. Thus, a\ncontainer that over allocates memory may not be immediately killed. This means\n`memory` limits are enforced reactively. A container may use more memory than\nits `memory` limit, but if it does, it may get killed.\n\n{{< note >}}\nThere is a feature `MemoryQoS` which adds memory throttling and optional\ntiered memory reservation on Linux nodes using cgroup v2. For details, see\n[Memory QoS with cgroup v2](/docs/concepts/workloads/pods/pod-qos/#memory-qos-with-cgroup-v2).\n{{< /note >}}\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4027,
+        "source_char_start": 3100,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "d9e79262135a6fbf7a78ea08547c3e96e4833f2fad7d21dc129b284ebafeb835",
+        "text": "{{< note >}}\nIf you specify a limit for a resource, but do not specify any request, and no admission-time\nmechanism has applied a default request for that resource, then Kubernetes copies the limit\nyou specified and uses it as the requested value for the resource.\n{{< /note >}}\n\n## Resource types\n\nA *resource type* has a base unit and can be requested, limited, or both.\nKubernetes has the following built-in resource types:\n\n| Resource type | Description | Base unit |\n|---|---|---|\n| `cpu` | Compute processing | cpu (core) |\n| `memory` | RAM | Bytes |\n| `ephemeral-storage` | [Local ephemeral storage](/docs/concepts/storage/ephemeral-storage/) | Bytes |\n| `hugepages-<size>` | [Huge pages](#huge-pages) (Linux only) | Bytes |\n\nClusters can also provide\n[extended resources](/docs/concepts/configuration/manage-resources-containers/#extended-resources)\n(resources with a custom name, typically exposed by device plugins).\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "f8df4890b07fb3fdee44",
+    "source_id": "kube_limits"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "vmem_s1",
+    "claim": "Both statements hold: (a1) Setting a modality's `limit_mm_per_prompt` count to zero disables that modality. (a2) An integer `limit_mm_per_prompt` value is interpreted as a mapping whose `count` is that integer.",
+    "components": [
+      {
+        "claim": "Setting a modality's `limit_mm_per_prompt` count to zero disables that modality.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "An integer `limit_mm_per_prompt` value is interpreted as a mapping whose `count` is that integer.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3939,
+        "source_char_start": 3405,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "6a491327a715fdc05240bf08741ca15755a0327990e9e2a8e8c9f0a340b566e7",
+        "text": "## Multi-modal input limits\n\nYou can allow a smaller number of multi-modal items per prompt to reduce the memory footprint of the model:\n\n```python\nfrom vllm import LLM\n\n# Accept up to 3 images and 1 video per prompt\nllm = LLM(\n    model=\"Qwen/Qwen2.5-VL-3B-Instruct\",\n    limit_mm_per_prompt={\"image\": 3, \"video\": 1},\n)\n```\n\nYou can go a step further and disable unused modalities completely by setting its limit to zero.\nFor example, if your application only accepts image input, there is no need to allocate any memory for videos.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5877,
+        "source_char_start": 4333,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "c5973344a1b112b5d06304421382089ff5111d0a6d7eb2e8cc88b3d42155a8f8",
+        "text": "### Configurable options\n\n`limit_mm_per_prompt` also accepts configurable options per modality. In the configurable form, you still specify `count`, and you may optionally provide size hints that control how vLLM profiles and reserves memory for your multi\u2011modal inputs. This helps you tune memory for the actual media you expect, instead of the model\u2019s absolute maxima.\n\nConfigurable options by modality:\n\n- `image`: `{\"count\": int, \"width\": int, \"height\": int}`\n- `video`: `{\"count\": int, \"num_frames\": int, \"width\": int, \"height\": int}`\n- `audio`: `{\"count\": int, \"length\": int}`\n\nDetails could be found in [`ImageDummyOptions`][vllm.config.multimodal.ImageDummyOptions], [`VideoDummyOptions`][vllm.config.multimodal.VideoDummyOptions], and [`AudioDummyOptions`][vllm.config.multimodal.AudioDummyOptions].\n\nExamples:\n\n```python\nfrom vllm import LLM\n\n# Up to 5 images per prompt, profile with 512x512.\n# Up to 1 video per prompt, profile with 32 frames at 640x640.\nllm = LLM(\n    model=\"Qwen/Qwen2.5-VL-3B-Instruct\",\n    limit_mm_per_prompt={\n        \"image\": {\"count\": 5, \"width\": 512, \"height\": 512},\n        \"video\": {\"count\": 1, \"num_frames\": 32, \"width\": 640, \"height\": 640},\n    },\n)\n```\n\nFor backward compatibility, passing an integer works as before and is interpreted as `{\"count\": <int>}`. For example:\n\n- `limit_mm_per_prompt={\"image\": 5}` is equivalent to `limit_mm_per_prompt={\"image\": {\"count\": 5}}`\n- You can mix formats: `limit_mm_per_prompt={\"image\": 5, \"video\": {\"count\": 1, \"num_frames\": 32, \"width\": 640, \"height\": 640}}`\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6388,
+        "source_char_start": 5878,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "47ed3623a0f69ba8ead25f67099a533bc9283dd7122aee68a88ea95dbb03c2d4",
+        "text": "!!! note\n    - The size hints affect memory profiling only. They shape the dummy inputs used to compute reserved activation sizes. They do not change how inputs are actually processed at inference time.\n    - If a hint exceeds what the model can accept, vLLM clamps it to the model's effective maximum and may log a warning.\n\n!!! warning\n    These size hints currently only affect activation memory profiling. Encoder cache size is determined by the actual inputs at runtime and is not limited by these hints.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "5c9ea4c57a403b2e7d7b",
+    "source_id": "vllm_memory"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "vmem_i1",
+    "claim": "Both statements hold: (a1) vLLM requires the number of attention heads to be divisible by `tensor_parallel_size`. (a2) With tensor parallelism enabled, each vLLM process reads the whole model before splitting it into chunks.",
+    "components": [
+      {
+        "claim": "vLLM requires the number of attention heads to be divisible by `tensor_parallel_size`.",
+        "contradict": [],
+        "id": "a1",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      },
+      {
+        "claim": "With tensor parallelism enabled, each vLLM process reads the whole model before splitting it into chunks.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1452,
+        "source_char_start": 144,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "c4e8e483bf22693df494a0d41086aaa7b6e9b1ac47a41ecd1da56c90cf924e0c",
+        "text": "## Tensor Parallelism (TP)\n\nTensor parallelism (`tensor_parallel_size` option) can be used to split the model across multiple GPUs.\n\nThe following code splits the model across 2 GPUs.\n\n```python\nfrom vllm import LLM\n\nllm = LLM(model=\"ibm-granite/granite-3.1-8b-instruct\", tensor_parallel_size=2)\n```\n\n!!! warning\n    To ensure that vLLM initializes CUDA correctly, you should avoid calling related functions (e.g. [torch.accelerator.set_device_index][])\n    before initializing vLLM. Otherwise, you may run into an error like `RuntimeError: Cannot re-initialize CUDA in forked subprocess`.\n\n    To control which devices are used, please instead set the `CUDA_VISIBLE_DEVICES` environment variable.\n\n!!! note\n    With tensor parallelism enabled, each process will read the whole model and split it into chunks, which makes the disk reading time even longer (proportional to the size of tensor parallelism).\n\n    You can convert the model checkpoint to a sharded checkpoint using [examples/features/sharded_state/load_sharded_state_offline.py](../../examples/features/sharded_state/load_sharded_state_offline.py). The conversion process might take some time, but later you can load the sharded checkpoint much faster. The model loading time should remain constant regardless of the size of tensor parallelism.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2175,
+        "source_char_start": 1453,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "4a2398de38783b5eb899fefbc78efe22ec896b11b587ce7ea38b5f2e4513822d",
+        "text": "## Quantization\n\nQuantized models take less memory at the cost of lower precision.\n\nStatically quantized models can be downloaded from HF Hub (some popular ones are available at [Red Hat AI](https://huggingface.co/RedHatAI))\nand used directly without extra configuration.\n\nDynamic quantization is also supported via the `quantization` option -- see [here](../features/quantization/README.md) for more details.\n\n## Context length and batch size\n\nYou can further reduce memory usage by limiting the context length of the model (`max_model_len` option)\nand the maximum batch size (`max_num_seqs` option).\n\n```python\nfrom vllm import LLM\n\nllm = LLM(model=\"Qwen/Qwen2.5-VL-3B-Instruct\", max_model_len=2048, max_num_seqs=2)\n```\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2990,
+        "source_char_start": 2176,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "dab9c2953bbb6111149d4683c86f9d4a671ed1a8826907377afa5c162dbbf089",
+        "text": "## Reduce CUDA Graphs\n\nBy default, we optimize model inference using CUDA graphs which take up extra memory in the GPU.\n\nYou can adjust `compilation_config` to achieve a better balance between inference speed and memory usage:\n\n??? code\n\n    ```python\n    from vllm import LLM\n    from vllm.config import CompilationConfig, CompilationMode\n\n    llm = LLM(\n        model=\"meta-llama/Llama-3.1-8B-Instruct\",\n        compilation_config=CompilationConfig(\n            mode=CompilationMode.VLLM_COMPILE,\n            # By default, it goes up to max_num_seqs\n            cudagraph_capture_sizes=[1, 2, 4, 8, 16],\n        ),\n    )\n    ```\n\nYou can disable graph capturing completely via the `enforce_eager` flag:\n\n```python\nfrom vllm import LLM\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", enforce_eager=True)\n```\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "fca6cf3f1dc939a20942",
+    "source_id": "vllm_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "kube_c1",
+    "claim": "Both statements hold: (a1) A Kubernetes memory quantity of `400m` denotes 400 mebibytes. (a2) Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+    "components": [
+      {
+        "claim": "A Kubernetes memory quantity of `400m` denotes 400 mebibytes.",
+        "contradict": [
+          [
+            "D1"
+          ]
+        ],
+        "id": "a1",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      },
+      {
+        "claim": "Kubernetes rejects CPU resource quantities with precision finer than `1m` or `0.001` CPU.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 9692,
+        "source_char_start": 8704,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "9dc7003f2a302a856cac3c4264a61f17cb00799d75a24792677cc3cc22fc6752",
+        "text": "### Memory resource units {#meaning-of-memory}\n\nLimits and requests for `memory` are measured in bytes. You can express memory as\na plain integer or as a fixed-point number using one of these\n[quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) suffixes:\nE, P, T, G, M, k. You can also use the power-of-two equivalents: Ei, Pi, Ti, Gi,\nMi, Ki. The Kubernetes API also allows m as a suffix (for millibytes: 1/1000 of a byte),\nbut this isn't useful to specify: you must always assign whole numbers of bytes, or sometimes larger chunks such as multiples of 1 gibibyte.\n\nHere are some examples of memory quantities that represent roughly the same value:\n\n```shell\n128974848, 129e6, 129M,  128974848000m, 123Mi\n```\n\nPay attention to the case of the suffixes. \"M\" means megabytes, while \"m\" means millibytes. If you request `400m` of memory, this is a request for 0.4 bytes. Someone who types that probably meant to ask for 400 mebibytes (`400Mi`)\nor 400 megabytes (`400M`).\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8703,
+        "source_char_start": 7374,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "f3f1acef6191d21eb0a4007f3311c2de74f0fb4e61aede93c051fd1f6cf4b0bc",
+        "text": "Fractional requests are allowed. When you define a container with\n`spec.containers[].resources.requests.cpu` set to `0.5`, you are requesting half\nas much CPU time compared to if you asked for `1.0` CPU.\nFor CPU resource units, the [quantity](/docs/reference/kubernetes-api/common-definitions/quantity/) expression `0.1` is equivalent to the\nexpression `100m`, which can be read as \"one hundred millicpu\". Some people say\n\"one hundred millicores\", and this is understood to mean the same thing.\n\nCPU resource is always specified as an absolute amount of resource, never as a relative amount. For example,\n`500m` CPU represents the roughly same amount of computing power whether that container\nruns on a single-core, dual-core, or 48-core machine.\n\n{{< note >}}\nKubernetes doesn't allow you to specify CPU resources with a precision finer than\n`1m` or `0.001` CPU. To avoid accidentally using an invalid CPU quantity, it's useful to specify CPU units using the milliCPU form \ninstead of the decimal form when using less than 1 CPU unit. \n\nFor example, you have a Pod that uses `5m` or `0.005` CPU and would like to decrease\nits CPU resources. By using the decimal form, it's harder to spot that `0.0005` CPU\nis an invalid value, while by using the milliCPU form, it's easier to spot that\n`0.5m` is an invalid value.\n{{< /note >}}\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 10047,
+        "source_char_start": 9693,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "8e0c5738468a690c4bfd02e9fd97f948bbf7b81471d852d40526ff71aee34624",
+        "text": "## Container resources example {#example-1}\n\nThe following Pod has two containers. Both containers are defined with a request for\n0.25 CPU\nand 64MiB (2<sup>26</sup> bytes) of memory. Each container has a limit of 0.5\nCPU and 128MiB of memory. You can say the Pod has a request of 0.5 CPU and 128\nMiB of memory, and a limit of 1 CPU and 256MiB of memory.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "b0cb35844fe9a7384577",
+    "source_id": "kube_limits"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "ray_i2",
+    "claim": "Both statements hold: (a1) Neither Ray's threaded-actor model nor its async-actor model bypasses Python's GIL. (a2) A threaded Ray actor has a default `max_concurrency` of 1000.",
+    "components": [
+      {
+        "claim": "Neither Ray's threaded-actor model nor its async-actor model bypasses Python's GIL.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "A threaded Ray actor has a default `max_concurrency` of 1000.",
+        "contradict": [],
+        "id": "a2",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1201,
+        "source_char_start": 401,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+        "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8937,
+        "source_char_start": 7734,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "b42dd4587cf36ebcc8d40ac12f84948cc349a25892aad6dbddbf8e30fe7ce39b",
+        "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n\n\n```{testcode}\n@ray.remote\nclass ThreadedActor:\n    def task_1(self): print(\"I'm running in a thread!\")\n    def task_2(self): print(\"I'm running in another thread!\")\n\na = ThreadedActor.options(max_concurrency=2).remote()\nray.get([a.task_1.remote(), a.task_2.remote()])\n```\n\n```{testoutput}\n:options: +MOCK\n\n(ThreadedActor pid=4822) I'm running in a thread!\n(ThreadedActor pid=4822) I'm running in another thread!\n```\n\nEach invocation of a threaded actor runs in a thread pool. The `max_concurrency` value limits the size of the thread pool.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6198,
+        "source_char_start": 5828,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "9dd5377ba7a7a9a8117e168ac0a8ff0a10966f3835863c95ead6287ccf486496",
+        "text": "Ray runs all of the methods inside a single Python event loop. Don't run blocking `ray.get` or `ray.wait` calls inside an async actor method, because `ray.get` blocks the event loop.\n\nAn async actor runs only one task at any point in time, though Ray can multiplex tasks on it. An async actor has only one thread. If you want a thread pool, see {ref}`threaded-actors`.\n\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "958e8523bc1437259f1a",
+    "source_id": "ray_async"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "torch_c1",
+    "claim": "Both statements hold: (a1) `TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1` overrides an explicit `weights_only=True` argument at a `torch.load` callsite. (a2) Static unsafe-global analysis can miss types that are built dynamically during unpickling.",
+    "components": [
+      {
+        "claim": "`TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1` overrides an explicit `weights_only=True` argument at a `torch.load` callsite.",
+        "contradict": [
+          [
+            "D1"
+          ]
+        ],
+        "id": "a1",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      },
+      {
+        "claim": "Static unsafe-global analysis can miss types that are built dynamically during unpickling.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 13658,
+        "source_char_start": 13201,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "8b4a7d7e1d997a7465433c2e99912296192e97c9dcc95f1c6a1fb17cf350ac9c",
+        "text": "#### Environment Variables\n\nThere are two environment variables that will influence the behavior of `torch.load`. These can be helpful\nif one does not have access to the `torch.load` callsites.\n\n- `TORCH_FORCE_WEIGHTS_ONLY_LOAD=1` will override all `torch.load` callsites to use `weights_only=True`.\n- `TORCH_FORCE_NO_WEIGHTS_ONLY_LOAD=1` will make `torch.load` callsites use `weights_only=False` **only**\n  if `weights_only` was not passed as an argument.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 12678,
+        "source_char_start": 12132,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "87527c441146f0792b152965ed57578499559aadb0ab3f508147ad301d46d761",
+        "text": "### Troubleshooting `weights_only`\n\n#### Getting unsafe globals\n\nA caveat is that {func}`torch.serialization.get_unsafe_globals_in_checkpoint` analyzes the checkpoint statically,\nsome types might be built dynamically during the unpickling process and hence will not be reported by\n{func}`torch.serialization.get_unsafe_globals_in_checkpoint`. One such example is `dtypes` in numpy. In\n`numpy < 1.25` after allowlisting all the functions/classes reported by\n{func}`torch.serialization.get_unsafe_globals_in_checkpoint` you might see an error like\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 12131,
+        "source_char_start": 11370,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "667da242af0a535009d3e42789d7decd807da0e945f65288e71a9fd22d3e2cc3",
+        "text": "Please follow the steps in the error message and allowlist the functions or classes only if you trust them.\n\nTo get all GLOBALs (functions/classes) in the checkpoint that are not yet allowlisted you can use\n{func}`torch.serialization.get_unsafe_globals_in_checkpoint` which will return a list of strings of the form\n`{__module__}.{__name__}`. If you trust these functions/classes, you can import them and allowlist them per\nthe error message either via {func}`torch.serialization.add_safe_globals` or the context manager\n{class}`torch.serialization.safe_globals`.\n\nTo access the list of user-allowlisted functions/classes you can use {func}`torch.serialization.get_safe_globals` and\nto clear the current list see {func}`torch.serialization.clear_safe_globals`.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "a8b324173bee9d50f225",
+    "source_id": "torch_serialization"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "ray_s1",
+    "claim": "Both statements hold: (a1) Calling `ray.get` inside an async actor method blocks that actor's event loop. (a2) An async Ray actor permits 1000 concurrent tasks by default.",
+    "components": [
+      {
+        "claim": "Calling `ray.get` inside an async actor method blocks that actor's event loop.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "An async Ray actor permits 1000 concurrent tasks by default.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 6198,
+        "source_char_start": 5828,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "9dd5377ba7a7a9a8117e168ac0a8ff0a10966f3835863c95ead6287ccf486496",
+        "text": "Ray runs all of the methods inside a single Python event loop. Don't run blocking `ray.get` or `ray.wait` calls inside an async actor method, because `ray.get` blocks the event loop.\n\nAn async actor runs only one task at any point in time, though Ray can multiplex tasks on it. An async actor has only one thread. If you want a thread pool, see {ref}`threaded-actors`.\n\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6398,
+        "source_char_start": 6198,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "81d06a9b7b36a37272db99141aa8fd301b1703c7b1a82cc5be46ec76683ad7c7",
+        "text": "(setting-concurrency-in-async-actors)=\n### Set concurrency in async actors\n\nUse the `max_concurrency` flag to set how many \"concurrent\" tasks run at once. By default, 1000 tasks can run concurrently.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 5430,
+        "source_char_start": 4539,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "b009f6186d93221dba1efe5bcaf091a70228deaf68fa2d04c9adc45b8c9db703",
+        "text": "(defining-an-async-actor)=\n### Define an async actor\n\nRay automatically detects whether an actor supports `async` calls from its `async` method definitions.\n\n```{testcode}\nimport ray\nimport asyncio\n\n\n@ray.remote\nclass AsyncActor:\n    def __init__(self, expected_num_tasks: int):\n        self._event = asyncio.Event()\n        self._curr_num_tasks = 0\n        self._expected_num_tasks = expected_num_tasks\n\n    async def run_task(self):\n        print(\"Started task\")\n        self._curr_num_tasks += 1\n        if self._curr_num_tasks == self._expected_num_tasks:\n            self._event.set()\n        else:\n            # Yield the event loop for multiple coroutines to run concurrently.\n            await self._event.wait()\n\n        print(\"Finished task\")\n\nactor = AsyncActor.remote(5)\n# All 5 tasks will start at once and run concurrently.\nray.get([actor.run_task.remote() for _ in range(5)])\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "1f897a5fc98dd70676be",
+    "source_id": "ray_async"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "ray_i1",
+    "claim": "Both statements hold: (a1) The `max_concurrency` setting of a running Ray actor can be changed after the actor is created. (a2) Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+    "components": [
+      {
+        "claim": "The `max_concurrency` setting of a running Ray actor can be changed after the actor is created.",
+        "contradict": [],
+        "id": "a1",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      },
+      {
+        "claim": "Calling `future()` on a Ray object reference allows it to be used with `concurrent.futures` APIs.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4538,
+        "source_char_start": 4052,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "8db48c1d65893cf0dd57ce9645b9506ba406d63c4bdcc4f6eb0f566f0117377a",
+        "text": "(async-ref-to-futures)=\n(objectrefs-as-concurrentfuturesfutures)=\n### Object refs as `concurrent.futures.Future` objects\nYou can also wrap object refs in `concurrent.futures.Future` objects to work with existing `concurrent.futures` APIs:\n\n```{testcode}\nimport concurrent\n\nrefs = [some_task.remote() for _ in range(4)]\nfuts = [ref.future() for ref in refs]\nfor fut in concurrent.futures.as_completed(futs):\n    assert fut.done()\n    print(fut.result())\n```\n\n```{testoutput}\n1\n1\n1\n1\n```\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 7123,
+        "source_char_start": 6198,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "cf8dbe212082aec446ea9f804938acaf2e66ceb696fa9936c9594264497a7291",
+        "text": "(setting-concurrency-in-async-actors)=\n### Set concurrency in async actors\n\nUse the `max_concurrency` flag to set how many \"concurrent\" tasks run at once. By default, 1000 tasks can run concurrently.\n\n```{testcode}\nimport asyncio\nimport ray\n\n@ray.remote\nclass AsyncActor:\n    def __init__(self, batch_size: int):\n        self._event = asyncio.Event()\n        self._curr_tasks = 0\n        self._batch_size = batch_size\n\n    async def run_task(self):\n        print(\"Started task\")\n        self._curr_tasks += 1\n        if self._curr_tasks == self._batch_size:\n            self._event.set()\n        else:\n            await self._event.wait()\n            self._event.clear()\n            self._curr_tasks = 0\n\n        print(\"Finished task\")\n\nactor = AsyncActor.options(max_concurrency=2).remote(2)\n\n# Only 2 tasks will run concurrently.\n# Once 2 finish, the next 2 should run.\nray.get([actor.run_task.remote() for _ in range(8)])\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3361,
+        "source_char_start": 2955,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "d4947ff334fb9c6f2f9e494069a7b0a349f62fd1386cb3b36f66e65a573fa536",
+        "text": "(objectrefs-as-asynciofutures)=\n### Object refs as `asyncio.Future` objects\nYou can use object refs as `asyncio.Future` objects, which means you can `await` Ray futures in existing concurrent applications.\n\nInstead of:\n\n```{testcode}\nimport ray\n\n@ray.remote\ndef some_task():\n    return 1\n\nray.get(some_task.remote())\nray.wait([some_task.remote()])\n```\n\nyou can await the object ref in Python 3.9 and 3.10:\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "b4d53981f8cef6bc7568",
+    "source_id": "ray_async"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ],
+      [
+        "D2"
+      ]
+    ],
+    "author_id": "vopt_c1",
+    "claim": "Both statements hold: (a1) In vLLM, the API server and engine core always run inside the same operating-system process. (a2) With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+    "components": [
+      {
+        "claim": "In vLLM, the API server and engine core always run inside the same operating-system process.",
+        "contradict": [
+          [
+            "D1"
+          ],
+          [
+            "D2"
+          ]
+        ],
+        "id": "a1",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      },
+      {
+        "claim": "With hyperthreading, the documented minimum for an `N`-GPU vLLM deployment is `2 * (2 + N)` vCPUs.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 22519,
+        "source_char_start": 21089,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "7a70b88fb1b59a9705a4cd64e91f530ccda26e035e0ef3183bdb01193ff43a24",
+        "text": "## CPU Resources for GPU Deployments\n\nvLLM V1 uses a multi-process architecture (see [V1 Process Architecture](../design/arch_overview.md#v1-process-architecture)) where each process requires CPU resources. Underprovisioning CPU cores is a common source of performance degradation, especially in virtualized environments.\n\n### Minimum CPU Requirements\n\nFor a deployment with `N` GPUs, there are at minimum:\n\n- **1 API server process** -- handles HTTP requests, tokenization, and input processing\n- **1 engine core process** -- runs the scheduler and coordinates GPU workers\n- **N GPU worker processes** -- one per GPU, executes model forward passes\n\nThis means there are always at least **`2 + N` processes** competing for CPU time.\n\n!!! warning\n    Using fewer physical CPU cores than processes will cause contention and significantly degrade throughput and latency. The engine core process runs a busy loop and is particularly sensitive to CPU starvation.\n\nThe minimum is `2 + N` physical cores (1 for the API server, 1 for the engine core, and 1 per GPU worker). In practice, allocating more cores improves performance because the OS, PyTorch background threads, and other system processes also need CPU time.\n\n!!! important\n    Please note we are referring to **physical CPU cores** here. If your system has hyperthreading enabled, then 1 vCPU = 1 hyperthread = 1/2 physical CPU core, so you need `2 x (2 + N)` minimum vCPUs.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 18132,
+        "source_char_start": 17208,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "605003bb19a52382fa936acfb64534d7bf2f55c83fd62847754da10b762e9d5a",
+        "text": "### Parallel Processing\n\nYou can run input processing in parallel via [API server scale-out](../serving/data_parallel_deployment.md#internal-load-balancing).\nThis is useful when input processing (which is run inside the API server)\nbecomes a bottleneck compared to model execution (which is run inside engine core)\nand you have excess CPU capacity.\n\n```console\n# Run 4 API processes and 1 engine core process\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4\n\n# Run 4 API processes and 2 engine core processes\nvllm serve Qwen/Qwen2.5-VL-3B-Instruct --api-server-count 4 -dp 2\n```\n\n!!! note\n    API server scale-out is only available for online inference.\n\n!!! warning\n    By default, 8 CPU threads are used in each API server to load media items (e.g. images)\n    from request data.\n\n    If you apply API server scale-out, consider adjusting `VLLM_MEDIA_LOADING_THREAD_COUNT`\n    to avoid CPU resource exhaustion.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6120,
+        "source_char_start": 5498,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "317385575fdcd6d6e2971b8e99a90b93a2851f75fa5336b548b917a629a5f3a2",
+        "text": "### Performance Tuning with Chunked Prefill\n\nYou can tune the performance by adjusting `max_num_batched_tokens`:\n\n- Smaller values (e.g., 2048) achieve better ITL because there are fewer prefills slowing down decodes.\n- Higher values achieve better time to first token (TTFT) as you can process more prefill tokens in a batch.\n- For optimal throughput, we recommend setting `max_num_batched_tokens > 8192` especially for smaller models on large GPUs.\n- If `max_num_batched_tokens` is the same as `max_model_len`, that's almost the equivalent to the V0 default scheduling policy (except that it still prioritizes decodes).\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "f764cbc9ba492cfdea21",
+    "source_id": "vllm_opt"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "vmem_c1",
+    "claim": "Both statements hold: (a1) vLLM uses CUDA graphs by default, and those graphs consume extra GPU memory. (a2) The default value of `VLLM_CPU_KVCACHE_SPACE` is 4 GiB.",
+    "components": [
+      {
+        "claim": "vLLM uses CUDA graphs by default, and those graphs consume extra GPU memory.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      },
+      {
+        "claim": "The default value of `VLLM_CPU_KVCACHE_SPACE` is 4 GiB.",
+        "contradict": [
+          [
+            "D1"
+          ]
+        ],
+        "id": "a2",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3939,
+        "source_char_start": 2991,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "02920534ecf943b810568ff8826a9c4c2760d784fe88da9976b026bb33c828d7",
+        "text": "## Adjust cache size\n\nIf you run out of CPU RAM, try the following options:\n\n- (Multi-modal models only) you can set the size of multi-modal cache by setting `mm_processor_cache_gb` engine argument (default 4 GiB).\n- (CPU backend only) you can set the size of KV cache using `VLLM_CPU_KVCACHE_SPACE` environment variable, in GiB (default 0, meaning vLLM doesn't override the KV cache size through this variable).\n\n## Multi-modal input limits\n\nYou can allow a smaller number of multi-modal items per prompt to reduce the memory footprint of the model:\n\n```python\nfrom vllm import LLM\n\n# Accept up to 3 images and 1 video per prompt\nllm = LLM(\n    model=\"Qwen/Qwen2.5-VL-3B-Instruct\",\n    limit_mm_per_prompt={\"image\": 3, \"video\": 1},\n)\n```\n\nYou can go a step further and disable unused modalities completely by setting its limit to zero.\nFor example, if your application only accepts image input, there is no need to allocate any memory for videos.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2990,
+        "source_char_start": 2176,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "dab9c2953bbb6111149d4683c86f9d4a671ed1a8826907377afa5c162dbbf089",
+        "text": "## Reduce CUDA Graphs\n\nBy default, we optimize model inference using CUDA graphs which take up extra memory in the GPU.\n\nYou can adjust `compilation_config` to achieve a better balance between inference speed and memory usage:\n\n??? code\n\n    ```python\n    from vllm import LLM\n    from vllm.config import CompilationConfig, CompilationMode\n\n    llm = LLM(\n        model=\"meta-llama/Llama-3.1-8B-Instruct\",\n        compilation_config=CompilationConfig(\n            mode=CompilationMode.VLLM_COMPILE,\n            # By default, it goes up to max_num_seqs\n            cudagraph_capture_sizes=[1, 2, 4, 8, 16],\n        ),\n    )\n    ```\n\nYou can disable graph capturing completely via the `enforce_eager` flag:\n\n```python\nfrom vllm import LLM\n\nllm = LLM(model=\"meta-llama/Llama-3.1-8B-Instruct\", enforce_eager=True)\n```\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2175,
+        "source_char_start": 1864,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "28e1f8cf1cf37a0db2f76ee2107798998dc0425f32d6060ade5a09a961a41a30",
+        "text": "## Context length and batch size\n\nYou can further reduce memory usage by limiting the context length of the model (`max_model_len` option)\nand the maximum batch size (`max_num_seqs` option).\n\n```python\nfrom vllm import LLM\n\nllm = LLM(model=\"Qwen/Qwen2.5-VL-3B-Instruct\", max_model_len=2048, max_num_seqs=2)\n```\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "acc76e00b447ea9a610e",
+    "source_id": "vllm_memory"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "slurm_i1",
+    "claim": "Both statements hold: (a1) Slurm permits a different `MaxArraySize` value for each partition. (a2) Slurm initially creates a single job record when a job array is submitted.",
+    "components": [
+      {
+        "claim": "Slurm permits a different `MaxArraySize` value for each partition.",
+        "contradict": [],
+        "id": "a1",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      },
+      {
+        "claim": "Slurm initially creates a single job record when a job array is submitted.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 15260,
+        "source_char_start": 14090,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "b998aba08145c3d7d2d545e48f08fd9d3e1b4f283ef657a01dfa15f0a779eb9e",
+        "text": "A new configuration parameter has been added to control the maximum job array size: MaxArraySize . The smallest index that can be specified by a user is zero and the maximum index is MaxArraySize minus one. The default value of MaxArraySize is 1001. The maximum MaxArraySize supported in Slurm is 4000001. Be mindful about the value of MaxArraySize as job arrays offer an easy way for users to submit large numbers of jobs very quickly. The sched/backfill plugin has been modified to improve performance with job arrays. Once one element of a job array is discovered to not be runnable or impact the scheduling of pending jobs, the remaining elements of that job array will be quickly skipped. Slurm creates a single job record when a job array is submitted. Additional job records are only created as needed, typically when a task of a job array is started, which provides a very scalable mechanism to manage large job counts. Each task of the job array will share the same ArrayJobId but will have their own unique ArrayTaskId. In addition to the ArrayJobId, each job will have a unique JobId that gets assigned as the tasks are started.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1469,
+        "source_char_start": 903,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "2f84cb91d2d5ab64b110ea0105ee04e996798988cee4aa5a1578abab0e8cbdb5",
+        "text": "Job arrays are only supported for batch jobs and the array index values are specified using the --array or -a option of the sbatch command. The option argument can be specific array index values, a range of index values, and an optional step size as shown in the examples below. Note that the minimum index value is zero and the maximum value is a Slurm configuration parameter ( MaxArraySize minus one). Jobs which are part of a job array will have the environment variable SLURM_ARRAY_TASK_ID set to its array index value.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2184,
+        "source_char_start": 1797,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "de1cefd6ac6071b5c1fbbe87b62e826c096416a98db4a50db8604e55d7072933",
+        "text": "A maximum number of simultaneously running tasks from the job array may be specified using a \"%\" separator. For example \"--array=0-15%4\" will limit the number of simultaneously running tasks from this job array to 4. NOTE : Job array tasks still act like regular jobs, including in the enforcement of job-related limits (e.g., MaxJobs , MaxSubmitJobs ).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "4a433246b39df25ab825",
+    "source_id": "slurm_array"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "slurm_c1",
+    "claim": "Both statements hold: (a1) Most Slurm commands recognize an array job ID and task ID joined by an underscore as an array element identifier. (a2) The Slurm `sstat` command accepts `ArrayJobID_TaskID` as an array-element identifier.",
+    "components": [
+      {
+        "claim": "Most Slurm commands recognize an array job ID and task ID joined by an underscore as an array element identifier.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      },
+      {
+        "claim": "The Slurm `sstat` command accepts `ArrayJobID_TaskID` as an array-element identifier.",
+        "contradict": [
+          [
+            "D1"
+          ]
+        ],
+        "id": "a2",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 13986,
+        "source_char_start": 13369,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "2fc6975674420845a8b83e7b837eb37531854a95c4906b616048904c44bbf0cf",
+        "text": "Other Command Use The following Slurm commands do not currently recognize job arrays and their use requires the use of Slurm job IDs, which are unique for each array element: sbcast, sprio, sreport, sshare and sstat. The sacct, sattach and strigger commands have been modified to permit specification of either job IDs or job array elements. The sview command has been modified to permit display of a job's ArrayJobId and ArrayTaskId fields. Both fields are displayed with a value of \"N/A\" if the job is not part of a job array.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 4885,
+        "source_char_start": 4089,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "94c00fc6b2cb5497c01bbfbb50f2fe5568ec6c02a9643f1376ac7c4cd07869f6",
+        "text": "All Slurm commands and APIs recognize the SLURM_JOB_ID value. Most commands also recognize the SLURM_ARRAY_JOB_ID plus SLURM_ARRAY_TASK_ID values separated by an underscore as identifying an element of a job array. Using the example above, \"37\" or \"36_1\" would be equivalent ways to identify the second array element of job 36. A set of APIs has been developed to operate on an entire job array or select tasks of a job array in a single function call. The function response consists of an array identifying the various error codes for various tasks of a job ID. For example the job_resume2() function might return an array of error codes indicating that tasks 1 and 2 have already completed; tasks 3 through 5 are resumed successfully, and tasks 6 through 99 have not yet started.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 14541,
+        "source_char_start": 14090,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "ee6137164bb7424abac18548392c0d306a8b1a7557518000b62c6dc894a89fdb",
+        "text": "A new configuration parameter has been added to control the maximum job array size: MaxArraySize . The smallest index that can be specified by a user is zero and the maximum index is MaxArraySize minus one. The default value of MaxArraySize is 1001. The maximum MaxArraySize supported in Slurm is 4000001. Be mindful about the value of MaxArraySize as job arrays offer an easy way for users to submit large numbers of jobs very quickly.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "266ea11d8ba3f77cc292",
+    "source_id": "slurm_array"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "ray_c1",
+    "claim": "Both statements hold: (a1) A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor. (a2) Ray directly supports defining an `async def` function as a remote task.",
+    "components": [
+      {
+        "claim": "A Ray actor definition with at least one `async def` method is recognized as an async actor rather than a threaded actor.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      },
+      {
+        "claim": "Ray directly supports defining an `async def` function as a remote task.",
+        "contradict": [
+          [
+            "D1"
+          ]
+        ],
+        "id": "a2",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 9310,
+        "source_char_start": 8938,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "304e21054618a56d55c7882f0a866661b06ee84b92d4a8554a530f1f0e73099f",
+        "text": "## `asyncio` for remote tasks\n\nRay doesn't support `asyncio` for remote tasks. The following snippet fails:\n\n```{testcode}\n:skipif: True\n\n@ray.remote\nasync def f():\n    pass\n```\n\nInstead, wrap the `async` function in a wrapper that runs the task synchronously:\n\n```{testcode}\nasync def f():\n    pass\n\n@ray.remote\ndef wrapper():\n    import asyncio\n    asyncio.run(f())\n```\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8395,
+        "source_char_start": 7734,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "0354bcb8a4c223406187cf55e98f4fe7fedd7f3bedafc3dd51e850eede73db82",
+        "text": "(threaded-actors)=\n\n## Threaded actors\n\nSometimes `asyncio` isn't the right fit for your actor. For example, you might have a method that performs a computation-heavy task and blocks the event loop without giving up control through `await`. This hurts the performance of an async actor, because async actors can only run one task at a time and rely on `await` to switch context.\n\n\nInstead, use the `max_concurrency` actor option without any async methods to get threaded concurrency, similar to a thread pool.\n\n\n:::{warning}\nIf an actor definition has at least one `async def` method, Ray recognizes the actor as an async actor instead of a threaded actor.\n:::\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 1201,
+        "source_char_start": 401,
+        "source_file": "sources/ray_async.md",
+        "source_text_sha256": "cc40dce071127718a1de94e2c3f1083f9327574e3ec4425fd0eb5e43a565f9a1",
+        "text": "Keep in mind that Python's [Global Interpreter Lock (GIL)](https://wiki.python.org/moin/GlobalInterpreterLock) runs only one thread of Python code at a time.\n\nAs a result, parallelizing pure Python code doesn't give you true parallelism. If you call NumPy, Cython, TensorFlow, or PyTorch code, these libraries release the GIL when they call into C or C++ functions.\n\n:::{note}\nNeither the {ref}`threaded actor <threaded-actors>` nor the {ref}`async actor <async-actors>` model bypasses the GIL.\n:::\n\n(async-actors)=\n\n## `asyncio` for actors\n\nPython 3.5 and later support writing concurrent code with the `async/await` [syntax](https://docs.python.org/3/library/asyncio.html). Ray integrates natively with `asyncio`, so you can use Ray alongside popular async frameworks such as aiohttp and aioredis.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "5e724c5af39b3b353db7",
+    "source_id": "ray_async"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "vopt_s1",
+    "claim": "Both statements hold: (a1) The default preemption mode in vLLM V1 is `RECOMPUTE` rather than `SWAP`. (a2) With chunked prefill enabled, vLLM batches all pending decode requests before scheduling prefills.",
+    "components": [
+      {
+        "claim": "The default preemption mode in vLLM V1 is `RECOMPUTE` rather than `SWAP`.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "With chunked prefill enabled, vLLM batches all pending decode requests before scheduling prefills.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4521,
+        "source_char_start": 3207,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "52eac7074cc229e306328798b4f5560f823c979f4910ba11b1cc3fa1b6e09492",
+        "text": "While this mechanism ensures system robustness, preemption and recomputation can adversely affect end-to-end latency.\nIf you frequently encounter preemptions, consider the following actions:\n\n- Increase `gpu_memory_utilization`. vLLM pre-allocates GPU cache using this percentage of memory. By increasing utilization, you can provide more KV cache space.\n- Decrease `max_num_seqs` or `max_num_batched_tokens`. This reduces the number of concurrent requests in a batch, thereby requiring less KV cache space.\n- Increase `tensor_parallel_size`. This shards model weights across GPUs, allowing each GPU to have more memory available for KV cache. However, increasing this value may cause excessive synchronization overhead.\n- Increase `pipeline_parallel_size`. This distributes model layers across GPUs, reducing the memory needed for model weights on each GPU, indirectly leaving more memory available for KV cache. However, increasing this value may cause latency penalties.\n\nYou can monitor the number of preemption requests through Prometheus metrics exposed by vLLM. Additionally, you can log the cumulative number of preemption requests by setting `disable_log_stats=False`.\n\nIn vLLM V1, the default preemption mode is `RECOMPUTE` rather than `SWAP`, as recomputation has lower overhead in the V1 architecture.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5497,
+        "source_char_start": 4522,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "aee184bd8b6369f18999fe58477fa051f9728d619a9f89a83efb71eb9d1d8060",
+        "text": "## Chunked Prefill\n\nChunked prefill allows vLLM to process large prefills in smaller chunks and batch them together with decode requests. This feature helps improve both throughput and latency by better balancing compute-bound (prefill) and memory-bound (decode) operations.\n\nIn V1, **chunked prefill is enabled by default whenever possible**. With chunked prefill enabled, the scheduling policy prioritizes decode requests. It batches all pending decode requests before scheduling any prefill operations. When there are available tokens in the `max_num_batched_tokens` budget, it schedules pending prefills. If a pending prefill request cannot fit into `max_num_batched_tokens`, it automatically chunks it.\n\nThis policy has two benefits:\n\n- It improves inter-token latency (ITL) and generation decode because decode requests are prioritized.\n- It helps achieve better GPU utilization by locating compute-bound (prefill) and memory-bound (decode) requests to the same batch.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6120,
+        "source_char_start": 5498,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "317385575fdcd6d6e2971b8e99a90b93a2851f75fa5336b548b917a629a5f3a2",
+        "text": "### Performance Tuning with Chunked Prefill\n\nYou can tune the performance by adjusting `max_num_batched_tokens`:\n\n- Smaller values (e.g., 2048) achieve better ITL because there are fewer prefills slowing down decodes.\n- Higher values achieve better time to first token (TTFT) as you can process more prefill tokens in a batch.\n- For optimal throughput, we recommend setting `max_num_batched_tokens > 8192` especially for smaller models on large GPUs.\n- If `max_num_batched_tokens` is the same as `max_model_len`, that's almost the equivalent to the V0 default scheduling policy (except that it still prioritizes decodes).\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "e07fb861c61095de72c4",
+    "source_id": "vllm_opt"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "kube_i2",
+    "claim": "Both statements hold: (a1) The Vertical Pod Autoscaler performs every recommendation through the Pod `/resize` subresource. (a2) An in-place Kubernetes Pod resize updates container CPU or memory specifications through the Pod `/resize` subresource.",
+    "components": [
+      {
+        "claim": "The Vertical Pod Autoscaler performs every recommendation through the Pod `/resize` subresource.",
+        "contradict": [],
+        "id": "a1",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      },
+      {
+        "claim": "An in-place Kubernetes Pod resize updates container CPU or memory specifications through the Pod `/resize` subresource.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 15378,
+        "source_char_start": 14409,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "b9b9f43f8e7c4ca968a7fdf9c3ceac30f4a7976c0fa13e5802eb672e22df4481",
+        "text": "### Resizing container resources\n\nAfter creating a Pod, you may need to adjust its CPU or memory resources based on\nactual usage patterns. Kubernetes provides two approaches for resizing Pod resources:\n\n#### In-place resize {#pod-resize-inplace}\n{{< feature-state feature_gate_name=\"InPlacePodVerticalScaling\" >}}\n\nYou can modify the CPU and memory `requests` and `limits` of containers\nin a running Pod without recreating it. This is called _in-place Pod vertical scaling_\nor _in-place Pod resize_. To perform an in-place resize, update the container's resource\nspecifications using the Pod's `/resize` subresource. You can control whether a container\nrestart is required by setting the `resizePolicy` field in the container specification.\n\n{{< note >}}\nIn-place resize currently applies to container-level resources. For resizing Pod-level\nresources, see [Resize Pod CPU and Memory Resources](/docs/tasks/configure-pod-container/resize-pod-resources/).\n{{< /note >}}\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2073,
+        "source_char_start": 1254,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "77c12f52519123ab495b8ab5d4d7a986bd4d17b0b1af1fefbb0ce77b04393564",
+        "text": "## Requests and limits\n\nIf the node where a Pod is running has enough of a resource available, it's possible (and\nallowed) for a container to use more resource than its `request` for that resource specifies.\n\nFor example, if you set a `memory` request of 256 MiB for a container, and that container is in\na Pod scheduled to a Node with 8GiB of memory and no other Pods, then the container can try to use\nmore RAM.\n\nLimits are a different story. Both `cpu` and `memory` limits are applied by the kubelet (and\n{{< glossary_tooltip text=\"container runtime\" term_id=\"container-runtime\" >}}),\nand are ultimately enforced by the kernel. On Linux nodes, the Linux kernel\nenforces limits with\n{{< glossary_tooltip text=\"cgroups\" term_id=\"cgroup\" >}}.\nThe behavior of `cpu` and `memory` limit enforcement is slightly different.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4027,
+        "source_char_start": 3100,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "d9e79262135a6fbf7a78ea08547c3e96e4833f2fad7d21dc129b284ebafeb835",
+        "text": "{{< note >}}\nIf you specify a limit for a resource, but do not specify any request, and no admission-time\nmechanism has applied a default request for that resource, then Kubernetes copies the limit\nyou specified and uses it as the requested value for the resource.\n{{< /note >}}\n\n## Resource types\n\nA *resource type* has a base unit and can be requested, limited, or both.\nKubernetes has the following built-in resource types:\n\n| Resource type | Description | Base unit |\n|---|---|---|\n| `cpu` | Compute processing | cpu (core) |\n| `memory` | RAM | Bytes |\n| `ephemeral-storage` | [Local ephemeral storage](/docs/concepts/storage/ephemeral-storage/) | Bytes |\n| `hugepages-<size>` | [Huge pages](#huge-pages) (Linux only) | Bytes |\n\nClusters can also provide\n[extended resources](/docs/concepts/configuration/manage-resources-containers/#extended-resources)\n(resources with a custom name, typically exposed by device plugins).\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "1ed27c633bc3c2d2129c",
+    "source_id": "kube_limits"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "slurm_s1",
+    "claim": "Both statements hold: (a1) A Slurm job-array index ranges from zero through `MaxArraySize` minus one. (a2) A percent suffix on Slurm's `--array` argument limits how many array tasks run simultaneously.",
+    "components": [
+      {
+        "claim": "A Slurm job-array index ranges from zero through `MaxArraySize` minus one.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "A percent suffix on Slurm's `--array` argument limits how many array tasks run simultaneously.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1796,
+        "source_char_start": 903,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "a7d2a30d5b9f7e67f126ee98f96f14a2e45164bdb259a134353713378be33c66",
+        "text": "Job arrays are only supported for batch jobs and the array index values are specified using the --array or -a option of the sbatch command. The option argument can be specific array index values, a range of index values, and an optional step size as shown in the examples below. Note that the minimum index value is zero and the maximum value is a Slurm configuration parameter ( MaxArraySize minus one). Jobs which are part of a job array will have the environment variable SLURM_ARRAY_TASK_ID set to its array index value. # Submit a job array with index values between 0 and 31 $ sbatch --array=0-31 -N1 tmp # Submit a job array with index values of 1, 3, 5 and 7 $ sbatch --array=1,3,5,7 -N1 tmp # Submit a job array with index values between 1 and 7 # with a step size of 2 (i.e. 1, 3, 5 and 7) $ sbatch --array=1-7:2 -N1 tmp",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2184,
+        "source_char_start": 1797,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "de1cefd6ac6071b5c1fbbe87b62e826c096416a98db4a50db8604e55d7072933",
+        "text": "A maximum number of simultaneously running tasks from the job array may be specified using a \"%\" separator. For example \"--array=0-15%4\" will limit the number of simultaneously running tasks from this job array to 4. NOTE : Job array tasks still act like regular jobs, including in the enforcement of job-related limits (e.g., MaxJobs , MaxSubmitJobs ).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4885,
+        "source_char_start": 4089,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "94c00fc6b2cb5497c01bbfbb50f2fe5568ec6c02a9643f1376ac7c4cd07869f6",
+        "text": "All Slurm commands and APIs recognize the SLURM_JOB_ID value. Most commands also recognize the SLURM_ARRAY_JOB_ID plus SLURM_ARRAY_TASK_ID values separated by an underscore as identifying an element of a job array. Using the example above, \"37\" or \"36_1\" would be equivalent ways to identify the second array element of job 36. A set of APIs has been developed to operate on an entire job array or select tasks of a job array in a single function call. The function response consists of an array identifying the various error codes for various tasks of a job ID. For example the job_resume2() function might return an array of error codes indicating that tasks 1 and 2 have already completed; tasks 3 through 5 are resumed successfully, and tasks 6 through 99 have not yet started.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "8bf7cf029b87280c58de",
+    "source_id": "slurm_array"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "torch_i1",
+    "claim": "Both statements hold: (a1) Cloning a tensor before saving can reduce the saved file size when the tensor has fewer elements than its storage object. (a2) Cloning a tensor before saving always reduces the CPU time spent serializing it.",
+    "components": [
+      {
+        "claim": "Cloning a tensor before saving can reduce the saved file size when the tensor has fewer elements than its storage object.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "Cloning a tensor before saving always reduces the CPU time spent serializing it.",
+        "contradict": [],
+        "id": "a2",
+        "label": "insufficient",
+        "rationale": "The packet states a possible file-size reduction, but gives no serialization CPU-time comparison or guarantee.",
+        "support": []
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3315,
+        "source_char_start": 2301,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "67a48db3dc934d2bb983836f7116ebd5aaf67d44cbfd282db83fcade48205a40",
+        "text": "Instead of saving only the five values in the `small` tensor to 'small.pt,'\nthe 999 values in the storage it shares with `large` were saved and loaded.\n\nWhen saving tensors with fewer elements than their storage objects, the size of\nthe saved file can be reduced by first cloning the tensors. Cloning a tensor\nproduces a new tensor with a new storage object containing only the values\nin the tensor:\n\n```\n>>> large = torch.arange(1, 1000)\n>>> small = large[0:5]\n>>> torch.save(small.clone(), 'small.pt')  # saves a clone of small\n>>> loaded_small = torch.load('small.pt')\n>>> loaded_small.storage().size()\n5\n```\n\nSince the cloned tensors are independent of each other, however, they have\nnone of the view relationships the original tensors did. If both file size and\nview relationships are important when saving tensors smaller than their\nstorage objects, then care must be taken to construct new tensors that minimize\nthe size of their storage objects but still have the desired view relationships\nbefore saving.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6765,
+        "source_char_start": 5941,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "fbbb1dce5ddf62a3165ad455d9da331e082cdb89a22db2bb745ec0de722a20f3",
+        "text": "(serialized-file-format)=\n\n## Serialized file format for `torch.save`\n\nSince PyTorch 1.6.0, `torch.save` defaults to returning an uncompressed ZIP64\narchive unless the user sets `_use_new_zipfile_serialization=False`.\n\nIn this archive, the files are ordered as such\n\n```text\ncheckpoint.pth\n\u251c\u2500\u2500 data.pkl\n\u251c\u2500\u2500 byteorder  # added in PyTorch 2.1.0\n\u251c\u2500\u2500 data/\n\u2502   \u251c\u2500\u2500 0\n\u2502   \u251c\u2500\u2500 1\n\u2502   \u251c\u2500\u2500 2\n\u2502   \u2514\u2500\u2500 \u2026\n\u2514\u2500\u2500 version\n```\n\nThe entries are as follows:\n\n- `data.pkl` is the result of pickling the object passed to `torch.save`\n  excluding `torch.Storage` objects that it contains\n- `byteorder` contains a string with the `sys.byteorder` when saving (\u201clittle\u201d or \u201cbig\u201d)\n- `data/` contains all the storages in the object, where each storage is a separate file\n- `version` contains a version number at save time that can be used at load time\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 7148,
+        "source_char_start": 6766,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "4b240dd25363f7d2daeaba20dd8023fa8258ddcf97fe2012976ac3aed0d88f3b",
+        "text": "When saving, PyTorch will ensure that the local file header of each file is padded\nto an offset that is a multiple of 64 bytes, ensuring that the offset of each file\nis 64-byte aligned.\n\n```{note}\nTensors on certain devices such as XLA are serialized as pickled numpy arrays. As\nsuch, their storages are not serialized. In these cases `data/` might not exist\nin the checkpoint.\n```\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "f9957d13bc8f41e9120d",
+    "source_id": "torch_serialization"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "kube_i1",
+    "claim": "Both statements hold: (a1) The Kubernetes API server restricts extended-resource quantities to whole numbers. (a2) Changing a ResourceQuota for an extended resource requires restarting the kubelet.",
+    "components": [
+      {
+        "claim": "The Kubernetes API server restricts extended-resource quantities to whole numbers.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "Changing a ResourceQuota for an extended resource requires restarting the kubelet.",
+        "contradict": [],
+        "id": "a2",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 25841,
+        "source_char_start": 24912,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "161307b3afef9cc2c96865f1a0051fcc08cc842bfaf15f72bb2f867747f23613",
+        "text": "### Consuming extended resources\n\nUsers can consume extended resources in Pod specs like CPU and memory.\nThe scheduler takes care of the resource accounting so that no more than the\navailable amount is simultaneously allocated to Pods.\n\nThe API server restricts quantities of extended resources to whole numbers.\nExamples of _valid_ quantities are `3`, `3000m` and `3Ki`. Examples of\n_invalid_ quantities are `0.5` and `1500m` (because `1500m` would result in `1.5`).\n\n{{< note >}}\nExtended resources replace Opaque Integer Resources.\nUsers can use any domain name prefix other than `kubernetes.io` which is reserved.\n{{< /note >}}\n\nTo consume an extended resource in a Pod, include the resource name as a key\nin the `spec.containers[].resources.limits` map in the container spec.\n\n{{< note >}}\nExtended resources cannot be overcommitted, so request and limit\nmust be equal if both are present in a container spec.\n{{< /note >}}\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 22703,
+        "source_char_start": 21957,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "6746eddd7d3b39410a553dc053b52a4487fb6c0fa42d006e3f863626a754df82",
+        "text": "To advertise a new node-level extended resource, the cluster operator can\nsubmit a `PATCH` HTTP request to the API server to specify the available\nquantity in the `status.capacity` for a node in the cluster. After this\noperation, the node's `status.capacity` will include a new resource. The\n`status.allocatable` field is updated automatically with the new resource\nasynchronously by the kubelet.\n\nBecause the scheduler uses the node's `status.allocatable` value when\nevaluating Pod fitness, the scheduler only takes account of the new value after\nthat asynchronous update. There may be a short delay between patching the\nnode capacity with a new resource and the time when the first Pod that requests\nthe resource can be scheduled on that node.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 24208,
+        "source_char_start": 23416,
+        "source_file": "sources/kube_limits.md",
+        "source_text_sha256": "3a404ae78d40bc1b2f1a9240bc58ab0e9624ae3425874e25a5aa8afcfb7ad80e",
+        "text": "#### Cluster-level extended resources\n\nCluster-level extended resources are not tied to nodes. They are usually managed\nby scheduler extenders, which handle the resource consumption and resource quota.\n\nYou can specify the extended resources that are handled by scheduler extenders\nin [scheduler configuration](/docs/reference/config-api/kube-scheduler-config.v1/)\n\n**Example:**\n\nThe following configuration for a scheduler policy indicates that the\ncluster-level extended resource \"example.com/foo\" is handled by the scheduler\nextender.\n\n- The scheduler sends a Pod to the scheduler extender only if the Pod requests\n     \"example.com/foo\".\n- The `ignoredByScheduler` field specifies that the scheduler does not check\n     the \"example.com/foo\" resource in its `PodFitsResources` predicate.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "a12550b9d8f84e83b12b",
+    "source_id": "kube_limits"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "vmem_s2",
+    "claim": "Both statements hold: (a1) Multi-modal size hints shape the dummy inputs used for activation-memory profiling. (a2) Multi-modal size hints do not limit the encoder cache size, which is determined by actual runtime inputs.",
+    "components": [
+      {
+        "claim": "Multi-modal size hints shape the dummy inputs used for activation-memory profiling.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "Multi-modal size hints do not limit the encoder cache size, which is determined by actual runtime inputs.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 6203,
+        "source_char_start": 4333,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "bd8096df3678dfd04428c09c3a4de1c15697106716df1a409d658b44b474e282",
+        "text": "### Configurable options\n\n`limit_mm_per_prompt` also accepts configurable options per modality. In the configurable form, you still specify `count`, and you may optionally provide size hints that control how vLLM profiles and reserves memory for your multi\u2011modal inputs. This helps you tune memory for the actual media you expect, instead of the model\u2019s absolute maxima.\n\nConfigurable options by modality:\n\n- `image`: `{\"count\": int, \"width\": int, \"height\": int}`\n- `video`: `{\"count\": int, \"num_frames\": int, \"width\": int, \"height\": int}`\n- `audio`: `{\"count\": int, \"length\": int}`\n\nDetails could be found in [`ImageDummyOptions`][vllm.config.multimodal.ImageDummyOptions], [`VideoDummyOptions`][vllm.config.multimodal.VideoDummyOptions], and [`AudioDummyOptions`][vllm.config.multimodal.AudioDummyOptions].\n\nExamples:\n\n```python\nfrom vllm import LLM\n\n# Up to 5 images per prompt, profile with 512x512.\n# Up to 1 video per prompt, profile with 32 frames at 640x640.\nllm = LLM(\n    model=\"Qwen/Qwen2.5-VL-3B-Instruct\",\n    limit_mm_per_prompt={\n        \"image\": {\"count\": 5, \"width\": 512, \"height\": 512},\n        \"video\": {\"count\": 1, \"num_frames\": 32, \"width\": 640, \"height\": 640},\n    },\n)\n```\n\nFor backward compatibility, passing an integer works as before and is interpreted as `{\"count\": <int>}`. For example:\n\n- `limit_mm_per_prompt={\"image\": 5}` is equivalent to `limit_mm_per_prompt={\"image\": {\"count\": 5}}`\n- You can mix formats: `limit_mm_per_prompt={\"image\": 5, \"video\": {\"count\": 1, \"num_frames\": 32, \"width\": 640, \"height\": 640}}`\n\n!!! note\n    - The size hints affect memory profiling only. They shape the dummy inputs used to compute reserved activation sizes. They do not change how inputs are actually processed at inference time.\n    - If a hint exceeds what the model can accept, vLLM clamps it to the model's effective maximum and may log a warning.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6388,
+        "source_char_start": 6204,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "eb4fc880034721deeba0c4ab32e9f72919c88f52c6768dd3790b6d55c9476179",
+        "text": "!!! warning\n    These size hints currently only affect activation memory profiling. Encoder cache size is determined by the actual inputs at runtime and is not limited by these hints.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6811,
+        "source_char_start": 6389,
+        "source_file": "sources/vllm_memory.md",
+        "source_text_sha256": "f87369fcb3f8362c1e2287866cdfefc810e7567c578a4f5439b06cbf22873ea4",
+        "text": "## Multi-modal processor arguments\n\nFor certain models, you can adjust the multi-modal processor arguments to\nreduce the size of the processed multi-modal inputs, which in turn saves memory.\n\nHere are some examples:\n\n```python\nfrom vllm import LLM\n\n# Available for Qwen2-VL series models\nllm = LLM(\n    model=\"Qwen/Qwen2.5-VL-3B-Instruct\",\n    mm_processor_kwargs={\"max_pixels\": 768 * 768},  # Default is 1280 * 28 * 28\n)\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "0f0b76ce6e26a1d2abf5",
+    "source_id": "vllm_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D2"
+      ]
+    ],
+    "author_id": "vopt_c2",
+    "claim": "Both statements hold: (a1) vLLM expert parallelism uses the same degree of parallelism configured for tensor parallelism. (a2) Multi-modal encoder batch-level data parallelism is controlled by `data_parallel_size`.",
+    "components": [
+      {
+        "claim": "vLLM expert parallelism uses the same degree of parallelism configured for tensor parallelism.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D3"
+          ]
+        ]
+      },
+      {
+        "claim": "Multi-modal encoder batch-level data parallelism is controlled by `data_parallel_size`.",
+        "contradict": [
+          [
+            "D2"
+          ]
+        ],
+        "id": "a2",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 14203,
+        "source_char_start": 13081,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "747aa1dfdbdae86dd91d0c9d34fb379db6c48d0b309755a7c34fee9c49a3fea1",
+        "text": "### Batch-level DP for Multi-Modal Encoders\n\nBy default, TP is used to shard the weights of multi-modal encoders just like for language decoders,\nin order to reduce the memory and compute load on each GPU.\n\nHowever, since the size of multi-modal encoders is very small compared to language decoders,\nthere is relatively little gain from TP. On the other hand, TP incurs significant communication\noverhead because of all-reduce being performed after every layer.\n\nGiven this, it may be advantageous to instead shard the batched input data using TP, essentially\nperforming batch-level DP. This has been shown to improve the throughput and TTFT by around 10% for\n`tensor_parallel_size=8`. For vision encoders that use hardware-unoptimized Conv3D operations,\nbatch-level DP can provide another 40% improvement compared to regular TP.\n\nNevertheless, since the weights of the multi-modal encoder are replicated across each TP rank,\nthere will be a minor increase in memory consumption and may cause OOM if you can barely fit the model already.\n\nYou can enable batch-level DP by setting `mm_encoder_tp_mode=\"data\"`, for example:\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 15118,
+        "source_char_start": 14742,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "a59c773b786deddb720ec90f5ab9491a563aff33c158ea526f1612f3108614f8",
+        "text": "!!! important\n    Batch-level DP is not to be confused with API request-level DP\n    (which is instead controlled by `data_parallel_size`).\n\nBatch-level DP needs to be implemented on a per-model basis,\nand enabled by setting `supports_encoder_tp_data = True` in the model class.\nRegardless, you need to set `mm_encoder_tp_mode=\"data\"` in engine arguments to use this feature.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 9262,
+        "source_char_start": 8087,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "e5faa4e32b3bfbd234b30e80754c8c2c563f4c483b7b41e7e2b1e132bd776fdf",
+        "text": "### Expert Parallelism (EP)\n\nExpert parallelism is a specialized form of parallelism for Mixture of Experts (MoE) models, where different expert networks are distributed across GPUs.\n\n**When to use:**\n\n- Specifically for MoE models (like DeepSeekV3, Qwen3MoE, Llama-4)\n- When you want to balance the expert computation load across GPUs\n\nExpert parallelism is enabled by setting `enable_expert_parallel=True`, which will use expert parallelism instead of tensor parallelism for MoE layers.\nIt will use the same degree of parallelism as what you have set for tensor parallelism.\n\n### Data Parallelism (DP)\n\nData parallelism replicates the entire model across multiple GPU sets and processes different batches of requests in parallel.\n\n**When to use:**\n\n- When you have enough GPUs to replicate the entire model\n- When you need to scale throughput rather than model size\n- In multi-user environments where isolation between request batches is beneficial\n\nData parallelism can be combined with the other parallelism strategies and is set by `data_parallel_size=N`.\nNote that MoE layers will be sharded according to the product of the tensor parallel size and data parallel size.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D2"
+    ],
+    "request_id": "0f63a77cf61a3eb92b66",
+    "source_id": "vllm_opt"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ],
+      [
+        "D3"
+      ]
+    ],
+    "author_id": "slurm_c2",
+    "claim": "Both statements hold: (a1) A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully. (a2) The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+    "components": [
+      {
+        "claim": "A Slurm `afterok` dependency on an entire job array is satisfied when any one array task completes successfully.",
+        "contradict": [
+          [
+            "D1"
+          ],
+          [
+            "D3"
+          ]
+        ],
+        "id": "a1",
+        "label": "contradicted",
+        "rationale": "The cited passage explicitly states the incompatible documented behavior.",
+        "support": []
+      },
+      {
+        "claim": "The default output filename format for a Slurm job array is `slurm-%A_%a.out`.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 12841,
+        "source_char_start": 11783,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "304433aa68863e0a685db48340bf576b28b016276126bd6bc1a21663c703c23d",
+        "text": "Job Dependencies A job which is to be dependent upon an entire job array should specify itself dependent upon the ArrayJobID. Since each array element can have a different exit code, the interpretation of the afterok and afternotok clauses will be based upon the highest exit code from any task in the job array. When a job dependency specifies the job ID of a job array: The after clause is satisfied after all tasks in the job array start. The afterany clause is satisfied after all tasks in the job array complete. The aftercorr clause is satisfied after the corresponding task ID in the specified job has completed successfully (ran to completion with an exit code of zero). The afterok clause is satisfied after all tasks in the job array complete successfully. The afternotok clause is satisfied after all tasks in the job array complete with at least one tasks not completing successfully.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5726,
+        "source_char_start": 4886,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "d5f14d4137ad1d5dfdb7d745806f583d7431dce2e917e0945907cbca92b10ae2",
+        "text": "File Names Two additional options are available to specify a job's stdin, stdout, and stderr file names: %A will be replaced by the value of SLURM_ARRAY_JOB_ID (as defined above) and %a will be replaced by the value of SLURM_ARRAY_TASK_ID (as defined above). The default output file format for a job array is \"slurm-%A_%a.out\". An example of explicit use of the formatting is: sbatch -o slurm-%A_%a.out --array=1-3 -N1 tmp which would generate output files names of this sort \"slurm-36_1.out\", \"slurm-36_2.out\" and \"slurm-36_3.out\". If these file name options are used without being part of a job array then \"%A\" will be replaced by the current job ID and \"%a\" will be replaced by 4,294,967,294 (equivalent to 0xfffffffe or NO_VAL).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 13368,
+        "source_char_start": 12842,
+        "source_file": "sources/slurm_array.shtml",
+        "source_text_sha256": "2451c6f88ea389d755a40409237f5efceb06ed5f11497f6ca225127468d3df37",
+        "text": "Examples of use are shown below: # Wait for specific job array elements sbatch --depend=after:123_4 my.job sbatch --depend=afterok:123_4:123_8 my.job2 # Wait for entire job array to complete sbatch --depend=afterany:123 my.job # Wait for corresponding job array elements sbatch --depend=aftercorr:123 my.job # Wait for entire job array to complete successfully sbatch --depend=afterok:123 my.job # Wait for entire job array to complete and at least one task fails sbatch --depend=afternotok:123 my.job",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D3"
+    ],
+    "request_id": "3d216ef6efe9dd5eb376",
+    "source_id": "slurm_array"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "torch_s1",
+    "claim": "Both statements hold: (a1) Since PyTorch 1.6.0, `torch.save` defaults to an uncompressed ZIP64 archive unless `_use_new_zipfile_serialization=False` is set. (a2) When saving, PyTorch pads each local file header to an offset that is a multiple of 64 bytes.",
+    "components": [
+      {
+        "claim": "Since PyTorch 1.6.0, `torch.save` defaults to an uncompressed ZIP64 archive unless `_use_new_zipfile_serialization=False` is set.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D1"
+          ]
+        ]
+      },
+      {
+        "claim": "When saving, PyTorch pads each local file header to an offset that is a multiple of 64 bytes.",
+        "contradict": [],
+        "id": "a2",
+        "label": "supported",
+        "rationale": "D2 explicitly describes padding each file header to a 64-byte-aligned offset.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      }
+    ],
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 6159,
+        "source_char_start": 5941,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "a0a76283fa72d0e68e252535567c1db8c21563439e0b694d4ca6aefbc24e4251",
+        "text": "(serialized-file-format)=\n\n## Serialized file format for `torch.save`\n\nSince PyTorch 1.6.0, `torch.save` defaults to returning an uncompressed ZIP64\narchive unless the user sets `_use_new_zipfile_serialization=False`.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6953,
+        "source_char_start": 6766,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "bfba48d74949b3ecc40357005dba487579e730356f87764033643d78b212f199",
+        "text": "When saving, PyTorch will ensure that the local file header of each file is padded\nto an offset that is a multiple of 64 bytes, ensuring that the offset of each file\nis 64-byte aligned.\n\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 8015,
+        "source_char_start": 7149,
+        "source_file": "sources/torch_serialization.md",
+        "source_text_sha256": "12bc66f26bc419b09ff4a7937bb6e582fc0a7d35e000fb0b527e5d84500ead1d",
+        "text": "(layout-control)=\n\n## Layout Control\n\nThe `mmap` argument in {func}`torch.load` allows for lazy loading of tensor storages.\n\nIn addition, there are some advanced features that allow for more fine-grained\ncontrol and manipulation of a `torch.save` checkpoint.\n\nThe {class}`torch.serialization.skip_data` context manager enables\n\n- Saving a checkpoint with `torch.save` that includes empty space for data bytes\n  to be written later.\n- Loading a checkpoint with `torch.load` and filling in the data bytes of tensors later.\n\nTo inspect tensor metadata in a `torch.save` checkpoint without allocating memory for storage\ndata, use `torch.load` within the `FakeTensorMode` context manager. On top of skipping loading\nstorage data similar to `skip_data` above, it additionally tags storages with their offset within\nthe checkpoint, enabling direct checkpoint manipulation.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "01e3cf5f9bc4b50e59ca",
+    "source_id": "torch_serialization"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "vopt_i1",
+    "claim": "Both statements hold: (a1) vLLM's GPU NUMA-binding implementation does not apply NUMA binding to frontend API-server processes. (a2) Each vLLM GPU worker logs its selected NUMA node at startup.",
+    "components": [
+      {
+        "claim": "vLLM's GPU NUMA-binding implementation does not apply NUMA binding to frontend API-server processes.",
+        "contradict": [],
+        "id": "a1",
+        "label": "supported",
+        "rationale": "The cited passage explicitly states this fact.",
+        "support": [
+          [
+            "D2"
+          ]
+        ]
+      },
+      {
+        "claim": "Each vLLM GPU worker logs its selected NUMA node at startup.",
+        "contradict": [],
+        "id": "a2",
+        "label": "insufficient",
+        "rationale": "The packet neither confirms nor denies this behavior.",
+        "support": []
+      }
+    ],
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 10608,
+        "source_char_start": 9668,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "adacd50354b8663f2a78a6a0503f74258a54497516fc4a22f5cba35025b36a00",
+        "text": "Use `--numa-bind` to enable the feature. By default, vLLM auto-detects the\nGPU-to-NUMA mapping and uses `--cpunodebind=<node> --membind=<node>` for each\nworker. When you need a custom CPU policy, add `--numa-bind-cpus` and vLLM will\nswitch to `--physcpubind=<cpu-list> --membind=<node>`.\n\nThese `--numa-bind*` options only apply to GPU execution processes. They do not\nconfigure the CPU backend's separate thread-affinity controls. Automatic\nGPU-to-NUMA detection is currently implemented for CUDA/NVML-based as well as\nROCM-based platforms; other GPU backends must provide explicit binding lists if\nthey use these options.\n\n`--numa-bind-nodes` takes one non-negative NUMA node index per visible GPU, in\nthe same order as the GPU indices.\n`--numa-bind-cpus` takes one `numactl` CPU list per visible GPU, in the same\norder as the GPU indices. Each CPU list must use\n`numactl --physcpubind` syntax such as `0-3`, `0,2,4-7`, or `16-31,48-63`.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 12017,
+        "source_char_start": 11139,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "b23f68523f7a92fe0ed49b69887057fb9a75b7e0e9089458a8605a5dfbe9f8cd",
+        "text": "Notes:\n\n- CLI usage forces multiprocessing to use the `spawn` method automatically. If you enable NUMA binding through the Python API, also set `VLLM_WORKER_MULTIPROC_METHOD=spawn`.\n- Automatic detection relies on NVML and NUMA support from the host. If it cannot determine the mapping reliably, pass `--numa-bind-nodes` explicitly.\n- Explicit `--numa-bind-nodes` and `--numa-bind-cpus` values must be valid `numactl` inputs. vLLM does a small amount of validation, but the effective binding semantics are still determined by `numactl`.\n- The current implementation binds GPU execution processes such as `EngineCore` and multiprocessing workers. It does not apply NUMA binding to frontend API server processes or the DP coordinator.\n- In containerized environments, NUMA policy syscalls may require extra permissions, such as `--cap-add SYS_NICE` when running via `docker run`.\n",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 13080,
+        "source_char_start": 12018,
+        "source_file": "sources/vllm_opt.md",
+        "source_text_sha256": "bdbab0b1e0e405b1d42cd22e0dbb618d2e5c36cf279517662feedf466f285ccb",
+        "text": "### CPU Backend Thread Affinity\n\nThe CPU backend uses a different mechanism from `--numa-bind`. CPU execution is\nconfigured through CPU-specific environment variables such as\n`VLLM_CPU_OMP_THREADS_BIND`, `VLLM_CPU_NUM_OF_RESERVED_CPU`, and\n`CPU_VISIBLE_MEMORY_NODES`, rather than the GPU-oriented `--numa-bind*` CLI\noptions.\n\nBy default, `VLLM_CPU_OMP_THREADS_BIND=auto` derives OpenMP placement from the\navailable CPU and NUMA topology for each CPU worker. To override the automatic\npolicy, set `VLLM_CPU_OMP_THREADS_BIND` explicitly using the CPU list format\ndocumented for the CPU backend, or use `nobind` to disable this behavior.\n\nFor the current CPU backend setup and tuning guidance, see:\n\n- [Related runtime environment variables](../getting_started/installation/cpu.md#related-runtime-environment-variables)\n- [How to decide `VLLM_CPU_OMP_THREADS_BIND`](../getting_started/installation/cpu.md#how-to-decide-vllm_cpu_omp_threads_bind)\n\nThe GPU-only `--numa-bind`, `--numa-bind-nodes`, and `--numa-bind-cpus` options\ndo not configure CPU worker affinity.\n",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The whole claim is the conjunction of the two component sentences; its label follows from their separately assessed labels.",
+    "relevant_evidence": [],
+    "request_id": "319e2bfbf4cb54ba6160",
+    "source_id": "vllm_opt"
+  }
+]

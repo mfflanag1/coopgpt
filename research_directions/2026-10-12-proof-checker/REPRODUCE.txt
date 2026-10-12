@@ -1,0 +1,90 @@
+# Reproduce the blind evidence-inventory screen
+
+Python 3 and the standard library suffice for saved-data checks. Work from the
+study directory:
+
+```sh
+cd /Users/maxf/projects/economics-research/game-theory/coopgpt/research_directions/2026-10-12-proof-checker
+python3 -B contract.py
+python3 -B -m unittest discover -s . -p 'test_*.py' -q
+python3 -B -O -m unittest discover -s . -p 'test_*.py' -q
+```
+
+During preparation, the same commands run from `/tmp/coop-proof-checker` after
+all study files are integrated. Tests use fixtures, mocks, and local loopback
+HTTP fixtures; they do not start an inference model or measure live hardware.
+
+## Recount the saved capture
+
+Create a fresh results directory so the archived capture stays unchanged:
+
+```sh
+proof_results=$(mktemp -d /tmp/coop-proof-recount.XXXXXX)
+python3 -B score_capture.py . capture --output "$proof_results/SUMMARY.json"
+python3 -B audit_runtime.py . capture --output "$proof_results/AUDIT.json"
+python3 -B -O audit_runtime.py . capture --output "$proof_results/AUDIT-O.json"
+cmp "$proof_results/AUDIT.json" "$proof_results/AUDIT-O.json"
+python3 -B - "$proof_results" <<'PY'
+import json, sys
+from pathlib import Path
+folder = Path(sys.argv[1])
+summary = json.loads((folder / 'SUMMARY.json').read_text())
+audit = json.loads((folder / 'AUDIT.json').read_text())
+if summary != audit['quality_summary']:
+    raise SystemExit('Primary and independent summaries differ')
+print('Primary and independent summaries agree')
+PY
+```
+
+`score_capture.py` reads only the 24 `collection/i_ID.json` inventory captures
+and 24 `collection/p_ID.json` primary captures. It concatenates the exact
+`requests[0].chunks[*].data.response` strings in recorded order, then supplies
+both maps to `contract.summarize` using bare case IDs. It does not infer, repair,
+parse-and-reserialize model answers, or treat prompts and cached summaries as
+responses. Controls are deterministic offline proposals and require no model
+calls. Warmup is unscored. Missing files remain missing and make
+`input_complete` false; malformed raw containers raise an error.
+
+The independent auditor checks frozen inputs, all 48 raw call bindings and their
+chronology, transport, clocks, host gates, and cleanup before reporting
+`data_complete_valid` and `qualified`. A scoring summary alone cannot establish
+capture validity. Incomplete or aborted captures are not qualified subset runs.
+The normal and `-O` audits must agree. The auditor recomputes quality independently
+of `contract.summarize`.
+
+To check deterministic construction, copy the study into a disposable directory
+and run `python3 -B build_cases.py` followed by `python3 -B build_controls.py`
+there. Compare `cases.json`, `BLIND_CASES.json`, and `controls.json` against the
+frozen originals. Never rebuild or relabel the canonical study after outcomes.
+Source URLs, commits, byte hashes, excerpt offsets, transformations, and licenses
+are recorded in `SOURCE_MANIFEST.json`, the cases, and `sources/`.
+
+## A separate experimental rerun
+
+A new collection is a new experiment, separate from saved-data reproduction.
+Prepare a separately frozen study copy and choose a nonexistent output path;
+do not overwrite or append to the canonical `capture` directory. For example,
+from that prepared copy:
+
+```sh
+proof_replication=$(mktemp -d /tmp/coop-proof-replication.XXXXXX)
+python3 -B collect.py --output "$proof_replication/capture"
+```
+
+Run once after host readiness is established. The collector verifies
+`FREEZE.json`, the pinned Qwen3:32b model and Ollama 0.20.0 binary/manifest,
+context 4096, single-slot operation on localhost port 11562, idle original port
+11434, acceptable power state, and nominal thermal readings. Do not stop the
+original server to make readiness pass. Readiness or runtime failure ends this
+attempt; preserve its artifacts instead of retrying calls or filling gaps.
+
+The fixed schedule is one unscored warmup, then all 24 inventories at cap 384,
+then all 24 primaries at cap 256 in the same SHA256(`order:` + case ID) order.
+Warmup cap is 32. All jobs exist before inference. The budget is 1800 seconds
+with a 300-second reserve; scored calls retain the 90/95/100-second timeout and
+owned-server watchdog limits. No answer-dependent scheduling, prompt changes,
+repairs, replacements, or budget extensions are permitted.
+
+This screen records execution diagnostics. It does not measure energy, serving
+performance, or reviewer cost, and it does not authorize a follow-on runtime or
+energy experiment. See `PROTOCOL.txt` for the frozen gates and claim limits.

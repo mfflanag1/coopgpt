@@ -1,0 +1,193 @@
+Independent design critique: blind per-component evidence inventory
+12 October 2026
+Scope: design review only. Read the completed evidence-checker REPORT.txt and
+PROTOCOL.txt. No inference, canonical edits, or external claims were made.
+
+RECOMMENDATION
+Proceed to a separately frozen, fresh 24-claim engineering screen, conditional on
+fixing the citation contract and the decomposition review described below. The
+architecture is a defensible response to the observed errors, but it is an
+independently generated answer plus deterministic comparison, not a verified
+proof checker. Its explicit failure mode remains correlated semantic error by the
+primary and inventory model. Do not describe a successful screen as proving the
+mechanism, improving the underlying model, or establishing reliability.
+
+1. SCOPE AND CLAIMS
+The proposed 48 scored calls comprise 24 primary answers and 24 inventory calls.
+The constructed proposals and JSON variants are local deterministic evaluations,
+not additional model calls or independent replications. The experimental unit is
+the claim/packet. There are 24 such units, with all proposals for a claim sharing
+one inventory. Freeze those proposals before inventory or primary outcomes.
+
+Reuse establishes presentation invariance of the parser/comparator for the tested
+JSON equivalence class by construction. It does not demonstrate robustness of an
+LLM exposed to differently serialized candidate answers, nor identify the cause
+of the earlier discordant pair. Correctly state that the architecture removes
+candidate presentation from the inventory model's input. Quote-free JSON parsing,
+key order, whitespace, and citation-array order can be tested without inference;
+invalid syntax and duplicate object keys should remain format referrals.
+
+A comparison to the failed checker on a different fresh cohort is descriptive.
+This screen does not identify the causal contribution of decomposition, blind
+inventory generation, deterministic aggregation, or changed citation policy. A
+same-case randomized ablation would be needed for that; it is outside this budget.
+The reused source snapshots support packet-relative claims only. Same-model
+stateless generation is input-blindness, not independence of errors or sources.
+
+2. DECOMPOSITION AND ANNOTATION LEAKAGE
+Supply both the unmodified claim and two neutrally worded components to the
+inventory model. Components are an authored interface feature, not model-discovered
+reasoning. If the primary also sees them, freeze that choice and acknowledge the
+primary task changed; keeping the primary's original interface is the cleanest
+way to isolate the proposed workflow operationally.
+
+Before inference, a reviewer who does not see component gold, proof sets, controls,
+or old outcomes should certify that the conjunction of the two components is
+logically equivalent to the original claim. Preserve shared antecedents, scope,
+quantifiers, temporal conditions, entities, and referents in each component.
+Do not silently turn "if A, B and C" into unconditional B/C, split a disjunction,
+or discard a qualifier. Components should not introduce a necessary premise as
+though it were an extra conjunct, clarify an ambiguity using gold, or name an
+excerpt/citation. Use neutral IDs, consistent ordering and formatting. Avoid
+words such as "actually", "merely", or "fails" when absent from the claim.
+
+Blind review must also certify that packets permit the three-valued aggregation
+rule. Exclude or prospectively repair packet inconsistencies, unresolved referents,
+and cases where packet-level implications refute the conjunction without refuting
+either individual conjunct. For example, evidence "not both A and B" contradicts
+A-and-B although neither A nor B is individually contradicted. Likewise, a packet
+can make A and B jointly impossible through a shared constraint. Any-C aggregation
+would incorrectly return insufficient in such cases. Restrict this bounded cohort
+to independently evaluable factual conjuncts and explicitly state this limit; a
+later general design needs a joint-consistency/whole-claim evidence channel.
+
+Require that this restriction is checked from claim and packet, not inferred after
+observing model errors. Balance the 24 claim labels if desired, but do not reveal
+the balance or component-label distributions. Case/control/error labels must never
+enter inventory requests. Freeze author disagreements and prospective repairs.
+
+3. INVENTORY AND DETERMINISTIC CITATION CONTRACT
+Do not require equality with one decisive citation list. That would reject
+alternative valid proofs, repeating the previous contextual-citation concern in a
+new form. Prefer this finite proof-family contract for packets with 3-4 excerpts:
+
+For each component, inventory returns:
+- supported, contradicted, or insufficient;
+- for a decisive relation, every identified inclusion-minimal sufficient citation
+  set establishing that relation, as a nonempty list of nonempty ID sets;
+- for insufficient, an empty proof-family list.
+
+The prompt must explicitly search the whole packet for support and contradiction
+before choosing insufficient. A rationale or "searched all" flag is not evidence
+that the search succeeded. If compact search notes are desired, keep them diagnostic
+and never substitute them for proof-family accuracy.
+
+For the runtime comparator, parse citations as a finite set C (while rejecting
+syntactically duplicated IDs under the frozen schema). Reject unknown IDs, missing
+or duplicate components, unsupported fields, empty decisive proof families,
+nonempty insufficient families, and other schema errors to REVIEW. Validate
+inventory structurally, independently of any candidate; never repair it from the
+candidate or gold. Invalid inventory routes every associated candidate to REVIEW.
+
+Aggregate: supported if both components supported; contradicted if at least one
+is contradicted; otherwise insufficient. Compare the candidate verdict to this
+aggregate before citation checks.
+
+For aggregate supported, form E from every inventory support proof P with P a
+subset of C. Accept citation coverage iff E contains a proof for each component
+and the union of all proofs in E equals C.
+
+For aggregate contradicted, form E from every inventory contradiction proof P
+for a contradicted component with P a subset of C. Accept iff E is nonempty and
+the union of all proofs in E equals C. Do not require decisive evidence for the
+other component: one false conjunct refutes the entire conjunction.
+
+For aggregate insufficient, require empty candidate citations. The inventory may
+still contain a valid support proof for the known component. "Insufficient" does
+not require both components to be insufficient. Candidate empty citations are
+correct for the aggregate even though the inventory has component-level evidence.
+
+This policy admits alternative proofs and extra complete corroborating proofs,
+but rejects an arbitrary extra citation that participates in no sufficient proof.
+It avoids conflating redundant evidence with irrelevant evidence. Freeze exactly
+this interpretation in both the candidate rubric and independent scorer. If the
+intended product instead requires a minimal proof, that is a different policy and
+must be stated prospectively; "no irrelevant citations" alone does not mean minimal.
+
+An inventory can still omit a legitimate alternative or invent a sufficient set.
+Those are semantic inventory errors, not a reason to relax the comparator or amend
+gold after outcomes. Gold authors can enumerate all 15 nonempty excerpt subsets
+for each component when there are four excerpts, identify sufficient sets, and
+reduce to the minimal antichain before collection. This modest exhaustive human
+annotation makes alternative-proof scoring substantially more credible. The model
+receives no such gold table. Return enough output tokens for the bounded proof
+families; the old 64-token binary-checker cap is plainly unsuitable.
+
+4. CHALLENGE DESIGN
+Include the prior missed failure directly in fresh controls: an invalid
+insufficient proposal where the packet decisively supports all components, and an
+invalid insufficient proposal where one component is decisively contradicted.
+Pair each with a valid proposal on the same claim. Otherwise the explicit new
+insufficient-search requirement is not directly challenged.
+
+Also include support missing one conjunct/premise, unsupported contradiction,
+correct contradiction from only one false conjunct, alternative valid proof sets,
+a context-dependent multi-excerpt proof, and irrelevant extra citations. Spread
+these deliberately across the 12 paired claims before inference; categories may
+overlap and need not be represented by disjoint groups of four. Preserve adequate
+valid supported, contradicted, and insufficient controls. Do not select controls
+from primary failures or from the resulting inventory.
+
+Use JSON variants of exactly the same candidate object with key/whitespace changes;
+if citations are formally unordered, include citation-order permutations. Freeze
+the equivalence relation and canonicalization tests. Parser malformed-input tests
+should include duplicate keys, duplicate IDs, unknown IDs, and extra prose.
+
+5. GATES AND REPORTING
+Keep the native zero-accepted-error, >=18-correct-retained, and >=90%-correct-
+retention gates, along with 12/12 invalid rejected and >=11/12 valid retained.
+All denominators and integer threshold formulas must be frozen. The prior
+report's distinctions between per-offered completion and conditional accepted
+quality remain essential. REVIEW is an unresolved referral, not a correction.
+
+Require valid raw data, all 48 calls, inventory schema validity, and exact binding
+of packet/component/input hashes to each inventory. Keep the existing runtime,
+freeze, and lifecycle requirements. A primary format failure is not a semantic
+error caught. If no schema-valid native error occurs, native sensitivity is
+unobserved even if the screen passes.
+
+Report inventory quality separately from downstream decisions: exact component
+relations (48 slots), aggregate verdicts (24 claims), soundness/completeness of
+proof families, omitted decisive evidence behind an insufficient relation,
+invented decisive evidence, and schema failures. Do not treat 48 component slots
+as independent observations. For every rejection, distinguish verdict mismatch,
+citation-coverage failure, format failure, and invalid inventory mechanically.
+Native and controlled tables remain separate; deterministic repeats add no sample
+size. Report valid-control retention by verdict and alternative-proof status.
+
+Do not silently add a new inventory-semantic gate to the main screen. If inventory
+quality is intended to qualify a reusable evidence artifact, specify a separate
+prospective threshold and report its result separately. Even with no such extra
+gate, erroneous inventories forbid claims that the architecture verified every
+part or faithfully identified evidence. Main-screen success would qualify only
+the bounded accept-or-review workflow for planning a later test.
+
+6. PRACTICAL ACCEPTANCE CHECKS BEFORE COLLECTION
+- Freeze 24 fresh propositions, component-equivalence certificates, packet-level
+  consistency checks, full gold proof families, controls, schemas, and comparator.
+- Use synthetic unit cases to exercise all 3x3 component relation combinations,
+  especially supported+insufficient and contradicted+insufficient.
+- Test one-conjunct contradiction, cross-excerpt premises, multiple proof
+  alternatives, redundant corroborating proofs, and arbitrary extra citations.
+- Independently reconstruct comparator decisions from raw responses without
+  calling the model or relying on production scoring helpers.
+- Ensure the token/output/wall budgets can complete the richer 24 inventories;
+  set caps prospectively and retain truncations as failures, with no retries.
+- Keep native primary outputs immutable and emit only those originals on accept.
+
+Overall: the strongest version is a blind, per-component answer inventory with
+finite alternative proof families, a precise deterministic coverage comparator,
+and explicit restrictions on what conjunctions its aggregation can represent.
+It is useful because it removes candidate anchoring and presentation dependence
+from one stage. Whether it catches omitted decisive evidence while retaining valid
+answers remains the empirical question, not an architectural guarantee.

@@ -1,0 +1,23 @@
+**Provisional verdict: findings (no blocking soundness defect found; two unenforced predeclared rules and an unverifiable transport dependency).**
+
+Most important: the control-case selection and citation-control construction rules in PROTOCOL.txt are prose only — nothing in `contract.validate_controls` or `audit_runtime.validate_controls` enforces them, so the only thing preventing control cherry-picking is author discipline.
+
+## Findings
+
+**1. Medium — Control selection rule unenforced.** PROTOCOL.txt:75–81 predeclares "first four cases of each gold label in frozen hash order; first two → false-insufficient, next two → citation" and a deterministic citation-error construction. `contract.py:169–185` and `audit_runtime.py:269–310` check only counts/balance/pairing. Any 4 cases per label with any group assignment pass. Fix: in both validators, compute hash-ordered cases per label, assert `{case_id for controls of label L} == first4(L)` and group-by-position; for `citation` controls assert `candidate.evidence` equals the true component's first support proof (or the first single failing excerpt / `[]` per the fallback rule). Verification: add a test that permutes which case receives which group and expect `ValueError`.
+
+**2. Low — Contract/audit validator disagreement.** `audit_runtime.py:307–310` requires false_insufficient and citation controls to be split 2 supported / 2 contradicted; `contract.validate_controls` does not. A `controls.json` accepted at collection time (`collect.main` → `validate_inputs`) can fail the post-hoc audit. Align the contract check before freeze.
+
+**3. Low — "Genuinely different premises" (PROTOCOL.txt:58) unenforced.** `aggregate_gold` (contract.py:128) and audit:411 accept `a1.support==a2.support` (e.g. both `[['D1']]`), making a supported case decidable from one excerpt. Add an input check that no a1 support proof is a subset of an a2 support proof (or vice versa).
+
+**4. Low — Conflict handling is correct but note the gate interaction.** `parse_inventory` (contract.py:84–87, audit:105–108) sets `usable=False` on any-component conflict and on unknown IDs; `decide` then refers. Gate 2 (`usable==24`) therefore fails the whole study on a single honest "both polarities" inventory, and valid controls on that case count as incorrect (`correct_decision` requires usable). Consistent with PROTOCOL.txt:38/116, but the report should disclose conflict referrals separately from schema failures — currently only `conflict` is stored per row, not summed.
+
+**5. Info — Verified as claimed.** Gold isolation: `decide` uses only `job['passages']` (test_contract.py:55–56); `inventory_job` reads only `id`/`claim` (lines 65–68, test:51–54). Fail-closed: duplicate keys, extra fields, permuted duplicate proof sets, out-of-range sizes, unknown IDs all return invalid/unusable. Alternatives: `any(set(proof)<=ids)` + union-membership (contract.py:118–120) matches the gold scorer's `relevant_evidence`/`acceptable_evidence` semantics, so decide/score cannot disagree on citation relevance. Order/binding: jobs materialized pre-server (collect.py:91), `wire_check` recomputes the exact prompt from AST-read constants (audit:436–441), i_ then p_ in hash order enforced at both ends. Denominators: `correct_automatic_per_offered=kept/24`, native and control counts never pooled.
+
+## Scope limitations
+- `client.py`, `transport_audit.py`, `server_control.py`, `clock_bridge.py` not supplied: cannot verify that `max_output_tokens` → `num_predict` (384 vs config 256) actually reaches the wire, nor how `raw_api` reconstructs response text.
+- `cases.json`/`controls.json` not supplied; packet semantics (joint-only constraints excluded, antecedent completeness) cannot be checked.
+- Tests not executed.
+
+## Verdict
+Findings. No defect in acceptance soundness, gold isolation, or fail-closed parsing within the reviewed scope; fix #1 (and ideally #2–#3) before freezing.
