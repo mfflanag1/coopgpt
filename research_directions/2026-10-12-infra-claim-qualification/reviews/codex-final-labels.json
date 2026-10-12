@@ -1,0 +1,491 @@
+{
+  "author_gold_files_read": false,
+  "blinding": "Second-round packet-based re-adjudication. No author gold/rationale files read, but the change message disclosed that the five new technical-behavior claims were intended as insufficient; this round is not fully blind to their intended category. All five were independently checked against the packet.",
+  "counts": {
+    "contradicted": 8,
+    "insufficient": 8,
+    "supported": 8
+  },
+  "evidence_convention": "Minimal proof sets exclude optional corroboration. Insufficient requires evidence=[] and has no decisive proof set.",
+  "initial_input_sha256": "4e4d78190366fd4d94e3cfbbfa82aa8b8c4fa50151468f510271a631cca51e3c",
+  "input_file": "/tmp/coop-infra-eval/BLIND_CASES.json",
+  "input_sha256": "a23e5fc7ade1428752087575a3f261895aa63b30edc4afe5049d107923a5b6ce",
+  "launch_blocking_label_ambiguities": [],
+  "network_or_inference_calls": false,
+  "records": [
+    {
+      "ambiguities": [],
+      "claim": "Calling empty_cache while tensors are still live releases the GPU memory occupied by those tensors for another process.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D2"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1",
+        "D2"
+      ],
+      "reason": "D2 explicitly says occupied tensor memory is not freed; only unused cache is released.",
+      "relevant_corroborating_ids": [
+        "D1"
+      ],
+      "request_id": "7b008687c650d1a4a118",
+      "required_evidence_for_insufficient": null,
+      "source_id": "torch_memory"
+    },
+    {
+      "ambiguities": [
+        "Driver/plugin setup is an assumed premise; D1 is optional. This does not guarantee a runnable Pod, and D1 actually says to run the plugin."
+      ],
+      "claim": "For our proposed container, after the vendor driver and device plugin are installed, a GPU limit can be specified without an explicit GPU request; Kubernetes uses that limit as the request.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D2"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1",
+        "D2"
+      ],
+      "reason": "D2 directly permits limits without requests and gives the default request value.",
+      "relevant_corroborating_ids": [
+        "D1"
+      ],
+      "request_id": "5545862a31cb2c216495",
+      "required_evidence_for_insufficient": null,
+      "source_id": "kubernetes"
+    },
+    {
+      "ambiguities": [
+        "D3 defines type but need not be mandatory; D4 permits count changes, not type inconsistency."
+      ],
+      "claim": "For our proposed typed-GPU allocation, the job step should request GPUs of that same type.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1",
+        "D3"
+      ],
+      "reason": "D1 explicitly requires matching GPU type between allocation and job step.",
+      "relevant_corroborating_ids": [
+        "D3"
+      ],
+      "request_id": "f540b424d1b95bc3d8e5",
+      "required_evidence_for_insufficient": null,
+      "source_id": "slurm_gres"
+    },
+    {
+      "ambiguities": [
+        "Shared prefix is now a premise; D1 is optional mechanism context, not required proof."
+      ],
+      "claim": "For a request that shares an existing prefix, the documented APC benefit targets prompt processing rather than generation of new tokens.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D3"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1",
+        "D3"
+      ],
+      "reason": "D3 directly distinguishes prefill benefits from lack of decoding-time benefits.",
+      "relevant_corroborating_ids": [
+        "D1"
+      ],
+      "request_id": "78be88e83056f2198a28",
+      "required_evidence_for_insufficient": null,
+      "source_id": "vllm_apc"
+    },
+    {
+      "ambiguities": [
+        "Do not import external Kubernetes resource-granularity knowledge. Equality does not itself prohibit matching fractional request and limit values."
+      ],
+      "claim": "The described GPU device plugin allows a container to request half of a physical GPU through its custom resource field.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "The device plugin/custom resource's permitted allocation granularity and fractional-resource semantics.",
+      "permitted_evidence_ids": [],
+      "reason": "The packet gives request/limit equality and defaulting rules but no integer-only or fractional-GPU rule.",
+      "relevant_corroborating_ids": [],
+      "request_id": "333f65d97eb66b804f84",
+      "required_evidence_for_insufficient": [],
+      "source_id": "kubernetes"
+    },
+    {
+      "ambiguities": [],
+      "claim": "A submission using the --gpus option will be accepted even when select/cons_tres is not configured.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D3"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D3"
+      ],
+      "reason": "D3 says --gpu* requests without select/cons_tres are rejected.",
+      "relevant_corroborating_ids": [],
+      "request_id": "bd05a86c9f54cab705ab",
+      "required_evidence_for_insufficient": null,
+      "source_id": "slurm_gres"
+    },
+    {
+      "ambiguities": [
+        "D4 checkpoint terminology refers to shared-prefix state and does not establish cross-process persistence."
+      ],
+      "claim": "APC keeps its cached prefix blocks available after a full server process restart.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "A restart persistence or restoration guarantee for APC prefix-cache blocks.",
+      "permitted_evidence_ids": [],
+      "reason": "Caching/reuse of existing queries does not specify persistence across a full process restart.",
+      "relevant_corroborating_ids": [],
+      "request_id": "43ab6c821be09574e43c",
+      "required_evidence_for_insufficient": [],
+      "source_id": "vllm_apc"
+    },
+    {
+      "ambiguities": [
+        "D1 is optional logical/admission-control context."
+      ],
+      "claim": "Our proposed Ray task declaring num_cpus=1 is prevented by Ray from launching threads that use multiple physical CPUs.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D2"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1",
+        "D2"
+      ],
+      "reason": "D2 explicitly says Ray does not prevent num_cpus=1 work from using multiple physical CPUs.",
+      "relevant_corroborating_ids": [
+        "D1"
+      ],
+      "request_id": "a894655c8247cc75d2ab",
+      "required_evidence_for_insufficient": null,
+      "source_id": "ray_resources"
+    },
+    {
+      "ambiguities": [
+        "D1 alone states an if-shared condition; do not require its converse when D3 provides the explicit negative."
+      ],
+      "claim": "Enabling APC lets a request with no prefix in common with existing queries reuse their prefix computations.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D3"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1",
+        "D3"
+      ],
+      "reason": "D3 expressly says no shared prefix means the computation cannot be reused.",
+      "relevant_corroborating_ids": [
+        "D1"
+      ],
+      "request_id": "1f522109b287e70646b1",
+      "required_evidence_for_insufficient": null,
+      "source_id": "vllm_apc"
+    },
+    {
+      "ambiguities": [
+        "This is scheduling admission, not a physical CPU-use ceiling."
+      ],
+      "claim": "Starting a head node with zero logical CPUs can prevent CPU-requiring work from being scheduled there even when the machine has physical CPUs.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1"
+      ],
+      "reason": "D1 gives the zero-logical-CPU example despite available physical CPUs and states its admission-control effect.",
+      "relevant_corroborating_ids": [],
+      "request_id": "7ae6f123309f68514200",
+      "required_evidence_for_insufficient": null,
+      "source_id": "ray_resources"
+    },
+    {
+      "ambiguities": [
+        "A general memory-allocation speed benefit does not entail faster completion for every job."
+      ],
+      "claim": "Disabling CUDA memory caching makes our training job finish faster than leaving caching enabled.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "This job's comparable end-to-end runtimes with and without caching.",
+      "permitted_evidence_ids": [],
+      "reason": "Allocation-speed and debugging statements do not determine this particular training job's total runtime.",
+      "relevant_corroborating_ids": [],
+      "request_id": "249821e678a9c4766421",
+      "required_evidence_for_insufficient": [],
+      "source_id": "torch_memory"
+    },
+    {
+      "ambiguities": [
+        "D1 is unnecessary; the claim already assumes the weights-only action and says can, not always."
+      ],
+      "claim": "After waking only the model weights with tags=[\"weights\"], is_sleeping can remain true until the remaining components are awake.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D3"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D3"
+      ],
+      "reason": "D3 describes weights-only wake-up and says is_sleeping stays true until all components are awake.",
+      "relevant_corroborating_ids": [],
+      "request_id": "cc5026c0dccee81eb72f",
+      "required_evidence_for_insufficient": null,
+      "source_id": "vllm_sleep"
+    },
+    {
+      "ambiguities": [
+        "Scope is this align-mode shared-prefix checkpoint option, not every Mamba/APC feature."
+      ],
+      "claim": "For the hybrid Mamba option described here, enabling the shared-prefix checkpoint flag is sufficient even when the model uses multi-module MTP.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D4"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D4"
+      ],
+      "reason": "D4 makes not using multi-module MTP a necessary condition for this checkpoint flag to take effect.",
+      "relevant_corroborating_ids": [],
+      "request_id": "cf56d7eef953f5ee714e",
+      "required_evidence_for_insufficient": null,
+      "source_id": "vllm_apc"
+    },
+    {
+      "ambiguities": [
+        "Pageable CPU memory in the option-scoped level-2 excerpt does not establish level-1 compression behavior."
+      ],
+      "claim": "The level-1 CPU backup of model weights is compressed before being stored in host memory.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "Whether level-1 CPU weight backups use compression.",
+      "permitted_evidence_ids": [],
+      "reason": "The packet states CPU backup but neither compressed nor uncompressed representation.",
+      "relevant_corroborating_ids": [],
+      "request_id": "5fcd7666b488400af711",
+      "required_evidence_for_insufficient": [],
+      "source_id": "vllm_sleep"
+    },
+    {
+      "ambiguities": [
+        "Both conjuncts need evidence. D1 installation context is unnecessary."
+      ],
+      "claim": "For a cluster with different GPU types, node labels and selectors can steer a Pod to suitable nodes, and the label key does not have to be accelerator.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D3",
+          "D4"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D3",
+        "D4"
+      ],
+      "reason": "D3 proves node labels/selectors can route heterogeneous GPU workloads; D4 proves the key need not be accelerator.",
+      "relevant_corroborating_ids": [],
+      "request_id": "c846353abbf7d37a0fa9",
+      "required_evidence_for_insufficient": null,
+      "source_id": "kubernetes"
+    },
+    {
+      "ambiguities": [
+        "Do not generalize the GPU rule to CPU or ordinary memory resources."
+      ],
+      "claim": "For the custom GPU resource described here, setting the request to one GPU and the limit to two GPUs is permitted.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D2"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D2"
+      ],
+      "reason": "D2 requires equal GPU request and limit values, unlike one versus two.",
+      "relevant_corroborating_ids": [],
+      "request_id": "b6126a81c4a9162c64fd",
+      "required_evidence_for_insufficient": null,
+      "source_id": "kubernetes"
+    },
+    {
+      "ambiguities": [
+        "D2 corroborates tensor/cache distinctions but D1 is sufficient."
+      ],
+      "claim": "The documented allocated-memory functions track tensors, whereas the reserved-memory functions track the total memory managed by the caching allocator.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1",
+        "D2"
+      ],
+      "reason": "D1 directly distinguishes tensor-allocated from total allocator-reserved memory.",
+      "relevant_corroborating_ids": [
+        "D2"
+      ],
+      "request_id": "0e8b4de435077803ec73",
+      "required_evidence_for_insufficient": null,
+      "source_id": "torch_memory"
+    },
+    {
+      "ambiguities": [],
+      "claim": "Our current serving engine will finish waking from sleep in under five hundred milliseconds.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "A wake-duration measurement or guarantee for the current engine/model/environment.",
+      "permitted_evidence_ids": [],
+      "reason": "No excerpt gives the claimed 500 ms bound.",
+      "relevant_corroborating_ids": [],
+      "request_id": "0cec5f44810a245e1c53",
+      "required_evidence_for_insufficient": [],
+      "source_id": "vllm_sleep"
+    },
+    {
+      "ambiguities": [
+        "The suspension rule does not imply this cluster has no free resources."
+      ],
+      "claim": "Our cluster has enough free GPUs of type tesla to start a two-GPU job right now.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "Current free tesla GPU inventory and scheduling/admission state.",
+      "permitted_evidence_ids": [],
+      "reason": "Request syntax and retention rules do not establish present availability.",
+      "relevant_corroborating_ids": [],
+      "request_id": "8da5f614c3dc0f46959d",
+      "required_evidence_for_insufficient": [],
+      "source_id": "slurm_gres"
+    },
+    {
+      "ambiguities": [
+        "The prohibition on changing node resource capacities after startup is a different operation and does not contradict actor migration."
+      ],
+      "claim": "Ray can move a running GPU actor to another node without restarting that actor.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "A live actor-migration/state-transfer capability and its restart requirements.",
+      "permitted_evidence_ids": [],
+      "reason": "Logical resources and device visibility do not specify whether running actors can migrate without restart.",
+      "relevant_corroborating_ids": [],
+      "request_id": "205775711261716f8ddb",
+      "required_evidence_for_insufficient": [],
+      "source_id": "ray_resources"
+    },
+    {
+      "ambiguities": [
+        "Do not import an allocation heuristic from outside this packet or from a different allocator backend."
+      ],
+      "claim": "The described PyTorch caching allocator uses first-fit selection to choose an available memory block.",
+      "label": "insufficient",
+      "minimal_sufficient_evidence_sets": [],
+      "missing_information": "The allocator's free-block selection policy.",
+      "permitted_evidence_ids": [],
+      "reason": "A caching allocator and memory diagnostics do not specify first-fit selection.",
+      "relevant_corroborating_ids": [],
+      "request_id": "21f7d9ba6e123ecf20c5",
+      "required_evidence_for_insufficient": [],
+      "source_id": "torch_memory"
+    },
+    {
+      "ambiguities": [
+        "D4 is about job steps within a job and cannot replace the suspension/other-jobs evidence."
+      ],
+      "claim": "Suspending a job makes its allocated generic resources available for other jobs to use.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D2"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D2"
+      ],
+      "reason": "D2 explicitly says a suspended job's resources do not become available to other jobs.",
+      "relevant_corroborating_ids": [],
+      "request_id": "8efc7a43c885363fb84e",
+      "required_evidence_for_insufficient": null,
+      "source_id": "slurm_gres"
+    },
+    {
+      "ambiguities": [
+        "Level-2 excerpts are unnecessary; restored D4 now supplies its option antecedent."
+      ],
+      "claim": "In our proposed pause-and-resume workflow, level 1 sleep retains the existing KV-cache contents so requests resume with that unchanged cache.",
+      "label": "contradicted",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D1"
+      ],
+      "reason": "D1 explicitly says level 1 discards and forgets the KV cache.",
+      "relevant_corroborating_ids": [],
+      "request_id": "3e102eebb69e5120a4e4",
+      "required_evidence_for_insufficient": null,
+      "source_id": "vllm_sleep"
+    },
+    {
+      "ambiguities": [
+        "This is not hard security isolation, universal compliance, or a fixed physical GPU assignment."
+      ],
+      "claim": "Ray provides visible-device GPU isolation by setting CUDA_VISIBLE_DEVICES, which most machine-learning frameworks respect for assignment.",
+      "label": "supported",
+      "minimal_sufficient_evidence_sets": [
+        [
+          "D3"
+        ]
+      ],
+      "missing_information": null,
+      "permitted_evidence_ids": [
+        "D3"
+      ],
+      "reason": "D3 explicitly describes visible-device isolation through CUDA_VISIBLE_DEVICES with the most-frameworks qualification.",
+      "relevant_corroborating_ids": [],
+      "request_id": "e9456337de47ba5d88aa",
+      "required_evidence_for_insufficient": null,
+      "source_id": "ray_resources"
+    }
+  ],
+  "review_type": "packet-relative label and evidence review"
+}

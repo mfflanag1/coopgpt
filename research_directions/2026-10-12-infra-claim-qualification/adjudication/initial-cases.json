@@ -1,0 +1,1283 @@
+[
+  {
+    "acceptable_evidence": [
+      [
+        "D2"
+      ]
+    ],
+    "claim": "Calling empty_cache while tensors are still live releases the GPU memory occupied by those tensors for another process.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 21551,
+        "source_char_start": 21021,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6707c51ed1b7c043ea02efa8664974e9a09147ad128ee6e3c2701486e5326c5a",
+        "text": "PyTorch uses a caching memory allocator to speed up memory allocations. This\nallows fast memory deallocation without device synchronizations. However, the\nunused memory managed by the allocator will still show as if used in\n`nvidia-smi`. You can use {meth}`~torch.cuda.memory_allocated` and\n{meth}`~torch.cuda.max_memory_allocated` to monitor memory occupied by\ntensors, and use {meth}`~torch.cuda.memory_reserved` and\n{meth}`~torch.cuda.max_memory_reserved` to monitor the total amount of memory\nmanaged by the caching allocator.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 21828,
+        "source_char_start": 21552,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "7ac30a40ad8c7ddc54366a7c6381fc078f0beffbadaa6e12569a0580157dceae",
+        "text": "Calling {meth}`~torch.cuda.empty_cache`\nreleases all **unused** cached memory from PyTorch so that those can be used\nby other GPU applications. However, the occupied GPU memory by tensors will not\nbe freed so it can not increase the amount of GPU memory available for PyTorch.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 22315,
+        "source_char_start": 21986,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "a4b3f07298144e32f63d64aa6e3b29e066dc172b7557dff5f734bfe1294fd010",
+        "text": "For more advanced users, we offer more comprehensive memory benchmarking via\n{meth}`~torch.cuda.memory_stats`. We also offer the capability to capture a\ncomplete snapshot of the memory allocator state via\n{meth}`~torch.cuda.memory_snapshot`, which can help you understand the\nunderlying allocation patterns produced by your code.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 22615,
+        "source_char_start": 22397,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "1aaaa5cd7ff1f37466d5c015888569fd73e88d8192f5cbeb95f3158093352d16",
+        "text": "Use of a caching allocator can interfere with memory checking tools such as\n`cuda-memcheck`.  To debug memory errors using `cuda-memcheck`, set\n`PYTORCH_NO_CUDA_MEMORY_CACHING=1` in your environment to disable caching.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D2 explicitly says occupied tensor memory is not freed; D1 gives the accounting context.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "7b008687c650d1a4a118",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "claim": "After the vendor driver and device plugin are installed, a container can specify a GPU limit without an explicit GPU request; Kubernetes uses that limit as the request.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 947,
+        "source_char_start": 736,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "3422fbea8ac42565f64ea79fa33599224560b987095f4195497a363d413e906b",
+        "text": "As an administrator, you have to install GPU drivers from the corresponding\nhardware vendor on the nodes and run the corresponding device plugin from the\nGPU vendor. Here are some links to vendors' instructions:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1910,
+        "source_char_start": 1542,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6f5c5c4a12f59c085e8724823574f019611cdd64f606f9810b42555f8477f9d0",
+        "text": "GPUs are only supposed to be specified in the `limits` section, which means:\n* You can specify GPU `limits` without specifying `requests`, because\n  Kubernetes will use the limit as the request value by default.\n* You can specify GPU in both `limits` and `requests` but these two values\n  must be equal.\n* You cannot specify GPU `requests` without specifying `limits`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2533,
+        "source_char_start": 2324,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6257c81aae8c39133007894f430433ad440e052878049c4d552b59a73ad7e57c",
+        "text": "If different nodes in your cluster have different types of GPUs, then you\ncan use [Node Labels and Node Selectors](/docs/tasks/configure-pod-container/assign-pods-nodes/)\nto schedule pods to appropriate nodes.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 2824,
+        "source_char_start": 2727,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "d2fa12581057b1652439386b16bb08aecd41221e81fb3188324093f9ecc0841e",
+        "text": "That label key `accelerator` is just an example; you can use\na different label key if you prefer.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D1 states vendor setup prerequisites; D2 explicitly permits limit-only resources and supplies request default.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "3363378b7baa59ddd990",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "claim": "An allocation requested with a typed GPU should use that same GPU type when requesting GPUs for its job step.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4775,
+        "source_char_start": 4369,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "06798ea49019e10728548a48bbeeab1efa2520338ae58aea16b19f2c927debab",
+        "text": "Requests for typed vs non-typed generic resources must be consistent within a job. For example, if you request --gres=gpu:2 with sbatch , you would not be able to request --gres=gpu:tesla:2 with srun to create a job step. The same holds true in reverse, if you request a typed GPU to create a job allocation, you should request a GPU of the same type to create a job step.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5579,
+        "source_char_start": 5401,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "54b1583fdf6f2c8a31218548dc2f1df567900512596d5f02f97e41f72141f236",
+        "text": "Jobs will be allocated specific generic resources as needed to satisfy the request. If the job is suspended, those resources do not become available for use by other jobs.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4367,
+        "source_char_start": 3461,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "e1a14f245492b9a832e32ba77e513f20c5a480204240d31585477d6e0091278e",
+        "text": "All of these options are supported by the salloc , sbatch and srun commands. Note that all of the --gpu* options are only supported by Slurm's select/cons_tres plugin. Jobs requesting these options when the select/cons_tres plugin is not configured will be rejected. The --gres option requires an argument specifying which generic resources are required and how many resources using the form name[:type:count] while all of the --gpu* options require an argument of the form [type]:count . The name is the same name as specified by the GresTypes and Gres configuration parameters. type identifies a specific type of that generic resource (e.g. a specific model of GPU). count specifies how many resources are required and has a default value of 1. For example: sbatch --gres=gpu:kepler:2 ... .",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 6428,
+        "source_char_start": 5581,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "b76ce8ca149ef3fbc727a2346604c64b883a0ba381db98fe9ab95e6c0a4268cc",
+        "text": "Job steps can be allocated generic resources from those allocated to the job using the --gres option with the srun command as described above. By default, a job step will be allocated all of the generic resources that have been requested by the job, except those implicitly requested when a job is exclusive. If desired, the job step may explicitly specify a different generic resource count than the job. This design choice was based upon a scenario where each job executes many job steps. If job steps were granted access to all generic resources by default, some job steps would need to explicitly specify zero generic resource counts, which we considered more confusing. The job step can be allocated specific generic resources and those resources will not be available to other job steps. A simple example is shown below.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "D1 requires typed/untyped consistency and same type across allocation and step.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "bc10402e003f5e17215f",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D3"
+      ]
+    ],
+    "claim": "A submission using the --gpus option will be accepted even when select/cons_tres is not configured.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4775,
+        "source_char_start": 4369,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "06798ea49019e10728548a48bbeeab1efa2520338ae58aea16b19f2c927debab",
+        "text": "Requests for typed vs non-typed generic resources must be consistent within a job. For example, if you request --gres=gpu:2 with sbatch , you would not be able to request --gres=gpu:tesla:2 with srun to create a job step. The same holds true in reverse, if you request a typed GPU to create a job allocation, you should request a GPU of the same type to create a job step.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5579,
+        "source_char_start": 5401,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "54b1583fdf6f2c8a31218548dc2f1df567900512596d5f02f97e41f72141f236",
+        "text": "Jobs will be allocated specific generic resources as needed to satisfy the request. If the job is suspended, those resources do not become available for use by other jobs.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4367,
+        "source_char_start": 3461,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "e1a14f245492b9a832e32ba77e513f20c5a480204240d31585477d6e0091278e",
+        "text": "All of these options are supported by the salloc , sbatch and srun commands. Note that all of the --gpu* options are only supported by Slurm's select/cons_tres plugin. Jobs requesting these options when the select/cons_tres plugin is not configured will be rejected. The --gres option requires an argument specifying which generic resources are required and how many resources using the form name[:type:count] while all of the --gpu* options require an argument of the form [type]:count . The name is the same name as specified by the GresTypes and Gres configuration parameters. type identifies a specific type of that generic resource (e.g. a specific model of GPU). count specifies how many resources are required and has a default value of 1. For example: sbatch --gres=gpu:kepler:2 ... .",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 6428,
+        "source_char_start": 5581,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "b76ce8ca149ef3fbc727a2346604c64b883a0ba381db98fe9ab95e6c0a4268cc",
+        "text": "Job steps can be allocated generic resources from those allocated to the job using the --gres option with the srun command as described above. By default, a job step will be allocated all of the generic resources that have been requested by the job, except those implicitly requested when a job is exclusive. If desired, the job step may explicitly specify a different generic resource count than the job. This design choice was based upon a scenario where each job executes many job steps. If job steps were granted access to all generic resources by default, some job steps would need to explicitly specify zero generic resource counts, which we considered more confusing. The job step can be allocated specific generic resources and those resources will not be available to other job steps. A simple example is shown below.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "D3 explicitly states these --gpu* requests are rejected without select/cons_tres.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D3"
+    ],
+    "request_id": "bd05a86c9f54cab705ab",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "The GPU assigned to our next Ray actor will be physical device number three.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1543,
+        "source_char_start": 1034,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "09dd41d43ef8ea0bab91124da69217b355cfefef0983219815168c5058baf2e5",
+        "text": "Ray resources are *logical* and don't need a one-to-one mapping with physical resources. For example, you can start a Ray head node with zero logical CPUs by running `ray start --head --num-cpus=0`, even if the machine physically has eight. This setting signals the Ray scheduler not to schedule any tasks or actors that require logical CPU resources on the head node, mainly to reserve the head node for running Ray system processes. Ray mainly uses logical resources for admission control during scheduling.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1931,
+        "source_char_start": 1611,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "a55e674151aff25b046a9f2cbc935bd19b487aafedd55a82d4322310424c3aa5",
+        "text": "- Resource requirements of tasks or actors don't limit actual physical resource usage. For example, Ray doesn't prevent a `num_cpus=1` task from launching multiple threads and using multiple physical CPUs. You're responsible for making sure tasks or actors use no more resources than their resource requirements specify.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2484,
+        "source_char_start": 2259,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "d9c70021b519c8ed0c480e4349b48281021dbb27d451d406a6bdbd793a89b85b",
+        "text": "- Ray does provide {ref}`GPU <gpu-support>` isolation in the form of *visible devices*. It automatically sets the `CUDA_VISIBLE_DEVICES` environment variable, which most machine learning frameworks respect for GPU assignment.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4834,
+        "source_char_start": 4740,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "ad336a07ea4a796eb608b12b224cf105c999f56ecc5aa715be9a1f8338a7376d",
+        "text": "You cannot dynamically update the resource capacities of a node after Ray starts on that node.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "Visible-device isolation is documented, but this actor allocation and physical device numbering are not supplied.",
+    "reasoning": "missing_deployment_state",
+    "relevant_evidence": [],
+    "request_id": "2f038871a7a041fe11c1",
+    "source_id": "ray_resources"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "claim": "Level 1 sleep retains the existing KV-cache contents so requests can resume with that unchanged cache.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1384,
+        "source_char_start": 1069,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "da52f000576f4ce884c3d9c5d3f303c9dfc0b5eff7d909ccfb366469e55f76be",
+        "text": "Level 1 sleep will offload the model weights and discard the KV cache. The content of KV cache is forgotten. Level 1 sleep is good for sleeping and waking up the engine to run the same model again. The model weights are backed up in CPU memory. Please make sure there's enough CPU memory to store the model weights.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2048,
+        "source_char_start": 1385,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "fddbc3738df0cd3dc7f7e598fb5f70683568bf027d2388cf5e608cac66f406c9",
+        "text": "Level 2 sleep will discard both the model weights and the KV cache (while the model's buffers are kept in CPU, like rope scaling tensors). The content of both the model weights and KV cache is forgotten. Level 2 sleep is good for sleeping and waking up the engine to run a different model or update the model, where previous model weights are not needed, e.g. RLHF weight update. Level 2 sleep is also useful when there is not enough CPU memory to back up the model weights, e.g. when a colocated trainer already uses CPU memory for offloading its own state; since nothing is backed up, restore the weights after waking up with `collective_rpc(\"reload_weights\")`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3527,
+        "source_char_start": 2777,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "51246a801c20a16113036402c363d9eb6ae44720c2c78f742f7d7d56dacb3839",
+        "text": "During RLHF training, vLLM allows you to selectively wake up only the model weights or the KV cache using the tags argument in wake_up(). This fine-grained control is especially useful when updating model weights: by waking up just the weights (e.g., llm.wake_up(tags=[\"weights\"])), you avoid allocating memory for the KV cache until after the weight update is complete. This approach helps prevent GPU out-of-memory (OOM) errors, particularly with large models, by minimizing peak memory usage during weight synchronization and update operations.\n\nUse `tags=[\"weights\"]` or `tags=[\"kv_cache\"]` to control which resources are restored, useful for RLHF and weight updates. **Note** that `is_sleeping` will report `true` until all components are awake.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4843,
+        "source_char_start": 4401,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "685e1a818fac3a9bb7bc8b98cdda78199e1c8b37cf687863bc12eccccba33aa3",
+        "text": "Level-2 sleep backs up selected GPU parameters to pageable CPU memory; weights\nwake-up restores them in place and releases the backups. CPU parameters need no\ncopy. Allow enough host memory for backups. Level-1 behavior is unchanged.\n\nThe trainer must omit these parameters from updates, and reload/post-processing\nmust preserve their values and storage (including avoiding replacement with meta\ntensors). This option does not filter updates.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D1 states the KV cache is discarded and its content forgotten.",
+    "reasoning": "direct",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "6a26fb8c176cba297daf",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D2"
+      ]
+    ],
+    "claim": "A Ray task declaring num_cpus=1 is prevented by Ray from launching threads that use multiple physical CPUs.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1543,
+        "source_char_start": 1034,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "09dd41d43ef8ea0bab91124da69217b355cfefef0983219815168c5058baf2e5",
+        "text": "Ray resources are *logical* and don't need a one-to-one mapping with physical resources. For example, you can start a Ray head node with zero logical CPUs by running `ray start --head --num-cpus=0`, even if the machine physically has eight. This setting signals the Ray scheduler not to schedule any tasks or actors that require logical CPU resources on the head node, mainly to reserve the head node for running Ray system processes. Ray mainly uses logical resources for admission control during scheduling.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1931,
+        "source_char_start": 1611,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "a55e674151aff25b046a9f2cbc935bd19b487aafedd55a82d4322310424c3aa5",
+        "text": "- Resource requirements of tasks or actors don't limit actual physical resource usage. For example, Ray doesn't prevent a `num_cpus=1` task from launching multiple threads and using multiple physical CPUs. You're responsible for making sure tasks or actors use no more resources than their resource requirements specify.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2484,
+        "source_char_start": 2259,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "d9c70021b519c8ed0c480e4349b48281021dbb27d451d406a6bdbd793a89b85b",
+        "text": "- Ray does provide {ref}`GPU <gpu-support>` isolation in the form of *visible devices*. It automatically sets the `CUDA_VISIBLE_DEVICES` environment variable, which most machine learning frameworks respect for GPU assignment.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4834,
+        "source_char_start": 4740,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "ad336a07ea4a796eb608b12b224cf105c999f56ecc5aa715be9a1f8338a7376d",
+        "text": "You cannot dynamically update the resource capacities of a node after Ray starts on that node.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D2 explicitly denies physical-usage enforcement; D1 explains logical resources.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "21a56acdad65360ef9e3",
+    "source_id": "ray_resources"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D3"
+      ]
+    ],
+    "claim": "Enabling APC lets a request with no prefix in common with existing queries reuse their prefix computations.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 307,
+        "source_char_start": 45,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "d9031754e0d89337e1fe1b4e86b18179cbf90ccfa0b111fffa3bb53f3ca81eca",
+        "text": "Automatic Prefix Caching (APC in short) caches the KV cache of existing queries, so that a new query can directly reuse the KV cache if it shares the same prefix with one of the existing queries, allowing the new query to skip the computation of the shared part.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 525,
+        "source_char_start": 443,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "7520a0a7e5d30846024b37eb727ed7046fdcac13cf0d665021e4dfec4195c8d1",
+        "text": "Set `enable_prefix_caching=True` in vLLM engine to enable APC. Here is an example:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3708,
+        "source_char_start": 3210,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "4e021359563ed3b3b7a93e8a5af640356ce1634f45043588143e1ff9497cb5f8",
+        "text": "APC in general does not reduce the performance of vLLM. With that being said, APC only reduces the time of processing the queries (the prefilling phase) and does not reduce the time of generating new tokens (the decoding phase). So APC does not bring performance gain when vLLM spends most of the time generating answers to the queries (e.g. when the length of the answer is long), or new queries do not share the same prefix with any of existing queries (so that the computation cannot be reused).",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 1428,
+        "source_char_start": 719,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "a65d03bef8c9b770af88f8e990f718070bbe45a689181aa1ebcd4d31d3b93a87",
+        "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D3 explicitly rules out reuse when new queries share no prefix; D1 is relevant corroboration.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D1",
+      "D3"
+    ],
+    "request_id": "1f522109b287e70646b1",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "claim": "Starting a head node with zero logical CPUs can prevent CPU-requiring work from being scheduled there even when the machine has physical CPUs.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1543,
+        "source_char_start": 1034,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "09dd41d43ef8ea0bab91124da69217b355cfefef0983219815168c5058baf2e5",
+        "text": "Ray resources are *logical* and don't need a one-to-one mapping with physical resources. For example, you can start a Ray head node with zero logical CPUs by running `ray start --head --num-cpus=0`, even if the machine physically has eight. This setting signals the Ray scheduler not to schedule any tasks or actors that require logical CPU resources on the head node, mainly to reserve the head node for running Ray system processes. Ray mainly uses logical resources for admission control during scheduling.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1931,
+        "source_char_start": 1611,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "a55e674151aff25b046a9f2cbc935bd19b487aafedd55a82d4322310424c3aa5",
+        "text": "- Resource requirements of tasks or actors don't limit actual physical resource usage. For example, Ray doesn't prevent a `num_cpus=1` task from launching multiple threads and using multiple physical CPUs. You're responsible for making sure tasks or actors use no more resources than their resource requirements specify.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2484,
+        "source_char_start": 2259,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "d9c70021b519c8ed0c480e4349b48281021dbb27d451d406a6bdbd793a89b85b",
+        "text": "- Ray does provide {ref}`GPU <gpu-support>` isolation in the form of *visible devices*. It automatically sets the `CUDA_VISIBLE_DEVICES` environment variable, which most machine learning frameworks respect for GPU assignment.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4834,
+        "source_char_start": 4740,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "ad336a07ea4a796eb608b12b224cf105c999f56ecc5aa715be9a1f8338a7376d",
+        "text": "You cannot dynamically update the resource capacities of a node after Ray starts on that node.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D1 provides this exact admission-control example and scope.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "7ae6f123309f68514200",
+    "source_id": "ray_resources"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "Disabling CUDA memory caching makes our training job finish faster than leaving caching enabled.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 21551,
+        "source_char_start": 21021,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6707c51ed1b7c043ea02efa8664974e9a09147ad128ee6e3c2701486e5326c5a",
+        "text": "PyTorch uses a caching memory allocator to speed up memory allocations. This\nallows fast memory deallocation without device synchronizations. However, the\nunused memory managed by the allocator will still show as if used in\n`nvidia-smi`. You can use {meth}`~torch.cuda.memory_allocated` and\n{meth}`~torch.cuda.max_memory_allocated` to monitor memory occupied by\ntensors, and use {meth}`~torch.cuda.memory_reserved` and\n{meth}`~torch.cuda.max_memory_reserved` to monitor the total amount of memory\nmanaged by the caching allocator.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 21828,
+        "source_char_start": 21552,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "7ac30a40ad8c7ddc54366a7c6381fc078f0beffbadaa6e12569a0580157dceae",
+        "text": "Calling {meth}`~torch.cuda.empty_cache`\nreleases all **unused** cached memory from PyTorch so that those can be used\nby other GPU applications. However, the occupied GPU memory by tensors will not\nbe freed so it can not increase the amount of GPU memory available for PyTorch.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 22315,
+        "source_char_start": 21986,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "a4b3f07298144e32f63d64aa6e3b29e066dc172b7557dff5f734bfe1294fd010",
+        "text": "For more advanced users, we offer more comprehensive memory benchmarking via\n{meth}`~torch.cuda.memory_stats`. We also offer the capability to capture a\ncomplete snapshot of the memory allocator state via\n{meth}`~torch.cuda.memory_snapshot`, which can help you understand the\nunderlying allocation patterns produced by your code.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 22615,
+        "source_char_start": 22397,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "1aaaa5cd7ff1f37466d5c015888569fd73e88d8192f5cbeb95f3158093352d16",
+        "text": "Use of a caching allocator can interfere with memory checking tools such as\n`cuda-memcheck`.  To debug memory errors using `cuda-memcheck`, set\n`PYTORCH_NO_CUDA_MEMORY_CACHING=1` in your environment to disable caching.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D4 recommends disabling for a debugging use, not measured end-to-end speed of this job. D1 says the allocator accelerates allocation but does not establish whole-job runtime in either configuration.",
+    "reasoning": "missing_measurement",
+    "relevant_evidence": [],
+    "request_id": "249821e678a9c4766421",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D3"
+      ]
+    ],
+    "claim": "When a request shares an existing prefix, APC can reuse that shared computation while leaving the new-token decoding phase without the APC speedup.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 307,
+        "source_char_start": 45,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "d9031754e0d89337e1fe1b4e86b18179cbf90ccfa0b111fffa3bb53f3ca81eca",
+        "text": "Automatic Prefix Caching (APC in short) caches the KV cache of existing queries, so that a new query can directly reuse the KV cache if it shares the same prefix with one of the existing queries, allowing the new query to skip the computation of the shared part.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 525,
+        "source_char_start": 443,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "7520a0a7e5d30846024b37eb727ed7046fdcac13cf0d665021e4dfec4195c8d1",
+        "text": "Set `enable_prefix_caching=True` in vLLM engine to enable APC. Here is an example:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3708,
+        "source_char_start": 3210,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "4e021359563ed3b3b7a93e8a5af640356ce1634f45043588143e1ff9497cb5f8",
+        "text": "APC in general does not reduce the performance of vLLM. With that being said, APC only reduces the time of processing the queries (the prefilling phase) and does not reduce the time of generating new tokens (the decoding phase). So APC does not bring performance gain when vLLM spends most of the time generating answers to the queries (e.g. when the length of the answer is long), or new queries do not share the same prefix with any of existing queries (so that the computation cannot be reused).",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 1428,
+        "source_char_start": 719,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "a65d03bef8c9b770af88f8e990f718070bbe45a689181aa1ebcd4d31d3b93a87",
+        "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D1 establishes shared-prefix reuse; D3 confines benefit to prefill, not decode.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D1",
+      "D3"
+    ],
+    "request_id": "182b7a4b0f1ed4a41d69",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D3"
+      ]
+    ],
+    "claim": "After waking only the model weights with tags=[\"weights\"], is_sleeping can remain true until the remaining components are awake.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1384,
+        "source_char_start": 1069,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "da52f000576f4ce884c3d9c5d3f303c9dfc0b5eff7d909ccfb366469e55f76be",
+        "text": "Level 1 sleep will offload the model weights and discard the KV cache. The content of KV cache is forgotten. Level 1 sleep is good for sleeping and waking up the engine to run the same model again. The model weights are backed up in CPU memory. Please make sure there's enough CPU memory to store the model weights.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2048,
+        "source_char_start": 1385,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "fddbc3738df0cd3dc7f7e598fb5f70683568bf027d2388cf5e608cac66f406c9",
+        "text": "Level 2 sleep will discard both the model weights and the KV cache (while the model's buffers are kept in CPU, like rope scaling tensors). The content of both the model weights and KV cache is forgotten. Level 2 sleep is good for sleeping and waking up the engine to run a different model or update the model, where previous model weights are not needed, e.g. RLHF weight update. Level 2 sleep is also useful when there is not enough CPU memory to back up the model weights, e.g. when a colocated trainer already uses CPU memory for offloading its own state; since nothing is backed up, restore the weights after waking up with `collective_rpc(\"reload_weights\")`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3527,
+        "source_char_start": 2777,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "51246a801c20a16113036402c363d9eb6ae44720c2c78f742f7d7d56dacb3839",
+        "text": "During RLHF training, vLLM allows you to selectively wake up only the model weights or the KV cache using the tags argument in wake_up(). This fine-grained control is especially useful when updating model weights: by waking up just the weights (e.g., llm.wake_up(tags=[\"weights\"])), you avoid allocating memory for the KV cache until after the weight update is complete. This approach helps prevent GPU out-of-memory (OOM) errors, particularly with large models, by minimizing peak memory usage during weight synchronization and update operations.\n\nUse `tags=[\"weights\"]` or `tags=[\"kv_cache\"]` to control which resources are restored, useful for RLHF and weight updates. **Note** that `is_sleeping` will report `true` until all components are awake.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4843,
+        "source_char_start": 4401,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "685e1a818fac3a9bb7bc8b98cdda78199e1c8b37cf687863bc12eccccba33aa3",
+        "text": "Level-2 sleep backs up selected GPU parameters to pageable CPU memory; weights\nwake-up restores them in place and releases the backups. CPU parameters need no\ncopy. Allow enough host memory for backups. Level-1 behavior is unchanged.\n\nThe trainer must omit these parameters from updates, and reload/post-processing\nmust preserve their values and storage (including avoiding replacement with meta\ntensors). This option does not filter updates.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D3 describes selective wake and explicitly says is_sleeping remains true until all components awake.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D3"
+    ],
+    "request_id": "cc5026c0dccee81eb72f",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D4"
+      ]
+    ],
+    "claim": "For the hybrid Mamba option described here, enabling the shared-prefix checkpoint flag is sufficient even when the model uses multi-module MTP.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 307,
+        "source_char_start": 45,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "d9031754e0d89337e1fe1b4e86b18179cbf90ccfa0b111fffa3bb53f3ca81eca",
+        "text": "Automatic Prefix Caching (APC in short) caches the KV cache of existing queries, so that a new query can directly reuse the KV cache if it shares the same prefix with one of the existing queries, allowing the new query to skip the computation of the shared part.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 525,
+        "source_char_start": 443,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "7520a0a7e5d30846024b37eb727ed7046fdcac13cf0d665021e4dfec4195c8d1",
+        "text": "Set `enable_prefix_caching=True` in vLLM engine to enable APC. Here is an example:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3708,
+        "source_char_start": 3210,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "4e021359563ed3b3b7a93e8a5af640356ce1634f45043588143e1ff9497cb5f8",
+        "text": "APC in general does not reduce the performance of vLLM. With that being said, APC only reduces the time of processing the queries (the prefilling phase) and does not reduce the time of generating new tokens (the decoding phase). So APC does not bring performance gain when vLLM spends most of the time generating answers to the queries (e.g. when the length of the answer is long), or new queries do not share the same prefix with any of existing queries (so that the computation cannot be reused).",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 1428,
+        "source_char_start": 719,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "a65d03bef8c9b770af88f8e990f718070bbe45a689181aa1ebcd4d31d3b93a87",
+        "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D4 gives conjunctive prerequisites including that model does not use multi-module MTP.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D4"
+    ],
+    "request_id": "cf56d7eef953f5ee714e",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "APC reduced our production service energy per successful request by fifteen percent last week.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 307,
+        "source_char_start": 45,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "d9031754e0d89337e1fe1b4e86b18179cbf90ccfa0b111fffa3bb53f3ca81eca",
+        "text": "Automatic Prefix Caching (APC in short) caches the KV cache of existing queries, so that a new query can directly reuse the KV cache if it shares the same prefix with one of the existing queries, allowing the new query to skip the computation of the shared part.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 525,
+        "source_char_start": 443,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "7520a0a7e5d30846024b37eb727ed7046fdcac13cf0d665021e4dfec4195c8d1",
+        "text": "Set `enable_prefix_caching=True` in vLLM engine to enable APC. Here is an example:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3708,
+        "source_char_start": 3210,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "4e021359563ed3b3b7a93e8a5af640356ce1634f45043588143e1ff9497cb5f8",
+        "text": "APC in general does not reduce the performance of vLLM. With that being said, APC only reduces the time of processing the queries (the prefilling phase) and does not reduce the time of generating new tokens (the decoding phase). So APC does not bring performance gain when vLLM spends most of the time generating answers to the queries (e.g. when the length of the answer is long), or new queries do not share the same prefix with any of existing queries (so that the computation cannot be reused).",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 1428,
+        "source_char_start": 719,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "a65d03bef8c9b770af88f8e990f718070bbe45a689181aa1ebcd4d31d3b93a87",
+        "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "Packet describes mechanism and limits, not measured energy or last-week deployment outcomes. It establishes neither this reduction nor its negation.",
+    "reasoning": "missing_measurement",
+    "relevant_evidence": [],
+    "request_id": "98a481a9567d5061da13",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D3",
+        "D4"
+      ]
+    ],
+    "claim": "For a cluster with different GPU types, node labels and selectors can steer a Pod to suitable nodes, and the label key does not have to be accelerator.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 947,
+        "source_char_start": 736,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "3422fbea8ac42565f64ea79fa33599224560b987095f4195497a363d413e906b",
+        "text": "As an administrator, you have to install GPU drivers from the corresponding\nhardware vendor on the nodes and run the corresponding device plugin from the\nGPU vendor. Here are some links to vendors' instructions:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1910,
+        "source_char_start": 1542,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6f5c5c4a12f59c085e8724823574f019611cdd64f606f9810b42555f8477f9d0",
+        "text": "GPUs are only supposed to be specified in the `limits` section, which means:\n* You can specify GPU `limits` without specifying `requests`, because\n  Kubernetes will use the limit as the request value by default.\n* You can specify GPU in both `limits` and `requests` but these two values\n  must be equal.\n* You cannot specify GPU `requests` without specifying `limits`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2533,
+        "source_char_start": 2324,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6257c81aae8c39133007894f430433ad440e052878049c4d552b59a73ad7e57c",
+        "text": "If different nodes in your cluster have different types of GPUs, then you\ncan use [Node Labels and Node Selectors](/docs/tasks/configure-pod-container/assign-pods-nodes/)\nto schedule pods to appropriate nodes.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 2824,
+        "source_char_start": 2727,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "d2fa12581057b1652439386b16bb08aecd41221e81fb3188324093f9ecc0841e",
+        "text": "That label key `accelerator` is just an example; you can use\na different label key if you prefer.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D3 gives routing mechanism and D4 says accelerator is an example rather than mandatory key.",
+    "reasoning": "conditional",
+    "relevant_evidence": [
+      "D3",
+      "D4"
+    ],
+    "request_id": "c846353abbf7d37a0fa9",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D2"
+      ]
+    ],
+    "claim": "For the custom GPU resource described here, setting the request to one GPU and the limit to two GPUs is permitted.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 947,
+        "source_char_start": 736,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "3422fbea8ac42565f64ea79fa33599224560b987095f4195497a363d413e906b",
+        "text": "As an administrator, you have to install GPU drivers from the corresponding\nhardware vendor on the nodes and run the corresponding device plugin from the\nGPU vendor. Here are some links to vendors' instructions:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1910,
+        "source_char_start": 1542,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6f5c5c4a12f59c085e8724823574f019611cdd64f606f9810b42555f8477f9d0",
+        "text": "GPUs are only supposed to be specified in the `limits` section, which means:\n* You can specify GPU `limits` without specifying `requests`, because\n  Kubernetes will use the limit as the request value by default.\n* You can specify GPU in both `limits` and `requests` but these two values\n  must be equal.\n* You cannot specify GPU `requests` without specifying `limits`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2533,
+        "source_char_start": 2324,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6257c81aae8c39133007894f430433ad440e052878049c4d552b59a73ad7e57c",
+        "text": "If different nodes in your cluster have different types of GPUs, then you\ncan use [Node Labels and Node Selectors](/docs/tasks/configure-pod-container/assign-pods-nodes/)\nto schedule pods to appropriate nodes.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 2824,
+        "source_char_start": 2727,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "d2fa12581057b1652439386b16bb08aecd41221e81fb3188324093f9ecc0841e",
+        "text": "That label key `accelerator` is just an example; you can use\na different label key if you prefer.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D2 explicitly requires equal values when both are supplied.",
+    "reasoning": "direct",
+    "relevant_evidence": [
+      "D2"
+    ],
+    "request_id": "b6126a81c4a9162c64fd",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "claim": "The documented allocated-memory functions track tensors, whereas the reserved-memory functions track the total memory managed by the caching allocator.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 21551,
+        "source_char_start": 21021,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6707c51ed1b7c043ea02efa8664974e9a09147ad128ee6e3c2701486e5326c5a",
+        "text": "PyTorch uses a caching memory allocator to speed up memory allocations. This\nallows fast memory deallocation without device synchronizations. However, the\nunused memory managed by the allocator will still show as if used in\n`nvidia-smi`. You can use {meth}`~torch.cuda.memory_allocated` and\n{meth}`~torch.cuda.max_memory_allocated` to monitor memory occupied by\ntensors, and use {meth}`~torch.cuda.memory_reserved` and\n{meth}`~torch.cuda.max_memory_reserved` to monitor the total amount of memory\nmanaged by the caching allocator.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 21828,
+        "source_char_start": 21552,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "7ac30a40ad8c7ddc54366a7c6381fc078f0beffbadaa6e12569a0580157dceae",
+        "text": "Calling {meth}`~torch.cuda.empty_cache`\nreleases all **unused** cached memory from PyTorch so that those can be used\nby other GPU applications. However, the occupied GPU memory by tensors will not\nbe freed so it can not increase the amount of GPU memory available for PyTorch.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 22315,
+        "source_char_start": 21986,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "a4b3f07298144e32f63d64aa6e3b29e066dc172b7557dff5f734bfe1294fd010",
+        "text": "For more advanced users, we offer more comprehensive memory benchmarking via\n{meth}`~torch.cuda.memory_stats`. We also offer the capability to capture a\ncomplete snapshot of the memory allocator state via\n{meth}`~torch.cuda.memory_snapshot`, which can help you understand the\nunderlying allocation patterns produced by your code.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 22615,
+        "source_char_start": 22397,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "1aaaa5cd7ff1f37466d5c015888569fd73e88d8192f5cbeb95f3158093352d16",
+        "text": "Use of a caching allocator can interfere with memory checking tools such as\n`cuda-memcheck`.  To debug memory errors using `cuda-memcheck`, set\n`PYTORCH_NO_CUDA_MEMORY_CACHING=1` in your environment to disable caching.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D1 distinguishes these two accounting concepts explicitly.",
+    "reasoning": "direct",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "0e8b4de435077803ec73",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "Our current serving engine will finish waking from sleep in under five hundred milliseconds.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1384,
+        "source_char_start": 1069,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "da52f000576f4ce884c3d9c5d3f303c9dfc0b5eff7d909ccfb366469e55f76be",
+        "text": "Level 1 sleep will offload the model weights and discard the KV cache. The content of KV cache is forgotten. Level 1 sleep is good for sleeping and waking up the engine to run the same model again. The model weights are backed up in CPU memory. Please make sure there's enough CPU memory to store the model weights.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2048,
+        "source_char_start": 1385,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "fddbc3738df0cd3dc7f7e598fb5f70683568bf027d2388cf5e608cac66f406c9",
+        "text": "Level 2 sleep will discard both the model weights and the KV cache (while the model's buffers are kept in CPU, like rope scaling tensors). The content of both the model weights and KV cache is forgotten. Level 2 sleep is good for sleeping and waking up the engine to run a different model or update the model, where previous model weights are not needed, e.g. RLHF weight update. Level 2 sleep is also useful when there is not enough CPU memory to back up the model weights, e.g. when a colocated trainer already uses CPU memory for offloading its own state; since nothing is backed up, restore the weights after waking up with `collective_rpc(\"reload_weights\")`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3527,
+        "source_char_start": 2777,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "51246a801c20a16113036402c363d9eb6ae44720c2c78f742f7d7d56dacb3839",
+        "text": "During RLHF training, vLLM allows you to selectively wake up only the model weights or the KV cache using the tags argument in wake_up(). This fine-grained control is especially useful when updating model weights: by waking up just the weights (e.g., llm.wake_up(tags=[\"weights\"])), you avoid allocating memory for the KV cache until after the weight update is complete. This approach helps prevent GPU out-of-memory (OOM) errors, particularly with large models, by minimizing peak memory usage during weight synchronization and update operations.\n\nUse `tags=[\"weights\"]` or `tags=[\"kv_cache\"]` to control which resources are restored, useful for RLHF and weight updates. **Note** that `is_sleeping` will report `true` until all components are awake.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4843,
+        "source_char_start": 4401,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "685e1a818fac3a9bb7bc8b98cdda78199e1c8b37cf687863bc12eccccba33aa3",
+        "text": "Level-2 sleep backs up selected GPU parameters to pageable CPU memory; weights\nwake-up restores them in place and releases the backups. CPU parameters need no\ncopy. Allow enough host memory for backups. Level-1 behavior is unchanged.\n\nThe trainer must omit these parameters from updates, and reload/post-processing\nmust preserve their values and storage (including avoiding replacement with meta\ntensors). This option does not filter updates.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "No measured or guaranteed latency for this deployment is present. It is not ruled out either.",
+    "reasoning": "missing_measurement",
+    "relevant_evidence": [],
+    "request_id": "0cec5f44810a245e1c53",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "Our cluster has enough free GPUs of type tesla to start a two-GPU job right now.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4775,
+        "source_char_start": 4369,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "06798ea49019e10728548a48bbeeab1efa2520338ae58aea16b19f2c927debab",
+        "text": "Requests for typed vs non-typed generic resources must be consistent within a job. For example, if you request --gres=gpu:2 with sbatch , you would not be able to request --gres=gpu:tesla:2 with srun to create a job step. The same holds true in reverse, if you request a typed GPU to create a job allocation, you should request a GPU of the same type to create a job step.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5579,
+        "source_char_start": 5401,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "54b1583fdf6f2c8a31218548dc2f1df567900512596d5f02f97e41f72141f236",
+        "text": "Jobs will be allocated specific generic resources as needed to satisfy the request. If the job is suspended, those resources do not become available for use by other jobs.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4367,
+        "source_char_start": 3461,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "e1a14f245492b9a832e32ba77e513f20c5a480204240d31585477d6e0091278e",
+        "text": "All of these options are supported by the salloc , sbatch and srun commands. Note that all of the --gpu* options are only supported by Slurm's select/cons_tres plugin. Jobs requesting these options when the select/cons_tres plugin is not configured will be rejected. The --gres option requires an argument specifying which generic resources are required and how many resources using the form name[:type:count] while all of the --gpu* options require an argument of the form [type]:count . The name is the same name as specified by the GresTypes and Gres configuration parameters. type identifies a specific type of that generic resource (e.g. a specific model of GPU). count specifies how many resources are required and has a default value of 1. For example: sbatch --gres=gpu:kepler:2 ... .",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 6428,
+        "source_char_start": 5581,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "b76ce8ca149ef3fbc727a2346604c64b883a0ba381db98fe9ab95e6c0a4268cc",
+        "text": "Job steps can be allocated generic resources from those allocated to the job using the --gres option with the srun command as described above. By default, a job step will be allocated all of the generic resources that have been requested by the job, except those implicitly requested when a job is exclusive. If desired, the job step may explicitly specify a different generic resource count than the job. This design choice was based upon a scenario where each job executes many job steps. If job steps were granted access to all generic resources by default, some job steps would need to explicitly specify zero generic resource counts, which we considered more confusing. The job step can be allocated specific generic resources and those resources will not be available to other job steps. A simple example is shown below.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "Syntax/type examples do not specify cluster inventory, allocation occupancy or real-time availability.",
+    "reasoning": "missing_deployment_state",
+    "relevant_evidence": [],
+    "request_id": "8da5f614c3dc0f46959d",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "Our production node gpu-west-02 already has the required vendor driver and device plugin installed.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 947,
+        "source_char_start": 736,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "3422fbea8ac42565f64ea79fa33599224560b987095f4195497a363d413e906b",
+        "text": "As an administrator, you have to install GPU drivers from the corresponding\nhardware vendor on the nodes and run the corresponding device plugin from the\nGPU vendor. Here are some links to vendors' instructions:",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1910,
+        "source_char_start": 1542,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6f5c5c4a12f59c085e8724823574f019611cdd64f606f9810b42555f8477f9d0",
+        "text": "GPUs are only supposed to be specified in the `limits` section, which means:\n* You can specify GPU `limits` without specifying `requests`, because\n  Kubernetes will use the limit as the request value by default.\n* You can specify GPU in both `limits` and `requests` but these two values\n  must be equal.\n* You cannot specify GPU `requests` without specifying `limits`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2533,
+        "source_char_start": 2324,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6257c81aae8c39133007894f430433ad440e052878049c4d552b59a73ad7e57c",
+        "text": "If different nodes in your cluster have different types of GPUs, then you\ncan use [Node Labels and Node Selectors](/docs/tasks/configure-pod-container/assign-pods-nodes/)\nto schedule pods to appropriate nodes.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 2824,
+        "source_char_start": 2727,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "d2fa12581057b1652439386b16bb08aecd41221e81fb3188324093f9ecc0841e",
+        "text": "That label key `accelerator` is just an example; you can use\na different label key if you prefer.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "Packet specifies required setup, but contains no observed state of gpu-west-02. Neither installed nor absent is established.",
+    "reasoning": "missing_deployment_state",
+    "relevant_evidence": [],
+    "request_id": "3059aa182d4871930eba",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "Worker Cedar currently has twelve GiB reserved by the PyTorch caching allocator.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 21551,
+        "source_char_start": 21021,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6707c51ed1b7c043ea02efa8664974e9a09147ad128ee6e3c2701486e5326c5a",
+        "text": "PyTorch uses a caching memory allocator to speed up memory allocations. This\nallows fast memory deallocation without device synchronizations. However, the\nunused memory managed by the allocator will still show as if used in\n`nvidia-smi`. You can use {meth}`~torch.cuda.memory_allocated` and\n{meth}`~torch.cuda.max_memory_allocated` to monitor memory occupied by\ntensors, and use {meth}`~torch.cuda.memory_reserved` and\n{meth}`~torch.cuda.max_memory_reserved` to monitor the total amount of memory\nmanaged by the caching allocator.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 21828,
+        "source_char_start": 21552,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "7ac30a40ad8c7ddc54366a7c6381fc078f0beffbadaa6e12569a0580157dceae",
+        "text": "Calling {meth}`~torch.cuda.empty_cache`\nreleases all **unused** cached memory from PyTorch so that those can be used\nby other GPU applications. However, the occupied GPU memory by tensors will not\nbe freed so it can not increase the amount of GPU memory available for PyTorch.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 22315,
+        "source_char_start": 21986,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "a4b3f07298144e32f63d64aa6e3b29e066dc172b7557dff5f734bfe1294fd010",
+        "text": "For more advanced users, we offer more comprehensive memory benchmarking via\n{meth}`~torch.cuda.memory_stats`. We also offer the capability to capture a\ncomplete snapshot of the memory allocator state via\n{meth}`~torch.cuda.memory_snapshot`, which can help you understand the\nunderlying allocation patterns produced by your code.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 22615,
+        "source_char_start": 22397,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "1aaaa5cd7ff1f37466d5c015888569fd73e88d8192f5cbeb95f3158093352d16",
+        "text": "Use of a caching allocator can interfere with memory checking tools such as\n`cuda-memcheck`.  To debug memory errors using `cuda-memcheck`, set\n`PYTORCH_NO_CUDA_MEMORY_CACHING=1` in your environment to disable caching.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "No live worker measurements are supplied. Accounting APIs do not reveal an actual reading.",
+    "reasoning": "missing_deployment_state",
+    "relevant_evidence": [],
+    "request_id": "450305ec8b6b1c295d23",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D2"
+      ]
+    ],
+    "claim": "Suspending a job makes its allocated generic resources available for other jobs to use.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4775,
+        "source_char_start": 4369,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "06798ea49019e10728548a48bbeeab1efa2520338ae58aea16b19f2c927debab",
+        "text": "Requests for typed vs non-typed generic resources must be consistent within a job. For example, if you request --gres=gpu:2 with sbatch , you would not be able to request --gres=gpu:tesla:2 with srun to create a job step. The same holds true in reverse, if you request a typed GPU to create a job allocation, you should request a GPU of the same type to create a job step.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 5579,
+        "source_char_start": 5401,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "54b1583fdf6f2c8a31218548dc2f1df567900512596d5f02f97e41f72141f236",
+        "text": "Jobs will be allocated specific generic resources as needed to satisfy the request. If the job is suspended, those resources do not become available for use by other jobs.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4367,
+        "source_char_start": 3461,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "e1a14f245492b9a832e32ba77e513f20c5a480204240d31585477d6e0091278e",
+        "text": "All of these options are supported by the salloc , sbatch and srun commands. Note that all of the --gpu* options are only supported by Slurm's select/cons_tres plugin. Jobs requesting these options when the select/cons_tres plugin is not configured will be rejected. The --gres option requires an argument specifying which generic resources are required and how many resources using the form name[:type:count] while all of the --gpu* options require an argument of the form [type]:count . The name is the same name as specified by the GresTypes and Gres configuration parameters. type identifies a specific type of that generic resource (e.g. a specific model of GPU). count specifies how many resources are required and has a default value of 1. For example: sbatch --gres=gpu:kepler:2 ... .",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 6428,
+        "source_char_start": 5581,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "b76ce8ca149ef3fbc727a2346604c64b883a0ba381db98fe9ab95e6c0a4268cc",
+        "text": "Job steps can be allocated generic resources from those allocated to the job using the --gres option with the srun command as described above. By default, a job step will be allocated all of the generic resources that have been requested by the job, except those implicitly requested when a job is exclusive. If desired, the job step may explicitly specify a different generic resource count than the job. This design choice was based upon a scenario where each job executes many job steps. If job steps were granted access to all generic resources by default, some job steps would need to explicitly specify zero generic resource counts, which we considered more confusing. The job step can be allocated specific generic resources and those resources will not be available to other job steps. A simple example is shown below.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "D2 explicitly states suspension does not release those resources to other jobs.",
+    "reasoning": "direct",
+    "relevant_evidence": [
+      "D2"
+    ],
+    "request_id": "8efc7a43c885363fb84e",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [],
+    "claim": "Our serving host has enough available CPU RAM to back up the model weights during level 1 sleep.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1384,
+        "source_char_start": 1069,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "da52f000576f4ce884c3d9c5d3f303c9dfc0b5eff7d909ccfb366469e55f76be",
+        "text": "Level 1 sleep will offload the model weights and discard the KV cache. The content of KV cache is forgotten. Level 1 sleep is good for sleeping and waking up the engine to run the same model again. The model weights are backed up in CPU memory. Please make sure there's enough CPU memory to store the model weights.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2048,
+        "source_char_start": 1385,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "fddbc3738df0cd3dc7f7e598fb5f70683568bf027d2388cf5e608cac66f406c9",
+        "text": "Level 2 sleep will discard both the model weights and the KV cache (while the model's buffers are kept in CPU, like rope scaling tensors). The content of both the model weights and KV cache is forgotten. Level 2 sleep is good for sleeping and waking up the engine to run a different model or update the model, where previous model weights are not needed, e.g. RLHF weight update. Level 2 sleep is also useful when there is not enough CPU memory to back up the model weights, e.g. when a colocated trainer already uses CPU memory for offloading its own state; since nothing is backed up, restore the weights after waking up with `collective_rpc(\"reload_weights\")`.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3527,
+        "source_char_start": 2777,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "51246a801c20a16113036402c363d9eb6ae44720c2c78f742f7d7d56dacb3839",
+        "text": "During RLHF training, vLLM allows you to selectively wake up only the model weights or the KV cache using the tags argument in wake_up(). This fine-grained control is especially useful when updating model weights: by waking up just the weights (e.g., llm.wake_up(tags=[\"weights\"])), you avoid allocating memory for the KV cache until after the weight update is complete. This approach helps prevent GPU out-of-memory (OOM) errors, particularly with large models, by minimizing peak memory usage during weight synchronization and update operations.\n\nUse `tags=[\"weights\"]` or `tags=[\"kv_cache\"]` to control which resources are restored, useful for RLHF and weight updates. **Note** that `is_sleeping` will report `true` until all components are awake.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4843,
+        "source_char_start": 4401,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "685e1a818fac3a9bb7bc8b98cdda78199e1c8b37cf687863bc12eccccba33aa3",
+        "text": "Level-2 sleep backs up selected GPU parameters to pageable CPU memory; weights\nwake-up restores them in place and releases the backups. CPU parameters need no\ncopy. Allow enough host memory for backups. Level-1 behavior is unchanged.\n\nThe trainer must omit these parameters from updates, and reload/post-processing\nmust preserve their values and storage (including avoiding replacement with meta\ntensors). This option does not filter updates.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D1 requires enough CPU memory, but neither actual free host RAM nor model-weight size is supplied.",
+    "reasoning": "missing_deployment_state",
+    "relevant_evidence": [],
+    "request_id": "4242c629ce23933c71fe",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D3"
+      ]
+    ],
+    "claim": "Ray provides visible-device GPU isolation by setting CUDA_VISIBLE_DEVICES, which most machine-learning frameworks respect for assignment.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1543,
+        "source_char_start": 1034,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "09dd41d43ef8ea0bab91124da69217b355cfefef0983219815168c5058baf2e5",
+        "text": "Ray resources are *logical* and don't need a one-to-one mapping with physical resources. For example, you can start a Ray head node with zero logical CPUs by running `ray start --head --num-cpus=0`, even if the machine physically has eight. This setting signals the Ray scheduler not to schedule any tasks or actors that require logical CPU resources on the head node, mainly to reserve the head node for running Ray system processes. Ray mainly uses logical resources for admission control during scheduling.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1931,
+        "source_char_start": 1611,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "a55e674151aff25b046a9f2cbc935bd19b487aafedd55a82d4322310424c3aa5",
+        "text": "- Resource requirements of tasks or actors don't limit actual physical resource usage. For example, Ray doesn't prevent a `num_cpus=1` task from launching multiple threads and using multiple physical CPUs. You're responsible for making sure tasks or actors use no more resources than their resource requirements specify.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2484,
+        "source_char_start": 2259,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "d9c70021b519c8ed0c480e4349b48281021dbb27d451d406a6bdbd793a89b85b",
+        "text": "- Ray does provide {ref}`GPU <gpu-support>` isolation in the form of *visible devices*. It automatically sets the `CUDA_VISIBLE_DEVICES` environment variable, which most machine learning frameworks respect for GPU assignment.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 4834,
+        "source_char_start": 4740,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "ad336a07ea4a796eb608b12b224cf105c999f56ecc5aa715be9a1f8338a7376d",
+        "text": "You cannot dynamically update the resource capacities of a node after Ray starts on that node.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "D3 explicitly documents visible-device isolation and its framework qualification.",
+    "reasoning": "direct",
+    "relevant_evidence": [
+      "D3"
+    ],
+    "request_id": "e9456337de47ba5d88aa",
+    "source_id": "ray_resources"
+  }
+]

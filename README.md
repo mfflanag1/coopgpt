@@ -2,7 +2,11 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
-**Latest result — 11 October 2026:** the local grounded-QA experiment is complete. Qwen3:32b returned valid JSON for all 12 scored requests, but **8/12 passed the frozen exact-match/abstention test**, below the required **11/12**. The configuration did not qualify for further testing.
+**Current work — 12 October 2026 UTC:** a fresh **24-case AI-infrastructure documentation qualification** is prepared and frozen. It asks Qwen3:32b to classify supplied engineering claims as supported, contradicted or insufficient, with checked citations, across Kubernetes, PyTorch, Ray, Slurm and vLLM documentation. Independent model reviews reconciled labels and citation alternatives before inference; all **95 offline preparation tests** pass in normal and optimized Python.
+
+**Collection has not started.** The latest direct-host check reported battery power at 22%, below the fixed battery threshold; AC power is needed to proceed now. The one-shot gate requires **at least 22/24 joint successes**, all schemas valid, 7/8 supported, 7/8 contradicted, 8/8 insufficient, and zero false-supported predictions. A lexical ranker already locates all 16 decisive proofs, so this is a narrow documentation screen, with no broad reasoning, economic, energy or pooling claim. [Preparation report](research_directions/2026-10-12-infra-claim-qualification/REPORT.txt) · [Frozen protocol](research_directions/2026-10-12-infra-claim-qualification/PROTOCOL.txt) · [Annotation decisions](research_directions/2026-10-12-infra-claim-qualification/adjudication/DECISIONS.txt) · [Reproduction](research_directions/2026-10-12-infra-claim-qualification/REPRODUCE.txt).
+
+**Latest completed result — 11 October 2026:** the local grounded-QA experiment is complete. Qwen3:32b returned valid JSON for all 12 scored requests, but **8/12 passed the frozen exact-match/abstention test**, below the required **11/12**. The configuration did not qualify for further testing.
 
 | Accuracy check | Observed | Required |
 | --- | --- | --- |
@@ -15,7 +19,7 @@ Two misses contain the annotated answer inside an overly long passage span; two 
 
 The independent raw-response audit found no capture or protocol faults, and the dedicated model and server shut down cleanly. All **118 preparation tests** passed in normal and optimized Python; the frozen implementation was unchanged during collection. [Full report](research_directions/2026-10-11-mac-grounded-qa/REPORT.txt) · [Results](research_directions/2026-10-11-mac-grounded-qa/RESULTS.json) · [Independent audit](research_directions/2026-10-11-mac-grounded-qa/reviews/independent-outcome-audit.txt) · [Raw captures](research_directions/2026-10-11-mac-grounded-qa/capture/) · [Reproduction](research_directions/2026-10-11-mac-grounded-qa/REPRODUCE.txt).
 
-**Next planned step:** define an application-specific correctness rubric and independently validate answers and answerability on fresh cases before inspecting model predictions. Fix the success threshold before collection, distinguishing factual support, abstention and required output shape. Only after a new configuration qualifies should the project measure useful completions under arrival rates and latency requirements, with full-horizon energy on AC. This next experiment has not started. Compatible measurements from two hardware configurations and evidence of independent-owner pooling remain open requirements.
+**Next step:** run the frozen documentation qualification once host readiness passes, then independently audit its raw responses. A pass permits a separately designed fresh-case, human-reviewed service trial. Arrival rates, latency and full-horizon energy on AC come after a credible useful-work contract; two compatible hardware configurations and actual independent-owner pooling evidence remain separate gates. The preceding SQuAD result stays unchanged, and scores across these different tasks are not a model-improvement comparison.
 
 The entries below retain earlier results and the mathematical research history.
 

@@ -1,0 +1,41 @@
+Infrastructure claim qualification: reproduction and bounded collection
+
+Start in research_directions/2026-10-12-infra-claim-qualification in CoopGPT.
+Python standard library only; all unit-test server traffic is synthetic localhost.
+
+Offline checks (no Ollama inference):
+  python3 -B -m unittest discover -p 'test_*.py'
+  python3 -B -O -m unittest discover -p 'test_*.py'
+  python3 -B contract.py
+  python3 -B -c "from collect import check_freeze; print(check_freeze())"
+
+FREEZE.json pins inputs, code, reviews/adjudication, sources/licenses and protocol.
+ARTIFACT_MANIFEST.json checks the whole saved package except itself and bytecode.
+Source offsets count Unicode code points after Python read_text(), not raw bytes.
+Only Slurm excerpts undergo HTML stripping/unescaping/whitespace normalization;
+full upstream files remain byte-exact. Upstream license notices are retained.
+To regenerate cases or descriptive baselines, use a separate temporary copy of
+build_cases.py / baselines.py and their inputs. Do not edit a frozen study in place.
+
+One prospective live command (NOT executed as of the preparation report):
+  python3 -B collect.py --output capture
+
+Recheck host readiness immediately before this command. Require pinned qwen3:32b
+and Ollama binary/manifest, original 11434 running and idle, port 11562 unused,
+adequate disk, nominal thermal reports, and AC or explicitly permitted battery
+>=60%. Do not weaken these conditions. The collector starts its own P1 server;
+one fixed warmup and then 24 scored requests are allowed, with no quality-based
+reruns. All 24 run unless infrastructure fails. Output must not already exist;
+never delete failed captures to retry. Work budget is 1800 seconds plus bounded
+cleanup. Original Ollama is never stopped. No energy sampler is started.
+
+After a completed or aborted attempt, independently recount raw responses:
+  python3 -B audit_runtime.py . capture --output INDEPENDENT_ANALYSIS.json
+  python3 -B -O audit_runtime.py . capture --output /tmp/coop-infra-recount-optimized.json
+
+The recount preserves partial/orphan request information and separates integrity
+faults from semantic failures. It cannot prove there were no unseen attempts.
+The production score is frozen; no post-response alternative gold or label repair.
+Update the report and artifact manifest without changing precollection inputs.
+Only report a pass if the independent audit agrees and data_complete_valid is true.
+Do not automatically start concurrency, energy, human outreach or pooling work.
