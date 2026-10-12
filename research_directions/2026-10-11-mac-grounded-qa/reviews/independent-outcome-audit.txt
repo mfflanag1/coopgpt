@@ -1,0 +1,53 @@
+Independent Qwen grounded-QA outcome audit
+
+Result: the completed development collection is valid under the frozen saved-evidence checks, but the candidate DOES NOT QUALIFY. Independent strict raw recount gives 8/12 exact matches (66.6667%), agreeing with every stored request score, the campaign, and the frozen analyzer. No scoring/count or saved-evidence contradiction was found. There was no confirmation stage; its 36 prepared questions remain unobserved, not 0/36 observed failures.
+
+Evidence and method
+Canonical source/capture: /Users/maxf/projects/economics-research/game-theory/coopgpt/research_directions/2026-10-11-mac-grounded-qa/{source files,capture}
+FREEZE SHA-256: 7bc0c93b8d0fe5429efa88dd6228b069825babd362dfe308d1afe50ee05e20ad
+FREEZE created_utc: 2026-10-12T00:41:59.935277+00:00.
+Campaign: status=completed, selected=null, qualified=false; started 2026-10-12T00:57:54.230311+00:00, finished 2026-10-12T00:58:50.754764+00:00.
+All 29 frozen file hashes matched when checked after completion. Campaign freeze linkage matches. No outcomes were inspected until the parent explicitly released the completed capture.
+
+I independently concatenated raw streamed responses, parsed a strict one-field answer:string|null object with duplicate-key rejection, and reconstructed primary EM and official token F1 from frozen official annotations. Answerable EM uses SQuAD normalization and nonempty-normalized gold alternatives. Impossible items require literal null for primary credit. The raw prompt matched the frozen instruction, exact passage and question for all 12. No primary scoring function was imported for this recount. I then ran the frozen offline analyzer in memory as a separate comparison; it returned data_complete_valid=true, qualified=false, faults=[]. No files in the canonical package were changed and no live host, model, or network calls were made.
+
+Counts and gates
+12 assigned development jobs, 12 retained/dispatched raw rows, 12 API completions, 12 valid response schemas, 12 stage-summary records. No missing, duplicate, orphan or unexpected request/stage evidence. The sole fixed warmup completed and is excluded from these 12 scored jobs.
+
+Stratum                       Exact / observed   Frozen development minimum
+All                           8 / 12             11 / 12 — fails
+Answerable                    4 / 6              5 / 6 — fails
+Unanswerable                  4 / 6              5 / 6 — fails
+Short                         4 / 4              3 / 4 — passes
+Medium                        3 / 4              3 / 4 — passes
+Long                          1 / 4              3 / 4 — fails
+Short × answerable            2 / 2
+Short × unanswerable          2 / 2
+Medium × answerable           2 / 2
+Medium × unanswerable         1 / 2
+Long × answerable             0 / 2
+Long × unanswerable           1 / 2
+
+The development crossed-cell 1/2 floor is implied by the total 11/12 requirement and is explicitly reported by the analyzer. The 0/2 long-answerable cell also fails it. Confirmation's prospective 33/36, 16/18 per label, 10/12 per length and 5/6 per crossed-cell rules were never activated. There is no failed-infrastructure retry or fallback to count.
+
+Official diagnostic F1 sum is 8.849462365591398; mean 0.7374551971326165. Answerable F1 mean is 0.8082437275985663 and unanswerable mean is 2/3. F1 does not rescue any primary failure. Always-null would score 6/12 on this balanced development cohort; observed 8/12 is a descriptive comparison against a weak floor, not a competitive-baseline or statistical-superiority claim.
+
+Visible failure mechanisms; frozen scores remain unchanged
+1. 57264c42dd62a815002e80ca, Black_Death, long/answerable. Question asks what the bubonic-plague mechanism relied on. Every official annotation is "two populations of rodents". The response includes that answer followed by a long description of both populations, ending "a second that lack resistance". It is an overinclusive verbatim passage span; normalized EM is false and F1 is 1/3. It should not be described as an invented or factually contradictory answer.
+2. 5726545f708984140094c2a7, European_Union_law, long/answerable. Question asks how votes are weighted. Golds include "inversely" and "weighted inversely to member state size". The model copies the full sentence beginning "When voting takes place" and ending with the purpose of protecting smaller states. This is another overinclusive verbatim span; normalized EM is false, F1=0.5161290322580645.
+3. 5a55319c134fea001a0e19bc, Packet_switching, medium/unanswerable. Question: "Who created the cooperative agreement?" The model returns "MCI Telecommunications under a cooperative agreement with the NSF". The passage identifies the network engineer/operator and agreement parties but does not explicitly identify the agreement's creator. The official item requires null; this non-null answer fails the frozen rule. Its copied words do not by themselves establish the requested role.
+4. 5a551492134fea001a0e18e0, Packet_switching, long/unanswerable. Question: "State educational and economic development where helped by what?" Response: "computer networking between three of Michigan's public universities". The passage explicitly presents that networking as a means to help the state's educational/economic development. This is a post hoc annotation/question ambiguity: intended help is stated, while the question can be read as asking what actually helped. The official is_impossible=true label remains authoritative for this frozen benchmark score, so primary EM stays false. It would overstate this evidence to classify this case unreservedly as hallucination or general inability to understand the passage. No annotation was repaired or score loosened.
+
+All eight non-null answers, including the four exact failures, are literal contiguous substrings of their respective supplied passages. All four null outputs belong to official impossible items. Thus the observed primary failures combine excessive answer-span length with answering items labeled impossible; there are no observed false abstentions, malformed JSON responses or fabricated out-of-passage strings in this 12-item cohort.
+
+Stream, clock and controller evidence
+All 12 scored responses have done_reason=stop; none ended with length. Generated counts range 6–33 against cap 256. No nonempty thinking fields appeared and every capture records request_think=false. The minimum reported context allowance 4096 - prompt_eval_count - requested_cap is 3399, above the 128-token minimum. This diagnostic is not exact tokenizer certification because prompt counts may omit cached prefixes. The unscored warmup returns {"answer": "ready"}, ends with stop, and uses 7 tokens.
+
+There are 50 stage clock stamps, as required by 4*12+2. Recorded maximum paired bracket is 0.000002042 s; observed offset interval span is 0.001014291 s, below the frozen 0.010/0.050 s limits. The frozen independent analyzer also checks raw clock pairs, epoch/elapsed consistency and binding into stage stamps.
+
+Controller status=completed, errors=[], clean_unload_verified=true, loaded_after_unload={"models":[]}, dedicated_server_returncode=0. Runtime parallel values are [1]. Three loaded-model checks report qwen3:32b, the pinned digest, context 4096, and size_vram=size=21883477024 bytes. Reported server version is 0.20.0 and saved binary/manifest locks match.
+
+All 24 per-job host checks pass; together with stage before/after there are 26 saved host snapshots. Every snapshot reports AC Power with external_power_connected=true; battery is 24% throughout and agrees with the saved pmset text. The prospective 60% floor applies to permitted battery-only operation, not confirmed AC, so 24% on AC is not a gate violation. All saved original-server-idle fields are true. Thermal text reports no recorded thermal/performance warnings. Cleanup and host findings are saved evidence, not a fresh postflight probe by this auditor.
+
+Limits and adjudication
+This is a valid completed semantic-gate rejection, not a collection abort and not an estimate for the unattempted confirmation set. The sample consists of 12 fixed public benchmark items with possible pretraining exposure. Label/question ambiguity in one visible failure and stricter answer-boundary scoring in two others limit interpretations of the 8/12 result. Those qualifications do not turn it into a pass under the predeclared protocol. There is no confidence-bound claim, broad population reliability guarantee, causal comparison with earlier models/tasks, serving-capacity result, energy result, pooling contribution, field-level novelty claim, or demonstrated economic value. Host and clock evidence is sampled, model blob validation is saved attestation against the manifest, and this audit performs no live verification.

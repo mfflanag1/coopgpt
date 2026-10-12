@@ -1,74 +1,87 @@
-Grounded QA qualification: prepared, no inference collected
+Grounded QA qualification: completed; candidate did not qualify
 11 October 2026 local / 12 October 2026 UTC
 
-STATUS: PREPARED_WAITING_FOR_POWER
+STATUS: COMPLETED_NOT_QUALIFIED
 
-The next accuracy experiment is prepared for local Qwen3:32b Q4_K_M on the
-inventoried M3 Max/96GB, using one fixed passage-question prompt and a strict
-answer-or-null schema. No study warmup, development or confirmation request has
-been sent. There is no new accuracy, latency, energy or pooling result.
+Qwen3:32b returned 12/12 complete, schema-valid scored responses. Eight of twelve
+passed the frozen normalized exact-match/literal-null criterion (66.7%), below
+the required 11/12. Each answerability label scored 4/6, below its required 5/6.
+The 36-question confirmation pool was never activated. No energy or arrival-load
+sweep ran. This is a valid negative qualification result, not a transport failure.
 
-Why this is the next step
-The previous serial KEEP/DROP calibration obtained 1/9 and 0/9 exact answers,
-despite 18 completed API responses. Those frozen results remain unchanged.
-KEEP/DROP has an exact ordinary-code solution, so it is a poor workload for an
-economic argument for LLM serving. This new, prospective study instead uses
-passage-grounded QA with required abstention. It changes both task and model;
-any future success would not isolate the cause of the earlier failure.
+Strata (correct / offered)
+                      Answerable   Unanswerable   Total
+Short passages          2/2            2/2           4/4
+Medium passages         2/2            1/2           3/4
+Long passages           0/2            1/2           1/4
+Total                   4/6            4/6           8/12
+The long-passage group misses the required 3/4. Its answerable cell scored 0/2.
+With 2 questions per cell, at least 1 correct per cell is already implied by the
+11/12 total threshold; this is not an additional development hurdle.
+The small fixed cells do not establish a general causal length effect.
 
-Model recovery
-An installed-model listing was misleading: the Qwen3:32b manifest existed, but
-the 20,201,240,160-byte weight layer was missing and /api/show returned 404.
-The free official model was restored. A direct SHA256 pass verified all five
-content-addressed config/layer files against the pinned manifest. /api/show now
-succeeds. MODEL_LOCK.json records hashes, byte counts and verification time;
-MODEL_PULL.jsonl retains the recovery stream. No model weights are in Git.
-Manifest: 030ee887880fc378860c2dd35101da424377520441ae4bfe7be6deff8ade7840
-Runtime: Ollama 0.20.0. The current API advertises completion/tools/thinking;
-actual nullable-schema, non-thinking and runtime-P1 behavior remains untested.
-The first retained warmup will check these and abort on incompatibility.
+What the four misses mean
+Two answerable responses quote an overly broad contiguous passage span containing
+a gold answer. One expands 'two populations of rodents' into its full explanation;
+one returns the whole sentence about inversely weighted votes. Both fail the
+frozen minimal-answer contract and exact metric; neither is a clear factual
+contradiction. Diagnostic mean token F1 is 0.737455, never a replacement gate.
+Two officially unanswerable questions received a non-null passage span. The
+cooperative-agreement question asks who created it, while the passage names its
+parties/operator without explicitly identifying its creator. The other asks what
+helped state educational/economic development; the passage explicitly connects
+computer networking with that intended purpose, but does not establish achieved
+benefits. That intent-versus-outcome distinction makes the official unanswerable
+label defensible. The question wording admits an ambiguous reading; this is a
+post-result interpretation issue, not a verified source error or reason to rescore. All four remain
+failures; no item was removed, re-labeled, retried or granted semantic credit.
+FAILURE_CASES.json retains questions, passages, original labels and predictions.
 
-Prospective test
-The pinned official SQuAD2.0 public development source yields 12 development
-questions and 36 conditional confirmation questions. Article titles are split
-before selection; article, paragraph text and question IDs do not cross phases.
-Six cells cross answerable/unanswerable with three passage-character bands.
-Gold annotations never enter the request. Empty string is not an abstention:
-unanswerable success requires literal JSON null. Answerable exact match uses
-the official normalization, with F1 retained as a diagnostic only.
-Development requires 11/12 exact plus schema/subgroup conditions. Only a pass
-activates confirmation, which requires 33/36 exact, 16/18 in each answerability
-label, 10/12 in each length band, and 5/6 in each crossed cell. No alternate
-prompt, fallback model, retry, energy sweep or post-response gate revision.
-The single execution budget is 30 minutes, with request/cleanup headroom; it
-can abort before all questions finish. Aborted or unattempted items are retained
-or reported unobserved rather than replaced by a fresh run.
+Measured execution and evidence
+The charging Mac passed the fresh readiness check at 00:57:38 UTC (24% battery,
+AC connected, nominal reported thermal state, original11434 endpoint idle).
+The one-shot campaign ran 00:57:54–00:58:50 UTC, approximately 56.52 seconds including
+startup/warmup/cleanup. There were 13 study generation calls: one unscored warmup
+and 12 scored requests. Serial scored completion times ranged 1.77–6.85 seconds,
+median 3.45 seconds. These are descriptive timings for this sample/configuration,
+not latency under arrivals, throughput capacity or a production service guarantee.
+Every scored response ended with done_reason=stop, well below the 256-token cap.
+No nonempty thinking output was observed. Nullable JSON grammar, observed GPU
+loading/context 4096 and logged P1 were supported in this run. Per-request host,
+paired-clock and raw-response checks passed; independent audit faults are empty.
+The dedicated model unloaded cleanly and its server exited 0. The original server
+was idle before and after collection. Source-freeze hash remains
+7bc0c93b8d0fe5429efa88dd6228b069825babd362dfe308d1afe50ee05e20ad.
 
-Readiness and verification
-The last direct-host snapshot at 00:39:47 UTC showed battery power at 30%,
-AC disconnected, nominal reported thermal state and the original Ollama endpoint
-idle. The predeclared launch rule is AC or explicitly permitted battery >=60%.
-The power condition is unmet; no inference was started to create a known abort.
-See READINESS.json for saved evidence. A fresh check is required before launch.
-The independent offline analyzer checks raw streams, source/lock provenance,
-strict scoring, clocks, per-request host conditions and the conditional gate.
-Unit tests use mock servers and synthetic streams, not measured model responses.
-All 118 integrated tests passed in normal and optimized Python execution.
-Both cohorts exactly match deterministic regeneration; the independent source
-audit reports zero faults. See VERIFICATION.json and test logs for executed checks.
-A Fable 5.1 snapshot review found no blocking issue in its scope; low-severity
-findings and the coordinator's verified fixes are recorded under reviews/.
-No review opinion substitutes for an actual Qwen run or independent outcome audit.
+Design and provenance
+One prompt, one model, no alternate candidate or retry. The author SQuAD2.0 public
+development data were deterministically split by article before outcomes, with
+unique paragraph/ID assignment and six length-by-answerability cells. Source,
+selected cohorts, model pins, protocol, collector and scorer were frozen before
+collection. The earlier missing 20.2GB official Qwen weight layer was restored
+and all five content-addressed files independently hash-checked. Weights remain
+outside Git. All 118 integrated preparation tests passed normally and with -O;
+no frozen implementation changed for this run. A separate offline implementation
+recounts all raw responses and confirms the decision and evidence validity.
+The precollection Fable review, independent raw outcome audit and final Fable
+interpretation review are under reviews/. Both outcome reviews agree on the
+failed gate; verified wording clarifications are recorded in outcome-resolution.txt.
+Earlier KEEP/DROP results remain unchanged; because both task and model changed,
+this study cannot identify which change caused the different measured score.
 
-Interpretation and next gate
-This is a Wikipedia benchmark service proxy, not real support traffic. Public
-examples may have appeared in pretraining; the confirmation split is not the
-hidden SQuAD test. A finite pass would qualify only this configuration for the
-next bounded study, not certify population reliability or economic value.
-Naturally short answers do not qualify long-output serving. The always-null
-50% baseline is a weak floor, not a competitive economic alternative.
-Once power permits, run this frozen gate exactly once and independently recount
-it. Only after a valid pass should a new experiment use fresh inputs to measure
-quality under arrival rates, latency and full-horizon energy on AC. Evidence of
-independent-owner pooling and gains across two hardware configurations is still
-missing. No mathematical novelty or field-level breakthrough is claimed here.
+Interpretation and recommended next step
+This model/configuration has not met the declared accuracy gate. The data do not
+show that it answered only eight questions sensibly, nor that it is broadly
+unsuitable for useful serving. Exact span compliance, abstention and annotation
+interpretation are distinct issues. This public Wikipedia proxy may be in pretraining;
+it is not actual business traffic or the hidden benchmark test. Short answers
+do not qualify long generation. The always-null baseline is a weak 50% floor.
+Before another model or energy run, define an application-specific correctness
+contract and independently validate answerability on fresh cases without inspecting
+model predictions. A meaningful new study should distinguish factual support,
+unsupported answers and required output shape, preserving a strict success gate
+fixed before collection. This failed study remains closed and unmodified.
+Only after a new configuration meets its prospective quality gate should we run
+quality-aware arrival/latency tests with full-horizon energy. Independent-owner
+pooling and compatible measurements from two hardware configurations remain
+unestablished. There is no new theorem, causal efficiency result or breakthrough.
