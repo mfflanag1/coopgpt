@@ -1,0 +1,112 @@
+Prospective grounded question-answering qualification — 11 October 2026 local
+
+Purpose and boundary
+Qualify one model/workload configuration before any further scheduling or energy
+study. The task is answering a natural question using a supplied passage, including
+abstention when unsupported. SQuAD2.0 is a public Wikipedia reading benchmark,
+not private support traffic or demonstrated economic value. Its public development
+examples may have appeared in pretraining. The within-study confirmation split is
+not the benchmark's hidden test and does not establish unseen-knowledge accuracy.
+No energy, capacity, pooling or field-level contribution follows from this gate.
+
+Why the task changed
+The earlier KEEP/DROP task has an exact deterministic filter, making it a poor
+candidate for economically useful LLM work. Its failed results remain unchanged.
+This is a new prospective task and model, not a rescoring or causal model comparison.
+No optional KEEP diagnostic, second model, prompt search or retry is included.
+
+Candidate and measurement
+Qwen3:32b Q4_K_M (32.8B), pinned manifest
+030ee887880fc378860c2dd35101da424377520441ae4bfe7be6deff8ade7840;
+Ollama0.20.0, the inventoried M3 Max with96GB memory, context4096, P1 dedicated11562.
+Temperature0, seed0, max256 generated tokens; think:false at the top API level and
+/no_think in the prompt. These settings prioritize a fixed structured-output
+configuration, not the vendor's suggested0.7 non-thinking sampling setting. No
+claim that a seed or greedy decoding guarantees bitwise hardware reproducibility.
+All streams, including any thinking fields, are retained. Any nonempty thinking
+field aborts the stage because this experiment fixes non-thinking execution.
+The model tag initially existed while its20.2GB weight layer was absent; restoring
+that free official artifact is preparation, not a model response or experiment.
+Verify all content-addressed layers and record actual model metadata before launch.
+
+Source and deterministic sample
+Author source: https://rajpurkar.github.io/SQuAD-explorer/dataset/dev-v2.0.json
+Full source4370528bytes, SHA256
+80a5225e94905956a6446d296ca1093975c4d3b3260f1d6c8f68bc2ab77182d8.
+Dataset license CC BY-SA4.0 per the author's explorer site. Original questions,
+passages and annotations are retained; derived selection data carry that license.
+Article rank uses SHA256('coop-qa-20261012:'+title): first12 articles development,
+remaining23 confirmation. Each split ranks question IDs by its frozen seeded hash.
+No paragraph text is repeated within a phase, and no article, passage or question
+ID crosses phases. Validate every original answer offset and label before selection.
+No selection based on model responses, baseline predictions or manual convenience.
+
+Six strata cross answerable/unanswerable with passage character length:
+short <600; medium600–1199; long1200–2400. Longer passages are outside this design.
+Characters are reproducible input-length proxies, not model token counts. Select
+2 questions per cell for12 development and6 per cell for36 confirmation. The
+fixed prompt supplies only the passage and question plus public instructions/schema.
+Gold answers and answerability labels are never sent. One question per request.
+Do not pad inputs or force verbose outputs. Naturally short answers mean this
+workload does not qualify long-generation or long-document workloads.
+
+Scoring
+Require a complete strict JSON object with only answer:string|null. Duplicate keys,
+extra keys, other types, nonfinite JSON, malformed/trailing or excessively nested
+text are schema failures. A non-string API response chunk is a transport-contract
+failure; retain the chunk and abort rather than score malformed API evidence.
+Answerable primary score uses the original SQuAD normalized exact match against
+all nonempty-normalized official annotations: lowercase, remove ASCII punctuation,
+remove articles a/an/the, normalize whitespace. This tolerates those specified
+surface differences; it is not byte equality or a verbatim-span guarantee.
+Original annotations with empty normalization are retained as source but excluded
+from answerable golds exactly as in the official evaluator. Every answerable item
+must have at least one nonempty-normalized gold. No post-response annotation repair.
+Unanswerable success requires literal null, mapped to empty string for official
+metric comparison. Empty strings, punctuation or an article alone cannot substitute
+for null. Token-overlap F1 and source-span diagnostics never replace the primary gate.
+A complete correct response with done_reason=length can pass; retain that reason.
+Always-null is a frozen50% balanced-label baseline, a weak floor rather than a
+competitive economic alternative. Passing does not prove superiority to specialist
+QA systems, efficient retrieval tools, human workflows or the strongest baseline.
+
+Predeclared single-candidate gate
+Run all12 development questions once. Require all schemas valid, >=11 exact matches,
+>=5/6 within each answerability label and >=3/4 within each length band.
+Only a passing completed development stage activates36 confirmation questions.
+Require all schemas valid, >=33/36 exact matches, >=16/18 within each label,
+>=10/12 within each length band, and >=5/6 within each of the six crossed cells.
+These are finite engineering screens with a small error budget, not confidence
+bounds or certification of a population reliability rate. They were fixed before
+any new model output. Both per-request correctness and failures remain in any later
+useful-work denominator; qualification does not make every job correct.
+No fallback after either gate fails. Infrastructure failure aborts, not semantic
+rejection followed by a second prompt. Unattempted confirmation remains unobserved.
+
+Execution and stopping
+Fresh owned server per stage. Strictly serial requests with0.2second spacing.
+The first retained warmup is also the runtime compatibility check for the nullable
+JSON grammar, explicit non-thinking mode and logged P1; no extra dry inference.
+A grammar rejection or unrecognized parallelism log aborts without modification.
+One retained, unscored fixed JSON warmup per stage,60second soft/65second collector
+bound for larger-model loading. Trial90second soft/socket,95second collector,
+100second owned-server watchdog.1800second work budget with300second headroom
+before setup or another request; bounded cleanup may outlast the work budget.
+Direct-host AC or explicitly permitted battery>=60% with independent ioreg evidence,
+thermal checks and original11434 idle before/after every request and stage.
+No dispatch while power conditions fail. Cleanup must verify unloaded model and
+termination of the owned process group. No power sampler or energy inference.
+
+Use paired monotonic-before/wall/monotonic-after clocks. Elapsed durations and
+ordering use monotonic time. Brackets<=10ms, sampled offset interval span<=50ms.
+This cannot exclude unsampled wall jumps. Reported prompt tokens plus requested
+output cap must leave>=128 tokens in4096, with no truncation logs. Counts may omit
+cached prefixes, so this is a diagnostic rather than exact tokenizer certification.
+Record source freeze before collection. Freeze model, input, code and scoring; retain
+all raw responses, aborts and cleanup evidence. Independent offline recount must
+reproduce scores, strata, decision tree and evidence validity before promotion.
+
+If qualified, a subsequent separately frozen experiment must measure quality and
+latency under arrivals while collecting ready full-horizon energy telemetry on AC.
+New article/paragraph/task inputs are required. This protocol does not itself start
+that sweep or establish that an economic pooling comparison is ready.

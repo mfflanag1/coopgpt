@@ -1,0 +1,43 @@
+Grounded QA: offline reproduction and one-shot live run
+
+Start in research_directions/2026-10-11-mac-grounded-qa in the CoopGPT repository.
+Python standard library only. All test-server traffic is local and synthetic.
+
+Offline checks (no Ollama inference):
+  python3 -B -m unittest discover -p 'test_*.py'
+  python3 -B -O -m unittest discover -p 'test_*.py'
+  python3 -B -c "from calibrate import check_freeze; print(check_freeze())"
+
+FREEZE.json pins scientific inputs, protocol, configuration, code and tests.
+ARTIFACT_MANIFEST.json checks the saved package, excluding itself and bytecode.
+The full author dataset and original scorer copy are included with source hashes,
+source URLs and CC BY-SA 4.0 attribution for the dataset/selected derivatives.
+Tests independently load four inspected scorer functions only, with hash check;
+they do not execute the author's standalone evaluator CLI or require NumPy.
+
+Prospective local execution, only after fresh direct-host power/thermal checks:
+  python3 -B calibrate.py --output capture
+
+Prerequisites: restored pinned qwen3:32b, pinned Ollama binary/manifest, port11562
+free, original11434 endpoint running and idle, adequate disk, nominal thermal
+state, AC power or the explicitly allowed battery>=60% condition. Collection
+rechecks host power and original endpoint before/after every scored request.
+The owned dedicated server is unloaded and stopped on completion or failure.
+Do not change gates, prompt, model, source files, options or freeze to bypass a
+failure. The output directory must not exist; this is one prospective attempt,
+not authorization for repeated reruns or deleting failed evidence. No dry model
+calls precede the retained warmup. The 1800-second budget covers both stages.
+
+After a live attempt, successful or aborted:
+  python3 -B analyze.py . capture --output INDEPENDENT_ANALYSIS.json
+
+This offline command recounts raw responses, including orphan captures, and
+reports integrity faults separately from quality. It cannot manufacture missing
+captures or establish unseen attempts. Do not label the study qualified unless
+the raw audit agrees and data_complete_valid is true. Preserve all responses,
+failed stages and cleanup evidence. Update the report and artifact manifest
+without modifying the precollection freeze. Do not automatically launch energy
+or concurrency tests; those need the separate next protocol and fresh inputs.
+
+The current package has no capture directory and no INDEPENDENT_ANALYSIS.json:
+there have been zero study model requests. Never treat test fixtures as data.

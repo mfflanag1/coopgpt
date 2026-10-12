@@ -1,0 +1,74 @@
+Grounded QA qualification: prepared, no inference collected
+11 October 2026 local / 12 October 2026 UTC
+
+STATUS: PREPARED_WAITING_FOR_POWER
+
+The next accuracy experiment is prepared for local Qwen3:32b Q4_K_M on the
+inventoried M3 Max/96GB, using one fixed passage-question prompt and a strict
+answer-or-null schema. No study warmup, development or confirmation request has
+been sent. There is no new accuracy, latency, energy or pooling result.
+
+Why this is the next step
+The previous serial KEEP/DROP calibration obtained 1/9 and 0/9 exact answers,
+despite 18 completed API responses. Those frozen results remain unchanged.
+KEEP/DROP has an exact ordinary-code solution, so it is a poor workload for an
+economic argument for LLM serving. This new, prospective study instead uses
+passage-grounded QA with required abstention. It changes both task and model;
+any future success would not isolate the cause of the earlier failure.
+
+Model recovery
+An installed-model listing was misleading: the Qwen3:32b manifest existed, but
+the 20,201,240,160-byte weight layer was missing and /api/show returned 404.
+The free official model was restored. A direct SHA256 pass verified all five
+content-addressed config/layer files against the pinned manifest. /api/show now
+succeeds. MODEL_LOCK.json records hashes, byte counts and verification time;
+MODEL_PULL.jsonl retains the recovery stream. No model weights are in Git.
+Manifest: 030ee887880fc378860c2dd35101da424377520441ae4bfe7be6deff8ade7840
+Runtime: Ollama 0.20.0. The current API advertises completion/tools/thinking;
+actual nullable-schema, non-thinking and runtime-P1 behavior remains untested.
+The first retained warmup will check these and abort on incompatibility.
+
+Prospective test
+The pinned official SQuAD2.0 public development source yields 12 development
+questions and 36 conditional confirmation questions. Article titles are split
+before selection; article, paragraph text and question IDs do not cross phases.
+Six cells cross answerable/unanswerable with three passage-character bands.
+Gold annotations never enter the request. Empty string is not an abstention:
+unanswerable success requires literal JSON null. Answerable exact match uses
+the official normalization, with F1 retained as a diagnostic only.
+Development requires 11/12 exact plus schema/subgroup conditions. Only a pass
+activates confirmation, which requires 33/36 exact, 16/18 in each answerability
+label, 10/12 in each length band, and 5/6 in each crossed cell. No alternate
+prompt, fallback model, retry, energy sweep or post-response gate revision.
+The single execution budget is 30 minutes, with request/cleanup headroom; it
+can abort before all questions finish. Aborted or unattempted items are retained
+or reported unobserved rather than replaced by a fresh run.
+
+Readiness and verification
+The last direct-host snapshot at 00:39:47 UTC showed battery power at 30%,
+AC disconnected, nominal reported thermal state and the original Ollama endpoint
+idle. The predeclared launch rule is AC or explicitly permitted battery >=60%.
+The power condition is unmet; no inference was started to create a known abort.
+See READINESS.json for saved evidence. A fresh check is required before launch.
+The independent offline analyzer checks raw streams, source/lock provenance,
+strict scoring, clocks, per-request host conditions and the conditional gate.
+Unit tests use mock servers and synthetic streams, not measured model responses.
+All 118 integrated tests passed in normal and optimized Python execution.
+Both cohorts exactly match deterministic regeneration; the independent source
+audit reports zero faults. See VERIFICATION.json and test logs for executed checks.
+A Fable 5.1 snapshot review found no blocking issue in its scope; low-severity
+findings and the coordinator's verified fixes are recorded under reviews/.
+No review opinion substitutes for an actual Qwen run or independent outcome audit.
+
+Interpretation and next gate
+This is a Wikipedia benchmark service proxy, not real support traffic. Public
+examples may have appeared in pretraining; the confirmation split is not the
+hidden SQuAD test. A finite pass would qualify only this configuration for the
+next bounded study, not certify population reliability or economic value.
+Naturally short answers do not qualify long-output serving. The always-null
+50% baseline is a weak floor, not a competitive economic alternative.
+Once power permits, run this frozen gate exactly once and independently recount
+it. Only after a valid pass should a new experiment use fresh inputs to measure
+quality under arrival rates, latency and full-horizon energy on AC. Evidence of
+independent-owner pooling and gains across two hardware configurations is still
+missing. No mathematical novelty or field-level breakthrough is claimed here.
