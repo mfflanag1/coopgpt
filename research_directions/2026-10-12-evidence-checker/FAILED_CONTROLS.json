@@ -1,0 +1,384 @@
+[
+  {
+    "case": {
+      "acceptable_evidence": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "author_id": "A-01",
+      "claim": "The documented Mamba checkpoint matching-unit recommendation requires the chosen value to be a multiple of the per-state compression ratio for a model that uses one.",
+      "label": "supported",
+      "max_output_tokens": 256,
+      "passages": [
+        {
+          "id": "D1",
+          "source_char_end": 2233,
+          "source_char_start": 1887,
+          "source_file": "sources/vllm_apc.md",
+          "source_text_sha256": "0132e62d776f1527b768003ad29ff497c08fe10a7270ca7f97d3d52970678f5a",
+          "text": "Choose a value that divides the block size of every prefix-cacheable KV cache group, and that is a multiple of the per-state compression ratio for models that use one, such as sparse MLA. vLLM validates both at startup and names the offending sizes in the error. Read the served block size from the startup log. 64 is a reasonable starting point.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D2",
+          "source_char_end": 1885,
+          "source_char_start": 719,
+          "source_file": "sources/vllm_apc.md",
+          "source_text_sha256": "0e0c500331adaf5baa8402e84aedc9e37355fe14206eb12ceb49c0c72fad8cf8",
+          "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP\n\n```bash\nvllm serve <hybrid-model> \\\n    --mamba-cache-mode align \\\n    --prefix-match-unit 64 \\\n    --enable-mamba-shared-prefix-checkpoint\n```\n\n`--prefix-match-unit` is required. It sets the granularity at which prefix-cache keys are computed. When unset it defaults to the greatest common divisor of the prefix-cacheable KV cache group block sizes. Under `align` that is the block size itself, so no sub-block boundary exists and the flag has no effect.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D3",
+          "source_char_end": 2798,
+          "source_char_start": 2343,
+          "source_file": "sources/vllm_apc.md",
+          "source_text_sha256": "f8c1e4b9a55ead46470f8330cde1abb3bdfd2c6396f8a6f77e659382ce220650",
+          "text": "Long document query, where the user repeatedly queries the same long document (e.g. software manual or annual report) with different queries. In this case, instead of processing the long document again and again, APC allows vLLM to process this long document *only once*, and all future requests can avoid recomputing this long document by reusing its KV cache. This allows vLLM to serve future requests with much higher throughput and much lower latency.",
+          "transformation": "verbatim"
+        }
+      ],
+      "rationale": "A3 identifies the Mamba checkpoint matching unit and A4 states its per-state compression-ratio divisibility requirement. Both give a complete scoped proof.",
+      "relevant_evidence": [
+        "D1",
+        "D2"
+      ],
+      "request_id": "cde2aa62c98ac4cfbcc1",
+      "source_id": "vllm_apc"
+    },
+    "checker_response": "{\"accept\":false}",
+    "control": {
+      "candidate": {
+        "evidence": [
+          "D1",
+          "D2"
+        ],
+        "verdict": "supported"
+      },
+      "case_id": "cde2aa62c98ac4cfbcc1",
+      "error_group": "wrong_verdict",
+      "expected_accept": true,
+      "pair_id": "pair_cde2aa62c98ac4cfbcc1",
+      "request_id": "c_0bfd7a73706b6f50e39e"
+    },
+    "outcome": {
+      "case_id": "cde2aa62c98ac4cfbcc1",
+      "checker": {
+        "accept": false,
+        "schema_valid": true
+      },
+      "correct_decision": false,
+      "error_group": "wrong_verdict",
+      "expected_accept": true,
+      "pair_id": "pair_cde2aa62c98ac4cfbcc1",
+      "request_id": "c_0bfd7a73706b6f50e39e"
+    }
+  },
+  {
+    "case": {
+      "acceptable_evidence": [
+        [
+          "D1"
+        ],
+        [
+          "D3"
+        ]
+      ],
+      "author_id": "K-02",
+      "claim": "Node labels are the only output NFD can produce; it has no mechanism to add node taints.",
+      "label": "contradicted",
+      "max_output_tokens": 256,
+      "passages": [
+        {
+          "id": "D1",
+          "source_char_end": 3310,
+          "source_char_start": 2872,
+          "source_file": "sources/kubernetes.md",
+          "source_text_sha256": "154506d989675ac00ebb2e54ce09fb787fcde0d4bbeedb2a975a08adcbb9a7a0",
+          "text": "As an administrator, you can automatically discover and label all your GPU enabled nodes\nby deploying Kubernetes [Node Feature Discovery](https://github.com/kubernetes-sigs/node-feature-discovery) (NFD).\nNFD detects the hardware features that are available on each node in a Kubernetes cluster.\nTypically, NFD is configured to advertise those features as node labels, but NFD can also add extended resources, annotations, and node taints.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D2",
+          "source_char_end": 3579,
+          "source_char_start": 3311,
+          "source_file": "sources/kubernetes.md",
+          "source_text_sha256": "7e02d50d19d8c5f520f282058a6bef3407da3a4209feb1b5707bac789946ed62",
+          "text": "NFD is compatible with all [supported versions](/releases/version-skew-policy/#supported-versions) of Kubernetes.\nBy default NFD create the [feature labels](https://kubernetes-sigs.github.io/node-feature-discovery/master/usage/features.html) for the detected features.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D3",
+          "source_char_end": 3734,
+          "source_char_start": 3580,
+          "source_file": "sources/kubernetes.md",
+          "source_text_sha256": "6bf386dc5b645301fb95985151ada369edbe938f1ef4a939ab98058a030c11ad",
+          "text": "Administrators can leverage NFD to also taint nodes with specific features, so that only pods that request those features can be scheduled on those nodes.",
+          "transformation": "verbatim"
+        }
+      ],
+      "rationale": "K1 says NFD \"can also add extended resources, annotations, and node taints\"; K3 independently describes tainting.",
+      "relevant_evidence": [
+        "D1",
+        "D3"
+      ],
+      "request_id": "0b36f0af52e19b08d640",
+      "source_id": "kubernetes"
+    },
+    "checker_response": "{\"accept\":false}",
+    "control": {
+      "candidate": {
+        "evidence": [
+          "D1"
+        ],
+        "verdict": "contradicted"
+      },
+      "case_id": "0b36f0af52e19b08d640",
+      "error_group": "wrong_verdict",
+      "expected_accept": true,
+      "pair_id": "pair_0b36f0af52e19b08d640",
+      "request_id": "c_9ab338422311c15c9358"
+    },
+    "outcome": {
+      "case_id": "0b36f0af52e19b08d640",
+      "checker": {
+        "accept": false,
+        "schema_valid": true
+      },
+      "correct_decision": false,
+      "error_group": "wrong_verdict",
+      "expected_accept": true,
+      "pair_id": "pair_0b36f0af52e19b08d640",
+      "request_id": "c_9ab338422311c15c9358"
+    }
+  },
+  {
+    "case": {
+      "acceptable_evidence": [
+        [
+          "D1"
+        ]
+      ],
+      "author_id": "V-02",
+      "claim": "After a full level-1 sleep, calling release_kv_cache_memory() is accepted as a way to additionally drop the KV cache.",
+      "label": "contradicted",
+      "max_output_tokens": 256,
+      "passages": [
+        {
+          "id": "D1",
+          "source_char_end": 6417,
+          "source_char_start": 6088,
+          "source_file": "sources/vllm_sleep.md",
+          "source_text_sha256": "8088dc98c0848313c25d2d9c460fe27c581c0af1cdc705f3c074e3dd4b201e22",
+          "text": "`LLM.release_kv_cache_memory()` discards KV cache physical memory while keeping model weights resident. It requires a completed pause and all executor memory to be resident: full sleep, partial wake-up, and repeated release without restoring memory are rejected. Requests retained with `mode=\"keep\"` are recomputed after wake-up.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D2",
+          "source_char_end": 6695,
+          "source_char_start": 6419,
+          "source_file": "sources/vllm_sleep.md",
+          "source_text_sha256": "29a07f6455e71ea24a682c3322275b4db0d7912c11ffd3ac542076ab0943b2eb",
+          "text": "Use the default `cumem` backend with managed allocations: `enable_cumem_allocator=True` on CUDA/ROCm (also enabled by `enable_sleep_mode=True`), or `enable_sleep_mode=True` on XPU. Other backends must implement selective discard; CPU and unmanaged allocations are unsupported.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D3",
+          "source_char_end": 7301,
+          "source_char_start": 6921,
+          "source_file": "sources/vllm_sleep.md",
+          "source_text_sha256": "5834238d4cf146ce09d03a0d6642ce693db3f85bd8b7a21b13511f9ed5a7d2d1",
+          "text": "By default, CUDA graph memory stays on the GPU while asleep. With\n`sleep_mode_offload_cudagraph=True` (off by default), CUDA graphs are captured\ninto a cuMem pool that sleep backs up to CPU memory at both levels and any wake\nrestores in place, so graphs are replayed, not recaptured. It needs the default\n`cumem` backend, CUDA or ROCm, and CUDA graphs; otherwise it has no effect.",
+          "transformation": "verbatim"
+        }
+      ],
+      "rationale": "V1: \"full sleep, partial wake-up, and repeated release without restoring memory are rejected.\" Different proposition from old \"level 1 retains KV contents\".",
+      "relevant_evidence": [
+        "D1"
+      ],
+      "request_id": "4162108bbcb13ac86758",
+      "source_id": "vllm_sleep"
+    },
+    "checker_response": "{\"accept\":false}",
+    "control": {
+      "candidate": {
+        "evidence": [
+          "D1"
+        ],
+        "verdict": "contradicted"
+      },
+      "case_id": "4162108bbcb13ac86758",
+      "error_group": "wrong_verdict",
+      "expected_accept": true,
+      "pair_id": "pair_4162108bbcb13ac86758",
+      "request_id": "c_61dca9f5396897cbe9c5"
+    },
+    "outcome": {
+      "case_id": "4162108bbcb13ac86758",
+      "checker": {
+        "accept": false,
+        "schema_valid": true
+      },
+      "correct_decision": false,
+      "error_group": "wrong_verdict",
+      "expected_accept": true,
+      "pair_id": "pair_4162108bbcb13ac86758",
+      "request_id": "c_61dca9f5396897cbe9c5"
+    }
+  },
+  {
+    "case": {
+      "acceptable_evidence": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "author_id": "A-03",
+      "claim": "A `--prefix-match-unit` value that does not divide a prefix-cacheable group's block size is silently rounded by vLLM to the nearest valid divisor.",
+      "label": "contradicted",
+      "max_output_tokens": 256,
+      "passages": [
+        {
+          "id": "D1",
+          "source_char_end": 2233,
+          "source_char_start": 1887,
+          "source_file": "sources/vllm_apc.md",
+          "source_text_sha256": "0132e62d776f1527b768003ad29ff497c08fe10a7270ca7f97d3d52970678f5a",
+          "text": "Choose a value that divides the block size of every prefix-cacheable KV cache group, and that is a multiple of the per-state compression ratio for models that use one, such as sparse MLA. vLLM validates both at startup and names the offending sizes in the error. Read the served block size from the startup log. 64 is a reasonable starting point.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D2",
+          "source_char_end": 1885,
+          "source_char_start": 719,
+          "source_file": "sources/vllm_apc.md",
+          "source_text_sha256": "0e0c500331adaf5baa8402e84aedc9e37355fe14206eb12ceb49c0c72fad8cf8",
+          "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP\n\n```bash\nvllm serve <hybrid-model> \\\n    --mamba-cache-mode align \\\n    --prefix-match-unit 64 \\\n    --enable-mamba-shared-prefix-checkpoint\n```\n\n`--prefix-match-unit` is required. It sets the granularity at which prefix-cache keys are computed. When unset it defaults to the greatest common divisor of the prefix-cacheable KV cache group block sizes. Under `align` that is the block size itself, so no sub-block boundary exists and the flag has no effect.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D3",
+          "source_char_end": 3197,
+          "source_char_start": 2801,
+          "source_file": "sources/vllm_apc.md",
+          "source_text_sha256": "58181579407ba255a7791c5d9afdd578f1fc8ee050479d328e2c5c42ed058db2",
+          "text": "Multi-round conversation, where the user may chat with the application multiple times in the same chatting session. In this case, instead of processing the whole chatting history again and again, APC allows vLLM to reuse the processing results of the chat history across all future rounds of conversation, allowing vLLM to serve future requests with much higher throughput and much lower latency.",
+          "transformation": "verbatim"
+        }
+      ],
+      "rationale": "A3 identifies the matching-unit variable; A4 explicitly validates its divisibility and reports offending sizes in an error. Together these contradict silent rounding.",
+      "relevant_evidence": [
+        "D1",
+        "D2"
+      ],
+      "request_id": "1060399f4e560fb08721",
+      "source_id": "vllm_apc"
+    },
+    "checker_response": "{\"accept\":false}",
+    "control": {
+      "candidate": {
+        "evidence": [
+          "D1",
+          "D2"
+        ],
+        "verdict": "contradicted"
+      },
+      "case_id": "1060399f4e560fb08721",
+      "error_group": "citation",
+      "expected_accept": true,
+      "pair_id": "pair_1060399f4e560fb08721",
+      "request_id": "c_80c7551a4528dfe5da35"
+    },
+    "outcome": {
+      "case_id": "1060399f4e560fb08721",
+      "checker": {
+        "accept": false,
+        "schema_valid": true
+      },
+      "correct_decision": false,
+      "error_group": "citation",
+      "expected_accept": true,
+      "pair_id": "pair_1060399f4e560fb08721",
+      "request_id": "c_80c7551a4528dfe5da35"
+    }
+  },
+  {
+    "case": {
+      "acceptable_evidence": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "author_id": "R-01",
+      "claim": "For our proposed actor that sets no explicit num_cpus, Ray by default will not schedule it on a zero-CPU node and will set OMP_NUM_THREADS=1 in its environment.",
+      "label": "supported",
+      "max_output_tokens": 256,
+      "passages": [
+        {
+          "id": "D1",
+          "source_char_end": 7041,
+          "source_char_start": 6528,
+          "source_file": "sources/ray_resources.md",
+          "source_text_sha256": "5a2a879d6589034e9e135539d8a9c47d623bdae4fcf4e92fd12c26e919120752",
+          "text": "By default, Ray tasks use one logical CPU resource, and Ray actors use one logical CPU for scheduling and zero logical CPUs for running. As a result, by default, actors can't get scheduled on a zero-CPU node, but an infinite number of them can run on any non-zero-CPU node. The default resource requirements for actors exist for historical reasons. To avoid surprises, always set `num_cpus` explicitly for actors. If you specify resources explicitly, Ray requires them both at schedule time and at execution time.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D2",
+          "source_char_end": 3020,
+          "source_char_start": 2520,
+          "source_file": "sources/ray_resources.md",
+          "source_text_sha256": "36f22aeb889c635dfec7cde6582b217058ec97a966fbd144d0db40b4c9801adc",
+          "text": "If you set `num_cpus` on a task or actor through {func}`ray.remote() <ray.remote>` and {meth}`task.options() <ray.remote_function.RemoteFunction.options>` or {meth}`actor.options() <ray.actor.ActorClass.options>`, Ray sets the environment variable `OMP_NUM_THREADS=<num_cpus>`. If you don't specify `num_cpus`, Ray sets `OMP_NUM_THREADS=1` to avoid performance degradation with many workers. For background, see issue #6998. To override anything Ray sets by default, set `OMP_NUM_THREADS` explicitly.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D3",
+          "source_char_end": 8354,
+          "source_char_start": 8130,
+          "source_file": "sources/ray_resources.md",
+          "source_text_sha256": "88c779387feb236c141a84db3200148d7fbcb0fdc8fcb44b13d5aa464b126f8f",
+          "text": "Task and actor resource requirements affect Ray's scheduling concurrency. The sum of the logical resource requirements of all concurrently executing tasks and actors on a node can't exceed the node's total logical resources.",
+          "transformation": "verbatim"
+        }
+      ],
+      "rationale": "R2 gives the default-actor scheduling rule; R3 gives the OMP_NUM_THREADS=1 default when num_cpus is unspecified. Distinct from old \"head node zero CPUs\" (that was about `--num-cpus=0` admission control for CPU-requiring work, evidence line 21).",
+      "relevant_evidence": [
+        "D1",
+        "D2"
+      ],
+      "request_id": "e1a5a66f0d3c448e22ed",
+      "source_id": "ray_resources"
+    },
+    "checker_response": "{\"accept\":true}",
+    "control": {
+      "candidate": {
+        "evidence": [
+          "D1"
+        ],
+        "verdict": "supported"
+      },
+      "case_id": "e1a5a66f0d3c448e22ed",
+      "error_group": "citation",
+      "expected_accept": false,
+      "pair_id": "pair_e1a5a66f0d3c448e22ed",
+      "request_id": "c_b4f005ce40212de5f94f"
+    },
+    "outcome": {
+      "case_id": "e1a5a66f0d3c448e22ed",
+      "checker": {
+        "accept": true,
+        "schema_valid": true
+      },
+      "correct_decision": false,
+      "error_group": "citation",
+      "expected_accept": false,
+      "pair_id": "pair_e1a5a66f0d3c448e22ed",
+      "request_id": "c_b4f005ce40212de5f94f"
+    }
+  }
+]
