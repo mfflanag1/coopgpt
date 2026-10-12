@@ -1,0 +1,360 @@
+{
+  "method": "Independent packet-only addendum. The only file read in this recheck was the updated BLIND_CASES.json. Comparison used the prior blind annotation already present in this conversation; no gold, author, source, or other-model files were read. Initial review files were preserved.",
+  "input_path": "/tmp/coop-checker-study/BLIND_CASES.json",
+  "input_sha256": "1f50981f092e3dddfc8c9ab18e95ee90b946ebcd51002411f019b9fe89120ebc",
+  "case_count": 24,
+  "changed_case_count": 3,
+  "changed_annotations": [
+    {
+      "request_id": "d1bb0ebf0a18c69aa5ff",
+      "prior_request_id": "fbf414a5fe2e423edaad",
+      "change": "Claim replaces the ambiguous reference the flag with --enable-mamba-shared-prefix-checkpoint.",
+      "prior_verdict": "supported",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "proof": "D1 explicitly establishes that under align the unset prefix-match-unit defaults to the block size, leaving no sub-block boundary and making the checkpoint flag ineffective. D2 establishes divisibility by every prefix-cacheable KV-group block size and startup validation. Both passages are needed for the full conjunction.",
+      "resolved_ambiguity": "The claim now names the flag that has no effect.",
+      "ambiguities": [],
+      "missing_premises": [],
+      "scope_note": "These are necessary restrictions, not an assertion that any divisor alone makes the checkpoint effective; D1 lists further prerequisites."
+    },
+    {
+      "request_id": "0305fc279f7d45917843",
+      "prior_request_id": "9fd5d0d552c068d6b050",
+      "change": "Claim now asserts removal from GPU memory rather than staying resident, replacing the less precise assertion of CPU backup.",
+      "prior_verdict": "contradicted",
+      "verdict": "contradicted",
+      "evidence": [
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D2"
+        ]
+      ],
+      "proof": "D2 explicitly states that graph executables outside PyTorch pools stay resident. This directly negates the revised claim that those executables are removed from GPU memory rather than staying resident. D1 additionally establishes the enabled pool-offload context but is not needed to negate this explicit removal assertion.",
+      "resolved_ambiguity": "Remaining resident is logically incompatible with the revised removal claim; the earlier possibility of making a redundant CPU copy while retaining residency no longer matters.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "cde2aa62c98ac4cfbcc1",
+      "prior_request_id": "cde2aa62c98ac4cfbcc1",
+      "change": "D2 now supplies the Mamba shared-prefix-checkpoint and prefix-match-unit context that was missing; the long-document passage moves to D3.",
+      "prior_verdict": "insufficient",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "proof": "D2 identifies prefix-match-unit as the matching granularity used in the Mamba shared-prefix-checkpoint configuration. D1 states that the chosen value must be a multiple of the per-state compression ratio when the model uses one. Together the passages establish both the identity of the setting and the claimed requirement.",
+      "resolved_ambiguity": "The antecedent of Choose a value is now supplied within this packet.",
+      "ambiguities": [],
+      "missing_premises": [],
+      "scope_note": "D1 alone remains insufficient to attach the numerical rule to the named Mamba setting. The sufficient proof must include D2."
+    }
+  ],
+  "current_verdict_counts": {
+    "insufficient": 8,
+    "contradicted": 8,
+    "supported": 8
+  },
+  "current_annotations": [
+    {
+      "request_id": "b69f8fb5f89be045c58e",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "2927a52cee345edef7d5",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "4162108bbcb13ac86758",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ]
+    },
+    {
+      "request_id": "c90fe6070d33e40ce96b",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "d34e0b4d466634b89d2b",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "abf001bf24c6eeff32ba",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "8bbda05550ad460d41bb",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "030a92f7e353f0d512ac",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ]
+    },
+    {
+      "request_id": "1060399f4e560fb08721",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "4afd85c1b2e5236141ca",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ]
+    },
+    {
+      "request_id": "729947e609ae8f17d8d0",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "d1bb0ebf0a18c69aa5ff",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "025abf0c9fad2c6cb7fc",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "961043bd97604693c161",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "0b36f0af52e19b08d640",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ],
+        [
+          "D3"
+        ]
+      ]
+    },
+    {
+      "request_id": "54f6e12b06b0eddce5b6",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "33266ba91472cf6e4f25",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "0305fc279f7d45917843",
+      "verdict": "contradicted",
+      "evidence": [
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "832a17396ca631f0ece3",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": []
+    },
+    {
+      "request_id": "ff3090eb6a65f551715e",
+      "verdict": "supported",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ]
+    },
+    {
+      "request_id": "cde2aa62c98ac4cfbcc1",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    },
+    {
+      "request_id": "eebe120eea36c1ff9bff",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ]
+    },
+    {
+      "request_id": "ca151425c47478093d4a",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ]
+    },
+    {
+      "request_id": "e1a5a66f0d3c448e22ed",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ]
+    }
+  ],
+  "unchanged_cases": "The other 21 claim/packet judgments remain as initially annotated. Reordering has no bearing on their labels.",
+  "remaining_material_ambiguities_in_changed_cases": [],
+  "remaining_evidence_requirements": [
+    {
+      "request_id": "cde2aa62c98ac4cfbcc1",
+      "requirement": "Use D1 and D2 jointly: D1 supplies the compression-ratio rule, while D2 identifies the matching-unit setting."
+    },
+    {
+      "request_id": "d1bb0ebf0a18c69aa5ff",
+      "requirement": "Use D1 and D2 jointly for the no-effect condition and the validated every-group divisibility requirement."
+    },
+    {
+      "request_id": "1060399f4e560fb08721",
+      "requirement": "The unchanged contradiction still needs D2 to attach D1's error rule to prefix-match-unit."
+    }
+  ],
+  "interpretive_qualifications_preserved": [
+    "NFD can be used is a documented capability, not proof that the proposed deployment is already configured.",
+    "The Slurm library-holding behavior is for a step requesting a GPU; the claim concerns disabling that behavior.",
+    "Ray actor environment behavior is qualified by default and allows the explicit OMP_NUM_THREADS override described in D2.",
+    "The eight remaining insufficient claims still lack behavior-specific premises; document silence does not constitute contradiction."
+  ]
+}

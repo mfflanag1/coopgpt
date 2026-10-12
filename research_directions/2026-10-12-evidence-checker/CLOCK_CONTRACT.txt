@@ -1,0 +1,21 @@
+Implement clock_bridge.py only. Standard library; no hardware/network/filesystem operations.
+
+paired_stamp(monotonic_ns=None, wall_ns=None): defaults to time.monotonic_ns/time.time_ns;
+call mono, wall, mono in that order; return keys monotonic_before_ns, wall_ns,
+monotonic_after_ns with exact int nanoseconds. Reject bool/nonints/reversed brackets.
+Wall time may be negative (valid epoch); monotonic values must be nonnegative.
+
+duration_bounds_s(start,end): validate both stamps, reject chronological overlap
+(end.before < start.after), return lower_s=(end.before-start.after)/1e9 and
+upper_s=(end.after-start.before)/1e9. Do not compare or subtract wall timestamps.
+
+bridge_diagnostics(stamps,max_bracket_s=.01,max_observed_offset_span_s=.05):
+validate at least2 nonoverlapping ordered stamps. Tolerances finite nonnegative
+numbers, excluding bool. Each wall/mono offset lies in [wall-after,wall-before].
+Return valid, maximum_bracket_s, observed_offset_span_s, errors.
+The conservative observed span is max(all offset uppers)-min(all offset lowers)
+in seconds, not a minimum feasible span. Invalid when maxbracket >threshold or
+span >threshold; equality passes. Preserve both errors. Handle huge ints without
+premature float rounding: subtract integers first. Malformed inputs raiseValueError.
+This diagnoses sampled offsets only; never claims no unobserved clock jump.
+No mutation of input stamps. Python -O must preserve all checks.

@@ -1,0 +1,1088 @@
+[
+  {
+    "acceptable_evidence": [],
+    "author_id": "V-04",
+    "claim": "With enable_nccl_comm_suspend=True on NCCL 2.29.7 or newer, in-flight collectives are drained before ncclCommSuspend is invoked.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 8271,
+        "source_char_start": 7872,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "d3e58e2f68b454b91d185c1fad7b114f492b21cd6deecd5843192d888052380d",
+        "text": "By default, NCCL communicators keep their GPU buffers while asleep. With\n`enable_nccl_comm_suspend=True` (off by default, experimental), sleep releases\nthem with `ncclCommSuspend` and wake restores them with `ncclCommResume`. The\ncommunicators keep their topology, so they are not re-created. It needs NCCL\n2.29.7 or newer; with an older library, a warning is logged and the memory stays\non the GPU.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 7301,
+        "source_char_start": 6921,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "5834238d4cf146ce09d03a0d6642ce693db3f85bd8b7a21b13511f9ed5a7d2d1",
+        "text": "By default, CUDA graph memory stays on the GPU while asleep. With\n`sleep_mode_offload_cudagraph=True` (off by default), CUDA graphs are captured\ninto a cuMem pool that sleep backs up to CPU memory at both levels and any wake\nrestores in place, so graphs are replayed, not recaptured. It needs the default\n`cumem` backend, CUDA or ROCm, and CUDA graphs; otherwise it has no effect.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6417,
+        "source_char_start": 6088,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "8088dc98c0848313c25d2d9c460fe27c581c0af1cdc705f3c074e3dd4b201e22",
+        "text": "`LLM.release_kv_cache_memory()` discards KV cache physical memory while keeping model weights resident. It requires a completed pause and all executor memory to be resident: full sleep, partial wake-up, and repeated release without restoring memory are rejected. Requests retained with `mode=\"keep\"` are recomputed after wake-up.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "V4 describes suspend/resume, topology retention, and the version fallback, but says nothing about draining or ordering relative to in-flight work.",
+    "relevant_evidence": [],
+    "request_id": "b69f8fb5f89be045c58e",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "T-04",
+    "claim": "With expandable_segments enabled, the allocator automatically shrinks an expanded segment by unmapping its unused tail when memory pressure rises.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 27540,
+        "source_char_start": 27262,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "61510aa7ccee0bc0a0385614cf440f6b55cf1237fa9637ec6404ab662e73b05e",
+        "text": "`expandable_segments` (experimental, default: `False`) If set to `True`, this setting instructs\n  the allocator to create CUDA allocations that can later be expanded to better handle cases\n  where a job changing allocation sizes frequently, such as having a changing batch size.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 29766,
+        "source_char_start": 29208,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "32965a7fe092b9c71ecc0146bf1436dc1f86459109037ed416f7db51a39c7971",
+        "text": "`expandable_segments` allows the allocator to create a segment initially and then\n  expand its size later when more memory is needed. Instead of making one segment\n  per allocation, it tries to make one segment (per stream) that grows as\n  necessary. Now when the `N + 1` case runs, the allocations will tile nicely into\n  the one large segment until it fills up. Then more memory is requested and\n  appended to the end of the segment. This process does not create as many slivers\n  of unusable memory, so it is more likely to succeed at finding this memory.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 23404,
+        "source_char_start": 22908,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6cc53dd52116e48cefffa4aef69d3f8648daf15a755d6b1d94724a003552c527",
+        "text": "`backend` allows selecting the underlying allocator implementation.\n  Currently, valid options are `native`, which uses PyTorch's native\n  implementation, and `cudaMallocAsync`, which uses\n  [CUDA's built-in asynchronous allocator](https://developer.nvidia.com/blog/using-cuda-stream-ordered-memory-allocator-part-1/).\n  `cudaMallocAsync` requires CUDA 11.4 or newer. The default is `native`.\n  `backend` applies to all devices used by the process, and can't be\n  specified on a per-device basis.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D4",
+        "source_char_end": 27259,
+        "source_char_start": 26416,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "7ebf37a716b4e38653893f2e938eb3ff99c322090c3ded2e237566ee957f7c19",
+        "text": "`garbage_collection_threshold` helps actively reclaiming unused GPU memory to\n  avoid triggering expensive sync-and-reclaim-all operation (release_cached_blocks),\n  which can be unfavorable to latency-critical GPU applications (e.g., servers).\n  Upon setting this threshold (e.g., 0.8), the allocator will start reclaiming\n  GPU memory blocks if the GPU memory capacity usage exceeds the threshold (i.e.,\n  80% of the total memory allocated to the GPU application). The algorithm prefers\n  to free old & unused blocks first to avoid freeing blocks that are actively being\n  reused. The threshold value should be between greater than 0.0 and less than 1.0.\n  The default value is set at 1.0.\n\n  `garbage_collection_threshold` is only meaningful with `backend:native`.\n  With `backend:cudaMallocAsync`, `garbage_collection_threshold` is ignored.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "T4/T4b describe growth (\"expand its size later when more memory is needed\") and tiling; shrinking/unmapping is never addressed. Not the old \"first-fit\"/\"caching disabled faster\" propositions.",
+    "relevant_evidence": [],
+    "request_id": "2927a52cee345edef7d5",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "V-02",
+    "claim": "After a full level-1 sleep, calling release_kv_cache_memory() is accepted as a way to additionally drop the KV cache.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 6417,
+        "source_char_start": 6088,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "8088dc98c0848313c25d2d9c460fe27c581c0af1cdc705f3c074e3dd4b201e22",
+        "text": "`LLM.release_kv_cache_memory()` discards KV cache physical memory while keeping model weights resident. It requires a completed pause and all executor memory to be resident: full sleep, partial wake-up, and repeated release without restoring memory are rejected. Requests retained with `mode=\"keep\"` are recomputed after wake-up.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6695,
+        "source_char_start": 6419,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "29a07f6455e71ea24a682c3322275b4db0d7912c11ffd3ac542076ab0943b2eb",
+        "text": "Use the default `cumem` backend with managed allocations: `enable_cumem_allocator=True` on CUDA/ROCm (also enabled by `enable_sleep_mode=True`), or `enable_sleep_mode=True` on XPU. Other backends must implement selective discard; CPU and unmanaged allocations are unsupported.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 7301,
+        "source_char_start": 6921,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "5834238d4cf146ce09d03a0d6642ce693db3f85bd8b7a21b13511f9ed5a7d2d1",
+        "text": "By default, CUDA graph memory stays on the GPU while asleep. With\n`sleep_mode_offload_cudagraph=True` (off by default), CUDA graphs are captured\ninto a cuMem pool that sleep backs up to CPU memory at both levels and any wake\nrestores in place, so graphs are replayed, not recaptured. It needs the default\n`cumem` backend, CUDA or ROCm, and CUDA graphs; otherwise it has no effect.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "V1: \"full sleep, partial wake-up, and repeated release without restoring memory are rejected.\" Different proposition from old \"level 1 retains KV contents\".",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "4162108bbcb13ac86758",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "L-04",
+    "claim": "Slurm's gres/gpuutil for a step is sampled once at step end rather than during the run.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 17088,
+        "source_char_start": 16274,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "eda4ed4de5e380f50f4df9e38da79e60f162bcd8eac01cb3f6c3e5ae308f0c02",
+        "text": "GPU memory and GPU utilization can be tracked as TRES for tasks using GPU resources. If AccountingStorageTRES=gres/gpu is configured, gres/gpumem and gres/gpuutil will automatically be configured and gathered from GPU jobs. gres/gpumem and gres/gpuutil can also be set individually when gres/gpu is not set. gres/gpumem and gres/gpuutil are only available for NVIDIA GPUs when using AutoDetect=nvml , and AMD GPUs when using AutoDetect=rsmi . Devices under shard device memory enforcement feed gres/gpumem from the kernel instead, regardless of vendor. NVML does not support utilization metrics for MIGs, so Slurm does not provide gpumem or gpuutil accounting for MIG devices.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8866,
+        "source_char_start": 8579,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "ff42dcd87525e7aa33e40efee0cfaf7c89ecff01bbbcf1c71e999d6f20ff5c5d",
+        "text": "AutoDetect=nvml and AutoDetect=rsmi also cause the slurmstepd to load and hold open the library to perform accounting on GPU usage when the associated step has requested a gpu. If you do not want this to happen have JobAcctGatherParams=DisableGPUAcct in the slurm.conf.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 19215,
+        "source_char_start": 18693,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "8c91931323ae95c542dcbb412c92f0f6f8d0b79d406ab91bc610edf11af5a07e",
+        "text": "In the case of Slurm's GRES plugin for GPUs, the environment variable CUDA_VISIBLE_DEVICES is set for each job step to determine which GPUs are available for its use on each node. This environment variable is only set when tasks are launched on a specific compute node (no global environment variable is set for the salloc command and the environment variable set for the sbatch command only reflects the GPUs allocated to that job on that node, node zero of the allocation).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "The packet describes GPU utilization accounting and holding the library open for per-step GPU accounting; it does not state when or how often utilization is sampled.",
+    "relevant_evidence": [],
+    "request_id": "c90fe6070d33e40ce96b",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "K-01",
+    "claim": "For our proposed NFD deployment, NFD can be used both to advertise detected node features as node labels and to taint those nodes so that only pods requesting those features are scheduled on them.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3310,
+        "source_char_start": 2872,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "154506d989675ac00ebb2e54ce09fb787fcde0d4bbeedb2a975a08adcbb9a7a0",
+        "text": "As an administrator, you can automatically discover and label all your GPU enabled nodes\nby deploying Kubernetes [Node Feature Discovery](https://github.com/kubernetes-sigs/node-feature-discovery) (NFD).\nNFD detects the hardware features that are available on each node in a Kubernetes cluster.\nTypically, NFD is configured to advertise those features as node labels, but NFD can also add extended resources, annotations, and node taints.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3734,
+        "source_char_start": 3580,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6bf386dc5b645301fb95985151ada369edbe938f1ef4a939ab98058a030c11ad",
+        "text": "Administrators can leverage NFD to also taint nodes with specific features, so that only pods that request those features can be scheduled on those nodes.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3976,
+        "source_char_start": 3736,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "df1b070b8c8f4e721a6eb212c7f1d3e854c501d75b0a89b8480118475ffc38b6",
+        "text": "You also need a plugin for NFD that adds appropriate labels to your nodes; these might be generic\nlabels or they could be vendor specific. Your GPU vendor may provide a third party\nplugin for NFD; check their documentation for more details.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "K1 establishes detection + labels (and that taints are possible); K3 supplies the \"only pods that request those features\" scheduling effect. Neither alone states both halves.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "d34e0b4d466634b89d2b",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "R-04",
+    "claim": "Ray retries automatic GPU detection after a driver initialization failure without requiring the node to restart.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4725,
+        "source_char_start": 3971,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "0a8b9394b5b54a5d668248ce9612c089af0cc7f0c4d76fbf1f3d0c6fe0f61cc3",
+        "text": "By default, Ray nodes start with pre-defined CPU, GPU, and memory resources. Ray sets the quantities of these logical resources on each node to the physical quantities it detects automatically. By default, Ray configures these resources with the following rules:\n\n- **Number of logical CPUs**: Ray sets `num_cpus` to the number of CPUs of the machine or container.\n- **Number of logical GPUs**: Ray sets `num_gpus` to the number of GPUs of the machine or container.\n- **Memory**: Ray sets `memory` to 70% of \"available memory\" when the Ray runtime starts.\n- **Object store memory**: Ray sets `object_store_memory` to 30% of \"available memory\" when the Ray runtime starts. Object store memory isn't a logical resource, and you can't use it for scheduling.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3020,
+        "source_char_start": 2520,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "36f22aeb889c635dfec7cde6582b217058ec97a966fbd144d0db40b4c9801adc",
+        "text": "If you set `num_cpus` on a task or actor through {func}`ray.remote() <ray.remote>` and {meth}`task.options() <ray.remote_function.RemoteFunction.options>` or {meth}`actor.options() <ray.actor.ActorClass.options>`, Ray sets the environment variable `OMP_NUM_THREADS=<num_cpus>`. If you don't specify `num_cpus`, Ray sets `OMP_NUM_THREADS=1` to avoid performance degradation with many workers. For background, see issue #6998. To override anything Ray sets by default, set `OMP_NUM_THREADS` explicitly.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 8354,
+        "source_char_start": 8130,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "88c779387feb236c141a84db3200148d7fbcb0fdc8fcb44b13d5aa464b126f8f",
+        "text": "Task and actor resource requirements affect Ray's scheduling concurrency. The sum of the logical resource requirements of all concurrently executing tasks and actors on a node can't exceed the node's total logical resources.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "The packet describes automatic resource defaults but says nothing about driver-initialization failures, retry behavior, or a restart requirement.",
+    "relevant_evidence": [],
+    "request_id": "abf001bf24c6eeff32ba",
+    "source_id": "ray_resources"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "A-04",
+    "claim": "For the long-document workload, APC evicts the cached document's KV blocks in least-recently-used order once cache memory is exhausted.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 2798,
+        "source_char_start": 2343,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "f8c1e4b9a55ead46470f8330cde1abb3bdfd2c6396f8a6f77e659382ce220650",
+        "text": "Long document query, where the user repeatedly queries the same long document (e.g. software manual or annual report) with different queries. In this case, instead of processing the long document again and again, APC allows vLLM to process this long document *only once*, and all future requests can avoid recomputing this long document by reusing its KV cache. This allows vLLM to serve future requests with much higher throughput and much lower latency.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3197,
+        "source_char_start": 2801,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "58181579407ba255a7791c5d9afdd578f1fc8ee050479d328e2c5c42ed058db2",
+        "text": "Multi-round conversation, where the user may chat with the application multiple times in the same chatting session. In this case, instead of processing the whole chatting history again and again, APC allows vLLM to reuse the processing results of the chat history across all future rounds of conversation, allowing vLLM to serve future requests with much higher throughput and much lower latency.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2233,
+        "source_char_start": 1887,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "0132e62d776f1527b768003ad29ff497c08fe10a7270ca7f97d3d52970678f5a",
+        "text": "Choose a value that divides the block size of every prefix-cacheable KV cache group, and that is a multiple of the per-state compression ratio for models that use one, such as sparse MLA. vLLM validates both at startup and names the offending sizes in the error. Read the served block size from the startup log. 64 is a reasonable starting point.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "A1 describes reuse of the document's KV cache; no eviction policy appears anywhere in the packet. Distinct from old \"survives process restart\" (persistence) proposition.",
+    "relevant_evidence": [],
+    "request_id": "8bbda05550ad460d41bb",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "T-03",
+    "claim": "In our proposed multi-GPU process, the allocator backend can be set to cudaMallocAsync for one device while the remaining devices keep the native backend.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 23404,
+        "source_char_start": 22908,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6cc53dd52116e48cefffa4aef69d3f8648daf15a755d6b1d94724a003552c527",
+        "text": "`backend` allows selecting the underlying allocator implementation.\n  Currently, valid options are `native`, which uses PyTorch's native\n  implementation, and `cudaMallocAsync`, which uses\n  [CUDA's built-in asynchronous allocator](https://developer.nvidia.com/blog/using-cuda-stream-ordered-memory-allocator-part-1/).\n  `cudaMallocAsync` requires CUDA 11.4 or newer. The default is `native`.\n  `backend` applies to all devices used by the process, and can't be\n  specified on a per-device basis.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 22885,
+        "source_char_start": 22617,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "c4cd61570026c6de83f039294bb089a1ec7f90c62e61be2c32993651c2308498",
+        "text": "The behavior of the caching allocator can be controlled via the environment variable\n`PYTORCH_ALLOC_CONF`. `PYTORCH_CUDA_ALLOC_CONF` is its alias and is provided only\nfor backward compatibility.\nThe format is `PYTORCH_ALLOC_CONF=<option>:<value>,<option2>:<value2>...`",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 29766,
+        "source_char_start": 29208,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "32965a7fe092b9c71ecc0146bf1436dc1f86459109037ed416f7db51a39c7971",
+        "text": "`expandable_segments` allows the allocator to create a segment initially and then\n  expand its size later when more memory is needed. Instead of making one segment\n  per allocation, it tries to make one segment (per stream) that grows as\n  necessary. Now when the `N + 1` case runs, the allocations will tile nicely into\n  the one large segment until it fills up. Then more memory is requested and\n  appended to the end of the segment. This process does not create as many slivers\n  of unusable memory, so it is more likely to succeed at finding this memory.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "T1: \"`backend` applies to all devices used by the process, and can't be specified on a per-device basis.\"",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "030a92f7e353f0d512ac",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "A-03",
+    "claim": "A `--prefix-match-unit` value that does not divide a prefix-cacheable group's block size is silently rounded by vLLM to the nearest valid divisor.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 2233,
+        "source_char_start": 1887,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "0132e62d776f1527b768003ad29ff497c08fe10a7270ca7f97d3d52970678f5a",
+        "text": "Choose a value that divides the block size of every prefix-cacheable KV cache group, and that is a multiple of the per-state compression ratio for models that use one, such as sparse MLA. vLLM validates both at startup and names the offending sizes in the error. Read the served block size from the startup log. 64 is a reasonable starting point.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1885,
+        "source_char_start": 719,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "0e0c500331adaf5baa8402e84aedc9e37355fe14206eb12ceb49c0c72fad8cf8",
+        "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP\n\n```bash\nvllm serve <hybrid-model> \\\n    --mamba-cache-mode align \\\n    --prefix-match-unit 64 \\\n    --enable-mamba-shared-prefix-checkpoint\n```\n\n`--prefix-match-unit` is required. It sets the granularity at which prefix-cache keys are computed. When unset it defaults to the greatest common divisor of the prefix-cacheable KV cache group block sizes. Under `align` that is the block size itself, so no sub-block boundary exists and the flag has no effect.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3197,
+        "source_char_start": 2801,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "58181579407ba255a7791c5d9afdd578f1fc8ee050479d328e2c5c42ed058db2",
+        "text": "Multi-round conversation, where the user may chat with the application multiple times in the same chatting session. In this case, instead of processing the whole chatting history again and again, APC allows vLLM to reuse the processing results of the chat history across all future rounds of conversation, allowing vLLM to serve future requests with much higher throughput and much lower latency.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "A3 identifies the matching-unit variable; A4 explicitly validates its divisibility and reports offending sizes in an error. Together these contradict silent rounding.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "1060399f4e560fb08721",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "L-02",
+    "claim": "Under the GPU GRES plugin, the salloc command exports a global CUDA_VISIBLE_DEVICES covering all GPUs in the allocation.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 19215,
+        "source_char_start": 18693,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "8c91931323ae95c542dcbb412c92f0f6f8d0b79d406ab91bc610edf11af5a07e",
+        "text": "In the case of Slurm's GRES plugin for GPUs, the environment variable CUDA_VISIBLE_DEVICES is set for each job step to determine which GPUs are available for its use on each node. This environment variable is only set when tasks are launched on a specific compute node (no global environment variable is set for the salloc command and the environment variable set for the sbatch command only reflects the GPUs allocated to that job on that node, node zero of the allocation).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 20762,
+        "source_char_start": 19914,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "9e7b22ff023f171a2df3539c37e499d023432b6b29332fd81a422d782c7eb834",
+        "text": "The CUDA_VISIBLE_DEVICES environment variable will also be set in the job's Prolog and Epilog programs. Note that the environment variable set for the job may differ from that set for the Prolog and Epilog if Slurm is configured to constrain the device files visible to a job using Linux cgroup. This is because the Prolog and Epilog programs run outside of any Linux cgroup while the job runs inside of the cgroup and may thus have a different set of visible devices. For example, if a job is allocated the device \"/dev/nvidia1\", then CUDA_VISIBLE_DEVICES will be set to a value of \"1\" in the Prolog and Epilog while the job's value of CUDA_VISIBLE_DEVICES will be set to a value of \"0\" (i.e. the first GPU device visible to the job).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 21263,
+        "source_char_start": 20858,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "eea5b32f2be61b1a0980df92f57c8989ab127ea44ab8218151a03b1684071033",
+        "text": "When possible, Slurm automatically determines the GPUs on the system using NVML. NVML (which powers the nvidia-smi tool) numbers GPUs in order by their PCI bus IDs. For this numbering to match the numbering reported by CUDA, the CUDA_DEVICE_ORDER environmental variable must be set to CUDA_DEVICE_ORDER=PCI_BUS_ID",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "L1: \"no global environment variable is set for the salloc command\".",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "4afd85c1b2e5236141ca",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "L-01",
+    "claim": "For our proposed node using AutoDetect=nvml with cgroup device constraint enabled, the CUDA_VISIBLE_DEVICES value seen by the Prolog may differ from the value seen by the job, and the slurmstepd's holding of the GPU library for per-step GPU accounting can be disabled with JobAcctGatherParams=DisableGPUAcct.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 20762,
+        "source_char_start": 19914,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "9e7b22ff023f171a2df3539c37e499d023432b6b29332fd81a422d782c7eb834",
+        "text": "The CUDA_VISIBLE_DEVICES environment variable will also be set in the job's Prolog and Epilog programs. Note that the environment variable set for the job may differ from that set for the Prolog and Epilog if Slurm is configured to constrain the device files visible to a job using Linux cgroup. This is because the Prolog and Epilog programs run outside of any Linux cgroup while the job runs inside of the cgroup and may thus have a different set of visible devices. For example, if a job is allocated the device \"/dev/nvidia1\", then CUDA_VISIBLE_DEVICES will be set to a value of \"1\" in the Prolog and Epilog while the job's value of CUDA_VISIBLE_DEVICES will be set to a value of \"0\" (i.e. the first GPU device visible to the job).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8866,
+        "source_char_start": 8579,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "ff42dcd87525e7aa33e40efee0cfaf7c89ecff01bbbcf1c71e999d6f20ff5c5d",
+        "text": "AutoDetect=nvml and AutoDetect=rsmi also cause the slurmstepd to load and hold open the library to perform accounting on GPU usage when the associated step has requested a gpu. If you do not want this to happen have JobAcctGatherParams=DisableGPUAcct in the slurm.conf.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 19215,
+        "source_char_start": 18693,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "8c91931323ae95c542dcbb412c92f0f6f8d0b79d406ab91bc610edf11af5a07e",
+        "text": "In the case of Slurm's GRES plugin for GPUs, the environment variable CUDA_VISIBLE_DEVICES is set for each job step to determine which GPUs are available for its use on each node. This environment variable is only set when tasks are launched on a specific compute node (no global environment variable is set for the salloc command and the environment variable set for the sbatch command only reflects the GPUs allocated to that job on that node, node zero of the allocation).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "L2 covers the Prolog-vs-job difference under cgroup constraint; L4 covers library holding and the DisableGPUAcct opt-out.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "729947e609ae8f17d8d0",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "A-02",
+    "claim": "For the hybrid Mamba shared-prefix checkpoint under `--mamba-cache-mode align`, leaving `--prefix-match-unit` unset makes `--enable-mamba-shared-prefix-checkpoint` have no effect, and any value chosen must divide the block size of every prefix-cacheable KV cache group, which vLLM validates at startup.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 1885,
+        "source_char_start": 719,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "0e0c500331adaf5baa8402e84aedc9e37355fe14206eb12ceb49c0c72fad8cf8",
+        "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP\n\n```bash\nvllm serve <hybrid-model> \\\n    --mamba-cache-mode align \\\n    --prefix-match-unit 64 \\\n    --enable-mamba-shared-prefix-checkpoint\n```\n\n`--prefix-match-unit` is required. It sets the granularity at which prefix-cache keys are computed. When unset it defaults to the greatest common divisor of the prefix-cacheable KV cache group block sizes. Under `align` that is the block size itself, so no sub-block boundary exists and the flag has no effect.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 2233,
+        "source_char_start": 1887,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "0132e62d776f1527b768003ad29ff497c08fe10a7270ca7f97d3d52970678f5a",
+        "text": "Choose a value that divides the block size of every prefix-cacheable KV cache group, and that is a multiple of the per-state compression ratio for models that use one, such as sparse MLA. vLLM validates both at startup and names the offending sizes in the error. Read the served block size from the startup log. 64 is a reasonable starting point.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2798,
+        "source_char_start": 2343,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "f8c1e4b9a55ead46470f8330cde1abb3bdfd2c6396f8a6f77e659382ce220650",
+        "text": "Long document query, where the user repeatedly queries the same long document (e.g. software manual or annual report) with different queries. In this case, instead of processing the long document again and again, APC allows vLLM to process this long document *only once*, and all future requests can avoid recomputing this long document by reusing its KV cache. This allows vLLM to serve future requests with much higher throughput and much lower latency.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "A3 explains the default-to-block-size consequence; A4 gives the divisibility rule and startup validation.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "d1bb0ebf0a18c69aa5ff",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "K-04",
+    "claim": "Extended resources that NFD adds for GPUs can be consumed by a container through its resource limits in the same way as the device-plugin GPU resource.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3310,
+        "source_char_start": 2872,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "154506d989675ac00ebb2e54ce09fb787fcde0d4bbeedb2a975a08adcbb9a7a0",
+        "text": "As an administrator, you can automatically discover and label all your GPU enabled nodes\nby deploying Kubernetes [Node Feature Discovery](https://github.com/kubernetes-sigs/node-feature-discovery) (NFD).\nNFD detects the hardware features that are available on each node in a Kubernetes cluster.\nTypically, NFD is configured to advertise those features as node labels, but NFD can also add extended resources, annotations, and node taints.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3579,
+        "source_char_start": 3311,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "7e02d50d19d8c5f520f282058a6bef3407da3a4209feb1b5707bac789946ed62",
+        "text": "NFD is compatible with all [supported versions](/releases/version-skew-policy/#supported-versions) of Kubernetes.\nBy default NFD create the [feature labels](https://kubernetes-sigs.github.io/node-feature-discovery/master/usage/features.html) for the detected features.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3976,
+        "source_char_start": 3736,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "df1b070b8c8f4e721a6eb212c7f1d3e854c501d75b0a89b8480118475ffc38b6",
+        "text": "You also need a plugin for NFD that adds appropriate labels to your nodes; these might be generic\nlabels or they could be vendor specific. Your GPU vendor may provide a third party\nplugin for NFD; check their documentation for more details.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "K1 only says NFD \"can also add extended resources\"; the packet never says how/whether NFD extended resources are requested or scheduled. Distinct from old K-D2 (limits/requests rules concern the device-plugin resource, and that excerpt is deliberately excluded from this packet).",
+    "relevant_evidence": [],
+    "request_id": "025abf0c9fad2c6cb7fc",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "V-01",
+    "claim": "In a release-only-KV flow with the pause completed and all executor memory resident, the documented CUDA configuration uses the default cumem backend with managed allocations, and release_kv_cache_memory discards KV cache physical memory while keeping model weights resident.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 6417,
+        "source_char_start": 6088,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "8088dc98c0848313c25d2d9c460fe27c581c0af1cdc705f3c074e3dd4b201e22",
+        "text": "`LLM.release_kv_cache_memory()` discards KV cache physical memory while keeping model weights resident. It requires a completed pause and all executor memory to be resident: full sleep, partial wake-up, and repeated release without restoring memory are rejected. Requests retained with `mode=\"keep\"` are recomputed after wake-up.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 6695,
+        "source_char_start": 6419,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "29a07f6455e71ea24a682c3322275b4db0d7912c11ffd3ac542076ab0943b2eb",
+        "text": "Use the default `cumem` backend with managed allocations: `enable_cumem_allocator=True` on CUDA/ROCm (also enabled by `enable_sleep_mode=True`), or `enable_sleep_mode=True` on XPU. Other backends must implement selective discard; CPU and unmanaged allocations are unsupported.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 8271,
+        "source_char_start": 7872,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "d3e58e2f68b454b91d185c1fad7b114f492b21cd6deecd5843192d888052380d",
+        "text": "By default, NCCL communicators keep their GPU buffers while asleep. With\n`enable_nccl_comm_suspend=True` (off by default, experimental), sleep releases\nthem with `ncclCommSuspend` and wake restores them with `ncclCommResume`. The\ncommunicators keep their topology, so they are not re-created. It needs NCCL\n2.29.7 or newer; with an older library, a warning is logged and the memory stays\non the GPU.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "V1 states resident-memory/completed-pause requirements and the operation; V2 supplies the default cumem/managed CUDA configuration. The premises do not claim actual deployment compliance.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "961043bd97604693c161",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ],
+      [
+        "D3"
+      ]
+    ],
+    "author_id": "K-02",
+    "claim": "Node labels are the only output NFD can produce; it has no mechanism to add node taints.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3310,
+        "source_char_start": 2872,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "154506d989675ac00ebb2e54ce09fb787fcde0d4bbeedb2a975a08adcbb9a7a0",
+        "text": "As an administrator, you can automatically discover and label all your GPU enabled nodes\nby deploying Kubernetes [Node Feature Discovery](https://github.com/kubernetes-sigs/node-feature-discovery) (NFD).\nNFD detects the hardware features that are available on each node in a Kubernetes cluster.\nTypically, NFD is configured to advertise those features as node labels, but NFD can also add extended resources, annotations, and node taints.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3579,
+        "source_char_start": 3311,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "7e02d50d19d8c5f520f282058a6bef3407da3a4209feb1b5707bac789946ed62",
+        "text": "NFD is compatible with all [supported versions](/releases/version-skew-policy/#supported-versions) of Kubernetes.\nBy default NFD create the [feature labels](https://kubernetes-sigs.github.io/node-feature-discovery/master/usage/features.html) for the detected features.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3734,
+        "source_char_start": 3580,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "6bf386dc5b645301fb95985151ada369edbe938f1ef4a939ab98058a030c11ad",
+        "text": "Administrators can leverage NFD to also taint nodes with specific features, so that only pods that request those features can be scheduled on those nodes.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "K1 says NFD \"can also add extended resources, annotations, and node taints\"; K3 independently describes tainting.",
+    "relevant_evidence": [
+      "D1",
+      "D3"
+    ],
+    "request_id": "0b36f0af52e19b08d640",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "T-01",
+    "claim": "For our proposed configuration, the cudaMallocAsync allocator backend selected through PYTORCH_ALLOC_CONF requires CUDA 11.4 or newer, and the PYTORCH_CUDA_ALLOC_CONF name is accepted only as a backward-compatibility alias of that variable.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 23404,
+        "source_char_start": 22908,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6cc53dd52116e48cefffa4aef69d3f8648daf15a755d6b1d94724a003552c527",
+        "text": "`backend` allows selecting the underlying allocator implementation.\n  Currently, valid options are `native`, which uses PyTorch's native\n  implementation, and `cudaMallocAsync`, which uses\n  [CUDA's built-in asynchronous allocator](https://developer.nvidia.com/blog/using-cuda-stream-ordered-memory-allocator-part-1/).\n  `cudaMallocAsync` requires CUDA 11.4 or newer. The default is `native`.\n  `backend` applies to all devices used by the process, and can't be\n  specified on a per-device basis.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 22885,
+        "source_char_start": 22617,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "c4cd61570026c6de83f039294bb089a1ec7f90c62e61be2c32993651c2308498",
+        "text": "The behavior of the caching allocator can be controlled via the environment variable\n`PYTORCH_ALLOC_CONF`. `PYTORCH_CUDA_ALLOC_CONF` is its alias and is provided only\nfor backward compatibility.\nThe format is `PYTORCH_ALLOC_CONF=<option>:<value>,<option2>:<value2>...`",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 27540,
+        "source_char_start": 27262,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "61510aa7ccee0bc0a0385614cf440f6b55cf1237fa9637ec6404ab662e73b05e",
+        "text": "`expandable_segments` (experimental, default: `False`) If set to `True`, this setting instructs\n  the allocator to create CUDA allocations that can later be expanded to better handle cases\n  where a job changing allocation sizes frequently, such as having a changing batch size.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "T1 gives the CUDA 11.4 requirement; T2 gives the alias status. Neither alone covers both conjuncts.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "54f6e12b06b0eddce5b6",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "K-03",
+    "claim": "NFD re-detects hardware and updates a node's feature labels when a GPU is hot-added after the node has joined the cluster.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 3310,
+        "source_char_start": 2872,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "154506d989675ac00ebb2e54ce09fb787fcde0d4bbeedb2a975a08adcbb9a7a0",
+        "text": "As an administrator, you can automatically discover and label all your GPU enabled nodes\nby deploying Kubernetes [Node Feature Discovery](https://github.com/kubernetes-sigs/node-feature-discovery) (NFD).\nNFD detects the hardware features that are available on each node in a Kubernetes cluster.\nTypically, NFD is configured to advertise those features as node labels, but NFD can also add extended resources, annotations, and node taints.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3579,
+        "source_char_start": 3311,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "7e02d50d19d8c5f520f282058a6bef3407da3a4209feb1b5707bac789946ed62",
+        "text": "NFD is compatible with all [supported versions](/releases/version-skew-policy/#supported-versions) of Kubernetes.\nBy default NFD create the [feature labels](https://kubernetes-sigs.github.io/node-feature-discovery/master/usage/features.html) for the detected features.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 3976,
+        "source_char_start": 3736,
+        "source_file": "sources/kubernetes.md",
+        "source_text_sha256": "df1b070b8c8f4e721a6eb212c7f1d3e854c501d75b0a89b8480118475ffc38b6",
+        "text": "You also need a plugin for NFD that adds appropriate labels to your nodes; these might be generic\nlabels or they could be vendor specific. Your GPU vendor may provide a third party\nplugin for NFD; check their documentation for more details.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "Packet says NFD detects features and creates labels by default, but says nothing about re-detection timing, hot-add, or label refresh. Neither confirmed nor denied.",
+    "relevant_evidence": [],
+    "request_id": "33266ba91472cf6e4f25",
+    "source_id": "kubernetes"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D2"
+      ]
+    ],
+    "author_id": "V-03",
+    "claim": "With sleep_mode_offload_cudagraph=True, graph executables that live outside PyTorch memory pools are removed from GPU memory during sleep rather than staying resident.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 7301,
+        "source_char_start": 6921,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "5834238d4cf146ce09d03a0d6642ce693db3f85bd8b7a21b13511f9ed5a7d2d1",
+        "text": "By default, CUDA graph memory stays on the GPU while asleep. With\n`sleep_mode_offload_cudagraph=True` (off by default), CUDA graphs are captured\ninto a cuMem pool that sleep backs up to CPU memory at both levels and any wake\nrestores in place, so graphs are replayed, not recaptured. It needs the default\n`cumem` backend, CUDA or ROCm, and CUDA graphs; otherwise it has no effect.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 7829,
+        "source_char_start": 7481,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "55b0f31fb68a8e8393b1e3a5d716ff40e7037fefbee3010114ae20cfbe8bacfa",
+        "text": "The cost is pinned host memory for the pool's backup, also at level 2, and one\nextra copy per captured custom allreduce (about 3% decode latency at batch\nsize 1). `NCCL_GRAPH_REGISTER` defaults to `0`, since NCCL graph registration\nwould pin the pool; an explicit value is kept with a warning. Graph executables\noutside PyTorch pools stay resident.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 6417,
+        "source_char_start": 6088,
+        "source_file": "sources/vllm_sleep.md",
+        "source_text_sha256": "8088dc98c0848313c25d2d9c460fe27c581c0af1cdc705f3c074e3dd4b201e22",
+        "text": "`LLM.release_kv_cache_memory()` discards KV cache physical memory while keeping model weights resident. It requires a completed pause and all executor memory to be resident: full sleep, partial wake-up, and repeated release without restoring memory are rejected. Requests retained with `mode=\"keep\"` are recomputed after wake-up.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "V3b explicitly says graph executables outside PyTorch pools stay resident. The claim asserts the opposite residency behavior, not an unmentioned redundant CPU copy.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "0305fc279f7d45917843",
+    "source_id": "vllm_sleep"
+  },
+  {
+    "acceptable_evidence": [],
+    "author_id": "R-03",
+    "claim": "If a task's explicitly specified resources are unavailable at execution time, Ray preempts a running lower-priority task to free them.",
+    "label": "insufficient",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 7041,
+        "source_char_start": 6528,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "5a2a879d6589034e9e135539d8a9c47d623bdae4fcf4e92fd12c26e919120752",
+        "text": "By default, Ray tasks use one logical CPU resource, and Ray actors use one logical CPU for scheduling and zero logical CPUs for running. As a result, by default, actors can't get scheduled on a zero-CPU node, but an infinite number of them can run on any non-zero-CPU node. The default resource requirements for actors exist for historical reasons. To avoid surprises, always set `num_cpus` explicitly for actors. If you specify resources explicitly, Ray requires them both at schedule time and at execution time.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8354,
+        "source_char_start": 8130,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "88c779387feb236c141a84db3200148d7fbcb0fdc8fcb44b13d5aa464b126f8f",
+        "text": "Task and actor resource requirements affect Ray's scheduling concurrency. The sum of the logical resource requirements of all concurrently executing tasks and actors on a node can't exceed the node's total logical resources.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 4725,
+        "source_char_start": 3971,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "0a8b9394b5b54a5d668248ce9612c089af0cc7f0c4d76fbf1f3d0c6fe0f61cc3",
+        "text": "By default, Ray nodes start with pre-defined CPU, GPU, and memory resources. Ray sets the quantities of these logical resources on each node to the physical quantities it detects automatically. By default, Ray configures these resources with the following rules:\n\n- **Number of logical CPUs**: Ray sets `num_cpus` to the number of CPUs of the machine or container.\n- **Number of logical GPUs**: Ray sets `num_gpus` to the number of GPUs of the machine or container.\n- **Memory**: Ray sets `memory` to 70% of \"available memory\" when the Ray runtime starts.\n- **Object store memory**: Ray sets `object_store_memory` to 30% of \"available memory\" when the Ray runtime starts. Object store memory isn't a logical resource, and you can't use it for scheduling.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "R2 says explicit resources are required at schedule and execution time; R4 says concurrent requirements can't exceed node totals. Neither mentions preemption or priorities; what happens on unavailability is unstated.",
+    "relevant_evidence": [],
+    "request_id": "832a17396ca631f0ece3",
+    "source_id": "ray_resources"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "T-02",
+    "claim": "With throw_on_cudamalloc_oom set to True, an allocation that would exceed the per_process_memory_fraction limit is rejected with an OutOfMemoryError before the driver allocation is attempted.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 33398,
+        "source_char_start": 32884,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "fcc5309171ac2e259be01d0d860bef00de4ea390a7eeb49223d5624075dd006c",
+        "text": "`throw_on_cudamalloc_oom` (default: `False`)\n  When set to `True`, the allocator will preemptively reject allocations that would\n  exceed the `per_process_memory_fraction` limit by throwing an `OutOfMemoryError`\n  instead of attempting the allocation through the driver, which could trigger a fatal\n  GPU runtime abort (e.g., `HSA_STATUS_ERROR_OUT_OF_RESOURCES` on ROCm). The rejected\n  allocation skips the retry chain and throws immediately, allowing the caller to catch\n  the exception and handle it gracefully.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 23404,
+        "source_char_start": 22908,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "6cc53dd52116e48cefffa4aef69d3f8648daf15a755d6b1d94724a003552c527",
+        "text": "`backend` allows selecting the underlying allocator implementation.\n  Currently, valid options are `native`, which uses PyTorch's native\n  implementation, and `cudaMallocAsync`, which uses\n  [CUDA's built-in asynchronous allocator](https://developer.nvidia.com/blog/using-cuda-stream-ordered-memory-allocator-part-1/).\n  `cudaMallocAsync` requires CUDA 11.4 or newer. The default is `native`.\n  `backend` applies to all devices used by the process, and can't be\n  specified on a per-device basis.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 27259,
+        "source_char_start": 26416,
+        "source_file": "sources/torch_memory.md",
+        "source_text_sha256": "7ebf37a716b4e38653893f2e938eb3ff99c322090c3ded2e237566ee957f7c19",
+        "text": "`garbage_collection_threshold` helps actively reclaiming unused GPU memory to\n  avoid triggering expensive sync-and-reclaim-all operation (release_cached_blocks),\n  which can be unfavorable to latency-critical GPU applications (e.g., servers).\n  Upon setting this threshold (e.g., 0.8), the allocator will start reclaiming\n  GPU memory blocks if the GPU memory capacity usage exceeds the threshold (i.e.,\n  80% of the total memory allocated to the GPU application). The algorithm prefers\n  to free old & unused blocks first to avoid freeing blocks that are actively being\n  reused. The threshold value should be between greater than 0.0 and less than 1.0.\n  The default value is set at 1.0.\n\n  `garbage_collection_threshold` is only meaningful with `backend:native`.\n  With `backend:cudaMallocAsync`, `garbage_collection_threshold` is ignored.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "T5 states exactly this (\"preemptively reject \u2026 instead of attempting the allocation through the driver\").",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "ff3090eb6a65f551715e",
+    "source_id": "torch_memory"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "A-01",
+    "claim": "The documented Mamba checkpoint matching-unit recommendation requires the chosen value to be a multiple of the per-state compression ratio for a model that uses one.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 2233,
+        "source_char_start": 1887,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "0132e62d776f1527b768003ad29ff497c08fe10a7270ca7f97d3d52970678f5a",
+        "text": "Choose a value that divides the block size of every prefix-cacheable KV cache group, and that is a multiple of the per-state compression ratio for models that use one, such as sparse MLA. vLLM validates both at startup and names the offending sizes in the error. Read the served block size from the startup log. 64 is a reasonable starting point.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 1885,
+        "source_char_start": 719,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "0e0c500331adaf5baa8402e84aedc9e37355fe14206eb12ceb49c0c72fad8cf8",
+        "text": "Under `--mamba-cache-mode align`, Mamba state is stored only on the Mamba block grid, so a prefix-cache hit can resume only at a block boundary. `--enable-mamba-shared-prefix-checkpoint` also stores a checkpoint at the shared-prefix junction, the point where an earlier request with the same prefix stopped. Requests whose shared prefix ends inside a block can then reuse it.\n\nThis helps when many requests share a long system prompt and then diverge. It is off by default, and takes effect only when all of the following hold:\n\n- `--mamba-cache-mode align`\n- EAGLE/MTP speculative decoding on the Mamba group\n- `--prefix-match-unit` smaller than the Mamba block size\n- the model does not use multi-module MTP\n\n```bash\nvllm serve <hybrid-model> \\\n    --mamba-cache-mode align \\\n    --prefix-match-unit 64 \\\n    --enable-mamba-shared-prefix-checkpoint\n```\n\n`--prefix-match-unit` is required. It sets the granularity at which prefix-cache keys are computed. When unset it defaults to the greatest common divisor of the prefix-cacheable KV cache group block sizes. Under `align` that is the block size itself, so no sub-block boundary exists and the flag has no effect.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 2798,
+        "source_char_start": 2343,
+        "source_file": "sources/vllm_apc.md",
+        "source_text_sha256": "f8c1e4b9a55ead46470f8330cde1abb3bdfd2c6396f8a6f77e659382ce220650",
+        "text": "Long document query, where the user repeatedly queries the same long document (e.g. software manual or annual report) with different queries. In this case, instead of processing the long document again and again, APC allows vLLM to process this long document *only once*, and all future requests can avoid recomputing this long document by reusing its KV cache. This allows vLLM to serve future requests with much higher throughput and much lower latency.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "A3 identifies the Mamba checkpoint matching unit and A4 states its per-state compression-ratio divisibility requirement. Both give a complete scoped proof.",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "cde2aa62c98ac4cfbcc1",
+    "source_id": "vllm_apc"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "L-03",
+    "claim": "With AccountingStorageTRES=gres/gpu and AutoDetect=nvml, Slurm also gathers gres/gpuutil for MIG devices.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 17088,
+        "source_char_start": 16274,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "eda4ed4de5e380f50f4df9e38da79e60f162bcd8eac01cb3f6c3e5ae308f0c02",
+        "text": "GPU memory and GPU utilization can be tracked as TRES for tasks using GPU resources. If AccountingStorageTRES=gres/gpu is configured, gres/gpumem and gres/gpuutil will automatically be configured and gathered from GPU jobs. gres/gpumem and gres/gpuutil can also be set individually when gres/gpu is not set. gres/gpumem and gres/gpuutil are only available for NVIDIA GPUs when using AutoDetect=nvml , and AMD GPUs when using AutoDetect=rsmi . Devices under shard device memory enforcement feed gres/gpumem from the kernel instead, regardless of vendor. NVML does not support utilization metrics for MIGs, so Slurm does not provide gpumem or gpuutil accounting for MIG devices.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 8866,
+        "source_char_start": 8579,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "ff42dcd87525e7aa33e40efee0cfaf7c89ecff01bbbcf1c71e999d6f20ff5c5d",
+        "text": "AutoDetect=nvml and AutoDetect=rsmi also cause the slurmstepd to load and hold open the library to perform accounting on GPU usage when the associated step has requested a gpu. If you do not want this to happen have JobAcctGatherParams=DisableGPUAcct in the slurm.conf.",
+        "transformation": "strip_html_and_collapse_whitespace"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 19215,
+        "source_char_start": 18693,
+        "source_file": "sources/slurm_gres.shtml",
+        "source_text_sha256": "8c91931323ae95c542dcbb412c92f0f6f8d0b79d406ab91bc610edf11af5a07e",
+        "text": "In the case of Slurm's GRES plugin for GPUs, the environment variable CUDA_VISIBLE_DEVICES is set for each job step to determine which GPUs are available for its use on each node. This environment variable is only set when tasks are launched on a specific compute node (no global environment variable is set for the salloc command and the environment variable set for the sbatch command only reflects the GPUs allocated to that job on that node, node zero of the allocation).",
+        "transformation": "strip_html_and_collapse_whitespace"
+      }
+    ],
+    "rationale": "L3 ends: \"NVML does not support utilization metrics for MIGs, so Slurm does not provide gpumem or gpuutil accounting for MIG devices.\"",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "eebe120eea36c1ff9bff",
+    "source_id": "slurm_gres"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1"
+      ]
+    ],
+    "author_id": "R-02",
+    "claim": "Object store memory is a logical resource, so a task can request it to control where it is scheduled.",
+    "label": "contradicted",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 4725,
+        "source_char_start": 3971,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "0a8b9394b5b54a5d668248ce9612c089af0cc7f0c4d76fbf1f3d0c6fe0f61cc3",
+        "text": "By default, Ray nodes start with pre-defined CPU, GPU, and memory resources. Ray sets the quantities of these logical resources on each node to the physical quantities it detects automatically. By default, Ray configures these resources with the following rules:\n\n- **Number of logical CPUs**: Ray sets `num_cpus` to the number of CPUs of the machine or container.\n- **Number of logical GPUs**: Ray sets `num_gpus` to the number of GPUs of the machine or container.\n- **Memory**: Ray sets `memory` to 70% of \"available memory\" when the Ray runtime starts.\n- **Object store memory**: Ray sets `object_store_memory` to 30% of \"available memory\" when the Ray runtime starts. Object store memory isn't a logical resource, and you can't use it for scheduling.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 7041,
+        "source_char_start": 6528,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "5a2a879d6589034e9e135539d8a9c47d623bdae4fcf4e92fd12c26e919120752",
+        "text": "By default, Ray tasks use one logical CPU resource, and Ray actors use one logical CPU for scheduling and zero logical CPUs for running. As a result, by default, actors can't get scheduled on a zero-CPU node, but an infinite number of them can run on any non-zero-CPU node. The default resource requirements for actors exist for historical reasons. To avoid surprises, always set `num_cpus` explicitly for actors. If you specify resources explicitly, Ray requires them both at schedule time and at execution time.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 8354,
+        "source_char_start": 8130,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "88c779387feb236c141a84db3200148d7fbcb0fdc8fcb44b13d5aa464b126f8f",
+        "text": "Task and actor resource requirements affect Ray's scheduling concurrency. The sum of the logical resource requirements of all concurrently executing tasks and actors on a node can't exceed the node's total logical resources.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "R1: \"Object store memory isn't a logical resource, and you can't use it for scheduling.\"",
+    "relevant_evidence": [
+      "D1"
+    ],
+    "request_id": "ca151425c47478093d4a",
+    "source_id": "ray_resources"
+  },
+  {
+    "acceptable_evidence": [
+      [
+        "D1",
+        "D2"
+      ]
+    ],
+    "author_id": "R-01",
+    "claim": "For our proposed actor that sets no explicit num_cpus, Ray by default will not schedule it on a zero-CPU node and will set OMP_NUM_THREADS=1 in its environment.",
+    "label": "supported",
+    "max_output_tokens": 256,
+    "passages": [
+      {
+        "id": "D1",
+        "source_char_end": 7041,
+        "source_char_start": 6528,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "5a2a879d6589034e9e135539d8a9c47d623bdae4fcf4e92fd12c26e919120752",
+        "text": "By default, Ray tasks use one logical CPU resource, and Ray actors use one logical CPU for scheduling and zero logical CPUs for running. As a result, by default, actors can't get scheduled on a zero-CPU node, but an infinite number of them can run on any non-zero-CPU node. The default resource requirements for actors exist for historical reasons. To avoid surprises, always set `num_cpus` explicitly for actors. If you specify resources explicitly, Ray requires them both at schedule time and at execution time.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D2",
+        "source_char_end": 3020,
+        "source_char_start": 2520,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "36f22aeb889c635dfec7cde6582b217058ec97a966fbd144d0db40b4c9801adc",
+        "text": "If you set `num_cpus` on a task or actor through {func}`ray.remote() <ray.remote>` and {meth}`task.options() <ray.remote_function.RemoteFunction.options>` or {meth}`actor.options() <ray.actor.ActorClass.options>`, Ray sets the environment variable `OMP_NUM_THREADS=<num_cpus>`. If you don't specify `num_cpus`, Ray sets `OMP_NUM_THREADS=1` to avoid performance degradation with many workers. For background, see issue #6998. To override anything Ray sets by default, set `OMP_NUM_THREADS` explicitly.",
+        "transformation": "verbatim"
+      },
+      {
+        "id": "D3",
+        "source_char_end": 8354,
+        "source_char_start": 8130,
+        "source_file": "sources/ray_resources.md",
+        "source_text_sha256": "88c779387feb236c141a84db3200148d7fbcb0fdc8fcb44b13d5aa464b126f8f",
+        "text": "Task and actor resource requirements affect Ray's scheduling concurrency. The sum of the logical resource requirements of all concurrently executing tasks and actors on a node can't exceed the node's total logical resources.",
+        "transformation": "verbatim"
+      }
+    ],
+    "rationale": "R2 gives the default-actor scheduling rule; R3 gives the OMP_NUM_THREADS=1 default when num_cpus is unspecified. Distinct from old \"head node zero CPUs\" (that was about `--num-cpus=0` admission control for CPU-requiring work, evidence line 21).",
+    "relevant_evidence": [
+      "D1",
+      "D2"
+    ],
+    "request_id": "e1a5a66f0d3c448e22ed",
+    "source_id": "ray_resources"
+  }
+]

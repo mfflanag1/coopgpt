@@ -1,0 +1,25 @@
+**Provisional verdict: findings (no blocking defect in gates; two contract inconsistencies and one missing protocol-required report should be fixed before freeze).**
+
+Most important: `contract.validate_sources` and `audit_runtime.source_check` disagree on the per-case passage count, so a run that `collect.py` accepts can be invalidated post hoc by the audit.
+
+## Findings
+
+**1. Medium — passage-count contract mismatch.** `contract.py:65` accepts any non-empty, duplicate-free passage list; `audit_runtime.py:261` requires exactly 4 passages per case (`len(c['passages']) == len(ids) == 4`). PROTOCOL specifies "four per source section" for *claims*, not excerpts. If any case has 3 or 5 excerpts, `collect.py` will run all 72 calls and the audit will then fault `four distinct excerpts required`, burning the one-shot budget. Repair: pick one rule, state it in PROTOCOL, and enforce identically in both files (e.g., add `len(case['passages'])==4` at contract.py:65 or drop the `==4` in the audit). Verification: a shared fixture with a 3-passage case fed to both validators must produce the same accept/reject.
+
+**2. Medium — duplicate checker inputs are not detected or reported.** PROTOCOL:62–63 requires "report duplicate checker inputs separately" when a native proposal text equals a controlled proposal. Neither `summarize` (contract.py:144) nor `quality_summary`/`stage_check` (audit_runtime.py:76, 303) compares `n_` and `c_` prompts. With temperature 0/seed 0 an identical prompt yields an identical checker output, so a paired native/control decision is one observation, not two. Repair: in audit `stage_check`, after building prompts, record `duplicate_checker_prompts=[(n_id, c_id)]` where `row['request_prompt']` is identical, and surface it in the summary (without altering denominators). Verification: unit test with a primary raw text equal to a control's compact JSON.
+
+**3. Medium (unverified assumption) — context margin relies on `prompt_eval_count`.** `collect.py:149` and `audit_runtime.py:333` compute `4096 − prompt_eval_count − cap`. Ollama reports evaluated (non-cached) tokens; with prompt-prefix KV reuse across the 3 checker calls per case, this can understate prompt length, so "at least 128 context tokens beyond prompt plus cap" (PROTOCOL:75) is not independently observed. Real overflow is unlikely at 103–307-word packets, but the check should not be described as verification. Repair: tokenize the prompt independently (or disable prompt caching on the owned server) and record both counts; or soften the PROTOCOL wording.
+
+**4. Low — checker acceptance of a malformed primary is invisible.** `summarize`/`quality_summary` set `automatic=False` when the primary is schema-invalid (correct per gate 2), but a checker that returns `{"accept":true}` on prose is a real checker weakness that no reported count captures. Repair: add `checker_accepted_malformed = format_referral and checker.accept` to both summaries (descriptive only, no gate change).
+
+**5. Low — freshness check is exact-string only.** `contract.py:140` / `audit_runtime.py:253` reject a claim only if byte-identical to `PRIOR_CLAIMS.json`. Trivial rewording passes. Acceptable as bookkeeping, but PROTOCOL should not call this a freshness guarantee.
+
+**6. Low — test naming.** `test_retention_gate_exact_90_percent` (test_contract.py:40) rejects 3/24 (87.5%), not the boundary. Add a case with `b=20, kept=18` pass and `kept=17` fail.
+
+## Scope limitations
+- `client.py`, `server_control.py`, `clock_bridge.py`, `transport_audit.py`, `cases.json`, `controls.json`, FREEZE/CONFIG not supplied. Unverified: that `run_trace` overrides `num_predict` from `max_output_tokens` (audit `wire_check` assumes `num_predict=cap`), that `raw_api`'s text equals `collect.response_text`'s chunk join (native binding depends on this), and host power/thermal gating.
+- No caller of `contract.summarize` is in the packet.
+- Tests not executed; no claim about their results.
+
+## Verdict
+Findings. Prompt construction leaks no gold fields (test_contract.py:62 confirms), raw proposals are passed unparsed, denominators are fixed, incomplete runs cannot qualify, and native/controlled counts are never pooled. Fix items 1–2 before freezing inputs; items 3–4 are reporting repairs.

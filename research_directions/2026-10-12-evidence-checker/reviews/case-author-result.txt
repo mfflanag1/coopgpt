@@ -1,0 +1,210 @@
+All six sources and all 24 old claims are now in hand; nothing further is needed from tools (no network, no code execution). Below is the proposed claim pool.
+
+# Fresh claim pool — 24 proposed cases (read-only research report)
+
+**Scope.** All assertions are about the supplied snapshot files only (developer snapshots, not product advice). Old cases (24) were read for exclusion; every proposition below targets a subsection not used as decisive evidence by any old case, and none is a paraphrase, polarity flip, or parameter swap of an old claim. No fractional-GPU example, no statistical/population/energy claims.
+
+**Distribution.** 4 cases per source; totals 8 supported / 8 contradicted / 8 insufficient. Six decisive claims require two excerpts (K-01, T-01, R-01, L-01, A-02, V-01).
+
+**Conventions.** Excerpts are verbatim, contiguous, identified by pool ID; anchors are exact start/end substrings with source line numbers. Slurm excerpts are given after `strip_html_and_collapse_whitespace` (same transformation as the old cases), with raw `.shtml` line refs. Char offsets / sha256 are **not** computed here (see Limitations). Each case lists its 3–4-excerpt packet, minimal sufficient sets (alternatives where they exist), relevant IDs, and rationale.
+
+---
+
+## Source: `kubernetes` (sources/kubernetes.md — "Automatic node labelling" §, lines 84–96; unused by old cases)
+
+**Excerpt pool**
+- **K1** (lines 86–89) start `As an administrator, you can automatically discover` … end `annotations, and node taints.`
+- **K2** (lines 90–91) start `NFD is compatible with all` … end `for the detected features.`
+- **K3** (line 92) start `Administrators can leverage NFD to also taint nodes` … end `can be scheduled on those nodes.`
+- **K4** (lines 94–96) start `You also need a plugin for NFD that adds appropriate labels` … end `check their documentation for more details.`
+
+**K-01 — supported (two excerpts)**
+Claim: "For our proposed NFD deployment, NFD can be used both to advertise detected GPU-node features as node labels and to taint those nodes so that only pods requesting those features are scheduled on them."
+Packet: K1, K3, K4. Sufficient: [K1, K3]. Relevant: K1, K3. Reasoning: conditional.
+Rationale: K1 establishes detection + labels (and that taints are possible); K3 supplies the "only pods that request those features" scheduling effect. Neither alone states both halves.
+
+**K-02 — contradicted**
+Claim: "Node labels are the only output NFD can produce; it has no mechanism to add node taints."
+Packet: K1, K2, K3. Sufficient: [K1] or [K3]. Relevant: K1, K3. Reasoning: conditional.
+Rationale: K1 says NFD "can also add extended resources, annotations, and node taints"; K3 independently describes tainting.
+
+**K-03 — insufficient (omitted qualitative behavior)**
+Claim: "NFD re-detects hardware and updates a node's feature labels when a GPU is hot-added after the node has joined the cluster."
+Packet: K1, K2, K4. Sufficient: []. Relevant: []. Reasoning: missing_information.
+Rationale: Packet says NFD detects features and creates labels by default, but says nothing about re-detection timing, hot-add, or label refresh. Neither confirmed nor denied.
+
+**K-04 — insufficient (omitted qualitative behavior)**
+Claim: "Extended resources that NFD adds for GPUs can be consumed by a container through its resource limits in the same way as the device-plugin GPU resource."
+Packet: K1, K2, K4. Sufficient: []. Relevant: [K1]. Reasoning: missing_information.
+Rationale: K1 only says NFD "can also add extended resources"; the packet never says how/whether NFD extended resources are requested or scheduled. Distinct from old K-D2 (limits/requests rules concern the device-plugin resource, and that excerpt is deliberately excluded from this packet).
+
+---
+
+## Source: `torch_memory` (sources/torch_memory.md — `PYTORCH_ALLOC_CONF` options, lines 563–715; old cases used only lines 534–561)
+
+**Excerpt pool**
+- **T1** (lines 569–575) start `` `backend` allows selecting the underlying allocator implementation. `` … end `specified on a per-device basis.`
+- **T2** (lines 563–566) start `The behavior of the caching allocator can be controlled via the environment variable` … end `` `PYTORCH_ALLOC_CONF=<option>:<value>,<option2>:<value2>...` ``
+- **T3** (lines 618–629) start `` `garbage_collection_threshold` helps actively reclaiming `` … end `` `garbage_collection_threshold` is ignored. ``
+- **T4** (lines 630–632) start `` `expandable_segments` (experimental, default: `False`) `` … end `such as having a changing batch size.`
+- **T4b** (lines 655–661) start `` `expandable_segments` allows the allocator to create a segment initially `` … end `so it is more likely to succeed at finding this memory.`
+- **T5** (lines 709–715) start `` `throw_on_cudamalloc_oom` (default: `False`) `` … end `handle it gracefully.`
+
+**T-01 — supported (two excerpts)**
+Claim: "For our proposed configuration, the cudaMallocAsync allocator backend selected through PYTORCH_ALLOC_CONF requires CUDA 11.4 or newer, and the PYTORCH_CUDA_ALLOC_CONF name is accepted only as a backward-compatibility alias of that variable."
+Packet: T1, T2, T4. Sufficient: [T1, T2]. Relevant: T1, T2. Reasoning: conditional.
+Rationale: T1 gives the CUDA 11.4 requirement; T2 gives the alias status. Neither alone covers both conjuncts.
+
+**T-02 — supported**
+Claim: "With throw_on_cudamalloc_oom set to True, an allocation that would exceed the per_process_memory_fraction limit is rejected with an OutOfMemoryError before the driver allocation is attempted."
+Packet: T5, T1, T3. Sufficient: [T5]. Relevant: T5. Reasoning: conditional.
+Rationale: T5 states exactly this ("preemptively reject … instead of attempting the allocation through the driver").
+
+**T-03 — contradicted**
+Claim: "In our proposed multi-GPU process, the allocator backend can be set to cudaMallocAsync for one device while the remaining devices keep the native backend."
+Packet: T1, T2, T4b. Sufficient: [T1]. Relevant: T1. Reasoning: conditional.
+Rationale: T1: "`backend` applies to all devices used by the process, and can't be specified on a per-device basis."
+
+**T-04 — insufficient (omitted qualitative behavior)**
+Claim: "With expandable_segments enabled, the allocator automatically shrinks an expanded segment by unmapping its unused tail when memory pressure rises."
+Packet: T4, T4b, T1, T3. Sufficient: []. Relevant: [T4, T4b]. Reasoning: missing_information.
+Rationale: T4/T4b describe growth ("expand its size later when more memory is needed") and tiling; shrinking/unmapping is never addressed. Not the old "first-fit"/"caching disabled faster" propositions.
+
+---
+
+## Source: `ray_resources` (sources/ray_resources.md — node-resource defaults, default actor requirements, OMP note, concurrency; old cases used lines 21, 25, 27, 59)
+
+**Excerpt pool**
+- **R1** (lines 51–56) start `By default, Ray nodes start with pre-defined CPU, GPU, and memory resources.` … end `you can't use it for scheduling.`
+- **R2** (line 118) start `By default, Ray tasks use one logical CPU resource` … end `both at schedule time and at execution time.`
+- **R3** (line 32, partial) start `` If you set `num_cpus` on a task or actor through `` … end `` set `OMP_NUM_THREADS` explicitly. ``
+- **R4** (line 150, partial) start `Task and actor resource requirements affect Ray's scheduling concurrency.` … end `can't exceed the node's total logical resources.`
+
+**R-01 — supported (two excerpts)**
+Claim: "For our proposed actor that sets no explicit num_cpus, Ray by default will not schedule it on a zero-CPU node and will set OMP_NUM_THREADS=1 in its environment."
+Packet: R2, R3, R4. Sufficient: [R2, R3]. Relevant: R2, R3. Reasoning: conditional.
+Rationale: R2 gives the default-actor scheduling rule; R3 gives the OMP_NUM_THREADS=1 default when num_cpus is unspecified. Distinct from old "head node zero CPUs" (that was about `--num-cpus=0` admission control for CPU-requiring work, evidence line 21).
+
+**R-02 — contradicted**
+Claim: "Object store memory is a logical resource, so a task can request it to control where it is scheduled."
+Packet: R1, R2, R4. Sufficient: [R1]. Relevant: R1. Reasoning: conditional.
+Rationale: R1: "Object store memory isn't a logical resource, and you can't use it for scheduling."
+
+**R-03 — insufficient (omitted qualitative behavior)**
+Claim: "If a task's explicitly specified resources are unavailable at execution time, Ray preempts a running lower-priority task to free them."
+Packet: R2, R4, R1. Sufficient: []. Relevant: [R2, R4]. Reasoning: missing_information.
+Rationale: R2 says explicit resources are required at schedule and execution time; R4 says concurrent requirements can't exceed node totals. Neither mentions preemption or priorities; what happens on unavailability is unstated.
+
+**R-04 — insufficient (omitted qualitative behavior)**
+Claim: "When computing a node's default num_gpus, Ray's automatic detection honors a CUDA_VISIBLE_DEVICES value already present in the environment before `ray start`."
+Packet: R1, R3, R4. Sufficient: []. Relevant: [R1]. Reasoning: missing_information.
+Rationale: R1 says Ray sets num_gpus to "the number of GPUs of the machine or container" — detection inputs are unspecified. **Flag:** this is about detection *input*; old case R-D3 (Ray *sets* CUDA_VISIBLE_DEVICES for tasks) is a different proposition and that excerpt is excluded from this packet to avoid conflation.
+
+---
+
+## Source: `slurm_gres` (sources/slurm_gres.shtml — GPU Management, Accounting, AutoDetect §§; old cases used lines 84–141 only)
+
+**Excerpt pool** (stripped text; raw line refs)
+- **L1** (lines 421–428) start `In the case of Slurm's GRES plugin for GPUs, the environment variable CUDA_VISIBLE_DEVICES is set for each job step` … end `node zero of the allocation).`
+- **L2** (lines 446–458) start `The CUDA_VISIBLE_DEVICES environment variable will also be set in the job's Prolog and Epilog programs.` … end `(i.e. the first GPU device visible to the job).`
+- **L3** (lines 356–372) start `GPU memory and GPU utilization can be tracked as TRES` … end `accounting for MIG devices.`
+- **L4** (lines 188–191) start `AutoDetect=nvml and AutoDetect=rsmi also cause the slurmstepd to load and hold open the library` … end `JobAcctGatherParams=DisableGPUAcct in the slurm.conf.`
+- **L5** (lines 462–467) start `When possible, Slurm automatically determines the GPUs on the system using NVML.` … end `CUDA_DEVICE_ORDER=PCI_BUS_ID.`
+
+**L-01 — supported (two excerpts)**
+Claim: "For our proposed node using AutoDetect=nvml with cgroup device constraint enabled, the CUDA_VISIBLE_DEVICES value seen by the Prolog may differ from the value seen by the job, and the slurmstepd's holding of the GPU library for per-step GPU accounting can be disabled with JobAcctGatherParams=DisableGPUAcct."
+Packet: L2, L4, L1. Sufficient: [L2, L4]. Relevant: L2, L4. Reasoning: conditional.
+Rationale: L2 covers the Prolog-vs-job difference under cgroup constraint; L4 covers library holding and the DisableGPUAcct opt-out.
+
+**L-02 — contradicted**
+Claim: "Under the GPU GRES plugin, the salloc command exports a global CUDA_VISIBLE_DEVICES covering all GPUs in the allocation."
+Packet: L1, L2, L5. Sufficient: [L1]. Relevant: L1. Reasoning: conditional.
+Rationale: L1: "no global environment variable is set for the salloc command".
+
+**L-03 — contradicted**
+Claim: "With AccountingStorageTRES=gres/gpu and AutoDetect=nvml, Slurm also gathers gres/gpuutil for MIG devices."
+Packet: L3, L4, L1. Sufficient: [L3]. Relevant: L3. Reasoning: conditional.
+Rationale: L3 ends: "NVML does not support utilization metrics for MIGs, so Slurm does not provide gpumem or gpuutil accounting for MIG devices."
+
+**L-04 — insufficient (omitted qualitative behavior)**
+Claim: "For plain gres/gpu job steps, Slurm itself sets CUDA_DEVICE_ORDER=PCI_BUS_ID in the step environment alongside CUDA_VISIBLE_DEVICES."
+Packet: L5, L1, L2. Sufficient: []. Relevant: [L5, L1]. Reasoning: missing_information.
+Rationale: L5 says the variable "must be set" for numbering to match, without saying who sets it; L1 says Slurm sets CUDA_VISIBLE_DEVICES only. **Flag (honest ambiguity):** the full source's MPS section (lines 619–621, outside this packet) says MPS-requesting jobs get CUDA_DEVICE_ORDER set; the claim is scoped to plain gres/gpu steps and to the packet, where it is unstated. If the controller prefers zero cross-section risk, substitute: "Slurm's gres/gpuutil for a step is sampled once at step end rather than during the run" (also unstated in L3/L4).
+
+---
+
+## Source: `vllm_apc` (sources/vllm_apc.md — Example workloads, `--prefix-match-unit` paragraphs; old cases used lines 5, 12, 18–25, 47)
+
+**Excerpt pool**
+- **A1** (line 42) start `Long document query, where the user repeatedly queries` … end `much higher throughput and much lower latency.`
+- **A2** (line 43) start `Multi-round conversation, where the user may chat` … end `much higher throughput and much lower latency.`
+- **A3** (line 34) start `` `--prefix-match-unit` is required. `` … end `so no sub-block boundary exists and the flag has no effect.`
+- **A4** (line 36) start `Choose a value that divides the block size` … end `64 is a reasonable starting point.`
+
+**A-01 — supported**
+Claim: "For our proposed multi-round chat deployment, the documented APC benefit comes from reusing the processing results of the chat history across later rounds of the same session rather than reprocessing the whole history."
+Packet: A2, A1, A3. Sufficient: [A2]. Relevant: A2. Reasoning: conditional.
+Rationale: A2 states this directly. Different proposition from old "prefill not decode" (line 47).
+
+**A-02 — supported (two excerpts)**
+Claim: "For the hybrid Mamba shared-prefix checkpoint under `--mamba-cache-mode align`, leaving `--prefix-match-unit` unset makes the flag have no effect, and any value chosen must divide the block size of every prefix-cacheable KV cache group, which vLLM validates at startup."
+Packet: A3, A4, A1. Sufficient: [A3, A4]. Relevant: A3, A4. Reasoning: conditional.
+Rationale: A3 explains the default-to-block-size consequence; A4 gives the divisibility rule and startup validation.
+
+**A-03 — contradicted**
+Claim: "A `--prefix-match-unit` value that does not divide a prefix-cacheable group's block size is silently rounded by vLLM to the nearest valid divisor."
+Packet: A4, A3, A2. Sufficient: [A4]. Relevant: A4. Reasoning: conditional.
+Rationale: A4: "vLLM validates both at startup and names the offending sizes in the error" — an error, not silent rounding. Not a parameter swap of the old multi-module-MTP prerequisite case (that was the conjunctive prerequisite list; this is validation behavior).
+
+**A-04 — insufficient (omitted qualitative behavior)**
+Claim: "For the long-document workload, APC evicts the cached document's KV blocks in least-recently-used order once cache memory is exhausted."
+Packet: A1, A2, A4. Sufficient: []. Relevant: [A1]. Reasoning: missing_information.
+Rationale: A1 describes reuse of the document's KV cache; no eviction policy appears anywhere in the packet. Distinct from old "survives process restart" (persistence) proposition.
+
+---
+
+## Source: `vllm_sleep` (sources/vllm_sleep.md — "Release only KV cache memory", CUDA-graph offload, NCCL suspend; old cases used lines 21, 62–64, 79–97)
+
+**Excerpt pool**
+- **V1** (line 127) start `` `LLM.release_kv_cache_memory()` discards KV cache physical memory `` … end `are recomputed after wake-up.`
+- **V2** (line 129) start `` Use the default `cumem` backend with managed allocations `` … end `CPU and unmanaged allocations are unsupported.`
+- **V3** (lines 139–143) start `By default, CUDA graph memory stays on the GPU while asleep.` … end `otherwise it has no effect.`
+- **V3b** (lines 151–155) start `The cost is pinned host memory for the pool's backup` … end `outside PyTorch pools stay resident.`
+- **V4** (lines 159–164) start `By default, NCCL communicators keep their GPU buffers while asleep.` … end `the memory stays on the GPU.`
+
+**V-01 — supported (two excerpts)**
+Claim: "In our proposed release-only-KV flow on CUDA with enable_sleep_mode=True, release_kv_cache_memory() can discard KV cache physical memory while keeping model weights resident, provided the level-0 pause has completed."
+Packet: V1, V2, V4. Sufficient: [V1, V2]. Relevant: V1, V2. Reasoning: conditional.
+Rationale: V1 gives the operation and the completed-pause requirement; V2 establishes that enable_sleep_mode=True on CUDA satisfies the cumem-backend requirement. V1 alone leaves the backend premise unverified.
+
+**V-02 — contradicted**
+Claim: "After a full level-1 sleep, calling release_kv_cache_memory() is accepted as a way to additionally drop the KV cache."
+Packet: V1, V2, V3. Sufficient: [V1]. Relevant: V1. Reasoning: conditional.
+Rationale: V1: "full sleep, partial wake-up, and repeated release without restoring memory are rejected." Different proposition from old "level 1 retains KV contents".
+
+**V-03 — contradicted**
+Claim: "With sleep_mode_offload_cudagraph=True, graph executables that live outside PyTorch memory pools are also backed up to CPU during sleep."
+Packet: V3, V3b, V1. Sufficient: [V3b]. Relevant: V3, V3b. Reasoning: conditional.
+Rationale: V3b: "Graph executables outside PyTorch pools stay resident." V3 corroborates that offload applies to the cuMem pool.
+
+**V-04 — insufficient (omitted qualitative behavior)**
+Claim: "With enable_nccl_comm_suspend=True on NCCL 2.29.7 or newer, in-flight collectives are drained before ncclCommSuspend is invoked."
+Packet: V4, V3, V1. Sufficient: []. Relevant: [V4]. Reasoning: missing_information.
+Rationale: V4 describes suspend/resume, topology retention, and the version fallback, but says nothing about draining or ordering relative to in-flight work.
+
+---
+
+## Cross-checks against acceptance criteria
+
+- **Freshness:** decisive excerpts for all 24 cases come from subsections absent from every old packet (K lines 86–96; T 563–715; R 32/51–56/118/150; L 188–191/356–372/421–467; A 34/36/42–43; V 127–164). No old proposition, polarity flip, or parameter swap; no fractional-GPU case.
+- **Insufficient cases** (K-03, K-04, T-04, R-03, R-04, L-04, A-04, V-04) all concern omitted qualitative technical behavior, not local measurements/numbers; each is neither confirmed nor denied by its packet, and the rationale states the missing premise.
+- **Contradicted cases** each cite an explicit negating sentence (distinguished from mere absence).
+- **Qualifiers/option scope preserved** (e.g., "when unset", "default cumem backend", "under align", "may differ", "might be generic").
+- **Packet size:** every packet is 3–4 excerpts, roughly 130–450 source words (largest: T-04 with T3 included ≈ 450).
+
+## Limitations / unresolved
+
+- I did **not** compute `source_char_start/end` or `source_text_sha256`; anchors + line numbers are supplied for the controller's tooling to derive them. Slurm anchors assume the same HTML-strip/whitespace-collapse transform as the old cases; raw-HTML offsets will differ.
+- L-04 carries a cross-section ambiguity flag (MPS paragraph outside the packet); an alternative claim is offered.
+- R-04 is adjacent in topic to old R-D3; I judge it a different proposition (detection input vs. task-level assignment) but flag it for reviewer judgment.
+- The controller's acceptance checks were not run by me; this is a research report only, with no files written.

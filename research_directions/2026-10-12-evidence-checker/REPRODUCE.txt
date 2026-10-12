@@ -1,0 +1,29 @@
+Evidence-checker experiment; Python standard library only for saved-data checks.
+From this directory:
+  python3 -B contract.py
+  python3 -B -m unittest discover -s . -p 'test_*.py' -q
+  python3 -B -O -m unittest discover -s . -p 'test_*.py' -q
+Tests use local mock HTTP endpoints, not the inference model.
+
+Saved capture, without inference or Git changes:
+  python3 -B score_capture.py . capture --output /tmp/checker-results.json
+  python3 -B audit_runtime.py . capture --output /tmp/checker-audit.json
+  python3 -B -O audit_runtime.py . capture --output /tmp/checker-audit-O.json
+Compare primary summary to audit quality_summary exactly. Audit qualified combines
+raw-data validity with frozen gates; quality scores alone cannot establish validity.
+Compare normal/-O independent outputs; neither imports primary scoring.
+
+Build reproduction, in a disposable copy (not the frozen canonical directory):
+  python3 -B build_cases.py
+  python3 -B build_controls.py
+Compare reconstructed JSON to frozen cases.json,BLIND_CASES.json,controls.json.
+Source manifests give original commit-pinned URLs and license provenance. Review
+records include rejected drafts and pre-outcome corrections, not post-hoc relabeling.
+
+A NEW inference collection would be a separate authorized replication, not routine
+reproduction of these results. The original collector command was:
+  python3 -B collect.py --output capture
+It refuses an existing output directory and requires FREEZE.json plus exact model,
+Ollama binary/manifest, host power/thermal state, dedicated port11562 and idle11434.
+Do not overwrite captures, change labels or caps, retry missing cases, or represent
+mock test fixtures as measurements. No performance/energy claim follows here.

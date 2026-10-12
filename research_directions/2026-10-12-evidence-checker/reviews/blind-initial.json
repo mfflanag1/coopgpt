@@ -1,0 +1,369 @@
+{
+  "method": "Independent gold-blind annotation from each claim and its own supplied passages only. No source pages, gold labels, other model outputs, or inference-hardware calls consulted. Evidence sets are sufficient packet-local sets; conservative context requirements are flagged explicitly.",
+  "input_path": "/tmp/coop-checker-study/BLIND_CASES.json",
+  "case_count": 24,
+  "verdict_counts": {
+    "insufficient": 9,
+    "supported": 7,
+    "contradicted": 8
+  },
+  "annotations": [
+    {
+      "request_id": "b69f8fb5f89be045c58e",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "D1 establishes the suspend/resume mechanism and minimum NCCL version, but says nothing about draining in-flight collectives or operation ordering. D2 and D3 describe other mechanisms.",
+      "ambiguities": [],
+      "missing_premises": [
+        "Whether in-flight collectives are drained, and whether draining precedes ncclCommSuspend."
+      ]
+    },
+    {
+      "request_id": "fbf414a5fe2e423edaad",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D1 states that leaving prefix-match-unit unset under align produces no sub-block boundary and makes the shared-prefix-checkpoint flag ineffective. D2 supplies the every-group divisibility requirement and startup validation.",
+      "ambiguities": [
+        "The claim is read as describing necessary constraints, not claiming those constraints alone are sufficient to enable the checkpoint; D1 lists additional prerequisites."
+      ],
+      "missing_premises": []
+    },
+    {
+      "request_id": "2927a52cee345edef7d5",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "D1 and D2 describe growth and appending memory. D4 separately describes reclaiming unused blocks under a garbage-collection threshold. None identifies automatic shrinking of expandable segments by unmapping their unused tails, or rules that behavior out.",
+      "ambiguities": [],
+      "missing_premises": [
+        "A statement connecting expandable segments to tail unmapping under memory pressure."
+      ]
+    },
+    {
+      "request_id": "4162108bbcb13ac86758",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "rationale": "D1 expressly rejects release_kv_cache_memory after full sleep and requires all executor memory to be resident. The claimed acceptance after a full level-1 sleep conflicts with that rule.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "c90fe6070d33e40ce96b",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "The passages establish GPU accounting availability and library retention, but no sampling schedule. Holding a library open does not establish whether sampling occurs during the step or only at its end.",
+      "ambiguities": [],
+      "missing_premises": [
+        "The sampling frequency or timing for gres/gpuutil."
+      ]
+    },
+    {
+      "request_id": "d34e0b4d466634b89d2b",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D1 establishes feature detection and advertising features through node labels. D2 explicitly states the feature-based tainting capability and scheduling effect.",
+      "ambiguities": [
+        "This is a capability claim (can be used), not a claim that the proposed deployment is already configured. D3 notes that an appropriate labeling plugin is needed."
+      ],
+      "missing_premises": []
+    },
+    {
+      "request_id": "abf001bf24c6eeff32ba",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "D1 establishes automatic detection of GPU quantities, but none of the passages discusses detection failure, retries, driver initialization, or node restarts.",
+      "ambiguities": [],
+      "missing_premises": [
+        "The GPU-detection failure and recovery policy."
+      ]
+    },
+    {
+      "request_id": "8bbda05550ad460d41bb",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "D1 and D2 establish reuse of cached prefixes; D3 concerns a divisibility constraint. The packet contains no cache eviction policy and no behavior specified for exhausted cache memory.",
+      "ambiguities": [],
+      "missing_premises": [
+        "An eviction-order rule and its applicability when the cache is full."
+      ]
+    },
+    {
+      "request_id": "030a92f7e353f0d512ac",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "rationale": "D1 explicitly states that backend applies to all devices in the process and cannot be specified per device, directly excluding the proposed mixed backends within one process.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "1060399f4e560fb08721",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D2 identifies prefix-match-unit and its role. D1 states that vLLM validates divisibility at startup and reports offending sizes in an error, conflicting with silent rounding to a valid divisor.",
+      "ambiguities": [
+        "D1 alone has a dangling reference to a value; D2 supplies the setting context needed to attach the validation rule to prefix-match-unit."
+      ],
+      "missing_premises": []
+    },
+    {
+      "request_id": "4afd85c1b2e5236141ca",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "rationale": "D1 explicitly says that no global CUDA_VISIBLE_DEVICES environment variable is set for salloc, directly negating the claim.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "729947e609ae8f17d8d0",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D1 states that cgroup device constraints can produce different CUDA_VISIBLE_DEVICES values in Prolog and the job. D2 states that AutoDetect=nvml loads and holds the accounting library for a step requesting a GPU, and that DisableGPUAcct disables that behavior.",
+      "ambiguities": [
+        "The accounting-library clause is conditional on a step requesting a GPU, as D2 states; the claim describes disabling that accounting behavior rather than asserting it happens for steps without GPUs."
+      ],
+      "missing_premises": []
+    },
+    {
+      "request_id": "025abf0c9fad2c6cb7fc",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "D1 says NFD can add extended resources, but neither it nor the other passages explains resource limits, resource consumption, or equivalence to a device-plugin GPU resource. An ability to add extended resources does not establish the asserted interface for consuming them.",
+      "ambiguities": [],
+      "missing_premises": [
+        "How NFD-added GPU extended resources are requested or consumed, and whether that is the same as the device-plugin resource interface."
+      ]
+    },
+    {
+      "request_id": "961043bd97604693c161",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D1 states the completed-pause and full-residency prerequisites and the selective KV-cache discard while preserving weights. D2 supplies the documented CUDA cumem configuration with managed allocations.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "0b36f0af52e19b08d640",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ],
+        [
+          "D3"
+        ]
+      ],
+      "rationale": "D1 explicitly lists extended resources, annotations, and node taints as additional NFD outputs. Independently, D3 directly states NFD can taint nodes, contradicting both the labels-only and no-taints assertions.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "54f6e12b06b0eddce5b6",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D1 states the CUDA 11.4 minimum for cudaMallocAsync. D2 names PYTORCH_ALLOC_CONF as the allocator configuration variable and PYTORCH_CUDA_ALLOC_CONF as its backward-compatibility alias.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "33266ba91472cf6e4f25",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "The passages establish discovery and labeling of detected node features, but do not specify rediscovery after a GPU hot-add or updating an already joined node. General discovery does not establish this lifecycle behavior.",
+      "ambiguities": [],
+      "missing_premises": [
+        "The rediscovery trigger and label-update behavior for hot-added GPUs after node join."
+      ]
+    },
+    {
+      "request_id": "832a17396ca631f0ece3",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "D1 and D2 require resource availability and bound concurrent resource use, but do not describe preemption, priorities, or the action taken when resources are unavailable. Those constraints are compatible with multiple scheduling policies.",
+      "ambiguities": [],
+      "missing_premises": [
+        "The response to unavailable execution-time resources, including any priority-based preemption policy."
+      ]
+    },
+    {
+      "request_id": "ff3090eb6a65f551715e",
+      "verdict": "supported",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "rationale": "D1 explicitly states that enabling throw_on_cudamalloc_oom preemptively throws OutOfMemoryError for an allocation exceeding per_process_memory_fraction instead of attempting the driver allocation.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "9fd5d0d552c068d6b050",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D1 describes the enabled sleep backup of the cuMem pool, and D2 identifies graph executables outside PyTorch pools as remaining resident. Read as a claim about the documented sleep offload, their stated residency excludes them from the described CPU backup.",
+      "ambiguities": [
+        "The contradiction uses the contextual meaning of backed up as the sleep offload. If backed up were intended to mean an additional redundant CPU copy while keeping the executable resident, residency alone would not logically exclude such a copy; the packet does not establish that alternative behavior."
+      ],
+      "missing_premises": []
+    },
+    {
+      "request_id": "cde2aa62c98ac4cfbcc1",
+      "verdict": "insufficient",
+      "evidence": [],
+      "sufficient_evidence_sets": [],
+      "rationale": "D1 establishes that an unspecified chosen value must be a multiple of a model's per-state compression ratio. This packet does not identify that value as the Mamba checkpoint matching unit. D2 and D3 discuss different APC workloads and do not resolve the antecedent. The numerical constraint matches the claim, but its attachment to the claimed setting is missing.",
+      "ambiguities": [
+        "With an explicit contextual link identifying D1 as the matching-unit recommendation, D1 would support the substantive compression-ratio requirement. The strict packet-only verdict cannot import that link from another case or an unprovided source paragraph."
+      ],
+      "missing_premises": [
+        "The antecedent of Choose a value: an explicit link to the Mamba checkpoint matching-unit setting."
+      ]
+    },
+    {
+      "request_id": "eebe120eea36c1ff9bff",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "rationale": "D1 explicitly excludes MIG devices from gpumem and gpuutil accounting because NVML lacks the utilization metrics. The general accounting configuration does not override the stated exception.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "ca151425c47478093d4a",
+      "verdict": "contradicted",
+      "evidence": [
+        "D1"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1"
+        ]
+      ],
+      "rationale": "D1 explicitly says object store memory is not a logical resource and cannot be used for scheduling, negating both parts of the claim.",
+      "ambiguities": [],
+      "missing_premises": []
+    },
+    {
+      "request_id": "e1a5a66f0d3c448e22ed",
+      "verdict": "supported",
+      "evidence": [
+        "D1",
+        "D2"
+      ],
+      "sufficient_evidence_sets": [
+        [
+          "D1",
+          "D2"
+        ]
+      ],
+      "rationale": "D1 excludes default actors from zero-CPU nodes. D2 states that omitting num_cpus results in OMP_NUM_THREADS=1 by default, supplying the other part of the claim.",
+      "ambiguities": [
+        "The default qualification matters: D2 permits an explicitly supplied OMP_NUM_THREADS override. The claim is read as the default behavior, not as overriding an explicit environment setting."
+      ],
+      "missing_premises": []
+    }
+  ]
+}

@@ -1,0 +1,113 @@
+Independent prospective evidence-checker design critique
+12 October 2026. Reviewed the prior qualification PROTOCOL, REPORT, RUBRIC and
+contract.py. No new cases authored, future outcomes inspected, inference run,
+network access, or canonical files changed.
+
+Recommendation: one fixed paired native cohort plus one separate challenge
+Freeze 24 new packet-relative claims, eight per gold verdict, with the existing
+primary prompt/model/configuration. Independently adjudicate labels and all valid
+citation alternatives before any response. Do not reuse the failed fractional-GPU
+claim as a new test success or merely rename its entities. Reused source families
+are permissible but disclose dependence and adaptation to the prior failure.
+
+The baseline answer is generated once. A fixed stateless verifier then sees the
+same packet and claim plus the exact primary verdict/evidence, without author gold,
+case source label, rationale, reviewer identity, confidence, or an error category.
+It returns only a strict accept/reject decision. Accept means BOTH verdict and
+citations are justified under the original three-way packet-relative rubric.
+For insufficient, it must assess whether neither decisive direction is established;
+checking that the candidate's citation list is empty is not substantive checking.
+Reject means route the unchanged case to human review. Do not relabel it
+'insufficient', repair the answer, or count the unperformed human review as correct.
+
+Also freeze 12 additional challenge claims, each with ONE prospectively invalid
+proposal and ONE matched valid proposal: 24 verifier calls, not 24 independent
+claims. Use four challenges per true verdict. Suggested error allocation:
+  * Four insufficient claims given unjustified decisive proposals: two supported,
+    two contradicted. These test the missing-premise issue in both directions.
+  * Four decisive claims given the wrong decisive verdict: two per true verdict.
+  * Four decisive claims given the correct verdict but deficient/irrelevant proof:
+    two per true verdict. These prevent a verdict-only checker passing.
+Adjudicate the invalidity and valid control before inference; keep all proposals
+schema-valid so this tests semantics beyond a JSON validator. Separate challenge
+claims from native claims. Never derive challenge defects from the new primary's
+observed mistakes. Fixed hash ordering should intermix valid/invalid proposals,
+with no pair ID, type indicator, or adjacent-pair instruction in the payload.
+The checker receives no shared conversation or preceding answers. Reusing weights,
+packet prefixes or caches does not make its errors statistically independent.
+
+This is at most 72 scored generations: 24 primary + 24 native verifier + 24
+challenge verifier. Always run the challenge, even when the primary makes errors;
+adding it only after observing zero errors would make the design adaptive. Freeze
+one verifier prompt, model, schema, output cap and order. No prompt search, retries,
+third stage or outcome-triggered expansion. A generic 'reject anything dubious'
+checker is tested against equally visible matched valid controls.
+
+Metrics: native and challenge results must remain separate
+For native case i let C_i indicate the primary's joint verdict/citation correctness,
+and A_i indicate that its unchanged proposal is accepted. Report all counts:
+  Baseline correct = sum C_i / 24.
+  Incorrect automatic outputs = sum A_i(1-C_i) / 24.
+  Correct automatic outputs = sum A_i C_i / 24.
+  Coverage = sum A_i / 24; manual-review load = sum (1-A_i) / 24.
+  Correct-answer retention = sum A_i C_i / sum C_i, undefined if denominator zero.
+  Observed error catch rate = sum (1-A_i)(1-C_i) / sum (1-C_i), undefined if no errors.
+Also show the four paired accept/reject x correct/incorrect counts and break out
+false support, false contradiction, wrong insufficient and citation-only failures.
+Accepted-only accuracy can be secondary, with numerator and denominator explicit.
+
+An accept/reject-only workflow CANNOT increase correct automatic outputs on the
+all-offered denominator: sum A_i C_i <= sum C_i. Its possible contribution is fewer
+incorrect automatic outputs in exchange for review load and checker cost. Do not
+claim 'accuracy improved' merely by discarding rejected cases. Rejected cases are
+not successful useful completions, and unperformed human review is not free labor.
+If the baseline makes zero native errors, natural error-detection sensitivity is
+unobserved; constructed challenge success cannot be substituted for that result.
+
+Small, fixed engineering gates
+Native screen: require complete valid collection; valid verifier schemas for every
+attempted verification; zero incorrect accepted outputs; at least 18/24 correct
+automatic outputs; and at least 90% retention of the baseline's correct answers (use exact integer
+cross multiplication, not rounded percentages: 10*retained_correct >= 9*baseline_correct).
+Report native coverage and errors by true verdict, without an additional per-class
+coverage gate: routing a harder class more often to review is permissible unless
+a per-class service promise was made. The 18/24 floor explicitly permits
+at most six cases requiring human review, not a measured staffing-capacity claim.
+Primary schema-invalid answers are deterministic human-review referrals, never
+repaired or claimed caught by the semantic verifier; retain them in the 24-offered
+denominator and record any deliberately skipped verifier call. Primary/verifier
+transport or host/clock integrity failure instead leaves collection incomplete
+and prohibits promotion; retain partial data and orphan captures.
+
+Challenge screen: reject 12/12 invalid proposals; accept at least 11/12 valid
+controls. With four valid controls per class, 11/12 already implies at least 3/4
+accepted in each true-verdict class. These thresholds stop
+reject-all, accept-all, and a checker that rejects an entire verdict class. Report
+results by the three prespecified error mechanisms and each matched pair. They
+are a small constructed sensitivity screen, not error-prevalence or production
+reliability estimates. No confidence bound should treat matched proposals or
+repeated packets as independent samples.
+
+Both screens must pass before describing this fixed workflow as having passed its
+narrow screen. Actual naturally occurring errors may be claimed caught only when
+observed among the 24 baseline answers. Passing with no baseline errors supports
+retention plus challenge sensitivity; it does not establish real error reduction.
+Any screen failure ends the experiment. Complete all planned quality cases unless
+an infrastructure or operational-budget stop intervenes; do not stop early after
+obtaining a favorable tally or continue until enough failures are caught.
+
+Operational bounds and remaining limits
+Use one prospective work budget (45 minutes plus existing bounded cleanup is ample
+as a proposed cap, not a predicted duration), with an explicit per-call timeout and
+cleanup reserve. All expected jobs, deterministic skips, attempted IDs and preserved
+raw responses must reconcile. Budget exhaustion means incomplete, not a sample
+size reduction or permission to retry. Preserve actual primary-to-verifier payload
+binding via hashes. An independent scorer should reconstruct native candidate
+correctness and checker decisions from raw payloads before accepting the gate.
+Reuse established host, model, context, clock and owned-process controls. No energy
+or latency superiority claim follows from this serial quality experiment; the
+previous host-load findings especially discourage treating elapsed time as clean
+capacity. The extra verifier generation and human-review burden are real costs,
+but no dollars, energy savings, safety guarantee or independent-owner pooling
+benefit are identified here. A pass enables a separately scoped service evaluation,
+not automatic deployment or a retrospective reopening of the failed 23/24 study.
