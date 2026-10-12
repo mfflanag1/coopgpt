@@ -17,7 +17,7 @@ full upstream files remain byte-exact. Upstream license notices are retained.
 To regenerate cases or descriptive baselines, use a separate temporary copy of
 build_cases.py / baselines.py and their inputs. Do not edit a frozen study in place.
 
-One prospective live command (NOT executed as of the preparation report):
+Historical live command (executed once; do not rerun or delete its capture):
   python3 -B collect.py --output capture
 
 Recheck host readiness immediately before this command. Require pinned qwen3:32b
@@ -30,7 +30,7 @@ never delete failed captures to retry. Work budget is 1800 seconds plus bounded
 cleanup. Original Ollama is never stopped. No energy sampler is started.
 
 After a completed or aborted attempt, independently recount raw responses:
-  python3 -B audit_runtime.py . capture --output INDEPENDENT_ANALYSIS.json
+  python3 -B audit_runtime.py . capture --output /tmp/coop-infra-recount-normal.json
   python3 -B -O audit_runtime.py . capture --output /tmp/coop-infra-recount-optimized.json
 
 The recount preserves partial/orphan request information and separates integrity
@@ -39,3 +39,7 @@ The production score is frozen; no post-response alternative gold or label repai
 Update the report and artifact manifest without changing precollection inputs.
 Only report a pass if the independent audit agrees and data_complete_valid is true.
 Do not automatically start concurrency, energy, human outreach or pooling work.
+
+Completed outcome: 24 scored cases + one unscored warmup, 23 joint successes.
+The frozen gate failed on 7/8 insufficient cases; no later stage was activated.
+Normal and optimized independent recounts of the saved capture agree.

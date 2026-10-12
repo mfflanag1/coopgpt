@@ -1,74 +1,122 @@
-AI-infrastructure documentation qualification — prepared, not run
+AI-infrastructure documentation qualification — completed, not qualified
 12 October 2026 UTC
 
-Status
-A fresh 24-case workload is ready for one prospective Qwen3:32b qualification.
-No warmup or scored model request has been sent for this study. At 02:27:12 UTC,
-the direct-host check reported battery power, 26%, ExternalConnected=false.
-The frozen rule requires AC or the previously permitted battery>=60%; collection
-therefore has not started. Original port 11434 was idle, dedicated port 11562 free,
-thermal reports nominal, and the pinned binary/model manifest matched. READINESS.json
-records the initial observation. A final check at 02:31:56 UTC still reported
-battery power, now 22%, with ExternalConnected=false (READINESS_FINAL.json).
-No collection occurred; these snapshots are not continuing readiness guarantees.
+Result
+Qwen3:32b completed all 24 scored cases and returned valid schemas for all 24.
+It answered 23/24 correctly with acceptable citations (95.83%), but FAILED the
+prospectively frozen qualification gate. Supported and contradicted cases each
+scored 8/8; insufficient-evidence cases scored 7/8 against a required 8/8. There
+were zero false-supported predictions among the 16 non-supported cases.
 
-Why this workload
-The prior SQuAD qualification ended at 8/12 under its exact-span/abstention rule.
-That result remains unchanged. This different task asks whether an engineering
-claim is supported, contradicted, or not established by supplied documentation,
-with excerpt citations. It is an informational assistant for reviewing GPU-serving
-and scheduler claims, not a configuration agent. The operator/service use is a
-plausible research proxy; real demand and time savings have not been established.
+Measure                         Observed       Frozen requirement
+Joint verdict plus citation     23/24          >=22/24
+Supported cases                  8/8           >=7/8
+Contradicted cases               8/8           >=7/8
+Insufficient-evidence cases      7/8           8/8
+Schema validity                 24/24          24/24
+False-supported predictions      0/16          0
 
-Preparation completed
-- Six official source sections are archived at exact repository commits with
-  licenses, SHA256 hashes, and reproducible excerpt offsets/transforms: Kubernetes
-  GPU scheduling, PyTorch CUDA memory, Ray resources, Slurm GRES, vLLM APC and sleep.
-- Twenty-four author-created claims: eight per verdict, four per source section.
-  No development/confirmation split, held-out-population or sampling claim.
-- Initial independent Codex/Fable label checks and final reviews are saved. The
-  final Fable annotation did not receive gold; Codex's second round was not fully
-  blind for five replacements, disclosed in its record. All final labels agree.
-- Citation alternatives were reconciled before inference. D3 is required for the
-  APC no-shared-prefix contradiction; D1's sufficient-condition wording alone
-  does not establish its converse. Other verified corroborating citations are
-  permitted without demanding unnecessary setup premises.
-- The source-offset/hash check passed. All 95 synthetic/offline preparation tests
-  passed in normal and optimized Python. Reused controller/client/clock helpers
-  match the previous separately reviewed QA study byte for byte. The new scorer
-  and independent auditor do not share scoring/gate implementations.
-- Code, cases, prompt, protocol, model pins, source snapshots and accepted evidence
-  are frozen in FREEZE.json before model access. Tests are not observed model data.
+The total-accuracy threshold alone is insufficient. No threshold, label, accepted
+citation, prompt, model, or case changed after collection began. No retuning,
+retry, fallback model, energy measurement or arrival-load sweep was performed.
+This is a completed negative qualification result, not an infrastructure abort.
 
-Fixed success gate
-All 24 schemas valid, at least 22/24 correct verdict-plus-citation answers, at
-least 7/8 supported and 7/8 contradicted cases, 8/8 insufficient cases, and zero
-false-supported predictions on contradicted/insufficient claims. Run every case
-once unless infrastructure fails; no retuning, relabeling, second model or retry.
-Independent raw-response integrity checks must pass before reporting qualification.
-The exact implementation is contract.py; the full design is PROTOCOL.txt.
+The one miss
+Case 333f65d97eb66b804f84 asserts that the described GPU device plugin permits a
+container to request half a physical GPU through its custom resource field.
+The model returned {"verdict":"contradicted","evidence":["D2"]}.
+The frozen answer is {"verdict":"insufficient","evidence":[]}.
 
-Limits exposed before collection
-The fixed lexical top-three ranker already covers the complete proof in 16/16
-supported/contradicted cases, although its returned sets include irrelevant
-citations in every case. It supplies no three-way verdict. Always-insufficient
-scores 8/24 on verdicts alone. This is a lookup-friendly documentation screen;
-it cannot demonstrate broad reasoning or superiority to human source review.
-Cases reuse six packets, are dependent, and mainly test explicit statements or
-qualifications. Public documentation may be in pretraining. Model-assisted label
-review is not human specialist validation. Source snapshots can be development
-versions and say nothing about the software installed on this Mac.
+D2 states the GPU request/limit placement, default and equality rules. Neither
+D2 nor the other supplied excerpts establishes fractional allocation granularity
+or permission. Equality of request and limit is compatible with equal fractional
+values as a logical constraint; it does not by itself establish that such values
+are admitted or forbidden. The operational behavior of the full platform is
+outside this packet-relative task. The missing granularity premise makes the
+frozen label defensible. This error is a false contradiction, not false support.
+The response has no explanation, so outside-knowledge intrusion versus an invalid
+inference from D2 cannot be distinguished from the saved output.
 
-Next action
-After the host meets the power condition, recheck readiness and run exactly the
-frozen one-shot collection. Preserve every response and any partial/orphan data,
-then independently recount correctness, transport, clocks and clean shutdown.
-If it qualifies, design a separate fresh-case, human-reviewed service trial.
-Arrival-load/latency and full-horizon energy measurement require that next
-protocol. Neither this preparation nor a narrow pass demonstrates energy savings,
-production reliability, private opportunity costs or independent-owner pooling.
+Execution and integrity
+Collection ran once from 03:03:50.818 to 03:10:08.819 UTC (378.001 seconds), with
+one retained unscored warmup plus 24 scored generations. The fixed configuration
+was qwen3:32b Q4_K_M, Ollama 0.20.0, P1, context 4096, temperature 0, seed 0,
+think:false and maximum 256 output tokens on the inventoried M3 Max / 96 GB Mac.
+The binary/model manifest matched their pins. Previously recorded full-layer
+hash checks remain provenance, not a new hash of 20 GB during this attempt.
 
-This package leaves all prior model, latency and energy results untouched. The
-longer-term empirical gates still include useful correct work, compatible measured
-hardware configurations, scheduling/latency constraints, and a defensible ownership
-and counterfactual model before any pooling claim.
+All 63 frozen input files retain their precollection hashes. Independent raw
+recounts in normal and optimized Python are identical: 24 offered, dispatched,
+API-completed, schema-valid and summarized requests; no missing or orphan case,
+and no integrity faults. The independent scorer does not import the primary
+scorer. The original 95 offline tests passed during preparation; production code
+was not changed for collection. Runtime fixture outputs are not measured data.
+
+All 48 before/after-request host checks, plus stage endpoints, recorded AC power
+and nominal reported thermal state; the original 11434 endpoint remained idle
+at those checks. The dedicated model unloaded cleanly and its server exited 0.
+Postflight at 03:11:25 UTC independently observed original 11434 idle and dedicated
+11562 closed, on AC power with battery charge at 36%. No continuous host attestation is claimed.
+Clock checks passed: maximum stamp bracket 9.458 microseconds and observed offset
+span 6.167 milliseconds. Unsampled wall-clock changes remain unobservable.
+
+The observed prompt-count/output-cap margin was 3049-3434 tokens; actual outputs
+used 18-24 tokens. Cached-prefix counts are diagnostics, not complete tokenizer
+certification. Serial completion times ranged 5.306-61.453 seconds, median 9.819.
+Host one-minute load rose from 6.588 to 133.115 and reached 242.019 at a sampled
+check. No load threshold was prespecified and the source of this activity was
+not identified. Together with variable packet length and cache history, this
+precludes treating these timings as isolated capacity or production latency.
+An independent Codex audit reconstructed all response scores without importing
+either scorer and confirmed the saved integrity/cleanup evidence. A bounded,
+tool-free Fable report review found no material error within its supplied packet;
+it did not execute the raw-data checks. Review records and adjudication are saved.
+
+The quality/integrity gate includes the checks explicitly stated in PROTOCOL.txt;
+a complete valid capture does not imply an otherwise quiet machine.
+
+Design and review provenance
+Six official source sections were archived at exact repository commits with
+licenses, hashes and reproducible excerpt offsets/transforms: Kubernetes GPU
+scheduling, PyTorch CUDA memory, Ray resources, Slurm GRES, vLLM APC and sleep.
+There are four authored cases per source and eight per verdict. Repeated packets
+make cases dependent; there is no held-out-population or random-sampling claim.
+
+Initial independent Codex/Fable label checks and final annotation reviews are
+saved. Final Fable annotation did not receive author gold. Codex's second round
+was packet-based re-adjudication with intended labels disclosed for five revised
+items, as documented. All final labels agreed before collection. Citation
+alternatives were reconciled prospectively, including the explicit APC negative
+statement required by D3 and optional, relevant contextual citations elsewhere.
+These model reviews are not human specialist validation.
+
+Limits and decision
+The frozen lexical top-three ranker already locates complete proofs for all 16
+decisive cases, though it includes irrelevant citations in every returned set.
+It supplies no three-way verdict and is not a competitive full-task baseline.
+Always-insufficient scores 8/24 on verdicts alone. The observed model score is a
+narrow supplied-documentation result, not proof of broad reasoning or superiority
+to operator review. Source snapshots can be development versions; public text
+may be in pretraining. Actual operator demand, review time saved, operational
+safety, energy efficiency and independent-owner pooling remain unmeasured.
+The earlier SQuAD 8/12 outcome stays unchanged. Different tasks and rubrics do
+not establish that the model improved between studies.
+
+This study stops at the failed gate. A useful follow-up would test whether a
+separately designed evidence-verification workflow catches unsupported decisive
+verdicts, including false contradictions, on fresh independently adjudicated
+cases. The present miss can become a development example, never a new held-out
+success. Any follow-up needs its own frozen design; none was executed here.
+Until a useful-work contract qualifies, more energy or concurrency sweeps would
+not resolve the present semantic failure. Compatible measurements from two
+hardware configurations and actual independent-owner counterfactuals remain
+later requirements for the broader AI-infrastructure pooling project.
+
+Evidence map
+RESULTS.json: compact observed counts, diagnostics and gate decision.
+FAILURE_CASES.json: exact failed proposition, packet, prediction and frozen gold.
+INDEPENDENT_ANALYSIS.json: full independent raw recount and integrity findings.
+capture/: immutable raw streams, actual requests, clocks and lifecycle evidence.
+PROTOCOL.txt and FREEZE.json: unchanged precollection contract and hashes.
+reviews/: annotation, runtime-code, independent outcome and report-scope reviews.
+REPRODUCE.txt: offline recount commands; the live attempt must not be rerun.

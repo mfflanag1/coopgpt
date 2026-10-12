@@ -1,0 +1,76 @@
+[
+  {
+    "audit_record": {
+      "api_completed": true,
+      "dispatched": true,
+      "done_reason": "stop",
+      "evidence_correct": false,
+      "faults": [],
+      "label": "insufficient",
+      "observed_context_margin": 3434,
+      "output_tokens": 22,
+      "prediction": {
+        "evidence": [
+          "D2"
+        ],
+        "verdict": "contradicted"
+      },
+      "quality_pass": false,
+      "raw_file": "333f65d97eb66b804f84.json",
+      "request_id": "333f65d97eb66b804f84",
+      "schema_valid": true,
+      "source_id": "kubernetes",
+      "verdict_correct": false
+    },
+    "case": {
+      "acceptable_evidence": [],
+      "claim": "The described GPU device plugin allows a container to request half of a physical GPU through its custom resource field.",
+      "label": "insufficient",
+      "max_output_tokens": 256,
+      "passages": [
+        {
+          "id": "D1",
+          "source_char_end": 947,
+          "source_char_start": 736,
+          "source_file": "sources/kubernetes.md",
+          "source_text_sha256": "3422fbea8ac42565f64ea79fa33599224560b987095f4195497a363d413e906b",
+          "text": "As an administrator, you have to install GPU drivers from the corresponding\nhardware vendor on the nodes and run the corresponding device plugin from the\nGPU vendor. Here are some links to vendors' instructions:",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D2",
+          "source_char_end": 1910,
+          "source_char_start": 1542,
+          "source_file": "sources/kubernetes.md",
+          "source_text_sha256": "6f5c5c4a12f59c085e8724823574f019611cdd64f606f9810b42555f8477f9d0",
+          "text": "GPUs are only supposed to be specified in the `limits` section, which means:\n* You can specify GPU `limits` without specifying `requests`, because\n  Kubernetes will use the limit as the request value by default.\n* You can specify GPU in both `limits` and `requests` but these two values\n  must be equal.\n* You cannot specify GPU `requests` without specifying `limits`.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D3",
+          "source_char_end": 2533,
+          "source_char_start": 2324,
+          "source_file": "sources/kubernetes.md",
+          "source_text_sha256": "6257c81aae8c39133007894f430433ad440e052878049c4d552b59a73ad7e57c",
+          "text": "If different nodes in your cluster have different types of GPUs, then you\ncan use [Node Labels and Node Selectors](/docs/tasks/configure-pod-container/assign-pods-nodes/)\nto schedule pods to appropriate nodes.",
+          "transformation": "verbatim"
+        },
+        {
+          "id": "D4",
+          "source_char_end": 2824,
+          "source_char_start": 2727,
+          "source_file": "sources/kubernetes.md",
+          "source_text_sha256": "d2fa12581057b1652439386b16bb08aecd41221e81fb3188324093f9ecc0841e",
+          "text": "That label key `accelerator` is just an example; you can use\na different label key if you prefer.",
+          "transformation": "verbatim"
+        }
+      ],
+      "rationale": "The packet gives equality/default rules but no fractional GPU granularity or device-sharing policy. Neither fractional permission nor prohibition is established.",
+      "reasoning": "missing_information",
+      "relevant_evidence": [],
+      "request_id": "333f65d97eb66b804f84",
+      "source_id": "kubernetes"
+    },
+    "raw_response": "{\n  \"verdict\": \"contradicted\",\n  \"evidence\": [\"D2\"]\n}"
+  }
+]
