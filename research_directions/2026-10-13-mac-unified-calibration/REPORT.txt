@@ -1,0 +1,132 @@
+Mac unified-memory GPU calibration — 13 October 2026 UTC
+
+Result
+The actual Mac completed the separately recorded warmup and all nine fixed GPU
+matrix jobs with zero mismatches against the independent CPU calculation. This
+establishes a small native GPU correctness harness on the available machine. It
+does not establish a scheduling improvement, AI serving quality, energy savings,
+independent-owner pooling or a new research result.
+
+Why the direction changed
+The user clarified that only the Mac is available. The repository audit found no
+configured remote GPU server or real cluster queue. The public trace study remains
+valid, but its discrete-GPU placement contract is not the right resource model for
+this machine. We moved to an explicitly constructed one-machine workload instead
+of inventing a production queue, treating GPU cores as separate cards, or declaring
+multiple logical tenants to be independent economic owners.
+
+What was actually executed
+Used existing Apple Command Line Tools, Metal, MetalPerformanceShaders, Accelerate
+and CryptoKit. No third-party package, model, dataset or paid resource was acquired.
+The native program encoded MPSMatrixMultiplication on the default Metal GPU and
+waited for every command buffer to complete. The reference used CPU Accelerate
+SGEMM; a separate literal 4x4 golden example tested that reference and the checker.
+
+The frozen order was one 64x64 warmup, followed by square dimensions
+256,512,1024,1024,256,512,512,1024,256. Every logical output element was checked:
+4,128,768 in the nine measured jobs and 4,096 in the warmup. There were zero
+nonfinite results and zero nonzero absolute differences. Repetitions reuse the
+same artificial matrices; they are not independent application datasets.
+
+The input rules use small integers. For this bounded family, each ordinary
+Float32 dot-product partial sum has absolute value at most 15N <=15,360 <2^24,
+so exact equality is an appropriate criterion. The matrices have short periods
+and are deliberately easy to verify. This is not a stress test of general
+floating-point accuracy, representative model weights or an LLM quality test.
+
+Hardware and conditions
+The fresh inventory reports Apple M3 Max, 30 GPU cores, 14 logical CPU processors,
+and 103,079,215,104 bytes (96 GiB) of physical unified memory. The Metal device
+also reports hasUnifiedMemory=true. The hardware collector's optional Metal
+capability strings were unavailable in this capture; successful native command
+execution supplies the direct runtime evidence instead.
+
+Both power snapshots reported battery power at 96%. The protocol did not require
+AC for this bounded correctness calibration. Thermal diagnostics said no warning
+level had been recorded; they do not establish a measured stable temperature.
+Background desktop activity was uncontrolled. The native process completed in
+about 0.233 seconds, including warmup, CPU checks and hashing. This short experiment
+cannot characterize sustained performance, thermal behavior or battery usage.
+
+Descriptive timing only (three repetitions per size; milliseconds)
+Dimension   GPU command interval range   Host submit-to-complete range
+256         0.070–0.082                  0.635–0.784
+512         0.171–0.203                  0.414–0.833
+1024        1.127–1.166                  1.794–1.940
+
+Host timing begins after buffer/input preparation and encoding, immediately
+before submission, and ends after completion. CPU verification and fingerprints
+come afterward. Neither interval is full request latency. The reversed ordering
+of some host timings illustrates overhead/noise at this scale; no speedup or
+policy ranking is inferred. SUMMARY.json retains unrounded descriptive ranges.
+
+Memory accounting
+A, B and the GPU result are shared system-memory buffers. The CPU reference reuses
+A/B and allocates its own result. At the largest size, the three Metal buffers
+occupy 12,582,912 bytes, the CPU reference 4,194,304 bytes, and the reusable digest
+row scratch 4,096 bytes: 16,781,312 explicit bytes in total, below the 64 MiB cap.
+These quantities count the memory domain once.
+
+The cap excludes framework/private workspaces, allocator metadata and unrelated
+processes. Sampled Metal allocation counters are not peak process memory, available
+unified memory or a proven safe concurrency allowance. The recommended working-set
+property is advisory, not free RAM. No reservation ledger or memory-pressure
+admission bound has been measured. The inventory correctly remains labelled
+hardware_inventory_only and placement_ready=false for the previous cluster model.
+
+Verification and evidence
+DESIGN_FREEZE.json binds the protocol, workload, seven collection/check source
+files and executed native binary before GPU collection. The final independent
+hash-review message arrived just after that record and before execution; the
+freeze candidly retains the then-pending addendum rather than being rewritten.
+The same final binary had already passed its CPU-only self-test. All 19 collection
+fixture tests passed normally and with optimized Python before GPU execution.
+
+The native comparison scans full matrices and rejects corrupt/nonfinite output.
+Separate GPU and CPU SHA256 digests encode all logical Float32 entries in row-major
+little-endian order, excluding padding and normalizing signed zero. The standalone
+verify_results.py reconstructs each full expected matrix using integer arithmetic
+and its exact row/column periods. The independently checked digests therefore
+provide content verification in addition to the native comparison counters,
+subject to the ordinary SHA256 collision assumption.
+
+The independent auditor's execution, corruption controls, findings and final test
+counts are recorded in VERIFICATION.json and reviews/. Its implementation was
+completed around collection; it did not change the frozen workload or acceptance
+criterion. It reads retained records and does not execute another GPU experiment.
+No full duplicate matrix dumps are published; the deterministic input rules and
+complete-output fingerprints are sufficient to reproduce this content check.
+All ten GPU and CPU fingerprints match the independently derived integer oracle.
+The final 28 Python tests pass normally and under -O; the two reviewer audit
+outputs and the controller's optimized reproduction are byte-identical.
+
+An initial compile command without an explicit SDK failed before typechecking;
+the successful explicit-SDK build and its legacy CBLAS deprecation warning are
+retained. No failed physical GPU run preceded the recorded successful run.
+The capture retains raw native JSON, process status, stdout/stderr and hardware/
+power diagnostics. Executables and compiler caches are local, not committed.
+
+Cross-model review is still unavailable under the previously confirmed Fable and
+Opus weekly quota failures. Independent Codex review and executed checks are
+documented; no cross-model approval or external specialist validation is claimed.
+
+Next useful experiment
+Use the Mac as one GPU service with a shared memory pool. Freeze a controlled
+mixed-size request stream and compare serial admission with at most two operations
+in flight, measuring offer-to-validated-completion latency and all late/failed jobs.
+That tests whether concurrency helps or merely increases contention. The present
+three-repeat timings are not a reliable service-time oracle or sustained baseline.
+See MODEL_AND_NEXT_TEST.txt for accounting and promotion conditions.
+
+Before applying this to AI infrastructure, a real useful application must pass
+its own correctness and resource-profile checks. The earlier documentation-answer
+configuration remains unqualified. Energy measurement follows useful-work
+validation; independent-owner pooling still needs independent physical resources
+and meaningful rights/costs. No such next-stage comparison was run here.
+
+Sources
+Apple MPSMatrixMultiplication API and local SDK headers:
+https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixmultiplication
+Apple shared-storage semantics and synchronization requirements:
+https://developer.apple.com/documentation/metal/mtlresourceoptions/storagemodeshared
+Retrieval details: SOURCES.json. Build/API details: BUILD_NOTES.txt.

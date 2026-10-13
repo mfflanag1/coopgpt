@@ -1,0 +1,87 @@
+Mac unified-memory GPU calibration — 13 October 2026 UTC
+
+User constraint: only the Mac is available. This supersedes preparing a collector
+for an unavailable discrete-GPU cluster. The previous whole-device planner and
+public-trace audit remain unchanged. This is a new hardware/workload calibration,
+not an extension claiming that Apple GPU cores are independently allocatable GPUs.
+
+Question: can we execute a small, exactly checkable linear-algebra workload on the
+actual shared-memory GPU, capture honest memory quantities, and obtain a useful
+primitive for a later single-machine queueing experiment?
+
+Domain: one local Mac with unified memory; one owner/operator; no production job
+queue is supplied. The offered jobs below are deliberately constructed matrix
+operations. They are not user requests, LLM answers or independent economic owners.
+No model download, serving endpoint, private data, network call, cloud allocation,
+package installation, power control, scheduler modification or energy run is needed.
+
+Hardware capture
+Record selected physical RAM, logical CPU and GPU model/core/Metal facts, with
+read status and capture interval. Exclude serial numbers and account identifiers.
+Record power source and available thermal diagnostics before/after the workload.
+Background desktop activity is uncontrolled. Missing diagnostics remain unknown.
+Physical RAM, Metal allocation samples and recommended working set are distinct;
+none is an observed scheduler reservation or permission to allocate all memory.
+CPU and GPU use one shared pool; do not count physical memory twice.
+
+Fixed workload and correctness gate
+Use Apple's native MPSMatrixMultiplication for Float32 square matrices:
+ A[i,k] = ((i+3k) mod 7)-3;
+ B[k,j] = ((5k+j) mod 11)-5.
+One 64x64 warmup is recorded separately. Then execute exactly nine serial jobs
+in order: 256,512,1024,1024,256,512,512,1024,256.
+This is three repetitions at each dimension; no additional sizes after inspecting
+results. For each operation, wait for the Metal command buffer to complete, check
+its status, and compare EVERY output element against CPU Accelerate SGEMM.
+Initialize GPU output to NaN; nonfinite/unwritten elements fail, as does any nonzero
+absolute difference. A separate CPU-only 4x4 golden case and corrupted-output
+controls must verify the reference and checker before collection.
+Retain separate SHA256 digests of GPU output and CPU reference, each encoded as
+the logical row-major Float32 little-endian bit patterns without stride padding,
+normalizing signed zero to positive zero (as exact numerical equality does).
+Compute these after timing. Independently derive the expected matrix using integer
+arithmetic and compare its digest; agreement checks the complete output content,
+subject to the ordinary SHA256 collision assumption, without publishing duplicate
+large arrays. The A row period is seven and B column period is eleven; exploiting
+these periods in verification is exact for this declared artificial workload.
+
+Inputs are small integers, products have absolute value at most 15, and every sum
+has absolute value at most 15N <= 15,360 < 2^24. Thus ordinary Float32 accumulation
+can represent these intermediate integer sums exactly. This permits a zero-error
+criterion for this bounded input family; it does not establish general floating-
+point accuracy or validate LLM output quality.
+
+The preparation gate requires the golden case and counterfeit/NaN controls to
+pass and an independent source/code review. The physical execution gate requires
+the warmup and all nine planned jobs to complete and match every reference entry.
+Stop at the first correctness/Metal execution failure and retain the failing row.
+Do not select a passing subset, repair output values or expand the workload.
+An outer process timeout of 120 seconds bounds the collection. A timeout or missing
+complete record closes the gate; preserve diagnostic stdout/stderr and any result.
+The explicit matrix buffers/reference arrays remain below 64 MiB; this is not a
+claim about the entire process or Metal driver's peak memory allocation.
+
+Measurement
+Record CPU monotonic submit-to-completion time and GPU command-buffer start/end
+times when available. The latter are device execution intervals, not full request
+latency; unavailable or invalid intervals remain unknown. CPU reference evaluation
+occurs after the GPU timing interval. CPU versus GPU speedup is not an estimand.
+Report explicit matrix payload bytes and actual buffer allocation sizes separately,
+plus any instantaneous Metal allocation samples. Do not label those samples peak
+resident memory, free unified memory, per-job energy or a safe concurrency limit.
+No comparison of admission policies, arrival rates, deadlines or energy is run.
+
+Interpretation and next gate
+Success supports this small exact-input native GPU harness on this machine. It
+does not validate the earlier failed language-model workload, establish production
+throughput, or demonstrate pooling/scheduling/energy gains or research novelty.
+Failure is an actionable implementation/hardware boundary, not a null scheduling
+effect. A later bounded queueing study must predeclare request arrivals, priorities
+or deadlines, queue disciplines, useful-success checks and end-to-end timing, and
+must account for shared memory once. Calibrated GPU timings alone are not a stable
+job-duration oracle. Independent-owner pooling still requires multiple resources.
+
+Freeze this protocol, workload, code and golden reference before physical GPU
+collection. Any later amendment preserves the earlier freeze and failed evidence.
+Use independent Codex checks while the previously recorded cross-model quota
+failure remains active; no cross-model approval is implied.

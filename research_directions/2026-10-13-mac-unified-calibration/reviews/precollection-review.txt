@@ -1,0 +1,97 @@
+Independent precollection review — Mac unified-memory calibration
+Date: 2026-10-13 UTC
+Reviewer: independent Codex agent; no cross-model or external specialist review.
+
+Scope and status
+Reviewed PROTOCOL.txt, WORKLOAD.json, capture_inventory.py, run_calibration.py,
+calibrate.swift and the inventory/runner fixture tests. This is a constructed
+single-Mac correctness/readiness experiment, not a production scheduler benchmark.
+No discrete-GPU snapshot fields, multiple owners, real queue, or energy observations
+are necessary for this deliberately limited calibration. Prior packages are frozen.
+Initial design passes review. A root-requested output-hash addition is pending;
+collection approval applies to the final checked source/binary, recorded below.
+
+Checks actually performed before the pending hash addition
+- Independently generated the 4x4 matrix product with Python integer scalar loops;
+  all 16 entries equal WORKLOAD.json and the Swift golden array.
+- Verified A and B entries are integers in [-3,3] and [-5,5]. Every product has
+  absolute value <=15; any ordinary Float32 product-sum intermediate is an integer
+  bounded in absolute value by 15N <=15,360 <2^24 for the prescribed sizes. This
+  supports exact finite equality for this special input family, not arbitrary
+  floating-point arithmetic. Matrix dimensions and repetitions match the protocol.
+- Ran the compiled native binary with --self-test only. It passed the golden,
+  padded-row, finite corruption, NaN, infinity and complete-scan checks. The
+  self-test branch returns before Metal device creation and submitted no GPU work.
+- Personally ran all 19 Python fixture tests under normal and optimized (-O)
+  Python: both passed. They use mocked hardware/subprocesses.
+- Ran the native binary only against already-existing temporary output paths
+  (ordinary file and symlink). Both returned code 2 before device creation and
+  preserved the original file bytes. No GPU collection was performed by me.
+
+Correctness and stopping behavior
+MPS descriptors use explicit Float32 row strides; neither matrix is transposed.
+CPU SGEMM sees the same explicit A/B strides and creates separate contiguous C.
+The checker scans all N^2 useful entries, catches nonfinite values, and uses zero
+absolute error. C is initialized to NaN, exposing unwritten useful entries. The
+self-test verifies row padding does not enter the comparison. Command status and
+error are checked before output acceptance. Warmup and each of the nine fixed jobs
+stop the sequence at the first failure; the failed row remains in the final report.
+No passing subset or adaptive workload extension is accepted.
+
+Memory and measurement boundaries
+A/B/C are Metal shared-storage buffers in the same system-memory domain. The CPU
+reference reuses A/B and creates a separate C array; the script does not add GPU
+capacity to physical RAM. Largest unpadded payload is 16,777,216 bytes (three
+1024x1024 GPU buffers and one CPU reference). Row-stride lengths and MTLBuffer
+allocatedSize are separately recorded and constrained with the reference under
+64 MiB. Framework workspaces, allocator overhead and process/device peaks are not
+measured by this explicit-payload bound and are correctly disclaimed. Sampled
+currentAllocatedSize and recommended working set are not free memory or a proven
+safe concurrency limit.
+
+Host submit-to-completion timing starts after encode and stops after wait. It
+excludes input creation, encoding and CPU reference work. GPU start/end timestamps
+are retained only when finite, positive and ordered. They describe a command-buffer
+interval, not complete request latency, LLM throughput or scheduling performance.
+The protocol correctly keeps warmup separate and treats background activity as
+uncontrolled. Power/thermal diagnostics describe conditions; no energy is measured.
+
+Output preservation and limits
+Native report publication writes/fsyncs a fresh same-directory temporary and uses
+an exclusive hard link; existing targets cannot be overwritten, including a race
+after the initial lstat. The Python harness creates a new output directory, bounds
+the native process to 120 seconds, and retains stdout/stderr/status on timeout or
+launch failure. A timeout may have no complete RAW.json because native publication
+occurs at the end; that closes the gate and is disclosed, rather than being counted
+as success. Per-job progress is not crash-durable and is not claimed to be.
+
+Precollection conditions
+Freeze the final protocol, workload, all collector/native sources, checks and
+compiled binary; independently validate raw output after collection. CPU-only
+self-tests and this review are preparation checks, not actual GPU results.
+The known cross-model quota limitation remains disclosed; no retry was attempted.
+
+Final precollection approval (output-hash addition)
+Reviewed final canonicalHash implementation and personally reran the rebuilt
+native --self-test. It passed, including known padded/golden SHA256 and signed-zero
+normalization. Hashes read actual GPU output and separate CPU reference pointers,
+exclude row padding, use little-endian UInt32 Float32 bitPatterns, and normalize
+both signed zeros to positive zero. Both hashes are computed after the measured
+interval. Its 4N-byte row scratch is now explicitly included in the memory cap;
+largest explicit unpadded payload including scratch is 16,781,312 bytes.
+
+PASS for collection of the prescribed warmup and nine serial native jobs. This is
+permission-free technical review within the already authorized local task; it is
+not a claim that GPU execution has happened or will succeed. Independent recorded-
+output verification is still required. No material collection blocker remains.
+
+Final reviewed Swift SHA256:
+506cce9820a29f5c3ad5bc50f133932cf5c84e3e9a853260329f6940a14479be
+Final CPU-self-tested executable SHA256:
+95b877709c3107f39ab9d827ba8857cc8537126e027c08916b8c8017458e32be
+
+The independent verifier was implemented separately and may be frozen separately
+from collection sources; report this chronology accurately. It reconstructs the
+complete expected output from integer arithmetic using exact row-7/column-11
+periodicity and compares both output digests, subject to SHA256 collision limits.
+No GPU execution was performed by this reviewer.

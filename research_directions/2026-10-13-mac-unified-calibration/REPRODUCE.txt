@@ -1,0 +1,56 @@
+Reproduce saved-result verification without GPU work
+
+Python standard library only. From this package directory:
+  python3 -B -m unittest discover -p 'test_*.py' -q
+  python3 -B -O -m unittest discover -p 'test_*.py' -q
+  python3 -B verify_results.py --capture capture --output /tmp/new-mac-audit.json
+
+The standalone verify_results.py reconstructs the expected complete matrix outputs
+using integer arithmetic and compares their canonical Float32 output digests. Its
+command and actual executed outcome are recorded in VERIFICATION.json. It does
+not invoke Metal or trust the Swift comparison summaries as its only oracle.
+
+Compile and run the CPU-only preparation checks
+
+Apple Command Line Tools with Metal/MPS/Accelerate/CryptoKit are required. On the
+recorded host the successful command was:
+  xcrun swiftc -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -O -module-cache-path /tmp/coop-mps-module-cache calibrate.swift -o /tmp/coop-mps-calibrate
+  /tmp/coop-mps-calibrate --self-test
+
+Use a fresh output binary path. BUILD_NOTES.txt records the original command,
+initial missing-SDK build error and successful rebuild. The legacy 32-bit CBLAS
+interface produces a deprecation warning; dimensions here are at most 1024.
+No package installation or downloaded model is needed. Platform executables and
+compiler module caches are not committed. Recompilation on another toolchain may
+change the binary hash without changing the source.
+
+Repeat actual hardware collection as a NEW experiment
+
+Do not overwrite this historical capture or DESIGN_FREEZE. Copy the source/tests/
+protocol/workload to a fresh experiment directory and compile there. Execute the
+CPU-only checks and record a new DESIGN_FREEZE.json before GPU work. Its keys are
+source_sha256 (mapping protocol/workload/source/test filenames to their SHA256)
+and binary_sha256; retain preparation time, platform and compiler metadata too.
+The runner verifies these hashes before/after execution. This binds a new run to
+its own binary instead of pretending a rebuilt binary was the original executable.
+
+From that new directory:
+  python3 -B run_calibration.py --binary /absolute/new/binary --output /absolute/new/capture
+
+The new capture directory must not exist. The runner collects selected hardware
+facts and power/thermal diagnostics, runs exactly the fixed warmup and nine jobs
+with a 120-second process timeout, and retains output/status files. It may need
+the same ordinary host access as other local GPU applications; no sudo, device
+settings, model server, scheduler, cloud resource or energy sampler is used.
+Successful process exit is not sufficient: run the independent saved-result audit.
+Different timing observations are expected on an active desktop. They do not need
+to reproduce the original latencies to reproduce the correctness experiment.
+
+Read-only inventory alone
+  python3 -B capture_inventory.py --node-id mac-local --output /tmp/new-mac-inventory.json
+This does not execute GPU work. Its hardware_inventory_only / placement_ready=false
+status is intentional: total hardware capacity is not an allocatable queue snapshot.
+
+PACKET_SHA256.json binds the published source, documentation, logs and capture.
+It excludes itself, local executables, module caches and Python bytecode. The
+earlier discrete-GPU placement/public-trace packages remain unchanged.

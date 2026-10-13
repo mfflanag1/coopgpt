@@ -1,0 +1,70 @@
+Independent recorded-output review — Mac calibration
+Review date: 2026-10-13 UTC
+
+Outcome: PASS for the one bounded recorded calibration. This reviewer performed
+no GPU execution. Both normal and optimized (-O) executions of verify_results.py
+passed and produced byte-identical JSON. The original capture was not edited.
+
+Verification is independent of the collector and Accelerate numerical reference.
+For each prescribed N, scalar integer sums determine C[i,j] for seven row classes
+and eleven column classes, because A repeats by i mod 7 and B by j mod 11. Expand
+these representatives to the entire N by N output, encode each exactly representable
+integer as little-endian Float32 with positive zero, and hash the complete row-major
+content. Both recorded GPU-output and CPU-reference digests equal this oracle for
+all ten rows (one warmup plus nine serial measured jobs). This verifies 4,128,768
+measured elements and 4,096 warmup elements through collision-resistant digests;
+it is not a claim that full floating-point arrays were published or retained.
+
+Other checked record conditions: planned size order and indices; warmup separation;
+all exact-comparison counts/errors; clean command completion; positive finite host
+times; optional GPU time consistency; explicit payload/stride/allocation accounting;
+64 MiB bound; selected Mac inventory consistency; run completion and freeze binding;
+all mandatory frozen sources; exact optional executable hash. Maximum recorded
+explicit buffer/reference/hash-scratch allocation is 16,781,312 bytes. Neither
+that quantity nor the Metal allocation samples are process peak memory or free RAM.
+
+Nine verifier fixture tests passed under normal and -O Python before the actual
+record audit. They check the known golden hash, periodicity against direct complete
+integer loops at 1/4/7/11/19 dimensions, valid status variants, independent GPU/CPU
+hash mutations, missing/reordered rows, misleading pass flags, missing/wrong counts,
+nonfinite/error values, memory-cap violations, bad timing, boolean count confusion,
+missing GPU timestamps, provenance/binary/required-source mutations, and duplicate
+or nonfinite JSON. These are synthetic tests, not additional physical observations.
+
+Chronology and limits
+The collection source/binary freeze predates physical collection. The independent
+auditor and its mutation tests were finalized separately; no original collection
+freeze was rewritten to imply the auditor was included. Its source hash is recorded
+in each independent audit output. The review's final native source and executable
+hashes remain exactly those approved before collection. Audited records do not
+provide cryptographic hardware attestation, repeatability across devices, arbitrary
+floating-point guarantees, request-level queueing results, LLM quality, energy,
+scheduler superiority, multi-owner pooling gains or a research novelty claim.
+No missing production snapshot fields were imposed on this constructed workload.
+
+Reproduce without GPU execution
+python3 -B -m unittest test_verify_results -q
+python3 -B -O -m unittest test_verify_results -q
+python3 -B verify_results.py --capture capture --binary calibrate --output NEW_AUDIT.json
+
+The --binary argument is optional for a published-data audit without a preserved
+platform executable. Omitting it explicitly records binary_bytes_reverified=false;
+all source, capture, mathematical content and freeze-binding checks still run.
+
+SHA256 identities
+verify_results.py
+0b8d2a3732cde08125bae22e23c52652d72d9ee8adfaf7c57b700dc457538651
+test_verify_results.py
+8755eb1675a7cd9eea595d424d08c367c2c2b28a2529c29fbc90c21d2bedb732
+INDEPENDENT_AUDIT.json
+8daefbba0ca74be5c0d5709fd42e40a78d532d9e2b0a68387e55a54df805d5eb
+INDEPENDENT_AUDIT_OPTIMIZED.json
+8daefbba0ca74be5c0d5709fd42e40a78d532d9e2b0a68387e55a54df805d5eb
+capture/RAW.json
+0bbd0dfc0887d56d09b8f4b6f277289305f8ee14408780c04d95b794f9bc6058
+capture/EXECUTION.json
+2b5ade24aae54fe8350f763693e9935906873dd94aead9a8ff099372aec10f4f
+capture/INVENTORY.json
+542ffb9d00b7b9c1e824d32380953fb804e64175670b3a03ea6a719a07cc534e
+DESIGN_FREEZE.json
+e185ab15d2016271680a4b0d0007f889b6796c79ee24fd72c7765046796feae2

@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "node_id": "mac-local",
+  "status": "hardware_inventory_only",
+  "placement_ready": false,
+  "capacity_kind": "hardware_totals",
+  "availability": {
+    "reservations": "unknown",
+    "allocatable_capacity": "unknown",
+    "execution_permissions": "unverified",
+    "application_fit": "unverified"
+  },
+  "memory_semantics": "Physical system RAM includes Apple silicon unified memory; it is not separate dedicated GPU capacity or currently available memory.",
+  "hardware": {
+    "platform": "Darwin",
+    "architecture": "arm64",
+    "physical_ram_bytes": {
+      "value": 103079215104,
+      "status": "observed",
+      "source": "sysctl hw.memsize"
+    },
+    "logical_cpu_count": {
+      "value": 14,
+      "status": "observed",
+      "source": "os.cpu_count (hardware, not usable CPUs)"
+    },
+    "gpu_inventory": {
+      "status": "observed",
+      "devices": [
+        {
+          "model": "Apple M3 Max",
+          "gpu_core_count": {
+            "value": 30,
+            "status": "observed",
+            "source": "system_profiler sppci_cores"
+          },
+          "metal_facts": {},
+          "metal_status": "unknown",
+          "whole_device_availability": "unknown"
+        }
+      ]
+    }
+  },
+  "commands": {
+    "ram": {
+      "command": [
+        "/usr/sbin/sysctl",
+        "-n",
+        "hw.memsize"
+      ],
+      "timeout_seconds": 15,
+      "status": "completed",
+      "returncode": 0
+    },
+    "mac_gpu": {
+      "command": [
+        "/usr/sbin/system_profiler",
+        "SPDisplaysDataType",
+        "-json"
+      ],
+      "timeout_seconds": 15,
+      "status": "completed",
+      "returncode": 0
+    }
+  },
+  "capture": {
+    "started_at_utc": "2026-10-13T23:26:02.124329+00:00",
+    "finished_at_utc": "2026-10-13T23:26:02.329349+00:00",
+    "monotonic_duration_seconds": 0.20481449970975518
+  }
+}

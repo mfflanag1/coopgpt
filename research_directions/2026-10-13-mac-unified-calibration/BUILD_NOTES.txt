@@ -1,0 +1,77 @@
+Purpose: bounded Mac MPS float32 correctness/memory calibration; not a scheduler,
+LLM workload, or CPU/GPU performance comparison. No third-party packages.
+CryptoKit is an Apple framework used only for reproducibility hashes.
+
+Build:
+/Library/Developer/CommandLineTools/usr/bin/swiftc -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -O -module-cache-path /tmp/coop-mac-unified-calibration/swift-module-cache /tmp/coop-mac-unified-calibration/calibrate.swift -o /tmp/coop-mac-unified-calibration/calibrate
+
+CPU-only verification:
+/tmp/coop-mac-unified-calibration/calibrate --self-test
+
+Collection invocation (root must freeze/review before running; use its 120s watchdog):
+/tmp/coop-mac-unified-calibration/calibrate --output /absolute/NEW_PATH.json
+
+Raw build logs:
+build.log: initial compiler invocation omitted -sdk; failed before typechecking
+  with "unable to load standard library for target arm64-apple-macosx26.0".
+build-explicit-sdk.log: compiler invocation above with explicit SDK.
+build-hashes.log: successful intermediate hash-enabled build.
+build-final.log: successful final signed-zero-normalizing build (exit 0).
+self-test-final.log: final CPU-only self-test passed (exit 0), including SHA256.
+Successful builds emit the macOS deprecation warning for legacy cblas_sgemm;
+the bounded Int32 dimensions fit that supported interface. No GPU work was run
+by the implementation worker.
+Final source SHA256: 506cce9820a29f5c3ad5bc50f133932cf5c84e3e9a853260329f6940a14479be
+Final executable SHA256: 95b877709c3107f39ab9d827ba8857cc8537126e027c08916b8c8017458e32be
+
+Local SDK declarations checked:
+MetalPerformanceShaders.framework/Frameworks/MPSMatrix.framework/Headers/MPSMatrixMultiplication.h
+  Explicit transpose flags, shape, alpha=1, beta=0, encode signature.
+MetalPerformanceShaders.framework/Frameworks/MPSCore.framework/Headers/MPSMatrix.h
+  Float32 descriptor dimensions/row bytes; recommended rowBytesForColumns method.
+Metal.framework/Headers/MTLResource.h
+  Shared memory coherence at command-buffer boundaries; resource allocatedSize.
+Metal.framework/Headers/MTLDevice.h
+  hasUnifiedMemory; working-set advisory property; currentAllocatedSize sample.
+Metal.framework/Headers/MTLCommandBuffer.h
+  GPUStartTime/GPUEndTime only meaningful after completion; zero unavailable.
+SDK root: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/
+
+Collection: separately stored N=64 warmup, then exactly 256,512,1024,1024,256,
+512,512,1024,256. One completed command buffer each. Comparison after measured
+submission/wait interval uses Accelerate cblas_sgemm; all N*N entries checked.
+CPU self-test validates padded stride and reference against independent fixed
+4x4 golden [31,-3,-4,-5,-5,24,20,16,-6,16,16,16,-7,8,12,16], then corrupts last
+entry and inserts NaN/infinity to prove complete rejection. It calls no Metal API.
+Both padded actual and contiguous golden data are independently hashed and checked
+against root's Python-derived canonical Float32-LE SHA256:
+3528d12e2f4ce4f09b261bebe1f87a9bf13961f72a9f8fb5e8b10517db08d24a
+Every completed trial records independent GPU-output and CPU-reference SHA256,
+computed after timing from their own buffers, row-major Float32 bitPatterns as
+little-endian bytes excluding row padding. Both signed zeros normalize to positive
+zero; all other bitPatterns remain unchanged. CPU self-test changes one controlled
+zero entry to negative zero and verifies identical canonical hashes. A reusable
+one-row UInt32 scratch requires 4*N bytes. Root's independent reviewer checks both
+hashes against independently reconstructed expected output.
+
+Input elements are exact integers, |A|<=3, |B|<=5; every product and partial sum
+has absolute bound 15*N <=15360 <2^24, permitting exact Float32 comparison.
+Input padding initializes to zero and all output elements/padding initialize NaN.
+CPU reference uses Metal A/B plus a separate N*N Float32 C. Explicit requested
+buffers plus C and the hash scratch row are capped at 64MiB; typical largest case
+is 16MiB + 4KiB total. Reported
+Metal buffers distinguish mathematical payload, requested padded buffer lengths,
+and resource allocatedSize. Framework internals are not measured or capped.
+Device allocation counters are samples, not peak usage or allocatable capacity.
+
+No retry, size reorder, or dropped failure rows. First failure stops collection;
+the failure row and previous rows remain in the JSON. gate_passed requires CPU
+self-test, successful warmup, and all nine complete, exact measured cases.
+Uncaught process termination (e.g. watchdog) yields no final JSON; root must
+treat missing final JSON as incomplete, never infer a pass from stdout.
+
+Output is a same-directory unique O_EXCL|O_NOFOLLOW file (0600), fsynced and
+published atomically by POSIX link to the NEW_PATH. Existing destination paths
+(including dangling symlinks) are refused before Metal initialization and again
+by atomic link. No existing final output is replaced. No shell commands execute
+from output path text. Temporary path is removed on ordinary success/failure.
