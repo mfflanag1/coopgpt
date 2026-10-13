@@ -1,0 +1,121 @@
+{
+  "access_date_utc": "2026-10-13",
+  "assessment": "Our source-to-contract judgment, not a claim by dataset authors",
+  "distinction": "Observed-snapshot qualification additionally requires provenance/time completeness; it is stricter than merely accepting a declared mathematical input. Real operator comparator is required only for claims of superiority over practice.",
+  "previous_formal_schema": "../2026-10-13-gpu-placement/SPEC.txt",
+  "scope": "Five inspected releases; no universal claim about all public GPU data",
+  "sources": [
+    {
+      "available": [
+        "node CPU/RAM capacities and GPU counts/types",
+        "job CPU/RAM/GPU requests and event timestamps",
+        "source-defined unrestricted policy for literal nan; default CSV has blank gpu_spec cells; gpuspec33 adds augmented policies"
+      ],
+      "data_origin": "production-derived inventory and task requests; compatibility variant augmented",
+      "gate": "data_insufficient_for_observed_snapshot",
+      "inspection": "downloaded node/default-task/gpuspec33 CSVs; full row audit",
+      "missing_or_unresolved": [
+        "no task-to-node/device allocation ledger or simultaneous unreserved inventory",
+        "no device VRAM table or ex-ante per-device job VRAM minimum",
+        "no resource-rights owners/access policy or numerical admission priority",
+        "multi-GPU co-location/execution constraints not established"
+      ],
+      "prohibited_inferences": [
+        "capacity equals available capacity",
+        "gpuspec33 constraints are original measured job requirements",
+        "blank CSV cells themselves authenticate measured per-job restrictions, or documented literal nan has no defined semantics"
+      ],
+      "source": "Alibaba GPU2023",
+      "url": "https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-gpu-v2023/README.md"
+    },
+    {
+      "available": [
+        "node CPU/GPU capacities and GPU models",
+        "job requested GPU model, CPU/GPU quantities, worker count, submit time/duration and job class",
+        "organization label"
+      ],
+      "data_origin": "published spot/high-priority inventory and job trace",
+      "gate": "data_insufficient_for_observed_snapshot",
+      "inspection": "downloaded node/job CSVs; full row audit",
+      "missing_or_unresolved": [
+        "no node host-RAM or job RAM/VRAM demands",
+        "no placement/start-time/completion/reservation ledger",
+        "request quantities per worker versus whole job not explicit",
+        "organization is not node ownership/permission; HP/Spot is not numerical priority"
+      ],
+      "prohibited_inferences": [
+        "submit_time+duration is an observed completion time",
+        "multiply request quantities by worker_num without resolving semantics",
+        "organization implies hardware ownership or access consent"
+      ],
+      "source": "Alibaba SpotGPU2026",
+      "url": "https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-v2026-spot-gpu/README.md"
+    },
+    {
+      "available": [
+        "server identity/type/count/CPU capacity",
+        "pod/server association, fractional GPU and CPU requests, priority class",
+        "gpu_mem_request plus separate average GPU-memory use"
+      ],
+      "data_origin": "hourly observed pod/server fact tables",
+      "gate": "data_insufficient_for_observed_snapshot",
+      "inspection": "schema/download metadata only; large archives not downloaded",
+      "missing_or_unresolved": [
+        "gpu_mem_request units and per-device versus total semantics unspecified",
+        "no host-RAM inventory/request fields or physical device identities",
+        "hourly observations do not establish simultaneous reservations or complete global pending queue",
+        "no resource-owner permissions or numerical priority scores"
+      ],
+      "prohibited_inferences": [
+        "GPU-hours imply simultaneous occupancy",
+        "average GPU memory equals requested minimum",
+        "cross-release hashed identifiers can be joined"
+      ],
+      "source": "Alibaba ASI GPU2026",
+      "url": "https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-gpu-v2026/docs/schema.md"
+    },
+    {
+      "available": [
+        "requested CPU/RAM/GPU fractions",
+        "task-instance-machine placement and timing joins",
+        "gpu_type_spec in group metadata distinguishes requested type from assigned gpu_type"
+      ],
+      "data_origin": "task/instance/machine tables plus lifetime-aggregated sensor data",
+      "gate": "data_insufficient_for_observed_snapshot",
+      "inspection": "schema, published archive sizes and source scout; data archives not downloaded",
+      "missing_or_unresolved": [
+        "per-device job VRAM requirements and complete contemporaneous reservation ledger",
+        "requested requirements cannot be replaced by lifetime utilization statistics",
+        "ownership/access/numerical priorities unresolved; distributed/sharing semantics exceed v1"
+      ],
+      "prohibited_inferences": [
+        "assigned GPU type equals only permitted type",
+        "observed lifetime memory statistics were known at submission"
+      ],
+      "source": "Alibaba GPU2020",
+      "url": "https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-gpu-v2020/README.md"
+    },
+    {
+      "available": [
+        "physical GPU assignment history and per-GPU memory inventory",
+        "submission/attempt times when present",
+        "host memory/CPU and GPU utilization series"
+      ],
+      "data_origin": "published job attempts and physical GPU allocation history",
+      "gate": "data_insufficient_for_observed_snapshot",
+      "inspection": "official schema/license and source scout; large trace archive not downloaded",
+      "missing_or_unresolved": [
+        "ex-ante CPU/RAM/VRAM job requirements and permitted type/owner policy",
+        "missing/never-scheduled attempts prevent complete occupancy/demand reconstruction",
+        "unreserved availability and numerical priorities not established"
+      ],
+      "prohibited_inferences": [
+        "recorded execution allocation is an ex-ante request",
+        "low utilization means device is free",
+        "virtual-cluster/user label is resource ownership permission"
+      ],
+      "source": "Microsoft Philly",
+      "url": "https://github.com/msr-fiddle/philly-traces/blob/master/README.md"
+    }
+  ]
+}

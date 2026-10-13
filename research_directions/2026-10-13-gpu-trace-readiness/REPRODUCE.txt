@@ -1,0 +1,29 @@
+Python 3.10+ standard library; no inference service or cluster access required.
+All paths below are relative to this package directory.
+
+1. Obtain the exact public bytes (about 24.4 MB total):
+python3 -B fetch_sources.py --cache data-cache --record /tmp/coop-source-retrieval.json
+
+SOURCE_LOCK.json pins official paths, byte lengths and Git blob identities to
+Alibaba revision cb65b488983ce23efb09eb891f796c214e0a3fd3. DOWNLOAD_RECORD.json
+records the original retrieval and SHA256s. Existing matching cache files are
+reused; mismatches stop rather than being replaced. Choose a new --record path.
+The cache contains public raw files for local inspection and is excluded from Git.
+
+2. Execute focused checks:
+python3 -B -m unittest discover -p 'test_*.py' -q
+python3 -B -O -m unittest discover -p 'test_*.py' -q
+
+3. Rebuild the descriptive source audit to a NEW output:
+python3 -B analyze_traces.py --cache data-cache --output /tmp/coop-trace-audit.json
+python3 -B -O analyze_traces.py --cache data-cache --output /tmp/coop-trace-audit-O.json
+
+Compare these outputs with TRACE_AUDIT.json. This is deterministic reconstruction
+of the same source data, not another observation or an out-of-sample test.
+No allocation policy is run and no incomplete trace is converted into a valid
+snapshot. Scientific qualification depends on the documented source semantics
+as well as the mechanically checked rows; see REPORT.txt and SOURCE_MATRIX.json.
+
+DESIGN_FREEZE.json records the protocol and source lock before the numerical audit.
+PACKET_SHA256.json binds the final code/reports/results, excluding raw cache and
+the inventory itself. The previous 2026-10-13-gpu-placement package remains frozen.

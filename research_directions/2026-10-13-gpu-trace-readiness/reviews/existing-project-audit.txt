@@ -1,0 +1,111 @@
+Local evidence audit for GPU snapshot placement — 2026-10-13
+
+Scope: read-only inspection of CoopGPT research_directions/2026-10-11-* and
+2026-10-13-gpu-placement, with a repository-wide filename search for hardware,
+inventory, snapshot, queue and cluster artifacts. No credentials/config discovery,
+new workload, live cluster query, telemetry run or repository mutation performed.
+Root: /Users/maxf/projects/economics-research/game-theory/coopgpt
+
+CONCLUSION
+No authoritative real discrete-GPU inventory paired with pending jobs' GPU/CPU/
+RAM/VRAM requirements and owner permissions was found. The existing 140-case
+placement cohort and examples are synthetic. Existing local Mac observations and
+public serving traces cannot be relabeled as such an inventory/queue snapshot.
+
+WHAT EXISTS
+1. Historical local hardware observation:
+ research_directions/2026-10-11-mac-feasibility/REPORT.txt:8
+ reports MacBook Pro Mac15,10, Apple M3 Max, 30 GPU cores, 96 GB unified memory.
+ The user described an M3 Pro, but the observed machine differed. The report
+ deliberately excludes serial/host identifiers. This is historical hardware
+ metadata, not a current available-resource snapshot. capture/ENVIRONMENT.json
+ records Ollama version/model tag/digest and loaded model size/size_vram, not an
+ authoritative device inventory or allocatable host RAM. smoke.py:77 writes that
+ API metadata. No CPU reservation/availability or scheduler job-demand data.
+
+2. Actual local request timing and serving-state observations:
+ research_directions/2026-10-11-mac-mixed-energy/client.py:137 and :308
+ preserve request_id, arrival_offset_s, dispatch_offset_s, first_content_offset_s,
+ terminal_offset_s, completion/error and response metadata. The arrivals are
+ deliberately constructed workload offers, not a real operator's GPU job queue.
+ capture-ac-confirmed/window-01/RUN.json (and other windows) retain UTC boundaries,
+ load averages, AC/thermal observations, serving parallelism, model digest and
+ reported resident model memory. Load average is not allocatable CPU capacity;
+ Ollama size_vram is not separate device VRAM capacity or per-request GPU demand.
+ Raw power capture concerns the one shared Mac; no independent owners/resources.
+
+3. Real public arrival trace:
+ research_directions/2026-10-11-inference-pilot/trace_ingest.py:33
+ has exactly TIMESTAMP, ContextTokens, GeneratedTokens. trace_sample.csv and
+ TRACE_PROVENANCE.json preserve the bounded Azure convenience sample. No GPU or
+ node assignment, CPU/RAM/VRAM demands, owners, admission state or priorities.
+ Token counts cannot fill missing hardware requirements without a new explicit
+ validated workload model. This importer is reusable only for request-arrival
+ provenance conventions, not for placement conversion.
+
+4. Public measured hardware/configuration pairs:
+ research_directions/2026-10-11-measured-serving/data/wattgpu/
+ COMPATIBILITY_AUDIT.txt reports one A100-SXM4-40GB and one H100 NVL (94 GB),
+ per-run energy and timing arrays. Missing request IDs and arrival timestamps;
+ no paired authoritative node availability, host CPU/RAM demand, owner consent or
+ scheduler queue. data/melodi/PAIRED_MEASUREMENTS.csv and RECOMMENDATION.txt concern
+ paired completed requests, with unresolved software/energy comparability.
+ Neither is a live or retrospective scheduling inventory/queue record.
+
+REUSABLE READ-ONLY COLLECTION / VALIDATION PIECES
+ research_directions/2026-10-11-measurement-closure/telemetry.py:52 NVMLBackend:
+ - Explicit selected full GPU UUIDs; rejects MIG/ordinal selection; confirms UUID.
+ - Metadata: name, total device memory bytes, driver version, power limits.
+ - Compute PID snapshot has explicit unsupported/error status; missing support
+   never silently becomes empty occupancy.
+ - Read-only: no workload, clock or power-limit changes. Pynvml imported lazily.
+ - DOES NOT provide available host CPU/RAM, GPU reservation authority, scheduler
+   jobs, owners/permissions, job requirements or an atomic cluster snapshot.
+ - It queries selected GPUs supplied by caller; not a complete discovery adapter.
+ - Memory is total memory. An idle process list does not prove unreserved device.
+ - Existing fixture_capture/run/run.json is explicitly synthetic, not hardware.
+
+ measurement-closure/collect.py:217 is NOT a pure inventory collector: it invokes
+ an existing vLLM server with warmup/workload requests and telemetry. Do not call
+ it for read-only placement collection. config.example.json contains FILL_ME
+ fields, not a known real GPU endpoint/inventory. The historical closure REPORT
+ says no actual GPU execution occurred on the macOS host.
+
+ research_directions/2026-10-13-gpu-placement/verifier.py:81 validate_manifest,
+ :186 verify_plan; solver.py:55 solve; placement.py:9 CLI are reusable once a
+ truthful manifest is available. SPEC.txt bounds 8 jobs, 8 GPUs, 4 nodes.
+
+MAC MODEL BOUNDARY
+The M3 unified-memory device does not satisfy the present interpretation of
+whole independent discrete GPUs each with separate VRAM and shared host RAM.
+Its 30 GPU cores cannot become 30 GPU resources; its 96 GB cannot simultaneously
+be counted as separate host RAM and device VRAM. Software parallel slots are not
+independent GPU ownership units. Existing Mac measurements remain useful local
+serving evidence, but provide no real validation of this placement model. The
+placement REPORT.txt:73 already records this boundary.
+
+MINIMAL NEXT INTEGRATION BOUNDARY
+Obtain an explicitly supplied, read-only snapshot from a known operator/scheduler
+covering one or a few discrete-GPU nodes and at most 8 pending jobs. Keep raw
+source values, capture UTC, source/version, units and mapping provenance; fail
+closed on missing fields instead of assigning default capacity/permissions.
+Required resource facts: node identity alias, owner declaration, independently
+allocatable CPU and host RAM, actual GPU IDs/type/total usable VRAM and which
+whole devices are available according to authoritative reservations. Required
+job facts: stable alias, admitted-resource demand (GPU count, per-device minimum
+VRAM, CPU, host RAM), allowed families/owners, externally declared priority and
+pending state. Arrival timestamps aid provenance but do not alter this snapshot
+objective; never infer pending state from a completed-request trace.
+
+CPU units must use an explicit scheduler conversion (e.g. millicores versus
+cores), and capacity/demand must share that unit. Family naming must map real
+device/compatibility profiles to declared IDs; same name does not itself prove
+driver/container/topology compatibility. Sensitive raw identities need not be
+published; deterministic local aliases can preserve mapping privately.
+
+An importer should preserve unsupported fields/reasons in a separate audit and
+refuse conversion when they affect feasibility. It should not query arbitrary
+stored cloud contexts or credentials. A fresh reservation and execution test is
+separate from solving a historical snapshot; do not dispatch from stale data.
+No additional local benchmark is needed to establish the present missing-data
+boundary. A hardware intake/validation tool can be prepared before access exists.

@@ -1,0 +1,166 @@
+Real GPU trace qualification — 13 October 2026 UTC
+
+Result
+The inspected public releases do not supply a complete, time-consistent observed
+snapshot for the existing whole-GPU placement model. The outcome is data-insufficient
+for that empirical gate. It is not a failure of the exact optimizer, evidence that
+all public traces are unsuitable, or evidence against GPU pooling.
+
+We downloaded and audited real public inventory/request tables from two Alibaba
+releases, and inspected the documented schemas of three additional releases.
+No optimizer, inference workload, live scheduler, performance or energy experiment
+was run. The previous placement package and mathematical manuscripts are unchanged.
+
+What was fixed before counting
+PROTOCOL.txt and SOURCE_LOCK.json were hashed in DESIGN_FREEZE.json before the
+numerical audit. The gate requires one decision instant, the relevant pending
+queue and reservations, allocatable device/CPU/RAM inventory, ex-ante resource
+requirements, documented access policies and declared numerical priorities.
+The bounded model supports at most four nodes, eight whole GPUs and eight jobs.
+An observed operator decision is additionally required for a claim of improvement
+over practice, but not merely for a feasibility check.
+
+This provenance gate is stricter than the previous mathematical input validator.
+An assumed empty cluster or an explicitly chosen administrative policy can define
+a valid simulation; it does not by itself reconstruct an observed operational
+decision. No missing mandatory field was filled with an invented measured value.
+
+Sources and scope
+Alibaba revision: cb65b488983ce23efb09eb891f796c214e0a3fd3.
+Twelve files, including metadata, were downloaded: 24,412,980 bytes in total.
+SOURCE_LOCK records paths, official URLs, byte sizes and Git blob identities;
+DOWNLOAD_RECORD adds SHA256 and retrieval metadata. All source bytes were checked
+before and after analysis. Raw files remain in the ignored local data-cache;
+the repository publishes code, hashes and derived descriptive results.
+
+The five CSV tables contain 488,662 records, including node records and a repeated
+job cohort with augmented policies. This is NOT 488,662 distinct jobs.
+
+Table                                      Records
+Alibaba GPU2023 nodes                         1,213
+Alibaba GPU2023 default tasks                 8,152
+Alibaba GPU2023 gpuspec33 tasks                8,152
+Alibaba SpotGPU2026 nodes                     4,278
+Alibaba SpotGPU2026 jobs                    466,867
+
+Every table has unique nonblank IDs and consistent row widths. No rows were dropped.
+The analyzer records blank cells, numeric validity, ranges, request categories and
+raw categorical distributions. TRACE_AUDIT.json is the original result; later
+verification outputs do not constitute new data or an out-of-sample replication.
+
+What the records show
+GPU2023 default tasks contain 1,088 CPU-only requests, 3,911 whole single-GPU
+requests, 75 multi-GPU requests and 3,078 fractional single-GPU requests. The
+source says gpu_milli applies to single-GPU tasks; it was not used to reinterpret
+multi-GPU demand. There are 897 blank scheduled_time cells, all on Pending tasks,
+and one zero memory_mib request. These observations were retained, not repaired.
+The zero RAM request is outside the previous validator's positive-RAM contract.
+
+The default and gpuspec33 files contain exactly the same 8,152 task IDs. Only the
+gpu_spec field changes, in 2,388 rows; every other field matches. The original
+README explicitly describes these variants as augmented type requirements.
+All default gpu_spec cells are blank. The README defines literal nan as no GPU-type
+constraint; blank CSV cells and that documented policy token are reported
+separately. Added gpuspec33 restrictions are not measured per-job compatibility.
+Twenty-five augmented rows repeat a compatibility token: V100M32 occurs twice in
+two raw strings appearing 22 and three times. No automatic deduplication occurred.
+
+SpotGPU2026 contains 415,713 HP jobs and 51,154 Spot jobs. Worker counts range from
+one to 332; 39,283 jobs request more than one worker. There are 49,238 nonintegral
+gpu_request values, 788 nonintegral cpu_request values and two zero CPU requests.
+Those are domain mismatches for the current integer whole-GPU model, not necessarily
+errors in the source. Spot numeric fields have no blank, nonfinite or negative
+values. Requested GPU models are genuinely supplied. The README does not settle
+whether CPU/GPU requests apply per worker or to the whole job; no multiplication
+by worker_num was performed.
+
+Why the full observed-snapshot gate remains closed
+GPU2023 supplies node CPU/RAM capacity, GPU counts/types, requests and event times.
+It lacks the device allocation/reservation ledger, physical per-device VRAM and
+job minimum VRAM, resource-rights policies and numerical admission scores needed
+here. Total capacity is not residual availability. The type-augmentation comparison
+is useful evidence about scenario construction, not about actual execution fit.
+
+SpotGPU2026 supplies requested GPU types, CPU/GPU quantities and worker counts,
+but no host-RAM/job-RAM/VRAM fields or start/placement/reservation ledger. Submission
+time plus duration is not an observed completion timestamp. Organization labels do
+not establish hardware ownership or permission; HP/Spot classes are not numeric
+priority scores. Request aggregation and gang placement also remain unresolved.
+
+ASI GPU2026 HAS a gpu_mem_request field. Its documented units and per-device versus
+total meaning are unresolved; average measured memory is a different quantity.
+Hourly pod/server observations do not identify a simultaneous reservation state
+and complete global pending queue. Host RAM, physical device identities and access
+policies are also missing for this contract. We inspected schema/download metadata,
+not its large archives; the pod archive alone is documented at about 352 GB.
+
+GPU2020 supplies instance-machine placements, resource requests and requested
+versus assigned GPU-type fields. Lifetime utilization averages/peaks are not
+ex-ante application requirements. Device VRAM requirements, complete contemporaneous
+reservations and access policies remain unresolved; sharing/distributed semantics
+also exceed the present model. Its large trace archives were not downloaded.
+
+Microsoft Philly provides GPU allocation histories and per-GPU memory inventory,
+but not the needed ex-ante CPU/RAM/VRAM demands or permissible placement policies.
+Incomplete/never-scheduled attempts also limit state reconstruction. We inspected
+the official schema and license, not the large trace archives. This source review
+uses the linked official pages, not a locally pinned full data release.
+
+SOURCE_MATRIX.json records each source-to-contract judgment and its scope.
+These conclusions follow from source semantics, not just missing column names.
+There was no cross-release identity join. The five-source finding is deliberately
+narrower than a statement that no suitable public data could exist.
+
+Verification and review
+An independent Codex reviewer read every cached file, checked source identities,
+and recounted all five CSV tables without importing the candidate analyzer.
+All recounted aggregates agree. It independently confirmed the exact augmentation
+join, Pending timestamp blanks, fractional requests and repeated policy tokens.
+Its output is INDEPENDENT_ANALYSIS.json; the recount was run as inline code, not
+as a separately saved executable. Candidate reconstruction is reproducible through
+REPRODUCE.txt. These are two calculations on the same observations.
+
+The reviewer identified a provenance guard gap: mutually edited URL/revision
+labels could pass the original byte checks. Actual recorded URLs and bytes were
+independently verified correct. The repair and its regression checks are recorded
+in VERIFICATION.json and reviews/implementation-review.txt; the original numerical
+result is preserved. The design record detects later accidental changes, not
+malicious coordinated replacement of every manifest and hash.
+
+Cross-model review remains unavailable after the previously recorded Fable and
+Opus weekly-quota failures. No cross-model approval or human specialist review is
+claimed. See REVIEW_STATUS.txt for the carried-forward failure records.
+
+Next step
+Obtain one operator-authorized, read-only export satisfying OPERATOR_INTAKE.txt:
+a common decision instant, available whole devices and reservations, the pending
+queue's CPU/RAM/per-device-memory demands, permissions, declared priorities and
+any observed placement used as a comparator. An inventory query alone is not
+enough. Resolve missing semantics before conversion or comparison.
+
+Once that input exists, compare feasible placements within the bounded slice;
+then verify actual application fit and useful completions before latency/energy
+claims. Independent-owner pooling additionally needs real resource rights,
+feasible deviations and costs or values. The Mac's unified GPU/memory system
+requires a different explicit model; its GPU cores are not separate whole GPUs.
+
+If only public data are available, a separate defensible project is reproduction
+of an established trace-simulation study with its assumptions and strong baselines,
+such as FGD. That would address simulated scheduling behavior, not close this
+observed-snapshot gate. No such follow-on experiment was started here.
+
+Original sources (accessed 13 October 2026 UTC)
+Alibaba GPU2023 schema and augmentation definitions:
+https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-gpu-v2023/README.md
+Alibaba SpotGPU2026 request definitions:
+https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-v2026-spot-gpu/README.md
+ASI GPU2026 schema and archive metadata:
+https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-gpu-v2026/docs/schema.md
+https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-gpu-v2026/docs/data_download.md
+Alibaba GPU2020 schema:
+https://github.com/alibaba/clusterdata/blob/cb65b488983ce23efb09eb891f796c214e0a3fd3/cluster-trace-gpu-v2020/README.md
+Microsoft Philly original schema and license:
+https://github.com/msr-fiddle/philly-traces/blob/master/README.md
+https://github.com/msr-fiddle/philly-traces/blob/master/LICENSE
+Existing FGD scheduling research (not a novelty claim for our prototype):
+https://www.usenix.org/conference/atc23/presentation/weng

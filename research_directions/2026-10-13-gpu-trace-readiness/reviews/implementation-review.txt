@@ -1,0 +1,131 @@
+Independent implementation and source interpretation review
+Review date: 2026-10-13 UTC
+Reviewer: independent Codex agent; no cross-model or external specialist review.
+Scope: read-only review of analyze_traces.py, fetch_sources.py, PROTOCOL.txt,
+SOURCE_LOCK.json, SOURCE_MATRIX.json, current TRACE_AUDIT.json, test fixture source,
+and cached GPU2023/Spot2026 original README definitions. No optimizer, deployment,
+network call, canonical repository edit, or candidate analyzer import was used.
+
+Outcome
+The published aggregate candidate has zero discrepancies in the independently
+recounted quantities below. Source interpretation supports a data-insufficiency
+conclusion for the full placement contract, not scheduler performance or energy
+claims. Two follow-ups were sent before integration: harden revision/URL binding,
+and name repeated tokens in augmentation policies explicitly in the report.
+
+Checks actually performed
+1. Independently read every one of the 12 locked source files; recomputed byte
+   size, Git blob SHA1 and SHA256. All match SOURCE_LOCK/DOWNLOAD_RECORD. Every
+   recorded URL equals the official raw URL formed from the recorded repository,
+   revision and path. Total 24,412,980 bytes agrees with DOWNLOAD_RECORD.
+2. A separate stdlib csv.reader/Decimal/Counter implementation, importing none of
+   the candidate analyzer, recounted all five full CSV tables. Row totals, numeric
+   category counts, all categorical distributions, blank columns, row widths,
+   unique IDs and duplicate-ID surplus match TRACE_AUDIT.json. No malformed-width
+   rows or duplicate IDs were found. Numeric signs/nonintegrality were retained.
+3. Independently joined default/gpuspec33 by unique name and compared every field.
+   Exactly 8,152 IDs match; exactly 2,388 rows change, solely gpu_spec. No other
+   field changes. This is augmentation, not new independent job observations.
+4. Read both original README schema definitions and checked the GPU category
+   interpretation. GPU2023 gpu_milli applies when num_gpu == 1. Its values are
+   retained but not used to reinterpret num_gpu == 0 or num_gpu >= 2. Classification
+   in each job file: 1,088 CPU-only, 3,911 whole single-GPU, 3,078 fractional single,
+   75 multi-GPU. The candidate does not turn fractional requests into whole devices.
+5. Independently checked noteworthy anomalies: all 897 blank scheduled_time cells
+   belong to Pending jobs; there is one zero memory_mib request; Spot has 49,238
+   numerically fractional gpu_request values, 788 fractional cpu_request values,
+   two zero cpu_request values and 39,283 worker_num values greater than one.
+   The source does not resolve whether request counts are per-worker or whole-job;
+   no multiplication was performed. HP/Spot and organization were not converted
+   into welfare weights, resource ownership or consent.
+6. Augmented compatibility strings contain repeated V100M32 entries in 25 rows:
+   V100M16|V100M32|V100M32 occurs 22 times; the longer A10|G2|P100|T4|V100M16|
+   V100M32|V100M32 string occurs three times. Raw categories preserve this anomaly.
+
+Row totals
+GPU2023 GPU-node table: 1,213.
+GPU2023 default jobs: 8,152.
+GPU2023 gpuspec33 jobs: 8,152 (same source IDs; not an independent job cohort).
+Spot2026 nodes: 4,278.
+Spot2026 jobs: 466,867.
+
+Actionable findings
+A. Provenance hardening: verify_inputs currently validates revision equality between
+   lock and download record and validates byte identities, but does not validate
+   that URL, repository, revision and relative path agree. A simultaneous accidental
+   edit of both revision labels or both URLs is not rejected. Actual current inputs
+   pass an independent exact URL construction check, so this does not invalidate
+   current counts. Enforce a 40-hex pinned revision and the raw-host URL derived
+   from the declared supported repository and relative path; include mutation tests.
+B. Report the 25 repeated-token augmentation rows explicitly. A later converter
+   must not silently repair these into canonical permission lists.
+C. Wording caution: SOURCE_MATRIX says default policy is declared unrestricted and
+   its prohibited-inference wording groups nan and blanks. The README explicitly
+   defines literal nan as unrestricted, while downloaded defaults contain blank
+   cells. Current analyzer sensibly retains blank separately. Prefer equally clear
+   prose in the final report: baseline source description plus blank-cell counts;
+   do not claim a blank CSV token itself supplies a measured per-job type policy.
+
+Limits of this review
+Did not execute candidate unit tests, mutate candidate code, independently inspect
+large non-downloaded releases, verify Git hosting authenticity beyond recorded
+pinned official URLs/blob identities, or run any optimizer. Current data hashes and
+candidate file hashes reviewed are recorded in coop-independent-trace-counts.json.
+The recount is one deterministic audit of the same files, not a new observation.
+
+Repair adjudication, 2026-10-13 UTC
+The provenance finding is closed for the inspected implementation. Analyzer now
+requires the exact supported repository, a lowercase 40-hex revision, and the exact
+raw URL derived from repository/revision/path. It checks protocol/source-lock
+SHA256 identities against DESIGN_FREEZE before and after analysis, and detects a
+changed DESIGN_FREEZE file itself. I read the repaired code and tests and personally
+executed all 31 tests in ordinary and optimized Python; both pass. This supersedes
+the initial review's statement that I had not run candidate tests.
+
+The root's fetcher separately enforces frozen protocol/source-lock hashes before
+retrieval, exact supported repository/revision/path URL binding and the 30 MB
+per-file cap. I imported this fetcher for 11 independent offline checks with all
+network calls explicitly forbidden: existing 12 cached files, valid tiny fixture,
+wrong repository, invalid revision, wrong URL, changed revision with old URL,
+oversize bytes, boolean bytes, parent traversal, changed frozen protocol and
+changed frozen source lock. Every check passed. Temporary fixtures were cleaned up;
+source files and canonical repository were not modified.
+
+The original TRACE_AUDIT.json remains byte-identical to the independently recounted
+version. I compared the worker's separately generated TRACE_AUDIT_REVIEWED.json to
+that original directly: identical, 81,776 bytes. I did not claim the worker's rerun
+as my own execution. The source matrix now distinguishes documented literal nan
+semantics from observed blank CSV cells, closing the wording caution. The 25
+repeated-token rows are recorded explicitly in this review and independent JSON.
+No outstanding blocker was found for the limited data-qualification conclusion.
+
+Reviewed repair SHA256 identities
+analyze_traces.py:
+0939a428ee697cfe148d8c3ee59b3c716dbe0363fe38c4dfc1484dc191811112
+fetch_sources.py:
+af21af5e55e71893513bc6c1885c72e97a1732468d990f96bf6b6c7ce50af2c7
+test_analyze_traces.py:
+4f9944553095b5f8596bb55b9934ed52873009bced47966cd11e0e1b73c4cbc5
+TRACE_AUDIT.json and separately reproduced TRACE_AUDIT_REVIEWED.json:
+7b97a9c7c21ca418572c046110f121cd9ffe50a7e04f6a66074f45984a01c6e6
+SOURCE_MATRIX.json:
+d3c71863ac08c5dc3f267203014f96d415cb2e67351b80c738cea73051937c0f
+DESIGN_FREEZE.json:
+6468324dce1a422af4cdd2d56cc1f2fccd952cf77acd691479e635bcffa594a8
+
+Recount reproducibility note
+The independent recount was executed through inline Python heredocs in the tool
+history. No standalone original recount script was saved. The independent output
+is saved and inspectable; do not describe a later reconstruction as the original
+executed script. The project's analyzer and tests remain the standalone executable
+reproduction path. The independent recount is a check of the same observations.
+
+Final report check
+Read REPORT.txt against the independent recount and the GPU2023/Spot2026
+source definitions. No consequential numerical or interpretive discrepancy found
+in that scope. The report correctly separates 488,662 CSV records from distinct
+jobs, names the 25 repeated-token rows, retains missing/fractional values, states
+that augmentation is not independent observed demand, and avoids scheduler, energy
+or pooling-gain claims. Did not independently re-audit the three metadata-only
+releases under this check. Reviewed REPORT.txt SHA256:
+766fad468df26845e0299d77c152f64346fe299eaf9e4f62d105f7b02cf1e68d

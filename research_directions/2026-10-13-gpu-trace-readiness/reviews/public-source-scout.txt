@@ -1,0 +1,39 @@
+GPU trace field-completeness scout — 2026-10-13 UTC
+Scope: official Alibaba v2020/v2023 and Microsoft Philly sources only. No datasets downloaded, no cluster access, no performance claims. Root agent separately covers newer releases.
+
+Recommendation
+The smallest useful intake test is Alibaba v2023 (roughly 0.6 MB for inventory plus default task requests). It can test parsing and reveal missing fields, but it cannot supply an observed pending queue AND concurrently available physical GPU snapshot for the present model. Philly is stronger for actual GPU allocation history; v2020 is stronger for requested CPU/RAM and recorded placement. None of these three supports our full execution-readiness gate without additional information. These are conclusions from comparing the published schemas with our SPEC, not conclusions reported by the dataset authors.
+
+1. Alibaba GPU v2023 — best small request/inventory intake
+Official schema: https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2023/README.md
+Paper: https://www.usenix.org/conference/atc23/presentation/weng
+Published fields: node ID, CPU milliunits, RAM MiB, GPU count and model; task CPU/RAM requests, GPU count/fraction, QoS, creation/scheduling/deletion times and phase. GPU family codes G1/G2/G3 are undisclosed. The gpuspec variants AUGMENT task type requirements; do not label their compatibility entries measured original constraints. QoS is not our numerical admission priority.
+Inference: timestamps permit observed pre-scheduling intervals for well-formed records, but the task schema has no assigned node/device IDs. Hence no reconstruction of concurrent per-node reservations. Missing: physical per-device VRAM, device IDs, job VRAM requirements, owner permissions, priorities, execution requirements. Capacity is not currently free capacity. Restricting to whole-GPU tasks changes the population and must be declared.
+Direct small files and GitHub-displayed sizes:
+https://raw.githubusercontent.com/alibaba/clusterdata/master/cluster-trace-gpu-v2023/csv/openb_node_list_gpu_node.csv — 41.4 KB, 1214 lines including header.
+https://raw.githubusercontent.com/alibaba/clusterdata/master/cluster-trace-gpu-v2023/csv/openb_pod_list_default.csv — 562 KB, 8153 lines including header.
+https://raw.githubusercontent.com/alibaba/clusterdata/master/cluster-trace-gpu-v2023/csv/openb_pod_list_gpuspec33.csv — 574 KB; augmented compatibility scenario, not default empirical input.
+Size source pages: replace raw.githubusercontent.com/alibaba/clusterdata/master/ with github.com/alibaba/clusterdata/blob/master/ in those URLs.
+
+2. Alibaba PAI GPU v2020 — richest request/placement joins, larger download
+Official schema/downloads: https://github.com/alibaba/clusterdata/blob/master/cluster-trace-gpu-v2020/README.md
+Paper: https://www.usenix.org/conference/nsdi22/presentation/weng
+Published fields: machine CPU/RAM/GPU capacities and assigned GPU type; task requested CPU/RAM/GPU fraction; job submission and task/instance start/end times; instance-to-machine assignment; sensor GPU device names. Group-tag gpu_type_spec records specified type constraints, whereas task gpu_type is ASSIGNED type. User hashes do not establish hardware ownership or access permissions. Sensor memory values are observed instance-lifetime averages/maxima, not job VRAM requests or physical card capacity. Machine metrics also average over instance lifetime, not a contemporaneous free-resource snapshot.
+Inference: historical waiting/active intervals and reservation estimates are possible only after completeness checks and correct job/task/instance joins. GPU sharing and multi-instance distributed jobs exceed our exclusive same-node model. Owner policy, numerical priorities, VRAM requirements/capacity and a complete reservation/availability ledger remain missing. Do not infer allowed families from the family that happened to run the job.
+Archive base: https://aliopentrace.oss-cn-beijing.aliyuncs.com/v2020GPUTraces/
+Append exact filenames; documented compressed sizes:
+pai_machine_spec.tar.gz 32K; pai_job_table.tar.gz 60M; pai_task_table.tar.gz 34M; pai_instance_table.tar.gz 663M; pai_sensor_table.tar.gz 388M; pai_group_tag_table.tar.gz 53M; pai_machine_metric.tar.gz 198M. The README publishes SHA-256 values. These are documented sizes, not downloads or byte-exact HEAD measurements.
+
+3. Microsoft Philly — best physical GPU placement history
+Official schema: https://github.com/msr-fiddle/philly-traces/blob/master/README.md
+Paper: https://arxiv.org/abs/1901.05758
+Archive: https://github.com/msr-fiddle/philly-traces/blob/master/trace-data.tar.gz
+The README documents 0.98 GB compressed / 6.6 GB unpacked, five files. cluster_job_log has submission times, attempts with start/end and server/GPU IDs, user hash and virtual-cluster hash; cluster_machine_list has GPU count and per-GPU memory. Other files contain minute-level GPU/CPU utilization and host total/free memory. Missing attempt timestamps and never-scheduled jobs are explicitly possible.
+Inference: overlapping complete attempts permit partial GPU occupancy reconstruction; recorded allocations are not ex-ante resource requests. Unknown CPU/RAM/job-VRAM requests, allowed GPU families, priorities, owner policy and missing attempts prevent a full model-ready snapshot. Low GPU utilization does not mean unreserved; host free memory does not mean allocatable RAM; user/virtual-cluster membership does not prove allowed physical owners. Distributed allocations also need an explicitly declared same-node subset. Do not backfill a never-scheduled job's demand from nonexistent execution data.
+
+Use terms / licensing observed
+Alibaba root README explicitly permits research/study use and requests citation: https://github.com/alibaba/clusterdata/blob/master/README.md . No standard repository LICENSE was visible in the inspected root listing; raw root LICENSE returned 404. Record the research-use statement; do not relabel this as MIT/Apache or infer unrestricted redistribution rights.
+Philly includes a CC BY 4.0 license: https://github.com/msr-fiddle/philly-traces/blob/master/LICENSE . Preserve attribution, source and modification notices when redistributing derived material.
+
+Promotion gate
+Public traces can supply empirically sourced distributions and partial histories, not authority to dispatch work. Every derived field should retain source column, units, transformation and status (observed/requested/inferred/assumed/missing). Reject missing critical fields rather than filling owner permissions, priority or VRAM from convenient defaults. A counterfactual simulation with invented policies can be useful if named as such, but it does not pass real-snapshot validation or establish measured execution fit, throughput, energy savings, latency or cooperative welfare.

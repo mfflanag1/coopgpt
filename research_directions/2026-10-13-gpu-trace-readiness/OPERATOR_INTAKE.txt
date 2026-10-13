@@ -1,0 +1,59 @@
+Minimum real-snapshot handoff for the existing bounded planner
+
+Purpose: a read-only comparison on an explicitly defined slice of a real queue.
+Supplying an inventory is not authorization to launch workloads. No credentials,
+tokens, billing data or unrelated tenant content belong in this handoff.
+
+1. Snapshot identity and scope
+Give one UTC decision instant, scheduler/environment/version, capture interval,
+and source export filenames/hashes. State how inventory, running allocations and
+pending-job data refer to the same instant. Identify the bounded node/queue slice:
+at most 4 nodes, 8 whole GPUs and 8 jobs. Account for excluded running jobs and
+reservations. Do not truncate a busy cluster and call every omitted device free.
+
+2. Resource inventory and reservations
+For each node: stable identifier; owner/operator-declared resource-rights identity;
+currently allocatable CPU and host RAM in stated units after system reservations
+and running jobs; available whole-device identifiers, device family and total
+per-device memory in MiB. UUIDs or authoritative scheduler logical IDs are usable.
+State if MIG, time sharing, GPU virtualization, maintenance, exclusive partitions,
+hidden reservations or placement constraints apply. These are outside v1 unless
+the supplied slice consists of genuinely available whole exclusive devices.
+
+A hardware query such as nvidia-smi identifies physical cards and total memory;
+it does not by itself establish scheduler allocatability or ownership permission.
+Low utilization or absence of a compute process does not prove a GPU is unreserved.
+The existing telemetry.NVMLBackend can provide selected device facts, but cannot
+supply the missing scheduler/queue/permission ledger.
+
+3. Pending jobs and ex-ante requirements
+For each job: stable ID; original request timestamp/state; declared administrative
+priority score (positive integer); CPU and host-RAM reservation; whole GPU count;
+minimum memory on EACH GPU; allowed device families and resource owners; and an
+explicit same-node/same-family gang requirement compatible with v1.
+Give the source of each number: scheduler request, tested application profile, or
+operator policy, including version/date. Record unknowns as null. Observed average
+usage, a later allocation or GPU model name alone is not a required-memory profile.
+Do not multiply per-job requests by worker count unless source semantics warrant it.
+
+4. Observed decision and runtime boundary
+For comparison with practice, include the actual scheduler/operator admission and
+placement decision at that instant, with deferred jobs and recorded constraints.
+A different optimizer result is not automatically a feasible operational change:
+affinity, partitions, fairness, deadlines, preemption, fabric and software behavior
+may explain the observed choice. Document these before calling a difference a gain.
+Read-only planning can precede execution. Actual execution requires fresh validation
+and concurrency-safe reservation/dispatch against the live scheduler.
+
+5. Acceptance and useful next measurement
+Every required field must have a source and valid units before conversion to
+../2026-10-13-gpu-placement/SPEC.txt. Unknown mandatory values keep the gate closed;
+do not substitute zero, permission-for-all, invented GPUs or arbitrary scores.
+First measure whether the plan actually fits and yields useful job completions.
+Then define latency/deadline and full-horizon energy measurements. A measured
+pooling claim additionally needs actual independent resource rights, feasible
+withholding/transfer choices and meaningful costs or values.
+
+The Mac's GPU cores and unified memory are not separate whole GPUs with separate
+host RAM and VRAM. A Mac-only extension requires a different, explicit shared-
+memory resource model and application-fit experiments; it is a distinct project.
