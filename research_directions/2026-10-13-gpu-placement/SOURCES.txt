@@ -1,0 +1,53 @@
+Primary-source grounding, accessed 13 October 2026 UTC
+
+These freely available sources motivate explicit resource and scheduling concepts.
+No source supplies measured hardware data, a job trace, economic values or an
+empirical observation for this experiment. SPEC.txt defines the actual model.
+
+Kubernetes, Schedule GPUs
+https://kubernetes.io/docs/tasks/manage-gpus/scheduling-gpus/
+GPU scheduling requires vendor drivers/device plugins. Different GPU types can
+be distinguished through node labels/selectors. This supports explicit type
+compatibility; it does not establish our abstract family field as sufficient
+runtime compatibility, nor provide a built-in per-device VRAM constraint.
+
+Kubernetes, Device Plugins
+https://kubernetes.io/docs/concepts/extend-kubernetes/compute-storage-net/device-plugins/
+Standard extended resources use integer quantities, cannot be overcommitted,
+and devices in that model are not shared between containers. Our whole-GPU
+restriction is explicit; vendor-specific sharing, MIG and time-slicing are out
+of scope. This is not a universal assertion that real GPUs cannot be partitioned.
+
+Slurm, Generic Resource Scheduling (GRES)
+https://slurm.schedmd.com/gres.html
+GRES identifies typed resource counts and supports GPU job/node/task requests.
+The prototype uses named devices and typed eligibility, but is not Slurm and
+does not reproduce its selection, priority, reservation or preemption policies.
+
+Slurm, sbatch
+https://slurm.schedmd.com/sbatch.html
+CPU and host-memory requests are separate resource dimensions. In particular,
+--mem-per-gpu concerns allocated host memory; our min_vram_mib is an additional
+formal device-profile requirement, not an interpretation of that Slurm flag.
+
+Kueue, Topology Aware Scheduling
+https://kueue.sigs.k8s.io/docs/concepts/topology_aware_scheduling/
+Required topology can constrain a PodSet to a topology domain. Our single-node,
+single-family multi-GPU job is a narrower modeling choice. Same-node placement
+does not establish suitable interconnect, library, driver or execution behavior.
+
+Google OR-Tools, Multiple Knapsacks
+https://developers.google.com/optimization/pack/multiple_knapsack
+Capacity-constrained assignment maximizing item values is established integer
+optimization. This work adds a deliberately small GPU-specific formal interface,
+independent verification and reproducible tests; it claims no new algorithm.
+For larger instances compare an appropriate CP-SAT/MIP formulation and established
+scheduling approaches before treating any learned policy as necessary or superior.
+
+Local research boundary
+../2026-10-11-ai-infrastructure/SPARSE_PRODUCTION_NOTE.txt
+../2026-10-11-inference-pilot/model.py
+../2026-10-11-measured-serving/replay.py
+These earlier artifacts concern divisible production and/or temporal serving.
+Neither is a whole-GPU snapshot integer placement solver. Their coalition/payment
+theorems and empirical claims are not inherited by this package.

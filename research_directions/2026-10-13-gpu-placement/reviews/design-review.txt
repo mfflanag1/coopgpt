@@ -1,0 +1,73 @@
+Independent prospective design review
+Scope: SPEC.txt, PROTOCOL.txt, solver.py, oracle.py, generate_cases.py only.
+Read-only inspection; no cases.json, outcomes, algorithm executions or comparisons
+were inspected. This review does not certify verifier.py or the benchmark runner.
+
+Decision: no blocking mathematical defect found in either exact algorithm.
+The 140-case comparison is a justified bounded correctness/baseline step, provided
+its interpretation remains the limited one already stated in the protocol. It
+does not establish a useful deployed workflow or a research advance.
+
+Exactness reasoning
+- solver.py:13-29 enumerates every individually eligible same-node, same-family
+  GPU subset. Global GPU IDs receive distinct bits. Lines32-36 enforce remaining
+  GPU/CPU/RAM capacity exactly. For each job, visit (lines50-58) includes deferral
+  and every feasible placement. Remaining jobs and the free-GPU/CPU/RAM state
+  contain all information that can affect continuation under this specification.
+  Integer lexicographic addition preserves the objective order, so the recurrence
+  has valid optimal substructure. Retaining an arbitrary plan on equal objectives
+  is permitted. No fractional relaxation is mistaken for integer feasibility.
+- oracle.py:45-65 independently constructs all permitted choices. The subset
+  enumeration includes every admitted set, sorted by the full objective tuple.
+  feasible (lines68-112) is complete despite dynamic most-constrained-first job
+  ordering. Its aggregate GPU/CPU/RAM bounds are necessary conditions only and
+  therefore safe pruning; its memoization key preserves all future constraints.
+  The first feasible subset has the optimum objective. The zero-job/zero-GPU
+  cases remain feasible via empty admission. This argument assumes valid manifests,
+  exactly as the oracle's contract requires.
+- The oracle uses a different search decomposition and imports neither producer
+  nor verifier. That is useful independence, though both still encode the same
+  interpretation of the specification. Manual expected-value fixtures remain
+  necessary protection against a shared interpretation error.
+
+Actionable clarifications before freezing
+1. SPEC.txt says an allowed_families/allowed_owners list referring to an absent
+   value "makes this job infeasible." This is ambiguous when the same list also
+   contains a present permitted value. Replace with: "Absent entries match no
+   resources. The job is infeasible only if no placement satisfies all conditions."
+   Both algorithms already implement this intended existential interpretation.
+2. Keep the 140 comparative manifests unchanged, but ensure independent unit
+   fixtures cover the permitted domain beyond generator support: four nodes;
+   eight GPUs on one node with an eight-GPU job; zero CPU or RAM; schema maximum
+   integer capacities; and mixed present/absent permission or family entries.
+   The generated family uses at most three nodes, three GPUs per node and
+   three-GPU jobs, so passing it alone does not exercise those contract boundaries.
+   Verify hand-computed objective pairs, including secondary job-count ties.
+3. Ensure the runner enforces the stated 180-second ceiling externally and saves
+   an explicit incomplete/invalid status. A prose limit is not a timeout mechanism.
+   Do not report a complete gate if remaining cases/invariances were unexecuted.
+
+Baseline and generalization assessment
+The two greedy policies match their descriptions. scarcity_first measures the
+number of GPU subsets, so several equivalent GPUs can inflate "scarcity" options;
+that is a disclosed heuristic definition, not an estimate of owner diversity or
+an optimal scarce-resource rule. Nodes/GPUs chosen first by ID can produce avoidable
+stranding, as expected from these simple policies. Do not imply comparison with
+Slurm, Kubernetes, or best-known scheduling methods.
+
+The constructed cases intentionally include failure witnesses; their comparative
+success frequencies have no inferential interpretation. The SHA256-generated
+cases are also a fixed synthetic stress family, not a workload population or
+independent empirical replications. Separate constructed/generated tables,
+retain zero optima, and report both priority regret and secondary-count misses
+as already promised. The exact optimum is a conventional reference ceiling for
+this formal objective; an LLM cannot improve it. An LLM experiment is not the
+automatic next step after a passing suite.
+
+The protocol correctly excludes energy, throughput, economic welfare, real consent,
+and incentive guarantees. Whole-GPU snapshot feasibility omits software/fabric
+compatibility, execution fit and races against changing state. Progress toward
+workflow value requires an authoritative real snapshot, user-valued decision task,
+safe reservation/dispatch and execution evidence; progress toward energy or pooling
+value requires its own matched measurement and ownership design. No novelty or
+continuous-production theorem transfer is justified by this bounded comparison.

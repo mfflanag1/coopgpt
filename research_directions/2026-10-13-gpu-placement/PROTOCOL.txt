@@ -1,0 +1,82 @@
+GPU SNAPSHOT PLACEMENT — BOUNDED ENGINEERING BASELINE
+Frozen before the comparative suite is executed; 13 October2026 UTC.
+
+Decision: build a useful executable correctness boundary for admitting and placing
+GPU jobs. Compare two deterministic greedy policies with an exact small-instance
+solver. Establish the conventional optimum before considering an LLM candidate.
+No inference-model benchmark, cluster deployment or energy run is authorized by
+this protocol. Those require a separately justified workflow and measurement design.
+
+Model and objective are specified in SPEC.txt. All resources are available at one
+snapshot; whole GPUs are exclusive, VRAM constraints apply to EACH device, CPU and
+host RAM aggregate per node. Each admitted multi-GPU job fits on one node with one
+GPU family. Per-job owner permissions constrain its eligible nodes. Every job is
+placed or explicitly deferred. A feasible plan is not automatically optimal; a
+fully deferred queue is not a certificate of infeasibility. Administrative priority
+sum is maximized, with admitted job count as the secondary objective. It is not
+measured economic value. No priority payments or incentive theorem are evaluated.
+
+Primary cohort: all140 manifests emitted by generate_cases.py:12 named constructed
+boundary/witness cases and128 deterministic generated cases from seeds0..127.
+The generator uses a SHA256 counter stream and fixed finite distributions written
+in its source. Cases are synthetic, selected to exercise modeled constraints;
+neither the hardware capacities nor demand are a measured production trace.
+Report constructed and generated rows separately, and pooled counts as descriptive
+engineering counts only. No case deletion, resampling, tuning on outcomes or
+positive-result stopping. Zero-optimum cases remain visible and are not counted as
+fractional regret observations. Regret is exact priority difference; on nonzero
+optima report the arithmetic mean of each policy's priority/optimum ratio and
+aggregate achieved/optimal priority. Secondary job-count ties are scored separately.
+
+Policies:
+1.priority_first: jobs sorted descending priority then job ID.
+2.scarcity_first: ascending number of individually feasible node/GPU subsets,
+  then descending priority then job ID. This counts placement options, not owners.
+For either policy choose first feasible option in node-ID, GPU-family and sorted
+GPU-ID-combination order; no backtracking. These are transparent simple baselines,
+not implementations of Kubernetes, Slurm, Kueue or the strongest heuristic.
+3.exact: dynamic programming over job index, free-GPU bit mask, remaining per-node
+  CPU and RAM. Try deferral and every individually eligible GPU subset. The exact
+  attainable priority/job-count tuple is the benchmark ceiling on this domain;
+  no learned policy can improve that objective over the exact optimum.
+
+Independent verification: separately authored verifier checks all candidate constraints
+from the original manifest and recalculates scores; it imports no solver. Separate
+Codex oracle enumerates admitted subsets and independently tests feasible placements;
+it imports neither solver nor verifier. Its optimum tuple must match exact. Unit
+fixtures include schema/adversarial violations, boundary equality, unauthorized
+owners, global GPU reuse, cross-node gangs, mixed families, insufficient per-device
+VRAM, and shared CPU/RAM contention. Tests run normally and under Python -O.
+Compare exact and independent oracle on all140 cases. Any mismatch or invalid
+produced plan means the engineering comparison is invalid, not a removed sample.
+
+Additional prespecified invariance checks for every case:
+- reverse node/job/GPU/policy-list order; optimum tuple must be unchanged;
+- increase each node's CPU and RAM by one; optimum tuple cannot decrease;
+- remove all GPUs from the first node; optimum tuple cannot increase;
+- duplicate one admitted GPU across two placements (where constructible) must
+  be rejected; fixed unit mutations cover constraints absent in random samples.
+These are software/mathematical consistency checks, not independent empirical data.
+
+Promotion gate: all140 exact/oracle tuples agree; all420 policy plans valid; all
+invariance and applicable corruption checks pass; bounded enumeration completes.
+Run suite once with a180-second wall ceiling; retain partial artifacts if exceeded.
+Do not silently extend deadline or substitute heuristics as exact. Normal/-O
+saved-data reproductions may rerun deterministic algorithms; they are not new
+observations. Solver timings, if saved, are engineering diagnostics only and
+must not be represented as serving latency or compared with previous LLM timings.
+
+Possible conclusions: verified bounded implementation; rejected/invalid
+implementation with exact disagreement; or bounded computation insufficient.
+A passing gate establishes an implementable exact reference for this formal model,
+not a novel scheduler, production qualification, economic gain, measured energy
+saving, support for the earlier continuous-production theorem, or a field-level
+breakthrough. Integer gang feasibility and finite job demand violate its automatic
+homogeneity/concavity assumptions. No public or private infrastructure is changed.
+
+Next promotion requires a real decision snapshot with authoritative available
+CPU/RAM/GPU identities and profiles, actual pending job requirements and permissions,
+a concurrency-safe reservation/dispatch path, and execution/fit observations. A
+read-only importer/normalizer is a plausible later LLM role; no benefit is assumed.
+Network topology, software compatibility, state freshness, opportunity costs,
+priority legitimacy, durations, fairness and power are deliberately unresolved.

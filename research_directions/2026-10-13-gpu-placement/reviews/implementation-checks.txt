@@ -1,0 +1,31 @@
+Preparation review and executed checks, 13 October 2026 UTC
+
+Separate Codex worker authored verifier.py from SPEC and root-authored tests.
+Root independently read the implementation: schema structure is checked before
+lookups; ID validation precedes hashing; physical GPUs are globally unique;
+job coverage, ownership, homogeneous gangs, per-GPU VRAM, and shared CPU/RAM
+are checked against original input. No solver import or input mutation.
+
+Separate Codex worker authored oracle.py using subset-first feasibility search.
+Root authored job-first dynamic programming and two declared greedy baselines.
+An independent design audit inspected both completeness arguments. Another worker
+added 24 hand-computed solver fixtures, including greedy failures, resource
+conflicts and schema maxima. Cohort outcomes were not inspected in preparation.
+
+Actually executed before freeze:
+python3 -B -m unittest test_verifier test_verifier_extra test_solver test_oracle -q
+python3 -B -O -m unittest test_verifier test_verifier_extra test_solver test_oracle -q
+87 tests pass in each. Runner tests and final checks are recorded separately.
+
+Verified preparation corrections:
+- Root-authored test helper used None as default and therefore failed to test a
+  literal None plan correctly. Replaced with a sentinel; strict verifier was right.
+- SPEC absent permission entries clarified: absent names match no resources;
+  present alternatives can still make the job feasible. Algorithms unchanged.
+- Runner output creation changed to exclusive creation to close overwrite race.
+- Failed candidate plans retained with recalculated verification diagnostics.
+
+Fable 5.1 and the documented Opus 5 fallback returned immediate weekly quota
+errors. No code/review was produced by either. DELEGATION_OUTCOME.txt records
+inspection and unavailable adjudication. This is independent same-model review,
+not completed cross-model approval or human specialist validation.

@@ -1,0 +1,40 @@
+Independent preparation audit: verifier.py against SPEC.txt
+
+Scope: read-only source audit of the complete current SPEC.txt and verifier.py.
+Reviewer authored the separate oracle and solver fixtures, not this verifier.
+Reviewed verifier SHA-256:
+eabd13cfd40f65f2c8f0d29115a5815f7f0d10bcc79b18289abcf27e4d4122bf
+
+Finding: no actionable omission, malformed-input exception path, numeric
+coercion/bool bypass, or solver coupling found in the stated JSON-data contract.
+
+Checks actually performed (source inspection):
+- Matched all manifest keys, numeric bounds, list bounds, identifier grammar,
+  namespace uniqueness, and global eight-GPU bound to SPEC.txt. Absent owner
+  and family entries remain valid and match no resources; mixed lists work.
+- Traced malformed nested plan values through type checks before indexing,
+  set membership, or arithmetic. Exact dict/list/str/int checks reject wrong
+  containers, unhashable ID values, subclasses, bools, floats, and extra keys
+  with ValueError. verify_plan converts invalid-plan ValueError to the required
+  four-field rejection result, with no score. Manifest failures may raise.
+- Traced exact job coverage, unknown/repeated IDs, global GPU exclusivity,
+  stated-node ownership of each GPU, whole-gang count, same-family requirement,
+  per-GPU VRAM, allowed owners/families, and cumulative per-node CPU/RAM.
+  These checks use validated manifest values and independently recompute score.
+- Checked strict_loads: duplicate keys use object_pairs_hook at every object;
+  NaN/Infinity constants and overflowed float exponents are rejected; malformed
+  JSON already raises ValueError via JSONDecodeError; recursion/overflow parser
+  failures are normalized to ValueError.
+- Checked imports and data flow: only json, math, and re are imported; no solver
+  or oracle dependency, self-reported score, input repair, sorting, or mutation.
+
+No new runtime tests were executed for this audit because source review found
+no concrete risk requiring an additional probe. The root-reported 87-test
+normal/-O result was not independently rerun here. Earlier in preparation this
+reviewer actually ran all 24 manual solver tests against the then-present
+verifier.py in normal Python and python3 -O; both passed. No headline cases, cohort data,
+generator, comparison, model, hardware, or external services were used.
+
+Limit: this is a source audit, not an exhaustive proof of all Python behavior
+or a denial-of-service analysis. The verifier certifies declared feasibility
+and recomputed score, not optimality or real hardware/permission suitability.

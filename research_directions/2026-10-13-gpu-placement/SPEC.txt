@@ -1,0 +1,70 @@
+GPU SNAPSHOT PLACEMENT v1 — IMPLEMENTATION CONTRACT
+
+Goal: produce a verifiable admission/placement plan for explicitly enumerated
+indivisible GPU jobs and available nodes. Synthetic engineering prototype;
+not a live cluster deployment, serving benchmark, measured pooling gain,
+truthful mechanism, production scheduler or new optimization theorem.
+
+Python standard library only. Integers exact, bool is NOT an integer.
+Object keys must match exactly; duplicate JSON keys and nonfinite values must
+be rejected by strict_loads(text). IDs are ASCII [A-Za-z][A-Za-z0-9_-]{0,31}.
+No unknown implicit defaults, coercions, executable fields or external lookups.
+
+Manifest exact keys: schema_version,nodes,jobs. schema_version integer1.
+nodes: list length1..4. Each node exact keys:
+ id,owner,cpu_units,ram_mib,gpus
+ id globally unique among nodes; owner is valid ID (may recur).
+ cpu_units integer0..65536; ram_mib integer0..1099511627776.
+ gpus list length0..8, total GPU count across manifest at most8.
+ Each GPU exact keys id,family,vram_mib. ID globally unique across GPUs.
+ family valid ID; vram_mib positive integer1..1099511627776.
+jobs: list length0..8. Each job exact keys:
+ id,priority,cpu_units,ram_mib,gpu_count,min_vram_mib,allowed_families,allowed_owners
+ id unique among jobs. Priority integer1..1000000.
+ cpu_units integer1..65536;ram_mib integer1..1099511627776;
+ gpu_count integer1..8;min_vram_mib integer1..1099511627776.
+ allowed_families and allowed_owners: nonempty lists of at most16 distinct validIDs.
+ Lists may refer to absent families/owners: absent entries match no resources,
+ and the job is infeasible only if no placement meets all conditions. Such lists
+ do not invalidate a manifest. Nodes/GPUs/jobs may share IDs across entity types;
+ uniqueness is within each named namespace, with globally unique GPU IDs.
+
+Plan exact keys schema_version,placements,deferred;schema_version integer1.
+placements: list of at most8 records, exact keys job,node,gpus.
+job and node valid known IDs. gpus list of unique known GPU IDs, length1..8.
+deferred: list of unique valid known job IDs, length0..8.
+Every job must appear EXACTLY ONCE, either in one placement or deferred.
+No GPU may be reused across placements. All GPUs in a placement must be on
+its stated node; count exactly job.gpu_count; every GPU meets min_vram_mib
+and allowed_families, and all GPUs for one job have the SAME family.
+Node owner must belong to job.allowed_owners. Sum admitted cpu_units and
+ram_mib per node must not exceed the available snapshot quantities.
+No partial multi-GPU placements; no fractional/time-shared/MIG GPUs.
+A GPU is wholly occupied even if the job's VRAM minimum is smaller.
+VRAM is NOT fungible across GPUs; CPU/RAM may be shared across separate jobs.
+No scheduling durations, network bandwidth, power, cost, payments or retries.
+Same-node placement is a necessary modeled topology restriction, not a proof
+that actual software, interconnects or performance requirements are satisfied.
+Owner lists are declared permissions, not proof of real legal consent.
+
+Objective: lexicographically maximize (sum priority of admitted jobs, number
+of admitted jobs). Priority is a declared administrative score, not dollars,
+measured productivity or economic welfare. Empty plan with alljobs deferred is
+feasible; it cannot be called optimal unless the optimum tuple is (0,0).
+Ties in optimum tuple are equivalent for scoring; output order irrelevant.
+
+Verifier API in verifier.py:
+ strict_loads(text)->parsed JSON (raises ValueError on malformed/duplicates/nonfinite)
+ validate_manifest(m)->None or raises ValueError (all constraints above)
+ verify_plan(m,p)->dict with exactly valid,errors,priority,admitted
+ invalidmanifest may raise ValueError; invalidplan returns validFalse,errors
+ nonempty list of strings, priorityNone,admittedNone. Valid plan returns
+ validTrue,errors[],priority exactint,admitted exactint. Fail closed on malformed
+ nested structures. Never trust self-reported scores (such fields are invalid).
+ Verifier must not import a solver or silently repair/reorder/dropbadrecords.
+
+Solver interface, separately implemented: solve(manifest)->plan, and greedy(manifest,
+ strategy)->plan where strategies priority_first and scarcity_first. Oracle
+ independent optimum(manifest)->(priority,admitted), no production solver/verifier
+ imports. All benchmark outputs verified; any disagreement closes comparison
+ as invalid rather than deleting cases. No real cluster APIs or inference calls.

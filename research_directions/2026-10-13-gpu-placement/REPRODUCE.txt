@@ -1,0 +1,34 @@
+GPU snapshot placement reference — Python 3.10+ standard library, no extra packages
+The bounded runner uses POSIX SIGALRM (macOS/Linux); it is not a Windows runner.
+
+From this directory:
+  python3 -B -m unittest discover -p 'test_*.py' -v
+  python3 -B -O -m unittest discover -p 'test_*.py' -q
+
+Verify frozen inputs without running the comparison:
+  python3 -B -c 'from run_study import check_freeze; print(check_freeze())'
+
+Run the deterministic offline comparison into a NEW path:
+  python3 -B run_study.py --output /tmp/coop-placement-reproduction.json
+  python3 -B -O run_study.py --output /tmp/coop-placement-reproduction-O.json
+Existing outputs are never overwritten. Each comparison has its own 180-second
+ceiling and saves incomplete status if it fails or times out. Reproductions are
+software checks on the same fixed inputs, not additional data observations.
+Compare rows/summary/gate to RESULTS.json; timestamps and elapsed durations differ.
+
+Plan or verify an individual valid manifest (JSON output to stdout):
+  python3 -B placement.py solve examples/manifest.json
+  python3 -B placement.py verify examples/manifest.json examples/plan.json
+The first only plans; the second verifies formal constraints and recalculates
+the objective. Neither reserves devices, launches jobs, guarantees runtime fit,
+certifies an arbitrary plan optimal, or measures performance/energy.
+
+SPEC.txt defines every input field and bound. CPU units are declared integral
+units used consistently by nodes/jobs; RAM and per-GPU VRAM are MiB. GPU family
+and allowed owner names must be explicit. Do not invent hardware profiles or
+interpret missing data as permission. Inputs above the bounded domain are rejected.
+
+FREEZE.json records hashes of code, tests, protocol, sources and all 140 cases
+before the first comparative run. Unit fixtures and review precede freezing.
+Results, examples, reports, review outcomes and final package inventory follow it.
+PACKET_SHA256.json verifies the final package, excluding itself.

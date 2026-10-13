@@ -1,0 +1,35 @@
+The mathematical object here is a finite packing/admission problem, not the
+earlier homogeneous continuous production model.
+
+For each job j enumerate its permitted placements P_j. A placement names one
+node and exactly g_j distinct GPUs on that node, all of one allowed family,
+each satisfying the device VRAM minimum, with an allowed resource owner.
+Binary x_{jp} chooses placement p. Each job has sum_p x_{jp} <= 1; each GPU
+occurs in at most one chosen placement. CPU and RAM sums are bounded per node.
+Lexicographically maximize (sum_{j,p} priority_j x_{jp}, sum_{j,p} x_{jp}).
+Every unchosen job is explicitly deferred in the output. This is conventional
+finite integer optimization; the bounded exact search is not a novelty claim.
+
+Exact solver argument: process jobs in fixed order. Every feasible plan either
+defers the next job or chooses one of its enumerated permitted placements. The
+remaining GPUs and per-node CPU/RAM determine all feasible continuations. The
+recurrence exhausts those alternatives and optimizes the additive lexicographic
+objective. Memoization preserves its optimum. The independent oracle instead
+orders all admitted subsets by their objective and exhaustively asks whether
+each subset has a feasible placement; the first feasible subset is optimal.
+Both searches are exponential and bounded to at most 8 jobs, 8 GPUs and 4 nodes.
+
+Why previous production assumptions fail automatically: take one job of value 1
+requiring 2 identical same-node GPUs, with CPU/RAM nonbinding. For available GPU
+capacity b, its integer value is F(0)=F(1)=0 and F(2)=1. Any extension agreeing
+at these points violates concavity, since F(1) < (F(0)+F(2))/2. Homogeneity also
+fails: F(2) != 2F(1). A fractional admission relaxation can admit x=1/2 at b=1
+and return value 1/2, while the integer optimum is 0. The relaxation's value is
+not an executable partial placement. With finite pending demand the value also
+saturates. Owner-dependent permissions and physical node identity add constraints
+that cannot be suppressed into a fungible sum of scalar capacities.
+
+These elementary examples establish an assumption boundary, not an impossibility
+theorem for cooperation or a new theorem. Earlier incentives/payment guarantees
+need a separately proved model-specific extension before reuse. Priority here
+is an administrative score, neither money nor willingness to pay.

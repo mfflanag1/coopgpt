@@ -1,0 +1,70 @@
+Independent runner/CLI audit — final reviewed source snapshot
+
+Scope: run_study.py and placement.py against SPEC.txt/PROTOCOL.txt, plus the
+producer exception path in solver.py. No saved research cases or comparison
+outcomes were read, no real generator was executed, and no headline suite ran.
+Only test_runner.py and this report were edited by this reviewer; implementation
+repairs were made by the root agent.
+
+Decision: no blocking runner/CLI defect remains in the reviewed snapshot.
+This is prospective implementation QA, not a passing research comparison gate.
+
+Findings and verified repairs
+1. Existing-output check followed by write_text allowed a concurrent writer's
+   artifact to be overwritten. The runner now creates the output exclusively
+   before evaluation and holds its file handle. The focused test attempts a
+   competing exclusive creation during evaluation; existing and competing
+   records are protected.
+2. Invalid candidate plans originally vanished when score() raised before a
+   result row was returned. The active case now retains attempted plans and
+   verification results; only a fully successful case enters completed rows.
+3. Producer-side self-verification could raise before evaluate received a plan.
+   InvalidProducedPlan now carries the original plan and verification result.
+   Original-policy and transformed-instance failures are retained; the latter
+   also identify the property and its actual altered manifest.
+4. Rejected non-JSON Python values could break final serialization or emit NaN.
+   Storage-only capture now uses strict JSON or an explicitly labeled Python
+   representation; the original candidate is still verified without repair.
+   Final result serialization disallows nonfinite JSON values. Tests exercise
+   NaN and an unserializable object, checking that failure records remain strict
+   JSON and keep the rejected candidate evidence.
+
+Protocol consistency
+- evaluate verifies all three primary policy plans and recomputes objectives,
+  compares the full exact priority/job-count tuple to the independent oracle,
+  rejects any candidate above that tuple, checks every required property, and
+  checks original-manifest immutability before returning a completed row.
+- The complete gate requires successful completion and all 140 rows. Failure
+  leaves gate_pass false and keeps completed rows plus active failure context.
+  Partial summaries summarize completed cases only; their counts are explicit.
+- SIGALRM/ITIMER_REAL installs a 180-second timer around evaluation and final
+  freeze verification, with timer cancellation and handler restoration in finally.
+  The tested timeout path retains prior completed rows and closes the gate. We
+  mocked expiration rather than waiting 180 seconds. Preflight and final artifact
+  serialization are outside this evaluation timer; this is not a hard bound on
+  total shell-process lifetime or an assurance against forced process death.
+- Summary arithmetic uses exact Fraction ratios, keeps zero-optimum counts while
+  excluding them from per-case ratios, distinguishes arithmetic mean from
+  aggregate ratio, reports exact priority regret, and counts secondary-only tie
+  losses separately. Constructed/generated/all cohorts remain separate.
+- The CLI does not reserve or dispatch resources. It returns 0 for successful
+  planning/valid verification, 1 for invalid plans, and 2 for expected input/file
+  errors. Duplicate JSON keys and invalid plans fail closed in the focused tests.
+
+Executed verification
+python3 -m unittest test_runner: 12 tests passed.
+python3 -O -m unittest test_runner: 12 tests passed.
+Tests use handcrafted manifests and mocked runner input/evaluation. The cohort
+guard tests substitute 140 hand-built stub records; neither the research cases
+file nor generator is accessed. These are software tests, not 140 experimental
+observations and not a substitute for the forthcoming frozen comparison.
+
+Reviewed SHA256
+SPEC.txt ec00427d2b5e9d68d40ea9a568320ab6d4e3778f1aac446f5b0165075d95eafa
+PROTOCOL.txt d1f5f42c919c6e0d5f74d33dfe5df3527f143acaa8a6b5a9bfa820584a48f1c3
+run_study.py 4525b298aac92a9d0a2ab7c8c8fb1ce591089817f47ac876dc4cc327b23131f4
+placement.py 0f3ff5258c8cf2a17827fb027d3dcc0df0caa21b87e57c5895d1d47f973062a8
+solver.py de5f7b3e3685db3b832f984a953b85f7bd84f3425d9cbf689e12126a8fa77187
+test_runner.py b01928638b7731be145548265df7ac7815812f44981c8199b6a4ce70daca41fc
+
+Review complete. No further edits planned.
