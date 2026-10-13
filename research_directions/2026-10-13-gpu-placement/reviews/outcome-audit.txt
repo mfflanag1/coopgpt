@@ -1,0 +1,64 @@
+Independent saved-evidence audit: zero discrepancies
+13 October 2026
+
+The standalone audit imports no study solver, verifier, oracle, generator, or
+run_study implementation. It recalculates resource constraints and objective
+values directly from the140 frozen manifests and420 saved original plans.
+Both normal Python and Python -O runs pass with zero discrepancies and produce
+byte-identical JSON reports. Fifteen focused validator/integrity self-checks pass.
+No canonical files were changed; the headline comparison was not rerun.
+
+Verified from saved evidence:
+- All24 frozen file hashes and the results-to-freeze binding match; saved freeze,
+  start and completion timestamps are ordered and the recorded duration is within
+  the180-second ceiling.
+- All140 case identities/order and cohort memberships match:12 constructed cases
+  and128 generated seed cases. All420 raw plans satisfy the specified schema,
+  one-placement-or-deferral coverage, exclusive GPU use, same-node/same-family
+  gangs, per-device VRAM, owner/family permissions, and shared CPU/RAM constraints.
+- Recalculated priority/admitted-job tuples equal every saved objective and
+  verification record. All140 exact-plan tuples equal the saved oracle tuples;
+  neither greedy policy exceeds those tuples.
+- All420 saved property relations satisfy the stated reversal equality,
+  relaxation monotonicity, and GPU-removal monotonicity. The41 applicable GPU-reuse
+  corruptions were reconstructed and independently rejected; saved rejection
+  fields agree. Null checks correctly correspond to fewer than two placements.
+- Every reported cohort count, priority regret, secondary tie loss, aggregate
+  ratio, and mean nonzero-case ratio reproduces with exact Fraction arithmetic.
+  Zero-optimum cases remain visible and excluded only from per-case ratio means.
+
+Key descriptive totals:
+                         Cases  Zero optima  Optimal priority
+Constructed                12        6               29
+Generated                 128       28              870
+All                       140       34              899
+
+All-case policy totals:
+                         Exact tuple matches  Priority total  Regret  Tie losses
+Exact                           140               899            0        0
+Priority first                  131               866           33        1
+Scarcity first                  130               830           69        1
+
+Priority-first aggregate priority ratio is866/899; its mean nonzero-case ratio is
+23652157/24192168. Scarcity-first ratios are830/899 and42286207/43985760 respectively.
+Constructed and generated subtotals, including every exact ratio, are in audit.json.
+The witness cohort and generated cohort need not rank heuristics identically.
+
+Interpretation limits:
+This is an audit of saved evidence, not a new proof of global optimality. The exact
+plans are independently feasible and attain the saved oracle objectives. Optimality
+continues to rely on the documented separate oracle/solver comparison. Altered
+instance plans and separate oracle traces were not saved in RESULTS.json, so this
+audit checks their recorded tuples and inequalities without independently verifying
+those altered placements or recomputing optima. Hash agreement checks current bytes
+against the saved freeze; it does not attest external timestamps or unseen runs.
+
+The result supports a bounded synthetic implementation under the formal resource
+model. Administrative priority is not measured economic value. Nothing here measures
+live state accuracy, dispatch safety, software/network fit, serving latency, energy,
+independent-owner pooling, or an LLM contribution. Timing is diagnostic. The discrete
+placement model does not automatically validate continuous-production assumptions.
+
+Reproduce this audit only:
+python3 audit_results.py STUDY_DIRECTORY --output audit.json
+python3 -O audit_results.py STUDY_DIRECTORY --output audit-optimized.json

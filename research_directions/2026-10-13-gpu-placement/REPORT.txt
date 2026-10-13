@@ -1,0 +1,122 @@
+GPU snapshot placement: completed bounded engineering reference
+13 October 2026 UTC
+
+The fixed comparison passed its software gate: all 420 primary policy plans were
+valid, exact optimization agreed with the independently authored oracle on all
+140 manifests, all 420 transformed-instance checks passed, and all 41 applicable
+GPU-reuse corruptions were rejected. A separate set of 99 preparation tests passed
+in both normal and optimized Python. The optimized saved-data reproduction matches
+every row, objective, summary and gate; it is not another set of observations.
+
+What was built
+A command-line planner and separate strict verifier for whole-GPU snapshot
+admission. Inputs declare node ownership, device identities/families/VRAM,
+available CPU and host RAM, and job demands, priorities and owner permissions.
+Each multi-GPU job stays on one node and one GPU family; VRAM cannot be pooled
+across devices. Every job is placed or explicitly deferred. Objective is total
+administrative priority, with admitted job count breaking ties. This is ordinary
+integer packing, not a new optimization method. Bounds: 8 jobs, 8 GPUs, 4 nodes.
+
+Exact results — generated cohort
+128 deterministic synthetic manifests; 100 have positive optimum and 28 have
+zero optimum. Total optimal priority is 870. Both simple heuristics are feasible.
+
+Policy           Full objective matches  Priority total  Regret  Aggregate share
+Exact             128/128                 870              0    100.00%
+Priority-first    122/128                 843             27     96.90%
+Scarcity-first    120/128                 802             68     92.18%
+
+The unweighted mean priority/optimum ratio over the 100 positive-optimum cases
+is 100%, 98.26% and 96.07%, respectively. Exact fractions are saved in RESULTS.json:
+priority-first aggregate 281/290, mean 2038597/2074800;
+scarcity-first aggregate 401/435, mean 39865607/41496000.
+No secondary-only ties are lost in the generated cohort.
+
+Constructed cohort, kept separate
+12 deliberately chosen boundary/witness cases: 6 positive and 6 zero optima.
+Optimal priority total 29. Exact matches 12/12, priority-first 9/12 and
+scarcity-first 10/12. Their priority totals are 29, 23 and 28; priority regret is
+0, 6 and 1. Each heuristic has one secondary-only job-count loss. Mean positive-
+case ratios are 1, 355/396 and 35/36; aggregate ratios 1, 23/29 and 28/29.
+These selected witnesses are not representative frequencies of scheduler failures.
+
+Pooled descriptive counts
+140 cases, 106 positive and 34 zero optima. Exact priority total 899; priority-first
+866 and scarcity-first 830. Exact objective matches: 140, 131 and 130. Priority
+regret: 0, 33 and 69; secondary-only losses: 0, 1 and 1. Aggregate ratios are
+1, 866/899 and 830/899. Mean positive-case ratios are 1, 23652157/24192168 and
+42286207/43985760. Do not treat these heterogeneous pooled cases as a workload
+population or the percentages as predicted production gains.
+
+A concrete placement failure
+In scarce_memory_placement, a flexible job has priority 6 and a second job has
+priority 5 but needs the only 32 GiB GPU. First-fit priority order puts the flexible
+job on that GPU and achieves 6. Exact placement sends it to the 16 GiB GPU and
+places the restricted job on the 32 GiB GPU, achieving 11. The manifest and both
+plans are in examples/. This is a simple constructed witness of memory stranding,
+not a measured GPU workload. HEURISTIC_MISSES.json retains every mismatch.
+
+Interpretation and limits
+The engineering reference is usable within its formal snapshot contract. The
+stronger practical conclusion is that a conventional exact algorithm already
+provides the objective ceiling on these small instances; an LLM has no objective
+improvement to offer over that ceiling. Both heuristics often reach the same
+answer, and neither is claimed to implement or outperform a production scheduler.
+At larger scales the first comparison should be appropriate CP-SAT/MIP and
+established scheduling methods; exponential enumeration has no scalability claim.
+
+No live cluster was changed, no local inference benchmark ran, and no serving or energy
+experiment followed. Resource quantities, owner declarations and priorities are
+synthetic. Same-node/family fit does not establish real library, interconnect,
+memory-peak or runtime compatibility. State freshness, atomic reservations,
+durations/deadlines, fairness, private costs and peak power remain unmodeled.
+The Mac's unified-memory GPU is not a validation of this discrete multi-GPU model.
+
+This is not a field-level breakthrough or evidence of economic pooling gains.
+THEORY_BOUNDARY.txt gives the simple two-GPU job example that violates automatic
+concavity/homogeneity. Earlier continuous-production payment and coalition
+guarantees cannot simply be carried across. A future economic model must specify
+actual rights, feasible deviations and the value/cost of completed jobs.
+
+Next decision
+Obtain one authoritative real GPU inventory plus pending-job snapshot, initially
+read-only, with validated per-job requirements and permissions. Apply this planner
+within its domain and inspect disagreements with the existing operator/scheduler.
+Then validate actual execution fit with fresh reservations before measuring useful
+completions, latency or full-horizon energy. A practical discovery could be a
+repeated avoidable placement failure under real memory, topology or power limits;
+the current synthetic counts do not establish its prevalence or value. A language
+model is optional for normalizing genuinely unstructured job requirements, only
+if a separate evaluation demonstrates value relative to explicit forms/importers.
+
+Provenance and review
+Protocol/code/cases were hashed in FREEZE.json and pushed in commit 6451966 before
+collection. Headline run: 03:38:58.459191 to 03:38:58.635368 UTC; evaluation clock
+0.175922417 seconds against a 180-second ceiling. This is only a local small-
+instance diagnostic, not serving latency or an end-to-end performance claim.
+Frozen source hashes remained unchanged. POSIX timeout covers evaluation and
+final freeze verification; preflight/serialization are outside that timer.
+
+Independent Codex reviews inspected exactness, schema enforcement and collection.
+Pre-freeze fixes included failure artifact preservation, exclusive output creation,
+and a test-helper sentinel. Fable 5.1 and Opus 5 both returned immediate weekly
+usage-limit errors; no cross-model approval was obtained. See reviews/ and
+DELEGATION_OUTCOME.txt. This is software QA, not human specialist validation.
+
+The independent raw audit found zero discrepancies in normal and optimized Python:
+all 420 original plans, cohort summaries, 24 frozen hashes, 420 saved property
+relations and 41 reconstructed GPU-reuse mutations agreed. It imports none of the
+study implementations. It rechecks feasibility and saved evidence; global
+optimality still relies on the separately documented exact searches, and altered
+instance plans were not saved. Root additionally verified that falsified summary
+totals and a reused GPU in a saved plan both cause this audit to reject the record.
+
+SPEC.txt, PROTOCOL.txt, SOURCES.txt and REPRODUCE.txt define the contract, provenance
+and commands. RESULTS.json retains original plans and per-case checks; RESULTS_O.json
+is the deterministic optimized reproduction. Final independent raw audit and
+package hashes accompany this report.
+
+Independent audit reproduction from this directory:
+  python3 -B audit_results.py . --output /tmp/coop-placement-audit.json
+  python3 -B -O audit_results.py . --output /tmp/coop-placement-audit-O.json
+These reconstruct the same evidence and are not new performance observations.
