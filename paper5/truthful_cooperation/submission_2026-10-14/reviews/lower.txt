@@ -1,0 +1,165 @@
+Recorded UTC: 2026-10-14T04:08:26.535627+00:00
+
+Bounded independent audit: matching simple-DAG lower theorem
+
+Conclusion: the lower argument at manuscript.tex lines 319-451 is sound under
+its stated fixed-owner, nonnegative-payment, coalition-coverage and own-report
+monotonicity model. No counterexample or substantive proof gap found. The
+subdivision proposition at lines 454-471 is also sound. This is a mathematical
+and bounded computational audit, not formal verification or a novelty claim.
+
+Source reviewed (read-only throughout):
+/Users/maxf/projects/economics-research/game-theory/coopgpt/paper5/truthful_cooperation/manuscript.tex
+SHA256: 4786126d3a4473bf04b06384ad7151a83576321c4734718f26f29ba6ff13e67f
+Hash was checked before and after the audit and remained identical.
+Relevant eligibility definition at lines 168 onward was also read; the upper
+mechanism itself was not independently re-proved in this bounded assignment.
+
+One minor wording correction, not a theorem gap:
+Line 448 says 'For any fixed epsilon>0'. The construction at line 449 requires
+0<epsilon<1; epsilon>=1 makes its proposed hierarchy height nonpositive. Change
+this to 'For any fixed 0<epsilon<1'. The intended epsilon-down-to-zero inversion
+and asymptotic conclusion are correct. No canonical edit was made.
+
+1. Fixed-owner symmetrization (369-380)
+Write each original edge owner as (module, local edge). A module permutation
+moves the entire local report/coalition pattern, including every auxiliary
+owner, to another identically shaped module; a branch permutation also moves
+its two incident auxiliary edge families. These are bijections of one fixed
+owner set, not population changes, mergers, subdivisions or clone owners.
+For every nonnegative capacity profile c and coalition S, series composition
+satisfies v_c(S)=min_l f_l(c restricted to S in module l). One inequality follows
+by restricting any global flow to a module; the reverse follows by scaling
+feasible local flows down to their common minimum and concatenating at the
+single shared terminals. Thus v_(pi c)(pi S)=v_c(S), including arbitrary
+asymmetric auxiliary capacities, even though permuting modules need not be a
+vertex automorphism of the entire directed graph.
+Consequently averaging ybar_i(c)=average_pi y_(pi i)(pi c) preserves coalition
+coverage, nonnegativity, the factor-B budget, and own-report monotonicity.
+At the proof's auxiliary-H profiles, stabilizers and branch/module relabelings
+make each low/high middle-owner payment depend only on its type and the type
+histogram. This justifies x_h(nu), z_h(nu). No assumed equality among auxiliary
+payments is needed for the argument.
+
+2. Actual shared-fan coalitions and auxiliary budget (345-394)
+A chosen fan pair supports precisely the selected middle branches J. Give each
+branch c_j units of flow. Each branch's two incident auxiliary edges can carry
+it, and the two common end edges carry sum_J c_j <= m*m=H. The middle edges
+are an upper-bounding cut, so equality holds. Series coalition worth is the
+minimum of these realized module values. Every endpoint fan edge occurs with
+probability 1/R; every incident auxiliary edge has probability either 0 or
+1/R for a fixed selected J. Their expected payment is therefore <=Q/R because
+payments are nonnegative. Replacing that expectation by Q/R relaxes coverage
+in the correct direction. Auxiliary owners remain strategic; fixing their
+reports only on this witness family is a valid restriction of an all-profile
+eligible rule, and their payments remain fully charged to Q.
+One low exists in every module since h<=d_0<m. For h<d_0, there are at least
+q_0=m-d_0+1 lows; a type-d_0 module has a high because d_0>=1. The second
+coalition has value q_0 when any type is below d_0, and m>=q_0 otherwise.
+Multiplying its relaxed bound by d_0 and the first by m-d_0 gives exactly
+A=(d_0+1)m-d_0^2 and coefficient m/R on Q. The all-top-type case is stronger
+than needed, not omitted: its extra weighted constant is d_0(d_0-1).
+
+3. Weighted transition and disjoint budgets (396-420)
+For nu_h>0 and h<d_0, choose one actual low owner in a type-h module and raise
+only its report from 1 to m. The source and destination representatives can
+be chosen so all other original reports, including auxiliaries, are identical.
+Own-monotonicity and the preceding symmetrization give x_h(nu)<=z_(h+1)(nu').
+The histogram bijection nu'=nu-e_h+e_(h+1) satisfies, by cancelling factorials,
+mu(nu) nu_h = [p_h/p_(h+1)] mu(nu') nu'_(h+1).
+Since p_h/p_(h+1)=(h+1)/lambda and lambda=A/alpha, the transported coefficient
+is alpha(h+1). There is no missing (m-h) multiplicity: the relevant coalition
+rows charge x_h per selected low, not the total payments of all low owners.
+Summing transports gives alpha times total high payments. The remaining
+boundary term is precisely the full middle-owner payment in type-d_0 modules.
+Both are nonnegative sub-budgets of Y, giving (1+alpha)E[Y]+(m/R)E[Q]. Because
+Y and Q are disjoint, this is at most max(1+alpha,m/R)E[Y+Q], not the sum of
+those coefficients times the budget. The displayed factor-B inequality follows.
+The integer tail-sum formula for min_l H_l gives the stated exact expectation.
+Each positive tail is <=1-p_0, and (1-1/Z)^k<=exp(-k/Z), proving the bound.
+
+4. Structural cuts (423-428)
+For any inclusion-minimal disconnecting edge set F, let U be vertices reachable
+from the source after F is removed. Then delta+(U) is a disconnecting subset of
+F, so minimality forces equality. A module has exactly 2R+2m internal vertices,
+hence at most 2^(2R+2m) such edge cuts. It has a path, so at least one exists.
+In series, a disconnected graph must contain a disconnected module; otherwise
+local surviving paths concatenate. A cut containing a disconnected module's
+edges and additional edges elsewhere is not inclusion-minimal. Conversely,
+every local minimal cut remains globally minimal because restoring any one of
+its edges restores a local path, while all other modules still have paths.
+The modules' edge sets are disjoint and local cuts are nonempty, so no duplicate
+sets arise: the exact count is K=k*C_(m,R), not just an upper bound. Series
+terminal identification creates neither parallel edges nor cycles here.
+
+5. Parameters and at-most-K inversion (429-451)
+Put d=d_0. For d>=2, g=ceil(sqrt(log(d+1)))>=2, m=dg>d, R=m and alpha=1/g.
+Then A/m=d+1-d/g and the budget maximum is 1+1/g. With ell=ceil(log(d+1))
+and k=ceil(2 ell Z), d exp(-k/Z)<=d exp(-2ell)<=d/(d+1)^2 ->0. This separate
+ell factor makes the displayed coarse bound vanish; substituting g into that
+bound would leave d*exp(-2g), which does not vanish.
+Lambda=d^2*g*(g-1)+d*g^2>d. Thus its truncated Poisson terms increase through
+height d, establishing the displayed two-sided bound on Z. More explicitly,
+log(lambda)=2log(d)+2log(g)+log(1+1/d-1/g)
+           =2log(d)+O(log log(d)).
+Stirling and the Z bound give log Z=d log d+O(d log log d); multiplying Z by
+2ell and taking a ceiling preserves log k=(1+o(1))d log d. Since m=O(d sqrt(log d))
+=o(d log d), the structural-count bound yields log K_d=(1+o(1))d log d.
+Combined with B>=(1-o(1))d, this gives the leading coefficient one along K_d.
+For fixed 0<epsilon<1 and L=log K, choosing d=floor((1-epsilon)L/log L) gives
+log K_d=(1-epsilon+o(1))L<L eventually. Hence this witness is within the
+external budget without needing monotonicity of the sequence K_d, or any
+exact-count padding theorem. Taking liminf and then epsilon down to zero
+proves the at-most-K lower. The matching upper is conditional here on the
+separately stated upper theorem, outside this audit's re-proof scope.
+The production lower follows by taking structural cut indicators as the fixed
+nonnegative forms and restricting each edge owner's resource bundle to its
+own coordinate axis. An eligible rule on the full bundle domain would restrict
+to an eligible network rule, so expanding that domain cannot evade this lower.
+
+6. Subdivision boundary check (454-471)
+With mate report fixed, the chosen virtual capacity min(a_e,b_e), and hence
+Q_e of the whole virtual profile, is constant once an owner's report reaches
+its mate. Its own payment is zero below, half that fixed nonnegative Q_e at
+equality, and the whole Q_e above: own-monotonicity holds without assuming
+Q itself monotone. For a coalition, an incomplete subdivided edge cannot carry
+through-flow at its private intermediate vertex; complete pairs exactly induce
+S*. Each complete pair contributes its whole Q_e to coalition payment, while
+other payments are nonnegative. Coverage and efficiency follow. This proposition
+does not undermine the shared-fan lower, whose auxiliary owners are explicitly
+included in the budget rather than treated as harmless subdividers.
+
+Executed finite checks (stdlib only; no external models or GPU):
+A. python3 -B -O /Users/maxf/projects/economics-research/game-theory/coopgpt/research_campaigns/2026-10-07-six-hour-campaign/verification/simple_dag_lower.py --skip-subdivision
+Exit 0, elapsed 0.07s. Explicit checks stay enabled under Python -O.
+  1,586 actual coalition maxflows; 13 full-profile flows; 16 single-owner changes.
+  Complete module structural-cut counts for (m,R)=(1,1),(2,2),(3,3): 5,39,689.
+  25 exact-rational weighted cases, 352 histograms, 512 transport identities,
+  including a case R<m testing the max coefficient for auxiliary absorption.
+Checker SHA256: f49de2f71fc1482cc9b673379c9e63aff8caabe326f77fddd26a4f5e1dc1bc7c
+The weighted checker also verifies E[T] in two exact forms and nonpositive
+uncancelled payment coefficients, retaining the stronger all-top constant.
+
+B. Supplemental Python -B -O heredoc, no persisted helper or canonical writes.
+Imported only graph construction/maxflow helpers from that checker; added an
+independent exhaustive deletion predicate: after deleting mask F, propagate
+reachability in the generated topological edge order; F is minimal iff it
+disconnects and restoring each edge in F individually reconnects.
+  (k,m,R)=(2,1,1): all 1,024 deletion subsets, C=5 and series cuts=10.
+  (k,m,R)=(3,1,1): all 32,768 deletion subsets, C=5 and series cuts=15.
+  (k,m,R)=(2,2,1): all 65,536 deletion subsets, C=11 and series cuts=22.
+Every enumerated minimal series cut lies wholly in one module.
+Then tested all 65,536 coalitions of the 16-edge (k,m,R)=(2,2,1) graph at
+capacities [11,3,5,2,7,4,6,9,8,7,2,6,3,4,9,5] in make_series edge order.
+For the module swap and each of the two modules' branch swaps, permuted both
+reports and owner membership, and compared actual integer maxflows. All
+196,608 equivariance comparisons passed; 225 masks have positive worth.
+This specifically exercises asymmetric auxiliary reports, rather than only
+profiles where the claimed symmetry is visually trivial. Exit 0; elapsed 1.525s.
+
+Inspected but did not run owner_count_lower.py: its owner-count translation is
+adjacent to, but not needed for, the cut-count theorem audited here. Did not run
+run_all.py or the 3^10-profile subdivision sweep: the scoped tests plus the
+written subdivision argument suffice for this bounded task. Finite tests do
+not prove arbitrary-height asymptotics, all-profile symmetrization, or priority.
+Cross-model review was not invoked because of the specified quota block.

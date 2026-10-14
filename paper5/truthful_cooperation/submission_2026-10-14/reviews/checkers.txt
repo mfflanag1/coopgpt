@@ -1,0 +1,193 @@
+SCOPED VERIFICATION CODE REVIEW
+Date: 2026-10-14
+Reviewer: independent Codex subagent trace_audit_review
+
+Reviewed canonical directory:
+/Users/maxf/projects/economics-research/game-theory/coopgpt/paper5/truthful_cooperation/submission_2026-10-14/verification/
+
+Initially reviewed source hashes:
+replay.py
+b2170b5ca504e3d53cc1d6910d612982edf1775e5ad4ec8d9b4afa67a9b79152
+two_owner_scope.py
+cff72556e9683facb29b5a47b35d66f736970763d158161cbbe111974cd3ca1a
+lower_symmetry_checks.py
+32740b114f1ab9dfcb2cf34dd5115671ef5d4ecf64456988847c60efdc899b81
+
+Verdict: no remaining mathematical-checker, portability or counter blocker
+found in the requested scope and documented -B -O invocation. The initially
+supplied successful replay is consistent with the baseline source versions.
+A concrete output-clobber issue was found and repaired. The final repair's
+source was inspected; refusal-test results are attributed to the coordinator.
+See the final addendum for the corrected wrapper hash and exact execution-
+evidence boundary.
+
+PORTABLE PATHS AND DEPENDENCIES
+
+The wrapper's default Path(__file__).resolve().parents[4] is the repository
+root for the distributed repository-relative placement. I checked that
+resolution explicitly. --repo-root also resolves explicitly and is used
+as subprocess cwd. Every job path is relative to that root. The lower
+symmetry job receives the same root as an argument, and dynamically imports
+the named helper file from that root. There is no developer-home fallback.
+
+The general-production job loads binary_packing.py relative to its own file;
+that dependency is included in the wrapper's source-hash and AST inventory.
+The simple-DAG helper imports only standard-library modules and has a guarded
+main, so importing it does not launch its full checker. The three new scripts
+also use only the standard library. The documented wrapper invokes each
+child with -B -O, preserving checks and suppressing imported bytecode files.
+
+Minor standalone caveat: lower_symmetry_checks.py dynamically imports its
+helper without itself disabling bytecode. If invoked without -B, normal
+import machinery may create __pycache__ despite its docstring's no-repository-
+writes wording. This does not affect the recorded wrapper run, which supplies
+-B. The coordinator was advised either to qualify standalone instructions
+with -B or to disable bytecode before the import.
+The coordinator confirmed that the documented -B -O invocation, including
+the standalone command, is the contract. No helper change is required within
+that scope; this review does not promise no-bytecode behavior outside it.
+
+FAILURE BEHAVIOR AND ALWAYS-ON CHECKS
+
+All new mathematical requirements are explicit exceptions, not assert
+statements. I AST-scanned the three scripts and found zero ast.Assert nodes.
+The wrapper additionally AST-scans its seven-file source/dependency inventory
+before any job. Checks therefore remain active under -O.
+
+Child success requires both returncode==0 and a PASS marker. A thrown
+require/check exception cannot pass merely because stdout already contains
+PASS: the nonzero return code still fails the conjunction. The existing
+child programs only emit their successful terminal PASS/JSON after their
+requested checks; their error paths throw or explicitly exit 1. I inspected
+those terminal paths, without re-auditing all historical checker logic.
+
+A timeout is converted to a return code 124 record with captured output and
+diagnostic. Any failed job stops the remaining loop. Overall PASS additionally
+requires all five records, every record passing, and all inventoried sources
+unchanged. A changed readable source produces FAIL. A missing/unreadable
+source or other uncaught I/O failure exits abnormally, rather than reporting
+success; an output JSON is not guaranteed for every such early failure.
+
+The PASS-marker test is a literal substring contract with the current trusted
+child programs, not a general validator for arbitrary command output. This
+is adequate for the five inspected entrypoints and should not be described
+as an adversarial-output parser.
+
+ACCEPTED OUTPUT-PRESERVATION REPAIR
+
+The initial wrapper computed sources_unchanged before calling write_text on
+an unrestricted --output path. Therefore --output could name a source file
+or prior report, overwrite it, and leave a newly written record saying PASS
+and sources_unchanged=true. This is a concrete inconsistency with its source-
+preservation promise, although it did not occur in the supplied fresh-output
+replay.
+
+The coordinator accepted the recommended repair: resolve output; refuse a
+preexisting path or symlink before checks; publish with exclusive open('x')
+after creating its parent directory. Exclusive creation also rejects a file
+introduced between the preflight check and publication. This is a correct
+repair for source/old-report aliasing under the stated local replay use.
+The coordinator will test existing-output and source-alias refusal and rerun
+all five jobs from a fresh extraction to bind the final wrapper hash. This
+report records the accepted design, not a claim that those later tests were
+already performed by this reviewer.
+
+TWO-OWNER CHECKER: ACTUAL COVERAGE AND COUNTS
+
+The code evaluates the repaired two-owner Shapley formula with Fraction
+arithmetic over five fixed technologies and 16 two-coordinate bundles on
+the grid {0,1/2,1,2}. Thus 5*16^2=1,280 full profiles is correct.
+
+At each profile it directly checks efficiency and both singleton coverage/
+nonnegativity inequalities. For two owners this implies all four coalition
+cases, including the empty coalition (whose value is identically zero).
+The reported 5,120 coalition count is four cases per profile; it is not
+5,120 separately executed require calls or nonempty-coalition comparisons.
+
+For each coordinate the four-level grid has 10 ordered weak-increase pairs.
+Hence two-coordinate own bundles have 100 ordered weak-increase pairs, and
+5 technologies * 2 owners * 16 other bundles * 100 = 16,000 comparisons.
+Of these, 2,560 compare identical reports and 13,440 are strict increases
+in at least one coordinate. The output key own_increases means weak
+componentwise comparisons; it must not be reported as 16,000 strict changes.
+
+The old-rule negative control is the actual full-bundle defect at M=3:
+b1=(0,0), b2=(1,0) gives the old P2=0 but v({2})=1/3. The new rule tests
+include overlapping bundles, zero technology and a single-form technology.
+The fixture sizes and fixed two-dimensional inputs make the use of zip
+well-defined here; this is not advertised as a general input parser.
+
+LOWER SYMMETRY CHECKER: ACTUAL COVERAGE AND COUNTS
+
+The cut enumerator is independent of the imported cut-count procedure: it
+enumerates all deletion bitmasks and checks source-sink reachability, then
+requires reconnection upon restoring each deleted edge. For a monotone
+reachability property this characterizes inclusion-minimal cuts. The
+single-pass reachability scan first verifies topological vertex labels and
+nondecreasing edge tails, so it is valid on these constructed DAGs.
+
+The three series cases have 10, 15 and 16 edges, enumerating respectively
+1,024, 32,768 and 65,536 deletion subsets. Local cut counts are 5, 5 and 11;
+series counts are 10, 15 and 22. The 5-edge one-branch module is a path.
+For the eight-edge two-branch/one-fan module, two terminal-fan cuts plus
+three choices in each of two branch paths give 2+3^2=11 local cuts. The
+code checks both k times the local count and that every minimal series cut
+occupies exactly one module.
+
+The symmetry part deliberately imports graph-construction and integer
+max-flow helpers; it is not an independently implemented flow solver. It
+checks all 65,536 coalition masks for each of three explicit owner
+permutations at one fixed asymmetric positive-capacity vector. Both the
+coalition mask and owner capacities are permuted, so it tests coalition
+equivariance, not a mistaken invariance with capacities left on old labels.
+Branch permutations relabel their incident auxiliary edges via kind lookup.
+Module swapping exchanges whole module edge blocks. All permutation maps
+are checked to be bijections of the original 16-owner set.
+
+The count 196,608 is exactly 3*65,536. The 225 positive-worth coalitions also
+has a simple independent count: both common fan edges are required in each
+module, and at least one of its two three-edge branches must be complete;
+there are 2^6-7^2=15 possibilities per module, hence 15^2=225 in series.
+These are finite witnesses at the stated profiles, not all-capacity symmetry
+verification or a proof of the asymptotic lower theorem.
+
+EXISTING EXECUTION RECORD CHECKED
+
+Read /tmp/coop-truthful-submission-20261014/scoped_replay.json. It reports
+five completed runs, zero exit codes, sources_unchanged=true, and overall
+PASS. I independently compared its seven recorded source hashes with the
+current canonical files: all matched at review time. Parsed the JSON child
+outputs for the two new checks and projection diagnostic and verified their
+recorded counts match the code and the calculations above. The lower-symmetry
+dependency/checker hashes in its own output also match the inventory.
+
+This report does not claim a new execution of the five-job suite. The
+coordinator's extraction replay is the actual execution evidence. I performed
+read-only source inspection, hash/path/AST checks, parsed-log inspection and
+independent count reasoning. No canonical files were edited; no GPU, network,
+fresh cross-model call, broad regression campaign or universal proof claim
+was added. Mathematical-source prose/format updates are outside this narrow
+checker review and retain their separately documented binding procedure.
+
+FINAL OUTPUT-GUARD ADDENDUM
+
+Final inspected replay.py SHA256:
+fbe1643e30c8a8b240f7ac692b2d8911630e4d018a19de578879ea59536c486d
+
+Inspected final lines 26-27: an existing output path or any symlink triggers
+argparse.error before source checks/jobs. Inspected final lines 61-63:
+the parent is created and output is published with exclusive open('x').
+The code retains the output's supplied relative spelling; since only the
+child subprocess changes cwd, both parent-process checks and exclusive
+publication resolve it against the same unchanged cwd. An explicit resolve()
+is unnecessary for the ordinary alias protection: existing source aliases
+are already rejected and exclusive creation handles a subsequently appearing
+target. This closes the reported clobber defect.
+
+The coordinator reports existing-report, source-alias and symlink refusal
+tests each exit 2 and preserve target bytes. I did not rerun those controls.
+At my final inspection, scoped_replay.json still held the earlier successful
+baseline-wrapper record; the coordinator's new extracted replay was running
+or finishing. Consequently I do NOT bind that old record to the final hash
+or assert the new replay's outcome prematurely. Final publication should
+retain the coordinator's new execution record with the final runner hash.

@@ -1,0 +1,240 @@
+INDEPENDENT BOUNDED AUDIT: TRUTHFUL GENERAL UPPER BOUND
+Date: 2026-10-14
+Reviewer: independent Codex subagent trace_audit_review
+
+Source reviewed:
+/Users/maxf/projects/economics-research/game-theory/coopgpt/paper5/truthful_cooperation/manuscript.tex
+SHA256: 4786126d3a4473bf04b06384ad7151a83576321c4734718f26f29ba6ff13e67f
+Scope: definitions and theorem/proof/corollary/proposition at lines 159-318,
+with surrounding manuscript framing read for the meaning of eligibility.
+Canonical files were not edited. The reasoning below was completed before
+reading the October 7 review/adjudication records listed at the end.
+
+VERDICT
+
+No load-bearing gap found in the stated finite-min-linear upper theorem or
+its production/network corollary. The raw selection, capped contributions,
+own-report monotonicity, endpoint comparison, deletion/integration identity,
+tail bound, parameter choice, ties and zero cases all check out under the
+stated fixed-family, nonnegative-form, binding-underreport assumptions.
+
+One local mathematical/model-domain correction is needed in the separate
+uncapped-rule example at lines 309-316. Its bad-payment example should state
+the owner bundles explicitly. Its final efficient-rule sentence is false on
+the full-bundle domain defined at lines 160-170, although it is true when
+owner 1 controls resource 1 only and owner 2 resource 2 only. This issue does
+not enter the upper theorem's proof. An all-bundle repair is given below.
+
+1. FIXED MODEL, MONOTONICITY AND ENDPOINTS
+
+Nonnegative forms imply f(x)>=0 and f(x)<=f(y) whenever 0<=x<=y.
+Also f(0)=0 and f(x+y)>=f(x)+f(y). These statements do not require positive
+reports, nondegeneracy or a unique minimizer.
+
+For each owner and each fixed other-owner mask, deleting that owner's WHOLE
+bundle removes all of its report from every selection score. Since both V
+and its priority are fixed, the selected off form is the same before and
+after any own-report increase, even at a tie or an all-zero mask. Its own
+linear contribution and full-profile T are both componentwise nondecreasing;
+the minimum of these two functions is nondecreasing. Therefore p_i^q is.
+
+For m_i^q the off value does not depend on b_i; the on value is nondecreasing.
+The endpoint difference is nonnegative, and is monotone in the whole own
+bundle. The weights q, 1-q, j and the integration interval are all independent
+of reports. This proves the required monotonicity of the final payment,
+including simultaneous decreases in several coordinates and comparisons
+across T=0. No monotonicity of the raw selected on form itself is asserted or
+needed. Choosing j from report-dependent active forms would be a different,
+unjustified procedure; the manuscript chooses it from fixed K.
+
+The conditional expression at q=0 is formally unnecessary: all identities
+are proved for 0<q<1 and the finite-mask polynomial extends continuously to
+the integration endpoint. The value at one endpoint does not affect the
+integral. Thus there is no zero-probability-conditioning gap.
+
+2. CAP/RAW COMPARISON AND COALITION COVERAGE
+
+At any fixed full profile and for any form w, the vector
+a_i(w,b)=min(w.b_i,T) covers every coalition S. If one of S's contributions
+is at least T, its cap is T>=f(sum_S b_i); otherwise no S contribution is
+capped and their sum is the linear upper support w.(sum_S b_i).
+The argument includes empty S, equality at the cap, and T=0.
+
+Let x be the masked aggregate of owners other than i and let w1 be any
+priority-selected raw minimizer at x+b_i. Then
+
+ f(x+b_i)-f(x) = w1.(x+b_i)-f(x) >= w1.b_i,
+
+because f(x)<=w1.x. Since all summands are nonnegative,
+
+ 0 <= w1.b_i <= w1.(x+b_i)=f(x+b_i) <= f(c)=T.
+
+Consequently w1.b_i=a_i(w1,b). The comparison has the correct direction;
+it does not substitute the off minimizer into the on value. Averaging over
+the same B_-i gives m_i^q >= E[a_i(W,b)|B_i=1]. Together with the exact
+off component this gives r_i^q>=z_i^q, coordinate by coordinate. Taking the
+same convex mixture of covering z-vectors covers every coalition, and
+j times the interval length 1/j is one. Coverage of M follows.
+
+The related selected-open identity is exact, not an inequality. For the
+selected raw minimizer W, its nonnegative open contributions sum to the
+masked value, which is at most T. Thus no open contribution is affected by
+capping and sum_i B_i a_i(W,b)=f(sum_i B_i b_i). Closed contributions may be
+capped; the proof does not assume otherwise. Raw selection is essential to
+this argument, and the manuscript consistently uses raw selection.
+
+3. DELETION IDENTITY AND INTEGRATION
+
+Taking expectations of the selected-open identity gives
+
+ Z(q)-g(q)=sum_i E[(1-B_i)a_i(W,b)]=q sum_i p_i^q.
+
+To differentiate g, first give each owner's deletion bit its own probability
+q_i. The resulting expectation is multiaffine. Its partial derivative in
+q_i is E[off value - on value]=-m_i. On the diagonal q_i=q, the ordinary
+derivative is the sum of these partial derivatives, so g'=-sum_i m_i^q.
+This avoids any differentiability assumption on f or the report-space
+selection rule; only a finite mask polynomial is differentiated.
+
+Hence R=Z-g-(1-q)g'. Set F(q)=(1-q)g(q). Since
+F'=-g+(1-q)g', one has R=Z-2g-F'. Therefore
+
+ integral_0^eta R = integral_0^eta Z + T
+                   -(1-eta)g(eta)-2 integral_0^eta g.
+
+The minus sign and factor 2 in the manuscript are correct. For eta<1 all
+terms discarded in its upper bound are nonnegative. A linear one-form
+sanity check gives g(q)=(1-q)T and Z=R=T, and the exact identity reduces to
+eta*T on both sides. No unproved independence between W and B is used.
+
+4. TAIL BOUND
+
+For fixed b with T>0, each fixed form has deterministic coefficients
+d_i(w)=a_i(w,b)/T in [0,1]. For any q in (0,1), lambda>0, set
+alpha=-log(q+(1-q)exp(-lambda))>0. The function
+h(u)=log(q+(1-q)exp(-lambda*u)) satisfies
+
+ h''(u)=lambda^2*q*(1-q)*exp(-lambda*u)
+        /(q+(1-q)*exp(-lambda*u))^2 >= 0.
+
+With h(0)=0 and h(1)=-alpha, convexity gives h(u)<=-alpha*u on [0,1].
+For fixed w, the variables B_i are independent, so Markov applied to
+exp(-lambda sum_i B_i d_i(w)) gives
+
+ P(sum_i B_i d_i(w)<=1) <= exp(lambda-alpha*rho_w).
+
+The selected form's open sum is g's realized masked value divided by T,
+hence at most one. Thus the event rho_W>=x is contained in the union,
+over fixed w with rho_w>=x, of their small-open-sum events. A union bound
+gives min(1,K exp(lambda-alpha*x)). The selected W need not be independent
+of the bits; the fixed-form union is precisely what permits its dependence.
+
+Since Z/T=E[rho_W], tail integration is valid for the bounded nonnegative
+random variable rho_W. The break point is
+x0=(log K+lambda)/alpha>0. Integrating 1 up to x0 and the exponential tail
+afterwards gives exactly (log K+lambda+1)/alpha. This proves the stated
+bound without hidden dependence on owner count, resource count, form
+coordinates, or a positive lower bound on contributions.
+
+5. PARAMETER CHOICE AND ASYMPTOTICS
+
+With eta=1/j and exp(-lambda)=j^-2, the quantity
+q+(1-q)j^-2 is increasing in q and is at most
+(j^2+j-1)/j^3 throughout the integration interval. Thus alpha>=alpha_j.
+Positivity follows from j^3-(j^2+j-1)=(j-1)^2(j+1)>0 for j>=2.
+Multiplying the integrated budget inequality by j yields
+
+ total M <= [j+(log K+2 log j+1)/alpha_j] T.
+
+For L=log K tending to infinity, the stated integer choice satisfies
+j~L/(log L)^2. Moreover
+alpha_j=log j-log(1+1/j-1/j^2)=log L-2 log log L+o(log L),
+so alpha_j~log L, 2 log j+1=o(L), and j=o(L/log L). Hence the coefficient
+is (1+o(1))*log K/log log K. The o(1) depends only on K, proving the claimed
+uniformity. The construction is a family indexed by j, as correctly stated
+by the theorem's 'for every j there exists a rule' quantifier.
+
+6. ZERO, SINGLE-FORM, RATIONAL AND LP CASES
+
+If T=0, every masked aggregate is coordinatewise at most c, hence has zero
+value. All caps and endpoint differences vanish; the payment is exactly
+zero. Normalized d_i and tail formulas are only used for T>0.
+
+For K=1, each w.b_i is a nonnegative summand of T, so the cap is inert and
+p_i^q=m_i^q=w.b_i. The integral returns that contribution exactly. Arbitrary
+ties for K>1 are already handled by a fixed priority, including duplicate
+score values and the empty mask.
+
+The displayed finite-mask formula has degree at most n in q. Its integral
+has rational coefficients at rational 1/j. 'Rational input' must include
+the technology forms as well as reports; under that ordinary reading the
+rational-payment conclusion is correct. It gives no polynomial evaluation
+algorithm, as the manuscript explicitly acknowledges.
+
+For the LP corollary, a positive entry in each activity column bounds that
+activity's nonnegative quantity separately at finite c. Thus the primal is
+nonempty (x=0), closed and bounded. A sufficiently large multiple of the
+all-ones price vector is dual-feasible. The dual polyhedron is pointed since
+it lies in the nonnegative orthant. A finite attained optimum has an optimal
+vertex; finitely many vertices supply the required fixed family, even when
+some capacities are zero. The nonzero-column exclusion is sufficient and
+explicit. For finite directed single-commodity flow, min-cut supplies the
+representation directly; any nonminimal structural cut has a contained
+minimal cut of no greater nonnegative capacity. Removing such forms does
+not depend on reports. No ordinary cut-count interpretation is asserted for
+arbitrary fractional production dual vertices.
+
+7. VERIFIED LOCAL ISSUE AND REPAIR
+
+Lines 309-313 specify aggregate c=(M,1) but not the owners' bundles. The
+claimed event follows with b1=(M,0), b2=(0,1). Then at mask (0,1), form
+(1,0) has score zero while (1/M,1-1/M) has score 1-1/M>0. The uncapped
+own contribution is M, giving r1^q>=q(1-q)M. Its j=2 average is
+2*M*integral_0^(1/2)(q-q^2)dq=M/6; T=2-1/M. This part is valid once
+the owner assignment is specified.
+
+The subsequent proposed efficient rule allocates all c1/M to owner 1 and
+half of (1-1/M)min(c1,c2) to each. On the declared arbitrary-bundle domain,
+take b1=(0,0), b2=(1,0). It pays owner 2 zero, but that singleton's worth is
+1/M>0. For example, at M=2 the claimed coalition-covering payment is
+(1/2,0) although coalition {2} has value 1/2. This is a concrete failure
+of eligibility, not an issue involving a tie or an asymptotic limit.
+
+Two straightforward repairs are available:
+(a) explicitly restrict this optional comparison to fixed resource-owner
+    domains b1=(x,0), b2=(0,y), and say eligibility here is on that domain;
+(b) retain the full-bundle domain and replace the comparison by
+
+    P_i(b)=[f(b_i)+f(b1+b2)-f(b_{-i})]/2,  i=1,2.
+
+For (b), the payments sum exactly to T. Superadditivity yields
+T>=f(b1)+f(b2), implying P_i>=f(b_i)>=0. Thus both singleton constraints
+and the grand-coalition constraint hold. With the other owner's report
+fixed, f(b_i) and T are nondecreasing, while f(b_{-i}) is constant, proving
+all-profile own-report monotonicity. This supplies the intended comparison
+on precisely the main theorem's domain, without changing the upper theorem.
+
+8. CHECKS ACTUALLY PERFORMED AND LIMITS
+
+Performed: direct reading and independent rederivation of every step above;
+explicit algebraic counterexample and proposed repair; source SHA256 read;
+comparison with the following historical records only AFTER the independent
+assessment:
+- research_campaigns/2026-10-07-six-hour-campaign/review/general_production_review.md
+- research_campaigns/2026-10-07-six-hour-campaign/review/general_production_adjudication.txt
+- research_campaigns/2026-10-07-six-hour-campaign/review/hybrid_review.md
+- research_campaigns/2026-10-07-six-hour-campaign/review/hybrid_adjudication.txt
+- research_campaigns/2026-10-07-six-hour-campaign/review/final_proof_spotcheck.txt
+- the uncapped example in GENERAL_PRODUCTION_THEOREM.txt, which explicitly
+  described two fixed resource owners before the compressed manuscript.
+
+The prior reviews corroborate the upper-bound derivation. Their earlier
+approval of the resource-owner comparison does not repair its omitted domain
+restriction in the current full-bundle manuscript.
+
+Not performed: new finite-checker execution, proof-assistant verification,
+lower-bound audit, novelty search, external specialist review, compilation,
+or whole-manuscript certification. Finite checker logs are supporting records,
+not the basis of this universal proof judgment. Cross-model review was not
+retried: the known quota is unavailable until October 15. This report is an
+independent same-model mathematical audit, not an external-model endorsement.

@@ -1,0 +1,184 @@
+INDEPENDENT FINAL ARCHIVE AUDIT
+Date: 2026-10-14
+Reviewer: independent Codex subagent trace_audit_review
+Scope: packet integrity, execution-dependency closure, reproduction and
+preservation; not a new proof, literature, priority or external-review audit.
+
+Canonical repository:
+/Users/maxf/projects/economics-research/game-theory/coopgpt
+
+Release directory:
+paper5/truthful_cooperation/submission_2026-10-14
+
+VERDICT: PASS
+
+Both final archives have complete internal manifests, valid CRCs and exact
+canonical payload bytes. All seven scoped execution dependencies are present
+and agree with the sealed five-check evidence. A new extraction of the final
+ESM archive successfully ran the documented command once. The source-export
+instruction ambiguity found during review was corrected before the audited
+final archives were sealed. No remaining packet-integrity blocker was found.
+
+FINAL ARCHIVE IDENTITIES
+
+ESM_2.zip
+Bytes: 35,914
+SHA256: fade895790fdfd2c861cc315244820877bbc539259e02279bbbd0925a644ee92
+ZIP entries: 11, comprising 10 canonical payload files and SHA256SUMS.json.
+
+Truthful_Economic_Theory_candidate.zip
+Bytes: 2,130,499
+SHA256: f5ba7b848df904ee3713db52f77b118e4075b7743dc231312bcb6b29b6b85b8c
+ZIP entries: 97, comprising 96 canonical payload files and SHA256SUMS.json.
+
+EXTERNAL MANIFEST
+
+Independently checked all 101 sha256 entries in the external MANIFEST.json
+against bytes read from the canonical repository. Every hash matched.
+The manifest bytes were unchanged over that integrity check.
+Manifest SHA256 at this audit stage:
+3f037963e7ebd8da3a84736f6f472d53c5065beafc706cd852eb578d9e154c36
+
+This is a point-in-time identity of the 101-entry manifest. The coordinator
+may subsequently add this report, and/or its fresh reproduction record, as
+external-only evidence and update the external manifest. Such additions do
+not change either ZIP identity above; this report does not claim to hash
+itself or a future external-manifest version.
+
+INTERNAL MANIFESTS, CRC AND CANONICAL BYTE CHECKS
+
+For each ZIP I independently:
+- rejected duplicate member names, absolute paths, parent traversal,
+  directory members and symlink members;
+- required SHA256SUMS.json's sha256 key set to equal every archive member
+  other than SHA256SUMS.json, and required its self-exclusion flag;
+- invoked the ZIP CRC test, read every entry, and separately compared its
+  length and crc32 with ZIP metadata;
+- recomputed SHA256 for every payload entry and compared with its internal
+  manifest entry;
+- compared every payload's decompressed bytes directly with the corresponding
+  canonical repository-relative file, including embedded ESM_2.zip and the
+  historical review ZIP in the full candidate.
+
+All comparisons passed. No unmatched or unhashed payload file was present.
+The full candidate contains all 28 release-directory records expected at
+the audited stage after excluding the full candidate ZIP itself, the external
+MANIFEST.json and validation/archive_integrity.json. Those two external
+records are deliberately absent from the full candidate, avoiding circular
+archive hashes. Its own SHA256SUMS.json is complete and excludes only itself.
+The external manifest binds both archives and the external integrity record.
+
+SEVEN EXECUTION DEPENDENCIES
+
+Both archives include the exact versions named in the sealed replay record:
+
+research_campaigns/2026-10-07-six-hour-campaign/verification/general_production.py
+a5f904596c91039e7429dfca5698e6bc29e7a0c5af8ba97e5530cbf31db68cbc
+
+research_campaigns/2026-10-07-six-hour-campaign/verification/simple_dag_lower.py
+f49de2f71fc1482cc9b673379c9e63aff8caabe326f77fddd26a4f5e1dc1bc7c
+
+research_campaigns/2026-10-07-six-hour-campaign/verification/core_projection.py
+545e0e9b97381adec5488d940b8341dd9bbb986b13967c2c829675c7d64b8eaf
+
+research_campaigns/2026-10-07-six-hour-campaign/verification/binary_packing.py
+06dc44891d8e05688e98708b74a2e29fa92572b0ac03cb2d63d20996032eb289
+
+paper5/truthful_cooperation/submission_2026-10-14/verification/two_owner_scope.py
+cff72556e9683facb29b5a47b35d66f736970763d158161cbbe111974cd3ca1a
+
+paper5/truthful_cooperation/submission_2026-10-14/verification/lower_symmetry_checks.py
+32740b114f1ab9dfcb2cf34dd5115671ef5d4ecf64456988847c60efdc899b81
+
+paper5/truthful_cooperation/submission_2026-10-14/verification/replay.py
+fbe1643e30c8a8b240f7ac692b2d8911630e4d018a19de578879ea59536c486d
+
+All seven hashes agree among canonical files, archive internal inventories,
+and validation/scoped_replay.json. The final hardened replay runner is bound;
+the archive does not accidentally carry its earlier pre-output-guard version.
+Its five named jobs are general_production, simple_dag_lower, core_projection,
+two_owner_scope and lower_symmetry. Sealed evidence records zero exit codes,
+PASS for all five, sources_unchanged=true, and overall PASS.
+
+The two dynamic helper dependencies identified during the separate checker
+review are included at their original relative paths. The documented scoped
+execution has no solver, network, canonical-checkout or unarchived-module
+dependency. This conclusion is corroborated by the isolated replay below.
+
+FRESH INDEPENDENT EXTRACTION AND EXECUTION
+
+Created a new temporary directory and extracted the final ESM archive only
+after checking its member paths, CRC, internal inventory and source hashes.
+The extracted ZIP SHA256 was exactly the final fade895...644ee92 hash above.
+Extraction directory:
+/var/folders/5w/l5827bsj3h10p3ghhr2t87980000gn/T/coop-truthful-independent-esm-20261014-su9a4wn7
+
+Ran, with that directory as cwd:
+
+python3 -B -O paper5/truthful_cooperation/submission_2026-10-14/verification/replay.py --output fresh-validation.json
+
+Actual exit code: 0.
+Actual stdout:
+general_production PASS
+simple_dag_lower PASS
+core_projection PASS
+two_owner_scope PASS
+lower_symmetry PASS
+
+Actual stderr was empty. Fresh evidence records overall PASS, all five jobs
+successful, all seven source hashes matching the sealed record, and sources
+unchanged. Compared new child results with sealed evidence:
+- general_production stdout was exactly equal;
+- simple_dag_lower output was equal apart from its elapsed-time suffix;
+- core_projection and two_owner_scope parsed JSON were exactly equal;
+- lower_symmetry parsed JSON was equal after removing elapsed_seconds.
+
+No mathematical count or certificate result changed in this reproduction.
+This was one execution of the documented scoped suite, not a broader replay
+of historical supplementary tests.
+
+Fresh evidence file:
+/var/folders/5w/l5827bsj3h10p3ghhr2t87980000gn/T/coop-truthful-independent-esm-20261014-su9a4wn7/fresh-validation.json
+SHA256: 99f355049a6eb63da8abe5ec7b77890b8d357ef253ce39080775c535d96e2821
+
+ARCHIVE-LOCAL INSTRUCTIONS
+
+The documented command runs from the extracted root with repository-relative
+paths, default root discovery and a new output filename. It passed as written.
+The instruction explains the five-check scope, excludes the unrelated full
+subdivision sweep, and labels old supplementary audits/execution records
+historical. It does not claim the finite suite proves universal/asymptotic
+claims or historical priority.
+
+Initial issue found: REPRODUCE.txt was shared by both archives and gave source
+export commands without explicitly saying the TeX sources occur only in the
+full candidate. The coordinator corrected the paragraph to begin 'Full
+candidate archive only' and resealed both archives. I verified that final
+instruction in both ZIPs. ESM_2 is correctly usable as a verifier-only archive;
+it does not need the three TeX documents or a LaTeX installation to replay.
+
+HISTORICAL PRESERVATION
+
+Compared all 27 entries in the preexisting temporary Acyclicity guard with
+the release preservation inventory and independently recomputed every current
+canonical file hash. Both inventories agree, and all 27 current files match.
+This includes the Acyclicity candidate/ESM ZIPs, manuscript source and PDF,
+release evidence, review records and source manifest. No protected Acyclicity
+file changed during preparation according to this baseline comparison.
+
+Historical truthful_cooperation_review.zip SHA256:
+4b98e3f32ce916526ffbc11874466c75dbd1be8565b7e83f4582c50ae6288fb1
+
+Independently read that file from git base commit
+f9f9cf697d79aa9d97001741f023ab96b2bf5a47 and compared its complete bytes with
+the current canonical historical ZIP. They are identical. The full candidate
+also contains those exact historical ZIP bytes, explicitly as historical
+material rather than the current manuscript.
+
+BOUNDARIES
+
+I did not edit canonical files, repair archives, reseal archives, push, upload,
+or contact anyone externally. The coordinator made the documented instruction
+repair; this audit verified the resulting final bytes. No fresh proof audit,
+literature search, historical-novelty determination, human specialist review,
+or additional PDF-layout review is implied by the integrity PASS.

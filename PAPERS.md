@@ -131,15 +131,15 @@ Status: the complete main theorem is retained, and all surviving static-protecti
 
 ### 8. Sharp subsidies for truthful production and network cooperation
 
-[Current manuscript](paper5/truthful_cooperation/manuscript.tex) · [Current specialist brief](paper5/truthful_cooperation/specialist_brief.tex) · [Review package](paper5/truthful_cooperation/README.md)
+[Current manuscript](paper5/truthful_cooperation/manuscript.tex) · [Main PDF](paper5/truthful_cooperation/output/pdf/manuscript.pdf) · [Indexed supplement](paper5/truthful_cooperation/supplement.tex) · [Two-page comparison](paper5/truthful_cooperation/output/pdf/specialist_brief.pdf) · [Review package](paper5/truthful_cooperation/README.md)
 
 High level: preventing gains from hidden resources while protecting every coalition requires an external budget that grows with production complexity. The paper gives the sharp growth rate, including for ordinary simple directed networks.
 
-Technical: for every finite nonnegative min-linear technology with K fixed supporting forms, the worst all-profile total-payment factor is **(1+o(1)) log K/log log K**. A capped own-excluded/endpoint hybrid proves the general upper; weighted report transitions through shared-fan networks give the matching simple-DAG lower with strategic auxiliary owners. The theorem permits arbitrary overlapping whole-owner resource bundles. The worst-case parameter uses at most K forms/cuts; it does not settle rates in owner count or resource dimension.
+Technical: over the class of finite nonnegative min-linear technologies with at most K fixed supporting forms, the optimal worst-case all-profile total-payment factor is **(1+o(1)) log K/log log K**. A capped own-excluded/endpoint hybrid proves the upper bound for every fixed technology; weighted report transitions through shared-fan networks give the matching simple-DAG lower with strategic auxiliary owners. The theorem permits arbitrary overlapping whole-owner resource bundles. The worst-case parameter uses at most K forms/cuts; it does not settle rates in owner count or resource dimension.
 
 Further results include an O(n/log n) bound for all finite-valued monotone concave homogeneous production functions, resource-dimension bounds, exact finite sampling and all-profile certification, and the earlier sharp multi-glove hierarchy. Certification can require exponential preprocessing. Appendices consolidate the finite-pool mechanisms, network subclasses, monotone-envelope obstruction and scoped method boundaries; these do not inflate the paper count.
 
-Status: complete consolidated source with conventional proofs, exact finite certificates and scoped model audits. The [October 7 campaign](research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt) is now its research archive. Current sources supersede the pre-hierarchy PDF exports. Historical novelty, significance and human specialist assessment remain unconfirmed. Outreach is prepared and unsent.
+Status: focused nine-page Economic Theory candidate, 63-page indexed supplement and two-page comparison prepared locally on 14 October, with fresh PDFs, scoped independent audits and exact checks. A full-bundle scope error in an auxiliary example is repaired; the central theorem is unchanged. The [author decision sheet](paper5/truthful_cooperation/submission_2026-10-14/DECISION.txt) records remaining declarations and priority limits. The [October 7 campaign](research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt) remains the research archive. Historical novelty, significance and human specialist assessment remain unconfirmed. No submission or outreach was sent.
 
 ## Broader archived manuscripts
 

@@ -1,146 +1,132 @@
 \documentclass[11pt]{article}
 \usepackage[T1]{fontenc}
 \usepackage{lmodern,microtype,amsmath,amssymb,booktabs,array}
-\usepackage[margin=0.85in]{geometry}
+\usepackage[margin=0.8in]{geometry}
 \usepackage[hidelinks]{hyperref}
 \setlength{\parindent}{0pt}
 \setlength{\parskip}{5pt}
-\hypersetup{pdftitle={Specialist brief: Sharp subsidies for truthful production and network cooperation},pdfauthor={Maxwell Flanagan}}
+\hypersetup{pdftitle={Claim and model comparison: Sharp subsidies for truthful production and network cooperation},pdfauthor={Maxwell Flanagan}}
 \begin{document}
 \begin{center}
-{\Large\bfseries Sharp subsidies for truthful production\\and network cooperation}\\[6pt]
-Maxwell Flanagan --- Specialist review brief --- 7 October 2026
+{\Large\bfseries Sharp subsidies for truthful production\\and network cooperation}\\[5pt]
+Maxwell Flanagan --- Claim and model comparison --- 14 October 2026
 \end{center}
+\textbf{Question for a specialist.} Does the sharp joint coverage--incentive--budget
+theorem below follow from earlier work, and are its two proofs valid?
+This is an internal-review candidate, not a claim of external endorsement.
 
-\textbf{Review request.} Correctness, priority and significance assessment of a
-sharp worst-case budget theorem. The manuscript now consolidates the earlier
-weighted multi-glove results and the general production/network extensions,
-with their algorithmic and structural consequences. Conventional proofs and
-exact checks have internal model reviews. Historical novelty and human
-specialist validation remain unconfirmed.
-
-\textbf{Exact model.} Fix $n$ owners, $d$ resource types and a finite ordered
-family $V\subseteq\mathbb R_+^d$ of $K$ supporting forms. Owner $i$ supplies
-$b_i\ge0$; coalition production is
+\textbf{Fixed model.} There are $n$ fixed owners and $d$ resources. Each owner
+reports $b_i\in\mathbb R_+^d$ to the same fixed ordered family
+$V=\{w^1,\ldots,w^K\}\subseteq\mathbb R_+^d$:
 \[
- v_b(S)=f\left(\sum_{i\in S}b_i\right),\qquad
- f(c)=\min_{w\in V}w\cdot c,\qquad T=v_b(N).
+ f(c)=\min_{w\in V}w\cdot c,\qquad
+ v_b(S)=f\left(\sum_{i\in S}b_i\right),\qquad T=v_b(N).
 \]
-Payments are nonnegative and deterministic, cover every coalition, and are
-componentwise nondecreasing in each owner's \emph{whole} report, with the
-other owners fixed. This means no profitable binding underreport when utility
-is payment and there are no use costs. There is no overreport, group-report,
-false-name, split/merge or population guarantee. The same rule works at all
-nonnegative real profiles, including zeros and ties.
+A single deterministic rule on every real report profile has nonnegative
+payments $M_i$, covers every coalition ($\sum_{i\in S}M_i\ge v_b(S)$), and
+is componentwise nondecreasing in each owner's entire bundle with others fixed.
+This means truthfulness for binding underreports and payment-only utility.
+There are no resource-use costs, overreports, coordinated-report, false-name,
+split/merge, other-owner or population guarantees. Owners are never replaced
+by strategic capacity units. A total-payment factor $B$ corresponds to subsidy
+factor $B-1$.
 
-\textbf{Main theorem.} For every integer $j\ge2$, there exists an eligible rule with
+\textbf{Proposed sharp theorem.} For every integer $j\ge2$ an eligible rule satisfies
 \[
- \sum_i M_i\le C_j(K)T,\qquad
+ \sum_iM_i\le C_j(K)T,\qquad
  C_j(K)=j+\frac{\log K+2\log j+1}{\log[j^3/(j^2+j-1)]}.
 \]
 Choosing $j=\max\{2,\lceil\log K/[\log(2+\log K)]^2\rceil\}$ gives
-\[
- \boxed{\quad\sum_i M_i\le(1+o(1))T\frac{\log K}{\log\log K}.\quad}
-\]
-A matching lower holds for worst cases with \emph{at most} $K$ structural
-cuts even on simple directed acyclic networks, with one distinct strategic
-owner per edge. Thus leading constant one is sharp in $K$. Owner and resource
-counts may grow without bound. $K$ can be exponential in a compact input;
-this is not a sharp bound in owner count. The factor bounds total payments;
-external subsidy is total payments minus $T$.
+$(1+o(1))T\log K/\log\log K$. Zero-value profiles receive zero.
+The worst-case optimum with \emph{at most} $K$ forms has the same leading
+constant one. The lower already holds for simple directed acyclic flow
+networks with at most $K$ structural cuts and one strategic owner per edge.
+It is not an exact-count padding theorem for every integer $K$.
 
-\textbf{Upper proof's key steps.} Delete each whole owner independently with
-probability $q$ and select a fixed-priority minimum \emph{raw} supporting form.
-For owner $i$, let $p_i^q$ be its expected contribution, capped at $T$, when
-$i$ is deleted; let $m_i^q$ be its expected on-minus-off production marginal.
-Both are own-report monotone. The mixture
-$r_i^q=qp_i^q+(1-q)m_i^q$ dominates the capped selected-form allocation and
-therefore covers coalitions. For $g(q)$ equal to expected masked production
-and $Z(q)$ the total capped selected-form payment,
+\textbf{Upper proof to check.} Delete whole owners independently with probability
+$q$; select a fixed-priority minimum \emph{raw} form. Let $p_i^q$ be the
+expected contribution capped at $T$ conditional on deleting $i$, and $m_i^q$
+the expected on-minus-off production marginal. Both are own-monotone.
+The mixture $r_i^q=qp_i^q+(1-q)m_i^q$ dominates a coalition-covering capped
+form allocation. For masked production $g$ and total capped payment $Z$,
 \[
- \sum_i r_i^q=Z-g-(1-q)g',\qquad
- \int_0^\eta\sum_i r_i^q\,dq
- =\int_0^\eta Z\,dq+T-(1-\eta)g(\eta)-2\int_0^\eta g\,dq.
+ R=Z-g-(1-q)g',\qquad
+ \int_0^\eta R=\int_0^\eta Z+T-(1-\eta)g(\eta)-2\int_0^\eta g.
 \]
-A Chernoff union over the fixed $K$ forms bounds $Z$. Averaging over
-$0<q<1/j$ proves the finite constant above. Selection is uncapped;
-only contributions are capped. Removing this cap is unbounded at $K=n=2$.
+A Chernoff union over the fixed forms bounds $Z$. The payment
+$M_i=j\int_0^{1/j}r_i^q\,dq$ is deterministic. Selection is uncapped;
+only payment contributions are capped.
 
-\newpage
-\textbf{Lower proof's key steps.} A hierarchy of fixed binary-report owners
-uses two actual coalition inequalities and multinomial weights from
-$p_h\propto\lambda^h/h!$. Raising one original owner's report moves one
-module from type $h$ to $h+1$; the identity
-\[
- \mu(\nu)\nu_h=(p_h/p_{h+1})\mu(\nu-e_h+e_{h+1})(\nu_{h+1}+1)
-\]
-transports only the changing owner's payment. Shared fan modules make the
-network simple while accounting for every auxiliary owner's compensation.
-With $Y,Q$ the disjoint variable/auxiliary budgets, the key bound is
+\textbf{Lower proof to check.} Shared-fan modules keep the network simple and
+all auxiliary owners strategic. Actual coalition inequalities and multinomial
+weights $p_h\propto\lambda^h/h!$ transport only the changing owner's payment.
+With disjoint middle-edge and auxiliary budgets $Y,Q$,
 \[
  A\le(1+\alpha)\mathbb EY+(m/R)\mathbb EQ
-   \le\max\{1+\alpha,m/R\}\,B\mathbb ET.
+ \le\max\{1+\alpha,m/R\}B\mathbb ET.
 \]
-Taking $R=m$ retains the coefficient. The module's cut count is at most
-$2^{4m}$; a slowly growing owner multiplier preserves
-$\log K\sim h\log h$ and the lower factor $(1-o(1))h$.
-Ordinary full subdivision into separately owned edge pairs instead permits
-an efficient truthful rule, so it cannot justify this reduction.
+Taking $R=m$ preserves the constant. Cut counts and hierarchy parameters
+then give $\log K\sim h\log h$ and factor $(1-o(1))h$.
+\newpage
+\textbf{Closest original-source comparisons.}
 
-\textbf{Further consolidated results.}
-\begin{itemize}
-\item Every finite monotone concave degree-one homogeneous production function
-admits an all-profile factor $(\log2+o(1))n/\log n$, including discontinuities
-at boundary faces. The proof uses relative supporting forms extended by
-infinity outside their face and capped before payment. It makes no arbitrary-
-function oracle or regularity claim.
-\item Exact finite sampling gives incentives for every seed. A uniform theorem
-gives one seed covering every coalition at every real profile. Rational
-arrangement/LP certification includes all tie faces and yields always-correct
-Las Vegas preprocessing. Preprocessing can be exponential; subsequent
-rational-input evaluation is polynomial in the stated sample parameters.
-\item Weighted multi-glove and series-parallel special cases retain finer
-bounds. Two-pool alternatives and restricted-domain nonlinear constructions
-are compared explicitly. These are parts of this paper, not extra candidates.
-\item The original continuous-noise own-report envelope has a polynomial-in-$K$
-obstruction, even on simple DAGs, and a universal $KT$ upper. This blocks every
-truthful pointwise-majorant repair of that base rule, not arbitrary mechanisms.
-\end{itemize}
+\textbf{Production and stability.} Owen (1975) and
+\href{https://www.tau.ac.il/~samet/papers/lp\%20games.pdf}{Samet--Zemel (1984)}
+establish dual-price/core ingredients. Moretti--Norde (2021) studies the
+weighted multi-glove game used as a special case. Fixed-game cost of
+stability is established. Our issue links different reports even though
+each individual production game has an efficient core.
 
-\textbf{Established ingredients and closest comparisons.}
-Dual production-core allocations, max-flow/min-cut, probabilistic marginals,
-own-excluded selection, concentration, convex support theory and uniform
-convergence are established ingredients. The weighted multi-glove model and
-continuous Banzhaf functional are explicitly credited to Moretti--Norde and
-Kurz. The closest strategic comparison is Huang--Mei--Yang--Cao,
-\href{https://arxiv.org/html/2502.08248v1}{\emph{Mechanism Design in Max-Flows}}
-(2025): binding capacity underreports with payment utility; efficient core
-selection can fail truthfulness. Our proposal permits subsidy while retaining
-all coalition inequalities. The ledger also compares population monotonicity,
-cost of stability, capacity-demand cost sharing and revised-worth production
-games. Some originals remain only partially inspected. No bounded search can
-confirm historical priority.
+\textbf{Same disclosure model.}
+\href{https://arxiv.org/html/2502.08248v1}{Huang--Mei--Yang--Cao (2025 v1)}
+uses binding capacity underreports and payment utility in flow games.
+Its efficient mechanisms and core-selection obstruction are the nearest
+strategic comparison. The present theorem keeps all coalition inequalities
+and allows subsidy; it does not inherit their extra incentive guarantees.
 
-\textbf{Specific review questions.}
-\begin{enumerate}
-\item Does an existing theorem imply the sharp general factor under these
-exact fixed-owner, whole-bundle, all-profile assumptions?
-\item Is the capped own-excluded/endpoint hybrid's coverage, integration
-identity or fixed-form probability bound missing a hypothesis?
-\item Does the simple-DAG lower correctly preserve owner identities and
-account for auxiliary payments, symmetrization and cut-count asymptotics?
-\item Are boundary supporting forms and all-tie-face seed certification valid
-at the claimed scope? Is the sharp theorem significant enough for one main
-paper, with the longer class comparisons as a supplement?
-\end{enumerate}
+\textbf{Different monotonicity.}
+\href{https://immorlica.com/pubs/costshare.pdf}{Immorlica--Mahdian--Mirrokni}
+compares an unchanged owner's payment when other owners join.
+\href{https://doi.org/10.1007/s11750-007-0002-7}{Br\^anzei--Solymosi--Tijs (2007)}
+compares participating subgames of unit owners (final Definition 1,
+Theorems 5--6). Neither condition is silently identified with our
+same-owner bundle comparison.
 
-\textbf{Reproduction and status.} The packet preserves repository paths.
-Its readme gives exact Python standard-library commands for the general,
-weighted-hierarchy and earlier certificates. Checks are active under
-\texttt{-O}; finite verification does not establish universal proofs or novelty.
-AI assistance in research, drafting and internal review is disclosed.
-Human reviewer feedback remains pending. The principal further mathematical
-gaps are owner-count/resource-dimension rates and polynomial preprocessing.
-The separate sharp-subsidy paper concerns \emph{pointwise original-core
-protection}; its added static-flow results assert no reporting incentives.
+\textbf{Same own-resource condition, different technology.}
+\href{https://hal.science/hal-01400498v1}{Amigo--Belzarena--Vaton (2016 author version)}
+defines own-resource monotonicity and a strictly concave service model.
+The supplement's smooth strictly concave example fits that inspected model
+and refutes a universal extension of the reported projection simulations,
+not a proved theorem. The publisher final has not been compared in full.
+This diagnostic is not homogeneous and is separate from the main theorem.
+
+\textbf{Established tools versus proposed contribution.} Supporting prices,
+max-flow/min-cut, marginal contributions, own-excluded selection,
+concentration, weighted counting, convex support theory and uniform
+convergence are established. The proposed contribution is the joint sharp
+all-profile guarantee and matching fixed-owner simple-network lower bound.
+The source search is bounded; historical priority remains unconfirmed.
+
+\textbf{What the result does not settle.} $K$ can be exponential in an encoded
+technology. The owner-count and resource-dimension gaps remain open.
+Exact enumeration and the supplementary certification procedure may require
+exponential preprocessing. The paper asserts neither a recognized major
+open-problem resolution nor a general theorem for private opportunity costs.
+
+\textbf{Review evidence and corrections.} The main paper contains complete
+upper and lower proofs. The indexed supplement preserves the October research
+record and its supporting results. Prior scoped cross-model reviews and
+fresh independent Codex audits are documented by source hash; finite exact
+checks are corroboration, not formal proof verification. The 14 October
+preparation repairs an auxiliary two-owner example so its efficient alternative
+works on whole bundles, and makes $0<\varepsilon<1$ explicit in the lower
+bound's inversion. Neither changes the central theorem. Current cross-model
+quota exhaustion prevented a fresh Claude audit; no human review is claimed.
+
+\textbf{Requested assessment.} Check the cap/endpoint/deletion identities;
+check symmetrization, auxiliary budgets, weighted transitions and cut inversion;
+identify any original theorem with the same fixed-owner, all-profile,
+full-coverage guarantee. Author affiliation, contact, declarations and final
+responsibility still need confirmation before any submission. No outreach
+or submission has been performed.
 \end{document}
