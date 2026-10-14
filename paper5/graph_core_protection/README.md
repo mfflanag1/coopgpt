@@ -1,11 +1,15 @@
 # Acyclicity and simultaneous protection of individual core maxima
 
-Consolidated manuscript, 20 September 2026. Author: Maxwell Flanagan.
+Journal submission candidate, 14 October 2026. Author: Maxwell Flanagan.
 This is the current presentation of the former chain-cycle paper and the later
 sector-graph and simultaneous-protection results. The earlier manuscript is
 preserved as history, not counted as another independent paper.
 
-[Read the manuscript](output/pdf/manuscript.pdf) · [LaTeX source](paper/manuscript.tex) · [Specialist brief](SPECIALIST_BRIEF.md) · [Source boundaries](SOURCES.md)
+**Current publication preparation:** [decision and package](submission_2026-10-14/README.txt) · [candidate bundle](submission_2026-10-14/Acyclicity_IJGT_candidate.zip) · [cover-letter draft](submission_2026-10-14/COVER_LETTER_DRAFT.txt) · [outstanding items](submission_2026-10-14/UNRESOLVED.txt). The current PDF has 11 pages; its exact source compiled and passed visual review. A fresh independent universal-proof review found no substantive gap, and the unchanged full portable suite passed with the recorded Python/Z3 versions. Recommendation: complete the remaining author/source revisions, then target International Journal of Game Theory. No submission or publication occurred.
+
+[Fresh source comparison](submission_2026-10-14/GRAPH_LITERATURE.txt) distinguishes inspected originals from remaining gaps. [Truthful-production assessment](submission_2026-10-14/TRUTHFUL_NEXT_PAPER.txt) plans the next ambitious candidate without rewriting it. Historical `VALIDATION.json`, `SHA256SUMS`, `review/` and `sharing/graph_core_protection.zip` below refer to the September version; the new package records current source/PDF hashes and preserves those archives.
+
+[Read the manuscript](output/pdf/manuscript.pdf) · [LaTeX source](paper/manuscript.tex) · [Historical specialist brief](SPECIALIST_BRIEF.md) · [Source boundaries](SOURCES.md)
 
 ## Result
 

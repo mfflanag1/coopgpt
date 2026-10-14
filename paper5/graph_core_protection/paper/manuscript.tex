@@ -3,7 +3,8 @@
 \usepackage{lmodern,microtype,amsmath,amssymb,amsthm,booktabs,array}
 \usepackage[margin=1in]{geometry}
 \usepackage[hidelinks]{hyperref}
-\hypersetup{pdftitle={Acyclicity and simultaneous protection of individual core maxima},pdfsubject={Consolidated technical manuscript for specialist review}}
+\hypersetup{pdftitle={Acyclicity and simultaneous protection of individual core maxima},pdfsubject={Journal submission candidate; author declarations unresolved}}
+\usepackage[round,authoryear]{natbib}
 \usepackage{enumitem}
 \setlist{nosep}
 \newtheorem{theorem}{Theorem}[section]
@@ -16,100 +17,134 @@
 \newcommand{\R}{\mathbb R}
 \newcommand{\N}{\mathbb N}
 \title{Acyclicity and simultaneous protection\\of individual core maxima}
-\author{Maxwell Flanagan}
-\date{September 20, 2026}
+\author{Maxwell Flanagan\thanks{Submission candidate. Affiliation or city/country,
+corresponding e-mail, and ORCID (if available): author confirmation required.}}
+\date{October 14, 2026}
 \begin{document}
 \maketitle
 \begin{abstract}
-We characterize the sector interaction graphs that support a uniform fraction
-of every player's maximum attainable core payoff. Fix a connected graph on
-$K\ge2$ equal-sized sectors, with nonnegative pair values on its edges; only
-full $K$-sector teams produce value, and coalition worth is integral matching
-worth. Conditional on a nonempty core, both the full leximin guarantee and the
-best simultaneous core guarantee have sharp size-independent constant $1/K$
-for trees and zero for graphs containing a cycle. The tree result follows from
-an entire-core cut representation and a clipping argument valid at every
-lexicographic level. For a triangular family with pair entries in $\{0,1,2\}$,
-we characterize the entire core as a simplex and prove that the best
-simultaneous fraction is exactly $1/(2q+3)$. Selective subdivision preserves a
-unit partial-matching shortfall and transfers the impossibility to every
-cyclic allowed graph, while retaining a strictly positive core allocation.
-Thus the cyclic failure persists even when the allocation rule is chosen
-optimally. Complete proofs and reproducible rational and exact-solver checks
-are supplied. Historical priority of the precise classification remains qualified.
+A stable allocation need not protect each participant relative to that
+participant's most favorable stable payoff. We characterize when sector
+interactions permit a uniform simultaneous guarantee of these individual core
+maxima. Fix a connected graph on $K\ge2$ equal-sized sectors. Full teams contain
+one player from every sector, their values sum nonnegative pair values on the
+allowed edges, and only full teams produce. Coalition worth is the maximum
+value of an integral matching. Among markets with positive worth and nonempty
+core, both full leximin and the best choice of any core allocation have sharp
+size-independent guarantee $1/K$ on trees and zero on graphs containing a
+cycle. The tree proof describes the entire core by cut coordinates and uses
+clipping at every lexicographic level. For a triangular family with pair values
+in $\{0,1,2\}$, the entire core is a simplex and the optimal simultaneous
+fraction is exactly $1/(2q+3)$. Selective subdivision transfers vanishing
+protection to every cyclic allowed graph while preserving a positive core
+allocation. The cyclic obstruction therefore concerns what stability can
+achieve, not merely the choice of a fairness rule. The classification is
+conditional on complete-team production and permits zero-valued allowed edges.
 \end{abstract}
 \noindent\textbf{Keywords:} assignment game; core; leximin; individual ideal;
 simultaneous protection; sector graph.
+\par\noindent\textbf{JEL classification:} C71; C78.
 
 \section{Introduction}
-A core allocation protects coalitions against profitable deviation. It need
-not protect each individual relative to what that person could receive at
-another stable allocation. For a core $\core$ and individual ideal
-$H_i=\max_{y\in\core}y_i$, we study two questions: how much of $H_i$ full
-leximin guarantees, and whether a different core allocation can protect all
-players better. The latter optimizes over the entire core, not over a specified
-selection rule.
+When production requires partners from several sectors, coalitional stability
+and individual protection address different questions. The core rules out a
+group earning more by producing separately. It does not ensure that a player
+receives a substantial share of the most that player could obtain in another
+stable agreement. This distinction matters when the core is used as a feasible
+set for bargaining: a payoff may be stable yet small relative to the same
+participant's attainable stable payoff.
 
-The same sharp graph boundary governs both questions in the model studied
-here. Trees guarantee $1/K$; every cyclic allowed graph admits growing markets
-with vanishing best simultaneous protection, even though the core contains a
-strictly positive point. The poor recipient in the simultaneous statement may
-depend on the chosen allocation. We do not claim that a single player receives
-little at every core point: each ideal is attained.
+For an entire core $\core$, write $H_i=\max_{y\in\core}y_i$. We ask whether
+one stable allocation can guarantee $p_i\ge\lambda H_i$ simultaneously for all
+players, with $\lambda$ depending only on the number and pattern of sector
+interactions, not the number of players. We also ask whether full leximin,
+which successively maximizes the smallest nominal payoffs, attains such a
+uniform guarantee. The benchmark $H_i$ is an attainable core payoff, not an
+outside option or a claim that all maxima can be attained together. We keep
+this benchmark fixed when comparing allocations within a market.
 
-This manuscript consolidates the earlier chain--cycle separation with its
-subsequent tree theorem, general cyclic transfer, and simultaneous-protection
-strengthening. The triangle is the same construction throughout. The simplex
-representation and the all-selection conclusion strengthen its interpretation;
-they are not an additional independently discovered family. The results concern
-worst-case individual guarantees, not aggregate welfare loss or typical markets.
+Our model describes a production project that needs one participant from
+every sector. Pair values describe contributions to a complete project's
+surplus; an edge does not by itself authorize a productive bilateral coalition.
+The same sharp graph boundary governs both questions. Trees guarantee $1/K$,
+and full leximin attains that bound for everyone at once. Every cyclic allowed
+graph instead admits growing markets with vanishing best simultaneous
+protection, even though each market has a strictly positive core allocation.
+Thus the negative result cannot be repaired by selecting a different point
+of the same core. The poorly protected player may depend on that point;
+each individual maximum is nevertheless attained somewhere in the core.
+
+The proof has three parts. A cut-coordinate description of the entire tree
+core yields a clipping operation that improves any violation of the $1/K$
+floor. A fixed-alphabet triangular construction has an explicit simplex core
+and exact optimal fraction $1/(2q+3)$. Finally, selective subdivision transfers
+a unit partial-matching shortfall to all cyclic allowed graphs. The latter two
+steps keep the number of sectors fixed as market size grows. The results
+measure distributional possibilities under stability, not a loss in aggregate
+surplus, typical-market performance, or a change in productive efficiency.
+
 \paragraph{Related work.}
-Multisided assignment cores have a substantial literature, including
-Quint~\cite{Quint1991} and Lucas~\cite{Lucas1995}. The strict
-supplier--firm--buyer model is associated with Stuart~\cite{Stuart1997};
-Atay and Solymosi~\cite{AtaySolymosi2018}, Definition~3 and equations~(1)--(2),
-give a precise later formulation allowing signed adjacent-pair values and
-replacing negative triple totals by zero. Their core and bargaining-set
-results concern stability sets, rather than the coordinate-ideal fraction
-studied here. Nonnegative chain values are a subclass of that model.
-Generalized assignment markets in which smaller teams also produce value
-have additional coalition constraints and must be distinguished from our
-strict model~\cite{AtayNunez2020}.
+The multisided assignment model and its core have a substantial literature,
+including \citet{Quint1991} and \citet{Lucas1995}. The strict
+supplier--firm--buyer model is associated with \citet{Stuart1997};
+\citet{AtaySolymosi2018}, Definition~3 and equations~(1)--(2), provide a
+later full formulation with signed adjacent-pair values and zero-truncated
+triple totals. Our nonnegative three-sector path is a subclass. We claim
+neither the model nor chain-core nonemptiness as new.
 
-Ideal-based core protection is explicit in N\'u\~nez and
-Rafels~\cite{NunezRafels2004}, Definition~6, in their bilateral bargaining
-analysis. A unit-capacity path in Gangam et al.~\cite{Gangam2025},
-Section~3.1.4, has uniform equitable payoff $1/r$ on its $r$ edges.
-Its full core is the unit simplex, so each ideal is one: vanishing
-protection in a broader game class follows immediately. That path uses a
-productive coalition whose size grows with $r$. Our construction instead
-uses only strict triples and pair values in $\{0,1,2\}$.
+The closest graph comparison is \citet{AtayNunez2019}. Their Theorem~1
+expresses tree cores through bilateral cores, Corollary~1 gives a tree/cycle
+strong-balancedness boundary, and Proposition~2 gives simultaneous maxima
+within a sector. Their connected partial-sector teams also produce value.
+Our core instead enforces strict full-team production and the cyclic theorem
+is conditional on its nonemptiness. Thus neither their core decomposition
+nor their empty-core cyclic examples establish the protection classification
+here. The elementary comparison below shows explicitly how partial-team
+production changes the individual maxima.
 
-Matching duality, tight-team cut coordinates, and closure of difference
-constraints under minimum are established tools. The tree proof below gives a
-direct clipping argument; no new general optimization method is claimed.
-N\'u\~nez and Rafels' bilateral half-optimal core is also a direct precedent
-for simultaneous ideal protection, rather than just for comparing named
-selectors~\cite{NunezRafels2004}. Tree decomposition and tree/cycle balancedness
-results in models with productive partial-sector coalitions
-\cite{AtayNunez2020} must not be identified with our classification conditional
-on a nonempty strict full-team core.
+Simultaneous ideal protection has a direct bilateral precedent: the
+half-optimal core of N\'u\~nez and Rafels requires at least half of each
+player's maximum core payoff.\footnote{N\'u\~nez and Rafels,
+\emph{Bargained stable allocations in assignment markets}, Barcelona Economics
+Working Paper~153, December 28, 2004, Definition~6, printed p.19; sharpness
+in Example~7, p.20. Original working text:
+\url{https://www.bse.eu/sites/default/files/working_paper_pdfs/153.pdf}.}
+The bilateral bargaining midpoint is also studied by
+\citet{NunezRafels2008}. Neither the benchmark nor the bilateral half guarantee
+is proposed as a new fairness concept.
 
-Extreme-core descriptions for assortative multisided
-markets~\cite{Martinez2020} and supermodular markets with local
-monotonicity~\cite{Martinez2026} impose restrictions different from
-nonnegative pair additivity. We make no assertion that arbitrary extreme-core
-or transportation representations preserve the entire labeled payoff core,
-the raw sorted selector, and our pair-value restrictions. The distinct
-2023 manuscript on extreme core points~\cite{Martinez2023} is now available
-for comparison. Its Theorem~2 redescribes the full core through cumulative
-sums of auxiliary-game core allocations, retaining nonnegativity and the
-triple inequalities outside a central strip. Theorems~3--4 simplify this
-under additional restrictions. These are core descriptions; they do not
-state the vanishing family or its full-leximin ideal ratio. The original
-texts of~\cite{Quint1991,Lucas1995,Stuart1997} remain access gaps at the
-date of this version. No theorem below relies on an uninspected statement
-from these originals.
+\citet{Gangam2026}, p.1621, give a unit-capacity path whose equitable payoff
+is $1/r$ on each of its $r$ edges. Its entire core is the unit simplex;
+therefore each ideal equals one and even the best simultaneous fraction is
+$1/r$. This last conclusion is an immediate inference from that example.
+Its productive coalition size grows with $r$, whereas our obstruction already
+uses strict triples and pair values in $\{0,1,2\}$. The distinction is fixed
+production-team size within a restricted class, not the first occurrence of
+vanishing individual protection in cooperative games.
+
+Extreme-core descriptions for assortative multisided markets
+\citep{Martinez2020} and simultaneous extrema under supermodularity and local
+monotonicity \citep{Martinez2026} impose different restrictions. A general
+2023 core-redescription preprint of the same authors also retains original
+inequalities outside a central strip.\footnote{Mart\'inez-de-Alb\'eniz,
+Rafels and Ybern, \emph{Extreme core points in multisided assignment problems},
+2023 preprint, Theorem~2 and Theorems~3--4:
+\url{https://doi.org/10.2139/ssrn.4369524}.}
+That general representation may apply to our inputs; non-supermodularity
+does not exclude it. It does not itself give the quantitative protection
+classification proved here. We do not assert an exclusion under every
+relabeling or assume an arbitrary core representation preserves the payoff
+labels, selector and pair-value restrictions relevant to this question.
+
+Matching duality, individual ideals, leximin, convex averaging and closure
+of difference constraints under minimum are established ingredients. The
+proposed contribution is their specific constructive use to classify
+protection on the entire strict full-team core, with a branching-tree
+argument and a bounded-alphabet obstruction on every cyclic allowed graph.
+Full-original comparisons with Quint, Lucas and Stuart remain incomplete
+under freely available access; their basic attribution is retained, without
+assuming uninspected detailed statements or claiming exhaustive priority
+clearance. No theorem below relies on such an uninspected statement.
 
 \section{Model and main classification}
 Fix a connected simple graph $G=(V,E)$ with $K=|V|\ge2$. Each sector $v\in V$
@@ -133,7 +168,7 @@ its integral matching and retaining nonnegative unmatched payoffs.
 The compact convex set $\core$ has coordinate maxima $H_i$. Let $x$ be its
 full ascending-sorted leximin allocation; all labeled coordinates, including
 permanent zeros, remain in the optimization. Existence follows by successive
-maximization of order statistics on compact optimal faces. Uniqueness follows
+maximization of order statistics on compact optimal sets. Uniqueness follows
 by averaging two distinct purported optima: at their first differing payoff
 level the average reduces its multiplicity without changing lower levels.
 Define
@@ -167,6 +202,19 @@ The zero in the theorem is an infimum over sizes, not a finite-market zero.
 Also, the theorem concerns allowed edges, not strictly positive matrices on
 every allowed edge. A single-sector edge-sum model has no positive-worth
 instance and is excluded.
+
+\paragraph{Why complete-team production matters.}
+Consider three sectors with one player each on the path $1$--$2$--$3$, with
+both edge values equal to one. In the present model only the triple produces,
+so $T=2$ and the core is $\{p\ge0:p_1+p_2+p_3=2\}$. All three ideals equal
+two and the best simultaneous fraction is $1/3$. If adjacent pairs can also
+produce their edge values, the core additionally requires
+$p_1+p_2\ge1$ and $p_2+p_3\ge1$. Its ideals become $(1,2,1)$; the point
+$(1/2,1,1/2)$ achieves the optimal fraction $1/2$, since the ideals sum to
+four while the total remains two. Thus admitting partial teams changes the
+benchmark as well as the feasible set. A tree theorem for that model does
+not transfer the same relative-payoff guarantee to the present core.
+
 
 \section{Trees: entire-core coordinates and clipping}
 Root the tree at an arbitrary sector $r$. Choose an optimal perfect matching
@@ -264,9 +312,12 @@ Fix an integer $q\geq1$. Use the common team-label set
 \]
 For every label $t$, create players $a_t,b_t,c_t$ in the respective
 sectors. Each sector has $3q+1$ players. Define
-$w(a_t,b_u,c_v)=A_{tu}+B_{tv}+C_{uv}$ by the following nonzero entries;
+$w(a_t,b_u,c_v)=A_{tu}+B_{tv}+C_{uv}$ by the nonzero entries in Table~\ref{tab:entries};
 all unspecified pair entries are zero.
-\begin{center}
+
+\begin{table}[htbp]
+\centering
+\caption{Nonzero pair values in the triangular market}\label{tab:entries}
 \begin{tabular}{lll}\toprule
 Pair entries & Range & Value\\\midrule
 $C_{L_s,L_s}$ & $0\leq s\leq q$ & $1$\\
@@ -275,7 +326,8 @@ $A_{O_s,O_s},\ B_{O_s,O_s}$ & $1\leq s\leq q$ & $2$\\
 $A_{O_s,R_s},\ B_{O_s,L_s}$ & $1\leq s\leq q$ & $2$\\
 $C_{R_s,L_s},\ C_{L_{s-1},O_s}$ & $1\leq s\leq q$ & $1$\\\bottomrule
 \end{tabular}
-\end{center}
+\end{table}
+
 There are $8q+1$ nonzero entries. The diagonal perfect matching consists
 of $(a_t,b_t,c_t)$ for all $t\in\mathcal T$. Each $L$ or $R$ triple has
 value one and each $O$ triple has value four, so this matching is worth
@@ -300,8 +352,11 @@ both points, so both allocations have total $6q+1$.
 
 We check every triple cover, including all mixed-team triples. If its
 $a$ player has an $L$ or $R$ label, its $A$ and $B$ entries are zero.
-The possible positive $C$ pairs and the associated two-player sums are
-\begin{center}
+Table~\ref{tab:weak-cover} lists the possible positive $C$ pairs and the associated two-player sums.
+
+\begin{table}[htbp]
+\centering
+\caption{Coverage when the first-sector player has a weak label}\label{tab:weak-cover}
 \begin{tabular}{lll}\toprule
 $(b,c)$ labels & $u_b+u_c$ & $y_b+y_c$\\\midrule
 $(L_s,L_s)$ & $1-\tau$ & $1$\\
@@ -309,15 +364,19 @@ $(R_s,R_s)$ & $1-\tau$ & $1$\\
 $(R_s,L_s)$ & $1+(3s-1)\tau$ & $2$\\
 $(L_{s-1},O_s)$ & $1-\tau$ & $1$\\\bottomrule
 \end{tabular}
-\end{center}
+\end{table}
+
 All four pair values are one. Adding $u_a=\tau$ or $y_a=0$ covers the
 triple. Zero $C$ entries are covered by nonnegativity.
 
 Now suppose its $a$ player is $a_{O_s}$. If at most one of its $A$ and
 $B$ entries is positive, the triple value is at most three, covered by
 $u_{a_{O_s}}\geq3+4\tau$ and $y_{a_{O_s}}=3$.
-If both entries are positive, exactly four cases remain:
-\begin{center}
+If both entries are positive, exactly the four cases in Table~\ref{tab:strong-cover} remain.
+
+\begin{table}[htbp]
+\centering
+\caption{Coverage when both adjacent pair values are positive}\label{tab:strong-cover}
 \begin{tabular}{llll}\toprule
 $(b,c)$ labels & $w$ & $u_a+u_b+u_c$ & $y_a+y_b+y_c$\\\midrule
 $(O_s,O_s)$ & $4$ & $4$ & $4$\\
@@ -325,7 +384,8 @@ $(O_s,L_s)$ & $4$ & $4+3\tau$ & $4$\\
 $(R_s,O_s)$ & $4$ & $5-3\tau$ & $5$\\
 $(R_s,L_s)$ & $5$ & $5$ & $5$\\\bottomrule
 \end{tabular}
-\end{center}
+\end{table}
+
 Since $\tau\leq1/6$, all are covers. The cases also show that every
 triple value is at most five.
 
@@ -357,9 +417,9 @@ gives, at every core point $p$,
 \end{equation}
 Thus a common payoff floor cannot exceed $1/(3q+3)=\tau$. The point
 $u$ attains this floor, so the first global leximin level is exactly
-$\tau$. At every point of the first optimal face, all coordinates are
+$\tau$. At every point of the first-stage optimal set, all coordinates are
 at least $\tau$, and $|U|\tau=1$. Inequality~\eqref{eq:budget} therefore
-fixes every coordinate of $U$ at $\tau$ on that entire face. In particular,
+fixes every coordinate of $U$ at $\tau$ on that entire set. In particular,
 the full leximin target $c_{L_0}$ is fixed at $\tau$ through every later
 refinement. We do not need, and do not assert, that $u$ is the complete
 final leximin vector.
@@ -517,7 +577,7 @@ bonuses and keeps shortfall $\delta$. The new unmatched set has
 $(k+1)(m-r)$ players. If the old floor witness has
 $\tau=\delta/[k(m-r)]$, the shifted witness attains the new floor
 $\delta/[(k+1)(m-r)]$. The unmatched budget proves that every unmatched
-coordinate is fixed to that value on the entire first optimal face.
+coordinate is fixed to that value on the entire first-stage optimal set.
 
 An old unmatched target keeps ideal $H$ if its diagonal team has worth
 $H$, its ideal is attained at an old core point, and the bonus at its
@@ -549,7 +609,7 @@ strictly positive.
 Adding a zero-interaction sector leaves full-team worths unchanged.
 An old core point lifts by zero; a floor witness is shifted exactly as
 above with $D=0$. Extend the critical matching by any $r$ distinct new
-labels. The same unit budget and first-face pinning arguments apply;
+labels. The same unit budget and first-stage pinning arguments apply;
 the target's diagonal worth and attainable ideal stay one.
 
 Choose a simple cycle in any fixed cyclic allowed graph $G$. Embed the
@@ -567,84 +627,97 @@ Letting $q$ grow gives $R(G)=0$, while nonnegativity and $c(G)\le R(G)$
 give $c(G)=0$. Together with the tree proof, this proves
 Theorem~\ref{thm:main}.
 
-\section{Evidence, scope, and contribution boundaries}
-The accompanying verification package preserves the earlier rational
-certificates and exact-solver checks for the component theorems. Tree checks
-compare the cut representation and clipping against raw full-team constraints.
-Cyclic checks verify integral matching and cover totals, unit shortfalls,
-positive floors and ideal attainment. The simultaneous checks reconstruct
-simplex vertices, all ideals, and the optimal-protection witnesses, and test
-both directions of the simplex description against raw cores for selected
-parameters. Negative controls reject damaged certificates. The package README
-states exact finite coverage and commands. These checks corroborate the
-all-parameter proofs above; they do not replace them or constitute a
-proof-assistant formalization.
+\section{Economic scope and reproducibility}
+The classification identifies when stability itself permits a guarantee
+relative to every participant's individually most favorable stable agreement.
+For a tree, a single familiar fairness selection meets the sharp guarantee.
+For a cyclic graph, the obstruction applies to the best possible selection.
+Every finite market still has a positive optimal fraction; the zero guarantee
+is a worst-case statement as the number of players per sector grows. The
+strictly positive witness allocations separate this conclusion from an empty
+core or a player who can never be paid positively.
 
-The mathematical additions to the earlier chain--cycle manuscript are the
-branching-tree clipping proof, selective cyclic transfer, and the entire-core
-simplex and simultaneous-protection analysis. The older triangle family and
-classical tools are retained with their original provenance. Neither
-simultaneous ideal protection nor the bilateral half guarantee is proposed
-as a new fairness concept. The specific strict full-team graph classification
-is the proposed contribution, pending specialist priority assessment; original
-Quint, Lucas and Stuart comparisons remain incomplete under the free-only
-source constraint.
+The theorem concerns the entire labeled core and nominal leximin. It does not
+cover productive partial-sector coalitions, unequal sector sizes, strictly
+positive matrices on every allowed edge, ratio-normalized leximin, or a
+selected proper face of the core. It does not determine the best constant at
+each finite market size. These restrictions delimit the economic application,
+rather than follow from the proof. In particular, an arbitrary transportation
+or extreme-point representation cannot be assumed to preserve all of them.
 
-The classification does not cover productive partial-sector coalitions,
-unequal sector sizes, strictly positive matrices on every allowed edge,
-ratio-normalized leximin, or a selected proper core face. It does not determine
-the best finite-size simultaneous constant for all markets. The separate
-protected-subsidy program permits allocations above grand worth and is not a
-theorem of this paper. No journal submission, human referee endorsement, or
-confirmed field-level breakthrough is claimed.
+\paragraph{Companion work.}
+The protected-subsidy companion manuscript permits payments above grand-coalition
+worth and asks how an external budget restores ideal-based floors. It shares
+the strict pair-additive market class and individual-core-maxima benchmark,
+but its sharp subsidy theorem uses a different extremal family. The present
+paper's graph classification and exact within-core protection result concern
+no external transfers. Earlier
+chain--cycle and graph-theorem drafts are superseded presentations of this
+paper, not additional contributions. The truthful-production companion studies
+capacity reports and all-profile incentives, assumptions absent here.
 
-\paragraph{Reproducibility and assistance.}
-The manuscript and accompanying checks were developed with AI assistance.
-Scoped cross-model review and coordinator verification are documented in the
-package review record, separately from external human review. The latter and
-historical novelty assessment remain pending.
+\paragraph{Online Resource 1: reproducibility supplement.}
+The self-contained supplement contains rational certificates, exact-solver
+checks, instructions and source hashes. Tree checks compare cut coordinates
+and clipping with raw full-team inequalities. Cyclic checks verify matching
+and cover totals, shortfalls, floors and ideal attainment. The simultaneous
+checks reconstruct simplex vertices and protection witnesses and test both
+directions of the simplex description for specified finite parameters.
+Negative controls reject damaged certificates. Exact coverage is listed in
+the supplement. These computations corroborate the universal proofs above;
+they are neither an exhaustive census of markets nor proof-assistant
+formalization. No verification program is used as a premise of a theorem.
+
+\section*{Statements and Declarations}
+\paragraph{Data and code availability.}
+This theoretical study uses no observed participant or market data. The
+constructed instances, source code and reproduction instructions are supplied
+in Online Resource 1. A public archival identifier has not yet been assigned.
+\paragraph{Funding.} [Author confirmation required.]
+\paragraph{Competing interests.} [Author confirmation required.]
+\paragraph{Author contributions.} [Author confirmation required.]
+\paragraph{Acknowledgments.} [Author confirmation required.]
+\paragraph{Use of artificial intelligence.}
+OpenAI Codex and Anthropic Claude assisted with mathematical exploration,
+proof drafting, literature triage, verification code and editorial revision.
+The supplement distinguishes executed checks, model reviews and unresolved
+source comparisons. These tools are not authors or human referees. The human
+author must review the final manuscript and accept responsibility for its
+claims before submission; that approval remains outstanding for this candidate.
+
 \begin{thebibliography}{99}
 \small\setlength{\itemsep}{1pt}
-\bibitem{Quint1991} T. Quint. The core of an $m$-sided assignment game.
-\emph{Games and Economic Behavior} 3(4):487--503, 1991.
-\href{https://doi.org/10.1016/0899-8256(91)90017-9}{doi:10.1016/0899-8256(91)90017-9}.
-\bibitem{Lucas1995} W. F. Lucas. Core theory for multiple-sided assignment
-games. \emph{Duke Mathematical Journal} 81(1):55--65, 1995.
-\href{https://doi.org/10.1215/S0012-7094-95-08106-X}{doi:10.1215/S0012-7094-95-08106-X}.
-\bibitem{Stuart1997} H. W. Stuart, Jr. The supplier--firm--buyer game and
-its $m$-sided generalization. \emph{Mathematical Social Sciences}
-34(1):21--27, 1997.
-\href{https://doi.org/10.1016/S0165-4896(96)00830-X}{doi:10.1016/S0165-4896(96)00830-X}.
-\bibitem{AtaySolymosi2018} A. Atay and T. Solymosi. On bargaining sets of
-supplier-firm-buyer games. \emph{Economics Letters} 167:99--103, 2018.
-\href{https://ataatay.github.io/webpage/Atay_Solymosi_2018_EL.pdf}{Author-hosted final article}.
-\bibitem{AtayNunez2020} A. Atay and M. N\'u\~nez. Multi-sided assignment
-games on $m$-partite graphs. \emph{Annals of Operations Research}
-279:271--290, 2019.
-\href{https://doi.org/10.1007/s10479-019-03256-5}{doi:10.1007/s10479-019-03256-5}.
-\bibitem{NunezRafels2004} M. N\'u\~nez and C. Rafels. Bargained stable
-allocations in assignment markets. Barcelona Economics Working Paper 153,
-December 2004. \href{https://www.bse.eu/sites/default/files/working_paper_pdfs/153.pdf}{Working version}.
-\bibitem{Gangam2025} R. R. Gangam, N. Garg, P. Shahkar, and V. V. Vazirani.
-Equitable core imputations for max-flow, MST and $b$-matching games.
-arXiv:2403.06037v3, February 2025.
-\href{https://arxiv.org/abs/2403.06037v3}{Version inspected}.
-\bibitem{Held2003} S. Held, B. Korte, J. Ma\ss berg, M. Ringe, and
-J. Vygen. Clock scheduling and clocktree construction for high performance
-ASICs. In \emph{Proceedings of ICCAD}, pp.232--239, 2003.
-\href{https://www.cs.york.ac.uk/rts/docs/SIGDA-Compendium-1994-2004/papers/2003/iccad03/pdffiles/03d_4.pdf}{Conference text}.
-\bibitem{Martinez2020} F. J. Mart\'inez-de-Alb\'eniz, C. Rafels, and N. Ybern.
-Assortative multisided assignment games: The extreme core points.
-\emph{Games and Economic Behavior} 120:144--153, 2020.
-\href{https://doi.org/10.1016/j.geb.2020.01.001}{doi:10.1016/j.geb.2020.01.001}.
-\bibitem{Martinez2026} F. J. Mart\'inez-de-Alb\'eniz, C. Rafels, and N. Ybern.
-Maximum and minimum core payoffs for supermodular multisided assignment
-markets with local monotonicity. \emph{Discrete Applied Mathematics}
-379:605--612, 2026.
-\href{https://doi.org/10.1016/j.dam.2025.10.006}{doi:10.1016/j.dam.2025.10.006}.
-\bibitem{Martinez2023} F. J. Mart\'inez-de-Alb\'eniz, C. Rafels, and N. Ybern.
-Extreme core points in multisided assignment problems. Working paper,
-SSRN4369524, 2023.
-\href{https://doi.org/10.2139/ssrn.4369524}{doi:10.2139/ssrn.4369524}.
+\bibitem[Atay and N\'u\~nez(2019)]{AtayNunez2019}
+Atay A, N\'u\~nez M (2019) Multi-sided assignment games on $m$-partite graphs.
+Ann Oper Res 279:271--290. \url{https://doi.org/10.1007/s10479-019-03256-5}
+\bibitem[Atay and Solymosi(2018)]{AtaySolymosi2018}
+Atay A, Solymosi T (2018) On bargaining sets of supplier-firm-buyer games.
+Econ Lett 167:99--103. \url{https://doi.org/10.1016/j.econlet.2018.03.022}
+\bibitem[Gangam et~al.(2026)]{Gangam2026}
+Gangam RR, Garg N, Shahkar P, Vazirani VV (2026) Equitable core imputations
+for max-flow, MST and $b$-matching games. In: Proceedings of the 25th
+International Conference on Autonomous Agents and Multiagent Systems,
+IFAAMAS, pp 1619--1627. \url{https://doi.org/10.65109/VJNO3737}
+\bibitem[Lucas(1995)]{Lucas1995}
+Lucas WF (1995) Core theory for multiple-sided assignment games.
+Duke Math J 81(1):55--65. \url{https://doi.org/10.1215/S0012-7094-95-08106-X}
+\bibitem[Mart\'inez-de-Alb\'eniz et~al.(2020)]{Martinez2020}
+Mart\'inez-de-Alb\'eniz FJ, Rafels C, Ybern N (2020) Assortative multisided
+assignment games: The extreme core points. Games Econ Behav 120:144--153.
+\url{https://doi.org/10.1016/j.geb.2020.01.001}
+\bibitem[Mart\'inez-de-Alb\'eniz et~al.(2026)]{Martinez2026}
+Mart\'inez-de-Alb\'eniz FJ, Rafels C, Ybern N (2026) Maximum and minimum core
+payoffs for supermodular multisided assignment markets with local monotonicity.
+Discrete Appl Math 379:605--612. \url{https://doi.org/10.1016/j.dam.2025.10.006}
+\bibitem[N\'u\~nez and Rafels(2008)]{NunezRafels2008}
+N\'u\~nez M, Rafels C (2008) A cooperative bargaining approach to the assignment
+market. Group Decis Negot 17:553--563.
+\url{https://doi.org/10.1007/s10726-008-9111-4}
+\bibitem[Quint(1991)]{Quint1991}
+Quint T (1991) The core of an $m$-sided assignment game.
+Games Econ Behav 3(4):487--503. \url{https://doi.org/10.1016/0899-8256(91)90017-9}
+\bibitem[Stuart(1997)]{Stuart1997}
+Stuart HW Jr (1997) The supplier-firm-buyer game and its $m$-sided generalization.
+Math Soc Sci 34(1):21--27. \url{https://doi.org/10.1016/S0165-4896(96)00830-X}
 \end{thebibliography}
 \end{document}

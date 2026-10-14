@@ -1,5 +1,7 @@
 # Sources and priority boundaries
 
+**14 October 2026 update:** the [submission source ledger](submission_2026-10-14/GRAPH_LITERATURE.txt) records the refreshed originals, verified AAMAS 2026 publication, strict/partial-team distinction, and remaining Quint/Lucas/Stuart gaps. The current manuscript uses those comparisons; the following is the retained September record.
+
 This consolidation carries forward the documented source comparisons; it does
 not claim a new exhaustive literature search on September 20, 2026.
 
