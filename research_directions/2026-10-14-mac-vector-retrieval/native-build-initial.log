@@ -1,0 +1,70 @@
+/tmp/coop-mac-retrieval/retrieve.swift:135:26: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+133 | struct Report: Codable {
+134 |     var schema_version = 1, protocol_id = "mac-sift10k-retrieval-v1"
+135 |     let batch_size: Int, base_count = baseCount, query_count = queryCount, dimensions = dimension, top_k = topK
+    |                          |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                          |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'base_count' case to silence this warning
+    |                          `- note: make the property mutable instead
+136 |     var started_at = ISO8601DateFormatter().string(from: Date()), completed_at: String?, clock_origin_uptime_ns: UInt64
+137 |     var input_base_sha256: String?, input_query_sha256: String?, inputs_validated = false, cpu_self_test_passed = false
+
+/tmp/coop-mac-retrieval/retrieve.swift:135:50: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+133 | struct Report: Codable {
+134 |     var schema_version = 1, protocol_id = "mac-sift10k-retrieval-v1"
+135 |     let batch_size: Int, base_count = baseCount, query_count = queryCount, dimensions = dimension, top_k = topK
+    |                                                  |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                                                  |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'query_count' case to silence this warning
+    |                                                  `- note: make the property mutable instead
+136 |     var started_at = ISO8601DateFormatter().string(from: Date()), completed_at: String?, clock_origin_uptime_ns: UInt64
+137 |     var input_base_sha256: String?, input_query_sha256: String?, inputs_validated = false, cpu_self_test_passed = false
+
+/tmp/coop-mac-retrieval/retrieve.swift:135:76: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+133 | struct Report: Codable {
+134 |     var schema_version = 1, protocol_id = "mac-sift10k-retrieval-v1"
+135 |     let batch_size: Int, base_count = baseCount, query_count = queryCount, dimensions = dimension, top_k = topK
+    |                                                                            |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                                                                            |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'dimensions' case to silence this warning
+    |                                                                            `- note: make the property mutable instead
+136 |     var started_at = ISO8601DateFormatter().string(from: Date()), completed_at: String?, clock_origin_uptime_ns: UInt64
+137 |     var input_base_sha256: String?, input_query_sha256: String?, inputs_validated = false, cpu_self_test_passed = false
+
+/tmp/coop-mac-retrieval/retrieve.swift:135:100: warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+133 | struct Report: Codable {
+134 |     var schema_version = 1, protocol_id = "mac-sift10k-retrieval-v1"
+135 |     let batch_size: Int, base_count = baseCount, query_count = queryCount, dimensions = dimension, top_k = topK
+    |                                                                                                    |- warning: immutable property will not be decoded because it is declared with an initial value which cannot be overwritten
+    |                                                                                                    |- note: set the initial value via the initializer or explicitly define a CodingKeys enum including a 'top_k' case to silence this warning
+    |                                                                                                    `- note: make the property mutable instead
+136 |     var started_at = ISO8601DateFormatter().string(from: Date()), completed_at: String?, clock_origin_uptime_ns: UInt64
+137 |     var input_base_sha256: String?, input_query_sha256: String?, inputs_validated = false, cpu_self_test_passed = false
+
+/tmp/coop-mac-retrieval/retrieve.swift:293:28: error: missing arguments for parameters 'completed_at', 'failure' in call
+131 |     var fixed: Int { input_file_staging_bound_bytes + input_vector_bytes + integer_norm_bytes + distance_matrix_bytes + distance_serialization_bytes + cpu_selection_hash_scratch_bound_bytes + top10_storage_bound_bytes }
+132 | }
+133 | struct Report: Codable {
+    |        `- note: 'init(schema_version:protocol_id:batch_size:started_at:completed_at:clock_origin_uptime_ns:input_base_sha256:input_query_sha256:inputs_validated:cpu_self_test_passed:device_name:has_unified_memory:max_buffer_length:recommended_max_working_set_size:queries:batches:memory:gate_passed:failure:input_read_validate_seconds:index_prepare_seconds:distances_write_seconds:processing_through_distance_output_seconds:distance_file:distance_file_bytes:distance_file_sha256:encoding:interpretation:)' declared here
+134 |     var schema_version = 1, protocol_id = "mac-sift10k-retrieval-v1"
+135 |     let batch_size: Int, base_count = baseCount, query_count = queryCount, dimensions = dimension, top_k = topK
+    :
+291 |         try require(mkdir(out, S_IRWXU) == 0, "Output directory exists or cannot be created")
+292 |         let clock = Clock()
+293 |         var report = Report(batch_size: size, clock_origin_uptime_ns: clock.epoch,
+    |                            `- error: missing arguments for parameters 'completed_at', 'failure' in call
+294 |             queries: (0..<queryCount).map { Query(query_id: $0, batch_index: $0/size) },
+295 |             batches: stride(from: 0, to: queryCount, by: size).enumerated().map { Batch(index: $0.offset, query_start: $0.element, query_count: min(size,queryCount-$0.element)) })
+
+/tmp/coop-mac-retrieval/retrieve.swift:304:98: error: cannot infer key path type from context; consider explicitly specifying a root type
+302 |             report.input_query_sha256 = queries.sha; report.inputs_validated = true; report.input_read_validate_seconds = clock.now()-start
+303 |             try autoreleasepool { try retrieve(base.values, queries.values, report: &report, output: &distances, clock: clock) }
+304 |             report.gate_passed = report.queries.count == queryCount && report.queries.allSatisfy(\.passed) && report.batches.allSatisfy(\.passed)
+    |                                                                                                  `- error: cannot infer key path type from context; consider explicitly specifying a root type
+305 |         } catch { report.failure = String(describing: error) }
+306 |         let start = clock.now(), canonical = distances.map(\.littleEndian)
+
+/tmp/coop-mac-retrieval/retrieve.swift:304:137: error: cannot infer key path type from context; consider explicitly specifying a root type
+302 |             report.input_query_sha256 = queries.sha; report.inputs_validated = true; report.input_read_validate_seconds = clock.now()-start
+303 |             try autoreleasepool { try retrieve(base.values, queries.values, report: &report, output: &distances, clock: clock) }
+304 |             report.gate_passed = report.queries.count == queryCount && report.queries.allSatisfy(\.passed) && report.batches.allSatisfy(\.passed)
+    |                                                                                                                                         `- error: cannot infer key path type from context; consider explicitly specifying a root type
+305 |         } catch { report.failure = String(describing: error) }
+306 |         let start = clock.now(), canonical = distances.map(\.littleEndian)

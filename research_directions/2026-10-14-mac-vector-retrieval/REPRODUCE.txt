@@ -1,0 +1,42 @@
+Reproduce the saved fixed-corpus retrieval qualification
+
+This package includes the original CC0 siftsmall archive and the three unaltered
+input files actually used. DATA_MANIFEST.json and SOURCES.txt record ownership,
+original URLs, publisher MD5 and SHA256 identities. No data/model/package download
+is needed to audit the saved results. Only existing Python standard-library tools
+are used by the independent checker.
+
+From this package directory, use previously unused output filenames:
+  python3 -B -m unittest -v test_run_retrieval test_capture_inventory test_audit_retrieval
+  python3 -B -O -m unittest -v test_run_retrieval test_capture_inventory test_audit_retrieval
+  python3 -B audit_retrieval.py --capture capture --output /tmp/coop-retrieval-new-audit.json
+
+The independent audit computes all 1,000,000 unique query/corpus distances directly
+in integer arithmetic and verifies both saved profile outputs (2,000,000 distance
+entries), all canonical top-ten positions, official top-100 tie-aware groundtruth,
+source identities and fixed capture/coverage/memory checks. It does not launch a
+GPU workload. Numerical/top-k agreement on these image descriptors is not a
+semantic relevance or LLM-answer metric. See PROTOCOL.txt for the exact gate.
+
+BUILD_NOTES.txt records the native build command and CPU-only self-test. The local
+executable and compiler cache are ignored by Git. DESIGN_FREEZE.json records the
+exact original executable hash. A rebuild can have a different hash because of
+build path/toolchain metadata. Add --binary /absolute/path/to/original/retrieve
+to the auditor only when that exact frozen local executable is available.
+Otherwise the auditor must report that binary bytes were not independently
+reverified while still checking all source/data/capture hashes.
+
+Optional source reacquisition into a new temporary directory:
+  python3 -B fetch_data.py --output /tmp/coop-retrieval-new-source
+This helper was added for reproduction; SOURCE_FETCH.json records the actual
+original acquisition attempts. It uses the publisher's original FTP URL, caps
+bytes and per-read time, checks the pinned archive and extracts only three named
+regular files to fixed paths. The 120-second read-loop budget may finish a pending
+20-second read before enforcing expiry. No TLS validation is disabled.
+
+A new hardware run is a new cohort. Review/freeze its executable, inputs and
+protocol before collection in a fresh directory; do not replace the original
+freeze, append profiles, change the metric or retune correctness thresholds.
+The original collector command and all process metadata are preserved. This
+qualification's timings are descriptive, not a CPU/GPU/batching speed comparison.
+Energy and independent-owner pooling require separate designs and evidence.

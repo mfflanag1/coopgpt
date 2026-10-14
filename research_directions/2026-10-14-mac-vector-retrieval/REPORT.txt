@@ -1,0 +1,121 @@
+Fixed-corpus Mac vector retrieval — completed qualification
+14 October 2026 UTC
+
+Result
+PASS. The native MPS pipeline returned the exact canonical top ten for all 100
+SIFT10K queries under both fixed batching configurations. An independently written
+Python direct-integer oracle checked all 2,000,000 saved distance entries and all
+2,000 returned neighbor positions, with zero discrepancies. Every published
+100-neighbor groundtruth list passed the tie-aware exact-distance check. The
+published and canonical top-ten IDs agree in all 1,000 query-neighbor positions.
+
+This qualifies a conventional exact vector-search workload for the next local
+scheduling experiment. It is an engineering result, not a new search algorithm,
+semantic-relevance result, energy saving, pooling gain or mathematical breakthrough.
+
+What ran
+The unmodified CC0 ANN_SIFT10K corpus has 10,000 base vectors and 100 queries,
+each with 128 coordinates. The task was exhaustive squared-L2 top-ten retrieval
+ordered by (distance, original corpus row ID). Native MPS computed dot products;
+CPU code reconstructed distances with integer norms and selected neighbors.
+A distinct native direct-difference oracle and a separately written Python oracle
+verified the full result. No rounding, tolerance, normalization or query removal
+was permitted. Native collection did not read the official groundtruth file.
+
+The fixed order was batch size 1, then batch size 16. The second configuration
+used six batches of 16 plus the final four queries. These are 200 executions of
+100 unique queries, not 200 independent semantic cases or randomized replications.
+
+Configuration           Batch 1                  Batch 16
+Completed queries       100 / 100                100 / 100
+Completed batches       100 / 100                7 / 7
+Exact distance entries  1,000,000 / 1,000,000     1,000,000 / 1,000,000
+Canonical top-ten slots 1,000 / 1,000             1,000 / 1,000
+Incorrect distance/ID   0                        0
+Explicit memory bound  20,351,344 bytes         20,965,232 bytes
+Native process elapsed 0.598393 seconds         0.543956 seconds
+
+Both explicit native storage bounds are below the fixed 64 MiB cap. They include
+shared matrix storage counted once, source coordinates, integer norms, full
+saved distances, output serialization, and conservative scratch allowances.
+They exclude framework allocations, metadata, file caches and the parent/Python
+verifier. They are not process RSS, whole-machine peak memory or available RAM.
+The machine reports an Apple M3 Max, 30 GPU cores and 96 GiB unified memory.
+This inventory does not establish any particular amount of unreserved capacity.
+
+Numerical basis
+Every coordinate was validated as a finite integer in [0,255]. The actual base
+maximum was 180 and query maximum 169. Each nonnegative dot sum is bounded by
+128*255^2 = 8,323,200 < 2^23, allowing exact full-precision Float32 integer sums.
+Reduced precision was explicitly disabled. Integer norm reconstruction was
+checked against direct integer sums of coordinate differences squared. These
+conditions are specific to the validated input class; they do not establish exact
+arithmetic for arbitrary real-valued language embeddings.
+
+The two 4,000,000-byte query-major UInt32LE outputs are identical, with SHA256:
+c8679dac332451538b09eb1a91a7a13d5ec57facb51b30209a1527395a317bff
+The independent oracle recomputed values, rather than merely comparing these
+hashes. Official groundtruth permits equal-distance tie alternatives, whereas
+our own outputs must follow the explicit canonical ID ordering. A separate tie
+census found internal top-100 equal-distance ties for 22 queries. The published
+and canonical top-100 order differ at 18 positions in nine queries, all legitimate
+ties. There are no top-ten internal ties or ties at either cutoff in this corpus;
+synthetic tests exercise those cases.
+
+Timing and power interpretation
+The entire collection, including inventory and diagnostics, took 1.445785 seconds.
+Both processes ran on battery power, recorded at 47% before and after. The 90-second
+per-process and 300-second collection ceilings were not approached. No profile
+failed, timed out or was left unrun. Frozen sources and the executable remained
+unchanged. There was one physical collection, with no post-outcome tuning or rerun.
+
+Elapsed times include input loading, setup, native CPU oracle validation and saved
+output. First-use costs remain; order was fixed and there was no arrival stream.
+The smaller observed batch-16 process time is not a causal batching-speed result.
+No sustained service capacity, deadline compliance or energy was measured. Phase
+timings are retained for later design work, without comparing GPU-only durations
+with full CPU/validation time.
+
+Verification and provenance
+Protocol, plan, source data, implementation, tests, executable and predata review
+were frozen at 2026-10-14T01:27:34.052337+00:00. Physical collection started at
+2026-10-14T01:27:46.090220+00:00. All real-query distance/oracle and groundtruth
+ranking calculations occurred after that freeze. Before it, only structural,
+range, norm, ID-schema and hash checks inspected real data.
+
+All 41 Python preparation tests passed normally and with optimized Python. Native
+CPU-only fixtures passed, including rectangular/padded shapes, exact bounds,
+deterministic ties, parser rejection, nonfinite/fractional dots and final-entry
+corruption. A separate reviewer inspected the entire native and runner sources,
+then independently recomputed all saved outcomes. Tests and native failure logs
+from preparation are preserved; they were repaired before freezing or collecting.
+Separate Codex reviews are recorded. Fable/Opus cross-model review was unavailable
+under the previously documented quota block; no external specialist approval is
+claimed.
+
+The original publisher archive matches its published MD5 and a pinned SHA256.
+Unchanged input files and the CC0 archive are included, so saved-result audits
+need no network or package installation. SOURCES.txt credits the dataset authors,
+records primary sources and distinguishes established exhaustive search from our
+implementation and reproducibility work. No Faiss performance comparison is made.
+
+Next experiment
+Use a separate development calibration to measure a persistent exact-retrieval
+service with the corpus loaded once, including the cost of producing and checking
+all returned answers. Then freeze an independent evaluation of immediate dispatch
+against bounded-wait batching, with externally scheduled arrivals, a fixed latency
+deadline, all-request accounting and a material improvement gate. Retain the
+single-request policy as the reference; do not assume batching will win.
+
+A larger corpus, modern embeddings, new metric or different validation rule
+requires explicit requalification. Request priorities can represent tenants,
+but one Mac does not provide independently owned hardware pools. Any later
+cooperative-game interpretation still needs ownership, feasible withholding and
+opportunity-cost assumptions. Energy measurement follows a useful sustained
+service comparison, with full-horizon idle/setup/failed-work accounting.
+
+Files to inspect
+PROTOCOL.txt; PLAN.json; DESIGN_FREEZE.json; SOURCES.txt; DATA_MANIFEST.json
+capture/; INDEPENDENT_AUDIT.json; reviews/independent-predata.txt
+reviews/independent-outcome.txt; reviews/native-outcome-recount.txt
+REPRODUCE.txt; APPLICATION_BRIDGE.txt; VERIFICATION.txt

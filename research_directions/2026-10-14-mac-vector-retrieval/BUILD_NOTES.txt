@@ -1,0 +1,104 @@
+Native retrieval build and CPU-only qualification
+
+Ownership: retrieve.swift, retrieve, this note, native build/self-test logs.
+No prior calibration/queueing package was edited. No GPU command or real-corpus
+distance/oracle computation was executed during implementation or these tests.
+
+Compiler: Apple Swift 6.2, swiftlang-6.2.0.19.9 clang-1700.3.19.1,
+swift-driver 1.127.14.1; target arm64-apple-macosx26.0.
+Build command (standard optimization; no reduced/fast-math flag):
+/Library/Developer/CommandLineTools/usr/bin/swiftc -swift-version 5 -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -O -module-cache-path /tmp/coop-mac-retrieval/swift-module-cache /tmp/coop-mac-retrieval/retrieve.swift -o /tmp/coop-mac-retrieval/retrieve > /tmp/coop-mac-retrieval/native-build.log 2>&1
+Final build exit: 0; native-build.log empty, no warnings.
+Initial failed build diagnostics are preserved in native-build-initial.log.
+
+CPU-only command:
+/tmp/coop-mac-retrieval/retrieve --self-test > /tmp/coop-mac-retrieval/native-self-test.log 2>&1
+Exit: 0. Output:
+CPU_ONLY_SELF_TEST_PASS rectangular/padding/ties/bounds/invaliddots/finalcorruption/parser/UInt32LEhash
+The self-test path never creates a Metal device or reads any corpus file.
+
+Source SHA256:
+898f646c2d93991c29af629c7b0ccf4302ba0491711788121df42af206c27398
+Executable SHA256:
+3d9e38bad70b5ef3a1383289573036aa4de02e9b6e7ea62f00e8f08e0fddc47e
+native-build.log SHA256:
+e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855
+native-self-test.log SHA256:
+146c939164976c754b385ed73f0c98232fc91731db2c17e056cc0558c1b0a62c
+
+After protocol/source/data/executable freeze only, collection syntax is:
+/tmp/coop-mac-retrieval/retrieve --data /tmp/coop-mac-retrieval/data --batch-size 1 --output-dir /absolute/new-profile-directory
+The only alternative permitted batch size is 16. Each profile retains all 100
+queries in source order and all planned batch descriptors. Batch 16 ends with
+four queries. There is no warmup or profile adaptation. The parent runner owns
+the fixed profile order and the process/campaign watchdogs.
+
+API verification used the installed Apple SDK MPSMatrixMultiplication.h,
+MPSMatrix.h and MPSCoreTypes.h under:
+/Library/Developer/CommandLineTools/SDKs/MacOSX.sdk/System/Library/Frameworks/MetalPerformanceShaders.framework/Frameworks/
+Use Q(batch,128) and corpus(10000,128), transposeLeft=false,
+transposeRight=true, result(batch,10000), alpha=1, beta=0, options.none.
+All matrices are Float32 row-major with separately recommended rowBytes.
+Input padding is zero; output including padding is NaN before encoding.
+The base buffer persists for the profile; query/result buffers are held in a
+per-batch autoreleasepool and released before the next batch. All buffers use
+storageModeShared. Unified memory is required. Command success and nil error
+are checked after waitUntilCompleted before any output is read.
+
+Exactness and independence:
+Every fvecs record has the exact required dimension/length, and every float must
+be finite and exactly integral in [0,255]. Native reads no groundtruth file.
+The maximum dot/norm is 128*255^2=8,323,200<2^23. Nonnegative partial sums and
+products are exact Float32 integers under full-precision operation. Every GPU
+dot is checked for finite/integer/range before Int64 conversion. Reconstruction
+uses integer norms and rejects negative/out-of-bound distances without clipping
+or tolerance. Candidate top ten uses streaming insertion ordered by (distance,
+original row ID). The CPU oracle independently sums Int64 coordinate differences
+squared for all 10,000 distances/query and uses full sorting for selection.
+Both results must agree everywhere; hashes are additional evidence, not a
+replacement for exact comparison. Output is query-major UInt32 little-endian,
+exactly 4,000,000 bytes/profile. The row and file hashes use those same bytes.
+Known hash fixture [0,1,256,8323200] has SHA256
+a6cf483fa4e8f4eee26b7f9147d8c541e145779ac6d90eed18fb18cc01429232.
+
+Conservative native explicit bound:
+The Memory.fixed sum includes input fvecs staging (5,211,600 bytes), retained
+UInt8 coordinates (1,292,800), Int64 norms (80,800), the full output matrix
+(4,000,000), simultaneous canonical output serialization (4,000,000), bounded
+CPU selection/reference/hash scratch (524,288), and top-ten storage (64,000
+on this ABI). Add actual persistent-base allocation plus maximum actual batch
+query/result allocations. Requested row-stride sizes and actual allocatedSize
+are checked against 64 MiB; payloads, lengths and allocations remain separate.
+Scratch covers reference/output-row/hash copies and full-sort IDs/temp storage;
+the input staging and final serialization are conservatively included even
+though those phases need not overlap. Shared Metal storage is counted once.
+Framework allocations, metadata, file caches, parent/Python verifier storage
+are excluded. This is not RSS, system free memory or a whole-machine peak.
+currentAllocatedSize values are global samples only. In particular,
+device_allocated_before_retrieve_return_sample is before the enclosing
+autoreleasepool drains and is not a post-cleanup claim. recommendedMaxWorkingSetSize
+is a device advisory property, not currently allocatable/free RAM.
+
+Timing and retention:
+All *_s phase offsets use one monotonic Dispatch uptime origin. Hardware
+gpuStartTime/gpuEndTime are separately reported only when finite and positive,
+with end>start. Input reading/validation, norm/base/index setup, batch preparation,
+submit-to-observed-completion, reconstruction/stream selection/copy/hash, and
+direct CPU oracle/full-sort/comparison/hash are separately recorded. Distance
+output duration includes canonical byte conversion, hashing, write and fsync.
+processing_through_distance_output_seconds excludes its own RAW serialization;
+the parent's process interval includes all output. Times are descriptive only.
+
+Any failed batch is recorded, with all its comparisons if GPU output is readable;
+later batches remain explicitly not_run. All 100 query rows remain in RAW.
+UInt32.max marks invalid/unrun distance entries and cannot pass correctness.
+Input/device/setup failures also retain descriptions and the sentinel artifact
+when output publication remains possible. The output directory must be newly
+created; each artifact uses exclusive no-follow temporary creation, fsync, and
+exclusive hard-link publication, with no replacement of an existing path.
+External termination or filesystem failure can prevent native publication;
+the parent is responsible for preserving subprocess evidence in those cases.
+
+Independent Codex source/fixture review is separate. Fable/Opus cross-model
+review was not retried because the documented quota remains exhausted; this
+note does not claim such review or a successful physical retrieval result.

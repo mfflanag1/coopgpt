@@ -1,0 +1,37 @@
+Independent precollection review — 2026-10-14T01:26:11.735381+00:00
+
+Verdict: no remaining material blocker found for the fixed correctness qualification, after the resolved allocation-sample naming issue below. This is an independent Codex source/fixture review, not external specialist or cross-model review. Known cross-model quota remains unavailable; no retry was made.
+
+Scope actually reviewed
+Read the fixed PROTOCOL.txt and PLAN.json, the complete native retrieve.swift implementation, and run_retrieval.py. Built an independently authored stdlib auditor; it imports no collector/native implementation or previous reducer. Read original benchmark documentation and publisher checksum manifest during the earlier bounded scout; copied the exact 407-byte checksum manifest. No dataset vectors or GPU commands were used for this review. Metadata supplied by root's structural source inspection was read, but no real-query distances, oracle rankings, ground-truth ranking agreement, or retrieval outcomes were computed before freeze.
+
+Design and numerical checks
+The target is precisely the unnormalized squared-L2 top ten from the 10,000 original base vectors for every one of the 100 queries, under (distance, original ID) order. Both batch profiles use the complete fixed query sequence; neither is a held-out sample or randomized performance comparison. Native input parsing checks every dimension header and finite integral [0,255] coordinate before UInt8 storage. For these inputs all Float32 nonnegative dot sums are integers <=8,323,200. Source uses Q_batch X^T, 128 interior dimensions, independently recommended strides, initialized outputs, alpha=1, beta=0, options.none, and command completion before CPU reads. Integer norms reconstruct distances without rounding or clipping; a distinct direct-difference native oracle compares every value, with a full-sort selection check against insertion-based candidate top ten. The Python auditor independently computes direct integer differences and checks all emitted UInt32LE distance bytes and canonical neighbor positions.
+
+Official ground truth is checked by exact ordered distances of 100 distinct valid IDs versus the full-oracle smallest 100 distances. This permits legitimate equal-distance alternatives, including at the cutoff. ID overlap is descriptive. Native never reads ground truth. Learning vectors are unused. Qualification does not establish semantic relevance, modern embedding performance, speedup, energy saving, or owner pooling.
+
+Resource, timing and retention checks
+Read allocation arithmetic: shared base/query/dot buffers counted once, UInt8 inputs, Int64 norms, full result matrix and conservative output/input staging included. The 512 KiB scratch allowance covers the bounded per-query reference, selection and hash arrays; retained top-ten arrays have a conservative 64,000-byte allowance. Framework allocations, JSON metadata and file caches remain excluded explicitly. Thus the 64 MiB limit is an explicit payload bound, not process RSS/whole-system usage. Serial batch resources are released through autoreleasepool before the next batch. CPU phase timings include their local copying/checking/hashing operations; device intervals are separate and not substituted for full-process duration.
+
+A recorded sample originally named device_allocated_after_cleanup_sample was taken by defer within retrieve(), before the outer autoreleasepool necessarily drained. Reviewer raised this concrete ambiguity; worker renamed it device_allocated_before_retrieve_return_sample. Final source has the accurate name. No numerical behavior changed.
+
+Runner uses a shared monotonic work deadline, recomputes native timeout after diagnostics, preserves failures and unrun profiles, checks frozen source/binary identity around collection, and refuses existing output directories. Native input failure retains all 100 requested query and planned batch descriptions and the full sentinel distance matrix. Outputs are published exclusively; retries cannot silently overwrite them. Independent checks run after collection as stated by protocol; no claim that they stop a second profile earlier.
+
+Executed checks before freeze
+1. python3 -m unittest -v test_audit_retrieval.py: 14 tests passed.
+2. python3 -O -m unittest -v test_audit_retrieval.py: 14 tests passed.
+These use constructed fixtures only: exact literal integer oracle; every-header, size, nonfinite/fractional/range rejection; last-distance corruption, swapped query order, truncation; valid official boundary ties and rejected missing closer/duplicate/invalid IDs; stricter canonical native tie order; incomplete/failed/reordered query records; hash/type corruption; frozen-file mutation/unsafe path rejection; complete constructed profile and batch coverage, timeline, memory and source-hash mutations.
+3. ./retrieve --self-test: CPU_ONLY_SELF_TEST_PASS rectangular/padding/ties/bounds/invaliddots/finalcorruption/parser/UInt32LEhash.
+4. A temporary missing-input native invocation (no call can reach Metal because input open fails first) returned failure while retaining 100 not-run queries, seven batch descriptions and all 1,000,000 UInt32.max sentinels. A second invocation targeting that same output directory returned refusal and left both output hashes unchanged. The temporary fixture was removed after verification. This fixture was executed inline, not saved as a separate reusable script.
+
+Remaining before a correctness claim
+Freeze these exact sources, tests, source data and executable; collect the two prescribed profiles once; then run the independent auditor and inspect the complete outputs. No real-data correctness claim is made in this precollection review. Precollection document should remain immutable after freeze; record outcomes separately.
+
+Reviewed SHA256 values
+PROTOCOL.txt c2778fd372283b4c1147f1f8f330338aca7611c924eb5175ab402d40617aa3b5
+PLAN.json d3fa1f89270c11437dc1c71e690d87f025436ef2b01870d14bd7372afbc81a06
+retrieve.swift 898f646c2d93991c29af629c7b0ccf4302ba0491711788121df42af206c27398
+retrieve 3d9e38bad70b5ef3a1383289573036aa4de02e9b6e7ea62f00e8f08e0fddc47e
+run_retrieval.py f51cb4340164d80641f317bcd69f291e19936e8d26209e5d1c304086c6aa4376
+audit_retrieval.py 66e5385eb9d46adcbf58f151d40fa99bdf06bf4a6738c3bc83af72cdd68470bc
+test_audit_retrieval.py c5bf559c413b2d31c2d3b31265700b24f47b1f93622213eb49afa12f15bb019e

@@ -1,0 +1,130 @@
+Fixed-corpus Mac vector-retrieval qualification — 14 October 2026 UTC
+
+Question and contribution boundary
+Can a native Apple Metal/MPS pipeline return the exact top ten nearest vectors
+for every query of the public ANN_SIFT10K benchmark, preserving source identity,
+deterministic tie handling and explicit shared-memory accounting? This is a
+functional qualification of a conventional exhaustive retrieval implementation,
+not a novel algorithm, latency improvement, energy saving, semantic relevance
+assessment, economic welfare estimate or independent-owner pooling result.
+
+The task is a standard vector-search primitive using released image descriptors.
+These are classical SIFT features, not modern language embeddings or text answers.
+A correct result establishes exact nearest neighbors in this fixed metric/corpus;
+it does not establish human-perceived image relevance or a production service.
+
+Data and fixed workload
+Use the original siftsmall archive from the TexMex benchmark, matching the
+publisher's MD5 0b8324a7a82d7f2663d7dcbd57642df7. Record SHA256 as well. Keep
+unaltered base/query/groundtruth files and their individual hashes. The original
+page places the datasets under CC0. The 25,000 learning vectors are not used.
+Read all 10,000 base vectors and all 100 queries, in original file order, each
+128-dimensional, from little-endian fvecs. Validate every per-row dimension,
+exact file length, finite coordinate and integral coordinate in [0,255]. Reject
+violations; do not normalize, round, discard, reorder or substitute coordinates.
+Read 100 groundtruth lists of 100 distinct, valid zero-based IDs from ivecs.
+Only structural/data-range checks are permitted before the design freeze; no
+real-query distance, groundtruth ranking or GPU outcome is computed beforehand.
+
+Two fixed serial profiles, each using every query exactly once:
+ p01_b1: batches of one query, 100 batches;
+ p02_b16: batches of sixteen queries, six full batches plus the final four.
+The order is fixed at b1 then b16. There are 200 query executions, two million
+query-corpus distance entries and 2,000 returned top-ten neighbor positions.
+This is one correctness cohort, with two ways to batch the same queries, not
+200 independent semantic tests or two statistical replications. There is no
+arrival stream, concurrency treatment, automatic warmup, load sweep or energy
+sampling. First-use costs remain in descriptive timings. No other GPU profiles
+may be added in response to the outcomes.
+
+Algorithm and exactness contract
+Compute Float32 dot products Q_batch X^T with MPSMatrixMultiplication and
+explicit options.none: reduced precision and skipped API validation are disabled.
+Use recommended independent row strides, initialize output/padding to NaN, and
+read outputs only after successful command-buffer completion. Corpus IDs are
+original row indices. Each dot must be finite, integral and within the numeric
+bounds before conversion to Int64. Reconstruct squared distances using separately
+computed integer squared norms: ||q||^2+||x||^2-2(q dot x). Negative/out-of-bound
+reconstructed distances are failures. No tolerance, clipping or rounding is used.
+
+For the validated coordinate class, each product and every nonnegative partial
+dot/norm sum is an integer <=128*255^2=8,323,200<2^23; twice this is below 2^24.
+Full Float32 arithmetic can represent these quantities exactly. This argument
+is conditional on the checked inputs and full-precision operation, not on all
+floating-point embeddings. The primary independent oracle must compute direct
+integer sum_j (q_j-x_j)^2, not reuse the dot/norm identity or GPU values.
+
+The candidate selects ten neighbors from GPU-derived distances under the total
+order (squared distance, original corpus row ID). Return exactly ten unique IDs
+and their exact integer distances per query, in that order. GPU performs dots;
+CPU performs reconstruction and neighbor selection. Do not call the entire
+retrieval pipeline GPU-resident. Native integer comparison and a differently
+implemented CPU selection serve as internal checks; a separate Python oracle
+must reproduce the full output and top ten directly from original input files.
+
+Official groundtruth and ties
+The published groundtruth guarantees squared-L2 distance order, not a tie-break.
+For each query, compute exact distances of its 100 published IDs; require unique
+valid IDs and that their distance list equals the sorted full-corpus first 100
+distances. Equal-distance permutations or alternative IDs at a tied boundary
+are valid. Separately require our native top ten to equal the canonical
+(distance,row ID) ordering exactly. Report official-ID overlap for top ten and
+any tie differences descriptively, never reinterpret a legitimate tie as a
+wrong distance. This is not the benchmark page's nearest-one-in-top-R recall.
+
+Retention, time and resource limits
+Each native profile retains descriptions for all 100 requested queries, per-batch
+records and all failures. Save complete query-major UInt32 little-endian distance
+outputs: 4,000,000 bytes/profile; UInt32.max sentinels denote unrun/failed entries
+and always fail qualification. Preserve native stdout/stderr, return code,
+source/binary hashes, environment and before/after power diagnostics. Never
+replace an existing capture directory. Native-detected failure/timeout/source
+change stops subsequent profiles; final independent audit determines the full
+correctness gate after collection. Planned but unrun profiles remain named.
+
+Each native process has a 90-second watchdog. Collection has a shared 300-second
+monotonic work budget; diagnostic timeouts and native execution consume it.
+Bounded inventory capture is counted; final termination/record serialization can
+finish after the work deadline. Preserve actual elapsed time. No paid resource,
+package installation, model server, system power change or energy sampler runs.
+AC is not required for this correctness test; power is recorded. These profiles
+are not a controlled timing comparison, so power is not an exclusion rule.
+
+Native explicit tracked buffers/arrays must stay within 64 MiB/process. Count
+shared Metal storage once, plus retained input representations, result distances,
+CPU reference and selection/hash scratch, using conservative explicit bounds.
+Record actual matrix buffer allocations and device allocation samples separately.
+Framework allocations, metadata, file caches and coordinator/Python verification
+storage are outside this native explicit cap; it is not a process RSS or system
+free-memory bound. Whole-machine peak memory and energy remain unmeasured.
+
+Phases and promotion gate
+CPU-only fixtures must cover parsing failures, asymmetric rectangular products,
+stride padding, deterministic ties, high-value exactness, nonfinite/fractional
+GPU values and corruption at the final distance. Independently review source,
+freeze protocol/data/plan/code/tests/exact executable, then collect this cohort.
+No source repair followed by hidden rerun is allowed within the frozen cohort.
+If collection fails, preserve evidence and record a failed/incomplete qualification.
+
+Pass ONLY if both native profiles fully complete; every input hash/schema and
+numeric assumption passes; every one of the two million distances equals the
+independent direct-integer oracle; all 2,000 canonical top-ten positions match;
+all 100 official top-100 lists pass the tie-aware test; all memory/timestamp/
+coverage/source-integrity checks pass; and no failed/sentinel/unrun result exists.
+
+Timing is descriptive: separate index/setup, GPU command intervals, CPU
+reconstruction/selection, exact oracle checks and output phases where available.
+The outer process interval includes setup, validation and serialization. Do not
+compare tiny GPU command intervals with end-to-end CPU times or interpret this
+fixed b1-then-b16 order as a causal performance comparison. No speed threshold or
+latency deadline is part of this correctness gate.
+
+A pass qualifies this fixed workload for a separately designed development
+calibration, then a newly frozen scheduling evaluation if justified. A failure
+names the exact fault and closes that gate. Neither outcome licenses a new
+novelty, energy, AI-serving or cooperation claim. Preserve prior studies unchanged.
+
+Cross-model status
+The documented Fable and Opus quota block has not reached its 15 October 01:00 UTC
+reset. Do not retry it repeatedly. Use separate Codex implementation/review and
+executed independent checks, explicitly disclosing the unavailable cross-model QA.
