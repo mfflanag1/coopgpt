@@ -1,0 +1,24 @@
+Implementation sources and attribution
+
+The native program adapts this project's immutable 13 October calibration,
+identified by source hash in BUILD_NOTES.txt. Queue/worker scheduling is standard
+FIFO admission implemented with Foundation threads, NSCondition and DispatchGroup.
+No novel scheduling algorithm or scientific priority claim is made.
+
+Primary Apple API references, inspected with the installed Apple SDK and the
+corresponding official documentation:
+https://developer.apple.com/documentation/metal/mtlcommandqueue
+https://developer.apple.com/documentation/foundation/nscondition
+https://developer.apple.com/documentation/metalperformanceshaders/mpsmatrixmultiplication
+https://developer.apple.com/documentation/metal/mtlresourceoptions/storagemodeshared
+
+Installed SDK: /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk
+Framework headers inspected: Metal MTLCommandQueue.h, MTLCommandBuffer.h and
+MTLResource.h; Foundation NSThread.h and NSLock.h; MPS matrix descriptors and
+matrix multiplication. Command objects are separate per job; resource reads
+follow completed command buffers. Shared memory is counted once. Framework
+internal memory and thread counts are not represented by the explicit job cap.
+
+The clock, open-loop arrival stream, fixed paired ordering and engineering
+thresholds are explicit design choices documented in PROTOCOL.txt. The numerical
+thresholds are not statistical confidence statements or established standards.

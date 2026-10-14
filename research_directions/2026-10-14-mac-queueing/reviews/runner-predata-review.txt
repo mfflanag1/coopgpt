@@ -1,0 +1,57 @@
+Runner pre-data review — 2026-10-14T00:38:49.137624+00:00
+Reviewer: Codex mac_mps_calibration subagent, independent of runner/protocol implementation.
+Scope: bounded campaign collection, interruption/failure preservation, and runner
+integration with the separately implemented window auditor. This is a same-model
+review; cross-model review remains unavailable because of the reported quota block.
+No physical GPU workload was executed. Only this review artifact was added.
+
+Disposition: PASS for the reviewed runner/protocol scope before design freeze.
+No unresolved material findings within this scope.
+
+Findings raised and verified repaired before data:
+1. Post-native diagnostic interruption previously escaped before execution
+   metadata was saved and could mislabel an executed window as unrun. The runner
+   now preserves native stdout/stderr before post-diagnostics, catches diagnostic
+   interruption, closes the window gate, and records an attempted window before
+   fallible execution/postprocessing. Unexpected interruption therefore retains
+   the attempted identity instead of adding it to the unrun denominator.
+2. Native gate_passed alone previously permitted continuation. The runner now
+   requires independent audit_window checks, with precomputed integer expected
+   hashes, the fixed plan and inventory device names, before the next window.
+   Final independent campaign auditing remains required and is a separate review.
+3. The added inventory integration initially iterated devices=None on an expected
+   unavailable-profiler path, losing the campaign record via uncaught TypeError.
+   The runner now rejects non-list device inventory with a caught ValueError,
+   preserves CAMPAIGN.json, retains all unrun identities, and launches no window.
+
+Other checked properties:
+- The fixed plan matches protocol order, 24 windows and 60 jobs per window.
+- Native subprocess watchdog is at most 90 seconds and is recomputed after
+  diagnostics against the remaining shared 600-second monotonic budget.
+- Before/after diagnostic calls use the shared deadline; expired work does not
+  launch a native or diagnostic subprocess. Inventory has two fixed calls bounded
+  individually to 15 seconds at campaign start, counted against elapsed budget.
+- Invalid/failed/interrupted/timed-out windows stop subsequent collection.
+- Raw output, execution metadata, source-integrity checks and named unrun windows
+  are retained; existing capture directories are refused rather than reused.
+- Subprocess invocations are fixed argument arrays with shell=False.
+
+Verification personally executed after final repair:
+PYTHONDONTWRITEBYTECODE=1 python3 -m unittest -q test_run_campaign
+Result: 16 tests passed, exit 0; native/diagnostic subprocesses mocked. Fixtures
+cover shared deadlines, timeout output, post-diagnostic interruption, independent
+rejection despite native success, attempted-window retention, unavailable inventory,
+fixed ordering, existing capture protection and frozen source/binary changes.
+
+Limits: this is a bounded engineering preflight, not evidence about physical
+performance. Process termination and final verification/serialization may extend
+past the work deadline; the protocol correctly avoids a hard real-time wall bound.
+Abrupt termination of the Python runner itself can leave incomplete artifacts;
+missing/partial records must fail the final audit. This review does not replace
+independent native/concurrency and complete analyzer reviews.
+
+Reviewed file SHA256 snapshots:
+run_campaign.py: 536dac8636620e62c5c617a779b48865b6beafe8c3f85101776dd19cf31c83cd
+test_run_campaign.py: 3c60e8866dc61793b6f56f750bf46b1a1aa5704060027201e9caa9c3a2d880ae
+PROTOCOL.txt: 22c3ef5d2414052ebe7e09a6240ec8aeea99afb5b7dfde8889c4fe349a1c8bd1
+capture_inventory.py: df6b87356bb8f91a9fc33e27b8aa584a790b6202c8cb99b560b97b926a9fe3a6

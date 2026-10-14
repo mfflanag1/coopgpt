@@ -1,0 +1,125 @@
+Mac bounded-concurrency queueing comparison — 14 October 2026 UTC
+
+Question and scope
+On the user's single shared-memory Mac, does allowing two complete matrix-job
+pipelines in flight improve verified completion latency relative to one pipeline?
+This is a controlled artificial-workload engineering comparison. It is not an
+LLM-serving benchmark, a new scheduler, an economic welfare estimate, an energy
+measurement or independent-owner pooling. Earlier packages remain frozen.
+
+Mechanisms
+Two live jobs may overlap CPU preparation/validation with GPU work and reduce
+queue delay. They may instead add CPU, memory or device contention. A single Metal
+command queue does not imply simultaneous GPU kernels; measure whole-pipeline
+concurrency and report device intervals separately. FCFS refers to admission from
+the common FIFO, not guaranteed GPU submission/completion order with two workers.
+
+Treatments and workload
+Exactly one or two worker threads admit jobs from a common FIFO. A slot is held
+through buffer preparation, GPU encoding/submission/completion, CPU reference,
+complete output comparison, fingerprints and resource cleanup. A dedicated
+producer follows the offered schedule independently of worker availability.
+It must not wait for a free worker before recording new arrivals.
+
+Every window has 60 jobs, dimensions 256,512,1024 repeated 20 times, with identical
+input rules to the previous calibration:
+ A[i,k]=((i+3k) mod 7)-3; B[k,j]=((5k+j) mod 11)-5.
+Nominal offers occur at i/r seconds from the measured epoch for i=0..59, at fixed
+rates r in {10,40,100} requests/second. Deadline is 0.100 seconds after each nominal
+offer, common to all jobs. The producer records actual enqueue time and lateness.
+Primary latency starts at nominal offer, so producer delay cannot be hidden by
+resetting request clocks when a worker is ready. Also report actual-enqueue latency.
+
+Each new native process first executes three serial correctness-checked warmups,
+dimensions 256,512,1024, outside the measured epoch. Warmup timestamps use their
+declared separate origin. It then executes the entire 60-job window. All output
+entries must match CPU Accelerate SGEMM exactly; independent integer reconstruction
+must verify the full GPU and CPU output digests. Signed zeros are normalized in
+the canonical row-major Float32-LE hashes. Inputs and partial sums fit exactly in
+Float32 for this special integer family; this is not general accuracy evidence.
+
+Fixed paired sequence
+Four rounds, each with all three rates and both configurations:
+ round 1: rates 10,40,100; within each rate concurrency 1 then 2;
+ round 2: rates 100,40,10; within each rate concurrency 2 then 1;
+ round 3: rates 40,10,100; within each rate concurrency 1 then 2;
+ round 4: rates 100,10,40; within each rate concurrency 2 then 1.
+Thus 24 windows, 1,440 planned measured jobs and 72 separate warmup jobs.
+Use a one-second inter-window idle interval and drain every window fully. No
+outcome-based reordering, extra repeats, changed rates, discarded slow windows or
+rerunning a bad comparison. These rates are selected using the earlier tiny
+calibration as development information, not as a guaranteed service-time model.
+
+Timing, accounting and preservation
+Record nominal offer, actual enqueue, locked FIFO admission/sequence, submit,
+observed GPU completion, validated completion and post-cleanup resource release.
+All host offsets share the window monotonic epoch. GPU start/end timestamps use
+their own documented timebase and must not be subtracted from host offsets.
+Primary completion includes allocation, preparation, CPU validation and hashing.
+CPU reference cost is part of this checked service, not a free offline oracle.
+Record admission/release/enqueue events and active counts under the queue lock.
+Independently reconstruct the maximum active pipelines and FIFO order.
+
+Per-job explicit buffer/reference/hash-scratch cap is 64 MiB; at most two active
+slots bound this tracked sum by 128 MiB. The expected largest explicit job uses
+about 16 MiB. Framework/private allocations and whole-process peaks are outside
+that cap. Retain global Metal allocation samples without attributing overlapping
+global counts to individual jobs. Unified RAM is counted once. No global memory
+availability, safe production concurrency or independent-device partition follows.
+
+Record selected hardware, power-source and thermal diagnostics before/after.
+An active desktop has uncontrolled background load. AC is not required for this
+same-machine comparison, but each paired comparison must have the same known
+power source at all four before/after observations. Record battery percentages.
+Thermal diagnostics are descriptive, not measured temperatures or exclusion rules.
+
+Native windows retain all requested rows and failures. Root stops subsequent
+windows after a process/timeout, incomplete window, correctness or source-integrity
+failure; planned but unrun windows remain named. Each native process has a
+90-second watchdog and the collection has a 600-second monotonic work budget.
+Before/after diagnostics and native execution share that deadline; no further
+subprocess starts once it expires. Selected inventory calls are individually
+bounded to 15 seconds and counted against the budget. Process termination and
+final record serialization may finish after the work deadline; report actual
+elapsed time rather than claiming a hard real-time wall bound.
+Timeout/missing records are failures or incompleteness, never zero latency. No
+privileged settings, live server, paid API, model download or energy sampler runs.
+
+Prespecified analysis and promotion gate
+Compute useful on-time fraction out of all 60 offered jobs in each completed
+window; invalid, missing or late jobs are not on-time successes. Any correctness
+failure closes the comparison's validity gate. Preserve all jobs and report
+incomplete/unrun denominators separately. Use nearest-rank p95 latency (sorted
+element ceil(0.95*n)) and ordinary median (mean of middle two for even n).
+
+Validity requires all 24 fixed windows complete; all measured/warmup correctness,
+digest, ordering, timing and active-count checks pass; all 12 power-source pairs
+are comparable; and every window's p95 producer lateness is <=0.010 seconds.
+Treat larger producer delay as distorted delivery, not evidence for faster service.
+Timeline consistency allows 1 microsecond numerical tolerance; deadline and gate
+comparisons use the recorded times without rounding. Preserve borderline cases.
+
+Primary contrast: at rate 100, paired ratios R_k=p95(cap2)/p95(cap1), k=1..4.
+Qualify the configuration for a larger follow-up only if ALL hold:
+ 1. validity gate above passes;
+ 2. median(R_k)<=0.90 (at least ten-percent median paired p95 improvement);
+ 3. cap2 p95 is lower in at least three of four rate-100 pairs;
+ 4. total cap2 on-time successes at rate 100 >= cap1;
+ 5. at rate 10, median paired p95 ratio <=1.10 (no >10% low-load regression).
+Rate 40 and mean/max latency, deadline counts, queue delays, producer jitter,
+observed overlaps and tracked memory are secondary descriptive diagnostics.
+Report every pair and rate, not just the primary winner. No multiple exploratory
+specifications, p-value, population confidence interval or causal generalization
+is claimed from four paired windows on one active machine.
+
+Permitted conclusions: engineering gate passes for this fixed cohort; the tested
+configuration fails the material-improvement gate; or the comparison is invalid/
+incomplete with the exact reason. A pass justifies a longer independently frozen
+follow-up, not energy/AI-serving/pooling claims. A failure is useful evidence
+against this specific proposed optimization and does not license tuning on the
+same captured stream until it passes.
+
+Freeze protocol, plan, sources, preparation checks and executed binary before
+physical comparison. Review design and concurrency logic independently. The known
+Fable/Opus quota failure has not reset; use independent Codex review and executed
+audits, disclosing that cross-model approval remains unavailable.

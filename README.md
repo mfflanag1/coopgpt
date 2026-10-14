@@ -2,7 +2,19 @@
 
 **Canonical repository:** [mfflanag1/coopgpt](https://github.com/mfflanag1/coopgpt) (private). Extracted with research history on 27 September 2026; see [migration record](MIGRATION.md). Start with the [papers and summaries](PAPERS.md).
 
-**Latest result — 13 October 2026 UTC:** after the user confirmed that only the Mac is available, the native shared-memory GPU calibration **passed**. The actual M3 Max completed **nine fixed matrix jobs plus one separate warmup**, with zero discrepancies across **4,128,768 measured output entries**. Independent integer reconstruction verified every complete GPU and CPU output fingerprint. All **28 Python checks** and the native CPU-only preparation checks pass.
+**Latest result — 14 October 2026 UTC:** the fixed Mac queueing comparison is complete and valid, but **two jobs in flight failed the material-improvement gate**. All **1,440 measured jobs in 24 windows**, plus 72 warmups, passed exact output checks and independent integer fingerprints. All measured jobs met the 100 ms deadline. At the primary rate of 100 requests/second, median paired p95 latency was **0.075% higher** with two slots; the required reduction was 10%, and only **2/4** pairs favored two slots.
+
+| Offered requests/second | Median paired p95 ratio, two/one slots | Favorable pairs | On-time jobs, each configuration |
+| --- | --- | --- | --- |
+| 10 | 0.94387 | 4/4 | 240/240 |
+| 40 | 0.98808 | 4/4 | 240/240 |
+| 100 — primary | 1.00075 | 2/4 | 240/240 |
+
+Queue delay fell at the highest rate, but full verified latency did not meet the gate. The workload offered limited overlap; recorded GPU command intervals never overlapped. The entire cohort ran on battery power with consistent paired power sources. All **43 preparation tests** passed; final independent audits and **108 separate recount comparisons** agree. This short numerical experiment establishes neither AI-serving performance nor energy or pooling gains. No energy sweep or adaptive rerun followed.
+
+[Queueing report](research_directions/2026-10-14-mac-queueing/REPORT.txt) · [Independent analysis](research_directions/2026-10-14-mac-queueing/INDEPENDENT_ANALYSIS.json) · [Frozen protocol](research_directions/2026-10-14-mac-queueing/PROTOCOL.txt) · [Raw captures](research_directions/2026-10-14-mac-queueing/capture/) · [Independent outcome review](research_directions/2026-10-14-mac-queueing/reviews/independent-outcome-audit.txt) · [Reproduction](research_directions/2026-10-14-mac-queueing/REPRODUCE.txt).
+
+**Earlier calibration — 13 October 2026 UTC:** after the user confirmed that only the Mac is available, the native shared-memory GPU calibration **passed**. The actual M3 Max completed **nine fixed matrix jobs plus one separate warmup**, with zero discrepancies across **4,128,768 measured output entries**. Independent integer reconstruction verified every complete GPU and CPU output fingerprint. All **28 Python checks** and the native CPU-only preparation checks pass.
 
 The machine reports **96 GiB of unified memory**. The largest test used approximately **16 MiB of explicit matrix/reference storage**; CPU and GPU memory were counted within one pool. This was a short constructed-workload correctness check on battery power, not a production queue, sustained-performance comparison, AI answer-quality result, energy saving or independent-owner pooling result. The earlier failed language-model configuration remains unqualified.
 
@@ -51,7 +63,7 @@ Two misses contain the annotated answer inside an overly long passage span; two 
 
 The independent raw-response audit found no capture or protocol faults, and the dedicated model and server shut down cleanly. All **118 preparation tests** passed in normal and optimized Python; the frozen implementation was unchanged during collection. [Full report](research_directions/2026-10-11-mac-grounded-qa/REPORT.txt) · [Results](research_directions/2026-10-11-mac-grounded-qa/RESULTS.json) · [Independent audit](research_directions/2026-10-11-mac-grounded-qa/reviews/independent-outcome-audit.txt) · [Raw captures](research_directions/2026-10-11-mac-grounded-qa/capture/) · [Reproduction](research_directions/2026-10-11-mac-grounded-qa/REPRODUCE.txt).
 
-**Next step:** with the available Mac, freeze a controlled mixed-size request stream and compare serial execution with at most two operations in flight. Measure offer-to-validated-completion latency, all late/failed jobs, and shared-memory use without double counting. The native correctness harness now works; the nine short calibration jobs do not establish a useful concurrency policy. A real AI application must pass its own output-quality/resource checks before promoting this to an AI-serving or energy result. Independent-owner pooling remains a separate multi-resource question. The earlier public-trace audit and [operator intake contract](research_directions/2026-10-13-gpu-trace-readiness/OPERATOR_INTAKE.txt) remain available for any future cluster access.
+**Next step:** retain serial execution as the reference for the tested matrix workload. Before another scheduling or energy comparison, qualify a meaningful AI-infrastructure numerical task with an exact end-to-end oracle—fixed-corpus vector retrieval is one candidate. Use a separate development calibration and a newly frozen evaluation stream; do not tune the completed cohort until it passes. Energy measurement and independent-owner pooling remain separate gates. The earlier public-trace audit and [operator intake contract](research_directions/2026-10-13-gpu-trace-readiness/OPERATOR_INTAKE.txt) remain available for future cluster access.
 
 The entries below retain earlier results and the mathematical research history.
 

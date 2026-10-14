@@ -1,0 +1,79 @@
+Independent outcome audit — Mac queueing comparison
+Date: 2026-10-14 UTC
+Reviewer: independent Codex agent; no GPU execution by this reviewer.
+
+Result
+The recorded comparison is VALID and FAILS the prespecified material-improvement
+promotion gate. The frozen analyzer was executed once normally and once under -O
+against the complete capture; JSON outputs are byte-identical. There were no
+analysis repairs, outcome-driven amendments, passing-subset exclusions or extra
+physical repetitions. All frozen files remain unchanged.
+
+All 24 windows completed: 1,440 planned measured jobs were recorded, released,
+verified and on time by the 100 ms deadline. All 72 separate warmup jobs also passed.
+Independent integer output SHA256 agrees with both recorded GPU and CPU digests
+for every job. Full element counts, finite zero-error results, FIFO/order/timeline,
+active counts and explicit-memory accounting passed. The final analyzer reruns
+the same independently authored window checker that the runner uses as its stop
+check; these are repeated calculations on the same raw evidence, not independent
+physical or statistical replications.
+
+Primary rate-100 paired p95 results (cap2 / cap1)
+Round 1: cap1 p95 0.014805375000000009 s; cap2 p95 0.014715915999999996 s; ratio 0.99395766740119629.
+Round 2: cap1 p95 0.014518458000000012 s; cap2 p95 0.014928082999999995 s; ratio 1.0282140844434018.
+Round 3: cap1 p95 0.014818665999999994 s; cap2 p95 0.014765499999999987 s; ratio 0.99641222765935833.
+Round 4: cap1 p95 0.014745290999999997 s; cap2 p95 0.014820209000000029 s; ratio 1.0050808085103258.
+Median paired ratio: 1.0007465180848421.
+Required median: at most 0.90. This condition FAILS.
+Cap2 strictly faster in 2 of 4 primary pairs; required at least 3. This FAILS.
+Primary on-time counts: 240/240 for cap1 and 240/240 for cap2. No-loss condition PASSES.
+Low-rate median paired p95 ratio: 0.9438716920864435;
+required at most 1.10. This condition PASSES.
+
+Validity and secondary observations
+All twelve comparisons have four known, matching Battery Power observations.
+All producer-jitter gates pass; largest window p95 lateness is 0.007202292000000554 s.
+Replay confirms maximum active pipelines 1 for cap1 and 2 for cap2; maximum
+observed overlapping GPU command-buffer intervals is 1. These observations do not
+establish the absence of all possible hardware overlap or general kernel behavior.
+Maximum reconstructed sum of explicit per-job payload bounds across active slots
+is 17,830,912 bytes, below the declared cap. This is not whole-process peak memory.
+
+At rate 100, cap1 window p95 queue delays are about 2.54–3.10 ms and cap2 about
+0.023–0.027 ms. Queue-delay reduction did not produce the required improvement in
+complete verified p95 latency. These are secondary descriptive diagnostics, not
+a reason to relabel the failed primary gate or retune the captured cohort.
+
+Scope
+This is a bounded, constructed, deterministic mixed-matrix workload on one active
+Mac, with CPU validation and fingerprinting included in completion time. There is
+no population confidence interval, energy result, LLM-serving conclusion, proof
+of production scheduling superiority or independent-owner pooling result. A failed
+promotion gate is evidence against this specific optimization under the fixed
+conditions; it does not prove that concurrency is universally unhelpful.
+
+Reproduction without GPU work
+python3 -B analyze_results.py --capture capture --binary queue_benchmark --output NEW_ANALYSIS.json
+python3 -B -O analyze_results.py --capture capture --binary queue_benchmark --output NEW_ANALYSIS_OPTIMIZED.json
+
+The optional --binary argument rechecks the exact frozen local executable. Without
+it, data/source/freeze checks still run and binary_bytes_reverified is explicitly
+false. Both executions in this audit included the binary check.
+
+Recorded campaign monotonic duration: 92.230827750 s.
+
+SHA256 identities
+analyze_results.py
+246e823b277386bdab260351c0e10d83e599c90c6cad0d1c356f20e07cd92761
+test_analyze_results.py
+266263c26b92110470fdeb433da5a82b4558ab77df61a0618e46ac40f0b51591
+reviews/independent-review.txt
+f86badb8d5d58d77a1034fc34eb476379202c0d3e3a7ffdb003ecf8b00786787
+DESIGN_FREEZE.json
+28b783895010084c64967d132875d756a00494d874732ac65920f1c0934a85ed
+INDEPENDENT_ANALYSIS.json
+869c7b5021cee815d37855821b7d7ce956e478962f4358ba2ce9c27c2fc569fd
+INDEPENDENT_ANALYSIS_OPTIMIZED.json
+869c7b5021cee815d37855821b7d7ce956e478962f4358ba2ce9c27c2fc569fd
+capture/CAMPAIGN.json
+4cd3974b04207a7230c63ac63e912acef16aa52cb3fecd9d9b3b7d8af50e66e2

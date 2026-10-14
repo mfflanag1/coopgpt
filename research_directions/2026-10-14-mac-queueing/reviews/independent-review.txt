@@ -1,0 +1,124 @@
+Independent precollection review — fixed Mac queueing comparison
+Date: 2026-10-14 UTC
+Reviewer: independent Codex agent. No cross-model or human specialist approval.
+
+Decision: PASS for the bounded, explicitly artificial single-Mac comparison.
+No GPU comparison data were inspected or produced by this reviewer. This review
+is saved before collection and must remain unchanged afterwards; outcomes belong
+in a separate review file.
+
+Design and identification
+The treatment is one versus at most two complete CPU/GPU job pipelines, not two
+independently allocatable GPUs or proof of simultaneous device kernels. A fixed
+24-window sequence counterbalances within-pair order and varies rate order across
+rounds. This reduces simple order drift but leaves background activity and short
+single-machine sampling limitations. No population significance, general causal
+effect, AI-serving, energy, economic or owner-pooling claim follows. The 10% effect,
+100 ms deadline, 10 ms producer-jitter and low-load nonregression limits are
+prespecified engineering gates; they are not confidence bounds or empirically
+estimated universal thresholds. No production snapshot fields are required for
+this explicitly constructed workload.
+
+Coordinated omission and latency
+The producer has its own thread, waits for absolute nominal offers, and records
+enqueues while all worker slots are occupied. Queue locks are not held during
+GPU work, CPU reference, hashing or cleanup. Nominal-offer-to-validated-completion
+latency includes producer delay, queuing, allocation, preparation, GPU execution,
+CPU reference and hashes. Actual-enqueue latency is reported separately. Slots
+remain occupied through cleanup, while the completion endpoint is the documented
+validated timestamp. All 60 planned offers remain in each on-time denominator;
+missing, incorrect or late jobs cannot be counted as useful on-time completions.
+
+Native concurrency and resource review
+FIFO admission timestamps, ordinal and enqueue/admit/release events are assigned
+under one condition lock. Exactly cap worker threads execute; a worker obtains
+its next job only after finishing its previous one. Autoreleasepool cleanup occurs
+before the post-cleanup sample and before FIFO.finish releases the slot. Worker
+Job copies hold numeric data, not escaping Metal objects. Separate per-job MPS
+objects and buffers use a shared thread-safe command queue. FIFO means admission
+order; the review does not impose GPU submission or completion ordering on two
+workers. Every measured row retains both raw hardware timestamps and its declared
+host epoch without subtracting values across timebases. Warmups have a separate
+origin and finish before the measured epoch.
+
+A/B/C buffers, separate CPU C reference and hash scratch share one system-memory
+pool. Both requested lengths and actual buffer allocatedSize plus reference/scratch
+are checked. Per-active-slot payload is capped at 64 MiB, hence at most 128 MiB
+for two active slots. Reconstructed sums of per-job payload bounds over active
+slots are bounds for tracked explicit objects, not measured process peaks or
+framework-private allocations. Global Metal allocation samples are not turned
+into per-job deltas, free RAM, dedicated GPU memory or a production safety limit.
+
+Correctness and independent analyzer
+Small integer inputs and product sums justify finite exact equality for these
+specific matrices. The native checker scans all output entries and records
+independent GPU and CPU reference digests. The standalone analyzer imports no
+collector/native bridge/BLAS/prior reducer. It independently constructs the exact
+integer product using row-7/column-11 periodicity, expands full row-major Float32
+little-endian content with positive zero, and compares both hashes. This verifies
+content subject to ordinary SHA256 collision assumptions, not hardware attestation.
+
+The analyzer replays all locked FIFO events, checks sequence/timestamps/counts,
+whole-pipeline cap, row timelines, complete fixed dimensions/order, full comparison
+counts, memory accounting, warmup separation, optional GPU timestamp consistency,
+and source/plan/capture identities. It reports actual command-buffer interval
+overlap without calling that simultaneous kernels. It reconstructs all twelve
+paired contrasts, nearest-rank p95, ordinary median, planned and unrun denominators,
+power-source comparability and producer jitter. Deadline/gate comparisons use
+unrounded recorded arithmetic. Invalid comparisons cannot pass a promotion gate.
+
+The root runner now invokes this independently authored window checker before
+advancing, and the final analyzer reruns it from retained raw files. These are
+repeated uses of the same checker, not two independent implementations. Independence
+is from the native numerical implementation and collector, with a separately
+constructed integer oracle. Results from rerunning unchanged records are not new
+observations or a new physical replication.
+
+Finding and repair
+Initial runner computed native timeout before the before-window diagnostics,
+which could exceed the advertised campaign budget. Root repaired it to use one
+absolute monotonic deadline for diagnostics, recompute native allowance afterwards,
+and avoid launching after expiry. Workload/diagnostic budgeting is now explicitly
+distinguished from final failure-record serialization/cleanup. Interruptions and
+ordinary failures retain their records and planned unrun identities. This closes
+the material precollection finding; it does not promise crash-proof I/O durability.
+
+Checks actually executed by this reviewer
+1. Read protocol, plan, native source, final deadline/record handling and analyzer.
+2. Ran native --self-test before and after the targeted failed-row control was
+   added. Both CPU-only runs passed; the final run verifies golden/comparator/hash,
+   cap-one/cap-two FIFO, producer independence while workers are occupied, delayed
+   cleanup release and retention of fake failed job 17 without losing remaining
+   requests. This branch returns before creating a Metal device.
+3. Executed 13 standalone analyzer tests under ordinary and optimized (-O) Python;
+   all passed before physical data collection. Tests cover known integer hashes,
+   rank/median conventions, changed frozen gate/cohort, power ambiguity, strict
+   gate boundaries and jitter, actual two-slot overlap, independent GPU/CPU hash
+   mutation, count/status/order errors, FIFO/cap/cleanup violations, missing-job
+   denominators, late-but-correct requests, complete synthetic campaign metrics,
+   missing windows, source mutation and duplicate JSON.
+4. Personally executed the then-current 29 root runner/inventory tests; all passed.
+   Root's subsequent small devices=None preservation repair and tests are root-
+   verified; this review does not claim to have executed that later extra fixture.
+
+No GPU work, cloud call, model download, energy sampler, production operation,
+canonical repository edit or external outreach was performed by this reviewer.
+Known cross-model quota failure remains in effect; no retry was attempted.
+
+Reviewed SHA256 identities
+PROTOCOL.txt
+22c3ef5d2414052ebe7e09a6240ec8aeea99afb5b7dfde8889c4fe349a1c8bd1
+PLAN.json
+00512ff9efbc9e2089da9ae102d637b534dd469e069f8f6e544f4c0eead21954
+queue_benchmark.swift
+df7cbb4ba39be80c48175042472d68d003137ea3da210937259bdc2f1c6d754c
+queue_benchmark
+426b4a5a6a49e1af233e01835d4aa03b339d9b3fcfca0a8ff99a554d2acad2ed
+run_campaign.py
+536dac8636620e62c5c617a779b48865b6beafe8c3f85101776dd19cf31c83cd
+capture_inventory.py
+df6b87356bb8f91a9fc33e27b8aa584a790b6202c8cb99b560b97b926a9fe3a6
+analyze_results.py
+246e823b277386bdab260351c0e10d83e599c90c6cad0d1c356f20e07cd92761
+test_analyze_results.py
+266263c26b92110470fdeb433da5a82b4558ab77df61a0618e46ac40f0b51591

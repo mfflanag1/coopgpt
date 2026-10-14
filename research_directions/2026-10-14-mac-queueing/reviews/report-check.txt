@@ -1,0 +1,44 @@
+Final report evidence check — 2026-10-14T00:46:16.117064+00:00
+Scope: REPORT.txt, ROOT_RECOUNT.json, recount_results.py, INDEPENDENT_ANALYSIS.json,
+and the latest-result section of the proposed repository README. No new physical
+workload or changes to frozen artifacts. Reviewer previously implemented native
+code; this bounded report check independently recounts saved numerical evidence.
+
+Disposition: PASS. No material arithmetic error or overstatement found.
+
+Direct read-only recomputation from all 24 RAW.json files confirmed:
+- 1,440 measured jobs and 72 warmups; all measured jobs on time at 100 ms.
+- 660,602,880 measured and 33,030,144 warmup output entries.
+- Full GPU and CPU output hashes match independently rebuilt integer dot products
+  for all three matrix sizes; every row records zero mismatches/nonfinite values.
+- All 108 comparisons agree: 24 window identities, 24 p95 latencies, 24 p95
+  producer delays, 24 on-time counts, and 12 paired p95 ratios.
+- Median paired p95 ratios are 0.9438716920864435, 0.9880781778339867,
+  1.000746518084842 at rates 10,40,100 respectively. The primary result is
+  0.0746518% higher latency, rounding to the reported 0.075%; only 2/4 primary
+  pairs favor cap2. Validity passes but both primary improvement requirements fail.
+- Sweeping row admission/resource-release boundaries independently of event
+  active_count reproduces occupancy: two pipelines for 0.11417038000000018 s
+  out of 2.414764334 s across high-rate cap2 windows, or 4.728013346581099%.
+  No low-rate cap2 window reached two; one rate40 and four rate100 windows did.
+- All 1,512 positive recorded GPU intervals are present and none overlap.
+- Primary queue-delay p95 ranges are 2.537417–3.097625 ms for cap1 and
+  0.023416–0.027167 ms for cap2. This secondary gain does not alter the gate.
+- Maximum tracked active allocation sum is 17,830,912 bytes; largest window p95
+  producer lateness is 7.202292 ms. The report labels these quantities correctly.
+- All 48 before/after power observations report Battery Power. Hardware inventory
+  matches Apple M3 Max, 30 GPU cores, 14 logical CPUs, 96 GiB unified RAM.
+
+Frozen source and exact binary hashes rechecked unchanged. Normal/optimized final
+analysis files are byte-identical. Both final preparation logs record 43 passing
+tests. The observed 92.2308277497068-second collection duration matches the report.
+The report and README retain the constructed-workload, limited-overlap, no-energy,
+no-serving-generalization, no-pooling and cross-model-unavailability limitations.
+The 108 figure is a number of recount comparisons, not overlapping jobs or tests.
+
+Reviewed artifact SHA256:
+REPORT.txt: 27955e5f8aac4dd2013ab3c5eed7d9e573615c2e79583b39dbd08af570294eb4
+ROOT_RECOUNT.json: bbda8b9cd8cb0112af51e2f09ae67b718671e13d9625821d8a1172b20ab6df04
+recount_results.py: 1a9194cff559bdf8450e5f4a6c642eafab425ac28a28ab4a177ffac70b2dc0b1
+INDEPENDENT_ANALYSIS.json: 869c7b5021cee815d37855821b7d7ce956e478962f4358ba2ce9c27c2fc569fd
+Proposed README snapshot: 1ba97de2432b4323d8aed2867fbccdbeabfd9201572be85925270890ceebeef8

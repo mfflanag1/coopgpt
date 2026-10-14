@@ -1,0 +1,35 @@
+Read-only reproduction of the saved Mac queueing comparison
+
+From this package directory, using Python 3 standard library:
+  python3 -B -m unittest -v test_run_campaign test_capture_inventory test_analyze_results
+  python3 -B -O -m unittest -v test_run_campaign test_capture_inventory test_analyze_results
+  python3 -B analyze_results.py --capture capture --output /tmp/coop-queueing-new-audit.json
+
+Choose a previously unused output filename. The analyzer refuses to overwrite
+results. It independently reconstructs all exact output hashes using integer
+arithmetic, replays FIFO/active-count events, checks the frozen inputs and
+recomputes every prespecified window and paired gate. A valid comparison may
+fail the improvement gate; audit exit zero means valid evidence, not success
+for the configuration. No physical GPU execution is needed for this audit.
+
+Native build and CPU-only self-test, on a Mac with existing Apple Command Line
+Tools (no package installation):
+  /Library/Developer/CommandLineTools/usr/bin/swiftc -swift-version 5 -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -O -module-cache-path /tmp/coop-queueing-rebuild-cache queue_benchmark.swift -o /tmp/coop-queueing-rebuilt
+  /tmp/coop-queueing-rebuilt --self-test
+
+The rebuild is useful for checking source portability; its binary hash may differ
+with toolchain/path/link metadata. DESIGN_FREEZE.json records the exact binary
+used for the saved experiment. The binary and module cache are local build
+artifacts and are ignored by Git. To audit with that exact local executable, add
+--binary /absolute/path/to/queue_benchmark to the analyzer command. Without it,
+source and captured freeze hashes are verified; binary identity is recorded
+rather than reexecuted or assumed independently reproduced.
+
+A new physical experiment is a new cohort: copy the source into a fresh directory,
+review/freeze its inputs and executable before collecting, and keep the archived
+freeze/captures unchanged. The collection command used for this original cohort
+is recorded in COLLECTION_COMMAND.txt and capture EXECUTION.json files. It has
+24 windows, three serial warmups plus 60 measured jobs per window, a 90-second
+native watchdog and a shared 600-second work budget. It starts no model server,
+energy sampler or paid service. It must never overwrite or silently extend this
+cohort. Follow PROTOCOL.txt rather than tuning on the observed results.

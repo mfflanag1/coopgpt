@@ -1,0 +1,135 @@
+Mac shared-memory queueing comparison — 14 October 2026 UTC
+
+RESULT: valid completed comparison; the two-slot configuration did not pass the
+prespecified material-improvement gate. No further physical windows were run.
+
+All 24 fixed windows completed, covering 1,440 measured jobs and 72 separate
+warmups. Every measured and warmup output passed exact full-array checks and
+independent integer SHA256 reconstruction. All 1,440 measured jobs met the
+100 ms nominal-offer-to-validated-completion deadline. There were no failed,
+missing, discarded or rerun jobs. A second implementation reproduced 108 count,
+timing and paired-ratio comparisons with zero discrepancies.
+
+At the primary rate of 100 requests/second, the median paired p95 ratio
+(two slots / one slot) was 1.000746518084842: about 0.075% higher latency,
+compared with the required ratio <=0.90. Only two of four pairs favored two
+slots; at least three were required. Equal deadline success and the low-load
+regression check passed. Thus validity passed and the improvement gate failed.
+
+Main contrasts (four paired windows per row; 240 jobs per configuration/rate)
+Rate /s   Median paired p95 ratio   Favorable pairs   On time, cap1 / cap2
+     10               0.943871692     4/4             240/240 / 240/240
+     40               0.988078178     4/4             240/240 / 240/240
+    100               1.000746518     2/4             240/240 / 240/240
+
+Every pair (p95 in milliseconds; quantile uses nearest rank, index 57 of 60)
+Rate /s Round  One slot    Two slots   Two/one ratio
+     10     1   33.62950     31.63779   0.940774974
+     10     2   31.90054     31.85525   0.998580212
+     10     3   33.02000     30.82696   0.933584434
+     10     4   32.88921     31.14504   0.946968410
+     40     1   23.11458     22.83571   0.987935106
+     40     2   22.82713     22.55825   0.988221250
+     40     3   23.85042     23.23046   0.974006366
+     40     4   22.90279     22.74750   0.993219517
+    100     1   14.80538     14.71592   0.993957667
+    100     2   14.51846     14.92808   1.028214084
+    100     3   14.81867     14.76550   0.996412228
+    100     4   14.74529     14.82021   1.005080809
+
+Interpretation
+This short, artificial numerical workload supplies no material scheduling gain
+under its fixed gate. Every serial job already met the deadline, so the useful
+on-time count could not improve. All low-rate two-slot windows actually reached
+only one active pipeline. At rate 40, just one two-slot window reached two active
+pipelines; at rate 100 all four did. Across those four high-rate two-slot windows,
+two pipelines were active for 0.11417 seconds, about 4.73% of their combined
+measured window time. Occupancy is a post-collection descriptive recount, not
+an additional promotion criterion. This workload offers limited overlap.
+
+A secondary metric does improve: at rate 100, per-window p95 FIFO queue delay
+was 2.54-3.10 ms with one slot and 0.023-0.027 ms with two. That did not translate
+into the required improvement in full validated-completion latency. Queue time
+alone is not the primary endpoint and cannot override the failed gate.
+
+The per-window p95 was lower at higher offered rates for both configurations.
+This is descriptive evidence; the study does not identify power management,
+wakeup effects or any other cause. Do not infer that higher load generally
+improves latency, or promote small low-rate differences as the primary result.
+The timing streams overlap two complete pipelines, but the recorded GPU command
+execution intervals never overlap. A shared Metal command queue and multiple
+workers do not establish concurrent GPU kernels. CPU preparation, the exact
+reference, full output comparison and hashing are part of each checked request.
+This contract is more expensive than GPU-only completion and is not a serving
+latency or end-user application-quality benchmark.
+
+Design and hardware
+The observed Mac is an Apple M3 Max with 30 GPU cores, 14 logical CPU cores and
+96 GiB of unified RAM. Hardware totals are not unreserved placement capacity.
+Each window offered dimensions 256,512,1024 repeated 20 times, independently of
+worker availability. Admission was FIFO; slots remained active through resource
+cleanup. The fixed rate/order scheme reversed configuration order in alternate
+rounds. Nominal offers, actual enqueues and completion timestamps are all saved.
+Four paired rounds on an active desktop do not support population confidence
+intervals, causal generalization or claims about all arrival rates/workloads.
+
+Every before/after power reading was Battery Power. All 12 paired comparisons
+had consistent known power sources. No privileged power changes were made.
+The largest window p95 producer delay was 7.202292 ms, within the prespecified
+10 ms limit; this delay is INCLUDED in nominal-offer latency. Thermal diagnostics
+are saved but are not temperatures or an outcome-based exclusion filter.
+
+The maximum conservative active sum of tracked matrix/reference/hash storage
+was 17,830,912 bytes (17.00488 MiB), below the 128 MiB two-slot cap.
+This is an event-based explicit-storage bound, not a measured process peak.
+Global Metal allocation samples are retained separately, never counted once per
+CPU and again per GPU, and never treated as per-job deltas or free RAM. Metal/
+Accelerate workspaces, allocator metadata and cached resources remain outside
+the explicit cap. No energy sampler ran and no energy savings are established.
+
+Collection and verification
+Frozen at 2026-10-14T00:39:38.756427+00:00.
+Collection: 2026-10-14T00:39:42.126665+00:00 to 2026-10-14T00:41:14.359853+00:00.
+Elapsed: 92.230828 seconds, within the 600-second work budget.
+All frozen sources and the exact executable hash remained unchanged. The final
+independent analysis passes every correctness, timestamp, event, FIFO, memory,
+power-pair and jitter validity check. The native comparisons covered
+660,602,880 measured and 33,030,144 warmup
+output entries; each complete GPU and CPU output hash also matches the independent
+integer oracle. These repeat three deterministic matrix cases; they are not
+millions of independent or diverse numerical-accuracy challenges. Hash verification is subject to the usual collision assumption;
+it is not hardware attestation.
+
+All 43 preparation tests passed in ordinary and optimized Python before data.
+Native build and CPU-only tests passed. Final independent normal/optimized audits
+are identical. Predata review found and repaired deadline accounting, interrupted
+record preservation, continuation without independent validation and unavailable
+inventory handling. No physical data were collected under the flawed runner.
+Cross-model review remains unavailable under the documented Fable/Opus quota
+block; separate Codex reviews and executed checks are recorded. There is no
+human specialist approval, new algorithm, energy gain or independent-owner
+pooling result here. Earlier language-model qualification failures are unchanged.
+
+Next decision
+Retain serial execution as the reference for this workload. Do not start an
+energy comparison to substantiate a concurrency benefit that was not observed.
+The useful next application gate is a fixed, meaningful AI-infrastructure
+numerical task with an exact correctness oracle: dense vector retrieval against
+a fixed corpus is one candidate. First verify end-to-end answers and memory
+accounting, then use a separate development calibration to choose workload size
+and an independently frozen evaluation stream. Energy and economic/ownership
+claims would require their own measurements and model. No new cohort is launched
+by this report; this negative fixed comparison remains archived unchanged.
+
+Evidence and reproduction
+PROTOCOL.txt / PLAN.json / DESIGN_FREEZE.json: prespecified contract and hashes.
+capture/: all 24 raw windows, execution/power metadata and hardware inventory.
+INDEPENDENT_ANALYSIS.json: complete frozen audit and gate computation.
+ROOT_RECOUNT.json / recount_results.py: separate post-collection recount.
+reviews/: predata reviews, outcome review and cross-model limitation.
+REPRODUCE.txt / VERIFICATION.txt / BUILD_NOTES.txt: commands and checks.
+
+Separate recount command after the saved main analysis is present:
+  python3 -B recount_results.py --output /tmp/coop-queueing-new-recount.json
+Use a fresh output filename. This recount was added after data collection and
+does not set or change the frozen promotion criteria.

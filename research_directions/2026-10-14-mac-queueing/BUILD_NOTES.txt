@@ -1,0 +1,95 @@
+Bounded native Mac queueing experiment; implementation worker performed no GPU runs.
+Source adapts verified calibration SHA256:
+506cce9820a29f5c3ad5bc50f133932cf5c84e3e9a853260329f6940a14479be
+from game-theory/coopgpt/research_directions/2026-10-13-mac-unified-calibration/calibrate.swift.
+
+Build (Apple Foundation/Metal/MPS/Accelerate/CryptoKit; no packages):
+/Library/Developer/CommandLineTools/usr/bin/swiftc -swift-version 5 -sdk /Library/Developer/CommandLineTools/SDKs/MacOSX.sdk -O -module-cache-path /tmp/coop-mac-queueing/swift-module-cache /tmp/coop-mac-queueing/queue_benchmark.swift -o /tmp/coop-mac-queueing/queue_benchmark
+
+Swift 5 language mode is explicit: these are manually synchronized Foundation
+threads with NSCondition/DispatchGroup, rather than Swift concurrency actors.
+The compiler's legacy cblas_sgemm deprecation warning is retained; dimensions fit
+the supported Int32 interface. build-initial.log: compiler exit0.
+self-test-initial.log: CPU-only self-test exit0.
+build-final.log and self-test-final.log: failure-retention revision passed.
+build-isolated-cache.log and self-test-isolated-cache.log: final source rebuilt
+using queueing-only module cache; compilation and CPU-only self-test exit0.
+Final source SHA256: df7cbb4ba39be80c48175042472d68d003137ea3da210937259bdc2f1c6d754c
+Final binary SHA256: 426b4a5a6a49e1af233e01835d4aa03b339d9b3fcfca0a8ff99a554d2acad2ed
+
+CPU-only verification:
+/tmp/coop-mac-queueing/queue_benchmark --self-test
+
+Collection invocation, ONLY after root protocol freeze/review and inside its 90-second watchdog:
+/tmp/coop-mac-queueing/queue_benchmark --concurrency 1 --rate 10 --output /absolute/NEW.json
+Allowed concurrency values: 1, 2. Allowed rate values: 10, 40, 100. Exactly 60 jobs:
+N = 256, 512, 1024 repeated 20 times; fixed planned offers i/rate and deadlines i/rate+0.100.
+No workload adaptation, skipped failures, retries, external servers, or downloads.
+
+Correctness uses every output entry against independent Accelerate cblas_sgemm,
+fixed literal 4x4 golden, exact integer bounds 15*N<2^24, padded-row initialization,
+and canonical SHA256 from independent GPU/CPU buffers. Hash encoding is row-major
+Float32 little-endian bitPattern, padding excluded, both signed zeros normalized
+positive, other bitPatterns unchanged. CPU test covers last-entry corruption,
+NaN, infinity, padding, signed zero, golden hash.
+
+Queue uses one NSCondition-guarded FIFO and exactly cap worker Threads. Producer
+is a separate Thread whose wait loop rechecks DispatchTime.uptimeNanoseconds
+against epoch+plannedoffer, never worker capacity. Late wakeups enqueue all due
+requests without changing planned times. Producer and workers have default QoS.
+One shared MTLCommandQueue; each job owns matrices/kernel/command buffer. FIFO
+constrains admission order; concurrent encoding can produce a different command
+submission or completion order. The experiment does not constrain those. Apple
+documents command queue thread safety here:
+https://developer.apple.com/documentation/Metal/MTLCommandQueue
+Local SDK checked: Foundation NSThread.h, NSLock.h; Metal MTLCommandQueue.h;
+MPSMatrixMultiplication and MPSCore MPSMatrix descriptors; MTLResource shared
+coherence at completed command boundaries; GPU timestamp/currentAllocatedSize APIs.
+
+Workers hold their slot through allocation, fill, encode, commit/wait, CPUoracle,
+full comparator, both hashes, and autoreleasepool teardown. Resource release is
+timestamped under the same lock as active-count decrement and event append.
+No inference about GPU kernel parallelism is justified by a cap=2 pipeline.
+Accelerate/Metal may use internal worker threads; these are not capped or measured.
+
+Queue CPU self-test uses the same producer/FIFO/execution functions for cap=1 and cap=2.
+First cap jobs block waiting for producer completion; all 60 are therefore offered
+while capacity is occupied. It verifies full FIFO admission sequence, cap reached
+without exceeding it, all 180 events, active/queue counts by independent replay,
+and release after simulated cleanup occurring after validation. This test calls
+no Metal API. Fake job 17 fails deliberately; the test verifies that the failed
+row is retained and all remaining jobs still admit and release. Normal windows run correctnessSelfTest only; queue test is preflight.
+
+Schema version 1; protocol_id mac-mps-queueing-v1. jobs always contains 60 descriptions,
+including not_offered jobs if device/warmup setup fails. warmups records attempted
+serial N = 256/512/1024 before measured epoch; a failed warmup prevents all offers.
+Measured job timestamps are seconds relative to epoch_uptime_ns. Warmup timestamps
+use warmup_epoch_uptime_ns; warmup planned_offer_s/deadline_s=0 are placeholders,
+not measured deadlines. Raw hardware GPU times use Metal's separate timestamp
+clock and are not subtracted from the experiment epoch.
+
+Events have sequence,job_id,kind(enqueue/admit/release),time_s,active_count,
+queue_count. Sequence and counts are recorded under lock AFTER each transition;
+admission_sequence is zero-based. The row's enqueue/admission/resource_release
+times equal the corresponding locked event timestamp. Other timestamps are
+worker-local monotonic observations. validated_completion_s follows CPU checks
+and both hashes; failed_at_s records ordinary failure. A command error returns a
+failed row and releases the slot; remaining fixed requests are still attempted.
+
+Per-job matrix buffer + CPU reference + hash row scratch is capped at 64 MiB; two active
+slots bound those explicit allocations at 128 MiB. Largest normal job needs 16 MiB + 
+4KiB. Memory metadata/framework internals are outside this explicit accounting.
+Buffer mathematical payload, padded length and allocatedSize are separate fields.
+Global currentAllocatedSize readings can include another active job/framework
+caches; never interpret them as per-job deltas, peaks, or allocatable capacity.
+device_allocated_after_release_sample is sampled after autoreleasepool cleanup,
+before the locked logical slot-release event. Advisory recommended working-set
+size is not free RAM. Framework resources may remain cached after slot release.
+
+Output publication uses same-directory exclusive mode-0600 O_NOFOLLOW temporary file,
+fsync and exclusive atomic hard-link to NEW.json. Existing files/dangling symlinks
+are refused before device setup and at publication. No path text executes shell.
+Process kill/watchdog produces no final JSON; root must preserve stdout/stderr and
+mark window incomplete. Ordinary failures preserve all request descriptions and
+completed/failed rows in final JSON. Root independent auditor must verify hashes,
+counts, timestamp order, FIFO events and caps before treating window as valid.
