@@ -1,0 +1,29 @@
+**Provisional verdict: no consequential findings in reviewed scope.** The most important check — direct coordinate derivatives of the mixed-owner two-input rule, including role switches, clipping and T=0 — holds up under independent re-derivation; I found no counterexample.
+
+## Findings
+
+**F1 (verified, no defect) — Two-input lemma, PROOF.txt 41–70.**
+- Coverage: ∑_S s_i ≥ v(S) trivially; ∑_S min(l_i,T) ≥ min(∑_S l_i, T) ≥ min(∑_S l_i, ∑_S s_i) since T ≥ ∑_S s_i. Weights p∈[0,½]. Correct.
+- Short-coordinate case: ρ′ = −(∑_{l_h<T} l_h)/T² ∈ [−ρ/T, 0] (own d_i included), so ((1−p)x)′ ≥ 1−p(1+ρ); (1+ρ)e^{1−ρ}/2 has derivative −ρe^{1−ρ}/2 < 0 and equals 1 at ρ=1. Correct. Uses x ≤ T, which holds.
+- Long-coordinate case: (pd)′ = p(1−d/T) ≥ 0 for x<T, constant beyond. Correct.
+- Tie: at A=B all l_h ≤ T so ρ=1, p=½, payment (a_i+b_i)/2 from both sides; limit ρ→1 as A↑B is continuous. Spot check (1,0.5),(0,1) with a_1 ∈ {0.8,1,1.4,1.5,1.6} gives 0.720, 0.848, 0.981, 1.0, 1.0 — monotone through the role switch.
+- T=0: payments bounded by own holdings, so continuous at T↓0.
+
+**F2 (verified) — Star decomposition, 79–106.** Fractional-knapsack identity (1) is standard and valid under ties (Δ_k=0 kills tie-dependent prefixes) and zero capacities. Component coverage/budget sum with Δ_k ≥ 0. Own increase of g_ij raises H_{i,k} weakly for all k, others fixed → lemma applies per component. Attainment profile (1,0),(1,0),(0,1): ρ=2, total 1+1/(2e). Correct.
+
+**F3 (verified) — 9/8 certificate, 120–134.** Coalition values at a,b,c recomputed; 2Y(a)−y_3(a) ≥ 4, 2Y(b)−y_0(b) ≥ 4, y_0(c)+y_3(c) ≥ 1, monotone transitions c→a (owner 3), c→b (owner 0). Yields 8C ≥ 9. verify_lower_certificate's coefficient cancellation matches (C coefficient 8, rhs 9).
+
+**F4 (verified) — Minimax reduction 135–140, singleton theorem 153–166, embedding 168–181.** All three arguments check: m=1 containment plus prefixwise composition; proportional splitting respects private rows and weakly reduces public-row use; weak duality F(c) ≤ w·c with w fixed makes G=F on the embedded domain and preserves order. Minor: "every column gains one positive entry" assumes p_j>0 (not consequential).
+
+**F5 (verified) — verify.py enclosures.** Tail bound next_term/(1−u/(terms+2)) is a valid geometric majorant for u<terms+2; exp(−u) ∈ [1/(total+tail), 1/total]. Expr encodes z_i = s_i + ½e^{−(ρ−1)}(d_i−s_i) correctly; budget expression t+(t/2)e^{−1} correct. Oracle enumerates all box-knapsack vertices independently of `layers`. Reported counts (960; 729/256; 512/256; 2916/1024/2304/1024) are consistent with the loops. Fails closed on unresolved intervals.
+
+**Minor (low):** Lemma text could state explicitly that the ρ′ bound includes the deviating owner's own clipped term and that x ≤ T is used; both are true but implicit.
+
+## Scope limitations
+- Could not execute verify.py; counts checked analytically.
+- The referenced exclusive-pool supplement (hist:exponential) and the "established 2T ceiling" are not in the packet; not audited.
+- Finite grids remain diagnostics; the continuous proof is what I checked by hand.
+- Novelty, literature claims, and physical implementation not assessed.
+
+## Verdict
+**No consequential findings in reviewed scope.** The mixed-owner lemma, decomposition, 9/8 witness, reduction, singleton theorem and embedding are mathematically sound as stated; the live gap [9/8, 1+1/(2e)] is an honest, unresolved two-input problem.

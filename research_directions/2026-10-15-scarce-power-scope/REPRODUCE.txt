@@ -1,0 +1,20 @@
+From this directory, using Python 3 standard library only:
+
+  python3 verify.py --output /tmp/coopgpt-power-scope-check.json
+  python3 -O verify.py --output /tmp/coopgpt-power-scope-check-optimized.json
+
+Both commands must finish with status PASS and identical JSON values.
+No network, scipy, solver license, GPU, model download or paid source is needed.
+
+Checks are exact Fraction computations, with rational lower/upper enclosures for
+exp(-u) obtained by bounding the positive Taylor tail of exp(u) and taking
+reciprocals. Symbolically identical exponential terms cancel before interval
+evaluation. An unresolved interval raises RuntimeError; it never counts as pass.
+Essential guards do not depend on Python assert and survive python -O.
+
+The oracle enumerates box/one-budget LP vertices directly, independently of the
+prefix decomposition. The lower certificate combines explicit coalition,
+actual-owner report-transition and budget rows and checks exact cancellation.
+The greedy-order obstruction enumerates all six orders and uses exact primal
+and dual witnesses for each profile's optimum. These are bounded reproducible
+certificates, not a replacement for the all-real-profile proof in PROOF.txt.
