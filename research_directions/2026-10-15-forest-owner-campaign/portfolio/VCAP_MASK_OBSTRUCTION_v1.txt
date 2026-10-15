@@ -1,0 +1,130 @@
+MAXIMUM-COALITION-MARGINAL CAPS DO NOT ESCAPE THE sqrt(2n) MASK BARRIER
+15 October 2026. Candidate theorem; independent review pending.
+Companion to FINITE_SUPPORT_MASK_OBSTRUCTION_v2.txt, left unchanged.
+
+SCOPE
+Fix n owners, a technology F, and ANY report-independent law on masks B.
+At x_B=sum_(i in B)b_i select a common nonnegative GLOBAL linear support ell_B,
+using only F, B and the open reports. Selection may randomize. Put T=F(sum b_i)
+and define the maximum coalition marginal
+ V_i(b)=max_{S subset[N]\{i}} [F(b_i+sum_(j in S)b_j)-F(sum_(j in S)b_j)].
+Consider the strengthened mask architecture
+ Y_i(B)=min{ell_B(b_i),V_i(b)} if i notin B,
+ Y_i(B)=F(x_B)-F(x_B-b_i) if i in B,
+followed by averaging over the fixed mask/support law.
+
+For n>=5 let m be the largest positive integer with m(m+7)/2<=n-1,
+let a=1-(2m+1)/n, A0=n-2, and define
+ L'_n=(am)A0/(am+A0).
+There is ONE fixed continuous finite nonnegative min-linear technology F on
+nm+n^2 resources for which every rule in this architecture has worst-profile
+total-payment factor at least L'_n=(sqrt(2)-o(1))sqrt(n).
+Hence this improvement to the cap cannot improve the leading sqrt(2n) worst
+case over general finite min-linear technologies. It may help restricted
+technologies or constants. This is NOT an unrestricted-mechanism lower bound.
+
+ELIGIBILITY OF THE IMPROVED CAP
+First, 0<=V_i<=T and V_i is nondecreasing in owner i's whole bundle: every
+off aggregate in its defining maximum excludes b_i. A closed selected support
+also excludes b_i; the minimum with V_i is thus own-bundle monotone. Open
+endpoint terms have the same property.
+
+For completeness, simultaneously truncating any covering vector z at V_i
+preserves coverage. For a coalition S let C={i in S:z_i>V_i}, R=S\C.
+Coverage gives sum_(i in R) z_i>=v(R). Enumerating the elements of C and
+telescoping coalition increments gives v(S)-v(R)<=sum_(i in C)V_i.
+Thus sum_(i in S)min{z_i,V_i}>=v(S).
+The capped selected-support vector min{ell_B(b_i),T} covers all coalitions.
+Since V_i<=T, replacing its cap by V_i preserves coverage. For each open i,
+the endpoint marginal is >=ell_B(b_i), by touching and majorization, and
+is <=V_i by definition. Replacing its capped-support coordinate by that
+endpoint therefore preserves coverage. The mask vector is eligible pointwise;
+fixed nonnegative averaging preserves all requirements.
+
+FIXED TECHNOLOGY AND REGULAR PROFILES
+Use the same n,m and the regular construction of the companion v2 proof.
+Explicitly, put A=n^2, epsilon=1/(100n^6), t=1+(n-1)epsilon. For k=1,...,m
+and 1<=s<n let a_(s,k)=(n-s)/n^2 if s<k, and 0 otherwise. Define
+ f_k(x)=min{(sum x_j)/n, w^(S,k).x: empty!=S!=[n]},
+ where w^(S,k)_j=n^2/|S|^2 for j in S and a_(|S|,k) otherwise.
+On separate resource blocks take
+ F(x^(1),...,x^(m),z)=sum_k f_k(x^(k))+min_(1<=e<=n^2)z_e.
+This sum is a single finite min-linear, monotone, concave homogeneous function.
+
+At P_k, owner i reports e_i+epsilon sum_(j!=i)e_j in block k and zero
+in the other blocks, including the new Leontief block. Then T=t.
+The companion proof establishes by explicit strict inequalities that at every
+proper nonempty mask, whose closed set is C and l=|C|, the unique active-block
+support is w^(C,k). This remains true in the sum technology: restricting any
+global support to the active block gives a support to f_k at an interior point.
+It therefore has that unique gradient. Closed support prices exceed T.
+At the full mask the baseline gradient is uniquely selected.
+
+Writing r=n-l, let v_k(l)=F(x_B); symmetry makes this depend only on l.
+The exact values, including both endpoints, are
+ v_k(0)=t; v_k(n)=0;
+ v_k(l)=n^2 r epsilon/l + a_(l,k)r[1+(r-1)epsilon], 1<=l<n.
+At the threshold l=k-1 the endpoint marginal obeys
+ Delta_k=v_k(k-1)-v_k(k)
+ >=(n-k+1)^2/n^2 -n^3 epsilon.
+In particular, each owner's V_i is at least this threshold marginal: choose
+a coalition of n-k other owners omitting i, then add i. Such a coalition
+exists for every i, and all owners are symmetric at P_k. Therefore
+ V_i/T >=1-2(k-1)/n-[(n-1)+n^3]epsilon
+ >=1-(2m+1)/n=a>0.
+Here 1/(1+u)>=1-u bounds the normalization, and
+[(n-1)+n^3]epsilon<1/n. The choice of m implies 2m+1<n for n>=5.
+Since all closed raw prices exceed T>=V_i, each closed payment equals V_i
+and is at least aT. This is the only change to the regular-profile budget.
+
+At l=k-1 the TOTAL open endpoint payment, normalized by T, is at least
+ D=n-3m-1, as in the companion proof: r Delta_k/t>=D, using
+r^3/n^2>=n-3l and (n^4+n^2)epsilon<1. All other payments are nonnegative.
+Let S0=m(m+1)/2 and pi_k=(m-k+1)/S0. For 0<=l<m, the weighted normalized
+budget over the regular profiles is at least
+ a l+D(m-l)/S0 >=am,
+because S0<=D and a<=1. For m<=l<n the closed payments alone give >=al>=am.
+Thus EVERY nonempty mask, including the full mask, has regular-profile
+weighted budget at least am, independent of its labels or support choices.
+
+NEW ALL-EMPTY-MASK ANCHORS WITH PIVOTAL OWNERS
+Label the new Leontief block cyclically by e in Z/(n^2 Z). For each shift
+j define the scarce window S_j={j,j+1,...,j+n-1}. There are n^2 anchors Q_j.
+At Q_j owner i, i=1,...,n, holds one unit of scarce resource j+i-1, zero
+of every other scarce resource, and TWO units of every resource outside S_j.
+All its other technology blocks are zero. Grand production is exactly1:
+scarce aggregate coordinates equal1 and abundant coordinates equal2n.
+Removing any owner removes its unique scarce resource, so grand production
+becomes zero. Thus U_i=1, V_i=1=T for EVERY owner. All-profile ownership is
+unchanged; these are different reports of the same n owners.
+
+At the empty mask, restrict the selected global support w to the Leontief
+block. Its coordinates are nonnegative and s=sum_e w_e>=1 because it must
+majorize min_e z_e at z=1. This support law is independent of all reports.
+Each coordinate belongs to exactly n of the n^2 scarce windows. Consequently
+the uniform mean scarce weight w(S_j) is s/n. Markov's inequality gives
+ Pr_j(w(S_j)>s/2)<=2/n.
+On the complementary fraction at least1-2/n of anchors, abundant weight is
+at least s/2>=1/2. Every owner therefore has raw support price at least1,
+and its V_i cap is exactly1. All n owners are paid1 on those anchors.
+Hence uniform average normalized empty-mask budget is at least n-2=A0.
+The argument holds for EVERY support realization, so arbitrary randomization
+does not evade it. The anchor family is fixed in advance and has n^2 profiles.
+
+COMBINATION AND ASYMPTOTICS
+Mix the regular profile distribution with total weight A0/(A0+am), and the
+uniform anchor distribution with weight am/(A0+am). Every nonempty mask has
+weighted budget at least A0 am/(A0+am); the empty mask has the same bound.
+Average over any fixed mask and randomized support law. Some profile in this
+single fixed technology and fixed-owner domain has factor at least L'_n.
+Finally m=sqrt(2n)+O(1), am=m-O(1), and A0=n-2, so
+ L'_n=(sqrt(2)-o(1))sqrt(n).
+
+CONTRIBUTION BOUNDARY
+The stronger cap and its eligibility are separate constructive observations.
+This obstruction shows that combining it with any fixed-mask common-support/
+endpoint architecture still cannot achieve o(sqrt n) in general. It does not
+exclude report-dependent mask laws with separately verified incentives,
+owner-specific incompatible support prices, or another payment architecture.
+It makes no priority claim, does not settle the unrestricted owner-count gap,
+and imposes no obstacle on small-rank/rank-two technology classes.

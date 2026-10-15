@@ -1,0 +1,108 @@
+All weighted double stars: positive decomposition into three-input components
+15 October 2026. Candidate structural lemma; historical novelty unconfirmed.
+
+Fix centers u,v of capacities U,V, central edge profit a>0, leaves at u of
+capacities s_j and edge profits b_j>0, and leaves at v of capacities t_k and
+edge profits c_k>0. Endpoint consumption coefficients are initially one.
+Define threshold capacities
+  B(theta)=sum_{j:b_j>=theta}s_j,
+  C(theta)=sum_{k:c_k>=theta}t_k.
+For all nonnegative real capacities, the production value satisfies
+
+F = integral_0^a min(U+C(a-theta), V+B(theta), U+V) dtheta
+    + integral_a^infinity min(U,B(theta)) dtheta
+    + integral_a^infinity min(V,C(theta)) dtheta.             (ADS)
+
+Integrals are finite step-function sums. Their breakpoints depend only on the
+fixed technology profits, never on capacity reports. There are O(J+K) terms.
+All weights are nonnegative and every term is a minimum of at most three fixed
+nonnegative linear combinations of actual resource capacities. No dominance
+condition such as a>=max b+max c is imposed.
+
+PROOF. Fix a feasible plan, with central quantity z and quantities on each
+leaf edge. Integrating its selected-edge quantities over the three ranges in
+(ADS) recovers exactly its weighted objective: the central edge is counted for
+length a; a u-leaf for length min(b_j,a)+(b_j-a)_+=b_j, and a v-leaf similarly.
+For a theta in (0,a), after aggregating the selected leaves the corresponding
+unweighted three-edge path has optimum
+  min(U+C(a-theta), V+B(theta), U+V).
+This follows either from the three minimal vertex covers or from the direct
+one-dimensional calculation below. The tail components are unweighted stars.
+Thus every plan has value at most the RHS of (ADS).
+
+We construct one plan attaining all component optima simultaneously. Put
+m=min(U,V). For a given central quantity z in [0,m], allocate remaining center
+capacity greedily to its incident leaves in descending original profit order.
+For the central theta component, the value of this plan is
+  z+min(U-z,B(theta))+min(V-z,C(a-theta)).
+As a function of z, this is maximized exactly on the interval between
+  L(theta)=clip(U-B(theta),0,m),
+  R(theta)=clip(V-C(a-theta),0,m),
+where clip(x,0,m)=max(0,min(x,m)). This follows from slope +1 before both
+unclipped thresholds, 0 between them, and -1 after both, with endpoints clipped.
+
+L is nondecreasing in theta, R is nonincreasing. All intervals I(theta) between
+L(theta),R(theta) intersect pairwise: if theta<eta and I(theta) lay strictly
+left of I(eta), this would force R(theta)<R(eta), a contradiction; if it lay
+strictly right, this would force L(theta)>L(eta). A finite family of intervals
+with pairwise intersections has common intersection. Only finitely many open
+threshold cells occur, so choose
+  z*=max_theta min(L(theta),R(theta)),
+which lies in every I(theta). The greedy-leaf plan with this z* attains all
+central components.
+
+Let B_>a=sum_{b_j>a}s_j and C_>a=sum_{c_k>a}t_k. Every central theta includes
+all these high-profit leaves. Consequently, for every theta,
+  min(L(theta),R(theta)) <= clip(U-B_>a,0,m),
+  min(L(theta),R(theta)) <= clip(V-C_>a,0,m),
+and the same bounds hold for z*. For any theta>a, this implies
+  min(U-z*,B(theta))=min(U,B(theta)),
+  min(V-z*,C(theta))=min(V,C(theta)).
+Indeed if high-profit leaf capacity exceeds its center capacity, z*=0;
+otherwise the remaining center capacity suffices for every high-profit leaf.
+The same greedy-leaf plan therefore attains every tail star too. This proves
+(ADS). Zero capacities, absent leaf sides, tied values and m=0 are included;
+changes on finitely many integration endpoints do not affect the formula.
+
+PAYMENTS. Give each actual owner its contribution to the two or three linear
+arguments in each term of (ADS). Apply the proved mixed-owner three-pool softmax
+rule (using the proved mixed two-input rule for two-form terms),
+then sum with the positive interval lengths. Every real coalition obeys the
+same decomposition. Increasing an owner's whole resource bundle raises each
+of its derived accounts and leaves all other owners' accounts fixed. The mixed
+rule is proved on the full independent-account domain: coordinatewise increases
+may be checked there even if intermediate vectors leave the linear image of
+physical bundles. Thus the
+result covers all coalitions and is truthful for binding underreports on ALL
+nonnegative profiles, with total at most
+  [1+W(2/e)] F, approximately 1.4630565 F.
+The number of fixed owners and both leaf counts may grow without bound.
+Owner identities do not change, and an owner may hold arbitrary resources on
+both sides of the graph. Disjoint unions compose even when owners span them.
+
+POSITIVE ENDPOINT COEFFICIENTS. On any forest with positive incident resource
+coefficients A_re, choose a root in each component, assign positive row scale
+s_root=1, and recursively choose s_neighbor so
+  s_r A_re = s_neighbor A_neighbor,e =: lambda_e.
+There is no consistency obstruction because the graph is acyclic. Set
+z_e=lambda_e x_e. Multiplying each resource constraint by s_r converts it to
+  sum_{e incident r} z_e <= s_r c_r,
+and edge profit becomes p_e/lambda_e. Every owner bundle transforms by the
+same fixed positive coordinate scalings. Thus arbitrary positive two-endpoint
+coefficients, including the target's hardware coefficient 1 and power e_jk,
+reduce to the unit-incidence model without affecting all-profile incentives,
+coalition values or budget factors. The normalization does not solve a general
+forest; it transfers (ADS) only to components with double-star topology.
+
+LIMITATION AND NEXT EXACT FRONTIER. The proof uses one central decision z and
+an interval intersection. A path with four edges already has three nonleaf
+vertices and two interacting central edge quantities; the scalar argument does
+not apply automatically. This is a structural stopping point, not an
+impossibility certificate for four-edge paths or deeper trees.
+
+PRIORITY BOUNDARY. The dominant-corner double-star condition has an exact
+antecedent in Solymosi, arXiv:2210.17373, Proposition 8, for unit-capacity
+assignment games and population monotonicity. Formula (ADS) removes that
+dominance condition and treats arbitrary continuous capacities with fixed
+mixed resource owners. The present argument alone does not establish that
+this decomposition or payment consequence is historically novel.

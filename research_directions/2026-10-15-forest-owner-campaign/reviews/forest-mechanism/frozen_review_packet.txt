@@ -1,0 +1,216 @@
+Task and review objective:
+Independently audit THREE_POOL_MERGE first: derive its whole-owner derivative from scratch, verify the crucial DW^2 algebra, clipping/bottleneck ties and zero boundaries. Then audit DOUBLE_STAR exact positive decomposition and SCALAR_BIAS_BARRIER mechanism-class no-go. Existing exclusive-account softmax is context only; do not assume merging preserves incentives. Give concrete failures or precise limited verdict. No novelty assertion or file edits or recursive delegation.
+
+
+FILE THREE_POOL_MERGE.txt
+1: Mixed-owner three-pool softmax lemma
+2: 15 October 2026. Candidate extension; historical novelty unconfirmed.
+3: 
+4: Fix arbitrary actual owners holding c_ij>=0 for j=0,1,2. Put T=min_j sum_i c_ij,
+5: d_ij=min(c_ij,T), rho_j=sum_i d_ij/T, w_j=exp(1-rho_j), p_j=w_j/sum_h w_h.
+6: For T>0 pay y_i=sum_j p_j d_ij; at T=0 pay zero. Coverage and total factor
+7: 1+b, b exp(b)=2/e, follow from the existing exclusive-pool softmax proof:
+8: every capped pool covers each coalition, some rho_j=1, and total/T is the
+9: weighted mean of rho_j. This note supplies the missing ACTUAL-OWNER incentive
+10: argument when one owner controls several accounts.
+11: 
+12: If an increased own coordinate belongs to a long pool, T is fixed. Its own
+13: account payment has derivative p_j[1-(d_ij/T)(1-p_j)]>=0 before its cap and
+14: zero thereafter; other p_h increase and their own-owner holdings stay fixed.
+15: Hence the owner's whole payment increases.
+16: 
+17: Suppose instead the increased own coordinate x lies in a uniquely short pool 0.
+18: T=x+a for fixed a>=0, w_0=1. Work off finitely many clipping/tie points.
+19: For j=1,2 let k_j be the number of capped accounts and let t_j be the sum of
+20: uncapped holdings divided by T. Thus rho_j=k_j+t_j and
+21:   w_j' = w_j t_j/T.
+22: Write A=w_1, B=w_2, W=1+A+B and M=(A t_1+B t_2)/W. We have M<1, because
+23:   A(t_1-1)+B(t_2-1)
+24:     <= sum_{j=1,2}(rho_j-1)exp(1-rho_j) <=2/e<1.
+25: For this actual owner let a_j=d_ij/T. Its long account derivative delta_j is 1
+26: when capped and 0 when uncapped. Also a_0=x/T<=1. Differentiating its SUM gives
+27:   D=p_0(1-a_0 M)+sum_{j=1,2}p_j[delta_j+a_j(t_j-M)].
+28: Capped terms are nonnegative since a_j=delta_j=1 and M<1. For uncapped terms,
+29: a_j<=t_j. If t_j>=M their contribution is nonnegative; otherwise it is at
+30: least p_j t_j(t_j-M). At most one of t_1,t_2 is less than M: if both were,
+31: their weighted mean with the additional weight-one zero would be less than M.
+32: If neither is, D>=p_0(1-M)>0. Otherwise relabel t_1=s<M and t_2=t. Then
+33:   D W^2 >= 1+A(1-s+s^2)+B(1+A s^2)-Bt(1+A s).
+34: Since B=exp(1-k_2-t)<=exp(1-t), we have Bt<=t exp(1-t)<=1. Consequently
+35:   D W^2 >= A(1-s)^2+B(1+A s^2)>0.
+36: Thus increasing a coordinate in a short pool also cannot lower actual-owner
+37: payment. Formulae agree continuously at caps and ties. At zero output,
+38: nonnegativity and the established total bound force continuity to zero.
+39: Sequential coordinate increases prove whole-bundle underreport monotonicity.
+40: 
+41: COROLLARY. For F(c)=min{L_0(c),L_1(c),L_2(c)} with fixed nonnegative linear
+42: forms L_j, assign actual owner i derived accounts L_j(b_i). The above rule
+43: covers every coalition, is whole-owner truthful on all nonnegative profiles,
+44: and pays at most [1+W(2/e)]F(c), approximately 1.4630565 F(c). The forms may
+45: overlap in resource support; no owner splitting or population change occurs.
+46: Positive sums of such technologies retain the same factor with arbitrary
+47: mixed fixed owners. This does not prove the bound for every forest.
+48: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE DOUBLE_STAR.txt
+1: A positive decomposition for dominant-center double stars
+2: 15 October 2026. Constructive scoping result; historical novelty unconfirmed.
+3: 
+4: MODEL. The connected resource graph has central vertices u,v and an edge uv
+5: of value a>0. Leaves attached to u have capacities s_j and edge values b_j>0;
+6: leaves attached to v have capacities t_k and edge values c_k>0. The centers
+7: have capacities U,V. Every edge consumes one unit at each incident endpoint.
+8: All resource capacities are sums of arbitrary nonnegative bundles held by a
+9: fixed real owner set. The owner count and both leaf counts are unrestricted.
+10: Any owner can own resources on both sides and at several vertices.
+11: 
+12: Assume a >= b_max+c_max, with an absent side's maximum defined as zero.
+13: Sort b_1>=...>=b_J>0 and c_1>=...>=c_K>0, put b_{J+1}=c_{K+1}=0,
+14: B_j=sum_{h<=j}s_h, C_k=sum_{h<=k}t_h. Then
+15: 
+16: F = (a-b_1-c_1) min(U,V)
+17:     + sum_j (b_j-b_{j+1}) min(U,V+B_j)
+18:     + sum_k (c_k-c_{k+1}) min(V,U+C_k).                 (DS)
+19: 
+20: Missing-side sums and maxima are zero. All coefficients are nonnegative and
+21: all arguments are nonnegative fixed linear combinations of resource capacities.
+22: 
+23: PROOF. Set m=min(U,V). Start with any optimal feasible edge quantities having
+24: central quantity z<m. Increase z by delta<=m-z. At u, reduce incident leaf
+25: quantities by max(0,delta-(U-z-L_u)), where L_u is their current total; this
+26: amount is at most delta and at most L_u because z+delta<=U. Similarly at v.
+27: This preserves all capacities (leaf capacities only become less used), while
+28: lost leaf value is at most delta(b_1+c_1) and central gain is a delta. Hence
+29: there is an optimum with z=m. The two leaf systems then independently maximize
+30: fractional knapsack value with center budgets U-m and V-m. Layer decomposition
+31: gives
+32: F=a m + sum_j Delta b_j min((U-V)_+,B_j)
+33:           + sum_k Delta c_k min((V-U)_+,C_k).
+34: Use min((U-V)_+,B)=min(U,V+B)-min(U,V), and its symmetric version; telescoping
+35: sum Delta b=b_1 and sum Delta c=c_1 yields (DS).
+36: 
+37: PAYMENTS. Apply the proved mixed-owner two-input exponential rule to each
+38: minimum in (DS), using each real owner's contributions to its two aggregate
+39: arguments. Sum with the fixed nonnegative coefficients. Every coalition obeys
+40: (DS), so coverage adds. Own whole-bundle increases raise both derived accounts
+41: coordinatewise without changing another owner's accounts, so all-profile
+42: truthfulness follows from the mixed-owner lemma. The total is at most
+43: (1+1/(2e))F. Zero capacities, zero-weight differences, ties, and zero output
+44: are handled exactly as in the preceding star theorem. This is an unbounded
+45: connected nonstar subclass of the forest model, not a bound for all forests.
+46: 
+47: SHARPNESS OF THE STRUCTURAL ASSUMPTION FOR THIS ROUTE. When both sides contain
+48: a leaf and a<b_max+c_max, set U=V=1, set the maximum-valued leaf on each side
+49: to capacity 1, and all other leaf capacities to zero. Saturating uv gives a,
+50: while the two selected leaf activities give b_max+c_max>a. Thus the condition
+51: is necessary and sufficient for central saturation to be optimal at every
+52: capacity profile of this fixed double-star technology. This is only an exact
+53: boundary for the saturation/decomposition route, not an optimal-payment lower
+54: bound. In particular the existing values (3,2,2) lie outside this subclass.
+55: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE SCALAR_BIAS_BARRIER.txt
+1: Scalar-bias barrier for the two-input rule family
+2: 15 October 2026. Internal lemma; no novelty claim.
+3: 
+4: Fix a single continuous function p:[1,infinity)->[0,1] with p(1)=1/2.
+5: On each fixed-owner two-input profile call the smaller aggregate input short,
+6: T its aggregate, s_i and l_i the owner's short and long inputs, d_i=min(l_i,T),
+7: and rho=sum_i d_i/T. Consider rules
+8:   y_i=(1-p(rho))*s_i+p(rho)*d_i,
+9: using the SAME scalar p across every finite owner population and all reports.
+10: If the rule is own-coordinate monotone for all profiles, then
+11:   p(rho)>=1/2 exp(1-rho), for every rho>=1.
+12: Consequently its uniform budget factor is at least 1+1/(2e).
+13: The exponential rule attains this bound within this family.
+14: 
+15: Proof without differentiability:
+16: Normalize T=1. Fix r>=1 and h in (0,1), r-h>=1. Make one long-only owner's
+17: contribution increase from 1-h to1. Choose the remaining long contributions,
+18: each <=1, summing to r-1; this is feasible with sufficiently many owners.
+19: Put the entire unit of short input with a different owner. At the initial and
+20: final profiles rho=r-h,r. Own monotonicity requires
+21:   p(r)>= (1-h)*p(r-h).
+22: Fix target R>1. For integer k>R-1 take h=(R-1)/k. Apply this inequality at
+23: r=1+h,...,1+kh=R, constructing valid profiles separately for each comparison.
+24: The same scalar function p is used at all of them, so
+25:   p(R)>= (1-h)^k p(1).
+26: Let k increase to get the claimed exponential lower bound.
+27: At rho=2 the total payment equals T*(1+p(2)), hence at least
+28: (1+1/(2e))*T. Such a profile uses one short-only owner holding1 and two
+29: long-only owners holding1 each.
+30: 
+31: This is a mechanism-class obstruction, NOT a lower bound for arbitrary
+32: monotone covering rules. Continuity and p(1)=1/2 are explicit family assumptions;
+33: the proof below uses p(1)=1/2 but does not otherwise need continuity. If p is
+34: allowed to depend on the owner count, the proof still works for R<=n-1 using
+35: one short-only owner and sufficiently many long-only owners, so R=2 needs n>=3.
+36: The owner count can remain fixed throughout each chain by adding zero owners.
+37: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE EXISTING_SOFTMAX.txt
+1: Exact source excerpt supplement.tex lines2390-2444
+2: 
+3: \subsection{Small-stage guarantees and failed exponential extensions}
+4: \begin{proposition}\label{hist:softmax}
+5: For $k=2$ or $3$, put $\rho_j=\sum_{i\in N_j}d_i/T$, $u_j=\rho_j-1$,
+6: $w_j=e^{-u_j}$, $p_j=w_j/\sum_\ell w_\ell$, and $y_i=d_ip_j$.
+7: This rule is own-report monotone, covers coalitions, protects $M_i/k$,
+8: and has exact worst-case subsidy $b_k$, where
+9: $b_ke^{b_k}=(k-1)/e$. The same unit-rate formula fails own-report
+10: monotonicity when $k=4$.
+11: \end{proposition}
+12: \begin{proof}
+13: Coverage is immediate from capping and $\sum p_j=1$.
+14: For an owner with $M_i>0$, same-pool remainder $a<T$, and $m=d_i$, one
+15: has $u_j=(m-M_i)/T$ and $\sum w_j\le k$. Hence
+16: $y_i\ge m e^{-(m-M_i)/T}/k\ge M_i/k$ by the preceding monotonicity of
+17: $t e^{-t/T}$. The assertion is immediate if $M_i=0$.
+18: In the long region of an own report, $T$ is fixed, and differentiation
+19: with respect to $m$ gives $p_j[1-(m/T)(1-p_j)]\ge0$.
+20: In the short region, $T=x+a$, $u_j=0$, and
+21: $0\ge\rho_\ell'\ge-\rho_\ell/T$ off clipping points. Therefore
+22: \[
+23:  \frac{d}{dx}(xp_j)
+24:  \ge p_j\left[1-\sum_{\ell\ne j}p_\ell\rho_\ell\right]\ge0,
+25: \]
+26: since the last bracket is nonnegative precisely when
+27: $\sum_{\ell\ne j}u_\ell e^{-u_\ell}\le1$, and each term is at most
+28: $1/e$. For $k\le3$, $(k-1)/e<1$. Continuity handles clipping points
+29: and the bottleneck seam; the zero boundary is handled by $0\le y_i\le x$.
+30: 
+31: The subsidy is $F=\sum_j u_je^{-u_j}/\sum_j e^{-u_j}$, with some
+32: $u_s=0$. For $b=b_k$, the elementary maximum
+33: $(u-b)e^{-u}\le e^{-1-b}$ implies
+34: \[
+35:  \sum_j(u_j-b)e^{-u_j}\le-b+(k-1)e^{-1-b}=0.
+36: \]
+37: Thus $F\le b$. Equality holds when $u_s=0$ and every other $u_j=1+b$:
+38: use one unit owner in pool $s$ and three owners of capacity $(2+b)/3<1$
+39: in each other pool. Here $b<1$ follows from $k\le3$.
+40: 
+41: For failure at $k=4$, use one owner reporting $x$ in the first pool and
+42: three owners of capacity $2/3$ in each other pool. Near $x=1$ the first
+43: owner's payment is
+44: $y(x)=x/[1+3e^{1-2/x}]$, whose derivative at one is
+45: $(1-3/e)/(1+3/e)^2<0$. Thus some strict underreport increases payment.
+46: \end{proof}
+47: A different extension also fails: assigning each nonshort pool price
+48: $e^{-u_j}/k$ and the residual to the short pool is not truthful even for
+49: three pools. At $(x\mid1/2,1/2\mid1/2,1/2)$, the first payment is
+50: $1/3$ when $x=1$, but at $x=99/100$ it is
+51: \[
+52:  x\left[1-\tfrac23 e^{-(1-x)/x}\right]
+53:  \ge x(1-2x/3)=1683/5000>1/3,
+54: \]
+55: using $e^{-q}\le1/(1+q)$. These are obstructions to the stated formulas,
+56: not to all mechanisms with more pools.
+57: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

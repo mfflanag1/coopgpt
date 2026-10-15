@@ -1,0 +1,65 @@
+Finite report-transition lower certificates on cycles transfer to paths
+15 October2026. Internal structural lemma; external novelty unconfirmed.
+
+Fix a cycle of L resource vertices with nonnegative edge output weights p_e,
+unit input consumption at each endpoint, and an exclusive assignment of its
+vertices to a fixed set of actual owners. An owner may hold several separated
+vertices. Reports are nonnegative resource capacities; underreporting changes
+only the reporting owner's capacities coordinatewise.
+
+For integer k, form a path on k consecutive copies of the L-vertex cycle word.
+Every consecutive edge has the original weight of its edge type; the last
+wraparound edge is omitted. The same ACTUAL owner owns every copy of her
+original vertices. At a selected original report, give each copy of a vertex
+its original capacity. This repeats a report, not an owner identity.
+Let F(c) be cycle production and F_k(c) this repeated-profile path production.
+For every capacity vector c,
+  k F(c)-p_last min(c_first,c_last) <= F_k(c) <= k F(c).
+The same inequalities hold for every coalition after zeroing absent owners.
+
+Proof. For the upper bound, sum the k resource constraints of each vertex
+type for any feasible path activity vector. Divide total activity of each
+edge type by k. The resulting cycle activity vector is feasible, so its
+objective, the path objective divided by k, is at most F(c). For the lower
+bound, take an optimal cycle plan and put the same plan on all copies, with
+the single final wraparound activity omitted. The omitted activity consumes
+at most min(c_first,c_last), and deleting it preserves all resource constraints.
+This proves the uniform O(1) deficit relative to kF(c). No integrality is used;
+the argument includes odd cycles and fractional activities.
+
+Transfer of exact finite lower certificates. A report-transition certificate
+is a nonnegative weighted sum of budget, coalition-coverage and own-monotone
+constraints whose aggregate payment coefficients are nonnegative, whose
+factor coefficient is negative, and whose right side is negative. Writing
+D=sum_budget lambda_b T_b>0 and R=sum_coalition lambda_s v_s, it proves C>=R/D.
+Repeat each of its finitely many profiles on the k-copy path. Every transition
+still changes only one fixed actual owner and increases her entire copied
+bundle coordinatewise. Every coverage constraint remains meaningful. The
+aggregate payment coefficients are unchanged because they depend only on
+owner subsets and transitions, not worths. The new lower certificate proves
+  C >= R_k/D_k,
+where R_k/k -> R and D_k/k -> D by the production bounds above. Therefore
+R_k/D_k -> R/D. Any certified finite cycle lower bound can be approached
+arbitrarily closely on exclusively owned path resources with fragmented
+holdings. The resulting path is an unbounded resource family; independent
+product replication can also make actual owner counts grow when needed.
+
+Product-replication justification. Aggregate budget weights by profile as
+lambda_b>=0 and put L=sum_b lambda_b>0. Removing the budget rows from the
+certificate shows sum_b lambda_b y_N(b)>=R for every eligible payment rule:
+coverage and incentive rows supply the lower bound, and nonnegative payments
+allow any nonnegative coefficient slack to be discarded. For disjoint copies,
+fix all other components' reports and apply this inequality to the payments of
+one component's owners. Every coalition and own-report row stays valid. Draw
+each component's profile independently with probability lambda_b/L. Then its
+expected payments are at least R/L, while its expected production is D/L.
+Sum over components and average the global budget inequality to obtain C>=R/D.
+Thus no separability of the payment rule is assumed. The same argument applies
+to each transferred finite path certificate with R_k,D_k in place of R,D.
+
+Scope. This is a lower-bound transfer, not an equivalence of all-profile
+mechanism classes, and it yields no upper bound. It does not say every cycle
+or every fragmented ownership pattern incurs subsidy. It justifies using
+compact merged-owner cycles as discovery problems for exclusively owned
+forest lower bounds. A source comparison is still needed before claiming
+this reduction itself is new.

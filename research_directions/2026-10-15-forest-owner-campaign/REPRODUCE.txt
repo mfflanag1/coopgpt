@@ -1,0 +1,56 @@
+PORTABLE REPRODUCTION
+
+From this campaign directory run:
+  python3 -B -O REPRODUCE.py
+
+Only the Python standard library is required for the curated suite. It runs
+14 top-level jobs, including the portfolio's five exact verifiers, at most
+three in parallel. No optimizer, network, GPU, paid service, or LaTeX compiler
+is used. Source hashes and output hashes are recorded in
+REPRODUCTION_RESULT.json; actual output is saved in checks/.
+
+The coordinator executed this suite from a clean staged copy of the curated
+files. Every job passed. The three lower-bound finite grids each contain
+6,561 profiles, and their certificate checker independently recomputes
+coalition production and checks rational primal and dual data. Details and
+additional selected certificates are in lower/README.txt.
+
+Other key counts:
+- Mixed three/four-input softmax: 4,720 profiles, 44,992 coalition inequalities,
+  55,720 own-report increases, and 4,720 budget checks, using exact exponential
+  polynomials and rational Taylor enclosures. The four-input tests use rate9/10;
+  the sharper irrational rate is established analytically, not by this grid.
+- Arbitrary weighted double stars:182,147 exact rational identity comparisons.
+- Weighted forests:20,000 integer tree profiles and148,194 threshold optima.
+- Dimension upper:576 scalar identities,61,632 coordinate-price comparisons,
+  1,728 closed-budget and1,728 integrated-budget comparisons.
+- Compressed dimension barriers:129,656 exact subset-score comparisons and
+  332 unique-gradient/mask/error/budget comparisons.
+
+These counts overlap within each test design and should not be summed into
+an alleged number of independent experiments. Finite tests corroborate the
+proofs and detect errors; they establish neither universal theorems nor novelty.
+
+Discovery scripts named search_*, threshold_lp.py, bundle_threshold_lp.py,
+projective_plane_discovery.py, and test_piecewise_weight.py are optional
+exploration. Some require NumPy/SciPy. They are excluded from the curated exact
+suite and must not be treated as accepted mechanism guarantees.
+
+To verify archive integrity without changing files:
+  python3 -B verify_manifest.py
+
+SHA256.json covers every payload file except itself and the manifest checker.
+Rerunning tests can update execution metadata; check the original manifest
+before rerunning, or expect those reproducible metadata files to change.
+
+Late supplemental check, also executed successfully under optimized Python:
+  python3 -B -O constructive/verify_depth_two_gibbs.py
+It verifies1,020 cover-account identities and exact rational exponential bounds.
+See GIBBS_REPRODUCTION.json and checks/constructive__verify_depth_two_gibbs.txt.
+
+Late efficient-institution rule, executed successfully under optimized Python:
+  python3 -B -O application/check_ai_subclass_rule.py
+2,430 exact profiles,71,442 coalition inequalities,11,016 adjacent own-coordinate
+increases; independent rational flow oracle. See AI_RULE_REPRODUCTION.json.
+Historical finite LP certificates can be replayed from application/:
+  python3 -B -O ../lower/check_certificates.py AI_SUBCLASS_CERTIFICATES/*.json.gz

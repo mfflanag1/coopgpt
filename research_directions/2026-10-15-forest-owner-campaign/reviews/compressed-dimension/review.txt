@@ -1,0 +1,25 @@
+**Provisional verdict: no substantive findings in reviewed scope.** Every comparison, error bound and asymptotic I re-derived checks out; the only items below are precision/scope clarifications, not errors.
+
+## Findings
+
+**1. (Low) Empty-mask anchor averaging is stated as "pointwise in the support" but actually relies on the support law being identical across anchors.** (BARRIER lines 90–96, 134–140.) For a *fixed* w the Markov count over the n cyclic windows is correct (each coordinate lies in exactly m windows → ≥(1−2m/n)n windows with scarce weight ≤ s/2). If the selector draws a different realization per profile, the per-window Markov bound does not apply realization-by-realization; what saves the argument is that at B=∅ there are no open reports, so the selection law is one fixed distribution μ, and E_μ[avg_j] = avg_j E_μ ≥ A_n. Suggested repair: replace "for every realization" with "for every fixed law μ on empty-mask supports, by exchanging the uniform anchor average with E_μ." Same remark for Part B (lines 139–140).
+
+**2. (Low) Class statement omits the relative-support convention at x_B=0.** Lines 5–7 require a "global linear support"; FOUNDATIONS' canonical choice is ℓ_0=+∞ off 0. This case only helps (every closed owner pays its cap, giving factor n at every anchor), but it should be listed explicitly so the DIMENSION_SQRT rule is visibly inside class (A).
+
+**3. (Informational) V_i-cap eligibility not in packet.** Lines 153–154 defer truthfulness/monotonicity of min{raw, V_i} to VCAP_MASK_OBSTRUCTION_v1. The lower bound in Part B uses only the stated payment formula and is unaffected; eligibility of that rule is unverified here.
+
+## Checks performed (all passed)
+
+- Common construction: a_l nonincreasing (v_{l+1} ≤ (r_l−1)δ_l), a_1<1/n ⇔ δ_0>1/n; mask aggregate = rε on C, 1+(r−1)ε elsewhere; baseline rt/n; C-form = v_l+εE_l with E_l ≤ n³+n; gap r/n−v_l ≥ r(δ_0−1/n)/(n−1) ≥ 1/n³ (uses l≥1, correct); 2n³ε<1/n³; comparison 1 (>1 vs <1), comparison 3 (strict first term, a_{|S|}≥a_l); exhaustiveness; differentiability ⇒ unique supergradient.
+- Closed raw price ≥ n²/(n−1)² > t; endpoint error (2n³+n)ε<1/n³ including l=n−1 (x_B−b_i=0) and l=0 cases; V_i ≤ T via f(b_i+b(S)) ≤ T.
+- Part A: 2≤m<n/2 for n≥9; δ sums to 1, nonincreasing; budgets ≥ m−1/n² in all three regimes; f(1)=1; T_j ≤ nAτ/m=1/4; A_n=n−2m>0; two-point profile mixture gives L_n; m=(√2+o(1))√n, L_n=(√2−o(1))√n with d=n.
+- Part B: H≤m−1 ⇒ a≥1/m, δ_0−1/n ≥ 1/n²; F finite min-linear; z=0 slice forces w=w^C; (n−l)δ_l=a(m−l) ⇒ am−nη; Leontief anchors: V_i=T=1, Σu_e≥1 ⇒ some u_e≥1/D, abundant in exactly R windows, raw ≥ D·(1/D)=1; A'_n=nR/D ~ n^{3/4}; a→1/2, C'_n~√(n/2), d_n~2n ⇒ (1/2−o(1))√d_n.
+- FOUNDATIONS: u≥0 and u·x=f(x) derivations; segment/concavity extension to face boundary without continuity (algebra verified); min-norm uniqueness; coalition coverage both branches; marginal ≥ ℓ(b_i) ≤ f(x_B) ≤ T (note f is super-, not sub-additive, so f(b_i) is not the right ceiling—the proof correctly doesn't use it); own-bundle monotonicity; diagonal derivative identity; Σα_i ≤ d.
+
+## Scope limitations
+
+No tools; no VCAP_MASK_OBSTRUCTION_v1, prior manuscript, or the "sharp √(2n) V-cap owner lower" available. Cannot assess priority claims. Reviewed only the stated fixed-mask class; nothing here bears on unrestricted lower bounds (document correctly disclaims this, lines 19, 158–160).
+
+## Verdict
+
+**No findings** of mathematical error in the reviewed scope; two low-severity wording repairs (items 1–2) recommended before marking the proof reviewed.

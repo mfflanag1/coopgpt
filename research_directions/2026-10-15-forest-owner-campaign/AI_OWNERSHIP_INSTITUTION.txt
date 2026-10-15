@@ -1,0 +1,137 @@
+LATE UPDATE: the unit-value/unit-coefficient ownership subclass below has an
+explicit efficient all-profile rule, with zero payment to the local-energy
+owner. See AI_INSTITUTION_EFFICIENT_RULE.txt. The model motivation below was
+written before that proof; a cycle is not itself an incentive-cost witness.
+
+A credible candidate institution: fixed compute pods with grid and local battery reservations
+16 October2026 UTC. Model design only; no empirical or existence claim about a
+particular operator, and no claim that this example requires subsidy.
+
+THE FOUR ACTUAL OWNERS
+Consider two fixed compute pods in one campus or behind one deliverable grid
+connection. No GPU or memory moves between pods; requests assigned to pod j
+run there. A precontracted neutral operator schedules already admitted work
+and enforces electrical and hardware reservations during one fixed window.
+
+A: one independent battery/energy-services owner holds the exclusive firm
+   discharge reservations L_1 and L_2 at the two pods. Local power L_j can
+   serve only pod j; it cannot be transferred between locations.
+B: owns the exclusive usable hardware/service reservation H_1 at pod1.
+C: owns an exclusive firm incremental grid-intake reservation P that the
+   campus distribution system can allocate to either pod within the window.
+D: owns the exclusive usable hardware/service reservation H_2 at pod2.
+
+The resources are contractual reservations with identifiable owners. Physical
+asset ownership may be separate, but each reservation in this game must be
+unambiguously controlled by one actual owner. C is not an owner of all usable
+power: local batteries make coalitions without C productive. A is not a veto
+owner either, since C can supply grid power. Utility/interconnection operation
+is a precontracted fixed service outside the game, rather than a hidden fifth
+strategic participant whose consent is required for every coalition.
+
+PRODUCTION AND THE TWO GRAPHS
+There are two production routes at each pod: grid-powered service and locally
+battery-powered service. For fixed public conversion coefficients e_j>0,
+  x_j^G + x_j^L <= H_j,
+  sum_j e_j x_j^G <= P,
+  e_j x_j^L <= L_j.
+Maximize sum_j(v_j^G x_j^G + v_j^L x_j^L), with fixed nonnegative PUBLIC NET
+output values. The quantity x_j is divisible qualified service throughput
+in the chosen window; it is not the number of raw, unrestricted GPU jobs.
+For the unit-coefficient/unit-profit mathematical baseline put e_j=1 and
+v_j^G=v_j^L=1. Fixed unequal coefficients and values can be kept explicitly.
+
+The resource-activity graph is the depth-two tree
+  L_1 -- H_1 -- P -- H_2 -- L_2.
+Its edges are complementary input pairs, not cables or routes along which
+GPUs travel. Describing this as the physical electrical topology would be
+misleading. The electrical engineering condition is simply that P is truly
+deliverable to both fixed pods while L_j is deliverable only locally.
+
+After exclusive resource ownership is mapped onto the four actual owners,
+the necessary bilateral interactions are
+  A--B, B--C, C--D, D--A.
+This is an owner-interaction four-cycle. Coalition AB can operate pod1 using
+local power; AD can operate pod2 using local power; BC or CD can operate the
+corresponding pod using C's grid reservation. Neither AC nor BD can produce
+incremental service on its own in this baseline. Standby/idle electricity is
+reserved outside the game and cannot secretly power these incremental jobs.
+
+A cycle alone does NOT prove incentive subsidy. The earlier repeatedABCD path
+lower family uses a different, longer resource path. The present five-resource
+institution has not been shown to require positive subsidy. Its value is that
+it is a concrete ownership-cycle model, with no universal veto owner, on the
+exact depth-two resource class proposed for the next mathematical campaign.
+
+HOW THE CLASS GROWS
+Use m fixed pods, each with a distinct hardware reservation owner, the same
+owner A of all local battery reservations, and owner C of the common grid
+reservation. The resource graph is P--H_j--L_j for j=1,...,m; the owner graph
+is K_{2,m}. There are m+2 actual owners and2m+1 resources, and both counts grow.
+Every local battery remains tied to its own pod. Further mixed ownership is
+allowed by the abstract theorem but need not be imposed on this first model.
+
+BINDING REPORTS AND FEASIBLE DEVIATIONS
+Each owner commits a coordinatewise smaller reservation than its verified
+available right. A can withhold L_1 and L_2 independently; B and D can reduce
+their local service reservations; C can reduce its shared grid reservation.
+The operator enforces these commitments via admission limits and power controls.
+Reported capacity is available to any coalition containing its owner, under
+the same deliverability rules. There is no owner splitting, relabeling, entry,
+or redistribution of the withheld capacity to a different coalition for free.
+Overreporting is excluded by verification/contract enforcement, not by the
+monotonicity theorem. The graph and production coefficients stay fixed as
+capacities go to zero; owner identities are never deleted or merged.
+
+For coalition comparison, a coalition may use only reservations controlled by
+its members. It may not simultaneously assume access to all of P after C has
+left. Nor may it obtain replacement grid power, transport a GPU, or discharge
+a battery at the other pod unless those outside options are explicitly added.
+The institution is a committed local window, not the entire cloud-energy market.
+
+POWER, ENERGY AND COSTS
+P and L_j should first mean firm instantaneous/steady-window power capacity,
+e.g. kW, not an interchangeable mixture of kW and kWh. In this interpretation,
+x_j and H_j are qualified service rates sustained over the chosen window, and
+e_j converts service rate into incremental kW. Fixed-window output value is
+the corresponding rate value multiplied by the common window length. A battery reservation
+L_j must satisfy BOTH its discharge-power limit and verified usable-energy
+limit over window length Delta: L_j*Delta <= available reserved energy. That
+energy is committed before the game; charging, future state of charge and
+multi-period arbitrage are outside this static model. H_j is a measured safe
+service envelope compatible with that window and latency class. Linearity in
+that envelope is a hypothesis to check, not a conclusion from naming a GPU.
+
+The payment-only incentive theorem is credible only for already committed
+rights with no private alternative-use payoff in this window, or for explicitly
+net payments after verifiable usage costs are reimbursed. The neutral operator
+can pay precontracted public energy/degradation charges as operating costs;
+then v_j^G and v_j^L are service revenue minus those known marginal costs, and
+the game's payments distribute the remaining surplus. Budget/subsidy statements
+must be stated on that same NET-surplus basis; gross cash also includes costs.
+If A privately values later battery discharge, C faces private electricity
+purchase costs, or B/D can run valuable outside jobs after withholding, utility
+is payment plus those outside gains minus costs. Own-payment monotonicity no
+longer establishes truthfulness. Those are substantive future model changes.
+
+Public output values are most defensible with fixed-price prebooked work or a
+known admitted backlog that exceeds feasible service in the window. They are
+less defensible with endogenous spot prices, private customer values, changing
+request mixes, scarcity pricing, or scarce demand. Likewise fractional steady
+service is an approximation to discrete jobs and scheduling. Availability of
+an economically meaningful safe operating range must be measured separately.
+
+Arbitrary mixed ownership is mathematically useful for robustness to vertical
+integration: a firm may hold hardware and local/grid power reservations, possibly
+at several pods. Such integration is plausible as a contract design, but it
+requires explicit ownership records and feasible independent withholding rights.
+It must not be manufactured by dividing one physical entitlement into strategic
+pseudo-owners. The initial four-owner example avoids those extra complications.
+
+RECOMMENDED USE
+Use this institution as the formal applied motivation for the depth-two target,
+with the owner-forest case as the classical baseline. First prove or refute the
+subsidy claim for the defined committed-rights game. Separately test throughput,
+latency, power deliverability and net-cost accounting. Do not use the ownership
+cycle, the mathematical bounds, or the existing Mac experiments as evidence
+that real GPU pooling has already produced a benefit.

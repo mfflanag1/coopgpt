@@ -1,0 +1,27 @@
+**Provisional verdict: no findings in reviewed scope (proof audit passes).** Most important observation: every sign, identity, and parameter step in OWNER_SQRT_BOUND.txt checks out against the project definitions in the excerpts; the only caveats are scope/presentation, not errors.
+
+## Findings
+
+**Verified steps (no defect found)**
+
+1. `sum_i m_i = -g'` (line 44): matches supplement Lemma "Budget from capped mask contributions"; multiaffine chain rule on the diagonal, `dG/dq_i = E[f|B_i=0]-E[f|B_i=1] = -m_i`. Sign correct; `-g' ≥ 0` since `g` is decreasing.
+2. Integration by parts (lines 46–48): `u=(1-q)`, `dv=-g'dq`, `v=-g` gives `T-(1-a)g(a)-∫_0^a g`. Correct, and consistent with manuscript `prod:integral` (`R=Z-g-(1-q)g'`, `Z-g=q·sum p_i ≤ nqT`).
+3. `g(q) ≥ (1-q)^n T` (line 50): needs only `f ≥ 0` (supplement line 12) and the all-open mask. Substituting gives `I ≤ n/(n+1)[1-(1-a)^{n+1}]T` — recomputed, correct.
+4. `B_n(a)` and the two simplifications (lines 15–16): `n/((n+1)a) ≤ 1/a` for `a ≤ 1`. Correct.
+5. Parameter (lines 18–19, 53–54): at `a=sqrt(2/(n+1))`, `na/2 = n/((n+1)a) = n/sqrt(2(n+1))`; sum `n·sqrt(2/(n+1))`; `a ≤ 1 ⇔ n ≥ 1`. `B_1(1)=1/2+1/2=1`. Correct; `a` depends only on `n`.
+6. Eligibility: supplement Thm "General concave homogeneous production" and manuscript proof establish monotonicity/coverage of `r_i^q` for every `q∈(0,1)` without restriction to `q ≤ 1/j`; the Chernoff step (which needed `q ≤ 1/j`) is not used here. Nonnegative report-independent averaging preserves linear inequalities. Zero profile: `T=0` ⇒ all terms vanish (supplement line 151). Boundary discontinuities: handled by the unchanged relative-support construction; nothing new is introduced.
+7. Exactness example (lines 59–66): for proper masks `f≡0` on the face, min-norm `u=0`, `ℓ(e_i)=+∞` off-face ⇒ capped term 1; all-off mask gives `ℓ_0(e_i)=+∞` ⇒ 1. So `p_i=1`, `m_i=(1-q)^{n-1}`, `g=(1-q)^n`, hence `sum r_i = nq+n(1-q)^n` and the average is exactly `B_n(a)`. Correct, and consistent with `n=1` efficiency. The disclaimer that this is not a mechanism lower bound is appropriate.
+8. Rational variant (lines 72–75): `a=1/j` gives `n/(2j)+nj/(n+1) ≤ n/(2j)+j`. Correct.
+9. Comparison: new `min{n, n·sqrt(2/(n+1))}` vs existing `min{n, C_{j_n}(2^n)}=(log2+o(1))n/log n`; asymptotically strictly better, lower bound untouched. Consistent with Definition "Total-payment factors" (rule may depend on `f`).
+
+**Presentation caveat (low)** — OWNER_SQRT_BOUND.txt lines 7–10 / 73: the supplement's Definition "Relative-support hybrid" fixes `j ≥ 2`, i.e. `a ≤ 1/2`. The new averaging law uses `a` up to 1 (and `a=sqrt(2/(n+1))>1/2` for `n ≤ 6`). This is a parameter extension of the existing rule, not literally "existing hybrid rules". The proofs cover it, but the wording should say so.
+
+## Scope limitations
+
+- Script checks only the finite min-linear selector; the relative-support rule and the exactness example are verified analytically only (identity checks at lines 77–83 are polynomial identities, not payments of that rule). Own-bundle monotonicity is tested by single unit increments only.
+- I did not run the script; I checked `integral`, `payments` weighting (`q^{c+1}(1-q)^o A`, `q^c(1-q)^{o+1} D`) and `bound` by reading.
+- Supplement citations (`prod:integral`, Lemma `ext:lem:budget`) were checked against the excerpts, not full sources.
+
+## Verdict
+
+**No findings in reviewed scope.** The analytic argument is sound as written; the claimed `B_n^conc ≤ n·sqrt(2/(n+1))` follows from established project lemmas plus the elementary `p_i ≤ T` step. Recommend clarifying the `j≥2`/`a≤1/2` extension and, optionally, adding a direct computational check of the relative-support example.

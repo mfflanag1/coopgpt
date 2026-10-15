@@ -1,0 +1,92 @@
+Weighted forests reduce to unweighted subforests by fixed positive sums
+15 October 2026. Structural reduction; historical novelty unconfirmed.
+
+First normalize all positive endpoint resource coefficients to one by the
+fixed row/activity scaling in ARBITRARY_DOUBLE_STAR.txt. Consider a bipartite
+forest G=(H union P,E), edge profits w_hp>0, and arbitrary capacities c_v>=0:
+  F_w(c)=max {sum_e w_e x_e: x>=0, sum_{e incident v}x_e<=c_v}.
+
+POTENTIALS. Choose a root and assign it an arbitrary real potential r_root.
+Traverse each tree to solve
+  w_hp=r_p-r_h
+on every edge hp, h in H,p in P. Acyclicity guarantees consistency. Potentials
+may be negative; their endpoint differences on all actual edges remain positive.
+For theta not equal to a vertex potential, define the fixed active subforest
+  E_theta={hp in E: r_h<theta<r_p}.
+Let F_theta(c) be the unit-profit matching/production LP on E_theta, using the
+same actual resources and capacities, with isolated rows harmless.
+
+THEOREM. On every nonnegative real capacity profile,
+  F_w(c)=integral_{-infinity}^{infinity} F_theta(c) dtheta.       (WF)
+The integral has at most |V|-1 nonempty intervals between distinct potentials.
+Every coefficient (interval length) is nonnegative and technology-dependent,
+not report-dependent. The active graphs are unweighted subforests.
+
+PROOF. Fix a weight-optimal feasible flow x, which exists by compactness. We
+show that its restriction to E_theta is a maximum-cardinality flow there for
+every theta avoiding the finite vertex-potential set.
+Suppose otherwise. The usual residual network for the capacitated bipartite
+matching LP yields an augmenting alternating path in E_theta, starting at a
+hardware h with unused active-flow capacity and ending at power p with unused
+active-flow capacity. Every hardware on this active path has potential below
+theta; every power has potential above theta.
+
+Increase flow along forward edges and decrease it along backward edges by a
+sufficiently small delta>0. At either endpoint, if total flow already saturates
+its full resource capacity, remove delta from one incident positive-flow edge
+outside E_theta. Such an outside edge exists because that endpoint has unused
+active-flow capacity. If the endpoint has positive total slack, simply choose
+delta below that slack and remove no outside flow. All backward/path/outside
+edge quantities being reduced can be kept nonnegative by taking delta small.
+
+An outside edge at the low hardware endpoint h leads to a power p' with
+r_p'<theta; otherwise the edge would be active. An outside edge at the high
+power endpoint p leads to hardware h' with r_h'>theta. These outside endpoints
+are not internal vertices of the active augmenting path. All internal active
+resource usage stays fixed; endpoint usage is either offset or within slack;
+outside endpoint usage only decreases. Thus the modified plan is feasible.
+
+Telescoping w_hp=r_p-r_h along the alternating path gives a gain per delta of
+r_p-r_h before outside removals. With neither, hardware-only, power-only, or
+both outside removals, the net gain per delta is respectively
+  r_p-r_h, r_p-r_p', r_h'-r_h, or r_h'-r_p'.
+Every expression is strictly positive by the threshold inequalities. This
+contradicts weight optimality. Therefore sum_{e in E_theta}x_e=F_theta(c).
+Finally, integrate and exchange the finite edge sum with the integral:
+  sum_e w_e x_e
+    =sum_e (r_p-r_h)x_e
+    =integral sum_{e in E_theta}x_e dtheta
+    =integral F_theta(c)dtheta.
+This proves (WF) directly for arbitrary real capacities; no splitting or
+cloning of strategic owners is used even in the proof.
+
+MECHANISM CONSEQUENCE. Fix any class of forests closed under edge deletion.
+If every unweighted graph in that class admits an all-profile, mixed-owner,
+truthful coalition-covering payment rule with uniform factor C, compose those
+rules for the finitely many graphs E_theta using the fixed positive interval
+lengths in (WF). Every coalition has the same decomposition, and component
+reports are the unchanged actual resource bundles. Thus the composition has
+identical factor C, whole-owner monotonicity and coalition coverage. Conversely
+unit profits are a subclass. The optimal uniform factor for weighted and
+unweighted versions of the class is therefore the same (use epsilon-optimal
+rules if the infimum is not attained).
+
+Including fixed positive endpoint coefficients does not change this equality:
+row/activity normalization maps owner bundles by fixed positive diagonal
+scaling before the threshold decomposition. Counts of owners, resources and
+activities remain unrestricted; actual owners never change across reports.
+
+The proof in fact applies to any bipartite graph whose positive edge profits
+admit potentials w_hp=r_p-r_h. Forests guarantee this property automatically;
+arbitrary cyclic weighted graphs need not. This does not solve the remaining
+uniform subsidy bound for unweighted forests, but removes price and energy
+heterogeneity as separate sources of difficulty in that entire class.
+
+APPLICATION. Every active subgraph of an arbitrary weighted double star is a
+disjoint union of stars/double stars with unit profits. Aggregate its leaf
+capacities to obtain at most three linear vertex-cover forms. The mixed
+three-pool mechanism then yields the already obtained uniform factor
+1+W(2/e). Every active subgraph of a four-edge path is a disjoint union of
+paths of at most four edges; each unit-profit component has at most four
+minimal vertex covers. The mixed four-pool rule gives uniform factor
+1+(10/9)W(3/e)<2 on arbitrary weighted four-edge paths as well.

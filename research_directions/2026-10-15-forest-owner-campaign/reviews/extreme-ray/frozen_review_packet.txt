@@ -1,0 +1,208 @@
+Task and review objective:
+Independently audit EXTREME_RAY_OBSTRUCTION: derive f_l>=weightedpacking, equality and adjacentedge argument, minimalcover exposure and explicit pathcover family. This is a general structural obstruction, not a subsidy lower. Then check the newly appended SHARP RATE corollary in FOUR_POOL_MERGE only: lambda*=2−log3, endpoint lambda proof, monotonicity counter for larger rates, exact worst budget attainment. Do not re-review alreadychecked core fourpool derivation unless needed. No edits, historical noveltyclaims, or recursive delegation.
+
+
+FILE EXTREME_RAY_OBSTRUCTION.txt
+1: Connected unit-profit bipartite production has no nontrivial positive concave decomposition
+2: 15 October 2026. Structural lemma; historical novelty unconfirmed.
+3: 
+4: Let G=(H union P,E) be a finite connected simple bipartite graph with at least
+5: one edge. Its unit-profit resource-production function is
+6:   F(c)=max {sum_e x_e: x_e>=0, sum_{e incident v}x_e<=c_v}, c>=0.
+7: 
+8: THEOREM. Suppose, on the whole nonnegative orthant,
+9:   F(c)=sum_{l=1}^L f_l(c),
+10: where every f_l is finite, nonnegative, concave and homogeneous of degree one.
+11: Then every summand is proportional to F: f_l=lambda_l F, lambda_l>=0,
+12: sum_l lambda_l=1. Thus F spans an extreme ray in this function cone.
+13: Positive constant coefficients can be absorbed into the summands.
+14: 
+15: PROOF. Concavity and degree-one homogeneity imply superadditivity:
+16: f_l(x+y)>=f_l(x)+f_l(y). For each edge e=uv let z_e be the vector with ones
+17: at u and v and zero elsewhere, and define w_le=f_l(z_e)>=0. Since F(z_e)=1,
+18:   sum_l w_le=1 for every edge e.
+19: For any feasible edge plan x at capacities c, the residual vector
+20: c-sum_e x_e z_e is nonnegative. Superadditivity, homogeneity and nonnegativity
+21: give
+22:   f_l(c)>=sum_e x_e f_l(z_e)=sum_e w_le x_e.
+23: Maximizing the RHS over feasible plans yields f_l(c)>=F_{w_l}(c), the same
+24: production LP with nonnegative edge profits w_l. Conversely,
+25:   F(c)=F_{sum_l w_l}(c)<=sum_l F_{w_l}(c)<=sum_l f_l(c)=F(c).
+26: All differences are nonnegative and the sum is zero, so
+27:   f_l(c)=F_{w_l}(c) for every l and c.
+28: 
+29: Now take any pair of adjacent edges e=uv and f=vw. Since the graph is simple
+30: and bipartite, u and w are distinct same-side vertices, with no edge uw.
+31: Give capacity one to u,v,w and zero elsewhere. Only e and f can produce,
+32: and their shared unit at v implies
+33:   F(c)=1, F_{w_l}(c)=max(w_le,w_lf).
+34: Therefore sum_l max(w_le,w_lf)=1, while both sum_l w_le and sum_l w_lf equal
+35: one. The identity max(a,b)=(a+b+|a-b|)/2 forces w_le=w_lf for every l.
+36: The edge-adjacency graph of a connected graph is connected. Hence for each l,
+37: w_le is a constant lambda_l on all edges, and
+38:   f_l=F_{w_l}=lambda_l F.
+39: This completes the proof without strategic owner splitting or any finite-grid
+40: inference. The statement is purely about production functions.
+41: 
+42: CONSEQUENCE FOR BOUNDED-FORM ROUTES. For a bipartite graph, F is the minimum of
+43: the capacity sums over its inclusion-minimal vertex covers. Every such linear
+44: form is exposed at a strictly positive capacity vector: give vertices in a
+45: chosen minimal cover C capacity epsilon with 0<epsilon<1/|C|, and every other
+46: vertex capacity one. C costs less than one. Any distinct minimal cover has a
+47: vertex outside C (otherwise C would not be minimal), so costs at least one.
+48: Thus a nonzero scalar multiple of F requires at least as many linear pieces
+49: as there are minimal covers. The extreme-ray theorem implies that F cannot
+50: be a finite positive sum of minima of at most K nonnegative linear forms
+51: whenever its number of minimal covers exceeds K.
+52: 
+53: This blocks every fixed-K version of that route on all forests. For an even
+54: path P_{2m}, the m+1 distinct minimal covers
+55:   C_j={1,3,...,2j-1} union {2j,2j+2,...,2m-2}, j=0,...,m,
+56: (using vertices 0,...,2m-1) already show unbounded cover count. Each selected
+57: vertex has an adjacent unselected vertex, so these covers are inclusion-minimal.
+58: Taking m>=K gives more than K exposed forms on a connected unit forest.
+59: 
+60: The four-edge path has four minimal covers, yielding the earlier specific
+61: obstruction to positive <=3-form decomposition as a special case. The new
+62: mixed four-form mechanism handles that particular path directly, but extending
+63: composition to any fixed larger K cannot by itself settle every forest.
+64: 
+65: BOUNDARIES. This is not a lower bound on required subsidy. It does not rule
+66: out direct nonlinear mechanisms, sums involving negative coefficients,
+67: nonconcave intermediate constructions, or increasing-form mechanisms with a
+68: new bound depending on graph structure. The nonnegative global function domain
+69: and degree-one homogeneity are explicit hypotheses. For the particular
+70: minimum-of-nonnegative-linear-forms components under discussion they hold
+71: automatically. Disconnected graphs do decompose over their connected components.
+72: 
+73: The mathematical argument uses standard superadditivity, max-of-sum versus
+74: sum-of-max, and connectivity facts. No historical novelty claim is made until
+75: an exact original-source comparison is completed.
+76: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE FOUR_POOL_MERGE.txt
+1: A mixed-owner four-input softmax rule below factor two
+2: 15 October 2026. Candidate extension; historical novelty unconfirmed.
+3: 
+4: Fix lambda=9/10. For arbitrary real owners with four input accounts c_ij>=0,
+5: let T=min_j sum_i c_ij, d_ij=min(c_ij,T), rho_j=sum_i d_ij/T, and
+6:   w_j=exp[-lambda(rho_j-1)], p_j=w_j/sum_h w_h,
+7:   y_i=sum_j p_j d_ij.
+8: At T=0 pay zero. The rule covers all coalitions, is nondecreasing in every
+9: coordinate of every actual owner's full bundle, and pays at most
+10:   C4 T, C4=1+(10/9)W(3/e)<2.
+11: Here W denotes the principal real Lambert W function. It is not the weight sum
+12: W used locally below. The mechanism has no identity changes or separate
+13: strategic control assigned to one owner's accounts.
+14: 
+15: COVERAGE. Each capped input total for a coalition covers its min-input value.
+16: A positive convex combination preserves coverage.
+17: 
+18: BUDGET. Put u_j=rho_j-1>=0, with at least one u_j=0. If b>0 solves
+19: b exp(b)=3/e, the inequality
+20:   (v-b)exp(-v)<=exp(-1-b), v>=0,
+21: gives sum_j (lambda u_j-b)exp(-lambda u_j)<=-b+3exp(-1-b)=0.
+22: Thus total/T<=1+b/lambda. To see this is less than two, it suffices that
+23: b<lambda, equivalent to 3<lambda exp(1+lambda); this holds at lambda=9/10.
+24: 
+25: INCENTIVES, LONG COORDINATE. If an increased own account belongs to a long
+26: input, T is fixed. Its own account derivative before c_ij=T is
+27: p_j[1-lambda(d_ij/T)(1-p_j)]>=0 since lambda<=1; after the cap it is constant.
+28: All other weights' normalized probabilities increase and their own-owner
+29: holdings are fixed. So the actual owner's total cannot fall.
+30: 
+31: INCENTIVES, SHORT COORDINATE. Fix all other capacities and increase the actual
+32: owner's coordinate x in uniquely short input 0; T=x+a. Work away from clipping
+33: and tie points. For the other three pools j=1,2,3 write
+34:   rho_j=k_j+t_j,
+35: where k_j counts capped accounts and t_j is the sum of uncapped accounts /T.
+36: Then w_j'=lambda w_j t_j/T. The short pool has w_0=1. Put
+37:   W=1+sum_j w_j, m=sum_j w_j t_j/W, M=lambda m.
+38: We first have M<1. Indeed each term w_j(lambda t_j-1) is at most
+39: exp(lambda-2): for a positive bracket use rho_j>=t_j and maximize
+40: (lambda t-1)exp(lambda-lambda t); a nonpositive bracket is immediate.
+41: Thus sum_j w_j(lambda t_j-1)<=3exp(-11/10)<1, which is equivalent to M<1.
+42: (The strict exponential inequality is certified by the Taylor polynomial
+43: through degree five at 11/10, which already exceeds three.)
+44: 
+45: Let a_j=d_ij/T be this owner's normalized account and delta_j its derivative
+46: with respect to T (1 if capped, 0 if uncapped). Its full payment derivative is
+47:   D=p_0(1-a_0 M)+sum_{j=1}^3 p_j[delta_j+a_j(lambda t_j-M)].
+48: Here a_0=x/T<=1. A capped term is nonnegative because a_j=delta_j=1 and M<1.
+49: For uncapped terms a_j<=min(t_j,1). Call j bad if t_j<m, good otherwise.
+50: For good j the bracket is nonnegative. Bad refers to ALL pools with t_j<m,
+51: including a pool where this owner has a capped account. Its true contribution
+52: is nonnegative, so it can safely be lower-bounded by the same artificial
+53: negative quantity min(t_j,1)(lambda t_j-M). Thus, writing a(t)=min(t,1),
+54:   D W >= 1-lambda H,
+55:   H=m+sum_bad w_j a(t_j)(m-t_j).
+56: At least one of the three pools is good, since m is their weighted mean with
+57: an additional positive-weight zero. There are 0,1, or 2 bad pools.
+58: 
+59: Set S=sum_bad w, A=sum_bad w a(t), N=sum_bad w t,
+60: B=sum_bad w a(t)t, and q=(1+lambda B)/(1+A)>0. The inequality lambda H<=1
+61: is algebraically equivalent to
+62:   sum_good w[lambda(1+A)t-(1+lambda B)] <= R,
+63:   R=(1+lambda B)(1+S)-lambda(1+A)N.
+64: Since a(t) is nondecreasing, weighted covariance gives BS-AN>=0. Hence
+65:   R-(1+A)=sum_bad w(1-a(t))(1-lambda t)+lambda(BS-AN)>=0.
+66: The first terms vanish for t>=1, and otherwise both factors are nonnegative.
+67: Each good term is at most
+68:   (1+A)exp(lambda-1-q),
+69: by maximizing (lambda t-q)exp(lambda-lambda t); negative brackets cause no issue.
+70: 
+71: If there are no bad pools, A=B=S=N=0, q=1, R=1, and the sum is at most
+72: 3exp(lambda-2)<1.
+73: If there are two bad pools, at most one is good, so its bound is strictly less
+74: than 1+A<=R because lambda<=1 and q>0.
+75: If there is one bad pool, at most two are good and q>=3/4. For t>=1 this follows
+76: from q=(1+lambda w t)/(1+w)>=lambda. For t<1, w<=1 gives
+77:   q=(1+lambda w t^2)/(1+w t)>=(1+(9/10)t^2)/(1+t)>=3/4,
+78: since 18t^2-15t+5>0. Therefore their sum is at most
+79:   2(1+A)exp(-17/20)<1+A<=R;
+80: exp(17/20)>2 already follows from its quadratic Taylor lower bound.
+81: This proves D>=0 in every case.
+82: 
+83: The formula is continuous at all clipping/tie boundaries; the total bound and
+84: nonnegativity imply convergence to zero at T=0. Increasing coordinates in
+85: sequence proves whole-owner binding-underreport monotonicity on all profiles.
+86: 
+87: COROLLARY. A production function given by the minimum of FOUR fixed nonnegative
+88: linear forms admits this actual-owner rule with factor C4<2, by mapping each
+89: owner's bundle to the four linear accounts. The account-space proof holds on
+90: the full orthant, so sequential coordinate paths may leave a particular
+91: physical-bundle image while proving monotonicity between its endpoints. In
+92: particular the unweighted
+93: four-edge path escapes the obstruction to positive sums of three-form
+94: technologies. Positive sums and disjoint resource components compose. This
+95: does not yet give a uniform bound for arbitrary-depth forests.
+96: 
+97: SHARP RATE WITHIN THIS FOUR-POOL SOFTMAX FAMILY. The proof also holds at
+98: lambda_*=2-log(3), approximately 0.9013877113. At this rate M<=1 replaces
+99: M<1; every needed inequality is non-strict. The single-bad-pool q>=3/4 bound
+100: continues to hold because lambda_*>=9/10; the two-good estimate is at most
+101: 2 exp(1-1-3/4)=2 exp(-3/4)<1 since lambda_*<1. All other cases are unchanged.
+102: The budget improves to 1+W(3/e)/(2-log 3), still below two.
+103: 
+104: For any lambda in (lambda_*,1], truthfulness fails even with exclusive owners.
+105: Take one short-pool owner reporting x near 1. In each other pool put three
+106: fixed owners of capacity 2/(3lambda). These accounts are uncapped near x=1
+107: and every other pool total is 2/lambda>1. The short owner's payment is
+108:   x/[1+3exp(lambda-2/x)].
+109: Its derivative at x=1 has the sign of 1-3exp(lambda-2), which is negative
+110: precisely for lambda>lambda_*. A sufficiently small strict underreport thus
+111: raises payment. For lambda>1, an independent long-account failure also exists:
+112: make its normalized probability p small via many same-pool companions and
+113: choose its uncapped own quantity near T; derivative
+114: p[1-lambda(d/T)(1-p)] is then negative. Thus lambda_* is the largest truthful
+115: rate in this family, not just a rate chosen for a sufficient proof.
+116: 
+117: The total-factor bound is attained by this rule: take rho_0=1 and
+118: rho_1=rho_2=rho_3=1+(1+b)/lambda, b=W(3/e), realizing each long total by enough
+119: accounts individually below T. Therefore lambda_* minimizes the worst-case
+120: factor within this exponential family. This is not an optimal-mechanism claim.
+121: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

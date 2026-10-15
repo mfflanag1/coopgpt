@@ -1,0 +1,82 @@
+Connected unit-profit bipartite production has no nontrivial positive concave decomposition
+15 October 2026. Structural lemma; historical novelty unconfirmed.
+
+Let G=(H union P,E) be a finite connected simple bipartite graph with at least
+one edge. Its unit-profit resource-production function is
+  F(c)=max {sum_e x_e: x_e>=0, sum_{e incident v}x_e<=c_v}, c>=0.
+
+THEOREM. Suppose, on the whole nonnegative orthant,
+  F(c)=sum_{l=1}^L f_l(c),
+where every f_l is finite, nonnegative, concave and homogeneous of degree one.
+Then every summand is proportional to F: f_l=lambda_l F, lambda_l>=0,
+sum_l lambda_l=1. Thus F spans an extreme ray in this function cone.
+Positive constant coefficients can be absorbed into the summands.
+
+PROOF. Concavity and degree-one homogeneity imply superadditivity:
+f_l(x+y)>=f_l(x)+f_l(y). For each edge e=uv let z_e be the vector with ones
+at u and v and zero elsewhere, and define w_le=f_l(z_e)>=0. Since F(z_e)=1,
+  sum_l w_le=1 for every edge e.
+For any feasible edge plan x at capacities c, the residual vector
+c-sum_e x_e z_e is nonnegative. Superadditivity, homogeneity and nonnegativity
+give
+  f_l(c)>=sum_e x_e f_l(z_e)=sum_e w_le x_e.
+Maximizing the RHS over feasible plans yields f_l(c)>=F_{w_l}(c), the same
+production LP with nonnegative edge profits w_l. Conversely,
+  F(c)=F_{sum_l w_l}(c)<=sum_l F_{w_l}(c)<=sum_l f_l(c)=F(c).
+All differences are nonnegative and the sum is zero, so
+  f_l(c)=F_{w_l}(c) for every l and c.
+
+Now take any pair of adjacent edges e=uv and f=vw. Since the graph is simple
+and bipartite, u and w are distinct same-side vertices, with no edge uw.
+Give capacity one to u,v,w and zero elsewhere. Only e and f can produce,
+and their shared unit at v implies
+  F(c)=1, F_{w_l}(c)=max(w_le,w_lf).
+Therefore sum_l max(w_le,w_lf)=1, while both sum_l w_le and sum_l w_lf equal
+one. The identity max(a,b)=(a+b+|a-b|)/2 forces w_le=w_lf for every l.
+The edge-adjacency graph of a connected graph is connected. Hence for each l,
+w_le is a constant lambda_l on all edges, and
+  f_l=F_{w_l}=lambda_l F.
+This completes the proof without strategic owner splitting or any finite-grid
+inference. The statement is purely about production functions.
+
+CONSEQUENCE FOR BOUNDED-FORM ROUTES. For a bipartite graph, F is the minimum of
+the capacity sums over its inclusion-minimal vertex covers. Every such linear
+form is exposed at a strictly positive capacity vector: give vertices in a
+chosen minimal cover C capacity epsilon with 0<epsilon<1/|C|, and every other
+vertex capacity one. C costs less than one. Any distinct minimal cover has a
+vertex outside C (otherwise C would not be minimal), so costs at least one.
+Thus a nonzero scalar multiple of F requires at least as many linear pieces
+as there are minimal covers. The extreme-ray theorem implies that F cannot
+be a finite positive sum of minima of at most K nonnegative linear forms
+whenever its number of minimal covers exceeds K.
+
+This blocks every fixed-K version of that route on all forests. For an even
+path P_{2m}, the m+1 distinct minimal covers
+  C_j={1,3,...,2j-1} union {2j,2j+2,...,2m-2}, j=0,...,m,
+(using vertices 0,...,2m-1) already show unbounded cover count. Each selected
+vertex has an adjacent unselected vertex, so these covers are inclusion-minimal.
+Taking m>=K gives more than K exposed forms on a connected unit forest.
+
+The four-edge path has four minimal covers, yielding the earlier specific
+obstruction to positive <=3-form decomposition as a special case. The new
+mixed four-form mechanism handles that particular path directly, but extending
+composition to any fixed larger K cannot by itself settle every forest.
+
+BOUNDARIES. This is not a lower bound on required subsidy. It does not rule
+out direct nonlinear mechanisms, sums involving negative coefficients,
+nonconcave intermediate constructions, or increasing-form mechanisms with a
+new bound depending on graph structure. The nonnegative global function domain
+and degree-one homogeneity are explicit hypotheses. For the particular
+minimum-of-nonnegative-linear-forms components under discussion they hold
+automatically. Disconnected graphs do decompose over their connected components.
+
+The mathematical argument uses standard superadditivity, max-of-sum versus
+sum-of-max, and connectivity facts. No historical novelty claim is made until
+an exact original-source comparison is completed.
+
+CLARIFICATION ON THE NUMBER OF LINEAR PIECES. At a positive capacity vector exposing one minimal cover uniquely, F agrees with that cover's linear form on a neighborhood. If F is represented as the minimum of finitely many other linear forms, any form active at that interior point majorizes F there and has zero linear difference there. Its difference from the exposed form is linear and nonnegative on a neighborhood, so it must vanish identically. Thus every exposed minimal-cover form must literally occur among the representing forms; the count cannot be avoided by different gradients or redundant terms.
+
+DEPTH-TWO SPECIALIZATION. The obstruction already grows exponentially on the next infrastructure model, without increasing tree depth. For the subdivided star with branches p--h_j--l_j, j=1,...,n, the minimal covers are:
+- all h_j, excluding p and every l_j;
+- p together with exactly one of h_j,l_j on every branch, with at least one l_j selected (so p is not redundant).
+There are1+(2^n-1)=2^n minimal covers. Each is exposed as above. Hence its unit-value function requires at least2^n linear forms, with equality attained by the minimal-cover representation, and any nonzero concave homogeneous summand in a positive decomposition requires that many forms as well. Thus a fixed-K positive decomposition fails even on depth-two trees with unbounded branch count; arbitrary depth is not needed for this barrier.

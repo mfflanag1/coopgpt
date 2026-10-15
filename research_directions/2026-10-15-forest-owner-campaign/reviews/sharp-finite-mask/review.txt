@@ -1,0 +1,30 @@
+**Provisional verdict: no verified errors in the reviewed core argument.** The strongest concern is a presentational/cross-reference gap, not a mathematical failure: the quoted "general upper n√(2/(n+1))" (v2 line 22) is not derived anywhere in the packet.
+
+## Findings
+
+**1. (Low) Unverified cross-reference for the upper, v2 line 22.**
+FIXED_MASK_THEOREM gives C_nm = n − (m−1)/(H_n − H_{n−m}) and the uniform-weights bound (m−1)/2 + n/m (≈ √(2n) − 1/2). Neither equals n√(2/(n+1)). The sharp-*leading-constant* claim survives (both are (√2+o(1))√n), but the explicit expression should be sourced or replaced by C_n = min_m C_nm. Verification: derive n√(2/(n+1)) from (2) or cite its origin.
+
+**2. (Low) Terminology inconsistency, lines 45/60/91.**
+"Proper nonempty mask" (closed-payment section) vs. "every proper mask (including the full mask)" (triangular section). The logic is consistent (full mask has l=0, no closed owners, handled by k=1 endpoint), but a reader could misread which masks the exact-T_k payment covers.
+
+**3. (Informational) Gap bound justification, line 53.**
+rl/n² ≥ 1/(2n) holds because r+l=n with r,l ≥1 gives rl ≥ n−1 ≥ n/2; the text asserts it without this step. Correct.
+
+**Checked and confirmed (no finding):**
+- Unique minimizer for all k,l (lines 47–60): aggregate rε on C, 1+(r−1)ε off C is correct; S meeting an open coordinate costs ≥ n²/(n−1)² > 1 > both baseline (<1) and v_C; strict subsets of C exceed v_C via Arε/|S| > Arε/l and a_(|S|,k) ≥ a_(l,k) (a nonincreasing in s); l ≥ k case v_C ≤ n³ε ≪ r/n.
+- Forced gradient: ℓ_B restricted to block k majorizes f_k (F restricted to a single block equals f_k), touches at an all-positive point where f_k is locally linear → restriction equals w^(C,k). Randomization irrelevant.
+- Closed payment ≥ A/l² ≥ n²/(n−1)² > t for l ≤ n−1: correct, so exactly T_k.
+- Endpoint: off aggregate has k closed → a_(k,k)=0 → value n²(r−1)ε/k; r³/n² ≥ n−3l by expansion; (n⁴+n²)ε < 1 with ε=1/(100n⁶); D = n−3m−1 ≥ S0 = m(m+1)/2 follows exactly from m(m+7)/2 ≤ n−1; D ≥ 1 since m(m+7)/2 ≥ 3m+1 for m ≥ 1.
+- Triangular average: l + D(m−l)/S0 ≥ m for l < m; l ≥ m trivial.
+- Anchors: s ≥ f_1(1)=1 (subset forms cost ≥ n at the all-ones vector); at most one index with tail sum < 1/2 (w_j+w_h > 2s−1 ≥ s contradiction); T_j ≤ nAδ = 1/4; n−1 indices pay T_j to all n owners → average ≥ n−1, realization-wise.
+- Combination: weights (n−1)/(n−1+m) and m/(n−1+m) give ≥ L_n for nonempty masks via regular part and for B=∅ via anchors; mask law report-independence allows exchanging E_B with the profile average.
+- Sharpness pairing: bound (1)–(2) in FIXED_MASK uses only off ≤ T and endpoint telescoping, so applies to every member of the v2 class; fixed-priority minimizing forms of a finite min-linear F are finite global linear supports, so the class contains members attaining it.
+
+## Scope limitations
+- Cannot verify supplement.tex beyond the excerpt; eligibility of the class is asserted (lines 126–136) and plausible but not independently rechecked beyond the finite-form touching argument.
+- The anchor argument depends essentially on the empty-mask support being profile-independent (line 15). A support at B=∅ depending on b_{−i} (e.g. w^({j},1) at Q_j) would pay factor ≈1 there; the document correctly excludes such owner-specific supports (line 133), so this is a class boundary, not an error — but it is the load-bearing restriction.
+- Priority/novelty claims (line 144) not assessed.
+
+## Verdict
+No findings of substantive error in reviewed scope; two low-severity presentation items (unsourced upper expression; "proper" terminology). The class lower L_n = m(n−1)/(n−1+m) and the (√2−o(1))√n asymptotics check out as stated.

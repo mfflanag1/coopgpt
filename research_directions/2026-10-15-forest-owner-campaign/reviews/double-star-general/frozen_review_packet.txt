@@ -1,0 +1,274 @@
+Task and review objective:
+Audit ARBITRARY_DOUBLE_STAR as the main task. Independently derive/check ADS threshold identity for all real capacities, simultaneous interval maximizer and tails, arbitrary endpoint-coefficient normalization, and whole-owner positive composition. Try to break it rather than trusting finite tests. Also audit RATIONAL_TWO_INPUT explicit rational approximation lemma and its complexity/budget statements. THREE_POOL_MERGE is included dependency, separately reviewed elsewhere. Return concrete gaps or limited proof verdict. No edits, historical novelty claims, or delegation.
+
+
+FILE ARBITRARY_DOUBLE_STAR.txt
+1: All weighted double stars: positive decomposition into three-input components
+2: 15 October 2026. Candidate structural lemma; historical novelty unconfirmed.
+3: 
+4: Fix centers u,v of capacities U,V, central edge profit a>0, leaves at u of
+5: capacities s_j and edge profits b_j>0, and leaves at v of capacities t_k and
+6: edge profits c_k>0. Endpoint consumption coefficients are initially one.
+7: Define threshold capacities
+8:   B(theta)=sum_{j:b_j>=theta}s_j,
+9:   C(theta)=sum_{k:c_k>=theta}t_k.
+10: For all nonnegative real capacities, the production value satisfies
+11: 
+12: F = integral_0^a min(U+C(a-theta), V+B(theta), U+V) dtheta
+13:     + integral_a^infinity min(U,B(theta)) dtheta
+14:     + integral_a^infinity min(V,C(theta)) dtheta.             (ADS)
+15: 
+16: Integrals are finite step-function sums. Their breakpoints depend only on the
+17: fixed technology profits, never on capacity reports. There are O(J+K) terms.
+18: All weights are nonnegative and every term is a minimum of at most three fixed
+19: nonnegative linear combinations of actual resource capacities. No dominance
+20: condition such as a>=max b+max c is imposed.
+21: 
+22: PROOF. Fix a feasible plan, with central quantity z and quantities on each
+23: leaf edge. Integrating its selected-edge quantities over the three ranges in
+24: (ADS) recovers exactly its weighted objective: the central edge is counted for
+25: length a; a u-leaf for length min(b_j,a)+(b_j-a)_+=b_j, and a v-leaf similarly.
+26: For a theta in (0,a), after aggregating the selected leaves the corresponding
+27: unweighted three-edge path has optimum
+28:   min(U+C(a-theta), V+B(theta), U+V).
+29: This follows either from the three minimal vertex covers or from the direct
+30: one-dimensional calculation below. The tail components are unweighted stars.
+31: Thus every plan has value at most the RHS of (ADS).
+32: 
+33: We construct one plan attaining all component optima simultaneously. Put
+34: m=min(U,V). For a given central quantity z in [0,m], allocate remaining center
+35: capacity greedily to its incident leaves in descending original profit order.
+36: For the central theta component, the value of this plan is
+37:   z+min(U-z,B(theta))+min(V-z,C(a-theta)).
+38: As a function of z, this is maximized exactly on the interval between
+39:   L(theta)=clip(U-B(theta),0,m),
+40:   R(theta)=clip(V-C(a-theta),0,m),
+41: where clip(x,0,m)=max(0,min(x,m)). This follows from slope +1 before both
+42: unclipped thresholds, 0 between them, and -1 after both, with endpoints clipped.
+43: 
+44: L is nondecreasing in theta, R is nonincreasing. All intervals I(theta) between
+45: L(theta),R(theta) intersect pairwise: if theta<eta and I(theta) lay strictly
+46: left of I(eta), this would force R(theta)<R(eta), a contradiction; if it lay
+47: strictly right, this would force L(theta)>L(eta). A finite family of intervals
+48: with pairwise intersections has common intersection. Only finitely many open
+49: threshold cells occur, so choose
+50:   z*=max_theta min(L(theta),R(theta)),
+51: which lies in every I(theta). The greedy-leaf plan with this z* attains all
+52: central components.
+53: 
+54: Let B_>a=sum_{b_j>a}s_j and C_>a=sum_{c_k>a}t_k. Every central theta includes
+55: all these high-profit leaves. Consequently, for every theta,
+56:   min(L(theta),R(theta)) <= clip(U-B_>a,0,m),
+57:   min(L(theta),R(theta)) <= clip(V-C_>a,0,m),
+58: and the same bounds hold for z*. For any theta>a, this implies
+59:   min(U-z*,B(theta))=min(U,B(theta)),
+60:   min(V-z*,C(theta))=min(V,C(theta)).
+61: Indeed if high-profit leaf capacity exceeds its center capacity, z*=0;
+62: otherwise the remaining center capacity suffices for every high-profit leaf.
+63: The same greedy-leaf plan therefore attains every tail star too. This proves
+64: (ADS). Zero capacities, absent leaf sides, tied values and m=0 are included;
+65: changes on finitely many integration endpoints do not affect the formula.
+66: 
+67: PAYMENTS. Give each actual owner its contribution to the two or three linear
+68: arguments in each term of (ADS). Apply the proved mixed-owner three-pool softmax
+69: rule (using the mixed two-input rule or duplicating a form for two-form terms),
+70: then sum with the positive interval lengths. Every real coalition obeys the
+71: same decomposition. Increasing an owner's whole resource bundle raises each
+72: of its derived accounts and leaves all other owners' accounts fixed. Thus the
+73: result covers all coalitions and is truthful for binding underreports on ALL
+74: nonnegative profiles, with total at most
+75:   [1+W(2/e)] F, approximately 1.4630565 F.
+76: The number of fixed owners and both leaf counts may grow without bound.
+77: Owner identities do not change, and an owner may hold arbitrary resources on
+78: both sides of the graph. Disjoint unions compose even when owners span them.
+79: 
+80: POSITIVE ENDPOINT COEFFICIENTS. On any forest with positive incident resource
+81: coefficients A_re, choose a root in each component, assign positive row scale
+82: s_root=1, and recursively choose s_neighbor so
+83:   s_r A_re = s_neighbor A_neighbor,e =: lambda_e.
+84: There is no consistency obstruction because the graph is acyclic. Set
+85: z_e=lambda_e x_e. Multiplying each resource constraint by s_r converts it to
+86:   sum_{e incident r} z_e <= s_r c_r,
+87: and edge profit becomes p_e/lambda_e. Every owner bundle transforms by the
+88: same fixed positive coordinate scalings. Thus arbitrary positive two-endpoint
+89: coefficients, including the target's hardware coefficient 1 and power e_jk,
+90: reduce to the unit-incidence model without affecting all-profile incentives,
+91: coalition values or budget factors. The normalization does not solve a general
+92: forest; it transfers (ADS) only to components with double-star topology.
+93: 
+94: LIMITATION AND NEXT EXACT FRONTIER. The proof uses one central decision z and
+95: an interval intersection. A path with four edges already has three nonleaf
+96: vertices and two interacting central edge quantities; the scalar argument does
+97: not apply automatically. This is a structural stopping point, not an
+98: impossibility certificate for four-edge paths or deeper trees.
+99: 
+100: PRIORITY BOUNDARY. The dominant-corner double-star condition has an exact
+101: antecedent in Solymosi, arXiv:2210.17373, Proposition 8, for unit-capacity
+102: assignment games and population monotonicity. Formula (ADS) removes that
+103: dominance condition and treats arbitrary continuous capacities with fixed
+104: mixed resource owners. The present argument alone does not establish that
+105: this decomposition or payment consequence is historically novel.
+106: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE THREE_POOL_MERGE.txt
+1: Mixed-owner three-pool softmax lemma
+2: 15 October 2026. Candidate extension; historical novelty unconfirmed.
+3: 
+4: Fix arbitrary actual owners holding c_ij>=0 for j=0,1,2. Put T=min_j sum_i c_ij,
+5: d_ij=min(c_ij,T), rho_j=sum_i d_ij/T, w_j=exp(1-rho_j), p_j=w_j/sum_h w_h.
+6: For T>0 pay y_i=sum_j p_j d_ij; at T=0 pay zero. Coverage and total factor
+7: 1+b, b exp(b)=2/e, follow from the existing exclusive-pool softmax proof:
+8: every capped pool covers each coalition, some rho_j=1, and total/T is the
+9: weighted mean of rho_j. This note supplies the missing ACTUAL-OWNER incentive
+10: argument when one owner controls several accounts.
+11: 
+12: If an increased own coordinate belongs to a long pool, T is fixed. Its own
+13: account payment has derivative p_j[1-(d_ij/T)(1-p_j)]>=0 before its cap and
+14: zero thereafter; other p_h increase and their own-owner holdings stay fixed.
+15: Hence the owner's whole payment increases.
+16: 
+17: Suppose instead the increased own coordinate x lies in a uniquely short pool 0.
+18: T=x+a for fixed a>=0, w_0=1. Work off finitely many clipping/tie points.
+19: For j=1,2 let k_j be the number of capped accounts and let t_j be the sum of
+20: uncapped holdings divided by T. Thus rho_j=k_j+t_j and
+21:   w_j' = w_j t_j/T.
+22: Write A=w_1, B=w_2, W=1+A+B and M=(A t_1+B t_2)/W. We have M<1, because
+23:   A(t_1-1)+B(t_2-1)
+24:     <= sum_{j=1,2}(rho_j-1)exp(1-rho_j) <=2/e<1.
+25: For this actual owner let a_j=d_ij/T. Its long account derivative delta_j is 1
+26: when capped and 0 when uncapped. Also a_0=x/T<=1. Differentiating its SUM gives
+27:   D=p_0(1-a_0 M)+sum_{j=1,2}p_j[delta_j+a_j(t_j-M)].
+28: Capped terms are nonnegative since a_j=delta_j=1 and M<1. For uncapped terms,
+29: a_j<=t_j. If t_j>=M their contribution is nonnegative; otherwise it is at
+30: least p_j t_j(t_j-M). At most one of t_1,t_2 is less than M: if both were,
+31: their weighted mean with the additional weight-one zero would be less than M.
+32: If neither is, D>=p_0(1-M)>0. Otherwise relabel t_1=s<M and t_2=t. Then
+33:   D W^2 >= 1+A(1-s+s^2)+B(1+A s^2)-Bt(1+A s).
+34: Since B=exp(1-k_2-t)<=exp(1-t), we have Bt<=t exp(1-t)<=1. Consequently
+35:   D W^2 >= A(1-s)^2+B(1+A s^2)>0.
+36: Thus increasing a coordinate in a short pool also cannot lower actual-owner
+37: payment. Formulae agree continuously at caps and ties. At zero output,
+38: nonnegativity and the established total bound force continuity to zero.
+39: Sequential coordinate increases prove whole-bundle underreport monotonicity.
+40: 
+41: COROLLARY. For F(c)=min{L_0(c),L_1(c),L_2(c)} with fixed nonnegative linear
+42: forms L_j, assign actual owner i derived accounts L_j(b_i). The above rule
+43: covers every coalition, is whole-owner truthful on all nonnegative profiles,
+44: and pays at most [1+W(2/e)]F(c), approximately 1.4630565 F(c). The forms may
+45: overlap in resource support; no owner splitting or population change occurs.
+46: Positive sums of such technologies retain the same factor with arbitrary
+47: mixed fixed owners. This does not prove the bound for every forest.
+48: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE verify_arbitrary_double_star.py
+1: from fractions import Fraction as Q
+2: from itertools import product
+3: from random import Random
+4: import json
+5: from verify_double_star import direct
+6: 
+7: def decompose(U,V,s,t,b,c,a):
+8:     knots=sorted({Q(0),a}|{v for v in b if 0<v<a}|{a-v for v in c if 0<v<a})
+9:     total=Q(0)
+10:     for lo,hi in zip(knots,knots[1:]):
+11:         mid=(lo+hi)/2
+12:         Bs=sum(cap for cap,value in zip(s,b) if value>=mid)
+13:         Ct=sum(cap for cap,value in zip(t,c) if value>=a-mid)
+14:         total+=(hi-lo)*min(U+Ct,V+Bs,U+V)
+15:     for center,caps,values in ((U,s,b),(V,t,c)):
+16:         knots=sorted({a}|{v for v in values if v>a})
+17:         for lo,hi in zip(knots,knots[1:]):
+18:             mid=(lo+hi)/2
+19:             selected=sum(cap for cap,value in zip(caps,values) if value>=mid)
+20:             total+=(hi-lo)*min(center,selected)
+21:     return total
+22: 
+23: checks=0
+24: for a,b1,b2,c1,c2 in product(map(Q,[1,2,3]),repeat=5):
+25:     b=(b1,b2);c=(c1,c2)
+26:     for raw in product(map(Q,[0,1,2]),repeat=6):
+27:         U,V=raw[:2];s=raw[2:4];t=raw[4:]
+28:         oracle=direct(U,V,s,t,b,c,a)
+29:         candidate=decompose(U,V,s,t,b,c,a)
+30:         if oracle!=candidate:raise RuntimeError((a,b,c,raw,oracle,candidate))
+31:         checks+=1
+32: r=Random(14013)
+33: for z in range(5000):
+34:     nl=r.randrange(1,8);nr=r.randrange(1,8)
+35:     b=tuple(Q(r.randrange(1,30),r.randrange(1,6)) for _ in range(nl))
+36:     c=tuple(Q(r.randrange(1,30),r.randrange(1,6)) for _ in range(nr))
+37:     a=Q(r.randrange(1,30),r.randrange(1,6))
+38:     U,V=(Q(r.randrange(0,30),r.randrange(1,6)) for _ in range(2))
+39:     s=tuple(Q(r.randrange(0,30),r.randrange(1,6)) for _ in range(nl))
+40:     t=tuple(Q(r.randrange(0,30),r.randrange(1,6)) for _ in range(nr))
+41:     oracle=direct(U,V,s,t,b,c,a)
+42:     candidate=decompose(U,V,s,t,b,c,a)
+43:     if oracle!=candidate:raise RuntimeError((a,b,c,U,V,s,t,oracle,candidate))
+44:     checks+=1
+45: print(json.dumps({'status':'PASS','exact_rational_checks':checks,
+46:  'exhaustive_two_leaves_per_side':3**11,'random_rational_cases':5000,
+47:  'scope':'finite corroboration of arbitrary double-star positive decomposition'},indent=2))
+48: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE RATIONAL_TWO_INPUT.txt
+1: Exact rational implementations approaching the mixed two-input constant
+2: 15 October 2026. Internal analytic lemma, not a historical novelty claim.
+3: 
+4: SETTING
+5: Use the fixed-owner mixed two-input model from the scarce-power scope proof.
+6: At T=min(A,B)>0 call s_i the short holding and d_i=min(l_i,T) the capped long
+7: holding. Let rho=sum_i d_i/T>=1, u=rho-1. For integer k>=1 define
+8:  E_k(u)=sum_{j=0}^k u^j/j!, p_k(rho)=1/(2 E_k(rho-1)),
+9:  y_i=(1-p_k)s_i+p_k d_i.
+10: At T=0 pay zero. Every arithmetic operation is rational on rational reports.
+11: 
+12: ELIGIBILITY
+13: Every capped pool vector covers every coalition, so their convex combination
+14: does also. Write R=E_{k-1}(u)/E_k(u); then 0<R<=1 and p_k'=-p_k R.
+15: If an own long holding grows with T fixed, its own long-account derivative is
+16: p_k(1-(d_i/T)R)>=0 before the cap, and zero after it. The own short-account
+17: payment increases because p_k decreases. If the owner's short holding grows,
+18: T grows at unit rate, rho' is in [-rho/T,0], and p_k grows. Its long-account
+19: payment p_k min(l_i,T) therefore grows. For the short account x(1-p_k),
+20: its derivative is at least 1-p_k-p_k R rho, using x/T<=1. This is nonnegative:
+21:  p_k(1+rho R)<= (1+rho)/(2E_k(u))=(2+u)/(2E_k(u))<=1,
+22: since E_k(u)>=1+u. At the aggregate tie every holding is uncapped and rho=1,
+23: p_k=1/2; the formulas coincide. Clipping points are continuous. The bounded
+24: budget below handles the zero-output boundary. Sequential coordinate changes
+25: prove whole-bundle monotonicity for arbitrary mixed actual owners.
+26: 
+27: BUDGET
+28: Total/T=1+u/(2E_k(u)). For k=1 the supremum is3/2. For k>=2, the derivative
+29: of u/E_k has the sign of
+30:  E_k-u E_k'=1-sum_{j=2}^k (j-1)u^j/j!.
+31: It is strictly decreasing for u>0, crosses once, and its root is at mostsqrt(2).
+32: Thus the exact worst-case excess beta_k=max_{u>=0}u/(2E_k(u)) is reached at
+33: a unique u_k in(0,sqrt(2)]. In particular beta_2=(sqrt(2)-1)/2.
+34: Every such rho=1+u is feasible with finitely many long-only owners and one
+35: short-only owner, so this is a genuine uniform supremum for this rule family.
+36: 
+37: For a convenient explicit bound let delta_k=(3/2)^(k+1)/(k+1)!.
+38: Taylor's remainder gives, for0<=u<=sqrt(2)<3/2,
+39:  E_k(u)>=e^u[1-u^(k+1)/(k+1)!]>=e^u(1-delta_k).
+40: Whenever delta_k<1,
+41:  beta_k<=1/[2e(1-delta_k)].
+42: Because E_k(u)<=e^u, beta_k>=1/(2e); hence beta_k converges downward to1/(2e).
+43: The degree required for additive error epsilon is O(log(1/epsilon)/loglog(1/epsilon))
+44: as epsilon tends tozero, by factorial growth. For rational reports of bitlengthL,
+45: exact evaluation takes polynomial arithmetic/bit complexity in k,n,L; this claim
+46: concerns this explicit two-input rule, not the general exponential-mask hybrid.
+47: 
+48: COMPOSITION
+49: Every fixed positive sum of two-input technologies inherits this rational rule
+50: and the same factor. This includes the previous single-power star theorem and
+51: the dominant double-star decomposition. This is an implementability refinement,
+52: not an improvement to the analytic factor or to the unrestricted9/8 lower bound.
+53: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

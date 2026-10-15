@@ -1,0 +1,73 @@
+MAXIMUM-COALITION-MARGINAL TRUNCATION FOR THE REPORT-MASK HYBRID
+Status: elementary structural lemma proved here; priority unassessed. No uniform forest-budget bound claimed.
+
+SETUP. Fixed actual owner set N, monotone production f, v_b(S)=f(sum_{i in S}b_i), f(0)=0. Reports and binding deviations are coordinatewise nonnegative bundles; utility is payment only. Define
+  V_i(b)=max_{S subset N\{i}} [v_b(S+i)-v_b(S)].
+V_i is finite, nonnegative, and nondecreasing in owner i's whole bundle, with all other bundles fixed. It differs from the manuscript H_i=max core coordinate; V_i is at least the grand marginal, whereas H_i is at most the grand marginal.
+
+LEMMA 1 (COALITION-COVERING TRUNCATION). If z>=0 covers every coalition, then the coordinatewise truncated vector min(z_i,V_i) also covers every coalition.
+Proof: truncate coordinates sequentially. Suppose the current covering vector has coordinate i reduced to V_i. For S containing i, the new sum is z(S\i)+V_i>=v(S\i)+V_i>=v(S). Coalitions not containing i are unchanged. Finitely many such operations prove the claim. This proof is game-theoretic and does not use concavity, linear programming, or sparse production.
+
+HYBRID. Suppose f=min_{w in W} w.c for a fixed finite collection of nonnegative forms. Independently retain each owner with probability p=1-q; let w_B be the first minimizing form for retained reports. Replace the existing global-T cap by
+  a_i(w,b)=min(w.b_i,V_i(b)).
+Define z_i=E a_i(w_B,b), p_i=E[a_i(w_B,b)|B_i=0],
+  m_i=E_{B_-i}[ f(b_i+sum B_h b_h)-f(sum B_h b_h) ],
+  r_i=q p_i+p m_i.
+Then r is nonnegative, own-report monotone, and covers every coalition on every profile.
+Proof: each full form covers, so Lemma 1 shows each capped form covers. Conditional on B_i=0, its selected w is independent of b_i and both terms in the min are own-monotone. The marginal m_i is own-monotone. When i is retained, the selected form satisfies
+  w_B.b_i <= v(B)-v(B\i) <= V_i.
+Hence its on contribution is unchanged by capping and is bounded by that same marginal. Thus r_i>=z_i, proving coverage.
+
+EXACT BUDGET IDENTITY. With g(q)=E v(B), Z(q)=sum z_i, R(q)=sum r_i,
+  R=Z-g-(1-q)g'.
+Proof: sum_{i:B_i=1}a_i(w_B,b)=v(B), so q sum p_i=Z-g. Differentiating the finite mask polynomial gives sum m_i=-g'. All original hybrid integration identities survive unchanged.
+
+WHAT THIS FIXES. For disjoint edges with one huge-capacity endpoint owner and one unit endpoint owner on each edge, each huge owner's V_i is 1, although global T equals the number of edges. The old global-T cap could incur a factor growing with edge count; this particular inflation disappears.
+WHAT IT DOES NOT FIX. Sum V_i need not be bounded by a constant times T even on a single star: n hardware owners of capacity 1 and one power owner of capacity 1 give V_i=1 for every owner, T=1. Budget control must use correlation between the selected form and the sampled reports.
+
+EXACT FAILURE OF A SIMPLE Z BOUND. On the four-edge path 0-1-2-3-4 with one owner per vertex and capacities (99/100,1,99/100,1,99/100), T=2 and V_i=c_i. Use the fixed minimal-cover order
+  {1,3}, {0,2,3}, {1,2,4}, {0,2,4}.
+At q=1/100 exact enumeration gives
+  Z/T=2028622791197/2000000000000
+      > 100/99 = 1/(1-q),
+with positive difference 833656328503/198000000000000.
+This counterexample defeats the proposed Z<=T/(1-q) inequality even with the new cap. It does not disprove a uniform improvement to the actual R budget.
+Certificate: check_sampled_counter.py in this directory.
+
+STRONGER OBSTRUCTION: UNBOUNDED V-CAP HYBRID ON A DEPTH-TWO TREE.
+This supersedes any numerical suggestion that a small fixed q might suffice.
+For n>=2, take vertices p,h_1,...,h_n,l_1,...,l_n and edges p--h_j--l_j. Owner 0 holds capacity 1 at p and epsilon=1/n^2 at EVERY l_j. Owner j holds capacity 1 at h_j only. All full resource capacities are strictly positive, all owners remain fixed, and every activity consumes one unit at each of two endpoints. The full optimum is
+  T=1+n epsilon=1+1/n.
+Indeed the private activities use n epsilon and the hub activity uses 1; the h capacities admit this because n(1-epsilon)>=1.
+For j>=1, V_j=1: retaining owner 0 plus j alone permits all of h_j's unit to be served, while without j that coalition has value0. No marginal can exceed h_j's unit capacity. Owner0 has V_0=T.
+
+Fix any q in (0,1), p_ret=1-q. Condition on owner0 retained, and let K be the number of retained h owners. If K>=2, there are only two possible optimal-cover types:
+  (a) exclude p, hence include all h_j, sampled cost K;
+  (b) include p, then independently choose h_j or l_j on each private edge.
+Type (b) uniquely chooses l_j for retained j (cost epsilon<1) and h_j for absent j (cost0<epsilon). Its sampled cost is 1+K epsilon<K for n>=2,K>=2 (strict also n=2,K=2). Thus the selected cover is unique: this argument is independent of any tie-breaking convention.
+At this mask every absent j contributes min(1,V_j)=1 to Z. Therefore
+  Z/T >= p_ret * E[(n-K) 1_{K>=2}]/(1+1/n)
+       = p_ret * [nq - n q^n - n(n-1)p_ret q^(n-1)]/(1+1/n).
+The right side tends to infinity linearly in n. Since R>=Z coordinatewise, the V-cap hybrid has no uniform finite budget factor on forests for ANY fixed retention parameter in (0,1).
+
+The same obstruction holds for any fixed report-independent probability mixture over q with positive probability on (0,1): by Fatou,
+  liminf_n E_q[R_n/T_n]/n >= E_q[q(1-q)]>0.
+This statement allows integration measures with atoms at0 and1 but requires positive mass in the interior. It does NOT rule out mechanisms whose q distribution changes with owner count, a different dependence among owner masks, or mechanisms outside this hybrid architecture. Nor does it prove an impossibility for truthful forest mechanisms generally.
+
+This obstruction is robust to tie-breaking and uses strictly positive capacities. Its source is one real mixed owner supplying the scarce hub resource and tiny private complements, while many competing owners each retain maximum coalition marginal1. The current V cap cannot reflect competition among these mutually substitutable owners.
+
+PRIORITY NOTE. V_i is the classical reasonable upper payoff of a cooperative game, not a newly introduced solution concept. Parent located an author original (Inductive tau-values, June 30, 2024, section6) using precisely max_{S subset N\i}(v(S+i)-v(S)), with historical attribution to Driessen--Tijs (1984) and Milnor (1952):
+https://ris.utwente.nl/ws/portalfiles/portal/445770136/inductive_tau-values_june_30_2024.pdf
+The truncation/hybrid observation and the depth-two-tree obstruction require their own source comparison before any priority assertion.
+
+NO-VETO ROBUSTNESS. The same divergence survives removing every veto owner. Modify the construction by giving each owner j>=1 an additional delta=1/n^4 at p and at EVERY private leaf l_k. Owner0 keeps p capacity1 and epsilon at each l_k. Then every owner has a positive-valued complement coalition: excluding owner0 leaves positive power supplied by the h owners, and excluding any h owner leaves owner0 plus another h owner. Thus no owner is veto.
+The full value is exactly
+  T=1+n epsilon+(n+n^2)delta
+   =1+1/n+1/n^3+1/n^2,
+obtained by consuming all power capacities; each h capacity1 admits its private-leaf flow, and aggregate remaining h capacity accommodates the center flow. Also V_j>=1 for every j>=1, since the coalition {0,j} has value1 and {0} has value0.
+Conditional on owner0 retained and K>=2 h owners retained, center capacity is 1+K delta and each private leaf has epsilon+K delta. The unique selected cover remains center + leaves on retained branches + h vertices on absent branches. Its sampled cost
+  1+K epsilon+K(K+1)delta < K
+for all n>=2 and 2<=K<=n. Each private-leaf capacity is <1. Every absent h owner's contribution to this selected cover is at least1, and its V cap is at least1. The support is selected using masked capacities, but the closed owner's charge uses her UNMASKED reported bundle b_j; this distinction is essential. Hence the previous lower bound applies with this new T, still tending to1:
+  R/T >= p_ret [nq - n q^n - n(n-1)p_ret q^(n-1)]
+          /(1+1/n+1/n^2+1/n^3).
+Therefore an efficient special-case rule for veto profiles does not remove this obstruction.

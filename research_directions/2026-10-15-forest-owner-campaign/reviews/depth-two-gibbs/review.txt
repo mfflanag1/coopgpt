@@ -1,0 +1,29 @@
+**Provisional verdict: no substantive findings in reviewed scope.** All algebra I could check by hand (cover enumeration, partition function, payment ratio, rational bounds, derivative sign, finite witness) is correct, and the two profiles are consistent with a common domain and a rate λ(D_d, d+2). Remaining items are definitional gaps, not errors.
+
+## Findings
+
+**1. (Low) Undefined T and undefined benchmark for "total-payment ratio" — line 5, 12–14, 19.**
+Evidence: T is used (`a_i(C)=min(w_C.b_i,T)`, "T=1") but never defined in this file. The argument needs T = min over covers of the uncapped cover weight (then all-h gives T=1 in both profiles and T is constant for x∈[2/3,3/4] in B). C_d(λ) is "exact total-payment ratio" but the denominator benchmark is implicit (it equals Σ_C P_C ρ_C, i.e. total payment / T). If T or the benchmark is defined differently in the frozen files (e.g. max-flow, capped sum), lines 10, 19 and 25 ("no bottleneck switches") need re-checking.
+Verification: cite the frozen definition of T and the bounded-budget benchmark; confirm T = min_C Σ_i w_C·b_i.
+
+**2. (Low) Utility model for "truthful" is unstated — lines 19–25, 37–39.**
+Evidence: the incentive argument shows xP(x) strictly increases under underreport. This is a truthfulness violation only if owner utility = payment received. If the frozen definition includes allocation value or costs, the sign argument may not transfer. The algebra itself is correct: Z = 1 + S + R with only S = 2^{d−1}e^{−λ(d+x−1)} depending on x gives dP/dx = −λP(1−P) and d(xP)/dx = P[1−λx(1−P)]; with λ>2, x=3/4, P<1/3 the bracket is <1−2·(3/4)·(2/3)=0.
+
+**3. (Low) Title (line 1) overstates relative to line 27.**
+Evidence: line 1 says "NO SINGLE-RATE COVER-SOFTMAX RULE"; line 27 correctly scopes to a scalar rate depending only on graph and owner count. Suggest aligning the title.
+
+## Items checked and found correct
+- Minimal covers of D_d: all-h plus p∪{h_j or l_j per branch, ≥1 leaf}; k-leaf count binom(d,k); ρ = 2+k(1−1/d) in A; d+x for l_1-covers, 2^{d−1} of them in B.
+- Partition function 1+e^{−λ}B and numerator 1+e^{−λ}[2B+bdz(1+z)^{d−1}] (line 13–14).
+- Limit C_d/d → z/(1+z) → 1/(1+e^λ); uniform lower bound via z≥e^{−2}, E[k | p-cover] ≥ dz/(1+z).
+- Rational bound: e^2 ≤ 1663/225 (series through k=5 = 109/15, tail ≤ (4/45)/(1−2/7)=28/225) < 8; (9/8)^18 ≈ 8.33 ≥ 8 so 9^19 ≥ 9·8^19; mass ≥1/2, b≥1/2, E[k]≥d/9 ⇒ C_d ≥ d/36 for d≥19, λ∈[0,2].
+- B bound: 2^{d−1}e^{−2(d−1/4)} = e^{−3/2}(2e^{−2})^{d−1} ≤ 2e^{−7/2} < 1/3; λ=3 witness 2e^{−5}<1/3 and derivative < −P/3 on [2/3,3/4], so xP strictly decreasing there.
+- Dichotomy is exhaustive (λ≤2 vs λ>2) and both profiles use D_d with N=d+2, so a single λ(D_d,d+2) hits one of the two obstructions for every d≥19.
+
+## Scope limitations
+- Only this file reviewed; frozen definitions of T, benchmark, truthfulness, and the embedding domain not available.
+- test_depth2_gibbs.py (line 29) not inspected; nothing in the conclusion depends on it.
+- No numerical verification run; all checks are hand computation.
+
+## Verdict
+No findings beyond definitional dependencies (T, benchmark, utility model) that must be confirmed against the frozen files. The obstruction, as scoped in line 27, is supported by the supplied evidence.

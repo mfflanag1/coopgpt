@@ -1,0 +1,27 @@
+**Provisional verdict: no counterexample found in reviewed scope; algebra holds. Most important finding: the "exact coalition worth" claim for A+C+I (line 5) is false for proper subsets (strict slack occurs), and truthfulness is only weak — A is payoff-indifferent across all reports, so the mechanism is not robust to A–C side payments.**
+
+## Findings
+
+**1. (Low — wording error, not a counterexample) Line 5: "A+C+I … exact coalition worth."**
+Coverage is only an inequality for proper subsets. Example: m=2, H=(2,2), L=(1,1), P=2 → a=(1,1), r=(1,1), R=2. For I={1}: worth = a₁ + min(P, r₁) = 1+1 = 2, payments = R + a₁ = 3 > 2. Equality holds only for I = all hardware owners. The inequality R ≥ min(P, Σ_I r_i) is correct (r_i ≥ 0, min(P,·) nondecreasing), so coverage still holds. Fix: replace "exact" with "≥; exact at I = full set."
+
+**2. (Medium — missing hypothesis / interpretation) Line 6: "all-profile binding resource truthfulness."**
+Verified: y_A ≡ 0, y_C = min(P, Σr) nondecreasing in P, y_Bi = min(H_i, L_i) nondecreasing in H_i, for all opposing profiles. Since underreports are binding and payments are monotone, truth is *weakly* dominant — but for A it is exactly indifferent at every profile. Consequence: A may report L = 0 at zero cost, which sets a_i = 0, r_i = H_i, and raises y_C from R to min(P, ΣH_i), while every B_i loses a_i. With side payments, the pair {A, C} strictly gains (concrete: H=(1,1), L=(1,1), P=2: truthful y_C = 0; A reports L=0 → y_C = 2, B's drop from 1 to 0). Line 7 acknowledges "weak incentive only," but the theorem should state explicitly that (a) no coalitional/group strategy-proofness is claimed and (b) B_i's payment depends on a report by an indifferent agent, so without a tie-breaking-toward-truth assumption the B_i guarantees are not self-enforcing.
+
+**3. (Verified, no finding) Coalition coverage, line 5.**
+- A+I: Σ_I a_i = worth. ✓
+- C+I: min(P, Σ_I r) + Σ_I a ≥ min(P, Σ_I H): if P ≤ Σ_I r, LHS ≥ P; else LHS = Σ_I H. ✓
+- No-hardware coalitions (A, C, A+C) worth 0; hardware-only coalitions worth 0; payments ≥ 0. ✓
+- Budget: Σ a_i + R = T. ✓
+Note coverage is evaluated at *reported* values; it coincides with true worth only under truthful reports (consistent with Finding 2).
+
+**4. (Low) m=1 is K_{2,1}, acyclic; line 7's "cycles for m≥2" is correct and the result does not depend on m.**
+
+## Scope limitations
+- Reviewed only the supplied text; no files inspected or code run.
+- Production functions on line 3 taken as primitives; not assessed for physical plausibility.
+- Novelty, private costs, outside options, fairness, and mixed roles excluded per task.
+- Overreporting is excluded by the "binding underreports" assumption; if overreports were feasible the monotonicity argument would not suffice.
+
+## Verdict
+**Findings (minor):** The algebra and inequalities are correct; no counterexample to coverage or weak own-report truthfulness. Required corrections: (i) drop "exact" for A+C+I proper subsets; (ii) state that truthfulness is weak dominance only, A is fully indifferent, and the result is not group strategy-proof (A–C collusion with side payments strictly profits and zeroes B_i payments).

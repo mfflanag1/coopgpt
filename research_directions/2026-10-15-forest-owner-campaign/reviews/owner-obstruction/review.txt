@@ -1,0 +1,29 @@
+**Provisional verdict: no defects found in reviewed scope (limited verdict).** The most important point to state up front: the argument is internally correct, and the file correctly confines its conclusion to the canonical relative-support hybrid averaged against a report-independent law — it does *not* establish any unrestricted mechanism lower bound, and the unrestricted gap (≈log n/loglog n vs (√2+o(1))√n) remains open. All steps below were checked by hand from the packet only.
+
+## Findings
+
+**No correctness defects.** Verified steps:
+
+1. **Technology (ll. 25–32).** F = Σ_k h_k(x^(k)) is concave, monotone, 1-homogeneous; expanding Σ_k min_{|A_k|=k} over product choices gives a finite min-linear family with 0/1 coefficients. Correct. m ≤ n for n ≥ 2 since n(n−1) ≥ 2(n−1).
+
+2. **p_i = T (ll. 41–44).** For any mask with B_i = 0, coordinate i of block k is outside supp(x_B) (including the all-closed mask, where ℓ_0 = +∞ off 0, SUPPLEMENT_EXCERPT l. 102). Capped at T = k > 0. Correct and independent of the min-norm choice inside the face.
+
+3. **Endpoint marginal (ll. 46–51).** Sum of k smallest entries of a 0/1 vector with n−C ones is (k−C)_+; difference (k−C)_+ − (k−C−1)_+ = 1 iff C ≤ k−1. Equation (1) follows. Sanity check against OWNER_SQRT_BOUND ll. 59–66: k = 1 gives nq + n(1−q)^n, matching that file’s exactness example. ✔
+
+4. **Weighting and Jensen (ll. 57–62).** Σ_k k/S = 1; Σ_{k=1}^m P(C ≤ k−1) = E[(m−C)_+] for integer C ≥ 0; (m−c)_+ is convex, so Jensen gives E ≥ (m−(n−1)q)_+. Direction correct.
+
+5. **Quadratic bound (ll. 64–69).** Expansion of H(q) checks: (1−q)(m−(n−1)q) + Sq = m + (S−m−(n−1))q + (n−1)q². S−m = m(m−1)/2 ≥ n−1 by definition of m, so H ≥ nm/S = 2n/(m+1). Second case needs m(m+1) ≥ 2(n−1), which holds. Empty-case remark correct.
+
+6. **From average to worst profile (ll. 71–73).** Positive weights summing to 1 ⇒ some profile has factor ≥ L_n, for any μ (atoms at 0 or 1 included; eligibility is not needed for a lower bound). Asymptotics: m = √(2n)+O(1) ⇒ L_n = (√2−o(1))√n. ✔
+
+7. **Match with upper theorem.** OWNER_SQRT_BOUND gives (√2+o(1))√n using the *uniform* law on [0,a]; the lower holds for *all* μ (even technology-dependent), so the leading constant √2 is sharp within the stated class. The class restriction is stated correctly (ll. 4–10, 19–22, 83–87): the finite-form selector hybrid for the same F (which OWNER_SQRT_BOUND also covers) is explicitly excluded, as are report-/owner-dependent mixing and non-face support extensions.
+
+**Minor (no action required):** line 54’s “polynomial continuation” at q = 0 for p_i (conditioning on a null event) follows the supplement’s convention; harmless.
+
+## Scope limitations
+- Only the supplement excerpt was available; I cannot confirm that the deployed rule uses exactly Definition ext:def:general (min-norm relative support, +∞ off-face). If the implemented selector differs, p_i = T may fail.
+- verify_owner_sqrt.py not in packet; no test claims assessed.
+- Priority/novelty not reviewed.
+
+## Verdict
+**No findings in reviewed scope.** The proof of L_n = 2n/(m+1) for the canonical relative-support mixture class is correct as written. It is a class-restricted obstruction only; it neither improves the unrestricted lower bound nor constrains the finite-form selector.

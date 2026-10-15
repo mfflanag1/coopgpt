@@ -1,0 +1,28 @@
+**Provisional verdict: no substantive findings against (ADS) in reviewed scope; limited-proof verdict on the payment layer.** Most important concrete gap: the "duplicate a form" route for two-form tail terms is not covered by THREE_POOL_MERGE as written (persistent tie, not "finitely many tie points"); the two-input route must be used.
+
+## Findings
+
+**1. Medium — ARBITRARY_DOUBLE_STAR.txt:68–69, duplicated-form application.**
+THREE_POOL_MERGE's incentive argument treats (i) a strictly long pool with T fixed and (ii) a *uniquely* short pool 0 with w_0=1, "off finitely many clipping/tie points." If a tail term min(U,B(θ)) is handled by duplicating the short form, pools 0 and 1 are identically tied for all reports; increasing an own coordinate moves both and T simultaneously, a case the lemma never analyses. The alternative stated route (mixed two-input rule) is sound: RATIONAL_TWO_INPUT supplies such a rule with whole-owner monotonicity and factor ≤1+β_k≤3/2 (k=1) or 1.207 (k=2), inside 1.463. Verification: strike the duplication option, or add a two-equal-pools derivative argument.
+
+**2. Low — ARBITRARY_DOUBLE_STAR.txt:12–65, (ADS) proof.** I re-derived it independently; it holds for all nonnegative real capacities:
+- Layer cake: u-leaf length min(b_j,a)+(b_j−a)_+=b_j; v-leaf via c_k≥a−θ on (0,a) gives min(c_k,a)+(c_k−a)_+ ✓; central edge length a ✓.
+- Aggregated level problem is a 3-edge path; min(U+V,U+C,V+B) is correct (bipartite, TU; vertex covers {u,v},{u,L2},{L1,v}) ✓.
+- f_θ(z)=z+min(U−z,B)+min(V−z,C) has slope +1/0/−1 with maximizer [min(L,R),max(L,R)] after clipping; checked the boundary cases (U−B<0, U−B>m, both negative) ✓.
+- L nondecreasing, R nonincreasing ⇒ pairwise intersection ⇒ 1-D Helly; z*=max_θ min(L,R) is the left end of the common intersection ✓. Finitely many distinct intervals since B,C are step functions ✓.
+- Tails: B(θ)≤B_{>a}≤B(θ') for θ>a>θ', giving z*≤clip(U−B_{>a},0,m); both branches (B_{>a}≥U ⇒ z*=0; else U−z*≥B_{>a}≥B(θ)) ✓.
+No dominance condition is used anywhere. Greedy prefix selection is consistent with ties (≥ threshold) ✓.
+
+**3. Low — endpoint normalization (lines 80–92).** Tree-recursive scaling is consistent (acyclic), λ_e=s_rA_re at both ends by construction, profits rescale as p_e/λ_e, bundles scale coordinatewise, so monotonicity, coverage and F are preserved ✓.
+
+**4. Low — RATIONAL_TWO_INPUT.txt.** Checked: E_k−uE_k'=1−Σ_{j≥2}(j−1)u^j/j! ✓; root ≤√2 since the j=2 term alone is 1 at u=√2 ✓; β_2=(√2−1)/2 ✓; p_k'=−p_kR ✓; ρ'=(k_cap−ρ)/T∈[−ρ/T,0] ✓; p_k(1+ρR)≤(2+u)/(2E_k)≤1 ✓; Lagrange remainder bound and δ_k<1 needs k≥2 (δ_1>1) — text says "whenever δ_k<1," fine. Bit complexity polynomial in k,n,L ✓. Note: the k=1 value 3/2 is a supremum, not attained; the text says so.
+
+**5. Observation.** ADS central terms are three-form; no rational three-pool rule is supplied, so the composition claim in RATIONAL_TWO_INPUT (line 50–51) correctly excludes the arbitrary double star. Worth stating explicitly in ARBITRARY_DOUBLE_STAR.
+
+## Scope limitations
+- `verify_double_star.direct` oracle is not in the packet; I did not run the script. Its cell logic (lines 8–20) matches (ADS).
+- The three-pool total bound and coverage rely on the "exclusive-pool softmax proof" and "scarce-power scope proof," not supplied.
+- THREE_POOL_MERGE reviewed elsewhere; relied on as stated.
+
+## Verdict
+Findings (one medium, otherwise consistent): (ADS) identity and its simultaneous-maximizer proof check out for all real capacities; payment claims are limited by Finding 1 and by out-of-packet dependencies.

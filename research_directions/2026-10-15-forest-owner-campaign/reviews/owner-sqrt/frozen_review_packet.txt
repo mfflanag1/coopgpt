@@ -1,0 +1,674 @@
+Task and review objective:
+Independently audit the candidate owner-count improvement in OWNER_SQRT_BOUND.txt. This is a consequential proposed theorem, not established. Check every integration sign, eligibility at all real profiles including zero and boundary discontinuity, report-independent parameter choice, comparison with existing support-hybrid theorem, and exactness example. Read selected project definitions before judging. Return specific verified gaps or a precise proof-audit verdict. Do not edit files, do not claim novelty, do not recursively delegate.
+
+
+FILE OWNER_SQRT_BOUND.txt
+1: CANDIDATE OWNER-COUNT IMPROVEMENT -- 15 October 2026
+2: Status: direct proof derived in bounded campaign; independent review pending.
+3: This is a bound for existing hybrid rules, not a novelty or efficiency claim.
+4: 
+5: THEOREM
+6: Fix n owners, dimension d and a finite-valued monotone concave homogeneous
+7: production function f:R_+^d -> R_+. Let T=f(sum_i b_i). Use either the finite
+8: min-linear capped own-excluded/endpoint hybrid from the manuscript, or the
+9: relative-support hybrid in Supplement Section 5. For any fixed a in (0,1],
+10: independent of reports, average its q-hybrid uniformly over q in [0,a].
+11: This deterministic finite expectation is nonnegative, coalition-covering and
+12: own-bundle monotone at every nonnegative real report profile. Its total payment
+13: is at most B_n(a) T, where
+14: 
+15:  B_n(a) = n a/2 + n [1-(1-a)^(n+1)] / [(n+1)a]
+16:         <= n a/2 + n/[(n+1)a] <= n a/2 + 1/a.
+17: 
+18: Choose a=sqrt(2/(n+1)) for every n>=1. Then
+19:  B_n(a)<=n sqrt(2/(n+1)).
+20: The bound equals one for n=1. Hence the worst-case all-profile total-payment
+21: factor over finite monotone concave homogeneous technologies satisfies
+22: 
+23:  B_n^conc <= n sqrt(2/(n+1)) = (sqrt(2)+o(1))sqrt(n).
+24: 
+25: In particular the previous O(n/log n) owner upper improves to O(sqrt n).
+26: The logarithmic-over-loglog lower from the existing hierarchy is unchanged.
+27: The result does not settle resource-dimension scaling or imply polytime evaluation.
+28: 
+29: PROOF
+30: Fix a profile and write B_i~Bernoulli(1-q), x_B=sum_i B_i b_i,
+31: g(q)=E f(x_B), p_i(q)=E[min{ell_(x_B)(b_i),T}|B_i=0],
+32: m_i(q)=E[f(b_i+x_(B_-i))-f(x_(B_-i))],
+33: r_i(q)=q p_i(q)+(1-q)m_i(q).
+34: For finite min-linear technologies ell is the fixed-priority minimizing form;
+35: for general concave f it is the canonical extended relative support defined
+36: in the existing supplement. All displayed capped terms are finite.
+37: 
+38: The existing pointwise eligibility proof works for every 0<q<1: p_i and m_i
+39: are own-bundle monotone; r_i dominates the expected capped core-majorant and
+40: therefore covers every coalition. Fixed nonnegative averaging preserves both.
+41: No owner is cloned, removed, renumbered, or endowed with fixed free resources.
+42: 
+43: Each p_i lies in [0,T], and differentiating the finite mask polynomial yields
+44: sum_i m_i(q)=-g'(q). Thus
+45:  sum_i r_i(q) <= n q T +(1-q)(-g'(q)).
+46: Integration by parts, with g(0)=T, gives
+47:  I:=integral_0^a (1-q)(-g'(q)) dq
+48:    = T -(1-a)g(a)-integral_0^a g(q)dq.
+49: The all-open mask alone contributes (1-q)^n T; every other value is nonnegative.
+50: Hence g(q)>=(1-q)^n T, and
+51:  I <= n/(n+1) [1-(1-a)^(n+1)] T.
+52: Integrate the nqT term and divide by a to prove B_n(a). Dropping the bracket
+53: proves B_n(a)<=na/2+n/[(n+1)a]. At a=sqrt(2/(n+1)), the two terms
+54: are equal and sum to n sqrt(2/(n+1)). This a belongs to (0,1] for every n>=1.
+55: At zero-value profiles all payments vanish. For n=1, B_1(a)=1. At a=1 use
+56: the polynomial integral; endpoints are null sets and may equivalently be
+57: interpreted by polynomial continuation.
+58: 
+59: EXACTNESS FOR THE CANONICAL RELATIVE-SUPPORT HYBRID
+60: For f(x)=min_{1<=e<=n}x_e and b_i=e_i, T=1. Every proper nonempty mask lies
+61: on a face on which f is identically zero. Its minimum-norm relative support
+62: is zero on that face and +infinity off it. Each excluded owner's capped term
+63: therefore equals 1, so p_i=1. Its endpoint marginal equals 1 precisely when
+64: all other owners are open, so m_i=(1-q)^(n-1). Consequently
+65:  sum_i r_i(q)=nq+n(1-q)^n,
+66: and its uniform average is exactly B_n(a). This is a sharp bound for this
+67: specific relative-support hybrid and averaging law. It is NOT an unrestricted
+68: mechanism lower bound: at this fixed one-owner-per-resource domain efficient
+69: mechanisms exist; moreover the finite-form selector behaves differently.
+70: 
+71: RATIONAL IMPLEMENTATION
+72: If an algebraic mixing endpoint is inconvenient, choose any fixed integer j>=1
+73: and a=1/j. All integration coefficients are rational and
+74:  total <= [j+n/(2j)]T.
+75: Taking j to be a nearest positive integer to sqrt(n/2) preserves (sqrt(2)+o(1))sqrt(n).
+76: The stronger B_n(1/j) is exact rational. Parameter choice depends only on fixed n,
+77: never the report profile.
+78: 
+79: RELATION TO PRIOR PROJECT RESULTS
+80: paper5/truthful_cooperation/supplement.tex:
+81: - Lemma 'Budget from capped mask contributions': sum_i m_i=-g'.
+82: - Theorem 'General concave homogeneous production': eligibility for every q.
+83: - Corollary 'Owner-count upper bound': previous (~log 2)n/log n upper.
+84: - Theorem 'Owner-count range': unchanged (~log n/loglog n) lower.
+85: - None of the support-function or incentive arguments is new here; the new
+86:   project-level observation is using p_i<=T before integrating the endpoint
+87:   derivative, instead of union-bounding the 2^n selected support range.
+88: 
+89: VERIFICATION STATUS
+90: Analytic proof above is the general argument. verify_owner_sqrt.py supplies
+91: independent exact rational identities and bounded finite min-linear coverage /
+92: monotonicity checks. Such finite tests do not establish general validity or novelty.
+93: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE verify_owner_sqrt.py
+1: #!/usr/bin/env python3
+2: """Exact bounded checks of candidate sqrt(n) owner upper; not a general proof."""
+3: from fractions import Fraction as Q
+4: from itertools import product
+5: from functools import lru_cache
+6: from math import comb
+7: from pathlib import Path
+8: import json, random
+9: 
+10: COUNTS={}
+11: def check(condition, tag):
+12:     if not condition: raise AssertionError(tag)
+13:     COUNTS[tag]=COUNTS.get(tag,0)+1
+14: 
+15: @lru_cache(None)
+16: def integral(k,l,a):
+17:     # (1/a) integral_0^a q^k(1-q)^l dq
+18:     return sum((Q((-1)**h*comb(l,h),k+h+1)*a**(k+h) for h in range(l+1)),Q(0))
+19: 
+20: def value(V,x): return min(sum(w*t for w,t in zip(v,x)) for v in V)
+21: def totals(b,mask):
+22:     return tuple(sum(b[i][e] for i in range(len(b)) if mask>>i&1) for e in range(len(b[0])))
+23: 
+24: def payments(V,b,a):
+25:     n=len(b);T=value(V,totals(b,(1<<n)-1));p=[]
+26:     for i in range(n):
+27:         yi=Q(0)
+28:         others=[h for h in range(n) if h!=i]
+29:         for bits in product((0,1),repeat=n-1):
+30:             mask=sum(bit<<h for bit,h in zip(bits,others));x=totals(b,mask)
+31:             # fixed report-independent form priority, exactly as main manuscript
+32:             w=min(enumerate(V),key=lambda z:(sum(t*c for t,c in zip(z[1],x)),z[0]))[1]
+33:             A=min(sum(t*c for t,c in zip(w,b[i])),T)
+34:             D=value(V,tuple(x[e]+b[i][e] for e in range(len(x))))-value(V,x)
+35:             o=sum(bits);c=n-1-o
+36:             check(0<=A<=T and 0<=D<=T,'bounded_terms')
+37:             yi+=integral(c+1,o,a)*A+integral(c,o+1,a)*D
+38:         p.append(yi)
+39:     return tuple(p)
+40: 
+41: def bound(n,a):return n*a/2+Q(n,n+1)*(1-(1-a)**(n+1))/a
+42: 
+43: def case(V,b,a):
+44:     n=len(b);T=value(V,totals(b,(1<<n)-1));p=payments(V,b,a)
+45:     check(all(y>=0 for y in p),'nonnegative')
+46:     check(sum(p)<=bound(n,a)*T,'finite_bound')
+47:     check(bound(n,a)<=n*a/2+1/a,'simplified_bound')
+48:     for mask in range(1<<n):
+49:         check(sum(p[i] for i in range(n) if mask>>i&1)>=value(V,totals(b,mask)),'coalition_coverage')
+50:     for i in range(n):
+51:         for e in range(len(b[0])):
+52:             bb=[list(x) for x in b];bb[i][e]+=1
+53:             pp=payments(V,tuple(tuple(x) for x in bb),a)
+54:             check(pp[i]>=p[i],'own_component_monotonicity')
+55: 
+56: # Grid over all 3-owner, two-resource binary bundle profiles: whole-bundle
+57: # ownership, ties, zero coordinates, zero profiles and overlapping bundles.
+58: Vs=(((1,0),(0,1)),((1,1),),((2,0),(1,1),(0,3)),((0,0),(2,1)))
+59: for V in Vs:
+60:     for flat in product((Q(0),Q(1)),repeat=6):
+61:         b=tuple(tuple(flat[2*i:2*i+2]) for i in range(3))
+62:         for a in (Q(1,2),Q(2,3),Q(1)):
+63:             case(V,b,a)
+64: 
+65: rng=random.Random(20261015)
+66: for n in range(1,7):
+67:     for z in range(8):
+68:         d=3;V=tuple(tuple(Q(rng.randrange(5)) for e in range(d)) for k in range(5))
+69:         b=tuple(tuple(Q(rng.randrange(5),rng.randrange(1,4)) for e in range(d)) for i in range(n))
+70:         for a in (Q(1,3),Q(1,2)):
+71:             case(V,b,a)
+72: 
+73: # Independent exact polynomial identity for all-open lower-bound integration.
+74: # g=(1-q)^n gives sum r=nq+n(1-q)^n for the canonical relative-support
+75: # selector on min-coordinate production with one unit-basis owner per resource.
+76: attainment=[]
+77: for n in range(1,41):
+78:     for a in (Q(1,7),Q(1,3),Q(1,2),Q(2,3),Q(1)):
+79:         computed=n*integral(1,0,a)+n*integral(0,n,a)
+80:         check(computed==bound(n,a),'relative_support_attainment_identity')
+81:         I=Q(n,n+1)*(1-(1-a)**(n+1))
+82:         by_parts=1-(1-a)**(n+1)-a*integral(0,n,a)
+83:         check(I==by_parts,'integration_by_parts_identity')
+84:     if n in (1,2,3,4,8,16,40):
+85:         a=Q(1,max(1,round((n/2)**.5)))
+86:         attainment.append({'n':n,'a':str(a),'bound_exact':str(bound(n,a)),'bound_decimal':float(bound(n,a))})
+87: 
+88: result={'status':'pass','arithmetic':'exact fractions; no LP solver or numerical acceptance',
+89:         'counts':COUNTS,'relative_support_attainment_examples':attainment,
+90:         'scope':'finite checks and exact polynomial identities only; analytic theorem in OWNER_SQRT_BOUND.txt'}
+91: Path(__file__).with_name('OWNER_SQRT_CHECKS.json').write_text(json.dumps(result,indent=2)+'\n')
+92: print(json.dumps(result,indent=2))
+93: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE SUPPLEMENT_EXCERPT.txt
+1: Exact source excerpt supplement.tex, lines 1067-1360
+2: The hybrid of Section~\ref{prod:section} extends to every finite monotone,
+3: concave, degree-one homogeneous production function, including discontinuities
+4: at boundary faces.  Its budget can also count the selected forms rather than
+5: the entire technology.  We obtain an $n/\log n$ owner-count upper bound,
+6: an imported $\log n/\log\log n$ lower bound, and a dimension fallback that is
+7: sharp without concavity.  The sharp rates in owners and in concave resource
+8: dimension remain open.
+9: 
+10: Throughout, $f:\R_+^d\to\R$ is finite, coordinatewise nondecreasing and
+11: positively homogeneous of degree one; concavity is assumed where stated.
+12: Homogeneity forces $f(0)=0$, hence monotonicity gives $f\ge0$.
+13: There are $n$ fixed owners $N=[n]$, with arbitrary bundles $b_i\ge0$;
+14: $c=\sum_i b_i$, $T=f(c)$, $v_b(S)=f(\sum_{i\in S}b_i)$, and
+15: $x_B=\sum_iB_i b_i$.  An eligible rule is nonnegative, coalition-covering,
+16: and componentwise nondecreasing in each owner's whole report at every real
+17: profile, as in Section~\ref{prod:section}.  All domains and owners remain fixed.
+18: Use $\alpha_j,C_j(H)$ from \eqref{prod:constant}, with $H\ge1$ in place of $K$.
+19: 
+20: \subsection{Reusable estimates and the selected range}
+21: \begin{lemma}[Fixed-vector Chernoff bound]\label{ext:lem:chernoff}
+22: Let independent bits have $\Prob(B_i=0)=q\in(0,1)$ and put
+23: $\alpha=-\log(q+(1-q)e^{-\lambda})$ for $\lambda>0$.
+24: For every fixed $\delta\in[0,1]^n$,
+25: \[
+26:  \Prob\Bigl(\sum_iB_i\delta_i\le1\Bigr)
+27:  \le e^{\lambda-\alpha\sum_i\delta_i}.
+28: \]
+29: If $\mathcal L\subseteq[0,1]^n$ has at most $H$ elements and a mask-dependent
+30: choice $\delta^B\in\mathcal L$ always satisfies
+31: $\sum_iB_i\delta_i^B\le1$, then
+32: $\E\sum_i\delta_i^B\le(\log H+\lambda+1)/\alpha$.
+33: For $q\le1/j$, $\lambda=2\log j$, one has $\alpha\ge\alpha_j$.
+34: \end{lemma}
+35: \begin{proof}
+36: The fixed-vector exponential calculation in \eqref{prod:chernoff} uses only
+37: $\delta_i\in[0,1]$ and independence, so applies verbatim.
+38: The event $\sum_i\delta_i^B\ge x$ implies that some vector in the fixed
+39: list with sum at least $x$ has sampled score at most one.
+40: A union bound gives $\min\{1,He^{\lambda-\alpha x}\}$; its integral is
+41: $(\log H+\lambda+1)/\alpha$.  Finally
+42: $q+(1-q)/j^2\le(j^2+j-1)/j^3$ when $q\le1/j$.
+43: The list must be fixed before sampling, but may depend on the full profile.
+44: \end{proof}
+45: 
+46: \begin{lemma}[Budget from capped mask contributions]\label{ext:lem:budget}
+47: Fix a profile and, for every mask, a vector $a(B)\in[0,T]^n$ satisfying
+48: \begin{equation}\label{ext:eq:open-sum}
+49:  \sum_iB_i a_i(B)=f(x_B).
+50: \end{equation}
+51: Define $z_i^q=\E a_i(B)$, $p_i^q=\E[a_i(B)\mid B_i=0]$, and use the endpoint
+52: marginal $m_i^q$ and hybrid $r_i^q=qp_i^q+(1-q)m_i^q$ of
+53: \eqref{prod:hybrid}.  With $g=\E f(x_B)$, $Z=\sum_i z_i^q$, $R=\sum_i r_i^q$,
+54: all these functions are finite mask polynomials and
+55: \[
+56:  q\sum_i p_i^q=Z-g,\qquad \sum_i m_i^q=-g',\qquad R=Z-g-(1-q)g'.
+57: \]
+58: Thus $\int_0^{b_0}R\le\int_0^{b_0}Z+T$ for $0<b_0<1$.
+59: If the vectors $a(B)$ take at most $H$ values, then for $0<q\le1/j$,
+60: $Z(q)\le T(\log H+2\log j+1)/\alpha_j$, and
+61: $j\int_0^{1/j}R(q)\,dq\le C_j(H)T$.
+62: \end{lemma}
+63: \begin{proof}
+64: Condition on the own bit and sum \eqref{ext:eq:open-sum} to obtain the first
+65: identity.  Differentiating the finite multiaffine expectation on its diagonal
+66: gives the second.  The exact integration identity \eqref{prod:integral}
+67: then applies, since $g(0)=T$ and $g\ge0$.
+68: If $T>0$, the fixed list $\{a(B)/T\}$ lies in $[0,1]^n$, and its selected
+69: score is $f(x_B)/T\le1$.  Apply Lemma~\ref{ext:lem:chernoff}, then integrate.
+70: For $T=0$, monotonicity makes every masked value and contribution zero.
+71: \end{proof}
+72: 
+73: \begin{proposition}[Selected-range refinement]\label{ext:prop:range}
+74: For a finite min-linear family $V$ of size $K$, the unchanged hybrid rule
+75: of Section~\ref{prod:section} satisfies
+76: \[
+77:  \sum_iM_i(b)\le\min\{n,C_j(\min\{K,2^n\})\}T.
+78: \]
+79: One may choose $j$ in advance using $\min\{K,2^n\}$; zero-report owners
+80: are not removed and the selected range is not used to retune after reports.
+81: \end{proposition}
+82: \begin{proof}
+83: At a fixed profile, $\{W(b,B):B\in\{0,1\}^n\}$ has at most
+84: $\min\{K,2^n\}$ elements.  Its capped vectors satisfy
+85: \eqref{ext:eq:open-sum}, because each nonnegative open contribution is a
+86: summand of the selected value $f(x_B)\le T$ and hence is uncapped.
+87: Apply Lemma~\ref{ext:lem:budget}.  Also $a_i,m_i^q\in[0,T]$, so
+88: $r_i^q,M_i\le T$ and the total is at most $nT$.
+89: \end{proof}
+90: 
+91: \subsection{General concave homogeneous production}
+92: \begin{lemma}[Relative supporting forms]\label{ext:lem:support}
+93: Assume $f$ is concave.  For $x\ge0$ let $J=\operatorname{supp}(x)$ and
+94: $F_J=\{y\ge0:\operatorname{supp}(y)\subseteq J\}$.
+95: If $J\ne\emptyset$, the set of $u\in\R_+^J$ satisfying
+96: \[
+97:  u\cdot x_J=f(x),\qquad f(y)\le u\cdot y_J\quad(y\in F_J)
+98: \]
+99: is nonempty, compact and convex.  Its unique minimum-norm element $u(x)$
+100: therefore defines a choice depending only on $f,x$.
+101: Set $\ell_x(y)=u(x)\cdot y_J$ on $F_J$ and $+\infty$ outside it.
+102: For $x=0$, instead set $\ell_0(0)=0$, $\ell_0(y)=+\infty$ for $y\ne0$.
+103: Then $\ell_x$ is componentwise nondecreasing, majorizes $f$ everywhere,
+104: and touches it at $x$.  On its finite face it is an ordinary nonnegative
+105: linear form.  No boundary continuity is required.
+106: \end{lemma}
+107: \begin{proof}
+108: On the relative interior of $F_J$, finiteness and concavity supply a finite
+109: supergradient $u$ at $x$~\cite{BoydSubgradients}:
+110: $f(y)\le f(x)+u\cdot(y_J-x_J)$.
+111: Putting $y=\lambda x$ with both $\lambda>1$ and $0<\lambda<1$ yields
+112: $u\cdot x_J=f(x)$.  Monotonicity applied to $y=x+te_e$ gives $u_e\ge0$.
+113: For any boundary point $y\in F_J$ and $0<\epsilon<1$, the point
+114: $y_\epsilon=(1-\epsilon)y+\epsilon x$ is in the relative interior.
+115: Concavity and the supporting inequality give
+116: \[
+117:  (1-\epsilon)f(y)+\epsilon f(x)\le f(y_\epsilon)
+118:  \le(1-\epsilon)u\cdot y_J+\epsilon f(x).
+119: \]
+120: Cancel and divide by $1-\epsilon$ to obtain the boundary inequality.
+121: The admissible set is an intersection of closed half-spaces and the touching
+122: hyperplane.  It is bounded by $0\le u_e\le f(x)/x_e$, so is compact;
+123: strict convexity of squared norm gives the unique choice.
+124: The extension majorizes $f$ trivially outside its face.  Increasing an argument
+125: within the face increases its nonnegative linear value; leaving the face
+126: changes that value to infinity.  The zero-face convention has the same
+127: properties.  In particular, no subtraction of infinite quantities is needed.
+128: \end{proof}
+129: 
+130: \begin{definition}[Relative-support hybrid]\label{ext:def:general}
+131: For each profile and mask choose the form $\ell_{x_B}$ above and set
+132: $a_i(B)=\min\{\ell_{x_B}(b_i),T\}$.
+133: Define $z_i^q,p_i^q,m_i^q,r_i^q$ as in Lemma~\ref{ext:lem:budget} and
+134: $M_i=j\int_0^{1/j}r_i^q\,dq$, with $j\ge2$ fixed independently of reports.
+135: The capped coefficients are finite, so these are finite sums and exact
+136: integrals of polynomials, defining deterministic payments.
+137: \end{definition}
+138: 
+139: \begin{theorem}[General concave homogeneous production]\label{ext:thm:general}
+140: For every finite, monotone, concave, degree-one homogeneous $f$, the rule of
+141: Definition~\ref{ext:def:general} is eligible at every real bundle profile and
+142: \[
+143:  0\le M_i(b)\le T,\qquad
+144:  \sum_iM_i(b)\le\min\{n,C_j(2^n)\}T.
+145: \]
+146: A zero bundle receives zero, and every zero-value profile receives zero.
+147: \end{theorem}
+148: \begin{proof}
+149: Both capped contributions and endpoint marginals belong to $[0,T]$, so the
+150: same holds for their mixtures.  If $b_i=0$, then $\ell(0)=0$ and its on/off
+151: aggregates coincide.  If $T=0$, monotonicity makes every masked value zero.
+152: 
+153: For incentives, fix $b_{-i},B_{-i}$ with $B_i=0$.
+154: The aggregate $x_B$ and its selected form are independent of the entire own
+155: bundle $b_i$.  Both $\ell_{x_B}(b_i)$ and $T$ increase weakly with $b_i$,
+156: including finite-to-infinite transitions; their capped minimum is therefore
+157: nondecreasing.  The off term of $m_i^q$ is fixed and the on term increases.
+158: Averaging with report-independent nonnegative weights proves own-bundle
+159: monotonicity on the whole domain.
+160: 
+161: For coverage, fix a selected form $\ell$ and coalition $S$.
+162: If $\ell(b_i)\ge T$ for some $i\in S$, that capped term alone covers
+163: $v_b(S)\le T$.  Otherwise all coalition terms are finite, uncapped and on
+164: the same face, so their sum is $\ell(\sum_{i\in S}b_i)\ge v_b(S)$.
+165: Thus every vector $a(B)$, and hence $z^q$, covers coalitions.
+166: For a fixed $B_{-i}$ select $\ell=\ell_x$ at the on aggregate
+167: $x=b_i+\sum_{h\ne i}B_hb_h$.  The bundles $b_i,x-b_i$ lie on its finite face.
+168: Touching, majorization and finite additivity give
+169: \begin{equation}\label{ext:eq:endpoint}
+170:  f(x)-f(x-b_i)\ge\ell(x)-\ell(x-b_i)=\ell(b_i),\qquad
+171:  0\le\ell(b_i)\le f(x)\le T.
+172: \end{equation}
+173: The middle term is the uncapped on contribution.  Averaging implies
+174: $m_i^q\ge\E[a_i(B)\mid B_i=1]$, hence $r_i^q\ge z_i^q$ and coverage of $M$.
+175: 
+176: For the budget, every open bundle lies on the finite face of $\ell_{x_B}$.
+177: Its nonnegative contributions sum to $\ell_{x_B}(x_B)=f(x_B)\le T$,
+178: so \eqref{ext:eq:open-sum} holds.  At the fixed profile there are at most
+179: $2^n$ capped vectors.  Lemma~\ref{ext:lem:budget} gives the $C_j(2^n)$ bound;
+180: $M_i\le T$ gives the other bound.  All endpoint arithmetic above is finite.
+181: \end{proof}
+182: 
+183: \begin{corollary}[Owner-count upper bound]\label{ext:cor:owner-upper}
+184: Let $L_n=n\log2$ and $j_n=\max\{2,\lceil L_n/[\log(2+L_n)]^2\rceil\}$.
+185: The rule with this report-independent parameter satisfies
+186: \[
+187:  \sum_iM_i(b)\le C_{j_n}(2^n)T
+188:    =(\log2+o(1))\frac n{\log n}T,
+189: \]
+190: uniformly in dimension, technology and profiles.  For $n=1$ it is efficient.
+191: \end{corollary}
+192: \begin{proof}
+193: Here $j_n\sim L_n/(\log L_n)^2$, $\alpha_{j_n}\sim\log n$, and
+194: $j_n=o(n/\log n)$; substitute into $C_j$.
+195: For $n=1$ and $b_1\ne0$, the off form is $\ell_0$, so its capped
+196: contribution is $T$, and the endpoint marginal is also $T$.
+197: Thus $r_1^q=M_1=T$; the zero bundle is immediate.
+198: \end{proof}
+199: \begin{remark}\label{ext:rem:direct}
+200: The direct construction covers downward boundary discontinuities, for example
+201: $f(x_1,x_2)=x_1$ when $x_2>0$ and zero otherwise.
+202: It avoids limits of approximating technologies.  The canonical relative
+203: support is a mathematical definition, not an efficient oracle; no regularity
+204: or measurability of the resulting all-profile payment map is asserted.
+205: \end{remark}
+206: 
+207: \subsection{Owner-count and dimension lower bounds}
+208: \begin{definition}[Total-payment factors]\label{ext:def:factors}
+209: Let $\mathcal Y_n(f)$ denote eligible rules on all of $(\R_+^d)^n$ and put
+210: \[
+211:  \mathfrak b_n(f)=\inf_{y\in\mathcal Y_n(f)}\sup_{b:T(b)>0}\frac{y(b)(N)}{T(b)}.
+212: \]
+213: The inner supremum is zero if $f\equiv0$.  These are total-payment factors,
+214: not subsidy quantities.  Let $\mathfrak M_d$ be finite nonnegative min-linear
+215: technologies on $\R_+^d$, and $\mathfrak F_d$ all finite monotone concave
+216: homogeneous technologies there.  Define
+217: \[
+218:  B_n^{\rm own}=\sup_{d\ge1,f\in\mathfrak M_d}\mathfrak b_n(f),\quad
+219:  B_n^{\rm conc}=\sup_{d\ge1,f\in\mathfrak F_d}\mathfrak b_n(f),\quad
+220:  B_d^{\rm dim}=\sup_{n\ge1,f\in\mathfrak M_d}\mathfrak b_n(f).
+221: \]
+222: Owners, resources and technology are fixed inside each infimum; different
+223: problems need not share a rule.  The first two suprema allow dimension to
+224: grow; the last fixes dimension and permits arbitrarily many owners.
+225: \end{definition}
+226: 
+227: \begin{theorem}[Owner-count range]\label{ext:thm:owner-range}
+228: As $n\to\infty$ along all integers,
+229: \[
+230:  (1-o(1))\frac{\log n}{\log\log n}\le B_n^{\rm own}
+231:  \le B_n^{\rm conc}\le\min\{n,C_{j_n}(2^n)\}
+232:        =(\log2+o(1))\frac n{\log n}.
+233: \]
+234: The lower bound is a parameter translation of the weighted hierarchy,
+235: not a new construction; it permits dimension to grow with $n$.
+236: \end{theorem}
+237: \begin{proof}
+238: The upper follows from Theorem~\ref{ext:thm:general} and
+239: $\mathfrak M_d\subseteq\mathfrak F_d$.
+240: For the lower, use $f_k(x)=\min_{1\le e\le k}x_e$.
+241: Restrict $km$ owners to axis-supported bundles, with $m$ owners per axis.
+242: An eligible all-bundle rule restricts to a valid scalar-report multi-glove
+243: rule, and its restricted total-payment factor cannot be larger.
+244: Thus Lemma~\ref{lem:weighted-hierarchy} applies to $\mathfrak b_{km}(f_k)$.
+245: If $n\ge n'$, restricting an $n$-owner rule to zero reports for the last
+246: $n-n'$ owners and discarding their nonnegative payments yields an eligible
+247: $n'$-owner rule.  All original coalition constraints and unilateral comparisons
+248: remain, so $\mathfrak b_n(f)\ge\mathfrak b_{n'}(f)$ without population incentives.
+249: 
+250: For an integer $h\ge2$ set
+251: \begin{align*}
+252:  R&=\lceil\log(h+1)\rceil, &s&=\lceil\sqrt R\rceil, &m&=hs,\\
+253:  \alpha&=1/s, &A&=(h+1)m-h^2, &\lambda&=As,\\
+254:  Z&=\sum_{r=0}^h\frac{\lambda^r}{r!}, &K_h&=\lceil2RZ\rceil, &\nu_h&=K_hm.
+255: \end{align*}
+256: Here $s\ge2$, so $m>h$, and $K_hp_0=K_h/Z\ge2R\ge2\log(h+1)$.
+257: Equation~\eqref{eq:weighted-bound}, with hierarchy height $h$, yields
+258: \begin{equation}\label{ext:eq:owner-lower-finite}
+259:  \mathfrak b_{\nu_h}(f_{K_h})
+260:  \ge\frac{h+1-h/s}{(1+1/s)(1+h/(h+1)^2)}=(1-o(1))h.
+261: \end{equation}
+262: Also $\log\lambda=2\log h+O(\log\log h)$ and $\lambda\ge h$.
+263: The terms of $Z$ increase up to index $h$, so
+264: $\lambda^h/h!\le Z\le(h+1)\lambda^h/h!$.
+265: Stirling's formula gives $\log Z=(1+o(1))h\log h$ and hence
+266: $\log\nu_h=(1+o(1))h\log h$.
+267: For fixed $0<\epsilon<1$ choose
+268: $h=\lfloor(1-\epsilon)\log n/\log\log n\rfloor$.
+269: Then $\log\nu_h\le(1-\epsilon+o(1))\log n<\log n$ for all large $n$.
+270: Padding to $n$ owners and \eqref{ext:eq:owner-lower-finite} give
+271: $B_n^{\rm own}\ge(1-\epsilon-o(1))\log n/\log\log n$.
+272: Taking the liminf and then $\epsilon\downarrow0$ proves the all-integer lower.
+273: \end{proof}
+274: 
+275: \subsection{Marginal floors for the original core}
+276: At a profile define the original efficient core and its coordinate benchmarks
+277: by $\core(b)=\{y:y(N)=T,\ y(S)\ge v_b(S)\ \forall S\}$ and
+278: $H_i(b)=\max_{y\in\core(b)}y_i$.  Put
+279: \begin{equation}\label{ext:eq:marginal}
+280:  U_i=T-f(c-b_i),\qquad
+281:  \rho_i=\max_{e:c_e>0}b_{ie}/c_e\quad(\rho_i=0\text{ if }c=0).
+282: \end{equation}
+283: 
+284: \begin{lemma}[Marginal contributions]\label{ext:lem:marginal}
+285: For concave $f$, the core is nonempty and compact,
+286: $0\le H_i\le U_i\le T$, and $U$ is eligible.  Furthermore
+287: \[
+288:  \sum_iU_i\le\min\{d,n\}T,\qquad
+289:  \sum_iU_i\le\min\{K,d,n\}T\quad\text{for a finite family of $K$ forms}.
+290: \]
+291: \end{lemma}
+292: \begin{proof}
+293: The grand relative support gives the finite allocation $y_i=\ell_c(b_i)$.
+294: It is nonnegative, sums to $\ell_c(c)=T$, and covers each coalition by
+295: majorization.  Singleton constraints make the core a closed subset of
+296: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE MANUSCRIPT_EXCERPT.txt
+1: Exact source excerpt manuscript.tex, lines 135-305
+2: reported bundle. No equivalence via strategic cloning is used.
+3: 
+4: \citet{ABV} do use own-resource monotonicity for a fixed alliance. Their
+5: inspected author version defines a strictly concave network-utility model
+6: and studies projection onto the full efficient core. Its projection
+7: monotonicity evidence is computational, not a universal proof. Online
+8: Resource 1 supplies a strictly concave counterexample to a universal
+9: extension of that evidence, with a version-specific comparison. This
+10: auxiliary example is not an instance of our homogeneous main theorem.
+11: 
+12: Weighted multi-glove games and their total balancedness are established
+13: \citep{MorettiNorde}. Their sharper special-case analysis, the connection to
+14: the continuous Banzhaf functional, and additional mechanism comparisons appear
+15: in Online Resource 1. Supporting prices, marginal contributions, concentration
+16: bounds and weighted counting are established tools. The proposed contribution
+17: is their combination into the joint all-profile coverage, incentive and sharp
+18: budget guarantee, with a matching lower bound under fixed ownership. The
+19: bounded source audit is not a certification of historical priority.
+20: 
+21: \subsection{Organization}
+22: Section~\ref{prod:section} gives the model, mechanism and complete upper proof.
+23: Section~\ref{dag:section} proves the lower bound and explains why naive
+24: subdivision would destroy it. The conclusion separates the theorem from the
+25: remaining owner-count and computational questions. Online Resource 1 is an
+26: indexed supplement containing the earlier hierarchy, general extensions and
+27: exact obstructions; its repeated foundational proofs make it independently
+28: readable. Online Resource 2 contains the scoped verification code and logs.
+29: 
+30: \section{General production: a sharp complexity bound}\label{prod:section}
+31: There are $n$ fixed owners and $d$ fixed resource types. Owner $i$ reports
+32: $b_i\in\R_+^d$; write $c=\sum_i b_i$. Fix a nonempty finite family
+33: $V=\{w^1,\ldots,w^K\}\subseteq\R_+^d$, with a report-independent priority,
+34: and define
+35: \[
+36:  f(c)=\min_{w\in V}w\cdot c,\qquad
+37:  v_b(S)=f\left(\sum_{i\in S}b_i\right),\qquad T=f(c).
+38: \]
+39: A rule is eligible if its payments are nonnegative, cover every coalition,
+40: and are componentwise nondecreasing in each owner's whole bundle, with all
+41: other reports fixed. These conditions hold on all of $(\R_+^d)^n$.
+42: They express truthfulness for binding underreports and payment-only utility;
+43: there are no operating costs, overreport, false-name, population-change or
+44: coordinated-report guarantees. A factor $C$ bounds \emph{total payment} by
+45: $CT$; external subsidy is at most $(C-1)T$. The family $V$ remains fixed
+46: across reports. Its size may be exponential in a compact description. All logarithms are natural.
+47: 
+48: \begin{theorem}[General sharp-order upper bound]\label{prod:upper}
+49: For every integer $j\ge2$, there exists an eligible deterministic rule with factor
+50: \begin{equation}\label{prod:constant}
+51:  C_j(K)=j+\frac{\log K+2\log j+1}{\alpha_j},\qquad
+52:  \alpha_j=\log\frac{j^3}{j^2+j-1}>0.
+53: \end{equation}
+54: With $L=\log K$ and
+55: $j=\max\{2,\lceil L/[\log(2+L)]^2\rceil\}$, this factor is
+56: $(1+o(1))\log K/\log\log K$, uniformly over owner counts, dimensions,
+57: technologies and reports. Zero-value profiles receive zero; for $K=1$ the
+58: constructed rule is efficient.
+59: \end{theorem}
+60: 
+61: \paragraph{The mechanism.}
+62: For $q\in(0,1)$ let independent owner bits satisfy $\Prob(B_i=0)=q$.
+63: Choose the first minimizer of the \emph{uncapped} objective,
+64: \[
+65:  W(b,B)=\operatorname*{first\,argmin}_{w\in V}
+66:                \sum_i B_i(w\cdot b_i),\qquad
+67:  a_i(w,b)=\min\{w\cdot b_i,T\}.
+68: \]
+69: Only the payment contribution $a_i$ is capped. Put
+70: \begin{align}
+71:  z_i^q&=\E a_i(W,b),&
+72:  p_i^q&=\E[a_i(W,b)\mid B_i=0],\label{prod:p}\\
+73:  m_i^q&=\E_{B_{-i}}\left[f\left(b_i+\sum_{h\ne i}B_hb_h\right)
+74:                          -f\left(\sum_{h\ne i}B_hb_h\right)\right],
+75:  &r_i^q&=qp_i^q+(1-q)m_i^q.\label{prod:hybrid}
+76: \end{align}
+77: The final payment is the deterministic finite expectation
+78: \begin{equation}\label{prod:payment}
+79:  M_i(b)=j\int_0^{1/j}r_i^q(b)\,dq.
+80: \end{equation}
+81: These quantities are finite polynomials in $q$ at a fixed profile; no
+82: continuity or generic-position assumption about the reports is required.
+83: 
+84: \begin{proof}[Proof of Theorem~\ref{prod:upper}]
+85: Conditional on $B_i=0$, every score and the selected form are independent of
+86: $b_i$. For that fixed nonnegative form, both $w\cdot b_i$ and $T$ are
+87: nondecreasing in $b_i$, so their minimum is nondecreasing. In $m_i^q$ the
+88: off term is independent of $b_i$ and the on term is nondecreasing. The
+89: nonnegative fixed mixtures preserve this property and nonnegativity.
+90: 
+91: For any $w,S$, if some $i\in S$ has $w\cdot b_i\ge T$, then
+92: $\sum_{i\in S}a_i(w,b)\ge T\ge v_b(S)$. Otherwise no term in $S$ is capped,
+93: and the sum is $w\cdot\sum_{i\in S}b_i\ge v_b(S)$. Thus every capped form
+94: covers coalitions. Fix $B_{-i}$ and let $w_1$ be the on minimizer. The off
+95: optimum is at most the off objective of this same form, whence
+96: \begin{equation}\label{prod:endpoint}
+97:  f\left(b_i+\sum_{h\ne i}B_hb_h\right)-f\left(\sum_{h\ne i}B_hb_h\right)
+98:  \ge w_1\cdot b_i=a_i(w_1,b).
+99: \end{equation}
+100: The equality holds because the contribution is a nonnegative summand of
+101: the selected on value, which is at most $T$. Averaging proves $r_i^q\ge z_i^q$,
+102: and hence coverage for $r^q$ and $M$.
+103: 
+104: For the budget define $g(q)=\E f(\sum_iB_ib_i)$, $Z(q)=\sum_i z_i^q$,
+105: and $R(q)=\sum_i r_i^q$. Capping leaves every open contribution unchanged:
+106: \[
+107:  \sum_iB_i a_i(W,b)=f\left(\sum_iB_ib_i\right).
+108: \]
+109: Consequently $q\sum_i p_i^q=Z-g$. Differentiating the finite mask polynomial
+110: gives $\sum_i m_i^q=-g'$, so $R=Z-g-(1-q)g'$. Since $g(0)=T$ and $g\ge0$,
+111: for $0<\eta<1$ integration by parts gives the exact identity
+112: \begin{equation}\label{prod:integral}
+113:  \int_0^\eta R\,dq=\int_0^\eta Z\,dq+T-(1-\eta)g(\eta)
+114:                          -2\int_0^\eta g\,dq
+115:  \le\int_0^\eta Z\,dq+T.
+116: \end{equation}
+117: Both the sign and the factor two in this identity matter.
+118: 
+119: Suppose $T>0$. For each fixed form let
+120: $d_i(w)=a_i(w,b)/T\in[0,1]$ and $\rho_w=\sum_i d_i(w)$.
+121: The selected form satisfies $\sum_iB_id_i(W)\le1$. For $\lambda>0$ put
+122: $\alpha=-\log(q+(1-q)e^{-\lambda})$. The convex function
+123: $u\mapsto\log(q+(1-q)e^{-\lambda u})$ lies below its endpoint chord
+124: $-\alpha u$ on $[0,1]$. Independence and Markov's inequality give
+125: \[
+126:  \Prob\left(\sum_iB_id_i(w)\le1\right)
+127:  \le e^\lambda\prod_i(q+(1-q)e^{-\lambda d_i(w)})
+128:  \le e^{\lambda-\alpha\rho_w}.
+129: \]
+130: A union over the fixed family and integration of the resulting tail yield
+131: \begin{equation}\label{prod:chernoff}
+132:  \Prob(\rho_W\ge x)\le\min\{1,K e^{\lambda-\alpha x}\},\qquad
+133:  \frac{Z(q)}T\le\frac{\log K+\lambda+1}{\alpha}.
+134: \end{equation}
+135: Take $\eta=1/j$ and $\lambda=2\log j$. For $q\le1/j$,
+136: $q+(1-q)e^{-\lambda}\le(j^2+j-1)/j^3$, so
+137: \eqref{prod:integral}--\eqref{prod:chernoff} give \eqref{prod:constant}.
+138: For the displayed choice of $j$, as $L\to\infty$,
+139: $j\sim L/(\log L)^2$, $\alpha_j\sim\log L$, and
+140: $j=o(L/\log L)$, proving the asserted asymptotic.
+141: 
+142: If $T=0$, all masked production values and capped contributions vanish.
+143: If $K=1$, no contribution is capped, $p_i^q=m_i^q=w\cdot b_i$, and
+144: $M_i=w\cdot b_i$. Finally each finite-mask term is
+145: $q^{n-1-|S|}(1-q)^{|S|}[q a_i(W(b,1_S),b)+(1-q)(v_b(S\cup\{i\})-v_b(S))]$.
+146: Its integral is a finite sum with rational coefficients when $j$ is integer.
+147: This gives exact rational payments for rational input, without an efficiency
+148: claim about enumeration of masks or forms.
+149: \end{proof}
+150: 
+151: \begin{corollary}[Production LPs and networks]\label{prod:lp}
+152: The theorem applies to
+153: $f(c)=\max\{\pi\cdot x:x\ge0,Ax\le c\}$ for fixed $A\ge0$, with every
+154: activity column nonzero and fixed positive profits $\pi$. Here $V$ can be
+155: the vertices of $\{w\ge0:A^Tw\ge\pi\}$. For single-commodity directed flow,
+156: one may instead use the characteristic vectors of the inclusion-minimal
+157: structural source--sink edge cuts.
+158: \end{corollary}
+159: \begin{proof}
+160: Each activity is bounded by a positive entry in its column, so every feasible
+161: production set is compact at finite $c$. The dual is nonempty, pointed and
+162: polyhedral. Strong duality and attainment at a vertex give the claimed finite
+163: min-linear representation, including boundary capacities. Network max-flow/
+164: min-cut gives the cut representation directly. Redundant nonminimal cuts may
+165: be removed once and for all because capacities are nonnegative. All owners
+166: and forms remain fixed across profiles. A positive-profit zero-resource
+167: activity is excluded because it would make production unbounded.
+168: \end{proof}
+169: Dual core allocations are established ingredients~\citep{Owen,SametZemel}.
+170: General dual vertices may be fractional; their count is not an ordinary
+171: network-cut count. Constraints introducing capacity-independent dual offsets
+172: are outside the homogeneous model here.
+173: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

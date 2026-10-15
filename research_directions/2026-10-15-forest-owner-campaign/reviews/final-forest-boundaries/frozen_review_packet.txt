@@ -1,0 +1,435 @@
+Task and review objective:
+Audit only the new final extensions: no-veto positive-capacity refinement in MAXIMUM_MARGINAL_CAP (base veto example already audited), arbitrary owner-count-dependent scaling measures in DETERMINISTIC_SCALING_OBSTRUCTION, 2^n minimal covers addendum in EXTREME_RAY, entire growing fragmented-ownership family and cross-component averaging, cycle-to-path lower-certificate transfer, and classical owner-interaction-forest own-bundle monotonicity corollary. Root independently checked all. Find invalid algebra, strategic identity/transition gaps, overly broad conclusions, or missing assumptions. Core extreme-ray proof already audited; do not spend effort re-reviewing unchanged core. No historical novelty assessment requested.
+
+
+FILE MAXIMUM_MARGINAL_CAP.txt
+1: MAXIMUM-COALITION-MARGINAL TRUNCATION FOR THE REPORT-MASK HYBRID
+2: Status: elementary structural lemma proved here; priority unassessed. No uniform forest-budget bound claimed.
+3: 
+4: SETUP. Fixed actual owner set N, monotone production f, v_b(S)=f(sum_{i in S}b_i), f(0)=0. Reports and binding deviations are coordinatewise nonnegative bundles; utility is payment only. Define
+5:   V_i(b)=max_{S subset N\{i}} [v_b(S+i)-v_b(S)].
+6: V_i is finite, nonnegative, and nondecreasing in owner i's whole bundle, with all other bundles fixed. It differs from the manuscript H_i=max core coordinate; V_i is at least the grand marginal, whereas H_i is at most the grand marginal.
+7: 
+8: LEMMA 1 (COALITION-COVERING TRUNCATION). If z>=0 covers every coalition, then the coordinatewise truncated vector min(z_i,V_i) also covers every coalition.
+9: Proof: truncate coordinates sequentially. Suppose the current covering vector has coordinate i reduced to V_i. For S containing i, the new sum is z(S\i)+V_i>=v(S\i)+V_i>=v(S). Coalitions not containing i are unchanged. Finitely many such operations prove the claim. This proof is game-theoretic and does not use concavity, linear programming, or sparse production.
+10: 
+11: HYBRID. Suppose f=min_{w in W} w.c for a fixed finite collection of nonnegative forms. Independently retain each owner with probability p=1-q; let w_B be the first minimizing form for retained reports. Replace the existing global-T cap by
+12:   a_i(w,b)=min(w.b_i,V_i(b)).
+13: Define z_i=E a_i(w_B,b), p_i=E[a_i(w_B,b)|B_i=0],
+14:   m_i=E_{B_-i}[ f(b_i+sum B_h b_h)-f(sum B_h b_h) ],
+15:   r_i=q p_i+p m_i.
+16: Then r is nonnegative, own-report monotone, and covers every coalition on every profile.
+17: Proof: each full form covers, so Lemma 1 shows each capped form covers. Conditional on B_i=0, its selected w is independent of b_i and both terms in the min are own-monotone. The marginal m_i is own-monotone. When i is retained, the selected form satisfies
+18:   w_B.b_i <= v(B)-v(B\i) <= V_i.
+19: Hence its on contribution is unchanged by capping and is bounded by that same marginal. Thus r_i>=z_i, proving coverage.
+20: 
+21: EXACT BUDGET IDENTITY. With g(q)=E v(B), Z(q)=sum z_i, R(q)=sum r_i,
+22:   R=Z-g-(1-q)g'.
+23: Proof: sum_{i:B_i=1}a_i(w_B,b)=v(B), so q sum p_i=Z-g. Differentiating the finite mask polynomial gives sum m_i=-g'. All original hybrid integration identities survive unchanged.
+24: 
+25: WHAT THIS FIXES. For disjoint edges with one huge-capacity endpoint owner and one unit endpoint owner on each edge, each huge owner's V_i is 1, although global T equals the number of edges. The old global-T cap could incur a factor growing with edge count; this particular inflation disappears.
+26: WHAT IT DOES NOT FIX. Sum V_i need not be bounded by a constant times T even on a single star: n hardware owners of capacity 1 and one power owner of capacity 1 give V_i=1 for every owner, T=1. Budget control must use correlation between the selected form and the sampled reports.
+27: 
+28: EXACT FAILURE OF A SIMPLE Z BOUND. On the four-edge path 0-1-2-3-4 with one owner per vertex and capacities (99/100,1,99/100,1,99/100), T=2 and V_i=c_i. Use the fixed minimal-cover order
+29:   {1,3}, {0,2,3}, {1,2,4}, {0,2,4}.
+30: At q=1/100 exact enumeration gives
+31:   Z/T=2028622791197/2000000000000
+32:       > 100/99 = 1/(1-q),
+33: with positive difference 833656328503/198000000000000.
+34: This counterexample defeats the proposed Z<=T/(1-q) inequality even with the new cap. It does not disprove a uniform improvement to the actual R budget.
+35: Certificate: check_sampled_counter.py in this directory.
+36: 
+37: STRONGER OBSTRUCTION: UNBOUNDED V-CAP HYBRID ON A DEPTH-TWO TREE.
+38: This supersedes any numerical suggestion that a small fixed q might suffice.
+39: For n>=2, take vertices p,h_1,...,h_n,l_1,...,l_n and edges p--h_j--l_j. Owner 0 holds capacity 1 at p and epsilon=1/n^2 at EVERY l_j. Owner j holds capacity 1 at h_j only. All full resource capacities are strictly positive, all owners remain fixed, and every activity consumes one unit at each of two endpoints. The full optimum is
+40:   T=1+n epsilon=1+1/n.
+41: Indeed the private activities use n epsilon and the hub activity uses 1; the h capacities admit this because n(1-epsilon)>=1.
+42: For j>=1, V_j=1: retaining owner 0 plus j alone permits all of h_j's unit to be served, while without j that coalition has value0. No marginal can exceed h_j's unit capacity. Owner0 has V_0=T.
+43: 
+44: Fix any q in (0,1), p_ret=1-q. Condition on owner0 retained, and let K be the number of retained h owners. If K>=2, there are only two possible optimal-cover types:
+45:   (a) exclude p, hence include all h_j, sampled cost K;
+46:   (b) include p, then independently choose h_j or l_j on each private edge.
+47: Type (b) uniquely chooses l_j for retained j (cost epsilon<1) and h_j for absent j (cost0<epsilon). Its sampled cost is 1+K epsilon<K for n>=2,K>=2 (strict also n=2,K=2). Thus the selected cover is unique: this argument is independent of any tie-breaking convention.
+48: At this mask every absent j contributes min(1,V_j)=1 to Z. Therefore
+49:   Z/T >= p_ret * E[(n-K) 1_{K>=2}]/(1+1/n)
+50:        = p_ret * [nq - n q^n - n(n-1)p_ret q^(n-1)]/(1+1/n).
+51: The right side tends to infinity linearly in n. Since R>=Z coordinatewise, the V-cap hybrid has no uniform finite budget factor on forests for ANY fixed retention parameter in (0,1).
+52: 
+53: The same obstruction holds for any fixed report-independent probability mixture over q with positive probability on (0,1): by Fatou,
+54:   liminf_n E_q[R_n/T_n]/n >= E_q[q(1-q)]>0.
+55: This statement allows integration measures with atoms at0 and1 but requires positive mass in the interior. It does NOT rule out mechanisms whose q distribution changes with owner count, a different dependence among owner masks, or mechanisms outside this hybrid architecture. Nor does it prove an impossibility for truthful forest mechanisms generally.
+56: 
+57: This obstruction is robust to tie-breaking and uses strictly positive capacities. Its source is one real mixed owner supplying the scarce hub resource and tiny private complements, while many competing owners each retain maximum coalition marginal1. The current V cap cannot reflect competition among these mutually substitutable owners.
+58: 
+59: PRIORITY NOTE. V_i is the classical reasonable upper payoff of a cooperative game, not a newly introduced solution concept. Parent located an author original (Inductive tau-values, June 30, 2024, section6) using precisely max_{S subset N\i}(v(S+i)-v(S)), with historical attribution to Driessen--Tijs (1984) and Milnor (1952):
+60: https://ris.utwente.nl/ws/portalfiles/portal/445770136/inductive_tau-values_june_30_2024.pdf
+61: The truncation/hybrid observation and the depth-two-tree obstruction require their own source comparison before any priority assertion.
+62: 
+63: NO-VETO ROBUSTNESS. The same divergence survives removing every veto owner. Modify the construction by giving each owner j>=1 an additional delta=1/n^4 at p and at EVERY private leaf l_k. Owner0 keeps p capacity1 and epsilon at each l_k. Then every owner has a positive-valued complement coalition: excluding owner0 leaves positive power supplied by the h owners, and excluding any h owner leaves owner0 plus another h owner. Thus no owner is veto.
+64: The full value is exactly
+65:   T=1+n epsilon+(n+n^2)delta
+66:    =1+1/n+1/n^3+1/n^2,
+67: obtained by consuming all power capacities; each h capacity1 admits its private-leaf flow, and aggregate remaining h capacity accommodates the center flow. Also V_j>=1 for every j>=1, since the coalition {0,j} has value1 and {0} has value0.
+68: Conditional on owner0 retained and K>=2 h owners retained, center capacity is 1+K delta and each private leaf has epsilon+K delta. The unique selected cover remains center + leaves on retained branches + h vertices on absent branches. Its sampled cost
+69:   1+K epsilon+K(K+1)delta < K
+70: for all n>=2 and 2<=K<=n. Each private-leaf capacity is <1. Every absent h owner's contribution to this selected cover is at least1, and its V cap is at least1. Hence the previous lower bound applies with this new T, still tending to1:
+71:   R/T >= p_ret [nq - n q^n - n(n-1)p_ret q^(n-1)]
+72:           /(1+1/n+1/n^2+1/n^3).
+73: Therefore an efficient special-case rule for veto profiles does not remove this obstruction.
+74: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE DETERMINISTIC_SCALING_OBSTRUCTION.txt
+1: FIXED OUTSIDE-SCALING MARGINAL MIXTURES CANNOT UNIFORMLY BEAT FACTOR TWO
+2: Architecture-specific obstruction; does not rule out general truthful mechanisms.
+3: 
+4: Consider payment-only underreports with fixed actual owners. For t in [0,1] define the eligible-incentive building block
+5:   D_i(t;b)=F(b_i+t sum_{j!=i}b_j)-F(t sum_{j!=i}b_j).
+6: Each D_i is own-report nondecreasing and nonnegative. The architecture pays
+7:   y_i=integral_[0,1] D_i(t;b) nu_n(dt),
+8: where nu_n is any fixed nonnegative measure chosen independently of reports; it may depend on owner count n and the fixed technology. Assume mu_n=integral t nu_n(dt)<infinity so that balanced-profile payments are finite. Atoms, including at t=1, are allowed; hence mixtures with grand marginal U_i=D_i(1) are included.
+9: 
+10: THEOREM. On the single-edge two-resource production F(a,b)=min(a,b), if this architecture covers every coalition on every n-owner profile, its worst-case total-payment factor is at least
+11:   2(n-3)/(n-1), n>=4.
+12: Consequently no uniform factor below2 is possible as owner counts grow.
+13: 
+14: PROOF. Write m=n-2 and delta=2/(m-1). Take two left owners, each capacity1, and m right owners, each capacity delta. Total right capacity is 2+delta. For any right owner, the OTHER right capacity equals2, the full left capacity. Thus D_right(t)=0 for every t. For either left owner,
+15:   D_left(t)=min(1,(1+delta)t).
+16: Choose a coalition consisting of one left owner and ceil(1/delta) right owners. It is feasible since ceil((m-1)/2)<=m, and its value is1. Coverage therefore forces
+17:   1<=integral min(1,(1+delta)t)nu_n(dt)<=(1+delta)mu_n,
+18: so mu_n>=1/(1+delta)=(m-1)/(m+1)=(n-3)/(n-1).
+19: Now keep the same n actual owners and let exactly two report one unit in opposite resources, while every other owner reports zero. Each active owner has D_i(t)=t, and every zero-report owner has D=0. Total payment is2mu_n>=2(n-3)/(n-1), while T=1. This proves the claim. All profiles use the same fixed owner count and the same single-edge technology; there is no cloning or owner insertion within a deviation.
+20: 
+21: For a single report-independent measure nu shared across owner counts, letting n increase directly forces integral t nu>=1 and gives factor>=2 already at the balanced two-active-owner profile. Owner-count-dependent measures only replace exact2 by an asymptotic lower bound tending to2.
+22: 
+23: The theorem does not cover report-dependent weights (which would need a separate incentive proof), different perturbations of different resources, negative combinations, or mechanisms outside this own-marginal scaling architecture. Historical priority of this elementary obstruction is unassessed.
+24: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE EXTREME_RAY_OBSTRUCTION.txt
+1: Connected unit-profit bipartite production has no nontrivial positive concave decomposition
+2: 15 October 2026. Structural lemma; historical novelty unconfirmed.
+3: 
+4: Let G=(H union P,E) be a finite connected simple bipartite graph with at least
+5: one edge. Its unit-profit resource-production function is
+6:   F(c)=max {sum_e x_e: x_e>=0, sum_{e incident v}x_e<=c_v}, c>=0.
+7: 
+8: THEOREM. Suppose, on the whole nonnegative orthant,
+9:   F(c)=sum_{l=1}^L f_l(c),
+10: where every f_l is finite, nonnegative, concave and homogeneous of degree one.
+11: Then every summand is proportional to F: f_l=lambda_l F, lambda_l>=0,
+12: sum_l lambda_l=1. Thus F spans an extreme ray in this function cone.
+13: Positive constant coefficients can be absorbed into the summands.
+14: 
+15: PROOF. Concavity and degree-one homogeneity imply superadditivity:
+16: f_l(x+y)>=f_l(x)+f_l(y). For each edge e=uv let z_e be the vector with ones
+17: at u and v and zero elsewhere, and define w_le=f_l(z_e)>=0. Since F(z_e)=1,
+18:   sum_l w_le=1 for every edge e.
+19: For any feasible edge plan x at capacities c, the residual vector
+20: c-sum_e x_e z_e is nonnegative. Superadditivity, homogeneity and nonnegativity
+21: give
+22:   f_l(c)>=sum_e x_e f_l(z_e)=sum_e w_le x_e.
+23: Maximizing the RHS over feasible plans yields f_l(c)>=F_{w_l}(c), the same
+24: production LP with nonnegative edge profits w_l. Conversely,
+25:   F(c)=F_{sum_l w_l}(c)<=sum_l F_{w_l}(c)<=sum_l f_l(c)=F(c).
+26: All differences are nonnegative and the sum is zero, so
+27:   f_l(c)=F_{w_l}(c) for every l and c.
+28: 
+29: Now take any pair of adjacent edges e=uv and f=vw. Since the graph is simple
+30: and bipartite, u and w are distinct same-side vertices, with no edge uw.
+31: Give capacity one to u,v,w and zero elsewhere. Only e and f can produce,
+32: and their shared unit at v implies
+33:   F(c)=1, F_{w_l}(c)=max(w_le,w_lf).
+34: Therefore sum_l max(w_le,w_lf)=1, while both sum_l w_le and sum_l w_lf equal
+35: one. The identity max(a,b)=(a+b+|a-b|)/2 forces w_le=w_lf for every l.
+36: The edge-adjacency graph of a connected graph is connected. Hence for each l,
+37: w_le is a constant lambda_l on all edges, and
+38:   f_l=F_{w_l}=lambda_l F.
+39: This completes the proof without strategic owner splitting or any finite-grid
+40: inference. The statement is purely about production functions.
+41: 
+42: CONSEQUENCE FOR BOUNDED-FORM ROUTES. For a bipartite graph, F is the minimum of
+43: the capacity sums over its inclusion-minimal vertex covers. Every such linear
+44: form is exposed at a strictly positive capacity vector: give vertices in a
+45: chosen minimal cover C capacity epsilon with 0<epsilon<1/|C|, and every other
+46: vertex capacity one. C costs less than one. Any distinct minimal cover has a
+47: vertex outside C (otherwise C would not be minimal), so costs at least one.
+48: Thus a nonzero scalar multiple of F requires at least as many linear pieces
+49: as there are minimal covers. The extreme-ray theorem implies that F cannot
+50: be a finite positive sum of minima of at most K nonnegative linear forms
+51: whenever its number of minimal covers exceeds K.
+52: 
+53: This blocks every fixed-K version of that route on all forests. For an even
+54: path P_{2m}, the m+1 distinct minimal covers
+55:   C_j={1,3,...,2j-1} union {2j,2j+2,...,2m-2}, j=0,...,m,
+56: (using vertices 0,...,2m-1) already show unbounded cover count. Each selected
+57: vertex has an adjacent unselected vertex, so these covers are inclusion-minimal.
+58: Taking m>=K gives more than K exposed forms on a connected unit forest.
+59: 
+60: The four-edge path has four minimal covers, yielding the earlier specific
+61: obstruction to positive <=3-form decomposition as a special case. The new
+62: mixed four-form mechanism handles that particular path directly, but extending
+63: composition to any fixed larger K cannot by itself settle every forest.
+64: 
+65: BOUNDARIES. This is not a lower bound on required subsidy. It does not rule
+66: out direct nonlinear mechanisms, sums involving negative coefficients,
+67: nonconcave intermediate constructions, or increasing-form mechanisms with a
+68: new bound depending on graph structure. The nonnegative global function domain
+69: and degree-one homogeneity are explicit hypotheses. For the particular
+70: minimum-of-nonnegative-linear-forms components under discussion they hold
+71: automatically. Disconnected graphs do decompose over their connected components.
+72: 
+73: The mathematical argument uses standard superadditivity, max-of-sum versus
+74: sum-of-max, and connectivity facts. No historical novelty claim is made until
+75: an exact original-source comparison is completed.
+76: 
+77: CLARIFICATION ON THE NUMBER OF LINEAR PIECES. At a positive capacity vector exposing one minimal cover uniquely, F agrees with that cover's linear form on a neighborhood. If F is represented as the minimum of finitely many other linear forms, any form active at that interior point majorizes F there and has zero linear difference there. Its difference from the exposed form is linear and nonnegative on a neighborhood, so it must vanish identically. Thus every exposed minimal-cover form must literally occur among the representing forms; the count cannot be avoided by different gradients or redundant terms.
+78: 
+79: DEPTH-TWO SPECIALIZATION. The obstruction already grows exponentially on the next infrastructure model, without increasing tree depth. For the subdivided star with branches p--h_j--l_j, j=1,...,n, the minimal covers are:
+80: - all h_j, excluding p and every l_j;
+81: - p together with exactly one of h_j,l_j on every branch, with at least one l_j selected (so p is not redundant).
+82: There are1+(2^n-1)=2^n minimal covers. Each is exposed as above. Hence its unit-value function requires exactly2^n linear forms, and any nonzero concave homogeneous summand in a positive decomposition requires that many forms as well. Thus a fixed-K positive decomposition fails even on depth-two trees with unbounded branch count; arbitrary depth is not needed for this barrier.
+83: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE FRAGMENTED_FOREST_FAMILY.txt
+1: An unbounded exclusive-ownership path family approaching the9/8 subsidy bound
+2: 15 October 2026. Exact internal result; external novelty unconfirmed.
+3: This does not improve the unrestricted9/8 lower bound. It strengthens the
+4: ownership-boundary interpretation without resource sharing or common access.
+5: 
+6: Technology and owners. For integer k>=2, take the path on4k vertices numbered
+7: 0,...,4k-1 with one unit-value activity on each edge. Each activity consumes
+8: one capacity at each endpoint. Owners A,B,C,D exclusively own vertices whose
+9: indices are respectively0,1,2,3 modulo4. No resource is shared. Each owner's
+10: k capacities are independent report coordinates, all bounded by2.
+11: 
+12: Reports. Baseline P has capacity1 at every vertex except the first and last,
+13: which have capacity0. At U, raise ALL D coordinates to2 and leave others at
+14: P. At V, raise ALL A coordinates to2 and leave others atP. These are valid
+15: single-owner bundle increases with fixed identities and fixed technology.
+16: Let T=2k-1. The grand production at each report is T. AtP andU, the even-side
+17: capacity sum is T; atV the odd-side sum is T. Matching certificates attainT:
+18:  P,U: all k edges B_j-C_j and all k-1 edges D_j-A_{j+1};
+19:  V: all k edges A_j-B_j and all k-1 edges C_j-D_j.
+20: Here j indexes copies0,...,k-1.
+21: 
+22: Coalition worths. AtP, v(AD)=k-1. AtU,
+23:  v(AB)=k-1, v(BC)=k, v(ACD)=2k-1.
+24: AtV,
+25:  v(BC)=k, v(ABD)=2k-1, v(CD)=k-1.
+26: Each equality follows by matching the indicated available adjacent pairs,
+27: with the capacity of the coalition's smaller relevant vertex side as upper
+28: bound. For example atU, ACD uses every C_j-D_j and every D_j-A_{j+1}; D_j
+29: has capacity2, while its neighboring A and C vertices have capacity1.
+30: 
+31: Lower bound. For any nonnegative all-profile own-bundle-monotone covering
+32: rule with total payment at most C times grand value, sum the three U
+33: coalition inequalities and separately the three V inequalities. This gives
+34:   2 y_N(U)-y_D(U)>=2T,
+35:   2 y_N(V)-y_A(V)>=2T.
+36: Coalition AD atP and the two own-report comparisons give
+37:   k-1 <= y_A(P)+y_D(P)
+38:       <= y_A(V)+y_D(U)
+39:       <= 4T(C-1).
+40: Consequently
+41:   C >= 1+(k-1)/(4(2k-1)) = (9k-5)/(8k-4),
+42: which tends to9/8 as k tends to infinity. k=2 is13/12.
+43: 
+44: The three-profile finite LP is exactly sharp. Payments in order A,B,C,D:
+45:  P=((k-1)/2, k/2, k/2, (k-1)/2),
+46:  U=(3(k-1)/4, (k-1)/4, (3k+1)/4, (k-1)/2),
+47:  V=((k-1)/2, (3k+1)/4, (k-1)/4, 3(k-1)/4).
+48: They are nonnegative, satisfy the only required own comparisons, and cover
+49: every coalition. For a direct check, the nonzero proper coalition worths at
+50: P are AB=CD=AD=k-1, BC=k, ABC=BCD=k, ABD=ACD=k-1.
+51: AtU they are AB=AD=ABD=k-1, BC=CD=ABC=BCD=k, ACD=T.
+52: AtV the U list is reflected by A<->D and B<->C. All singleton and BD/AC
+53: worths are zero. P spendsT and U,V each spendT+(k-1)/4.
+54: This finite upper certificate does NOT construct a mechanism on all reports.
+55: 
+56: Both owner count and resource count can grow. Take m disjoint such paths,
+57: with four distinct owners per path. Even if a mechanism's payments depend
+58: on all components and allow cross-subsidies, the same factor lower applies.
+59: For a fixed component r and arbitrary fixed reports of all others, the
+60: preceding coalition inequalities and own transitions imply
+61:   y_r(U,others)+y_r(V,others) >= 2T+(k-1)/2,
+62: where y_r is total payment to its four owners. Average over independently
+63: uniform U/V profiles of the other components. Equivalently,
+64:   E[y_r]>=T+(k-1)/4
+65: under the product-uniform U/V profile distribution of ALL components.
+66: Sum over r. Some all-U/V profile then spends at least
+67: m[T+(k-1)/4] while production is mT. Thus the factor lower survives arbitrary
+68: cross-component dependence. At these U/V profiles every owner is active;
+69: there are4m actual owners and4km exclusively owned resource vertices.
+70: This is a valid fixed-owner argument, not strategic splitting or entry.
+71: 
+72: Interpretation. Classical hierarchical allocations ensure zero subsidy when
+73: resource ownership blocks are connected on the physical forest. Fragmented
+74: exclusive holdings permit a subsidy arbitrarily close to1/8 of production,
+75: even on a collection of paths. Therefore overlapping/fractional ownership
+76: is not necessary for the incentive obstruction. The established general9/8
+77: bound remains numerically unchanged. No claim of all-forest sharpness or
+78: external novelty is made.
+79: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE CYCLE_TO_PATH_TRANSFER.txt
+1: Finite report-transition lower certificates on cycles transfer to paths
+2: 15 October2026. Internal structural lemma; external novelty unconfirmed.
+3: 
+4: Fix a cycle of L resource vertices with nonnegative edge output weights p_e,
+5: unit input consumption at each endpoint, and an exclusive assignment of its
+6: vertices to a fixed set of actual owners. An owner may hold several separated
+7: vertices. Reports are nonnegative resource capacities; underreporting changes
+8: only the reporting owner's capacities coordinatewise.
+9: 
+10: For integer k, form a path on k consecutive copies of the L-vertex cycle word.
+11: Every consecutive edge has the original weight of its edge type; the last
+12: wraparound edge is omitted. The same ACTUAL owner owns every copy of her
+13: original vertices. At a selected original report, give each copy of a vertex
+14: its original capacity. This repeats a report, not an owner identity.
+15: Let F(c) be cycle production and F_k(c) this repeated-profile path production.
+16: For every capacity vector c,
+17:   k F(c)-p_last min(c_first,c_last) <= F_k(c) <= k F(c).
+18: The same inequalities hold for every coalition after zeroing absent owners.
+19: 
+20: Proof. For the upper bound, sum the k resource constraints of each vertex
+21: type for any feasible path activity vector. Divide total activity of each
+22: edge type by k. The resulting cycle activity vector is feasible, so its
+23: objective, the path objective divided by k, is at most F(c). For the lower
+24: bound, take an optimal cycle plan and put the same plan on all copies, with
+25: the single final wraparound activity omitted. The omitted activity consumes
+26: at most min(c_first,c_last), and deleting it preserves all resource constraints.
+27: This proves the uniform O(1) deficit relative to kF(c). No integrality is used;
+28: the argument includes odd cycles and fractional activities.
+29: 
+30: Transfer of exact finite lower certificates. A report-transition certificate
+31: is a nonnegative weighted sum of budget, coalition-coverage and own-monotone
+32: constraints whose aggregate payment coefficients are nonnegative, whose
+33: factor coefficient is negative, and whose right side is negative. Writing
+34: D=sum_budget lambda_b T_b>0 and R=sum_coalition lambda_s v_s, it proves C>=R/D.
+35: Repeat each of its finitely many profiles on the k-copy path. Every transition
+36: still changes only one fixed actual owner and increases her entire copied
+37: bundle coordinatewise. Every coverage constraint remains meaningful. The
+38: aggregate payment coefficients are unchanged because they depend only on
+39: owner subsets and transitions, not worths. The new lower certificate proves
+40:   C >= R_k/D_k,
+41: where R_k/k -> R and D_k/k -> D by the production bounds above. Therefore
+42: R_k/D_k -> R/D. Any certified finite cycle lower bound can be approached
+43: arbitrarily closely on exclusively owned path resources with fragmented
+44: holdings. The resulting path is an unbounded resource family; independent
+45: product replication can also make actual owner counts grow when needed.
+46: 
+47: Scope. This is a lower-bound transfer, not an equivalence of all-profile
+48: mechanism classes, and it yields no upper bound. It does not say every cycle
+49: or every fragmented ownership pattern incurs subsidy. It justifies using
+50: compact merged-owner cycles as discovery problems for exclusively owned
+51: forest lower bounds. A source comparison is still needed before claiming
+52: this reduction itself is new.
+53: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE FOREST_CLASSICAL_BOUNDARY.txt
+1: Classical hierarchical core allocations give truthful efficiency on owner forests
+2: 15 October 2026. Restricted-class boundary, not a new core theorem.
+3: 
+4: Setup. Fix a forest H on the ACTUAL owner set. For every report profile b,
+5: v_b(empty)=0, v_b is nonnegative and superadditive, and v_b(S) is the sum of
+6: v_b(C) over the connected components C of the induced owner graph H[S].
+7: Assume v_b(S) is independent of reports outside S and is coordinatewise
+8: nondecreasing in reports of owners in S. The graph and roots do not depend
+9: on reported capacities, including when a capacity becomes zero.
+10: 
+11: Choose a fixed root in each component. Let D_i be the subtree rooted at i
+12: and child(i) its immediate children. The classical hierarchical allocation is
+13:   y_i(b) = v_b(D_i) - sum_{h in child(i)} v_b(D_h).
+14: It is nonnegative, exactly efficient, coalition-covering, and nondecreasing
+15: in every coordinate of owner i's report on the entire report domain.
+16: 
+17: Proof. Nonnegativity follows from superadditivity on the disjoint child
+18: subtrees and singleton {i}. Summing over a rooted component telescopes to
+19: its worth; summing components gives v_b(N). For connected coalition C let
+20: r be its member nearest the fixed root. Summing y_i over i in C telescopes
+21: as follows: y(C) equals v_b(D_r) minus the sum of worths of the subtrees
+22: hanging off C below its boundary. These subtrees and C partition D_r.
+23: Superadditivity thus gives y(C)>=v_b(C). For arbitrary S, sum this result
+24: over the components of H[S] and use component additivity. Finally, owner
+25: i's report changes v_b(D_i) monotonically and changes none of the child
+26: terms, because i lies in no D_h. This proves all-profile own monotonicity.
+27: A fixed convex combination over roots retains every property; the classical
+28: average-tree solution is therefore another valid choice. Dependence of the
+29: root weights or tree on reports would require a new incentive argument.
+30: 
+31: Production corollary. Let a fixed physical resource forest have activities
+32: on its edges. Activity x_e>=0 consumes fixed positive amounts at its two
+33: endpoints and generates nonnegative fixed output p_e*x_e. Each resource
+34: has additive capacity available only from its owner. Partition resource
+35: vertices among actual owners, with each owner's block connected, and let
+36: that owner report an arbitrary coordinatewise-smaller bundle of all its
+37: capacities. Different owners' blocks are disjoint. Contracting each block
+38: gives a forest on actual owners. At every profile, including zero reports,
+39: coalition production decomposes over components of that contracted forest:
+40: there are no activity edges between those components, and no shared resource
+41: rows. Separate feasible activity plans can be added, so the game is
+42: superadditive. Coalition worth is increasing in included capacities and
+43: independent of absent owners' reports. The preceding allocation therefore
+44: is efficient, coalition-covering and own-bundle monotone for arbitrarily
+45: many resources and owners. Internal owner activities merely allow positive
+46: singleton values and cause no problem.
+47: 
+48: Limits. Multiple actual owners sharing the capacity of one resource do not
+49: form a vertex partition. A single owner's disconnected resource holdings
+50: also do not meet the connected-block hypothesis; contracting disconnected
+51: blocks may create cycles. These cases must not be claimed from this result.
+52: Two resources with two suppliers each already induce the four-owner
+53: substitution cycle K_{2,2} and admit the existing 9/8 incentive lower bound.
+54: Thus physical branching alone is not the obstruction; ownership structure
+55: can remove the owner-forest decomposition even on a single physical edge.
+56: This does not prove that every disconnected/overlapping ownership pattern
+57: requires a subsidy, only that the classical argument no longer guarantees
+58: zero subsidy.
+59: 
+60: Primary-source comparison (free original publisher PDF inspected):
+61: P. Jean-Jacques Herings, Gerard van der Laan, Dolf Talman (2008),
+62: 'The average tree solution for cycle-free graph games', Games and Economic
+63: Behavior 62, 77-92, DOI 10.1016/j.geb.2007.03.007.
+64: https://cris.maastrichtuniversity.nl/ws/files/64777103/Herings_2008_the_average_tree_solution_for.pdf
+65: Printed p83, equation (3.3), is exactly the hierarchical formula above.
+66: Printed p85, Section 4, attributes core membership of each rooted allocation
+67: to Demange (2004); Theorem 4.1 characterizes the stable average-tree solution.
+68: The owner-report monotonicity observation follows immediately under our
+69: report-locality assumptions and should be presented as an application of
+70: this classical construction, not independent evidence of novelty.
+71: Demange original: Gabrielle Demange (2004), 'On Group Stability in Hierarchies
+72: and Networks', Journal of Political Economy 112(4), 754-778,
+73: DOI 10.1086/421171. Full Demange original not inspected in this pass.
+74: 
+75: Broader formulation. Connected resource blocks are sufficient, not required.
+76: For ANY fixed production system whose resources have exclusive actual owners
+77: and whose activity columns each use resources from at most two owners, form
+78: the fixed owner-interaction graph: connect distinct owners exactly when some
+79: activity needs resources of both. If this graph is a forest and there are no
+80: other shared constraints, coalition production decomposes over its induced
+81: components. All the report-locality and superadditivity hypotheses above
+82: hold, so the classical hierarchy gives efficient own-bundle-monotone payments.
+83: An owner's resources may be physically disconnected. Activities internal to
+84: one owner are allowed, including positive singleton production. If an activity
+85: uses several owners, the same conclusion follows whenever its owner support
+86: is connected in a fixed owner forest and absence of a required owner makes
+87: the activity unavailable; this broader variant is not needed here.
+88: 
+89: The repeated A-B-C-D path family has an owner-interaction four-cycle, although
+90: its physical resource graph is a path and resources have exclusive owners.
+91: FRAGMENTED_FOREST_FAMILY.txt proves an incentive factor tending to9/8 there.
+92: The precise contrast is acyclic owner interaction (classical zero subsidy)
+93: versus some cyclic owner-interaction examples with positive subsidy. We do
+94: not claim every owner cycle necessarily incurs a subsidy.
+95: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

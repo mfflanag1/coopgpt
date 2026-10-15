@@ -1,0 +1,33 @@
+**Provisional verdict: no findings in reviewed scope (algebra verified); one scope limitation — the "mixed-owner two-input exponential rule" that DOUBLE_STAR and SCALAR_BIAS depend on is not in the packet.**
+
+## Findings
+
+**THREE_POOL_MERGE — independently re-derived, checks out.**
+
+- Long case (line 13): with `w_j = exp(1-(m+rest)/T)`, `p_j' = -p_j(1-p_j)/T`, so `d(m p_j)/dm = p_j[1-(m/T)(1-p_j)] ≥ p_j² > 0`. Other `p_h` rise since `W` falls. ✓
+- Short case: `ρ_j' = -t_j/T`, `w_j' = w_j t_j/T` (line 21) ✓; `p_0' = -p_0 M/T`, `p_j' = p_j(t_j-M)/T`; differentiating `p_0 x + Σ p_j d_ij` reproduces line 27 exactly ✓.
+- `M<1` (lines 23–24): `t_j ≤ ρ_j` and `u e^{-u} ≤ 1/e` give `Σ ≤ 2/e` ✓. "At most one `t_j < M`" is the weighted-mean-with-zero argument; the `M=0` edge (both `t_j=0`) is not a counterexample ✓.
+- Line 33: expanding `W(1-M) + A s(s-M)W` with `W=1+A+B`, `MW = As+Bt` gives `1 + A(1-s+s²) + B(1+As²) - Bt(1+As)` — matches ✓. `Bt ≤ t e^{1-t} ≤ 1` ✓, then `A(1-s)² + B(1+As²) > 0` since `B>0` ✓.
+- Coverage: `Σ_{i∈S} min(c_ij,T) ≥ min(Σ_S c_ij, T) ≥ F(c_S)` ✓. Continuity at caps/ties holds since `min(·,T)` and `exp` are continuous; `T→0` seam forced by `0 ≤ y_i ≤ (1+b)T` ✓. `1+W(2/e) ≈ 1.4631` ✓.
+- Minor (low): corollary's "truthful on all nonnegative profiles" means underreport-monotone only (bundle `b' ≤ b` coordinatewise lowers all `L_j(b')`). Overreports are assumed infeasible; state this explicitly.
+
+**DOUBLE_STAR — decomposition verified.**
+
+- Saturation step: reduction `max(0, z+δ+L_u-U) ≤ min(δ, L_u)` as claimed; loss `≤ δ(b_1+c_1) ≤ δa` ✓.
+- Fractional-knapsack Abel summation `Σ_j (b_j-b_{j+1}) min(R,B_j)` ✓; identity `min((U-V)_+,B) = min(U,V+B)-min(U,V)` holds in both orderings ✓; telescoping yields (DS) with coefficient `a-b_1-c_1 ≥ 0` ✓.
+- Sharpness example is correct and correctly scoped ✓.
+- **Gap (medium, line 37):** payments invoke a "proved mixed-owner two-input exponential rule" with factor `1+1/(2e)`. This rule is not in the packet, and it is *not* the EXISTING_SOFTMAX `k=2` rule (that has factor `1+b_2 ≈ 1.278`). My own sanity check of `y_i=(1-p)s_i+p d_i`, `p=½e^{1-ρ}`: long derivative `½e^{1-ρ}(1-m/T) ≥ 0`; short derivative `≥ 1-p(1+ρ) ≥ 0` since `(1+ρ)e^{1-ρ} ≤ 2`. Plausible, but unverified from source.
+
+**SCALAR_BIAS_BARRIER — proof correct as a mechanism-class obstruction.**
+
+- Chain inequality `p(r) ≥ (1-h)p(r-h)` is exactly own-monotonicity of the mover (`d_i=l_i ≤ T=1`) ✓; `(1-(R-1)/k)^k → e^{1-R}`, and `p(R) ≥ sup_k` needs no continuity ✓. `ρ=2` profile gives total `1+p(2)` with `F=1` ✓. Owner-count remark `R ≤ n-1` ✓.
+- Nit (line 33): "the proof below" should read "above".
+- "Exponential rule attains this bound" again depends on the unseen rule.
+
+## Scope limitations
+- Two-input mixed-owner rule and its proof absent; "preceding star theorem" (DOUBLE_STAR line 44) absent.
+- No numerical/tool verification performed; all checks are by hand.
+- Did not assess novelty or optimal-payment lower bounds.
+
+## Verdict
+THREE_POOL_MERGE: no findings — derivative, `DW²` identity, tie/cap/zero handling all reproduce. DOUBLE_STAR: decomposition no findings; payment claim **insufficient evidence** pending the two-input lemma. SCALAR_BIAS_BARRIER: no findings.

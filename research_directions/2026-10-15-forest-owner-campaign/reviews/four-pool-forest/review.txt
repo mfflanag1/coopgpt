@@ -1,0 +1,24 @@
+**Provisional verdict: no substantive findings in reviewed scope.** All three arguments check out step by step; the most important observations are a classification ambiguity in FOUR_POOL_MERGE (capped pools in the bad/good algebra) and unverifiable dependencies in WEIGHTED_FOREST_REDUCTION. No counterexample found.
+
+## Findings
+
+**1. FOUR_POOL_MERGE.txt, lines 47–59 — Low (presentation gap, not an error).**
+Lines 48–49 handle capped pools separately, but the algebraic equivalence of `λH ≤ 1` (lines 57–60) uses `W = 1 + Σ_j w_j` over all three pools, so capped pools with `t_j < m` must appear on the "good" side of (59). This is valid: a capped term `w_j[1+λt_j−M] ≥ 0` can be dropped, and the bound `w_j ≤ exp(−λ(t_j−1))` still holds since `ρ_j ≥ 1+t_j ≥ t_j`. The counting "at most 3 pools" is unaffected. Suggest stating explicitly "bad = uncapped with `t_j < m`; all others dropped."
+
+Verified independently: derivative `D` (line 47) via `p_j' = p_j(λt_j − M)/T`, `p_0' = −p_0 M/T`; `M<1` via max of `(λt−1)e^{λ−λt} = e^{λ−2}`; `3e^{−1.1} ≈ 0.9986 < 1` (tight — λ cannot be raised much); `R − (1+A)` identity; covariance `BS − AN ≥ 0`; `q ≥ 3/4` via `w ≤ 1` and discriminant `225−360<0`; `e^{0.85} > 2`. Budget: `(v−b)e^{−v}` max at `v=b+1`; `C4 ≈ 1.670`. Coverage and long-coordinate derivative `p_j[1−λ(d_ij/T)(1−p_j)]` confirmed.
+
+**2. WEIGHTED_FOREST_REDUCTION.txt, lines 4–5, 85–92 — Low (missing evidence).**
+The row/activity normalization cites ARBITRARY_DOUBLE_STAR.txt (not supplied); on a forest the log-linear scaling system is consistent (incidence of a tree), so plausible. The APPLICATION invokes a "mixed three-pool mechanism" with factor `1+W(2/e)` (not supplied). Note: 1–3-edge subpaths of a four-edge path have ≤3 covers, and the four-pool rule cannot be applied with a duplicated column (the "uniquely short input" analysis breaks under permanent ties), so the three-pool rule is genuinely required. Also, the unweighted rule must tolerate isolated vertices in `E_θ`.
+
+Theorem (WF) verified: telescoping gain `r_p − r_h`; outside endpoints `p'`, `h'` lie off the path by threshold inequalities; four net gains all positive; numeric check on a 2-edge path with weights 1,3 and capacities (1,2,1) gives 4 = 2·1 + 1·2.
+
+**3. FOUR_PATH_OBSTRUCTION.txt — no findings.**
+Vertex covers `{1,3},{0,2,4},{0,2,3},{1,2,4}` are exactly the minimal ones; witness points give unique minimizers (A=2,B=3,C=3,D=3 respectively); at (1,2,1,1,1) A=B=C=3<D=4 and at (1,1,1,2,1) A=B=D=3<C=4; `A−B`, `B−C` and `A−B`, `B−D` independent. Concavity sign (`g = min` of pieces) gives `λ ≥ 0`; triangle sum forces equality; chamber gradients are global because chambers are convex. Homogeneity is unused but harmless.
+
+## Scope limitations
+- ARBITRARY_DOUBLE_STAR.txt, the three-pool rule, and the "disjoint components compose" claim are not in the packet.
+- No numeric simulation run; verification is by hand algebra.
+- Novelty not assessed.
+
+## Verdict
+**No findings** of mathematical error in the reviewed scope. Finding 1 is a clarity gap; Finding 2 identifies external dependencies that must be supplied for the APPLICATION paragraph to be fully evidenced.

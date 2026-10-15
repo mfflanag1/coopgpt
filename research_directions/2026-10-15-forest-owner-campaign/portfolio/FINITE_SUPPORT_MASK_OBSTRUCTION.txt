@@ -1,0 +1,115 @@
+FINITE GLOBAL SUPPORTS DO NOT REMOVE THE sqrt(n) BARRIER
+15 October 2026. Candidate proof; independent review pending.
+This concerns the support/endpoint MASK-HYBRID architecture, not all mechanisms.
+
+THE MASK-HYBRID CLASS
+For one fixed technology F and n fixed owners, fix ANY law on masks B subset[N],
+independently of reports. For each mask select a common nonnegative global linear
+support ell_B at x_B=sum_(i in B)b_i: ell_B(x_B)=F(x_B), ell_B>=F everywhere.
+The selector may depend on F, B and the open owners' reports, and may randomize.
+Closed owner reports may not affect its selection. At B=empty the support law
+therefore remains fixed across profiles. Pay
+ Y_i(B)=min{ell_B(b_i),T} if i notin B;
+ Y_i(B)=F(x_B)-F(x_B-b_i) if i in B,
+then average over the fixed mask and support laws. This includes the current
+finite-form hybrid and arbitrary report-independent iid/cardinality mixtures.
+Every such rule is eligible; the argument below bounds its worst budget.
+
+THEOREM
+For every n>=4, there is one fixed continuous finite nonnegative min-linear
+technology F on nm resources, m=floor(sqrt n), such that EVERY rule above has
+worst-profile total-payment factor >=m/16. Thus no choice of finite supports,
+tie-breaking, mask correlation, or fixed mask weights makes this architecture
+achieve o(sqrt n) uniformly in owner count.
+The construction uses finite global supports; +infinity off a face is unnecessary.
+The unrestricted owner-count lower remains the existing log n/loglog n bound.
+
+TECHNOLOGY
+Set A=n^2 and for k=1,...,m define on R_+^n
+ f_k(x)=min{ (sum_i x_i)/n,
+              [A/|S|^2] sum_(i in S)x_i : k<=|S|<=n-1 }.
+On m separate n-coordinate blocks take F=sum_k f_k. A sum of finite minima
+is again a finite min-linear function (expand the product choices).
+The single F is continuous, nonnegative, monotone, concave and homogeneous.
+All owners have the same unrestricted whole-bundle report domain throughout.
+
+REGULAR WITNESS PROFILES
+Let epsilon=1/(8n^4), t=1+(n-1)epsilon. At profile P_k, owner i reports
+ e_i+epsilon sum_(j!=i)e_j in block k and zero in every other block.
+Thus T_k=t. Fix a proper nonempty mask with l closed owners and r=n-l open.
+The active block aggregate has entries r epsilon on closed coordinates and
+1+(r-1)epsilon on open coordinates.
+
+If l<k, every subset form contains an open coordinate and costs more than1;
+the baseline form costs r t/n<1. It is the unique supporting gradient.
+If k<=l<n, the unique minimizing subset is S=the closed set C. Its value is
+ A r epsilon/l. A smaller subset of C has strictly larger value A r epsilon/s;
+a subset meeting an open coordinate has value>1; the baseline is>=r/n,
+whereas A r epsilon/l<r/n. This proves uniqueness, not only one tie choice.
+At these positive active-block aggregates, ANY global linear supporting form
+must restrict to the unique active-block gradient, even when inactive blocks
+are zero. Randomization or extra redundant forms cannot change that gradient.
+
+For a closed owner i when k<=l<n,
+ ell_B(b_i)=A[1+(l-1)epsilon]/l^2 >=n^2/(n-1)^2 >t.
+Its capped payment is exactly T. Hence R(P_k,B)/T_k>=l in that case.
+
+If l=k-1, an open owner has endpoint difference
+ Delta = r t/n - A(r-1)epsilon/k >=r/n -1/(8n)
+       >=(n-k)/n >=(n-m)/n.
+(The removed-owner mask remains nonempty since k<=m<=n/2.)
+Since r>=n-m and t<2,
+ R(P_k,B)/T_k >=(n-m)^2/(2n)>=n/8.
+For B=N (l=0), the same endpoint calculation applies at P_1.
+
+Consequently the uniform average over P_1,...,P_m satisfies:
+ - if 0<=l<m: choose k=l+1; its contribution alone gives >=n/(8m);
+ - if m<=l<n: every k<=m gives >=l>=m.
+These statements hold for every deterministic proper mask, regardless of which
+owners are open and regardless of the support selector. All other payments are
+nonnegative and may safely be ignored.
+
+ALL-EMPTY-MASK ANCHORS
+At B=empty the selected support is a fixed nonnegative global majorant w,
+possibly random. Restrict w to block1. Because F(1_block1)=f_1(1)=1,
+s=sum_j w_j>=1. At most one index j can have sum_(e!=j)w_e<1/2: two such
+indices would imply w_j+w_h>2s-1>=s, a contradiction.
+
+Let delta=1/(4n^3). At anchor Q_j, every one of the n owners reports
+ z_j=delta e_j+sum_(e!=j)e_e in block1, with other blocks zero.
+Its grand production is T_j=n f_1(z_j)<=n A delta=1/4.
+For at least n-1 indices j, w.z_j>=1/2>=T_j. Every owner at that anchor
+therefore receives capped payment T_j under the all-empty mask.
+The uniform average normalized budget across all n anchors is >=n-1.
+This holds for EVERY selected support realization, so randomizing w cannot
+avoid it. The anchor profiles and weights are independent of the selector.
+
+COMBINED WEIGHTED PROFILE ARGUMENT
+Give total weight1/2 to the uniform regular profiles and weight1/2 to the
+uniform anchors. For each mask:
+ - l<m: weighted normalized budget >=n/(16m)>=m/16;
+ - m<=l<n: >=m/2>=m/16;
+ - l=n: >=(n-1)/2>=m/16.
+Integrate these pointwise inequalities over ANY fixed mask law and support law.
+The weighted average of the rule's normalized budgets at this finite set of
+profiles is at least m/16. Some profile attains that bound. The theorem follows.
+
+ELIGIBILITY AND QUANTIFIER LIMITS
+For a fixed mask, closed prices exclude the recipient's report; open endpoint
+marginals also increase with the own bundle. For coverage, the endpoint marginal
+of an open owner dominates its selected support contribution; the closed capped
+support terms and open support terms cover every coalition. Hence each mask
+vector is itself eligible; any fixed mixture remains eligible.
+No claim is made for a selector using closed reports, profile-dependent mask
+weights, owner-specific incompatible support forms, or another payment formula.
+The profiles lie in one fixed F with fixed n owners and vary only their reports.
+Within the active block every regular owner's bundle is strictly positive.
+Inactive blocks are zero, but all selected prices are finite global forms; the
+proof does not exploit an infinite off-face convention.
+
+NEW VERSUS ESTABLISHED
+The project-level result is the explicit finite-form, arbitrary-fixed-mask-law
+barrier for the existing architecture. Linear-production support/core facts,
+min-linear concavity, and weighted averaging are established ingredients.
+Historical priority has not been confirmed. This does not prove a sharp
+unrestricted sqrt(n) lower bound; a different mechanism may improve that rate.

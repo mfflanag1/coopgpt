@@ -1,0 +1,17 @@
+**Provisional verdict: no substantive findings in reviewed scope.** Both arguments check out step-by-step; the most important concrete gap is a loose derivation (not an error) in FIXED_MASK_THEOREM lines 48–51, where the √2 asymptotic for the harmonic constant C_n is inferred from the bound for a *different* (uniform-weight) law.
+
+## Findings
+
+**1. Low — FIXED_MASK_THEOREM.txt:48–51, 78–80.** "choosing uniform weights gives total ≤ [(m−1)/2 + n/m]T … implies C_n ≤ (√2+o(1))√n." C_n is defined (line 43) as min_m of the *harmonic* constants n−(m−1)/(H_n−H_{n−m}); the uniform-size law has a different, separately proved constant. The implication holds only via the unproved expansion (m−1)/h = n − n/m − (m−1)/2 + O(1+m²/n), which line 52 explicitly declines to assert. Sharpness of √2 for the class is nonetheless valid, because the uniform law is itself a fixed, report-independent law whose bound is proved by summation by parts. Verification: either cite the uniform law in the sharpness statement, or prove the two-term expansion of H_n−H_{n−m}.
+
+**2. Low — verify_fixed_masks.py:25–28.** The off-term selector is a fixed-priority finite minimizing form, not the canonical min-norm/+∞ face extension used in the obstruction. Hence the numeric eligibility/coverage checks never exercise the +∞-off-face branch, and the lower-bound technology F (line 57–62 of the theorem) is checked only through formula (3) and H(l), never by running the mechanism. The analytic verification of (3) that I did (open marginal = 1 iff l<k; closed owner off-face ⇒ capped T; S−n−m ≥ 0 from m(m−1) ≥ 2n; S ≥ n) is correct, so this is a coverage gap in the script, not a defect in the claim.
+
+**3. Low / scope — FINITE_SUPPORT_MASK_OBSTRUCTION.txt:10–11, 72–85.** The empty-mask anchor is the *only* place where "closed owner reports may not affect selection" is load-bearing: at B=∅ all owners are closed, so a report-aware selector could choose w minimizing w·z_j and collapse the anchor budget to ≈T_j. The restriction is a modeling choice, not a consequence of eligibility (a symmetric report-dependent selector could still be own-report monotone). Line 103 discloses this; readers should treat the theorem as applying to the closed-blind architecture only. Also note m/16 < 1 for n < 256, so the bound is informative only asymptotically.
+
+**Verified without issue** (hand-checked): correlated-mask eligibility (off term depends on b_i only through capped ℓ and T; on term monotone; per-mask coverage by domination of capped vector; averaging preserves all); identity Σ_open marginals = s(g_s−g_{s−1}) (each (s−1)-set arises from n−s+1 supersets, so deletions are uniform); telescoping to C_nm = n−(m−1)/h; summation-by-parts bound; uniqueness of f_k's minimizer in both regimes (A r ε/l < r/n; subset-meets-open > 1 > rt/n) and its forcing of any global majorant's block-k restriction via interiority; closed-owner inequality A/l² ≥ n²/(n−1)² > t; Δ ≥ r/n − 1/(8n) ≥ (n−m)/n; m ≤ n/2 for n ≥ 4; anchor bound T_j ≤ 1/4, at most one bad index per realization, average ≥ n−1; combined cases l<m, m≤l<n, l=n all ≥ m/16.
+
+## Scope limitations
+Only the four supplied files were reviewed; supplement proofs (prod:section, weighted hierarchy) are taken as given. No tests were run. Historical novelty not assessed.
+
+## Verdict
+**No findings** of incorrectness in reviewed scope; three low-severity exposition/verification/scope notes above.

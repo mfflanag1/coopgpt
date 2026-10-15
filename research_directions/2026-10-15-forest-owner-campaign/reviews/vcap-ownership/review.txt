@@ -1,0 +1,29 @@
+**Provisional verdict: no findings (no verified errors) in reviewed scope; several cited certificates are outside the packet and remain unverified.**
+
+Most important point: the new V-cap obstruction (VCAP) holds up — the only new ingredients beyond the already-reviewed v2 are (i) closed payments drop from T to V_i ≥ aT, (ii) the n² Leontief anchors with Markov; both check out algebraically.
+
+## Findings
+
+**1. VCAP_MASK_OBSTRUCTION_v1 — verified, no error (Low: loose but valid steps).**
+- Eligibility (l.26–42): V_i ≤ T and own-monotone; telescoping v(S)−v(R) ≤ Σ_C V_i correct; endpoint ≥ ℓ_B(b_i) follows from touching/majorization. Averaging preserves all properties.
+- Unique supports: restriction of a global support to block k touches f_k because all other blocks (incl. Leontief) have zero aggregate; uniqueness cases in v2 l.48–60 re-checked (gap rl/n² ≥ (n−1)/n² ≥ 1/(2n); ε(n³+n) < 1/(2n)).
+- V_i bound (l.67–76): Δ_k ≥ (n−k+1)²/n² − n³ε; (1−x)(1−y) ≥ 1−x−y; 2m+1<n follows from m(m+7)/2 ≤ n−1. The stated bound 1−(2m+1)/n is looser than the derived 1−(2m−1)/n; harmless.
+- Budget (l.80–88): al + D(m−l)/S0 ≥ am needs only D ≥ S0, a ≤ 1 — correct. Empty mask (l=n) correctly excluded from the regular bound (ℓ_∅ is unconstrained at x=0) and covered by anchors.
+- Anchors (l.90–112): V_i = 1 = T verified (any S ⊊ N∖{i} has a zero scarce coordinate); each coordinate lies in exactly n windows; Markov gives ≤ 2n bad windows; abundant weight ≥ s/2 ≥ 1/2 ⇒ raw price ≥ 1. Average ≥ n−2. Combination weights give equal bounds on empty/nonempty masks.
+
+**2. MAXIMUM_MARGINAL_CAP — verified except external certificate (Medium: unverifiable).**
+- Lemma 1 and hybrid coverage (w_B·b_i ≤ v(B)−v(B∖i) ≤ V_i) and R = Z − g − (1−q)g′ check.
+- Depth-two tree: T = 1+1/n, V_j = 1, V_0 = T; cover types (a) cost K vs (b) 1+Kε, strict for K ≥ 2, n ≥ 2; E[(n−K)1_{K≥2}] formula correct; Fatou step valid.
+- **Unverified:** the four-edge-path rational Z/T (l.31–33) relies on `check_sampled_counter.py`, not supplied. Verification: rerun enumeration with q=1/100 and the stated cover order.
+
+**3. DISCONNECTED_OWNERSHIP_OBSTRUCTION — verified.** All coalition worths at P,U,V re-derived (matchings and bipartition upper bounds agree); inequalities 2Σy−y_D ≥ 6 etc. correct; C ≥ 13/12 follows using only coverage, budget, own-bundle monotonicity. Sharpness payments checked against all 15 coalitions at each profile and both incentive comparisons. **Unverified:** 6561-grid claim (JSONL not in packet).
+
+**4. NETTING_AND_THREE_OWNERS — verified.** Decomposition identity min(Σa,Σb) = Σt + min(Σd⁺,Σd⁻) correct; seam argument correct because y_i ∈ [a_i,b_i] on the a<b side (z_i ≤ |d_i| from Lipschitz + zero-at-zero) and y_i ≥ b_i on the other. Three-owner formulas agree with the surplus rule in every case and are coordinatewise monotone; totals equal T. **Unverified:** derivative-in-[0,1] property of the "existing exponential rule" and the external 4-owner 9/8 witness.
+
+No conclusion exceeds its stated mechanism class; all four files carry explicit architecture-bound scope statements.
+
+## Scope limitations
+No code run; external files (`check_sampled_counter.py`, `DISCONNECTED_PRIMAL_REPLAY.jsonl`, exponential rule, upper bound n√(2/(n+1))) not inspected. Priority/novelty not assessed.
+
+## Verdict
+**No findings in reviewed scope**; two cited numerical certificates and one external rule property are insufficient-evidence items, not errors.

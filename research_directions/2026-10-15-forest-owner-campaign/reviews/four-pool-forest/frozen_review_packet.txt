@@ -1,0 +1,250 @@
+Task and review objective:
+Audit all three new mathematical candidates independently. FOUR_POOL_MERGE: derive actualowner derivative and covariance/bad-good algebra, all rate inequalities and seams. WEIGHTED_FOREST_REDUCTION: challenge simultaneous optimality via alternating residual paths, real capacities and outside endpoint edges, fixedreportindependent decomposition and scaling. FOUR_PATH_OBSTRUCTION: scrutinize affine summands and gradient-jump triangle argument. Try counterexamples, give precise limited verdict. No edits, noveltyclaims or recursive delegation.
+
+
+FILE FOUR_POOL_MERGE.txt
+1: A mixed-owner four-input softmax rule below factor two
+2: 15 October 2026. Candidate extension; historical novelty unconfirmed.
+3: 
+4: Fix lambda=9/10. For arbitrary real owners with four input accounts c_ij>=0,
+5: let T=min_j sum_i c_ij, d_ij=min(c_ij,T), rho_j=sum_i d_ij/T, and
+6:   w_j=exp[-lambda(rho_j-1)], p_j=w_j/sum_h w_h,
+7:   y_i=sum_j p_j d_ij.
+8: At T=0 pay zero. The rule covers all coalitions, is nondecreasing in every
+9: coordinate of every actual owner's full bundle, and pays at most
+10:   C4 T, C4=1+(10/9)W(3/e)<2.
+11: Here W denotes the principal real Lambert W function. It is not the weight sum
+12: W used locally below. The mechanism has no identity changes or separate
+13: strategic control assigned to one owner's accounts.
+14: 
+15: COVERAGE. Each capped input total for a coalition covers its min-input value.
+16: A positive convex combination preserves coverage.
+17: 
+18: BUDGET. Put u_j=rho_j-1>=0, with at least one u_j=0. If b>0 solves
+19: b exp(b)=3/e, the inequality
+20:   (v-b)exp(-v)<=exp(-1-b), v>=0,
+21: gives sum_j (lambda u_j-b)exp(-lambda u_j)<=-b+3exp(-1-b)=0.
+22: Thus total/T<=1+b/lambda. To see this is less than two, it suffices that
+23: b<lambda, equivalent to 3<lambda exp(1+lambda); this holds at lambda=9/10.
+24: 
+25: INCENTIVES, LONG COORDINATE. If an increased own account belongs to a long
+26: input, T is fixed. Its own account derivative before c_ij=T is
+27: p_j[1-lambda(d_ij/T)(1-p_j)]>=0 since lambda<=1; after the cap it is constant.
+28: All other weights' normalized probabilities increase and their own-owner
+29: holdings are fixed. So the actual owner's total cannot fall.
+30: 
+31: INCENTIVES, SHORT COORDINATE. Fix all other capacities and increase the actual
+32: owner's coordinate x in uniquely short input 0; T=x+a. Work away from clipping
+33: and tie points. For the other three pools j=1,2,3 write
+34:   rho_j=k_j+t_j,
+35: where k_j counts capped accounts and t_j is the sum of uncapped accounts /T.
+36: Then w_j'=lambda w_j t_j/T. The short pool has w_0=1. Put
+37:   W=1+sum_j w_j, m=sum_j w_j t_j/W, M=lambda m.
+38: We first have M<1. Indeed each term w_j(lambda t_j-1) is at most
+39: exp(lambda-2): for a positive bracket use rho_j>=t_j and maximize
+40: (lambda t-1)exp(lambda-lambda t); a nonpositive bracket is immediate.
+41: Thus sum_j w_j(lambda t_j-1)<=3exp(-11/10)<1, which is equivalent to M<1.
+42: (The strict exponential inequality is certified by the Taylor polynomial
+43: through degree five at 11/10, which already exceeds three.)
+44: 
+45: Let a_j=d_ij/T be this owner's normalized account and delta_j its derivative
+46: with respect to T (1 if capped, 0 if uncapped). Its full payment derivative is
+47:   D=p_0(1-a_0 M)+sum_{j=1}^3 p_j[delta_j+a_j(lambda t_j-M)].
+48: Here a_0=x/T<=1. A capped term is nonnegative because a_j=delta_j=1 and M<1.
+49: For uncapped terms a_j<=min(t_j,1). Call j bad if t_j<m, good otherwise.
+50: For good j the bracket is nonnegative. Therefore, writing a(t)=min(t,1),
+51:   D W >= 1-lambda H,
+52:   H=m+sum_bad w_j a(t_j)(m-t_j).
+53: At least one of the three pools is good, since m is their weighted mean with
+54: an additional positive-weight zero. There are 0,1, or 2 bad pools.
+55: 
+56: Set S=sum_bad w, A=sum_bad w a(t), N=sum_bad w t,
+57: B=sum_bad w a(t)t, and q=(1+lambda B)/(1+A)>0. The inequality lambda H<=1
+58: is algebraically equivalent to
+59:   sum_good w[lambda(1+A)t-(1+lambda B)] <= R,
+60:   R=(1+lambda B)(1+S)-lambda(1+A)N.
+61: Since a(t) is nondecreasing, weighted covariance gives BS-AN>=0. Hence
+62:   R-(1+A)=sum_bad w(1-a(t))(1-lambda t)+lambda(BS-AN)>=0.
+63: The first terms vanish for t>=1, and otherwise both factors are nonnegative.
+64: Each good term is at most
+65:   (1+A)exp(lambda-1-q),
+66: by maximizing (lambda t-q)exp(lambda-lambda t); negative brackets cause no issue.
+67: 
+68: If there are no bad pools, A=B=S=N=0, q=1, R=1, and the sum is at most
+69: 3exp(lambda-2)<1.
+70: If there are two bad pools, at most one is good, so its bound is strictly less
+71: than 1+A<=R because lambda<=1 and q>0.
+72: If there is one bad pool, at most two are good and q>=3/4. For t>=1 this follows
+73: from q=(1+lambda w t)/(1+w)>=lambda. For t<1, w<=1 gives
+74:   q=(1+lambda w t^2)/(1+w t)>=(1+(9/10)t^2)/(1+t)>=3/4,
+75: since 18t^2-15t+5>0. Therefore their sum is at most
+76:   2(1+A)exp(-17/20)<1+A<=R;
+77: exp(17/20)>2 already follows from its quadratic Taylor lower bound.
+78: This proves D>=0 in every case.
+79: 
+80: The formula is continuous at all clipping/tie boundaries; the total bound and
+81: nonnegativity imply convergence to zero at T=0. Increasing coordinates in
+82: sequence proves whole-owner binding-underreport monotonicity on all profiles.
+83: 
+84: COROLLARY. A production function given by the minimum of FOUR fixed nonnegative
+85: linear forms admits this actual-owner rule with factor C4<2, by mapping each
+86: owner's bundle to the four linear accounts. In particular the unweighted
+87: four-edge path escapes the obstruction to positive sums of three-form
+88: technologies. Positive sums and disjoint resource components compose. This
+89: does not yet give a uniform bound for arbitrary-depth forests.
+90: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE FOUR_PATH_OBSTRUCTION.txt
+1: The four-edge path is not a positive sum of at-most-three-form technologies
+2: 15 October 2026. Exact obstruction to one decomposition route, not to mechanisms.
+3: 
+4: Take five vertices 0,1,2,3,4 in a path with four unit-profit, unit-consumption
+5: edge activities and capacities c=(c0,...,c4)>=0. Its production function is
+6:   F(c)=min{A(c),B(c),C(c),D(c)},
+7:   A=c1+c3, B=c0+c2+c4, C=c0+c2+c3, D=c1+c2+c4.
+8: These are precisely its four inclusion-minimal vertex covers. For completeness,
+9: the bipartite vertex-cover LP has an integral optimum: clamp any feasible dual
+10: vertex prices to [0,1], select even vertices with price>=theta and odd vertices
+11: with price>=1-theta, and average theta uniformly over [0,1]. Every selected
+12: set covers all edges; its expected capacity cost equals the fractional dual
+13: objective. Strong duality gives the displayed formula.
+14: 
+15: CLAIM. F cannot be expressed, even only on the strictly positive orthant, as a
+16: finite sum of concave piecewise-linear homogeneous functions each having at
+17: most three linear pieces, with all sum coefficients strictly positive. In
+18: particular no finite positive decomposition into minima of <=3 nonnegative
+19: linear forms exists. Adding globally linear summands does not help.
+20: 
+21: PROOF. Absorb positive weights into summands. On an open chamber where one of
+22: A,B,C,D uniquely minimizes, F is affine. Each concave summand must be affine
+23: on that whole convex chamber: Jensen gaps are nonnegative and sum to zero.
+24: Write a_s,b_s,c_s,d_s for its four chamber gradients.
+25: All four chambers are nonempty, witnessed respectively by capacities
+26:   (2,1,2,1,2), (1,3,1,3,1), (1,3,1,1,3), (3,1,1,3,1).
+27: 
+28: At c=(1,2,1,1,1), exactly A=B=C=3<D=4. The two independent equalities
+29: A=B and B=C produce all three neighboring chambers and their pairwise facets
+30: in a small positive neighborhood. Continuity across such a facet forces the
+31: summand's gradient jump to be parallel to F's jump; concavity forces its
+32: scalar to be nonnegative. Denote the scalars lambda_AB,lambda_BC,lambda_CA.
+33: Summing the three gradient jumps around the triangle and using the linear
+34: independence of A-B and B-C shows
+35:   lambda_AB=lambda_BC=lambda_CA.
+36: At c=(1,1,1,2,1), exactly A=B=D=3<C=4. The same argument gives
+37:   lambda_AB=lambda_BD=lambda_DA.
+38: The same A and B chamber gradients enter both neighborhoods, so lambda_AB is
+39: the same scalar in both. Hence, for some lambda_s>=0 and fixed vector h_s,
+40:   a_s=lambda_s A+h_s, b_s=lambda_s B+h_s,
+41:   c_s=lambda_s C+h_s, d_s=lambda_s D+h_s,
+42: where A,B,C,D on this line denote their coefficient vectors.
+43: If lambda_s>0, these are four distinct gradients, impossible for a function
+44: with at most three linear pieces. Thus every summand has lambda_s=0. Its
+45: four gradients are equal, so the sum has no gradient jump between these
+46: chambers, contradicting F's distinct gradients. QED.
+47: 
+48: The argument concerns positive CONCAVE sums with report-independent component
+49: technologies. It does not preclude nonlinear mechanisms, signed identities,
+50: minima of four or more forms, alternative nonconcave intermediate expressions,
+51: or direct truthful coalition-covering rules with a factor below two.
+52: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE WEIGHTED_FOREST_REDUCTION.txt
+1: Weighted forests reduce to unweighted subforests by fixed positive sums
+2: 15 October 2026. Structural reduction; historical novelty unconfirmed.
+3: 
+4: First normalize all positive endpoint resource coefficients to one by the
+5: fixed row/activity scaling in ARBITRARY_DOUBLE_STAR.txt. Consider a bipartite
+6: forest G=(H union P,E), edge profits w_hp>0, and arbitrary capacities c_v>=0:
+7:   F_w(c)=max {sum_e w_e x_e: x>=0, sum_{e incident v}x_e<=c_v}.
+8: 
+9: POTENTIALS. Choose a root and assign it an arbitrary real potential r_root.
+10: Traverse each tree to solve
+11:   w_hp=r_p-r_h
+12: on every edge hp, h in H,p in P. Acyclicity guarantees consistency. Potentials
+13: may be negative; their endpoint differences on all actual edges remain positive.
+14: For theta not equal to a vertex potential, define the fixed active subforest
+15:   E_theta={hp in E: r_h<theta<r_p}.
+16: Let F_theta(c) be the unit-profit matching/production LP on E_theta, using the
+17: same actual resources and capacities, with isolated rows harmless.
+18: 
+19: THEOREM. On every nonnegative real capacity profile,
+20:   F_w(c)=integral_{-infinity}^{infinity} F_theta(c) dtheta.       (WF)
+21: The integral has at most |V|-1 nonempty intervals between distinct potentials.
+22: Every coefficient (interval length) is nonnegative and technology-dependent,
+23: not report-dependent. The active graphs are unweighted subforests.
+24: 
+25: PROOF. Fix a weight-optimal feasible flow x, which exists by compactness. We
+26: show that its restriction to E_theta is a maximum-cardinality flow there for
+27: every theta avoiding the finite vertex-potential set.
+28: Suppose otherwise. The usual residual network for the capacitated bipartite
+29: matching LP yields an augmenting alternating path in E_theta, starting at a
+30: hardware h with unused active-flow capacity and ending at power p with unused
+31: active-flow capacity. Every hardware on this active path has potential below
+32: theta; every power has potential above theta.
+33: 
+34: Increase flow along forward edges and decrease it along backward edges by a
+35: sufficiently small delta>0. At either endpoint, if total flow already saturates
+36: its full resource capacity, remove delta from one incident positive-flow edge
+37: outside E_theta. Such an outside edge exists because that endpoint has unused
+38: active-flow capacity. If the endpoint has positive total slack, simply choose
+39: delta below that slack and remove no outside flow. All backward/path/outside
+40: edge quantities being reduced can be kept nonnegative by taking delta small.
+41: 
+42: An outside edge at the low hardware endpoint h leads to a power p' with
+43: r_p'<theta; otherwise the edge would be active. An outside edge at the high
+44: power endpoint p leads to hardware h' with r_h'>theta. These outside endpoints
+45: are not internal vertices of the active augmenting path. All internal active
+46: resource usage stays fixed; endpoint usage is either offset or within slack;
+47: outside endpoint usage only decreases. Thus the modified plan is feasible.
+48: 
+49: Telescoping w_hp=r_p-r_h along the alternating path gives a gain per delta of
+50: r_p-r_h before outside removals. With neither, hardware-only, power-only, or
+51: both outside removals, the net gain per delta is respectively
+52:   r_p-r_h, r_p-r_p', r_h'-r_h, or r_h'-r_p'.
+53: Every expression is strictly positive by the threshold inequalities. This
+54: contradicts weight optimality. Therefore sum_{e in E_theta}x_e=F_theta(c).
+55: Finally, integrate and exchange the finite edge sum with the integral:
+56:   sum_e w_e x_e
+57:     =sum_e (r_p-r_h)x_e
+58:     =integral sum_{e in E_theta}x_e dtheta
+59:     =integral F_theta(c)dtheta.
+60: This proves (WF) directly for arbitrary real capacities; no splitting or
+61: cloning of strategic owners is used even in the proof.
+62: 
+63: MECHANISM CONSEQUENCE. Fix any class of forests closed under edge deletion.
+64: If every unweighted graph in that class admits an all-profile, mixed-owner,
+65: truthful coalition-covering payment rule with uniform factor C, compose those
+66: rules for the finitely many graphs E_theta using the fixed positive interval
+67: lengths in (WF). Every coalition has the same decomposition, and component
+68: reports are the unchanged actual resource bundles. Thus the composition has
+69: identical factor C, whole-owner monotonicity and coalition coverage. Conversely
+70: unit profits are a subclass. The optimal uniform factor for weighted and
+71: unweighted versions of the class is therefore the same (use epsilon-optimal
+72: rules if the infimum is not attained).
+73: 
+74: Including fixed positive endpoint coefficients does not change this equality:
+75: row/activity normalization maps owner bundles by fixed positive diagonal
+76: scaling before the threshold decomposition. Counts of owners, resources and
+77: activities remain unrestricted; actual owners never change across reports.
+78: 
+79: The proof in fact applies to any bipartite graph whose positive edge profits
+80: admit potentials w_hp=r_p-r_h. Forests guarantee this property automatically;
+81: arbitrary cyclic weighted graphs need not. This does not solve the remaining
+82: uniform subsidy bound for unweighted forests, but removes price and energy
+83: heterogeneity as separate sources of difficulty in that entire class.
+84: 
+85: APPLICATION. Every active subgraph of an arbitrary weighted double star is a
+86: disjoint union of stars/double stars with unit profits. Aggregate its leaf
+87: capacities to obtain at most three linear vertex-cover forms. The mixed
+88: three-pool mechanism then yields the already obtained uniform factor
+89: 1+W(2/e). Every active subgraph of a four-edge path is a disjoint union of
+90: paths of at most four edges; each unit-profit component has at most four
+91: minimal vertex covers. The mixed four-pool rule gives uniform factor
+92: 1+(10/9)W(3/e)<2 on arbitrary weighted four-edge paths as well.
+93: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

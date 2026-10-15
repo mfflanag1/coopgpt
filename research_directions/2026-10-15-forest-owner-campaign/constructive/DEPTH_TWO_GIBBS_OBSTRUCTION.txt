@@ -1,0 +1,43 @@
+FINAL BOUNDED GIBBS TEST: NO REPORT-INDEPENDENT SCALAR RATE SOLVES THE SPECIFIED COVER-SOFTMAX ARCHITECTURE
+Internally checked mechanism-specific obstruction. Parent and scoped Fable review completed; no historical-priority claim. This file does not modify earlier frozen proof/index files.
+
+MODEL. T=F(sum_i b_i) is the maximum unit-profit fractional matching production on the resource tree. By bipartite LP duality, T=min_C sum_i w_C.b_i over minimal vertex covers. Total-payment factor means sum_i y_i/T for T>0. Owners have payment-only utility, with no private operating cost or allocation utility; binding own-coordinate underreports are feasible. These are the same conventions as coordinator/FOUNDATIONS.txt.
+
+ARCHITECTURE. On D_d with branches p--h_j--l_j, use all inclusion-minimal vertex covers C, each once. Let
+ a_i(C)=min(w_C.b_i,T), rho_C=sum_i a_i(C)/T,
+ P_C=exp[-lambda(rho_C-1)]/sum_D exp[-lambda(rho_D-1)],
+ y_i=sum_C P_C a_i(C).
+The scalar rate lambda>=0 may depend on the fixed graph and fixed number of owners, but is independent of reports. Owners may have arbitrary fixed mixed bundles and zero reports are allowed. The following two profiles use the SAME D_d, the SAME N=d+2 actual owners, and hence the SAME chosen rate.
+
+A. BUDGET PROFILE. One owner holds capacity1/d at every h_j; one owner holds capacity1 at p; owner j holds capacity1 at l_j, for j=1,...,d. Thus N=d+2, and T=1. The all-h cover has rho=1. A cover containing p and exactly k>=1 private leaves has
+ rho=1+k+(d-k)/d=2+k(1-1/d),
+and there are binom(d,k) such covers. Write b=1-1/d,z=exp(-lambda*b), B=(1+z)^d-1. The exact total-payment ratio is
+ C_d(lambda)=[1+exp(-lambda){2B+b*d*z*(1+z)^(d-1)}]
+             /[1+exp(-lambda)B].
+For every fixed lambda, C_d(lambda)/d -> 1/(1+exp(lambda)). More strongly, it diverges uniformly for lambda in [0,2]: z>=exp(-2), the mass of p-containing covers tends to1 uniformly, and their conditional expected k is at least d/(1+exp(2)). For all sufficiently large d,
+ C_d(lambda)>=d/[4(1+exp(2))].
+Thus rates bounded by2 cannot give a uniform finite factor.
+
+B. INCENTIVE PROFILE FOR EVERY lambda>2. Keep D_d and N=d+2 with d>=2. One owner holds capacity1 at h_1 only. A second owner holds x=3/4 at l_1 only. The other d owners each hold capacity1 at p. All remaining resource reports are zero. T=1, independent of x in a neighborhood of3/4. Let P be the probability that the selected cover contains l_1. This owner is paid xP. Every cover containing l_1 also contains p and has rho=d+x. There are2^(d-1) such covers. Since the denominator includes the all-h cover of weight1,
+ P<=2^(d-1)exp[-lambda(d+x-1)]
+  < 2^(d-1)exp[-2(d-1/4)]
+  <=2exp(-7/2)<1/3.
+The bound decreases with d>=2 because each increment multiplies it by2exp(-2)<1. The covers containing l_1 all have own-price derivative1 and the other covers have derivative0. Therefore
+ d(xP)/dx=P[1-lambda*x*(1-P)]<0,
+because lambda>2,x=3/4,P<1/3. A sufficiently small strict underreport consequently raises payment. No cap or bottleneck switches occur in this neighborhood.
+
+CONCLUSION. An all-profile truthful single-rate rule in this architecture must have lambda<=2 for every D_d,N=d+2. But those rates have unbounded budget by profile A. Hence NO graph-/owner-count-dependent scalar rate can make this cover-softmax architecture both all-profile truthful and uniformly bounded on depth-two trees. This does not rule out nonuniform weights, a different support distribution, per-branch corrections, or other mechanisms. It is stronger than failure at a fixed rate, but it is not a lower bound against unrestricted truthful payments.
+
+FINITE SEARCH CONTEXT. Before the analytic obstruction, test_depth2_gibbs.py performed480000 random own-coordinate comparisons on3--6branches at rates1,.9,.5 without finding an incentive violation. Those null searches do not establish truthfulness. The budget family above already rejects those rates regardless of their incentive behavior.
+
+Historical priority unassessed. All identities and the derivative are elementary calculations for this particular candidate architecture.
+
+EXPLICIT RATIONAL GROWTH BOUND. Since exp(2)<8, for lambda<=2 one has z>1/8 and exp(-lambda)>1/8. For d>=19, (9/8)^d>=9, so exp(-lambda)B>=1 and the p-containing covers have probability at least1/2. Their expected k is at least d/9, and b>=1/2. Thus
+  C_d(lambda)>=d/36  for every d>=19 and every0<=lambda<=2.
+The exponential estimate can be checked by summing its series through k=5 and bounding the tail from k=6 by a geometric series of ratio2/7; this gives exp(2)<=1663/225<8. The integer inequality9^19>=9*8^19 verifies the d threshold exactly.
+
+EXPLICIT FINITE UNDERREPORT. In profile B choose lambda=3, any d>=2, and report x initially3/4. Throughout x in[2/3,3/4],
+ P<=2^(d-1)exp[-3(d-1/3)]<=2exp(-5)<1/3.
+Thus the payment derivative is strictly below-P/3 throughout this interval. Reporting2/3 instead of3/4 strictly increases the leaf owner's payment. This is an exact finite deviation witness; decimal evaluation is unnecessary.
+
+FIXED OWNERSHIP-DOMAIN CLARIFICATION. The comparison does not reassign strategic identities or change eligible resource coordinates. Fix labels0,1,...,d+1 once. Label0 may report on every h_j; label1 may report on p and l_1; labelj+1 (j=1,...,d) may report on p and l_j. These predetermined allowed-coordinate sets contain BOTH profiles: in A, label0 reports all h_j=1/d,label1 reports p=1,and labelj+1 reports l_j=1; in B,label0 reports h_1=1,label1 reports l_1=3/4,and every labelj+1 reports p=1. Equivalently use the full mixed-owner report orthant. Coordinatewise maxima of A and B can serve as fixed common upper bounds if bounded report boxes are desired. The finite deviation then changes only label1's own l_1 report from3/4 to2/3 within that same domain. Thus the obstruction also permits lambda to depend on this common predetermined eligibility pattern or common report box; it must not change between A and B based on the realized report pattern.

@@ -1,0 +1,489 @@
+Task and review objective:
+Audit these precise new research boundaries independently: (1) maximum-coalition-marginal cap eligibility and unbounded fixed-q forest obstruction; (2) extension of the finite global-support mask-family sqrt(2n) lower bound to this cap; (3) exact13/12 fragmented-exclusive-ownership witness; (4) netting closure and efficient <=3 mixed-owner mechanism. Finite v2 base lower already independently reviewed; focus on changes and coupled hypotheses. Check all fixed-owner/all-report incentives, unique support claims, algebra, and whether any conclusion exceeds its mechanism class. No novelty assessment requested. Give verified gaps/counterexamples or limited-scope verdict, not a literature-based guess.
+
+
+FILE VCAP_MASK_OBSTRUCTION_v1.txt
+1: MAXIMUM-COALITION-MARGINAL CAPS DO NOT ESCAPE THE sqrt(2n) MASK BARRIER
+2: 15 October 2026. Candidate theorem; independent review pending.
+3: Companion to FINITE_SUPPORT_MASK_OBSTRUCTION_v2.txt, left unchanged.
+4: 
+5: SCOPE
+6: Fix n owners, a technology F, and ANY report-independent law on masks B.
+7: At x_B=sum_(i in B)b_i select a common nonnegative GLOBAL linear support ell_B,
+8: using only F, B and the open reports. Selection may randomize. Put T=F(sum b_i)
+9: and define the maximum coalition marginal
+10:  V_i(b)=max_{S subset[N]\{i}} [F(b_i+sum_(j in S)b_j)-F(sum_(j in S)b_j)].
+11: Consider the strengthened mask architecture
+12:  Y_i(B)=min{ell_B(b_i),V_i(b)} if i notin B,
+13:  Y_i(B)=F(x_B)-F(x_B-b_i) if i in B,
+14: followed by averaging over the fixed mask/support law.
+15: 
+16: For n>=5 let m be the largest positive integer with m(m+7)/2<=n-1,
+17: let a=1-(2m+1)/n, A0=n-2, and define
+18:  L'_n=(am)A0/(am+A0).
+19: There is ONE fixed continuous finite nonnegative min-linear technology F on
+20: nm+n^2 resources for which every rule in this architecture has worst-profile
+21: total-payment factor at least L'_n=(sqrt(2)-o(1))sqrt(n).
+22: Hence this improvement to the cap cannot improve the leading sqrt(2n) worst
+23: case over general finite min-linear technologies. It may help restricted
+24: technologies or constants. This is NOT an unrestricted-mechanism lower bound.
+25: 
+26: ELIGIBILITY OF THE IMPROVED CAP
+27: First, 0<=V_i<=T and V_i is nondecreasing in owner i's whole bundle: every
+28: off aggregate in its defining maximum excludes b_i. A closed selected support
+29: also excludes b_i; the minimum with V_i is thus own-bundle monotone. Open
+30: endpoint terms have the same property.
+31: 
+32: For completeness, simultaneously truncating any covering vector z at V_i
+33: preserves coverage. For a coalition S let C={i in S:z_i>V_i}, R=S\C.
+34: Coverage gives sum_(i in R) z_i>=v(R). Enumerating the elements of C and
+35: telescoping coalition increments gives v(S)-v(R)<=sum_(i in C)V_i.
+36: Thus sum_(i in S)min{z_i,V_i}>=v(S).
+37: The capped selected-support vector min{ell_B(b_i),T} covers all coalitions.
+38: Since V_i<=T, replacing its cap by V_i preserves coverage. For each open i,
+39: the endpoint marginal is >=ell_B(b_i), by touching and majorization, and
+40: is <=V_i by definition. Replacing its capped-support coordinate by that
+41: endpoint therefore preserves coverage. The mask vector is eligible pointwise;
+42: fixed nonnegative averaging preserves all requirements.
+43: 
+44: FIXED TECHNOLOGY AND REGULAR PROFILES
+45: Use the same n,m and the regular construction of the companion v2 proof.
+46: Explicitly, put A=n^2, epsilon=1/(100n^6), t=1+(n-1)epsilon. For k=1,...,m
+47: and 1<=s<n let a_(s,k)=(n-s)/n^2 if s<k, and 0 otherwise. Define
+48:  f_k(x)=min{(sum x_j)/n, w^(S,k).x: empty!=S!=[n]},
+49:  where w^(S,k)_j=n^2/|S|^2 for j in S and a_(|S|,k) otherwise.
+50: On separate resource blocks take
+51:  F(x^(1),...,x^(m),z)=sum_k f_k(x^(k))+min_(1<=e<=n^2)z_e.
+52: This sum is a single finite min-linear, monotone, concave homogeneous function.
+53: 
+54: At P_k, owner i reports e_i+epsilon sum_(j!=i)e_j in block k and zero
+55: in the other blocks, including the new Leontief block. Then T=t.
+56: The companion proof establishes by explicit strict inequalities that at every
+57: proper nonempty mask, whose closed set is C and l=|C|, the unique active-block
+58: support is w^(C,k). This remains true in the sum technology: restricting any
+59: global support to the active block gives a support to f_k at an interior point.
+60: It therefore has that unique gradient. Closed support prices exceed T.
+61: At the full mask the baseline gradient is uniquely selected.
+62: 
+63: Writing r=n-l, let v_k(l)=F(x_B); symmetry makes this depend only on l.
+64: The exact values, including both endpoints, are
+65:  v_k(0)=t; v_k(n)=0;
+66:  v_k(l)=n^2 r epsilon/l + a_(l,k)r[1+(r-1)epsilon], 1<=l<n.
+67: At the threshold l=k-1 the endpoint marginal obeys
+68:  Delta_k=v_k(k-1)-v_k(k)
+69:  >=(n-k+1)^2/n^2 -n^3 epsilon.
+70: In particular, each owner's V_i is at least this threshold marginal: choose
+71: a coalition of n-k other owners omitting i, then add i. Such a coalition
+72: exists for every i, and all owners are symmetric at P_k. Therefore
+73:  V_i/T >=1-2(k-1)/n-[(n-1)+n^3]epsilon
+74:  >=1-(2m+1)/n=a>0.
+75: Here 1/(1+u)>=1-u bounds the normalization, and
+76: [(n-1)+n^3]epsilon<1/n. The choice of m implies 2m+1<n for n>=5.
+77: Since all closed raw prices exceed T>=V_i, each closed payment equals V_i
+78: and is at least aT. This is the only change to the regular-profile budget.
+79: 
+80: At l=k-1 the TOTAL open endpoint payment, normalized by T, is at least
+81:  D=n-3m-1, as in the companion proof: r Delta_k/t>=D, using
+82: r^3/n^2>=n-3l and (n^4+n^2)epsilon<1. All other payments are nonnegative.
+83: Let S0=m(m+1)/2 and pi_k=(m-k+1)/S0. For 0<=l<m, the weighted normalized
+84: budget over the regular profiles is at least
+85:  a l+D(m-l)/S0 >=am,
+86: because S0<=D and a<=1. For m<=l<n the closed payments alone give >=al>=am.
+87: Thus EVERY nonempty mask, including the full mask, has regular-profile
+88: weighted budget at least am, independent of its labels or support choices.
+89: 
+90: NEW ALL-EMPTY-MASK ANCHORS WITH PIVOTAL OWNERS
+91: Label the new Leontief block cyclically by e in Z/(n^2 Z). For each shift
+92: j define the scarce window S_j={j,j+1,...,j+n-1}. There are n^2 anchors Q_j.
+93: At Q_j owner i, i=1,...,n, holds one unit of scarce resource j+i-1, zero
+94: of every other scarce resource, and TWO units of every resource outside S_j.
+95: All its other technology blocks are zero. Grand production is exactly1:
+96: scarce aggregate coordinates equal1 and abundant coordinates equal2n.
+97: Removing any owner removes its unique scarce resource, so grand production
+98: becomes zero. Thus U_i=1, V_i=1=T for EVERY owner. All-profile ownership is
+99: unchanged; these are different reports of the same n owners.
+100: 
+101: At the empty mask, restrict the selected global support w to the Leontief
+102: block. Its coordinates are nonnegative and s=sum_e w_e>=1 because it must
+103: majorize min_e z_e at z=1. This support law is independent of all reports.
+104: Each coordinate belongs to exactly n of the n^2 scarce windows. Consequently
+105: the uniform mean scarce weight w(S_j) is s/n. Markov's inequality gives
+106:  Pr_j(w(S_j)>s/2)<=2/n.
+107: On the complementary fraction at least1-2/n of anchors, abundant weight is
+108: at least s/2>=1/2. Every owner therefore has raw support price at least1,
+109: and its V_i cap is exactly1. All n owners are paid1 on those anchors.
+110: Hence uniform average normalized empty-mask budget is at least n-2=A0.
+111: The argument holds for EVERY support realization, so arbitrary randomization
+112: does not evade it. The anchor family is fixed in advance and has n^2 profiles.
+113: 
+114: COMBINATION AND ASYMPTOTICS
+115: Mix the regular profile distribution with total weight A0/(A0+am), and the
+116: uniform anchor distribution with weight am/(A0+am). Every nonempty mask has
+117: weighted budget at least A0 am/(A0+am); the empty mask has the same bound.
+118: Average over any fixed mask and randomized support law. Some profile in this
+119: single fixed technology and fixed-owner domain has factor at least L'_n.
+120: Finally m=sqrt(2n)+O(1), am=m-O(1), and A0=n-2, so
+121:  L'_n=(sqrt(2)-o(1))sqrt(n).
+122: 
+123: CONTRIBUTION BOUNDARY
+124: The stronger cap and its eligibility are separate constructive observations.
+125: This obstruction shows that combining it with any fixed-mask common-support/
+126: endpoint architecture still cannot achieve o(sqrt n) in general. It does not
+127: exclude report-dependent mask laws with separately verified incentives,
+128: owner-specific incompatible support prices, or another payment architecture.
+129: It makes no priority claim, does not settle the unrestricted owner-count gap,
+130: and imposes no obstacle on small-rank/rank-two technology classes.
+131: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE FINITE_SUPPORT_MASK_OBSTRUCTION_v2.txt
+1: SHARP sqrt(2n) BARRIER FOR FINITE-SUPPORT MASK HYBRIDS
+2: 15 October 2026. Version2; strengthened construction, independent review pending.
+3: Earlier version remains unchanged. This is a class lower, not an unrestricted lower.
+4: 
+5: CLASS AND THEOREM
+6: Use n fixed owners and one fixed finite nonnegative min-linear technology F.
+7: Choose ANY report-independent law on masks B subset[N]. For each mask select a
+8: common nonnegative global linear support ell_B at x_B=sum_(i in B)b_i. It may
+9: depend on F, B and the open reports, and may randomize. No closed report enters
+10: its selection. Pay
+11:  Y_i(B)=min{ell_B(b_i),T} for i notin B;
+12:  Y_i(B)=F(x_B)-F(x_B-b_i) for i in B,
+13: then average, where T=F(sum_i b_i). This includes arbitrary fixed iid or
+14: fixed-cardinality mixtures and any finite-form tie priorities. At the all-empty
+15: mask the support law is independent of the entire report profile.
+16: 
+17: For n>=5 let m be the greatest positive integer satisfying
+18:  m(m+7)/2 <= n-1.
+19: Then there is ONE fixed continuous finite min-linear F on nm resources such
+20: that every rule in the class has worst-profile factor at least
+21:  L_n=m(n-1)/(n-1+m)=(sqrt(2)-o(1))sqrt(n).
+22: The general upper n sqrt(2/(n+1)) has the same leading constant. Thus sqrt(2)
+23: is sharp for this architecture even when finite global supports are selected
+24: optimally and mask bits are arbitrarily correlated. This does NOT prove a
+25: sqrt(n) lower bound for unrestricted truthful coalition-covering mechanisms.
+26: 
+27: FIXED TECHNOLOGY
+28: Put A=n^2. For k=1,...,m and 1<=s<n set
+29:  a_(s,k)=(n-s)/n^2 if s<k, and a_(s,k)=0 if s>=k.
+30: For S subset[N], 1<=|S|<n, define the nonnegative form
+31:  w^(S,k)_j=A/|S|^2 for j in S, and a_(|S|,k) for j notin S.
+32: On R_+^n let
+33:  f_k(x)=min{(sum_j x_j)/n, w^(S,k).x: empty!=S!=N}.
+34: On m separate n-coordinate blocks set F=sum_k f_k.
+35: Expanding the finite product of form choices shows F is finite min-linear.
+36: It is continuous, nonnegative, monotone, concave and degree-one homogeneous.
+37: No free infrastructure or changing ownership is used.
+38: 
+39: REGULAR WITNESS PROFILES AND UNIQUE SUPPORTS
+40: Let epsilon=1/(100n^6), t=1+(n-1)epsilon. At P_k owner i reports
+41:  e_i+epsilon sum_(j!=i)e_j in block k and zero in all other blocks.
+42: T_k=t: at the full aggregate, the baseline form is uniquely minimal since
+43: each subset form contributes at least A t/|S|>n t>t.
+44: 
+45: For a proper nonempty mask let C be the closed set, l=|C|, r=n-l.
+46: The active block aggregate is r epsilon on C and 1+(r-1)epsilon outside C.
+47: The uniquely minimal form is w^(C,k), FOR EVERY k. To verify:
+48: - Any S meeting an open coordinate costs >=A/(n-1)^2>1.
+49: - The C form costs
+50:   v_C=A r epsilon/l + a_(l,k) r[1+(r-1)epsilon].
+51:   If l>=k this is <r/n. If l<k, its leading term is r^2/n^2,
+52:   and its remaining term is <=epsilon(n^3+n).
+53:   The gap r/n-r^2/n^2=rl/n^2>=1/(2n), whereas
+54:   epsilon(n^3+n)<1/(2n); thus v_C<r/n<=baseline cost.
+55:   Also v_C<1 (r/n<1). For l>=k that conclusion is immediate.
+56: - If S is a strict nonempty subset of C, its first term A r epsilon/|S|
+57:   strictly exceeds A r epsilon/l; its off-S coefficient a_(|S|,k) is
+58:   at least a_(l,k), and it multiplies every open coordinate plus additional
+59:   nonnegative closed coordinates. Hence its value is strictly larger.
+60: These cases exhaust all S. At the full mask the unique form is the baseline.
+61: 
+62: At these positive active-block aggregates, EVERY global linear supporting form
+63: restricts to that unique active-block gradient: its restriction majorizes f_k
+64: and touches f_k at an interior point where the minimum is differentiable.
+65: Inactive blocks contribute zero. Randomized ties or redundant forms cannot
+66: alter the forced active-block gradient.
+67: 
+68: EXACT CLOSED PAYMENTS AND THRESHOLD ENDPOINTS
+69: For every closed owner at a proper nonempty mask,
+70:  ell_B(b_i)>=A[1+(l-1)epsilon]/l^2>=n^2/(n-1)^2>t=T_k.
+71: Thus each closed owner receives EXACTLY T_k, irrespective of k.
+72: 
+73: If l=k-1, each open owner's on value is at least r^2/n^2 (including l=0,
+74: where the on value is t>=1). Removing that owner makes k owners closed, so
+75: its off value is A(r-1)epsilon/k. Therefore
+76:  Delta >=r^2/n^2 -n^3 epsilon.
+77: The normalized TOTAL endpoint payment to the r open owners is at least
+78:  [r^3/n^2-r n^3 epsilon]/t.
+79: Since r=n-l, r^3/n^2>=n-3l. Moreover t=1+(n-1)epsilon,
+80: r n^3 epsilon<=n^4 epsilon, and r^3/n^2<=n. Thus
+81:  [r^3/n^2-r n^3 epsilon]/t
+82:  >=r^3/n^2 -n^2 epsilon-n^4 epsilon
+83:  >=n-3l-(n^4+n^2)epsilon >=n-3m-1=:D.
+84: The penultimate inequality uses 1/(1+u)>=1-u for the nonnegative leading
+85: term and bounds the subtracted term by n^4 epsilon. Our epsilon gives
+86: (n^4+n^2)epsilon<1. Other endpoint payments are nonnegative by monotonicity.
+87: The removed-owner mask remains nonempty because k<=m<n.
+88: 
+89: TRIANGULAR PROFILE WEIGHTS
+90: Let S0=m(m+1)/2 and pi_k=(m-k+1)/S0. These are positive and sum to1.
+91: For every proper mask (including the full mask), average normalized budgets
+92: across P_k using pi_k. Every closed owner contributes1 in every profile;
+93: when l=0 there are no such terms. At k=l+1 the extra endpoint lower D applies.
+94: Thus, if 0<=l<m, the average is at least
+95:  l+D pi_(l+1)=l+D(m-l)/S0.
+96: Our choice of m gives S0<=n-3m-1=D, so this is >=m.
+97: If m<=l<n, the closed payments alone give at least l>=m.
+98: Hence the weighted regular-profile budget is >=m for EVERY proper mask,
+99: independently of which owners are open and of the selected support.
+100: 
+101: ALL-EMPTY-MASK ANCHORS
+102: At B=empty let w be the selected global support, possibly random, restricted
+103: to block1. It has nonnegative entries and s=sum_j w_j>=f_1(1)=1.
+104: At most one index j has sum_(e!=j)w_e<1/2: two such indices would imply
+105: w_j+w_h>2s-1>=s, contradicting nonnegativity of the other entries.
+106: 
+107: Set delta=1/(4n^3). At Q_j all n owners report the SAME bundle
+108:  z_j=delta e_j+sum_(e!=j)e_e in block1, zero in other blocks.
+109: Its positive grand production T_j=n f_1(z_j)<=n A delta=1/4.
+110: For at least n-1 indices j, w.z_j>=1/2>=T_j, so all n owners receive T_j.
+111: The uniform average normalized budget over Q_1,...,Q_n is therefore >=n-1.
+112: This holds for every realization of w. Consequently randomizing supports,
+113: including correlations with the mask law, cannot avoid the anchor bound.
+114: The full anchor list and its weights are independent of the selector.
+115: 
+116: COMBINING INSIDE ONE FIXED DOMAIN
+117: Give total weight (n-1)/(n-1+m) to the triangular regular-profile distribution,
+118: and weight m/(n-1+m) to the uniform anchor distribution. All other payments
+119: are nonnegative. For every proper mask the regular part contributes >=L_n;
+120: for the empty mask the anchor part contributes >=L_n. Integrate over ANY fixed
+121: mask and support law. The weighted average of normalized expected budgets
+122: at this finite list of profiles is >=L_n. Some profile has factor>=L_n.
+123: All profiles use the same F and the same n owners. Only their reports change.
+124: Finally m=sqrt(2n)+O(1), so L_n=(sqrt(2)-o(1))sqrt(n).
+125: 
+126: ELIGIBILITY AND SCOPE
+127: For each fixed mask, closed prices exclude the recipient's report; open
+128: endpoint marginals are own-bundle monotone. The open endpoint marginal
+129: majorizes the selected linear support contribution, and capped support terms
+130: cover every coalition. Thus every fixed-mask vector is eligible.
+131: The lower applies only to the stated support/endpoint payment architecture.
+132: It does not exclude report-dependent mask choices with separately proved
+133: incentives, incompatible owner-specific supports, or a different mechanism.
+134: Inactive resource blocks are zero in the witnesses, but every chosen support
+135: is FINITE and active-block mask aggregates are interior. No +infinity extension
+136: or arbitrary minimizer priority is exploited.
+137: 
+138: CONTRIBUTION BOUNDARY
+139: This sharp leading-constant architecture lower complements the new general
+140: O(sqrt n) upper. It supplies a precise reason that changing fixed mask weights,
+141: mask correlations, or finite supporting-price selection alone cannot obtain
+142: o(sqrt n). It leaves the unrestricted owner-count lower at log n/loglog n.
+143: Min-linear concavity, support/core facts, and weighted averaging are established.
+144: The construction is a candidate project-level advance; priority is unconfirmed.
+145: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE MAXIMUM_MARGINAL_CAP.txt
+1: MAXIMUM-COALITION-MARGINAL TRUNCATION FOR THE REPORT-MASK HYBRID
+2: Status: elementary structural lemma proved here; priority unassessed. No uniform forest-budget bound claimed.
+3: 
+4: SETUP. Fixed actual owner set N, monotone production f, v_b(S)=f(sum_{i in S}b_i), f(0)=0. Reports and binding deviations are coordinatewise nonnegative bundles; utility is payment only. Define
+5:   V_i(b)=max_{S subset N\{i}} [v_b(S+i)-v_b(S)].
+6: V_i is finite, nonnegative, and nondecreasing in owner i's whole bundle, with all other bundles fixed. It differs from the manuscript H_i=max core coordinate; V_i is at least the grand marginal, whereas H_i is at most the grand marginal.
+7: 
+8: LEMMA 1 (COALITION-COVERING TRUNCATION). If z>=0 covers every coalition, then the coordinatewise truncated vector min(z_i,V_i) also covers every coalition.
+9: Proof: truncate coordinates sequentially. Suppose the current covering vector has coordinate i reduced to V_i. For S containing i, the new sum is z(S\i)+V_i>=v(S\i)+V_i>=v(S). Coalitions not containing i are unchanged. Finitely many such operations prove the claim. This proof is game-theoretic and does not use concavity, linear programming, or sparse production.
+10: 
+11: HYBRID. Suppose f=min_{w in W} w.c for a fixed finite collection of nonnegative forms. Independently retain each owner with probability p=1-q; let w_B be the first minimizing form for retained reports. Replace the existing global-T cap by
+12:   a_i(w,b)=min(w.b_i,V_i(b)).
+13: Define z_i=E a_i(w_B,b), p_i=E[a_i(w_B,b)|B_i=0],
+14:   m_i=E_{B_-i}[ f(b_i+sum B_h b_h)-f(sum B_h b_h) ],
+15:   r_i=q p_i+p m_i.
+16: Then r is nonnegative, own-report monotone, and covers every coalition on every profile.
+17: Proof: each full form covers, so Lemma 1 shows each capped form covers. Conditional on B_i=0, its selected w is independent of b_i and both terms in the min are own-monotone. The marginal m_i is own-monotone. When i is retained, the selected form satisfies
+18:   w_B.b_i <= v(B)-v(B\i) <= V_i.
+19: Hence its on contribution is unchanged by capping and is bounded by that same marginal. Thus r_i>=z_i, proving coverage.
+20: 
+21: EXACT BUDGET IDENTITY. With g(q)=E v(B), Z(q)=sum z_i, R(q)=sum r_i,
+22:   R=Z-g-(1-q)g'.
+23: Proof: sum_{i:B_i=1}a_i(w_B,b)=v(B), so q sum p_i=Z-g. Differentiating the finite mask polynomial gives sum m_i=-g'. All original hybrid integration identities survive unchanged.
+24: 
+25: WHAT THIS FIXES. For disjoint edges with one huge-capacity endpoint owner and one unit endpoint owner on each edge, each huge owner's V_i is 1, although global T equals the number of edges. The old global-T cap could incur a factor growing with edge count; this particular inflation disappears.
+26: WHAT IT DOES NOT FIX. Sum V_i need not be bounded by a constant times T even on a single star: n hardware owners of capacity 1 and one power owner of capacity 1 give V_i=1 for every owner, T=1. Budget control must use correlation between the selected form and the sampled reports.
+27: 
+28: EXACT FAILURE OF A SIMPLE Z BOUND. On the four-edge path 0-1-2-3-4 with one owner per vertex and capacities (99/100,1,99/100,1,99/100), T=2 and V_i=c_i. Use the fixed minimal-cover order
+29:   {1,3}, {0,2,3}, {1,2,4}, {0,2,4}.
+30: At q=1/100 exact enumeration gives
+31:   Z/T=2028622791197/2000000000000
+32:       > 100/99 = 1/(1-q),
+33: with positive difference 833656328503/198000000000000.
+34: This counterexample defeats the proposed Z<=T/(1-q) inequality even with the new cap. It does not disprove a uniform improvement to the actual R budget.
+35: Certificate: check_sampled_counter.py in this directory.
+36: 
+37: STRONGER OBSTRUCTION: UNBOUNDED V-CAP HYBRID ON A DEPTH-TWO TREE.
+38: This supersedes any numerical suggestion that a small fixed q might suffice.
+39: For n>=2, take vertices p,h_1,...,h_n,l_1,...,l_n and edges p--h_j--l_j. Owner 0 holds capacity 1 at p and epsilon=1/n^2 at EVERY l_j. Owner j holds capacity 1 at h_j only. All full resource capacities are strictly positive, all owners remain fixed, and every activity consumes one unit at each of two endpoints. The full optimum is
+40:   T=1+n epsilon=1+1/n.
+41: Indeed the private activities use n epsilon and the hub activity uses 1; the h capacities admit this because n(1-epsilon)>=1.
+42: For j>=1, V_j=1: retaining owner 0 plus j alone permits all of h_j's unit to be served, while without j that coalition has value0. No marginal can exceed h_j's unit capacity. Owner0 has V_0=T.
+43: 
+44: Fix any q in (0,1), p_ret=1-q. Condition on owner0 retained, and let K be the number of retained h owners. If K>=2, there are only two possible optimal-cover types:
+45:   (a) exclude p, hence include all h_j, sampled cost K;
+46:   (b) include p, then independently choose h_j or l_j on each private edge.
+47: Type (b) uniquely chooses l_j for retained j (cost epsilon<1) and h_j for absent j (cost0<epsilon). Its sampled cost is 1+K epsilon<K for n>=2,K>=2 (strict also n=2,K=2). Thus the selected cover is unique: this argument is independent of any tie-breaking convention.
+48: At this mask every absent j contributes min(1,V_j)=1 to Z. Therefore
+49:   Z/T >= p_ret * E[(n-K) 1_{K>=2}]/(1+1/n)
+50:        = p_ret * [nq - n q^n - n(n-1)p_ret q^(n-1)]/(1+1/n).
+51: The right side tends to infinity linearly in n. Since R>=Z coordinatewise, the V-cap hybrid has no uniform finite budget factor on forests for ANY fixed retention parameter in (0,1).
+52: 
+53: The same obstruction holds for any fixed report-independent probability mixture over q with positive probability on (0,1): by Fatou,
+54:   liminf_n E_q[R_n/T_n]/n >= E_q[q(1-q)]>0.
+55: This statement allows integration measures with atoms at0 and1 but requires positive mass in the interior. It does NOT rule out mechanisms whose q distribution changes with owner count, a different dependence among owner masks, or mechanisms outside this hybrid architecture. Nor does it prove an impossibility for truthful forest mechanisms generally.
+56: 
+57: This obstruction is robust to tie-breaking and uses strictly positive capacities. Its source is one real mixed owner supplying the scarce hub resource and tiny private complements, while many competing owners each retain maximum coalition marginal1. The current V cap cannot reflect competition among these mutually substitutable owners.
+58: 
+59: PRIORITY NOTE. V_i is the classical reasonable upper payoff of a cooperative game, not a newly introduced solution concept. Parent located an author original (Inductive tau-values, June 30, 2024, section6) using precisely max_{S subset N\i}(v(S+i)-v(S)), with historical attribution to Driessen--Tijs (1984) and Milnor (1952):
+60: https://ris.utwente.nl/ws/portalfiles/portal/445770136/inductive_tau-values_june_30_2024.pdf
+61: The truncation/hybrid observation and the depth-two-tree obstruction require their own source comparison before any priority assertion.
+62: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE DISCONNECTED_OWNERSHIP_OBSTRUCTION.txt
+1: Disconnected exclusive ownership can require an incentive subsidy on a path
+2: 15 October 2026. Exact internal counterexample; literature novelty unconfirmed.
+3: This is an ownership-boundary result, not an improvement on general9/8.
+4: 
+5: A fixed unit-value production path has8 resource vertices0,...,7 and one
+6: activity on each edge. Each activity consumes one unit at each endpoint.
+7: Actual fixed owners are A={0,4}, B={1,5}, C={2,6}, D={3,7}. Resources have
+8: exclusive ownership: no row is shared between owners. Reports of both
+9: coordinates of one owner's bundle can independently decrease.
+10: 
+11: Consider three profiles, listed by resource order:
+12:  P=(0,1,1,1,1,1,1,0),
+13:  U=(0,1,1,2,1,1,1,2), increasing only D's bundle,
+14:  V=(2,1,1,1,2,1,1,0), increasing only A's bundle.
+15: The grand value at each profile is3. Explicit feasible matchings of value3:
+16:  P,U use edges(1,2),(3,4),(5,6), one unit each;
+17:  V uses edges(0,1),(2,3),(4,5), one unit each.
+18: Upper bounds are the sum of capacities on the smaller bipartition side,
+19: which is3 at each profile.
+20: 
+21: At P, coalition AD has value1, so y_A(P)+y_D(P)>=1.
+22: At U, the coalition values AB=1, BC=2, ACD=3 imply
+23:   2*sum_i y_i(U)-y_D(U)>=6.
+24: At V, coalition values BC=2, ABD=3, CD=1 imply
+25:   2*sum_i y_i(V)-y_A(V)>=6.
+26: All these values are exact: the stated worths have disjoint unit matching
+27: certificates, and resource-side capacity covers give matching upper bounds.
+28: If the rule spends at most C times production, then
+29:   y_D(U)<=6C-6,   y_A(V)<=6C-6.
+30: Own-report monotonicity gives y_D(P)<=y_D(U), y_A(P)<=y_A(V). Therefore
+31:   1 <= y_A(P)+y_D(P) <= 12C-12,
+32: so C>=13/12.
+33: 
+34: This uses only three profiles and fixed actual owners. There is no entry,
+35: identity splitting, common-access counterfactual, or outside-option change.
+36: It shows the connected-block hypothesis of the classical owner-forest
+37: argument cannot simply be dropped. It does not assert connected blocks
+38: are necessary in every instance.
+39: 
+40: The bound is sharp on this three-profile subdomain: feasible payments in
+41: owner order A,B,C,D are
+42:  P=(1/2,1,1,1/2), U=(3/4,1/4,7/4,1/2), V=(1/2,7/4,1/4,3/4).
+43: Every coalition is covered and the two required own-incentive comparisons
+44: hold. P spends3, U and V spend13/4, yielding factor13/12.
+45: The entire0,1,2 coordinate grid of6561 profiles also has reconstructed
+46: rational primal factor13/12; its full independent verification is recorded
+47: in DISCONNECTED_PRIMAL_REPLAY.jsonl. That remains a finite-domain upper
+48: certificate, not an all-real-profile mechanism.
+49: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE NETTING_AND_THREE_OWNERS.txt
+1: Netting closure and the three-owner boundary
+2: 15 October2026. Internal derivations; no novelty claim.
+3: 
+4: 1. A general mixed-owner lifting lemma
+5: For every assignment of a fixed finite owner set to two exclusive pools,
+6: assume a scalar-capacity payment rule z that is nonnegative, covers the
+7: min(total left,total right) game, spends at most C times that value (C>=1),
+8: pays a zero-capacity owner zero, and is own-capacity nondecreasing and
+9: 1-Lipschitz. No relation between rules for different role assignments is needed
+10: except the same bound and these properties.
+11: For actual mixed owner i with (a_i,b_i), put
+12:   t_i=min(a_i,b_i), d_i=a_i-b_i.
+13: Feed |d_i| to the exclusive-pool rule on the sign partition, assigning zero
+14: net owners by any fixed convention, and set y_i=t_i+z_i.
+15: Then y is own-bundle monotone, coalition-covering, and spends at most CT on
+16: all mixed reports, with fixed actual owners.
+17: 
+18: Proof: for every coalition S,
+19:  min(sum_S a_i,sum_S b_i)=sum_S t_i+min(sum_S(d_i)+,sum_S(-d_i)+).
+20: Coverage and budget follow, since sum t_i+C*residual<=C*T.
+21: When a_i increases while a_i<b_i, standalone value rises by delta and the
+22: negative net capacity falls by delta. The 1-Lipschitz assumption prevents a
+23: payment loss larger than delta. When a_i>b_i, standalone value is unchanged
+24: and positive net capacity increases, so monotonicity applies. At a_i=b_i,
+25: the net payment is zero on both sides. Other owners' signed reports stay fixed.
+26: The b_i argument is symmetric. This proves direct incentive validity without
+27: asserting a general strategic merger theorem.
+28: 
+29: The existing exclusive-pool exponential rule has own derivative in[0,1] in
+30: the short region and in[0,1/2] in the long region, with continuous boundaries.
+31: It therefore meets the lifting hypotheses. This is another simple route to
+32: a mixed-owner exponential bound and should temper claims that mixed ownership
+33: alone is a historically novel difficulty.
+34: 
+35: 2. Exact efficient rule for at most three mixed owners
+36: Pad to three with zero owners. At a report, net each owner as above. If all
+37: nonzero d_i have the same sign, pay each t_i. If one sign has a single owner
+38: and the other sign has two, give the entire residual value to the sole owner
+39: of the first sign, plus each owner's t_i. If there is exactly one positive
+40: and one negative owner (third zero), divide the residual equally between those
+41: two, plus t_i. This rule is efficient and covers coalitions because the residual
+42: game has a veto owner, or two necessary owners receiving its value between them.
+43: 
+44: For a fully explicit own-monotonic formula, fix the OTHER two net capacities:
+45: - Both strictly positive, sum D: pay i=min(b_i,a_i+D).
+46: - One strictly positive D and the other zero:
+47:     pay i=1/2 min(a_i,b_i)+1/2 min(b_i,a_i+D).
+48: - Both strictly negative, absolute sum D: pay i=min(a_i,b_i+D).
+49: - One strictly negative -D and the other zero:
+50:     pay i=1/2 min(a_i,b_i)+1/2 min(a_i,b_i+D).
+51: - Opposite signs or both zero: pay i=min(a_i,b_i).
+52: These expressions are coordinatewise nondecreasing with the other reports
+53: fixed and agree with the surplus description. Thus there is no incentive
+54: subsidy for at most three actual mixed owners in the two-input class. The
+55: existing four-owner9/8 lower witness is a sharp boundary in owner count for
+56: the existence of a positive worst-case subsidy, not a determination of the
+57: optimal subsidy once four or more owners are allowed.
+58: 
+59: This bounded-owner observation is not the campaign's unbounded-class gate.
+60: It explains the exact finite-grid pattern and identifies an owner-dependent
+61: mechanism feature absent from the scalar-bias family.
+62: 
+63: Independent seam audit, 15 October 2026.
+64: The lift needs a family indexed by fixed role assignments, with the same C
+65: and 1-Lipschitz bound. Other owners retain their role assignment throughout
+66: an own deviation. At a zero net report, the selected sign convention can
+67: change the rule used by others, but their payments are irrelevant to the
+68: deviating owner's monotonicity; her own residual payment is exactly zero
+69: in either role by hypothesis. On either open sign region, the applicable
+70: role assignment is fixed. Integrate monotone/Lipschitz comparisons up to
+71: zero, cross that zero seam, and continue on the other side. This proves
+72: arbitrary finite coordinate changes, not only infinitesimal derivatives.
+73: At a_i=b_i=0, payment is zero and both coordinate directions are covered.
+74: No cross-role continuity for other owners and no global merger theorem is
+75: being assumed. Without own-zero payment, cross-role monotonicity can fail.
+76: The phrase 'at most three' includes padding with zero owners, but the pure
+77: rule in part 1 must be defined on the entire fixed owner set, including such
+78: zeros; deleting/relabeling owners profile by profile is not justified.
+79: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

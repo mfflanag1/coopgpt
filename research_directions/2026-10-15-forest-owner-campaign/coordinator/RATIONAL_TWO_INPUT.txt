@@ -1,0 +1,52 @@
+Exact rational implementations approaching the mixed two-input constant
+15 October 2026. Internal analytic lemma, not a historical novelty claim.
+
+SETTING
+Use the fixed-owner mixed two-input model from the scarce-power scope proof.
+At T=min(A,B)>0 call s_i the short holding and d_i=min(l_i,T) the capped long
+holding. Let rho=sum_i d_i/T>=1, u=rho-1. For integer k>=1 define
+ E_k(u)=sum_{j=0}^k u^j/j!, p_k(rho)=1/(2 E_k(rho-1)),
+ y_i=(1-p_k)s_i+p_k d_i.
+At T=0 pay zero. Every arithmetic operation is rational on rational reports.
+
+ELIGIBILITY
+Every capped pool vector covers every coalition, so their convex combination
+does also. Write R=E_{k-1}(u)/E_k(u); then 0<R<=1 and p_k'=-p_k R.
+If an own long holding grows with T fixed, its own long-account derivative is
+p_k(1-(d_i/T)R)>=0 before the cap, and zero after it. The own short-account
+payment increases because p_k decreases. If the owner's short holding grows,
+T grows at unit rate, rho' is in [-rho/T,0], and p_k grows. Its long-account
+payment p_k min(l_i,T) therefore grows. For the short account x(1-p_k),
+its derivative is at least 1-p_k-p_k R rho, using x/T<=1. This is nonnegative:
+ p_k(1+rho R)<= (1+rho)/(2E_k(u))=(2+u)/(2E_k(u))<=1,
+since E_k(u)>=1+u. At the aggregate tie every holding is uncapped and rho=1,
+p_k=1/2; the formulas coincide. Clipping points are continuous. The bounded
+budget below handles the zero-output boundary. Sequential coordinate changes
+prove whole-bundle monotonicity for arbitrary mixed actual owners.
+
+BUDGET
+Total/T=1+u/(2E_k(u)). For k=1 the supremum is3/2. For k>=2, the derivative
+of u/E_k has the sign of
+ E_k-u E_k'=1-sum_{j=2}^k (j-1)u^j/j!.
+It is strictly decreasing for u>0, crosses once, and its root is at mostsqrt(2).
+Thus the exact worst-case excess beta_k=max_{u>=0}u/(2E_k(u)) is reached at
+a unique u_k in(0,sqrt(2)]. In particular beta_2=(sqrt(2)-1)/2.
+Every such rho=1+u is feasible with finitely many long-only owners and one
+short-only owner, so this is a genuine uniform supremum for this rule family.
+
+For a convenient explicit bound let delta_k=(3/2)^(k+1)/(k+1)!.
+Taylor's remainder gives, for0<=u<=sqrt(2)<3/2,
+ E_k(u)>=e^u[1-u^(k+1)/(k+1)!]>=e^u(1-delta_k).
+Whenever delta_k<1,
+ beta_k<=1/[2e(1-delta_k)].
+Because E_k(u)<=e^u, beta_k>=1/(2e); hence beta_k converges downward to1/(2e).
+The degree required for additive error epsilon is O(log(1/epsilon)/loglog(1/epsilon))
+as epsilon tends tozero, by factorial growth. For rational reports of bitlengthL,
+exact evaluation takes polynomial arithmetic/bit complexity in k,n,L; this claim
+concerns this explicit two-input rule, not the general exponential-mask hybrid.
+
+COMPOSITION
+Every fixed positive sum of two-input technologies inherits this rational rule
+and the same factor. This includes the previous single-power star theorem and
+the dominant double-star decomposition. This is an implementability refinement,
+not an improvement to the analytic factor or to the unrestricted9/8 lower bound.

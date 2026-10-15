@@ -1,0 +1,25 @@
+**Provisional verdict: no substantive findings in reviewed scope.** All new algebra checks out; the most important residual gap is an unproved aside in CYCLE_TO_PATH_TRANSFER (product replication for arbitrary certificates), which is fixable but currently asserted.
+
+## Findings
+
+**1. CYCLE_TO_PATH_TRANSFER.txt:44-45 — Low (unverified claim).** "Independent product replication can also make actual owner counts grow when needed" is asserted for arbitrary finite certificates, but only the FRAGMENTED family's specific averaging argument is proved. The general version needs: (i) with budget rows removed, the certificate yields Σ_b λ_b y_r(b, others) ≥ R for every fixed "others" (valid under the stated sign convention and y ≥ 0); (ii) pick each component's profile independently with probability λ_b/Σλ, then C ≥ E[total pay]/E[total production] = R/D. Suggest adding this two-line argument or deleting the aside.
+
+**2. MAXIMUM_MARGINAL_CAP.txt:68-70 — Low (hidden dependency).** "Every absent h owner's contribution to this selected cover is at least 1" is correct only because a_i(w,b)=min(w·b_i, V_i(b)) uses the *unmasked* bundle b_j (line 12), while the cover selection uses masked capacities. This is consistent with the definition but is the load-bearing step; it should be stated explicitly, since a variant that charged masked bundles would give contribution 0 and the obstruction would vanish.
+
+**3. EXTREME_RAY_OBSTRUCTION.txt:82 — Trivial (wording).** "requires exactly 2^n linear forms" — the argument proves "at least 2^n", attained by the minimal-cover representation. Also line 77's uniqueness argument needs nothing about nonnegativity of forms; fine as stated.
+
+**4. FRAGMENTED_FOREST_FAMILY.txt:73-74 — Trivial (wording).** "permit a subsidy arbitrarily close to 1/8" should read "force a worst-case factor ≥ (9k−5)/(8k−4) for every nonnegative own-monotone covering rule"; "permit" could be read as an upper statement.
+
+## Verified independently (no issues)
+
+- **No-veto refinement:** T=1+nε+(n+n²)δ matches sum of p and leaf capacities; feasibility at n=2 (per-h load 15/16); v({0,j})=1, v({0})=0 so V_j≥1; type-(b) cost 1+Kε+K(K+1)δ<K for 2≤K≤n (n=2,K=2: 1.875<2); E[(n−K)1_{K≥2}] formula correct; no owner is veto.
+- **Scaling obstruction:** mδ=2+δ; D_right≡0; D_left=min(1,(1+δ)t); coalition value 1 with ⌈(m−1)/2⌉≤m; μ_n≥(n−3)/(n−1); second profile pays 2μ_n at T=1. Valid for owner-count-dependent ν_n.
+- **2^n covers:** case split (p excluded ⇒ all h; p included ⇒ one per branch, ≥1 leaf) exhaustive and each cover minimal; exposure and linear-difference argument correct.
+- **Fragmented family:** T=2k−1 at P,U,V; all listed coalition worths (including ABD=ACD at P, ACD=T at U) recomputed; summed inequalities give 2y_N−y_D≥2T; bound (9k−5)/(8k−4); upper certificate sums to T and T+(k−1)/4, covers all 14 proper coalitions, satisfies both own comparisons with equality.
+- **Cross-component averaging:** y_r(U)+y_r(V)≥2T+(k−1)/2 via intermediate (P,others); product-uniform averaging and summation valid.
+- **Cycle→path bounds:** averaging feasible; replicated plan minus one wraparound; coefficients unchanged; R_k/D_k→R/D requires D>0 (stated).
+- **Owner-interaction forest corollary:** two-owner activities with support in S are adjacent in H hence same component of H[S]; locality, monotonicity, superadditivity hold; H report-independent.
+
+## Scope limitations
+
+Reviewed only the listed extensions; did not re-derive the base veto example, the core extreme-ray theorem, or the hierarchical-allocation proof. Did not run `check_sampled_counter.py` or inspect it.
