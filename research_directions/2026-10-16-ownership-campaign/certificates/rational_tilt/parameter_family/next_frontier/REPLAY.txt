@@ -1,0 +1,27 @@
+EXACT REPLAY RECORD -- 16 OCTOBER2026
+
+Both final executions passed with exit0 and byte-identical JSON:
+  python3 verify_optimal_shape.py
+  python3 -O verify_optimal_shape.py
+Result SHA256: a656c4538c27b6bf53f14e04700d0a0c48ba51c5b75de9e7f949f7a65a521c26
+
+The verifier uses rational report arithmetic and exact A+B*kappa payment
+representations. Branch choice at tau is decided by the sign of its strictly
+increasing cubic, not by a floating approximation. Signs of payments and
+payment differences are certified by rational isolating bounds on kappa.
+An unresolved nonzero sign raises an exception; none occurred in the runs.
+Floats are used only to display four decimal approximations after checks.
+
+15 polynomial/rational identities also passed normally and under -O:
+  python3 verify_scalar_identities.py
+  python3 -O verify_scalar_identities.py
+
+Development correction: the first startup run rejected an overly narrow
+decimal bracket inferred from a rounded float. Direct rational/Decimal
+calculation showed Gamma=1.12875129848746585421..., so the bracket was
+corrected to(1.1287512984874658,1.1287512984874660). No formula, algorithm,
+incentive argument or funding theorem changed. Both complete runs then
+passed. This was a verification-precision correction, not a counterexample.
+
+These finite diagnostics corroborate, and do not replace, the all-real
+proof. Parent and cross-model acceptance status is recorded separately.

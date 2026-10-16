@@ -1,0 +1,87 @@
+GLOBAL FIVE-RECIPIENT CAP FRONTIER FOR THE C^2 CONJECTURE
+16 October 2026. Structural consequence for the original exponential envelope.
+This is a necessary condition for a funding counterexample, not a finite-owner
+equivalence of the incentive problem or a proof of the remaining C^2 bound.
+
+DEPENDENCIES AND NOTATION
+Use the original fixed-actual-owner mixed-input model, local exponential rule,
+nested raw rule N, and actual whole-owner envelope E. Let F=min(H,P+M),
+c=1/(2e), C=1+c. The already reviewed power-bottleneck theorem proves
+sum E_i<=C^2 F if P+M<=H. The reviewed GRID_CAP_RANGE_BOUND.txt proves
+sum E_i<C^2 H if H>0 and
+                    pi=sum_i min(p_i,H)/H>=15/7.
+The latter condition implies P>=H, so it lies inside that theorem's stated
+domain. The elementary rational bound C<148/125 will be used below.
+
+THEOREM
+Suppose a full profile violates sum E_i<=C^2 F. Then H>0 and, after normalizing
+H=F=1, it satisfies
+             P+M>1,  pi<15/7,  S<15/7+C<10/3,          (1)
+where S=sum_i min(p_i+z_i,1). For the common recipient ceilings
+ U_k=min{M,(1+z_k)/2,sum_j min(T_j,max(h_kj,l_kj))},
+pi_k=min(p_k,1), and weights
+ w_k=min(1,(1-pi_k)/U_k) if U_k>0, w_k=1 if U_k=0,
+the exceptional actual recipient set J={k:w_k<1} has
+                              |J|<=5.                 (2)
+
+PROOF
+H=0 and F=0 both give zero payments, so cannot be failures. The power theorem
+excludes P+M<=H; hence F=H>0. The grid theorem excludes pi>=15/7. Capping is
+subadditive, giving
+ S=sum min(p_i+z_i,1)<=sum min(p_i,1)+sum z_i=pi+Z.
+Since Z<=CM and M<=1,
+ S<15/7+C<15/7+148/125=2911/875<10/3;
+the last comparison is 8733<8750.
+
+The ceiling proof in THREE_CAP_RECIPIENT_REDUCTION.txt does not require S<2;
+it holds for every profile with H=1. More strongly than merely d_k>1/2, every
+member k of J has pi_k+U_k>1 and U_k<=(1+z_k)/2. Therefore
+                         2*pi_k+z_k>1.
+If J is empty, (2) is immediate. Otherwise, summing over the SAME actual
+exceptional recipients gives the general bound (pi_J=sum_J pi_k, Z_J=sum_J z_k)
+                 |J|<2*pi_J+Z_J<=2*pi+Z.
+In the remaining frontier this is
+ |J|<30/7+C<=30/7+148/125=4786/875<6,
+where the last exact comparison is4786<5250. Since |J| is an integer, (2)
+follows. The stronger pointwise counting inequality for nonempty J holds beyond this frontier;
+the older six-recipient consequence used only d_k>1/2 and the bound on S.
+This includes
+zero ceilings, zero payments, tied pools, and full or incipient outer overflow.
+No restriction is imposed on the independently chosen deviating reports.
+
+CONSTANT-SIZE COALITION-FLOOR CONSEQUENCE
+Fix an actual deviator i and put Q=J\{i}, O=N\(Q union {i}). Ordinary recipients
+in O have no variable cap loss: either p_k+z_k^i<=1 at every i-underreport or
+their local payment is identically zero. Hence the exact cap-choice identity is
+ opponents' capped total
+ =pi_{-i}+min_{A subset Q}
+       [sum_{k in O union A} z_k^i+sum_{k in Q\A}(1-pi_k)].  (3)
+All sets in (3) contain actual original owners. Ordinary payments are grouped
+only for accounting; there is no owner merger or new strategic report.
+
+The floor constructions of FINITE_CAP_CHOICE_COALITION_FLOOR.txt therefore
+apply with q=|Q|<=5 instead of q<=3. In particular:
+ * The weighted floor needs at most q+1<=6 nested actual coalition values.
+ * The explicit cap-choice and ceiling-aware floors need at most2^q<=32
+   actual coalition values m(O union A), and at most3^q<=243 combinations.
+ * The stronger coverage LP floor uses at most2^q<=32 linear programs in
+   q+1<=6 real variables, with at most2^(q+1)<=64 coalition inequalities
+   plus the coordinate boxes. One variable is the ordinary coalition's payment
+   total; the other variables are payments to the q named actual recipients.
+If i itself belongs to J, then q<=4 and these counts improve accordingly.
+
+The data still include the actual resource vectors of the ordinary coalition,
+the exceptional recipients, and the particular actual deviator i. All source
+coalition values are evaluated from the original physical production function.
+The LP omits some projected coalition restrictions and is only a safe lower
+bound on opponents' payments, which yields an upper bound on E_i through the
+restoration comparison. It is not a characterization of feasible deviations.
+
+INTERPRETATION
+Any unresolved C^2 failure must occur in the hardware-bottleneck region with
+bounded capped grid mass, and all local-payment changes hidden by outer caps
+are confined to at most five recipients. The number of ordinary recipients,
+the number of deviating owners, and the branch count remain unrestricted.
+The result exposes a bounded set of cap interactions in the global frontier;
+it does not prove that any counterexample has at most five owners, reduce the
+true envelope to these LPs, or establish a uniform C^2 funding constant.

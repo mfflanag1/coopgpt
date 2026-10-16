@@ -1,0 +1,83 @@
+INDEPENDENT AUDIT OF THE JOINT LOCAL-ROLE RANGE BOUND
+16 October 2026. Auditor: sparse_power_theory; the target proof and certificate
+were written by the root lane. No changes made to their mathematical statements.
+
+RESULT: no material mathematical or certificate defect found. Subject to the
+previously audited definition and truthfulness proof of R, the new argument
+establishes the uniform funding factor 69/40. This uses the ORIGINAL exponential
+local primitive. The new water-fill primitive cannot be substituted here.
+
+Files inspected:
+  root/JOINT_ROLE_TRADEOFF.txt
+  root/verify_joint_role_scalar.py
+  certificates/singleton_followon/HIGH_P_DEFICIT_COUPLING.txt
+  root/SEVEN_FOURTHS_SHARPENING.txt, low-K argument.
+All paths above are relative to /private/tmp/coopgpt-ownership-20261016/.
+
+1. ROLE SUPPORT FUNCTIONS
+For w=exp(1-rho)/2 and rho>=1, I independently rederived
+  S/m=q+w(B rho-q)                 [hardware short],
+  S/m=B+w(q rho-B)                 [local power short].
+Their scalar maxima are q+(B/2)exp(-q/B) and
+B+(q/2)exp(-B/q), respectively. In the second orientation h/m>=rho.
+The derivative of [B+w(q rho-B)]/rho is exactly
+  B[w(rho+1)-1]/rho^2-qw <=0.
+Thus its hardware-normalized value is at most (B+q)/2, itself no greater
+than q+(B/2)exp(-q/B). For B/q=x>=1, the difference between the two scalar
+maxima divided by q is
+  x-1+exp(-x)/2-x exp(-1/x)/2.
+It vanishes at x=1 and has derivative >=(1-exp(-1))/2>0. This verifies both
+support inequalities, including their summability with common B,q. They are
+upper support bounds; the proof does not require joint attainment.
+
+2. SEPARATE AUXILIARY VECTORS DO NOT INVALIDATE THE GAP ACCOUNTING
+With H=1, baseline shared power p<1<k=p+Cm, let q0=exp(1-k)/2,
+q1=exp(1-1/p)/2 (zero at p=0), B=1-q1. For each recipient separately:
+  positive own gap B_i-H_i: payment <=H_i+B(B_i-H_i);
+  negative own gap B_i-H_i: payment <=H_i-q0(H_i-B_i).
+For an auxiliary short-power profile, its total is at least p, giving its
+coefficient q>=q1; its negative-gap deficit coefficient 1-q>=1/2>=q0.
+For a long-power profile, capped density <=k gives q>=q0, while q<=1/2<=B.
+These bounds hold uniformly for each allowed auxiliary vector, so they survive
+independent optimization by each recipient. If G+ and G- are actual own-gap
+sums, G+<=p+L follows from local hardware payment <=H_i, and
+G+-G-=p+Z-1 is exact. Since B-q0>=0, this gives equation (3).
+
+3. TWO INTERMEDIATE REGIMES
+When F=H, the hardware support function cancels q0 in (3) and gives (4).
+Increasing m reduces q0 and raises the upper bound. Replacing C by 148/125
+also raises it: e>sum_{j=0}^6 1/j!=1957/720>125/46 proves C<148/125.
+When F<H, put f=p+m. Then k<=Cf and k>1, so f>1/C. The derivative of
+[1-exp(1-x)/2]/x is nonpositive for x>=1, yielding (1-q0)/f<=C/2.
+The remaining support term is <=1/(4e), hence the stated bound
+3/2+1/(2e)<17/10. All normalizations require positive output; the previously
+defined zero-output rule supplies zero payments and covers that boundary.
+
+4. CONTINUOUS SCALAR CERTIFICATE
+I inspected the complete implementation and reran it using python3 -B -O.
+Result: EXACT PASS on all 256 intervals covering [1/4,1], plus the analytic
+[0,1/4] bound. Largest certified interval upper is approximately
+1.723215800216205 on [335/512,673/1024], strictly below 69/40.
+The signed Lagrange remainder makes the degree-19 Taylor polynomial a lower
+bound and degree-10 polynomial an upper bound for exp(-x), x>=0; this does not
+rely on alternating terms decreasing. Rounding lower bounds downward preserves
+validity. For G(B,p,q)=1+B[p+exp(-q/B)/2], the signs are
+  G_B=p+exp(-q/B)(1+q/B)/2>0, G_p=B>0, G_q=-exp(-q/B)/2<0.
+Thus the independent endpoint substitutions used by every interval are valid.
+The initial interval uses q0>11/40 and exp(-x)<=1/(1+x), giving
+5/4+20/51<69/40. Checks raise exceptions and remain active under -O.
+This is a certificate over complete real intervals, not numerical sampling.
+
+5. REMAINING REGIME DEPENDENCIES
+The low-K estimate uses Zh>=Z-M, z_i^h<=min(H_i,K), and maximizes
+(rho-t)exp(1-rho) at rho=1+t. Its resulting r(t) is increasing and gives
+12/7<69/40. I checked those steps directly.
+For high P, the capped baseline overflow is absent from a negative-gap owner's
+own account and therefore retained among opponents. This gives the coupled
+coefficient exp(1-U-t)/2 for the deficit. The positive/negative gap accounting
+and U>=1 yield 7/4-exp(-C)(3/2-C)/2<137/80<69/40; I checked the algebra and
+the monotonicity in U. Neither dependency uses the new water-fill mechanism.
+
+SCOPE: this audit establishes no sharpness or priority claim and does not
+independently re-prove the earlier range mechanism's implementation or model.
+It verifies the new funding proof and its stated prior budget dependencies.

@@ -1,0 +1,178 @@
+SHARP SPLIT-OPERATOR RULE -- CANDIDATE COMPLETE PROOF
+16 October 2026. Independent constructive lane. Awaiting independent audit.
+No historical novelty claim. This is MODEL A of ../CONTRACT.txt, not mixed
+ownership, private opportunity costs, or permission to split strategic identities.
+
+STATEMENT
+Fix any finite m>=1 and any partition of {1,...,m} into nonempty blocks J_a.
+Owner A_a holds the local-capacity coordinates L_i for i in J_a, distinct H_i
+holds hardware h_i, and C holds shared grid capacity P. All reports are arbitrary
+nonnegative real numbers, with binding coordinatewise underreports and payment
+utility. Every actual owner and block remains fixed across all report profiles.
+For every public theta in [0,1] there is an O(m+g)-arithmetic payment rule that
+is nonnegative, covers every coalition, is own-bundle monotone for every owner,
+pays A_a at least theta times its grand marginal M_a, and has total at most
+(1+theta/4)T. This factor is optimal uniformly over all m and partitions because
+the one-block subclass contains the previously proved sharp even-pod family.
+This last statement does not assert sharpness for every prescribed partition.
+
+NOTATION
+ell_i=min(h_i,L_i), r_i=h_i-ell_i, L=sum_i ell_i, Q=sum_i r_i, H=L+Q,
+R=min(P,Q), G=min(P,H), T=L+R, M=T-G, D=G-R.
+Thus 0<=D<=L, M=L-D=min(L,(H-P)_+), D=min(L,(P-Q)_+).
+ell_a=sum_{i in J_a}ell_i. Deleting A_a removes ell_a locally and adds ell_a
+to residual hardware. Hence
+ M_a=ell_a+min(P,Q)-min(P,Q+ell_a)
+    =(ell_a-(P-Q)_+)_+=(ell_a-D)_+.
+The second equality with D uses ell_a<=L, including D=L.
+
+THETA=1 RULE
+For L>0 put
+ x_i=ell_i clip((P-Q+r_i)/L), X=sum_i x_i,
+ y_Hi=x_i, y_Aa=ell_a M/L,
+ y_C=G-(X-L/4)_+=min(G,G-X+L/4).
+Here clip(z)=min(1,max(0,z)). At L=0 pay C=G and all other owners zero.
+Thus the total of all local-operator payments is exactly M, as in the old
+merged-operator rule; only the distribution across actual local owners changes.
+
+NONNEGATIVITY, FLOORS, OWNERS' ZERO REPORTS
+For L>0, 0<=x_i<=ell_i, and because P-Q+r_i=P-sum_{j!=i}r_j<=P,
+ X<=L min(1,P/L)=min(L,P)<=G.
+Consequently y_C>=0. Also y_Aa>=0. Since ell_a<=L,
+ ell_a M/L=ell_a-ell_a D/L >= ell_a-D,
+which together with nonnegativity proves y_Aa>=M_a.
+If T=0 then L=0 and G=0, so all payments vanish. If A_a reports a zero bundle
+then ell_a=0 and its payment is zero. If h_i=0 then x_i=0. If P=0 then X=G=0
+and C receives zero. At L=0 all definitions agree with these conclusions.
+
+INCENTIVES -- WHOLE ACTUAL OWNERS
+For A_a, hardware H and grid P are fixed, as is L_-a=sum_{i outside J_a}ell_i.
+Let K=(H-P)_+. Its payment is the function
+ u -> u min(1,K/(u+L_-a)), u=ell_a,
+with value zero when u+L_-a=0. Both branches u and K*u/(u+L_-a) are
+nondecreasing for u>=0, and match at the boundary. Equivalently the payment
+is their minimum, with the natural zero convention. A coordinatewise increase
+of the entire local bundle increases ell_a, so whole-bundle monotonicity follows.
+This argument does not treat the block's coordinates as separate strategic owners.
+
+For H_i, put p_i=(P-sum_{j!=i}r_j)_+ and L_-i=sum_{j!=i}ell_j. Both are fixed
+under that actual hardware owner's report. Its payment is
+ min(ell_i, p_i*ell_i/(L_-i+ell_i)),
+with the continuous zero convention when the denominator vanishes. It is
+nondecreasing in ell_i and hence h_i, including h_i=L_i and the L=0 boundary.
+
+For C, all h,L reports are fixed. Each x_i(P) is nondecreasing and
+ell_i/L-Lipschitz when L>0. Therefore X is nondecreasing and 1-Lipschitz.
+It has saturated at L by P=H. It follows for P'<=P that
+ 0<=X(P)-X(P')<=G(P)-G(P').
+Since z -> (z-L/4)_+ is nondecreasing and 1-Lipschitz, y_C is nondecreasing.
+At L=0 the same follows from y_C=min(P,H).
+
+COALITION COVERAGE: REDUCTION TO ROW SUBSETS
+For a coalition let I be its set of hardware pods, and let J be the union of
+the blocks of its included local operators. Put K=I intersect J. Its available
+local output is ell(K); it may only use grid when it includes C. Payments to
+its local operators total (M/L)ell(J)>=(M/L)ell(K). Thus it suffices to prove
+coverage for all I and all K subset I after assigning the accounting amount
+(M/L)ell_i to each selected local row. This is a coalition accounting device,
+not a change to ownership or strategic reports.
+
+If C is absent, coalition worth is ell(K). Since x_i>=ell_i D/L,
+ sum_{i in I}x_i+(M/L)ell(K)>=ell(K).
+
+If C is present, coalition worth is
+ ell(K)+min(P,r(I)+ell(I\K))=min(H_I,P+ell(K)).
+It remains to show y_C+sum_I x_i+(M/L)ell(K) covers that expression.
+
+CASE 1: P<=Q
+Here D=0 and M=L, so all selected local output ell(K) is paid directly.
+The original grid-only coalition inequality gives
+ y_C+sum_I x_i>=min(P,H_I)>=min(P,r(I)+ell(I\K)).
+For completeness the grid-only inequality also follows from the lemma below
+at delta=0, or from the already proved single-operator rule, whose hardware
+and grid payments are unchanged. The direct endpoint delta=0 proof is included
+after the central case, avoiding any dependency on that prior result.
+
+CASE 2: Q<P<H, with L>0
+Normalize all capacities and payments by L, so sum ell_i=1. Set
+ delta=P-Q in (0,1), z_i=ell_i min(r_i,1-delta), Z=sum z_i.
+Then x_i=delta ell_i+z_i, X=delta+Z, M=1-delta, and
+ y_C=min(P,Q+1/4-Z).
+For I,K define s=ell(I\K), r=r(I^c), o=ell(I^c)<=1-s.
+After subtracting the paid local amount, the required grid deficit is
+ d=min(P,r(I)+s)-delta*s-z(I).
+It is at most P because both subtracted terms are nonnegative. Furthermore
+ d-Q+Z=min(delta,s-r)-delta*s+z(I^c)
+        <=min(delta,s-r)-delta*s+o min(r,1-delta)
+        <=min(delta,s-r)-delta*s+(1-s)min(r,1-delta)
+        <=1/4.
+The last inequality is the elementary lemma proved below. Therefore d is at
+most both P and Q+1/4-Z, hence at most y_C. This covers every coalition with C.
+
+ELEMENTARY COVERAGE LEMMA
+For 0<=delta<=1, 0<=s<=1, and r>=0,
+ J=min(delta,s-r)-delta*s+(1-s)min(r,1-delta)<=1/4.
+If s-r>=delta, then r<=s-delta and
+ J=(1-s)[delta+min(r,1-delta)]<=s(1-s)<=1/4.
+If s-r<=delta and r>=1-delta, then
+ J=s-r-delta*s+(1-s)(1-delta)=1-delta-r<=0.
+If s-r<=delta and r<=1-delta, then
+ J=s(1-delta-r).
+When s<=delta this is at most s(1-delta)<=delta(1-delta)<=1/4.
+When s>=delta, the condition r>=s-delta makes it at most s(1-s)<=1/4.
+Equalities and all boundaries are included.
+
+DIRECT GRID-ONLY COVERAGE FOR P<=Q (L>0)
+Normalize L=1. Write delta=P-Q<=0, x_i=ell_i clip(delta+r_i), X=sum x_i,
+so G=P and y_C=min(P,P-X+1/4).
+For hardware I let s=ell(I), r=r(I), and x_out=sum_{j outside I}x_j.
+Need min(P,H_I)-x(I)<=P-X+1/4, equivalently
+ x_out-min((P-H_I)_+,P)<=1/4; since H_I>=0 this is simply
+ x_out-(P-H_I)_+<=1/4.
+For j outside I, Q-r_j>=r, so delta+r_j=P-Q+r_j<=P-r.
+Hence x_out<=(1-s)clip(P-r).
+Put a=P-r. Since H_I=r+s, the left side is at most
+ (1-s)clip(a)-(a-s)_+.
+If a<=0 it is0; if 0<=a<=s it is at most s(1-s); if s<=a<=1
+it equals s(1-a)<=s(1-s); if a>=1 it is1-s-a+s=1-a<=0.
+Thus the bound is at most1/4. The deficit is also at most P, proving the
+grid-only inequality. This proof in fact holds for any P, but the stated
+case is all that is needed here.
+
+CASE 3: P>=H (L>0)
+Here D=L, M=0, x_i=ell_i and y_C=H-3L/4=Q+L/4>=Q.
+A coalition without C has local worth at most ell(I), already paid. One with
+C has worth at most H_I=ell(I)+r(I)<=ell(I)+Q, also paid. At P=H the cases
+agree. For L=0, every coalition's worth is at most min(P,H_I)<=G=y_C when C
+is included, and zero otherwise. This completes all-coalition coverage.
+
+BUDGET, ALL THETA, AND SHARPNESS
+Total theta=1 payment is
+ M+X+G-(X-L/4)_+=T+min(X,L/4)<=T+L/4<=5T/4.
+For theta in [0,1], mix this rule with fixed weight theta and the efficient
+rule (A_a=0 for all a, C=R, H_i=ell_i) with weight1-theta.
+That baseline is own-monotone: local payments are zero, R nondecreasing in P,
+and ell_i nondecreasing in h_i. To verify its coverage, without C it pays all
+available local output through hardware. With C, for hardware I and selected
+local rows K subset I, put a=ell(I\K). Then
+ ell(I)+R=ell(K)+a+min(P,Q)
+          >=ell(K)+min(P,a+r(I)),
+because Q>=r(I) and a+min(P,Q)>=min(P,a+r(I)). This is coalition worth.
+Its total is T. Fixed mixtures preserve every incentive and coverage property,
+and pay each A_a at least theta M_a. Total becomes
+ T+theta min(X,L/4)<=(1+theta/4)T.
+
+For the uniform lower, take a single local operator, any even m, h_i=L_i=1,
+P=m/2. The original balanced counting with the local-operator floor forces
+total >=m+theta m/4. This subclass is included here, so the upper is sharp
+over arbitrary partitions and sizes. Stronger statements requiring multiple
+active operators in every lower-bound family need a separate construction.
+
+WHAT IS NEW IN THIS NOTE
+Proportional redistribution preserves all actual local owners' whole-bundle
+incentives and their separate marginal floors. The elementary coverage lemma
+handles coalitions containing arbitrary subsets of local operators, which was
+not supplied by merely merging the operators in the old theorem. The physical
+model, public floor, old hardware/grid rule, and matching one-block lower are
+unchanged. No mixed-role ownership result, new lower premium, measured pooling
+gain, external expert endorsement or historical-priority claim is asserted.

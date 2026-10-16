@@ -1,0 +1,70 @@
+RESTORED CAPPED TOTAL CAN INCREASE AT ZERO LOCAL BUDGET SLACK
+16 October 2026. Exact fixed-owner diagnostic; not an actual-envelope lower bound.
+
+SCOPE
+This note refutes the intermediate inference S^i <= S+(CM-Z) for the
+hardware-restored outer comparison used in the nested-envelope proof. It also
+refutes retaining the full negative-recipient deficit solely by that inference.
+It does NOT prove that the actual envelope exceeds C^2, nor that the actual
+underreport is profitable: restoring the deviator's outer hardware can itself
+strictly raise its comparison payment.
+
+FAMILY
+Fix arbitrary integers r,m>=1. There are r branches and owners A,L and
+B_{j,k}, 1<=j<=r,1<=k<=m. Owner A has hardware 1/r in each branch. Owner
+B_{j,k} has hardware 1/(rm) only in branch j. Owner L has local resource
+1/r in every branch and grid amount 2. All other reports are zero. Thus all
+rm+2 owners are active, and both owner and branch counts are unbounded.
+Every deviation below stays in that same fixed-owner domain.
+
+Write c=1/(2e), C=1+c. Every branch has hardware 2/r, local resource 1/r,
+and capped long ratio 2. Consequently H=2, M=1, Z=C, and CM-Z=0. Aggregate
+local payments are
+ z_A=c, sum_{j,k} z_{B_{j,k}}=c, z_L=1-c.
+The outer account of L is 3-c>H and hence capped at 2. After normalizing all
+outer quantities by full H=2, the full capped opposing sum and A's variables
+are
+ S=1+c, a_A=1/2, d_A=c/2, g_A=a_A-d_A=(1-c)/2.
+
+UNDERREPORT AND RESTORED COMPARISON
+For 0<epsilon<=1/10, A reports only (1-epsilon)/r hardware in every branch.
+The local primitive remains hardware-long and has q_epsilon=c exp(epsilon).
+Its aggregate payments become
+ z_A^A=q_epsilon(1-epsilon),
+ sum_{j,k}z_{B_{j,k}}^A=q_epsilon,
+ z_L^A=1-q_epsilon.
+The own local loss is c[1-exp(epsilon)(1-epsilon)]>0 and is of order epsilon^2.
+Now restore A's OUTER hardware to its full value, while retaining these local
+payments. This is the usual valid monotonicity comparison, not an actual local
+report. L's opposing account is 3-q_epsilon>2, so it remains capped. Therefore
+ S^A=1+(c/2)exp(epsilon)(2-epsilon),
+ S^A-S=(c/2)[exp(epsilon)(2-epsilon)-2]>0.
+The last strict inequality follows by differentiating exp(epsilon)(2-epsilon):
+its derivative is exp(epsilon)(1-epsilon)>0 on (0,1). Since CM-Z=0, the
+claimed bound S^A<=S+(CM-Z) is false throughout this interval.
+
+THE NEGATIVE-DEFICIT COMPARISON ALSO STRICTLY RISES
+Let Q_epsilon=(1/2)exp[-(c/2)exp(epsilon)(2-epsilon)]. A's restored outer
+payment divided by H is
+ W_A(epsilon)=1/2-Q_epsilon[1/2-(c/2)exp(epsilon)(1-epsilon)].
+Differentiation gives
+ W_A'(epsilon)=Q_epsilon(c exp(epsilon)/2)
+   *{(1-epsilon)[1/2-(c/2)exp(epsilon)(1-epsilon)]-epsilon}.
+For 0<=epsilon<=1/10, c<1/5 and exp(epsilon)<=1/(1-epsilon). Thus the
+braced term is at least
+ (1-epsilon)/2-(1-epsilon)/10-epsilon
+ =2/5-(7/5)epsilon >=13/50>0.
+Hence W_A(epsilon)>W_A(0)=a_A-q0 g_A, where q0=(1/2)exp(1-S).
+The full negative deficit cannot be retained for this restored comparison
+when delta=CM-Z=0. In particular its failure occurs even though the actual
+own local loss is quadratic in epsilon.
+
+WHAT REMAINS VALID
+The nonlinear response permits the corrected estimate
+ S^A<=S+delta+(e-1)sqrt(z_A D_A)
+in normalized units. The extra term is of order epsilon here, exactly the
+order needed to allow the capped-total increase. The separate note
+ownership/outer_frontier/hardware_bound/extension/NEGATIVE_GAP_SAVINGS.txt
+retains the own local loss while minimizing the resulting deficit. No actual
+funding counterexample or impossibility for a stronger hardware-aware proof
+is claimed by this note.

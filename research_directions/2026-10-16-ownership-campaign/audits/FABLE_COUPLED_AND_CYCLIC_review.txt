@@ -1,0 +1,23 @@
+**Provisional verdict: no material findings in reviewed scope.** The most consequential item is a dependency gap, not an error: Section 5's short-pool feasibility rests on an unstated inequality (below), and the strict certificates (`G>15001/10000`, `Gc<1401/1000`) are asserted via a script not in the packet.
+
+## Findings
+
+**1. Low — COUPLED_BOX_THEOREM.txt §5, lines 203–208 (thin feasibility argument).** The claim that `x*(T)` is feasible for every `T` in `[p+L, min(H,K,beta+U)]` requires `max(p,T−U)` to satisfy the coupling bound. At `x=T−U` this needs `U ≥ Pminus+γ(T−U−p−a)`, which follows from `T≤beta+U` and full-profile feasibility `Σ(p_t+z_t) ≥ Pminus+γ(z_i−H_i)`, `u_t ≥ p_t+z_t`. The text instead gestures at "interval projection of the convex domain." The conclusion is correct; the justification should state the inequality. Verification: write out the four lower/upper bound comparisons at fixed `T`.
+
+**2. Low — COUPLED_BOX_THEOREM.txt §5, line 248 ("Feasibility ensures this is possible").** The overflow step in the `x<a` branch needs `S0(x) ≤ U` and existence of some `u_t>H` when capped-and-overflow mass at `min(u_t,H)`/`ell_t` falls short of `S0(x)`. This holds (if all `u_t≤H` then `V+W ≥ U ≥ S0`), but is not argued.
+
+**3. Low — scope/evidence.** `check_cyclic_obstruction.py` and its JSON are not in the packet; the strict inequalities `G>1.5001` and `Gc<1.401` are unverifiable here. My independent floating recomputation gives `G≈1.500119`, `Gc≈1.400330`, `E-ratio≈1.392784`, consistent with the texts but not a certificate. The `Gc` margin (~0.0007) is small enough that the exact certificate matters.
+
+**Checked and found correct (no finding):**
+- §1 derivatives: `∂_y f` sign `2e^{y−d}(1−y)−1`, its derivative `−2y e^{y−d}`, `D_k'`, `D_k''`, stationarity `u e^u=e^{1−k}/2`, `D_k(d*)=(1−u)^2/u`; hardware-short case via `q≤1/2`; `h_i≥T` and zero-output boundaries; sharpness example attains `η_k`.
+- §2/§3: `k_i` excludes `i`, so coefficient is invariant under own changes; `(C_η)` relaxes with `H_i`; `(C_0)⊂(C_η)` since `κ_k≥η_k`; boundary switch nests domains; `k_i=0,H_i=0` convention harmless.
+- §4: `κb≤a`, `(1+κ)b<s`, totals `<H`, monotone upper bound; `Rc_w` exact.
+- CYCLIC_ACTUAL_ENVELOPE: formulas (3)–(4), `B'=1−q(1+x)`, `Z'=1+x²q`, ratio bound via `6/e>2`, derivative bound via `exp(0.9)>4853/2000` and `461/960<1/2`, `f(3/2)<15/22` via `e>64/25`, `1/2−(5/7)(15/22)=1/77`; coordinatewise monotonicity over the full box handles simultaneous underreports; hardware-owner envelope via restoration and `T≤nz`; final `89/60` bound. The E-vs-relaxation distinction is maintained consistently across files (`N≤E≤Rc≤Rη≤Rbox`).
+
+## Scope limitations
+- Not in packet: OWNER_SPECIFIC_FLOORS.txt, ABSTRACT_RANGE_MONOTONICITY.txt (box truthfulness and 7/4 bound are inherited from them), the certificate script/JSON, owner_box_reference.py.
+- Did not execute any computation; numeric values above are my own arithmetic for plausibility only.
+- Did not audit polynomiality or finite-precision rounding claims (explicitly disclaimed by the file).
+
+## Verdict
+No findings of material error in reviewed scope. Two presentational gaps in §5 and one unverifiable external certificate; all downstream claims checked analytically are consistent.

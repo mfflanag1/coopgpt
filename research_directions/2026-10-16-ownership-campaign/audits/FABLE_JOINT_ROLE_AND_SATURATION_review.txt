@@ -1,0 +1,28 @@
+**Provisional verdict: no findings in reviewed scope (analytic); the rational scalar certificate is unexecuted.** Most important observation: every displayed inequality in both notes re-derives correctly; the only unverified step is the numerical pass of `verify_joint_role_scalar.py`, whose margin I estimate at roughly 1.8×10⁻³ on the worst interval (p≈0.65), so a pass is plausible but not established here.
+
+## Findings
+
+**JOINT_ROLE_TRADEOFF.txt — Section 1 (support functions).** Checked exactly:
+- Hardware-short: L=wρm, Z=m[1+w(ρ−1)] ⇒ S/m=q+w(Bρ−q); stationary at ρ=1+q/B, value S0 (line 20). ✓
+- Local-power-short: S/m=B+w(qρ−B)≥0; d≥ρ since ρ≤h/m; derivative of [·]/ρ equals B[w(ρ+1)−1]/ρ²−qw (line 25) ✓; w(ρ+1)≤1 ✓; (B+q)/2≤S0 reduces to 1−x≤e^{−x}. ✓
+- (2): S1=B+(q/2)e^{−B/q}; difference derivative ≥1−e^{−x}/2−½(1+1/x)e^{−1/x}≥(1−e^{−1})/2. ✓
+
+**Section 2.** (3) follows from the frozen inequalities (6) (I re-derived both lines of (6) from RANGE_ROBUST_ENVELOPE_THEOREM §6: hardware-short/long cases, q≥q0, q≥q1), D₊−D₋=p+Z−1, and D₊≤p+L via z_i^h≤H_i. (4) cancels q0 correctly. Monotonicity in m, C-replacement (148/125−1=23/125>1/(2e)) ✓. (5): algebra ✓; g(x)=(1−e^{1−x}/2)/x nonincreasing ✓; final constant 3/2+1/(2e)≈1.684<1.7 ✓.
+
+**verify_joint_role_scalar.py (unexecuted).** Direction of every bound is correct: objective increasing in B,p, decreasing in q0; `exp_lower` (degree 19, positive signed remainder) and `exp_upper` (degree 10, negative remainder) are valid for all x≥0; B uses q1(lo), q0 uses hi; `floor_grid` preserves lower bounds. Initial interval: q0≥(1−1/4−23/125)/2>11/40 ⇒ e^{−q0}≤40/51 ⇒ 5/4+20/51≈1.642 ✓. Severity: low — margin thin; if a run fails, a finer grid suffices, not a proof repair.
+
+**Section 3.** Regimes K≤H / P≥H / P<H<K exhaustive; 12/7, 137/80, 17/10 all <69/40 ✓ (dependencies only spot-checked).
+
+**SATURATION_RETENTION_THEOREM.txt — Theorem A.** Re-derived: q'=q(r−m)/t; z_i'≥1−q(1+r−m); Z'=1+q[r(r−1)−m(r−2)−1]>0 (using m≤r); ratio nondecreasing in m; f'(r)=qr[r−2+q(r+2)]/D² ✓; f(2)=(1−3c)/(1+c)=λ ✓; q(1+r)≤3c ✓. Step 2: others' total (1−s)+q[Σmin(h_k,t)−(1−s)] with bracket ≥t−(1−s)≥0 ✓, so (1−λ)D+λA≥0 ✓. Sharpness example (1 short, three 2/3 long) gives m=0, x=0, equality ✓.
+
+**Theorem B.** Characterization: C²F−C(C−1)P forces P=0, Z=CM, ρ=2 ✓. (B_account) ✓. Lipschitz lemma: m=0 ⇒ A=2, q'≤1/e; m=1 ⇒ A≥1, q'≤2e^{−2}; m≥2 ⇒ q'≤e^{−m} ✓. Envelope: V0−V=(1−c)(z−b)−(c−q)(b−a) ✓; 1−5c+2c²>0 and (1−c)(1−5c)/C≥0 ✓; a≥z case ✓; F=M since H≥2CM ✓.
+
+No counterexample found; no water-fill primitive is used in either note.
+
+## Scope limitations
+- Did not execute the certificate or any code; margin estimate is mine, hand-computed.
+- 12/7 (SEVEN_FOURTHS §1) and 137/80 (HIGH_P) accepted as audited elsewhere; only sanity-checked.
+- Primitive properties (own-monotonicity, total ≤CT, tie behaviour) taken as previously proved.
+
+## Verdict
+No findings in reviewed scope; the 69/40 headline is conditional on the unexecuted certificate passing.

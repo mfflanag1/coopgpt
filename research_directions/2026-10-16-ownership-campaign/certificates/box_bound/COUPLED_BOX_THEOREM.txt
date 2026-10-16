@@ -1,0 +1,294 @@
+SHARP RESPONSE COUPLING AND A TRUTHFUL REFINEMENT OF RECIPIENT BOXES
+16 October 2026. Candidate theorem for independent audit.
+
+SUMMARY
+A sharp local response inequality gives a linear constraint coupling an
+owner's own auxiliary account to its opponents' accounts. Intersecting the
+recipient-specific box with this constraint preserves fixed-owner, all-real-
+profile incentives and coalition coverage for arbitrary mixed ownership.
+The resulting rule is pointwise no larger than Rbox and retains its7/4 bound.
+A stronger zero-hardware boundary constraint is compatible with all-profile
+truthfulness; on the cyclic obstruction family its exact funding ratio is
+less than1.401, whereas Rbox exceeds1.5001. No general3/2 bound is asserted.
+
+Notation and the definitions of Phi,z,H_i,p_i,beta_i,K,Dbox_i are as in
+CYCLIC_THREE_HALVES_OBSTRUCTION.txt and the audited mixed/ box theorem.
+An owner's hardware and local-power bundles may have arbitrarily many
+coordinates. Actual owners are fixed throughout all incentive comparisons.
+
+1. THE SHARP MIXED-OWNER RESPONSE COEFFICIENT
+For each integer k>=1, let u_k be the unique number in(0,1) satisfying
+  u_k exp(u_k)=exp(1-k)/2,
+and set
+  eta_k = k u_k/(1-u_k)^2.
+Equivalently u_k=W_0(exp(1-k)/2), but this notation is unnecessary: monotone
+bisection of u exp(u) gives the coefficient to any requested precision.
+Set eta_0=1.
+
+THEOREM. Fix an owner i. Suppose every branch has at most k OTHER owners with
+positive hardware accounts. Then its actual local payments satisfy
+  sum_(t!=i) z_t >= eta_k (z_i-H_i).
+The assertion holds at every nonnegative real profile, with arbitrary owner
+and branch counts. For k>=1, eta_k is the largest universal coefficient for
+this inequality, even for a single branch. It satisfies
+  0<eta_k<=k/[2 exp(k-1)-1]<=1.
+For k=0 the right-hand excess is always nonpositive; eta_0=1 is a convention,
+not a finite optimality claim.
+
+PROOF ON ONE BRANCH. Write h_i,l_i for i's accounts and T for branch output.
+A zero-output branch is trivial. If hardware is the short pool, q<=1/2 and
+  z_i-h_i = q(min(l_i,T)-h_i) <= q(T-h_i),
+whereas opponents' hardware roles alone total (1-q)(T-h_i). Hence opponents'
+payments are at least z_i-h_i whenever this excess is positive, and the
+eta_k bound follows from eta_k<=1. Negative excess needs no argument.
+
+Suppose local power is short. If h_i>=T then z_i<=T<=h_i, so again the claim
+is trivial. Otherwise set
+  d=1-h_i/T in(0,1],
+  y=sum_(t!=i)min(h_t,T)/T.
+Since total hardware is at leastT and each capped opponent contributes at
+most1, we have d<=y<=k. The capped hardware ratio is1-d+y, so
+  q=exp(d-y)/2,
+  z_i-h_i <= (1-q)dT,
+  sum_(t!=i)z_t >= q y T.
+Therefore it suffices to minimize
+  f(d,y)=y/[d(2 exp(y-d)-1)]
+over0<d<=1 and d<=y<=k.
+
+For fixed d, the derivative with respect to y has the sign of
+  2 exp(y-d)(1-y)-1.
+Its derivative is -2y exp(y-d)<0 for y>0. Thus f(d,.) has at most one
+interior turning point, a maximum, and its minimum on[d,k] is at an endpoint.
+At y=d its value is1. At y=k it is k/D_k(d), where
+  D_k(d)=d[2 exp(k-d)-1].
+Now D_k'(d)=2 exp(k-d)(1-d)-1 and
+D_k''(d)=-2 exp(k-d)(2-d)<0 on(0,1]. Its derivative is positive at0 and
+negative at1, so it has a unique maximizer d*=1-u_k. The stationarity
+condition is exactly u_k exp(u_k)=exp(1-k)/2. At that point
+  D_k(d*)=(1-u_k)^2/u_k.
+Thus min_d f(d,k)=eta_k. Since d=1 is an admissible comparison,
+eta_k<=k/[2 exp(k-1)-1]<=1; the final inequality follows from
+2 exp(k-1)-1>=k for k>=1. This proves the one-branch inequality.
+Summing branch inequalities gives the theorem, even when individual branch
+excesses are negative. The common coefficient uses the same bound k on every
+branch; no unproved monotonicity in k is needed.
+
+SHARPNESS. For k>=1 take one branch, local-power owner i with local capacityT
+and hardware capacity u_k T, and k other owners each with hardware capacityT
+and no local power. Then d=1-u_k, y=k. Owner i's positive excess is exactly
+(1-q)(1-u_k)T and its opponents receive qkT, attaining ratio eta_k. Capacities
+are real, as allowed by the model. Rational approximation gives arbitrarily
+nearby ratios if rational input profiles are required, by continuity and
+strict positivity of the excess. This sharpness concerns this response
+inequality, not an all-mechanism funding lower bound.
+
+2. THE REFINED MECHANISM ON THE FULL MIXED-OWNERSHIP DOMAIN
+At a profile define, separately for each owner i,
+  k_i=max_j #{t!=i:h_tj>0}.
+This number depends only on OPPONENT hardware reports and therefore stays
+fixed under every underreport or increase of i's entire own bundle. It need
+not remain fixed when a different owner changes its report; truthfulness
+places no monotonicity restriction on that owner's effect on i's payment.
+
+Let Deta_i be Dbox_i intersected with the single linear constraint
+  sum_(t!=i)(c_t-p_t) >= eta_(k_i)[(c_i-p_i)-H_i].             (C_eta)
+Define Reta_i=max_(c in Deta_i) Phi_i(Hvector,c).
+The domain is compact. It is nonempty because the full vector p+z satisfies
+(C_eta), the exact recipient intervals, the own ceiling, and the total ceiling.
+Thus the maximum exists, including all tie/zero cases by continuity of Phi.
+
+COVERAGE AND ENVELOPE DOMINATION. Full-profile feasibility gives Reta_i>=N_i,
+so every coalition is covered because N is coalition covering. More strongly,
+consider any actual underreport of i, with local responses z' and hardware
+H_i'<=H_i. Restore its own shared-power account in the auxiliary vector:
+  c_i=p_i+z_i', c_t=p_t+z_t' for t!=i.
+The audited box argument puts this vector in Dbox_i. The new inequality is
+also satisfied, because the response theorem at the underreport gives
+  sum_(t!=i)z_t' >= eta_(k_i)(z_i'-H_i')
+                   >= eta_(k_i)(z_i'-H_i).
+Restoring i's own shared power and outer hardware can only increase its
+primitive payment. Consequently
+  N_i <= E_i <= Reta_i <= Rbox_i,
+where E is the actual own-report envelope of N. All these comparisons retain
+the same actual owners; no cloning or owner-dependent population is used.
+
+ALL-PROFILE WHOLE-OWNER INCENTIVES. Increase any local report of i. Its own
+ceiling and total ceiling increase; opponent lower endpoints decrease and
+upper endpoints increase, because its set of possible underreports expands.
+Constraint(C_eta) is unchanged, so its feasible domain expands. If the increase
+is in hardware, H_i also increases, which WEAKENS(C_eta), and the primitive is
+nondecreasing in its own hardware coordinate. The coefficient eta_(k_i) stays
+fixed because k_i excludes i. Therefore the payment cannot decrease.
+If i increases its shared power by delta>=0, translate c_i to c_i+delta.
+Its own bounds and total ceiling increase by delta; (c_i-p_i) is unchanged,
+and all other terms of(C_eta) are unchanged. Primitive own-coordinate
+monotonicity again proves payment monotonicity. Composing these coordinate
+changes proves whole-owner truthfulness at every real profile. In particular,
+(C_eta) has the correct direction: increasing hardware RELAXES its right side.
+The inherited total funding bound is sum_i Reta_i<=7F/4.
+
+3. STRONGER ZERO-HARDWARE BOUNDARY, STILL ON THE FULL DOMAIN
+For k>=1 set kappa_k=k/[2 exp(k-1)-1], and set kappa_0=1. The separate
+hardware-free response lemma gives sum_(t!=i)z_t>=kappa_(k_i) z_i whenever
+H_i=0. Define Dc_i as follows:
+  if H_i>0, use Deta_i;
+  if H_i=0, intersect Dbox_i with
+       sum_(t!=i)(c_t-p_t) >= kappa_(k_i)(c_i-p_i).          (C_0)
+Let Rc_i=max_(c in Dc_i) Phi_i(Hvector,c).
+For H_i=0,k_i=0 there is no hardware anywhere, all local payments vanish,
+and the mechanism is zero; the stated convention is harmless.
+
+The hardware-free response lemma is proved in the cyclic-obstruction file.
+It applies throughout i's underreport box whenever H_i=0, so E_i<=Rc_i.
+Since kappa_k>=eta_k, Dc_i is a subset of Deta_i at this boundary. While H_i
+remains zero, the domain-expansion and own-p translation arguments are
+unchanged. When an own-report increase crosses from H_i=0 to H_i>0, the
+stronger constraint(C_0) is dropped, and
+  Dc_i(old) subset Deta_i(old) subset Deta_i(new)=Dc_i(new).
+The outer primitive's own hardware also increases. Hence the boundary switch
+preserves truthfulness. A jump in the payment is allowed; continuity of the
+final mechanism across that switch is not claimed. This construction requires
+no restriction on which owners may own hardware at other profiles.
+Thus on the entire mixed domain,
+  N_i<=E_i<=Rc_i<=Reta_i<=Rbox_i,
+with all coalition and incentive guarantees and the same global7/4 bound.
+
+4. A QUANTIFIED CONSEQUENCE WITH UNBOUNDED ACTIVE COUNTS
+Use the cyclic family in CYCLIC_THREE_HALVES_OBSTRUCTION.txt: for each n>=3
+there are n hardware owners, n active branches, and one common local-power
+owner w. Let r=19/10,s=83/40,q=exp(1-r)/2,a=rq,b=1-q,z=a+b.
+Write kappa=kappa_2=2/(2e-1) and q0=exp(1-s/z)/2.
+
+Every hardware payment already equals N_i=Rbox_i=a+(s-a)q0. Envelope/baseline
+domination therefore forces Rc_i=Reta_i=Rbox_i for these owners.
+For w, its opponent lower endpoints are0, its own ceiling is nb, and its
+coupling(C_0) requires total opposing payment at least(1+kappa)c_w.
+All feasible totals are below H=ns because K=nz<H. The zero-hardware outer
+payment is c_w[1-q_outer(T)], with q_outer nondecreasing. It is consequently
+at most c_w[1-q_outer((1+kappa)c_w)]. This expression is nondecreasing for
+0<=c_w<=nb by the derivative calculation in the cyclic-obstruction file.
+
+The upper bound at c_w=nb is attained in the refined auxiliary domain: take
+  c_w=nb, c_i=kappa b for every hardware owner i.
+The full-profile response inequality gives kappa b<=a, so each opponent
+coordinate lies between0 and its upper endpoint (which is at least a).
+The total n(1+kappa)b is at most n(a+b)=K. All hardware accounts s are below
+nb, hence also below this total. Therefore exactly
+  Rc_w=nb[1-exp(1-s/((1+kappa)b))/2].
+For every n>=3 the exact funding ratio of Rc on this family is
+  Gc=z+(s-a) exp(1-s/z)/2-b exp(1-s/((1+kappa)b))/2 <1401/1000.
+The strict inequality is certified with exact Fraction/Taylor arithmetic by
+check_cyclic_obstruction.py. Numerically Gc is approximately1.400330258092.
+Thus the refinement excludes the entire Rbox counterfamily, which instead
+has ratio>15001/10000. This is a uniform consequence for an unbounded active
+family, not a global1.401 or3/2 theorem.
+
+5. FINITE EXPLICIT OPTIMIZATION (GENERAL OWN HARDWARE)
+This section gives an exact mathematical reduction, not a claim of polynomial
+time or incentive-safe floating-point implementation. Each owner's coupled
+problem has the form
+  p<=x<=beta, ell_t<=c_t<=u_t(t!=i), x+sum c_t<=K,
+  sum c_t >= Pminus+gamma(x-p-a),
+where a=H_i, H=sum H_t, p=p_i, Pminus=sum_(t!=i)p_t,
+and gamma=eta_(k_i), or gamma=kappa_(k_i) at a=0. Let
+  L=sum ell_t, U=sum u_t.
+The own ceiling x=beta is feasible, because the full profile is feasible.
+For H=0 the value is0. For one actual owner the constraint is nonbinding and
+the value is F. Suppose henceforth H>0 and at least two actual owners.
+
+SHORT OPPOSING POOL. The feasible total interval is
+  T in[p+L, min(H,K,beta+U)],
+if the upper endpoint is at least the lower endpoint. For fixed T, the
+primitive is increasing in x, so choose
+  x*(T)=min{beta, T-L, [T-Pminus+gamma(p+a)]/(1+gamma)}.
+Its lower feasible x bound is max(p,T-U). Both lower-bound candidates are
+at most beta, because p<=beta and T<=beta+U. Both are at most T-L, because
+T>=p+L and U>=L. Finally p satisfies the coupling upper bound since
+T>=p+L>=p+Pminus>=p+Pminus-gamma*a. The candidate T-U satisfies it because
+  U>=Pminus+gamma(beta-p-a)>=Pminus+gamma(T-U-p-a).
+The first inequality follows from feasibility at the own ceiling beta and
+the opponent upper total U. Thus the maximum of the lower bounds is at most
+each of the three upper bounds, proving feasibility of x*(T). Opponent
+interval sums fill every value from L to U, so a corresponding vector exists
+for every T in the displayed interval. The upper bound T<=K supplies the
+remaining total-budget constraint.
+The value to maximize is
+  f(T)=x*(T)+q(T)[min(a,T)-x*(T)],
+  q(T)=exp(1-sum_t min(H_t,T)/T)/2.
+At T=0 define f(0)=0.
+
+Partition this one-dimensional interval at the hardware caps H_t and at
+intersections of the three affine expressions defining x*. On each open cell,
+write x*=vT+w, min(a,T)-x*=dT+e, and
+  q(T)=exp(1-m-C/T)/2,
+where m counts capped hardware coordinates and C is the sum of the others.
+Then
+  f'(T)=v+q(T)[d+dC/T+eC/T^2],
+  f''(T)=q(T) C/T^3 [dC+e(C/T-2)].
+If C=0, f is affine. Otherwise f'' has at most one zero unless it vanishes
+identically. Split at that possible zero. On each resulting interval f' is
+monotone, so an interior maximizer is either a root of f' or a whole constant
+interval; there are at most two nontrivial stationary candidates per cell.
+Endpoints and these bracketed one-dimensional roots determine the exact
+short-pool maximum. Alternatively a uniform grid with a derivative bound
+computes this continuous scalar maximum to arbitrary precision. Near T=0 all
+positive hardware coordinates are capped, so C=0; there is no singularity.
+
+LONG OPPOSING POOL. This regime exists iff K>=H and beta+U>=H. The feasible
+own-account interval is
+  x in[max(p,H-U), beta].
+For a fixed x, the minimum feasible opponent total is
+  S0(x)=max{L,H-x,Pminus+gamma(x-p-a)}.
+The ceiling feasibility at beta ensures S0(x)<=U and x+S0(x)<=K throughout
+this interval. Split at x=a and x=H.
+
+If x<a, the own gap x-a is negative, so maximize the capped opponent total.
+Let V=sum_(t!=i)min(u_t,H) and W=sum_(t!=i)(ell_t-H)_+.
+The maximal capped ratio is
+  rho(x)=min{(x+V)/H,(K-W)/H}.
+It is attained by filling useful capacities up to H. If this exhausts the
+budget, its opponent total is K-x>=S0(x), so every total lower constraint is
+already met. Otherwise all useful caps have been filled. If the resulting
+total is below S0(x), every remaining upper capacity lies above a filled cap
+and can be added as overflow without changing the capped objective. There
+is enough such capacity because S0(x)<=U; if there were none, the current
+total would already equal U. Adding only the mass required to reach S0(x)
+also respects the budget because x+S0(x)<=K.
+The value a+exp(1-rho(x))(x-a)/2 is increasing in x on x<a, because rho is
+nondecreasing there and the gap is negative. Hence only the largest feasible
+x in this negative-gap segment is needed.
+
+If x>=a, minimize the capped opponent total. It suffices to use total S0(x),
+since decreasing an opponent coordinate never increases its capped value.
+The concave function sum min(c_t,H) on the interval slice sum c_t=S0(x)
+attains its minimum at a vertex. At a vertex all but at most one opponent
+coordinate are at their lower or upper endpoints. Enumerate the remaining
+coordinate j and endpoint choices for all other opponents. If their total
+is D, then c_j=S0(x)-D. Split x into intervals on which one affine branch
+of S0 is active, own cap min(x,H) is fixed to one affine branch, and the
+pivot cap min(c_j,H) is fixed to one affine branch. All feasibility conditions
+are linear in x, so each candidate has an explicitly computed interval.
+On it the capped ratio is (lambda x+mu)/H and the own gap is
+nu x+xi-a, where nu is0 or1. Here lambda>=0: the only negative slope in S0
+is -1 from H-x, and it can be active only while x<=H, when the own cap has
+slope1. Therefore the candidate value is
+  a+exp(1-(lambda x+mu)/H)(nu x+xi-a)/2.
+If nu=0 it is nonincreasing; if nu=1 its only possible interior maximizer
+is x=a+H/lambda when lambda>0 (the own cap is x, so xi=0). If lambda=0
+it is increasing or constant. Evaluate interval endpoints and the stated
+stationary point whenever it lies in the interval.
+
+Taking the maximum of all short and long candidates computes Rc or Reta.
+Long-pool endpoint enumeration can be exponential in the actual owner count;
+no polynomial preprocessing claim is made. The short component uses a finite
+number of explicit one-dimensional monotone-root searches. Exponentials and
+the uniquely specified coefficient u_k are computable to arbitrary precision.
+Finite-precision payment rounding that preserves exact incentives is a
+separate problem, not established by this reduction.
+
+LIMITS
+The sharp response coefficient decays as k grows. This theorem does not give
+a global3/2 funding bound, solve arbitrary network technologies, or show
+optimality of the resulting payment rule. It supplies a sharp general response
+inequality, a truthful full-domain refinement, an exact evaluation reduction,
+and a quantified improvement on a family with unbounded active counts.

@@ -1,0 +1,146 @@
+C^2 FUNDING WHEN A HARDWARE OWNER COVERS THE FULL OPPOSING POOL
+16 October 2026. Candidate theorem for independent review.
+
+Use the fixed-actual-owner physical model, exponential primitive Phi, nested
+raw rule N, and actual whole-owner envelope E defined in
+UNIVERSAL_RETENTION_AND_OUTER_DOMINANCE_THEOREM.txt. In particular
+  H_i=sum_j h_ij, H=sum_i H_i, P=sum_i p_i,
+  M=sum_j min(sum_i h_ij,sum_i l_ij), F=min(H,P+M),
+  z_i=sum_j Phi_i(h_.j,l_.j), Z=sum_i z_i, B=P+Z,
+  c=1/(2e), C=1+c, b_i=p_i+z_i,
+  N_i=Phi_i(Hvector,bvector),
+  E_i=sup_{whole-owner report_i'<=report_i}N_i(report_i',report_-i).
+Split full local slack CM-Z into Delta_- from branches with capped long
+ratio at most2 and Delta_+ from branches with ratio above2. All actual
+owners, eligibility, and report domains remain fixed. Owner and branch
+counts, grid capacity P, and local ratios are unrestricted.
+
+THEOREM.
+Suppose at the evaluated full profile there exists an actual owner k with
+  H_k>=B>0.                                             (DH)
+Then every whole-owner underreport is allowed, including reports violating
+(DH) and reports that switch the outer short pool, and
+  sum_i E_i<=CB+(20/21)Delta_-+Delta_+
+    =C^2 F-Cc P-(C-20/21)Delta_--c Delta_+<=C^2 F.       (DH_bound)
+The mechanism E is the same everywhere-defined truthful envelope, not a
+rule whose domain is restricted to(DH). Condition(DH) is imposed only on
+the profile at which its funding guarantee is evaluated.
+
+This class is not contained in the earlier outer-ratio-at-least2 class:
+the full capped hardware ratio can be anywhere in[1,n], including strictly
+below2. The result needs neither H>=CB nor zero grid capacity. It is a
+funding theorem for this specified nested envelope; it is not an optimal
+subsidy lower bound against other mechanisms.
+
+1. PHYSICAL POWER BOTTLENECK AND THE ABSENCE OF OPPOSING CAPS.
+Local coverage gives Z>=M, so(DH) implies H>=B=P+Z>=P+M and hence F=P+M.
+For any whole-owner underreport, write resulting local payments z_j^i and
+local output M^i. Every primitive recipient payment is at most its local
+output, so z_j^i<=M^i<=M for every actual owner j. Thus its opposing account
+is bounded by
+  p_j^i+z_j^i<=P+M<=H.                                  (DH_nocap)
+To upper-bound the deviating owner's outer payment, restore only its outer
+hardware argument to its original H_i, keeping all computed local accounts
+unchanged. This can only increase its payment by primitive own monotonicity.
+The restored full hardware vector is fixed throughout the comparison.
+All opposing accounts in the full and counterfactual profiles are at most H.
+This remains true on any straight interpolation between those account
+vectors. Thus when the hardware pool is short, opposing caps never affect
+the payment formula; it depends only on opposing total and own account.
+
+2. TOTAL-UP CHANGES: A LEMMA VALID THROUGH THE OUTER POOL TIE.
+Hold the full hardware vector fixed, let t denote the opposing total and b
+the recipient's own opposing account, and write a=H_i. Assume every opposing
+account is at most H. Let W(t,b) denote the primitive payment to this owner.
+For t<=H,
+  W(t,b)=(1-q(t))b+q(t)min(a,t),
+  q(t)=exp(1-sum_j min(H_j,t)/t)/2.
+On a cap cell put r=sum_j min(H_j,t)/t and m=# of capped hardware accounts.
+Then q'=q(r-m)/t and W_b=1-q. If a<t,
+  W_t=q'(a-b)<=q(r-m)<=qr<=1/2<=W_b.
+If a>=t, at least one hardware account is capped and
+  W_t=q+q'(t-b)<=q[1+r-m]<=qr<=1/2<=W_b.
+Negative values of W_t cause no problem.
+
+For t>=H, (DH_nocap) gives the hardware-short expression
+  W(t,b)=a+q(t)(b-a), q(t)=exp(1-t/H)/2,
+  W_b=q, W_t=q(a-b)/H<=q=W_b, W_t<=1/2.
+At t=H the two expressions agree, including the endpoint value. Hence on
+both sides of every tie/cap boundary,
+  W_t<=W_b and W_t<=1/2, while W_b>=0.                   (DH_derivatives)
+
+Suppose an underreport increases opposing total by G>0 and decreases its
+own opposing account by D>=0. Interpolate the actual opposing vectors, so
+t increases at rate G and own b decreases at rate D; their values remain
+feasible and (DH_nocap) holds throughout. If G<=D, (DH_derivatives) gives
+  dW/ds=W_t G-W_b D<=0.
+If G>D and W_t>=0, the derivative is at most W_t(G-D)<=(G-D)/2; if W_t<0,
+the derivative is already nonpositive. Therefore the TOTAL-UP gain is
+  W(after)-W(full)<=(G-D)_+/2.                           (DH_up)
+This proof expressly permits crossing t=H and does not assume W_b>=1/2
+on the hardware-short side.
+
+For a physical own underreport, let eta_i=p_i-p_i'>=0. Then
+  G=(Z^i-Z)-eta_i,
+  D=(z_i-z_i^i)+eta_i>=0,
+so G-D=(Z^i-Z)-(z_i-z_i^i)-2eta_i. The universal total-increase lemma
+gives the aggregate bound
+  sum_i[(Z^i-Z)-(z_i-z_i^i)]_+<=2Delta_+.
+Consequently all TOTAL-UP gains together cost at most Delta_+.
+
+3. TOTAL-DOWN CHANGES WITH A DOMINANT HARDWARE OWNER.
+Now t<=B. Condition(DH) guarantees at least one capped hardware account
+for EVERY such total, so m>=1. Fix full own account b0 in[0,B] and define
+the largest feasible retention-compatible comparison account
+  b_*(t)=min(t,max(0,b0-(B-t)/3)), 0<=t<=B.
+We claim W(t,b_*(t)) is nondecreasing in t. It is continuous and piecewise
+smooth; a derivative check suffices on its cap and clipping cells.
+
+On a cell where b_*=0, the derivative is q'min(a,t)+q*1_{a>=t}>=0.
+On a cell where b_*=t, it is
+  1-q+q'[min(a,t)-t]+q*1_{a>=t}
+    >=1-q-q(r-m)>=1-qr>=1/2.
+On its remaining cells b_*'=1/3 and 0<=b_*<=t, so the derivative is
+  (1-q)/3+q'[min(a,t)-b_*]+q*1_{a>=t}
+    >=(1-q)/3-q(r-m)
+    >=[1-q(3r-2)]/3>0.
+For the last strict inequality, q(r)(3r-2) is maximized on r>=1 at r=5/3,
+with value(3/2)exp(-2/3)<1; exp(2/3)>1+2/3>3/2 proves this exactly.
+Thus the claim holds, including all boundaries by continuity.
+
+For an arbitrary total-down counterfactual with total t and own account b,
+define epsilon=[(B-t)/3-(b0-b)]_+. Then
+  b<=b_*(t)+epsilon.
+Indeed the inequality before clipping is b<=b0-(B-t)/3+epsilon, while
+0<=b<=t handles the two clipping cases. At fixed t the derivative W_b=1-q
+is at most1, so
+  W(t,b)<=W(t,b_*(t))+epsilon<=W(B,b0)+epsilon.           (DH_down)
+This is an exact retention transfer with coefficient1; it requires no
+quadratic account-excess term or outer-slack estimate.
+
+For each physical own underreport,
+  epsilon_i=[(Z-Z^i)/3-(z_i-z_i^i)-(2/3)eta_i]_+.
+Universal local retention therefore yields
+  sum_i epsilon_i<=(20/21)Delta_-.
+All TOTAL-DOWN gains together cost at most this amount.
+
+4. FUNDING AND SHARPNESS FOR THE FIXED RULE.
+The full outer raw total is at most CB because H>=B. Sum(DH_up) over
+total-up owners and(DH_down) over the remaining owners. The resulting bound
+is uniform over the independently selected actual own underreports, and
+taking their separate suprema proves the first inequality in(DH_bound).
+Using Z=CM-Delta_--Delta_+ and F=P+M gives its displayed identity. All
+saving coefficients are positive because C>1>20/21 and c>0.
+
+Sharpness follows from the four-owner/two-branch saturation example:
+owners A,B,D,W, with W local power1 on both branches and no grid;
+branch1 hardware A=1+2c,B=1; branch2 hardware A=1,D=1+2c.
+Both local ratios are2, Z=2C, H_A=2+2c=Z, and the other hardware totals
+sum to Z. Thus(DH) holds, outer ratio is2, and raw total is C^2F. Since
+E>=N and(DH_bound) gives the same upper bound, E=N in total and the bound
+is sharp. This is sharpness of the particular envelope, not an impossibility
+theorem for the underlying game, which has a veto power owner.
+
+The remaining energy-short frontier has H_i<B for EVERY owner and full
+capped hardware ratio below2. The hardware-short frontier H<B is also not
+covered by(DH), and requires separate analysis of opposing-account caps.

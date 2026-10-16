@@ -1,0 +1,213 @@
+Heterogeneous hardware with additive power rights
+15 October 2026 -- scoping supplement, not a submitted manuscript
+
+1. Model and funding benchmark
+
+Fix finitely many real owners i and hardware types j=1,...,m. Owner i reports
+(g_i1,...,g_im,q_i)>=0: hardware capacities and power entitlements. One owner may
+hold both kinds of input. All coefficients p_j,e_j are fixed and strictly
+positive. They denote public service value and incremental power per activity.
+For aggregate g,q define
+  F(g,q)=max sum_j p_j x_j
+          subject to 0<=x_j<=g_j and sum_j e_j x_j<=q.
+For coalition S, v_b(S)=F(sum_{i in S} g_i, sum_{i in S} q_i).
+Owner sets and technology are fixed while reports range over all nonnegative
+real bundles. A feasible deviation decreases any coordinates of that owner's
+bundle. Utilities are payments only. No assertion covers private opportunity
+costs, overreports, coordinated deviations, false identities or owner changes.
+
+Let T=v_b(N). Fixed-profile required funding is
+  B(b)=min {sum_i z_i : z>=0, sum_{i in S}z_i>=v_b(S) for every S}.
+Nonnegative packing LP duality gives B(b)=T. Thus any payment above T in this
+model is not caused by the absence of an efficient core at a fixed profile.
+For a fixed institution and report domain D, define
+  Gamma(D)=inf_y sup_{b in D:B(b)>0} sum_i y_i(b)/B(b),
+where one rule y must be nonnegative, coalition-covering and own-report monotone
+on all D; require y=0 at B=0. Static subsidy is B-T; additional funding is
+sum y-B. These quantities must not be conflated.
+
+2. Two-input rule for actual owners with mixed bundles
+
+An owner i holds (a_i,b_i)>=0. Put A=sum a_i, B=sum b_i, T=min(A,B).
+If T=0 pay everyone zero. Otherwise call a minimum-total input short and the
+other long; at ties either choice is allowed. Write s_i,l_i for that owner's
+short and long holdings, d_i=min(l_i,T), rho=sum_i d_i/T, and
+  p=(1/2) exp(1-rho),
+  z_i=(1-p)s_i+p d_i.
+The formula is defined directly on actual owners. No owner is permitted to
+split or merge strategically. It extends the exclusive-pool exponential rule
+already proved in the existing supplement (hist:exponential).
+
+Lemma. The rule covers every coalition, is nondecreasing in either coordinate
+of each fixed owner, and totals at most C T, where C=1+1/(2e).
+
+Proof. rho>=1 because total long holdings are at least T. For a coalition S,
+sum_{i in S}s_i>=v(S), and
+sum_{i in S}min(l_i,T)>=min(sum_{i in S}l_i,T)>=v(S).
+Both weights are nonnegative and sum to one, proving coverage. Total payment is
+  T[1+(rho-1) exp(1-rho)/2] <= (1+1/(2e))T,
+using max_{u>=0} u exp(-u)=1.
+
+For incentives fix all other owners and the owner's opposite coordinate.
+Consider increasing its short coordinate x while it remains short. Then
+T=x+a for a fixed nonnegative remainder a. Away from clipping points,
+rho is nonincreasing and -rho/T<=rho'<=0, including the deviating owner's
+own long holding in the clipped sum. Hence 0<=p'<=p rho/T, and x<=T.
+The derivative of its short payment is
+  ((1-p)x)'=1-p-xp' >= 1-p(1+rho) >=0.
+The last inequality follows since (1+rho) exp(1-rho)/2 decreases from one on
+[1,infinity). Its other payment p min(l_i,T) also is nondecreasing, being a
+product of nonnegative nondecreasing factors.
+
+If the increased coordinate is long, T is fixed. Write d=min(x,T) and
+gamma=sum_{h!=i}min(l_h,T). Then p=(1/2)exp(1-(d+gamma)/T).
+For x<T, (p d)'=p(1-d/T)>=0, and beyond T it is constant. The owner's short
+payment (1-p)s_i is also nondecreasing because p is nonincreasing in x.
+At equality of pool totals, all holdings are <=T, rho=1 and the owner's
+payment is (a_i+b_i)/2 on either side. Clipping boundaries are continuous.
+At T=0 payments are zero, continuous as T decreases to zero by the total
+payment bound C T and nonnegativity, and cannot
+decrease from zero after an increase. Piecewise monotonicity and continuity
+therefore prove coordinatewise monotonicity globally. Increasing all of one
+owner's coordinates sequentially proves whole-bundle monotonicity. QED.
+
+This is a direct, rule-specific ownership argument. A generic truthful rule on
+two separately controlled accounts need not remain truthful after those
+accounts are controlled by one owner. No general merger or group-proofness
+claim follows from this lemma.
+
+3. Heterogeneous-star decomposition and mechanism
+
+Sort types once so a_j=p_j/e_j is nonincreasing. Put a_{m+1}=0 and
+Delta_k=a_k-a_{k+1}>=0. Define h_j=e_j g_j and H_k=sum_{j<=k}h_j.
+Then the fractional-knapsack identity is
+  F(g,q)=sum_{k=1}^m Delta_k min(q,H_k).                    (1)
+Indeed write u_j=e_j x_j. The objective sum a_j u_j equals
+sum_k Delta_k sum_{j<=k}u_j. Each prefix is bounded by min(q,H_k), and filling
+types in the fixed sorted order attains every such prefix bound simultaneously.
+This proves (1), including coefficient ties and zero capacities.
+
+For each prefix k give actual owner i the derived two-input bundle
+  (H_i,k,q_i)=(sum_{j<=k}e_j g_ij,q_i).
+Apply the preceding lemma to obtain z_i^k and define
+  y_i(b)=sum_k Delta_k z_i^k(b).                           (2)
+
+Theorem. On all nonnegative real profiles, (2) is nonnegative, covers every
+coalition, is whole-owner underreport truthful, and satisfies
+  sum_i y_i <= (1+1/(2e)) F(sum_i g_i,sum_i q_i).
+The bound is independent of the numbers of owners and hardware types. Mixed
+ownership of hardware and power is permitted. Explicit evaluation takes
+O(m log m + nm) arithmetic operations and O(m) exponential evaluations after
+prefix aggregation; this is a real-arithmetic statement, not an exact finite-bit
+evaluation guarantee for transcendental numbers.
+
+Proof. Identity (1) holds for every coalition, so summing component coverage
+with fixed nonnegative Delta_k proves coverage. Each owner's own coordinate
+increase raises its derived H_i,k and/or q_i, leaving other owners' derived
+reports fixed. The lemma and positive weights prove incentives. Summing the
+component budget bounds and applying (1) proves the budget. QED.
+
+Each activity column touches a hardware row and the common power row, so
+this is a column-support-two packing class. The result improves the established
+grand-marginal 2T ceiling for this star class to about 1.183940T. It does not
+improve the bound for every column-support-two matrix, arbitrary hardware
+compatibility graph, multiple coupled power bottlenecks or discrete schedules.
+The generic form-count theorem can separately be better on particular
+technologies. We assert no pointwise payment dominance over other mechanisms.
+
+The total bound is attained by THIS RULE in a single-type profile with three
+fixed owners having bundles (1,0),(1,0),(0,1), with p_1=e_1=1. This does not
+establish the optimal mechanism factor.
+
+4. Existing lower bound and exact live gap
+
+One type is a subclass, so the existing 9/8 lower bound applies. To make the
+owner-preserving certificate explicit, use two hardware-only owners 0,1 and
+two power-only owners 2,3 at profiles
+  c=(1,1 | 1,1), a=(1,1 | 1,2), b=(2,1 | 1,1).
+At a, coverage of {0,2},{1,2},{0,1,3} gives 2Y(a)-y_3(a)>=4.
+At b, coverage of {1,2},{1,3},{0,2,3} gives 2Y(b)-y_0(b)>=4.
+At c, coverage of {0,3} plus monotonicity gives
+1<=y_0(c)+y_3(c)<=y_0(b)+y_3(a)<=2Y(a)+2Y(b)-8.
+All three profiles have T=2. A uniform Y<=C T therefore requires 1<=8C-8,
+or C>=9/8. This is the earlier lower witness, reproduced rather than claimed
+as new. In particular the optimal uniform factor for the star class lies in
+  [9/8, 1+1/(2e)].
+
+More precisely, positive-sum decomposition shows that the optimal uniform
+factor over arbitrary mixed-owner star technologies EQUALS that over arbitrary
+mixed-owner two-input technologies: a rule for the latter composes prefixwise,
+and the former contains the latter as m=1. Thus increasing heterogeneity in
+this star model cannot itself open a harder minimax problem. Closing this
+interval is exactly a two-input problem, not a new independent frontier.
+If the infimum is not attained, compose rules within any positive epsilon of
+the two-input infimum, then let epsilon decrease to zero.
+
+5. Institutional obstructions and reduction
+
+Veto power. If one fixed owner is required for every positive-output coalition,
+paying it T and everybody else zero is efficient, covering and own-monotone.
+This is the conventional veto-player construction. For m compute owners,
+v({0} union S)=min(q,sum_{i in S}g_i), imposing y_0<=alpha T for fixed alpha
+in [0,1] instead gives optimal uniform total factor m-(m-1)alpha. The matching
+rule is y_0=alpha T, y_i=(1-alpha)min(g_i,q). Pair coverage at g_i=q=1 proves
+the lower bound. This extra funding is forced already at one profile by the
+distributional cap, not by incentives.
+
+Full common access. For v(S)=min(sum_{i in S}g_i,P), fixed public P,
+B(b)=sum_i min(g_i,P), attained on every profile by singleton payments
+y_i=min(g_i,P), which are own-monotone. Static funding can be nT while Gamma=1.
+More generally, suppose each activity consumes exactly one private resource
+row (strictly positive coefficient), plus any number of nonnegative common
+resource rows with fixed capacities. Every coalition plan can be split among
+owners in proportion to their contribution of that activity's private row.
+Each owner's allocated subplan respects its private capacities and consumes
+no more of any public row than the original plan. Thus coalition value is at
+most the sum of singleton values; paying singleton values is covering,
+statically optimal and own-monotone. Exclude activities consuming no private
+row and assume finite optima. Full public access for each deviating coalition
+is an explicit optimistic outside-option convention, not simultaneous physical
+feasibility for all coalitions or a claim about actual rationed markets.
+
+Broad additive power retains sparse hardness. Given any sparse nonnegative LP
+F(c)=max{p.x:Ax<=c,x>=0}, with p>0, nonzero columns of A and finite nonnegative
+capacities, append a row p.x<=q. The new production function
+G(c,q)=min(F(c),q), by scaling an optimal plan. Choose fixed w>=0 satisfying
+A^T w>=p and embed each original report b_i as (b_i,w.b_i). This preserves
+owner identities, coordinatewise underreport order and every coalition value,
+because F(c)<=w.c. Every column gains just one positive entry. A truthful
+covering rule for G therefore restricts to one for F with the same factor.
+Choosing w dual-optimal at a specified positive target profile makes the
+power row binding there; lowering q below T lowers output one-for-one. The
+chosen w is then held FIXED on the full embedded domain. This establishes a
+mathematical reduction, not an assertion that energy per activity equals price
+in real hardware. A generic additive-power label alone does not simplify the
+general sparse problem.
+
+6. Exact obstruction to a fixed greedy order beyond the star
+
+There are two hardware rows H1,H2, two power rows P1,P2 and three activities:
+  a=(H1,P1), value 3; b=(H1,P2), value 2; c=(H2,P1), value 2.
+Every activity consumes one unit of each incident resource. The resource graph
+is a path, hence acyclic. Consider a greedy procedure that fixes one order of
+these activities independently of reports and fills each activity as much as
+remaining resources permit.
+
+At capacities (H1,H2,P1,P2)=(1,0,1,1), optimal value is 3, so such an optimal
+greedy order must put a before b. At (1,1,1,0), it must put a before c. But at
+(1,1,1,1), a first yields value 3 whereas b=c=1 yields 4. Therefore no fixed
+activity order is optimal at all profiles, even on this three-edge path.
+This obstructs copying the star's fixed merit-order proof to arbitrary
+compatibility trees. It does NOT show that a different decomposition or payment
+rule cannot achieve the same factor, or that the general 2T bound is tight.
+
+7. Contribution boundary
+
+Known ingredients: LP core existence, fractional knapsack/merit-order identity,
+positive-sum closure, veto allocation, singleton subadditivity arguments,
+the existing exclusive-pool exponential mechanism and its existing 9/8 witness.
+Candidate project extension: the explicitly proved mixed-owner monotonicity
+lemma, yielding a constructive uniform star-technology bound and the exact
+reduction of its minimax factor to the mixed two-input class. The internal
+proof and finite checks do not establish historical novelty. Literature
+comparisons and economic implementation qualifications accompany this note.

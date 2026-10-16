@@ -1,0 +1,40 @@
+OWNER-SPECIFIC COUNTERFACTUAL FLOORS FOR THE RANGE MECHANISM
+16 October2026. Conventional proof candidate; no stronger uniform constant claimed.
+
+MOTIVATION. The global range relaxation allows other owners' local payments to fall even when the reporting owner cannot affect them. In particular a grid-only owner cannot change any local payment. The following refinement retains that dependence while preserving the explicit optimizer.
+
+DEFINITION. Let z be the local mixed two-pool payment vector summed across branches. For each distinct i,k define
+ m_k^i(b)=min_{0<=b'_i<=b_i} z_k(b'_i,b_-i).
+Use the auxiliary opposing-account domain
+ D_i(b)={c: c_i>=p_i, c_k>=p_k+m_k^i for k!=i,
+                c_i<=p_i+z_i, sum_k c_k<=P+Lbar},
+where Lbar is the exact monotone total ceiling in EXACT_LOCAL_TOTAL_ENVELOPE.txt (CM also works). Define
+ Rfloor_i(b)=max_{c in D_i(b)} Phi_i(H,c).
+All owner identities and real report domains remain fixed. Different recipients' minima need not be simultaneously attainable by one actual report; D_i is intentionally a relaxation.
+
+TRUTHFULNESS. When owner i increases its local report, the minimization box defining each m_k^i expands, so these floors cannot increase. Its own ceiling z_i and Lbar cannot decrease. Thus D_i expands, and its own H_i rises while others' H coordinates stay fixed. Own-account monotonicity of Phi gives own-report monotonicity. If i increases only its shared p by delta, every feasible c maps to c+delta e_i; lower floor, upper ceiling and total budget shift compatibly, and Phi is own-account monotone. These arguments compose for whole-bundle reports.
+
+COVERAGE AND BUDGET. Full c=p+z belongs to D_i because m_k^i<=z_k and sum z<=Lbar. Therefore Rfloor_i>=N_i and coalition coverage follows from N. Also D_i is a subset of the tightened range domain, so
+ N_i<=E_i<=Rfloor_i<=Rbar_i<=R_i,
+and the7/4 total-funding theorem transfers. This is a general pointwise refinement; it is not a new proved smaller uniform constant.
+
+To justify E_i<=Rfloor_i explicitly, take any actual coordinatewise underreport by i. Its other owners' local payments are at least m_k^i by definition. Restore only i's outer shared-power account to p_i and its outer hardware account to H_i; own-account monotonicity of Phi cannot lower its payment. Keep the local payments from the underreport. The resulting opposing vector has own coordinate at most p_i+z_i by local own-report monotonicity, all required opponent floors, and total at most P+Lbar by the exact monotone local-total ceiling. It belongs to D_i. The restored auxiliary vector need not itself be a physical report, which is why this proves an upper bound on the actual envelope rather than equality.
+
+EXACT COMPUTATION OF FLOORS. On a single two-pool branch, fix recipient k!=i with own accounts(a_k,b_k). The cross-sign lemma proved in
+ /private/tmp/coopgpt-consolidation-20261016/forest/NESTED_ENVELOPE_INFLUENCE.txt
+states that its payment is nondecreasing in every other b account and nonincreasing in every other a account if a_k>=b_k, with the signs reversed if a_k<=b_k. Consequently the exact minimum over i's own lower box is attained as follows:
+ - If a_k>=b_k, keep a_i at its full report and set b_i=0.
+ - If a_k<=b_k, set a_i=0 and keep b_i at its full report.
+If a_k=b_k, k's payment equals a_k independent of all others, so either choice works. For completeness, the global sign statement survives pool switches. Suppose a_k>=b_k and another b coordinate rises. While B>=A, payment is a_k+q(min(b_k,A)-a_k); the parenthesis is nonpositive and q decreases as the capped b total grows. While B<A, payment is b_k+q(min(a_k,B)-b_k); both q and the nonnegative parenthesis increase with B, since sum min(a_j,B)/B is nonincreasing. Thus payment increases in both regions. If a_k<=b_k, in B>=A the parenthesis is nonnegative, giving a decrease; in B<A, B>=b_k>=a_k so payment is b_k+q(a_k-b_k), also decreasing. Continuity at B=A and cap boundaries completes the proof. Exchanging a,b proves the signs for another a coordinate. At zero totals use continuity. This is a whole fixed-owner account statement; no identity split is used.
+The branch minima sum to m_k^i because owner i's report coordinates on distinct branches are independently bounded. Computing the two endpoint-deletion payment vectors for each i and branch yields all floors in O(n^2 m) elementary operations.
+
+CLOSED-FORM OPTIMIZATION STILL APPLIES. For owner i, substitute the baseline vector p^i with p^i_i=p_i and p^i_k=p_k+m_k^i into the existing optimizer, retaining beta_i=p_i+z_i and K=P+Lbar. Its required feasibility inequalities hold:
+ sum p^i<=P+sum z<=K,
+ beta_i+sum_{k!=i}p^i_k<=P+sum z<=K.
+The short/long regime formulas depend only on these baselines, beta_i,K and the fixed hardware vector. Hence no new continuous optimization oracle is introduced.
+
+GRID-ONLY OWNERS ARE TREATED EXACTLY. A grid-only owner i has no local coordinates to withhold, so m_k^i=z_k for every k!=i and z_i=H_i=0. Its domain fixes c_i=p_i and bounds each other c_k below by its base value p_k+z_k. The cross-sign lemma, now applied to the outer primitive with own accounts(0,p_i), says its payment is nonincreasing in each other opposing account. Therefore the maximum is attained at the base vector, even if K>P+sum z leaves unused slack. Hence Rfloor_i=N_i=E_i for every grid-only owner. In the balanced one-branch family N_i=1/(2e), strictly below Rbar_i=1/2. This equality is a general consequence of the coupled floors, not a conclusion from numerical examples.
+
+GENERAL LIMITATION. This refinement exploits an explicit cross-sign property of the two-pool primitive. For another inner rule, one must prove or compute the counterfactual floors and their antitonicity; no general efficient floor oracle is asserted. The7/4 budget remains dependent on the established local role bounds.
+
+FINITE CORROBORATION. owner_floor_reference.py implements the endpoint floors and the closed-form range optimizer. verify_owner_floors.py passes246124 checks over1400 seeded profiles, including direct primitive evaluation at optimizer attainers, each recipient's exact endpoint floor, actual underreport tests, box-inclusion antitonicity, the pointwise mechanism sandwich, and328 grid-only exactness checks. It runs with explicit require exceptions under python -O. These are floating-point diagnostics with scaled tolerances, not certificates of the continuum theorem. The conventional proof above carries the universal quantifiers. The maximum sampled funding ratio1.466094 does not imply a stronger uniform bound.

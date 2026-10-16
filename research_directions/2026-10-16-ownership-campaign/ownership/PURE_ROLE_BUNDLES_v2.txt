@@ -1,0 +1,167 @@
+SHARP FUNDING WITH SEPARATE RESOURCE ROLES AND ARBITRARY OWNER BUNDLES
+16 October 2026. Self-contained candidate proof, awaiting independent audit.
+Supersedes no frozen file; v1 and SPLIT_OPERATOR_RULE_v1 remain preserved.
+This note makes no historical-priority or arbitrary mixed-role claim.
+
+THEOREM AND FIXED MODEL
+Fix a finite set of m>=1 physical pods. Pod i has hardware h_i, local power L_i,
+and access to shared grid P. An output unit uses one hardware unit and either
+one unit of its pod's local power or one grid unit. Partition hardware rows into
+nonempty fixed blocks K_b owned by actual B_b, and local rows independently into
+nonempty fixed blocks J_a owned by actual A_a. One actual owner C owns P. All A,
+B,C identities are distinct. Partitions may cross arbitrarily, but each resource
+row has exactly one owner. Reports are all nonnegative real capacities; actual
+owners may jointly underreport any part of their own coordinate bundle. Utility
+is payment, and underreports are binding.
+
+For any public theta in[0,1], a nonnegative all-profile payment rule covers every
+coalition, is own-bundle monotone, and pays each A_a at least theta times its
+grand-coalition marginal M_a. Its total is at most(1+theta/4)T, where T is the
+actual grand production. Evaluation takes O(m+number of actual owners) arithmetic
+operations. The uniform factor is sharp over all counts and partitions, by the
+included one-local-owner lower family. This is not sharpness for each individual
+fixed partition. Neither private costs nor strategic identity changes are allowed.
+
+NOTATION AND GRAND MARGINALS
+ell_i=min(h_i,L_i), r_i=h_i-ell_i,
+L=sum ell_i, Q=sum r_i, H=L+Q,
+R=min(P,Q), G=min(P,H), T=L+R,
+D=G-R=min(L,(P-Q)_+), M=T-G=L-D=min(L,(H-P)_+).
+For hardware owner b let e_b=sum_{K_b}ell_i, r_b=sum_{K_b}r_i.
+For local owner a let ell_a=sum_{J_a}ell_i.
+Removing A_a changes local total from L to L-ell_a and residual from Q to
+Q+ell_a, while retaining all hardware. Therefore
+ M_a=ell_a+min(P,Q)-min(P,Q+ell_a)
+    =(ell_a-(P-Q)_+)_+=(ell_a-D)_+.
+
+RULE AT THETA=1
+For L>0, define clip(u)=min(1,max(0,u)) and
+ x_b=e_b clip((P-Q+r_b)/L), X=sum_b x_b,
+ y_Bb=x_b, y_Aa=ell_a M/L,
+ y_C=G-(X-L/4)_+=min(G,G-X+L/4).
+At L=0, pay C=G and every other owner zero. The A owners jointly receive M.
+
+NONNEGATIVITY AND FLOORS
+Since P-Q+r_b=P-sum_{c!=b}r_c<=P,
+ 0<=X<=L min(1,P/L)=min(L,P)<=G.
+Hence y_C>=0. All other payments are nonnegative. As ell_a<=L and 0<=D<=L,
+ y_Aa=ell_a-ell_a D/L>=max(0,ell_a-D)=M_a.
+All payments vanish at T=0. An owner whose entire own resource bundle is zero
+receives zero; for C this follows P=0=>X=G=0. All statements include L=0.
+
+ACTUAL-OWNER INCENTIVES
+A_a: all hardware, P and L_-a=sum_{i outside J_a}ell_i are fixed under its
+reports. With K=(H-P)_+ fixed, its payment as a function of u=ell_a is
+ u min(1,K/(u+L_-a))=min(u,K*u/(u+L_-a)),
+using value zero when the denominator is zero. Both branches are nondecreasing
+for u>=0 and have the same value at their junction. Every coordinatewise
+increase of A_a's whole bundle increases u, proving its incentive claim.
+
+B_b: under its whole bundle, p_b=(P-sum_{c!=b}r_c)_+ and e_-b=sum_{c!=b}e_c
+remain fixed. Its payment equals
+ min(e_b,p_b*e_b/(e_-b+e_b)),
+with value zero if the denominator vanishes. This is nondecreasing in e_b;
+e_b=sum_{K_b}min(h_i,L_i) increases with the entire hardware bundle. Changes
+in r_b cancel out of p_b. Hardware/local-cap and zero-boundary cases are covered.
+
+C: when L>0 all e_b,r_b are fixed; each x_b(P) is nondecreasing and
+e_b/L-Lipschitz. Hence X is nondecreasing and1-Lipschitz. For P>=H it is
+constant at L. Consequently, for P'<=P,
+ 0<=X(P)-X(P')<=G(P)-G(P').
+The positive-part function is nondecreasing and1-Lipschitz, so y_C is
+nondecreasing. If L=0, y_C=min(P,H) has the same property.
+
+ALL COALITIONS: BASIC REDUCTION
+Given a coalition, let I be the union of its included hardware blocks K_b and
+let J be the union of its included local blocks J_a. Write K=I intersect J.
+With no C, its production is ell(K). With C, it is
+ ell(K)+min(P,r(I)+ell(I\K)).
+Its local owners receive (M/L)ell(J)>=(M/L)ell(K). Thus it suffices to prove
+coverage for every hardware-block union I and every row subset K subset I with
+the accounting contribution (M/L)ell(K). No fictitious owners are introduced.
+Since x_b>=e_b D/L, coalitions without C receive at least
+ (D/L)ell(I)+(M/L)ell(K)>=ell(K).
+We handle coalitions with C next.
+
+GRID-ONLY INEQUALITY, VALID FOR ALL P WHEN L>0
+Normalize capacities and payments by L, so sum_b e_b=1. For hardware-block
+union I set s=ell(I), r=r(I) and x_out=sum_{b excluded}x_b. For every excluded b,
+ Q-r_b>=r, hence x_b<=e_b clip(P-r). Therefore
+ x_out<= (1-s)clip(P-r).
+Put a=P-r; then H_I=r+s. Elementary case analysis gives
+ (1-s)clip(a)-(a-s)_+<=s(1-s)<=1/4:
+ a<=0 gives0; 0<=a<=s gives(1-s)a<=s(1-s);
+ s<=a<=1 gives s(1-a)<=s(1-s); a>=1 gives1-a<=0.
+It follows x_out-(P-H_I)_+<=1/4, equivalently
+ min(P,H_I)-x(I)<=P-X+1/4.
+The left side is also<=P. When P<=H, G=P, so it is at most
+ y_C=min(P,P-X+1/4). For P>=H, x_b=e_b and y_C=H-3/4=Q+1/4>=Q,
+which directly covers min(P,H_I)<=ell(I)+Q. Restoring scale, we have
+ y_C+x(I)>=min(P,H_I) for every hardware coalition.
+
+CASE P<=Q
+Here M=L. For included local rows K, the payment ell(K) is direct. The grid-only
+inequality gives y_C+x(I)>=min(P,H_I)>=min(P,r(I)+ell(I\K)), completing coverage.
+
+CASE Q<P<H
+Normalize L=1 again and put delta=P-Q in(0,1),
+ z_b=e_b min(r_b,1-delta), Z=sum_b z_b.
+Then x_b=delta e_b+z_b, X=delta+Z, M=1-delta and
+ y_C=min(P,Q+1/4-Z).
+For the coalition put s=ell(I\K), r=r(I^c), o=ell(I^c)<=1-s.
+Subtracting its local payment, the remaining grid deficit is
+ d=min(P,r(I)+s)-delta*s-z(I).
+This is<=P by nonnegativity. Moreover,
+ d-Q+Z=min(delta,s-r)-delta*s+z(I^c)
+        <=min(delta,s-r)-delta*s+o min(r,1-delta)
+        <=min(delta,s-r)-delta*s+(1-s)min(r,1-delta).
+If r<=1-delta, set t=delta+r in[0,1]. The final expression is
+ min(t,s)-s*t.
+For t<=s it equals t(1-s)<=s(1-s); for t>=s it equals s(1-t)<=s(1-s).
+If r>=1-delta, then s-r<=delta and the expression is1-delta-r<=0.
+In every case the expression is<=s(1-s)<=1/4. Therefore
+ d<=Q+1/4-Z as well as d<=P, hence d<=y_C. Coverage follows.
+
+CASE P>=H AND ZERO CASES
+For P>=H and L>0, M=0, x_b=e_b and y_C=Q+L/4>=Q. Every coalition with C
+has worth at most H_I=ell(I)+r(I)<=ell(I)+Q, and is covered. Coalitions without
+C were already covered by hardware payments. The cases agree at saturation.
+If L=0, coalitions without C have value zero and those with C have worth at
+most min(P,H_I)<=G, which C's payment covers. This finishes every real profile.
+
+BUDGET AND ALL THETA
+At theta1, total is exactly
+ M+X+G-(X-L/4)_+=T+min(X,L/4)<=T+L/4<=5T/4.
+Use the efficient baseline y_Aa=0, y_Bb=e_b, y_C=R. Its incentives follow
+from constant local payments, own-hardware monotonicity of e_b, and own-grid
+monotonicity of R. For coalition hardware I and local rows K, without C its
+hardware payment covers ell(K). With C, put a=ell(I\K). Since Q>=r(I),
+ ell(I)+R=ell(K)+a+min(P,Q)
+          >=ell(K)+min(P,a+r(I)),
+its coalition value. The baseline's total is T.
+Mix the theta1 rule and baseline with fixed weights theta and1-theta. This
+preserves all incentives, coverage and nonnegativity, pays each A_a at least
+theta M_a, and has total T+theta min(X,L/4)<=(1+theta/4)T.
+
+UNIFORM SHARPNESS (INCLUDED ONE-BLOCK FAMILY)
+Take one local operator A, m even hardware owners, h_i=L_i=1, P=m/2.
+Then T=m and M_A=m/2. Let a,c,x=sum_i y_Hi denote arbitrary eligible payments.
+Coverage of A with all hardware gives a+x>=m. Averaging grid-plus-hardware
+coverage over all m/2-element hardware subsets gives c+x/2>=m/2. The floor
+gives a>=theta m/2. Multiply these three inequalities by1/2,1,1/2 respectively
+and add: a+c+x>=m+theta m/4. Thus no smaller universal factor is possible.
+
+EXACT FAILURE OF NAIVE HARDWARE MERGING
+If one actual owner holds both hardware pods, local capacities are(1,1), and
+P=1, the original PER-POD hardware payments sum to1 at h=(1,1), but only3/4
+at h=(3/2,1). Specifically they change from(1/2,1/2) to(1/2,1/4). Increasing
+an actual owner's report would lower its payment. The owner-block formula here
+pays1 at both profiles. Thus the theorem uses a corrected account definition;
+it does not rely on a false generic owner-merging principle.
+
+LIMITS
+Actual owners may not span hardware, local-power and grid roles. The proof also
+does not cover overlapping ownership contributions to one physical resource
+coordinate. The payoff floor concerns actual local-only operators. No measured
+GPU gain, private-cost incentive, coalition strategyproofness, strict incentive,
+or historical-priority claim follows.

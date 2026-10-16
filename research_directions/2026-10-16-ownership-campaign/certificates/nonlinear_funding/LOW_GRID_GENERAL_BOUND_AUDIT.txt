@@ -1,0 +1,99 @@
+INDEPENDENT AUDIT: LOW-GRID 8/5 AND GENERAL 27/16 FUNDING
+16 October 2026. Codex subagent audit of root/general_funding.
+Verdict: PASS on the new mathematical reduction and exact certificate. No
+substantive defect found. Existing power/high-grid theorems remain explicit
+dependencies; this audit does not replace their separate proof reviews.
+
+FILES EXAMINED
+ root/general_funding/LOW_GRID_EIGHT_FIFTHS_AND_GLOBAL_27_16.txt
+ root/general_funding/build_low_grid_certificate.py
+ root/general_funding/verify_low_grid_certificate.py
+ root/general_funding/low_grid_certificate.json
+The positive dual aggregation and subset-role lemmas are existing dependencies
+from this lane and were independently reviewed by root/Fable. I rechecked their
+interface to the new theorem; I do not describe this as a fresh independent
+review of my own earlier proofs.
+
+1. ACTUAL-OWNER MOMENT REDUCTION
+Normalize H=F=1 in P<=H<=P+M. Coalition coverage gives Z>=M and the local
+budget gives Z<=CM. Since sum min(b_i,1)>=min(sum b_i,1), hardware bottleneck
+implies S>=1. P<=1 gives S<=1+Z. These statements allow arbitrary full overflow.
+
+The potentially delicate constraints Z+v<=1+M and Z+v<=3/2 are valid without
+an omitted overflow correction. Write z_i=U_i+V_i in physical hardware/local
+roles. U_i<=a_i for each actual owner. On negative set J the account is
+uncapped, and a_i-d_i<=a_i-U_i. All omitted a_i-U_i are nonnegative, so
+ v<=sum_i(a_i-U_i)=1-Z+L.
+Branchwise L<=M is immediate. For hardware-short branches, L=q rho T<=T/2.
+For hardware-long branches, L=(1-q)T and H>=rho T; the inequality
+2(1-q)<=rho is 1-exp(-(rho-1))<=rho-1. Hence L<=H/2. This proves both rows.
+
+On J, zminus+v=sum_J(a_i-p_i)<=1, including equality and zero payments. The
+subset-role bound gives zminus>=v-(4/3)(1-M), with the same actual subset J.
+The elementary bounds zminus<=Z and M<=1 are also valid. Tied recipients may
+carry local payment; replacing zplus by Z-zminus is an enlargement, not an
+identity. Finally Wplus<=P+Z-S<=1+Z-S follows from the exact cap identity.
+
+2. ENVELOPE AND NEGATIVE-SAVING INTERFACES
+The imported PD5 applies separately to every actual owner's full bundle of
+underreports and permits caps and pool switches. Its scalar t includes that
+owner's restored capped account. All aggregate quantities here come from the
+full profile; no common maximizing counterprofile is presumed.
+
+For a negative recipient, z_i+g_i<=1, so z_i*g_i<=1/4. Since K^2<3 and
+L(v) decreases, L(K^2*z_i*g_i)>L(3/4)=4/(3sqrt(e))>4/5. Also
+delta=CM-Z<=cM<=c. Thus the saving (2/5)exp(1-S-c)*v is a valid lower bound
+even with arbitrary full overflow elsewhere. A tied recipient has E_i<=a_i:
+restoration preserves d_i'<=d_i=a_i, and its outer payment is at most the
+larger of its two own coordinates. This checks equation (4) including ties.
+
+3. EVERY INTERVAL-BOUND DIRECTION
+On S in [lo,hi], lambda=1-q(1+1/u-1/S) is bounded above using qlo and lo;
+the multiplier of q is positive. eta is bounded above with qhi/lo. A lies
+between Alo and Ahi, with Alo>0, so mu<=3*etahi^2/(4*Alo). The negative
+saving uses the lower Taylor bound at hi-1+cbar. Signed Taylor remainders
+justify the odd/even exponential bounds for every nonnegative argument; an
+alternating-series term-size assumption is unnecessary.
+
+Every coefficient enlargement multiplies a nonnegative expression:
+S-1, v, Z-zminus, and 1+Z-S. Replacing S by hi only in the constant positive
+term and by lo in the admissible response remainder is in the correct direction.
+The 11 LP rows exactly express the relaxed constraints, in variables
+(M,Z,v,zminus,t). The coordinate caps
+(1,Cbar,1,Cbar,p*Cbar) are valid for all these nonnegative variables.
+
+4. INDEPENDENT EXACT REPLAY
+I wrote replay_low_grid_certificate_independent.py without importing either
+root's builder or verifier, and reconstructed the matrix with named mathematical
+rows. It parses the saved dual weights as untrusted rational proposal data,
+recomputes all coefficients, residual corrections, and strict target inequalities,
+and checks the contiguous closed partition from 1 to 1+148/125. It uses only
+the Python standard library and exact Fraction arithmetic. It has explicit
+exceptions, not assertions.
+
+Both normal and -O runs PASS with byte-identical output:
+ low_grid_independent_replay.json
+ low_grid_independent_replay_optimized.json
+All 128 real intervals pass. The largest exact bound is in those files; its
+display is 1.578190034444061, leaving over 0.0218 below 8/5. There are 214
+positive coordinate residuals from rounded dual weights; all are explicitly
+charged using the coordinate caps. They are not ignored as solver tolerances.
+
+I also ran root's separate verifier with python3 -I -O. Its PASS output is
+low_grid_parent_verifier_replay.json. No optimizer, floating numerical search,
+or finite report grid was used for either replay. The builder's optimizer is
+only a way to propose coefficients of the saved rational inequalities.
+
+5. GLOBAL COMPOSITION AND LIMITS
+The three full-profile regions are exhaustive: physical power bottleneck;
+P>=H>0; and P<=H<=P+M. The first already has C^2 funding and the second has
+27/16 funding. The new certificate proves 8/5 on the third. C^2<27/16 and
+8/5<27/16, so the stated global result follows for the SAME original symmetric
+actual envelope. Full-profile region conditions do not constrain the deviations.
+
+H=0 gives zero payments. If F=0 with H>0, then P=M=0 and all own underreports
+also yield zero opposing accounts, so payments vanish. Boundary equalities are
+covered by the adjacent proofs. No efficient exact evaluation algorithm, sharp
+global constant, unrestricted mechanism lower bound, or novelty conclusion is
+inferred. The previous asymmetric range rule is a different mechanism; the
+theorem correctly compares guarantees without claiming pointwise domination.

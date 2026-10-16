@@ -1,0 +1,90 @@
+INDEPENDENT AUDIT: WEIGHTED PRODUCTION ROBUSTNESS FUNDING
+16 October 2026. Verdict: mathematical PASS; one minor wording correction noted.
+Source: mixed/outer_scalar/WEIGHTED_PRODUCTION_ROBUSTNESS_FUNDING.txt and
+verify_weighted_robustness_constants.py. The common payment ceilings, weighted
+actual-coalition coverage floor, and negative-gap theorem are explicit dependencies.
+
+1. ETA AND THE ACTUAL-COALITION FLOOR
+Each U_k is a ceiling on recipient k's local payment after EVERY actual owner's
+underreport, evaluated relative to one full profile. It is not a marginal
+contribution ceiling. The incoming half-gap bound supplies (1+z_k)/2; the
+coordinate and total-output ceilings are independently valid. Taking their
+minimum is safe. U_k=0 implies every counterfactual local payment is zero,
+so assigning that recipient weight one causes no division or cap problem.
+
+Every threshold set excludes the deviating actual owner. Its resources are
+therefore unchanged during that underreport, and local coalition coverage gives
+opponent capped mass >=pi-u_i+L_i. Because every threshold coalition is a subset
+of the full owner set, 0<=L_i<=m. Thus eta=max_i(m-L_i) lies in [0,m]. No
+simultaneous attainment of the weighted inequalities or independent local
+technology responses is assumed.
+
+2. CAP-SAFE POSITIVE COMPARISON
+Restore the actual deviator's outer hardware, grid and own opposing coordinate
+to their full values as monotonic upper comparisons. This need not be an actual
+report; it is used only to upper-bound the actual envelope. Its full capped
+coordinate d_i>=u_i implies total capped opposing mass at least
+d_i+pi-u_i+L_i>=pi+m-eta>=S-(Z-m)-eta.
+All other coordinates retain the uniform coalition floor. This retains actual
+caps; it does not use the invalid uncapped complement-surplus shortcut.
+
+For completeness I verified the global scalar majorant k(t)<=exp(1-t)/2.
+It is equality for t>=1. For 0<t<1, set
+h(t)=exp(1-t)+exp(1-1/t)-2. Its derivative has the sign of
+exp(t-1/t)/t^2-1. The logarithm t-1/t-2log t increases to zero at one because
+its derivative is (1-1/t)^2. Hence h decreases to h(1)=0, proving h>=0.
+The t=0 case is the continuous limit. Even if the total lower bound is negative,
+apply this majorant to the actual nonnegative total first. This gives R4 with
+A=exp(epsilon+eta), where epsilon=Z-m, in the stated direction.
+
+MINOR WORDING CORRECTION: Section 2 says 'L_i may exceed one.' In this
+normalization L_i<=m<=1. The FULL floor pi-u_i+L_i may exceed one. This sentence
+should refer to that full floor. No proof estimate uses the incorrect wording.
+
+3. NEGATIVE SAVINGS AND ROLE BUDGET
+The imported negative theorem supplies B=(4/5)exp(epsilon-cm), since its slack
+is delta=cm-epsilon. Its arbitrary-overflow scope is exactly the needed one.
+For the actual negative subset, a_i-d_i<=a_i-U_i^hw, and every omitted
+a_i-U_i^hw is nonnegative. Thus v<=1-Z+L_power with
+L_power<=min(m,1/2), yielding v<=b-epsilon, b=min(1,3/2-m).
+The use of this role accounting does not strategically split an owner.
+We have 0<=b-epsilon<=1 and A>=1>=B, so replacing v by b-epsilon increases
+the funding upper bound. This step remains valid with full overflow.
+
+4. FULL REAL SCALAR MAXIMIZATION
+For theta=B/A=(4/5)exp(-cm-eta), direct differentiation gives the unique
+maximum over r>=0 at r*=1-(1-theta)(b-epsilon)>=theta>0. Substitution yields
+c*exp[eta+b-theta(b-epsilon)], including the cancellation of epsilon outside
+the last term. This exponent increases with epsilon, and after epsilon=cm
+it increases with eta because b-cm>=0. Setting eta=1/4 is a valid enlargement,
+even when the actual eta<=m<1/4.
+
+I rederived both m derivatives in R9. The first is positive on [0,1/2]; the
+second is below -3/25 on [1/2,1]. Therefore the maximum is at m=1/2. With
+x=c/2<3/32, monotonicity in x and the signed cubic exponential lower bound give
+exp(-1/4-x)(1-x)>5/8. This makes the exponent strictly below 3/4 and funding
+strictly below 1+exp(-1/4)/2<7/5<C^2. Equality eta=1/4, m=0, zero responses,
+and arbitrarily large opposing total S are included.
+
+5. GENERAL CERTIFIED FLOORS AND PRODUCTION RESERVE
+The abstract-floor extension is valid: for any report-uniform R_i>=pi_-i,
+eta=max(0,max_i[m+pi_-i-R_i]) lies in [0,m] and gives exactly the lower bound
+used in Section 2. The finite cap-choice LP contains every actual counterprofile
+payment vector and its objective is nonnegative above the grid baseline, so
+it satisfies this premise. A maximum of independent valid floors remains valid.
+
+Every weighted threshold set contains N\(J union {i}), since ordinary weights
+equal one. Thus the stated production-reserve deletion condition is sufficient
+for eta<=1/4. It is not necessary and does not merge the exceptional owners.
+The at-most-five cap count in the remaining grid-tail cell is also valid using
+2u_k+z_k>1 for each exceptional recipient. The floor reduction is an arithmetic
+procedure over actual coalitions, not an exact envelope algorithm.
+
+6. EXACT REPLAY AND LIMITS
+All seven source Fraction checks pass under python3 -I -O. The replay is saved
+in weighted_robustness_parent_checks_replay.json. I independently checked the
+derivative signs, cubic product, exponent cancellations and coefficient directions;
+the replay checks only the exact constants used in that analytical proof.
+No finite profile grid or floating optimizer is used to establish the class
+theorem. The general C^2 question remains open when the sufficient statistic
+eta exceeds 1/4, and eta is not claimed necessary.

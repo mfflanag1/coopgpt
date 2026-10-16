@@ -1,0 +1,46 @@
+EXACT RECIPIENT COUNTERFACTUAL BOXES, RELAXED JOINTLY
+16 October 2026. Follow-on structural refinement of OWNER_SPECIFIC_FLOORS.txt.
+
+For each pair of distinct actual owners i,k define
+ m_k^i=min_{0<=b'_i<=b_i}z_k(b'_i,b_-i),
+ M_k^i=max_{0<=b'_i<=b_i}z_k(b'_i,b_-i).
+Define Dbox_i by the same own-coordinate bounds and total ceiling as D_i in OWNER_SPECIFIC_FLOORS.txt, and by the opponent bounds
+ p_k+m_k^i<=c_k<=p_k+M_k^i (k!=i).
+Set Rbox_i=max_{c in Dbox_i}Phi_i(H,c).
+
+Both extrema are exact, attained values. On a branch with recipient k's hardware account a_k>=b_k, the minimum is attained by keeping i's hardware and deleting i's local power; the maximum is attained by deleting i's hardware and keeping its local power. Reverse these endpoints if a_k<=b_k. At equality the payment is constant. The global cross-sign proof in OWNER_SPECIFIC_FLOORS.txt applies across all pool switches, ties, caps and zero boundaries. Sum these recipientwise branch extrema because the own report coordinates on separate branches are independently bounded.
+
+This box is a JOINT RELAXATION, even though each scalar bound is exact. Distinct recipients can require conflicting reports to attain their extrema. No simultaneous attainability is asserted.
+
+EXACT NONATTAINMENT EXAMPLE. One local branch has fixed recipient A with accounts(1,0), fixed recipient B with accounts(0,1), and reporting owner i with full accounts(1,1). Let i underreport to(x,y) in[0,1]^2. If x>=y, the power pool is short, neither recipient account is capped, and the recipient payments are(q,1-q); if x<=y they are(1-q,q). Their sum is exactly1 for every actual underreport. Each recipient separately has minimum1/(2e) and maximum1-1/(2e), attained at opposite endpoints(1,0) and(0,1). The product of the two exact scalar ranges therefore contains points whose sum is below1 or above1, although no physical underreport attains them. This also explains why the box rule is not asserted to compute E.
+
+ALL-PROFILE GUARANTEES. Enlarging i's local report enlarges its underreport box, so every m_k^i weakly decreases and every M_k^i weakly increases. Its own z_i ceiling and Lbar weakly increase, as does its own H_i. Thus its feasible auxiliary box expands and the primitive's own-account monotonicity gives own-report monotonicity. Increasing only its shared-power report by delta translates the own auxiliary coordinate by delta and shifts its own bounds and total ceiling identically. These coordinate arguments compose to whole-bundle truthfulness for all real reports of the same fixed actual owners.
+
+The full vector p+z belongs to the box. For any actual underreport, restore i's shared-power and hardware outer accounts as in OWNER_SPECIFIC_FLOORS.txt; its opposing vector remains inside the recipient-specific bounds, own ceiling and total ceiling. Therefore
+ N_i<=E_i<=Rbox_i<=Rfloor_i<=Rbar_i<=R_i.
+Coalition coverage and total funding at most7F/4 transfer. No sharper uniform constant is claimed.
+
+EXPLICIT OPTIMIZER. Fix an owner i. Put a=H_i, H=sum H_k, beta=p_i+z_i, K=P+Lbar. Let lower vector ell satisfy ell_i=p_i and ell_k=p_k+m_k^i. Let u_k=p_k+M_k^i for k!=i. Set Lminus=sum_{k!=i}ell_k and Uminus=sum_{k!=i}u_k. The feasibility conditions
+ beta+Lminus<=K, ell_i<=beta, ell_k<=u_k
+hold because the full base vector is feasible. For H=0 the result is zero. For n=1 the result is F.
+
+SHORT OPPOSING POOL. This regime exists precisely when sum ell<=H. Put
+ U=min(K,H,beta+Uminus), T0=beta+Lminus,
+ T*=U if beta<=a, and T*=min(U,T0) if beta>=a.
+At a fixed T, the largest feasible own coordinate is c_i=min(beta,T-Lminus); it is feasible because T<=beta+Uminus, T>=sum ell, and interval sums fill every intermediate total. Phi_i is affine increasing in c_i with coefficient1-q(T)>0 at fixedT, where q(T)=exp(1-sum_k min(H_k,T)/T)/2. Hence choose this own coordinate.
+Before T0 all opponents can stay at their lower bounds while only i's account increases, so the optimized payment is nondecreasing by primitive own monotonicity. After T0 the own account is beta; q(T) increases, and min(a,T)-beta is nonnegative and nondecreasing if beta<=a, while it is the fixed nonpositive a-beta if beta>=a (T>=T0>=beta). Thus the displayed T* is optimal. Choose c_i as above and fill opponents within [ell_k,u_k] to total T*. Evaluate the primitive at this vector.
+
+LONG OPPOSING POOL. This regime exists precisely when K>=H and beta+Uminus>=H. Write d=min(beta,H),
+ Sminus=sum_{k!=i}min(ell_k,H),
+ Wminus=sum_{k!=i}(ell_k-H)_+,
+ Vminus=sum_{k!=i}min(u_k,H).
+If d>=a, take rho=max(1,(d+Sminus)/H). Set own c_i=beta, opponents initially to ell, and increase opponents only if needed to make total H. This attains the smallest possible capped total, and it is feasible by the regime criterion. The value is a+exp(1-rho)(d-a)/2.
+If d<=a, take rho=min((d+Vminus)/H,(K-Wminus)/H). Set own c_i=beta and increase opponents from ell toward min(u_k,H) until K is exhausted or all those caps are attained. Opponents whose lower bound already exceeds H remain at their lower bound. This attains the largest possible capped total and yields the same value formula. If total remains below H after exhausting all useful cap increments, the claimed regime cannot hold: either total budgetK<H, or beta+Uminus<H, because once all accounts are below H or capped atH the capped sum at leastH is equivalent to sufficient feasible total. Hence an attaining vector can always be chosen in the long regime.
+
+Why is fixing the own account at beta legitimate? For any fixed own c_i=x<=beta, first optimize the capped total as above whenever the long regime is feasible. If x<=a, the maximum capped ratio is nondecreasing in x; both the gap min(x,H)-a and the resulting exponential-weighted negative gap increase with x. If x>=a, the minimum capped ratio is max(1,(min(x,H)+Sminus)/H); before x=H its slope is at most1/H, and differentiating exp(1-rho)(x-a) gives a nonnegative derivative because0<=x-a<=H. AboveH the value is constant. The optimized value is continuous when x=a and when cap branches change. Increasing x does not destroy feasibility: beta+Lminus<=K and each opponent interval is fixed. Therefore the maximal feasible own account beta is optimal.
+
+Take the maximum of the applicable short/long values. The formulas are explicit and the attainers use only interval filling; there is no numerical continuous optimization oracle. Computing all endpoint extrema is O(n^2 m) elementary/exponential operations for n actual owners and m branches. For each owner the optimizer uses O(n) further operations. Exact transcendental output and incentive-safe finite-precision rounding are separate implementation questions.
+
+SCOPE. This gives a computable, truthful upper approximation to the actual nested envelope while retaining every recipient's exact counterfactual range. It does not identify the actual envelope, recover joint counterfactual constraints, prove a better uniform funding constant or extend the technology beyond depth two. Its finite implementation checks must not be interpreted as a continuum proof.
+
+FINITE CORROBORATION. owner_box_reference.py implements the endpoint extrema and closed-form optimizer. verify_owner_boxes.py passes1146058 explicit exception-based checks under python -O:1800 production profiles,12000 independently generated generic optimizer domains, direct primitive values at feasible claimed attainers, arbitrary feasible auxiliary competitors, physical underreports, pointwise refinement and box inclusion. The generic domains are generated without the local-production formulas, reducing shared-assumption risk in the optimizer checks. All checks use floating-point values with scaled tolerances. The largest sampled funding ratio1.473405 is diagnostic only.

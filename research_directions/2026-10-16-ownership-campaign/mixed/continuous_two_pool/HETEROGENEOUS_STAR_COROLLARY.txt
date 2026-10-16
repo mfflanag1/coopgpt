@@ -1,0 +1,87 @@
+HETEROGENEOUS HARDWARE AND ONE ADDITIVE POWER POOL: EXACT 31/27 RULE
+16 October 2026. Corollary of WATERFILL_PRODUCT_THEOREM.txt. The fractional-
+knapsack identity and positive-sum composition are established elementary
+ingredients; no historical novelty is claimed for those ingredients.
+
+MODEL
+Fix finitely many actual owners i=1,...,n and hardware types j=1,...,m, with
+no bound on n or m. Public activity values v_j>0 and power intensities e_j>0
+are fixed across all reports. Owner i reports hardware g_ij>=0 and power q_i>=0
+in predetermined eligible coordinates. Reports are binding componentwise
+underreports. Owners may hold arbitrary mixed hardware and power bundles.
+For a coalition S, let g_j(S)=sum_{i in S}g_ij and q(S)=sum_{i in S}q_i. Its
+production value is
+  F(S)=max sum_j v_j x_j,
+       0<=x_j<=g_j(S),  sum_j e_j x_j<=q(S).
+Payoffs are the mechanism's nonnegative payments. There are no private
+opportunity costs, energy costs, utilities from withheld resources, or request-
+level latency claims in this model.
+
+THEOREM
+There is an all-profile truthful, coalition-covering rule with
+  sum_i y_i <= (31/27) F(N).
+It applies to all nonnegative real reports and arbitrary fixed mixed owners.
+For rational reports and rational public v_j,e_j, its payments can be computed
+exactly as rationals in time polynomial in the full binary input length.
+
+PROOF: FIXED POSITIVE DECOMPOSITION
+Set a_j=v_j/e_j and reorder types once by a_1>=...>=a_m>0; a_{m+1}=0.
+Ties use any fixed order independent of reports. Write delta_k=a_k-a_{k+1}>=0.
+Changing variables u_j=e_j x_j gives a fractional-knapsack problem. An optimal
+greedy solution fills the higher a_j first, so its cumulative allocated power
+through k is min(q(S),sum_{j<=k}e_j g_j(S)). Summation by parts yields
+  F(S)=sum_{k=1}^m delta_k min(q(S),sum_{j<=k}e_j g_j(S)).             (1)
+The statement remains valid with ties, zero capacities and unused power.
+
+For each k retain EXACTLY the same actual-owner set. Give actual owner i the
+two accounting inputs
+  h_ik=sum_{j<=k}e_j g_ij,  q_i.
+Apply the water-fill product mechanism to these two accounts and denote its
+actual-owner payment y_ik. Define y_i=sum_k delta_k y_ik; omit zero weights.
+There are no strategic clones and no identity changes between components.
+Every owner's hardware coordinate increase weakly increases its own h_ik in
+the appropriate components and leaves all opponents' inputs fixed. Its power
+increase raises its own second input in every component. The component theorem
+therefore proves own-coordinate monotonicity of y_i. Sequential increases
+prove monotonicity under arbitrary simultaneous whole-bundle increases.
+Every coalition is covered componentwise, and equation (1) gives
+  sum_{i in S}y_i >=sum_k delta_k min(q(S),sum_{j<=k}e_j g_j(S))=F(S).
+Likewise sum_i y_i<=sum_k delta_k(31/27)F_k(N)=(31/27)F(N).
+
+EXACT EVALUATION AND BIT COMPLEXITY
+The component rule contains no exponentials or irrational operations. For a
+nonzero component, sort its n long-account caps together with the single dummy
+cap M. On each resulting interval its water equation is linear. Its level is
+  lambda=(A+M-sum of caps already saturated)/(number of unsaturated caps).
+The exact rule uses that rational level, at most n+1 rational factors for its
+coefficient, and rational additions/multiplications for the n payments.
+All-zero components return zero; the D=A boundary uses the rational maximal
+cap and coefficient 1/2. Sorting and comparisons can use integer cross-products.
+
+Let L be the binary input length of the explicit lists of all public numbers
+and owner reports. Then n,m<=L. The transformed inputs e_j g_ij, prefix sums,
+public ratios and differences have polynomial bit length: a common denominator
+can be the product of the input denominators, whose bit lengths add, and the
+numerator gains at most polynomially many bits from sums and products.
+Every cap and water level is a rational expression involving one such prefix
+sum, sums of at most n caps, and division by an integer at most n+1. Each has
+polynomial bit length. The product defining a coefficient contains at most
+n+1 such rational ratios, so its numerator and denominator bit lengths again
+add and remain polynomial. Each final payment is a sum of at most m weighted
+component payments; using the product of their denominators still gives only
+a polynomial bit bound. This argument bounds unreduced fractions as well, so
+exact fraction reduction cannot invalidate it.
+
+Sorting activities requires O(m log m) rational comparisons, prefix accounts
+require O(mn) arithmetic operations, and the component computations require
+O(mn log n) arithmetic operations and comparisons in total (with the usual
+constant-size interpretation when n=1). All operands have polynomial bit length;
+standard integer arithmetic therefore yields a polynomial-time exact algorithm.
+
+INTERPRETATION AND LIMITS
+Hardware types may have different public work values and energy intensities.
+The common power entitlement is additive across actual owners. This gives a
+precise divisible production abstraction for heterogeneous compute and power,
+not a claim that measured AI-serving workloads satisfy that abstraction.
+The old nested shared/local-power theorem must retain its original exponential
+primitive: its separate role inequalities are not consequences of this corollary.

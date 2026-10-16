@@ -1,0 +1,153 @@
+RECIPIENT RESPONSE AND GRID-FUNDED CAP COMPENSATION
+16 October 2026. Candidate general structural lemma. Independent audit pending.
+Uses the original exponential two-input primitive with fixed actual owners.
+No historical-priority claim; this is not yet a C^2 funding theorem.
+
+THEOREM 1: ONE RECIPIENT, MANY INDEPENDENT OWNER DEVIATIONS
+On one local branch let H be total hardware, and let z_k be the full payment
+to a fixed recipient k. For EACH actual owner i choose any own-bundle underreport,
+independently of the choices for the other owners, and let z_k^i be k's payment
+at that resulting profile. Then
+ sum_i (z_k^i-z_k)_+ <= H-z_k.                            (R)
+The i=k summand is zero by own-report monotonicity. All capacities are arbitrary
+nonnegative reals and the number of owners is unrestricted.
+
+For multiple branches, let z_k be the aggregate local payment and H aggregate
+hardware. Positive-part subadditivity gives the same inequality(R), even when
+each owner changes its whole multi-branch bundle simultaneously.
+
+PROOF: RECIPIENT CROSS-MONOTONICITY
+Hold recipient k's own two reports fixed. It benefits from withholding by
+others only in the input of which k itself holds MORE. It cannot benefit from
+others withholding the input of which k holds LESS. To verify, write its lesser
+own amount as a and greater one as b. When the a-pool is short with total T,
+its payment is a+q[min(b,T)-a]. Increasing others' a-pool reports increases T,
+the cap min(b,T), and q; increasing others' b-pool reports decreases q. When
+the b-pool is short, its payment is b-q(b-a), because its opposite account a
+is uncapped. Increasing others' b-pool reports increases q; increasing others'
+a-pool reports decreases q. All boundary formulas agree. Thus an arbitrary
+mixed-owner deviation can only be more favorable to k after restoring the
+adverse coordinate and fully deleting the beneficial coordinate. No actual
+owner is split: this only compares two permitted reports by the same owner.
+If a=b, k's payment is constant and(R) is immediate.
+
+CASE A: RECIPIENT'S HARDWARE IS ITS GREATER OWN INPUT
+Let its hardware be b and own local resource be a<=b. The beneficial coordinates
+are other owners' hardware reports. The magnitude of the derivative of k's
+payment with respect to any such coordinate is at most1/2. If that input pool
+is long, the derivative magnitude is q[min(b,T)-a]/T<=q<=1/2 when uncapped,
+and zero when capped. If that input pool is short, its magnitude is
+ (b-a)q'(T), where q'(T)=q(r-m)/T<=qr/T<=1/(2T),
+and T>=b. Hence it is again at most1/2. Pool and cap boundaries are continuous.
+Sum the individual deletion bounds over owners other than k:
+ sum_i(z_k^i-z_k)_+ <=(H-b)/2 <=H-z_k,
+because z_k<=b. This includes arbitrary mixed ownership by the preceding
+cross-monotonicity reduction.
+
+CASE B: RECIPIENT'S HARDWARE IS ITS LESSER OWN INPUT
+If H=0 all local payments are zero. Otherwise normalize H=1, put own hardware
+a, own local resource b>a, and retain b for its UNTRUNCATED own amount.
+
+B1. If b>=1, the local-resource pool stays long after any opponent deletion.
+Its own capped amount is1. Let d_i=min(l_i,1) for i!=k, r=sum_i d_i, and
+q=(1/2)exp(-r). Then z_k=a+q(1-a), and deleting i's beneficial coordinate
+increases k's payment by q(1-a)(exp(d_i)-1). Since0<=d_i<=1,
+ exp(d_i)-1 <=(e-1)d_i.
+The aggregate increase is at most(1-a)q r(e-1). Since r exp(-r)<=1/e,
+ q r(e-1)<1/2<=1-q.
+Thus it is at most(1-a)(1-q)=1-z_k.
+
+B2. Let0<b<1, put u=b-a, and let B=sum_i l_i be the full local-resource total.
+If B<=1, every beneficial deletion keeps that pool short with total T>=b.
+The recipient payment is b-q(T)u, with derivative magnitude
+ u q'(T)<=u/(2T)<=u/(2b).
+The sum of the deleted coordinates is B-b<=1-b. Hence aggregate gain is at
+most u(1-b)/(2b)<=(1-b)/2<=1-z_k, using z_k<=b.
+
+B3. Still0<b<1, but B>1. Split each beneficial deletion, if necessary, at the
+pool tie B=1. Let
+ D=b+sum_{i!=k}min(l_i,1), r=D-1>0, q=(1/2)exp(-r).
+At the full profile z_k=a+qu. Before the tie, recipient k's own cap is the
+fixed b. Let Delta_i be the reduction of the capped long sum during i's
+pre-tie segment. Then
+ 0<=Delta_i<=min(1,r),  sum_i Delta_i<=D-b=1+r-b.
+The first bound holds because the capped sum stays at least1 before the tie,
+and only i's capped coordinate changes. The second sums its original cap.
+The corresponding aggregate payment increase is
+ q u sum_i(exp(Delta_i)-1).
+If0<r<=1, convex secants give
+ q sum_i(exp(Delta_i)-1)
+ <=[(1-exp(-r))/(2r)](1+r-b)<=(2-b)/2.
+If r>=1, the same argument with cap1 gives
+ q sum_i(exp(Delta_i)-1)
+ <=(1/2)exp(-r)(e-1)(1+r-b)<=(2-b)/2.
+For the last step, (1+r-b)exp(-r) decreases for r>=1 because b<=1;
+evaluating at r=1 even gives the extra factor1-e^(-1)<1.
+Thus total pre-tie gain is at most u(2-b)/2.
+
+For the post-tie segments, each ending total is at least b, so the derivative
+bound from B2 is u/(2b). Their lengths are
+ ell_i=(l_i-(B-1))_+.
+If any length is positive, summing over its nonempty index set gives
+ sum_i ell_i<= (B-b)-(B-1)=1-b.
+Thus total post-tie gain is at most u(1-b)/(2b). Combining both stages,
+ sum_i(z_k^i-z_k)_+ <=u[(2-b)/2+(1-b)/(2b)].              (2)
+Meanwhile1-z_k=1-b+(1-q)u>=1-b+u/2. The latter exceeds the right side of(2)
+by at least
+ (1-b)[1-u(b+1)/(2b)] >=(1-b)^2/2>=0,
+because u<=b. This proves(R) in the final case. Scale back by H.
+
+THEOREM 2: AGGREGATE OUTER OVERFLOW GROWTH
+Return to arbitrary branches and full aggregate hardware H. Restore each
+selected owner's outer hardware and grid coordinates to full after computing
+its local counterfactual accounts. Define
+ b_k=p_k+z_k, w_k=(b_k-H)_+, W=sum_k w_k,
+ b_k^i=p_k+z_k^i, w_k^i=(b_k^i-H)_+, W^i=sum_k w_k^i.
+Then
+ sum_i sum_k (w_k^i-w_k)_+ <=P-W.                        (3)
+Consequently sum_i(W^i-W)_+<=P-W. In fact the i=k terms in the double sum
+vanish, because the local primitive is monotone in its own recipient's bundle.
+
+PROOF. Fix k and put U=H-z_k>=0 and v_i=(z_k^i-z_k)_+. By(R), sum_i v_i<=U.
+If p_k<=U then the full overflow is zero and
+ sum_i(w_k^i-w_k)_+ <=sum_i[v_i-(U-p_k)]_+
+                       <=[sum_i v_i-(U-p_k)]_+<=p_k.
+If p_k>=U, each overflow increase is at most v_i, so their sum is at most U.
+In both cases the bound is min(p_k,U)=p_k-w_k. Sum over k to prove(3).
+This is the desired grid charge without an owner-count factor.
+
+THEOREM 3: CAPPED RETENTION WITH AN EXPLICIT GRID CHARGE
+Let S=sum_k min(b_k,H)=B-W and S^i=B^i-W^i. Define the full and counterfactual
+own capped accounts d_i=min(b_i,H), d_i^i=min(b_i^i,H). Let Delta_- denote
+the sum of local funding slacks on branches whose full local ratio is below2.
+Use the universal signed-total retention constant kappa; kappa=1 is already
+proved in the consolidated theorem, and the strengthened proof permits20/21.
+Then
+ sum_i[(S-S^i)/3-(b_i-b_i^i)]_+
+ <=kappa Delta_-+(P-W)/3,                               (4)
+and
+ sum_i[(S-S^i)/3-(d_i-d_i^i)]_+
+ <=kappa Delta_-+(P-W)/3+(2/3)L
+ <=kappa Delta_-+(P+W)/3,                               (5)
+where L=sum_i min(w_i,z_i)<=W. The sharper first bound in(5) remains useful
+when grid amounts are much larger than hardware.
+
+PROOF. With grid restored, B-B^i=Z-Z^i and b_i-b_i^i=z_i-z_i^i>=0.
+Equation(4) follows from S-S^i=(B-B^i)+(W^i-W), the ordinary retention bound,
+positive-part subadditivity and(3). For(5), let L_i=w_i-w_i^i>=0. Since only
+owner i's own local account can decrease its own opposing account,
+ L_i<=min(w_i,z_i).
+Also d_i-d_i^i=(b_i-b_i^i)-L_i. Combining the own overflow term with W^i-W,
+ (S-S^i)/3-(d_i-d_i^i)
+ =[(B-B^i)/3-(b_i-b_i^i)]
+    +(1/3)sum_{k!=i}(w_k^i-w_k)+(2/3)L_i.
+Take positive parts, sum, and use(3) plus the bound on sum L_i. This proves(5).
+
+SCOPE
+All inequalities compare separately selected actual whole-owner underreports,
+with fixed owners and arbitrary real amounts. They apply even when some local
+pools switch or local totals increase. They repair the failed zero-slack cap
+analogue by adding an explicit positive-grid term. They do NOT alone prove
+C^2 funding of the envelope: the outer nonlinear response must still convert
+these cap charges into a funding estimate using the available hardware-scale
+budget. No new mechanism or data-center performance claim is made here.

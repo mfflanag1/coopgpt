@@ -1,0 +1,68 @@
+VALUE-WEIGHTED CONCENTRATION BOUND FOR HETEROGENEOUS HARDWARE
+16 October 2026. Consequence of CONCENTRATION_THEOREM.txt and the fixed positive
+decomposition in ../HETEROGENEOUS_STAR_COROLLARY.txt. The mechanism is unchanged.
+
+Fix public positive values v_j and power intensities e_j. Order a_j=v_j/e_j
+decreasingly, set a_{m+1}=0 and delta_k=a_k-a_{k+1}. With the fixed actual-owner
+hardware reports g_ij and power reports q_i, put
+  h_ik=sum_{j<=k}e_j g_ij, H_k=sum_i h_ik, Q=sum_i q_i,
+  T_k=min(H_k,Q), F=sum_k delta_k T_k.
+Omit terms with delta_k T_k=0. In every other term, define s_k as the largest
+actual owner's short-pool account divided by T_k: max_i h_ik/H_k when H_k<Q,
+or max_i q_i/Q when Q<H_k. At a tie either orientation is valid; the component
+actually pays exactly T_k, so tied components may be bounded by that sharper
+exact value or by the formula below.
+
+The sum of the existing weighted water-fill payments satisfies
+  total <= sum_k delta_k T_k[1+g(s_k)]
+        = 9F/8 + sum_{k:s_k>1/2} delta_k T_k
+                         (2s_k-1)^2(s_k+4)/(216s_k).      (1)
+For tied positive components, use any one fixed tie orientation in this
+display; choosing the smaller of the two concentrations also gives a valid
+upper bound, although the exact efficient contribution is better.
+This is a bound on the original globally truthful mechanism, not a new
+piecewise mechanism selected according to the concentration reports.
+
+For F>0 let theta be the fraction of decomposed production value carried by
+majority-short-owner components:
+  theta=sum_{k:s_k>1/2}delta_k T_k / F.
+Since (2s-1)^2(s+4)/(216s)<=5/216 on [1/2,1], equation (1) gives
+  total/F <=9/8+(5/216)theta.                             (2)
+In particular, no majority owner in any positive-weight short-pool component
+implies total<=9F/8. Contributions with ties can be omitted from the majority
+penalty altogether if their exact efficient payments are used.
+
+A SIMPLE SUFFICIENT REPORT CONDITION
+Suppose each owner holds at most half the aggregate power, q_i<=Q/2, and at
+most half of EACH hardware type, g_ij<=(sum_l g_lj)/2 for every i,j. Multiplying
+by e_j>0 and summing over each prefix gives h_ik<=H_k/2. Thus every component
+has s_k<=1/2 and the9/8 funding bound follows. The weaker exact test is just
+the appropriate short-pool prefix concentration; the per-type condition is
+sufficient, not necessary.
+
+THE VALUE-SHARE BOUND IS ALSO SHARP
+Fix three actual owners with (type1,type2,power) reports
+  owner1=(1,1,0), owner2=(0,2,1), owner3=(0,0,1),
+and both public energy intensities equal1. For any prescribed theta in (0,1),
+fix public value ratios a1=1+theta and a2=1-theta. The positive layer weights
+are delta1=2theta and delta2=1-theta. At prefix1 the short hardware total is1,
+concentration is1, and the two long power accounts each equal1, so its exact
+payment total is31/27. At prefix2 the short power total is2, concentration is
+1/2, and the two long hardware accounts each equal2, so its exact payment total
+is9/4. Thus F=2theta+2(1-theta)=2, the majority component's value share is
+exactly theta, and
+  total/F=[2theta*(31/27)+(1-theta)*(9/4)]/2
+         =9/8+(5/216)theta.
+All three owners and their eligible bundles remain fixed; owner2 owns both
+hardware and power. Public coefficients are fixed within each instance, and
+this family varies those public parameters only to display sharpness at every
+theta. Endpoints theta=0 and1 are attained by the corresponding one-component
+examples, so no zero-value activity is needed. This proves sharpness across
+the stated model class, not within every preassigned set of public values.
+
+This bound makes the relevant concentration observable from the same reported
+resource accounts and public coefficients already used by the mechanism.
+It does not identify empirical GPU ownership, production elasticities, private
+power costs, or measured serving/latency behavior. The decomposition itself is
+the established fractional-knapsack identity, and the result is a profilewise
+corollary of the new water-fill analysis, without a priority claim.

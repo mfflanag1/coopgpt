@@ -1,0 +1,151 @@
+SIGNED OTHER-RECIPIENT LOCAL LOSS IS AT MOST THREE HALVES OF THE OWN PAYMENT
+17 October 2026. Candidate general structural theorem, no novelty claim.
+Original symmetric exponential primitive; fixed actual owners, all-real reports,
+arbitrary hardware fragmentation, mixed owners, and arbitrary branch counts.
+
+THEOREM
+Let actual owner i underreport any subset of its LOCAL-resource coordinates,
+while keeping all hardware coordinates fixed. Write z_k,z'_k for full and
+changed aggregate local payments. Then
+
+       [sum_{k!=i}(z_k-z'_k)]_+ <= (3/2) z_i.           (1)
+
+The summation is SIGNED: other recipients' gains offset their losses. This is
+strictly stronger than the accepted (e-1)z_i bound for this signed quantity,
+since e-1>3/2. It does not strengthen the sum of positive losses in general.
+It also does not permit replacing capped outer-account loss by signed local
+loss when a cap hides another recipient's increase. Such cap accounting must
+be justified separately before using (1) in a funding proof.
+
+The constant 3/2 is proved, not asserted sharp. Known pure-local examples
+already exceed one; the existing v=1/5 response gives about 1.13635. This note
+classifies both original pool orientations and arbitrary switches, not just
+that example or a fixed-owner grid.
+
+1. ORIGINALLY SHORT LOCAL COORDINATE
+The accepted all-real SHORT_STAGE_NONLINEAR_THREE_HALVES.txt gives
+ H_+^2<=(9/4)U D,
+where H_+ is the sum of OTHER recipients' POSITIVE losses, U is the owner's
+full short-role payment and D its actual own-payment loss. For this one local
+coordinate change, 0<=U<=z_i and 0<=D<=z_i by nonnegativity and own monotonicity.
+Thus H_+<=3z_i/2, which also bounds signed other loss. This covers all hardware
+cap changes and mixed ownership. Decreasing a shorter pool cannot switch it
+into the longer orientation. Zero-output endpoints follow by continuity.
+
+2. ORIGINALLY LONG LOCAL COORDINATE, BEFORE A SWITCH
+Normalize full hardware total to1. Let s be the owner's hardware, d<=1 its
+capped local report, v the sum of OTHER capped local reports, rho=d+v>=1,
+and q=exp(1-rho)/2. Its full payment is z_i=(1-q)s+qd.
+For a cap reduction u<=d before any switch, q becomes q exp(u). The signed
+OTHER loss is exactly
+
+                 q(exp(u)-1)(1-s-v).                  (2)
+
+If positive, v<1 and its ratio to z_i is at most
+ (exp(u)-1)(1-v)/d.
+Remaining hardware-short orientation implies u<=d+v-1. Since d,v<=1,
+d+v-1<=dv. Convexity gives exp(u)-1<=K u for 0<=u<=1, where K=e-1.
+Therefore (2)/z_i<=K v(1-v)<=K/4<3/2. Reductions above the original cap change
+no local payment. If d=0 there is no effective report change.
+
+3. AFTER A POOL SWITCH: AN ACTUAL CAP COMPARISON
+Now the new local total t is below1. Other local reports have actual total
+v<1 and were all uncapped at the full profile. The remaining own local report
+is t-v, so t>=v. Necessarily d in [1-v,1]. Let q_new be the new coefficient,
+A=1-s the OTHER hardware total, and W=sum_{k!=i}min(h_k,t) its actual cap sum.
+Put q_min(t)=exp(1-1/t)/2, with q_min(0)=0. We claim
+
+                     q_new W>=q_min(t) A.             (3)
+
+If A<=t, every opposing hardware coordinate is uncapped, W=A, and q_new>=q_min
+gives (3). If A>t, then t<=W<=A, while the full new hardware cap sum is at
+most W+s=W+1-A. Consequently
+ q_new W>=(W/2)exp[1-(W+1-A)/t]
+          >=(A/2)exp(1-1/t).
+The last step uses the decrease of x exp(-x/t) for x>=t and W<=A. This is an
+inequality on the actual coordinate caps; no replacement owner or hypothetical
+hardware fragmentation is introduced.
+
+All local accounts are now short, so q_new<=1/2. Their OTHER contribution is
+(1-q_new)v>=v/2. The full OTHER payments are (1-q)A+qv. Hence their signed loss
+is at most
+
+ (1-q-q_min(t))(1-s)-(1/2-q)v
+ <=(1-q-q_min(v))(1-s)-(1/2-q)v,                         (4)
+
+using t>=v and the increase of q_min. For v=0 use the limiting q_min(v)=0.
+The coefficient 1-q-q_min(v) is nonnegative. Thus the numerator in (4)
+decreases as s increases, while z_i=(1-q)s+qd increases. If the numerator is
+nonpositive the desired bound is immediate; otherwise its ratio is at most
+the value at s=0. This proves the reduction for arbitrary mixed OWN hardware,
+without assuming it can be physically reassigned in the actual instance.
+
+4. TWO SCALAR ENDPOINTS COVER ALL FULL REPORTS
+For 0<v<1, let a(v)=exp(1-1/v)=2q_min(v). The pure-short-zero upper from (4) is
+
+ f(d,v)={2exp(d+v-1)[1-v/2-a(v)/2]-(1-v)}/d,
+                       1-v<=d<=1.                    (5)
+
+At fixed v, its derivative has numerator
+ A_v exp(d)(d-1)+(1-v),
+where A_v=2exp(v-1)[1-v/2-a(v)/2]>0. This numerator increases with d, with
+positive derivative A_v exp(d)d. Thus f decreases then increases, or is
+monotone: its maximum is at an ENDPOINT, not an omitted interior maximum.
+The endpoint values are
+
+ f(1-v,v)=[1-exp(1-1/v)]/(1-v),                         (6)
+ f(1,v)=exp(v)[2-v-exp(1-1/v)]-1+v.                     (7)
+
+At v=0 the limiting value is one; v=1 is a continuous boundary, not a possible
+strict pool switch with positive remaining own local amount.
+
+5. FIRST ENDPOINT: AN ELEMENTARY THREE-HALVES BOUND
+For v<=1/3, (6)<=1/(1-v)<=3/2. For v>=1/3 set x=(1-v)/v in[0,2]. The elementary
+Padé inequality
+ exp(-x)>=(2-x)/(2+x), x>=0,
+follows for 0<=x<2 from
+ d/dx[log((2+x)/(2-x))-x]=x^2/(4-x^2)>=0;
+for x>=2 its right side is nonpositive. Therefore
+ (6)<=[1-(3v-1)/(v+1)]/(1-v)=2/(v+1)<=3/2.
+This proves the first endpoint bound on its entire real domain.
+
+6. SECOND ENDPOINT: EXACT RATIONAL CERTIFICATE ON ONE COMPACT INTERVAL
+For 0<=v<=1/4, discard the nonnegative subtracted exponential in (7). The
+remaining exp(v)(2-v)-1+v increases, so it is at most
+(7/4)exp(1/4)-3/4<3/2, using exp(1/4)<9/7.
+The latter exponential inequality is also certified exactly below.
+
+On [1/4,1], the companion certify_signed_other_three_halves.py partitions the
+interval into 256 rational cells [l,u] of equal width. It uses exact Fractions
+and the following rigorous bounds, with factorials evaluated as integers:
+ U_12(x)=sum_{k=0}^{12}x^k/k! + [x^13/13!]/[1-x/14]>=exp(x), 0<=x<=1;
+ L_17(x)=sum_{k=0}^{17}(-x)^k/k!<=exp(-x), x>=0.
+The first is the positive-series geometric-tail estimate; the second is the
+odd Taylor polynomial with positive Lagrange remainder. For each cell the
+script verifies L_17((1-l)/l)>=0 and checks the rational inequality
+
+ U_12(u)[2-l-L_17((1-l)/l)]-1+u <3/2.                   (8)
+
+This indeed upper-bounds (7): exp(v) and +v use u, whereas -v and the increasing
+exp(1-1/v) use l; the remaining bracket is nonnegative. The finite exact replay
+checks every cell and also U_12(1/4)<9/7. Its largest rational interval upper
+is approximately 1.479760521, with positive exact margin to3/2. It uses explicit
+exceptions rather than removable assertions and passes python3 -I -O.
+This is a universal rational interval proof of this scalar inequality, not a
+floating grid conjecture. Together with Section 5 it bounds both endpoints
+in (5), proving the post-switch branch bound for all real reports.
+
+7. FIXED-OWNER AGGREGATION AND EXACT SCOPE
+Scale each nonzero-output branch back to its arbitrary full shorter total.
+For one actual owner, each local coordinate changes independently within its
+branch; all hardware is retained. On every branch the signed OTHER loss is
+at most 3/2 times that owner's FULL branch payment. Summing the signed changes
+first, then taking a positive part, gives (1) with z_i equal to its full total
+local payment. Zero-output branches stay zero under underreporting. Owner and
+branch counts do not enter the constant; every identity remains fixed.
+
+The result controls a signed local response under local-only changes. It does
+not by itself control full grid-account caps or actual envelope funding, and
+it does not apply after discarding the hardware-restoration requirement while
+allowing both physical coordinate families to be changed. The sharper accepted
+K bound on the sum of positive losses remains a distinct dependency.

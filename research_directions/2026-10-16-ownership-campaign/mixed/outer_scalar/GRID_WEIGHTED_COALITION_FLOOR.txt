@@ -1,0 +1,68 @@
+GRID-WEIGHTED ACTUAL-COALITION FLOORS FOR OUTER ACCOUNTS
+16 October2026. Computable structural bound; no complete new funding constant.
+The weighted sum of coalition inequalities is an established elementary step.
+
+Normalize full hardware H=1. Fix an actual deviating owner i. All other owners'
+local resources and grid reports are fixed. Let m(A)=sum_j min(H_j(A),L_j(A))
+for coalitions A excluding i, and write u_k=min(p_k,1).
+Suppose U_k>=0 is a report-independent upper bound on k's local payment z'_k
+under EVERY underreport by i. The simple choice U_k=M always works. Define
+ w_k=min{1,(1-u_k)/U_k} if U_k>0, and w_k=1 if U_k=0.
+Then at every counterprofile,
+             min(p_k+z'_k,1)>=u_k+w_k z'_k.                 (1)
+For p_k>=1 this is equality with w_k=0 unless U_k=0 (then z'_k=0).
+For p_k<1, use min(z'_k,1-p_k)>=(min{1,(1-p_k)/U_k})z'_k,
+valid for0<=z'_k<=U_k.
+
+Local all-profile coalition coverage and a finite layer-cake identity give
+ sum_{k!=i} w_k z'_k
+   =integral_0^1 sum_{k!=i:w_k>=t} z'_k dt
+   >=integral_0^1 m({k!=i:w_k>=t})dt.
+Consequently the opponents' capped outer total is uniformly at least
+ R_i^weighted=sum_{k!=i}u_k
+       +integral_0^1 m({k!=i:w_k>=t})dt.                  (2)
+All sets are coalitions of the original actual owners. The threshold weights
+are fixed while i underreports. No actual deviation is required to attain the
+integral lower bound, and no virtual-player coverage inequality is introduced.
+
+Unlike the single grand-opponents floor min{1,P_{-i}+M_{-i}}, expression(2) may
+exceed1 and retains arbitrarily large fixed grid mass. It need not dominate that
+other floor pointwise. Take the maximum of independently valid floors, including
+(2), the grand-opponents floor, and fixed partition/fractional-packing floors.
+For a full positive recipient gap d_i-a_i>0, every such floor R yields
+                  E_i<=a_i+k(d_i+R)(d_i-a_i),
+by the restoration argument in FIXED_OPPONENT_COALITION_FLOOR.txt. It can also
+be retained inside the own-loss-dependent scalar bound through
+ t_i(x)>=d_i-x+R. A general funding theorem still requires controlling the sum
+of these individually valid bounds; no such conclusion is assumed here.
+
+A MORE LOCAL EXPLICIT UPPER CEILING
+For each opponent k, the choice
+ U_k=sum_j min{T_j,max(h_kj,l_kj)}
+also works, and is no larger than M. On any branch, its payment is a convex
+combination of its short account and its capped long account. Both are bounded
+by max(h_kj,l_kj) and by the COUNTERPROFILE branch output T'_j<=T_j. Summing gives
+the stated upper ceiling. The opponent's h_kj,l_kj are unchanged when i deviates.
+Any independently proved tighter ceiling may replace it.
+
+FINITE EVALUATION
+Sort the opponents' weights as0<=w_(1)<=...<=w_(n-1)<=1, put w_(0)=0, and let
+A_l={k!=i:w_k>=w_(l)}. Then the integral equals
+                   sum_l [w_(l)-w_(l-1)]m(A_l).
+Ties give zero increments and cause no ambiguity. Suffix sums of resource
+reports compute all these coalition values in O(n*m) arithmetic operations
+after O(n log n) sorting, where m is the number of local branches. For rational
+reports the weights, coalition values, and floor are rational. This note makes
+no complexity claim for computing the actual envelope E itself.
+
+EXACT STRUCTURAL SPECIALIZATION
+If every opponent is either a pure grid owner (no local resources) or has p_k=0,
+then w_k=1 for all local-resource owners, while grid-only owners contribute
+u_k and no coalition output. Thus(2) becomes
+                       R_i^weighted=pi_{-i}+M_{-i}.
+There is no artificial cap at1. If M=0, every local counterfactual payment and
+coalition value is0, all U_k=0, and(2) reduces exactly to pi_{-i}. Thus no
+division by M or by a zero ceiling is required at this endpoint. This supplies a continuous ownership-aware
+interpolation between separated grid ownership and mixed grid/local ownership.
+It is a consequence of existing coverage and explicit payment ceilings, not a
+claim that the underlying weighted-core inequality is novel.

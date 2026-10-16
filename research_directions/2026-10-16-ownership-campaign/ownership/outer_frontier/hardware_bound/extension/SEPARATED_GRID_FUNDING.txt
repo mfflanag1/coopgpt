@@ -1,0 +1,146 @@
+HARDWARE-BOTTLENECK FUNDING WHEN GRID OWNERS ARE SEPARATE
+16 October 2026. Candidate theorem; independent audit pending.
+Original exponential primitive and actual whole-report envelope. This is a
+structural ownership theorem with unrestricted owner and branch counts, not a
+claim about arbitrary grid/local mixed ownership or optimal funding.
+
+MODEL AND HYPOTHESES
+Use fixed actual owners and nonnegative real reports h_ij,l_ij,p_i. Put
+ H_i=sum_j h_ij, H=sum_i H_i, P=sum_i p_i,
+ T_j=min(sum_i h_ij,sum_i l_ij), M=sum_j T_j,
+ F=min(H,P+M), c=1/(2e), C=1+c.
+The primitive Phi has, for shorter vector s and longer vector l,
+ T=min(sum s,sum l), rho=sum_i min(l_i,T)/T,
+ q=exp(1-rho)/2, Phi_i=(1-q)s_i+q min(l_i,T).
+Zero-output payments are zero. Let z_i=sum_j Phi_i(h_.j,l_.j), Z=sum_i z_i,
+ N_i=Phi_i(Hvector,pvector+zvector), and let E_i be the supremum of N_i over
+all actual coordinatewise own-bundle underreports. Counts are unrestricted;
+each recipient may select a different actual underreport. Owners are never
+split or merged. The envelope is defined on the entire domain; the following
+conditions restrict only the profile at which its budget is evaluated.
+
+Assume H>0, P>=H, and every owner with p_i>0 has
+                     h_ij=l_ij=0 for every j.          (SG)
+Thus positive grid supply is owned separately from current hardware/local
+reports. Owners outside this group may mix arbitrarily many hardware and local
+coordinates. Hypothesis(SG) may equivalently be imposed by fixed eligibility,
+but no change in eligibility is used in the proof.
+
+THEOREM
+Under these hypotheses,
+ sum_i E_i <=Gamma H=Gamma F,
+ Gamma=3/4+1/e+sqrt(e)/6 <(1+1/(2e))^2=C^2.              (1)
+Numerically Gamma is approximately1.3926663. This is a proved uniform upper
+bound for the specified nested envelope on the stated ownership class; neither
+optimality of Gamma nor sharpness against all mechanisms is asserted.
+
+DEPENDENCIES
+We use previously proved properties of the exponential primitive: own-report
+monotonicity, continuity, coalition coverage, and total payment at most CT.
+We also use its all-profile local-response inequalities, for separately chosen
+actual owner underreports (superscript i):
+ sum_i[(Z-Z^i)/3-(z_i-z_i^i)]_+ <=kappa Delta_-,          (2)
+ sum_i[(Z^i-Z)-(z_i-z_i^i)]_+ <=2 Delta_+,               (3)
+where kappa=20/21 (kappa=1 is sufficient here),
+ Delta_- and Delta_+ are the sums of delta_j=CT_j-Z_j on full local branches
+with rho_j<=2 and rho_j>2, respectively. Zero-output branches contribute zero.
+The consolidated sources are
+ certificates/box_bound/UNIVERSAL_RETENTION_AND_OUTER_DOMINANCE_THEOREM.txt
+for(2) and certificates/box_bound/UNIVERSAL_TOTAL_INCREASE_LEMMA.txt for(3).
+These inequalities concern actual fixed owners and the full continuous domain.
+
+PROOF
+Normalize H=1. Every individual local payment is at most its branch output,
+so every aggregate local account z_i^i is at most M^i<=M<=1.
+For an arbitrary own underreport by a nongrid owner, restore its OUTER hardware
+coordinate to full H_i while retaining the locally recomputed payments. This
+analytical comparison increases its outer payment by primitive own monotonicity.
+Its grid coordinate is zero and cannot change. Grid owners have no hardware or
+local report, so their local payments stay zero under every owner's deviation.
+
+Set pi=sum_i min(p_i,1)>=1. Every restored outer comparison is hardware-short,
+since the unchanged grid total alone is at least1. Grid caps are fixed, while
+no local recipient is capped. Thus its opposing capped total is EXACTLY
+                  S^i=pi+Z^i,
+not merely an estimate in terms of an uncapped total. Put
+ q0=exp(1-pi-Z)/2 <=1/2, a_i=H_i, g_i=z_i-a_i.
+For a nongrid owner, write D_i=z_i-z_i^i>=0. The restored outer payment is
+                  a_i+q_i(z_i-D_i-a_i),
+where q_i=exp(1-pi-Z^i)/2. Its full raw payment is a_i+q0*g_i.
+For a grid owner, its only possibly positive coordinate is p_i. With others
+fixed, the primitive is own-monotone, so E_i=N_i exactly. In particular grid
+owners introduce no own-envelope gain despite their arbitrary reports/count.
+
+LOCAL ROLE BOUND
+For each branch decompose Phi_i=u_ij+v_ij into hardware and local-resource
+components. If hardware is short, u=(1-q)h_i and v=q min(l_i,T); hence u<=h_i
+and sum_i v=q rho T<=T/2=H_j/2. If local resource is short, u=q min(h_i,T)
+and v=(1-q)l_i. Again u<=h_i, and
+ sum_i v=(1-q)T<=rho T/2<=H_j/2.
+The middle inequality follows because f(r)=r/2-1+q(r) vanishes at1 and has
+derivative1/2-q(r)>=0 for r>=1. In both cases q(r)r<=1/2.
+Summing branches gives
+                sum_i(g_i)_+ <=sum_ij v_ij<=1/2.       (4)
+Consequently at most one owner has g_i>1/3, and every such g_i is at most1/2.
+
+TOTAL-DECREASING COMPARISONS
+Suppose Z^i<=Z, put u=Z-Z^i>=0 and epsilon_i=[u/3-D_i]_+. Exact subtraction
+of the two outer payments gives
+ gain_i=q0[(exp(u)-1)g_i-exp(u)D_i]
+       <=q0 f_{g_i}(u)+q0 exp(u)epsilon_i,
+ f_g(u)=exp(u)(g-u/3)-g.                                (5)
+Since pi+Z^i>=1, q0 exp(u)<=1/2. For g<=1/3, f_g is nonincreasing from0,
+because f_g'(u)=exp(u)[g-(1+u)/3]<=0. If1/3<g<=1/2 its maximum over u>=0
+occurs at u=3g-1 and equals exp(3g-1)/3-g, which increases in g. Hence
+             max_{u>=0} f_g(u)<=K=sqrt(e)/3-1/2.
+By(4) at most one owner requires this positive K allowance. Taking positive
+parts in(5), summing, and applying(2), gives
+ sum_{Z^i<=Z}(gain_i)_+ <=q0 K+(kappa/2)Delta_-.         (6)
+K>0 follows from exp(1/2)>1+1/2.
+
+TOTAL-INCREASING COMPARISONS
+Suppose Z^i>Z, write u=Z^i-Z>0 and D=D_i. Interpolate only the two aggregate
+numbers t=Z+s and own local account z_i-(D/u)s, for0<=s<=u. This is an
+algebraic interpolation, not an assumed actual report path. It keeps the own
+local account nonnegative, because the endpoint z_i-D is nonnegative. The
+outer expression on this path is
+ W(s)=a_i+q0 exp(-s)[z_i-(D/u)s-a_i].
+Its derivative is
+ W'(s)=q0 exp(-s)[a_i-z_i+(D/u)s-D/u].
+Because a_i<=1 and the interpolated own local account is nonnegative, the
+bracket is at most1-D/u. If D>=u the derivative is nonpositive. If D<=u,
+it is at most q0(1-D/u), uniformly in s. Therefore
+                  (gain_i)_+<=q0(u-D)_+.
+Equation(3), valid for the independently selected actual deviations before
+this algebraic interpolation, now yields
+ sum_{Z^i>Z}(gain_i)_+<=2q0 Delta_+<=Delta_+.            (7)
+The distinction between actual local profiles in(3) and the scalar comparison
+path used only for the outer expression is essential.
+
+SUM AND EXACT CONSTANT
+Full raw outer funding is at most C. Combining(6)--(7), using q0<=1/2 and
+kappa<=1, gives
+ sum_i E_i <=C+K/2+Delta_-+Delta_+.
+Each local primitive has total Z_j>=T_j, since its capped long ratio is>=1.
+Thus Delta_-+Delta_+=CM-Z<=cM<=c. Consequently
+ sum_i E_i<=C+c+K/2=3/4+1/e+sqrt(e)/6=Gamma.
+The estimates were uniform over independent actual owner underreports, so
+passing to their separate suprema is justified. Scaling restores H.
+
+For the strict comparison with C^2, note
+ C^2-Gamma=1/4+1/(4e^2)-sqrt(e)/6>0.
+Indeed e<11/4<25/9 implies sqrt(e)<5/3, and e<3 implies1/(4e^2)>1/36.
+Hence the right side is greater than1/4+1/36-5/18=0. For completeness,
+e<11/4 follows by summing through1/4! and bounding the remaining positive tail
+by(1/5!)/(1-1/6)=1/100, giving e<65/24+1/100<11/4.
+All equalities/pool ties are continuous; zero local outputs stay zero under
+underreporting. The case H=0 has all physical and payment values zero, but is
+excluded from the normalized statement only to avoid division by zero.
+
+LIMITATION
+If an owner mixes grid with local resources or hardware, it can alter locally
+computed accounts while remaining grid-capped. Then S^i=pi+Z^i fails, and its
+own-envelope gain need not vanish. The half-gap recipient-response theorem
+provides a cap-sensitive account inequality for this missing case, but has not
+yet established a C^2 funding theorem there. No conclusion for P<H is asserted
+by this note.

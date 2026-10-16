@@ -1,0 +1,159 @@
+AN ASYMMETRIC OUTER PRIMITIVE AND A GENERAL171/100 FUNDING BOUND
+16 October2026. Candidate theorem. Independent audit pending; no novelty claim.
+
+Scope. This constructs a NEW truthful range mechanism for the same fixed-owner
+depth-two physical game. It does not improve the proved bound on the OLD
+symmetric nested envelope merely by comparison. Counts of owners and branches
+are unrestricted, all reports are nonnegative reals, and every coordinatewise
+whole-owner underreport is allowed. Utility is the payment; no private costs,
+overreports, false identities, or extra public marginal floors are included.
+
+MODEL AND FIXED LOCAL RULE
+Owner i has(h_ij,l_ij,p_i). Put H_i=sum_j h_ij,H=sum_i H_i,P=sum_i p_i,
+M=sum_j min(sum_i h_ij,sum_i l_ij),F=min(H,P+M).
+On every local branch use the existing symmetric exponential primitive Phi,
+with coefficient exp(1-rho)/2, and sum its actual-owner payments to z_i.
+Write Z=sum_i z_i,c=1/(2e),C=1+c,B_i=p_i+z_i,K=P+CM.
+The established local properties are actual-owner own-coordinate monotonicity,
+coalition coverage, Z<=CM, and a role decomposition z_i=z_i^h+z_i^l with
+z_i^h<=H_i, sum_i z_i^l<=min(M,H/2). Local coverage gives Z>=M.
+Write L=sum_i z_i^l. These are accounting roles, not separate strategic owners.
+
+1. ASYMMETRIC OUTER PRIMITIVE
+Fix w=49/100,v=51/100,alpha=49/51=w/v. For two vectors(a,b), a denotes
+hardware and b denotes the opposing resource; this distinction is public.
+If their minimum total T is zero, pay zero. Otherwise orient the shorter
+vector as s and longer as l, set d_i=min(l_i,T),rho=sum_i d_i/T, and pay
+  Psi_i=(1-q)s_i+q d_i,
+where q=w exp(1-rho) if hardware a is short, and
+      q=v exp(alpha(1-rho)) if opposing resource b is short.
+At a pool tie, rho=1 and both formulas give v a_i+w b_i. Thus Psi is continuous.
+
+Coverage follows because both s(S) and sum_(i in S)min(l_i,T) are at least
+min(a(S),b(S)); Psi is their convex combination with0<=q<=1.
+For own-coordinate monotonicity, write q=q_*exp(beta(1-rho)), where the
+orientation gives(q_*,beta)=(w,1) or(v,alpha). In both cases beta<=1 and
+q_*(1+beta)<=1. On a smooth cell, increasing an uncapped own long account
+gives derivative q[1-beta(d_i-s_i)/T]>=q(1-beta)>=0; a capped own long
+increase has derivative zero. For an own short increase, let m count capped
+long accounts and e_i be the own cap indicator. Direct differentiation gives
+  Psi_i'=1-q+q e_i+beta q(rho-m)(d_i-s_i)/T
+         >=1-q[1+beta rho]>=0.
+The last step uses that exp(beta(1-rho))(1+beta rho) decreases on rho>=1,
+with maximum1+beta at1. Integration over finitely many cap cells, continuity
+at ties, and the zero-output limit prove all own-coordinate comparisons.
+Coordinate telescoping gives every mixed whole-owner underreport comparison.
+
+2. NEW RANGE MECHANISM
+For each actual owner i use the compact domain
+  D_i={b>=p: b_i<=B_i, sum_k b_k<=K}
+and define R_i^w=max_(b in D_i) Psi_i(Hvector,b).
+The full vector p+z belongs to every D_i, so the nested raw rule is majorized.
+Local coalition coverage followed by outer coverage proves coalition coverage.
+For an increase in own h or l, only own H_i changes in the hardware vector,
+while B_i and K weakly increase and the lower bounds p stay fixed: the domain
+expands and pointwise own monotonicity applies. For own grid increase eta,
+the map b->b+eta e_i carries old feasible vectors into the new domain and
+Psi_i is own monotone. Thus R^w is truthful on the full report domain.
+If F=0 every feasible payment is zero. The one-owner case pays exactlyF.
+The earlier explicit range evaluator extends by replacing the two orientation
+coefficients; its endpoint arguments use beta<=1 and remain valid. This gives
+O(nm+n log n) real operations plus exponentials, not a finite-bit implementation
+claim. The mathematical maximization definition alone suffices for the theorem.
+
+3. LOW K: K<=H
+Put d_i=min(H_i,K),D=sum_i d_i,rho=D/K, and Zh=sum_i z_i^h. Every chosen
+opposing vector has total at mostK, so the opposing pool is short throughout.
+The same monotonic-total comparison as for the old range gives
+  payment_i<=B_i+v exp(alpha(1-rho))(d_i-B_i)_+
+            <=B_i+v exp(alpha(1-rho))(d_i-z_i^h).
+Here z_i^h<=min(H_i,K). Summing and maximizing over rho>=1 gives
+  sum R_i^w<=P+Z+(Kv/alpha)exp(alpha-1-alpha Zh/K).
+The scalar maximum occurs at rho=Zh/K+1/alpha>=1. Since Zh>=Z-M, the
+right side is at most P+Z+(Kv/alpha)exp(alpha-1-alpha(Z-M)/K).
+Its derivative in Z is1-v exp(alpha-1-alpha(Z-M)/K)>0, so replace Z byCM.
+Now F=P+M and K/F=1+t with t=cM/F in[0,c]. The resulting ratio is
+  (1+t)[1+(v/alpha)exp(alpha/(1+t)-1)].
+Its derivative is1+(v/alpha)exp(alpha/(1+t)-1)[1-alpha/(1+t)]>0.
+Therefore the ratio is at most
+  C[1+(v/alpha)exp(alpha/C-1)]<171/100.                 (A_low)
+The strict final comparison is certified with rational Taylor bounds below.
+
+4. HIGH P: P>=H
+Normalize H=1. Every feasible opposing total is at least1, so hardware is
+short and its coefficient is w exp(1-rho). The previously proved negative-gap
+coupling argument applies with coefficient w in place of1/2. For completeness,
+let u_i=min(p_i,1),v_i=min(B_i,1),U=sum u_i>=1,
+D_+=sum(v_i-H_i)_+,D_-=sum(H_i-v_i)_+, and t=CM<=C.
+Positive gaps pay at most w exp(1-U)(v_i-H_i)_+; negative gaps retain at
+least w exp(1-U-t)(H_i-v_i)_+. Baseline overflow P-U is unavoidable and
+belongs to opponents of each negative-gap owner, proving the latter bound.
+Thus total<=1+w exp(1-U)[D_+-exp(-t)D_-]. The role bound gives
+D_+<=U+1/2, and D_- >=max(0,D_+-U-Z+1). Optimizing these coupled gaps,
+using Z<=t<=C<3/2, and then U>=1 gives
+  sum R_i^w<=1+w[3/2-exp(-C)(3/2-C)]
+             <1+(57/40)w<171/100.                    (A_high)
+Indeed C<6/5,exp(C)<4 imply exp(-C)(3/2-C)>3/40.
+
+5. INTERMEDIATE P<H<K
+Normalize H=1,p=P/H,m=M/H,k=p+Cm,f=p+m. Define
+  q0=w exp(1-k),
+  q1=v exp(alpha(1-1/p)) for p>0, and q1=0 at p=0,
+  Q=1-q1.
+Then Q>=w>=q0. For a positive full account gap B_i-H_i, every opposing-short
+choice has excess at most Q(B_i-H_i), since its total is at leastp and its
+coefficient q is at leastq1; a hardware-short choice has coefficient at mostw.
+For a negative gap, the deficit is at least q0(H_i-B_i): hardware-short
+capped total is at mostk, while opposing-short deficit coefficient1-q is
+at leastw. The total positive gap is at most p+L, and positive minus negative
+gaps equals p+Z-1. Consequently, uniformly over separate recipient choices,
+  sum R_i^w<=1+Qp-q0+(Q-q0)L+q0 Z.                     (A_role)
+
+The established symmetric LOCAL support functions, for Q>=q0>0, are
+  (Q-q0)L+q0 Z<=H[q0+(Q/2)exp(-q0/Q)],
+  (Q-q0)L+q0 Z<=M[Q+(q0/2)exp(-Q/q0)].
+Their full proofs are in root/JOINT_ROLE_TRADEOFF.txt; the local primitive
+has not changed, so this invocation is valid.
+
+If F=H, the H-support bound gives
+  sum R_i^w<=1+Q[p+(1/2)exp(-q0/Q)].                   (A_W)
+For fixedp this increases withm, because q0 decreases. Setm=1. Replacing
+C by148/125 further decreases q0 and raises this bound. The exact interval
+certificate covers everyp in[0,1] and proves(A_W)<171/100.
+
+If F<H, the M-support bound gives
+  sum R_i^w/F<=Q+(1-q0)/f+(m/f)(q0/2)exp(-Q/q0).
+Here 1<k<=Cf, q0>=w exp(1-Cf), and the function
+[1-w exp(1-x)]/x is nonincreasing forx>=1, since w<=1/2. Hence
+(1-q0)/f<=C(1-w)=Cv. AlsoQ<=1,m/f<=1,q0<=w,Q/q0>=1. Therefore
+  sum R_i^w/F<=1+Cv+w/(2e)=2-w+c<171/100.            (A_power)
+
+6. EXACT SCALAR CERTIFICATE AND CONCLUSION
+The four cases above are exhaustive. The only numerical-looking comparisons
+are proved by verify_asymmetric_scalar.py using Fraction arithmetic and
+signed Taylor remainders. It uses C<148/125, following the established lower
+Taylor bound for e. For(A_low), the even degree10 Taylor polynomial bounds
+exp(-(1-alpha/C)) above. The high and intermediate-power bounds are rational.
+For(A_W), p in[0,1/4] has q0>27/100 and Q<=1, hence an upper bound
+5/4+50/127<171/100, using exp(-x)<=1/(1+x). The remaining interval is
+partitioned into3072 rational intervals. The objective increases in Q,p and
+decreases in q0; use Q at the left endpoint and q0 at the right. Odd degree19
+Taylor lower bounds, rounded down, enclose both coefficients safely; even
+degree10 bounds the remaining exponential above. Every exact rational upper
+is strictly below171/100. The largest displayed decimal is about1.708935,
+but the stored rational positive gaps, not that decimal, are the certificate.
+
+Thus this explicit truthful coalition-covering mechanism has
+  sum_i R_i^w <=(171/100)F
+for all continuous reports, arbitrary fixed mixed ownership, and unbounded
+owner/branch counts. This improves the general existence upper69/40. It is
+not a sharp factor, an unrestricted lower, or a proof of the old symmetric
+envelope C^2 conjecture. Historical priority remains unconfirmed.
+
+AUDIT ADDENDUM: ELEMENTARY ENCLOSURES
+The exact certificate now explicitly checks e>=sum_{j=0}^7 1/j!
+=685/252>125/46, implying C<148/125. On p in[0,1/4],
+q0>=w[2-p-C]>=13867/50000>27/100 by exp(-x)>=1-x.
+Both bounds support the initial interval before the3072 interval checks.
+The independent reviewer could inspect the script but not execute it; root
+and the independent Codex auditor both replayed the exact certificate.

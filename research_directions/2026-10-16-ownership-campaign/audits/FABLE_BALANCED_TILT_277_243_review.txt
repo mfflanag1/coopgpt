@@ -1,0 +1,30 @@
+**Provisional verdict: no findings in reviewed scope.** I re-derived every inequality in the candidate proof and found no error; the tightest step is the final budget case (margin 677/(51200·243)), which I confirm is exact.
+
+## Findings
+
+None of substantive severity. Items below are observations, not defects.
+
+**1. Dominant-long-cap lemma (§2, lines 54–61) — verified.** Actual truncated mass = 1+s−min(s,λ) ≥ 1 gives λ+R ≥ 1; a second active cap gives R > λ, hence R > 1/2 and t < 1/(1+1/2) = 2/3. Correct, including the strict/non-strict handling of max(λ,1−λ).
+
+**2. Own-long derivatives (§3) — verified.** η = Vt(1−t)/(2hd) (strict max, via t′ = R/D² = t(1−t)/d) and η = −Vt/(2hD) (non-max) are correct. Active cell: (L)/p = x(1/d−η)+dη with ηd ≤ 1/(27h) ≤ 4/51. Inactive non-max with L active: λ−d ≥ 1−2R ≥ 3DV and λd|η| ≤ 18V/17 < 3V ≤ 3DV. L inactive: d/λ < R/L = (1−t)/t < 1/2 and d|η| ≤ 2/17. All correct.
+
+**3. Own-short derivatives (§4) — verified.** s′ = e−s, t′ = t−ct² (c=1 when V>0), (H) and bounds h′ ≥ −1/72, h′₊ ≤ 11/54, h′₊ ≤ 1/27 (e=1) check (U(1−s) ≤ 1/36 at s=5/6; Vt(1−t) ≤ 2/27). 4a/4b/4c: I recomputed P(1+βs) = λ+s−λs ≤ 1 and 2λ−λ² ≤ 1 (c=1), (λ+s)/L with h(λ+s) ≤ (5L+s)/6 ≤ L, 2hλ ≤ λ+(L−s)/3 < L (needs s ≤ L, which holds since s < t ≤ L). The 4b active-dummy chain s > 1/2, t < 1/(2−s), 3V < (2s−1)/(2s) for s ≤ 2/3 is correct. Note 4b line 128 implicitly uses β ≥ 0 (fine: that is the case being handled).
+
+**4. D=A face (§4d) — verified.** Face has one cap = A, t=1, P=1; cap-holder derivative 1+h′(1−x) ≥ 71/72; non-holder ≥ 1−h−1/24 > 0. Orientation swap: h(s,t)+h(t,s)=1 makes (1−h)x+hz invariant at A=B.
+
+**5. Funding (§5–6) — verified.** J(s) = −36s³+27s²+28s−14 is the correct derivative sign of g; J(2/3)=6, J(1)=5, J″<0 on [2/3,1]. Lemma (ii): R(2−R)²/8 increasing on [0,1/2] (derivative (2−R)(2−3R)), values 9/64 and 25/216. Final case: (2387/2400)(9/64) = 7161/51200 and 34·51200 − 7161·243 = 677 > 0. Attainment: h=17/36, P=8/27, p=34/243 — correct.
+
+**Observation (low):** the last budget case has a relative margin ≈ 4×10⁻⁴; it relies on U² ≥ 4/225 at s ≥ 4/5 and the loose 9/64. Correct as written but fragile to any future modification of h.
+
+**Observation (presentation):** typos "e1/e0", "k0/k1", "s1" in §4d, §5, §6; §4b line 128 should state β ≥ 0 explicitly.
+
+## Scope limitations
+
+- I cannot run `probe_tilt.py` or any numeric check; all verification is hand re-derivation.
+- The endpoint reduction (frozen §5) and the frozen derivative identities were re-derived from the supplied text only; the concentration envelope F(s) was checked against CONCENTRATION_THEOREM.txt.
+- The 9/8 unrestricted lower bound (line 262) is not in the packet; the "[9/8, 277/243]" interval claim depends on it.
+- Sharpness is confirmed only for this rule, as stated.
+
+## Verdict
+
+**No findings in reviewed scope.** Every lemma, derivative case, face argument, continuity step and budget inequality recomputed consistently. I concur with the root reviewer independently, not by deference.

@@ -1,0 +1,102 @@
+FULL UTILIZATION WITH VARIABLE CAP OVERLAP: A QUANTITATIVE PARAMETER BOUND
+16 October2026. Corollary of FULL_UTILIZATION_HEADROOM_FUNDING.txt's scalar
+certificate and GRID_WEIGHTED_COALITION_FLOOR.txt. Candidate review pending.
+
+THEOREM
+Retain the original nested exponential rule and its actual own-report envelope,
+with fixed actual mixed owners and all nonnegative real reports. Suppose M=H>0.
+Choose ceilings U_i that BOTH bound every one-owner-counterprofile local
+payment to i AND bound i's marginal contribution to every actual local
+coalition. The explicit choice U_i=sum_j min(T_j,max(h_ij,l_ij)) has both
+properties, as does U_i=M. Define the dimensional cap-overlap parameter
+                  Gamma=sum_i (U_i+min(p_i,H)-H)_+.
+Then, with gamma=Gamma/H,
+             sum_i E_i <=[7/8+(5267/10000)exp(gamma)]H.       (1)
+The bound is independent of owner and branch counts. It may be combined with
+any better separately proved global bound; it is not claimed sharp.
+In particular,
+ Gamma=0        gives sum E_i<=1.4017H<C^2H;
+ Gamma<=H/4     gives sum E_i<(25/16)H.                     (2)
+Thus the theorem tolerates positive variable cap overlap; it does not simply
+rename separated grid ownership. The actual envelope remains truthful on its
+entire original report domain. The funding bound is conditioned on the full
+profile's M=H and stated overlap parameter, not on restricting deviations.
+
+PROOF
+Normalize H=M=1 and use the notation of the headroom theorem: epsilon=Z-1,
+r=S-1, negative gap total v<=1/2-epsilon, C_i=Z-z_i-M_{-i}<=min(1/2,z_i+epsilon).
+No cap-linearity assumption is now made.
+
+The weighted floor and its overlap addendum give opponents' capped total at
+least pi_{-i}+M_{-i}-Gamma_{-i}, where pi=sum min(p_i,1) and
+Gamma_{-i}=sum_{k!=i}(U_k+u_k-1)_+. Because S-d_i<=pi_{-i}+Z-z_i,
+that total is at least S-d_i-C_i-Gamma_{-i}. After restoring the positive
+recipient's own capped account to d_i, the opposing total is therefore at least
+                  max{d_i,S-C_i-Gamma_{-i}}.
+Restoring the account raises its payment; no actual report is asserted to
+achieve the restored value or this lower floor.
+
+The reciprocal-exponential inequality
+                     k(t)<=.5exp(1-t),  t>=0,               (3)
+is valid on BOTH sides of the outer switch. It is equality for t>=1. For
+0<t<=1, it is equivalent to exp(1-t)+exp(1-1/t)>=2. The derivative of its
+left side minus2 has the sign of
+ exp[t-1/t-2log(t)]-1.
+The exponent increases to0 on(0,1], since its derivative is (1-t)^2/t^2.
+Thus the derivative is nonpositive, and the function decreases to0 at1.
+The zero endpoint follows by continuity. This proves(3).
+
+Consequently every positive-gap recipient, without any restriction on the
+counterprofile's outer orientation, satisfies
+ E_i<=a_i+exp(Gamma)*q0*exp(C_i)*g_i, q0=.5exp(-r).         (4)
+This is the cap-safe replacement for the invalid untruncated Ci bound.
+
+If S<=3/2, the general low-total proof in the headroom theorem never used Gamma0
+and already gives sum E_i<7/5. Since the right side of(1) is at least1.4017,
+this region is settled. Suppose S>=3/2. Let P_chord be the full positive chord
+relaxation in(H8) of FULL_UTILIZATION_HEADROOM_FUNDING.txt, and let
+              N=q0*(4/5)exp(epsilon-c)*v.
+The exact high-total scalar certificate establishes
+                  1+P_chord-N <=14017/10000               (5)
+throughout the ENTIRE allowed epsilon,r,v domain. Its scalar statement is
+independent of whether the physical profile has Gamma0; Gamma0 was only needed
+to compare the ORIGINAL positive payments directly with P_chord. Here(4) gives
+the corrected comparison with exp(Gamma)P_chord.
+
+Also N<=.2exp(-1/2)<1/8: use r>=1/2, v<=1/2,
+exp(epsilon-c)<=1, and sqrt(e)>8/5. Thus
+ sum E_i<=1+exp(Gamma)P_chord-N
+ <=1+(14017/10000-1)exp(Gamma)+(exp(Gamma)-1)/8
+ =7/8+(5267/10000)exp(Gamma).
+This proves(1), including all caps and outer switches.
+
+For Gamma<=1/4, exp(Gamma)<=exp(1/4)<9/7; the fourth-power comparison follows
+from e<68/25<(9/7)^4. Hence the right side of(1) is at most
+              7/8+(5267/10000)(9/7)=108653/70000<25/16.
+The exact comparisons are recorded in verify_headroom_overlap_constants.py.
+
+SCOPE
+The cap-overlap parameter uses ceilings valid for BOTH stated purposes.
+A smaller ceiling improves this form only after proving both properties.
+A payment ceiling alone is sufficient for Gamma=0, but not for the positive
+Gamma deduction from the marginal-loss bound. It is not valid to
+replace U_i by the owner's current local payment without proving that payment
+cannot increase under another owner's underreport. Counts remain unbounded.
+The case of arbitrarily large Gamma is not claimed to have a useful constant
+from(1); the remaining general C^2 funding question is still open.
+
+SEPARATE PAYMENT AND MARGINAL CEILINGS
+More generally choose any payment ceilings U_i and any marginal-contribution
+ceilings V_i. Put w_i=min(1,(H-min(p_i,H))/U_i) when U_i>0, and w_i=1 when
+U_i=0. Define Gamma=sum_i (1-w_i)V_i. The same theorem and proof hold with this
+Gamma: the exact threshold-coalition floor loses at most that quantity under
+sequential deletion, because it is V_i that bounds each coalition loss.
+This distinction allows improved payment ceilings without asserting they also
+bound marginal production. The above explicit common-ceiling case follows by
+setting V_i=U_i, when (1-w_i)U_i=(U_i+min(p_i,H)-H)_+.
+
+PATCH RECORD
+After initial freeze, the positive-Gamma theorem's hypothesis was made explicit:
+U_i must be both a payment and marginal ceiling. The Gamma=0 theorem remains
+unchanged. This prevents use of an arbitrary smaller payment-only ceiling in
+the deletion bound. The proof and constants for the explicit U_i are unchanged.

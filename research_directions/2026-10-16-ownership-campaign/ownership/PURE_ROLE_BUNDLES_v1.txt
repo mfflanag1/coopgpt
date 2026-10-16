@@ -1,0 +1,75 @@
+PURE HARDWARE AND LOCAL-ENERGY BUNDLES -- DIRECT EXTENSION CANDIDATE
+16 October 2026. Depends on SPLIT_OPERATOR_RULE_v1.txt, awaiting audit.
+No historical novelty or arbitrary mixed-role claim.
+
+MODEL
+Keep the same physical pods h_i--L_i and shared grid P, but partition the
+hardware coordinates into arbitrary fixed nonempty blocks K_b. Actual owner
+B_b controls all h_i for i in K_b. Independently partition the local-energy
+coordinates into fixed blocks J_a, controlled by actual A_a. Grid C is a third
+role. The A, B, C owner sets are pairwise disjoint. The two partitions need not
+align. Each resource coordinate has exactly one actual owner. Every owner can
+jointly underreport any of its own coordinates. Public floors remain theta times
+each local operator's actual grand marginal. Hardware/grid floors are absent.
+
+RULE
+Use ell_i=min(h_i,L_i), r_i=h_i-ell_i and the same L,Q,H,G,R,T,M,D as v1.
+For hardware owner b put e_b=sum_{i in K_b}ell_i and r_b=sum_{i in K_b}r_i.
+For L>0 pay
+ x_b=e_b clip((P-Q+r_b)/L), X=sum_b x_b,
+ y_Bb=x_b, y_Aa=ell_a M/L, y_C=G-(X-L/4)_+.
+At L=0 pay C=G and all others zero. Mix with the efficient baseline
+(all A0, B_b=e_b, C=R) for general theta as in v1.
+Total, nonnegativity and local floors are unchanged, yielding factor1+theta/4.
+
+ACTUAL-OWNER INCENTIVES
+For B_b under any whole-bundle increase, e_b is nondecreasing. The quantity
+ p_b=(P-sum_{c!=b}r_c)_+
+and e_-b=sum_{c!=b}e_c remain fixed. Thus
+ x_b=min(e_b,p_b*e_b/(e_-b+e_b))
+is nondecreasing, including zero and cap boundaries. Changes in r_b cancel
+entirely in this formula; no assumption that only one pod report changes.
+For each A_a, all hardware reports remain fixed and the v1 proof applies
+unchanged. For C, sum_b e_b/L=1 gives exactly the same1-Lipschitz proof.
+
+COALITION COVERAGE
+A coalition's hardware set I is a union of full K_b blocks. Its selected local
+rows K are the intersection of I with a union of J_a blocks, and may be a proper
+part of individual K_b blocks. Coalitional worth is still ell(K) without grid,
+or ell(K)+min(P,r(I)+ell(I\K)) with grid.
+The total local payment is at least M*ell(K)/L, exactly as in v1.
+
+For Q<P<H, normalize L=1 and set delta=P-Q. Now define
+ z_b=e_b min(r_b,1-delta), Z=sum_b z_b.
+For included hardware owners, sum x_b=delta*ell(I)+z(I), and for excluded
+hardware owners, with o=ell(I^c), r=r(I^c),
+ z(I^c)<=o min(r,1-delta).
+These are precisely the identities used by the v1 scalar coverage lemma;
+no step required K to be a union of hardware blocks. The proof transfers
+word-for-word using s=ell(I\K), o<=1-s.
+
+For P<=Q, the v1 grid-only proof also transfers: for every excluded hardware
+owner b, Q-r_b>=r(I), so x_b<=e_b clip(P-r(I)) after normalizing L=1.
+For P>=H, x_b=e_b and y_C>=Q. Local-only coverage follows x_b>=e_b D/L.
+Zero cases and the baseline proof are identical to v1.
+
+SHARPNESS AND COST
+The previous one-local-operator/separate-hardware-owner lower family is a
+subclass, so the uniform factor remains sharp. O(m+number of actual owners)
+arithmetic operations suffice. No theorem of sharpness for each prescribed
+partition or positive floor for a hardware/mixed owner is asserted.
+
+WHY REAGGREGATION MATTERS
+Merely summing the old per-pod hardware payments is not truthful. Give one
+actual hardware owner both pods, take local capacities(1,1) and P=1. At h=(1,1),
+the old per-pod formula pays each pod1/2, total1. At h=(3/2,1), L=2,Q=1/2 and
+r=(1/2,0), so those payments are1/2 and1/4, total3/4. Raising an actual owner's
+hardware decreases its summed old payment. The new owner-level formula pays
+min(L,P)=1 at both profiles. This also illustrates why a general owner-merging
+assertion would have been invalid.
+
+SCOPE BOUNDARY
+The proof relies on hardware owners having no local or grid report and local
+owners having no hardware or grid report. It also uses disjoint coordinate
+ownership within each role. Arbitrary overlapping contributions to one local
+or hardware resource, or actual owners spanning roles, are not proved here.

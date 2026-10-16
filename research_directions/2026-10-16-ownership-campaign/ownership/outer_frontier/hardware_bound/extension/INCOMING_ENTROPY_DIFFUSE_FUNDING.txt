@@ -1,0 +1,204 @@
+INCOMING RESPONSE AND DIFFUSE LOCAL PAYMENTS: A GENERAL FUNDING REGIME
+16 October 2026. Candidate proof, awaiting independent review.
+Original symmetric exponential primitive. Fixed actual owners, arbitrary finite
+owner and branch counts, arbitrary nonnegative real reports and whole-bundle
+underreports. No novelty claim. All grid overflow is allowed.
+
+1. MODEL AND TWO STATEMENTS
+On one local branch let T be the shorter pool total, s_i the shorter coordinate,
+d_i=min(l_i,T) the capped longer coordinate, rho=sum_i d_i/T, and
+ q=exp(1-rho)/2, z_i=(1-q)s_i+q d_i.
+The zero-output rule is zero. Ties and caps are continuous. Let c=1/(2e),
+C=1+c, K=e-1. The established primitive is coalition covering and own-report
+monotone, with each z_i<=T and T<=sum_i z_i<=CT.
+
+With any number of local branches, let T_j be branch output, M=sum_j T_j,
+z_i=sum_j z_ij, and Z=sum_i z_i. Write z_k^i for aggregate local payments after
+any one actual owner i underreports any of its coordinates. Then
+
+ G_i := sum_{k!=i}(z_k^i-z_k)_+
+      <= (e+1) z_i [1+log(M/z_i)].                         (I)
+
+The right side is defined to be zero at z_i=0. This is an incoming POSITIVE
+response bound, not a bound on changes of total payment alone.
+
+For the depth-two production model, actual owner i has branch hardware h_ij,
+local resources l_ij, and grid p_i. Put H_i=sum_j h_ij, H=sum_i H_i, P=sum_i p_i,
+F=min(H,P+M), and b_i=p_i+z_i. The raw nested payment is the same exponential
+primitive applied to outer pools (H_i)_i and (b_i)_i. Let E_i be its actual
+own-report monotone envelope over coordinatewise underreports of owner's
+whole hardware/local/grid bundle. At every physical hardware bottleneck,
+H>0 and H<=P+M, define epsilon=max_i z_i/H. Then 0<=epsilon<=1, and
+
+ sum_i E_i/H <= 1 + (A/2) exp(-B/A),                       (D)
+ A=exp(K epsilon),
+ B=exp(-(e+1)epsilon[1+log(1/epsilon)]).
+
+At epsilon=0 use A=B=1. In particular,
+
+ max_i z_i/H <= 1/20  ==> sum_i E_i/H <= 6931/4995 < 7/5 < C^2.  (F)
+
+This is a profilewise bound on the SAME actual envelope; it is not a new
+payment formula, an exact envelope evaluation algorithm, or a claim of C^2
+funding on all profiles. The number of positive outer gaps can grow without
+limit. In particular the theorem does not rely on the one-positive-gap case.
+
+2. INCOMING RESPONSE WHEN AN ORIGINAL SHORT COORDINATE IS REDUCED
+First reduce only the deviator's original SHORT coordinate, leaving its long
+coordinate fixed. This pool remains short. On a smooth cap cell with
+m=#{k:l_k>T}, differentiation with respect to the increasing short report gives
+ q'=q(rho-m)/T,
+ z_k'=q'(d_k-s_k)+q*1_{l_k>T}, k!=i.
+For a capped other recipient, d_k=T>=s_k, so this derivative is nonnegative:
+that recipient cannot gain when the short coordinate is withheld. An uncapped
+recipient can gain only if s_k>l_k. Therefore the sum of all positive gains
+per unit short withholding is at most
+ q' sum_{k!=i}(s_k-l_k)_+
+ <=q' sum_{k!=i}s_k<=q(rho-m)<=q rho<=1/2.
+The last inequality holds for rho>=1 because rho exp(1-rho) decreases there.
+Thus the incoming positive gain over this entire stage is <=s_i/2<=U_i,
+where U_i=(1-q_full)s_i is the owner's FULL original-short-role payment.
+Also its long-role payment V_i=q min(l_i,T) cannot increase during this stage:
+both q(T) and min(l_i,T) are nondecreasing as T increases.
+
+3. ORIGINAL LONG COORDINATE: BOTH SIDES OF THE POOL SWITCH
+At the beginning of the long stage, normalize its current short total to 1.
+Let d<=1 be the deviator's capped long coordinate, q its current coefficient,
+rho the capped ratio, and V=qd its current long-role payment. Reducing an
+uncapped long report above 1 has no effect and may be omitted.
+
+Before a switch, reducing the capped own long coordinate by u<=d changes q
+to q exp(u), and leaves all other capped long amounts fixed. The sum of
+positive OTHER gains is therefore at most
+ q(exp(u)-1) sum_{k!=i}d_k
+ =q(exp(u)-1)(rho-d)<=K V rho.                            (2)
+Here exp(u)-1<=Ku<=Kd for 0<=u<=d<=1.
+
+If a switch occurs, the other ACTUAL long reports sum to v<1, so none is
+capped at the current short total. At the switch u=rho-1=d+v-1 lies in [0,d].
+The pre-switch positive gain is <=q(exp(u)-1)v<=K V.
+After the switch the original long coordinate becomes the short coordinate.
+Section 2 applies to any remaining reduction: its incoming gain is at most
+half the deviator's short amount at the tie, namely (1-v)/2=(d-u)/2.
+At the start of this long stage q=exp(-u)/2, and
+ d-u<=d exp(-u), since 1-d exp(-u)>=0 on 0<=u<=d<=1.
+Thus this post-switch gain is <=V. Combining both parts gives <=e V. Together
+with (2), the whole long-stage incoming gain is always <=e V rho.
+
+Restoring scale T, V/T=qd<=q implies
+ rho=1-log(2q)<=1+log(T/(2V)),
+so the incoming long-stage gain is at most
+ e V [1+log(T/(2V))].                                    (3)
+If V=0, this stage has no effect. If T=0, every payment remains zero.
+
+4. COMPOSITION OF ACTUAL COORDINATES AND BRANCHES
+At the beginning of the long stage, V<=V_full and T<=T_full. The function
+ f(v,t)=v[1+log(t/v)]
+is nondecreasing in both arguments on 0<v<=t, and continuous with f(0,t)=0.
+Drop the factor 2 inside the denominator in (3). First increase T to T_full
+while keeping V fixed; then increase V to z_i_full<=T_full. This order matters
+because z_i_full can exceed the intermediate T. Use
+V<=V_full<=z_i_full<=T_full. The long-stage incoming gain is <=e f(z_i_full,T_full).
+The short-stage gain is <=U_i<=z_i_full<=f(z_i_full,T_full). Positive-part
+subadditivity along these two successive reports of the SAME actual owner
+therefore gives <=(e+1)f(z_i_full,T_full) on a branch.
+
+Sum over branches and use the log-sum inequality (or concavity of log):
+ sum_j z_ij log(T_j/z_ij)<=z_i log(M/z_i).
+Zero-payment terms are interpreted by their continuous limit. A full branch
+with T_j=0 stays zero under withholding. If z_i=0, on every productive branch
+both of its coordinates are zero (the two coefficients are strictly positive),
+so it has no influence there. This proves (I), including all zero cases.
+There are finitely many cap/pool boundaries on each coordinate path; continuity
+extends the integrated derivative arguments to all real endpoints and ties.
+No owner cloning, role reassignment, or virtual strategic identities occur.
+
+5. TWO OUTER RESPONSE BOUNDS THAT ALLOW ARBITRARY OVERFLOW
+Normalize H=1. Then M<=1, z_i<=M, and physical hardware bottleneck implies
+sum_i b_i>=P+M>=1. Let a_i=H_i, d_i=min(b_i,1), S=sum_i d_i>=1, and
+q0=exp(1-S)/2. Full raw payments are a_i+q0(d_i-a_i).
+
+Fix any actual underreport of owner i. Compute its local response first.
+Restore its outer hardware and grid to the full values, and increase its own
+opposing account to its full value b_i. These are valid PAYMENT COMPARISONS
+by the outer primitive's own monotonicity, not assertions about an actual
+feasible underreport. The other hardware accounts and their total H=1 are
+now fixed; other opposing accounts are p_k+z_k^i. The restored own cap is d_i.
+
+Let O_i=sum_{k!=i}(z_k-z_k^i)_+. The established sharp outgoing bound gives
+ O_i<=K z_i<=K epsilon.                                  (4)
+The min(.,1) map is 1-Lipschitz. Therefore, for the restored capped opposing
+total S_i, independently of all full or changed overflow,
+ S-O_i<=S_i<=S+G_i.                                      (5)
+By (I), M<=1, and monotonicity of v[1+log(1/v)] on [0,1],
+ G_i<=(e+1)epsilon[1+log(1/epsilon)]=J.                   (6)
+
+Define the scalar comparison coefficient
+ k(t)=1-exp(1-1/t)/2 for 0<t<=1,
+ k(t)=exp(1-t)/2 for t>=1, and k(0)=1.
+It is continuous and decreasing. Also
+ k(t)<=exp(1-t)/2 for every t>=0.                         (7)
+For 0<t<=1, (7) is equivalent to exp(1-t)+exp(1-1/t)>=2.
+The left side decreases to 2 as t increases to 1: the ratio of the positive
+to negative terms in its derivative is exp(t-1/t-2log t)<=1, because
+t-1/t-2log t increases to zero. The t=0 limit also satisfies (7).
+
+For a POSITIVE full gap g_i=d_i-a_i>0, the restored payment is <=a_i+k(S_i)g_i.
+Indeed this is equality when the outer hardware pool is short. If the opposing
+pool is short, its raw total is S_i<1 (there are then no opposing caps);
+a_i<d_i<=S_i so the owner's hardware cap is inactive. The capped hardware
+sum is <=1, so its coefficient on its opposing account is <=k(S_i).
+Combining (4),(5),(7) yields, for every actual underreport and hence its envelope,
+ E_i<=a_i+q0 A g_i, A=exp(K epsilon).                     (8)
+This remains valid when (S-O_i)<1 or even negative; no lower bound on a capped
+total is improperly substituted for an uncapped total.
+
+For a NEGATIVE full gap g_i=a_i-d_i>=0, if the restored opposing raw total is
+>=1, its coefficient q_i is >=q0 exp(-G_i)>=q0 B, B=exp(-J), and its payment
+is <=a_i-q0 B g_i. If that raw total is <1, its payment is
+(1-q_i)d_i+q_i min(a_i,S_i)<=(a_i+d_i)/2, since q_i<=1/2; this is also
+<=a_i-q0 B g_i because q0 B<=1/2. Thus
+ E_i<=a_i-q0 B g_i.                                      (9)
+The zero-gap boundary a_i=d_i=1, which can hide own full overflow, needs only
+the primitive ceiling E_i<=1=a_i. All other negative or zero-gap owners have
+b_i=d_i, so the preceding formula applies directly.
+
+6. SUMMATION WITH NO BOUND ON POSITIVE-GAP OWNER COUNT
+Let G_+ and G_- sum the positive and negative full gaps. Then
+G_+-G_-=S-1=r>=0 and G_-<=sum_i a_i=1. By (8),(9),
+ sum_i E_i<=1+(exp(-r)/2)[A r+(A-B)G_-]
+            <=1+(exp(-r)/2)[A r+A-B].                   (10)
+A>=1>=B, and the last added term has its global maximum on r>=0 at r=B/A.
+This maximum is (A/2)exp(-B/A), proving (D). When epsilon=0, no local report
+has an effect and the limit A=B=1 is valid directly as well.
+
+7. EXACT CONVENIENT THRESHOLD
+Assume epsilon<=1/20. Elementary rational bounds e<11/4 and log20<3 imply
+ J<(15/4)(1/20)(1+3)=3/4, K epsilon<7/80.
+Consequently
+ A<=exp(7/80)<=1/(1-7/80)=80/73<11/10,
+ B>=exp(-3/4)>=1-3/4+(3/4)^2/2-(3/4)^3/6=59/128.
+The exponential estimates follow from its positive geometric majorant and
+the alternating Taylor bound. The function A^2/(A+B) has positive A derivative
+A(A+2B)/(A+B)^2 and negative B derivative -A^2/(A+B)^2. Since exp(-x)<=1/(1+x),
+ 1+(A/2)exp(-B/A)<=1+A^2/[2(A+B)]
+                 <=1+(11/10)^2/[2(11/10+59/128)]
+                  =6931/4995<7/5.
+Finally e<68/25 gives C>161/136, whose square exceeds 7/5.
+The accompanying exact Fraction checker verifies the rational exponential
+bounds and all stated rational comparisons. This completes (F).
+
+DEPENDENCIES AND STATUS
+Only established primitive own monotonicity/coverage/payment ceilings and the
+sharp linear outgoing theorem SHARP_OUTGOING_LOSS.txt are imported. The latter
+is a separately accepted dependency (root adjudication10); the accepted sharp
+nonlinear outgoing theorem also implies it because the owner loss D_i<=z_i. The incoming
+lemma, outer-switch comparison, summation, and threshold are proved here.
+The theorem does not establish unrestricted C^2 funding. It identifies a new
+regime controlled by concentration of local PAYMENTS, not simply owner counts
+or physical report fragmentation. A high-value owner can violate its hypothesis
+even when arbitrarily many other owners are present.
+
+POST-REVIEW CLARIFICATIONS (16 October UTC): explicit order of monotonicity
+comparisons, signs of the threshold substitution derivatives, and the separate
+accepted outgoing dependency. No theorem or proof inequality has changed.

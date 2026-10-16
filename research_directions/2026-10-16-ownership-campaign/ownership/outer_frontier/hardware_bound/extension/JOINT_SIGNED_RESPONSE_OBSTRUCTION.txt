@@ -1,0 +1,82 @@
+EXACT OBSTRUCTION TO THE PROPOSED TWO-RECIPIENT SIGNED-RESPONSE SUM
+17 October 2026. Fixed actual owners, rational physical reports, local-only
+underreports. Original symmetric exponential two-input primitive. This is a
+counterexample to the SPECIFIC proposed inequality, not a funding lower bound
+against all mechanisms and not a counterexample to the sharp signed theorem.
+
+PROPOSED INEQUALITY (FALSE)
+For two distinct actual owners A,G and two independently selected own local
+underreports, with all hardware fixed, one might hope that
+
+ sum_{k!=G}(z_k-z_k^{[G]})
+       +sum_{k notin{A,G}}(z_k-z_k^{[A]})
+                      <=Lambda(z_A+z_G),                (J)
+
+where Lambda is the exact signed-other constant from
+SHARP_SIGNED_OTHER_LOCAL_LOSS.txt. The second term excludes G, as occurs when
+G's outer account stays capped and hides its gains during A's underreport.
+The two reports are separate individual comparisons, not simultaneous changes.
+Even taking positive parts of the two displayed sums does not repair(J).
+
+EXACT THREE-OWNER INSTANCE
+Owner B holds hardware1 and no local supply. Owner G holds local1 and no
+hardware. Owner A holds local2/5 and no hardware. There are no other branch
+resources. Both pools and all owner identities are fixed throughout.
+Let q=exp(-2/5)/2. The full hardware-short profile has payments
+
+ z_B=1-q,             z_G=q,             z_A=(2/5)q.     (1)
+
+If G deletes its local supply, remaining local total2/5 is short. B's hardware
+is capped at2/5, so its coefficient is1/2 and
+ z_B^{[G]}=1/5,       z_A^{[G]}=1/5,      z_G^{[G]}=0.
+Therefore the first signed sum in(J) is
+             L_G=(3/5)(1-q).                            (2)
+
+If A deletes its local supply, hardware and G's local supply balance at1.
+The new payments to B,G are1/2 each and A is paid0. Hence the second sum is
+             L_A=z_B-1/2=1/2-q.                         (3)
+Both losses are strictly positive. Equations(1)--(3) give
+
+ (L_G+L_A)/(z_G+z_A)=(11exp(2/5)-8)/7 >6/5>Lambda.      (4)
+
+The first strict inequality is certified using the four-degree positive Taylor
+lower bound for exp(2/5), which already exceeds82/55.
+For the second, let w=45/128. An exact rational Taylor-tail upper gives
+w exp(w)<1/2, hence v_*>w. Since(1-v)^2/v decreases on(0,1),
+ Lambda<(1-w)^2/w=6889/5760<6/5.
+The companion script verifies both rational inequalities with explicit errors
+rather than assertions; it passes under python -I -O. No floating comparison
+is used in the proof.
+
+GROWING FAMILY AND DIFFUSE ACTUAL OWNERS
+The obstruction is homogeneous and persists with arbitrary productive branch
+counts. For any m>=3 and epsilon>0, take m branches of hardware
+ t=epsilon/(m q), held by m DISTINCT actual owners B_j. The SAME G holds local t
+on each, and the SAME A holds local(2/5)t on each. Then z_G=epsilon,
+z_A=(2/5)epsilon, and each actual z_Bj=(1-q)epsilon/(m q)<epsilon, because
+exp(2/5)<3/2 implies(1-q)/q=2exp(2/5)-1<2<m.
+Both whole-bundle deletions give the same ratio(4), independently of m. Thus
+arbitrary actual-owner fragmentation or a diffuse local-payment condition does
+not restore(J). All actual owners and permitted reports are fixed per instance.
+
+WHY THIS MATTERS, AND WHAT IT DOES NOT SHOW
+The sharp signed theorem counts G's GAIN when A deletes its local supply;
+that gain equals1/2-q and cancels B's loss. In(J), G's gain is excluded because
+an outer cap may hide it. Meanwhile G retains a different profitable response
+for its own envelope. Thus independently sharp signed bounds cannot simply be
+summed after deleting one recipient from the second signed sum. This identifies
+a precise remaining joint cap-accounting constraint.
+
+The example says nothing adverse about the validity of the original sharp
+signed theorem, global diffuse asymptotics, or current funding bounds. It is
+not a claimed counterexample to any mechanism-level subsidy conjecture.
+
+OPTIONAL ALGEBRAIC CONSEQUENCE FOR A FUTURE LOWER INTEGRATION
+If A's unused3/5 of an epsilon local-payment budget is allocated to an
+independent sharp-response module, its extra signed response is(3/5)Lambda
+in epsilon units. The combined response coefficient is then
+ J=(11exp(2/5)-8)/5+(3/5)Lambda >2Lambda,
+by(4). This is an exact response identity, but a standalone global asymptotic
+lower needs the same grid/core/cap checks as the separately frozen pair lower.
+No such extension is claimed as proved in this note; the prior frozen lower
+remains unchanged for review.

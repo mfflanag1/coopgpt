@@ -1,0 +1,71 @@
+EXACT POSITIVE-BINARY TWO-POOL FUNDING WITH GROWING OWNER COUNTS
+16 October2026. Parametrized stopping result for a specific report family. No historical-priority claim and no upper on the full continuous domain.
+
+MODEL. Fix m>=2 actual hardware owners and m distinct actual power owners. A hardware owner contributes only to resource A; a power owner contributes only to resource B. Each actual owner has the fixed report domain{1,H}, where H>=2 is an INTEGER. The production value of coalition S is min(A(S),B(S)). Its reports are binding and utility is its monetary payment. Owners cannot change roles or identities. Required incentives are exactly that changing one's own report from1 toH, with all others fixed, cannot decrease one's payment. All payments are nonnegative and every actual coalition must be covered at every profile in this finite rectangular report domain. There are no grand-marginal floors.
+
+THEOREM. Put a=min(H,m). The exact minimum worst-profile funding factor on this domain is
+ C(m,H)=1+(a-1)/(2*m*a).
+This remains a lower bound for every mechanism defined on a larger real report domain containing these profiles. The matching upper below concerns only this binary restriction. For all m,H it is at most9/8; uniformly over H it tends1 as m grows, because C(m,H)<=1+(m-1)/(2m^2). Hence increasing the population in this symmetric positive-binary family cannot improve the existing9/8 unrestricted lower. The result includes arbitrarily many active owners; none is a zero-report dummy.
+
+1. EXPLICIT RULE
+At a profile let k and l be the numbers of H-reports in the two pools. For notation orient the pools so k<=l; this is a formula convention, not an ownership change. Set
+ T=m+(H-1)k, d=l-k, a_k=min(H,T), q=(1/2)*a_k^(-d).
+Pay an owner on the short side with report x the amount (1-q)*x. Pay an owner on the long side with report z the amount q*min(z,T). If k=l, q=1/2 and every report is at most T, so both orientation choices give exactly half the owner's report. The tie formula is therefore unambiguous on the same fixed owners.
+
+2. COALITION COVERAGE
+For any actual coalition S, write A_S for its short-side resource sum and B_S for its long-side sum. The grand short total is T, so A_S<=T. Nonnegative scalar capping satisfies
+ sum_{i in S long}min(z_i,T)>=min(B_S,T)>=min(A_S,B_S).
+Also A_S>=min(A_S,B_S). Thus the coalition payment is at least
+ (1-q)A_S+q*min(A_S,B_S)>=min(A_S,B_S).
+All payments are nonnegative because 0<q<=1/2.
+
+3. EXACT OWN-REPORT INCENTIVES
+Fix an actual owner with current report1, changing only that coordinate toH.
+(a) If its pool is currently long or tied, let k be the opposite-side high count and l>=k its own pool's current count. The opposite short total T and a_k stay fixed. The old payment is q, including at a tie. After the increase the same owner is on the long side, its capped report is a_k and the new coefficient is q/a_k. Its new payment is exactly q. Hence this transition is payment-neutral.
+(b) If its pool is currently strictly short, increasing its high count by one either leaves it short or makes a tie. It cannot jump past the other pool's integer high count. The old payment is1-q<=1. The new payment is at least H/2>=1, because the new q is at most1/2, including the tie. Thus the payment does not fall.
+These cases exhaust every own-report change on the specified domain. This proves all-profile, fixed-actual-owner incentives on that domain, not only incentives at the worst-budget profiles.
+
+4. FUNDING UPPER
+Let D be the sum of capped reports on the long side. Total payment is
+ T+q(D-T).
+At a tie it equals T. For d>=1 use d<=2^(d-1)<=a_k^(d-1), hence d/a_k^d<=1/a_k, because a_k>=2.
+
+If H<=m, then a_k=H for every k, and
+ D=T+d(H-1),
+ q(D-T)/T=d(H-1)/(2*T*H^d)
+             <=(H-1)/(2*m*H).
+This is the claimed excess with a=H.
+
+Suppose H>m. If k=0, then T=m,a_k=m and
+ D=m+d(m-1),
+ q(D-T)/T=d(m-1)/(2*m*m^d)<= (m-1)/(2*m^2).
+If k>=1, then a_k=H and T>=m+H-1. Therefore
+ q(D-T)/T<= (H-1)/(2*H*(m+H-1)) <= (m-1)/(2*m^2).
+For completeness, the last inequality is equivalent to
+ g(H)=(m-1)H^2+(-2m+1)H+m^2>=0.
+Writing u=H-m>=0 gives
+ g(H)=(m-1)u^2+(2m^2-4m+1)u+m(m-1)^2>=0
+for every m>=2. This proves the bound with a=m.
+
+The bound is attained by this rule when k=0,l=1: T=m,q=1/(2a),D=m+a-1. Thus its worst-profile factor is exactly the displayed C(m,H).
+
+5. MATCHING LOWER FROM ACTUAL-OWNER REPORT TRANSITIONS
+Averaging any eligible mechanism over the finite permutation group of hardware labels and, independently, power labels preserves its worst funding factor, nonnegativity, coalition coverage and all own-report inequalities. This is a proof symmetrization over the same fixed population/domain, not permission to relabel identities between reported profiles. Hence it suffices to lower-bound such a symmetric mechanism.
+
+At the all-low profile let u be each hardware owner's payment and v each power owner's payment. A coalition of one owner from each side has value1, so u+v>=1.
+
+At the profile with one H-report on the POWER side and all others1, let x be the common hardware payment, z the common low-power payment, and y the high-power owner's payment. Own-report monotonicity gives y>=v. A low owner from each side gives x+z>=1 (m>=2 guarantees a low power owner remains). The coalition of the high power owner and any a hardware owners has value a, because a=min(H,m) is an integer. Thus a*x+y>=a. Its total funding B_P satisfies the exact identity
+ B_P=m*x+(m-1)z+y
+    =(m-1)(x+z)+(a*x+y)/a+(1-1/a)y
+    >=m+(1-1/a)*v.
+The analogous one-high HARDWARE profile has total
+ B_A>=m+(1-1/a)*u.
+Both profiles have grand value m. If a mechanism's funding factor is C, adding these two bounds gives
+ 2*m*C>=B_A+B_P>=2*m+(1-1/a)(u+v)
+                         >=2*m+1-1/a.
+Therefore C>=1+(a-1)/(2*m*a). Together with the upper this proves exact optimality on the entire binary domain.
+
+6. BOUNDARY AND RESEARCH SCOPE
+Integer H is used in the lower coalition of exactly a unit owners. The explicit upper and incentive proof also work for any real H>=2, but this note does not assert the same matching lower for noninteger H. The case m=1 is efficiently fundable and was excluded only to avoid separate cap/tie notation.
+
+This theorem neither proves that9/8 is optimal on continuous two-pool reports nor rules out multi-level, asymmetric-population, heterogeneous-amount, mixed-bundle or genuinely interacting depth-two lower families. It rigorously closes one natural growing-owner positive-binary attempt. Adding the level0 changes the domain and permits active-count variation; that richer family is not covered by this stopping lemma.

@@ -1,0 +1,116 @@
+SEPARATOR STATES AND TWO EXACT OBSTRUCTIONS TO NAIVE RECURSION
+16 October 2026. Bounded follow-on attack after the depth-two 7/4 theorem.
+All statements here are method-scope facts; none lower-bounds the unrestricted
+truthful subsidy on forests. No historical novelty claim is made.
+
+1. EXACT ROOTED-TREE STATE
+Let a finite tree carry unit-profit edge activities, consuming one unit at each
+endpoint. Root it once and for all. For a vertex v, write F_v(c) for maximum
+production inside its rooted subtree, and c_v for its resource capacity. Define
+  A_v=sum_{u child of v} F_u,
+  M_v=F_v-A_v,
+  R_v=c_v-M_v.
+Then, including zero capacities and leaves,
+  M_v=min(c_v,sum_{u child of v}R_u),
+  R_v=(c_v-sum_{u child of v}R_u)_+,
+  F_v=A_v+M_v.                                           (1)
+
+Proof: the minimum-weight vertex-cover representation gives two dynamic states.
+If v is excluded from a vertex cover, all child roots are included. If included,
+each child subtree can independently choose its optimal cover. The minimum
+cover cost with v included is c_v+A_v. In a child subtree u, the minimum cover
+with u included is c_u+A_u=F_u+R_u. Thus excluding v costs A_v+sum_u R_u. Taking
+the smaller gives (1). Weighted bipartite vertex-cover duality is the standard
+LP ingredient. The formula also follows by exchange in the primal edge flow.
+
+For gluing a new root P to boundary resources h_j of disjoint components, let
+A_j be each component's value with h_j removed, and let M_j=F_j-A_j. Writing
+H=sum_j h_j, A=sum_j A_j and M=sum_j M_j, the exact identity is
+  F=sum_j F_j+min(P,sum_j(h_j-M_j))
+   =A+M+min(P,H-M)=A+min(H,P+M).                          (2)
+Here the zero-boundary baseline A must not be confused with the full child
+value A+M: the new root adds production to the latter.
+
+Every A_j and F_j is nonnegative and monotone in reports, but M_j generally is
+not. On the three-vertex child path h--l--u,
+  A=min(l,u),  M=min(h,(l-u)_+).
+Increasing the internal substitute u can decrease the boundary marginal M.
+For example h=l=1 and u increasing from0 to1 makes M fall from1 to0 while A
+rises from0 to1. Therefore M cannot be fed into a monotone local-production
+primitive without an explicit compensation argument. The conservation of
+A+M is useful, but is not itself a payment or incentive proof.
+
+2. NO UNIFORM BELOW-TWO BOUND FOR MONOTONE MAJORANTS OF VERTEX-CORE BASES
+For every m>=2, take the path with vertices0,...,2m, all capacities1. Actual
+owner A holds every even vertex and owner B every odd vertex. The owner set is
+fixed. At any report profile let z_v be ANY nonnegative efficient core allocation
+for the auxiliary game in which every resource vertex is a separate player.
+Its actual-owner aggregation is Z_A=sum_even z_v, Z_B=sum_odd z_v.
+
+Claim: every actual-owner own-report-monotone rule y satisfying y_i>=Z_i at
+every profile, for any choice of such efficient auxiliary cores, must have
+  y_A+y_B >=2m-1
+at the full profile, whose production value is m. Hence its worst-case factor
+is at least 2-1/m and no uniform constant below2 is possible in this class.
+
+Proof: at the full profile, edge coalitions give z_v+z_{v+1}>=1. For EACH even
+vertex2j there is a matching of size m leaving just2j uncovered: match adjacent
+vertices separately on its left and right. Summing that matching's edge-core
+inequalities gives sum_{v!=2j}z_v>=m. Efficiency and nonnegativity force z_{2j}=0.
+This holds for every even vertex. Each odd vertex is adjacent to an even one,
+so receives at least1; efficiency forces exactly1. Thus Z_B=m and Z_A=0.
+
+Now owner A underreports its two endpoint capacities to zero, leaving every
+other coordinate fixed. The active path has2m-1 vertices; its unique efficient
+auxiliary core pays1 to the internal even vertices and0 to all other vertices.
+Thus Z_A=m-1 at that report. The two zero-resource players receive0 in any
+efficient nonnegative auxiliary core: the coalition excluding them already
+has the full value m-1. Majorization at the reduced profile and A's own-report
+monotonicity force y_A(full)>=m-1. Majorization at the full profile forces
+y_B(full)>=m, proving the claim.
+
+This applies in particular to every fixed mixture of hierarchical vertex-core
+allocations followed by an actual-owner own-report envelope, and even allows
+the auxiliary core choice itself to depend on reports. It is stronger than a
+failure of one selected root. The issue is retaining auxiliary vertex-coalition
+constraints after several vertices belong to the same actual owner.
+
+It is NOT an unrestricted lower bound. In this exact two-actual-owner example,
+neither singleton owner can produce. Paying each owner F/2 is nonnegative,
+efficient, covers every actual coalition, and is own-report-monotone because
+F is monotone. A successful separator method must use actual-owner coalition
+coverage and need not majorize the efficient virtual-player allocation.
+
+3. THE RANGE RULE DOES NOT PRESERVE A HALF-BUDGET BOUND FOR ALL POWER OWNERS
+This is a precise warning about one tempting inductive invariant. It is not a
+counterexample to the proved 7/4 theorem or its local-role decomposition.
+
+Consider one depth-two branch, with one pure hardware owner holding h=1 and
+two other owners each holding local power l_i=1/2 and shared power p_i=1/2.
+No owner has hardware and power together. The local two-input rule is balanced,
+so z_h=1/2 and z_1=z_2=1/4. Hence H=P=M=1, C=1+1/(2e), K=1+C, and each power
+owner's available account upper bound is B_i=3/4.
+
+For each power owner, take an admissible outer account vector with its own
+account3/4, the other power account1/2, and hardware account0. The total5/4 is
+<=K, and each account is at least the physical shared-power report. Its outer
+payment is
+  (1/2)(3/4) exp(1-5/4)=(3/8)exp(-1/4).
+Consequently the two power owners' range payments total at least
+  (3/4)exp(-1/4)>1/2=H/2.
+The strict inequality follows from exp(1/4)<3/2; for example e<3<(3/2)^4.
+
+Thus one cannot iterate the depth-two proof by treating the entire solved
+component as a new two-pool primitive and asserting that its TOTAL payments
+to pure power-side owners remain <=H/2. The actual local lemma only bounds
+the local-power contribution in the underlying two-input primitives, before
+the outer range operation; it does not assert the false stronger invariant.
+More refined accounting separating inherited grid and local roles is not
+ruled out, and could still support a genuine separator composition theorem.
+
+STATUS
+These derivations identify the exact unresolved step for the bounded attack:
+combine the opposite changes in the zero-boundary baseline A and residual
+marginal M into owner-specific monotone payments, without retaining an
+efficient vertex-core majorant or assuming an inherited half-power bound.
+No all-forest factor below2 has been proved by this note.

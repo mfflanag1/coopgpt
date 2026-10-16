@@ -1,0 +1,27 @@
+**Provisional verdict: qualified pass — no counterexample found; every derivative cell, the funding reduction and all k-cases check; reference code matches the definition. Two minor rigor gaps, neither affecting correctness.**
+
+## Findings
+
+**1. (Low) D=A full-dimensional cell not explicitly covered — WATERFILL_PRODUCT_THEOREM.txt:39,76.**
+Section 4 assumes "At D>A one has λ<A" and derives cells (a)/(b) under that. But D=A can persist on an interval of x_i (exactly one z_j>A, e.g. x=(x₁,0), z=(0,5)); there λ=max cap is not pinned by (1), k=0, and β=1/λ−c fails. The cell is trivially fine (p=1/2, y_i=(x_i+d_i)/2, nondecreasing), and p→1/2 as D→A⁺ (η≈δ/r argument), so continuity holds. Suggest adding one sentence.
+
+**2. (Low) Finiteness of cells asserted, not argued — line 67.**
+"Finitely many linear cells" is claimed without proof. It does hold: within D>A, λ'∈{1/k,(1+ε)/(k+1)}>0 so λ is strictly increasing in x_i; fixed caps (z_j≤A) cross λ at most once, caps d_j=A never cross (λ<A), k is nonincreasing, and M–λ crossings are finite once k stabilizes. Worth stating since monotonicity is deduced from a.e. derivative sign.
+
+**Verified (independently recomputed):**
+- Eq.(1) solvable: LHS continuous nondecreasing, =M+D≥A+M at λ=max; unique when D>A. λ<A whenever D>A (else LHS=M+D>A+M).
+- Sec.3: p′/p=−1/d_i (active) and −1/λ (inactive, λ′=−1/r); y_i′=p·x_i/d_i and p[1−d_i/λ+x_i/λ], both ≥0.
+- Sec.4(a): λ′=1/k, k≥1, β=1/λ−c≥0, u′=0 (inactive caps fixed since z_j≤A); y′≥1−p(1+x/λ)≥0 via x≤s≤λ, p≤1/2.
+- Sec.4(b): β=(1+ε)/λ−ε/s−c exact; ε=0: p(1+x/λ)≤(λ+x)/(2s)<1; ε=1: 1+βs=2s/λ−cs≤2s/λ; β<0: β≥1−s/λ via c≤k≤(1+s−λ)/λ, giving y′≥1−ps/λ≥1/2 using d−x≤1, p≤λ/(2s).
+- Orientation swap at A=B: all d_i=z_i, D=A, p=1/2, y=(a+b)/2 both sides; A→0 bound y_i≤3A/2.
+- Sec.5: total =A+p(D−A); endpoint reduction valid (λ fixed, D≥1 preserved, d_j=1 feasible since λ<1). (a): (k/2)λ^k(1−λ) on [0,1/k], max (k−1)/(2k^k)≤1/8 (2^k≥4(k−1) checked). (b): k=0 ≤s/8; k=1 critical (1+s)/3, split at s=1/2, (1+s)³/(54s) increasing (log-deriv (2s−1)/(s(1+s))), =4/27 at s=1; k≥2: λ*=(k+s)/(k+2)≥(1+s)/(k+1)⇔k²−2≥s, endpoint values (k/2)s^k(1−s) and (k−1)(1+s)^{k+1}/(2s(k+1)^{k+1}), log-deriv sign ks−1, k=2 gives 4/27, k≥3 ≤(2/(k+1))^k≤1/8.
+- Attainment: x=(1,0,0), z=(0,1,1): λ=2/3, p=4/27, payments (23/27,4/27,4/27), total 31/27.
+- Code (waterfill_rule.py): `water_level` is the standard sort-and-fill with correct invariant; at target=sum(caps) it returns the max cap, matching the D=A convention; `p` and `out` implement (2)–(3) exactly; tie orientation 0 consistent with proof; exact equation assertion at line 28. Faithful.
+
+Whole-bundle monotonicity follows from the two coordinate results since the rule is defined on all of ℝ₊², so intermediate profiles exist regardless of eligibility restrictions.
+
+## Scope limitations
+No code executed; no numeric sweeps. The dependency file (exponential 1+1/(2e) rule, star decomposition) and the composition corollary were not audited beyond noting the corollary's term-by-term logic is routine. Historical novelty not assessed.
+
+## Verdict
+Findings: two low-severity presentational gaps (D=A cell, cell finiteness). No correctness defect found; the 31/27 claim and all quantifiers (all-real, all-profile, fixed owners, mixed bundles) are supported by the supplied argument as checked above.

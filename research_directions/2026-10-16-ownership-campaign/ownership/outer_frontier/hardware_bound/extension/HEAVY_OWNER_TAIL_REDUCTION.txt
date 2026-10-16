@@ -1,0 +1,135 @@
+HEAVY-OWNER / LIGHT-TAIL FUNDING REDUCTION
+16 October 2026. Candidate consequence of SHARP_INCOMING_ENTROPY_v2.txt.
+All owner identities remain fixed. The results bound contributions to the actual
+own-report envelope; they do not merge owners, alter the technology, or claim
+an equivalent finite-dimensional report space. Arbitrary full grid overflow,
+real reports, mixed bundles, and unbounded owner/branch counts remain allowed.
+
+1. NOTATION
+At a physical hardware bottleneck normalize H=1. Let M<=1 be physical local
+output, z_i local payments, a_i hardware shares, d_i=min(p_i+z_i,1), S=sum_i d_i,
+r=S-1>=0, q0=exp(-r)/2. The full raw outer payment is
+ N_i=a_i+q0(d_i-a_i).
+Let E_i be the actual own-report envelope. Then E_i>=N_i, since truthful reporting
+is among the feasible choices. Put K=e-1 and define
+ f_M(z)=z[1+log(M/z)] for0<z<=M, f_M(0)=0,
+ b_M(z)=exp(-K f_M(z)),
+ psi_K(t)=(exp(Kt)-1)/t for t>0, psi_K(0)=K.
+If M=0, all responses vanish and every E_i=N_i; assume M>0 below.
+
+The sharp incoming/outgoing response proofs give the INDIVIDUAL bounds
+ E_i-N_i<=q0(exp(Kz_i)-1)(d_i-a_i), ifd_i>a_i,             (P)
+ E_i-N_i<=q0(1-b_M(z_i))(a_i-d_i), ifa_i>d_i.             (N)
+Zero gaps haveE_i=N_i. These comparisons apply to every actual own underreport
+before taking its supremum, including outer switches and arbitrary overflow.
+
+2. A COUPLED TWO-MOMENT BOUND FOR ANY SUBSET OF OWNERS
+Fix any subset L of actual owners; a useful choice is L={i:z_i<=epsilon}.
+Let t=max_{i in L}z_i (zero for an empty subset), and define
+ G_- =sum_{i in L,a_i>d_i}(a_i-d_i),
+ W_- =sum_{i in L,a_i>d_i}z_i(a_i-d_i),
+ W_+ =sum_{i in L,d_i>a_i}z_i(d_i-a_i).
+Then
+
+ sum_{i in L}(E_i-N_i)
+ <=q0 { psi_K(t) W_+
+       +G_-[1-b_M(W_-/G_-)] }.                          (T-moment)
+
+IfG_-=0 the second term is zero; ifW_-=0 it also equals zero. The bound retains
+both the owners' actual local payments and their actual outer gap weights.
+In particular a tail of many owners with substantial grid but negligible local
+payments produces a small correction; tail cardinality does not appear.
+
+PROOF. Convexity ofexp(Kz) gives the upper chord
+ exp(Kz)-1<=psi_K(t)z for0<=z<=t.
+For0<z<=M, differentiating b=b_M gives
+ b'=-K log(M/z)b,
+ b''=[K/z+K^2 log^2(M/z)]b>0.
+The continuous extensionb(0)=1 is convex on[0,M]. Weighted Jensen with weights
+(a_i-d_i)/G_- therefore yields
+ sum_{i in L,a_i>d_i}(a_i-d_i)b_M(z_i)>=G_- b_M(W_-/G_-).
+Apply(P),(N) and sum. This proves(T-moment) without replacing any actual owner
+or requiring its optimizing report to coincide with another owner's report.
+
+3. AN EXPLICIT UNIFORM TAIL CHARGE COUPLED TO HEAVY ACCOUNTS
+TakeL={i:z_i<=epsilon},0<epsilon<=1, andJ=N\L. Put
+ A=exp(Kepsilon), B=exp(-Kepsilon[1+log(1/epsilon)]),
+ a_J=sum_{i in J}a_i, d_J=sum_{i in J}d_i, Q_J=d_J-a_J.
+AsM<=1, (P),(N) imply
+ sum_{i in L}(E_i-N_i)
+ <=q0[(A-1)G_+^L+(1-B)G_-^L].                            (4)
+ButG_+^L-G_-^L=r-Q_J andG_-^L<=1-a_J, hence
+
+ sum_{i in L}(E_i-N_i)
+ <=(exp(-r)/2){(A-1)(r-Q_J)+(A-B)(1-a_J)}.               (T-fixed)
+
+This is the requested coupling: heavy owners' full HARDWARE mass a_J and capped
+OPPOSING mass d_J restrict the possible contribution of every remaining owner.
+It is generally stronger than discarding the heavy accounts. The moment bound
+in Section2 can be taken in minimum with(T-fixed), using the same actual data.
+
+For a bound independent of the remaining grid total, put
+ u=A-1>0, v=(A-B)(1-a_J)-uQ_J,
+ r_min=max(0,d_J-1), r_hat=max(r_min,1-v/u).
+Necessarilyr>=r_min, since S>=d_J. Elementary one-variable differentiation gives
+
+ sum_{i in L}(E_i-N_i)
+ <= T_epsilon(a_J,d_J)
+ :=(exp(-r_hat)/2)(u r_hat+v).                            (T-heavy)
+
+At every feasible r>=r_min the affine expressionu r+v is nonnegative:
+ifQ_J>1-a_J use r>=Q_J-(1-a_J), and otherwise its value at zero is already
+nonnegative. Its exponential product increases to1-v/u and decreases thereafter,
+which proves the maximum formula. No geometric or strategic equivalence with
+a problem involving onlyJ is claimed; the actual heavy-owner envelopes E_i
+still depend on every report and branch of the original instance.
+
+A simpler bound, valid without any heavy-account information, is
+
+ sum_{i in L}(E_i-N_i)<= (A-B)/2.                         (T-simple)
+
+Indeed G_-^L<=1 and G_+^L<=G_+<=r+1, so(4) is at most
+(exp(-r)/2)[(A-1)r+A-B], whose maximum forr>=0 occurs at0 becauseB<=1.
+
+4. FINITE CONCENTRATION OF ANY FUNDING FAILURE
+For everyprofile,
+ sum_i E_i<=sum_i N_i+sum_{i in J}(E_i-N_i)
+                    +T_epsilon(a_J,d_J),               (R)
+with the stronger moment correction available. Since sum_iN_i<=C=1+1/(2e)
+and |J|epsilon<sum_i z_i<=CM<=C, every fixed excess above C can be localized
+to a bounded number of actual heavy owners, with an explicit tail error:
+
+ sum_i E_i>C+eta
+ ==> sum_{i in J}(E_i-N_i)>eta-(A-B)/2,
+     |J|<C/epsilon.                                     (L)
+
+This has useful content whenever(A-B)/2<eta. The tail error(A-B)/2 tends tozero
+as epsilon decreases tozero, uniformly over all owner counts, branch counts,
+report magnitudes, and grid overflow. Thus an arbitrarily large population of
+small-local-payment owners cannot conceal an order-one envelope funding loss.
+The high-dimensional whole-bundle reports of heavy owners remain unrestricted.
+
+For one exact calibration relevant to the C^2 frontier, takeepsilon=1/20.
+Elementary boundsK<7/4,log20<3 give
+ A<11/10,
+ B>exp(-7/20)>=1-7/20+(7/20)^2/2-(7/20)^3/6=33797/48000.
+Consequently the uniform tail charge is <19003/96000.
+Sincee<68/25 impliescC>4025/18496, any profile withsum_iE_i>C^2 has
+
+ sum_{i in J}(E_i-N_i)>545633/27744000,
+ |J|<=23,
+ max_{i in J}(E_i-N_i)>545633/638112000.                 (5)
+
+The owner-count bound usesC<6/5. The last conclusion is an existence claim
+about an ACTUAL envelope gain, not a claim that its supremum is attained by a
+finite report. For any strictly smaller gain threshold there is a feasible
+own underreport witnessing it by the definition of supremum. All quantities
+scale byH when the normalization is removed.
+
+5. SCOPE
+The reduction neither proves nor disproves unrestrictedC^2 funding. It gives
+an exact error budget and two coupled moments for treating many remaining
+owners, while preserving actual whole-bundle incentives. The finite heavy set
+is selected from one full profile only; it is not fixed across reports and
+must not be used to redefine strategic identities or the mechanism. The
+original rule and envelope remain fixed on the entire report domain.

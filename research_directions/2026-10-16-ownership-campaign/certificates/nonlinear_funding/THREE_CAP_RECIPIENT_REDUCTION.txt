@@ -1,0 +1,126 @@
+THREE CAP-SENSITIVE RECIPIENTS BELOW CAPPED TOTAL TWO
+16 October 2026. Structural reduction for the original exponential primitive.
+All owners remain actual owners; all single-owner whole-bundle underreports are
+allowed. No global C^2 funding theorem is asserted here.
+
+SETUP AND DEPENDENCIES
+Normalize positive full hardware H to one. Let M be full local output, z_k the
+full aggregate local payment, and p_k the full grid report of actual owner k.
+Thus 0<=z_k<=M<=1. Put pi_k=min(p_k,1), d_k=min(p_k+z_k,1), S=sum_k d_k.
+For every actual deviator i, let z_k^i be recipient k's local payment following
+an arbitrary coordinatewise whole-bundle underreport by i. The grid reports in
+the following outer-account comparison are restored to their full values.
+
+We use local own monotonicity, local coalition coverage, and the independently
+audited half-gap incoming-response theorem
+       sum_i (z_k^i-z_k)_+ <= (1-z_k)/2.                 (1)
+The choices of the different owners' underreports in (1) are independent.
+The weighted actual-coalition floor is the elementary layer-cake consequence
+of coalition coverage, as set out in GRID_WEIGHTED_COALITION_FLOOR.txt. Neither
+that standard argument nor the underlying coalition inequality is claimed new.
+
+1. A COMMON CEILING FOR EVERY ACTUAL DEVIATOR
+Write T_j=min(H_j,L_j) for full output on branch j and define
+       U_k=min{M, (1+z_k)/2,
+                  sum_j min(T_j,max(h_kj,l_kj))}.       (2)
+Then z_k<=U_k and, simultaneously for every actual i and every i-underreport,
+                         0<=z_k^i<=U_k.                (3)
+
+Proof. Every local payment is at most the branch output, so z_k^i<=M.
+Equation (1), or its single-deviator consequence, gives
+z_k^i<=z_k+(1-z_k)/2=(1+z_k)/2. If i=k, own monotonicity gives the stronger
+z_k^k<=z_k. On each branch the payment is a convex combination of the owner's
+short-pool report and capped long-pool report. Both are at most the counterprofile
+output T_j^i<=T_j and at most max(h_kj,l_kj): if k=i its reports only decreased,
+and otherwise its reports stayed fixed. Summing proves the third ceiling.
+The full report is an allowed underreport, proving z_k<=U_k. This also treats
+zero-output branches and zero recipient payments without a limiting argument.
+
+2. AT MOST THREE NONTRIVIAL WEIGHTS
+Set
+ w_k=min{1,(1-pi_k)/U_k} if U_k>0; set w_k=1 if U_k=0.
+Let J={k:w_k<1}. This is a set of actual recipients, not new virtual players.
+For every k in J,
+                              d_k>1/2.                 (4)
+If J is nonempty, consequently |J|<2S. In all cases, S<2 implies |J|<=3;
+S<=3/2 implies |J|<=2. If S=0 then J is empty.
+
+Proof. A nontrivial weight requires U_k>0 and pi_k+U_k>1. If p_k>=1 then
+d_k=1>1/2. If p_k<1, (2) gives
+ p_k>1-U_k>=(1-z_k)/2,
+so p_k+z_k>(1+z_k)/2>=1/2. Clipping at one preserves the strict lower bound
+d_k>1/2. This proof does not assert the false strict inequality
+d_k>(1+z_k)/2 when z_k=1. Summing (4) proves the count.
+
+For k outside J with U_k>0, p_k+U_k<=1, hence its outer account never caps at
+any actual single-owner counterprofile. For U_k=0, every local payment is zero,
+so its outer account is the constant pi_k even if p_k>1. Therefore only members
+of J can have local payment changes hidden by the outer cap. The converse is
+not asserted: some members of J may never actually cross a cap.
+
+3. A FLOOR REQUIRING AT MOST FOUR COALITION VALUES
+Assume S<2. Fix i and let A be any coalition not containing i. Its actual opponents'
+resource reports are fixed; write
+                    m(A)=sum_j min(H_j(A),L_j(A)).
+At every i-underreport, (3) gives
+        min(p_k+z_k^i,1)>=pi_k+w_k z_k^i  (k!=i).      (5)
+Thus the opponents' capped total is uniformly at least
+ R_i=sum_{k!=i}pi_k + integral_0^1 m({k!=i:w_k>=t})dt. (6)
+Indeed, sum_k w_k z_k^i is the integral of payments to these fixed actual
+coalitions, each at least its production. No counterprofile needs to attain
+the lower bound and no reports of separate virtual roles are introduced.
+
+Let the q<=3 exceptional opponents in J\{i} be ordered as
+ 0<=w_(1)<=...<=w_(q)<1,
+and let A_ell be all opponents except the first ell exceptional opponents.
+With w_(0)=0 and w_(q+1)=1, the integral in (6) equals
+       sum_{ell=0}^q (w_(ell+1)-w_(ell)) m(A_ell).     (7)
+Tied or zero weights merely produce zero-length intervals. Formula (7) uses
+at most four original coalition values independently of the total owner count
+and branch count. For an exceptional deviator i itself, it uses at most three.
+For q=1, writing the sole exceptional opponent as k, (6) is explicitly
+ R_i=pi_{-i}+w_k m(N\{i})+(1-w_k)m(N\{i,k}).          (8)
+
+Precompute all branch resource totals in O(n*m) arithmetic operations, where
+n is the number of actual owners and m the number of branches. Each recipient's
+at most four coalition values then follows by deleting i and at most three
+named owners from these totals in O(m) arithmetic operations. All recipient
+floors therefore require O(n*m) arithmetic operations, once the local payments
+and weights have been evaluated. This is an arithmetic-operation statement;
+the exponential primitive makes the weights generally transcendental. No exact
+rational bit-complexity or actual-envelope evaluation claim is made.
+
+4. A VERIFIED DOMAIN WHERE THE UNTRUNCATED FLOOR IS VALID
+If J is empty, (6) becomes
+                         R_i=pi_{-i}+M_{-i},            (9)
+where M_{-i}=m(N\{i}). All full outer accounts satisfy d_k=pi_k+z_k, including
+U_k=0. Hence S=sum pi_k+Z and
+                   d_i+R_i=S-C_i,
+                   C_i=Z-z_i-M_{-i}.                  (10)
+The positive-gap restoration bound therefore gives, for g_i=d_i-H_i>0,
+                   E_i<=H_i+g_i k(S-C_i).              (11)
+Here k(t)=1-(1/2)exp(1-1/t) for 0<t<=1, k(0)=1, and
+k(t)=(1/2)exp(1-t) for t>=1. Any independent upper bound on C_i can safely
+replace C_i in (11) because k is decreasing. This makes the previously unsafe
+untruncated complement-surplus argument valid on this explicit class.
+
+The ceiling in (2) can strictly enlarge a uniform-M headroom class. For example,
+one balanced branch with n owners, each owning hardware and local resource 1/n,
+has M=1 and z_k=1/n; the coordinate ceiling gives U_k=1/n. Arbitrarily many
+positive grid reports with p_k<=1-1/n then satisfy J empty, although the crude
+uniform-M condition would require all p_k=0. This example illustrates the
+domain extension, not a sharp funding lower bound.
+
+5. SCOPE AND REMAINING OBSTRUCTION
+For S<2 there can still be arbitrarily many positive-gap owners. The conclusion
+is that cap-sensitive recipients, and hence the coalition-floor threshold
+states, have bounded count. It does not bound the number of deviators, merge
+their resources, identify the exact envelope, or prove a global funding factor.
+The exact family in COMPLEMENT_CAP_TRUNCATION_OBSTRUCTION.txt has just one
+cap-sensitive recipient. It already invalidates deleting all cap corrections
+in the general class. Equations (6)-(8) retain that recipient and its actual
+coalition geometry instead of imposing the false untruncated floor.
+
+If H=0 the physical output is zero, every local payment is zero, and all
+funding and floor statements reduce to the zero-output case without normalization.
+If H>0 but M=0, (2) makes every U_k=0, J is empty and (6) is simply pi_{-i}.

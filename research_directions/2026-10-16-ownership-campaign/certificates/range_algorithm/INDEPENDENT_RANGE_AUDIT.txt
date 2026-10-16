@@ -1,0 +1,188 @@
+INDEPENDENT AUDIT: CLOSED-FORM MIXED-OWNER RANGE MECHANISM
+16 October 2026. Codex independent validation lane.
+
+Scope and outcome
+-----------------
+Read root/RANGE_MECHANISM.txt, mixed/RANGE_ROBUST_ENVELOPE_THEOREM.txt, and
+root/SEVEN_FOURTHS_SHARPENING.txt. Independently derived both range maxima and
+constructed feasible maximizing opposing vectors. No root/sparse verifier was
+imported or copied. No formula, attainment, coalition, or incentive blocker was
+found. The mathematical optimization proof below is conventional; all exp-based
+computational checks are explicitly floating-point stress tests, not certificates.
+This audit does not independently certify the entire 7/4 scalar budget argument
+or priority/novelty. Those remain the responsibility of the broader proof audit.
+
+1. Independent account-space formulation
+----------------------------------------
+Fix n actual owners, h_k>=0, p_k>=0, H=sum h_k, P=sum p_k, and owner i.
+Write a=h_i, p_-=sum_{k!=i}p_k. The only needed range assumptions are
+  beta>=p_i, K>=beta+p_-.
+The feasible opposing vectors satisfy b>=p, b_i<=beta, sum b<=K.
+They form a nonempty compact set. For H=0 the objective is identically zero.
+For n=1, own-account monotonicity gives max Phi_1=min(H,beta).
+Henceforth H>0 and n>=2. There is at least one other account available to
+receive slack, which is essential in the short-regime witness construction.
+
+The independent implementation is verify_range_mechanism.py. The primitive
+uses the original formula directly and treats A=B as (a_i+b_i)/2, T=0 as zero.
+Physical coalition worth is rebuilt by removing every absent owner's entire
+bundle before computing min(H(S),p(S)+sum_j min(h_j(S),l_j(S))).
+
+2. Short opposing pool: complete derivation and attainment
+---------------------------------------------------------
+The total T lies in [P,U], U=min(K,H); this interval exists exactly when P<=H.
+At fixed T, the payment is
+  (1-q(T))c+q(T)min(a,T),
+  q(T)=exp(1-rho(T))/2, rho(T)=sum_k min(h_k,T)/T.
+Because T<=H, rho>=1 and 1-q>=1/2>0. Thus the optimal own account is
+  c(T)=min(beta,T-p_-).
+It is feasible: T>=P ensures c>=p_i; putting every other account initially
+at p_k leaves nonnegative residual T-c-p_-, which can be assigned to any
+one other owner. No upper bounds are imposed on those other accounts.
+
+Let T0=beta+p_-. On [P,min(T0,U)], the preceding witness has all other
+accounts equal to p and raises only c=T-p_-. Primitive own-account
+monotonicity therefore makes the objective nondecreasing there.
+
+On T>=T0, c=beta and q(T) is nondecreasing, since each
+min(h_k,T)/T=min(h_k/T,1) is nonincreasing. If beta<=a, then
+min(a,T)-beta>=0 and is nondecreasing, so the payment is nondecreasing.
+If beta>=a, then T>=T0>=beta>=a and the gap a-beta<=0 is constant, so
+the payment is nonincreasing. Consequently
+  T*=U                    when beta<=a;
+  T*=min(U,T0)            when beta>=a.
+At beta=a both prescriptions agree in value; beyond T0 the value is a.
+At T=0 the value is zero. This proves the entire short formula, including
+zero endpoints and the beta=a crossing, with an explicit maximizing vector.
+
+3. Long opposing pool: complete derivation and attainment
+--------------------------------------------------------
+The region exists exactly when K>=H. Put c=b_i and d_c=min(c,H). The
+payment is
+  a + exp(1-rho)(d_c-a)/2,
+  rho=sum_k min(b_k,H)/H >=1.
+
+Positive gap d_c>=a.
+The smallest capped total is max(H,d_c+S_-), where
+  S_-=sum_{k!=i}min(p_k,H).
+Both terms are lower bounds. To attain them, fix c and initially use p_-.
+If c+p_- >=H, the initial capped total is already >=H: either one account
+is >=H, or no account is capped and the capped total equals the total.
+If c+p_- <H, all initial accounts are <H. Add H-c-p_- to one other
+account. That account does not exceed H, since the initial total was at
+least its initial value. The new total and capped total are both H. It is
+within budget because K>=H. Hence
+  rho_min(d)=max(1,(d+S_-)/H).
+For a<=d<=H, the factor exp(1-rho_min(d))(d-a) is nondecreasing. On either
+smooth piece its derivative is exp(1-rho_min)[1-(d-a)rho_min'], where
+rho_min' is 0 or 1/H, so the bracket is nonnegative. The pieces join
+continuously. Thus the maximum positive-gap choice uses d=min(beta,H).
+Taking c=beta is feasible and attains that capped value, even if beta>H.
+
+Negative gap d_c<=a.
+When beta<a, necessarily beta<H; every feasible c<=beta is uncapped.
+For fixed c, define W_-=sum_{k!=i}(p_k-H)_+. The largest capped total is
+  min(c+(n-1)H,K-W_-).
+The first term is the accountwise cap; the second subtracts unavoidable
+overflow at the other owners from the total budget. To attain this minimum,
+start at b_i=c and b_{-i}=p_{-i}, then distribute remaining budget into
+other accounts below H until they are full or the budget is exhausted.
+The attainable maximum is at least H: if some p_k>=H, that account alone
+provides H; if none does, W_-=0 and both c+(n-1)H and K are >=H.
+Thus the constructed vector lies in the long region. Its ratio is
+  rho_max(c)=min((c+(n-1)H)/H,(K-W_-)/H).
+As c increases, rho_max is nondecreasing and a-c is nonnegative and
+nonincreasing. Therefore exp(1-rho_max(c))(a-c) is nonincreasing, and
+the payment is nondecreasing. Its optimum is c=beta.
+
+If beta>=a, c=a is feasible whenever the feasible interval contains a,
+and positive-gap values are at least a, whereas negative-gap values are
+at most a. If p_i>a, every feasible c already has nonnegative gap.
+Hence the positive-gap optimum dominates all negative-gap choices.
+At d=a, the objective is exactly a and either formula agrees, regardless
+of which cap-ratio expression is used. This establishes the complete long
+formula with no assumption that the optimizing vectors are physical reports.
+
+4. Boundary and whole-owner incentive checks
+--------------------------------------------
+At total opposing capacity H, every account is at most H, so rho=1 and
+the short and long primitive formulas both give (h_i+b_i)/2. At K=H,
+the long feasible set is the total-H face; it introduces no discontinuous
+larger value. At P=H the short face is already included in the long region.
+At beta=a, the maximizing-total switch has equal values as proved above.
+
+The original range-inclusion incentive proof is valid. An own h/l increase
+raises H_i, beta=B_i and K, fixes all other H_k and all p, and therefore
+expands D_i; the outer primitive is monotone in its own H_i at each old
+feasible b. An own p_i increase by delta translates every old feasible
+b to b+delta e_i, raises the own ceiling and total ceiling by exactly delta,
+and cannot reduce the primitive payment. Coordinate telescoping covers every
+whole-owner comparison. Other owners' local payments may move either way;
+the proof never assumes their monotonicity.
+
+For completeness, the primitive's own-coordinate monotonicity can also be
+checked directly, independently of any cloning argument. In the A<=B region,
+with T=A, own b_i below A has derivative q[1+(a_i-b_i)/A]>=0; above A its
+derivative is zero. For own a_i, if b_i>=A the derivative is
+1+q'(A-a_i)>=1. If b_i<A, it is 1-q+q'(b_i-a_i). On smooth pieces,
+0<=q'<=q rho/A. If b_i>=a_i the derivative is nonnegative immediately;
+otherwise it is >=1-q(1+rho)>=0, since
+(1+rho)exp(1-rho)/2<=1 for rho>=1. The B<=A argument is symmetric.
+The primitive is continuous across cap crossings and A=B; at zero its
+individual payment is at most T and tends to zero. These local derivatives
+therefore give global coordinate monotonicity, including all boundaries.
+
+The full local-account vector p+z belongs to every D_i. Hence each R_i is at
+least its nested-rule payment. Branchwise coalition coverage of the primitive
+and then outer coalition coverage prove physical coalition coverage. A null
+owner has a=beta=p_i=0 and receives zero. If grand F=0, either H=0 or K=0,
+and every payment is zero. No semantic substitution of virtual account vectors
+for actual ownership or actual reports is needed in any of these arguments.
+
+5. Actual numerical validation, all performed under python3 -B -O
+----------------------------------------------------------------
+The following complete Cartesian domains were checked, with all coalitions,
+all adjacent own-coordinate comparisons, and feasible witnesses for every
+available closed-form option at every owner/profile:
+  n=1,m=3,levels{0,1,2}:       2187 profiles,   4374 coalitions, 10206 edges;
+  n=2,m=2,levels{0,1,2}:      59049 profiles, 236196 coalitions,393660 edges;
+  n=3,m=2,levels{0,1}:        32768 profiles, 262144 coalitions,245760 edges;
+  n=2,m=1,levels{0,1/3,1,2}:  4096 profiles,  16384 coalitions, 18432 edges.
+All passed. Totals: 98100 profiles,519098 coalitions,668058 adjacent edges.
+The largest observed funding factor was 1.5765176319495888, not a theorem.
+
+Independent abstract-account checks covered 3659 cases, including zero H,
+zero coordinates, n=1, K=H, P=H, beta=a, one or several p_k>H, plus seeded
+random scales from 10^-3 to 10^3 and owner counts up to 8. Every option's
+explicit feasible vector attained its displayed value. Exhaustive rational
+fraction grids of own-account increases and opposing-account simplex slack
+enumerated 329121 feasible vectors. None exceeded the claimed maximum.
+The largest scaled witness discrepancy was below 7.3e-17.
+
+check_report_crossings.py constructed 921 additional physical profiles:
+120 base cases,120 P=H,78 K=H,283 B_i=H_i,320 local-pool ties. It checked
+21046 coalitions,46570 two-sided coordinate perturbations,and3433 whole-owner
+underreports. All passed. The largest observed factor was 1.6044677199451014.
+The most negative scaled incentive residual was -3.11e-17, consistent with
+floating arithmetic; this is not represented as exact nonnegativity.
+
+Numerical acceptance tolerance was 2e-10 times an explicit profile/account
+scale. Inputs include rational grids, but exp and all computed payments use
+binary floats. None of these numerical PASS records proves exact incentives,
+finite-precision truthfulness, or a universal funding bound. The conventional
+arguments above and the separate budget proof carry those mathematical claims.
+
+6. Reproduction and integration advice
+--------------------------------------
+Run the scripts from this directory with python3 -B -O. Each accepts --output;
+verify_range_mechanism.py accepts --abstract or --owners/--branches/--levels.
+The six JSON outputs preserve actual domains, counts, residuals, and source
+hashes. No SciPy or package installation is needed.
+
+Recommended manuscript presentation: define R as the compact-range maximum,
+prove incentives by domain inclusion/translation and coverage by domination,
+then give the short/long formulas as an evaluation theorem. This keeps the
+all-profile argument independent of a brittle piecewise derivative proof for
+the final closed form. Retain the explicit n=1 case and the n>=2 hypothesis
+in the range-maximization lemma. State real-arithmetic/exponential-operation
+costs without claiming bit complexity or implemented exact truthfulness.

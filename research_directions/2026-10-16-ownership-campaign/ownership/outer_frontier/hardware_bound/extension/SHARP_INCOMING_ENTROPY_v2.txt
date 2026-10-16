@@ -1,0 +1,144 @@
+SHARP ENTROPY CONSTANT AND DIFFUSE FUNDING v2
+16 October 2026. Candidate strengthening; independent review pending.
+This preserves INCOMING_ENTROPY_DIFFUSE_FUNDING.txt unchanged. Its Sections1--2,
+4--6 supply the model, short-coordinate incoming estimate, branch summation,
+and outer comparison. This note proves the stronger local constant, its
+sharpness, a doubled simple diffuseness threshold, and the sharp diffuse limit.
+All reports are real and nonnegative; actual owners are fixed; mixed whole-bundle
+underreports and all pool switches are included. No novelty claim.
+
+1. IMPROVED LONG-STAGE SWITCH ESTIMATE
+Use the notation of Section3 of the frozen v1: at start of the original-long
+stage normalize short total to1, own capped long amount d<=1, coefficientq,
+and long role V=qd. If no switch occurs, incoming positive gain is <=K V rho,
+where K=e-1 and rho is the initial capped ratio.
+
+If a switch occurs, the other actual original-long total v<1 and the reduction
+until the tie is u=d+v-1=rho-1, with0<=u<=d<=1 and q=exp(-u)/2. The pre-switch
+gain is <=q(exp(u)-1)v. The short-stage estimate after the tie gives at most
+(1-v)/2 for the rest of the reduction. Hence the total is at most
+ q[(exp(u)-1)v+exp(u)(1-v)]=q(exp(u)-v).
+Since v=1+u-d,
+ exp(u)-v=d+[exp(u)-1-u].
+For u>0, usingd>=u andexp(u)-1-u>=0,
+ [exp(u)-v]/d<=1+[exp(u)-1-u]/u=(exp(u)-1)/u<=K.
+Atu=0 the ratio is1 ifd>0, and a zero d has no effect. Thus the entire long
+stage has incoming gain <=K V in the switching case, and <=K V rho in all
+cases because rho>=1. Restoring T and using V/T=qd<=q gives
+ G_long<=K V[1+log(T/(2V))].                              (1)
+The upper bound applies to any partial reduction, not only complete deletion.
+
+2. COMBINE BOTH ACTUAL COORDINATES WITH THE SHARP CONSTANT
+Let U and V_full be the owner's full short and long role payments and z=U+V_full.
+The short stage has incoming gain<=U. During that stage V and T cannot increase,
+so first increase T to T_full while keeping the intermediate V fixed; then
+increase V to V_full<=T_full/2. This yields the bound
+K V_full[1+log(T_full/(2V_full))]. The function in (1) is nondecreasing inV
+on0<V<=T/2, and inT; its V derivative islog(T/(2V)). The explicit comparison
+order avoids incorrectly assumingV_full<=T_intermediate/2.
+The endpointV_full<=T_full/2 follows fromq<=1/2 andd<=T_full.
+
+Write alpha=V_full/z and R=T_full/z>=1 whenz>0. We claim
+ U+K V_full[1+log(T_full/(2V_full))]
+ <=K z[1+log(T_full/z)].                                 (2)
+The difference divided byz is
+ (K-1)(1-alpha)+K(1-alpha)logR+K alpha log(2alpha).
+Drop the nonnegative logR term. The remaining function ofalpha has its global
+minimum on[0,1] at alpha=exp(-1/K)/2, with value
+ K-1-(K/2)exp(-1/K)>0.
+For an entirely rational sign proof, e>8/3 ande<11/4 imply5/3<K<7/4. Thus
+K-1>2/3 and(K/2)exp(-1/K)<=(7/8)exp(-4/7)
+ <=(7/8)/(1+4/7)=49/88<2/3.
+Thealpha=0 formula uses the continuous limit. This proves(2), includingz=0.
+
+Positive-part subadditivity over the actual two-coordinate path and the log-sum
+inequality across branches, exactly as in v1 Section4, now give
+
+ sum_{k!=i}(z_k^i-z_k)_+
+ <=K z_i[1+log(M/z_i)], K=e-1.                            (I-sharp)
+
+No averaging or merging of actual owners occurs in the proof.
+
+3. THE CONSTANT K IS SHARP
+On one branch take one pure hardware owner with amount1 and n pure local-resource
+owners each with amount1, n>=3. All actual identities and roles remain fixed
+throughout the deviation. Then T=M=1,rho=n,q=exp(1-n)/2. One resource owner i
+hasz_i=q; let it reduce its own amount from1 to0. The new coefficient iseq.
+The other n-1 resource owners each gainKq, and the hardware owner losesKq.
+Therefore the total positive OTHER gain is exactly(n-1)Kq, and
+ G_i/{z_i[1+log(M/z_i)]}=K(n-1)/(n+log2) ->K.
+No smaller universal multiplicative constant in(I-sharp) is possible. This is
+also an exact obstruction to any universal linear incoming boundG_i<=L z_i:
+G_i/z_i=K(n-1) diverges. Counts grow, but each member uses one fixed owner set
+and an ordinary feasible own-coordinate underreport.
+
+4. IMPROVED GENERAL PROFILE FUNDING BOUND
+At a physical hardware bottleneckH>0 defineepsilon=max_i z_i/H. Use the same
+outgoing estimate<=Kz_i and the same outer comparison and summation from v1,
+now replacing its incoming constant(e+1) byK. The result is
+
+ sum_i E_i/H<=D(epsilon):=1+(A/2)exp(-B/A),                (D-sharp)
+ A=exp(K epsilon), B=exp(-K epsilon[1+log(1/epsilon)]).
+
+SetA=B=1 atepsilon=0. All full or changed grid overflow remains permitted;
+there is no restriction on the number of positive outer gaps. This is a bound
+on the original actual own-report envelope, not a new rule. The proof uses the
+1-Lipschitz mapmin(.,H) directly and does not replace a capped opponent floor
+by its uncapped extension.
+
+5. EXACT THRESHOLD epsilon<=1/10
+For0<=epsilon<=1/10, useK<7/4 andlog10<7/3 to obtain
+ K epsilon<7/40,
+ K epsilon[1+log(1/epsilon)]<=(7/40)(1+7/3)=7/12.
+Thus A<exp(7/40)<6/5 and
+ B>exp(-7/12)>=1-7/12+(7/12)^2/2-(7/12)^3/6>11/20.
+The first exponential bound follows from its Taylor terms0--2, bounding the
+remaining tail geometrically with successive ratio at most(7/40)/4.
+The map(A,B)->1+(A/2)exp(-B/A) has positive A derivative
+exp(-B/A)(1+B/A)/2 and negative B derivative -exp(-B/A)/2. Since
+exp(x)>=1+x+x^2/2 forx>=0,
+ D(epsilon)<=1+(3/5)exp(-11/24)
+ <=1+(3/5)/(1+11/24+(11/24)^2/2)
+ =12461/9005<7/5<C^2.                                    (3)
+The exact rational checker beside this file verifies these elementary bounds.
+
+6. SHARP DIFFUSE LIMIT, WITH GROWING BRANCH AND OWNER COUNTS
+The upper bound satisfies
+ D(epsilon)=C+cK epsilon log(1/epsilon)+O(epsilon)
+ as epsilon decreases to0, wherec=1/(2e),C=1+c.
+This follows by expandingA=1+Kepsilon+O(epsilon^2) and
+B=1-Kepsilon[1+log(1/epsilon)]+O(epsilon^2 log^2(1/epsilon)).
+In particularD(epsilon)=C+O(epsilon log(1/epsilon)).
+
+The constantC cannot be lowered even in this diffuse regime. For every integer
+m>=2 usem branches and2m fixed owners A_j,B_j. In branchj letA_j ownhardware1/m
+andB_j ownlocalresource1/m; all other branch reports are zero. GiveB_j grid1/m,
+andA_j zero grid. These are the same fixed actual owners at all reports; they
+are not recreated during any deviation. At the displayed full profile:
+ H=M=P=1, z_Aj=z_Bj=1/(2m), Z=1, epsilon=1/(2m).
+The outer accounts area_Aj=1/m,b_Aj=1/(2m),a_Bj=0,b_Bj=3/(2m).
+For m>=2 all outer opposing accounts are<=1, henceS=2 andq0=c. The full raw
+outer total is1+c(S-1)=C. Since actual truth-telling is one allowed point in
+each own envelope, sum_i E_i>=sum_i N_i=C.
+
+Formally letW(epsilon) be the supremum ofsum_i E_i/H over all finite depth-two
+instances and physical hardware-bottleneck profiles withmax_i z_i/H<=epsilon,
+allowing arbitrary finite owner/branch counts, fixed identities in each instance,
+and arbitrary real reports. For everyepsilon>0 choosem>=max(2,ceil(1/(2epsilon))).
+The construction showsW(epsilon)>=C, whereas(D-sharp) givesW(epsilon)<=D(epsilon)
+(the bound is increasing inepsilon on[0,1]). Consequently
+                 lim_{epsilon->0+} W(epsilon)=C.
+Both productive branch count and active owner count tend to infinity in the
+matching family. This is sharp asymptotic funding in a genuine unbounded regime,
+not unrestrictedC^2 funding or a lower bound against every truthful mechanism.
+
+DEPENDENCY CLARIFICATION: the sharp linear outgoing theorem is separately
+accepted (root adjudication10); the accepted nonlinear theorem implies it as
+well usingD_i<=z_i. The inherited v1 file now explicitly records the order of
+monotonicity comparisons and the signs used in its rational substitutions.
+
+POST-REVIEW MONOTONICITY CLARIFICATION: on0<=epsilon<=1, A=exp(Kepsilon)
+is increasing and B=exp(-Kepsilon[1+log(1/epsilon)]) is decreasing (its
+derivative is -Klog(1/epsilon)B). Since the funding expression is increasing
+in A and decreasing in B, D(epsilon) is increasing. Thus it bounds the
+supremum over all profiles with max_i z_i/H AT MOST epsilon, as used in W.

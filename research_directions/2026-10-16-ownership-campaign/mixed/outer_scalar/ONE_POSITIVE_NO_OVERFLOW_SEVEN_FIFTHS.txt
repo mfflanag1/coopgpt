@@ -1,0 +1,152 @@
+ONE POSITIVE OUTER GAP WITHOUT FULL OVERFLOW: A 7/5 ENVELOPE BOUND
+16 October 2026. Candidate proved by analytical reduction and exact rational
+certificate; independent review pending. Original exponential primitive only.
+This is a structural class with unbounded numbers of actual owners and branches,
+not a claim about all mixed-grid profiles, novelty, or the optimal constant.
+
+1. MODEL AND STATEMENT
+Use the fixed-owner depth-two production model and actual own-report envelope E
+of the original nested exponential rule. Hardware H=sum_i H_i, local optimum
+M=sum_j min(H_j,L_j), grid total P, and production F=min(H,P+M). The local
+payment is z_i, with Z=sum_i z_i, and the full outer opposing account is p_i+z_i.
+Let C=1+1/(2e), c=C-1, K=e-1, eta=1/2+2/e.
+
+Suppose the full profile satisfies:
+ (i) physical hardware bottleneck F=H<=P+M;
+ (ii) no full outer overflow: p_i+z_i<=H for EVERY actual owner i;
+ (iii) at most one owner has p_i+z_i>H_i.
+Then
+                         sum_i E_i <=(7/5)H < C^2 H.                 (1)
+The no-overflow and one-positive-gap restrictions concern the full profile.
+Own deviations may change either local bottleneck, create opposing overflow,
+and change the outer bottleneck. All actual owners and their eligible resource
+coordinates remain fixed. The theorem concerns payments, not welfare losses or
+an explicitly polynomial algorithm for evaluating the actual envelope.
+
+The zero-H case is immediate. Normalize H=1. Write a_i=H_i,
+d_i=p_i+z_i<=1, S=sum_i d_i=P+Z>=1. Let r be the sole positive-gap owner and
+put a=a_r, z=z_r, d=d_r, g=d-a. Since all other gaps are nonpositive,
+                  0<=g<=1,                  1<=S<=1+g.             (2)
+If no positive-gap owner exists, S=1 and the ordinary nonpositive-gap ceiling
+E_i<=a_i gives total at most1. Hence assume g>0 below.
+
+2. POSITIVE RECIPIENT: RETAIN OWN LOSS AND LOCAL HARDWARE
+For any whole-owner underreport of r, first compute its local payments and then
+restore only its OUTER hardware and grid coordinates. This algebraic restoration
+raises its outer payment by own-coordinate monotonicity. Let
+                  D=z-z_r' >=0,
+and let O=sum_{i!=r}(z_i-z_i')_+ be outgoing positive local loss. The restored
+own outer account is exactly d-D: the full account was at most1 and the local
+own payment cannot increase. If D>=g, its payment is at most a, so it suffices
+to consider 0<=D<=g. In fact D<=z, but that further restriction is not needed.
+
+The sharp nonlinear outgoing theorem and directed hardware lemma give
+ O<=K sqrt(zD),
+ O<=U_{-r}+eta*a<=1-z+eta*a,                               (3)
+where U_{-r} is full local HARDWARE-role payment to the other owners. The last
+inequality is the hardware-role compatibility bound z+U_{-r}<=1. Since d=a+g<=1,
+a<=1-g, and therefore
+ O<=min{K sqrt(zD),w-z},             w=1+eta(1-g).           (4)
+Maximizing this upper bound over the larger interval 0<=z<=w gives
+ O<=kappa(D,g):=K/2*[sqrt(K^2 D^2+4Dw)-KD].                (5)
+Indeed, the first term in(4) increases in z and the second decreases. Their
+intersection solves kappa^2=K^2D(w-kappa). Formula(5) is also valid at D=0.
+It is nondecreasing in K,D,w. No report or simultaneous attainment is claimed
+at that maximizing artificial z.
+
+Clipping opposing accounts at1 can only reduce their positive loss. Thus the
+restored opposing capped total is at least both d-D and S-D-O. Define
+ k(t)=1-(1/2)exp(1-1/t) for 0<t<=1,
+ k(t)=(1/2)exp(1-t) for t>=1, and k(0)=1.
+It is continuous and nonincreasing. When the restored total is at least1,
+the positive-gap payment is exactly a+k(total)(g-D). Below1, the own hardware
+account is uncapped whenever g-D>0, and the other hardware caps increase the
+coefficient q above (1/2)exp(1-1/total); because the gap is positive, this only
+LOWERS the payment. Hence
+ E_r<=a+max_{0<=D<=g} (g-D) k(max{g-D,S-D-kappa(D,g)}).     (6)
+Here we weakened d-D to g-D, another valid relaxation. Equation(6) includes
+outer switching and opposing cap crossings.
+
+3. NEGATIVE RECIPIENTS: FULL NO-OVERFLOW IS ESSENTIAL HERE
+For any other owner i and any own underreport, restore its outer hardware/grid.
+The resulting opposing capped total S' satisfies
+ S'<=P+Z'<=P+CM = S+CM-Z <= S+cM <= S+c,
+since every local production decreases and M<=H=1, while Z>=M. This uses the
+FULL no-overflow identity S=P+Z; it is not asserted with arbitrary full overflow.
+Thus, in the hardware-short outer regime, its coefficient is at least
+                    q_*=(1/2)exp(1-S-c).
+Its own opposing account cannot exceed d_i, so its payment is at most
+                    a_i-q_*(a_i-d_i).
+If the outer regime switches, its payment is at most(a_i+d_i)/2, which obeys
+the same bound because q_*<=1/2. Sum over all i!=r and use
+                    sum_{i!=r}(a_i-d_i)=1+g-S.
+Combining with(6), the desired envelope budget follows from the scalar inequality
+
+ 1+(g-D) k(max{g-D,S-D-kappa(D,g)})
+       -(1/2)exp(1-S-c)(1+g-S) <=7/5                    (7)
+
+throughout 0<=D<=g<=1 and 1<=S<=1+g. Different owners may choose unrelated
+underreports: the positive and negative bounds above are individually uniform.
+
+4. EXACT, SMALL ADAPTIVE CERTIFICATE FOR(7)
+The attached certify_one_positive.py proves(7) with rational arithmetic only.
+All bound decisions and infeasible-box decisions are exact; there is no floating
+search, numerical tolerance, optimizer, or disabled-assert dependency. Floats
+appear only in the printed summary after the proof decisions have completed.
+
+Conservatively replace K by 7/4, eta by5/4, and c by23/125. These enlarge the
+right side of the scalar upper bound: kappa increases and the negative saving
+coefficient decreases. The checks use
+ 1957/720 < e <11743/4320,
+where the lower bound is the degree6 positive series and the upper bound is
+sum_{j=0}^5 1/j! plus the geometric tail (1/720)/(1-1/7).
+These also verify exactly that 7/5 < (1+1/(2e))^2.
+
+For a rational box g in[gl,gh], S in[sl,sh], D in[dl,dh], intersect the bounds
+with gl>=dl, gl>=sl-1, dh<=gh, and sh<=1+gh. Set
+ x=gh-dl,
+ w_hi=1+(5/4)(1-gl),
+ kappa_hi=(7/8)[sqrt_hi((49/16)dh^2+4dh*w_hi)-(7/4)dh],
+ T_lo=sl-dh-kappa_hi,
+ G_lo=max(0,1+gl-sh).
+The square-root upper bound rounds upward to a multiple of 2^-24 using integer
+square roots and an exact rational comparison.
+
+For fixed T, the map x -> x k(max{x,T}) is nondecreasing on0<=x<=1. Below T it
+is linear; above T, its derivative is
+ 1-(1/2)exp(1-1/x)(1+1/x)>=0,
+by (r+2)exp(-r)<=2 for r=1/x-1>=0. This matters: it permits the sharper positive
+box bound x*k(max{x,T_lo}), rather than independently bounding its two factors.
+An upper bound on(7)'s left side over the entire feasible part of the box is
+ 1+x*k_upper(max{x,T_lo})
+   -(1/2)*exp_lower(1-sh-23/125)*G_lo.                  (8)
+If x<=2/5, the simpler upper bound1+x already suffices.
+
+Taylor polynomials for exp(-y), y>=0, give the exact analytic directions:
+ degree13 is a lower bound, degree12 is an upper bound (Lagrange remainder).
+The lower bound may harmlessly be truncated below at zero. These are used
+inside k_upper and exp_lower in(8). All arguments are rational.
+
+Starting from [0,1]x[1,2]x[0,1], each unresolved box is bisected at the midpoint
+of a longest side. The two children cover their parent, and the rational
+intersections discard only infeasible points. The completed traversal contains
+1,627 evaluated boxes and814 accepted leaves. The largest accepted rational
+upper bound is approximately1.3999823153985693, strictly below7/5. The full exact
+fraction and corresponding box are in certify_one_positive.json. There are no
+unresolved leaves. Normal and -O executions both pass.
+
+5. INTERPRETATION AND DEPENDENCIES
+This establishes an additional unbounded structural regime for the ACTUAL
+own-report envelope. It does not bound profiles with two positive-gap owners,
+and it does not permit positive full overflow, even at a negative-gap owner.
+It is neither a matching lower bound nor an optimality claim for7/5.
+
+Proof dependencies, all under the same campaign directory:
+ mixed/outer_scalar/HARDWARE_DIRECTED_OUTGOING.txt
+ ownership/outer_frontier/hardware_bound/extension/SHARP_NONLINEAR_OUTGOING_LOSS.txt
+ ownership/outer_frontier/hardware_bound/extension/SHORT_STAGE_NONLINEAR_THREE_HALVES.txt
+and the original fixed-owner exponential primitive's own monotonicity, individual
+bound z_i<=M, production monotonicity, and total bounds M<=Z<=CM.
+The checker needs only Python's standard library. Run:
+ python3 -O mixed/outer_scalar/certify_one_positive.py
+from the campaign directory, or use the absolute script path from any directory.

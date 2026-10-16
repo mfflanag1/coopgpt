@@ -1,0 +1,89 @@
+PROFILEWISE SHARPENING OF THE FIXED-OPPONENTS SURPLUS FLOOR
+16 October2026. Version2 adds the exact concave tradeoff supplied by root.
+Candidate analytical corollary; review pending; original version remains saved.
+This sharpens sparse lane's complement-surplus bound M/2. Original exponential
+primitive, actual fixed owners, all-real reports, arbitrary branches.
+
+On branch j, let T_j be production, rho_j the full capped long/short ratio, and
+q_j=.5exp(1-rho_j). Put
+ Vlong=sum_j q_j rho_j T_j,
+which is the TOTAL full payment allocated to original-long resource roles.
+This is not the hardware/local-power role decomposition. For every actual owner i,
+                    Z-z_i-M_{-i} <=Vlong.                         (1)
+The same Vlong works simultaneously for every omitted actual owner. It satisfies
+ Vlong<=min{M/2, 2cM-delta+(e-1)sqrt(c M delta)},                   (2)
+where c=1/(2e), C=1+c, delta=CM-Z. At zero local slack, Vlong=2cM.
+
+ONE-BRANCH PROOF
+Normalize T=1. Let x<=1 be opponents' actual short total, y their actual long
+total, and d their capped long total. Their full payments sum to(1-q)x+qd.
+If y>=x, their coalition value is x, so the surplus is q(d-x)<=q rho.
+If y<x, then y<1 and d=y. The omitted owner's own capped long amount is at most1,
+so rho=d+d_i<=d+1, hence d>=rho-1. The surplus is
+ (1-q)(x-d)<=(1-q)(2-rho).
+This case necessarily has rho<2. Since
+ q rho-(1-q)(2-rho)=2q+rho-2=exp(1-rho)+rho-2>=0,
+the same upper bound q rho holds. Restoring T and summing proves(1).
+For each prescribed rho>=1 the one-branch bound is attained by an actual owner
+holding the entire short pool and none of the long pool: its opponents produce
+zero alone, and receive exactly q rho T. This is sharpness of(1)'s profilewise
+coefficient, not a lower bound on funding or on other mechanisms.
+
+GLOBAL BOUNDS ON Vlong
+The function rho exp(1-rho)/2 is at most1/2 for rho>=1, giving Vlong<=M/2.
+Also write Q=sum_j q_j T_j. The full total payment identity is
+ Z=M+sum_j q_j(rho_j-1)T_j, hence Vlong=Q+Z-M.
+The exact scalar inequality proved analytically in MARGINAL_FLOOR_STABILITY.txt,
+Section3, gives
+ (q_j-c)_+ <=(e-1)sqrt(c delta_j/T_j),
+with delta_j=CT_j-Z_j. It is also valid when rho_j>=2 because then q_j<=c.
+Cauchy--Schwarz yields Q<=cM+(e-1)sqrt(c M delta). Therefore
+ Vlong<=cM+Z-M+(e-1)sqrt(c M delta)
+       =2cM-delta+(e-1)sqrt(c M delta),
+proving(2). Zero-output branches are omitted without changing any quantities.
+When delta=0, every productive branch has rho=2, so equality Vlong=2cM follows.
+
+EXACT CONCAVE TRADEOFF WITH FULL LOCAL EXCESS (root derivation)
+Write epsilon=Z-M in[0,cM]. For EVERY t>=0,
+ Vlong <=(M/2)(1+t)exp[-t/(1+t)]-t epsilon.              (4)
+Taking the infimum gives the exact concave upper envelope as a function of M
+and epsilon. For M>0, let u be the unique value in[0,1] satisfying
+ epsilon/M=(u/2)exp(-u).
+Then
+ Vlong <=(M/2)(1+u)exp(-u).                             (5)
+The formula has its continuous endpoint interpretation at u=1. If M=0 every
+quantity is zero. This tradeoff is sharper than the convenient square-root
+bound whenever the latter is not tight.
+
+To prove(4), on a branch put u_j=rho_j-1>=0. Its long-role payment per T is
+b_j=.5exp(-u_j)(1+u_j), and its excess per T is e_j=.5u_j exp(-u_j).
+The function b_j+t e_j=.5exp(-u_j)[1+(1+t)u_j] is maximized over u_j>=0
+at u_j=t/(1+t), by direct differentiation. Its maximum is exactly the first
+coefficient in(4). Multiplication by T_j and summation prove the support line.
+For epsilon/M in[0,c), choosing t=u/(1-u) makes this support line equal to
+(5). For epsilon/M=c, take t to infinity; the limit is2cM. Conversely all
+support lines must dominate the one-branch point with that u, so their infimum
+is exactly(5), not merely an upper estimate.
+
+Attainment is concrete: one pure short owner holds M and two pure long owners
+hold M and uM. Then rho=1+u, the displayed excess and long-role payment are
+attained. Common-rho branches realize the same boundary with arbitrary branch
+counts. This establishes sharpness of the scalar tradeoff, not of any envelope
+funding bound. The support line may be used directly without solving for u.
+
+Finally the half-marginal floor gives the additional omitted-owner surplus bound
+ Z-z_i-M_{-i}=epsilon-z_i+(M-M_{-i})<=epsilon+z_i.
+Thus the capped-opponents bound below may use the owner-specific coefficient
+ min{Vlong,epsilon+z_i}. Both bounds refer to actual fixed coalitions.
+
+CAPPED OPPONENTS AFTER ANY OWN UNDERREPORT
+The other owners' actual resource reports are unchanged. Coalition coverage
+forces sum_{k!=i}z'_k>=M_{-i}, so their capped opposing total at full H=1 obeys
+ sum_{k!=i}min(p_k+z'_k,1)
+ >=min{1,P_{-i}+M_{-i}}
+ >=min{1,(S-d_i-Vlong)_+},                              (3)
+where S=sum_k min(p_k+z_k,1), d_i=min(p_i+z_i,1). The last step uses
+P_{-i}+Z-z_i>=S-d_i. This remains valid with arbitrary full and deviated overflow.
+It improves the M/2 coalition floor whenever full original-long-role payment is
+smaller, especially near locally maximally funded profiles. Funding with several
+positive-gap owners still requires a separate coupled summation argument.

@@ -1,0 +1,122 @@
+UNIVERSAL TOTAL-INCREASE CHARGE AND A BROADER FUNDING CERTIFICATE
+16 October 2026. Candidate theorem for independent audit.
+
+Keep the same exponential primitive, c=1/(2e), C=1+c, fixed actual owners,
+and arbitrary coordinatewise whole-owner underreports indexed separately
+by owner. At ANY branch with full capped long ratio rho>=2,
+  sum_i[(Z^i-Z)-(z_i-z_i^i)]_+<=2(CT-Z).                 (U)
+There is no upper bound on rho, owner count, or capacities.
+
+PROOF. Normalize the full short total T=1. Other long accounts alone have
+actual total at least rho-min(h_i,1)>=1, so the original short pool stays
+short under every own underreport. Reduce own long account first, then own
+short account. The short stage cannot increase J_i=z_i+Z, since both own
+payment and total payment increase with a short report. Overflow above1
+is irrelevant to the first stage.
+
+Let x=min(h_i,1) in[0,1], y=s_i>=0, and q=exp(1-rho)/2 at the full
+profile. Reducing the capped long account by u in[0,x] changes J_i by
+  q{exp(u)[x-y+rho-1-2u]-(x-y+rho-1)}.
+This expression decreases with y, because the coefficient of y is
+q[1-exp(u)]<=0. Ignore y to bound it above, and write the maximum as
+  g_rho(x)=q max_(0<=u<=x){exp(u)[x+rho-1-2u]-(x+rho-1)}.
+The maximizing u is clip((x+rho-3)/2,0,x).
+
+The function g_rho is convex on[0,1], with g_rho(0)=0. Here is a complete
+piecewise verification. On a zero-optimizer piece it is identically zero.
+On an interior-optimizer piece its derivative in x is q(exp(u)-1) and its
+second derivative is q exp(u)/2>0. On an upper-endpoint optimizer piece
+u=x, the first derivative is q[exp(x)(rho-2-x)-1] and the second is
+q exp(x)(rho-3-x)>=0, since this piece requires x<=rho-3. Values and
+first derivatives agree at both kinds of transition. Convexity therefore
+gives g_rho(x)<=x g_rho(1). Since the full capped accounts sum to rho,
+  sum_i[J_i^i-J_i]_+<=rho g_rho(1).
+This inequality also bounds each complete underreport, including its later
+short stage. Direct substitution gives
+  g_rho(1)=q[2exp((rho-2)/2)-rho],  2<=rho<=4;
+  g_rho(1)=q[e(rho-2)-rho],        rho>=4.
+
+It remains to prove rho g_rho(1)<=2delta, where delta=c-q(rho-1).
+For2<=rho<=4 put u=(rho-2)/2. After division by2q, the difference
+2delta-rho g_rho(1) becomes
+  (exp(u)-1-u)^2+u^2>=0.
+For rho>=4 put v=rho-2>=2. After division by q the same difference is
+  F(v)=2exp(v)-(e-1)(v^2+2v)+2.
+At v=2, F(2)=2[(e-2)^2+1]>0 and F'(2)=2(e^2-3e+3)>0.
+Also F''(v)=2exp(v)-2(e-1)>0 for v>=2. Thus F remains positive.
+Rescale T to prove(U). This argument requires no sharpness assertion for
+the coefficient2 and no fictitious owners.
+
+LOW-RATIO BRANCHES CANNOT INCREASE THEIR TOTAL.
+Here is the full justification used when aggregating(U). Suppose the full
+branch has short total T0 and capped long ratio1<=rho<=2. Reduce the chosen
+owner's original short account first. On every cap cell the derivative of
+the total with respect to increasing that account is
+  Z'=1+q[r(r-1)-m(r-2)-1]>0.
+For1<=r<=2 its bracket is at least -1, while q<=1/2; for r>=2 its minimum
+over0<=m<=r is r-1>=1. Thus this first stage cannot increase the total.
+Let T<=T0 and R>=rho be the resulting short total and capped ratio.
+
+If R<=2, reduce the owner's long account. Before any pool switch, its
+capped ratio decreases within[1,2], on which1+q(r)(r-1) is increasing;
+the total payment therefore cannot increase. After a pool switch, the
+original short pool has become a long pool of fixed actual total T. The
+primitive total is at most its capped long sum, hence at most T, and so
+is still at most its total before this second stage.
+
+If R>2 instead, the full capped long sum bounds the intermediate one:
+  2T<RT=sum_k min(full long_k,T)<=rho*T0.
+During the entire second stage the output is at most T, hence its payment
+total is at most CT<=C*rho*T0/2. The function
+  f(rho)=1+q(rho)(rho-1)
+is concave on[1,2], since f''(rho)=q(rho)(rho-3)<0. The difference
+f(rho)-C*rho/2 is therefore concave, nonnegative at both endpoints
+(values1-C/2 and0), and nonnegative everywhere on that interval. Thus
+CT<=T0*f(rho), the ORIGINAL full payment total. The zero-output endpoint
+is immediate. This proves total nonincrease for every whole-owner
+underreport, including all pool switches and intermediate ratios above2.
+The owner's own payment also cannot increase by primitive own monotonicity,
+so these branches contribute no positive part to(U_outer).
+
+OUTER CONSEQUENCE.
+Under P=0 and full outer capped ratio r0>=2, the restored full hardware
+total is at least2Z>=2M>CM. Every actual local total is at most CM.
+The universal outer slope bound in TWO_SIDED_LOCAL_FUNDING_THEOREM.txt
+therefore applies to every total-INCREASING own deviation. Its gain over
+full N_i is at most half the positive part in(U), summed across branches.
+Branches whose full rho<=2 cannot increase their total and contribute
+no positive part. Therefore the aggregate gain from all owners whose
+particular deviation increases the aggregate local total is at most
+  Delta_+=sum_(j:rho_j>2)(CT_j-Z_j).                     (U_outer)
+This is a dimension-free result for arbitrary local ratios.
+
+BROAD FUNDING COROLLARY.
+Suppose P=0, every productive local ratio is at least9/5 (with NO upper
+bound), the full outer capped ratio r0>=2, and the actual full account
+excess satisfies the directly evaluable condition
+  A=max_i (z_i-H_i)_+/Z <=(1-c)/(6c).                    (U_account)
+Then the actual envelope satisfies
+  sum_i E_i<=CZ+(e/3)Delta_-+Delta_+
+            <=CZ+Delta=C^2F-cDelta<=C^2F,               (U_funding)
+where Delta=CM-Z and Delta_- sums branches with rho<=2.
+Indeed, all total-increasing owners are covered by(U_outer). For decreasing
+totals, the exact retention proof uses only the account upper bound A.
+Its large-total coefficient is nonnegative because
+(1-c)/3-2cA>=0; its small-total condition follows from
+cA<=(1-c)/6<1/6. Thus each such owner's gain is at most its retention
+defect. The quantitative theorem charges their aggregate defects at
+(e/3)Delta_-, because branches with rho>=2 have no such defect.
+Sum, use e/3<1 and F=M, and take independent suprema over owner reports.
+
+MORE GENERAL SLACK CERTIFICATE.
+Under P=0, r0>=2, and(U_account), local ratios below9/5 can also be allowed.
+Let Delta_bad sum their slacks, Delta_mid sum ratios in[9/5,2], and
+Delta_high sum ratios above2. The same proof, using the global quantitative
+retention theorem on low-ratio branches, gives
+  sum_i E_i<=CZ+350Delta_bad+(e/3)Delta_mid+Delta_high.
+In particular C^2 funding is certified whenever
+  (350-C)Delta_bad <=(C-e/3)Delta_mid+(C-1)Delta_high.
+These sufficient profile conditions are explicit and computable from the
+full report. They do not establish an unrestricted C^2 theorem; arbitrary
+positive grid reports and profiles violating the account/slack conditions
+remain outside this conclusion.

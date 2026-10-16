@@ -1,0 +1,67 @@
+EFFECTIVE GRID OVERFLOW IN THE POSITIVE-GAP DUAL BOUND
+16 October 2026. Exact strengthening of the reviewed PD1-PD5 bounds.
+Original exponential nested rule and actual whole-owner envelope only.
+
+Normalize positive full hardware H=1, and assume physical hardware bottleneck
+P+M>=1. Use z_i, a_i, d_i, S, q0 and the positive/negative/tied recipient sets
+from POSITIVE_GAP_DUAL_AGGREGATION.txt. Define capped grid mass
+ pi_i=min(p_i,1), pi=sum_i pi_i,
+ w_i^eff=(pi_i+z_i-1)_+, W_+^eff=sum_{i:d_i>a_i}w_i^eff.
+For every nonnegative z, min(p_i+z,1)=min(pi_i+z,1). In particular
+                        sum_i w_i^eff=pi+Z-S.          (1)
+
+CLAIM
+The positive bounds PD1 and PD2 hold with w_i^eff and W_+^eff in place of the
+raw overflow w_i=(p_i+z_i-1)_+ and W_+. The same replacement is valid in PD5,
+without changing any negative-gap saving term. There is no assumption P<=1.
+
+PROOF
+Fix one actual owner's arbitrary whole-bundle underreport. Recompute the local
+payments, and perform exactly the outer hardware/grid restoration used in PD1.
+Let z_i' be the resulting own local payment, D_i=z_i-z_i'>=0, and
+ d_i'=min(p_i+z_i',1)=min(pi_i+z_i',1), x_i=d_i-d_i'>=0,
+ w_i^{eff,'}=(pi_i+z_i'-1)_+.
+Applying the identity min(v,1)=v-(v-1)_+ to the two restored own accounts gives
+           D_i=x_i+w_i^eff-w_i^{eff,'}<=x_i+w_i^eff.    (2)
+Also D_i<=z_i as before. In particular when p_i>=1, d_i=d_i'=1 and x_i=0,
+while w_i^eff=z_i, so (2) reduces to the valid D_i<=z_i. No size bound on the
+original grid report is required. Equality, zero local payments, and zero
+underreported local output are all included.
+
+The sharp outgoing theorem therefore bounds the capped-total reduction B by
+       B<=x_i+K z_i,
+       B<=x_i+K sqrt(z_i(x_i+w_i^eff)), K=e-1.
+These are exactly the two hypotheses used in the PD1 square completion.
+For the same u,q,eta,lambda,A,mu as in that theorem, its unchanged argument gives
+ E_i<=a_i+lambda g_i+min{K eta z_i,mu z_i+A w_i^eff}.    (3)
+Sum over actual positive-gap recipients to obtain
+ sum_I(E_i-a_i)<=lambda G+
+                min{K eta Z_+,mu Z_++A W_+^eff}.       (4)
+Nothing changes in the negative-gap proof. A strictly negative recipient has
+d_i<a_i<=1, which forces p_i<1, so pi_i=p_i on that set. More fundamentally,
+the negative saving lemma already permits arbitrary overflow by other owners.
+Tied owners retain E_i<=a_i. This proves the asserted PD5 extension.
+
+AGGREGATE CONSEQUENCE
+For any chosen full-profile upper bound pi<=Pi_bar, (1) gives
+       1<=S<=Pi_bar+Z,
+       0<=W_+^eff<=Pi_bar+Z-S.                         (5)
+All the other moment constraints in the low-grid 8/5 proof are unchanged:
+they involve M,Z,the actual negative subset, and physical role payments rather
+than the raw grid total. Thus its interval LP construction extends to a
+capped-grid class pi<=Pi_bar, even when P is arbitrarily large. Specifically
+replace the row -Z<=1-lo by -Z<=Pi_bar-lo and replace the remainder-row
+right side Ahi*(1-lo) by Ahi*(Pi_bar-lo); cover S up to Pi_bar+Cbar. The
+coefficient directions and dual residual corrections remain as before.
+This note does not certify any new value of Pi_bar or resulting funding factor;
+those require their own saved rational interval certificate.
+
+ADDITIONAL ELEMENTARY INFORMATION
+Since 0<=pi_i,z_i<=1,
+        0<=w_i^eff<=min(pi_i,z_i),
+        w_i^eff<=pi_i*z_i.
+The product inequality follows from (1-pi_i)(1-z_i)>=0 when pi_i+z_i>=1,
+and is trivial otherwise. These may be retained in a more detailed actual-owner
+relaxation, but are not needed to establish (3)-(5). The clipping in this proof
+is an algebraic identity inside the restored comparison, not a redefinition of
+the globally truthful mechanism or of any owner's admissible report domain.

@@ -1,0 +1,183 @@
+MODEL A: STATIC REDUCTIONS AND A SPLIT-OWNER INCENTIVE CERTIFICATE
+16 October 2026. Independent exact/static lane; conventional arguments below.
+No novelty or universal finite-LP upper claim.
+
+1. UNIVERSAL STATIC BOUND FOR ARBITRARY BLOCKS
+Use the contract's notation ell_j=min(h_j,L_j), ell_a=sum_{j in J_a}ell_j,
+L=sum ell_a, Q=sum(h_j-ell_j), R=min(P,Q), T=L+R, D=(P-Q)_+.
+Deleting local owner A_a changes its marginal by exactly M_a=(ell_a-D)_+.
+Let E=max_a ell_a. If E=0 all local floors vanish; use the efficient baseline.
+Otherwise set
+ lambda=max_a theta M_a/ell_a = theta(1-D/E)_+,
+where zero ell_a terms are assigned zero. This lies in[0,1].
+
+Two allocations cover every coalition:
+ (i) A_a=0, C=R, H_j=ell_j, the original efficient baseline.
+ (ii) A_a=ell_a, C=P, H_j=0, the energy-only allocation.
+For (ii), a coalition with local-owner subset B and grid indicator g has
+production <=sum_{a in B}ell_a+gP; if no hardware is present it is zero.
+Thus its designated energy payments cover it. For the baseline, write I for the
+selected hardware and u<=ell(I) for its selected local contribution. With C its
+worth u+min(P,h(I)-u) is nondecreasing in u, hence at most
+ell(I)+min(P,h(I)-ell(I))<=ell(I)+R. Without C its worth is at most ell(I).
+
+Their convex mixture with weight lambda on (ii) covers every coalition and
+pays A_a=lambda ell_a>=theta M_a. Its total is
+ T+lambda(P-R).
+If P<=Q, the extra term is zero. If P>=Q+L, then D>=L>=E and lambda=0.
+In the remaining range Q<P<Q+L, write D=P-Q. Then T=L+Q and extra funding is
+ theta D(1-D/E)_+ <=theta E/4<=theta T/4.
+Consequently the single-profile minimum B_theta always satisfies
+ T<=B_theta<=(1+theta/4)T for arbitrary block and pod counts.
+This construction is STATIC: report-dependent lambda can violate incentives.
+The merged-owner balanced even-pod family from the original proof supplies
+sharpness over the class permitting one local block. Thus any failure of the
+5/4 target under splitting must come from cross-profile incentives, not a
+higher worst-case static funding requirement.
+
+2. EXACT STATIC EFFICIENCY WHEN EACH LOCAL OWNER HAS ONE POD
+Suppose J_j={j}. At theta=1 define
+ a_j=(ell_j-D)_+,
+ x_j=min(ell_j,D),
+ c=R=min(P,Q).
+Then a_j+x_j=ell_j, a_j=M_j, and total is L+R=T.
+We prove every coalition is covered, for arbitrary real capacities and any
+number of pods. A coalition is described by local set B, hardware set I,
+and presence/absence of C. Without C, its worth is ell(B intersection I),
+covered because a_j+x_j=ell_j for j in B intersection I.
+
+If C is present and P<=Q, then D=0, x=0, a_j=ell_j, c=P. Its payment is
+at least ell(B intersection I)+P, which bounds its worth.
+If C is present and P>Q, write J=I minus B and r(I)=sum_{i in I}(h_i-ell_i).
+The coalition payment is at least
+ Q+ell(B intersection I)+sum_{j in J}min(ell_j,D).
+Its worth is
+ ell(B intersection I)+min(P,r(I)+ell(J)).
+Since Q>=r(I), P=Q+D and
+ sum_{j in J}min(ell_j,D)>=min(ell(J),D),
+we have
+ Q+sum_J min(ell_j,D)>=min(Q+D,r(I)+ell(J)),
+by considering ell(J)<=D or ell(J)>=D. This proves coverage.
+All terms vanish at T=0. For 0<=theta<=1, mix this static allocation with
+the efficient theta0 baseline; it pays a_j=theta M_j and remains efficient.
+Therefore B_theta(b)=T(b) pointwise on the entire singleton-local domain.
+This static allocation is not claimed own-H monotone; the next certificate
+shows no globally efficient rule can satisfy the full theta1 requirements.
+
+3. THREE-PROFILE, FIVE-FIXED-OWNER INCENTIVE LOWER
+Two singleton local owners A1,A2, one shared grid owner C, and hardware owners
+H1,H2. All resources are positive at the following profiles, in order
+(P,h1,h2,L1,L2):
+ O=(1,1,1,1,1), T_O=2;
+ U=(1,2,1,1,1), T_U=3;
+ V=(1,1,2,1,1), T_V=3.
+Only H1 changes O->U and only H2 changes O->V. Owner identities stay fixed.
+Let payments at O be (a,b,c,x,y), and let an eligible rule have total <=B*T
+at all three profiles. At O the following three coalition constraints hold:
+ a+b+x+y>=2                 [A1,A2,H1,H2],
+ a+c+x+y>=2                 [A1,C,H1,H2],
+ b+c+x+y>=2                 [A2,C,H1,H2].
+Their sum is 2*total_O+x+y>=6. Thus
+ x+y>=6-4B.
+At U, both local marginal floors are theta, and C+H2 has worth1. Consequently
+ x_U<=3B-1-2theta.
+At V, the same floors and C+H1 give y_V<=3B-1-2theta.
+Own-H monotonicity gives x<=x_U and y<=y_V. Combining,
+ 6-4B<=x+y<=6B-2-4theta,
+so every all-profile rule satisfies
+ B >= (4+2theta)/5.
+At theta1 this is 6/5. By Section2, B_theta=T at every profile, so the same
+6/5 is a genuine incentive premium over pointwise-static funding, without
+any static instability or floor cost. This is a finite-profile lower bound
+valid against unrestricted mechanisms on this ownership subclass, not a
+continuous upper or a sharpness theorem for that subclass.
+
+The exact 14-row nonnegative dual certificate found by the independent finite LP
+is simply the preceding calculation divided by10:
+ - budget O weight1/5;
+ - each of its three coalition inequalities weight1/10;
+ - the two own-H transition inequalities weight1/10 each;
+ - budget U and budget V weight1/10 each;
+ - C+other-hardware coalition at U/V weight1/10 each;
+ - the two local floor inequalities at each U/V weight1/10 each.
+In <= convention, summing these rows cancels every payment and gives
+ -B <= -(4+2theta)/5.
+The saved theta1 LP reports exact coefficient -1 and RHS -6/5.
+
+4. ACTIVE-COUNT EXTENSION, WITH AN EXPLICIT LIMITATION
+For any k>=1 append k new singleton local owners and k new hardware owners,
+each reporting epsilon>0 at a private new pod in all three profiles.
+Keep P=1 and the two original-pod reports O,U,V unchanged. Put z=k epsilon.
+Every actual owner and resource is positive, and extra pods have positive local
+production. Grand values become 2+z,3+z,3+z; Section2 still gives static funding
+exactly equal to these values.
+At O, the original three coalition constraints are unchanged. Since the original
+five payments are <=the full budget, they give
+ x+y>=6-2B(2+z).
+At U and V, Q=1,D=0, so every local floor equals its ell value: their sum is
+2+z. The grid+unchanged-original-hardware coalition still requires1, hence
+ x_U,y_V <= B(3+z)-(3+z).
+These yield
+ B >= (6+z)/(5+2z).
+Taking epsilon=k^(-2), so z=1/k, proves a family with unbounded active owner
+and pod counts whose lower approaches6/5. This uses vanishing aggregate added
+mass and is honestly an active-padding extension of the five-owner obstruction;
+it is not a new growing-complexity lower construction or a bound above5/4.
+
+5. ONE-POD AND THETA0 CALIBRATIONS
+At one pod set ell=min(h,L), G=min(P,h), R=min(P,h-ell), T=ell+R,
+M=T-G=min(L,(h-P)_+). The efficient truthful theta1 rule
+ A=M, H=min(ell,G)=min(h,L,P), C=G-min(ell,G)=(G-ell)_+
+has total M+G=T. Own-A monotonicity follows from M=min(L,(h-P)_+);
+own-H from min(h,L,P); own-C from (min(P,h)-ell)_+ with h,L fixed.
+C+H receives G. If G<=ell then A+H=M+G=T>=ell; if G>=ell then
+A+H=M+ell>=ell. Other proper coalitions have zero worth. This proves all-profile
+efficiency, not merely the finite calibration.
+A fixed mixture with the theta0 baseline handles every theta in[0,1].
+For arbitrary blocks theta0, baseline(A=0,C=R,H_j=ell_j) is efficient and
+own-report monotone, as specified by the contract.
+
+6. ACTUAL FINITE CALIBRATION
+All Cartesian ternary profiles {0,1,2}^{2m+1}, all coalition/floor constraints,
+and adjacent own-coordinate edges were used. Adjacent comparisons generate
+all componentwise own-bundle comparisons within that finite Cartesian domain.
+Discovery used cached SciPy; every saved primal/dual was reconstructed as exact
+Fractions and checked with no tolerance. Results:
+ merged m2,theta1: 243profiles, factor5/4, static max5/4;
+ singleton m2,theta1: 243profiles, factor6/5, static max1;
+ onepod,theta1: 27profiles, factor1, static max1;
+ singleton m2,theta0: 243profiles, factor1, static max1.
+The finite6/5 primal does not establish a continuous6/5 upper.
+The candidate split sharp5/4 rule separately passed exact all-coalition and
+adjacent-incentive tests on243two-pod profiles and2187three-pod profiles for
+each of two and three local blocks. Those tests are bounded calibration only;
+the general extension requires its independent conventional proof.
+
+Independent replay: verify_transition_certificate.py reconstructs all production,
+coalition, marginal-floor and own-report constraints without importing SciPy or
+the discovery/candidate implementation. All four compressed certificates passed
+under python3 -B -O, including all 756 static primal/dual pairs and every global
+primal constraint. Two corrupted-certificate controls per file were rejected.
+Exact counts and SHA-256 digests are recorded in exact-replay.json.
+
+Two subsequent bounded grids were also solved and independently replayed:
+ singleton m2,levels{0,1,2,3}:1024profiles,factor6/5,staticmax1;
+ singleton m3,levels{0,1,2}:2187profiles,factor6/5,staticmax1.
+Their saved files and hashes are listed in extended-exact-replay.json. These are
+additional finite-domain calibrations, not a continuous 6/5 upper theorem.
+
+7. A FALSIFIED SINGLETON 6/5 CONSTRUCTIVE ANSATZ
+This is an archival failure, not a theorem candidate. Let beta=6/5,
+s_j=(P-Q+r_j)_+, and try
+ x_j=min(ell_j,s_j,beta ell_j s_j/L),
+ a_j=max((ell_j-D)_+,ell_j-x_j),
+ c=min(G,beta T-sum_j(a_j+x_j)).
+This enforces pair coverage and the intended budget but does NOT cover every
+grid coalition. Exact finite falsification, recorded in
+probe-singleton-six-fifths-m3.json and reproduced by
+probe_singleton_six_fifths.py:
+ (P,h1,h2,h3,L1,L2,L3)=(2,1,2,2,1,2,2).
+ Here L=T=5,Q=0,x=(12,24,24)/25,a=(13,26,26)/25,c=1.
+ Coalition {C,H2} has worth2 but payment1+24/25=49/25, a deficit1/25.
+Thus the hoped-for 6/5 rule needs shape-sensitive grid coverage; simply scaling
+the merged hardware formula and charging the remaining budget to C fails.

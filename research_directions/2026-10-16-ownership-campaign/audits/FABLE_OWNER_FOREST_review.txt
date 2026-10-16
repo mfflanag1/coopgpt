@@ -1,0 +1,26 @@
+**Provisional verdict: no findings in reviewed scope (no counterexample located).** The most consequential unverified step is the "harmless supergraph" assertion in OWNER_FOREST_COVER.txt line 21, which is correct but not argued.
+
+## Findings
+
+**1. Low — OWNER_FOREST_COVER.txt:19–21, component additivity over H_t ⊋ G^t.**
+Section 1 of OWNER_COMPATIBILITY_FOREST.txt requires additivity over components of the *rooted forest* G[S]. The production lemma only delivers additivity over the (possibly finer) components of G^t[S], the actual compatibility graph of the restricted lift. The claim holds: each H_t-component D of S is a union of G^t-components, and applying the lemma to D itself gives v^t(D)=Σ v^t(C_j), so the coarser partition is additive too. The file asserts this ("harmless fixed supergraph") without the one-line coarsening argument. Verification: insert that sentence; nothing else depends on it.
+
+**2. Low — OWNER_FOREST_COVER.txt:27–28, coverage inequality uses the *full lifted* optimum.** The argument fixes an optimal lifted plan z for S and restricts it per H_t; the weight accounting (cross-owner pieces ≥1, same-owner/one-input pieces Λ≥1) is correct. I checked it on a resource-competing triangle (rows a,b,c, unit capacities, three unit-profit pair activities): v(N)=3/2, the three spanning-path hierarchies give y=(1/2,1/2,1/2), every pair is covered, total 3/2 ≤ (3/2)·v(N). No violation.
+
+**3. Low — OWNER_COMPATIBILITY_FOREST.txt:30–37, shared-row transportation.** The per-row distribution d_ire and product coupling z_ike=α_iβ_k/x_e are valid; pieces land on G[S]-edges by fixed eligibility; grouping by component never exceeds any (i,r) capacity. The reverse inequality (disjoint owner sets ⇒ summed usage ≤ c_r(S)) is correct even with shared physical rows. No gap.
+
+**4. Low — OWNER_FOREST_COVER.txt:46, "sharp minimum forest-cover weight for a cactus".** Consistent with Section 4: for a cactus, |E(G[S])|/(|S|−1) is a mediant of r_C/(r_C−1) terms and bridges (ratio ≤1), so a_f = g/(g−1). Correct, though the mediant step is not written.
+
+**5. Low — OWNER_FOREST_COVER.txt:53–55, Edmonds replication.** |A′| ≤ q|A| ≤ p·rank(A) via per-component density bound, p lowest-terms numerator ≤ |E|, parallel copies cannot share a forest, projected weight 1/q per forest sums to exactly 1 per edge. Correct specialization.
+
+**6. Info — scope-limiting assumptions should be stated as load-bearing.** Truthfulness rests on (i) the *binding coordinatewise underreport* domain (a monotone rule rewards overreports if those were feasible), (ii) G computed from fixed eligibility, (iii) fixed rooting per H_t. All three are stated (COMPATIBILITY_FOREST:9,26; FOREST_COVER:66), so this is not an error.
+
+**7. Info — complexity (FOREST_COVER:63–64).** Lift size ≤ m|N|², O(|E|) cactus forests, |N| LPs each, rational LP optima — polynomial LP-oracle count is correct. The general a_f cover additionally needs a matroid-partition / density computation; the file correctly disclaims relying on it for the cactus case.
+
+## Scope limitations
+- External claims not in packet are unverifiable: the "known 9/8 lower", the "better than 4/3" K_{2,2} mechanism, CONNECTED_OWNER_EFFICIENCY.txt, and Demange (2004) (explicitly unread per FREE_SOURCE_COMPARISONS_2.txt).
+- I did not execute any LP; the triangle check above is hand-computed.
+- Section 3 of OWNER_COMPATIBILITY_FOREST.txt (contraction recovery) is a sketch; I confirmed only that contracting connected exclusive blocks of a tree yields a simple tree and that summing per-physical-component rules preserves efficiency/coverage.
+
+## Verdict
+No findings in reviewed scope. Both theorems (forest ⇒ factor 1; fractional cover ⇒ factor Λ, cactus ⇒ g/(g−1) ≤ 3/2) and the polynomial LP-oracle claim check out as corollaries of the cited hierarchical-core and matroid-partition machinery; only the minor expositional gaps in items 1 and 4 warrant edits.

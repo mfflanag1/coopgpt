@@ -1,0 +1,150 @@
+JOINT CAPACITY ACCOUNTING STILL CANNOT RESCUE THE CURRENT FIXED-COVER ROUTE
+16 October 2026. Exact finite dual certificate; no historical novelty claim.
+This strengthens the earlier obstruction that replaced each restricted value
+F_r by F separately. It is still an obstruction to a stated BUDGET PROOF,
+not a lower bound against arbitrary truthful mechanisms or their actual totals.
+
+SCOPE
+Let G be the complete ternary tree of height4:121 resource vertices,120 unit-
+profit activities, each consuming one unit at each endpoint. The actual owners
+are fixed; the argument concerns production values and does not split owners.
+It holds for any fixed ownership that permits arbitrary nonnegative capacities,
+for example one resource coordinate assigned to each of121 fixed owners.
+
+Allow ANY finite collection of connected activity subtrees Q, each of diameter
+at most4, with arbitrary fixed weights lambda_Q>=0. Every edge must be covered:
+  sum_{Q containing e}lambda_Q>=1.                         (1)
+A component may be charged using any class it belongs to, at the corresponding
+uniform factor: stars C2=1+1/(2e), double-stars C3=1+W(2/e), and general depth-two
+trees7/4. A star has diameter<=2; a double-star has diameter<=3. In a tree,
+diameter<=4 is equivalent to having a center vertex of radius<=2. Isolated
+vertices can be omitted. Collections of forests with mixed component types
+are included by separating their connected components with the same weights.
+
+For capacities c, define the exact JOINT surrogate budget
+  B_lambda(c)=sum_Q lambda_Q C_Q F_Q(c),                    (2)
+where F_Q is production with only Q's activities. This is the budget obtained
+by summing the available component-factor guarantees, retaining their actual
+joint production values rather than bounding them individually by F(c).
+
+THEOREM
+For every cover(1), some capacity profile c with F(c)=1 satisfies
+  B_lambda(c)>=580203/257499 >2.253 >2.                    (3)
+Moreover, even if star, double-star and depth-two charges were discounted to
+7/6,4/3 and3/2 respectively, some profile would still satisfy
+  B_lambda(c)>=2199/1060 >2.074 >2.                        (4)
+Thus the present fixed positive-cover route cannot establish an all-tree
+factor below2 merely by improving the joint estimate of the F_Q values. This
+remains true after the stated substantial discounts to the component costs.
+
+WHAT THE THEOREM DOES NOT SAY
+Actual component payments can be strictly smaller than C_Q F_Q. A finer bound
+using the actual payment formulas could escape this theorem, as could a new
+lower-cost primitive, a larger solved component class, or report-dependent
+covers accompanied by a valid incentive proof. No unrestricted subsidy lower
+bound is asserted. The obstruction is already present on one finite tree;
+it is not a new unrestricted asymptotic lower bound.
+
+PROOF: STAR-CENTERED CAPACITY PROFILES
+For every vertex v, let c^(v) put capacity1 on v and all its neighbors, and0
+elsewhere. Only edges incident to v can produce, because a tree has no edges
+between two neighbors of v. Thus F(c^(v))=1. For every connected activity
+subtree Q with at least one edge,
+  F_Q(c^(v))=1[v has an incident edge in Q]=1[v in V(Q)].   (5)
+
+Choose nonnegative vertex weights g_v, normalized by D=sum_v g_v, and edge
+weights a_e such that every allowed component Q obeys
+  sum_{e in Q}a_e <= c_Q sum_{v in V(Q)}g_v,               (6)
+where c_Q is a lower bound on its charged factor C_Q. Averaging(2) over the
+profiles c^(v) with weights g_v/D, using(5),(6), and then the edge cover gives
+  max_v B_lambda(c^(v))
+   >=(1/D)sum_Q lambda_Q C_Q sum_{v in V(Q)}g_v
+   >=(1/D)sum_Q lambda_Q sum_{e in Q}a_e
+   >=(1/D)sum_e a_e.                                     (7)
+This handles arbitrarily overlapping components and arbitrary nonnegative
+weights. No LP strong-duality theorem or floating-point optimization is needed
+to establish(7); optimization was used only to discover the explicit numbers.
+
+CERTIFICATE A: CURRENT FACTORS
+Each vertex at depth d receives g_d, and an edge whose child is at depth d
+receives a_d. Use
+  g=(24057,16038,10692,3300,0),
+  a=(28431,18954,8112,1300),
+  (c_star,c_double,c_depth)=(13/11,7/5,7/4).
+There are3^d vertices at depth d and3^d edges with child depth d, so
+  D=24057+3*16038+9*10692+27*3300=257499,
+  sum_e a_e=3*28431+9*18954+27*8112+81*1300=580203.
+
+The actual factors dominate these charges. Since e<11/4, C2>13/11.
+For completeness, sum_{k=0}^4 1/k!=65/24 and the remaining tail is less than
+(1/120)/(1-1/6)=1/100, so e<1631/600<11/4. Also C3>7/5: W(2/e)>2/5 because
+e^(7/5)<5, which follows from e<3 and3^7=2187<3125=5^5. The depth factor is
+the established7/4. Therefore(7) gives(3).
+
+CERTIFICATE B: ROBUST DISCOUNTED FACTORS
+Use
+  g=(4914,3402,2520,720,0),
+  a=(5859,4221,1500,280),
+  (c_star,c_double,c_depth)=(7/6,4/3,3/2).
+Then
+  D=4914+3*3402+9*2520+27*720=57240,
+  sum_e a_e=3*5859+9*4221+27*1500+81*280=118746,
+  sum_e a_e/D=2199/1060.
+These discounts are smaller than the current component charges. In particular
+C2>7/6 follows from e<3; C3>4/3 follows from e^(4/3)<6, since e^4<81<216.
+Even the hypothetical3/2 depth-two charge therefore cannot make this proof
+architecture succeed on all profiles.
+
+COMPLETE EXACT VERIFICATION OF(6)
+The following formulas check every connected component, without enumerating
+all edge subsets or relying on the exploratory LP. Write w_uv=a_uv and let
+t be the charge of the class under consideration.
+
+For a star centered at v, the maximum of its edge weight minus t times its
+vertex weight, allowing an empty selection of incident edges, is
+  -t g_v + sum_{u adjacent v}(w_vu-t g_u)_+ .             (8)
+Checking(8)<=0 for all121 vertices proves every star constraint.
+
+For a double-star with central edge uv, that maximum is
+  w_uv-t(g_u+g_v)
+   +sum_{z adjacent u,z!=v}(w_uz-t g_z)_+
+   +sum_{z adjacent v,z!=u}(w_vz-t g_z)_+.               (9)
+Every nonempty diameter<=3 tree has such a central edge, allowing zero leaves
+on either side. Checking(9)<=0 for all120 edges proves the whole class.
+
+For a depth-two component centered at v, that maximum is
+  -t g_v +sum_{u adjacent v}
+       [w_vu-t g_u+sum_{z adjacent u,z!=v}(w_uz-t g_z)_+]_+ . (10)
+Once the center is selected, child branches are independent because G is a
+tree. A chosen child can retain precisely its profitable grandchild edges;
+the entire child branch is retained exactly when its resulting profit is
+positive. Thus(10) is an exact maximization over every connected subtree
+within distance2 of v. Checking all121 possible centers covers every tree of
+diameter<=4. Zero-profit choices and isolated vertices cause no issue.
+
+The standard-library-only verifier verify_joint_cover_obstruction.py evaluates
+(8)-(10) using Fraction/integer arithmetic for BOTH displayed certificates.
+For each class the largest value is nonpositive, proving(6). All maxima are0
+except the current-factor double-star maximum, which is -108/5. It also replays
+the production identity(5) by exact vertex-cover dynamic programming on each
+star-centered profile, for all single-edge, full-star and full-radius-two
+components. The latter is a computational corroboration; the elementary
+support argument already proves(5) for every component.
+
+WHY MULTIPLE CAPACITY PROFILES ARE ESSENTIAL TO THIS CERTIFICATE
+The offending profile may depend on the fixed cover. We do not assert that one
+capacity vector makes all useful restricted values close to F simultaneously.
+Indeed G contains a matching of size30. At any profile, the sum of the30
+single-edge production values on that matching is at most F, so one is at
+most F/30. In contrast the weighted family c^(v), together with the fixedness
+of the cover, forces at least one large joint budget through(7). Each profile
+can individually be handled cheaply by a cover tailored to that profile; such
+tailoring is outside the fixed-cover scope and needs a new incentive argument.
+
+FILES AND STATUS
+- probe_joint_cover_dual.py: exploratory SciPy search, floating-point only.
+- verify_joint_cover_obstruction.py: self-contained exact proof replay.
+- joint_cover_obstruction.json: exact replay results.
+- joint_cover_obstruction_optimized.json: Python-O replay results.
+The exact statements depend only on the displayed witnesses and(5)-(10), not
+on the search or numerical optimality. No optimality of these duals is claimed.

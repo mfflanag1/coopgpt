@@ -1,0 +1,92 @@
+EXACT OBSTRUCTION TO THE SIMPLE STAR / DEPTH-TWO COVER MIXTURE
+16 October2026. Finite combinatorial certificate, not an unrestricted mechanism
+lower bound. Candidate proof using an exhaustive tree-DP recurrence.
+
+SCOPE
+Consider fixed fractional activity covers as in FOREST_COVER_LEMMA_v1.txt. Each
+subgraph is either a star forest, charged its known universal factor
+C2=1+1/(2e), or a forest with every component of diameter<=4, charged7/4.
+The simple proof bounds each component mechanism by C_r F_r(N)<=C_r F(N),
+and therefore certifies the total factor sum_r lambda_r C_r.
+There is a finite tree on which EVERY such fixed fractional activity cover has
+sum_r lambda_r C_r>2. Thus merely mixing these two solved classes in that
+particular proof cannot establish a sub-two factor for all forests.
+
+EXPLICIT TREE AND AUXILIARY WEIGHTS
+Use the complete ternary rooted tree of height4:121 vertices and120 edges.
+Give each edge to a child at depth d weight3^(4-d), i.e.27,9,3,1 at depths
+1,2,3,4. Each level has weight81; total auxiliary edge weight is324.
+These weights define a dual counting argument for activity covers. They need
+not be the economic profits of the production instance.
+
+EXACT BOUNDED-DIAMETER OPTIMA
+The maximum auxiliary weight of a star forest (component diameter<=2) is189.
+The maximum auxiliary weight of a diameter<=4 forest is243.
+Both optima include all choices of retained/deleted edges, with any number of
+components and isolated vertices. They are certified by the following recurrence.
+
+For a rooted subtree at v, state h stores the largest retained weight whose
+component containing v has height h, with every component's diameter<=D.
+At a leaf only state h=0,weight0 exists. Process children one at a time. For
+current state(h,s) and a child state(t,u) across edge of weight w:
+ - Delete that edge: keep height h and add the child's best score over all t.
+ - Keep that edge: permit it iff t+1<=D and h+t+1<=D; update height to
+   max(h,t+1) and add u+w.
+Take the maximum score for each updated height. This is exhaustive because
+the unique path between different child branches crosses v. Every retained
+cross-branch distance is at most the sum of their branch heights, while all
+within-child distances were checked already. The deletion case separates the
+entire child forest. Conversely every valid forest determines exactly such
+child choices, so induction proves both upper and attainability.
+
+All vertices at a common depth have identical state profiles. The exact values
+in this instance are:
+
+D=2
+ depth4: {0:0}
+ depth3: {0:0,1:3}
+ depth2: {0:9,1:9,2:12}
+ depth1: {0:36,1:54,2:42}
+ depth0: {0:162,1:189,2:189}.
+
+D=4
+ depth4: {0:0}
+ depth3: {0:0,1:3}
+ depth2: {0:9,1:9,2:18}
+ depth1: {0:54,1:54,2:54,3:63}
+ depth0: {0:189,1:243,2:243,3:243,4:216}.
+
+The independent executable verify_mixed_cover_obstruction.py derives these
+profiles on the explicit121-vertex tree using integer arithmetic, reconstructs
+attaining edge sets, and checks their diameters by all-source graph distances.
+It additionally compares the DP against all16,384 edge subsets of a binary
+height3 tree, separately for D2 and D4; both comparisons pass. The full121-vertex
+result is exhaustive via the proved recurrence, not a direct2^120 enumeration.
+
+FRACTIONAL-COVER COST LOWER BOUND
+For a star forest E_r, its auxiliary weight is at most189. For a diameter4
+forest it is at most243. As C2<6/5<49/36,
+ 243/(7/4)=972/7<189/C2.
+Thus in either class,
+  weight(E_r)<=(189/C2) C_r.
+If every original edge is covered with sum of fixed coefficients at least1,
+then
+ 324<=sum_r lambda_r weight(E_r)
+     <=(189/C2)sum_r lambda_r C_r.
+Consequently
+ sum_r lambda_r C_r>=324 C2/189=(12/7)C2>2,
+where the last inequality follows from e<3, hence C2>7/6.
+This is an exact strict obstruction to the simple charged-class cover argument.
+
+WHAT IT DOES NOT EXCLUDE
+It does not exclude a direct all-tree mechanism, a lower-budget primitive,
+report-dependent covers with a separate incentive proof, or a sharper joint
+estimate of sum_r lambda_r C_r F_r(N) instead of replacing each F_r(N) byF(N).
+It also does not exclude new separator-gluing constructions or a different
+class of solvable component technologies. The7/4 depth-two mechanism itself
+is unaffected. No lower bound on the optimal truthful subsidy is asserted.
+
+REPRODUCE
+ python3 ownership/verify_mixed_cover_obstruction.py
+Saved exact output: ownership/mixed_cover_obstruction.json.
+The script has explicit RuntimeError guards that remain active under Python-O.

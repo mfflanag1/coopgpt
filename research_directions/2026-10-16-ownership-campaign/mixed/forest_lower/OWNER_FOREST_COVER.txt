@@ -1,0 +1,72 @@
+OWNER-PAIR LIFTING AND FRACTIONAL FOREST-COVER PAYMENTS
+16 October2026. Conventional proof and explicit cactus corollary. Hierarchical core allocations, fractional activity covers and graphic-matroid facts are established ingredients; no historical novelty claim is made for this combination.
+
+MODEL AND AIM
+Use the rank-at-most-two production model and fixed actual-owner eligibility graph G from OWNER_COMPATIBILITY_FOREST.txt. Every activity has one or two genuine resource rows, with fixed positive input coefficients and fixed nonnegative profit. Capacities aggregate additively across owners. The actual owners may hold arbitrary eligible bundles and make arbitrary binding coordinatewise underreports. Utility is payment, without extra grand-marginal fairness floors. The resource-activity graph itself need not be a forest. All claims apply in particular to the user's unit bipartite-forest target.
+
+1. EXACT FIXED OWNER-PAIR LIFT
+For every eligible owner-resource pair(i,r), introduce an accounting row with capacity b_ir owned by the SAME actual owner i. For each original two-input activity e on distinct rows r,s, introduce one variant for every ordered pair(i,k) with r eligible to i and s eligible to k. Variant(e,i,k) consumes A_re from row(i,r), A_se from row(k,s), and earns original profit w_e per unit. Variants with i=k use two rows belonging to that same actual owner. For a one-input activity e on r, introduce one variant per eligible i using row(i,r). No actual identity is split, and no fictitious strategic player is introduced.
+
+The lifted and original production values agree on every actual coalition and every report profile. A lifted plan maps to the original plan x_e=sum_{i,k}z_eik by summing row inequalities over owners. Conversely, the rowwise transportation allocations and owner-pair coupling proved in OWNER_COMPATIBILITY_FOREST.txt lift any original feasible plan with identical objective. The lift is fixed by public technology/eligibility, independently of reports.
+
+This step is essential. Simply deleting a physical activity according to one of its possible owner pairs would be ambiguous when rows have several owners. The lift makes each retained activity have a definite actual-owner support of size at most two while retaining its capacity coupling through the owner-resource rows.
+
+2. FIXED FRACTIONAL FOREST COVER
+Choose finitely many spanning subgraphs H_t of G, each a forest (isolated actual owners retained), and fixed nonnegative coefficients lambda_t satisfying
+ sum_{t:edge ik in H_t}lambda_t>=1 for every edge ik in G.
+Let Lambda=sum_t lambda_t. If G has an edge, the preceding condition implies Lambda>=1. If G is empty, take one edgeless H with lambda1=1.
+
+For each t, retain all lifted cross-owner variants whose pair edge belongs to H_t. Retain EVERY same-owner and one-input variant. Call the resulting production game v_b^t. Its actual compatibility graph is a subgraph of H_t and hence a forest. Apply the efficient hierarchical actual-owner rule from OWNER_COMPATIBILITY_FOREST.txt, rooting H_t once and for all and using the SAME full actual owner set N:
+ y_i^t(b)=v_b^t(T_i^t)-sum_{j child of i}v_b^t(T_j^t).
+If an edge of H_t carries no activity, component additivity still holds because H_t is a harmless fixed supergraph of the actual compatibility forest. Precisely, each H_t[S] component D is a union of components C of the actual restricted compatibility graph; applying its component-additivity lemma also to D gives v_b^t(D)=sum_C v_b^t(C), and summing over D proves the required coarser component additivity.
+
+Define the final rule
+ y_i(b)=sum_t lambda_t y_i^t(b).
+Every component rule is nonnegative and own-bundle monotone, so the final rule has those properties.
+
+COVERAGE. Fix an actual coalition S and an optimal lifted plan z for it. Restrict z to the variants retained by each H_t. This is a feasible plan for v_b^t(S). Every cross-owner activity piece is retained with total coefficient at least1 by its pair-edge cover condition. Every same-owner/one-input activity is retained with total coefficient Lambda>=1. Therefore
+ sum_t lambda_t v_b^t(S)>=v_b(S).
+Component coalition coverage gives sum_{i in S}y_i>=v_b(S).
+
+FUNDING. Each restricted lifted technology uses a subset of the original lifted activities and the same owner-resource capacities, so v_b^t(N)<=v_b(N). Efficiency of the component hierarchy therefore gives
+ sum_i y_i=sum_t lambda_t v_b^t(N)<=Lambda v_b(N).
+All arguments hold for every real report and every coalition with fixed actual owners. They do not require jointly attaining distinct counterfactual payment optima or majorizing a virtual-vertex core.
+
+3. EXPLICIT CYCLE AND CACTUS CONSEQUENCES
+Suppose G is a cactus: every edge belongs to at most one simple cycle, and distinct cycle blocks share at most one vertex. If G has no cycles, Section2 yields factor1. Otherwise let g>=3 be its shortest cycle length and alpha=g/(g-1).
+
+List the edges of each cycle C of length r in an arbitrary fixed cyclic order e_C,0,...,e_C,r-1. For a parameter u in[0,1), delete from C exactly edge e_C,floor(r*u); retain every bridge. The resulting graph H(u) is a spanning forest, because one edge was deleted from every cactus cycle. Use the finite intervals between the distinct breakpoints k/r from every cycle, together with0 and1. H(u) is constant on each interval I_t; choose its midpoint u_t and set
+ H_t=H(u_t), lambda_t=alpha*length(I_t).
+There are at most1+sum_C(r_C-1) such intervals, hence O(|E(G)|) forests.
+
+Every edge on a cycle of length r is retained for exactly1-1/r of the parameter interval. Its total cover weight is alpha(1-1/r)>=alpha(1-1/g)=1. Every bridge receives total weight alpha>=1. The total coefficient is alpha. Section2 gives an explicit all-profile truthful covering rule with funding factor
+ g/(g-1)<=3/2.
+For a triangle-free cactus this is at most4/3. For a single n-cycle the rule averages its n spanning paths with coefficient1/(n-1) each, giving n/(n-1). Owner count, resource count, activity count, number of cycle blocks, tree depth and degree may all grow. The theorem is an unbounded compatibility-graph class, not a fixed-size example.
+
+The shortest-cycle expression is the sharp minimum total FOREST-COVER WEIGHT for a cactus: every spanning forest retains at mostg-1 of the g edges in a shortest cycle, so covering those edges forces(g-1)Lambda>=g. This proves optimality only within this particular cover method. It is not a lower bound on arbitrary truthful mechanisms; the two-pool K2,2 case already has a mechanism better than the cover factor4/3.
+
+4. GENERAL GRAPH PARAMETER (STANDARD COMBINATORIAL INGREDIENT)
+The minimum total weight of a fractional forest edge cover is the fractional arboricity
+ a_f(G)=max_{S subset N,|S|>=2} |E(G[S])|/(|S|-1)
+for a graph with an edge (use factor1 for an edgeless graph). This is a standard matroid-partition consequence, not a new production-game assertion. The lower bound follows immediately because any forest uses at most|S|-1 edges inside S. The following replication proof derives the matching upper directly from Edmonds's original matroid-partition theorem.
+
+Write a_f=p/q in lowest terms. Some vertex set realizes this finite maximum, so p<=|E(G)| and q<=|N|-1. Replace every original edge by q distinct parallel copies and consider the graphic matroid of this multigraph. For any subset A' of copies, let A be its support in the original graph. Then
+ |A'|<=q|A|<=p rank(A)=p rank(A').
+The middle inequality follows by partitioning the nontrivial connected components of (N,A): each component with vertex set S has at most a_f(|S|-1) edges, and summing these bounds gives |A|<=a_f rank(A). Parallel copies do not change rank. Edmonds's Theorem1 therefore partitions all copies into p independent sets, that is, p forests. A forest cannot contain two parallel copies of one edge. Project each forest to the original graph and give it coefficient1/q. Every original edge appears exactly q times, its total weight is1, and the total forest weight is p/q=a_f. The construction uses at most p<=|E| forests on a multigraph with q|E|<|N||E| edges.
+
+Consequently Section2 gives a_f(G) as a funding upper whenever such a cover is used. If a_f>=2 this statement alone provides no below-two improvement. The explicit cactus proof in Section3 is self-contained and does not depend on a general matroid optimization oracle.
+
+SOURCE. Jack Edmonds, "Minimum partition of a matroid into independent subsets", Journal of Research of the National Bureau of Standards69B(1-2),67-72(1965), Theorem1 on printedp69, freely available original:
+ https://nvlpubs.nist.gov/nistpubs/jres/69B/jresv69Bn1-2p67_A1b.pdf
+The graph-density identity and replication argument above are a routine specialization of this established theorem.
+
+5. COMPUTABILITY AND SCOPE
+For rational public coefficients, rational reports and a rational finite forest cover, every v_b^t(T) is a rational linear-program optimum. The stated payments are therefore exactly rational and can be evaluated by finitely many standard LP solves and rational arithmetic. The lift has polynomially many owner-pair variants (at most the original activity count times|N|^2). A cactus uses O(|E(G)|) forest components; evaluating each hierarchy takes at most|N| subtree-value LPs. Thus this is a polynomial LP-oracle implementation for that class; no exponential or approximate transcendental payment evaluation is required. Bit-level implementation, solver certificate formats and incentive-safe rounding remain separate engineering matters.
+
+The guarantee concerns payment-only, binding-underreport incentives and coalition coverage. It does not impose fairness floors, private-cost truthfulness, false-name robustness, measured hardware efficiency or dynamic scheduling feasibility. Compatibility must be computed from fixed eligibility; selecting or deleting edges according to currently positive reports would invalidate the fixed-cover incentive argument.
+
+RESEARCH CONSEQUENCE. Acyclic actual-owner compatibility cannot support any subsidy lower above1. More generally, cactus compatibility cannot force a factor above3/2 under the stated model, even with arbitrarily large physical forests or cyclic resource technologies. A lower approaching2 must therefore retain owner interactions outside this cactus cover guarantee, or exploit a denser compatibility family. This is an upper/route-separation result, not a new unrestricted lower bound.
+
+HIERARCHICAL-ALLOCATION ATTRIBUTION. The fixed-root payment vector used in each forest is an established hierarchical core allocation, not a novel allocation rule. A freely available primary exposition is P. Jean-Jacques Herings, Gerard van der Laan and Dolf Talman, "The Component Fairness Solution for Cycle-Free Graph Games", Tinbergen Institute Discussion Paper05-114/1(2005), equation(3.1) and Section4:
+ https://papers.tinbergen.nl/05114.pdf
+That paper credits Demange's hierarchical construction. Demange's original journal article is "On Group Stability in Hierarchies and Networks", Journal of Political Economy112(4),754-778(2004); the original was not available for direct inspection here. The fixed-owner reporting argument and owner-row production lift are the explicit application proved above. No independent historical novelty claim is made for them.

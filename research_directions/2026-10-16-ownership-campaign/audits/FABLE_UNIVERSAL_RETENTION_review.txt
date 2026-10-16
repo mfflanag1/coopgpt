@@ -1,0 +1,22 @@
+**Provisional verdict: no substantive findings in reviewed scope.** All displayed derivatives, cap/pool-switch bounds, the 13/42 and 20/21 coefficients, and the positive-grid translation rederive correctly. Two dependency statements are asserted rather than proved in the packet (both check out when I rederive them).
+
+## Findings
+
+**1. (Low) Unproved step imported from UNIVERSAL_TOTAL_INCREASE_LEMMA.txt**
+`UNIVERSAL_RETENTION_AND_OUTER_DOMINANCE_THEOREM.txt:180–181` says the lemma file proves "low-ratio branches have nonincreasing totals." The lemma file only asserts this (`UNIVERSAL_TOTAL_INCREASE_LEMMA.txt:56–57`); its proof covers rho≥2 only. Rederivation: short stage Z′=1+q[r(r−1)−m(r−2)−1]>0 for all r≥1, m≤r; pre-switch long stage dZ/du=q e^u(R−u−2)≤0 for R≤2; post-switch total ≤t+(1−t)/2<1≤Z; if the short stage pushes R>2 then t<rho/2 and Ct≤C·rho/2≤1+q(rho)(rho−1) by concavity (equality at rho=2). So the claim holds, but should be written down, since (U) alone does not give the Theorem 2 charge Δ₊.
+
+**2. (Low) Lipschitz lemma hypothesis mismatch**
+`SATURATION_RETENTION_THEOREM.txt:125–126` proves the 2c-Lipschitz bound with capped sum *exactly* 2; Theorem 2 uses it under (OD) with capped sum ≥2 (`…THEOREM.txt:195–197`). The proof extends (m=0: A e^{−A/t} decreasing for A≥t; m=1: A≥1 still; m≥2 unchanged), but the dependency as cited does not state this.
+
+**3. (Info) Verified items, for the record**
+- Short stage: z_i′, Z′ (lines 59–60) correct; 3f_i′ ≥ 2−q(r²+r+2)+qmr and ≥ 2−q(r²+2r+2)+qm(r+1) correct; 2Z′−3z_i′−C maximized at r=3/2, m=0, value 7/(2√e)≈2.123<2+c≈2.184.
+- Long stage: (UC) correct; derivative bracket x−s−(1+R)/3−2u/3; G_max integral correct; Taylor chain ε²/4−(3/14)ε³≥ε²/28 and δ≤q_Rε²/2 give 13/42.
+- Post-switch: (2),(6),(7) correct; q_a+q_b≥1 via φ′=(1−1/t)²; f_art(R−1)=f_cross.
+- Counting: d_i+s_i≥tx+1−t≥x>(1+rho)/3, at most two owners; in fact at a single intermediate point only one can satisfy x>(1+R)/3 when R≤2, so the 2× is loose but valid.
+- Theorem 2: B^i, b_i^i, D_i algebra; total-derivative ≤qr≤1/2 (both cap cases); (OD_quad) algebra incl. 1−c+2cu≤C for u≤1; b′(r), b(2)<0 so rho∈[1,2] branches contribute ≤0 (this is what removes the 9/5 floor); (UL_scalar) rational chain (α>29/570, k<301/570, v*>5591/3311, Taylor exceeds 301/58) — margin ≈0.0513 vs 0.0484; κ=(7c−1)/(10c); C²F rewrite and all three savings positive.
+
+## Scope limitations
+Snapshot-only review; no execution. TWO_SIDED_LOCAL_FUNDING_THEOREM.txt (sharpness profiles) not supplied; sharpness remark not audited. I did not search for counterexamples beyond the cases above (single long owner, rho=1.5 two-owner case) which matched the bounds.
+
+## Verdict
+No findings of correctness defects in the reviewed claim. Two citations (items 1–2) point to results stated more narrowly than used; both gaps close under short rederivation and should be documented before promotion. The theorem is correctly scoped as a local, class-restricted result (outer ratio ≥2 at the evaluated profile), not a global or all-mechanism bound.

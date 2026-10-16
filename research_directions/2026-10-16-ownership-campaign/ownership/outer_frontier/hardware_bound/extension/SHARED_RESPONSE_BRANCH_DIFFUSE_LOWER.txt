@@ -1,0 +1,137 @@
+SHARING ONE RESPONSE BRANCH WITH THE CAPPED OWNER IMPROVES THE DIFFUSE LOWER
+17 October 2026. Candidate fixed-owner construction, original actual envelope.
+This extends the accepted core and TWO_RESPONSE_BRANCH_DIFFUSE_LOWER.txt.
+No claim of optimal residual coefficient or lower bound on all mechanisms.
+
+Let c=1/(2e), C=1+c, K=e-1, L=log(1/epsilon). Fix
+ gamma=1/4, v=1/5,
+ B=(4/5)[2exp(1/5)-exp(-19/5)-1],
+ J=2exp(1/4)-exp(-11/4)-1,
+                       F=J+(3/4)B.                    (1)
+
+THEOREM. For every sufficiently small real epsilon>0, a finite instance with
+fixed actual owners, growing productive-branch and owner counts, physical
+hardware bottleneck H=1, and max_i z_i=epsilon has
+
+ sum_i E_i >= C+cKepsilon(L-log L)
+                   +c[F-2e-Klog2]epsilon+o(epsilon).    (2)
+
+Moreover F>2B, so this strictly improves the two-independent-response-branch
+lower. The two distinguished grid/local owners share the first response branch;
+their full local-payment constraints are enforced jointly across both branches.
+No counterprofile is required to retain the full-profile diffuseness condition.
+
+1. SHARED RESPONSE BRANCH
+Put q_s=exp(-gamma)/2 and t_s=epsilon/q_s. Four pure hardware owners each hold
+t_s/4. The uncapped-grid owner A holds local t_s, and the capped-grid owner G
+holds local gamma t_s. There are no other inputs on this branch. Its full
+coefficient is q_s, and its full local payments are
+ z_A=epsilon, z_G=gamma epsilon,
+ each hardware payment=(1-q_s)t_s/4,
+                     Z_s=t_s+gamma epsilon.            (3)
+
+When A deletes its own local report, the new short total is gamma t_s=t_s/4.
+Each hardware fragment equals this total, so q_s'=exp(1-1/gamma)/2=exp(-3)/2.
+Write b=1-q_s-q_s'>0. G's local payment increases by gamma b t_s, while each
+hardware payment decreases by b t_s/4. A's local payment becomes zero.
+Thus the hardware's TOTAL loss is
+                  b t_s=J epsilon,                    (4)
+where b/q_s=2exp(gamma)-exp(1+gamma-1/gamma)-1=J.
+G's increase will be hidden by its full outer cap. All four hardware accounts
+stay below epsilon before and after the report. For example t_s<3epsilon,
+so their full payments are below epsilon/2 and their changed payments below
+3epsilon/8. This branch gives the profitable A report used in Section 4.
+
+2. G'S REMAINING LOCAL-PAYMENT BUDGET
+Adjoin one disjoint copy of the existing v=1/5 response branch, but allocate
+it only epsilon_r=(1-gamma)epsilon=(3/4)epsilon of G's full local-payment budget.
+Thus t_r=epsilon_r/q_r with q_r=exp(-v)/2. Five pure hardware owners each hold
+t_r/5; G holds local t_r; a separate owner D holds local v t_r. Its full
+payments satisfy z_G=epsilon_r, z_D=v epsilon_r, and
+                         Z_r=t_r+v epsilon_r.
+Every new hardware account is less than epsilon. When G deletes only its
+local report on THIS branch, its own local loss is epsilon_r and the signed
+OTHER local-payment loss is exactly B epsilon_r, by the independently checked
+response-branch identity. Those other changed accounts remain uncapped.
+
+The SAME actual owner G holds local resources on both response branches.
+Its total full local payment is gamma epsilon+epsilon_r=epsilon. Owner A's
+full local payment is epsilon. This identity is essential: the construction
+does not give a new payment budget to a second copy of G.
+
+3. CORE, HARDWARE, AND EXACT S=2 NORMALIZATION
+Use the accepted core with T=1/L, k=floor L growing productive branches,
+ rho=1+log(T/(2epsilon))=L-log L+1-log2,
+and actual local owners with capped shares d_j in (0,1], sum_j d_j=rho and
+one d_1=1. Each branch has hardware T/k; its pure hardware owners are fragmented
+so each full local payment is at most epsilon. Its full payments are
+d_j epsilon and Z_core=T+epsilon(rho-1). For all sufficiently small epsilon,
+rho>=3. Give core owner B_1 the remaining hardware
+                      a=1-T-t_s-t_r>0                 (5)
+on an extra branch with zero local resource. Thus H=1 and M=T+t_s+t_r.
+All other owners and branches are distinct except for G's explicit sharing.
+
+Let Z=Z_core+Z_s+Z_r. Give G grid p_G=1 and A grid p_A=1-Z+epsilon; all other
+grids are zero. Then G's full uncapped account is 1+epsilon, A's is
+                      b_A=1-Z+2epsilon,
+and every other opposing account is at most epsilon. Since Z=T+O(epsilon L),
+for all sufficiently small epsilon p_A>0 and 0<b_A<1. The sole full overflow
+is G's epsilon, so the total capped sum is EXACTLY S=2. Also
+ P+M=2-epsilon[rho-2+gamma+v(1-gamma)]>1 eventually.
+Hence physical output is H=1 and full raw nested funding is exactly C.
+
+All full local payments obey z_i<=epsilon, with equality at B_1,G,A. Every
+listed owner is active, and the finite instance's identities and eligible
+physical coordinates remain fixed across all feasible reports.
+
+4. THREE SEPARATE ACTUAL UNILATERAL REPORTS
+The own-report envelope optimizes these owners independently; the reports
+below are never combined into a simultaneous change.
+
+(i) B_1 deletes its core local bundle while retaining its hardware. The exact
+core capped-total increase is Delta=epsilon[K rho-(2e-1)]. All changed core
+accounts stay below one, so its exact gain is
+                  g_1=c[a(1-exp(-Delta))-epsilon].     (6)
+
+(ii) G deletes only its local resource on the independent residual-budget
+branch of Section 2. Its shared-branch local resource stays fully reported,
+so its changed raw opposing account is 1+gamma epsilon and remains capped.
+The uncapped opponents on the changed branch lose B epsilon_r in total.
+Thus S'=2-B epsilon_r>1 and G's exact gain is
+                       g_G=c[exp(B epsilon_r)-1].      (7)
+
+(iii) A deletes only its local resource on the shared branch. Its own opposing
+account falls by epsilon and remains positive/uncapped. G's local increase
+in (4) is fully hidden by its grid-backed cap. The hardware loses J epsilon,
+so S'=2-(1+J)epsilon>1. A's exact gain is
+                g_A=c[exp((1+J)epsilon)(b_A-epsilon)-b_A]. (8)
+Every other changed account stays below one. Both outer pools retain the
+hardware-short orientation for sufficiently small epsilon.
+
+Truthful reports are feasible for every other owner, giving the exact lower
+                       sum_i E_i>=C+g_1+g_G+g_A.       (9)
+
+5. ASYMPTOTIC COEFFICIENT AND EXACT STRICT IMPROVEMENT
+The core calculation is unchanged:
+ g_1=cKepsilon(L-log L)-c[2e+Klog2]epsilon+o(epsilon).
+Its response-branch hardware cost is O(epsilon)*Delta=O(epsilon^2 L)=o(epsilon).
+Since b_A->1, (7)--(8) give
+ g_G=c(1-gamma)B epsilon+o(epsilon),
+ g_A=cJ epsilon+o(epsilon).
+These prove (2) for EVERY sufficiently small real epsilon. A fractional final
+core local share, fixed within each instance, avoids integer phase errors.
+
+For the exact comparison with two independent response branches,
+ F-2B=J-(5/4)B
+     =2[exp(1/4)-exp(1/5)]+exp(-19/5)-exp(-11/4)>0.     (10)
+Indeed exp(1/4)-exp(1/5)>1/20 by integrating exp(x)>1 across that interval.
+Also exp(11/4)>1+11/4+(11/4)^2/2+(11/4)^3/6>10, so exp(-11/4)<1/10.
+Thus the first positive term in (10) already strictly exceeds the final
+negative term, before adding exp(-19/5)>0.
+
+This demonstrates a concrete limitation of optimizing two independent signed
+response branches: shared resources can increase an uncapped owner's payment
+while hiding the capped recipient's local increase, without duplicating that
+recipient's payment budget. It does not show that this two-branch sharing
+pattern is optimal; further cross-ownership or additional response branches
+remain possible.

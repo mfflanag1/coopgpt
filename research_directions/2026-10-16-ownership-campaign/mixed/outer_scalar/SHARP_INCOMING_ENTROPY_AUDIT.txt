@@ -1,0 +1,73 @@
+INDEPENDENT AUDIT: SHARP INCOMING ENTROPY AND DIFFUSE FUNDING v2
+16 October 2026. Reviewer: sparse_power_theory lane.
+
+VERDICT: PASS, with one exposition clarification already requested by parent.
+I independently rederived all mathematical load-bearing steps in v2, and the
+imported short-stage, composition, outer-switch, and summation steps from v1.
+This is an analytical audit, not a novelty review or proof-assistant result.
+
+1. LOCAL INCOMING RESPONSE
+For a reduction of the original short report, capped other accounts cannot gain.
+On each smooth cell, uncapped gains are bounded by q(rho-m) <= q rho <=1/2 per
+unit. Integrating gives at most s_i/2 <= U_i. The original long-role payment
+and the shorter total cannot increase during this stage.
+
+Before a long-stage switch, the positive other-account gain is at most
+q(exp(u)-1)(rho-d), hence at most K V rho. If a switch occurs, the other
+actual long total v<1, u=d+v-1 lies in [0,d], and q exp(u)=1/2. Combining
+the pre-switch response and the remaining short-stage response gives
+q(exp(u)-v). Since v=1+u-d, its ratio to qd is at most
+(exp(u)-1)/u <= e-1, with the u=0 limit and d=0 case valid. This proves
+the improved K V bound for the entire switching long stage.
+
+The passage from current (T,V) to full (T0,V0) must be read in this order:
+FIRST increase T to T0, THEN increase V to V0. Throughout the second step,
+V<=V0<=T0/2; therefore the derivative log(T0/(2V)) is nonnegative. The
+existing v2 conclusion is correct, but explicitly saying this order avoids
+an unjustified intermediate point V0>T/2. Parent has already requested this
+exposition clarification; no numerical constant changes.
+
+2. ACTUAL MIXED-OWNER COMBINATION
+With alpha=V0/z and R=T0/z>=1, the difference between the claimed sharp
+entropy budget and the short-plus-long budget is exactly
+z[(K-1)(1-alpha)+K(1-alpha)log R+K alpha log(2alpha)].
+After dropping the nonnegative log R term, the minimum is
+K-1-(K/2)exp(-1/K)>0 at alpha=exp(-1/K)/2.
+The stated rational proof using 5/3<K<7/4 is valid. Thus no virtual-owner
+splitting or unproved cancellation is needed. Positive-part subadditivity
+along one actual owner's two-coordinate path and then across branches is
+valid. The log-sum inequality has the correct direction and zero cases.
+
+3. OUTER PAYMENT COMPARISON
+Restoring the deviator's own outer accounts is only a monotonic payment
+comparison. For the restored capped opposing total, S-O_i<=S_i<=S+G_i
+follows directly from the 1-Lipschitz cap map, regardless of grid overflow.
+The reciprocal-exponential majorant k(t)<=exp(1-t)/2 handles positive-gap
+recipients even after switching the outer bottleneck. In the switched case,
+the actual capped hardware ratio is <=1/S_i, giving the needed direction of
+the coefficient bound. Negative gaps retain the factor exp(-G_i); the
+possible zero-gap full-overflow owner has a_i=d_i=1 and the primitive ceiling
+alone suffices. Summing with G_+-G_-=S-1 and G_-<=1 yields the displayed
+D(epsilon) at the exact stationary point r=B/A. No count restriction enters.
+
+4. SHARPNESS AND ASYMPTOTICS
+The one-hardware, n-local-owner example gives incoming gain exactly
+(n-1)(e-1)q and denominator q(n+log 2); hence the entropy coefficient e-1
+is sharp and a universal linear incoming coefficient is impossible.
+The m-branch, 2m-owner diffuse family has epsilon=1/(2m), S=2, raw total C,
+and the actual envelope dominates it. Together with D(epsilon)->C this proves
+the stated sharp diffuse-limit supremum, with both productive branch and
+active owner counts unbounded. It does not prove an unrestricted mechanism
+lower bound or unrestricted C-squared funding.
+
+5. EXACT CONSTANT REPLAY
+Executed check_sharp_incoming_constants.py with Python3.13 -I -O: PASS, all
+13 exact Fraction checks. The verifier uses explicit RuntimeError checks,
+so optimization mode cannot erase its obligations. It certifies the stated
+rational threshold 12461/9005<7/5<C^2 and the displayed finite family identities.
+The checker does not stand in for the analytical universal proof above.
+
+REVIEWED SHA256 SNAPSHOT
+SHARP_INCOMING_ENTROPY_v2.txt af0c22ca4feb9860034737be7ac48a525e60f3dc834041336692d39c76d3cdb8
+INCOMING_ENTROPY_DIFFUSE_FUNDING.txt 27302cc4fb57fff0b515a520da44f89ccec97e5bb87ed5d4bb4eb40e3bca2a86
+check_sharp_incoming_constants.py f7b910d26882485d1d4a79894f91bfee7936d71490747d1823c5ccf3f7b87101

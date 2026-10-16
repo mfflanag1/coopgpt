@@ -1,0 +1,105 @@
+INDEPENDENT AUDIT: ACTUAL DIFFUSE PREMIUM MATCHING RATE
+16 October 2026. Verdict: PASS; no substantive defect found.
+
+SOURCE
+ ownership/outer_frontier/hardware_bound/extension/DIFFUSE_PREMIUM_MATCHING_RATE.txt
+ and check_diffuse_rate_constants.py.
+I read SHARP_INCOMING_ENTROPY_v2.txt to check the precise upper-rate interface.
+The incoming theorem itself is a separately reviewed dependency; this audit
+independently checks the new lower construction, its all-epsilon quantifiers,
+and its actual-account calculations.
+
+1. FULL ACTUAL PROFILE
+For rho>=3, n=floor(rho), s=rho-n, each productive branch has hardware T/k and
+long local total rho*T/k. Its n full local coordinates and optional fractional
+coordinate all lie at or below the short total. Thus the capped ratio really is
+rho and q=exp(1-rho)/2. Each B owner receives epsilon=qT; the fractional owner
+receives s*epsilon. A branch-specific hardware owner's payment is
+(1-q)T/(k*m)<=epsilon/k because m>=ceil((1-q)/q). Grid-only owners receive zero
+local payment. Hence max z_i=epsilon exactly, including every hardware owner.
+
+The separate zero-local branch contributes hardware 1-T and no local payment,
+so H=1 and M=T. Every owner included in the instance has a positive resource:
+the B owners also supply productive local resources, the A owners supply active
+productive hardware, and both grid reports are positive. The optional owner is
+included only when s>0. This is legitimate variation between instances, never
+variation of identities within one strategic report domain.
+
+Z=T+epsilon(rho-1)<=CT<2, so both grid reports 1-Z/2 lie strictly between zero
+and one. Also epsilon(rho-1)<=cT<1, proving P+M=2-epsilon(rho-1)>1. Thus F=H.
+All full opposing accounts are below one and sum to exactly two. The outer
+coefficient is c=1/(2e), and the raw sum is exactly C. No approximate equality
+or clipped-account replacement is involved in this baseline.
+
+2. ACTUAL DEVIATION, NOT A RESTORED AUXILIARY PROFILE
+One B_i removes its entire local bundle on the same k branches and leaves its
+hardware a=(1-T)/n unchanged. Other owners, all grids, and all identities remain
+unchanged. Each productive capped ratio becomes rho-1>=2, so the local
+coefficient becomes e*q. The deviator's local payment is zero. Summing the
+remaining actual accounts gives
+ Z'=T+e*epsilon(rho-2),
+ Delta=epsilon[(e-1)rho-(2e-1)]>0.
+The remaining full local accounts e*epsilon satisfy e*epsilon<=T/(2e)<1;
+the fractional account is smaller, hardware payments decrease, and the two
+grid accounts stay below one. Therefore the ACTUAL new outer sum is 2+Delta
+with unchanged hardware total one. It has coefficient c*exp(-Delta).
+
+The exact own raw gain is consequently
+ c[a(1-exp(-Delta))-epsilon],
+which verifies the source formula directly. Each B_i may select this deviation
+separately in its own envelope. Summing the n corresponding payment lower bounds
+and truthful payments of all other owners proves equation (4). The different
+deviations are not required to occur simultaneously. Its lower bound remains
+valid even if the displayed gain is negative at some finite parameters.
+
+3. ALL-EPSILON RATE AND LEADING-COEFFICIENT SCOPE
+For each fixed T>0, choosing rho=1+log(T/(2epsilon)) realizes every sufficiently
+small positive epsilon exactly. The fractional owner handles nonintegral rho.
+With L=log(1/epsilon), rho/L and n/L tend to one, Delta/(epsilon L) tends to
+K=e-1, and Delta tends to zero. Thus the EXHIBITED aggregate gain divided by
+epsilon L tends to c[(1-T)K-1]. The actual envelope inherits a liminf lower
+bound; the source correctly does not assert equality for its actual premium.
+
+At fixed T=1/4 this coefficient is c(3e-7)/4>0, proving a positive rate with
+nonvanishing local output. Since the same liminf is bounded below by each
+fixed-T coefficient, taking the supremum over T>0 gives c(e-2). This does not
+exchange limits or require uniformity in T. Setting k=n grows the productive
+branch count; m is finite in each instance and may grow exponentially.
+
+The cited upper bound D=1+(A/2)exp(-B/A), with
+A=exp(Kepsilon), B=exp(-Kepsilon[1+L]), expands as
+ C+cKepsilon L+O(epsilon).
+Indeed B/A=1-Kepsilon(L+2)+O(epsilon^2 L^2), and multiplication by A adds
+only an O(epsilon) term. The upper coefficient c(e-1) therefore has the stated
+direction. These facts establish Theta(epsilon log(1/epsilon)); they do not
+determine the leading constant, prove unrestricted C^2 funding, or lower-bound
+the best possible truthful mechanism.
+
+4. EXACT FINITE CALIBRATION
+For T=1/8,rho=n=k=8,m=3000, the stated owner count is 24,010. I independently
+rederived the finite lower expression, its Taylor lower bound, and
+ (42e-113)/8>3/32,
+ (7/16)*epsilon*(6e-7)^2<2527/131072,
+ 3/32-2527/131072=9761/131072>0.
+The fragmentation condition follows from 2*(11/4)^7-1<3000. The source's seven
+Fraction checks all pass with python3 -I -O; their exponential tail comparison
+has the correct direction. These arithmetic checks corroborate the finite
+member, while the general proof is Sections 1-3 above.
+
+5. INDEPENDENT ACTUAL-ACCOUNT CORROBORATION
+I wrote check_actual_diffuse_lower_independent.py using a direct two-pool
+primitive implementation and materialized all branch-specific actual owners.
+It evaluates the 24,010-owner finite calibration and a separate 19,670-owner
+fractional-ratio instance rho=9.5 with two productive branches. Both pass the
+full and deviated cap checks, exact-formula comparisons, positive actual gain,
+full diffuse ceiling, and active-owner checks at 100-digit Decimal precision.
+The original and deviated profiles have identical owner indices throughout.
+The result is saved in actual_diffuse_independent_checks.json. These are finite
+high-precision corroborations, explicitly not exact transcendental certificates
+or evidence replacing the analytic lower bound. Separate asymptotic displays
+likewise are not used as proof.
+
+MINOR NOTATIONAL CLARIFICATION
+The supremum defining W should explicitly specify H>0, since its ratio divides
+by H. The proof already normalizes H=1 and zero-hardware instances have zero
+payments, so this is a definitional clarification, not a mathematical gap.

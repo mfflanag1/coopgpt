@@ -1,0 +1,103 @@
+FINITE CAP-CHOICE COALITION FLOORS
+16 October 2026. Constant-dimensional coverage relaxation for S<2.
+Uses THREE_CAP_RECIPIENT_REDUCTION.txt. No global funding conclusion.
+
+1. FIXED ACTUAL RECIPIENTS AND COALITIONS
+Normalize full hardware H=1 and assume the full capped opposing total S<2.
+Use the common ceilings U_k, baseline pi_k=min(p_k,1), and exceptional actual
+recipient set J from THREE_CAP_RECIPIENT_REDUCTION.txt, so |J|<=3. Fix actual
+deviator i. Let Q=J\{i}, O=N\(Q union {i}), and q_k=1-pi_k for k in Q.
+For coalitions A excluding i, write m(A)=sum_j min(H_j(A),L_j(A)). All these
+coalitions retain their full resource reports while i underreports.
+
+At every i-underreport, write y_k=z_k^i. Every k in O is either uncapped at all
+such reports or has y_k=0. Thus the opponents' capped total is exactly
+ pi_{-i}+sum_{k in O}y_k+sum_{k in Q}min(y_k,q_k)
+ =pi_{-i}+min_{A subset Q}
+       [sum_{k in O union A}y_k+sum_{k in Q\A}q_k].    (1)
+This is merely the distributive identity for a finite sum of minima. It does
+not presume that the minimizing cap pattern is the same at different reports.
+
+2. DIRECT CAP-CHOICE COVERAGE FLOOR
+Local coverage applied to O union A in (1) proves the uniform floor
+ R_i^choice=pi_{-i}+min_{A subset Q}
+             [m(O union A)+sum_{k in Q\A}q_k].         (2)
+At most eight actual coalition values are required. Unlike replacing the entire
+opponents' account by one cap at one, (2) keeps each exceptional recipient's
+own headroom q_k and allows the ordinary coalition to contribute above one.
+
+For one exceptional opponent k this is
+ R_i^choice=pi_{-i}+min{M_{-i},m(O)+1-pi_k}.            (3)
+The floor need not dominate the weighted layer-cake floor; take their maximum.
+Neither the cap-choice identity nor this elementary coverage implication is
+presented as a historical-priority claim.
+
+3. RETAINING THE EXCEPTIONAL PAYMENT CEILINGS
+For any A subset Q and B subset Q\A, coverage and y_k<=U_k imply
+ sum_{k in O union A}y_k
+ >=m(O union A union B)-sum_{k in B}U_k.
+Consequently the stronger, still explicit floor is
+ R_i^upper=pi_{-i}+min_{A subset Q}
+   [sum_{k in Q\A}q_k+
+      max_{B subset Q\A}{m(O union A union B)-sum_{k in B}U_k}].  (4)
+The inner maximum includes B empty. Therefore (4)>=(2). It requires the same
+at most eight coalition values and at most 3^|Q|<=27 scalar combinations.
+For one exceptional opponent k, (4) simplifies to
+ R_i^upper=pi_{-i}+min{M_{-i},
+       q_k+max(m(O),M_{-i}-U_k)}.                      (5)
+
+4. A CONSTANT-DIMENSIONAL LINEAR-PROGRAM FORM
+A stronger floor follows by retaining all union-of-groups coalition inequalities.
+Introduce variables v_0 and (v_k:k in Q). The actual vector
+v_0=sum_{k in O}y_k, v_k=y_k is feasible for the polytope P_i defined by
+ 0<=v_0<=sum_{k in O}U_k,  0<=v_k<=U_k (k in Q),
+ sum_{k in A}v_k>=m(A)                    (A subset Q),
+ v_0+sum_{k in A}v_k>=m(O union A)         (A subset Q). (6)
+The constraints for the empty coalition are harmless. If O is empty then its
+upper bound sets v_0=0. Feasibility follows from the actual full local payment
+vector, so neither an infeasible LP nor a +infinity convention is needed.
+
+Define
+ R_i^LP=pi_{-i}+min_{A subset Q}
+   [sum_{k in Q\A}q_k+
+     min_{v in P_i}(v_0+sum_{k in A}v_k)].             (7)
+Every counterprofile vector lies in P_i; (1) therefore proves its opposing
+capped total is at least (7). There are at most eight linear programs, each in
+at most four variables, with at most sixteen coalition inequalities plus box
+bounds. The outer minimum over cap choices is essential: minimizing a concave
+sum of capped coordinates is not equivalent to a single ordinary LP.
+
+This LP floor dominates both (4) and the weighted layer-cake floor based on
+these U_k. The first dominance follows because every inequality used in (4)
+is a consequence of (6) and its upper bounds. For the second, every v in P_i
+satisfies min(v_k,q_k)>=w_k v_k on 0<=v_k<=U_k, where
+w_k=min(1,q_k/U_k), and the weighted sum of the nested coalition constraints
+in (6) gives exactly the layer-cake floor. Its ordinary-group weight is one.
+Thus the concave objective at every v in P_i is at least that weighted floor;
+taking its minimum, equivalently (7), proves the claim.
+
+The variable v_0 is an accounting sum of payments to a fixed actual coalition.
+It is not a merged owner, is never assigned a report, and has no incentive
+constraint. We retain all actual-owner deviations when invoking this floor.
+We also do not assert that (6) contains every implied projection of all possible
+actual coalition inequalities. Ignoring some constraints only lowers the floor.
+
+5. CONSEQUENCE FOR THE ACTUAL ENVELOPE AND COMPUTATION
+For a full positive-gap recipient i, g_i=d_i-H_i>0, the established restoration
+argument now yields
+                E_i<=H_i+g_i k(d_i+R_i^LP).             (8)
+Alternatively keep the floor inside the own-loss scalar bound
+             t_i(x)>=d_i-x+R_i^LP.
+Formula (8) is a pointwise upper bound, not an exact envelope formula. The
+largest of this floor and independent coalition/response floors is also valid.
+
+All m(A) and m(O union A), for A subset Q, use original actual coalitions and
+can be evaluated from branch totals and the at most three exceptional owners'
+resource vectors. After O(n*m) aggregation, the arithmetic work for each i is
+O(m) plus a bounded-dimensional LP calculation. The numbers U_k can contain
+exponentials. These statements are finite-dimensional real-arithmetic reductions,
+not a rational bit-complexity theorem or a new method for computing the true E.
+
+The result is uniform in owner and branch counts. It resolves the unbounded
+number of possible cap-sensitive recipients in the S<2 frontier, but does not
+yet bound the sum of (8) by C^2. That funding inequality remains a separate gate.

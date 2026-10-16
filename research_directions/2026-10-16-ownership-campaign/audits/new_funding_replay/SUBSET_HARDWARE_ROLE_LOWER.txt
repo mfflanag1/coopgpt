@@ -1,0 +1,47 @@
+SUBSET HARDWARE-ROLE LOWER BOUND
+16 October 2026. Exact structural lemma; original exponential primitive.
+
+For any full profile and ANY subset I of actual recipients, let H_I be its
+aggregate hardware and U_I its aggregate local hardware-role payment. Let H
+be total hardware and M the sum of branch outputs min(H_j,L_j). Then
+ U_I >= H_I/2-(2/3)(H-M).                             (SH1)
+Counts, branch overlaps, real reports, and mixed ownership are unrestricted.
+This is an accounting inequality, not an instruction to merge actual owners.
+
+PROOF
+On a hardware-short branch, U_ij=(1-q_j)h_ij>=h_ij/2, because q_j<=1/2.
+Such a branch has H_j-M_j=0. A zero-output branch satisfies(SH1) directly:
+its hardware-role payment is0 and H_Ij/2-(2/3)H_j<=0.
+
+On a positive-output hardware-long branch write T=M_j, d=H_j/T>=1,
+rho=sum_i min(h_ij,T)/T in[1,d], and q=(1/2)exp(1-rho). Every individual
+hardware-role deficit h_ij/2-U_ij is nonnegative, since U_ij=q min(h_ij,T)
+<=h_ij/2. Hence the subset deficit is at most the total deficit
+ H_j/2-U_j=(T/2)[d-rho exp(1-rho)].
+If rho=1 this is (H_j-T)/2. For rho>1, the ratio of this expression to
+H_j-T is
+ [d-rho exp(1-rho)]/[2(d-1)].
+It decreases as d increases, because rho exp(1-rho)<=1. Its maximum
+therefore occurs at d=rho and is
+ rho[1-exp(1-rho)]/[2(rho-1)] <=2/3.                  (SH2)
+To prove the last inequality put x=rho-1>=0. It is equivalent to
+ (3-x)exp(x)<=3(x+1).
+For x>=3 this is immediate. For x>=0 define F(x)=3(x+1)-(3-x)exp(x).
+Then F(0)=0, F'(x)=3-(2-x)exp(x), and F''(x)=(x-1)exp(x).
+Thus F' has its global minimum at1, where F'(1)=3-e>0. Hence F>=0,
+proving(SH2) also at rho=1 by continuity. Summing branch inequalities proves
+(SH1). All pool equalities and zero reports are included.
+
+CONSEQUENCE FOR NEGATIVE OUTER GAPS
+Normalize H=1 and let J={i:d_i<a_i} with the notation of the dual aggregation
+note. Negative-gap recipients have no own full overflow, so
+ H_J=P_J+Z_J+G_-, where P_J=sum_J p_i, Z_J=sum_J z_i.
+Their full local payments dominate their hardware-role payments. Applying
+(SH1) and rearranging therefore gives
+ Z_J >= P_J+G_--(4/3)(1-M).                           (SH3)
+In particular, when M=H=1, Z_J>=P_J+G_-. This holds for every recipient subset
+selected by the full profile and can be imposed in an aggregate scalar funding
+relaxation. It prevents treating nearly fully utilized hardware as carrying a
+large negative gap with arbitrarily little local payment.
+
+The coefficient2/3 in(SH1) is a clean sufficient value, not asserted sharp.

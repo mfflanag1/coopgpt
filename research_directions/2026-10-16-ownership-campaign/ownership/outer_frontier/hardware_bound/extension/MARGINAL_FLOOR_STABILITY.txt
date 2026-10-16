@@ -1,0 +1,97 @@
+MARGINAL-FLOOR STABILITY FOR THE EXPONENTIAL LOCAL RULE
+16 October 2026. Candidate analytical theorem with an exact scalar certificate;
+independent review pending. Actual fixed owners, all-real reports, arbitrary
+branches. No historical-priority claim or full funding claim.
+
+For the original exponential local primitive put c=1/(2e), C=1+c. For an owner i,
+let M=sum_j min(H_j,L_j), let M_{-i}=sum_j min(H_j-h_ij,L_j-l_ij) be the actual
+opponents' coalition value, let mu_i=M-M_{-i}, and let z_i be its local payment.
+Let delta=CM-Z>=0, where Z is the sum of all local payments. Then
+ z_i >=mu_i/2,                                                  (1)
+ z_i >=(1-c)mu_i-(4/5)sqrt(M delta).                             (2)
+In particular, at zero local budget slack delta=0, the stronger floor is
+z_i>=(1-c)mu_i. Both constants in the zero-slack and half-floor statements are
+attained by elementary pure-owner profiles. The4/5 stability coefficient is a
+convenient certified upper bound, not an optimality claim.
+
+1. ONE BRANCH: EXACT MARGINAL IDENTITY
+Ignore zero-output branches and normalize its shorter total T to1. Let the
+owner's short amount be s in[0,1], its capped long amount d in[0,1], and
+rho=sum_k min(long_k,1)=1+u, u>=0. Then q=.5exp(-u), and
+ z_i=(1-q)s+qd,     delta_branch=c-qu.
+The owner's loss of production upon removal is
+ mu=max{s,(d-u)_+}.                                      (3)
+To check(3), if opponents' actual long total is below1, all those long amounts
+are uncapped and their total is rho-d=1+u-d; the remaining short total is1-s.
+If opponents' actual long total is at least1, its capped total is also at least1,
+so d-u<=0 and only the short side can bind. This includes a capped own long
+report and does not replace any actual owner by virtual accounts.
+
+2. HALF-MARGINAL FLOOR
+If mu=s, z_i>=(1-q)s>=s/2. Otherwise mu=d-u>0 implies0<=u<d<=1. Then
+ qd=.5exp(-u)d>=.5(d-u),
+since d(1-exp(-u))<=du<=u. This proves(1) on one branch.
+
+3. STABILITY WHEN THE SHORT COORDINATE SETS THE MARGINAL
+Suppose mu=s. If u>=1 then q<=c and z_i>=(1-c)mu directly. For0<=u<=1,
+ (1-c)mu-z_i <=(q-c)s <=q-c.
+Put t=exp(1-u) in[1,e]. Then
+ (q-c)^2/(c-qu)=c (t-1)^2/[1-t+t log t].
+The ratio (t-1)^2/[1-t+t log t] increases on[1,e], with continuous value2 at1
+and value(e-1)^2 at e. Its derivative has the sign of
+ (t+1)log t-2t+2,
+whose derivative is log t-1+1/t>=0 for t>=1. Therefore
+ (q-c)^2 <=c(e-1)^2 (c-qu) <(16/25)(c-qu).                (4)
+The last strict inequality is certified by rational upper bounds on e in the
+attached checker. This proves(2) in the short-marginal case.
+
+4. STABILITY WHEN THE LONG COORDINATE SETS THE MARGINAL
+Suppose mu=d-u>s, hence0<=u<d<=1. Dropping the nonnegative short payment gives
+ (1-c)mu-z_i <=(1-c)(d-u)-qd
+             <=F(u):=(1-c)(1-u)-.5exp(-u),              (5)
+because the coefficient1-c-q is positive. The function F decreases for u>=0:
+F'=-(1-c)+q<0. It is already negative at u=3/4, as verified exactly below.
+It remains to prove, for0<=u<=3/4,
+                   max(F(u),0)^2 <=(16/25)[c-.5u exp(-u)].          (6)
+
+5. EXACT ALL-REAL CERTIFICATE FOR(6)
+certify_marginal_stability.py uses only Fraction arithmetic. The constants obey
+ 1957/720 < e <11743/4320,
+so c is bounded below by clo=2160/11743. Degree13/12 Taylor polynomials of
+exp(-x) give lower/upper bounds for every x>=0, by the Lagrange remainder.
+The checker first proves c(e-1)^2<16/25 using the monotonicity of
+(e-1)^2/(2e) for e>1, and proves F(3/4)<0 using clo and a degree13 lower bound.
+
+Split[0,3/4] into512 closed equal intervals[lo,hi]. Since F decreases and
+c-.5u exp(-u) decreases on[0,1], throughout such an interval
+ F(u)<=Fhi=(1-clo)(1-lo)-exp_lower(-lo)/2,
+ c-.5u exp(-u)>=delta_lo=clo-hi*exp_upper(-hi)/2.
+If Fhi<=0, (6) is automatic. Otherwise the script checks delta_lo>0 and
+Fhi^2<=(16/25)delta_lo using exact rational comparisons. All512 intervals pass;
+474 have positive Fhi. The largest certified squared ratio is about.584413,
+strictly below16/25=.64. No floating acceptance, sampling inference, unresolved
+interval, or assert-dependent check is used. The exact fraction is recorded in
+the accompanying JSON. Normal and -O runs agree.
+This completes(6), then(5), and hence(2) on one branch.
+
+6. HOMOGENEITY AND ARBITRARY BRANCHES
+Restoring scale T gives z_ij>=(1-c)mu_ij-(4/5)sqrt(T_j delta_j). Sum over branches
+and apply Cauchy--Schwarz to obtain(2), since sum_j T_j=M, sum_j delta_j=delta,
+and actual coalition marginals add across independent local branches. The same
+summation proves(1). Zero-output branches have zero marginal and payment.
+All actual owner coordinates are fixed and may be arbitrarily mixed across
+branches; no assumptions on owner or branch count enter.
+
+7. FIXED OPPONENTS' COALITION CONSEQUENCE
+After any actual own underreport by i, the other owners' local resources are
+unchanged. Coalition coverage therefore gives sum_{k!=i}z'_k>=M_{-i}. For H=1,
+their total capped opposing account is consequently at least
+ min{1,P_{-i}+M_{-i}} >=min{1,P_{-i}+R_i},
+where
+ R_i=max{0,M-2z_i,M-[z_i+(4/5)sqrt(M delta)]/(1-c)}.       (7)
+Here the cap inequality sum min(x_k,1)>=min(sum x_k,1) is elementary. It remains
+valid through arbitrary opposing cap changes. This lower bound is a fixed-actual-
+coalition constraint, complementary to the outgoing-loss inequalities.
+For a full-capped positive owner, after restoring its own outer hardware/grid,
+its payment is at most a_i+.5exp(-min{1,P_{-i}+R_i})(1-a_i).
+This is an individual bound; simultaneous funding still requires summation.

@@ -1,0 +1,154 @@
+A FINITE ADDITIVE APPROXIMATION WITH EXACT OWN-REPORT MONOTONICITY
+16 October 2026. Original symmetric exponential nested mechanism only.
+Counts are arbitrary but finite; all actual identities and eligible coordinates
+are fixed. A lattice and padding construction is an elementary approximation
+method, not claimed historically novel. The explicit Lipschitz control below
+is proved for this particular primitive and its composition.
+
+RESULT AND LIMIT
+For every fixed finite ownership instance and every fixed positive additive
+accuracy epsilon, there is a payment rule A defined by a finite maximum at
+every finite report profile, with
+ * exact coordinatewise own-report monotonicity on the full nonnegative domain;
+ * all-profile coalition coverage;
+ * E_i<=A_i<=E_i+epsilon/n for each actual owner;
+ * sum_i A_i<=sum_i E_i+epsilon.
+Here E is the original actual own-report envelope and n is the FIXED owner count.
+The real-valued formula has an implementable certified rational-output variant
+for rational reports, with the same total additive error after splitting the
+accuracy allowance. Evaluation is generally exponential in report dimension
+and capacity magnitude. No polynomial-time or relative subsidy guarantee is
+claimed. In particular the padded rule can pay positively when F=0.
+
+1. THE EXPONENTIAL PRIMITIVE IS GLOBALLY 2-LIPSCHITZ IN l1
+Let Phi(a,b) be its full vector of actual-owner payments. On a positive-output
+cell, orient the short report vector as s, the long vector as ell, and write
+ T=sum s_i, d_i=min(ell_i,T), D=sum d_i, rho=D/T>=1,
+ q=exp(1-rho)/2,
+                         Phi_i=(1-q)s_i+q*d_i.          (1)
+The asserted global inequality is
+ ||Phi(a,b)-Phi(a',b')||_1
+              <=2(||a-a'||_1+||b-b'||_1).              (2)
+
+First vary one short coordinate at unit speed while staying in one cell. Let
+m be the number of capped long coordinates, so dT=1, dD=m and
+ dq=q(rho-m)/T.
+Here 0<=m<=rho. The l1 norm of the payment derivative is bounded by
+ (1-q)+qm+(D+T)q(rho-m)/T
+ =1+q[rho^2+rho-1-rho*m]
+ <=1+q(rho^2+rho-1)<=1+5/(2e)<2.                       (3)
+The last scalar maximum occurs at rho=2, since the derivative of
+exp(1-rho)(rho^2+rho-1)/2 has the sign of (2-rho)(rho+1).
+
+Next vary one uncapped long coordinate at unit speed. T is fixed, dD=1 and
+dq=-q/T. Its vector derivative has l1 norm at most
+                  q+(D+T)q/T=q(rho+2)<=3/2.            (4)
+The last expression decreases on rho>=1. For a capped long coordinate the
+derivative is zero. These estimates cover either physical pool after orientation.
+
+Cap boundaries are continuous. At a pool tie all long coordinates are at most
+T, rho=1 and Phi=(a+b)/2, so the two orientation formulas agree. At T=0 the
+payment vector is zero, and its l1 norm at positive T is
+ T[1+q(rho-1)]<=CT<2T,
+which proves continuity at zero-output boundaries as well. A one-coordinate
+path crosses only finitely many orientation/cap cells. Integrating the bounded
+one-sided derivatives and then changing coordinates successively proves (2)
+on the whole nonnegative domain. No lower bound on T or upper bound on reports
+is required. The constant does not depend on owner count.
+
+2. THE NESTED RAW PAYMENT IS 6-LIPSCHITZ IN ONE WHOLE BUNDLE
+Let h_ij and l_ij be owner i's hardware and local resource on branch j; p_i is
+its grid report. Local payments z are sums of the branch primitive outputs,
+and the outer input vectors are H_i=sum_j h_ij and p_i+z_i.
+Changing one local-resource coordinate by magnitude v changes the local payment
+vector by at most 2v in l1, and hence the outer payment vector by at most 4v.
+Changing one hardware coordinate also changes its owner's outer hardware by v,
+so the outer input difference is at most 3v and its payment difference at most
+6v. A grid coordinate gives at most 2v. Therefore for fixed opponents,
+ |N_i(b_i,b_-i)-N_i(b_i',b_-i)|
+ <=6 sum_j|h_ij-h_ij'|+4 sum_j|l_ij-l_ij'|+2|p_i-p_i'|
+ <=6||b_i-b_i'||_1.                                    (5)
+This includes arbitrary mixed ownership, ties, zeros, and underreports changing
+all eligible coordinates together. The eligible dimension d_i is fixed by the
+instance, NOT the number of currently nonzero reported coordinates.
+
+The raw rule is consequently continuous. Its own underreport box [0,b_i] is
+compact for every finite profile, so the supremum defining E_i is attained.
+This existence statement is not an efficient optimization algorithm.
+
+3. FIXED LATTICE PLUS A CERTIFIED PADDING
+For each owner with d_i>0 choose a positive step h_i FIXED EX ANTE independently
+of ALL reports. Let G_i={0,h_i,2h_i,...}^{d_i}. Define
+ A_i(b)=6d_i h_i+
+          max_{g in G_i, 0<=g<=b_i} N_i(g,b_-i).         (6)
+If d_i=0 the owner has no eligible resource, N_i=E_i=0, and we set A_i=0.
+Every feasible grid point is an actual underreport by the same original owner.
+
+The candidate set in (6) is nonempty and finite at each finite profile, with
+size product_{j=1}^{d_i}(1+floor(b_ij/h_i)). Its size may grow without bound
+with reports; the overall report domain need not be bounded in advance.
+If b_i increases coordinatewise while opponents remain fixed, the candidate
+set only expands. Each candidate's value depends on g and b_-i, not on the
+current full b_i. The padding is fixed. Hence A_i is EXACTLY own-report monotone.
+The grid is not rescaled or selected by the owner's current report.
+
+For every actual underreport x<=b_i, round every coordinate down to g in G_i.
+Then g<=x<=b_i and ||x-g||_1<=d_i h_i. Equation (5) gives
+ N_i(x,b_-i)<=N_i(g,b_-i)+6d_i h_i<=A_i(b).
+Taking the supremum proves E_i<=A_i. Conversely every grid point is feasible,
+so its value is at most E_i, and
+                        E_i<=A_i<=E_i+6d_i h_i.         (7)
+In particular A_i>=E_i>=N_i at every profile. The original raw rule covers every
+actual coalition, so the new payments do too. This is exact coverage, not an
+approximate incentive or coverage statement.
+
+For a total additive tolerance epsilon>0, choose h_i=epsilon/(6n*d_i) when
+d_i>0. Equations (6)-(7) give E_i<=A_i<=E_i+epsilon/n and sum A_i<=sum E_i+epsilon.
+The owner count n, eligible dimensions d_i, tolerance epsilon and steps h_i are
+all fixed independently of the reports. No virtual players are introduced.
+
+4. CERTIFIED FINITE EVALUATION FOR RATIONALLY ENCODED REPORTS
+For this implementation take a positive rational epsilon, so the prescribed
+steps are rational. Exact comparison of arbitrary transcendental node values
+is unnecessary. Fix
+positive rational node accuracy xi_i ex ante, and compute a deterministic
+rational upper value U_i(g,b_-i) satisfying
+ N_i(g,b_-i)<=U_i(g,b_-i)<=N_i(g,b_-i)+xi_i.              (8)
+Replace the node value in (6) by U_i. Candidate values still depend only on g,
+the fixed opponents, and the prescribed accuracy. Thus own-report monotonicity
+and coalition coverage remain EXACT, while the per-owner additive error becomes
+6d_i h_i+xi_i. For example choose h_i=epsilon/(12n*d_i) and xi_i=epsilon/(2n).
+
+Such node bounds can be obtained finitely with rational interval arithmetic.
+For rational local inputs, pool/cap comparisons are rational; each nonzero
+local coefficient is an exponential of a rational number, with computable
+signed Taylor bounds. Compute nonnegative rational approximations to the full
+local payment vector with total l1 error at most xi_i/8. Feed the resulting
+rational opposing vector into the outer primitive. By (2), this changes its
+recipient payment by at most xi_i/4. Evaluate the outer primitive at those
+rational inputs within an interval of width at most xi_i/2, then add xi_i/4
+to its upper endpoint. The result satisfies (8). This avoids needing to decide
+an exact tie between sums of transcendental local payments: the outer primitive
+is evaluated on rational approximations and its error is controlled by (2).
+Zero-output branches are detected directly from the rational reports.
+
+This is a finite certified algorithm for every rational report profile. Its
+node enumeration can be exponentially large in d_i and in numeric input size;
+there is no polynomial or fixed-parameter tractability claim based on the
+number of cap-sensitive recipients. Fixed-ex-ante padding and precision are
+essential for the stated exact monotonicity argument.
+
+5. FUNDING LIMITATION AND THE OPEN ALGORITHMIC QUESTION
+The guarantee is ADDITIVE. At the all-zero profile, if d_i>0 then (6) pays
+6d_i h_i although F=0. Thus no finite multiplicative funding ratio follows
+from this padded rule, and scaling epsilon using the current report can destroy
+the nested-grid monotonicity proof. This defect is stated explicitly rather
+than hidden by normalizing F to one inside the implemented mechanism.
+
+The true envelope remains the limiting object as the fixed mesh tends to zero.
+The theorem provides arbitrarily accurate finite, exactly truthful and covering
+payments in absolute units, not an exact evaluator or an exact relative-funding
+implementation of the newly proved envelope constants. A stronger algorithmic
+result must retain joint attainable own/opponent response geometry or find a
+report-consistent relative error scheme. The separate constant-gap obstruction
+shows why the present independent coalition floors do not already supply one.

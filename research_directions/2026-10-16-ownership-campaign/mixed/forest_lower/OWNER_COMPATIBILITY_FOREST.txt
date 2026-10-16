@@ -1,0 +1,53 @@
+ACYCLIC ACTUAL-OWNER COMPATIBILITY GIVES EFFICIENT TRUTHFUL FUNDING
+16 October 2026. Structural stopping lemma for lower-bound attempts. The hierarchical allocation on a superadditive tree-decomposable game is an established ingredient; the reporting/production mapping is spelled out rather than claimed historically novel.
+
+1. GENERAL ACTUAL-OWNER LEMMA
+Fix the actual owner set N and a fixed forest G on these owners. At each report profile b, let v_b(S) be the nonnegative worth of actual coalition S. Assume:
+ (a) v_b(empty)=0 and disjoint-coalition superadditivity;
+ (b) v_b(S) is the sum of v_b(C) over the connected components C of the induced graph G[S];
+ (c) v_b(S) is independent of reports outside S and is nondecreasing in each member's own coordinatewise resource report.
+These hypotheses hold at every real report profile in the fixed domain. Neither G nor the actual identities may be changed with reports.
+
+Root each component of G once and for all. Let T_i denote the descendant actual-owner set at i. Define
+ y_i(b)=v_b(T_i)-sum_{j child of i}v_b(T_j).
+Then the rule is nonnegative, efficient, covers every actual coalition and is own-bundle monotone. It imposes no grand-marginal fairness floor.
+
+Proof. Disjoint-child superadditivity gives y_i>=0. Telescoping gives total v_b(N), using component additivity for the full forest. For a connected actual coalition S, let r be its highest owner and let B(S) be children outside S of owners inside S. The sets S and T_j, j in B(S), partition T_r. Thus
+ sum_{i in S}y_i=v_b(T_r)-sum_{j in B(S)}v_b(T_j)>=v_b(S)
+by superadditivity. General coalitions split into induced connected components and property(b) completes coverage. When only owner i increases its report, v_b(T_i) cannot decrease and every subtracted term is fixed because its coalition excludes i. Hence y_i is own-report monotone for any whole-bundle change. This uses only actual-owner coalition values; no virtual-player constraints are imported.
+
+2. RANK-TWO PRODUCTION WITH SHARED RESOURCES
+Fix resource rows r, activities e, nonnegative public objective coefficients w_e, and fixed positive input coefficients A_re on every activity's nonempty support. Each activity uses one or two genuine resource rows. Every owner i has a predetermined eligible resource set E_i and reports nonnegative capacities b_ir on those rows; all other coordinates are fixed zero. Resource capacities aggregate additively: c_r(S)=sum_{i in S}b_ir. Binding reports determine the production LP
+ v_b(S)=max{sum_e w_e x_e: x>=0, sum_e A_re x_e<=c_r(S) for all r}.
+Assume the LP value is finite, as it is for finitely many activities with a positive coefficient on at least one input each and finite capacities.
+
+Define a FIXED simple compatibility graph G on actual owners. For each two-input activity using rows r,s, connect distinct owners i,k whenever either
+ r in E_i and s in E_k, or s in E_i and r in E_k.
+Same-owner input pairs are allowed but require no graph edge. One-input activities require no graph edge. Eligibility, rather than positive current capacity, determines G, so zero reports never change it.
+
+PRODUCTION COMPONENT LEMMA. For every actual coalition S and every real report profile, its value is additive over the induced connected components of G[S]. This holds even when distinct owners share the same physical resource row.
+
+Proof of the nontrivial inequality. Take any feasible activity plan x for S. For each row r, distribute its demand A_re x_e across eligible owners i in S. That is, choose nonnegative d_ire with
+ sum_i d_ire=A_re x_e,
+ sum_e d_ire<=b_ir.
+This transportation allocation exists because total row demand is at most sum_i b_ir; the row has no owner-specific activity restriction beyond contributing its row capacity. Such a distribution can be formed greedily from actual capacities.
+
+For a two-input activity e on r,s, put alpha_i=d_ire/A_re and beta_k=d_kse/A_se. Both nonnegative owner distributions have total x_e. Couple them by any nonnegative matrix z_ike having row sums alpha_i and column sums beta_k. Existence is ordinary transportation feasibility (for x_e>0, the explicit product alpha_i beta_k/x_e works). For x_e=0 use zeros. Piece z_ike of activity e consumes A_re z_ike from actual owner i's r report and A_se z_ike from actual owner k's s report. If i!=k, these are adjacent in G by fixed eligibility; if i=k, the piece belongs to that singleton. For one-input activities, the row allocation already decomposes the activity into singleton-owner pieces.
+
+Every piece therefore lies entirely within one induced connected component C of G[S]. Grouping pieces by C gives a feasible production plan using only C's additive reported capacities, because the row allocations never exceed any actual owner's capacity. The original objective is the sum of the grouped objectives, so v_b(S)<=sum_C v_b(C). Conversely combine feasible optimal plans of the distinct components: their owner sets are disjoint, so their row usages sum to at most the total coalition capacity even if they use the same physical row. This proves the reverse inequality and hence equality.
+
+Nonnegativity, owner-locality, own-report monotonicity and disjoint-owner superadditivity follow directly from the production LP. Thus if this fixed actual-owner compatibility graph is a forest, Section1 supplies an efficient all-profile truthful coalition-covering payment rule. The physical resource-activity graph need not itself be a forest or bipartite for this conditional conclusion; the target unit bipartite forest technology is a special case.
+
+3. RELATION TO THE CONNECTED EXCLUSIVE-BUNDLE LEMMA
+If each resource vertex in a physical forest is assigned exclusively to one actual owner, and each owner's assigned vertices are connected within each physical tree, contract each connected owner block. The simple compatibility graph on the blocks is a forest, apart from the possibility that one owner appears in multiple physical trees. Treat those physical components separately with the same full actual owner set and sum the efficient truthful rules. This recovers CONNECTED_OWNER_EFFICIENCY.txt. The owner-graph formulation is stronger: it also allows some coownership and some disconnected bundles when their actual compatibility graph remains acyclic.
+
+For example a two-input activity with several hardware-only owners and one power owner has a star compatibility graph. Shared ownership of the hardware row therefore creates no incentive subsidy requirement. With two distinct owners on EACH input, the compatibility graph contains K_{2,2}, so the known9/8 lower is not excluded. Likewise, the alternating two-owner path from the virtual-core obstruction has only one actual compatibility edge and is efficiently fundable; its forced2-1/m funding concerned majorization of an auxiliary vertex core, not arbitrary actual-owner mechanisms.
+
+4. EXACT SCOPE OF THE STOPPING RESULT
+Any lower-bound construction whose actual-owner compatibility graph is acyclic cannot improve9/8 or even exceed1 on the full continuous report domain. A cycle in this graph is therefore necessary for a positive funding premium within the stated rank-two production model. It is NOT sufficient: disjoint edge activities can induce owner compatibility cycles while admitting efficient componentwise two-owner payments. Resource competition, in addition to a compatible owner cycle, must be retained in a useful lower family.
+
+This does not prove an upper below2 for unrestricted ownership, a stronger unrestricted lower, a fairness-floor guarantee, private-cost truthfulness or strategyproofness for coalitions. Full mixed eligibility often makes G dense, so the conditional factor1 theorem does not settle that main case. The result is a structural no-amplification certificate for a specified unbounded family, with all actual owners and physical capacity reports preserved.
+
+PRIMARY-SOURCE ATTRIBUTION. The underlying fixed-root hierarchical core vector is established. Herings, van der Laan and Talman, "The Component Fairness Solution for Cycle-Free Graph Games", Tinbergen Institute05-114/1(2005), equation(3.1) and Section4, gives the same descendant-worth-minus-child-worth allocation and credits Demange:
+ https://papers.tinbergen.nl/05114.pdf
+Demange's original is "On Group Stability in Hierarchies and Networks", Journal of Political Economy112(4),754-778(2004). The free primary follow-on was inspected; the original journal source remains unavailable in this lane. The above contribution to this campaign is an explicit ownership/reporting reduction and a stopping criterion for lower-bound searches, not a claim to invent hierarchical core allocations.

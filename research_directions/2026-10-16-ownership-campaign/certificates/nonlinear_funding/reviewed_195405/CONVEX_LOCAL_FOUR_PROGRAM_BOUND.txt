@@ -1,0 +1,132 @@
+AT MOST FOUR EXACT CONVEX PROGRAMS AT LOW EFFECTIVE GRID
+16 October 2026. Addendum to JOINT_RESPONSE_CONVEX_LOCAL_FRONTIER.txt.
+All hypotheses and actual-owner conventions of that theorem remain in force.
+In particular this is an exact local-response representation after justified
+hardware restoration, not an independent coalition-floor substitution.
+
+MAIN CONSEQUENCE
+Let pi=sum_k min(p_k/H,1), and let c_i be the number of actual opponents whose
+affine opposing accounts genuinely cross H on the branch-price box Q. If
+                       pi<=51/40,
+then c_i<=2, so the exact envelope representation needs at most FOUR convex
+programs, regardless of the number of owners or productive branches.
+Each program still has one variable per affected branch, plus its own-account
+variable. This is a convex representation, not a polynomial bit-complexity or
+finite-precision exact-truthfulness claim.
+
+There are admissible families with both counts growing and all four cap regions
+nonempty at pi=5/4. Thus the count cannot in general be replaced by one crossing
+opponent. This does not show that every algorithm must solve four programs.
+
+1. EXACT OPPONENT COORDINATE CEILINGS
+For k!=i, define U_k=max_{q in Q} z_k(q). These are exact coordinate maxima of
+the affine responses in the parent theorem. On a variable branch j, write
+ T=H_j, h_k=h_kj, d_k=min(l_kj,T) for k!=i,
+ R=sum_{k!=i}d_k/T>=1, q_high=exp(1-R)/2,
+ q_low=q_high exp(-u_max/T), 0<u_max<=T.
+For the signed-part convention x_+=max(x,0), x_-=min(x,0), the exact branch
+coordinate maximum is
+                U_kj=h_k+q_high(d_k-h_k)_+
+                            +q_low(d_k-h_k)_-.         (1)
+Each coefficient independently chooses the appropriate endpoint of q_j.
+Because distinct branches' q_j coordinates are independently feasible, the
+EXACT aggregate maximum is the sum of (1) plus the fixed-branch payments.
+Different opponents' maxima need not be simultaneously attained. No argument
+below assumes their simultaneous attainment.
+
+Summing (1), discarding its nonpositive last terms, and using h_i>=0 gives
+ sum_{k!=i}U_kj
+   <=sum_{k!=i}h_k+q_high sum_{k!=i}d_k
+   <=T+(T/2)R exp(1-R)<=3T/2.                         (2)
+The last inequality follows from R exp(1-R)<=1 for R>=1.
+For a fixed branch let T_j=min(H_j,L_j) be its PHYSICAL output, which need not
+equal H_j. Its fixed opponent payments sum to at most C*T_j<3T_j/2, where
+C=1+1/(2e). Zero-output fixed branches contribute zero. The variable branches
+have physical output H_j throughout. Therefore
+                         sum_{k!=i}U_k<=3M/2.          (3)
+This treats nonvariable branches and their possible opposite pool orientation
+explicitly; replacing their physical output by hardware would be unnecessary.
+
+2. CAP COUNT AND THE FOUR-PROGRAM CONSEQUENCE
+For a genuinely crossing opponent k,
+        min_Q[p_k+z_k(q)]<H<max_Q[p_k+z_k(q)].
+Nonnegative local payments imply p_k<H, and (1) implies p_k+U_k>H. If the
+crossing set is nonempty, summing these STRICT inequalities gives
+ c_i < sum_crossing p_k/H + sum_crossing U_k/H
+     <= pi + 3M/(2H).                                 (4)
+For the empty set c_i=0 directly; there is no need to assert a strict bound by
+zero in a degenerate profile. In the physical hardware-bottleneck model M<=H.
+Thus pi<=51/40 gives
+                  c_i<51/40+3/2=111/40<3,
+and the integer c_i is at most two. The parent theorem's enumeration then has
+at most 2^2=4 programs. Cap equalities alone do not create a crossing opponent;
+constant or one-sided equality accounts can use the fixed assignment there.
+
+3. SHARPER, OPTIMAL AGGREGATE-CEILING CONSTANT
+There is in fact a sharp refinement of (3):
+       sum_{k!=i}U_k <= D*M,
+                 D=1+exp(-1/e)/2 <3/2.                (5)
+On a variable branch let
+ A=sum_{k!=i}(d_k-h_k)_+, B=-sum_{k!=i}(d_k-h_k)_-.
+Then A-B=R*T-(T-h_i) and B<=T-h_i. Also q_low>=q_high/e. Consequently
+ sum_{k!=i}U_kj=T-h_i+q_high*A-q_low*B
+ <=T-h_i+q_high[(R-1)T+h_i]+q_high(1-1/e)B
+ <=T[1+q_high(R-1/e)]-h_i[1-q_high/e]
+ <=T[1+q_high(R-1/e)].                                (6)
+The scalar function exp(1-R)(R-1/e)/2 on R>=1 has derivative with the sign
+of 1+1/e-R. Its maximum at R=1+1/e is exp(-1/e)/2. This proves the variable
+branch bound in (5). Fixed branches obey the same bound because C<D: indeed
+exp(-1/e)>exp(-1)=1/e. Summing physical branch outputs proves (5).
+
+Thus the sharper general nonempty-set count is
+                         c_i<pi+D*M/H.                 (7)
+For example pi<=3-D, together with M<=H, still guarantees at most two crossings.
+The rational threshold 51/40 in the main consequence needs only the simpler
+proof (2)-(4); it does not depend on evaluating D numerically.
+
+SHARPNESS OF (5), WITH GROWING COUNTS.
+For every r>=1, take r branches with T=1/r. Owner i has no hardware, and holds
+local T on every branch. On branch j add three distinct actual opponents:
+one hardware-only owner with hardware T, one local-only owner with local T,
+and one local-only owner with local T/e. Use different opponents on every
+branch, and no grid reports. Then R=1+1/e, q_high=exp(-1/e)/2 and
+q_low=q_high/e. The hardware opponent's maximum is T(1-q_low); the two local
+opponents' maxima sum to R*T*q_high. Their total coordinate maxima equal
+T[1+q_high]=D*T. Summing branches attains (5), with H=M=1, r productive branches,
+and 3r+1 active actual owners. The maximizing reports differ between opponent
+coordinates, as allowed in the definition of their individual maxima.
+All parent-theorem hypotheses hold for i: it has no hardware, its full outer
+gap is positive, and its opponents alone supply each branch's hardware.
+This sharpness statement uses the full real report domain; rational capacities
+can approach it continuously. It is not a subsidy lower bound.
+
+4. TWO CROSSINGS AND FOUR NONEMPTY REGIONS REALLY OCCUR
+For each r>=1, take 2r productive branches in two groups of r. Each branch has
+T=1/(2r). Two actual hardware owners A_1,A_2 each hold all hardware on one group,
+so their total holdings are 1/2 each. Each A_g has grid 5/8. A distinguished
+owner i has local T on EVERY branch and no hardware or grid. Every branch has
+one further distinct local-only owner B_gj with local T. There is no other
+resource. Thus H=M=1, pi=5/4, and there are 2r+3 active actual owners.
+
+Every variable branch has R=1, q_high=1/2 and q_low=c=1/(2e). The exact account
+range of each A_g is
+ [5/8+(1/2)(1-1/2), 5/8+(1/2)(1-c)]
+                    =[7/8,9/8-c/2].                   (8)
+Its lower endpoint is less than one, and the upper endpoint is greater than
+one because e>2. All B_gj accounts stay at most T/2<1. Hence EXACTLY the two
+hardware owners are genuinely crossing opponents of i.
+
+Within either group, keep i's full local report to make A_g's account exceed
+one. Alternatively, report T/2 on every branch of that group; then each price
+is exp(-1/2)/2>1/4 since e<4, and A_g's account is strictly less than one.
+These choices are independent across the two groups. All four subsets of
+{A_1,A_2} are therefore realized as strict cap patterns by actual whole-bundle
+underreports. Owner i retains positive local payment in every such report,
+so each pattern also gives a feasible positive-gap program, not merely a zero
+payment boundary. Every branch remains productive and all identities fixed.
+
+This proves that two-crossing/four-nonempty-region behavior persists with both
+owner and productive-branch counts growing. It does not assert four separate
+maximizations are information-theoretically necessary, nor resolve the classes
+excluded by the parent theorem's exact-restoration, local-supply, or gap
+hypotheses.

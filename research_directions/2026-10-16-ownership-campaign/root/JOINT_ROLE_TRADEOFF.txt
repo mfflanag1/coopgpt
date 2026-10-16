@@ -1,0 +1,85 @@
+JOINT LOCAL-ROLE TRADEOFF AND A69/40 RANGE BOUND
+16 October2026. Candidate proof for independent review. Uses the ORIGINAL
+exponential primitive only. It does not replace that primitive by water filling.
+
+1. EXACT SUPPORT FUNCTIONS FOR THE TWO ROLE TOTALS
+Consider one branch with hardware totalh, local-power totall, outputm=min(h,l),
+original exponential primitive totalZ, and its local-power role totalL.
+These are role components of actual-owner payments; no owner is split
+strategically. For constantsB>=q>0 defineS=(B-q)L+qZ.
+Then both bounds hold simultaneously:
+  S<=h [q+(B/2)exp(-q/B)],                                (1)
+  S<=m [B+(q/2)exp(-B/q)].                               (2)
+They sum over arbitrary branches with the SAME coefficientsB,q.
+
+Proof. Zero-output branches contribute zero. Let rho be the capped long-pool
+ratio and w=exp(1-rho)/2, so rho>=1. If hardware is short thenh=m,
+L=w rho m andZ=m[1+w(rho-1)]. Hence
+  S/m=q+w(B rho-q).
+Its maximum over rho>=1 occurs at rho=1+q/B and equals
+S0=q+(B/2)exp(-q/B), proving(1) in this case.
+If local power is short, letd=h/m>=rho. Then
+  S/m=B+w(q rho-B).
+The nonnegative numerator divided by d is at most its value divided by rho.
+The derivative of that latter expression is
+  B[w(rho+1)-1]/rho^2-qw<=0,
+because w(rho+1)<=1. ThusS/h<=(B+q)/2<=S0. This proves(1).
+
+For(2), the local-power-short expression is maximized at rho=1+B/q,
+where it equalsS1=B+(q/2)exp(-B/q). The hardware-short boundS0 is no larger
+thanS1. Indeed withx=B/q>=1 their difference divided byq is
+  x-1+exp(-x)/2-x exp(-1/x)/2.
+It is zero atx1; its derivative is at least(1-exp(-1))/2>0, since
+(1+1/x)exp(-1/x)<=1. This proves(2). The extrema are scalar support-function
+bounds, not a claim that both can be simultaneously attained on one profile.
+
+2. RETAIN THE TRADEOFF IN THE INTERMEDIATE RANGE REGIME
+Use the range mechanismR fromRANGE_MECHANISM.txt and normalize grand hardware
+H=1. Assume0<=p=P/H<1<k=p+Cm, where m=M/H<=1 andC=1+1/(2e).
+Putq0=exp(1-k)/2, q1=exp(1-1/p)/2 (q1=0 atp0), andB=1-q1.
+ThenB>=1/2>=q0>0. LetL andZ denote normalized aggregate local-power payments
+and total local payments, respectively.
+
+The same individual short/long range inequalities used by the existing
+7/4 proof imply, before replacing the two local totals independently,
+  sum_i R_i <=1+Bp-q0+(B-q0)L+q0Z.                       (3)
+For clarity, classify recipients by the sign ofB_i-H_i. A positive-gap
+recipient has excess at mostB(B_i-H_i); a negative-gap recipient has deficit
+at leastq0(H_i-B_i). The positive gap sum is at mostp+L, since the hardware
+role payment is at mostH_i. The difference of positive and negative gap sums
+is exactlyp+Z-1. BecauseB-q0>=0, these statements give(3). All bounds are
+uniform before each recipient chooses its separate auxiliary vector.
+
+IfF=H, applying(1) to(3) cancelsq0 and gives
+  sumR_i <=1+B[p+exp(-q0/B)/2].                          (4)
+For fixedp, the right side increases withm becauseq0 decreases withm.
+Thus setm1. ReplacingC by148/125 only decreasesq0 and raises this upper.
+The exact rational interval certificateverify_joint_role_scalar.py proves
+the resulting expression is strictly below69/40 for the FULL intervalp in[0,1].
+The numerical maximum about1.72092 merely explains the available margin;
+it is not the evidence for the inequality.
+
+IfF<H, writef=p+m<1. Applying(2) instead gives
+  sumR_i/F <= B+(1-q0)/f +(m/f)(q0/2)exp(-B/q0).          (5)
+Sincek=p+Cm<=Cf andk>1, we havef>1/C and
+  (1-q0)/f <=[1-exp(1-Cf)/2]/f <=C/2.
+The last step follows by settingx=Cf>=1: the function
+(1-exp(1-x)/2)/x is nonincreasing, because its derivative has numerator
+exp(1-x)(x+1)/2-1<=0. AlsoB<=1,m/f<=1,q0<=1/2 andB/q0>=1.
+Thus(5) is at most1+C/2+1/(4e)=3/2+1/(2e)<17/10.
+
+3. ALL REGIMES
+The unchanged low-K proof gives12/7. The separately audited high-P
+deficit-coupling proof gives137/80. The new intermediateF<H estimate is
+below17/10, and the rational certificate covers intermediateF=H at69/40.
+All four are at most69/40. Therefore the same explicit all-profile range rule
+and every smaller nested envelope refinement have total funding<=69F/40.
+Owner and branch counts remain unrestricted; all reports are nonnegative reals.
+This is a stronger general upper bound, not a tight factor or novelty claim.
+
+DEPENDENCIES AND STATUS
+RANGE_MECHANISM.txt, RANGE_ROBUST_ENVELOPE_THEOREM.txt and the local primitive
+remain unchanged. High-P dependency:
+certificates/singleton_followon/HIGH_P_DEFICIT_COUPLING.txt.
+The candidate requires independent review before replacing the audited7/4
+headline. All computations below cover scalar real intervals, not report grids.

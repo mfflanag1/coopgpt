@@ -1,0 +1,222 @@
+INDEPENDENT CODEX AUDIT: EXACT LOCAL TOTAL, RECIPIENT FLOORS AND BOXES
+16 October 2026. Scope: conventional proofs and reference implementations.
+
+Disposition
+-----------
+The mathematical refinements survive this independent audit after two minor
+issues were reported and repaired by the source owner. No remaining mechanism-
+level defect was found in the exact local-total envelope, recipient endpoint
+extrema, owner-domain inclusion argument, box optimizer, or the pointwise chain
+  N_i<=E_i<=Rbox_i<=Rfloor_i<=Rbar_i<=R_i.
+This is an internal proof/code audit, not external specialist review, priority
+confirmation, or a proof that the box computes E. The universal7/4 budget is
+inherited from the previously audited range theorem, not rederived here.
+
+Reviewed source files
+---------------------
+ mixed/EXACT_LOCAL_TOTAL_ENVELOPE.txt
+ mixed/OWNER_SPECIFIC_FLOORS.txt
+ mixed/OWNER_SPECIFIC_BOXES.txt
+ mixed/verify_local_total_envelope.py
+ mixed/tightened_range_reference.py
+ mixed/owner_floor_reference.py
+ mixed/owner_box_reference.py
+The independent checks are audits/box_independent_checks.py and its JSON output.
+No source proof or implementation was edited by this audit lane.
+
+1. Exact local-total envelope: derivation checked
+------------------------------------------------
+Fix the orientation in which a is short and its total t<=min(A,B)=T.
+Every t in[0,T] is realizable by coordinatewise underreports of the actual
+owners. The largest capped opposite total is D_b(t)=sum min(b_i,t), at least t.
+Every capped total between t and D_b(t) can be attained by choosing accounts
+inside the coordinate intervals[0,min(b_i,t)]. Thus the payment total is
+maximized at capped ratio s=min(D_b(t)/t,2), because(rho-1)exp(1-rho) peaks
+at rho=2. This is actual report attainment; no owner is cloned or split.
+
+I independently differentiated t[1+(s-1)exp(1-s)/2] on each cap piece.
+Writing D_b(t)=k t+r gives the stated bracket
+ (k-1)+(rho-1)(rho-k).
+For k=0 it is rho^2-rho-1>=-1 on[1,2], and the derivative is >=1/2.
+For k=1 it is(rho-1)^2>=0. The remaining nonclipped case is the boundary
+k=2,r=0,rho=2, consistent with the clipped derivative C. Continuity at cap
+breakpoints and t=0 establishes monotonicity, so t=T is optimal.
+
+The original short pool realizes total T already. Keep it unchanged, cap
+the original long accounts at T, and scale those capped accounts uniformly
+to total T min(rho,2). This independently constructs an attaining lower
+report and is the witness used in the audit harness. The opposite orientation
+at T has ratio1 and value T when the original pools were unequal; at a tie
+both give T. This verifies the closed form and its least-majorant property.
+
+Summing across branches is legitimate even for owners with multiple roles:
+the report domain is the coordinatewise product of all their branch reports.
+The branchwise attaining choices can therefore be combined into one actual
+fixed-owner report vector. No shared capacity constraint couples these local
+coordinates in the stated model. The conclusion would need reconsideration
+if such a constraint were added to the model.
+
+2. Recipient extrema: global cross-signs checked across pool switches
+-------------------------------------------------------------------
+Fix recipient k!=i. Its own a_k,b_k remain unchanged as i reports differently.
+For a_k>=b_k, increasing another b coordinate increases its payment:
+ - In B>=A, b_k<=a_k<=A, so the gap b_k-a_k is nonpositive; the capped
+   b ratio rises and q falls, increasing a_k+q(b_k-a_k).
+ - In B<A, B>=b_k and min(a_k,B)-b_k is nonnegative and nondecreasing;
+   q(B) is also nondecreasing, so b_k+q(B)(min(a_k,B)-b_k) increases.
+For a_k<=b_k the signs reverse: in B>=A the gap min(b_k,A)-a_k>=0;
+in B<A, B>=b_k>=a_k and the gap a_k-b_k<=0 is constant.
+Swapping the two pools establishes the signs for other a coordinates.
+
+At A=B the two formulas agree; cap switches are continuous. At a zero pool,
+all payments tend to zero with T. If a_k=b_k, both pools have total at least
+that common own account, and the recipient receives exactly a_k throughout.
+Hence the endpoint-deletion formulas hold globally, including equality and
+zero cases. Branchwise minima/maxima add because i's branch coordinates are
+independently bounded. Different recipients' attaining reports need not agree.
+
+The example with fixed recipients(1,0),(0,1) and reporter(x,y) in[0,1]^2 is
+correct: the two recipient payments always sum to1, while their individual
+ranges are[1/(2e),1-1/(2e)]. Thus the product range is a strict joint relaxation.
+It must not be called an exact representation of the attainable payment vector.
+
+3. Actual-owner domain inclusion and the entire pointwise chain
+--------------------------------------------------------------
+For an own local-report increase, the set over which each opponent minimum
+and maximum is taken expands. Therefore its minimum decreases and maximum
+increases. The reporting owner's z_i, H_i and the exact total ceiling Lbar
+are nondecreasing. Opponents' outer hardware coordinates remain fixed. Thus
+each old feasible auxiliary box is contained in the new one, and at every old
+vector the primitive's own-hardware payment is nondecreasing.
+
+For an own shared-power increase delta, local payments and recipient extrema
+do not change. Translating c to c+delta e_i shifts its own lower/upper bounds
+and total ceiling by exactly delta, with all opposing intervals unchanged.
+The primitive is monotone in its own opposing account. These two arguments
+compose to whole-owner comparisons; no other owner's own payment is assumed
+monotone under the reporter's change.
+
+The full vector p+z belongs to every box, so Rbox>=N. For any actual own
+underreport, every opponent z'_k lies between its exact recipientwise extrema.
+Restore only the reporter's outer shared account and then hardware account.
+Those are valid monotonicity comparisons in the primitive's account domain.
+Its own opposing account is at most p_i+z_i, and total opposing mass is at
+most P+Lbar. Thus the restored vector lies in the full-profile box and its
+objective dominates the original nested own payment. Taking the supremum
+gives E<=Rbox. This does not require the restored vector to be physically
+attainable and does not establish equality with E.
+
+Dbox is contained in the floor domain, which is contained in the Lbar range,
+which is contained in the CM range. Maximization gives the remaining chain.
+Actual nested coalition coverage then transfers coordinatewise, as does the
+known7/4 total budget. Null owners have own hardware and own upper account0,
+so receive0. If grand F=0, either H=0 or P+M=0; all resulting payments vanish.
+For a grid-only owner, the box fixes every opposing account exactly at p+z,
+while its own account is fixed at p_i, hence Rbox=N=E. This also follows for
+Rfloor from the cross-sign argument in its source note.
+
+4. Capped-box optimizer: feasibility and attainment checked
+---------------------------------------------------------
+Assume H>0,n>=2, lower_i<=beta, beta+Lminus<=K and lower_k<=upper_k.
+At a short total T, feasibility requires
+ sum lower<=T<=min(K,H,beta+Uminus).
+The largest own coordinate is min(beta,T-Lminus). If this equals beta,
+the residual T-beta lies in[Lminus,Uminus]; otherwise it equals T-Lminus
+and all opponents can stay at their lower bounds. Thus the maximal own
+coordinate is feasible, not merely an algebraic relaxation. Its coefficient
+is1-q>0, so it is optimal. Before T0=beta+Lminus only its own account changes;
+after T0 the sign of min(a,T)-beta gives exactly the claimed endpoint maximum.
+
+The long region exists precisely when K>=H and beta+Uminus>=H. For a
+nonnegative capped-own gap d-a>=0, the least capped total is
+ max(H,d+sum min(lower_k,H)).
+If the baseline total is below H, every baseline account is below H. Filling
+opponents to total H is possible by the region criterion; no account needs
+to exceed H before that total is reached. This attains the stated minimum.
+
+For a strict negative gap d<a, beta=d<H. Therefore own overflow is zero.
+The largest capped total is exactly
+ min(beta+sum min(upper_k,H),K-sum(lower_k-H)_+).
+Fill opponents from their lower bounds toward min(upper_k,H); the two terms
+are exactly the available cap capacity and the budget net of unavoidable
+overflow. This maximum is at least H: an opponent lower bound>=H already
+ensures it; otherwise, if filling all useful caps still gave total<H, no
+upper bound could exceed H, so beta+Uminus<H, contradicting feasibility.
+
+Increasing a feasible own coordinate toward beta preserves long feasibility.
+In the negative-gap region, the maximal capped ratio is nondecreasing and
+a-c decreases, so its negative exponential penalty decreases. In the positive
+region, the minimal capped-ratio derivative is0 or1/H, and the gap derivative
+is nonnegative because0<=c-a<=H before the own cap. Above H the value is
+constant. Equality joins continuously and is handled by the nonnegative branch.
+These arguments establish the optimizer and its claimed witnesses on all
+valid finite-dimensional domains, not only physical instances.
+
+For n=1 the physical answer is F=min(H,beta); for H=0 the value is zero.
+The input feasibility conditions are assumptions of the generic reference
+optimizer, rather than fully validated runtime preconditions. That is acceptable
+for this research reference but should be explicit if exposed as a public API.
+
+5. Concrete findings, repairs, and remaining archival limitation
+---------------------------------------------------------------
+Finding A, repaired: tightened_range_reference.py returned all-zero witness
+vectors at H=0 even when p>0. Example rows[[1,0,0],[0,0,0]] has required
+lower accounts[1,0], so the returned zero vector was infeasible. The value0
+was correct. The source owner changed the return to independent copies of p.
+I reran the example and verified witnesses[[1,0],[1,0]].
+
+Finding B, repaired: the original box note stated its negative-gap formula
+for d<=a. At d=a=H<beta it omits own overflow and need not give an attainable
+capped ratio. Example H=a=1,beta=K=2,opponent lower0/upper1 yields the stated
+rho2, but fixing own account2 leaves actual capped ratio1. Payment remains1
+because the gap is zero. The implementation already sent equality through
+the positive branch. The source owner narrowed the text to d<a and explicitly
+handled equality in d>=a. I checked the edited text and a long-only equality
+case with own lower1.25,beta2,K2, obtaining payment1 at witness[2,0].
+
+Historical limitation: mixed/verify_explicit_range_rule.py still deliberately
+returns dummy zero vectors for zero-valued instances and its verification code
+explicitly skips their attainment. This does not affect payment correctness,
+but those historical dummy vectors must not be described as feasible maximizers.
+Current tightened/floor/box implementations return valid baseline witnesses.
+No remaining repair was applied by this audit lane.
+
+6. Meaningful independent checks actually run
+--------------------------------------------
+Ran audits/box_independent_checks.py with python3 -B -O. It reconstructs
+local extrema by evaluating all four actual-owner corners, directly enumerates
+interior reports, uses an independently written primitive, and treats the
+reference box optimizer as the candidate under test.
+
+ -729 complete three-owner two-pool profiles in{0,1,2}^6.
+ -117649 lower reports across all owners for the total-envelope bound and
+  monotonicity; independent proportional capped witnesses attained every value.
+ -23814 recipient interior-report range checks across pool/cap switches.
+ -2265 complete physical profiles from n2,m1 ternary; n3,m1 binary; n2,m2 binary.
+ -96346 actual whole-owner underreports checked against Rbox and recipient bounds.
+ -14506 whole-owner monotonicity/domain-inclusion checks.
+ -11108 complete physical coalition inequalities.
+ -2400 generic box domains, independent of the physical local-payment formulas.
+ -42080 feasible opposing vectors, including interval grids, cap breakpoints,
+  and intersections of box edges with the total-budget face.
+
+All checks passed. Maximum scaled total-attainment error was1.12e-16; maximum
+scaled generic optimizer-attainment error was7.8e-17. The largest sampled box
+funding ratio1.4434469107429617 is diagnostic only. The checks use binary floats,
+math.exp and scaled tolerance3e-10, so they are not exact certificates, continuum
+proofs, or guarantees of truthfulness after finite-precision implementation.
+
+Final source hashes at audit closure
+-----------------------------------
+ EXACT_LOCAL_TOTAL_ENVELOPE.txt
+ b13b56f4019cb51d1d91984e15054fa1e62e3494a8656366cf23159bbd6f7646
+ OWNER_SPECIFIC_FLOORS.txt
+ 8a30ccf4b3e9fa5a9c05c473e7aecb01023c72cc8bbb8c266199a6be4bbd87cd
+ OWNER_SPECIFIC_BOXES.txt
+ 7c4c0da8ba3fdf72b944de819c681e23be15b00f63d1fdbe837de065eaa586fb
+ tightened_range_reference.py
+ 82e1a8d21774d6705955dcd40dbcca1686e45fa5ffe87416f85f7e67194040f8
+ owner_floor_reference.py
+ 18c42b0488a065ceb499949335b833229c66c19f657a2ea090446bcf2ca42422
+ owner_box_reference.py
+ 9eb9b65485bd6fe72352bda1a0a6184f46651ec4c4c09fdb522a770e47257d3f

@@ -1,0 +1,77 @@
+INDEPENDENT OUTGOING-LOSS AUDIT -- 16 OCTOBER 2026
+Reviewer: algorithmic_integration Codex lane. Read the root proof only;
+did not read the independent pivot proof. Source SHA256:
+ed4aa4a419dc15a87f71359630c8c25195fd0b44de16339d79c976d5242f2213
+
+VERDICT: No substantive gap found. The statement holds for the original
+exponential primitive, fixed actual owners and arbitrary whole-owner
+coordinatewise underreports, with arbitrary finite branch/owner counts.
+The constant e-1 is sharp for this specified primitive (attainer below).
+This does not prove a nested funding bound or a lower bound for all mechanisms.
+
+CHECKED ARGUMENTS
+1. Short-coordinate stage. Every other short-role contribution increases
+as T falls. Each long-role contribution q(T)min(l_k,T) decreases, so their
+positive losses really sum to the difference in the aggregate qD; one is
+not incorrectly replacing a sum of positive parts by an aggregate loss.
+On a cap cell, r'= (m-r)/T and q'=q(r-m)/T. Thus
+(qD)'=q[r(r-m)+m]=q[r^2-m(r-1)] between0 and q r^2. The maximum of
+q r^2 on r>=1 is2/e. Integrating through finitely many cap boundaries and
+using a<=x_i proves the short-stage coefficient4/e.
+
+2. Long-coordinate stage before and after pool switch. Before the switch,
+other short-role contributions decrease and other long-role contributions
+increase when the owner's long report falls. After the switch, the old long
+pool becomes short. The remaining old-long contributions (1-q_new)l_k
+increase as its total falls, and each old-short contribution
+q_new min(x_k,T_new) decreases. Payments agree at the switch. Therefore
+complete deletion really dominates each external positive loss, even for
+mixed recipients; a recipient's loss is bounded by its old-short-role loss.
+
+3. No-switch case. Deletion removes exactly d=min(b,T) from the capped long
+mass. Normalizing T=1 gives q(exp(d)-1) as an upper bound on all short-role
+loss, including the deviator's short role. The exponential secant on[0,1]
+proves the claimed coefficient. Counting the deviator's role is harmless
+because it only enlarges an upper bound on other recipients' losses.
+
+4. Post-switch case. If the remaining long total r is below1, its former
+caps are all uncapped; full capped ratio is d+r>=1. After deletion the
+old-short cap ratio R lies in[1,1/r]. Since R exp(1-R) decreases for R>=1,
+the remaining aggregate old-short payment is at least exp(1-1/r)/2.
+The rearrangement to A(r)exp(d)<=1+(e-1)d is exact. For
+A(r)=2exp(r-1)-exp(r-1/r), A(r)<=1 is equivalent to
+exp(x)+exp(-x/(1-x))>=2, x=1-r. Differentiating the latter sum and taking
+the log ratio of its positive and negative terms gives
+1/r-r+2log r. Its derivative is -(1-r)^2/r^2 and it vanishes at1, hence
+it is nonnegative for0<r<=1. This proves the desired monotonicity.
+The r=0 limit and d endpoints are valid; at r=0, initial feasibility forces
+d=1. Multiplying by exp(d)>0 and applying the same secant finishes the bound.
+
+5. Whole-owner and branch quantifiers. The first stage lowers the original
+short coordinate, so orientation stays short. At its endpoint the owner's
+long-role contribution is no larger than at the full profile because both
+q(T) and its capped long report are nondecreasing in T. Thus the second-stage
+coefficient can be charged to the FULL long-role contribution. Combining
+positive parts across stages and then across branches is valid. The two
+roles are bookkeeping terms; no strategic player or report domain is split.
+Zero-output branches remain zero under all allowed underreports.
+
+SHARPNESS (AN ADDITION TO THE SOURCE CLAIM)
+Use three fixed pure owners, with short reports(1,0,0) and long reports
+(0,1,1). Let owner2 withhold its long unit completely. At full reports
+q=1/(2e), and z_2=q. After the underreport the capped ratio is1 and q'=1/2.
+Owner1 loses exactly1/2-q=(e-1)q; owner3 gains. Therefore the sum of other
+positive losses is exactly(e-1)z_2. No constant smaller than e-1 can hold
+uniformly for this primitive. All capacities are rational and owners fixed;
+only the rule's exponential payments are transcendental.
+
+DIAGNOSTICS ACTUALLY EXECUTED
+An independently written in-memory implementation tested10,000 deterministic
+random bundle underreports, n=2..8 and m=1..4, seed161016, integer-over3
+capacities and underreport multipliers in{0,.1,...,1}. It observed2,907
+branch orientation switches and no inequality violation at tolerance1e-11.
+Largest random loss ratio was1.1058997806999291. The explicit sharp example
+returned1.718281828459045, agreeing with e-1 to1e-14. These are floating
+corroborations only; the continuous proof above is the justification.
+
+No source edits, canonical edits, external outreach, or recursive delegation.

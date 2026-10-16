@@ -1,0 +1,181 @@
+HALF-GAP RECIPIENT RESPONSE AND GRID CAP COMPENSATION
+16 October 2026. Separate v2 candidate; v1 remains frozen. Independent review
+pending. Fixed actual owners, all nonnegative real mixed reports, exponential
+primitive only. No historical-priority claim or full envelope funding theorem.
+
+THEOREM A
+For one fixed recipient k, choose an arbitrary own-bundle underreport separately
+for each actual owner i, and denote k's resulting local payment by z_k^i.
+Let H be full aggregate hardware and z_k its full local payment. Then
+ sum_i(z_k^i-z_k)_+ <=(H-z_k)/2.                          (A)
+This holds for arbitrarily many branches after aggregating their local payments
+and hardware, even if each owner changes all its branches simultaneously.
+
+1. CROSS-MONOTONICITY AND REDUCTION
+Fix the recipient's own two coordinates, let a be the smaller and b the larger.
+When the a-pool is short with total T, its payment is
+ a+q[min(b,T)-a].
+Increasing opponents' a-pool reports increases both T and q, whereas increasing
+opponents' b-pool reports decreases q. When the b-pool is short its payment is
+ b-q(b-a),
+because its own opposite account a is uncapped. Increasing opponents' b-pool
+reports increases q, and increasing opponents' a-pool reports decreases q.
+All pool and cap boundaries agree. Thus the recipient can benefit only when
+another owner withholds the input of which the recipient owns MORE. For each
+other owner's arbitrary mixed deviation, restore its adverse coordinate and
+then fully delete its beneficial coordinate; this only increases the recipient's
+payment. These are allowed reports of the same actual owner, not split owners.
+If a=b all its payments are constant. Its own underreport cannot increase its
+payment, so the diagonal i=k contributes0.
+
+On a short-total cell,
+ q'(T)=q(r-m)/T, r>=1, 0<=m<=r, and qr<=1/2.             (1)
+These identities will control derivatives through all cap boundaries.
+
+2. RECIPIENT'S HARDWARE IS ITS LARGER COORDINATE
+Let its hardware be b and its local resource a<=b. The beneficial coordinates
+are other owners' hardware. If hardware is long, the magnitude of the derivative
+with respect to an uncapped opponent hardware coordinate is
+ q[min(b,T)-a]/T<=q<=1/2;
+it is zero when that opponent is capped. If hardware is short, the magnitude
+is (b-a)q'(T)<= (b-a)/(2T)<=1/2 since T>=b. Therefore deletion of opponent i's
+hardware can raise the payment by at most h_i/2. Summing gives
+ sum_i(z_k^i-z_k)_+ <=(H-b)/2 <=(H-z_k)/2,
+because the recipient's payment is at most its larger own coordinate b.
+Zero-output boundaries follow by continuity.
+
+3. RECIPIENT'S HARDWARE IS ITS SMALLER COORDINATE
+If H=0, everything is zero. Otherwise normalize H=1. Write own hardware a,
+own local resource b>a. All other hardware stays fixed after the reduction
+in Section1, so only opponents' local-resource coordinates are deleted.
+
+3a. OWN LOCAL RESOURCE b>=1
+The local-resource pool always remains long and the recipient's own cap is1.
+Put d_i=min(l_i,1) for i!=k, r=sum_i d_i, q=(1/2)exp(-r). Its full payment is
+z_k=a+q(1-a). Deleting i increases it by q(1-a)(exp(d_i)-1). Since d_i<=1,
+ sum_i(z_k^i-z_k)_+ <=(1-a)q r(e-1).                    (2)
+We show q r(e-1)<(1-q)/2, which proves(A). Set A0=e-1, so1<A0<2. The maximum
+for r>=0 of (1+2A0*r)exp(-r) occurs at r=1-1/(2A0), and equals
+ 2A0 exp(-1+1/(2A0)).
+As a function of A0>1/2 this is increasing, so it is below4exp(-3/4)<2.
+The last strict inequality follows from exp(3/4)>1+3/4+9/32=65/32>2.
+Consequently q[1+2r(e-1)]<1, exactly the desired estimate. The case a=1 has
+zero response directly.
+
+3b. OWN LOCAL RESOURCE0<b<1 AND FULL RESOURCE TOTAL B<=1
+Put u=b-a. Along any beneficial deletion, the resource total T stays in[b,B]
+and the recipient payment is b-q(T)u. By(1), its derivative magnitude is
+u q'(T)<=u/(2T)<=u/(2b). The sum of all individually deleted coordinates is
+B-b<=1-b. Thus aggregate gain is at most
+ u(1-b)/(2b) <=(1-b)/2 <=(1-z_k)/2,
+since u<=b and z_k<=b.
+
+3c. OWN LOCAL RESOURCE0<b<1 AND FULL RESOURCE TOTAL B>1
+We may replace every OTHER local-resource report by its cap at1 for this
+calculation. This preserves the full payment and every payment after deleting
+one opponent: if a remaining report exceeds1, the pool stays long and only
+caps enter; if no remaining report exceeds1, the remaining total already
+equals the sum of those caps. After this replacement write
+ d_i=min(l_i,1), D=b+sum_i d_i=1+r>1,
+ q=(1/2)exp(-r), u=b-a, z_k=a+qu.
+Thus0<d_i<=1 and sum_i d_i=1+r-b. The gain after deleting d_i is u*f(d_i).
+For d_i<=r the pool does not switch, and
+ f(d_i)=q(exp(d_i)-1).                                  (3)
+For d_i>r it first reaches the tie and then decreases the resource total from1
+to1+r-d_i>=b. The pre-tie gain divided by u is1/2-q. The post-tie derivative
+bound in3b gives the upper bound
+ f(d_i)<=1/2-q+(d_i-r)/(2b).                             (4)
+Define g(d) by the right sides of(3) and(4), joined at d=r when r<1.
+This is continuous, nonnegative, convex on[0,1], with g(0)=0: the left
+slope at r is1/2 and the right slope is1/(2b)>=1/2.
+
+It suffices to prove
+ sum_i g(d_i)<= (1/b-q)/2.                              (5)
+Indeed (1-z_k)/(2u)=(1-b)/(2u)+(1-q)/2 >=(1/b-q)/2 because u<=b.
+
+If r>=1, no switch is possible and convexity on[0,1] gives
+ sum_i f(d_i)<=q(e-1)(1+r-b).
+This decreases in r>=1, whereas (1/b-q)/2 increases. At r=1 the required
+inequality is
+ (1/2-c)(2-b)<=(1/b-c)/2, c=1/(2e).
+After multiplying by2b, the right side minus the left side is
+ Q(b)=(1-2c)b^2-(2-3c)b+1.
+For0<=b<=1, Q'(b)<=-c<0 and Q(1)=c>0, so(5) holds.
+
+Now0<r<1, so sum_i d_i=1+r-b lies between0 and2. A convex function g on[0,1]
+with g(0)=0 has its sum at fixed total maximized by as many unit coordinates
+as possible and at most one fractional coordinate. This follows by replacing
+a pair of interior coordinates with either(0,x+y) or(1,x+y-1), keeping its
+sum and increasing the convex objective; finitely many replacements suffice.
+If r<=b, the total is at most1. Its concentrated coordinate1+r-b is above r,
+so(4) gives
+ sum_i g(d_i)<=1/2-q+(1-b)/(2b)=1/(2b)-q,
+which is at most the right side of(5).
+If r>=b, the total is at least1. Its maximizing coordinates are1 and r-b.
+The latter is at most r. Therefore
+ sum_i g(d_i)<=1/2-2q+(1-r)/(2b)+(1/2)exp(-b).
+Subtracting this from the right side of(5) gives
+ (1/2)[r/b-1-exp(-b)+(3/2)exp(-r)].                     (6)
+For fixed b and r>=b, the bracket is increasing in r, since
+1/b-(3/2)exp(-r)>=1/r-(3/2)exp(-r)>0;
+the last inequality follows from r exp(-r)<=1/e<2/3. At r=b the bracket is
+(1/2)exp(-b)>0. Hence(6) is positive, proving(5) in the last case.
+This completes(A) for one branch. Multiply back by H.
+
+4. MULTIBRANCH AGGREGATION
+For any fixed recipient, the positive increase of its aggregate payment is at
+most the sum of its positive branch increases. Sum first over deviating owners,
+then over branches, applying(A) on each branch. The resulting bound is
+(1/2)sum_j(H_j-z_kj)=(H-z_k)/2. This keeps every actual owner fixed and permits
+unrelated deviations for each owner. Zero-output branches cause no difficulty.
+
+THEOREM B: GRID OVERFLOW COMPENSATION
+Let p_k be full grid reports and restore the deviator's grid before comparing
+outer payments. Use the full hardware total H as the fixed cap threshold. Put
+ b_k=p_k+z_k, w_k=(b_k-H)_+, W=sum_k w_k,
+ b_k^i=p_k+z_k^i, w_k^i=(b_k^i-H)_+,
+ U_k=H-z_k>=0,
+ G=sum_k min{U_k/2, (p_k-U_k/2)_+}.
+Then
+ sum_i sum_k(w_k^i-w_k)_+ <=G,
+ G<=P/2, and also G<=P-W.                               (7)
+All diagonal increases are zero by local own monotonicity.
+
+PROOF. For fixed k, set v_i=(z_k^i-z_k)_+. TheoremA gives sum_i v_i<=U_k/2.
+If p_k<=U_k the full overflow vanishes, and
+ sum_i(w_k^i-w_k)_+<=sum_i[v_i-(U_k-p_k)]_+
+                    <=[sum_i v_i-(U_k-p_k)]_+
+                    <=(p_k-U_k/2)_+.
+If p_k>=U_k, each increase is at most v_i, so their sum is at most U_k/2.
+These combine to the summand defining G. It is at most p_k/2: in the middle
+range U_k/2<=p_k<=U_k use p_k-U_k/2<=p_k/2; the other ranges are immediate.
+It is also at most min(p_k,U_k)=p_k-w_k. Summing proves(7).
+
+THEOREM C: CAP-SENSITIVE RETENTION
+Let S=sum_k min(b_k,H) and S^i=sum_k min(b_k^i,H). Let own capped accounts be
+d_i=min(b_i,H), d_i^i=min(b_i^i,H), and let Delta_- be the sum of full local
+funding slacks on branches whose full ratio is below2. The universal ordinary
+retention theorem supplies constant kappa=1, or20/21 using its strengthened
+long-stage certificate. Define L=sum_i min(w_i,z_i). Then
+ sum_i[(S-S^i)/3-(b_i-b_i^i)]_+ <=kappa Delta_-+G/3,       (8)
+ sum_i[(S-S^i)/3-(d_i-d_i^i)]_+
+      <=kappa Delta_-+G/3+(2/3)L.                       (9)
+In particular(8) is at most kappa Delta_-+P/6. These inequalities are uniform
+over separately chosen actual whole-owner underreports.
+
+PROOF. Write B=P+Z, B^i=P+Z^i and W^i=sum_k w_k^i. Then S=B-W,S^i=B^i-W^i.
+Equation(8) follows from ordinary retention and(7) by positive-part subadditivity.
+For(9), let L_i=w_i-w_i^i>=0. Since grid is restored and z_i^i<=z_i,
+L_i<=min(w_i,z_i), and d_i-d_i^i=(b_i-b_i^i)-L_i. Therefore
+ (S-S^i)/3-(d_i-d_i^i)
+ =[(B-B^i)/3-(b_i-b_i^i)]
+   +(1/3)sum_{k!=i}(w_k^i-w_k)+(2/3)L_i.
+Take positive parts, sum over i, and apply(7) and sum_i L_i<=L.
+
+SCOPE
+The response and cap-compensation estimates are independent of owner count,
+branch count, grid size, and local ratio. They preserve fixed owners, actual
+bundle deviations, and continuous report domains. They provide an explicit
+grid-funded replacement for the false slack-only cap-retention inequality.
+They do not yet convert the available (C^2-C)H margin into a complete funding
+bound for the hardware-bottleneck envelope; that outer response step remains.

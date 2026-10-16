@@ -1,0 +1,95 @@
+NEGATIVE-GAP SAVINGS WITH ARBITRARY FULL GRID OVERFLOW
+16 October 2026. Candidate; independent review pending.
+Original exponential local primitive and outer primitive. Actual fixed owners,
+all nonnegative real reports, arbitrary branches. This is an envelope inequality,
+not by itself a complete C^2 funding theorem or a novelty claim.
+
+Normalize full hardware H=1 and assume the physical hardware bottleneck P+M>=1.
+Use a_i=H_i, z_i for full local payment, Z=sum_i z_i, M=sum_j T_j<=1,
+C=1+1/(2e), K=e-1, delta=C M-Z>=0,
+b_i=p_i+z_i, d_i=min(b_i,1), S=sum_i d_i, q0=.5 exp(1-S).
+Every z_i<=M<=1 and S>=1: if any b_i>=1 this is immediate; otherwise S=P+Z
+and Z>=M. For v in[0,K^2/4] put
+ L(v)=2 exp(sqrt(1-v)-1)/(1+sqrt(1-v)).
+
+THEOREM
+Every full negative-gap owner i, meaning g_i=a_i-d_i>=0, satisfies
+ E_i <=a_i-q0 exp(-delta) g_i L(K^2 z_i g_i).             (1)
+Here E_i is the actual own-report monotone envelope of the raw nested rule.
+The formula includes zero g_i or z_i by continuity. It follows that
+ E_i <=a_i-q0 exp(-delta) L(K^2/4)g_i.                  (2)
+The numerical constant L(K^2/4) is about .812; the symbolic expression is
+load-bearing. Unlike a bound depending on sum_i min(p_i,1)+CM, (1) uses the full
+capped total S and its owner-specific correction despite arbitrary full overflow.
+
+PROOF: RESTORATION AND CAPPED TOTAL
+Fix an arbitrary actual whole-owner underreport of i. Restore its OUTER hardware
+and grid accounts after calculating the local payments at that underreport.
+The outer primitive's own monotonicity only raises i's payment. This algebraic
+restoration is not asserted to be an actual report. Other outer hardware accounts
+stay fixed, so outer hardware total is now1. Write z'_k for the local payments,
+D=z_i-z'_i in[0,z_i], and S'=sum_k min(p_k+z'_k,1).
+
+If g_i>0, b_i=d_i<1. Thus its own full overflow is zero and its own restored
+capped account is exactly d_i-D. Let W=sum_k(b_k-1)_+ and similarly W'. Then
+ S'-S=(Z'-Z)+(W-W').
+Every local report has decreased only in owner's i bundle. Therefore every local
+output T'_j<=T_j and Z'<=C sum_j T'_j<=CM, so Z'-Z<=delta. Only opponents can
+contribute positively to W-W', and each opponent's overflow decrease is at most
+its positive local payment decrease. The sharp nonlinear outgoing theorem gives
+ W-W' <=sum_{k!=i}(z_k-z'_k)_+ <=K sqrt(z_i D).
+Consequently
+ S'<=S+delta+K sqrt(z_i D).                            (3)
+The same calculation works for g_i=0 unless d_i=a_i=1; this boundary case needs
+only E_i<=a_i, shown below, and can be treated directly.
+
+PROOF: PAYMENT AND OUTER POOL SWITCH
+If S'>=1, the restored outer profile is hardware-short (or tied). Its coefficient
+is q'=.5exp(1-S'), and its payment equals
+ a_i-q'(g_i+D).
+By(3), q'>=q0 exp(-delta-K sqrt(z_iD)).
+If S'<1, every opposing account is uncapped and the opposing pool is short.
+Writing q_h<=1/2 for the corresponding coefficient, i's payment is
+ (1-q_h)(d_i-D)+q_h min(a_i,S')
+ <=(a_i+d_i-D)/2
+ =a_i-(g_i+D)/2.
+As S>=1 and delta,D>=0, q0 exp(-delta-K sqrt(z_iD))<=1/2.
+The same upper bound therefore holds on either side of the pool switch:
+ E_i <=a_i-q0 exp(-delta) inf_{0<=D<=z_i}
+                      (g_i+D)exp(-K sqrt(z_iD)).        (4)
+This also proves E_i<=a_i when g_i=0, even if i's full account is capped.
+
+PROOF: EXACT ONE-DIMENSIONAL MINIMUM
+Suppose z=z_i>0 and g=g_i>0. Because b_i=d_i=p_i+z_i<=a_i<=1,
+ z+g=a_i-p_i<=1, hence zg<=1/4 and K^2zg<1 (K<2).
+Set A=K sqrt(z) and x=sqrt(D). The derivative of
+ f(x)=(g+x^2)exp(-Ax), 0<=x<=sqrt(z),
+has the sign of 2x-A(g+x^2). Its two roots are
+ x_-=(1-sqrt(1-K^2zg))/(K sqrt(z)),
+ x_+=(1+sqrt(1-K^2zg))/(K sqrt(z)).
+The smaller root belongs to[0,sqrt(z)] and the larger exceeds sqrt(z).
+For the first assertion, if Kz>=1 it is immediate; otherwise square the
+nonnegative comparison sqrt(1-K^2zg)>=1-Kz, obtaining K(z+g)<=2.
+For the second, if Kz<=1 it is immediate; otherwise squaring the nonnegative
+comparison sqrt(1-K^2zg)>Kz-1 gives the same strict condition K(z+g)<2.
+Thus f decreases to x_- and increases thereafter throughout the allowed domain.
+Put r=sqrt(1-K^2zg). At x_-,
+ x_-^2/g=(1-r)/(1+r), and A x_-=1-r.
+The exact minimum is therefore
+ g * [2/(1+r)] exp(r-1)=g L(K^2zg).
+This proves(1). When z=0 the infimum in(4) is g and L(0)=1. When g=0 the
+right side of(1) is a_i and the previously proved ceiling applies.
+
+Finally L(v) decreases on[0,1): writing r=sqrt(1-v),
+ d log[2 exp(r-1)/(1+r)]/dr=r/(1+r)>=0,
+while r decreases with v. Since K^2zg<=K^2/4, (2) follows.
+
+DEPENDENCIES AND SCOPE
+Uses only eligibility/own monotonicity/local budget of the original exponential
+primitive and SHARP_NONLINEAR_OUTGOING_LOSS.txt (including its stated short-stage
+dependency). No arbitrary owner deletion, cloning, or changing roles is a feasible
+deviation. The scalar minimization ranges over a larger set than feasible local
+losses, which is valid for an upper bound and does not assert joint attainability.
+Every owner may choose its own unrelated underreport in its envelope. The bound
+can be summed over negative-gap owners; a complete joint positive-gap funding
+argument remains open.

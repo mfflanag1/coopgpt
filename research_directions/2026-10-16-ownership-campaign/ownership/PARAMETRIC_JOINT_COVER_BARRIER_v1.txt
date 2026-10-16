@@ -1,0 +1,177 @@
+EXACT WORST-CASE VALUE OF THE BOUNDED-DIAMETER COVER BUDGET SURROGATE
+16 October 2026. Structural theorem for a precisely stated proof architecture.
+No claim about the optimal actual mechanism factor or historical priority.
+
+MODEL OF THE COVER PROOF
+Fix a finite nonempty list of component types t. Type t permits EVERY connected
+tree of diameter at most D_t, where D_t is a fixed positive integer, and charges
+a uniform factor C_t>=1 on all components in that type, including smaller ones.
+Different types may overlap and may have different costs; a particular subtree
+can use whichever permitted type is advantageous. The cost is fixed independently
+of reports. If some type is available only on a subclass, the lower bound below
+still applies, but the matching upper theorem requires the full diameter class.
+
+For a finite resource tree G, a cover is a finite collection of connected edge
+subtrees Q_j, permitted type choices t_j, and fixed lambda_j>=0, with
+  sum_{j:e in Q_j}lambda_j>=1 for every activity edge e.   (1)
+The empty collection suffices for a tree without edges; such trees can be omitted.
+Let F_G(c) be unit-profit production with one unit of each endpoint consumed by
+each activity; F_Q restricts the activities to Q. Define
+  B_lambda(c)=sum_j lambda_j C_{t_j} F_{Q_j}(c).           (2)
+This is the exact joint budget surrogate obtained from uniform component-factor
+guarantees. It retains all F_Q(c), and therefore allows every joint-capacity
+inequality one could prove about those values.
+
+The cover can depend on G and its fixed technology, but not on reports c. Define
+  K = sup_{finite trees G} inf_{covers lambda of G}
+          sup_{c>=0, F_G(c)>0} B_lambda(c)/F_G(c).         (3)
+No choice of actual owners enters this production-value quantity. When the
+component mechanisms are whole-owner-monotone and coalition-covering on one
+fixed actual-owner set, their weighted sum inherits those properties by the
+already proved activity-cover lemma. Their ACTUAL total can be smaller than
+(2), so K is not a lower bound on arbitrary truthful mechanisms or even on the
+actual payment total of every such sum.
+
+THEOREM
+If at least one D_t>=2, then
+  K = min_{t:D_t>=2} C_t (1+1/floor(D_t/2)).               (4)
+If all types have D_t=1, then K is infinite. Thus mixing finitely many bounded-
+diameter component classes cannot improve this worst-case joint surrogate over
+the best single class. Arbitrarily large finite trees and branching degrees are
+allowed in the supremum. For a particular finite tree the best value can be
+strictly smaller than(4).
+
+LOWER-BOUND FAMILY AND ITS FINITE GUARANTEE
+Let G_{b,h} be the complete b-ary rooted tree of height h, where b>=2,h>=1.
+Give each vertex at depth d weight g_v=b^(-d), and each edge the weight of its
+child vertex. The total vertex weight is h+1 and total edge weight is h.
+For D>=1 define
+  K_D(b)=R+1                 if D=2R, R>=1,
+  K_D(b)=R+1+1/b             if D=2R+1, R>=0.             (5)
+Set
+  L_b=min_t C_t K_{D_t}(b)/(K_{D_t}(b)-1).                (6)
+Every fixed cover of G_{b,h} has some capacity profile with F=1 and
+  B_lambda(c)>= L_b h/(h+1).                             (7)
+The capacity profile uses only zeros and ones. In particular it lies within
+the same fixed unit endowment box for every vertex; no owner or technology is
+changed between these profiles.
+
+WEIGHTED-MASS LEMMA
+For every connected nonempty vertex subtree Q of G_{b,h} having diameter<=D,
+let v be its unique topmost vertex. Then
+  W(Q):=sum_{u in Q}g_u <= K_D(b) g_v.                    (8)
+The topmost vertex is unique because the path between two distinct vertices of
+minimum depth would contain a shallower common ancestor and lies in Q.
+
+Proof of(8): normalize g_v=1. At any fixed distance k below v, the total weight
+of all descendants is at most1, since there are at most b^k vertices, each of
+weight b^(-k). Hence a rooted subtree of height a has weight at most a+1.
+
+First take D=2R, R>=1. If Q has height<=R, this immediately gives W<=R+1.
+Otherwise its tallest child branch has height L>=R, measured from that child.
+The overall diameter implies L<=2R-1. Every OTHER child branch has height at
+most2R-L-2: joining its deepest vertex to the deepest vertex of the tallest
+branch passes through v. A negative bound means that branch must be absent.
+The tallest branch has weight at most(L+1)/b; each of the at most b-1 other
+branches has weight at most(2R-L-1)/b, a nonnegative expression for this range
+of L. Thus
+  W <=1+[L+1+(b-1)(2R-L-1)]/b
+    <=1+[R+1+(b-1)(R-1)]/b
+     =R+2/b <=R+1.
+The middle inequality uses b>=2: the numerator is nonincreasing in L, so its
+maximum for L>=R occurs at L=R. This proves the even case.
+
+For D=2R+1, R>=0, height<=R again gives W<=R+1. Otherwise the tallest child
+branch has R<=L<=2R, and every other child branch has height<=2R-L-1. Therefore
+  W <=1+[L+1+(b-1)(2R-L)]/b
+    <=1+[R+1+(b-1)R]/b
+     =R+1+1/b.
+This also covers R=0: a nonempty diameter-one component is an edge, of total
+weight1+1/b relative to its topmost vertex. Missing children and branches only
+reduce the bound. This proves(8) in all cases used here.
+
+The constants in(8) are attainable when enough depth is available. A complete
+rooted subtree of height R attains R+1 for D=2R. For D=2R+1, give one child a
+complete subtree of height R and the other b-1 children complete subtrees of
+height R-1, interpreting height -1 as absent when R=0. The resulting diameter
+is at most2R+1 and its weight is R+1+1/b.
+
+DUAL BOUND FROM THE MASS LEMMA
+Every connected Q has one edge for each vertex except its topmost vertex, with
+the edge weighted by that child vertex. Thus its edge weight is W(Q)-g_v.
+By(8),
+  sum_{e in Q}g_child(e) <=[1-1/K_D(b)] W(Q).
+Multiplying by L_b and using(6), for every component of permitted type t,
+  L_b sum_{e in Q}g_child(e) <= C_t sum_{u in Q}g_u.       (9)
+
+For each vertex u, consider the capacity profile putting1 on u and its neighbors
+and0 elsewhere. Its full production is1. A component Q produces1 exactly when
+it contains u as a nonisolated vertex, and otherwise produces0: the only
+productive edges are those incident to u. Average(2) over these profiles with
+probabilities g_u/(h+1). Applying(9), exchanging finite sums, and then using(1),
+  max_u B_lambda(c^(u))
+   >=[1/(h+1)]sum_j lambda_j C_{t_j} sum_{u in Q_j}g_u
+   >=[L_b/(h+1)]sum_j lambda_j sum_{e in Q_j}g_child(e)
+   >=[L_b/(h+1)]sum_e g_child(e)
+    =L_b h/(h+1).
+This proves(7) for EVERY cover of that fixed tree. The witnessing profile may
+depend on the cover; no common bad profile for all covers is asserted.
+
+PASSING TO THE WORST CASE
+For D=2R>=2, K_D/(K_D-1)=(R+1)/R. For D=2R+1>=3 this ratio tends to(R+1)/R
+as b tends to infinity. For D=1 the ratio is b+1 and diverges. The type list is
+finite and the costs are fixed positive constants. Therefore, if some D_t>=2,
+  lim_{b->infinity}L_b = min_{t:D_t>=2} C_t(1+1/floor(D_t/2)).
+First choose b large enough to approach this finite minimum, then choose h
+large enough that h/(h+1) is arbitrarily close to1. Bound(7), which holds after
+the infimum over covers, establishes the lower half of(4). If all D_t=1,
+L_b=(b+1)min_t C_t tends to infinity, proving K=infinity.
+
+MATCHING UPPER COVER
+Choose a type t with D_t>=2 and let R=floor(D_t/2). Root any finite tree once
+and for all. For each residue s modulo R+1, delete all edges whose child depth
+is congruent to s. Every remaining connected component has rooted height at
+most R, hence diameter at most2R<=D_t, and is permitted for type t. Give this
+forest weight1/R, and separate it into its connected components with that same
+weight. Each original edge survives in exactly R of the R+1 forests, so(1)
+holds.
+
+Within each forest the components use disjoint resource vertices; their
+production values sum exactly to its restricted production F_s(c), even if
+actual owners hold resources in several components. Thus
+  B_lambda(c)=(C_t/R)sum_{s=0}^R F_s(c)
+             <=C_t(R+1)/R F_G(c).
+This holds for all capacities and all actual owners. Choosing the best type
+gives the upper half of(4). This is a fixed cover; its incentives follow from
+the component mechanisms and do not rely on report-dependent rooting or cuts.
+
+CONSEQUENCES FOR THE PRESENT PROGRAM
+The current complete component classes have
+  stars:       D=2, C2=1+1/(2e),
+  double-stars:D=3, C3=1+W(2/e),
+  depth-two:   D=4, C4=7/4.
+The exact worst-case value of their joint surrogate is
+  min(2C2,2C3,(3/2)(7/4))=2C2=2+1/e, approximately2.367879.
+For example C2<6/5, C3>7/5, and21/8>12/5 make the minimizer immediate.
+The finite height-four dual in JOINT_COVER_OBSTRUCTION_v1.txt is a compact
+instance certificate; it is complemented, not replaced, by this asymptotic
+structural theorem.
+
+A new primitive valid for EVERY diameter<=2R tree can make this same cover
+proof give a factor below2 exactly when its uniform factor satisfies
+  C_R < 2R/(R+1),
+assuming no already available type meets that threshold. In particular:
+- radius2 needs C<4/3;
+- radius3 needs C<3/2;
+- extending factor7/4 to every radius8 tree would suffice, giving63/32<2;
+- at radius7, factor7/4 gives exactly2 and does not cross the strict gate.
+These are requirements for the stated proof architecture, not necessary
+conditions for a direct all-forest mechanism. A direct separator/range rule,
+report-dependent covers with a valid incentive proof, or sharper estimates of
+the actual component payments can evade this theorem.
+
+REPLAY
+verify_parametric_cover_mass.py checks the mass lemma by an independent exact
+height-state tree dynamic program for several branching factors, tree heights,
+and component diameters. The proof above is the all-parameter argument; the
+finite checks are corroboration, not extrapolation from examples.

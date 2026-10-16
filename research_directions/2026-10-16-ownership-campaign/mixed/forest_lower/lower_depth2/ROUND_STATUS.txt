@@ -1,0 +1,49 @@
+BOUNDED LOWER-FAMILY ROUND: STATUS AND REPRODUCTION
+16 October2026. No unrestricted lower above9/8 was found.
+
+ANALYTIC RESULTS
+1. BINARY_POPULATION_STOPPING_LEMMA.txt proves exact factor1+(a-1)/(2ma), a=min(H,m), for any m owners per pool and positive binary reports{1,H}, integer H>=2. The family has unbounded active owner count, never exceeds9/8, and its worst optimum tends1 with m.
+2. TERNARY_GRID_STOPPING_LEMMA.txt proves exact uniform9/8 for arbitrary fixed owner counts and arbitrary mixed reports(a_i,b_i) in{0,1,2}^2. The proof includes whole-owner netting and a discrete1-Lipschitz primitive. These are finite-grid stopping results, not continuous-domain upper bounds.
+3. Independent agent audit: /private/tmp/coopgpt-ownership-20261016/audits/DISCRETE_GRID_AUDIT.txt. It found no substantive proof gaps and independently replayed all mixed profiles with up to4 owners. Its final section supplies a separate exact obstruction to unbiased common-grid rounding preserving all coalition values.
+
+INDEPENDENT EXACT CHECKS
+Run with standard-library Python, including -O (checks use explicit exceptions, not assert):
+ python3 -B -O verify_binary_family.py
+ python3 -B -O verify_ternary_grid.py
+ python3 -B -O replay_report_certificates.py
+Outputs: binary_family_verification.json, ternary_grid_verification.json, independent_replay.json.
+Binary verification:41 parameter pairs;4,790 profiles;8,896 own transitions;62,167,255 distinct coalition-amount pairs checked through exact prefix/suffix minimization.
+Ternary verification:19,530 pure residual profiles;89,844 own-Lipschitz steps;7,380 exhaustive mixed profiles and800 larger random profiles;135,770 coalition checks;44,483 own changes.
+LP replay: 21 exact full actual-owner certificates, 50038 profiles, 1122298 coalitions, 717035 all-comparable own changes;4 corruption controls rejected. Its value oracle enumerates physical minimum vertex covers independently of the discovery formula.
+
+FINITE DIAGNOSTICS (EXACT ON THEIR STATED RESTRICTIONS)
+ asymmetric_A2_B3_H3: 12/11; 32 profiles.
+ asymmetric_A2_B3_H4: 12/11; 32 profiles.
+ asymmetric_A2_B3_H8: 12/11; 32 profiles.
+ asymmetric_A2_B4_H3: 13/12; 64 profiles.
+ asymmetric_A2_B4_H4: 18/17; 64 profiles.
+ asymmetric_A2_B4_H8: 18/17; 64 profiles.
+ asymmetric_A3_B4_H3: 16/15; 128 profiles.
+ asymmetric_A3_B4_H4: 12/11; 128 profiles.
+ asymmetric_A3_B4_H8: 12/11; 128 profiles.
+ calibration_one_branch: 9/8; 16 profiles.
+ four_roles_grid_0123: 9/8; 16384 profiles.
+ mixed_crossed_K4_012: 9/8; 2187 profiles.
+ mixed_selfproducers_012: 1; 19683 profiles.
+ multilevel_A2_B3_levels0124: 9/8; 1024 profiles.
+ multilevel_A3_B3_levels0124: 9/8; 4096 profiles.
+ multilevel_A3_B3_levels013: 9/8; 729 profiles.
+ multilevel_A3_B3_levels124: 9/8; 729 profiles.
+ split_local_owners_012: 9/8; 2187 profiles.
+ two_branch_coordinate_012: 9/8; 2187 profiles.
+ two_branch_coordinate_12: 9/8; 128 profiles.
+ two_branch_coupled: 9/8; 16 profiles.
+
+The compressed two_pool_m*_h*.json.gz files are earlier symmetry-reduced discovery outputs, superseded mathematically by the analytic binary theorem and its explicit exact checker. One discovery output, m8,H8, records a FAILED rational reconstruction of the numerical solver primal; its exact dual passed. This failure is retained honestly. The analytic explicit mechanism supplies a proved matching upper but was not retroactively represented as the numerical solver output. Those symmetry-discovery files are not part of the independent full-owner certificate replay.
+
+DISCOVERY REPRODUCTION
+report_lp.py constructs finite Cartesian actual-owner report domains, all coalition constraints, nonnegativity, budget inequalities and own-report Hasse edges. first/second_round/asymmetric_positive_binary/multilevel_boundary scripts specify the targeted families. Discovery requires existing SciPy/NumPy; exact replay above does not. No package was installed.
+Existing runtime used: PYTHONPATH=/Users/maxf/.cache/uv/archive-v0/40DScKDtKvHceb3VaQ8M_:/Users/maxf/.cache/uv/archive-v0/gJ72PSomfXm8X-Nf5F3r2 /opt/homebrew/bin/python3.13 -B -O SCRIPT.
+
+DIRECTION FILTER
+The four-role two-branch template, separately owned local pools, crossed mixed K4 bundles, asymmetric binary two-pool populations and selected additional positive report levels all remained at or below9/8 in the exact finite tests. These results do not exclude stronger continuous or multi-level interacting lower bounds. Merely enlarging the common ternary two-pool population, or the symmetric positive-binary population, is now ruled out analytically as a way to exceed9/8. A future lower must use a feature outside those proved domains, and must supply an exact actual-owner transition certificate. No claim of historical novelty is made.

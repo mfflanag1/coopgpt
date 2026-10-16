@@ -1,0 +1,105 @@
+OUTGOING PAYMENT LOSS IS CONTROLLED BY THE DEVIATOR'S FULL PAYMENT
+16 October2026. Root candidate requiring independent audit.
+Original exponential local primitive, fixed actual owners, all real reports.
+
+CLAIM
+For any actual owner i and any coordinatewise own-bundle underreport, let z_k
+and z_k' be full and counterfactual local payments. Then
+ sum_{k!=i}(z_k-z_k')_+ <=(e-1)z_i.                    (OL)
+The same statement holds after aggregating arbitrarily many branches, where
+owner i may change its whole bundle. Branch inputs are fixed nonnegative
+coordinates of that bundle (or fixed coordinatewise nondecreasing input maps),
+so a bundle underreport induces a coordinatewise underreport on each branch. This bounds one owner's outgoing effect;
+it is not a bound on the sum over independently deviating owners relative to
+hardware or grid. No novelty or complete nested-funding claim is made.
+
+PRIMITIVE AND ROLE ACCOUNTING
+At full short total T>0 and capped long ratio r>=1, q=exp(1-r)/2,
+z_k=(1-q)x_k+q min(l_k,T). Regard the two displayed nonnegative terms as
+accounting contributions. This does not create strategic players. Every
+actual recipient's positive loss is at most the sum of its two role losses.
+Coordinates in the long input can be treated as pure-role accounts for this
+accounting comparison because splitting the two input labels changes neither
+pool total nor any cap within either input. Actual owner i stays fixed.
+
+1. DECREASING A SHORT-INPUT COORDINATE
+Keep the long reports fixed and decrease the short total from T to T-a, with
+0<=a<=x_i. The input stays short. Other short-role payments weakly increase,
+since q decreases; only long-role contributions can lose. Their total is
+q(U)D(U), where D=sum_k min(l_k,U), r=D/U, and m counts long coordinates
+strictly capped by U. On any cap cell,
+ d[qD]/dU=q[r^2-m(r-1)] <=q r^2<=2/e.
+The maximum of r^2 exp(1-r)/2 on r>=1 is2/e at r=2. All cap boundaries and
+zero limits are continuous. Thus the sum of all long-role losses, even if
+owner i's own long-role loss is included, is at most(2/e)a. Since q<=1/2,
+this is at most(4/e)(1-q)x_i.
+
+2. DECREASING A LONG-INPUT COORDINATE
+Keep short reports fixed. It suffices to bound complete deletion of i's long
+amount b, because every other short-role payment decreases monotonically as
+this coordinate falls, whereas every other long-role contribution increases.
+The latter statements also hold after the pools switch: the old long input
+then becomes short and its remaining accounts acquire coefficient1-q_new;
+the old short input becomes long with capped payments q_new min(x_k,T_new).
+The cross-input monotonicity follows directly from q'(U)=q(r-m)/U>=0.
+
+Normalize T=1 and let d=min(b,1), so i's full long-role payment is qd.
+If the remaining long total is at least1, there is no pool switch. Deleting
+b lowers the capped long ratio by d, so total short-role loss is
+ q(exp(d)-1)<=q(e-1)d,
+using the convex secant exp(d)-1<=(e-1)d for0<=d<=1.
+
+If the remaining long total is r<1, all those accounts are uncapped at the
+full profile and the full capped ratio is d+r>=1. Put q=exp(1-d-r)/2.
+After full deletion, the new capped ratio of the old short input is R in
+[1,1/r], and its aggregate payment is q_new R r, where
+q_new=exp(1-R)/2. Since R exp(1-R) decreases for R>=1, this aggregate is
+at least exp(1-1/r)/2. At r=0 use its continuous limit0.
+The total short-role loss is therefore at most
+ 1-q-exp(1-1/r)/2.
+We claim it is at most(e-1)qd. Equivalently,
+ A(r)exp(d)<=1+(e-1)d,
+ A(r)=2exp(r-1)-exp(r-1/r).
+For0<r<=1, A(r)<=1. To prove this set x=1-r and multiply the inequality by
+exp(1-r); it becomes
+ exp(x)+exp(-x/(1-x))>=2, 0<=x<1.
+Its derivative is nonnegative because the log of the ratio of its positive
+and negative derivative terms is
+ x+x/(1-x)+2log(1-x)=1/r-r+2log r>=0.
+The last function equals0 at r=1 and has derivative
+ -(1-r)^2/r^2<=0. Hence the exponential sum is at least its value2 at x=0.
+At r=0, A(0)=2/e<=1 directly. Finally exp(d)<=1+(e-1)d for0<=d<=1,
+which proves the claimed long-stage loss bound through the switch.
+Restoring T gives loss<=(e-1)q min(b,T).
+
+3. WHOLE-OWNER REPORTS
+For an arbitrary actual owner's two-coordinate underreport, first lower its
+full-profile short coordinate to the reported amount, then lower its long
+coordinate. The first stage keeps the original orientation. Its external
+positive loss is at most(4/e) times the owner's FULL short-role payment.
+At the intermediate profile, the owner's long-role payment is at most its
+full long-role payment, since both q(U) and min(b,U) increase with U.
+The second-stage bound is therefore at most(e-1) times its FULL long-role
+payment. Since4/e<=e-1 (for example e>8/3 implies e^2-e-4>0), positive-part
+subadditivity across the two stages proves(OL). Ties may use either initial
+orientation. Zero-output branches have zero at every underreport.
+
+For multiple branches, apply this argument on every branch and use positive-
+part subadditivity over branch contributions for each actual recipient. The
+right side sums to(e-1)z_i. No owner is cloned or reselected, and no finite
+report-grid hypothesis or bounded owner count appears.
+
+POTENTIAL USE AND LIMIT
+For a saturated grid owner, the outer cap can hide its own local payment loss.
+The theorem bounds how much that same owner can nevertheless lower other local
+accounts, using its full local payment as a scale. It may complement the
+half-gap incoming-response lemma. Converting this to C^2 funding remains open.
+
+SHARPNESS OF THE OUTGOING CONSTANT
+One hardware owner has report1 and two pure local-resource owners each have
+report1. At the full profile q=c=1/(2e), so each resource owner receives c.
+After one resource owner deletes its report, the two remaining inputs balance
+and the hardware owner's payment falls from1-c to1/2. The other resource
+owner's payment increases. Thus the total external positive loss is
+1/2-c=(e-1)c, attaining(OL) exactly. This is sharpness of the response lemma,
+not a subsidy lower bound or a bounded example offered as the main result.
