@@ -1,0 +1,296 @@
+Task and review objective:
+Focused independent audit of two closing corollaries. WEIGHTED_VALUES.txt: check coalitionwise simultaneous prefix decomposition for fixed public values, same value under local/grid service, null outside-prefix owners, shared resource not physically duplicated, fixed weighted sums of mechanisms, exact marginal floor and O(m²) complexity. PARETO_NOTE_v2.txt: check same-rule C+K inequality and attaining sharp rule, m>=2 qualification, m1 efficient counterrule, distinction between optimal uniform class factor and each fixed dimension/value-vector factor. Base proof provided but already audited; do not re-audit it except needed identity. Identify concrete errors or precise verified limits. Historical novelty unconfirmed. No code execution by reviewer.
+
+
+FILE WEIGHTED_VALUES.txt
+1: Public heterogeneous pod values: exact extension of the sharp fairness rule
+2: 16 October2026. Separate closing extension; frozen theorem packets unchanged.
+3: 
+4: STATEMENT AND FIXED DOMAIN
+5: Use the clean ownership institution from CONTINUOUS_ATTACK.txt. Fix arbitrary
+6: nonnegative PUBLIC values v_1,...,v_m before any capacity reports. At pod i,
+7: both local-powered and grid-powered output have the SAME value v_i and each
+8: consumes one hardware unit and one unit of its chosen power source. There
+9: remains one distinct actual hardware owner per pod, one owner A of all local
+10: resources, and one owner C of the shared grid resource. These identities never
+11: change. The extension permits heterogeneous values, not heterogeneous input
+12: coefficients, route-specific prices, private values, or mixed ownership.
+13: 
+14: Choose once and for all a public ordering with v_1>=...>=v_m>=0, resolving ties
+15: independently of reports. Set v_{m+1}=0 and d_k=v_k-v_{k+1}>=0. Let N denote
+16: the SAME full owner set in every construction below. For each prefix1..k,
+17: define a unit-value production game on N that ignores all hardware/local rows
+18: outside that prefix but retains the same shared-grid row. Outside-prefix
+19: hardware owners are null in that component, not deleted or relabeled.
+20: 
+21: For any coalition S let h_i(S)=h_i if hardware owner i is in S and0 otherwise;
+22: let L_i(S)=L_i if A is in S and0 otherwise; P(S)=P if C is in S and0 otherwise.
+23: Put ell_i(S)=min(h_i(S),L_i(S)), r_i(S)=h_i(S)-ell_i(S). The unit prefix value is
+24:   T_k(S)=sum_{i<=k}ell_i(S)+min(P(S),sum_{i<=k}r_i(S)).
+25: The actual public-value production game satisfies, for EVERY coalition S,
+26:   F_v(S)=sum_{k=1}^m d_k T_k(S).
+27: 
+28: PROOF OF THE COALITIONWISE DECOMPOSITION
+29: Fix any S and a feasible allocation with local q_i and grid g_i. Replace
+30: q_i by ell_i and g_i by min(g_i,h_i-ell_i). Since q_i<=ell_i and
+31: q_i+g_i<=h_i, the new total service ell_i+min(g_i,h_i-ell_i) is at least
+32: q_i+g_i. Grid use weakly decreases and hardware use stays at most h_i.
+33: Both routes have the same nonnegative public value, so this never lowers
+34: the objective. Thus choose ell_i local output first and
+35: allocate the remaining shared grid to residual capacities r_i. The residual
+36: problem is fractional knapsack with equal unit resource costs and public
+37: values v_i. Greedily fill residual capacities in the fixed descending-value
+38: order. Its allocation g has, for every prefix k SIMULTANEOUSLY,
+39:   sum_{i<=k}g_i=min(P(S),sum_{i<=k}r_i(S)).
+40: Every feasible allocation has each prefix sum at most that quantity. For any
+41: nonnegative vector z the telescoping identity sum_i v_i z_i equals
+42: sum_k d_k sum_{i<=k}z_i. Applying it to ell+g proves both the upper bound and
+43: simultaneous attainability of the displayed decomposition. This proves equality
+44: of actual coalition values, not merely an upper envelope of separate optima.
+45: The greedy fractional-knapsack step and the telescoping layer decomposition
+46: are established ingredients; no novelty is claimed for them.
+47: 
+48: PAYMENTS, INCENTIVES, FLOOR, AND BUDGET
+49: For each prefix k run the sharp unit-value rule with the same fixed theta in
+50: [0,1], using the original full owner identities and actual reports on the rows
+51: that component retains. Denote its payments y_i^k. Define
+52:   y_i=sum_k d_k y_i^k.
+53: Each d_k is public, nonnegative, and independent of every report. Therefore:
+54: * Coverage: y(S)>=sum_k d_k T_k(S)=F_v(S), for every coalition S.
+55: * Nonnegativity follows componentwise. A whole-bundle underreport by A changes
+56:   any subset of her retained local rows in each component; that component's
+57:   proof already handles such reports. Each hardware owner changes the same
+58:   hardware coordinate in each prefix that includes her. C changes the same P
+59:   in every component. Each own payment is a fixed nonnegative sum of own-
+60:   monotone payments. No splitting of an actual owner is used.
+61: * The local owner's floor is exact:
+62:   y_A=theta sum_k d_k[T_k(N)-T_k(N\{A})]
+63:      =theta[F_v(N)-F_v(N\{A})].
+64: * Total funding is at most(1+theta/4)sum_k d_k T_k(N)
+65:   =(1+theta/4)F_v(N).
+66: All zero-value and zero-capacity cases are harmless. If every v_i=0, every
+67: payment is0. If a component has zero production, its payments are0. Zero own
+68: resources still imply zero own payment. The model has only weak individual
+69: truthfulness, as before.
+70: 
+71: SHARPNESS AND COMPLEXITY
+72: The unit-value class is included, so the active even-m lower family proves
+73: the same optimal universal factor1+theta/4 over the entire public-value class
+74: with unbounded m. This is not a sharpness claim for every fixed heterogeneous
+75: value vector or for every fixed m; in particular m=1 admits factor1.
+76: Evaluate m prefix rules in total
+77: O(m^2) arithmetic operations after sorting, which costs O(m log m). This simple
+78: extension is not claimed to retain the base rule's linear-time complexity.
+79: Using the same grid row in the algebraic sum does NOT duplicate physical power:
+80: coalition-value equality was proved by one feasible greedy allocation, and the
+81: summed payments are a mathematical allocation rule for that one game.
+82: 
+83: ECONOMIC SCOPE
+84: Pod values may represent fixed public per-unit net revenue for already admitted
+85: service, with the same value regardless of its power route. Public route-
+86: specific energy costs are not covered if they create different local/grid net
+87: values. Private values, nonlinear request latency, endogenous demand, general
+88: hardware-to-power ratios, and exclusive/mixed-role changes need new proofs.
+89: No empirical claim about real GPU pooling is made. Historical novelty of the
+90: combined payment result remains unconfirmed.
+91: 
+92: FREE PRIMARY TEACHING SOURCE FOR THE ESTABLISHED GREEDY INGREDIENT
+93: MIT6.046J/18.410J, Demaine, Devadas and Lynch, Problem Set9 Solutions,
+94: 4 May2015, Problem9-1(b), PDFpage2, states the fractional-knapsack greedy
+95: solution used as a classical ingredient here. Inspected16 October2026:
+96: https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/ff14ef9418b742bf99cfa9f52c6accd7_MIT6_046JS15_pset9sols.pdf
+97: The coalitionwise telescope and simultaneous prefix proof are supplied above,
+98: so the extension does not rely on any unverified stronger result in that source.
+99: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE PARETO_NOTE_v2.txt
+1: Two funding objectives cannot both improve: exact tradeoff at the sharp rule
+2: 16 October2026. Corrected v2: explicitly requires fixed m>=2, or a uniform
+3: family containing all m. Supersedes PARETO_NOTE.txt; preserves its frozen hash.
+4: 
+5: Fix m>=2 and theta in[0,1]. For any SINGLE all-profile mechanism satisfying
+6: the public marginal floor theta M_A, let C be its worst total funding divided
+7: by production T, and K its worst total funding divided by pointwise static
+8: need B_theta; both suprema range over T>0. This also holds for a uniform family
+9: of mechanisms over all m, with the suprema additionally over m. The two
+10: objectives refer to the SAME mechanism, not independently minimized infima. Then
+11:   C+K >=2+theta/2.
+12: 
+13: Proof uses O=(1,1,1,1,1),V=(2,1,1,1,1), in capacity order(P,h1,h2,L1,L2),
+14: and payment order(A,C,H1,H2). For m>2, set all other hardware and local
+15: capacities to zero, preserving the full fixed owner set. Extra payments, if
+16: any, only strengthen the total-funding inequalities below.
+17: At O, floor a>=theta and the two grid-plus-single-hardware coalition constraints
+18: give2c+x+y>=2. Since total_O>=a+c+x+y and total_O<=2C,
+19:   c_O >=2+a_O-total_O >=2+theta-2C.
+20: Own-grid monotonicity gives c_V>=c_O. At V, A+both hardware can produce2, so
+21:   total_V>=2+c_V>=4+theta-2C.
+22: Since B_theta(V)=2, total_V<=2K. Rearranging proves the inequality.
+23: 
+24: The continuous rule in CONTINUOUS_ATTACK.txt has
+25:   C=K=1+theta/4.
+26: Both upper bounds hold because total<=(1+theta/4)T and B_theta>=T. Equality for
+27: C holds at O; equality for K holds at V, where hardware payments remain1 each,
+28: the grid owner receives theta/2, and A receives0. It therefore lies exactly on
+29: the lower tradeoff line. Any rule achieving the optimal C=1+theta/4 must have
+30: K>=1+theta/4. Reducing K below that value necessarily sacrifices worst total
+31: funding efficiency. This does NOT determine the remaining Pareto frontier or
+32: the unconstrained infimum K_theta.
+33: 
+34: For theta1, the finite-grid lower K>=6/5 does not contradict this statement:
+35: achieving K6/5 would require C>=13/10. For theta1/2, a K18/17 mechanism requires
+36: C>=81/68. These are necessary tradeoffs, not claimed continuous attainability.
+37: 
+38: WHY m>=2 IS NECESSARY
+39: For m=1 the rule(A,C,H)=(theta M,0,T-theta M) is efficient, nonnegative,
+40: coalition-covering and own-monotone. Hardware payment equals
+41: (1-theta)T+theta G, which is own-hardware monotone. A's theta M is own-local
+42: monotone; C's payment is zero. Coalition A+H receives T>=ell, coalition C+H
+43: receives T-theta M=G+(1-theta)M>=G, and singleton values are zero. Thus
+44: B_theta=T and this rule has C=K=1. The earlier wording 'any mechanism' in
+45: the m>=1 ambient model omitted this exception; that wording was incorrect.
+46: This correction does not change the m>=2 proof or the universal-in-m result.
+47: 
+48: AUDIT STATUS
+49: Root and pivot_grounding independently checked the inequalities. The m>=2
+50: restriction was identified by pivot_grounding and confirmed by root. Cross-
+51: model review of this v2 corollary is being handled by root; not claimed done.
+52: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE CONTINUOUS_ATTACK.txt
+1: SHARP CONTINUOUS FAIR-FLOOR RULE: C_theta=1+theta/4
+2: 16 October2026, follow-up after curated packet freeze. Candidate conventional
+3: proof requiring independent audit. No historical novelty claim. This is the
+4: PUBLIC MARGINAL-FLOOR extension, not arbitrary mixed ownership/floor-free work.
+5: 
+6: MODEL
+7: Use the exact clean K2,m fixed-owner contract of PARTICIPATION_THEOREMS.txt,
+8: m>=1, arbitrary nonnegative real reports, unit coefficients/values. Actual owner
+9: A exclusively controls all local capacities L_i; C exclusively controls shared
+10: grid capacity P; separate owner H_i controls hardware h_i at pod i. One output
+11: unit uses one hardware unit and either one local unit at that same pod or one
+12: shared grid unit. Coalition resources are exactly its members' reports. Owners
+13: may withhold any coordinatewise smaller part of their fixed bundle, with no
+14: additional report-dependent outside utility. Identity and roles never change.
+15: Put
+16:   ell_i=min(h_i,L_i), r_i=h_i-ell_i,
+17:   L=sum ell_i, Q=sum r_i, H=L+Q,
+18:   G=min(P,H), R=min(P,Q), T=L+R, M=T-G.
+19: The public floor is y_A>=theta M,0<=theta<=1. No private-cost utility is added.
+20: The static optimum satisfies sup B_theta/T=1+theta/4 by the frozen theorem.
+21: 
+22: THETA=1 RULE (linear time in number of pods)
+23: If L=0, pay A0,C=G, all hardware0. Otherwise let clip(z)=min(1,max(0,z)) and
+24:   x_i=ell_i clip((P-Q+r_i)/L), X=sum_i x_i,
+25:   y_A=M,
+26:   y_Hi=x_i,
+27:   y_C=G-(X-L/4)_+ = min(G,G-X+L/4).
+28: Then payments are nonnegative, coalition-covering, and own-bundle-monotone.
+29: Their total is exactly T+min(X,L/4)<=5T/4. They vanish at T=0.
+30: Each owner also receives zero when all her own resources are zero.
+31: 
+32: INCENTIVES AND NONNEGATIVITY
+33: A: M=min(L,(H-P)_+) where H is fixed under A's reports; hence M is own-A
+34: monotone in every L_i coordinate. For hardware i, the quantity
+35:   p_i=(P-sum_{j!=i}r_j)_+
+36: and L_-i=sum_{j!=i}ell_j are fixed under h_i changes. Its payment is
+37:   min(ell_i, p_i ell_i/(L_-i+ell_i)),
+38: with the natural zero value if the denominator vanishes. Both displayed terms
+39: are nondecreasing in ell_i, hence in h_i. This includes crossing h_i=L_i and
+40: the L=0 boundary. For C, H,L,Q,r_i are fixed. Each x_i(P) is nondecreasing and
+41: ell_i/L-Lipschitz, so X(P) is nondecreasing and1-Lipschitz. Also X saturates at
+42: L by P=H because H-Q+r_i=L+r_i>=L. Therefore, for P'<=P,
+43:   0<=X(P)-X(P')<=G(P)-G(P').
+44: It follows that G-(X-L/4)_+ is nondecreasing. Since P-Q+r_i<=P, each x_i is
+45: at most ell_i min(1,P/L), so X<=min(L,P)<=G. Thus y_C>=0. If P=0, X=G=0;
+46: if h_i=0 then ell_i=x_i=0; if all L_i=0 then M=0. These claims also hold at
+47: zero-production profiles. No strict truthfulness or coalition-strategyproofness
+48: is claimed.
+49: 
+50: LOCAL-OWNER COALITIONS
+51: Let D=G-R. Then M=L-D and0<=D<=L. Since r_i>=0,
+52:   x_i>=ell_i clip((P-Q)/L)=ell_i D/L.
+53: Thus for any hardware subset I,
+54:   sum_I(ell_i-x_i)<=L-D=M,
+55: and A plus I receives at least ell(I), its local-only worth. The L=0 case is
+56: immediate.
+57: 
+58: GRID-OWNER COALITIONS: THE LOAD-BEARING BOUND
+59: Fix all h,L reports and regard hardware payments as functions x_i(p) of a
+60: counterfactual grid report p. For hardware subset I write H_I=sum_I h_i and
+61:   d_I(p)=min(p,H_I)-sum_I x_i(p).
+62: On p<=H_I this is nondecreasing: the subtracted sum has Lipschitz constant
+63: ell(I)/L<=1. On p>=H_I it is nonincreasing. Consequently its own-past maximum
+64: at current P is
+65:   c_I=d_I(t), t=min(P,H_I).
+66: Define c_env=max_I c_I (including the empty set). Clearly0<=c_env<=G.
+67: 
+68: We prove X+c_env-G<=L/4. Since x_i has saturated by P=H, replace current P by
+69: p=G without changing X or any t=min(P,H_I). Fix a candidate I and set
+70:   s=ell(I)/L in[0,1].
+71: If H_I>=p, then t=p and
+72:   X+c_I-p=sum_{j notin I}x_j(p).
+73: For each j outside I, Q-r_j>=sum_{i in I}r_i, so
+74:   (p-Q+r_j)/L <= (p-r(I))/L <=ell(I)/L=s.
+75: Therefore the preceding sum is at most L(1-s)s.
+76: 
+77: If H_I<p, write delta=(p-H_I)/L>0 and t=H_I. For j outside I,
+78:   (p-Q+r_j)/L <= s+delta,
+79: so outside payment is at most L(1-s)clip(s+delta). The total increase of
+80: inside payments from t to p is at most s(p-t)=Ls delta, by the same Lipschitz
+81: bound. Hence
+82:   X+c_I-p
+83:   = sum_outside x_j(p) +sum_inside[x_i(p)-x_i(t)] -(p-t)
+84:   <=L(1-s)[clip(s+delta)-delta]
+85:   <=L s(1-s)<=L/4.
+86: The middle inequality holds for delta<=1-s by equality, and for delta>=1-s
+87: because1-delta<=s. Maximizing over I proves c_env<=G-X+L/4. Together with
+88: c_env<=G this gives c_env<=min(G,G-X+L/4)=y_C. Since c_env>=d_I(P), every
+89: grid-plus-hardware coalition is covered by y_C+sum_I x_i>=min(P,H_I).
+90: 
+91: BOTH ENERGY OWNERS
+92: Its worth is v(I)=ell(I)+min(P,r(I)). Its incremental local contribution
+93: M_I=v(I)-min(P,H_I)=min(ell(I),(H_I-P)_+) is at most
+94: M=min(L,(H-P)_+). The grid-coalition inequality therefore gives
+95:   y_A+y_C+sum_I x_i >=M+min(P,H_I)>=v(I).
+96: Coalitions with neither energy owner have zero worth. All coalitions covered.
+97: 
+98: BUDGET AND ALL THETA
+99: By definition,
+100:   y_A+X+y_C=M+G+X-(X-L/4)_+=T+min(X,L/4)<=T+L/4<=5T/4.
+101: Mix the theta=1 rule with the original efficient own-monotone rule
+102: (0,R,ell_i), with fixed mixture weight theta. Fixed convex combinations preserve
+103: nonnegativity, coverage, and own-report monotonicity. A receives exactlytheta M;
+104: the total is T+theta min(X,L/4)<=(1+theta/4)T. The frozen O-profile static lower
+105: requires factor>=1+theta/4. Thus the exact continuous WORST TOTAL funding factor
+106: uniform over every finite m is C_theta=1+theta/4, even though the best
+107: pointwise-static-normalized factor
+108: K_theta is strictly greater than1 whenever theta>0. These are compatible facts.
+109: 
+110: ACTIVE UNBOUNDED SHARPNESS
+111: For every even m take h_i=L_i=1 and P=m/2. All actual owners/resources are active.
+112: Then T=m and M=m/2. A+all hardware requires a+sumx>=m. Average the grid-plus-I
+113: coalition inequalities over all size-m/2 subsets I: c+(1/2)sumx>=m/2.
+114: Add one half of (a+sumx>=m), one full copy of the averaged grid inequality,
+115: and one half of (a>=theta m/2). The resulting left side is exactly total,
+116: and therefore
+117:   total>=m+theta m/4.
+118: Thus sharpness holds with both owner and resource counts growing, not merely
+119: through zero padding. The averaging ingredient is standard balanced counting.
+120: The displayed rule is an upper bound for each fixed m; the uniform sharpness
+121: claim does not assert this implementation is optimal on the one-pod subclass.
+122: 
+123: STATUS
+124: This proof was derived after the prior packet was frozen. After the first Fable
+125: snapshot, the final balanced-counting sentence was clarified to display the
+126: weights1/2,1,1/2 explicitly; no inequality or theorem changed. Audit its Lipschitz
+127: and denominator arguments independently before promotion. It does not prove
+128: the exact continuous K_theta, group-strategyproofness, private-cost truthfulness,
+129: or any result for arbitrary mixed ownership. It assumes equal unit net margins.
+130: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

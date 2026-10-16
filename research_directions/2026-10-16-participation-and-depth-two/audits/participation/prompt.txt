@@ -1,0 +1,284 @@
+Task and review objective:
+Adversarial static proof review of PARTICIPATION_THEOREMS.txt. Verify the local-share sharp 1+theta theorem, distinguish total-production from per-profile static-minimum denominator, and rigorously check the two continuous all-profile marginal-contribution-floor lower proofs. In particular verify every displayed static optimal payment covers every coalition at O,V,U, all fixed-owner incentive inequalities, exact theta ranges, and economic utility/participation limits. The finite-domain primal/dual verifier is supplied as a consistency aid; you cannot run it and must not imply you did. Identify concrete mistakes, missing assumptions, or overclaimed novelty. No speculative literature assertions.
+
+
+FILE PARTICIPATION_THEOREMS.txt
+1: Public participation and fairness in the clean local-energy/grid institution
+2: 16 October 2026. Bounded theory lane. Conventional proofs plus exact finite LP
+3: certificates; historical novelty NOT established. This changes the floor-free
+4: contract by explicitly adding payment floors, and does not solve its open cases.
+5: 
+6: 1. FIXED MODEL AND TWO BASELINES
+7: 
+8: For every finite m, actual owners are A, C, H_1,...,H_m. A exclusively owns
+9: local capacities L_j, C exclusively owns shared grid capacity P, and H_j
+10: exclusively owns hardware capacity h_j. Public unit coefficients and unit net
+11: output values. Reports are arbitrary nonnegative reals, owners/roles fixed;
+12: deviations are coordinatewise withholding within an actual owner's bundle.
+13: Let ell_j=min(h_j,L_j), r_j=h_j-ell_j, L=sum ell_j, H=sum h_j,
+14: R=min(P,H-L), T=L+R. An owner coalition with hardware set I has worth
+15:   0                         without either energy owner;
+16:   sum_I ell_j               with A but not C;
+17:   min(P,sum_I h_j)           with C but not A;
+18:   sum_I ell_j+min(P,sum_I r_j) with both A and C.
+19: The known efficient all-profile own-monotone rule is (0,R,ell_1,...,ell_m).
+20: 
+21: For a PUBLIC floor f(b)>=0 imposed only on A, define STATIC minimum funding
+22:   B_f(b)=min sum_i z_i,
+23:   subject to z>=0, z(S)>=v_b(S) for every S, z_A>=f(b).
+24: There are no comparisons between different report profiles in this definition.
+25: Let K_f be the infimum, over ALL-PROFILE own-bundle-monotone covering rules
+26: respecting f, of sup_{b:B_f(b)>0} sum_i y_i(b)/B_f(b), with zero funding
+27: required when B_f=0. Thus K_f isolates extra incentive cost beyond static
+28: stability and the already imposed fairness constraint. It differs from total
+29: subsidy factor C_f normalized by T. Always B_f>=T.
+30: 
+31: 2. A SIMPLE SHARP TRADEOFF FOR A PUBLIC LOCAL-PRODUCTION SHARE
+32: 
+33: Fix theta>=0. Impose f_L=theta L. This is a public contractual surplus-share
+34: floor, NOT a claim about A's private reservation cost. For all finite m,
+35:   inf_rules sup_b (sum_i y_i/T) = 1+theta.
+36: Upper: add theta L to A's payment in the known efficient rule, leaving all
+37: other payments unchanged. Coverage survives; own-A monotonicity follows from
+38: L increasing in each L_j; other own payments are unchanged. Total=T+theta L
+39: <= (1+theta)T. At T=0, L=R=0 and all payments are zero.
+40: Lower: take every h_j=L_j=1 and P=m. Then T=L=m and the coalition excluding A
+41: already produces m. Its payments plus A's floor force total>=(1+theta)m.
+42: This lower bound is STATIC. It holds for every m, with all m+2 owners and all
+43: 2m+1 resources active. There is no additional worst-case incentive-factor
+44: loss relative to the worst-case static funding requirement. This statement
+45: does NOT assert K_f=1 or pointwise optimal static funding at every profile.
+46: 
+47: 3. A DIFFERENT PUBLIC FLOOR HAS A GENUINE INCENTIVE PREMIUM
+48: 
+49: Fix 0<=theta<=1 and impose the marginal-contribution floor
+50:   f_M(b)=theta M_A(b), where M_A=T-min(P,H).
+51: This quantity is nonnegative and own-A monotone, since the second term does
+52: not depend on A's report. It is a normative share of A's contribution to the
+53: grand coalition, not an outside-option estimate and not standard individual
+54: rationality. M_A is the classical grand-coalition marginal/utopia quantity;
+55: using it as a floor is the additional design choice. It can be zero even when
+56: A provides technologically useful substitutes. All-profile rule (theta M_A,
+57: R,ell_1,...,ell_m) gives C_f<=1+theta and consequently K_f<=1+theta.
+58: 
+59: Nevertheless, on the same clean K2,2 ownership institution,
+60:   K_f >= max{(8+2theta)/(8+theta), (4+2theta)/5}.
+61: The first lower is strictly above 1 for every theta>0. Hence the extra cost
+62: cannot be attributed solely to the static floor or to changed ownership.
+63: Only four actual owners and two or three profiles are used. As a lower bound
+64: for the class containing all m, this applies to that class; it does not prove
+65: growth with m or close the optimal all-real factor.
+66: 
+67: Proof of the first lower. Profile order is (P,h1,h2,L1,L2). Let
+68:   O=(1,1,1,1,1), V=(2,1,1,1,1).
+69: At O, T=2 and M_A=1. Its exact static funding is B_f(O)=2+theta/2:
+70: feasible payment (a,c,x,y)=(theta,theta/2,1-theta/2,1-theta/2).
+71: For the matching static lower, A+H1+H2 requires a+x+y>=2, and C+H1,
+72: C+H2 require 2c+x+y>=2. Their sum gives a+2c+2x+2y>=4;
+73: adding a>=theta and dividing by2 yields total>=2+theta/2.
+74: At V, B_f(V)=T=2, witnessed by (0,0,1,1), because M_A=0.
+75: 
+76: Suppose a rule has total funding <=K B_f at each profile. At O,
+77:   total_O+c_O-a_O >=2   [sum of C+H1 and C+H2 constraints],
+78: so c_O >= 2+theta-K(2+theta/2).
+79: At V, coalition A+H1+H2 requires a_V+x_V+y_V>=2, so
+80:   c_V<=2K-2.
+81: Own-C monotonicity implies c_O<=c_V. Hence
+82:   K(4+theta/2)>=4+theta,
+83: which is the stated (8+2theta)/(8+theta). Only C changes its report.
+84: 
+85: Proof of the second lower. Add U=(1,2,1,1,1). Here T=3, M_A=2, and
+86: B_f(U)=3 for all theta<=1: payment (2,1,0,0) covers every coalition and
+87: satisfies the floor. Grand-coalition coverage gives the matching lower.
+88: At O, C+H1 implies c_O+x_O>=1.
+89: At V, the preceding argument gives c_V<=2K-2, and c_O<=c_V.
+90: At U, C+H2 implies c_U+y_U>=1. The floor gives a_U>=2theta. Budget gives
+91:   x_U<=3K-1-2theta.
+92: Own-H1 monotonicity implies x_O<=x_U. Thus
+93:   1 <= c_O+x_O <=5K-3-2theta,
+94: or K>=(4+2theta)/5. All owners and zero reports remain in the fixed domain.
+95: 
+96: At theta=1/2 the first bound is18/17. At theta=1 the second is6/5. An exact
+97: finite-profile LP on all243 profiles in {0,1,2}^5 attains these respective
+98: bounds, with exact primal and dual verification. This proves sharpness on
+99: THAT FINITE DOMAIN only. No continuous upper of18/17 or6/5 has been proved.
+100: The numerical search is discovery; the displayed lower proofs require no LP.
+101: 
+102: 4. GENUINE PUBLIC RESERVATION OUTSIDE OPTIONS REQUIRE DIFFERENT ACCOUNTING
+103: 
+104: A constant q>0 as a floor for A on EVERY profile rules out any finite factor
+105: relative to T, since profiles with T=0 are allowed. Likewise a per-kW floor
+106: kappa*sum_j L_j is unbounded relative to T when hardware is zero or arbitrarily
+107: small. It is invalid to omit these profiles while claiming the original
+108: all-profile domain. Finite absolute funding remains possible.
+109: 
+110: If publicly contracted reservation retainers q_i>=0 are fixed independently
+111: of subsequent reports, y_i=q_i+y_i^0 preserves own-payment monotonicity and
+112: coverage and costs T+Q, Q=sum_i q_i. It guarantees y_i>=q_i. At a zero-production
+113: profile B_q=Q, so this additive term is unavoidable. On any explicitly restricted
+114: admitted domain T>=T_min>0 the rule has factor<=1+Q/T_min; this is an admission
+115: condition, not a theorem on the original unrestricted report domain.
+116: 
+117: For q_i to be a genuine public reservation utility, the participation decision
+118: must be specified: outside utility q_i is foregone upon entering a binding slot
+119: contract and cannot simultaneously be earned by withholding after entry.
+120: Alternatively, q_i is an already negotiated retainer and the game allocates
+121: incremental net surplus afterward. Either interpretation keeps private costs
+122: out of the theorem. If withheld resources can earn report-dependent outside
+123: revenue, utilities are y_i+outside_i(withheld)-cost_i and own-payment monotonicity
+124: is insufficient. Public observed usage costs must be explicitly reimbursed or
+125: netted from the objective, consistently for every coalition. A report-dependent
+126: cost is not made harmless merely by calling it public.
+127: 
+128: 5. RESEARCH INTERPRETATION
+129: 
+130: Most defensible applied first contract: separately funded public availability
+131: retainer plus a committed short-window net-surplus game. Record all gross
+132: costs/retainers and the subsidy denominator. Do not claim observed pooling gains.
+133: The marginal-contribution floor is a mathematically useful, falsifiable fairness
+134: extension; it requires explicit adoption by participants, and is not inferred
+135: from physical battery ownership. It provides a clean incentive-versus-static
+136: separation on the economically simple class. It does NOT settle the original
+137: floor-free arbitrary mixed-owner depth-two frontier, whose target remains live.
+138: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE flow_oracle.py
+1: """Exact independent max-profit flow oracle for bipartite resource graphs."""
+2: from fractions import Fraction as Q
+3: 
+4: def value(cap,edges):
+5:     d=len(cap);neighbors=[[] for _ in range(d)]
+6:     for u,v,p in edges:
+7:         u,v=int(u),int(v);neighbors[u].append(v);neighbors[v].append(u)
+8:     color={}
+9:     for root in range(d):
+10:         if root in color:continue
+11:         color[root]=0;stack=[root]
+12:         while stack:
+13:             u=stack.pop()
+14:             for v in neighbors[u]:
+15:                 if v not in color:color[v]=1-color[u];stack.append(v)
+16:                 elif color[v]==color[u]:raise RuntimeError('non-bipartite graph')
+17:     N=d+2;s=d;t=d+1;graph=[[] for _ in range(N)]
+18:     def add(u,v,c,k):
+19:         graph[u].append([v,Q(c),Q(k),len(graph[v])]);graph[v].append([u,Q(0),-Q(k),len(graph[u])-1])
+20:     for u,c in enumerate(cap):
+21:         if color[u]==0:add(s,u,c,0)
+22:         else:add(u,t,c,0)
+23:     total=sum(cap)
+24:     for u,v,p in edges:
+25:         u,v=int(u),int(v)
+26:         if color[u]==1:u,v=v,u
+27:         add(u,v,total,-Q(p))
+28:     objective=Q(0)
+29:     while True:
+30:         dist=[None]*N;dist[s]=Q(0);prev=[None]*N
+31:         for _ in range(N-1):
+32:             change=False
+33:             for u in range(N):
+34:                 if dist[u] is None:continue
+35:                 for k,(v,c,cost,rev) in enumerate(graph[u]):
+36:                     if c>0 and (dist[v] is None or dist[u]+cost<dist[v]):dist[v]=dist[u]+cost;prev[v]=(u,k);change=True
+37:             if not change:break
+38:         if dist[t] is None or dist[t]>=0:break
+39:         node=t;path=[]
+40:         while node!=s:
+41:             u,k=prev[node];path.append((u,k));node=u
+42:             if len(path)>N:raise RuntimeError('negative cycle in shortest path')
+43:         amount=min(graph[u][k][1] for u,k in path);objective-=amount*dist[t]
+44:         for u,k in path:
+45:             v,c,cost,rev=graph[u][k];graph[u][k][1]-=amount;graph[v][rev][1]+=amount
+46:     return objective
+47: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE verify_floor_certificates.py
+1: """Independent Fraction replay; no SciPy or floor_probe import.
+2: Reconstructs all coalitions by exact primal max-profit flow and all static LP
+3: primal/dual witnesses before replaying the inter-profile mechanism certificate.
+4: """
+5: from fractions import Fraction as Q
+6: from functools import lru_cache
+7: from pathlib import Path
+8: import gzip
+9: import json
+10: import sys
+11: from flow_oracle import value
+12: 
+13: def require(ok, reason):
+14:     if not ok:
+15:         raise RuntimeError(reason)
+16: 
+17: def verify(path):
+18:     text=gzip.open(path,'rt').read() if str(path).endswith('.gz') else Path(path).read_text()
+19:     doc=json.loads(text);m=doc['m'];n=m+2;d=2*m+1;theta=Q(doc['theta'])
+20:     profiles=[tuple(map(Q,b)) for b in doc['all_profiles']]
+21:     owner=[1]+list(range(2,n))+[0]*m
+22:     edges=[edge for j in range(1,m+1) for edge in [(0,j,1),(j,m+j,1)]]
+23:     C=len(profiles)*n
+24:     @lru_cache(None)
+25:     def coal(k, mask):
+26:         cap=tuple(profiles[k][r] if mask&(1<<owner[r]) else Q(0) for r in range(d))
+27:         return value(cap,edges)
+28:     def floor(k):
+29:         if doc['kind']=='constant':return theta
+30:         if doc['kind']=='local':
+31:             return theta*coal(k,((1<<n)-1)^2)
+32:         require(doc['kind']=='marginal','unknown floor')
+33:         return theta*(coal(k,(1<<n)-1)-coal(k,((1<<n)-1)^1))
+34:     funding=list(map(Q,doc['static_funding']));allmask=(1<<n)-1
+35:     require(len(funding)==len(profiles)==len(doc['static_certificates']),'profile lengths')
+36:     for k,static in enumerate(doc['static_certificates']):
+37:         x=list(map(Q,static['primal']));w=list(map(Q,static['dual']))
+38:         A=[[-Q(bool(mask&(1<<i))) for i in range(n)] for mask in range(1,1<<n)]
+39:         rhs=[-coal(k,mask) for mask in range(1,1<<n)]
+40:         A.append([-Q(i==0) for i in range(n)]);rhs.append(-floor(k))
+41:         require(len(x)==n and len(w)==len(rhs),'static certificate lengths')
+42:         require(all(v>=0 for v in x+w),'negative primal/dual')
+43:         require(all(sum(a*z for a,z in zip(row,x))<=r for row,r in zip(A,rhs)),'static primal infeasible')
+44:         require(all(sum(wj*A[j][i] for j,wj in enumerate(w))>=-1 for i in range(n)),'static dual infeasible')
+45:         require(sum(x)==-sum(wj*r for wj,r in zip(w,rhs))==funding[k],'static funding mismatch')
+46:     def reconstruct(tag):
+47:         kind=tag[0];k=tag[1]
+48:         if kind=='budget':return {**{k*n+i:Q(1) for i in range(n)},C:-funding[k]},Q(0)
+49:         if kind=='floor':return {k*n:Q(-1)},-floor(k)
+50:         if kind=='coalition':
+51:             mask=tag[2]
+52:             return {k*n+i:Q(-1) for i in range(n) if mask&(1<<i)},-coal(k,mask)
+53:         require(kind=='monotone','bad certificate tag')
+54:         ell,i=tag[2:]
+55:         require(all(profiles[k][r]==profiles[ell][r] for r in range(d) if owner[r]!=i),'other owner changed')
+56:         require(all(profiles[k][r]<=profiles[ell][r] for r in range(d) if owner[r]==i),'wrong report order')
+57:         return {k*n+i:Q(1),ell*n+i:Q(-1)},Q(0)
+58:     combo={};rhs=Q(0)
+59:     for item in doc['certificate']:
+60:         w=Q(item['weight']);require(w>=0,'negative dual weight');row,r=reconstruct(item['tag'])
+61:         for j,a in row.items():combo[j]=combo.get(j,Q(0))+w*a
+62:         rhs+=w*r
+63:     require(combo.get(C,0)<0,'missing negative factor coefficient')
+64:     require(all(v>=0 for j,v in combo.items() if j!=C),'negative payment remainder')
+65:     lower=rhs/combo[C];require(lower==Q(doc['exact_lower']),'lower mismatch')
+66:     x=list(map(Q,doc['primal']));require(len(x)==C+1 and all(v>=0 for v in x),'bad primal')
+67:     K=x[C];require(K==lower==Q(doc['exact_primal']),'finite primal-dual gap')
+68:     lookup={b:k for k,b in enumerate(profiles)};levels=list(map(Q,doc['levels']));count=0
+69:     for k,b in enumerate(profiles):
+70:         pay=x[k*n:(k+1)*n]
+71:         require(sum(pay)<=K*funding[k] and pay[0]>=floor(k),'mechanism budget/floor')
+72:         for mask in range(1,1<<n):
+73:             require(sum(pay[i] for i in range(n) if mask&(1<<i))>=coal(k,mask),'mechanism coalition')
+74:         for j in range(d):
+75:             ix=levels.index(b[j])
+76:             if ix+1<len(levels):
+77:                 nxt=list(b);nxt[j]=levels[ix+1];ell=lookup[tuple(nxt)];i=owner[j]
+78:                 require(pay[i]<=x[ell*n+i],'mechanism own monotonicity');count+=1
+79:     return {'file':Path(path).name,'kind':doc['kind'],'theta':str(theta),'exact_static_normalized_factor':str(K),'profiles':len(profiles),'coalition_checks':len(profiles)*allmask,'static_certificates':len(profiles),'own_adjacent_checks':count,'dual_terms':len(doc['certificate']),'status':'PASS','scope':'finite domain only','oracle':'independent exact Fraction max-profit flow'}
+80: 
+81: if __name__=='__main__':
+82:     paths=sys.argv[1:] or sorted(Path(__file__).parent.glob('floor-*.json'))
+83:     for path in paths:print(json.dumps(verify(path)),flush=True)
+84: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

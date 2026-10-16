@@ -1,0 +1,155 @@
+INDEPENDENT AUDIT: CONTINUOUS PUBLIC MARGINAL-FLOOR RULE
+16 October 2026. Architecture lane; canonical and institution files unchanged.
+
+VERDICT
+The all-real, all-m proof in institution/CONTINUOUS_ATTACK.txt survives this
+independent audit. It establishes the uniform sharp total-payment factor
+C_theta=1+theta/4 for0<=theta<=1 in the specified clean fixed-owner local-energy/
+grid institution. It does not solve arbitrary mixed ownership or the exact
+pointwise-static-normalized K_theta. No historical novelty claim is audited.
+
+One minor exposition issue was found and fixed by the institution author:
+the active-even-m sharpness combination must weight the three inequalities
+by1/2,1,1/2 (equivalently1,2,1 before division). The corrected source now
+displays those weights explicitly. No other substantive or boundary defect
+was found.
+
+RULE AND MODEL CHECKED
+Actual owners are A(all local capacities L_i), C(grid capacity P), and one
+hardware owner H_i for each h_i, for any finite m>=1. Reports are arbitrary
+nonnegative real capacities and utility is payment only, with binding
+coordinatewise underreports. Put
+  ell_i=min(h_i,L_i), r_i=h_i-ell_i,
+  L=sum ell_i, Q=sum r_i, H=L+Q,
+  G=min(P,H), R=min(P,Q), T=L+R, M=T-G.
+For theta=1 and L>0, define
+  x_i=ell_i clip((P-Q+r_i)/L), X=sum x_i,
+  y_A=M, y_C=G-(X-L/4)_+, y_Hi=x_i.
+At L=0, use y_A=0,y_C=G,all x_i=0. For arbitrary theta, mix this rule with
+the efficient rule(0,R,ell_i), using fixed weight theta on the new rule.
+
+1. OWN-REPORT MONOTONICITY AND ZERO BOUNDARIES
+Identity M=min(L,(H-P)_+) holds in all three regimes P<=Q, Q<P<H, P>=H.
+When A changes any or all local reports, H and P stay fixed and L increases
+coordinatewise. Therefore y_A is own-bundle monotone. This argument does
+not mistakenly hold Q fixed when A changes its reports.
+
+For hardware i, the original numerator P-Q+r_i equals
+P-sum_{j!=i}r_j and is independent of h_i. Likewise L_-i is fixed. Writing
+p_i=(P-sum_{j!=i}r_j)_+, its payment equals
+  min{ell_i, p_i ell_i/(L_-i+ell_i)}.
+Both terms are nondecreasing in ell_i. For the second, the derivative is
+p_i L_-i/(L_-i+ell_i)^2 wherever the denominator is positive. If L_-i=0,
+the expression is min{ell_i,p_i} for positive ell_i and tends to zero as
+ell_i decreases to zero. Thus the L=0 boundary is continuous in own payment.
+After h_i reaches L_i, ell_i remains constant and so does its payment;
+the increase of residual r_i cancels from the numerator. Whole own-report
+monotonicity therefore holds through every clipping threshold.
+
+For grid owner C, every ell_i,r_i,L,Q,H is fixed. Each x_i(P) is increasing
+and ell_i/L-Lipschitz, so X(P) is increasing and1-Lipschitz. By P=H,
+P-Q+r_i=L+r_i>=L, hence X has saturated at L. Therefore for P'>=P,
+  0<=X(P')-X(P)<=min(P',H)-min(P,H)=G(P')-G(P).
+The positive-part function is increasing and1-Lipschitz, proving that
+G-(X-L/4)_+ is nondecreasing. This also covers intervals crossing P=H.
+When L=0, C simply receives the increasing function G.
+
+The inequality P-Q+r_i<=P gives X<=min(L,P)<=G. Hence y_C>=0.
+All other payments are nonnegative. If T=0 then L=0 and G=T=0, so every
+payment is zero. Hardware h_i=0 forces x_i=0; grid P=0 forces y_C=0;
+all A-owned local capacities zero forces M=0. Mixing preserves these facts.
+
+2. LOCAL-ENERGY COALITIONS
+Set D=G-R. In every regime,
+  D/L=clip((P-Q)/L) for L>0, and M=L-D.
+Since r_i>=0, x_i>=ell_i D/L and x_i<=ell_i. For any hardware subset I,
+  ell(I)-x(I)<=ell(I)(1-D/L)<=L-D=M.
+Thus A plus I receives at least ell(I), its exact local-only production.
+At L=0 all such worths vanish.
+
+3. GRID COALITIONS: INDEPENDENT SUBSET-ENVELOPE DERIVATION
+For fixed hardware and local reports, define
+  d_I(p)=min(p,H_I)-x_I(p), H_I=sum_{i in I}h_i.
+On p<=H_I, d_I is increasing because x_I is s-Lipschitz, where
+s=ell(I)/L<=1. On p>=H_I it is decreasing. Therefore its maximum over
+past grid reports0<=p<=P occurs at t=min(P,H_I). Put
+  c_I=d_I(t), c_env=max_I c_I.
+The empty subset gives0, and c_I<=t<=G, so0<=c_env<=G.
+
+It suffices to show X+c_I-G<=L/4 for every I. Current P may be replaced
+by p=G: if P>H, all x_i have already saturated and t=min(P,H_I)=H_I
+does not change. Otherwise p=P.
+
+Case H_I>=p. Here t=p and X+c_I-p=x_outside(p). For j outside I,
+Q-r_j>=r(I), hence
+  (p-Q+r_j)/L <= (p-r(I))/L <= ell(I)/L=s.
+Clipping is monotone and s lies in[0,1], so outside payment is at most
+L(1-s)s<=L/4. Negative numerators cause no problem.
+
+Case H_I<p. Write delta=(p-H_I)/L>0, so t=H_I. For every outside j,
+its clipping argument is at most s+delta, and inside payments increase
+between t and p by at most s(p-t)=Ls delta. Consequently
+  X+c_I-p
+  =x_outside(p)+[x_inside(p)-x_inside(t)]-(p-t)
+  <=L(1-s)[clip(s+delta)-delta]
+  <=Ls(1-s)<=L/4.
+The middle inequality uses clip(s+delta)-delta<=s: it is equality below
+the upper clip and becomes1-delta<=s above it. The edge cases s=0,s=1
+are included. Thus c_env<=G-X+L/4 as well as c_env<=G, giving
+  c_env<=min(G,G-X+L/4)=y_C.
+Since d_I(P)<=c_env, every C-plus-hardware coalition is covered.
+
+4. COALITIONS CONTAINING BOTH ENERGY OWNERS
+For a hardware subset I, the difference between its joint-energy worth and
+grid-only worth is exactly
+  ell(I)+min(P,r(I))-min(P,H_I)
+    =min(ell(I),(H_I-P)_+)=M_I.
+This is at most M=min(L,(H-P)_+), since both arguments increase when I is
+enlarged to all hardware. Adding A's payment M to the already established
+grid-coalition inequality covers every coalition containing both energy
+owners. Coalitions with neither energy owner have zero production. Together
+with Sections2--3, this exhausts all coalitions, including empty hardware sets.
+
+5. BUDGET, INTERPOLATION, AND SHARPNESS
+The exact theta=1 identity is
+  total=M+G+X-(X-L/4)_+=T+min(X,L/4)<=T+L/4<=5T/4.
+Fixed convex interpolation with the efficient rule preserves every proved
+eligibility property, gives A exactly theta M, and gives exact total
+  T+theta min(X,L/4)<=(1+theta/4)T.
+The public parameter theta is fixed independently of the report profile.
+
+For any positive even m, choose h_i=L_i=1 and P=m/2. Then T=m,M=m/2.
+Let a,c,X denote payments to A,C,and all hardware. Coalition coverage gives
+  a+X>=m,
+and averaging grid-plus-I constraints over all m/2-element hardware subsets
+gives c+X/2>=m/2. The floor is a>=theta m/2. Applying weights1/2,1,1/2
+to these inequalities yields
+  a+c+X>=m+theta m/4.
+This proves uniform sharpness with growing active owner/resource counts.
+It does not assert optimality of this implementation on every fixed m.
+All reports in this lower family belong to the same specified model; within
+each problem the actual owners/roles remain fixed.
+
+6. CORROBORATING CHECKS AND SCOPE
+Read and reran institution/verify_continuous_rule.py under python3 -B -O.
+All12 combinations of m=1,2,3 and theta=0,1/3,1/2,1 passed exact Fraction
+checks against the independent max-profit flow oracle. This includes all
+coalitions, adjacent own-coordinate increases, nonnegativity, floor, exact
+budget identity, zero-production and zero-own-resource conventions. Counts
+per theta are189/3645/67797 coalition checks and54/810/10206 own-coordinate
+comparisons for m=1/2/3. The active even-m equality checks passed for
+m=2,4,8,16,32,64,128 and theta=1/3,1. These bounded computations corroborate
+the proof but do not prove its all-real or all-m quantifiers.
+
+Since B_theta>=T, the new rule also supplies K_theta<=1+theta/4. Together
+with the earlier continuous lower bounds,
+  max{(8+2theta)/(8+theta),(4+2theta)/5}<=K_theta<=1+theta/4.
+In particular K_1 lies in[6/5,5/4] and K_(1/2) in[18/17,9/8]. The exact
+continuous K_theta remains open. Uniform C_theta sharpness is compatible
+with K_theta>1 because their normalization differs profile by profile.
+
+This is a theorem for the public marginal-contribution floor, equal unit
+net margins, and the clean roles A/C/H_i. It adds no private opportunity
+costs, false-name guarantees, coalition-strategyproofness, or arbitrary
+mixed-resource ownership. Historical novelty still requires a primary-source
+comparison. No manuscript or institution file was edited during this audit.

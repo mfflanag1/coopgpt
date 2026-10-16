@@ -1,0 +1,165 @@
+Public participation and fairness in the clean local-energy/grid institution
+16 October 2026. Bounded theory lane. Conventional proofs plus exact finite LP
+certificates; historical novelty NOT established. This changes the floor-free
+contract by explicitly adding payment floors, and does not solve its open cases.
+
+1. FIXED MODEL AND TWO BASELINES
+
+For every finite m>=1, actual owners are A, C, H_1,...,H_m. A exclusively owns
+local capacities L_j, C exclusively owns shared grid capacity P, and H_j
+exclusively owns hardware capacity h_j. Public unit coefficients and unit net
+output values. Reports are arbitrary nonnegative reals, owners/roles fixed;
+deviations are coordinatewise withholding within an actual owner's bundle.
+Let ell_j=min(h_j,L_j), r_j=h_j-ell_j, L=sum ell_j, H=sum h_j,
+R=min(P,H-L), T=L+R. An owner coalition with hardware set I has worth
+  0                         without either energy owner;
+  sum_I ell_j               with A but not C;
+  min(P,sum_I h_j)           with C but not A;
+  sum_I ell_j+min(P,sum_I r_j) with both A and C.
+The known efficient all-profile own-monotone rule is (0,R,ell_1,...,ell_m).
+
+For a PUBLIC floor f(b)>=0 imposed only on A, define STATIC minimum funding
+  B_f(b)=min sum_i z_i,
+  subject to z>=0, z(S)>=v_b(S) for every S, z_A>=f(b).
+There are no comparisons between different report profiles in this definition.
+Let K_f be the infimum, over ALL-PROFILE own-bundle-monotone covering rules
+respecting f, of sup_{b:B_f(b)>0} sum_i y_i(b)/B_f(b), with zero funding
+required when B_f=0. Thus K_f isolates extra incentive cost beyond static
+stability and the already imposed fairness constraint. Define the total funding
+factor C_f=inf_rules sup_{b:T(b)>0} sum_i y_i(b)/T(b), additionally requiring
+zero payments at T=0. When a positive floor at T=0 prevents that requirement,
+no finite all-profile C_f exists. Always B_f>=T.
+
+2. A SIMPLE SHARP TRADEOFF FOR A PUBLIC LOCAL-PRODUCTION SHARE
+
+Fix theta>=0. Impose f_L=theta L. This is a public contractual surplus-share
+floor, NOT a claim about A's private reservation cost. For all finite m,
+  inf_rules sup_b (sum_i y_i/T) = 1+theta.
+Upper: add theta L to A's payment in the known efficient rule, leaving all
+other payments unchanged. Coverage survives; own-A monotonicity follows from
+L increasing in each L_j; other own payments are unchanged. Total=T+theta L
+<= (1+theta)T. At T=0, L=R=0 and all payments are zero.
+Lower: take every h_j=L_j=1 and P=m. Then T=L=m and the coalition excluding A
+already produces m. Its payments plus A's floor force total>=(1+theta)m.
+This lower bound is STATIC. It holds for every m, with all m+2 owners and all
+2m+1 resources active. There is no additional worst-case incentive-factor
+loss relative to the worst-case static funding requirement. This statement
+does NOT assert K_f=1 or pointwise optimal static funding at every profile.
+
+3. A DIFFERENT PUBLIC FLOOR HAS A GENUINE INCENTIVE PREMIUM
+
+Fix 0<=theta<=1 and impose the marginal-contribution floor
+  f_M(b)=theta M_A(b), where M_A=T-min(P,H).
+This quantity is nonnegative and own-A monotone, since the second term does
+not depend on A's report. It is a normative share of A's contribution to the
+grand coalition, not an outside-option estimate and not standard individual
+rationality. M_A is the classical grand-coalition marginal/utopia quantity;
+using it as a floor is the additional design choice. It can be zero even when
+A provides technologically useful substitutes. All-profile rule (theta M_A,
+R,ell_1,...,ell_m) gives C_f<=1+theta and consequently K_f<=1+theta.
+
+The exact worst STATIC funding ratio is
+  sup_b B_f(b)/T(b) = 1+theta/4,
+over every finite m and real capacities. To prove the upper, set lambda=f_M/L
+when L>0 and zero otherwise. Since M_A<=L, 0<=lambda<=theta<=1. Besides the
+efficient vector (0,R,ell_j), the energy-only vector (L,P,0,...,0) always covers
+every coalition: A alone among energy owners can provide at most L, C at most
+P, and both at most L+P. Their convex mixture with weight lambda on the
+energy-only vector covers every coalition and has
+  a=f_M, c=R+lambda(P-R), x_j=(1-lambda)ell_j,
+with total T+lambda(P-R). If P<=H-L, R=P so the extra term vanishes.
+If P>=H, M_A=0 so it vanishes again. In the remaining case H-L<P<H,
+T=H and M_A=H-P. Put t=(P-(H-L))/L in(0,1). Then the extra funding divided byT
+is theta*(L/H)*t*(1-t)<=theta/4. The matching lower is the profile O below,
+where B_f(O)/T(O)=1+theta/4. This is sharp on the unbounded class because m=2
+belongs to it; no claim is made that every m has this same sharp constant.
+This pointwise static construction generally FAILS own-report monotonicity:
+at theta=1 the hardware-1 payment is1/2 at O and0 at U below.
+
+Nevertheless, on the same clean K2,2 ownership institution,
+  K_f >= max{(8+2theta)/(8+theta), (4+2theta)/5}.
+The first lower is strictly above 1 for every theta>0. Hence the extra cost
+cannot be attributed solely to the static floor or to changed ownership.
+Only four actual owners and two or three profiles are used. As a lower bound
+for the class containing all m, this applies to that class; it does not prove
+growth with m or close the optimal all-real factor.
+In particular, a lower K_f>1 does NOT establish C_f>1+theta/4. The two suprema
+and their profile-dependent denominators differ. For theta=1, exact finite
+production-normalized LPs on the m=2 and m=3 ternary grids have optimum5/4,
+equal to the global worst static ratio. A continuous upper C_f<=5/4 has NOT
+been proved here.
+
+Proof of the first lower. Profile order is (P,h1,h2,L1,L2). Let
+  O=(1,1,1,1,1), V=(2,1,1,1,1).
+At O, T=2 and M_A=1. Its exact static funding is B_f(O)=2+theta/2:
+feasible payment (a,c,x,y)=(theta,theta/2,1-theta/2,1-theta/2).
+For the matching static lower, A+H1+H2 requires a+x+y>=2, and C+H1,
+C+H2 require 2c+x+y>=2. Their sum gives a+2c+2x+2y>=4;
+adding a>=theta and dividing by2 yields total>=2+theta/2.
+At V, B_f(V)=T=2, witnessed by (0,0,1,1), because M_A=0.
+
+Suppose a rule has total funding <=K B_f at each profile. At O,
+  total_O+c_O-a_O >=2   [sum of C+H1 and C+H2 constraints],
+so c_O >= 2+theta-K(2+theta/2).
+At V, coalition A+H1+H2 requires a_V+x_V+y_V>=2, so
+  c_V<=2K-2.
+Own-C monotonicity implies c_O<=c_V. Hence
+  K(4+theta/2)>=4+theta,
+which is the stated (8+2theta)/(8+theta). Only C changes its report.
+
+Proof of the second lower. Add U=(1,2,1,1,1). Here T=3, M_A=2, and
+B_f(U)=3 for all theta<=1: payment (2,1,0,0) covers every coalition and
+satisfies the floor. Grand-coalition coverage gives the matching lower.
+At O, C+H1 implies c_O+x_O>=1.
+At V, the preceding argument gives c_V<=2K-2, and c_O<=c_V.
+At U, C+H2 implies c_U+y_U>=1. The floor gives a_U>=2theta. Budget gives
+  x_U<=3K-1-2theta.
+Own-H1 monotonicity implies x_O<=x_U. Thus
+  1 <= c_O+x_O <=5K-3-2theta,
+or K>=(4+2theta)/5. All owners and zero reports remain in the fixed domain.
+
+At theta=1/2 the first bound is18/17. At theta=1 the second is6/5. An exact
+finite-profile LP on all243 profiles in {0,1,2}^5 attains these respective
+bounds, with exact primal and dual verification. This proves sharpness on
+THAT FINITE DOMAIN only. No continuous upper of18/17 or6/5 has been proved.
+The numerical search is discovery; the displayed lower proofs require no LP.
+
+4. GENUINE PUBLIC RESERVATION OUTSIDE OPTIONS REQUIRE DIFFERENT ACCOUNTING
+
+A constant q>0 as a floor for A on EVERY profile rules out any finite factor
+relative to T, since profiles with T=0 are allowed. Likewise a per-kW floor
+kappa*sum_j L_j is unbounded relative to T when hardware is zero or arbitrarily
+small. It is invalid to omit these profiles while claiming the original
+all-profile domain. Finite absolute funding remains possible.
+
+For a vector q=(q_i) of per-owner public floors, define
+  B_q(b)=min{sum_i z_i : z>=q and z(S)>=v_b(S) for every S}.
+This extends the earlier single-owner B_f definition.
+If publicly contracted reservation retainers q_i>=0 are fixed independently
+of subsequent reports, y_i=q_i+y_i^0 preserves own-payment monotonicity and
+coverage and costs T+Q, Q=sum_i q_i. It guarantees y_i>=q_i. At a zero-production
+profile B_q=Q, so this additive term is unavoidable. On any explicitly restricted
+admitted domain T>=T_min>0 the rule has factor<=1+Q/T_min; this is an admission
+condition, not a theorem on the original unrestricted report domain.
+
+For q_i to be a genuine public reservation utility, the participation decision
+must be specified: outside utility q_i is foregone upon entering a binding slot
+contract and cannot simultaneously be earned by withholding after entry.
+Alternatively, q_i is an already negotiated retainer and the game allocates
+incremental net surplus afterward. Either interpretation keeps private costs
+out of the theorem. If withheld resources can earn report-dependent outside
+revenue, utilities are y_i+outside_i(withheld)-cost_i and own-payment monotonicity
+is insufficient. Public observed usage costs must be explicitly reimbursed or
+netted from the objective, consistently for every coalition. A report-dependent
+cost is not made harmless merely by calling it public.
+
+5. RESEARCH INTERPRETATION
+
+Most defensible applied first contract: separately funded public availability
+retainer plus a committed short-window net-surplus game. Record all gross
+costs/retainers and the subsidy denominator. Do not claim observed pooling gains.
+The marginal-contribution floor is a mathematically useful, falsifiable fairness
+extension; it requires explicit adoption by participants, and is not inferred
+from physical battery ownership. It provides a clean incentive-versus-static
+separation on the economically simple class. It does NOT settle the original
+floor-free arbitrary mixed-owner depth-two frontier, whose target remains live.

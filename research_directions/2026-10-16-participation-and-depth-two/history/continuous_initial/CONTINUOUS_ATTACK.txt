@@ -1,0 +1,129 @@
+SHARP CONTINUOUS FAIR-FLOOR RULE: C_theta=1+theta/4
+16 October2026, follow-up after curated packet freeze. Candidate conventional
+proof requiring independent audit. No historical novelty claim. This is the
+PUBLIC MARGINAL-FLOOR extension, not arbitrary mixed ownership/floor-free work.
+
+MODEL
+Use the exact clean K2,m fixed-owner contract of PARTICIPATION_THEOREMS.txt,
+m>=1, arbitrary nonnegative real reports, unit coefficients/values. Actual owner
+A exclusively controls all local capacities L_i; C exclusively controls shared
+grid capacity P; separate owner H_i controls hardware h_i at pod i. One output
+unit uses one hardware unit and either one local unit at that same pod or one
+shared grid unit. Coalition resources are exactly its members' reports. Owners
+may withhold any coordinatewise smaller part of their fixed bundle, with no
+additional report-dependent outside utility. Identity and roles never change.
+Put
+  ell_i=min(h_i,L_i), r_i=h_i-ell_i,
+  L=sum ell_i, Q=sum r_i, H=L+Q,
+  G=min(P,H), R=min(P,Q), T=L+R, M=T-G.
+The public floor is y_A>=theta M,0<=theta<=1. No private-cost utility is added.
+The static optimum satisfies sup B_theta/T=1+theta/4 by the frozen theorem.
+
+THETA=1 RULE (linear time in number of pods)
+If L=0, pay A0,C=G, all hardware0. Otherwise let clip(z)=min(1,max(0,z)) and
+  x_i=ell_i clip((P-Q+r_i)/L), X=sum_i x_i,
+  y_A=M,
+  y_Hi=x_i,
+  y_C=G-(X-L/4)_+ = min(G,G-X+L/4).
+Then payments are nonnegative, coalition-covering, and own-bundle-monotone.
+Their total is exactly T+min(X,L/4)<=5T/4. They vanish at T=0.
+Each owner also receives zero when all her own resources are zero.
+
+INCENTIVES AND NONNEGATIVITY
+A: M=min(L,(H-P)_+) where H is fixed under A's reports; hence M is own-A
+monotone in every L_i coordinate. For hardware i, the quantity
+  p_i=(P-sum_{j!=i}r_j)_+
+and L_-i=sum_{j!=i}ell_j are fixed under h_i changes. Its payment is
+  min(ell_i, p_i ell_i/(L_-i+ell_i)),
+with the natural zero value if the denominator vanishes. Both displayed terms
+are nondecreasing in ell_i, hence in h_i. This includes crossing h_i=L_i and
+the L=0 boundary. For C, H,L,Q,r_i are fixed. Each x_i(P) is nondecreasing and
+ell_i/L-Lipschitz, so X(P) is nondecreasing and1-Lipschitz. Also X saturates at
+L by P=H because H-Q+r_i=L+r_i>=L. Therefore, for P'<=P,
+  0<=X(P)-X(P')<=G(P)-G(P').
+It follows that G-(X-L/4)_+ is nondecreasing. Since P-Q+r_i<=P, each x_i is
+at most ell_i min(1,P/L), so X<=min(L,P)<=G. Thus y_C>=0. If P=0, X=G=0;
+if h_i=0 then ell_i=x_i=0; if all L_i=0 then M=0. These claims also hold at
+zero-production profiles. No strict truthfulness or coalition-strategyproofness
+is claimed.
+
+LOCAL-OWNER COALITIONS
+Let D=G-R. Then M=L-D and0<=D<=L. Since r_i>=0,
+  x_i>=ell_i clip((P-Q)/L)=ell_i D/L.
+Thus for any hardware subset I,
+  sum_I(ell_i-x_i)<=L-D=M,
+and A plus I receives at least ell(I), its local-only worth. The L=0 case is
+immediate.
+
+GRID-OWNER COALITIONS: THE LOAD-BEARING BOUND
+Fix all h,L reports and regard hardware payments as functions x_i(p) of a
+counterfactual grid report p. For hardware subset I write H_I=sum_I h_i and
+  d_I(p)=min(p,H_I)-sum_I x_i(p).
+On p<=H_I this is nondecreasing: the subtracted sum has Lipschitz constant
+ell(I)/L<=1. On p>=H_I it is nonincreasing. Consequently its own-past maximum
+at current P is
+  c_I=d_I(t), t=min(P,H_I).
+Define c_env=max_I c_I (including the empty set). Clearly0<=c_env<=G.
+
+We prove X+c_env-G<=L/4. Since x_i has saturated by P=H, replace current P by
+p=G without changing X or any t=min(P,H_I). Fix a candidate I and set
+  s=ell(I)/L in[0,1].
+If H_I>=p, then t=p and
+  X+c_I-p=sum_{j notin I}x_j(p).
+For each j outside I, Q-r_j>=sum_{i in I}r_i, so
+  (p-Q+r_j)/L <= (p-r(I))/L <=ell(I)/L=s.
+Therefore the preceding sum is at most L(1-s)s.
+
+If H_I<p, write delta=(p-H_I)/L>0 and t=H_I. For j outside I,
+  (p-Q+r_j)/L <= s+delta,
+so outside payment is at most L(1-s)clip(s+delta). The total increase of
+inside payments from t to p is at most s(p-t)=Ls delta, by the same Lipschitz
+bound. Hence
+  X+c_I-p
+  = sum_outside x_j(p) +sum_inside[x_i(p)-x_i(t)] -(p-t)
+  <=L(1-s)[clip(s+delta)-delta]
+  <=L s(1-s)<=L/4.
+The middle inequality holds for delta<=1-s by equality, and for delta>=1-s
+because1-delta<=s. Maximizing over I proves c_env<=G-X+L/4. Together with
+c_env<=G this gives c_env<=min(G,G-X+L/4)=y_C. Since c_env>=d_I(P), every
+grid-plus-hardware coalition is covered by y_C+sum_I x_i>=min(P,H_I).
+
+BOTH ENERGY OWNERS
+Its worth is v(I)=ell(I)+min(P,r(I)). Its incremental local contribution
+M_I=v(I)-min(P,H_I)=min(ell(I),(H_I-P)_+) is at most
+M=min(L,(H-P)_+). The grid-coalition inequality therefore gives
+  y_A+y_C+sum_I x_i >=M+min(P,H_I)>=v(I).
+Coalitions with neither energy owner have zero worth. All coalitions covered.
+
+BUDGET AND ALL THETA
+By definition,
+  y_A+X+y_C=M+G+X-(X-L/4)_+=T+min(X,L/4)<=T+L/4<=5T/4.
+Mix the theta=1 rule with the original efficient own-monotone rule
+(0,R,ell_i), with fixed mixture weight theta. Fixed convex combinations preserve
+nonnegativity, coverage, and own-report monotonicity. A receives exactlytheta M;
+the total is T+theta min(X,L/4)<=(1+theta/4)T. The frozen O-profile static lower
+requires factor>=1+theta/4. Thus the exact continuous WORST TOTAL funding factor
+uniform over every finite m is C_theta=1+theta/4, even though the best
+pointwise-static-normalized factor
+K_theta is strictly greater than1 whenever theta>0. These are compatible facts.
+
+ACTIVE UNBOUNDED SHARPNESS
+For every even m take h_i=L_i=1 and P=m/2. All actual owners/resources are active.
+Then T=m and M=m/2. A+all hardware requires a+sumx>=m. Average the grid-plus-I
+coalition inequalities over all size-m/2 subsets I: c+(1/2)sumx>=m/2.
+Add one half of (a+sumx>=m), one full copy of the averaged grid inequality,
+and one half of (a>=theta m/2). The resulting left side is exactly total,
+and therefore
+  total>=m+theta m/4.
+Thus sharpness holds with both owner and resource counts growing, not merely
+through zero padding. The averaging ingredient is standard balanced counting.
+The displayed rule is an upper bound for each fixed m; the uniform sharpness
+claim does not assert this implementation is optimal on the one-pod subclass.
+
+STATUS
+This proof was derived after the prior packet was frozen. After the first Fable
+snapshot, the final balanced-counting sentence was clarified to display the
+weights1/2,1,1/2 explicitly; no inequality or theorem changed. Audit its Lipschitz
+and denominator arguments independently before promotion. It does not prove
+the exact continuous K_theta, group-strategyproofness, private-cost truthfulness,
+or any result for arbitrary mixed ownership. It assumes equal unit net margins.

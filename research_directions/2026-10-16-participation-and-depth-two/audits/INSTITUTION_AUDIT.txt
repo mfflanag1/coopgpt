@@ -1,0 +1,207 @@
+INDEPENDENT PARTICIPATION-FLOOR AUDIT -- 16 October 2026
+Reviewer lane: architecture. Read-only audit of institution work.
+
+VERDICT
+No substantive mathematical error found in PARTICIPATION_THEOREMS.txt.
+The continuous lower bounds and the two claimed243-profile exact optima survive
+independent derivation and exact replay. The continuous upper remains1+theta;
+the finite18/17 and6/5 optima must not be promoted to continuous upper bounds.
+Historical novelty and real-world outside-option interpretation were not audited.
+
+FILES EXAMINED
+/private/tmp/coopgpt-consolidation-20261016/institution/PARTICIPATION_THEOREMS.txt
+/private/tmp/coopgpt-consolidation-20261016/institution/verify_floor_certificates.py
+/private/tmp/coopgpt-consolidation-20261016/institution/flow_oracle.py
+/private/tmp/coopgpt-consolidation-20261016/institution/floor_probe.py
+/private/tmp/coopgpt-consolidation-20261016/institution/floor-marginal-m2-levels3-theta1_2.json
+/private/tmp/coopgpt-consolidation-20261016/institution/floor-marginal-m2-levels3-theta1_1.json
+
+1. BASE MODEL AND EFFICIENT RULE
+For fixed hardware set I and fixed ownership, the stated coalition values are
+consistent with the resource-flow model. With both energy owners present,
+local service ell_j=min(h_j,L_j) may be maximized independently before shared
+grid serves residual demand. Hence worth is ell(I)+min(P,r(I)).
+
+The all-profile rule (0,R,ell_1,...,ell_m) covers every coalition. With A alone,
+hardware payments equal local coalition output. With both energy owners,
+R=min(P,r([m]))>=min(P,r(I)). With C alone:
+  if P<=r([m]), then R=P already covers its coalition output;
+  otherwise R=r([m])>=r(I), so R+ell(I)>=h(I)>=min(P,h(I)).
+Without either energy owner coalition worth is zero. Total payment equals T.
+Own-A payment is constant zero; own-C payment increases with P; own-H_j
+payment min(h_j,L_j) increases with h_j. No owner identities change.
+
+For the local-output floor theta L, the proposed addition to A is own-A
+monotone and leaves other own-payment maps unchanged. It gives total
+T+theta L<=(1+theta)T, with zero payments when T=0. The profile h_j=L_j=1,
+P=m gives T=L=m, while the coalition excluding A also produces m. Adding
+A's floor proves the matching static lower (1+theta)m. This proves equality
+of worst-case T-normalized funding and worst-case static requirement; it
+does not prove pointwise equality to B_f or K_f=1. The source states this
+distinction correctly. For literal completeness, specify m>=1 rather than
+the potentially ambiguous phrase 'every finite m'; m=0 is a degenerate
+zero-production domain and not the intended institution.
+
+2. MARGINAL FLOOR: STATIC BASELINES
+Payments below are ordered (a,c,x,y), for owners(A,C,H1,H2).
+For theta in[0,1], the three displayed baselines are exact.
+
+O=(P,h1,h2,L1,L2)=(1,1,1,1,1): T=2, M_A=1.
+The witness(theta,theta/2,1-theta/2,1-theta/2) is nonnegative.
+For A plus one hardware owner it pays1+theta/2>=1; for A plus both it
+pays2; for C plus one it pays1; for C plus both it pays2-theta/2>=1.
+With both energy owners and one hardware owner it pays1+theta>=1;
+the grand coalition receives2+theta/2>=2. Coalitions without hardware or
+without either energy owner have zero worth. Thus every coalition is covered.
+For a matching lower, add the constraints A+H1+H2, C+H1, C+H2 and A's
+floor. Their left side is2(a+c+x+y), right side4+theta. Therefore
+  B_f(O)=2+theta/2.
+
+V=(2,1,1,1,1): T=2, M_A=0. The witness(0,0,1,1) pays each present hardware
+owner1. Every coalition's production is at most its number of hardware
+owners, so every coalition is covered. The grand coalition forces total2:
+  B_f(V)=2.
+
+U=(1,2,1,1,1): T=3, M_A=2. The witness(2,1,0,0) meets the floor2theta.
+A alone with any hardware produces at most2, covered by its payment2;
+C alone with any hardware produces at most1, covered by its payment1;
+both energy owners with any hardware produce at most3, covered by their
+combined payment3. Without either energy owner production is zero.
+Grand-coalition coverage forces total3, hence
+  B_f(U)=3.
+
+3. OWN-REPORT INEQUALITIES AND CONTINUOUS LOWER BOUNDS
+At O, adding the two C+H_j constraints gives
+  total_O+c_O-a_O=2c_O+x_O+y_O>=2.
+With a_O>=theta and total_O<=K(2+theta/2),
+  c_O>=2+theta-K(2+theta/2).
+At V, the coalition A+H1+H2 has worth2, so c_V<=2K-2.
+Only C's report changes from O to V, increasing P from1 to2. Hence
+c_O<=c_V, giving
+  K(4+theta/2)>=4+theta,
+  K>=(8+2theta)/(8+theta).
+
+For the second bound, c_O+x_O>=1 by C+H1 coverage. At U,
+c_U+y_U>=1 by C+H2 coverage, a_U>=2theta, and total_U<=3K.
+Thus x_U<=3K-1-2theta. Only H1 changes from O to U, increasing h1 from1
+to2. Therefore x_O<=x_U, while c_O<=c_V<=2K-2 as above. Combining gives
+  1<=c_O+x_O<=5K-3-2theta,
+  K>=(4+2theta)/5.
+Every comparison is between actual reports of the same one owner, with all
+other owners' reports identical. Both lower bounds apply to any continuous
+all-profile rule because all three profiles belong to its required domain.
+They are strictly incentive-based after normalization by the exact static
+baseline; the first exceeds1 for every theta>0.
+
+The continuous upper (theta M_A,R,ell_1,...,ell_m) is valid: M_A=T-min(P,H)
+is nonnegative and nondecreasing in A's report, because the subtracted term
+does not depend on A. Its total is T+theta M_A<=(1+theta)T<=(1+theta)B_f.
+When B_f=0, T=0 and every payment is zero. Thus zero-baseline profiles are
+handled, rather than discarded.
+
+4. FINITE CERTIFICATES: TWO INDEPENDENT REPLAYS
+Ran verify_floor_certificates.py with python3 -B -O on both specified
+243-profile marginal-floor certificates. Its explicit require() checks
+remain enabled under optimization. Both passed:
+  theta=1/2: exact factor18/17,7 nonzero dual terms;
+  theta=1:   exact factor6/5,8 nonzero dual terms.
+Per file it replayed243 exact static primal/dual certificates,3645 coalition
+constraints,810 adjacent own-report comparisons, the mechanism budget/floor,
+and the exact matching dual lower bound using the independent Fraction flow
+oracle. The dual sign convention is correct: nonnegative payment remainders
+and a negative K coefficient give a lower bound on K.
+
+I additionally executed a separate Fraction replay directly from the JSON,
+using the displayed closed-form coalition values, with no import of either
+flow_oracle or floor_probe. Assertions were enabled in the accepted run.
+It verified:
+* The profiles are exactly the243 distinct elements of {0,1,2}^5, and levels
+  are exactly the increasing list[0,1,2].
+* Every mechanism payment is nonnegative and respects its floor and budget.
+* All3645 nonempty-coalition inequalities per file hold exactly.
+* Every one of the243 static primal/dual pairs has feasible nonnegative
+  variables and exactly matching objective equal to its stored B_f.
+* All1458 strict comparable whole-bundle own-report pairs per file satisfy
+  monotonicity, including simultaneous increases of A's two coordinates.
+* At theta=1/2 the O,V,U baselines are9/4,2,3; at theta=1 they are5/2,2,3.
+* The mechanism factors equal18/17 and6/5 respectively.
+The continuous analytic lower proofs already match those finite primal
+factors at these theta values. Therefore finite-domain sharpness is proved,
+independently of reliance on the discovery LP's numerical solver status.
+
+Minor verifier hardening, not a defect in the supplied certificates:
+verify_floor_certificates.py trusts the declared profile list and level list
+to describe the complete, unique Cartesian grid. It does not itself assert
+that completeness/uniqueness/sorting. Add those checks if the verifier will
+be distributed as a generic checker. The actual files satisfy them, as
+independently verified above. Adjacent comparisons then imply all coordinate-
+wise own-bundle comparisons by paths through that complete product domain.
+
+5. ECONOMIC AND SCOPE WORDING
+The marginal contribution floor is explicitly an added public normative
+constraint, not conventional private-cost individual rationality. It can
+vanish when the owner supplies useful substitutes. The text correctly avoids
+calling it an observed outside option. Positive constant retainers or per-kW
+floors cannot have finite T-normalized factors on a domain containing zero
+production, while fixed report-independent retainers preserve own-payment
+monotonicity when added to an eligible net-surplus rule. The participation
+timing caveat is necessary and correctly supplied.
+
+This audit does not establish growth with m, a continuous optimum18/17 or6/5,
+a result for the original floor-free arbitrary mixed-owner problem, or novelty.
+No institution or canonical file was changed. The coordinator subsequently
+authorized a separate reproducible replay script and results in this lane.
+
+6. ADDITIONAL GLOBAL STATIC RATIO -- CHECKED AFTER THE FIRST AUDIT
+The new exact claim sup_{b:T>0} B_f(b)/T=1+theta/4 is correct over the class
+of all finite m>=1, for0<=theta<=1. Here is an independent derivation.
+
+The efficient vector e=(0,R,ell_j) and the energy-only vector g=(L,P,0,...,0)
+both cover every coalition. For g, coalitions with only A among energy owners
+produce at most L; those with only C produce at most P; those with both
+produce at most L+P. Coalitions with neither have zero worth. Also
+0<=M_A<=L. Therefore lambda=theta M_A/L lies in[0,1] when L>0. When L=0,
+M_A=0 and lambda=0. The convex mixture (1-lambda)e+lambda g meets A's
+floor and has total T+lambda(P-R).
+
+If P<=H-L, then R=P and the excess is zero. If P>=H, then T=H and M_A=0,
+so the excess is again zero. For H-L<P<H, necessarily L>0 and H>0, and
+R=H-L,T=H. Write t=(P-(H-L))/L, so0<t<1. Then
+  M_A=H-P=L(1-t), lambda=theta(1-t), P-R=Lt,
+  excess/T=theta(L/H)t(1-t)<=theta/4.
+The two endpoint cases are already included in the zero-excess branches.
+At T=0 both the floor and static optimum are zero. For O, L=H=2,P=1,
+so L/H=1,t=1/2 and the exact baseline B_f(O)=2+theta/2 attains the upper.
+Hence the global static constant is sharp, without asserting sharpness for
+every fixed m. The theta=1 static mixture pays H1 one half at O and zero
+at U; since O->U only increases H1's report, this construction is indeed
+not an own-report-monotone rule.
+
+The distinction K_f>1 versus C_f exceeding the global static ratio is vital.
+The current text now explicitly says the former does not imply the latter;
+that is correct because K_f and C_f have different profile-dependent
+denominators and may attain their worst cases at different profiles.
+
+7. REPRODUCIBLE INDEPENDENT REPLAY AND RESOLVED HARDENING
+The independent replay is now saved as replay_institution_closed_form.py,
+with INSTITUTION_REPLAY.json. It uses only Python's standard library and
+Fraction arithmetic, no institution-code imports, and explicit fail-closed
+require() calls. It passed under python3 -B -O. In addition to the checks
+above, it independently replays the exact finite dual, and verifies the
+new static mixture's budget and all3645 coalition inequalities on each of
+the two243-profile grids. It checks static maxima9/8 and5/4 respectively,
+records input certificate SHA256 hashes, and preserves all1458 strict
+whole-bundle monotonicity comparisons per certificate.
+
+The institution author implemented the suggested profile-domain hardening.
+I inspected the new checks for m>=1, dimensions, unique sorted nonnegative
+levels, profile count, unique profiles, exact Cartesian set equality, and
+normalizer whitelist, and reran both marginal-floor certificates successfully.
+The m>=1 wording and zero-production convention are now explicit. Thus the
+minor concerns above are resolved in the current source/verifier.
+
+The subsequently added production-normalized theta=1 finite certificates
+were also replayed with the hardened existing verifier: m=2(243 profiles)
+and m=3(2187 profiles) both attain5/4 exactly. This additional replay uses
+the institution flow oracle, not the separately written closed-form script.
+It supports only the stated finite-domain claim, not a continuous5/4 upper.

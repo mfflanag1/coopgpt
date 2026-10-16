@@ -1,0 +1,98 @@
+Public heterogeneous pod values: exact extension of the sharp fairness rule
+16 October2026. Separate closing extension; frozen theorem packets unchanged.
+
+STATEMENT AND FIXED DOMAIN
+Use the clean ownership institution from CONTINUOUS_ATTACK.txt. Fix arbitrary
+nonnegative PUBLIC values v_1,...,v_m before any capacity reports. At pod i,
+both local-powered and grid-powered output have the SAME value v_i and each
+consumes one hardware unit and one unit of its chosen power source. There
+remains one distinct actual hardware owner per pod, one owner A of all local
+resources, and one owner C of the shared grid resource. These identities never
+change. The extension permits heterogeneous values, not heterogeneous input
+coefficients, route-specific prices, private values, or mixed ownership.
+
+Choose once and for all a public ordering with v_1>=...>=v_m>=0, resolving ties
+independently of reports. Set v_{m+1}=0 and d_k=v_k-v_{k+1}>=0. Let N denote
+the SAME full owner set in every construction below. For each prefix1..k,
+define a unit-value production game on N that ignores all hardware/local rows
+outside that prefix but retains the same shared-grid row. Outside-prefix
+hardware owners are null in that component, not deleted or relabeled.
+
+For any coalition S let h_i(S)=h_i if hardware owner i is in S and0 otherwise;
+let L_i(S)=L_i if A is in S and0 otherwise; P(S)=P if C is in S and0 otherwise.
+Put ell_i(S)=min(h_i(S),L_i(S)), r_i(S)=h_i(S)-ell_i(S). The unit prefix value is
+  T_k(S)=sum_{i<=k}ell_i(S)+min(P(S),sum_{i<=k}r_i(S)).
+The actual public-value production game satisfies, for EVERY coalition S,
+  F_v(S)=sum_{k=1}^m d_k T_k(S).
+
+PROOF OF THE COALITIONWISE DECOMPOSITION
+Fix any S and a feasible allocation with local q_i and grid g_i. Replace
+q_i by ell_i and g_i by min(g_i,h_i-ell_i). Since q_i<=ell_i and
+q_i+g_i<=h_i, the new total service ell_i+min(g_i,h_i-ell_i) is at least
+q_i+g_i. Grid use weakly decreases and hardware use stays at most h_i.
+Both routes have the same nonnegative public value, so this never lowers
+the objective. Thus choose ell_i local output first and
+allocate the remaining shared grid to residual capacities r_i. The residual
+problem is fractional knapsack with equal unit resource costs and public
+values v_i. Greedily fill residual capacities in the fixed descending-value
+order. Its allocation g has, for every prefix k SIMULTANEOUSLY,
+  sum_{i<=k}g_i=min(P(S),sum_{i<=k}r_i(S)).
+Every feasible allocation has each prefix sum at most that quantity. For any
+nonnegative vector z the telescoping identity sum_i v_i z_i equals
+sum_k d_k sum_{i<=k}z_i. Applying it to ell+g proves both the upper bound and
+simultaneous attainability of the displayed decomposition. This proves equality
+of actual coalition values, not merely an upper envelope of separate optima.
+The greedy fractional-knapsack step and the telescoping layer decomposition
+are established ingredients; no novelty is claimed for them.
+
+PAYMENTS, INCENTIVES, FLOOR, AND BUDGET
+For each prefix k run the sharp unit-value rule with the same fixed theta in
+[0,1], using the original full owner identities and actual reports on the rows
+that component retains. Denote its payments y_i^k. Define
+  y_i=sum_k d_k y_i^k.
+Each d_k is public, nonnegative, and independent of every report. Therefore:
+* Coverage: y(S)>=sum_k d_k T_k(S)=F_v(S), for every coalition S.
+* Nonnegativity follows componentwise. A whole-bundle underreport by A changes
+  any subset of her retained local rows in each component; that component's
+  proof already handles such reports. Each hardware owner changes the same
+  hardware coordinate in each prefix that includes her. C changes the same P
+  in every component. Each own payment is a fixed nonnegative sum of own-
+  monotone payments. No splitting of an actual owner is used.
+* The local owner's floor is exact:
+  y_A=theta sum_k d_k[T_k(N)-T_k(N\{A})]
+     =theta[F_v(N)-F_v(N\{A})].
+* Total funding is at most(1+theta/4)sum_k d_k T_k(N)
+  =(1+theta/4)F_v(N).
+All zero-value and zero-capacity cases are harmless. If every v_i=0, every
+payment is0. If a component has zero production, its payments are0. Zero own
+resources still imply zero own payment. The model has only weak individual
+truthfulness, as before.
+
+SHARPNESS AND COMPLEXITY
+The unit-value class is included, so the active even-m lower family proves
+the same optimal universal factor1+theta/4 over the entire public-value class
+with unbounded m. This is not a sharpness claim for every fixed heterogeneous
+value vector or for every fixed m; in particular m=1 admits factor1.
+Evaluate m prefix rules in total
+O(m^2) arithmetic operations after sorting, which costs O(m log m). This simple
+extension is not claimed to retain the base rule's linear-time complexity.
+Using the same grid row in the algebraic sum does NOT duplicate physical power:
+coalition-value equality was proved by one feasible greedy allocation, and the
+summed payments are a mathematical allocation rule for that one game.
+
+ECONOMIC SCOPE
+Pod values may represent fixed public per-unit net revenue for already admitted
+service, with the same value regardless of its power route. Public route-
+specific energy costs are not covered if they create different local/grid net
+values. Private values, nonlinear request latency, endogenous demand, general
+hardware-to-power ratios, and exclusive/mixed-role changes need new proofs.
+No empirical claim about real GPU pooling is made. Historical novelty of the
+combined payment result remains unconfirmed.
+
+FREE PRIMARY TEACHING SOURCE FOR THE ESTABLISHED GREEDY INGREDIENT
+MIT6.046J/18.410J, Demaine, Devadas and Lynch, Problem Set9 Solutions,
+4 May2015, Problem9-1(b), PDFpage2, states the fractional-knapsack greedy
+solution used as a classical ingredient here. Inspected16 October2026:
+https://ocw.mit.edu/courses/6-046j-design-and-analysis-of-algorithms-spring-2015/ff14ef9418b742bf99cfa9f52c6accd7_MIT6_046JS15_pset9sols.pdf
+The coalitionwise telescope and simultaneous prefix proof are supplied above,
+so the extension does not rely on any unverified stronger result in that source.

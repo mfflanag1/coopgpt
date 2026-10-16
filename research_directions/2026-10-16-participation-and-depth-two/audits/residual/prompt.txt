@@ -1,0 +1,329 @@
+Task and review objective:
+Adversarial review of forest/RESIDUAL_COMPOSITION.txt: verify claimed universal coverage and factor(3/2)(1+1/(2e)) for arbitrary fixed mixed owners and arbitrarily many branches; verify exact three-owner incentive failure and every beta>0 residual-credit failure. The primitive definition/proof is supplied as coordinator/MIXED_PRIMITIVE.txt. Determine if any coverage, budget, derivative, nonveto or all-profile statement is wrong. New candidate is intentionally NOT truthful; it is an obstruction to one construction, not an unrestricted lower. No conjectural envelope claim is supplied or should be approved. Verify calculation code statically only; coordinator will run it. No speculative novelty assertions.
+
+
+FILE forest/RESIDUAL_COMPOSITION.txt
+1: DIRECT LOCAL-RESIDUAL COMPOSITION: A SUB-TWO BUDGET WITH AN EXACT INCENTIVE OBSTRUCTION
+2: 16 October2026. New bounded attack; mathematical priority unassessed.
+3: 
+4: MODEL. D_d has activities p--h_j and h_j--l_j, unit profits/consumption. Actual owners have arbitrary fixed nonnegative bundles. Let H=sum_j h_j,M=sum_j min(h_j,l_j),R=H-M. Then
+5:  F=M+min(p,R)=min(H,p+M).
+6: At each local pair (h_j,l_j), run the proved mixed-owner two-input exponential rule, with total factor C=1+1/(2e). Let z_i be the sum of these local payments, and z_i^h the part paid against owner i's hardware accounts. For every coalition S, z(S)>=M(S), and z(N)<=C M. Each z_i is own-report nondecreasing.
+7: 
+8: CANDIDATE A. Define residual hardware account a_i=(H_i-z_i)_+, retain the owner's shared-power account p_i, run the mixed two-input rule on (a,p), obtaining t_i, and pay y_i=z_i+t_i.
+9: 
+10: COALITION COVERAGE IS VALID. Let z_S=sum_{i in S}z_i and a_S=sum_{i in S}(H_i-z_i)_+. If z_S>=H_S coverage is immediate. Otherwise a_S>=H_S-z_S and
+11:  z_S+t(S)>=z_S+min(a_S,p_S)>=min(H_S,z_S+p_S)
+12:           >=min(H_S,M(S)+p_S)=F(S).
+13: 
+14: BUDGET IS STRICTLY BELOW TWO. The local hardware part satisfies z_i^h<=H_i, and z_i>=z_i^h, so sum a_i<=H-Z_h with Z_h=sum_i z_i^h. For each local branch,
+15:   min(h_j,l_j)-Z_h,j <= h_j/2.
+16: If h_j<=l_j, hardware is the short pool and receives at least h_j/2. If h_j>=l_j, write eta=h_j/l_j>=1 (zero l_j is trivial) and rho=sum_i min(h_ij,l_j)/l_j<=eta. The hardware payment is (l_j/2)rho exp(1-rho)>= (h_j/2)exp(1-eta). The inequality eta[1+exp(1-eta)]>=2 for eta>=1 then proves the claim. Summing gives M-Z_h<=H/2.
+17: Hence
+18:  y(N)<=C M+C min(p,H-Z_h).
+19: If p<=H-M, this is at most C F. If p>=H-M, F=H and the displayed bound is at most C(M+H-Z_h)<=3C H/2. Thus this candidate always covers and has total factor
+20:   (3/2)(1+1/(2e)) approximately1.77591 <2.
+21: It fails truthfulness, as the next exact example shows.
+22: 
+23: EXACT THREE-OWNER, TWO-BRANCH COUNTEREXAMPLE.
+24: Fix owners I,A,B. Their allowed coordinates are fixed throughout:
+25:  I owns h_2=1,p=2,and l_1=x, with0<x<1;
+26:  A owns h_1=1;
+27:  B owns l_1=1.
+28: All other reports are0. The full production value is F=2. On local branch1, hardware total1 is short, capped local-power total1+x, and
+29:  q=(1/2)exp(-x).
+30: The local payments are z_I=qx,z_A=1-q,z_B=q. Branch2 has no local value.
+31: Candidate A has residual accounts
+32:  a_I=1-qx,a_A=q,a_B=0, so T_res=1+q(1-x)<2.
+33: All shared power belongs to I and is capped at T_res; thus the residual rule's long-pool capped ratio is1 and its mixing coefficient is exactly1/2.
+34: Consequently
+35:  t_I=(a_I+T_res)/2=1+q/2-qx,
+36:  y_I=z_I+t_I=1+q/2=1+(1/4)exp(-x).
+37: This strictly DECREASES as I's own local-power report x increases. In particular reporting1/2 rather than3/4 raises I's payment. Owners remain fixed, and the deviation changes one own coordinate only. No owner is veto: each complement coalition has positive production.
+38: 
+39: CANDIDATE B, A NATURAL REPAIR, ALSO FAILS. Deduct only a fixed fraction beta of local hardware payments, using a_i=H_i-beta z_i^h with0<beta<=1, and again pay z_i+t_i. In the same profile, a_I=1 and a_A=1-beta+beta q; the residual total2-beta+beta q is strictly below p=2. Therefore
+40:  y_I=1+(1-beta)/2+q(x+beta/2),
+41:  dy_I/dx=q(1-x-beta/2).
+42: For every beta>0 this is negative whenever1-beta/2<x<1. Thus no positive fixed residual-credit fraction repairs incentives within this architecture. This obstruction does not cover owner-specific adaptive corrections, different inner/outer mechanisms, or an unrestricted truthful rule.
+43: 
+44: LOAD-BEARING LESSON. Local subsidy credits have a nonlocal effect: a local-power report reduces another owner's residual hardware account, lowering the reporting owner's shared-power payment. Merely composing individually truthful primitives does not preserve truthfulness, even with three fixed owners, positive full production and no veto owner. A successful local-first rule needs an explicit payment correction for this spillover; the candidate's budget/coverage proofs alone are insufficient.
+45: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE forest/verify_residual.py
+1: from fractions import Fraction as Q
+2: import json
+3: 
+4: def require(condition, message):
+5:     if not condition:
+6:         raise RuntimeError(message)
+7: 
+8: def expminus(x, terms=90):
+9:     # For 0<=x<=1, alternating decreasing Taylor series bounds exp(-x).
+10:     require(Q(0)<=x<=Q(1),'Taylor argument outside certified interval')
+11:     total=Q(1); term=Q(1); lo=hi=total
+12:     for k in range(1,terms+1):
+13:         term *= -x/Q(k); total+=term
+14:         if k%2: lo=total
+15:         else: hi=total
+16:     require(lo<=hi and hi-lo<Q(1,10**90),'insufficient exponential enclosure')
+17:     return lo,hi
+18: 
+19: def add(X,Y): return X[0]+Y[0],X[1]+Y[1]
+20: def scale(c,X): return (c*X[0],c*X[1]) if c>=0 else (c*X[1],c*X[0])
+21: 
+22: checks=0
+23: for x in [Q(1,2),Q(3,4)]:
+24:     q=scale(Q(1,2),expminus(x))
+25:     # Candidate A exact reduced formula and branch conditions.
+26:     require(1+q[1]*(1-x)<2,'outer hardware must be short')
+27:     y=[add((Q(1),Q(1)),scale(Q(1,2),q)),add((Q(1),Q(1)),scale(-Q(1,2),q)),q]
+28:     # Coalitions: I alone1,A0,B0,IA2,IB1,AB1,IAB2.
+29:     # IA sum is EXACTLY2, so evaluate by cancellation not interval subtraction.
+30:     vals={1:Q(1),2:Q(0),4:Q(0),3:Q(2),5:Q(1),6:Q(1),7:Q(2)}
+31:     for mask,v in vals.items():
+32:         if mask==3: require(Q(2)==v,'IA exact equality')
+33:         else: require(sum(y[i][0] for i in range(3) if mask>>i&1)>=v,'coverage failure')
+34:         checks+=1
+35:     require(vals[6]>0 and vals[5]>0 and vals[3]>0,'veto owner')
+36:     checks+=1
+37: full=add((Q(1),Q(1)),scale(Q(1,4),expminus(Q(3,4))))
+38: under=add((Q(1),Q(1)),scale(Q(1,4),expminus(Q(1,2))))
+39: require(under[0]>full[1],'strict Candidate A incentive violation not certified');checks+=1
+40: 
+41: # Candidate B: any beta in(0,1] fails by derivative proof. Certify finite
+42: # deviations for representative exact beta values, no float decisions.
+43: for denom in range(1,101):
+44:     beta=Q(1,denom); xfull=1-beta/4; xunder=1-beta/3
+45:     def pay(x):
+46:         const=1+(1-beta)/2
+47:         return add((const,const),scale((x+beta/2)/2,expminus(x)))
+48:     u=pay(xunder);v=pay(xfull)
+49:     require(u[0]>v[1],f'Candidate B beta={beta} not certified')
+50:     checks+=1
+51: # Universal budget numerical constant is certified using e>8/3.
+52: # C<1+3/16=19/16, hence(3/2)C<57/32<2.
+53: require(Q(57,32)<2,'budget bound');checks+=1
+54: print(json.dumps({'status':'PASS','exact_rational_checks':checks,'candidate_A_gap_lower':float(under[0]-full[1]),'candidate_B_beta_examples':100,'scope':'finite certificates corroborate symbolic proof; no assertion of truthfulness'}))
+55: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE coordinator/MIXED_PRIMITIVE.txt
+1: Heterogeneous hardware with additive power rights
+2: 15 October 2026 -- scoping supplement, not a submitted manuscript
+3: 
+4: 1. Model and funding benchmark
+5: 
+6: Fix finitely many real owners i and hardware types j=1,...,m. Owner i reports
+7: (g_i1,...,g_im,q_i)>=0: hardware capacities and power entitlements. One owner may
+8: hold both kinds of input. All coefficients p_j,e_j are fixed and strictly
+9: positive. They denote public service value and incremental power per activity.
+10: For aggregate g,q define
+11:   F(g,q)=max sum_j p_j x_j
+12:           subject to 0<=x_j<=g_j and sum_j e_j x_j<=q.
+13: For coalition S, v_b(S)=F(sum_{i in S} g_i, sum_{i in S} q_i).
+14: Owner sets and technology are fixed while reports range over all nonnegative
+15: real bundles. A feasible deviation decreases any coordinates of that owner's
+16: bundle. Utilities are payments only. No assertion covers private opportunity
+17: costs, overreports, coordinated deviations, false identities or owner changes.
+18: 
+19: Let T=v_b(N). Fixed-profile required funding is
+20:   B(b)=min {sum_i z_i : z>=0, sum_{i in S}z_i>=v_b(S) for every S}.
+21: Nonnegative packing LP duality gives B(b)=T. Thus any payment above T in this
+22: model is not caused by the absence of an efficient core at a fixed profile.
+23: For a fixed institution and report domain D, define
+24:   Gamma(D)=inf_y sup_{b in D:B(b)>0} sum_i y_i(b)/B(b),
+25: where one rule y must be nonnegative, coalition-covering and own-report monotone
+26: on all D; require y=0 at B=0. Static subsidy is B-T; additional funding is
+27: sum y-B. These quantities must not be conflated.
+28: 
+29: 2. Two-input rule for actual owners with mixed bundles
+30: 
+31: An owner i holds (a_i,b_i)>=0. Put A=sum a_i, B=sum b_i, T=min(A,B).
+32: If T=0 pay everyone zero. Otherwise call a minimum-total input short and the
+33: other long; at ties either choice is allowed. Write s_i,l_i for that owner's
+34: short and long holdings, d_i=min(l_i,T), rho=sum_i d_i/T, and
+35:   p=(1/2) exp(1-rho),
+36:   z_i=(1-p)s_i+p d_i.
+37: The formula is defined directly on actual owners. No owner is permitted to
+38: split or merge strategically. It extends the exclusive-pool exponential rule
+39: already proved in the existing supplement (hist:exponential).
+40: 
+41: Lemma. The rule covers every coalition, is nondecreasing in either coordinate
+42: of each fixed owner, and totals at most C T, where C=1+1/(2e).
+43: 
+44: Proof. rho>=1 because total long holdings are at least T. For a coalition S,
+45: sum_{i in S}s_i>=v(S), and
+46: sum_{i in S}min(l_i,T)>=min(sum_{i in S}l_i,T)>=v(S).
+47: Both weights are nonnegative and sum to one, proving coverage. Total payment is
+48:   T[1+(rho-1) exp(1-rho)/2] <= (1+1/(2e))T,
+49: using max_{u>=0} u exp(-u)=1.
+50: 
+51: For incentives fix all other owners and the owner's opposite coordinate.
+52: Consider increasing its short coordinate x while it remains short. Then
+53: T=x+a for a fixed nonnegative remainder a. Away from clipping points,
+54: rho is nonincreasing and -rho/T<=rho'<=0, including the deviating owner's
+55: own long holding in the clipped sum. Hence 0<=p'<=p rho/T, and x<=T.
+56: The derivative of its short payment is
+57:   ((1-p)x)'=1-p-xp' >= 1-p(1+rho) >=0.
+58: The last inequality follows since (1+rho) exp(1-rho)/2 decreases from one on
+59: [1,infinity). Its other payment p min(l_i,T) also is nondecreasing, being a
+60: product of nonnegative nondecreasing factors.
+61: 
+62: If the increased coordinate is long, T is fixed. Write d=min(x,T) and
+63: gamma=sum_{h!=i}min(l_h,T). Then p=(1/2)exp(1-(d+gamma)/T).
+64: For x<T, (p d)'=p(1-d/T)>=0, and beyond T it is constant. The owner's short
+65: payment (1-p)s_i is also nondecreasing because p is nonincreasing in x.
+66: At equality of pool totals, all holdings are <=T, rho=1 and the owner's
+67: payment is (a_i+b_i)/2 on either side. Clipping boundaries are continuous.
+68: At T=0 payments are zero, continuous as T decreases to zero by the total
+69: payment bound C T and nonnegativity, and cannot
+70: decrease from zero after an increase. Piecewise monotonicity and continuity
+71: therefore prove coordinatewise monotonicity globally. Increasing all of one
+72: owner's coordinates sequentially proves whole-bundle monotonicity. QED.
+73: 
+74: This is a direct, rule-specific ownership argument. A generic truthful rule on
+75: two separately controlled accounts need not remain truthful after those
+76: accounts are controlled by one owner. No general merger or group-proofness
+77: claim follows from this lemma.
+78: 
+79: 3. Heterogeneous-star decomposition and mechanism
+80: 
+81: Sort types once so a_j=p_j/e_j is nonincreasing. Put a_{m+1}=0 and
+82: Delta_k=a_k-a_{k+1}>=0. Define h_j=e_j g_j and H_k=sum_{j<=k}h_j.
+83: Then the fractional-knapsack identity is
+84:   F(g,q)=sum_{k=1}^m Delta_k min(q,H_k).                    (1)
+85: Indeed write u_j=e_j x_j. The objective sum a_j u_j equals
+86: sum_k Delta_k sum_{j<=k}u_j. Each prefix is bounded by min(q,H_k), and filling
+87: types in the fixed sorted order attains every such prefix bound simultaneously.
+88: This proves (1), including coefficient ties and zero capacities.
+89: 
+90: For each prefix k give actual owner i the derived two-input bundle
+91:   (H_i,k,q_i)=(sum_{j<=k}e_j g_ij,q_i).
+92: Apply the preceding lemma to obtain z_i^k and define
+93:   y_i(b)=sum_k Delta_k z_i^k(b).                           (2)
+94: 
+95: Theorem. On all nonnegative real profiles, (2) is nonnegative, covers every
+96: coalition, is whole-owner underreport truthful, and satisfies
+97:   sum_i y_i <= (1+1/(2e)) F(sum_i g_i,sum_i q_i).
+98: The bound is independent of the numbers of owners and hardware types. Mixed
+99: ownership of hardware and power is permitted. Explicit evaluation takes
+100: O(m log m + nm) arithmetic operations and O(m) exponential evaluations after
+101: prefix aggregation; this is a real-arithmetic statement, not an exact finite-bit
+102: evaluation guarantee for transcendental numbers.
+103: 
+104: Proof. Identity (1) holds for every coalition, so summing component coverage
+105: with fixed nonnegative Delta_k proves coverage. Each owner's own coordinate
+106: increase raises its derived H_i,k and/or q_i, leaving other owners' derived
+107: reports fixed. The lemma and positive weights prove incentives. Summing the
+108: component budget bounds and applying (1) proves the budget. QED.
+109: 
+110: Each activity column touches a hardware row and the common power row, so
+111: this is a column-support-two packing class. The result improves the established
+112: grand-marginal 2T ceiling for this star class to about 1.183940T. It does not
+113: improve the bound for every column-support-two matrix, arbitrary hardware
+114: compatibility graph, multiple coupled power bottlenecks or discrete schedules.
+115: The generic form-count theorem can separately be better on particular
+116: technologies. We assert no pointwise payment dominance over other mechanisms.
+117: 
+118: The total bound is attained by THIS RULE in a single-type profile with three
+119: fixed owners having bundles (1,0),(1,0),(0,1), with p_1=e_1=1. This does not
+120: establish the optimal mechanism factor.
+121: 
+122: 4. Existing lower bound and exact live gap
+123: 
+124: One type is a subclass, so the existing 9/8 lower bound applies. To make the
+125: owner-preserving certificate explicit, use two hardware-only owners 0,1 and
+126: two power-only owners 2,3 at profiles
+127:   c=(1,1 | 1,1), a=(1,1 | 1,2), b=(2,1 | 1,1).
+128: At a, coverage of {0,2},{1,2},{0,1,3} gives 2Y(a)-y_3(a)>=4.
+129: At b, coverage of {1,2},{1,3},{0,2,3} gives 2Y(b)-y_0(b)>=4.
+130: At c, coverage of {0,3} plus monotonicity gives
+131: 1<=y_0(c)+y_3(c)<=y_0(b)+y_3(a)<=2Y(a)+2Y(b)-8.
+132: All three profiles have T=2. A uniform Y<=C T therefore requires 1<=8C-8,
+133: or C>=9/8. This is the earlier lower witness, reproduced rather than claimed
+134: as new. In particular the optimal uniform factor for the star class lies in
+135:   [9/8, 1+1/(2e)].
+136: 
+137: More precisely, positive-sum decomposition shows that the optimal uniform
+138: factor over arbitrary mixed-owner star technologies EQUALS that over arbitrary
+139: mixed-owner two-input technologies: a rule for the latter composes prefixwise,
+140: and the former contains the latter as m=1. Thus increasing heterogeneity in
+141: this star model cannot itself open a harder minimax problem. Closing this
+142: interval is exactly a two-input problem, not a new independent frontier.
+143: If the infimum is not attained, compose rules within any positive epsilon of
+144: the two-input infimum, then let epsilon decrease to zero.
+145: 
+146: 5. Institutional obstructions and reduction
+147: 
+148: Veto power. If one fixed owner is required for every positive-output coalition,
+149: paying it T and everybody else zero is efficient, covering and own-monotone.
+150: This is the conventional veto-player construction. For m compute owners,
+151: v({0} union S)=min(q,sum_{i in S}g_i), imposing y_0<=alpha T for fixed alpha
+152: in [0,1] instead gives optimal uniform total factor m-(m-1)alpha. The matching
+153: rule is y_0=alpha T, y_i=(1-alpha)min(g_i,q). Pair coverage at g_i=q=1 proves
+154: the lower bound. This extra funding is forced already at one profile by the
+155: distributional cap, not by incentives.
+156: 
+157: Full common access. For v(S)=min(sum_{i in S}g_i,P), fixed public P,
+158: B(b)=sum_i min(g_i,P), attained on every profile by singleton payments
+159: y_i=min(g_i,P), which are own-monotone. Static funding can be nT while Gamma=1.
+160: More generally, suppose each activity consumes exactly one private resource
+161: row (strictly positive coefficient), plus any number of nonnegative common
+162: resource rows with fixed capacities. Every coalition plan can be split among
+163: owners in proportion to their contribution of that activity's private row.
+164: Each owner's allocated subplan respects its private capacities and consumes
+165: no more of any public row than the original plan. Thus coalition value is at
+166: most the sum of singleton values; paying singleton values is covering,
+167: statically optimal and own-monotone. Exclude activities consuming no private
+168: row and assume finite optima. Full public access for each deviating coalition
+169: is an explicit optimistic outside-option convention, not simultaneous physical
+170: feasibility for all coalitions or a claim about actual rationed markets.
+171: 
+172: Broad additive power retains sparse hardness. Given any sparse nonnegative LP
+173: F(c)=max{p.x:Ax<=c,x>=0}, with p>0, nonzero columns of A and finite nonnegative
+174: capacities, append a row p.x<=q. The new production function
+175: G(c,q)=min(F(c),q), by scaling an optimal plan. Choose fixed w>=0 satisfying
+176: A^T w>=p and embed each original report b_i as (b_i,w.b_i). This preserves
+177: owner identities, coordinatewise underreport order and every coalition value,
+178: because F(c)<=w.c. Every column gains just one positive entry. A truthful
+179: covering rule for G therefore restricts to one for F with the same factor.
+180: Choosing w dual-optimal at a specified positive target profile makes the
+181: power row binding there; lowering q below T lowers output one-for-one. The
+182: chosen w is then held FIXED on the full embedded domain. This establishes a
+183: mathematical reduction, not an assertion that energy per activity equals price
+184: in real hardware. A generic additive-power label alone does not simplify the
+185: general sparse problem.
+186: 
+187: 6. Exact obstruction to a fixed greedy order beyond the star
+188: 
+189: There are two hardware rows H1,H2, two power rows P1,P2 and three activities:
+190:   a=(H1,P1), value 3; b=(H1,P2), value 2; c=(H2,P1), value 2.
+191: Every activity consumes one unit of each incident resource. The resource graph
+192: is a path, hence acyclic. Consider a greedy procedure that fixes one order of
+193: these activities independently of reports and fills each activity as much as
+194: remaining resources permit.
+195: 
+196: At capacities (H1,H2,P1,P2)=(1,0,1,1), optimal value is 3, so such an optimal
+197: greedy order must put a before b. At (1,1,1,0), it must put a before c. But at
+198: (1,1,1,1), a first yields value 3 whereas b=c=1 yields 4. Therefore no fixed
+199: activity order is optimal at all profiles, even on this three-edge path.
+200: This obstructs copying the star's fixed merit-order proof to arbitrary
+201: compatibility trees. It does NOT show that a different decomposition or payment
+202: rule cannot achieve the same factor, or that the general 2T bound is tight.
+203: 
+204: 7. Contribution boundary
+205: 
+206: Known ingredients: LP core existence, fractional knapsack/merit-order identity,
+207: positive-sum closure, veto allocation, singleton subadditivity arguments,
+208: the existing exclusive-pool exponential mechanism and its existing 9/8 witness.
+209: Candidate project extension: the explicitly proved mixed-owner monotonicity
+210: lemma, yielding a constructive uniform star-technology bound and the exact
+211: reduction of its minimax factor to the mixed two-input class. The internal
+212: proof and finite checks do not establish historical novelty. Literature
+213: comparisons and economic implementation qualifications accompany this note.
+214: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

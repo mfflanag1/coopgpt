@@ -1,0 +1,139 @@
+INDEPENDENT AUDIT: FIXED PUBLIC HETEROGENEOUS POD VALUES
+16 October 2026. Read-only audit of institution/PUBLIC_VALUE_EXTENSION.txt.
+
+VERDICT
+The extension is valid as stated. It preserves the uniform sharp factor
+1+theta/4, the exact floor theta times A's grand-coalition marginal, and all-
+profile own-bundle monotonicity. No substantive mathematical correction found.
+The crucial assumptions are fixed public nonnegative values, the SAME value
+for local and grid service at a given pod, unit input consumption in both
+modes, and the clean fixed ownership roles. The theorem is not for arbitrary
+mixed ownership or route-specific values/costs.
+
+1. LOCAL-FIRST REDUCTION IS EXACT FOR EVERY COALITION
+Fix a coalition S. Its h_i,L_i,P are actual capacities if their owners belong
+to S and zero otherwise. Let ell_i=min(h_i,L_i), r_i=h_i-ell_i. A feasible
+allocation has local service a_i and grid service g_i satisfying
+  0<=a_i<=ell_i, a_i+g_i<=h_i, sum g_i<=P.
+Replace it by a'_i=ell_i and g'_i=min(g_i,h_i-ell_i). Grid use cannot rise.
+Its service to pod i is
+  a'_i+g'_i=min(ell_i+g_i,h_i)>=a_i+g_i.
+Thus nonnegative same-route value v_i cannot decrease. This proves that
+maximizing local output first is without loss, even if the initial allocation
+used grid on a pod with available local energy. It also handles v_i=0.
+
+After local service is fixed, grid allocation is the fractional-knapsack
+problem max sum v_i g_i with0<=g_i<=r_i and sum g_i<=P. A fixed public
+descending order v_1>=...>=v_m admits the feasible greedy allocation
+  g_i=min(r_i,(P-sum_{j<i}r_j)_+).
+For every prefix k simultaneously,
+  sum_{i<=k}g_i=min(P,sum_{i<=k}r_i).
+This simultaneous attainment is the load-bearing reason that the proposed
+decomposition is an equality, rather than a sum of incompatible optima.
+
+2. COALITIONWISE PREFIX IDENTITY
+Set v_{m+1}=0 and Delta_k=v_k-v_{k+1}>=0. For any service vector s,
+  sum_i v_i s_i=sum_k Delta_k sum_{i<=k}s_i.
+Every residual allocation has prefix grid total at most min(P,r(prefix));
+the greedy allocation attains all these bounds simultaneously. Therefore
+the actual production value of EVERY coalition equals
+  F_v(S)=sum_k Delta_k [ell(prefix_k,S)+min(P(S),r(prefix_k,S))].
+
+Missing energy owners cause no exception:
+* Without A, every ell_i is0 and r_i=h_i; the same greedy grid proof applies.
+* Without C, P=0, no grid is allocated, and both sides equal sum_i v_i ell_i.
+* Without both, both sides are0.
+* An absent hardware owner makes h_i=ell_i=r_i=0 at that pod, regardless of
+  A's retained local capacity. The greedy formula and identity still apply.
+Thus the decomposition is valid coalitionwise on exactly the original game.
+It does not introduce transferable power between independent physical copies.
+
+3. FIXED OWNERS, DEVIATIONS, AND FLOOR
+Every prefix component retains the full owner set A,C,H_1,...,H_m. It ignores
+resource rows beyond its prefix; these hardware owners are null in that
+component. This does not split, delete, or relabel an actual owner across
+the mechanism. The public order and Delta weights are fixed before reports.
+
+For A, a simultaneous underreport of multiple local rows is an allowed
+whole-bundle deviation in each prefix; each component's own-payment theorem
+already covers it. Ignored local coordinates have no effect in that component.
+For H_i, prefixes containing i use the same one actual hardware report and
+have own-report monotonicity; other prefixes pay that owner zero. For C,
+each prefix sees the same actual P, and its component payment is monotone
+in P. Therefore y_i=sum_k Delta_k y_i^k is nonnegative and own-bundle
+monotone for every owner on every real nonnegative report profile.
+
+Coalition coverage follows by summing the component coverage inequalities
+with the nonnegative weights and using the exact coalitionwise identity.
+In particular, since each component pays A exactly theta times its own
+grand marginal,
+  y_A=theta sum_k Delta_k[T_k(N)-T_k(N\{A})]
+     =theta[F_v(N)-F_v(N\{A})].
+No approximation or inequality is needed for the floor.
+
+4. BUDGET, ZERO CASES, SHARPNESS, AND COMPLEXITY
+Summing component budgets gives
+  sum_i y_i <=(1+theta/4)sum_k Delta_k T_k(N)
+            =(1+theta/4)F_v(N).
+If F_v(N)=0, every component with positive weight has zero production and
+zero payments; zero-weight components contribute nothing. If every value is
+zero, all Delta weights and all aggregate payments vanish. The base rule's
+zero-own-resources property also survives the weighted sum.
+
+The all-unit-value even-m family is contained in the heterogeneous class.
+It therefore proves the same best UNIVERSAL factor1+theta/4, with growing
+active owner/resource counts. This is not a claim that every particular
+fixed heterogeneous vector has that same optimal factor.
+
+Sorting takes O(m log m). Evaluating prefix k and adding its active payments
+takes O(k) arithmetic operations; summing over all k gives O(m^2), plus
+sorting. This is a real/rational arithmetic-operation statement, not a new
+bit-complexity theorem or a linear-time implementation claim.
+
+EVIDENCE AND LIMITATIONS
+This is an independent conventional proof audit, not a finite search or
+formal verification. Local-first exchange, fractional knapsack, telescoping
+layer sums, and nonnegative combinations are established ingredients. No
+historical novelty or human specialist review is inferred. All institution
+and canonical files were left unchanged.
+
+ADDITIONAL CHECK: SAME-RULE PARETO INEQUALITY
+Reviewed institution/PARETO_NOTE.txt. The algebra is valid for a fixed m>=2
+(or for a uniform mechanism family whose domain includes the two-pod case):
+  C+K>=2+theta/2.
+Here C and K must describe the SAME mechanism. This is not an inequality
+between the two infima obtained by optimizing each objective separately.
+
+At O, sum of the two grid-plus-hardware constraints gives
+2c_O+x_O+y_O>=2. With the floor a_O>=theta and total_O<=2C,
+  c_O>=2+theta-2C.
+Only the grid report increases from O to V, so c_V>=c_O. At V, local owner
+plus both hardware owners produce2, and thus total_V>=2+c_V. Since B(V)=2,
+  2K>=total_V>=4+theta-2C,
+which proves the tradeoff. If m>2, give the other fixed hardware/local rows
+zero capacities. Additional nonnegative payments only strengthen the same
+inequalities, and the exact static B(V) remains2.
+
+The new continuous rule has C=1+theta/4 at O. At V, its hardware payments
+remain1 each, A receives0, and C receives theta/2, so K=1+theta/4 there.
+The general upper gives no larger ratios. Thus this rule attains the tradeoff
+line, and any rule with minimal C=1+theta/4 must have K>=1+theta/4. The stated
+numerical implications C>=13/10 for K=6/5 at theta1 and C>=81/68 for K=18/17
+at theta1/2 are arithmetically correct. They are necessary conditions, not
+continuous attainability claims or a characterization of the whole frontier.
+
+SCOPE FINDING -- SENT TO AUTHOR AND COORDINATOR
+The Pareto note's initial unrestricted 'any mechanism' wording must explicitly
+exclude the one-pod subclass or say it treats a family containing m=2. The
+tradeoff is FALSE for m=1 and theta>0. A concrete counterexample is
+  (y_A,y_C,y_H)=(theta M,0,T-theta M).
+This vector is nonnegative and efficient. Its C+H payment is
+T-theta M=G+(1-theta)M>=G, its A+H payment is T>=ell, and the grand coalition
+is covered exactly. All remaining positive-worth coalitions are included in
+those cases. A's payment is own-local monotone. The hardware payment equals
+(1-theta)T+theta G, both summands monotone in its hardware report. C's payment
+is constant zero. The floor is exact, and zero-production profiles pay zero.
+Therefore the one-pod rule has C=K=1, with B=T at every profile. This does not
+contradict uniform sharpness over all m or the m>=2 Pareto inequality.
+
+No further search was undertaken after this short check.
