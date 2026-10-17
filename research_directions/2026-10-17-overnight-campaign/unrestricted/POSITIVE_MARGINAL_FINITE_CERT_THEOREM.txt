@@ -1,0 +1,102 @@
+SIXTEEN FIXED OWNERS: POSITIVE MARGINAL RULES NEED FACTOR AT LEAST FIVE
+17 October2026. Exact finite certificate; independent mathematical and exact replay audits passed.
+
+STATEMENT
+Let F(x)=min(x1,x2,x3). There are16 fixed actual owners, each eligible for all
+three resources; reports in the unit cube[0,1]^3 per owner already suffice.
+Consider any rule
+ y_i(b)=sum_(R subset N\{i}) w_(i,R)[F(b_i+b_R)-F(b_R)]
+with fixed nonnegative real weights independent of the reports. If the rule
+covers every actual coalition and satisfies payment-only TCWM for all
+coalitions of size at most4, its worst total-funding factor is at least5.
+Weights need not be symmetric, normalized, or a Bernoulli mixture.
+
+This is a finite architecture separation. The already accepted unrestricted
+min3 TCWM rule has factor2, even protecting all coalition sizes and all finite
+owner populations. Therefore the new lower is not a lower against arbitrary
+mechanisms. No sharpness at5 or new asymptotic exponent is claimed.
+
+SYMMETRIZATION AND VARIABLES
+Finite owner-label averaging preserves every condition on the same fully
+eligible16-owner report domain. The resulting weights depend only on
+l=|R|. Let W_l=binom(15,l)w_l>=0, for l=0,...,15. Thus a payment is the weighted
+sum, with weights W_l, of expected marginal contributions under uniform l-subsets
+of the other15 actual owners.
+
+At the balanced profile all16 owners hold(1,1,1). Every marginal contribution
+equals1, total production equals16, and funding implies
+                           sum_l W_l <= kappa.           (1)
+At a second profile only three owners hold the three pure unit resources;
+the others report zero. Each active owner has marginal1 exactly when the other
+two pure owners are sampled. Coverage of those three owners gives
+  sum_l c_l W_l >=1,  c_l=3*l(l-1)/(15*14).               (2)
+Both profiles are in the same fixed-owner domain.
+
+ACTUAL TRANSITION ROWS
+Choose q,k,t with2<=q<=4, 1<=k<=16-q, and0<=t<k; put z=16-q-k.
+The protected coalition has q leaf owners. Focal owner0 initially reports
+(0,0,t/k), then adds(0,0,1/k), reaching(0,0,(t+1)/k). The other q-1 protected owners each hold
+(0,0,1) and change nothing. Outside the coalition, k center owners each hold
+(1/k,1/k,0); the remaining z actual owners report zero throughout.
+All owner identities/eligibility remain fixed, and each holding lies in[0,1]^3.
+
+Write epsilon=1/k. A restoration changes a sampled coalition's production by epsilon only
+when the focal leaf is included, all other protected leaves are absent, and
+at least t+1 centers are present. The exact TCWM increment, divided by epsilon,
+is sum_l D_(q,k,t;l) W_l, where
+ D_(q,k,t;l)= [sum_(j=t+1)^k binom(k,j)
+                {binom(z,l-j)-(q-1)binom(z,l-1-j)}]/binom(15,l).             (3)
+An out-of-range binomial coefficient is zero. The first term is the focal
+owner's marginal increase; each of the q-1 unchanged coalition members gives
+the negative second term when focal0 is sampled. TCWM therefore requires
+                         D_(q,k,t).W >=0.                 (4)
+These are fixed finite report comparisons, not formal coefficient sign tests.
+
+THE RATIONAL DUAL CERTIFICATE
+Multiply coverage inequality(2) by5. Add the14 inequalities(4) with these
+nonnegative rational multipliers:
+  q   k   t     multiplier
+  2  13  12       281/20
+  3  13  12       45187/500
+  4   8   1       3/2
+  4   8   2       1479/1000
+  4   8   7       48993/200
+  4   9   3       863/500
+  4   9   6       4289/250
+  4  10   4       863/500
+  4  10   5       23/5
+  4  10   6       371/125
+  4  11   0       162/125
+  4  11   4       49/1000
+  4  11  10       46543/1000
+  4  12  11       67543/1000
+
+The resulting coefficient vector v=5c+sum lambda D is, in order l=0,...,15,
+ (0,594/625,4157/4375,54042/56875,43233/45500,237779/250250,
+  2377863/2502500,254786/268125,679457/715000,951221/1001000,
+  67941/71500,1297033/1365000,216171/227500,4751/5000,3563/3750,19/20).
+Every v_l<=1. The weighted necessary inequalities imply v.W>=5. Since W>=0,
+                    kappa >=sum W >=v.W >=5.
+This proves the finite theorem. The slack is intentional;5 is a convenient
+small exact lower, not an assertion of the optimum for this certificate set.
+
+DISCOVERY, REPLAY AND SCOPE
+One bounded LP discovery run used N16,s4 with275 necessary rows. Its floating
+optimum was about5.26206. Fourteen supported transition multipliers were
+rationalized, then deliberately scaled and rounded to obtain the small exact
+certificate above. Neither the floating optimum nor numerical feasibility is
+a proof dependency. No larger-N search was run.
+
+POSITIVE_MARGINAL_FINITE_CERT_N16_S4_FACTOR5.json stores the exact multipliers
+and coefficient vector. POSITIVE_MARGINAL_FINITE_CERT_CHECK.py uses only the
+Python standard library and Fraction arithmetic. It independently reconstructs
+every displayed transition row from all2^16 raw low/high min3 coalition values
+and cardinality-conditioned marginal contributions, verifies the pure-owner
+coverage vector separately, and checks all16 coefficient inequalities v_l<=1. It uses no
+LP solver and no floating-point operation. The analytic symmetrization and
+fixed-owner interpretation above remain part of the proof.
+
+This supplements the architecture-order theorem in
+SEMIVALUE_MIXTURE_GENERAL_FIXED_MARGINALS.txt with a concrete finite witness.
+The unrestricted arity-three coalition-size frontier remains open. Historical
+novelty and external specialist review remain unconfirmed.

@@ -1,0 +1,111 @@
+INDEPENDENT AUDIT: EXACT POLYMATROID PRICE EVALUATION
+17 October 2026. Read-only audit of other lanes; no new mechanism claim.
+
+VERDICT
+No material mathematical or implementation defect found in
+composition/POLYMATROID_ORACLE_COROLLARY.txt and
+composition/POLYMATROID_ORACLE_PRICES.py. The lower-envelope recursion computes
+the accepted two-block prices exactly, conditional on the stated exact maximal
+SFM callback and normalized, monotone, nonnegative submodular rational rank.
+Consequently it inherits the accepted TCWM/coverage/3/2 theorem; this audit does
+not add full outside-production incentives or certify historical novelty.
+
+ENDPOINTS AND FACES
+Deleting zero-capacity private coordinates preserves the minimum: intersecting
+any set with the active set J weakly decreases rank and leaves its capacity
+intercept unchanged. This is restriction of the public rank, not contraction.
+The allocation's absent-coordinate price is zero; actual owners remain fixed.
+P=0, no active private coordinates, and r(J)=0 are legitimate zero-value faces.
+For positive active capacities, J is the unique minimizer at parameter zero.
+Submodularity implies the union L of zero-rank singleton loops has rank zero;
+monotonicity implies every zero-rank set lies in L. Thus L is the unique
+eventual minimizer. There is no need to compute a sufficiently large endpoint.
+
+RECURSION AND TIES
+For f_z(S)=zP r(S)-c(S), maximal minimizers nest downward in z. One direct
+uncrossing proof compares A at alpha and B at beta>alpha with A union B and
+A intersection B. Submodularity and monotonicity give the required weighted
+rank inequality; optimality makes A union B a minimizer at alpha, so maximality
+forces B subset A. The endpoints used by the recursion are maximal at their
+anchors. Their line intersection is between their optimality anchors.
+
+A strict improvement M at the intersection belongs strictly between B and A.
+Equal ranks for distinct nested optimal-anchor sets are impossible: the larger
+set has strictly smaller intercept because all active capacities are positive.
+Therefore both recursive denominators are positive. With no strict improvement,
+each competing affine line is above A at the left anchor and intersection and
+above B at the intersection and right anchor. It cannot hide a positive-length
+envelope segment. At the infinite right anchor, comparison is with the
+zero-slope loop line, and all competing slopes are nonnegative.
+
+The positive-interval assertion is also valid. At a positive parameter z0, the
+maximal minimizer M contains every other tied minimizer S. If S is proper then
+P(r(M)-r(S))=c(M\S)/z0>0. Thus M has strictly greater slope than every proper
+tied minimizer and is uniquely optimal immediately to the left of z0. The
+finitely many nontied lines remain separated on a sufficiently short interval.
+This excludes intermediate sets that exist only at an isolated tie. Isolated
+ties legitimately have zero mass under the continuous averaging law.
+
+EXACT ORACLE COUNT
+A simple induction avoids any ambiguity about retained segments. A recursive
+call on A strictly containing B needs at most 2|A\B|-1 queries. A terminal call
+uses one. A strict M splits A\B into nonempty disjoint A\M and M\B, so
+  1+[2|A\M|-1]+[2|M\B|-1]=2|A\B|-1.
+Initially this is 2|J\L|-1 <= 2|J|-1. Zero-rank faces need no maximal query.
+The ordinary-to-maximal wrapper is correct: membership in the union of all
+minimizers is equivalent to equality of unconstrained and forced-membership
+minimum values. The minimizer lattice makes that union a minimizer. It uses
+at most |J|+1 ordinary exact SFM calls per maximal query. The restricted forced
+objective is submodular; a backend requiring normalization can subtract its
+constant empty-set value without changing minimizers.
+
+RANK ACCOUNTING CLARIFICATION APPLIED
+The current corrected note states '|J|+2 rank calls to check normalization,
+find loops and the initial rank' and explicitly separates additional chain/
+oracle evaluations. This resolves the minor presentation concern in my first
+audit. Outside rank queries made internally by SFM, the code evaluates
+at most |J| singleton ranks, r(J), r(empty), and one new rank for each strict
+query; terminal queries return the cached maximal endpoint. Thus <=2|J|+1
+such external rank evaluations is a safe simple bound. SFM's internal rank
+queries must also be counted if reporting full value-oracle cost, as the
+corrected note now makes clear. The stated maximal-SFM bound is correct.
+
+RATIONAL ARITHMETIC
+Every breakpoint is a ratio of an original capacity sum and a difference of
+two original rank values, multiplied by P. It is not obtained by repeatedly
+substituting earlier breakpoints. Polynomially bounded rational input/rank
+encoding therefore gives polynomially bounded breakpoint and oracle-objective
+encoding. G is piecewise rational; at most |J|+1 rational weighted gradients
+are summed, so exact prices also have polynomial encoding and arithmetic work.
+This is conditional polynomial evaluation with an exact polynomial SFM backend;
+it does not assert strong polynomial bit complexity, efficient arbitrary rank
+representations, or correctness of approximate floating-point tie handling.
+
+IMPLEMENTATION AND TARGETED REPLAY
+The supplied code faithfully implements this recursion, original-to-active
+index mapping, rational prices, and ordinary-to-maximal oracle conversion.
+Its docstring correctly leaves rank submodularity and callback correctness as
+assumptions; runtime comparisons alone do not certify an arbitrary callback.
+The exhaustive backend is explicitly only a finite test oracle.
+
+I inspected the author's independent full-subset reference and recorded output
+(195 profiles, 290 restoration holding boxes, 32 ordinary-oracle comparisons,
+16 all-pair reference cross-checks); I did not rerun that unchanged suite.
+Instead I copied the evaluated algorithm into this lane and ran six independent
+exact modular tests using the direct additive formula, with a non-enumerative
+modular oracle. A forty-row distinct-breakpoint case attains exactly 79=2m-1
+queries and 41 chain sets; a forty-row all-tied case uses one query; loops,
+inactive rows, rank-zero, P-zero and private-zero faces all pass.
+Reproducible files:
+ unrestricted/polymatroid_oracle_final_replay/INDEPENDENT_MODULAR_CHECK.py
+ unrestricted/polymatroid_oracle_final_replay/INDEPENDENT_MODULAR_CHECKS.json
+ unrestricted/polymatroid_oracle_final_replay/POLYMATROID_ORACLE_PRICES.py
+
+SOURCE AND CLAIM SCOPE
+Principal partitions, parametric submodular minimization and decomposition
+algorithms are established ingredients, as the note expressly states. The
+separate source lane is checking the original algorithm citations; this audit
+does not independently certify those historical attributions. Exact oracle
+evaluation is an implementation corollary of the accepted mechanism, not a
+new SFM algorithm or a new incentive theorem. Finite checks support the code;
+the all-profile statement rests on the analytic identity of the computed field.

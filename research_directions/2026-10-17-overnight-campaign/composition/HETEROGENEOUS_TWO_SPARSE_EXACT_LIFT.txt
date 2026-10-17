@@ -1,0 +1,141 @@
+FINITE EXACT UNIT-GRAPH REPRESENTATION OF TWO-SPARSE PRODUCTION
+Frozen candidate, 17 October 2026. Internal mathematical review pending.
+
+1. SCOPE AND CLAIM
+Let A be a finite nonnegative resource-by-activity matrix, each column having
+at most two positive entries, and let w>=0 be public activity profits. Exclude
+positive-profit zero-resource columns (these make production infinite). Define
+ F(c)=max{w.x : x>=0, Ax<=c}, c>=0.
+All activity amounts and resource capacities are real and divisible. Public
+coefficients themselves may be arbitrary real numbers. There is a finite
+simple unweighted graph H and a fixed nonnegative diagonal-copy linear map B
+from original resources to virtual resources such that
+ F(c)=gamma.c + F_H(Bc)                 for EVERY c>=0.                 (1)
+Here gamma>=0 is public, and F_H is fractional unit-edge production. The graph
+may be exponentially large; no efficient enumeration claim is made here.
+
+For fixed actual owners b_i, virtual owner i holds B b_i; ownership never
+changes, and there are no free auxiliary resources or new owners. Thus (1)
+holds simultaneously for every coalition and every report profile. Feeding
+these linked reports to the audited unit-Huber rule and adding gamma.b_i gives
+coalition coverage and coalition-total whole-bundle-underreport monotonicity,
+with total payment at most (3/2)F(c). The uniform 3/2 is sharp already on the
+unit single-edge subclass as actual owner counts grow. It is NOT a lower bound
+for individually truthful mechanisms without coalition-total incentives.
+The audited unit full-OUT factor-2 rule also transfers, including its full
+owner grand-marginal payment floors. These incentive consequences use previously
+proved graph mechanisms; the representation proof below is independent.
+
+2. REMOVE UNARY ACTIVITIES EXACTLY
+Discard zero-profit columns. For each resource v let gamma_v be the maximum
+profit/consumption ratio of unary activities at v, or zero if absent. The dual
+of F requires p_v>=gamma_v and, for each binary activity e=uv,
+ a_e p_u + b_e p_v >= w_e, with a_e,b_e>0.
+Write p=gamma+q. Retain only binary activities with positive residual profit
+ r_e=w_e-a_e gamma_u-b_e gamma_v>0; all others impose redundant inequalities
+because q>=0. Strong LP duality gives exactly
+ F(c)=gamma.c + max{r.x : x>=0, A_binary x<=c}.                       (2)
+This is an identity of value functions, not a claim that the optimal original
+plan physically executes all baseline and residual activities simultaneously.
+If no residual activities remain, H is empty and (1) is already proved.
+
+3. A BOUNDED DUAL POLYTOPE AND FIXED FINITE GRIDS
+Now use residual profits r_e>0 and omit the word residual. Put
+ M_v=max_{e incident v} w_e/a_{ev}, or zero at an isolated resource.
+The dual is min c.p subject to p>=0 and a_e p_u+b_e p_v>=w_e.
+Clipping every coordinate to M_v preserves feasibility: if an endpoint of an
+edge is clipped, its new contribution alone is at least that edge's profit;
+if neither is clipped, nothing changes. Clipping cannot increase c.p.
+Consequently the nonempty compact polytope
+ P={p: 0<=p_v<=M_v, a_e p_u+b_e p_v>=w_e for every e}
+contains an optimal dual vertex for every nonnegative capacity vector c.
+It has finitely many vertices, even for arbitrary real public coefficients.
+
+At resource v sort 0, M_v, and ALL coordinates p_v of vertices p of P.
+Remove duplicates. Each consecutive interval I=[l_I,h_I] of positive width
+becomes one virtual resource (v,I), with capacity (h_I-l_I)c_v. Isolated
+resources with M_v=0 have no copies. This grid is fixed by the public technology
+and does not depend on capacities, owner counts, or reports.
+
+Connect (u,I) to (v,J) iff at least one original binary activity e=uv satisfies
+ a_e l_I+b_e l_J < w_e.                                             (3)
+Multiple activities/qualifying reasons create only one unit edge. The resulting
+finite H is simple and loop-free; it need not be bipartite.
+
+4. PRIMAL EMBEDDING: F_H(Bc)>=F(c)
+Take any feasible original activity plan x. For an activity e=uv, distribute
+mass x_e dz along z in [0,w_e] to the pair of heights
+ s=z/a_e at u,   t=(w_e-z)/b_e at v.
+Both heights lie in their resource grids' ranges, since w_e/a_ev<=M_v.
+Outside finitely many bin boundaries (which have Lebesgue measure zero),
+let I,J be their unique bins. Then l_I<s and l_J<t, so
+ a_e l_I+b_e l_J < a_e s+b_e t=w_e;
+therefore (3) includes that unit edge. Add the corresponding mass to its flow.
+At a bin I of u, mass contributed by e is at most a_e |I| x_e, because the
+preimage of I under z/a_e has length at most a_e |I|. Summing activities at u,
+ bin load <= |I| sum_{e incident u} a_{eu} x_e <= |I| c_u.
+All lifted flows are feasible, including where different activities share a
+lift edge. Total lifted value is sum_e w_e x_e. Maximizing gives the claim.
+For exact rational replay the integrals reduce to finitely many intervals cut
+at a_e times u-grid boundaries and w_e-b_e times v-grid boundaries.
+
+5. DUAL EMBEDDING: F_H(Bc)<=F(c)
+Choose an optimal vertex p of P for c. On a bin I at v place unit cover price
+ q_{v,I}=1 if l_I<p_v, and 0 otherwise.
+If a lift edge from e were uncovered, l_I>=p_u and l_J>=p_v, contradicting
+ a_e l_I+b_e l_J<w_e<=a_e p_u+b_e p_v.
+Thus q is a feasible vertex cover, including all ties under convention (3).
+Because p_v is a grid boundary, the total width of bins with l_I<p_v is
+EXACTLY p_v. Its total cover cost is sum_v c_v p_v=F(c). Weak duality proves
+the reverse inequality. Together with section 4 and then (2), this proves (1).
+
+6. FIXED OWNER, COALITION, AND OUTSIDE-PRODUCTION TRANSFER
+For every actual owner i and bin I at v set b'_{i,v,I}=|I|b_{iv}. This positive
+linear map preserves coordinatewise underreports, coalition sums, and withheld
+bundles. The same graph H works on every real report profile, including zeros.
+If graph payments satisfy coverage, then for any owner coalition S their sum
+plus gamma.b_S is >=F_H(B b_S)+gamma.b_S=F(b_S).
+If graph coalition-total payments cannot decrease when members increase reports,
+the added linear nonnegative payments preserve this property. Funding obeys
+ gamma.c+(3/2)F_H(Bc) <= (3/2)F(c).
+For full OUT, every withheld aggregate d satisfies F(d)=gamma.d+F_H(Bd), so
+adding linear gamma payments to a full-OUT graph mechanism proves the original
+full-OUT inequality exactly. Likewise the full grand-marginal floor transfers:
+ F(c)-F(c-b_i)=gamma.b_i+F_H(Bc)-F_H(B(c-b_i)).
+No interpretation that withheld resources are destroyed is needed for the full
+OUT consequence. Payment-only TCWM by itself does not imply full OUT.
+
+7. DEPENDENCIES, ATTRIBUTION, AND LIMITS
+Unit-Huber: HUBER_PRICE_THREE_HALVES_v2.txt and EXACT_HUBER_ALGORITHM.txt.
+Sharp all-mechanism TCWM lower: ../root/COALITION_THREE_HALVES_CANDIDATE.txt
+and accepted ../root/ROOT_ADJUDICATION_03_COALITION_OPTIMUM.txt.
+Full OUT plus full marginal floors: ../root/GRAPH_OUTSIDE_TWO_CANDIDATE.txt,
+independently audited in root's Fable review 011749.
+
+Weighted matching unfolding and its cover proof are established ingredients:
+Kao--Lam--Sung--Ting (2001), section 4.1/Lemma 4.1, original freely retrieved
+and read by root 17 October 2026. Our earlier antidiagonal proof instantiated
+that ingredient. This new finite vertex-aligned interval construction handles
+arbitrary heterogeneous two-sparse columns, arbitrary real coefficients, all
+capacities, and linked same-owner reports. Its historical priority is NOT
+confirmed. LP duality, vertex enumeration, and the graph mechanisms remain
+separate established/audited inputs; do not label the whole reduction novel.
+
+Divisibility is essential. This is not a result for integer scheduling,
+nonlinear activity costs, private technology, unrestricted overreports, or
+consumption support size three. Indeed the known sharp TCWM factor 2 on a
+single three-input min technology rules out any exact positive same-owner
+unit-graph representation of that technology: such a representation would
+transfer the graph factor 3/2 and contradict that lower bound. Separately the
+proof's two endpoint height allocation cannot be carried over verbatim to
+arity three. Neither statement is an unbounded-subsidy lower bound for
+three-sparse technologies. The finite vertex construction
+alone gives no polynomial runtime in the original input size.
+
+CLASSICAL COMPARATOR LOCATED AND READ BY ROOT
+Hochbaum--Megiddo--Naor--Tamir (1993), original sections 2--3:
+https://theory.stanford.edu/~megiddo/pdf/2satful.pdf
+Their two-variable constraint algorithms use variable doubling and integer-level
+threshold copies leading to cuts/closure. This is a close established algorithmic
+ingredient, not an unrelated citation. The present continuous identity and
+linked-owner transfer require a precise scope comparison; novelty remains open.

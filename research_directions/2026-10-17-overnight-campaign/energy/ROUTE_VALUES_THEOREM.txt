@@ -1,0 +1,120 @@
+PUBLIC MODE-DEPENDENT NET VALUES: SHARP FUNDING FACTOR IS UNCHANGED
+17 October 2026. Candidate conventional proof; independent audit required.
+This is a reduction to the accepted unit-value theorem, not a claimed breakthrough
+or historical-novelty claim. It closes the explicitly excluded route-cost extension.
+
+1. CONTRACT
+Actual owners A,C,H_1,...,H_m and capacities L_i,P,h_i are fixed as in CONTRACT.txt.
+Public nonnegative NET margins a_i (local) and b_i (grid) are report-independent.
+Coalition worth is max Σ(a_i q_i+b_i g_i) subject to q_i+g_i<=h_i,
+q_i<=L_i, Σg_i<=P, q,g>=0, with absent owners' capacities set to zero.
+Payments are nonnegative, cover every coalition, and are own-bundle monotone.
+The optional floor is y_A>=theta M_A, M_A=F(N)-F(N\{A}), theta in[0,1].
+
+THEOREM. For every finite m, all nonnegative real capacities and public margins,
+there is such a rule with total at most (1+theta/4)F(N). The universal constant
+is sharp, including when both hardware-owner and resource counts grow. No
+private-cost, strategic-identity, temporal/latency or deployment claim follows.
+The extension also holds with arbitrary fixed separate-role hardware/local-owner
+partitions, using the accepted PURE_ROLE_BUNDLES_v2 theorem componentwise and
+requiring each actual local owner its own theta grand-marginal floor.
+
+2. EFFICIENT FLOOR-FREE COROLLARY (DIRECT PROOF)
+Let ell_i=min(h_i,L_i), B_i=a_i ell_i, B=ΣB_i. Pay A=0,H_i=B_i,C=F-B.
+Nonnegativity holds since local-only service attains B. Hardware i's payment
+is own-monotone; C's is own-monotone since B is independent of P and F increases
+with P; A's is constant. Total is F. For a coalition with hardware set I and C,
+append local-only output ell_j at every j outside I to that coalition's optimal
+allocation. Local resources are independently indexed by pod and hardware is
+disjoint, so this is feasible at the full profile and yields F>=F(S)+Σ_{j∉I}B_j.
+Thus C plus included hardware receive F-B+Σ_I B_i>=F(S), whether A is present
+or absent. Without C, coalition worth is B(I) if A present and zero otherwise,
+and hardware payments cover it. Zero profiles are included. The append step
+uses locality and cannot simply be reused when A owns a single shared L budget.
+
+3. EXACT COALITIONWISE DECOMPOSITION
+All statements in this section apply separately to every coalition after its
+absent resources are zeroed. Put ell_i=min(h_i,L_i), r_i=h_i-ell_i and
+u_i=(b_i-a_i)_+. At a grid allocation g_i∈[0,h_i], choose maximum feasible
+local output q_i=min(L_i,h_i-g_i). Relative to baseline a_i ell_i, its marginal
+grid value is b_i on the first r_i units, and b_i-a_i on the next ell_i units.
+Negative tail values can be omitted in an optimum. Therefore the residual
+optimization is fractional knapsack with segments:
+  capacity r_i at value b_i;
+  capacity ell_i at value u_i if u_i>0.
+The first segment's value is at least the second's. Greedy filling in descending
+public value order admits a tie order putting first segments before second, so
+it respects each pod's prefix requirement and corresponds to feasible q,g.
+Conversely every feasible q,g gives no larger value than this knapsack optimum.
+For t>0 define J_t={i:b_i>=t} and K_t={i:u_i>=t}. The total segment capacity
+above threshold t is
+  R_t=Σ_{J_t\K_t}r_i+Σ_{K_t}h_i.
+Knapsack's value is ∫_0^∞ min(P,R_t)dt. One greedy allocation attains all
+threshold counts simultaneously; this is NOT a sum of unrelated optima.
+
+Define a UNIT-VALUE component game T_t on the SAME actual owner set:
+ * retain hardware h_i exactly for i∈J_t;
+ * retain local L_i exactly for i∈J_t\K_t;
+ * retain the original grid row P.
+All other rows have zero use in that component; actual owners are not deleted
+or split. Its worth is
+  T_t=Σ_{J_t\K_t}ell_i+min(P,R_t).
+For each i, the set of t where i∈J_t\K_t is (u_i,b_i], with length
+b_i-u_i=min(a_i,b_i). Hence the exact identity is
+  F(S)=Σ_i(a_i-b_i)_+ min(h_i(S),L_i(S)) + ∫_0^∞ T_t(S)dt.       (1)
+Threshold endpoint conventions affect measure-zero points only. An exact finite
+implementation uses the distinct positive breakpoints among b_i and u_i, and
+the component at each interval's upper endpoint; weights are interval lengths.
+At a_i=0, the two segments tie and the local component interval is empty.
+At b_i=0, only the positive local-premium term remains. All-zero values give F=0.
+
+4. PAYMENTS AND FIXED OWNER INCENTIVES
+For each unit component run the accepted sharp theta-floor rule, retaining the
+full actual owner identities. Integrate these payments with the fixed nonnegative
+interval weights. For local-premium game f_i=(a_i-b_i)_+min(h_i,L_i), pay theta f_i
+to A and (1-theta)f_i to H_i, all other owners zero. This component is efficient,
+coalition-covering and own-monotone, and its A-grand-marginal equals f_i.
+Sum all component payments. Equation (1) proves coalition coverage for the actual
+weighted game. Each own-coordinate underreport maps to an allowed underreport in
+every component; all weights and retained-row sets depend only on public values.
+Therefore own-bundle monotonicity holds, including joint changes of all A rows.
+Grand marginals telescope by applying (1) at N and N\{A}; A receives exactly
+θ M_A in the single-local-owner version. Each component has budget <=(1+θ/4)
+its own worth (the local-premium components have factor1), so total is at most
+  (1+θ/4)F(N) - (θ/4)Σ_i(a_i-b_i)_+ell_i <=(1+θ/4)F(N).
+All payments vanish when F=0 because each nonnegative component worth vanishes.
+Zero own resources still give zero own payment.
+
+For separate-role arbitrary fixed owner partitions, apply PURE_ROLE_BUNDLES_v2
+to each unit component. Local-premium payments go to the actual two owners of
+its local/hardware rows. Those owners' roles are disjoint, so they are distinct.
+Componentwise grand-marginal floors sum to the actual owner's θ marginal by (1),
+and all owner-bundle incentive arguments remain valid. Do NOT merge the original
+per-pod rule naively; the owner-block theorem is the needed input in that version.
+
+5. SHARPNESS AND COMPUTATION
+The equal-margin subdomain a_i=b_i=1 is included. For even m, take h_i=L_i=1,
+P=m/2. Then F=m,M_A=m/2. The accepted balanced-counting lower forces total
+>=(1+θ/4)m with all owners active, proving sharpness uniform over the domain.
+With at most 2m distinct breakpoints, evaluating the single-owner base rules
+costs O(m²) arithmetic operations after sorting. This is an arithmetic bound,
+not a bit-complexity, exact-real computational or finite-precision truthfulness
+claim. The physical grid is used once: (1) was proved from a single feasible
+greedy allocation. Reusing its report in components is algebra, not duplicate power.
+
+6. PUBLIC NORMALIZATION COROLLARY
+Known positive public mode-dependent hardware/power coefficients on each pod can
+be normalized to this model if each pod has exactly those two output routes and
+one hardware constraint, and the only shared resource is one grid row. Rescale
+output into hardware units, then rescale each pod's common hardware/local units
+by its grid power-per-hardware coefficient, and rescale margins reciprocally.
+Zero coefficients are excluded from that normalization and need separate cases.
+This is a routine unit change, not a new mechanism or proof for general networks.
+
+7. SCOPE AND SUCCESSOR
+This closes the requested public mode-dependent-cost extension through a classical
+knapsack reduction. It is not evidence of observed pooling gains or confirmation
+of historical novelty. A meaningful successor is a SINGLE SHARED local-energy
+budget L across pods, alongside P, because the append-outside-pods argument and
+the above local-first independent baseline both fail. That is a new domain and
+must be frozen separately before attempting it.

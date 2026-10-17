@@ -1,0 +1,93 @@
+INTERMEDIATE OWN REPORTS ARE ESSENTIAL FOR THE MINIMUM-NORM ENVELOPE
+2026-10-17. Exact four-owner obstruction; proposed structural observation.
+This refutes deletion-only endpoint reduction. It does not refute either live
+envelope funding conjecture and is not an unrestricted-mechanism lower bound.
+
+FULL COALITION GAME.
+Use owners1,2,3,4, and write a payment vector as(x,y,z,w), focal owner4.
+The full cover polyhedron is given by nonnegativity and
+ y+w>=3, x+z+w>=3, x+y>=2, x+y+w>=5.                    (1)
+Its balanced closure has only these positive coalition worths:
+ v12=v123=2;
+ v24=v134=v234=3;
+ v124=v1234=5.
+Every other worth is0. Its total worth isT=5 and it is totally balanced.
+Thus all original coalition rows, including redundant supersets, are included
+in the endpoint test below. The conclusion is not an artifact of dropping
+redundant full-game rows.
+
+INTERMEDIATE RELAXATION.
+Lower only the last primitive demand in(1) from5 to15/4 and balanced-close.
+The resulting totally balanced game differs only in
+ v124:5->15/4 and v1234:5->4.
+It agrees with the full game on every coalition omitting owner4.
+The unique minimum-Euclidean-norm cover of the relaxed game is
+ q=(3/4,5/4,1/2,7/4).
+For the four displayed primitive rows the nonnegative KKT multipliers are
+ (1,1/2,0,1/4), respectively: q=A^T lambda, every row is feasible, and every
+positive-multiplier row is tight. This proves the projection exactly.
+The focal coordinate is7/4.
+
+ALL ENDPOINT RELAXATIONS ARE STRICTLY WORSE.
+For every coalition containing4, restrict its demand to either0 or its full
+value. Keep every off-owner coalition row unchanged. There are five positive
+own rows, hence32 distinct endpoint patterns. Their maximum focal coordinate
+is12/7, strictly less than7/4 by1/28. A short exhaustive case proof follows.
+
+If row124 at demand5 is retained, its standalone projection
+ (5/3,5/3,0,5/3)
+already satisfies ALL full coalition rows. Therefore every such endpoint
+pattern has focal coordinate5/3.
+If row124 is deleted but grand row1234 at5 is retained, then:
+ * if row24 at3 is retained, the projection is(1,3/2,1,3/2);
+ * otherwise, the projection is(5/4,5/4,5/4,5/4).
+In both cases every other possible retained row is automatically satisfied.
+The focal coordinate is at most3/2.
+
+It remains to delete both5-demand rows. The fixed off row isx+y>=2; the
+remaining own rows are24,134,234 at3. If24 is retained then234 is redundant.
+Keeping134 as well gives
+ q=(5,9,4,12)/7,
+with KKT multipliers(8,4,1)/7 on24,134,12, so the focal coordinate is12/7.
+Keeping24 but deleting134 gives focal coordinate4/3.
+If24 is deleted, retaining both134 and234 gives q=(1,1,1,1), focal1;
+retaining exactly one gives focal4/5; retaining neither gives focal0.
+These cases cover all32 patterns and prove the strict gap.
+
+CONCRETE FIXED-OWNER PRODUCTION REALIZATION.
+Let P be(1), P' the same system with its last RHS15/4. Their vertex sets are
+ V={(0,2,0,3),(0,5,3,0),(2,0,0,3),(2,2,0,1),(2,3,1,0),(3,3,0,0)},
+ W={(0,2,0,3),(0,2,5/4,7/4),(0,15/4,3,0),
+    (3/4,5/4,1/2,7/4),(3/4,3,9/4,0),(1,1,0,2),
+    (2,0,0,3),(3,3,0,0)}.
+On five nonnegative resources(c1,c2,c3,c4,h) define
+ F(c,h)=min{p dot c:p inV; q dot c+5h:q inW}.
+This is a finite monotone concave homogeneous production function with14
+nonnegative supporting forms. Owners1,2,3 report their distinct unit base
+resources. Owner4 reports e4+e5 at full capacity and e4 when withholding its
+fifth coordinate. The owner set stays fixed, and the underreport is binding
+and coordinatewise smaller. At the full and lower profiles the coalition
+games are exactly v and its stated local relaxation, respectively.
+Proof: each vertex minimum gives the balanced closure of its cover system.
+At an indicator coalition containing4, the extra5h suppresses every W form
+at the full report, while the low report picks the smaller relaxed game.
+For coalitions omitting4 the two games agree. The finite lists can also be
+checked directly at all16 coalitions, as the exact checker does.
+
+INTERPRETATION.
+One may not replace continuous own-report relaxation by choosing only full
+or deleted coalition demands, even after retaining EVERY original coalition
+row and repairing balancedness. An intermediate demand can tilt the projection
+normal cone enough to produce a strictly larger focal payment. Any proof of
+the live sqrt(n) envelope bound must control these interior changes.
+The example does not show that an actual binary full/zero RESOURCE report
+suffices or fails: endpoint here refers to coalition-demand rows, not resource
+coordinates. The explicit realization uses a single actual resource withheld
+from1 to0; that resource induces INTERMEDIATE coalition-demand changes.
+
+VERIFICATION.
+verify_projection_endpoint_obstruction.py uses only exact Fraction arithmetic,
+checks the interior KKT certificate, independently enumerates every endpoint
+projection by active-set KKT, and verifies all32 full/low profile-coalition
+values of the explicit14-form, five-resource production model. It fails closed
+under Python optimization, which would otherwise disable assertions.

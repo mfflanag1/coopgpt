@@ -1,0 +1,115 @@
+WITHHELD RESOURCES CAN PRODUCE: TWO GENERAL POSITIVE BOUNDS AND A SCOPE OBSTRUCTION
+17 October2026. Root candidate, independent review pending.
+
+MODEL
+Fixed actual owners report bundles b_i=(a_i,b_i) in R_+^2; use x_i=(a_i,b_i)
+below to avoid overloading the vector. F(x)=min(A,B), A=sum a_i,B=sum b_i.
+A coalition S may withhold d_i<=x_i, receive its mechanism payments at the
+reduced reports, and independently produce F(sum_S d_i) using withheld inputs.
+The strong condition is
+ sum_S y_i(x) >= sum_S y_i(x-d_S)+F(sum_S d_i).           (OUT)
+Individual OUT restricts S to singletons. Full OUT includes all coalitions.
+All identities, eligibility, technology, and opponents' reports stay fixed.
+No double use of a resource is permitted: withheld inputs are excluded from
+the mechanism's production and used only outside.
+
+1. INDIVIDUAL OUT WITH FACTOR K=1+1/(2 exp(1))
+Begin with the pure-side exponential rule, an established project ingredient:
+T=min(P,N), each short-side owner z gets (1-q)z, each long-side owner z gets
+q min(z,T), where rho=sum_long min(z,T)/T and q=exp(1-rho)/2. Zero production
+gives zero payments. It covers coalitions and has total<=K T.
+
+Its payment to a pure owner is nondecreasing and1-Lipschitz in that owner's
+scalar report, including zero and side-switch points. Long-side derivative
+below its cap is q(1-z/T) in[0,1/2], and above the cap is0. On the short side,
+g(z)=(1-q(T))z, T=z+fixed short opponents. Here q'(T)>=0 and
+  0 <= 1-q-z q'(T) <=1.
+The lower bound follows from z<=T, q'(T)<=q rho/T and
+q(1+rho)<=1 for rho>=1. All cap/seam formulas join continuously. This proves
+the global scalar Lipschitz assertion without numerical approximation.
+
+For each actual mixed owner define standalone production s_i=min(a_i,b_i)
+and residual r_i=a_i-b_i. Run the pure rule on positive r_i on one side and
+negative r_i on the other, keeping actual labels (a zero residual gets0).
+Pay y_i=s_i+g_i(r). This is the established ownerwise-netting construction;
+the new question here is its stronger outside-production interpretation.
+
+Production decomposes EXACTLY, coalition by coalition:
+ F(sum_S x_i)=sum_S s_i+min(sum_S(r_i)_+,sum_S(-r_i)_+).
+Therefore coverage and funding follow, since
+ sum_i y_i <=sum_i s_i+K min(P,N)<=K F(sum_i x_i).
+
+Own-coordinate monotonicity follows from the0..1 Lipschitz bound. On a fixed
+residual-sign cell, raising the abundant coordinate increases g; raising the
+scarce coordinate increases s by the same amount by which it decreases the
+absolute residual, so the loss of g is at most that gain. Across r_i=0 both
+rules meet at y_i=s_i; g tends0 by the Lipschitz property. Hence y_i is
+coordinatewise nondecreasing for arbitrary real own reports.
+
+More strongly, adding (t,t) to this actual owner's bundle changes only s_i,
+raising its payment EXACTLY by t. For an arbitrary withheld bundle d_i, put
+t=min(d_i). Moving from x_i-d_i to x_i first add(t,t), then add the remaining
+nonnegative one-sided bundle. Payment increases by at least t=F(d_i).
+This proves individual OUT at every profile, with unbounded owner counts.
+
+This also transfers to complete-access public source-price production:
+at each fixed public threshold first aggregate each actual owner's energy
+and hardware amounts, net within it, and apply the rule. Integrating both
+mechanism inequality and standalone withheld worth gives individual OUT for
+arbitrary public tiers, because F(d)=integral min(E_t(d),H_t(d))dt.
+This particular transfer assumes complete access; an arbitrary-access threshold
+component is a graph game, not necessarily a scalar two-pool minimum.
+
+2. FULL COALITION OUT WITH FACTOR TWO
+For T>0 define
+ y_i=T(a_i/A+b_i/B); set all payments0 when T0.
+The total is exactly2T, and coverage is immediate: when A>=B, each coalition
+gets at least its B amount, and the other orientation is symmetric.
+
+Fix S and grow its reports on the straight line from x-d_S to x. Let
+a=sum_S a_i,b=sum_S b_i, with aggregates A,B. When A>B, its total is
+Y_S=B a/A+b. Its derivative for an increase to any own A-coordinate is
+g_A=(B/A)(1-a/A)>=0; for an increase to any own B-coordinate it is
+g_B=1+a/A>=1. For A<B the roles swap. Along the line, total changes in the
+two resource sums are Delta_A,Delta_B>=0, so at every differentiable point
+dY_S/dt >=min(Delta_A,Delta_B). Integrating over the finite side-switch cells
+gives(OUT). At A=B the formulas agree; at zero total, continuity follows
+from0<=Y_S<=2T. The line may start at zero; use a positive limiting segment.
+This is a full all-profile coalition statement, not merely one deviation.
+
+More generally, for a single r-input minimum T=min_j C_j, the rule
+ y_i=T sum_j x_ij/C_j (zero if T0)
+has full coalition OUT and funding rT. On a cell with bottleneck coordinate k,
+the coalition derivative in k is1+sum_{j!=k} a_j/C_j>=1, while every other
+coordinate derivative is(T/C_j)(1-a_j/C_j)>=0. Integrate as above, giving
+at least min_j Delta_j. Any tied bottlenecks can be handled by one-sided
+derivatives or direct subdivision of the linear path.
+
+No optimality claim for these full coalition OUT bounds is made. The existing
+TCWM3/2 lower applies to the two-input subclass because OUT implies TCWM.
+
+3. NO CONSTANT MULTIPLIER REPAIRS HUBER ON ALL UNIT RESOURCE GRAPHS
+Consider the four-vertex unit path0--1--2--3. One actual owner holds the two
+endpoints with capacity1 each. A second holds the two interior resources with
+capacity1 each. At the full profile the unique Huber prices are all1/2; the
+interior owner's total payment is1.
+That owner withholds delta in(0,1) of EACH interior resource. Its reports are
+now1-delta each. The tight outer edges have endpoint prices(1-delta)/2 and
+interior prices(1+delta)/2; the middle edge is slack. Positive outer KKT
+multipliers1-delta and zero middle multiplier certify the unique optimum.
+The interior owner's mechanism payment is1-delta^2, while its withheld
+resources can use the middle activity to produce delta.
+For ANY fixed multiplier L>0 applied to every Huber payment, the withholding
+gain is delta-L delta^2>0 for delta<min(1,1/L). Thus no uniform scalar payment
+inflation repairs individual OUT on all unit resource graphs.
+This is an architecture obstruction, not an impossibility for other rules.
+It shows why a mere constant-factor rescaling of the accepted graph theorem
+cannot justify retained-resource self-production in the economic model.
+
+PRIORITY AND STATUS
+Ownerwise netting and the pure exponential rule are established project
+ingredients. Absence-proofness/withholding with retained resources have older
+literature, notably Dogan2013/2016 and Postlewaite1979. This note supplies a
+precise model extension and its proofs, not historical novelty confirmation.
+General graph OUT bounds and the sharp two-input full-coalition constant remain
+open here. No private-cost, latency, energy-measurement or deployment claim.

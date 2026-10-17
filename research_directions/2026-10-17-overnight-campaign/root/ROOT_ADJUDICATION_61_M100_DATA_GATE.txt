@@ -1,0 +1,65 @@
+ROOT ADJUDICATION61 — PUBLIC M100 OBSERVED POWER-PANEL GATE
+17 October2026. Accepted descriptive intake result, no pooling/causal claim.
+
+RESULT
+Original public April2020M100 files contain a simultaneous physical-node
+power panel. Exact same-time intersections across all980nodes contain965
+instants for total_power and1,722for the sum of both PSU input readings.
+This passes schema and panel-existence gates. It does not validate a reserve
+model, ownership institution, reliability target, serving latency or subsidy.
+
+ACTUAL EVIDENCE
+Root downloaded3complete Parquet members by verified public byte ranges,
+with9,949,841bytes total including the512byte probe and3,072byte verifiedzero
+end padding. The210header/104ordinary-file tar enumeration identifies exactly
+one member per target metric; full archive MD5 was not computed. The rows
+are4,787,828/4,787,831/4,750,202 for PSU0/PSU1/total_power. No duplicate keys,
+nulls, negative readings or noncanonical node IDs were found. All980node
+strings are the canonical integers0--979; timestamp precision is whole seconds
+within an explicitly UTC-adjusted millisecond Parquet type. Metric values
+have INT32storage and documented Watt units.
+
+The released target files cover parts ofApril1--4 only. Across their observed
+endpoint span, an explicit phase-zero20sgrid has roughly33%record availability.
+The union has a51h21m20sgap. These absences are in the released files; neither
+system downtime nor sensor failure is inferred. No state file was obtained.
+The four-day span and sparse overlap do not constitute a rare-tail sample.
+
+On4,750,202same-node/time triples, total_power minus PSU-input sum averages
+-160.6296W, with median-150W. This magnitude shows that the fields should not
+be substituted. Exact equality is quantization-sensitive and is not the main
+argument. No AC/DC conversion-loss or calibration interpretation is supplied.
+The original PM100 paper explicitly uses PSU input sum; the schema does not
+identify the boundary of total_power sufficiently to explain the difference.
+
+INDEPENDENT REVIEW AND ROOT FIXES
+The energy agent independently verified member lengths/hashes/PAR1, all tar
+member offsets, actual footer types, and SQL logic. Fable reviewed the code,
+small summary and source/audit context; it could not execute data checks.
+Neither found a load-bearing defect. A truncated frequency table was repaired
+by a focused query and reconciled to the full gap totals. Root then checked
+canonical integer-ID uniqueness, as requested by Fable.
+The unexpected absence of adjacent all980total_power instants was investigated:
+964of965following20s instants lack193PSU node observations, the remaining one
+lacks194. Thus no next instant has a fullPSU panel either; this is not solely
+a total_power-specific omission. The physical cause remains unknown.
+
+FILES AND REPRODUCIBILITY
+energy/M100_OBSERVED_PANEL_RESULT.txt is the readable result.
+energy/M100_SCHEMA_GATE.txt and M100_OBSERVED_PANEL_ACCEPTANCE.txt specify the
+original-source schema and independent descriptive acceptance contract.
+energy/M100_PANEL_INDEPENDENT_AUDIT.txt; reviews/M100_PANEL_FABLE.md.
+checks/M100_RANGE_INTAKE.json; M100_PANEL_INSPECTION.json;
+M100_PANEL_SUPPLEMENT.json; M100_REVIEW_FOLLOWUP.json;
+M100_PANEL_SUMMARY.json (includes hashes of the other derived reports).
+Scripts share the corresponding M100 prefixes. DuckDB1.4.1performed analysis;
+matplotlib3.10.7generated the inspected descriptive figure. Raw telemetry and
+the temporary database remain outside the checkpoint. Reacquisition needs
+network access; it is not part of the standard-library21-check math replay.
+
+NEXT GATE
+Specify actual owner rights, feasible joint capacity/load withdrawals,
+curtailment, public valuation and sponsor before interpreting a subsidy.
+A subsequent statistical pilot needs a longer simultaneous input-power/state
+panel and declared chronological training/holdout windows. The April slice
+is a reproducibility fixture and measurement warning, not a pooling result.

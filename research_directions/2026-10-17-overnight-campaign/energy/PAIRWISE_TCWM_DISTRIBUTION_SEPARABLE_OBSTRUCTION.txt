@@ -1,0 +1,118 @@
+EVERY IDENTICAL STRICTLY CONVEX SEPARABLE COVER PROJECTION FAILS PAIR-TCWM
+17 October 2026. Analytic architecture obstruction; independent review pending.
+
+1. EXACT SCOPE
+For the two-pool technology F(A,B)=min(A,B), net each actual owner's standalone
+value and consider the pure residual game
+ v(Q)=min(sum_{i in Q} z_i^+, sum_{i in Q} (-z_i)^+).
+The candidate selects the unique minimizer x of sum_i phi(x_i), subject to
+ x_i>=0 and sum_{i in Q}x_i>=v(Q) for EVERY coalition Q.
+Here phi:[0,infinity)->R is C1 and strictly convex, phi'(0)=0, and the same
+report-independent phi is used for all owners. This includes every power
+objective x^p/p with 1<p<infinity. No twice differentiability is needed.
+
+THEOREM. Every such candidate fails pairwise total-payment monotonicity on
+six fixed pure owners. Hence adding standalone values and applying this
+projection to residuals cannot give pair-TCWM on the unrestricted mixed-owner
+domain. The witness changes only one owner's report and stays pure. It does
+NOT refute individual own monotonicity, report-weighted projection objectives,
+or any unrestricted mechanism theorem.
+
+2. CHOOSE SCALE AND PROFILES
+The continuous strictly increasing derivative phi' has range [0,L), or [0,L]
+when L=infinity is interpreted naturally. Choose v>0 small enough that
+ phi'(2v)+phi'(v)<sup_{x>=0} phi'(x).
+This is possible because phi'(0)=0 and strict convexity gives positive
+derivatives at positive arguments. There is a unique s>2 satisfying
+ phi'(sv)=phi'(2v)+phi'(v).                                  (1)
+Equivalently normalize v=1 and write psi(t)=phi(vt); equation (1) becomes
+ psi'(s)=psi'(2)+psi'(1). We use this normalization below; multiply capacities
+and payments by v to obtain the original rule.
+
+At the low profile take six signed capacities
+ z=(-2,2,-(2+s),-(1+s),-1,2+s),
+and candidate payment
+ x=(1,1,2,1,1,s).                                           (2)
+Restore delta>0 units of the second resource to owner 0, changing z_0 to
+ -(2+delta). All other reports and all owner identities remain fixed.
+
+For sufficiently small delta>0 there is a unique h in (0,delta) solving
+ psi'(s+h)=psi'(2-h)+psi'(1+delta-h).                         (3)
+Indeed the difference left-minus-right is strictly increasing in h. At h=0
+it is negative by (1), and at h=delta it is positive. Existence follows from
+continuity. As delta tends to zero, 0<h<delta forces h to zero.
+The high-profile payment will be
+ x'=(1,1,2-h,1+delta-h,1-delta,s+h).                         (4)
+Choose delta<=1/2 and also small enough that
+ r:=psi'(1+delta-h)-psi'(1-delta)<psi'(1).
+This is possible by continuity. We have r>0 because h<delta.
+
+3. FEASIBILITY, EXACTLY OVER ALL COALITIONS
+For every s>=2 and 0<=h<=delta<=1/2, vector (4) covers the high-profile game.
+This finite symbolic claim has an exact rational checker supplied alongside
+this note. Here is a complete and independently reproducible proof method.
+
+For each of the 64 masks Q, form affine functions P_Q,N_Q,X_Q of
+ (1,s,delta,h), giving its positive capacity, negative capacity and payment.
+The difference P_Q-N_Q has one constant sign throughout the polyhedron
+ D={s>=2, 0<=h<=delta<=1/2}.
+This is certified by checking its values at the three vertices
+ (s,delta,h)=(2,0,0),(2,1/2,0),(2,1/2,1/2)
+and its coefficient in the sole recession direction +s. Select the lesser
+of P_Q,N_Q using that sign. Then X_Q-min(P_Q,N_Q) is affine and is nonnegative
+at the same three vertices and in the recession direction. These statements
+hold for all 64 masks in the supplied exact checker; no numerical search or
+symbolic assumption about s is used. The polyhedron is exactly the convex
+hull of those vertices plus the nonnegative +s ray, so this verifies every
+real parameter value in D. Setting delta=h=0 also proves feasibility of (2).
+
+The identically tight masks for (4) are 0,3,36,39,43,56,59. In particular
+all masks used in the next KKT certificates are tight. At the low profile
+mask56 remains tight; the three required low masks are 3,36,56.
+
+4. GLOBAL OPTIMALITY CERTIFICATES
+Masks use bit i for owner i. Write g(t)=psi'(t).
+At the low profile the positive multipliers are
+ lambda_3=g(1), lambda_36=g(2), lambda_56=g(1).
+They give grad(sum psi(x_i))=sum_Q lambda_Q 1_Q by (1).
+
+At the high profile use
+ lambda_3=g(1)-r, lambda_36=g(2-h),
+ lambda_43=r, lambda_56=g(1-delta).
+All are positive by the chosen delta. Coordinates 0,1 have gradient g(1);
+coordinate 2 has g(2-h); coordinate 3 has r+g(1-delta)=g(1+delta-h);
+coordinate 4 has g(1-delta); and coordinate 5 has
+ g(2-h)+r+g(1-delta)=g(s+h) by (3).
+Thus these multipliers give exact KKT stationarity at (4).
+
+Nonnegative multipliers, feasibility and tightness prove global optimality:
+for any feasible w, convexity bounds objective(w)-objective(x) below by
+ grad objective(x) dot (w-x)=sum_Q lambda_Q(w(Q)-x(Q))>=0.
+Strict convexity gives uniqueness. All coordinates are positive, so the
+nonnegativity constraints require no additional multipliers.
+
+5. INCENTIVE FAILURE AND CONSEQUENCE
+The protected pair {0,2} has payment 3 at the low profile and 3-h at the
+high profile. Owner 0 alone restores capacity, while owner 2 changes zero;
+weak coalition underreport definitions permit this protected member. Since
+h>0, pairwise TCWM fails. In original units the loss is v*h.
+The changed owner 0 retains payment v, so this certificate concerns the
+negative payment externality on another protected owner. It is not an
+individual-IC counterexample.
+
+The obstruction is structural across all the stated objectives, including
+all finite p-norm projections, rather than a failure of a chosen exponent.
+Any successful distribution-sensitive pair-TCWM construction must leave
+this entire class, for example through genuinely report-dependent weights,
+different nonseparable selections, or a non-projection mechanism. None of
+those alternatives is proved feasible by this note.
+
+FILES
+ PAIRWISE_TCWM_DISTRIBUTION_check_separable.py
+ PAIRWISE_TCWM_DISTRIBUTION_separable_exact.json
+
+PROVENANCE
+An earlier exact quadratic six-owner witness suggested the construction.
+The present theorem is proved analytically for the full stated objective
+class. Historical novelty has not been confirmed. No external specialist
+review has occurred. Parent/root will arrange independent proof review.

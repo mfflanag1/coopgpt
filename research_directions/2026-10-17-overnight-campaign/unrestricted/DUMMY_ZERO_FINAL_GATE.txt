@@ -1,0 +1,106 @@
+DUMMY-ZERO FINAL GATE: MIN2 CONSTRUCTIVE ESCAPE; MIN3 UNRESOLVED
+17 October 2026. Corollary of accepted campaign results, not a novelty claim.
+
+CONTRACT AND BASELINES
+Fix actual owners with nonnegative resource reports. A game dummy i satisfies
+F(b_i+b_R)-F(b_R)=0 for every subset R excluding i. Dummy-zero requires y_i=0.
+Payments are nonnegative and cover every actual coalition. TCWM protects the
+TOTAL payment of any coalition under restoration by any of its members; other
+members may be unchanged. Full OUT additionally requires a coalition payment
+increase at least F(sum of its withdrawn bundles).
+For every fixed n, accepted scaled-Bernoulli rules already give finite
+dummy-zero full-OUT funding r*n^(r-1) on min_r. Thus mere fixed-n infeasibility
+is impossible. The real question concerns bounds uniform over growing owners.
+
+1. UNIFORM MIN2 RULE WITH DUMMY-ZERO
+For F(A,B)=min(A,B), let
+ f_i=min(a_i,b_i), u_i=(a_i-b_i)^+, v_i=(b_i-a_i)^+,
+ S=sum_i f_i, U=sum_i u_i, V=sum_i v_i.
+Then T=F(sum b_i)=S+min(U,V). For U>=V and U>0 set
+ p=V/(2U), q=1-p; use the symmetric formula for V>=U, V>0.
+Define pi_i=u_i*p+v_i*q, with all pi_i=0 when U=V=0, and
+                     y_i=(3/2)f_i+pi_i.                 (1)
+This is the accepted signed-L1 construction under the linear cone isomorphism
+t_i=(a_i+b_i)/2, x_i=(a_i-b_i)/2; here is a direct TCWM proof as well.
+
+For a coalition with residual holdings (u,v), fixed outside residual holdings
+(u_o,v_o), write W=u*p+v*q and U=u+u_o,V=v+v_o. On U>=V>0,
+ W=v+(u-v)V/(2U),
+ W_u=V(U-u+v)/(2U^2),
+ W_v=1+(u-v-V)/(2U).
+Because 0<=u<=U and 0<=v<=V<=U, both derivatives lie in [0,3/2].
+The other half-plane is symmetric. W is continuous at U=V and at zero;
+the bounded derivatives give the corresponding finite Lipschitz inequalities.
+When one member restores a_i, either u_i increases at unit rate and f_i is
+fixed, or f_i increases at unit rate and v_i decreases at unit rate. Thus the
+coalition derivative is respectively W_u>=0 or 3/2-W_v>=0. Restoring b_i is
+symmetric. Continuity handles sign/tie crossings. Sequential restorations
+prove all-profile TCWM with the same actual owners.
+
+Prices sum to one, so pi(S)>=min(u(S),v(S)). The identity
+F(b(S))=sum_{i in S}f_i+min(u(S),v(S)) proves every coalition is covered.
+For U>=V, total pi=V(3/2-V/(2U))<=3V/2. Consequently
+                         sum_i y_i<=3T/2.
+
+Dummy characterization: a nonzero min2 dummy must be pure on one side.
+For i=(a_i,0), a_i>0, it is a dummy exactly when every other owner has
+a_j>=b_j. Necessity follows by choosing a singleton j with b_j>a_j;
+sufficiency follows by summing that inequality over every R. The other side
+is symmetric. Therefore a pure-A dummy has f_i=0 and V=0, hence pi_i=0.
+Zero-report owners also receive zero. This proves dummy-zero for (1).
+
+The accepted signed-L1 theorem also supplies the stronger full-OUT version:
+replace 3/2 by kappa=1+c and pi by the accepted logarithmic min2 rule,
+where c[2-exp(-1/c)]=1. Its residual payments vanish on the abundant side
+when the opposite residual total is zero, so the same dummy argument applies.
+The full-OUT proof is the signed compensation proof in
+../composition/CONE_L1_EMBEDDABLE_SHARP_THEOREM.txt, not a claim about the
+Huber rule (1), which only has the TCWM proof above.
+
+2. PRECISE ESCAPE FROM FIXED MARGINAL WEIGHTS
+For any monotone production function, every nonnegative dummy-zero payment
+rule has a POINTWISE report-adaptive positive whole-owner marginal
+representation. If y_i>0, choose any R with marginal Delta_i,R>0 and set
+w_i,R(b)=y_i(b)/Delta_i,R(b), with all other weights zero. If y_i=0 set all
+weights zero. Dummy-zero guarantees the required positive marginal exists.
+Choosing the first positive R in a fixed subset order makes this explicit.
+No efficient computation, bounded coefficients, or extra regularity is asserted.
+
+Thus (1) is a uniform bounded example in the report-adaptive positive
+marginal-weight class. The accepted fixed-weight lower does not extend to
+that class merely from positivity or dummy-zero. In particular min2 permits
+TCWM factor3/2 even while every report-independent positive whole-owner
+marginal-weight architecture has an unbounded uniform all-coalition factor.
+This is a representation/scope corollary; it does not improve the already
+accepted unrestricted min2 factors.
+
+3. MIN3: EXACT STOP FOR SIMPLE NETTING, NOT FOR DUMMY-ZERO
+Take fixed owners
+ A=(1,0,0), B=(2,0,1), C=(2,1,0), F=min_3.
+A is a dummy: the four R profiles excluding A have values 0,0,0,1 both
+before and after A is added. Every owner's standalone minimum is zero, so
+ownerwise balanced netting changes nothing. Aggregate totals are (5,1,1).
+The accepted rule in ../root/GENERAL_FACE_AVERAGE_TCWM.txt defines
+p_1(C)=C_1^-1 integral_[0,1]^2 F(C_1,u C_2,v C_3) du dv.
+At C=(5,1,1), F(5,u,v)=min(u,v). Its expectation is
+integral_0^1 Pr(u>=t,v>=t)dt=integral_0^1(1-t)^2dt.
+Therefore the raw min3 resource1 price equals
+             (1/5) integral_0^1 (1-t)^2 dt=1/15,
+so A receives a positive payment. Therefore simply netting standalone minima
+and then applying that integral rule does not establish dummy-zero for min3.
+
+No scalable dummy-zero lower or owner-independent min3 dummy-zero mechanism
+has been proved in this gate. The min2 positive result does not transfer by
+assertion to min3. The original unrestricted individual-IC gap and the general
+arity3 bounded-coalition gap remain unchanged.
+
+VERIFICATION AND CLOSURE
+DUMMY_ZERO_FINAL_CHECK.py verifies the min2 formula using Fraction arithmetic
+on every three-owner profile in {0,1,2}^6, all coalition covers, dummy-zero,
+the funding inequality, and every one-step coordinate restoration with every
+protected coalition containing the changed owner. It also checks all four
+min3 dummy marginals and the exact 1/15 payment. The formulas and argument
+above establish all owner counts and continuous profiles; finite checks do not.
+Replay PASS: 729 profiles, 5103 coalition covers, 675 dummy-zero checks,
+11664 coalition restoration inequalities, and four min3 dummy marginals.
+No established manuscript, accepted proof, or handoff file was changed.

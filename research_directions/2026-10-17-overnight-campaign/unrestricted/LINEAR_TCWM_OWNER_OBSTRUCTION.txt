@@ -1,0 +1,102 @@
+LINEAR COALITION-VALUE RULES CANNOT GIVE SUBLINEAR TCWM FUNDING
+17 October 2026. Candidate structural theorem; independent audit required.
+
+STATEMENT
+For every n>=2 there is ONE finite-dimensional, nonnegative monotone concave
+homogeneous production technology F such that every eligible TCWM mechanism
+of the form
+                 y_i(b)=sum_{empty!=S subset N} c_{i,S} v_b(S),
+                 v_b(S)=F(sum_{j in S}b_j),
+with real coefficients fixed across all reports, has worst-case total-funding
+factor at least
+                         (n-1)/2+1/n.                       (1)
+All actual owners are fixed and fully eligible for all resources. The coefficients
+may depend arbitrarily on F and n, may be signed, and need not be anonymous.
+The statement is about a fixed linear transformation of the ENTIRE coalition-
+worth vector; it therefore includes fixed semivalues and linear corrections.
+It does not restrict nonlinear rules or mechanisms using reports beyond v_b.
+Affine constants are also covered when finite-factor funding and nonnegative
+payments are imposed: the zero profile forces each constant to be zero.
+
+The routine TCWM rule [v_b(N)+v_b({i})]/2 is linear in these values and has
+factor at most(n+1)/2. Thus the best uniform rate within this broad linear
+architecture is Theta(n), with asymptotic coefficient1/2. A general o(n)
+TCWM upper must be nonlinear in the coalition-worth vector, or use additional
+report/ownership information. Historical priority is not yet established.
+
+A REALIZABLE COALITION-VALUE PERTURBATION GADGET
+Fix a nonempty target S subset N. This gadget has resources x_1,...,x_n,z.
+For each nonempty U subset N define a nonnegative linear form
+ L_U(x,z)= (|U|+1)/2 *sum_{j in U}x_j
+            +M*sum_{j notin U}x_j + 1_{U=S}z,
+ where M=n(n+1)+1. Define G_S=min_{empty!=U subset N}L_U.
+This is a finite nonnegative min-linear technology, hence monotone, concave
+and positively homogeneous. At x=1_T, z=0, for every nonempty T, the unique
+minimizer is U=T and the value is |T|(|T|+1)/2:
+ - If T subset U and U!=T, the excess is |T|(|U|-|T|)/2>=1/2.
+ - If T is not a subset of U, the M term alone exceeds n(n+1)/2.
+Therefore every competing form has margin at least1/2.
+Give actual owner j one unit of x_j, and zero z to everyone. Let h belong to
+S. Increase ONLY h's z-report from0 to epsilon=1/4. For a coalition T:
+ - If h notin T, its resource bundle is unchanged.
+ - If h in T and T!=S, its formerly unique minimizing form has z coefficient0,
+   and every other form only increases or stays fixed, so its value is unchanged.
+ - If T=S, its unique minimizing form increases by epsilon and retains its
+   positive margin, so its value increases by exactly epsilon.
+Thus one actual owner's coordinate increase changes v(S) alone among ALL
+nonempty coalition values. This is an explicit realizable production transition,
+not an assumption that arbitrary abstract-game changes are feasible.
+
+ONE FIXED TECHNOLOGY FOR THE COMPLETE PROOF
+Take the sum on disjoint resource blocks of:
+ (a) G_{S_k} for k=1,...,n-1, where S_k={1,...,k};
+ (b) one linear production resource;
+ (c) a two-resource minimum;
+ (d) an n-resource minimum.
+The direct sum F is again finite, monotone, concave and homogeneous. It has
+n^2+n+2 resources. At each test profile activate only the specified block;
+all other resources report zero and contribute zero. Owners and eligibility
+are unchanged across all tests. This construction freezes F before the rule
+is selected, so it also covers coefficients chosen with full knowledge of F.
+
+SYMMETRIZATION AND NORMALIZATION
+Average an eligible linear rule over all permutations of actual owner labels.
+The fully eligible domain, fixed F, each coalition-cover and TCWM inequality,
+nonnegativity and funding factor are preserved. The averaged coefficients for
+any k-element coalition S are alpha_k for i in S and beta_k for i notin S.
+Set a_k=binom(n-1,k-1)alpha_k for1<=k<=n, and
+b_k=binom(n-1,k)beta_k for1<=k<n.
+
+TCWM COEFFICIENT INEQUALITIES
+In gadget G_{S_k}, choose h=1. The changing owner belongs to the coalition
+C={h} union (N\S_k). Its payment change is
+ epsilon[alpha_k+(n-k)beta_k]. TCWM implies it is nonnegative. Equivalently,
+                         a_k+k*b_k>=0, k<n.                (2)
+No condition on nonrealizable game changes was used.
+
+THREE COVERAGE/BUDGET TESTS
+Activate the two-resource minimum, giving owner1 its first unit and owner2 its
+second unit. This is the two-owner unanimity game with n fixed owners. Coverage
+of {1,2} gives
+ 2 sum_{k=2}^n binom(n-2,k-2)alpha_k>=1,
+ or equivalently
+                  sum_{k=1}^n(k-1)a_k >=(n-1)/2.            (3)
+Activate the n-resource minimum, giving owner j one unit of resource j. Only
+N produces one unit, so grand coverage gives
+                             a_n>=1/n.                     (4)
+Finally activate the linear resource, giving only owner1 one unit. This is the
+single-owner unanimity game, v(T)=1 iff1 in T. Total funding at this profile is
+ K=sum_{k=1}^{n-1}k(a_k+b_k)+n*a_n.
+Using (2),
+ K >= sum_{k=1}^n(k-1)a_k+a_n
+   >= (n-1)/2+1/n
+by(3),(4). Its grand production is1, proving(1). QED.
+
+EVIDENCE AND CONSEQUENCE
+linear_tcwm_probe.py was a numerical discovery LP on the normalized coefficient
+constraints, not a numerical proof. The explicit gadget and algebra above give
+an all-n conventional proof. verify_linear_tcwm_obstruction.py independently
+checks the gadget values, all changed coalition values and coefficient identities
+with rational arithmetic. This theorem closes the fixed-linear-operator route
+to a sublinear TCWM owner upper. It does not prove a linear unrestricted lower,
+and does not constrain the original individual-incentive problem.

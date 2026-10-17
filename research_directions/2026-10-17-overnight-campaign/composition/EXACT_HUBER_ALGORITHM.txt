@@ -1,0 +1,94 @@
+EXACT UNIT-HUBER PRICES BY DENSITY MIN-CUTS
+17 October2026. Independent implementation/audit of the algorithmic proposition
+suggested by the Fable delegate. Existing flow/principal-partition machinery,
+not a new algorithmic-priority assertion. No strongly-polynomial claim.
+
+INPUT AND OUTPUT
+Input: finite undirected simple graph and rational nonnegative capacities.
+Output: exact Huber resource prices, exact original-edge KKT multipliers,
+exact fractional production and rounded-dual certificates, and density blocks.
+Zero-capacity vertices receive price1 as a cover convention and paymentzero.
+The positive induced graph is solved; isolated positive vertices have price0.
+No numerical optimizer or floating-point comparison is used.
+
+STRUCTURAL LEMMA, INDEPENDENTLY CHECKED
+At a positive profile, let p be the unique Huber optimizer and let lambda be
+its nonnegative tight-edge KKT flow, with degree(v)=c_v min(2p_v,1). For any
+vertex setX, counting each edge endpoint gives
+  degree(X)<=degree(N(X))<=c(N(X)).                    (1)
+Let tau=min_v p_v. If tau<1/2, then
+  rho=2tau=min_{nonempty X} c(N(X))/c(X).               (2)
+Indeed(1) and degree(v)>=2tau c_v give the lower bound. For the minimum-price
+setX0, every neighbor has price1−tau: feasibility forces price>=1−tau, and
+that neighbor's tight edge to some vertex forces the reverse inequality.
+All its positive KKT flow therefore goes toX0. Hence c(N(X0))=2tau c(X0).
+Any minimizing set in(2) can contain only minimum-price vertices, by equality
+in the same chain. ThusX0 is the unique inclusion-maximal minimizing set,
+and is independent. Assign p=rho/2 onX0, p=1−rho/2 onN(X0).
+
+All edges fromN(X0) to the remaining vertices are strictly slack, since all
+remaining prices exceedtau. Restricting KKT to the remaining induced graph
+therefore proves the same optimizer problem remains. RemoveX0 andN(X0) and
+repeat. If the minimum ratio is at least1, the remainder has all prices1/2.
+The reasoning uses the original graph, so odd cycles cause no exception.
+
+MIN-CUT ORACLE
+Scale rational capacities to positive integers on the active induced graph;
+write C for their sum. For rationaltheta=a/b in[0,1], build a double-cover
+network: source->L_v capacitya c_v; R_v->sink capacityb c_v; L_u->R_v and
+L_v->R_u for each original edge, capacity(a+b)C+1. The latter exceeds every
+potential finite mincut. A finite cut with left source setX optimally includes
+exactlyN(X) on the right, and its cost is
+  a C + b[c(N(X))−theta c(X)].                       (3)
+Thus a maxflow detects a negative minimum precisely when its value<a C.
+
+At the EXACT critical ratio rho the empty set also minimizes(3). Ordinary
+source reachability may return that empty set. The implementation deliberately
+takes the MAXIMAL source side: complement of all residual vertices that can
+reach the sink. This is the union/maximal side of all mincuts and returns the
+maximal minimizingX0 required above. A one-edge positive profile provides a
+calibration where this distinction is essential.
+
+EXACT RATIONAL RECOVERY
+After integerization, each critical ratio is B/A for capacity sumsA,B with
+1<=A<=C. Distinct rationals of denominator<=C differ by at least1/C^2.
+Binary-search the sign from(3) until the enclosing interval has width below
+1/(4C^2). The closest denominator<=C rational to its midpoint is then uniquely
+the desired rho. Python Fraction.limit_denominator implements this exact
+continued-fraction operation. A fresh exact mincut at rho verifies zero
+reduced cost, nonempty disjointX,N(X), and c(N(X))/c(X)=rho before assigning
+any prices. There are at mostn nontrivial peeling blocks.
+
+BIT COMPLEXITY
+Each block uses O(log C) maxflows. Clearing input denominators uses their LCM,
+whose bit length is at most the sum of input denominator bit lengths.
+All bisection and network-capacity bit lengths are polynomial in the input
+encoding length. Edmonds-Karp uses O(V E) augmentations and O(V E^2) arithmetic operations,
+with exact integer capacities here; bit complexity is polynomial in graph size
+and input bit length. This is a weakly polynomial implementation. It does not
+assume a strongly-polynomial parametric-flow theorem or an unverified runtime.
+KKT certificate construction is one further rational double-cover maxflow
+with demands d_v=c_v min(2p_v,1); its bit sizes also remain polynomial.
+
+CERTIFICATES AND REPLAY
+The KKT flow is mapped back to ORIGINAL edges by averaging the two oriented
+copy flows. The standalone checker verifies nonnegativity, original cover
+constraints, tight-edge support, degree stationarity, rounded cover feasibility,
+sumlambda=sum c rounded_p, and funding<=3/2 sumlambda. It does not rerun the
+mincut optimizer. Exact checks raise RuntimeError rather than use assert.
+
+Files:
+  exact_huber_solver.py -- implementation and standalone certificate verifier
+  check_exact_huber_solver.py -- independent enumerator comparison and stress
+  EXACT_HUBER_SOLVER_CERTIFICATES.json --579 exact certificates
+  EXACT_HUBER_SOLVER_CHECKS.json -- full check summary
+  EXACT_HUBER_OLD_VERIFIER_REPLAY.json -- prior independent KKT checker PASS
+  EXACT_HUBER_NEW_VERIFIER_REPLAY.json -- standalone new verifier PASS
+
+Validation:501 frozen independent-enumerator prices plus75 fresh exact
+enumerator cases match. Includes zeros, isolated vertices, odd cycles and
+coprime rational denominators; maximum integerized sum was52 bits. Three
+larger graph checks have20,40,80 vertices and26,72,165 edges, respectively.
+All579 original-edge certificates pass BOTH checkers using python3 -I.
+The finite validations check implementation; the universal guarantee comes
+from the structural proof and the already-audited mechanism theorem.

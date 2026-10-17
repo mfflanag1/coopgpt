@@ -1,0 +1,142 @@
+M100 OFFLINE DESCRIPTIVE GATE: PORTABLE REPRODUCTION
+17 October 2026. This reproduces observations in three public released-data
+members. It does not test physical pooling, causal energy savings, reliability,
+ownership, or an operational reserve contract.
+
+ONE COMMAND
+
+Use Python3.10+ with DuckDB1.4.1 already installed in that interpreter. This
+runner does not install packages or download data. From any working directory:
+
+  /path/to/python -I /path/to/reproduce_m100_gate.py \
+    --raw-dir /path/to/local-parquet-members \
+    --output /path/to/new-report.json
+
+The script alone and the three raw members are sufficient. It has no sibling
+Python dependency or hard-coded campaign directory. To additionally compare
+against the preserved, unmodified inspection/supplement reports:
+
+  /path/to/python -I /path/to/reproduce_m100_gate.py \
+    --raw-dir /path/to/local-parquet-members \
+    --output /path/to/new-report.json \
+    --reference-dir /path/to/checks
+
+The optional directory must contain M100_PANEL_INSPECTION.json and
+M100_PANEL_SUPPLEMENT.json. Their hashes are included in the output. They are
+comparison targets only: no derived result is imported into the computations.
+Without them, embedded accepted key claims still provide a compact regression
+comparison. Counts and timestamps must match exactly; floating summaries use
+absolute tolerance1e-9 and relative tolerance1e-12.
+
+The output parent must already exist. Existing output files and any output
+inside the raw directory are refused. Choose a new name for each rerun.
+Exit0 means the analysis completed and all selected comparisons passed.
+Exit1 produces an ERROR or DISCREPANCY report, with details; invalid CLI paths
+can fail before analysis. A missing/wrong raw hash fails before any DB is opened.
+
+INPUT IDENTITY
+
+All three filenames, byte lengths and SHA256 values are pinned from the
+preserved range-intake record of the April2020 Zenodo release:
+https://zenodo.org/records/7588815/files/20-04.tar?download=1
+
+ps0_input_power__a_0.parquet; 2,830,525 bytes
+ a2e9925ed8590d3096ba9e2d78039ad3a6a9b7e541b5fe94f0a910720194095e
+ps1_input_power__a_0.parquet; 2,896,957 bytes
+ 370340c4f330d6efcfc266bfa315cc9206884621243248af0ebdd61f5c8aca35
+total_power__a_0.parquet; 2,511,767 bytes
+ 7cd3425bac3dfaebe804299b39742ee084df8af34d16d7549f470dc2ae20c51e
+
+The original members were each
+year_month=20-04/plugin=ipmi_pub/metric=METRIC/a_0.parquet.
+The raw directory may contain unrelated files, including the old inspection
+database. Only the three explicitly named parquet members are read. The runner
+does not open, copy, attach, or mutate inspection.duckdb. Input hashes are
+checked again after analysis. This is an offline replay, not an acquisition
+script or a verification of the full tar archive's hash.
+
+WHAT IS RECOMPUTED
+
+For every metric: exact rows and node count; schema; timestamp range; null,
+negative, zero, unmapped/noncanonical node counts; value ranges/quantiles;
+exact duplicate, conflicting, all-null and mixed-null key statistics.
+
+Internal join/grouping keys are exact epoch nanoseconds. There is no rounding
+to20s or even milliseconds. Millisecond summaries are merely display fields;
+submillisecond and subsecond rows are separately checked and are absent in
+the pinned files. Times are UTC. Node IDs are canonical strings0 through979.
+
+Exact repeated keys collapse before joins. A conflicting key, all-null key,
+negative value, null node or null time is excluded from the clean table.
+A key with nulls plus one agreed nonnull value is retained and separately
+counted. No imputation, upper cutoff, health-state or workload filter is used.
+The actual pinned files have no duplicate/conflicting/null/negative keys.
+
+PSU pairs require ps0 and ps1 for the same node at the identical timestamp.
+Triples additionally require total_power at that exact node/time. Delta is
+total_power minus (ps0_input_power plus ps1_input_power). No assumption that
+these quantities describe an identical physical meter boundary is imposed.
+
+The runner computes timestamp node-count histograms for each raw metric,
+the PSU pair panel and the triple panel, then their intersections across all
+980 nodes. It also reproduces the preselected node0/node1 intersection.
+The longest20s run counts consecutive timestamp observations; elapsed span
+is20*(cells-1) seconds, not20*cells. Runs are postselected summaries.
+
+Global maximum gaps use distinct timestamps with at least one clean reported
+node, separately for each raw metric. They are not the maximum per-node gap,
+nor an estimate of hardware failure or sensor downtime. Ties select the first
+gap by start time. This avoids importing hand-added supplement fields.
+
+RESOURCE AND WRITE BOUNDARIES
+
+Every run creates a fresh database in an automatically deleted temporary
+directory, with two DuckDB threads, a1GB buffer-memory limit, and UTC timezone.
+Known-extension auto-install and auto-load are disabled. Only local parquet
+paths are supplied; the code has no acquisition/network routine. Temporary
+database/spill storage may exceed1GB; allow a few GB of temporary disk space.
+The1GB setting limits DuckDB-managed buffer memory, not total OS process RSS.
+No persistent database, original report or original raw member is written.
+
+VERIFIED REPLAY IN THIS CAMPAIGN
+
+The canonical command was run from /private/tmp, outside the campaign tree:
+
+  /private/tmp/coopgpt-overnight-20261017/root/.venv/bin/python -I \
+    /private/tmp/coopgpt-overnight-20261017/energy/reproduce_m100_gate.py \
+    --raw-dir /private/tmp/coopgpt-m100-raw-20261017 \
+    --output /private/tmp/coopgpt-overnight-20261017/checks/M100_PORTABLE_REPLAY.json \
+    --reference-dir /private/tmp/coopgpt-overnight-20261017/checks
+
+Python3.13.7 / DuckDB1.4.1: PASS in approximately8 seconds. No discrepancies
+against the selected accepted inspection/supplement results; raw hashes were
+unchanged. An initial setup-only attempt rejected TimeZone as a connect
+configuration option; it was corrected to SET TimeZone after opening the
+connection before the passing analysis. No accepted finding was changed.
+
+Selected replay results:
+  raw rows ps0/ps1/total: 4,787,828 / 4,787,831 / 4,750,202;
+  exact PSU pair keys: 4,787,824; exact triples: 4,750,202;
+  triple delta mean: -160.62955217483383 W; median: -150 W;
+  delta range: -1290 to910 W;
+  all980 timestamps total/triples:965, longest20s run1 observation;
+  all980 timestamps PSU sum:1,722, longest20s run71 observations/1,400s;
+  maximum global timestamp gap per metric:184,880s (51h21m20s).
+The separate per-node maxima in older reports use a different definition.
+
+The small independent test file test_reproduce_m100_gate.py checks exact run
+endpoints, refusal of bad hashes/overwriting output, null/conflict duplicate
+handling and a1us-versus2us timestamp mismatch. That mismatch must not create
+a PSU pair after accidental millisecond truncation. Run it with the same
+interpreter and -I; all3 tests passed. These tests cover failure modes rather
+than treating the observed production dataset as its own specification.
+
+INTERPRETATION LIMITS
+
+The complete retrieved members contain April1-4 observations. Their lack of
+later monthly records does not establish a sensor outage or monthly uptime.
+No Nagios operational states, workloads, service latency, ownership rights,
+deliverability or opportunity costs enter this replay. It establishes an exact
+released-data panel and its limitations, not a pooling result. The difference
+between total_power and PSU sum is retained, not corrected away or explained
+causally. No additional empirical claim follows from passing this runner.

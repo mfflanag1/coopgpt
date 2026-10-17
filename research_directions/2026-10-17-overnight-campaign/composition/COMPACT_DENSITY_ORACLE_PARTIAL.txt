@@ -1,0 +1,49 @@
+PARTIAL EXACT-COMPRESSION LEAD: ONE DENSITY STEP HAS A COMPACT LP
+2026-10-17. Structural derivation only; no total-runtime theorem claimed.
+
+Use the full triangular integer unfolding from the frozen rational-lift v1:
+copy(v,a), a=0,...,W-1, and edges a+b<=w_uv-1. It also has the exact weighted
+production identity. Copy capacities within each original resource are all c_v.
+Assume positive-capacity original resources; zero rows are ignored for density.
+
+Nested neighborhoods imply a minimum-density set X can be chosen as a suffix
+of copies at each resource: replacing any selected lower-index copy by an
+unselected higher-index copy preserves its capacity and only shrinks neighbors.
+Suppose remaining copies at v form an interval[lo_v,hi_v], of size N_v, and
+for every surviving original edge, in both orientations,
+ hi_u+lo_v>=w_uv-1.                                      (I)
+Initially lo=0,hi=W-1 satisfies(I). If x_v copies form the selected suffix,
+its neighbor set at v is the prefix of length
+ y_v=max(0,max_{u:uv in E}[x_u+w_uv-hi_u-lo_v-1]).         (2)
+Formula(2) also works when x_u=0, by(I), and never exceeds N_v, by the
+oppositely oriented instance of(I). This avoids hidden activation binaries.
+
+Therefore minimum-density selection is the linear-fractional program
+ min (sum_v c_v y_v)/(sum_v c_v x_v), denominator>0,
+ 0<=x_v,y_v<=N_v,
+ y_v>=x_u+w_uv-hi_u-lo_v-1 for every oriented original edge.
+It has only2n variables and O(n+m) difference constraints with binary-encoded
+integer right sides. The difference-constraint matrix is totally unimodular;
+its bounded polytope has integral vertices. The continuous fractional optimum
+is attained at a nonzero-denominator vertex: decompose any feasible point
+into vertices and compare ratios; zero-denominator positive-numerator terms
+cannot reduce the ratio. Thus its optimum equals the discrete suffix optimum.
+Standard linear-fractional programming supplies a bit-polynomial single-step
+oracle, without constructing W copies. Isolated suffixes may give density0.
+
+At a critical density rho<1, choose the maximal minimizer (the union of all
+minimizing sets), which can be found by maximizing sum x_v on its optimum
+face. Minimum-density sets are closed under union, and suffix union corresponds
+to coordinatewise maximum counts. The unit density argument makes X and N(X)
+disjoint. Removing low suffix counts x_v and high prefix counts y_v leaves
+intervals lo'_v=lo_v+y_v, hi'_v=hi_v-x_v. For every surviving original edge,
+ hi'_u+lo'_v = hi_u+lo_v-x_u+y_v >= w_uv-1,
+so(I) is preserved. Thus the compact oracle can be iterated exactly, summing
+assigned low/high copy-price contributions to each original effective price.
+
+UNRESOLVED GATE
+The number of peeling phases has NOT been bounded polynomially in n,m,log W.
+The trivial bound is nW; a compact oracle alone is not a polynomial algorithm.
+No claim of strongly polynomial, original-bit-polynomial exact3/2 evaluation,
+or historical novelty for this LP representation is made. The independently
+proved approximation scheme is the currently completed algorithmic result.

@@ -1,0 +1,72 @@
+UNBOUNDED OBSTRUCTION TO THE MINIMUM-NORM DELETION BOUND
+17 October 2026. Exact architecture obstruction; the own-envelope remains open.
+
+PRODUCTION FAMILY
+Fix integers m,k>=1. There are n=1+mk fixed actual owners, each owning one
+resource: center0, and mk leaves partitioned into m disjoint groups of size k.
+Technology is
+ F(c)=min{c_0, sum_{g=1}^m min_{j in g} c_j}.
+It is nonnegative, monotone, concave and homogeneous. Equivalently m activities
+share the center resource; activity g consumes one unit of the center and of
+every leaf resource in group g. All reported capacities are1. Grand production
+is T=1. A coalition produces1 exactly when it contains the center and every
+leaf of at least one group; all other coalitions produce0.
+
+MINIMUM-NORM COVERS
+The complete nonnegative coalition-cover polyhedron therefore reduces to
+ x_0+sum_{j in g}x_j>=1 for g=1,...,m.
+Strict convexity and group/leaf symmetry give x_0=a and every leaf b. Tightness
+and minimization of a^2+mk*b^2 subject to a+kb=1 give
+ a=m/(m+k), b=1/(m+k), R^2=m/(m+k).
+This can also be certified by assigning dual multiplier1/(m+k) to every group
+constraint: the resulting coordinate loads are exactly x and all rows are tight.
+Deleting the center removes all positive coalition constraints, hence R_{-0}^2=0.
+Deleting any leaf disables its group; the k-1 other leaves in that group become
+null players. The same calculation with m-1 groups gives
+ R_{-j}^2=(m-1)/(m+k-1),
+ delta_0=R^2=m/(m+k),
+ delta_j=R^2-R_{-j}^2=k/[(m+k)(m+k-1)].
+
+FAILURE OF THE PROPOSED SQUARED-DELETION INEQUALITY
+The deletion sum is
+ D=m/(m+k)+mk^2/[(m+k)(m+k-1)].
+For m=k=t it equals
+ D=1/2+t^2/[2(2t-1)],
+which tends to infinity, whereas T^2=1. Thus no constant multiple of T^2 can
+bound this deletion sum on all production games. The smallest symmetric
+instance t=2 has n=5 and D=7/6>1.
+
+FAILURE OF THE DIRECT SQUARE-ROOT-DELETION PAYMENT RULE
+Root observed that Y_i=sqrt(R^2-R_{-i}^2) is itself individually own-monotone,
+nonnegative, and coalition covering. Own monotonicity follows because R^2
+increases when own-report coalition constraints increase, while R_{-i} is fixed.
+Coverage follows by setting coordinate i of x to zero, which is feasible for
+the deletion polyhedron: R_{-i}^2<=R^2-x_i^2, hence Y_i>=x_i.
+However on this family its funding is exactly
+ sum_iY_i=sqrt[m/(m+k)]+mk*sqrt[k/((m+k)(m+k-1))].
+For m=k=t this becomes
+ 1/sqrt(2)+t^2/sqrt[2(2t-1)] = (1/2+o(1))*n^(3/4).
+So this otherwise valid rule cannot match the manuscript's O(sqrt(n)) bound.
+This is an architecture obstruction, not an unrestricted mechanism lower bound.
+
+WHAT THIS DOES NOT RULE OUT
+The original own-report monotone envelope of the minimum-norm cover may be
+much smaller than the square-root-deletion majorant. At the profile above it
+actually equals x. To see this, reduce one leaf's sole capacity from1 to u.
+Only its group constraint changes to x_0+sum_{j in g}x_j>=u. The payment to
+that leaf is
+ max{0, [(m+k-1)u-(m-1)]/[k(m+k)]},
+which increases with u. Reducing center capacity scales all positive group
+requirements and the entire minimum-norm cover linearly. Thus no owner gains
+by underreporting from the all-unit profile, and the envelope total there is
+ m(k+1)/(m+k), only(t+1)/2 when m=k=t.
+A sqrt(n) upper for the ACTUAL own-envelope is therefore still a live question;
+its proof must use more than the total decrease in minimum squared norm.
+
+VERIFICATION
+verify_min_norm_deletion_obstruction.py checks all displayed identities and
+primal/dual stationarity with rational arithmetic for thousands of m,k pairs.
+The formulas and symmetry/strict-convexity proof establish every integer pair.
+The earlier five-owner three-edge-path numerical discovery in
+qp_hypergraph_deletion_probe.json has D=31/30; the two disjoint groups here
+are a strictly simpler and stronger counterexample.

@@ -1,0 +1,83 @@
+INDEPENDENT CODEX AUDIT — HUBER THREE-HALVES CANDIDATE v1
+17 October 2026, 04:09 UTC. Reviewer: unrestricted-limits lane.
+Scope: /composition/HUBER_PRICE_THREE_HALVES_CANDIDATE.txt as read at04:07UTC.
+Verdict: NO VERIFIED MATHEMATICAL GAP FOUND in the frozen unit-profit,
+unit-consumption, fractional graph model with arbitrary actual mixed owners.
+This is internal proof review, not novelty clearance or external specialist QA.
+
+1. Positive-capacity optimization
+The global zero/one perturbation in Lemma1 is valid: there are finitely many
+one/interior edges with positive slack, and decreasing every price1 while
+increasing every price0 preserves zero/one equalities and one/one feasibility
+for small epsilon. At least one positive-cost one-vertex exists whenever a
+nonisolated zero exists. The first-order decrease defeats the quadratic cost
+of all raised zeros. No hidden active-edge exception remains.
+
+The uniqueness argument correctly uses strict convexity only below1/2.
+If two minimizers differ at a coordinate, both endpoint values must be>=1/2.
+Any coordinate strictly above1/2 has a tight low neighbor (otherwise decrease
+that coordinate). The low neighbor is the same in both optima, ruling out a
+decrease of the high coordinate. Exchanging the optima completes uniqueness.
+Isolated actual graph vertices have unique price0 at positive cost.
+
+2. KKT and funding
+Slater holds, e.g. all prices3/4; nonisolated prices are interior. Multipliers
+therefore satisfy degree(lambda)=c h'(p). Since h'<=1 they are feasible
+fractional activity flows. The rounded vector r in{0,1/2,1} is dual feasible:
+every low neighbor is high; half/half sums1; high/half and high/high are safe.
+Every positive-multiplier edge has rounded sum1, and every r-positive vertex
+is saturated. Thus lambda and r certify the ORIGINAL maximum production,
+not merely a regularized surrogate. This also handles inactive edges.
+Strict components yield t=B/(2A) and funding(3/2-t)B. Half-price components
+are efficiently funded. The bound therefore adds across tight components
+without multiplying by depth.
+
+3. Mixed-owner own monotonicity
+For one actual owner, the relevant sums a,b are her capacities over BOTH
+sides of the entire changing tight component. Bounds a<=A,b<=B hold even
+when she owns both sides and several vertices; they are exactly what is
+needed by the displayed derivatives. Other tight components' rational
+formulas are constant during a fixed-pattern interval. The high-side lower
+bound is1-2t>=0; the low-side lower bound is t(1-a/A+b/A)>=0.
+
+The seam argument is adequate: there is a finite collection of rational
+candidate optimizer vectors along a one-coordinate segment, with positive
+denominators. Distinct formulas intersect only finitely many times unless
+identical. A continuous selection cannot move between unequal formulas
+without an intersection; identical formulas have identical tight edges.
+Hence finite-piece integration of the nonnegative derivatives is justified.
+
+4. Boundary
+At zero aggregate coordinates, owner capacities there all vanish. The
+limiting objective reduces to the induced positive graph because zero
+vertices can be assigned price1 free of charge. Positive-coordinate prices
+therefore have a unique limit; arbitrary limiting zero-coordinate prices
+do not affect payments. For the regularized objective c+epsilon1, retaining
+actual report weights is legitimate: the same inequalities a<=A,b<=B hold,
+and changing an actual coordinate changes its regularized aggregate by1.
+The pointwise limit of own-monotone regularized payments proves the boundary
+claim without introducing public resource capacity into the actual game.
+
+5. Exact finite independent corroboration
+audit_huber_exact.py builds tight-edge component patterns independently and
+minimizes the Huber objective in Fraction arithmetic over feasible rational
+candidate formulas. It uses no numerical convex optimizer. With seed178733:
+980 profiles across one edge, path5, cycle5, square+diagonal, K4, K3,3,
+and a disconnected graph;980 budget comparisons;4340 mixed-owner coordinate
+increases; all PASS, including zero aggregate capacities and component seams.
+Run: python3 -I -O unrestricted/audit_huber_exact.py
+Saved: unrestricted/audit_huber_exact.json.
+The production comparison enumerates half-integral dual covers, using the
+standard half-integrality theorem. Finite checks corroborate the proof;
+they do not replace its universal argument.
+
+Reviewer implementation correction: an initial checker compared tied
+nonminimal intermediate candidates for uniqueness. It was repaired to compare
+only final global minimizers. This was a checker bug, not a theorem finding.
+
+6. Scope to preserve
+Do not silently generalize to weighted profits, nonunit endpoint consumption,
+integral matching, public common capacities, private costs, or coordinated
+deviations. A factor3/2 here is total funding; subsidy is at mostF/2.
+The all-graph theorem supersedes forest topology restrictions for this model,
+but does not close unrestricted general concave-production n/d rate gaps.

@@ -1,0 +1,137 @@
+SCALED POSITIVE MARGINAL-CONTRIBUTION RULES HAVE A QUADRATIC SIZE BARRIER
+17 October 2026. Extension of SEMIVALUE_MIXTURE_OBSTRUCTION_GATE.txt.
+Root proposed the compactness/exchangeability extension; this lane checked and
+formalized it independently. Accepted after opposite-model, independent composition-lane and root review.
+
+STATEMENT
+Fix integers r,s>=2. Use the SINGLE public technology
+                    F(x)=min(x1,...,xr).
+For each n, all n actual owners are eligible for all r resources. Suppose
+payments have the form
+ y_i^(n)(b)=sum_(R subset N\{i}) w_(n,i,R)
+                         [F(b_i+b_R)-F(b_R)],             (1)
+where all weights are nonnegative, finite and independent of the report profile.
+Weights may depend on n, i, R, r, s and this public technology. Assume coverage
+for every coalition, TCWM for every coalition of at most s owners, and total
+funding <=kappa_n F(b_N), all at every report profile.
+
+Then
+                 liminf_(n->infinity) kappa_n
+                              >= s^(r-1)/r.              (2)
+In particular, any such family with a uniform funding factor has factor at
+least s^(r-1)/r. The accepted scaled binomial rule gives the complementary upper
+r*s^(r-1), even with full OUT for the protected coalitions and coverage for all
+coalitions, on every arity-at-most-r packing technology. Therefore this ENTIRE
+fixed nonnegative marginal-weight architecture has worst funding order
+Theta_r(s^(r-1)), uniformly over finite owner populations. At r=3 the exponent
+is quadratic. For r other than3 the displayed general exponent governs.
+
+This is an ARCHITECTURE lower, not an unrestricted-mechanism lower. On the
+very same min_r technology, the accepted unrestricted all-coalition TCWM
+mechanism has factor(r+1)/2 independent of s; at r=3 its factor is2. Thus(2)
+is strong evidence of this architecture's inefficiency, not evidence that the
+general arity-three size frontier must be quadratic. The class uses fixed
+whole-owner marginal contributions; profile-adaptive, resource-level and
+nonlinear ownership-aware mechanisms remain outside its scope.
+
+Only reports in [0,1]^r per owner are needed for the lower proof: threshold
+witnesses, pure-owner coverage, balanced-owner budget and null padding all lie
+in that cube. Owner identities stay fixed in each comparison. Padding means
+examining zero reports of additional fixed eligible owners, not owner creation
+or strategic splitting. The finite-n weights need not be Bernoulli mixtures.
+
+1. FINITE LABEL SYMMETRIZATION
+Permute owner labels and average both payments and report labels over all n!
+permutations of the SAME fully eligible owner model. Nonnegativity, funding,
+all coalition coverage and size-at-most-s TCWM survive this finite convex
+average. The symmetrized rule has one nonnegative weight w_(n,k) per subset
+cardinality k, identical across focal owners. This uses symmetry of the public
+domain; the original mechanism need not be anonymous.
+
+Set W_(n,k)=binom(n-1,k)w_(n,k). The symmetrized payment is
+ sum_(k=0)^(n-1) W_(n,k) E_[uniform k-subset R of N\{i}]
+                                         [F(b_i+b_R)-F(b_R)].
+At b_i=(1,...,1) for all owners, every marginal contribution is1. Funding
+therefore gives sum_k W_(n,k)<=kappa_n. For n>=2 define the finite positive
+measure
+             mu_n=sum_k W_(n,k) delta_[k/(n-1)].          (3)
+Its mass is uniformly bounded on every subsequence with bounded kappa_n.
+
+2. UNIFORM FINITE-ACTIVE SAMPLING COMPARISON
+Fix a profile with a active owner slots, including the focal slot, and pad the
+remaining n-a owners with zero reports. The focal marginal depends only on
+which q=a-1 other active slots belong to R. Under uniform k-subset sampling,
+their inclusion indicators have the distribution of q draws WITHOUT replacement
+from n-1 binary labels, k of them1. Under Bernoulli p=k/(n-1), the indicators
+are q draws WITH replacement from those same labels.
+
+Couple the draws to agree unless repeated population labels occur. Their total
+variation distance is at most
+                 delta_(n,q)=min(1,q(q-1)/(2(n-1))),      (4)
+by the union bound for a collision among q independent uniform labels. One
+explicit coupling keeps the with-replacement sequence when it is distinct;
+on collision, replace it by an independent uniform distinct sequence. Both
+conditional laws of the resulting distinct sequence are uniform, so it has
+the required without-replacement law. This bound is uniform in k.
+
+For a fixed profile, monotonicity bounds every focal marginal in [0,F(b_N)].
+Consequently its expected value differs between the two sampling laws by at
+most F(b_N)delta_(n,q). Multiplying by W and summing bounds the difference
+between the symmetrized payment and its Bernoulli-mixture counterpart by
+                  kappa_n F(b_N)delta_(n,q).              (5)
+The finite-active Bernoulli marginal is a polynomial in p. Null owners have
+zero marginal contribution and zero payment exactly in(1); none of their
+payments has been discarded by assumption or deducted from a funding bound.
+
+3. PASSAGE TO A COMMON LIMIT
+If liminf kappa_n is infinite there is nothing to prove. Otherwise choose a
+subsequence n_l->infinity on which kappa_(n_l) converges to its finite liminf L.
+Positive measures(3) have bounded mass on the compact interval[0,1], so a
+further subsequence converges weakly to a finite positive measure mu, with
+mu([0,1])<=L. Every fixed finite-active marginal polynomial converges in
+integral against these measures. Equation(5) tends to zero, so every fixed
+threshold report inequality passes to the corresponding Bernoulli mixture
+with the SAME limiting mu. This requires neither regularity of the original
+payment map nor an infinite strategic population.
+
+For the threshold witnesses of SEMIVALUE_MIXTURE_OBSTRUCTION_GATE.txt, embed
+the center amount x as(x,...,x,0) on the first r-1 rows, and a leaf amount l
+as(0,...,0,l). Then F=min(center,leaf) at every coalition. Each finite witness
+uses at most k+s active owner slots and can be null-padded whenever n_l is
+large enough. Its protected coalition remains fixed and has size at most s.
+Thus the limit mu satisfies all polynomial inequalities in that proof,
+including the protected-pair tests excluding an atom at1. The proved support
+lemma yields support(mu) subset[0,1/s]. No finite-n support assertion follows.
+
+4. COVERAGE MOMENT AND CONCLUSION
+Use r active pure owners, owner j holding the j-th unit vector, with all other
+owners zero. For uniform k-subset sampling, each active owner's marginal is1
+exactly when all other r-1 active owners are selected. Its expectation is
+(k)_(r-1)/(n-1)_(r-1), with value0 if k<r-1. The same comparison(4), or this
+explicit formula, shows uniform convergence to p^(r-1) on the atom grid in(3).
+All r active owners together produce1; coverage and the limit therefore give
+                        r integral p^(r-1) dmu >=1.
+Since p<=1/s on the support,
+  1/r <= integral p^(r-1) dmu <= mu([0,1])/s^(r-1)
+                                    <= L/s^(r-1),
+which is(2). This does not claim a quantitative finite owner threshold or
+the optimal leading constant within the architecture.
+
+SCOPE, TERMINOLOGY AND VERIFICATION
+The proof includes n-dependent Bernoulli mixtures, owner-specific fixed
+mixtures after label averaging, anonymous cardinality marginal rules, and
+all nonnegative fixed weights(1). Classical normalized semivalues have unit
+mass; arbitrary scaled positive marginal-contribution rules need not. The
+Bernoulli semivalue is an ingredient, not terminology for every arbitrary-mass
+rule in(1). Report-dependent coefficients and signed weights are excluded.
+
+SEMIVALUE_MIXTURE_CHECK.py checks the underlying finite fixed-owner threshold
+identity independently. SEMIVALUE_MIXTURE_EXCHANGEABILITY_CHECK.py verifies
+exact hypergeometric normalization, the uniform coupling bound(4), and the
+pure-owner coverage moment on bounded grids. These checks corroborate the
+analytic proof; weak compactness and the all-finite-population conclusion are
+not established by enumerating those grids. Sampling without replacement,
+finite permutation averaging and compactness are classical ingredients.
+Historical novelty of this architecture theorem remains unconfirmed. The
+Theta_r statement concerns order in s at fixed r; the lower/upper constants
+differ by r^2 and are not claimed optimal. See root64 for the acceptance record.

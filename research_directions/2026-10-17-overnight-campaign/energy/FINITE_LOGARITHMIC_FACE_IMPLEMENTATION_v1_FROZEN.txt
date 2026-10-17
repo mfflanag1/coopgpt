@@ -1,0 +1,157 @@
+FINITE RATIONAL FACE AVERAGES WITH EXACT FULL-OUT INCENTIVES
+17 October 2026. Candidate constructive corollary; independent review pending.
+This is an exact mechanism, not approximate incentive compatibility obtained
+by applying an arbitrary numerical quadrature to a payment formula.
+
+1. A PURELY RATIONAL SUFFICIENT CONDITION
+
+Choose a public rational endpoint 0<tau<1 and a public rational partition
+0=u_0<u_1<...<u_n=tau. Define
+
+  gamma=1/(1+tau),
+  w_l=gamma (u_l-u_(l-1))/(1-u_l),
+  W=sum_l w_l,
+  M=sum_l w_l u_l=W-gamma tau=gamma+(W-1).
+
+Suppose the exact rational inequality W>=1 holds. For any finite nonnegative
+monotone concave degree-one homogeneous F, define
+
+  H_j^D(C)=sum_l w_l F(C_j e_j+u_l C_-j),
+  p_j^D(C)=H_j^D(C)/C_j  if C_j>0,
+  y_i^D=b_i.p^D,
+
+with absent-coordinate contributions zero. Then these payments satisfy
+nonnegativity, coalition coverage and full coalition OUT on every real
+report profile of arbitrary fixed mixed owners. With k active coordinates,
+
+        sum_i y_i^D <= [W+M(k-1)] F(C).
+
+All constants and weights can be rational. In a rational linear-programming
+technology, rational report profiles therefore have exactly rational
+payments, computable by finitely many rational LP evaluations.
+
+2. PROOF
+
+Finite TCWM is immediate from the share-times-monotone-face expression, as
+in GENERAL_LOGARITHMIC_FACE_OUTSIDE.txt. Weighted Jensen gives
+
+  sum_j H_j^D
+   <= W sum_j F(C_j e_j+(M/W)C_-j)
+   <= [W+M(k-1)]F(C).
+
+The derivative proof from the continuous theorem still reduces to holding
+corners J. Every own-coordinate derivative term B_j is at least M F(d),
+and M>=gamma>1/2. Thus corners with |J|>=2 are covered.
+
+For the empty corner, use the same ray domination and shortest/second
+shortest ratio t. The two relevant prices are q_D(t)=sum_l w_l min(1,u_l/t)
+and Mt. If t>=tau, q_D(t)=M/t, so q_D(t)+Mt>=2M>1. If t<=tau, the function
+
+                   (t-u)_+/(1-u)
+
+is nonincreasing on [0,tau]. Its right-endpoint Riemann sum is at most its
+integral, giving
+
+  W-q_D(t)
+    =(gamma/t)sum_l (u_l-u_(l-1))(t-u_l)_+/(1-u_l)
+    <=gamma[1+(1-t)log(1-t)/t].
+
+Consequently
+
+  q_D(t)+Mt
+    >=W+gamma(1-t)[-1-log(1-t)/t]>=W>=1.
+
+For singleton J={j}, use the continuous proof's normalization G(1)=1,
+min_(l!=j)x_l=1, t=x_j, V=G(x). The base B_j contributes at least M>=gamma,
+and the outside coordinates contribute at least M V>=gamma V. If V>=tau
+these already total at least gamma(1+tau)=1. Otherwise 0<t<=V<tau.
+
+Let H(u)=G(t,u x_-j). By Euler, the own-coordinate gradient is
+
+          h(u)=partial_j G(t,u x_-j)=[H(u)-u H'(u)]/t.
+
+This function is nondecreasing in u. For smooth H, its derivative is
+-u H''(u)/t>=0. General smooth positive-face F gives precisely this case;
+nonsmooth F is handled below. Thus the discrete extra derivative satisfies
+
+  sum_l w_l(1-u_l)h(u_l)
+    =gamma sum_l (u_l-u_(l-1))h(u_l)
+    >=gamma integral_0^tau h(u)du
+    >=gamma(tau-V),
+
+where the scalar concave lemma from the continuous proof is valid with any
+endpoint tau. Combining all terms proves the singleton bound 1. Hence every
+coalition derivative in every nonnegative direction d is at least F(d).
+
+Finite deviations, zero coordinates, and possible boundary jumps follow by
+the same monotone-restoration and diagonal-log-smoothing argument as in the
+continuous theorem. All u_l are strictly positive, so each discrete face
+evaluation stays in the original active relative face. Smoothing convergence
+passes through the finite sums directly. The proof establishes exact OUT;
+it does not rely on numerical approximation of a derivative or an inequality.
+
+3. ARBITRARILY NEAR-SHARP VALUE-ORACLE COMPLEXITY
+
+Let c and t0 be the sharp continuous constants, and let 0<epsilon<=1. Choose
+a rational tau with
+
+             t0<=tau<=t0+epsilon/24,  tau<=9/10,
+
+and use the uniform grid with n=ceil(24/epsilon). Such a rational endpoint
+can be certified by bisection on
+
+              -log(1-tau)-(1+tau),
+
+whose root is t0. A fully rational certificate uses
+-log(1-tau)=sum_(m>=1) tau^m/m, with the positive omitted tail at most
+tau^(N+1)/[(N+1)(1-tau)]. On the fixed interval below 9/10, O(log(1/epsilon))
+terms suffice to bracket the function to the needed accuracy. Equality at
+the root need not be decided; choose an upper rational endpoint with a
+strict certified positive lower bound.
+
+Put W_cont=gamma[-log(1-tau)]. Then W_cont>=1. A right-sum estimate gives
+
+  0<=W-W_cont
+    <=gamma (tau/n)[1/(1-tau)-1]
+    <=(81/10)/n.
+
+The derivative of [-log(1-tau)]/(1+tau) is at most
+1/(1-tau^2)<=100/19<6, so
+
+  0<=W_cont-1<=6(tau-t0)<=epsilon/4.
+
+It follows that W>=1 and W-1<epsilon. Since gamma<=c,
+
+  W+M(k-1)
+    =1+gamma(k-1)+k(W-1)
+    <=1+c(k-1)+epsilon k.
+
+The rule therefore obtains the sharp universal factor to additive epsilon k
+using O(k/epsilon) exact value-oracle calls at each profile, independent of
+the number of owners except for aggregation and payment arithmetic. For a
+rational explicit production LP, this is a polynomial-time near-optimal
+mechanism in the usual rational LP and 1/epsilon model. It has exact full OUT
+for its defined rational rule, not merely epsilon-truthfulness.
+
+The qualification 'exact oracle calls' matters. Uncertified floating output
+from a solver can violate exact economic inequalities. Numerical deployment
+requires verified values, interval bounds with an incentive-preserving
+implementation, or an explicitly approximate economic contract. This theorem
+does not silently convert a floating solver into an exact mechanism.
+
+4. REPRODUCIBLE RATIONAL EXAMPLES AND SCOPE
+
+For tau=84141/100000 and n=1000, exact rational arithmetic gives W>=1 and
+approximately
+
+       W=1.0012259025039554,   M=0.5442880125174776.
+
+Thus the all-profile rule has factor W+M(d-1). The decimals are only a
+readable display of an exactly specified rational certificate. A smaller
+working example tau=421/500,n=100 gives W about1.0140209026 and M about0.5569090676.
+
+The finite construction supplies an implementable approximation to the
+universal theorem. It does not prove optimality within fixed n-node schemes,
+and it does not improve the exact sharp constant c. Its significance is that
+the near-optimal computation preserves the full incentive contract for all
+profiles instead of hoping that numerical integration preserves it.

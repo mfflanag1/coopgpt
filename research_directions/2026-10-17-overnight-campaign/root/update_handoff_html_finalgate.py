@@ -1,0 +1,17 @@
+from pathlib import Path
+p=Path('/private/tmp/coopgpt-overnight-20261017/handoff/build_handoff.py');s=p.read_text()
+anchor="items=[]\n"
+addition="""rows.append(('Limits of fixed marginal-payment rules','boundary','A broad sharp-order obstruction with a finite certificate','Any nonnegative, report-independent weighting of whole-owner marginal contributions has worst funding order Θ_r(s^(r−1)) when activities use at most r resources and coalitions up to size s receive incentive protection. This includes asymmetric and population-dependent weights. An exact 16-owner min3 certificate requires factor 5 for groups up to four.','These are architecture bounds. General mechanisms on that same min3 technology have factor 2. The unrestricted arity-three interval remains Ω(s^(1/4)) to O(s²). The limiting-measure proof does not impose a finite-population support restriction.','root/ROOT_ADJUDICATION_64_POSITIVE_MARGINAL_BARRIER.txt'))
+"""
+assert anchor in s;s=s.replace(anchor,addition+anchor,1)
+s=s.replace("now=datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M UTC')","now=datetime.datetime.now(datetime.timezone.utc).strftime('%H:%M UTC')\ncampaign=json.loads((base/'CAMPAIGN_STATUS.json').read_text())\ncomplete=campaign.get('status')=='complete'\nstatus_label='Complete' if complete else 'Final audits'\nfooter_label=('Eight-hour campaign completed. Research supplements and internal review records; external review and novelty remain unconfirmed.' if complete else 'Campaign ends 11:55:47 UTC / 7:55 a.m. Eastern. Final audits and preservation checks are in progress.')")
+s=s.replace('Eight-hour research campaign · Interim, updated __TIME__','Eight-hour research campaign · __STATUS__, updated __TIME__')
+s=s.replace('Local research handoff. Campaign ends 11:55:47 UTC / 7:55 a.m. Eastern. This interim artifact will be updated at close.','Local research handoff. __FOOTER__')
+s=s.replace("repl={'__TIME__':now,","repl={'__TIME__':now,'__STATUS__':status_label,'__FOOTER__':footer_label,")
+s=s.replace("'status':'interim'","'status':campaign['status']")
+s=s.replace("link('handoff/READ_FIRST.txt','Read the concise technical handoff')","link('handoff/READ_FIRST.txt','Read the concise technical handoff')+' · '+link('handoff/CAMPAIGN_OUTCOMES.txt','Read what changed across the original three objectives')")
+s=s.replace("link('checks/CURATED_REPLAY_20261017.json','Read the initial isolated replay')","link('energy/FINAL_REPLAY_PROVENANCE.json','Read final provenance for all 26 checks')")
+s=s.replace('<li><strong>Resolve the graph outside-production gap.</strong>','<li><strong>Improve coalition-size dependence.</strong> At activity arity three, the unrestricted gap is Ω(s^(1/4)) to O(s²). The new obstruction excludes every fixed positive whole-owner marginal weighting as a way to improve the exponent. A new upper must use a different mechanism; a lower must constrain arbitrary mechanisms.</li><li><strong>Resolve the graph outside-production gap.</strong>')
+s=s.replace("link('composition/FINAL_DIRECT_PRIORITY_GATE.txt','Read the final direct-implication source checks')","link('composition/FINAL_DIRECT_PRIORITY_GATE.txt','Read the final direct-implication source checks')+' · '+link('energy/SEMIVALUE_MIXTURE_PRIORITY_GATE.txt','Read the marginal-rule source comparison')")
+p.write_text(s)
+print('Updated HTML generator with final-gate card, ranked frontier, and status from campaign record')

@@ -1,0 +1,96 @@
+M100 PUBLIC POWER DATA — OBSERVED PANEL GATE
+17 October2026. Descriptive data-quality result, not a pooling experiment.
+
+VERDICT
+Schema verified; exact simultaneous physical-node panel EXISTS in the named
+files; scientific adequacy for reliability/reserve pooling remains UNASSESSED.
+This is a stronger intake result than metadata alone, but it supplies neither
+actual ownership nor controllable reserve rights or a subsidy-paying sponsor.
+
+ACQUISITION AND COVERAGE
+Original source: https://zenodo.org/records/7588815
+The April2020 archive is210,769,920bytes. Root used verified206byte ranges,
+enumerated210tar headers/104ordinary files, and retrieved all3target power
+members. Total data/header transfer including the initial512byte
+probe and verified3,072byte zero end padding was9,949,841bytes, below the100MBcap. Each target occurs once; local size/hash/PAR1 and
+UTC-adjusted millisecond timestamp/INT32value footer were independently checked.
+The full archive MD5 was not verified from partial ranges. Raw files remain
+outside the research checkpoint; our scripts, hashes and derived summaries
+are retained. No account, purchase, access bypass or private data were used.
+
+Observed files have980mapped physical nodes, whole-second UTC times, no nulls,
+negative values, duplicate keys or conflicting values. The rows are:
+  ps0_input_power 4,787,828
+  ps1_input_power 4,787,831
+  total_power    4,750,202
+Each covers2020-04-01 07:19:40 through2020-04-04 16:53:00 UTC only. Complete
+monthly target files do not imply a complete physical observation month.
+All observed times are phase-zero multiples of20seconds; all positive gaps
+are multiples of20seconds. A phase-zero20sgrid across the observed endpoints
+contains14,681times and14,387,380node-time slots. Released records fill about
+33.28% for each PSU and33.02% for total_power. There is a51h21m20s gap in the
+union of released timestamps across all nodes. These are absence in the
+release, not measured sensor failures, shutdowns or system downtime.
+
+EXACT SAME-TIME PANELS
+PSU input power uses both channels at the SAME node/time; missing one channel
+is not replaced by zero. There are4,787,824paired-PSU cells.
+For fixed inspection nodes0and1, selected before inspecting their traces:
+  total_power:4,523common instants;
+  PSU sum:4,559common instants.
+Across ALL980observed nodes, the exact intersections contain:
+  total_power:965instants;
+  PSU sum:1,722instants.
+The longest post-selected exact20s run across all980nodes has1total_power
+instant or71PSU-sum instants. This is a description, not a representative
+window selection. The gate does not turn sparse complete cases into a valid
+tail-reliability sample. Raw UTC timestamps were not rounded or imputed.
+
+METER BOUNDARY MATTERS
+Antici et al.'s original PM100 paper uses the sum of the two PSU INPUT readings
+as node power. We therefore label it input power; total_power remains a
+separate sensor quantity. On4,750,202same-node/same-time triples,
+  delta=total_power-(ps0_input_power+ps1_input_power)
+has mean-160.6296W, median-150W, range[-1290,910]W, and only2,458exact equalities
+(about0.052%). Absolute-difference median/90th/99th percentiles are150/230/500W.
+Observed PSU values have10Wgranularity and total_power20Wgranularity; that is
+not an accuracy certificate. The offsets do not identify AC/DC conversion
+losses, calibration error, averaging windows or hardware state. Do not add
+these meter definitions together or substitute one for the other.
+Original PM100: https://cris.unibo.it/retrieve/6fbbd46f-a7e7-4469-b1ab-8adbe6de6d98/3624062.3624263.pdf
+
+CHECKS AND LIMITS
+The independent energy audit verified range-member completeness, hashes,
+footers and SQL logic. Its one reporting defect—a global100row limit hiding
+82rare gaps in the third metric—was repaired by a focused query, and the full
+frequency totals now reconcile to each metric's gap summary. No data changed.
+The exact-panel status is now explicitly EXISTS. Fable methodology
+review found no material error; root checked its remaining low-priority items.
+The980strings are exactly980distinct canonical integers0--979, with no alias
+rows. The absence of adjacent all-node total_power times was diagnosed:
+each following20s instant also lacks a full PSU panel, so it is not solely a
+total_power-specific effect. Of964positive complete-total gaps,911are40s.
+Detailed omitted-node counts are in M100_REVIEW_FOLLOWUP.json.
+Meter discrepancy magnitude, not the quantization-sensitive equality count,
+is the operative evidence that the readings cannot be substituted.
+
+No Nagios state file was acquired, so health, occupancy and online status are
+unknown. Physical-node IDs are not independently owned economic actors. No
+Gaussian model, training/holdout tail test, energy integral, request-serving
+latency experiment, causal savings, pooling gain or sponsor valuation has
+been estimated. A short sparse release can validate parsing and alignment,
+not the intended multiowner energy contract.
+
+REPRODUCTION AND NEXT STEP
+energy/M100_RANGE_INTAKE.py records source URL, offsets and member hashes.
+energy/M100_PANEL_INSPECTION.py uses DuckDB1.4.1; the supplemental script adds
+explicit grid, gap and observed-granularity summaries. The complete derived
+reports are checks/M100_PANEL_INSPECTION.json and M100_PANEL_SUPPLEMENT.json;
+M100_PANEL_SUMMARY.json is the smaller review packet. M100_PLOT_GATE.py creates
+the descriptive figure from those summaries with matplotlib3.10.7.
+
+First specify ownership, capacity entitlement, feasible joint withdrawals,
+curtailment, public value and sponsor. For a statistical pilot, obtain a longer
+simultaneous input-power/state panel with declared chronological training and
+holdout windows; retain complete provenance and missingness diagnostics. The
+present April slice is a reproducibility fixture, not a reliability dataset.

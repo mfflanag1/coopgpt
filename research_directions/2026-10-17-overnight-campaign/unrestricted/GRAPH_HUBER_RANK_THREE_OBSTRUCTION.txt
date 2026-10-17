@@ -1,0 +1,54 @@
+KEEPING THE GRAPH HUBER THRESHOLD ALSO FAILS AT ARITY THREE
+17 October 2026. Exact incentive obstruction; independently check before use.
+
+This uses the original graph regularizer h(p)=p^2 for p<=1/2 and p-1/4
+above1/2. Thus it is distinct from moving the threshold to1/r. All optimizer
+prices at both witness profiles are STRICTLY below1/2, so tie-breaking and
+the quadratic/linear seam play no role.
+
+Fix seven resource vertices0,...,6 and six unit-profit activities:
+ e0={0,3,6}, e1={0,3,5}, e2={0,5,6},
+ e3={0,1,2}, e4={1,4,5}, e5={1,3,6}.
+Each activity consumes one unit at its three listed resources. Let A be the
+6x7 edge-incidence matrix. There are exactly TWO actual owners, each allowed
+its fixed listed resources:
+ owner I: b=(0,0,1,3,1,3,3),
+ owner II: a=(4,3,0,0,0,0,0).
+Aggregate c=(4,3,1,3,1,3,3), equal to resource degrees.
+
+At this profile the unique price minimizer is p=(1/3,...,1/3).
+Every edge is tight, and edge multipliers lambda=(2/3,...,2/3) satisfy
+ A^T lambda=2 diag(c)p. These are sufficient KKT conditions for the convex
+program; all prices are interior in the strictly convex quadratic region.
+Any other minimizer would contradict strict convexity at these coordinates.
+Owner I's payment is11/3.
+
+Now INCREASE ONLY owner I's resource2 report from1 to2. The new aggregate
+is c'=(4,3,2,3,1,3,3). Its unique minimizer is
+ p'=(13,13,9,11,11,11,11)/35.
+Every edge again sums to1. The positive multipliers
+ lambda'=(24,22,22,36,22,20)/35
+satisfy A^T lambda'=2 diag(c')p'. All coordinates remain below1/2.
+Owner I's new payment is
+  (2*9+(3+1+3+3)*11)/35 =128/35 =11/3-1/105.
+Increasing an actual owned capacity reduces that owner's payment. Equivalently,
+underreporting capacity2 back to1 is strictly profitable. The other owner's
+bundle, identities, eligibility, technology, and all other reports are fixed.
+
+STRUCTURAL DIAGNOSIS
+The active incidence matrix has one-dimensional kernel spanned by
+ z=(-2,-2,4,1,1,1,1).
+For c(s)=c+s e2 with s near0, the all-tight quadratic optimizer is
+ p(s)=1/3*1+t(s)z,
+ t(s)=-4s/[3(54+16s)].
+Owner I's payment changes EXACTLY by -s/[3(27+8s)].
+This comes from positive-part mass of the weighted tangent projection, not
+from price ties or changing active components. At c the row for coordinate2
+is (-16,-12,8,6,2,6,6)/27, whose positive part sums to28/27>1.
+The graph proof succeeds because each active bipartite component has only
+two opposite price directions; the rank-three component admits a direction
+with unequal magnitudes and an excessive positive projection sum.
+
+This rejects the graph Huber rule on arbitrary triple-resource production.
+It is NOT an impossibility for all eligible rank-three mechanisms or an
+unrestricted owner-count/dimension lower bound.

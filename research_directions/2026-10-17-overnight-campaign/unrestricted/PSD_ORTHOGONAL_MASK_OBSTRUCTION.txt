@@ -1,0 +1,167 @@
+A SQUARE-ROOT PSD-ORDER BARRIER FOR ARBITRARILY CORRELATED CAPPED MASKS
+17 October 2026. Proposed theorem; independent review pending.
+Authoring lane: unrestricted. Root owns integration and independent audit.
+
+STATEMENT AND EXACT ARCHITECTURE
+Let m>=4 and let the SAME n=m owners report matrices in PSD_m. Production is
+F(X)=lambda_min(X). Consider a public, report-independent probability law rho
+on subsets B of these m owner labels. Correlation and asymmetry are unrestricted.
+On a profile U=(U_i) with lambda_min(U_i)=0 for every i, put
+ G=lambda_min(sum_i U_i), U_B=sum_(i in B) U_i.
+The architecture pays retained owners their deletion marginals
+ y_i(B)=lambda_min(U_B)-lambda_min(U_B-U_i), i in B,
+and pays a missing owner
+ y_i(B)=min{Tr(P_B U_i),G}, i not in B.
+Here P_B is a BOREL MEASURABLE, retained-only choice of a PSD trace-one matrix
+supported in the minimum eigenspace of U_B. It may read B, owner labels, and
+all individual retained reports, but no missing owner's report. The same rule
+and law are used on all profiles. Additional public randomization is allowed
+by conditioning on its report-independent seed. If the mask law depends on
+that seed, rho denotes its marginal law and all expectations over B below
+include BOTH seed and mask randomness. The measurable restriction
+is used, rather than suppressed, in the rotation average below.
+
+For EVERY such rule,
+ sup_(profiles with G>0) E_B[sum_i y_i(B)]/G >= sqrt(m/10)-4/5.       (T)
+Thus its worst-profile funding order is Omega(sqrt(m)) with exactly n=m owners.
+Together with the previously established O(sqrt(m)) capped-mask upper this
+settles the ORDER for this architecture, not its leading constant. It is not
+an unrestricted truthful-mechanism lower bound and does not settle the
+original owner/resource gap. All witness profiles have zero standalone values,
+so the same statement applies to a gain-normalized extension of this rule.
+
+The conclusion also holds if the closed cap G is replaced by the maximum
+coalition marginal V_i=max_(A subset N\{i})[F(U_A+U_i)-F(U_A)]. In the frame
+family below, every proper coalition has value zero and the grand coalition
+has value 1, hence V_i=G=1 for all owners. The junta argument uses only open
+payments and therefore is unaffected by this cap replacement. It does not
+follow for an arbitrary different cap or a different coverage decomposition.
+
+1. A WEIGHTED ORTHOGONAL FRAME
+Set L=100m. In a fixed orthonormal basis let
+ U_1=e_1 e_1^T,     U_i=L e_i e_i^T for 2<=i<=m.                  (1)
+All standalone values are zero and sum_i U_i=diag(1,L,...,L), hence G=1.
+Apply the SAME orthogonal transformation Q to every owner's matrix. The
+rotated profiles keep m actual owners, the same report domain, and G=1.
+For the averaging argument Q is Haar-uniform in O(m), independently of B
+and of any public seed. An adverse Q is selected only after averaging.
+
+Fix a proper retained set B and write l=m-|B|>=1. The kernel K_B of U_B is
+the l-dimensional span of the missing rotated basis vectors. Its eigenvalue
+zero is minimal, so the retained-only selector P_B is supported on K_B.
+Condition on the ORDERED, ORIENTED vectors (Qe_i : i in B). This reveals at
+least as much as the retained matrices, and therefore fixes the selector.
+Conditional on these vectors the missing columns are a Haar orthonormal
+basis of K_B. In particular, each individual missing Qe_i is uniform on its
+unit sphere. Their mutual dependence is immaterial to the following sum.
+
+There are at least (l-1)^+ missing high-weight owners i>=2. This count handles
+either inclusion status of owner 1. The case B=all owners has no closed
+payment, and will be included using the lower bound (l-1)^+ with l=0.
+
+2. SPHERICAL CAP ESTIMATE, INCLUDING MIXED SELECTORS
+If V is uniform on the unit sphere in R^l and 0<=t<=1/2, then
+                 P(|V_1|<t)<=2t sqrt(l).                       (2)
+For l=1 the left side is zero. For l=2 the arcsine density on [-1/2,1/2]
+is at most 2/(pi sqrt(3))<sqrt(2). For l>=3 the coordinate density is maximal
+at zero and equals Gamma(l/2)/(sqrt(pi)Gamma((l-1)/2))<sqrt(l).
+The gamma-ratio bound follows from E sqrt(Y)<=sqrt(EY) for a
+Gamma((l-1)/2,1) random variable. Integrating over an interval of length 2t
+proves (2). No asymptotic sphere approximation is used.
+
+For any fixed unit v in K_B and a missing high-weight owner i,
+ t=1/sqrt(L)<=1/2 and
+ P(L(v dot Qe_i)^2<1 | retained oriented vectors)
+       <=2 sqrt(l/L)<=1/5.                                   (3)
+Since min{L(v dot Qe_i)^2,1} equals 1 on the complementary event,
+ its conditional expectation is at least 4/5.
+Write the fixed conditional selector as P_B=sum_a alpha_a v_a v_a^T,
+where alpha_a>=0 and sum alpha_a=1. Concavity of x -> min{x,1} gives
+ min{Tr(P_B U_i),1} >= sum_a alpha_a min{L(v_a dot Qe_i)^2,1}.
+The same 4/5 lower bound follows for an arbitrary mixed PSD selector.
+One may diagonalize separately after conditioning: no measurable eigenvector
+choice is required to establish this invariant conditional inequality.
+
+Let delta=E_(seed,B)[m-|B|]/m be the marginal mean missing fraction. Summing only eligible
+high-weight owners, then averaging Q and B, gives
+ E_Q E_B[closed payment] >= (4/5) E_B[(m-|B|-1)^+]
+                         >= (4/5)(m delta-1).                 (4)
+Boundedness and Borel measurability justify Fubini/conditional expectation.
+All other payments are nonnegative, so the supremum over this rotated family
+is at least the right side of (4). There is no claim to supply a closed-form
+adverse rotation for every arbitrary measurable selector.
+
+3. THE SAME LABEL SET HAS A JUNTA WITNESS FOR SMALL delta
+Choose any integer 2<=J<=m. For an active owner set S of size J, partition the
+coordinate identity into J nonzero mutually orthogonal projections:
+ J-1 rank-one coordinate projections and their complementary projection.
+Assign these to the J owners in S, in any order, and assign zero to the other
+m-J actual owners. Each standalone minimum eigenvalue is zero, the full sum
+is I, and G=1. A retained sum has positive minimum eigenvalue if and only if
+it retains ALL J active owners. When it does, every active owner's deletion
+marginal is 1. Therefore the open payment is exactly
+                             J * 1_{S subset B}.              (5)
+This identity is independent of which active owner has the larger projection
+and independent of the retained-only selector.
+
+Average S uniformly among all J-subsets, independently of B. For each fixed
+B, a union bound (or Markov applied to |S intersect B^c|) gives
+ P_S(S not subset B) <= E_S|S intersect B^c|=J(m-|B|)/m.
+Consequently E_S P_B(S subset B)>=1-J delta. Hence at least one fixed active
+label set S gives expected open payment at least
+                              J(1-J delta).                   (6)
+No exchangeability or independence of the mask coordinates was assumed.
+The zero owners are retained as actual owners, with their original labels.
+
+4. MINIMAX: A FIXED LAW MUST HANDLE BOTH FAMILIES
+If delta<=1/(2m), choose J=m in (6), obtaining at least m/2, which is at least
+the right side of (T).
+If delta>=1/4, (4) gives m/5-4/5 >= sqrt(m/10)-4/5 for m>=4.
+Otherwise J=floor(1/(2delta)) satisfies 2<=J<=m, J delta<=1/2, and
+J>=1/(4delta). Equation (6) is then at least 1/(8delta).
+Together with (4), the worst profile costs at least
+ max{1/(8delta), (4/5)m delta-4/5}
+ >= max{1/(8delta), (4/5)m delta}-4/5
+ >= sqrt(m/10)-4/5.
+This proves (T). The two profiles used in this minimax argument can differ:
+a report-independent architecture must satisfy its guarantee at both.
+
+5. SCOPE: PROFILEWISE COMMUTING IS NOT A PUBLIC DIAGONAL DOMAIN
+Every matrix in the orthogonal-frame profile (1), and in each rotated version,
+commutes with every other matrix at that same profile. The diagonalizing
+basis, however, varies with Q across profiles and is not supplied publicly.
+The retained reports need not reveal the missing subspace directions.
+Therefore the theorem holds even when adverse profiles are individually
+commuting, but it does NOT claim the same obstruction in one fixed public
+commutative algebra. In a fixed public basis lambda_min is a minimum of m
+known linear forms, and the finite-form methods yield substantially smaller
+asymptotic funding. That is consistent: a good fixed-basis rule need not meet
+the guarantee on all rotated profiles in the full PSD report domain.
+
+The obstruction exploits a rule's common retained-only support and global
+closed cap. It does not itself obstruct owner-specific or missing-report-aware
+supports, a new coverage decomposition, or an altogether different truthful
+mechanism. Changing a payment formula requires a fresh coverage and incentive
+proof; it is not justified merely by this lower bound.
+
+ANTECEDENTS, STATUS, AND CHECKS
+The canonical scalar architecture lower bounds already allow arbitrary
+correlated subset laws, but their exact forced-support technology has
+2^n-1 essential linear pieces. Its obvious diagonal PSD lift has that matrix
+order. The present direct construction has matrix order m=n and is not the
+same parameterization. See PSD_MASK_ANTECEDENT_COMPARISON.txt for a precise
+linear-pencil obstruction to a smaller exact lift.
+The initial root proof used an almost-dependent rotated frame and mixtures
+of iid masks. This note replaces that frame by weighted orthogonal reports
+and extends the second witness by averaging owner labels, allowing all fixed
+subset laws. Haar conditioning, the spherical estimate, concavity, and the
+union bound are established tools. Priority of this application is unconfirmed.
+
+verify_psd_orthogonal_mask.py checks exact rational scalar consequences:
+eligible-owner counts, label-averaged junta inequality, cap-tail constants,
+and all minimax branch inequalities at a finite rational suite. These checks
+do not substitute for the continuous Haar/spherical proof above. Review status
+at initial freeze: proposed. Parent reports Fable review 042711 found no
+mathematical error in the Haar, mixed-selector, junta, minimax, or pencil
+arguments. Its seed-law clarification has been applied above; root separately
+replayed the exact checker. External specialist/priority review remains open.

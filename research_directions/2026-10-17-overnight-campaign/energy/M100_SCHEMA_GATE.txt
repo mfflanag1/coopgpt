@@ -1,0 +1,176 @@
+M100 ORIGINAL-SOURCE POWER SCHEMA GATE
+17 October 2026, 10:09 UTC. Read-only metadata/code validation by overnight_energy.
+No raw telemetry or large archive was downloaded by this lane. No account,
+payment, access bypass, outreach, measurement or pooling inference occurred.
+Files outside energy were not changed. Parent may inspect bounded raw data
+separately; that evidence is not silently included in this metadata verdict.
+
+VERDICT
+The original authors' public documentation and conversion code resolve the
+power-field names, watt units, nominal cadence, UTC representation, anonymized
+node keys and relevant state fields. M100 therefore passes the SCHEMA-DESIGN
+gate for a candidate multi-node measured-power panel. It does NOT yet pass
+the OBSERVED-PANEL gate: no actual common time interval, missingness rate,
+clock alignment, power-meter equivalence or healthy-node selection has been
+verified here. It remains an intake candidate, not a qualified reserve pilot.
+
+1. ORIGINAL RELEASE AND EXACT MEASURED-POWER FIELDS
+Release: https://zenodo.org/records/7588815 (version1.0.0).
+This record covers March--December2020, as monthly tar archives containing
+Hive-style partitions year_month=YY-MM/plugin=.../metric=.... It is a system
+telemetry release, not a random collection of independent node-day samples.
+The record describes computing-node sensors and wider facility/scheduler
+data. Its smallest listed monthly archive is20-04.tar,210.8MB; its small size
+does NOT establish adequate sensor coverage. No whole archive was fetched.
+
+Author IPMI documentation:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/documentation/plugins/ipmi.md
+It identifies out-of-band BMC sensors and gives these exact metric families:
+
+  total_power                         total node power
+  ps0_input_power, ps1_input_power     each power-supply input
+  p0_power, p1_power                  each CPU socket
+  p0_mem_power, p1_mem_power          each CPU memory subsystem
+  p0_io_power, p1_io_power            each CPU I/O subsystem
+  fan_disk_power                     disk-fan power
+
+All are documented as integer values in Watts (display unit W), sampled
+every20 seconds PER NODE. They are power readings, not integrated energy.
+Do not add total_power to its component readings. The inspected original
+IPMI page does not assert that total_power equals ps0_input_power plus
+ps1_input_power, or specify calibration, accuracy, sensor averaging window,
+or a universal AC-versus-DC boundary for total_power. Those remain unknown.
+
+2. FINAL FILE SCHEMA, TIME AND NODE IDENTIFIERS
+Author conversion implementation:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/parquet_dataset/csv_to_parquet/plugins/ipmi_logic.py
+The final logical schema is plugin:string, metric:string, year_month:string,
+timestamp:timestamp[ms,UTC], value:int32 for the power metrics, node:string.
+The writer sets plugin=ipmi_pub and floors timestamps to whole seconds.
+Units, raw rack/slot tags and raw hostnames are not retained in this final
+IPMI schema. Node names are replaced by strings from an anonymization map.
+Hence the short plugin prose calling node a hostname describes the source
+identifier, not the final public key. This is code evidence; a selected
+archive's actual Parquet footer still needs inspection. The current source
+contains a typo in its optional hostname-suffix cleanup predicate, so it is
+not sufficient evidence of the precise transformation of every source row.
+
+Author query implementation:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/parquet_dataset/query_tool/query_tool.py
+Its timestamp filter explicitly attaches UTC to input strings and uses the
+half-open interval start<=timestamp<stop. It preserves nullable Pandas integer
+types. It selects rows; it does not reconstruct a complete time grid, align
+node clocks, fill missing observations or certify a balanced panel.
+
+Author query examples:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/parquet_dataset/query_tool/README.md
+Examples use node strings such as381,383,385,387. The public query-tool
+plugin alias is ipmi, whereas the final row/partition literal is ipmi_pub.
+Metric-only queries avoid assuming these two spellings are interchangeable.
+
+Author spatial map:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/documentation/racks_spatial_distribution.md
+It explicitly maps node identifiers0--979 to49 racks,20 nodes per rack, and
+orders their vertical positions. Thus these IDs have a documented physical
+node interpretation. They are not established legal owners, and the map
+does not certify persistence through replacement or repair. Do not import
+raw r{rack}n{slot} names from newer synthetic benchmark examples.
+
+3. MISSINGNESS, DUPLICATES AND NODE STATES
+Author final writer:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/parquet_dataset/csv_to_parquet/process_and_write_step2.py
+It removes exact duplicate rows at UTC22:00:00 or23:00:00, described in its
+comment as local-midnight duplication in Europe/Rome. This operates within
+each input fragment. Sorting by timestamp is present only as commented code.
+Therefore sortedness, global duplicate uniqueness and constant spacing are
+not guaranteed by this implementation. No universal sentinel-to-missing,
+zero-to-offline or interpolation rule was found in the inspected IPMI path.
+
+Author Nagios documentation and final conversion:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/documentation/plugins/nagios.md
+https://gitlab.com/ecs-lab/exadata/-/raw/main/parquet_dataset/csv_to_parquet/plugins/nagios_logic.py
+State is a SEPARATE metric, nominally15 minutes per node and description.
+For host events the documented values are0 UP,1 DOWN,2 UNREACHABLE; for service
+events0 OK,1 WARNING,2 CRITICAL,3 UNKNOWN. The description determines which
+meaning applies. state_type distinguishes SOFT0 from HARD1; nagiosdrained
+marks manual draining. The final plugin is nagios_pub, metric is state and
+the integer state code is stored in value. The final schema retains node,
+description, host_group, nagiosdrained and state_type, but drops the redundant
+raw state column. Tags use string types in that schema; inspect actual values.
+The batchs::client::state description concerns scheduler availability, not a
+guarantee that each power meter is calibrated or that zero power is genuine.
+
+Author Slurm documentation:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/documentation/plugins/slurm.md
+Its documented metrics largely aggregate by partition, qos or job state;
+the page itself warns of possible inconsistencies. Cluster totals cannot be
+silently used as a per-node online/offline label. No validated cross-plugin
+as-of join or imputation tolerance has been established in this gate.
+
+4. THE15-MINUTE DERIVATIVE IS A DIFFERENT INTAKE OPTION
+Original derivative record: https://zenodo.org/records/7541722
+This release has one Parquet file per node, bundled by rack, with15-minute
+IPMI aggregates and Nagios labels. It could support a coarse simultaneous
+node panel IF actual file timestamps overlap. It is not equivalent to the
+raw20-second readings and cannot recover within-bin joint peaks.
+
+Author aggregation step1:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/parquet_dataset/node_aggregated_data/step1.py
+Resampling uses15-minute bins anchored at start_day and creates metric_avg,
+metric_std, metric_min and metric_max. Empty bins return four NaNs. The mean
+is an unweighted sample mean, not a duration-weighted energy integral; the
+standard deviation uses NumPy's default population convention. No per-bin
+sample-count or observed-duration column is emitted. Thus a bin with very
+few observations can be indistinguishable from a fully observed bin without
+revisiting the raw data. Node-wise maxima in a bin need not be simultaneous.
+
+Author aggregation step2:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/parquet_dataset/node_aggregated_data/step2.py
+The script inner-joins the available metric tables on timestamp within each
+node, then left-joins labels selected by description=batchs::client::state.
+The label's value column is retained. Nodes are queued from the label groups.
+Consequently the derivative's temporal support can depend on other sensors
+and label availability; absence of a row is not evidence of zero demand.
+It removes the test metric0_0. This processing can select a different sample
+from a power-only panel. Published-file behavior still requires inspection.
+
+5. CONCRETE SIMULTANEOUS-PANEL CANDIDATE AND REMAINING GATE
+The raw candidate is ONE chosen monthly interval with the same physical
+node IDs, using these logical partition paths:
+
+  year_month=YY-MM/plugin=ipmi_pub/metric=total_power/
+  year_month=YY-MM/plugin=ipmi_pub/metric=ps0_input_power/
+  year_month=YY-MM/plugin=ipmi_pub/metric=ps1_input_power/
+
+These partitions can represent multiple nodes on a shared UTC timeline;
+the public design does not destroy simultaneity. This is a representation
+finding, not an observed statement that any particular file contains a
+complete simultaneous panel. The author repository has a one-node demo388;
+one node cannot establish cross-node overlap. Full HTTP range support,
+tar-member offsets and individual member sizes were not tested by this lane.
+
+The smallest decisive raw inspection should record, for at least two fixed
+node IDs in one common UTC interval: actual footer types and partition keys;
+first/last timestamps; duplicate counts by(node,metric,timestamp); nulls,
+negative values, zeros and observed timestamp spacings; overlap counts on an
+explicit common grid and state coverage. Any binning tolerance is a declared
+analysis choice, not a fact inferred from20-second nominal cadence. Report
+unobserved bins as missing. Do not independently shuffle or select days by
+node. Test PSU-versus-total relationships before choosing one meter boundary.
+
+Unknown after this gate: actual contemporaneous sample count; complete-case
+fraction and its selection bias; irregular-clock offsets; meter accuracy;
+precise raw sensor averaging; stable identity through hardware replacement;
+physical curtailment rights; firm delivery capacity; legal ownership; sponsor
+valuation; and whether enough joint tail observations exist for any specified
+reliability target. Nothing here establishes reserve savings or pooling gains.
+
+SOURCE ACCESS LIMITS
+All factual schema claims above come from original author Zenodo records or
+the author-maintained GitLab repository, read17 October2026. Main-branch
+content is not a cryptographically pinned published-release artifact; the
+attempted commit API was unavailable. The original paper's Nature/PMC/ETH
+routes were inaccessible in this session, and the author Zenodo PDF request
+returned429. No anti-bot interaction was attempted. The accessible original
+code and documentation are adequate for this bounded metadata gate; no
+claim of reading the full paper or inspecting raw Parquet rows is made.

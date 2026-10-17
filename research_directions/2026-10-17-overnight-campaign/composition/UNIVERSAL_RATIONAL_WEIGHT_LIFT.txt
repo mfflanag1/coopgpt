@@ -1,0 +1,95 @@
+UNIVERSAL RATIONAL-PROFIT RESOURCE LIFT AND SHARP3/2 FUNDING
+Frozen candidate, 2026-10-17 05:12 UTC. Priority unconfirmed.
+
+STATEMENT AND SCOPE
+Let G=(V,E) be any finite simple undirected graph with fixed public
+nonnegative rational edge profits w_e. Resources have arbitrary finite
+nonnegative real capacities. Production is FRACTIONAL capacitated matching:
+ F_w(c)=max {sum_e w_e x_e:x>=0, sum_{e incident v}x_e<=c_v}.
+Actual owners are fixed and can hold arbitrary mixed bundles of resources.
+Reports are binding coordinatewise underreports; utility here is payment
+only. Coalition coverage means sum_{i in S}P_i(b)>=F_w(sum_{i in S}b_i).
+Coalition-total monotonicity means a coalition cannot increase its summed
+payment by jointly withholding any subset of its whole resource bundles,
+with all outsiders' reports fixed; side transfers within it are allowed.
+
+There is an explicit public positive linear resource-copy lift to a finite
+unit-profit graph H and scalar q>0 such that
+ F_w(c)=(1/q)F_H(Bc)                                (1)
+for EVERY real capacity vector, including zeros. Therefore unit-Huber
+transfers coalition coverage, coalition-total monotonicity, and total
+funding <=(3/2)F_w(c), without any bound on graph or actual-owner counts.
+The unit single-edge lower family belongs to this class; root's separately
+audited general-mechanism lower theorem makes3/2 the sharp uniform constant
+for this payment-only coalition incentive requirement.
+
+INTEGER LIFT
+First let all retained edge profits be positive integers, and let
+W=max_e w_e. Delete zero-profit edges (they never improve production).
+Create W copies (v,a), a=0,...,W-1, of each resource v. Every copy has
+capacity c_v. For every original uv of profit w=w_uv, connect copies
+(u,a),(v,b) whenever a+b<=w-1. These are unit-profit edges.
+There are nW resources and sum_e w_e(w_e+1)/2 edges. An original owner
+holding b_iv receives b_iv on EACH copy (v,a). Copies are a deterministic
+public transformation of the same report, not extra actual owners,
+independently reportable endowments, or report-independent free capacity.
+
+PRIMAL DIRECTION
+Given an original feasible x, for each edge uv of integer profit w put
+x_uv on each of the w lifted edges with a+b=w-1, a,b>=0. An original
+edge uses any particular copy of either endpoint at most once. Thus
+at (v,a), total incident lifted flow is at most the original incident
+flow sum, which is <=c_v. Lifted unit production is exactly sum_e w_e x_e.
+Hence F_H(Bc)>=F_w(c).
+
+DUAL DIRECTION
+The original weighted dual is
+ min sum_v c_v p_v subject to p_v>=0, p_u+p_v>=w_uv.
+It has an optimum, and clipping all prices at W preserves feasibility
+and cannot increase cost, so take 0<=p_v<=W. Assign lifted prices
+ r_(v,a)=min(1,max(0,p_v-a)).
+For a lifted edge with a+b<=w_uv-1, weighted feasibility gives
+ (p_u-a)+(p_v-b)>=1.
+For ANY two real numbers s,t with s+t>=1,
+ clip_[0,1](s)+clip_[0,1](t)>=1:
+if either is>=1 it is immediate; otherwise neither can be negative,
+and the sum is unchanged. Thus r is a feasible unit vertex cover.
+For every p in[0,W], sum_{a=0}^{W-1}clip_[0,1](p-a)=p. Therefore
+ sum_(v,a)c_v r_(v,a)=sum_v c_v p_v=F_w(c).
+Weak duality gives F_H(Bc)<=F_w(c), completing exact identity.
+This argument applies to odd cycles and mixed ownership without changes.
+
+RATIONAL PROFITS
+Choose a common positive denominator q so k_e=q w_e are integers.
+Use the integer construction for k. Then F_k=q F_w and (1) holds.
+All transformations and identities are independent of capacities, owners,
+coalitions, and reports. Fixed zero-profit or isolated resources can be
+ignored or assigned zero payments without changing any claim.
+
+MECHANISM TRANSFER
+At every report profile b, apply B separately to each actual owner's
+bundle, run the unit-Huber mechanism on the lifted graph, and divide
+payments by q. For any coalition, total lifted resource vector is
+B(sum_{i in S}b_i). Equation(1) proves exact coalition production and
+coverage. If a coalition increases its reports while outsiders stay fixed,
+only that coalition's lifted reports increase coordinatewise because
+B>=0; unit-Huber coalition-total monotonicity therefore applies globally,
+with no report-specific changing ownership or unrelated price selection.
+The global funding bound divides identically by q.
+
+COMPLEXITY AND LIMITATIONS
+The lift is finite and explicit. Its size is O(nW+mW^2), W=max q w_e.
+This is polynomial in the INTEGER magnitude W, not polynomial in binary
+input length. Large rational denominators can make the graph exponential
+in the original encoded input size. Combining it with the exact unit-Huber
+solver gives an exact rational algorithm polynomial in the expanded graph
+and capacity bit length. No strongly polynomial or polynomial-in-original-
+bit-length claim is made. Real irrational profits require a separate
+compactness/continuum argument, not a casual per-profile limit.
+
+This theorem is not an outside-production incentive theorem. If owners
+can use withheld resources elsewhere, see root/OUTSIDE_PRODUCTION_BOUNDS.txt.
+It also does not establish that the copying reduction itself is historically
+new. The proposed research contribution is the audited incentive/funding
+transfer combined with the sharp unit theorem; prior-source review remains
+necessary before asserting novelty or a field-level breakthrough.

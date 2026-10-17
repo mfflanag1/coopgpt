@@ -1,0 +1,68 @@
+TIGHT-COMPONENT HUBER NORMALIZATION FAILS AT COMPONENT SEAMS
+17 October 2026. Exact rule-class counterexample. No novelty assertion.
+
+CANDIDATE BEING STOPPED
+For public weighted resource graphs, choose a feasible resource-price vector.
+On EACH connected component of its tight-edge graph, normalize the Huber knee
+by W_C=max public edge profit in that component, and require its restriction
+to minimize sum_v c_v h_{W_C}(p_v) over the component's own edge constraints.
+Here h_W(p)=p^2/W below W/2 and p-W/4 above W/2. An isolated component has
+price zero. Pay actual owner i its report dot p. This is a self-consistency
+proposal, not a single global convex program. It would repair the weak-edge
+anchor responsible for the global normalization factor2 boundary.
+
+COUNTEREXAMPLE
+Path0--1--2--3 has public edge profits(1,14/5,4). Four fixed actual owners
+each own one vertex. Owners1,2,3 report capacity1; owner0 reports A.
+At A=2 the UNIQUE self-consistent price is
+  p=(3/10,7/10,21/10,19/10).                         (1)
+All three edges are tight, and W_C=4. Exact KKT edge multipliers
+  lambda=(3/10,1/20,19/20)
+satisfy degree_lambda(v)=c_v min(2p_v/4,1). The low-price coordinates0,1,3
+and a tight neighbor of vertex2 force uniqueness, as in the weighted note.
+Owner0 receives2*(3/10)=3/5.
+
+At A=5 the UNIQUE self-consistent price is
+  p=(1/10,9/10,2,2).                                 (2)
+Only the outer edges are tight; their separate scales are1 and4. Multipliers
+are lambda01=1, lambda23=1. The middle edge is strictly slack because
+9/10+2=29/10>14/5. Owner0 receives5*(1/10)=1/2.
+Thus withholding capacity5 down to2 increases owner0's payment by1/10.
+The failure already uses one resource per actual owner; no mixed bundle or
+coalitional deviation is needed.
+
+EXHAUSTION OF OTHER SELF-CONSISTENT PATTERNS
+There are eight possible subsets of the three tight edges. Patterns missing
+edge23 and with vertex3 isolated force p3=0. If edge12 is in its other
+component, that component's maximum profit is at most14/5, hence every price
+there is at most14/5<4; if edge12 is absent then p2=0. In either case edge23
+cannot be covered. Therefore edge23 must be tight.
+
+If edge01 is absent but edge12 is tight, the component on vertices1,2,3 has
+scale4, capacities(1,1,1), and unique minimizing prices(2/5,12/5,8/5).
+Their exact edge multipliers are(1/5,4/5). Isolated vertex0 has price0,
+so edge01 is not covered. If both edge01 and edge12 are absent, vertices0,1
+have zero price and again fail edge01. Therefore edge01 must also be tight.
+Only patterns {01,23} and {01,12,23} remain.
+
+For the disconnected pattern {01,23}, A>=1 gives the unique pairwise prices
+  (1/(2A),1-1/(2A),2,2).
+They cover the middle edge iff A>=5/2. Thus the pattern is impossible at A=2
+and valid at A=5.
+
+For the connected pattern {01,12,23}, scale is4. At A=2, certificate(1)
+establishes the required optimizer. At A=5 the unique GLOBAL scale4 optimizer
+is instead
+  (1/6,5/6,2,2), lambda=(5/12,0,1).
+The exact KKT identities hold, and its middle constraint is strictly slack
+because5/6+2=17/6>14/5. Therefore no optimizer with all three tight edges exists
+at A=5; a self-consistent connected component is impossible there.
+This proves uniqueness of the asserted self-consistent choices at BOTH
+profiles, so no tie-breaking or choice among fixed points repairs the failure.
+
+CONSEQUENCE
+Component-specific normalization has a valid derivative invariant only while
+the component structure and its scales remain fixed. That local property
+does not extend across component seams. This exact two-profile example stops
+the candidate before any unrestricted claim. It is separate from the earlier
+per-vertex local-knee obstruction and the global fixed-curvature funding bound.

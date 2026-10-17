@@ -1,0 +1,145 @@
+A FINITE CERTIFICATE FOR LINEAR GAIN-ONLY FUNDING UNDER PAIRWISE OUTSIDE PROTECTION
+17 October2026. Internally audited strengthening; exact stdlib certificate PASS.
+Root replay and independent Fable20261017-042325 review found no substantive
+error. Historical novelty and external significance remain unconfirmed.
+
+THEOREM
+For n>=5 fixed owners eligible for both coordinates, F(A,B)=min(A,B), full
+nonnegative real report domain, nonnegative payments, coverage of EVERY
+coalition, and singleton/pair beta-outside-production protection (0<=beta<=1),
+any gain-only funding bound Y<=S+K G satisfies
+
+ K >= (n-4) max{0,28 beta-27}/22.                         (1)
+
+In particular full outside production forces K>=(n-4)/22. Together with the
+universal gain-only pairwise rule y_i=f_i+G/2, this proves sharp linear order
+for every fixed beta>27/28. The cutoff and finite coefficient are not claimed
+optimal. Pairwise TCWM(beta=0) remains unresolved by this certificate.
+
+This proof uses nineteen explicit finite inequalities. Its only preliminary
+reductions are compact translation averaging, finite owner/resource symmetry,
+and a two-active-owner efficiency lemma. All coefficients are integers and
+all payment variables for active owners cancel exactly.
+
+1. PRELIMINARY LEMMAS
+As proved in PAIRWISE_PARTIAL_OUTSIDE_GAIN_ROBUSTNESS.txt, translation averaging
+preserves the beta-OUT contract and gain funding, without any starting
+regularity premise. Therefore y_i=b_i+h_i(z), z_i=a_i-b_i. Owner/resource
+symmetrization is also without loss.
+
+For a signed transfer inside a pair, replacing(x,y) by(u,v) with x+y=u+v, choose
+the owner matching with smallest transferred magnitude
+
+ D=min{|u-x|,|u-y|}.
+
+The minimal nonnegative restorations have withheld totals(D,D), and the finite
+beta-OUT inequalities imply
+
+ |H_pair(new)-H_pair(old)|<=(1-beta)D.                    (2)
+
+Let p_X(t) be the actual payment to an owner whose pure signed report is t at
+profile X. Positive t means(t,0), negative t means(0,-t); null t=0 means(0,0).
+Since h=p+min(t,0), one direction of(2) is exactly
+
+ p_X(x)+p_X(y)-p_Y(u)-p_Y(v)+D beta
+ <=D+min(u,0)+min(v,0)-min(x,0)-min(y,0).                 (3)
+
+Repeated types denote distinct actual owners, with equal payments by anonymity.
+Each comparison can be realized among the same fixed owners; only reports
+change, and all unlisted/padded owners stay null.
+
+Protected coalitions include a member withdrawing the zero bundle, as in the
+original weak-underreport contract and PAIRWISE_GAIN_TRANSLATION_REDUCTION.txt.
+This convention is used in the following two-active-owner efficiency argument.
+A profile with just two nonzero owners has its ACTIVE pair paid efficiently:
+for opposite pure types(a,0),(0,b), restore the missing input of the scarce
+owner until it can produce min(a,b) alone. Total production stays constant and
+G becomes0. Pairwise monotonicity plus the gain cap and coverage then sandwich
+the original pair total at min(a,b). Same-sign profiles have G=T=0.
+At the balanced profile(2,-2), symmetry therefore pays each active owner1;
+own monotonicity on restoring2 to4 proves p_A(4)>=1 for profile A below.
+
+2. NINE PROFILES WITH AT MOST FIVE ACTIVE OWNERS
+Each displayed vector lists FIVE fixed owner slots; pad with n-5 null owners.
+All have total signed imbalance2. The variable u_X=p_X(0) denotes the common
+null-owner payment when that profile has null owners.
+
+ A=(-2,0,0,0,4),       B=(-2,0,0,1,3),
+ C=(-2,0,1,1,2),       D=(-1,0,0,0,3),
+ E=(-1,0,0,1,2),       F=(-1,0,1,1,1),
+ H=(-1,-1,0,1,3),      J=(-1,-1,1,1,2),
+ Z=(0,0,0,1,1).
+
+We have u_Z=0 because G_Z=0, and u_A>=0. For the other null prices,
+nonnegativity and Y<=K G at pure profiles give
+
+ u_D<=K/(n-2), u_C<=2K/(n-4),
+ u_E<=K/(n-3), u_F<=K/(n-4).                             (4)
+
+3. THE NINETEEN VALID INEQUALITIES
+Notation T(X;x,y -> Y;u,v) means inequality(3) with its minimal D.
+Notation C(X;t_1,...,t_k) means the coverage inequality with all terms moved
+to the <= direction: -sum_j p_X(t_j)<=-min(sum t_j^+,sum(-t_j)^+).
+Notation E(X) means the active-pair upper bound from the efficiency lemma.
+The final column is the positive integer multiplier.
+
+  1. T(A;0,4 -> B;1,3),       D=1                         x1
+  2. T(B;-2,1 -> D;-1,0),     D=1                         x1
+  3. T(B;0,3 -> C;1,2),       D=1                         x1
+  4. C(C;-2,1,1)                                          x1
+  5. T(C;-2,1 -> E;-1,0),     D=1                         x3
+  6. T(C;-2,2 -> Z;0,0),      D=2                         x1
+  7. C(H;-1,-1,3)                                         x2
+  8. T(H;-1,-1 -> B;-2,0),    D=1                         x1
+  9. T(H;-1,3 -> E;0,2),      D=1                         x2
+ 10. C(J;-1,-1,2)                                         x6
+ 11. T(J;-1,-1 -> C;-2,0),    D=1                         x3
+ 12. T(J;-1,2 -> F;0,1),      D=1                         x6
+ 13. E(D):p_D(-1)+p_D(3)<=1                               x1
+ 14. C(E;-1,1)                                            x1
+ 15. T(E;-1,2 -> Z;0,1),     D=1                         x4
+ 16. T(E;1,2 -> D;0,3),      D=1                         x1
+ 17. T(F;1,1 -> E;0,2),      D=1                         x3
+ 18. E(Z):2p_Z(1)<=0                                      x2
+ 19. -p_A(4)<=-1                                          x1
+
+For every transfer, the target multiset is obtained by replacing only the two
+listed owner reports. Coverage rows use actual coalitions of nonzero owners.
+The certificate never drops a positive null payment from a coalition coverage
+inequality. The exact checker verifies all multiset replacements, pair transfer
+magnitudes, right sides and final cancellations.
+
+4. EXACT SUM AND FUNDING CONSEQUENCE
+Multiplying and summing the nineteen rows gives
+
+ 28 beta +u_A-2u_D-3u_C-8u_E-6u_F-6u_Z <=27.              (5)
+
+All active payment coefficients cancel. Insert u_Z=0, discard nonnegative u_A,
+and use(4):
+
+ 28 beta-27
+ <= K[2/(n-2)+8/(n-3)+12/(n-4)]
+ <= 22K/(n-4).                                           (6)
+
+Together with K>=0, this proves(1). The first inequality in(6) supplies a
+slightly stronger exact n-dependent bound if desired; no coefficient tuning
+is needed for the linear-order conclusion.
+
+REPRODUCIBILITY
+pairwise_partial_finite_certificate.json stores the nineteen integer weights
+and underlying profile inequalities. Run
+
+ python3 -I check_pairwise_partial_certificate.py
+
+It uses only Python standard-library exact fractions and verifies the entire
+row sum, all active-variable cancellations, the final null coefficients and
+the factor22 bound. Result: PASS. The separate SciPy scout discovered the
+certificate; no floating optimization result is used to establish this theorem.
+
+PRIORITY / STATUS
+Root's earlier Banzhaf comparison identifies classical merger/symmetry ideas.
+The final finite proof here relies on the stated signed-transfer inequalities
+and gain cap directly. The proposed contribution is the all-profile gain-only
+linear separation and its robustness to near-full pairwise outside protection.
+Internal correctness review completed with the zero-withdrawal convention
+clarified above. Broader original-source comparison remains open.

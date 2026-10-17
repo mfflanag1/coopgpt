@@ -1,0 +1,114 @@
+INDEPENDENT AUDIT: PAIRWISE FULL-OUT GAIN-ONLY LINEAR OWNER LOWER, VERSION2
+2026-10-17. Auditor: overnight_unrestricted. Files read independently before
+any coordination with the author:
+ energy/PAIRWISE_GAIN_LINEAR_OWNER_LOWER.txt
+ energy/PAIRWISE_GAIN_UNBOUNDED_OBSTRUCTION.txt
+ energy/PAIRWISE_GAIN_TRANSLATION_REDUCTION.txt
+ energy/check_pairwise_gain_linear.py
+All audit edits and checks are confined to unrestricted/.
+
+VERDICT.
+The claimed asymptotic theorem survives this independent audit:
+              (n-5)/342 <= K_n <= n/2, n>5,
+for min2, full unbounded mixed-eligibility reports, nonnegative payments,
+all-coalition coverage, and singleton/pair full outside-production protection.
+There is one small but real induction exposition gap concerning a cancelling
+merge. The correction below establishes exactly the stated recursion and
+constant. No continuity, measurability, anonymous starting rule, owner creation,
+or null-payment-zero assumption is needed in the quantitative proof.
+Historical priority is outside this correctness verdict.
+
+REQUIRED CLARIFICATION: CANCELLING MERGES.
+Section4 currently says that when a merge removes two active coordinates one
+may simply use the smaller previous active-owner error bound. That is not
+literally justified: the merged owner is then NULL, and the inductive hypothesis
+was stated only for active owners. The merged h-payment can be positive.
+
+Correct case analysis:
+* If z_i+z_j!=0, the merged coordinate is active, and the stated induction
+  gives pair error at most E_(r-1)+epsilon.
+* If z_i+z_j=0 and r=3, the only remaining active coordinate equals total2.
+  The merged profile has G=0, so BOTH new null payments are exactly zero.
+  The pair error is zero.
+* If z_i+z_j=0 and r>=4, each of the two new null payments lies in[0,epsilon].
+  The Banzhaf merged marginal is exactly0, so the pair error is at most
+  2epsilon. Since E_(r-1)>=E3=3epsilon/2, this is at most E_(r-1)+epsilon.
+
+Thus E2=0 and E_r=(3/2)(E_(r-1)+epsilon) are valid without changing342.
+This is a repairable proof-detail issue, not a counterexample to the theorem.
+
+INDEPENDENT CHECK OF THE UPPER.
+For y_i=f_i+G/2 and singleton restoration d, write
+y_i=(f_i+T-S_outside)/2. Each changing term increases by at least F(d) under
+superadditivity. A pair's payment sum is exactly T-S_outside-pair, so its
+increase covers production from the sum of their withheld bundles. For any
+coalition of size at least2, its payment is at least f(Q)+G, and
+T>=F(b(Q))+f(outside) makes this sufficient for coverage. Funding is exactly
+S+nG/2. Nonnegative superadditivity with F(0)=0 is sufficient throughout.
+
+TRANSLATION/SYMMETRY DEPENDENCY CHECK.
+The compact feasible product consists of intervals[f_i,f_i+KG], not intervals
+whose lengths grow under translation. Diagonal resource additions raise every
+coalition's value and each owner's standalone value by the corresponding
+added scalar, while leaving G unchanged. Hence the affine shift operators
+preserve all finite constraints and have a common fixed point by finite
+rectangular averages and compactness. No integration of a nonmeasurable rule
+is used. Finite owner/global-resource symmetrization preserves the fixed-point
+condition, gain budget, coverage, and protected deviations.
+
+The signed-imbalance restoration argument really compares feasible reports
+of the SAME n actual owners. It permits both signs of signed changes by adding
+nonnegative physical resources on the appropriate side and cancelling the
+diagonal translation. This is why mixed eligibility and the full unbounded
+orthant are essential. It does not assume owners can transfer identities.
+
+TWO-OWNER POTENTIAL CHECK.
+For total2, pair neutrality compares(x,2-x) with(2,0), with all other reports
+zero. The latter has G=0, so the active pair's h-sum is0. Owner symmetry gives
+q(x)+q(2-x)=0, and no-gain profiles give q=0 on[0,2]. Null payments at other
+profiles may be positive, but they do not enter this pair-sum equality.
+At(2,-2), the active pair's payment sum is2 by the same neutrality argument
+with total0; owner symmetry combined with global resource symmetry makes
+both payments1. Raising only the positive report from2 to4 preserves the
+negative report and gives q(4)>=1 by singleton monotonicity. This step is
+independent of grand efficiency and independent of null payments.
+
+FINITE MERGER CHECK.
+Every merger preserves total2, cannot increase total negative mass, and cannot
+increase active count. Hence all intermediary profiles stay in the class
+r<=5, negative mass<=2. At pure residual profiles all standalone values vanish,
+and anonymity plus the gain budget bounds each null payment by
+epsilon=2K/(n-5). It is not assumed that outsiders' payments stay fixed.
+
+The Banzhaf pair identity follows by expanding over subsets of outsiders;
+the two intermediate q-terms cancel. The merged marginal is exactly zero when
+the merged coordinate is zero. For r=2, complementarity and q(0)=q(2)=0 make
+the Banzhaf coordinate exactly q(z_i). The preceding null-case clarification
+therefore completes a uniform induction over all chosen profiles.
+
+EXACT FIVE-OWNER CONTRADICTION.
+For z=(2,-1,-1,1,1), the coalition's actual h-total must be nonnegative because
+its signed total is0. Expanding the three Banzhaf marginals and collecting
+formal q-coefficients, then using q=0 on[0,2] and q(-x)=-q(2+x), leaves
+exactly -q(4)/8. Thus its potential total is at most-1/8. Three individual
+errors of size E5 must cover that deficit. Since E5=57epsilon/8,
+1/8<=171epsilon/8=(171/4)K/(n-5), giving K>=(n-5)/342.
+This finite contradiction does not use the qualitative population limit.
+
+QUALITATIVE COMPANION.
+Its population-padding compactness construction is consistent with the finite
+argument: null payments tend to0 at each fixed finite-support profile, and
+finite constraints pass to a cofinal convergent subnet. Pair-merger uniqueness
+is only for the potential q_Z induced by that limit rule, not ordinary Banzhaf
+uniqueness over all games. This distinction is correctly maintained. The
+quantitative theorem is sufficient, so this extra compactness limit need not
+be relied upon in a main proof.
+
+INDEPENDENT EXACT VERIFICATION.
+verify_pairwise_gain_audit.py performs symbolic coefficient checks for92
+admissible integer profiles and613 Banzhaf mergers, including180 cancelling
+mergers. It independently verifies the five-owner coalition polynomial
+{q(4):-1/8}, the cancelling-case recursion bounds, and coefficient1/342.
+All checks pass with Python assertions enabled. These checks support the
+analytic proof; they do not establish arbitrary real-profile validity by
+finite enumeration.

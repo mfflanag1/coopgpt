@@ -1,0 +1,132 @@
+EXACT EVALUATION OF THE POLYMATROID3/2 RULE BY A PRINCIPAL PARTITION
+17 October2026. Accepted implementation corollary after independent mathematical/code review.
+This applies established parametric submodular minimization, not a new SFM algorithm.
+Direct original: Nagano--Kawahara, UAI2013, Section5.2 AlgorithmDA,
+https://auai.org/uai2013/prints/papers/151.pdf . The transformation is
+f=P r, alpha=1/z. See energy/POLYMATROID_ORACLE_SOURCE_GATE.txt for the
+exact original-source mapping, maximal-oracle support and attribution.
+
+CONTRACT AND OBJECTIVE
+The accepted theorem in TWO_COMMON_FRESH_ONE_COMMON_DR_BLOCK_THEOREM.txt gives
+coverage, TCWM and total funding<=3F/2 for arbitrary fixed mixed owners of
+ F(P,c)=min_(S subset E)[P r(S)+c(E\S)],
+where r is public, normalized, nonnegative, monotone and submodular. Its exact
+prices average(r(S),1_(E\S)) along the lower envelope
+ L_S(z)=z P r(S)+c(E\S), z>0,
+with the ratio-law CDF G(z)=z/2 for0<=z<=1 and G(z)=1-1/(2z) forz>=1.
+This note replaces subset enumeration by an exact maximal-submodular-minimizer
+oracle. It changes neither the mechanism nor its incentive proof.
+
+ORACLE MODEL
+The public rank oracle evaluates rational r(S) exactly. At parameter z an
+exact maximal-minimization oracle returns the UNIQUE inclusion-maximal
+minimizer of zP r(S)-c(S). The union of all minimizers is a minimizer by the
+submodular minimizer lattice. An ordinary exact SFM value oracle can implement
+this via one unconstrained minimum and at most|E| constrained minima: j belongs
+to the maximal minimizer iff min_(S containing j)f(S)=min_S f(S). Constrained
+minimization is SFM on T -> f(T union{j}). The union of the resulting possible
+elements is exactly the maximal minimizer. No numeric epsilon tie-breaking
+or approximate minimization is used. Original algorithms can return the
+maximal minimizer directly; the separate source comparison confirms this.
+
+ZERO FACES AND ENDPOINTS
+If P=0, or every private capacity is0, all payments are0. Otherwise restrict
+to active private indices J={j:c_j>0}, using the restriction of r to J.
+This preserves F: removing inactive elements from any S cannot increase rank
+or alter the private intercept, while every restricted set is still feasible.
+Set absent-coordinate prices to0. Owners and their eligible rows do not change.
+
+Zero prices on absent coordinates are the convention of the accepted theorem.
+They do not assert a full-space supporting gradient at a boundary. Every owner
+has zero holding in an absent row, so changing that row's price changes no
+payment at that profile. If P=0, private directional derivatives on the active
+face vanish; the literal nonzero common derivative, when defined, multiplies
+zero common holdings. If all c=0, the reverse statement holds. Thus the zero
+payment returned on either block axis equals the accepted mechanism's payment.
+When r(J)=0 the production on the active face is identically0, so all charged
+prices are0. Coverage and TCWM are statements about payments, not unused prices.
+In a cross-face restoration any newly active row is evaluated at its correct
+high-profile price; its old holding was0. No cross-face continuity is assumed.
+
+If r(J)=0, F is identically0 on this active face. Otherwise define the loop set
+L={j in J:r({j})=0}. Monotonicity and submodularity imply r(L)=0 and every
+zero-rank set is contained in L. For z=0, J is the unique minimizer since all
+active c_j>0. For all sufficiently large z, L is the unique minimizer: any
+positive-rank set loses to L eventually, and among zero-rank sets L has the
+smallest intercept. Thus the envelope has endpoints J and L. With positive
+capacities a strict positive-interval nested chain has at most|J|+1sets.
+The maximal minimizers shrink as z grows, as proved by the theorem's uncrossing
+argument (equivalently divide by zP and vary the modular weight1/(zP)).
+
+RECURSIVE BREAKPOINT ALGORITHM
+For two known envelope sets A strictly containing B, with r(A)>r(B), put
+ z*=[c(A\B)]/[P(r(A)-r(B))].
+This is the intersection of L_A and L_B. Query the maximal minimizer M at z*.
+
+If L_M(z*)=L_A(z*)=L_B(z*), record an adjacent-envelope breakpoint z* between
+A and B. Intermediate sets that tie at this single point have zero probability
+under the continuous ratio law and need not be retained.
+
+If L_M(z*) is strictly smaller, recurse on(A,M) and(M,B). In this case B is a
+strict subset of M and M a strict subset of A; their ranks strictly decrease.
+Start at(J,L). Return the ordered sets and all recorded breakpoints.
+
+WHY THIS RECOVERS THE WHOLE ENVELOPE
+Maintain anchors alpha<beta at which A and B are optimal, respectively;
+initially alpha=0 and beta=infinity. Intersection z* lies between the anchors.
+If another line is below the two lines at z*, the oracle finds such a line M.
+Parametric nesting puts B subset M subset A, and strict improvement makes
+both inclusions and rank inequalities strict. The two recursive intersections
+lie between their corresponding anchors; M is optimal at the new shared anchor.
+
+If there is no strict improvement at z*, every competing affine line lies
+above A at alpha and at z*, hence throughout[alpha,z*]; it lies above B at
+z* and beta, hence throughout[z*,beta]. For beta=infinity use its nonnegative
+slope relative to the zero-slope L line. Thus no hidden positive-length
+segment was skipped. The same affine argument applies recursively. A set
+with equal slope and smaller intercept could not coexist with the claimed
+optimal anchor, so division by a zero rank difference is never required.
+
+Let k be the number of retained positive-interval sets. Each strict query
+introduces one new chain set, and each terminal query joins two adjacent sets.
+A binary recursion with k-2 strict nodes has2k-3queries. Since k<=|J|+1,
+there are at most2|J|-1maximal-minimizer calls. A direct induction gives the
+stronger2|J\L|-1 bound: a strict split partitions A\B into A\M and M\B.
+With cached ranks, at most2|J|+1 external rank evaluations suffice, including
+normalization, singleton loops, the full set and strict-query new ranks.
+This excludes rank evaluations made internally by the SFM backend. A naive
+conversion to ordinary exact SFM uses O(|J|^2)calls; a maximal-returning SFM
+algorithm yields O(|J|)calls. These are oracle counts, not wall-clock promises.
+
+EXACT PRICES
+Write the ordered chain S_0=J,...,S_(k-1)=L and breakpoints
+0=z_0<z_1<...<z_(k-1)<z_k=infinity. For each interval define
+ w_l=G(z_(l+1))-G(z_l).
+Then
+ q_P=sum_l w_l r(S_l),
+ q_j=sum_l w_l 1_{j notin S_l}.
+All weights are nonnegative and sum to1. Rational rank/capacity data produce
+rational breakpoints and prices. Ties at isolated breakpoints have zero mass.
+On active faces this is exactly the accepted two-block gradient average, so
+all-profile coverage, mixed-owner TCWM and3/2funding follow unchanged. It does
+not produce the missing full-OUT guarantee.
+
+COMPLEXITY QUALIFIERS
+With exact rational ranks of polynomially bounded encoding length and a
+polynomial exact SFM implementation, this gives polynomial oracle evaluation
+of the prices. Aggregate owner sums and final dot products are additional
+straightforward work. No polynomial guarantee is asserted for an arbitrary
+rank representation whose oracle itself is expensive, or for approximate or
+floating-point SFM. The small executable verification harness uses exhaustive
+SFM as a test oracle; that backend is exponential and is NOT an efficient
+implementation. The improvement is the general oracle reduction, not the
+performance of the finite test harness.
+
+PRIORITY
+Principal partitions, nested parametric minimizers and decomposition algorithms
+are established. The proposed contribution remains the incentive-compatible
+polymatroid payment theorem; exact evaluation is an implementation corollary.
+Do not present the chain algorithm or SFM complexity as newly discovered.
+Independent proof/code review and exact comparison to full enumeration have
+passed. See root/ROOT_ADJUDICATION_62_POLYMATROID_ORACLE.txt for the acceptance
+record, finite-test scope, original-source attribution and remaining limits.

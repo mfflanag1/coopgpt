@@ -1,0 +1,151 @@
+M100 BOUNDED RAW-SLICE ACCEPTANCE SPECIFICATION
+17 October2026. Independent descriptive validation plan, overnight_energy.
+This file specifies checks; it records NO observed-data results. Root owns the
+range extractor and any raw inspection. This lane downloads no telemetry and
+does not edit root scripts. Companion metadata: M100_SCHEMA_GATE.txt.
+
+PURPOSE AND PERMITTED CONCLUSION
+Determine whether the retrieved slice contains measured power from multiple
+identified physical nodes at common UTC instants, and describe its defects.
+Acceptance qualifies only the named files, nodes, interval and meter fields.
+It does not validate cooperation gains, causal savings, a reliability tail,
+controllable capacity, independent owners or any particular reserve contract.
+
+0. INTAKE MANIFEST BEFORE STATISTICS
+Retain the record/version URL; HTTP response status and Content-Range;
+advertised full archive size; cumulative transferred bytes; each complete
+tar member's path, offset and size; local member hash; Parquet schema and
+row-group count. Do not claim that the full archive checksum was verified
+from partial ranges. Inspect complete members, not truncated Parquet buffers.
+Report whether ALL members of each selected metric/month were enumerated
+and read. If only some members were read, missing rows may be unexamined
+files rather than telemetry gaps; label coverage partial/unknown accordingly.
+Record selection rules before comparing power values. Keep acquisition
+under the parent's100MB aggregate cap, including retries and header probes.
+
+1. SCHEMA, KEYS AND TIMESTAMPS
+Expect metric labels total_power, ps0_input_power, ps1_input_power and
+plugin=ipmi_pub, subject to actual footer/partition verification. Combine
+Hive partition keys with physical columns; report any disagreement rather
+than silently overwriting. Treat node as a string. Check observed IDs against
+the public rack map0--979; preserve and separately list unexpected IDs.
+
+Expected timestamp type is milliseconds with UTC metadata, whole-second
+values after author conversion. Report actual type, null timestamps, nonzero
+subsecond remainders, first/last UTC values by(node,metric), and observations
+outside the named month. Convert an explicitly timezone-aware timestamp to
+UTC; do not silently attach UTC to a naive field if the actual file omits
+the timezone. Preserve the original field and mark the ambiguity for review.
+Unsorted file order is not itself a sensor defect. Sort a copy by key/time
+for cadence analysis while retaining the original provenance/order.
+
+2. WATT-VALUED RANGE CHECKS
+Report actual storage type, nonnumeric/nonfinite/null counts, noninteger
+counts, minimum, maximum, median and selected empirical quantiles for every
+node and metric. Author documentation specifies integer Watts, but one-Watt
+storage granularity is not an accuracy or calibration certificate. Flag
+negative readings and implausibly repeated extreme values; preserve them in
+the raw table and exclude ambiguous cells from the clean descriptive view.
+No validated hardware maximum or sentinel code has been established here:
+do not invent an upper cutoff, winsorize, or reinterpret a negative code.
+Keep genuine numeric zero distinct from missing/invalid. Zero may reflect
+an idle, powered-off, disabled-supply or erroneous reading; state is needed.
+Use at least signed64-bit arithmetic for PSU sums and integer differences.
+
+3. DUPLICATES AND CONFLICTS
+The natural key is(node,metric,timestamp). Count raw rows, distinct keys and
+duplicate multiplicities. Exact repeats with one identical nonnull value
+may be collapsed only in a derived view, retaining the multiplicity count.
+If one key has two distinct nonnull readings, label it CONFLICT and do not
+average, take the maximum or choose the last row without additional evidence.
+Treat a mixture of null and one nonnull reading separately, with an explicit
+retained-value policy and flag. A conflict invalidates that cell for exact
+alignment, not every other node or time. Report conflicts around UTC22/23h
+as well as elsewhere; the author's midnight cleanup is not a global promise.
+
+4. CADENCE AND MISSINGNESS
+After duplicate handling, describe positive consecutive-time gaps per node
+and metric: frequency table, quantiles, longest gap, fraction exactly20s,
+fraction a positive multiple of20s and fraction otherwise. Also tabulate
+timestamp seconds modulo20. Nominal20s sampling alone does not establish a
+common phase or synchronization across nodes. Do not round timestamps to
+force an apparent common grid.
+
+For a declared half-open UTC window W=[start,stop), report separately:
+  a. null/invalid/conflicting observed cells;
+  b. entirely absent keys on an EXPLICIT grid, if such a grid is justified;
+  c. portions outside known complete extraction coverage.
+For grid phase phi, use G={phi+20k in W}; denominator is exactly |G|, not
+elapsed seconds divided by20 without endpoint conventions. If phase varies
+or is not verified, report observed gap distributions and exact overlap;
+do not present an unjustified grid-completeness percentage. If files are
+only a partial slice, report availability within that slice, not system
+telemetry missingness. Report leading/trailing absence and interior gaps.
+No forward fill, interpolation or zero fill is part of this acceptance test.
+
+5. ALIGNED PHYSICAL-NODE INTERSECTION
+For each declared node i and meter m, let T_i,m be UTC times with exactly one
+accepted finite nonnegative reading. For one chosen meter, report the exact
+intersection T_common=intersection_i T_i,m, its first/last time, count and
+consecutive-gap distribution, together with every node's individual count.
+For PSU-derived node input power first intersect T_i,ps0 and T_i,ps1 WITHIN
+the node, then intersect those times ACROSS nodes. Never sum readings from
+different instants or independently selected days without saying so.
+
+A minimal EXISTS result needs at least two distinct mapped physical nodes
+and at least two common timestamps; list them. This only establishes that
+a simultaneous panel is present, however tiny. A usable-window assessment
+must additionally declare the node set, fixed interval, extraction coverage
+and acceptable missingness for its eventual scientific question. This gate
+sets no arbitrary threshold implying adequate reliability information.
+Report the longest exact20s common run descriptively, but if chosen after
+inspection label it post-selected. Do not market it as representative.
+If exact intersections are empty, retain that result. Any later nearest-time
+join must state a tolerance, lag distribution, tie policy and one-to-one
+matching rule and must be labeled aligned-by-analysis, not simultaneous raw
+observations. It cannot retroactively count as this exact-intersection pass.
+
+6. TOTAL_POWER VERSUS PSU INPUT SUM
+On conflict-free same-node/same-timestamp triples define
+  P_in=ps0_input_power+ps1_input_power,
+  delta=total_power-P_in.
+Report the number/fraction of eligible triples; delta min/max, mean, median
+and absolute-error quantiles; exact equality fraction; and relative delta
+only where P_in>0. Report P_in=0 and total_power=0 cases separately. Provide
+per-node summaries as well as pooled ones so cancellation cannot conceal a
+node-specific offset. Correlation is optional and undefined on constant
+series; high correlation is not meter equivalence. Do not enforce equality.
+Missing one PSU is NOT a zero reading and cannot give an accepted input sum.
+Do not add total_power to P_in or to CPU/memory component power.
+
+The original IPMI documentation calls total_power total node consumption and
+the PS fields power-supply INPUT readings; it does not define their relative
+meter boundaries or explain an offset. Antici et al.'s original PM100 paper,
+Section2 printed1813 and Section3 printed1814, explicitly uses the sum of
+the two PSU input readings as node power. Its processing excludes jobs with
+missing power data and jobs sharing nodes. This supports labeling P_in as
+the author-used input-power quantity. It does NOT prove total_power=P_in,
+that total_power is DC output, or that their difference is conversion loss.
+Original: https://cris.unibo.it/retrieve/6fbbd46f-a7e7-4469-b1ab-8adbe6de6d98/3624062.3624263.pdf
+Author metric dictionary:
+https://gitlab.com/ecs-lab/exadata/-/raw/main/documentation/plugins/ipmi.md
+
+7. OPERATIONAL STATES AND THE FINAL STATUS
+If no Nagios slice was acquired, state classification is UNKNOWN. Preserve
+power observations without calling the nodes healthy, online or available.
+If acquired, match metric=state in nagios_pub, using node AND description;
+retain value, state_type and nagiosdrained. The author distinguishes host
+UP/DOWN/UNREACHABLE from service OK/WARNING/CRITICAL/UNKNOWN. The two encodings
+must not be merged. A15-minute service observation is not a continuously
+verified condition during the surrounding15 minutes. Exact matches may be
+reported first; any as-of state propagation is an explicit extra assumption.
+Do not discard all flagged periods before reporting the original missingness
+and sample-selection consequences. Job occupancy does not establish private
+ownership, and whole-node power cannot generally be attributed to one of
+several concurrently running jobs from these three metrics.
+
+The result should end with three distinct verdicts:
+  SCHEMA: verified/contradicted/unresolved in the retrieved files.
+  EXACT PANEL: exists/absent/unresolved for the stated nodes and UTC window.
+  SCIENTIFIC SUFFICIENCY: unassessed; no reliability or pooling conclusion.
+Include unresolved meter/state issues even if the first two pass.

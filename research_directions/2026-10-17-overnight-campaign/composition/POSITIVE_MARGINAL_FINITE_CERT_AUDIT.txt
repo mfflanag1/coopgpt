@@ -1,0 +1,105 @@
+FINAL INDEPENDENT AUDIT: THE SIXTEEN-OWNER POSITIVE-MARGINAL CERTIFICATE
+17 October 2026. Composition lane. No material mathematical gap found.
+
+FILES ACTUALLY CHECKED
+unrestricted/POSITIVE_MARGINAL_FINITE_CERT_THEOREM.txt
+unrestricted/POSITIVE_MARGINAL_FINITE_CERT_N16_S4_FACTOR5.json
+unrestricted/POSITIVE_MARGINAL_FINITE_CERT_CHECK.py
+The numerical scout and its optimum are not proof dependencies.
+
+EXACT CLAIM AND SCOPE
+For F(x)=min(x1,x2,x3), fix 16 actual owners, each eligible for all three
+resources, with reports in [0,1]^3. A rule with nonnegative report-independent
+whole-owner marginal-contribution weights that covers every coalition and
+satisfies payment-only TCWM for groups of at most four needs worst-case total
+funding at least 5F. The weights may be asymmetric and unnormalized. This is
+an architecture obstruction. It is not a lower against all mechanisms: the
+separately established unrestricted min-three TCWM factor is 2.
+
+1. ANALYTICAL OWNER AND DOMAIN OBLIGATIONS
+I checked the actual symmetrization argument, rather than assuming anonymity.
+Average the rule over all owner-label permutations, transporting both reports
+and output labels. The cube and full resource eligibility are invariant under
+this operation. Every coalition-coverage, same-coalition restoration, and
+funding inequality is linear in payments, so each survives averaging with its
+original constant. The resulting coefficient for a marginal depends only on
+the predecessor subset cardinality h. Its cardinality mass is
+ W_h=binom(15,h)w_h >=0.
+No new owners are introduced or deleted. Null reports remain possible reports
+of the same fixed owners; null owners have exactly zero marginal contribution.
+
+The balanced profile b_i=(1,1,1) gives every marginal value 1 and F=16. Hence
+funding implies sum_h W_h<=kappa. Three pure-resource owners, with the other
+thirteen reporting zero, give coverage coefficients
+ c_h=3h(h-1)/(15*14), so c.W>=1. Both profiles lie in the stated cube.
+
+2. THE THRESHOLD ROW IS A GENUINE TCWM COMPARISON
+For each displayed (q,k,t), there are q protected leaf owners, k outside center
+owners, and z=16-q-k null owners. The focal leaf changes t/k to (t+1)/k;
+the other q-1 leaves remain at one. Center bundles are (1/k,1/k,0). Every
+holding remains in the cube, and every restoration is feasible and nonnegative.
+The coalition includes its unchanged members, as required by TCWM.
+
+For the focal owner's marginal change to be 1/k, all other protected leaves
+must be absent from the sampled predecessor, and at least t+1 centers present.
+For an unchanged protected leaf to lose 1/k, the focal leaf must be present,
+the other protected leaves absent, and the same center threshold met. Thus the
+increment divided by epsilon=1/k has exact coefficient
+ D_h = sum_(j=t+1)^k binom(k,j)
+       [binom(z,h-j)-(q-1)binom(z,h-1-j)] / binom(15,h).
+TCWM gives D.W>=0. Out-of-range binomials are zero. This derivation includes
+t=0, the null focal report, h=0, and h=15 without an endpoint exception.
+
+Optional wording clarification only: the theorem's phrase 'changes coalition
+production' here means a sampled coalition's production. The protected all-leaf
+coalition itself has value zero at both profiles. This does not affect the
+formula, the certificate, or the theorem.
+
+3. INDEPENDENT EXACT REPLAY
+I wrote a separate replay in
+ composition/POSITIVE_MARGINAL_FINITE_CERT_REPLAY/independent_replay.py
+and executed it with python3 -I. It uses Fraction arithmetic and explicit
+RuntimeError checks, without floating arithmetic, an LP solver, or disabled
+assertions. Its raw-subset method differs from the supplied checker's loop
+over individual predecessor marginals: it aggregates final-subset incidence.
+For any raw game increment delta, the sum of protected marginal changes for
+predecessor size h equals
+ sum_(|A|=h+1) |A intersect S| delta(A)
+ - sum_(|A|=h) (q-|A intersect S|) delta(A).
+The replay obtains delta from integer-scaled low/high min-three values, then
+checks this independently reconstructed vector against the binomial formula.
+
+Results: PASS for all 14 rows, 917,504 raw transition subset values, a further
+65,536 pure-coverage subset values, and all 16 rational dual components.
+The complete evidence and exact row vectors are in
+ composition/POSITIVE_MARGINAL_FINITE_CERT_REPLAY/independent_replay.json.
+Certificate SHA256:
+ 5d817fc7fc22507b3c5d80934e2f4fcf16118961c27e7a34ec8c5ee0231354b5
+
+4. THE DUAL IMPLICATION
+All 14 multipliers are nonnegative exact rationals. Adding their transition
+rows to five times coverage gives precisely the published vector v. Each
+component is at most 1; its maximum is 594/625 and minimum slack is 31/625.
+Consequently v.W>=5, and nonnegative W gives
+ kappa >=sum W >=v.W >=5.
+The intentional positive slack does not weaken validity. The claim does not
+assert that 5 is the optimal lower or that the floating discovery optimum is
+certified. This finite proof needs neither a weak-limit argument nor a claim
+that finite-population mixtures have restricted support.
+
+CAMPAIGN SUMMARY SCOPE CHECK
+I also read handoff/CAMPAIGN_OUTCOMES.txt as requested. Its incidence-tree
+consequence is correct for the bipartite resource-activity incidence graph:
+the common-cap instance has 3M+1 vertices and 3M edges and is connected. The
+summary correctly confines the growing lower to coalition protection and
+retains the individual-OUT arity-three upper 3. Thus it does not close or refute
+the original individual-incentive question. I suggested qualifying the signed
+reserve sentence with 'L1-embeddable norms' so it cannot be read as asserting
+the sharp endpoints for arbitrary norms. No summary edits were made here.
+
+LIMITS
+The analytical proof and exact replay support this finite architecture claim.
+They establish neither historical novelty nor external specialist acceptance,
+and they do not improve the unrestricted arity-three coalition-size frontier.
+Report-dependent weights, negative weights, and general resource-level
+mechanisms lie outside the theorem. No further research attack was undertaken.

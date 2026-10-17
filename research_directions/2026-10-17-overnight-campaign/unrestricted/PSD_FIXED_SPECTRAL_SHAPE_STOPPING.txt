@@ -1,0 +1,90 @@
+FIXED NORMALIZED SPECTRAL SHAPES CANNOT SAVE A DIMENSION-LINEAR FRACTION
+Frozen 2026-10-17. Necessary individual-IC condition, not an all-rule lower.
+
+RULE CLASS
+For every matrix order m>=2, fix a scalar function f_m:[1,infinity)->(0,
+infinity), continuous at1 and locally absolutely continuous, with f_m(1)=1.
+The function may vary with m and with the fixed owner count, but not with
+the reported profile. On positive-definite aggregate C, with
+T=lambda_min(C), pay actual owner i
+ y_i=Tr(P(C)X_i),   P(C)=f_m(C/T)/Tr(f_m(C/T)).                (1)
+Assume this rule is individually own-report monotone for every fixed-owner
+PSD report profile. Individual/full coalition outside-production incentives
+would be stronger and hence also entail the necessary condition below.
+
+THEOREM
+The worst total-output funding factor of(1) is at least
+       B_m=1+(m-1)*m^(-1/(m-1)) >= m-log(m).                 (2)
+In particular B_m/m tends to1. No family of such rules can guarantee a
+factor (1-epsilon)m for a fixed epsilon>0 in all growing dimensions.
+This includes shapes that locally decay faster than the inverse and
+therefore are not covered by the positive-resolvent order obstruction.
+
+PROOF: A NECESSARY OWN-REPORT DIFFERENTIAL INEQUALITY
+Fix m, write f=f_m and k=m-1. At the aggregate
+C_s=diag(1,s,...,s), s>1, let one actual owner hold X=s E_jj for a high
+coordinate j. A second owner holds C_s-X. All other owners, if any, may
+be zero. Hold the second owner's report fixed and change only X to
+x E_jj near x=s. The aggregate minimum eigenvalue remains1. The focal
+owner's payment, as a function of x, is
+                x*f(x)/(1+(m-2)*f(s)+f(x)).                 (3)
+Monotonicity forces its derivative at x=s to be nonnegative at every
+differentiability point of f. Since f>0, this is equivalent to
+
+ f(s)[1+k f(s)] + s f'(s)[1+(k-1)f(s)] >=0.                (4)
+
+The other owner stays fixed for this comparison; no identity changes or
+cross-owner symmetry assumptions occur. Different choices of s may use
+different profiles from the same unrestricted two-owner report domain.
+
+INTEGRATING WITHOUT A MONOTONICITY ASSUMPTION ON f
+Define
+                  I(s)=s*f(s)/(1+k f(s))^(1/k).
+On any finite interval[1,R], positivity and continuity bound f away from
+zero. Local absolute continuity and the chain rule give, almost everywhere,
+ (log I(s))'=1/s + f'(s)[1+(k-1)f(s)]/[f(s)(1+k f(s))].
+By(4), this derivative is nonnegative. Hence I is nondecreasing and
+ I(s)>=I(1)=m^(-1/k)=:c_m.
+In particular q(s)=s*f(s)>=c_m. No sign restriction on f' was used.
+
+At C_s, T=1 and total payment is
+ A(s)=[1+k*s*f(s)]/[1+k*f(s)]=[1+k q(s)]/[1+k q(s)/s].
+For fixed s>1 this expression is increasing in q. Therefore
+ A(s)>=[1+k*c_m]/[1+k*c_m/s].
+Let s tend to infinity to obtain the first bound in(2). Finally
+ exp(-u)>=1-u with u=log(m)/(m-1) gives B_m>=m-log(m),
+and B_m/m->1. This proves the theorem.
+
+REGULARITY, BOUNDARIES, AND SCOPE
+Local absolute continuity may be replaced by C1 regularity. Continuity
+at1 is used only to identify I(1). The rule is tested entirely on strictly
+positive aggregates, so no singular-profile convention can repair the
+obstruction. Its scalar shape is positive by assumption; for finite
+nonnegative shapes with f(1)=1, all-profile own monotonicity already forces
+f(s)>0: if f(s)=0, hold the complementary report from(3) fixed and restore
+the focal high coordinate from1 to s. Its payment falls from a positive
+number to zero.
+
+The theorem is a necessary architecture bound. It neither asserts that
+B_m is attainable nor proves global incentives from(4). It does not cover
+arbitrary profile-dependent f_C, owner-specific prices, a report-dependent
+spectral allocation that is not a fixed scalar shape, or discontinuous
+shape rules outside the stated regularity. Positive resolvent mixtures with
+arbitrary profile-dependent weights are separately excluded by
+PSD_POSITIVE_RESOLVENT_FUNDING_OBSTRUCTION.txt. The two classes overlap but
+neither statement is being silently substituted for the other.
+
+The known full coalition outside-production rule T*C^-1 has exactly mT
+funding and is not trace-normalized as in(1). The present result says the
+natural normalized separable spectral-shape route cannot save a fixed
+fraction of that coefficient. It does not establish the unrestricted
+general PSD_m optimum. The fixed-owner individual general funding bound
+can be far smaller on two-owner domains; this obstruction is specific to
+the spectral architecture, not the economics of two owners.
+
+CHECKER
+verify_psd_fixed_spectral_shape.py uses rational arithmetic to check(4),
+the invariant derivative identity, the monotonicity of the total-payment
+formula, and rational enclosures for c_m. The analytic proof, not these
+finite checks, establishes the all-dimension statement. Priority review
+has not been completed; this is a rigorous campaign stopping result.

@@ -1,0 +1,58 @@
+SUPERSEDED: the production candidate is now disproved by the unbounded family in
+SQUARE_ROOT_SHAPLEY_PRODUCTION_OBSTRUCTION.txt. The broader-scope examples below
+remain correct, but any language calling the candidate live is historical.
+
+SQUARE-ROOT SHAPLEY CANDIDATE: LIVE TOTAL-BALANCED SCOPE, FAILED BROADER SCOPES
+2026-10-17. Discovery note, not an established mechanism theorem.
+
+For a monotone concave homogeneous production F and actual fixed owners b_i,
+let v(S)=F(sum_{i in S} b_i), T=v(N), and phi_i(v) be its Shapley value.
+Candidate y_i=sqrt(T phi_i). Nonnegativity, individual own-report monotonicity,
+and funding sum y_i <= sqrt(n) T are immediate. The ONLY unresolved condition
+is coalition coverage: sum_{i in S}sqrt(T phi_i) >= v(S).
+
+All production games here are totally balanced with nonnegative efficient cores
+for every subgame. Numerical tests do not prove the candidate: 23,692 random
+min-linear games and finite LP searches passed; systematic symmetric LP searches
+have also passed within the tested total-balanced class. No novelty claim.
+
+SCOPE OBSTRUCTION 1: SUPERADDITIVITY ALONE IS INSUFFICIENT.
+Take 4 distinguished players A and 5 outsiders B. The simple game wins iff all
+four A players are present, OR at least one A and at least three B are present.
+Winning coalitions intersect, so the game is monotone and superadditive.
+For a uniform random permutation, the pivotal player lies in A iff all four A
+arrive before the third B, or all arrive after the third B. With the third-B
+uniform-time order statistic Q ~ Beta(3,3), phi(A)=2 E Q^4=5/21. By symmetry
+phi_i=5/84 for i in A. Thus sum_A sqrt(phi_i)=sqrt(20/21)<1=v(A).
+There is no veto player and no efficient core. This is not a production-domain
+counterexample.
+
+SCOPE OBSTRUCTION 2: A GRAND CORE PLUS SUPERADDITIVITY IS STILL INSUFFICIENT.
+Take k=6 distinguished players and m=80 outsiders. Write a,b for coalition
+counts, alpha=beta=1/2, ell=41. Define v(a,b) by the ordered cases:
+  b=m:                 1/2 + a/(2k);
+  b<m and a=k:         1/2;
+  b<m, 1<=a<k, b>=ell: min{1/2, 1/(2k)+b/(2m)};
+  otherwise:           0.
+Then T=1 and z_i=1/(2k) on A, z_i=1/(2m) on B is a nonnegative efficient
+GRAND core: every displayed value is at most a/(2k)+b/(2m).
+The game is monotone. For superadditivity, two positive middle coalitions cannot
+be disjoint because each contains more than half the outsiders. A middle
+coalition cannot be disjoint from an all-A coalition or an all-B coalition.
+The only two disjoint positive coalitions are all A and all B, whose values
+sum to 1=v(N). Adding a zero-worth coalition is harmless by monotonicity.
+(The same argument applies to subcoalitions with b=m and a>0.)
+
+Exact Shapley total on A:
+  phi(A)=1115822639/28209304620,
+  [sum_A sqrt(phi_i)/(1/2)]^2=2231645278/2350775385 < 1.
+The count-weighted Shapley identity used by the checker is
+ phi(A)=sum_{a=0}^{k-1}sum_{b=0}^m
+   k*C(k-1,a)*C(m,b)/[(k+m)C(k+m-1,a+b)] * (v(a+1,b)-v(a,b)).
+The obstruction is exact, not a floating-point LP inference. It rules out any
+proof of the live candidate that uses only monotonicity, superadditivity and
+a grand efficient core; some genuinely stronger production/subgame structure
+would be needed. It does NOT refute the candidate on totally balanced games.
+
+The checker verifies all count-level monotonicity, superadditivity and grand-core
+inequalities, as well as the exact Shapley arithmetic for both examples.

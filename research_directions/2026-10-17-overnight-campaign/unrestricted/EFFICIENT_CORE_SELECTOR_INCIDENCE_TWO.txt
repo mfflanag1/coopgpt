@@ -1,0 +1,168 @@
+AN EFFICIENT INDIVIDUALLY MONOTONE CORE SELECTOR UNDER EITHER INCIDENCE-TWO CONDITION
+2026-10-17. Proposed structural theorem; independent audit and priority check pending.
+
+THEOREM.
+Fix a finite 0/1 matrix A with nonempty rows. For every b>=0 write
+ K(b)={x>=0:Ax>=b},  T(b)=min_(x in K(b))sum_i x_i.
+Let e(b) be the UNIQUE minimum-Euclidean-norm point of the efficient face
+ {x in K(b):sum_i x_i=T(b)}.
+Suppose either:
+ (R) every ROW of A has at most two1s; or
+ (C) every COLUMN of A has at most two1s.
+Then e_i(b) is nondecreasing whenever only RHS entries of rows containing
+owner i increase. The result holds for arbitrary nonnegative real demands,
+zero demands, degeneracies, and simultaneous changes to several incident rows.
+Thus e is an efficient coalition-covering, INDIVIDUALLY own-row monotone
+allocation on every local monotone report array retaining this fixed generator
+matrix. Its funding factor is exactly1. Counts of owners and rows are unbounded.
+There is NO claim here of coalition-total monotonicity or outside-production IC.
+
+REGULARIZED SELECTORS.
+For epsilon>0 define x^epsilon(b) as the unique minimizer on K(b) of
+             f_epsilon(x)=sum_i x_i+(epsilon/2)||x||^2.
+Equivalently it is the Euclidean projection of the fixed vector
+             c_epsilon=-(1/epsilon)*1
+onto K(b). We first prove that each x^epsilon is individually own-row monotone.
+The projection target changes with epsilon; it does not depend on b.
+
+CONTINUITY AND FINITE AFFINE PIECES.
+Fix epsilon and change one RHS row along a bounded interval. Feasibility is
+never an issue, since a sufficiently large nonnegative constant vector is
+feasible. If the demands change by at most delta, translating any feasible
+point by delta*1 restores feasibility, because rows are nonempty. The coercive
+strictly convex objective then bounds minimizers on compact parameter intervals.
+Feasible recovery points and compactness show that every subsequential limit
+is the unique minimizer at the limit demand. Hence x^epsilon is continuous.
+
+There are finitely many active faces of this fixed polyhedron family. On an
+open piece with fixed zero-coordinate set and active affine face, restrict to
+the positive coordinate set J. Choose independent active cover rows B on J
+spanning the remaining affine equalities. Then
+ x_J=c_J+B^T(BB^T)^(-1)(b_B-Bc_J), and x_(outside J)=0.       (1)
+This follows from perpendicularity of x_J-c_J to the face's tangent space.
+The finitely many candidate faces have polyhedral parameter-feasibility and
+normal-cone conditions, so they yield a finite piecewise-affine subdivision.
+Zero multipliers and dependent active constraints are covered by selecting
+an independent active basis on each open piece.
+
+An inactive changed row has derivative0 on that piece. If the changed row
+is active, it can be chosen in the independent basis. A dependent changed
+equality cannot stay active on an open interval while every other RHS remains
+fixed. A coordinate i outside J has derivative0. Thus it remains to check the
+response for a positive owner i in an active changed row r:
+                   d x_J/d b_r=B^T(BB^T)^(-1)e_r.           (2)
+The fixed shift c_J has disappeared. Restricting columns to J preserves both
+hypotheses (R) and(C), including the conversion of some pair rows to singleton
+rows. Empty restricted rows cannot be members of an independent basis.
+
+PROOF UNDER(R).
+The active-basis derivative proof in RANK_TWO_PROJECTION_MONOTONICITY.txt
+applies directly to(2). For clarity, pair rows form a graph and singleton
+rows are anchors. An independent connected component is an unanchored tree,
+a tree with one anchor, or an odd unicyclic graph with no anchor. An own
+singleton derivative is1. For a changed pair ij, deleting its edge gives
+endpoint response b/(a+b)>0 in an unanchored tree with split sizes a,b;
+responses0 or1 in an anchored tree or a branch off an odd cycle; and1/2
+at both endpoints of an odd cycle edge. Other components contribute0.
+All own derivatives are nonnegative. This calculation concerns the derivative
+of the fixed-target projection and does not require target0.
+
+PROOF UNDER(C).
+Put G=BB^T. It is symmetric positive definite, nonnegative entrywise, and
+G_rr>=sum_(s!=r)G_rs, because a column contributes to at most one off-diagonal
+intersection for every row containing it. For w=G^(-1)e_r the maximum principle
+proved in COLUMN_TWO_PROJECTION_MONOTONICITY.txt gives |w_s|<=w_r and w_r>0.
+In brief, a maximum absolute entry at a nonsource forces equality in diagonal
+dominance and opposite signs of equal size at all neighbors. Propagation either
+reaches the positive source, or forms a closed alternating null component,
+contradicting positive definiteness. A positive own coordinate has either
+one basis incidence r, with derivative w_r, or two basis incidences r,s, with derivative
+w_r+w_s>=0. Hence(2) has nonnegative own response under(C) also.
+
+Combining the nonnegative derivatives with continuity proves one-row own
+monotonicity of x^epsilon. Increase several incident demands sequentially to
+obtain the full own-row statement. This does not assert monotonicity of sums
+of arbitrary owners' payments.
+
+PASSAGE TO AN EXACTLY EFFICIENT SELECTOR.
+The efficient face is nonempty and compact: x>=0 and sum x=T(b). Its strictly
+convex quadratic minimizer e(b) therefore exists and is unique. Optimality of
+x^epsilon against e gives
+ sum_i x_i^epsilon+(epsilon/2)||x^epsilon||^2
+       <=T(b)+(epsilon/2)||e(b)||^2.
+Since sum_i x_i^epsilon>=T(b), we get ||x^epsilon||<=||e(b)||. The family is
+bounded. Any accumulation point as epsilon tends to0 belongs to K(b) and has
+sum at most T(b), hence lies on the efficient face; it also has norm at most
+||e(b)|| and so equals e(b) by uniqueness. Thus the ENTIRE family converges
+pointwise to e(b). For any fixed pair of own-comparable demand profiles, the
+inequality x_i^epsilon(b_low)<=x_i^epsilon(b_high) holds for every epsilon>0.
+Taking limits proves the claimed exact efficient own monotonicity of e.
+
+WHAT THIS DOES AND DOES NOT SAY ABOUT PRODUCTION.
+The generator matrix must remain sufficient at EVERY report in the claimed
+domain, and an owner may change only its incident generator demands, in the
+monotone direction. A rank-two or frequency-two representation solely at a
+full profile does not justify dropping larger coalition inequalities that can
+become binding later. This is a theorem about fixed local cover systems;
+production instantiations require verifying that hypothesis separately.
+
+There is no contradiction with the sharp3/2 funding result for weighted/unit
+resource GRAPH technologies with actual mixed owners: a graph of productive
+resources is not the same object as a fixed graph of two-owner COALITION
+constraints, and mixed ownership need not preserve either incidence condition.
+Moreover the3/2 theorem is formulated with the stronger coalition-total
+incentive requirement, whereas the theorem here asserts individual monotonicity.
+There is also no contradiction with the general efficient-core-envelope linear
+obstruction, whose growing coalition generators lie outside these restrictions.
+
+ESTABLISHED INGREDIENTS AND PRIORITY.
+Strictly convex tie-breaking of the efficient core, active-face sensitivity,
+and the regularization limit are established methods. The proposed contribution
+is the incidence-two monotonicity conclusion and its efficient fixed-generator
+mechanism consequence. No historical novelty confirmation is claimed. Existing
+minimum-norm efficient-core literature, including ABV2016, must be compared
+before presenting the selector itself as new.
+
+FAILURE BEYOND INCIDENCE TWO: FREQUENCY THREE AND ARITY THREE CAN REQUIRE SUBSIDY.
+Five owners and five cyclic triple rows S_r={r,r+1,r+2} (indices modulo5)
+already rule out an efficient individually monotone mechanism on a finite
+local report star. At the high profile every row demand is3; its minimum
+L1 value is5, attained by the all-ones vector. For low profile i reduce only
+row(i-1), which contains owner i, to3/2. Its minimum L1 value is9/2, attained
+by the vector that has3/2 on owners i,i+2,i+3 and0 on i-1,i+1.
+Summing all five row inequalities and dividing by3 proves both optimum values.
+
+Suppose a coalition-covering, own-monotone rule funds every displayed profile
+within kappa times its minimum L1 value. At low profile i, the two unchanged
+triples S_i and S_(i+3) intersect only at i and together include every owner.
+Their inequalities imply
+           y_i(low_i)+sum_j y_j(low_i)>=6.
+Hence y_i(low_i)>=6-(9/2)kappa. Own monotonicity implies the same lower bound
+for y_i(high). Summing over all five owners and using the high-profile budget
+5kappa gives
+              5kappa>=5[6-(9/2)kappa], so kappa>=12/11.
+The argument uses no symmetry assumption on the mechanism. Both row arity
+and column frequency are exactly3. It shows that neither incidence-two
+hypothesis can simply be raised to3 while retaining an efficiency theorem.
+The12/11 value is an exact rational lower certificate, not a claim here of
+the optimal funding factor for this finite family. It is not an improvement
+of the general unrestricted subsidy lower bound.
+
+At kappa=1 one can also see the failure directly from unique efficient covers:
+all rows must be tight because the uniform positive row dual1/3 is optimal.
+The cyclic triple matrix is invertible (subtract consecutive homogeneous
+row equations to obtain x_r=x_(r+3); coprimality of3 and5 then forces all
+coordinates equal and hence0). Thus full owner i gets1 while low owner i
+gets3/2. This is a selector-independent efficiency obstruction. The accepted
+balanced closure/Boolean realization lemmas embed the finite report star
+into one fixed-owner monotone concave homogeneous production model.
+
+EXACT CHECKS.
+verify_efficient_incidence_two.py passes145 rational profile-level KKT checks
+and2034 own-comparable profile pairs across six families. It checks the exact
+efficient selector and both epsilon=1 and epsilon=1/4 regularized selectors.
+The active-basis verifiers for row2 and column2 supply separate geometric
+checks; finite checks support, but do not replace, the general proof above.
+verify_incidence_three_subsidy_boundary.py checks all five exact low-profile
+covers, their row-dual optimum values, the unchanged-row identities, and the
+12/11 inequality algebra.

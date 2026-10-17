@@ -1,0 +1,24 @@
+**Provisional verdict: no substantive flaw found in the upper-bound (compensation) proofs; the sharpness claim rests on lower-bound documents not in the packet, and one cited document hints the TCWM lower may need many resource coordinates, which the one-dimensional reduction cannot supply.**
+
+## Findings
+
+**F1 — Medium (unverified dependency, possible gap in sharpness of (i)).** `composition/CONE_L1_EMBEDDABLE_SHARP_THEOREM.txt:22-24, 233-234, 239` claims the 3/2 TCWM lower transfers "already on every nonzero one-dimensional subspace" via the two-resource map at line 223. But `root/ROOT_ADJUDICATION_03_COALITION_OPTIMUM.txt:9-10` says the lower "3/2−1/(2m) tends 3/2 with both actual owner **and resource counts** growing if k=m" via a "k-block lift". If the lower instance uses 2k resources, the single-edge reduction (span{e}) does not reproduce it. For ℓ1 one can embed k disjoint edges (x=Σ(a_j−b_j)e_j, t=Σ(a_j+b_j) gives F=2Σ_j min(A_j,B_j)), but not for Euclidean norms, and not if the k-block instance is a connected graph. Verification: confirm in `COALITION_THREE_HALVES_CANDIDATE.txt` that the 3/2 lower is proved for the single two-input min game (or that the block instance embeds into the cone domain for the norm in question).
+
+**F2 — Low (unverified dependency).** `SHARP_MULTIPOOL_OUTSIDE_CANDIDATE.txt` (d=2 lower 1+c) is not supplied; `energy/GENERAL_LOGARITHMIC_FACE_OUTSIDE.txt:30-33` only asserts it. Contract match (nonneg coordinate withholding ≤ report, aggregate pooling) is consistent with line 220-231 reduction.
+
+**Verified correct (checked by hand):**
+- Identity (3): Σ_S‖x_i‖−‖Σ_S x_i‖ = ∫[(a_S+b_S)−|a_S−b_S|] = 2∫min. Coverage and total ≤κF(C) follow for κ≥1.
+- Decomposition does **not** preserve underreports; the TCWM proof never assumes it. Identity |z⁺−w⁺|+|z⁻−w⁻|=|z−w| holds; (6) and Σdf_i=dt−∫(da+db) correct; W_new−W_old ≥ −κ[(−da)⁺+(−db)⁺] uses α,β∈[0,κ]; da+2(−da)⁺=|da| gives (7). 
+- Inequality (8): all three sign cases expand exactly as stated (r≥v≥0: 2α(r−v)+2(α+β−1)v; r≥0≥v: 2αr+2(κ−β)(−v); 0≥r≥v: 2(κ−β)(−v−(−r))+2(2κ−1−α−β)(−r)); remaining cases by symmetry. Y′−F(ΣD) ≥ (κ−1)[dt−∫(|r|+|v|)] + ∫(8) ≥ 0.
+- Huber: α=(r/2)[1−(a−b)/A]∈[0,r(1+r)/2], β=1−r/2+(a−b)/(2A)∈[1−r,3/2−r/2]. Note α+β can be <1, so Huber correctly is not used for (ii).
+- 1+c rule: q′=c[r+log(1−r)]/r², q+rq′=1+c·log(1−r)≥0 iff r≤t0, cr−r²q′=−c·log(1−r)≤1 iff r≤t0, cr+q+(1−r)rq′=1; q(t0)=c/t0 and q′ continuous at t0 (both =−c/t0²); r→0 gives q→1, q′→−c/2 (bounded). Bounds (10) hold on both pieces; c/t0<1 since c<(√5−1)/2.
+- Seams: W is piecewise C¹ with seams A=B (prices agree at r=1), B=t0·A (C¹), and axes; along a path lying in a seam both pieces give the same tangential derivative, so a.e. chain rule is valid. Integration from 0 to 1 justified by Lipschitz-in-s integrands dominated by Σ_S|Ldx_i|, integrable for any exact L1 embedding (finite or Gaussian).
+- Reduction map lands in K, withdrawals in K, F=2min; fixed owners.
+
+**Exposition nits:** line 127 stray "+ties"; the slack 2κ−1 in (5) is never needed since α+β≤κ; the signed lemma's a.e.-partial hypothesis suffices only for piecewise-C¹ W (as here), not arbitrary Lipschitz W.
+
+## Scope limitations
+Lower-bound proofs (`COALITION_THREE_HALVES_CANDIDATE.txt`, `SHARP_MULTIPOOL_OUTSIDE_CANDIDATE.txt`, Huber adjudication 01) not supplied; no tools run; p-stable embedding sources not checked.
+
+## Verdict
+Findings: upper bounds (i),(ii) and the compensation argument check out in reviewed scope; sharpness is contingent on F1/F2 (insufficient evidence in packet, with a concrete concern in F1).

@@ -1,0 +1,75 @@
+INDEPENDENT UNIFORM RESOURCE THINNING FAILS MIXED-OWNER INCENTIVES
+17 October 2026. Exact method obstruction on a unit-profit resource tree.
+
+CANDIDATE TESTED
+Independently draw U_v uniform on[0,1] for each resource vertex. At the thinned
+aggregate capacity profile c_v U_v choose an efficient optimal dual resource
+price p*(c U), and pay owner i her FULL reported bundle dotted into E[p*(c U)].
+The average is dual feasible, hence coalition-covering. On a single resource
+edge it agrees with the3/2 Huber-price rule. This suggested a nonseparable
+extension to weighted graphs. It fails already on an unweighted four-vertex
+path with two fixed actual owners.
+
+TECHNOLOGY / OWNERS
+Resources0--1--2--3 form a unit-profit path, every edge consuming one unit at
+each endpoint. Actual owner A holds vertices0 and2; actual owner B holds1 and3.
+Their eligibility remains fixed. Compare actual aggregate capacities
+  c=(1,1,1,1) and c'=(2,1,2,1),
+where only A increases reports. A rule satisfying whole-bundle underreport
+monotonicity must give A at least as much at c' as at c.
+
+MINIMUM-COVER EVENTS
+With positive continuously random capacities the optimum cover is uniquely one
+of the three minimal vertex covers
+  X={0,2}, Y={1,3}, Z={1,2}.
+Ties have probability zero. For general capacities(t,1,t,1), let independent
+uniform variables for vertices0,1,2,3 be x,y,z,w. Cover X is optimal exactly if
+  t x < y and t(x+z)<y+w.
+Write f(t) for this probability. Reflection exchanging the two bipartition
+sides gives P(Y optimal)=f(1/t); the remaining probability belongs to Z.
+
+EXACT INTEGRATION
+Set r=t x, s=t z. Then
+  f(t)=t^(-2) integral_{r=0}^{min(t,1)} integral_{s=0}^t g(r,s) ds dr,
+where g(r,s)=P[y>=r,y+w>=r+s]. For0<=r<=1:
+  g=1-r-s^2/2                       when0<=s<=1-r;
+  g=(1-s)(1-r)+(1-r)^2/2            when1-r<=s<=1;
+  g=(2-r-s)^2/2                    when1<=s<=2-r;
+  g=0                              when s>=2-r.
+These pieces follow by integrating y from r to1 and the remaining interval
+for w; there is no numerical probability approximation.
+
+At t=1/2 the square r,s<=1/2 lies in the first region, and
+  f(1/2)=1-(1/2)/2-(1/2)^2/6=17/24.
+For t=1, put a=1-r. Integrating s from0 to1 gives
+  a/2+a^2/2-a^3/6.
+Its integral over a in[0,1] is3/8, so f(1)=3/8.
+For t=2, the additional s in[1,2-r] contributes a^3/6. Hence the full s
+integral is a/2+a^2/2, whose a integral is5/12; divide by t^2=4 to get
+  f(2)=5/48.
+
+PAYMENTS AND PROFITABLE WITHHOLDING
+At t=1 the cover probabilities are(3/8,3/8,1/4), giving expected prices
+  (3/8,5/8,5/8,3/8).
+Owner A receives1.
+At t=2 the cover probabilities are(5/48,17/24,3/16), giving expected prices
+  (5/48,43/48,7/24,17/24).
+Owner A receives2*(5/48+7/24)=19/24.
+Thus at true capacities c', A gains5/24 by hiding half of both her resource
+stocks. The owner set and all other reports remain unchanged. This disproves
+even individual whole-bundle incentives; no coalition manipulation is needed.
+
+WHY THE EASY IDENTITY DOES NOT REPAIR IT
+For each single resource v, integration in U_v gives
+  c_v E[p*_v(c U)]
+   =E_{U_-v}[F(c_v,c_-v U_-v)-F(0,c_-v U_-v)].
+This proves own-capacity monotonicity of that resource's payment while all
+other resources are fixed. An actual owner can control several resources;
+their price spillovers invalidate the aggregation step, exactly as above.
+
+SCOPE
+This stops independent uniform thinning of resource rows followed by efficient
+dual prices. It is not the previously blocked fixed owner-mask architecture,
+and it does not affect the deterministic Huber-price theorem. On this path
+the latter uses a different global convex optimizer rather than an average
+of efficient covers of independently thinned capacities.

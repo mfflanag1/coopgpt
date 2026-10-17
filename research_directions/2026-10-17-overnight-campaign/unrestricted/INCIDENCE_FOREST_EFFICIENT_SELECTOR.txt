@@ -1,0 +1,92 @@
+EFFICIENT OWN-MONOTONE SELECTION FOR COALITION INCIDENCE FORESTS
+2026-10-17. Proposed structural theorem; independent audit pending.
+
+Fix a finite 0/1 matrix A with nonempty rows. The BIPARTITE incidence graph
+has one vertex for each generator row and one for each owner coordinate,
+with an edge exactly where A has a 1. Assume this graph is a forest.
+Both row sizes and owner incidence frequencies may grow without bound.
+Define K(b)={x>=0:Ax>=b}, T(b)=min_K sum x, and let e(b) be the unique
+minimum-Euclidean-norm efficient cover, for arbitrary nonnegative demands b.
+
+THEOREM. Increasing any subset of RHS entries incident with owner i cannot
+decrease e_i. The same statement holds for the projection of ANY fixed target
+c onto K(b). In particular it holds for the regularized efficient selectors
+min_K [sum x+(epsilon/2)||x||^2], epsilon>0, and passes to e as epsilon->0.
+This gives an exactly efficient individually own-row monotone rule on every
+local monotone demand domain with this fixed adequate generator matrix.
+
+CONDITIONAL-ENERGY DERIVATIVE LEMMA.
+Let B be any full-row-rank submatrix obtained by deleting rows and columns
+from A, and let r be one of its rows. The minimum-norm solution d to
+                         Bd=e_r                                  (1)
+has d_i>=0 for every i contained in row r.
+
+Proof. Full row rank makes (1) feasible. All connected components not
+containing r have zero RHS and contribute zero to the minimum-norm solution.
+Remove the source row vertex r from its tree component. Each adjacent owner
+i now belongs to a DIFFERENT component, because two such owners in one
+remaining component would close a cycle through r.
+
+For the component rooted at owner i, all remaining equations are homogeneous.
+Let its feasible linear subspace be H_i and retain its root value t=d_i.
+The image of H_i under the root-coordinate map is a linear subspace of R,
+so it is either {0} or all of R. In the first case the branch is pinned to
+t=0. In the second case define alpha_i as the minimum squared norm over
+H_i with root coordinate 1. This minimum exists and is unique; alpha_i>=1
+because its norm includes the root coordinate. Homogeneity and uniqueness
+give minimum branch cost alpha_i t^2 for every real t, including negative t.
+
+Thus (1) reduces exactly to
+ min sum_(free branches i) alpha_i t_i^2 subject to sum_i t_i=1,
+ with pinned branches assigned t_i=0.
+There is at least one free branch, since otherwise (1) would be infeasible.
+Its solution is
+          t_i=(1/alpha_i)/sum_(free j)(1/alpha_j)>0
+on free branches and zero on pinned branches. This proves the lemma, including
+all possible homogeneous anchors and degeneracies. No generic-demand or
+strict-complementarity assumption appears in the argument.
+
+FROM THE LEMMA TO ALL-PROFILE MONOTONICITY.
+For a fixed target c, its projection onto K(b) is continuous and finite
+piecewise affine along any one-row RHS change. A direct continuity proof uses
+feasible recovery x+delta*1 when demands change by at most delta, compactness
+of minimizers, and uniqueness; rows are nonempty. On each open affine piece
+restrict to positive owner coordinates J and select independent active cover
+rows B on J. KKT places c_J-x_J in the span of these active normals, so
+the optimizer is the projection onto their affine equality face. Finitely many
+faces and their linear primal/normal-cone conditions give finitely many affine
+critical intervals along the RHS segment. Zero coordinates have derivative zero.
+The derivative for an
+active changed row r is exactly B^T(BB^T)^(-1)e_r, the solution of (1).
+If the changed row is inactive its derivative is zero. A dependent changed
+row cannot remain a separate active equality on an open interval while all
+other RHS entries remain fixed. Deleting active rows and zero columns preserves
+the forest property. Hence all own-coordinate slopes are nonnegative.
+Continuity gives one-row monotonicity; sequential incident changes give the
+full own-row statement.
+
+The target c=-(1/epsilon)*1 produces the regularized selectors. Let x_epsilon
+be one, and let e be the minimum-norm efficient cover. Optimality gives
+ sum x_epsilon+(epsilon/2)||x_epsilon||^2
+     <=T+(epsilon/2)||e||^2, while sum x_epsilon>=T.
+Consequently ||x_epsilon||<=||e|| and every limit as epsilon->0 is efficient
+with norm at most ||e||. The unique such minimizer is e. Thus x_epsilon->e
+pointwise, and each own-monotonicity inequality passes to the limit.
+
+SCOPE AND PRIORITY.
+This is a fixed COALITION-GENERATOR incidence forest. It is not a resource
+technology forest, and mixed ownership need not preserve the hypothesis.
+The representation must suffice at every profile in the claimed domain;
+additional coalition constraints cannot simply be dropped because they are
+redundant at a selected full profile. The theorem asserts individual payment
+monotonicity, not coalition-total monotonicity or outside-production protection.
+
+This class allows high degrees on both sides, unlike either incidence-two
+condition in EFFICIENT_CORE_SELECTOR_INCIDENCE_TWO.txt. It does not contain
+every incidence-two system, since some of those contain cycles.
+
+The efficient minimum-norm selector is already discussed in ABV2016 Section
+5.2.2. Shifted quadratic projections, active-face sensitivity, and quadratic
+regularization limits are established ingredients. The proposed contribution
+is the incidence-forest own-monotonicity conclusion. Historical priority for
+that conclusion remains unconfirmed.

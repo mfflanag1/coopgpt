@@ -1,0 +1,96 @@
+EVERY EXACT-CORE MAJORANT ARCHITECTURE NEEDS LINEAR FUNDING
+2026-10-17. Original individual-IC model; architecture obstruction only.
+Status: proposed theorem and exact proof, independent review pending.
+
+THEOREM.
+For every integer k>=2, there is one k-resource min-linear production function
+with n=2k fixed actual owners such that every own-report-monotone nonnegative
+rule y satisfying the following additional property must spend at least k+1
+at a profile of grand worth3:
+ (CD) At every report profile b, there exists an efficient core allocation
+      z(b) of that ACTUAL-OWNER coalition game with y_i(b)>=z_i(b) for every i.
+Hence its worst funding factor is at least(k+1)/3=(n+2)/6.
+This applies to the own-report envelope of EVERY exact efficient-core selector,
+including the minimum-norm efficient-core selector. No chosen tie-breaking,
+symmetry, continuity or price representation is assumed in the lower bound.
+
+CONSTRUCTION AND PROOF.
+Use k pools, one resource per pool, and
+ F(c)=min_{1<=s<=k}c_s.
+Each pool s has two distinct actual owners H_s and L_s. At the full profile,
+ H_s reports2e_s and L_s reports e_s.
+Thus T=3. For each i separately, lower ONLY H_i's report from2e_i to e_i.
+All owners and every other report stay fixed. The reduced profile hasT_i=2.
+
+At that reduced profile the efficient core is UNIQUE: H_i and L_i each get1,
+and every other owner gets0. To prove this, the actual coalition containing
+both owners in pool i and only H_s in every other pool has worth2, equal to
+the grand worth. Efficiency/nonnegativity force every outside L_s (s!=i) to0.
+The coalition {H_i} union {L_s:s!=i} has worth1, so H_i must get at least1.
+The coalition {L_i} union {L_s:s!=i} also has worth1, forcing L_i at least1.
+Efficiency then gives exactly the allocation asserted. It is a core allocation:
+every coalition with positive production contains at least one pool-i owner;
+one such owner gives worth at most1 and both give worth at most2.
+
+Property(CD) at the i-th reduced profile gives y_Hi>=1. Own monotonicity of
+that SAME actual owner carries this to the full profile, independently for
+all i. Hence sum_i y_Hi(full)>=k.
+At the full profile, the coalition of all low owners has worth1. Property(CD)
+there implies sum_i y_Li(full)>=1, giving total y(full)>=k+1.
+(In fact ordinary coalition coverage at the full profile suffices for this
+last step.) Dividing by grand worth3 proves the lower bound.
+
+MINIMUM-NORM EFFICIENT CORE AT THE FULL PROFILE.
+Every full efficient core has aggregate high-owner payment2 and low-owner
+payment1: the all-high and all-low coalitions have those values, and their
+sum is the grand worth3. Cauchy–Schwarz in the two classes gives the unique
+minimum-norm efficient core
+ z_Hs=2/k, z_Ls=1/k.
+It is feasible because its payment to any coalition is the average of that
+coalition's k pool capacities, which dominates their minimum.
+Nevertheless its own-report envelope has every high-owner payment at least1,
+so the envelope is linearly expensive despite this perfectly balanced full
+allocation. This closes the proposed efficient-core-envelope route.
+
+GENERAL CONSEQUENCES AND LIMITS.
+1. The envelope of any efficient-core selector is own-monotone, covers, and
+   majorizes that selector at each profile. Therefore the theorem defeats ALL
+   such selectors, not just the ABV equalization selector or bottleneck prices.
+2. The class(CD) has worst-case funding Theta(n): the lower is linear, while
+   grand-marginal payments U_i=T-v(N\{i}) are own-monotone, at mostT each,
+   and dominate EVERY efficient core since z_i=T-z(N\{i})<=U_i.
+   No sharp leading coefficient for this architecture class is claimed.
+3. Here d=k and the number of min-linear forms is exactlyk. Thus the same
+   obstruction is linear in resource dimension and representation size.
+   Any general sublinear-funding mechanism must sometimes fail to dominate
+   every candidate efficient core coordinatewise: more precisely, at some
+   profile its payment box contains NO efficient core allocation.
+4. This is NOT an unrestricted subsidy lower bound. A subsidized covering
+   vector need not dominate any efficient core. At the reduced profiles an
+   unrestricted rule may use its extra budget to pay other owners and keep
+   H_i's payment below1. The existing sublinear unrestricted upper bounds
+   therefore remain fully compatible with this theorem.
+5. Odd owner counts can be padded by a zero-resource dummy, giving
+   (floor(n/2)+1)/3 for n>=4. No owner is replaced or created during deviations.
+
+PRIOR-ART / PROJECT COMPARISON.
+ABV2016 author manuscript, Section5.2.2, already proposes squared-norm
+minimization inside the efficient core and warns that monotonicity is not
+ensured. Original text inspected locally at
+ /private/tmp/coop-submission-20261014/ABV16-hal.txt, lines1043ff.
+No novelty is claimed for that selector, its raw incentive failure, or the
+own-envelope repair definition.
+Earlier project BARRIERS.txt(2026-10-04-constant-subsidy), item5, proves a
+linear kT obstruction for the PARTICULAR minimum-pool core selection's
+monotone envelope. The2026-10-16 separator obstruction covers arbitrary
+VIRTUAL vertex-core selectors aggregated to two actual owners and approaches
+factor2. The present statement instead covers EVERY efficient ACTUAL-OWNER
+core selector, indeed every pointwise core-majorant rule, and yields linear
+actual-owner growth. This generality is the proposed added observation;
+historical novelty is unconfirmed.
+
+CHECKER.
+verify_efficient_core_envelope_obstruction.py uses Fraction arithmetic,
+explicit coalition enumeration for k=2..7, exact reduced-core forcing rows,
+and the full minimum-norm candidate. The general proof above is independent
+of finite enumeration.

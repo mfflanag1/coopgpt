@@ -1,0 +1,187 @@
+UNBOUNDED POSITIVE-BINARY LIFT DISTORTION IN TWO-SPARSE RESOURCE GRAPHS
+17 October 2026. New structural theorem candidate; historical priority open.
+Analytic proof below. Exact finite checks are supplementary, not the theorem.
+
+THEOREM AND SCOPE
+Let G be a finite simple graph, with unit-profit fractional matching production
+ F_G(c)=max{sum_e x_e: x>=0, sum_(e incident v)x_e<=c_v}.
+At a fixed report profile, a positive binary coalition majorant has the form
+
+ H(S)=sum_(i in S) f_i + integral min(sum_(i in S)a_i(w),
+                                    sum_(i in S)b_i(w))dmu(w),        (1)
+
+where f_i>=0, a_i,b_i are nonnegative measurable functions, mu is positive,
+and every displayed coalition integral is finite. These auxiliary holdings may depend
+arbitrarily and nonlinearly on the ENTIRE profile. They need only be fixed
+across coalitions at that profile. Infinite positive layers are permitted.
+Each actual owner retains its own auxiliary holdings; no new strategic owner
+identities, free capacities, or signed cancellation terms are permitted.
+Assume the coalitionwise comparison
+
+                   F_G(c_S)<=H(S)<=rho F_G(c_S)       (2)
+
+for every coalition S, including zero-value coalitions. This is a VALUE
+representation condition, not an incentive property.
+
+A. If G is triangle-free, C4-free and d-regular, d>=1, take one actual pure
+unit owner at every vertex. Then EVERY majorant(1)-(2) has
+
+                              rho>=(d+1)/2.          (3)
+
+B. For EVERY graph of maximum degree Delta>=1, the fixed public-linear
+positive binary function
+
+ H_star(c)=(1/2)sum_v min(c_v, sum_(u adjacent v)c_u)                  (4)
+
+satisfies, for ALL nonnegative real capacities,
+
+                     F_G(c)<=H_star(c)<=(Delta+1)F_G(c)/2.           (5)
+
+Consequently(3) is sharp for every triangle/C4-free regular graph, even though
+the lower permits arbitrary nonlinear profile-dependent positive integrals.
+There exist explicit such graphs for arbitrarily large degree. Projective
+plane incidence graphs give n=2(q^2+q+1) actual owners/resources, degree q+1,
+and the lower rho>=(q+2)/2=Omega(sqrt(n)) for every prime q.
+A separate elementary circulant construction supplies every integer degree d.
+
+This is NOT a lower bound for arbitrary truthful graph mechanisms. The direct
+all-profile graph full-OUT mechanism already has funding factor2 independent
+of degree and owner count. The theorem proves that no constant-distortion
+positive binary lifting route can explain that theorem, much less improve it.
+
+1. ZERO COALITION VALUES FORCE STAR SUPPORTS
+Fix the pure unit-owner profile, so c_S=1_S. Every singleton and nonedge pair
+has production0. By positivity in(1) and the upper bound in(2), f_i=0 and,
+outside one common null set, no owner has both a_i>0 and b_i>0; every pair
+from opposite positive supports is an edge. There are finitely many zero
+coalitions, so a common null set is valid even for an infinite measure space.
+Thus every nonzero layer's two supports span a complete bipartite subgraph.
+Because G has no C4, at least one support has size1: the layer is a star.
+A layer with only one nonempty support has zero coalition value and is dropped.
+
+Assign every remaining layer a center v, the vertex in its singleton support.
+If both supports are singletons, choose one endpoint by a fixed ordering.
+This choice is measurable: there are finitely many vertices and support
+patterns, and positivity of each measurable holding defines measurable sets.
+All positive leaves of a layer assigned to v lie in N(v).
+
+Let R_v be the TOTAL grand-coalition value of layers assigned to v. For an
+edge uv let E_uv^v be their total value on the pair{u,v}. These are finite
+nonnegative quantities because H(V) is finite. Then
+
+ H(V)=sum_v R_v,   H({u,v})=E_uv^u+E_uv^v.            (6)
+
+2. THE CLOSED-NEIGHBORHOOD IDENTITY
+Write N[v]={v} union N(v). Since G is triangle-free, for a neighbor u of v,
+its assigned layers have only one possible leaf inside N[v], namely v.
+Layers centered outside N[v] have no center in that coalition and contribute0.
+Layers centered at v have ALL their positive leaves in N[v]. Therefore
+
+                  H(N[v])=R_v+sum_(u in N(v)) E_uv^u.
+
+Summing over v and using(6) yields the EXACT identity
+
+             sum_v H(N[v])=H(V)+sum_(uv in E)H({u,v}).                (7)
+
+No continuity, finite number of layers, linear dependence on capacities, or
+incentive assumption is used. There are only finitely many coalitions and
+vertices in each graph, so linearity of the finite integral sums suffices;
+all displayed quantities are finite under(2).
+
+At the unit profile, F_G(N[v])=1: the induced graph is a star with unit center,
+and at least one incident edge can be produced. Each edge pair has value1.
+For d-regular G, assigning flow1/d to every edge saturates every unit vertex;
+its total is |E|/d=n/2. No feasible flow exceeds half the total capacity, so
+F_G(V)=n/2. Now(2) and(7) give
+
+       n rho >=sum_v H(N[v])=H(V)+sum_e H(e)
+              >=n/2+|E|=n(d+1)/2,
+
+proving(3). More generally the same identity gives
+rho>=[F_G(1_V)+|E|]/n for triangle/C4-free graphs with no isolates.
+
+3. A MATCHING ALL-CAPACITY UPPER FOR MAXIMUM DEGREE
+Each term of(4) uses fixed nonnegative linear input maps, so actual-owner
+holdings transfer directly and (5) automatically applies to every coalition.
+For any feasible matching flow x, let l_v=sum_(e incident v)x_e. Both c_v
+and sum_(u adjacent v)c_u are at least l_v. Hence
+ H_star(c)>=(1/2)sum_v l_v=sum_e x_e.
+Maximize over x to obtain F_G<=H_star.
+
+For the upper, the fractional matching LP dual is
+ min sum_v c_v p_v subject to p_v>=0, p_u+p_v>=1 on every edge.
+It has an optimal solution with p_v in{0,1/2,1}. Here is a short proof of the
+half-integral ingredient. Truncate prices to[0,1], which preserves every
+edge cover and weakly lowers cost, and choose an extreme optimal solution
+of this bounded polytope. On the set0<p_v<1, consider the tight-edge graph.
+A tight edge cannot join a free vertex to a0 or1 vertex. A bipartite free
+tight component permits a sufficiently small alternating positive/negative
+perturbation in both directions, preserving all slack constraints, contrary
+to extremality. Every free component therefore has an odd cycle, whose
+alternating tight equations force all its prices to1/2.
+
+Partition vertices into V0,Vh,V1 by these prices. Every neighbor of V0 lies
+in V1. Using min(c_v,N_v)<=c_v for v in Vh union V1, and <=N_v for v in V0,
+
+ 2H_star <=sum_(Vh)c_v+sum_(V1)c_v+sum_(V0)sum_(u~v)c_u
+          <=sum_(Vh)c_v+(Delta+1)sum_(V1)c_v
+          <=(Delta+1)[(1/2)sum_(Vh)c_v+sum_(V1)c_v]
+           =(Delta+1) F_G(c).
+
+The penultimate inequality uses Delta>=1. Isolated vertices have zero terms
+and may be discarded. This proves(5). The LP duality and half-integral vertex-
+cover structure are established ingredients, with an elementary proof supplied;
+no historical novelty is claimed for them.
+
+4. EXPLICIT LARGE-DEGREE FAMILIES
+For a prime q, use projective points and projective lines over F_q. Represent
+each by a nonzero vector in F_q^3 normalized so its first nonzero coordinate
+is1. There are q^2+q+1 vectors: (1,a,b), (0,1,b), and(0,0,1). Make disjoint
+point and line vertex classes. A point p and line l are adjacent exactly when
+p dot l=0 modulo q.
+
+For any nonzero line vector, its nullspace has q^2-1 nonzero vectors, yielding
+(q^2-1)/(q-1)=q+1 normalized points. The same argument counts lines through
+each point. Two distinct normalized points are linearly independent, so their
+common orthogonal space is one-dimensional and gives exactly one projective
+line. Thus two distinct point vertices cannot have two common line neighbors:
+there is no C4. Bipartiteness excludes triangles. This is a(q+1)-regular
+triangle/C4-free graph on n=2(q^2+q+1) vertices, proving the stated growing
+lower. This classical incidence construction is an established ingredient;
+the graph-star identity and its lifting consequence are the proposed claim.
+
+For completeness, every integer degree d>=1 has an elementary explicit family.
+Let m=2^(d+1), with left and right copies of Z/mZ, and join left x to right
+x+s for s in{1,2,4,...,2^(d-1)}. This graph is d-regular and bipartite. Ordered
+nonzero differences of distinct powers of2 are unique as integers: their
+2-adic valuation determines the smaller exponent, then the larger exponent.
+Their absolute values are below2^(d-1), so congruence modulo m cannot identify
+two unequal such differences. A C4 would give two different ordered pairs
+of shifts with the same difference, impossible. Thus(3) is sharp in maximum
+degree for every d, although this simpler family has exponentially many
+vertices and gives a weaker owner-count relation than the projective family.
+
+5. INTERPRETATION AND LIMITATIONS
+The failure is present already at one pure-owner report profile; no changing
+owner identities or cross-profile incentive reduction is involved. It permits
+arbitrary mixed-owner eligibility because the selected pure reports are an
+allowed subdomain. A single value identity/majorant must work simultaneously
+for all coalitions, which is exactly what an independent positive binary
+transfer needs to preserve coalition coverage and pooled outside production.
+
+The lower does NOT exclude signed decomposition, different multiresource
+primitives, joint auxiliary constraints, or a coupled direct payment rule.
+It does not say that an approximation only at the grand coalition is bad:
+condition(2) is explicitly coalitionwise, including zero-worth coalitions.
+It does not reclassify numerical scouts as proofs. For these unit resource
+graphs, the established direct bounds remain3/2 for TCWM
+(HUBER_PRICE_THREE_HALVES_v2.txt) and2 for full OUT
+(../root/GRAPH_OUTSIDE_TWO_CANDIDATE.txt).
+The unbounded distortion shows a genuine architectural separation between
+those direct mechanisms and all positive binary game-lifting explanations.
+
+Companion exact checker: P4_SIGNED_CHECK_HIGH_GIRTH.py.
+It validates finite incidence/circulant graphs, exact graph-star identities,
+and rational all-capacity upper examples (the exact dual enumeration uses
+the proved half-integral lemma rather than an independent general LP solver); the dimension-independent claims
+are justified by the preceding proofs. Independent internal review pending.

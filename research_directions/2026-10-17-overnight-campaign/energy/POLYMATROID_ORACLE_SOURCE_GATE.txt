@@ -1,0 +1,120 @@
+PUBLIC POLYMATROID RULE: PRINCIPAL-CHAIN ORACLE SOURCE GATE
+17 October 2026. Free original sources read; implementation application only.
+
+RESULT: the chain-recovery step is an established decomposition algorithm.
+An original conference paper gives the exact recursion, maximal-minimizer tie
+rule, and at most 2m-1 minimizations. It can replace subset enumeration in the
+accepted one-common polymatroid rule, subject to exact oracle assumptions.
+The algorithm itself, its nested-chain structure, and polynomial solvability
+of submodular minimization must not be claimed as our contributions.
+
+1. Directly read original source for the recursion
+
+Kiyohito Nagano and Yoshinobu Kawahara, Structured Convex Optimization under
+Submodular Constraints, Proceedings of UAI 2013, Section 5.1--5.2, PDF pp6--7.
+Free original proceedings PDF:
+https://auai.org/uai2013/prints/papers/151.pdf
+
+The setting is normalized, nondecreasing submodular f and strictly positive
+modular weights b. The parameterized objectives are f-alpha b. Section5.1
+uses their unique maximal minimizers. Section5.2 presents Algorithm DA(T,T'):
+compute alpha=(f(T')-f(T))/b(T'\T), then the unique maximal minimizer M;
+if M=T', the two endpoint sets are consecutive; otherwise recursively treat
+(T,M) and (M,T'). The paper states at most 2m-1 submodular minimizations.
+It credits this framework to Fujishige's 2005 book and Nagano--Aihara2012,
+not as a new contribution of the 2013 application. Section3.1 also explains
+maximal-cut recovery by complementing nodes that can reach the sink in the
+residual network; a source-reachable minimum cut is generally the other
+extremal choice. These are exact ties, not a numerical epsilon convention.
+
+2. Direct original support for an exact maximal-minimizer oracle
+
+Satoru Iwata and James B. Orlin, A Simple Combinatorial Algorithm for
+Submodular Function Minimization, June2008 preprint, Sections3 and6.
+https://www.kurims.kyoto-u.ac.jp/preprint/file/RIMS1634.pdf
+
+Algorithm SFM and Theorem3.1 (PDF pp5--6) explicitly return the unique maximal
+minimizer for integer-valued input. Section6's Algorithm SPM (PDF pp10--11)
+handles real-valued submodular functions on ring families and again returns
+the unique maximal minimizer. The stated arithmetic/value-oracle running
+time is O((m^5 EO+m^6) log m), with EO the function-evaluation cost. This is
+a sufficient historical polynomial oracle bound, not a claim about the
+current fastest implementation. Their algorithm supplies exactly the tie
+interface needed here. Approximate minimization or an arbitrary minimizer
+cannot silently replace it. A full-power-set instance is a special ring
+family, and subtracting a modular function preserves submodularity.
+
+3. Historical attribution checked in the originator's own overview
+
+Satoru Fujishige, Theory of Principal Partitions Revisited, author manuscript,
+Section3.4, printed pp11--14 (PDF pp13--16).
+https://www.kurims.kyoto-u.ac.jp/~fujishig/Preprint010208.pdf
+
+Theorem14 gives the box-truncation min-max formula; Remark8 describes the
+weighted chain through maximal minimizers; Theorem16 identifies successive
+minimum/maximum minimizers at critical values. The text attributes the
+O(m SFM) weighted lexicographically optimal-base algorithm to Fujishige1980.
+This confirms established provenance. The original 1980 article and
+Groenevelt1991 full texts were not obtained in this gate; the inspected
+2013 original supplies the explicit recursion instead. No first-invention
+priority is inferred from this limited retrieval.
+
+4. Translation to our rule, and boundary precautions (our analysis)
+
+At a fixed positive report P, put f(S)=P r(S), b_j=c_j. For z>0,
+
+  argmin_S [z P r(S)+c(E\S)]
+       = argmin_S [P r(S)-(1/z)c(S)].
+
+Thus alpha=1/z reverses the established increasing principal chain. If
+successive chain members are A subsetneq B, their positive breakpoint is
+
+  alpha=[P(r(B)-r(A))]/c(B\A),
+  z=c(B\A)/[P(r(B)-r(A))].
+
+At a tie choose the maximal minimizer, matching the accepted gradient
+(r(S),1_{E\S}). Isolated ratio breakpoints have zero integration weight;
+the choice still matters for the algorithm and must remain consistent.
+
+Handle zero cases before applying a positive-weight theorem:
+- P=0 or all c=0 gives zero production/payments under the accepted rule.
+- Restrict to J={j:c_j>0}. For monotone r, deleting zero-capacity elements
+  from S cannot increase the objective, so the minimum and charged
+  active-face gradients can be computed on r restricted to J.
+- A loop j with r({j})=0 never changes r(S) when adjoined: submodularity
+  bounds its marginal by zero and monotonicity bounds it below by zero.
+  Every maximal minimizer contains all loops, whose private prices are zero.
+  Remove them, reconstruct them in every selected S, and start the remaining
+  chain at empty. Equivalently start with the maximal zero-rank set. Do not
+  assume the empty set is the maximal alpha=0 minimizer when loops remain.
+- If no nonloop active element remains, F=0 and the rule is identically zero.
+
+The active-face restriction is analysis/evaluation at the current report,
+not a change of actual owners or eligibility. It evaluates the same fixed
+all-profile field already proved incentive compatible.
+
+5. What complexity conclusion is justified
+
+Let T_maxSFM(m) be the cost of exact maximal minimization for f-alpha c and
+its restrictions/contractions, with exact rank evaluation available. The
+standard recursion uses O(m) such calls, plus polynomial bookkeeping and
+rank evaluations. Each positive interval contributes its dual gradient with
+weight H(z_next)-H(z_prev), where the already-proved ratio CDF is z/2 below1
+and 1-1/(2z) above1. Hence rational exact inputs/oracle outputs yield rational
+breakpoints, weights, and prices without numerical quadrature.
+
+An exact rational value oracle for r together with a cited exact SFM routine
+supports a polynomial oracle/arithmetic implementation. This does not mean
+one rank evaluation is one minimization, and it does not certify bit-cost
+complexity for an unspecified oracle, floating rank estimates, or arbitrary
+black-box real values. State the rational output encoding and arithmetic
+model before a bit-complexity theorem. Graph-specific max-flow shortcuts
+require an explicit graph representation; arbitrary public polymatroids
+cannot simply be assumed to have one. No practical runtime was measured.
+
+This resolves the implementation-source attribution gate. Our candidate
+contribution remains the common/private incentive coupling and funding bound;
+principal-chain recovery is a standard computational ingredient. The
+algorithm-to-payment implementation and boundary handling require their
+own tests/review. This note is not historical novelty confirmation for the
+combined research theorem. No purchases, outreach, or new theorem hunt.

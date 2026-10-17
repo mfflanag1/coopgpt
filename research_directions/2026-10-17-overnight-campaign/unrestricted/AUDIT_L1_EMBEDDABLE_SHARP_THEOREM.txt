@@ -1,0 +1,117 @@
+INDEPENDENT AUDIT: L1-EMBEDDABLE CONE FUNDING TRANSFER
+17 October 2026, unrestricted lane. Read-only review of composition files.
+
+VERDICT
+No substantive mathematical error found. The proposed compensated lift gives
+TCWM factor3/2 and full-coalition outside-production factor1+c for every
+nonzero finite-dimensional norm with a fixed linear L1 isometric embedding.
+Sharpness transfers from the cited, previously audited min2 lower bounds.
+This audit verifies the transfer, not the historical priority of L1 embedding
+theory or the independent lower-bound proofs cited as dependencies.
+
+Frozen target:
+../composition/CONE_L1_EMBEDDABLE_SHARP_THEOREM.txt
+No target file was edited. The author's checker was not run because its
+output ownership belongs to composition. An independent checker is described
+below and lives only in unrestricted/.
+
+1. ORIGINAL CONE REPORTS AND OWNER IDENTITY
+The cone is K={(t,x):t>=||x||}, with production t-||x|| and withdrawals D_i in
+K such that retained b_i-D_i remain in K. The auxiliary u_i=Lx_i and their
+positive/negative parts are evaluated per actual owner. No owner splitting,
+merging, or change in strategic identity occurs. It would be wrong to assume
+their coordinates change monotonically; the proof correctly avoids that.
+For every coalition, the equality
+ F(sum b_i)=sum(t_i-||x_i||)+2 int min(sum u_i^+,sum u_i^-)
+is exact. Nonnegative auxiliary payments bounded by |u_i| are integrable
+even if the embedding measure is not finite.
+
+2. FINITE-CHANGE TCWM PROOF
+For scalar z,w, |z^+-w^+|+|z^--w^-|=|z-w|. Summing over actual coalition
+owners, applying the triangle inequality after aggregation, and integrating
+gives int(|da|+|db|)<=sum||dx_i||<=dt. If 0<=W_a,W_b<=kappa, then moving
+from (a,b) to (a+da,b+db) loses at most kappa times its total negative movement.
+Combining this with df=dt-int(da+db) gives exactly
+ Delta Y >= kappa[dt-int(|da|+|db|)]>=0.
+The coefficient 2 on the auxiliary min game is necessary and is used
+correctly; no factor of 2 is missing.
+
+3. FULL OUTSIDE-PRODUCTION PROOF
+On straight cone restoration, let r=a'_S and v=b'_S. Pointwise r-v=L(dx_S),
+where dx_S is the SUM of all withdrawn signed vectors. Hence the outside
+option after integration is dt-||dx_S||, not sum_i(dt_i-||dx_i||).
+For 0<=alpha,beta<=kappa and 1<=alpha+beta<=2kappa-1 the claimed inequality
+ (kappa-1)(|r|+|v|)+(2alpha-kappa)r+(2beta-kappa)v+|r-v|>=0
+is correct in all six ordering/sign regions. Its three printed expansions
+are algebraically exact; swapping the two coordinates covers the rest.
+After integrating this pointwise inequality,
+ Y'>=kappa dt-(kappa-1)int(|r|+|v|)-int|r-v|
+    >=dt-||dx_S||=F(D_S).
+Integration in the restoration parameter proves the exact full coalition
+outside option. No approximation, differentiability of the norm, or individual
+outside-option substitution was used.
+
+Seam justification clarification (not a counterexample): the explicit W is
+piecewise smooth, with seams at zero totals, A=B, and B/A=t0 (or its symmetric
+version). For each fixed omega, each u_i(s) is affine and changes sign at most
+once, so a_S(s),b_S(s) are piecewise affine with finitely many pieces. On each
+piece the seam equations are linear in s; a seam is crossed finitely often or
+the path lies along it. In the latter case the two continuous smooth formulas
+have the same tangential derivative, so either admissible one-sided gradient
+gives the needed inequality. The displayed globally bounded derivative
+estimates then justify Fubini and absolute continuity. This supplies the detail
+behind the author's phrase that continuity handles seams. For an abstract
+arbitrary locally Lipschitz W, one can instead use mollification or the convex
+gradient constraints; the explicit mechanisms do not require that generality.
+
+To remove any representative ambiguity, choose basis representatives of the
+finite-dimensional map L once. Then u_i(s)=u_i(0)+s Ldx_i pointwise outside
+one fixed null set. No uncountable family of exceptional sets is necessary.
+
+4. EXPLICIT SCALAR INPUT CHECKS
+Huber input (A>=B, r=B/A):
+ alpha=(r/2)[1-(a-b)/A], beta=1-r/2+(a-b)/(2A).
+The bounds 0<=a/A<=1 and 0<=b/A<=r give alpha in[0,1] and beta in[0,3/2],
+as required for TCWM with kappa3/2. This input is not asserted to satisfy
+the full-OUT derivative condition, and the audit makes no such inference.
+
+Logarithmic input: c[2-exp(-1/c)]=1, t0=1-exp(-1/c)=1/c-1,
+q=1-c-c(1-r)log(1-r)/r for r<=t0, q=c/r for r>=t0.
+Both q and q' match at t0. On the first branch q'=c[log(1-r)+r]/r^2,
+q+r q'=1+c log(1-r)>=0, and
+cr+q+(1-r)r q'=1. These yield 0<=alpha,beta<=1+c and
+1<=alpha+beta<=c+q<=1+c. On the second branch the extrema are
+alpha<=c(1+r), beta<=c+c/r, and
+c(1+r)<=alpha+beta<=c+c/r. Since r>=t0 and q<=1, these are again within
+the stated bounds. In particular alpha+beta<=kappa<=2kappa-1 because
+kappa=1+c>=1. Scalar coverage follows from nonnegative prices summing to
+at least1; funding is B[c+q]<=kappa B. Boundary payments tend to zero when
+the smaller total tends to zero, also following from this nonnegative total
+funding bound. No endpoint r=0 or r=1 gap was found.
+
+5. LOWER-BOUND TRANSFER
+Fix a unit e and map (a_i,b_i) to (a_i+b_i,(a_i-b_i)e). This is a fixed
+linear map on the original owners, with production exactly 2min(A,B).
+Every coordinatewise underreport maps to a cone-feasible withdrawal. A
+mechanism on the full cone domain restricts to this subdomain; dividing all
+payments by2 preserves coverage, funding factor, TCWM, and full OUT.
+Therefore the accepted scalar lower bounds transfer with exactly the same
+constants, uniformly over owner counts. No regularity of the restricted
+mechanism is assumed beyond the source lower-bound contracts.
+
+6. CLAIM BOUNDARIES AND MINOR EDITS
+* No constant gain-only S+K G bound is established; the reserve f_i is paid
+  kappa f_i, and that overhead is load-bearing for sign changes.
+* L1 isometric embeddability is an explicit hypothesis. Euclidean embedding
+  follows directly from E|<G,x>|=sqrt(2/pi)||x||_2. Other norm classes depend
+  on the separately checked classical source, not on this audit.
+* The raw selector and compensation are owner-aware; this does not contradict
+  previous lower bounds for narrower aggregate radial-price architectures.
+* A stray '+' precedes 'ties A=B' in Section2; remove it as a typo.
+* The seam/basis-representative details above would make the analytic passage
+  more self-contained but do not change the theorem or constants.
+
+Independent exact checker verify_l1_signed_transfer_audit.py checks the six
+sign-region identity, derivative-polytope corners for rational kappa, and
+actual multicoordinate cone restorations for the rational Huber/TCWM lift.
+Those finite checks support, but do not replace, the analytic audit above.

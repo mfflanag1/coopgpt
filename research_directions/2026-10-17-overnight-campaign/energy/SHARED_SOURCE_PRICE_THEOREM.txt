@@ -1,0 +1,148 @@
+SHARED PUBLIC SOURCE PRICES WITH ALL ENERGY-OWNER MARGINAL FLOORS
+17 October 2026. Candidate conventional theorem; independent audit required.
+A constructive subdomain of SHARED_LOCAL_CONTRACT.txt. It permits unbounded
+energy-owner and hardware-owner counts. This is NOT the arbitrary route-matrix
+case, not a sharp optimality claim and not historical-novelty confirmation.
+
+THEOREM
+Fix disjoint finite sets of actual energy owners and hardware owners. Owner j's
+energy quantity e_j>=0 has a PUBLIC constant opportunity/operating cost c_j>=0
+already settled by the operator. Hardware owner i's quantity h_i>=0 supports
+PUBLIC service value v_i>=0. One service unit consumes one energy and one
+hardware unit; every energy source can serve every admitted hardware unit.
+Net coalition production is the continuous transportation LP
+ F(S)=max Σ_ij (v_i-c_j) z_ij,
+ Σ_i z_ij<=e_j(S), Σ_j z_ij<=h_i(S), z>=0.
+Negative-surplus matches may remain unused. Reports are nonnegative real
+capacities with binding own-coordinate underreports, fixed identities and
+payment-only utility after public costs are settled. No private costs are added.
+
+There is a nonnegative all-profile own-bundle-monotone coalition-covering rule
+paying EVERY energy owner j at least its grand marginal
+ M_j=F(N)-F(N\{j}),
+with total at most 3F(N)/2. Thus subsidy above net production is at most F/2.
+The result is uniform in both owner counts and all public costs/values.
+For public theta∈[0,1], a fixed mixture pays each energy owner at least theta M_j
+with total at most [1+(1-theta)/(2e)+theta/2]F. The 3/2 factor is an upper bound,
+not claimed optimal. Multiple fixed cost tiers or service-value tiers per actual
+owner are permitted PROVIDED owners remain on only one side; see section5.
+
+1. UNIT-INPUT PRIMITIVE (ESTABLISHED INPUT, REPROVED HERE)
+For energy quantities e_j and hardware quantities h_i put E=Σe_j,H=Σh_i,
+T=min(E,H). At T=0 pay everyone0. Otherwise call a side of total T the short
+side (either choice at equality). For each long-side owner r set d_r=min(x_r,T),
+ρ=Σ_r d_r/T>=1 and q=(1/2)exp(1-ρ). Pay each short-side owner (1-q)x_r and each
+long-side owner q d_r. At equality ρ=1,q=1/2 and every owner gets x_r/2.
+Total is T[1+q(ρ-1)] <= [1+1/(2e)]T.
+
+Coverage: for any coalition, let s be its short quantity and l its long quantity.
+Its worth is min(s,l); s<=T and its capped-long total is >=min(l,T), so both
+s and that capped total are >=min(s,l). The payment is their convex combination.
+
+Own monotonicity: while an owner remains long, T is fixed and its own capped
+quantity d has payment d exp(1-(d+D)/T)/2, whose derivative is q(1-d/T)>=0.
+While an owner remains short, its report x increases T at unit rate, and
+ρ(T)=Σmin(l_r,T)/T. Away from finitely many cap thresholds,
+ q'(T)=q Σ_{l_r<T}l_r/T² <=qρ/T.
+Hence d[(1-q(T))x]/dx >=1-q-qρ >=0, because x<=T and
+(1+ρ)exp(1-ρ)/2<=1 for ρ>=1. At cap thresholds the rule is continuous; when the
+owner crosses the total-side equality, both branches give x/2. Thus the payment
+is nondecreasing over the entire real report domain. Zero boundaries also agree.
+This proves the needed unit primitive rather than relying on numeric checks.
+
+2. RAISE EACH ENERGY PAYMENT TO ITS GRAND MARGINAL
+For the unit game define m_j=T-min(H,E-e_j), an own-e_j-monotone nonnegative
+quantity since the subtracted term is independent of e_j. Replace every energy
+payment by max{its primitive payment,m_j}; keep hardware payments unchanged.
+Taking the maximum of two own-monotone functions preserves incentives. Raising
+payments preserves coalition coverage. We prove total<=3T/2.
+
+Case E<=H. Here T=E and m_j=e_j for every energy owner. The patched energy
+payments sum exactly T, and hardware payments sum qρT. Since
+ρ exp(1-ρ)<=1 for ρ>=1, the total is at most T+T/2.
+
+Case H<=E. Normalize H=T=1. Let d_j=min(e_j,1), ρ=Σd_j>=1,
+q=(1/2)exp(1-ρ). Hardware payments total1-q, while m_j=(1-E+e_j)_+.
+If all m_j<=q d_j, no patch is active and total<=1+1/(2e)<3/2.
+
+If some energy owner b has e_b>=1, all other owners' marginals are zero. If
+there are two such owners every marginal is zero. Otherwise put t=Σ_{j≠b}e_j.
+Only t<1 needs consideration, and then ρ=1+t, q=(1/2)exp(-t), m_b=1-t.
+Total is max{1+qt, 1+(1-t)(1-q)}. The first is <=1+1/(2e). For the second,
+f(t)=(1-t)(1-(1/2)exp(-t)) has derivative
+ -1+(1/2)exp(-t)(2-t)<=0 on[0,1], so f(t)<=f(0)=1/2.
+
+It remains that all e_j<=1. Write E=1+δ, δ>=0; then ρ=1+δ,q=(1/2)exp(-δ).
+Let B={j:(1-q)e_j>δ}, k=|B| and e_B=Σ_B e_j. These are exactly the owners
+whose floor exceeds their primitive payment. Total is
+ 1+qδ+(1-q)e_B-kδ.                                            (2)
+If k=0 the ordinary primitive bound applies. If k=1, e_B<=1, so the excess
+above1 is at most (1-q)(1-δ). An active owner implies δ<1; the same f inequality
+bounds this by1/2. If k>=2, e_B<=1+δ, so excess is at most
+ 1-q-(k-1)δ <=1/2,
+because this expression equals1/2 at δ=0 and has derivative
+q-(k-1)<=1/2-1<0. This proves the bound in every case, including equality.
+
+3. EXACT SOURCE-PRICE LAYER DECOMPOSITION
+For every coalition S and every real t>=0, retain energy rows whose public
+cost c_j<=t and hardware rows whose public service value v_i>=t. Set
+ E_t(S)=Σ_{c_j<=t}e_j(S), H_t(S)=Σ_{v_i>=t}h_i(S).
+Then
+ F(S)=∫_0^∞ min(E_t(S),H_t(S))dt.                             (3)
+This is a classical one-dimensional supply/demand surplus identity. For a direct
+proof, order energy units by increasing cost c(x) and hardware units by decreasing
+value v(x), using fractional quantiles. For a fixed total quantity x, minimum
+cost is obtained from the first x energy units and maximum service value from
+the first x hardware units. The optimum selects precisely the initial range
+where v(x)>=c(x), up to irrelevant zero-surplus units. Its value is
+∫(v(x)-c(x))_+ dx. By integrating the indicator of c(x)<=t<=v(x), the inner
+x-length at price t is exactly min(E_t,H_t); Fubini's theorem for a nonnegative
+bounded step function gives(3). This is one jointly feasible allocation, not a
+sum of physically inconsistent threshold optima. The argument applies separately
+to every coalition and to all nonnegative real capacities.
+
+4. COMPONENTWISE PAYMENTS, FLOORS AND BUDGET
+Run section2's patched unit rule at every threshold, on the SAME actual owner
+set. Integrate payments over t. All retained sets depend only on public c,v;
+components have nonnegative fixed interval weights. Equation(3) gives actual
+coalition coverage and total<=3F/2. Each owner's report maps to an allowed own
+report in every retained component, so monotonicity survives integration. For
+energy owner j, integrate its component floor:
+∫[T_t(N)-T_t(N\{j})]dt=F(N)-F(N\{j})=M_j.
+Thus every actual energy owner's required floor is respected. All payments vanish
+at F=0, because all nonnegative component production values then vanish. An owner
+with zero own quantities gets zero. Fixed convex mixing with the unpatched
+primitive yields the stated theta tradeoff. No mixture coefficients depend on
+reports. There are at most |c|+|v| distinct breakpoints in the simple model.
+
+5. ACTUAL OWNER BUNDLES AND ECONOMIC INTERPRETATION
+An energy owner may hold multiple public cost tiers e_jr,c_jr, and a hardware
+owner multiple service tiers h_is,v_is. At each threshold sum retained quantities
+WITHIN each actual owner before applying the primitive. Its own whole-bundle
+underreport decreases that one pooled component contribution. Removing an owner
+removes all its retained tiers, so the floor identity remains exact. This extends
+to arbitrary fixed same-side bundles and overlapping cost tiers, with both owner
+and resource counts unbounded. It does not allow one actual owner to hold both
+energy and hardware roles: that needs a new incentive proof.
+
+Prices c are verified public net operating/opportunity costs settled once by the
+operator. A paid marginal floor is a negotiated share of incremental surplus,
+not payment for hidden opportunity cost or post-contract resale. Nonlinear
+public supply costs can be represented by publicly fixed marginal-cost tiers
+when the contract makes their cumulative capacities enforceable; no private
+cost elicitation or general battery intertemporal dispatch is implied. Every
+energy source must actually be deliverable to every admitted hardware tier.
+Route-specific transmission losses, pod-dependent tariffs and source-specific
+hardware productivity can destroy the separable v_i-c_j structure; the separate
+unit-graph obstruction shows that an arbitrary route matrix cannot simply be
+reduced by fixed positive subgraph weights.
+
+6. PROMOTION STATUS
+Conventional proof, independent audit pending. The exponential primitive and
+supply/demand integral are established ingredients; the all-energy-owner marginal
+floor bound and its contract synthesis are proposed extensions requiring priority
+review. No sharpness, recognized-open-problem, empirical energy savings, measured
+GPU pooling or deployment claim is made. A numerical two-energy integer-grid
+experiment returned4/3 for theta1 floors on both energy owners; it is bounded
+floating-point discovery only, and neither proves a continuous4/3 upper nor
+invalidates this nonsharp3/2 theorem.

@@ -1,0 +1,107 @@
+SUPERSEDED INTERPRETATION (17 October 2026): The stated restricted lower and
+reserve inequality remain algebraically valid, but branch-nullity is unnecessary.
+The smaller coalition of old active owners plus the newly increasing A owner
+gives the multiplicative recurrence without subtracting any inactive payment.
+See UNRESTRICTED_COMMON_CAP_QUARTER_POWER_LOWER.txt. The suggestion below that
+reserves could escape the quarter-power bound is withdrawn. Retained audit history.
+
+INACTIVE BRANCH PAYMENTS ARE NECESSARY FOR SUBPOLYNOMIAL FUNDING
+17 October 2026. Frozen candidate; historical novelty unconfirmed.
+
+Technology: F(P,a,b)=min(P,sum_{j=1}^M min(a_j,b_j)), M>=2. TCWM means every
+fixed coalition's total payment is coordinatewise nondecreasing when its own
+members restore reports and all outsiders remain fixed. Funding factor kappa
+means total nonnegative payment<=kappa F at every profile. Coalition coverage
+is required for every fixed coalition. All owners below are fixed throughout.
+
+BRANCH-NULLITY AXIOM. Every owner dedicated to branch j receives zero whenever
+min(a_j,b_j)=0. This is an EXTRA restriction, stronger than null-owner payment:
+it also forbids paying a positive b_j owner whose complementary a_j is absent.
+Our capped-utilization cube-root upper satisfies this axiom. The general
+rank-three impossibility proof does not assume it and has a weaker lower rate.
+
+THEOREM 1 (finite owners, arbitrary payment architecture).
+Fix integers B>=1 and M>=2. Use R=2B pure power owners, each with report bound
+1/R, and two pure branch owners A_j,B_j with report bounds1 for each branch.
+Thus n=2M+2B, d=2M+1. A factor-B, nonnegative, coalition-covering, all-profile
+TCWM mechanism satisfying branch-nullity exists only if
+ B^2 >= 4^M / [8 binom(2M,M)].                              (1)
+The right-hand side is asymptotic to sqrt(pi M)/8. Thus this broad architecture
+needs funding Omega(M^(1/4)), already with fixed pure owners.
+
+PROOF.
+Average a purported mechanism over all power-owner permutations, branch
+permutations and within-branch endpoint/owner swaps. These are automorphisms
+of this same owner-eligibility/report-bound model; the linear constraints and
+branch-nullity survive finite averaging. No original anonymity is assumed.
+All power owners always report1/R, hence P=1. Let C_m have m pairs(1,1) and
+M-m pairs(0,1), for m=1,...,M. Its worth is1. By branch-nullity all branch
+payments are paid to active branches. Write their sum T_m. Each active owner
+receives q_m=T_m/(2m), by profile-preserving symmetries. Hence T_m<=B.
+
+Bootstrap C_1 by first using the auxiliary profile D_1 with its active pair
+(epsilon,epsilon), epsilon=1/(2B), and all other pairs(0,1). Worth is epsilon,
+so total power payment Y_P<=B epsilon=1/2. Symmetry gives each power owner
+Y_P/R<=1/(4B). The coalition of the active pair plus one power owner has worth
+epsilon; coverage gives active pair payment>=epsilon-Y_P/R>=1/(4B).
+Restoring the two active owners' reports to1, while every outsider stays fixed,
+gives T_1>=1/(4B) by TCWM.
+
+For m>=2, C_m differs from C_{m-1} only by A_m increasing0 to1. Apply TCWM to
+all branch owners EXCEPT B_m. At C_{m-1}, excluded B_m is inactive and paid0;
+at C_m it is paid q_m. Therefore
+ T_m-q_m >= T_{m-1}, i.e. (1-1/(2m))T_m>=T_{m-1}.             (2)
+Let P_1=1 and P_m=product_{j=2}^m 2j/(2j-1). Then (2) implies
+ B>=T_M>=P_M T_1>=P_M/(4B).
+The exact product identity P_M=4^M/[2 binom(2M,M)] gives(1). QED.
+
+FINITE INSTANCE FORM WITHOUT AN ATTAINMENT ASSUMPTION.
+For the same fixed model with R=2B and epsilon=1/(2B), a mechanism with any
+actual factor kappa satisfying branch-nullity must obey
+ kappa >= P_M epsilon / (1+P_M epsilon^2).                   (3)
+Indeed the bootstrap pair payment is at least epsilon(1-kappa epsilon), so
+kappa>=P_M epsilon(1-kappa epsilon). This is a valid linear inequality even
+when that bootstrap expression is negative. Formula(1) follows when kappa<=B.
+The theorem makes no assertion that an optimal funding factor is attained.
+
+THEOREM 2 (exact reserve-payment inequality WITHOUT branch-nullity).
+Keep the same finite model and profiles, assume only factor B and the original
+nonnegativity/coverage/TCWM requirements, and symmetrize as above. Define
+ W_m = total payment to ALL branch owners at C_m;
+ T_m = total payment to its active branch owners;
+ D_m = W_m-T_m = total payment to owners in inactive branches;
+ z_m = payment to any one positive b_j owner in an inactive branch.
+Zero-report A_j payments are INCLUDED in D_m; none is discarded. Then
+ sum_{m=2}^M [D_m/(2m)+z_{m-1}]/P_{m-1}
+       >= 1/(4B) - B/P_M.                                  (4)
+Thus any improvement below the branch-nullity threshold forces a quantitatively
+positive weighted amount of payment to currently inactive branches.
+
+PROOF.
+The identical bootstrap gives W_1>=T_1>=1/(4B), regardless of payments to
+inactive owners. The same transition coalition now yields
+ W_m-T_m/(2m)>=W_{m-1}-z_{m-1}.
+Substitute T_m=W_m-D_m and divide by P_{m-1}=(1-1/(2m))P_m:
+ W_m/P_m >= W_{m-1}/P_{m-1}
+             -[D_m/(2m)+z_{m-1}]/P_{m-1}.
+Telescope, use W_M<=B and the bootstrap, obtaining(4). QED.
+
+A coarser but explicit consequence is useful. Since z_{m-1}<=D_{m-1}/(M-m+1),
+write D_*=max_{1<=m<M}D_m (D_M=0). The identity
+ sum_{m=2}^M 1/(2m P_{m-1})=1-1/P_M
+then gives
+ D_* >= [1/(4B)-B/P_M]_+ /
+ [1-1/P_M + sum_{m=2}^M 1/((M-m+1)P_{m-1})].                (5)
+The numerator is positive exactly when B^2<P_M/4. The positive-part notation
+merely combines the proved inequality with D_*>=0.
+
+SCOPE AND CONSEQUENCE.
+This is not an unrestricted Omega(M^(1/4)) theorem: branch-nullity is essential
+to Theorem1. The unrestricted finite-owner lower currently established is
+Omega(sqrt(log M)), from RANK_THREE_UNBOUNDED_TCWM.txt and the energy lane's
+quantitative refinement. Theorem2 identifies a necessary mechanism feature
+for escaping the stronger branch-nullity obstruction. It does not provide a
+reserve-payment construction. Root's separate CAPPED_UTILIZATION_CUBE_ROOT_
+BARRIER.txt proves the sharper Omega(M^(1/3)) constant within the narrower
+scalar capped-utilization class. Neither result excludes different rules with
+well-designed reserves. No full outside-production incentive upper is claimed.

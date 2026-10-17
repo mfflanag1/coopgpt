@@ -1,0 +1,122 @@
+TWO INTERACTING COMMON RESOURCES: A LOGARITHMIC DEMAND-RATIO BOUND
+17 October 2026. Frozen candidate; novelty unconfirmed.
+
+MODEL
+Activity j consumes a_j>0 units of shared resource P, b_j>0 units of shared
+resource Q, and beta_jl>0 units of each of k branch-private resources c_jl. Its
+public profit is w_j>=0. Private rows are distinct between activities. Fixed
+actual owners may hold arbitrary mixed bundles across all rows. The LP is
+ F=max sum_j w_j x_j, subject to sum_j a_j x_j<=P,
+ sum_j b_j x_j<=Q, beta_jl x_j<=c_jl, x_j>=0.                 (1)
+Both common resources may bind and the ratios a_j/b_j may all differ. Coefficients
+and profits are public and fixed; only resource capacities are reported.
+
+Let R=max_j(a_j/b_j)/min_j(a_j/b_j)>=1 after discarding zero-profit activities.
+For any chosen public rho>1, let T be the number of nonempty geometric buckets
+of these ratios, anchored at their public minimum. Then
+ T<=1+floor(log_rho R).                                     (2)
+All claims below hold for every capacity profile and every fixed owner model;
+there is no bounded-grid or probabilistic hypothesis.
+
+THE PARTICULARLY CLEAN CASE k=1
+There is a nonnegative coalition-covering TCWM mechanism with funding at most
+ 2 rho T F.                                                 (3)
+There is also a full coalition outside-production-protecting mechanism with
+funding at most
+ rho(1+2c)T F,                                              (4)
+where c is the previously proved universal constant satisfying
+ c(2-exp(-1/c))=1, c approximately0.543063.
+Here full OUT means a coalition's payment gain on restoring its withheld bundle
+d is at least F(d). Bounds(3),(4) are independent of the number of activities and
+actual owners, except through the public ratio condition R. For rho=2, (4) is
+2(1+2c)T with T<=1+floor(log_2 R). When all ratios coincide, bucketing is unnecessary:
+use exact one-type bounds2 and1+2c without rho.
+
+For arbitrary fixed k, the harmonic type-composition theorem yields the explicit
+TCWM-only bound in section5 below. Full OUT is not silently inferred from that
+nonlinear harmonic aggregation.
+
+1. FIXED LINEAR OWNER RESCALING
+Set z_j=b_j x_j, r_j=a_j/b_j, v_j=w_j/b_j, and
+ q_j=min_l (b_j/beta_jl)c_jl.
+Then(1) is exactly max sum_j v_j z_j subject to
+ sum_j r_j z_j<=P, sum_j z_j<=Q,0<=z_j<=q_j.                  (5)
+Each private holding of each actual owner is scaled by the same fixed positive
+b_j/beta_jl. This is additive across owners and maps every binding underreport
+and withheld bundle to its scaled counterpart. No actual owner is split or merged.
+
+2. A ONE-SIDED PUBLIC TECHNOLOGY APPROXIMATION
+Let r_min=min_j r_j and define
+ rhat_j=r_min rho^m where m is the unique integer with
+ r_min rho^m<=r_j<r_min rho^(m+1).
+Define F+ by replacing r_j in(5) with rhat_j, leaving all other data unchanged.
+For EVERY capacity vector, including zeros,
+ F<=F+<=rho F.                                             (6)
+The first inequality relaxes a shared constraint. For the second, take any proxy
+plan z and scale it to z/rho. Since r_j<rho rhat_j,
+ sum_j r_j z_j/rho<=sum_j rhat_j z_j<=P,
+ sum_j z_j/rho<=Q, and z_j/rho<=q_j.
+It is feasible in the true game and has exactly1/rho of the proxy value. The same
+argument holds for each coalition and each withheld bundle. In particular F=0
+implies F+=0, so approximation creates no spurious positive value on zero faces.
+
+3. EXACT PRIVATE-POOL REDUCTION INSIDE A TYPE WHEN k=1
+A type consists of activities with the same rhat. Its isolated game has common
+throughput bound B=min(P/rhat,Q) and private caps q_j. Sorting its public profits
+v_j gives the exact finite fractional-knapsack decomposition
+ F_type=sum_l (v_(l)-v_(l+1)) min(P/rhat,Q,sum_{j in prefix_l}q_j).
+For k=1 each prefix private pool is a FIXED LINEAR sum of original private rows.
+Its actual-owner allocation is the corresponding sum of that owner's scaled
+holdings, while the P and Q holdings stay with the original owners. Thus each
+prefix is exactly a three-pool minimum production game, with fixed additive owner
+mapping for reports and withheld resources.
+
+Use the independently proved three-pool TCWM factor2 or three-pool full-OUT factor
+1+2c. The former is the d=3 instance of the earlier sharp(d+1)/2 theorem; the
+latter is the d=3 instance of energy/GENERAL_LOGARITHMIC_FACE_OUTSIDE.txt. These
+are existing ingredients in this campaign, not claims of a new three-pool rule.
+A fixed positive sum over public profit prefixes gives the same factor for the
+isolated type, preserves coverage, and in the OUT case preserves its exact
+outside-production value. At most the number of activities many prefixes are used.
+
+4. INTERACTING TYPE COMPOSITION AND TRANSFER BACK TO THE TRUE GAME
+Pay the sum of these mechanisms for the T isolated proxy types, on the same
+fixed actual-owner profile. Relaxing competition between types gives
+ F+(c)<=sum_tau F_tau(c).
+The sum is TCWM. In the full-OUT case its gain on restoring d is at least
+sum_tau F_tau(d)>=F+(d)>=F(d), so it protects the actual outside-production option.
+Coverage for the true game follows by the same inequality on coalition holdings.
+
+Each type's optimum is individually feasible in the proxy game; time-share those
+T plans equally to obtain sum_tau F_tau<=T F+. More generally this is the exact
+type-congestion argument in HARMONIC_MULTI_COMMON_TCWM.txt. Total funding is
+therefore <=K3 sum_tau F_tau<=K3 T F+<=rho K3 T F,
+where K3 is2 or1+2c. This proves(3),(4). The public approximation game is fixed
+through every deviation, so exact incentives are not inferred from approximate
+payments or from a report-dependent choice of buckets.
+
+5. MORE THAN ONE PRIVATE COMPLEMENTARY ROW
+Set alpha=(k-1)/k, a=alpha/2 and A_k=k/(k+1)^(1+1/k). For type tau with M_tau
+branches, the harmonic theorem gives a TCWM factor bounded by
+ sqrt(2k A_k) M_tau^a + B_k, B_k=2+max(2,k).
+This follows from its integer-free C=max(1,sqrt((k A_k/2)M_tau^alpha)) and
+max(1,x)<=1+x. All positive-ratio types use both shared rows. Concavity of x^a
+(or direct counting if a=0) yields
+ sum_tau M_tau^a <=T^(1-a) M^a.
+Thus the true game has TCWM funding factor at most
+ rho [sqrt(2k A_k) T^(1-a) M^a+B_k T].                       (7)
+For k=1 prefer the sharper three-pool bounds above. For k>=2, (7) extends the
+common-cap exponent to noncollinear two-resource demands with a controlled
+public-ratio loss. It does not settle whether that dependence on R is necessary.
+
+SCOPE, PRIORITY AND REMAINING QUESTION
+The geometric bucketing, fractional-knapsack layering and time-sharing comparison
+are elementary established approximation ingredients. The contribution proposed
+here is their combination with fixed-owner all-profile incentive theorems and the
+harmonic shared-resource composition lemma; historical priority is unconfirmed.
+The case of arbitrary ratios with a constant independent of R remains open in
+this investigation. Zero common coefficients, shared private rows, private profits,
+indivisibility and scheduling constraints are outside the displayed theorem.
+They must not be silently treated as negligible positive coefficients.
+No participation-floor transfer is asserted across(6): value approximation alone
+does not order grand-marginal increments.

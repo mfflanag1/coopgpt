@@ -1,0 +1,87 @@
+AT MOST TWO GENERATOR INCIDENCES PER OWNER: RAW PROJECTION IS OWN-MONOTONE
+2026-10-17. A geometric companion to the row-arity-two theorem.
+
+Let A be any finite 0/1 matrix with nonempty rows, and assume each COLUMN
+has at most two1s. Row cardinalities, owner count and row count may grow.
+For b>=0 let q(b) be the minimum-Euclidean-norm cover of Ax>=b, x>=0.
+For every owner i, increasing any collection of RHS entries on rows containing
+i cannot decrease q_i. Equivalently, its own-row downward envelope equals q_i.
+Thus the uniform-base amplification target has E=||q||^2=rho on this class;
+it cannot violate E<=2rho. In fact the original diagonal bound holds directly,
+since the minimum-norm cover has norm at most that of any efficient L1 cover.
+All assertions allow arbitrary nonnegative real RHS values and arbitrary
+continuous simultaneous changes in the incident demands.
+
+NONNEGATIVITY AND ACTIVE BASES.
+First project onto Ax>=b without explicit coordinate bounds. KKT stationarity
+is q=A^T lambda for lambda>=0, so q>=0 automatically; the two projections
+coincide. Thus no signed nonnegativity anchor rows need to be inserted.
+Along a one-row RHS change, the projection is continuous and finite piecewise
+affine. On each open affine piece, choose independent active rows B spanning
+its active face. The minimum-norm formula is q=B^T(BB^T)^(-1)b_B. If a changed
+row is inactive throughout that piece, its derivative is0; if active, it can
+be included in the independent basis. A dependent changed equality cannot
+remain active over an open interval with every other RHS fixed. Degenerate
+positive/zero multipliers do not affect the finite active-face argument.
+The remaining argument is purely a matrix calculation for any such B.
+
+GRAM MAXIMUM PRINCIPLE.
+G=BB^T is positive definite, with nonnegative entries. Since every column
+of B has at most two1s,
+ G_rr >= sum_(s!=r) G_rs.
+Indeed G_rr counts columns incident to r; each such column contributes to
+at most one off-diagonal intersection. Fix a source row r and put
+ w=G^(-1)e_r. Then
+                        |w_s|<=w_r for every s.             (1)
+Here w_r=e_r^T G^(-1)e_r>0. For completeness, at any nonsource s,
+ G_ss*w_s=-sum_(t!=s)G_st*w_t.
+If |w_s| attains a positive global maximum, diagonal dominance forces either
+a contradiction or equality in every triangle inequality: the row must be
+weakly, not strictly, diagonally dominant, and every adjacent t has equal
+absolute value and sign opposite to w_s. Propagate across positive off-diagonal
+entries. If the source is reached, its absolute value is the maximum, proving(1).
+If it is not reached, the propagation gives a closed component with no strict
+diagonal dominance and alternating signs. The vector with those signs on the
+component and0 elsewhere is a nonzero kernel vector of G, contradicting positive
+definiteness. Components not containing the source have w=0 directly. This
+proves(1) in every case.
+
+OWN DERIVATIVE.
+Suppose row r contains owner i and changes at unit speed. If it is active,
+let w above be its multiplier response. Column i of B has either one active
+incidence r or two incidences r,s. The coordinate response is respectively
+ w_r>0, or w_r+w_s>=0 by(1).
+If r is inactive the response is0. Hence every affine segment has nonnegative
+own derivative. Continuity across the finite seams proves monotonicity for
+one row; changing the finitely many incident demands sequentially proves the
+stated simultaneous result.
+
+FUNDING CONSEQUENCE, WITH THE ROUTINE BASELINE MADE EXPLICIT.
+This is NOT a new universal funding bound. At any profile, each positive q_i
+has a positive incident KKT multiplier, hence touches a tight row. Therefore
+ sum_i q_i <=sum_(tight rows r)q(S_r)=sum_(tight rows r)b_r
+             <=sum_r b_r<=2T,
+where T is the minimum L1 cover value and the last inequality follows by
+summing all row constraints at an efficient cover: each owner occurs at most
+twice. The raw rule is truthful on every local monotone report array retaining
+this fixed generating matrix. The2T factor is asymptotically sharp for the raw
+rule: two unit-demand rows share one owner and each has k private owners.
+The full projection pays2/(k+2) to the shared owner and1/(k+2) to each private
+owner, giving total2(k+1)/(k+2) against T=1.
+
+A simpler per-row equal-share rule also proves the routine factor2: pay each
+owner the sum over its incident rows of b_r/|S_r|. Every row is covered by its
+own equal-share component, incentives are immediate, and total funding is
+sum_r b_r<=2T. The specific contribution here is monotonicity of the RAW norm
+projection, and its resulting exact diagonal identity E=rho. No historical
+novelty claim is made pending original-source comparison.
+
+RELATION TO PREVIOUS STRUCTURE AND PRODUCTION SCOPE.
+RANK_TWO_PROJECTION_MONOTONICITY.txt assumes at most two OWNERS per row.
+This result instead assumes at most two ROWS per owner. Neither assumption
+implies the other; both give unbounded classes with exact raw monotonicity.
+For production models, the same fixed generators must remain sufficient at
+every permitted report. A single full-profile representation with column
+frequency two is insufficient if previously redundant coalition rows can
+become binding after a report change. The general all-profile envelope
+conjecture remains open.

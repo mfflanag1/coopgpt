@@ -1,0 +1,249 @@
+SHARP RESOURCE-DIMENSION BOUND FOR FULL COALITION OUTSIDE PRODUCTION
+17 October 2026. New theorem candidate; independent review pending.
+Joint derivation by the energy lane and root. Historical priority unconfirmed.
+
+THEOREM.
+Let F:R_+^d -> R_+ be finite, coordinatewise nondecreasing, concave, and
+positively homogeneous of degree one. There is one all-profile payment rule,
+for arbitrary finitely many fixed actual owners of arbitrary mixed bundles,
+with nonnegative payments, coalition coverage, and full coalition OUT:
+
+  Y_S(b) >= Y_S(b-withheld_S) + F(sum_(i in S) withheld_i).
+
+Every withheld coordinate is nonnegative and bounded by its actual owner's
+reported resource. The coalition can produce with its aggregate withheld
+bundle. No identity changes, overreports, private costs, or outside resources
+are allowed. If k resource coordinates are active at the report profile, then
+
+  sum_i y_i <= [1+c(k-1)] F(sum_i b_i),
+
+where k=0 means zero payment and
+
+  c[2-exp(-1/c)]=1,  c=0.5430633898250876...,
+  t0=1-exp(-1/c)=1/c-1,  c(1+t0)=1.
+
+The root is uniquely in (1/2,1): the left side is below 1 at c=1/2 and
+above 1 at c=1, and its derivative is
+2-exp(-1/c)(1+1/c)>1, using exp(x)>1+x. In particular 2c>1 and 0<t0<1.
+
+For every d>=2, the factor 1+c(d-1) is optimal uniformly over technologies
+and all finite fixed owner populations. The already independently audited
+min_d unrestricted OUT lower in SHARP_MULTIPOOL_OUTSIDE_CANDIDATE.txt matches
+this universal upper. The d=1 factor is exactly 1.
+
+This is a stronger contract than payment-only TCWM, whose sharp universal
+dimension factor is (d+1)/2. Neither result is a sharp bound for the original
+individual-payment-only incentive problem. The theorem makes no claim of
+efficient evaluation for an arbitrary oracle F, and no claim of novelty.
+
+1. THE RULE
+
+Draw ONE common scalar U, with density c/(1-u) on 0<u<t0. Its total mass is
+-c log(1-t0)=1, and E U=c[-t0-log(1-t0)]=1-c t0=c.
+For aggregate capacity C and each j with C_j>0 define
+
+  H_j(C)=E F(C_j e_j + U sum_(l!=j) C_l e_l),
+  p_j(C)=H_j(C)/C_j,
+  y_i(b)=sum_(j:C_j>0) b_ij p_j(C).
+
+Absent-coordinate contributions are zero. The same random scalar multiplies
+ALL other coordinates within each face average. This is different from the
+independent uniform averages in the TCWM theorem. The formula depends only
+on the fixed reported technology and actual owner bundles; no strategic
+splitting or merging of identities is involved.
+
+2. FUNDING AND FINITE PAYMENT MONOTONICITY
+
+For k positive coordinates, Jensen applied first to U and then across j gives
+
+  sum_j H_j(C)
+  <= sum_j F(C_j e_j + c sum_(l!=j) C_l e_l)
+  <= k F(((1+c(k-1))/k) C)
+   = [1+c(k-1)] F(C).
+
+For a coalition with bundle a and outsiders o, its coordinate-j payment is
+
+  [a_j/(a_j+o_j)] H_j(a+o).
+
+Both nonnegative factors are coordinatewise nondecreasing in a. Each old
+coordinate contribution therefore increases under an arbitrary restoration
+of coalition resources. A newly active coordinate contributes nonnegatively;
+the old integrands increase when that coordinate changes from zero to
+positive. Thus finite TCWM holds on and across all faces, even when F has
+downward jumps at the boundary of a face.
+
+3. TWO ELEMENTARY LEMMAS
+
+Lemma A (ray coverage). For any positive x in R_+^k, k>=2, write m=min_j x_j,
+S=the second-smallest coordinate counting multiplicity, and t=m/S. Then
+
+  sum_j E min(x_j,U min_(l!=j) x_l)/x_j >=1.
+
+Proof. Choose one shortest coordinate. Its term is
+
+  q(t)=E min(1,U/t)
+      =1-c-c(1-t)log(1-t)/t,  0<t<=t0;
+      =c/t,                    t0<=t<=1.
+
+Every other term is c m/x_j; in particular a second-shortest coordinate
+contributes ct. For t<=t0,
+
+  q(t)+ct-1=c(1-t)[-1-log(1-t)/t]>=0,
+
+using -log(1-t)>=t. For t>=t0, q(t)+ct=c(t+1/t)>=2c>1.
+This proves the lemma, including shortest-coordinate ties.
+
+Lemma B (concave scalar inequality). If H is nonnegative, nondecreasing and
+concave on [0,1], and 0<=t<=t0<1, then
+
+  I := integral_0^t0 [H(u)-u H'(u)]du
+     =2 integral_0^t0 H(u)du-t0 H(t0)
+     >=t0 H(t)-t H(1).
+
+The derivative is needed only almost everywhere. A possible downward jump
+at zero can be filled with its right limit, without changing any integral.
+For a continuous piecewise-linear concave nondecreasing H, decompose it as
+a nonnegative constant, a nonnegative multiple of u, and a positive sum of
+hinges min(u,s), 0<s<=1. Constants and linear functions satisfy the assertion.
+For a hinge, the residual I+t H(1)-t0 H(t) is
+
+  s(t-s)                    if 0<s<=t;
+  (s-t)(t0-s)               if t<s<t0;
+  t(s-t0)                  if t0<=s<=1.
+
+All are nonnegative. General H follows by uniform piecewise-linear concave
+approximation after filling the endpoint. The integral identity makes this
+limit legitimate without convergence of derivatives.
+
+4. THE FULL OUT DIFFERENTIAL INEQUALITY ON AN ACTIVE FACE
+
+First suppose F is smooth on the positive relative interior of the current
+active face. Let C>0 on that face, let a be an arbitrary coalition bundle
+with 0<=a<=C, and let d>=0 be a restoration direction. Put alpha_j=a_j/C_j.
+Differentiation of the coalition payment along simultaneous restoration gives
+
+  D Y_S[d] = sum_j { alpha_j B_j(d)+(1-alpha_j) A_j(d) },
+
+  A_j(d)=H_j(C)d_j/C_j,
+  B_j(d)=E[U grad F(v_j(U)).d
+                 +(1-U) partial_j F(v_j(U)) d_j],
+  v_j(u)=C_j e_j+u sum_(l!=j) C_l e_l.
+
+Gradients are nonnegative. By concavity and homogeneity, every such gradient
+is a supporting price: grad F(v).d>=F(d) for nonnegative d on this face.
+Hence B_j(d)>=c F(d), and A_j(d)>=0. The expression is affine in each alpha,
+so it suffices to consider corners alpha_j in {0,1}. Let J be the set of
+coordinates with alpha_j=1.
+
+If |J|>=2, the corner expression is at least 2c F(d)>=F(d).
+If F(d)=0, nonnegativity already proves the desired inequality.
+Assume now F(d)>0 and initially d>0 on the active face.
+
+If J is empty, put x_j=C_j/d_j. Monotonicity and homogeneity imply
+
+  F(v_j(u))/F(d) >= min(x_j,u min_(l!=j) x_l).
+
+Therefore sum_j A_j(d)>=F(d) by Lemma A. For a one-coordinate active face,
+the assertion is directly equality by homogeneity.
+
+It remains to treat a singleton J={j}. Normalize by F(d), and define
+G(z)=F(d*z)/F(d), with coordinatewise product, so G(1)=1. By common scaling
+of all x_j=C_j/d_j, which leaves these directional expressions unchanged,
+normalize min_(l!=j)x_l=1. Write t=x_j and V=G(x). Monotonicity gives
+
+  sum_(l!=j) A_l(d)/F(d)
+    >= c V sum_(l!=j) 1/x_l >= c V.
+
+Indeed, every face vector is at least u x, and one outside coordinate has
+x_l=1. Also B_j(d)/F(d)>=c. If V>=t0, these estimates already give at least
+c(1+t0)=1. If t>=1 then V>=G(1)=1, so that case is included.
+
+The only remaining case is 0<t<=V<t0. Define
+
+  H(u)=G(t e_j+u sum_(l!=j)x_l e_l),  0<=u<=1.
+
+It is nonnegative, nondecreasing, and concave; H(t)>=t and H(1)=V.
+Euler's identity gives, for u>0,
+
+  partial_j G(t,u x_-j)=[H(u)-u H'(u)]/t.
+
+Because (1-u) times the density of U is the constant c, the second,
+nonnegative term in B_j supplies an additional
+
+  c integral_0^t0 partial_j G(t,u x_-j)du
+  = (c/t) I >= c(t0-V),
+
+where Lemma B was used. Thus the singleton corner is at least
+
+  c+c(t0-V)+cV=c(1+t0)=1.
+
+Every corner, hence every coalition holding fraction alpha, satisfies
+
+                         D Y_S[d]>=F(d).
+
+Directions with some zero coordinates follow by applying the result to
+d+delta*1 and letting delta decrease to zero. The derivative expression is
+linear in the direction, and F(d+delta*1)>=F(d); no boundary continuity of F
+is required for this passage.
+
+Differentiating the face averages is legitimate on each compact positive
+capacity set. Euler's identity and nonnegative gradients give
+C_j partial_j F(v_j(u))<=F(C) and u C_l partial_l F(v_j(u))<=F(C).
+These bounds dominate every differentiated integrand uniformly down to u=0.
+
+5. FINITE DEVIATIONS, FACE CHANGES, AND NONSMOOTH F
+
+For a finite coalition restoration d, write a(s)=a(0)+s d and C(s)=o+a(s),
+0<=s<=1. For every s>0 the support of C(s) is the fixed support of C(1).
+On that face, integrate the proved derivative inequality from epsilon to1:
+
+  Y_S(1)-Y_S(epsilon)>=(1-epsilon)F(d).
+
+Finite TCWM from Section 2 gives Y_S(epsilon)>=Y_S(0), even if crossing into
+this face creates upward payment jumps. Consequently
+Y_S(1)-Y_S(0)>=(1-epsilon)F(d), and epsilon down to zero proves full OUT.
+If the active face has one coordinate, the same conclusion follows directly
+from linearity on that ray; the zero face is trivial.
+
+To remove smoothness, choose a smooth probability density supported in
+[-1,1]^d and set
+
+  F_epsilon(x)=E_z F(diag(exp(epsilon z_j)) x).
+
+This averages fixed diagonal linear transformations, so it preserves
+concavity, monotonicity, nonnegativity and degree-one homogeneity. Logarithmic
+convolution makes F_epsilon smooth on every positive relative face. Further,
+
+  exp(-epsilon) F(x)<=F_epsilon(x)<=exp(epsilon) F(x)
+
+at EVERY x, including faces with possible downward jumps. The finite OUT
+inequality therefore holds for F_epsilon and its face-average payments.
+The relative bounds imply pointwise convergence of F_epsilon and all its
+face-average payments to their F counterparts at every report and withheld
+bundle. Passing to the limit proves full OUT for the stated entire class.
+
+Coalition coverage also follows directly from full OUT by restoring the
+coalition's entire bundle from its zero report. Its low-profile payment is
+zero, so its high-profile payment is at least F(its aggregate bundle).
+
+6. SHARPNESS, SPECIALIZATION, AND STATUS
+
+For F(C)=min_j C_j, every non-shortest face average is c min C, while the
+shortest face average gives q(T/S). Thus this rule specializes exactly to
+MULTIPOOL_OUTSIDE_LOGARITHMIC.txt. Its independently audited unrestricted
+lower proves the universal factor sharp for every dimension d. Lower-bound
+mechanisms need not be anonymous, continuous, homogeneous, or aggregate-price
+rules; the separate reduction theorem establishes the necessity.
+
+The construction works for arbitrary fixed mixed owners and arbitrary finite
+dimension. It includes public energy and hardware production LPs, resource
+networks, weighted activities and nonlinear concave technologies. A graph's
+special factor-two OUT guarantee can be better than this dimension bound;
+this theorem is a sharp universal result, not a replacement for all structural
+graph bounds. Public linear opportunity-cost settlement can be added using
+the previously defined reimbursement contract. Private costs and physical
+cluster efficiency remain separate economic and empirical questions.
+
+This analytic proof is the evidence. Numerical checks can challenge its
+algebra but do not establish the transcendental constant or universal claim.
+Independent review and original-source priority comparison remain required.

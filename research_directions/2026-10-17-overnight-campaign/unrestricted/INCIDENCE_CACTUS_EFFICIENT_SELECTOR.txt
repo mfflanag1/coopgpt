@@ -1,0 +1,175 @@
+EFFICIENT OWN-MONOTONE SELECTION FOR COALITION INCIDENCE CACTI
+2026-10-17. Proposed extension of the forest theorem; independent audit pending.
+
+SETUP AND STATEMENT.
+Fix a finite 0/1 generator matrix A with nonempty rows. Its bipartite incidence
+graph has generator-row vertices, owner vertices, and edges at its 1 entries.
+A cactus means every graph edge lies in at most one simple cycle; distinct
+cycles may meet at a vertex. Disconnected cacti are allowed. Row sizes, owner
+frequencies, numbers of cycles, and owner counts are all unrestricted.
+
+For K(b)={x>=0:Ax>=b}, b>=0, and T(b)=min_K sum x, let e(b) be the unique
+minimum-Euclidean-norm point of the efficient face sum x=T(b).
+
+THEOREM. If the incidence graph of A is a cactus, e_i cannot decrease when
+an arbitrary subset of incident RHS demands increases. The same own-row
+monotonicity holds for projection of ANY fixed target onto K(b), and hence
+for every regularized selector min_K [sum x+(epsilon/2)||x||^2].
+Thus every fixed adequate cactus generator system admits an efficient,
+individually own-row monotone allocation for all nonnegative demands.
+
+CENTRAL DERIVATIVE LEMMA.
+Let B be full row rank and have cactus incidence graph. For any source row r,
+the minimum-norm solution to Bd=e_r has d_i>=0 for every owner i in r.
+
+PROOF: REDUCTION AT THE SOURCE ROW.
+Delete row vertex r from its connected incidence component. Each remaining
+component meets the neighbors of r in either one or two owner vertices.
+It cannot meet three: its minimal connecting tree would make some edge lie
+in two cycles after r is restored. A component with two interface owners u,v
+has a unique simple path between them corresponding to its cycle through r;
+every component off that path attaches to it at just one vertex. Otherwise
+there would again be overlapping cycles. Other cycles are permitted inside
+these one-articulation attachments.
+
+All remaining row equations have zero RHS. The component energy is its sum
+of squared owner coordinates. It is a positive definite quadratic objective
+on a homogeneous linear feasible subspace.
+
+A component with ONE interface value t either forces t=0 or has conditional
+minimum energy alpha*t^2, alpha>=1. This is the homogeneous image argument
+in INCIDENCE_FOREST_EFFICIENT_SELECTOR.txt: a linear image in R is {0} or R,
+and scaling the minimum-norm solution at t=1 gives every t.
+
+We show that a component with TWO interfaces has a similar positive quadratic
+cost in their TOTAL h=d_u+d_v, or forces h=0; whenever h>=0 is feasible its
+minimum-energy endpoint split has d_u,d_v>=0.
+
+TWO-INTERFACE PATH REDUCTION, INCLUDING ALL PINS.
+Write the alternating interface path as owners 0,...,k and intervening rows
+1,...,k. At a path owner j, all attached homogeneous modules either force
+x_j=0 or add a nonnegative multiple of x_j^2 to the energy. Including the
+owner's own square therefore gives alpha_j*x_j^2 with alpha_j>=1, or pins
+x_j=0. This uses only a one-dimensional linear-image argument, so the
+attachments themselves may contain arbitrarily many cycles.
+
+At path row j, combine all off-path modules into their total contribution s
+to that row. Their homogeneous feasible subspace either forces s=0 or has
+minimum energy beta_j*s^2 with beta_j>0. A nonzero prescribed sum of finitely
+many coordinates has strictly positive minimum squared norm. The row equation
+is x_(j-1)+x_j+s=0. Hence this attachment contributes
+             beta_j*(x_(j-1)+x_j)^2,
+or enforces the hard equality x_(j-1)+x_j=0 if no nonzero s is feasible.
+All attachments are disjoint except for their stated articulation vertex,
+so these eliminations add their exact conditional energies without cross terms.
+
+Set z_j=(-1)^j*x_j. The reduced energy becomes
+     sum_j alpha_j*z_j^2 + sum_(soft edges j) beta_j*(z_(j-1)-z_j)^2,  (1)
+with pinned z_j=0 and hard equalities z_(j-1)=z_j. Contract hard equalities.
+Any contracted node containing a pin is zero; remove it, adding energies of
+its incident soft edges as grounding terms at their other ends. An interior
+pin may disconnect the path; the same argument then gives zero off-diagonal
+coupling between the endpoint components. Every remaining
+node has strictly positive grounding because its alpha coefficients sum to
+a positive number. Thus (1) is a strictly grounded weighted path quadratic.
+
+If both endpoints survive as distinct nodes, eliminate all interior nodes.
+Its two-variable Schur complement H is positive definite with
+                  H_01<=0,  H_00>=-H_01, H_11>=-H_01.       (2)
+For completeness, eliminating a grounded node with ground a>=0 and edge
+conductances c_j>=0 produces between its neighbors conductances c_j*c_l/D
+and adds ground c_j*a/D, where D=a+sum c_j>0. Thus nonnegative grounds and
+conductances are preserved. This proves (2), without assuming the interior
+weights are equal. Positive definiteness follows from the positive original
+grounds and the Schur complement identity.
+
+Returning to original endpoint signs multiplies H by a diagonal sign matrix.
+The resulting positive definite 2x2 matrix Q satisfies
+                  Q_00>=|Q_01|, Q_11>=|Q_01|.
+Consequently
+           Q^(-1)*1 = (Q_11-Q_01,Q_00-Q_01)^T/det(Q) >=0.
+Under a fixed total h, the unique minimizing split is
+        (d_u,d_v)^T = h*Q^(-1)1/(1^T Q^(-1)1),               (3)
+which is componentwise nonnegative for h>=0. Its energy is a strictly positive
+constant times h^2.
+
+If one endpoint is pinned, the other equals h and the same conclusion holds.
+If both are pinned, only h=0 is possible. If both endpoints contracted to the
+same unpinned node, their original signs are either equal or opposite. Equal
+signs give d_u=d_v=h/2. Opposite signs force h=0, whose minimum-energy solution
+is zero throughout that module. These cases also cover hard constraints at
+arbitrary positions, including contractions that meet a pin. Thus the asserted
+two-interface property holds in every case.
+
+FINISHING THE DERIVATIVE LEMMA.
+For every component after deleting r, write h_l for the sum of its one or two
+interface values. Each component either forces h_l=0 or has minimum energy
+gamma_l*h_l^2, gamma_l>0, with nonnegative interface values when h_l>=0.
+The source equation is exactly sum_l h_l=1. Full row rank makes Bd=e_r
+feasible, so at least one component has free total. The minimum-energy totals
+are h_l=(1/gamma_l)/sum_(free t)(1/gamma_t)>0 on free components, and zero on
+pinned-total components. Every neighbor of r therefore has nonnegative
+coordinate. This proves the derivative lemma.
+
+ALL-PROFILE AND EFFICIENCY CONSEQUENCE.
+The active-face proof from INCIDENCE_FOREST_EFFICIENT_SELECTOR.txt now applies
+verbatim: fixed-target projection is continuous and finite piecewise affine
+under one-row RHS variation. KKT places target minus optimizer in the active
+normal span, so on each face the optimizer is its affine-face projection. The
+finitely many faces and their linear feasibility/normal conditions yield finite
+affine critical intervals. Restricting to positive owner coordinates and
+independent active rows preserves the cactus property. Its derivative is the
+minimum-norm solution of Bd=e_r, or zero for an inactive changed row. Hence
+every own-coordinate derivative is nonnegative. Continuity joins the pieces,
+and sequential changes handle any subset of incident rows.
+
+The targets -(1/epsilon)*1 give the regularized efficient selectors. Comparing
+their objectives with e bounds their norms by ||e|| and forces every limit
+as epsilon->0 to be efficient with norm at most ||e||. Uniqueness gives their
+pointwise convergence to e, preserving each own-monotonicity inequality.
+
+EXACT OBSTRUCTION ON TWO OVERLAPPING CYCLES.
+The cactus hypothesis cannot simply be replaced by allowing overlapping
+cycles. Take three rows {1,2}, {1,3}, {1,2,3}, whose incidence cycles share
+an edge. Demands (1,1,1) have T=1 and unique efficient cover (1,0,0).
+Increasing only the third demand to3/2 gives T=3/2 and minimum-norm efficient
+cover (1/2,1/2,1/2). This is an own-row increase for owner1, but its payment
+falls from1 to1/2. In fact along grand demand t in(1,3/2), the efficient
+selector is (2-t,t-1,t-1), with derivative(-1,1,1).
+
+This incidence graph has cycle rank2. It refutes the selector conclusion for
+a minimal overlapping-cycle pattern; it does not prove that every noncactus
+matrix fails or that any funding subsidy is necessary on this particular
+veto instance. MINIMAL_PROJECTION_OWN_MONOTONICITY_FAILURE.txt supplies a
+fixed-owner monotone concave homogeneous production realization of these two
+profiles. The separate five-cycle-triple12/11 argument in
+EFFICIENT_CORE_SELECTOR_INCIDENCE_TWO.txt is a mechanism-independent subsidy
+obstruction, with a larger and denser incidence pattern.
+
+SCOPE AND ESTABLISHED INGREDIENTS.
+These are COALITION-GENERATOR incidence cacti, not resource-technology cacti.
+All-profile adequacy of the fixed generator representation is essential.
+The incentive conclusion is individual payment monotonicity, not coalition
+total monotonicity or outside-production protection.
+
+ABV2016 Section5.2.2 already studies minimum-norm efficient-core selection.
+Grounded quadratic-network elimination, shifted projection sensitivity, and
+quadratic regularization are established methods. The proposed contribution
+is the cactus incidence condition ensuring own-row monotonicity and efficiency.
+Historical priority for that conclusion remains unconfirmed.
+
+EXACT CHECKS.
+verify_incidence_cactus.py passes13699 cactus systems,12320 independent active
+bases,93891 own derivatives including28180 zeros,14 growing high-degree
+cacti and75 anchored-cycle systems. These derivative checks complement the
+general proof; they are not a finite enumeration of every possible profile.
+
+Additional profile-level verification: verify_cactus_profile_selectors.py passes
+58 rational profiles and937 own-comparable pairs on growing5/6/7-owner cactus
+families, including a singleton anchor and an added branch at a cycle owner.
+Each profile is checked for the exact efficient minimum-norm selector and four
+fixed-target projections: zero, negative all-ones, negative four-ones, and an
+asymmetric mixed-sign target. Exact LP vertices establish T and exact KKT bases
+establish each projection. Parent reports independent cactus/forest review found
+no substantive mathematical errors; the active-face/pinning clarifications above
+were incorporated after that review. Historical priority is still unconfirmed.

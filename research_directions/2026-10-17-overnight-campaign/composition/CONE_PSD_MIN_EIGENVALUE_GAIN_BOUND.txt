@@ -1,0 +1,109 @@
+GAIN-ONLY FUNDING BY MATRIX ORDER FOR WORST-DIRECTION INFORMATION
+17 October2026. Root insight, independent composition derivation.
+Frozen candidate for audit. Historical novelty unconfirmed.
+
+THEOREM
+Let n fixed actual owners report real symmetric PSD matrices X_i of orderm.
+Let F(X)=lambda_min(X), C=sum_i X_i, f_i=lambda_min(X_i), S=sum_i f_i,
+G=lambda_min(C)-S. Binding unilateral withholding has0<=D_i<=X_i in Loewner
+order. There is one all-profile deterministic nonnegative payment rule with
+every-coalition coverage and individual full outside-production protection,
+
+ y_i(X)-y_i(X_i-D_i,X_-i)>=lambda_min(D_i),
+
+and total funding at most
+
+             S+min{m,n sqrt(2/(n+1)),1+2sqrt(m)} G.       (1)
+
+This does not assert coalition-report immunity. It allows noncommuting mixed
+matrix ownership. Rule/parameter choice uses public m,n before reports. The
+number of unit eigenvectors/supporting forms is infinite; a finite-K logarithmic
+support bound cannot simply be substituted with K=m. The rankm here is matrix
+order, not ambient resource dimensionm(m+1)/2.
+
+1. ORIGINAL-REPORT MASK MECHANISM
+Use the fixed-mask mechanism of CONE_GAIN_ONLY_THEOREM.txt. For each masked sum
+C_B choose a unit eigenvector v_B in its least-eigenvalue eigenspace, with a
+fixed tie rule invariant under scalar identity shifts. The global support is
+L_B(X)=v_B^T X v_B. It is finite, nonnegative onPSD, majorizes lambda_min, and
+touches C_B. Open owners receive F(C_B)-F(C_B-X_i), while closed owners receive
+min{v_B^T X_i v_B,T-sum_{h!=i}f_h}. The cone proof establishes coverage and
+individual OUT directly in X_i, including singular faces.
+
+2. EXACT RESIDUAL IDENTITY FOR FUNDING ONLY
+Put U_i=X_i-f_i I>=0 and U=sum_i U_i. Then for every coalition A,
+
+ F(sum_{i in A}X_i)=sum_{i in A}f_i+lambda_min(sum_{i in A}U_i),
+ G=lambda_min(U).
+
+The selected least eigenspace of C_B is exactly that of U_B, so the fixed
+shift-invariant tie rule selects the same v_B. Open excess is the residual
+grand marginal; closed excess is min{v_B^T U_i v_B,G}. Therefore the ORIGINAL
+modified-cap rule equals standalone payments plus this residual mask rule.
+No monotonicity of X_i -> U_i is asserted or used: it generally fails, which
+is why incentives were proved first in original reports.
+
+3. MATRIX CAPPED-SAMPLING LEMMA
+Independently retain each owner with probability p=1-q. For each mask B choose
+any PSD test matrix P_B of trace1 minimizing tr(P_B U_B); a least-eigenvector
+projector is enough. Its training score is lambda_min(U_B)<=G. Own-bit
+conditioning and the usual scalar inequality give
+
+ E sum_{i notin B} min{tr(P_B U_i),G}
+ <=(2q/p)G E sum_{i in B}
+       tr(P_(B\{i}) U_i)/tr(P_(B\{i}) U_B).            (2)
+
+Zero denominators contribute0 because0<=U_i<=U_B implies their numerators
+are0. The scalar step uses off-diagonal training score<=G, hence
+min(x/G,1)<=2x/(G+x)<=2x/(x+offdiag). G=0 is handled separately.
+
+For fixed B, let W=range(U_B) and inverse square roots be taken only on W.
+For ANY PSD test matrix P (even one not supported on W),
+
+ tr(P U_i)/tr(P U_B)
+ <=lambda_max(U_B^(-1/2) U_i U_B^(-1/2))
+ <=tr(U_B^(-1/2) U_i U_B^(-1/2)).                       (3)
+
+Indeed U_i<=alpha_i U_B for the displayed maximal eigenvalue alpha_i, so
+trace pairing with PSD P proves the first inequality. The second is ordinary
+nonnegative-eigenvalue domination by the trace. Summing the last quantity
+over i in B gives tr(I_W)=rank(U_B)<=m. This argument tolerates different
+selected P_(B\{i}) in every summand; no common eigenbasis is assumed.
+Substitute into(2):
+
+             expected closed excess <=2m q/(1-q) G.     (4)
+
+Average q uniformly on[0,a]. The open-excess endpoint integral is at mostG,
+as in the residual-game proof, so total is bounded by
+
+ S+[1+2m(-a-log(1-a))]/a *G.
+
+Choose a=1/(1+sqrt m) and use -a-log(1-a)<=a^2/[2(1-a)] to obtain the
+1+2sqrt m term in(1). The owner-count term transfers unchanged from the
+general cone rule. G=0 makes all residual mask values and excesses zero.
+
+4. GRAND-MARGINAL ORDER-m BOUND
+For U=sum_i U_i let alpha_i=lambda_max(U^(-1/2)U_i U^(-1/2)) on range(U).
+Then0<=alpha_i<=1, U_i<=alpha_i U, and
+sum_i alpha_i<=sum_i tr(U^(-1/2)U_iU^(-1/2))=rank(U)<=m.
+Consequently
+
+ lambda_min(U-U_i)>=(1-alpha_i)lambda_min(U)=(1-alpha_i)G,
+ m_i-f_i=G-lambda_min(U-U_i)<=alpha_i G.
+
+Thus total grand marginals<=S+mG. If U is singular then G=0 and all residual
+marginals vanish; the same conclusion is immediate. Grand marginals already
+have coverage and individual OUT. Choosing among whole fixed rules gives(1).
+
+5. SCOPE AND COMPARATORS
+Diagonal matrices recover the original min-m resource technology, so this is
+not a claim that the matrix model has easier worst cases than its diagonal
+subclass. The order-m improvement over ambient-dimension bounds is relevant
+for genuinely noncommuting matrices. Existing diagonal lower bounds continue
+to apply. The theorem does not close the logarithmic-versus-square-root gap
+for the matrix model, does not extend the diagonal finite-form logarithmic
+upper without new work, and does not provide a polynomial-time exact mask
+average. Data valuation and verification require the separate contract in
+CONE_APPLICATIONS_AND_LIMITS.txt. Spectral order, trace leverage and scalar
+shift identities are established ingredients; priority of their combination
+with this incentive construction is unconfirmed.

@@ -1,0 +1,108 @@
+ACYCLIC TRIPLE-INPUT SYSTEMS DEFEAT EVERY FIXED SMOOTH SEPARABLE PRICE RULE
+17 October 2026. Stronger and simpler successor to
+SEPARABLE_PRICE_PROJECTION_OBSTRUCTION.txt; independent audit pending.
+
+THEOREM (architecture-specific)
+Fix any convex nondecreasing h:[0,1]->R which is C2 near t0=1/3, with
+0<h'(t0)<infinity and0<h''(t0)<infinity. The rule that minimizes
+  J_c(p)=sum_v c_v h(p_v)
+over0<=p<=1 and sum_{v in e}p_v>=1, then pays each owner i sum_v b_iv p_v,
+fails own-report monotonicity on some finite unit-profit triple-input
+hypergraph whose incidence graph is a TREE and whose resource degree is<=2.
+There are only TWO actual fixed owners. At the base profile every resource
+capacity is1 or2. The profitable underreport changes only one actual owner's
+root resource. All relevant minimizers are unique, interior, and all edges
+retain positive KKT multipliers. No active-set switch or tie-breaking is used.
+
+The quantifier is one FIXED regularizer used across all these hypergraphs.
+The result does not exclude graph-dependent h or nonlinear owner-specific
+mechanisms, and is not an unrestricted subsidy lower bound.
+
+CONSTRUCTION
+Take a complete rooted binary resource tree of depth D>=1. It has2^l resource
+vertices at level l=0,...,D. For each nonleaf resource vertex, create one
+activity consuming that parent and its two children, with unit profit.
+Every activity has arity3. The incidence graph is connected and has
+3(2^D-1) edges and3*2^D-2 vertices, hence is a tree. The root and leaves have
+resource degree1; other resources have degree2.
+Give each resource capacity equal to its degree:
+ c_0=1, c_l=2 for1<=l<D, c_D=1 (constant within each level).
+Owner I owns all resources at EVEN levels; owner II owns all ODD levels.
+Their eligibility sets and identities are fixed throughout.
+
+At the base profile all prices p_v=t0=1/3 are feasible and every activity is
+tight. Giving every activity multiplier h'(t0)>0 satisfies stationarity
+c_v h'(t0)=sum_{e incident v}lambda_e. Convexity proves global optimality.
+Since h is strictly convex in a neighborhood of t0 and every capacity is
+positive, any different minimizer would contradict strict convexity along the
+initial part of the segment joining it to this point. Thus it is UNIQUE.
+
+PERTURB THE ROOT
+Increase only owner I's root capacity from1 to1+s, s>0 small. Seek a level-
+symmetric all-tight solution
+ p_l=t0+tau z_l,  z_l=(-1/2)^l.
+Every activity constraint holds exactly, because z_l+2z_{l+1}=0.
+The derivative of J along this one-dimensional family is
+ G(s,tau)=sum_{l=0}^D (-1)^l(c_l+s*1_{l=0}) h'(t0+tau z_l).
+At(0,0), G=0 because sum_l(-1)^l c_l=0. Its tau derivative is
+ h''(t0) Q_D, where
+ Q_D=sum_{l=0}^D c_l/2^l=3(1-2^{-D})>0.
+Therefore the implicit-function theorem supplies tau(s) near0 with
+ tau'(0)=-h'(t0)/[h''(t0) Q_D].                       (1)
+
+This stationary all-tight candidate is the TRUE unique optimizer, not just
+a restricted-family minimizer. To see it directly, let lambda_{D-1}=
+c_D h'(p_D) at the leaf edges, and recurse upward
+ lambda_{l-1}=c_l h'(p_l)-lambda_l  (1<=l<D).
+At s=0 every lambda_l=h'(t0)>0; all remain positive by continuity.
+The root equation lambda_0=(1+s)h'(p_0) is exactly G(s,tau)=0.
+Thus full KKT stationarity and complementary slackness hold at every vertex
+and activity. Prices stay strictly between0 and1 and in the local strict-
+convexity region. Convexity gives global optimality and uniqueness as above.
+
+OWNER PAYMENT
+Owner I's aggregate payment is
+ Y_I(s)=sum_{even l}2^l(c_l+s*1_{l=0})(t0+tau(s)z_l).
+Since2^l z_l=1 on even levels,
+ sum_{even l}c_l = D,
+whether D is even or odd. Differentiating at0 and using(1),
+  Y_I'(0)=1/3-[h'(1/3)/h''(1/3)] D/[3(1-2^{-D})].    (2)
+For any fixed h this is negative when D is sufficiently large; it is enough
+that D>h''(1/3)/h'(1/3). Hence increasing a genuine owned capacity lowers
+that owner's payment for every sufficiently small positive s. The reverse
+change is a profitable binding underreport in the SAME actual-owner model.
+
+EXACT ORIGINAL-HUBER EXAMPLE
+Use h(t)=t^2 below1/2 (the graph rule) and D=3. Then there are15 resource
+vertices and7 activities. Level capacities are(1,2,2,1), and owner I holds
+the root plus the four level2 resources. Initially all prices1/3, all edge
+multipliers2/3, and owner I receives(1+4*2)/3=3.
+Increase only root capacity1->2. The unique optimizer prices by level are
+  (7,11,9,10)/29.
+They are all below1/2. Activity multipliers by parent level are
+  (28,16,20)/29.
+The edge equations are7+2*11=29,11+2*9=29,9+2*10=29.
+Stationarity is respectively
+  root: 2*2*(7/29)=28/29;
+  level1:2*2*(11/29)=(28+16)/29;
+  level2:2*2*(9/29)=(16+20)/29;
+  leaf:2*1*(10/29)=20/29.
+Owner I now receives2*(7/29)+4*2*(9/29)=86/29=3-1/29.
+No numerical optimization is used in this certificate.
+
+SIGNIFICANCE AND LIMITS
+The graph theorem's fixed Huber regularization genuinely exploits pairwise
+activity incidence. Moving to three-way complementarity loses the derivative
+invariant even when the activity-resource incidence remains acyclic, degrees
+are bounded, capacities are tiny, and ownership consists of two fixed parties.
+A rank-three extension therefore needs a different owner-payment architecture,
+a graph-dependent regularizer with a new global funding argument, or additional
+restrictions beyond incidence acyclicity. This theorem does NOT claim that
+truthful, covering cooperation is impossible on these hypergraphs: with only
+two actual owners an efficient all-profile rule already exists in the general
+concave production model. It isolates the failure of the stated price rule.
+
+VERIFICATION
+verify_tree_price_obstruction.py checks the closed geometric identities for
+depths1..30 and the complete depth3 KKT/payment certificate using Fraction.
+Historical priority and literature comparison remain unassessed.

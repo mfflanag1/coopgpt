@@ -1,0 +1,173 @@
+EXACT FLOW BACKEND FOR THE PUBLIC WEIGHTED-COVERAGE PRICE RULE
+17 October 2026. Implementation complete; local exact checks PASS.
+Independent mathematical/code review and opposite-model QA passed. See
+root/ROOT_ADJUDICATION_63_COVERAGE_FLOW.txt for scope and reproducible evidence.
+
+SCOPE AND STATUS
+
+This implements an established min-cut specialization of the already accepted
+one-common-resource public-polymatroid mechanism. It is not a new mechanism,
+new max-flow algorithm, or empirical pooling result. The all-profile proof is
+TWO_COMMON_FRESH_ONE_COMMON_DR_BLOCK_THEOREM.txt; the principal-chain evaluator
+and its oracle contract are POLYMATROID_ORACLE_PRICES.py and the corresponding
+POLYMATROID_ORACLE_COROLLARY.txt. Those files were read, not modified here.
+
+Public weighted coverage has m job classes and f public features:
+
+  r(S) = sum_l w_l 1{S intersects E_l},  w_l >= 0,
+  F(P,c) = min_(S subset jobs) [P r(S) + c(jobs\S)].
+
+Weights and eligibility E_l are fixed, public model parameters. P is the one
+common reported capacity, while c_j are private-row aggregate capacities.
+The evaluator returns the previously specified prices and hence the same
+coalition coverage, TCWM and total funding at most 3F/2 for arbitrary fixed
+mixed owners. It does NOT establish the stronger full outside-production
+contract. Its budget is relative to total output F, not cooperation gain.
+
+FILES AND API
+
+1. COVERAGE_POLYMATROID_FLOW_BACKEND.py (Python standard library only):
+
+   WeightedCoverageRank(n_jobs, feature_masks, weights)
+     Each feature mask uses ORIGINAL job indices. Zero weights, empty masks,
+     repeated features and public loops are supported. rank(mask) evaluates
+     the public rank. rank.restrict(indices) preserves the specified order.
+
+   coverage_maximal_minimizer(coefficient, capacities, coverage)
+     Inputs share one LOCAL index universe. Returns the exact maximal mask,
+     objective, flow value, maximal source side, and network/augmentation
+     counts. This standalone function handles zero capacities and coefficient.
+
+   coverage_polymatroid_prices(common, capacities, coverage)
+     Inputs and output prices use ORIGINAL indices. Internally binds the exact
+     active restriction needed by the existing generic evaluator. Returns its
+     fields plus flow_stats. Owners' payments are their resource dot products
+     with prices ordered (common, private0, private1, ...).
+
+All scalar inputs must be int or fractions.Fraction; floating inputs are
+rejected. Feature weights, coefficients and capacities must be nonnegative.
+The sibling generic evaluator file must be present. No third-party packages,
+network access, optimization service, or installation is required.
+
+Example:
+  rank = WeightedCoverageRank(3, [0b011, 0b110], [Fraction(1), Fraction(3,2)])
+  result = coverage_polymatroid_prices(Fraction(2), [3, 0, 4], rank)
+The returned job1 price is zero at this inactive face. The implementation
+keeps the original job0/job2 mapping and the same actual owners throughout.
+
+2. COVERAGE_POLYMATROID_FLOW_CHECK.py:
+   Run python3 -I COVERAGE_POLYMATROID_FLOW_CHECK.py from any directory.
+   All checks explicitly raise on failure; they are not disabled by -O.
+   Successful execution writes COVERAGE_POLYMATROID_FLOW_CHECKS.json.
+
+WHY THE EXACT ORACLE IS CORRECT
+
+For a >= 0 the oracle must minimize a r(S)-c(S). Construct source->job edges
+of capacity c_j, job->eligible-feature edges of capacity M=sum_j c_j+1,
+and feature->sink edges of capacity a w_l. Empty and zero-weight features
+can be omitted. Edmonds--Karp uses Fraction capacities for every residual
+update, with no rounding or epsilon comparisons.
+
+The cut with all jobs/features on the sink side costs sum c. Since M is
+strictly larger, no minimum cut crosses a job->feature edge. Therefore a
+source-side job set S forces every incident feature onto the source side.
+For any fixed S, moving other features to the sink side cannot increase cost;
+the minimum cost with that job set is c(jobs\S)+a r(S). Thus the maximum-flow
+value is sum c plus the required minimum objective. Zero coefficients do not
+invalidate the argument: extra zero-capacity features may enter either side
+without changing cost or any job set's objective.
+
+After maximum flow, let R be the vertices that can reach the sink through
+positive residual edges. V\R contains the source and excludes the sink; no
+positive residual edge leaves it, so it is a minimum source side. Any minimum
+source side is residual-closed and cannot contain a vertex of R, since its
+path to the sink would violate closure. Therefore V\R contains EVERY minimum
+source side: it is the unique maximal one. Its job projection is consequently
+the unique inclusion-maximal minimizing job set. This is distinct from source
+reachability, which selects the minimal side. The one-job tie a=w=c=1 is a
+regression test: the correct maximal job set is {0}, not empty.
+
+Each call also verifies exact equality of the selected cut, flow value and
+coverage-objective offset. These internal identities supplement but do not
+replace comparison with independent small-instance minimization.
+
+ACTIVE FACES AND LOOPS
+
+The wrapper computes precisely the active private list {j:c_j>0}, in increasing
+original order, before calling the existing generic evaluator. The explicit
+coverage rank is restricted to that same list. Each oracle call checks the
+local capacities and selected/full/empty rank values against the evaluator's
+callback. This is a guarded binding of a known rank representation, not a
+claim that finitely many values certify an arbitrary black-box rank.
+
+A positive-capacity public loop has no incident positive-weight feature.
+It belongs to every maximal minimizing set and receives private price zero.
+The generic evaluator already treats loop endpoints. P=0, all c=0, or rank
+zero on the active face return the accepted zero payments without flow calls.
+The standalone oracle additionally supports c_j=0 and a=0 and returns the
+maximal mask even in those tied cases. Restricting a current evaluation face
+never changes actual strategic identities or resource eligibility.
+
+COMPLEXITY AND WHAT WAS ACTUALLY RUN
+
+Let m be active jobs, f nonempty positive-weight active features, I their
+incidences, V=m+f+2, and E<=m+f+I. One Edmonds--Karp call uses O(V E^2)
+exact arithmetic operations and O(V+E) network storage. The accepted principal
+chain uses at most 2m-1 such calls, plus rank evaluation and chain bookkeeping.
+This is a polynomial arithmetic bound for this explicit public representation;
+it is not a practical high-performance guarantee or an arbitrary-SFM backend.
+
+All network capacities are rational expressions in the explicit rational
+input and the current exact breakpoint. Flow updates only add, subtract and
+compare rational capacities; finite capacity denominators admit a common
+multiple of polynomial bit length in their combined encoding. Exact arithmetic
+cost must still be counted for a bit-complexity assessment. The implementation
+uses Fraction rather than asserting unit-cost operations on arbitrary reals.
+
+The recorded run passed:
+  5,184 exhaustive two-job representation/capacity/coefficient oracle cases;
+  324 random small exact oracle comparisons, with zero through eight jobs;
+  186 generic price evaluations compared field-for-field to exhaustive SFM;
+  384 coalition-cover checks with fixed mixed-owner bundles;
+  120 exact single-coordinate restoration holding-box checks;
+  5,336 permuted restriction-mask comparisons and 10 invalid-input checks.
+
+Three larger explicit coverage instances used the actual flow backend only:
+  jobs/features   principal flow calls   positive-interval sets
+       24/16               13                      8
+       72/48               23                     13
+      160/112              55                     29
+The largest made 12,136 actual augmentations across its price-oracle calls;
+its largest network had 272 vertices and 750 positive original edges. No
+rank-subset table or exponential reference was constructed for these runs.
+An additional actual flow at z=1 independently checked each production value.
+Runtime fields in the JSON describe these local executions only. These sizes
+are tests of a growing input class, not an exhaustive scalability result.
+
+INTERPRETATION AND PRIORITY
+
+A defensible service interpretation is a publicly fixed mixture of eligible
+service slots: feature l supplies P*w_l units, and job j may use the public
+features incident to it, subject to its total demand/capacity c_j. A bipartite
+flow implements this interpretation. The same common P scales EVERY feature
+capacity in fixed proportions. This does not describe independently varying
+heterogeneous GPUs, memory, bandwidth, energy, or multiple common resources.
+No serving latency, measured power or economic pooling gains are inferred.
+
+The min-cut representation, extremal-cut recovery and Edmonds--Karp algorithm
+are established. The free original Nagano--Kawahara UAI2013 paper, Section3.1
+and Section5.2, documents maximal cut recovery and principal decomposition:
+https://auai.org/uai2013/prints/papers/151.pdf
+See energy/POLYMATROID_ORACLE_SOURCE_GATE.txt for exact source attribution.
+Our work here is an executable specialization and its verification; novelty
+of the previously accepted incentive application remains separately assessed.
+
+RELATION TO THE EARLIER RESOURCE-GRAPH THEOREM
+The weighted-coverage service model also has a direct bipartite resource-graph
+representation: feature f has capacity P*w_f, job j has private capacity c_j,
+and each eligible job-feature edge consumes one unit of each. Owner i supplies
+P_i*w_f to every feature, preserving the same actual owner under this fixed
+linear map. Thus the earlier graph3/2 theorem already supplies a TCWM bound
+for this subclass. The contribution here is exact evaluation of the specified
+polymatroid rule, not a newly covered technology class. General public rank
+functions need not be weighted coverage functions.

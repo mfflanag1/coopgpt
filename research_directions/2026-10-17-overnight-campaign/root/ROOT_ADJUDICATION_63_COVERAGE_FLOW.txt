@@ -1,0 +1,58 @@
+ROOT ADJUDICATION63 — EXACT FLOW IMPLEMENTATION OF THE COVERAGE-RANK RULE
+17 October2026. Accepted implementation specialization, not a new mechanism.
+
+RESULT
+For explicit rational weighted coverage ranks r(S)=sum_f w_f 1{S meets E_f},
+the accepted public-polymatroid3/2 price rule now has an actual dependency-free
+exact rational max-flow backend. It avoids subset enumeration and numerical
+quadrature. Fixed original resource indices, zero-capacity rows, loops and
+exact ties are preserved. The theorem remains coalition coverage plus TCWM,
+not full coalition outside production; funding is relative to total output.
+
+CORRECTNESS AND COMPLEXITY
+To minimize a r(S)-c(S), source-job arcs carry c_j, job-feature arcs carry
+M=sum c+1, and feature-sink arcs carry a w_f. Every minimum cut costs at most
+sum c, hence crosses no M arc. Its job set has cut cost c(E\S)+a r(S).
+After exact max flow, complementing all vertices that can reach the sink in
+the positive residual graph gives the unique maximal source side and thus
+maximal minimizing job set. Source reachability alone would pick the wrong
+extremal cut in tie cases. Fraction Edmonds--Karp and at most2m-1principal-chain
+calls give polynomial arithmetic complexity for the explicit graph; rational
+bit costs and rank bookkeeping remain counted separately. No arbitrary public
+polymatroid backend or high-performance guarantee is inferred.
+
+INDEPENDENT AUDITS
+Root checked the layered-network cut identity, exact big-M, residual closure,
+active-index mapping and representative exact price outputs. The unrestricted
+lane independently rederived these arguments and ran adversarial rerouting,
+large-weight, tie/scale and permuted-index tests. Its137-job disjoint-group
+case has an independent additive price formula: all prices match with63actual
+flow calls and7,934augmentations. Fable read proof/code and found no defect;
+it could not execute the code. Optional style/loader changes were unnecessary.
+Its provenance uncertainty about a random seed was resolved by executing the
+current script in an isolated copy with a pre-execution source hash, rather
+than interpreting a seed as a timestamp.
+
+The author suite passes5,184tiny exhaustive oracle cases,324random oracles,
+186full-price comparisons,384mixed-owner coalition covers,120restoration
+holding boxes,5,336restriction mappings and10input rejections. Actual-flow
+runs with24,72,160jobs use no exponential reference; the largest makes55price
+oracle calls and12,136augmentations. Local runtimes are diagnostics only.
+The curated isolated replay is checks/COVERAGE_FLOW_REPLAY_20261017.json.
+
+INTERPRETATION AND PRIORITY
+Feature f represents public eligible service capacity P*w_f. The SAME common
+P scales every feature in fixed proportions. This is a fixed fleet-mix model,
+not independently varying hardware, power, memory or bandwidth; it supplies
+no latency or measured energy result. The classical min-cut and principal-
+partition ingredients are credited in energy/POLYMATROID_ORACLE_SOURCE_GATE.txt.
+Novelty of the surrounding incentive theorem remains unconfirmed.
+
+FILES
+composition/COVERAGE_POLYMATROID_FLOW_BACKEND.py
+composition/COVERAGE_POLYMATROID_FLOW_CHECK.py and _CHECKS.json
+composition/COVERAGE_POLYMATROID_FLOW_NOTE.txt
+composition/POLYMATROID_ORACLE_PRICES.py
+unrestricted/COVERAGE_FLOW_INDEPENDENT_AUDIT.txt
+unrestricted/coverage_flow_final_replay/
+reviews/COVERAGE_FLOW_FABLE.md

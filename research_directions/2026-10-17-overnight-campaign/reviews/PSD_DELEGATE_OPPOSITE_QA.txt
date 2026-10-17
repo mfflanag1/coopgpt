@@ -1,0 +1,63 @@
+Verdict: **insufficient evidence**
+
+The candidate may contain a valid \(\Omega(\sqrt m)\) obstruction, but the supplied evidence begins midway through Theorem A and omits the definitions and proofs on which the main contribution depends. It therefore cannot be accepted as a fully checked obstruction.
+
+Concrete findings:
+
+1. **The central construction is unauditable.**  
+   \(W_\varepsilon\), Theorem A, Lemma 1, Lemma 2, \(K_B\), “eligible \(j\),” \(w_j\), \(d\), and the choice of \(G\) are absent. Consequently, one cannot verify:
+
+   - that every \(U_i\succeq0\);
+   - that \(\lambda_{\min}(\sum_iU_i)=G\);
+   - the asserted kernel dimensions;
+   - that the Haar/stabilizer argument works for every deterministic permitted selector;
+   - that \(G\) satisfies the numerical hypothesis used to obtain \(0.1128\);
+   - that the construction preserves all fixed-owner and all-profile conditions.
+
+   These are exactly the nonstandard parts of the proposed obstruction.
+
+2. **The junta construction is correct.**  
+   For
+   \[
+   U_i=e_ie_i^\top\quad(i<J),\qquad
+   U_J=I-\sum_{i<J}e_ie_i^\top,
+   \]
+   the matrices are PSD, sum to \(I\), and a retained sum has positive minimum eigenvalue exactly when all \(J\) owners are retained. Thus its open excess is indeed
+   \[
+   J\int(1-q)^J\,d\mu(q).
+   \]
+
+3. **The three-case minimax calculation in Theorem B is valid, conditional on Theorem A.**
+
+   - For \(\bar q<1/(2m)\), Markov gives mass at least \(1/2\) on \(q\le2\bar q\), yielding at least \(m/8\).
+   - In the middle regime, \(J=\lceil1/(2\bar q)\rceil\) gives the stated conservative lower bound \(0.0169/\bar q\).
+   - Combining this with \(0.887(m\bar q-1)\) gives approximately
+     \[
+     0.1224\sqrt m-0.887.
+     \]
+   - The uniform-\([0,a]\) junta integral and the resulting \(0.44\sqrt m-0.9\) bound are also sound.
+
+   Hence Result B reduces almost entirely to the missing proof of Theorem A.
+
+4. **The clipping warning is handled correctly.**  
+   The candidate does not reverse
+   \[
+   v^\top\min(U_i,GI)v\le \min\{v^\top U_iv,G\}.
+   \]
+   Its claimed obstruction works directly with capped Rayleigh payments, so there is no visible clipping error in the supplied portion.
+
+5. **“For every mask law” needs qualification.**  
+   The candidate proves a lower bound on the **supremum over profiles** for each fixed mask law and selector. It does not say every profile has \(\Theta(\sqrt m)\) payment. Also, the matching \(O(\sqrt m)\) bound comes from a particular wrapper choice, not separately from every mask law.
+
+6. **The owner-count condition is not stated precisely.**  
+   Both displayed obstruction families appear to use \(n=m\) owners. Since the problem begins with fixed \(n\) owners and matrix dimension \(m\), the theorem must explicitly quantify over \(n\), or state that the obstruction is for the regime \(n=m\). It does not establish an \(m\)-dependent lower bound for arbitrary fixed \(n\).
+
+7. **The proposed successor payment is only a next lemma, not a completed result.**  
+   Its pointwise comparison is plausible:
+   \[
+   \lambda_{\min}(U_B+U_i)-\lambda_{\min}(U_B)
+   \le \min\{v_B^\top U_iv_B,G\},
+   \]
+   using the selected minimum eigenvector for the Rayleigh bound and \(U_B+U_i\preceq U\) for the cap. But coalition covering is expressly unaudited, so this cannot count toward acceptance.
+
+Required revision: supply the complete \(W_\varepsilon\) definition and spectral calculation; state the \(n\)-versus-\(m\) quantifiers; prove the selector-neutralizing Haar lemma for the exact allowed selector class, including measurability and one-dimensional-kernel cases; and show explicitly how the chosen \(G\) implies the \(0.1128\) probability bound. With those pieces, the locally verified junta/minimax argument could support acceptance as a wrapper-specific \(\Omega(\sqrt m)\) obstruction.

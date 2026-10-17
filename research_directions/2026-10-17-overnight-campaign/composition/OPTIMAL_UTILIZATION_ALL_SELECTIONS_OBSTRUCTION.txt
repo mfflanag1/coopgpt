@@ -1,0 +1,75 @@
+NO TCWM SELECTION OF OPTIMAL RESOURCE-UTILIZATION PAYMENTS
+17 October 2026. Exact three-profile architecture impossibility.
+
+MODEL
+Five resource rows P,a,b,c,d, two unit-profit unit-consumption activities
+ e_1=(P,a,b), e_2=(P,c,d).
+Production F=min(P,min(a,b)+min(c,d)). Fixed actual owners:
+ A owns a,c; B owns b; C owns P,d.
+All five true capacities are one. Binding underreports may set either of A's
+resources to zero. There are exactly these three actual owners throughout.
+
+ARCHITECTURE
+At every report, choose ANY maximum-production fractional plan x. Pay each
+actual owner its total resource utilization in that plan. Equivalently choose
+resource price q_v=(Ax)_v/c_v when c_v>0, and pay b_i.q. The rule may depend on
+all ownership data and use any deterministic or randomized tie-breaking;
+randomized expected payments reduce to the mean fractional plan. The result
+also excludes multiplying every utilization payment by the same fixed positive
+constant. It does not exclude arbitrary payments or report-dependent changes
+of architecture.
+
+THREE-PROFILE PROOF
+At the all-one true profile, maximum production is one. Every optimum has
+activity quantities (x,1-x), 0<=x<=1. The owner-payment vector is
+ (y_A,y_B,y_C)=(1,x,2-x).                                      (1)
+A receives x+(1-x); B receives x; C receives the common resource1 and second-
+activity use1-x.
+
+First underreport: A hides c and continues reporting a=1. The unique maximum
+plan is (1,0), and payments are (1,1,1). Coalition {A,B} can make this report
+with B unchanged. TCWM requires its truthful total to be at least its lower-
+report total:
+ 1+x >= 1+1, hence x=1.                                      (2)
+
+Second underreport: A hides a and continues reporting c=1. The unique maximum
+plan is (0,1), and payments are (1,0,2). Coalition {A,C} can make this report
+with C unchanged. TCWM requires
+ 1+(2-x) >= 1+2, hence x=0.                                  (3)
+Equations(2),(3) contradict one another. Arbitrary ownership-aware selection,
+continuity, computational power and randomization cannot repair this.
+No cross-profile owner change or outsider report change occurs in either
+comparison. The same true profile must satisfy both coalitions' inequalities.
+Full coalition outside-production incentives imply TCWM, so they fail as well.
+
+WHY THIS WAS A CREDIBLE CANDIDATE
+For every maximum unit-profit rank-r plan, every activity contains a saturated
+resource: otherwise that activity could be increased. Consequently utilization
+prices form a dual cover. Grand payments are sum_e |e|x_e<=rF, and fixed-owner
+coalition coverage follows. This observation is correct. The impossibility
+isolates the missing all-profile coalition incentive property.
+
+WHAT IS AND IS NOT CLOSED
+This is stronger than the quadratic tie-break counterexample, which used only
+individual incentives and gave an exact1/14 gain. The present theorem excludes
+ALL optimal-utilization selectors, but its proof specifically uses TCWM; it
+does not prove that every selector violates individual-only truthfulness.
+It is not a lower bound against arbitrary rank-three subsidy mechanisms.
+The general dimension theorem supplies mechanisms outside this architecture.
+
+RELATED OWNER-SHAPLEY CHECK
+At the first lower report, the actual-owner game is unanimity on {A,B,C}, so
+Shapley payments are(1/3,1/3,1/3). At the true profile it is unanimity on {A,C},
+so Shapley payments are(1/2,0,1/2). Coalition {A,B} decreases from2/3 to1/2.
+Thus constant-scaled actual-owner Shapley also fails TCWM already in this unit
+rank-three example. This does not say Shapley lacks individual monotonicity,
+and no universal Shapley coverage bound is claimed here.
+
+CERTIFICATE AND STATUS
+verify_optimal_utilization_all.py checks both unique lower plans and the two
+incompatible coefficient inequalities using exact Fractions. Discovery came
+from a finite LP scout; the proof above is analytic and independent of solver
+numerics. Root audit requested. Historical novelty unconfirmed. Literature
+on multi-hospital kidney exchange is relevant context but commonly includes
+indivisible matchings and additional utility from internally matched hidden
+vertices; its impossibility results are not silently imported into this model.

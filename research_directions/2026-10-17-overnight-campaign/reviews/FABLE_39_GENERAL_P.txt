@@ -1,0 +1,25 @@
+**Provisional verdict: no substantive findings in reviewed scope.** I re-derived every step of the general-p argument by hand; the identities and inequalities hold for all real p≥2, including zero coordinates and 2<p<3. The only item worth flagging is a low-severity precision issue in the optimality example (§4, lines 142–146).
+
+## Findings
+
+**1. (Low) Optimality example: "pure-reserve restoration" must start at the boundary profile, not withdraw from it.** `CONE_FINITE_P_DIMENSION_FREE_THEOREM.txt:142-146`. The coalition bundle `((1-s)/2, -(1-s)e/2)` lies on ∂K_p, so a pure-reserve *withdrawal* D=(ε,0) from it is infeasible (retained bundle leaves K_p). The argument works only if that boundary profile is the *retained* profile b−D and b=b−D+(ε,0). Then λ[Y(b)−Y(b−D)] = λ(a_p ε + o(ε)) < ε for λ<λ_p, which does establish minimality. Suggest rewording to make the direction explicit. The script (line 78–80) verifies only the algebraic value `1+(p-1)s^(p-1)h=a_p`, not this feasibility detail.
+
+## Verified steps (hand-checked, no tool execution)
+
+- **Dual norm / coverage (§1):** |J_p(X)_j|^q=|X_j|^p ⇒ ||J_p(X)||_q=R^(p-1), so ||v||_q=s^(p-1)≤1; Hölder gives y_A≥F(b_A). Sum T(1−s^p)≤pT(1−s) via ∫_s^1 p u^(p-1)du≤p(1−s). y_i∈[0,2t_i] ⇒ continuity at T=0.
+- **Bregman bound (4):** tangent of u^(p/2) (convex for p≥2) at u=1 with u=z²/X², scaled by |X|^p/p, rearranges exactly to (4). X=0, p>2: D_f=|z|^p/p≥0. p=2: equality.
+- **Identity (6):** expanded fully. Key cancellations: L+mrθ+mr²=1+m=p (kills f(X) terms to −|X|^p) and θ(u−X)+r(v−X)=0. With u−X=rh, v−X=−θh and |X|^(p-2)X=J_p(X), the residual equals exactly the LHS of (5). Correct.
+- **Square completion (7):** Lk²+mθr²h²−2mθrhk = L(k−mθrh/L)² + mθr²h²(L−mθ)/L, and L−mθ=1. Nonnegative since L≥1.
+- **Summation (8):** coefficients mθr, mr², L≥0, each coordinate sum ≤1, total (mr+1+mθ)/p=1. Zero-denominator cases (θ=0⇒x=0) reduce to Young's inequality. Valid.
+- **Fréchet differentiability, 2<p<3:** J_p(x)=|x|^(p-1)sgn x has derivative (p−1)|x|^(p-2), which is continuous and vanishes at 0 for p>2; hence J_p∈C¹(ℝ) and Y∈C¹ on {T>0}. Only first derivatives of J_p are used; non-Lipschitz Hessian is irrelevant. Derivative formula A,V matches; rescaling of (8) to general T is correct (homogeneity degrees p−1 and p).
+- **Integration:** straight segment keeps each retained bundle in K_p by convexity; aggregate direction D_A∈K_p; T linear nondecreasing so T=0 only at the start, where Y=0≤Y(b).
+- **(9):** ||e*||_q=1, h≥−θ and s−h≤1−θ give h≥(s−1)/2; max of s^(p-1)(1−s) at s=(p−1)/p yields a_p exactly. λ_p↑(1−1/(2e))^(-1). Scaled-derivative decomposition (α−1)(dt−||dx||_p)+(α−β)||dx||_p≥0 is correct.
+
+## Script (`CONE_CHECK_FINITE_P.py`)
+Symbolic identities use polynomial powers, valid only for even p — correctly restricted to [2,4,6,8,10]. Exact-Fraction signed tests cover odd p and zero coordinates. `cover`/`cone` predicates match F and K_p. Consistent with the text; no defects seen.
+
+## Scope limitations
+Could not execute the script or inspect the p=4 SOS note or Lorentz notes; non-integer p is covered only by the analytic argument (which I verified), not by exact tests. No novelty assessment performed.
+
+## Verdict
+**No findings of error in the mathematical claim**; one low-severity wording issue in the optimality example (Finding 1).

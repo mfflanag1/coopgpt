@@ -1,0 +1,84 @@
+A SCALABLE STRONG-INCENTIVE LOWER FOR r-WAY COMPLEMENTARITY
+17 October 2026. Candidate theorem; independent audit and priority check pending.
+
+THEOREM
+Fix integers r>=2 and s>=2. Let n=r+s-1 actual owners all have all r resources
+in their fixed eligibility sets. Production is F(c)=min_j c_j. Every rule with
+nonnegative payments, coalition coverage, and transferable coalition-withholding
+monotonicity (TCWM) has worst-case total-funding factor at least
+ B(r,s) = 1 + (s+r-3)/(s+r-2) *
+       [ (r-2)/(r-1) + 1/r - (r-2)/(r(r-1)s) ].                 (1)
+TCWM requires every coalition's total payment to be nondecreasing whenever
+one member increases any resource coordinate, holding all others fixed.
+The whole proof uses binary reports and the SAME n actual owners.
+
+Consequently, for fixed r and unbounded finite owner counts,
+ sup_n optimal-TCWM-factor >= 2-1/[r(r-1)].                     (2)
+For THREE resources this tends11/6. Combined with the existing integral rule's
+mixed-owner TCWM extension, the rank-three MINIMUM technology has factor in
+[11/6,2] when owner counts are unrestricted. This is an all-mechanism lower
+within the stronger TCWM class. It is not a lower for merely individual IC.
+
+PROOF
+If the rule's worst-case factor is infinite there is nothing to prove.
+Otherwise average the rule over all permutations of actual owner labels and
+resource labels. The fixed domain, production, all coalitions, report comparisons,
+and budget bound are preserved. This is a finite convex combination of rules,
+not a strategic cloning or partition-consistency assumption. We may therefore
+use the invariant averaged rule in the following profiles.
+
+P0: one pure unit owner for each of the r resources, and s-1 zero-report owners.
+All pure owners receive the same x; zero owners receive the same w>=0.
+The coalition consisting of the r pure owners has value1, so r*x>=1.
+
+P1: increase every zero-report owner to the pure unit resource-1 report.
+There are now s identical resource-1 owners, each receiving a, and one pure
+owner of each other resource, each receiving b. Both types of symmetry follow
+from the averaging above. The coalition consisting of the original resource-1
+owner and all previously zero owners has the SAME actual members throughout.
+TCWM, applied successively to the s-1 increases, gives
+   s*a >= x+(s-1)w >=1/r.                                    (3)
+A coalition consisting of one resource-1 owner and the other r-1 pure owners
+has production1, so
+   a+(r-1)b >=1.                                             (4)
+
+P2: leave the unique resource-2 owner unchanged. Increase EVERY other owner's
+report to the vector with zero in resource2 and one in every other resource.
+Every such change is coordinatewise nondecreasing: the changed owners initially
+hold a pure unit resource different from resource2. Let C denote all these
+m=s+r-2 actual owners, excluding only the unchanged resource-2 owner.
+At P2 all owners in C have identical report vectors; write p for their common
+payment and q for the unchanged owner's payment. Production at P2 is1.
+One member of C together with the resource-2 owner has worth1. Hence
+   p+q>=1,  m*p+q<=kappa,
+which imply
+   m*p <= m/(m-1)*(kappa-1).                                 (5)
+TCWM for C throughout the P1-to-P2 increases gives
+   s*a+(r-2)b <= m*p.                                        (6)
+By(4),
+   s*a+(r-2)b
+    >= (r-2)/(r-1) + [s-(r-2)/(r-1)]a
+    >= (r-2)/(r-1) + 1/r - (r-2)/(r(r-1)s),                  (7)
+where the coefficient on a is positive and(3) was used. Combine(5)--(7)
+and rearrange to obtain(1). Letting s tend to infinity gives(2), since
+ (r-2)/(r-1)+1/r=1-1/[r(r-1)]. QED.
+
+SPECIAL CASES AND EXACT CHECKS
+r=2 gives B=3/2-1/(2s), approaching the graph factor3/2.
+r=3 gives B=1+(5s-1)/(6(s+1))=11/6-1/(s+1).
+Thus r=3, s=3 (five owners) yields19/12>3/2 already. The separate exact
+five-owner LP certificate improves this finite instance to103/64; it is not
+needed for the asymptotic family or separation.
+r=3, s=10 (12owners) gives115/66; s=100 gives1105/606.
+No numerical optimization occurs in the proof. verify_tcwm_arity_family.py
+checks the symbolic rational rearrangements at hundreds of integer parameters.
+
+SCOPE
+This establishes a clean obstruction to extending graph factor3/2 while
+retaining TCWM: even a SINGLE triple-input activity requires at least11/6
+as the fixed owner set grows. The rule is unrestricted in all other respects:
+nonlinear owner-aware rules are covered. The same lower applies to any wider
+class containing these technologies. It does not improve the original weaker-
+incentive logarithmic-versus-square-root owner/dimension gap. The class of
+arbitrary rank-three packing hypergraphs may require more than this single-
+activity subclass; its general baseline remains3 unless improved elsewhere.

@@ -1,0 +1,129 @@
+INDEPENDENT AUDIT: WEIGHTED-COVERAGE POLYMATROID FLOW BACKEND
+17 October 2026. Read-only implementation/proof review of the composition lane.
+
+VERDICT
+No material correctness, tie-handling, indexing or complexity defect found in
+composition/COVERAGE_POLYMATROID_FLOW_BACKEND.py,
+composition/COVERAGE_POLYMATROID_FLOW_CHECK.py, or the accompanying _NOTE.txt.
+The backend supplies the exact maximal-minimizer oracle required by the already
+audited principal-chain evaluator. It does not establish a new mechanism,
+full-OUT protection, gain-only budget, empirical pooling result or new max-flow
+algorithm. Source priority remains the separate source lane's responsibility.
+
+1. CUT IDENTITY AND FINITE BIG-M
+Write r(S)=sum_f w_f 1{S intersects E_f}. The network has source-job capacity
+c_j, job-feature capacity M=1+sum_j c_j, and feature-sink capacity a*w_f.
+The cut with only the source on its source side costs sum c. Since all capacities
+are nonnegative, every cut crossing even one incidence edge costs at least
+M>sum c and therefore cannot be minimum. A source-side job set S must include
+all incident features. Including additional features can only increase the cut
+cost, or leave it unchanged when a*w_f=0. Thus its least cut cost is exactly
+c(J\S)+a*r(S), proving mincut=sum c+min_S(a*r(S)-c(S)).
+
+The chosen M does not need to exceed the feature-sink capacity sum. It remains
+valid when weights/a are enormous and capacities are tiny rationals, or when
+sum c=0. Empty and zero-weight features can be removed without altering r or
+the minimizing job sets. Repeated feature masks are represented by distinct
+feature vertices and correctly add their weights.
+
+2. MAXIMAL MINIMIZER, NOT MERELY SOME MINIMUM CUT
+At termination, Edmonds--Karp has no positive residual source-sink path.
+Let R contain precisely the vertices that have a positive residual path to the
+sink. Then U=V\R contains the source, excludes the sink, and has no positive
+residual edge to its complement: such an edge would place its tail in R.
+Hence U is a minimum-cut source side. Every other minimum-cut source side W
+is residual-closed and cannot intersect R, since following a path from that
+intersection to the sink would violate closure. Therefore W subset U.
+
+Every minimizing job set has a minimum-cut extension, by the cut identity.
+Consequently the jobs in U are exactly the inclusion-maximal minimizing set.
+The implementation computes R by traversing the reverse of each positive
+residual edge. Both directions are always present as dictionary keys, and
+zero-capacity keys are retained, so residual[u][v] is valid in that traversal.
+Source reachability alone would select the opposite extremal cut and would be
+wrong for the required tie convention; this implementation does not make that
+mistake. Its exact cut/flow/objective equality checks are consistent with the
+graph-theoretic argument, not substitutes for it.
+
+3. MAX-FLOW IMPLEMENTATION AND BOUNDARIES
+The BFS is a standard shortest augmenting-path search. Every augmentation uses
+an exact positive Fraction bottleneck, updates forward/reverse residuals, and
+increases the recorded flow by that bottleneck. The network has no original
+antiparallel layer edges that would complicate its cut accounting. Zero edges
+may be omitted safely. Termination is justified by the Edmonds--Karp argument,
+not by a numerical tolerance or a capacity-dependent unit augmentation bound.
+
+For a=0, all jobs belong to the maximal minimizer even with zero capacities;
+the sink is isolated and the reverse-reachability procedure returns them.
+For c=0 and a>0, precisely the public loops can occur in a zero-rank minimizing
+set. Positive-capacity loops are included and have zero private payment.
+The empty ground set also works. The wrapper's P=0/private-zero/rank-zero
+cases use the accepted evaluator's zero-payment convention and no flow calls.
+
+4. ACTIVE AND ORIGINAL INDICES
+The wrapper computes active original indices in increasing order, exactly as
+the generic evaluator does. The explicit rank restriction maps each original
+feature to those local indices, retaining zero/duplicate features harmlessly.
+Its callback binds that same local rank and validates capacities plus empty,
+full and returned rank values against the generic callback. These checks guard
+the known representation interface; the note correctly does not claim that
+three rank queries certify an arbitrary black-box rank. Returned prices and
+chain masks are mapped back to original resource indices. No strategic owners
+are split, merged or created by this bookkeeping.
+
+5. RATIONAL AND OPERATION COMPLEXITY
+For the explicit coverage representation the network has m+f+2 vertices and
+at most m+f+I positive original edges. The stated O(V E^2) Edmonds--Karp
+arithmetic bound and O(V+E) graph storage apply in the usual nontrivial case.
+The principal chain invokes at most 2m-1 such flows. Rank evaluation and
+incidence construction also have polynomial work in the explicit mask input.
+
+At each call, all capacities are rational expressions in original data and
+one exact breakpoint. A common denominator can be chosen as the product of
+the finitely many capacity denominators, whose bit length is at most their
+combined bit length. Each residual remains between zero and its pair's total
+capacity; flow stays at most sum c. Thus exact addition/subtraction/comparison
+does not conceal exponentially growing integer encoding. Together with the
+previously audited polynomial breakpoint encoding, this supports polynomial
+rational implementation, while the note appropriately avoids practical runtime
+or arbitrary-real unit-cost promises. Fraction arithmetic uses no floating
+epsilon for zero capacities or ties.
+
+6. INDEPENDENT ADVERSARIAL REPLAY
+I inspected the author's checker and recorded JSON, including its actual
+24/72/160-job flow runs. Its larger cases invoke the real flow backend, not a
+dummy or exhaustive SFM callback. The extra z=1 call independently checks the
+chain's value through the same backend; it is not an independent flow algorithm.
+Small exhaustive comparisons provide a separate oracle reference. I did not
+blindly rerun the author's unchanged suite.
+
+Instead I copied the evaluated implementation and generic dependency into
+unrestricted/coverage_flow_final_replay and wrote an independent exact checker.
+Six deliberately chosen small fixtures compare against direct weighted-feature
+objectives: reverse-edge rerouting; tied components with duplicates/empty/zero
+features; huge feature weights versus tiny c; coefficient zero; capacity zero;
+and the empty ground set. All PASS. In the two-job rerouting fixture, the first
+flow uses feature0 for job0; the second must send job1 through feature0 and its
+reverse edge to reroute job0 through feature1. The maximal tied job mask is3.
+
+A 137-job case uses32 disjoint, noncontiguous eligibility groups,64 positive
+duplicate features, zero-capacity jobs and9 loop jobs. Here the production
+and prices have independent additive min formulas, so no 2^137 enumeration
+or second use of the generic price algorithm is needed for the reference.
+All prices match exactly. The run uses63 actual flow calls,33 principal sets,
+7,934 augmentations, and networks up to195 vertices/435 original edges.
+Six additional standalone scale/tie checks and64 deliberately permuted rank
+restrictions pass. These are implementation evidence, not universal incentive
+proofs or a general scalability benchmark.
+
+REPRODUCIBLE INDEPENDENT FILES
+ unrestricted/coverage_flow_final_replay/INDEPENDENT_COVERAGE_FLOW_CHECK.py
+ unrestricted/coverage_flow_final_replay/INDEPENDENT_COVERAGE_FLOW_CHECKS.json
+ unrestricted/coverage_flow_final_replay/COVERAGE_POLYMATROID_FLOW_BACKEND.py
+ unrestricted/coverage_flow_final_replay/POLYMATROID_ORACLE_PRICES.py
+
+NO REQUIRED CORRECTIONS
+The note accurately distinguishes the fixed-proportion common-resource model
+from independently varying hardware/energy constraints, and TCWM from full
+outside production. Mathematical all-profile guarantees remain dependencies
+of the identical accepted price rule. No implementation edits were made.

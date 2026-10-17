@@ -1,0 +1,73 @@
+POSITIVE RESOLVENT MIXTURES CANNOT IMPROVE THE DIMENSION COEFFICIENT
+Frozen 2026-10-17. Architecture theorem; no unrestricted mechanism lower.
+
+MODEL AND STATEMENT
+There are fixed actual owners with PSD reports X_i; C=sum_i X_i is positive
+definite and T=lambda_min(C). A common spectral price pays
+ y_i=Tr(P(C)X_i),       P(C)=f_C(C)/Tr(f_C(C)).
+It is enough to define a positive number f_j on each eigenvalue lambda_j.
+Assume the products h_j=lambda_j*f_j are nondecreasing with lambda_j.
+Then the total output funding obeys
+
+ sum_i y_i = (sum_j lambda_j f_j)/(sum_j f_j)
+           >= m/(sum_j 1/lambda_j).                         (1)
+
+Consequently any such architecture, on all positive-definite PSD_m
+profiles, has worst-case total-output funding factor at least m. This
+holds even before imposing any incentive condition. It is not an
+impossibility theorem for arbitrary owner-aware mechanisms.
+
+EXACT PAIRWISE PROOF
+Order eigenvalues increasingly. Expanding and pairing terms gives
+ (sum_j lambda_j f_j)(sum_j 1/lambda_j)-m sum_j f_j
+   = sum_{i<j} [(lambda_j-lambda_i)/(lambda_i lambda_j)]
+                *(lambda_j f_j-lambda_i f_i) >=0.
+All denominators in(1) are positive. On C_L=diag(1,L,...,L), the right
+side of(1) divided by T is m/[1+(m-1)/L], tending to m as L tends to
+infinity. Each C_L is an admissible aggregate: it may be owned by one
+actual owner with the other fixed owners reporting zero. Alternatively
+split it as C_L/n among n positive-definite actual owners. The formula
+for total payment is independent of this split.
+
+POSITIVE RESOLVENT MIXTURES
+In particular the assumption holds for
+ f_C(lambda)=a_C + integral_[0,infinity) 1/(lambda+s) dmu_C(s),
+where a_C>=0, mu_C is a nonnegative measure, evaluations are finite, and
+the resulting prices are not all zero. Indeed lambda and
+lambda/(lambda+s) are nondecreasing functions of lambda. The weights,
+shifts and measure may depend arbitrarily on the entire reported profile,
+on T, on m, on n, or on public labels; at a single profile the same scalar
+function must be applied to all eigenvalues. Thus arbitrary adaptive
+mixtures of positive shifts do not evade the bound.
+
+Report-dependent convex mixtures of already normalized resolvent prices
+also satisfy(1), either by linearity of the funding total or by absorbing
+each component's normalization into its positive weight. Positive scalar
+powers f(lambda)=lambda^(-p), 0<=p<=1, satisfy the same condition directly
+because lambda*f(lambda)=lambda^(1-p). No integral representation theorem
+is needed for this conclusion. Multiplying the trace-one price by a scalar
+at least1 only increases the lower bound.
+
+LIMITS AND RELATION TO PRIOR OBSTRUCTIONS
+Pure normalized inverse price, f(lambda)=1/lambda, gives equality in(1)
+at every profile and has worst funding factor m. Thus this lower bound is
+sharp for the stated spectral-order architecture as a funding claim.
+Its normalized inverse incentives are a separate issue; this note does
+not infer them from(1). The already established unnormalized inverse rule
+T*C^-1 gives a full coalition outside-production guarantee and exactly
+mT funding; see PSD_INVERSE_PRICE_FULL_OUTSIDE.txt.
+
+Negative shifts C-theta*T*I fall outside the positive-resolvent hypothesis:
+their lambda*f(lambda) is decreasing. PSD_SHIFTED_HARMONIC_STOPPING.txt
+separately bounds that family's possible leading-constant improvement by
+a commuting individual-incentive obstruction. Spectral Huber prices also
+escape this order condition but fail individual incentives on an exact
+two-owner noncommuting example. None of these statements excludes a new
+owner-aware construction or a genuinely different common-price class.
+
+CHECKER
+verify_psd_positive_resolvents.py checks the exact pairwise identity and
+nonnegativity for rational positive resolvent mixtures and the limiting
+funding arithmetic. The all-dimension theorem is the analytic identity.
+External priority review has not been performed; this elementary identity
+is used as a campaign stopping result, not claimed as a new matrix theorem.

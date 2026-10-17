@@ -1,0 +1,133 @@
+FULL COALITION OUT FOR AN UNBOUNDED NUMBER OF COMPLEMENTARY INPUTS
+2026-10-17. Internally audited construction: root and independent Fable review
+012547 found no correctness defects. The matching unrestricted lower is now
+proved in SHARP_MULTIPOOL_OUTSIDE_CANDIDATE.txt. Historical priority is open.
+
+THEOREM. Let r>=2 be arbitrary and let F(C)=min_j C_j. There is a single
+nonnegative aggregate-price mechanism for arbitrary fixed mixed-resource owners
+which covers every coalition, satisfies full coalition OUT on all real reports,
+and uses at most [1+c(r-1)]F(C), where c is the root
+
+               c[2-exp(-1/c)]=1,  c=0.5430633898250876... .
+
+Thus the leading coefficient improves from 1 to c. Compared with the accepted
+TCWM optimum (r+1)/2, the additional full-OUT cost is (c-1/2)(r-1). The matching
+unrestricted full-OUT lower proves this construction sharp for every r>=2.
+
+MODEL. Owners i hold fixed bundles x_i in R_+^r and may bindingly underreport
+any coordinates. For a coalition S let d be its aggregate withheld bundle.
+Full OUT means
+
+      sum_(i in S) y_i(x) >= sum_(i in S) y_i(x-d_S)+min_j d_j.
+
+The retained and withheld bundles use disjoint resources. This is stronger
+than payment-only coalition underreport monotonicity. No private costs, false
+identities, or overreports are introduced.
+
+1. THE RULE
+
+Put t0=1-exp(-1/c), so c(1+t0)=1, and define
+
+ q(t)=1-c-c(1-t)log(1-t)/t,       0<t<=t0;
+ q(t)=c/t,                       t0<=t<=1;
+ q(0)=1.
+
+At positive aggregate C, choose a coordinate s attaining the smallest amount
+T, let S be the second-smallest amount (counting multiplicity), and t=T/S.
+Set
+
+      p_s(C)=q(t),
+      p_j(C)=c T/C_j for j!=s,
+      y_i(x)=sum_j p_j(C)x_ij.
+
+If the minimum is attained at least twice, t=1 and q(1)=c. Every minimum
+coordinate then has price c, independent of the choice of s. Ties for second
+smallest also create no ambiguity. At T=0 set all payments to zero.
+
+The previously proved one-variable identities are
+
+ q'<0, q+tq'>=0, q+ct>=1,
+ q+ct+t(1-t)q'>=1,
+ c<=q<=1.
+
+For t<=t0, q+tq'=1+c log(1-t)>=0 and the fourth expression equals 1.
+For t>=t0, q+tq'=0 and the fourth expression is c(1+t)>=1.
+The function q and its first derivative agree at t0. These identities verify
+all transcendental parts of the construction analytically.
+
+2. BUDGET AND COVERAGE
+
+Every non-minimum coordinate contributes exactly cT to total payment, so
+
+      sum_i y_i = T[q(t)+c(r-1)] <= [1+c(r-1)]F(C).
+
+The bound is a supremum approached when the unique minimum stays fixed and
+all other coordinates grow. For every coalition with aggregate a,
+
+      p(C).a >= min_j a_j * sum_j p_j(C).
+
+The sum of prices is at least q(t)+ct>=1, using any second-smallest coordinate.
+Hence coalition coverage holds. At F(C)=0 every coalition also has zero value.
+
+3. DERIVATIVE TEST FOR FULL OUT
+
+On a region with unique shortest s and unique second-shortest l, write
+t_j=T/C_j for j!=s and alpha_j=a_j/C_j for a coalition's holdings a<=C.
+Only t_l=t enters q. As the coalition adds a unit of coordinate k to itself,
+let g_k denote the derivative of its total mechanism payment. Direct
+differentiation gives
+
+ g_j=c t_j(1-alpha_j)                    for j not in {s,l};
+ g_l=c t(1-alpha_l)-alpha_s t^2 q';
+ g_s=q+c sum_(j!=s) alpha_j+alpha_s t q'.
+
+Since q'<=0, every g_j for j!=s is nonnegative. For g_s the minimum on the
+holding-fraction cube is q+tq'>=0. Summing,
+
+ sum_j g_j = q+c sum_(j!=s)t_j
+             +c sum_(j!=s)alpha_j(1-t_j)+alpha_s t(1-t)q'
+           >= q+ct+t(1-t)q' + c sum_(j not in {s,l})t_j
+           >=1.
+
+Consequently g.d>=min_j d_j for every nonnegative addition d: subtract
+min_j d_j from each coordinate and use g>=0, sum g>=1.
+
+For a finite coalition underreport compare the low report with the high
+report by restoring the withheld bundle along a straight line. Along this
+line the outsiders are fixed and coalition fractions stay in [0,1]. Integrate
+the displayed derivative inequality to obtain full OUT exactly.
+
+4. TIES, ZERO COORDINATES, AND UNBOUNDED DIMENSION
+
+Prices are continuous on the positive orthant. At a shortest-coordinate tie
+both branches assign c to every tied coordinate, and at a second-shortest tie
+the same ratio enters q. Along a line there are finitely many ordering changes;
+when a line remains in a tie hyperplane, either coincident formula has the
+same restricted derivative. The switch q at t0 is C1. Thus the piecewise
+integration is valid without a generic-position assumption.
+
+At a zero-production endpoint all payments vanish, and nonnegativity plus
+the budget bound makes their total converge to zero as T decreases to zero.
+If the restoration path stays on a zero-production face, both outside worth
+and mechanism payments are zero. Otherwise integrate over its positive
+portion and take the endpoint limit. This proves every boundary case.
+
+The number r and the number of fixed owners are unrestricted finite integers.
+The formulas and proof are uniform in both. Owners may hold several resource
+types; the proof uses only their actual coalition aggregates, and never splits
+owners strategically. The rule is homogeneous, anonymous, and resource-
+symmetric as a construction, but no lower-bound claim relies on those choices.
+
+5. SHARPNESS AND VERIFICATION
+
+The difference between c and1/2 is now a proved separation between full OUT and
+payment-only TCWM, not an open gap for this technology. The companion lower
+removes all architecture assumptions and proves that coupling several nearby
+bottlenecks cannot improve this universal full-OUT constant. Arbitrary graph
+technologies and the original individual-only incentive problem remain separate
+frontiers.
+
+check_multipool_outside.py runs floating diagnostics over varying dimensions,
+mixed ownership, zeros, ties, coalition deviations, and derivative corners.
+Those checks do not replace this analytic proof or certify the transcendental
+constant numerically. External specialist review and priority checking remain.

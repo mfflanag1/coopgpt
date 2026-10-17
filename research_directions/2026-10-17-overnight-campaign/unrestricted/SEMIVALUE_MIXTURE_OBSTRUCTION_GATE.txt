@@ -1,0 +1,141 @@
+FIXED POSITIVE BERNOULLI MIXTURES: EXACT SUPPORT AND QUADRATIC SIZE BARRIER
+17 October 2026. Accepted core support lemma; general fixed-weight extension is a separate note.
+
+CONTRACT
+Fix an integer s>=2 and a finite nonnegative Borel measure mu on [0,1]. For
+each finite actual-owner population define
+ m_i(p;b)=E_R[F(b_i+b_R)-F(b_R)],
+where the other actual owners independently enter R with probability p, and
+ y_i(b)=integral_[0,1] m_i(p;b) dmu(p).
+The SAME mu is used at every report profile and every owner count. Production
+and eligible ownership are public and fixed within every report comparison;
+reports are binding nonnegative divisible holdings. An unchanged member is
+allowed in an incentive coalition. The target contract is TCWM for all actual
+coalitions of at most s owners, with coverage still required for all coalitions.
+
+THEOREM
+(A) If this mixture satisfies the stated TCWM condition simultaneously on
+every finite owner population with the SAME measure mu for the two-input minimum F(P,L)=min(P,L), then mu is supported on
+[0,1/s]. The result already follows from the explicit rational profiles below.
+It also holds for the SINGLE fixed three-input technology min(x1,x2,x3), with
+all owners eligible for all three resources: represent a center bundle x by
+(x,0,x) and a leaf bundle l by (0,l,0), giving exactly the same two-input game.
+
+(B) For the three-input minimum, any such mixture that covers every coalition
+and has all-profile total funding factor kappa satisfies
+                         kappa >= s^2/3.
+Therefore fixed positive mixtures cannot improve the quadratic s-exponent of
+the accepted 3s^2 upper for arity-at-most-three production. This is a mechanism-
+architecture lower, NOT an unrestricted-mechanism lower. It does not close the
+unrestricted interval Omega(s^(1/4)) to O(s^2).
+
+The measure may be chosen for this fixed technology and for s. Necessity still
+uses the same measure across owner counts. The separate
+SEMIVALUE_MIXTURE_GENERAL_FIXED_MARGINALS.txt extends the uniform funding lower
+to owner-count-dependent fixed mixtures and all scaled positive fixed
+whole-owner marginal-contribution rules. It does not impose support on their
+finite-n measures. Report-dependent/signed weights and arbitrary mechanisms
+remain outside scope. Classical normalized semivalues are the ingredients;
+arbitrary scaled mixtures need not satisfy their unit-mass normalization.
+
+1. EXACT THRESHOLD-STAR TRANSITION
+Choose integers k>=1 and 0<=t<=k-1. There are k+s fixed actual owners:
+ k outside center owners, each holding P=1/k and no leaf resource;
+ s protected leaf owners, with no center resource.
+The focal protected owner starts with leaf t/k and restores epsilon=1/k.
+Each of the other s-1 protected owners holds leaf1 and changes nothing.
+The same coalition of all s leaf owners is protected across the transition.
+All reports are rational; all owner identities and eligibility sets are fixed.
+
+Let
+ T_(k,t)(p)=Pr[Bin(k,p)>=t+1].
+Total sampled center capacity is at most1. If any nonfocal protected leaf is
+present, output is already saturated and focal restoration changes no value.
+If none is present, restoration changes value by exactly epsilon when at
+least t+1 centers are sampled, and by zero otherwise. Thus the change in the
+focal owner's Bernoulli marginal is
+              epsilon(1-p)^(s-1) T_(k,t)(p).
+For each unchanged protected leaf j, the change in its marginal is negative
+only when the focal owner is sampled and every other protected leaf is absent.
+Adding j then saturates output before and after, while the term without j gains
+epsilon. Its exact change is
+             -epsilon p(1-p)^(s-2) T_(k,t)(p).
+Summing the same s owners gives the polynomial identity
+ Delta sum_(i in S) m_i(p)
+   = epsilon (1-p)^(s-2)(1-sp) T_(k,t)(p).                 (1)
+It includes p=0 and p=1 by direct evaluation; for s=2 the exponent-zero factor
+is1 everywhere. Integration is legitimate because finite-population semivalues
+are bounded polynomials in p and mu is finite. TCWM implies
+ integral (1-p)^(s-2)(1-sp) T_(k,t)(p) dmu(p) >= 0.        (2)
+This is obtained from actual report transitions, not coefficientwise positivity.
+
+2. THE ENDPOINT p=1 CANNOT HIDE
+The hypothesis also protects coalitions of size2. Use the same construction
+with two protected leaves and t=k-1. Then T_(k,k-1)(p)=p^k, so
+                    integral (1-2p)p^k dmu(p) >= 0.       (3)
+As k tends to infinity, the bounded integrand tends pointwise to0 on [0,1)
+and to-1 at1. Dominated convergence yields -mu({1})>=0, hence mu({1})=0.
+There is no assertion that an infinite population is strategic: each inequality
+is valid in one finite population, and the common measure permits taking the
+limit of these necessary scalar inequalities.
+
+3. EXCLUDING ALL MASS ABOVE 1/s
+Suppose mu((1/s,1))>0. Choose a in (1/s,1), not an atom of mu, such that
+mu((a,1))>0. Such an a exists: finite measures have at most countably many
+atoms, and (1/s,1) is the increasing union of intervals bounded away from1/s.
+For each k put t_k=floor(ka), always an integer in {0,...,k-1}. All profiles
+remain rational even if the chosen threshold a is irrational.
+
+For p<a, T_(k,t_k)(p) tends to0; for p>a it tends to1. For completeness,
+Bin(k,p)/k has mean p and variance p(1-p)/k. Chebyshev bounds give these limits
+once its distance to a exceeds the rounding error1/k. No statement at p=a is
+needed because mu({a})=0. Let h_s(p)=(1-p)^(s-2)(1-sp). Dominated convergence
+in(2), using |h_s T|<=s-1 and finite mu, gives
+                       integral_(a,1) h_s(p) dmu(p) >=0.
+The integrand is strictly negative at every p in (a,1), and that interval has
+positive measure. The integral is therefore strictly negative, a contradiction.
+Together with Section2 this proves support(mu) subset [0,1/s]. Atoms at0 and
+at1/s are not excluded, and are consistent with the known valid architecture.
+
+4. FUNDING CONSEQUENCE ON ONE FIXED THREE-OWNER MODEL
+Use F=min(x1,x2,x3), with three fixed actual owners each eligible for all three
+resources. At the pure profile b1=(1,0,0), b2=(0,1,0), b3=(0,0,1), each owner's
+Bernoulli marginal is p^2. Grand-coalition coverage therefore requires
+                          3 integral p^2 dmu >=1.
+Section3 implies integral p^2 dmu <= mu([0,1])/s^2, so mu([0,1])>=s^2/3.
+At a balanced profile b1=b2=b3=(1,1,1) in the SAME eligible owner model,
+every coalition's production equals its size. Each m_i(p)=1 for every p,
+so total payment is3mu([0,1]) and total production is3. Hence kappa>=mu([0,1]),
+proving(B). Zero-report owners could pad either profile without changing the
+calculation, but padding or strategic cloning is not needed for this step.
+
+5. CONSEQUENCE AND STOPPING DECISION
+The fixed positive-mixture loophole in the old single-p stopping argument is
+closed: averaging unsafe p-values cannot repair incentives uniformly over finite
+owner counts. The required test functions come from thresholded marginal gains
+inside a two-resource technology, despite its low activity arity. Necessity of
+support was not inferred merely from signs of formal semivalue coefficients.
+
+This result supports the ranking's requirement for a genuinely different
+payment structure before trying to improve the general s-exponent. The core
+proof does not restrict finite-n mixture support; the separate extension
+closes uniform-budget n-dependent fixed positive marginal-weight rules.
+Report-dependent rules remain open. Neither result proves the unrestricted
+3s^2 upper sharp: min3 itself has the accepted general TCWM factor2 independent
+of s. The exact leading constant inside the fixed-mixture architecture is not
+investigated. No new target is launched here.
+
+VERIFICATION AND PRIORITY
+SEMIVALUE_MIXTURE_CHECK.py independently enumerates finite low/high coalition
+games and Bernoulli marginals for rational transition fixtures, including p=0,1
+and p=1/s; it checks(1) against the binomial-tail expression. A further exact
+two-atom mixture has only one millionth as much high-p mass but still violates
+TCWM on a finite threshold transition. The measure-limit argument remains a
+conventional analytic proof, not a claim of exhaustive computational coverage.
+Bernoulli semivalues, dummy-player consistency, concentration and measure
+convergence are established ingredients. Historical novelty of this particular
+support characterization is unconfirmed. Independent mathematical and Fable
+reviews passed; see root/ROOT_ADJUDICATION_64_POSITIVE_MARGINAL_BARRIER.txt.
+The separate SEMIVALUE_MIXTURE_GENERAL_FIXED_MARGINALS.txt now extends the
+funding-order obstruction to n-dependent and arbitrary fixed positive marginal
+weights. This core lemma alone makes no finite-n support assertion for them.

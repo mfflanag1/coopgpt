@@ -1,0 +1,185 @@
+SHARP 4/3 FUNDING FOR SHARED SOURCE PRICES AND ENERGY MARGINAL FLOORS
+17 October 2026. Candidate conventional proof; independent audit required.
+Improves SHARED_SOURCE_PRICE_THEOREM.txt's nonsharp3/2 bound. The earlier file
+is retained as a derivation record. Historical novelty remains unconfirmed.
+
+1. THEOREM AND PRECISE DOMAIN
+Fix disjoint finite sets of actual energy owners and hardware owners. Energy
+owner j has nonnegative reported quantity e_j and PUBLIC settled unit cost c_j;
+hardware owner i has nonnegative reported quantity h_i and PUBLIC service value
+v_i. Costs and values are nonnegative and fixed independently of all reports.
+Every energy unit can serve every admitted hardware unit in this committed
+window. Coalition production is
+ F(S)=max Σ_ij (v_i-c_j) z_ij,
+ subject to Σ_i z_ij<=e_j(S), Σ_j z_ij<=h_i(S), z_ij>=0.
+Unprofitable matches may remain unused; absent owners have zero capacities.
+Actual identities and resource roles remain fixed. Deviations are arbitrary
+coordinatewise binding underreports, and utility is the owner's net-surplus
+payment after the public operating costs have been settled once by the operator.
+
+Require nonnegative coalition-covering payments, all-profile own-bundle
+monotonicity, and EVERY energy owner's public floor
+ y_j >= M_j := F(N)-F(N\{j}).
+Then the optimal universal total-funding factor is EXACTLY4/3, uniformly over
+both owner counts and all public costs/values. There is an explicit continuous
+rule; subsidy above net production is at most F/3. The sharpness statement is
+for the class, not every fixed valuation/cost vector or owner arrangement.
+Multiple fixed public cost/value tiers per actual owner are permitted, provided
+an actual owner remains wholly on one side. No mixed energy/hardware ownership,
+private-cost truthfulness, scheduling/latency, integer tasks or deployment result
+is implied. A floor for only one selected energy owner is also respected by the
+upper, but the matching4/3 lower REQUIRES the all-energy-owner floor contract.
+
+2. UNIT GAME RULE
+First consider unit value/cost-zero production T=min(E,H), where E=Σe_j,H=Σh_i.
+At T=0 all payments are zero.
+
+If E<=H (energy is short), put d_i=min(h_i,E), ρ=Σ_i d_i/E>=1,
+ q_H(ρ)=exp(1-ρ)/3.
+Pay energy owner j exactly e_j and hardware owner i exactly q_H(ρ)d_i.
+
+If H<=E (hardware is short), put d_j=min(e_j,H), ρ=Σ_j d_j/H>=1 and
+ q_E(ρ) = 1-ρ/3                    for1<=ρ<=2,
+          exp(2-ρ)/3              forρ>=2.
+Pay hardware owner i (1-q_E)h_i, and energy owner j
+ max{q_E d_j, m_j}, where m_j=(H-E+e_j)_+.
+The formulas agree at E=H: every energy owner receives e_j and every hardware
+owner h_i/3. They also agree at ρ=2 and at all individual cap thresholds.
+
+3. COVERAGE AND THE FLOORS
+For E<=H, each energy owner gets e_j=m_j. A coalition's worth is no greater
+than its total energy quantity, which its energy payments alone cover.
+For H<=E, before raising energy payments to m_j, a coalition receives
+ (1-q_E)h(S)+q_E Σ_{j∈S}min(e_j,H).
+Here h(S)<=H, and the capped energy sum is >=min(e(S),H); both displayed
+quantities are >=min(h(S),e(S)), the coalition's worth. Thus this convex
+combination covers, and raising energy payments preserves coverage. The stated
+m_j equals T-min(H,E-e_j), exactly its unit-game grand marginal. All payments
+are nonnegative. Zero own quantities give zero own payment.
+
+4. ALL-PROFILE INCENTIVES
+For a long-side owner its capped own quantity d∈[0,T] has payment q(ρ)d with
+ρ=(D+d)/T and other-owner D fixed. Its derivative is q+(d/T)q'. It is
+nonnegative whenever q+q'>=0. For q_H, q_H'=-q_H. For q_E's linear branch,
+q_E'=-1/3 and q_E>=1/3; on its exponential branch q_E'=-q_E. Thus both long-side
+payments are own-monotone. A long energy owner's marginal m_j is itself
+own-monotone because T-min(H,E-e_j) subtracts a term independent of its report;
+therefore the maximum of its two own-monotone payments is own-monotone.
+
+A short energy owner receives exactly its own quantity, hence is own-monotone.
+For a short hardware owner, its own report x changes H=T at unit rate while
+energy quantities remain fixed. On a cap cell let U=Σ_{e_j<T}e_j, so
+ dρ/dT=-U/T², with0<=U/T<=ρ. Differentiating its payment (1-q_E(ρ))x gives
+ 1-q_E + x q_E' U/T² >= 1-q_E+ρ q_E',
+because q_E'<=0 and x<=T. The final expression is zero on1<=ρ<=2.
+Onρ>=2 it is1-q_E(1+ρ)>=0: it equals zero atρ2, and
+exp(2-ρ)(1+ρ)/3 is nonincreasing forρ>=2. Thus short hardware payments are
+own-monotone too. Continuity handles cap cells and the total-side switch.
+At T=0 the same nonnegative formulas limit to zero. These arguments apply to
+whole bundles after their retained same-side capacities are aggregated within
+the actual owner; there is no virtual-owner splitting.
+
+5. FUNDING: ENERGY-SHORT REGIME
+Energy payments total T and hardware payments total q_H ρ T. Since
+ρ exp(1-ρ)<=1 forρ>=1, total<=T+T/3=4T/3.
+
+6. FUNDING: HARDWARE-SHORT REGIME
+Normalize H=T=1. Put d_j=min(e_j,1), ρ=Σd_j>=1 and q=q_E(ρ).
+The unraised payments total1+q(ρ-1). This is <=4/3: for1<=ρ<=2,
+q(ρ-1)=(1-ρ/3)(ρ-1) is increasing to1/3 atρ2; forρ>=2,
+q(ρ-1)=exp(2-ρ)(ρ-1)/3 is nonincreasing from1/3.
+It remains to bound any active marginal-floor raises.
+
+If some e_b>=1, all other energy marginals are zero. If two owners have e>=1,
+all marginals are zero, so no raise is needed. With a unique large owner b,
+put t=Σ_{j≠b}e_j. An active floor requires t<1; then every other e_j<1,
+ρ=1+t, q=(2-t)/3 and m_b=1-t. Total is
+ max{1+qt, 1+(1-t)(1-q)}.
+The first is the already-bounded base total; the second equals
+1+(1-t²)/3<=4/3.
+
+Otherwise all e_j<=1. Put E=ρ=1+δ. Ifδ>=1 all marginals are zero. For0<=δ<1,
+q=(2-δ)/3. Let B={j:(1-q)e_j>δ}, k=|B|, e_B=Σ_B e_j. Exactly these owners
+have active floor raises. Total is
+ 1+qδ+(1-q)e_B-kδ.                                            (4)
+For k0 use the base bound. For k1, e_B<=1, and excess above1 is at most
+ (1-q)(1-δ)=(1-δ²)/3<=1/3.
+For k>=2, e_B<=1+δ, and excess is at most
+ 1-q-(k-1)δ=(1+δ)/3-(k-1)δ<=1/3.
+This proves the4/3 bound for every real profile.
+
+7. MATCHING LOWER AND ACTIVE GROWING-COUNT FAMILY
+Take two actual energy owners A,C, each quantity1 and cost0, and one hardware
+owner with value1. Compare hardware report h=1 to h=2, holding all others fixed.
+Let a,c,x be payments at h1 and let κ be a uniform funding factor. Coalitions
+A+H and C+H force a+x>=1 and c+x>=1. Budget a+c+x<=κ gives x>=2-κ.
+At h2, each energy owner's grand marginal is1, so their floors plus budget
+force hardware payment x'<=2κ-2. Own-H monotonicity gives x<=x', hence
+2-κ<=2κ-2, or κ>=4/3. This lower applies to ANY rule satisfying the contract,
+without symmetry, continuity, separability or a concentration-price architecture.
+
+To realize the same limiting obstruction with both counts diverging and strictly
+positive capacities, for each k>=2 take k energy owners: two have quantity1 and
+k-2 have quantityε. Take k hardware owners: one reports1 or2, and k-1 each have
+quantityε, with0<ε<=1; all costs0 and values1. At the low profile H_low=1+(k-1)ε and the two
+big-energy-plus-main-hardware coalitions again force the main hardware payment
+at least2-κ H_low. At the high profile E=2+(k-2)ε < H_high=2+(k-1)ε, so EVERY
+energy owner's marginal floor equals its own positive quantity. Therefore the
+main hardware payment is at most(κ-1)E. Monotonicity yields
+ κ >= [4+(k-2)ε]/[3+(2k-3)ε].
+With ε=1/k² this tends4/3. Every owner has strictly positive capacity and access
+to productive matches; no null owner, zero padding or virtual identity is used.
+This is a concentrated active asymptotic family, not a diffuse-owner theorem.
+
+8. EXACT PUBLIC SOURCE-PRICE DECOMPOSITION
+For each real threshold t>=0 retain energy tiers with c_j<=t and hardware tiers
+with v_i>=t. Let E_t(S),H_t(S) be their coalition totals. Then coalitionwise
+ F(S)=∫_0^∞ min(E_t(S),H_t(S))dt.                             (5)
+Proof: order energy units by increasing public cost c(x) and hardware units by
+decreasing service value v(x). For any fixed served quantity the cheapest energy
+and highest-value hardware are optimal; select the initial range with v(x)>=c(x).
+Its net surplus is ∫(v(x)-c(x))_+dx. Integrating the nonnegative indicator
+c(x)<=t<=v(x) in the opposite order, the x-length at t is exactly
+min(E_t,H_t), proving(5). These step functions have finite support and finite
+quantities, so interchanging the integrals is elementary. This proof uses one
+feasible allocation, not unrelated threshold optima.
+
+Run sections2-6's unit rule in every component and integrate payments using fixed
+nonnegative interval lengths. Retained sets depend only on public costs/values,
+so actual-owner underreports remain componentwise allowed. Equation(5) gives
+coalition coverage and total<=4F/3. For each energy owner j, integrated marginal
+floors equal
+ ∫[T_t(N)-T_t(N\{j})]dt=F(N)-F(N\{j}),
+which proves the contractual floor. Fixed costs0 and values1 embed section7,
+so the full public-price class has the same sharp universal factor4/3.
+At F0 every nonnegative component value vanishes, hence so do payments.
+
+A fixed energy owner may hold several public cost tiers, and a hardware owner
+several public service-value tiers. At each threshold FIRST aggregate retained
+capacity within each actual owner; apply the same rule to those aggregate actual
+owners. Joint own-tier underreports decrease that owner's pooled component
+quantity, and removing it removes all its retained tiers. Thus incentives and
+floors persist. An owner may not span the two roles in this theorem.
+
+9. FRACTIONAL FLOORS AND ACCOUNTING
+For a public theta∈[0,1], mixing this sharp full-floor rule with the accepted
+symmetric exponential floor-free primitive gives all energy floors≥theta M_j
+and total <=[1+(1-theta)/(2e)+theta/3]F. This displayed partial-floor tradeoff
+is an upper bound, NOT claimed sharp. It can be improved at theta0 by importing
+a stronger accepted floor-free primitive, but that does not change the full-floor
+4/3 theorem. Fixed externally funded availability retainers add separately.
+
+c_j is a PUBLIC settled cost used once in NET production. A marginal floor is
+an expressly negotiated surplus-share condition, not compensation for private
+cost or report-dependent resale. Gross energy reimbursements, availability
+retainers and the net-surplus subsidy must have separate ledgers. No claim that
+these contracting assumptions hold at any existing AI campus is made.
+
+10. EVIDENCE AND RELATION TO OTHER WORK
+The cap-price primitive idea and the supply/demand price integral are established
+ingredients. The asymmetric piecewise rule, its all-energy-floor4/3 bound, and
+matching two-profile lower are proposed contributions requiring independent
+proof and historical-priority review. This is not the unrestricted arbitrary
+route-value matrix, mixed ownership or arbitrary resource-network problem.
+The separate six-profile unit-subgraph obstruction explains a precise boundary
+of fixed positive layering beyond the separable v_i-c_j structure.

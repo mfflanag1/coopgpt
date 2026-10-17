@@ -1,0 +1,95 @@
+GENERAL LOGARITHMIC OUT RULE: INDEPENDENT AUDIT AND EXPLICIT EVALUATION
+17 October 2026. Composition lane, bounded independent check.
+Dependency: ../energy/GENERAL_LOGARITHMIC_FACE_OUTSIDE.txt (root/energy).
+
+AUDIT RESULT
+No mathematical gap found in the supplied analytic proof. This is an independent
+algebraic audit, not a claim of external specialist review or historical novelty.
+I checked: the exact common-U density and its mean c; the two shortest-coordinate
+ray inequality; all three hinge cases in Lemma B; the affine coalition-fraction
+corner reduction; singleton normalization and Euler identity; the nonnegative
+extra derivative term; zero-direction passage without boundary continuity;
+finite restoration across face jumps; and multiplicative diagonal smoothing.
+
+Two scope details are load-bearing:
+* The scalar U is common across all other coordinates within a face average.
+  Replacing it by independent thinning does not preserve the proof.
+* A derivative along d+delta*1 is linear on the left, while monotonicity gives
+  F(d+delta*1)>=F(d). Thus no false equality at a discontinuous boundary is used.
+For Lemma B, the general concave H may be filled at zero by its right limit;
+monotonicity forbids a downward jump at the right endpoint. This makes the
+piecewise-linear approximation and integration-by-parts passage coherent.
+
+EXPLICIT INPUT MODEL
+Suppose the production function is supplied as K nonnegative rational linear
+forms in d resources:
+ F(x)=min_{1<=k<=K} a^k.x,  a^k>=0.
+Owners submit nonnegative rational bundles b_i and aggregate C=sum_i b_i.
+This is an EXPLICIT min-linear representation. If F is instead supplied as a
+packing LP with exponentially many dual vertices, this note does not assert
+polynomial conversion to the explicit representation. Arbitrary oracle F is
+outside this algorithmic claim.
+
+THE UNIVERSAL CONSTANT
+Let c be the unique root in (1/2,1) of c[2-exp(-1/c)]=1 and t0=1/c-1.
+The exact output format treats c as this named real constant; it is generally
+not rational. The formula below also uses logarithms and min with t0. It is
+not a rational-payment algorithm and does not rely on exact sign decisions
+between arbitrary rational breakpoints and the transcendental constant t0.
+
+POLYNOMIAL EXACT SYMBOLIC CONSTRUCTION
+For each active coordinate j, form the K rational affine functions
+ alpha_k=a^k_j C_j,   beta_k=sum_{l!=j} a^k_l C_l,
+ h_j(u)=min_k(alpha_k+beta_k u), 0<=u<=1.
+All alpha,beta are nonnegative. A direct polynomial algorithm is:
+1. Enumerate all pairwise line intersections strictly between 0 and 1; include
+   0 and 1, remove duplicates, and sort the resulting rational numbers.
+2. On each consecutive open interval evaluate all K lines at its rational
+   midpoint, choose a minimizing line with a fixed tie convention, and merge
+   adjacent intervals whose chosen affine functions agree.
+3. Record the concave hinge decomposition
+ h_j(u)=alpha+beta u+sum_s Delta_s min(u,s),
+ where alpha=h_j(0), beta is the final slope, and Delta_s>=0 is each downward
+ slope jump at rational breakpoint s in (0,1). Line intersections and slope
+ continuity establish this identity at every u in [0,1].
+The naive method takes O(K^3) rational arithmetic operations per face and uses
+polynomial bit length; a standard lower-hull algorithm is faster but unnecessary
+for the claim. There are at most K distinct active affine pieces, so the final
+expression has O(K) hinge terms per face (O(K^2) also suffices as a bound).
+
+Define z=min(s,t0) and
+ psi(s)=(1-c)z-c(1-z)log(1-z).
+Then psi(s)=E[min(U,s)] for density c/(1-u) on (0,t0). To verify, for s<t0 split
+the integral at s and integrate u/(1-u); for s>=t0 it equals E U=c. At s=t0 the
+formula equals c using log(1-t0)=-1/c and c(1+t0)=1. Consequently the EXACT face
+average and payments are
+ H_j(C)=alpha+beta c+sum_s Delta_s psi(s),
+ y_i=sum_{j:C_j>0} (b_ij/C_j) H_j(C).
+Absent-coordinate terms are exactly zero. The output can be a finite symbolic
+expression tree, or the rational hinge coefficient lists together with these
+two universal formulas. min(s,t0) may equivalently be written
+ (s+t0-|s-t0|)/2 if an absolute-value expression format is preferred.
+No transcendental comparison is needed to construct this exact expression.
+
+BIT AND PRECISION GUARANTEES
+Products/sums of rational input coefficients and reports have polynomial binary
+encoding length. Intersections are ratios of their differences, also with
+polynomial encoding length. Sorting and midpoint comparisons are exact rational
+operations. Thus the complete symbolic output is constructed in polynomial time
+in d,K, owner count, and rational input bit length.
+For numerical values to any prescribed absolute precision 2^-P, c can be
+computed by interval root finding with elementary exp evaluation; the derivative
+of its defining function is bounded below by 1 on (1/2,1). Clamp min is Lipschitz,
+and all logarithm arguments satisfy 1-z>=1-t0=exp(-1/c), a positive UNIVERSAL
+constant. Therefore interval evaluation to polynomially many extra bits gives
+certified absolute precision in time polynomial in input bits and P using
+standard arbitrary-precision elementary arithmetic. No difficult rational-vs-t0
+separation bound is required. Large rational coefficients only require extra
+precision proportional to their encoding length.
+
+Crucial implementation distinction: an approximation of each payment is not
+itself an exact truthful/full-OUT mechanism. Independent rounding errors can
+reverse a tight incentive or coalition inequality. The theorem guarantees the
+EXACT symbolic real-valued rule; this note makes no claim that a finite-decimal
+payment settlement retains exact inequalities without a separate robust
+rounding theorem. The included numerical checks are only corroboration.

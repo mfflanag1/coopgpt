@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Local handoff interaction check</title></head><body><pre id="report">{
+  "status": "PASS",
+  "checks": [
+    {
+      "name": "result count",
+      "pass": true,
+      "detail": 14
+    },
+    {
+      "name": "filter all",
+      "pass": true,
+      "detail": {
+        "expected": 14,
+        "visible": 14
+      }
+    },
+    {
+      "name": "unique pressed all",
+      "pass": true,
+      "detail": "all"
+    },
+    {
+      "name": "filter coalition",
+      "pass": true,
+      "detail": {
+        "expected": 7,
+        "visible": 7
+      }
+    },
+    {
+      "name": "unique pressed coalition",
+      "pass": true,
+      "detail": "coalition"
+    },
+    {
+      "name": "filter individual",
+      "pass": true,
+      "detail": {
+        "expected": 2,
+        "visible": 2
+      }
+    },
+    {
+      "name": "unique pressed individual",
+      "pass": true,
+      "detail": "individual"
+    },
+    {
+      "name": "filter boundary",
+      "pass": true,
+      "detail": {
+        "expected": 5,
+        "visible": 5
+      }
+    },
+    {
+      "name": "unique pressed boundary",
+      "pass": true,
+      "detail": "boundary"
+    },
+    {
+      "name": "audit record count",
+      "pass": true,
+      "detail": 66
+    },
+    {
+      "name": "audit search hit",
+      "pass": true,
+      "detail": [
+        "ROOT ADJUDICATION66 — DUMMY-ZERO COROLLARY AND A PRICE-REDUCTION LIMIT"
+      ]
+    },
+    {
+      "name": "audit search empty",
+      "pass": true,
+      "detail": 66
+    },
+    {
+      "name": "audit search reset",
+      "pass": true,
+      "detail": 66
+    },
+    {
+      "name": "funding cap 20,10",
+      "pass": true,
+      "detail": "16.29"
+    },
+    {
+      "name": "funding ratio 20,10",
+      "pass": true,
+      "detail": "1.63 ×"
+    },
+    {
+      "name": "slider labels 20,10",
+      "pass": true,
+      "detail": "labels"
+    },
+    {
+      "name": "funding cap 100,1",
+      "pass": true,
+      "detail": "54.85"
+    },
+    {
+      "name": "funding ratio 100,1",
+      "pass": true,
+      "detail": "54.85 ×"
+    },
+    {
+      "name": "slider labels 100,1",
+      "pass": true,
+      "detail": "labels"
+    },
+    {
+      "name": "funding cap 0,50",
+      "pass": true,
+      "detail": "27.15"
+    },
+    {
+      "name": "funding ratio 0,50",
+      "pass": true,
+      "detail": "0.54 ×"
+    },
+    {
+      "name": "slider labels 0,50",
+      "pass": true,
+      "detail": "labels"
+    },
+    {
+      "name": "scope disclosure opens",
+      "pass": true,
+      "detail": true
+    },
+    {
+      "name": "scope disclosure closes",
+      "pass": true,
+      "detail": false
+    },
+    {
+      "name": "anchor navigation",
+      "pass": true,
+      "detail": "#results"
+    }
+  ]
+}</pre><iframe id="target" style="width:1400px;height:1000px" src="coopgpt-overnight-handoff.html"></iframe><script>
+const checks=[];function check(name,ok,detail){checks.push({name,pass:!!ok,detail});if(!ok)throw Error(name+': '+detail)}
+const f=document.getElementById('target');f.onload=()=>{try{const d=f.contentDocument,w=f.contentWindow;
+const cards=[...d.querySelectorAll('.result')];check('result count',cards.length===14,cards.length);
+for(const button of d.querySelectorAll('[data-filter]')){button.click();const tag=button.dataset.filter;const expected=cards.filter(c=>tag==='all'||c.dataset.kind===tag).length;const visible=cards.filter(c=>!c.classList.contains('hidden')).length;check('filter '+tag,visible===expected&&button.getAttribute('aria-pressed')==='true',{expected,visible});check('unique pressed '+tag,d.querySelectorAll('[data-filter][aria-pressed=true]').length===1,tag)}
+d.querySelector('[data-filter=all]').click();const search=d.getElementById('audit-search'),rows=[...d.querySelectorAll('#audit-list li')];check('audit record count',rows.length===66,rows.length);
+search.value='dummy';search.dispatchEvent(new w.Event('input',{bubbles:true}));let shown=rows.filter(r=>!r.classList.contains('hidden'));check('audit search hit',shown.length===1&&shown.every(r=>r.textContent.toLowerCase().includes('dummy')),shown.map(r=>r.textContent));
+search.value='no_such_audit_79921';search.dispatchEvent(new w.Event('input',{bubbles:true}));check('audit search empty',rows.every(r=>r.classList.contains('hidden')),rows.length);
+search.value='';search.dispatchEvent(new w.Event('input',{bubbles:true}));check('audit search reset',rows.every(r=>!r.classList.contains('hidden')),rows.length);
+for(const [s,g,cap,ratio] of [[20,10,'16.29','1.63 ×'],[100,1,'54.85','54.85 ×'],[0,50,'27.15','0.54 ×']]){d.getElementById('s-range').value=s;d.getElementById('g-range').value=g;d.getElementById('g-range').dispatchEvent(new w.Event('input',{bubbles:true}));check('funding cap '+s+','+g,d.getElementById('fund-cap').textContent===cap,d.getElementById('fund-cap').textContent);check('funding ratio '+s+','+g,d.getElementById('fund-ratio').textContent===ratio,d.getElementById('fund-ratio').textContent);check('slider labels '+s+','+g,d.getElementById('s-label').textContent===String(s)&&d.getElementById('g-label').textContent===String(g),'labels')}
+const detail=d.querySelector('.result details');detail.querySelector('summary').click();check('scope disclosure opens',detail.open,detail.open);detail.querySelector('summary').click();check('scope disclosure closes',!detail.open,detail.open);
+d.querySelector('nav a[href="#results"]').click();check('anchor navigation',w.location.hash==='#results',w.location.hash);
+document.getElementById('report').textContent=JSON.stringify({status:'PASS',checks},null,2);
+}catch(e){document.getElementById('report').textContent=JSON.stringify({status:'FAIL',error:String(e),checks},null,2)}};f.src='coopgpt-overnight-handoff.html';
+</script></body></html>

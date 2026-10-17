@@ -1,0 +1,30 @@
+EXACT RATIONAL WEIGHTED MECHANISM REPLAY
+
+weighted_graph_mechanism.py exposes weighted_prices(capacities,edges,profits)
+and payments(owner_bundles,edges,profits). It uses only Python standard-library
+Fraction arithmetic and the exact_huber_solver.py in this same folder.
+The CLI accepts one JSON file with owner_bundles, edges, profits; use integer
+JSON numbers or rational strings such as "3/2", not binary floating-point
+approximations when exact intended decimal/rational values matter.
+
+Each reported original bundle is copied by the fixed public graph unfolding.
+The returned original-resource prices, actual-owner payments, production,
+and funding are exact rationals. A unit-lift KKT/primal-dual certificate is
+included. Zero-profit technology and all-zero report profiles are handled.
+The default explicit copy limit is100,000, to reject accidental enormous
+expansions; it does not turn the pseudo-polynomial algorithm into a polynomial
+one in the original binary input length.
+
+Replay:
+ python3 -I check_weighted_graph_mechanism.py
+ python3 -I verify_antidiagonal_weight_lift.py
+
+WEIGHTED_MECHANISM_CHECKS.json records162 exact mechanism evaluations,
+144 coalition coverage comparisons against an independent weighted LP dual
+vertex enumerator, and144 simultaneous whole-coalition report-increase
+comparisons, including mixed owners, odd graphs, zeros, and rational profits.
+ANTIDIAGONAL_WEIGHT_LIFT_CHECKS.json records449 independent exact production
+identities, using weighted dual enumeration, clipped lifted covers, and
+symmetrized maxflow primal certificates. Finite regression checks support,
+but do not replace, the all-profile proof in
+UNIVERSAL_WEIGHTED_THREE_HALVES_v2.txt.

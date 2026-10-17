@@ -1,0 +1,79 @@
+SIX-PROFILE OBSTRUCTION TO FIXED POSITIVE UNIT-SUBGRAPH DECOMPOSITION
+17 October 2026. Exact analytic method obstruction, with independent rational
+primal/dual replay. It is NOT an unrestricted mechanism impossibility, an
+optimal funding lower bound, or a claim of historical novelty.
+
+STATEMENT
+In the shared-local domain, fixed owners are A,C,H_1,H_2,H_3. Let a=(3,0,2),
+b=(3,4,5) be the public local/grid margins. There are no nonnegative constants
+w_G, indexed by unit-value subgraphs G of the same bipartite graph {A,C}×{H_i},
+such that, for EVERY real capacity profile r,
+ F_{a,b}(r)=Σ_G w_G F_G(r).
+Each F_G retains the SAME reports L,P,h_i and fixed owner identities and permits
+exactly its selected edges, with unit profit on selected edges. All64 graphs,
+including empty, are allowed. Coefficients may depend on the public matrix but
+not on capacity reports. This forbids both finite and measure-valued mixtures,
+since there are only64 distinct component functions. It does not rule out
+rescaled/auxiliary resources, signed or report-dependent decompositions, a new
+payment rule, or a bound below2 by another method.
+
+SIX PROFILES
+Profile order is (L,P,h1,h2,h3). Let the linear functional be
+ D(f)=f(r1)+f(r3)+f(r4)+f(r6)-f(r2)-f(r5), where
+ r1=(0,1,2,2,0),  F(r1)=4;
+ r2=(0,2,1,1,0),  F(r2)=7;
+ r3=(1,0,2,0,2),  F(r3)=3;
+ r4=(1,1,0,2,1),  F(r4)=6;
+ r5=(2,1,1,0,2),  F(r5)=10;
+ r6=(2,2,1,0,0),  F(r6)=3.
+The values follow directly by allocating to the best routes; exact duals also
+certify no fractional improvement. Thus D(F)=4+3+6+3-7-10=-1.
+
+UNIVERSAL UNIT-GRAPH INEQUALITY
+Write the graph's six edge indicators as A,B,C on the local row and D,E,F on
+the grid row, each in{0,1}. (These letters are Boolean labels in this proof,
+not owner names or production functions.) Direct feasible allocations give
+ u1=max(D,E), u2=D+E, u3=max(A,C), u6=max(A,D),
+ u4=max(B+E,B+F,C+E,C,F),
+ u5=max(min(2,A+2C), D+2C, F+A+C).
+These formulas also follow from the unit transportation LP; shared hardware3
+has capacity1 at r4 and capacity2 at r5, explaining their different terms.
+Since max(D,E)-(D+E)=-DE and u4>=max(C+E,F), it suffices to prove
+ max(min(2,A+2C),D+2C,F+A+C)
+ <=max(A,C)+max(A,D)+max(C+E,F)-DE=:K.                        (*)
+
+If C=1, then K=2+E+max(A,D)-DE. The three terms on the left of(*) are
+2, D+2, and F+A+1. The first is <=K since E-DE>=0. For the second,
+K-(D+2)=(E-DE)+(max(A,D)-D)>=0. For the third,
+K-(F+A+1)=(1-F)+(E-DE)+(max(A,D)-A)>=0.
+
+If C=0, then K=A+max(A,D)+max(E,F)-DE and the left terms reduce to A,D,F+A.
+For A, max(A,D)>=D>=DE ensures K>=A. For D, max(A,D)>=D and max(E,F)>=E>=DE
+ensure K>=D. For F+A, if D=0 use max(E,F)>=F; if D=1 then max(A,D)=1 and
+K-(F+A)=1-E+max(E,F)-F>=0. Thus(*) holds in every Boolean case.
+Consequently D(F_G)>=0 for every unit subgraph G. Any fixed nonnegative sum
+would also have D>=0, contradicting the weighted function's D=-1. QED.
+
+WHY THIS IS A STRUCTURAL GATE
+The per-pod-local theorem ROUTE_VALUES_THEOREM.txt succeeds by an exact positive
+sum of fixed unit games. Sharing the local budget across pods removes that
+independent baseline. This certificate proves the broadest same-row unit-
+subgraph version of that reduction already fails in the shared-budget class.
+Because any claimed all-size reduction must also handle these fixed five owners,
+it blocks a universal reduction on the unbounded class. It is not presented as
+an active-count asymptotic lower family. The first continuation needs a genuinely
+new weighted mechanism, a more expressive positive decomposition, or the
+separable source-price restriction proved in SHARED_SOURCE_PRICE_THEOREM.txt.
+
+ARTIFACTS AND REPLAY
+ decomposition_obstruction.json : six profiles and integer signs.
+ check_decomposition_obstruction.py : standalone exact stdlib replay.
+ decomposition_obstruction_verified.json :64 unit-graph dots and hashes.
+Run: python3 -I -O check_decomposition_obstruction.py
+The verifier independently enumerates feasible integer allocations and finds
+matching exact feasible LP dual values. Equality certifies the CONTINUOUS value
+at each tested profile without using an integer-only optimum as an upper bound.
+It fails closed with explicit exceptions, including under Python optimization.
+The proof above establishes the universal unit-graph inequality without relying
+on an incomplete computational search. Initial10-profile discovery and the
+floating LP/MILP simplification are retained as historical diagnostic artifacts.

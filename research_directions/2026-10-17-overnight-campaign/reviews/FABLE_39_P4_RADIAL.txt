@@ -1,0 +1,28 @@
+**Provisional verdict: no findings in reviewed scope.** Most important point: I re-derived the quartic SOS identity (5) and the derivative/Hölder chain in Sections 3–4 by hand and found no algebraic or quantifier error; the sharpness configuration for 431/512 is realizable.
+
+## Findings
+
+No correctness defects found. Items independently re-derived (evidence):
+
+**CONE_FOUR_NORM_DIMENSION_FREE_THEOREM.txt**
+- L30–35: ‖(X_j³/T³)‖_{4/3} = s³ ≤ 1; summing (1) gives T(1−s⁴) = F·(1+s+s²+s³). Correct.
+- L43–67: Substituting u=X+rh, v=X−θh, d=X+k, the LHS reduces to X⁴+LX³k+3θrX²hk; the RHS/4 expansion gives exactly the listed X⁴, 0·X³h, (9/2)θr²X²h², 3θr²(1−2θ)Xh³, 3θr²M/4·h⁴ (using r²−rθ+θ² = M) and L[X³k+3X²k²/2+Xk³+k⁴/4]. Difference matches L65–67.
+- L55–58: Expanding the four squares reproduces every monomial; the residual X²h² coefficient is 3θr²[3LM−2L(1−2θ)²−3θM]/(2LM) = 3θr²(1−θ+7θ²−6θ³)/(2LM). All coefficients nonnegative on θ∈[0,1] as claimed (L59–61).
+- L73–82: With ‖u‖₄,‖v‖₄,‖d‖₄ ≤ 1 the summed RHS is (3θr+3r²+1+3θ)/4 = 1 since θ+r=1; θ=0 or r=0 edge cases are handled because the corresponding exposure is forced zero. The sup over signed d gives (6).
+- L87–94: ∂Y/∂t_A and −∂Y/∂x_Aj match A and V_j; both are 0‑homogeneous, so T=1 normalization is legitimate at every point of a restoration. A ≥ ‖V‖_{4/3} ≥ 0 gives Y′ ≥ A(dt−‖dx‖₄) ≥ 0. Intermediate aggregates stay in K₄ by convexity.
+- L101–108: h ≥ max(−τ, s−1+τ) ⇒ h ≥ (s−1)/2; max of s³(1−s) is 27/256 at s=3/4; A ≥ 431/512. Equality is attained with x_A = −X/6, z = 7X/6 (both boundary bundles), so 512/431 is the least uniform scaling of rule (1) (requires n ≥ 2, as the text implies).
+
+**CONE_LORENTZ_RADIAL_FULL_OUTSIDE_BARRIER.txt**
+- L32–38: Forward endpoint (q=1, w=0), direction (1,e): A−V_e = 1−a−(1−s²)a′/2. b(s)=2s/(1+s) solves the equality ODE with b(0)=0; comparison yields (3). Monotonicity of a not needed.
+- L44–47: Opposite endpoint, direction (1,0): λ[1−s(1−s)a′/2] ≥ 1. Both owners are boundary bundles; restoration is feasible.
+- L49–57: ∫_{1/7}^{3/4} ds/[s(1−s)] = log 18; a(1/7) ≤ 1/4; funding at s=3/4 gives a(3/4) ≥ 4/3−κ/(3λ); (6) follows. Intersection with κ ≥ λφ gives (1); numerically 1.7861 > 1.786.
+- Cross-dependency: I re-derived PHI_COALITION_THEOREM L125–126 (limit (8)) to first order in 1−s and it is correct, so a′(1) ≥ c holds under the stated C¹-near-1 hypothesis.
+
+## Scope limitations
+- The attached checker (FOUR_NORM L69–70) and the Q(√5)/atanh bracket for log 18 (BARRIER L67–68) were not inspected or run; I verified (5) and the numerics by hand only.
+- Novelty not assessed.
+- The barrier is explicitly restricted: reserve coefficient fixed at λ, single radial a(s), a C¹ near 1, d ≥ 2, n ≥ 2. It does not bound nonradial, owner-dependent, or variable-reserve rules, and the text says so.
+- The four-norm sharpness statement concerns scalings of rule (1) only, not other mechanisms (as stated L121–122).
+
+## Verdict
+**No findings in reviewed scope.** The dimension-free p=4 mechanism (coverage, nonnegativity, all-profile TCWM via summed signed-coordinate SOS, funding ≤ 4F, full OUT at 512/431 with funding ≤ 2048/431) checks out algebraically and quantifier-wise; the restricted Euclidean radial lower bound > 1.786 is correctly derived within its stated architecture.

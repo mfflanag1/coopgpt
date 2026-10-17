@@ -1,0 +1,45 @@
+FINITE NECESSARY-CONDITION LP FOR AGGREGATE LINEAR PRICES
+17 October 2026. Search instrument, not a theorem inferred from numerical output.
+
+The public technology is one fixed weighted resource graph. Exactly TWO actual
+owners are fixed and eligible at every resource coordinate. A mechanism in the
+tested architecture uses one price vector p(c) depending only on total reports
+c and the fixed technology/owner set. Its owner payments are b_i.p(c).
+Changing how the same aggregate c is distributed between these two owners does
+not change p(c); this is an explicit restriction of the architecture.
+
+All aggregate test profiles have strictly positive coordinates. For every edge
+uv, choose epsilon<=min(c_u,c_v), give owner1 exactly epsilon at u and v, and
+give owner2 the remainder c-b_1. Owner1's singleton production is at least
+epsilon*w_uv. Its coverage therefore forces p_u(c)+p_v(c)>=w_uv. Similarly
+nonnegative payments for a singleton-coordinate owner force p_v(c)>=0.
+The full budget is c.p(c)<=K F(c), where F(c) is computed exactly from the
+weighted fractional-cover LP vertices.
+
+For c'=c+delta*e_k, delta>0, and ANY resource subset S, give owner1 the bundle
+  b_1=c*1_S
+and owner2 the fixed remainder c-b_1. Compare owner1's larger report
+  b'_1=b_1+delta*e_k.
+Owner2 is unchanged, owner1's eligibility and identity are unchanged, and
+b_1<=b'_1. Incentive monotonicity therefore forces
+  delta*p_k(c') + sum_{v in S}c_v[p_v(c')-p_v(c)] >= 0.
+Every such comparison is realized by the SAME two fixed eligible owners,
+within endowment boxes large enough to contain all listed reports. Different
+LP rows may use different report profiles, which is legitimate for one
+all-profile mechanism. There is no owner cloning within any comparison.
+
+These subset inequalities are the corners of the linear condition over all
+0<=b_1<=c. Thus they impose the full aggregate-price own-monotonicity condition
+for each selected aggregate transition. Consecutive coordinate levels suffice
+for the grid by transitivity. They do not imply incentives outside the finite
+grid, nor do finite LP feasible prices establish any general upper theorem.
+
+The program minimizes K over these necessary constraints. A numerical optimum
+is only a scouting result. To claim a rigorous lower bound, a nonnegative dual
+combination must be recovered and checked in exact arithmetic, including every
+price coefficient and the K coefficient. A lower bound for this architecture
+would not automatically lower-bound arbitrary owner-aware mechanisms.
+
+Implementation: weighted_price_lp.py. Exact resource-game values use Fraction
+arithmetic and enumerated dual vertices. scipy.linprog/HiGHS solves the payment
+LP numerically. Reports retain primal residual and dual-support diagnostics.

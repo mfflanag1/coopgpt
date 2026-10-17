@@ -1,0 +1,54 @@
+INDEPENDENT BOUNDED AUDIT — CURATED REPLAY
+17 October2026. Read-only review of handoff/VERIFICATION_GUIDE.txt,
+handoff/CURATED_CHECKS.json and handoff/replay_curated.py, plus relevant
+selected checkers and local dependencies. No handoff files edited.
+
+VERDICT
+The guide correctly separates finite evidence from conventional proofs,
+novelty, external review and empirical measurement. No discovered issue
+invalidates the parent's reported isolated passes. Three narrow corrections
+would improve evidence provenance, scope precision and portability.
+
+1. HASH THE EXECUTED COPY (provenance defect)
+replay_curated.py line45 hashes source/row['script'] after the subprocess,
+although line36 executes copy/row['script']. A concurrent source edit after
+copying would make the recorded hash describe different bytes from those run.
+Hash the disposable script before starting its subprocess, and retain that
+digest in the record. This affects reproducibility metadata, not a mathematical
+assertion or the reported pass when the source stayed fixed.
+
+2. NARROW THE SAMPLING CERTIFICATE LABEL (scope overstatement)
+Manifest ID sampling_barrier says "All-t polynomial/null-padding identities".
+The checker fixes profile parameter t=1/2 at line44. Its exact coefficient
+arithmetic DOES establish the displayed polynomial identity for all values of
+the sampling probability. Null padding is checked only for1,2,3,4 extra owners
+(lines65–68). It does not certify all profile parameters or arbitrary padding.
+Suggested scope: "Exact sampling-probability polynomial certificate at profile
+t=1/2; finite null-padding checks; general parameter/padding proof separate."
+This is a description repair, not a challenge to the separate analytic proof.
+
+3. STATE A PYTHON VERSION FLOOR (portability)
+The guide/manifest say Python3. The selected graph_fptas dependency
+composition/two_sparse_mechanism.py line10 imports math.lcm, requiring at least
+Python3.9. Specify Python3.9+ and the version actually used for the replay.
+No compatibility test of older supported versions was performed in this audit.
+The inspected selected scripts and dependencies use the standard library;
+no third-party installation or network access is needed for them.
+
+OPTIONAL LABEL CLEANUP
+Manifest l1_transfer conservatively says mixed exact/floating tests. Its
+current checker instead reports Fraction arithmetic, rational log/exp
+enclosures and symbolic cancellation. Updating this label would reflect the
+stronger finite arithmetic without enlarging its finite-domain proof scope.
+
+POSITIVES AND AUDIT LIMIT
+The runner rejects disabled assertions, invokes children with -I, executes in
+a disposable copy, excludes environment/cache/Git material, and preserves
+nonzero/timeout outcomes. Selected helper imports and generated outputs use
+the copied tree; no selected-script absolute write or network dependency was
+found. The guide accurately treats face quadrature as diagnostic and keeps
+open-conjecture checks and architecture counterexamples scoped. The original
+manuscript and canonical repository are not touched by these entry points.
+This was a static evidence/portability audit; it did not repeat the parent's
+fresh20 checks or reprove all analytic dependencies. Root57 acceptance was
+independently read and the lane closure now points to that accepted record.

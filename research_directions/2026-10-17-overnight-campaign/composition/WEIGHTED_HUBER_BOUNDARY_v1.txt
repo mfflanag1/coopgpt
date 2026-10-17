@@ -1,0 +1,146 @@
+WEIGHTED RESOURCE GRAPHS: GLOBAL-SCALE HUBER BOUNDARY
+17 October 2026. Candidate successor for independent review.
+The unit-profit theorem is in HUBER_PRICE_THREE_HALVES_v2.txt.
+
+QUESTION
+Does applying its convex price construction with one public global profit
+scale extend the strict-below-two funding theorem to arbitrary weighted edges?
+Answer for THIS construction: NO. It retains coalition-total underreport
+monotonicity and exact coalition coverage, but its sharp uniform funding
+factor becomes two. The obstruction already uses a connected weighted path.
+This does not rule out other weighted mechanisms or all weighted price rules.
+
+MODEL AND RULE
+Activity e=uv consumes one unit at u and v and has fixed public profit w_e>=0.
+Discard zero-profit activities. If none remain, pay zero. Otherwise divide
+all w_e by the fixed technology scale W=max_e w_e, so 0<w_e<=1; restore W to
+all payments/output at the end. Define h(t)=t^2 below1/2, t-1/4 above1/2.
+Choose p minimizing sum_v c_v h(p_v) over p>=0 and p_u+p_v>=w_uv. One may
+restrict p<=1 without changing the optimum. Pay i sum_v b_iv p_v.
+Zero capacities use the unique prices on the positive induced graph and
+p_v=1 on zero vertices, as in the unit-profit construction.
+The value1 on a zero vertex is a dual-cover convention, not a claim about
+the limiting regularized optimizer. As positive capacities tend to zero,
+its limiting price can differ from1; the actual payment on that vertex is
+zero in either convention. Positive-coordinate prices and all owner/coalition
+payments have the same limit. This distinction also applies in the unit note.
+
+CLAIMS
+(A) The positive-coordinate prices are unique; actual-owner payments and sums
+    of coalition payments are continuous and own/coalition-underreport monotone.
+(B) Every actual-owner coalition is covered, and total payment is at most2F.
+(C) The supremum funding factor for this global-scale rule is exactly2,
+    even on connected four-vertex resource paths with all capacities positive.
+
+PROOF OF UNIQUE PRICES AND THE ACTIVE-COMPONENT INVARIANT
+Existence is compactness. A price above1 can decrease to1. At positive c no
+optimal vertex has price1: raise every zero price by epsilon and lower every
+price-one vertex by epsilon. Tight zero/one edges have weight1 and stay tight;
+other affected constraints have positive slack and remain feasible for small
+epsilon. The cost rises only quadratically at zero prices and decreases
+linearly at positive-cost price-one vertices. Thus 0<=p_v<1.
+
+Unlike the unit case, p_v=0 can occur at nonisolated positive-capacity vertices
+whose incident low-profit constraints are slack. It cannot be assumed away.
+KKT nonetheless gives nonnegative edge multipliers lambda with
+  degree_lambda(v)=c_v h'(p_v)=c_v min(2p_v,1).          (1)
+Indeed at p_v=0, the lower-bound stationarity is -degree_lambda(v)-alpha_v=0,
+so both nonnegative quantities vanish. Upper bounds are inactive. Multipliers
+are zero on non-tight edges.
+
+Strict convexity below1/2 fixes all coordinates below1/2 across any two
+minimizers. At every price p_v>1/2 a tight incident edge must exist, or v's
+price can decrease. Its neighbor has p_u=w_uv-p_v<1/2 because w_uv<=1. Thus
+the same uniqueness argument as the unit case applies. Positive-coordinate
+continuity and zero-capacity payment limits follow by compactness as before.
+
+Every connected tight-edge component is either pinned (an odd cycle or a
+zero-price vertex fixes all affine edge equations) or is bipartite with
+  p_v=a_v+sigma_v t, sigma_v in {+1,-1},                 (2)
+where public offsets a_v come from the tight edge weights. Fix a smooth piece
+where tight edges and the signs of p_v-1/2 are unchanged. If any p_v remains
+identically1/2 on the piece then t is fixed and all its prices are constant.
+Otherwise let L={v:p_v<1/2}, H={v:p_v>1/2}, C_L=sum_L c_v.
+No tight edge joins two H vertices, since its price sum would exceed1>=w_e.
+
+For each bipartition sign s, every high-price vertex on side s is saturated
+in (1), and all its incident positive flow goes to LOW vertices on side -s.
+Consequently
+  C_{H,s} <= sum_{v in L,-s} degree_lambda(v)
+          <= C_{L,-s},
+and therefore
+  C_s := sum_{sigma_v=s}c_v <= C_L.                     (3)
+For a non-pinned varying component C_L>0. This capacity domination, rather
+than a false assertion that one entire bipartition is low, is the key new
+weighted incentive invariant.
+
+COALITION-TOTAL INCENTIVES
+Summing signed KKT equations over a bipartite tight component gives
+  sum_v sigma_v c_v h'(p_v)=0.
+Differentiate an increase of one coalition-owned report coordinate at k:
+  dt/dc_k = -sigma_k h'(p_k)/(2 C_L).                   (4)
+Let B_s be that coalition's total report on sign s and Bsign=B_+-B_-.
+Its payment derivative is
+  p_k - sigma_k Bsign h'(p_k)/(2 C_L).                 (5)
+We have sigma_k Bsign<=C_{sigma_k}<=C_L by(3). If k is low,
+(5)>=p_k(1-C_{sigma_k}/C_L)>=0. If k is high,
+(5)>=p_k-C_{sigma_k}/(2C_L)>=p_k-1/2>0. On pinned pieces the
+derivative is just p_k>=0.
+
+There are finitely many tight-edge, zero-coordinate and low/high patterns.
+On each free bipartite pattern, the signed KKT equation expresses t as a
+rational function of capacities with denominator2 C_L; pinned patterns have
+constant prices. Finite rational candidate intersections and continuity give
+the same finite-interval/clopen argument as the unit theorem. Boundaries with
+p=0 or p=1/2 are included by continuity. Regularize objective capacities to
+c+epsilon*1 to cover zero aggregate resources; coalition holdings still obey
+B_s<=C_s. Thus every joint binding underreport cannot increase the coalition's
+sum of payments. All actual owner identities and eligibility sets stay fixed.
+
+COALITION COVERAGE AND THE FACTOR TWO
+Dual feasibility p_u+p_v>=w_uv directly covers each actual coalition.
+Let d_v=h'(p_v). For each positive-lambda edge define
+  x_uv=lambda_uv/max(d_u,d_v),                          (6)
+and use x=0 on zero-lambda edges. Positive lambda implies p_u,p_v>0 by(1).
+For every v, sum_incident x<=degree_lambda(v)/d_v=c_v, so x is a feasible
+production plan. Also, by(1), total payment equals
+  Y=sum_edges lambda_uv (p_u/d_u+p_v/d_v).             (7)
+On a low/low edge, d_v=2p_v, so the coefficient in(7) is1, while its profit
+coefficient in sum w_e x_e is (p_u+p_v)/(2max(p_u,p_v))>=1/2.
+On a low/high edge, write low p=a<=1/2 and high p=b>=1/2. The respective
+coefficients are1/2+b and a+b, and1/2+b<=2(a+b). No high/high edge can carry
+positive lambda. Half-price endpoints can be treated in either case.
+Thus Y<=2 sum_e w_e x_e<=2F. This proof does not mistakenly treat rounded
+prices {0,1/2,1} as a weighted dual cover; low/low positive-profit edges would
+invalidate that shortcut.
+
+EXACT CONNECTED-PATH OBSTRUCTION
+For an integer m>=1, use path0--1--2--3 with fixed profits
+  w01=1/4, w12=1/4, w23=1,
+and capacities
+  c=(m,1,1/m,1/m).
+All resources and profits are positive. The claimed unique price optimum is
+  p=(1/[4(m+1)], m/[4(m+1)], 1/2, 1/2).
+Its edge01 and edge23 constraints are tight; edge12 is strictly slack.
+Exact KKT multipliers are
+  lambda01=m/[2(m+1)], lambda12=0, lambda23=1/m.
+They satisfy(1), so convexity certifies optimality; uniqueness was proved above.
+The true production value is
+  F=1/4+1/m:
+primal x01=1,x12=0,x23=1/m attains it, and dual prices(0,1/4,0,1)
+certify its upper bound. The payment total is
+  Y=m/[2(m+1)]+1/m.
+Consequently Y/F tends to2 as m tends to infinity. Together with the upper
+bound this proves exact rule-specific worst-case factor2.
+
+INTERPRETATION / STOPPING GATE
+Global scale covariance avoids the naive fixed-knee failure at profits above1
+and does preserve the strengthened incentive property. It does not yield a
+strictly-below-two weighted theorem. The connected path shows why: a weak
+activity can remain in the wholly quadratic regime, behaving almost like the
+factor-two quadratic price rule, while a negligible-capacity high-profit
+activity determines the global knee. Inactive connecting edges do not help.
+This stops attempts to rescue the theorem by merely replacing the fixed unit
+knee with the maximum edge profit. It leaves open multiscale/owner-aware
+mechanisms and economically structured route values. No unrestricted weighted
+mechanism lower bound, and no historical novelty claim, follows.

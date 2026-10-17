@@ -1,0 +1,207 @@
+FINITE ACTUAL-OWNER RATE FOR THE COMMON-CAP THREE-RESOURCE OBSTRUCTION
+17 October 2026. Companion to the composition lane's common-cap theorem.
+Status: internally accepted after root rederivation and independent Fable
+review023151, with exact arithmetic replay. Historical novelty unconfirmed.
+
+1. CLAIM AND SCOPE
+
+For integer B>=1 and integers M>K>=2, consider
+
+ F(P,a,b) = min(P, sum_{j=1}^M min(a_j,b_j)).                 (1)
+
+This is a finite nonnegative monotone concave homogeneous production function.
+It is the optimum of the unit-profit packing LP
+
+ max sum_j x_j,   sum_j x_j<=P,   x_j<=a_j, x_j<=b_j, x_j>=0.
+
+Every activity consumes exactly THREE resources, although both resource count
+and actual owner count grow. There are L=2BK actual power owners, each eligible
+only for resource P; and two actual branch owners per branch, eligible only for
+a_j and b_j respectively. Their identities and eligibility are fixed across
+every report profile. Thus n=2M+2BK and d=2M+1. No strategic cloning, splitting,
+identity creation, aggregate-price hypothesis, or infinite-population limit is
+used in the finite inequality below.
+
+Assume nonnegative payments, coverage of every actual coalition, and TCWM:
+the total payment to every actual coalition is nondecreasing when its members
+increase their resource reports coordinatewise while all outsiders stay fixed.
+Suppose total payments are at most B times grand production at every profile.
+Define
+
+ k_m=floor(K/m),   x_m=m*k_m/K,
+ A_K=sum_{m=2}^K [1-(1-x_m)^2]/m,
+ S_(M,K)=sum_{m=2}^K 1/(M-m+1)=H_(M-1)-H_(M-K).
+
+Then necessarily
+
+ B^2 >= A_K/[8(1+S_(M,K))]
+     >= [H_K-1-delta_K]/[8(1+S_(M,K))],                    (2)
+
+ where delta_K=[K(K+1)/2-1]/K^2.
+
+In particular, if K_TCWM,3(n) denotes the worst necessary factor among such
+three-resource-per-activity models with n fixed actual owners, then
+
+ liminf_{n->infinity} K_TCWM,3(n)/sqrt(log n) >= 1/sqrt(8).  (3)
+
+The logarithm is natural. This is a quantitative bounded-arity obstruction;
+it does NOT improve the already established Omega(sqrt(n)) lower when activity
+arity is allowed to grow, and does not concern only individual truthfulness.
+Full outside-production incentives imply TCWM, so the same lower also applies
+to that stronger contract.
+The model class defining K_TCWM,3(n) permits additional fixed owners with empty
+eligibility sets (or reports restricted to zero). This convention makes the
+padding step in Section5 explicit; it never changes an owner's identity within
+a report domain.
+
+2. FIXED-OWNER SYMMETRIZATION
+
+Average a hypothetical rule over permutations of power-owner labels, branch
+permutations with the corresponding branch-owner/resource labels, and swaps
+of the two owner/resource roles within any branch. These are automorphisms of
+the SAME fixed ownership eligibility model and of (1). Nonnegativity, every
+coverage inequality, every TCWM inequality and the factor B all survive this
+finite averaging. We therefore use the resulting invariant rule below.
+
+All L power owners report 1/L at all profiles, so aggregate P=1. For m=1,...,K,
+profile C_m has (a_j,b_j)=(1,1) for j<=m and (0,1) for j>m. Its production is1.
+At C_m, all 2m active branch owners receive the same payment q_m. All M-m
+inactive b-owners receive the same payment z_m. Let L_m be the TOTAL payment
+to all 2M branch owners, including zero-report inactive a-owners. Thus
+
+ L_m<=B,   z_m<=B/(M-m).                                  (4)
+
+The second expression is used only for m<K<=M-1. We never assume zero payments
+to zero-report owners. Swaps among active branch roles preserve C_m even though
+inactive branches have the asymmetric report (0,1).
+
+3. EXACT RATIONAL BOOTSTRAP
+
+For fixed m<=K, put k=k_m>=1 and epsilon=k/L. Change the m active branch pairs
+to (epsilon,epsilon), leaving all power and inactive branch reports unchanged.
+Production is m*epsilon<=1/(2B). Let Y_P be total payment to all power owners
+at this bootstrap profile. Budget and symmetry imply
+
+ Y_P<=B*m*epsilon,  each power owner receives Y_P/L.
+
+For any active branch j, take the coalition consisting of its two actual branch
+owners and ANY k actual power owners. This coalition has power k/L=epsilon and
+paired branch capacity epsilon, hence worth epsilon. Coverage gives
+
+ y_(a_j)+y_(b_j) >= epsilon-(k/L)Y_P
+                  >= epsilon(1-B*m*epsilon).
+
+Summing over m active pairs, then restoring all these same owners' reports to1
+and applying TCWM to their actual coalition, yields
+
+ 2m*q_m >= m*epsilon(1-B*m*epsilon)
+          = [1-(1-x_m)^2]/(4B).
+
+Consequently
+
+ q_m >= [1-(1-x_m)^2]/(8Bm).                              (5)
+
+Keeping the exact factor 1-B*m*epsilon is essential to the leading constant.
+Replacing it immediately by1/2 and rounding k loses an unnecessary factor2.
+
+4. LINKED RESTORATIONS
+
+Transition C_(m-1) to C_m, for m=2,...,K, by increasing only a_m from0 to1.
+Take the coalition of ALL branch owners except b_m. It contains the changing
+owner a_m and no power owner. TCWM for this same coalition gives exactly
+
+ L_m-q_m >= L_(m-1)-z_(m-1).
+
+Sum these inequalities. Since L_1>=0 and L_K<=B, equations(4)--(5) imply
+
+ B*(1+S_(M,K)) >= sum_{m=2}^K q_m >= A_K/(8B).
+
+This is the first inequality in(2), with no unmodeled owner participation.
+Since 0<=1-x_m<m/K,
+
+ A_K >= H_K-1 - (1/K^2)sum_{m=2}^K m = H_K-1-delta_K,
+
+which proves the second inequality. QED for the finite result.
+
+There is also a direct rational lower without presupposing an integer budget.
+Keep the INSTANCE parameter B, L=2BK and epsilon_m=floor(K/m)/L fixed, but let
+kappa be any candidate mechanism's factor. The same bootstrap gives
+q_m>=epsilon_m(1-kappa*m*epsilon_m)/2 (valid even if its right side is negative).
+Thus, with the finite rational quantities
+
+ R=sum_{m=2}^K epsilon_m/2,  Q=sum_{m=2}^K m*epsilon_m^2/2,
+
+every mechanism necessarily satisfies
+
+                 kappa >= R/(1+S_(M,K)+Q).                (7)
+
+In particular R-BQ=A_K/(8B). Any strict contradiction at kappa=B gives an
+explicit strict rational gap in(7), so no attainment/closure assumption is
+hidden in statements that the optimum exceeds B.
+
+5. QUANTITATIVE OWNER-COUNT CONSEQUENCE
+
+Convexity of 1/x gives the trapezoid bound
+
+ H_K >= log K + (1+1/K)/2.
+
+It follows that H_K-1-delta_K >= log K-1+1/K^2 > log K-1.
+For integer B>=2 take M=BK. Then n=4BK and
+
+ S_(BK,K) <= (K-1)/(BK-K+1) < 1/(B-1).
+
+Thus a factor-B rule would require
+
+ B^2 > [(B-1)/(8B)]*(log K-1)                             (6)
+
+whenever log K>1. Set
+
+ K_B=ceil(exp(8B^3/(B-1)+1)),  N_B=4B*K_B.
+
+Equation(6) is impossible at K=K_B. Therefore K_TCWM,3(N_B)>B.
+Here log N_B=8B^2+O(B+log B), and log N_(B+1)/log N_B tends1.
+For any additional actual owners, give them empty eligibility sets, or restrict
+them to a zero-report face and discard their nonnegative payments. The original
+owners' coverage and TCWM inequalities remain valid, with no greater budget.
+Hence the worst necessary factor is nondecreasing in n. Padding between the
+successive N_B proves(3), not merely a subsequence statement.
+
+6. A FINITE EXACT CERTIFICATE ABOVE FACTOR TWO
+
+The asymptotic statement is not needed to exhibit a fixed finite obstruction.
+Take B=2, K=2^49, M=35K, L=4K, and n=74K=41658296553177088 owners.
+All profiles in the proof have rational capacities. Since S_(M,K)<1/34 and
+
+ log2 > 6931/10000,
+ log K-1 > 49*(6931/10000)-1 > 8*4*(35/34),
+
+equation(2) contradicts funding factor2. The elementary logarithm certificate
+uses log2=2*sum_{r>=0} (1/3)^(2r+1)/(2r+1); six positive terms already exceed
+6931/10000, and their geometric tail bound gives log2<6932/10000.
+No enumeration of this enormous owner population is necessary. More precisely,
+
+ R-2Q-2(1+S) > 3523/2720000,
+ 1+S+Q < 35/34 + 49*(6932/10000)/32 = 2843589/1360000.
+
+Here Q<=(H_K-1)/(8B^2)<=log K/(8B^2). Inserting these inequalities into(7)
+gives the explicit fixed-owner bound
+
+ kappa > 2 + 3523/5687178 = 11377879/5687178 > 2.0006.       (8)
+
+This certificate establishes existence and preserves all fixed-owner details;
+it is not a practical deployment scale or a claim that this owner count is
+close to minimal. Sharper finite examples and the true owner-rate remain open.
+
+7. VERIFICATION AND PROVENANCE
+
+check_finite_owner_arity_three.py uses Fraction arithmetic to check the exact
+bootstrap identity, floor-error estimate, harmonic ladder and explicit finite
+factor-two certificate. These checks supplement the analytic proof rather than
+replacing its all-profile conclusion.
+
+The common-cap production function and linked C_m transition idea are due to
+the composition lane of this campaign. That lane independently found the pure
+power-owner finite realization. This companion retains the quadratic bootstrap
+rounding loss, allows M to vary independently of K, and derives the explicit
+owner-count rate and compact exact certificate. No historical priority claim
+is made here.

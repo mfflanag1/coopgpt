@@ -1,0 +1,121 @@
+FULLY POLYNOMIAL EXACT-INCENTIVE APPROXIMATION FOR TWO-SPARSE PRODUCTION
+Frozen candidate, 17 October 2026. Independent audit pending.
+
+THEOREM
+For any finite nonnegative RATIONAL two-sparse production technology (A,w),
+any rational 0<epsilon<=1, and any rational fixed-owner report profile, one
+can compute rational payments in time polynomial in the technology/report
+binary encoding lengths and 1/epsilon with:
+ (i) coalition coverage at EVERY real profile;
+ (ii) coalition-total payment monotonicity under simultaneous binding whole-
+      bundle underreports, for arbitrary fixed mixed owners;
+ (iii) total payments at most (3/2+epsilon)F(c).
+This is an FPTAS in funding factor, with exact incentives and exact coverage,
+not approximately truthful payments. The same construction using the audited
+unit full-OUT mechanism gives exact full OUT with funding at most
+(2+epsilon)F(c). Full original marginal floors are not asserted for this
+approximate representation; see section 4.
+
+A single finite public graph and a fixed positive linear owner-copy map define
+the rule on all REAL report profiles. Polynomial exact evaluation is asserted
+for rational reports; the mathematical rule and its incentive guarantees have
+all-real-report scope. The exact optimum factor 3/2 is attainable by the finite
+vertex-coordinate construction, potentially exponential; no exact polynomial
+3/2 algorithm is claimed here.
+
+1. NORMALIZE, BOUND, AND INTEGERIZE
+Use section 2 of HETEROGENEOUS_TWO_SPARSE_EXACT_LIFT.txt to extract unary gamma
+and retain positive residual binary profits. This exact rational arithmetic
+has polynomial bit cost. If no residual activity remains, pay gamma.b_i and
+stop. Form the explicit bounded dual polytope
+ P={p: 0<=p_v<=M_v, a_e p_u+b_e p_v>=w_e},
+ M_v=max_e w_e/a_ev (or zero for isolated v).
+Write EVERY inequality in the form C_j p>=d_j and clear denominators in each
+row INCLUDING its right-hand side. This yields an integral matrix C and
+integral vector d, computed with polynomial bit length. Let
+ H=max(1, max absolute entry of C and d),   D=n! H^n,   delta=1/D.
+The n-dimensional formula is safe even when P is lower-dimensional: every
+vertex still has n linearly independent active inequality normals, by the
+standard definition of a polytope vertex. Take such a square active submatrix.
+Its nonzero determinant is an integer, of absolute value at most n!H^n=D.
+By Cramer's rule every positive vertex coordinate is a ratio of two nonzero
+integers with denominator of absolute value at most D. Hence
+ p_v>0 at a vertex of P  ==>  p_v>=delta.                            (4)
+No enumeration of vertices is needed to compute delta. Since the all-M vector
+is a vertex of P (the n upper-bound normals are independent), every positive
+M_v itself is >=delta.
+
+2. PUBLIC GEOMETRIC GRIDS
+For the 3/2+epsilon result put eta=2epsilon/3; for 2+epsilon put eta=epsilon/2.
+For each nonisolated v use the sorted grid
+ {0, delta, delta(1+eta), delta(1+eta)^2,... below M_v, M_v}.
+Remove repeated endpoints and make interval copies with capacity width times
+c_v. Use exactly the edge condition (3) of the exact-lift theorem:
+ a_e lower(I)+b_e lower(J)<w_e for some original activity e.
+The construction depends only on public technology and epsilon, not reports.
+The primal height embedding is unchanged and proves, uniformly for every c,
+ F_res(c)<=G(c):=F_H(Bc).                                           (5)
+
+3. MULTIPLICATIVE DUAL ROUNDING, INCLUDING ZERO PRICES
+Choose an optimal VERTEX p of P for c. Round each p_v upward to the first grid
+point q_v>=p_v, retaining q_v=0 exactly when p_v=0. By (4), every positive p_v
+lies at or above delta, so
+ q_v<=(1+eta)p_v; in particular no additive error occurs at zero coordinates.
+Set a bin's cover price to 1 iff its lower endpoint is less than q_v. If a
+lift edge were uncovered, its lower endpoints would be >=q>=p, contradicting
+original dual feasibility and the strict edge condition. The cover has exact
+cost c.q <=(1+eta)c.p. Therefore
+ F_res(c)<=G(c)<=(1+eta)F_res(c)               for EVERY c>=0.        (6)
+This includes profiles with F_res(c)=0: both sides force G(c)=0. An arbitrary
+fixed small first interval without a vertex-coordinate lower bound would not
+justify (6); the Cramer bound is load-bearing.
+
+4. PAYMENTS, INCENTIVES, COVERAGE, FUNDING
+Apply the audited unit-Huber rule to H with owner reports B b_i, then add
+linear payment gamma.b_i. Linked report maps preserve all admissible coalition
+underreports exactly. Graph all-profile coalition monotonicity gives original
+all-profile coalition monotonicity. Coalition coverage follows from
+ payment(S)>=gamma.b_S+G(b_S)>=gamma.b_S+F_res(b_S)=F(b_S).
+Total payment is at most
+ gamma.c+(3/2)G(c) <= gamma.c+(3/2)(1+eta)F_res(c)
+ <= (3/2+epsilon)F(c).
+All inequalities are exact. There is no randomized owner sampling or rounding
+of a report, and no assumption that owners control copies separately.
+
+For full OUT, graph full OUT covers withheld production G(d)>=F_res(d), so
+linear plus graph payments also satisfy original full OUT, with funding2+epsilon.
+CAUTION: approximate equality (6) alone does NOT transfer the full original
+owner marginal floor: G(c)-G(c-b_i) need not dominate the corresponding F_res
+marginal. Thus the full-OUT FPTAS conclusion in this note DOES NOT assert the
+marginal floor unless an independent argument establishes it. The exact lift
+DOES transfer full floors. This distinction does not affect TCWM or full OUT.
+
+5. BIT COMPLEXITY AND GRAPH SIZE
+Let B be the total binary encoding length of the explicit rational technology
+after elementary residualization. Rational M and rowwise denominator clearing
+have bit lengths polynomial in B and n; products of denominators have at most
+the sum of their bit lengths. Thus log H and log D are polynomial in B,n.
+Each grid has at most
+ 2+ceil(log(M_v/delta)/log(1+eta))
+interval endpoints, with log(M_v/delta) polynomial in B,n. Since eta<=1,
+log(1+eta)>=eta/2, giving a polynomial number K of bins in B,n,1/epsilon.
+Each endpoint is a rational product of at most K factors of the rational
+1+eta times delta (or M_v), so its binary encoding length is also polynomial
+in B,n,1/epsilon and the encoding length of epsilon.
+The graph has at most nK vertices and mK^2 candidate pairs before duplicate
+edge removal, with exact rational comparisons to decide each edge. Computing
+all virtual owner reports requires a polynomial number of rational products.
+The exact unit-Huber density/mincut algorithm is polynomial in graph size and
+rational capacity bit length (EXACT_HUBER_ALGORITHM.txt). The full-OUT graph
+rule q=min(2p,1) uses the same exact prices. Composing these bounds establishes
+fully polynomial running time. This is a bit-complexity theorem, not a claim
+that this conservative grid is fast for large practical instances.
+
+6. STATUS / PRIORITY
+Correctness rests on the all-capacity bin-lift proof and independently audited
+unit graph mechanisms. Rational LP vertex bounds and multiplicative geometric
+grids are standard ingredients. Their use for exact linked-owner incentive
+transfer on arbitrary heterogeneous two-sparse technology is a proposed
+contribution with historical novelty unconfirmed. This stronger scheme would
+supersede the earlier exponential-in-1/epsilon separated-weight-block scheme;
+that earlier proof remains valid as an independently checked stepping stone.

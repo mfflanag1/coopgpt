@@ -1,0 +1,120 @@
+EXPLICIT FINITE-OWNER FULL-OUT OBSTRUCTION ABOVE 3/2
+2026-10-17. Candidate exact certificate; internal parent review pending.
+
+This is a compressed analytic certificate, not an enumerated LP certificate.
+It makes the earlier compactness lower bound effective at an enormous finite
+owner count. Its modest numerical constant is not the sharp asymptotic result.
+
+THEOREM. Put L=2000 and N=12000*1110^(L+3). For the two-input production
+function F(A,B)=min(A,B), some binary report profile on N pure owners of each
+input forces funding at least
+
+             1588934000/1058001797 = 1.5018254264836566... .
+
+This holds for every nonnegative coalition-covering mechanism satisfying full
+coalition OUT on all binary profiles. Owners and their resource types are fixed.
+An owner reports either zero or one unit. OUT allows a coalition to withhold
+units, then produce min(withheld A,withheld B) outside the mechanism. No
+regularity, anonymity, resource-price, or scale-invariance assumption is made.
+
+1. NECESSARY ACTIVE-PAYMENT ARRAY
+
+Average any candidate rule within the two resource types, and average with its
+resource-swapped version. This preserves all linear requirements. At a profile
+with m active A owners and n active B owners write x_mn,y_mn for their respective
+per-owner payments. Inactive owners may receive positive payments. Dropping
+their nonnegative payments gives the following necessary inequalities:
+
+ m x_mn+n y_mn <= k min(m,n);
+ r x_mn+s y_mn >= min(r,s) for r<=m,s<=n;
+ r x_mn+s y_mn >= (r-u)x_(m-u,n-v)+(s-v)y_(m-u,n-v)+min(u,v)
+       for 0<=u<=r<=m, 0<=v<=s<=n.
+
+All are actual fixed-owner comparisons. The last inequality drops any payments
+to the newly inactive coalition members. The array is nonnegative and obeys
+x_mn=y_nm. The funding factor is denoted k.
+
+2. FINITE DILATION AVERAGE WITH CONTROLLED ERROR
+
+Let D range uniformly over 2^e2 3^e3 5^e5 37^e37, with each exponent in
+{0,...,L-1}. Define xbar_mn=average_D x_(Dm,Dn), and likewise ybar.
+Scaling all counts in any necessary inequality and dividing by D proves the
+same inequality for xbar,ybar. This operation averages different actual
+profiles; it does not change owners during a strategic comparison.
+
+For a positive integer h with prime factors only in {2,3,5,37}, let Omega(h)
+count those factors with multiplicity. A finite-box shift and telescoping give
+
+ |xbar_(hm,hn)-xbar_mn| <= Omega(h)*k min(m,n)/(m L),
+ |ybar_(hm,hn)-ybar_mn| <= Omega(h)*k min(m,n)/(n L).
+
+To see the one-prime step, all but one exponent layer cancel; the difference
+is an average of last-layer minus first-layer payments, each in [0,M], hence
+has magnitude at most M/L. Iterate for each prime factor. The chosen N is a
+loose upper bound covering every profile and every shifted box below.
+
+Set
+ p0=xbar_(1000,1), q0=ybar_(1000,1), C=1000 p0;
+ p1=xbar_(5,2), q1=ybar_(5,2);
+ p2=xbar_(5,4), q2=ybar_(5,4);
+ a=xbar_(1,1)=ybar_(1,1).
+
+Budget and coverage give exactly
+
+       k >= C+q0,   q0 >= 1-C/1000,
+       k >= 1+(999/1000)C.                         (1)
+
+Coalitions consisting only of A owners imply
+5p1 <= 2000 xbar_(2000,2),
+5p2 <= 4000 xbar_(4000,4), and a<=C.
+Applying the h=2 and h=4 shift bounds yields
+
+       p1 <= (2/5)C +(2/5)k/L,
+       p2 <= (4/5)C +(8/5)k/L.                    (2)
+
+An all-B coalition gives 4q2<=5 ybar_(5,5). Using h=5 and a<=C,
+
+       (4/5)q2 <= C+k/L.                           (3)
+
+3. TWO BALANCED WITHHOLDING COMPARISONS
+
+At (1665,666), let a coalition with holdings (665,666) withhold (665,665).
+The low aggregate is (1000,1), and its retained holding is (0,1). Therefore
+
+ 665 xbar_(1665,666)+666 ybar_(1665,666) >= q0+665.
+
+The high profile is 333*(5,2), and Omega(333)=3. The shift errors contribute
+665*(6/5)k/L+666*3k/L=2796k/L. Thus
+
+       665p1+666q1 >= q0+665-2796k/L.
+
+Using (1),(2),
+
+       q1 >= 1-(266001/666000)C-(1531/333)k/L.       (4)
+
+At (15,12), let a coalition (10,12) withhold (10,10), leaving (5,2) and a
+retained coalition holding (0,2). The h=3 shift contributes 20k/L:
+
+       10p2+12q2 >= 2q1+10-20k/L.                  (5)
+
+By (2),(3), the left side of (5) is at most 23C+31k/L. Substituting (4)
+therefore gives
+
+       (2641667/111000)C >= 12-(20045/333)k/L.       (6)
+
+4. EXACT ELIMINATION
+
+Put A=2641667/111000, B=20045/333, d=999/1000. From (1), C<=(k-1)/d.
+Combining with (6),
+
+       k >= (12+A/d)/(A/d+B/L).
+
+At L=2000 this is exactly 1588934000/1058001797 > 3/2, with difference
+3862609/2116003594. Every comparison uses integer owner counts. The astronomical
+N is intentional: this certificate establishes finite realization, not a
+practical adversarial instance. The sharper asymptotic constant 1.543063... is
+proved separately in UNRESTRICTED_OUTSIDE_SHARP_CANDIDATE.txt.
+
+Verification: check_finite_outside_obstruction.py uses exact Fraction arithmetic
+to check all coefficients, the four dilation factors, and the final bound. It
+does not enumerate all N-owner profiles or substitute for the proof above.

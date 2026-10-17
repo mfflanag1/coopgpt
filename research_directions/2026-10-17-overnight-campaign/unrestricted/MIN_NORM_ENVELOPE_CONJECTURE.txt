@@ -1,0 +1,74 @@
+MINIMUM-NORM COVER ENVELOPE: ORIGINAL INDIVIDUAL-IC FRONTIER
+17 October 2026. Exact reduction plus unproved covering inequality.
+
+UPDATE: CONJECTURE(C) IS FALSE, WITH AN UNBOUNDED PRODUCTION-FAMILY
+COUNTEREXAMPLE. See MIN_NORM_DELETION_OBSTRUCTION.txt. The exact envelope
+reduction(E) remains valid; a better direct bound on that envelope remains open.
+THIS IS NOT A PROVED NEW GENERAL BOUND.
+
+For a nonnegative monotone coalition game v on N, let
+ P(v)={x>=0: x(S)>=v(S) for every S subset N},
+ x(v)=argmin_{x in P(v)} ||x||_2^2, R(v)^2=||x(v)||_2^2.
+Let v_{-i} be the restriction to N\{i}, embedded with coordinate i zero,
+and write R_{-i}^2 for its minimum squared norm. Equivalently the deletion
+polyhedron imposes only the coalition constraints not containing i, with its
+minimum-norm solution having coordinate i zero.
+
+PROVED ENVELOPE REDUCTION
+In the production-report model, define
+ M_i(b)=sup_{0<=b_i'<=b_i} x_i(v_{(b_i',b_{-i})}).
+For every fixed actual ownership eligibility model this is nonnegative and
+own-report monotone by inclusion of the supremum domains. It covers every
+coalition because it coordinatewise dominates x(v_b).
+Fix any underreport b_i' and let x'=x(v_{(b_i',b_{-i})}), z=x(v_{-i}).
+All coalition constraints not containing i are unchanged, so x' belongs to
+the deletion polyhedron. The variational inequality for Euclidean projection
+of zero gives
+ ||x'||^2 >= ||z||^2+||x'-z||^2 >= R_{-i}^2+(x_i')^2.
+All coalition values at the underreport are no larger than at b, so x(v_b)
+is feasible for that underreport's polyhedron. Thus ||x'||^2<=R(v_b)^2.
+Consequently
+ M_i(b)^2 <= R(v_b)^2-R_{-i}^2,
+ sum_i M_i(b) <= sqrt(n * sum_i[R(v_b)^2-R_{-i}^2]).       (E)
+The supremum is finite and its attainment is unnecessary. No smoothness,
+continuity, or resource-boundary regularity is used.
+
+UNPROVED ABSTRACT COVERING INEQUALITY
+If P(v) contains a nonnegative vector z with sum_i z_i=T=v(N), conjecture
+                 sum_i[R(v)^2-R_{-i}^2] <= T^2.            (C)
+A stronger version replaces T by the minimum l1 norm of ANY feasible cover
+and does not require monotonicity or balanced subgames. No proof yet.
+If(C) holds, (E) yields a general sqrt(n) all-profile individual-IC funding
+upper, improving the manuscript's n*sqrt(2/(n+1)) constant asymptotically.
+This would not establish TCWM or close the weak-IC asymptotic-rate gap.
+
+EVIDENCE
+qp_deletion_probe.py:981 random min-linear production profiles, no numerical
+counterexample; maximum left/T^2=1 within floating error.
+qp_abstract_deletion_probe.py:3000 random nonnegative abstract games with an
+explicit nonnegative grand-efficient core, no numerical counterexample;
+maximum left/T^2 approximately0.99999999997.
+Both are numerical discovery only. Simple unanimity and veto-star examples
+attain equality analytically. Raw minimum-norm cover itself need not be
+own-monotone (owner_qp_probe.json); the envelope is essential.
+
+FAILED DIRECT DUAL BOUND
+At the minimum-norm cover x, choose dual weights lambda_S>=0 supported on
+tight coalitions, so x=sum_S lambda_S 1_S. Define
+ A=sum_S lambda_S 1_S 1_S^T.
+Dropping all dual weights on coalitions containing i gives
+ R^2-R_{-i}^2 <= ||A e_i||^2,
+ hence sum deletion losses <=||A||_F^2. This does not prove(C): for a veto
+star with one center and three leaves, x=(3/4,1/4,1/4,1/4), dual pair weights
+1/4 give ||A||_F^2=9/8>T^2=1, although the TRUE deletion sum is1.
+Reoptimizing the remaining dual weights is necessary. This failed shortcut
+must not be silently used as a proof.
+
+SOURCE COMPARISON
+Amigo--Belzarena--Vaton, full original /private/tmp/coop-submission-20261014/
+ABV16-hal.txt, Section5.2.2, already studies minimizing the Euclidean norm of
+payments within the EFFICIENT core. It expressly notes that monotonicity is
+not assured. Our proposed object drops the efficiency equality, uses the
+upper covering polyhedron, and then takes an own-report envelope. Therefore
+minimum-norm selection itself is an established ingredient; only a proved
+new envelope/deletion theorem would be a proposed contribution.

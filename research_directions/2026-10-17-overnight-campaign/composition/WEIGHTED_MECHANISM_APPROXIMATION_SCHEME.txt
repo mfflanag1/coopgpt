@@ -1,0 +1,117 @@
+ORIGINAL-BIT-LENGTH APPROXIMATION SCHEME FOR WEIGHTED FUNDING
+2026-10-17. Candidate transfer theorem; independent review required.
+Known weight-reduction/bucketing ideas are explicitly attributed below.
+
+THEOREM
+For every fixed rational 0<epsilon<=1, every finite resource graph with
+public nonnegative rational profits and fixed arbitrary mixed owners has
+an explicit coalition-covering, coalition-total-underreport-monotone
+payment-only mechanism with funding at most(3/2+epsilon)F_w.
+On rational reports, its running time is polynomial in the ORIGINAL graph,
+profit, and capacity encoding lengths, with a potentially enormous factor
+depending only on epsilon. This is an efficient approximation scheme,
+not a fully polynomial scheme and not a practical runtime promise.
+The exact3/2 original-bit-polynomial question remains unresolved here.
+
+CAPACITY-UNIFORM SEPARATED-BLOCK LEMMA
+Partition positive-profit edges into ordered nonempty blocks E_1,...,E_t
+with maximum M_j and minimum m_j, satisfying m_(j+1)>=R M_j for R>1.
+Let F_j(c) be production using only block j. Then for every real c>=0,
+ F_union(c)<=sum_j F_j(c)<=(1+2/(R-1))F_union(c).          (1)
+The lower inequality restricts any feasible union plan to its blocks.
+
+For the upper inequality, choose a block-optimal fractional plan x^j for
+each j. Process blocks high to low. Retain y^j obtained by reducing x^j
+until it respects capacities residual after already accepted higher plans.
+If d_v is higher accepted use, initial overflow of x^j at v is at most d_v.
+One can fix each violated vertex by deleting its incident flow, never
+creating another violation. Total deleted edge quantity is at most sum_v d_v,
+so block-j value loss is at most M_j sum_v d_v. Summing losses gives
+ sum_j(F_j-value(y^j))
+ <=2 sum_k sum_{e in E_k} y^k_e (sum_{j<k}M_j)
+ <=[2/(R-1)] sum_k sum_{e in E_k} w_e y^k_e.
+Indeed sum_{j<k}M_j<=m_k/(R-1)<=w_e/(R-1), by geometric separation.
+The combined y is feasible in the union graph. Rearranging proves(1).
+Zero capacities, disconnected graphs, odd cycles, and arbitrary actual
+ownership require no modification. This is an adaptation of standard
+spread-weight greedy aggregation to arbitrary real fractional capacities.
+
+PUBLIC BLOCK CONSTRUCTION
+Delete zero-profit edges. If none remain, pay zero. Set a=min_e w_e.
+Choose integer R>=1+12/epsilon, integer L>=1+6/epsilon, eta=epsilon/6.
+Assign edge e the integer band index k with a R^k<=w_e<a R^(k+1).
+For each public shift s=0,...,L-1, omit all bands k congruent to s modulo L.
+Partition the remaining bands into maximal runs of L-1 consecutive indices;
+empty runs need not be built. A run starting at ell has profits in
+[a R^ell,a R^(ell+L-1)), and adjacent retained runs are R-separated.
+Each original edge is retained in EXACTLY L-1 of the L shifts.
+
+For a nonempty retained run B, let a_B=min_{e in B}w_e and round weights upward:
+ tilde w_e=eta a_B ceil(w_e/(eta a_B)).
+Then w_e<=tilde w_e<=(1+eta)w_e. The normalized integer profits are bounded
+by C_epsilon=ceil(R^(L-1)/eta), depending only on epsilon. Apply the exact
+rational unfolded3/2 mechanism to that block's rounded technology. Scale
+its integer-unit payments by eta a_B. This block rule is an exact truthful
+rule for the rounded technology, not an approximate optimizer with unknown
+incentive error. Every block retains the same original actual owners.
+
+FINAL PAYMENT AND COVERAGE
+Pay each owner
+ P_i=(1/(L-1)) sum_s sum_(retained blocks B at shift s) P_i^(B).
+This is a fixed positive combination of all-profile coalition-monotone
+rules, so it preserves that incentive property exactly. For any coalition,
+fix its optimum original weighted plan x. Each rounded block's covered
+value is at least the original value of x restricted to that block. Each
+edge appears L-1 times across shifts, so summing and dividing by L-1 gives
+coalition payment at least F_w of its holdings. The construction depends
+only on public profits/graph, never on reports or selected optima.
+
+FUNDING
+For each block, F_tildeB(c)<=(1+eta)F_B(c). For each shift, lemma(1) gives
+sum_B F_B(c)<=(1+2/(R-1))F_retained(c)<=(1+2/(R-1))F_w(c).
+Thus total payment is at most
+ K F_w(c), K=(3/2)(1+eta)(1+2/(R-1)) L/(L-1).
+Our parameter choices give K<=(3/2)(1+epsilon/6)^3<=3/2+epsilon
+for 0<epsilon<=1. The last inequality follows by expanding:
+(3/2)[epsilon/2+epsilon^2/12+epsilon^3/216]
+<=epsilon(3/4+1/8+1/144)<epsilon.
+
+BIT COMPLEXITY AND WHAT IS NOT CLAIMED
+There are at most mL nonempty retained blocks, because every nonempty block
+contains an original edge and each edge is retained L-1 times. Each normalized
+block unfolds to at most n C_epsilon vertices and m_B C_epsilon edges.
+All profits and scales are rational. Band indices and powers of R have bit
+length polynomial in the original rational-profit encoding length, for fixed
+epsilon; compute band indices by exact rational comparisons, not floating logs.
+Applying the proven polynomial-bit unit-Huber solver to these finite blocks
+is polynomial in the original input length, times a function of epsilon.
+For the displayed parameters C_epsilon grows like
+(1/epsilon)^{O(1/epsilon)}. This proof does not provide polynomial dependence
+on1/epsilon, exact3/2 polynomial compression, or a useful practical constant.
+The all-real-report property is an analytic property of the formula; exact
+finite bit-model evaluation naturally takes rational report inputs.
+
+ATTRIBUTION AND PRIORITY BOUNDARY
+Weight rounding, widely separated classes, shifts with omitted bands, and
+greedy aggregation are established matching techniques. Lingas-Di(2010/11)
+reduce to bounded weight range with exponential dependence on inverse
+accuracy. Bernstein-Chen-Dudeja-Langley-Sidford-Tu, arXiv2410.18936v2,
+Section3.1 reviews Gupta-Peng's spread-class framework; Section3.2 discusses
+limitations of narrow disjoint classes. These are relevant prior ingredients,
+not new weight-reduction claims. The argument above explicitly checks
+fractional real capacities and uses ALL public shifts in a positive sum,
+so that coalition coverage and all-profile owner incentives survive. Priority
+for that mechanism consequence remains unconfirmed.
+Primary texts consulted17 October2026:
+https://arxiv.org/abs/1012.5911 (abstract; full proof not yet read)
+https://arxiv.org/html/2410.18936v2 (Section3.1 and surrounding discussion)
+
+IMPLEMENTATION GUARD (17 October 2026 review clarification)
+The supplied approximation wrapper defaults to copy_limit=100000 and raises
+when a lifted block exceeds this cap; it never truncates the block. The proven
+C_epsilon may greatly exceed this cap, even at epsilon=1. Thus the implementation
+is an exact bounded demonstrator, not a practical realization for every
+parameter regime in the theorem. Independent Fable review 012656 found no
+mathematical issue; it did not execute the scripts. Its noted two-transition
+regression count is corroboration only; incentives follow from the all-profile
+positive-sum theorem.

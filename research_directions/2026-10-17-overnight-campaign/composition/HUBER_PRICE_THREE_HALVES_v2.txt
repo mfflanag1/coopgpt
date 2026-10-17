@@ -1,0 +1,201 @@
+A THREE-HALVES PAYMENT RULE FOR UNIT-PROFIT RESOURCE GRAPHS
+17 October 2026. Version2 after independent Fable audit and root algebra/replay.
+Version1 is preserved verbatim in HUBER_PRICE_THREE_HALVES_CANDIDATE.txt.
+Root retains authority over final promotion and historical priority assessment.
+Historical novelty is unassessed. The proof is stronger in topology than the
+forest target: finite arbitrary undirected graphs, with fractional production.
+
+MODEL
+Fix a finite simple resource graph G=(V,E). Activity uv consumes one unit at
+each of u,v and earns one unit. F(c)=max sum_e x_e subject to x>=0 and
+sum_{e incident v}x_e<=c_v. This is fractional matching, not integral matching.
+Fixed actual owners report bundles b_i>=0, c=sum_i b_i. Their eligibility sets
+are fixed. Deviations are arbitrary coordinatewise binding underreports of
+the whole bundle; utility is payment only. No ownership is split strategically.
+Every coalition S can use exactly the aggregate bundle sum_{i in S}b_i.
+
+CONSTRUCTION
+Let h(t)=t^2 for 0<=t<=1/2, and h(t)=t-1/4 for 1/2<=t<=1.
+For strictly positive c, minimize
+  J_c(p)=sum_v c_v h(p_v)
+over 0<=p_v<=1 and p_u+p_v>=1 for every edge uv. Set
+  y_i(b)=sum_v b_iv p_v(c).                                (1)
+For c with zeros, solve the same optimization on the induced graph of positive
+capacity vertices, use its unique minimizer there, and set p_v=1 at zero
+capacity vertices. Zero-capacity prices make every edge incident to zero
+feasible, while contributing zero to every payment.
+
+CLAIM
+The prices on positive-capacity vertices are unique. Rule (1) is nonnegative,
+all-profile own-bundle monotone, covers every actual-owner coalition, and
+  sum_i y_i <= (3/2) F(c).                                (2)
+The factor 3/2 is the exact supremum for this rule, already on a single edge.
+No claim of optimality over all eligible mechanisms is made.
+
+LEMMA 1: UNIQUENESS AND INTERIORITY AT POSITIVE CAPACITIES
+The feasible set is nonempty compact convex and h is convex C1, so an optimum
+exists. If p_v=0 at a nonisolated v, all neighbors have price1. Raise p_v by
+epsilon and lower all those neighbors from1 to1-epsilon. Constraints involving
+v stay feasible; constraints between lowered neighbors stay feasible for
+epsilon<=1/2, and constraints to other vertices are feasible unless a neighbor
+has another zero-price neighbor. In that case raise ALL zero-price vertices
+and lower ALL price-one vertices. Edges of types zero/one remain exactly tight,
+one/one remain feasible, and one/interior edges remain feasible for sufficiently
+small epsilon (finiteness). The objective increases only O(epsilon^2) on zero
+vertices and decreases linearly on at least one positive-cost price-one vertex.
+This contradicts optimality. Therefore p_v>0 for nonisolated vertices.
+If p_v=1, lowering it slightly is feasible because all neighbors are positive,
+again contradicting positive cost. Thus 0<p_v<1 at nonisolated vertices.
+Isolated vertices uniquely have p_v=0.
+Every positive-capacity nonisolated vertex has at least one tight incident
+edge: otherwise all its finitely many incident inequalities have positive
+slack, so its positive price can decrease slightly, reducing the objective.
+
+For uniqueness, let p,q both minimize. By convexity their midpoint also does.
+Strict convexity of h below1/2 implies: if p_v!=q_v, both p_v,q_v>=1/2.
+At any optimum, a vertex with p_v>1/2 has a tight neighbor u with p_u<1/2;
+otherwise its own price could decrease slightly, reducing the objective.
+All coordinates below1/2 are identical in p and q by the strict-convexity
+observation. If p_v>q_v, take a tight low neighbor u of v under p. Then
+q_u=p_u and feasibility requires q_v>=1-p_u=p_v, a contradiction. Interchange
+p,q for the opposite inequality. Thus the optimizer is unique.
+
+LEMMA 2: CONTINUITY AND ACTIVE COMPONENT FORMULA
+Uniqueness and compactness imply that p(c) is continuous for c>0: every
+subsequential limit along c_k->c minimizes J_c, and so equals its unique optimum.
+Consider the graph of TIGHT edges p_u+p_v=1. Its connected components are:
+(a) a strict-low/high bipartite component, all low vertices having one common
+    t in(0,1/2), all high vertices having1-t;
+(b) a component with every price1/2; or
+(c) an isolated resource vertex with price0 (isolated in G).
+An active component that is bipartite but has price1/2 is included in (b).
+
+KKT gives nonnegative edge multipliers lambda_e, zero on non-tight edges, with
+  sum_{e incident v}lambda_e = c_v h'(p_v)
+at every nonisolated vertex, by Lemma1 interiority. For a component (a), let
+A=sum_{low v}c_v and B=sum_{high v}c_v. Sum KKT on its two sides:
+  2t A = B, so t=B/(2A), A>B>0.                          (3)
+Components of type(b) have saturated incident flow at every vertex.
+Inactive cross-component edges carry zero lambda and impose no derivative
+equation inside the component. They remain part of the feasibility constraints.
+
+LEMMA 3: COVERAGE AND FUNDING
+Every p is a feasible dual fractional vertex cover, so for any S,
+  F(sum_{i in S}b_i)<=sum_v p_v sum_{i in S}b_iv=sum_{i in S}y_i.
+Define r_v=0 for p_v<1/2, r_v=1 for p_v>1/2, and r_v=1/2 otherwise.
+Every graph edge obeys r_u+r_v>=1: a strict-low endpoint requires a strict-high
+neighbor, and an edge between half-price vertices has rounded sum1.
+The KKT lambda is a feasible primal packing since h'(p)<=1. On every positive
+lambda edge the rounded price sum is1. Every vertex with r_v>0 is saturated
+because h'(p_v)=1. Consequently complementary slackness gives
+  F(c)=sum_e lambda_e=sum_v c_v r_v.                      (4)
+On each strict-low/high component its contribution to F is B, while payment
+is tA+(1-t)B = (3/2-t)B <=(3/2)B, using(3).
+On each half-price component payment equals its production-flow contribution,
+namely one half the sum of its capacities. Summing proves(2).
+
+LEMMA 4: OWN-REPORT MONOTONICITY AT POSITIVE AGGREGATE CAPACITIES
+Fix an actual owner i and vary ONE coordinate of her report while all others
+stay fixed. On an interval with a fixed tight-edge graph, all other components'
+prices are constant. If the varying coordinate lies in a strict-low/high
+component, let a=sum_{low}b_iv and b=sum_{high}b_iv. Her payment from that
+component is a t+b(1-t), with t=B/(2A), a<=A, b<=B.
+For a low-side coordinate increase (a and A each increase at unit rate),
+  derivative = t-(a-b)t/A = t(1-a/A+b/A)>=0.              (5)
+For a high-side coordinate increase (b and B each increase at unit rate),
+  derivative = 1-t+(a-b)/(2A)>=1-2t>=0.                 (6)
+For a half-price component the derivative is1/2; all component prices remain
+constant on that fixed-pattern interval. For an isolated vertex it is0.
+
+To justify passing through changes of pattern, there are finitely many edge
+subsets and their component bipartitions. Each positive-capacity optimizer
+belongs to one of finitely many rational formulas: (3), its reverse-orientation
+version, the constant1/2 on a component, or zero for a graph-isolated vertex.
+Along the chosen line segment the formulas are rational with nonvanishing
+positive denominators. Identify formulas that agree identically. Each pair
+of remaining distinct vector formulas can agree at only finitely many points:
+at least one coordinate difference is a nonzero rational function, whose
+numerator has finitely many roots. Remove their finite collection of agreement
+points. On each resulting open interval the candidate vectors are pairwise
+distinct. The set where the continuous optimizer equals a particular candidate
+is relatively closed. Its complement, a finite union of the corresponding
+closed sets for the other candidates, is also closed. Connectedness therefore
+forces the optimizer to follow just one candidate throughout the interval.
+Refine these intervals at all nonidentical roots of p_u+p_v-1 and p_v-1/2;
+there are finitely many. Each final interval has a fixed tight graph and fixed
+strict-low/high classification (identically zero functions remain tight).
+On each interval (5) or(6) applies, and continuity joins them without downward
+jumps. Hence each
+owner's payment is nondecreasing in every own coordinate, and therefore in
+arbitrary finite whole-bundle coordinatewise increases.
+
+LEMMA 5: ZERO CAPACITIES
+At a zero-capacity profile, zero vertices can be assigned price1 at no objective
+cost. Thus minimization reduces to the positive-capacity induced graph, where
+Lemma1 gives unique prices on all positive vertices (including isolated ones).
+As c^k>0 tends to c, compactness says every optimizer subsequential limit is a
+minimizer of the limiting objective. Its prices on positive vertices are the
+same unique induced-graph minimizer; on zero vertices prices may vary but
+the corresponding total owner report goes to zero. Thus all owner payments
+converge to(1), regardless of the zero-price convention.
+For complete incentive rigor, regularize the objective's capacities to c+eps*1
+but keep payments weighted by the actual b_i. The positive-capacity derivative
+proof still holds because a<=A and b<=B remain true with this artificial
+positive slack. Therefore each regularized payment is own-monotone. Taking
+eps down to zero proves own-monotonicity at every boundary profile. This is
+only a proof device; no new owner, public resource, or change of coalition
+opportunities is introduced by the actual rule.
+Coverage at zero follows from dual feasibility; the funding statement follows
+by direct application to the positive induced graph, or by a limit.
+
+RULE-SPECIFIC SHARPNESS
+One edge with capacities A>=B>0 has p_low=B/(2A), p_high=1-B/(2A).
+Its payment ratio is 3/2-B/(2A), tending to3/2 as A/B grows without bound.
+This is only sharpness of the constructed Huber-price rule.
+
+COROLLARY FOR INDEPENDENT REVIEW: COALITION TOTAL-PAYMENT MONOTONICITY
+Fix any actual-owner coalition S and hold all outside reports fixed. Its total
+payment is sum_v (sum_{i in S}b_iv) p_v(c). The proof of Lemma4 applies verbatim
+with a,b equal to S's entire low/high holdings: still a<=A and b<=B. Thus every
+coordinatewise increase in S's aggregate reported bundle increases or preserves
+S's total payment. The same boundary argument applies. In particular, any joint
+binding underreport by S cannot increase the sum of its members' payments.
+This rules out profitable withholding even when members can transfer money
+among themselves, under the stipulated payment-only utilities. It does not
+address private opportunity costs, overreports, or other changes to the model.
+Furthermore, splitting or merging identities while preserving the aggregate
+bundle leaves their total payment unchanged, since prices use only c and the
+payment is linear in each bundle. This is a consequence of the actual rule;
+no change to the fixed owner set is used within the main proof.
+
+COROLLARY: THE PRIOR HARDWARE / LOCAL-POWER / SHARED-POWER MODEL
+Take resource vertices P, h_1,...,h_m, L_1,...,L_m and activity edges P--h_j
+and h_j--L_j, each consuming one unit of each endpoint and earning one unit.
+The unit-profit production value is
+  F=sum_j min(h_j,L_j)+min(P,sum_j(h_j-L_j)_+)
+   =min(H, P+sum_j min(h_j,L_j)), H=sum_j h_j.
+All quantities here are total reported capacities; an actual owner may hold
+any mixed bundle among all these vertices. H is an aggregate, not an additional
+resource row or ownership identity. Therefore the new rule gives a3/2 funding
+existence theorem on exactly the prior mixed-owner physical model, improving
+the earlier323/200 existence upper bound there. It is a DIFFERENT mechanism.
+The old323/200 bound, diffuse asymptotics, and sharp response/obstruction facts
+remain valid facts about the older nested exponential envelope; this theorem
+does not claim that older rule itself has funding at most3/2.
+
+LIMITS
+- Unit edge profits and unit consumption at both endpoints are essential to
+  the proof as written. Arbitrary weighted edges are not covered.
+- Production is the divisible fractional matching LP, even on odd cycles.
+- No private cost, strategic participation, overreporting, or scheduling/
+  energy-data claim is made. The joint-deviation corollary is confined to
+  binding resource underreports and sums of payment-only utility.
+- Exact algorithmic bit complexity is not yet assessed. The definition is a
+  finite convex quadratic/linear program; floating-point evaluation alone
+  does not certify exact incentives.
+- Version1 passed an independent Fable proof audit with two clarifications,
+  now incorporated. Root replayed the independent KKT certificates. The exact
+  mixed-owner sweep passed20,528 profiles and62,080 incentive comparisons;
+  501 KKT/primal-dual certificates passed a standalone exact replay. The new
+  corollaries, final root promotion, and original-source comparison remain
+  subject to their separate checks. Historical novelty remains unconfirmed.

@@ -1,0 +1,90 @@
+A GAIN-NORMALIZED PSD RULE WITH A PROFILE-ADAPTIVE ORIGINAL-RANK BUDGET
+17 October 2026. Proposed structural theorem; independent review pending.
+
+THEOREM
+Fix n actual owners, matrix order m>=1, and the full report domain PSD_m.
+Production is F(X)=lambda_min(X). For a profile define
+ f_i=F(X_i), U_i=X_i-f_i I, S=sum_i f_i,
+ T=F(sum_i X_i), G=T-S=F(sum_i U_i),
+ a_i=rank(X_i)/m,                  y_i=f_i+a_i G.               (1)
+Then y is nonnegative, covers every coalition, and satisfies INDIVIDUAL
+full outside-production incentives for every Loewner underreport by the
+same actual owner. Its total payment is exactly
+                sum_i y_i=S+[sum_i rank(X_i)/m]G.              (2)
+The ranks in (1)-(2) are those of ORIGINAL reports, not netted residuals U_i.
+No fixed owner count or rank bound is required for the theorem.
+
+Coverage. For a coalition Q, the scalar-identity netting is exact:
+ F(sum_Q X_i)=sum_Q f_i+F(sum_Q U_i).
+If the last term is zero, (1) already covers it. Otherwise sum_Q U_i is
+positive definite, and hence
+ m=rank(sum_Q U_i)<=sum_Q rank(U_i)<=sum_Q rank(X_i).
+Thus sum_Q a_i>=1. Since sum_Q U_i<=sum_N U_i in Loewner order,
+F(sum_Q U_i)<=G; summing (1) proves coverage.
+
+Individual full OUT. Restore a withdrawn PSD matrix D to owner i, with all
+other reports fixed. Write old/new quantities without/with primes. Rank
+is Loewner-monotone, so 0<=a_i<=a'_i<=1; also G'>=0. Because only i changes,
+Delta G=Delta T-Delta f_i. Therefore
+ y'_i-y_i
+ =Delta f_i+a_i Delta G+(a'_i-a_i)G'
+ >=(1-a_i)Delta f_i+a_i Delta T
+ >=(1-a_i)F(D)+a_i F(D)=F(D).                                 (3)
+The last step is superadditivity of lambda_min, once for X_i+D and once
+for the grand aggregate+D. This is the original owner's outside production,
+not a residual withdrawal that might fail to be PSD.
+
+Zero gain. If G=0, every coalition's residual production is zero by monotonicity,
+so y_i=f_i is efficient and covers all coalitions. The formula and proof remain
+valid through rank jumps; continuity is not assumed or needed. Exact rank is
+not proposed here as a robust empirical estimator for noisy matrix data.
+
+SCOPE AND USEFUL CONSEQUENCES
+1. If every owner's public report domain contains only singular matrices
+   (for example rank(X_i)<=r_i<m), then f_i=0 throughout the domain. The rule
+   reduces to y_i=rank(X_i)T/m and satisfies FULL COALITION outside-production
+   incentives by PSD_RANK_FUNDING_BASELINE.txt. In particular n=m rank-one
+   owners have exact efficiency at every profile and arbitrary orientations.
+2. In general the guarantee (2) can improve the standard rank-m grand-marginal
+   gain factor when total original rank is small. It is a separate eligible
+   rule, and does not justify switching by profile to a different rule or
+   taking componentwise minima of covers. No improvement to the unrestricted
+   worst-case sqrt(m) gain order is claimed.
+3. A positive standalone value forces full rank and hence a_i=1. Thus the
+   gain-only rank advantage concerns low-rank original ownership. A large
+   scalar standalone reserve does not silently count as low-rank ownership.
+
+WHY RESIDUAL RANK CANNOT SIMPLY REPLACE ORIGINAL RANK
+Take m=3, two owners, and diagonal reports
+ X_1=diag(0,1/10,2), X_2=diag(1,1,0).
+Initially all f_i=0, G=1 and rank(U_1)=2. Restore
+ D_1=diag(1/10,0,0)>=0 to owner1. Then
+ X'_1=diag(1/10,1/10,2), f'_1=1/10,
+ U'_1=diag(0,0,19/10), G'=1, rank(U'_1)=1.
+The naive residual-rank payment drops from2/3 to1/10+1/3=13/30,
+a loss7/30 under an own report increase. Its individual monotonicity fails.
+The original-rank payment instead rises from2/3 to1/10+1=11/10.
+
+WHY GENERAL COALITION OUT IS NOT CLAIMED
+For m=2,n=3, take X_1=diag(1,0), X_2=X_3=diag(0,1).
+Initially S=0,G=1 and (1) pays (1/2,1/2,1/2). Restore D_1=diag(0,1)
+to owner1, leaving the other two reports unchanged. Now f'_1=1,G'=0 and
+payments are (1,0,0). The coalition of all three owners loses1/2 despite
+the restored matrix having outside production0. Thus general coalition
+monotonicity already fails, exactly as the stated individual contract allows.
+
+ABSTRACT CERTIFICATE FORM (EXPLANATORY, NOT A SEPARATE HEADLINE)
+For a production model with exact nonnegative residual coalition values
+v(Q)-sum_Q f_i<=G, suppose a_i in[0,1] is own-report nondecreasing and
+sum_Q a_i>=1 whenever that residual value is positive. Then y_i=f_i+a_i G
+has coverage and the same individual full-OUT proof whenever production
+is superadditive and Delta G=Delta T-Delta f_i. Original PSD ranks provide
+a concrete certificate of these conditions. This observation does not assert
+that suitable certificates exist or have small total in general models.
+
+CHECKS AND STATUS
+verify_psd_gain_rank.py checks exact diagonal profiles, all coalition coverage,
+individual PSD restorations, the two displayed scope counterexamples, and
+the stronger coalition incentive on a singular-owner test domain. Spectral
+rank monotonicity and superadditivity supply the all-matrix proof above;
+finite diagonal checks are not a substitute. Historical priority is open.

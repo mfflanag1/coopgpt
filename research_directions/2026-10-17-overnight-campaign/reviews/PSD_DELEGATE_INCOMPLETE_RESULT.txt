@@ -1,0 +1,42 @@
+For eligible j, w_j is a unit vector in K_B, so under Lemma 1 the payout is min{(w_j·ξ)², G} with (w_j·ξ)² ~ Beta(1/2,(d−1)/2). By Lemma 2 with t = G and d ≤ m: P((w_j·ξ)² < G) ≤ √(2mG/π) ≤ √(2/(50π)) = 0.1128. Hence E_Q[payout to j] ≥ 0.887·G, and
+
+  E_Q[closed payout at B] ≥ 0.887·G·(|B^c|−1)^+ ≥ 0.887·G·(|B^c|−1).
+
+Take E over B (independent of Q) and over q ~ μ: E_Q C(μ; QW_ε) ≥ 0.887·G·(m q̄ − 1). Since this is an average over Q, some rotation Q* attains it: the profile {Q*U_iQ*^T} satisfies Theorem A. (Existence is rigorous; Q* is not given explicitly — see Limitations.) ∎
+
+Sanity check m=2: masks {1},{2} have 1-dimensional kernels forcing the selector, and the single closed owner is paid exactly G; mask ∅ pays min{v_1²,G}+min{v_2²,G} ≈ 2G for generic v. Consistent.
+
+## 2. Result B — the wrapper is Θ(√m) for every mask law and every selector
+
+**Junta profiles J_J (2 ≤ J ≤ m).** Owners 1..J−1: U_i = e_ie_i^T; owner J: U_J = I − Σ_{i<J} e_ie_i^T (PSD, λ_min=0). U = I, G = 1. λ_min(U_B) = 1 iff B = [J], else 0, so every retained owner's marginal is 1[B=[J]]: open payout = J·(1−q)^J in expectation; closed payouts ≥ 0. (J = m is the orthonormal "grand marginals" profile.)
+
+**Theorem B.** For every fixed μ and selector Φ, sup over profiles of (total payment)/G ≥ 0.12√m − 0.9 (m ≥ 16). For the uniform law on [0,a]: ≥ 0.44√m − 0.9 for every a.
+*Proof.* Let q̄ = ∫q dμ.
+- q̄ > 1/4: Theorem A gives ≥ 0.887(m/4 − 1).
+- q̄ < 1/(2m): J_m gives open ≥ m·(1/2)(1−2q̄)^m ≥ (m/2)(1−1/m)^m ≥ m/8 (Markov: μ(q ≤ 2q̄) ≥ 1/2).
+- 1/(2m) ≤ q̄ ≤ 1/4: J := ⌈1/(2q̄)⌉ ∈ [2,m]. Markov plus (1−x)^{1/x} ≥ e^{−1/(1−x)} with x = 2q̄ ≤ 1/2 gives ∫(1−q)^J dμ ≥ (1/2)(1−2q̄)^{1/(2q̄)+1} ≥ e^{−2}/4, so open_J ≥ 0.0338·J ≥ 0.0169/q̄. Combined with Theorem A, max{0.0169/q̄, 0.887(mq̄−1)} ≥ 0.1225√m − 0.887.
+Uniform [0,a] (q̄ = a/2): a ≤ 1/√m: J_m gives (m/(m+1))(1−(1−a)^{m+1})/a ≥ (m/(m+1))√m(1−e^{−√m}); a ≥ 1/√m: Theorem A gives ≥ 0.887(√m/2 − 1). ∎
+
+Upper bound from the file is 1+2√m; so the exponent 1/2 is exact for this wrapper. The uniform-in-q averaging is also necessary: at a point mass q* = ln m/m, J_J with J = m/ln m pays open ≈ (J)(1−q*)^J ≈ 0.37·m/ln m ≫ ln m.
+
+## 3. Answers to the posed questions
+
+- **Can matrix concentration beat √m here?** No — for this payment rule, Theorems A/B are exact obstructions, so no proof technique can. The obstruction profile has λ_max(U)/G ≈ 200m. Conversely (standard, one line): Σ_{j∉B} min{v^TU_jv,G} ≤ v_B^TUv_B − λ_min(U_B) ≤ λ_max(U) − λ_min(U_B), so with condition number κ the closed excess is ≤ (κ−1)G at every q. Dimension dependence therefore arises only from κ ≳ m instances, where bounded-norm matrix Chernoff does not apply.
+- **Clipping warning:** read; not used. The obstruction is for the exact capped payments, so the wrong-direction inequality v^T min(U_i,GI)v ≤ min(v^TU_iv,G) is moot: even a correct clipping route could prove nothing better than Θ(mq).
+- **Wrapper failure vs all-rules lower bound:** this is a wrapper failure only. The only lower bound for all individually-truthful coalition-covering rules remains the scalar Θ(log m/log log m); gap [log m/log log m, √m] is open.
+
+## 4. Standard vs proposed
+
+Standard: Haar invariance / stabilizer factorization; Beta law of a squared spherical coordinate; Wendel's inequality; Loewner monotonicity and concavity of λ_min; Markov. Proposed: the profile W_ε and its spectral/kernel analysis; Lemma 1 (selector-neutralizing rotation); junta profiles J_J; the two-family minimax over mask laws (Theorem B). No numerics used anywhere.
+
+## 5. Concrete next lemma
+
+The obstruction exploits a d-dimensional kernel with a generic selector and the cap G being tiny. A rule change that kills W_ε: pay closed j the retained-relative marginal F(X_B+X_j) − F(X_B) = f_j + [λ_min(U_B+U_j) − λ_min(U_B)]. Checked: pointwise ≤ the current payment (λ_min(U_B+U_j) ≤ λ_min(U_B)+v_B^TU_jv_B), so the 2mq/(1−q)G bound and Theorem B's open-part obstruction carry over; monotone in own report (Loewner); outside-production protection holds (λ_min(A+D) ≥ λ_min(A)+λ_min(D)); on W_ε it pays closed owners ≈ 0. **Open lemma:** bound E Σ_{j∉B}[λ_min(U_B+U_j) − λ_min(U_B)] by polylog(m)·G·h(q), or exhibit a profile forcing Ω(mq)G. Also must be audited against the root's exact coalition-covering definition, which I could not verify from the supplied file.
+
+## 6. Limitations / unresolved
+
+1. Obstruction is existential in the rotation Q* (averaging argument); explicit Q* not provided, though rigorous.
+2. Assumes the selector depends only on (B, retained reports); selectors reading closed reports are out of scope (and would threaten truthfulness per the file).
+3. Constants unoptimized; Theorem B stated for m ≥ 16.
+4. No stronger upper bound proved; the result shows none exists for this rule, not for the problem.
+5. Output file not written (no write tool available this session); acceptance checks not run by me.

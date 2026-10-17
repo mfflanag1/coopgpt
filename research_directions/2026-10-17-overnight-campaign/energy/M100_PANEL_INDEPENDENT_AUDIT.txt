@@ -1,0 +1,157 @@
+INDEPENDENT AUDIT: M100 APRIL RAW-POWER INTAKE AND DESCRIPTIVE PANEL
+17 October2026, 10:17 UTC. Reviewer: overnight_energy.
+Read-only review. No new downloads and no full analysis rerun.
+
+REVIEWED
+energy/M100_RANGE_INTAKE.py and M100_PANEL_INSPECTION.py;
+checks/M100_RANGE_INTAKE.json and M100_PANEL_INSPECTION.json;
+the three corresponding local Parquet members in
+/private/tmp/coopgpt-m100-raw-20261017/.
+Compared against energy/M100_OBSERVED_PANEL_ACCEPTANCE.txt.
+Independent execution was limited to local hashes/lengths, manifest arithmetic,
+JSON consistency and footer-only parquet_schema calls using DuckDB1.4.1.
+
+VERDICT
+The descriptive existence result is supported: exact common UTC observations
+are present across physical node IDs, including all980 documented nodes at
+some instants. The retrieved complete members have the expected timestamp,
+integer-power and node schema. Duplicate handling and exact meter joins are
+sound for these files. No pooling, causal, ownership or reliability inference
+is justified. One minor histogram truncation issue is identified below.
+
+1. EXTRACTION COMPLETENESS AND INTEGRITY
+The intake manifest records HTTP206 range retrieval from the public April
+archive, advertised size210,769,920bytes, with9,946,257bytes downloaded in108
+successful requests. The code checks exact Content-Range and exact body length
+before accepting a response, and parses tar checksums through TarInfo.frombuf.
+It stops rather than guessing PAX headers. No such unsupported header occurred.
+
+I independently checked the210 listed header entries: their offsets advance
+contiguously through tar payload padding, ending at offset210,766,848, with
+3,072bytes of archive trailer. There are104 regular files. Each target metric
+has EXACTLY ONE regular member anywhere in that full header inventory:
+
+  total_power/a_0.parquet       offset58,055,680   bytes2,511,767
+  ps0_input_power/a_0.parquet   offset117,482,496  bytes2,830,525
+  ps1_input_power/a_0.parquet   offset152,300,032  bytes2,896,957
+
+Each path has prefix year_month=20-04/plugin=ipmi_pub/metric=.
+All local byte counts match the manifest, all local SHA256s match the saved
+intake values, and all three start/end with PAR1. The final inspection read
+their full rows successfully. Therefore the observed short time support is
+not explained by downloading only one of several April target-metric members.
+This does not verify the publisher's MD5 for the WHOLE210MB archive, which
+was not downloaded, or establish that its release captures all source events.
+
+2. SCHEMA AND PRECISION
+Independent footer queries verify timestamp as INT64 TIMESTAMP_MILLIS with
+isAdjustedToUTC=1, value as INT32, node as UTF8. All are nullable schema fields.
+Thus epoch_ms(timestamp)::BIGINT preserves timestamp precision here; casting
+value to BIGINT cannot hide a fractional or nonfinite source value here.
+DuckDB's session timezone is UTC. All observed timestamps are whole seconds.
+Metric/plugin/month are carried by the verified tar path rather than stored
+inside these three-column files; the local renaming maps them correctly.
+
+Observed rows: ps0 4,787,828; ps1 4,787,831; total_power 4,750,202.
+Each metric has980 node strings, whose canonical integer IDs are exactly
+0--979. The reported minimum/maximum timestamps are within April. Every
+metric has zero null node/time/value, negative value, unmapped-node and
+subsecond-row counts. The observed watt ranges are0--1700 forps0,0--1800
+forps1 and200--1900 for total_power. These are descriptive ranges, not
+validated physical maxima or meter-accuracy bounds. PSU zeros remain genuine
+numeric observations with unresolved operational meaning; they are not filled
+or automatically labeled missing/offline.
+
+3. DUPLICATES, CLEANING AND EXACT ALIGNMENT
+Grouping by(metric,node,t) and comparing min/max nonnull values correctly
+detects conflicting readings. The policy collapses identical duplicates,
+quarantines distinct-value/negative/all-null cells, and retains a unique
+nonnull reading mixed with nulls while separately counting that condition.
+In this dataset all multiplicities are1: no duplicate, conflict, all-null
+or mixed-null keys occur. Hence the clean table retains every input row.
+
+The psu table joins only identical(node,t) keys ofps0 andps1; triples then
+joins total_power at the SAME key. Keys are unique, so neither join silently
+multiplies records. No interpolation or time rounding creates matches.
+The all-node intersection uses count(*) after uniqueness, which equals
+count(distinct node) in this table. The preselected pair is exactly IDs0,1.
+The longest-run routine correctly counts consecutive20,000ms steps, and
+labels the resulting run as post-selected. Its value1 for the all-node
+total_power intersection is possible: those965 common times have no adjacent
+20s pair. No defect in that computation was found.
+
+Exact intersections reported:
+  total_power, nodes0/1: 4,523 instants; longest20s run766 cells
+    2020-04-01 07:20:00--11:35:00 UTC.
+  PSU sum, nodes0/1: 4,559 instants; longest20s run767 cells
+    2020-04-01 07:20:00--11:35:20 UTC.
+  total_power, all980 nodes: 965 instants; longest20s run1 cell.
+  PSU sum, all980 nodes: 1,722 instants; longest20s run71 cells
+    2020-04-01 09:29:00--09:52:20 UTC.
+These establish simultaneous measured-node data, not a representative or
+complete operating sample. In particular the all-node complete-case subset
+can have different operating conditions from the omitted observations.
+
+4. ACTUAL COVERAGE AND WHAT MONTHLY ABSENCE MEANS
+All three complete April metric members span only
+2020-04-01 07:19:40 through2020-04-04 16:53:00 UTC.
+Every observed timestamp lies on the UTC20-second phase0 grid, and every
+positive gap is a multiple of20s. The longest per-node gap is190,180seconds
+(52h49m40s), so the span is not four continuous days of measurements.
+
+The observed endpoint-inclusive span has14,681 nominal20s slots per node.
+Against980 times that number, row availability is33.27797% forps0,
+33.27799% forps1 and33.01645% for total_power. Against the DECLARED complete
+April grid [2020-04-01,2020-05-01), comprising129,600 slots per node, these
+become3.769706%,3.769708%,3.740081%. These are arithmetic availability ratios
+within the RELEASE relative to an explicit hypothetical full-cadence grid.
+They are NOT sensor failure rates, uptime estimates, loss-of-load rates or
+evidence that unobserved physical nodes were powered off. We do not know why
+those source periods are absent. Retain both calendar and observed-span
+denominators; min/max endpoints alone obscure the large interior gaps.
+
+The script currently provides counts and gaps, not these denominator-based
+availability summaries. That is adequate for existence, but does not satisfy
+every item of the stronger usable-window acceptance specification. It should
+not be described as having completed a month-long data-quality validation.
+
+5. METER BOUNDARY
+All4,750,202 total_power rows have exact-time PSU pairs. Their difference
+total_power-(ps0+ps1) has median-150W, mean about-160.63W and range-1290 to910W.
+Only2,458 triples are exactly equal, about0.05175%. Therefore these fields
+are visibly NOT interchangeable in this sample. The script appropriately
+reports their difference rather than enforcing an identity. Wide mismatch
+is not by itself evidence that either sensor is wrong.
+
+Original authors define the PSU input sum as node input power in the PM100
+paper; the IPMI documentation names total_power total node consumption.
+Neither inspected source establishes an AC/DC identity or an efficiency
+interpretation for this observed difference. Do not turn the mean relative
+delta into a conversion-loss estimate. Per-node statistics are correctly
+included, avoiding cancellation hidden by one overall mean. No state slice
+was acquired, so availability, job occupancy and health remain unknown.
+
+6. ONE MINOR REPORTING ISSUE AND TWO NON-BLOCKING CLARIFICATIONS
+The gap_frequencies query ends with a GLOBAL LIMIT100 after ordering by
+metric and count. It includes40 frequency bins each forps0 andps1 but only20
+for total_power. The displayed total_power bins account for4,749,140 gaps,
+while the separate correct gap_summary accounts for4,749,222. Thus82 rare
+gaps are absent from that histogram. Remove the limit in a small query on
+the existing gaps table or label the histogram truncated. This does not
+change the full min/max, quantiles, exact20s counts or intersection results.
+Parent was notified; no analysis source was edited by this reviewer.
+
+The JSON verdict currently says EXISTS conditionally on pair counts. Its
+condition is satisfied; a concrete computed EXISTS label would be clearer.
+Keep scientific_sufficiency=UNASSESSED.
+
+Future reuse of this script should validate the selected files against the
+intake manifest rather than ingest arbitrary *.parquet files from a reused
+directory. In this actual directory there are exactly the three verified
+members, so this is not a defect in the present result.
+
+ACCEPTED SCOPE
+Schema verified in the retrieved complete April target members. Exact
+simultaneous physical-node panel EXISTS. Released coverage is sparse and
+confined to April1--4, with large interior gaps. The two meter boundaries
+are observably different. States and scientific sufficiency remain unresolved.

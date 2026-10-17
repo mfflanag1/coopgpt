@@ -1,0 +1,131 @@
+LOW-RANK SAMPLING LEMMA AND A UNIVERSAL GAIN-ONLY RESOURCE BOUND
+17 October 2026. Root-derived trace argument, independently checked in the
+energy lane. Complete candidate proof; cross-model audit requested. Historical
+priority not established. This strengthens the open gate in the initial
+GAIN_ONLY_MASK_AND_DIMENSION_THEOREM.txt without changing its mechanism.
+
+1. A FINITE SAMPLING LEMMA FOR ARBITRARILY SELECTED NONNEGATIVE VECTORS
+Fix n, G>0, and a linear subspace L of R^n of dimension D. For EVERY subset
+B of [n], choose an arbitrary vector a(B) in L intersect R_+^n satisfying
+
+  sum_{i in B}a_i(B)<=G.                                (1)
+
+The choice may depend arbitrarily on B; it need not optimize a common problem.
+Let each owner be retained in B independently with probability p=1-q>0.
+Then
+
+  E sum_{i notin B}min(a_i(B),G) <=[2Dq/(1-q)]G.          (2)
+
+Proof. For a fixed retained set B, and each i in B, restrict the vector
+a(B\{i}) to the coordinates in B and normalize by its coordinate sum. This
+gives the i-th column v^i of a square |B|-by-|B| matrix V. If that sum is zero,
+use the zero column. Every column is nonnegative, with sum either one or zero.
+All columns lie in the coordinate projection of L, so rank(V)<=D.
+
+The induced l1 matrix norm is at most one, hence every complex eigenvalue
+has modulus at most one. The number of nonzero eigenvalues, counted with
+algebraic multiplicity, is at most rank(V). Therefore
+
+  0<=trace(V)<=sum |eigenvalues(V)|<=rank(V)<=D.           (3)
+
+This argument does not require V to be symmetric or diagonalizable. The
+trace is a nonnegative real number because the diagonal entries are nonnegative.
+
+For each i in B, write z=a_i(B\{i}). The training bound (1) gives
+sum_{j in B}a_j(B\{i})<=G+z. Consequently
+
+  min(z/G,1)<=2z/(G+z)<=2v_i^i.                         (4)
+
+If the column sum vanishes then z=0 and all terms are zero. Summing (4) and
+using (3) bounds the leave-one-out capped total for THIS B by2D. Finally,
+independent Bernoulli conditioning on the own bit gives the exact identity
+
+ E sum_{i notin B}min(a_i(B)/G,1)
+   =[q/(1-q)] E sum_{i in B}min(a_i(B\{i})/G,1).
+
+This proves (2). Empty B contributes zero on the leave-one-out side; q=0
+gives a zero left side. No asymptotic or probabilistic approximation is used.
+
+2. APPLICATION TO THE MODIFIED-CAP MECHANISM
+Use the contract and fixed mask mechanism from
+GAIN_ONLY_MASK_AND_DIMENSION_THEOREM.txt. At one fixed profile, let
+f_i=F(b_i), S=sum f_i, T=F(C), G=T-S>0. For finite global supports put
+
+  a_i(B)=ell_{C_B}(b_i)-f_i.
+
+These residual coefficients are nonnegative, and
+sum_{i in B}a_i(B)=F(C_B)-sum_{i in B}f_i<=G.
+For every mask they lie in the SAME linear subspace spanned by the d owner
+coordinate columns (b_1j,...,b_nj) and the standalone column (f_1,...,f_n).
+Its dimension D is at most d+1. The modified closed excess is min(a_i(B),G),
+so (2) bounds its expected total C(q) by2(d+1)qG/(1-q).
+
+3. BOUNDARY FACES: FINITE SURROGATES ONLY FOR THE ANALYSIS
+The actual mechanism uses the manuscript's extended support ell_{C_B}, which
+may be infinite off the coordinate face of C_B. It remains own-excluding;
+we do NOT replace that mechanism by a support selected using other reports.
+
+At a fixed profile there are finitely many masks and owners. For every mask,
+retain its finite nonnegative support coefficients on active coordinates,
+and replace every off-face coefficient by one common sufficiently large
+finite number M. Choose M large enough that, for EVERY owner outside that
+mask's face, the finite residual price is at least G:
+
+  p_B(M) dot b_i-f_i >=G.
+
+Such a finite M exists because each relevant owner has a strictly positive
+sum of off-face coordinates and only finitely many inequalities occur. On-face
+owners already have nonnegative residual prices, and their prices are unchanged.
+For B=empty, use zero active coefficients and the same large off-face M; a
+zero bundle remains priced at zero. Thus every surrogate vector is nonnegative,
+and its capped coordinates agree EXACTLY with the original infinite-price
+closed excesses. Its training sum is unchanged, since every owner in B has
+zero capacity outside the face of C_B.
+
+All surrogate vectors still lie in the span of the d coordinate columns
+and f. The sampling lemma needs only that common span, nonnegativity, and
+the training bound; it does not require common global majorants. Hence the
+same C(q) bound is valid for arbitrary finite concave homogeneous F, including
+downward discontinuities at coordinate faces. M is a proof device at a fixed
+profile, not a mechanism parameter or an incentive-sensitive report change.
+
+4. UNIVERSAL GAIN-ONLY RESOURCE THEOREM
+The endpoint identity from the companion theorem says that the average
+excess over standalone payments for q uniform on[0,a], 0<a<1, is at most
+
+  [G+integral_0^a C(q)dq]/a
+  <=[1+2(d+1)(-a-log(1-a))]G/a.                         (5)
+
+Choose the PUBLIC parameter a=1/(1+sqrt(d+1)). The elementary inequality
+-a-log(1-a)<=a^2/[2(1-a)] gives
+
+  sum_i y_i <= S+[1+2sqrt(d+1)]G.                       (6)
+
+The same fixed mechanism covers ALL coalitions and satisfies individual full
+outside-production protection at EVERY profile, as proved for each mask in
+the companion theorem. If G=0, every excess is exactly zero and y_i=f_i;
+the normalized sampling lemma is unnecessary. Thus no positive-gain or
+interior-report restriction is hidden in (6).
+
+Choose whole rules once from public n,d and (when available) K. Combining
+the companion owner, grand-marginal, and finite-form bounds yields
+
+ sum_i y_i <=S+min{d,n sqrt(2/(n+1)),1+2sqrt(d+1),inf_j C_j(K)}G.          (7)
+
+Omit the finite-form term when no finite K representation is supplied.
+For a single min-r technology the exact residual physical representation
+allows the older1+2sqrt(r) term, and K=r also gives the stronger asymptotic
+log r/log log r term. These numerical ingredients are established; the
+gain-only individual-OUT contract and the trace sampling transfer are the
+new proof content proposed for review.
+
+This result does not provide full coalition OUT. The separate zero-gain
+completion obstruction rules out any finite gain-only funding coefficient
+for that stronger contract already with three fully eligible min2 owners.
+The current rule may enumerate exponentially many masks and supports; no
+polynomial-time implementation or measured hardware benefit is asserted.
+
+VERIFICATION
+check_low_rank_sampling.py checks exact trace matrices, Bernoulli identities,
+nonnegative residual spaces and finite boundary surrogates. These checks
+supplement the analytic proof, including its general real-report scope.

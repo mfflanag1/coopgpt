@@ -1,0 +1,106 @@
+MATCHING PREMIUMS ADMIT AN EXACT SAME-OWNER UNIT LIFT
+Frozen candidate, 2026-10-17. Proposed mechanism-transfer result; priority unchecked.
+
+MODEL AND STATEMENT
+Let G=(V,E) be any finite simple undirected resource graph, M a matching
+in G, and b>0 a fixed public unit of profit. Give edges in M profit 2b
+and all other edges profit b. Production is fractional capacitated
+matching: F_w(c)=max sum_e w_e x_e subject to x>=0 and deg_x<=c.
+There is a public nonnegative linear capacity lift to a unit graph H
+such that F_w(c)=b F_H(Bc) for EVERY real c>=0. The identity holds for
+all coalition deletions and all reports of any fixed actual-owner system.
+Consequently the unit-Huber mechanism transfers a 3/2 funding bound,
+coalition coverage, and transferable-coalition-total whole-bundle
+underreport monotonicity to this weighted class, with arbitrary mixed
+owners and unbounded owner/resource counts. No outside-production utility
+claim is made. The class contains the unit single-edge lower-bound family,
+so 3/2 is uniform sharp for this stronger payment-only incentive condition.
+
+CONSTRUCTION (normalize b=1)
+Keep G and every original capacity c_v. For each uv in M add two leaves:
+ u^e has capacity c_u and is adjacent only to original v;
+ v^e has capacity c_v and is adjacent only to original u.
+Keep original edge uv. Every original owner i receives in the lift the
+same copies of its OWN holdings b_iu,b_iv. These are deterministic linear
+images of reports, not independently reportable resources, new owners,
+or constant auxiliary endowments. H has n+2|M| vertices and |E|+2|M| edges.
+
+EXACT IDENTITY: PRIMAL DIRECTION
+Given a weighted feasible x, keep x_e on ordinary edges and replace x_uv
+for uv in M by x_uv on each of u^e-v and u-v^e. The original uv carries
+zero. Original endpoint use is unchanged; copy capacity is respected
+since x_uv<=min(c_u,c_v). Unit value equals the weighted value. Hence
+F_H(Bc)>=F_w(c).
+
+EXACT IDENTITY: DUAL DIRECTION
+The weighted dual is min c.p with p>=0, p_u+p_v>=w_uv. Start from an
+optimal dual. For each doubled edge uv, if p_u+p_v>2, an endpoint has
+price >1. Lower such an endpoint until it reaches 1 or the edge becomes
+tight. All its OTHER incident edges have weight 1 because M is a matching,
+so their constraints remain satisfied. Repeat as necessary. This process
+makes every doubled edge tight without increasing objective and without
+interference between doubled edges. Clip any vertex not in M at 1.
+The result is still optimal, nonnegative, every ordinary edge is covered,
+and p_u+p_v=2 on M.
+
+Set r_v=min(1,p_v) on originals, and r_{u^e}=1-r_v,
+r_{v^e}=1-r_u on leaves. Clipping original prices at 1 preserves all
+ordinary unit constraints; it also covers uv since p_u+p_v=2 implies
+min(1,p_u)+min(1,p_v)>=1. Every leaf edge is tight. This is a unit dual.
+For uv in M, tightness implies
+ r_u+1-r_v=p_u,   r_v+1-r_u=p_v.
+Thus lifted dual cost, grouped by original capacities, is exactly c.p.
+Vertices outside M have their optimal clipped prices unchanged. Therefore
+F_H(Bc)<=F_w(c), proving the identity including zero capacities.
+
+MECHANISM TRANSFER
+For each actual owner i lift its whole vector by B, run unit-Huber on H,
+and multiply its total payment by b. Every coalition S has lifted capacity
+B(sum_{i in S}b_i), so exact production and coverage agree. Increasing
+any coalition's original holdings increases only that coalition's lifted
+holdings because B>=0. The established all-profile coalition-total
+monotonicity therefore transfers. Funding is at most 3/2 F_w(c).
+The exact unit-Huber mincut implementation gives a polynomial-bit algorithm.
+
+STRICTLY BEYOND THE SAME-RESOURCE POSITIVE UNIT CONE
+Take C6 with edges 03,13,14,24,25,05 and double only 05. The earlier
+six-profile signed functional is -1, so no positive unit-subgraph mixture
+on the original rows represents this production function. The lift has
+original C6 plus one leaf copy of 0 adjacent to 5 and one leaf copy of 5
+adjacent to 0. Its exact six values are (2,2,2,2,3,2), also functional -1.
+Thus the former cone obstruction cannot be reused as a no-go for linear
+resource-copy lifts. This C6 is also not node-induced (alternating edge
+sums differ), so the construction extends the earlier additive-weight
+sufficient class. It does not settle arbitrary weighted graphs.
+
+BOUNDARIES AND STOPPED SHORTCUTS
+M being a matching is substantive for this proof. Copying every edge of
+a doubled star creates extra production: a degree-three star with center
+capacity 1 and each leaf capacity 1 has weighted value 2, whereas its
+three center copies can supply three original leaves, yielding >=3.
+Simply scaling the two new leaf capacities by epsilon does not implement
+one edge of profit 1+epsilon. On C6 above, epsilon=1/2 and capacities
+(9,9,10,10,11,8), the weighted value is 32 but this scaled lift yields
+65/2. Exact witness checking is included in verify_matching_premium_lift.py.
+Neither failure is a lower bound on all truthful weighted mechanisms.
+
+EXTENSION: ARBITRARY LARGE MATCHING PREMIUMS
+The same 3/2 conclusion holds when ordinary profits are b and each edge
+of a matching has any profit w_e>=2b, independently and without an upper
+bound. Normalize b=1. Let F_2 be the just-proved doubled-matching value,
+and T_e=min(c_u,c_v). Then, for every c>=0,
+ F_w(c)=F_2(c)+sum_{e in M}(w_e-2) T_e.                     (A)
+For the upper inequality, every feasible x has x_e<=T_e and its weight-2
+objective is <=F_2. For the reverse inequality, start from a weight-2
+optimum. For any heavy uv below T_e, increase x_uv toward T_e, dropping
+ordinary incident flow only as needed to respect the two endpoint caps.
+Each unit of added uv flow drops at most one ordinary unit at u and one
+at v, so the objective does not decrease. No other heavy edge is dropped,
+since the heavy edges form a matching. Previously saturated heavy edges
+are untouched. After finitely many such operations all heavy x_e=T_e,
+and the objective is still F_2. This realizes equality in (A).
+Each extra term is a nonnegative scalar times a one-edge production
+function with the same owners' two endpoint holdings. Summing the lifted
+F_2 mechanism and these one-edge mechanisms gives exactly 3/2 times (A),
+with all-profile coalition monotonicity. This extension is not a claim
+about intermediate heavy profits strictly between b and 2b.
