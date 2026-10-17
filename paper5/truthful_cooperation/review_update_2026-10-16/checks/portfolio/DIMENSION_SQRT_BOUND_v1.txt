@@ -1,0 +1,108 @@
+GENERAL RESOURCE-DIMENSION UPPER BOUND: (2+o(1))sqrt(d)
+15 October 2026. Candidate proof; independent review pending.
+
+THEOREM
+Let f:R_+^d ->R be finite, monotone, concave and homogeneous of degree one.
+There are arbitrarily many but fixed n owners reporting whole bundles b_i>=0.
+For every fixed 0<a<1, the existing relative-support/endpoint hybrid, averaged
+uniformly over missing probability q in [0,a], is nonnegative, coalition-covering,
+and nondecreasing in every owner's own bundle at every real profile. Its total
+payment satisfies
+ sum_i M_i(b) <= C_d(a) T(b),
+ C_d(a)=[1+2d(-a-log(1-a))]/a.
+In particular, taking a=1/(1+sqrt(d)) gives factor at most 1+2sqrt(d).
+As d tends to infinity, a~1/sqrt(d) gives factor (2+o(1))sqrt(d).
+Combining the existing dimension marginal bound and the new bound gives
+ B_d^dim <= min{d, 1+2sqrt(d)},
+and the same upper for arbitrary finite monotone concave homogeneous functions,
+including boundary discontinuities. The bound is independent of n and the
+number of supporting forms. It does not assert efficient oracle evaluation,
+measurability of the full report map, or historical novelty.
+
+THE UNCHANGED RULE
+At each profile fix T=f(c), c=sum_i b_i. For a mask B, x_B=sum_i B_i b_i.
+Choose the canonical relative support ell_(x_B) from the manuscript: it is
+nonnegative linear on the coordinate face containing x_B, majorizes f there,
+touches f at x_B, and equals +infinity outside that face. At x_B=0 it is zero
+at0 and +infinity elsewhere. Put A_i(B)=min{ell_(x_B)(b_i),T}.
+For independent B_i with Pr(B_i=0)=q, define
+ p_i(q)=E[A_i(B)|B_i=0],
+ m_i(q)=E[f(b_i+x_(B_-i))-f(x_(B_-i))],
+ r_i(q)=q p_i(q)+(1-q)m_i(q),
+ M_i=(1/a)int_0^a r_i(q)dq.
+These are finite mask sums and integrals of finite polynomials; no random
+sampling implementation or limit over technologies is needed. Eligibility is
+the existing relative-support theorem: a closed support excludes its recipient,
+both caps increase in the own report, endpoint marginals increase in the own
+report, capped supports cover coalitions, and on-endpoint marginals dominate
+on-support contributions. The proof works for every0<q<1.
+
+SCALAR BERNOULLI RECIPROCAL LEMMA
+Fix arbitrary u_1,...,u_n>=0 and let S_B=sum_i B_i u_i. Define
+ R_i(B)=min{u_i/S_B,1}, taking R_i=0 if u_i=0 and R_i=1 if u_i>0,S_B=0.
+Then, with p=1-q,
+ E sum_(i:B_i=0) R_i(B) <= 2q/p.
+Proof: for nonnegative u,S,
+ min{u/S,1} <= 2u/(u+S),
+with the same zero conventions. Conditioning on the own bit gives the exact
+identity
+ E sum_i (1-B_i) u_i/(u_i+S_B)
+  = (q/p) E sum_i B_i u_i/S_B
+  = (q/p) Pr(S_B>0) <=q/p.
+The fractions with zero numerator and denominator are defined as zero.
+The first equality holds because in either conditioned expression the ratio
+is u_i/(u_i+sum_(j!=i) B_j u_j). Summing and applying the elementary inequality
+proves the lemma. No lower bound on positive weights is used.
+
+POINTWISE RESOURCE-COORDINATE DOMINATION
+Assume T>0. For every mask and every owner i,
+ A_i(B)/T <= sum_(e=1)^d min{b_ie/(x_B)_e,1},
+with the scalar lemma's conventions coordinatewise.
+If b_i has a positive coordinate outside the support of x_B, the right side
+contains1 and the claim follows from A_i<=T. Otherwise the relative support
+is an ordinary nonnegative linear form w on that face. Touching gives
+ sum_e w_e (x_B)_e=f(x_B)<=T,
+so for each positive coordinate (x_B)_e, w_e (x_B)_e<=T and
+ w_e b_ie/T <= b_ie/(x_B)_e.
+Use min{sum z_e,1}<=sum min{z_e,1} for nonnegative z_e to conclude. If x_B=0
+and b_i=0, both sides are zero; the remaining zero-mask cases were handled
+by the off-face argument. This also proves the same claim for any finite
+nonnegative global support, regardless of minimizer ties.
+
+EXPECTED CLOSED BUDGET
+Apply the scalar lemma separately to each resource's weights u_i=b_ie.
+The preceding pointwise inequality yields
+ q sum_i p_i(q)=E sum_(i:B_i=0) A_i(B)
+ <= [2d q/(1-q)]T.
+Only d appears; owner count and support-form complexity have disappeared.
+
+ENDPOINT BUDGET AND INTEGRATION
+Let g(q)=E f(x_B), a finite polynomial. The elementary diagonal derivative
+identity is sum_i m_i(q)=-g'(q). Therefore
+ sum_i r_i(q) <= [2d q/(1-q)]T +(1-q)(-g'(q)).
+Since g(0)=T and g>=0, integration by parts gives
+ int_0^a (1-q)(-g'(q))dq
+  =T-(1-a)g(a)-int_0^a g(q)dq <=T.
+The integral of q/(1-q) is -a-log(1-a). Divide by a to obtain C_d(a).
+At T=0 monotonicity makes all coalition worths, capped contributions and
+endpoint marginals zero, so the same bound is immediate.
+
+EXPLICIT PARAMETERS AND ASYMPTOTICS
+For0<a<1,
+ -a-log(1-a)=sum_(k>=2) a^k/k <=a^2/[2(1-a)].
+Consequently C_d(a)<=1/a+d a/(1-a). The choice a=1/(1+sqrt(d)) gives
+1/a+d a/(1-a)=1+2sqrt(d). This a is at most1/2 for d>=1, so it stays inside
+the old averaging interval range (although it need not be an inverse integer).
+Alternatively choose j=ceil(sqrt(d))+1 and a=1/j to retain the literal old
+integer parameter: C_d(1/j)<=j+d/(j-1)=(2+o(1))sqrt(d).
+All parameters are chosen from the fixed resource dimension before reports;
+there is no report-dependent retuning or deletion of zero owners/resources.
+
+CONTRIBUTION BOUNDARY
+The production model, relative supports, hybrid eligibility, and derivative
+identity are established earlier in this project. The new ingredient is the
+coordinatewise capped-price domination plus the scalar Bernoulli reciprocal
+identity, giving an owner-independent closed-budget estimate. This changes the
+previous general dimension upper bound from d to O(sqrt d). The existing lower
+bound of order log d/loglog d remains unchanged. It does not prove a sharp
+dimension rate or an unrestricted sqrt(d) lower. Priority is unconfirmed.

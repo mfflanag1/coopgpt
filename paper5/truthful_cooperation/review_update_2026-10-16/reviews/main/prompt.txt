@@ -1,0 +1,1307 @@
+Task and review objective:
+Audit the newly integrated section Bounds in owner count and resource dimension (general:* labels) in the existing manuscript. Check relative-face support existence without boundary continuity, fixed-mask eligibility, endpoint integration signs, exact B_n(a), scalar reciprocal identity including zeros, coordinate domination, dimension constants, fixed pre-report whole-rule selection. Check abstract/introduction/conclusion claims are consistent and distinguish static cost of stability from cross-report incentives. Older K/DAG proof unchanged and out of scope except references. Compare with supplied frozen proof notes, already internally reviewed. Find verified gaps, missing hypotheses or claim inflation. Do not treat tests/model opinions as proof or novelty.
+
+
+FILE paper5/truthful_cooperation/manuscript.tex
+1: \documentclass[11pt]{article}
+2: \usepackage[T1]{fontenc}
+3: \usepackage{lmodern,microtype,amsmath,amssymb,amsthm,booktabs,array}
+4: \usepackage[margin=1in]{geometry}
+5: \usepackage[authoryear,round]{natbib}
+6: \usepackage[hidelinks]{hyperref}
+7: \hypersetup{pdftitle={Sharp subsidies for truthful production and network cooperation},pdfauthor={Maxwell Flanagan}}
+8: \newtheorem{theorem}{Theorem}[section]
+9: \newtheorem{lemma}[theorem]{Lemma}
+10: \newtheorem{proposition}[theorem]{Proposition}
+11: \newtheorem{corollary}[theorem]{Corollary}
+12: \theoremstyle{definition}\newtheorem{definition}[theorem]{Definition}
+13: \theoremstyle{remark}\newtheorem{remark}[theorem]{Remark}
+14: \newcommand{\R}{\mathbb R}
+15: \newcommand{\E}{\mathbb E}
+16: \newcommand{\Prob}{\mathbb P}
+17: \newcommand{\core}{\mathcal C}
+18: \newcommand{\pos}[1]{(#1)_+}
+19: \newcommand{\ind}{\mathbf 1}
+20: \title{Sharp subsidies for truthful production\\and network cooperation}
+21: \author{Maxwell Flanagan\thanks{Corresponding author. Affiliation and contact details require author confirmation before submission.}}
+22: \date{16 October 2026\\[2pt]\small Economic Theory candidate; not submitted}
+23: \begin{document}
+24: \maketitle
+25: \begin{abstract}
+26: Owners of complementary productive resources may gain by withholding capacity
+27: when a sharing rule selects efficient core allocations. We ask how much
+28: external subsidy suffices to retain every coalition's production guarantee
+29: while making each fixed owner's payment nondecreasing in its reported
+30: resource bundle. For any technology represented by the minimum of $K$ fixed
+31: nonnegative linear forms, we construct a deterministic rule satisfying both
+32: requirements at all nonnegative real report profiles. Its total payment is
+33: at most $(1+o(1))T\log K/\log\log K$, where $T$ is grand-coalition production.
+34: A matching lower bound holds for the worst case with at most $K$ structural
+35: cuts even on simple directed acyclic flow networks with distinct strategic
+36: edge owners. Thus the leading constant is one. The upper combines capped
+37: supporting prices selected without the recipient's report with endpoint
+38: marginal payments. The lower transports payments across unilateral report
+39: changes and explicitly accounts for auxiliary owners. The incentive model
+40: permits binding componentwise underreports and payment-only utility.
+41: The bound is uniform in owner count and resource dimension, but $K$ may be
+42: exponential in a compact description. Exact finite evaluation exists;
+43: polynomial preprocessing is not asserted. The result isolates the cost of
+44: linking coalition-covering allocations across reports in games whose
+45: individual profiles already admit efficient core allocations. For every finite
+46: monotone concave homogeneous technology we also obtain total-payment factors
+47: $n\sqrt{2/(n+1)}$ and $1+2\sqrt d$ in fixed owner count $n$ and resource
+48: dimension $d$. Their unrestricted optimal rates remain open.
+49: \end{abstract}
+50: \noindent\textbf{Keywords:} production game; mechanism design; capacity reporting;
+51: coalitional stability; subsidy; flow game.\\
+52: \textbf{JEL classification:} C71; D82; D47.
+53: 
+54: \section{Introduction}
+55: Resource owners can jointly create value that none can produce alone. A
+56: sharing rule must then address two distinct problems: retaining the coalition
+57: and eliciting the resources available to it. At a given capacity profile,
+58: competitive supporting prices can allocate the entire production value while
+59: meeting every coalition's outside option. The difficulty is choosing these
+60: allocations consistently across profiles. An owner who receives less after
+61: revealing additional resources has an incentive to withhold them.
+62: 
+63: We measure the external budget needed to reconcile these requirements.
+64: Owners, resource types and technology are fixed. Each owner reports a
+65: nonnegative bundle and can commit no more than its true resources. Its utility
+66: is its payment; resource use has no private cost. A single deterministic rule
+67: must work at every nonnegative real profile, including zeros and ties. Payments
+68: are nonnegative, cover every coalition's production value, and are
+69: nondecreasing in the reporting owner's entire bundle with the other reports
+70: held fixed. These assumptions describe capacity disclosure by fixed partners;
+71: they do not model hidden opportunity costs or the choice of who joins.
+72: 
+73: The production function is a minimum of $K$ fixed nonnegative linear forms.
+74: This includes finite nonnegative linear production programs and
+75: single-commodity flow networks. A form can represent supporting resource
+76: prices; in a network it is a structural cut. Grand production is denoted by
+77: $T$. If total payment is at most $BT$, the external subsidy is at most
+78: $(B-1)T$. Coverage includes the grand coalition, so total payments cannot
+79: be below $T$ at positive-value profiles.
+80: 
+81: \subsection{Result and economic interpretation}
+82: We prove that the optimal worst-case total-payment factor is
+83: \[
+84:  (1+o(1))\frac{\log K}{\log\log K}
+85: \]
+86: for technologies with at most $K$ forms. The same leading constant is necessary
+87: even on simple directed acyclic networks with one strategic owner per edge.
+88: Theorem~\ref{prod:upper} provides an explicit finite-$K$ bound and a mechanism.
+89: Theorem~\ref{dag:sharp} supplies the matching asymptotic lower bound for the
+90: worst case with at most $K$ cuts. Owner and resource counts are unrestricted
+91: finite integers in both statements.
+92: 
+93: The lower bound means that no universal constant subsidy factor preserves
+94: all coalition guarantees and truthful capacity disclosure throughout this
+95: class. This is not caused by an empty core at a fixed profile. For any
+96: minimizing form $w$, the efficient payments $w\cdot b_i$ cover every
+97: coalition. Subsidy is required because payments must also satisfy incentive
+98: inequalities between profiles. Our lower bound connects those inequalities
+99: using actual unilateral changes by the original owners. All auxiliary edges
+100: in its network construction belong to strategic owners and can have arbitrary
+101: reports; no free infrastructure is introduced.
+102: 
+103: The upper bound selects supporting prices after randomly deleting whole
+104: owners. A recipient's excluded price does not depend on its own report, and
+105: its contribution is capped at grand production. Endpoint marginal payments
+106: repair coalition coverage. Averaging over a short interval of deletion
+107: probabilities controls the additional payment. Randomness defines a finite
+108: expectation: the implemented rule is deterministic. The proof uses a union
+109: bound over the fixed forms, which explains the technology-complexity parameter.
+110: 
+111: A small $K$ gives a budget guarantee independent of the number of owners.
+112: However, $K$ can be exponential in an encoded network or production program.
+113: Theorem~\ref{general:sqrt} gives separate bounds of order $\sqrt n$ and
+114: $\sqrt d$, including technologies without a finite-form representation.
+115: These bounds improve the previous owner-count and dimension estimates,
+116: but their unrestricted optimal rates remain open. No polynomial-time
+117: preprocessing algorithm is asserted. It also makes no incentive claim for resource-use
+118: costs, overreports, coordinated deviations, false names, or changes in the
+119: owner population. These are separate economic questions.
+120: 
+121: \subsection{Related work and contribution boundary}
+122: Dual-price core allocations are classical in linear production games
+123: \citep{Owen,SametZemel}. The present contribution concerns selecting payments
+124: across reports under a uniform budget bound. Fixed-game cost of stability
+125: \citep{Bachrach} studies subsidy for coalitional stability; here efficient
+126: cores already exist profile by profile.
+127: 
+128: The closest strategic comparison is Huang, Mei, Yang and Cao's
+129: \emph{Mechanism Design in Max-Flows} (2025, inspected
+130: \href{https://arxiv.org/html/2502.08248v1}{arXiv:2502.08248v1}, Sections 2 and 4).
+131: It uses binding capacity underreports and payment utility, establishes an
+132: obstruction to truthful efficient core selection, and studies efficient
+133: mechanisms with other incentive properties. We retain every coalition
+134: inequality and permit subsidy. We do not claim their split/merge or
+135: other-owner monotonicity guarantees.
+136: 
+137: \citet{Immorlica} impose cross-monotonicity when other owners join.
+138: \citet{Branzei} define type-monotonic schemes on participating subgames of a
+139: unit-resource market (Definition 1 and Theorems 5--6 of the final 2007 text).
+140: Those comparisons change the population; ours changes one fixed owner's
+141: reported bundle. No equivalence via strategic cloning is used.
+142: 
+143: \citet{ABV} do use own-resource monotonicity for a fixed alliance. Their
+144: inspected author version defines a strictly concave network-utility model
+145: and studies projection onto the full efficient core. Its projection
+146: monotonicity evidence is computational, not a universal proof. Online
+147: Resource 1 supplies a strictly concave counterexample to a universal
+148: extension of that evidence, with a version-specific comparison. This
+149: auxiliary example is not an instance of our homogeneous main theorem.
+150: 
+151: Weighted multi-glove games and their total balancedness are established
+152: \citep{MorettiNorde}. Their sharper special-case analysis, the connection to
+153: the continuous Banzhaf functional, and additional mechanism comparisons appear
+154: in Online Resource 1. Supporting prices, marginal contributions, concentration
+155: bounds and weighted counting are established tools. The proposed contribution
+156: is their combination into the joint all-profile coverage, incentive and sharp
+157: budget guarantee, with a matching lower bound under fixed ownership. The
+158: bounded source audit is not a certification of historical priority.
+159: 
+160: \subsection{Organization}
+161: Section~\ref{prod:section} gives the model, mechanism and complete upper proof.
+162: Section~\ref{general:section} gives complete owner-count and dimension proofs
+163: for general concave homogeneous production. Section~\ref{dag:section} proves
+164: the complexity lower bound and explains why naive subdivision would destroy
+165: it. The conclusion separates the unrestricted parameter gaps from the
+166: restricted mechanism barriers and computational questions. Online Resource 1 is an
+167: indexed supplement containing the earlier hierarchy, general extensions and
+168: exact obstructions; its repeated foundational proofs make it independently
+169: readable. Online Resource 2 contains the scoped verification code and logs.
+170: 
+171: \section{General production: a sharp complexity bound}\label{prod:section}
+172: There are $n$ fixed owners and $d$ fixed resource types. Owner $i$ reports
+173: $b_i\in\R_+^d$; write $c=\sum_i b_i$. Fix a nonempty finite family
+174: $V=\{w^1,\ldots,w^K\}\subseteq\R_+^d$, with a report-independent priority,
+175: and define
+176: \[
+177:  f(c)=\min_{w\in V}w\cdot c,\qquad
+178:  v_b(S)=f\left(\sum_{i\in S}b_i\right),\qquad T=f(c).
+179: \]
+180: A rule is eligible if its payments are nonnegative, cover every coalition,
+181: and are componentwise nondecreasing in each owner's whole bundle, with all
+182: other reports fixed. These conditions hold on all of $(\R_+^d)^n$.
+183: They express truthfulness for binding underreports and payment-only utility;
+184: there are no operating costs, overreport, false-name, population-change or
+185: coordinated-report guarantees. A factor $C$ bounds \emph{total payment} by
+186: $CT$; external subsidy is at most $(C-1)T$. The family $V$ remains fixed
+187: across reports. Its size may be exponential in a compact description. All logarithms are natural.
+188: 
+189: \begin{theorem}[General sharp-order upper bound]\label{prod:upper}
+190: For every integer $j\ge2$, there exists an eligible deterministic rule with factor
+191: \begin{equation}\label{prod:constant}
+192:  C_j(K)=j+\frac{\log K+2\log j+1}{\alpha_j},\qquad
+193:  \alpha_j=\log\frac{j^3}{j^2+j-1}>0.
+194: \end{equation}
+195: With $L=\log K$ and
+196: $j=\max\{2,\lceil L/[\log(2+L)]^2\rceil\}$, this factor is
+197: $(1+o(1))\log K/\log\log K$, uniformly over owner counts, dimensions,
+198: technologies and reports. Zero-value profiles receive zero; for $K=1$ the
+199: constructed rule is efficient.
+200: \end{theorem}
+201: 
+202: \paragraph{The mechanism.}
+203: For $q\in(0,1)$ let independent owner bits satisfy $\Prob(B_i=0)=q$.
+204: Choose the first minimizer of the \emph{uncapped} objective,
+205: \[
+206:  W(b,B)=\operatorname*{first\,argmin}_{w\in V}
+207:                \sum_i B_i(w\cdot b_i),\qquad
+208:  a_i(w,b)=\min\{w\cdot b_i,T\}.
+209: \]
+210: Only the payment contribution $a_i$ is capped. Put
+211: \begin{align}
+212:  z_i^q&=\E a_i(W,b),&
+213:  p_i^q&=\E[a_i(W,b)\mid B_i=0],\label{prod:p}\\
+214:  m_i^q&=\E_{B_{-i}}\left[f\left(b_i+\sum_{h\ne i}B_hb_h\right)
+215:                          -f\left(\sum_{h\ne i}B_hb_h\right)\right],
+216:  &r_i^q&=qp_i^q+(1-q)m_i^q.\label{prod:hybrid}
+217: \end{align}
+218: The final payment is the deterministic finite expectation
+219: \begin{equation}\label{prod:payment}
+220:  M_i(b)=j\int_0^{1/j}r_i^q(b)\,dq.
+221: \end{equation}
+222: These quantities are finite polynomials in $q$ at a fixed profile; no
+223: continuity or generic-position assumption about the reports is required.
+224: 
+225: \begin{proof}[Proof of Theorem~\ref{prod:upper}]
+226: Conditional on $B_i=0$, every score and the selected form are independent of
+227: $b_i$. For that fixed nonnegative form, both $w\cdot b_i$ and $T$ are
+228: nondecreasing in $b_i$, so their minimum is nondecreasing. In $m_i^q$ the
+229: off term is independent of $b_i$ and the on term is nondecreasing. The
+230: nonnegative fixed mixtures preserve this property and nonnegativity.
+231: 
+232: For any $w,S$, if some $i\in S$ has $w\cdot b_i\ge T$, then
+233: $\sum_{i\in S}a_i(w,b)\ge T\ge v_b(S)$. Otherwise no term in $S$ is capped,
+234: and the sum is $w\cdot\sum_{i\in S}b_i\ge v_b(S)$. Thus every capped form
+235: covers coalitions. Fix $B_{-i}$ and let $w_1$ be the on minimizer. The off
+236: optimum is at most the off objective of this same form, whence
+237: \begin{equation}\label{prod:endpoint}
+238:  f\left(b_i+\sum_{h\ne i}B_hb_h\right)-f\left(\sum_{h\ne i}B_hb_h\right)
+239:  \ge w_1\cdot b_i=a_i(w_1,b).
+240: \end{equation}
+241: The equality holds because the contribution is a nonnegative summand of
+242: the selected on value, which is at most $T$. Averaging proves $r_i^q\ge z_i^q$,
+243: and hence coverage for $r^q$ and $M$.
+244: 
+245: For the budget define $g(q)=\E f(\sum_iB_ib_i)$, $Z(q)=\sum_i z_i^q$,
+246: and $R(q)=\sum_i r_i^q$. Capping leaves every open contribution unchanged:
+247: \[
+248:  \sum_iB_i a_i(W,b)=f\left(\sum_iB_ib_i\right).
+249: \]
+250: Consequently $q\sum_i p_i^q=Z-g$. Differentiating the finite mask polynomial
+251: gives $\sum_i m_i^q=-g'$, so $R=Z-g-(1-q)g'$. Since $g(0)=T$ and $g\ge0$,
+252: for $0<\eta<1$ integration by parts gives the exact identity
+253: \begin{equation}\label{prod:integral}
+254:  \int_0^\eta R\,dq=\int_0^\eta Z\,dq+T-(1-\eta)g(\eta)
+255:                          -2\int_0^\eta g\,dq
+256:  \le\int_0^\eta Z\,dq+T.
+257: \end{equation}
+258: Both the sign and the factor two in this identity matter.
+259: 
+260: Suppose $T>0$. For each fixed form let
+261: $d_i(w)=a_i(w,b)/T\in[0,1]$ and $\rho_w=\sum_i d_i(w)$.
+262: The selected form satisfies $\sum_iB_id_i(W)\le1$. For $\lambda>0$ put
+263: $\alpha=-\log(q+(1-q)e^{-\lambda})$. The convex function
+264: $u\mapsto\log(q+(1-q)e^{-\lambda u})$ lies below its endpoint chord
+265: $-\alpha u$ on $[0,1]$. Independence and Markov's inequality give
+266: \[
+267:  \Prob\left(\sum_iB_id_i(w)\le1\right)
+268:  \le e^\lambda\prod_i(q+(1-q)e^{-\lambda d_i(w)})
+269:  \le e^{\lambda-\alpha\rho_w}.
+270: \]
+271: A union over the fixed family and integration of the resulting tail yield
+272: \begin{equation}\label{prod:chernoff}
+273:  \Prob(\rho_W\ge x)\le\min\{1,K e^{\lambda-\alpha x}\},\qquad
+274:  \frac{Z(q)}T\le\frac{\log K+\lambda+1}{\alpha}.
+275: \end{equation}
+276: Take $\eta=1/j$ and $\lambda=2\log j$. For $q\le1/j$,
+277: $q+(1-q)e^{-\lambda}\le(j^2+j-1)/j^3$, so
+278: \eqref{prod:integral}--\eqref{prod:chernoff} give \eqref{prod:constant}.
+279: For the displayed choice of $j$, as $L\to\infty$,
+280: $j\sim L/(\log L)^2$, $\alpha_j\sim\log L$, and
+281: $j=o(L/\log L)$, proving the asserted asymptotic.
+282: 
+283: If $T=0$, all masked production values and capped contributions vanish.
+284: If $K=1$, no contribution is capped, $p_i^q=m_i^q=w\cdot b_i$, and
+285: $M_i=w\cdot b_i$. Finally each finite-mask term is
+286: $q^{n-1-|S|}(1-q)^{|S|}[q a_i(W(b,1_S),b)+(1-q)(v_b(S\cup\{i\})-v_b(S))]$.
+287: Its integral is a finite sum with rational coefficients when $j$ is integer.
+288: This gives exact rational payments for rational input, without an efficiency
+289: claim about enumeration of masks or forms.
+290: \end{proof}
+291: 
+292: \begin{corollary}[Production LPs and networks]\label{prod:lp}
+293: The theorem applies to
+294: $f(c)=\max\{\pi\cdot x:x\ge0,Ax\le c\}$ for fixed $A\ge0$, with every
+295: activity column nonzero and fixed positive profits $\pi$. Here $V$ can be
+296: the vertices of $\{w\ge0:A^Tw\ge\pi\}$. For single-commodity directed flow,
+297: one may instead use the characteristic vectors of the inclusion-minimal
+298: structural source--sink edge cuts.
+299: \end{corollary}
+300: \begin{proof}
+301: Each activity is bounded by a positive entry in its column, so every feasible
+302: production set is compact at finite $c$. The dual is nonempty, pointed and
+303: polyhedral. Strong duality and attainment at a vertex give the claimed finite
+304: min-linear representation, including boundary capacities. Network max-flow/
+305: min-cut gives the cut representation directly. Redundant nonminimal cuts may
+306: be removed once and for all because capacities are nonnegative. All owners
+307: and forms remain fixed across profiles. A positive-profit zero-resource
+308: activity is excluded because it would make production unbounded.
+309: \end{proof}
+310: Dual core allocations are established ingredients~\citep{Owen,SametZemel}.
+311: General dual vertices may be fractional; their count is not an ordinary
+312: network-cut count. Constraints introducing capacity-independent dual offsets
+313: are outside the homogeneous model here.
+314: 
+315: \begin{proposition}[Why the payment cap is essential]\label{prod:uncapped}
+316: Removing the cap from the own-excluded contribution in
+317: \eqref{prod:p} makes the uniform-$q$ hybrid unbounded even with two owners
+318: and two supporting forms.
+319: \end{proposition}
+320: \begin{proof}
+321: Take unit-profit activity columns $(1,1)$ and $(M,0)$, $M>1$, and two
+322: fixed owners with bundles $b_1=(M,0)$ and $b_2=(0,1)$, so $c=(M,1)$. The two dual vertices are $(1,0)$ and $(1/M,1-1/M)$, and
+323: $T=2-1/M$. If owner 1 is off and owner 2 on, $(1,0)$ uniquely minimizes the
+324: raw score, giving uncapped contribution $M$. Thus $r_1^q\ge q(1-q)M$;
+325: with $j=2$ its average is at least $M/6$, an unbounded ratio to $T$.
+326: This obstructs only the uncapped rule. On the full two-owner bundle
+327: domain, the Shapley payments
+328: $P_i(b)=[f(b_i)+T-f(b_{-i})]/2$ are efficient and own-monotone.
+329: They are nonnegative by monotonicity of $f$, and cover singleton coalitions
+330: because $f(b_1+b_2)\ge f(b_1)+f(b_2)$. This last inequality follows by
+331: minimizing nonnegative linear forms. Thus an efficient eligible alternative
+332: exists without restricting each owner's report to a single resource.
+333: \end{proof}
+334: 
+335: \section{Bounds in owner count and resource dimension}\label{general:section}
+336: The number of supporting forms can be much larger than the economic description.
+337: We now obtain bounds directly in the numbers of fixed owners and resources.
+338: Here the production technology may be any finite-valued monotone concave
+339: function $f:\R_+^d\to\R_+$ homogeneous of degree one; a finite min-linear
+340: representation is not required. The report space and eligibility conditions
+341: remain unchanged. In particular, there is no additional fairness floor.
+342: 
+343: \begin{theorem}[General owner and dimension bounds]\label{general:sqrt}
+344: For every fixed $n,d\ge1$ and every such technology, there exists an eligible
+345: deterministic rule on all nonnegative real report profiles with
+346: \begin{equation}\label{general:combined}
+347:  \sum_i M_i(b)\le
+348:  \min\left\{d,\ n\sqrt{\frac{2}{n+1}},\ 1+2\sqrt d\right\}T.
+349: \end{equation}
+350: The individual bounds are uniform in the other parameter. They also hold when
+351: $f$ has downward discontinuities at the boundary. More precisely, for every
+352: fixed $0<a<1$ the supporting-price/endpoint rule averaged over $q\in[0,a]$
+353: has both bounds
+354: \begin{align}
+355:  B_n(a)&=\frac{na}{2}+
+356:  \frac{n[1-(1-a)^{n+1}]}{(n+1)a},\label{general:owner}\\
+357:  D_d(a)&=\frac{1+2d[-a-\log(1-a)]}{a}.\label{general:dimension}
+358: \end{align}
+359: The owner expression remains valid at $a=1$ by polynomial integration.
+360: No polynomial-time evaluation or preprocessing claim is made.
+361: \end{theorem}
+362: 
+363: \subsection{Supporting prices on boundary faces}
+364: For $x\ne0$, restrict $f$ to its coordinate face
+365: $F_x=\{z\ge0:z_e=0\text{ whenever }x_e=0\}$.
+366: At the relative-interior point $x$, finite concavity gives a supergradient $u$.
+367: Monotonicity forces each active coordinate of $u$ to be nonnegative, and
+368: homogeneity applied above and below $x$ gives $u\cdot x=f(x)$.
+369: For a boundary point $z\in F_x$, apply the supporting inequality at
+370: $(1-t)x+tz$, $0<t<1$, and the concavity lower bound on that segment to obtain
+371: $u\cdot z\ge f(z)$. Thus boundary continuity is unnecessary.
+372: Choose the unique minimum-norm vector in the nonempty closed convex set of
+373: such nonnegative supports on $F_x$. Extend its linear form to
+374: \[
+375:  \ell_x(z)=\begin{cases}u\cdot z,&z\in F_x,\\+\infty,&z\notin F_x.
+376:  \end{cases}
+377: \]
+378: Set $\ell_0(0)=0$ and $\ell_0(z)=+\infty$ for $z\ne0$.
+379: This is one fixed selection depending only on $x$. For finite min-linear
+380: technologies the original fixed-priority global minimizing form is an
+381: alternative; the bounds below apply to either choice.
+382: 
+383: For any fixed mask $B\subseteq N$, put $x_B=\sum_{i\in B}b_i$ and
+384: $A_i(B)=\min\{\ell_{x_B}(b_i),T\}$. This vector covers every coalition:
+385: if any member's raw price reaches $T$, its capped payment alone suffices;
+386: otherwise all relevant prices are finite on the support face and their sum
+387: majorizes the coalition's worth. For $i\in B$,
+388: \[
+389:  f(x_B)-f(x_B-b_i)\ge \ell_{x_B}(b_i),
+390: \]
+391: because the support touches at $x_B$ and majorizes $f(x_B-b_i)$.
+392: The marginal is at most $T$. Replace open owners' prices by these marginals
+393: and keep $A_i(B)$ for closed owners. Coverage is preserved. A closed owner's
+394: selected price excludes its own report, while its raw price and cap are
+395: nondecreasing in that report. An open owner's marginal has a fixed off term
+396: and a nondecreasing on term. This proves eligibility for every fixed mask
+397: and every report-independent mixture of masks.
+398: 
+399: With independent missing probability $q$, retain the notation $p_i^q,m_i^q,r_i^q$
+400: from \eqref{prod:p}--\eqref{prod:hybrid}, now using $\ell_{x_B}$.
+401: At a fixed profile every capped mask payment is finite, so the expectations
+402: are finite polynomials in $q$. Define $M_i^a=a^{-1}\int_0^a r_i^q\,dq$.
+403: The endpoints have measure zero, including when $a=1$.
+404: Writing $g(q)=\E f(x_B)$ and $C(q)=q\sum_i p_i^q$, differentiation of the
+405: finite mask polynomial gives
+406: \begin{equation}\label{general:endpoint}
+407:  \sum_i r_i^q=C(q)-(1-q)g'(q),\qquad
+408:  \int_0^a-(1-q)g'(q)\,dq
+409:  =T-(1-a)g(a)-\int_0^a g(q)\,dq.
+410: \end{equation}
+411: No derivative of $f$ with respect to reports occurs here.
+412: 
+413: \subsection{Owner-count bound}
+414: Every closed payment is at most $T$, whence $C(q)\le nqT$.
+415: The all-open mask alone gives $g(q)\ge(1-q)^nT$.
+416: Substituting both estimates in \eqref{general:endpoint}, integrating and
+417: dividing by $a$ yields
+418: \[
+419:  \sum_i M_i^a\le\left(\frac{na}{2}+
+420:  \frac{n[1-(1-a)^{n+1}]}{(n+1)a}\right)T.
+421: \]
+422: Dropping the bracketed power term gives
+423: $B_n(a)\le na/2+n/[(n+1)a]$. The fixed choice
+424: $a=\sqrt{2/(n+1)}\le1$ equalizes these terms and proves the owner bound
+425: in \eqref{general:combined}. For $n=1$ the exact expression is $B_1(a)=1$.
+426: The former $O(n/\log n)$ upper bound recorded in the supplement is therefore
+427: superseded by $(\sqrt2+o(1))\sqrt n$.
+428: 
+429: \subsection{Resource-dimension bound}
+430: The following scalar identity controls contributions from closed owners
+431: without counting owners or supporting forms.
+432: \begin{lemma}[Bernoulli reciprocal bound]\label{general:reciprocal}
+433: Let $u_i\ge0$, independently retain each $i$ with probability $p=1-q$, and
+434: write $S_B=\sum_{i\in B}u_i$. Define $\min\{u_i/S_B,1\}$ to be zero when
+435: $u_i=0$ and one when $u_i>0=S_B$. Then
+436: \[
+437:  \E\sum_{i\notin B}\min\{u_i/S_B,1\}\le\frac{2q}{1-q}.
+438: \]
+439: \end{lemma}
+440: \begin{proof}
+441: With zero-over-zero interpreted as zero,
+442: $\min\{u/S,1\}\le2u/(u+S)$. Conditioning on the own bit gives
+443: \[
+444:  \E\sum_{i\notin B}\frac{u_i}{u_i+S_B}
+445:  =\frac qp\E\sum_{i\in B}\frac{u_i}{S_B}
+446:  =\frac qp\Prob(S_B>0)\le\frac qp.
+447: \]
+448: In the first equality both conditioned ratios are
+449: $u_i/(u_i+\sum_{j\ne i}B_ju_j)$; the other bits have the same law.
+450: \end{proof}
+451: 
+452: Suppose $T>0$. For every mask and owner,
+453: \begin{equation}\label{general:coordinate}
+454:  \frac{A_i(B)}T\le
+455:  \sum_{e=1}^d\min\left\{\frac{b_{ie}}{(x_B)_e},1\right\},
+456: \end{equation}
+457: with the lemma's conventions. If $b_i$ has a positive coordinate outside
+458: $F_{x_B}$, the right side is at least one. Otherwise the selected nonnegative
+459: support satisfies $\sum_eu_e(x_B)_e=f(x_B)\le T$, so each active term obeys
+460: $u_eb_{ie}/T\le b_{ie}/(x_B)_e$. Apply
+461: $\min\{\sum_e z_e,1\}\le\sum_e\min\{z_e,1\}$.
+462: The case $x_B=b_i=0$ is immediate. The same argument applies to a finite
+463: global minimizing form, since off-face prices remain capped by $T$.
+464: 
+465: Sum \eqref{general:coordinate} over closed owners and use
+466: Lemma~\ref{general:reciprocal} separately in each resource coordinate:
+467: $C(q)\le 2dqT/(1-q)$. The endpoint integral in
+468: \eqref{general:endpoint} is at most $T$. Since
+469: $\int_0^a q/(1-q)\,dq=-a-\log(1-a)$, this proves
+470: \eqref{general:dimension}. Also
+471: \[
+472:  -a-\log(1-a)=\sum_{k\ge2}\frac{a^k}{k}
+473:  \le\frac{a^2}{2(1-a)},\qquad
+474:  D_d(a)\le\frac1a+\frac{da}{1-a}.
+475: \]
+476: Choosing $a=1/(1+\sqrt d)$ gives $1+2\sqrt d$.
+477: At $T=0$, monotonicity makes all coalition values, caps and endpoint
+478: marginals vanish, completing these cases.
+479: 
+480: \subsection{Baseline, selection and remaining gap}
+481: The grand marginal $U_i=f(c)-f(c-b_i)$ is eligible: it is own-monotone and
+482: dominates the support allocation at $c$. Put
+483: $\alpha_i=\max_{e:c_e>0}b_{ie}/c_e$ when $T>0$.
+484: Then $c-b_i\ge(1-\alpha_i)c$, so $U_i\le\alpha_iT$ and
+485: $\sum_i\alpha_i\le d$. This proves the $dT$ baseline.
+486: Choosing an entire rule using the fixed public $n,d$ before reports proves
+487: \eqref{general:combined}; no pointwise minimum of payment vectors is used.
+488: For a finite $K$ representation, the complexity bound in
+489: Theorem~\ref{prod:upper} is another available choice.
+490: 
+491: The scalar leading constant two is already sharp as $q\downarrow0$:
+492: two equal positive weights give expected closed ratio exactly $2q$.
+493: This does not prove optimality of the dimension constant for the full mechanism.
+494: The unrestricted owner and dimension rates remain open between the earlier
+495: logarithmic-over-logarithmic lower bounds and the square-root uppers above.
+496: Online Resource 1 gives matching square-root growth obstructions only for
+497: specified fixed-mask, common-support and endpoint architectures, including
+498: a maximum-coalition-marginal cap variant. Those restrictions are essential;
+499: they are not lower bounds for arbitrary eligible payment rules.
+500: 
+501: Square-root payment bounds also arise in static cost-of-stability theory:
+502: \citet[Theorem 3.5]{Bachrach2009} prove the corresponding superadditive-game
+503: bound without the cross-report incentive requirement. Every profile in our
+504: model already admits an efficient support allocation, so its static cost of
+505: stability is zero. The new bounds concern one rule linking those profiles.
+506: 
+507: \section{A matching lower bound on simple networks}\label{dag:section}
+508: A network has one distinct fixed strategic owner per edge, and coalition
+509: worth is its maximum source--sink flow using only its owned edges. Structural
+510: cuts are inclusion-minimal edge sets disconnecting source from sink; their
+511: number depends on the fixed graph, not its reported capacities. Define
+512: $\mathcal B_{\rm dag}(K)$ as the supremum, over simple finite DAGs having at
+513: most $K$ structural cuts, of the best all-profile eligible total-payment
+514: factor on that graph. The analogous quantity for finite nonnegative
+515: min-linear technologies with at most $K$ forms is $\mathcal B_{\rm prod}(K)$;
+516: owner counts and dimensions are unrestricted finite integers.
+517: 
+518: \begin{theorem}[Sharp first-order worst-case factors]\label{dag:sharp}
+519: As $K\to\infty$,
+520: \[
+521:  \mathcal B_{\rm dag}(K)=(1+o(1))\frac{\log K}{\log\log K},\qquad
+522:  \mathcal B_{\rm prod}(K)=(1+o(1))\frac{\log K}{\log\log K}.
+523: \]
+524: The lower holds along an explicit sequence of simple DAGs at their exact cut
+525: counts, and for the worst case with \emph{at most} $K$ cuts. It does not
+526: assert an exact-count padding theorem for every integer $K$.
+527: \end{theorem}
+528: 
+529: \begin{proof}
+530: The upper follows from Theorem~\ref{prod:upper}. We give the simple-DAG lower,
+531: which also supplies the production lower. Fix integers $d_0\ge1$, $m>d_0$,
+532: $R\ge1$, and $k\ge2$. (Here $d_0$ is hierarchy height, not resource dimension.)
+533: One module with terminals $a,b$ has vertices $L_1,\ldots,L_R$,
+534: $u_1,\ldots,u_m$, $v_1,\ldots,v_m$, $W_1,\ldots,W_R$ and edges
+535: \[
+536:  aL_s,\quad L_su_j,\quad u_jv_j,\quad v_jW_t,\quad W_tb
+537:  \quad(1\le s,t\le R,\ 1\le j\le m).
+538: \]
+539: Take $k$ copies in series by identifying consecutive terminals. Each middle
+540: edge $u_jv_j$ has report in $\{1,m\}$; all auxiliary edges have report
+541: $H=m^2$. Every edge, including every auxiliary edge, is a strategic original
+542: owner whose full report domain is nonnegative. Only the finite profiles
+543: used in this proof keep auxiliary reports fixed.
+544: 
+545: A type-$h$ module has $h$ high middle edges, $0\le h\le d_0$. For any subset
+546: $J$ of middle edges, choose one left fan and one right fan, and include the
+547: source/final fan edges plus the incident edges supporting exactly $J$.
+548: This actual coalition has module flow $\sum_{j\in J}c_j$: the middle cut
+549: bounds it above, and the selected branches carry it because their total is
+550: at most $m^2$. In particular the full graph has
+551: \begin{equation}\label{dag:value}
+552:  T=m+(m-1)\min_{1\le l\le k}H_l.
+553: \end{equation}
+554: Choosing the two fans independently uniformly, any particular auxiliary
+555: edge is included with probability at most $1/R$.
+556: 
+557: Symmetrize an arbitrary eligible factor-$B$ rule over module permutations
+558: and branch permutations, relabeling each branch's incident auxiliary edges.
+559: These are permutations of the fixed owner set preserving every coalition's
+560: flow at all profiles: module flows combine by their minimum, so even module
+561: permutations preserve coalition values. Averaging preserves all required
+562: inequalities. At a histogram $\nu=(\nu_0,\ldots,\nu_{d_0})$ of module types,
+563: write $x_h(\nu),z_h(\nu)$ for low and high variable-owner payments, and
+564: \[
+565:  Y(\nu)=\sum_h\nu_h[(m-h)x_h(\nu)+hz_h(\nu)],\qquad
+566:  Q(\nu)=\text{total auxiliary-owner payment}.
+567: \]
+568: No auxiliary-payment symmetry is assumed; $Y+Q\le BT$.
+569: 
+570: First choose one low variable in each module, supported by random fans.
+571: Averaged coalition coverage and nonnegativity give
+572: $\sum_h\nu_hx_h+Q/R\ge1$. Next put $q_0=m-d_0+1$ and choose $q_0$ low
+573: variables in each type below $d_0$, and one high variable in each type
+574: $d_0$. These exist because $m>d_0$. The resulting coalition has worth at
+575: least $q_0$, giving
+576: $q_0\sum_{h<d_0}\nu_hx_h+\nu_{d_0}z_{d_0}+Q/R\ge q_0$.
+577: Multiply the first inequality by $m-d_0$ and the second by $d_0$. With
+578: $A=(d_0+1)m-d_0^2$,
+579: \begin{equation}\label{dag:coalitions}
+580:  A\le A\sum_{h<d_0}\nu_hx_h+
+581:  \nu_{d_0}[(m-d_0)x_{d_0}+d_0z_{d_0}]+(m/R)Q.
+582: \end{equation}
+583: 
+584: Fix $\alpha>0$, set $\lambda=A/\alpha$,
+585: $Z=\sum_{h=0}^{d_0}\lambda^h/h!$, and $p_h=\lambda^h/(h!Z)$.
+586: Average profiles with independent module types of probabilities $p_h$;
+587: let $\mu(\nu)$ be their multinomial histogram weights. Raising one actual
+588: low variable owner from $1$ to $m$ gives
+589: $x_h(\nu)\le z_{h+1}(\nu')$ at
+590: $\nu'=\nu-e_h+e_{h+1}$. Every other report, including every auxiliary report,
+591: is unchanged. The exact identity
+592: \[
+593:  \mu(\nu)\nu_h=(p_h/p_{h+1})\mu(\nu')\nu'_{h+1},\qquad
+594:  A p_h/p_{h+1}=\alpha(h+1)
+595: \]
+596: transports only this changing owner's payment. Averaging
+597: \eqref{dag:coalitions} therefore yields
+598: \begin{align}
+599:  A&\le\alpha\E\sum_{h=1}^{d_0}h\nu_hz_h+
+600:  \E\nu_{d_0}[(m-d_0)x_{d_0}+d_0z_{d_0}]+(m/R)\E Q\notag\\
+601:  &\le(1+\alpha)\E Y+(m/R)\E Q
+602:  \le\max\{1+\alpha,m/R\}B\E T.\label{dag:transport}
+603: \end{align}
+604: The last step uses the disjoint budgets $Y,Q$; their coefficients are not
+605: added. By the tail-sum formula and $p_0=1/Z$,
+606: \begin{equation}\label{dag:mean}
+607:  \E T=m+(m-1)\sum_{r=1}^{d_0}\left(\sum_{h=r}^{d_0}p_h\right)^k
+608:  \le m[1+d_0 e^{-k/Z}].
+609: \end{equation}
+610: 
+611: Let $C_{m,R}$ be the number of structural cuts of one module. Any minimal
+612: cut is the outgoing cut of its reachable source side after deletion, so
+613: $1\le C_{m,R}\le2^{2R+2m}$. A minimal cut in a series composition lies
+614: entirely in one module: otherwise each module retains a path, or an edge
+615: removed elsewhere is redundant. Hence the full cut count is exactly
+616: $K=kC_{m,R}$.
+617: For $d_0\ge2$ choose
+618: \[
+619:  g=\lceil\sqrt{\log(d_0+1)}\rceil,\quad
+620:  m=d_0g,\quad R=m,\quad \alpha=1/g,\quad
+621:  \ell=\lceil\log(d_0+1)\rceil,\quad k=\lceil2\ell Z\rceil.
+622: \]
+623: The separate multiplier $\ell$, rather than $g$, ensures the tail error
+624: vanishes. Equations~\eqref{dag:transport}--\eqref{dag:mean} give
+625: \[
+626:  B\ge\frac{d_0+1-d_0/g}{(1+1/g)(1+d_0e^{-2\ell})}=(1-o(1))d_0.
+627: \]
+628: Here $\lambda=(d_0+1)d_0g^2-d_0^2g>d_0$, so
+629: $\lambda^{d_0}/d_0!\le Z\le(d_0+1)\lambda^{d_0}/d_0!$.
+630: Stirling's estimate implies
+631: $\log k=(1+o(1))d_0\log d_0$; since $m=o(d_0\log d_0)$,
+632: \[
+633:  \log k\le\log K\le\log k+4m\log2=(1+o(1))d_0\log d_0.
+634: \]
+635: This proves the lower along the sequence $K_{d_0}$. For any fixed
+636: $0<\varepsilon<1$ and large external cut budget $K$, take
+637: $d_0=\lfloor(1-\varepsilon)\log K/\log\log K\rfloor$.
+638: Then $K_{d_0}\le K$ eventually, yielding lower coefficient $1-\varepsilon$.
+639: Letting $\varepsilon$ decrease to zero proves the at-most-$K$ assertion.
+640: \end{proof}
+641: 
+642: \begin{proposition}[A subdivision that destroys the lower bound]\label{dag:subdivision}
+643: Fully subdividing every edge of any finite directed network into two edges
+644: owned separately produces a network with an efficient eligible rule.
+645: \end{proposition}
+646: \begin{proof}
+647: For pair reports $(a_e,b_e)$ set $d_e=\min(a_e,b_e)$. Choose the original
+648: network's fixed-priority minimum-cut core allocation $Q(d)$, which pays
+649: $d_e$ on the selected cut and zero elsewhere. Pay $Q_e(d)$ to the higher
+650: reporting member of pair $e$, split equally at equality, and pay the lower
+651: member zero. Holding the mate's report fixed, the payment is zero below it,
+652: half the fixed $Q_e$ at equality and the fixed $Q_e$ above it: in the last
+653: two cases all virtual capacities are fixed. Thus it is own-monotone, even
+654: if $Q$ is not. For a coalition $S$, let $S^*$ contain the original edges
+655: whose two members both lie in $S$. Its value is exactly $v_d(S^*)$, and
+656: $p(S)\ge Q(S^*)\ge v_d(S^*)$. Total payment is $T$. This shows why the naive subdivision reduction fails and motivates the
+657: explicit auxiliary-budget accounting in the shared-fan construction.
+658: \end{proof}
+659: 
+660: 
+661: \section{Implications, limitations and further questions}
+662: The result identifies technology complexity as one sharp measure of the
+663: budget required to combine truthful disclosure with coalition coverage.
+664: For every fixed finite representation, the upper holds simultaneously over
+665: all profiles and all owner bundles. The lower uses an increasing family of
+666: fixed technologies; it does not change the graph when an owner changes its
+667: report. Its asymptotic statement concerns a worst case with at most $K$ cuts,
+668: not an exact-count construction for each integer $K$.
+669: 
+670: Two questions remain distinct from the sharp $K$ theorem. First,
+671: Theorem~\ref{general:sqrt} bounds the factor by
+672: $\min\{d,n\sqrt{2/(n+1)},1+2\sqrt d\}$, while the unrestricted lower bounds
+673: remain logarithmic over logarithmic in $n$ and $d$. The supplement's matching
+674: square-root barriers apply to specified mask/support architectures; they do
+675: not close these unrestricted gaps. A better general rule must escape those
+676: restrictions. Second, rational finite technologies permit exact evaluation
+677: by finite enumeration, and the supplement develops finite sampling with
+678: all-profile certification. The certification preprocessing can be exponential.
+679: A polynomial preprocessing guarantee or a matching computational obstruction
+680: would be a separate contribution.
+681: 
+682: The main theorem deliberately isolates capacity disclosure. Private operating
+683: costs, endogenous participation, and coordinated reports require additional
+684: incentive constraints. A resource-sharing application should justify the
+685: payment-only assumption and its feasible deviations before interpreting the
+686: bound as a policy prescription.
+687: 
+688: \paragraph{Supplementary material.}
+689: Online Resource 1 (\texttt{ESM\_1.pdf}): indexed proofs of supplementary
+690: hierarchies, extensions and mechanism obstructions, including the original
+691: research lineage. Online Resource 2 (\texttt{ESM\_2.zip}): scoped exact
+692: verification programs, execution logs, source hashes and reproduction
+693: instructions. Finite checks corroborate bounded identities and instances;
+694: the universal and asymptotic statements depend on the proofs above.
+695: 
+696: \section*{Statements and Declarations}
+697: \paragraph{Funding and competing interests.}
+698: Author confirmation is required before submission; neither a funding statement
+699: nor a declaration of no competing interests is presumed here.
+700: \paragraph{Data and code availability.}
+701: No empirical dataset is used in the main theorem. The accompanying local
+702: reproducibility archive contains exact finite checks and their inputs, with
+703: version hashes and execution records. This candidate and archive have not
+704: been submitted or newly deposited by this preparation task.
+705: \paragraph{AI assistance and responsibility.}
+706: OpenAI Codex and Anthropic Claude assisted mathematical exploration, code,
+707: proof drafting and internal review across this research project. Internal
+708: model review is not human peer review or formal proof verification. The named
+709: author must independently assess the arguments, approve the text and
+710: references, confirm the declarations, and assume responsibility before any
+711: submission. Human specialist validation and historical priority remain open.
+712: 
+713: \begin{thebibliography}{99}
+714: \bibitem[Amigo et al.(2016)]{ABV}
+715: Amigo I, Belzarena P, Vaton S (2016) Revenue sharing in network utility
+716: maximization problems. NETNOMICS 17:255--284.
+717: \url{https://doi.org/10.1007/s11066-016-9112-4}.
+718: Comparison uses the author manuscript at \url{https://hal.science/hal-01400498v1}.
+719: \bibitem[Bachrach et al.(2009)]{Bachrach2009}
+720: Bachrach Y, Elkind E, Meir R, Pasechnik D, Zuckerman M, Rothe J,
+721: Rosenschein JS (2009) The cost of stability in coalitional games.
+722: arXiv:0907.4385v1. \url{https://arxiv.org/abs/0907.4385v1}.
+723: \bibitem[Bachrach et al.(2018)]{Bachrach}
+724: Bachrach Y, Elkind E, Malizia E, Meir R, Pasechnik D, Rosenschein JS,
+725: Rothe J, Zuckerman M (2018) Bounds on the cost of stabilizing a cooperative
+726: game. Journal of Artificial Intelligence Research 63:987--1023.
+727: \url{https://doi.org/10.1613/jair.1.11270}.
+728: \bibitem[Br\^anzei et al.(2007)]{Branzei}
+729: Br\^anzei R, Solymosi T, Tijs S (2007) Type monotonic allocation schemes
+730: for a class of market games. TOP 15:78--88.
+731: \url{https://doi.org/10.1007/s11750-007-0002-7}.
+732: \bibitem[Immorlica et al.(2008)]{Immorlica}
+733: Immorlica N, Mahdian M, Mirrokni VS (2008) Limitations of cross-monotonic
+734: cost-sharing schemes. ACM Transactions on Algorithms 4(2), article 24.
+735: \url{https://doi.org/10.1145/1361192.1361201}.
+736: \bibitem[Moretti and Norde(2021)]{MorettiNorde}
+737: Moretti S, Norde H (2021) A note on weighted multi-glove games.
+738: Social Choice and Welfare 57:721--732. \url{https://doi.org/10.1007/s00355-021-01337-8}.
+739: \bibitem[Owen(1975)]{Owen}
+740: Owen G (1975) On the core of linear production games.
+741: Mathematical Programming 9:358--370.
+742: \url{https://doi.org/10.1007/BF01681356}.
+743: \bibitem[Samet and Zemel(1984)]{SametZemel}
+744: Samet D, Zemel E (1984) On the core and dual set of linear programming games.
+745: Mathematics of Operations Research 9(2):309--316.
+746: \url{https://doi.org/10.1287/moor.9.2.309}.
+747: \end{thebibliography}
+748: \end{document}
+749: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+diff --git a/paper5/truthful_cooperation/manuscript.tex b/paper5/truthful_cooperation/manuscript.tex
+index 31be10b..2dc0cdb 100644
+--- a/paper5/truthful_cooperation/manuscript.tex
++++ b/paper5/truthful_cooperation/manuscript.tex
+@@ -19,7 +19,7 @@
+ \newcommand{\ind}{\mathbf 1}
+ \title{Sharp subsidies for truthful production\\and network cooperation}
+ \author{Maxwell Flanagan\thanks{Corresponding author. Affiliation and contact details require author confirmation before submission.}}
+-\date{14 October 2026\\[2pt]\small Economic Theory candidate; not submitted}
++\date{16 October 2026\\[2pt]\small Economic Theory candidate; not submitted}
+ \begin{document}
+ \maketitle
+ \begin{abstract}
+@@ -42,7 +42,10 @@ The bound is uniform in owner count and resource dimension, but $K$ may be
+ exponential in a compact description. Exact finite evaluation exists;
+ polynomial preprocessing is not asserted. The result isolates the cost of
+ linking coalition-covering allocations across reports in games whose
+-individual profiles already admit efficient core allocations.
++individual profiles already admit efficient core allocations. For every finite
++monotone concave homogeneous technology we also obtain total-payment factors
++$n\sqrt{2/(n+1)}$ and $1+2\sqrt d$ in fixed owner count $n$ and resource
++dimension $d$. Their unrestricted optimal rates remain open.
+ \end{abstract}
+ \noindent\textbf{Keywords:} production game; mechanism design; capacity reporting;
+ coalitional stability; subsidy; flow game.\\
+@@ -107,8 +110,11 @@ bound over the fixed forms, which explains the technology-complexity parameter.
+ 
+ A small $K$ gives a budget guarantee independent of the number of owners.
+ However, $K$ can be exponential in an encoded network or production program.
+-The theorem does not supply a sharp owner-count bound or a polynomial-time
+-preprocessing algorithm. It also makes no incentive claim for resource-use
++Theorem~\ref{general:sqrt} gives separate bounds of order $\sqrt n$ and
++$\sqrt d$, including technologies without a finite-form representation.
++These bounds improve the previous owner-count and dimension estimates,
++but their unrestricted optimal rates remain open. No polynomial-time
++preprocessing algorithm is asserted. It also makes no incentive claim for resource-use
+ costs, overreports, coordinated deviations, false names, or changes in the
+ owner population. These are separate economic questions.
+ 
+@@ -153,9 +159,11 @@ bounded source audit is not a certification of historical priority.
+ 
+ \subsection{Organization}
+ Section~\ref{prod:section} gives the model, mechanism and complete upper proof.
+-Section~\ref{dag:section} proves the lower bound and explains why naive
+-subdivision would destroy it. The conclusion separates the theorem from the
+-remaining owner-count and computational questions. Online Resource 1 is an
++Section~\ref{general:section} gives complete owner-count and dimension proofs
++for general concave homogeneous production. Section~\ref{dag:section} proves
++the complexity lower bound and explains why naive subdivision would destroy
++it. The conclusion separates the unrestricted parameter gaps from the
++restricted mechanism barriers and computational questions. Online Resource 1 is an
+ indexed supplement containing the earlier hierarchy, general extensions and
+ exact obstructions; its repeated foundational proofs make it independently
+ readable. Online Resource 2 contains the scoped verification code and logs.
+@@ -324,6 +332,178 @@ minimizing nonnegative linear forms. Thus an efficient eligible alternative
+ exists without restricting each owner's report to a single resource.
+ \end{proof}
+ 
++\section{Bounds in owner count and resource dimension}\label{general:section}
++The number of supporting forms can be much larger than the economic description.
++We now obtain bounds directly in the numbers of fixed owners and resources.
++Here the production technology may be any finite-valued monotone concave
++function $f:\R_+^d\to\R_+$ homogeneous of degree one; a finite min-linear
++representation is not required. The report space and eligibility conditions
++remain unchanged. In particular, there is no additional fairness floor.
++
++\begin{theorem}[General owner and dimension bounds]\label{general:sqrt}
++For every fixed $n,d\ge1$ and every such technology, there exists an eligible
++deterministic rule on all nonnegative real report profiles with
++\begin{equation}\label{general:combined}
++ \sum_i M_i(b)\le
++ \min\left\{d,\ n\sqrt{\frac{2}{n+1}},\ 1+2\sqrt d\right\}T.
++\end{equation}
++The individual bounds are uniform in the other parameter. They also hold when
++$f$ has downward discontinuities at the boundary. More precisely, for every
++fixed $0<a<1$ the supporting-price/endpoint rule averaged over $q\in[0,a]$
++has both bounds
++\begin{align}
++ B_n(a)&=\frac{na}{2}+
++ \frac{n[1-(1-a)^{n+1}]}{(n+1)a},\label{general:owner}\\
++ D_d(a)&=\frac{1+2d[-a-\log(1-a)]}{a}.\label{general:dimension}
++\end{align}
++The owner expression remains valid at $a=1$ by polynomial integration.
++No polynomial-time evaluation or preprocessing claim is made.
++\end{theorem}
++
++\subsection{Supporting prices on boundary faces}
++For $x\ne0$, restrict $f$ to its coordinate face
++$F_x=\{z\ge0:z_e=0\text{ whenever }x_e=0\}$.
++At the relative-interior point $x$, finite concavity gives a supergradient $u$.
++Monotonicity forces each active coordinate of $u$ to be nonnegative, and
++homogeneity applied above and below $x$ gives $u\cdot x=f(x)$.
++For a boundary point $z\in F_x$, apply the supporting inequality at
++$(1-t)x+tz$, $0<t<1$, and the concavity lower bound on that segment to obtain
++$u\cdot z\ge f(z)$. Thus boundary continuity is unnecessary.
++Choose the unique minimum-norm vector in the nonempty closed convex set of
++such nonnegative supports on $F_x$. Extend its linear form to
++\[
++ \ell_x(z)=\begin{cases}u\cdot z,&z\in F_x,\\+\infty,&z\notin F_x.
++ \end{cases}
++\]
++Set $\ell_0(0)=0$ and $\ell_0(z)=+\infty$ for $z\ne0$.
++This is one fixed selection depending only on $x$. For finite min-linear
++technologies the original fixed-priority global minimizing form is an
++alternative; the bounds below apply to either choice.
++
++For any fixed mask $B\subseteq N$, put $x_B=\sum_{i\in B}b_i$ and
++$A_i(B)=\min\{\ell_{x_B}(b_i),T\}$. This vector covers every coalition:
++if any member's raw price reaches $T$, its capped payment alone suffices;
++otherwise all relevant prices are finite on the support face and their sum
++majorizes the coalition's worth. For $i\in B$,
++\[
++ f(x_B)-f(x_B-b_i)\ge \ell_{x_B}(b_i),
++\]
++because the support touches at $x_B$ and majorizes $f(x_B-b_i)$.
++The marginal is at most $T$. Replace open owners' prices by these marginals
++and keep $A_i(B)$ for closed owners. Coverage is preserved. A closed owner's
++selected price excludes its own report, while its raw price and cap are
++nondecreasing in that report. An open owner's marginal has a fixed off term
++and a nondecreasing on term. This proves eligibility for every fixed mask
++and every report-independent mixture of masks.
++
++With independent missing probability $q$, retain the notation $p_i^q,m_i^q,r_i^q$
++from \eqref{prod:p}--\eqref{prod:hybrid}, now using $\ell_{x_B}$.
++At a fixed profile every capped mask payment is finite, so the expectations
++are finite polynomials in $q$. Define $M_i^a=a^{-1}\int_0^a r_i^q\,dq$.
++The endpoints have measure zero, including when $a=1$.
++Writing $g(q)=\E f(x_B)$ and $C(q)=q\sum_i p_i^q$, differentiation of the
++finite mask polynomial gives
++\begin{equation}\label{general:endpoint}
++ \sum_i r_i^q=C(q)-(1-q)g'(q),\qquad
++ \int_0^a-(1-q)g'(q)\,dq
++ =T-(1-a)g(a)-\int_0^a g(q)\,dq.
++\end{equation}
++No derivative of $f$ with respect to reports occurs here.
++
++\subsection{Owner-count bound}
++Every closed payment is at most $T$, whence $C(q)\le nqT$.
++The all-open mask alone gives $g(q)\ge(1-q)^nT$.
++Substituting both estimates in \eqref{general:endpoint}, integrating and
++dividing by $a$ yields
++\[
++ \sum_i M_i^a\le\left(\frac{na}{2}+
++ \frac{n[1-(1-a)^{n+1}]}{(n+1)a}\right)T.
++\]
++Dropping the bracketed power term gives
++$B_n(a)\le na/2+n/[(n+1)a]$. The fixed choice
++$a=\sqrt{2/(n+1)}\le1$ equalizes these terms and proves the owner bound
++in \eqref{general:combined}. For $n=1$ the exact expression is $B_1(a)=1$.
++The former $O(n/\log n)$ upper bound recorded in the supplement is therefore
++superseded by $(\sqrt2+o(1))\sqrt n$.
++
++\subsection{Resource-dimension bound}
++The following scalar identity controls contributions from closed owners
++without counting owners or supporting forms.
++\begin{lemma}[Bernoulli reciprocal bound]\label{general:reciprocal}
++Let $u_i\ge0$, independently retain each $i$ with probability $p=1-q$, and
++write $S_B=\sum_{i\in B}u_i$. Define $\min\{u_i/S_B,1\}$ to be zero when
++$u_i=0$ and one when $u_i>0=S_B$. Then
++\[
++ \E\sum_{i\notin B}\min\{u_i/S_B,1\}\le\frac{2q}{1-q}.
++\]
++\end{lemma}
++\begin{proof}
++With zero-over-zero interpreted as zero,
++$\min\{u/S,1\}\le2u/(u+S)$. Conditioning on the own bit gives
++\[
++ \E\sum_{i\notin B}\frac{u_i}{u_i+S_B}
++ =\frac qp\E\sum_{i\in B}\frac{u_i}{S_B}
++ =\frac qp\Prob(S_B>0)\le\frac qp.
++\]
++In the first equality both conditioned ratios are
++$u_i/(u_i+\sum_{j\ne i}B_ju_j)$; the other bits have the same law.
++\end{proof}
++
++Suppose $T>0$. For every mask and owner,
++\begin{equation}\label{general:coordinate}
++ \frac{A_i(B)}T\le
++ \sum_{e=1}^d\min\left\{\frac{b_{ie}}{(x_B)_e},1\right\},
++\end{equation}
++with the lemma's conventions. If $b_i$ has a positive coordinate outside
++$F_{x_B}$, the right side is at least one. Otherwise the selected nonnegative
++support satisfies $\sum_eu_e(x_B)_e=f(x_B)\le T$, so each active term obeys
++$u_eb_{ie}/T\le b_{ie}/(x_B)_e$. Apply
++$\min\{\sum_e z_e,1\}\le\sum_e\min\{z_e,1\}$.
++The case $x_B=b_i=0$ is immediate. The same argument applies to a finite
++global minimizing form, since off-face prices remain capped by $T$.
++
++Sum \eqref{general:coordinate} over closed owners and use
++Lemma~\ref{general:reciprocal} separately in each resource coordinate:
++$C(q)\le 2dqT/(1-q)$. The endpoint integral in
++\eqref{general:endpoint} is at most $T$. Since
++$\int_0^a q/(1-q)\,dq=-a-\log(1-a)$, this proves
++\eqref{general:dimension}. Also
++\[
++ -a-\log(1-a)=\sum_{k\ge2}\frac{a^k}{k}
++ \le\frac{a^2}{2(1-a)},\qquad
++ D_d(a)\le\frac1a+\frac{da}{1-a}.
++\]
++Choosing $a=1/(1+\sqrt d)$ gives $1+2\sqrt d$.
++At $T=0$, monotonicity makes all coalition values, caps and endpoint
++marginals vanish, completing these cases.
++
++\subsection{Baseline, selection and remaining gap}
++The grand marginal $U_i=f(c)-f(c-b_i)$ is eligible: it is own-monotone and
++dominates the support allocation at $c$. Put
++$\alpha_i=\max_{e:c_e>0}b_{ie}/c_e$ when $T>0$.
++Then $c-b_i\ge(1-\alpha_i)c$, so $U_i\le\alpha_iT$ and
++$\sum_i\alpha_i\le d$. This proves the $dT$ baseline.
++Choosing an entire rule using the fixed public $n,d$ before reports proves
++\eqref{general:combined}; no pointwise minimum of payment vectors is used.
++For a finite $K$ representation, the complexity bound in
++Theorem~\ref{prod:upper} is another available choice.
++
++The scalar leading constant two is already sharp as $q\downarrow0$:
++two equal positive weights give expected closed ratio exactly $2q$.
++This does not prove optimality of the dimension constant for the full mechanism.
++The unrestricted owner and dimension rates remain open between the earlier
++logarithmic-over-logarithmic lower bounds and the square-root uppers above.
++Online Resource 1 gives matching square-root growth obstructions only for
++specified fixed-mask, common-support and endpoint architectures, including
++a maximum-coalition-marginal cap variant. Those restrictions are essential;
++they are not lower bounds for arbitrary eligible payment rules.
++
++Square-root payment bounds also arise in static cost-of-stability theory:
++\citet[Theorem 3.5]{Bachrach2009} prove the corresponding superadditive-game
++bound without the cross-report incentive requirement. Every profile in our
++model already admits an efficient support allocation, so its static cost of
++stability is zero. The new bounds concern one rule linking those profiles.
++
+ \section{A matching lower bound on simple networks}\label{dag:section}
+ A network has one distinct fixed strategic owner per edge, and coalition
+ worth is its maximum source--sink flow using only its owned edges. Structural
+@@ -487,10 +667,13 @@ fixed technologies; it does not change the graph when an owner changes its
+ report. Its asymptotic statement concerns a worst case with at most $K$ cuts,
+ not an exact-count construction for each integer $K$.
+ 
+-Two questions remain distinct from this theorem. First, sharper bounds in
+-owner count or resource dimension would make the economic size of the
+-instance more explicit. The supplement gives general bounds but leaves a
+-substantial gap. Second, rational finite technologies permit exact evaluation
++Two questions remain distinct from the sharp $K$ theorem. First,
++Theorem~\ref{general:sqrt} bounds the factor by
++$\min\{d,n\sqrt{2/(n+1)},1+2\sqrt d\}$, while the unrestricted lower bounds
++remain logarithmic over logarithmic in $n$ and $d$. The supplement's matching
++square-root barriers apply to specified mask/support architectures; they do
++not close these unrestricted gaps. A better general rule must escape those
++restrictions. Second, rational finite technologies permit exact evaluation
+ by finite enumeration, and the supplement develops finite sampling with
+ all-profile certification. The certification preprocessing can be exponential.
+ A polynomial preprocessing guarantee or a matching computational obstruction
+@@ -533,6 +716,10 @@ Amigo I, Belzarena P, Vaton S (2016) Revenue sharing in network utility
+ maximization problems. NETNOMICS 17:255--284.
+ \url{https://doi.org/10.1007/s11066-016-9112-4}.
+ Comparison uses the author manuscript at \url{https://hal.science/hal-01400498v1}.
++\bibitem[Bachrach et al.(2009)]{Bachrach2009}
++Bachrach Y, Elkind E, Meir R, Pasechnik D, Zuckerman M, Rothe J,
++Rosenschein JS (2009) The cost of stability in coalitional games.
++arXiv:0907.4385v1. \url{https://arxiv.org/abs/0907.4385v1}.
+ \bibitem[Bachrach et al.(2018)]{Bachrach}
+ Bachrach Y, Elkind E, Malizia E, Meir R, Pasechnik D, Rosenschein JS,
+ Rothe J, Zuckerman M (2018) Bounds on the cost of stabilizing a cooperative
+
+
+FILE research_directions/2026-10-15-forest-owner-campaign/coordinator/FOUNDATIONS.txt
+1: SELF-CONTAINED FOUNDATIONS FOR THE NEW GENERAL BOUNDS
+2: 15 October 2026. Established ingredients from the existing truthful-production
+3: manuscript, restated and checked here. No priority claim.
+4: 
+5: Fix n actual owners, d resources, and a finite-valued monotone concave degree-one
+6: homogeneous f on the nonnegative orthant. Thus f(0)=0 and f>=0. Reports b_i>=0
+7: are binding available bundles; utility is the payment, with no private operating
+8: cost. Set c=sum b_i, T=f(c), and v(S)=f(sum_(i in S)b_i). Requirements are
+9: nonnegative payments, sum_(i in S)y_i>=v(S) for every coalition, and coordinatewise
+10: nondecrease of y_i in b_i while every other owner remains fixed. A budget factor
+11: C means total payment <=CT; the external subsidy is at most (C-1)T.
+12: 
+13: RELATIVE SUPPORTS, INCLUDING DOWNWARD BOUNDARY DISCONTINUITIES
+14: For x!=0, restrict f to its coordinate face F_x={z>=0:z_e=0 if x_e=0}.
+15: The point x is in the relative interior. A finite concave function has a
+16: supergradient u there. Monotonicity forces u>=0: f(x+t e)>=f(x), whereas the
+17: support inequality gives f(x+t e)<=f(x)+t u_e. Homogeneity, applied to scalar
+18: multiples of x both above and below x, gives u.x=f(x). The support inequality
+19: on the whole face follows from the interior inequality by the segment from
+20: x to any boundary point z and concavity; this does not require continuity at z.
+21: Consequently u.z>=f(z) for every z in F_x. The set of such nonnegative u with
+22: u.x=f(x) is nonempty, closed, and convex; its minimum-Euclidean-norm element
+23: defines one fixed unique choice. Extend ell_x(z)=u.z on F_x and +infinity outside.
+24: At x=0 use ell_0(0)=0 and ell_0(z)=+infinity otherwise.
+25: 
+26: For a finite min-linear technology one may instead select a fixed-priority
+27: minimizing nonnegative global form, producing finite ordinary linear supports.
+28: The arguments below apply to either selection. Each selection is fixed before
+29: evaluating deviations and depends only on its indicated aggregate/report data.
+30: 
+31: MASK ELIGIBILITY
+32: For any fixed subset B of owners let x_B=sum_(i in B)b_i and A_i=min{ell_xB(b_i),T}.
+33: The vector A covers every coalition. If any member's raw price is >=T (including
+34: +infinity), that member's capped payment alone covers its coalition. Otherwise
+35: all relevant prices are finite, add on the support face, and majorize v(S).
+36: For i in B, ell_xB(b_i) is finite and
+37:  f(x_B)-f(x_B-b_i)>=ell_xB(b_i),
+38: by touching at x_B and majorization at x_B-b_i. This marginal is <=T. Therefore
+39: replace the open owners' prices by these marginals and retain A_i for closed
+40: owners; the resulting vector Y(B) still covers every coalition.
+41: 
+42: For a closed i, ell_xB excludes b_i, so its raw price and cap T are separately
+43: nondecreasing in b_i. For an open i, x_B-b_i excludes b_i and the marginal is
+44: nondecreasing in b_i. Thus Y_i(B) is own-bundle monotone. Every report-independent
+45: distribution over masks, including any fixed mixture of Bernoulli missing
+46: probabilities, preserves these pointwise properties. The expected rule is a
+47: deterministic payment map; no approximation by a finite sample is being claimed.
+48: 
+49: POLYNOMIAL ENDPOINT IDENTITY
+50: For independent missing probability q, g(q)=E f(x_B) is a finite polynomial.
+51: Conditioning on each owner's bit and differentiating the multilinear polynomial
+52: along its diagonal yields -g'(q)=sum_i E[f(b_i+x_(B without i))-f(x_(B without i))].
+53: This identity does not differentiate f, move owner identities, or assume report
+54: continuity. Every q integral at a fixed profile is an integral of a polynomial.
+55: 
+56: THE ELEMENTARY d BOUND
+57: The grand marginal U_i=f(c)-f(c-b_i) is own-bundle monotone and dominates the
+58: selected support price at c, hence covers every coalition. If T>0, let
+59: alpha_i=max_(e:c_e>0)b_ie/c_e. Then c-b_i>=(1-alpha_i)c coordinatewise, so
+60: U_i<=alpha_i T by monotonicity and homogeneity. Finally
+61: sum_i alpha_i<=sum_(e:c_e>0)sum_i b_ie/c_e<=d.
+62: Thus total grand-marginal payment is <=dT. If T=0 every term vanishes. This
+63: explains the prior linear dimension baseline without relying on a finite-form
+64: approximation or on continuity at the boundary.
+65: 
+66: DEPENDENCIES AND LIMITS
+67: Only the standard finite-dimensional supporting-hyperplane theorem for a finite
+68: concave function on a relative interior is used above. General evaluation may
+69: require exponentially many coalitions or masks; no polynomial-time theorem is
+70: asserted. Taking the minimum of independently valid fixed bounds means selecting
+71: one entire rule from known n,d,technology parameters before reports; it does not
+72: mean taking pointwise minima of payments or tuning a rule after seeing reports.
+73: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+
+
+FILE research_directions/2026-10-15-forest-owner-campaign/portfolio/OWNER_SQRT_BOUND_v2.txt
+1: CANDIDATE OWNER-COUNT IMPROVEMENT -- 15 October 2026
+2: Status: direct proof derived in bounded campaign; independent review pending.
+3: This is a bound for existing hybrid rules, not a novelty or efficiency claim.
+4: 
+5: THEOREM
+6: Fix n owners, dimension d and a finite-valued monotone concave homogeneous
+7: production function f:R_+^d -> R_+. Let T=f(sum_i b_i). Use either the finite
+8: min-linear capped own-excluded/endpoint hybrid from the manuscript, or the
+9: relative-support hybrid in Supplement Section 5. For any fixed a in (0,1],
+10: independent of reports, average its q-hybrid uniformly over q in [0,a].
+11: This explicitly extends the old parameterization a=1/j, j>=2; eligibility
+12: is inherited from the pointwise hybrid for every 0<q<1, not merely from
+13: the old restricted averaging definition.
+14: This deterministic finite expectation is nonnegative, coalition-covering and
+15: own-bundle monotone at every nonnegative real report profile. Its total payment
+16: is at most B_n(a) T, where
+17: 
+18:  B_n(a) = n a/2 + n [1-(1-a)^(n+1)] / [(n+1)a]
+19:         <= n a/2 + n/[(n+1)a] <= n a/2 + 1/a.
+20: 
+21: Choose a=sqrt(2/(n+1)) for every n>=1. Then
+22:  B_n(a)<=n sqrt(2/(n+1)).
+23: The bound equals one for n=1. Hence the worst-case all-profile total-payment
+24: factor over finite monotone concave homogeneous technologies satisfies
+25: 
+26:  B_n^conc <= n sqrt(2/(n+1)) = (sqrt(2)+o(1))sqrt(n).
+27: 
+28: In particular the previous O(n/log n) owner upper improves to O(sqrt n).
+29: The logarithmic-over-loglog lower from the existing hierarchy is unchanged.
+30: The result does not settle resource-dimension scaling or imply polytime evaluation.
+31: 
+32: PROOF
+33: Fix a profile and write B_i~Bernoulli(1-q), x_B=sum_i B_i b_i,
+34: g(q)=E f(x_B), p_i(q)=E[min{ell_(x_B)(b_i),T}|B_i=0],
+35: m_i(q)=E[f(b_i+x_(B_-i))-f(x_(B_-i))],
+36: r_i(q)=q p_i(q)+(1-q)m_i(q).
+37: For finite min-linear technologies ell is the fixed-priority minimizing form;
+38: for general concave f it is the canonical extended relative support defined
+39: in the existing supplement. All displayed capped terms are finite.
+40: 
+41: The existing pointwise eligibility proof works for every 0<q<1: p_i and m_i
+42: are own-bundle monotone; r_i dominates the expected capped core-majorant and
+43: therefore covers every coalition. Fixed nonnegative averaging preserves both.
+44: No owner is cloned, removed, renumbered, or endowed with fixed free resources.
+45: 
+46: Each p_i lies in [0,T], and differentiating the finite mask polynomial yields
+47: sum_i m_i(q)=-g'(q). Thus
+48:  sum_i r_i(q) <= n q T +(1-q)(-g'(q)).
+49: Integration by parts, with g(0)=T, gives
+50:  I:=integral_0^a (1-q)(-g'(q)) dq
+51:    = T -(1-a)g(a)-integral_0^a g(q)dq.
+52: The all-open mask alone contributes (1-q)^n T; every other value is nonnegative.
+53: Hence g(q)>=(1-q)^n T, and
+54:  I <= n/(n+1) [1-(1-a)^(n+1)] T.
+55: Integrate the nqT term and divide by a to prove B_n(a). Dropping the bracket
+56: proves B_n(a)<=na/2+n/[(n+1)a]. At a=sqrt(2/(n+1)), the two terms
+57: are equal and sum to n sqrt(2/(n+1)). This a belongs to (0,1] for every n>=1.
+58: At zero-value profiles all payments vanish. For n=1, B_1(a)=1. At a=1 use
+59: the polynomial integral; endpoints are null sets and may equivalently be
+60: interpreted by polynomial continuation.
+61: 
+62: EXACTNESS FOR THE CANONICAL RELATIVE-SUPPORT HYBRID
+63: For f(x)=min_{1<=e<=n}x_e and b_i=e_i, T=1. Every proper nonempty mask lies
+64: on a face on which f is identically zero. Its minimum-norm relative support
+65: is zero on that face and +infinity off it. Each excluded owner's capped term
+66: therefore equals 1, so p_i=1. Its endpoint marginal equals 1 precisely when
+67: all other owners are open, so m_i=(1-q)^(n-1). Consequently
+68:  sum_i r_i(q)=nq+n(1-q)^n,
+69: and its uniform average is exactly B_n(a). This is a sharp bound for this
+70: specific relative-support hybrid and averaging law. It is NOT an unrestricted
+71: mechanism lower bound: at this fixed one-owner-per-resource domain efficient
+72: mechanisms exist; moreover the finite-form selector behaves differently.
+73: 
+74: RATIONAL IMPLEMENTATION
+75: If an algebraic mixing endpoint is inconvenient, choose any fixed integer j>=1
+76: and a=1/j. All integration coefficients are rational and
+77:  total <= [j+n/(2j)]T.
+78: Taking j to be a nearest positive integer to sqrt(n/2) preserves (sqrt(2)+o(1))sqrt(n).
+79: The stronger B_n(1/j) is exact rational. Parameter choice depends only on fixed n,
+80: never the report profile.
+81: 
+82: RELATION TO PRIOR PROJECT RESULTS
+83: paper5/truthful_cooperation/supplement.tex:
+84: - Lemma 'Budget from capped mask contributions': sum_i m_i=-g'.
+85: - Theorem 'General concave homogeneous production': eligibility for every q.
+86: - Corollary 'Owner-count upper bound': previous (~log 2)n/log n upper.
+87: - Theorem 'Owner-count range': unchanged (~log n/loglog n) lower.
+88: - None of the support-function or incentive arguments is new here; the new
+89:   project-level observation is using p_i<=T before integrating the endpoint
+90:   derivative, instead of union-bounding the 2^n selected support range.
+91: 
+92: VERIFICATION STATUS
+93: Analytic proof above is the general argument. verify_owner_sqrt.py supplies
+94: independent exact rational identities and bounded finite min-linear coverage /
+95: monotonicity checks. Such finite tests do not establish general validity or novelty.
+96: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+
+
+FILE research_directions/2026-10-15-forest-owner-campaign/portfolio/DIMENSION_SQRT_BOUND_v1.txt
+1: GENERAL RESOURCE-DIMENSION UPPER BOUND: (2+o(1))sqrt(d)
+2: 15 October 2026. Candidate proof; independent review pending.
+3: 
+4: THEOREM
+5: Let f:R_+^d ->R be finite, monotone, concave and homogeneous of degree one.
+6: There are arbitrarily many but fixed n owners reporting whole bundles b_i>=0.
+7: For every fixed 0<a<1, the existing relative-support/endpoint hybrid, averaged
+8: uniformly over missing probability q in [0,a], is nonnegative, coalition-covering,
+9: and nondecreasing in every owner's own bundle at every real profile. Its total
+10: payment satisfies
+11:  sum_i M_i(b) <= C_d(a) T(b),
+12:  C_d(a)=[1+2d(-a-log(1-a))]/a.
+13: In particular, taking a=1/(1+sqrt(d)) gives factor at most 1+2sqrt(d).
+14: As d tends to infinity, a~1/sqrt(d) gives factor (2+o(1))sqrt(d).
+15: Combining the existing dimension marginal bound and the new bound gives
+16:  B_d^dim <= min{d, 1+2sqrt(d)},
+17: and the same upper for arbitrary finite monotone concave homogeneous functions,
+18: including boundary discontinuities. The bound is independent of n and the
+19: number of supporting forms. It does not assert efficient oracle evaluation,
+20: measurability of the full report map, or historical novelty.
+21: 
+22: THE UNCHANGED RULE
+23: At each profile fix T=f(c), c=sum_i b_i. For a mask B, x_B=sum_i B_i b_i.
+24: Choose the canonical relative support ell_(x_B) from the manuscript: it is
+25: nonnegative linear on the coordinate face containing x_B, majorizes f there,
+26: touches f at x_B, and equals +infinity outside that face. At x_B=0 it is zero
+27: at0 and +infinity elsewhere. Put A_i(B)=min{ell_(x_B)(b_i),T}.
+28: For independent B_i with Pr(B_i=0)=q, define
+29:  p_i(q)=E[A_i(B)|B_i=0],
+30:  m_i(q)=E[f(b_i+x_(B_-i))-f(x_(B_-i))],
+31:  r_i(q)=q p_i(q)+(1-q)m_i(q),
+32:  M_i=(1/a)int_0^a r_i(q)dq.
+33: These are finite mask sums and integrals of finite polynomials; no random
+34: sampling implementation or limit over technologies is needed. Eligibility is
+35: the existing relative-support theorem: a closed support excludes its recipient,
+36: both caps increase in the own report, endpoint marginals increase in the own
+37: report, capped supports cover coalitions, and on-endpoint marginals dominate
+38: on-support contributions. The proof works for every0<q<1.
+39: 
+40: SCALAR BERNOULLI RECIPROCAL LEMMA
+41: Fix arbitrary u_1,...,u_n>=0 and let S_B=sum_i B_i u_i. Define
+42:  R_i(B)=min{u_i/S_B,1}, taking R_i=0 if u_i=0 and R_i=1 if u_i>0,S_B=0.
+43: Then, with p=1-q,
+44:  E sum_(i:B_i=0) R_i(B) <= 2q/p.
+45: Proof: for nonnegative u,S,
+46:  min{u/S,1} <= 2u/(u+S),
+47: with the same zero conventions. Conditioning on the own bit gives the exact
+48: identity
+49:  E sum_i (1-B_i) u_i/(u_i+S_B)
+50:   = (q/p) E sum_i B_i u_i/S_B
+51:   = (q/p) Pr(S_B>0) <=q/p.
+52: The fractions with zero numerator and denominator are defined as zero.
+53: The first equality holds because in either conditioned expression the ratio
+54: is u_i/(u_i+sum_(j!=i) B_j u_j). Summing and applying the elementary inequality
+55: proves the lemma. No lower bound on positive weights is used.
+56: 
+57: POINTWISE RESOURCE-COORDINATE DOMINATION
+58: Assume T>0. For every mask and every owner i,
+59:  A_i(B)/T <= sum_(e=1)^d min{b_ie/(x_B)_e,1},
+60: with the scalar lemma's conventions coordinatewise.
+61: If b_i has a positive coordinate outside the support of x_B, the right side
+62: contains1 and the claim follows from A_i<=T. Otherwise the relative support
+63: is an ordinary nonnegative linear form w on that face. Touching gives
+64:  sum_e w_e (x_B)_e=f(x_B)<=T,
+65: so for each positive coordinate (x_B)_e, w_e (x_B)_e<=T and
+66:  w_e b_ie/T <= b_ie/(x_B)_e.
+67: Use min{sum z_e,1}<=sum min{z_e,1} for nonnegative z_e to conclude. If x_B=0
+68: and b_i=0, both sides are zero; the remaining zero-mask cases were handled
+69: by the off-face argument. This also proves the same claim for any finite
+70: nonnegative global support, regardless of minimizer ties.
+71: 
+72: EXPECTED CLOSED BUDGET
+73: Apply the scalar lemma separately to each resource's weights u_i=b_ie.
+74: The preceding pointwise inequality yields
+75:  q sum_i p_i(q)=E sum_(i:B_i=0) A_i(B)
+76:  <= [2d q/(1-q)]T.
+77: Only d appears; owner count and support-form complexity have disappeared.
+78: 
+79: ENDPOINT BUDGET AND INTEGRATION
+80: Let g(q)=E f(x_B), a finite polynomial. The elementary diagonal derivative
+81: identity is sum_i m_i(q)=-g'(q). Therefore
+82:  sum_i r_i(q) <= [2d q/(1-q)]T +(1-q)(-g'(q)).
+83: Since g(0)=T and g>=0, integration by parts gives
+84:  int_0^a (1-q)(-g'(q))dq
+85:   =T-(1-a)g(a)-int_0^a g(q)dq <=T.
+86: The integral of q/(1-q) is -a-log(1-a). Divide by a to obtain C_d(a).
+87: At T=0 monotonicity makes all coalition worths, capped contributions and
+88: endpoint marginals zero, so the same bound is immediate.
+89: 
+90: EXPLICIT PARAMETERS AND ASYMPTOTICS
+91: For0<a<1,
+92:  -a-log(1-a)=sum_(k>=2) a^k/k <=a^2/[2(1-a)].
+93: Consequently C_d(a)<=1/a+d a/(1-a). The choice a=1/(1+sqrt(d)) gives
+94: 1/a+d a/(1-a)=1+2sqrt(d). This a is at most1/2 for d>=1, so it stays inside
+95: the old averaging interval range (although it need not be an inverse integer).
+96: Alternatively choose j=ceil(sqrt(d))+1 and a=1/j to retain the literal old
+97: integer parameter: C_d(1/j)<=j+d/(j-1)=(2+o(1))sqrt(d).
+98: All parameters are chosen from the fixed resource dimension before reports;
+99: there is no report-dependent retuning or deletion of zero owners/resources.
+100: 
+101: CONTRIBUTION BOUNDARY
+102: The production model, relative supports, hybrid eligibility, and derivative
+103: identity are established earlier in this project. The new ingredient is the
+104: coordinatewise capped-price domination plus the scalar Bernoulli reciprocal
+105: identity, giving an owner-independent closed-budget estimate. This changes the
+106: previous general dimension upper bound from d to O(sqrt d). The existing lower
+107: bound of order log d/loglog d remains unchanged. It does not prove a sharp
+108: dimension rate or an unrestricted sqrt(d) lower. Priority is unconfirmed.
+109: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):

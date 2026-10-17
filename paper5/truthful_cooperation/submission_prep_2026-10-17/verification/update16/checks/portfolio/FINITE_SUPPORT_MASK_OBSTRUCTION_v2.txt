@@ -1,0 +1,144 @@
+SHARP sqrt(2n) BARRIER FOR FINITE-SUPPORT MASK HYBRIDS
+15 October 2026. Version2; strengthened construction, independent review pending.
+Earlier version remains unchanged. This is a class lower, not an unrestricted lower.
+
+CLASS AND THEOREM
+Use n fixed owners and one fixed finite nonnegative min-linear technology F.
+Choose ANY report-independent law on masks B subset[N]. For each mask select a
+common nonnegative global linear support ell_B at x_B=sum_(i in B)b_i. It may
+depend on F, B and the open reports, and may randomize. No closed report enters
+its selection. Pay
+ Y_i(B)=min{ell_B(b_i),T} for i notin B;
+ Y_i(B)=F(x_B)-F(x_B-b_i) for i in B,
+then average, where T=F(sum_i b_i). This includes arbitrary fixed iid or
+fixed-cardinality mixtures and any finite-form tie priorities. At the all-empty
+mask the support law is independent of the entire report profile.
+
+For n>=5 let m be the greatest positive integer satisfying
+ m(m+7)/2 <= n-1.
+Then there is ONE fixed continuous finite min-linear F on nm resources such
+that every rule in the class has worst-profile factor at least
+ L_n=m(n-1)/(n-1+m)=(sqrt(2)-o(1))sqrt(n).
+The general upper n sqrt(2/(n+1)) has the same leading constant. Thus sqrt(2)
+is sharp for this architecture even when finite global supports are selected
+optimally and mask bits are arbitrarily correlated. This does NOT prove a
+sqrt(n) lower bound for unrestricted truthful coalition-covering mechanisms.
+
+FIXED TECHNOLOGY
+Put A=n^2. For k=1,...,m and 1<=s<n set
+ a_(s,k)=(n-s)/n^2 if s<k, and a_(s,k)=0 if s>=k.
+For S subset[N], 1<=|S|<n, define the nonnegative form
+ w^(S,k)_j=A/|S|^2 for j in S, and a_(|S|,k) for j notin S.
+On R_+^n let
+ f_k(x)=min{(sum_j x_j)/n, w^(S,k).x: empty!=S!=N}.
+On m separate n-coordinate blocks set F=sum_k f_k.
+Expanding the finite product of form choices shows F is finite min-linear.
+It is continuous, nonnegative, monotone, concave and degree-one homogeneous.
+No free infrastructure or changing ownership is used.
+
+REGULAR WITNESS PROFILES AND UNIQUE SUPPORTS
+Let epsilon=1/(100n^6), t=1+(n-1)epsilon. At P_k owner i reports
+ e_i+epsilon sum_(j!=i)e_j in block k and zero in all other blocks.
+T_k=t: at the full aggregate, the baseline form is uniquely minimal since
+each subset form contributes at least A t/|S|>n t>t.
+
+For a proper nonempty mask let C be the closed set, l=|C|, r=n-l.
+The active block aggregate is r epsilon on C and 1+(r-1)epsilon outside C.
+The uniquely minimal form is w^(C,k), FOR EVERY k. To verify:
+- Any S meeting an open coordinate costs >=A/(n-1)^2>1.
+- The C form costs
+  v_C=A r epsilon/l + a_(l,k) r[1+(r-1)epsilon].
+  If l>=k this is <r/n. If l<k, its leading term is r^2/n^2,
+  and its remaining term is <=epsilon(n^3+n).
+  The gap r/n-r^2/n^2=rl/n^2>=1/(2n), whereas
+  epsilon(n^3+n)<1/(2n); thus v_C<r/n<=baseline cost.
+  Also v_C<1 (r/n<1). For l>=k that conclusion is immediate.
+- If S is a strict nonempty subset of C, its first term A r epsilon/|S|
+  strictly exceeds A r epsilon/l; its off-S coefficient a_(|S|,k) is
+  at least a_(l,k), and it multiplies every open coordinate plus additional
+  nonnegative closed coordinates. Hence its value is strictly larger.
+These cases exhaust all S. At the full mask the unique form is the baseline.
+
+At these positive active-block aggregates, EVERY global linear supporting form
+restricts to that unique active-block gradient: its restriction majorizes f_k
+and touches f_k at an interior point where the minimum is differentiable.
+Inactive blocks contribute zero. Randomized ties or redundant forms cannot
+alter the forced active-block gradient.
+
+EXACT CLOSED PAYMENTS AND THRESHOLD ENDPOINTS
+For every closed owner at a proper nonempty mask,
+ ell_B(b_i)>=A[1+(l-1)epsilon]/l^2>=n^2/(n-1)^2>t=T_k.
+Thus each closed owner receives EXACTLY T_k, irrespective of k.
+
+If l=k-1, each open owner's on value is at least r^2/n^2 (including l=0,
+where the on value is t>=1). Removing that owner makes k owners closed, so
+its off value is A(r-1)epsilon/k. Therefore
+ Delta >=r^2/n^2 -n^3 epsilon.
+The normalized TOTAL endpoint payment to the r open owners is at least
+ [r^3/n^2-r n^3 epsilon]/t.
+Since r=n-l, r^3/n^2>=n-3l. Moreover t=1+(n-1)epsilon,
+r n^3 epsilon<=n^4 epsilon, and r^3/n^2<=n. Thus
+ [r^3/n^2-r n^3 epsilon]/t
+ >=r^3/n^2 -n^2 epsilon-n^4 epsilon
+ >=n-3l-(n^4+n^2)epsilon >=n-3m-1=:D.
+The penultimate inequality uses 1/(1+u)>=1-u for the nonnegative leading
+term and bounds the subtracted term by n^4 epsilon. Our epsilon gives
+(n^4+n^2)epsilon<1. Other endpoint payments are nonnegative by monotonicity.
+The removed-owner mask remains nonempty because k<=m<n.
+
+TRIANGULAR PROFILE WEIGHTS
+Let S0=m(m+1)/2 and pi_k=(m-k+1)/S0. These are positive and sum to1.
+For every proper mask (including the full mask), average normalized budgets
+across P_k using pi_k. Every closed owner contributes1 in every profile;
+when l=0 there are no such terms. At k=l+1 the extra endpoint lower D applies.
+Thus, if 0<=l<m, the average is at least
+ l+D pi_(l+1)=l+D(m-l)/S0.
+Our choice of m gives S0<=n-3m-1=D, so this is >=m.
+If m<=l<n, the closed payments alone give at least l>=m.
+Hence the weighted regular-profile budget is >=m for EVERY proper mask,
+independently of which owners are open and of the selected support.
+
+ALL-EMPTY-MASK ANCHORS
+At B=empty let w be the selected global support, possibly random, restricted
+to block1. It has nonnegative entries and s=sum_j w_j>=f_1(1)=1.
+At most one index j has sum_(e!=j)w_e<1/2: two such indices would imply
+w_j+w_h>2s-1>=s, contradicting nonnegativity of the other entries.
+
+Set delta=1/(4n^3). At Q_j all n owners report the SAME bundle
+ z_j=delta e_j+sum_(e!=j)e_e in block1, zero in other blocks.
+Its positive grand production T_j=n f_1(z_j)<=n A delta=1/4.
+For at least n-1 indices j, w.z_j>=1/2>=T_j, so all n owners receive T_j.
+The uniform average normalized budget over Q_1,...,Q_n is therefore >=n-1.
+This holds for every realization of w. Consequently randomizing supports,
+including correlations with the mask law, cannot avoid the anchor bound.
+The full anchor list and its weights are independent of the selector.
+
+COMBINING INSIDE ONE FIXED DOMAIN
+Give total weight (n-1)/(n-1+m) to the triangular regular-profile distribution,
+and weight m/(n-1+m) to the uniform anchor distribution. All other payments
+are nonnegative. For every proper mask the regular part contributes >=L_n;
+for the empty mask the anchor part contributes >=L_n. Integrate over ANY fixed
+mask and support law. The weighted average of normalized expected budgets
+at this finite list of profiles is >=L_n. Some profile has factor>=L_n.
+All profiles use the same F and the same n owners. Only their reports change.
+Finally m=sqrt(2n)+O(1), so L_n=(sqrt(2)-o(1))sqrt(n).
+
+ELIGIBILITY AND SCOPE
+For each fixed mask, closed prices exclude the recipient's report; open
+endpoint marginals are own-bundle monotone. The open endpoint marginal
+majorizes the selected linear support contribution, and capped support terms
+cover every coalition. Thus every fixed-mask vector is eligible.
+The lower applies only to the stated support/endpoint payment architecture.
+It does not exclude report-dependent mask choices with separately proved
+incentives, incompatible owner-specific supports, or a different mechanism.
+Inactive resource blocks are zero in the witnesses, but every chosen support
+is FINITE and active-block mask aggregates are interior. No +infinity extension
+or arbitrary minimizer priority is exploited.
+
+CONTRIBUTION BOUNDARY
+This sharp leading-constant architecture lower complements the new general
+O(sqrt n) upper. It supplies a precise reason that changing fixed mask weights,
+mask correlations, or finite supporting-price selection alone cannot obtain
+o(sqrt n). It leaves the unrestricted owner-count lower at log n/loglog n.
+Min-linear concavity, support/core facts, and weighted averaging are established.
+The construction is a candidate project-level advance; priority is unconfirmed.

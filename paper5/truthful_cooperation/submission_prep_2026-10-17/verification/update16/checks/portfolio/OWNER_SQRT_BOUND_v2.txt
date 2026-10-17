@@ -1,0 +1,95 @@
+CANDIDATE OWNER-COUNT IMPROVEMENT -- 15 October 2026
+Status: direct proof derived in bounded campaign; independent review pending.
+This is a bound for existing hybrid rules, not a novelty or efficiency claim.
+
+THEOREM
+Fix n owners, dimension d and a finite-valued monotone concave homogeneous
+production function f:R_+^d -> R_+. Let T=f(sum_i b_i). Use either the finite
+min-linear capped own-excluded/endpoint hybrid from the manuscript, or the
+relative-support hybrid in Supplement Section 5. For any fixed a in (0,1],
+independent of reports, average its q-hybrid uniformly over q in [0,a].
+This explicitly extends the old parameterization a=1/j, j>=2; eligibility
+is inherited from the pointwise hybrid for every 0<q<1, not merely from
+the old restricted averaging definition.
+This deterministic finite expectation is nonnegative, coalition-covering and
+own-bundle monotone at every nonnegative real report profile. Its total payment
+is at most B_n(a) T, where
+
+ B_n(a) = n a/2 + n [1-(1-a)^(n+1)] / [(n+1)a]
+        <= n a/2 + n/[(n+1)a] <= n a/2 + 1/a.
+
+Choose a=sqrt(2/(n+1)) for every n>=1. Then
+ B_n(a)<=n sqrt(2/(n+1)).
+The bound equals one for n=1. Hence the worst-case all-profile total-payment
+factor over finite monotone concave homogeneous technologies satisfies
+
+ B_n^conc <= n sqrt(2/(n+1)) = (sqrt(2)+o(1))sqrt(n).
+
+In particular the previous O(n/log n) owner upper improves to O(sqrt n).
+The logarithmic-over-loglog lower from the existing hierarchy is unchanged.
+The result does not settle resource-dimension scaling or imply polytime evaluation.
+
+PROOF
+Fix a profile and write B_i~Bernoulli(1-q), x_B=sum_i B_i b_i,
+g(q)=E f(x_B), p_i(q)=E[min{ell_(x_B)(b_i),T}|B_i=0],
+m_i(q)=E[f(b_i+x_(B_-i))-f(x_(B_-i))],
+r_i(q)=q p_i(q)+(1-q)m_i(q).
+For finite min-linear technologies ell is the fixed-priority minimizing form;
+for general concave f it is the canonical extended relative support defined
+in the existing supplement. All displayed capped terms are finite.
+
+The existing pointwise eligibility proof works for every 0<q<1: p_i and m_i
+are own-bundle monotone; r_i dominates the expected capped core-majorant and
+therefore covers every coalition. Fixed nonnegative averaging preserves both.
+No owner is cloned, removed, renumbered, or endowed with fixed free resources.
+
+Each p_i lies in [0,T], and differentiating the finite mask polynomial yields
+sum_i m_i(q)=-g'(q). Thus
+ sum_i r_i(q) <= n q T +(1-q)(-g'(q)).
+Integration by parts, with g(0)=T, gives
+ I:=integral_0^a (1-q)(-g'(q)) dq
+   = T -(1-a)g(a)-integral_0^a g(q)dq.
+The all-open mask alone contributes (1-q)^n T; every other value is nonnegative.
+Hence g(q)>=(1-q)^n T, and
+ I <= n/(n+1) [1-(1-a)^(n+1)] T.
+Integrate the nqT term and divide by a to prove B_n(a). Dropping the bracket
+proves B_n(a)<=na/2+n/[(n+1)a]. At a=sqrt(2/(n+1)), the two terms
+are equal and sum to n sqrt(2/(n+1)). This a belongs to (0,1] for every n>=1.
+At zero-value profiles all payments vanish. For n=1, B_1(a)=1. At a=1 use
+the polynomial integral; endpoints are null sets and may equivalently be
+interpreted by polynomial continuation.
+
+EXACTNESS FOR THE CANONICAL RELATIVE-SUPPORT HYBRID
+For f(x)=min_{1<=e<=n}x_e and b_i=e_i, T=1. Every proper nonempty mask lies
+on a face on which f is identically zero. Its minimum-norm relative support
+is zero on that face and +infinity off it. Each excluded owner's capped term
+therefore equals 1, so p_i=1. Its endpoint marginal equals 1 precisely when
+all other owners are open, so m_i=(1-q)^(n-1). Consequently
+ sum_i r_i(q)=nq+n(1-q)^n,
+and its uniform average is exactly B_n(a). This is a sharp bound for this
+specific relative-support hybrid and averaging law. It is NOT an unrestricted
+mechanism lower bound: at this fixed one-owner-per-resource domain efficient
+mechanisms exist; moreover the finite-form selector behaves differently.
+
+RATIONAL IMPLEMENTATION
+If an algebraic mixing endpoint is inconvenient, choose any fixed integer j>=1
+and a=1/j. All integration coefficients are rational and
+ total <= [j+n/(2j)]T.
+Taking j to be a nearest positive integer to sqrt(n/2) preserves (sqrt(2)+o(1))sqrt(n).
+The stronger B_n(1/j) is exact rational. Parameter choice depends only on fixed n,
+never the report profile.
+
+RELATION TO PRIOR PROJECT RESULTS
+paper5/truthful_cooperation/supplement.tex:
+- Lemma 'Budget from capped mask contributions': sum_i m_i=-g'.
+- Theorem 'General concave homogeneous production': eligibility for every q.
+- Corollary 'Owner-count upper bound': previous (~log 2)n/log n upper.
+- Theorem 'Owner-count range': unchanged (~log n/loglog n) lower.
+- None of the support-function or incentive arguments is new here; the new
+  project-level observation is using p_i<=T before integrating the endpoint
+  derivative, instead of union-bounding the 2^n selected support range.
+
+VERIFICATION STATUS
+Analytic proof above is the general argument. verify_owner_sqrt.py supplies
+independent exact rational identities and bounded finite min-linear coverage /
+monotonicity checks. Such finite tests do not establish general validity or novelty.

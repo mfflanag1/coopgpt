@@ -1,0 +1,58 @@
+ACYCLICITY REPRODUCIBILITY — 17 OCTOBER 2026
+
+WHAT WAS EXECUTED
+The October14 supplement already recorded a complete successful replay with
+Python3.10.14 and z3-solver5.0.0.0. Its historical requirements-smt.txt pins
+5.1.0.0, which was not that tested environment. This is an instruction mismatch,
+not a claim that the old scientific package had never been run.
+
+For this successor, a new venv was created from Python3.10.14 on macOS arm64.
+The command below successfully downloaded and installed z3-solver5.0.0.0 into
+that previously empty environment:
+  /private/tmp/acyclicity-prep-20261017/install-check-venv/bin/python -m pip install -r /private/tmp/acyclicity-prep-20261017/requirements-tested.txt
+The unchanged complete SMT suite was then executed in a fresh extraction:
+  COOPGT_PYTHON=/private/tmp/acyclicity-prep-20261017/install-check-venv/bin/python bash build.sh --smt
+All three stages passed. See validation/REPLAY_ENVIRONMENT.json and
+validation/portable-summary.json. Installed distribution and solver runtime
+versions are recorded separately. No success on5.1.0.0 is newly claimed.
+
+PORTABLE COMMANDS
+Use Python3.10.14 to match the tested interpreter. From a directory containing
+the dated ESM_1.zip, run in a new writable directory (not a frozen archive):
+
+  mkdir acyclicity-replay
+  unzip ESM_1.zip -d acyclicity-replay
+  cd acyclicity-replay
+  python3.10 -m venv .venv
+  .venv/bin/python -m pip install -r requirements-tested.txt
+  COOPGT_PYTHON="$PWD/.venv/bin/python" bash build.sh --smt
+
+The standard-library-only subset needs no solver installation:
+  COOPGT_PYTHON=/path/to/python3 bash build.sh
+That subset does not substitute for the tree/raw-core SMT checks. Generated
+reports are refreshed, so replay a copy and retain its new outcomes separately.
+The historical5.1.0.0 pin is preserved only for provenance; use
+requirements-tested.txt for the recorded supported setup.
+
+CODE AND SCOPE
+All eight verification Python files and build.sh are byte-identical to the
+October14 supplement. The new supplement carries the dated manuscript source
+and fresh replay reports. No theorem, algorithm or scientific output meaning
+was changed. Native compilation and PDF export are separate from SMT replay.
+With a conventional existing TeX installation, bash build.sh --pdf compiles
+the supplement's paper/manuscript.tex. No custom styles, figures, external
+bibliography or private research checkout are required.
+
+Executed finite coverage:120 tree clipping checks(56 strict improvements);
+822,002 cyclic-family full-team inequalities,33,864 embedding masks,12 raw-core
+UNSAT queries and4 rejected damaged certificates;2,553,912 simultaneous cover
+inequalities,16 raw-core simplex/ideal/protection UNSAT queries forq=1..4,
+vertices/witnesses throughq=8,6 cyclic extensions and3 rejected corrupt inputs.
+The edge-mask census is not a census of all markets. The all-parameter theorem
+rests on conventional proofs; these checks are corroboration, not formal proof,
+external specialist review or evidence of novelty.
+
+Archive binding: SHA256SUMS.json inside ESM_1.zip binds supplied files;
+EXACT_ARTIFACTS.json binds the dated source/PDF/supplement. Historical manifests
+remain valid for their own frozen versions. Licensed third-party originals and
+internal model-review transcripts are excluded from Online Resource1.

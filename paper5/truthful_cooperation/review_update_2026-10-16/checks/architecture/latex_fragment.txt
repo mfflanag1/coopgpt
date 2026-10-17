@@ -1,0 +1,547 @@
+% Insert as a new supplementary section before the bibliography.
+% Uses only the existing amsmath/amssymb/amsthm and theorem environments.
+% All labels introduced here have the unused prefix arch:.
+\section{Limits of fixed-mask common-support mechanisms}\label{arch:section}
+
+This section proves lower bounds for a specified payment architecture.
+The owners and technology remain fixed throughout each construction, and only
+their reports change. The conclusions do not apply to every eligible mechanism.
+In particular, they do not replace the unrestricted logarithmic lower bounds
+by square-root lower bounds.
+
+\subsection{The architecture, marginal caps, and profile averaging}
+
+Fix $n$ owners and a continuous finite nonnegative min-linear technology
+$F:\R_+^d\to\R_+$: thus $F(x)=\min_{w\in\mathcal W}w\cdot x$ for a fixed
+nonempty finite family $\mathcal W\subseteq\R_+^d$.
+For a report profile $b=(b_i)_{i=1}^n$, put
+\[
+ b(S)=\sum_{i\in S}b_i,\qquad x_B=b(B),\qquad
+ T=F(b([n])),\qquad v_b(S)=F(b(S)).
+\]
+A \emph{global linear support at $x$} is a nonnegative finite linear form
+$\ell$ such that $\ell(z)\ge F(z)$ for all $z\ge0$ and $\ell(x)=F(x)$.
+The support need not belong to the displayed defining family $\mathcal W$.
+
+\begin{definition}[Fixed-mask common-support architecture]\label{arch:def}
+Fix any probability law on subsets $B\subseteq[n]$, independently of all
+reports. Conditional on $B$, select a global linear support $\ell_B$ at $x_B$
+using only the fixed technology, $B$, and the open reports $(b_i)_{i\in B}$.
+The selection may randomize. A closed report may not enter that selection.
+Choose one of the following two caps:
+\begin{align}
+ c_i(b)&=T,\label{arch:tcap}\\
+ c_i(b)&=V_i(b):=
+ \max_{S\subseteq[n]\setminus\{i\}}
+       \{F(b_i+b(S))-F(b(S))\}.\label{arch:vcap}
+\end{align}
+For the chosen cap, the payment map is the expectation of
+\begin{equation}\label{arch:maskpay}
+ Y_i(B,b)=
+ \begin{cases}
+ \min\{\ell_B(b_i),c_i(b)\},&i\notin B,\\
+ F(x_B)-F(x_B-b_i),&i\in B.
+ \end{cases}
+\end{equation}
+The cap convention and all mask and support-selection laws are fixed before
+the profile is evaluated.
+\end{definition}
+
+This definition permits arbitrary correlations and asymmetries in the mask
+law, any fixed mixture of mask laws, and randomized or redundant supporting
+forms. Conditional on $B=\varnothing$, it permits exactly one support law for
+the fixed technology and owners: there are no open reports on which that law
+could depend. It does not permit a different empty-mask support law for each
+profile.
+
+\begin{lemma}[Eligibility and simultaneous marginal truncation]
+\label{arch:caplemma}
+Both architectures in Definition~\ref{arch:def} are eligible: payments are
+nonnegative, cover every coalition, and are nondecreasing in each owner's
+own whole bundle with all other reports fixed. Moreover, if a nonnegative
+vector $z$ covers every coalition at $b$, then
+$(\min\{z_i,V_i(b)\})_{i=1}^n$ also covers every coalition.
+\end{lemma}
+\begin{proof}
+For every $i$, monotonicity of $F$ gives $0\le V_i\le T$. Each term in
+the maximum defining $V_i$ is nondecreasing in $b_i$, since its off aggregate
+does not involve $i$. Thus $V_i$ is own-bundle monotone.
+
+For simultaneous truncation, fix a coalition $S$ and write
+$C=\{i\in S:z_i>V_i\}$ and $R=S\setminus C$.
+Coverage gives $\sum_{i\in R}z_i\ge v_b(R)$. Add the members of $C$ to $R$
+one at a time. Each increment of coalition value is at most the corresponding
+$V_i$, so
+\[
+ v_b(S)-v_b(R)\le\sum_{i\in C}V_i.
+\]
+Adding proves $\sum_{i\in S}\min\{z_i,V_i\}\ge v_b(S)$.
+
+For any global support $\ell$, the vector
+$A_i=\min\{\ell(b_i),T\}$ covers every coalition. If a member of a coalition
+has raw price at least $T$, its capped payment alone covers that coalition;
+otherwise the uncapped sum equals $\ell(b(S))\ge F(b(S))$.
+The preceding truncation argument shows the same fact for
+$\min\{\ell(b_i),V_i\}$. For an open owner $i$, touching and majorization
+give
+\[
+ F(x_B)-F(x_B-b_i)\ge\ell_B(b_i),
+\]
+and this endpoint marginal is at most both $T$ and $V_i$.
+Replacing an open owner's capped support payment by its endpoint marginal
+therefore preserves coverage. All payments are nonnegative.
+
+For a closed owner, the selected support is independent of its report, while
+its raw price and either cap are nondecreasing in that report. For an open
+owner, the off aggregate $x_B-b_i$ is independent of its report and the on
+value is nondecreasing. Hence every fixed-mask payment is own-bundle
+monotone. Averaging over fixed mask and support randomness preserves the
+three requirements.
+\end{proof}
+
+\begin{lemma}[Combining regular and empty-mask witnesses]
+\label{arch:averaging}
+Fix one technology and $n$ owners. Suppose a fixed finite distribution
+$\mu$ of positive-value profiles has mean normalized total payment at least
+$C>0$ for every nonempty mask and every admissible choice of supports at
+those profiles. Suppose a fixed finite distribution $\nu$ of positive-value
+profiles has mean normalized empty-mask total payment at least $A>0$ for
+every one fixed empty-mask support. Then every rule in the architecture has
+some profile with total-payment factor at least
+\begin{equation}\label{arch:harmonic}
+ \frac{AC}{A+C}.
+\end{equation}
+The same conclusion holds if the empty support is randomized.
+\end{lemma}
+\begin{proof}
+Give total weight $A/(A+C)$ to $\mu$ and $C/(A+C)$ to $\nu$.
+For every nonempty mask the regular contribution alone is at least
+$AC/(A+C)$; for the empty mask the anchor contribution alone is at least
+that number. Other payments are nonnegative. At the empty mask, the finite
+anchor average commutes with integration against its one fixed support law.
+The regular bound is valid for every support choice separately, so it also
+survives profile-dependent support selection using open reports. Finally
+average over the report-independent mask law. The resulting finite weighted
+average of normalized expected payments is at least \eqref{arch:harmonic};
+at least one profile attains that bound.
+\end{proof}
+
+\subsection{A finite technology forcing all nonempty-mask prices}
+
+The following lemma supplies the common finite construction. It is useful
+because every supporting form at the regular profile is forced on its active
+resource block, regardless of the chosen support-selection rule.
+
+\begin{lemma}[Forced-support realization]\label{arch:realization}
+Let $n\ge5$, and let $a_1\ge\cdots\ge a_{n-1}\ge0$ satisfy
+\begin{equation}\label{arch:gapassumption}
+ v_l:=(n-l)a_l\le\frac{n-l}{n}-\frac1{n^3}
+ \qquad(1\le l<n).
+\end{equation}
+Set $v_0=1$, $v_n=0$, $\delta_l=v_l-v_{l+1}$ for $0\le l<n$, and
+\[
+ \varepsilon=\frac1{100n^6},\qquad
+ t=1+(n-1)\varepsilon,\qquad \eta=\frac1{n^3}.
+\]
+For every nonempty proper subset $S\subset[n]$ define the form
+\[
+ w^S_j=
+ \begin{cases}n^2/|S|^2,&j\in S,\\a_{|S|},&j\notin S,
+ \end{cases}
+ \qquad
+ f(x)=\min\left\{\frac1n\sum_jx_j,
+              w^S\cdot x:\varnothing\ne S\subsetneq[n]\right\}.
+\]
+At the regular profile
+\begin{equation}\label{arch:regularprofile}
+ b_i=e_i+\varepsilon\sum_{j\ne i}e_j,
+\end{equation}
+grand production is $T=t$. If $B$ is nonempty and proper, write
+$C=[n]\setminus B$, $l=|C|$ and $r=n-l$. The unique minimizing form at
+$x_B$ is $w^C$. Consequently every global linear support at $x_B$ is
+this same form, and every closed owner's raw price exceeds $T$.
+For every nonempty mask, including $B=[n]$, each open endpoint marginal
+divided by $T$ is at least $\delta_l-\eta$.
+
+These conclusions remain valid on the active block if $f$ is one summand
+of a sum of technologies on disjoint resource blocks and the other reported
+blocks are all zero.
+\end{lemma}
+\begin{proof}
+The function $f$ is continuous, finite min-linear, nonnegative, monotone,
+concave, and homogeneous of degree one. The full aggregate is $t\mathbf1$.
+Its baseline value is $t$, whereas a subset form contributes at least
+$n^2t/|S|>t$, so the baseline is uniquely minimal there.
+
+At a nonempty proper mask, the aggregate has coordinate $r\varepsilon$ on
+$C$ and $1+(r-1)\varepsilon$ elsewhere. The value of $w^C$ is
+\begin{equation}\label{arch:maskedvalue}
+ v_l+\varepsilon E_l,
+ \qquad E_l=\frac{n^2r}{l}+(r-1)v_l,
+ \qquad 0\le E_l\le2n^3.
+\end{equation}
+By \eqref{arch:gapassumption} and $2n^3\varepsilon<1/n^3$, this value is
+strictly below $r/n$ and hence below the baseline $rt/n$; it is also below1.
+Any subset $S$ meeting an open coordinate has value at least
+$n^2/(n-1)^2>1$. If instead $\varnothing\ne S\subsetneq C$, its contribution
+from the coordinates in $S$ is $n^2r\varepsilon/|S|$, strictly larger than
+$n^2r\varepsilon/l$. Its off-$S$ coefficient is at least $a_l$; it multiplies
+all open coordinates and additional nonnegative closed coordinates. Thus it
+also costs strictly more than $w^C$. These cases exhaust the competitors.
+
+Every coordinate of $x_B$ is positive. A finite minimum with a unique
+minimizing linear form is differentiable there. If any other global linear
+form majorizes $f$ and touches there, taking directional derivatives in both
+directions forces its coefficients to equal that gradient. This proves the
+assertion for all supports, including randomized selections. Each closed
+owner has raw price at least
+\[
+ \frac{n^2}{l^2}\bigl(1+(l-1)\varepsilon\bigr)
+ \ge\frac{n^2}{(n-1)^2}>t.
+\]
+
+Put $E_0=n-1$ and $E_n=0$. The exact masked values for all mask sizes are
+$v_l+\varepsilon E_l$. Since $a_l$ is nonincreasing and nonnegative,
+$(v_l)_{l=0}^n$ is nonincreasing and lies in $[0,1]$, so
+$0\le\delta_l\le1$. Removing an open owner changes $l$ to $l+1$; its
+unnormalized endpoint marginal is at least $\delta_l-2n^3\varepsilon$.
+Normalization by $t$ loses at most an additional $(n-1)\varepsilon$:
+\[
+ \frac{F(x_B)-F(x_B-b_i)}{T}
+ \ge\delta_l-(2n^3+n)\varepsilon
+ \ge\delta_l-\eta.
+\]
+The same computation covers $l=0$ and $l=n-1$. Endpoint marginals are
+nonnegative even when this displayed lower bound is negative.
+
+For a sum of technologies on separate blocks, restriction of a global
+support to the active block majorizes that summand and touches its value
+at the active aggregate. The same interior-gradient argument therefore
+forces precisely the support just computed. Inactive blocks contribute
+zero to every reported bundle and every endpoint value.
+\end{proof}
+
+\begin{lemma}[Realizing decreasing endpoint increments]
+\label{arch:increments}
+Let $n\ge5$ and let $\delta_0\ge\cdots\ge\delta_{n-1}\ge0$ sum to1, with
+$\delta_0\ge1/n+1/n^2$. Put
+$v_l=\sum_{j=l}^{n-1}\delta_j$ and $a_l=v_l/(n-l)$ for $1\le l<n$.
+Then the assumptions of Lemma~\ref{arch:realization} hold. At its regular
+profile, every owner also satisfies $V_i/T\ge\delta_0-\eta$.
+\end{lemma}
+\begin{proof}
+Since $v_{l+1}\le(n-l-1)\delta_l$, we have
+$v_l/(n-l)\ge v_{l+1}/(n-l-1)$ whenever $l<n-1$.
+Thus $a_l$ is nonincreasing. In particular
+$a_l\le a_1=(1-\delta_0)/(n-1)$, whence
+\[
+ \frac{n-l}{n}-v_l
+ \ge\frac{(n-l)(\delta_0-1/n)}{n-1}
+ \ge\frac1{n^3}.
+\]
+Finally, $V_i$ includes the grand-coalition endpoint marginal. The $l=0$
+case of Lemma~\ref{arch:realization} bounds it below by
+$(\delta_0-\eta)T$.
+\end{proof}
+
+\subsection{A sharp owner obstruction already in dimension $d=n$}
+
+\begin{theorem}[Global-cap owner and dimension barriers]
+\label{arch:tbarrier}
+For each $n\ge9$, let $m$ be the largest integer with $1\le m<n$ such that
+\[
+ S_m:=\sum_{l=0}^{m-1}\frac{m-l}{n-l}\le1,
+ \qquad C_n=m-\frac1{n^2},\qquad A_n=n-2m.
+\]
+There is one fixed $n$-resource finite nonnegative min-linear technology on
+which every global-$T$-cap rule of Definition~\ref{arch:def}, with the same
+$n$ owners on all report profiles, has worst-profile factor at least
+\begin{equation}\label{arch:tfinite}
+ L_n=\frac{C_nA_n}{C_n+A_n}
+      =(\sqrt2-o(1))\sqrt n.
+\end{equation}
+Since $d=n$, this is also a $(\sqrt2-o(1))\sqrt d$ architecture lower bound.
+\end{theorem}
+\begin{proof}
+For $n\ge9$, $S_2<1$, so $m\ge2$. Also
+$S_m\ge m(m+1)/(2n)$, implying $m<\sqrt{2n}<n/2$.
+Define
+\[
+ \delta_l=\frac{m-l}{(n-l)S_m}\quad(0\le l<m),
+ \qquad\delta_l=0\quad(m\le l<n).
+\]
+These increments sum to1 and are nonincreasing, because
+$(m-l)/(n-l)$ decreases in $l$ when $m<n$. Moreover
+$\delta_0=m/(nS_m)\ge2/n\ge1/n+1/n^2$.
+Use Lemma~\ref{arch:increments} to define one technology $f$ and its
+regular profile $P$. All closed raw prices at nonempty masks exceed $T$.
+For a mask with $0\le l<m$ closed owners, its normalized total payment is
+at least
+\[
+ l+(n-l)(\delta_l-\eta)
+ =l+\frac{m-l}{S_m}-(n-l)\eta
+ \ge m-\frac1{n^2}=C_n.
+\]
+The case $l=0$ is included. When $m\le l<n$, closed payments alone give
+at least $l\ge m$. Thus every nonempty mask costs at least $C_n$ at $P$.
+
+It remains to control the empty mask in this same technology. Index
+coordinates cyclically modulo $n$. For each $j$, let
+$S_j=\{j,j+1,\ldots,j+m-1\}$ and let $z_j$ have coordinate
+$\tau=m/(4n^3)$ on $S_j$ and1 elsewhere. At the anchor profile $Q_j$, all
+$n$ owners report this same bundle $z_j$. Since $a_m=0$, the form indexed
+by $S_j$ gives
+\[
+ 0<T_j=nf(z_j)\le n\frac{n^2\tau}{m}=\frac14.
+\]
+Strict positivity follows because $z_j$ is strictly positive and every
+defining form has a positive coefficient.
+
+For every empty-mask global support $w$, write $s=\sum_e w_e$.
+We have $s\ge f(\mathbf1)=1$. Each coordinate lies in exactly $m$ cyclic
+windows, so the uniform average of $w(S_j)$ is $ms/n$. Markov's inequality
+shows that a fraction at least $1-2m/n$ of windows satisfies
+$w(S_j)\le s/2$. At each such anchor,
+\[
+ w\cdot z_j\ge w([n]\setminus S_j)\ge s/2\ge1/2>T_j.
+\]
+All $n$ owners are therefore paid $T_j$ at the empty mask. The uniform
+anchor average of normalized total payment is at least $n-2m=A_n>0$.
+This is a pointwise statement for each one empty support, so it also holds
+after randomizing that support according to its fixed law.
+Lemma~\ref{arch:averaging} now proves \eqref{arch:tfinite} using only
+$P,Q_1,\ldots,Q_n$.
+
+Finally, uniformly for $m=O(\sqrt n)$,
+\[
+ S_m=\frac{m(m+1)}{2n}+O\left(\frac{m^3}{n^2}\right).
+\]
+Maximality of $m$ and this expansion give $m\sim\sqrt{2n}$.
+Consequently $C_n\sim\sqrt{2n}$ and $A_n\sim n$, proving the stated
+asymptotic factor.
+\end{proof}
+
+\subsection{Maximum-marginal caps retain the sharp owner obstruction}
+
+The cap $V_i$ is a valid improvement to the payment rule, by
+Lemma~\ref{arch:caplemma}. It can improve individual technologies. The next
+result shows that it cannot improve the leading owner-count constant of the
+fixed-mask architecture over general finite min-linear technologies.
+
+\begin{theorem}[Sharp owner barrier with maximum-marginal caps]
+\label{arch:vowner}
+For $n\ge5$, let $m$ be the largest positive integer satisfying
+$m(m+7)/2\le n-1$, and put
+\[
+ a=1-\frac{2m+1}{n},\qquad A_0=n-2,
+ \qquad L'_n=\frac{amA_0}{am+A_0}.
+\]
+There is one fixed finite nonnegative min-linear technology on
+$nm+n^2$ resources such that every $V_i$-cap rule of
+Definition~\ref{arch:def}, with $n$ fixed owners, has worst-profile
+total-payment factor at least
+\begin{equation}\label{arch:vownerfactor}
+ L'_n=(\sqrt2-o(1))\sqrt n.
+\end{equation}
+\end{theorem}
+\begin{proof}
+For $k=1,\ldots,m$, use the construction of Lemma~\ref{arch:realization}
+with coefficients
+\[
+ a_{l,k}=\begin{cases}(n-l)/n^2,&l<k,\\0,&l\ge k.
+ \end{cases}
+\]
+They are nonincreasing. If $l<k$, the gap in
+\eqref{arch:gapassumption} is $(n-l)l/n^2\ge1/n^3$; if $l\ge k$, the
+gap is $(n-l)/n\ge1/n^3$. Denote the resulting technology by $f_k$.
+On separate coordinate blocks define
+\begin{equation}\label{arch:ownertechnology}
+ F(x^{(1)},\ldots,x^{(m)},z)
+   =\sum_{k=1}^m f_k(x^{(k)})+\min_{1\le e\le n^2}z_e.
+\end{equation}
+A sum of finite minima on disjoint blocks is itself a finite minimum:
+expand the finite product of form choices. Thus this is one fixed
+finite nonnegative min-linear technology.
+
+At profile $P_k$, activate the regular profile
+\eqref{arch:regularprofile} only on block $k$, setting every other reported
+block to zero. Grand production is $t$. At every nonempty proper mask,
+Lemma~\ref{arch:realization} forces the active-block support and gives
+closed raw prices exceeding $T=t$.
+At the threshold $l=k-1$, with $r=n-l$, the unperturbed on value is
+$r^2/n^2$ and the off value is zero. This also holds for $k=1$, because
+the full-mask unperturbed value is1. Thus each threshold endpoint divided
+by $T$ is at least $r^2/n^2-\eta$.
+The total normalized open payment at that threshold is at least
+\[
+ r\left(\frac{r^2}{n^2}-\eta\right)
+ \ge n-3l-\frac1{n^2}
+ \ge n-3m-1=:D.
+\]
+Here $(n-l)^3/n^2\ge n-3l$.
+
+Every owner has a coalition witnessing this same threshold marginal:
+choose $n-k$ of the other owners and add the owner in question. Symmetry
+of $P_k$ makes the value independent of those labels. Consequently
+\[
+ \frac{V_i}{T}\ge\frac{(n-k+1)^2}{n^2}-\eta
+ \ge1-\frac{2(k-1)}n-\eta
+ \ge1-\frac{2m+1}n=a>0.
+\]
+The last positivity follows from the defining inequality for $m$.
+Since each closed raw price exceeds $T\ge V_i$, every closed owner
+receives $V_i$, hence at least $aT$.
+
+Let $S_0=m(m+1)/2$ and put
+$\pi_k=(m-k+1)/S_0$ on the regular profiles. These weights sum to1,
+and the choice of $m$ gives $S_0\le D$. For a mask with $0\le l<m$,
+the mean normalized total payment across $P_k$ is at least
+\[
+ al+D\pi_{l+1}
+ =al+D\frac{m-l}{S_0}
+ \ge al+(m-l)\ge am.
+\]
+For $m\le l<n$, closed payments alone give at least $al\ge am$.
+Thus every nonempty mask, including the full mask, has regular-profile
+average at least $am$.
+
+For empty-mask anchors, index the $n^2$ Leontief coordinates cyclically.
+For each shift $j$, declare the $n$ coordinates
+$S_j=\{j,\ldots,j+n-1\}$ scarce. Owner $i$ holds one unit of coordinate
+$j+i-1$, zero of every other scarce coordinate, and two units of every
+coordinate outside $S_j$. All other technology blocks are zero.
+The grand production is1. Removing any owner eliminates its unique scarce
+resource, reducing production to zero. Hence $V_i=T=1$ for every owner.
+
+For an empty support, let $w$ be its restriction to the Leontief block.
+Its nonnegative coefficient sum $s$ is at least1. Each coordinate lies in
+exactly $n$ of the $n^2$ scarce windows, so the uniform mean scarce weight
+is $s/n$. Markov's inequality gives
+\[
+ \Pr_j\{w(S_j)>s/2\}\le2/n.
+\]
+On every other anchor, each owner's abundant resources have raw price at
+least $2(s/2)\ge1$. Its cap is1, so all $n$ owners receive1.
+The mean normalized empty-mask payment is therefore at least $n-2=A_0$.
+This holds for every realization of the one fixed empty-support law.
+Lemma~\ref{arch:averaging}, with $C=am$, proves the finite lower bound.
+
+Finally $m=\sqrt{2n}+O(1)$, $am=m-O(1)$, and $A_0=n-2$.
+These give \eqref{arch:vownerfactor}.
+\end{proof}
+
+\subsection{A resource-dimension obstruction with maximum-marginal caps}
+
+\begin{theorem}[Maximum-marginal dimension barrier]
+\label{arch:vdimension}
+For each $n\ge9$, put
+\[
+ m=\lfloor\sqrt{2n}\rfloor,\quad
+ H=\sum_{l=1}^{m-1}\frac{m-l}{n-l},\quad a=\frac1{1+H},
+ \quad R=\lceil n^{3/4}\rceil,\quad D=n+R,
+\]
+and define
+\[
+ C'_n=am-\frac2{n^2},\qquad A'_n=\frac{nR}{n+R}.
+\]
+There is one fixed finite nonnegative min-linear technology of dimension
+$d_n=2n+R$ such that every $V_i$-cap rule of
+Definition~\ref{arch:def}, with the same $n$ owners at every profile, has
+worst-profile factor at least
+\begin{equation}\label{arch:vdimensionfactor}
+ \frac{C'_nA'_n}{C'_n+A'_n}
+       =(1/2-o(1))\sqrt{d_n}.
+\end{equation}
+\end{theorem}
+\begin{proof}
+Set
+\[
+ \delta_0=a,\qquad
+ \delta_l=a\frac{m-l}{n-l}\quad(1\le l<m),\qquad
+ \delta_l=0\quad(m\le l<n).
+\]
+The increments sum to1 and are nonincreasing. Since $H\le m-1$,
+$a\ge1/m$. Also $m<n$, so
+\[
+ a-\frac1n\ge\frac{n-m}{mn}\ge\frac1{n^2}.
+\]
+Lemma~\ref{arch:increments} therefore supplies a regular technology $f$.
+Add a separate Leontief block:
+\[
+ F(x,z)=f(x)+\min_{1\le e\le D}z_e.
+\]
+This is a single finite min-linear technology on $n+D=d_n$ resources.
+
+At the regular profile $P$, activate only the $f$ block. Each closed
+raw price at a nonempty mask exceeds $T$, while
+$V_i/T\ge a-\eta$. If $1\le l<m$, normalized total payment is at least
+\[
+ l(a-\eta)+(n-l)(\delta_l-\eta)
+ =am-n\eta=am-\frac1{n^2}.
+\]
+For $m\le l<n$, closed payments alone give
+$l(a-\eta)\ge am-1/n^2$. For $l=0$, endpoint payments give
+$n(a-\eta)\ge am-1/n^2$. Thus every nonempty mask costs at least the
+slightly weaker positive quantity $C'_n=am-2/n^2$.
+Positivity follows from $am\ge1$.
+
+For the empty-mask anchors, index the Leontief resources cyclically modulo
+$D$. At shift $j$, the $n$ coordinates $S_j=\{j,\ldots,j+n-1\}$ are
+scarce. Owner $i$ holds one unit of coordinate $j+i-1$, zero of every
+other scarce coordinate, and $D$ units of every abundant coordinate.
+All reports on the $f$ block are zero. Again $T=V_i=1$ for every owner.
+
+The restriction $w$ of an empty support to the Leontief block has
+nonnegative coefficients summing to at least1. Some coordinate $e$ has
+$w_e\ge1/D$. It is abundant in exactly $R$ of the $D$ cyclic anchors.
+On each of these anchors, every owner's raw price is at least
+$D w_e\ge1$, so all $n$ capped payments equal1.
+The uniform anchor average is at least $nR/D=A'_n$.
+Although the coordinate $e$ can depend on the support realization, the
+anchor list and its weights do not. The inequality thus holds pointwise
+before averaging the fixed empty-support law.
+Lemma~\ref{arch:averaging} proves the finite bound in
+\eqref{arch:vdimensionfactor}.
+
+For the asymptotic statement, $m\sim\sqrt{2n}$ and
+\[
+ H=\frac{m(m-1)}{2n}+O\left(\frac{m^3}{n^2}\right)\longrightarrow1.
+\]
+Hence $a\to1/2$ and $C'_n\sim\sqrt{n/2}$. Also
+$A'_n\sim n^{3/4}$ and $d_n\sim2n$, yielding
+\eqref{arch:vdimensionfactor}.
+\end{proof}
+
+\subsection{Scope of the matching statements}
+
+The global owner-count upper factor $n\sqrt{2/(n+1)}$ is realized within
+the fixed-mask support/endpoint architecture. Replacing its global cap by
+$V_i$ only decreases closed payments and remains eligible by
+Lemma~\ref{arch:caplemma}. Thus Theorems~\ref{arch:tbarrier} and
+\ref{arch:vowner} show that the leading owner constant $\sqrt2$ is sharp
+within the respective architectures. Likewise, the general
+$O(\sqrt d)$ dimension upper and Theorems~\ref{arch:tbarrier} and
+\ref{arch:vdimension} establish the square-root \emph{order} within those
+architectures; they do not identify the optimal dimension constant.
+
+The same lower constructions apply to the explicitly specified canonical
+relative support: on the coordinate face of $x\ne0$, take the
+minimum-Euclidean-norm nonnegative supporting form, extend its value to
+$+\infty$ outside that face, and at zero use zero on the zero bundle and
+$+\infty$ on every nonzero bundle. At each nonempty regular mask, the active
+resource block is interior and all reported bundles lie in that face;
+the unique-gradient argument in Lemma~\ref{arch:realization} therefore
+forces the same prices. At the empty mask every nonzero anchor bundle has
+infinite raw price. Each global-cap anchor then pays $T$ to all owners,
+and each pivotal marginal-cap anchor pays $V_i=T$ to all owners, strengthening
+the required anchor estimate. This observation concerns that particular
+relative-support convention, not every unspecified extended-valued selector.
+
+These lower bounds exclude improvements obtained solely by changing a
+report-independent mask distribution, correlating its bits, choosing different
+common supports from the open reports, or replacing the global cap by
+maximum coalition marginals. They do not exclude report-dependent masks
+whose incentives are separately proved, owner-specific supports coupled by
+a new coverage argument, or a different payment architecture. No efficient
+evaluation theorem, human specialist endorsement, or historical priority
+claim is implied by these constructions.
