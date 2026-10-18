@@ -1,15 +1,15 @@
 # Acyclicity and simultaneous protection of individual core maxima
 
-Journal submission candidate, 14 October 2026. Author: Maxwell Flanagan.
+Journal preparation updated 17 October 2026. Inherited author name: Maxwell Flanagan; final author confirmation remains outstanding.
 This is the current presentation of the former chain-cycle paper and the later
 sector-graph and simultaneous-protection results. The earlier manuscript is
 preserved as history, not counted as another independent paper.
 
-**Current publication preparation:** [decision and package](submission_2026-10-14/README.txt) · [candidate bundle](submission_2026-10-14/Acyclicity_IJGT_candidate.zip) · [cover-letter draft](submission_2026-10-14/COVER_LETTER_DRAFT.txt) · [outstanding items](submission_2026-10-14/UNRESOLVED.txt). The current PDF has 11 pages; its exact source compiled and passed visual review. A fresh independent universal-proof review found no substantive gap, and the unchanged full portable suite passed with the recorded Python/Z3 versions. Recommendation: complete the remaining author/source revisions, then target International Journal of Game Theory. No submission or publication occurred.
+**Current publication preparation (17 October 2026):** [readiness sheet](submission_prep_2026-10-17/SUBMISSION_READINESS.txt) · [dated manuscript](submission_prep_2026-10-17/manuscript.pdf) · [editable source](submission_prep_2026-10-17/manuscript.tex) · [author decisions](submission_prep_2026-10-17/AUTHOR_DECISIONS.txt). The eleven-page successor fixes journal presentation and installation instructions; the model, theorem statements and proofs are unchanged. The fresh Python 3.10.14 / Z3 5.0.0.0 full suite and compilation passed. It is prepared for a focused specialist read, subject to the author's sending approval; author declarations and source-priority questions still prevent calling it ready for journal submission. The [October14 bundle](submission_2026-10-14/Acyclicity_IJGT_candidate.zip) and October15 packet remain frozen. No submission or outreach occurred.
 
 [Fresh source comparison](submission_2026-10-14/GRAPH_LITERATURE.txt) distinguishes inspected originals from remaining gaps. [Truthful-production assessment](submission_2026-10-14/TRUTHFUL_NEXT_PAPER.txt) plans the next ambitious candidate without rewriting it. Historical `VALIDATION.json`, `SHA256SUMS`, `review/` and `sharing/graph_core_protection.zip` below refer to the September version; the new package records current source/PDF hashes and preserves those archives.
 
-[Read the manuscript](output/pdf/manuscript.pdf) · [LaTeX source](paper/manuscript.tex) · [Historical specialist brief](SPECIALIST_BRIEF.md) · [Source boundaries](SOURCES.md)
+[Read the manuscript](submission_prep_2026-10-17/manuscript.pdf) · [LaTeX source](submission_prep_2026-10-17/manuscript.tex) · [Historical specialist brief](SPECIALIST_BRIEF.md) · [Source boundaries](SOURCES.md)
 
 ## Result
 
@@ -35,31 +35,19 @@ No submission, outreach, or purchase was performed.
 
 ## Reproduce
 
-Python standard library checks for the cyclic and simultaneous constructions:
+Use the [dated Online Resource1](submission_prep_2026-10-17/ESM_1.zip) and [reproduction record](submission_prep_2026-10-17/REPRODUCIBILITY.txt). Extract into a new writable directory; the runner regenerates its reports. From the extraction, with Python **3.10.14**:
 
 ```sh
-bash build.sh
+python3.10 -m venv .venv
+.venv/bin/python -m pip install -r requirements-tested.txt
+COOPGT_PYTHON="$PWD/.venv/bin/python" bash build.sh --smt
 ```
 
-For the complete retained scientific suite, including tree clipping and exact
-raw-core queries, install requirements-smt.txt in a Python environment and run:
+`requirements-tested.txt` pins **z3-solver==5.0.0.0**, matching both the October14 replay and the fresh October17 install and complete replay. The historical `requirements-smt.txt` pin **5.1.0.0** is preserved for provenance and was not freshly tested; it is not the recommended reproduction route.
 
-```sh
-COOPGT_PYTHON=/path/to/python bash build.sh --smt
-```
+The standard-library subset is `bash build.sh`; it omits tree/raw-core SMT checks. In the dated supplement, `bash build.sh --pdf` builds the current manuscript with an existing conventional LaTeX installation. The package has no private-checkout imports. The top-level `paper/manuscript.tex` and `output/pdf/manuscript.pdf` retain the October14 presentation; use the dated successor links above for current preparation.
 
-To build the PDF with a conventional LaTeX installation:
-
-```sh
-bash build.sh --pdf
-```
-
-`--full` runs the SMT suite and PDF build. The package is self-contained; no
-imports or files from the original research checkout are needed. Source files
-were copied unchanged, with hashes in SOURCE_PROVENANCE.json. Generated result
-files are refreshed by the runner, which invalidates prior success before work,
-records FAILED on errors, and propagates subprocess failures and timeouts.
-Checks run with python -O, using explicit validation guards.
+Source files are unchanged scientifically. Reports record failures and subprocess timeouts, and checks run with `python -O` using explicit validation guards. The new [exact artifact record](submission_prep_2026-10-17/EXACT_ARTIFACTS.json) binds the successor; older manifests still bind their own frozen versions.
 
 ## Executed coverage
 

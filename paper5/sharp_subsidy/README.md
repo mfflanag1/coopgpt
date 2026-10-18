@@ -1,5 +1,39 @@
 # Sharp subsidies for protecting core maxima
 
+**Current named candidate — 17 October 2026. Maxwell Flanagan, sole author; no affiliation.**
+
+[Current main PDF](author_update_2026-10-17/manuscript.pdf) · [Current supplement](author_update_2026-10-17/ESM_1.pdf) · [Editable sources](author_update_2026-10-17/LATEX_SOURCES.zip) · [Named package](author_update_2026-10-17/REVIEW_PACKAGE.zip) · [Readiness and residual decisions](author_update_2026-10-17/READINESS.txt)
+
+The author-information successor applies the human-confirmed byline and PDF metadata to both documents. It preserves all scientific text and source/priority qualifications; all edits reverse exactly to the frozen predecessor. Both native and clean extracted-source builds passed. Main and supplement remain nine and three pages; all four changed pages were inspected, and eight others are pixel-identical. Scientific code, inputs, results and proof reviews are reused unchanged.
+
+Corresponding contact, city/country, factual declarations, licenses, priority-risk decisions and external authorization remain pending. Authorship and no affiliation are resolved and should not be requested again. No new research, scientific-suite rerun, contact, submission, deposit or repository push occurred.
+
+The [accepted scientific package](submission_prep_2026-10-17/README.txt) is frozen and unchanged. Its earlier author-uncertainty fields are superseded only by the confirmed facts above. [Current author decisions](author_update_2026-10-17/AUTHOR_DECISIONS.txt) · [Exact source preservation](author_update_2026-10-17/SOURCE_PRESERVATION.json) · [Current checksums](author_update_2026-10-17/SHA256SUMS)
+
+---
+
+## Preserved earlier preparation record
+
+The author-status statements below are historical and superseded by the confirmed facts above.
+
+
+**Focused publication candidate — 17 October 2026. Local and unsubmitted.**
+
+[Current main PDF](submission_prep_2026-10-17/manuscript.pdf) · [Compact supplement](submission_prep_2026-10-17/ESM_1.pdf) · [Complete source/check/review package](submission_prep_2026-10-17/REVIEW_PACKAGE.zip) · [Readiness](submission_prep_2026-10-17/READINESS.txt) · [Author decisions](submission_prep_2026-10-17/AUTHOR_DECISIONS.txt)
+
+The dated nine-page main paper gives the full sharp three-sided static theorem: each finite market has protected subsidy strictly below T/3, while the supremum of subsidy/worth is one third. The integral residual-count refinement remains explicitly restricted to integral obstructions. The three-page supplement contains the inherited exact slack identities and verification guide. [Claim/selection map](submission_prep_2026-10-17/CLAIMS_AND_SELECTION.txt) · [Source and companion overlap](submission_prep_2026-10-17/SOURCE_OVERLAP_LEDGER.txt).
+
+The model-through-family proof is unchanged from the reviewed source; the package adds a focused main/supplement split, explicit companion disclosure, current PDF exports, fresh exact checks and journal preparation. The broader October7 A–C extensions remain preserved in the canonical compendium below, outside this focused article. No higher-sector or rational-capacity sharpness campaign was undertaken.
+
+This paper's author identity and declarations remain unconfirmed; confirmation for other named papers does not extend here. IJGT is the recommended first route, with Mathematical Social Sciences as an alternative. Human specialist review and historical novelty remain unresolved. No contact, submission, public deposit or GitHub push occurred. The historical October3 export and frozen prior packets remain unchanged.
+
+[Package index](submission_prep_2026-10-17/README.txt) · [Reproduce](submission_prep_2026-10-17/REPRODUCE.txt) · [Exact checksums](submission_prep_2026-10-17/SHA256SUMS)
+
+---
+
+## Preserved October7 consolidation record
+
+
 **Consolidated working manuscript, 7 October 2026 — Maxwell Flanagan.**
 
 [Current LaTeX source](manuscript.tex) · [Portable review packet](sharp_subsidy_review.zip) · [Consolidation ledger and audits](../../review_packages/2026-10-07/consolidation/README.md)
