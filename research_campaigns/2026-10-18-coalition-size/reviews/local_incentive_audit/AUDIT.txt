@@ -1,0 +1,113 @@
+INDEPENDENT AUDIT: LOCAL INCENTIVE SEPARATION
+Auditor: lower lane, /root/arity3_lower. Completed 2026-10-18 23:31 UTC.
+Scope: root/LOCAL_INCENTIVE_SEPARATION.txt. No source proof edits made.
+Disposition: PASS for the stated computational/local reformulation.
+No funding-bound improvement, historical novelty, or formal verification claim.
+
+1. EXACT TCWM ORDER STATISTIC
+For an active report coordinate (j,a), a direction supported only there changes
+the coalition payment at rate sum_(i in C) JAC[i;j,a]. Exactly the coalitions
+containing actual owner j can use that direction. The minimum over |C|<=s is
+the j entry plus up to s-1 strictly negative remaining entries; omitting a
+nonnegative entry is allowed by the at-most convention. Inactive owners remain
+eligible passive coalition members and therefore must remain in this sort.
+Every nonnegative direction is a nonnegative sum of coordinate directions.
+Thus (2) is necessary and sufficient, including all simultaneous restorations.
+
+2. FULL OUT: ACTIVITY INPUT ASSIGNMENTS ARE SUFFICIENT
+Necessity is valid despite finite owner boxes: at a relative interior point,
+any finite assigned-input direction is feasible after a sufficiently small
+positive scaling. Homogeneity cancels that scale. A whole unit of activity e
+may be replicated in the derivative test even when the unscaled direction
+would leave the report box. For its actual restoring-owner set D, minimizing
+over all protected supersets gives precisely the displayed sorted expression.
+
+For sufficiency fix an actual coalition C. TCWM ensures every relevant rate
+ell_(j,a) = sum_(i in C) JAC[i;j,a] is nonnegative. For each row supplied by C,
+take the minimum of these rates over its eligible active actual owners. Each
+activity can choose a minimizing owner independently for every input row;
+the resulting D is contained in C and has size at most s. The sorted test is
+the minimum over all eligible supersets of D, so its lower bound also holds
+for C. Consequently these row minima cover every usable activity's profit.
+Any activity with an unavailable positive input has zero feasible production
+in the chosen direction and is correctly omitted. Nonnegative row prices
+then give the production dual upper bound for every distributed restoration.
+
+No owner is split or relabeled in this argument. Assignment tests are a
+separation device; the resulting dual handles owners supplying fractional
+pieces of many rows and mixtures of many activities. Separate TCWM tests are
+necessary to ensure nonnegative prices and to cover nonproductive directions.
+
+3. POLYNOMIAL CLAIM HAS THE CORRECT SCOPE
+At one supplied Jacobian, each coordinate needs a sort over n owners. For
+each activity there are at most n^r input-to-owner assignments; each score
+uses at most r*n multiply-adds and one sort. For fixed r this is polynomial
+in the explicit input size (technology, eligible coordinates and Jacobian),
+with no enumeration of coalitions. For rational input, exact rational sums,
+comparisons and sorting also have polynomial bit cost. For arbitrary real
+derivatives the note appropriately makes only an arithmetic-complexity claim.
+No coverage separation, report-continuum test, integrability construction,
+or fixed-profile test of all boundary-admission comparisons is supplied.
+
+4. DIRECTED ADMISSION COMPLETES THE GLOBAL EQUIVALENCE
+For b+t*d, t>0, the positive-coordinate set is constant. The same protected
+actual coalition C is used throughout. The local inequalities imply g'(t)>=0
+for TCWM and g'(t)>=F(sum d) for OUT, where g(t)=Y_C(b+t*d). Smoothness on
+that face justifies integration from epsilon to1. Monotonicity gives the
+right-hand limit at0; nonnegativity and finite endpoint payments already
+bound it, and the stated funding assumption is also sufficient. Admission
+is exactly the inequality needed to compare this limit with Y_C(b). Taking
+epsilon down to0 proves the global finite comparison. Conversely global
+comparisons imply both the face derivatives and admission by limits.
+
+The explicit upper-boundary convention is important and correctly stated:
+the equivalence at a fixed point is first proved in the relative interior;
+derivative tests at endowment boundaries are inherited by smooth limits from
+below. Local feasible directions at an isolated upper corner alone can be
+vacuous and should not be read as determining all derivatives there. This is
+an optional wording emphasis, not a defect in the existing note.
+
+The two-owner counterexample is exact. At b1>0, y=(b1,b2), so all within-face
+OUT rates equal the additive production rates. At b1=0,b2>0, the only active
+coordinate is owner2's; its rate vector is (1,1), so every eligible coalition
+containing owner2 has rate at least1. The other faces are immediate. All
+coalitions are covered and total payment is at most2(b1+b2). Yet owner1 has
+payment1 at(0,1), right limit0 along its restoration, and payment epsilon
+at(epsilon,1). Thus admission, TCWM and OUT fail on this actual singleton
+comparison, for either s=1 or s=2. This proves coverage/funding do not repair
+the missing boundary condition.
+
+5. INDEPENDENT EXACT COMPUTATIONAL CHECKS
+check_local_separation.py constructs technology and Jacobians independently
+of any root implementation. It compares the sorting/assignment oracle with
+all actual coalitions' normalized direct direction problems:
+
+ max pi*x - sum_(j,a in C) ell_(j,a)d_(j,a)
+ s.t. A*x <= sum_j d_j, sum_(j,a)d_(j,a)<=1, x,d>=0.
+
+The optimum is positive exactly when that coalition has a local OUT
+violation. This LP searches arbitrary distributed directions and simultaneous
+activity mixtures. Every solver result is reconstructed using rational
+numbers and checked for primal feasibility, dual feasibility, nonnegativity,
+and exact equality of objective values. No floating tolerance decides PASS.
+
+PASS: 240 generated instances, 3,017 coalition direction problems, including
+2,893 LP optima with exact primal/dual certificates and124 analytically zero
+direction problems. The cases include79 failing TCWM,67 satisfying TCWM but
+failing OUT, and94 satisfying OUT. There are1,775 active-coordinate tests and
+1,874 activity assignments;60 instances retain a wholly inactive actual owner.
+The test also checks s>n handling. The boundary example is checked exactly on
+25 rational profiles, with80 nontrivial face-derivative OUT checks.
+Artifacts: check_local_separation.py and check_local_separation.json.
+
+6. DEPENDENCIES AND REMAINING SCOPE
+Section5 uses the already independently reviewed multiplicative regularization
+result; reviews/REGULARIZATION_AND_PRICE_ROOT_DISPOSITION.txt explicitly
+accepts arbitrary/Borel/facewise-smooth infimum equality, without attainment
+or continuity across zero faces. The local theorem is compatible with that
+scope because admission remains separately required. This audit does not
+repeat the full invariant-integral proof, nor assert an upper mechanism.
+
+No required mathematical correction found. The exact finite checks support
+the independent analytic argument; they do not prove a theorem by sampling.
+SOURCE_MANIFEST.json records the audited source, dependency and output hashes.

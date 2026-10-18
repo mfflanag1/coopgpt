@@ -1,0 +1,117 @@
+LOCAL INCENTIVE SEPARATION FOR FIXED ARITY
+Root derivation, 18 October 2026. Candidate pending independent audit.
+This is a differential reformulation, not a general funding-bound improvement.
+Its ingredients are elementary calculus, packing duality and order statistics;
+no historical priority claim is made.
+
+FIXED CONTRACT AND REGULARITY
+Keep the campaign's actual owners, finite coordinate boxes, nonnegative finite
+packing technology F(c)=max{pi*x:Ax<=c,x>=0}, and protected coalitions of size
+at most s. Let y be smooth on each positive-coordinate face, including a smooth
+extension at its endowment upper boundaries. Payments to owners with zero
+reports remain variables. Coverage and funding are still imposed separately.
+
+On a face J, the positive coordinates are (j,a) in J. Write
+  JAC[i;j,a] = partial y_i / partial b_(j,a).
+At a relative interior point of this face, consider nonnegative directions d
+supported in J and on a protected coalition C. Put Y_C=sum_(i in C)y_i.
+The differential conditions are
+  TCWM: sum_(j,a) d_(j,a) partial_(j,a)Y_C >=0;
+  OUT:  sum_(j,a) d_(j,a) partial_(j,a)Y_C >=F(sum_j d_j). (1)
+Only locally feasible directions are used; upper boundary values follow by
+the stated smooth extension and limits from below.
+
+1. EXACT TCWM SEPARATION BY SORTING
+For every active report coordinate (j,a), define z_i=JAC[i;j,a]. Let
+  Neg_k(z;D) = the sum of the at most k most negative entries z_i with i notin D,
+where positive entries are never added and k is capped at n-|D|.
+Then the TCWM part of (1) for EVERY eligible C is equivalent to
+  z_j + Neg_(s-1)(z;{j}) >=0                            (2)
+for every (j,a) in J. Indeed a restoring owner j must belong to C, and the
+remaining at most s-1 members minimize its coalition derivative by taking
+exactly those negative entries. Nonnegative linear combinations handle all d.
+Passive owners, including zero-report owners, are included in the sorting.
+
+2. EXACT FULL-OUT SEPARATION USING AT MOST r RESTORING OWNERS
+Assume (2). For every positive-profit activity e with support R_e and arity
+|R_e|<=r, consider each assignment f:R_e -> actual owners for which
+(f(a),a) is in J. Let D be the image of f. Skip assignments with |D|>s.
+For this assignment define the owner score
+  z_i(e,f) = sum_(a in R_e) A_(a,e) JAC[i;f(a),a].
+Then the full OUT part of (1) for every C,d is equivalent to (2) and
+  sum_(i in D) z_i(e,f) + Neg_(s-|D|)(z(e,f);D) >= pi_e   (3)
+for every such activity and assignment.
+
+Necessity. For each C containing D take d_(f(a),a)=A_(a,e), all other
+coordinates zero. One unit of activity e is feasible, hence F(sum d)>=pi_e.
+Minimizing the resulting sum_(i in C)z_i over D subset C, |C|<=s gives (3).
+Condition (2) is necessary since the nonnegative OUT right side implies TCWM.
+
+Sufficiency. Fix C and write ell_(j,a)=sum_(i in C)JAC[i;j,a] for j in C.
+By (2), every eligible ell_(j,a) is nonnegative. For a resource a eligible
+to some owner in C, set q_a=min_(j in C:(j,a) in J)ell_(j,a).
+For each activity whose every input row is eligible, choose a minimizing
+owner separately for every row. Its image D is contained in C. Inequality
+(3), and the fact that C cannot have a lower score than its displayed
+minimum, give sum_a A_(a,e)q_a>=pi_e. Activities with an ineligible input row
+cannot be used at aggregate direction sum d and may be omitted. Thus q is a
+nonnegative dual cover for the remaining production problem, and
+  sum_(j,a)ell_(j,a)d_(j,a) >= sum_a q_a sum_j d_(j,a)
+                                >= F(sum_j d_j).
+This proves (1). The minimizers and restoring owners are never split into
+fractional agents; f assigns each entire input requirement to one actual owner
+only for the separating test. It is enough to test these directions because
+dual feasibility then controls arbitrary distributed restorations.
+
+3. WHAT IS AND IS NOT POLYNOMIAL
+At one fixed profile, with a supplied Jacobian, (2) uses one sort per eligible
+coordinate. For fixed maximum arity r, (3) uses at most n^r assignments per
+activity, each requiring one sum and sort over n owners. Hence all local
+coalition incentive inequalities can be separated in polynomial time in the
+explicit technology and owner count, independently of the number of eligible
+coalitions. Arithmetic complexity is meant; exact bit complexity requires
+exactly represented derivative data. This does not separate all-coalition
+coverage, test a continuum of profiles, or construct an integrable Jacobian.
+
+4. ZERO-FACE ADMISSION IS ESSENTIAL FOR GLOBAL INCENTIVES
+Local inequalities alone do not control the jump when a zero coordinate first
+becomes positive. In addition impose the following directed admission condition
+at every b and nonnegative feasible direction d supported on a protected C:
+  Y_C(b) <= lim_(t downarrow0) Y_C(b+t d).                (4)
+The limit exists whenever (2) holds, since on t>0 the face is fixed and Y_C
+is nondecreasing in t. It is finite if the funding bound is imposed. When the
+ray stays in the starting face, (4) follows from continuity; only face entry
+needs an additional check. The actual coalition C is the same at both ends.
+
+With facewise smoothness, TCWM is exactly (2)+(4); full OUT is exactly
+(2)+(3)+(4). Necessity follows by dividing the finite incentive inequality
+between b and b+epsilon*d by epsilon inside a face, using F(epsilon*d)=
+epsilon*F(d), and by taking a limit for admission. For sufficiency integrate
+the local derivative along t in (epsilon,1). TCWM gives Y_C(b+d)>=Y_C(b+
+epsilon*d). Full OUT gives Y_C(b+d)-Y_C(b+epsilon*d)>=(1-epsilon)F(sum d).
+Let epsilon decrease to zero and apply (4). This covers simultaneous report
+changes and all positive and zero-coordinate endpoints. There is no assumed
+continuity across zero faces.
+
+Exact necessity example for admission. Take two actual scalar owners on [0,1]
+and the one-resource additive technology F(c)=c. Define y_2(b)=b_2, and
+y_1(b)=b_1 for b_1>0 but y_1(0,b_2)=b_2. This rule is nonnegative, covers
+every coalition, and is funded by 2F. On every positive-coordinate face it is
+smooth and obeys all within-face full-OUT derivative tests, for s=1 or2.
+Nevertheless at (0,1) owner1 receives1, and at (epsilon,1) receives epsilon.
+The singleton restoration violates even TCWM. Its missing condition is exactly
+admission (4). Consequently coverage and a finite funding bound cannot be used
+to silently infer the omitted boundary condition.
+
+5. CONSEQUENCE AND LIMITATION
+Combining with the independently checked multiplicative regularization theorem,
+the unrestricted infimum funding can be expressed over facewise-smooth rules
+satisfying these exact local conditions, directed admission, coverage and
+funding. No measurability restriction is silently imposed on the original
+class; regularization preserves the infimum but need not attain its value.
+This yields a polynomial separation oracle for the local incentive part of
+a candidate Jacobian at a fixed profile. It does NOT yield a subquadratic
+funding mechanism: global coverage, the report continuum, Jacobian
+integrability, and face admission remain genuine obligations. In particular,
+discarding (4) or treating a feasible Jacobian independently at each point as
+an already defined payment rule would invalidate the conclusion.

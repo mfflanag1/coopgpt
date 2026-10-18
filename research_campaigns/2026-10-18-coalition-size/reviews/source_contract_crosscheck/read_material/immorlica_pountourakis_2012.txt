@@ -1,0 +1,967 @@
+   On Budget-Balanced Group-Strategyproof Cost-Sharing
+                      Mechanisms
+                  Nicole Immorlica              Emmanouil Pountourakis
+
+
+                                           Abstract
+    A cost-sharing mechanism defines how to share the cost of a service among serviced cus-
+tomers. It solicits bids from potential customers and selects a subset of customers to serve and
+a price to charge each of them. The mechanism is group-strategyproof if no subset of customers
+can gain by lying about their values. There is a rich literature that designs group-strategyproof
+cost-sharing mechanisms using schemes that satisfy a property called cross-monotonicity. Unfor-
+tunately, Immorlica et al showed that for many services, cross-monotonic schemes are provably
+not budget-balanced, i.e., they can recover only a fraction of the cost. While cross-monotonicity
+is a sufficient condition for designing group-strategyproof mechanisms, it is not necessary. Poun-
+tourakis and Vidali recently provided a complete characterization of group-strategyproof mech-
+anisms. Using their characterization, we construct a fully budget-balanced group-strategyproof
+mechanism for the edge-cover problem. This improves upon the cross-monotonic approach
+which can recover only half the cost, and provides a proof-of-concept as to the usefullness of
+the complete characterization. This raises the question of whether all “natural” problems have
+budget-balanced group-strategyproof mechanisms. We answer this question in the negative by
+designing a set-cover instance in which no group-strategyproof mechanism can recover more
+than a (18/19)-fraction of the cost.
+1        Introduction
+In cost-sharing problems, a service provider faces a set of potential customers, each of which has
+a private value for the service. The provider must select a subset of customers to serve, and a
+price to charge each of them. To this end, he defines a mechanism that solicits bids from potential
+customers and, based on these bids, outputs the serviced subset and corresponding prices. To cover
+the cost of providing service, he looks for a mechanism that is budget-balanced, that is the sum of
+prices equals the cost of service for every input bid vector.
+    A central goal in mechanism design is to define mechanisms that are strategyproof in that no
+agent can gain by misreporting his value. This guarantees that the equilibrium bidding strategy
+of agents is robust and so the mechanism behaves as predicted. In cost-sharing problems, there is
+an inherent cooperative aspect: the cost of service changes drastically depending on which subset
+is serviced and so groups of agents may have aligned interests. In these problems, it makes sense
+to ask for an even more robust solution concept, group-strategyproofness. In a group-strategyproof
+mechanism, no group of agents can mutually gain by misreporting their values.
+    Group-strategyproofness is a very strong requirement. Nonetheless, there is a rich literature
+defining group-strategyproof mechanisms for various cost-sharing problems [4, 7, 6, 11]. All these
+papers use the same general technique. They define a cost-sharing scheme which, given any subset
+of customers, defines the price each of them would have to pay if that subset was serviced. They
+then turn this scheme into a mechanism by applying a procedure of Moulin [9]. The resulting
+mechanism is group-strategyproof so long as the underlying cost-sharing scheme satisfies a property
+called cross-monotonicity. Intuitively, cross-monotonicity requires that as more agents are serviced,
+the price to each decreases. If the cross-monotonic cost-sharing scheme is (approximately) budget-
+balanced on every subset of customers, then the resulting group-strategyproof mechanism is also
+(approximately) budget-balanced.
+    Unfortunately, the use of this technique comes at a cost. While submodular cost functions
+always have fully budget-balanced cross-monotonic cost-sharing schemes [5], and many combina-
+torial optimization problems have approximately budget-balanced schemes [4, 7, 6, 11], Immorlica
+et al. [5] prove that cross-monotonicity fundamentally limits achievable budget-balance factors for
+many combinatorial optimization problems. They also note that, while cross-monotonicity is a
+sufficient condition for giving rise to group-strategyproof mechanisms, it is not necessary. This
+left open the question of whether another approach might enable the design of group-strategyproof
+mechanisms with better budget-balance factors.
+    In a recent work, Pountourakis and Vidali [13] gave a complete characterization of group-
+strategyproof mechanisms. Their characterization is based on cost-sharing schemes that satisfy
+three technical properties. They then give a procedure that converts any such (approximately)
+budget-balanced cost-sharing scheme into an (approximately) budget-balanced group-strategyproof
+mechanism.1
+    In this work, we use the edge-cover cost-sharing problem to showcase the Pountourakis-Vidali
+technique of designing group-strategyproof mechanisms. In the edge-cover problem, the agents are
+the vertices of a graph, and the cost of a subset is the minimum number of edges that must be
+selected in order to cover every agent in the subset. The problem models, for example, assigning
+people to rooms either as a single occupant or with a compatible roommate (as defined by the edges
+of the graph).
+    1
+        In general, this procedure is not known to be polynomial-time.
+
+
+
+                                                            1
+     The results of Immorlica et al. [5] show that the best budget-balance factor of any cross-
+monotonic cost-sharing scheme for edge-cover is just 1/2. Using the characterization of Poun-
+tourakis and Vidali [13], we design a fully budget-balanced group-strategyproof mechanism for
+edge-cover. Thus our result improves upon any group-strategyproof mechanism designed using the
+standard cross-monotonic technique, thereby demonstrating the significance of the full character-
+ization. Furthermore, the cost-sharing scheme that we define is very intuitive: for a given subset
+of agents, we compute a lexicographically first maximum matching of that subset, charge each
+matched agent a price of 1/2, and charge each remaining agent in the subset a price of 1. This
+natural scheme is not cross-monotonic. However, using a key lemma regarding alternating paths
+of certain matchings, we are able to prove that this scheme does satisfy the characterization of
+Pountourakis and Vidali [13].
+     We also show that not all problems have fully budget-balanced group-strategyproof mechanisms.
+This is fairly obvious when one allows arbitrary (e.g., non-monotone) cost functions.2 In this paper,
+we prove this result for the natural monotone cost function defined by the set cover problem, a
+generalization of the edge cover problem. For set cover, Immorlica et al [5] showed a bound of n−1/2
+(where n is the number of agents) on the budget-balance factor of cross-monotonic cost-sharing
+schemes, implying that the standard technique for designing group-strategyproof mechanisms is
+highly impractical. This negative result is particularly disturbing in light of the fact that there
+exists a trivial fully budget balanced strategyproof mechanism (see Example 4.1 [5]) for any non-
+decreasing cost-function if we dont take computational limits into consideration. Even imposing
+computational limits, Devanur et al [3] obtain a O(1/ log n)-budget balanced mechanism that is
+strategyproof but not group-strategyproof. In our work we are interested in bounding the power of
+group-strategyproofness without any computational assumption. We present a set-cover instance,
+where there is no cost-sharing scheme satisfying the characterization of Pountourakis and Vidali [13]
+with budget-balance factor better than 18/19. Since this characterization does not take computa-
+tional constraint into consideration this implies a bound for every group-strategyproof mechanism
+independent of its running time.
+     Our proof uses an interesting interesting property of the cost-sharing schemes of Pountourakis
+and Vidali [13]. Namely, we define agents to be good, bad, or neutral for one another at particular
+sets depending on how their costs change when each is removed.3 If the cost to Jack increases when
+Jill is removed from the current set of serviced agents, then we say Jill is good for Jack at that
+set. On the other hand, if the cost to Jack decreases when Jill is removed, then Jill is bad for Jack
+at that set. If neither happens (i.e., the cost to Jack remains the same), then Jill is neutral. We
+derive natural conditions on the good/bad/neutral relations of agents which we believe to be of
+independent interest for future work in proving lower-bounds on group-strategyproof mechanisms.
+     Finally, we would like to note that while we try to deal with the limitations of cross-monotonic
+mechanisms by exploiting the full power of group-strategyprofness, another approach that has been
+followed so far was to relax group-strategyproofness. In particular, Mehta et al. [8] defined the
+notion of weak group-strategyproonfess and proposed a general framework to design mechanisms
+that satisfy this property. This framework has been used to design mechanism with better budget
+balance guarantees for many combinatorial problems. [8, 1]. Specifically, cost-sharing schemes
+used by Mehta et al. [8] were naturally derived by primal-dual schemes without any refinement
+   2
+    See, for example, Pountourakis and Vidali [13].
+   3
+    This corresponds to the notion of positive, negative, and neutral elements of Immorlica et al. [5], and one of the
+properties we derive is precisely the property of semi-cross-monotonicity as derived in that paper.
+
+
+
+                                                          2
+that would ensure cross-monotonicity [11]. However, as we argue in Section 5 these cost-sharing
+schemes fail to satisfy the necessary condition to give rise to group-strategyproofness; hence, ideas
+from this literature cannot be directly applied to group-strategyproof mechanism design.
+
+Related Work. In addition to the literature on cost-sharing mechanisms mentioned above, our
+work is related to the literature on combinatorial public projects. This problem was introduced
+by Papadimitriou et al. [12] who assume that a set of agents is interested in sharing a number of
+resources. Each agent has a private valuation for each subset of these resources. For some given
+k, a mechanism has to choose based on the valuations of the agent a set of k resources so as to
+maximize the social welfare.
+    Papadimitriou et al. [12] provide communication and computational bounds for every strate-
+gyproof mechanism that solves this problem when the valuation functions satisfy submodularity.
+Schapira and Singer [14] also provide similar bounds without the constraint of truthfulness, but
+slightly relaxing submodularity of valuation functions. Finally, Buchfuher et al. [2] study simi-
+lar questions for sub-additive valuations and provide various upper and lower bound for specific
+valuation function classes.
+    This problem differs from cost-sharing in the sense that there are multiple resources the mech-
+anism is called to choose upon, however, all the agents are going to share them. Moreover, they
+are interested in maximizing social welfare rather than budget balance. However, both of these
+problems have applications to resource sharing and particularly network formation.
+
+
+2    Model
+A set of agents A = {1, 2, . . . , n} is interested in receiving a service. Each agent i has a private
+type vi , which is her valuation for receiving the service. A cost-sharing mechanism inputs a bid
+bi for each agent i and outputs the subset of agents Q ⊆ A that receive service and the price pi
+that each agent i pays. Assuming quasi-linear utilities, each agent wants to maximize the quantity
+vi xi − pi where xi = 1 if i ∈ Q and xi = 0 if i ∈/ Q. We concentrate on mechanisms that satisfy the
+following conditions [9, 10]:
+
+    • Voluntary Participation (VP): An agent that is not serviced is not charged (i ∈    / Q ⇒ pi = 0)
+      and a serviced agent is never charged more than her bid (i ∈ Q ⇒ pi ≤ bi ).
+    • No Positive Transfer (NPT): The payment of each agent i is non-negative (pi ≥ 0 for all i).
+    • Consumer Sovereignty (CS): For each agent i there exists a value b∗i ∈ R such that if she bids
+      b∗i , then it is guaranteed that agent i will receive the service no matter what the other agents
+      bid.
+
+    We also assume that the agents can bid in a way that they will definitely not receive the service.
+This can be done by allowing negative bids. Then VP implies that an agent that reports a negative
+amount has to be charged a negative amount if she is serviced, which is prohibited by NPT.
+    We are interested in mechanisms that are group-strategyproof (GSP). A mechanism is GSP if
+for every two valuation vectors v, v 0 and every coalition of agents S ⊆ A, satisfying vi = vi0 for all
+i∈/ S, one of the following is true: (a) There is some i ∈ S, such that vi x0i − pi < vi xi − pi or (b)
+for all i ∈ S, it holds that vi x0i − pi = vi xi − pi .
+    We also assume the existence of an underlyng cost-function C : 2A → R+ ∪ {0}, where C(S)
+specifies the cost of providing service to all agents in S. We say that a mechanism is α-budget
+
+                                                   3
+                                                P
+balanced with respect to C if for all b, αC(Q) ≤ i∈A pi ≤ C(Q), where Q and {pi } are the prices
+and allocation output by the mechanism on input b.
+
+2.1     Characterization
+A cost-sharing scheme ξ : A × 2A → R is a function that takes as input an agent and a set and
+outputs a real number. The amount ξ(i, S) can be viewed as the payment of agent i when the set
+of agents S receivesPthe service.4 A cost-sharing scheme is α-budget balanced with respect to C if
+for all S, αC(S) ≤ i∈S ξ(i, S) ≤ C(S).
+      A property of the cost-sharing scheme, namely cross-monotonicity, has played a central role
+in the literature. Intuitively, cross-monotonicity requires that the cost-share of an agent can not
+increase as the serviced set grows. Moulin [9, 10] showed that given a cross-monotone cost-sharing
+scheme we can construct a group-strategyproof mechanism with a budget-balance factor equal to
+that of the cost-sharing scheme. Moreover, if the underlying cost function is submodular then
+there exist a perfectly budget balanced cost-sharing scheme. However, when the cost function is
+given by the cost of the optimal solution of an optimization problem, the cost function is often not
+submodular. Immorlica et al. [5] proved bounds on the budget balance factor of cross-monotonic
+cost-sharing schemes. This gave rise to the question of whether there are group-strategyproof
+mechanisms for such problems with better budget-balance properties. As a step towards answering
+this question, Pountourakis and Vidali [13] provided a complete characterization of the cost-sharing
+schemes that can give rise to group-strategyproof mechanisms. Let ξ ∗ (i, L, U ) be the minimum
+payment of player i for getting serviced when the serviced set is between sets L and U , i.e.,
+ξ ∗ (i, L, U ) := min{L⊆S⊆U,i∈S} ξ(i, S).
+
+Theorem 1 (Pountourakis and Vidali [13]). A cost-sharing scheme ξ can give rise to a group-
+strategyproof mechanism if and only if for every L ⊆ U ⊆ A it satisfies the following three properties.
+
+(a) There exists a set S with L ⊆ S ⊆ U , such that for all i ∈ S, we have ξ(i, S) = ξ ∗ (i, L, U ).
+
+(b) For each player i ∈ U \ L there exists one set Si with i ∈ Si and L ⊆ Si ⊆ U , such that for all
+    j ∈ Si \ L, we have ξ(j, Si ) = ξ ∗ (j, L, U ).
+      (Since i ∈ Si \ L, it holds that ξ(i, Si ) = ξ ∗ (i, L, U ).)
+
+(c) If for some C ⊂ U there is a player j ∈ C with ξ(j, C) < ξ ∗ (j, L, U ) (obviously L * C), then
+    there exists a set T 6= ∅ with T ⊆ L \ C, such that for all i ∈ T , ξ(i, C ∪ T ) = ξ ∗ (i, L, U ).
+
+    To make our arguments and the use of this characterization more intuitive we introduce some
+additional definitions and properties that are implied by this theorem and are themselves of in-
+dependent interest. Given a set S and agents i, j ∈ S we say that agent i is good for j at S if
+ξ(i, S) < ξ(i, S \ {j}), agent i is bad for j at S if ξ(i, S) > ξ(i, S \ {j}), and agent i is neutral to
+agent j at S otherwise. The characterization implies the following.
+
+Proposition 1. Given a cost-sharing scheme ξ that can give rise to a group-strategyproof mecha-
+nism, the following hold for every S.
+    4
+      This is a restrictive form of a payment policy as we exclude the possibility of charging different values given two
+different bid vectors where the mechanism provides the service to the same set of agents. Nevertheless, this is without
+loss of generality for the mechanisms of our setting [5].
+
+
+                                                           4
+(a) Given i ∈ S then either i is bad or neutral for every j ∈ S at S, or i is good or neutral for
+    every j ∈ S at S.5
+
+(b) Given i, j ∈ S, if i is bad for j at S then j is neutral for i at S.
+
+(c) Given i, j, k ∈ S, if i is bad for j at S and j is bad for k at S, then i is bad for k at S.
+Proof.
+    (a): The statement is equivalent to requiring that i is not both good for some j ∈ S at S
+and bad to another k ∈ S at S. Assume for the purpose of contradiction that this holds. By
+property (a) of Theorem 1 for L = S \ {i} and U = S either at S \ {i} or at S every agent should
+be charged the minimum value among these two sets. However, this cannot true since from our
+assumption ξ(j, S) < ξ(j, S \ {i}) and ξ(k, S \ {i}) < ξ(k, S).6
+    (b): First assume that i is bad for j at S and j is bad for i at S. We derive a contradiction with
+property (c) of Theorem 1. To that end, let L = S \ {j}, U = S, and C = S \ {i}. Note that, since i
+is bad for j, ξ(j, C) = ξ(j, S \ {i}) < ξ(j, S) = ξ ∗ (j, L, U ). Thus the conditions of property (c) apply
+and require that there is a nonempty T ⊆ L \ C such that for all k ∈ T, ξ(k, C ∪ T ) = ξ ∗ (k, L, U ).
+For our setting of L and C, the only choice for T is {i}. But for T = {i}, ξ(i, C ∪ T ) = ξ(i, S) >
+ξ(i, S \{j}) = ξ ∗ (i, L, U ) as j is bad for i at S. Thus, there is no choice for T satisfying the property.
+    Next assume that i is bad for j at S and j is good for i at S. We derive a contradiction with
+property (b) of Theorem 1. Let L = S \ {i, j} and U = S. By the property, there must be a set Si
+where i ∈ Si , L ⊆ Si ⊆ U , and all k ∈ Si \ L have cost-share ξ(k, Si ) = ξ ∗ (k, L, U ). Now since j
+is good for i, ξ(i, S) < ξ(i, S \ {j}) and so ξ(i, S) = ξ ∗ (j, L, U ). Hence the only choice for Si is S.
+However, agent j is not happy in this set: ξ(j, Si ) = ξ(j, S) > ξ(j, S \ {i}) = ξ ∗ (j, L, U ) since i is
+bad for j. Thus, there is no choice for Si satisfying the property.
+    (c): Assume that the converse holds, i.e., agent i is bad for j at S, agent j is bad for k at S, and
+yet agent i is not bad for agent k at S. We derive a contradiction with property (c) of Theorem 1.
+Let L = S \ {i}, U = S, and C = S \ {j}. Note that, since i is not bad for k, ξ(k, S \ {i}) ≥ ξ(k, S),
+so k achieves its minimum at S: ξ ∗ (k, L, U ) = ξ ( k, S). Furthermore, since j is bad for k, ξ(k, C) =
+ξ(k, S \ {j}) < ξ(k, S) = ξ ∗ (k, L, U ). Thus the conditions of property (c) apply and require that
+there is a nonempty T ⊆ L \ C such that for all l ∈ T, ξ(l, C ∪ T ) = ξ ∗ (l, L, U ). For our setting of L
+and C, the only choice for T is {j}. But for T = {j}, ξ(j, C∪T ) = ξ(j, S) > ξ(j, S\{i}) = ξ ∗ (j, L, U )
+as i is bad for j at S. Thus, there is no choice for T satisfying the property.
+
+2.2    Allocation
+Pountourakis and Vidali [13] provided a characterization of the allocation functions that can
+be coupled with a cost-sharing scheme satisfying the properties of Theorem 1 to yield a group-
+strategyproof mechanism.
+Theorem 2 (Pountourakis and Vidali [13]). If ξ is a cost-sharing scheme that satisfies the prop-
+erties of Theorem 1, then for every bid vector b there exists unique sets L(b) ⊆ U (b) ⊆ A such
+that
+   1. for all i ∈ L(b), bi > ξ ∗ (i, L(b), U (b)),
+   5
+     This is exactly the necessary property of semi-cross-monotonicity defined in Immorlica et al. [5].
+   6
+     As indicated by this proof, semi-cross-monotonicity coincides with property (a) of Theorem 1 when restricted to
+sets where |U \ L| = 1.
+
+
+                                                         5
+    2. for all i ∈ U (b) \ L(b), bi = ξ ∗ (i, L(b), U (b)),
+    3. and for all R ⊆ A \ U (b), there exist i ∈ R with bi < ξ ∗ (i, L(b), U (b) ∪ R).
+
+Furthermore, the mechanism that on input b outputs allocation Q = S and prices pi = ξ(i, S) where
+
+    1. L(b) ⊆ S ⊆ U (b), and
+    2. for all i ∈ S, ξ(i, S) = ξ ∗ (i, L(b), U (b)) (such a set must exist by Theorem 1(a)),
+
+is a group-strategyproof mechanism.
+
+    A way to implement the allocation is to exhaustively search for these sets L(b) and U (b) and a set
+S that satisfy the properties of the theorem. It is still not known if there algorithm that implements
+this procedure with asymptotically better running time in general. However, in Section 3, we
+provide a fully budget-balanced cost-sharing scheme and corresponding polynomial-time allocation
+when the cost function is given by the edge-cover problem.
+
+
+3     Edge Cover
+In this section, we give a fully budget-balanced group-strategyproof mechanism for the edge-cover
+cost-sharing game. To do so, we derive a cost-sharing scheme that satisfies the conditions presented
+in Theorem 1. Previous work [5] implies that group-strategyproof mechanisms for edge-cover de-
+signed via cross-monotonic cost-sharing schemes are at best 1/2-budget balanced. Thus, our work
+improves upon the previous results and demonstrates that the assumption of cross-monotonicity is
+not without loss for group-strategyproof mechanism design. We start with a definition of the edge
+cover game.
+
+Definition 1. In the edge cover game we are given a graph G = (V, E) with no isolated vertices.
+The agents in the game are the vertices V of the graph G. Given a subset of vertices S ⊆ V , an
+edge-cover of S is a subset of edges F ⊆ E such that for all vertices v ∈ S there is some edge e ∈ F
+such that v ∈ e. The cost of a set S is the minimum cardinality edge-cover of S.
+
+    In the following subsections, we first present a cost-sharing scheme for the edge cover game that
+provably gives rise to a group-strategyproof mechanism. We then show how to use this scheme to
+define a computationally efficient group-strategyproof mechanism for our problem.
+
+3.1     Cost-sharing Scheme
+Our cost-sharing scheme is based on the following well-known polynomial time algorithm for finding
+the minimum edge cover F of a set S. Let F be the set of edges in the maximum matching on S,
+and then for each vertex v ∈ S uncovered by F , add to F an edge e adjacent to v. Based on this
+algorithm, a natural cost-sharing scheme is to charge each agent v ∈ S a price of 1/2 if v is in the
+matching found by the algorithm, and 1 otherwise. The problem that arises with this cost-sharing
+scheme is the existence of multiple maxima matchings. The following example shows that if the
+tie-breaking choices of the algorithm are inconsistent between different inputs S, then the scheme
+fails to give rise to group-strategyproof mechanisms.
+
+Example 1. Consider a star graph with four vertices {v0 , v1 , v2 , v3 } where v0 is the center of the
+star, i.e., E = {(v0 , v1 ), (v0 , v2 ), (v0 , v3 )}. For the set {v0 , v1 , v2 , v3 } the maxima matchings have
+
+                                                       6
+size one and consist of one of the three edges. Suppose the algorithm on input {v0 , v1 , v2 , v3 } selects
+edge e = (v0 , v1 ) to be in the matching. This means that in the cost-sharing scheme the vertices
+v0 and v1 are charged 1/2 and vertices v2 and v3 are charged 1.
+    Now consider the set {v0 , v1 , v2 }. Assume that this time the algorithm on input {v0 , v1 , v2 }
+selects edge e = (v0 , v2 ) to be in the matching. Then the cost-sharing scheme charges vertices v0
+and v2 a price of 1/2 and vertex v1 a price of 1.
+    As a result, ξ(v2 , {v0 , v1 , v2 , v3 }) = 1 > 1/2 = ξ(v2 , {v0 , v1 , v2 }) and ξ(v1 , {v0 , v1 , v2 , v3 }) =
+1/2 < 1 = ξ(v1 , {v0 , v1 , v2 }). Thus v3 is bad for v2 at {v0 , v1 , v2 , v3 } and good for v1 at the same
+set. This contradicts property (a) of Proposition 1.
+
+   Since our construction favors the agents that are matched by the algorithm, it is important to
+have some consistency on the choice of matching. We resolve this issue by choosing the lexico-
+graphically first maximum matching.
+
+Definition 2. Given G = (V, E) on m edges, label edges E from 1 to m arbitrarily. For a subset
+of vertices S ⊆ V , let MS denote the lexicographically first maximum matching according to the
+labeling. Moreover let V (MS ) = {v | ∃e ∈ MS s.t. v ∈ e}, i.e., V (MS ) contains the vertices that
+are matched in MS .
+
+     Note that the lexicographically first maximum matching MS of any set of vertices S can be found
+efficiently, for example by assigning a weight of (1 + 2i )/2m to the i’th edge and then computing
+the maximum weight matching. We are now ready to formally define the cost-sharing scheme ξ.
+This cost-sharing scheme extends one introduced by Immorlica et al. [5] for an edge-cover instance
+on just three vertices as an example of a group-strategyproof mechanism without a cross-monotone
+cost-sharing scheme.
+
+Definition 3. Let G = (V, E). For every S ⊆ V and every i ∈ V we define
+                                        
+                                         0        i∈/S
+                              ξ(i, S) =   1/2   i ∈ V (MS )
+                                           1 i ∈ S \ V (MS )
+                                        
+
+    By construction, the cost-sharing scheme of Definition 3 is 1-budget balanced (and therefore, by
+the results of Immorlica et al. [5], it is not cross-monotone). We show that it additionally satisfies
+all the necessary and sufficient conditions of group-strategyproofness.
+
+Theorem 3. The cost-sharing scheme ξ of Definition 3 satisfies all the necessary and sufficient
+conditions to give rise to a GSP mechanism. Consequently there is a 1-budget balanced GSP mech-
+anism for the edge-cover problem.
+
+    The proof uses the characterization presented in Theorem 1. The main challenge is to show
+that for any lower set L and upper set U , there is some intermediate set S ∗ , L ⊆ S ∗ ⊆ U , in which
+every agent in S ∗ achieves his minimum cost-share among all intermediate sets (i.e., property (a)).
+Since cost-shares are always either 1 or 1/2, this amounts to finding a set S ∗ in which each agent
+i ∈ S ∗ either has cost-share 1/2, or has cost-share 1 for every intermediate set S, L ⊆ S ⊆ U .
+    The proof idea is as follows. We start with an arbitrary intermediate set S and work our way
+towards S ∗ . First, we prove in the following lemmas that for any set S, we can discard agents with
+cost-share equal to 1 without changing the solution for the other agents. Thus starting from an
+
+
+                                                         7
+arbitrary intermediate set S, we can work our way towards S ∗ by discarding all agents in S \ L
+with cost-share equal to 1. This leaves the question of whether agents in S ∩ L are receiving their
+minimum cost-share among the intermediate sets. Unfortunately, this is not necessarily the case:
+there may be some unhappy agent i ∈ L ∩ S with cost-share equal to 1 who has a cost-share equal
+to 1/2 in some other intermediate set Si . In this case, we use the lexicographically first maximum
+matchings MS and MSi to construct an alternating path starting from agent i. We prove that this
+alternating path ends in a node j that can either be added to or deleted from S in order to decrease
+the number of unhappy agents in L ∩ S (interestingly, agent i may still be unhappy after this fix,
+but at least one agent becomes happy). In this way, starting from an arbitrary intermediate set S,
+we can walk towards S ∗ .
+    Before we proceed with the proof we provide two useful lemmas that help us iteratively manip-
+ulate sets. The first lemma and its corollary imply that we can discard elements with cost-share 1
+from some set without affecting the cost-shares of the other elements.
+Lemma 1. Consider some S ⊆ V . If there is some i ∈ S such that ξ(i, S) = 1, then for all
+j ∈ S \ {i}, ξ(j, S) = ξ(j, S \ {i}).
+Proof. Since ξ(i, S) = 1, agent i must be uncovered by the maximum matching MS , i.e., i 6∈ V (MS ).
+Therefore, removing agent i does not decrease the cardinality of MS , and so the set of maxima
+matchings of S \ {i} is a subset of the maxima matchings of S. As a result, MS is still the
+lexicographically first matching, i.e., MS\{i} = MS . Part (a) follows by definition of ξ.
+
+   The following corollary follows immediately by applying Lemma 1 inductively.
+Corollary 1. Consider an S ⊆ V and a T ⊆ {i | ξ(i, S) = 1}. Then for all i ∈ S \ T , ξ(i, S) =
+ξ(i, S \ T ).
+   The second lemma is the key lemma. It says that whenever there is an unhappy (i.e., unmatched)
+element i at some current set S, then there is another element j that can be added or deleted in
+order to increase the total number of happy (i.e., matched) elements (not counting j).
+Lemma 2. Let L ⊆ U ⊆ A and i ∈ U . Consider any set S with L ⊆ S ⊆ U such that ξ(i, S) >
+ξ ∗ (i, L, U ). Then either
+   • there is some j ∈ S \ L such that the number of matched elements does not decrease when
+     we remove j, i.e., |V (S)| ≤ |V (S \ {j})|, and j was matched in MS (hence the number of
+     matched elements restricted to S \ {j} strictly increases),
+   • or there is some j ∈ U \ S such that the number of matched elements strictly increases when
+     we add j, i.e., |V (S)| < |V (S ∪ {j})| (and since the number of matched elements is always
+     even, the number of matched elements restricted to S strictly increases as well).
+Proof. Let i and S be as in the theorem statement, and let Si , L ⊆ Si ⊆ U , be a set where i achieves
+its minimum cost-share, i.e., ξ(i, Si ) = ξ ∗ (i, L, U ). Note since ξ(i, S) > ξ ∗ (i, L, U ) = ξ(i, Si ), it
+must be that ξ(i, S) = 1 and ξ(i, Si ) = 1/2. Thus, by the definiton of our cost-sharing scheme,
+i is matched in maximum matching MSi (i.e., i ∈ V (Si )) and unmatched in maximum matching
+MS (i.e., i 6∈ V (S)). Consider the alternating path (j1 , . . . , jm ) of maximum length starting from
+vertex j1 = i whose odd edges belong to MSi and whose even edges belong to MS . We show that
+we can find an agent j as required by the lemma which we remove or add depending on its parity
+in the path.
+
+                                                     8
+    Case 1: Suppose m is odd. Note since i ∈ V (Si ), this implies m ≥ 3. Thus the path ends in an
+even edge (jm−1 , jm ) where jm ∈ V (S) and jm 6∈ V (Si ). We would to show that we can delete jm
+and deduce the first inequality, but in order to do so we must first argue jm 6∈ L. To do so, we show
+that jm 6∈ Si and consequently jm 6∈ L. Assume for contradiction that jm ∈ Si . Notice that by
+the definition of the alternating path j1 , . . . , jm−1 ∈ Si while j2 , . . . , jm ∈ S. Since the first vertex
+j1 = i ∈ L it follows that j1 ∈ S as well. Moreover, we already assumed that jm ∈ Si . As a result,
+every vertex in this path belongs to S ∩ Si . Now one of the matchings projected to the vertices
+along this path must come lexicographically first. Assume that the projection corresponding to
+MS comes first (the other case is similar). Then since jm is not matched in Si , we can construct
+a matching that comes lexicographically before MSi and has equal cardinality by leaving j1 = i
+unmatched, matching agents j2 , . . . , jm according to MS , and keeping the rest of the agents as they
+were matched in MSi , i.e.,
+
+                    (MSi \ {(j1 , j2 ), . . . , (jm−2 , jm−1 )}) ∪ {(j2 , j3 ), . . . , (jm−1 , jm )}.
+
+This contradicts the fact that M (Si ) was the lexicographically first maximum matching in the
+graph induced by agents in Si . Thus jm 6∈ Si and so jm 6∈ L. Note by the above argument,
+L ⊆ S \ {jm } ⊆ U . Since j1 ∈ L, it follows that j1 ∈ S and j1 ∈ S \ {jm }, and so by removing the
+matched element jm , we can construct a matching for S \ {jm },
+
+                    (MS \ {(j2 , j3 ), . . . , (jm−1 , jm )}) ∪ {(j1 , j2 ), . . . , (jm−2 , jm−1 )},
+
+that has the same cardinality as MS .
+   Case 2: Suppose m is even, i.e., jm ∈ V (Si ) and jm 6∈ V (S). This time we add jm to S and
+deduce the second inequality, but to do so must first argue that jm 6∈ S. This is the case since if
+jm ∈ S then this alternating path is also an augmenting path, which contradicts the fact that MS
+has maximum cardinality. Now consider S ∪ {jm } and note that the set of edges
+
+                     (MS \ {(j2 , j3 ), . . . , (jm−2 , jm−1 )}) ∪ {(j1 , j2 ), . . . , (jm−1 , jm )}
+
+is a valid matching for S ∪ {jm } and has one greater cardinality than MS .
+
+   We are now ready to prove our main theorem which shows that the cost-sharing scheme satisfies
+the properties for yielding a group-strategyproof mechanism.
+
+Proof of Theorem 3. We show the scheme satisfies the three properties of Theorem 1. Consider
+arbitrary sets L and U with L ⊆ U .
+     Property (a): We first show that we can find a set S ∗ with L ⊆ S ∗ ⊆ U such that for all
+i ∈ S ∗ , ξ(i, S ∗ ) = ξ ∗ (i, L, U ). We start with an arbitrary set S with L ⊆ S ⊆ U . Assume, wlog, for
+all i ∈ S \ L, ξ(i, S) = 1/2 (if not, remove all such agents with ξ(i, S) = 1; this does not change the
+others’ cost-shares by Corollary 1). Since the only cost-shares charged to the agents are 1/2 and 1,
+this implies that ξ(i, S) = ξ ∗ (i, L, U ) = 1/2 for all i ∈ S \ L. Now suppose there is some i ∈ S ∩ L
+with ξ(i, S) > ξ ∗ (i, L, U ) (if not, we have found a set S ∗ satisfying the conditions of property (a)).
+By Lemma 2 there is either a matched element j ∈ S \ L such that |V (S)| ≤ |V (S \ {j})| in which
+case the number of unmatched vertices (i.e., those with cost-share equal to 1) strictly decreases:
+
+                          |{k ∈ S | ξ(k, S) = 1}| > |{k ∈ S | ξ(k, S \ {j}) = 1}|
+
+
+                                                            9
+(the inequality is strict since j is matched), or there is an element j ∈ U \ S such that |V (S)| <
+|V (S ∪ {j})| in which case, similarly,
+                         |{k ∈ S | ξ(k, S) = 1}| > |{k ∈ S | ξ(k, S ∪ {j}) = 1}|.
+Since we assumed that only players in L are charged more than 1/2, in either case this implies that
+the quantity |{k ∈ L | ξ(k, S) = 1}| strictly decreases. Since the number of vertices in L is fixed
+and finite, this process must terminate and produce a set S ∗ , L ⊆ S ∗ ⊆ U , such that for all i ∈ S ∗ ,
+ξ(i, S ∗ ) = ξ ∗ (i, L, U ).
+      Property (b): Next we show for every player i ∈ U \ L, there is a set Si such that all agents
+j ∈ Si \ L have ξ(j, Si ) = ξ ∗ (j, L, U ). Consider some i ∈ U \ L. In the case where ξ ∗ (i, L, U ) = 1
+then the set Si = L ∪ {i} satisfies the property trivially, as player i cannot be charged a greater
+amount in any set. Assume that ξ ∗ (i, L, U ) = 1/2 and let S be a set where L ⊆ S ⊆ U , i ∈ S, and
+ξ(i, S) = 1/2. Let T = {j ∈ S \ L | ξ(j, S) = 1} and set Si = S \ T . By Corollary 1, all agents
+k ∈ Si ∩ S have ξ(k, Si ) = ξ(k, S) = 1/2. Thus for all k ∈ Si \ L, ξ(k, Si ) = ξ ∗ (k, L, U ) = 1/2, as
+this is the lowest amount they may be charged by the cost-sharing scheme.
+      Property (c): Finally, we show that if for some C ⊂ U , there is a player j ∈ C with ξ(j, C) <
+ξ ∗ (j, L, U ), then there is a set T 6= ∅ with T ⊆ L \ C such that for all i ∈ T , ξ(i, C ∪ T ) = ξ ∗ (i, L, U ).
+Consider some C ⊂ U and some j ∈ C such that ξ(j, C) < ξ ∗ (j, L, U ). Notice that this is only
+possible if ξ(j, C) = 1/2 and ξ ∗ (j, L, U ) = 1. If for all agents i ∈ L \ C, ξ ∗ (i, L, U ) = 1, then the
+set T = L \ C trivially meets the requirements. Otherwise we look for agents i ∈ T ⊆ L \ C with
+ξ(i, T ∪ C) = ξ ∗ (i, L, U ) = 1/2. To find T , we look at the set L ∪ C and discard players in L \ C
+who have cost-share 1: namely, let Q = {i ∈ L \ C | ξ(i, L ∪ C) = 1} and let T = L \ (C ∪ Q).
+First note by Corollary 1, for all i ∈ T , ξ(i, T ∪ C) = ξ(i, L ∪ C) = 1/2. Hence for all i ∈ T ,
+ξ(i, T ∪ C) = ξ ∗ (i, L, U ). To show that this meets the requirement of property (c), it remains to
+show that T is non-empty. Namely, we claim that there is some i ∈ L\C such that ξ(i, L∪C) = 1/2.
+Otherwise, V (ML∪C ) ⊆ C, i.e., only players in C are contained in the maximum matching which
+implies that MC = ML∪C and consequently V (MC ) = V (ML∪C ). Since j ∈ V (MC ) this implies
+that ξ(j, L ∪ C) = 1/2, contradicting our observation that ξ ∗ (j, L, U ) = 1.
+
+3.2    Polynomial-Time Allocation
+We now argue that the group-strategyproof mechanism corresponding to the cost-sharing scheme
+in Definition 3 can be constructed in polynomial time. To do so, we must find, for any bid vector b,
+a set S satisfying the conditions of Theorem 2. Namely, we are looking for a set S that lies between
+some lower-bound set L(b) and upper-bound set U (b) such that:
+   1. for all i ∈ L(b), bi > ξ ∗ (i, L(b), U (b)),
+   2. for all i ∈ U (b) \ L(b), bi = ξ ∗ (i, L(b), U (b)),
+   3. and for all R ⊆ A \ U (b), there exist i ∈ R with bi < ξ ∗ (i, L(b), U (b) ∪ R),
+and for all i ∈ S, ξ(i, S) = ξ ∗ (i, L(b), U (b)). In words, the elements in L(b) should be bidding
+more than their minimum cost-share; the elements in U (b) \ L(b) should be bidding equal to their
+minimum cost-share; and U (b) is maximal in the sense that when we try to add elements to it,
+at least one of the newcomers can’t afford his minimum cost-share. The set S allocated by the
+group-strategyproof mechanism is then any of the intermediate sets in which each agent is happy
+(gets its minimum cost-share), i.e., a set S with
+                         L(b) ⊆ S ⊆ U (b), s.t. ∀i ∈ S, ξ(i, S) = ξ ∗ (i, L(b), U (b)).
+
+                                                       10
+For ease of notation, in the rest of this section we fix b and use L to denote L(b) and U to denote
+U (b).
+    The main difficulty in finding S is that we do not know L and U . However, using the structure
+of these sets and the fact that the only cost-shares in our scheme are 1 and 1/2, we can bound
+these two sets. Given a bid vector b let us define P = {i | bi > 12 } and Q = {i | bi ≥ 12 }. Then
+L ⊆ P and U ⊆ Q. Hence we can search through intermediate sets of P and Q, looking for our
+S. Any such S will definitely contain L as L ⊆ P , but may not be contained in U ; our algorithm
+must provide a separate guarantee for this containment.
+    Our algorithm for finding S is based on a local search procedure and corresponding potential
+function φ(.) which is strictly increasing with respect to the steps of this search. The search
+procedure iteratively adds an element to, or deletes an element from, the current set S while
+maintaining the invariant that P ⊆ S ⊆ Q. Our potential function φ(S) counts the number of
+happy elements in L ⊆ S, i.e.,
+
+                              φ(S) = |{i ∈ L | ξ(i, S) = ξ ∗ (i, L, U )}|.
+
+Using our key lemma, Lemma 2, we show that as long as φ(S) < |L|, there is always a way
+to improve the potential. Since L is fixed and finite (given b), this procedure must terminate.
+Furthermore, by definition of the potential, when the procedure terminates, each agent in L ⊆ S
+is happy. To guarantee that agents in S \ L are happy and also that S ⊆ U , we need to prune
+S. As we show later, it is sufficient to simply remove agents from S whose bids are less than their
+cost-shares. The following procedure implements this local search.
+
+  1. S ← P .
+  2. Iterate as long as the set S changes:
+      (a) Remove all players in S \ P with ξ(i, S) = 1.
+      (b) If there is some i ∈ Q \ S such that the cardinality of the maximum matching in S ∪ {i}
+          is increased, then set S ← S ∪ {i}.
+      (c) Else if there is some i ∈ S \ P that was matched in M (S) and the maximum matching
+          in S \ {i} does not decrease, then set S ← S \ {i}.
+  3. Set S ← {i | bi ≥ ξ(i, S)}.
+
+    We first observe that this algorithm runs in polynomial time. Specifically steps 2 (b) and 2 (c)
+reduce to finding whether the inclusion of some agent in Q \ P forms an augmented path or wether
+an agent in S \ P is not present in every maximum cardinality matching respectively. Both of these
+steps can be implemented in polynomial time. Since at each step the potential function increases,
+step 2 is performed at most as many times as the cardinality of L, which is bounded by the total
+number of agents.
+    We next prove that when the algorithm terminates, the set S satisfies the conditions of Theo-
+rem 2. The following two lemmas are used in the proof. The first is used to prove that the pruning
+in step 3 forces S to be contained in U . The second is used to argue that the potential function is
+increasing.
+Lemma 3. If for some S, L ⊆ S, and for all i ∈ S \ L, ξ(i, S) ≤ bi , then S ⊆ U .
+Proof. Consider some such S and any i ∈ S \ L. Note ξ ∗ (i, L, U ∪ S) ≤ ξ(i, S) ≤ bi . Thus by the
+third condition for L and U , we must have that S ⊆ U .
+
+                                                  11
+Lemma 4. For any S, P ⊆ S ⊆ Q, if there is an agent i ∈ P that is matched in MS , then i ∈ L
+and ξ(i, S) = ξ ∗ (i, L, U ).
+
+Proof. Let S 0 = L ∪ {j ∈ S | ξ(j, S) = 21 }, i.e., we removed all the agents in S \ L that are charged
+1. By Corollary 1 for all j ∈ S 0 , ξ(j, S 0 ) = ξ(j, S). Every agent in S 0 \ L is charged 12 and also since
+S 0 ⊆ S ⊆ Q for every i ∈ S 0 \ L it holds that bi ≥ 21 = ξ(i, S 0 ). Lemma 3 implies that S 0 ⊆ U ,
+hence, i ∈ U and ξ(i, S 0 ) ≥ ξ ∗ (i, L, U ) ⇒ ξ ∗ (i, L, U ) = 21 . Finally, our assumption that L, U satisfy
+the conditions of Theorem 2 imply that i ∈ L.
+
+Theorem 4. This procedure outputs a set S, L ⊆ S ⊆ U , where for all i ∈ S, ξ(i, S) = ξ ∗ (i, L, U ).
+
+Proof. We first show that every time step 2 (b) or 2 (c) is performed, the potential function
+increases. After step 2 (a), every agent i ∈ S \ P is paying 1/2. Thus all i ∈ S \ P are matched by
+MS . Since by Lemma 2 the number of matched agents in the new set strictly increases, it follows
+that the number of agents in P that are matched increases. By Lemma 4, this implies that the
+number of agents in L that are charged ξ ∗ (i, L, U ) increases.
+      Next, we show that either step 2 (b) or step 2 (c) can always be performed as long as φ(S) < |L|.
+First note that, by Lemma 4, if for some i ∈ L ⊆ P , ξ(i, S) = 1/2, then ξ(i, S) = ξ ∗ (i, L, U ). Since
+all cost-shares are 1 or 1/2, this means that ξ(i, S) ≥ ξ ∗ (i, L, U ) for all i ∈ L (even though S may
+not lie between L and U ). So if φ(S) < |L|, there must be some i ∈ L such that ξ(i, S) > ξ ∗ (i, L, U ).
+We apply Lemma 2 for i at L, Q. Note that the Lemma requires that ξ(i, S) > ξ ∗ (i, L, Q) whereas
+what we know is that ξ(i, S) > ξ ∗ (i, L, U ). However, since U ⊆ Q the second statement implies the
+first.
+      Our previous arguments imply that for the final set S, L ⊆ S and for all i ∈ L, ξ(i, S) =
+ξ ∗ (i, L, U ). We still need to show that S ⊆ U and for all i ∈ S \ L, ξ(i, S) = ξ ∗ (i, L, U ). Note that
+for all i ∈ S, bi ≥ ξ(i, S). Hence, we can apply Lemma 3 to show that S ⊆ U . Moreover, for all
+i ∈ S \ L, i ∈ U and so by the conditions of Theorem 2, ξ ∗ (i, L, U ) = bi = ξ(i, S) (where the latter
+equality follows as we’ve shown L ⊆ S ⊆ U ).
+
+
+4    Set Cover
+In this section we show that it is impossible to construct a fully budget balanced group-strategyproof
+mechanism when the cost function is determined by the optimal objective function of the set-cover
+problem. Immorlica et al. [5] showed that no cross-monotonic cost-sharing scheme can have a
+budget-balance of better than n−1/2 where n is the number of elements or the size of the largest
+subset in the set-cover instance. Here we show that there are instances where no group-strategyproof
+mechanism can be (18/19)-budget-balanced. Thus, while group-strategyproof mechanisms may be
+able to improve upon the budget-balance factor of cross-monotonic ones, we show that they can
+not, in general, provide full budget-balance.
+
+Definition 4. In the set cover game we are given a ground set V and a collection of subsets
+F ⊆ 2V . The agents in the game are the elements V of the ground set. S Given a subset of agents
+S ⊆ V , a set-cover of S is a collection of subsets C ⊆ F such that S ⊆ C∈C , i.e., every element
+i ∈ S belongs to some subset C ∈ C. The cost of a set of agents S is the minimum cardinality
+set-cover of S.
+
+
+
+
+                                                     12
+   In the following subsections, in order to build intuition, we first prove that there is no fully
+budget-balanced group-strategyproof mechanism for the set-cover game. We then extend the
+proof to show the constant bound. Our counter-example uses the following instance of a set-
+cover game. There are six elements U = {A1 , A2 , B1 , B2 , C1 , C2 }, and the collection of subsets is
+F = {{Ai , Bj , Ck }i,j,k=1,2 }. In other words there are three groups of two elements and the available
+subsets are all those who contain exactly one element from each group.
+
+4.1   Impossibility of Full Budget-Balance
+We will show by contradiction that there is no fully budget balanced group-strategyproof mech-
+anism for this instance of the set-cover game. The first step to reach a contradiction is to show
+that the necessary properties together with full budget balance imply that at sets of the form
+{A1 , A2 , Bj , Ck }, there must be an unfair sharing of the cost in the sense that A1 or A2 must be
+responsible for their externality (their inclusion increases the cost of the optimal solution by one).
+Since one of the agents of the group A is responsible for her externality this puts an upper bound
+on the sum of the rest agents’ payments. Then, since adding the missing agent from group B
+does not increase the cost, we show this does not change the upper bound. Finally, we exploit the
+symmetric form of this instance to derive the same bound with different agents in groups A and B.
+By summing, we bound the total contribution and yield the contradiction.
+    Our proofs rely heavily on the notions of good, bad, and neutral elements defined in Section 2.1.
+Recall that an element i is good (bad, neutral, respectively) for element j at set S if removing i
+from S increases (decreases, keeps the same, respectively) the cost-share of j. In Proposition 1, we
+derived some useful properties of the good, bad, and neutral relation. We start with some further
+observations.
+    By Proposition 1 (a), if i is a bad element at S, then the cost share of every agent j ∈ S \ {i}
+can only increase. Hence, the sum of the payments can only increase as well.
+                                                    P                        P
+Corollary 2. If i is bad for some j ∈ S S, then j∈S\{i} ξ(j, S \ {i}) ≥ j∈S\{i} ξ(i, S).
+   An implication of this is the following.
+Corollary 3. Let ξ be a cost-sharing scheme that satisfies the conditions of Theorem 1, and suppose
+ξ is fully budget balanced for a cost function c. Then if c(S) = c(S \ {i}), agent i cannot be bad for
+every element j ∈ S at S.
+    We first show either A1 or A2 pays a significant fraction of the cost of set {A1 , A2 , Bj , Ck }. The
+idea of the proof is to show that if neither agent carries the cost, then they are bad for other agents.
+This imposes bounds on various subsets and lets us argue that one of these subsets is not budget
+balanced.
+Claim 1. For j, k ∈ {1, 2} and S = {A1 , A2 , Bj , Ck }, either ξ(A1 , S) ≥ 1 or ξ(A2 , S) ≥ 1.
+Proof. Assume that the converse holds. Since ξ(A1 , S) < 1, by budget balance we have that
+
+                                  ξ(A2 , S) + ξ(Bj , S) + ξ(Ck , S) > 1.
+
+Hence, A1 must be a bad element for at least one of the rest agents at S = {A1 , A2 , Bj , Ck }. By
+symmetry, we conclude tht A2 must be bad for at least one other agent at S. We consider two
+cases: either A1 and A2 are both bad for the same element, or they are bad for different elements.
+
+                                                   13
+    Case 1: Suppose that A1 and A2 are both bad for the same element, say Bj , at S. Proposi-
+tion 1 (b) implies that ξ(A1 , {A1 , A2 , Ck }) = ξ(A1 , {A1 , A2 , Bj , Ck }) < 1 and ξ(A2 , {A1 , A2 , Ck }) =
+ξ(A2 , {A1 , A2 , Bj , Ck }) < 1. Using budget balance we conclude that A1 is bad for at least one agent
+in {A2 , Ck } and similarly A2 is bad for at least one agent in {A1 , Ck }.
+    By Proposition 1 (b) it is impossible that both A1 and A2 are bad for each other. Hence, one
+of them, wlog A1 , must be bad for Ck . If A2 is bad for A1 then by Proposition 1 (c) she must be
+bad for Ck as well. As a result both A1 and A2 must be bad for Ck .
+    Applying Proposition 1 (c) again we get that
+                                 ξ(A1 , {A1 , A2 }) = ξ(A1 , {A1 , A2 , Ck }) < 1
+and
+                                 ξ(A2 , {A1 , A2 }) = ξ(A2 , {A1 , A2 , Ck }) < 1,
+which contradicts budget balance.
+    Case 2: Suppose A1 and A2 are not both bad for the same element at S = {A1 , A2 , Bj , Ck }.
+Proposition 1 (b) excludes the case where A1 and A2 are bad for each other at S. Moreover, if one
+of them, say A1 is bad for A2 , then by Proposition 1 (c) A1 is also bad for whatever A2 is bad for;
+hence, we are in the previous case. As a result, we can assume, wlog, that A1 is bad for Bj and
+neutral for Ck at {A1 , A2 , Bj , Ck }, and A2 is bad for Ck and neutral for Bj at {A1 , A2 , Bj , Ck } (by
+Proposition 1 (a), neither can be good for any element).
+    Let L = {Bj , Ck } and U = {A1 , A2 , Bj , Ck }. Property (a) of the characterization requires that
+there is a set T with L ⊆ T ⊆ U where every agent in T is charged the minimum payment with
+respect to this restriction. By assumption, T cannot be the set S = {A1 , A2 , Bj , Ck }, as A1 and A2
+are bad for Bj and Ck respectively. Moreover, since A1 is bad for Bj and A2 is neutral for Bj at
+{A1 , A2 , Bj , Ck } it holds that ξ(Bj , {A1 , Bj , Ck }) = ξ(Bj , {A1 , A2 , Bj , Ck }) > ξ(Bj , {A2 , Bj , Ck }).
+Thus we can exclude the possibility that the set T equals {A1 , Bj , Ck }. Due to symmetry we also
+exclude the set {A2 , Bj , Ck }. Hence, the only set left is {Bj , Ck }. This implies that
+            ξ(Bj , {A1 , Bj , Ck }) + ξ(Ck , {A1 , Bj , Ck }) ≥ ξ(Bj , {Bj , Ck }) + ξ(Ck , {Bj , Ck })
+As we argued before Ck is charged an amount strictly greater than her minimum at {A1 , Bj , Ck };
+hence, the previous inequality is strict. However, this is impossible since budget balance requires
+that ξ(Bj , {Bj , Ck }) + ξ(Ck , {Bj , Ck }) = 1, and ξ(Bj , {A1 , Bj , Ck }) + ξ(Ck , {A1 , Bj , Ck }) ≤ 1.
+
+    We next use this to make a claim about the payments of agents in sets with one added element
+(slowly working our way towards a bound on the payments of the agents in the entire set). The main
+idea is that (by Corollary 3) adding elements with zero marginal cost can not increase cost-shares.
+Claim 2. Fix k = 1, 2 and let S = {A1 , A2 , B1 , B2 , Ck }. Then it holds that
+                                          X
+                                                ξ(x, S) + ξ(Ck , S) ≤ 2.
+                                          x∈S
+
+Proof. Consider set {A1 , A2 , B1 , Ck }. By Claim 1, at least one A-type agent has cost-share at
+least 1, say A2 , i.e., ξ(A2 , {A1 , A2 , B1 , Ck }) ≥ 1. In this case, we say A2 carries the cost of set
+{A1 , A2 , B1 , Ck } (i.e., in this set, A2 carries the cost of the externality). Then, budget balance
+implies that                            X
+                                                 ξ(x, {A1 , A2 , B1 , Ck }) ≤ 1.
+                                   x∈{A1 ,B1 ,Ck }
+
+
+                                                        14
+Since c({A1 , A2 , B1 , B2 , Ck }) = c({A1 , A2 , B1 , Ck }), Corollary 3 implies that agent B2 cannot be
+bad for any element at {A1 , A2 , B1 , B2 , Ck }. Therefore, we conclude that if A2 carries the cost of
+{A1 , A2 , B1 , Ck }, then the agents {A1 , B1 , Ck } collectively don’t pay too much in {A1 , A2 , B1 , B2 , Ck }:
+                                     X
+                                              ξ(x, {A1 , A2 , B1 , B2 , Ck }) ≤ 1.
+                                x∈{A1 ,B1 ,Ck }
+
+By symmetry a similar equation holds if we start with any of the four sets {A1 , A2 , B1 , Ck },
+{A1 , A2 , B2 , Ck }, {A1 , B1 , B2 , Ck }, and {A2 , B1 , B2 , Ck }. Furthermore, by Claim 1, the cost of
+each set must be carried by some element: the first by some Ai , the second by some (possibly
+different) Ai0 , the third by some Bj , and the fourth by some (possibly different) Bj 0 .
+    We claim that two of these induced equations are complementary in the sense their sum yields
+the claim. If the costs of sets {A1 , A2 , B1 , Ck } and {A1 , A2 , B2 , Ck } are carried by different Ai
+then they are complementary. Otherwise, if both are carried by A1 , the equation induced by
+{A2 , B1 , B2 , Ck } is complementary with one of them (no matter which Bj carries the cost of
+{A2 , B1 , B2 , Ck }). On the other hand, by symmetry, if both are carried by A2 then the equation
+induced by {A1 , B1 , B2 , Ck } is complementary with one of them. Adding these complementary
+equations we derive the equation in the statement of the claim.
+
+    Our main result follows directly from the above claim.
+
+Theorem 5. There is no fully budget-balanced group-strategyproof mechanism for the set-cover
+game.
+
+Proof. Budget balance requires that
+                                X
+                                                     ξ(x, {A1 , A2 , B1 , B2 , Ck }) = 2
+                               x∈{A1 ,A2 ,B1 ,B2 }
+
+This is only possible if the equation of Claim 2 holds with equality and ξ(Ck , {A1 , A2 , B1 , B2 , Ck }) =
+0. We can similarly apply Corollary 3 to show that ξ(Ck , {A1 , A2 , B1 , B2 , C1 , C2 }) = 0. By sym-
+metry, we can conclude that the cost-share of every agent in {A1 , A2 , B1 , B2 , C1 , C2 } is zero which
+contradicts budget balance.
+
+4.2    A constant lower bound
+The same example can be used to derive a constant bound on the budget balance factor of group-
+strategyproof mechanisms for the set-cover game. The main complication in extending the proof is
+that Corollary 3 no longer holds. Instead we must use different arguments to bound payments.
+                                                                                       1
+    Assume that there is a ω(1 − β) budget-balanced mechanism. We show that β > 19       , which
+                    18                                                                   1
+implies a bound of 19 for the budget balance. Assume that the converse holds, i.e., β ≤ 19 . The
+next claim generalizes Claim 1.
+
+Claim 3. For j, k ∈ {1, 2} and S = {A1 , A2 , Bj , Ck }, either ξ(A1 , S) > 1 − 2β or ξ(A2 , S) > 1 − 2β.
+
+Proof. Given the budget balance assumption, a payment less or equal to 1 − 2β for agent A1 or A2
+at this set would guarantee that she is a bad element for one of the rest at S.
+    When A1 , A2 is bad for Bj or Cj a similar argument can be used to show that A1 and A2 are
+both charged an amount less than or equal to 1 − 2β after removing the element for which they
+
+                                                            15
+are both bad, wlog Cj . Similarly, budget balance implies that they are bad for the other element
+Bj at {A1 , A2 , Bj }, and we get
+
+                              ξ(A1 , {A1 , A2 }) + ξ(A2 , {A1 , A2 }) < 2 − 4β,
+
+which contradicts budget balance.
+   As in Claim 1, we only need to consider the case where A1 is bad for Bj but not bad for Cj
+and A2 is bad for Cj , and also Bj and Ck are not bad for each other. The same arguments imply
+that agents Bj and Ck achieve their minimum payment at {Bj , Ck }, and we get a similar equation
+
+           ξ(Bj , {A1 , Bj , Ck }) + ξ(Ck , {A1 , Bj , Ck }) > ξ(Bj , {Bj , Ck }) + ξ(Ck , {Bj , Ck })
+     This equation does not imply a contradiction, as it did it the case of full budget balance since
+it is possible that ξ(Bj , {A1 , Bj , Ck }) + ξ(Ck , {A1 , Bj , Ck }) > 1 − β. This time we have to employ
+Property (b) of the characterization to reach a contradiction. Note that the previous equation
+implies that ξ(A1 , {A1 , Bj , Ck }) < β and by symmetry ξ(A2 , {A2 , Bj , Ck }) < β.
+     Let L = ∅ and U = {A1 , A2 , Bj , Ck }. Our previous arguments imply the following bounds on
+the minimum payment of A1 and A2 : ξ ∗ (A1 , L, U ) < β and ξ ∗ (A2 , L, U ) < β. By Property (b) of
+the characterization, we have to find two sets SA1 and SA2 in this restriction such that A1 ∈ SA1 ,
+A2 ∈ SA2 , and every agent in SA1 \ L and SA2 \ L (which equal SA1 and SA2 respectively since L
+is empty) is charged her minimum payment with respect to this restriction.
+     Our assumptions exclude the sets {A1 , Bj , Ck }, {A1 , Bj , Ck }, {A1 , A2 , Bj }, and {A1 , A2 , Ck }
+since either Bj or Ck are not charged their minimum payment. Moreover, we exclude the set
+{A1 , A2 } since then the sum ξ(A1 , {A2 , A2 }) + ξ(A2 , {A1 , A2 }) should be strictly less than 2β and
+                                                                                        1
+also strictly greater than 2 − 2β, which is impossible as we assumed that β ≤ 19          .
+     The only sets left are those that contain one agent from group A and either Bj or Ck . We
+show that it is impossible that agents A1 and A2 achieve their minimum payment at set with a
+different agent. Note that the minimum payment of at least one Bj or Ck must be less than 12 , as
+the sum of their minimum values cannot be larger than 1 by budget balance. Wlog, assume that
+ξ ∗ (Bj , L, U ) ≤ 21 . If we could set SA1 = {A1 , Bj } it should be that the sum of the agents is less
+than 21 + β but also larger than 1 − β, which is again impossible by our assumption that β ≤ 19           1
+                                                                                                            .
+     As a result, SA1 = {A1 , Ck } and SA2 = {A2 , Ck }, which implies agent Ck is charged her
+minimum value at these two sets. We use this fact to show that one of the agents A1 or A2 is
+charged strictly less than β at {A1 , A2 }. Then budget balance and our assumption about β would
+imply that one of these agents in good while the other is bad contradicting Proposition 1 (b):
+                                                                                                   1
+Assume ξ(A2 , {A1 , A2 }) < β and by budget balance ξ(A1 , {A1 , A2 }) > 2 − 3β. Since β ≤ 19         budget
+balance implies that ξ(A2 , {A1 , A2 }) < 1 − β < ξ(A2 , {A2 }), hence, A1 is good for A2 at {A1 , A2 }.
+                           1
+Moreover since β ≤ 19        , budget balance implies that ξ(A1 , {A1 , A2 }) > 1 ≥ ξ(A1 , {A1 }), i.e., A2 is
+bad for A1 at {A1 , A2 }.
+     We finish our proof by showing that our assumptions imply that either A1 or A2 are charged
+less than β at {A1 , A2 }, thus, reaching a contradiction. We know that Ck is charged an amount
+strictly greater than her minimum value at {A1 , A2 , Ck }, which implies that agents A1 and A2
+are both bad for Cj . Proposition 1 (b) implies that Cj is neutral for both of these agents,
+hence, ξ(A1 , {A1 , A2 , Ck }) < β and ξ(A2 , {A1 , A2 , Ck }) < β. Moreover, Proposition 1 (a) im-
+plies that neither A1 nor A2 can be good for the other. Therefore, by Proposition 1 (b), one of
+them must be neutral, i.e., either ξ(A1 , {A1 , A2 }) = ξ(A1 , {A1 , A2 , Ck }) < β or ξ(A2 , {A1 , A2 }) =
+ξ(A2 , {A1 , A2 , Ck }) < β which completes our proof.
+
+                                                       16
+   Using this claim we deduce a similar equation like in Claim 2. However, we must be more
+careful, as we cannot use Corollary 3 anymore.
+
+Claim 4. Fix k = 1, 2 and let S = {A1 , A2 , B1 , B2 , Ck }. Then it holds that
+                                         X
+                                               ξ(x, S) + ξ(Ck , S) ≤ 2 + 4β.
+                                         x∈S
+
+Proof. Like before consider the set {A1 , A2 , B1 , Ck }. Similarly, let us assume that A2 carries the
+cost of the externality, i.e., ξ(A2 , {A1 , A2 , B1 , Ck }) ≥ 1 − 2β which implies that
+                                  X
+                                              ξ(x, {A1 , A2 , B2 , Ck }) ≤ 1 + 2β.
+                              x∈{A1 ,A2 ,Bj ,Ck }
+
+If we show that                     X
+                                                  ξ(x, {A1 , A2 , B1 , B2 , Ck }) ≤ 1 + 2β              (1)
+                            x∈{A1 ,A2 ,Bj ,Ck }
+
+then we can use the same arguments regarding the existence of two complementary equations and
+derive the equation in the statement of the claim. If agent B2 is not bad for any of the agents
+A1 , B2 , and Ck then Equation 1 holds. If B2 is bad for some of these agents then by Proposition 1
+(a) she must be neutral or bad for A2 , i.e.,
+
+                    ξ(A2 , {A1 , A2 , B1 , B2 , Ck } ≥ ξ(A2 , {A1 , A2 , Bj , Ck } > 1 − 2β.
+
+Hence we can derive Equation 1 by budget balance.
+
+   Subtracting the budget balance equation we get that
+
+                                         ξ(Ck , {A1 , A2 , B1 , B2 , Ck }) ≤ 6β.
+
+Again since we cannot use Corollary 3 we have to use different arguments to bound the payment
+of agent Ck at the set {A1 , A2 , B1 , B2 , C1 , C2 }.
+    This time we bound the sum of the payments of agents C1 and C2 and particularly we show
+that
+              ξ(C1 , {A1 , A2 , B1 , B2 , C1 , C2 }) + ξ(C2 , {A1 , A2 , B1 , B2 , C1 , C2 }) ≤ 12β. (2)
+If C2 is good for C1 at {A1 , A2 , B1 , B2 , C1 , C2 }, then the contrapositive of Proposition 1 (b) implies
+that C1 is good or neutral for C2 and the result follows. Now if C2 is bad for C1 then by Corollary 2
+the sum of the payments of agents in {A1 , A2 , B1 , B2 , C1 } has to increase. Let ∆ be the denote
+this difference, i.e.,
+                       X
+           ∆=                      ξ(x, {A1 , A2 , B1 , B2 , C1 , C2 }) − ξ(x, {A1 , A2 , B1 , B2 , C1 }).
+               x∈{A1 ,A2 ,B1 ,B2 ,C1 }
+
+By Proposition 1 (a) the payment of every agent can only increase after the inclusion of agent C2 ,
+hence, ∆ is an upper bound on the increase in the payment of C1 . Moreover, note that by budget
+balance the payment of agent C2 is less than
+
+
+
+                                                            17
+                                     X
+                       2−                             ξ(x, {A1 , A2 , B1 , B2 , C1 , C2 }) =
+                            x∈{A1 ,A2 ,B1 ,B2 ,C1 }
+                                    X
+                      2−                             ξ(x, {A1 , A2 , B1 , B2 , C1 }) − ∆ <
+                           x∈{A1 ,A2 ,B1 ,B2 ,C1 }
+                                                                              2β − ∆.
+
+    As a result,
+
+               ξ(C1 , {A1 , A2 , B1 , B2 , C1 , C2 }) + ξ(C1 , {A1 , A2 , B1 , B2 , C1 , C2 }) ≤ 8β
+
+which implies Equation 2.
+   Using the same arguments for A1 , A2 and B1 , B2 we get that
+                          X
+                                       ξ(x, {A1 , A2 , B1 , B2 , C1 , C2 }) < 36β.
+                      x∈{A1 ,A2 ,B1 ,B2 ,C1 ,C2 }
+
+                                              1
+Budget blance implies that 36β > 2 − 2β ⇔ β > 19 , which contradicts our assumption.
+
+
+5    Conclusion
+Our work is the first application of the complete characterization of group-strategyproof mecha-
+nisms, given by Pountourakis and Vidali [13]. We use the characterization to show bounds on the
+budget balance of group-strategyproof mechanisms for specific combinatorial problems. While the
+case of edge-cover is completely solved by this paper, it remains open to bound the optimal budget
+balance factor of group-strategyproof mechanisms for set-cover. Other problems of interest include
+facility location, vertex cover, Steiner tree, and Steiner forest. In the previous literature, these
+problems have only been solved using techniques involving cross-monotonic cost-sharing schemes,
+and it is known such an approach can not achieve perfect budget-balance for these problems.
+    Many constructions of cross-monotonic cost-sharing schemes rely on primal-dual schema. In
+these schemes, the natural linear-programming formulations of the combinatorial problems have
+constraints corresponding to the demand of the agents. The primal-dual scheme charges each agent
+her respective dual variable. In order to guarantee cross-monotonicity, these schemes introduce the
+notion of ghost-shares, i.e., the idea that variables contributing to a tight constraint are not frozen
+but rather keep growing and contributing to other constraints. Nevertheless, the payment of an
+agent is determined by the time that the dual variable was first involved in a tight constraint.
+    If we don’t use the ghost-share technique the resulting cost-sharing scheme is not cross-monotone.
+However, in many cases it can be used to design weakly group-strategyproof mechanisms [8]. A
+natural question that arises is whether such a cost-sharing scheme satisfies the necessary conditions
+of group-strategyproofness despite the fact that it fails to satisfy cross-monotonicity. Unfortunately,
+the following observation indicates that this may not be true. Consider a cost-sharing scheme that
+is constructed by a primal-dual scheme and does not satisfy cross-monotonicity. Note that this
+implies the existence of at least one agent i that is bad for another agent j at some set S. This
+means that the constraint that was responsible for freezing the dual variable of agent j becomes
+tight at a later time when i is present. This is only possible if there is another agent k ∈ S that
+
+                                                           18
+contributed to this constraint for subset S \{i}; however, the inclusion of agent i caused the variable
+of k to freeze earlier, which means that the payment of k has to decrease. As a result, agent i is
+bad for j and good for k which violates Proposition 1 (a).
+    The previous observation indicates that one should search beyond primal-dual schemes in order
+to design group-strategyproof mechanisms that perform strictly better than mechanisms captured
+by the cross-monotonic framework.
+
+
+
+
+                                                  19
+References
+ [1] Janina A. Brenner and Guido Schäfer. Cost sharing methods for makespan and completion
+     time scheduling. In Wolfgang Thomas and Pascal Weil, editors, STACS, volume 4393 of LNCS,
+     pages 670–681. Springer, 2007.
+
+ [2] David Buchfuhrer, Michael Schapira, and Yaron Singer. Computation and incentives in combi-
+     natorial public projects. In David C. Parkes, Chrysanthos Dellarocas, and Moshe Tennenholtz,
+     editors, ACM Conference on Electronic Commerce, pages 33–42. ACM, 2010.
+
+ [3] Nikhil R. Devanur, Milena Mihail, and Vijay V. Vazirani. Strategyproof cost-sharing mecha-
+     nisms for set cover and facility location games. Decision Support Systems, 39(1):11–22, 2005.
+
+ [4] Anupam Gupta, Jochen Könemann, Stefano Leonardi, R. Ravi, and Guido Schäfer. An efficient
+     cost-sharing mechanism for the prize-collecting steiner forest problem. In Nikhil Bansal, Kirk
+     Pruhs, and Clifford Stein, editors, SODA, pages 1153–1162. SIAM, 2007.
+
+ [5] Nicole Immorlica, Mohammad Mahdian, and Vahab S. Mirrokni. Limitations of cross-
+     monotonic cost-sharing schemes. ACM Trans. Algorithms, 4(2):1–25, 2008.
+
+ [6] Kamal Jain and Vijay V. Vazirani. Applications of approximation algorithms to cooperative
+     games. In STOC, pages 364–372, 2001.
+
+ [7] Jochen Könemann, Stefano Leonardi, Guido Schäfer, and Stefan H. M. van Zwam. A
+     group-strategyproof cost sharing mechanism for the steiner forest game. SIAM J. Comput.,
+     37(5):1319–1341, 2008.
+
+ [8] Aranyak Mehta, Tim Roughgarden, and Mukund Sundararajan. Beyond moulin mechanisms.
+     Games and Economic Behavior, 67(1):125–155, September 2009.
+
+ [9] Herve Moulin. Incremental cost sharing: Characterization by coalition strategy-proofness.
+     Social Choice and Welfare, (16):279–320, 1999.
+
+[10] Herve Moulin and Scott Shenker. Strategyproof sharing of submodular costs: budget balance
+     versus efficiency. Economic Theory, 18:511–533, 2001.
+
+[11] Martin Pál and Éva Tardos. Group strategyproof mechanisms via primal-dual algorithms. In
+     FOCS, pages 584–593. IEEE Computer Society, 2003.
+
+[12] Christos H. Papadimitriou, Michael Schapira, and Yaron Singer. On the hardness of being
+     truthful. In FOCS, pages 250–259. IEEE Computer Society, 2008.
+
+[13] Emmanouil Pountourakis and Angelina Vidali. A complete characterization of group-
+     strategyproof mechanisms of cost-sharing. In Mark de Berg and Ulrich Meyer, editors, ESA
+     (1), volume 6346 of Lecture Notes in Computer Science, pages 146–157. Springer, 2010.
+
+[14] Michael Schapira and Yaron Singer. Inapproximability of combinatorial public projects. In
+     Christos H. Papadimitriou and Shuzhong Zhang, editors, WINE, volume 5385 of Lecture Notes
+     in Computer Science, pages 351–361. Springer, 2008.
+
+
+
+                                                20
+

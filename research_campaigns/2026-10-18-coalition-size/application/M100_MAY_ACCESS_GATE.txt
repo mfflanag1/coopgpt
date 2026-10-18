@@ -1,0 +1,65 @@
+M100 MAY2020: METADATA AND SELECTIVE-BYTE FEASIBILITY, NOT A PANEL RESULT
+18 October 2026. Acquisition stopped at468,255 cumulative dataset-body bytes.
+
+SOURCE AND SELECTION
+https://zenodo.org/records/7588815/files/20-05.tar?download=1
+Original record7588815, version1.0.0, publication31 January2023, CC BY4.0.
+May was chosen chronologically as the month after the inspected April fixture,
+before any May power/state values. API archive size:6,596,945,920 bytes;
+published MD5 acc17e344755ef58a009592b362fd6bf (full archive hash NOT verified).
+
+ACTUAL ACCESS
+The public server honored exact HTTP byte ranges. The one tar-header scan
+reached the first end marker with325 requests and166,400 bytes. No payload
+read-ahead occurred. The following complete members were located:
+  nagios_pub/state/a_0.parquet          589,845 bytes
+  ipmi_pub/ps0_input_power/a_0.parquet 66,515,930 bytes
+  ipmi_pub/ps1_input_power/a_0.parquet 68,554,725 bytes
+All paths begin year_month=20-05/. Their sum135,660,500 exceeds100MB, but this
+does NOT make selective acquisition infeasible. total_power is a separate
+68,100,674-byte member; it cannot silently substitute for paired PSU input.
+
+FOOTER-ONLY SCHEMA
+Using already installed DuckDB1.4.1, nine bounded requests obtained magic,
+length and footer bytes for the three members:301,855 additional dataset bytes.
+Only schema, chunk sizes/offsets and timestamp extrema were queried. No data
+pages, power/state statistics or measured power/state outcomes were inspected.
+The FOOTER_ONLY_SPARSE.parquet files contain zero holes, not observed values;
+they must never be used as data. No package was installed.
+
+Observed PSU file columns are timestamp:int64 with UTC-adjusted millisecond
+logical type, value:int32 and node:string. State adds description, host_group,
+nagiosdrained and state_type strings. The metric/plugin identify the partition,
+not extra physical columns in these files. PSU0 has463 row groups; PSU1 has464;
+state has77. Their IDs cannot be treated as matched observations.
+
+Global timestamp metadata envelopes:
+  PSU0/PSU1: 2020-05-02 17:46:40 through2020-05-31 23:59:40 UTC.
+  State:     2020-05-11 14:42:03 through2020-05-31 23:45:00 UTC.
+These extrema do not prove any interior time coverage or node intersection.
+The common envelope spans20.3770486days, so this month alone cannot supply
+two14-day windows with concurrent state evidence, even before accounting gaps.
+
+BYTE-FEASIBLE CHRONOLOGICAL CANDIDATE
+The offline rule picks the first full UTC day after the latest of the three
+global minima:12 May2020. All row groups whose timestamp envelopes overlap
+that day contain92,136,523 bytes of relevant column chunks. Including already
+downloaded metadata gives92,604,778 bytes. Coalescing gaps of at most16,384
+bytes would require84 explicit ranges and92,759,641 cumulative bytes.
+Exact row-group IDs and member-relative half-open ranges are stored in
+m100_training_day_plan.json. This is a metadata-based acquisition estimate,
+not a download or a proof of a usable simultaneous power/state panel.
+
+The groups are poorly ordered in time and mix dates through31 May. A naive
+row-group read would therefore encounter later-May values. May cannot be
+treated as an untouched holdout after such a read. No payload was fetched.
+Before any future value work, explicitly designate the data-use boundary and
+freeze the filtering/holdout protocol. Do not let an automatic HTTP reader
+prefetch beyond the recorded range budget.
+
+OUTCOME
+Public access/schema and a bounded selective byte plan are established.
+Actual common node/time keys, missingness, state descriptions, paired PSU
+coverage, any curtailment result and any reliability estimate remain UNVERIFIED.
+The same institution/ownership/sponsor gates remain missing. This fallback
+does not replace the proposed Summit Jan1-14/Jan15-28 design.

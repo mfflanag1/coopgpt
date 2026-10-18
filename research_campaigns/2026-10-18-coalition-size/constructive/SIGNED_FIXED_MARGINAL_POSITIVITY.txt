@@ -1,0 +1,79 @@
+SIGNED FIXED MARGINALS: INDIVIDUAL TCWM FORCES COEFFICIENTWISE POSITIVITY
+2026-10-18 22:19 UTC. Exact structural lemma; no novelty claim.
+
+STATEMENT
+Fix any finite set N of actual owners, all eligible for three rows, and the
+single technology F(x,y,z)=min(x,y,z). Suppose a payment rule has the form
+ y_i(b)=sum_(T subset N\{i}) w_(i,T)[F(b_i+b_T)-F(b_T)],     (1)
+where every w_(i,T) is a fixed real number, independent of reports. Weights may
+depend arbitrarily on owner labels, population size, this public technology,
+and a common fixed report/endowment box. Every isolator below lies in the SAME
+unit box; coefficients are held fixed across all targets and restorations.
+If the rule is individually withholding-monotone at every nonnegative real
+profile, then every coefficient w_(i,T) is nonnegative. This conclusion uses
+no coalition coverage, funding bound, payment nonnegativity, or symmetry.
+It remains true if reports are restricted to the unit cube [0,1]^3. This is
+a claim about this min3 institution, not arbitrary technologies with potentially
+redundant signed marginal representations.
+
+EXACT SUBSET-ISOLATION PROOF
+Fix owner i and target subset T*. Index the other m=|N|-1 owners by j=0,...,m-1.
+Give owner j a positive scalar a_j=2^j, so every subset has a distinct integer
+sum W_T=sum_(j in T) a_j. Put W*=W_(T*) and choose 0<delta<epsilon<1.
+At the low profile set
+ b_j=(2a_j,a_j,0) for j!=i,
+ b_i=(epsilon,W*,2W*+epsilon).
+At high only owner i restores its second row by delta. Owners and eligibility
+are fixed throughout. For any T subset N\{i},
+ F(b_T)=0,
+ F(b_i+b_T)=min(epsilon+2W_T, W*+W_T, 2W*+epsilon).          (2)
+If W_T<W*, integer separation implies W_T<=W*-1. The first coordinate is the
+strict minimum before and after restoration, since epsilon<1. If W_T>W*, the
+third coordinate is the strict minimum before and after restoration. If W_T=W*,
+the second coordinate is the unique minimum, and rises by delta<epsilon.
+Unique subset sums therefore give the exact identity
+ F(b_i'+b_T)-F(b_i+b_T)=delta * 1{T=T*}.                   (3)
+As F(b_T) never changes, the owner's payment increment is
+                    y_i(b')-y_i(b)=delta w_(i,T*).        (4)
+Individual TCWM makes(4) nonnegative. Since i,T* were arbitrary, all weights
+are nonnegative. Empty and full target subsets are included without exception;
+for T*=empty, the isolated minimum at low is0 and rises to delta.
+
+BOUNDED REPORTS
+Let W_all=2^m-1 and M=2W_all+1. Take epsilon=1/4 and delta=1/8, and divide
+EVERY low and high report by M. All coordinates then belong to[0,1]; at m=0,
+M=1 and the same construction works. Homogeneity replaces delta in(3)-(4)
+by delta/M, preserving the sign. No report comparison changes the population.
+
+HIGHER ARITY
+For min_r with r>=3, give owner i sufficiently large fixed supplies in the
+remaining r-3 rows, with all other owners zero there. These rows remain strictly
+above the values in(2) at both profiles. A common scaling again puts all reports
+in[0,1]^r. Hence the same coefficientwise positivity holds on every min_r,
+r>=3. This argument does not prove the corresponding statement for min2.
+
+CONSEQUENCE USING THE ACCEPTED ROOT64 THEOREM
+The accepted input ROOT_ADJUDICATION_64_POSITIVE_MARGINAL_BARRIER.txt proves:
+on the SAME single fully eligible min_r technology, a fixed NONNEGATIVE
+whole-owner marginal rule satisfying all-coalition coverage, TCWM for |C|<=s,
+and funding kappa_n F must have liminf_(n->infinity) kappa_n>=s^(r-1)/r.
+For r>=3, the positivity lemma removes the need to assume nonnegative weights:
+individual TCWM, already a required part of TCWM<=s, forces them. Therefore
+arbitrary SIGNED report-independent whole-owner marginal rules have the same
+quadratic arity3 obstruction liminf kappa_n>=s^2/3.
+This is an architecture extension, not an unrestricted lower-bound improvement.
+It does not exclude report-dependent signed weights, fractional-resource rules,
+nonlinear payments, or general linear value formulas with independent terms
+not expressible in the marginal form(1). Source priority is unassessed.
+
+SLIGHTLY BROADER DIAGONAL FACT
+For any fixed linear rule y_i=sum_(S subset N) alpha_(i,S)F(b_S), the same
+restoration proves alpha_(i,T* union{i})>=0 for every T*. Coefficients on sets
+not containing i are invisible to this own-restoration test and remain free.
+Without additional structure, this does NOT recover the marginal form(1).
+
+EXACT CHECK
+check_signed_marginal_positivity.py/.json enumerates every target and every
+sampled subset through eight owners, and confirms the exact isolated increment
+using Fraction arithmetic and unit-cube reports. The written proof covers every
+finite population; the enumeration is a replay, not the source of the theorem.

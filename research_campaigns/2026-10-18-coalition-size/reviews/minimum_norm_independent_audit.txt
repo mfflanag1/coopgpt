@@ -1,0 +1,157 @@
+INDEPENDENT AUDIT: MINIMUM-NORM COVER OBSTRUCTION
+18 October2026. Reviewer: reserve_feasibility lane, reassigned to proof audit.
+Application records remain sealed and unchanged. No new data acquired.
+
+VERDICT
+PASS for the stated architecture rejection. I found no substantive error in
+the coalition values, minimizers, total-penalty extension, pair KKT certificate,
+budget calculation or fixed-Lp scope. This is not an unrestricted funding lower
+and does not meet the campaign's general mathematical success gate.
+Two scope clarifications and an optional sharper pair threshold appear below.
+
+AUDITED SNAPSHOT
+root/MINIMUM_NORM_COVER_OBSTRUCTION.txt
+ SHA256 d96b2671d07fef6b25f9bfc272274b76aebfff9038265a0456426492c3de245f
+checks/minimum_norm_cover_exact.py
+ SHA256 88051a57ee9317f21e7754c322f2b35ea4c07eb41482bbe38f95c44d653c48a4
+checks/minimum_norm_cover_exact.json
+ SHA256 fa57f85870a9b9f5e84c8c05c2ad03e895f3cb8a911c4f5e8a02bfac25701b97
+No root/checks file was edited or rerun in a way that writes its output.
+
+INDEPENDENT REPRODUCTION
+reviews/minimum_norm_audit_check.py imports none of the root checker. It solves
+each coalition's two-activity packing LP by enumerating all feasible vertices,
+then checks primal feasibility and a full KKT certificate for each quadratic
+solution. It enumerates ACTUAL subsets of the named owners, not just k-power
+symmetry classes. Run from campaign root:
+  python3 reviews/minimum_norm_audit_check.py
+Observed PASS:34,752 subset LPs;72 exact primal/KKT payment-profile certificates;
+R in{1,2,3,4,5,10}; lambda in{0,1/100,1/3,2/7,1,10}; rational Lp examples and
+an exact p=3 star sequence. These finite checks corroborate, not replace, the
+parametric derivations below.
+
+1. EVERY COALITION'S WORTH
+For arbitrary nonnegative capacities, the primal has x1,x2>=0,
+x1+x2<=P, x1<=X1,Y1 and x2<=X2,Y2. Its optimum is
+ min(P,min(X1,Y1)+min(X2,Y2)).
+With R equal power owners, a coalition containing k of them has P=k/R<=1.
+Each private pair contributes either0 or1, except that low A2 contributes0.
+Thus any coalition containing a complete active pair has worth k/R, and all
+other coalitions have worth0. This includes coalitions with BOTH pairs and
+incomplete mixed pairs. The root check's (k,4-bit-mask) reduction is valid;
+binomial multiplicities do not matter for checking each inequality.
+
+2. LOW MINIMIZER, INCLUDING ANY PROFILE-SPECIFIC PENALTY
+Let E be the R power owners plus A1,B1. Coverage gives sum_E y>=1. For
+nonnegative payments,
+  sum_i y_i^2 >= sum_E y_i^2 >= (sum_E y_i)^2/(R+2) >=1/(R+2).
+The proposed y=1/(R+2) on E and0 elsewhere attains every bound. It covers
+all coalitions because (k+2)/(R+2)>=k/R iff k<=R. Its total is1, the minimum
+allowed by coverage. Therefore a nondecreasing psi cannot improve on it;
+equality of the quadratic bound forces this unique vector. This argument
+does not assume the low profile's feasible set permutes power/private owners.
+
+3. EXISTENCE, UNIQUENESS AND HIGH SYMMETRY
+The quadratic term is strictly convex and coercive. A finite convex
+nondecreasing psi is bounded below by psi(0), and is continuous at every
+positive total. For F(B)>0, the feasible totals stay in that interior domain;
+a minimizer exists and is unique. For F(B)=0, y=0 uniquely minimizes directly
+by nonnegativity, monotonicity of psi and the positive quadratic term.
+
+At the HIGH profile, arbitrary power permutations and private-pair exchanges
+(including within-pair swaps) preserve the coalition-value function. They are
+transitive on the three power owners and on all four private owners separately.
+Uniqueness forces payments(t,t,t,u,u,u,u). This is an invariance of payments
+WITHIN THE FIXED PROFILE. Selecting a different scalar psi for another profile,
+or selecting psi with knowledge of owner names, does not invalidate it: at a
+given profile psi depends only on the candidate payment total.
+
+For general R, all symmetric coverage constraints are equivalent to
+  t,u>=0, R*t+2*u>=1.
+Sufficiency is the exact identity
+  k*t+2*u = (k/R)*(R*t+2*u)+(1-k/R)*2*u >= k/R.
+Any slack in the full-power constraint permits common scaling down to equality,
+strictly lowering the quadratic objective and weakly lowering psi. This holds
+also when one coordinate is zero. Hence t=(1-2u)/R, 0<=u<=1/2, T=1+2u.
+
+4. ARBITRARY CONVEX NONDECREASING TOTAL PENALTIES
+For R=3,
+  Q(u)=1/2[(1-2u)^2/3+4u^2], Q'(u)=(-2+16u)/3.
+If u>1/8, replacing it by1/8 strictly lowers Q and weakly lowers psi(1+2u).
+Thus every optimum has u<=1/8, without assuming psi differentiable. At low,
+the protected fixed coalition{A1,B1,A2} receives2/5; at high it receives3u,
+so the change is<=-1/40. A2 alone restores X2 and the other two protected
+members are unchanged, exactly as allowed by the campaign's TCWM definition.
+The restored bundle has F=0. Failure is TCWM and therefore also full OUT.
+
+5. QUADRATIC PENALTY AND PAIR KKT
+For psi(T)=lambda*T^2/2, differentiation on the equality face yields
+  u=max(0,(1-R*lambda)/(2+2R+2R*lambda)), t=(1-2u)/R.
+This matches the stated R=3 formula. At R*lambda>=1, u=0,t=1/R,T=1.
+Put multiplier mu=(1/R+lambda)/2 on each of the two full-power-plus-pair
+coverage constraints, and zero on the other coalition constraints. The power
+stationarity equation is1/R+lambda=2mu. Each zero private payment has
+nonnegativity multiplier lambda-mu=(lambda-1/R)/2>=0. Complementarity holds.
+Other coalition constraints may also be active; zero multipliers on them are
+valid. Strict convexity gives unique global optimality, not merely stationarity.
+The fixed pair{A1,A2} then changes from1/(R+2) to0. R is an integer satisfying
+R>=1/lambda. This proves the claimed pair obstruction for each fixed lambda>0.
+
+OPTIONAL SHARPENING (SAME ARCHITECTURE, NOT A NEW GENERAL LOWER)
+The boundary regime u=0 is unnecessary. In the interior R*lambda<1,
+  Delta_pair=2u-1/(R+2)
+            =[1-R(R+3)lambda]/[(R+2)(1+R+Rlambda)].
+In the boundary regime Delta_pair=-1/(R+2). Combining the regimes gives the
+EXACT threshold for this pair in this family:
+  Delta_pair<0 iff lambda>1/[R(R+3)].
+At equality the pair is unchanged. For integer s>=2 and lambda=s^(-2), R=s
+already gives a negative protected-pair change with s+4 owners. The construction still has five resource
+rows. It remains a rejection of this selector, entirely consistent with other
+efficient/bounded mechanisms on fixed-row technologies. The independent checker
+verifies this formula in all its rational cases; for R=10,lambda=1/100 it gives
+Delta_pair=-1/444 despite R*lambda=1/10<1.
+
+6. BUDGET ESTIMATE
+For a finite feasible packing value with no positive-profit resource-free
+columns, a nonnegative optimal dual vector w induces z_i=w*b_i. It is an
+efficient nonnegative all-coalition cover: sum z=F(B), sum z_i^2<=F(B)^2.
+For the specific nonnegative quadratic total penalty, optimality gives
+  lambda*T(y)^2 <= (1+lambda)*F(B)^2.
+The stated square-root budget bound is therefore correct for lambda>0.
+No such inequality is claimed for an arbitrary possibly negative psi.
+The failure is the incentive property, not this budget calculation.
+
+7. FIXED UNWEIGHTED Lp EXTENSION
+For p>1, strict convexity gives uniqueness. The low solution is still equal
+on the R+2 essential owners, by the power-mean inequality. At high R=3,
+the active-face derivative of3*t^p+4*u^p gives t^(p-1)=2*u^(p-1).
+With a=1/(p-1), t=2^a*u and u=1/(3*2^a+2). Thus1<p<=2 implies a>=1,
+u<=1/8 and the same protected size-three loss at least1/40.
+
+For fixed p>2, the separate arity-two star has full value1, one center payment
+t and M equal leaf payments u. Every nonzero coalition includes the center
+and a leaf, so coverage is exactly t+u>=1. Scaling gives equality. Minimizing
+t^p+M*u^p gives t=M^a*u and total (M^a+M)/(1+M^a), asymptotic M^(1-a).
+Since a<1, funding is unbounded with owner count. For p=3 and M=N^2 the
+total is EXACTLY N; the checker verifies N=2,4,16,64.
+
+SCOPE CLARIFICATIONS
+(a) This family does not show an unpenalized size-two TCWM failure: at lambda0,
+the pair change is +1/[(R+1)(R+2)]. The unpenalized quadratic rejection shown
+here is size-three; the positive-penalty rejection is size-two. The root's
+explicit claims respect this distinction; preserve it when summarizing.
+(b) For p>2 the demonstrated failure is BUDGET, not necessarily the same
+negative incentive increment. For example at p=3 the seven-owner protected
+size-three payment is3/(3sqrt2+2)>2/5, so that particular increment is positive.
+The last rescaling sentence should be read narrowly or clarified as:
+'Fixed positive rescaling preserves the exhibited negative increments and
+also leaves the star budget unbounded.' No p>2 incentive theorem is needed.
+(c) p=1 selection is nonunique and correctly excluded. Owner/report-dependent
+individual quadratic weights, profile-dependent p, different objectives and
+arbitrary mechanisms are outside this rejection. Scalar psi may vary by profile
+in the size-three result, as proved above.
+
+FINAL DISPOSITION
+Accept the obstruction and KKT evidence at the stated scope. Incorporate the
+optional threshold only if useful. No manuscript, root artifact, sealed source
+or other worker's note was edited by this reviewer.

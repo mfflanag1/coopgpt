@@ -1,0 +1,101 @@
+CAPPED GRAPH PRODUCTION: AN INCENTIVE-CORRECT QUADRATIC NEAR-MISS
+2026-10-18. Constructive lane. Conventional finite proof; not a new general upper.
+
+MODEL AND SCOPE
+Let G be a nonnegative packing value with at most two graph-resource rows per
+positive-profit activity. Add a separate cap row charging each activity its
+profit. This realizes the arity-at-most-three technology
+  F(P,c)=min(P,G(c)).
+Zero-profit activities can be discarded. Each actual owner i reports (P_i,c_i),
+with arbitrary mixed ownership, fixed eligibility and nonnegative real reports.
+Put P=sum_i P_i and c=sum_i c_i. Fix integer s>=1 and p=1/s. For R obtained by
+independently retaining every owner other than i with probability p, define
+  u_i(P;c_1,...,c_n)
+    =E_R[min(P,G(c_i+c_R))-min(P,G(c_R))].                (1)
+The cap P in EVERY expectation is the reported aggregate cap, not a sampled cap.
+Set
+  h(P,c)=min(1,G(c)/P) if P>0, and h(0,c)=1;
+  y_i=P_i h(P,c)+p^(-1) u_i(P;c_1,...,c_n).             (2)
+This uses full partition information through (1). All final payments are >=0.
+
+ALL-COALITION COVERAGE
+If P<=G(c), the first summand is P_i. Thus for every C,
+  y(C)>=P_C>=min(P_C,G(c_C))=F(P_C,c_C).
+If P>G(c), the cap never binds on any sampled graph bundle. Hence u_i is the
+ordinary binomial marginal of G. The standard rank-two sampled-core inequality
+  sum_(i in C) u_i >=p G(c_C)
+proves coverage, even when |C|>s. For completeness this inequality follows from
+  p sum_(i in C)u_i
+   =E_R sum_(i in C intersect R)[G(c_R)-G(c_(R\i))]
+   >=E_R G(c_(C intersect R))>=p^2 G(c_C).
+The first inequality uses optimal dual resource prices on R; the second keeps
+an optimal production plan's pieces supported on at most two actual suppliers.
+This is the previously established sparse-production argument, not a new lemma.
+
+TCWM FOR EVERY |C|<=s, INCLUDING UNCHANGED PROTECTED OWNERS
+Split a restoration into its cap and graph coordinates, with the SAME owners
+and coalition C throughout. For cap restorations graph reports are fixed.
+  cap payment to C=P_C min(1,G(c)/P)
+is nondecreasing as only members of C increase cap reports: before saturation
+its derivative is1; when P>G(c), its derivative for any changed cap coordinate
+is G(c)(P-P_C)/P^2>=0. Boundary cases follow directly or by continuity.
+Every u_i is also nondecreasing in P: for fixed a>=b>=0,
+  min(P,a)-min(P,b)
+is nondecreasing in P. Therefore all graph payments, including those of passive
+protected owners, are nondecreasing under this cap restoration.
+
+For graph restorations, P and all P_i are fixed. The cap payment to C is
+nondecreasing because G(c) is nondecreasing. To prove monotonicity of sum_C u_i,
+use the following universal finite identity. Fix any monotone value function
+v(c_S), restore a single owner j in C, and let Delta(T+j)>=0 be the resulting
+worth increment. For 0<p<1, the coefficient of Delta(T+j) in the increment of
+sum_(i in C) E[v(c_i+c_R)-v(c_R)] is
+  p^|T|(1-p)^(n-1-|T|)
+    * [1-p|C|+|T intersect (C\{j})|]/(1-p).             (3)
+It is nonnegative when p|C|<=1. This applies to v=min(P,G), despite its fixed
+cap destroying homogeneity. Restore each owner's graph bundle in sequence.
+Equation (3) includes unchanged protected members and requires no derivatives.
+For s=1,p=1, u_i=v(c)-v(c_-i) is directly monotone in i's own graph report.
+Thus (2) is TCWM for all coalitions of size at most s on all real profiles.
+No full-OUT claim is made: the fixed-cap function used in (3) is not homogeneous.
+
+FUNDING
+For the fixed-cap game v_P(R)=min(P,G(c_R)), removing each actual owner from an
+optimal capped graph production plan loses at most the value of pieces using
+that owner. Each piece uses at most two graph suppliers; the cap is held fixed.
+Consequently
+  sum_(i in R)[v_P(R)-v_P(R\i)]<=2v_P(R).
+Conditioning inclusion gives
+  p sum_i u_i<=2 E_R v_P(R)<=2 min(P,pG(c)).              (4)
+The final inequality uses concavity of min(P,G(.)); it can also be bounded
+separately by P and E G(c_R)<=pG(c). Hence
+  sum_i y_i<=F(P,c)+2p^(-2)min(P,pG(c))
+           <=(1+2s^2)F(P,c).                           (5)
+In the uncapped regime P>=G(c), (5) improves to (1+2s)F. The genuinely capped
+regime is where the second sampling loss appears.
+
+EXACT QUADRATIC OBSTRUCTION TO THIS CANDIDATE'S FUNDING
+Take N disjoint unit graph edges and 2N distinct private endpoint owners, each
+reporting one unit of its endpoint resource. One additional owner reports cap
+P=1 and no graph resources. All private owners report zero cap. The public graph
+and actual owner roster are fixed. For any endpoint owner i, its marginal is1
+exactly when its partner is sampled and none of the other N-1 complete edges
+is sampled. Therefore
+  u_i=p(1-p^2)^(N-1),
+  sum_i y_i=1+2N(1-p^2)^(N-1),   F=1.                  (6)
+Take N=s^2 and p=1/s. For s>=2 the factor is
+  1+2s^2(1-1/s^2)^(s^2-1) ~ (2/e)s^2.
+Thus no sharper analysis of (2) can yield o(s^2). This is not a lower bound on
+arbitrary mechanisms, or even on all owner-sensitive common-cap mechanisms.
+It pinpoints a specific obstacle: converting a capped graph marginal into
+uncapped graph coverage costs one 1/p, and many independent nearly active
+branches produce another 1/p in total marginal mass.
+
+SURVIVING REDUCED TASK
+A genuine improvement through this decomposition needs a different owner-aware
+extension of a graph mechanism under a shared endogenous cap. It must retain
+all-coalition coverage when P>=G, pay for passive coalition members' losses as
+new branches activate when P<G, and avoid the N=s^2 family in (6). A fixed
+positive sampling distribution or a globally shared adaptive mixture is already
+blocked elsewhere in this lane. No assertion is made that solving this special
+common-cap task suffices for every arity-three packing technology.

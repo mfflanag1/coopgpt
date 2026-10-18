@@ -1,0 +1,97 @@
+DELIVERY-INTEGRITY AND NORMALIZATION AUDIT
+2026-10-19 UTC. Auditor /root/arity3_lower. Exact time/hashes in MANIFEST.json.
+No root, author or sealed evidence file was edited. No acquisition was run.
+
+DISPOSITION
+Normalization witness: PASS, including its all-real claim.
+Portable metadata runner: saved-byte replay PASS; one verified archive-placement
+validation gap requires repair or narrower wording. This is not a claim that
+the sealed original evidence is corrupt or that its computed totals are wrong.
+
+1. NORMALIZATION WITNESS
+
+Inspected reviews/SOURCE_CONTRACT_ROOT_ADJUDICATION.txt and completed opposite
+review20261018-203842-b89bfc0a. The elementary witness validly fills the specific
+missing support identified by that snapshot review. This audit does not certify
+the literature comparison, source-page provenance, or historical priority.
+
+For fixed owners b1,b2 in[0,1], F=b1+b2, define g(t)=0 below1/2 and g(t)=t
+at or above1/2, y1=b1, y2=b2+g(b1). Since 0<=g(b1)<=b1 and g is nondecreasing,
+payments are nonnegative, each singleton is covered, and total payment is
+F+g(b1)<=2F. Hence every coalition is covered.
+
+For any actual coalition C and restoration delta supported on C,
+ Delta y(C)=sum_(i in C) delta_i + 1_(2 in C)[g(h1)-g(l1)].
+The second term is nonnegative; if owner1 is outside C it is exactly zero.
+Therefore Delta y(C)>=sum_C delta_i=F(sum_C delta_i), including unchanged
+protected members and restorations crossing the jump. This is a direct proof
+for every real report, not merely a derivative or finite-grid argument.
+
+At(2/5,1), total funding equals F and normalized owner1 gets2/5. At(1/2,1),
+F=3/2 and total payment2; proportional normalization gives owner1=3/8.
+The difference is3/8-2/5=-1/40, violating singleton TCWM. The normalized
+payment3/8 is also less than owner1's singleton worth1/2, so coverage fails.
+The chosen zero value at F=0 is consistent. No continuity assumption is needed.
+
+Supplementary Fraction checks in check_delivery_details.py cover64 profiles,
+192 coalition coverage tests and1,872 legal full-OUT comparisons, with points
+on both sides of and exactly at the discontinuity. The all-real conclusion
+rests on the formula above. These checks are not a new scientific contribution.
+
+2. PORTABLE METADATA RUNNER: CHECKED SCOPE
+
+Inspected application/verify_portable_metadata.py, REPRODUCTION_GUIDE.txt,
+and the saved metadata_integrity_PASS.json / metadata_portability_and_tamper.json
+under checks/portable_runner_validation. The inspected runner hash is
+d1d29e352fe3135f0a6086bcd434255a7bb4a58cdea391b97bf66afa8fa59852.
+
+The runner uses only the standard library and supplied local files. It checks
+logged206 responses and Content-Range arithmetic; saved body lengths and hashes;
+334 range requests totaling468,255 bytes; nonduplicate(kind,start,length) keys;
+the166,400/301,855 header/footer split; each supplied tar-entry record against
+its saved header bytes; and three declared Parquet member header/tail markers,
+footer lengths and footer hashes at report-declared offsets. The68,537-byte
+documentation count is ledger-only. It records input hashes rather than
+independently authenticating the remote release. The recorded zero outcome-read
+count is an assertion checked for consistency, not an audit of unlogged traffic.
+
+The code does not invoke a network client, acquisition code, Parquet decoder,
+footer-statistics decoder or outcome-data reader. Sparse wrappers and original
+documentation are unnecessary. Its stated exclusions of remote authenticity,
+physical feasibility and ownership/sponsor rights are appropriate.
+
+Independently copied exactly the339 inputs listed by the saved PASS record
+into a temporary directory under this audit's ownership. All original input
+hashes matched. The runner's baseline output matched the saved output apart
+from its new timestamp. A one-byte change in a copied range file was rejected
+with “Saved range mismatch”. Temporary copies were then removed. Originals
+were untouched; no footer statistics or power/state values were decoded.
+
+3. VERIFIED FINDING: SELECTED MEMBER IS NOT TIED TO PARSED TAR ENTRY
+
+The runner validates headers['entries'] against actual tar bytes, but uses
+headers['selected_members'] to locate footers without checking that each
+selected(name,offset,size,type) equals one of those validated entries.
+
+Concrete isolated-copy test: change the first selected member's name and the
+corresponding footer member's name to an audit-only name absent from every
+parsed tar entry. Leave all range bodies, request logs, offsets, sizes and
+hashes untouched. The runner returns PASS. Its input-hash inventory changes,
+but the runner itself does not compare report hashes to an external manifest.
+An external authenticated bundle manifest could reject the changed reports;
+that is separate from the runner's advertised placement validation.
+
+This is a meaningful gap in associating declared footer names with archive
+members. It does not refute the body hash, byte count or numeric-offset checks.
+
+Recommended repair: before footer checking, require unique selected names and
+require every selected(name,offset,size,type) to match exactly a tar entry
+already validated from saved bytes. Then require every footer member to resolve
+to one such selected entry. Re-run the sealed copy and this mismatch fixture.
+Alternatively explicitly narrow “archive placement” / “hashes/placement” to
+“range hashes and report-declared offsets; selected-member identity linkage
+is trusted”. The exact linkage check is preferable and requires no new data.
+
+The finding and original successful replay are recorded in
+check_delivery_details.json. No third-party text extraction, article passage
+or source snippet is included in this audit's portable outputs.

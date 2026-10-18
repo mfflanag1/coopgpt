@@ -1,0 +1,206 @@
+FINITE ALL-REAL CERTIFICATES FOR CONTINUOUS PIECEWISE-AFFINE PAYMENTS
+2026-10-18. Constructive-method result on a SUPPLIED finite rational partition.
+No completeness claim for arbitrary mechanisms, polynomial global-coverage
+claim, funding improvement, or historical priority claim is made.
+
+DEPENDENCY
+root/LOCAL_INCENTIVE_SEPARATION.txt, independently audited in
+reviews/local_incentive_audit/AUDIT.txt. The local sorting and input-assignment
+equivalences are reused. Continuity replaces separate face admission within
+the restricted payment class considered here.
+
+1. FIXED DATA AND REPRESENTATION
+There are n fixed actual owners and d resource rows. Owner i has a fixed
+nonnegative rational endowment bar_b_i. Remove coordinates with zero endowment
+from the variable list, but DO NOT remove their owners from coalition tests.
+Let m be the number of remaining report coordinates, indexed by (i,a), and
+D=[0,bar_b] the m-dimensional report box. For coalition C, S_C is the fixed
+d-by-m aggregation matrix, so S_C b=sum_(i in C)b_i. Actual owners never change.
+
+Production is F(c)=max{pi^T x:A x<=c,x>=0}, with finite rational A,pi>=0.
+Remove zero-profit columns; every remaining activity uses a nonempty set of
+positive input rows. Hence F is finite on finite bundles, continuous,
+positively homogeneous, monotone, concave, and F(0)=0. Its maximum arity is r.
+The case with no remaining activities is allowed and has F=0.
+
+Supply finitely many bounded rational full-dimensional closed polytopes
+ P_t={b:H_t b<=g_t} subset D, t=1,...,T, whose union is D.
+A face-to-face partition suffices; a finite closed cover also suffices when
+formulas agree on overlaps. Every boundary point belongs to at least one
+such full-dimensional cell. Geometry, including covering, is part of the
+certificate data and must be verified; sample points do not verify it.
+The m=0 case is trivial: F=0 and all nonnegative finite-funded payments are0.
+
+On cell t specify
+                  y_i(b)=a_(t,i)^T b+h_(t,i).             (1)
+Write a_(t,C)=sum_(i in C)a_(t,i), h_(t,C)=sum_(i in C)h_(t,i).
+The funding factor kappa is finite and nonnegative. Rational coefficients and
+rational witnesses allow exact certificate checking.
+
+2. SHARED-BOUNDARY CONSISTENCY AND NONNEGATIVITY
+For each cell pair t,u, owner i, and vertex v of P_t intersect P_u, impose
+ (a_(t,i)-a_(u,i))^T v+h_(t,i)-h_(u,i)=0.                 (2)
+Empty intersections impose nothing. Affine functions agree throughout a
+bounded polytope exactly when they agree at its vertices. Thus these finite
+equalities make (1) a single continuous function on D. Lower-dimensional
+intersections, zero-coordinate faces and corners are included. A verified
+adjacency list can reduce this work, but testing every pair is sufficient.
+
+For every cell vertex v and every owner i impose
+                       a_(t,i)^T v+h_(t,i)>=0.           (3)
+This is exactly nonnegativity throughout D. Zero-report owners retain their
+payment variables and coalition eligibility; no extra zero-payment condition
+on individual zero reports is assumed.
+
+3. ALL-REAL, ALL-COALITION COVERAGE IS A FAMILY OF LINEAR PROGRAMS
+For EACH actual coalition C, of ANY size, and each cell t, form
+ max_{b,x} pi^T x-a_(t,C)^T b-h_(t,C)
+ subject to H_t b<=g_t, A x<=S_C b, x>=0.               (4)
+The b variables are free here; their box restrictions are included in H_t.
+The optimum is finite and attained. It is at most0 exactly when
+Y_C(b)>=F(S_C b) throughout P_t. This searches all simultaneous mixed reports.
+
+An equivalent finite LP-dual certificate is u_(t,C)>=0, p_(t,C)>=0 with
+ H_t^T u_(t,C)-S_C^T p_(t,C)=-a_(t,C),
+ A^T p_(t,C)>=pi,
+                      g_t^T u_(t,C)<=h_(t,C).           (5)
+All constraints are LINEAR jointly in payment coefficients and witnesses.
+Indeed a_C^T b=p^T S_C b-u^T H_t b, so for any feasible production x,
+ a_C^T b+h_C>=p^T S_C b-u^T g_t+h_C>=p^T S_C b>=pi^T x.
+Necessity follows from finite LP strong duality for (4).
+
+Coverage cannot generally be checked only at cell vertices: F is concave,
+so F-minus-affine can peak between them. On the triangle b1,b2>=0,
+b1+b2<=1 with F=min(b1,b2), zero payments cover all three vertices but fail
+at (1/2,1/2), with shortfall1/2. The checker includes this exact test.
+There can be 2^n coverage coalitions. The local incentive oracle does NOT
+supply a polynomial all-coalition coverage oracle.
+
+4. FUNDING HAS AN EXACT VERTEX TEST
+For every vertex v of every cell compute f_v=F(S_N v), and impose
+                       a_(t,N)^T v+h_(t,N)<=kappa f_v.  (6)
+This is equivalent to funding on D. For b=sum_l lambda_l v_l in one cell,
+ Y_N(b)=sum_l lambda_l Y_N(v_l)
+       <=kappa sum_l lambda_l F(S_N v_l)
+       <=kappa F(S_N b),
+using concavity and kappa>=0. Exact primal and dual optimal solutions certify
+each rational f_v. These values depend only on the fixed geometry/technology,
+so (6) is linear even when kappa is a synthesis variable.
+
+Alternatively use a COMPLETE finite representation F(c)=min_h p_h^T c by
+the needed extreme dual covers of Q={p>=0:A^T p>=pi}, and impose
+Y_N(v)<=kappa p_h^T S_N v for every v,h. A merely selected feasible-dual list
+is insufficient: its minimum can exceed F, giving the wrong funding bound.
+
+Conditions (3) and (6) force all payments to vanish at EVERY zero-output
+profile, even away from cell vertices. This follows from proved global
+funding/nonnegativity and is not a sample-based inference.
+
+5. EXACT LOCAL INCENTIVES ON EACH CONSTANT JACOBIAN
+Fix s>=1, replacing s by min(s,n). On cell t let
+ J_t[i;j,a]=(a_(t,i))_(j,a).
+Every globally eligible coordinate (bar_b_(j,a)>0) is an interior coordinate
+at interior points of each full-dimensional cell. For each such (j,a), set
+z_i=J_t[i;j,a]. TCWM is equivalent locally to
+ z_j+Neg_(s-1)(z;{j})>=0,                                (7)
+where Neg_k sums the up to k most negative entries outside the excluded set.
+The sort includes passive and zero-report actual owners.
+
+For FULL OUT additionally test every positive-profit activity e and every
+assignment f of each input row a of e to an eligible actual owner f(a).
+Let D_f be its image; skip assignments with |D_f|>s. Define
+ z_i(e,f)=sum_(a in supp(e)) A_(a,e) J_t[i;f(a),a].
+Impose
+ sum_(i in D_f)z_i(e,f)+Neg_(s-|D_f|)(z(e,f);D_f)>=pi_e.  (8)
+An activity with a globally unavailable input row has no assignment and cannot
+produce from any feasible restoration. Condition (7) is still required.
+
+The audited local theorem says (7), respectively (7)+(8), is equivalent to
+the appropriate derivative inequality for EVERY protected actual C and EVERY
+nonnegative direction d supported on C:
+ sum_(i in C)a_(t,i)^T d>=0, or >=F(S_N d).
+Whole-input assignments are a separating device, not a change in ownership;
+production duality then controls arbitrary distributed restorations.
+
+6. GLOBAL FINITE INCENTIVE COMPARISONS, INCLUDING ALL BOUNDARIES
+Take any feasible b to b+d in D, d>=0 supported on one fixed protected C.
+A segment meets finitely many closed cells. Subdivide at the endpoints of
+their intersection intervals. On each resulting open interval at least one
+full-dimensional cell contains the whole interval, so Y_C has that cell's
+affine formula there. This also holds when the segment lies in a common face.
+Agreement makes the directional derivative independent of the chosen formula.
+
+Apply the derivative bound from (7), or (7)+(8), and sum interval lengths.
+Continuity cancels all endpoint terms and gives zero-face admission as equality.
+Therefore
+             Y_C(b+d)-Y_C(b)>=0, or >=F(S_N d).          (9)
+No face Jacobians or generic-position assumptions are needed. Conversely,
+global TCWM/OUT of a rule of form (1) implies the local tests: choose a cell
+interior point, scale a tested direction enough to stay inside, and divide
+the finite inequality by that scale. Such points have every eligible report
+strictly between0 and its endowment. Thus these tests are also necessary
+within the stated continuous piecewise-affine class.
+
+7. FINITE SYNTHESIS LP AND CERTIFICATE FORMAT
+For a fixed verified partition, use variables a_(t,i), h_(t,i), kappa>=0 and
+u_(t,C),p_(t,C) for each cell and nonempty actual coalition. Impose (2),(3),
+(5),(6), and the linear expansions of (7), optionally (8); minimize kappa.
+A negative-entry sum is a minimum of finitely many linear coalition sums.
+Its lower bound is therefore a finite family of linear inequalities, separable
+by the audited sorting/assignment oracle without materializing every one.
+Consequently feasibility and the best finite kappa WITHIN THIS FIXED-PARTITION
+CLASS are finite rational LP questions. If feasible, minimizing kappa has a
+finite attained rational optimum: the objective is bounded below by0 and
+the constraint system is a finite rational polyhedron. This restricted
+attainment statement does not concern the unrestricted mechanism infimum.
+
+For fixed r, local separation is polynomial in the explicit technology and
+owner count at ONE cell Jacobian. The full representation can be enormous:
+cells, vertices, intersections, coverage coalitions and geometry verification
+all count. Dual variables in (5) are proof witnesses, not payments/new owners.
+Actual affine formulas and continuity impose integrability automatically.
+
+A certificate contains fixed owners/endowments and rational technology;
+verified cell geometry; affine formulas and kappa; boundary/nonnegativity
+vertex checks; coverage duals (5); production LP certificates at funding
+vertices; and exact local incentive checks. A failing coverage LP returns
+an actual rational report and feasible production. A failing local test
+returns actual owners/direction and becomes a finite violation after small
+scaling at an interior point. Continuity failure rejects this representation
+class; by itself it need not show every possible discontinuous choice fails.
+
+For homogeneous PL payments, use a finite rational conic partition intersected
+with D and set every h_(t,i)=0. The same conditions then certify homogeneity
+along every feasible ray, in addition to the original mechanism properties.
+
+8. GEOMETRIC VERIFICATION AND SCOPE
+Containment in D can be imposed directly by including its bounds in each H_t.
+Cell nonemptiness/full dimension and all vertex/intersection computations are
+finite rational polyhedral questions. Covering a box by an arbitrary supplied
+finite list is also a finite question, but may be expensive. For example,
+a point outside every closed cell chooses a violated inequality from each
+cell. Enumerate these choices and test whether some b in D and epsilon>0
+satisfy h_(t,chosen)^T b>=g_(t,chosen)+epsilon for all t. One can maximize
+epsilon with 0<=epsilon<=1 by an exact LP. Covering holds exactly when no such
+choice has a positive optimum (or feasible point with positive epsilon).
+This is a correctness procedure, NOT a polynomial complexity assertion.
+A complete hyperplane-arrangement subdivision has covering by construction.
+
+The universal rule y_i(b)=F(S_N b) is representable on a partition refining
+the finite production dual-price regions. It has funding n and all coverage
+by monotonicity; full OUT follows from packing superadditivity:
+F(B+d)-F(B)>=F(d), and a nonempty coalition sums at least one such increment.
+It is a calibration witness, not a new funding improvement.
+
+A supplied partition can be too coarse. With two pure owners, F=min(b1,b2),
+and the whole square as ONE cell, finite funding and nonnegativity force every
+affine payment to vanish on both axes and hence everywhere, violating grand
+coverage. Fixed-partition infeasibility says nothing about finer partitions.
+
+Continuity is an explicit additional restriction. The facewise-smooth/
+admission theorem allows certain boundary discontinuities. No result here
+says continuous PL rules attain or approximate the unrestricted infimum.
+Approximate gridding/interpolation can spoil coverage, incentives, or funding
+near zero-output profiles. This is a finite language for certifying supplied
+all-real upper candidates, not a completeness theorem or better K3 bound.
+

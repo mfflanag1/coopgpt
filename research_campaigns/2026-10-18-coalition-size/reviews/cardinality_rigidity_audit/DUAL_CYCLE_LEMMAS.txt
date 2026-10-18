@@ -1,0 +1,163 @@
+FINITE-PROFILE DUAL: VALID CYCLE REDUCTIONS AND A COUPLING OBSTRUCTION
+Independent derivation, 18 October 2026. Exact computational consequences,
+but no O(s), o(s^2), or other unrestricted funding improvement.
+
+SETUP
+Use the actual finite dual in reviews/cross_profile_duality/
+FINITE_AND_ALL_PROFILE_DUAL.txt. For profiles Q, a comparison (l,h,C) has
+mu_(l,h,C)>=0, contributes +mu to every (h,i), i in C, and -mu to every
+(l,i), i in C. Coverage and budget multipliers are lambda and nu. TCWM has
+comparison objective zero; full OUT has mu F(delta_(l,h)). Each actual owner
+has its full resource vector throughout. The finite LP includes ALL legal
+endpoint comparisons among Q. This closure matters for shortcut edges.
+
+1. THERE ARE NO NONTRIVIAL DIRECTED PROFILE CYCLES
+For distinct comparable profiles, the sum of all reported resource coordinates
+strictly increases along a restoration. Therefore the directed comparison graph
+is already acyclic. Equal-endpoint comparisons have a zero row and RHS and can
+be dropped. Merely invoking standard directed-cycle cancellation cannot improve
+this dual: there are no such cycles to eliminate.
+
+2. EXACT PER-COALITION SOURCE--SINK FOREST NORMAL FORM
+Lemma. Fix a feasible finite dual. It can be replaced by one with the SAME
+lambda,nu and the SAME owner/profile balances, with the same TCWM objective
+or a weakly larger full-OUT objective, such that for each protected C:
+ (a) no profile has both a positive incoming and positive outgoing C-edge;
+ (b) the undirected support of its C-edges is a forest;
+ (c) there are at most |Q|-1 positive C-edges.
+Consequently, whenever the finite LP has an optimal dual, it has one with
+at most (|Q|-1) sum_(j=1)^min(s,n) binom(n,j) positive comparison variables.
+The statements apply to arity three, and in fact to every finite nonnegative
+packing technology. No new arity-dependent estimate is hidden in this bound.
+
+Proof. For a fixed C, view mu as a nonnegative scalar flow on its acyclic
+profile graph, with divergence d_p=incoming-outgoing. Standard finite flow
+decomposition with these prescribed supplies/sinks expresses it as weighted
+paths from d_p<0 to d_p>0. Replace each such path by its direct endpoint edge.
+All intermediate changes involve only C and are coordinatewise restorations,
+so that endpoint comparison is legal, still protects exactly C, and is in Q.
+The scalar divergence is unchanged. Its contribution to every owner balance
+is d_p times the SAME indicator 1_(i in C), so all coupled balances are unchanged.
+For OUT, delta_path is the sum of its successive restored resource bundles.
+Superadditivity gives F(delta_path)>=sum_path F(delta_edge); multiplying by
+the nonnegative path weight shows that the objective cannot decrease. TCWM's
+objective does not involve mu. The resulting graph is bipartite from its
+negative-divergence sources to positive-divergence sinks, proving (a).
+
+If this bipartite support contains an undirected cycle, it has even length.
+Alternately add/subtract a scalar theta along its edges. This preserves every
+scalar divergence. Choose the sign whose linear OUT objective change is
+nonnegative (either sign works for TCWM), then increase theta until some edge
+weight reaches zero. No new support edge is introduced. Iteration terminates
+with a forest; a forest on at most |Q| nonisolated vertices has at most |Q|-1
+edges. Repeating independently for each C proves the lemma. It cannot increase
+the optimum value because the resulting dual remains feasible with unchanged
+budget denominator. This also explains the optimal-dual assertion.
+
+Concrete consequence: in a finite certificate search, same-coalition comparison
+depth is unnecessary, and a certificate can be normalized to the above explicit
+support bound. For OUT, shortcutting can strengthen a candidate certificate.
+For example, one owner restoring A then B+C in min(A,B,C) has two zero OUT
+increments but the direct A+B+C restoration has outside value one. Endpoint
+coefficients agree exactly. This is a useful reduction, not a funding theorem.
+
+3. WHY THE COALITION LABEL CANNOT BE ERASED: EXACT ARITY-THREE EXAMPLE
+There are three fixed actual owners with unit-cube reports and the single
+unit-profit activity F(A,B,C)=min(A,B,C), of arity exactly three. Use bundles
+  L=(1,0,1), R=(0,1,1), 0=(0,0,0).
+At all these profiles and coalitions the third total is A+B, so coalition
+production equals min(number of L, number of R). The witness uses the six
+permutations of (0,L,R) as low profiles, and the six profiles of types LLR/RRL
+as high profiles. Every high profile has total production one.
+
+At each low profile restore its zero owner to L, protecting that owner together
+with the unchanged L owner; also restore it to R, protecting it with the
+unchanged R owner. These are 12 legitimate pair-TCWM edges. Assign:
+ - weight 1/4 to each such comparison;
+ - weight 1/4 to grand-coalition coverage at each low profile;
+ - weight 1/2 to each unlike-pair coverage at each high profile (12 rows);
+ - budget multiplier one at each of the six high profiles.
+
+At each high profile both majority owners receive coefficient one after adding
+the two incoming comparison contributions and the unlike-pair coverages; the
+minority owner also receives coefficient one. At each low profile the L and R
+owner coefficients are zero and the zero-owner coefficient is -1/4. Thus g<=nu
+exactly. The nonnegative-payment slack at that low zero owner is 1/4; no
+dummy-zero assumption is imposed. Coverage numerator is 6/4+12/2=15/2,
+budget denominator is 6, and the valid lower ratio is 5/4.
+
+Every edge goes directly from a low to a high profile. For each fixed protected
+pair, the support is already two disjoint two-edge stars, hence a forest in
+the normal form of Section 2. The UNLABELED profile graph is a 12-cycle. But
+the 12 ACTUAL comparison columns are linearly independent: each edge has a
+unique low-profile/incumbent-owner coordinate. That row appears in no other
+comparison column. Therefore no nonzero signed change of the 12 comparison
+weights can preserve all owner/profile balances. The alternating unlabelled-
+cycle perturbation preserves aggregate profile flow but changes owner balances.
+
+Consequences: even an arity-three, pair-protected, per-coalition forest dual
+can obstruct K=1. Unlabelled cycle elimination is invalid unless one also
+proves how to change coverage/budget multipliers while controlling the ratio.
+This example rejects the naive cancellation, not every conceivable theorem
+using cycles and not the existence of some other certificate representation.
+
+4. AN EXACT COMPARISON-BLOCK COMPRESSION THAT RETAINS THE COUPLING
+For a fixed nontrivial endpoint pair l<h, let D be the set of owners whose
+reports change, d=|D|. Legal coalitions are exactly D subset C, |C|<=s; if d>s
+there is no such comparison. Suppose d<=s and define
+  M=sum_C mu_C,   w_i=sum_(C containing i) mu_C.
+The EXACT cone of allowable owner-incidence vectors is
+  M>=0;
+  w_i=M for i in D;
+  0<=w_i<=M for i outside D;
+  sum_(i outside D) w_i <=(s-d)M.                       (10)
+
+Necessity is immediate. For sufficiency, if M=0 all weights vanish. Otherwise
+x_i=w_i/M on the unchanged owners lies in the uniform-matroid independent-set
+polytope {0<=x_i<=1, sum x_i<=s-d}. Every vertex is integral: with two fractional
+coordinates one can perturb them oppositely if the sum constraint binds; with
+slack, a fractional coordinate can be perturbed alone; with exactly one
+fractional coordinate and a binding integer sum it cannot be fractional.
+Thus x is a convex combination of indicators of subsets J of size <=s-d.
+Multiplying those convex weights by M and setting C=D union J gives valid
+comparison multipliers realizing w. Caratheodory needs at most n-d+1 sets.
+
+Replace the whole coalition family for that endpoint pair by M,w satisfying
+(10), with +w at h and -w at l in the owner balances. For OUT its objective
+is M F(delta), because the restored bundle depends only on the endpoints,
+not on which unchanged owners join C. For TCWM it is zero. This is an exact
+extended formulation of the comparison block, not independent owner flows.
+
+Explicit consequence: for q=|Q| profiles the comparison part has O(n q^2)
+variables and inequalities rather than q^2 times an exponential coalition
+family. Separation in primal payments for one pair is equally explicit:
+take sum_(i in D) Delta y_i, and add the up to s-d most negative unchanged-
+owner increments. A negative result is exactly a violated protected-coalition
+constraint. This needs O(n log n) time by sorting. The coverage block still
+contains all coalitions, and this does not make the full all-profile problem
+polynomial or prove any bound depending only on s.
+
+In particular the restoring owner cannot disappear from (10): every changed
+owner receives coefficient M, and every passive coefficient is at most M.
+The previously rejected owner-only-flow relaxation violates this condition.
+
+5. ZERO-PRODUCTION PROFILE PRUNING
+One more exact simplification: profiles with f_p=0 can be omitted without
+changing the finite optimum K_Q. Their payment vectors are forced to zero.
+An outgoing comparison from such l to h has nonnegative high coalition payment
+under TCWM. Under OUT, coverage at h gives y_C(h)>=F(b_C(h))>=F(delta), so it
+is also redundant. A comparison entering a zero-output profile must start at
+zero output by monotonicity. This eliminates these vertices without inspecting
+the mechanism, but does not eliminate individual zero-report owners at positive
+profiles, such as the low profiles in Section 3.
+
+STATUS AND PRECISE MISSING STEP
+The valid lemmas provide certificate normalization, stronger OUT shortcut rows,
+and an exact polynomial-size comparison block for a chosen finite profile set.
+They use actual owners and preserve their coalition coupling. The arity-three
+witness rules out the simple cross-coalition cycle cancellation. Nothing here
+bounds the interaction of different protected coalitions and different optimal
+production-price faces by O(s) or o(s^2). A funding improvement would require
+an additional inequality controlling that interaction while preserving (10)
+and all coalition coverage. The normal-form support bound still depends on the
+profile/owner counts, and is not a research-success-gate result.

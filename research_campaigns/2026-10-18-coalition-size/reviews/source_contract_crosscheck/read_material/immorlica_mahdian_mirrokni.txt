@@ -1,0 +1,1145 @@
+             Limitations of cross-monotonic cost-sharing schemes∗
+                Nicole Immorlica†              Mohammad Mahdian∗                  Vahab S. Mirrokni‡
+
+
+
+                                                        Abstract
+           A cost-sharing scheme is a set of rules defining how to share the cost of a service (often computed
+       by solving a combinatorial optimization problem) amongst serviced customers. A cost-sharing scheme
+       is cross-monotonic if it satisfies the property that everyone is better off when the set of people who
+       receive the service expands. In this paper, we develop a novel technique for proving upper bounds on
+       the budget-balance factor of cross-monotonic cost-sharing schemes. We apply this technique to games
+       defined based on several combinatorial optimization problems including the problems of edge cover,
+       vertex cover, set cover, and metric facility location, and in each case derive tight or nearly-tight bounds.
+       In particular, we show that for the facility location game, there is no cross-monotonic cost-sharing scheme
+       that recovers more than a third of the total cost. This result together with a recent 1/3-budget-balanced
+       cross-monotonic cost-sharing scheme of Pál and Tardos closes the gap for the facility location game.
+       For the vertex cover and set cover games, we show that no cross-monotonic cost-sharing scheme can
+       recover more than a O(n−1/3 ) and O( n1 ) fraction of the total cost, respectively. Finally, we study the
+       implications of our results on the existence of group-strategyproof mechanisms. We show that every
+       group-strategyproof mechanism corresponds to a cost-sharing scheme that satisfies a condition weaker
+       than cross-monotonicity. Using this, we prove that group-strategyproof mechanisms satisfying additional
+       properties give rise to cross-monotonic cost-sharing schemes and therefore our upper bounds hold.
+
+
+1 Introduction
+Consider a situation where a group of customers (which we call agents) wish to buy a service such as con-
+nectivity to a network. The total cost of this service is a function of the group of customers that is serviced: a
+group of customers in distant towns might incur a larger cost than a group of customers in the same town. The
+service provider must develop a pricing policy, or cost-sharing scheme, that, given any group of customers,
+divides the cost of the service amongst them. For example, one plausible cost-sharing scheme divides the
+cost of the service evenly amongst the customers. However, in the case of network connectivity, this scheme
+seems to undercharge distant customers with high connection costs and overcharge other customers.
+    Developing a fair and economically viable cost-sharing scheme is a central problem in cooperative game
+theory (see, for example, [23] and [34]). The question of what constitutes an equitable cost-sharing is diffi-
+cult to define and has been the subject of centuries of thought, dating from Aristotle’s proclamation of “equal
+  ∗
+      A preliminary version of this paper appeared in [13].
+   †
+      Microsoft Research, Redmond, WA 98052, USA. Email: {nickle,mahdian}@microsoft.com. The first author was supported
+in part by an NSF fellowship. The second author was supported by a Microsoft fellowship.
+    ‡
+      Computer Science and Artificial Intelligence Laboratory, MIT, Cambridge, MA 02139, USA. Email:               mir-
+rokni@theory.csail.mit.edu. Research was supported in part by NSF contracts ITR-0121495 and CCR-0098018.
+
+
+                                                            1
+treatment of equals and unequal treatment of unequals in proportion to their inequality” in his book on Nico-
+machean Ethics [1] through modern times. One plausible notion of equity is that of cross-monotonicity
+or population monotonicity (see [32] for a survey). Intuitively, cross-monotonicity requires that the price
+charged to any individual in a group does not increase as the group expands. There is a large body of litera-
+ture [5, 6, 12, 16, 22, 26, 29, 31] on cross-monotonic cost-sharing schemes for submodular cost functions1 , a
+subclass of cost functions of particular interest. Many mechanisms exist, prominent among them the Shapley
+value [29], which minimizes the worst-case efficiency loss, and the Dutta-Ray solution [6]. Both of these are
+budget-balanced and cross-monotonic for any submodular cost function.
+    There are many other interesting classes of cost functions that arise from (often NP-hard) optimization
+problems. For example, the cost of providing the service for a set S of agents could be expressed as the cost
+of building the cheapest Steiner tree that covers the elements of S, or the minimum cost of opening facilities
+and connecting each member of S to an open facility. These two games, and many others of practical import,
+are instances of covering problems. For such problems, it is usually impossible for a cross-monotonic cost-
+sharing scheme to be budget-balanced. Moreover, even if a budget-balanced cross-monotonic cost-sharing
+scheme exists, it might be hard to compute. Therefore, it is natural to consider cost sharing schemes that are
+approximately budget balanced, that is, they recover only a fraction of the cost of the service.2 Approximately
+budget-balanced schemes have been proposed for minimum spanning tree [14, 17], Steiner tree [14], Steiner
+forest [18], facility location [25], and connected facility location [20].
+    We can derive simple bounds on the budget-balance factor of combinatorial optimization games using the
+integrality gaps of the “natural” LP-relaxations. The cross-monotonicity of a cost-sharing scheme implies
+that for every set of agents the cost shares form an allocation in the core of the game (see Section 2 for
+definitions). Therefore, the best budget-balance factor achievable by a cross-monotonic cost-sharing scheme
+cannot be better than that of a cost sharing in the core. A simple extension of the classic Bondareva-Shapley
+theorem [3, 28] implies that the best budget-balance factor for a cost sharing in the core of integer covering
+games is equal to the integrality gap of the “natural” LP-relaxation of the problem (this fact was observed
+by Jain and Vazirani [14]). This line of reasoning proves bounds on cross-monotonic cost-sharing schemes
+for many combinatorial optimization games. In particular, metric facility location, vertex cover, and set
+cover games cannot recover more than a 1.463 1
+                                                , 12 , and ln1n fraction of the total cost, respectively. Prior to this
+work, this was the only method known for upper bounding the cross-monotonic cost-sharing schemes. In this
+paper, we show stronger upper bounds for several combinatorial optimization games using a novel technique
+based on the probabilistic method that will be explained in Section 3. In particular, we prove that the best
+budget-balance factor achievable for the facility location game is 13 , proving optimality of the scheme given
+by Pál and Tardos [25]. Also, for the vertex cover and set cover games, we show that no cross-monotonic
+cost sharing scheme can recover more than an O(n−1/3 ) and O( n1 ) fraction of the total cost, respectively. We
+also apply this technique to several other games including the maximum flow and the maximum matching
+games. In subsequent work, Könemann et al. [19] used our techniques to prove a tight bound of 21 on the
+budget-balance factor of the Steiner tree game.
+    As observed by Moulin [22], cross-monotonic cost-sharing schemes can be used to construct group strat-
+   1
+     Sometimes called concave games in the cooperative game theory literature.
+   2
+     Alternatively, we can relax the definition of budget balance by allowing the scheme to recover at least the cost of the service and
+at most a small multiple of the cost of the service. This definition seems more reasonable, since a business usually needs to at least
+recover its costs. However, the two definitions are equivalent up to a constant multiple. To be consistent with other papers on this
+topic, we use the first definition in this paper.
+
+
+
+                                                                   2
+egyproof mechanisms, or mechanisms which resist collusion among the agents. In fact, almost all known
+group-strategyproof mechanisms are constructed in this manner. However, as our results indicate, many
+classes of important cost functions fail to have budget-balanced cross-monotonic cost-sharing schemes. As
+we know that there are group-strategyproof mechanisms that do not correspond to any cross-monotonic cost-
+sharing scheme, our negative results for cross-monotonic schemes do not immediately imply negative results
+for group-strategyproof mechanisms. However, we give a partial characterization of group-strategyproof
+mechanisms in terms of cost-sharing schemes that satisfy a condition weaker than cross-monotonicity, and
+use this characterization to prove that group-strategyproof mechanisms that satisfy an additional condition
+called upper continuity give rise to cross-monotonic cost-sharing schemes, and therefore our negative results
+apply to such mechanisms.
+    The rest of this paper is organized as follows. In Section 2, we present the definitions of cross-monotonic
+cost-sharing schemes. Section 3 contains a description of our upper bound technique, highlighted by the
+example of the edge cover game (Section 3.1), and proof of bounds for the set cover game (Section 3.2), the
+vertex cover game (Section 3.3), the facility location game (Section 3.4) , and several combinatorial profit-
+sharing games (Section 3.5). In Section 4 we define group-strategyproof mechanisms and prove several
+results relating such mechanisms to cost-sharing schemes.
+
+
+2 Definitions
+Let A denote a set of n agents who are interested in a service. A cost-sharing game is defined by a function
+C : 2A 7→ R+ ∪ {0} which for every set S ⊆ A , gives the cost C(S) of providing service to S.3 A cost
+allocation for a set S ⊆ A is a function ψ : S 7→ R+ ∪ {0}, that for each agent i ∈ S, specifies the share
+ψ(i) of i in the total cost of servicing S. A cost-sharing scheme is a collection of cost allocations for every
+S ⊆A.
+
+Definition 2.1 A cost-sharing scheme is a function ξ : A × 2A 7→ R+ ∪ {0} such that, for every S ⊂ A
+and every i 6∈ S, ξ(i, S) = 0.
+
+Intuitively, we think of ξ(i, S) as the share of i in the total cost if S is the set of agents receiving the service.
+    Ideally,Pwe want cost-sharing schemes (and cost allocations) to be budget-balanced, that is, for every
+S ⊆ A , i∈S ξ(i, S) = C(S). Budget-balance is desirable as it guarantees economic viability of the
+auction. However, it is not always possible to achieve budget balance in combination with other properties,
+or even if it is possible, it might be computationally hard to compute the cost shares. Therefore, we relax this
+notion to the notion of α-budget balance (for some α ≤ 1).
+                                                                                                                    P
+Definition 2.2 A cost-sharing scheme ξ is α-budget-balanced if, for every S ⊆ A , αC(S) ≤                              i∈S ξ(i, S) ≤
+C(S).
+
+    This definition guarantees that the mechanism does not over-charge agents, but it may under-charge them.
+Alternatively, one could define α-budget balance as C(S) ≤ i∈S ξ(i, S) ≤ α1 C(S) and equivalently relax
+                                                             P
+
+   3
+    This is similar to the notion of a coalitional game with transferable payoff, where the cost function is replaced by a function that
+gives the value, or the worth of each set. This notion was first defined by von Neumann and Morgenstern [33].
+
+
+                                                                   3
+the notion of α-core (see Definition 2.3). All negative results hold without modification in this alternative
+framework as well; the positive results extend by multiplying each ξ(i, S) by α1 . To be consistent with other
+papers, we use the first definition in this paper.
+    In addition to budget balance, we usually require cost allocations and cost-sharing schemes to satisfy
+additional properties. One property that is extensively studied in the classic cooperative game theory litera-
+ture [2, 3, 8, 27, 28, 30] is the property of being in the core, first suggested by Edgeworth [7] in 1881. This
+property intuitively says that no subset of agents should be overcharged for the service.
+
+Definition 2.3 A cost P allocation ψ for a set S ⊆ A is in the α-core if and only if it is α-budget balanced
+and for every T ⊆ S, i∈T ψ(i) ≤ C(T ). A cost-sharing scheme ξ is in the α-core if and only if for every
+S, ξ(·, S) is in the α-core.
+
+    Another property, which was studied by Moulin [22] and Moulin and Shenker [24] in order to design
+group-strategyproof mechanisms (see Section 4), and has recently received considerable attention in the
+computer science literature (see, for example, [14, 16, 17, 25]), is cross-monotonicity (or population mono-
+tonicity). This property captures the notion that agents should not be penalized as the serviced set grows.
+Namely,
+
+Definition 2.4 A cost-sharing scheme ξ is cross-monotone if for all S, T ⊆ A and i ∈ S, ξ(i, S) ≥ ξ(i, S ∪
+T ).
+
+    It is a simple exercise to show that every α-budget-balanced cross-monotonic cost-sharing scheme is in
+the α-core, but the converse need not hold. Therefore, cross-monotonicity is strictly stronger than the core
+condition. Using this fact and a simple extension of the classic Bondareva-Shapley theorem [3, 28] (see Jain
+and Vazirani [14]), one can derive upper bounds on the budget-balance factor of cross-monotonic cost-sharing
+schemes for covering games in terms of the integrality gap of their LP formulation. In the next section, we
+derive a technique based on the probabilistic method which yields stronger bounds.
+
+
+3 Upper bounds for cross-monotonic cost-sharing schemes
+In this section we present the main idea behind our upper bound technique and prove upper bounds for several
+games defined based on combinatorial optimization problems. We explain the technique in Section 3.1 with a
+simple example of the edge cover game and then extend it to the set cover game in Section 3.2. Sections 3.3,
+3.4, and 3.5 contain the proofs of our bounds for the vertex cover, facility location, and several other games.
+
+3.1 A simple example: the edge cover game
+In this section, we explain our technique using the edge cover game as a guiding example. The edge cover
+game is defined as follows.
+
+Definition 3.1 Let G = (V, E) be a graph with no isolated vertices. The set of agents in the edge cover
+game on G is the set of vertices of G. Given a subset S of vertices, the cost of S is the minimum size of a set
+F ⊆ E of edges such that for every v ∈ S, at least one of the edges incident to v is in F . Such a set F is
+called an edge cover for S.
+
+                                                      4
+     It is easy to see that for every set S, one can obtain a minimum edge cover of S by taking a maximum
+matching on S and adding one edge for every vertex that is not covered by the maximum matching (see [4]).
+Using this fact, we can give a cost-sharing scheme that is in the 23 -core of the game: charge each vertex that
+is covered by the maximum matching 13 , and other vertices 23 . Since there is no edge between two vertices
+that are not covered by the maximum matching, this cost-sharing scheme satisfies the core property (but
+not cross-monotonicity). Furthermore, it is easy to see that the sum of the cost shares is always equal to 23
+times the edge cover for S. Therefore, there is a cost-sharing scheme satisfying the core property with a
+budget-balance factor of 32 . In fact, Goemans [9] showed that for every graph there is a cost-sharing scheme
+in the 43 -core. However, in the following, we show that no cross-monotonic cost-sharing scheme can achieve
+a budget-balance factor better than 12 .
+
+Theorem 3.1 For every ǫ > 0, there is no ( 21 + ǫ)-budget balanced cross-monotonic cost-sharing scheme
+for the edge cover problem.
+
+Here is the high-level idea of the proof: We assume, for contradiction, that there is a cross-monotonic cost-
+sharing scheme that always recovers at least a ( 21 + ǫ) fraction of the total cost. We explicitly construct a
+graph G (or in general the set of agents A and the structure based on which the cost function is defined),
+and look at the cost-sharing scheme on this graph. For edge cover, this graph is simply a complete bipartite
+graph Kn,n , with n large enough. Then, we need to argue that there is a set S of agents such that the total
+cost shares of the elements of S is less than 21 + ǫ times the size of the minimum edge-cover for S. This is
+done using the probabilistic method: we pick a subset S at random from a certain distribution and show that
+in expectation, the ratio of the recovered cost to the cost of S is low. Therefore, there is a manifestation of S
+for which this ratio is low. In the edge-cover example, we pick one vertex v of G uniformly at random and
+let S be the union of v and the set of vertices adjacent to v. We now need to bound the expected value of the
+sum of cost shares of the elements of S. We do this by using cross-monotonicity and bounding the cost share
+of each vertex u ∈ S by the cost share of u in a substructure Tu of S. Bounding the expected cost share of u
+in Tu is done by showing that for every substructure T , every u ∈ T has the same probability of occurring in
+a structure S in which Tu = T . This implies that the expected cost share of u in Tu (where the expectation
+is over the choice of S) is at most the cost of Tu divided by the number of agents in Tu . Summing up these
+values for all u gives us the desired contradiction.
+
+Proof of Theorem 3.1.        Assume that there is a ( 21 + ǫ)-budget-balanced cross-monotonic cost-sharing
+scheme ξ. Let G be the complete bipartite graph Kn,n , where n will be fixed later, and consider ξ on G. For
+every v ∈ V (G), we let Sv be the union of v and the set of vertices adjacent to v (that is, all vertices of the
+other part). We pick a set S of agents by picking v uniformly at random from V (G) and letting S = Sv . By
+the definition of the edge cover game,
+
+                                                C(Sv ) = n       for every v.                                (1)
+
+On the other hand,
+                            hX              i                      h X                              i
+                       ES         ξ(i, S)        = Ev ξ(v, Sv ) + Ev                      ξ(u, Sv )
+                            i∈S                                               u∈Sv \{v}
+                                                             hX                      i
+                                                 ≤ 1 + Ev                ξ(u, {u, v}) ,                      (2)
+                                                             u∈Sv \{v}
+
+
+                                                             5
+where the last inequality follows from the facts that for every vertex u and every set S, ξ(u, S) ≤ 1, and that
+for every v ∈ V (G) and u ∈ Sv \ {v}, ξ(u, Sv ) ≤ ξ(u, {u, v}). Both of these facts are consequences of the
+cross-monotonicity of ξ. By the definition of expected values, we have
+                                  h X                     i                      
+                               Ev           ξ(u, {u, v}) = n Ev,u ξ(u, {u, v}) ,                            (3)
+                                   u∈Sv \{v}
+
+where the second expectation is over the choice of v from V (G) and u in Sv \ {v}. However, choosing a
+vertex v and then a neighbor u of v at random is equivalent to choosing a random edge e in G at random, and
+letting u be a random endpoint of e and v be the other one. By the budget-balance condition, the sum of the
+cost shares of the endpoints of e is at most one. Therefore, for every e, if u is a random endpoint of e and v
+is the other endpoint, E[ξ(u, {u, v})] ≤ 12 . Thus, the right-hand side of Equation 3 is at most n2 . Therefore,
+by Equations 1 and 2, we have
+
+                                                            1 + n2
+                                        P
+                                            i∈S ξ(i, S)
+                                                        
+                                                                      1
+                                    ES                    ≤        < +ǫ
+                                              C(S)             n      2
+                                                      P
+                                                           i∈S ξ(i,S)
+for n > 1/ǫ. Therefore, there is a set S satisfying         C(S)        < 12 + ǫ, which is a contradiction with the
+assumption that ξ is ( 12 + ǫ)-budget balanced.                                                                  
+
+   It is not difficult to see that the cost-sharing scheme ξ satisfying ξ(i, S) = 21 for every i ∈ S is cross-
+monotonic and 21 -budget balanced. Therefore, the bound given in the above theorem is tight.
+
+
+3.2 The set cover game
+The set cover game is defined as follows.
+
+Definition 3.2 Let A be a set of agents and E be a collection of subsets of A such that every element of A
+is contained in at least one set in E . For every S ⊆ A , the cost of S in the set cover game is the minimum
+size of a subcollection F ⊆ E such that every x ∈ S is contained in at least one set in F . Such a collection
+F is called a set cover for S.
+
+    One can think of the edge-cover problem as a special case of the set cover problem in which the size of
+each set is 2. It is not difficult to generalize Theorem 3.1 to the special case of set cover in which the size
+of each set is k, and prove that for k constant, no cross-monotonic cost-sharing scheme for this problem can
+recover more than a k1 fraction of the cost. Using a similar argument, the next theorem shows that for the
+general case of the set cover game, no cross-monotonic cost-sharing scheme can recover more than a O( n1 )
+of the total cost.
+
+Theorem 3.2 There is no cross-monotonic cost-sharing scheme ξ for the set cover game such that for every
+                                       1
+set S ⊆ A , ξ recovers more than a O( |S| ) fraction of the cost of S.
+
+Proof. Assume that there is such a cross-monotonic cost-sharing scheme ξ. Consider the following set cover
+game. Let A be a set of n2 agents that can be partitioned as A = A1 ∪ A2 ∪ · · · ∪ An , where Ai ’s are disjoint
+
+
+                                                       6
+sets each of size n. Define E as the collection of all sets S ⊂ A such that |S ∩Ai | = 1 for every i = 1, . . . , n.
+An alternative way to look at this is that A and E are sets of vertices and edges of an n-uniform n-partite
+complete hypergraph.
+    We pick a random set S of agents in the above game as follows: Pick a random i from {1, . . . , n}, and
+for every j 6= i, pick an agent aj uniformly at random from Aj . Let T = {aj : j 6= i} and S = Ai ∪ T .
+The cost of the optimal set cover solution on S is always at least n, since no set in E contains two distinct
+elements of Ai , and therefore each element of Ai must be covered with a distinct set in E .
+    We now bound the average recovered cost over the random choice of S.
+                       X                    X                  X              
+                    ES       ξ(x, S) = E            ξ(x, S) + E          ξ(aj , S)
+                                x∈S                        x∈Ai                        j6=i
+                                                          X                                 X                   
+                                                  ≤ E             ξ(x, {x} ∪ T )       + E            ξ(aj , T )
+                                                           x∈Ai                                j6=i
+
+Since all elements of T can be covered by one set, the second term in the above expression is at most 1. We
+write the first term as nES,x [ξ(x, {x} ∪ T )] where the expectation is over the random choice of S and the
+random choice of x from Ai . As in the proof ofPTheorem 3.5, the expected value of ξ(x, {x} ∪ T ) in this
+experiment is equal to the expected value of n1 nj=1 ξ(aj , {a1 , . . . , an }) in an experiment that consists of
+choosing
+Pn        an agent aj from each Aj uniformly at random. By the budget-balance property, we always have
+   j=1 ξ(aj , {a1 , . . . , an }) ≤ C({a1 , . . . , an }) = 1. Therefore, the first term in the left-hand side of the
+inequality (4) is at most one. This means that the expected total cost share recovered from the set S is at most
+two. Therefore, the ratio of recovered cost to total cost of S is at most 2/n < 4/|S|.                             
+
+    It is worth noting that the above proof shows that even for the fractional set cover game, no cross-
+monotonic cost-sharing scheme can achieve a budget-balance factor better than O(1/n).4 This is particularly
+interesting for the following reason: It is easy to show that if there is an α-budget balanced cross-monotonic
+cost-sharing scheme for the fractional set cover, then for any special case of the set cover problem of integral-
+ity gap at most µ, there is an αµ-budget balanced cross-monotonic cost-sharing scheme. For example, if we
+could find a constant-factor for fractional set cover, we would automatically get a constant-factor for metric
+facility location, generalized Steiner tree, and many other network design games. Unfortunately, the above
+theorem shows this approach for designing cross-monotonic cost-sharing schemes fails to recover much of
+the cost.
+
+
+3.3 The vertex cover game
+The vertex cover game is defined on a graph G = (V, E). The set of agents is the set of edges of G, and the
+cost of serving a set S ⊆ E is equal to the minimum size of a set A of vertices such that for each e ∈ S, at
+least one of the endpoints of e is in A. Such a set is called a vertex cover for the set S. It is well-known that
+the integrality gap of the LP relaxation of vertex cover is 2, and therefore no allocation in core can recover
+more than half the cost of the solution in the worst case [3, 28]. We show in the following theorem that if
+we require the cost-sharing scheme to be cross-monotonic, then no constant-factor budget balanced scheme
+exists.
+   4
+       Other bounds in the section also apply to the fractional variants of the corresponding games.
+
+
+                                                                    7
+                                                       A         ...
+
+                                                   B               ...
+                                                   C               ...
+
+                                  Figure 1: Vertex Cover Sample Distribution
+
+Theorem 3.3 For every ǫ > 0, there is no cross-monotonic cost-sharing scheme for vertex cover that on
+every set S of n agents, recovers at least a (2 + ǫ)n−1/3 fraction of the cost of S.
+
+Proof. Assume, for contradiction, that such a scheme ξ exists. We let G be a complete graph on m + 2ℓ
+vertices, where m and ℓ (m < ℓ) are numbers that will be fixed later, and consider the cost-sharing scheme
+ξ on G. We show that there is some set S of edges of G for which ξ recovers at most a |S|−1/3 fraction of
+the cost. We do this by picking S randomly from a distribution described below, and showing that the above
+statement holds in expectation, and therefore there should be a particular S satisfying the above statement.
+     Let π be a permutation of the m + 2ℓ vertices. Let A be the set of the first m vertices, B be the set of the
+next ℓ vertices, and C be the set of the remaining ℓ vertices. We denote the i’th vertices of B and C (based
+on the ordering given by π) by bi and ci . Let Sπ denote the set of all mℓ edges between A and B, together
+with the set of edges bi ci for i = 1, . . . , ℓ. We pick S by picking the permutation π uniformly at random and
+letting S = Sπ . See Figure 1 for an example.
+    If we denote the set of edges between A and B by T , we have
+                                    hX          i    hX           i
+                                  E      ξ(e, S) ≤ E      ξ(e, T ) ≤ m,                                         (4)
+                                         e∈T                      e∈T
+
+where the first inequality follows from the cross-monotonicity of ξ and the second inequality is implied by
+the budget balance assumption and the fact that the cost of the minimum vertex cover in T is m. We also
+let Ti be the set of all m + 1 edges in S that have bi as an endpoint (see Figure 1). Equation 4 and the
+cross-monotonicity of ξ imply the following.
+                               hX              i           hX           i Xℓ
+                                                                              
+                          ES         ξ(i, S)       = E           ξ(e, S) +   E ξ(bi ci , S)]
+                               i∈S                         e∈T                i=1
+                                                            ℓ
+                                                            X                     
+                                                   ≤ m+            E ξ(bi ci , Ti ) ,                           (5)
+                                                            i=1
+
+We now need to analyze the expectation of ξ(bi ci , Ti ) over the random choice of π. Notice that the only
+elements of π that are important in ξ(bi ci , Ti ) are the first m elements and the m + i’th and m + ℓ + i’th
+elements (bi and ci ). Therefore, the expectation of ξ(bi ci , Ti ) over the choice of π is equal to the expectation
+of ξ(vm+2 vm+1 , {v1 vm+1 , v2 vm+1 , . . . , vm vm+1 , vm+2 vm+1 }) over the random choice of an ordered list
+v1 , v2 , . . . , vm+2 of m + 2 different vertices of G. However, in this experiment it is clear by symmetry
+that the expected cost share of vi vm+1 is the same for i = 1, . . . , m, m + 2, and therefore by the budget
+
+                                                             8
+                                                                 1
+balance condition each of these expected cost shares is at most m+1 . This, together with Equation 5 imply
+the following.
+                                        hX           i           ℓ
+                                    ES       ξ(i, S) ≤ m +           .                                 (6)
+                                                              m+1
+                                             i∈S
+
+On the otherPhand, the size of the minimum vertex cover in S is always ℓ. Therefore, the expected value of
+                                                      1
+the ratio of i∈S ξ(i, S) to C(S) is at most mℓ + m+1    . Thus, there is a set S for which this ratio is at most
+m       1
+                        √
+ ℓ + m+1 . Taking m =     ℓ, we see that the allocation on S recovers at most a √2ℓ < (2 + ǫ)|S|−1/3 fraction
+of the cost.                                                                                                  
+
+    We can show the following positive result for cross-monotonic cost sharing schemes for the vertex
+cover which, together with the Moulin mechanism [22] implies an approximately budget-balanced group-
+strategyproof mechanism for this problem (see Section 4). We do not know the right bound for the budget-
+balance factor of the vertex cover game.
+
+Theorem 3.4 For the vertex cover game, the cost-sharing scheme that charges the edge uv in the set S an
+amount equal to min(1/degS (u), 1/degS (v)) is cross-monotonic and 2√1 n -budget balanced.
+
+Proof. It is clear that this scheme is cross-monotone. We only need to verify the budget-balance factor.
+Consider a set S of n agents (edges), and the graph G[S] induced on this set of edges. We prove that the total
+cost share of the agents in S is at least 2√1 n times the cost of a vertex cover for S.
+                                                                                                            √
+    Divide the set of vertices into two subsets L and H, where L is the set vertices of degree less than n in
+G[S] and H is the rest of vertices (H = V (G) − L). As a vertex cover solution, select H and both endpoints
+of all edges (u, v) such that u, v ∈ L. We show that the cost shares of the edges in S sum to at least a 2√1 n
+fraction of the cost of this solution. First consider any edge e between vertices in L. The cost share of e is at
+least √1n , thus its cost share covers √1n of the cost of picking both its endpoints. Now consider the vertices in
+                                                                             √
+H. Since the degree of each vertex v ∈ H is greater than or equal to n, the sum of the cost shares of the
+                                   √
+edges adjacent to v is at least n1 n = √1n . Each edge is included in at most two such summations (namely,
+when both its endpoints are in H), and thus the sum of the cost shares of edges adjacent to vertices in H is at
+least a 2√1 n fraction of the cost of H. Therefore, the sum of the cost shares of the agents in S is at least 2√1 n
+times the cost of the optimal vertex cover for S.                                                                
+
+
+3.4 The metric facility location game
+Given a set of cities, facilities with opening costs, and metric connection costs between cities and facilities,
+the facility location problem seeks to open a subset of facilities and connect each city to a facility in a manner
+that minimizes the total cost. In the facility location game, each city is an agent. The cost of a subset of
+agents is the cost of the minimum facility location solution for that subset; a cross-monotonic cost-sharing
+scheme tries to share this cost among the agents. In this section, we prove that any cross-monotonic cost-
+sharing scheme for facility location is at best 13 -budget-balanced. This matches the budget-balance factor of
+the scheme given by Pál and Tardos [25].
+
+
+
+
+                                                        9
+                             c1                       cm           A1
+
+                                                                   A2
+
+                         f                             fm
+                         1
+                                                                   Ai
+
+
+                                  c’1           c’k                Ak
+
+                                          (a)                                     (b)
+
+                                        Figure 2: Facility Location Sample Distribution
+
+    We start by giving an example on which the scheme of Pál and Tardos [25] recovers only a third of the
+cost5 . This example will be used as the randomly chosen structure in our proof.
+
+Lemma 3.1 Let I be an instance of the facility location problem consisting of m + k cities c1 , . . . , cm ,
+c′1 , . . . , c′k and m facilities f1 , . . . , fm each of opening cost 3. For every i and j, the connection costs
+between fi and ci and between fi and c′j are all 1, and other connection costs are obtained by the triangle
+inequality. See Figure 2(a). Then if m = ω(k) and k tends to infinity, the optimal solution for I has cost
+3m + o(m).
+
+Proof. The solution which opens just one facility, say f1 , has cost 3m + k + 1 = 3m + o(m). We show
+that this solution is optimal. Consider any feasible solution which opens f facilities. The first opened facility
+can cover k + 1 clients with connection cost 1. Each additional facility can cover 1 additional client with
+connection cost 1. Thus, the number of clients with connection cost 1 is k + f . The remaining m − f clients
+have connection cost 3. Therefore, the cost of the solution is 3f + k + f + 3(m − f ) = 3m + k + f . As
+f ≥ 1, this shows that any feasible solution costs at least as much as the solution we constructed.            
+
+
+Theorem 3.5 Any cross-monotonic cost-sharing scheme for the facility location game is at most 1/3-budget
+balanced.
+
+Proof. Consider the following instance of the facility location problem. There are k sets A1 , . . . , Ak of m
+cities each, where m = ω(k) and k = ω(1). For every subset B of cities containing exactly one city from
+each Ai (|B ∩ Ai | = 1 for all i), there is a facility fB with connection cost 1 to each city in B. The remaining
+connection costs are defined by extending the metric, that is, the cost of connecting city i to facility fB for
+i 6∈ B is 3. The facility opening costs are all 3.
+     We pick a random set S of cities in the above instance as follows: Pick a random i from {1, . . . , k}, and
+for every j 6= i, pick a city aj uniformly at random from Aj . Let T = {aj : j 6= i} and S = Ai ∪ T . See
+Figure 2(b) for an example. It is easy to see that the set S induces an instance of the facility location problem
+   5
+    This example also shows that the dual computed by the Jain-Vazirani facility location algorithm [15] can be a factor 3 away
+from the optimal dual.
+
+
+                                                              10
+almost identical to the instance I in Lemma 3.1 (the only difference is that here we have more facilities, but
+it is easy to see that the only relevant facilities are the ones that are present in I). Therefore, the cost of the
+optimal solution on S is 3m + o(m).
+    We show that for any cross-monotonic cost-sharing scheme ξ, the average recovered cost over the choice
+of S is at most m+o(m) and thus conclude that there is some S whose recovered cost is at most m+o(m). As
+in the previous proofs, we start bounding the expected total cost share by using the linearity of expectations
+and cross-monotonicity:
+                        hX           i         hX           i      hX             i
+                     ES       ξ(c, S) = E           ξ(c, S) + E         ξ(aj , S)
+                           c∈S                     c∈Ai                     j6=i
+                                                  hX                    i          hX                  i
+                                           ≤ E            ξ(c, {c} ∪ T ) + E              ξ(aj , T )
+                                                   c∈Ai                            j6=i
+
+Notice the set T has a facility location solution of cost 3 + k − 1 and thus by the budget balance condition the
+second term in the above expression is at most k + 2. The first term in the above expression can be written as
+mES,c [ξ(c, {c} ∪ T )] where the expectation is over the random choice of S and the random choice of c from
+Ai . However, it can be seen easily that this is equivalent to the following random experiment: From each
+Aj , pick a city aj uniformly at random. Then pick i from {1, . . . , k} uniformly at random and let c = ai
+and T = {aj : j 6= i}. From this description it is clear that the expected value of ξ(c, {c} ∪ T ) is equal
+to k1 kj=1 ξ(aj , {a1 , . . . , ak }). This, by the budget balance property and the fact that {a1 , . . . , ak } has a
+     P
+
+solution of cost k + 3, cannot be more than k+3    k . Therefore,
+                                       hX          i      k+3
+                                   ES      ξ(c, S) ≤ m(         ) + (k + 2) = m + o(m),                            (7)
+                                                            k
+                                    c∈S
+
+when m = ω(k) and k = ω(1). Therefore, the expected value of the ratio of recovered cost to total cost
+tends to 1/3.                                                                                       
+
+
+3.5 Other combinatorial optimization games
+In this section we prove bounds for three other combinatorial optimization games (in particular, the ones
+considered by Deng, Ibaraki, and Nagamochi [4]). These problems are maximization problems; therefore
+instead of cost-sharing schemes, we consider profit-sharing schemes, as defined below.
+
+Definition 3.3 A profit-sharing game (or a coalitional game with transferable utilities) is defined by a set A
+of agents, and a function v : 2A 7→ R+ ∪ {0} that for every set S, gives the value v(S) of S (or the profit
+earned if agents in S collaborate). A profit-sharing scheme is a function ξ : A × 2A 7→ R+ ∪ {0}, such
+that for every S ⊆ A and every i 6∈ S,
+                                     Pξ(i, S) = 0. Such a scheme is called α-budget-balanced (for some
+α ≥ 1) if for every S ⊆ A , v(S) ≤ i∈S ξ(i, S) ≤ P     αv(S). A profit-sharing scheme ξ is in the α-core if
+it is α-budget-balanced and for every S and T ⊆ S, i∈T ξ(i, S) ≥ v(T ). A profit-sharing scheme ξ is
+cross-monotone if for all S, T ⊆ A and i ∈ S, ξ(i, S) ≤ ξ(i, S ∪ T ).
+
+   In this section, we consider profit-sharing schemes for the games of maximum flow, maximum arbores-
+cence packing, and maximum matching, and derive lower bounds on the budget-balance factor of cross-
+monotonic profit-sharing schemes for these games.
+
+                                                          11
+                                 s                    u                    t
+
+
+                            Figure 3: The graph G for the maximum flow game
+
+
+
+
+The maximum flow game In the maximum flow game, we are given a directed graph G = (V, E) with a
+source s and a sink t. Agents are directed edges of G. Given a subset of edges, S, the value of S is the value
+of the maximum flow from s to t on the subgraph of G induced by the edges of S. It is known that the core
+of the maximum flow game is nonempty [4]. The situation is different for cross-monotonic profit-sharing
+schemes.
+
+Theorem 3.6 There is no o(n)-budget-balanced profit-sharing scheme for the maximum flow game where n
+is the number of agents in the set that receives the service.
+
+Proof. Let G be a graph consisting of three nodes named s, u, and t; n − 1 edges from s to u; and n − 1
+edges from u to t. Let Esu and Eut denote the set of edges from s to u and from u to t, respectively. See
+Figure 3. We pick a random set S of n agents as follows: With probability 1/2, pick a random edge e from s
+to u, and let S = {e} ∪ Eut . With probability 1/2, pick a random edge e from u to t, and let S = {e} ∪ Esu .
+For example the set S could contain the thick edges in Figure 3.
+   Assume ξ is an o(n)-budget-balanced cross-monotonic profit-sharing scheme for G. We have
+       X                           X                                    X                       
+                           1                                       1
+    ES      ξ(a, S) ≥        E R            ξ(a, {e} ∪ Eut ) + E R                  ξ(a, {e} ∪ Esu )
+                           2 e←Esu                                 2 e←Eut
+        a∈S                           a∈Eut                                 a∈Esu
+                                     X                                X                  
+                           1                                  1
+                       ≥     E R            ξ(a, {a, e}) + E R                 ξ(a, {a, e})
+                           2 e←Esu                            2 e←Eut
+                                      a∈Eut                             a∈Esu
+                                                                                 
+                                                    1                1
+                       = (n − 1)E R         R         ξ(a, {a, b}) + ξ(b, {a, b})
+                                    a←Esu ,b←Eut 2                   2
+                           n−1
+                       ≥         .
+                             2
+
+   On the other hand, the value of every set S picked using the above procedure is one. Therefore, the
+expected ratio of the sum of profit shares to the value of S is at least (n − 1)/2.                 
+
+
+Remark 3.1 It is easy to see that the above proof also works for the problems of packing the maximum
+number of arborescences in a digraph, and gives the same lower bound. An r-arborescence is a spanning
+tree rooted at r in which all edges are directed away from r. The maximum r-arborescence game is defined
+on a digraph G = (V, E) with a root r where each edge is an agent. The value of a set S is the maximum
+
+                                                     12
+number of edge-disjoint r-arborescences on the subgraph induced by S. One can think of the value of S as
+the maximum bandwidth for broadcasting messages from r to all vertices of the graph. It is known that the
+core of this game is nonempty [4].
+
+The maximum matching game As a last example, we consider the maximum matching game, in which
+the agents are vertices of a graph G, and the value of a subset of vertices S is the size of the maximum
+matching in the subgraph of G induced by S (denoted G[S]). One can show that there is a 2-budget-balanced
+profit-allocation in the core of this game.
+
+Theorem 3.7 There is no o(n)-budget-balanced profit-sharing scheme for the maximum matching game,
+where n is the set of agents that receive the service.
+
+Proof. We use the same construction that was used in the proof of Theorem 3.1. Let G be a complete bipartite
+graph with n − 1 vertices in each part (here we use n − 1 instead of n so that the size of S becomes n), and
+pick S by picking a random vertex in G and all vertices in the other part. Using an argument essentially the
+same as the one in the proof of Theorem 3.1, the expected sum of profit shares of the elements of S is at least
+(n − 1)/2. On the other hand, the value of S is always one. Thus, there is an S on which the ratio between
+the total profit share and the value of S is at least (n − 1)/2.                                             
+
+
+
+4 Group-strategyproof mechanisms
+One of the important applications of cross-monotonic cost-sharing schemes is in the construction of group-
+strategyproof cost-sharing mechanisms [22, 24]. In this section, we explore the connection between cross-
+monotonic cost-sharing schemes and group-strategyproof cost-sharing mechanisms, and implications of the
+upper bounds of the previous section on such mechanisms. In Section 4.1 we define the setting and present
+some preliminaries. In Section 4.2 we discuss an issue in the definition of group-strategyproof mechanisms,
+and note that in order to exclude a trivial mechanism, we need to use a stronger version of one of the axioms.
+In Section 4.3 we give a partial characterization of group-strategyproof mechanisms in terms of cost-sharing
+schemes satisfying a property weaker than cross-monotonicity. We then use this characterization to prove that
+group-strategyproof mechanisms that satisfy additional properties give rise to cross-monotonic cost-sharing
+schemes.
+
+
+4.1 Preliminaries
+Let A be a set of n agents interested in receiving a service. Each agent i has a value ui ∈ R for receiving
+the service, that is, she is willing to pay at most ui to get the service. We further assume that the utility of
+agent i is given by ui qi − xi , where qi is an indicator variable which indicates whether she has received the
+service or not, and xi is the amount she has to pay. A cost-sharing mechanism is an algorithm that elicits a
+bid bi ∈ R from each agent, and based on these bids, decides which agents should receive the service and
+how much each of them has to pay. More formally, a cost-sharing mechanism is a function that associates
+to each vector b of bids a set Q(b) ⊆ A of agents to be serviced, and a vector x(b) ∈ Rn of payments.
+
+
+
+                                                      13
+When there is no ambiguity, we write Q and x instead of Q(b) and x(b), respectively. We assume that a
+mechanism satisfies the following conditions:6
+
+       • No Positive Transfer (NPT): The payments are non-negative (that is, xi ≥ 0 for all i).
+       • Voluntary Participation (VP): An agent who does not receive the service is not charged (that is, xi = 0
+         for i 6∈ Q), and an agent who receives the service is not charged more than his bid (that is, xi ≤ bi for
+         i ∈ Q)
+       • Consumer Sovereignty (CS): For each agent i, there is some bid b∗i such that if i bids b∗i , she will get
+         the service, no matter what others bid.
+
+    Furthermore, we would like the mechanisms to be approximately budget balanced. Mimicking the defi-
+nition for cost-sharing schemes, we call a mechanism α-budget balanced
+                                                                  P if the total amount the mechanism
+charges the agents is between αC(Q) and C(Q) (that is, αC(Q) ≤ i∈Q xi ≤ C(Q)).
+    We look for mechanisms, called group strategyproof mechanisms, which satisfy the following property in
+addition to NPT, VP, and CS. Let S ⊆ A be a coalition of agents, and u, u′ be two vectors of bids satisfying
+ui = u′i for every i 6∈ S (we think of u as the value of agents, and u′ as a vector of strategically chosen
+bids). Let (Q, x) and (Q′ , x′ ) denote the outputs of the mechanism when the bids are u and u′ , respectively.
+A mechanism is group strategyproof if for every coalition S of agents, if the inequality ui qi′ − x′i ≥ ui qi − xi
+holds for every i ∈ S, then it holds with equality for every i ∈ S. In other words, there should not be any
+coalition S and vector u′ of bids such that if members of S announce u′ instead of u (their value) as their
+bids, then every member of the coalition S is at least as happy as in the truthful scenario, and at least one
+person is happier.7
+    Given a cross-monotonic cost-sharing scheme ξ, Moulin [22] defined a cost-sharing mechanism Mξ as
+follows.
+
+Mechanism Mξ :
+
+       Initialize S ← A .
+       Repeat
+            Let S ← {i ∈ S : bi ≥ ξ(i, S)}.
+       Until for all i ∈ S, bi ≥ ξ(i, S).
+       Return Q = S and xi = ξ(i, S) for all i.
+
+
+    Notice that the mechanism Mξ always services the maximal subset of agents whose bids are all at least
+as large as their cost shares in that set.8 Moulin [22] proved the following result.
+
+Theorem A (Moulin [22]) If ξ is a cross-monotonic cost-sharing scheme, then Mξ is group-strategyproof.
+   6
+      For a discussion about these properties see Moulin [22] and Moulin and Shenker [24].
+   7
+      Notice that we do not allow members of the coalition to sacrifice their own utility to benefit the group’s total utility, that is
+we disallow side-payments. Side-payments require a transfer of money between agents which might be restricted in some settings
+either due to legal concerns or issues of trust, and so we do not consider side-payments here. For a discussion of collusion with
+side-payments, see Goldberg and Hartline [11].
+    8
+      Note that there is a unique maximal set as if two sets are feasible then, by cross-monotonicity, their union is as well.
+
+
+                                                                 14
+4.2 A discussion about the definition
+In the definition of group-strategyproof mechanisms in the paper by Moulin and Shenker [24] (which is the
+basis for the definition of this concept in most computer science papers), it is not required that an agent
+can bid in a way that guarantees her not to receive the service. In particular, it is assumed that the bids are
+non-negative, and an agent who bids zero can still be serviced, if her payment is also zero [24, page 517].
+As we see in the following example, according to this definition, for every cost function there is a trivial
+budget-balanced group-strategyproof mechanism.
+
+Example 4.1 Arbitrarily order the agents from 1 to n. Then, find the first agent i in this order whose bid is
+at least C({i, . . . , n}). The set that will receive the service is Q = {i, . . . , n}, and the total cost of servicing
+this set is paid by the agent i. Other agents pay nothing.
+
+Proposition 4.1 Assuming non-negative bids, the mechanism in Example 4.1 is budget-balanced and group-
+strategyproof.
+
+Proof. It is not hard to see that this mechanism is budget-balanced and satisfies NPT, VP, and CS. To show
+that it is group-strategyproof, let i be the first agent to receive service when agents bid truthfully (or n + 1
+if no agent receives service) and j be the first agent to receive service when a coalition deviates. If j < i, it
+must be that j is part of the coalition and raised his bid to a number greater than or equal to C({j, . . . , n}),
+but this decreases his utility. If j = i, then the outcome is identical to the truthful scenario and so no utility
+changes. If j > i, then the utility of any agent k < j is now zero and so did not increase. The utility of any
+agent k > j did not change as his allocation and payment remained the same. Finally, as the payment of j is
+at least his payment in the truthful scenario, the utility of agent j can not increase either. Thus the coalition
+can not be successful.                                                                                          
+
+    Although it satisfies all of the axioms, this mechanism is unsatisfactory, since in practice a coalition can
+convince a member that has zero utility for receiving the service simply not to bid, thus reducing the cost to
+others. Furthermore, this mechanism fails to satisfy the axioms in the original paper of Moulin [22], where a
+stronger version of CS is assumed that guarantees that each agent can bid in a way that she does not receive
+the service, no matter how others bid.
+    In order to exclude mechanisms like the one in Example 4.1, we only consider mechanisms that satisfy the
+stronger definition of CS by Moulin [22]. To this end, we allow the utilities and bids to be negative. NPT and
+VP guarantee that any agent with negative bid will not receive the service. An alternative approach (adapted
+by Moulin [22]) is to assume that utilities, bids, and payments are all positive.9 In many combinatorial games,
+the cost function is not strictly increasing and therefore it is reasonable to allow cost shares to be zero. Thus,
+we use negative bids to indicate that an agent does not want to receive the service. However, it is easy to see
+that all our results hold in the setting considered by Moulin [22].
+
+4.3 A partial characterization of group-strategyproof mechanisms
+In Section 3, we proved that for certain games every cross-monotonic cost-sharing scheme is poorly budget
+balanced. A natural question to ask is whether all group-strategyproof mechanisms for these games are so
+   9
+       This is equivalent to a property called no free riders, or no free lunch, which was used in an earlier version of this paper [13].
+
+
+                                                                     15
+poorly budget balanced. Towards this aim, one might hope to show a converse to Theorem A, namely that
+every group-strategyproof mechanism corresponds to a cross-monotonic cost-sharing scheme. Unfortunately,
+this statement is not necessarily true (See, for example, Appendix A, or the incremental cost-sharing method
+for supermodular cost functions in the paper by Moulin [22]). In this section, we prove that for any group-
+strategyproof mechanism, we can construct a cost-sharing scheme that satisfies a weaker condition than
+cross-monotonicity. Then, we use this characterization to show that group-strategyproof mechanisms that
+satisfy certain additional properties correspond to cross-monotonic cost-sharing schemes.
+    We start by defining a property weaker than cross-monotonicity for cost-sharing schemes. Recall that a
+cost-sharing scheme is cross-monotonic, if the removal of each agent from the service set does not increase
+the cost to any other agent.
+
+Definition 4.1 Let ξ : A × 2A 7→ R+ ∪ {0} be a cost-sharing scheme, S ⊆ A , and i ∈ S. We say i is
+a positive element of S if for every j ∈ S \ {i}, ξ(j, S \ {i}) ≥ ξ(j, S) and for at least one such j a strict
+inequality holds; i is a negative element of S if for every j ∈ S \ {i}, ξ(j, S \ {i}) ≤ ξ(j, S) and for at
+least one such j a strict inequality holds. If for all j ∈ S \ {i}, ξ(j, S \ {i}) = ξ(j, S), we say i is a neutral
+element of S. We say that ξ is semi-cross-monotonic, if every element of every set is either positive, negative,
+or neutral. In other words, ξ is semi-cross-monotonic if there is no set S ⊆ A and three distinct elements
+i, j1 , j2 of S, such that ξ(j1 , S \ {i}) < ξ(j1 , S) and ξ(j2 , S \ {i}) > ξ(j2 , S).10
+
+    Thus, cross-monotonicity is precisely a special case of semi-cross-monotonicity, when every element of
+every set is either positive or neutral. The results in this section are based on the following partial characteri-
+zation of group-strategyproof mechanisms.
+
+Theorem 4.1 For every α-budget-balanced group-strategyproof cost-sharing mechanism M for a cost func-
+tion C, there is a cost-sharing scheme ξM for C such that
+
+  (a) ξM is α-budget-balanced and semi-cross-monotonic.
+
+  (b) for any set S and bid vector b such that bi = −1 for i 6∈ S and bi > ξM (i, S) for i ∈ S, the mechanism
+      M services the set S.
+
+  (c) for any bid vector b, if the serviced set is S, then the payment of i ∈ S is equal to ξM (i, S).
+
+    We note that this is not a complete characterization of group-strategyproof mechanisms, as there are
+semi-cross-monotonic cost-sharing schemes that do not correspond to any group-strategyproof mechanism
+(See Appendix B). Finding a complete characterization of cost-sharing schemes that give rise to group-
+strategyproof mechanisms is an interesting open direction.
+     Before proving the above theorem, we state two of the corollaries of this theorem. These results charac-
+terize group-strategyproof mechanisms that satisfy the following additional properties.
+
+Definition 4.2 A mechanism M is upper continuous if for every agent i, if i gets the service for every bid
+value greater than x holding other bids fixed, then i gets the service if he bids x.
+   10
+      Notice that this definition allows sets that contain both negative and positive elements. Also, an element can be a positive
+element of one set and a negative element of another.
+
+
+                                                               16
+Definition 4.3 A mechanism is subsidy-free if, for any bid vector, the total charge to any subset of agents is
+at most the cost of servicing that subset.
+
+    Although arguably not well-motivated, the condition of upper-continuity allows us to prove the following
+equivalence between cross-monotonic cost-sharing schemes and group-strategyproof mechanisms satisfying
+this condition, hence implying that all the upper bounds on the budget-balance factor of cross-monotonic
+cost-sharing schemes proved in Section 3 apply to such mechanisms as well. This theorem can be viewed
+as guidance in the search for group-strategyproof mechanisms: in order to design a mechanism with better
+revenue properties than the best cross-monotonic cost-sharing schemes, one must build a mechanism which
+violates upper continuity.
+
+Theorem 4.2 The cost function C has an upper-continuous α-budget-balanced group-strategyproof mecha-
+nism if and only if it has an α-budget-balanced cross-monotonic cost-sharing scheme.
+
+    The subsidy-freeness property was considered previously by Moulin [21]. This property parallels the
+core condition of cost-sharing games and is motivated by the argument that no subset of serviced agents
+should be over-charged to accommodate others. The following theorem shows the equivalence of group-
+strategyproof mechanisms satisfying this property and cross-monotonic cost-sharing schemes, in the case
+that the mechanism is perfectly budget balanced. We do not know if this theorem holds for budget-balance
+factors other than 1, and so the results of Section 3 only imply that the problems presented there do not have
+budget-balanced group-strategyproof mechanisms satisfying subsidy-freeness.
+
+Theorem 4.3 The cost function C has a subsidy-free budget-balanced group-strategyproof mechanism if and
+only if it has a budget-balanced cross-monotonic cost-sharing scheme.
+
+In the rest of this section, we present the proofs of Theorems 4.1, 4.2, and 4.3.
+
+Proof of Theorem 4.1. (a): We start by defining the cost-sharing scheme ξM . For an agent i, let b∗i be
+a large enough value such that if agent i bids b∗i , she will get the service, independent of other agents’ bids
+(such a value exists by CS). For a set S ⊆ A , consider the scenario where the agents in S bid their value
+in b∗ , and others bid −1. By CS and VP, the set of agents serviced by the mechanism in this scenario is
+precisely S. We define the cost share ξM (i, S) as the payment charged by the mechanism to the agent i in
+this scenario. By this definition and the fact that M is α-budget balanced, it is clear that ξM is also α-budget
+balanced.
+    Now, we prove that ξM is semi-cross-monotonic. Assume, for contradiction, that there is a set S ⊆ A
+and three distinct agents i, j1 , j2 ∈ S such that ξ(j1 , S \ {i}) < ξ(j1 , S) and ξ(j2 , S \ {i}) > ξ(j2 , S).
+Consider three bid vectors b1 , b2 , and b3 defined as follows: In all of these vectors, agents j ∈ S \ {i} bid b∗j
+and agents j ∈ A \ S bid −1. The bid of i in these vectors is b1i = b∗i , b2i = ξM (i, S), and b3i = −1. By VP
+and CS, the set of serviced agents at b1 is S, at b3 is S \ {i}, and at b2 is either S or S \ {i}. Furthermore,
+by the definition of ξM , the payment of each agent j at the bid vectors b1 and b3 is ξ(j, S) and ξ(j, S \ {i}),
+respectively. We consider two cases based on whether i is serviced at the bid vector b2 :
+
+Case 1: i is served at the bid vector b2 . By VP, i’s payment at b2 is at most b2i = ξM (i, S). If i’s payment is
+      strictly less than ξM (i, S), then in a scenario where the utility of the agents is given by b1 , i would have
+
+                                                        17
+      an incentive to announce a bid of b2i , contradicting the strategyproofness of the mechanism. Therefore,
+      when all agents bid according to b2 , the payment of i must be equal to ξM (i, S). Now consider the
+      payment xj1 (b2 ) of j1 when agents bid b2 . If xj1 (b2 ) < ξ(j1 , S), then in the scenario where the
+      utility of the agents is given by b1 , {i, j1 } can form a successful coalition: they can bid according
+      to b2 , thereby decreasing the payment of j1 , and not changing the payment of i. Also, if xj1 (b2 ) >
+      ξ(j1 , S \ {i}), then in the scenario where the utility of the agents is given by b2 , {i, j1 } can form a
+      successful coalition: they can bid according to b1 . This decreases the payment of j1 , and i is indifferent
+      between the two situations, as her utility is zero in both. Thus, ξ(j1 , S) ≤ xj1 (b2 ) ≤ ξ(j1 , S \ {i}),
+      contradicting the definition of j1 .
+
+Case 2: i is not served at the bid vector b2 . Consider the payment xj2 (b2 ) of j2 when agents bid b2 . If
+      xj2 (b2 ) < ξ(j2 , S \ {i}), then if the true utility of the agents is given by b3 , {i, j2 } can form a
+      coalition: they can bid according to b2 , thereby reducing j2 ’s payment while keeping the utility of i
+      constant at zero. Also, if xj2 (b2 ) > ξ(j2 , S), then if the utility of the agents is given by b2 , {i, j2 } can
+      form a coalition and bid according to b1 , thereby reducing j2 ’s payment and keeping i’s utility constant
+      at zero. Therefore, ξ(j2 , S \ {i}) ≤ xj2 (b2 ) ≤ ξ(j2 , S), contradicting the definition of j2 .
+
+    The contradiction in both cases shows that ξM is semi-cross-monotonic.
+(b): Index the agents such that S = {1, . . . , k}. For i = 0, . . . , k, define the bid vector b(i) as follows:
+ (i)                               (i)                                                (i)
+bj = b∗j for 1 ≤ j ≤ k − i, bj = bj > ξM (j, S) for k − i < j ≤ k, and bj = −1 for j ∈ A \ S. We
+will prove by induction on i that if the agents bid b(i) , then the mechanism M will service the agents in S
+and charges j ∈ S an amount equal to ξM (j, S). This statement for i = k would imply (b). The induction
+basis (i = 0) is obvious from CS and the definition of ξM . To show the induction step, we assume that the
+statement is true for i and prove it for i + 1. The only difference between the bid vectors b(i) and b(i+1) is
+the bid of the agent k − i. If at the bid vector b(i+1) agent k − i is either not serviced, or is charged an amount
+more than ξM (k − i, S), then this agent has an incentive to announce a bid of b∗k−i when the true utilities of
+the agents is given by b(i+1) . Similarly, if k − i is serviced and charged an amount less than ξM (k − i, S)
+when agents bid according to b(i+1) , then when the true utilities of the agents is given by b(i) , agent k − i
+has an incentive to bid bk−i . Therefore, at b(i+1) , k − i gets serviced and pays ξM (k − i, S). This means
+that from the perspective of agent k − i, outcomes at b(i) and b(i+1) are the same. Therefore, for every other
+agent j, the agent j must be indifferent between these two outcomes as well, since otherwise {i, j} can form
+a coalition at one of the two bid vectors b(i) or b(i+1) . Therefore, by the induction hypothesis, at the bid
+vector b(i+1) , every agent j ∈ S must receive the service and be charged ξ(j, S).
+(c): Let S1 = {i ∈ S | bi ≤ ξM (i, S)}, S2 = S \ S1 , and S3 = A \ S. By VP, every i ∈ S1 is not
+charged more than ξM (i, S) at b. Suppose the price charged to some agent i∗ ∈ S1 is strictly less than
+ξ(i∗ , S). Consider a bid vector b′ in which every agent i ∈ S1 bids b∗i , every i ∈ S2 bids bi (his bid in b)
+and every i ∈ S3 bids −1. From part (b), at the bid vector b′ , set S will receive the service and i ∈ S will
+pay ξM (i, S). Now, since the agent i∗ ∈ S1 is charged strictly less than ξM (i∗ , S) at b, then when the true
+utilities are given by b′ , i∗ can form a coalition with the agents in S1 ∪ S3 and submit the bid vector b. As a
+result, i∗ pays strictly less and no member of the coalition pays more, contradicting group-strategyproofness.
+Therefore the price of any agent i ∈ S1 equals ξM (i, S) at the bid vector b.
+    Now consider an agent i ∈ S2 . If his payment differs between b and b′ , then i can form a coalition with
+the agents in S1 ∪ S3 and submit the bid vector in which he pays less. Agent i strictly benefits from this,
+
+
+                                                          18
+while the situation of the agents in S1 ∪ S3 does not change, again contradicting the group-strategyproofness
+of M. Therefore the payment of every agent i ∈ S2 also equals ξM (i, S).                                   
+
+Proof of Theorem 4.2. The “if” part of this statement follows from Theorem A and the simple observation
+that the Moulin mechanism Mξ is upper continuous.
+     Given an α-budget-balanced group-strategyproof mechanism M, we show that the cost-sharing scheme
+ξM defined in the proof of Theorem 4.1 is cross-monotonic. In other words, we need to show that every
+element of every set is either positive or neutral. Define b∗ as in the proof of Theorem 4.1. Consider a set
+S ⊆ A and an agent i ∈ S. Let b be a bid vector such that bj = b∗j for every j ∈ S \ {i}, bj = −1 for every
+j ∈ A \ S, and bi is any number greater than ξM (i, S). By part (b) of Theorem 4.1, at any such bid vector,
+the set S gets the service. Therefore, by the upper continuity of M and CS, the set S gets the service when i
+bids ξM (i, S) and every other agent bids according to b. Call this bid vector b′ .
+     Now, assume, for contradiction, that ξM (j, S \ {i}) < ξM (j, S) for some j ∈ S \ {i}. We argue that
+{i, j} can form a successful coalition when the utilities of the agents is given by b′ . In this situation, if i bids
+−1 and j does not change her bid, then by Theorem 4.1 the set S \ {i} receives the service and agent j pays
+ξM (j, S \ {i}). This outcome makes the agent j strictly happier, and agent i is indifferent between the two
+outcomes. This contradicts the group-strategyproofness of M. This contradiction shows that every element
+i of every set S is either positive or neutral, and hence ξM is cross-monotonic.                                   
+
+Proof of Theorem 4.3. As in the previous proof, the “if” direction is a direct corollary of Theorem A and
+the simple observation that Mξ satisfies subsidy-freeness.
+    Given a subsidy-free 1-budget-balanced mechanism M, we show that the cost-sharing scheme ξM de-
+fined in Theorem 4.1 is cross-monotonic. First, notice that by part (c) of Theorem 4.1, subsidy-freeness of
+M implies that ξM is in the 1-core of C, that is, for every T ⊆ S ⊆ A , we have
+                                              X
+                                                    ξM (j, S) ≤ C(T ).                                           (8)
+                                              j∈T
+
+   Now, consider a set S ⊆ A and an agent i ∈ S. If i is a negative element of S, then for every j ∈ S \ {i},
+we have ξM (j, S) ≥ ξM (j, S \ {i}), and at least for one j this inequality is strict. Therefore,
+                            X                       X
+                                    ξM (j, S) >             ξM (j, S \ {i}) = C(S − {i}),                        (9)
+                          j∈S\{i}                 j∈S\{i}
+
+where the last equality follows from the fact that M is 1-budget-balanced. Equation 9 contradicts Equation 8
+for T = S \ {i}.                                                                                          
+
+
+5 Conclusion
+In this paper, we studied upper bounds for the budget-balance factor of cross-monotonic cost-sharing schemes
+for a variety of combinatorial optimization games. Our techniques are quite general and may prove applicable
+to a variety of other combinatorial games. For example, Könemann et al. [19] used techniques similar to
+the ones introduced in this paper to solve an open question posed in the conference version of this paper
+
+                                                            19
+regarding the Steiner tree game. As another example, the facility location game restricted to a tree always
+has a budget-balanced cost allocation in the core [10], but we do not have a tight lower and upper bound on
+the budget-balance factor of the best cross-monotonic cost-sharing schemes for this game. For the facility
+location game on the line, we have an upper bound of 76 .
+    An interesting open question is to fully characterize cost-sharing schemes that can arise as ξM for some
+group-strategyproof mechanism M. The results of Section 4.3 is a step toward solving this problem. Another
+open question is to generalize Theorem 4.3 for mechanisms with budget-balance factors less than one.
+    Finally, we would like to note that there was an error in Example 4.2 and Theorem 4.2 of the conference
+version of this paper [13]: The mechanism in Example 4.2 can be poorly budget-balanced, and the mechanism
+in Theorem 4.2 is not group-strategyproof. We would like to thank Hervé Moulin for noticing the latter
+mistake.
+
+Acknowledgments. We would like to thank Michel Goemans and Rahul Sami for helpful discussions. We
+are grateful to Hervé Moulin for a careful reading of this paper and pointing out a mistake in the proof of
+Theorem 4.2 in the conference version of this paper, and also for pointing out the stronger version of CS
+originally proposed in his paper. Finally, we would like to thank Martin Pál for introducing the problem and
+for helpful discussions.
+
+
+References
+ [1] Aristotle. Book V. In R. Crisp, K. Ameriks, and D.M. Clarke, editors, Nicomachean Ethics, pages
+     81–102. Cambridge University Press, 2000.
+
+ [2] R. J. Aumann. Lectures on Game Theory. Westview Press, 1989.
+
+ [3] O.N. Bondareva. Some applications of linear programming to cooperative games. Problemy Kiber-
+     netiki, 1963.
+
+ [4] X. Deng, T. Ibaraki, and H. Nagamochi. Algorithms and complexity in combinatorial optimization
+     games. In SODA, 1997.
+
+ [5] B. Dutta. The egalitarian solution and reduced game properties in convex games. International Journal
+     of Game Theory, 19:153–169, 1990.
+
+ [6] B. Dutta and D. Ray. A concept of egalitarianism under participation constraints. Econometrica,
+     57:615–635, 1989.
+
+ [7] F.Y. Edgeworth. Mathematical Psychics. Kegan Paul Publishers, 1881.
+
+ [8] D.B. Gillies. Solutions to general non-zero-sum games. In A.W. Tucker and R.D. Luce, editors, Contri-
+     butions to the Theory of Games, Volume IV (Annals of Mathematics Studies, 40), pages 47–85. Princeton
+     University Press, 1959.
+
+ [9] M. Goemans. Personal communication.
+
+[10] M.X. Goemans and M. Skutella. Cooperative facility location games. SODA, 2000.
+
+
+                                                     20
+[11] A. Goldberg and J. Hartline. Collusion-resistant mechanisms for single-parameter agents. In Proceed-
+     ings of 16th ACM Symposium on Discrete Algorithms, pages 620–629, 2005.
+
+[12] T. Hokari. Population monotonic solutions on convex games. International Journal of Game Theory,
+     29:327–338, 2000.
+
+[13] N. Immorlica, M. Mahdian, and V.S. Mirrokni. Limitations of cross-monotonic cost-sharing schemes.
+     In Proceedings of 16th ACM Symposium on Discrete Algorithms (SODA), 2005.
+
+[14] K. Jain and V.V. Vazirani. Applications of approximation algorithms to cooperative games. In Pro-
+     ceedings of the thiry-third annual ACM Symposium on Theory of Computing (STOC), pages 364–372,
+     2001.
+
+[15] K. Jain and V.V. Vazirani. Approximation algorithms for metric facility location and k-median problems
+     using the primal-dual schema and lagrangian relaxation. Journal of the ACM, 48:274–296, 2001.
+
+[16] K. Jain and V.V. Vazirani. Equitable cost allocations via primal-dual-type algorithms. In Proceedings
+     of the thiry-fourth annual ACM Symposium on Theory of Computing (STOC), pages 313–321, 2002.
+
+[17] K. Kent and D. Skorin-Kapov. Population monotonic cost allocation on MST’s. In Operational Reearch
+     Proceedings KOI, pages 43–48, 1996.
+
+[18] J. Könemann, S. Leonardi, and G. Schäfer. A group-strategyproof mechanism for Steiner forests. In
+     Proceedings of 16th ACM Symposium on Discrete Algorithms, pages 612–619, 2005.
+
+[19] J. Könemann, S. Leonardi, G. Schäfer, and S. van Zwam. From primal-dual to cost shares and back: A
+     stronger LP relaxation for the Steiner forest problem. In Proceedings of 32nd International Colloquium
+     on Automata, Languages and Programming, 2005. to appear.
+
+[20] S. Leonardi and G. Schäfer. Cross-monotonic cost-sharing methods for connected facility location
+     games. In Proceedings of 5th ACM Conference on Electronic Commerce, pages 242–243, 2004.
+
+[21] H. Moulin. Axioms of cooperative decision making, chapter 4 (Cost sharing games and the core).
+     Cambridge University Press, 1988.
+
+[22] H. Moulin. Incremental cost sharing: Characterization by coalition strategy-proofness. Social Choice
+     and Welfare, 16:279–320, 1999.
+
+[23] H. Moulin. Axiomatic Cost and Surplus Sharing. In K.J. Arrow, A.K. Sen, and K. Suzumura, editors,
+     Handbook of Social Choice and Welfare, volume 1, pages 289–357. Elseveir Science Publishers B.V.,
+     2002.
+
+[24] H. Moulin and S. Shenker. Strategyproof Sharing of Submodular Costs: Budget Balance vs. Efficiency.
+     Economic Theory, 18:511–533, 2001.
+
+[25] M. Pál and E. Tardos. Group strategyproof mechanisms via primal-dual algorithms. In Proceedings of
+     44th Annual IEEE Symposium on Foundations of Computer Science (FOCS), pages 584–593, 2003.
+
+[26] E.C. Rosenthal. Monotonicity of the core and value in dynamic cooperative games. International
+     Journal of Game Theory, 19:45–57, 1990.
+
+                                                    21
+[27] H.E. Scarf. The core of an n person game. Econometrica, 35(1):50–69, 1967.
+
+[28] L. S. Shapley. On balanced sets and cores. Naval Research Logistics Quarterly, 14:453–460, 1967.
+
+[29] L.S. Shapley. A value for n-person games. In H. Kuhn and A.W. Tucker, editors, Contributions to the
+     Theory of Games, volume 2, pages 307–317. Princeton University Press, 1953.
+
+[30] M. Shubik. Edgeworth market games. In A.W. Tucker and R.D. Luce, editors, Contributions to the
+     Theory of Games, Volume IV (Annals of Mathematics Studies, 40), pages 267–278. Princeton University
+     Press, 1959.
+
+[31] Y. Sprumont. Population monotonic allocation schemes for cooperative games with transferable utility.
+     Games and Economic Behavior, 2:378–394, 1990.
+
+[32] W. Thomson. Population-monotonic allocation rules. In W.A. Barnett, H. Moulin, M. Salles, and N.J.
+     Schofield, editors, Social Choice, Welfare and Ethics, pages 79–124. Cambridge University Press, 1995.
+
+[33] J. von Newmann and O. Morgenstern. Theory of Games and Economic Behavior. John Wiley and Sons,
+     1944.
+
+[34] H.P. Young. Cost Allocation. In R.J. Aumann and S. Hart, editors, Handbook of Game Theory with
+     Economic Applications, volume 2, pages 1193–1235. Elseveir Science Publishers B.V., 1994.
+
+
+A    A group-strategyproof mechanism with no cross-monotonic cost-sharing
+     scheme
+In this appendix, we give an example that shows that for some cost functions, group-strategyproof mecha-
+nisms do not correspond to cross-monotonic cost-sharing schemes.
+
+Example A.1 Suppose there are three agents, 1, 2, and 3, with a cost function given by
+                                         
+                                             2        if |S| = 3,
+                                C(S) =
+                                             1        otherwise.
+
+We consider the following mechanism for this cost function:
+
+Mechanism M:
+    If b1 ≥ 1 then
+         If min(b2 , b3 ) > 21 then Q = {1, 2, 3} and x = (1, 12 , 21 ),
+         else if max(b2 , b3 ) < 12 then Q = {1} and x = (1, 0, 0),
+         else if b2 ≥ b3 then Q = {1, 2} and x = ( 12 , 12 , 0),
+         else if b3 > b2 then Q = {1, 3} and x = ( 21 , 0, 21 ),
+    else if 12 ≤ b1 < 1 then
+         If min(b2 , b3 ) > 21 then Q = {2, 3} and x = (0, 12 , 12 ),
+         else if max(b2 , b3 ) < 21 then Q = ∅ and x = (0, 0, 0),
+
+
+                                                         22
+         else if b2 ≥ b3 then Q = {1, 2} and x = ( 12 , 12 , 0),
+         else if b3 > b2 then Q = {1, 3} and x = ( 21 , 0, 21 ),
+    else if b1 < 12 then
+         If min(b2 , b3 ) ≥ 21 then Q = {2, 3} and x = (0, 12 , 12 ),
+         else if b2 ≥ 1 then Q = {2} and x = (0, 1, 0),
+         else if b3 ≥ 1 then Q = {3} and x = (0, 0, 1),
+         else Q = ∅ and x = (0, 0, 0).
+
+    The cost-sharing scheme ξM is not cross-monotonic since, for example, ξM (1, {1, 2, 3}) > ξM (1, {1, 2}).
+In fact, it is not hard to see that no cross-monotonic cost-sharing scheme for C exists. Still, as the following
+lemma shows, the mechanism M is group-strategyproof.
+
+Proposition A.1 The mechanism M in Example A.1 is group-strategyproof.
+
+Proof. Let ui denote the true utility of i for receiving the service, bi denote his bid, and xi (b) denote his
+payment when the bids are b. Note xi (b) = 0 if and only if i does not receive the service.
+     We first prove by contradiction that any successful coalition must include 1. Suppose not (that is, b1 =
+u1 ). First consider the case u1 ≥ 21 . Note that for i ∈ {2, 3}, whenever i receives the service, he pays 12 .
+Therefore, i can benefit only if ui > 12 and he is not receiving service. However, in any input bid vector with
+b1 ≥ 12 , bi > 12 implies that i receives the service, so i can not benefit in any coalition. Next suppose u1 < 12 .
+Consider the cross-monotonic cost-sharing scheme ξ : {2, 3} → R+ where for i ∈ {2, 3}, ξ(i, {2, 3}) = 12
+and ξ(i, {i}) = 1. The Moulin mechanism Mξ is equivalent to M when u1 < 21 and so Theorem A implies
+that there is no subset of {2, 3} can form a successful coalition in this case.
+    Now consider any coalition including 1. Suppose u1 < 21 . If b1 < 12 , then the outcome does not change
+if we set b1 = u1 . Thus, we only need to consider coalitions in which b1 ≥ 21 . As u1 < 21 and the minimum
+non-zero price of 1 is 12 , it must be that 1 6∈ Q(b) even though b1 ≥ 12 . This happens only when 12 ≤ b1 < 1
+and max(b2 , b3 ) < 12 or min(b2 , b3 ) > 12 . In the first case, as no agent receives service, all utilities are zero
+and so no one can benefit. In the second case, for i ∈ {2, 3}, the payment of i is 12 . Therefore, if i is in
+the coalition, it must be that ui ≥ 21 . If i is not in the coalition, then ui = bi > 12 by assumption. Thus
+min(u2 , u3 ) ≥ 12 . But then x(b) = x(u) and so no agent’s utility for the outcome changes.
+     Next, suppose u1 ≥ 21 . For i ∈ {2, 3}, in the truthful scenario i pays at most 21 . As i’s payment is always
+at least 12 , i can not benefit from a decrease in price. Therefore i can benefit only if ui > 21 and i 6∈ Q(u).
+But this is impossible for any vector with u1 ≥ 21 , so i can not benefit in any coalition. Therefore, 1 must be
+the agent that benefits from the coalition. As the minimum price for 1 is 12 , in order for 1 to benefit, it must
+be that u1 > 21 but either 1 6∈ Q(u) or x1 (u) = 1. This means that either min(u2 , u3 ) > 12 (case one) or
+max(u2 , u3 ) < 12 (case two). Furthermore, 1 can only benefit if x1 (b) = 12 since, when u1 ≥ 1, 1 is receiving
+the service at price 1 and so the price must decrease, and when 21 ≤ u1 < 1, 1 is not receiving the service but
+can not afford to pay 1 and so must receive the service at price 12 . Now, in case one (min(u2 , u3 ) > 12 ), in the
+truthful scenario 2 and 3 have positive utility. In order for x1 (b) = 12 , i for i = 2 or i = 3 must lower his bid
+to bi ≤ 21 . But then if the coalition consists of just i and 1, i 6∈ Q(b) and so i’s utility decreases. Similarly, if
+the coalition is {1, 2, 3}, then 1 only benefits if {2, 3} 6⊂ Q(b) and so the utility of 2 or 3 decreases. In case
+two (max(u2 , u3 ) < 12 ), 1 can only benefit if i for i = 2 or i = 3 raises his bid to bi ≥ 21 . But then if the
+coalition consists of just i and 1, xi (b) = 12 and so i’s utility becomes negative. Similarly, if the coalition is
+{1, 2, 3}, then at least one of 2 or 3 must pay 12 , and so his utility becomes negative.                          
+
+
+                                                         23
+B A semi-cross-monotonic cost-sharing scheme with no group-strategyproof
+  mechanism
+Suppose there are just two agents, 1 and 2. The cost of servicing both agents is 6 while the cost of servicing
+either agent individually is 1. The following is a budget-balanced semi-cross-monotonic cost-sharing scheme:
+
+                     ξ(1, {1, 2}) = ξ(2, {1, 2}) = 3,      ξ(1, {1}) = ξ(2, {2}) = 1
+
+However, this scheme can not correspond to the payments in any group-strategyproof mechanism. First
+consider the bid vector b1 = (3, 3). By group-strategyproofness, the mechanism must service exactly one of
+the agents; otherwise they could collude and bid either (−1, 2) or (2, −1). Without loss of generality, suppose
+it services agent 2. Now consider the bid vector b2 = (3, 2). Again, the mechanism must service agent 2
+since otherwise he could bid 3 and get the service at price 1. Finally, consider the bid vector b3 = (b∗1 , 2),
+where b∗1 is as in the proof of Theorem 4.1. Now the mechanism must service just agent 1 at price 1. But this
+implies that in bid vector b2 , agent 1 could have profitably deviated by bidding b∗1 .
+
+Remark B.1 In this cost-sharing scheme, removing either agent from the set {1, 2} decreased the cost share
+of the other agent. This property allowed us to draw conclusions about the serviced set in bid vector b1
+which led us to our contradiction. This highlights the following general fact: if two agents i and j are both
+negative in a set S, then either ξ(i, S \ {j}) = ξ(i, S) or ξ(j, S \ {i}) = ξ(j, S) (or both).
+
+
+
+
+                                                      24
+

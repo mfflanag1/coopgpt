@@ -1,0 +1,516 @@
+{
+  "status": "STATIC_INVENTORY_COMPLETE",
+  "timestamp_utc": "2026-10-19T01:21:58.338614+00:00",
+  "scope": "Source and serialized proof-data inspection only; no checker imported, executed, or mathematically replayed.",
+  "jobs_from_runner_ast": [
+    [
+      "projective_geometry_and_scalar",
+      "lower/projective_cube_root_check.py",
+      [
+        "--max-geometry-m",
+        "4",
+        "--max-scalar-m",
+        "64"
+      ],
+      []
+    ],
+    [
+      "bounded_coalition_tail",
+      "checks/projective_bounded_tail.py",
+      [],
+      []
+    ],
+    [
+      "general_arity",
+      "lower/general_arity_circuit_check.py",
+      [],
+      []
+    ],
+    [
+      "actual_variable_lift",
+      "reviews/projective_dual_lift/verify_lifted_certificate.py",
+      [],
+      [
+        "PROFILE_TABLE.json",
+        "ACTION_GROUPS.json",
+        "LIFTED_CERTIFICATE_ROWS.jsonl.gz"
+      ]
+    ],
+    [
+      "cea_owner_cells",
+      "reviews/cea_calibration_audit/check_refined_cells.py",
+      [],
+      []
+    ],
+    [
+      "fixed_partition_synthesis",
+      "reviews/polyhedral_audit/independent_synthesis.py",
+      [],
+      []
+    ]
+  ],
+  "sources": [
+    {
+      "path": "reproduce_campaign.py",
+      "bytes": 6471,
+      "sha256": "e1ac09a84957006e566b60443bcddbe1221c61597cab691cc5147bce1689e130",
+      "symlink": false,
+      "imports": [
+        {
+          "line": 8,
+          "source": "from pathlib import Path"
+        },
+        {
+          "line": 9,
+          "source": "from datetime import datetime, timezone"
+        },
+        {
+          "line": 10,
+          "source": "import argparse"
+        },
+        {
+          "line": 11,
+          "source": "import hashlib"
+        },
+        {
+          "line": 12,
+          "source": "import importlib.util"
+        },
+        {
+          "line": 13,
+          "source": "import json"
+        },
+        {
+          "line": 14,
+          "source": "import os"
+        },
+        {
+          "line": 15,
+          "source": "import shutil"
+        },
+        {
+          "line": 16,
+          "source": "import subprocess"
+        },
+        {
+          "line": 17,
+          "source": "import sys"
+        },
+        {
+          "line": 18,
+          "source": "import tempfile"
+        },
+        {
+          "line": 19,
+          "source": "import time"
+        }
+      ],
+      "pathlike_literals": [],
+      "file_or_process_calls": [
+        {
+          "line": 21,
+          "source": "Path(__file__).resolve()"
+        },
+        {
+          "line": 21,
+          "source": "Path(__file__)"
+        },
+        {
+          "line": 25,
+          "source": "path.read_bytes()"
+        },
+        {
+          "line": 38,
+          "source": "importlib.util.find_spec(name)"
+        },
+        {
+          "line": 43,
+          "source": "args.out.expanduser().resolve()"
+        },
+        {
+          "line": 44,
+          "source": "output.mkdir(parents=True, exist_ok=False)"
+        },
+        {
+          "line": 46,
+          "source": "Path(tempfile.mkdtemp(prefix='coopgpt-campaign-replay-')).resolve()"
+        },
+        {
+          "line": 46,
+          "source": "Path(tempfile.mkdtemp(prefix='coopgpt-campaign-replay-'))"
+        },
+        {
+          "line": 46,
+          "source": "tempfile.mkdtemp(prefix='coopgpt-campaign-replay-')"
+        },
+        {
+          "line": 76,
+          "source": "report_path.write_text(json.dumps(report, indent=2) + '\\n')"
+        },
+        {
+          "line": 82,
+          "source": "work.mkdir()"
+        },
+        {
+          "line": 86,
+          "source": "original.is_file()"
+        },
+        {
+          "line": 92,
+          "source": "shutil.copy2(original, copied)"
+        },
+        {
+          "line": 101,
+          "source": "(work / 'stdout.txt').open('w')"
+        },
+        {
+          "line": 101,
+          "source": "(work / 'stderr.txt').open('w')"
+        },
+        {
+          "line": 102,
+          "source": "subprocess.run(command, cwd=work, stdout=stdout, stderr=stderr,\n                                       env=checker_environment, check=False)"
+        },
+        {
+          "line": 114,
+          "source": "(work/'stdout.txt').read_text()"
+        },
+        {
+          "line": 126,
+          "source": "work.iterdir()"
+        },
+        {
+          "line": 126,
+          "source": "p.is_file()"
+        }
+      ],
+      "dynamic_execution_calls": []
+    },
+    {
+      "path": "lower/projective_cube_root_check.py",
+      "bytes": 11557,
+      "sha256": "6982eabe6f48a0ec128715bdece9aa57d8d753753ecafb32880b50a74463d690",
+      "symlink": false,
+      "imports": [
+        {
+          "line": 9,
+          "source": "import argparse"
+        },
+        {
+          "line": 10,
+          "source": "import json"
+        },
+        {
+          "line": 11,
+          "source": "from collections import Counter, defaultdict"
+        },
+        {
+          "line": 12,
+          "source": "from fractions import Fraction as F"
+        },
+        {
+          "line": 13,
+          "source": "from math import comb"
+        }
+      ],
+      "pathlike_literals": [],
+      "file_or_process_calls": [],
+      "dynamic_execution_calls": []
+    },
+    {
+      "path": "checks/projective_bounded_tail.py",
+      "bytes": 2200,
+      "sha256": "72ad657ebc9da0ad527769a3a1abd6ad33a785623d113dba3490d9ce62c48156",
+      "symlink": false,
+      "imports": [
+        {
+          "line": 2,
+          "source": "from fractions import Fraction as Q"
+        },
+        {
+          "line": 3,
+          "source": "from math import comb"
+        },
+        {
+          "line": 4,
+          "source": "import json"
+        }
+      ],
+      "pathlike_literals": [],
+      "file_or_process_calls": [
+        {
+          "line": 62,
+          "source": "run()"
+        }
+      ],
+      "dynamic_execution_calls": []
+    },
+    {
+      "path": "lower/general_arity_circuit_check.py",
+      "bytes": 7241,
+      "sha256": "d45679ca5f1c2e6720a67f4b9e4133d1d484198a11708619aef774765dc74bb8",
+      "symlink": false,
+      "imports": [
+        {
+          "line": 7,
+          "source": "from collections import defaultdict"
+        },
+        {
+          "line": 8,
+          "source": "from fractions import Fraction as F"
+        },
+        {
+          "line": 9,
+          "source": "from itertools import combinations"
+        },
+        {
+          "line": 10,
+          "source": "import json"
+        }
+      ],
+      "pathlike_literals": [],
+      "file_or_process_calls": [],
+      "dynamic_execution_calls": []
+    },
+    {
+      "path": "reviews/projective_dual_lift/verify_lifted_certificate.py",
+      "bytes": 7661,
+      "sha256": "83f5ab17629ace71c7457e423c12154176468c20c41c7432ac520011391b8f58",
+      "symlink": false,
+      "imports": [
+        {
+          "line": 7,
+          "source": "from collections import Counter, defaultdict"
+        },
+        {
+          "line": 8,
+          "source": "from fractions import Fraction as Q"
+        },
+        {
+          "line": 9,
+          "source": "from itertools import combinations"
+        },
+        {
+          "line": 10,
+          "source": "from pathlib import Path"
+        },
+        {
+          "line": 11,
+          "source": "import gzip"
+        },
+        {
+          "line": 12,
+          "source": "import hashlib"
+        },
+        {
+          "line": 13,
+          "source": "import json"
+        }
+      ],
+      "pathlike_literals": [],
+      "file_or_process_calls": [
+        {
+          "line": 15,
+          "source": "Path(__file__).resolve()"
+        },
+        {
+          "line": 15,
+          "source": "Path(__file__)"
+        },
+        {
+          "line": 19,
+          "source": "(HERE/'PROFILE_TABLE.json').read_text()"
+        },
+        {
+          "line": 43,
+          "source": "(HERE/'LIFTED_CERTIFICATE_ROWS.jsonl.gz').read_bytes()"
+        },
+        {
+          "line": 99,
+          "source": "(HERE/'ACTION_GROUPS.json').read_text()"
+        },
+        {
+          "line": 139,
+          "source": "(HERE/name).read_bytes()"
+        },
+        {
+          "line": 141,
+          "source": "(HERE/'VERIFICATION_RESULT.json').write_text(json.dumps(result,indent=2)+'\\n')"
+        }
+      ],
+      "dynamic_execution_calls": []
+    },
+    {
+      "path": "reviews/cea_calibration_audit/check_refined_cells.py",
+      "bytes": 7859,
+      "sha256": "52b0832613ea09911fda86a4ee929576656707b46ae90206b5ace9ad21b5fa0b",
+      "symlink": false,
+      "imports": [
+        {
+          "line": 8,
+          "source": "from fractions import Fraction as Q"
+        },
+        {
+          "line": 9,
+          "source": "from itertools import combinations, product"
+        },
+        {
+          "line": 10,
+          "source": "from pathlib import Path"
+        },
+        {
+          "line": 11,
+          "source": "from datetime import datetime, timezone"
+        },
+        {
+          "line": 12,
+          "source": "from collections import Counter"
+        },
+        {
+          "line": 13,
+          "source": "import hashlib"
+        },
+        {
+          "line": 14,
+          "source": "import json"
+        }
+      ],
+      "pathlike_literals": [],
+      "file_or_process_calls": [
+        {
+          "line": 168,
+          "source": "Path(__file__).read_bytes()"
+        },
+        {
+          "line": 168,
+          "source": "Path(__file__)"
+        },
+        {
+          "line": 170,
+          "source": "Path(__file__).with_suffix('.json')"
+        },
+        {
+          "line": 170,
+          "source": "Path(__file__)"
+        },
+        {
+          "line": 171,
+          "source": "output.write_text(json.dumps(out,default=encode,indent=2)+'\\n')"
+        }
+      ],
+      "dynamic_execution_calls": []
+    },
+    {
+      "path": "reviews/polyhedral_audit/independent_synthesis.py",
+      "bytes": 8208,
+      "sha256": "86677b35007b2ec8cd8d72d52719d807d96871ae9c6eae013a20e82d737cb91e",
+      "symlink": false,
+      "imports": [
+        {
+          "line": 7,
+          "source": "from fractions import Fraction as Q"
+        },
+        {
+          "line": 8,
+          "source": "from itertools import combinations, product"
+        },
+        {
+          "line": 9,
+          "source": "from pathlib import Path"
+        },
+        {
+          "line": 10,
+          "source": "from datetime import datetime, timezone"
+        },
+        {
+          "line": 11,
+          "source": "import json"
+        },
+        {
+          "line": 12,
+          "source": "import numpy as np"
+        },
+        {
+          "line": 13,
+          "source": "from scipy.optimize import linprog"
+        }
+      ],
+      "pathlike_literals": [],
+      "file_or_process_calls": [
+        {
+          "line": 174,
+          "source": "Path(__file__).with_suffix('.json')"
+        },
+        {
+          "line": 174,
+          "source": "Path(__file__)"
+        },
+        {
+          "line": 175,
+          "source": "path.write_text(json.dumps(out,indent=2)+'\\n')"
+        }
+      ],
+      "dynamic_execution_calls": []
+    }
+  ],
+  "fixtures": [
+    {
+      "path": "reviews/projective_dual_lift/PROFILE_TABLE.json",
+      "bytes": 335859,
+      "sha256": "4bee5ee8e5a31ab3a0ccbe0665d52c40f9fcb8611edce738354325fe7d27cfbf",
+      "symlink": false,
+      "serialized_documents": 1,
+      "pathlike_strings": [],
+      "top_level_keys": [
+        "activities",
+        "domain",
+        "owner_labels",
+        "profiles",
+        "report_encoding",
+        "resource_encoding",
+        "resource_rows"
+      ]
+    },
+    {
+      "path": "reviews/projective_dual_lift/ACTION_GROUPS.json",
+      "bytes": 21355,
+      "sha256": "9a3d372ae57c238c460f8e73456de24145dca6396c4430aae6e89afb4057c8da",
+      "symlink": false,
+      "serialized_documents": 1,
+      "pathlike_strings": [],
+      "top_level_keys": [
+        "base_high_profile",
+        "base_low_profile",
+        "base_seed_and_terminal_coalition",
+        "base_transition_coalition",
+        "base_zero_restorer",
+        "cartesian_product_actions_enumerated",
+        "owner_permutations_old_to_new",
+        "resource_maps_on_0_through_7"
+      ]
+    },
+    {
+      "path": "reviews/projective_dual_lift/LIFTED_CERTIFICATE_ROWS.jsonl.gz",
+      "bytes": 378439,
+      "sha256": "e829ba32d0a3fe9061fbb9b6d37636277b5419a78fb9a346e93d61823c5e7a5a",
+      "symlink": false,
+      "serialized_documents": 34440,
+      "pathlike_strings": [],
+      "top_level_keys": [
+        "K_coefficient",
+        "coalition",
+        "high_profile_id",
+        "kind",
+        "low_profile_id",
+        "multiplicity",
+        "rhs",
+        "terms",
+        "weight"
+      ]
+    }
+  ],
+  "input_count_including_runner": 10,
+  "absolute_or_url_literals_in_sources": 0,
+  "absolute_or_url_strings_in_fixtures": 0,
+  "dynamic_execution_calls_in_sources": 0
+}

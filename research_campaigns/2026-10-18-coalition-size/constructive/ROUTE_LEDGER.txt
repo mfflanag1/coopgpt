@@ -1,0 +1,296 @@
+CONSTRUCTIVE ROUTE LEDGER
+2026-10-18 21:15 UTC
+
+R1. INDEPENDENT FRACTIONAL-OWNER MARGINALS: REJECTED AS UNCOMPENSATED RULE
+Define m_i(b)=E[F(b_i+sum_{j!=i} U_j b_j)-F(sum_{j!=i} U_j b_j)],
+with report-independent independent U_j uniform[0,1]. This leaves root64's
+whole-owner class, is nonnegative and individually monotone. Via integration
+in the i coordinate it is the common-price rule
+ m_i=b_i dot E grad F(sum_j U_j b_j),
+so it covers every coalition. This equality is valid at a.e. interior points
+and can be obtained for packing F by finite polyhedral integration.
+
+But TCWM fails exactly at arity2. Fixed owners 0,1,2 have reports
+ b_0=(1,0), b_1=(0,x), b_2=(0,y); F(P,L)=min(P,L).
+For x,y>=1, direct integration gives
+ m_1=1/(6y), m_2=1/(6x).
+Indeed for fixed P=u_0, m_1=E[(u_0-y U_2)_+]=u_0^2/(2y),
+and E u_0^2=1/3. Thus restoring x from1 to1+delta holds m_1 fixed
+but strictly reduces m_2. Coalition {1,2} (one unchanged member) loses
+ delta/[6(1+delta)]. Fixed owners, same eligibility, all real reports.
+Any positive fixed multiplier retains this violation.
+
+The failure extends to independent fractional laws with an interval of
+positive mass near0: an already individually saturated supplier gets no own
+increment, while its unchanged competitor loses some marginal value.
+This extension needs exact law hypotheses if promoted beyond this diagnosis.
+
+R2. COMMON-PRICE GRADIENT SMOOTHING: EXACT DIFFERENTIAL DIAGNOSTIC
+For smooth F, B(t)=sum_j t_j b_j, y_j=b_j dot E grad F(B(t)),
+and a restoration in coordinate z of owner i in coalition C,
+ d Y_C / d b_iz = E[w_z(B)+t_i sum_{j in C} partial_{t_j} w_z(B)].
+For independent uniform t in[0,1], integration by parts gives
+ E_{-i}[w_z(B)|t_i=1]
+ +sum_{j in C\{i}} E_{-j}[t_i (w_z(B)|t_j=1-w_z(B)|t_j=0)].
+The second sum has negative lower-face terms for unchanged protected members.
+These are genuine incentive terms; positivity of expected dual prices only
+proves coverage, not TCWM. R1 supplies an exact realized failure.
+
+R3. GAMMA-WEIGHTED EULER ALLOCATION: REJECTED EVEN FOR INDIVIDUAL IC
+For independent Gamma(a,1) t, Euler shares
+ y_i=E[t_i b_i dot grad F(B)]
+are nonnegative, with total E F(B)<=a F(sum b). But on a saturated star,
+large supplier shares may decline when own capacity grows. Under regularity,
+ dY_C/db_iz=E[t_i (sum_{j in C}t_j-a|C|) w_z(B)].
+The integrand has a negative small-coalition-scale region. No all-profile
+incentive claim. An exact rational/exponential counterexample can be supplied
+if this route becomes relevant; it is not currently pursued.
+
+R4. PROFILE-ADAPTIVE COMPENSATION: OPEN
+Need compensate lower-face loss with own payments that can keep increasing
+while production is flat, without a row-count or owner-count budget. Generic
+raw-capacity factors are not justified for mixed owners. Target lemma would
+bound coalition losses by an explicit owner-local compensation with total
+O(s)F; no such lemma proved yet.
+
+2026-10-18 21:26 UTC
+R5. OWNERWISE NORMALIZED BINOMIAL MARGINALS: REJECTED EXACTLY
+For p=1/s let m be binomial marginals and set
+ y_i=m_i max_{C containing i, v(C)>0} v(C)/m(C).
+This gives coverage and attempts to localize the expensive coverage scaling.
+At s2,min2, low reports[(0,0),(0,2),(2,0)] give payments(0,1,1).
+Restore owner0 to(1,0): payments become(2/9,5/4,3/4).
+Protected coalition{0,2} loses1/36. Exact integer marginal sums are low(0,4,4)
+and high(1,5,3); the probability denominator4 cancels from the normalized rule.
+Certificates: adaptive_local_small_failure.json; adaptive_local_probe.py.
+
+R6. IMPORTANCE-WEIGHTED COVER QP: REJECTED EXACTLY
+See importance_qp_exact.txt. A paired-coalition loss1/3 occurs already on min2
+with three mixed/pure actual owners and a zero-report owner restoring one row.
+Coverage is automatic; the failure is selection monotonicity. Common-cap
+calibration alone was too weak to detect this mixed-ownership failure.
+
+R7. PLAIN CORE-NORM SELECTION: TRANSFERRED TO ROOT, NOT THIS LANE'S CLAIM
+Initial bootstrap counterexample was algebraically WRONG: an R multiplicity
+was dropped from the objective. Root caught this; it is explicitly rejected.
+A later second-branch common-cap example is valid and independently verified
+by root: R3 power owners; one active private pair and one half-zero pair;
+restoration of the missing row drops oldpair+newowner payment2/5 to3/8 under
+plain quadratic cover selection. Root owns subsequent total-penalty analysis.
+
+R8. FULL FRACTIONAL THINNING GRAND MARGINALS: REJECTED EXACTLY
+For independent uniforms U and m_i=E[F(sum U_j b_j)-F(sum_{j!=i}U_j b_j)],
+the same star with x,y>=1 has
+ m1=1/(6y)-1/(24xy), m2=1/(6x)-1/(24xy).
+Holding y fixed, d(m1+m2)/dx=(1-2y)/(12x^2 y)<0. At x=y1 and x restoredto2,
+coalition leaves lose1/24. Even adding fractional own scaling does not cure R1.
+
+2026-10-18 21:43 UTC
+R9. FULLY ADAPTIVE GLOBAL BINOMIAL PARAMETERS: QUADRATIC ARCHITECTURE BARRIER
+See ADAPTIVE_SCALAR_BINOMIAL_BARRIER.txt and exact rational checker. For one
+GLOBAL scalar beta,p at each report profile, hard min3 coverage plus additive
+anchor funding force p>=1/sqrt(3B). A growing leaf-activation chain forces
+leaf payments to decay no faster than (1-1/s)^m; their exact binomial form
+decays at most (1-1/sqrt(3B))^m. Thus B>=s^2/3 asymptotically. Finite
+s^2/4 obstruction needs O(s log s) owners. Endpoint/zero reports handled.
+Public connected-component splitting blocked by zero-gated arity3 bridges.
+Owner-specific or active-support adaptive parameters are NOT excluded.
+
+R10. RANDOM-PRIORITY GREEDY COVER SELECTION: REJECTED EXACTLY
+For a fixed permutation, recursively set
+ y_i=max_{T subset earlier}[v(T union {i})-y(T)].
+Coverage follows when the last member of any coalition is processed. Earlier
+payments do not depend on later reports, so own payment is individually
+monotone. Average over all permutations retains these properties.
+At min2, bundles[(1,2),(2,3),(3,2)] give payments(4/3,7/3,8/3).
+Restoring owner2 from(3,2) to(3,4) gives(1,2,3). The coalition of all three
+loses1/3, while F remains6. This rejects TCWM for s>=3. Exact integer/Fraction
+replay is random_priority_cover_probe.py/.json; no LP numerical tolerance.
+
+2026-10-18 21:49 UTC
+R11. ADAPTIVE GLOBAL BINOMIAL MIXTURES: BARRIER CHAIN ESCAPED
+See ADAPTIVE_MIXTURE_ESCAPE_CALIBRATION.txt. A three-atom nonnegative measure
+with fixed mass2 and fixed second moment1/2 gives exact factor2 coverage and
+all-coalition TCWM along the full binary leaf activation chain used in R9.
+Anchor and hard-owner payments remain constant; leaf payments are1/(2m), and
+center payment increases to e/2. This proves that the R9 chain does not by itself
+exclude report-adaptive mixtures. It is not a mechanism for all real reports.
+
+R12. PRODUCTION-NORMALIZED RANDOM-PRIORITY COVER: REJECTED EXACTLY
+Normalizing the R10 averaged cover vector z to F*z/sum(z) makes total payment
+exactly F (later constant scaling cannot alter incentive signs), but fails paired
+TCWM. On min3 with bundles[(3,0,0),(0,4,0),(0,0,1),(4,0,0)], restoring owner2
+to(0,7,1) drops coalition{1,2} from5/7 to1/2, a loss3/14. Exact certificate:
+random_priority_normalized_failure.json. Restorer was already productive in a
+different row; this mixed-ownership change removes an unchanged member's price.
+
+R13. QUADRATIC DUAL-PRICE SELECTION: REJECTED EVEN INDIVIDUALLY
+Choose feasible production dual p minimizing sum_i (p dot b_i)^2 plus
+lambda*(p dot B)^2, and pay p dot b_i. Coverage is automatic; for lambda>0,
+comparison with an optimal dual implies total <=sqrt((1+lambda)/lambda)F.
+But on min2 with b0=(1,t), b1=(1,0), and1<t<2, the unique optimal dual has
+0<=p_X<1 and hence y0>1. At t=2 the optimum is p_X=1 and y0=1. Thus restoring
+owner0's Y supply decreases its own payment for every finite lambda>=0.
+Algebra: p_Y=1-p_X, y0=t-(t-1)p_X, y1=p_X. Objective derivative at p_X=1
+is2(2-t)(1+2lambda)>0 for t<2, so the minimizing p_X is strictly below1.
+At t=2 its derivative at1 is0 and strict convexity gives the unique endpoint.
+An earlier exact random min2 counterexample is in dual_price_qp_probe.json;
+the two-owner symbolic family supersedes it and covers every lambda.
+
+2026-10-18 21:58 UTC
+R14. GLOBAL ADAPTIVE MIXTURE HARMONIC BARRIER: VERIFIED ELEMENTARY PROOF
+Parent supplied multiscale star idea; lane checked direct restorations and wrote
+ADAPTIVE_GLOBAL_MIXTURE_HARMONIC_BARRIER.txt. One star of each size m<=s gives
+simultaneous final constraints int p(1-p)^(m-1) dmu>=1/(2m). Summing yields
+mass>=H_s/2, and an additive anchor translates this to funding. Base arity2
+family has an explicit factor2 all-real, mixed-ownership general mechanism,
+so this is an architecture separation, not a general lower.
+
+R15. REPLICATION RIGIDITY FOR ALL GLOBAL ADAPTIVE POSITIVE MIXTURES: REVIEW PASSED
+ADAPTIVE_GLOBAL_MIXTURE_RIGIDITY_BARRIER.txt claims K>=s^(r-1)/r. Repeated fresh
+threshold-test components, fixed huge sentinel stars, and a larger additive
+anchor force a low-variation cycle in the finite moment vector. A weak limit
+satisfies any chosen finite list with one measure; compactness over lists and
+the accepted root64 support lemma yield the quadratic r3 barrier. Root notified
+and independent audit requested. Opposite-model review found no fatal gap; root independently checked key steps.
+The stated review clarifications were incorporated without changing snapshots.
+Owner/component-specific adaptation remains outside the class.
+PAIR_REPLICATION_EXACT_SANITY_CHECK.txt supplies an independent exact finite
+special case: repeated pair-star activation plus fixed hard min3 forces
+h_t=int p(1-p)dmu_t >=(1/3)(1-2^(-t)), hence mass>=4h_t and asymptotic4/3.
+No sentinels or compactness are needed for this s2 sanity check. Rational replay
+pair_replication_sanity_check.json is PASS.
+
+2026-10-18 22:17 UTC
+R16. OWNER-SURPLUS QUADRATIC COVER: O(s) BUDGET LEMMA, EXACT PAIR FAILURE
+OWNER_SURPLUS_REGULARIZER_BUDGET_AND_FAILURE.txt proves that weights w_i<=a/g_i
+with surplus floors f_i and total penalty(lambda/F)Y^2 yield funding at most
+sqrt(1+a/lambda)F. For a=s,lambda=1/s this is O(s); coverage is imposed.
+But the specific importance weights min(F/g_i^2,s/g_i) fail pair TCWM.
+SURPLUS_IMPORTANCE_QP_TOTAL_PENALTY_OBSTRUCTION.txt gives a stronger exact
+min3/s2 fixture rejecting EVERY nondecreasing total penalty, even profilewise,
+and EVERY feasible total cap. Low reports[(2,4,3),(3,3,0),(4,1,4)] and restore
+owner0's second coordinate4->6. Protected coalition{0,1} loses at least41/170.
+The variant weights1/g_i loses at least7/22 on the same reports. All cover
+constraints and region KKT certificates checked exactly by Fraction replay
+check_surplus_importance_total_penalty.py/.json. The budget lemma survives;
+coalition-monotone selection is the unsolved obligation.
+
+2026-10-18 22:22 UTC
+R17. FIXED SIGNED LINEAR WORTH RULES: CANDIDATE QUADRATIC ARCHITECTURE EXTENSION
+SIGNED_FIXED_MARGINAL_POSITIVITY.txt gives an exact min3 unit-box restoration
+isolating any sampled owner subset. Individual TCWM forces every coefficient
+on an own-containing coalition worth nonnegative. Fraction replay passes21,845
+comparisons through eight owners. Same fixed public min3 institution and SAME
+unit report/endowment box throughout; no sign claim on arbitrary technologies.
+FIXED_LINEAR_WORTH_RULE_QUADRATIC_BARRIER.txt extends to all fixed signed linear
+worth rules, even with nonzero dummy payments. After label averaging, write
+y_i=positive marginal part+q_i(b_-i). Payment nonnegativity forces q_i>=0.
+On a D-designated-owner profile padded with zeros, symmetry and funding give
+q_i<=kappa_n F/(n-D+1), by setting i's report0 in an auxiliary profile. Thus
+q_i vanishes in the same root64 compactness limit, yielding liminf kappa_n>=s²/3.
+Parent notified; independent review requested. This remains an architecture
+barrier, not a general lower bound or a surviving upper construction.
+
+2026-10-18 22:27 UTC
+R18. ALL SCALAR-SURPLUS-IMPORTANCE QUADRATIC SELECTORS: EXACT PAIR OBSTRUCTION
+SCALAR_IMPORTANCE_QP_FAMILY_OBSTRUCTION.txt rejects ANY common positive weight
+function of (grand value, standalone value, maximum surplus), even when the
+function itself adapts arbitrarily across profiles. Four actual owners on a
+two-branch arity3 common-cap technology suffice; owner A restores a second
+branch input while its scalar importance stays1. Low vector(1/3,1/3,1/3,0),
+high unpenalized vector(2/5,2/5,1/5,1/5); protected pair A+oldleaf loses1/15.
+Every nondecreasing total penalty and every feasible total cap retains at least
+this loss. Exact all16coalition replay/checker passes. This is a family-wide
+obstruction, not a lower bound on arbitrary nonlinear owner-sensitive rules.
+
+2026-10-18 22:29 UTC
+R19. SEPARABLE STRICTLY CONVEX SCALAR-IMPORTANCE SELECTORS: UNBOUNDED PAIR FACTOR
+Appendices A/B of SCALAR_IMPORTANCE_QP_FAMILY_OBSTRUCTION.txt extend the clean
+QP example. Smooth strictly convex nondecreasing costs fail the same four-owner
+transition. For nonsmooth strictly convex costs, use M fixed branches, one P
+owner, one mixed A owner activating X branches, and fixed Y-leaf owners.
+At profile m, coverage/strict convexity/monotonicity force P=A=t_m, every active
+leaf=q_m, 2t_m+q_m=1. At m1 allthree=1/3. Pair TCWM for A+firstleaf forces
+q_m nondecreasing, hence factor at M at least(M+2)/3. This excludes any uniform
+finite factor for the entire stated separable scalar-feature architecture,
+including nonsmooth costs, arbitrary profile adaptation, total penalties/caps.
+Strict convexity and identical costs for equal (V,f,g) are explicit assumptions.
+Parent independently derived the smooth four-owner extension. Chain audit pending.
+
+2026-10-18 22:35 UTC — FIXED-LINEAR REVIEW PASSED
+Root and opposite-model review found no fatal gap in the signed general linear
+worth-rule barrier. Applied the four requested scope/notation clarifications;
+source review snapshots unchanged. The scalar-importance convex-family note is
+now frozen for opposite-model audit. Next work targets a direction-sensitive
+nonseparable or all-profile dual route; no more scalar-summary refinements.
+
+2026-10-18 22:39 UTC
+R20. WORTH-ONLY PARETO-MINIMAL NONSEPARABLE SELECTION: STRUCTURAL FILTER
+WORTH_ONLY_PARETO_MINIMAL_COVER_BARRIER.txt argues any worth-only selector that
+always chooses a Pareto-minimal cover needs factor>=n/3 on the fixed-owner
+branch chain, already with pair TCWM. Key nontrivial point: Pareto-minimality
+is not generally preserved by averaging, but its set on THESE chain games is
+the convex triangle P+A+q=1, all leaves=q, inactive0. Thus label averaging
+preserves it here; worth-only game symmetry givesP=A and the pair chain applies.
+This excludes even nonseparable monotone objectives based only on worths.
+A genuine bounded upper must use bundle directions beyond worths or deliberate
+nonminimal reserve payments. Candidate proof, parent audit pending; frozen
+scalar-cost proof untouched.
+
+2026-10-18 22:43 UTC — CONVEX-FAMILY REVIEW PASSED AND CHECKERS STRENGTHENED
+Opposite-model audit found no invalid mathematics in SCALAR_IMPORTANCE_QP_FAMILY
+_OBSTRUCTION.txt. Scope headlines corrected to the exact (V,f,g) statistics,
+pair-TCWM-conditional chain bound, and zero-slope condition. Exact checkers now
+certify global surplus potentials, ALL QP KKT conditions,36 chain-state optima,
+and625 owner-weight low/high optima (PASS), instead of mere feasible vectors.
+Worth-only Pareto note remains frozen under its separate opposite audit.
+Next constructive avenue is a profile-dependent compensated graph decomposition
+using full owner bundle directions; no surviving O(s) mechanism yet.
+
+2026-10-18 22:50:56 UTC — CAPPED-GRAPH CONSTRUCTION: EXACT QUADRATIC NEAR-MISS
+R21. CAPPED_GRAPH_MARGINAL_NEAR_MISS.txt defines an all-real, mixed-owner rule
+for F(P,c)=min(P,G(c)), G arity2: aggregate-cap shares plus p^-1 fixed-cap
+binomial graph marginals, p=1/s. It covers every coalition and is TCWM for
+all |C|<=s. A finite coefficient identity handles unchanged protected members.
+Funding <=1+2s², and N=s² disjoint graph branches with one common unit cap
+force exact funding 1+2s²(1-1/s²)^(s²-1) ~2s²/e. Thus this ownership-sensitive
+composition still cannot improve the exponent. No full-OUT claim.
+check_capped_graph_marginal.py/.json PASS:1920 coverage rows,12000 protected
+coalition comparisons,80 direct marginal values,322 coefficient sign checks.
+The reduced task is a capped graph extension avoiding the second sampling loss;
+it has not been shown sufficient for arbitrary arity-three technologies.
+
+2026-10-18 22:51:15 UTC — WORTH-ONLY PARETO REVIEW PASSED
+Opposite review found no substantive invalidating findings. Corrected the
+quantified reserve consequence's lead sentence to concern the symmetrized rule;
+no quantitative original asymmetric reserve bound is asserted. Root previously
+rederived the convex-minimal-set, label-average and reserve calculations.
+Review input snapshots remain unchanged; independent aggregate-price check
+also agrees with the separate parent result. No general upper improvement.
+
+2026-10-18 22:53:59 UTC
+R22. PERSPECTIVE OWNER-COST DUAL PRICES: SINGLETON FAILURE
+PERSPECTIVE_DUAL_PRICE_FAILURE.txt rejects minimizing and paying the coordinate
+costs Vh((p.b_i)/V), for any common fixed strictly convex nondecreasing h with
+h(0)=0. This objective uses full owner bundles and has a valid budget h(1)V;
+h>=identity also covers every coalition. Yet two mixed owners on min2 already
+violate singleton TCWM by restoring(1,t) to(1,2), 1<t<2. For h=z+2z²,t=3/2,
+exact low/high KKT gives loss577/400. No general dual-selection impossibility.
+
+2026-10-18 22:59:54 UTC — BOUNDED CONSTRUCTIVE BRANCH SEALED
+CAPPED_GRAPH_REMAINING_COMPENSATION_GAP.txt records the exact owner-reserve
+inequality needed for a common-cap graph extension. No reserve formula or
+O(s) budget bound survives. The stronger graph increment Delta Z_C>=Delta G
+is already implicit in the old graph utilization proof; it is not new work.
+Stop this bounded branch rather than treating an equivalent incentive obligation
+as a new structural lemma. No subquadratic general upper was obtained.
+Reviewed architecture barriers and exact counterexamples remain valid progress.
+
+2026-10-18 23:00:30 UTC — CARDINALITY REVIEW CLARIFICATIONS
+Parent rigidity construction now uses the general bound
+A+DL+1 <= F_total <= A+DL+NT+1=A(1+1/N), with equality for its explicit threshold
+tests, rather than claiming arbitrary local tests have constant value1.
+The extension header records independent/opposite audit scope and the explicit
+D>=number-of-other-local-owners requirement, already present and root-verified.
+No argument or conclusion changes; original review snapshots remain unchanged.

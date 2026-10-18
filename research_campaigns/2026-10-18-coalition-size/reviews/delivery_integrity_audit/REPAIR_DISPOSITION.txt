@@ -1,0 +1,51 @@
+PORTABLE METADATA PLACEMENT REPAIR — FINAL INDEPENDENT DISPOSITION
+2026-10-19 UTC. Auditor /root/arity3_lower. Exact time in REPAIR_MANIFEST.json.
+
+PASS. The placement gap recorded in AUDIT.txt is resolved in the current
+application/verify_portable_metadata.py. No remaining substantive correctness
+or scope issue was found in this bounded recheck. The original audit and its
+successful mismatch reproduction remain historical evidence of the v1 gap.
+
+Current checker SHA256:
+a6d92ecb2eb9f5fb8c7a887b37fc408a0da85b3c9675c88014903097d33503ce
+
+The repaired code binds each uniquely named selected member's offset, size
+and type to an entry validated against saved tar-header bytes. Footer member
+names and sizes are tied to those selected entries. The sequential tar-offset
+walk, zero first-end marker and end position are checked. All logged header
+and footer ranges must have an accounted role, and their recorded archive
+sizes must agree. These checks support the advertised saved-byte and archive-
+placement scope without decoding Parquet column statistics or outcome values.
+
+Executed check_metadata_repair.py against temporary copies of precisely339
+selected inputs. The baseline matched metadata_integrity_v2_PASS.json apart
+from timestamp:334 dataset requests and468,255 dataset bytes. The original
+forged selected/footer name was rejected at the new validated-entry check.
+All ten bounded negative fixtures were rejected with the relevant diagnostic:
+ - forged selected/footer name;
+ - selected offset mismatch;
+ - duplicate selected name;
+ - omitted interior tar entry;
+ - incorrect reported end offset;
+ - nonzero end marker, even after updating its copied body hash;
+ - omitted footer record leaving unaccounted ranges;
+ - duplicate footer member;
+ - footer member-size mismatch;
+ - one request's inconsistent recorded archive size.
+
+After restoring copied inputs the baseline passed again. Every one of the339
+sealed source inputs was compared with its pretest bytes and remained identical.
+Temporary copies were removed. No original record or author file was modified;
+no acquisition, network request, source extraction, sparse wrapper, Parquet
+decoder, footer-statistics decoder or outcome-value read was involved.
+
+Limits remain appropriate: this verifies local consistency with the saved
+ledgers, not remote-release authenticity, completeness of historical network
+traffic, documentation-body hashes, physical feasibility or institutional
+rights. Documentation bytes and the historical zero-value-read count remain
+ledger statements. The ten cases are targeted regression checks, not a claim
+of security completeness against arbitrary coordinated replacement of every
+record. An external bundle manifest supplies separate provenance checks.
+
+The normalization-witness PASS in AUDIT.txt is unchanged. This closes the
+assigned delivery-integrity audit; no new scientific or priority claim follows.

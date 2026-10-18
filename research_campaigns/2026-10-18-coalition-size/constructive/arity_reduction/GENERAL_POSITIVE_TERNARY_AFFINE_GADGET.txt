@@ -1,0 +1,154 @@
+GENERAL POSITIVE PACKING HAS AN OWNER-PRESERVING AFFINE ARITY-THREE GADGET
+2026-10-18. Exact construction and precise funding obstruction.
+This is an affine value reduction, not a bounded multiplicative reduction and
+not an improvement to the coalition-size frontier. Historical novelty unchecked.
+
+1. ORIGINAL DATA AND THE GADGET
+Let F(c)=max{sum_e pi_e x_e:Ax<=c,x>=0}, with A,pi>=0. Remove zero-profit
+activities and assume every remaining activity uses a nonempty finite set of
+rows. For activity e list its r_e>=1 positive input rows v_(e,1),...,v_(e,r_e),
+with positive coefficients a_(e,k)=A_(v_(e,k),e) and profit pi_e>0.
+
+Replace e by stage variables z_(e,1),...,z_(e,r_e), each with profit pi_e.
+Stage k consumes a_(e,k) units of the ORIGINAL row v_(e,k). Original rows remain
+shared across all activities exactly as before; they are not duplicated.
+For each k=1,...,r_e-1 add a bridge variable w_(e,k), also of profit pi_e, and
+two distinct link-resource rows:
+  z_(e,k)  +w_(e,k)<=M_e,
+  z_(e,k+1)+w_(e,k)<=M_e.                               (1)
+Each link row is private to this activity and adjacent pair. Both have the
+same supplied capacity M_e. A middle stage uses its original row and two link
+rows; an endpoint stage uses at most two rows; a bridge uses two link rows.
+Every positive-profit column therefore has arity at most3. All constraints,
+profits and reports are nonnegative. There is no conservation equality or
+negative coefficient. For r_e=1 there are no links and the stage is unchanged.
+
+2. EXACT VALUE IDENTITY, INCLUDING OPTIONAL ACTIVITY CAPS
+For arbitrary c>=0,M>=0 let
+ B(M)=sum_e pi_e(r_e-1)M_e,
+ F_M(c)=max{sum_e pi_e x_e:Ax<=c,x>=0,x_e<=M_e if r_e>=2}.
+Then the gadget value is exactly
+                         G(c,M)=B(M)+F_M(c).             (2)
+
+Proof of upper bound. At given feasible stages z, positive bridge profit makes
+its optimal amount M_e-max(z_(e,k),z_(e,k+1)). Thus activity e contributes
+ pi_e(r_e-1)M_e
+   +pi_e[sum_k z_(e,k)-sum_k max(z_(e,k),z_(e,k+1))].    (3)
+Choose an index j of a minimum stage m_e. For every edge to the left of j,
+its maximum dominates its left endpoint; for every edge to the right, its
+maximum dominates its right endpoint. Hence
+ sum_(k=1)^(r_e-1)max(z_k,z_(k+1)) >=sum_(k!=j)z_k,
+so the bracket in (3) is at most m_e. Replacing every stage by m_e weakly lowers
+all original resource consumption. Also m_e<=M_e when r_e>=2, because every
+stage meets at least one link row. Consequently x_e=m_e is feasible for F_M,
+and every gadget plan has value at most B+F_M.
+
+Proof of lower bound. For an optimal original capped plan x, set every stage
+of e equal to x_e and each bridge equal to M_e-x_e. This is nonnegative, keeps
+original resource use Ax, and exactly fills every link row. Its profit for e is
+ r_e pi_e x_e+(r_e-1)pi_e(M_e-x_e)
+   =pi_e(r_e-1)M_e+pi_e x_e.
+Sum to prove (2). The argument also covers zeros and arbitrary real reports.
+For r_e=1, simply take m_e=z_e and omit its vacuous cap.
+
+3. TWO ACTUAL-OWNER REPORT MAPS
+Original owner i reports a mixed bundle b_i with fixed endowment bar_b_i.
+Keep those ORIGINAL row reports with owner i. Give that same owner the following
+capacity at EACH of activity e's two link rows for EVERY adjacent pair:
+
+(A) Positive-linear map:
+   M_(i,e)(b_i)=(1/r_e)sum_(k=1)^r_e b_(i,v_(e,k))/a_(e,k).
+(B) Constant endowment map:
+   M_(i,e)=(1/r_e)sum_(k=1)^r_e bar_b_(i,v_(e,k))/a_(e,k).
+
+Both use the original actual-owner roster, with no new dummy agent. Map(A)
+is a fixed nonnegative linear map T; map(B) is owner-local and affine. Under
+(A), fixed gadget endowments are T bar_b_i; under(B), link stocks are fixed in
+the report image. Every original binding underreport/restoration changes only
+the same owner's gadget reports. No owner is required to restore other owners.
+The gadget itself permits all real reports in its fixed box; this construction
+uses only the stated image profiles when pulling a mechanism back.
+
+For any actual coalition C, M_e(C)=sum_(i in C)M_(i,e) is at least
+ min_k b_(C,v_(e,k))/a_(e,k), because the minimum is bounded by the average,
+and in(B) endowments dominate reports. Every feasible original activity amount
+is bounded by this minimum. Thus the extra caps in F_M are redundant for the
+coalition, and (2) becomes the ALL-coalition identity
+  G(mapped b_C)=B_C+F(b_C),
+  B_C=sum_(i in C)B_i,  B_i=sum_e pi_e(r_e-1)M_(i,e).    (4)
+In(A), B_i is a fixed nonnegative linear functional of b_i. In(B), B_i is a
+fixed owner-specific constant. The factor1/r_e is optional: using the sum of
+normalized reports/endowments also works, but has a larger baseline.
+
+4. PRECISE MECHANISM TRANSFERS
+Suppose z_i is a nonnegative gadget mechanism covering EVERY coalition. Define
+original payments
+                         y_i=z_i(mapped b)-B_i.          (5)
+Singleton coverage and (4) give z_i>=B_i+F(b_i)>=B_i, proving y_i>=0.
+Subtracting B_C from every coalition's coverage proves original coverage.
+
+(A) Linear report map: a coalition's restored gadget bundle is exactly T d_C,
+and G(T d_C)=B(d_C)+F(d_C). Therefore full OUT of z for |C|<=s gives
+ Delta y_C=Delta z_C-B(d_C)>=F(d_C).
+The same actual owners and coalition size are used. TCWM ALONE of z does not
+justify (5), because a changing baseline would subtract B(d_C) from its zero
+increment bound. This version transfers full OUT, not arbitrary TCWM.
+
+(B) Constant endowment map: B_C is unchanged during every original restoration,
+so TCWM of z gives TCWM of y for the SAME coalition C. Full OUT of z also gives
+this TCWM conclusion, but does NOT automatically give original full OUT: the
+restored gadget bundle has zero link resources, so its outside production can
+be zero even when F(d_C)>0. Do not identify the two incentive conclusions.
+
+5. ORDINARY TOTAL FUNDING DOES NOT TRANSFER
+In either version a gadget factor kappa only yields
+     sum_i y_i <= kappa[B_N+F(b_N)]-B_N
+               = (kappa-1)B_N+kappa F(b_N).              (6)
+The baseline is not sponsor-free under the original contract. B/F is unbounded;
+for example, a single r-way minimum with one missing resource and other positive
+resources has F=0 but positive baseline in both versions. Thus no finite
+multiplicative original factor follows from (6).
+
+This can be an ACTUAL failure for a uniform mechanism, not merely a loose bound.
+Use the accepted scaled p-binomial gadget rule for arity3, p=1/s. At any image
+profile with original F(b_N)=0, monotonicity gives F(b_C)=0 for every C, so (4)
+is an additive gadget worth game v(C)=B_C. Every binomial marginal is then B_i,
+and the factor p^-2 rule pays z_i=s² B_i. After (5), total original payment is
+ (s²-1)B_N>0 for s>=2 and B_N>0, violating every finite K F bound. The gadget
+rule still has its valid all-real, fixed-owner full-OUT guarantee; the failed
+step is the attempted transfer of its total-budget guarantee.
+
+What would suffice is a GAIN-ONLY gadget bound
+                       sum_i z_i<=B_N+K F(b_N).          (7)
+Together with the appropriate incentive condition in Section4, this would
+transfer factor K. Equation(7) is a separate stronger mechanism theorem; the
+ordinary arity3 bound3s²G does not imply it. On the image, adding B_i to any
+original mechanism reverses (5) for coverage and TCWM in the constant case,
+illustrating why merely demanding (7) can restate the original problem.
+
+6. AN UNAVOIDABLE BASELINE AT A UNANIMITY SEED
+Suppose ANY arity-q gadget at an r-owner unanimity seed has the coalition-affine
+identity G(C)=B_C+alpha*1_(C=N), with additive B_C>=0 and alpha>0. Write B=B_N.
+This statement assumes actual additive owner stocks u_i at the seed, so the
+pooled stock is c=sum_i u_i and coalition deletion satisfies
+G(N\i)=G(c-u_i). More generally an owner-local zero-report encoding suffices
+when its deletion-profile value is at least G(c-u_i), with the same identity
+for that profile; this only decreases the summed deletion losses below.
+Its total deletion marginal is
+ sum_i[G(N)-G(N\i)]=sum_i(B_i+alpha)=B+r alpha.
+The reused arity charging inequality bounds this by q(B+alpha). Therefore
+               (q-1)B >= (r-q)alpha.                    (8)
+For q=1 and r>1 no such representation is possible. For q>1 this gives a
+necessary baseline B>=(r-q)alpha/(q-1). In particular, the separate arity2 path
+gadget at x=(1,...,1) has B=r-2 and alpha1, attaining the minimum allowed by(8).
+This is baseline optimality within coalition-affine embeddings at that seed,
+not optimal mechanism funding or a new unrestricted lower exponent.
+
+DISPOSITION
+An exact, nonnegative, mixed-owner, all-coalition affine arity-three reduction
+exists. Its two maps have distinct valid incentive transfers, stated above.
+It does not meet the requested multiplicative funding contract. The separate
+POSITIVE_PACKING_GADGET_OBSTRUCTION.txt rules out a zero-baseline multiplicative
+owner-local value embedding for r>3. A successful lower transfer must supply
+new baseline payment control or use a different certificate argument; no such
+control is proved here.

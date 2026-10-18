@@ -1,0 +1,20 @@
+## Provisional verdict
+**Findings (minor only).** Part (B) reproduces exactly; Part (C) shows no falsely-without-loss framing. The one concrete correction is a dropped hypothesis in the HTML summary table (ownership restriction on the restricted-sharpness result).
+
+## Findings
+
+**1. Dropped hypothesis — Low/Medium. `CAMPAIGN_20261018.html:14`.**
+The table says `B_s` "is the worst-case optimum over the class of binary unit-worth ideals of linear triple technologies." The supporting text and synthesis both condition on pure owners: line 41, "linear three-uniform unit technologies **with pure binary unit owners**"; `CAMPAIGN_SYNTHESIS.txt:113`, "with pure unit owners." Since line 13 itself warns against mixing ownership restrictions across realizations, the compressed table row is the kind of combination it forbids. Also, the parenthetical gloss "(distinct triples share at most one resource)" for "linear" is not attested in the supplied packet. Verify against `reviews/UNIT_WORTH_IDEAL_ROOT_DISPOSITION.txt`; add "with pure binary unit owners."
+
+**2. Possible mislabel — Low. `CAMPAIGN_20261018.html:78`.** "finite `5/4` total-funding corollary of the existing **two-input-minimum** lower." The supplied fixture is `F(A,B,C)=min(A,B,C)` with an arity-three embedding (`PRICE_BASE_RISK_CHECK.txt:10-11`; checker `technology: A=[[1],[1],[1]]`), with the two-input notation only "equivalent" in the sealed JSON. Verify which object the HTML intends; state "s=2, twelve-profile fixture" rather than a general corollary.
+
+**3. Scope note, not an error — `PRICE_BASE_RISK_CHECK.txt:29-30`, `RECOMMENDATION.txt:89`.** "Prices can depend on the entire profile… free to choose among all efficient nonnegative duals" is literally true, but at the six high profiles the efficient dual is **unique**: from `p·B=1` and `p_A+p_B+p_C≥1` with `B=(2,1,3)` one gets `p_A+2p_C≤0`, so `p=(0,1,0)` (symmetrically `(1,0,0)` at RRL). The 3/2 cost is therefore driven by uniqueness at highs, i.e. technology-specific; worth saying so, since it bears on how much the growing-family gate can be expected to inherit.
+
+**4. (B) independent rederivation — no finding.** I rederived without the sealed JSON: edge closure (72 reflexive + 36 proper, 24 with passive members) matches; the 12 same-type pair-TCWM rows at weight 1/2 plus 6 low active-pair coverages at 1/2 plus 6 zero-owner nonnegativities give `Σ_highs Y_majority ≥ 3`; coverage `y_maj+y_min≥1` then yields `6K≥15/2` (K≥5/4), and uniqueness-forced `y_min≥1` yields `6K≥9` (K≥3/2). Both primals are feasible and tight (lows total 1; highs 5/4 and 3/2); identity (2) `D+2G−E+2p_C = y_min−1` checks for both high types; `F(δ)=min(δ)=0` on all edges, so TCWM=full OUT here only. No growing/all-real claim is made.
+
+**5. Tail/main-proof arithmetic — no finding.** `Q_M≥√(3M+1)/2` induction residual is exactly `M`; `(2/3)Q_M≥√(s/6)` with `s_0=2M−1≤s`; `h=⌈s/2⌉=⌊(s+1)/2⌋`; `P_{h,s}=Q_h/h`; tail ratio `Mα/(M−1)` gives equal maxima at `M=s,s+1`; `B_6=1+(16/9)(125/216)=493/243>2` with `n=13`, `d=127`. HTML, synthesis, proof, and tail agree; asymptotic `√(2π)/(3√e)=0.506782` matches.
+
+**6. (C) — no finding.** `RECOMMENDATION.txt:49-55` explicitly denies without-loss (cap-star non-domination example is valid), lines 98-103 downgrade to a falsifiable bounded target, and 178-193 deny PL completeness/approximation, consistent with `POLYHEDRAL_AND_CEA_ROOT_DISPOSITION.txt:4,16`. Campaign-in-progress framing is correct in both documents (HTML:4, synthesis:2); no finished-timing inference.
+
+## Scope limitations
+Snapshot only; no execution or original-source access. Unverified because not supplied: `three_portfolio_certificate.json` row data and hashes, the 34,440-row/5,880-profile lift (HTML:35), the `10/9` ternary cap-switch (HTML:43), CEA audit counts (HTML:69), arity-`r` and pure-owner files, the unit-worth and full-fiber dispositions, and all application artifacts/byte ledger. Claims 2 and 4's sealed-row component rest on my reconstruction, not on the original certificate.

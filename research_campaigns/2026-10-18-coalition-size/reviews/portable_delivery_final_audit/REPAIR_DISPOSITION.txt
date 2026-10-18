@@ -1,0 +1,49 @@
+FINAL PORTABLE RUNNER REPAIR — INDEPENDENT DISPOSITION
+2026-10-19 00:59:49 UTC test completion. SCOPED PASS.
+
+Current runner SHA256:
+e1ac09a84957006e566b60443bcddbe1221c61597cab691cc5147bce1689e130
+Current reproduction guide SHA256:
+20bd5ee37440808f0835ef75c677f4cfffec869bd6c456e27f89711cd0e17e45
+
+The assertion-disabled false-PASS issue in AUDIT.txt is repaired in the
+advertised runner. The original finding and controlled invalid-fixture result
+remain historical evidence in CHECK_RESULT.json; they are not a current defect.
+
+The runner now rejects sys.flags.optimize!=0 before parsing/output creation
+or checker execution. Its own copy-integrity check is an explicit conditional
+failure rather than an assert. It records optimization0/assertions-enabled in
+its report. The guide explicitly requires enabled assertions.
+
+The first guard alone left a narrow environment mismatch: a parent started
+with -E can ignore PYTHONOPTIMIZE=1 while its children inherit that setting.
+Root independently confirmed and fixed it by copying the environment and
+removing PYTHONOPTIMIZE before each checker launch. Other environment variables,
+including PYTHONPATH needed by the existing NumPy/SciPy installation, remain.
+
+Independently executed check_repair.py on relocated temporary copies:
+ 1. PYTHONOPTIMIZE=1: rejected; requested --out never created.
+ 2. Explicit -O: rejected; requested --out never created.
+ 3. Ordinary --help: succeeds without creating output.
+ 4. PYTHONOPTIMIZE=1 with parent -E: invalid lifted budget row RHS0->1 is
+    rejected by AssertionError; child exits1 and runner records FAIL. The
+    parent's optimization flag is0, the child's explicit environment omits
+    PYTHONOPTIMIZE, and its PYTHONPATH exactly preserves the audit sentinel.
+
+For test4 the harness changes ONLY the job table to the already advertised
+lifted-certificate job, then executes the unchanged author preflight, copying,
+child-environment, process and result-handling logic. This avoids repeating
+the full extended suite. No author checker is changed; only the temporary
+certificate is deliberately invalid. All sealed fixtures and scripts remain
+byte-identical; temporary files were removed. The parent owns the final
+ordinary basic replay. REPAIR_CHECK.json records the exact evidence and scope.
+
+The current metadata verifier remains separately scoped PASS at its repaired
+hash. Selected-input closure and relocation findings in AUDIT.txt are unchanged.
+The minor generated_files naming observation is nonblocking provenance wording,
+not an integrity failure. No remaining substantive portability or advertised-
+scope defect was found within this bounded delivery audit.
+
+This is not final-archive QA. Regenerate the campaign index/manifest after final
+edits, then perform the planned top-level bundle binding and extraction checks.
+No scientific theorem, priority assessment or application outcome was added.

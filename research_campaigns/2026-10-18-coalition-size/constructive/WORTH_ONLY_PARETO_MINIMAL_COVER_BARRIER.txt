@@ -1,0 +1,113 @@
+WORTH-ONLY PARETO-MINIMAL COVER SELECTION CANNOT HAVE UNIFORM PAIR-TCWM FUNDING
+2026-10-18 22:39 UTC. Scoped structural route filter; root and opposite-model
+review accepted the argument. See reviews/PARETO_COVER_ROOT_DISPOSITION.txt.
+
+CLAIM AND SCOPE
+For each integer M>=1, use the arity3 packing technology
+ F(P,X,Y)=min(P,sum_(j=1)^M min(X_j,Y_j))
+and n=M+2 fixed actual owners, ALL fully eligible for ALL rows, with the same
+unit report/endowment box. At every profile define the coalition game
+ v_b(S)=F(sum_(i in S)b_i).
+Suppose a mechanism's payments depend on reports ONLY through this entire
+coalition-worth vector v_b; dependence on the fixed public technology, labels,
+owner count, and common report box is allowed. Assume:
+ (a) nonnegative payments and all-coalition coverage;
+ (b) TCWM for every coalition of size<=2, including one unchanged member;
+ (c) at every profile its payment vector is PARETO-MINIMAL in the nonnegative
+     coverage polyhedron P(v)={y>=0:y(S)>=v(S) for all S}.
+Pareto-minimal means no different z in P(v) satisfies0<=z<=y coordinatewise.
+Then any all-profile funding factor on this institution is at least
+                              n/3=(M+2)/3.               (1)
+Hence no such mechanism family has finite funding uniform over owner/resource
+counts. This covers nonseparable and report-adaptive selections as long as they
+are worth-only and always choose a Pareto-minimal cover. It does NOT cover rules
+using bundle directions beyond v_b, or rules deliberately selecting a dominated
+cover with excess payments. It is not a general mechanism lower bound.
+
+THE SAME FIXED-OWNER BRANCH CHAIN
+Choose distinguished owner slots P,A,B_1,...,B_M. P reports P=1; leaf B_j reports
+Y_j=1. At profile m, A reports X_j=1 for j<=m and0 otherwise. All other entries
+are0. Only A restores between successive profiles. Production is1 throughout.
+The game v_m has value1 exactly for coalitions containing BOTH P,A and at least
+one of B_1,...,B_m; all other coalition values are0. Thus its coverage polyhedron
+is given by
+                y_P+y_A+y_(B_j)>=1, j<=m; y>=0.          (2)
+
+PARETO-MINIMAL SET ON THIS FAMILY IS CONVEX
+Every Pareto-minimal cover of v_m has inactive-owner payments0. Put h=y_P+y_A.
+If h>1, reduce a positive common-owner payment while retaining h>=1, contradicting
+minimality. If0<=h<=1, each active leaf must equal1-h: a larger leaf payment can
+be reduced without violating(2). Conversely every vector of the form
+ y_P=p>=0, y_A=a>=0, p+a<=1,
+ y_(B_j)=q=1-p-a for j<=m, inactive payments0              (3)
+is Pareto-minimal: reducing a positive common payment violates every tight branch
+constraint, and reducing an active leaf violates its tight branch constraint.
+For q=0, reducing either positive common payment likewise violates(2).
+The set(3) is an affine image of a triangle, hence convex.
+
+WHY LABEL AVERAGING IS LEGITIMATE HERE
+Average the mechanism over all owner-label permutations, permuting reports and
+payments together. The SAME public technology and full common report box are
+preserved, so nonnegativity, coverage, pair TCWM, and the funding factor survive.
+The averaged rule remains worth-only and is equivariant under owner labels.
+Averaging does not in general preserve Pareto minimality; we DO NOT assert that.
+But at each of the particular games v_m, every permutation-back payment vector
+is a Pareto-minimal cover of v_m, because the original mechanism has property(c).
+Convexity of the special set(3) proves that its average remains Pareto-minimal
+on EVERY profile in this chain. That is all the proof needs.
+
+GAME SYMMETRY AND PAIR PROPAGATION
+In v_m, swapping P,A is a game automorphism. A worth-only label-equivariant rule
+therefore pays them equally: p=a=t_m. This does not follow merely from public
+technology symmetry; worth-only dependence is essential. Equation(3) gives
+                 2t_m+q_m=1,
+                 total Y_m=2t_m+m q_m=1+(m-1)q_m.        (4)
+At m=1 the three productive owners P,A,B_1 are all symmetric in the game v_1.
+Consequently each receives1/3, so q_1=1/3.
+Protect the fixed pair C={A,B_1} at each activation. Only A changes. Its payment
+at profile m is t_m+q_m=(1+q_m)/2. Pair TCWM therefore forces q_m>=q_(m-1).
+Thus q_M>=1/3, and(4) gives Y_M>=1+(M-1)/3=n/3, proving(1).
+
+CONSTRUCTIVE CONSEQUENCE
+A bounded-funding upper construction based only on coalition worths must leave
+the Pareto-minimal cover frontier somewhere. Minimizing any coordinatewise
+strictly increasing objective over coverage, whether separable or nonseparable,
+necessarily selects a Pareto-minimal point, so such a worth-only optimization
+architecture cannot suffice. Total-payment caps do not help this conclusion:
+if z<=y is a covered improvement, it remains under the same upper cap.
+A bundle-direction-sensitive objective is outside the theorem and remains a
+live option; so does a selector with deliberate reserve payments above every
+minimal cover. No funding lower improvement is claimed for those alternatives.
+
+EVIDENCE
+The exact game values and covers on this chain through M=8 were checked by
+check_scalar_importance_chain.py/.json (14,344 subset/profile comparisons).
+That script predates this statement and does not establish label averaging or
+Pareto-minimality; those are the explicit analytic arguments above. The scalar
+convex-family note is frozen for its separate audit and was not edited here.
+
+QUANTIFIED RESERVE CONSEQUENCE WITHOUT PARETO MINIMALITY
+Drop assumption(c), keeping a worth-only pair-TCWM mechanism with funding<=K
+uniformly on the fully eligible institution above. Label average as before.
+At profile1, the three productive owners have equal payment u>=1/3 by their
+coalition coverage, regardless of any payments to inactive owners. At profileM,
+game symmetry gives common-owner payments P=A=t and each leaf payment q.
+Restore A directly from profile1 to profileM and protect{A,B_1}. Then
+                         t+q>=2u>=2/3.                  (5)
+Funding gives2t+M q<=K, hence q<=K/M. Every active branch coalition{P,A,B_j},
+whose worth is1, therefore receives
+                 2t+q>=4/3-q>=4/3-K/M.                  (6)
+Thus its coverage slack is at least1/3-K/M. If M>K and M>3K, q<1 and this is
+positive. Holding all leaves fixed, reduce the total common-owner payment from
+2t to1-q, sharing the reduction between P,A. This remains nonnegative and
+satisfies every cover constraint, because each branch then gets exactly1.
+The total removable payment is
+                         2t+q-1>=1/3-K/M.               (7)
+Consequently, for any bounded-funding worth-only pair-TCWM mechanism, its
+symmetrized rule must select, for arbitrarily large M, a vector with at least
+(1/3-o(1))F of coordinatewise removable reserve payment. This is a necessary structural feature, not a
+construction or a general unrestricted lower improvement. The conclusion is
+about the symmetrized rule; if all original selections had zero removable
+reserve, the earlier convex-minimal-set argument would transfer that property
+and contradict(7). No assertion that every original asymmetric rule has the
+same exact reserve bound follows merely from averaging.

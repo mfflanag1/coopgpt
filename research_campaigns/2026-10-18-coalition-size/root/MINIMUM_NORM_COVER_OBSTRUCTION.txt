@@ -1,0 +1,124 @@
+MINIMUM-QUADRATIC COVER SELECTION AND TOTAL-PAYMENT PENALTIES FAIL TCWM
+18 October 2026. Opening-gate architecture obstruction, independently checked
+by root from constructive-lane calculations; further independent review pending.
+This is not an unrestricted funding lower bound and does not pass the campaign
+gate requiring an improvement of the general arity-three frontier.
+
+1. THE TEMPTING CONSTRUCTION
+At each report profile minimize
+  J(y)= (1/2)sum_i y_i^2 + psi(sum_i y_i)
+over y_i>=0 and sum_{i in C}y_i>=F(b_C) for every coalition C.
+Here psi is any finite convex nondecreasing function on nonnegative totals.
+It may even be selected separately at each profile. The minimizer is unique
+by strict convexity. Coverage and nonnegativity are automatic.
+
+In particular psi(T)=lambda*T^2/2, lambda>0, gives a simple general budget
+estimate. Compare with an efficient nonnegative LP-dual core allocation z:
+sum z_i=F(B), sum z_i^2<=F(B)^2. Optimality and J(y)>=lambda*(sum y)^2/2 give
+  sum y_i <= sqrt((1+lambda)/lambda)*F(B).
+Choosing lambda about s^(-2) suggests O(s) funding. The following exact
+counterexample invalidates the required coalition incentive, regardless of
+the nondecreasing penalty. The budget calculation itself is correct.
+
+2. FIXED TECHNOLOGY, OWNERS, AND REPORTS
+Five resource rows: P,X1,Y1,X2,Y2. Two unit-profit activities use respectively
+(P,X1,Y1) and (P,X2,Y2), so arity is three and
+  F(P,X1,Y1,X2,Y2)=min(P, min(X1,Y1)+min(X2,Y2)).
+Seven fixed pure-resource owners:
+  three power owners each report P=1/3;
+  A1 and B1 each report one unit of X1 and Y1 respectively;
+  A2 reports X2=0 initially and restores it to 1;
+  B2 reports Y2=1 throughout.
+Each owner's eligibility and full report bound stay fixed. Only A2 changes.
+Protect C={A1,B1,A2}, of size three. Two members are unchanged.
+
+3. ALL COALITION CONSTRAINTS
+A coalition with k power owners and at least one complete active private pair
+has worth k/3, since 0<=k/3<=1. Without a complete pair it has worth zero.
+At the low profile only pair1 is complete. At the high profile either pair is
+complete. These observations describe EVERY coalition's production, including
+mixed pairs, absent resources, and zero-report owners.
+
+4. LOW PROFILE: EXACT UNIQUE MINIMIZER
+The five essential owners (three power plus A1,B1) form a worth-one coalition.
+Thus their payments sum to at least one; Cauchy-Schwarz bounds their squared
+sum below by 1/5. Equality is attained by giving each 1/5 and giving A2,B2 zero.
+For a coalition with k power owners and pair1, payment=(k+2)/5>=k/3 for k<=3.
+So this vector is feasible. It simultaneously minimizes the quadratic term and
+total payment (=1); any nondecreasing psi preserves its unique optimality.
+The protected coalition receives 2/5.
+
+5. HIGH PROFILE: EVERY SUCH PENALTY GIVES A LOSS
+By uniqueness and the symmetries of the profile, all three power owners receive
+t and all four private owners receive u. Feasibility requires 3t+2u>=1.
+At an optimum equality holds: otherwise scale both positive values down until
+equality, decreasing the quadratic term and not increasing psi. This scaling
+preserves all coalition inequalities when t,u are symmetric: with equality,
+  k*t+2u-k/3 = 2u*(1-k/3)>=0, 0<=k<=3.
+Consequently t=(1-2u)/3, 0<=u<=1/2, and total payment is T=1+2u.
+The quadratic term becomes
+  Q(u)=(1/2)[(1-2u)^2/3+4u^2].
+It is strictly minimized at u=1/8 and is strictly increasing for u>1/8.
+Because psi(1+2u) is nondecreasing, a minimizer of Q(u)+psi(1+2u) cannot
+have u>1/8. Therefore the protected coalition's new total is at most 3/8.
+It falls by at least 2/5-3/8=1/40. For protected size s>=3 this violates TCWM,
+and hence full OUT. This particular coalition does not refute the s=2 rule.
+The restored bundle contains only X2, so its outside production is zero.
+
+For the unpenalized rule psi=0, the exact high vector is three copies of1/4
+and four copies of1/8; the loss is exactly1/40.
+For psi(T)=lambda*T^2/2 with lambda>=0, explicit differentiation gives
+  u=max{0,(1-3lambda)/(8+6lambda)}, t=(1-2u)/3.
+This confirms the same loss for every nonnegative lambda. Thus allowing a
+different nonnegative lambda at each profile does not evade this obstruction.
+
+6. PAIR-SIZE FAILURE OF EVERY FIXED POSITIVE QUADRATIC PENALTY
+For any fixed lambda>0, use R>=1/lambda power owners each reporting1/R, with
+the same two private pairs. At low, each power owner and pair1 owner gets1/(R+2).
+At high the penalized optimum pays every power owner1/R and all private owners0.
+A direct KKT certificate uses the two full-power-plus-pair coverage constraints,
+with multiplier mu=(1/R+lambda)/2 each. The power gradient is1/R+lambda=2mu.
+At every zero private payment the gradient minus its constraint multiplier is
+lambda-mu=(lambda-1/R)/2>=0. Primal feasibility and complementarity hold;
+strict convexity proves unique optimality. All k-power constraints also hold.
+The pair {A1,A2} loses1/(R+2) when only A2 restores its X2 resource.
+This rejects any lambda(s)>0 chosen independently of owner count even for s=2.
+The independent audit gives the sharper exact pair threshold. Before private
+payments hit zero, the pair change is
+ [1-R(R+3)lambda]/[(R+2)(1+R+Rlambda)].
+It is negative exactly when lambda>1/[R(R+3)]; after private payments vanish
+it stays negative. Thus lambda=s^(-2) already fails with R=s power owners.
+
+7. RELATED UNWEIGHTED Lp SELECTION
+For min sum_i y_i^p over the same cover polyhedron, 1<p<=2, let a=1/(p-1)>=1.
+The low seven-owner solution is still1/5 on essential owners. At high,
+the first-order equations give t=2^a*u, u=1/(3*2^a+2)<=1/8. The same size-three
+coalition therefore loses at least1/40.
+For any fixed p>2 there is already an unbounded budget on an arity-two star:
+one unit center owner and M unit leaf owners, F=min(P,sum leaves). Symmetry and
+the edge coverage constraints give t+u=1 and t=M^a*u, a=1/(p-1)<1. Total
+payment=(M^a+M)/(1+M^a), which grows as M^(1-a). For1<p<=2, fixed positive
+rescaling cannot repair the exhibited negative incentive increment. Forp>2,
+fixed positive rescaling preserves the unbounded funding ratio; the displayed
+size-three increment need not itself be negative in that range.
+The p=1 selector is not uniquely defined; it is not analyzed by these formulas.
+
+8. SCOPE AND PROVENANCE
+For s>=3 this rejects unweighted quadratic cover selection, nondecreasing
+convex total penalties, and fixed unweighted Lp objectives in the stated ranges.
+For s=2 the proved incentive obstruction applies to fixed positive quadratic
+total penalties; unpenalized quadratic selection is not refuted here at s=2.
+For p>2 the owner-independent funding bound fails regardless of s. It says
+nothing against owner/report-dependent weighting of the individual quadratic
+terms, a different feasible-selection objective, or arbitrary mechanisms.
+Constructive agent first proposed the second-branch quadratic example. Root
+verified every coalition constraint, generalized to total penalties and Lp,
+and supplied the pair-KKT certificate. An earlier proposed epsilon-bootstrap
+counterexample was rejected after correcting a missing owner multiplicity in
+its objective; it is not part of this proof.
+Independent Codex audit: reviews/minimum_norm_independent_audit.txt. Its distinct
+checker enumerated34,752 actual-subset packing LPs and72 primal/KKT profiles,
+and confirmed the parametric reasoning. Opposite-model review completed on
+18 October 2026 and confirmed the algebra while identifying the s=2 scope
+overstatement above; the statement has been narrowed accordingly. It did not
+execute either checker or establish historical priority.

@@ -1,0 +1,103 @@
+FINAL APPLICATION OUTPUT/PROVENANCE AUDIT
+19 October2026. Audit only: no acquisition, SQL execution, raw footer/statistic
+decoding, outcome-file opening or new application work. Sources are unchanged.
+
+DISPOSITION
+The retained code and saved reports support the operational claim that no new
+power/state observations or power/state value extrema were selected/displayed.
+No evidence of outcome leakage was found. Two wording clarifications are useful:
+whole footer bytes were acquired, and a June listing exists in the shared record.
+Neither is evidence of a measured power/state observation being inspected.
+The exact pre-clarification source hashes are preserved in SOURCE_MANIFEST.json.
+
+1. ACQUISITION IS NOT THE SAME AS QUERY OUTPUT
+application/m100_may_metadata_gate.py:48-79 fetches exact requested ranges;
+95-119 walks tar headers and skips member bodies. Its saved report/ledger
+record325 header requests and166,400 bytes. No GNU long-name entry occurred;
+the existing independent placement audit already bound these to headers.
+
+application/m100_may_footer_gate.py:79-93 obtains each selected member's4-byte
+magic,8-byte tail and WHOLE footer. Nine requests add301,855 bytes. The sparse
+wrappers contain those real footer bytes and zero holes where data pages would
+be. The acquired footers were not stripped of any encoded value statistics.
+They may therefore encode power/state summaries; this audit deliberately did
+not inspect which summaries they contain. The saved bytes were handed to
+DuckDB's metadata reader. Neither SQL projection nor the saved report proves
+that DuckDB never parsed/materialized an unselected statistic internally.
+
+Thus “metadata only” accurately describes the byte categories acquired and
+the selected query outputs. It must not mean “no bytes encoding data-derived
+power/state summaries were acquired” or “no footer statistics were decoded”.
+The latter is false for timestamp statistics and unestablished for unselected
+engine internals. This distinction does not manufacture an outcome leak.
+
+2. EXACT RETAINED QUERY AND OUTPUT BOUNDARY
+The three SQL queries at m100_may_footer_gate.py:94-97 select:
+ - schema names, physical/repetition/logical/converted types;
+ - row-group ID/row count, column path/type, compressed size and page offsets;
+ - stats_min_value/stats_max_value ONLY WHERE path_in_schema='timestamp'.
+No power/state value min/max/null-count field is selected. The print statement
+at107-110 emits metric, footer size, row-group count and global timestamp bounds.
+The saved report at m100_may_footers/report.json contains exactly those schema,
+chunk and timestamp-array projections:77 state groups,463 PSU0 groups,464 PSU1
+groups. Its chunk records contain structural information for the value column,
+not the column's observed values. Every saved member-field name and row width
+matches the retained query projections. CHECK_RESULT.json records this check.
+
+plan_m100_training_day.py:15-58 consumes only those timestamp envelopes and
+chunk ranges to select May12 chronologically and estimate bytes. Its saved
+plan explicitly says no new holdout is frozen and that groups mix later dates.
+audit_application.py hashes ranges/footer wrappers and reads saved JSON; it
+does not execute a new Parquet query. Its manifest booleans are written policy
+statements supported by the retained query/report inspection, not independent
+measurements of every possible unlogged action. verify_portable_metadata.py's
+“no decoding ... footer statistics” refers only to that later byte verifier,
+which hashes the raw footer bytes and does not invoke a metadata decoder.
+
+The334 saved dataset requests total468,255 bytes, all to20-05.tar. Footer
+range roles agree with the saved member placement/lengths. No data-page request
+appears. This bounded audit does not reconstruct unlogged execution history,
+network traffic outside the saved ledgers, or DuckDB's internal implementation.
+
+3. EXACT SAFE REPLACEMENT FOR A BROAD SUMMARY
+Suggested paragraph, for root to adopt in the delivery summary if desired:
+
+“The gate acquired468,255 bytes of tar headers and Parquet magic/footer
+segments, including whole raw footers that may encode value statistics.
+Queries returned schema, row-group structure/chunk sizes and offsets, and
+timestamp minima/maxima. No power/state data pages were fetched, and no
+power/state value extrema or observations were selected or displayed in the
+retained reports. Timestamp metadata informed chronological byte feasibility;
+no power/state outcome analysis or new holdout evaluation was performed.”
+
+The existing data_manifest.json fields power_state_data_pages_fetched=false,
+power_state_column_statistics_exposed=false and timestamp_extrema_metadata_
+exposed=true are consistent when “exposed” means selected/returned/displayed,
+as the acquisition script explicitly states. If changing them, preserve their
+historical meaning rather than marking a nonexistent observation leak.
+
+4. JUNE LISTING WORDING AND HOLDOUT STATUS
+NEXT_PREREGISTRATION_DECISION.txt:22 currently says no June source was requested
+or inspected. That is broader than the provenance record: the already saved
+m100_may_metadata/zenodo_record.json contains a20-06.tar entry, its byte size,
+MD5 and URL in the shared collection listing. m100_may_metadata_gate.py:83-93
+downloaded that collection JSON and then selected only the May entry. The
+saved request ledgers contain no June archive request. The listing does not
+establish June schema, timestamps, state coverage or outcome access.
+
+Exact replacement:
+“No June archive ranges, schema, footer, or outcome values have been requested
+or inspected in this lane; only its listing in the shared collection record
+was acquired. June remains an unverified chronological candidate.”
+
+The heldout plan is explicitly UNFROZEN in FINAL_FEASIBILITY_GATE.txt:29 and
+NEXT_PREREGISTRATION_DECISION.txt:2-4. CONDITIONAL_VALIDATION_PROTOCOL.txt:2-16,
+28-44 and its PROMOTION section require unresolved fields and the complete
+protocol before a later freeze. April remains previously inspected calibration.
+A future M100 switch requires an explicit amendment designating all May as
+training before values; it does not replace Summit silently. No June holdout
+has been selected or verified. These boundaries remain intact.
+
+No canonical application file was edited by this auditor. Root owns any wording
+clarification and its provenance update. No scientific or empirical conclusion
+changes as a result of this audit.

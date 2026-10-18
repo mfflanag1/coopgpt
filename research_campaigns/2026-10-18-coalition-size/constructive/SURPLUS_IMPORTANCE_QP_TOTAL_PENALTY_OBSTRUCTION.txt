@@ -1,0 +1,92 @@
+SURPLUS-IMPORTANCE COVER QP: TOTAL PENALTIES AND BUDGET CAPS CANNOT REPAIR TCWM
+2026-10-18 22:16 UTC. Exact architecture obstruction, not a general lower bound.
+
+CLASS AND FIXED TECHNOLOGY
+Use F(X,Y,Z)=min(X,Y,Z), one positive-profit activity with arity3.
+For a report profile b, define V=F(sum b), f_i=F(b_i), and
+ g_i=max_{0<=a<=sum_(j!=i)b_j}[F(a+b_i)-F(a)]-f_i.
+For this technology g_i=min(V,max_j b_ij)-min_j b_ij. At s=2 set
+ w_i=min(V/g_i^2,2/g_i) for g_i>0.
+Select a covered vector y>=f minimizing
+ Q_b(y)+psi_b(sum_i y_i),  Q_b(y)=sum_i w_i(y_i-f_i)^2.       (1)
+Each psi_b may be any nondecreasing function for which a minimizer exists,
+including an arbitrary profile-dependent convex nondecreasing total penalty.
+Optional: also impose sum_i y_i<=K_b V with K_b>=1. The statement below holds
+for every such cap. No continuity or consistency of psi_b across profiles is
+needed. The fixture has all g_i positive, so zero-surplus conventions are moot.
+
+REPORTS AND COVER POLYHEDRA
+Three fixed actual owners have low reports
+ b0=(2,4,3), b1=(3,3,0), b2=(4,1,4).
+Only owner0 restores one resource, to b0'=(2,6,3). The protected coalition is
+C={0,1}; owner1's report is unchanged. Both profiles have V=7, f=(2,0,1).
+Their non-singleton coalition values, in order 01,02,12,012, are
+ low:  (3,5,4,7),
+ high: (3,6,4,7).
+Writing z=y-f>=0, the low coverage constraints are exactly
+ z0+z1>=1, z0+z2>=2, z1+z2>=3, z0+z1+z2>=4.              (2)
+At high, replace the second right side2 by3. The other constraints stay fixed.
+Potentials and weights are
+ low:  g=(2,3,3), w=(1,2/3,2/3),
+ high: g=(4,3,3), w=(7/16,2/3,2/3).                       (3)
+
+LOW OPTIMUM FOR EVERY TOTAL PENALTY
+The low unconstrained weighted-quadratic minimum on(2) is uniquely
+ z_low=(1,3/2,3/2), y_low=(3,3/2,5/2), Y_low=7.            (4)
+Its full gradient is(2,2,2), the multiplier2 on the active grand constraint.
+All other KKT multipliers may be0; every constraint is feasible. Positive
+weights make Q strictly convex, proving uniqueness. Coverage requires Y>=7.
+Thus(4) simultaneously minimizes Q and total Y. Adding any nondecreasing
+psi_b(Y), or any cap with K_b>=1, preserves this unique optimum.
+
+HIGH OPTIMUM: EXACT REGION REDUCTION
+Put t=z2. For 0<=t<=2 the pair constraints force z0,z1>=3-t>=1.
+The vector (3-t,3-t,t) satisfies all other cover constraints. For fixed t,
+positive Q and nondecreasing psi make this vector uniquely best. Set q=3-t;
+this region is q in[1,3], with
+ z=(q,q,3-q), Y=6+q,
+ Q(q)=(7/16+2/3)q^2+(2/3)(3-q)^2
+     =(85/48)q^2-4q+6.                                  (5)
+
+For the remaining region t>=2, the boundary point z=(1,1,2) uniquely minimizes
+Q over coverage plus t>=2. To verify KKT, its gradient is
+ (7/8,4/3,8/3)
+ = (7/8)(1,1,1)+(11/24)(0,1,1)+(4/3)(0,0,1).              (6)
+These are nonnegative multipliers on active grand coverage, pair12 coverage,
+and t>=2. All other multipliers are0. Again strict convexity proves uniqueness.
+The same point has Y=7, the smallest possible total. Therefore any nondecreasing
+penalty and any allowed cap leave it best in the region t>=2. Consequently a
+global minimizer must lie on the branch(5), including q=1 at this boundary.
+
+The quadratic(5) has unique minimum q_bar=96/85. Since Y=6+q increases with q,
+any nondecreasing total penalty forces every minimizer to satisfy
+                    1<=q<=96/85.                         (7)
+A cap can only reduce the allowable upper endpoint q<=7K_b-6; q=1 remains
+feasible. Thus(7) continues to hold with every cap K_b>=1.
+
+EXACT TCWM VIOLATION
+At low, C={0,1} receives9/2. At high, every selected minimizer gives it at most
+ y0+y1=2+2q <=2+192/85=362/85.
+Hence its payment falls by at least
+                   9/2-362/85=41/170>0.                  (8)
+With no penalty or binding cap, high y=(266/85,96/85,244/85), whose total is
+606/85>7. Equation(8) is attained. The restorer is a member of C, and the
+other protected member is unchanged. All payments are nonnegative, all owners
+are actual and fixed, and every coalition is covered. This defeats TCWM for
+s=2; no full-OUT assumption is used.
+
+SECOND OWNER-IMPORTANCE WEIGHT CHOICE
+The same reports reject weights w_i=1/g_i with any nondecreasing total penalty
+and any cap K_b>=1. Low weights(1/2,1/3,1/3) retain(4). High weights are
+(1/4,1/3,1/3), and(5) becomes Q=(11/12)q^2-2q+3 with q_bar=12/11.
+The t>=2 boundary KKT multipliers are grand1/2, pair12 1/6, t-lower-bound2/3.
+Thus the protected coalition gets at most46/11, losing at least7/22.
+
+SCOPE
+This excludes two specified profile-dependent owner-sensitive quadratic
+selection rules, including standalone floors, arbitrary total penalties, and
+arbitrary feasible total caps. It does not exclude other owner-specific
+nonlinear objectives, other weights, or general mechanisms. The O(s) budget
+lemma in OWNER_SURPLUS_REGULARIZER_BUDGET_AND_FAILURE.txt remains valid; its
+missing ingredient is a coalition-monotone selection, not a funding bound.
+Exact arithmetic replay: check_surplus_importance_total_penalty.py/.json.

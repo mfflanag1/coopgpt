@@ -1,0 +1,96 @@
+SINGLE min_r TO ARITY r-1: A SHARP AFFINE BASELINE GADGET
+2026-10-18. Construction supplied by root; independently rederived here.
+This is a single-minimum identity, not an arbitrary shared-technology reduction.
+Historical novelty is unassessed. It does not change the funding frontier.
+
+1. CONSTRUCTION AND ALL-REAL VALUE IDENTITY
+Fix r>=3 and let
+  F(c)=min_(i=1)^r c_i,   beta=1/[r(r-2)],   B(c)=beta sum_i c_i.
+Make r-1 resource copies of each original row i, labeled(i,j) for j!=i,
+all with capacity c_i. There are two types of positive-profit activities:
+ - baseline activity x_i uses ALL copies(i,j), j!=i, and has profit beta;
+ - joint activity z_j uses copies(i,j) for ALL i!=j, and has profit(r-1)beta.
+The resource constraints are exactly
+                       x_i+z_j<=c_i,   i!=j.            (1)
+Every activity uses r-1 rows. All coefficients and profits are nonnegative.
+For every nonnegative real c, the gadget value is
+                         G(Tc)=B(c)+F(c).               (2)
+
+Direct primal certificate. Set m=min_i c_i, every z_j=m, and x_i=c_i-m.
+All constraints in(1) are tight. Profit is
+ beta sum_i(c_i-m)+(r-1)beta r m
+   =B+beta r(r-2)m=B+m.
+
+Direct dual certificate. Choose k with c_k=m. Give resource copy(i,j) price
+  (r-1)beta if i=k;
+  beta     if j=k;
+  0        otherwise.
+These cases are disjoint since i!=j. Baseline column i!=k has cover price beta;
+baseline column k has price(r-1)^2 beta=beta+1>=beta. Every joint column has
+cover price exactly(r-1)beta. The total dual cost is
+ beta sum_(i!=k)c_i+(r-1)^2 beta c_k=B+c_k.
+Weak duality proves (2), including ties and zero capacities.
+
+Alternative elimination proof, useful as a consistency check. At fixed z,
+optimal x_i=c_i-max_(j!=i)z_j. The profit above B is
+ beta[(r-1)sum_j z_j-sum_i max_(j!=i)z_j].
+At a minimizing capacity index k, every z_j for j!=k is at most m. Clipping
+any z_k>m down to m leaves this expression unchanged: exactly r-1 maxima and
+the coefficient(r-1)z_k fall by equal amounts. Once all z<=m, averaging shows
+sum_i max_(j!=i)z_j>=sum_j z_j, so the score is at most
+ beta(r-2)sum_j z_j<=beta r(r-2)m=m.
+
+2. OWNER AND INCENTIVE MAP; FUNDING LIMITATION
+For any fixed number of actual owners holding mixed original-row bundles,
+each owner keeps ALL of its own row copies. T is fixed and positive linear.
+For every coalition C,
+  G(Tb_C)=B(b_C)+F(b_C),  B(b_C)=sum_(i in C)B(b_i).
+Therefore subtracting B(b_i) from any full-OUT, all-coalition-covering gadget
+payment preserves nonnegativity, all original coverage, and full OUT for the
+SAME protected coalitions. Singleton coverage proves nonnegative differences;
+G(Td_C)=B(d_C)+F(d_C) cancels the baseline in the OUT increment.
+TCWM alone does not suffice for this subtraction. An ordinary gadget budget
+kappa G gives only (kappa-1)B+kappa F, which is unbounded relative to F near
+an original zero-production profile. See the general affine-gadget note for
+the exact distinction from a gain-only bound B+K F.
+
+3. OPTIMALITY OF THE BASELINE AT THE UNIT SEED
+At c=(1,...,1), with one actual owner per original row, the baseline is
+ B=r beta=1/(r-2).
+Every proper original coalition has worth0; the grand coalition has worth1.
+For ANY arity-q coalition-affine embedding at this seed, the reused rank
+charging bound gives (q-1)B>=r-q. Here q=r-1, so B>=1/(r-2). The construction
+attains equality. This is exact seed-baseline optimality within coalition-
+affine embeddings, not a statement about optimal mechanism funding.
+In particular min4 maps to arity3 with B(c)=sum_i c_i/8 and seed baseline1/2.
+
+4. AN EXACT FAILURE OF THE NAIVE SHARED-RESOURCE EXTENSION
+The following tempting extension is invalid. Start with an r-partite original
+r-input technology. Give each row i of color a one copy(i,j) for each other
+color j, with capacity c_i. Put one baseline column on all copies of row i,
+profit beta. For each original activity e and each omitted color j, put a joint
+column on the copies labeled j of e's remaining r-1 rows, profit(r-1)beta.
+This identifies resource copies and baseline columns across overlapping original
+activities. It works for a single minimum, but not for general technologies.
+
+Exact counterexample for every r>=3. In each color i there is one available
+row a_i with capacity1 and one unavailable row a'_i with capacity0. Original
+activity e_j consists of a'_j together with every a_i for i!=j. Thus EVERY
+original activity uses a zero row and original F=0.
+In the gadget, e_j's joint column omitting color j uses only copies(a_i,j),
+i!=j, all of capacity1. These r particular columns have pairwise disjoint
+resource-copy sets; set all their amounts to1. Their total profit is
+                      r(r-1)beta=(r-1)/(r-2).           (3)
+This is optimal: pricing EVERY copy at beta is dual feasible, since baseline
+columns see(r-1)beta>=beta and joint columns see their exact profit(r-1)beta.
+Only r(r-1) copies have positive capacity, so the dual cost equals(3).
+But the putative baseline is
+                      B=r beta=1/(r-2),
+hence the gadget has G-B=1 although the original F is0.
+At r=4 this is an arity3 gadget with G=3/2,B=1/2,F=0.
+
+Thus independently applying the one-step minimum construction and identifying
+shared resource roles does not preserve the original production LP. Iterating
+it through a general overlapping output technology is not justified either.
+Any broader transfer needs a new exact value theorem, and even an affine value
+theorem would still face the ordinary-funding obstruction in Section2.

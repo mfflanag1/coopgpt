@@ -1,0 +1,171 @@
+INDEPENDENT AUDIT: GLOBALLY SHARED ADAPTIVE CARDINALITY WEIGHTS
+18 October 2026. Started 22:35:36 UTC. Own audit directory only.
+
+FINDING
+The stated extension is valid under the parent's uniform-model contract and
+the explicit convention that sampling is over the full fixed actual-owner
+roster, including owners whose current report is zero. No additional symmetry,
+continuity, or consistency across populations is needed. D must bound the
+number of distinct other local owners, not merely the polynomial degree;
+the extension explicitly imposes this stronger bound. This audit independently
+derives the lemma and limit below. Its conclusion concerns the architecture,
+not arbitrary mechanisms, and supplies no new unrestricted funding bound.
+
+1. EXACT FIXED-ROSTER COUPLING LEMMA
+Let m=n-1 and take d<=m distinct local owners other than the focal owner.
+Draw a uniform k-subset of all m other ACTUAL owner labels, where 0<=k<=m.
+For any particular local inclusion pattern with t included labels,
+
+  H_(m,k,d)(pattern)=binom(m-d,k-t)/binom(m,k),             (1)
+
+with out-of-range binomial coefficients zero. Equivalently its d bits are
+d ordered draws without replacement from m positions containing k ones.
+Draw those d positions with replacement instead. The resulting bits are iid
+Bernoulli(p), p=k/m. On the event that the drawn positions are distinct, the
+ordered position sequence is uniform without replacement. Couple a uniform
+without-replacement sequence to this one on that event, and use an independent
+uniform distinct sequence on the complement. Its marginal law is correct.
+The event of any repeated position has probability at most binom(d,2)/m.
+Consequently
+
+  TV(H_(m,k,d), Bernoulli(k/m)^d) <= binom(d,2)/m.        (2)
+
+The bound holds uniformly in k, including 0 and m. It is harmless if the
+right side exceeds one. For a function g taking values in [0,W],
+
+  |E_H g-E_B g| <= W binom(d,2)/m.                      (3)
+
+There is no factor two in (3): the oscillation of g, rather than its absolute
+supremum in a signed [-W,W] interval, is W. This proof applies to arbitrary
+local functions of the inclusion labels. No independence of different owners'
+samples or different components' samples is assumed or needed.
+
+For common nonnegative finite cardinality weights lambda_k(b), put
+  mu_b=sum_k lambda_k(b) delta_(k/(n-1)),
+  beta_b=sum_k lambda_k(b).
+If all relevant local functions have d<=D and W<=1, their payments differ
+from their Bernoulli-polynomial integrals by at most
+  e_(n,b)=beta_b binom(D,2)/(n-1),                       (4)
+and therefore by the extension's more conservative beta_b D^2/(n-1).
+For a sentinel with size L, divide its payment by L before applying (4).
+
+2. WHAT CANCELS, AND WHICH OWNER LABELS COUNT
+For a disjoint production sum F=sum_a F_a, if owner i reports only in
+component a, then for EVERY selected subset R,
+  F(b_i+b_R)-F(b_R)=F_a(b_i+b_(R intersect owners(a)))-F_a(b_(R intersect owners(a))).
+All other components cancel pointwise. Correlations between component inclusion
+counts under fixed-size sampling therefore do not enter an individual marginal.
+Owners can instead hold identically coordinated unit copies of that component;
+the number d counts distinct OTHER OWNERS, not resource copies or rows.
+
+Zero-report owners remain in the population of m labels. Their own marginal
+payment is identically zero in this formula, but their inclusion can occupy a
+sample slot. Removing them changes the rule. For instance, let a focal owner
+hold one A unit, one other owner hold one B unit for min(A,B), and two more
+actual owners report zero. At k=1 the focal marginal is 1/3, not 1. An
+active-only implementation would sample from a different population and is
+not covered by this extension. A currently zero focal test owner is likewise
+still a fixed label, distinct from all unchanged protected members.
+
+The SAME lambda_k(b) must apply to anchor, sentinels, test owners and hard owners
+at that profile. This is exactly why one anchor bounds the mass used in every
+error estimate. Anonymous, owner-specific or component-specific weights need
+not have this property. The proof does not derive it from anonymity.
+
+3. REPLICATION WITH EXPLICIT THREE-PARAMETER ORDER
+Fix first a FINITE nonempty list W of threshold comparisons, T=|W|. Choose
+D>=r-1 and at least the number of distinct other local owners needed for every
+test endpoint. Sentinel k has k+2 owners in total, so k<=D-1 also meets d<=D.
+Only after fixing W,T,D let the repetition count N tend to infinity. Set
+  L=N^2 T,   A=N(DL+NT+1).
+An additive anchor of value A has cardinality marginal exactly A for EVERY
+k, so its payment is A beta_b. Total production on the sequence is
+  A+DL+NT+1=A(1+1/N).
+Funding and nonnegativity imply beta_b<=B_N=K(1+1/N), even when lambda changes
+arbitrarily at every endpoint. The test owner's local marginal lies in [0,1],
+and hence its actual payment lies in [0,B_N].
+
+Write E_N=B_N D^2/(n-1). At a restoration compare the ACTUAL coalition
+consisting of the focal owner and an unchanged designated sentinel owner.
+The two normalized sentinel errors have absolute value at most E_N each.
+Pair TCWM therefore implies
+  Delta integral f_j dmu >= -B_N/L-2E_N.                (5)
+The anchor moment beta obeys Delta beta>=-B_N/A, which is stronger. Every
+moment is in [0,B_N]. Summing its positive and negative variation over NT
+transitions, then averaging over N cycles, gives one cycle whose summed
+absolute variation over the D+1 basis moments is at most
+  eps_N=(D+1)[B_N/N+2T(B_N/L+2E_N)].                    (6)
+
+Owner count is at least 3NT because each threshold component has at least
+three distinct owners; more explicitly
+  n=C_0+C_W N,
+  C_0=1+r+D(D+3)/2,
+  C_W=sum_(w in W) (number of local owners in test w)>=3T,
+before optional extra zero-report owners or a connector owner. Thus
+  eps_N <= (D+1)B_N[1/N+2/N^2+4T D^2/(3NT-1)] ->0.    (7)
+This only asserts convergence with D,T fixed. It does not assert that total
+sampling error over the entire NT-transition sequence tends to zero.
+The latter may stay bounded. The selected cycle, not the whole sequence,
+is the argument's required object.
+
+4. LIMIT INEQUALITIES WITH ACTUAL COALITION ERRORS
+Let nu_N be the measure at the selected cycle's start. For a fixed polynomial
+P of degree <=D, expand P in the fixed basis {1,p(1-p)^j:0<=j<D}.
+At any endpoint in that cycle,
+  |integral P d(mu_b-nu_N)| <= ||P||_(basis,1) eps_N.
+For a protected q-owner test, q<=s, the sum of its actual marginals differs
+from the corresponding polynomial integral by at most q E_N. Therefore its
+TCWM inequality yields
+  integral (P_high-P_low) dnu_N
+    >= -2q E_N-(||P_high||+||P_low||) eps_N.            (8)
+There is one common measure at each endpoint, but the low and high measures
+need not agree. Equation (8) is what makes a common limiting measure valid.
+
+For the unchanged hard min_r coalition, each owner's Bernoulli polynomial is
+p^(r-1). Its cardinality marginal is instead (k)_(r-1)/(n-1)_(r-1), not
+exactly p^(r-1). Coverage and (4) give
+  integral p^(r-1) dnu_N >= 1/r-E_N.                   (9)
+The r-owner coalition need not have size <=s: coverage includes ALL coalitions.
+
+Positive measures on [0,1] with mass bounded by B_N have a weakly convergent
+subsequence. Equations (7)--(9) imply one limit nu, mass <=K, satisfying every
+test in the fixed finite list and integral p^(r-1)dnu>=1/r. Compactness with
+the finite-intersection property THEN ranges over finite test lists. These are
+two separate limits. No uniform bound on the basis coefficients as W varies
+is required, and no infinite actual-owner game is asserted.
+
+5. COMPLETING THE PARENT SUPPORT ARGUMENT INDEPENDENTLY
+The threshold integrands are (1/k)(1-p)^(q-2)(1-qp) T_(k,t)(p), for q=2,s.
+For q=2,t=k-1, T=p^k. Dominated convergence gives -nu({1})>=0, removing the
+atom at 1. If nu((1/s,1))>0, choose a nonatom a>1/s with nu((a,1))>0.
+The tests t=floor(ka) have tails tending to 1_(a,1) away from a. Dominated
+convergence in the q=s test gives a nonnegative integral of a function strictly
+negative on (a,1), a contradiction. Thus support(nu) is contained in [0,1/s].
+Combining (9) in the limit with its mass bound gives
+  1/r <= integral p^(r-1)dnu <= K/s^(r-1),
+and hence K>=s^(r-1)/r, as claimed.
+
+6. OWNER-COUNT-DEPENDENT FUNDING AND SCOPE
+If a subsequence n_j tends to infinity with uniform-over-institutions funding
+kappa_(n_j)<=K<s^(r-1)/r, fix W first and choose
+  N_j=floor((n_j-C_0)/C_W).
+It tends to infinity. Pad the unused roster positions with zero reports.
+The cardinality distribution changes with n_j, but (1)--(4) use that exact
+n_j and remain uniform in k. The anchor still bounds beta by K(1+1/N_j).
+Hence the same contradiction proves liminf_n kappa_n>=s^(r-1)/r.
+There is no requirement that the finite-model mechanisms agree across n_j.
+It IS necessary that kappa_n bound every selected technology with n owners;
+a bound for one fixed institution alone cannot support this replication claim.
+
+All paired sentinel comparisons and q-member threshold comparisons use actual
+fixed owner identities. Unchanged protected members are allowed by the contract.
+The report-adaptive map need not be measurable. Nonnegative weights and common
+weights are essential assumptions. The result does not cover arbitrary rules,
+owner-specific weights, subset weights sensitive to reported bundles, or a
+single fixed min_r technology across all replication models.
+
+CHECKS
+audit_cardinality.py independently checks exact hypergeometric TV distances,
+threshold polynomials and cardinality/Bernoulli expectation errors using
+fractions.Fraction. Its JSON contains actual executed counts. These finite
+checks are diagnostics; the proofs above establish the stated full scope.

@@ -1,0 +1,141 @@
+REPORT-ADAPTIVE GLOBAL BINOMIAL PARAMETERS STILL REQUIRE QUADRATIC FUNDING
+2026-10-18 21:29 UTC. Constructive-lane derivation; root audit requested.
+Architecture obstruction only. No unrestricted lower improvement or novelty claim.
+
+MODEL / CLASS
+Fix integer s>=2. For each finite fixed actual-owner model, allow an arbitrary
+report-adaptive common probability p(b) in[0,1] and a common finite nonnegative
+multiplier beta(b). The rule is
+ y_i(b)=beta(b) m_i(p(b);b),
+ m_i(p;b)=E_R[F(b_i+b_R)-F(b_R)],
+where R independently includes each OTHER actual owner with probability p.
+The functions beta,p may depend on the entire report profile, technology,
+actual-owner labels and total owner count. No continuity, anonymity, derivative,
+fixed coefficient or report-independent parameter assumption is made.
+Require all-coalition coverage, TCWM for |C|<=s, and total funding <=K F(B).
+
+CLAIM
+Uniformly over arity-at-most3 technologies and growing owner counts, this class
+requires asymptotic funding at least s^2/3. More precisely the finite construction
+below forces inequality(6); consequently liminf_M K_M >=s^2/[3(1+(epsilon+1)/L)]
+for fixed positive L,epsilon, and letting L grow gives the s^2/3 architecture
+lower. This extends the fixed-parameter limitation to globally adaptive scalar
+parameters, but NOT to owner-specific adaptive marginal weights or general rules.
+
+ONE FIXED TECHNOLOGY FOR EACH M
+Take the disjoint sum of three production components:
+ F(c)=a+min(x1,x2,x3)+min(P,sum_{j=1}^M z_j).                 (1)
+There is one additive activity, one three-input activity, and M two-input star
+activities. All unit-profit columns have arity<=3. Actual owners are:
+ one anchor owner A holding a=L;
+ three hard-complement owners H_l, each holding x_l=epsilon;
+ one star-center owner O holding P=1;
+ M distinct star-leaf owners Z_j, each eligible for its own row z_j in[0,1].
+Thus n=M+5 actual owners. Technology, eligibility and identities are fixed.
+At profile b^(m), m leaves report1, the rest0; all other reports are fixed.
+Total production is L+epsilon+1 for every m>=1.
+
+Because production is additive across these disjoint components, each owner's
+binomial marginal depends only on its own component. Contributions from other
+components cancel pointwise inside every marginal difference. Therefore:
+ m_A=L;
+ m_H_l=epsilon p^2;
+ m_Z_j=p(1-p)^(m-1) for any active leaf j at profile b^(m);
+ m_Z_j=0 for a zero-report leaf.                            (2)
+Write beta_m=beta(b^(m)), p_m=p(b^(m)) and
+ q_m=beta_m p_m(1-p_m)^(m-1), the payment to an active leaf.
+All active leaves have the same payment because the common scalar parameters
+are shared even if the parameter functions themselves inspect owner labels.
+
+POINTWISE COVERAGE AND FUNDING BOUNDS
+Coverage of the coalition of the three H owners implies
+                 3 beta_m p_m^2 >=1.                     (3)
+Funding, just through the anchor's payment beta_m L, implies
+ beta_m <=B_M:=K_M (L+epsilon+1)/L.
+Thus p_m>=delta_M:=1/sqrt(3 B_M), and beta_m p_m>=1/3.
+In particular q_1>=1/3. Coverage rules out p_m=0 and beta_m=0.
+If a parameter choice p_m=1 with m>=2 would make q_m=0, the transition bound
+below rules it out automatically. No limiting endpoint convention is needed.
+
+THE FIXED-OWNER TRANSITION CHAIN
+Restore leaf Z_m from0 to1. For 2<=m<=s choose C to contain the new leaf and
+all m-1 previously active leaves; its size m is permitted. For m>s choose C
+containing the new leaf and any s-1 previously active leaves. The previously
+active members make NO report change; all outsiders remain fixed.
+The old new-leaf payment is exactly0 by the marginal formula. TCWM implies
+ m q_m >=(m-1) q_(m-1)          (2<=m<=s),
+ s q_m >=(s-1) q_(m-1)          (m>s).
+For M>=s, iteration yields
+ q_M >= (1/(3s)) (1-1/s)^(M-s).                            (4)
+This proof retains all inactive actual owners throughout every comparison.
+
+On the other hand, beta_M<=B_M, p_M<=1 and p_M>=delta_M give
+ q_M <= B_M (1-1/sqrt(3 B_M))^(M-1).                       (5)
+Combining(4)-(5) gives the exact finite necessary condition
+ (1/(3s))(1-1/s)^(M-s)
+ <= B_M (1-1/sqrt(3 B_M))^(M-1).                           (6)
+If B_M<1/3 then (3) already contradicts p_m<=1, so the square root expression
+in any feasible instance is nonnegative.
+
+ASYMPTOTIC CONSEQUENCE
+Suppose along an unbounded sequence of M one had B_M<=B0<s^2/3. The function
+B -> B(1-1/sqrt(3B))^(M-1) is increasing for B>=1/3; hence(6) also holds with
+B0 in place of B_M. But 1-1/sqrt(3B0)<1-1/s, so its right side decays strictly
+faster in M than the left side, a contradiction. Therefore
+ liminf_M B_M>=s^2/3,
+ liminf_M K_M >= s^2/[3(1+(epsilon+1)/L)].                 (7)
+For a factor claimed uniformly over all finite arity3 models, choose L as large
+as desired while epsilon remains positive. This gives K(s)>=s^2/3 in this class.
+If one requires all report bounds<=1, replace the single anchor by L separate
+unit additive owners for integer L; their TOTAL payment is beta L and the same
+proof works, with n=M+L+4. Growing finite owner counts remain allowed.
+
+SCOPE / WHY THIS DOES NOT SOLVE THE CAMPAIGN
+The lower is caused by forcing one adaptive scalar pair(beta,p) to serve a hard
+complement component, an additive budget anchor and a repeated star transition
+simultaneously. General mechanisms can localize across independent technologies;
+owner-specific adaptive weights can as well. This is an architecture exclusion,
+not a stronger unrestricted exponent than the recorded1/4. It rules out a
+natural report-adaptive escape route and identifies owner/component localization
+as necessary for this family of binomial methods. Full OUT is not used.
+
+FINITE QUADRATIC OBSTRUCTION WITH O(s log s) OWNERS
+For every integer s>=2, set epsilon=1,L=12 and test claimed K0=s^2/4.
+Then B0=7s^2/24. Choose the rational q=16/(15s)>1/s; it satisfies
+ 3 B0 q^2=224/225<1,
+so hard coverage plus beta<=B0 forces p>q. Put
+ a=(s-1)/s, b=1-q=(15s-16)/(15s).
+A contradiction follows once
+ (a/b)^(M-s)>3s B0 b^(s-1).                               (8)
+Since a/b=1+1/(15s-16) and log(1+x)>=x/(1+x),
+ log(a/b)>=1/(15s-15)>1/(15s).
+Also 3sB0 b^(s-1)<(7/8)s^3<s^3. Consequently the explicit choice
+ M=s+ceil(45s log s)
+satisfies(8). Thus this finite n=M+5 owner family already excludes factor
+s^2/4 for every s>=2 in the adaptive-global-scalar class. This is a growing
+architecture obstruction rather than just a fixed-s compactness argument.
+The exact rational checker finds smaller M by direct integer-fraction arithmetic;
+its conclusions do not depend on floating point logarithms.
+
+CONNECTED TECHNOLOGY VARIANT
+Decomposing only by public connected components does not evade this example.
+Add a new gate resource q with its own fixed actual owner reporting0 at every
+comparison. Add positive-profit arity3 activities {a,x1,q} and {x1,P,q}.
+The technology's resource/activity incidence graph becomes connected, but these
+bridge activities are infeasible at every calibration report because q=0.
+Therefore all worths and marginal formulas above remain EXACT. This uses allowed
+zero reports, not changing ownership or eligibility. It excludes a common beta,p
+per PUBLIC connected component as well. Report-adaptive active-support/component
+splitting and owner-specific weights are not excluded. No dummy-zero axiom is
+added to the unrestricted model; the gate owner has zero payment only because
+this particular marginal formula assigns it zero.
+
+GENERAL FIXED ARITY r>=2
+Replace the hard min3 by a hard min_r. Hard coverage is
+ r beta p^(r-1)>=1,
+so delta=(rB)^(-1/(r-1)); also beta p>=1/r. The same star transition chain gives
+ (1/(r s))(1-1/s)^(M-s)<=B(1-(rB)^(-1/(r-1)))^(M-1).
+Hence liminf funding in the same adaptive-global-scalar class is at least
+ s^(r-1)/r after the anchor limit. For r=2, star and hard component both have
+arity2; for r>=3 the bridge variant remains within arity r. This generalization
+is the same proof and remains an architecture result only.

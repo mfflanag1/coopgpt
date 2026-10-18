@@ -1,0 +1,108 @@
+GLOBAL REPORT-ADAPTIVE NONNEGATIVE BINOMIAL MIXTURES NEED H_s/2 FUNDING
+2026-10-18 21:52 UTC. Parent proposed the multiscale family; lane verified it.
+Architecture theorem only, already on an arity2 family. No novelty assertion.
+
+CLASS AND CLAIM
+For each report profile b, let mu_b be ANY finite nonnegative measure on[0,1],
+common to all actual owners, and define
+ y_i(b)=int m_i(p;b) dmu_b(p),
+ m_i(p;b)=E_R[F(b_i+b_R)-F(b_R)],
+with each other actual owner included independently with probability p.
+The measure may depend arbitrarily on all reports, labels, technology, owner
+count and s. It may have any support, including atoms at0 and1. No regularity,
+continuity, anonymity or fixed coefficients are assumed.
+
+If this rule covers every coalition and is TCWM for every coalition of size
+at most integer s>=1, then a uniform funding factor over finite arity2 models
+must satisfy
+                         K(s)>=H_s/2,                    (1)
+where H_s=sum_{m=1}^s1/m. The construction has O(s^2) fixed actual owners.
+The finite inequality is K>=H_s/[2(1+s/L)] for anchor size L>0.
+
+ONE FIXED TECHNOLOGY AND FIXED OWNERS
+Take an additive anchor and one disjoint unit star for each m=1,...,s:
+ F(c)=a+sum_{m=1}^s min(P_m,sum_{j=1}^m z_(m,j)).          (2)
+There is one additive activity and sum_m m two-input star activities, all with
+unit profit. Every column has arity at most2. The fixed actual owners are:
+ - one anchor owner with a=L;
+ - s center owners, center m holding P_m=1;
+ - sum_m m distinct leaf owners, each holding one z_(m,j) in[0,1].
+Thus n=1+s+s(s+1)/2. At the common final profile b*, all leaves report1.
+For each m, define b^(m) by changing only leaves j=2,...,m of star m to0;
+all other star leaves remain1, and all centers/anchor remain fixed. Every
+comparison retains the exact same actual-owner set and eligibility. All
+profiles have total production L+s because every star has at least one leaf.
+
+LOW-PROFILE COVERAGE
+At b^(m), the center and sole active leaf of star m each have binomial marginal
+exactly p. Other components cancel pointwise from this marginal difference.
+The coalition of these two owners has production1, so all-coalition coverage
+requires
+              2 int p dmu_(b^(m))(p)>=1.                 (3)
+This coverage condition applies even at s=1 because coverage is for ALL
+coalitions, whereas only TCWM coalition sizes are bounded.
+Inactive leaf owners have zero marginal and zero payment in this architecture.
+
+A DIRECT TCWM RESTORATION FOR EACH m
+Let C_m contain all m leaf owners of star m, including the first unchanged
+active leaf. Move from b^(m) to b* by restoring its other m-1 leaves from0 to1.
+Every changing owner lies in C_m and every outsider remains fixed. Since m<=s,
+TCWM applies. At b^(m), the coalition payment is int p dmu_(b^(m))>=1/2.
+At b*, each leaf of star m has marginal
+                    p(1-p)^(m-1),                       (4)
+because the center must be included and all m-1 other leaves excluded.
+Consequently, writing mu*=mu_(b*),
+ q_m:=int p(1-p)^(m-1) dmu*(p) >=1/(2m)                 (5)
+for EVERY m=1,...,s at the SAME final report profile and SAME measure mu*.
+For m=1 this follows directly from coverage; no nontrivial restoration is needed.
+This direct comparison avoids any need to assume continuity along a chain.
+
+EXACT HARMONIC MASS BOUND
+Sum(5) over m and use the finite geometric identity, valid also at endpoints:
+ sum_{m=1}^s p(1-p)^(m-1)=1-(1-p)^s <=1.
+Nonnegativity of mu* therefore gives
+ mu*([0,1]) >=int[1-(1-p)^s]dmu*(p)
+             =sum_m q_m >=H_s/2.                        (6)
+The anchor's marginal is L at every p, including p=0. Its payment is exactly
+L mu*([0,1]). Funding at b* bounds this by K(L+s), proving
+                 K>=H_s/[2(1+s/L)].                     (7)
+For a factor uniform over finite models, L can be arbitrarily large, yielding(1).
+Alternatively L=s gives the completely finite bound K>=H_s/4. If individual
+report upper bounds must be at most1, replace an integer-size anchor L by L
+unit additive owners; their total payment is still L times the mixing mass.
+
+WHY THIS IS AN ARCHITECTURE SEPARATION, NOT A GENERAL LOWER
+The original disjoint-star family admits an explicit factor2 mechanism for ALL
+nonnegative real reports and arbitrary mixed ownership, with TCWM for ALL
+coalition sizes. For star m write P=sum_i P_i, Z=sum_i Z_i, F_m=min(P,Z), and
+pay owner i
+                 F_m(P_i/P+Z_i/Z),                      (8)
+with the whole expression defined as0 when PZ=0. Additive anchor value is paid
+to its actual contributors. Summing these payments gives at most2F.
+Coverage: if P<=Z, the star coalition payment is P_C+P Z_C/Z>=P_C>=min(P_C,Z_C);
+the other regime is symmetric. TCWM: when C restores its P supply, in P<=Z the
+coalition sum is P_C+P Z_C/Z and increases; in P>=Z it is Z P_C/P+Z_C and its
+P_C derivative is Z(P-P_C)/P^2>=0. Restoring Z is symmetric. Boundary values
+are continuous. Summing over components preserves coverage and TCWM, including
+owners contributing to multiple rows/components. Thus no unrestricted growing
+factor is forced by this family; the logarithmic growth belongs to the GLOBAL
+mixture architecture. Known sharper graph mechanisms are not needed for this
+separation argument.
+
+CONNECTED PUBLIC TECHNOLOGY VARIANT
+Add one gate row q, held by a fixed owner reporting0 throughout these comparisons.
+Add arity2 positive-profit activities {a,q} and {P_m,q} for every m. The public
+resource/activity incidence graph is now connected. All bridges remain infeasible
+at every compared profile, so every worth and marginal calculation above is
+unchanged. A different measure per PUBLIC connected component therefore does not
+evade the bound. Report-adaptive splitting by active support, owner-specific
+weights or component-local measures are not excluded.
+
+WHAT THE RESULT RULES OUT
+Even allowing arbitrarily supported, fully report-dependent nonnegative global
+mixtures cannot yield a constant funding factor as s grows. The one-star factor2
+calibration in ADAPTIVE_MIXTURE_ESCAPE_CALIBRATION.txt is consistent: simultaneous
+stars at every active-count scale force one measure to satisfy all constraints(5).
+The theorem does not exclude O(s), O(s log s), or any other subquadratic global
+mixture rule. It does not establish full OUT, which was not used. It does not
+improve the campaign's unrestricted arity3 bound.

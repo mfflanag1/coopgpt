@@ -1,0 +1,190 @@
+INDEPENDENT AUDIT: PROJECTIVE SQUARE-ROOT COALITION-SIZE LOWER
+18 October2026. Reviewer: reserve_feasibility lane.
+Scope: mathematical validity, fixed-owner/all-profile contract, exact checks.
+Historical novelty and specialist acceptance are not assessed.
+
+VERDICT
+PASS for the stronger R=1 statement in lower/PROJECTIVE_SQUARE_ROOT_LOWER.txt:
+  kappa >= (2/3) Q_M,
+  kappa >= 1 + [2(M-1)/(3M)] Q_M,
+  Q_M=product_(m=2)^M 2m/(2m-1),
+with n=2M+1 fixed fully eligible owners, d=2^(M+1)-1 rows, and protected
+coalition size s0=2M-1. Hence K3(s)>=sqrt(s/6) for every integer s>=1.
+The first two finite statements are independently checked below; no regularity,
+payment formula, dummy-zero axiom, marginal floor, or identity change is used.
+
+The original R>=1 cube-root bootstrap is also valid, but is superseded by R=1
+and the additional seed stabilizer. Root, the lower worker, and this reviewer
+independently checked that improvement. This audit does not count their
+agreement as a substitute for the calculations here.
+
+FROZEN INPUT AND REPRODUCTION
+Input lower/PROJECTIVE_SQUARE_ROOT_LOWER.txt SHA256:
+  0cd1739fd85a4ac6c8e852d154ca88d6f8c0ba260b8db53006e16b5067d95ab8
+Earlier lower/PROJECTIVE_CUBE_ROOT_LOWER.txt SHA256:
+  d9dd5011cc6b85502d1ed5bc28350ad1bd7682aef37cb50b6aa66ce6ec5f402d
+Independent checker: reviews/growing_projective_audit_check.py
+Output: reviews/growing_projective_audit_check.json
+Command: python3 reviews/growing_projective_audit_check.py
+The JSON embeds the checker hash and full rational A/B certificates at M=8.
+This reviewer wrote the checker independently before reading the lower lane's
+checker; only the proof and the campaign contract were inputs.
+
+1. THE COMMON FULL REAL CUBE IS EXACTLY WHAT LICENSES THE AVERAGING
+Put V=F2^(M+1). A resource label is a NONZERO VECTOR of V, but its reported
+capacity is an ordinary real number in[0,1]. An element g of GL(V) acts on
+capacity vectors by a PERMUTATION OF RESOURCE INDICES:
+  (P_g b)_(g(a))=b_a.
+It does not take binary linear combinations of real capacities. Consequently
+P_g maps the full real cube bijectively to itself and preserves coordinatewise
+order, nonnegativity, and the all-ones actual endowment.
+
+Because g(a+b)=g(a)+g(b), the activity {a,b,a+b} maps to another activity,
+with identical profit and unit consumption. Thus F(P_g c)=F(c) for every
+nonnegative REAL capacity vector, not just the binary witness profiles.
+Each owner has the SAME full cube and the same endowment, so permutations of
+owner labels preserve the entire institution as well.
+
+Formally, for owner permutation sigma define
+  [T_(sigma,g) b]_i=P_g b_(sigma^{-1}(i)).
+Given any rule y, its transformed rule at original label i is
+  y_i^(sigma,g)(b)=y_(sigma(i))(T_(sigma,g)b).
+For each coalition S, the relevant coalition in the original rule is sigma(S),
+whose cardinality is unchanged. Its report and withdrawal sums are transformed
+by P_g. Therefore each transformed rule preserves nonnegativity, coverage,
+the same uniform funding bound, and every TCWM/full-OUT inequality.
+The average over finite S_n x GL(V) preserves these linear inequalities and
+is equivariant. There is no measurability or continuity premise.
+
+This construction would FAIL with privately designated pure-resource eligibility
+that was not invariant under these maps. The actual proof avoids precisely that
+problem by declaring the full cube for EVERY owner before choosing the rule.
+The symbols p,h_j,l_j label particular reports, not different eligibility sets.
+All zero reports and all restored unit reports belong to this fixed cube.
+
+2. NO UNREPORTED PROJECTIVE ACTIVITY CAN PRODUCE
+Let S={v} union {e_j,e_j+v:1<=j<=M}. For two private rows with different
+indices, their sum has two nonzero e-coordinates and is outside S. For the
+same index, the two distinct private rows sum to v. Adding v swaps mates.
+Hence the only triples entirely contained in S are {v,e_j,e_j+v}.
+
+At C_m, the mates with j>m have zero aggregate capacity. Every activity using
+a zero row has zero feasible activity amount by its resource constraint.
+The only surviving columns are the m branches j<=m, each consuming one unit
+of v. That row's capacity is1, so total objective<=1; one branch at level1
+attains1. This is the full LP, not a restricted technology substituted midway.
+
+A convenient GLOBAL dual is p_v=1, p_a=1 at every zero-capacity resource,
+and p_a=0 at every other positive-capacity resource. Every supported column
+uses v; every unsupported column uses a zero row. Thus all columns are covered
+and the dual objective is exactly1. This also handles the many triples among
+unreported rows. Grand production is1 at EVERY compared profile.
+
+3. THE STRONGER SEED STABILIZER IS VALID
+At C1=D with R=1, the reported multiset is
+  {v,e_1,v+e_1,e_2,...,e_M}, plus M-1 zero reports.
+Two invertible linear maps preserve this entire multiset:
+  g1 swaps basis vectors v and e1, fixing every e_j for j>1;
+  g2 sends v to v+e1 and fixes every e_j.
+Map g1 fixes v+e1; g2 swaps v and v+e1 while fixing e1. Both fix all dormant
+high rows e_j, j>1, and every zero report. Composing with the corresponding
+permutations of the three actual owners gives stabilizers of the FULL profile.
+These two swaps act transitively on p,h1,l1, so the averaged payments all equal a.
+
+Their coalition produces1, and all-coalition coverage gives3a>=1. Therefore
+the first private pair total T1=2a>=2/3. This coverage coalition need not be
+TCWM-protected; the contract explicitly covers every coalition regardless of s.
+The root owner is not being paid a stipulated deletion marginal.
+
+4. THE LADDER USES EXACTLY THE DECLARED ACTUAL COALITIONS
+At C_m, fixing v, independently flipping e_j to e_j+v for active j<=m and
+permuting the active basis indices preserves all reports, including every
+dormant high row e_j for j>m and every zero low owner. Combining these maps
+with fixed-label owner permutations acts transitively on the 2m active private
+owners. Call their common payment q_m and their total T_m=2m q_m.
+
+The actual transition C_(m-1)->C_m changes only owner l_m from0 to one unit
+of e_m+v. Its protected coalition is
+  A_m={h_j,l_j:j<m} union {l_m},
+with size2m-1. All its older members retain exactly the same reports. The
+root p and the new unchanged high owner h_m are EXCLUDED. At the low profile,
+the coalition receives2(m-1)q_(m-1)+z_(m-1), where z_(m-1) is the actual
+nonnegative payment to the zero-report owner l_m. At the high profile its
+payment is(2m-1)q_m. Thus
+  (2m-1)q_m - 2(m-1)q_(m-1) - z_(m-1) >=0.
+Dropping z>=0 gives the claimed recurrence. No zero-report payment is assumed
+to vanish. The convention retaining unchanged coalition members is essential
+and is exactly the frozen campaign convention.
+
+The restored bundle is one pure resource, so its standalone production is0.
+Therefore the same witness inequalities hold under full OUT without modifying
+the RHS. No claim is made about a distinct contract that excludes unchanged
+members or requires coalitions to restore every member strictly positively.
+
+5. EXACT MULTIPLIER CERTIFICATES AND THE TERMINAL STRENGTHENING
+Write lambda_m=product_(j=m)^M 2j/(2j-1). For each m>=2 give the exact TCWM
+row above weight lambda_m and its z_(m-1)>=0 row the same weight. Give seed
+coverage3q1>=1 weight(2/3)Q_M. Give the true final budget
+  kappa - 2M q_M - r_M >=0
+and root nonnegativity r_M>=0 weight1. Every q,z,r coefficient cancels, and
+the result is kappa>=(2/3)Q_M. This is a nonnegative rational aggregation.
+
+For the stronger finite bound, replace root nonnegativity by final coverage
+  r_M+2q_M>=1
+of one actual triple, keeping its weight and the final budget weight1. Scale
+the seed/TCWM/z weights by(M-1)/M. Again all payment coefficients cancel,
+leaving kappa>=1+[2(M-1)/(3M)]Q_M. At M=1 those scaled weights are0 and
+final coverage plus final budget directly gives kappa>=1.
+
+The certificates are in orbit variables AFTER the independently justified
+finite symmetry average. They do not purport to list the enormous set of
+all individual inequalities from every group conjugate. Averaging those
+conjugates recovers the same unrestricted-mechanism lower, because every
+conjugate remains in the fixed real-cube institution.
+
+6. RATE, RESOURCE GROWTH, AND THE ORIGINAL RULE
+Direct factorial cancellation gives Q_M=4^M/[2 binom(2M,M)]. The lower
+bound Q_M>=sqrt(3M+1)/2 has base equality at M=1. Its inductive squared
+comparison is the exact polynomial identity
+  4(M+1)^2(3M+1)-(2M+1)^2(3M+4)=M>=0.
+This is an analytic all-M induction, not an extrapolation of finite checks.
+
+For integer s>=1 set M=floor((s+1)/2). Then2M-1<=s and M>=s/2, so
+  K3(s)>=(2/3)Q_M>=sqrt(3M+1)/3>=sqrt(s/6).
+There are n=2M+1<=s+2 owners and d=2^(M+1)-1 rows. The exponential row count
+is allowed by the campaign; this result must not be described as a polynomial-
+size resource construction in s. All columns have exactly3 rows.
+
+Symmetrization proves a worst-case bound for the ORIGINAL arbitrary rule: its
+average cost over the finite symmetry orbit of C_M is at least the stated
+bound, all those profiles having production1. Hence at least one original-rule
+profile in that orbit is expensive. It need not be the named C_M profile for
+every asymmetric rule. This is a useful wording clarification, not a proof gap.
+
+7. EXECUTED INDEPENDENT CHECKS
+Standard-library exact arithmetic only; no LP solver or numerical tolerance.
+M=1,...,9:
+ -45 complete supported-profile checks, containing165 supported triples;
+ -285 ladder generator/profile-preservation and invertibility checks;
+ -45 active private-orbit transitivity checks;
+ -18 seed generator checks and9 seed three-owner transitivity checks;
+ -36 fixed-owner transition/member checks.
+M=1,...,1000:2000 evaluations of the cleared induction polynomials.
+M=1,...,64:128 exact A/B certificates,8448 total rows aggregated, with all
+payment coefficients cancelling and kappa coefficient1. Both17-row M8
+certificates, their terms and rational weights are retained in the JSON.
+All checks PASS. These counts describe precisely what was executed.
+
+The checker enumerates all triples SUPPORTED by the tested profiles, and
+checks the declared linear maps are invertible. Preservation of all projective
+columns at arbitrary M follows analytically from g(a+b)=g(a)+g(b); this checker
+does not enumerate the full exponentially large column set at every M.
+Its finite execution does not formalize the real-domain symmetry argument.
+
+8. DISPOSITION
+The projective square-root result meets the requested mathematical form of
+an unrestricted exponent improvement under the frozen contract. Root and
+opposite-model review still control final campaign acceptance. No claim about
+historical novelty, fixed resource dimension, a particular observed economic
+institution, individual-only incentives, or exact optimal funding follows.
+Fallback preparation remains paused; sealed application records are untouched.

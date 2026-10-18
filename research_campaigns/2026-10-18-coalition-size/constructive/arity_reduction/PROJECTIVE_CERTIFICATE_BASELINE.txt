@@ -1,0 +1,108 @@
+PROJECTIVE LOWER CERTIFICATE: THE TERNARY AFFINE BASELINE IS EXPONENTIAL
+2026-10-18. Exact calculation for the existing circuit construction and the
+stage/bridge gadget. This closes this transfer route; it is not a new lower
+frontier, nor an obstruction to every possible certificate-specific reduction.
+
+INPUTS
+Use lower/GENERAL_ARITY_CIRCUIT_LOWER.txt with fixed r=k+1>=3 and M>=1.
+The binary vector space has dimension D=1+(r-2)M, its nonzero rows number
+R=2^D-1, and the fixed actual-owner roster has N=1+(r-1)M members, each with
+the full unit-cube endowment on these R rows. Activities are all minimal
+binary circuits of cardinality r; coefficients and profits are all1.
+At ladder profile C_m, exactly D+m distinct rows have unit capacity; all
+others have capacity0. Its production is1. In particular, C_M has N unit
+rows and F(C_M)=1. The proof uses a terminal budget at C_M, after averaging
+over the fixed institution's GL and owner-permutation symmetries.
+
+1. EXACT NUMBER OF ACTIVITIES AND ROW DEGREE
+An ordered independent (r-1)-tuple determines a circuit by adjoining its
+sum. Conversely, each r-circuit is obtained r! times: choose its omitted
+element in r ways and order the others in (r-1)! ways. Consequently
+ |E| = [product_(j=0)^(r-2) (2^D-2^j)] / r!.
+Row transitivity and incidence counting give the common degree
+ d_r(D) = r|E|/R
+        = [product_(j=1)^(r-2) (2^D-2^j)] / (r-1)!.
+Here D>=r-1, so all factors are positive. For fixed r,
+ d_r(D)=Theta_r(2^((r-2)D)).
+For example, since each 2^j<=2^(D-1),
+ 2^((r-2)(D-1))/(r-1)! <= d_r(D)
+                          <=2^((r-2)D)/(r-1)!.
+
+2. THE TWO BASELINES AT THE ACTUAL BUDGET PROFILE
+The arithmetic-average linear map from the general ternary gadget has
+ M_(i,e)(b_i)=(1/r)sum_(v in e)b_(i,v),
+ B(b)=(r-1)sum_e sum_i M_(i,e)(b_i)
+     =[(r-1)/r]d_r(D)sum_v b_(N,v).
+Therefore
+ B_linear(C_m)=[(r-1)/r]d_r(D)(D+m),
+ B_linear(C_M)=[(r-1)/r]d_r(D)N.                    (1)
+The fixed-endowment map has M_(i,e)=1 for EVERY owner and activity, because
+every original owner has the full unit-cube endowment. Hence
+ B_constant=N(r-1)|E|=R B_linear(C_M).               (2)
+Both are already enormous at the terminal budget profile, whose original
+worth is exactly1. They are not merely bad at irrelevant zero-worth profiles.
+For fixed r and M tending to infinity,
+ B_linear=Theta_r(M 2^((r-2)[1+(r-2)M])),
+ B_constant=Theta_r(M 2^((r-1)[1+(r-2)M])).
+Every GL/owner permutation of C_M has the same baseline under these maps.
+
+3. EXACT DILUTION OF THE EXISTING LOWER CERTIFICATE
+Write
+ Q=product_(m=2)^M [(r-1)m/((r-1)(m-1)+1)],
+ L=1+[(r-1)(M-1)/(rM)]Q.
+The accepted original certificate forces terminal total payment at least L.
+Its growth for fixed r is polynomial, L=Theta_r(M^((r-2)/(r-1))).
+For completeness, with alpha=(r-2)/(r-1), the identity
+log Q=sum_(m=2)^M -log(1-alpha/m)=alpha log M+O_r(1)
+follows by the convergent quadratic remainder, proving this stated rate.
+
+For the CONSTANT map, a TCWM gadget rule z with factor kappa gives original
+y_i=z_i-B_i with all coverage and TCWM. Its terminal budget is only
+ sum_i y_i <= kappa(B+1)-B.
+Combining with the lower certificate therefore yields exactly
+              kappa >= (B+L)/(B+1)
+                     =1+(L-1)/(B+1).               (3)
+With B from (2), the excess over1 is exponentially small in M. This is
+weaker than the existing arity3 lower bound, not an improvement.
+
+For the LINEAR map, the same calculation with B from (1) is available only
+when z satisfies FULL OUT (so baseline subtraction preserves TCWM and indeed
+full OUT). Mere TCWM of z does not justify that subtraction. Even this
+stronger premise yields only the exponentially diluted expression (3).
+The respective coalition-size limits and actual owner roster remain unchanged.
+
+4. REWEIGHTING THE SAME FIXED POSITIVE LINEAR CAP MAP CANNOT CURE THE LOSS
+This paragraph concerns only the SAME stage/bridge construction, while
+allowing arbitrary owner-specific nonnegative linear cap functionals
+ M_(i,e)(b_i)=sum_v a_(i,e,v)b_(i,v), a_(i,e,v)>=0.
+Suppose its claimed all-report, all-coalition identity G=B+F really holds.
+Give owner i alone the indicator bundle 1_e of a circuit e. The ONLY
+original activity supported by these r rows is e, because all activities
+have cardinality r. Original worth is1. By the gadget's exact capped identity,
+the cap on e must therefore be at least1:
+                   sum_(v in e)a_(i,e,v)>=1.        (4)
+In particular sum_v a_(i,e,v)>=1.
+
+At C_M every owner reports one nonzero row. Averaging its GL orbit makes
+each individual owner's row uniform over the R nonzero rows; no independence
+assumption is needed. Thus the orbit-average baseline satisfies
+ average B =[(r-1)/R]sum_i sum_e sum_v a_(i,e,v)
+           >=[(r-1)/R]N|E|=B_linear(C_M).           (5)
+The arithmetic-average map attains equality. A non-equivariant choice can
+move baseline cost among orbit profiles but cannot reduce this average.
+The symmetrized certificate has the same budget calculation with average B;
+its resulting lower bound 1+(L-1)/(average B+1) is no larger than that from
+the arithmetic-average map. This observation concerns the bound produced by
+this transfer calculation; (5) alone is not a lower bound on kappa.
+
+For arbitrary fixed CONSTANT owner caps in this gadget, the same singleton
+test forces M_(i,e)>=1. Hence B>=N(r-1)|E|, and (2) is already minimal in
+that class. No extra owner or altered incentive-size convention is used.
+
+DISPOSITION
+The general positive affine gadget does not transfer the existing general-r
+polynomial lower bound into a useful arity3 funding lower bound, even when
+one checks baseline only at its terminal certificate budget profiles.
+Fixed positive linear reweighting and fixed owner caps within this gadget
+cannot remove the exponential loss. Different gadgets or new baseline-payment
+control remain outside this statement.
