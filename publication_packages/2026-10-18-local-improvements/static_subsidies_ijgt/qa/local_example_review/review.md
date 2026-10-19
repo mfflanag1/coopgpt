@@ -1,0 +1,17 @@
+## Provisional verdict
+
+**No findings in reviewed scope** (the two new worked examples are arithmetically and logically sound as printed). One low-severity transparency note on what the attached checks do and do not certify.
+
+## Findings
+
+**1. (Informational / Low) The exact checks certify attainability of the printed ideals, not their maximality; the upper bounds still rest on unchanged results.**
+- `acyclicity_ijgt/qa/verify_local_example.py:22–23, 42–43`: `H` is hard-coded from the manuscript table, and the vertex loop asserts only `max(v[t][a] for v in vertices) == H[t][a]`. That establishes $H_i \ge$ printed value; the claim $H_i \le$ printed value comes entirely from Prop. `prop:simplex` (necessity direction, `manuscript.tex:469–471`) and the weak-$a$ equality argument (`manuscript.tex:437–441`), which are outside the reviewed diff. Same structure in `static_subsidies_ijgt/qa/verify_local_example.py:31` (`all_9_ideals: 3`), where $H_i\le 3$ follows from diagonal tightness ($d_j=3$), not from the script.
+- Suggested verification: add an LP/brute-force max of $x_i$ over the 64 (resp. 27) team inequalities plus $x(N)=T$, so the ideal upper bounds are independent of the pre-existing propositions. The JSON key `all_12_ideals_match_vertices` overstates slightly; `ideals_attained_at_vertices` would be accurate.
+
+**Arithmetic I reconstructed independently (all consistent):**
+- Acyclicity $q=1$ (`manuscript.tex:543–571`): $\mathcal T=\{L_0,O_1,L_1,R_1\}$, diagonal worths $1,4,1,1\Rightarrow T=7$. With $t=1/5$, $\alpha=1/10$, $l_0=h=d_1=r_1=1/5$, $e_1=f_1=0$: eq. (4.2) sums to 1; reconstruction gives $o_1=1/5$, $l_1=7/10$, $b_{L_0}=b_{R_1}=7/10$, $a_{O_1}=18/5$ — exactly the table rows. Total $=7$; $N_1$ (worth 5), $E_1$ (worth 1), $(O_1,O_1,O_1)$ (worth 4) and all three $L/R$ diagonals are tight; spot-checked remaining triples are covered. Min ratio $=1/5$, attained at $a_{L_0},c_{L_0},a_{L_1},b_{L_1},a_{R_1},b_{O_1},c_{R_1}$. Ideals $1/2,4,1,1$ recovered at the seven simplex vertices ($(q+1)\alpha=1\Rightarrow\alpha=1/2$, correctly encoded as `F(1,2)` at `verify_local_example.py:35`).
+- Unmatched set, budget and leximin distinction: $U$ = $\{c_{L_0},a_{L_1},b_{L_1},a_{R_1},b_{O_1},c_{R_1}\}$, $\sum_U H_i=5=2q+3$, $\delta=1$, so $\rho\le1/5$ with equality — and $\sum_U p^*_i=1$ exactly. The leximin value $\tau=1/[3(q+1)]=1/6$ is pinned by $|U|\tau=1$; the paragraph correctly declines to identify $u$ with the final leximin vector (`manuscript.tex:566–568`), matching §4.2's hedge (`line 423–424`).
+- Static $\ell=1$ (`manuscript.tex:519–545`): $A=B=C=I_3$, $A_{01}=2,B_{02}=1,C_{12}=2$. Max matching is diagonal, $T=9$ (best with $e_0$ is $5+2=7$); $H_i=3$ by diagonal tightness plus the nine colour witnesses (I verified $(r,a_0)=(0,0)$ and $(1,0)$ cover all 27 teams). Floors $=1$; lower bound $5+6=11$; the table totals 11, gives 5 to $e_0$, and every team with first-sector label $\neq 0$ has worth $\le3$ (the $C_{12}=2$ route forces $j_1\in\{1,2\}$ with $\le1$ from $A,B$). So $s(M)=2=2\ell$, ratio $2/9<1/3$, consistent with Thm. 4.1 ($k=\ell+1=2$, $J=2=2(k-1)T/[3(2k-1)]$). Ideal/feasible-payoff boundary ("not a point of the original total-nine core", "benchmarks remain those of that original core") is stated correctly.
+
+## Scope limitations
+I did not execute the scripts, recompute hashes, exhaustively enumerate all 64/27 team inequalities (spot checks only, plus structural argument), or review pre-existing theorems, priority claims, or external sources.

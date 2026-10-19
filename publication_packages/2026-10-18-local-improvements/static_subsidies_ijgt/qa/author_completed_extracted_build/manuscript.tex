@@ -1,0 +1,660 @@
+\documentclass[11pt]{article}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern,microtype,amsmath,amssymb,amsthm,booktabs}
+\usepackage[margin=1in]{geometry}
+\usepackage[authoryear,round]{natbib}
+\usepackage[hidelinks]{hyperref}
+\hypersetup{pdftitle={Sharp subsidies for protecting core maxima in three-sided assignment markets},pdfauthor={Maxwell Flanagan}}
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\R}{\mathbb R}
+\newcommand{\core}{\mathcal C}
+\newcommand{\pack}{\mathcal P}
+\newcommand{\one}{\mathbf 1}
+\newcommand{\E}{\mathbb E}
+\DeclareMathOperator{\supp}{supp}
+\title{Sharp subsidies for protecting core maxima\\in three-sided assignment markets}
+\author{Maxwell Flanagan\\\small New York City, United States\\\small\href{mailto:maxwell.flanagan@gmail.com}{maxwell.flanagan@gmail.com}}
+\date{17 October 2026}
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Consider three equally sized finite sectors, nonnegative pair values, and
+productive teams containing exactly one player from each sector. A team's
+value is the sum of its three pair values; coalition worth is maximum integral
+matching worth. Assume the original core is nonempty and grand worth is
+$T>0$. For each player let $H_i$ be their maximum payoff over that entire
+original core. We determine the worst-case external subsidy needed to cover
+every original coalition while paying each player at least $H_i/3$.
+Every finite market requires strictly less than $T/3$, and the supremum of
+the subsidy-to-worth ratio is exactly $1/3$. A direct fractional-packing
+argument combines six core-maximum comparisons with residual budgets at
+separately attaining core allocations. For an integral partial matching
+leaving $k\ge1$ players unmatched in each sector, the associated subsidy
+obstruction is at most $2(k-1)T/[3(2k-1)]$. This bound is sharp for every
+$k\ge2$. We give complete proofs, a family with pair values in
+$\{0,1,2\}$, and reproducible exact checks. A compact supplement records exact nonnegative slack identities and the
+verification scope. The original core is fixed before subsidy, and the result
+is static: it makes no claim about reporting incentives across profiles.
+\end{abstract}
+\noindent\textbf{Keywords:} assignment game; core; individual payoff maximum;
+subsidy; cost of stability; fractional matching.
+
+\section{Introduction}
+A stable allocation need not simultaneously give each player a substantial
+fraction of what that player could obtain at another stable allocation.
+An external budget permits a different question: how much must be added to
+the grand coalition's worth to protect individual benchmarks while retaining
+all original coalition constraints?
+
+We study the benchmark $H_i/3$, where $H_i$ is player $i$'s maximum over the
+entire original core of a three-sided assignment market. The reference core
+is fixed before intervention. In particular, the benchmark is not recomputed
+after adding the subsidy. The restriction to nonnegative pair-additive team
+values is central; an arbitrary three-dimensional value array is not assumed
+to satisfy our conclusion.
+
+Our main result gives the sharp worst-case subsidy ratio $1/3$. It is a
+supremum over finite markets of arbitrary size, not a maximum at a finite
+size. The upper proof applies directly to fractional partial matchings in
+the subsidy dual. It does not require a reduction to sparse markets,
+replication of players, or an acyclic support. A second result determines a
+sharp upper bound for the obstruction supplied by an integral partial
+matching, indexed by its number of unmatched players per sector.
+
+The proof uses two estimates for the same dual expression. If $W$ is a
+fractional matching's value, $S$ the sum of residual-weighted individual
+maxima and $\beta$ a residual-weighted diagonal pair budget, then
+\[
+                 3W+S\le5T-\beta,
+        \qquad   3W+S\le3T+\beta.
+\]
+The first estimate aggregates six comparisons between individual maxima;
+the second uses a different original-core witness for each maximum.
+Averaging eliminates $\beta$. Retaining the slack terms proves strictness in
+every finite market and the sharper integral bound.
+
+\paragraph{Scope of this article.}
+The main paper contains the full three-sided theorem, strict finite-market
+upper bound, integral obstruction refinement and matching family. Online
+Resource~1 records exact slack identities and reproducibility details.
+The project's broader October~7 compendium also contains higher-sector,
+flow, transportation and ancillary core results. Those separate extensions
+are not included or claimed as additional contributions of this article.
+
+\paragraph{Related work and contribution.}
+The assignment-game connection between core allocations and linear-programming
+duality is classical~\citep{ShapleyShubik1971}. Protection relative to individual
+core maxima is also an established question. N\'u\~nez and Rafels (2004, \emph{Bargained stable allocations in assignment
+markets}, Barcelona Economics Working Paper~153, Definition~6;
+\href{https://www.bse.eu/sites/default/files/working_paper_pdfs/153.pdf}{inspected working version}) study the bilateral half-optimal core:
+stable allocations paying every agent at least half their maximum core
+payoff. Thus neither the benchmark based on core maxima nor simultaneous
+fractional protection is introduced here.
+
+External payments to stabilize a game are studied through the cost of
+stability (Bachrach et al., 2009, arXiv:0907.4385; published successor
+\citep{Bachrach2018}). Meir, Rosenschein and Malizia
+\citep[Section~2.2]{Meir2011} also define the cost of extending a given
+efficient payoff vector to a stable one; the same definition appears in
+Bachrach et al.~\citep[Section~5]{Bachrach2018}. Their input vector has total $T$;
+our floor vector $H/3$ may have smaller total. Section~\ref{sec:framework}
+records the exact comparison. Bejan and G\'omez~\citep{BejanGomez2009} define minimal grand-coalition
+expansions and the extended core. The inspected August~1, 2008 author
+version, Section~2, pp.~5--6, minimizes the required expansion over efficient
+payoff vectors; its extended core coincides with the core for balanced games.
+Here that ordinary minimum is zero. Our additional restriction is the
+simultaneous floor $H/3$, which need not itself be efficient or stable.
+Priority-game transformations also impose individual protections.
+In the final version of \citet{Priority2024}, Definitions~2 and~4 use a
+prior core allocation; footnote~3 extends the formulas to imputations.
+Lemmas~2 and~8 identify restrictions of the original core while retaining
+grand-coalition worth. These statements do not supply the sharp
+subsidy constant for our possibly incompatible floors. The subsidy framework
+and the operation of imposing individual claims are established antecedents.
+
+Atay and N\'u\~nez~\citep[p.~273]{AtayNunez2019} describe a model in
+Quint~\citep{Quint1991} in which full teams have pair-additive values and
+smaller coalitions have zero worth. Their own graph model permits productive
+partial-sector teams and therefore has different coalition constraints.
+Results on core extrema in supermodular multisided markets with local
+monotonicity~\citep{Martinez2026} impose additional hypotheses absent here.
+
+The contribution proposed for review is the aggregate compatibility
+inequality and the resulting sharp subsidy bound for the stated class.
+The extremal family was obtained earlier in this project's subsidy work;
+the matching upper bound and its integral refinement complete its extremal
+interpretation. This manuscript gives a self-contained proof rather than
+claiming a new general subsidy framework or a new assignment model.
+A companion manuscript, \emph{Acyclicity and simultaneous protection of
+individual core maxima}, asks which fractions of the same benchmarks can
+be protected \emph{within} the original core and studies graph structure.
+Its triangle construction differs from the uniform-ideal family used here.
+The present paper fixes the fraction at one third and optimizes external
+subsidy. Another companion, \emph{Sharp subsidies for truthful production
+and network cooperation}, links payments across report profiles; this
+static result supplies no such incentive guarantee.
+Historical priority of the precise result remains under review. In
+particular, full-original comparisons with Quint~\citep{Quint1991},
+Lucas~\citep{Lucas1995} and Stuart~\citep{Stuart1997} remain incomplete.
+Other original-source leads and general implication routes are listed in
+the companion source ledger; no exhaustive priority clearance is claimed.
+
+\section{Model and subsidy duality}\label{sec:model}
+Let $N_1,N_2,N_3$ be disjoint sectors of size $n\ge1$, and put
+$N=N_1\cup N_2\cup N_3$. A market $M$ is specified by nonnegative real
+matrices $A,B,C$ on $N_1\times N_2$, $N_1\times N_3$, and
+$N_2\times N_3$, respectively. A full team $e=(i_1,i_2,i_3)$ has value
+\begin{equation}\label{eq:team}
+                  v(e)=A_{i_1i_2}+B_{i_1i_3}+C_{i_2i_3}.
+\end{equation}
+For a coalition $Q\subseteq N$, its worth $v(Q)$ is the maximum sum of
+values of player-disjoint full teams contained in $Q$. The empty matching
+is allowed. Pairs and all other coalitions containing no full team have
+worth zero, even when a constituent pair matrix entry is positive.
+
+Write $T=v(N)>0$. We assume throughout that the original core
+\[
+ \core=\{x\in\R^N:x(N)=T,\ x(Q)\ge v(Q)\text{ for every }Q\subseteq N\}
+\]
+is nonempty, where $x(Q)=\sum_{i\in Q}x_i$.
+Nonnegativity and full-team coverage describe all coalition constraints:
+\begin{equation}\label{eq:core}
+ \core=\{x\in\R_+^N:x(N)=T,\ x(e)\ge v(e)\text{ for every full team }e\}.
+\end{equation}
+Indeed, sum the full-team inequalities over an optimal integral matching
+inside any coalition and use nonnegative payoffs for unmatched players.
+The reverse implication follows from singleton and full-team coalitions.
+The core is a compact subset of the nonnegative total-$T$ simplex. Define
+the attained individual maxima
+\begin{equation}\label{eq:ideals}
+                        H_i=\max_{x\in\core}x_i.
+\end{equation}
+
+The protected subsidy is
+\begin{equation}\label{eq:subsidy}
+ s(M)=\min\{y(N)-T:y_i\ge H_i/3\ (i\in N),\
+                         y(e)\ge v(e)\ (e\text{ a full team})\}.
+\end{equation}
+This feasible linear program has a finite minimum. Each feasible vector
+is nonnegative and covers all original coalitions, including $N$, so
+$s(M)\ge0$. It is interpreted as an allocation for a subsidized grand
+coalition; it need not belong to the original core.
+
+Let $\pack$ be the fractional partial-matching polytope:
+\[
+ \pack=\left\{\lambda\ge0:
+               p_i:=\sum_{e\ni i}\lambda_e\le1\quad(i\in N)\right\}.
+\]
+For $\lambda\in\pack$ put $q_i=1-p_i$ and define
+\begin{equation}\label{eq:dualquantities}
+ W=\sum_e\lambda_e v(e),\qquad
+ S=\sum_iq_iH_i,\qquad V=3W+S.
+\end{equation}
+
+\begin{lemma}[Protected subsidy dual]\label{lem:dual}
+For every market satisfying the preceding assumptions,
+\begin{equation}\label{eq:dual}
+                  s(M)=\max_{\lambda\in\pack}(W+S/3-T)
+                       =\max_{\lambda\in\pack}(V/3-T).
+\end{equation}
+Both extrema are attained.
+\end{lemma}
+\begin{proof}
+Substitute $y_i=H_i/3+z_i$ in~\eqref{eq:subsidy}. The variable part is
+to minimize $\sum_i z_i$ subject to $z_i\ge0$ and
+$\sum_{i\in e}z_i\ge v(e)-\sum_{i\in e}H_i/3$ for every team $e$.
+Its dual has one nonnegative variable $\lambda_e$ per team and constraints
+$\sum_{e\ni i}\lambda_e\le1$. Adding the constant
+$\sum_iH_i/3-T$ to the dual objective gives~\eqref{eq:dual}.
+The primal is feasible and bounded below. Moreover, $\pack$ is nonempty
+and compact, since there are finitely many teams and $0\le\lambda_e\le1$.
+Finite-dimensional linear-programming duality proves the assertion, for
+real as well as rational market data.
+\end{proof}
+
+\begin{theorem}[Sharp subsidy ratio]\label{thm:main}
+Every market in the stated class satisfies $s(M)<T/3$. Nevertheless,
+\begin{equation}\label{eq:sharp}
+             S_3:=\sup_M\frac{s(M)}{v(N)}=\frac13.
+\end{equation}
+The supremum is approached by markets with pair values in $\{0,1,2\}$.
+\end{theorem}
+We prove the upper bound in Section~\ref{sec:aggregation} and construct the
+sharpness family in Section~\ref{sec:family}.
+
+\section{Diagonal budgets and comparisons of maxima}\label{sec:comparisons}
+Choose an optimal integral matching. Because sector sizes are equal, it
+can be completed to a perfect matching; nonnegative team values imply
+that the completion remains optimal. Relabel the players so that this
+perfect matching consists of $(1,j),(2,j),(3,j)$ for $j=0,\ldots,n-1$.
+Let
+\begin{align}
+ d_j&=A_{jj}+B_{jj}+C_{jj}, &\sum_jd_j&=T,\label{eq:diagonal}\\
+ u_{1,j}&=A_{jj}+B_{jj},&u_{2,j}&=A_{jj}+C_{jj},
+ &u_{3,j}&=B_{jj}+C_{jj}.\notag
+\end{align}
+Thus $u_{a,j}$ is the diagonal pair budget incident to player $(a,j)$, and
+\begin{equation}\label{eq:budget}
+                     \sum_{a,j}u_{a,j}=2T.
+\end{equation}
+Every diagonal team is tight at every $x\in\core$: their covering
+inequalities sum to the efficiency equality. Consequently
+\begin{equation}\label{eq:caps}
+     \sum_{a=1}^3x_{a,j}=d_j,\qquad
+     0\le H_{a,j}\le d_j,\qquad
+     \delta_{a,j}:=d_j-H_{a,j}\ge0.
+\end{equation}
+Zero diagonal values cause no difficulty; no argument divides by $d_j$.
+
+\begin{lemma}[Same-sector range]\label{lem:range}
+For every $x\in\core$, sector $a$, and labels $j,h$,
+\begin{equation}\label{eq:range}
+                         x_{a,j}-x_{a,h}\le u_{a,j}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Complete the two players of the diagonal team at $j$ outside sector $a$
+with player $(a,h)$. By pair nonnegativity this team's value is at least
+the opposite diagonal pair value, namely $d_j-u_{a,j}$.
+Core coverage and diagonal tightness give
+$x_{a,h}+d_j-x_{a,j}\ge d_j-u_{a,j}$.
+This is~\eqref{eq:range}; it also holds when $j=h$.
+\end{proof}
+
+\begin{lemma}[Six ideal comparisons]\label{lem:comparison}
+For a full team $e=((1,j_1),(2,j_2),(3,j_3))$ and every ordered
+permutation $(a,b,c)$ of $(1,2,3)$,
+\begin{equation}\label{eq:comparison}
+         H_{c,j_c}-H_{c,j_b}\ge v(e)-d_{j_b}-u_{a,j_a}.
+\end{equation}
+The labels $j_1,j_2,j_3$ need not be distinct.
+\end{lemma}
+\begin{proof}
+Subtract diagonal tightness at label $j_b$ from coverage of $e$.
+For every original core point $x$ this gives
+\[
+ x_{c,j_c}-x_{c,j_b}
+ \ge v(e)-d_{j_b}+x_{a,j_b}-x_{a,j_a}
+ \ge v(e)-d_{j_b}-u_{a,j_a},
+\]
+using Lemma~\ref{lem:range}. Choose a core point attaining the
+\emph{subtracted} maximum $H_{c,j_b}$. Its other coordinate is at most
+$H_{c,j_c}$, proving~\eqref{eq:comparison}. A different core point may
+be used for every comparison. No joint attainment is assumed.
+\end{proof}
+
+\section{Aggregation for arbitrary fractional matchings}\label{sec:aggregation}
+Fix $\lambda\in\pack$. In addition to~\eqref{eq:dualquantities}, write
+\begin{equation}\label{eq:residual}
+ k=n-\sum_e\lambda_e,\qquad
+ \beta=\sum_iq_iu_i,\qquad C_2=\sum_iq_i^2u_i.
+\end{equation}
+Here and below $u_i=u_{a,j}$ when $i=(a,j)$. Every sector has the same
+residual mass: $\sum_{i\in N_a}q_i=k\ge0$. In particular $\sum_iq_i=3k$.
+For each diagonal label let
+\[
+ n_j=\sum_{a=1}^3p_{a,j},\qquad H_j^\Sigma=\sum_{a=1}^3H_{a,j},\qquad
+ E=\sum_{a,j}\left(\sum_{b\ne a}q_{b,j}\right)\delta_{a,j}\ge0.
+\]
+The symbol $n_j$ is a fractional load on a diagonal label, not the number
+of labels $n$; it may be any number in $[0,3]$.
+
+\begin{lemma}[Aggregate ideal comparison]\label{lem:aggregate}
+Every fractional partial matching satisfies
+\begin{equation}\label{eq:aggregate}
+                          V\le5T-\beta-\frac E2.
+\end{equation}
+\end{lemma}
+\begin{proof}
+Sum~\eqref{eq:comparison} over the six ordered sector permutations for
+one team $e$. Each participating ideal appears twice positively. The
+negative cross terms are
+$-\sum_{a=1}^3 H_{j_a}^\Sigma+\sum_{a=1}^3H_{a,j_a}$.
+Each diagonal value and each incident budget occurs twice. Therefore
+\[
+ 6v(e)\le2\sum_ad_{j_a}+2\sum_au_{a,j_a}
+             +3\sum_aH_{a,j_a}-\sum_aH_{j_a}^\Sigma.
+\]
+Multiply by $\lambda_e$ and sum over teams. With
+$D_p=\sum_{a,j}p_{a,j}d_j$, $U_p=\sum_{a,j}p_{a,j}u_{a,j}$ and
+$H_p=\sum_{a,j}p_{a,j}H_{a,j}$, this becomes
+\begin{equation}\label{eq:sixsum}
+                     6W\le2D_p+2U_p+3H_p-\sum_jn_jH_j^\Sigma.
+\end{equation}
+All sums retain sector multiplicities, including when team labels coincide.
+
+Add $2S$ to~\eqref{eq:sixsum}. For one label $j$, the coefficient of
+$H_{a,j}$ is
+\begin{equation}\label{eq:coefficient}
+ 3p_{a,j}+2q_{a,j}-n_j
+       =2+p_{a,j}-n_j=\sum_{b\ne a}q_{b,j}.
+\end{equation}
+Replace $H_{a,j}$ by $d_j-\delta_{a,j}$. Summing
+\eqref{eq:coefficient} over $a$ gives $2\sum_aq_{a,j}$, so
+\[
+ 3H_p+2S-\sum_jn_jH_j^\Sigma
+       =2\sum_{a,j}q_{a,j}d_j-E.
+\]
+Finally $D_p+\sum_{a,j}q_{a,j}d_j=3T$ and $U_p=2T-\beta$.
+Thus $2V\le10T-2\beta-E$, as required. In particular the sign of the
+deficit term does not depend on integrality of $n_j$.
+\end{proof}
+
+\begin{lemma}[Weighted residual witness budget]\label{lem:residual}
+If $k>0$, then for each player $i$
+\begin{equation}\label{eq:witness}
+                       kH_i\le T-W+(k-q_i)u_i.
+\end{equation}
+Consequently,
+\begin{equation}\label{eq:residualbound}
+                         V\le3T+\beta-\frac{C_2}{k}.
+\end{equation}
+\end{lemma}
+\begin{proof}
+For every $x\in\core$, fractional team coverage implies
+$\sum_ip_ix_i\ge W$. By efficiency,
+\begin{equation}\label{eq:residualcover}
+                       \sum_iq_ix_i\le T-W=:R.
+\end{equation}
+In particular $W\le T$. Fix $i\in N_a$ and take a core point with
+$x_i=H_i$. Lemma~\ref{lem:range} gives $x_h\ge H_i-u_i$ for every
+other $h\in N_a$. Since residual weights and all other-sector payoffs
+are nonnegative,
+\[
+ R\ge\sum_{h\in N}q_hx_h\ge q_iH_i+(k-q_i)(H_i-u_i)
+                         =kH_i-(k-q_i)u_i.
+\]
+Here $k-q_i=\sum_{h\in N_a\setminus\{i\}}q_h\ge0$. The lower bound
+$H_i-u_i$ need not be positive, and $q_i$ may be zero.
+This proves~\eqref{eq:witness} using just one attaining witness at a time.
+
+Multiply~\eqref{eq:witness} by $q_i$ and sum over players. The resulting
+scalar inequalities concern the fixed numbers $H_i$, so different witnesses
+can be used. Since $\sum_iq_i=3k$,
+\[
+                 kS\le3k(T-W)+k\beta-C_2.
+\]
+Dividing by $k$ proves~\eqref{eq:residualbound}.
+\end{proof}
+
+\begin{proof}[Proof of the upper assertion in Theorem~\ref{thm:main}]
+For $k>0$, average~\eqref{eq:aggregate} and~\eqref{eq:residualbound}:
+\begin{equation}\label{eq:strictbound}
+                        V\le4T-\frac E4-\frac{C_2}{2k}.
+\end{equation}
+If $C_2>0$, this is strictly less than $4T$. If $C_2=0$, each
+nonnegative summand $q_i^2u_i$ is zero, hence each $q_iu_i$ is zero
+and $\beta=0$. Equation~\eqref{eq:residualbound} then gives
+$V\le3T<4T$. If $k=0$, every $q_i=0$ and
+\eqref{eq:residualcover} gives $W\le T$, again implying $V\le3T<4T$.
+
+Thus $V<4T$ at every point of the compact polytope $\pack$.
+The objective $V$ is linear in $\lambda$ and attains its maximum.
+Apply the strict inequality at a maximizing point and use
+Lemma~\ref{lem:dual} to conclude $s(M)<T/3$.
+\end{proof}
+
+\section{A sharp bound for integral obstructions}\label{sec:integral}
+For an integral player-disjoint partial matching $P$, let $U$ be its
+unmatched players, $k=n-|P|$, and set
+\[
+              J(M,P)=v(P)+\frac13\sum_{i\in U}H_i-T.
+\]
+The indicator of $P$ is feasible in $\pack$, so $J(M,P)\le s(M)$.
+An upper bound on $J(M,P)$ alone is not an upper bound on the full subsidy.
+
+\begin{theorem}[Integral residual-count bound]\label{thm:integral}
+For $k\ge1$,
+\begin{equation}\label{eq:integral}
+             J(M,P)\le\frac{2(k-1)}{3(2k-1)}T.
+\end{equation}
+For $k=0$, $J(M,P)\le0$. For every integer $k\ge2$, equality
+in~\eqref{eq:integral} occurs in a market with $n=2k-1$.
+\end{theorem}
+\begin{proof}
+For the indicator packing, $q_i\in\{0,1\}$ and $C_2=\beta$. The two
+aggregate bounds imply
+\[
+               V\le3T+\frac{k-1}{k}\beta,\qquad V\le5T-\beta.
+\]
+Weight these inequalities by $k/(2k-1)$ and $(k-1)/(2k-1)$,
+respectively, and add. This gives
+$V\le(4-1/(2k-1))T$ and hence~\eqref{eq:integral}.
+The argument includes $k=1$, where the second weight is zero.
+For $k=0$, $P$ is perfect and $J(M,P)=v(P)-T\le0$.
+Equality for each $k\ge2$ follows from the family below with
+$\ell=k-1$.
+\end{proof}
+
+\section{The sharpness family}\label{sec:family}
+For an integer $\ell\ge1$, take $n=2\ell+1$ and labels
+$0,\ldots,2\ell$. Initialize $A,B,C$ to the identity matrix. Define
+special teams
+\begin{equation}\label{eq:family}
+ e_0=(0,\ell,2\ell),\qquad
+ e_s=(s,\ell+s,s-1)\quad(1\le s\le\ell-1).
+\end{equation}
+For every $e=(j_1,j_2,j_3)$ in this list set
+$A_{j_1j_2}=2$, $B_{j_1j_3}=1$, and $C_{j_2j_3}=2$.
+All labels within a special team are distinct, so these entries are
+off-diagonal. The special teams are player-disjoint: their sectorwise
+label sets are $\{0,\ldots,\ell-1\}$,
+$\{\ell,\ldots,2\ell-1\}$, and
+$\{2\ell,0,\ldots,\ell-2\}$. In particular, special entries do not
+conflict or overwrite diagonal entries.
+
+\begin{proposition}[Exact values]\label{prop:family}
+The market in~\eqref{eq:family} has a nonempty original core and
+\begin{equation}\label{eq:familyvalues}
+            T=3(2\ell+1),\qquad H_i=3\ (i\in N),\qquad s(M)=2\ell.
+\end{equation}
+\end{proposition}
+\begin{proof}
+Consider the bipartite incidence graph with one vertex for each label
+and one vertex for each special team, joined by label membership.
+Consecutive special teams share one label; nonconsecutive special teams
+share none, and each has a private second-sector label. Their label sets
+together contain every label $0,\ldots,2\ell$. Thus the graph is connected
+and has $(2\ell+1)+\ell$ vertices and $3\ell$ edges, so it
+is a tree. This also covers $\ell=1$.
+
+Fix a label $r$ and a sector $a_0\in\{1,2,3\}$. Root this incidence
+tree at $r$, assign $r$ color $a_0$, and traverse outward. When a special
+team is reached, its parent label is already colored; assign each of its
+two other labels the sector in which that label occurs in the team.
+No assignments conflict because the incidence graph is a tree. Each
+special team therefore has at least two labels colored by their designated
+sectors. With $c(j)$ denoting the resulting label color, set
+\begin{equation}\label{eq:colorwitness}
+           x_{a,j}=\one_{\{a=a_0\}}+2\one_{\{c(j)=a\}}.
+\end{equation}
+This vector is nonnegative, has total $3n$, pays each diagonal team
+exactly $3$, and satisfies $x_{a_0,r}=3$.
+
+We check every full-team inequality. Each team receives a baseline payoff
+of $1$ from the first term in~\eqref{eq:colorwitness}. If it contains two
+positive off-diagonal pair entries, the shared player lies in the same
+special team for both entries, because special teams are player-disjoint.
+The team must therefore be that special team. It has value $5$ and receives
+at least $1+2+2=5$. If two positive pair entries are diagonal, all three
+labels coincide, and the team's value and payoff are both $3$.
+
+Every remaining team has at most one positive off-diagonal entry and at
+most one diagonal entry. Any off-diagonal entry belongs to a special team.
+At least one of its endpoints has its designated color, since at least two
+of the three labels in that special team do. Such a team receives at least
+$3$. Its value is at most $3$ if the off-diagonal entry is $2$, and at
+most $2$ if that entry is $1$. A nondiagonal team with no positive
+off-diagonal entries has value at most $1$, covered by the baseline.
+These cases exhaust all teams.
+
+The diagonal matching has value $3n$ and $x$ covers every matching with
+total $3n$, so $T=3n$ and $x\in\core$. Diagonal tightness bounds every
+original-core coordinate by $3$. As $r,a_0$ were arbitrary,
+\eqref{eq:colorwitness} proves $H_i=3$ for each player.
+
+Every protected allocation pays at least $1$ to each player. The $\ell$
+special teams form a partial matching of value $5\ell$, and its
+$3n-3\ell$ unmatched players require at least $3n-3\ell$. Hence the
+total payment is at least $3n+2\ell$, proving $s(M)\ge2\ell$.
+Conversely start with payoff $1$ to every player and add $2$ to the
+first-sector player of each special team. A special team receives $5$;
+every other team has value at most $3$ by the preceding classification
+and receives at least $3$. This allocation covers all coalitions, meets
+every floor, and has total $3n+2\ell$. Thus $s(M)=2\ell$.
+\end{proof}
+
+The ratios $2\ell/[3(2\ell+1)]$ tend to $1/3$, proving the remaining
+assertion of Theorem~\ref{thm:main}. For the special partial matching,
+$k=\ell+1$ and $J(M,P)=2\ell$, which proves the equality assertion
+of Theorem~\ref{thm:integral}.
+
+\begin{remark}[Why the finite bound is integral]\label{rem:fractional}
+The formula in~\eqref{eq:integral} cannot be applied by inserting a
+fractional packing's residual mass $k$. In the family with $\ell=1$,
+let $D$ be the diagonal matching and $P=\{e_0\}$. The packing
+$\lambda=\tfrac12\one_D+\tfrac12\one_P$ has $T=9$, $W=7$, and
+$k=1$. Its six residual players have $q_i=1/2$ and $H_i=3$, so $S=9$
+and $W+S/3-T=1$. Substituting $k=1$ in~\eqref{eq:integral} would
+incorrectly give zero. The fractional proof instead retains $C_2$,
+which need not equal $\beta$.
+\end{remark}
+
+\section{Relation to subsidy frameworks and scope}\label{sec:framework}
+Let $l_i=H_i/3$. From diagonal caps, $\sum_i l_i\le T$.
+Following Meir et al.~\citep[Section~2.2]{Meir2011} and
+Bachrach et al.~\citep[Section~5]{Bachrach2018}, let
+$\operatorname{CoS}(x,G)$ be the least subsidy allowing a stable payoff
+vector above an efficient preimputation $x$, with $\sum_ix_i=T$.
+The following identity is a direct comparison of feasible sets:
+\begin{equation}\label{eq:cos}
+       s(M)=\min_{x\ge l,\ x(N)=T}\operatorname{CoS}(x,G).
+\end{equation}
+Indeed, if $y\ge l$ is stable with total at least $T$, there is a vector
+$x$ between $l$ and $y$ with total $T$: distribute $T-l(N)$ of the
+available nonnegative coordinate increments $y-l$. Conversely, a stable
+extension of any such $x$ lies above $l$. In particular the intervention
+fits an existing subsidy framework. Its sharp quantitative behavior here
+comes from the structure of the assignment market and its original maxima.
+
+Our universal statement allows arbitrary nonnegative real pair values,
+dense supports, repeated diagonal labels within a team, and zero diagonal
+values. It does not assume that all maxima on one sector are jointly
+attainable. Nonempty original core is an explicit hypothesis, not a
+claim for all pair-additive three-sided markets. Pair-additivity and
+nonnegativity enter through the incident-budget identity
+\eqref{eq:budget} and the completion argument in Lemma~\ref{lem:range}.
+Equal sector sizes give the perfect diagonal matching and common residual
+mass. No extension to signed pair values, arbitrary triple arrays, or a
+different productive-coalition convention is asserted.
+
+The finite integral bound does not determine the largest full subsidy at
+each fixed $n$, because its maximizing dual may be fractional. A constructive
+allocation formula avoiding general linear programming, and the sharp
+tradeoff for floors $\alpha H_i$ at other values of $\alpha$, are separate
+questions. They are not required for the sharp constant proved here.
+
+\paragraph{Verification and reproducibility.}
+The proofs above are conventional all-parameter arguments. The accompanying
+standard-library Python package verifies the coefficient identities in
+\eqref{eq:coefficient} and the two slack identities in Online Resource~1,
+including all $27$ ordered label triples over three symbols in the sixfold
+count (covering every coincidence type).
+For $\ell=1,\ldots,12$, it reconstructs each separate ideal-attaining
+core witness and a matching optimal subsidy allocation from the raw pair
+matrices. That check covers $3{,}603{,}804$ full-team inequalities and rejects
+$12$ deliberately damaged allocations. Additional rational packing checks
+include the fractional counterexample in Remark~\ref{rem:fractional}.
+These finite checks corroborate, but do not establish, the universal theorem;
+no proof-assistant formalization is claimed.
+
+\paragraph{Supplementary material.}
+Online Resource~1 (\texttt{ESM\_1.pdf}) gives the slack identities, a notation
+recap, and the scope of the exact tests. Online Resource~2
+(\texttt{ESM\_2.zip}) contains the standalone verification programs, frozen
+inputs, source hashes, and the fresh execution report. The full October~7
+compendium remains a separate research record.
+
+\section*{Statements and Declarations}
+\paragraph{Funding.} No funding or support was received for this work.
+\paragraph{Competing interests.} The author declares no competing interests.
+\paragraph{Data and code availability.}
+No empirical dataset is used. Exact mathematical inputs and verification code
+are included in Online Resource~2. This preparation has not newly deposited
+or submitted the manuscript or its materials.
+\paragraph{AI assistance and responsibility.}
+OpenAI Codex assisted mathematical exploration, proof drafting, verification
+code and manuscript preparation. Anthropic Claude was used for recorded
+internal reviews during later preparation. The author personally reviewed
+the manuscript, proofs, code and results. Internal model reviews and finite
+checks are not human peer review or formal proof verification.
+
+\begin{thebibliography}{99}
+\small
+\bibitem[Atay and N\'u\~nez(2019)]{AtayNunez2019}
+A. Atay and M. N\'u\~nez.
+Multi-sided assignment games on $m$-partite graphs.
+\emph{Annals of Operations Research} 279:271--290, 2019.
+\href{https://doi.org/10.1007/s10479-019-03256-5}{https://doi.org/10.1007/s10479-019-03256-5}.
+
+\bibitem[Bachrach et al.(2018)]{Bachrach2018}
+Y. Bachrach, E. Elkind, E. Malizia, R. Meir, D. Pasechnik,
+J.~S. Rosenschein, J. Rothe, and M. Zuckerman.
+Bounds on the cost of stabilizing a cooperative game.
+\emph{Journal of Artificial Intelligence Research} 63:987--1023, 2018.
+\href{https://doi.org/10.1613/jair.1.11270}{https://doi.org/10.1613/jair.1.11270}.
+
+\bibitem[Bejan and G\'omez(2009)]{BejanGomez2009}
+C. Bejan and J.~C. G\'omez. Core extensions for non-balanced TU-games.
+\emph{International Journal of Game Theory} 38:3--16, 2009.
+\href{https://doi.org/10.1007/s00182-008-0135-4}{https://doi.org/10.1007/s00182-008-0135-4}.
+
+\bibitem[Lucas(1995)]{Lucas1995}
+W.~F. Lucas. Core theory for multiple-sided assignment games.
+\emph{Duke Mathematical Journal} 81(1):55--65, 1995.
+\href{https://doi.org/10.1215/S0012-7094-95-08106-X}{https://doi.org/10.1215/S0012-7094-95-08106-X}.
+
+\bibitem[Mart\'inez-de-Alb\'eniz et al.(2026)]{Martinez2026}
+F.~J. Mart\'inez-de-Alb\'eniz, C. Rafels, and N. Ybern.
+Maximum and minimum core payoffs for supermodular multisided assignment
+markets with local monotonicity.
+\emph{Discrete Applied Mathematics} 379:605--612, 2026.
+\href{https://doi.org/10.1016/j.dam.2025.10.006}{https://doi.org/10.1016/j.dam.2025.10.006}.
+
+\bibitem[Meir et al.(2011)]{Meir2011}
+R. Meir, J.~S. Rosenschein, and E. Malizia.
+Subsidies, stability, and restricted cooperation in coalitional games.
+\emph{Proceedings of IJCAI 2011}, pp.~301--306.
+\href{https://www.cs.huji.ac.il/~jeff/papers/coopmas11meir.pdf}{Author-hosted extended manuscript, Section 2.2}.
+
+\bibitem[N\'u\~nez Lugilde et al.(2024)]{Priority2024}
+I. N\'u\~nez Lugilde, A. Est\'evez-Fern\'andez, and E. S\'anchez-Rodr\'iguez.
+Priority coalitional games and claims problems.
+\emph{Mathematical Methods of Operations Research} 100:669--701, 2024.
+\href{https://doi.org/10.1007/s00186-024-00876-x}{https://doi.org/10.1007/s00186-024-00876-x}.
+The source comparison uses the final Version of Record, Definitions~2 and~4
+and Lemmas~2 and~8, pp.~675--676 and~679--680.
+
+\bibitem[Quint(1991)]{Quint1991}
+T. Quint. The core of an $m$-sided assignment game.
+\emph{Games and Economic Behavior} 3(4):487--503, 1991.
+\href{https://doi.org/10.1016/0899-8256(91)90017-9}{https://doi.org/10.1016/0899-8256(91)90017-9}.
+
+\bibitem[Shapley and Shubik(1971)]{ShapleyShubik1971}
+L.~S. Shapley and M. Shubik.
+The assignment game I: The core.
+\emph{International Journal of Game Theory} 1:111--130, 1971.
+\href{https://doi.org/10.1007/BF01753437}{https://doi.org/10.1007/BF01753437}.
+
+\bibitem[Stuart(1997)]{Stuart1997}
+H.~W. Stuart, Jr. The supplier--firm--buyer game and its $m$-sided generalization.
+\emph{Mathematical Social Sciences} 34(1):21--27, 1997.
+\href{https://doi.org/10.1016/S0165-4896(96)00830-X}{https://doi.org/10.1016/S0165-4896(96)00830-X}.
+\end{thebibliography}
+\end{document}
