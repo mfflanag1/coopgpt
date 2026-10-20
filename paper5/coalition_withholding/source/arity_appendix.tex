@@ -1,0 +1,456 @@
+\section{Fixed arity and pure ownership}
+\label{sec:arity}
+\label{arity:appendix}
+
+The projective construction of Theorem~\ref{thm:projective} extends to every
+fixed arity $r\geq 3$ by
+replacing binary triples with binary circuits of size $r$.  This appendix
+gives the additional geometry and records the exact finite bounds.  It also
+gives a separate realization with one pure owner per resource.  The resource
+count is exponential in the length of the construction in both realizations;
+the pure realization has exponentially many owners as well.
+
+Throughout, payments are arbitrary nonnegative functions on the entire fixed
+real report domain.  For a report profile $b=(b_i)_{i\in N}$, write
+$b_C=\sum_{i\in C}b_i$.  The hypotheses used below are coalition coverage and
+a uniform funding bound,
+\begin{equation}
+  \sum_{i\in C}y_i(b)\geq F(b_C)\quad(C\subseteq N),
+  \qquad
+  \sum_{i\in N}y_i(b)\leq\kappa F(b_N),
+  \label{arity:contract}
+\end{equation}
+at every feasible profile, together with size-$s$ coalition withholding
+monotonicity: if $|C|\leq s$, $b'_i\geq b_i$ coordinatewise for $i\in C$,
+and $b'_i=b_i$ for $i\notin C$, then
+\begin{equation}
+  \sum_{i\in C}y_i(b')\geq\sum_{i\in C}y_i(b).
+  \label{arity:tcwm}
+\end{equation}
+Members of $C$ may have unchanged reports.  Coverage in
+\eqref{arity:contract} is required for \emph{every} coalition, including
+coalitions larger than $s$.  No continuity, formula for payments, anonymity,
+or zero payment to a zero reporter is assumed.  Since full OUT implies
+\eqref{arity:tcwm}, every lower bound below also applies under full OUT.
+
+\subsection{The binary-circuit construction}
+\label{arity:construction-section}
+
+Fix integers $k\geq2$ and $M\geq1$, and put $r=k+1$.  Let
+\[
+  V=\mathbb F_2^{\,1+(k-1)M}
+\]
+have the specified basis
+\[
+  v,\qquad e_{j,\ell}\quad
+  (1\leq j\leq M,\ 1\leq\ell\leq k-1).
+\]
+Resource rows are indexed by $V\setminus\{0\}$, so their number is
+\begin{equation}
+  d=2^{1+(k-1)M}-1.
+  \label{arity:row-count}
+\end{equation}
+A binary circuit means a nonempty set of distinct rows whose sum over
+$\mathbb F_2$ is zero and none of whose proper nonempty subsets has sum zero.
+The activities are all binary circuits of cardinality $k+1$.  Each activity
+has profit one and consumes one unit of each of its $k+1$ rows.  Thus, with
+$\mathcal A$ denoting the set of activities, the full technology is
+\begin{equation}
+  F(c)=\max\left\{
+    \sum_{A\in\mathcal A}x_A:
+    x_A\geq0,\quad
+    \sum_{\substack{A\in\mathcal A\\u\in A}}x_A\leq c_u
+       \text{ for every }u\in V\setminus\{0\}
+  \right\}.
+  \label{arity:technology}
+\end{equation}
+Every activity has arity exactly $r$, and every $g\in\operatorname{GL}(V)$
+permutes the resources and the activities of this finite technology.
+
+For the first realization take the fixed actual owner set
+\[
+  N=\{p\}\ \cup\
+  \{h_{j,\ell}:1\leq j\leq M,\ 1\leq\ell\leq k-1\}
+  \ \cup\ \{\ell_j:1\leq j\leq M\}.
+\]
+There are $n=1+kM$ owners.  Every owner has the all-ones endowment and the
+same fixed report cube $[0,1]^d$.  Let $\delta_u\in\R^d$ denote one unit of
+resource $u$, to distinguish real resource quantities from the binary
+vectors that index resources.  Set
+\[
+  w_j=v+\sum_{\ell=1}^{k-1}e_{j,\ell}\quad\text{in }V.
+\]
+Basis independence makes all displayed root, high and low rows nonzero and
+pairwise distinct.
+For $1\leq m\leq M$, define a feasible profile $C_m$ by
+\begin{equation}
+  b_p=\delta_v,\qquad
+  b_{h_{j,\ell}}=\delta_{e_{j,\ell}},\qquad
+  b_{\ell_j}=
+  \begin{cases}
+    \delta_{w_j},&j\leq m,\\
+    0,&j>m.
+  \end{cases}
+  \label{arity:profiles}
+\end{equation}
+All actual owners and all their report domains remain fixed as $m$ changes.
+In particular, the high owners of inactive branches already report their
+basis rows.
+
+\begin{lemma}[Supported activities]
+\label{arity:supported}
+At $C_m$, the only activities whose rows all have positive capacity are
+\[
+  A_j=\{v,e_{j,1},\ldots,e_{j,k-1},w_j\},
+  \qquad 1\leq j\leq m.
+\]
+Consequently $F(b_N(C_m))=1$.
+\end{lemma}
+
+\begin{proof}
+Consider a nonempty zero-sum subset of the larger set
+\[
+  S=\{v\}\cup\{e_{j,\ell}:j,\ell\}\cup\{w_j:1\leq j\leq M\}.
+\]
+Let $J$ be its set of selected low-row indices and put $t=|J|$.  The basis
+coordinate $e_{j,\ell}$ occurs in only two members of $S$: the row
+$e_{j,\ell}$ itself and the row $w_j$.  Cancellation therefore requires all
+$k-1$ high rows of every branch in $J$, and no high rows of any other branch.
+Cancellation of the $v$ coordinate requires the root row precisely when $t$
+is odd.  If $t=0$, these conditions give the empty subset.  Every nonempty
+zero-sum subset thus has cardinality
+\begin{equation}
+  kt+(t\bmod 2).
+  \label{arity:dependency-cardinality}
+\end{equation}
+For $k\geq2$, this cardinality equals $k+1$ precisely when $t=1$: if $t\geq2$
+it is at least $2k>k+1$.  The corresponding set is $A_j$, and it is minimal
+because its $k$ rows $v,e_{j,1},\ldots,e_{j,k-1}$ are independent and $w_j$
+is their sum.  At $C_m$ its low row has positive capacity exactly when
+$j\leq m$, which proves the classification.
+
+Running any one active branch at level one is feasible.  Every supported
+activity consumes the root row, whose capacity is one, so production cannot
+exceed one.  Equivalently, a dual certificate for the \emph{full} technology
+assigns price one to $v$ and to every zero-capacity row, and price zero to
+the other rows.  A supported activity contains $v$; every other activity
+contains a zero-capacity row.  Each dual constraint is therefore satisfied,
+and the dual objective is one.
+\end{proof}
+
+\begin{lemma}[Seed and private-owner orbits]
+\label{arity:orbits}
+After lawful finite averaging over resource automorphisms and owner
+permutations, the owners of the first branch at $C_1$ have a common payment
+$q_1\geq1/(k+1)$.  At $C_m$, all $km$ active private owners
+\[
+  \{h_{j,\ell}:j\leq m,\ 1\leq\ell\leq k-1\}
+  \cup\{\ell_j:j\leq m\}
+\]
+have a common payment $q_m$.
+\end{lemma}
+
+\begin{proof}
+The finite averaging argument of Lemma~\ref{lem:average} applies to
+$\operatorname{GL}(V)\times\mathfrak S_N$.  A binary linear automorphism
+acts on a real report by \emph{permuting its resource coordinates}; it does
+not take binary linear combinations of real capacities.  These resource
+permutations preserve \eqref{arity:technology}, the real report cubes and
+coordinatewise order.  Owner permutations preserve the common fixed report
+domains, coalition sizes and the coverage and comparison inequalities.
+Consequently conjugating a rule and averaging preserves nonnegativity,
+\eqref{arity:contract}, \eqref{arity:tcwm}, and its funding factor.  It
+suffices to prove the lower bound for this equivariant averaged rule.
+
+At $C_1$, any permutation of the $k$ basis vectors
+$v,e_{1,1},\ldots,e_{1,k-1}$ fixes their sum $w_1$ and fixes every high
+basis row of an inactive branch.  Also the map
+\[
+  v\longmapsto w_1,\qquad e_{j,\ell}\longmapsto e_{j,\ell}
+       \quad\text{for all }j,\ell
+\]
+is invertible: the coefficient of $v$ in the replacement for $v$ is one.
+It exchanges $v$ and $w_1$.  These maps preserve the entire multiset of
+reported rows at $C_1$, including the inactive high reports and zero low
+reports.  Combined with the matching owner permutations, they stabilize
+$C_1$ and act transitively on its $k+1$ first-branch owners.  Their coalition
+can run $A_1$ at level one, so coverage gives $(k+1)q_1\geq1$.  This use of
+coverage does not require $k+1\leq s$.
+
+At $C_m$, permute the active branch blocks, or permute the high basis vectors
+within one active branch, fixing $v$ and the inactive basis vectors.
+Additionally, for each $j\leq m$ the basis replacement
+\[
+  e_{j,1}\longmapsto w_j
+\]
+with every other basis vector fixed is invertible, since the coefficient of
+$e_{j,1}$ in $w_j$ is one.  It fixes $v$, exchanges $e_{j,1}$ with $w_j$,
+and fixes all other displayed rows except these two.  Within-branch
+permutations and this exchange connect all $k$ private rows of a branch;
+active branch permutations connect the branches.  They preserve the entire
+profile, so the induced stabilizers are transitive on all $km$ active
+private owners.  Equivariance gives their common payment $q_m$.
+\end{proof}
+
+\begin{theorem}[Finite fixed-arity lower bound]
+\label{arity:finite-bound}
+Fix integers $k\geq2$, $s\geq2$ and $M\geq1$.  There is a finite institution
+of arity exactly $k+1$, with $1+kM$ fixed fully eligible owners and
+$2^{1+(k-1)M}-1$ resource rows, for which every payment rule satisfying
+\eqref{arity:contract}--\eqref{arity:tcwm} has funding factor at least
+\begin{equation}
+  L_{k,M,s}
+  :=1+\frac{k(M-1)}{k+1}P_{k,M,s},\qquad
+  P_{k,M,s}:=\prod_{m=2}^{M}\frac{a_m}{a_m+1},\qquad
+  a_m:=\min\{s-1,k(m-1)\}.
+  \label{arity:finite-tail}
+\end{equation}
+Empty products are one.  If $s\geq k(M-1)+1$, including $s=1,M=1$, the
+same construction gives
+\begin{equation}
+  \kappa\geq\frac{k}{k+1}Q_{k,M},\qquad
+  \kappa\geq1+\frac{k(M-1)}{(k+1)M}Q_{k,M},\qquad
+  Q_{k,M}:=\prod_{m=2}^{M}\frac{km}{k(m-1)+1}.
+  \label{arity:untruncated}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+Use \eqref{arity:profiles} and the averaged rule from
+Lemma~\ref{arity:orbits}.  In the transition from $C_{m-1}$ to $C_m$, only
+the same actual owner $\ell_m$ changes its report, from $0$ to $\delta_{w_m}$.
+Select any $a_m$ of the $k(m-1)$ old active private owners and protect them
+together with $\ell_m$.  This fixed coalition has $a_m+1\leq s$ members.
+All selected old members keep their reports unchanged.  At the old profile
+their total payment is $a_mq_{m-1}$, and the restoring owner's old payment
+is nonnegative.  At the new profile all selected members, including the
+restorer, receive $q_m$.  Hence \eqref{arity:tcwm} implies the exact recurrence
+\begin{equation}
+  (a_m+1)q_m\geq a_mq_{m-1},\qquad 2\leq m\leq M.
+  \label{arity:recurrence}
+\end{equation}
+The selected old owners need not comprise whole branches.  Iterating
+\eqref{arity:recurrence} from $(k+1)q_1\geq1$ gives
+\begin{equation}
+  q_M\geq\frac{P_{k,M,s}}{k+1}.
+  \label{arity:terminal-q}
+\end{equation}
+
+Write $z$ for the root owner's payment at $C_M$.  Coverage for the actual
+owners of any complete branch and the budget at $C_M$ give respectively
+\[
+  z+kq_M\geq1,\qquad
+  \kappa\geq z+kMq_M.
+\]
+The second inequality uses Lemma~\ref{arity:supported} and discards every
+other owner's payment only by nonnegativity.  Combining them yields
+$\kappa\geq1+k(M-1)q_M$, proving \eqref{arity:finite-tail}.  This includes
+$M=1$, when terminal coverage alone gives $\kappa\geq1$.
+
+If $s\geq k(M-1)+1$, protect \emph{all} old active private owners at every
+transition.  The recurrence becomes
+\[
+  [k(m-1)+1]q_m\geq k(m-1)q_{m-1}.
+\]
+Writing $T_m=kmq_m$ gives
+\[
+  T_1\geq\frac{k}{k+1},\qquad
+  T_m\geq\frac{km}{k(m-1)+1}T_{m-1}.
+\]
+Thus $T_M\geq kQ_{k,M}/(k+1)$, and the budget proves the first bound in
+\eqref{arity:untruncated}.  Since
+$q_M\geq Q_{k,M}/[(k+1)M]$, terminal branch coverage proves the second.
+When $M=1$ there are no comparisons, so this argument also applies at $s=1$.
+
+All comparisons just used occur inside the one original fixed institution.
+Symmetry is a proof reduction, not a restriction on admissible payment
+rules.  If the original rule is asymmetric, an expensive profile may be an
+image of $C_M$ under the finite symmetry group, rather than $C_M$ itself.
+The same lower bound on its worst-case funding factor follows.
+\end{proof}
+
+The finite bound also has a direct nonnegative rational certificate.
+Put $c=k(M-1)$ and $P=P_{k,M,s}$.  Give the terminal coverage inequality
+$z+kq_M\geq1$ and the budget inequality
+$\kappa-z-kMq_M\geq0$ weight one each.  Give the seed inequality
+$(k+1)q_1\geq1$ weight $cP/(k+1)$, and give recurrence $m$ weight
+\begin{equation}
+  \lambda_m=\frac{c}{a_m+1}
+    \prod_{j=m+1}^{M}\frac{a_j}{a_j+1}.
+  \label{arity:certificate-weights}
+\end{equation}
+For $M\geq2$, the coefficient of $q_M$ from the final two inequalities is
+$-c$, canceled by $\lambda_M(a_M+1)$.  For $2\leq m<M$,
+$\lambda_m(a_m+1)=\lambda_{m+1}a_{m+1}$, and
+$\lambda_2a_2=cP$ cancels the seed term.  The $z$ coefficients also cancel,
+leaving exactly $\kappa\geq1+cP/(k+1)$.  At $M=1$, $c=0$ and terminal
+coverage plus budget already give the conclusion.  These are consequences
+for arbitrary payment variables; no marginal-payment representation is used.
+
+\subsection{Length optimization and the fixed-arity exponent}
+\label{arity:rate-section}
+
+\begin{corollary}[Optimized length within the construction]
+\label{arity:optimized}
+For fixed integers $k\geq2$ and $s\geq2$, set
+\[
+  h=\left\lceil\frac{s}{k}\right\rceil,
+  \qquad \rho=\frac{s-1}{s}.
+\]
+The largest value of $L_{k,M,s}$ over positive integer lengths $M$ is
+attained exactly at $M=s$ and $M=s+1$, with common value
+\begin{equation}
+  B_{k,s}
+  =1+\frac{k(s-1)}{(k+1)h}Q_{k,h}\rho^{\,s-h}.
+  \label{arity:optimized-bound}
+\end{equation}
+The length $M=s$ realizes this bound with
+$n=1+ks$ fully eligible owners and $d=2^{1+(k-1)s}-1$ rows.  For fixed $k$,
+\begin{equation}
+  B_{k,s}-1\sim
+  \frac{k}{k+1}\Gamma\!\left(1+\frac1k\right)
+       k^{1/k}\exp\!\left(-\frac{k-1}{k}\right)
+       s^{(k-1)/k}
+       \qquad(s\longrightarrow\infty).
+  \label{arity:asymptotic}
+\end{equation}
+This optimizes the displayed certificate over its length; it does not
+identify the optimal funding factor among all mechanisms.
+\end{corollary}
+
+\begin{proof}
+The cutoff satisfies $k(h-1)\leq s-1$ and $kh\geq s$.  Through $m=h$ the
+recurrence is untruncated, and for $m\geq h+1$ its factor is $\rho$.
+Telescoping the factors $(m-1)/m$ therefore gives
+\[
+  P_{k,h,s}=\frac{Q_{k,h}}{h},\qquad
+  P_{k,M,s}=\frac{Q_{k,h}}{h}\rho^{M-h}\quad(M\geq h).
+\]
+Let $I_M=(M-1)P_{k,M,s}$.  We have $I_1=0<I_2$.  If $1<M<h$,
+\[
+  \frac{I_{M+1}}{I_M}
+  =\frac{kM^2}{(M-1)(kM+1)}>1,
+\]
+because the numerator minus the denominator is $(k-1)M+1>0$.  If
+$M\geq h$ and $M>1$, the ratio is
+\[
+  \frac{I_{M+1}}{I_M}=\frac{M\rho}{M-1},
+\]
+which exceeds one for $M<s$, equals one for $M=s$, and is less than one
+for $M>s$.  As $h\leq s$, this proves the two asserted maximizers, including
+the boundary case $h=1$.  Substituting $M=s$ proves
+\eqref{arity:optimized-bound}.
+
+The gamma functional equation gives the exact identity
+\[
+  Q_{k,h}
+  =\frac{\Gamma(h+1)\Gamma(1+1/k)}{\Gamma(h+1/k)}.
+\]
+Stirling's formula yields
+$Q_{k,h}\sim\Gamma(1+1/k)h^{(k-1)/k}$.  Moreover $h\sim s/k$ and
+$\rho^{s-h}\longrightarrow\exp(-(k-1)/k)$.
+Inserting these limits into \eqref{arity:optimized-bound} proves
+\eqref{arity:asymptotic}.
+\end{proof}
+
+\begin{corollary}[An all-$s$ bound]
+\label{arity:all-s}
+For every fixed integer $r\geq3$ and every integer $s\geq1$, writing
+$k=r-1$, the unrestricted worst-case optimal funding factor satisfies
+\begin{equation}
+  K_r(s)\geq
+  \frac{k}{k+1}\left(\frac{s}{2k}\right)^{(k-1)/k}.
+  \label{arity:elementary-rate}
+\end{equation}
+In particular,
+$K_r(s)=\Omega_r(s^{(r-2)/(r-1)})$.
+\end{corollary}
+
+\begin{proof}
+Put $\beta=(k-1)/k$.  For $m\geq2$, concavity of $x^\beta$ gives
+\[
+  \frac{km}{k(m-1)+1}
+    =\frac{m}{m-\beta}
+    \geq1+\frac{\beta}{m}
+    \geq\left(1+\frac1m\right)^\beta.
+\]
+Consequently $Q_{k,M}\geq((M+1)/2)^\beta$, also at $M=1$.
+Choose $M=\lceil s/k\rceil$.  Then
+$k(M-1)+1\leq s$ and $M\geq s/k$, so the first bound in
+\eqref{arity:untruncated} implies \eqref{arity:elementary-rate}.
+The finite institution is admissible for the worst-case class defining
+$K_r(s)$.
+\end{proof}
+
+\subsection{A separate realization with pure owners}
+\label{arity:pure-section}
+
+\begin{corollary}[Fixed pure-owner realization]
+\label{arity:pure}
+All the lower bounds above also hold for institutions with one fixed pure
+unit owner per resource row.  For the length-$M$ instance, this realization
+has
+\begin{equation}
+  n=d=2^{1+(k-1)M}-1,
+  \label{arity:pure-counts}
+\end{equation}
+and every owner's fixed report domain is the full real interval along its
+own resource coordinate.  It does not have the fully eligible realization's
+owner count $1+kM$.
+\end{corollary}
+
+\begin{proof}
+Keep the technology \eqref{arity:technology}.  For each row
+$u\in V\setminus\{0\}$ introduce the actual owner $i_u$ with fixed
+endowment $\delta_u$ and report domain
+\[
+  \{t_u\delta_u:0\leq t_u\leq1\}.
+\]
+All these owners exist at every profile.  A resource automorphism $g$ acts
+\emph{jointly} on resource rows and owner labels, sending owner $i_u$ to
+owner $i_{g(u)}$.  On scalar reports the action is
+\[
+  (g\cdot t)_{g(u)}=t_u.
+\]
+This preserves the fixed institution: the transformed owner still reports
+only its own resource.  The associated owner bijection takes a coalition
+to another coalition of the same size, maps its total resource report by
+the same technology automorphism, preserves coordinatewise restoration,
+and leaves all outsiders unchanged in a comparison.  Conjugation therefore
+preserves every coverage, funding and incentive inequality.  Averaging over
+this finite joint $\operatorname{GL}(V)$ action is lawful.  No independent
+owner permutation is required or used.
+
+At the pure-owner version of $C_m$, set $t_u=1$ exactly for
+\[
+  S_m=\{v\}\cup\{e_{j,\ell}:j,\ell\}
+                 \cup\{w_j:j\leq m\},
+\]
+and set $t_u=0$ for every other row.  Its aggregate capacities coincide with
+those of \eqref{arity:profiles}, so Lemma~\ref{arity:supported}, including
+the full-technology dual, applies without change.  Each seed or private
+stabilizer described in Lemma~\ref{arity:orbits} preserves $S_m$ as a set.
+Being a permutation of all nonzero rows, it also preserves its complement.
+Its joint action thus fixes the entire report profile, including every
+additional zero-report owner.  The same seed and private orbits give
+$(k+1)q_1\geq1$ and a common payment $q_m$ for the $km$ active private owners.
+
+In the transition from $C_{m-1}$ to $C_m$, only the same actual pure owner
+$i_{w_m}$ restores its report from zero to one.  Protect this owner together
+with the specified old active pure owners.  Their labels, eligibility and
+reports remain fixed throughout the comparison.  Equation
+\eqref{arity:recurrence} follows exactly as before, by discarding only the
+restorer's nonnegative old payment.  Terminal branch coverage involves
+the $k+1$ actual pure owners of that branch.  All omitted owners, including
+additional zero reporters, have nonnegative payments, so the terminal
+budget argument is unchanged.  This proves the finite bounds and all their
+stated consequences with the counts \eqref{arity:pure-counts}.
+\end{proof}
+
+For example, $k=2$ specializes to the arity-three construction.  Its optimized
+length-$s$ bound has coefficient
+$\sqrt{2\pi}/(3\sqrt e)$ in front of $\sqrt s$, and $B_{2,6}=493/243$.
+The length-six witness uses $127$ resource rows in either realization,
+with $13$ fully eligible owners or $127$ pure owners.  Neither the
+fixed-arity extension nor the change of ownership realization gives a
+bound with a fixed resource dimension.

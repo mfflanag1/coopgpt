@@ -1,6 +1,6 @@
 # CoopGPT paper index
 
-Updated 7 October 2026. Eight focused manuscript candidates are listed below.
+Updated 18 October 2026. Nine focused manuscript candidates are listed below.
 The current LaTeX sources are authoritative; some PDF exports are historical. A completed draft does not imply
 publication, confirmed novelty, or independent human endorsement. The current
 structural paper replaces the earlier chain-cycle manuscript in this list.
@@ -140,6 +140,16 @@ Technical: for every finite nonnegative min-linear technology with K fixed suppo
 Further results include an O(n/log n) bound for all finite-valued monotone concave homogeneous production functions, resource-dimension bounds, exact finite sampling and all-profile certification, and the earlier sharp multi-glove hierarchy. Certification can require exponential preprocessing. Appendices consolidate the finite-pool mechanisms, network subclasses, monotone-envelope obstruction and scoped method boundaries; these do not inflate the paper count.
 
 Status: complete consolidated source with conventional proofs, exact finite certificates and scoped model audits. The [October 7 campaign](research_campaigns/2026-10-07-six-hour-campaign/INDEX.txt) is now its research archive. Current sources supersede the pre-hierarchy PDF exports. Historical novelty, significance and human specialist assessment remain unconfirmed. Outreach is prepared and unsent.
+
+### 9. The cost of coalition withholding: resource dimension and coalition size
+
+[Current manuscript PDF](paper5/coalition_withholding/manuscript.pdf) · [Standalone LaTeX](paper5/coalition_withholding/manuscript.tex) · [Specialist brief](paper5/coalition_withholding/specialist_brief.pdf) · [Review and verification package](paper5/coalition_withholding/README.txt)
+
+High level: protecting a coalition against coordinated resource withholding can require external funding even though each individual report profile admits an efficient stable allocation. The paper separates the number of resource types from the number of inputs in one activity and the size of protected coalitions.
+
+Technical: for general monotone concave homogeneous production on d resources, the sharp worst-instance total-funding factors are (d+1)/2 under transferable payment-only coalition withholding monotonicity and 1+c(d-1) under full outside-production protection, where c(2-exp(-1/c))=1. For packing activities of arity at most r, the full-outside upper is r*s^(r-1). The new unrestricted arity-three lower is sqrt(s/6), with an explicit sharper certificate B_s asymptotic to sqrt(2*pi*s)/(3*sqrt(e)). Higher arity gives Omega_r(s^((r-2)/(r-1))). Actual owners and full real report boxes stay fixed; pure ownership has separately stated larger owner counts.
+
+Status: first consolidated coalition manuscript prepared on 18 October with complete proofs, internal independent reviews, a focused standard-library replay package, and a correctness/priority review brief. The arity-three gap to 3s^2 remains open, and the lower witnesses use exponentially many resource rows. This is a distinct incentive contract from Paper 8, not a replacement for its individual-incentive theorem. Established ingredients are credited; missing original-source comparisons, historical novelty and human specialist review remain unresolved. No outreach or submission has been sent.
 
 ## Broader archived manuscripts
 
