@@ -1,0 +1,213 @@
+POSITIVE-PART PRICE DEFECTS CANNOT BE GLOBALLY CHARGED TO BUDGET
+21 October 2026 UTC. Strengthened certificate-route result.
+The alternating-price construction was suggested by the parent; the exact
+arity-three embedding, flow-invariant strengthening, proof and checker were
+completed in this route. Conventional proof plus exact rational checks.
+
+THEOREM (SCOPED STOP, NOT A FUNDING LOWER BOUND)
+For fixed arity r=3 and protection size s=2, there is no finite c such that
+every actual-owner feasible finite dual, with efficient nonnegative production
+prices u, satisfies
+
+  sum_e mu_e [u_low(C_e)-u_high(C_e)+d_e]_+ <= c D,                 (1)
+
+where D=sum_p nu_p F(B_p), and d_e is either F(delta_e) (full OUT) or zero
+(TCWM). Failure occurs with unique optimal prices at every selected profile.
+The lower bound persists under nonnegative comparison-flow reweightings that
+preserve the signed comparison incidence at every actual owner/profile
+coordinate. It therefore does not arise from counting subdivided arcs.
+
+The signed defect sum is small and its negative terms must remain. The dual
+objective ratio does not grow. This rejects clipping negative edge defects
+before global charging; it does NOT reject an O(s) mechanism or the entire
+price-plus-reserve architecture.
+
+1. FIXED ACTUAL OWNERS AND EXACT ARITY THREE
+Let m>=2 be even, eps=1/(4m), and V_t=2+t/(2m), 1<=t<=m.
+The sole activity uses one unit each of resources A,B,K and has profit one:
+  F(a,b,k)=min(a,b,k).
+There are three distinguished actual owners R,X,Y and one distinct actual
+passive owner P_ij for each 1<=i<j<=m. Every owner has the entire report box
+[0,8]^3. At profile p_t, put
+  (A_t,B_t)=(V_t,V_t+eps) if t is odd,
+             (V_t+eps,V_t) if t is even;
+  b_R(p_t)=(A_t-1,B_t-2,3V_t),
+  b_X(p_t)=(1,0,0),
+  b_Y(p_t)=(0,2,0),
+  b_Pij(p_t)=0.
+All reports lie in their fixed boxes. Owner R owns three rows; no strategic
+owner is split. Both A_t and B_t strictly increase with t, since consecutive
+V increments are 1/(2m)>eps. The K report also strictly increases.
+
+Total capacity is (A_t,B_t,3V_t). Thus F(B_total)=V_t and the unique optimal
+production price is
+  w_t=(1,0,0) for odd t; w_t=(0,1,0) for even t.
+Uniqueness follows from the strictly slack other two constraints at x=V_t.
+In particular
+  u_R(p_t)=V_t-1 for odd t, and V_t-2 for even t.
+All passive price payments are zero.
+
+For every i<j, take C_ij={R,P_ij} and shared multiplier mu_ij=1/(j-i).
+Only R changes reports. These comparisons are legal for the fixed actual
+owners and include the unchanged passive member. Restoration value is
+  d_ij=F(delta_ij)=V_j-V_i-eps*1_{i,j of different parity}.         (2)
+The increasing third row matters: delta_K=3(V_j-V_i), which is larger than
+the other minimum. A fixed third row would incorrectly make d_ij zero.
+
+Using the actual efficient prices and (2), the full-OUT edge defect is exactly
+  a_ij=u_R(p_i)-u_R(p_j)+d_ij
+       = 1-eps   if i odd and j even;
+       =-1-eps   if i even and j odd;
+       =0        if i,j have the same parity.                     (3)
+For TCWM, the defect is simply u_R(p_i)-u_R(p_j). On every odd-to-even pair,
+this is 1-(j-i)/(2m)>1/2. Thus the same positive-part obstruction applies.
+
+2. EXACT FEASIBLE DUAL AND AN O(m) DENOMINATOR
+The ambient finite dual uses nonnegative coverage weights lambda_(p,S), one
+nonnegative shared comparison weight mu_e per ENTIRE protected coalition,
+and nonnegative budget weights nu_p. Its signed owner/profile coefficient is
+  g_(p,i)=sum_(S containing i) lambda_(p,S)
+           +sum_(e:high=p, i in C_e) mu_e
+           -sum_(e:low=p, i in C_e) mu_e.
+Feasibility means g_(p,i)<=nu_p. Its objective and denominator are
+  L=sum_(p,S)lambda_(p,S)F(b_S(p))+sum_e mu_e d_e,
+  D=sum_p nu_p F(B_p).
+Multiplying the original nonnegative-payment, coverage, comparison and
+budget inequalities gives L<=K D for any feasible factor K. These are the
+unnormalized Farkas coefficients. No D=1 normalization is needed; when D>0,
+all coefficients can be divided by D without changing any ratio. The exact
+finite primal/dual equivalence is retained in FINITE_AND_ALL_PROFILE_DUAL.txt.
+
+Write H_k=sum_(d=1)^k 1/d, H_0=0, and
+  b_t=H_(t-1)-H_(m-t), nu_t=max(1,b_t).
+Give the coverage row for {R,X,Y} at p_1 multiplier one; all other coverage
+multipliers are zero. Its right-hand side is V_1. The actual-owner balances are
+  g_(t,R)=b_t+1_{t=1};
+  g_(t,X)=g_(t,Y)=1_{t=1};
+  g_(t,P_ij)=mu_ij(1_{t=j}-1_{t=i}).
+All are <=nu_t. For R at t=1, g=1-H_(m-1)<=1; for every passive, mu_ij<=1.
+Hence sigma=nu-g>=0 and the dual is feasible with ONE coefficient for the
+entire protected coalition at both endpoints.
+
+As in the harmonic construction, b_t is negative in the lower half and
+positive in the upper half. Summing positive divergence equals the mu flow
+across that cut. At distance d, at most d edges cross, each of weight 1/d.
+Therefore sum_t (b_t)_+<=m-1 and
+  sum_t nu_t<=2m-1,
+  D=sum_t nu_t V_t <= (5/2)(2m-1)<5m.                            (4)
+
+3. EXACT GROWING POSITIVE AND NEGATIVE PARTS
+Set
+  H_odd=sum_(1<=d<=m-1, d odd) 1/d = H_m-(1/2)H_(m/2).
+For each odd distance d, the number of odd-to-even pairs is (m-d+1)/2,
+and the number of even-to-odd pairs is (m-d-1)/2. Therefore
+  W_oe=sum_(i odd<j even) mu_ij
+      =[(m+1)H_odd-m/2]/2,
+  G_plus=(1-eps) W_oe,
+  G_minus=(1+eps)[(m-1)H_odd-m/2]/2.                             (5)
+Here G_plus is exactly the left side of (1) for full OUT, and G_minus is
+the magnitude of the negative defect part. Since H_odd grows as (1/2)log m,
+G_plus and G_minus each grow as (m/4)log m. From (4)--(5),
+  G_plus/D >= (1-eps)[(m+1)H_odd-m/2]/(10m) -> infinity.           (6)
+For TCWM, G_plus_TCWM >= W_oe/2, so its ratio also diverges.
+
+Nevertheless the SIGNED full-OUT defect is only
+  G_plus-G_minus = (3/4)H_odd+1/8.                               (7)
+The weighted outside-production term is
+  sum mu_ij d_ij=(m-1)/4-eps[m H_odd-m/2],
+and the true full-OUT objective is V_1 plus this quantity. It is O(m), not
+O(m log m). All negative edges remain present in the feasible dual.
+
+4. POSITIVE-PART FAILURE SURVIVES FLOW NORMALIZATION
+Consider any nonnegative comparison multipliers on these selected profiles
+with the same signed comparison divergence at every actual owner/profile
+coordinate. Every nonzero comparison changes R, so it must contain R. A
+comparison that also carries a passive owner P_ij can contain no other owner
+at size two: its whole coalition is {R,P_ij}.
+
+Fix an original odd-to-even pair (i,j). Its passive owner has prescribed net
+comparison divergence -mu_ij at p_i and +mu_ij at p_j, zero elsewhere. For
+all alternative edges carrying that actual passive owner, telescoping gives
+  sum_e mu'_e [u_R(low)-u_R(high)]
+       =mu_ij[u_R(p_i)-u_R(p_j)] > mu_ij/2.                     (8)
+For TCWM the bracket is the actual defect. For full OUT, adding d_e>=0
+can only increase it. In either case sum of positive parts is at least the
+signed sum in (8). Since no size-two comparison can carry two different
+passive owners along with R, summing (8) across odd-to-even pairs yields
+  alternative positive-part charge >= W_oe/2.                 (9)
+The original nu and D remain feasible when comparison incidence is fixed.
+Equations (4) and (9) prove divergence even after exact incidence-preserving
+rerouting, shortcutting, or subdivision.
+
+The same endpoint telescoping works if profiles along these monotone
+intervals are added with zero new divergence, keeping other owners fixed.
+The endpoint prices are unique; prices at added intermediate profiles may
+be selected arbitrarily. This proof uses the net flow demands of distinct
+actual passive owners, not the number of comparison arcs or a fabricated
+independent weight for each coalition member.
+
+This uses a distinct zero-report actual passive owner for every original
+pair. The protection contract explicitly includes such unchanged members,
+and each edge still has one shared multiplier for its entire two-member
+coalition. Deleting these zero-report owners from comparison labels changes
+their incidence and lies outside this theorem. Such a deletion is in fact a
+valid broader dual normalization here; signed_followup.txt records it. Thus
+the obstruction is specific to preserving these original endpoint demands,
+and does not preclude a normalization that removes these artificial labels.
+
+This is a statement about preserving comparison incidence. It does not forbid
+transformations that also modify coverage weights, budget support, nonnegative
+payment slack, original demands, or introduce other kinds of profiles. Such
+more substantial transformations remain potential positive proof routes.
+
+5. WHY THIS IS NOT AN UNRESTRICTED OR PRICE-FLOOR LOWER BOUND
+On the displayed profile set, pay R the entire production V_t and every
+other owner zero. Every coalition containing R has value <=V_t; a coalition
+without R has zero K and hence value zero. All selected comparisons contain
+R, and V_j-V_i>=F(delta_ij), so this is an efficient full-OUT rule. In fact it
+handles every admissible comparison between the selected profiles, regardless
+of additional passive members. Thus the displayed primal rule proves L<=D for EVERY feasible dual on this
+finite profile set. The exact checker independently checks L<=D only for the
+particular harmonic dual exhibited here.
+
+For a finite price-floor example, the payments
+  y_R(p_t)=V_t, y_X(p_t)=1, y_Y(p_t)=2, y_Pij=0
+are also full OUT, cover every coalition, and dominate the unique efficient
+price allocations. Their factor is (V_t+3)/V_t<5/2. Hence this family cannot
+be promoted to an unbounded price-domination cost claim either. These are
+rules on the selected profiles only, not rules on the full legal report box.
+
+6. DISPOSITION
+The all-size obstruction closes a precise attempted global inequality:
+positive edge defects cannot be charged separately to O(s) times the budget,
+even with exact shared-coalition balances and flow normalization, at fixed
+s=2. Gross endpoint rank-surplus charging fails as well (the companion note).
+A successful O(s) proof must retain cancellation among signed edge defects or
+use a substantive transformation that changes more than the incidence flow.
+No improved general upper, no unrestricted lower, and no universal failure of
+the price-plus-reserve architecture follows.
+
+CHECKS AND AUDIT STATUS
+check_positive_defects.py verifies m=2,4,8,16,32,64,128,256 using exact Fractions:
+legal strict restorations, unique-price formulas, full-OUT restoration values,
+shared actual-owner balances, D bounds, both positive/negative parts, (7), the
+finite factor-one comparison, and the exact price-slack identity. Results are
+in positive_defect_checks.json. These checks supplement the symbolic proof.
+Every checked finite positive-OUT-defect ratio through m=256 is below one;
+at m=256 the exact ratio evaluates to approximately 0.48339. These finite
+checks verify the identities and feasibility, not unbounded growth. Divergence
+is established by the symbolic harmonic formula (5), bound (4), and
+H_odd tending to infinity. No estimate of the first m exceeding ratio one is
+needed or claimed.
+
+The parent obtained an independent opposite-model snapshot review at
+/Users/maxf/.local/state/claude-reviews/2026-10-20-upper-bound-gate-7842231cfec1/20261020-202800-9e3b54fb/review.md.
+It rederived the displayed algebra without executing checks. Its verified
+scope/evidence clarifications led to the present prose-only revision: the
+ambient dual is now explicit; the universal L<=D statement is attributed to
+the primal proof; the checked finite range is distinguished from asymptotic
+proof; and label erasure is distinguished from incidence preservation. The
+review refers to its original frozen snapshot, not this revised file. The
+reviewer's rough numeric estimates and suggested threshold were not adopted.
+The exact checker and mathematical formulas were unchanged.
+

@@ -1,0 +1,603 @@
+Task and review objective:
+Independently audit these two new scoped lemmas, not the entire research program. (A) arbitrary rank-r packing with k varying actual owners and frozen background: check coverage, full OUT, all signs in L<=kD+(H_J-k f_J)T<=max(k,r)D and componentwise application. (B) pure min-r maximum-report winner: verify all-real full OUT, exact unrestricted optimum1 vs efficient-price-floor optimumr, and distinguish correction-itself TCWM costr from repaired-sum costr-1. Check CEA proof for mixed-owner correction upper. Find concrete counterexamples or missing hypotheses. No novelty clearance. Tests are supplemental; do not claim execution from this snapshot. We have50minutes left on the hard campaign deadline; this review has a15minute ceiling.
+
+
+FILE CONTRACT.txt
+1: UPPER BOUND FEASIBILITY GATE
+2: Target: all finite nonnegative packing technologies of activity support arity at most three; fixed actual multirow owners and arbitrary real report boxes; arbitrary growing owner/resource counts; nonnegative payments covering every coalition at every profile; full OUT for protected coalitions of size at most s, including passive members. A TCWM-only result must be separately labeled.
+3: Known audited manuscript frontier: sqrt(s/6) <= K3(s) <= K3_OUT(s) <= 3s^2. Target O(s), accept any proved O(s^(2-epsilon)) improvement with fixed epsilon>0.
+4: Primary architecture: choose efficient feasible production prices u_i=p.b_i and nonnegative reserves rho, y=u+rho. Require rho_C(h)-rho_C(l)>=u_C(l)-u_C(h)+F(delta) globally. Price domination is additional, not without loss.
+5: Gate success: a precise global inequality or certificate template controlling outgoing reserves, surviving retained exact failures, with a noncircular route to an improved all-real bound. A fully proved better bound is stronger success. A scoped architecture obstruction is a useful stop, not unrestricted impossibility. A finite example or a local derivative alone does not pass.
+6: No-go: fixed rank-surplus scaling and changed-owner-only charging already fail; one global layer and the binary unit-worth ideal cannot support the desired larger architecture obstruction. Do not repeat them as discoveries.
+7: Run: recover calibration and dual; pursue independent proof and exact-falsification routes; close with independent audit and a pass/stop decision. Do not extend automatically past the fixed 90-minute window.
+8: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE inputs/PRICE_CHARGE_FRONTIER.txt
+1: ENDPOINT PRICE CHARGING: VALID LOCAL BOUND AND EXACT REPAIR OBSTRUCTION
+2: Independent derivation, 18 October 2026. No unrestricted upper improvement.
+3: The basic arity/deletion-loss estimate is an established ingredient already
+4: used elsewhere in the campaign. The contribution here is its explicit
+5: interaction with actual dual balances and a failed compensation architecture.
+6: 
+7: 1. A NONNEGATIVE PRIMAL--DUAL SURPLUS AT EACH PROFILE
+8: At a profile b, let B=sum_i b_i, V=F(B), x an optimal nonnegative production,
+9: and p an optimal nonnegative production dual. For each actual owner define
+10:  u_i=p dot b_i,
+11:  h_i=sum_j pi_j x_j sum_(a in supp A_j) b_ia/B_a,
+12:  zeta_i=h_i-u_i.                                      (1)
+13: Set a ratio with B_a=0 to zero; an activity using such a resource cannot
+14: have positive x_j. These are resource shares inside one owner's payment,
+15: not separate strategic owners or independently transported dual flows.
+16: 
+17: For support arity at most r,
+18:  sum_i u_i=V,
+19:  sum_i h_i=sum_j pi_j x_j |supp A_j|<=rV,
+20:  zeta_i>=0,  sum_i zeta_i<= (r-1)V.                    (2)
+21: To check the nontrivial nonnegativity, complementary slackness gives
+22:  p_a B_a=p_a sum_j A_aj x_j.
+23: For x_j>0, pi_j=sum_a p_a A_aj>=p_a A_aj. Thus
+24:  sum_(j:a in supp A_j) pi_j x_j >=p_a B_a.
+25: Multiply by b_ia/B_a and sum in a to get h_i>=u_i.
+26: 
+27: For any coalition C, writing t_a=b_Ca/B_a and reducing activity j by the
+28: fraction max_(a in supp A_j) t_a gives feasible production under B-b_C.
+29: Its lost profit is at most h(C), whence
+30:  F(B)-F(B-b_C)<=h(C).                                 (3)
+31: In particular h covers every coalition by superadditivity. Equations (2)--(3)
+32: are static rank bounds, not a monotonicity theorem for the profile-dependent h.
+33: 
+34: 2. VALID LOCAL PRICE-DEFECT BOUND FOR TCWM AND FULL OUT
+35: For a comparison e=(l,h,C), the outsiders' bundle B_out is the same at both
+36: ends. Let d_e=0 for TCWM and F(delta_e) for full OUT. Optimal prices imply
+37:  u_l(C)<=F(B_l)-F(B_out).
+38: Superadditivity gives F(B_l)+d_e<=F(B_h). Therefore
+39:  u_l(C)-u_h(C)+d_e
+40:  <=F(B_h)-F(B_out)-u_h(C)
+41:  <=h_h(C)-u_h(C)=zeta_h(C).                           (4)
+42: Every term uses the SAME actual C. Equation (4) holds for arbitrary optimal
+43: primal/dual choices at the two profiles and requires no differentiability.
+44: 
+45: 3. EXACT INTERACTION WITH A FINITE CROSS-PROFILE CERTIFICATE
+46: Use the actual dual lambda,mu,nu and sigma=nu-g>=0 from
+47: reviews/cross_profile_duality/FINITE_AND_ALL_PROFILE_DUAL.txt. Let
+48:  L=sum lambda F(b_C)+sum mu d_e, D=sum nu F(B_p).
+49: With k_(p,C)=u_p(C)-F(b_C)>=0, exact summation gives
+50:  L-D =sum_e mu_e[u_l(C)-u_h(C)+d_e]
+51:        -sum_(p,C)lambda_(p,C) k_(p,C)
+52:        -sum_(p,i)sigma_(p,i) u_(p,i).                 (5)
+53: There is one shared mu_e for every member at both endpoints. Combining with
+54: (4) yields the VALID but not yet useful general upper bound
+55:  L<=D+sum_e mu_e zeta_h(C).                           (6)
+56: 
+57: Since zeta>=0, owner-coordinate balances imply the further valid identity
+58:  sum_e mu_e zeta_h(C)
+59:  =sum_p nu_p sum_i zeta_pi +sum_e mu_e zeta_l(C)
+60:    -sum_(p,C)lambda_(p,C)zeta_p(C)-sum_(p,i)sigma_pi zeta_pi.
+61: Hence (6) alone does NOT give rD: outgoing terms remain. Dropping them is an
+62: invalid compression. A bound on these coupled outgoing/incoming terms, with
+63: coverage and nonnegative-payment slacks retained, is the exact missing step.
+64: The endpoint incidence cone constrains each whole edge block; it does not
+65: permit assigning the passive owner's flow coefficient to the restorer alone.
+66: 
+67: 4. NO CONSTANT REPAIR BY THE RANK SURPLUS
+68: A tempting candidate is y_i=u_i+beta zeta_i, beta>=0. It is nonnegative,
+69: covers every coalition, and has funding at most 1+(r-1)beta. Choosing beta
+70: proportional to s would give linear funding if incentives held. They do not.
+71: 
+72: Use four resources K,A,B,C and two unit-coefficient activities:
+73:  old: consumes K,A,B, profit 1;
+74:  new: consumes K,C, profit 1+epsilon, where 0<epsilon<1.
+75: There are TWO fixed actual owners, both allowed the full unit cube. Along the
+76: displayed reports owner0 holds A=B=1,C=t,K=0, and owner1 holds K=1 only, with
+77: 0<t<1. Owner0 restores only C. The optimum is uniquely
+78:  x_old=1-t, x_new=t,
+79: and its dual is uniquely p_K=1,p_C=epsilon,p_A=p_B=0.
+80: Uniqueness follows from the strictly larger new profit, the binding K and C
+81: constraints, and slack A and B constraints. Thus tie-breaking cannot help.
+82: 
+83: For owner0, the exact payments in (1) are
+84:  u_0=epsilon t,
+85:  h_0=2(1-t)+(1+epsilon)t=2-(1-epsilon)t,
+86:  zeta_0=2-t.
+87: Consequently y_0=2beta+(epsilon-beta)t. For every beta>0 choose
+88:  epsilon=min(beta/2,1/2). Restoring t strictly decreases y_0, violating
+89: singleton TCWM and therefore every protected-coalition family containing
+90: singletons. This is also a full-OUT failure (restored C alone has value zero).
+91: More generally A0*u+B0*zeta fails whenever A0>=1, B0>0: choose
+92: epsilon=min(B0/(2A0),1/2), giving derivative A0*epsilon-B0<0.
+93: 
+94: At beta=0, optimal-price payments themselves fail. For min(A,B), use owner0
+95: (a,0), owner1(0,1/2), and restore a from1/4 to3/4 within the fixed unit cubes.
+96: The unique low price is (1,0), the unique high price (0,1); owner0's payment
+97: drops from1/4 to0. A positive fixed scaling of optimal prices also fails.
+98: 
+99: For an exact rational instance of the first fixture, take epsilon=1/2 and
+100: t from1/4 to3/4. Then
+101:  u_0: 1/8 ->3/8; h_0:15/8 ->13/8; zeta_0:7/4 ->5/4.
+102: The beta=1 payment loses1/4 and beta=2 loses3/4. All coalition coverage and
+103: the displayed funding bounds still hold. The violated row is the actual
+104: singleton comparison +y_0(high)-y_0(low)>=0, with one shared coefficient.
+105: 
+106: This rejects fixed nonnegative surplus compensation for arbitrary choices
+107: of optimal x,p, because this fixture makes both choices unique. It does not
+108: reject an adaptive compensation rule, a different potential, general smooth
+109: rules, or a genuinely global dual inequality.
+110: Indeed the fixture has only two owners, so the crude rule y_i=F(total) already
+111: gives full OUT at factor two. Its purpose is architecture rejection, not a
+112: new unrestricted lower bound.
+113: 
+114: 5. WHY CHANGING-OWNER-ONLY CHARGING FAILS, EVEN WITH EXACT DUAL BALANCES
+115: Take F(A,B,C)=min(A,B,C), three fixed fully eligible owners, 0<epsilon<1/2:
+116:  low b0=(1,0,0), b1=(0,0,0), b2=(0,1+epsilon,2);
+117:  high changes only b1 to(2epsilon,0,0).
+118: Endowments can be the common box [0,2]^3. Protect C={0,1}, so the changed
+119: owner set is D_changed={1}, and owner0 is genuinely unchanged and protected.
+120: The unique optimal prices are p_low=(1,0,0), p_high=(0,1,0). The edge's price
+121: defect is one, and its outside-production value is zero. At the high profile
+122:  zeta_1=h_1=(1+epsilon)*2epsilon/(1+2epsilon),
+123: which tends to zero. Thus no finite c(s), even at s=2 and arity exactly three,
+124: can bound the price defect by c(s)*zeta_high(D_changed). Whole-coalition
+125: zeta_high(C)=1+epsilon remains large, as required by (4).
+126: 
+127: This example is consistent with a FULLY FEASIBLE actual-coordinate dual:
+128: give low grand coverage weight1, the one comparison weight1, and budgets at
+129: both profiles weight1. Then
+130:  g_low=(0,0,1), g_high=(1,1,0),
+131:  sigma_low=(1,1,0), sigma_high=(0,0,1),
+132:  L=1, D_budget=2+epsilon.
+133: Adding the explicit nonnegative-payment rows cancels every payment coordinate.
+134: The endpoint-incidence cone has M=1,w=(1,1,0); its changed coordinate equals M
+135: and its passive capacity is exactly s-1=1. No owner-wise split of mu or dummy
+136: zero assumption occurs. The ratio is BELOW one; this is an obstruction to a
+137: particular local charging inequality, not a new funding lower certificate.
+138: 
+139: FINAL GATE
+140: The proved local bounds respect arbitrary multirow owners, arbitrary coalition
+141: coverage, full OUT, actual-coordinate balances, and shared comparison weights.
+142: They do not control the remaining global term in (5) by O(s) or o(s^2) times D.
+143: The natural fixed rank-surplus repair and changed-owner-only compression are
+144: now rejected by exact fixtures. No new unrestricted upper bound is claimed.
+145: 
+146: REPRODUCIBLE FINITE CHECK
+147: price_charge_check.py uses exact fractions and no third-party dependencies.
+148: Its saved JSON records 256 two-owner binary profiles, 1,024 coalition deletion
+149: and coverage checks, 9,153 actual-coalition full-OUT price-defect checks,
+150: 24 fixed-repair failures, and five fully balanced changed-owner dual fixtures.
+151: These finite checks supplement the displayed proofs; they do not establish
+152: the universal quantified lemmas by enumeration or check an upper-bound claim.
+153: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE certificate_route/signed_followup.txt
+1: SIGNED FOLLOW-UP: LABEL ERASURE, FLOW SHORTCUTS, AND FROZEN-BACKGROUND CHARGES
+2: 21 October 2026 UTC. Bounded follow-up to the certificate-route obstruction.
+3: Status: conventional elementary proofs and supplemental exact checks.
+4: No general O(s) upper, price-floor representation, novelty or gate pass claimed.
+5: The rank deletion-loss bound and Farkas framework are inherited ingredients.
+6: 
+7: SUMMARY
+8: The harmonic obstruction is removable by legitimate changes of incidence:
+9: zero-report passive labels can be erased without changing L or D; the resulting
+10: singleton flow can be shortcut into one global source/sink layer. Thus the
+11: obstruction is a literal unchanged-incidence charging failure, not a barrier
+12: to broader dual normalization.
+13: 
+14: A second, more general global bound keeps nonzero constant owners AND their
+15: coverage valuations. If exactly k>=1 owners vary across a finite profile set,
+16: then every feasible dual satisfies
+17:   L <= k D + (H_J-k f_J) T
+18:      <= k D + (r-k) f_J T
+19:      <= max(k,r) D,                                               (FB)
+20: where J is the set of constant owners, f_J=F(sum_(j in J)b_j),
+21: T=sum_p nu_p, and H_J<=r f_J is one fixed rank-charge total at that background.
+22: It applies to full OUT, arbitrary protected coalition sizes, actual multirow
+23: owners, and every coverage coalition. It does not guarantee price domination.
+24: For the alternating harmonic family k=1 and f_J=0, so it gives L<=D directly.
+25: 
+26: 1. EXACT FINITE DUAL AND RESOURCE BALANCES
+27: At finite Q let lambda_(p,S), mu_e, nu_p be nonnegative, with one shared mu_e
+28: for the entire actual coalition C_e. Define
+29:   g_(p,i)=sum_(S containing i)lambda_(p,S)
+30:           +sum_(e:high=p,i in C_e)mu_e
+31:           -sum_(e:low=p,i in C_e)mu_e <=nu_p,
+32:   sigma_(p,i)=nu_p-g_(p,i)>=0,
+33:   L=sum lambda F(b_S)+sum mu d_e, D=sum nu F(B_p).
+34: For full OUT d_e=F(delta_e); for TCWM d_e=0.
+35: These are unnormalized Farkas coefficients. Multiplying any admissible
+36: payments gives L<=K D. The retained finite LP duality and compactness note
+37: establishes the converse criterion; no new feasibility LP is introduced here.
+38: 
+39: The exact resource identity is
+40:   sum_p nu_p B_p - sum_e mu_e delta_e
+41:    =sum_(p,S)lambda_(p,S)b_S(p)+sum_(p,i)sigma_(p,i)b_i(p)>=0.
+42: The original signed price identity is
+43:   L-D=sum_e mu_e a_e -sum lambda [u(S)-F(b_S)]-sum sigma u,
+44:   a_e=u_low(C_e)-u_high(C_e)+d_e.
+45: Neither identity licenses discarding negative a_e or outgoing flow terms.
+46: The following operations retain legitimate complete-coalition coefficients.
+47: 
+48: 2. TWO FREE LABEL-ERASURE LEMMAS
+49: (A) CONSTANT OWNERS WITH NO COVERAGE INCIDENCE.
+50: Suppose owner j reports the same bundle at every p in Q, and every positive
+51: coverage multiplier is on a coalition excluding j. Remove j from every
+52: comparison coalition label. Each comparison is still legal: j's report was
+53: unchanged, all changed owners remain protected, and coalition size decreases.
+54: Its restored bundle and d_e are unchanged. All other owners' g coordinates
+55: are unchanged. The new g_(p,j) is zero, hence <=nu_p. Thus L and D are exactly
+56: preserved and the new dual is feasible. No condition on whether j's constant
+57: bundle is zero or valuable is required. This applies to several such owners
+58: simultaneously; coincident resulting rows can have their multipliers combined.
+59: 
+60: (B) ZERO-REPORT OWNERS, EVEN WITH COVERAGE INCIDENCE.
+61: Suppose b_j(p)=0 for all p in Q. In addition to removing j from comparison
+62: labels, remove j from every coverage label. The coverage RHS is unchanged
+63: because its aggregate bundle is unchanged. A resulting empty coverage row
+64: has RHS zero and may be discarded. Again every surviving owner's g is
+65: unchanged, while g_(p,j) becomes zero. L and D are preserved.
+66: More generally, the same proof works for constant owners Z satisfying
+67: F(b_S(p))=F(b_(S\Z)(p)) for every coverage row used, with simultaneous
+68: removal from those rows. Zero reports are an easy sufficient condition.
+69: 
+70: These operations do NOT assume that the original mechanism pays null owners
+71: zero. They construct a different valid dual using other existing contract
+72: rows. They deliberately change the erased owners' incidence and sigma values.
+73: Consequently they lie outside the preservation hypothesis in the positive-part
+74: obstruction. Applying (B) removes every artificial passive label of that
+75: harmonic family. The actual nonzero owners X,Y remain in coverage.
+76: 
+77: 3. SINGLETON FLOW CAN BE SHORTCUT GLOBALLY
+78: Suppose every positive comparison in one weakly connected profile component
+79: has exactly the same singleton coalition {R}. Such comparisons strictly
+80: increase R's report and leave all other actual owners' reports fixed.
+81: Their graph is acyclic. Put gamma_p=incoming_mu-outgoing_mu at owner R.
+82: Standard finite nonnegative-flow decomposition expresses all comparison flow
+83: as paths from vertices gamma<0 to vertices gamma>0. To see this without a
+84: circulation assumption, add a source edge of weight -gamma at every negative
+85: vertex and a sink edge of weight gamma at every positive vertex; conservation
+86: holds internally. Repeatedly extract a positive source-sink path. No residual
+87: positive directed cycle can remain because the graph is acyclic.
+88: 
+89: Replace each extracted path by its direct singleton-R comparison between
+90: its endpoints, with the path weight. It is legal: R's coordinates increase
+91: along the path and all outsiders are fixed. Its delta is the sum of the path
+92: deltas, so superadditivity gives F(delta_direct)>=sum F(delta_path_edges).
+93: The new comparison divergence equals the old one at every owner/profile.
+94: Thus all lambda, nu and sigma remain feasible, D is unchanged, and L does
+95: not decrease for full OUT (it is unchanged for TCWM).
+96: 
+97: All retained direct edges now run from the global disjoint sets {gamma<0}
+98: to {gamma>0}. This is the actual one-global-layer structure, not separate
+99: per-coalition forests. Applying the retained one-layer theorem gives L<=rD
+100: for the original component. The construction can be performed on disjoint
+101: components with different singleton owners; their vertex sets do not overlap.
+102: 
+103: After the erasure in section 2, this applies to the harmonic family. Its
+104: nonzero comparison divergences have negative lower-half and positive
+105: upper-half support. The exact checker verifies path decomposition, direct
+106: OUT domination, unchanged divergence, and the resulting one-layer support.
+107: 
+108: With multiple singleton coalitions in ONE connected profile component,
+109: independent owner-wise shortcutting need not produce one global layer: the
+110: same profile can be a sink for one owner and a source for another. This
+111: operation alone does not resolve the genuine owner-mixing problem.
+112: 
+113: 4. RANK-PRICED ELIMINATION OF A NONZERO FROZEN BACKGROUND
+114: Now allow arbitrary legal comparisons and coverage rows. Let V be the actual
+115: owners whose reports are not constant across Q, with |V|=k>=1. Let J=N\V;
+116: write a_j for each frozen owner's bundle, A=sum_(j in J)a_j, and f_J=F(A).
+117: Choose one optimal production at A and its established rank charges h_j>=0:
+118:   H_J=sum_(j in J)h_j<=r f_J,
+119:   h(S)<=H_J,
+120:   h(S)>=f_J-F(A-a_S) for every S subset J.                        (4)
+121: These charges are sums of resource shares inside each actual owner's payment,
+122: not separate strategic row owners. They are constant across all p in Q.
+123: When f_J=0 take all h_j=0; (4) is then still valid.
+124: 
+125: Define the explicit testing/payment potential
+126:   W_(p,i)=F(B_p)-f_J if i in V;
+127:   W_(p,j)=h_j if j in J.                                         (5)
+128: It is nonnegative. It satisfies every coverage inequality:
+129: * If S contains no varying owner, superadditivity and (4) give
+130:   F(a_S)<=f_J-F(A-a_S)<=h(S).
+131: * If S contains at least one varying owner, disjoint bundles give
+132:   F(B_p)>=F(b_S(p))+F(A-a_(S intersect J)).
+133:   Therefore
+134:   F(b_S(p))<=F(B_p)-f_J+h(S intersect J)
+135:             <=sum_(i in S)W_(p,i).
+136: This preserves the original coverage valuation, including nonzero static
+137: owners that occur in positive lambda rows. It does not delete their value.
+138: 
+139: It also satisfies full OUT. A distinct-profile admissible comparison must
+140: change a varying owner, so |C intersect V|>=1, and
+141:   W_C(high)-W_C(low)
+142:    =|C intersect V|[F(B_high)-F(B_low)]
+143:    >=F(delta_e)=d_e.                                             (6)
+144: The equality counts every protected varying owner, including members passive
+145: on this particular edge. Frozen protected members have constant W and remain
+146: in the coalition. Superadditivity proves the inequality. TCWM follows too.
+147: 
+148: The total potential is exactly
+149:   sum_i W_(p,i)=k[F(B_p)-f_J]+H_J.                                (7)
+150: Multiply coverage and comparison inequalities by their ORIGINAL shared dual
+151: weights and use the exact balance g=nu-sigma:
+152:   L<=sum_(p,i)g_(p,i)W_(p,i)
+153:     =sum_p nu_p[k(F(B_p)-f_J)+H_J]-sum_(p,i)sigma_(p,i)W_(p,i).
+154: Dropping only the displayed nonnegative slack proves (FB). Since
+155: 0<=f_J T<=D, its last bound follows for either sign of r-k.
+156: This is an explicit global signed accounting inequality, not a restatement
+157: of the unresolved primal feasibility system.
+158: 
+159: For exact bookkeeping one can retain three nonnegative loss terms:
+160:   kD+(H_J-k f_J)T-L
+161:    =sum sigma W
+162:     +sum lambda[W_S-F(b_S)]
+163:     +sum mu[|C intersect V|(F_high-F_low)-d_e]>=0.                 (8)
+164: Every original actual coalition and every shared comparison multiplier is
+165: retained. The large positive/negative harmonic price defects are never clipped.
+166: 
+167: 5. COMPONENTWISE CONSEQUENCE AND THE REMAINING BOTTLENECK
+168: Split the positive-mu profile graph into weak components, retaining isolated
+169: profiles carrying lambda or nu. A frozen owner is constant along a connected
+170: component exactly when its report never changes on its edges. Thus, for a
+171: component H, let k_H count the actual owners changed somewhere on its edges.
+172: Apply section 4 componentwise; original dual feasibility and D split by profile.
+173: Isolated profiles admit efficient static price payments and cost factor one.
+174: Consequently
+175:   L <= sum_(nontrivial H) max(k_H,r) D_H
+176:        +sum_(isolated H) D_H.                                   (9)
+177: In particular at arity three, any dual ratio greater than three must have a
+178: comparison component in which at least four actual owners vary. Merely giving
+179: the harmonic passive labels nonzero frozen reports does not evade this bound.
+180: If the frozen background has zero production and k_H=1, the sharp bound is one.
+181: 
+182: This supplies a concrete sufficient normalization target: decompose/transform
+183: a general certificate into feasible pieces with at most O(s) varying owners
+184: per piece, while preserving or increasing total objective and increasing the
+185: sum of budget denominators by only a constant. Then (9) would give O(s).
+186: No such decomposition is proved. Arbitrary edgewise splitting creates owner
+187: imbalances at shared profiles; paying these imbalances is the outstanding
+188: cost. The negative-edge clipping obstruction cannot bound that cost while
+189: holding all original demands fixed, and label erasure only treats unvalued
+190: or null frozen members. This is a specific structural bottleneck, not claimed
+191: progress on the all-real O(s) quantifier.
+192: 
+193: A single comparison has <=s changed owners, but a connected component can
+194: accumulate arbitrarily many different changed owners. Arity does not itself
+195: bound that union. A separate per-coalition forest cannot substitute for a
+196: bounded component union or a controlled way to cut the shared profiles.
+197: 
+198: 6. PRICE-FLOOR AND FULL-DOMAIN LIMITATIONS
+199: The potential (5) need not dominate an efficient production price. In the
+200: alternating harmonic family, the frozen X,Y background has no K and f_J=0;
+201: (5) pays all V_t to R and zero to X,Y. At an odd profile the unique price gives
+202: X payment one. Thus this global signed dual bound concerns unrestricted
+203: payments and cannot silently be promoted to a price-plus-reserve rule.
+204: 
+205: The bound applies to a selected finite Q or any report-domain restriction
+206: on which the same J really is frozen. In a full product of nontrivial report
+207: boxes, growing numbers of owners can vary across finite certificates, so
+208: k_H is not uniformly controlled by s. Compactness does not remove this gap.
+209: For k=0, the single common complete profile uses efficient static prices and
+210: factor one; it need not use the rank charges in (5).
+211: 
+212: 7. CHECKS, PRIOR-NOTE SEARCH, AND AUDIT STATUS
+213: signed_followup.py verifies coverage, full OUT including passive members, and
+214: budget accounting for 48 mixed-owner min-three profiles across three different
+215: frozen backgrounds. It also performs exact harmonic singleton-flow path
+216: compression for m=2,4,8,16,32, checking unchanged divergence and nondecreasing
+217: OUT objective. Results are saved in signed_followup.json. Fractions only.
+218: These checks supplement the arbitrary-rank/size proofs, not replace them.
+219: 
+220: A case-insensitive search of the sealed campaign inputs and the current
+221: workspace for frozen/static/constant/varying-owner elimination terms found no
+222: matching prior statement. This is not an exhaustive historical or project-wide
+223: novelty search; the lemmas are elementary and should be treated as structural
+224: bookkeeping results. The parent should check any other historical notes before
+225: calling them new. No recursive cross-model review was launched by this worker.
+226: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE price_lift_route/additive_followup.txt
+1: SHARP TCWM ADDITIVE REPAIR FOR ONE MINIMUM TECHNOLOGY
+2: 20 October 2026. Bounded follow-up. No general sparse upper improvement.
+3: 
+4: RESULTS
+5: For F(c)=min_{a<=r} c_a, r>=2, the sharp universal extra funding coefficient
+6: for a TCWM correction to an arbitrary valid full-OUT rule is exactly r,
+7: independent of the actual owner count, mixed ownership, real report boxes,
+8: and protected coalition size s>=1. Thus the coefficients are 2 for min2 and
+9: 3 for min3. The upper uses the EXISTING CEA calibration; the lower below is
+10: a separate exact consequence for the correction problem.
+11: 
+12: The same pure-owner institution gives a SHARP ALL-REAL OPTIMIZED ARCHITECTURE
+13: GAP: unrestricted full-OUT optimum 1 versus efficient-price-dominating optimum
+14: r, already requiring only singleton TCWM for the restricted lower. For its
+15: specified efficient input mechanism the weaker sum-only additive repair cost
+16: is exactly r-1. These are separate conclusions from the TCWM-correction cost r.
+17: 
+18: Here the correction problem requires Z>=0, sum_i Z_i<=A F(B), TCWM of Z
+19: itself for the protected coalitions, and an efficient nonnegative production
+20: price p at every profile satisfying p.b_i<=Y_i+Z_i. The input Y is any
+21: nonnegative coalition-covering full-OUT rule with a finite funding factor.
+22: TCWM of Z preserves full OUT of Y+Z. This problem is STRONGER than requiring
+23: only that Y+Z be full OUT. The sharp lower does not apply to that weaker form.
+24: 
+25: 1. EXISTING CONSTRUCTION SEARCHED FIRST
+26: Before choosing selectors, inspected OLD campaign constructive/ROUTE_LEDGER.txt,
+27: PERSPECTIVE_DUAL_PRICE_FAILURE.txt, AGGREGATE_COMMON_PRICE_INDEPENDENT_CHECK.txt,
+28: and capped_awards_calibration/CEA_MINIMUM_FULL_OUT.txt. OLD denotes
+29:   ../2026-10-18-coalition-size/
+30: relative to the NEW campaign's parent research-campaigns directory.
+31: The CEA calibration already supplies the needed upper; the rejected convex,
+32: normalized-marginal and common-price selectors are not revived here.
+33: 
+34: 2. UPPER A=r FOR ARBITRARY ACTUAL MIXED OWNERS
+35: Let E=min_a B_a. For each row a, allocate estate E by constrained equal awards
+36: among the ACTUAL owners with claims b_ia:
+37:   t_i^a=min(b_ia,lambda_a),  sum_i t_i^a=E.
+38: Use the smallest nonnegative water level solving the equation, with lambda=0
+39: at E=0. Define Z_i=sum_a t_i^a. Then sum_i Z_i=rE and Z>=0, including E=0.
+40: 
+41: For a protected coalition C's restoration, each row's C claims weakly rise,
+42: outsider claims stay fixed, and E weakly rises. If the new water level is
+43: at least the old one, each C award weakly rises. If it decreases, every
+44: outsider award weakly falls, so the coalition's award, equal to the estate
+45: minus outsider awards, weakly rises. Thus each row's C total, and therefore
+46: Z_C, is TCWM. This finite argument handles passive members, ties and zeros.
+47: 
+48: Choose any bottleneck row h with B_h=E. Its estate is its entire claim sum,
+49: so t_i^h=b_ih for every owner. The efficient price p=e_h then satisfies
+50:   p.b_i=b_ih<=Z_i<=Y_i+Z_i.
+51: This proves the correction theorem. It uses only nonnegativity of Y; its
+52: validity as an input mechanism matters when concluding that Y+Z is full OUT.
+53: The OLD note proves the stronger fact that Z itself is full OUT: along a
+54: restoration segment, split at finitely many bottleneck changes; on each
+55: subsegment the bottleneck row's C award increment equals that row's restored
+56: quantity, while all other row award increments are nonnegative.
+57: 
+58: 3. MATCHING LOWER A>=r, EVEN WITH AN EFFICIENT INPUT MECHANISM
+59: Use r fixed actual owners. Owner i owns only resource i and reports
+60:   b_i=c_i e_i,   c_i in[0,1].
+61: These are legal fixed coordinate boxes; pure ownership is a subclass of the
+62: arbitrary mixed-ownership theorem. Let V(c)=min_i c_i. Select an owner w(c)
+63: with maximum c_i, resolving ties by a fixed ordering, and define
+64:   Y_w(c)=V(c),   Y_i(c)=0 for i!=w(c).
+65: This rule has factor ONE and covers all coalitions: every proper coalition
+66: lacks a resource and has worth zero, while grand worth is V.
+67: 
+68: It is full OUT for every coalition. For a proper coalition C, restored
+69: resources have a missing row, so F(delta_C)=0. If the old selected maximum
+70: is in C, increasing C's reports cannot move the selected maximum outside C:
+71: outsiders are unchanged, and the old winner remains at least as large as
+72: every outsider with the same fixed tie priority. Thus Y_C stays equal to V
+73: or increases from zero to V. Since V is nondecreasing, this is TCWM. For
+74: the grand coalition, total payment is V and
+75:   min_i(c_i+delta_i)-min_i c_i >= min_i delta_i,
+76: which is full OUT. Zero output is handled by the same formulas.
+77: 
+78: Let H=(1,...,1). For each owner i and each real t in(0,1), let L_i(t) have
+79: c_i=t and every other coordinate one. Its production dual p>=0,sum p>=1
+80: has objective
+81:   t sum_a p_a + (1-t) sum_{a!=i}p_a.
+82: Its UNIQUE efficient price is e_i. Owner i is not a maximum, so
+83:   Y_i(L_i(t))=0,   p.b_i=t.
+84: Any admissible correction must therefore satisfy Z_i(L_i(t))>=t. The
+85: comparison L_i(t)->H restores ONLY owner i's own resource. Singleton TCWM
+86: of Z gives Z_i(H)>=t. Since this holds for every t<1, Z_i(H)>=1 without any
+87: continuity assumption. Summing over all r actual owners gives
+88:   sum_i Z_i(H)>=r,   F(B_H)=1.
+89: Hence A>=r. The rational sequence t=1-1/m gives finite exact certificates
+90:   sum_i Z_i(H)>=r(1-1/m),
+91: approaching r. This lower needs only singleton TCWM of the correction and
+92: therefore applies for every protected size s>=1. It does NOT split owners,
+93: alter the roster between comparisons, or assume dummy payments vanish.
+94: 
+95: Combining sections 2 and 3 proves the exact value r. For r=1 the distinct
+96: answer is zero: singleton coverage already dominates the additive technology's
+97: efficient price, so Z=0 works.
+98: 
+99: 4. WHY TCWM OF THE CORRECTION IS A REAL EXTRA RESTRICTION
+100: For the pure-owner lower example, set Y'_i(c)=V(c) for every owner and
+101: Z'_i=Y'_i-Y_i>=0. Then sum_i Z'_i=(r-1)V, Y' dominates every efficient price,
+102: and Y' is full OUT. However Z' is not TCWM: when an owner increases its report
+103: enough to become the selected maximum, its correction may drop from V to zero.
+104: Thus even this example permits a cheaper repair when only the sum Y+Z must
+105: be full OUT.
+106: 
+107: 4A. SHARP ALL-REAL ARCHITECTURE GAP ON THIS SAME INSTITUTION
+108: This consequence was identified by the parent task and independently checked
+109: here. Let W be ANY price-dominating rule on the entire pure-owner report box
+110: that satisfies singleton TCWM. At L_i(t), efficient-price domination forces
+111: W_i(L_i(t))>=t regardless of the input Y. Restoring owner i to H therefore
+112: forces W_i(H)>=t for every t<1, so W_i(H)>=1. Hence sum_i W_i(H)>=r, and its
+113: funding factor is at least r. No continuity or particular price selector is
+114: assumed. The rule W_i(c)=V(c) for every owner attains factor r, dominates every
+115: efficient price (each nonnegative owner charge is at most total V), and is
+116: full OUT: for every nonempty C its increment is |C|[V(h)-V(l)]>=F(delta_C).
+117: The unrestricted maximum-selector rule above has factor one, which grand
+118: coverage makes optimal. Both exact optima hold for every s>=1.
+119: 
+120: If W=Y+Z>=Y is required but Z need not be TCWM, the terminal lower implies
+121: sum_i Z_i(H)>=r-1, since sum_i Y_i(H)=1. The explicit W_i=V repair in section4
+122: has sum_i Z_i=(r-1)V at every profile, proving its sharp correction coefficient
+123: r-1 for this specified input mechanism. The weaker arbitrary-mixed-owner
+124: repair coefficient is not determined here.
+125: 
+126: Comparison with OLD: inspected reviews/next_frontier_synthesis/
+127: PRICE_BASE_RISK_CHECK.txt in full and searched the constructive/root/next-
+128: frontier notes for this maximum-selector and pure-owner optimum argument.
+129: The inspected prior result is the twelve-profile fully eligible mixed min3
+130: fixture with optimized factors 5/4 versus 3/2 and explicitly no all-real
+131: attainment claim. The present result is an all-real separation on a DIFFERENT
+132: institution with pure eligibility and optima 1 versus r. It is not a claim
+133: that the earlier fully eligible institution has these optima, nor a historical
+134: novelty certification. Its t->1 proof uses nonbinary reports; it does not
+135: contradict the earlier binary unit-worth ideal analysis. At fixed arity three
+136: the gap is the constant 3 versus 1, so it leaves the growing-s exponent open.
+137: 
+138: 5. A VALID GROWING-RESOURCE EXTENSION, AND ITS LIMIT
+139: The same construction extends to resource-disjoint minimum blocks. Suppose
+140:   F(B)=sum_e pi_e min_{a in S_e}(B_a/A_ae),
+141: where the nonempty row sets S_e are pairwise disjoint, |S_e|<=r, and all
+142: displayed A_ae,pi_e are positive. Actual owners may supply many rows and blocks.
+143: In block e run CEA on normalized row claims b_ia/A_ae with estate
+144: E_e=min_{a in S_e} B_a/A_ae, multiply awards by pi_e, and sum blocks. Every
+145: block's coalition total is TCWM; total correction is
+146:   sum_e |S_e| pi_e E_e <= rF(B).
+147: Selecting one bottleneck per block gives a global efficient feasible price,
+148: and the same bottleneck-award argument proves domination. This includes
+149: arbitrarily many owners and resources, but EXCLUDES competition for a shared
+150: resource between activities. The bound is sharp already on one block.
+151: 
+152: For a shared-resource packing technology the two direct estate choices fail:
+153: 
+154: (a) Standalone estates have an unbounded budget. With m activities K+L_j->1,
+155:     capacities K=L_1=...=L_m=1 give F=1. Each standalone activity estate is one,
+156:     so independently adding its two-row CEA payments costs 2m. Arity is two.
+157: 
+158: (b) Efficient primal estates need not be coalition monotone. Reuse the exact
+159:     OLD/NEW retained fixture from inputs/PRICE_CHARGE_FRONTIER.txt: activities
+160:     K+A+B->1 and K+C->1+epsilon; owner0 has A=B=1,C=t,K=0, owner1 has K=1.
+161:     For 0<t<1 the unique optimal plan is (1-t,t). Applying per-activity CEA
+162:     with those estates assigns each row's full estate to its sole supplier.
+163:     Owner0's resulting award is
+164:       2(1-t)+(1+epsilon)t=2-(1-epsilon)t,
+165:     which strictly decreases as owner0 restores C when 0<epsilon<1.
+166:     This is the existing efficient-plan switching obstruction, not a new one.
+167: 
+168: Thus the old fixed rank-surplus failure blocks the straightforward shared-
+169: resource extension of the successful CEA correction. No new estate-selection
+170: inequality controlling both its budget and coalition changes has been proved.
+171: 
+172: 6. CONCRETE CONSEQUENCE FOR THE GENERAL UPPER GATE
+173: The min_r correction above has the STRONGER property that Z alone dominates
+174: an efficient production price. A universal arity-three extension with this
+175: property, TCWM for all coalitions of size<=s, and constant total cost A F
+176: would make Z itself a coalition-covering TCWM rule of factor A. The retained
+177: general lower K_3(s)>=sqrt(s/6) rules this out for fixed A and growing s.
+178: Consequently a constant-cost general additive repair, if it exists, MUST
+179: use the input payments Y in its domination argument; it cannot be obtained
+180: by adding an independent constant-cost price-dominating blanket of CEA awards.
+181: More quantitatively, any universal blanket of that kind has A>=sqrt(s/6).
+182: 
+183: The weaker goal p.b_i<=Y_i+Z_i may still admit a small correction and is not
+184: excluded by that lower. Such a repair would compare optimized architectures
+185: (at most an additive A overhead); it would not itself improve the currently
+186: known unrestricted 3s^2 upper. A general exponent improvement still requires
+187: a new globally valid mechanism or estimate, beyond the min/disjoint-block
+188: calibration solved here.
+189: 
+190: VERIFICATION
+191: additive_followup.py checks the efficient maximum-selector input rule and its
+192: sum-only repair on exact rational grids, the finite correction and architecture
+193: lower identities, and mixed-owner CEA
+194: funding, price domination, coverage and full OUT on exact grids. The universal
+195: claims are proved above; finite checks supplement them. No recursive review
+196: was launched. Parent task owns independent verification and integration.
+197: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

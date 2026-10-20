@@ -1,0 +1,252 @@
+BUDGET-SUPPORTED PRICE EFFICIENCY: EXACT WITNESSES, OPEN GENERAL LEMMA
+21 October 2026 UTC. Bounded diagnostic; no upper-bound gate pass.
+
+RESULT
+All 56 previously stored finite dual supports admit nonnegative, production-
+dual-feasible rational prices whose defects are nonnegative on every positive-
+weight comparison, with prices efficient at every positive-budget profile.
+There are 39 supports with comparisons and 17 without them. This includes the
+seed-15 optimal certificate that obstructs efficient prices at EVERY profile.
+The explicit seed-15 escape below has excess price cost 1/3 only at a profile
+with zero budget multiplier. Its budget-weighted excess is therefore zero.
+
+These are exact existence certificates for the 56 FIXED stored supports, not
+a theorem about all optimal duals. The source duals are exact feasible lower
+certificates selected by the numerical optimum solver; exact primal optimality
+was separately proved for seed 15 in the frozen price_selection_diagnostic.
+No exact primal optimum is newly asserted for the other 55 cases.
+
+1. EXACT ACCOUNTING IDENTITY
+Let F(B)=max{pi.x: Ax<=B,x>=0} for a finite nonnegative packing program with
+finite value. For profile q write B_q=sum_i b_qi, V_q=F(B_q). A feasible
+certificate has coverage weights lambda_qC>=0, full-OUT weights mu_e>=0 on
+actual coalition edges e=(l,h,C), budget weights nu_q>=0, and nonnegative
+payment slacks sigma_qi satisfying the actual-owner balance
+
+  g_qi := sum_(C contains i) lambda_qC
+          +sum_(e:high=q,i in C) mu_e
+          -sum_(e:low=q,i in C) mu_e = nu_q-sigma_qi.
+
+Each mu remains a single shared coefficient for its WHOLE coalition.
+Set d_e=F(sum_(i in C)(b_hi-b_li)),
+  L=sum lambda_qC F(b_qC)+sum mu_e d_e,
+  D=sum nu_q V_q.
+Choose arbitrary nonnegative production-dual-feasible prices p_q:
+  A^T p_q>=pi.
+Define
+  u_qi=p_q.b_qi,
+  epsilon_q=p_q.B_q-V_q>=0,
+  k_qC=u_q(C)-F(b_qC)>=0,
+  a_e=u_l(C)-u_h(C)+d_e.
+Then the EXACT signed identity is
+
+  L-D = sum_e mu_e a_e -sum_qC lambda_qC k_qC
+        -sum_qi sigma_qi u_qi +sum_q nu_q epsilon_q.          (1)
+
+Proof: summing the owner balance against u gives
+  sum lambda u(C)+sum mu[u_h(C)-u_l(C)]
+    =sum nu(V+epsilon)-sum sigma u.
+Substituting F(b_C)=u(C)-k and the definition of a proves (1).
+
+The last term in (1) is NONNEGATIVE. Dropping it for arbitrary feasible prices
+would produce an invalid upper inequality. It vanishes exactly when
+nu_q epsilon_q=0 at every q; in particular it vanishes when prices are efficient
+at every q with nu_q>0. Thus efficiency at zero-budget profiles is unnecessary
+for this certificate accounting identity. Once this condition holds,
+
+  L-D = sum mu a -sum lambda k -sum sigma u.                  (2)
+
+This observation concerns certificate-dependent prices. It does not construct
+an all-profile efficient-price-plus-reserve payment architecture. At zero-
+budget profiles an inflated base may exceed the production value, and the
+relevant budget support itself depends on the selected certificate.
+
+2. FINITE FEASIBILITY CRITERION
+Fix one feasible certificate on a finite profile set, its positive comparison
+support E, and Bplus={q:nu_q>0}. The relaxed selection problem is
+
+  p_q>=0, A^T p_q>=pi                         for every q,
+  B_q.p_q=V_q                                for q in Bplus,
+  b_C(h).p_h-b_C(l).p_l<=d_e                  for e in E.    (P_B)
+
+Only profiles incident to positive certificate rows need be explicitly kept;
+prices at all other profiles can be completed by any efficient production
+prices. The comparisons imposed on prices are precisely positive-mu rows,
+not every legal comparison in the underlying payment LP.
+
+For alpha_qj>=0, beta_e>=0 and free tau_q supported on Bplus, let
+
+  G_qa = -sum_j A_aj alpha_qj + 1_(q in Bplus) tau_q B_qa
+         +sum_(e:high=q) beta_e b_Ca(q)
+         -sum_(e:low=q) beta_e b_Ca(q).
+
+Finite Farkas duality gives: (P_B) is feasible if and only if every such tuple
+with G_qa>=0 satisfies
+
+  -sum alpha_qj pi_j +sum beta_e d_e +sum_(q in Bplus)tau_q V_q >=0. (F_B)
+
+Proof: combine the inequalities -A^T p<=-pi and the comparison inequalities,
+plus the supported efficiency equalities. Nonnegative resulting coefficients
+and negative RHS contradict p>=0. The finite Farkas alternative gives the
+converse. In particular, there is NO free efficiency multiplier at nu_q=0.
+
+An always-feasible phase-I LP replaces the comparison RHS by d_e+q_e, q_e>=0,
+and minimizes sum_e mu_e q_e, using the original positive weights. A rational
+feasible solution of objective zero certifies (P_B). Its dual maximizes
+  sum alpha pi -sum beta d -sum tau V,
+subject to G>=0 and 0<=beta_e<=mu_e. A strictly positive exact dual objective
+would certify an obstruction to (P_B). The retained witnesses all have zero
+primal objective, so no numerical lower bound or solver tolerance is needed.
+
+3. SEED 15: EXPLICIT ESCAPE AND EXACT ACCOUNTING
+Resource order is A,B,C,D. The production activities, in order, are
+  A+B+C, B+C+D, A+B+2D, 2A+C+D,
+with profits 5/2,5/2,5/2,1. Owners are indexed 0,1,2,3.
+The five relevant profiles, listing their four owner reports, are
+  L=37:  (0, A, B, 2C),
+  P=101: (2B, A, B, 2C),
+  M=133: (A, 0, B, 2C),
+  Q=149: (A, D, B, 2C),
+  R=165: (A, A, B, 2C).
+Their values are 5/2,5/2,5/2,17/6,5/2, respectively. Exact primal and dual
+production witnesses and complete payment-system checks are preserved in
+../price_selection_diagnostic; the new verifier also rechecks every source
+production oracle using rational primal/dual witnesses.
+
+Use the following prices and resulting actual-owner charges:
+
+  node   p_(A,B,C,D)             u_(0,1,2,3)            p.B-F
+  L      (0,5/2,0,1)             (0,0,5/2,0)            0
+  P      (5/2,0,0,5/2)           (0,5/2,0,0)            0
+  M      (0,5/2,1/6,5/6)         (0,0,5/2,1/3)          1/3
+  Q      (1/3,13/6,0,1/3)        (1/3,1/3,13/6,0)       0
+  R      (0,5/2,0,1)             (0,0,5/2,0)            0
+
+Every price is nonnegative and satisfies all four production dual inequalities.
+At M, the fourth inequality is tight: 2p_A+p_C+p_D=1; the other three LHS
+are 8/3,7/2,25/6, all at least 5/2. The M price cost is 17/6 versus V_M=5/2.
+
+In the unnormalized displayed optimal dual, all six positive comparison
+weights are one, all six d_e are zero, and the defects are
+
+  L -> R, {0,1}: 0       L -> P, {0,2}: 5/2
+  L -> R, {0,3}: 0       M -> R, {0,1}: 0
+  M -> R, {1,2}: 0       M -> Q, {1,3}: 0.
+
+Budget weights are nu_P=2, nu_Q=2, nu_R=5, nu_L=nu_M=0.
+Coverage weights are one at L123, P013, P123, M023, Q012, Q023,
+and two at R023 and R123. The only positive coverage-price slacks are
+  k_M,023=1/3 and k_Q,012=19/12,
+so the weighted coverage slack is 23/12. The only positive payment slacks
+are sigma_L,0=sigma_M,1=3, both with zero price charge. Hence
+
+  L=95/4, D=139/6, sum mu a=5/2,
+  sum lambda k=23/12, sum sigma u=0, sum nu epsilon=0,
+  L-D=7/12=5/2-23/12.
+
+Scaling the entire dual by 6/139 gives D=1, L=285/278, with zero negative
+price-defect mass. In contrast, prices efficient at EVERY profile force the
+edge M->Q,{1,3} to have defect -1/3. The frozen theorem about that stronger
+restriction remains valid; it does not extend to (P_B).
+
+This witness asserts nonnegative defects only on the six supported edges.
+For example M->Q,{1} is a legal but unsupported comparison and still has
+price defect -1/3. No claim of price monotonicity on every comparison is made.
+
+4. EXACT CHECKS AND FILES
+check_stored_supports.py solves only the 56 existing supports, seeds 10--65,
+with no newly generated lattices or payment LP changes. It rationalizes
+candidate prices and checks exact feasibility before saving case_<seed>.json.
+results.json and screen.log contain the complete screen.
+
+verify_exact.py is standard-library only. It independently reconstructs the
+price constraints from semantic source tags; calls the frozen standard-library
+certificate checker to recheck all source production primal/dual witnesses,
+legal actual-coalition rows and exact dual balances; and directly checks for
+every new witness:
+  production-price feasibility,
+  efficiency at every positive-budget node,
+  every positive-mu defect >=0,
+  nonnegative coverage and payment slacks,
+  the complete identity (1), including the budget-excess term.
+It also separately checks the explicit seed-15 prices in section 3.
+
+Run from this folder:
+  python3 verify_exact.py
+Output: EXACT PASS; 56 cases, 39 with comparisons, 17 without comparisons.
+Detailed output is EXACT_VERIFICATION.json; the compact explicit witness is
+seed15_root_witness.json. No frozen source file was modified.
+
+5. PRECISE UNRESOLVED CLAIM AND LIMIT OF THE DIAGNOSTIC
+Strong proposed statement: for every finite admissible report system and every
+optimal unrestricted feasible dual, (P_B) is feasible.
+A weaker normalization statement asks only whether some optimal dual on that
+same profile system admits (P_B). Neither is proved or refuted here. The new
+56-support result includes one exact optimum already known to obstruct every-
+profile efficient prices, so that obstruction cannot refute either statement.
+
+An exact remaining inequality is (F_B): derive its nonnegativity for every
+alpha,beta,tau with G>=0 from optimality of the original whole-coalition dual,
+or provide one optimal certificate together with a rational tuple violating
+(F_B). Actual-owner dual balances alone give (1), not this Farkas inequality;
+complementary slackness for an optimal payment vector constrains payments,
+whereas (F_B) constrains production prices. No valid implication between them
+has been established in this diagnostic.
+
+Even a proof of the strong statement would only remove negative supported
+price defects. It would not itself bound sum mu a -sum lambda k -sum sigma u
+relative to D by a target depending on coalition size/arity. Such a uniform
+accounting estimate remains necessary for a general upper-bound improvement.
+The permitted zero-budget price inflation can increase both positive defects
+and coverage slack, as the explicit seed-15 identity demonstrates.
+
+6. TERMINAL-BUDGET SELECTION CAN REQUIRE UNBOUNDED OFF-BUDGET INFLATION
+Attribution: root derivation, independently checked here. This is a scoped
+quantitative limitation, related to the earlier scalar-lift family; no novelty
+claim or new unrestricted mechanism lower bound is intended.
+
+Let F(A,B,K)=min(A,B,K), implemented by one unit-profit activity using all three
+resources. There are two actual owners with fixed boxes
+  Rbar=(3,0,0), Cbar=(1,2,3).
+For any real 0<t<1 retain two profiles with R=(3,0,0) fixed and
+  C_low=t(1,2,3), C_high=(1,2,3).
+The protected coalition is the singleton C, so r=3 and s=1. Give coverage
+lambda_low,{C}=1, comparison mu_low->high,{C}=1, and budget nu_high=1.
+All other multipliers vanish. The owner balances are
+  g_low,R=g_low,C=g_high,R=0, g_high,C=1.
+Thus g<=nu, with sigma_high,R=1 and all other payment slacks zero. The low
+tail bundle is nonzero and the only positive-budget node is terminal. There
+are no local zero-report labels to erase. Values are
+  F_low=2t, F_high=2, F(C_low)=t, F(delta)=1-t,
+so this feasible certificate has L=1 and D=2.
+
+The high total is (4,2,3), with unique bottleneck B. For a feasible production
+price p>=0, p_A+p_B+p_K>=1, its cost satisfies
+  4p_A+2p_B+3p_K = 2(p_A+p_B+p_K)+2p_A+p_K >=2.
+Equality forces p_A=p_K=0 and p_B=1. Hence budget-supported efficiency forces
+p_high=e_B and u_C(high)=2. Nonnegative supported defect therefore requires
+  u_C(low)>=2-F(delta)=1+t.
+The low total is (3+t,2t,3t); nonnegative prices imply
+  p_low.B_low = u_C(low)+3p_low,A >=1+t.
+Consequently EVERY price selection meeting these requirements has
+  p_low.B_low / F_low >= (1+t)/(2t),
+which diverges as t tends to zero. Equality is achieved by the feasible price
+  p_low=(0,(1+t)/(2t),0),
+because (1+t)/(2t)>1, its low total cost is 1+t, and its supported defect is
+zero. Thus the stated inflation ratio is the exact minimum, not just a bound.
+
+This proves that a qualitative terminal-budget price-selection lemma cannot
+also promise a uniform multiplicative bound on off-budget price cost, even at
+fixed r=3,s=1. It does not refute price selection for optimal certificates:
+this particular certificate has ratio 1/2 and is not asserted optimal. Nor
+does it imply any unrestricted funding lower bound. In identity (1), its
+coverage-price slack is exactly 1, its supported defect is zero, and its
+budget excess is zero, giving L-D=-1 with no divergent accounting term.
+
+verify_exact.py additionally checks seven rational instances of this family,
+including all displayed balances, price feasibility, unique-bottleneck data,
+values, attained ratios and the signed identity. root_inflation_family.json
+records these checks. The all-real proof is the algebra above, not an inference
+from the finitely many checks.
+
+FROZEN after exact verification. No general lemma or upper gate pass claimed.

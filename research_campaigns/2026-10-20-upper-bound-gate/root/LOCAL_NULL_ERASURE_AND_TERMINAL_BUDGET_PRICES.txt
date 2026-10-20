@@ -1,0 +1,172 @@
+LOCAL NULL-INCIDENCE ERASURE AND PRICES FOR TERMINAL BUDGET SUPPORT
+21 October 2026 UTC. Parent derivation; native and opposite-model review complete.
+This is a finite-certificate normalization and sufficient price-selection
+lemma. It gives no improved unrestricted funding bound or novelty clearance.
+
+1. EXACT DOMAIN AND DUAL
+Use the fixed-owner real-box finite packing model in CONTRACT.txt. The finite
+profile set Q contains complete actual-owner report vectors, with b_i(p)>=0
+coordinatewise for EACH owner. The real report boxes lie in the nonnegative
+orthant. A legal distinct
+comparison e=(l,h,C) restores only members of C coordinatewise; outsiders are
+fixed, passive members are permitted, and |C|<=s. Comparisons have one shared
+whole-coalition weight mu_e>=0. For full OUT, d_e=F(delta_e), where
+delta_e=sum_i(b_i(h)-b_i(l)). Let lambda_(p,S),nu_p>=0 and
+  g_(p,i)=lambdaInc_(p,i)+incoming_mu_(p,i)-outgoing_mu_(p,i)<=nu_p.
+Put L=sum lambda F(b_S)+sum mu d_e and D=sum nu F(B).
+Discard zero-mu rows and trivial self-rows before forming the comparison graph;
+throughout, this graph contains only positive-mu comparisons. Every remaining
+edge strictly increases the sum of all resource coordinates: monotone reports
+and fixed outsiders imply that a distinct endpoint changes at least one
+coordinate positively. Therefore the finite comparison graph is a DAG.
+
+2. LOCAL NULL-INCIDENCE ERASURE
+At each coverage row (p,S), remove every owner i whose WHOLE report b_i(p) is
+zero. Its aggregate resource bundle and hence its right side are unchanged.
+If the resulting coalition is empty, its zero-right-side row may be discarded.
+At each comparison (l,h,C), remove every member i with b_i(l)=b_i(h)=0.
+The row stays legal: these members were unchanged, every changed member remains,
+and the coalition only shrinks. Its delta and full-OUT right side are unchanged.
+An empty resulting comparison coalition would force identical endpoints and
+therefore cannot occur among the distinct comparisons retained above.
+Combine identical resulting rows by adding their nonnegative weights.
+
+For an owner/profile with b_i(p) nonzero, NO incident coefficient for that
+owner has been removed. Its g is unchanged. For an owner/profile with b_i(p)=0,
+all of that owner's coverage incidence vanishes. Every incoming comparison has
+b_i(low)=b_i(p)=0 by monotonicity, so its incoming incidence is erased too.
+The only remaining incidence is negative outgoing incidence on comparisons
+where that owner changes from zero to a positive report. Therefore its new
+g is <=0<=nu_p. This proves dual feasibility, with EXACTLY the same L and D.
+
+The operation is local to owner/profile pairs; it does not require an owner
+to be zero at every profile. It does not assert that the mechanism pays zero
+reporters zero. It changes the certificate's labels using valid contract rows.
+Arity and owner count are irrelevant to this normalization.
+
+3. REPLACE COMPARISONS WITH AN ENTIRELY ZERO LOW COALITION
+After section2, suppose an edge has b_C(l)=0. Nonnegativity of resources means
+every member's low report is zero. Every surviving member has a positive high
+report, since unchanged zero members have already been erased. Replace this
+edge's multiplier mu by an additional coverage multiplier of the SAME weight
+on (h,C), removing the comparison.
+
+At high owner/profile coordinates the positive coefficient is unchanged. At
+the low coordinates the negative outgoing coefficient disappears, but section2
+ensures that the remaining g at each such zero-report owner is still a sum
+of negative outgoing terms, hence <=0<=nu. This remains true when all such
+edges are replaced simultaneously. At other owner/profile pairs nothing changes.
+Because outsiders were fixed and b_C(l)=0,
+  delta_e=b_C(h),  F(delta_e)=F(b_C(h)).
+Thus full-OUT L and D are exactly preserved. Every retained positive-mu edge
+now has a NONZERO aggregate low coalition bundle b_C(l).
+
+For the TCWM-only dual the same substitution can increase L, since it replaces
+a zero comparison right side by nonnegative F(b_C(h)); it does not decrease L
+and still preserves D. The equality claim above is specifically full OUT.
+
+4. A GENERAL SUFFICIENT PRICE-SELECTION LEMMA
+Assume the original dual has TERMINAL BUDGET SUPPORT: no profile with nu_p>0
+is the tail of a positive-mu comparison. A budget profile may be a sink or
+isolated. The normalizations above only erase comparisons, so preserve this
+property. They do not add profiles or change nu or D; they may change lambda.
+
+Then the normalized dual admits nonnegative feasible production prices p_p
+such that
+  B_p.p_p=F(B_p) at EVERY profile with nu_p>0,
+  a_e=p_l.b_C(l)-p_h.b_C(h)+F(delta_e)>=0
+       on EVERY retained positive-mu comparison.
+There is no efficiency requirement at zero-budget profiles.
+
+PROOF. A strictly positive feasible price vector w exists: for finite A,pi
+with every positive-profit column consuming a resource, take w=t*(1,...,1)
+where t>=1 and t>=pi_e/sum_a A_ae for each positive-profit column. Larger
+scalar multiples remain feasible. At each positive-budget profile choose an
+optimal nonnegative production dual price. Such profiles have no outgoing
+comparisons, so this choice creates no outgoing restriction.
+
+Process the other profiles in reverse topological order. At a nonbudget sink
+choose w. At any remaining nonbudget profile l, all successor prices have
+already been chosen. Section3 gives w.b_C(l)>0 for every outgoing comparison.
+Choose the finite scalar
+  t_l=max(1, max_(e:l->h) [p_h.b_C(h)-F(delta_e)]/[w.b_C(l)] )
+and put p_l=t_l*w. It is feasible and satisfies every outgoing a_e>=0.
+Every comparison is handled once and prices are shared across all edges at
+each profile. No member-specific comparison coefficient is introduced. QED.
+
+5. SIGNED ACCOUNTING AND WHY THIS DOES NOT PROVE A SMALL FUNDING FACTOR
+For the full-OUT dual and arbitrary feasible prices define u_(p,i)=p_p.b_i(p), coverage slack
+c_(p,S)=u_p(S)-F(b_S(p))>=0, and sigma=nu-g>=0. Direct summation gives
+  L-D = E + sum_e mu_e a_e - sum_(p,S)lambda_(p,S)c_(p,S)
+                         - sum_(p,i)sigma_(p,i)u_(p,i),
+  E=sum_p nu_p[p_p.B_p-F(B_p)]>=0.
+For the TCWM-only dual, with the same a_e definition, subtract the additional
+nonnegative term sum_e mu_e F(delta_e) from the right-hand side. The displayed
+identity without that subtraction is specifically full OUT.
+The preceding lemma makes E=0 because efficiency is required wherever nu>0.
+It shows that every-profile efficiency is stronger than needed for this
+particular dual identity. It does NOT produce an efficient price-base payment
+mechanism on all profiles, since nonbudget prices can be arbitrarily expensive.
+
+Nor does a_e>=0 control sum mu_e a_e by a useful multiple of D. Backward price
+scaling may enlarge that sum and the subtractive coverage/slack terms together.
+No rank-bound on these inflated prices has been proved. Thus the surviving
+problem is still a quantitative signed accounting inequality or a controlled
+budget/coverage transformation, not mere feasibility of these prices.
+
+The current five-profile obstruction retains its stated force for efficiency
+at EVERY profile. This lemma concerns a normalized dual and a different,
+budget-adapted price condition. It does not silently retract or generalize
+that fixed-Q result. The separate budget_price_relaxation note supplies an
+explicit escape for its stored support even without normalization.
+
+6. PROVENANCE AND LIMITS
+Derived after the opposite-model price review highlighted zero-budget price
+freedom. The earlier signed_followup note proved only global-zero and certain
+constant-owner label erasures; section2 is the local extension. A bounded
+search of the retained older campaign did not locate this exact statement,
+which is not evidence of historical novelty. All ingredients are elementary
+finite duality, monotonicity, and reverse topological induction.
+Independent proof review and exact diagnostic checks are recorded separately.
+
+7. DEMONSTRATED REACH, WITHOUT A GENERAL-BOUND CLAIM
+The exact normalization checker validates all 56 stored finite certificates.
+Of these, 38 have terminal budget support, including 21 with L/D>1. The
+largest such stored ratio is 15/11 (case 48); the exact five-profile obstruction
+also qualifies (case 15, ratio 285/278 on its complete original lattice).
+Backward prices are checked on all 38 qualifying supports and all 113 of their
+positive comparisons. These examples show nonvacuous reach, not universality.
+The manuscript's growing family is addressed separately in section 8 below.
+The other 18 stored supports fail the sufficient hypothesis even though all
+56 admit separately stored budget-adapted price witnesses. Thus terminal
+budget support is sufficient, not shown necessary. An extra explicit fixture
+tests the positive-OUT zero-low replacement absent from the stored 56.
+
+8. SCOPE CHECK ON THE EXISTING PROJECTIVE LOWER CERTIFICATE
+The certificate in inputs/core.tex, section "A square-root lower bound for
+arity three", also satisfies terminal budget support after expanding its
+finite symmetry average into actual-owner variables. Fix M>=2 (the M=1 case
+uses coverage and budget only). The profile C_m has total report mass
+  1+M+m.
+Owner and resource permutations preserve this mass. The certificate has budget
+rows only at group images of C_M, all of mass 2M+1. Every comparison is a group
+image of C_(m-1)->C_m with m<=M; its tail has mass M+m<=2M. Consequently no
+positive-budget profile can be a comparison tail, even if different symmetry
+images coincide. Expanding an average creates group images of the original
+rows; stabilizer identities require no additional strategic comparisons.
+
+Every restored bundle is a single unit resource row. The technology's activities
+require three distinct positive rows, so F(delta)=0, before and after the
+resource symmetry. The TCWM certificate is therefore also a full-OUT certificate
+with the same objective. Dormant-payment nonnegativity rows add only sigma and
+do not create comparison edges or budgets. The normalizations and price lemma
+apply with L and D unchanged. This covers the optimized tail on its stated
+domain s>=2 as well; k_m>=1 there, so each low protected coalition already has
+a positive-report old member and the zero-low replacement is unnecessary.
+
+This is an application to an EXISTING lower certificate, not a new lower bound.
+It demonstrates that the sufficient price lemma reaches a family with growing
+Omega(sqrt(s)) ratio. It also confirms that nonnegative price defects and E=0
+alone do not yield a constant upper bound. No subquadratic upper inequality
+follows. Parent source check and an independent native read-only audit agreed;
+this scope check was added after the opposite-model review of sections 1--6.

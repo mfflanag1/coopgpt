@@ -1,0 +1,20 @@
+**Provisional verdict: no substantive findings in reviewed scope** (both scoped lemmas check out as stated). The most important issue is an *unstated hypothesis* in (FB): the full-OUT step (6) silently requires that every comparison with `B_high ≠ B_low` changes some owner **inside** `C`; under a contract variant permitting a non-protected owner to restore, `W_C(high)-W_C(low)=0 < F(delta_e)` and (FB) fails.
+
+## Findings
+
+**1. (A) `certificate_route/signed_followup.txt:139–146` — missing explicit hypothesis for (6).**
+Evidence: (6) is `W_C(high)-W_C(low)=|C∩V|[F(B_high)-F(B_low)] >= d_e`. This needs `|C∩V|>=1`, justified only by "a distinct-profile admissible comparison must change a varying owner". That owner is in `V` by definition of `V`, but it is in `C` only because the contract freezes outsiders (`inputs/PRICE_CHARGE_FRONTIER.txt:35`). The weaker aggregate reading ("`B_out` same at both ends") also suffices (if C is unchanged and outsider aggregate is fixed then `delta_e=0`), but neither is stated. Severity: low-moderate (hypothesis hygiene, not an error). Verification: state "only `C` members' reports change" as a standing assumption and re-derive (6).
+
+**2. (A) lines 125–157 — signs and coverage verified.** `W>=0` needs `F(B_p)>=f_J` (monotonicity + nonnegative reports + fixed roster, all unstated but true for packing F). Coverage case 1 uses superadditivity `F(a_S)+F(A-a_S)<=f_J` plus (4); case 2 uses `B_p >= b_S(p)+a_{J\S}` and `|S∩V|>=1` — both correct, including `S` grand (there (4) with `S=J` forces `H_J>=f_J`, consistent). `L<=sum g W` matches the `g` definition at line 29–31 exactly; dropping `sum sigma W>=0` is legitimate; `f_J T<=D` gives `max(k,r)D` for both signs of `r-k`. Componentwise (9) is sound: the positive-`mu` graph partitions profiles, restricted `(lambda,mu,nu)` stay feasible (`g<=nu` is per-`(p,i)`), and isolated profiles get factor one from LP weak duality `F(b_S)<=p·b_S` with `p·B_p=F(B_p)`. No counterexample found.
+
+**3. (B) `price_lift_route/additive_followup.txt:34–57` — CEA upper is correct; the cited full-OUT-of-Z sketch is compressed.** Lines 54–57 sum per-subsegment bottleneck increments; the summary omits that this sum equals `E_high-E_low=F(B_high)-F(B_low)>=F(delta_C)`. Without that step the chain is not closed (segment-wise `min` is subadditive the wrong way). A shorter proof exists: at the high profile's bottleneck row `h`, awards equal claims, so `Z_C` rises by at least `delta_{C,h}>=F(delta_C)`, other rows by TCWM. Severity: presentational.
+
+**4. (B) lines 59–124 — lower `A>=r`, optimum 1 vs r, and `r-1` all verified.** Uniqueness of `e_i` at `L_i(t)` for `t<1` is correct (`min p·c, sum p>=1`); `Y_i(L_i(t))=0` needs `r>=2` (r=1 handled at line 95); `W_i=V` dominates every efficient price because optimal duals load only minimal coordinates with `sum p=1` when `V>0`. Factor-1 optimality of the max-selector follows from grand coverage. The `r` (TCWM-of-Z) vs `r-1` (sum-only, this specific Y) distinction is consistently maintained; full OUT ⇒ singleton TCWM supplies the `r-1` lower.
+
+**5. (B) lines 172–181 — unverified external dependency.** The `A>=sqrt(s/6)` conclusion requires the retained `K_3(s)>=sqrt(s/6)` to bind *TCWM-only* coalition-covering rules (the `K3` vs `K3_OUT` labeling in `CONTRACT.txt:3` suggests yes). Not checkable here.
+
+## Scope limitations
+No execution: `signed_followup.py/.json`, `additive_followup.py`, `price_charge_check.py` were not in the packet; all finite-check counts are unverified. Inherited items outside the packet: `FINITE_AND_ALL_PROFILE_DUAL.txt` (Farkas/converse criterion), the "one-layer theorem" `L<=rD`, the OLD CEA note, and the `sqrt(s/6)` lower. `signed_followup.txt` §3 (singleton shortcut) and §6 were outside the assigned claims; §3's superadditivity/acyclicity steps looked locally fine on a skim. No novelty assessment performed.
+
+## Verdict
+No findings in reviewed scope, modulo Finding 1 (hypothesis to state) and Findings 3/5 (proof compression, external dependency). Neither lemma overclaims: both explicitly disclaim price-floor promotion, the all-real O(s) quantifier, and the unbounded-`k_H` gap.

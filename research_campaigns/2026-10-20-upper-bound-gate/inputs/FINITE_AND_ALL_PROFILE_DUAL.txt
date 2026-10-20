@@ -1,0 +1,164 @@
+EXACT FEASIBILITY DUAL FOR THE ACTUAL MULTIROW OWNER CONTRACT
+18 October2026. Bounded independent work by reserve_feasibility.
+Classical LP duality and product compactness; no novelty or improved s-bound claim.
+
+1. FIXED INSTITUTION AND THE FULL PROFILE INDEX
+Fix a finite owner set N, fixed actual endowments/eligibility, and one finite
+nonnegative packing technology F(c)=max{pi.x:x>=0,Ax<=c}. Every retained
+positive-profit column consumes a positive amount of some resource, so F is
+finite at every finite capacity vector. Let P be the domain of complete legal
+owner report profiles p=(b_i(p):i in N). Every b_i(p) is a RESOURCE VECTOR.
+Do not replace owner i by a separate strategic player for each resource row.
+No price formula, dummy-zero rule, continuity or measurability is required.
+
+For nonempty S subset N define v_(p,S)=F(b_S(p)), where b_S=sum_(i in S)b_i.
+Let f_p=F(c_p), c_p=sum_i b_i(p).
+An admissible protected comparison e=(l,h,C) has |C|<=s, identical outsider
+reports, b_i(h)>=b_i(l) componentwise for i in C, and both endpoints in P.
+It includes ALL members of C even if some retain identical reports. Let
+  delta_e=sum_(i in C)[b_i(h)-b_i(l)]>=0.
+For TCWM set d_e=0. For full OUT set d_e=F(delta_e).
+The set of changed owners must be contained in C; it need not equal C.
+
+2. FINITE PRIMAL
+For a finite Q subset P use unrestricted scalar payment variables y_(p,i)>=0
+for each p in Q and every ACTUAL owner i. Minimize K>=0 subject to
+  sum_(i in S)y_(p,i)>=v_(p,S),                  all p in Q and nonempty S;
+  sum_(i in C)[y_(h,i)-y_(l,i)]>=d_e,            all admissible e with l,h in Q;
+  sum_i y_(p,i)<=K f_p,                         all p in Q.
+This is a finite LP, with arbitrary real coefficients if the input reports
+or technology are real. For rational inputs the relevant LP values are rational.
+It is not a scalar-unit-agent surrogate: all original report coordinates enter
+the comparisons and coalition values, and there is one payment per actual owner.
+
+Finite feasibility is automatic at K=|N|: the all-profile rule y_i(p)=f_p
+is nonnegative, covers every nonempty coalition, and has that funding factor.
+Restoration gives f_h-f_l>=F(delta_e) by superadditivity, so even full OUT holds:
+the protected coalition's increase is |C|(f_h-f_l)>=F(delta_e).
+This crude bound is used only to settle finiteness/duality and compactness.
+
+3. FINITE DUAL AND THE SIGN CONVENTION
+Use nonnegative multipliers lambda_(p,S) for coverage, mu_e for comparisons,
+and nu_p for budgets. Define the owner/profile balance
+  g_(p,i)=sum_(S containing i)lambda_(p,S)
+          +sum_(e:h=p,i in C_e)mu_e
+          -sum_(e:l=p,i in C_e)mu_e.
+Dual feasibility is exactly
+  g_(p,i)<=nu_p  for every p,i,       sum_p nu_p f_p<=1.
+Its objective is
+  L=sum_(p,S)lambda_(p,S)v_(p,S)+sum_e mu_e d_e.
+There is ONE multiplier mu_e for the ENTIRE coalition C_e. It appears with
+the same coefficient for every member at BOTH endpoints. Giving each member
+an unrelated flow weight is a different and generally false dual system.
+
+With fixed K, define D=sum_p nu_p f_p. The exact Farkas criterion is:
+  the finite payment system is feasible iff L<=K D for EVERY nonnegative
+  lambda,mu,nu satisfying g<=nu.
+Necessity follows by multiplying the original inequalities:
+  L<=sum_(p,i)g_(p,i)y_(p,i)
+    <=sum_p nu_p sum_i y_(p,i)<=K D.
+The middle step uses y>=0. Sufficiency is finite-dimensional Farkas/LP duality.
+Writing sigma_(p,i)=nu_p-g_(p,i)>=0 makes the same certificate a weighted
+sum whose payment coefficients cancel exactly after adding sigma*y>=0 rows.
+
+When Q has a positive-production profile, its optimum K_Q is at least1 and
+equals max L under D<=1. A nonzero optimum can be normalized to D=1.
+There is no positive-L, zero-D certificate, since the K=|N| rule exists.
+When all f_p=0, every coverage/outside RHS is0 and K_Q=0; the D=1 normalization
+is then unnecessary and may be unavailable. Weak/strong duality handle this
+case without dividing by zero.
+
+4. ALL REAL PROFILES: EXACT FINITE-SUBSYSTEM EQUIVALENCE
+Fix finite K>=0. Consider the product of compact intervals
+  X=product_(p in P, i in N) [0,K f_p].
+Each coverage, comparison, and total-budget inequality defines a closed cylinder
+subset of X: it involves only finitely many coordinates, at one or two profiles.
+This uses the product topology on PAYMENT COORDINATES, not a topology on reports.
+No continuity of the mechanism as a function of its reports is assumed.
+
+If every finite Q admits the finite primal with factor K, any finite collection
+of these closed constraints is satisfiable. Take the finite union Q of the
+profiles appearing in that collection, use its feasible payments, and assign
+arbitrary values inside the intervals to all other coordinates. Tychonoff
+compactness and the finite-intersection property then give one payment function
+satisfying EVERY constraint on P. The converse follows by restriction.
+
+Therefore, for the one fixed institution,
+  K_*=sup_(finite Q subset P) K_Q,
+and the infimum K_* is attained because K_*<=|N| and every finite Q is feasible
+at that value. Equivalently, failure at any proposed fixed factor K always has
+a finite-profile Farkas witness with actual owners and actual comparisons.
+
+This is nonconstructive. It supplies no finite grid, bound on witness size,
+algorithm, measurability, report continuity, or implementable selection rule.
+Checking many finite grids does not verify all finite Q. A desired regularity
+axiom would require a separate argument; this compactness proof does not add it.
+
+5. EXACT RESOURCE-CONSERVATION INVARIANTS
+For any feasible finite dual set sigma=nu-g and define
+  B=sum_p nu_p c_p,
+  Delta=sum_e mu_e delta_e,
+  R=B-Delta.
+Multiplying every owner/profile balance by that owner's actual resource vector
+and summing gives the VECTOR IDENTITY
+  R = sum_(p,S)lambda_(p,S)b_S(p)
+      +sum_(p,i)sigma_(p,i)b_i(p) >=0.                 (RC)
+It holds coordinate by coordinate for mixed owners. Outsider reports are
+unchanged, so the comparison's aggregate capacity change equals delta_e.
+Also, summing balances without resources gives, for every actual owner i,
+  sum_(p,S containing i)lambda_(p,S)<=sum_p nu_p.
+
+By superadditivity, homogeneity and monotonicity,
+  L_TCWM<=F(R),
+  L_OUT<=F(R)+sum_e mu_e F(delta_e)<=F(B).             (RB)
+The first full-OUT bound is the more informative one. These are upper bounds
+on a GIVEN dual objective, not universal factors times D. They preserve the
+restoration amount under subdivision of a comparison with the same coalition
+and multiplier. Counting arcs or total mu alone has no such invariance.
+
+6. BUDGET PROFILES ON A COMMON OPTIMAL PRICE FACE CANNOT OBSTRUCT K=1
+Suppose one nonnegative resource price w satisfies A^T w>=pi and
+w.c_p=f_p for every p with nu_p>0. Using (RC) or the fixed-price payment rule,
+  L_TCWM<=w.B-sum_e mu_e w.delta_e<=D;
+  L_OUT<=w.B-sum_e mu_e[w.delta_e-F(delta_e)]<=D.
+Thus a certificate with ratio>1 requires budget profiles with no common optimal
+production dual price. In particular, no collection of coverage/incentive rows
+can force factor>1 using a budget at only ONE prescribed profile. The fixed
+price w optimal there defines y_i(b)=w.b_i everywhere, covers all coalitions,+satisfies full OUT, and is efficient at that profile (though possibly expensive
+elsewhere).
+
+Symmetrized projective lower certificates are fully consistent with this fact:
+their one budget variable represents the average over MANY transformed profiles.
+Expanding the symmetry average gives budget multipliers on that finite orbit,
+not one budget inequality for the original asymmetric mechanism.
+
+7. A COARSE PRICE-COVER BOUND FOR A GIVEN CERTIFICATE
+More generally, suppose ell dual-feasible prices w^1,...,w^ell collectively
+cover the budget support: for every p with nu_p>0, at least one has
+w^j.c_p=f_p. Let G(c)=min_j w^j.c. Then G>=F everywhere and G(c_p)=f_p on
+the budget support. Transform each ACTUAL owner's bundle to z_ij=w^j.b_i;
+this creates public linear resource coordinates, not new strategic owners.
+
+For T=G(c)>0, Z_j=sum_i z_ij, pay
+  Y_i=T sum_(j=1)^ell z_ij/Z_j;
+when T=0 pay0. Total is ell*T, and a bottleneck coordinate proves coverage
+of G and hence F. Along a coalition restoration, on a bottleneck-k cell,
+the derivative of its payment is
+  DeltaZ_k [1+sum_(j!=k) a_j/Z_j]
+  +sum_(j!=k) (T/Z_j)(1-a_j/Z_j) DeltaZ_j
+  >=DeltaZ_k>=min_j DeltaZ_j=G(delta)>=F(delta).
+Here a_j is the coalition's current holding in transformed coordinate j.
+These coalition-restoration derivatives are nonnegative; finitely many bottleneck changes and the bound
+0<=sum_C Y_i<=ell*T handle seams and zero-output boundaries. Thus full OUT
+holds. Applying weak duality to these payments yields L<=ell D.
+
+This is an exact certificate-structure bound, not O(s): no bound on the number
+of needed optimal-price faces in terms of s is proved. The one-price case is
+the preceding sharper invariant. Existing sharper min-ell mechanisms can also
+be substituted, but no such dependency is needed for this note.
+
+STATUS
+Finite Farkas/LP duality and the compactness lift are classical. The explicit
+resource balances and price-face tests provide useful checks and pruning rules;
+they do not establish an improved arity-three funding exponent or upper bound.
+The remaining packing inequality and failed shortcuts are in ATTACK_AND_GATE.txt.

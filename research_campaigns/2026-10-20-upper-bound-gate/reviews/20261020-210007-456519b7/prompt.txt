@@ -1,0 +1,649 @@
+Task and review objective:
+Independently audit two narrow mathematical claims. First audit the balanced two-terminal contraction lemma, especially coordinate-cut conservation, legality of whole-coalition endpoint rows, resource telescoping, and the distinction between comparison-only and full dual divergence. Check the exact scopes of both failed normalization examples. Second audit the root capped fractional-rule counterexample, including the static cap proof and the claim that arbitrary whole-coalition-worth-only corrections cannot repair the 1/18 loss. Give explicit gaps or counterexamples; do not expand the research program, execute tools, or claim novelty. No general upper bound improvement is claimed. The coordinator independently rederived the main cut argument and will run checks separately.
+
+
+FILE CONTRACT.txt
+1: UPPER BOUND FEASIBILITY GATE
+2: Target: all finite nonnegative packing technologies of activity support arity at most three; fixed actual multirow owners and arbitrary real report boxes; arbitrary growing owner/resource counts; nonnegative payments covering every coalition at every profile; full OUT for protected coalitions of size at most s, including passive members. A TCWM-only result must be separately labeled.
+3: Known audited manuscript frontier: sqrt(s/6) <= K3(s) <= K3_OUT(s) <= 3s^2. Target O(s), accept any proved O(s^(2-epsilon)) improvement with fixed epsilon>0.
+4: Primary architecture: choose efficient feasible production prices u_i=p.b_i and nonnegative reserves rho, y=u+rho. Require rho_C(h)-rho_C(l)>=u_C(l)-u_C(h)+F(delta) globally. Price domination is additional, not without loss.
+5: Gate success: a precise global inequality or certificate template controlling outgoing reserves, surviving retained exact failures, with a noncircular route to an improved all-real bound. A fully proved better bound is stronger success. A scoped architecture obstruction is a useful stop, not unrestricted impossibility. A finite example or a local derivative alone does not pass.
+6: No-go: fixed rank-surplus scaling and changed-owner-only charging already fail; one global layer and the binary unit-worth ideal cannot support the desired larger architecture obstruction. Do not repeat them as discoveries.
+7: Run: recover calibration and dual; pursue independent proof and exact-falsification routes; close with independent audit and a pass/stop decision. Do not extend automatically past the fixed 90-minute window.
+8: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE inputs/FINITE_AND_ALL_PROFILE_DUAL.txt
+1: EXACT FEASIBILITY DUAL FOR THE ACTUAL MULTIROW OWNER CONTRACT
+2: 18 October2026. Bounded independent work by reserve_feasibility.
+3: Classical LP duality and product compactness; no novelty or improved s-bound claim.
+4: 
+5: 1. FIXED INSTITUTION AND THE FULL PROFILE INDEX
+6: Fix a finite owner set N, fixed actual endowments/eligibility, and one finite
+7: nonnegative packing technology F(c)=max{pi.x:x>=0,Ax<=c}. Every retained
+8: positive-profit column consumes a positive amount of some resource, so F is
+9: finite at every finite capacity vector. Let P be the domain of complete legal
+10: owner report profiles p=(b_i(p):i in N). Every b_i(p) is a RESOURCE VECTOR.
+11: Do not replace owner i by a separate strategic player for each resource row.
+12: No price formula, dummy-zero rule, continuity or measurability is required.
+13: 
+14: For nonempty S subset N define v_(p,S)=F(b_S(p)), where b_S=sum_(i in S)b_i.
+15: Let f_p=F(c_p), c_p=sum_i b_i(p).
+16: An admissible protected comparison e=(l,h,C) has |C|<=s, identical outsider
+17: reports, b_i(h)>=b_i(l) componentwise for i in C, and both endpoints in P.
+18: It includes ALL members of C even if some retain identical reports. Let
+19:   delta_e=sum_(i in C)[b_i(h)-b_i(l)]>=0.
+20: For TCWM set d_e=0. For full OUT set d_e=F(delta_e).
+21: The set of changed owners must be contained in C; it need not equal C.
+22: 
+23: 2. FINITE PRIMAL
+24: For a finite Q subset P use unrestricted scalar payment variables y_(p,i)>=0
+25: for each p in Q and every ACTUAL owner i. Minimize K>=0 subject to
+26:   sum_(i in S)y_(p,i)>=v_(p,S),                  all p in Q and nonempty S;
+27:   sum_(i in C)[y_(h,i)-y_(l,i)]>=d_e,            all admissible e with l,h in Q;
+28:   sum_i y_(p,i)<=K f_p,                         all p in Q.
+29: This is a finite LP, with arbitrary real coefficients if the input reports
+30: or technology are real. For rational inputs the relevant LP values are rational.
+31: It is not a scalar-unit-agent surrogate: all original report coordinates enter
+32: the comparisons and coalition values, and there is one payment per actual owner.
+33: 
+34: Finite feasibility is automatic at K=|N|: the all-profile rule y_i(p)=f_p
+35: is nonnegative, covers every nonempty coalition, and has that funding factor.
+36: Restoration gives f_h-f_l>=F(delta_e) by superadditivity, so even full OUT holds:
+37: the protected coalition's increase is |C|(f_h-f_l)>=F(delta_e).
+38: This crude bound is used only to settle finiteness/duality and compactness.
+39: 
+40: 3. FINITE DUAL AND THE SIGN CONVENTION
+41: Use nonnegative multipliers lambda_(p,S) for coverage, mu_e for comparisons,
+42: and nu_p for budgets. Define the owner/profile balance
+43:   g_(p,i)=sum_(S containing i)lambda_(p,S)
+44:           +sum_(e:h=p,i in C_e)mu_e
+45:           -sum_(e:l=p,i in C_e)mu_e.
+46: Dual feasibility is exactly
+47:   g_(p,i)<=nu_p  for every p,i,       sum_p nu_p f_p<=1.
+48: Its objective is
+49:   L=sum_(p,S)lambda_(p,S)v_(p,S)+sum_e mu_e d_e.
+50: There is ONE multiplier mu_e for the ENTIRE coalition C_e. It appears with
+51: the same coefficient for every member at BOTH endpoints. Giving each member
+52: an unrelated flow weight is a different and generally false dual system.
+53: 
+54: With fixed K, define D=sum_p nu_p f_p. The exact Farkas criterion is:
+55:   the finite payment system is feasible iff L<=K D for EVERY nonnegative
+56:   lambda,mu,nu satisfying g<=nu.
+57: Necessity follows by multiplying the original inequalities:
+58:   L<=sum_(p,i)g_(p,i)y_(p,i)
+59:     <=sum_p nu_p sum_i y_(p,i)<=K D.
+60: The middle step uses y>=0. Sufficiency is finite-dimensional Farkas/LP duality.
+61: Writing sigma_(p,i)=nu_p-g_(p,i)>=0 makes the same certificate a weighted
+62: sum whose payment coefficients cancel exactly after adding sigma*y>=0 rows.
+63: 
+64: When Q has a positive-production profile, its optimum K_Q is at least1 and
+65: equals max L under D<=1. A nonzero optimum can be normalized to D=1.
+66: There is no positive-L, zero-D certificate, since the K=|N| rule exists.
+67: When all f_p=0, every coverage/outside RHS is0 and K_Q=0; the D=1 normalization
+68: is then unnecessary and may be unavailable. Weak/strong duality handle this
+69: case without dividing by zero.
+70: 
+71: 4. ALL REAL PROFILES: EXACT FINITE-SUBSYSTEM EQUIVALENCE
+72: Fix finite K>=0. Consider the product of compact intervals
+73:   X=product_(p in P, i in N) [0,K f_p].
+74: Each coverage, comparison, and total-budget inequality defines a closed cylinder
+75: subset of X: it involves only finitely many coordinates, at one or two profiles.
+76: This uses the product topology on PAYMENT COORDINATES, not a topology on reports.
+77: No continuity of the mechanism as a function of its reports is assumed.
+78: 
+79: If every finite Q admits the finite primal with factor K, any finite collection
+80: of these closed constraints is satisfiable. Take the finite union Q of the
+81: profiles appearing in that collection, use its feasible payments, and assign
+82: arbitrary values inside the intervals to all other coordinates. Tychonoff
+83: compactness and the finite-intersection property then give one payment function
+84: satisfying EVERY constraint on P. The converse follows by restriction.
+85: 
+86: Therefore, for the one fixed institution,
+87:   K_*=sup_(finite Q subset P) K_Q,
+88: and the infimum K_* is attained because K_*<=|N| and every finite Q is feasible
+89: at that value. Equivalently, failure at any proposed fixed factor K always has
+90: a finite-profile Farkas witness with actual owners and actual comparisons.
+91: 
+92: This is nonconstructive. It supplies no finite grid, bound on witness size,
+93: algorithm, measurability, report continuity, or implementable selection rule.
+94: Checking many finite grids does not verify all finite Q. A desired regularity
+95: axiom would require a separate argument; this compactness proof does not add it.
+96: 
+97: 5. EXACT RESOURCE-CONSERVATION INVARIANTS
+98: For any feasible finite dual set sigma=nu-g and define
+99:   B=sum_p nu_p c_p,
+100:   Delta=sum_e mu_e delta_e,
+101:   R=B-Delta.
+102: Multiplying every owner/profile balance by that owner's actual resource vector
+103: and summing gives the VECTOR IDENTITY
+104:   R = sum_(p,S)lambda_(p,S)b_S(p)
+105:       +sum_(p,i)sigma_(p,i)b_i(p) >=0.                 (RC)
+106: It holds coordinate by coordinate for mixed owners. Outsider reports are
+107: unchanged, so the comparison's aggregate capacity change equals delta_e.
+108: Also, summing balances without resources gives, for every actual owner i,
+109:   sum_(p,S containing i)lambda_(p,S)<=sum_p nu_p.
+110: 
+111: By superadditivity, homogeneity and monotonicity,
+112:   L_TCWM<=F(R),
+113:   L_OUT<=F(R)+sum_e mu_e F(delta_e)<=F(B).             (RB)
+114: The first full-OUT bound is the more informative one. These are upper bounds
+115: on a GIVEN dual objective, not universal factors times D. They preserve the
+116: restoration amount under subdivision of a comparison with the same coalition
+117: and multiplier. Counting arcs or total mu alone has no such invariance.
+118: 
+119: 6. BUDGET PROFILES ON A COMMON OPTIMAL PRICE FACE CANNOT OBSTRUCT K=1
+120: Suppose one nonnegative resource price w satisfies A^T w>=pi and
+121: w.c_p=f_p for every p with nu_p>0. Using (RC) or the fixed-price payment rule,
+122:   L_TCWM<=w.B-sum_e mu_e w.delta_e<=D;
+123:   L_OUT<=w.B-sum_e mu_e[w.delta_e-F(delta_e)]<=D.
+124: Thus a certificate with ratio>1 requires budget profiles with no common optimal
+125: production dual price. In particular, no collection of coverage/incentive rows
+126: can force factor>1 using a budget at only ONE prescribed profile. The fixed
+127: price w optimal there defines y_i(b)=w.b_i everywhere, covers all coalitions,+satisfies full OUT, and is efficient at that profile (though possibly expensive
+128: elsewhere).
+129: 
+130: Symmetrized projective lower certificates are fully consistent with this fact:
+131: their one budget variable represents the average over MANY transformed profiles.
+132: Expanding the symmetry average gives budget multipliers on that finite orbit,
+133: not one budget inequality for the original asymmetric mechanism.
+134: 
+135: 7. A COARSE PRICE-COVER BOUND FOR A GIVEN CERTIFICATE
+136: More generally, suppose ell dual-feasible prices w^1,...,w^ell collectively
+137: cover the budget support: for every p with nu_p>0, at least one has
+138: w^j.c_p=f_p. Let G(c)=min_j w^j.c. Then G>=F everywhere and G(c_p)=f_p on
+139: the budget support. Transform each ACTUAL owner's bundle to z_ij=w^j.b_i;
+140: this creates public linear resource coordinates, not new strategic owners.
+141: 
+142: For T=G(c)>0, Z_j=sum_i z_ij, pay
+143:   Y_i=T sum_(j=1)^ell z_ij/Z_j;
+144: when T=0 pay0. Total is ell*T, and a bottleneck coordinate proves coverage
+145: of G and hence F. Along a coalition restoration, on a bottleneck-k cell,
+146: the derivative of its payment is
+147:   DeltaZ_k [1+sum_(j!=k) a_j/Z_j]
+148:   +sum_(j!=k) (T/Z_j)(1-a_j/Z_j) DeltaZ_j
+149:   >=DeltaZ_k>=min_j DeltaZ_j=G(delta)>=F(delta).
+150: Here a_j is the coalition's current holding in transformed coordinate j.
+151: These coalition-restoration derivatives are nonnegative; finitely many bottleneck changes and the bound
+152: 0<=sum_C Y_i<=ell*T handle seams and zero-output boundaries. Thus full OUT
+153: holds. Applying weak duality to these payments yields L<=ell D.
+154: 
+155: This is an exact certificate-structure bound, not O(s): no bound on the number
+156: of needed optimal-price faces in terms of s is proved. The one-price case is
+157: the preceding sharper invariant. Existing sharper min-ell mechanisms can also
+158: be substituted, but no such dependency is needed for this note.
+159: 
+160: STATUS
+161: Finite Farkas/LP duality and the compactness lift are classical. The explicit
+162: resource balances and price-face tests provide useful checks and pruning rules;
+163: they do not establish an improved arity-three funding exponent or upper bound.
+164: The remaining packing inequality and failed shortcuts are in ATTACK_AND_GATE.txt.
+165: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE certificate_route/layer_followup.txt
+1: LAYER FOLLOW-UP: A BALANCED TWO-TERMINAL NETWORK CONTRACTS EXACTLY
+2: 21 October 2026 UTC. Conventional proof; independent audit pending.
+3: Main result is an exact structural normalization, not a general O(s) bound.
+4: No original owner is split, and every comparison retains one shared weight.
+5: 
+6: 1. STANDING CONTRACT AND COMPARISON DIVERGENCE
+7: Fix a finite nonnegative packing technology F, finite on legal capacities,
+8: and a fixed roster of actual multirow owners with their original report boxes.
+9: Each nonzero distinct-profile comparison e=(l,h,C) has all outsider reports
+10: unchanged, every changed owner in C, weakly increasing reports of members of
+11: C, and |C|<=s. Let delta_e=B_h-B_l>=0. For full OUT, d_e=F(delta_e).
+12: All comparison weights mu_e are nonnegative and shared by the whole C_e.
+13: Write the COMPARISON-ONLY incidence
+14:   gamma_(p,i)=sum_(e:h=p,i in C_e)mu_e
+15:               -sum_(e:l=p,i in C_e)mu_e.
+16: This differs from the full Farkas coefficient g by coverage incidence.
+17: 
+18: Only edges with mu_e>0 are in the active comparison graph; their OUT worth
+19: may be zero and such edges must still be retained. Other legal comparisons
+20: with zero multiplier need not have this graph structure. A resulting r-bound
+21: bounds this particular dual certificate, not all other dual supports on Q.
+22: Coverage rows and budgets at every profile, including profiles isolated in
+23: the positive-mu graph, remain present and unchanged.
+24: 
+25: The finite positive-mu graph is acyclic: a distinct legal restoration strictly
+26: increases the sum of all reported resource coordinates. Trivial self-rows have
+27: zero incidence and RHS and can first be removed. Under the frozen complete
+28: report-profile convention, a restoration with delta=0 has identical reports
+29: for every owner at its endpoints and is just such a self-row. By contrast,
+30: F(delta)=0 with delta nonzero is NOT a self-row. Constant-report owners may
+31: be protected passive members and are never silently deleted here.
+32: 
+33: 2. TWO-TERMINAL CONTRACTION LEMMA
+34: Suppose a weak component of this comparison graph has one source profile a,
+35: one sink profile z, and
+36:   gamma_(p,i)=0 for EVERY actual owner i at every p other than a,z.   (BT)
+37: There may be arbitrarily many branches, mergers, intermediate profiles,
+38: coalition labels, actual owners, and resource rows. Intermediate coverage,
+39: nonnegativity slacks and budgets need not vanish. Only comparison divergence
+40: must vanish there.
+41: 
+42: Then replace this ENTIRE component by direct comparisons from a to z so that:
+43:   * every new comparison is legal with |C|<=s;
+44:   * every new weight remains shared by its entire actual coalition;
+45:   * comparison divergence at every owner/profile is exactly preserved;
+46:   * the full-OUT comparison objective does not decrease;
+47:   * lambda, nu, sigma, and D remain unchanged.
+48: Thus the replacement is a genuine global source/sink layer. Applied to a
+49: feasible finite dual, the retained rank-r one-layer theorem gives L<=r D for
+50: this component. The same applies componentwise to disjoint components of
+51: this form; isolated profiles use efficient static prices.
+52: 
+53: 3. PROOF BY AN OWNER-COORDINATE CUT
+54: Every vertex lies on an a-to-z path, because the finite acyclic component has
+55: unique source and sink. Every complete report profile on such a path lies
+56: coordinatewise between a and z. By (BT), there is a nonnegative owner vector
+57: w such that gamma_(a,i)=-w_i and gamma_(z,i)=w_i.
+58: 
+59: Let T be the actual owners whose reports differ between a and z. It is nonempty.
+60: Fix i in T and choose one of i's resource coordinates that strictly increases.
+61: Choose a threshold theta strictly between its endpoint values, unequal to any
+62: vertex value in this coordinate. Partition profiles into those below and above
+63: theta. This separates a from z. No comparison crosses backwards, since all
+64: reports increase. Every crossing comparison must include i, since that owner's
+65: coordinate changes across it. Thus
+66:   sum_(e crossing cut)mu_e = sum_(e crossing cut, i in C_e)mu_e=w_i. (1)
+67: For every other owner j, conservation of comparison incidence on the lower
+68: side gives
+69:   sum_(e crossing cut, j in C_e)mu_e=w_j.                          (2)
+70: Hence w_j<=w_i for all j. Repeating the argument for every i in T shows
+71:   w_i=M:=max_j w_j>0 for every i in T.                            (3)
+72: 
+73: Use the cut just chosen for one i in T. Its total weight is M. For EACH j in T,
+74: its incidence also equals M. Nonnegative weights therefore imply that every
+75: positive crossing edge contains every member of T. In particular
+76:   T subset C_e for every positive crossing edge, and |T|<=s.       (4)
+77: This is the load-bearing conclusion: zero internal comparison divergence and
+78: two terminals force all endpoint changes to fit in a protected coalition.
+79: It is not inferred merely from each individual edge having size at most s.
+80: 
+81: For every crossing edge, place its original whole coalition C_e, with its
+82: original shared multiplier mu_e, on a direct a-to-z comparison. This is legal
+83: by (4): owners outside T are unchanged between a and z, and all changed owners
+84: are protected. Equations (1)--(2) show that the direct family has exactly owner
+85: incidence -w at a, +w at z, and zero elsewhere, matching the original network.
+86: No independent owner flows or per-member edge coefficients are introduced.
+87: 
+88: For the full-OUT objective, exact resource telescoping gives
+89:   sum_(all original e)mu_e delta_e
+90:    =sum_i w_i[b_i(z)-b_i(a)]
+91:    =M[B_z-B_a].                                                   (5)
+92: The first equality multiplies comparison incidence by actual owner resource
+93: vectors and uses (BT). The second uses (3), since owners outside T have zero
+94: endpoint change. Positive homogeneity and superadditivity of F now imply
+95:   sum_(original e)mu_e F(delta_e)
+96:    <=F(sum_e mu_e delta_e)=M F(B_z-B_a).                           (6)
+97: The direct cut family has total weight M, and every direct row has restored
+98: bundle B_z-B_a, so its objective is exactly the right side of (6). TCWM has
+99: zero comparison objective before and after. Coverage weights and all full
+100: owner/profile balances are unchanged. This proves the lemma.
+101: 
+102: 4. UNBRANCHED CHAINS AND COALITION RECOMBINATION
+103: The lemma includes chains of profile transitions with arbitrary parallel
+104: coalition labels. A short direct proof there is instructive: interior balance
+105: makes the transition owner-incidence vector v constant. A transition that
+106: changes owner i has total weight M=v_i, while every v_j<=M. Hence every
+107: transition has M=max_j v_j, every owner changed anywhere has v_i=M, and every
+108: positive coalition at every transition contains all such owners. One can reuse
+109: the first transition's coalitions directly between the endpoints.
+110: 
+111: This permits changing WHICH endpoint pair carries a coalition label. It is
+112: strictly stronger than making separate forests for each fixed coalition.
+113: The following growing exact family shows why such recombination is necessary.
+114: 
+115: 5. A GROWING OBSTRUCTION TO PER-COALITION-DIVERGENCE NORMALIZATION
+116: Let n=2q>=4 and m=n-1. Take n passive actual owners P_1,...,P_n, each reporting
+117: (1/n,1/n,0), and one varying owner R reporting (0,0,1+k/m) at p_k, 0<=k<=m.
+118: All have the fixed real box [0,2]^3. The sole activity consumes one unit of
+119: A,B,K and has profit one. Thus arity is three and F(B_(p_k))=1 everywhere.
+120: Every passive owner is nonzero and valuable: deleting one from grand-coalition
+121: coverage at p_0 reduces value from one to 1-1/n. R is also valuable.
+122: 
+123: Use a 1-factorization M_0,...,M_(m-1) of K_n. An explicit formula labels the
+124: passives infinity and Z_(n-1); matching M_t contains {infinity,t} and
+125: {t+a,t-a} modulo n-1 for 1<=a<=q-1. Each matching covers every passive once,
+126: and every passive pair appears in exactly one matching.
+127: For every pair {i,j} in M_k, add comparison p_k->p_(k+1) with the WHOLE
+128: coalition {R,P_i,P_j} and multiplier one. Its OUT value is zero because only
+129: K is restored. Protection size is fixed at s=3.
+130: 
+131: Give grand coverage at p_0 weight one, and give only p_m budget weight q.
+132: Exact balances are
+133:   g_(p_0,R)=1-q, g_(p_0,P_i)=0;
+134:   g_(p_k,all owners)=0 for 0<k<m;
+135:   g_(p_m,R)=q, g_(p_m,P_i)=1.
+136: They are <=nu. This is a feasible actual-owner dual with L=1 and D=q.
+137: Its internal comparison divergence is zero, so section 2 applies.
+138: 
+139: Consider the sharply restricted normalization class that preserves comparison
+140: divergence SEPARATELY for every fixed coalition label at every profile, while
+141: allowing arbitrary nonnegative rerouting, subdivision, same-coalition path
+142: compression, splitting across pieces, and added profiles along this same
+143: monotone chain. The pieces must each be globally one-layer feasible duals.
+144: Each of the qm distinct coalition labels has one unit of prescribed net flow
+145: from its original low to high profile. It therefore requires at least one unit
+146: of total comparison weight in any such normalization. Every nonzero comparison
+147: contains R. At a sink profile of any one-layer piece there is no outgoing
+148: comparison, so its budget multiplier is at least its incoming R weight;
+149: nonnegative coverage weights only increase this requirement. Every permitted
+150: profile has F=1. Summing budgets across pieces therefore gives
+151:   sum_piece D_piece >=qm=(n-1)D.                                 (7)
+152: No bound depending only on the fixed s=3 is possible for this class.
+153: This bound is not a count of subdivided arcs: it uses the preserved unit flow
+154: demand of each distinct coalition label. It already allows all same-coalition
+155: path normalizations. No zero-report or zero-coverage-incidence erasure applies
+156: to these passive owners.
+157: 
+158: Nevertheless copy ANY ONE matching directly from p_0 to p_m with weights one.
+159: This preserves aggregate ACTUAL-OWNER comparison divergence, lambda, nu,
+160: sigma, L and D exactly, and is one global layer. It changes divergence for
+161: individual coalition labels, which (7) forbids. Thus the family does NOT
+162: obstruct general normalization; it demonstrates the precise additional
+163: whole-coalition recombination that a proof must permit. Its unrestricted
+164: funding factor on these selected profiles is one, by the frozen-background
+165: lemma. It is not a funding or price-floor lower bound.
+166: 
+167: 6. WHY BALANCE ALONE DOES NOT SOLVE THE MULTI-TERMINAL CASE
+168: Use four actual owners. At middle profile p each reports one in its own row.
+169: There are two predecessors: l_12 decreases owners 1,2 to zero; l_34 decreases
+170: owners 3,4 to zero. There are two successors: h_13 increases owners 1,3 to two;
+171: h_24 increases owners 2,4 to two. Protect precisely the changed pair on each
+172: of the four edges, with multiplier one. Thus the middle incoming coalition
+173: incidence {1,2}+{3,4} equals outgoing incidence {1,3}+{2,4}.
+174: 
+175: However every predecessor-to-successor comparison changes THREE actual owners.
+176: At protection size s=2, no direct endpoint comparison is legal. One cannot
+177: couple the owner incidences independently and declare the resulting shortcut
+178: an admissible whole-coalition row. For an explicit production technology take
+179: F(c)=sum_i c_i (arity one, hence within the arity-three class). With budget
+180: weight one at each successor and no coverage, the four-edge full-OUT dual is
+181: feasible, with L=8 and D=12. This is an exact local legality obstruction, not
+182: a growing lower or a failure of bounded-cost layer splitting.
+183: 
+184: The two-terminal lemma avoids this example because it has two source and two
+185: sink profiles. Its coordinate-cut identity then has multiple distinct terminal
+186: reports, and w_i is no longer one common source-to-sink owner flow vector.
+187: 
+188: 7. PRECISE REMAINING TARGET AND DISPOSITION
+189: Balanced two-terminal comparison regions can now be contracted without any
+190: budget inflation, preserving shared actual-coalition weights and increasing
+191: OUT objective. Per-coalition forests are insufficient, but whole-coalition
+192: recombination resolves those regions, including arbitrary branching within them.
+193: 
+194: What remains is to decompose a general certificate into such regions or
+195: one-layer pieces when comparison divergence can have many source/sink profiles
+196: and mixed owner signs at the same profile. The cost of splitting those terminal
+197: incidences must be controlled by production and original budget weights. Local
+198: owner-incidence conservation does not guarantee legal terminal shortcuts, as
+199: section 6 demonstrates. No O(s) bound on that terminal-splitting cost has been
+200: proved here. Claiming it would simply hide the original unresolved step.
+201: 
+202: Therefore this route establishes a useful structural normalization and a
+203: sharply scoped no-go for per-coalition preservation, but does NOT pass the
+204: requested general O(s) upper-bound gate.
+205: 
+206: 8. CHECKS AND EVIDENCE LIMITS
+207: layer_followup.py uses exact arithmetic. It verifies the growing matching
+208: construction for n=4,6,8,10,16,32: factorization, positive coverage dependence,
+209: all shared-owner balances, resource conservation, and direct recombination.
+210: It also checks all four illegal endpoint shortcuts in section 6. Results are
+211: in layer_followup.json. The general two-terminal cut proof is symbolic and is
+212: not established merely by these examples; independent review is still needed.
+213: No recursive model delegation was launched by this worker.
+214: 
+215: Additional exact test: a genuinely branching diamond with two changed owners
+216: and two different passive coalition labels satisfies the two-terminal cut
+217: hypotheses. The checker verifies cut owner incidence (2,2,1,1), unchanged
+218: internal balances, and full-OUT objective increasing from 6/5 to 9/5 after
+219: contraction. One changed owner owns two resource rows. This supplements the
+220: matching-chain examples without replacing the general cut proof.
+221: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE certificate_route/layer_followup.py
+1: from fractions import Fraction as Q
+2: import json
+3: 
+4: 
+5: def matching_chain(n):
+6:     assert n>=4 and n%2==0
+7:     q=n//2; m=n-1; inf=m
+8:     matchings=[]
+9:     for t in range(m):
+10:         pairs=[tuple(sorted((inf,t)))]+[tuple(sorted(((t+a)%m,(t-a)%m))) for a in range(1,q)]
+11:         assert sorted(v for pair in pairs for v in pair)==list(range(n))
+12:         matchings.append(pairs)
+13:     all_pairs=[pair for M in matchings for pair in M]
+14:     assert len(set(all_pairs))==n*(n-1)//2
+15:     # Coordinate zero is R, passive owner v uses coordinate v+1.
+16:     div=[[Q(0)]*(n+1) for _ in range(m+1)]
+17:     for k,M in enumerate(matchings):
+18:         for a,b in M:
+19:             for owner in [0,a+1,b+1]:
+20:                 div[k][owner]-=1
+21:                 div[k+1][owner]+=1
+22:     g=[row[:] for row in div]
+23:     g[0]=[v+1 for v in g[0]] # grand coalition coverage at p_0
+24:     nu=[Q(0)]*m+[Q(q)]
+25:     assert all(g[p][i]<=nu[p] for p in range(m+1) for i in range(n+1))
+26:     assert g[0]==[Q(1-q)]+[Q(0)]*n
+27:     assert all(v==0 for row in g[1:m] for v in row)
+28:     assert g[m]==[Q(q)]+[Q(1)]*n
+29:     # Frozen passives own (1/n,1/n,0), R owns (0,0,1+k/m).
+30:     assert min(Q(1)-Q(1,n),Q(1)-Q(1,n),Q(1))==1-Q(1,n)
+31:     # Replace all flow by the FIRST matching directly from p_0 to p_m.
+32:     new_div=[[Q(0)]*(n+1) for _ in range(m+1)]
+33:     for a,b in matchings[0]:
+34:         for owner in [0,a+1,b+1]:
+35:             new_div[0][owner]-=1
+36:             new_div[m][owner]+=1
+37:     assert new_div==div
+38:     # RC: budget resources minus all restorations = lambda b + sigma b.
+39:     B=(Q(q),Q(q),Q(2*q)); Delta=(Q(0),Q(0),Q(q))
+40:     residual=tuple(x-y for x,y in zip(B,Delta))
+41:     assert residual==(Q(q),)*3
+42:     return dict(passive_owners=n,actual_owners=n+1,profiles=m+1,
+43:                 arity=3,protection_size=3,original_edges=q*m,
+44:                 original_L=1,original_D=q,
+45:                 per_coalition_divergence_preserving_layer_cost_lower_bound=q*m,
+46:                 cost_ratio_lower_bound=m,recombined_edges=q,
+47:                 recombined_D=q,all_checks_passed=True)
+48: 
+49: 
+50: def local_obstruction():
+51:     p=(1,1,1,1)
+52:     C=[{0,1},{2,3}]
+53:     E=[{0,2},{1,3}]
+54:     lows=[tuple(x-(i in S) for i,x in enumerate(p)) for S in C]
+55:     highs=[tuple(x+(i in S) for i,x in enumerate(p)) for S in E]
+56:     incoming=[sum(i in S for S in C) for i in range(4)]
+57:     outgoing=[sum(i in S for S in E) for i in range(4)]
+58:     assert incoming==outgoing==[1]*4
+59:     shortcut_changes=[]
+60:     for l in lows:
+61:         for h in highs:
+62:             changed=sum(a!=b for a,b in zip(l,h))
+63:             assert changed==3
+64:             shortcut_changes.append(changed)
+65:     # Technology F=sum of four capacities has arity one, hence at most three.
+66:     assert sum(sum(h) for h in highs)==12
+67:     return dict(protection_size=2,balanced_middle_incidence=incoming,
+68:                 source_sink_shortcut_changed_owner_counts=shortcut_changes,
+69:                 all_four_shortcuts_illegal=True,all_checks_passed=True)
+70: 
+71: 
+72: def branched_cut_check():
+73:     # R1 owns A,K; R2 owns B; P,Q are actual passive owners.
+74:     xy=[(Q(1,10),Q(1,10)),(Q(7,10),Q(4,10)),
+75:         (Q(4,10),Q(7,10)),(Q(1),Q(1))]
+76:     edges=[(0,1,{0,1,2}),(1,3,{0,1,2}),
+77:            (0,2,{0,1,3}),(2,3,{0,1,3})]
+78:     div=[[Q(0)]*4 for _ in xy]
+79:     old=Q(0)
+80:     for a,b,C in edges:
+81:         for i in C: div[a][i]-=1; div[b][i]+=1
+82:         old+=min(xy[b][0]-xy[a][0],xy[b][1]-xy[a][1])
+83:     assert div[1]==div[2]==[0]*4
+84:     cut=[(a,b,C) for a,b,C in edges if xy[a][0]<Q(1,2)<xy[b][0]]
+85:     w=[sum(i in C for a,b,C in cut) for i in range(4)]
+86:     assert w==[2,2,1,1]==div[3]
+87:     assert all({0,1}<=C for a,b,C in cut)
+88:     new=len(cut)*min(xy[3][0]-xy[0][0],xy[3][1]-xy[0][1])
+89:     assert old==Q(6,5) and new==Q(9,5)
+90:     return dict(old_OUT_part=str(old),contracted_OUT_part=str(new),
+91:                 cut_owner_incidence=w,all_checks_passed=True)
+92: 
+93: if __name__=='__main__':
+94:     print(json.dumps({'matching_chains':[matching_chain(n) for n in [4,6,8,10,16,32]],
+95:                       'local_legality_obstruction':local_obstruction(),
+96:                       'branched_cut_check':branched_cut_check(),
+97:                       'evidence':'exact checks supplementing symbolic all-n proof'},indent=2))
+98: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE root/CAPPED_FRACTIONAL_COMPENSATION_STOP.txt
+1: VALUE-PRESERVING CAP DOES NOT REPAIR FRACTIONAL PRICE SMOOTHING
+2: 21 October 2026 UTC. Root derivation. Scoped architecture diagnostic only.
+3: 
+4: QUESTION
+5: Can the known individually monotone, covering fractional-owner marginal rule
+6: be capped at economically usable resource levels and then repaired by an
+7: O(s)-scaled binomial marginal (or another correction using only coalition
+8: worths)? The underlying uncapped fractional-rule failure is already in OLD
+9: constructive/ROUTE_LEDGER.txt, R1. The contribution of this check is only that
+10: a natural value-preserving cap and arbitrary worth-only compensation do not
+11: remove that failure. No novelty, new general lower, or gate pass is claimed.
+12: 
+13: NATURAL CAP AND ITS VALID STATIC PROPERTY
+14: For a finite packing technology, discard zero-profit activities. Put
+15:   Gamma_a = max_e A_ae/pi_e
+16: over the remaining activities (zero if no retained activity uses row a),
+17: and V=F(sum_i b_i). Define capped reports
+18:   btilde_ia=min(b_ia,Gamma_a V).
+19: These preserve EVERY coalition worth at the given profile. Indeed any
+20: optimal coalition production of value W<=V uses at most Gamma_a W units
+21: of row a. Also sum_(i in C) min(b_ia,Gamma_a V) is at least
+22: min(sum_(i in C)b_ia,Gamma_a V), hence at least that plan's row usage.
+23: Thus the original coalition optimum remains feasible; the reverse inequality
+24: follows because capped capacities are smaller. At V=0 all coalition values
+25: are zero and the same conclusion holds. This is a static preservation fact,
+26: not a cross-profile incentive or useful budget theorem.
+27: 
+28: THE CANDIDATE FAMILY BEING REJECTED
+29: At capped reports define
+30:   phi_i(btilde)=E[F(btilde_i+sum_(j!=i) U_j btilde_j)
+31:                  -F(sum_(j!=i) U_j btilde_j)],
+32: where U_j are independent uniform[0,1]. Consider payments
+33:   y_i(b)=phi_i(btilde(b))+H_i(v_b),
+34: where v_b is the FULL vector (F(b_C):C subseteq N), and H is any deterministic
+35: function of that vector, with the fixed public institution also available.
+36: No sign, linearity, budget bound, or monotonicity is assumed for H. This
+37: includes fixed or worth-adaptive combinations of whole-owner marginal rules.
+38: It does not include corrections using report directions beyond v_b.
+39: 
+40: EXACT COUNTEREXAMPLE, WITH ALL ACTIVITIES ACTIVE
+41: Use four fixed pure owners P,X,Y,Z, resources A,B,D, and
+42:   F(A,B,D)=min(A,B)+D.
+43: Activity1 uses A+B and has profit1; activity2 uses D and has profit1.
+44: Maximum activity arity is two, so this lies in the arity-at-most-three class.
+45: The legal endowment boxes are P: [0,1] in A; X,Y: [0,2] in B;
+46: Z: [0,1] in D. All other owner coordinates are fixed zero.
+47: 
+48: At the lower profile P=1, X=1, Y=1, Z=1. At the upper profile restore
+49: only X's B report to3/2. The protected coalition is C={X,Y}, including
+50: unchanged Y, and s=2 suffices. Production is two at both endpoints.
+51: Gamma_A=Gamma_B=Gamma_D=1, so the cap is two in every row and leaves
+52: all displayed owner reports unchanged at both endpoints.
+53: 
+54: Every whole-owner coalition worth is unchanged: the min part is one iff
+55: the coalition contains P and at least one leaf, and zero otherwise; the D
+56: part is one iff it contains Z. Hence H(v_high)=H(v_low) for ANY H above.
+57: 
+58: For leaf reports x,y>=1, the independent D activity cancels from a leaf's
+59: marginal. Conditional on the sampled P amount u in[0,1], X's full report
+60: already saturates it. Therefore
+61:   phi_X = E[(U_P-y U_Y)_+]
+62:          = integral_0^1 u^2/(2y) du =1/(6y),
+63:   phi_Y =1/(6x).
+64: Thus the protected sum changes from1/3 to1/6+1/9=5/18, a LOSS of1/18.
+65: The correction sum does not change. This violates pair TCWM and full OUT;
+66: the restored B alone has outside production zero.
+67: 
+68: DISPOSITION
+69: An independent productive anchor makes the global-output cap too loose to
+70: remove a locally redundant report. All whole-owner worths remain unchanged,
+71: so no correction depending only on those worths can repair this base rule.
+72: The result also applies to any positive fixed multiple of phi plus such H.
+73: It leaves direction-sensitive corrections, other caps, and other bases open.
+74: It does not rule out an O(s) mechanism; it rejects this explicitly defined
+75: attempt to obtain one from fractional smoothing plus worth-only reserves.
+76: 
+77: PROVENANCE AND CHECKS
+78: The integral and 1/18 loss were derived analytically by the parent. The OLD
+79: R1 calculation is reused and explicitly credited above; the anchor/cap and
+80: worth-invariance observation is the bounded additional check. A separate
+81: exact checker will enumerate all16 coalition values and verify the displayed
+82: fractions; that enumeration does not replace the integral or cap proof.
+83: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)
+
+FILE root/check_capped_fractional.py
+1: """Exact finite supplement; the integration/cap arguments are in the note."""
+2: from fractions import Fraction as Q
+3: from itertools import combinations
+4: import json
+5: from pathlib import Path
+6: 
+7: def worth(bundle):
+8:     return min(bundle[0], bundle[1]) + bundle[2]
+9: 
+10: def total(reports, selected):
+11:     return tuple(sum((reports[i][a] for i in selected), Q(0)) for a in range(3))
+12: 
+13: low = ((Q(1), Q(0), Q(0)), (Q(0), Q(1), Q(0)),
+14:        (Q(0), Q(1), Q(0)), (Q(0), Q(0), Q(1)))
+15: high = (low[0], (Q(0), Q(3, 2), Q(0)), low[2], low[3])
+16: assert all(high[i] == low[i] for i in (0, 2, 3))
+17: assert all(high[1][a] >= low[1][a] for a in range(3))
+18: rows = []
+19: for size in range(5):
+20:     for coalition in combinations(range(4), size):
+21:         vl = worth(total(low, coalition))
+22:         vh = worth(total(high, coalition))
+23:         assert vl == vh
+24:         rows.append({"coalition": coalition, "both_values": str(vl)})
+25: for reports in (low, high):
+26:     V = worth(total(reports, range(4)))
+27:     assert V == 2
+28:     capped = tuple(tuple(min(v, V) for v in row) for row in reports)
+29:     assert capped == reports
+30: 
+31: # On x,y>=1, exact polynomial integration is
+32: # int_{u=0}^1 int_{v=0}^{u/y} (u-y*v) dv du = 1/(6*y).
+33: phi_low = Q(1, 6) + Q(1, 6)
+34: phi_high = Q(1, 6) + Q(1, 9)
+35: assert phi_high - phi_low == -Q(1, 18)
+36: delta = tuple(high[1][a] - low[1][a] for a in range(3))
+37: assert worth(delta) == 0
+38: out = {"coalition_worth_rows": rows, "global_output": "2",
+39:        "cap_unchanged": True, "protected_coalition": [1, 2],
+40:        "low_fractional_payment": str(phi_low),
+41:        "high_fractional_payment": str(phi_high),
+42:        "protected_increment": str(phi_high - phi_low),
+43:        "outside_production": str(worth(delta)),
+44:        "scope": "Exact finite check; analytic integral and cap proof are separate."}
+45: Path(__file__).with_suffix(".json").write_text(json.dumps(out, indent=2) + "\n")
+46: print(json.dumps({k: v for k, v in out.items() if k != "coalition_worth_rows"}))
+47: 
+DIFF AGAINST HEAD (empty for untracked/unchanged files):
+(No Git HEAD available; full snapshot only.)

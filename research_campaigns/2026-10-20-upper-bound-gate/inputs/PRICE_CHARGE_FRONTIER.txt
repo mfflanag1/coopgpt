@@ -1,0 +1,152 @@
+ENDPOINT PRICE CHARGING: VALID LOCAL BOUND AND EXACT REPAIR OBSTRUCTION
+Independent derivation, 18 October 2026. No unrestricted upper improvement.
+The basic arity/deletion-loss estimate is an established ingredient already
+used elsewhere in the campaign. The contribution here is its explicit
+interaction with actual dual balances and a failed compensation architecture.
+
+1. A NONNEGATIVE PRIMAL--DUAL SURPLUS AT EACH PROFILE
+At a profile b, let B=sum_i b_i, V=F(B), x an optimal nonnegative production,
+and p an optimal nonnegative production dual. For each actual owner define
+ u_i=p dot b_i,
+ h_i=sum_j pi_j x_j sum_(a in supp A_j) b_ia/B_a,
+ zeta_i=h_i-u_i.                                      (1)
+Set a ratio with B_a=0 to zero; an activity using such a resource cannot
+have positive x_j. These are resource shares inside one owner's payment,
+not separate strategic owners or independently transported dual flows.
+
+For support arity at most r,
+ sum_i u_i=V,
+ sum_i h_i=sum_j pi_j x_j |supp A_j|<=rV,
+ zeta_i>=0,  sum_i zeta_i<= (r-1)V.                    (2)
+To check the nontrivial nonnegativity, complementary slackness gives
+ p_a B_a=p_a sum_j A_aj x_j.
+For x_j>0, pi_j=sum_a p_a A_aj>=p_a A_aj. Thus
+ sum_(j:a in supp A_j) pi_j x_j >=p_a B_a.
+Multiply by b_ia/B_a and sum in a to get h_i>=u_i.
+
+For any coalition C, writing t_a=b_Ca/B_a and reducing activity j by the
+fraction max_(a in supp A_j) t_a gives feasible production under B-b_C.
+Its lost profit is at most h(C), whence
+ F(B)-F(B-b_C)<=h(C).                                 (3)
+In particular h covers every coalition by superadditivity. Equations (2)--(3)
+are static rank bounds, not a monotonicity theorem for the profile-dependent h.
+
+2. VALID LOCAL PRICE-DEFECT BOUND FOR TCWM AND FULL OUT
+For a comparison e=(l,h,C), the outsiders' bundle B_out is the same at both
+ends. Let d_e=0 for TCWM and F(delta_e) for full OUT. Optimal prices imply
+ u_l(C)<=F(B_l)-F(B_out).
+Superadditivity gives F(B_l)+d_e<=F(B_h). Therefore
+ u_l(C)-u_h(C)+d_e
+ <=F(B_h)-F(B_out)-u_h(C)
+ <=h_h(C)-u_h(C)=zeta_h(C).                           (4)
+Every term uses the SAME actual C. Equation (4) holds for arbitrary optimal
+primal/dual choices at the two profiles and requires no differentiability.
+
+3. EXACT INTERACTION WITH A FINITE CROSS-PROFILE CERTIFICATE
+Use the actual dual lambda,mu,nu and sigma=nu-g>=0 from
+reviews/cross_profile_duality/FINITE_AND_ALL_PROFILE_DUAL.txt. Let
+ L=sum lambda F(b_C)+sum mu d_e, D=sum nu F(B_p).
+With k_(p,C)=u_p(C)-F(b_C)>=0, exact summation gives
+ L-D =sum_e mu_e[u_l(C)-u_h(C)+d_e]
+       -sum_(p,C)lambda_(p,C) k_(p,C)
+       -sum_(p,i)sigma_(p,i) u_(p,i).                 (5)
+There is one shared mu_e for every member at both endpoints. Combining with
+(4) yields the VALID but not yet useful general upper bound
+ L<=D+sum_e mu_e zeta_h(C).                           (6)
+
+Since zeta>=0, owner-coordinate balances imply the further valid identity
+ sum_e mu_e zeta_h(C)
+ =sum_p nu_p sum_i zeta_pi +sum_e mu_e zeta_l(C)
+   -sum_(p,C)lambda_(p,C)zeta_p(C)-sum_(p,i)sigma_pi zeta_pi.
+Hence (6) alone does NOT give rD: outgoing terms remain. Dropping them is an
+invalid compression. A bound on these coupled outgoing/incoming terms, with
+coverage and nonnegative-payment slacks retained, is the exact missing step.
+The endpoint incidence cone constrains each whole edge block; it does not
+permit assigning the passive owner's flow coefficient to the restorer alone.
+
+4. NO CONSTANT REPAIR BY THE RANK SURPLUS
+A tempting candidate is y_i=u_i+beta zeta_i, beta>=0. It is nonnegative,
+covers every coalition, and has funding at most 1+(r-1)beta. Choosing beta
+proportional to s would give linear funding if incentives held. They do not.
+
+Use four resources K,A,B,C and two unit-coefficient activities:
+ old: consumes K,A,B, profit 1;
+ new: consumes K,C, profit 1+epsilon, where 0<epsilon<1.
+There are TWO fixed actual owners, both allowed the full unit cube. Along the
+displayed reports owner0 holds A=B=1,C=t,K=0, and owner1 holds K=1 only, with
+0<t<1. Owner0 restores only C. The optimum is uniquely
+ x_old=1-t, x_new=t,
+and its dual is uniquely p_K=1,p_C=epsilon,p_A=p_B=0.
+Uniqueness follows from the strictly larger new profit, the binding K and C
+constraints, and slack A and B constraints. Thus tie-breaking cannot help.
+
+For owner0, the exact payments in (1) are
+ u_0=epsilon t,
+ h_0=2(1-t)+(1+epsilon)t=2-(1-epsilon)t,
+ zeta_0=2-t.
+Consequently y_0=2beta+(epsilon-beta)t. For every beta>0 choose
+ epsilon=min(beta/2,1/2). Restoring t strictly decreases y_0, violating
+singleton TCWM and therefore every protected-coalition family containing
+singletons. This is also a full-OUT failure (restored C alone has value zero).
+More generally A0*u+B0*zeta fails whenever A0>=1, B0>0: choose
+epsilon=min(B0/(2A0),1/2), giving derivative A0*epsilon-B0<0.
+
+At beta=0, optimal-price payments themselves fail. For min(A,B), use owner0
+(a,0), owner1(0,1/2), and restore a from1/4 to3/4 within the fixed unit cubes.
+The unique low price is (1,0), the unique high price (0,1); owner0's payment
+drops from1/4 to0. A positive fixed scaling of optimal prices also fails.
+
+For an exact rational instance of the first fixture, take epsilon=1/2 and
+t from1/4 to3/4. Then
+ u_0: 1/8 ->3/8; h_0:15/8 ->13/8; zeta_0:7/4 ->5/4.
+The beta=1 payment loses1/4 and beta=2 loses3/4. All coalition coverage and
+the displayed funding bounds still hold. The violated row is the actual
+singleton comparison +y_0(high)-y_0(low)>=0, with one shared coefficient.
+
+This rejects fixed nonnegative surplus compensation for arbitrary choices
+of optimal x,p, because this fixture makes both choices unique. It does not
+reject an adaptive compensation rule, a different potential, general smooth
+rules, or a genuinely global dual inequality.
+Indeed the fixture has only two owners, so the crude rule y_i=F(total) already
+gives full OUT at factor two. Its purpose is architecture rejection, not a
+new unrestricted lower bound.
+
+5. WHY CHANGING-OWNER-ONLY CHARGING FAILS, EVEN WITH EXACT DUAL BALANCES
+Take F(A,B,C)=min(A,B,C), three fixed fully eligible owners, 0<epsilon<1/2:
+ low b0=(1,0,0), b1=(0,0,0), b2=(0,1+epsilon,2);
+ high changes only b1 to(2epsilon,0,0).
+Endowments can be the common box [0,2]^3. Protect C={0,1}, so the changed
+owner set is D_changed={1}, and owner0 is genuinely unchanged and protected.
+The unique optimal prices are p_low=(1,0,0), p_high=(0,1,0). The edge's price
+defect is one, and its outside-production value is zero. At the high profile
+ zeta_1=h_1=(1+epsilon)*2epsilon/(1+2epsilon),
+which tends to zero. Thus no finite c(s), even at s=2 and arity exactly three,
+can bound the price defect by c(s)*zeta_high(D_changed). Whole-coalition
+zeta_high(C)=1+epsilon remains large, as required by (4).
+
+This example is consistent with a FULLY FEASIBLE actual-coordinate dual:
+give low grand coverage weight1, the one comparison weight1, and budgets at
+both profiles weight1. Then
+ g_low=(0,0,1), g_high=(1,1,0),
+ sigma_low=(1,1,0), sigma_high=(0,0,1),
+ L=1, D_budget=2+epsilon.
+Adding the explicit nonnegative-payment rows cancels every payment coordinate.
+The endpoint-incidence cone has M=1,w=(1,1,0); its changed coordinate equals M
+and its passive capacity is exactly s-1=1. No owner-wise split of mu or dummy
+zero assumption occurs. The ratio is BELOW one; this is an obstruction to a
+particular local charging inequality, not a new funding lower certificate.
+
+FINAL GATE
+The proved local bounds respect arbitrary multirow owners, arbitrary coalition
+coverage, full OUT, actual-coordinate balances, and shared comparison weights.
+They do not control the remaining global term in (5) by O(s) or o(s^2) times D.
+The natural fixed rank-surplus repair and changed-owner-only compression are
+now rejected by exact fixtures. No new unrestricted upper bound is claimed.
+
+REPRODUCIBLE FINITE CHECK
+price_charge_check.py uses exact fractions and no third-party dependencies.
+Its saved JSON records 256 two-owner binary profiles, 1,024 coalition deletion
+and coverage checks, 9,153 actual-coalition full-OUT price-defect checks,
+24 fixed-repair failures, and five fully balanced changed-owner dual fixtures.
+These finite checks supplement the displayed proofs; they do not establish
+the universal quantified lemmas by enumeration or check an upper-bound claim.
