@@ -1,0 +1,148 @@
+FULL COMPATIBILITY PILOT P1 — freeze before new values
+Local date 20 October 2026; machine freeze timestamp is UTC in FREEZE.json.
+
+1. QUESTION AND EVIDENCE CLASS
+Can the published May 2020 M100 raw PSU0, PSU1 and Nagios-state members support
+an exact-key, simultaneously observed physical panel on the predetermined
+May 12 UTC day? This is a diagnostic measurement/compatibility exercise, not
+causal, predictive, Gaussian-reserve or economic validation. A complete result
+can be compatible at the key level, incompatible, unresolved, or access-limited.
+No statistical significance or favorable gain is a success criterion.
+
+2. SOURCES AND CONTAMINATION
+Zenodo record 7588815, version 1.0.0, published 31 January 2023, CC BY 4.0;
+20-05.tar size 6,596,945,920 and published MD5
+acc17e344755ef58a009592b362fd6bf. Partial ranges cannot verify the full MD5.
+Use the sealed tar offsets/footer metadata and exact 84-range plan. Treat all
+May as calibration, including decoded off-day rows and unselected footer value
+statistics potentially parsed internally. Never emit such statistics for June.
+All author-source URLs and retrieved body hashes go in the source manifest.
+Current author documentation is evidence about the published format, not a
+cryptographically authenticated match to every 2020 collection process.
+
+3. BUDGET AND INTEGRITY
+Begin dataset accounting at 468,255. Count every actual archive response-body
+byte read, including headers, markers, footers, gaps, retries and failed partial
+responses. Before each request reserve requested length under 100,000,000.
+Require HTTP 206, exact Content-Range and identity transfer encoding before
+reading; abort unexpected responses without body consumption. No HTTP parquet
+reader or implicit prefetch. Store each bounded body and its SHA256, URL, UTC,
+range, response headers and status in an append-only ledger. Count documentation
+separately, excluding HTTP/TLS overhead and unmeasured web-tool documentation.
+Reusing local sealed bytes is not a new acquisition. Verify their hashes first.
+Do not reuse incomplete data as if complete. On interruption, retain a failure
+record and ledger; resume only unfulfilled ranges, counting any reread bytes.
+Full raw member reconstruction is sparse: holes are missing bytes, never zero
+observations. Verify all chunks of all selected row groups are covered by saved
+ranges before decoding. Use local timestamp predicate pruning only. Any attempt
+to decode an unacquired group or undecodable sparse region fails this execution.
+No auto-installation or remote DuckDB extensions. Save software versions.
+
+4. FIXED UNIVERSE, TIME AND METER
+Universe: all canonical decimal strings 0..979, as in the author rack map;
+save/hash node_roster.json. Unexpected IDs are flagged and reported separately,
+never silently added. No node selected by successful coverage or power values.
+Window: 2020-05-12 00:00:00+00 through 2020-05-13 00:00:00+00, exclusive end.
+Parquet UTC-adjusted milliseconds are decoded without local-time conversion.
+Nominal source cadence is 20 seconds per node. The calendar diagnostic grid is
+00:00:00 + 20*k seconds for k=0..4319 (4,233,600 node/grid cells).
+This is a nominal phase-zero collection grid, not a claim about exposure time.
+Report off-grid timestamps and residues separately without rounding them.
+Exact PSU joins also include off-grid records within the day. Report each
+metric's timestamp differences and node coverage; no offset correction.
+Sensor averaging duration and interval-start/end convention are unresolved;
+do not call the readings 20-second means or validate between-sample peaks.
+Power is PSU0+PSU1 at their documented input boundaries in W, only at identical
+node/time keys. No total_power substitution, facility-load inference or capacity
+right is permitted. No values are trimmed, winsorized, normalized or imputed.
+
+5. ROW QUALITY AND SIMULTANEITY
+For each PSU report rows, null keys/values, negative and zero values, unexpected
+nodes, duplicate counts and conflicting keys, before and after day filtering
+where available without opening additional groups. For exact-key duplicates,
+collapse only logically identical rows; if a key contains differing values or
+null mixed with nonnull, mark the entire key unusable. Null values, negative
+values and invalid keys are unusable, not zero. Keep measured zero readings.
+Join usable PSU keys by node and exact timestamp; never row order/group ID.
+Report anti-join counts and zero-pair counts. Build simultaneous-node-count
+histograms, all-980 exact timestamps, all-980 nominal-grid timestamps, per-node
+nominal coverage, full-panel missing cells, and longest missing runs including
+leading/trailing runs on the full fixed day grid. Report missing runs in grid
+cells and seconds of nominal slots; do not label them physical outage duration.
+No independent node-day stacking, random shuffling or fit on selected subpanels.
+
+6. STATE DIAGNOSTIC AND POWERED-OFF BOUNDARY
+Preserve all description, host_group, nagiosdrained and state_type values.
+State identity is (node,timestamp,description); collapse logically identical
+rows only and flag conflicting records including differing tags. Null/unmapped
+codes or tags are reported. Report description/code/tag frequency tables and
+per-description cadence, node coverage, exact state/PSU overlap. Main named
+service diagnostic is batchs::client::state: source service codes 0 OK, 1
+WARNING, 2 CRITICAL, 3 UNKNOWN; state_type strings 0 SOFT, 1 HARD. These are
+scheduler service statuses, not evidence of a powered-on or powered-off meter.
+Do not interpret host/service codes for other descriptions without an explicit
+source mapping. Report raw drained tags; do not infer boolean meanings not
+documented. Nominal state cadence is 15 minutes per node and description.
+Primary join is exact timestamp only; no as-of, nearest-neighbor, forward fill,
+interpolation, expiry window or retrospective state smoothing. State obtained
+at one sample time does not establish its duration until another observation.
+No state filtering changes the PSU panel or denominator. Unknown state, absent
+telemetry, measured zero and documented service alarms remain separate.
+No documented authoritative powered-off indicator is presently available;
+powered-off classification remains unresolved unless original evidence makes
+that distinction explicit. The pilot may therefore pass key structure while
+failing operational state sufficiency. Missing observations never become zero.
+
+7. ACCEPTANCE AND STOP RULES
+Technical extraction passes only if hashes, range coverage, expected schema,
+UTC encoding and bounded decoding checks pass. Exact simultaneous support is
+reported numerically, including zero if absent; no minimum favorable sample
+count is chosen post hoc. A complete population panel requires all 980 nodes;
+partial coverage is a partial panel. Nominal complete coverage requires all
+4,320 slots for every fixed node; a deficit is reported rather than tolerated
+through an invented threshold. Operational state sufficiency additionally needs
+authoritative powered-off versus missing distinctions and a source-backed
+validity/join policy; exact matches alone cannot supply these. If unmet, the
+reserve-reliability gate stays closed. Stop on integrity failure, cap exhaustion,
+inaccessible ranges or inability to justify decoding. No replacement day/node.
+
+8. JUNE METADATA GATE ONLY
+Acquire the current public record metadata, then a bounded tar-header scan
+(<=2,000 headers; <=1,024,000 archive bytes) and only the three matching PSU/state
+footers (each <=2,000,000 bytes; total overall cap always controls). Require the
+same source identity, member schema and UTC logical timestamp semantics; check
+whether each global timestamp envelope contains June 1 00:00 through the last
+nominal sample before June 15. Check state-member presence and document its
+envelope separately; metadata cannot establish node/time intersection or state
+completeness. Only timestamp min/max and structural fields may be queried or
+emitted. Raw footers can contain unselected outcome statistics; disclose that
+acquisition and internal metadata parsing are not absence of those bytes.
+No June data pages, node dictionaries or outcome statistics are decoded. Do not
+pick an alternative interval based on metadata coverage or outcomes. A clean
+metadata result qualifies only the fixed candidate for a later design decision.
+If selected groups later span dates beyond a proposed holdout, that future
+protocol must treat all exposed dates as contaminated before acquisition.
+
+9. DEFERRED PERFORMANCE AND ECONOMIC GATES
+No model fit, reserve commitment, curtailment simulation, payment comparison,
+Gaussian calibration, reliability inference or pooling gain is executed here.
+The historical 14-day training plus 14-day holdout proposal and alpha .05 are
+not shortened or relaxed. All May is calibration but this task acquires only
+the groups required for one pilot day, not a complete 14-day training sample.
+A later protocol must establish full windows, temporal dependence, common-node
+coverage, minimum useful delivered headroom, capacity/dispatch rights and a
+defensible uncertainty design before outcomes. The proposed synchronized
+24-hour bootstrap and 6/48-hour sensitivities remain conditional proposals;
+fourteen blocks do not automatically certify .05 reliability. Economic rights,
+outside operation, liability, sponsor value and AI attribution stay missing.
+The Gaussian cone is not established as an arity-three packing technology.
+
+10. REPRODUCTION AND AUDIT
+Keep sealed inputs unchanged; save hashes and local copies of selected text,
+safe metadata and byte plan. Reproduce diagnostics offline from saved bytes,
+using fixed SQL/code and library versions. Obtain independent checks of ledger,
+key joins, state interpretation, contamination and claims. Record reviewer
+limitations and adjudication; a reviewer opinion alone does not verify a fact.
+Deliver amendment, protocol hash, exact ledger, reproducible compatibility
+report, missing-evidence boundary and explicit next gate. End this block in
+roughly 90 minutes or earlier on a precise obstruction; no broader campaign.

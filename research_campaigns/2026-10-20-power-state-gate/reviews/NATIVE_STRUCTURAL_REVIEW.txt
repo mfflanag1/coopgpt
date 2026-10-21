@@ -1,0 +1,30 @@
+Independent agent: /root/power_acquisition_audit
+
+The agent implemented acquisition_audit.py and its report, then separately
+reviewed footer_structure.py, the saved projection, safe inherited metadata,
+and cached Apache specifications. Its native review supports the full-data-page
+claim conditional on correct writer declarations. It verified unique/complete
+actual report keys, candidate flags, byte lengths and absent index fields 4–7.
+It exercised synthetic Compact Protocol buffers without opening raw footer or
+data-page files. The parent performed the actual retained-footer projection.
+
+Review caveats retained:
+- Counts are metadata declarations, not independently read page headers.
+- Statistics fields are traversed/discarded; this is not a claim their bytes
+  were never parsed. Binary measurement statistics are not decoded/emitted.
+- No advertised standard indexes does not rule out custom/external extraction.
+- CompactReader is bounded and not generally certified. A collection-boolean
+  encoding discrepancy between prose and implementation was noted; no exercised
+  selected field depends on it. Unsupported encodings may fail closed.
+
+Parent improvements after this review: explicit unique/complete projected
+column-key checks and timezone-aware timestamp comparisons replaced an implicit
+actual-input check and lexical comparisons. Nine saved structural tests verify
+synthetic fields, skipped binary statistics, corruption refusal, and the exact
+retained-footer/header replays. Their initial JSON comparison failed because
+JSON serializes integer object keys to strings; normalizing the comparison
+fixed that test. The generated projection and substantive counts did not change.
+
+The parent also ran the independent 36-check acquisition replay. These checks
+establish arithmetic and the declared reader behavior, not universal compression
+lower bounds, valid power observations, or a qualified holdout.

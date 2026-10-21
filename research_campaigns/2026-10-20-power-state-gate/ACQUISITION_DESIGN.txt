@@ -1,0 +1,181 @@
+OFFLINE ACQUISITION AUDIT — FIXED JUNE 1–14 CANDIDATE
+20 October 2026
+
+Decision
+
+The declared complete-column-chunk reader cannot acquire the fixed June 1–14
+candidate under the inherited remaining allowance of 6,393,615 bytes. Its exact
+uncached chunk union is 107,625,469 bytes, an excess of 101,231,854 bytes before
+any additional requests, gaps or retries. This is a necessary byte cost within
+that reader class, conditional on the supplied metadata. It is neither a claim
+that all possible readers fail nor a universal compression lower bound.
+
+This audit uses only the five designated safe inputs: the metadata projection,
+candidate summary, byte totals, candidate gate text, and request ledger. No
+archive, Parquet member, footer binary, page, node dictionary, or dataset value
+was opened. No package was installed, no network request made, and no source
+file changed. The report hashes those inputs and checks the metadata hash
+against the inherited candidate summary. Ledger assertions are provenance and
+arithmetic checks on supplied records; sealed response bodies are not rehashed.
+
+The candidate remains [2020-06-01T00:00:00Z, 2020-06-15T00:00:00Z), with the
+fixed 980-node design. No date/node selection, cap change, shorter reliability
+window, holdout qualification, or data acquisition is authorized by this audit.
+The 980 count is a design constraint, not an observed active-node cardinality.
+Active-node counts, common-node support, power/state codes and their statistics
+remain unread. This June-only arithmetic does not establish the completeness
+or acquisition feasibility of a fixed training-plus-holdout pair.
+
+Exact definition and reproducible ranges
+
+A row group is selected when its reported closed timestamp extrema [lo,hi]
+overlap the fixed half-open candidate [start,end): lo < end AND hi >= start.
+For every selected group and projected column, the complete chunk begins at
+the dictionary-page offset when present, otherwise the data-page offset. Its
+end is that start plus the supplied total_compressed_size. These are byte
+ranges [start,end), not inclusive HTTP endpoints. For HTTP, the last requested
+byte would be end-1. Reported extrema are relied on as valid for this plan;
+global envelopes alone do not prove complete interior coverage.
+
+acquisition_audit.json records every selected group id and the canonical exact
+per-column union in member-relative coordinates, plus the complete selected
+union for each member. Add archive_member_start to both endpoints for archive
+coordinates. It also records all-month complete-chunk unions and the already
+cached marker/footer ranges. The exact source offsets are:
+
+  state:           897,921,024
+  ps0_input_power: 3,269,122,048
+  ps1_input_power: 4,010,451,456
+
+Duplicate identical metadata entries cost once, order is immaterial, and
+overlapping/adjacent ranges are canonically unioned. Conflicting duplicates,
+overlapping distinct chunks, missing groups/columns, reversed or malformed
+ranges, invalid offsets, and known metadata/chunk overlaps fail closed.
+No selected chunk overlaps the cached June marker/footer/header union, so
+there is no previously-paid-byte credit against the selected-chunk total.
+
+Per-column necessary costs WITHIN THE COMPLETE-CHUNK READER CLASS
+
+Column            State           PSU 0           PSU 1           Total
+timestamp         169,753      16,011,877      16,932,439      33,114,069
+value              36,329      34,871,430      38,718,101      73,625,860
+node              425,784         183,121         195,598         804,503
+description        26,492               -               -          26,492
+host_group         21,714               -               -          21,714
+nagiosdrained       17,944               -               -          17,944
+state_type         14,887               -               -          14,887
+TOTAL             712,903      51,066,428      55,846,138     107,625,469
+Selected groups        96             442             477           1,015
+
+These are compressed byte lengths and structural group counts, not value
+statistics. Per-column entries are diagnostics: reading one column alone
+does not deliver an identified, synchronized, physically valid node panel.
+No extrapolation from compression rates or row counts to active-node support
+is made. The counts of distinct physical chunks are 672, 1,326 and 1,431.
+
+Reader alternatives and limits
+
+1. Timestamp-first, complete selected chunks
+   The first stage alone needs 33,114,069 uncached bytes, exceeding the remaining
+   allowance by 26,720,454. Each PSU timestamp column alone exceeds the remaining allowance.
+   Therefore this particular timestamp-first strategy cannot start and finish
+   its timestamp stage within the current allowance. In addition, every
+   selected group's reported minimum is inside the candidate (96/96, 442/442,
+   477/477). Conditional on valid extrema, each group has at least one target
+   timestamp, so timestamp decoding cannot eliminate an entire selected group
+   while recovering all target records at complete-chunk granularity. Savings
+   in later reads are not assumed. A strategy reading only selected timestamp
+   pages is a different, currently uncosted reader class.
+
+2. Drop all extra state columns
+   Dropping description, host_group, nagiosdrained and state_type would save
+   exactly 81,037 bytes. Keeping only timestamp/value/node for state and both
+   PSU members still costs 107,544,432 bytes, exceeding the remaining allowance
+   by 101,150,817. This fails even before deciding whether the research semantics
+   permit omitting those columns. Treating them as optional for this favorable
+   byte calculation does not establish that they are scientifically optional.
+
+3. Complete projected column chunks
+   The inherited selected-group plan is the exact 107,625,469-byte union above.
+   Reading every column in every June row group, without timestamp pruning,
+   costs 128,050,719 chunk bytes: state 836,502, PSU 0 63,082,168, PSU 1
+   64,132,049. These are necessary payload unions; neither figure guarantees
+   that a specific client will avoid additional body bytes. A complete-member
+   or a reader that coalesces byte gaps pays more.
+
+4. Whole members
+   The three complete members total 128,776,583 bytes: state 974,255; PSU 0
+   63,375,454; PSU 1 64,426,874. Reading them as three complete responses pays
+   that amount, including repeated metadata bytes. If a reader instead assembles
+   them using all cached member bytes, 378,489 bytes can be credited and the
+   exact new-byte cost is still 128,398,094. Both variants fail the cap. Tar
+   padding and unrelated archive members are excluded. A whole-archive download
+   would be a separate, larger plan and is not proposed.
+
+5. Indexed-page or page-header-scanning alternatives
+   The five audited inputs do not supply page counts, offsets, compressed page
+   lengths, index existence, timestamp-to-row/page mapping, dictionary reuse,
+   or cross-column page alignment. No exact byte budget or feasible savings
+   follows from this projection. The cost is UNIDENTIFIED, not proved zero,
+   feasible, or impossible. An alternative needs a separately checked map of
+   required pages and decoder dependencies; a bounded cost for discovering that
+   map; accounting for requests, gaps and retries; and an exposure plan before
+   any power/node/state decoding. Scanning headers may itself consume dataset
+   bytes, and a selective record predicate does not imply selective physical
+   byte retrieval. Independent structural-index findings, if obtained by the
+   parent audit, should be stated separately with their own provenance.
+
+Overhead and cumulative accounting
+
+The ledger replays to 93,138,130 new dataset response-body bytes. Adding the
+inherited 468,255 bytes gives 93,606,385 consumed under the 100,000,000-byte cap.
+Documentation response bodies total 45,851 and are separate by contract.
+June's 544,889 already charged bytes are 325 header requests totaling 166,400,
+plus nine marker/tail/footer requests totaling 378,489. The audit checks exact
+206 responses, Content-Range endpoints, requested bytes and body lengths for
+successful dataset entries. Unique-cache unions and actually-read-body sums
+are distinct accounting quantities; repeated reads would still be charged.
+
+Selected chunk cost uses supplied compressed lengths, with no extra allowance
+for gap coalescing, new footer checks, page indexes, retries, failed-response
+bodies, repeated requests, or any reader-specific additional body bytes. These
+would add to future dataset consumption. Previously charged marker/footer bytes
+can be reused without charging them again. HTTP/TLS and response-header overhead
+are excluded under inherited BYTE_TOTALS accounting, not silently counted as
+zero network traffic. The difference between whole-member lengths and all-month
+chunk unions is 725,864 bytes; 378,489 of that is cached member metadata/markers.
+The remaining 347,375 is other member space outside the supplied chunk unions.
+Its internal interpretation is not inferred by this safe projection.
+
+Exposure and execution boundary
+
+Selected groups extend through June 30, with 90 state, 338 PSU 0 and 416 PSU 1
+group maxima at or after the exclusive candidate end. Current use of structural
+metadata and timestamp extrema is not June outcome evaluation. If a later
+authorized reader decodes those chunks, all exposed dates must be declared
+contaminated before reading; a logical June 1–14 filter does not protect values
+physically decoded outside the filter. No later month becomes an implicit
+replacement holdout, and this report does not select one.
+
+Replay and checks
+
+  python3 acquisition_audit.py --check
+
+Default execution validates and prints JSON to stdout, changing no file. The
+explicit report-generation command is:
+
+  python3 acquisition_audit.py --output acquisition_audit.json
+
+The replay is standard-library-only and reads the fixed sibling inputs/ paths.
+It writes only when --output is explicitly supplied and refuses to overwrite
+the replay, CONTRACT.txt, or an existing input file. It needs no environment
+activation, package import outside the standard library, credentials or network.
+
+There are 36 passing checks. They cover the inherited exact aggregate/remainder,
+range union/subtraction/intersection, inclusive-start/exclusive-end timestamp
+boundary cases (including a straddling envelope), chunk ordering and exact
+duplication invariance, and rejection of malformed byte ranges, negative sizes,
+out-of-member chunks, conflicting duplicates, missing timestamp groups and
+naive/reversed timestamps. Required gates use explicit exceptions and remain
+active under Python -O. These are arithmetic and reader-plan validation tests,
+not evidence of a universal compression bound or successful dataset decoding.

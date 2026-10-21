@@ -1,0 +1,94 @@
+SOURCE-BOUNDED MEASUREMENT AUDIT
+
+Exadata is pinned to db994a39cb256da3d623fbfe28257a4531db075f. Stored source
+copies and access_ledger.jsonl provide hashes. This pins the published material,
+not the actual 2020 collector, configuration, firmware or ingestion stack.
+
+S1 — What is measured
+Source: documentation/plugins/ipmi.md, metric table psX_input_power.
+https://gitlab.com/ecs-lab/exadata/-/blob/db994a39cb256da3d623fbfe28257a4531db075f/documentation/plugins/ipmi.md
+Supported: each of two PSU input-power channels is reported in watts with
+nominal 20-second cadence. Not supplied: accuracy, freshness, internal averaging,
+or an off-versus-failed-reading classifier. total_power is a separately defined
+channel; equality to the AC PSU sum is not established by these descriptions.
+
+S2 — What state means
+Source: documentation/plugins/nagios.md, column and description tables.
+https://gitlab.com/ecs-lab/exadata/-/blob/db994a39cb256da3d623fbfe28257a4531db075f/documentation/plugins/nagios.md
+Supported: alive::ping concerns reachability; batchs::client::state concerns
+scheduler health. state_type distinguishes SOFT/HARD, not host/service checks.
+Host and service numeric encodings differ; the description-to-check-type mapping
+is not supplied. Sampling is nominally 15 minutes. Neither an administrative
+drain nor failed reachability identifies deenergization. No between-record
+validity or carry-forward policy was established. This is an evidence gap, not
+a theorem that physical states cannot persist or that no further source exists.
+
+S3 — Timestamp transformation
+Sources: ipmi_logic.py and nagios_logic.py in parquet_dataset/csv_to_parquet/plugins/;
+Scientific Data DOI 10.1038/s41597-023-02174-3, Data Processing.
+https://cris.unibo.it/retrieve/d318f3a4-89f2-48f2-84cb-4cb824ebc6a3/versione_editoriale.pdf
+Published converters truncate timestamps to seconds and use UTC-aware output
+types. Exact timestamp equality therefore is not proof of simultaneous physical
+conversion. Conversion code alone cannot identify upstream averaging or lag.
+The article's account of monitoring gaps reinforces keeping missingness explicit;
+it supplies no validated zero/off substitution or duration guarantee.
+
+S4 — Better quality fields, different instrument
+Source: documentation/plugins/logics.md, Bad_values, Comlost, panel/device.
+https://gitlab.com/ecs-lab/exadata/-/blob/db994a39cb256da3d623fbfe28257a4531db075f/documentation/plugins/logics.md
+The facility-meter feed documents unreliability and communication flags. It does
+not by itself identify flag codes/validity, averaging, or a meter-to-980-node
+mapping. Our cached-header replay finds no Logics or Schneider member in the
+June chain before the first tar terminator; 1,536 trailing bytes remain
+uninspected. Their general documentation does not make
+them available in this candidate. No new month or facility population was chosen.
+
+S5 — What the located collector does, and why it is not historical proof
+https://github.com/ExamonHPC/ipmi_pub/blob/50d542ff64e803deb4046040707c1f2ef6c6e1ce/ipmi_pub.py
+The inspected implementation stamps before running the sensor command, parses
+returned readings, and has no explicit time-averaging accumulator in that loop.
+Unparsable sensors are skipped. A nonzero command return does NOT force empty
+output: run_cmd logs and returns whatever stdout was obtained. Thus even for
+this implementation the blanket claim that every read failure emits nothing
+is too strong. Its March 2025 public commit history and TS=10 example do not
+identify the May/June 2020 deployment. Firmware behavior also remains unknown.
+No point-sample/instantaneous-power contract is inferred for the historical data.
+
+S6 — Search scope and provenance
+The Exadata IPMI documentation history contains a February 2023 initial commit.
+The located publisher has three public March 2025 commits. A complete current
+Examon tree (af6886b4dda88192365998324612cb47fb7844c4, 1,468 entries, not
+truncated) was inspected for ipmi/nagios/publisher paths; no historical collector
+match was established. This is a finite search, not proof of global nonexistence
+or that code first originated at its public publication date. We did not inspect
+every historical branch or private CINECA system.
+
+S7 — Query and storage claims
+https://gitlab.com/ecs-lab/exadata/-/blob/db994a39cb256da3d623fbfe28257a4531db075f/parquet_dataset/query_tool/query_tool.py
+The released client constructs a PyArrow dataset from a supplied path and filters
+it. No ready hosted selective extraction endpoint was established. This does not
+rule out alternative remote filesystem clients or a new operator-produced export.
+The writer's nominal page target is not evidence of actual page count; our
+single-page finding comes from cached actual footer metadata instead.
+
+S8 — Structural format
+https://raw.githubusercontent.com/apache/parquet-format/apache-parquet-format-2.9.0/src/main/thrift/parquet.thrift
+ColumnMetaData field 13 contains page-type/encoding counts; data page types are
+0 and 3. ColumnChunk fields 4–7 advertise the standard offset/column indexes.
+Statistics field 12 is unselected. The parser is a bounded audit projection,
+not a general certified Parquet implementation. It relies on accurate footer
+declarations; actual page headers were not inspected. The independent audit
+and synthetic fixtures test selected field IDs, page-count distinctions,
+skipping, corruption refusal, and equality with inherited structural metadata.
+
+Adjudication
+
+The delegated semantics report is REJECTED AS WRITTEN, with useful source leads
+retained after verification. Opposite-family Codex QA agreed that its historical
+collector, sampling, persistence and negative-search claims required revision.
+Our final statements keep E07/E08/P01 unresolved. An example's exact-time join
+does not disprove persistence; dropping a textual field does not prove loss of
+nonredundant information; a present row does not prove an immediate BMC response.
+The delegate's isolated workspace lacked inherited docs by design; the parent
+has retained and hash-verified the pertinent source copies. Neither model's
+literature opinion establishes physical truth or exhaustive absence.
