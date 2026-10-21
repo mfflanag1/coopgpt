@@ -1,0 +1,201 @@
+INDEPENDENT AUDIT OF THE COMMON-VETO TRUE-ENVELOPE UPPER BOUND
+21 October 2026. Reviewed frozen mass_geometry_final_upper_attempt.txt.
+
+VERDICT
+The caps, heterogeneous aggregation, real-report transfer, and hypercube
+sharpness limits are valid under the intended hypothesis that EVERY base
+generator is nonempty. The phrase "nonempty generator families" should
+explicitly say this, rather than merely requiring each family to contain
+some rows. The proof needs a finite feasible unit-demand base and u<1.
+An empty base row has no feasible unit-demand cover; after adjoining the
+veto it would force u>=1. This is a hypothesis clarification, not a valid
+counterexample to the intended finite-rho theorem.
+
+I independently derived the conclusions below; I did not rely on the
+frozen proof's claimed numerical checks. The only frozen-file correction
+recommended is the explicit nonempty-row hypothesis. This audit does not
+edit that file or extend the theorem to arbitrary production functions.
+
+1. MASS INEQUALITY WITHOUT IDENTIFYING MASS WITH NORM
+Use the multiplier normalization q=A^T lambda. Nonnegative-coordinate
+constraints have zero multipliers here: at a positive coordinate their
+multiplier vanishes by complementarity; at a zero coordinate stationarity
+is0=(A^T lambda)_j+nu_j with both terms nonnegative, hence both vanish.
+
+For a unit full RHS and any downward RHS b in[0,1], full projection z remains
+feasible for the relaxed system. For ANY chosen nonnegative KKT multipliers,
+  L=sum lambda <=sum lambda*z(R)=z dot q
+    <=||z||*||q||<=||z||^2=rho.
+Also q_i is a subset sum of lambda, so q_i<=L. Complementarity separately
+gives ||q||^2=sum lambda*b<=L. This establishes all mass claims, even when
+the relaxed RHS is fractional and L differs from ||q||^2. At full RHS,
+L=||z||^2=rho. The frozen proof's alternative quadratic-dual calculation
+agrees with these inequalities and its normalization is consistent.
+
+2. COMMON-VETO CAP: INDEPENDENT DERIVATION
+Let rho_c denote each full base squared norm, R=sum rho_c. At a fixed
+veto value u in[0,1], the full objective is
+  u^2+(1-u)^2 R.
+Its minimum is at u0=R/(1+R), with full squared norm also u0. Values u>1
+cannot improve on the feasible point paying the veto1. At any full-system
+RHS relaxation the total multiplier mass is the veto coordinate, since
+every row contains that coordinate. Applying the preceding mass inequality
+to the FULL augmented system gives u<=u0<1. Full demand attains u0, proving
+the abstract veto envelope exactly.
+
+For a private owner i in block c, only its incident rows in c can change.
+Write h=1-u>0. Other blocks have unique conditional projections h*z^d and
+multiplier masses h*rho_d. In the focal block set q=x^c/h and
+  b'_r=max(0,(a'_r-u)/h).
+The off-i residual demands equal1 and every residual lies in[0,1].
+
+The clipping step is sound. If an original focal-row multiplier mu_r is
+positive, stationarity gives x_j>=mu_r for every base coordinate j in r.
+Since r is nonempty, x(r)>0. Complementarity then gives a'_r-u=x(r)>0.
+Hence a nonpositive residual always has multiplier zero. Dividing all
+focal multipliers by h gives KKT for the clipped base system, with mass L
+and owner coordinate p. Veto stationarity now reads
+  u=h*(R-rho_c+L),
+and therefore
+  x_i=p/[1+R-rho_c+L].
+Since0<=p<=L<=rho_c and1+R-rho_c>0, monotonicity of s/(1+R-rho_c+s) yields
+  x_i<=rho_c/(1+R).
+No endpoint restriction, dual uniqueness, equal block size, uniform full
+coordinate, or base own-coordinate monotonicity enters this proof.
+
+3. HETEROGENEOUS AGGREGATION
+The caps imply
+  sum_i M_i^2 <=[R^2+sum_c n_c*rho_c^2]/(1+R)^2,
+  sum_i M_i <=[sum_c(n_c+1)rho_c]/(1+R).
+If n_c*rho_c<=4, the first numerator is at most R^2+4R; subtracting from
+4/3 gives (R-2)^2/[3(1+R)^2]>=0.
+
+If(n_c+1)^2*rho_c<=4n_c, then
+  (n_c+1)rho_c<=2sqrt(n_c*rho_c).
+Summing and applying Cauchy-Schwarz gives at most2sqrt(mR)/(1+R)<=sqrt(m),
+where m=sum n_c=N-1. This includes the veto coordinate. The same arguments
+permit different rho_c and different n_c; block symmetry is unnecessary.
+
+For uniform row size k with the uniform row vector in the row convex hull,
+rho=n/k^2. The squared-diagonal condition is k>=n/2, while the funding
+condition is exactly k>=(n+1)/2, which follows from the stated integer
+condition k>n/2. The hypercube bases satisfy this condition.
+
+4. REAL PRIVATE REPORTS IN THE PARTICULAR PRODUCTION FUNCTION
+Let Phi_g(X)=min_{A nonempty} h^(g,A) dot X for the DIRECT forms specified
+in the frozen proof. Consider a coalition S containing private owner j.
+At the designated full bundles, after j alone reports X_j=t in[0,1], every
+other present base coordinate is1. I obtain
+  Phi_g(X_S)=min(g(S),g(S\{j})+t).                              (D1)
+
+To prove this, any non-j element of S outside A contributes1, which cannot
+improve g(S)<=1. If all such elements are inside A, either j is also inside
+and the value is at least g(S), or j is outside and the value is at least
+g(S\{j})+t. Choosing A=S or A=S\{j} attains these cases whenever needed.
+The apparently missing empty A causes no problem: when S={j}, or more
+generally S omits u, g(S)=0 and the nonempty choice A=S already attains0.
+At S=empty every form evaluates to0.
+
+At a unilateral report(t,z), all other present control coordinates stay1.
+An alternative k-family with k present therefore costs at least1; with
+k absent it agrees with the baseline by locality, on both S and S\{j}.
+The j-family contributes
+  min(w^j(S),w^j(S\{j})+t)+z.
+Because w^j(S\{j})=v(S\{j}), its second term is redundant against the
+baseline. The exact value is consequently
+  min(v(S),v(S\{j})+t,w^j(S)+z).                              (D2)
+
+If a contained generator avoids j, this is1. If no generator is contained,
+it is0. Otherwise all contained generators contain j, and it equals
+  min(1,t,max_{R subset S} a^j_R+z)
+   =max_{R subset S} min(1,t,a^j_R+z).
+The maximum here is over a finite nonempty family. Thus the entire real
+report game is EXACTLY represented by the original generator family with
+off-j RHS1 and incident RHS min(1,t,a^j_R+z). All are in[0,1]. Coalitions
+omitting j are unchanged. This proves inclusion of EVERY actual unilateral
+real underreport in the abstract envelope domain used above.
+
+5. VETO, EMPTY AND SINGLETON COALITIONS
+For a veto report X_u=t, a coalition containing u has all other present
+base coordinates1. Its direct-form minimum is
+  Phi_g(X_S)=t*g(S).
+An omitted nonveto coordinate costs1>=t*g(S), an omitted veto costs t,
+and A=S attains t*g(S). This includes singleton S={u}; nonempty base rows
+actually make g({u})=0, and A={u} gives0. Coalitions omitting u have value0.
+Empty coalition values are0 for every form and control branch.
+
+The selected veto game is w^u=v. Its own branch is t*v(S)+z and cannot
+improve the baseline. Every other branch is either protected by its unit
+control or agrees with v off that branch's owner. Hence the actual game is
+t*v, independent of z, and its projection scales by t. The veto's true
+envelope is exactly the full u0. Thus the theorem covers the veto owner's
+entire real report square, not just its selected Boolean report.
+
+FOCUSED CROSS-MODEL FINDING ADJUDICATION
+The review at claude-reviews/2026-10-21-breakthrough-scope-dc034b4bf10c/
+20261021-021700-815c5ea5/review.md claims that the veto supporting-form
+minimum is min(g(S),t), rather than t*g(S), for fractional games. This
+finding is FALSE: its case S subset A drops the factor X_u=t and evaluates
+the veto coefficient g(A) as though it were itself a form value.
+
+An exact two-owner countercheck to that finding is V={u,1}, with the sole
+generator{u,1} of demand1/2. For A={u},{1},{u,1}, respectively, the three
+direct forms on the base coordinates are
+  (0,1), (1,0), (1/2,0).
+At X=(1/2,1) their values are1,1/2,1/4. The minimum is1/4=t*g(S), whereas
+the review's proposed min(g(S),t) is1/2. The original identity is correct;
+its suggested repair should not be adopted. The independent checker also
+tests the identity on320 fractional-game/coalition/report combinations,
+separately from the control branches. The review's distinct nonempty-row
+clarification is valid and is recorded in the verdict above.
+
+6. PRECISE SCOPE AND A VERIFIED BOUNDARY EXAMPLE
+The production function is valid on all R_+^(2N), but the proved caps and
+real-report transfer are evaluated at the DESIGNATED full bundles
+b_i=e_i+e_(N+i), allowing one owner to lower its bundle arbitrarily. They
+do not assert the same caps at every other base profile. In (D1) the
+other present base coordinates must be1, and in (D2) the other present
+controls must be1. These hypotheses cannot be silently discarded.
+
+In fact original-generator preservation fails at a simultaneous report
+even within the fixed bundle box. Take V={u,1,2}, generators{u,1},{u,2},
+w^1 deleting the first row and w^2 deleting the second, with w^u=v.
+Set all X coordinates to1 and drop BOTH private controls to0. Direct
+evaluation gives values
+  g({u,1})=0, g({u,2})=0, g(V)=1.
+No RHS assignment to those original two generators can represent this
+game: their coalition values force both RHS to0, which would force g(V)=0.
+This does NOT contradict the theorem, whose envelope comparisons keep all
+other owners at the designated full reports. It demonstrates why that
+scope restriction is substantive. Likewise, arbitrarily scaling unrelated
+full bundles cannot preserve the theorem's fixed absolute numerical caps.
+
+The separate resource bottleneck F(X,Z)<=X_u remains globally valid for
+these direct forms. It implies a veto OWNER throughout the fixed bundles'
+underreport box, since only that owner can supply X_u. It does not imply
+the original generator representation or these sharper projection caps at
+all those base profiles, nor a fixed veto owner at unrelated bundle profiles.
+
+7. SHARPNESS OF TRUE ENVELOPES
+For the hypercube family, p/rho->1, ell/rho->1, n*rho->4 and rho->0.
+Choose J with J*rho->r>0. Each private true envelope is sandwiched between
+  p/[1+(J-1)rho+ell] and rho/(1+J*rho).
+The ratio tends1 uniformly over all private owners because both bounds
+are identical across those owners; joint symmetries of the entire F are
+not additionally needed. The veto envelope is exactly J*rho/(1+J*rho).
+Squaring/summing, or summing and dividing by sqrt(Jn+1), gives by squeezing
+  sum_i M_i^2 ->(r^2+4r)/(1+r)^2,
+  (sum_i M_i)/sqrt(N) ->2sqrt(r)/(1+r).
+At r=2 the first limit is4/3; at r=1 the second is1 and the first is5/4.
+These are genuine true-envelope limits at the designated full bundles.
+They are stronger than witness-only lower limits and remain restricted to
+this production class. No unrestricted sqrt(N) upper bound follows.
+
+REPRODUCIBILITY
+Run python3 checks/mass_search_true_envelope_upper.py. It uses exact
+Fraction active-set KKT enumeration for small heterogeneous block systems,
+checks arbitrary sampled fractional RHS reductions including negative
+unclipped residuals, verifies the real-report formulas on a rational grid
+including empty and singleton coalitions, and checks the simultaneous-report
+scope example. It imports no frozen-proof checker or numerical optimizer.
+Finite checks supplement, rather than replace, the independent derivation.

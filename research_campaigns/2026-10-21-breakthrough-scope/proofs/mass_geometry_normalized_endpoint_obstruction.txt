@@ -1,0 +1,74 @@
+NORMALIZED OWN-ROW RELAXATIONS DO NOT REDUCE TO DELETIONS
+2026-10-21. Exact finite computation with independently rerunnable rational
+primal/KKT certificates. Not a diagonal counterexample; not a proof of H>2.
+
+Let A consist of all fifteen cyclic shifts modulo15 of the set
+  {0,1,2,3,4,5,7,8}.
+Rows are sorted lexicographically as owner subsets; focal owner is0. The first
+eight rows contain0 and the last seven do not. All full demands equal1.
+For any incident-row relaxation, q denotes the minimum-Euclidean-norm cover,
+q=A^T lambda is its KKT representation, L=sum lambda, theta=q_0/L.
+
+Claim. Some continuous incident-row relaxation has theta=1251/2260,
+whereas every deletion-only relaxation has theta<=711/1297. The exact gap is
+15687/2931220>0.
+
+Continuous certificate.
+In lexicographic row order set
+  alpha=(0,188,429,629,0,489,330,437,393,129,381,489,311,0,315)/4520,
+  t=19364/4520,
+  v=A^T alpha=
+    (2502,2257,2479,2210,2391,2632,2506,2121,2434,2455,2570,2500,
+     2325,2321,2457)/4520.
+The row potentials A*v, in the same order, have numerator
+  (19026,18923,19364,19364,18963,19364,19364,19364,19364,19364,
+   19364,19364,19364,19364,19364)
+and denominator4520. Thus every off row has potential t; every positive-alpha
+own row has potential<=t. These exact conditions certify a genuine relaxed
+projection q=v/t, lambda=alpha/t. Set own rows0 and4 demand0, own row1 demand
+s*=18923/19364, all other rows demand1. Positive multipliers meet these demands
+with equality; q is feasible. Theta=v_0=1251/2260.
+
+Exhaustive endpoint upper certificate.
+There are exactly2^8=256 choices of retained own rows. For each mask, the JSON
+file below contains a rational nonnegative multiplier vector lambda supported
+on the retained own rows and the seven mandatory off rows. The stdlib verifier
+checks q=A^T lambda, q(row)>=1 for every retained row, q(row)=1 for every
+positive multiplier, and L=sum lambda=||q||^2. These conditions certify the
+UNIQUE minimum-norm projection for that deletion profile, independently of
+the numerical routine that guessed multiplier support. The verifier checks
+the mask set equals {0,...,255}, and compares every exact ratio q_0/L.
+The maximum is711/1297, attained at mask238 (retain own rows1,2,3,5,6,7).
+Thus no MILP-reported upper bound or numerical optimality is used in the claim.
+
+Active-set mechanism.
+Fix own rows0 and4 at0 and the other retained rows except1 at1. Vary row1's
+demand s. Exact active-Gram solves give
+  theta(s)=(6401+29518*s)/(58062+5744*s)
+      for32545/33981 <= s <=18923/19364,
+  theta(s)=(6537-1560*s)/(8043+1036*s)
+      for18923/19364 <= s <=1.
+The first is strictly increasing and the second strictly decreasing. Their
+common breakpoint is where off-row13's multiplier reaches0. Below the first
+interval, row1's multiplier is0 and the projection is constant down to s=0.
+Thus the strict gain arises at a genuine interior active-set transition in a
+single incident-row demand; a scalar endpoint reduction misses it.
+
+Scope.
+The full system is cyclic and8-uniform, so q_full=(1/8,...,1/8) andrho15/64.
+Cyclically shifting the continuous witness gives
+  H_cont=15*(15/64)*(1251/2260)^2=14085009/13075456 ~1.07721,
+while optimal endpoint witnesses give
+  H_end=113742225/107661376 ~1.05648.
+Both are BELOW2. This closes the normalized deletion-endpoint reduction, not
+the main normalized-mass problem or the actual envelope diagonal. No claim of
+global optimality among all continuous relaxations is required or made.
+
+Artifacts, relative to campaign root.
+  checks/mass_geometry_endpoint_certificate.py
+  checks/mass_geometry_endpoint_certificate.json
+Independent verification (standard Python only):
+  python3 checks/mass_geometry_endpoint_certificate.py --verify \
+    checks/mass_geometry_endpoint_certificate.json
+Discovery mode uses scipy only to guess active supports; all accepted endpoint
+certificates are subsequently checked with exact fractions.

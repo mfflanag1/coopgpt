@@ -1,0 +1,112 @@
+ROW COMPLETION LEMMA FOR NORMALIZED OWN-ROW RELAXATIONS
+2026-10-21. Conventional proof; independent audit still required.
+
+This is a sufficient safe-class theorem at a UNIFORM unit-demand profile.
+It does not prove the actual own-report envelope diagonal at arbitrary profiles.
+
+Setup.
+Let a_1,...,a_m be nonempty zero-one row vectors in R^n, C their convex
+hull, and z the unique minimum-Euclidean-norm point of C. Put d=||z||^2>0.
+The full unit-demand covering projection is p=z/d, with rho=||p||^2=1/d:
+the minimum-hull condition gives a_r.z>=d for every r, hence p is feasible;
+any convex representation z=sum mu_r a_r gives the projection certificate
+p=A^T(mu/d), with positive mu supported on a_r.z=d.
+
+An admissible normalized witness for owner i consists of alpha>=0, sum alpha=1,
+v=A^T alpha, and t>0, satisfying
+  a_r.v >= t                     for every off-i row (a_ri=0),
+  a_r.v = t                      for positive-alpha off-i rows,
+  a_r.v <= t                     for positive-alpha own-i rows.
+Here theta=v_i=sum_{own}alpha_r. These conditions are exactly the uniform
+incident-row downward-relaxation KKT conditions after lambda=alpha/t and
+q=v/t. In particular ||v||^2=sum alpha_r(a_r.v)<=t.
+
+Completion hypothesis for owner i with 0<r=z_i<1.
+For every own-i row a, the vector
+             b_a=(z-r*a)/(1-r)
+belongs to the off-i face C_i^0=conv{a_s:a_si=0}.
+
+Claim. Every admissible normalized witness satisfies theta<=z_i.
+
+Proof.
+Since b_a is a convex combination of off-i rows, b_a.v>=t. Thus every own
+row a (whether or not used by alpha) satisfies
+             a.v <= [z.v-(1-r)t]/r.
+Average this inequality over the own part of alpha, and use exact value t on
+its off part. Writing c=theta/r gives
+             ||v||^2 <= c(z.v)+(1-c)t.                       (1)
+Suppose theta>r, so c>1. Since t>=||v||^2, (1) implies
+             ||v||^2 <= c(z.v)-(c-1)||v||^2,
+and hence ||v||^2<=z.v. By Cauchy-Schwarz this implies ||v||<=||z||.
+Because v belongs to C and z is its UNIQUE minimum-norm point, v=z. But
+then theta=v_i=z_i=r, a contradiction. Therefore theta<=r. QED.
+
+Raw-coordinate consequence.
+For any actual downward incident-row relaxation, let q=A^T lambda be its
+projection, L=sum lambda, and p the full projection. Its KKT conditions give
+||q||^2<=L. Full feasibility gives L<=p.q<=sqrt(rho)||q||; hence L<=rho
+when L>0. Therefore q_i=L theta<=rho*z_i=p_i. The full profile itself is an
+allowed relaxation, so the own-row coordinate envelope at this unit profile
+equals p_i whenever the completion hypothesis holds.
+
+Edge cases.
+If z_i=1, theta<=1=z_i is automatic. If z_i=0, every convex representation
+of z uses only off-i rows. The full projection has a KKT certificate using
+only those rows, and is therefore already the off-i covering projection.
+Every incident-row relaxation has that same projection; q_i=theta=0.
+Thus if completion holds for every owner with 0<z_i<1, then
+             H=rho*sum_i theta_i^2 <= rho*||z||^2=1.
+This bound is attained by using the full profile for every owner.
+
+Regular bipartite perfect-matching row hypergraphs.
+Let G be a d0-regular bipartite graph with N vertices on each side and d0*N
+edges (owners). Rows are ALL its perfect matchings, each with N edges.
+By degree counting Hall's condition holds. Removing a perfect matching leaves
+a (d0-1)-regular bipartite graph; induction decomposes its edges into perfect
+matchings. Consequently z_e=1/d0 is in C. Every point of C has coordinate sum
+N, so Cauchy-Schwarz proves this uniform vector is the unique minimum-norm
+point. For an arbitrary matching a, the vector (z-a/d0)/(1-1/d0) is the
+uniform fractional perfect matching on G minus a, and is a convex combination
+of its perfect matchings. It is therefore in the off-e face for every e in a.
+The completion hypothesis holds for all owners. Thus H<=1, and every
+incident-row relaxation satisfies q_e<=p_e=1/N. This includes the full
+Birkhoff/permutation system (d0=N). For d0=1 the conclusion is direct.
+
+Interpretation limits.
+This proves coordinate monotonicity under arbitrary incident ROW relaxation
+from unit demands for these row systems. It neither proves coordinate
+monotonicity from arbitrary nonuniform demand profiles nor the global
+all-real-profile own-report envelope diagonal. It is a general obstruction
+to obtaining an H>2 witness from regular bipartite perfect-matching systems.
+
+Irregular bipartite graphs.
+Their matching polytope has equality constraints plus nonnegativity, but the
+minimum-norm fractional matching z need not be uniform. The completion vector
+for an owner i is feasible precisely when z_e>=z_i for every edge e in the
+chosen own matching (the equality constraints are automatically preserved).
+Thus this lemma applies to owner i if that inequality holds for EVERY matching
+containing i. It does not generally extend merely because the rows are
+perfect matchings: a matching can contain both low-z and high-z edges.
+Any stronger irregular-graph theorem requires a different argument.
+
+Conditional completion and a limited inflation-ratio principle.
+The proof only needs completion of the particular conditional own mixture
+u=sum_{own}alpha_r*a_r/theta, rather than of every individual own row.
+If C has an exact representation {x>=0:B*x=b}, then z>=z_i*u coordinatewise
+is sufficient: (z-z_i*u)/(1-z_i) satisfies the same equalities, is nonnegative,
+and has coordinate i equal0. Consequently, if 0<z_i<1 and theta>z_i, some
+coordinate j must satisfy v_j/z_j>theta/z_i (an edge with z_j=0<v_j counts as
+infinite ratio). Otherwise u_j<=v_j/theta<=z_j/z_i for every j, and conditional
+completion gives a contradiction. This DOES NOT prove a bound on all own
+envelopes: v_j belongs to i's witness and is not automatically achievable as
+j's own-report normalized coordinate.
+
+Separate exchange calibration: all k-subset rows.
+Let rows be all k-subsets of n owners, 1<=k<n. For a positive-alpha own row a
+and any j outside a, replacing i by j gives an off row b. Hence
+v_j-v_i=b.v-a.v>=t-a.v>=0. If some coordinate j had v_j<v_i, it would have to
+belong to EVERY positive-alpha own row; then v_j>=sum_{own}alpha=v_i, again
+a contradiction. Thus all coordinates satisfy v_j>=v_i, and sum v_j=k gives
+theta=v_i<=k/n=z_i. This proves H<=1 for complete uniform hypergraphs even
+when k>n/2, where the rowwise completion hypothesis is unavailable. It is a
+calibration safe class, not an extension to arbitrary restricted hypergraphs.

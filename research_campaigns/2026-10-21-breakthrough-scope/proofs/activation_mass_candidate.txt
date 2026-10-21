@@ -1,0 +1,36 @@
+EXACT FINITE NORMALIZED-MASS CANDIDATE: MOBIUS LADDER ON 104 VERTICES
+Status: internally checked with rational arithmetic; independent audit pending.
+
+Let G have vertex set Z/104Z, cycle edges {j,j+1}, and antipodal matching edges {j,j+52}. Let R be the family of complements of ALL independent 49-subsets of G. Each row has size55. Rotation j -> j+1 preserves R and is transitive on owners. The nonempty row family is certified by any of the101 independent sets in activation_mass_certificate.txt.
+
+Full quadratic covering program: min ||z||^2/2 subject z>=0 and z(R)>=1 for every R. The uniform vector z_i=1/55 is optimal: every feasible z has sum z_i>=104/55 by averaging cyclic translates of one row, whence ||z||^2>=104/3025 by Cauchy-Schwarz. Its squared norm rho=104/3025. Explicit KKT multipliers place1/3025 on each of104 translates of one row, combining duplicate rows if necessary.
+
+Fix owner0 and closed star C={0,1,52,103}. The certificate gives101 positive rational weights alpha_I, summing to1, on independent49-sets satisfying |I intersect C|=1. Exact marginal probabilities are1/4 on C and12/25 outside C. Thus the complementary row mixture w has coordinates3/4 on C and13/25 outside C. Its squared norm is
+ t=4*(3/4)^2+100*(13/25)^2=2929/100.
+For ANY row R avoiding owner0, the complementary independent set I contains0; independence implies I excludes every neighbor of0. Therefore |R intersect C|=3. The same equality holds for each supported row by its exact-one star condition. Consequently w(R)=(13/25)*55+(3/4-13/25)*3=2929/100=t for all off-owner rows and all supported rows.
+
+Define relaxed RHS d_R=1 for all off-owner rows and all supported rows, and d_R=0 for all other own-owner rows. Then q=w/t is feasible, with all kept rows tight. For each supported row let lambda_R=alpha_R/t, combining duplicates. Stationarity q=sum_R lambda_R 1_R holds exactly. Nonnegativity constraints are slack. Hence KKT is satisfied: q is the unique quadratic optimum for this binary own-row relaxation. The chosen multipliers have total mass L=1/t=100/2929, and focal payment p=q_0=75/2929. Normalized focal theta=p/L=3/4. No uniqueness of dual multipliers is required: this explicit multiplier vector suffices for the amplification reduction.
+
+Translate the focal witness to every owner. The normalized total is
+ H=rho * sum_i theta_i^2=(104/3025)*104*(9/16)=6084/3025=2+34/3025>2.
+This is a finite counterexample to the normalized bound, conditional only on the exact certificate checks. The JSON file contains all actual supporting sets and rational weights. It does not enumerate the entire row universe, which is defined combinatorially; the off-row argument verifies every member uniformly.
+
+Scope: applying the previously audited union-product and common-veto amplification can produce a failure of the TRUE own-report diagonal inequality, with a fixed-owner production realization. The normalized H>2 example itself is not yet that diagonal counterexample. Neither this calculation nor diagonal failure establishes a total-envelope sqrt(n) funding violation, or any lower bound for arbitrary payout mechanisms.
+
+Construction record: represent vertex j as top_j and52+j as bottom_j on52 rungs. An independent49-set has exactly3 empty rungs; on occupied adjacent rungs top/bottom choices alternate, and the twisted wrap requires equal choices when both end rungs are occupied. Enumerating these states and requiring exactly1 selected vertex in C gives83,443 eligible independent sets. HiGHS feasibility returned101 positive supports. Fraction-free integer elimination of the105 marginal equations, followed by exact Fraction back substitution, reconstructed positive rational weights (max denominator16digits). Independent graph, cardinality, star-intersection, mass, marginal, and row-potential checks then passed exactly. Floating-point solver residuals are not used in the claimed proof.
+
+OPTIMIZED BASE: 172 OWNERS, DIRECT COMMON-VETO AMPLIFICATION
+An independently reconstructible second certificate is activation_mass_certificate_172.txt. Replace104 by172 and52 by86 throughout; rows complement all independent83-sets, so k=89. The exact certificate has168 strictly positive supports, each exact-one on C={0,1,86,171}. Independent marginals are1/4 on C and41/84 off C; complementary row mixture has w=3/4 on C and43/84 elsewhere. Exact quantities:
+ t=||w||^2=3887/84,
+ rho=172/7921,
+ L=84/3887,
+ p=63/3887,
+ theta=3/4,
+ H=16641/7921>2.
+All off-owner rows and supported rows have89 entries, including3 in C; their common w-potential is3*(3/4)+86*(43/84)=3887/84=t. Thus the same proof establishes an actual own-row relaxation and KKT witness for each owner.
+
+The squared-payments-over-rho quantity for this base, before normalized union amplification, is
+ R=(172*p^2)/rho = 31438449/15108769 > 2.
+Therefore common-veto amplification can be applied directly, without any union product. This is a substantial simplification of the final counterexample. With B copies, total owners172B+1. The previously audited diagonal lower gap numerator is B*rho*(R-2)-1, over positive denominator (1+B*rho)^2. Its smallest sufficient integer B is570, giving98,041 owners.
+
+Generation: seeded random sampling produced40,000 eligible independent83-sets; linear feasibility selected168 of these. Rational reconstruction and all exact checks passed. The certificate is independent of solver availability or random generation because all actual sets and weights are supplied; a standard-library verifier is activation_mass_verify.txt. Source-generation records are activation_mass_generate_104.txt and activation_mass_generate_172.txt. These have .txt extensions but contain Python source. The latter requires scipy only to reproduce discovery.

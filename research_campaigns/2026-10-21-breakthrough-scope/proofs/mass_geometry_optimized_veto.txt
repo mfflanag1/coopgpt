@@ -1,0 +1,87 @@
+EXACT VETO OPTIMIZATION FOR THE MOBIUS-LADDER WITNESS FAMILY
+2026-10-21. Independent algebra and exact one-dimensional arithmetic.
+This note optimizes the selected witness certificate, not the unknown actual
+envelope. The newer hypercube family supersedes its numerical strength.
+
+1. GENERAL FORMULA.
+Suppose a symmetric n-owner base has full squared norm rho, and for each
+owner an own-relaxation witness with focal coordinate p and total dual mass
+ell. Let E=n*p^2, R=E/rho, delta=rho-ell and c=J*rho. Add one common veto
+owner to J disjoint base blocks. Its full-profile coordinate is c/(1+c),
+and each selected nonveto coordinate is p/(1+(J-1)*rho+ell). Thus the
+selected squared diagonal is exactly
+ D_delta(c)=c^2/(1+c)^2 + R*c/(1+c-delta)^2.
+This is a LOWER bound on the true envelope squared diagonal.
+If delta>=0, a conservative lower bound is
+ D_0(c)=(c^2+R*c)/(1+c)^2.
+For R>2,
+ D_0'(c)=[R+(2-R)c]/(1+c)^3,
+ c_opt=R/(R-2),  max D_0=R^2/[4(R-1)].
+For R<=2 the conservative expression increases to1. In particular R->9/4
+has optimum c->9 and maximum81/80, not9/8.
+
+For the exact expression put a=1-delta. Its derivative is
+ 2c/(1+c)^3 + R*(a-c)/(a+c)^3.
+It is positive for c<=a. For c>a, its sign changes when
+ R=Psi(c)=2c*(a+c)^3/[(c-a)*(1+c)^3].
+The sign of the logarithmic derivative of Psi is the sign of
+ (3-4a)c^2-2a(2-a)c-a^2.
+For 3/4<=a<=1 this is negative. Hence Psi decreases from infinity to2;
+for R>2 there is exactly one maximizer. The integer-J maximum is attained
+at one of the two integers bracketing this critical point. Exact signs
+and binary search suffice; no numerical optimization is needed.
+
+2. MOBIUS PARAMETERS AND AN EXACT CERTIFICATE CEILING.
+For even L>=4 put D=2L^2+9L-18. The closed-form ladder construction gives
+ n=2L, rho=2L/(L+3)^2, p=3(L-2)/D, ell=4(L-2)/D,
+ R=[3(L-2)(L+3)/D]^2,
+ delta=2(L-6)^2/[(L+3)^2*D].
+Here 0<=delta<1/4. Write r=sqrt(R)=p*(L+3). The inequality
+ r < (3/2)*(1-delta)
+is equivalent to (7L-6)*(L+3)^2>2(L-6)^2, which holds for every L>=4
+(expanding the difference gives 7L^3+34L^2+51L-126>0).
+Since 1+c-delta >= (1-delta)*(1+c), it follows that for every finite L,J,
+ D_delta(c) < [c^2+(9/4)c]/(1+c)^2 <=81/80.
+Conversely choosing integer J with J*rho->9 as L->infinity attains limit
+81/80. This is therefore the exact supremum of this selected-certificate
+architecture within the ladder family. It is NOT an upper bound on the
+actual envelope, which could have other stronger own reports.
+
+The selected nonveto funding sum divided by sqrt(J*n) is
+ r*sqrt(c)/(1+c-delta).
+Its maximum over c>0 is r/[2sqrt(1-delta)]<3/4, attained at c=1-delta.
+Consequently the selected total including veto is below
+ 1+(3/4)*sqrt(J*n).
+As L->infinity the leading coefficient is (3/2)*sqrt(c)/(1+c), with maximum
+3/4 at c=1. At the squared-diagonal-optimal c=9 it equals9/20. Asymptotic
+squared-diagonal violation requires c>4, so the supremum of the funding
+coefficient along such ladder choices is3/5. These are limitations of the
+selected ladder witnesses only, not of the true envelope or of general
+constructions. The hypercube family changes R's limiting value to4.
+
+3. EXACT FINITE >1% INSTANCES.
+The standalone Fraction checker
+ checks/mass_geometry_optimized_veto.py
+writes checks/mass_geometry_optimized_veto.json. It finds, within this
+specified even-L family, the minimum number of owners for a selected
+certificate strictly exceeding101/100:
+ L=546, n=1092, J=2580, N=J*n+1=2,817,361,
+ D_delta=8676858712789423451772628480/8590948812523739625636641293
+        =1.0100000479737985 approximately.
+The first feasible even L is536. The minimum above uses the exact denominator;
+its conservative lower bound is slightly below101/100.
+
+A simpler round choice is L=600,J=3030,N=3,636,001, with conservative bound
+ 356455003490756000/352837479293129789 >101/100
+and exact selected value
+ 7110104294326946946653491156000/7037945968242772139429727763561
+ =1.0102527536314962 approximately.
+
+The finite minimality claim has a rigorous stopping rule. Any >1% certificate
+requires c>5, because the universal upper expression with R=9/4 increases
+through c=5 and there equals145/144<101/100. Thus N-1>5(L+3)^2. Once this
+bound exceeds the best found N-1, all larger L are excluded. The script checks
+every even L through746 and stops at748, with exact Fraction comparisons.
+For each L it brackets the unique maximum using derivative signs and finds
+the least successful integer J on the increasing branch. This proves
+minimality only in the stated ladder selected-certificate family.

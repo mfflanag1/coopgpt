@@ -1,0 +1,170 @@
+TOTAL FUNDING OF THE OWN-REPORT PROJECTION ENVELOPE
+21 October 2026. Exact architecture-specific corollary.
+
+CLAIM AND SCOPE
+For every even integer s>=4 there is a finite unit-demand cover system with
+N=s^2+1 fixed owners and minimum total feasible payment T=1 for which its
+coordinatewise own-report projection envelope M satisfies
+
+                 sum_i M_i >= (3/4)*sqrt(N) - 21/8.                 (1)
+
+Consequently this architecture has examples with total funding at least
+(3/4-o(1))*sqrt(N), along N=s^2+1. This is a lower bound on this particular
+envelope architecture, not on arbitrary incentive-compatible mechanisms.
+The common-veto systems also have the efficient allocation paying the veto
+one and everyone else zero. No optimality of the coefficient3/4 is claimed.
+
+The proof below concerns finite cover polyhedra and their incident-row
+relaxations. Its transfer to genuine own reports of one production function
+uses the separate balanced-closure and simultaneous Boolean realization
+lemmas, exactly as in inputs/UNIFORM_VETO_AMPLIFICATION_REDUCTION.txt.
+For every fixed s all owners remain fixed across the displayed witnesses.
+The asymptotic sequence may use a different institution for each s.
+
+BASE CERTIFICATE
+Use proofs/activation_mass_simple_proof.txt, independently checked here by
+parity counting and checks/mass_search_funding_corollary.py. Let the graph
+have vertices Z/(2s), cycle edges and antipodal edges, with s even. Covering
+rows are complements of all independent (s-3)-sets, so their size is s+3.
+The graph's cyclic translation is transitive. With C the four-vertex closed
+neighborhood of owner0, the explicit equal-weight mixture of 2(s-2) rows has
+coordinates3/4 on C and s/[2(s-2)] elsewhere. Its supporting rows each meet
+C in three vertices. Every off-owner row also meets C in three vertices:
+its independent complement contains0 and excludes the three neighbors.
+
+For clarity, the independent-set marginal count in that proof is exact:
+write m=(s-2)/2. Each of the four local vertices occurs m times among4m
+sets; each other vertex occurs2m-2 times. At even interior rung j=2r the
+A/B contributions to the top layer are (m-r)+(r-1)=m-1, with the same
+bottom total; C/D contribute m-1 on each layer. At odd interior rung
+j=2r+1 the A/B top total is (r-1)+(m-r)=m-1 and the bottom total is
+(m-r-1)+r=m-1, again with C/D contributing m-1. The two nonlocal endpoint
+vertices occur2m-2 times as well. Thus the certificate holds for every even
+s>=4, not merely the finitely many sizes checked by the executable.
+
+Put D=2s^2+9s-18. The exact full and relaxed KKT quantities are
+
+  n=2s,              rho=2s/(s+3)^2,
+  ell=4(s-2)/D,      p=3(s-2)/D,       theta=p/ell=3/4.
+
+Here ell denotes total relaxed dual mass, not a graph size. The relaxed
+vector is3(s-2)/D on C and2s/D elsewhere. Each supported row gets multiplier
+2/D (combine repeated rows if needed), and every supported and off-owner
+row has payment1. Set demand1 on those rows and0 on other own-owner rows.
+This gives primal feasibility, stationarity and complementary slackness.
+All owners have translated copies. The full point1/(s+3) follows by cyclic
+averaging and Cauchy-Schwarz, or by equally weighted translated-row KKT.
+
+DIRECT COMMON-VETO CONSTRUCTION
+Take B=s/2 disjoint base blocks and one common veto u; each generator is
+u+x^b(S)>=1. Then N=Bn+1=s^2+1 and T=1: u=1 is feasible and any one row
+forces total payment at least1.
+
+The full quadratic projection has veto coordinate
+
+  u_full=B*rho/(1+B*rho)=s^2/(2s^2+6s+9).
+
+For any owner in any block use its base witness in that block and the full
+base point in every other block. Scale these points and their multipliers
+by a=1/[1+(B-1)rho+ell], and set the veto to1-a. Veto stationarity is the
+identity a[(B-1)rho+ell]=1-a. Incident demands become1-a+a*b_S; off-owner
+demands stay1. Feasibility and complementarity follow from the base KKT.
+Thus each of the Bn nonveto owners has own envelope at least a*p, while the
+veto owner has envelope at least its full-profile payment u_full. Therefore
+
+  sum_i M_i >= F_s := u_full + s^2*p/[1+(s/2-1)rho+ell].              (2)
+
+These are coordinatewise envelope lower bounds from different reports,
+which is exactly how this architecture defines its funding vector.
+
+EXACT FINITE BOUND AND ASYMPTOTIC
+Write
+  Q=4s^4+30s^3+34s^2-3s-234,
+  f_s=F_s-u_full=3s^2(s-2)(s+3)^2/Q.
+The denominator is positive because it is the original positive KKT
+denominator multiplied by D(s+3)^2. Direct algebra gives
+
+  (3/4)s-f_s=(42s^4+138s^3+207s^2-702s)/(4Q),
+  21Q-2(42s^4+138s^3+207s^2-702s)
+       =354s^3+300s^2+1341s-4914 >=0  for s>=4.
+
+The last polynomial is positive at4 and increasing thereafter, so
+f_s>=(3/4)s-21/8. Also
+
+  u_full>=3/(8s),
+  sqrt(s^2+1)-s<=1/(2s).
+
+The first follows from8s^3-6s^2-18s-27>=0 for s>=4; the second follows by
+squaring or rationalizing. Adding them proves (1). Degree comparison in
+the displayed rational formulas shows F_s/sqrt(s^2+1)->3/4. This is the
+limit of the explicit witness lower bound, not a claimed limit or upper
+bound for the actual envelope sum. In fact
+  f_s=(3/4)s-21/8+O(1/s),
+  F_s=(3/4)s-17/8+O(1/s).
+
+FIXED BASE PLUS UNION PRODUCT: SECONDARY COROLLARY
+Suppose a fixed symmetric n-owner unit-demand base (every full RHS is1)
+has full norm rho>0 and chosen KKT owner witnesses with the same positive
+p,ell and theta=p/ell. Their mass always satisfies ell<=rho: if z is the
+full projection and q=A^T lambda a relaxed projection, then
+  ell=sum_R lambda_R <=sum_R lambda_R*z(R)=z dot q
+      <=||z||*||q||<=||z||^2=rho.
+The last step uses that z remains feasible for the relaxed system. This
+does not assume ell=||q||^2, which can fail for fractional relaxed demands.
+Let t be a positive integer and take its union-of-rows product, with nt owners. The
+exact reduction gives
+
+  rho_t=rho/t,
+  p_t=rho*p/[rho+(t-1)ell],
+  ell_t=rho*ell/[rho+(t-1)ell].
+
+Now take B_t=ceil(t/rho) common-veto copies, N_t=B_t*n*t+1. The explicit
+nonveto envelope sum is bounded below by
+
+  W_t=B_t*n*t*p_t/[1+(B_t-1)rho/t+ell_t].
+
+Let c=rho/ell-1>=0 and b_t=B_t*rho/t. Then
+  1<=b_t<1+rho/t,
+  W_t/t=n*theta*[t/(t+c)]*b_t/
+                       [1+b_t-rho*c/(t(t+c))],
+  N_t/t^2=n*b_t/rho+1/t^2.
+Consequently
+
+  W_t/sqrt(N_t) -> theta*sqrt(n*rho)/2 = sqrt(H)/2,
+  H=n*rho*theta^2.
+
+In particular the actual envelope sum has liminf after normalization at
+least this number. An exact finite conservative bound is
+
+  W_t/sqrt(N_t) >= [theta*sqrt(n*rho)/2]
+       *[t/(t+c)]/[sqrt(1+rho/t+rho/(n*t^2))].                    (3)
+
+The additional full veto coordinate is nonnegative and bounded by1, so it
+does not affect this asymptotic lower-bound coefficient. More generally,
+choosing B_t*rho/t->x>0 gives coefficient
+theta*sqrt(n*rho)*sqrt(x)/(1+x), maximized at x=1. This optimization concerns
+these displayed witnesses and this construction, not all possible covers.
+
+For the independently certified172-owner base,
+  rho=172/7921, p=63/3887, ell=84/3887, theta=3/4,
+  sqrt(H)/2=129/178.
+Thus even a fixed base followed by the two amplifications gives the
+coefficient129/178. The varying-s direct construction improves this to3/4.
+
+COMPARISON WITH THE EXISTING INTERVAL INGREDIENTS
+The already available cyclic-interval base n=2k-1, row size k has
+rho=(2k-1)/k^2 and normalized witness theta=2/3. Formula(3) therefore gives
+coefficient(2k-1)/(3k), tending to2/3 as k grows. Even k=3 gives5/9>1/2.
+Thus a universal leading upper coefficient1/2 for this raw own-report
+projection envelope was already incompatible with those ingredients;
+the present family improves the available architecture-specific lower
+coefficient. This note makes no literature-priority or novelty claim.
+
+REPRODUCIBILITY
+Run python3 checks/mass_search_funding_corollary.py. It uses only the
+standard library, imports no search or solver code, independently rebuilds
+the graph/support sets, verifies exact marginals and KKT for many sizes,
+checks the displayed polynomial identities coefficient by coefficient,
+certifies polynomial positivity on s>=4 by expansion around4, and checks
+union/veto arithmetic and inequality(3) with Fraction. General validity is
+proved above; finite computational checks are supplementary.

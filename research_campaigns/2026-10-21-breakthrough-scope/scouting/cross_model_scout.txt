@@ -1,0 +1,62 @@
+## Scout result — target selection for the 150-minute attack
+
+### 0. Frontier of record (do not regress)
+
+Manuscript `inputs/coalition_manuscript.tex` Thm `thm:projective`, eq. (1013)–(1015), lines 1011–1015:
+
+> for every integer $s\ge 1$: $\sqrt{s/6}\;\le\;K_3(s)\;\le\;K_3^{\rm OUT}(s)\;\le\;3s^2$
+
+with the sharper ladder value $B_s$ (eq. `Bs`, line 1135), $B_6=493/243$, and $B_s/\sqrt s\to\sqrt{2\pi}/(3\sqrt e)\approx0.5068$ (line 1141). General arity: $K_r(s)\ge\frac{k}{k+1}(s/2k)^{(k-1)/k}$, $k=r-1$ (line 1602), i.e. $\Omega_r(s^{(r-2)/(r-1)})$; upper $rs^{r-1}$ (line 898, $p=1/s$).
+
+**Defect found in supplied evidence (report it upstream):** `inputs/decision_map.txt:32` ("`Omega(s^(1/4)) <= K_3(s)`") and `inputs/positive_marginal_barrier.txt:52` ("`Omega(s^(1/4)) versus O(s^2)`") are both **superseded** by eq. (1014) and `CONTRACT.txt:3`. Verification: compare line 1129 of the manuscript ($K_3(s)\ge 2Q_M/3\ge\sqrt{s/6}$) against those two lines. Any attack plan quoting $s^{1/4}$ is using a stale frontier.
+
+### 1. Ranked shortlist
+
+| # | Target | Contract | Consequence | 150-min feasibility | Verdict |
+|---|---|---|---|---|---|
+| **1** | **Arity-3 activation-number lower bound (chosen)**: break the $1/2$ exponent by raising "owners activated per restorer" above $r-1$; dual branch = architecture cap theorem | unchanged: fixed actual owners, full real boxes, all-coalition coverage, size-$s$ TCWM (weaker than OUT, so result transfers to OUT) | $K_3(s)=\Omega(s^{2/3})$ at $\lambda=3$, $\Omega(s^{1-\epsilon})$ for $\lambda\to\infty$; or first **lower-side** obstruction theorem certifying $\sqrt s$ as the ladder ceiling | high: the *consequence is already a proved manuscript corollary*; only a finite geometry is open | **select** |
+| 2 | Weighted resource-graph full OUT, interval $[1+c,2]$, $c\approx0.543063$ (`decision_map.txt:44–47`) | graph (arity-2 weighted) full OUT; TCWM already sharp $3/2$ | closes a constant-factor gap in Paper A | highest chance of *completion*, but constant-only; closed route = positive-layer retuning | strong fallback |
+| 3 | Arity-3 unrestricted upper $3s^2\to O(s^{2-\epsilon})$ | as above, full OUT | largest consequence | just failed a dedicated 90-min gate with the whole dual machinery (`upper_gate_report.txt:6–19`), and `positive_marginal_barrier.txt:4–18` proves the only known constructive class is $\Theta_r(s^{r-1})$ — must exit to report-adaptive/signed/fractional mechanisms | **do not repeat** (inherited recommendation) |
+| 4 | Transfer the Immorlica–Mahdian–Mirrokni flow technique to *coalition-sum* TCWM at small arity | strictly weaker hypothesis than theirs | arity-2 is wide open here (manuscript lower is trivially 1, upper $2s$) | blocked by a one-way implication (`priority_matrix.txt:50–61`): per-incumbent cross-monotonicity $\Rightarrow$ coalition-sum, not conversely | keep as lead, not a 150-min target |
+| 5 | Two-common / pairwise gain-only | — | unresolved constants | closed routes enumerated (`two_common_gate.txt:61–66`) | no |
+
+### 2. The chosen target, stated precisely
+
+**Observation (checkable in 10 minutes, the whole basis of the target).** In the manuscript's fixed-arity proof, arity enters the ladder arithmetic **only** through the *activation number* $k$ = number of private owners that become active per single restored owner. Lines 1491–1503: the protected coalition is restorer + old actives, giving $(a_m+1)q_m\ge a_mq_{m-1}$, $T_m=kmq_m$, $T_M\ge\frac{k}{k+1}Q_{k,M}$, $Q_{k,M}=\prod_{m=2}^{M}\frac{km}{k(m-1)+1}$. Writing $A_m$ for the active count and $\Delta$ for activation, the step factor is exactly
+$$T_m/T_{m-1}\;\ge\;\frac{A_{m-1}+\Delta}{A_{m-1}+1},\qquad\text{so } T_M\sim A_M^{(\Delta-1)/\Delta}.$$
+The manuscript sets $\Delta=k=r-1$ *because its technology is the binary-circuit (i.e. $\mathbb F_2$) one*, where any two rows determine the activity (lines 1294–1296, 1341–1349). The $(r-2)/(r-1)$ law is therefore an **artifact of linearity of the design, not of arity**.
+
+**Proposed Lemma (A$_\lambda$).** For every fixed integer $\lambda\ge3$ there exist, for all $M\ge1$, finite **arity-three** packing institutions ($F(c)=\max\{\pi x:Ax\le c,x\ge0\}$, $A,\pi\ge0$, $\le3$ positive entries per profitable column) with fixed actual fully eligible owners, full real report boxes $[0,1]^d$, a profile ladder $C_1,\dots,C_M$ in which (i) exactly one actual owner raises its report at each step, (ii) $F(b_N(C_m))$ is constant in $m$, (iii) the stabilizer of $C_m$ in the technology's automorphism group acts transitively on the $A_m=\lambda m$ active private owners, (iv) the $C_1$-stabilizer acts transitively on the three owners of a supported activity, and (v) $A_m=A_{m-1}+\lambda$.
+
+**Consequence (already proved; drop-in with $k:=\lambda$).** For every integer $s\ge2\lambda$,
+$$K_3(s)\;\ge\;K^{\rm ladder}_{3,\lambda}(s)\;\ge\;\tfrac{\lambda}{3}\big(s/2\lambda\big)^{(\lambda-1)/\lambda},$$
+by the certificate of lines 1459–1522 with the arity-3 seed $3q_1\ge1$ (lines 1080–1082). At $\lambda=3$: $K_3(s)=\Omega(s^{2/3})$, which **supersedes $\sqrt{s/6}$ and refutes $K_3(s)=\Theta(\sqrt s)$**; $\lambda$ growing gives $s^{1-o(1)}$, i.e. it would show the campaign's $O(s)$ upper-bound target is exponent-optimal.
+
+### 3. Concrete route (fresh leverage)
+
+1. **Leave $\mathbb F_2$.** Use a *non-linear* symmetric arity-3 design: collinear point-triples of $\mathrm{PG}(m,q)$ with $q\ge3$. Two points lie on a unique line of $q+1$ points, hence in exactly $q-1$ collinear triples (standard incidence geometry — stated here as standard, **not** fetched in this scout), while $\mathrm{PGL}_{m+1}(q)$ is 2-transitive on points, supplying hypothesis (iv). $q=2$ degenerates to the manuscript's linear case with pair-multiplicity 1 — this is exactly where the $\Delta=r-1$ ceiling comes from.
+2. **Alternative, purely LP-side:** repeated columns $\{v,u,y_1\},\dots,\{v,u,y_\lambda\}$ (legal: $A$ arbitrary nonnegative) give $\Delta=\lambda$ with the ceiling enforced by $v$'s single unit. Its *known failure mode must be repaired first*: if any row is group-theoretically identifiable as "the cap", the rule paying everything to the cap owner satisfies coverage (private pairs produce 0) with $\kappa=1$. So hypothesis (iv) is load-bearing, and the attack must verify it before anything else.
+3. **Exact check order:** (a) smallest instance, $\le 20$ rows, two consecutive rungs, exact rational LP for $F$ and for the symmetric dual; (b) verify the profile stabilizer's orbits by explicit matrices; (c) only then extend to the $\lambda$-indexed, $M$-growing family and recompute the truncated product $P_{\lambda,M,s}$, $a_m=\min\{s-1,\lambda(m-1)\}$.
+
+**Falsifier (and the dual branch, also a deliverable).** Prove an **activation–production inequality**: for every arity-$r$ packing institution and every single-owner restoration,
+$$\frac{A_{m-1}+\Delta_m}{A_{m-1}+t_m}\cdot\frac{F_{m-1}}{F_m}\;\le\;\frac{A_{m-1}+(r-1)t_m}{A_{m-1}+t_m}.$$
+Quantitative hint that this may be true: for a **vertex-transitive** unit-profit 3-uniform technology the symmetric fractional matching $x_e=1/\deg$ is optimal, so $F=A/3$ exactly and $T/F\le 3q\le$ const — the gap exists only because the *profile-restricted* configuration (a pencil) is far from transitive while the *technology* is transitive. If every extra awakened owner necessarily adds matching capacity at rate $\ge1/3$, the ladder is capped and $s^{(r-2)/(r-1)}$ is optimal for the whole architecture — the first lower-side obstruction, the mirror of `positive_marginal_barrier.txt`, and it would redirect all remaining effort to the upper bound.
+
+### 4. Why this is not routine and not already excluded
+
+- It does **not** touch the fixed nonnegative whole-owner marginal-weight barrier (`positive_marginal_barrier.txt:4–18`): that theorem constrains *mechanisms* (upper bounds); this target constrains *arbitrary nonnegative rules* from below. No overlap.
+- It is not the inherited recommendation (upper bound) and does not reuse the failed dual-certificate route of `upper_gate_report.txt`.
+- It is not a bounded-family claim: the deliverable is a $\lambda$-indexed family with $M\to\infty$ plugged into an already-proved growing certificate; a single finite instance would be a diagnostic only.
+- Antecedent scan gave no exponent $>1/2$ for a comparable coalition-sum quantity. The nearest primary leverage is Immorlica–Mahdian–Mirrokni's $\Omega(n)$ (set cover) vs $\Omega(n^{1/3})$ (vertex cover) budget-balance lower bounds for cross-monotonic schemes — an *arity-sensitive* pattern that motivates candidate 4 — but their hypothesis is per-incumbent cross-monotonicity, strictly stronger than coalition-sum TCWM (`priority_matrix.txt:50–61`), so no verbatim transfer.
+
+### 5. Stopping criterion
+
+- **t+60 min:** a verified two-rung arity-3 instance with $\Delta\ge3$, constant $F$, and transitive active orbit, or switch branch.
+- **t+120 min:** either the $\lambda$-family + recomputed $B_{\lambda,s}$, or a proof of the activation–production inequality for single-ceiling ladders.
+- **t+150 min:** if neither, report the exact tension (awakening vs. matching capacity) as an unresolved obstruction with the smallest failing configuration. Explicit stop rules: do not claim a new $K_3$ bound without a growing family and a nonnegative rational certificate in original owner/profile variables; do not promote a finite witness to a general theorem.
+
+### Limitations (honest)
+
+15-minute scout, not a novelty or correctness check. I did **not** run any LP, did not construct the geometry, and did not verify Lemma (A$_\lambda$) is satisfiable — it may well be false, in which case the dual branch is the output. The Immorlica et al. primary PDF would not text-extract through the fetch tool, so its exact theorem numbers/bounds here rest on a secondary survey statement, not on the primary text. The $\mathrm{PG}(m,q)$ pair-multiplicity $q-1$ and 2-transitivity of $\mathrm{PGL}$ are standard facts asserted from knowledge, not fetched. The step-factor identity $T_m/T_{m-1}\ge(A_{m-1}+\Delta)/(A_{m-1}+t)$ is my own derivation from manuscript lines 1459–1503 (inference, matching their $Q_{k,M}$ exactly at $\Delta=k$, $t=1$) and should be re-derived independently before being relied on. The "all payment to the cap owner" failure mode is my reasoning, not a cited result. Others are scouting independently; this is one ranked opinion.
+
+Sources: [Immorlica, Mahdian, Mirrokni (primary, not text-extractable here)](https://immorlica.com/pubs/costshare.pdf) · [DOI 10.1145/1361192.1361201](https://doi.org/10.1145/1361192.1361201) · [Schäfer, cost-sharing survey (secondary, Ω(n)/Ω(n^{1/3}) statement)](https://homepages.cwi.nl/~schaefer/ftp/pdf/csf.pdf) · [Bachrach et al., Bounds on the Cost of Stabilizing a Cooperative Game, JAIR](https://jair.org/index.php/jair/article/view/11270) · [Cost of Stability, arXiv:0907.4385](https://arxiv.org/abs/0907.4385) · [Meir, Rosenschein, Malizia, IJCAI 2011](https://www.ijcai.org/Proceedings/11/Papers/060.pdf)

@@ -1,0 +1,74 @@
+HYPERCUBE FAMILY: NORMALIZED MASS TENDS TO4
+21 October2026. Frozen first proof for independent review.
+
+1. PARAMETERS AND ROW UNIVERSE
+Fix an integer d>=4. Let G=Q_d be the d-dimensional hypercube on binary vectors {0,1}^d, adjacent when they differ in exactly one coordinate. Write n=2^d, focal vertex o=0, and C={o,e_1,...,e_d}, its closed neighborhood. The even and odd parity classes have size n/2. Define
+ E'= {even vertices} minus {o},       a=n/2-1,
+ O'= {odd vertices} minus {e_1,...,e_d}, b=n/2-d,
+ m=a+b=n-d-1,
+ D=binomial(d,2), R=a-D,
+ K=floor[a(d-2)/d], f=K/a.
+Use all complements of independent (K+1)-subsets of Q_d as covering rows. Every row has cardinality c=n-K-1. XOR by any binary vector is a graph automorphism; therefore this row universe is vertex transitive.
+
+For d>=4, 2^d-2>d(d-1). It holds at4 and follows by induction thereafter. Consequently R>0 and 2a/d>d-1. Since a-b=d-1, we have K<=b. Also0<f<= (d-2)/d<1.
+
+2. EXPLICIT FINITE DISTRIBUTION ON INDEPENDENT (K+1)-SETS
+Choose a vertex s uniformly from C. Independently choose the even-background branch with probability a/m and the odd-background branch with probability b/m.
+
+Odd branch: choose a uniformly random K-subset J of O' and output I={s} union J. This is independent: O' is contained in one bipartition class; when s=o its neighbors have all been removed from O'; when s=e_j it belongs to the odd parity class itself. The choice is possible because K<=b.
+
+Even branch: split E' into the D vertices of Hamming weight2 and the R vertices of even weight at least4. Let mu=Df. Choose an integer P in {floor(mu),ceil(mu)} with mean mu (if mu is integral, take P=mu). Independently conditional on P, choose P uniformly among the allowed weight2 vertices and K-P uniformly among the R vertices of even weight at least4, and let J be their union. Output I={s} union J.
+If s=o, all D weight2 vertices are allowed. If s=e_j, only the weight2 vertices whose support avoids j are allowed, a set of size D'=D-(d-1)=(d-1)(d-2)/2. These are exactly the weight2 vertices not adjacent to e_j. Vertices of even weight at least4 are never adjacent to e_j. Thus I is independent in either case.
+
+Rounding feasibility is exact. Since f<1 and D<=a, mu<=K. Since f<= (d-2)/d and D'/D=(d-2)/d, mu<=D'. Since K-mu=Rf lies in[0,R], we have mu>=K-R. Hence mu lies in the integer-bounded interval
+ [max(0,K-R), min(K,D')].
+Both its floor and ceiling lie in that interval. Therefore every indicated uniform subset exists, including all rounding endpoints.
+
+Every output has cardinality K+1 and intersects C in exactly{s}. All probabilities are rational and all choices are finite. This is a complete explicit convex-mixture certificate, without an LP or an asymptotic existence assumption.
+
+3. EXACT MARGINALS
+Each vertex of C is selected with probability1/(d+1).
+In the even branch, each weight>=4 even vertex has conditional marginal
+ E[(K-P)/R]=(K-Df)/R=f.
+For a fixed weight2 vertex u={r,s}, when the selected star vertex is o, its conditional marginal is mu/D=f. It is unavailable when the selected star vertex is e_r or e_s. For each of the other d-2 selected star vertices, its conditional marginal is
+ mu/D' = [d/(d-2)]f.
+Averaging over the d+1 equally likely star vertices yields
+ [f+(d-2)*(d/(d-2))*f]/(d+1)=f.
+Thus every E' vertex has unconditional marginal (a/m)*f=K/m. Every O' vertex has unconditional marginal (b/m)*(K/b)=K/m. Writing beta=K/m, the independent-set mixture has marginal1/(d+1) on C and beta everywhere outside C.
+
+4. EXACT OWN-ROW KKT WITNESSES
+The mixture w of complementary covering rows has
+ theta=d/(d+1) on C,
+ gamma=1-beta=(m-K)/m outside C.
+Its squared norm is
+ t=(d+1)theta^2+m*gamma^2
+  =d^2/(d+1)+(m-K)^2/m.
+Every supported row contains exactly d vertices of C. Any row avoiding focal vertex o complements an independent set containing o, which excludes all d neighbors of o. Therefore every off-o row also contains exactly d vertices of C. Since every row has size c=d+m-K, both supported rows and all off-o rows have w-potential
+ d*theta+(c-d)*gamma
+ =d^2/(d+1)+(m-K)^2/m=t.
+
+Keep RHS1 on every off-o row and every supported row, and put RHS0 on every other own-o row. Let alpha be the explicit distribution from Section2, with duplicate rows combined if necessary. Set q=w/t and lambda_R=alpha_R/t on supported rows, zero elsewhere. Then q satisfies all covering inequalities, supported rows are tight, and q=sum_R lambda_R*1_R. Coordinates of q are strictly positive. This proves all KKT conditions for the unique minimum-norm cover of the relaxed instance. Its displayed dual mass is ell=sum_R lambda_R=1/t; its focal coordinate is p=theta/t. Thus normalized focal mass p/ell=theta. No uniqueness assumption on the dual multipliers is used. XOR transports the construction to every focal owner.
+
+5. FULL COVER AND NORMALIZED TOTAL
+The full covering minimizer is uniform z_i=1/c. Averaging the XOR orbit of any row forces every feasible z to satisfy sum_i z_i>=n/c; Cauchy-Schwarz implies ||z||^2>=n/c^2, attained by uniform z. Thus rho=n/c^2. Equivalently assign multiplier1/c^2 to each of the n XOR translates of one row, combining repetitions; every vertex appears c times, giving exact full KKT.
+The normalized total is
+ H_d=rho*n*theta^2 = [n*d/(c*(d+1))]^2.
+Since K/n tends to1/2, c/n tends to1/2 and theta tends to1 as d tends to infinity. Therefore H_d tends to4.
+Already d=8 gives n=256,K=95,c=160 and H_8=4096/2025>2. This small example alone uses union/veto amplification if desired; direct unnormalized ratio is slightly below2 at d=8.
+
+6. DIRECT VETO FUNDING COEFFICIENT
+The unnormalized ratio is
+ R_d=(n*p^2)/rho=(c*theta/t)^2.
+We have t/n ->1/4, so R_d ->4 as well. This avoids needing a union product for the asymptotic consequence.
+Take B_d=floor(1/rho) copies in the previously audited common-veto construction, and N_d=B_d*n+1 owners. Then B_d*rho ->1. The actual own-report envelope is at least p/(1+B_d*rho) on every private coordinate and at least B_d*rho/(1+B_d*rho) on the veto coordinate. Hence the total envelope divided by sqrt(N_d) has lower limit at least
+ lim [B_d*n*p / ((1+B_d*rho)*sqrt(B_d*n+1))]
+ =lim [c*p/2]
+ =1.
+The exact root term is nonnegative and is not needed for this limit. The common-veto and Boolean fixed-owner production-realization lemmas are separate audited inputs; this lemma supplies their explicit hypercube bases and exact own-row witnesses.
+
+This establishes asymptotic coefficient1 in a sqrt(N) lower bound for this own-report-envelope architecture. It does not establish a coefficient greater than1, or an impossibility theorem for arbitrary mechanisms. If a matching sqrt(N) upper bound for this same architecture is separately established, this family makes its leading constant sharp.
+
+7. WHY SIMPLE DEGREE INCREASES FAIL
+For any graph, a distribution supported on independent sets meeting C=N[o] exactly once and assigning each star vertex marginal1/(d+1) obeys, for every outside vertex u,
+ P(u in I) <= 1-|N(u) intersect C|/(d+1).
+Indeed selecting u excludes every star vertex adjacent to u, and the selected star vertex is unique and uniform. An independent clone blowup has outside twins with all d common neighbors, forcing marginal<=1/(d+1). In the antiweb with cyclic-distance edges>k, degree d=n-2k-1, the outside vertex1 shares d-1 neighbors with focal0, forcing marginal<=2/(d+1). Thus degree>=5 antiwebs cannot realize outside marginal tending to1/2 in this ansatz. The hypercube avoids that obstruction: a nonstar even vertex has at most2 neighbors among the focal neighbors, and the construction above compensates exactly for those two exclusions.

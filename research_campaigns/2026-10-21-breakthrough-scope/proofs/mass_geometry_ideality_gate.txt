@@ -1,0 +1,82 @@
+IDEALITY GATE: EXACT OBSTRUCTION TO THE EASY TRANSFER, AGGREGATE QUESTION OPEN
+2026-10-21. Bounded analytic gate; no claim of a universal H counterexample.
+
+Setup. For binary rows A, let Q={x>=0:Ax>=1}; let z be its minimum-norm point,
+rho=||z||^2. For each coordinate i, selectively lower only rows containing i,
+let q^i be the new minimum-norm cover, choose KKT row multipliers lambda^i,
+and write L_i=sum lambda^i, theta_i=q^i_i/L_i. The questions are
+H=rho sum_i theta_i^2<=4 and J=sqrt(rho/n) sum_i theta_i<=2.
+Zero-mass witnesses are interpreted by continuity or omitted.
+
+Primary source comparison. Abdi--Cornuejols--Lee, Identically self-blocking
+clutters (2019), https://ahmadabdi.com/papers/ISBC.pdf, Lemma 7 supplies the
+full unit-demand multiplier identity sum lambda=rho. Theorem 13 proves
+n rho>=4 for an ideal clutter without a common element and characterizes
+the equality case by ideal cuboid structure. Lemma 19 supplies a decomposition
+of the full minimum-norm cover into integral covers, with complementary
+intersection structure. These are static full-demand statements; none asserts
+integrality after arbitrary incident fractional RHS changes.
+
+A concrete obstruction to transferring ideality through an own relaxation.
+Take six coordinates and four rows
+    135, 146, 236, 245.                                      (Q6)
+The full covering polyhedron is ideal. Its seven vertices are precisely the
+three pair-cover vectors 12,34,56 and the four displayed row vectors. The
+stdlib verifier enumerates all C(10,6)=210 possible active constraint bases
+with exact Fraction elimination and finds exactly these seven vertices.
+Its recession cone is the nonnegative orthant, so the vertex certificate
+certifies integrality of this pointed rational polyhedron.
+
+Its full minimum-norm cover is z=(1/3)1, rho=2/3, because all row sums are 3,
+the equal row mixture is (1/2)1, and equal row multipliers 1/6 certify KKT.
+The full normalized hull point is v=(1/2)1.
+
+Delete only row 135. This is an allowed incident-row downward relaxation for
+owner 1 (also owners 3 and 5). The remaining covering polyhedron has the
+fractional vertex
+    x=(0,1/2,0,1/2,0,1/2).
+Indeed all three remaining rows are tight. On its positive coordinates the
+active equations are x4+x6=1, x2+x6=1, x2+x4=1, with determinant of absolute
+value 2; together with x1=x3=x5=0 they determine x uniquely. Thus even an
+endpoint own deletion destroys ideality. This is not the deletion of a
+vertex of the clutter, the minor operation that preserves ideality.
+
+The earlier completion lemma also does not follow from ideality. At v=(1/2)1,
+for the row a=135, (v-(1/2)a)/(1/2)=246, which is not in the row hull. A binary
+point in a convex hull of binary vectors can only be represented using that
+same vector, and 246 is absent. Thus uniformity plus ideality does not imply
+that completion hypothesis.
+
+This example is NOT an aggregate-mass obstruction. In fact theta_i<=1/2 for
+every owner and every incident relaxation, so H<=1 and J<=1, sharply.
+Here the row Gram matrix is 2I+11^T. Write any local normalized KKT witness
+w=A^T alpha, alpha>=0, sum alpha=1, and threshold t=1/L. Then each row's
+potential is 1+2 alpha_r. There are exactly two own and two off rows.
+Feasibility and complementarity say every off row has potential >=t, and
+every used off row has potential =t; every used own row has potential <=t.
+Also t>=||w||^2=1+2 sum alpha_r^2>=3/2>1. Thus both off rows have positive
+alpha and the same coefficient beta=(t-1)/2. Every own coefficient is at
+most beta, including unused rows. Therefore theta<=2 beta and
+1=theta+2 beta, giving theta<=1/2. Full equal alpha attains equality.
+
+A useful positive edge of the source theorem. Whenever an ideal clutter
+satisfies n rho=4, the universal binary cap 0<=theta_i<=1 already gives
+H<=rho n=4 and J<=sqrt(rho n)=2. For n rho>4 it gives no desired bound.
+The source inequality points in the opposite direction from the dense-base
+condition n rho<=4 used in our common-veto upper theorem.
+
+Exact remaining bottleneck. A general ideal-clutter theorem still requires
+an aggregate coupling between the different normalized local mixtures.
+The full ideal cover decomposition and blocker identity do not themselves
+supply such a coupling. The off-owner row subsystem is a genuine vertex-
+deletion minor and remains ideal, so that subsystem's integrality is usable;
+the projection after adding selectively weakened own rows is the missing
+step. The unresolved lemma is exactly whether the above local KKT systems,
+with ideal full Q, force rho sum theta_i^2<=4 or sqrt(rho/n)sum theta_i<=2.
+No proof or counterexample to either implication was obtained in this gate.
+Reopening this route needs a new coupling lemma, not an assumption that
+ideality survives the own relaxation.
+
+Reproduction: checks/mass_geometry_ideality_verify.py (stdlib only), results
+checks/mass_geometry_ideality_verify.json. The Q6 ideality enumeration, deleted
+fractional vertex, failed completion, and Gram identity all pass exactly.

@@ -1,0 +1,80 @@
+FUNDING AND SQUARED-DIAGONAL AGGREGATES ARE DIFFERENT TARGETS
+21 October2026. Exact asymptotic consequence of the recorded union/veto KKT
+construction. This note concerns certified witness lower bounds, not a
+universal upper theorem. It requires independent audit before promotion.
+
+BASE CONTRACT.
+Let A have finitely many NONEMPTY0/1 rows on n coordinates, all with demand1.
+Let z be its minimum-norm cover and rho=||z||^2>0. For each owner i choose
+an incident-only downward RHS relaxation, its projection q^i, and particular
+nonnegative KKT multipliers lambda^i with mass L_i>0. Define
+ p_i=q^i_i, theta_i=p_i/L_i,
+ H=rho*sum_i theta_i^2,
+ J=sqrt(rho/n)*sum_i theta_i.
+Zero-coordinate witnesses may be replaced by full witnesses if needed to
+ensure positive L_i. Always L_i<=rho and0<=theta_i<=1. Cauchy gives J^2<=H;
+equality holds when the chosen theta_i are all equal. Thus H>4 alone does
+NOT imply J>2 in a nonuniform family.
+
+UNION PRODUCT.
+For integer t>=1 take t disjoint copies of the base and every row formed by
+choosing one base row in each copy and taking their union; all demands1.
+Its full projection is z/t in each copy, with squared norm rho_t=rho/t.
+The explicit incident-row witnesses from
+ inputs/UNIFORM_VETO_AMPLIFICATION_REDUCTION.txt
+have, for a focal owner of type i,
+ p_i(t)=rho*p_i/[rho+(t-1)L_i]
+       =rho*theta_i/[t+rho/L_i-1],
+ L_i(t)=rho*L_i/[rho+(t-1)L_i]
+       =rho/[t+rho/L_i-1].
+All own RHS are in[0,1], all off-owner RHS remain1, and their KKT certificate
+is the product of the selected focal multipliers with the other full ones,
+scaled exactly as in the cited proof. In particular, as t tends to infinity,
+ t*p_i(t)->rho*theta_i and t*L_i(t)->rho for each fixed base owner.
+
+VETO PRODUCT AND LIMITS.
+Fix c>0. Choose B_t=max(1,floor(c*t/rho)) independent union-product blocks,
+and add one common veto coordinate to every row. There are
+ N_t=B_t*t*n+1 owners, with minimum total cover T=1. Its full veto coordinate
+is u_t=(B_t*rho/t)/(1+B_t*rho/t). The certified private witness of type i is
+ a_i(t)=p_i(t)/[1+(B_t-1)*rho/t+L_i(t)].
+This follows from the same exact common-veto KKT proof, including the
+veto stationarity identity. Every selected own-report comparison has the
+same actual owners and can be simultaneously realized by the explicit
+2N_t-resource direct production function in CONSOLIDATED_THEOREM.txt.
+
+Let S_t=u_t+B_t*t*sum_i a_i(t) and
+D_t=u_t^2+B_t*t*sum_i a_i(t)^2. These are LOWER bounds on the true envelope's
+total and squared total at its designated full bundles. Then
+ B_t/t->c/rho,  N_t/t^2->cn/rho,
+ t*a_i(t)->rho*theta_i/(1+c),  u_t->c/(1+c).
+Consequently
+ lim S_t/sqrt(N_t)=sqrt(c)/(1+c)*J,
+ lim D_t=(c^2+cH)/(1+c)^2.
+These are exact limits of the selected certificates; other real reports
+could make the true envelope larger. No upper bound is inferred here.
+
+CONSEQUENCES AND CORRECT NEXT GATES.
+The funding expression is maximized over c>0 at c=1, giving J/2. Hence
+one finite exact unit-demand base with J>2 would, for a sufficiently large
+finite t, produce a genuine fixed-owner production instance with true
+funding STRICTLY GREATER than sqrt(N_t)*T. This is a sufficient architecture
+counterexample criterion. Conversely a universal sqrt(N) funding theorem
+for this rule would imply J<=2 for every such base/witness collection.
+Proving J<=2 alone would only block this amplification route; sufficiency
+for arbitrary production is not established.
+
+For H>2 the squared expression has maximum H^2/[4(H-1)] at c=H/(H-2).
+Thus H>2 refutes the old diagonal constant1, while H>4 would produce a
+selected squared diagonal above4/3. H<=2 gives supremum1 as c->infinity.
+The new hypercube construction has equal theta_i, with H->4 and J->2;
+its separate class upper theorem upgrades the corresponding witness limits
+to true-envelope limits. That upgrade is not available for an arbitrary base.
+
+The pointwise-inflation examples in mass_geometry_uniform_pointwise_gate.txt
+certify only one changed owner. Their full row point is uniform p=1/s,
+rho=1/s,n=s^3, and all other owners can use the full theta=p. In that case
+ J=(theta_i+(s^3-1)/s)/s^2
+  =1-1/s^3+theta_i/s^2 ->1.
+Despite an unbounded individual ratio, these selected certificates are far
+from the funding obstruction J>2. No all-owner symmetry may be assumed.

@@ -1,0 +1,241 @@
+INDEPENDENT TERNARY-CUBE AUDIT: EXACT H>4, J>2, AND OWN-ENVELOPE FUNDING FAILURE
+2026-10-21. Independently checked combinatorial proof and exact scalar replay.
+Originating construction: proofs/activation_ternary_cube_candidate.txt.
+Cross-model review/novelty audit are separate gates; no arbitrary-mechanism
+impossibility is claimed here.
+
+1. PARAMETERS AND PRECISE CLAIM.
+Take d=10000, h=d/5=2000, n=3^d, V=(Z/3Z)^d. A hyperedge is an axis-parallel
+triple; an independent set contains no full such triple. Put
+ m=n-2d-1, K=601m/1000, beta=601/1000, b=399/1000,
+ s=d+h+K, k=n-s, a=2/5.
+K is an integer: 3^100=1 mod1000, so n=1 mod1000 and m is divisible by1000.
+All rows are complements of ALL independent s-sets, not merely the supported
+rows. The distinguished vertex is o=0; its 2d neighbors are +/-e_j.
+The construction below gives a finite rational distribution of independent
+s-sets I with o excluded, exactly d+h neighbors in each I, each neighbor's
+marginal3/5, and every outside vertex's marginal beta.
+
+The complement mixture w has entries
+ w_o=1, w_neighbors=2/5, w_outside=399/1000.
+Its support rows have exactly d-h neighbors and potential
+ t=1+(d-h)a+(m-K)b=1+2d a^2+m b^2=||w||^2.
+In these fixed parameters,
+ k=(399n+20601)/1000,
+ t=(159201n+16820799)/1000000.
+The full cover projection is z=(1/k)1 and rho=n/k^2. The local projection
+obtained by deleting only specified incident rows is q=w/t, with total KKT
+mass ell=1/t and focal coordinate q_o=ell. Thus theta_o=q_o/ell=1.
+Translations give one such witness for every owner, whence
+ H=rho sum theta_i^2=n^2/k^2>4,
+ J=sqrt(rho/n) sum theta_i=n/k>2.
+Here J denotes normalized mass, not the number of blocks used later.
+
+2. LOCAL AVAILABLE INDEPENDENT SETS: NO HIDDEN LINE CONFLICT.
+Color x by the sum of its coordinates modulo3. Each axis triple contains
+all three colors. Start by excluding a uniformly selected color c.
+If c=0, keep a uniform (d+h)-subset of the 2d neighbors, and all initially
+available outside vertices. This only removes vertices, so independence
+persists and o is absent.
+If c=1, start with colors0,2 and remove o. Select a uniform h-subset S of
+coordinates and add e_j for j in S. For each ordered pair(j,l), j in S,
+l!=j, independently delete e_j+2e_l with probability r=49/100, otherwise
+delete e_j+e_l. Take the union of deletions. No axis triple contains two
+added e_j, because distinct e_j differ in two coordinates. A new triple
+through e_j in direction j is broken by deleting o. A new triple in any
+other direction l is broken by the specified deletion. Every deletion has
+weight2, so no neighbor is accidentally deleted. The available set has
+exactly d+h neighbors and excludes o. For c=2 use the image under x->-x.
+
+For a fixed neighbor, the conditional probabilities in these three phases
+are3/5,1/5,1, in an order depending on its sign. Its unconditional marginal
+is therefore3/5. Subsequent thinning never changes the neighbor set.
+
+3. EXCEPTIONAL VERTICES AND EXACT CAPACITY MARGINS.
+The exceptional outside vertices have Hamming weight2. Their number is
+ e=2d(d-1). Write x=h/d=1/5 and y=h(h-1)/(d(d-1)).
+A mixed-sign vertex e_j+2e_l, j!=l, occurs in the two phases containing its
+color. In either, exactly one possible added neighbor can cause its deletion.
+Its availability probability is
+ Pmix=(2/3)(1-xr)=451/750=601/1000+1/3000.
+A same-sign vertex has one phase in which it is available without repairs,
+one phase in which either of two added neighbors can delete it, and one
+phase in which its color is absent. The two repair coins are independent;
+the probability both indices are selected is y. Hence
+ Psame=2/3-[2x(1-r)-y(1-r)^2]/3
+      =100345511/166650000
+      =601/1000+188861/166650000.
+Both probabilities strictly exceed beta. Whenever an exceptional vertex is
+available, retain it with independent conditional probability beta/Pmix or
+beta/Psame as appropriate. Each marginal is now exactly beta; independence
+is preserved by deletion. Let P be the number retained in a resulting state.
+Then 0<=P<=e, E P=e beta, and all state probabilities are finite and rational.
+
+4. FAR VERTICES: ALL CUTS, NOT ONLY MARGINAL CAPACITY.
+Let F_j be the vertices of weight>=3 and color j. Their sizes are
+ f0=n/3-1-d(d-1),
+ f1=f2=n/3-d-d(d-1)/2.
+They sum to m-e. No repair touches them. In phase c, precisely the two classes
+with colors other than c are available. For every state omega after the
+exceptional thinning, choose Q_omega=K-P_omega far vertices. This will make
+the final independent set have exactly d+h+K elements. Its desired far
+marginals are beta. The expected total is correct:
+ E Q=K-e beta=beta(f0+f1+f2).
+
+For completeness, the exact finite transportation criterion is
+ beta|U| <= sum_omega p_omega min(Q_omega,|U intersect A_omega|)
+for every U subset F, together with equality for total expected size. Here
+A_omega is the available far set. Construct a network with source-state
+capacity p_omega Q_omega, state-vertex capacity p_omega on available pairs,
+and vertex-sink capacity beta. Optimizing each state's placement in a cut
+gives exactly the displayed inequality. Rational max flow then gives, in
+each state, conditional marginals in[0,1] summing to integer Q_omega.
+Any such rational vector is a finite rational mixture of Q_omega-subsets:
+if it is not integral, shift mass between two fractional coordinates until
+one becomes integral in each of the two opposite directions, express the
+original as the convex combination of those endpoints, and recurse.
+Thus the transport proof actually constructs a finite rational distribution.
+
+To verify EVERY cut, put u_j=|U intersect F_j|. Its right side minus left side
+is a concave function on the box 0<=u_j<=f_j: each term is the minimum of a
+constant and an affine function, minus the affine demand. A concave function
+is at least the convex interpolation of its values at the eight box corners.
+Thus the eight unions of whole color classes suffice, even though Q depends
+on the detailed state. The availability of far vertices depends only on c.
+
+The following strict bounds hold:
+ K-e>=max_j f_j,
+ K<=min_{r!=s}(f_r+f_s),
+ K-e>=(3beta-1)(f_r+f_s) for all distinct r,s,
+ beta<2/3.
+An elementary proof avoids enormous integer arithmetic. We have n>=100d^2,
+ n/3-d^2<=f_j<=n/3, and K-e>=601n/1000-3d^2.
+The first bound follows from (803/3000)n>3d^2. The next two follow from
+ (197/3000)n>2d^2 and (197/3000)n>3d^2, respectively. These all follow from
+n>=100d^2. For d10000, already3^22>100d^2, so this premise is immediate.
+
+For one whole class r, Q>=f_r means its expected available capacity is
+(2/3)f_r>=beta f_r. For two classes r,s and third color c, the cut capacity
+is exactly (f_r+f_s)/3+E[Q 1_{phase c}], at least
+(f_r+f_s+K-e)/3, sufficient by the third bound. For all three classes,
+Q never exceeds the available two-class size, so the cut equals E Q and is
+an equality. The empty cut is zero. This proves all transportation cuts.
+Combining this far-subset distribution with the earlier states establishes
+the claimed independent-set mixture, with no unverified enumeration claim.
+
+5. FULL PROJECTION AND EVERY OFF-OWNER CONSTRAINT.
+Translations of V preserve all axis triples and all independent s-sets.
+The row universe is therefore vertex-transitive. Averaging the translates
+of any row gives the uniform hull point (k/n)1. Every hull point has coordinate
+sum k, so Cauchy-Schwarz makes that uniform point its unique minimum-norm
+point. Equivalently, q_full=(1/k)1 is feasible; total multiplier mass rho=n/k^2
+on a uniform translate distribution gives q_full, with all row constraints
+tight. This is a full KKT certificate and gives the stated rho.
+
+An off-o row complements an independent set containing o. On each axis
+through o, that independent set cannot contain both neighbors. Hence every
+such row has at least d neighbors. If it has r neighbors, its potential is
+ r a+(k-r)b, increasing in r because a>b. It is therefore at least
+ d a+(k-d)b=t+h(beta-3/5)-beta=t+1399/1000>t.
+This proves feasibility for ALL off-o rows, including unsupported rows.
+
+An own-o row with r neighbors has potential1+r a+(k-1-r)b, increasing in r.
+Keep demand1 for rows with r>=d-h and delete those with r<d-h (demand0).
+All off-o rows are retained automatically. Every supported row has r=d-h,
+potential t, and demand1. Set lambda_R=alpha_R/t on the mixture support and
+zero elsewhere. Then q=A^T lambda=w/t, all retained rows have q-sum>=1,
+all positive multipliers meet tight unit rows, and deleted rows impose no
+constraint. These are exact KKT conditions. In particular this example uses
+only incident-row DELETIONS, not intermediate fractional RHS changes.
+The mass is ell=sum lambda=1/t and q_o=ell. Translations preserve every
+part of the argument, giving a distinct valid own witness for every owner.
+
+6. EXACT COMMON-VETO FUNDING CONSEQUENCE.
+Take M=(n-3)/6 disjoint copies of this base, and add one veto u to every row.
+This is an integer because n=3^d is3 modulo6. There are N=Mn+1 owners.
+The full minimum-l1 cover value is T=1: the veto alone covers every unit row,
+and any nonempty row forces total payment at least1. At full demand the
+veto coordinate is M rho/(1+M rho).
+
+For any private owner i, delete exactly its translated bad rows from its
+block, leaving all other rows unchanged. Put A=(M-1)rho+ell. The exact new
+projection has veto coordinate A/(1+A), other blocks equal to z/(1+A), and
+the focal block equal to q/(1+A). This follows either by one-dimensional
+minimization or by scaling the base KKT multipliers by1/(1+A): their total
+mass is A/(1+A), exactly the veto coordinate. All positive rows are unit
+and tight; deleted rows have demand0. The selected private coordinate is
+ ell/[1+(M-1)rho+ell].
+Thus total PRIVATE own-envelope payments are at least
+ P=M n ell/[1+(M-1)rho+ell].
+Cauchy-Schwarz on w gives ell<=rho. The explicit coordinates give
+ rho<=1000000/(159201n),
+ ell>=25/(4n+21),
+the latter because t=1+2d(2/5)^2+m b^2 <=(4n+21)/25.
+Using M<=n/6 and ell<=rho,
+ P >= 25*159201*n*(n-3)/[(4n+21)*1955206] > n/2.
+The final strict inequality is exactly
+ 139226n>64939476,
+which holds for n>=467. Finally
+ N=n(n-3)/6+1<n^2/6,
+so, even without adding the veto payment,
+       sum_i Envelope_i/(sqrt(N)*T) >sqrt(6)/2>1.2247.       (F)
+The exact selected sum including the full veto payment has ratio in
+[1.252803920,1.252803921), as independently enclosed by Fraction arithmetic.
+The conservative exact inequality(F) is the recommended presentation.
+
+7. FIXED-OWNER, ALL-REAL PRODUCTION TRANSFER AND SCOPE.
+Use the explicit finite min-linear production from Section4 of
+proofs/mass_geometry_final_upper_attempt.txt, which has an independent
+all-real report audit there. At the full bundles each owner j owns its two
+fixed private coordinates X_j=Z_j=1. The baseline simple game has the
+common-veto generator rows above. For each private j choose the binary
+generator array that deletes only the bad rows just specified; for the veto
+choose the baseline array. Define the selected monotone game w^j(S) as the
+maximum demand of a generator contained in S, with maximum of empty set0.
+It equals the baseline game on coalitions omitting j.
+
+For clarity, the production forms for every nonempty owner-set A and game g
+have coefficient1 outside A, coefficient g(A) on the veto when u is in A,
+and coefficient0 on other coordinates inside A. Let these vectors be h^g,A.
+Take F(X,Z) to be the minimum of all baseline h^v,A dot X and all
+h^(w^j),A dot X+Z_j. This finite min of nonnegative linear forms is monotone,
+concave, homogeneous, and defined on all nonnegative real resource profiles.
+At full Boolean bundles it induces the baseline game. When j keeps X_j=1
+and changes Z_j from1 to0, it induces w^j on every coalition: the own branch
+is w^j, other present-owner branches have penalty1, and absent-owner branches
+agree with v. These are legitimate fixed-owner underreports in the actual
+real boxes, and their unique minimum-norm covers are the projections above.
+All other real underreports remain in the domain; no restriction to Boolean
+reports is imposed. Therefore actual own envelopes dominate our selected
+witnesses, proving(F) for this production instance. At the full bundle
+F=1 and the minimum-l1 cover value is1.
+
+What is refuted: the universal sqrt(N)T funding inequality for the coordinate-
+wise own-report envelope of the minimum-Euclidean-norm cover rule, and the
+proposed universal normalized bounds H<=4 or J<=2.
+What is NOT proved: a lower bound against every mechanism; failure of every
+incentive-compatible rule; a theorem about unrelated ownership restrictions;
+or novelty of the elementary projection, transport, or min-linear realization.
+The instance is finite but enormous; the theorem is a structural counterexample,
+not a practical numerical optimization result.
+
+8. AN UNBOUNDED PARAMETRIC EXTENSION.
+Exactly the same proof works for every d=500r with integer r>=7. Then h=d/5,
+n=3^d, m=n-2d-1 is divisible by1000, and beta remains exactly601/1000.
+The off-row gap is d/5000-601/1000>0. The same-sign availability exceeds
+beta whenever851d>11255 (in particular d>=14). The transport bounds hold
+because3^d>=100d^2 for d>=8, checked at d8 and preserved under increment.
+All funding inequalities above remain valid. In this family
+ k/n->399/1000, t/n->159201/1000000,
+ H->1000000/159201>4, J->1000/399>2,
+and the chosen M=(n-3)/6 funding ratio tends
+ sqrt(6)/[1+6(399/1000)^2] =sqrt(6)*1000000/1955206 >sqrt(6)/2.
+This extension is analytic; the frozen d10000 replay is the principal finite
+certificate. No extrapolation from finite checks is used.
+
+REPRODUCTION.
+checks/mass_geometry_ternary_verify.py uses only stdlib exact Fractions.
+checks/mass_geometry_ternary_verify.json records29 successful scalar checks,
+including all parameter inequalities, support norm, off-row gap, full/own
+mass bounds, H,J, and funding inequalities. All-row and all-cut coverage is
+proved in Sections4-5, rather than asserted from a numerical enumeration.

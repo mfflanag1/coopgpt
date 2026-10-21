@@ -1,0 +1,124 @@
+A FINITE AMPLIFICATION TEST FOR THE GENERAL DIAGONAL CONJECTURE
+2026-10-17. Exact structural reduction; it neither proves nor refutes the conjecture.
+
+BASE SYSTEM.
+Let A have finitely many nonempty 0/1 rows on m coordinates, all with demand1.
+Let z be its minimum-norm cover and rho=||z||^2>0. For each owner i choose
+ANY incident-row downward relaxation 0<=b^i<=1, keeping off-i rows exactly1.
+Let q^i be its minimum-norm cover, with nonnegative KKT multipliers lambda^i,
+and let p_i=q^i_i, L_i=sum lambda^i. Put E=sum_i p_i^2.
+No rank-two or own-monotonicity hypothesis is imposed.
+
+UNIFORM DUAL-MASS LEMMA.
+For every such relaxation, ||q^i||^2=sum lambda^i_S b^i_S<=L_i.
+The same multipliers are feasible for the full quadratic dual, whose value
+is 2L_i-||q^i||^2. Therefore
+                  0<=L_i<=2L_i-||q^i||^2<=rho.             (1)
+This holds for any full-row relaxation, not only own-row relaxation.
+
+THE REDUCTION.
+If E>2rho, then there is an explicit finite fixed-generator cover system
+with minimum l1 value T=1 whose actual own-row envelope M violates
+                         sum_j M_j^2<=T^2.                 (2)
+It uses K copies of the m base coordinates plus one common veto coordinate,
+where ANY integer K satisfying K(E-2rho)>1 is sufficient. Conversely, the
+universal diagonal conjecture implies, on every uniform-demand base system,
+                         sum_i M_i(base)^2<=2rho.           (3)
+The constant2 in (3) is a NECESSARY bound obtained by this reduction; no
+claim is made that it is sharp or sufficient for the full conjecture.
+
+CONSTRUCTION AND EXACT KKT PROOF.
+Create disjoint coordinate blocks x^1,...,x^K and a common coordinate u.
+For every original row S in every block k impose
+                         u+x^k(S)>=1.
+The full minimum l1 value is1: setting u=1 is feasible, and any one row
+requires total payment at least1. The full quadratic projection has
+ u_full=K*rho/(1+K*rho), x^k=z/(1+K*rho).
+It follows in particular that the veto's own envelope is at least u_full.
+
+For owner i in block k define
+ H_i=(K-1)rho+L_i,  alpha_i=1/(1+H_i), u_i=1-alpha_i.
+In block k replace each incident row demand by
+                         u_i+alpha_i*b^i_S;
+all other row demands remain1. These demands lie in[0,1], and off-i rows
+are exactly1. The proposed projection is
+ u=u_i,  x^k=alpha_i*q^i,  x^ell=alpha_i*z for ell!=k.
+Its multipliers are alpha_i*lambda^i in block k, and alpha_i*lambda(full)
+in each other block. Base-coordinate stationarity is immediate. Veto
+stationarity is
+ alpha_i*((K-1)rho+L_i)=u_i.
+Feasibility and complementary slackness follow by scaling the corresponding
+base systems. Thus this is the unique minimum-norm projection. In particular,
+                    M_(k,i)>=p_i/[1+(K-1)rho+L_i].
+Using (1), all denominators are at most1+K*rho. Therefore
+ sum_j M_j^2 >= [K^2*rho^2+K*E]/(1+K*rho)^2
+              =1+[K*(E-2rho)-1]/(1+K*rho)^2.               (4)
+The stated condition on K proves a strict counterexample. If only suprema
+rather than attaining witnesses are available in the base, choose finite
+approximating witnesses first. The finitely many coordinates allow E>2rho
+whenever the base supremum violates (3).
+
+FIXED-OWNER PRODUCTION TRANSFER AND SCOPE.
+The construction has exactly Km+1 fixed owners throughout its witness star.
+Balanced-close each coalition demand array, which preserves every cover
+polyhedron and all off-owner games, then apply the simultaneous Boolean
+realization in BALANCED_CLOSURE_AND_ROW_RELAXATION.txt and
+BOOLEAN_PROFILE_REALIZATION_LEMMA.txt. This produces one monotone concave
+homogeneous production function with fixed owner bundles and own control
+underreports realizing all the displayed projection witnesses. It does not
+change owners between report profiles. Additional coalition rows produced
+by the closure have exactly the same polyhedra at those profiles.
+
+This gives a smaller, normalized falsification target for the still-open
+original envelope conjecture: find a uniform unit-demand base whose own-row
+envelope has squared norm greater than twice its raw squared norm. It avoids
+endpoint assumptions and the already false efficient-core support and
+max-coordinate inequalities. It does NOT show that such a base exists.
+The common-veto final system also admits an efficient mechanism; a failure
+would reject this projection-envelope architecture, not prove an unrestricted
+incentive lower bound.
+
+A STRONGER NECESSARY TEST VIA A UNION-OF-ROWS PRODUCT.
+Retain the same base witnesses and choose ones with L_i>0 (a zero witness
+can simply be replaced by the full witness). Form K disjoint base blocks,
+but this time put one generator for EACH union S_1 union ... union S_K,
+where S_k is a base row in block k; all demands are1. Call this the union
+product. Its full projection is z/K in every block, and rho_K=rho/K.
+A full KKT multiplier on a row tuple is
+       (product_k lambda_(S_k))/(K*rho^(K-1)).
+
+For focal owner i in block k put
+ alpha_i=rho/[rho+(K-1)L_i],  beta_i=L_i/[rho+(K-1)L_i].
+Use alpha_i*q^i in its block, beta_i*z in every other block. Give a row tuple
+right side alpha_i*b^i_(S_k)+(K-1)*beta_i. These are at most1, and rows not
+containing the focal owner keep demand1. KKT multipliers are
+ (alpha_i/rho^(K-1))*lambda^i_(S_k)*product_(ell!=k)lambda_(S_ell).
+Summing over other blocks gives the asserted focal stationarity; summing
+for another block gives beta_i*z. Complementarity and feasibility follow
+from the base systems. Hence this is an exact own-row projection witness.
+Its diagonal payment is alpha_i*p_i, and its total dual mass is alpha_i*L_i.
+
+The squared diagonal witnesses divided by the full squared norm satisfy
+ E_K/rho_K = K^2*rho*sum_i p_i^2/[rho+(K-1)L_i]^2
+            increases to rho*sum_i (p_i/L_i)^2 as K tends to infinity.
+Monotonicity uses L_i<=rho from(1). Consequently, if
+                         rho*sum_i (p_i/L_i)^2>2,           (5)
+then some FINITE union product has E_K>2rho_K, and the common-veto construction
+above produces an exact counterexample to the original diagonal conjecture.
+The universal conjecture therefore implies (5) with <=2 for EVERY chosen
+collection of uniform-base KKT witnesses. This is a stronger necessary test
+than(3). The ratio p_i/L_i is the fraction of witness dual mass placed on
+rows containing i. Nonunique multipliers cause no issue: the construction
+uses the particular chosen nonnegative KKT multipliers explicitly.
+
+This reduction is valid for all finite base hypergraphs, with arbitrary
+arity and owner counts, and requires no transitivity or equal row lengths.
+The generated number of rows can grow exponentially with K; no efficiency
+claim is made. It remains a structural falsification reduction, not a found
+counterexample and not a new general funding bound.
+
+CHECKERS.
+verify_uniform_veto_amplification.py passes820 copied exact KKT witnesses
+through40 blocks. verify_union_product_amplification.py passes3905 exact
+row-tuple KKT checks through5 blocks. These checks support the displayed
+formulas; the general proofs are above.

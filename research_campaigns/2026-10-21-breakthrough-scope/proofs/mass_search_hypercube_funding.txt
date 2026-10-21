@@ -1,0 +1,209 @@
+HYPERCUBE FUNDING COROLLARY: ASYMPTOTIC COEFFICIENT ONE
+21 October 2026. Independent derivation and exact finite bounds.
+
+THE QUANTIFIED RESULT
+For every epsilon in(0,1) and every owner-count threshold N0 there exist
+an integer N>=N0, one finite nonnegative min-linear production function F
+on2N resources, and fixed actual bundles b_i=e_i+e_(N+i), such that
+
+  F(sum_i b_i)=1,
+  min{sum_i x_i: x>=0 covers every full-profile coalition}=1,
+  sum_i M_i^F(b) >= (1-epsilon)*sqrt(N).                           (1)
+
+Here M_i^F is the TRUE own-report envelope: the supremum of owner i's
+minimum-Euclidean-norm covering payment over all real coordinatewise
+underreports0<=a_i<=b_i, with all other actual owners fixed. The function F
+is concave, monotone, continuous and positively homogeneous on the entire
+nonnegative real resource domain. The theorem follows from finitely many
+explicit underreport witnesses; extra real reports can only increase M.
+
+This is an architecture-specific lower bound. It is not an impossibility
+theorem for arbitrary mechanisms, does not prove a sqrt(N) upper bound,
+and does not exceed its proposed leading coefficient1. It concerns
+arbitrarily large N along an explicit sequence, not every integer N.
+No padding or literature-priority claim is made.
+
+BASE AND INDEPENDENT CERTIFICATE AUDIT
+Use the finite distribution in proofs/activation_hypercube_proof.txt.
+Its parameters, for any integer d>=4, are
+
+  n=2^d, a=n/2-1, b=n/2-d, m=n-d-1,
+  K=floor[a(d-2)/d], c=n-K-1,
+  theta=d/(d+1), gamma=(m-K)/m,
+  tau=d^2/(d+1)+(m-K)^2/m,
+  rho=n/c^2, ell=1/tau, p=theta/tau.
+
+The rows are complements of ALL independent(K+1)-sets of Q_d, hence have
+size c. For a focal vertex o, its closed neighborhood C has d+1 vertices.
+The distribution chooses one star vertex uniformly and a K-element
+background outside C. It mixes the even and odd parity backgrounds with
+probabilities a/m and b/m.
+
+The odd background is a uniform K-subset of the b odd non-neighbors; it is
+compatible with every selected star vertex. For the even background put
+D=binomial(d,2), R=a-D, f=K/a and mu=Df. Choose P as the two neighboring
+integers of mu with mean mu. If the star vertex is o, choose P weight2
+vertices from all D; if it is e_j, choose them only from the
+D'=(d-1)(d-2)/2 pairs avoiding j. Choose the remaining K-P background
+vertices among the R even vertices of weight at least4. All choices are
+uniform conditional on these counts.
+
+I independently checked the construction's possible failure points:
+R>0 follows from2^d-2>d(d-1), valid at4 and preserved by induction;
+K<=b; and mu belongs to[max(0,K-R),min(K,D')], whose endpoints are integers,
+so both rounded choices are feasible. Every output is an independent set
+of exactly K+1 vertices with exactly one member of C. At any weight2 vertex,
+the marginal within the even branch is
+  [mu/D+(d-2)mu/D']/(d+1)=f.
+At higher even weights it is(K-mu)/R=f. After phase mixing, every outside
+vertex has independent-set marginal K/m; every star vertex has1/(d+1).
+Thus the complementary-row mixture w equals theta on C and gamma outside.
+
+The support and every off-o row contain exactly d star vertices. Their
+w-potential is d*theta+(c-d)*gamma=tau=||w||^2. Put q=w/tau and divide the
+distribution weights by tau for the KKT multipliers. Keep demand1 on all
+supported and off-o rows and demand0 on other own-o rows. This gives exact
+primal feasibility, stationarity and complementarity, mass ell and payment p.
+XOR translations transport the witness to every owner. Full KKT follows
+from the XOR orbit of one row with multiplier1/c^2 on each translated row,
+with repeated rows combined. Thus the full point is1/c and its norm is rho.
+Here ||q||^2=ell because all positive multipliers have relaxed RHS1; the
+full point is feasible for the relaxation, so0<ell<=rho. Alternatively
+this inequality follows for any unit-demand base from
+ell<=z dot q<=||z||*||q||<=rho, without assuming binary relaxed RHS values.
+
+These arguments prove the certificate for every d>=4. The independent
+checker also enumerates the entire explicit support for d=4,5 (71 and2480
+entries), and checks all independent4-sets of Q_4 as an additional off-row
+test. It imports no generator, solver, or activation checker.
+
+NORMALIZED COEFFICIENT AND A USEFUL VARIANCE IDENTITY
+Define
+  C_d=theta*sqrt(n*rho)/2=n*theta/(2c),
+  H_d=4C_d^2.
+Since K=floor[(n/2-1)(1-2/d)],
+  n/2 <= c <= n/2+n/d+1.
+Consequently 0<C_d<=1 and
+  1-C_d <=3/d+2/n <=4/d,       C_d>=1-4/d.                         (2)
+Here n>=2d for d>=4. In particular H_d tends to4, from below for this family.
+
+The mean of w is c/n, with d+1 coordinates theta and m coordinates gamma.
+The exact two-value variance formula gives
+
+  tau-c^2/n = [(d+1)m/n]*(theta-gamma)^2 <= d+1.                  (3)
+
+Both entries lie in[0,1], so the displayed bound follows. Thus
+  1<=rho*tau<=1+4(d+1)/n,
+using c>=n/2. For d>=9,2^d>=4d(d+1): it holds at9 and the induction step
+uses2d>=d+2. Hence
+
+  rho*tau<=1+1/d,
+  c*p/2=C_d/(rho*tau)>=(1-4/d)/(1+1/d)>=1-5/d.                 (4)
+
+DIRECT VETO: AN EXPLICIT FINITE BOUND
+For d>=9 take
+  B=floor(1/rho)=floor(c^2/n), N=Bn+1.
+There are B disjoint base blocks and one common veto owner; each generator
+is u+x^b(S)>=1. Set u=1 to see the minimum total cover is1; any row forces
+total payment at least1. The exact veto lifting gives every private owner
+a witness payment
+  p/[1+(B-1)rho+ell] >= p/(1+B*rho),
+because ell<=rho. Therefore the envelope sum is at least
+  W=B*n*p/(1+B*rho).
+The full veto owner's nonnegative payment may be omitted in this bound.
+
+Put z=B*rho. Then1-rho<z<=1 and B>=1. An exact rearrangement gives
+
+  W/sqrt(N)=(c*p/2)*[2sqrt(z)/(1+z)]
+                         *[1+1/(Bn)]^(-1/2).                   (5)
+
+The second factor is at least sqrt(z)>=z>=1-rho; the third is at least
+1-1/(2Bn)>=1-1/(2n), by the tangent bound for(1+x)^(-1/2). All lower factors
+are nonnegative. Combining them with(4) and rho<=4/n yields
+
+  W/sqrt(N) >=1-5/d-rho-1/(2n)
+             >=1-5/d-9/(2n)
+             >=1-6/d.                                           (6)
+
+The last step follows already from n>=4d(d+1), d>=9. Thus the direct finite
+construction, without a union product, proves a quantitative coefficient
+arbitrarily close to1.
+
+EXPLICIT QUANTIFIERS AND PRODUCTION TRANSFER
+Given epsilon in(0,1) and N0, choose ANY integer d such that
+  d>=9, d>=6/epsilon, and2^d>=N0.
+Define n,K,c,B,N by the preceding formulas. They are all finite integers;
+B>=1 and N>=n>=N0. Formula(6) gives the right side of(1).
+
+To obtain one genuine production function, use the direct realization
+audited in proofs/mass_search_direct_realization_audit.txt. Each generator
+contains the common veto. For its full and selected relaxed demand arrays
+a define g_a(S)=max({a_R:R subset S} union{0}). This preserves every cover
+polyhedron. The full game v and each local game w^i obey0<=w^i<=v<=1 and
+w^i(S)=v(S) off i. For every nonempty A, take the supporting vector with
+all outside-A coefficients1, the veto coefficient g_a(A) if the veto lies
+in A, and all other inside-A coefficients0. These forms majorize g_a and
+attain it at A. The single production function is
+
+  F(X,Z)=min{h^(v,A) dot X,
+             h^(w^i,A) dot X+Z_i: A nonempty, i an owner}.
+
+At b_i=e_i+e_(N+i) it realizes v; when only i drops its control resource,
+it realizes w^i. It is a finite nonnegative min of linear forms on2N real
+resources, so it is valid on the entire nonnegative real domain. Every
+selected report lies in the fixed owner's genuine underreport box. Since
+the base relaxations are deletions, final relaxed generator demands are
+only1 or the selected veto payment u_i; thus coefficients are in
+{0,1} union{u_i}. Symmetry makes all private u_i equal. Empty coalition
+values are zero. F at the full aggregate equals1.
+
+No compatibility assumption between distinct owners' selected relaxed
+profiles is missing: the control-coordinate realization constructs them
+simultaneously. No assertion that an owner changes identity or bundle
+between witness profiles is made. Other real reports do not weaken a
+supremum lower bound. All generators, supports and forms may be numerous;
+this is an existence theorem, not an efficient representation claim.
+
+DIRECT ASYMPTOTIC SEQUENCE
+Along all integers d tending to infinity, c/n->1/2, tau/n->1/4,
+rho*n->4, p*n->4 and ell/rho->1. Also B/n->1/4, so N/n^2->1/4 and N grows
+without bound. The explicit conservative lower bound in(5) tends to1.
+The actual envelope sum consequently has normalized liminf at least1.
+This is not an assertion that the actual envelope's normalized limit is1.
+
+FIXED-BASE UNION/VETO ALTERNATIVE
+For completeness the earlier union theorem supplies a second quantitative
+route. Fix a dimension d>=4 and take a union product of t copies. Its
+rho_t=rho/t, p_t=rho*p/[rho+(t-1)ell], and
+ell_t=rho*ell/[rho+(t-1)ell]. Choose B_t=ceil(t/rho), N_t=B_t*n*t+1.
+The finite bound in proofs/mass_search_funding_corollary.txt is
+
+  W_t/sqrt(N_t) >= C_d * [t/(t+c0)]
+                         /sqrt(1+rho/t+rho/(n*t^2)),
+  c0=rho/ell-1>=0.
+
+Because every coordinate of w lies in[0,1], tau<=n. Hence c0<=3 and
+rho<=4/n<=1/4. The product of the last two factors is at least
+  1-[c0+(rho/2)(1+1/n)]/t >=1-4/t.
+For d,t>=4, (2) therefore gives
+  W_t/sqrt(N_t) >=1-4/d-4/t.                                    (7)
+
+Given epsilon,N0 choose d,t>=8/epsilon and2^d>=N0. Then N_t>=N0 and(7)
+proves(1). This explicitly resolves the two limiting parameters; no illicit
+interchange of a fixed-base limit and a growing-base limit is needed.
+The direct route(6) is simpler and retains the three-value coefficient
+description, so it is the preferred construction.
+
+REPRODUCIBILITY AND INTERPRETATION
+Run python3 checks/mass_search_hypercube_funding.py. All checks use integers
+and Fraction; square-root inequalities are checked after valid squaring.
+It reconstructs the d=4,5 distributions, independently checks graph edges,
+marginals, KKT and XOR symmetry, verifies the complete d=4 off-row universe,
+and checks the exact formulas and finite funding bounds for many dimensions.
+The universal statements follow from the proof, not from finite tests.
+
+The coefficient improves the old interval construction's2/3 and the
+Möbius-ladder construction's3/4. It rules out every architecture-specific
+universal leading upper coefficient strictly below1. It does not rule out
+a sqrt(N) upper bound with coefficient1, and it says nothing comparable
+about arbitrary mechanisms. These veto instances admit efficient covers.

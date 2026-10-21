@@ -1,0 +1,36 @@
+NORMALIZED DUAL-MASS OPTIMIZATION — candidate, 21 October2026
+Let A have nonempty 0/1 rows on n coordinates, all demands1. Let z be its
+minimum-norm cover, rho=||z||². For owner i vary incident RHS in[0,1], retain
+off-i demands1, and choose any nonnegative KKT multipliers lambda of the
+resulting projection q. L=sum lambda>0, theta=q_i/L.
+
+Set alpha=lambda/L, t=1/L, w=Aᵀalpha, sum alpha=1. Then theta=w_i and:
+(1) A_S.w>=t for off-i rows.
+(2) alpha_S>0 => A_S.w=t for off-i rows.
+(3) alpha_S>0 => A_S.w<=t for incident rows.
+Conversely any positive t and such alpha give lambda=alpha/t,q=w/t;
+choose active incident RHS=A_S.w/t and inactive incident RHS0. All KKT
+conditions hold, proving exact equivalence, including arbitrary intermediate
+own RHS and nonunique multipliers. Zero alpha may be assigned either flag.
+
+When an off-i row exists, 0<t<=n since w coordinates lie in[0,1]. Uniform
+quadratic duality gives L<=rho<=n, hence t>=1/n. With y_S binary and Gram
+G=AAᵀ, exact MILP constraints are alpha>=0, sum alpha1, alpha_S<=y_S,
+t in[1/n,n], G_S.alpha-t>=0 on off rows, and
+G_S.alpha-t+n*y_S<=n on ALL rows. Maximize sum_(S containing i)alpha_S.
+For y0 the upper bound is redundant because rowdotw<=n,t>=0. If no off-i
+rows, all rows contain i, theta=1; a full KKT witness already attains it.
+If no incident rows theta=0 with any full witness. These cases are separate.
+
+For exact independently verified full rho and chosen witnesses, H=rho*sum
+theta_i²>2 triggers the existing finite union-product plus veto theorem.
+H<=2 from numerical finite samples proves nothing. A universal H<=2 theorem
+would block this route, not establish the original diagonal conjecture.
+
+Geometric perspective: the full normalized vector v=z/rho is the unique
+minimum-norm point of conv{A_S}; min squared norm=1/rho. A normalized local
+w is a row mixture whose used off rows have common potential t, all off rows
+at least t, and used incident rows at most t. It corresponds to selectively
+penalizing rows containing i in a simplex quadratic program. Uniform penalty
+on all i-rows cannot increase their total mass, but selective penalties may.
+This last perspective is exploratory and is not a proof of a new bound.

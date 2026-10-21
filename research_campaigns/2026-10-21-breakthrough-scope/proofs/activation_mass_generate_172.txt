@@ -1,0 +1,59 @@
+import numpy as np,json,itertools,random,time
+from scipy.optimize import linprog
+from scipy.sparse import coo_matrix
+from fractions import Fraction as F
+from pathlib import Path
+L=86;n=2*L;holes=3;star={0,1,L,n-1};rng=random.Random(83192021)
+sets=[];seen=set();attempt=0
+while len(sets)<40000:
+ attempt+=1
+ hs=set(rng.sample(range(L),holes));seq=[]
+ for j in range(L):
+  if j in hs:seq.append(0)
+  elif not seq or seq[-1]==0:seq.append(rng.choice((1,2)))
+  else:seq.append(3-seq[-1])
+ if seq[-1] and seq[0] and seq[-1]!=seq[0]:continue
+ ss=frozenset(j+(L if s==2 else 0) for j,s in enumerate(seq) if s)
+ if len(ss&star)!=1 or ss in seen:continue
+ seen.add(ss);sets.append(ss)
+print('SAMPLED',len(sets),'ATTEMPTS',attempt,flush=True)
+rr=[];cc=[]
+for j,s in enumerate(sets):
+ rr.append(0);cc.append(j)
+ for i in s:rr.append(i+1);cc.append(j)
+a=coo_matrix((np.ones(len(rr)),(rr,cc)),shape=(n+1,len(sets))).tocsc()
+off=F(1,2)-F(2,n-4)
+bf=[F(1)]+[F(1,4) if i in star else off for i in range(n)]
+b=np.array([float(x) for x in bf])
+r=linprog(np.zeros(len(sets)),A_eq=a,b_eq=b,bounds=(0,None),method='highs')
+print('LP',r.success,r.message,flush=True)
+assert r.success
+nz=np.where(r.x>1e-8)[0];support=[sets[int(j)] for j in nz];m=len(support)
+orig=[[1]*m]+[[int(i in s) for s in support] for i in range(n)]
+from math import lcm
+scale=lcm(*(z.denominator for z in bf));target=[int(z*scale) for z in bf]
+mat=[row[:]+[b] for row,b in zip(orig,target)];prev=1
+for k in range(m):
+ pivot=next(i for i in range(k,len(mat)) if mat[i][k]);mat[k],mat[pivot]=mat[pivot],mat[k];p=mat[k][k]
+ for i in range(k+1,len(mat)):
+  q=mat[i][k]
+  for j in range(k+1,m+1):
+   num=mat[i][j]*p-q*mat[k][j]
+   assert num%prev==0
+   mat[i][j]=num//prev
+  mat[i][k]=0
+ prev=p
+x=[F(0)]*m
+for i in reversed(range(m)):
+ x[i]=(F(mat[i][m])-sum(mat[i][j]*x[j] for j in range(i+1,m)))/mat[i][i]
+alpha=[z/scale for z in x]
+assert all(z>0 for z in alpha)
+assert all(sum(orig[i][j]*alpha[j] for j in range(m))==bf[i] for i in range(n+1))
+edges={tuple(sorted((i,(i+1)%n))) for i in range(n)}|{tuple(sorted((i,(i+L)%n))) for i in range(n)}
+assert all(len(s)==L-3 and len(s&star)==1 and all(not (u in s and v in s) for u,v in edges) for s in support)
+w=[F(3,4) if i in star else 1-off for i in range(n)];t=sum(z*z for z in w)
+assert all(sum(w[i] for i in range(n) if i not in s)==t for s in support)
+rho=F(n,(L+3)**2);H=rho*n*F(9,16)
+cert={'status':'exact_verified','n':n,'L':L,'graph':f'vertices Z/{n}Z; edges cyclic neighbors and antipodes +{L}','row_universe':f'complements of all independent sets of size{L-3} in graph','focal':0,'closed_star':sorted(star),'independent_marginals':{str(i):str(bf[i+1]) for i in range(n)},'support':[{'independent_set':sorted(s),'weight':str(z)} for s,z in zip(support,alpha)],'parameters':{'row_size':L+3,'rho':str(rho),'theta':'3/4','H':str(H),'t':str(t),'dual_mass':str(1/t),'focal_payment':str(F(3,4)/t)},'checks':{'sum_weights':'1','strictly_positive':True,'all_marginals_exact':True,'all_support_independent':True,'all_support_star_intersection_one':True,'all_support_potentials_exact_t':True}}
+path=Path('/Users/maxf/.codex/visualizations/2026/09/04/01a06e8a-dcbb-7c81-9929-e72831a14ac8/research-campaigns/2026-10-21-breakthrough-scope/proofs/activation_mass_certificate_172.txt');path.write_text(json.dumps(cert,indent=2)+'\n')
+print('CERTIFICATE',path,'SUPPORT',m,'H',H,'t',t,'minweight',min(alpha),flush=True)

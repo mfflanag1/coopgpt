@@ -1,0 +1,166 @@
+INDEPENDENT AUDIT: FUNDING VERSUS SQUARED-DIAGONAL AMPLIFICATION
+21 October 2026. Audits FUNDING_VERSUS_DIAGONAL_REDUCTION.txt.
+
+VERDICT
+The union/veto formulas, both certificate limits, their optimizations, and
+the strict positive counterexample criteria are correct. The funding gate
+is J>2, equivalently rho*(sum_i theta_i)^2>4n; H>4 by itself does not
+algebraically certify that funding gate. H controls the squared-diagonal
+certificate instead.
+
+One scope wording needs narrowing. The sentence "Proving J<=2 alone would
+only block this amplification route" should say "would block this strict
+asymptotic funding criterion." A limit at most1 does not by itself exclude
+a finite t with selected funding above sqrt(N_t), a t-dependent choice of
+the scalar c, or another product construction. No finite upper bound in
+terms of J is proved in the audited note. This qualification does not affect
+the valid implication from J>2 to a finite genuine counterexample.
+
+1. BASE CONTRACT
+All base rows must be nonempty and have full RHS1. With full projection z
+and relaxed q=A^T lambda, normalized multipliers give
+  L=sum lambda <=sum lambda*z(R)=z dot q
+    <=||z||*||q||<=||z||^2=rho.
+Thus0<L_i<=rho for the selected witnesses, and0<=p_i<=L_i because the focal
+coordinate is a subset sum of its nonnegative multipliers. A zero-mass
+witness can be replaced by the full witness, whose mass is rho>0; even an
+unused owner then has a valid positive-mass witness with focal payment0.
+No identity L_i=||q^i||^2 is required for fractional relaxed RHS values.
+
+2. INDEPENDENT PRODUCT DERIVATION
+For t copies, the full union projection z/t has norm rho/t. Its row-tuple
+multiplier is the product of full multipliers divided by t*rho^(t-1).
+Summing over other tuple entries gives z/t coordinatewise. A positive
+tuple multiplier uses only tight base rows, so its union row is tight.
+
+For owner type i define
+  alpha_i=rho/[rho+(t-1)L_i], beta_i=L_i/[rho+(t-1)L_i].
+Use alpha_i*q^i in its own base copy and beta_i*z in each other copy.
+The tuple RHS is alpha_i*b^i+(t-1)beta_i, which is in[0,1] and equals1
+off the focal owner. The tuple multiplier is alpha_i times the selected
+focal multiplier times the other full multipliers, divided by rho^(t-1).
+The focal marginal is alpha_i*q^i; another marginal is
+alpha_i*L_i*z/rho=beta_i*z. Complementarity follows from the base KKT.
+The total mass is alpha_i*L_i and focal payment alpha_i*p_i.
+
+Put d_i=rho/L_i-1>=0. The exact quantities are therefore
+  p_i(t)=rho*theta_i/(t+d_i), L_i(t)=rho/(t+d_i).
+All d_i are fixed finite numbers because the base and witnesses are fixed.
+
+Take B_t=max(1,floor(c*t/rho)), c>0. The full veto is
+u_t=b_t/(1+b_t), b_t=B_t*rho/t. The selected private payment is
+  a_i(t)=p_i(t)/[1+(B_t-1)rho/t+L_i(t)]
+        =[rho*theta_i/(t+d_i)]/
+             [1+b_t-rho*d_i/(t*(t+d_i))].                     (1)
+This is precisely the common-veto KKT construction, not an optimization
+over all private reports. There are B_t*t copies of each original owner
+type and one veto; N_t=B_t*t*n+1. All full generator RHS values are1, so
+the minimum total cover is1. The direct min-linear realization supplies
+one production function on2N_t resources and the SAME fixed owners across
+all selected unilateral reports. Fractional intermediate union RHS values
+are allowed; they need not be deletion endpoints.
+
+3. BOTH LIMITS, WITH THEIR NORMALIZATIONS
+Since B_t/t->c/rho,
+  N_t/t^2->cn/rho,
+  t*a_i(t)->rho*theta_i/(1+c), u_t->c/(1+c).
+There are only finitely many original owner types, so these limits may be
+summed without any additional uniformity assumption.
+
+Define the selected certificate values
+  S_t=u_t+B_t*t*sum_i a_i(t),
+  D_t=u_t^2+B_t*t*sum_i a_i(t)^2.
+Then
+  S_t/t -> c*sum_i theta_i/(1+c),
+  S_t/sqrt(N_t) -> [sqrt(c)/(1+c)]*
+                         sqrt(rho/n)*sum_i theta_i,
+  D_t ->[c^2+c*rho*sum_i theta_i^2]/(1+c)^2.                  (2)
+The veto contribution to the first normalized limit vanishes, but its
+squared contribution in the second limit does not vanish. This distinction
+is essential and is handled correctly in the audited proof.
+
+Let J=sqrt(rho/n)*sum theta_i and H=rho*sum theta_i^2. Equation(2) becomes
+  selected funding coefficient=sqrt(c)*J/(1+c),
+  selected diagonal limit=(c^2+cH)/(1+c)^2.
+For the TRUE envelopes, the justified statements are the corresponding
+liminf LOWER bounds. They are not equalities for arbitrary bases. Equality
+requires separate upper control, such as the audited special-class caps
+used for the hypercube examples. Additional real reports can raise either
+true-envelope aggregate.
+
+4. OPTIMIZATION AND FINITE EXISTENCE
+The first coefficient has maximum J/2 at c=1. Its squared gap from the
+maximum is exactly
+  J^2/4-c*J^2/(1+c)^2=J^2*(c-1)^2/[4(1+c)^2].
+If J>2, choose c=1 and eta=(J/2-1)/2>0. By the limit definition there is
+an integer t0 such that every integer t>=t0 has
+  S_t/sqrt(N_t)>J/2-eta=(J/2+1)/2>1.
+Fixing ANY such t gives one finite, genuine, fixed-owner production
+instance whose true envelope total exceeds sqrt(N_t), with full output
+and minimum total cover both1. No infinite institution or interchange of
+growing-base limits is required. With rational certificate data, the
+positive gate is checkable without square roots as
+  rho*(sum_i theta_i)^2>4n,
+and a finite candidate can be checked exactly via S_t^2>N_t.
+
+A universal funding theorem for this architecture would therefore imply
+J<=2 on every base/witness collection. The converse is NOT established.
+In particular, even a proof of J<=2 would only exclude the strict limit
+criterion above unless supplemented by a finite-product upper argument.
+
+For H>2, the diagonal maximum is H^2/[4(H-1)] at c=H/(H-2). The exact gap is
+  H^2/[4(H-1)]-(c^2+cH)/(1+c)^2
+   =[H-(H-2)c]^2/[4(H-1)(1+c)^2].
+Also the diagonal limit minus1 is [c(H-2)-1]/(1+c)^2. Therefore H>2 gives
+a strict finite diagonal violation after choosing c>1/(H-2) and then
+sufficiently large finite t. If H<=2, the displayed limits are below1 for
+every finite c and have supremum1 as c tends to infinity. For H>4, the
+simple fixed choice c=2 already gives limit(4+2H)/9>4/3; optimization is
+optional. These statements concern selected asymptotic certificates, not
+universal finite upper bounds.
+
+5. HETEROGENEITY AND THE LOGICAL STATUS OF H>4
+Cauchy gives J^2<=H, with equality exactly when all selected theta_i are
+equal. More precisely, when H>0,
+  J^2=H * (sum theta_i)^2/[n*sum theta_i^2].
+The final factor measures how distributed the selected normalized masses
+are across owners. Thus a large squared sum cannot be substituted for the
+ordinary sum in the funding calculation. J>2 implies H>4 and also n*rho>4,
+since theta_i<=1; the reverse implications are not supplied by this algebra.
+
+No feasible H>4 example is established in either note. Therefore the
+statement "H>4 alone is insufficient" should be understood as identifying
+the correct certificate formula, not claiming an already constructed
+admissible example with H>4 and J<=2.
+
+There is also an exact structural padding observation under this base
+contract. Append r unused coordinates (zero columns) to any base. Its full
+projection extends by zeros and rho is unchanged. Retain existing witness
+multipliers and use the full witness for every added owner, giving them
+L=rho and theta=0. All original rows remain nonempty, all local relaxations
+remain valid, and
+  H_new=H_old, J_new=sqrt(n/(n+r))*J_old.
+Thus H does not determine this construction's funding coefficient. If an
+H>4 base were found, this padding would retain H>4 while making J arbitrarily
+small. This is a CONDITIONAL observation, not a claim that H>4 has been
+found. It does not assert that padding preserves a funding counterexample
+or that every final owner count can be attained with the same lower ratio.
+
+6. THE ONE-FOCAL POINTWISE FAMILY
+For the audited family n=s^3,rho=1/s,p_full=1/s, use its inflated focal
+theta and full witnesses for all other owners. Direct substitution gives
+  J=1-1/s^3+theta/s^2 ->1,
+  H=1-1/s^3+theta^2/s ->1.
+Since theta<1 and s>=2, J<1+1/s^2<=5/4. These particular certificates
+therefore do not approach the strict funding gate J>2, despite unbounded
+pointwise theta/p_full. This is not an upper bound over all possible
+witness collections for those bases. No all-owner symmetry is available.
+
+REPRODUCIBILITY
+checks/mass_search_funding_reduction_audit.py uses only Fraction arithmetic.
+It verifies the exact finite identities and convergence numerically with
+exact rational error comparisons on independently audited valid base
+collections, including heterogeneous masses, the13-owner pointwise example,
+its unused-coordinate extension, and the d8 hypercube. It separately checks
+the exact scalar optimization identities. These finite checks supplement
+the limit and finite-existence proof above.

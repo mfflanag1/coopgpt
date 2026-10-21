@@ -1,0 +1,353 @@
+INDEPENDENT AUDIT: NORMALIZED DUAL MASS -> FINITE DIAGONAL COUNTEREXAMPLE
+2026-10-21. No H>2 cover witness is asserted here.
+
+FILES AUDITED
+inputs/UNIFORM_VETO_AMPLIFICATION_REDUCTION.txt
+inputs/BALANCED_CLOSURE_AND_ROW_RELAXATION.txt
+inputs/BOOLEAN_PROFILE_REALIZATION_LEMMA.txt
+
+VERDICT
+The two amplification constructions, balanced closure, and simultaneous
+fixed-owner star realization are correct under their stated hypotheses.
+There is no missing pure-ownership, uniqueness-of-dual, endpoint-relaxation,
+or row-rank assumption. Exact finite amplification parameters are supplied
+below. I also give an explicit closure and production formula specialized
+to the common-veto output, eliminating the need to solve auxiliary core LPs.
+
+The conclusion is a failure of the TRUE projection-envelope DIAGONAL bound.
+It does not by itself refute the separate sqrt(n) bound on the envelope's
+sum of payments, and it does not establish any lower bound for unrestricted
+payment mechanisms. The resulting production instance admits an efficient
+mechanism paying only the fixed veto owner, even under full OUT.
+
+1. REQUIRED FINITE INPUT CERTIFICATE
+
+Let A have R>=1 nonempty 0/1 rows on m coordinates. Its full RHS is exactly
+one on every row. Supply its unique minimum-norm projection z and any
+nonnegative full multipliers lambda satisfying
+
+ z=A^T lambda,  Az>=1,  lambda_S (z(S)-1)=0.
+
+Put rho=||z||^2>0. For every coordinate i supply a RHS b^i, projection q^i,
+and chosen nonnegative multipliers lambda^i satisfying
+
+ 0<=b^i<=1; b^i_S=1 for every row S not containing i;
+ q^i=A^T lambda^i; Aq^i>=b^i;
+ lambda^i_S (q^i(S)-b^i_S)=0.
+
+Write p_i=q^i_i, L_i=sum_S lambda^i_S. Require L_i>0. If a chosen witness has
+L_i=0, q^i=0 because rows are nonempty and multipliers are nonnegative; replace
+that zero witness by the full witness. This cannot remove a positive
+contribution to the target. Unused coordinates may use the full witness,
+with p_i=0 and L_i=rho.
+
+The decisive input is the exact strict inequality
+
+ H := rho sum_i (p_i/L_i)^2 > 2.
+
+No such input has been found by this audit. Rational b^i, q^i, lambda^i and
+z,lambda make every parameter and subsequent coefficient rational. The
+projection and a valid multiplier certificate are rational for rational
+finite input data; alternatively, supply the explicit rational certificate
+rather than relying on this existence observation.
+
+2. KKT AND DUAL MASS: ALL MULTIPLIERS ARE ALLOWED
+
+Use the objective ||x||^2, with Lagrangian multipliers normalized so that
+q=A^T lambda. The quadratic dual is
+
+ max_{lambda>=0} 2 b.lambda - ||A^T lambda||^2.
+
+The primal nonnegativity constraints do not contribute a hidden term.
+Writing stationarity as q=A^T lambda+mu, with mu>=0 and mu_i q_i=0, gives
+mu=0 because A^T lambda>=0. Equivalently, minimizing the Lagrangian over
+x>=0 has minimizer A^T lambda, already nonnegative.
+
+Complementarity gives ||q^i||^2=lambda^i.b^i<=L_i. The same lambda^i is feasible
+for the full unit-RHS dual. Therefore
+
+ 0 <= L_i <= 2L_i-||q^i||^2 <= rho.                         (2.1)
+
+For a full multiplier, sum lambda=rho. For relaxed systems the total mass
+need not be unique. This is harmless: the constructions explicitly use the
+selected lambda^i, including its selected L_i. Also 0<=p_i<=L_i because p_i
+is the sum of its incident multipliers.
+
+Concrete nonunique-mass check: use rows {1,2},{0,1},{0,2},{0}, with relaxed
+RHS (1,7/10,7/10,1/5). The projection is q=(1/5,1/2,1/2). Both
+
+ lambda=(2/5,1/10,1/10,0), L=3/5;
+ lambda=(1/2,0,0,1/5),     L=7/10
+
+satisfy exact KKT. Both were separately passed through the products by the
+independent checker. Thus the nonuniqueness issue is tested in an example
+where the TOTAL mass itself changes, not merely duplicate-row multipliers.
+
+3. EXPLICIT FINITE UNION LENGTH FROM RATIONAL H>2
+
+Set
+
+ theta_i=p_i/L_i,
+ h_i=rho theta_i^2,
+ a_i=rho/L_i-1 >=0,
+ D=sum_i h_i a_i,
+ delta=H-2 >0.
+
+A sufficient explicit integer union length is
+
+ t=max{1, floor(2D/delta)+1}.                              (3.1)
+
+There are t disjoint copies of the base coordinates. For every tuple of
+base rows (S_1,...,S_t), impose the unit-demand union row consisting of
+S_k in block k for every k. The product has tm coordinates and R^t rows
+(before identifying any duplicate representations).
+
+Its full projection is z/t in every block, with squared norm
+
+ r := rho/t.
+
+A full multiplier on tuple (S_1,...,S_t) is
+
+ product_k lambda_(S_k) / [t rho^(t-1)].                    (3.2)
+
+It has total mass r. Summing (3.2) on one coordinate gives z_i/t. A tuple
+with positive multiplier consists entirely of tight full rows, so it is
+tight. This verifies full feasibility, stationarity, and complementarity.
+
+For a focal owner i in one of the t blocks, put
+
+ alpha_i=rho/[rho+(t-1)L_i],
+ beta_i=L_i/[rho+(t-1)L_i].
+
+The relaxed tuple demand is
+
+ alpha_i b^i_(S_focal)+(t-1)beta_i.                        (3.3)
+
+It belongs to [0,1], since alpha_i+(t-1)beta_i=1. A tuple excluding the
+focal owner has b^i_(S_focal)=1, and hence demand exactly one. Thus this is
+an incident-row-only relaxation of the PRODUCT system, not a relaxation
+of other owners' rows.
+
+The proposed projection has alpha_i q^i in the focal block and beta_i z
+in every other block. The tuple multipliers are
+
+ [alpha_i/rho^(t-1)] lambda^i_(S_focal)
+       product_(other blocks k) lambda_(S_k).             (3.4)
+
+Focal stationarity gives alpha_i q^i. Another block gives
+(alpha_i L_i/rho) z=beta_i z. On positive multipliers, all base rows are
+tight at the appropriate demands, proving complementarity. Feasibility
+holds term by term. Strict convexity makes this the unique projection.
+Its total dual mass and focal coordinate are
+
+ ell_i=alpha_i L_i=rho/(t+a_i),
+ c_i=alpha_i p_i=rho theta_i/(t+a_i).                      (3.5)
+
+There is one such witness for each of the tm owners. Consequently
+
+ E_t=t sum_i c_i^2,
+ R_t:=E_t/r = sum_i h_i /(1+a_i/t)^2.                      (3.6)
+
+This is nondecreasing in t and tends to H. The finite choice (3.1) works
+without square roots: (1+x)^(-2)>=1-2x for x>=0 implies
+
+ R_t >= H-2D/t >2.                                       (3.7)
+
+Compute the exact rational epsilon=R_t-2>0 from (3.6). No floating-point
+limit comparison is needed in a final certificate.
+
+4. EXPLICIT FINITE COMMON-VETO COPY COUNT
+
+Use B disjoint copies of the union product plus one fixed veto owner u.
+For every union-product row in each copy append u and retain demand one.
+A sufficient exact integer choice is
+
+ B=floor[t/(rho epsilon)]+1 = floor[1/(r epsilon)]+1.      (4.1)
+
+The final owner count is n=Btm+1. There are B R^t generator rows. Every
+row is nonempty and contains u. The minimum l1 covering value is EXACTLY
+T=1: u=1, all other coordinates zero is feasible, and any one row forces
+sum of all nonnegative coordinates to be at least one.
+
+Write z_U for the union product's full projection. The final full
+projection is
+
+ u_full=Br/(1+Br),
+ x^b=z_U/(1+Br), b=1,...,B.                              (4.2)
+
+Full multipliers are the union-product full multipliers divided by 1+Br
+in each copy. Coordinate and veto stationarity are immediate. The full
+projection squared norm equals u_full, as an additional consistency check.
+
+For any focal union owner with witness coordinate c_i, whole witness q_U,
+and total mass ell_i, let
+
+ gamma_i=1/[1+(B-1)r+ell_i],
+ u_i=1-gamma_i.
+
+In the focal copy change its row demand d to u_i+gamma_i d; other copies
+retain demand one. Off-owner rows in the focal copy also retain demand
+one. All changed demands lie in [0,1]. The exact projection is
+
+ u=u_i,
+ x^focal=gamma_i q_U,
+ x^other=gamma_i z_U.
+
+Multiply each corresponding base multiplier by gamma_i. Veto stationarity
+is gamma_i[(B-1)r+ell_i]=u_i; all other stationarity equations and all
+complementarity relations follow from the union-product systems.
+
+Thus the TRUE own envelope, after the fixed-owner realization below,
+obeys M_u>=u_full and M_(copy,block,i)>=gamma_i c_i. By (2.1), ell_i<=r,
+so gamma_i>=1/(1+Br). Hence
+
+ sum_j M_j^2
+   >= [B^2 r^2+B E_t]/(1+Br)^2
+    = 1+[B r epsilon-1]/(1+Br)^2
+    > 1=T^2.                                            (4.3)
+
+The strict margin in (4.3) is an explicit positive rational number. Both
+finite parameters t and B have now been fixed, not left as asymptotic
+limits. The owner and row counts may be enormous; this is an existence
+construction with a symbolic finite certificate, not an efficiency claim.
+
+5. BALANCED CLOSURE AUDIT
+
+For arbitrary finite nonnegative demands a with a(empty)=0, let C(a)(S)
+be the minimum nonnegative total cover of all rows contained in S. The
+minimum exists by finite feasibility and compactness of bounded sublevels.
+Then C(a)>=a and
+
+ P_S(C(a))=P_S(a) for every S.                            (5.1)
+
+To check the nontrivial inclusion, a cover x of a restricted to S restricts
+on every U subset S to a feasible cover of a on U, so x(U)>=C(a)(U).
+Every minimizing subgame cover is therefore a nonnegative efficient core
+of C(a). Nonnegativity also gives coalition monotonicity by restriction.
+Demand-array monotonicity follows from containment of feasible sets.
+
+If an owner-i relaxation changes only rows containing i, closure on a
+coalition S omitting i is IDENTICAL to full closure, because none of the
+changed rows is contained in S. The relaxed closure is at most the full
+closure everywhere, and (5.1) preserves every raw projection polyhedron.
+Therefore simultaneous realization applies. There is no requirement that
+the raw sparse demand array itself be balanced or coalition-monotone.
+
+6. SPECIALIZED EXPLICIT CLOSURE AND PRODUCTION FUNCTION
+
+The common-veto output makes the preceding step particularly simple. Let
+R_g be its generator supports, all containing u, and let d^j_g be the
+chosen final RHS for focal owner's witness j. Use j=0 for the full RHS
+(all ones). For every coalition S define
+
+ w^j(S)=max({d^j_g : R_g subset S} union {0}).              (6.1)
+
+This is EXACTLY the balanced closure: pay only u the displayed maximum
+when u is present; every included row gives the matching lower bound on
+total payment. Coalitions without u have value zero. In particular v=w^0
+has v(N)=1 and every w^j<=v. Off-j agreement follows because all included
+rows of a coalition omitting j retain demand one.
+
+For each nonempty A subset N define a nonnegative coefficient vector
+p^(j,A) on n base resources by
+
+ p_i=1 if i is outside A;
+ p_u=w^j(A) if u is inside A;
+ p_i=0 for all other i inside A.                          (6.2)
+
+This is the standard subgame efficient core (paid entirely to u) extended
+with coefficient one outside A. It majorizes w^j on every coalition and
+attains w^j(A) at A. All coefficients are explicit rational maxima from
+(6.1); no auxiliary optimization or unspecified core choice remains.
+
+Introduce one control resource z_j for each actual owner j and define
+
+ F(x,z)=min{
+   p^(0,A).x                  for nonempty A,
+   p^(j,A).x + z_j            for each witness j, nonempty A
+ } .                                                       (6.3)
+
+The veto's own witness can simply be its full-report choice, so a separate
+relaxed veto game is unnecessary. Using 2n resources remains a valid count.
+Every owner j has fixed endowment e_j+e_(n+j), full report equal to that
+endowment, and its designated low report e_j. The report domain is the
+entire coordinatewise interval below this fixed endowment.
+
+At the all-high profile, an owner-j form adds one on a coalition containing
+j, so is at least one and hence at least v(S). If j is absent, off-j agreement
+makes it majorize v(S) already. Full-game forms attain v(S). When only owner
+j drops its control coordinate, its own forms attain w^j(S); every other
+form still majorizes that value. Thus the same actual owners and one F
+realize ALL chosen projection witnesses at one full profile.
+
+Equation (6.3) is a finite minimum of nonnegative linear forms, and hence
+is nonnegative, finite-valued, monotone, concave, and degree-one homogeneous
+on the entire orthant. Rationality is explicit. All partial and fractional
+reports remain legal; they may enlarge the true envelope but cannot erase
+the witnessed diagonal lower bound.
+
+7. GENERAL BOOLEAN REALIZATION: ADDITIONAL AUDIT
+
+The general supporting-form proof is sound. For an efficient nonnegative
+core of each subgame A, assigning H outside A majorizes all coalitions,
+because a coalition not contained in A has at least one outside coefficient
+H and every game's total value is at most H. In the Boolean construction,
+a form indexed by U either incurs an H control penalty or has U containing
+the coalition's active report set, so monotonicity and locality give the
+correct lower bound. Choosing the matching profile and A=S attains equality.
+
+The converse's boundary argument is also valid without assuming continuity
+on the closed orthant. At an aggregate c, restrict F to the relative interior
+of the positive-coordinate face. A finite concave function has a finite
+supergradient there. Monotonicity gives nonnegative coefficients; homogeneity
+gives p.c=F(c). For a boundary sub-bundle z, use
+F(z)<=F(z+epsilon c)<=p.(z+epsilon c) and then let epsilon decrease to zero.
+This yields the efficient nonnegative subgame core needed for necessity.
+
+The star corollary does not require independently chosen relaxed games to
+be mutually compatible on profiles where several owners are low. Formula
+(6.3), or its general-core counterpart, defines those other games itself.
+The finite witness star is enough for the envelope lower bound.
+
+8. SCOPE: DIAGONAL, ENVELOPE FUNDING, AND ARBITRARY MECHANISMS
+
+At the full profile F(B)=v(N)=T=1. Equation (4.3) refutes
+sum_j M_j(B)^2<=F(B)^2 for the true own-report minimum-norm envelope.
+
+It does NOT imply sum_j M_j(B)>sqrt(n)F(B). Cauchy-Schwarz says the diagonal
+bound would SUFFICE for that funding bound; the converse is false. A vector
+can have squared norm greater than one and total mass less than sqrt(n).
+A funding counterexample needs a separate certified l1 lower bound exceeding
+sqrt(n), with the final owner count n=Btm+1. If the available witnessed
+coordinate sum is W, the exact rational comparison is W^2>n because T=1.
+H>2 alone supplies no such inequality.
+
+It also gives NO unrestricted incentive lower bound. In the explicit F,
+the full-game form indexed by A=N is simply x_u. Thus F(x,z)<=x_u globally,
+and any coalition omitting the actual veto owner has production zero.
+The mechanism paying y_u(B)=F(B), every other owner zero, is efficient and
+coalition-covering on the full real report domain. For a withholding coalition
+containing u, superadditivity gives F(B)-F(B-delta)>=F(delta); for a coalition
+omitting u, payments and withheld production are both zero. Therefore this
+efficient mechanism satisfies full OUT for every coalition. The reduction
+is specifically an architecture counterexample, not a lower bound for
+arbitrary mechanisms or a bounded-arity result.
+
+9. EXECUTED INDEPENDENT CHECKS
+
+checks/amplification_exact_audit.py uses only exact Fraction arithmetic.
+It independently solves small projection systems by active-set enumeration,
+then checks full and relaxed primal feasibility, nonnegative multipliers,
+stationarity, complementary slackness, mass identities, preservation of all
+off-owner row demands, and the min-linear star realization on every tested
+coalition. Results are saved in checks/amplification_exact_audit.json:
+
+ 8 base systems; 28 base witnesses;
+ 84 union-product witnesses; 252 common-veto witnesses;
+ 320 realized star/coalition values;
+ 2 distinct valid dual-mass representations of one identical projection;
+ 3 synthetic H>2 PARAMETER-ARITHMETIC tests, not cover witnesses.
+
+All passed. These checks support the derivations above; they are not a search
+for H>2 and do not establish that the decisive input exists. No claimed
+counterexample or general diagonal theorem has been proved by this audit.

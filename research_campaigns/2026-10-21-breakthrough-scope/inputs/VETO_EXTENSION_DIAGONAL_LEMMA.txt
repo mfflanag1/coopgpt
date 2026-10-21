@@ -1,0 +1,109 @@
+A PROVED AGGREGATE DIAGONAL BOUND UNDER ONE UNIFORM VETO EXTENSION
+2026-10-17. Structural progress on the minimum-norm own-envelope conjecture.
+
+STATEMENT AND SCOPE.
+Let A be a finite nonnegative0/1 matrix with nonempty rows on base owners
+1,...,m. Its base full cover system is A*z>=1, z>=0. Assume its raw minimum-
+norm projection is own-row monotone: lowering any subset of demands on rows
+containing i, while fixing rows excluding i, cannot increase coordinate i.
+The hypothesis quantifies over EVERY arbitrary nonnegative downward RHS
+perturbation on incident rows, not only report-realizable perturbations.
+It suffices that this holds below the uniform demand vector; homogeneity
+then gives the scaled cases used below. All fixed graph/singleton generator
+systems satisfy the hypothesis by RANK_TWO_PROJECTION_MONOTONICITY.txt
+(the full arbitrary-RHS statement and its active-component proof). Its exact
+finite derivative verifier is verify_rank_two_projection_derivatives.py. Add a common veto owner0 to EVERY row, giving
+ x_0+sum_(i in S)x_i>=1 for each generator S.
+Let M_i be the supremum of coordinate i of the minimum-norm projection after
+arbitrary downward relaxations of rows containing i, with all off-i rows
+fixed. Then
+                     sum_(i=0)^m M_i^2 <=1.                 (V)
+The full veto cover system has minimum l1 value T=1. Thus(V) proves the
+diagonal inequality for this growing class of FIXED GENERATING systems.
+It is not a characterization of every production-report relaxation of the
+same full-profile game. The conclusion is about the stated generator envelope. If additional coalition
+rows are independently allowed to relax or remain binding, the assumption
+must be checked for that actual system; do not silently discard such rows.
+In particular, the theorem directly covers real report domains for which
+the indicated fixed generator description remains valid at every profile.
+A veto already admits an efficient mechanism, so this is a geometric
+structural lemma, NOT an improved unrestricted funding theorem.
+
+WRITE rho=||z||^2 FOR THE BASE FULL PROJECTION.
+The empty-row-family case is zero and trivial. Otherwise rho>0. Choose
+nonnegative base KKT row multipliers lambda with z=A^T lambda, supported
+on tight rows. Uniform unit demands give
+ rho=sum_S lambda_S, and 0<=z_i<=min{1,rho}.
+The upper bound1 follows because any positive z_i has a positive incident
+multiplier, whose tight row has total exactly1.
+
+LEMMA1: A UNIFORM DELETION LOSS IS BOUNDED BY ONE COORDINATE.
+Let rho_-i be the minimum squared norm after deleting all rows containing i.
+Define w_i=sum_(S contains i) lambda_S*1_S. Then0<=w_i<=z coordinatewise,
+and z.w_i=sum_(S contains i)lambda_S*z(S)=z_i. Remove these incident dual
+multipliers from the base dual2*sum lambda-||A^T lambda||^2. Its value is
+ rho-||w_i||^2>=rho-z_i. Therefore
+                         rho_-i>=rho-z_i.                 (D)
+This is the cross-owner coupling used below: all those off-i rows remain
+full at every witness for i. A cruder bound ignoring them loses the result.
+
+LEMMA2: THE VETO'S OWN ENVELOPE IS EXACTLY t=rho/(1+rho).
+At the full profile, fixing x_0=u leaves the scaled base problem, with
+minimum objective u^2+(1-u)^2*rho for0<=u<=1. Hence the full solution is
+ x_0=t=rho/(1+rho), x_base=z/(1+rho), and full squared norm is t.
+At ANY relaxation of the veto rows, let mu be its projection KKT multipliers.
+Every row contains0, so x_0=sum mu. All relaxed right sides are at most1,
+so ||x||^2=sum mu*b'_S<=sum mu=x_0. Use the SAME mu in the full dual:
+ 2*sum mu-||x||^2>=x_0.
+The full dual optimum equals t. Hence x_0<=t under every relaxation, with
+equality at the full profile. This proves M_0=t.
+
+LEMMA3: EACH BASE OWNER HAS A COUPLED ENVELOPE CAP.
+Take any own-row relaxation witness for base owner i and write its veto
+coordinate as u. All off-i rows remain full. Conditional on u, the base
+projection is an own-row relaxation of the original base demand vector
+scaled by1-u. (Negative residual demands can be replaced by0.) The assumed
+own monotonicity therefore gives
+ x_i <=(1-u)*z_i.
+Also the base coordinates satisfy all off-i rows at residual demand1-u, so
+ ||x_base||^2 >=(1-u)^2*rho_-i.
+The unit-demand dual calculation above gives||x_base||^2<=u(1-u). Thus
+ u>=rho_-i/(1+rho_-i), and consequently
+ x_i<=z_i/(1+rho_-i)<=z_i/(1+rho-z_i).
+Because every row containing i also contains0, KKT gives x_i<=x_0<=t.
+Combining and taking suprema proves
+             M_i<=min{t, z_i/(1+rho-z_i)}.                (C)
+This includes zero coordinates; 1+rho-z_i>=1. The case u=1 is trivial,
+but actually u<=t<1 whenever rho is finite.
+
+AGGREGATION: THE GOLDEN-RATIO SPLIT IS AN EXACT ALGEBRAIC THRESHOLD.
+Let phi=(1+sqrt5)/2. For0<=z_i<=min{1,rho}, the ratio M_i/z_i is bounded
+by the smaller of t/z_i and1/(1+rho-z_i). They cross at
+ z_star=rho*(1+rho)/(1+2rho).
+When rho<=phi, this crossing lies in the allowed interval. Therefore
+ sum_i M_i^2 <= rho*(1+2rho)^2/(1+rho)^4.
+Adding M_0^2=rho^2/(1+rho)^2 gives at most1 because the numerator of the
+remaining gap is
+ (1+rho)^4-rho^2*(1+rho)^2-rho*(1+2rho)^2
+   =-(2rho+1)*(rho^2-rho-1) >=0.
+When rho>=phi, z_star>=1 and1/(1+rho-z_i)<=1/rho. Consequently
+ sum_i M_i^2<=1/rho.
+Then M_0^2+sum_i M_i^2<=rho^2/(1+rho)^2+1/rho<=1, since
+ rho^2-rho-1>=0. This completes(V).
+
+WHAT ADVANCED / WHAT REMAINS OPEN.
+The conclusion does not assume own monotonicity of the veto-extended
+projection itself. The proof combines exact uniform dual mass, off-owner
+deletion, and an aggregate scalar inequality; it does not use the false
+efficient-core support or T*max-coordinate inequalities. No example of raw
+incentive failure in this precise uniform graph subclass is asserted here. General nonuniform demands and
+base systems whose own projection is not monotone remain unresolved.
+No historical novelty claim is made for KKT duality or the individual base
+lemmas; the assembled envelope theorem is a proposed structural result.
+
+EXACT VERIFICATION.
+verify_veto_extension_diagonal.py passes19 base graph/singleton systems,
+326 rational own-relaxation KKT witnesses, and12750 rational aggregation
+identity/inequality checks. The checker tests the stated algebra and sample
+KKT cases; the proof above, not finite enumeration, covers all matrices
+and all continuously varying incident RHS values.

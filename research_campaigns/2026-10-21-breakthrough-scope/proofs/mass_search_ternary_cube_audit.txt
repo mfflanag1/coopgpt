@@ -1,0 +1,119 @@
+INDEPENDENT TERNARY-CUBE AUDIT
+21 October 2026. Source: activation_ternary_cube_candidate.txt and its scalar
+completion. This audit does not import the author's checker or certificates.
+
+VERDICT. The local construction and the finite transport existence proof
+are valid. The independent exact checker establishes all required scalar
+inequalities at d=10000. Consequently this is a finite rational normalized
+mass example with theta_i=1 for every owner, J>5/2 and H>25/4. Claims about
+funding additionally invoke the separately audited common-veto realization.
+
+1. LOCAL INDEPENDENCE, INCLUDING MULTIPLE ADDITIONS.
+Every axis line meets every sum-color exactly once. Thus omitting one color
+starts with an independent set. In phase1, two distinct added vertices e_j
+and e_l differ in two coordinates. They cannot lie on the same axis line.
+Any line newly completed by additions therefore contains precisely one
+added e_j. In direction j this line contains0, which was removed. In each
+direction l!=j the other points are e_j+e_l and e_j+2e_l; the repair removes
+one. All repair targets are originally available weight2 points. Repeated
+deletions are harmless. Negation proves the phase2 assertion. All later
+steps only delete available vertices, so no repaired line is restored.
+
+Every phase excludes0 and keeps precisely d+h neighbors. For a fixed
+neighbor the three inclusion probabilities are3/5,1/5,1 in some order,
+so the unconditional marginal is3/5. Repairs never affect neighbors.
+
+2. EXCEPTIONAL AVAILABILITY AND CORRELATION.
+For a fixed mixed weight2 point e_j+2e_l, only the repair indexed(j,l)
+can remove it in phase1. This has probability (h/d)r. Negation exchanges
+j,l in phase2 and gives the same probability. The point is absent in
+phase0. Hence Pmix=(2/3)(1-(h/d)r).
+
+A same-sign point e_j+e_l is present in phase0, absent in one other phase,
+and exposed to the two repairs(j,l),(l,j) in the remaining phase. Their
+joint index-selection probability is h(h-1)/(d(d-1)), not (h/d)^2;
+their repair coins are independent. Inclusion-exclusion therefore gives
+Psame=2/3-[2(h/d)(1-r)-h(h-1)(1-r)^2/(d(d-1))]/3.
+Both exceed601/1000 at d10000. Independent conditional thinning by
+beta/Pmix or beta/Psame is a valid finite rational procedure and yields
+every exceptional marginal beta. The retained count P can correlate
+arbitrarily with the phase and with neighbor selection; nothing below
+assumes otherwise. Its only required properties are0<=P<=e and EP=e beta.
+
+3. FAR-SET TRANSPORT, ALL CUTS AND PRESERVED STATE PROBABILITIES.
+Weight>=3 points never occur in a repair or exceptional thinning. In a
+state of phase c their available set is exactly the two entire far color
+classes other than c. Class sizes are
+f0=3^(d-1)-1-d(d-1), f1=f2=3^(d-1)-d-d(d-1)/2.
+They sum to m-e. With Q=K-P, EQ=beta(m-e). Exact scalar inequalities give
+Q>=K-e>=max f_j>0 and Q<=K<=every pair sum.
+
+Here is an independent derivation of the transport criterion. Give the
+source-to-state arc capacity p_omega Q_omega, every available state-to-point
+arc capacity p_omega, and each point-to-sink arc capacity beta. Let U be
+the points on the sink side of a cut. For each state the smaller possible
+contribution is p_omega min(Q_omega,|U intersect A_omega|). The remaining
+point arcs cost beta(|F|-|U|). Thus every cut has capacity at least
+beta|F| exactly when the displayed all-subsets inequalities hold. Total
+source and sink capacities equal beta|F|; rational maxflow therefore
+saturates both. States of probability0 can be discarded.
+
+Divide each state-to-point flow by its positive p_omega. The resulting
+conditional vector has coordinates in[0,1], integer sum Q, and zero entries
+outside the available set. A vector with integer sum cannot have exactly
+one fractional coordinate. Given two, shift mass between them in both
+directions until an endpoint hits0 or1. The original vector is a rational
+convex combination of the two endpoints, each with fewer fractional
+coordinates. Finite recursion gives a rational mixture of Q-subsets.
+Crucially, this does not reweight the states: their probabilities remain
+p_omega. It changes only which available far points are retained.
+
+For a subset U let u_j count its points in far color j. The Hall deficit
+sum p_omega min(Q_omega,sum_{j!=phase}u_j)-beta sum u_j is concave on the
+box0<=u_j<=f_j. Each point of this box is a convex combination of its eight
+corners; concavity therefore makes the corner inequalities sufficient.
+Empty and full corners give equality. A single-class corner gives
+2f_j/3>=beta f_j. For two classes r,s, the exact contribution is
+(f_r+f_s)/3+E[Q 1_{phase=third}]. The latter expectation is at least
+(K-e)/3 pointwise, regardless of phase dependence. Therefore
+K-e >= (3beta-1)(f_r+f_s) proves every two-class corner. The checker verifies
+these inequalities exactly. This establishes every cut, not only vertex
+availability. No exponentially large transport is numerically executed:
+the finite rational maxflow theorem plus these inequalities proves it exists.
+
+4. KKT AND FULL PROJECTION.
+The constructed sets all exclude0 and contain d+h neighbors and K outside
+points. Each is independent and has s=d+h+K elements. Their complement
+mixture w has coordinates1,2/5,1-beta on the focal, neighbor, outside types.
+Every used row has potential
+t=1+(d-h)(2/5)+(m-K)(1-beta)=1+2d(2/5)^2+m(1-beta)^2=||w||^2.
+Every off-focal row complements an independent set containing0 and hence
+contains at least one member of each neighbor pair. Since2/5>1-beta, its
+potential is at least d(2/5)+(k-d)(1-beta); the excess over t is exactly
+h(beta-3/5)-beta>0. This uses the complete row universe, not a restricted
+collection of checked rows.
+
+If alpha is the finite rational complement distribution, q=w/t and
+lambda=alpha/t satisfy stationarity. Give every supported own row RHS1,
+every other own row RHS0, and every off row RHS1. Feasibility and
+complementarity now hold exactly; q is the unique minimum-norm cover.
+The multiplier mass and focal coordinate are both1/t, so theta0=1.
+Translation preserves the full independent-set universe and transfers
+the witness to every owner. Since all rows have size k and any one row
+has a uniform translation average, their hull's minimum norm is k²/n.
+Equivalently the full unit cover is(1/k)1 with rho=n/k². The checker gives
+k<2n/5, so J=n/k>5/2 and H=n²/k²>25/4.
+
+5. REPLAY AND SCOPE.
+Run python3 checks/mass_search_ternary_cube_audit.py. It exhaustively
+checks370 local states and405 axis lines at dimension5, including exact
+availability marginals, independently of the general proof. It then checks
+all large-d scalar inequalities and KKT identities with integer/Fraction
+arithmetic at d10000. Small-d enumeration is a diagnostic, not a substitute
+for Sections1--3. For the separately proved direct common-veto construction
+it also checks B=floor(k²/n), N=Bn+1 and the finite selected private total
+B n ell/[1+(B-1)rho+ell] > (5/4)sqrt(N), where ell=1/t. Thus no numerical
+optimization or asymptotic interchange is needed for that consequence.
+The inequality is an envelope lower bound at the designated full profile
+of the explicit production architecture; it is not a mechanism-independent
+lower bound and does not assert the envelope equals the selected total.

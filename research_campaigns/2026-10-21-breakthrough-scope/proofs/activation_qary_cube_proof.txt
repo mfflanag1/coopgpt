@@ -1,0 +1,190 @@
+Q-ARY AXIS-LINE FAMILY: UNBOUNDED NORMALIZED MASS AND L1 PARAMETER
+Candidate for independent review; 21 October2026. Canonical repo untouched.
+This extends the frozen ternary construction but does not modify it.
+
+THEOREM CLAIM (subject to independent verification).
+For every integer Q>=3 there is a finite transitive 0/1 row family with
+full minimum-norm unit-demand cover squared norm rho, and an incident-only
+relaxation witness for every owner with normalized coordinate theta_i=1,
+such that J=sqrt(rho/n)*sum_i theta_i>Q-1 and H=rho*sum_i theta_i^2>(Q-1)^2.
+In particular both normalized aggregate parameters are unbounded.
+
+1. PARAMETERS AND ROW UNIVERSE.
+Fix integer Q>=3 (no primality assumption). Set
+ d=16Q(Q-1)(Q+2), h=8Q(Q-1), x=h/d=1/[2(Q+2)],
+ n=Q^d, M=Q^(d-1), m=n-(Q-1)d-1,
+ mu=(Q-2+x)/(Q-1), delta=1/[4Q(Q-1)], beta0=mu+delta,
+ K=floor(beta0*m), beta=K/m, s=(Q-2)d+h+K, k=n-s.
+Vertices are (Z/QZ)^d. Hyperedges are complete axis-parallel Q-point lines.
+Independent sets contain no entire line. The FULL row family consists of
+complements of ALL independent s-sets. Translation acts transitively on
+vertices and preserves this family. We construct one such set distribution,
+proving in particular that the row family is nonempty.
+
+At focal0 the neighbors are a e_j, 1<=a<=Q-1, 1<=j<=d. We construct
+independent s-sets with focal absent, exactly (Q-2)d+h selected neighbors,
+each neighbor marginal mu, exactly K selected outside vertices, and each
+outside vertex marginal beta. Their complement mixture w has focal1,
+neighbor entries a0=1-mu=(1-x)/(Q-1), outside b=1-beta.
+
+2. AVAILABLE SETS AND LOCAL REPAIRS.
+Color a vertex by its coordinate sum modulo Q; every axis line has all Q
+colors. Choose excluded color c uniformly from0,...,Q-1.
+If c=0, start with all nonzero colors and retain a uniformly selected
+((Q-2)d+h)-subset of the (Q-1)d neighbors. Keep all other available vertices.
+If c!=0, start with all colors except c, delete focal0, choose a uniform
+h-subset S of coordinate indices, and add c e_j for j in S. For each added
+c e_j and every l!=j independently choose A uniformly from{1,...,Q-1} and
+delete c e_j+A e_l. Take the union of all these deletions.
+
+Each resulting available set is independent. The original Q-1 colors
+contain no full line. No axis line can contain two added vertices c e_j.
+The axis line through c e_j in direction j loses0; in direction l!=j the
+construction deletes one of its other Q-1 vertices. Thus every possible
+newly completed line is broken. Each set excludes0 and contains exactly
+(Q-2)d+h neighbors; no repair deletion is a neighbor.
+For a fixed neighbor a e_j, conditional inclusion probabilities are mu
+in phase0, x in phasea, and1 in each of the other Q-2 phases. Their mean
+(mu+x+Q-2)/Q equals mu by the definition of mu.
+
+3. EXCEPTIONAL MARGINALS.
+Let E be all Hamming-weight2 vertices, e=(Q-1)^2*binomial(d,2).
+For u=a e_j+b e_l (j!=l,a,b!=0), the original color-phase availability is
+(Q-1)/Q. It can be deleted only through an added a e_j in phasea or an
+added b e_l in phaseb. If a!=b, these are distinct phases, giving exact
+availability
+ B=(Q-1)/Q-2x/[Q(Q-1)].
+If a=b, their union deletion probability is at most the sum of the two
+probabilities, so availability is at least B (the duplicate correction
+is positive). This argument also covers composite Q and a+b=0: neither
+a nor b equals a+b, since both coefficients are nonzero.
+A direct computation gives
+ B-mu=1/[2Q(Q-1)]=2delta,
+so every exceptional vertex has availability P_u>=B=beta0+delta>beta.
+Each P_u is rational because the construction is finite rational.
+Conditionally on availability, retain u with probability beta/P_u, using
+independent thinning coins. Then every exceptional vertex has marginal
+exactly beta. Independence and all neighbor counts are preserved. Let P
+be the number retained, so0<=P<=e and E[P]=beta e.
+
+4. FAR CLASSES AND FINITE TRANSPORT.
+Far vertices have Hamming weight>=3. Let F_c be their color classes. Their
+sizes are
+ f0=M-1-(Q-1)*binomial(d,2),
+ fc=M-d-(Q-2)*binomial(d,2) for c!=0.
+Indeed there are Q-1 nonzero ordered pairs summing to0 and Q-2 summing to
+a fixed nonzero color, for each chosen coordinate pair. Thus sum f_c=m-e.
+In phase c every far vertex of color !=c is available and none of color c
+is. A state omega records all local and exceptional-thinning choices;
+its probability p_omega is rational. We need retain exactly
+ T_omega=K-P_omega
+far vertices, with each far vertex's unconditional marginal beta.
+E T=K-beta e=beta*sum f_c.
+
+We use the following elementary finite rational transport lemma. For
+states with probabilities p_omega, available sets A_omega, integer target
+sizes T_omega, and common desired marginal beta, such a selection exists
+if expected target size=beta|F| and every U subset F satisfies
+ beta|U| <= sum_omega p_omega min(T_omega,|U intersect A_omega|).
+Proof: source->state capacities p_omega T_omega, state->available-vertex
+capacities p_omega, vertex->sink capacities beta. Maxflow/mincut gives
+precisely these inequalities (optimize each state's side of a fixed cut).
+A rational flow saturates all source and sink arcs. Divide state-vertex
+flows by p_omega to get conditional marginals in[0,1] of integer sum T.
+Any such rational vector is a rational mixture of fixed-cardinality
+indicators: shift between two fractional coordinates in both directions
+until a coordinate hits0 or1, express the original as a convex mixture,
+and recurse. Each endpoint has fewer fractional coordinates. This gives
+a finite rational distribution of T-subsets of A_omega.
+
+For our states the cut deficit depends only on u_c=|U intersect F_c|.
+It is concave on the box0<=u_c<=f_c: every summand is the minimum of a
+constant and a linear function, minus a linear desired demand. Therefore
+it suffices to check box corners, i.e. unions of entire color classes.
+We will prove below these three uniform bounds:
+ (i) K-e >=(Q-2)M;
+ (ii) K <= sum_{c!=a} f_c for every a;
+ (iii) K-e >=(Q beta-Q+2)*sum_{c!=a} f_c for every a.
+For a corner containing r<=Q-2 classes, (i) implies T is at least every
+available count in that union, so its RHS is exactly (Q-1)/Q times its
+size, >=beta times its size. For r=Q-1, let a be the omitted color and
+write f_R for the union size. In each phase c in R the available portion
+has at most(Q-2)M vertices, so (i) makes the minimum its available count.
+In phasea, (ii) makes the minimum T. Thus the cut RHS is
+ ((Q-2)/Q)*f_R + E[T*1_{phase=a}]
+ >=((Q-2)*f_R+K-e)/Q >=beta*f_R by(iii).
+For all Q classes, (ii) gives RHS=E T=beta sum f_c, equality. The empty
+cut is trivial. All cuts hold, so the transport lemma completes the
+fixed-size independent-set distribution.
+
+5. UNIFORM SCALAR BOUNDS VALID FOR ALL Q>=3.
+First d>=480. For every integer D>=20, 3^(D-5)>100D^2: check D20 and use
+3(D/(D+1))^2>1 for induction. Hence
+ M=Q^4*Q^(d-5)>=Q^4*3^(d-5)>100Q^4 d^2.
+Every far-class size is positive and in[M-Qd^2,M]. Also
+ e+Qd+2 <=Q^2d^2,
+so flooring yields
+ K-e >=beta0*Q*M-Q^2d^2,       K<=beta0*Q*M.
+Put gamma=(Q-1)/Q-beta0. Since B=beta0+delta,
+ gamma=delta+2x/[Q(Q-1)]>delta>=1/(4Q^2).
+Moreover b0=1-beta0<1/(Q-1)<=3/(2Q), hence
+ Q beta0-Q+2=2-Q b0>1/2.
+Now(i) follows from
+ K-e-(Q-2)M >=(Q beta0-Q+2)M-Q^2d^2>0.
+For(ii), sum_{c!=a}f_c>=(Q-1)(M-Qd^2), so its excess over K is at least
+ Q gamma M-Q(Q-1)d^2 > M/(4Q)-Q^2d^2>0.
+For(iii), the coefficient Q beta-Q+2 is positive; beta>=beta0-1/m>mu
+(as verified below), and Qmu-Q+2>0. Its product with a Q-1-class union is
+at most (Q beta0-Q+2)(Q-1)M. Thus the excess of K-e is at least
+ (Q-2)(Q-1-Q beta0)M-Q^2d^2
+ =(Q-2)Q gamma M-Q^2d^2 >=M/12-Q^2d^2>0.
+(The weak1/12 bound uses(Q-2)/(4Q)>=1/12.) These prove all cuts.
+
+6. OFF-OWNER KKT AND FULL PROJECTION.
+The enormous M bound gives m>h and m>1/delta. Therefore beta>=beta0-1/m
+>mu, so a0>b. Every supported row contains focal0, exactly d-h neighbors,
+and k-1-d+h=m-K outside vertices. Its potential is the common value
+ t=1+(d-h)a0+(m-K)b
+  =1+(Q-1)d*a0^2+m*b^2=||w||^2>0.
+Every off-focal row complements an independent set containing0. Each of
+the d axis lines through0 must omit at least one of its Q-1 neighbors, so
+such a row has at least d neighbors. Its potential is at least
+ d*a0+(k-d)*b.
+This minus t is h(a0-b)-(1-b)=h(beta-mu)-beta. Because h delta=2,
+ h(beta-mu)-beta >=2-h/m-beta0>0
+using m>h and beta0<1. Thus ALL off rows are feasible at threshold t.
+
+Set lambda=alpha/t and q_local=w/t, where alpha is the finite row-mixture
+constructed above. Keep every off-row RHS1. Set own-row RHS1 on support
+of alpha and0 on other own rows. Primal feasibility, stationarity
+q_local=A^T lambda, and complementary slackness hold exactly. This is the
+unique minimum-norm cover for an incident-only relaxation. Total dual
+mass ell=1/t and focal coordinate q_local,0=1/t give theta0=1.
+
+Since the full row universe is nonempty, all its rows have size k, and
+translation acts transitively, the uniform point v=(k/n)1 lies in its
+convex hull. Every point in that hull has coordinate sum k, so Cauchy-
+Schwarz proves v is the unique minnorm point. Therefore the full cover
+is z=(1/k)1 and rho=n/k^2. Translate the focal witness to each owner.
+
+7. UNBOUNDED AGGREGATES.
+The flooring bound and mu(Q-1)d=(Q-2)d+h give
+ k<=b0*n+delta*(Q-1)d+beta0+1
+   <b0*n+d/(4Q)+2.
+But1/(Q-1)-b0=x/(Q-1)+delta>delta, and the M bound ensures
+ delta*n>d/(4Q)+2.
+Therefore0<k<n/(Q-1), so
+ J=sqrt(rho/n)*n=n/k>Q-1,
+ H=rho*n=(n/k)^2>(Q-1)^2.
+Positivity of k follows because beta<1 and the same bounds give s<n;
+alternatively every constructed independent set omits at least one vertex
+per axis line and hence has size<=n(Q-1)/Q<n.
+
+SCOPE. This is a finite exact family of normalized incident-relaxation
+witnesses, with actual translation symmetry on the full row universe.
+Funding consequences require the separately audited production realization
+and amplification theorem. If those apply, for each fixed Q the amplified
+funding coefficient approaches J/2>(Q-1)/2 along arbitrarily large owner
+counts. Varying Q then rules out any universal constant times sqrt(N)
+funding bound for this particular true-envelope architecture. It does not
+prove a corresponding lower bound for arbitrary mechanisms.

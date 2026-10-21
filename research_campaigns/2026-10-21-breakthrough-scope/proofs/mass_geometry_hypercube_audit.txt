@@ -1,0 +1,164 @@
+INDEPENDENT AUDIT: EXPLICIT HYPERCUBE FAMILY AND TRUE DIAGONAL LOWER BOUND
+2026-10-21. No combinatorial or KKT gap found in activation_hypercube_proof.txt.
+This audit gives a direct proof for every integer d>=4, exact finite arithmetic,
+and the optimized asymptotic selected diagonal4/3. It does not upper-bound the
+actual envelope and does not establish an arbitrary-mechanism lower bound.
+
+1. COMBINATORIAL CONSTRUCTION AND ALL CAPACITY CHECKS.
+Take the hypercube graph Q_d on V={0,1}^d, n=2^d. Let o=0 and
+ C={o,e_1,...,e_d}. Let E' be the even vertices other than o, and O' the odd
+vertices other than the d unit vectors. Set
+ a=n/2-1, b=n/2-d, m=a+b=n-d-1,
+ D=d(d-1)/2, D'=(d-1)(d-2)/2, U=a-D,
+ K=floor[a(d-2)/d], f=K/a.
+The letter U here denotes a count, not a vertex set.
+For d>=4, 2^d-2>d(d-1). The inequality holds at4; its left-minus-right
+increment from d to d+1 is2^d-2d>0. Therefore U>0 and
+ a(d-2)/d <= a-(d-1)=b, so K<=b. Also0<K<a.
+
+Select s uniformly from C. Independently choose the E branch with probability
+a/m or O branch with probability b/m.
+In the O branch choose a uniform K-subset of O' and add s. This is independent:
+if s=o all its neighbors are excluded from O'; if s is a unit vector it is
+odd, just as every member of O'. The result has K+1 vertices.
+
+In the E branch let mu=Df. Choose P=floor(mu) or ceil(mu) with exact mean mu,
+using the usual rational rounding probabilities (a single value if integral).
+Choose P uniformly from the allowed weight-two vertices, and K-P uniformly
+from the U even vertices of weight at least4. Add s. For s=o all D weight-two
+vertices are allowed. For s=e_j, allowed pairs omit j and there are D' of them.
+No vertex of weight at least4 is adjacent to a unit vector; the forbidden
+weight-two vertices are exactly the pairs containing j. Thus every output
+is independent, including every possible rounding outcome.
+
+All indicated subsets exist. The real number mu satisfies
+ 0<=mu<=K, mu<=D', and mu>=K-U,
+because D<=a, f<=D'/D, and K-mu=Uf<=U. Both endpoints of the enclosing
+integer interval [max(0,K-U),min(K,D')] are integers. Consequently floor(mu)
+and ceil(mu) lie in that interval. This checks both the weight-two capacity
+and the remaining-background capacity, for every d>=4 and every star choice.
+Every output I intersects C exactly in {s}. All probabilities are rational
+and there are finitely many outputs. No linear-program feasibility oracle
+or limiting construction is used.
+
+2. EXACT MARGINALS.
+Star vertices have probability1/(d+1). In the E branch each even vertex of
+weight at least4 has marginal E[(K-P)/U]=f. For a fixed weight-two pair,
+its marginal conditional on s=o is f; for two unit-star choices it is0;
+for the other d-2 unit-star choices it is mu/D'=d*f/(d-2). Its star-averaged
+marginal is therefore [f+(d-2)*d*f/(d-2)]/(d+1)=f. After the E/O mixture,
+every E' vertex has marginal (a/m)f=K/m. Every O' vertex has marginal
+(b/m)(K/b)=K/m. There are no collisions between background and star.
+Thus the distribution has exact independent-set marginal1/(d+1) on C
+and K/m on all outside vertices.
+
+3. FULL ROW UNIVERSE, FULL KKT, AND EVERY OFF-OWNER ROW.
+Let the cover generators be the complements of ALL independent(K+1)-sets
+of Q_d, not merely the support above. Every row has size
+ k=n-K-1=d+m-K.
+XOR by any binary vector is a graph automorphism, acts transitively, and
+preserves this row universe. The full cover has RHS1 on every generator.
+Its minimum-norm cover is the uniform vector z_i=1/k, with rho=n/k^2.
+Indeed, the n XOR translates of one row contain each coordinate k times.
+Giving each translate multiplier1/k^2, counting multiplicity, certifies
+stationarity z=sum lambda_R 1_R. Every row is tight. This proves exact full
+KKT without enumerating any other independent sets.
+
+The mean w of complementary supported rows has
+ theta=d/(d+1) on C, gamma=(m-K)/m outside C.
+All supported rows contain d vertices of C. Crucially, EVERY row omitting
+focal o complements an independent set containing o, and so that independent
+set omits all d neighbors of o. Every such off-o row also contains exactly
+d vertices of C. Consequently all supported and all off-o rows have potential
+ t=d*theta+(k-d)*gamma
+  =d^2/(d+1)+(m-K)^2/m
+  =||w||^2.
+This argument covers the unenumerated row universe, not just the finite support.
+
+Keep RHS1 on all rows with exactly d members of C, and delete all other rows
+by changing their RHS to0. All changed rows contain o. Set q=w/t and assign
+multiplier alpha_R/t to every supported row, where alpha is the finite mixture
+above. Then q is feasible, each positive-multiplier row is tight, and
+q=sum_R(alpha_R/t)1_R. Nonnegativity multipliers vanish since q>0. These are
+all KKT conditions; strict convexity makes q the unique minimum-norm cover.
+Its displayed dual mass and own coordinate are
+ ell=1/t=||q||^2, p=theta/t.
+Translating by XOR gives one such legitimate own-row relaxation for every
+fixed owner. Off-owner rows and all other actual owners remain unchanged.
+This exact argument is compatible with the separate balanced-closure and
+simultaneous fixed-owner production-realization lemmas used in MAIN.
+
+4. NORMALIZED MASS AND THE STRONGER RAW QUANTITY.
+The normalized mass is
+ H_d=rho*n*(p/ell)^2=[n*d/(k*(d+1))]^2.
+The direct-veto raw ratio is
+ R_d=(n*p^2)/rho=(k*theta/t)^2.
+As d tends to infinity, K/n->1/2, k/n->1/2, theta->1, and t/n->1/4.
+Therefore H_d->4, R_d->4, and ell/rho=k^2/(n*t)->1.
+Since q is the minimum-norm point after deleting constraints, ell=||q||^2
+<=||z||^2=rho. Hence delta=rho-ell>=0; also delta<=rho->0.
+The raw quantity is essential: H>2 by itself is not the direct-veto test.
+For example d8 has H=4096/2025>2 but R=4225/2116<2.
+
+5. TRUE-DIAGONAL LOWER BOUND APPROACHING4/3.
+For J disjoint copies of the base plus one common veto owner, the previously
+audited amplification formulas give full veto coordinate
+ u=J*rho/(1+J*rho)
+and selected own-report coordinate
+ p/[1+(J-1)*rho+ell]
+for each of the J*n nonveto owners. Let c=J*rho. Since each coordinate is
+attained by a legitimate unilateral report in the SAME production function
+with the SAME fixed owners, the true own-report envelope obeys
+ sum_i M_i^2 >= D_delta(c)
+ =c^2/(1+c)^2 + R_d*c/(1+c-delta)^2.
+The sum combines different owners' unilateral witnesses as allowed by the
+definition of the envelope; no joint deviation is claimed.
+
+Choose the positive integer J_d nearest2/rho. Then c->2, delta->0,R_d->4,
+so these certified lower bounds converge to
+ (2^2+4*2)/(1+2)^2=4/3.
+Thus there is a sequence of finite, all-real min-linear production instances
+with fixed mixed owners for which liminf of the true squared-envelope ratio
+is at least4/3, under the normalization F(B)=1. In particular the true diagonal
+inequality fails by a substantial amount. This is a lower bound on actual
+envelopes, not an asserted limit or upper bound for them.
+
+Optional certificate-only optimization: for R>2,
+ max_{c>=0}(c^2+R*c)/(1+c)^2=R^2/[4(R-1)],
+attained at c=R/(R-2). Since
+ 1+c-delta >=(1-delta)(1+c),
+the selected D_delta is at most the same expression with
+ R_eff=R_d/(1-delta)^2, whose maximum tends to4/3. The rounding choice above
+attains this limit. Hence4/3 is the asymptotic optimized selected certificate,
+while the actual envelope may be larger. There is no9/8 ceiling here.
+
+6. CLEAN FINITE >1% INSTANCE.
+Take d=10, so n=1024, a=511,b=502,m=1013,D=45,D'=36,U=466,
+ K=408,k=615, f=408/511.
+The E-branch pair count is35 with probability36/511 or36 with probability
+475/511. These two integer counts and the finite uniform subsets completely
+define the exact local support mixture. Its cover quantities are
+ theta=10/11, gamma=605/1013,
+ t=4127575/11143, ell=11143/4127575,
+ p=2026/825515, rho=1024/378225,
+ R=62099643204/27259000609.
+Use J=2000 common-veto blocks. The final instance has
+ N=2,048,001 fixed owners and2N=4,096,002 star-production resources.
+The exact selected squared diagonal is
+ 611957943568125807906685665280/604523446437006645738436084369
+ =1.0122981121326844 approximately.
+Even the simpler conservative lower bound (using delta>=0) is
+ 259896347191099064320/256739126238730616209
+ >101/100.
+All displayed fractions and the >101/100 comparison are independently
+replayed by checks/mass_geometry_hypercube_verify.py, using only stdlib
+Fraction arithmetic. The combinatorial existence argument in Sections1-3
+is for every integer d>=4; finite checks do not replace it.
+
+SCOPE.
+This is a statement about the specified minimum-norm own-report envelope.
+It neither disproves a sqrt(N) funding bound nor proves a lower bound for
+arbitrary allocation mechanisms or TCWM mechanisms. The separate production
+transfer supplies one F valid on all nonnegative real profiles, with fixed
+mixed owner bundles and actual coordinatewise underreports. Novelty and
+cross-model review are separate from this independent correctness audit.

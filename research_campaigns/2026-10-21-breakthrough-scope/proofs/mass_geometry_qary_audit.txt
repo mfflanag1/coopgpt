@@ -1,0 +1,266 @@
+INDEPENDENT Q-ARY AUDIT AND FINITE TRUE-ENVELOPE FUNDING LOWER BOUND
+2026-10-21. Conventional proof plus independent exact scalar replay.
+Originating construction: proofs/activation_qary_cube_proof.txt.
+Cross-model review and novelty checking are separate; no claim about all
+mechanisms follows from this result about a particular envelope rule.
+
+THEOREM.
+For each integer Q>=3, the construction below gives one finite monotone,
+concave, homogeneous production function F on 2N nonnegative real resources,
+with N fixed owners each owning its two specified coordinates at full levels1,
+full output F(b)=1, and full minimum-l1 cover value T=1, such that the TRUE
+own-report envelope E of the minimum-Euclidean-norm cover satisfies
+ sum_i E_i > ((Q-1)/8)*sqrt(N).
+Consequently no universal constant C can bound these true envelopes by
+C sqrt(N) T. Moreover, along this explicit sequence of N,
+ sum_i E_i > (1/40)*sqrt(N)*(log N/log log N)^(1/3).
+All unilateral real underreports in the fixed boxes remain admissible; the
+lower bound uses particular endpoint underreports. No report-dependent
+change in ownership or production function is used.
+
+A. PARAMETERS AND THE ALL-Q LARGE-N BOUNDS.
+Fix Q>=3, not necessarily prime. Put
+ d=16Q(Q-1)(Q+2), h=8Q(Q-1), x=h/d=1/[2(Q+2)],
+ n=Q^d, M=Q^(d-1), m=n-(Q-1)d-1,
+ mu=(Q-2+x)/(Q-1), delta=1/[4Q(Q-1)], beta0=mu+delta,
+ K=floor(beta0*m), beta=K/m, b0=1-beta0, b=1-beta,
+ a=1-mu, s=(Q-2)d+h+K, k=n-s.
+Here M denotes a color-class size; the number of amplification blocks below
+is B, a different symbol.
+
+Every D>=20 satisfies3^(D-5)>100D^2: it holds at D20 and the ratio at the
+next integer is3D^2/(D+1)^2>1. Since d>=480,
+ M=Q^4 Q^(d-5)>=Q^4 3^(d-5)>100Q^4d^2.                 (1)
+In particular m>M>h and m>1/delta. To see m>M explicitly, use
+m-M=(Q-1)(M-d)-1>0. Flooring therefore gives beta>mu.
+
+Let B_exc=(Q-1)/Q-2x/[Q(Q-1)]. Direct algebra gives
+ B_exc-mu=2delta,
+ gamma=(Q-1)/Q-beta0=delta+2x/[Q(Q-1)]>1/(4Q^2).
+Thus beta<=beta0<(Q-1)/Q<1, and b>=b0>1/Q. Also
+ b0<1/(Q-1)<=3/(2Q), so Q beta0-Q+2=2-Qb0>1/2.
+These strict signs are needed in the cut estimates, not merely convenient
+asymptotic approximations.
+
+B. INDEPENDENT-SET MIXTURE, INCLUDING COMPOSITE ALPHABETS.
+Vertices are (Z/QZ)^d. A hyperedge is a complete axis-parallel line of Q
+points. Independence means containing no complete line. Color a vertex by
+its coordinate sum modulo Q. Every axis line contains every color exactly
+once, also when Q is composite.
+
+At focal0 the neighbors are c e_j for1<=c<=Q-1 and1<=j<=d. Choose an excluded
+color uniformly. If it is0, start with all other colors and keep a uniform
+((Q-2)d+h)-subset of the neighbors. If the excluded color is c!=0, start
+with all other colors, delete0, choose a uniform h-subset S of coordinate
+indices, and add c e_j for j in S. For each added c e_j and each l!=j,
+independently delete c e_j+A e_l for uniform A in{1,...,Q-1}.
+No line contains two added c e_j: two of them differ in two coordinates.
+The line in direction j is broken by deleting0, and each other line through
+an added vertex is broken by its repair. Repairs have weight2 and delete
+no neighbor. Thus each available set is independent, excludes0, and has
+exactly (Q-2)d+h neighbors. A fixed neighbor's phase-dependent marginals are
+mu,x,1,...,1, averaging to mu because (mu+x+Q-2)/Q=mu.
+
+There are e=(Q-1)^2 binomial(d,2) weight2 exceptional vertices. A vertex
+u=a1 e_j+a2 e_l can be deleted only in excluded-color phases a1 and a2.
+Those phases initially contain u because neither a1 nor a2 equals a1+a2
+modulo Q (both are nonzero). If a1!=a2, the deletion events occupy distinct
+phases, giving availability exactly B_exc. If a1=a2, union probability is
+at most the sum, hence availability at least B_exc; the duplicate correction
+is nonnegative. This also handles a1+a2=0 in composite alphabets.
+Every availability P_u is rational and exceeds beta. Conditional on being
+available, retain u independently with probability beta/P_u. Every exceptional
+marginal is then exactly beta. Let P be the retained number;0<=P<=e and
+E P=beta e. Thinning preserves independence and all neighbor counts.
+
+C. FAR-VERTEX TRANSPORT: EXHAUSTIVE CUT ARGUMENT.
+For far vertices (weight>=3), let F_c be color c. Their sizes are
+ f0=M-1-(Q-1)binomial(d,2),
+ fc=M-d-(Q-2)binomial(d,2), c!=0.
+For each coordinate pair there are Q-1 nonzero coefficient pairs summing
+to0 and Q-2 summing to a specified nonzero color. Hence these formulas are
+valid for every integer Q, and sum f_c=m-e. Repairs never touch far vertices.
+In excluded phase c, precisely all far classes except F_c are available.
+
+For each finite rational state omega after exceptional thinning, choose
+T_omega=K-P_omega available far vertices. We need their common marginal beta.
+The expected size is correct: E T=K-beta e=beta sum f_c.
+The exact finite transport condition is, for every U in the far set,
+ beta|U|<=sum_omega p_omega min(T_omega,|U intersect A_omega|).   (2)
+This is the maxflow/mincut criterion for source-state capacities pT,
+state-available-vertex capacities p, and vertex-sink capacities beta.
+A saturating rational flow yields conditional vectors in[0,1] of integer
+sum T. Each such vector is a rational mixture of T-subset indicators by
+successively shifting mass between two fractional coordinates to boundary
+points. Therefore(2) yields actual finite rational subset distributions.
+
+The cut deficit is concave in u_c=|U intersect F_c| on0<=u_c<=f_c. Its terms
+are minima of a constant and an affine function. Every point of the box is
+a convex combination of corners, so checking all corners proves every cut.
+A corner is a union of whole color classes. We verify them via these bounds:
+ (i) K-e >=(Q-2)M;
+ (ii) K <=sum_{c!=a}f_c for every a;
+ (iii) K-e >=(Q beta-Q+2)sum_{c!=a}f_c for every a.            (3)
+
+Here is a uniform proof of(3), without finite enumeration in Q. From(1),
+ M-Qd^2<=f_c<=M and f_c>0, while e+Qd+2<=Q^2d^2.
+Flooring gives K-e>=Q beta0 M-Q^2d^2 and K<=Q beta0 M.
+For(i) subtract(Q-2)M; the difference is at least
+ (Q beta0-Q+2)M-Q^2d^2>M/2-Q^2d^2>0.
+For(ii), use sum_{c!=a}f_c>=(Q-1)(M-Qd^2); its excess above K is at least
+ Q gamma M-Q(Q-1)d^2>M/(4Q)-Q^2d^2>0.
+For(iii), Q beta-Q+2>0 since beta>mu and Qmu-Q+2>1/2. Its product with a
+Q-1-class union is at most(Q beta0-Q+2)(Q-1)M. Subtraction leaves at least
+ (Q-2)Q gamma M-Q^2d^2>M/12-Q^2d^2>0.
+All final inequalities follow from(1).
+
+For a corner with r<=Q-2 classes, T>=K-e>=(Q-2)M exceeds every available
+portion, so the cut's RHS is exactly(Q-1)/Q times its size, at least beta
+times its size. For r=Q-1 with missing class a, the RHS is exactly
+ ((Q-2)/Q)*sum_{c!=a}f_c + E[T 1_{phase a}],
+which is at least [ (Q-2)sum_{c!=a}f_c+K-e ]/Q, sufficient by(iii).
+For all Q classes,(ii) makes the RHS E T, equal to the total demand. The
+empty cut is zero. Thus every cut(2) holds.
+
+Consequently there exists a finite rational distribution of independent
+s-sets with focal absent, exactly(Q-2)d+h neighbors of common marginal mu,
+and exactly K outside vertices of common marginal beta. This establishes
+nonemptiness of the row universe as well as the mixture; it is not a
+marginal-only argument that ignores fixed set sizes or transport cuts.
+
+D. FULL ROW UNIVERSE AND EXACT DELETION KKT.
+Let the rows be complements of ALL independent s-sets. Translations preserve
+the full row family and act transitively on vertices. Every row has size k.
+Averaging translates of any row gives (k/n)1. Cauchy-Schwarz on the row hull
+makes that its unique minimum-norm point. Equivalently, the full cover is
+z=(1/k)1, with rho=n/k^2 and a full unit-demand KKT certificate obtained by
+multiplying a uniform translate mixture by rho.
+
+The constructed complement mixture w has focal1, neighbor entries a, and
+outside entries b. Each support row has d-h neighbors and m-K outside
+vertices, hence potential
+ t=1+(d-h)a+(m-K)b=1+(Q-1)d a^2+m b^2=||w||^2.             (4)
+Every off-focal row complements an independent set containing0. Each of
+the d axis lines through0 must omit at least one neighbor, so the row has
+at least d neighbors. Since a>b, all such row potentials are at least
+ d a+(k-d)b=t+h(beta-mu)-beta.
+The last gap is positive: h delta=2, beta>=beta0-1/m, m>h, and beta<=beta0<1
+imply h(beta-mu)-beta>=2-h/m-beta0>0. This handles every unsupported off-row.
+
+An own row with r neighbors has potential1+r a+(k-1-r)b, increasing in r.
+Keep rows with r>=d-h at demand1 and delete those with r<d-h. No off row is
+deleted, because its r>=d. Every support row remains tight at potential t.
+With lambda_R=alpha_R/t on the support, q=w/t=A^T lambda is feasible and
+satisfies complementary slackness. It is therefore exactly the unique
+minimum-norm cover of this incident-only deletion system. Its multiplier
+mass ell=1/t equals its focal coordinate. Translations supply this witness
+for every owner, with theta_i=1.
+
+For density, flooring gives
+ k<=b0 n+d/(4Q)+2<n/(Q-1),                                 (5)
+since1/(Q-1)-b0=x/(Q-1)+delta>delta and(1) implies
+delta n>d/(4Q)+2. Positivity follows from independence (each parallel-line
+partition permits at most Q-1 points per line). In fact the exact identity
+ k-nb=beta+(Q-1)d(beta-mu)>0                               (6)
+shows k>nb>n/Q. Therefore H=n^2/k^2>(Q-1)^2 and J=n/k>Q-1.
+
+E. FINITE BALANCED-BLOCK AMPLIFICATION: NO ASYMPTOTIC LEAP.
+By(4), t<=nb^2+Qd: subtract nb^2 and bound the remaining at most
+1+(Q-1)d<=Qd. Since b>1/Q and(1) gives n>Q^3d, nb^2>Qd. By(6),
+ ell/rho=k^2/(nt)>=nb^2/(nb^2+Qd)>1/2.                     (7)
+Cauchy-Schwarz on w also gives ell<=rho. Moreover rho<Q^2/n<1/2.
+Choose the integer number of base blocks
+ B=floor(1/rho)=floor(k^2/n), c=B rho.
+Then B>=1 and1/2<c<=1. Add one common veto u to every row in all B copies,
+so N=Bn+1. The full minimum-l1 cover is1: the veto alone is feasible, and
+any unit row forces total cover at least1.
+
+For each private owner delete its translated bad rows in its own block.
+Scale the focal local projection q and all B-1 other full projections z by
+1/[1+(B-1)rho+ell], and put the veto coordinate at
+[(B-1)rho+ell]/[1+(B-1)rho+ell]. Scaling the base multipliers proves stationarity
+at the veto and every private coordinate. Every positive row is unit and
+tight; deleted rows impose no constraint. This exactly certifies the augmented
+projection. The selected private coordinate is
+ ell/[1+(B-1)rho+ell].
+Thus the sum over PRIVATE actual envelopes is at least
+ P=Bn ell/[1+(B-1)rho+ell]>=Bn ell/(1+B rho)>=Bn ell/2.
+Since N=Bn+1<=2Bn,
+ P/sqrt(N)>=ell sqrt(Bn)/(2sqrt(2))
+          =(ell/rho)*sqrt(c n rho)/(2sqrt(2))
+          >sqrt(n rho)/8>(Q-1)/8.                          (8)
+This is one finite instance per Q, with no limit interchange. It suffices
+to rule out every universal constant times sqrt(N) funding bound for this
+own-envelope rule once the production transfer in SectionG is applied.
+The veto payment would only strengthen the lower bound and is not needed.
+
+F. RATE IN N WITH AN EXPLICIT CONSTANT.
+The chosen block count satisfies B< n/(Q-1)^2<=n/4 by(5), hence N<=n^2.
+Also N>=n since B>=1. The exact identity
+ Q(Q-1)(Q+2)<= (9/8)Q^3
+is equivalent to(Q-4)^2>=0. Thus d<=18Q^3 and
+ log N<=2d log Q<=36Q^3 log Q.
+Because log N>=d log Q>Q, we have log log N>log Q>0. Therefore
+ (log N/log log N)^(1/3)<=36^(1/3)Q.
+For Q>=3, Q-1>=2Q/3, so(8) gives
+ P/sqrt(N)>Q/12
+ >=[1/(12*36^(1/3))]*(log N/log log N)^(1/3)
+ >(1/40)*(log N/log log N)^(1/3).
+The final numerical comparison is exact because36<(10/3)^3.
+As Q grows, N>=Q^d grows without bound. This is an along-sequence lower bound,
+not a claim that every possible integer N has the stated rate.
+
+G. ACTUAL PRODUCTION, FIXED OWNERS, AND THE REAL REPORT DOMAIN.
+For the N-owner common-veto generator system let v(S) be1 exactly when S
+contains a full generator, else0. For each private j, let w^j(S) be1 exactly
+when S contains a generator retained in j's selected deletion system, else0.
+Set w^u=v. These games vanish without the veto, are monotone, and satisfy
+w^j(S)=v(S) whenever j is absent from S.
+
+Use 2N resources X_1,...,X_N,Z_1,...,Z_N. Owner j's fixed full bundle has
+X_j=Z_j=1 and every other coordinate0. For each nonempty A subset of owners
+and any game g among v,w^1,...,w^N, define a nonnegative form h^(g,A) with
+coefficient1 on coordinates outside A, coefficient g(A) on the veto if it
+belongs to A, and coefficient0 on all other coordinates inside A. Define
+ F(X,Z)=min{ h^(v,A) dot X,
+             h^(w^j,A) dot X+Z_j : A nonempty, j an owner }.
+This is a finite minimum of nonnegative linear forms, hence monotone,
+concave, homogeneous and defined on ALL nonnegative real resource profiles.
+
+For a Boolean coalition S, min_A h^(g,A)(S)=g(S): A=S attains it for nonempty
+S; if S is not contained in A, an outside coordinate costs1>=g(S), while
+if S is contained in A monotonicity supplies g(A)>=g(S). If the veto is
+absent then g(S)=0, and the same conclusion holds. Empty S costs0 directly.
+At full bundles the baseline gives v; each present-owner branch has penalty1,
+and every absent-owner branch equals v on that coalition. Thus the full
+coalition game is v and F(full)=1.
+
+For private j, keep X_j=1 and underreport Z_j from1 to0. The j-branch now
+induces w^j. Other present-owner branches cost at least1, and absent-owner
+branches equal v on the coalition. Since w^j<=v, the entire induced game
+is w^j. This is an admissible endpoint in j's fixed real report box[0,1]^2;
+all other real reports remain admissible. Nonnegative cover inequalities
+for a max-of-contained-generators game are exactly its generator inequalities.
+Therefore the actual minimum-norm response at this own report is precisely
+the projection in SectionE. All these witnesses occur in the SAME F, with
+fixed ownership, one selected game per owner, and one common full profile.
+The true envelope, a supremum over every real own underreport, dominates
+each witness, proving(8) and SectionF for actual envelopes.
+
+SCOPE AND REVIEW STATUS.
+This refutes a universal C sqrt(N) T bound for the coordinatewise own-report
+envelope of the minimum-Euclidean-norm cover rule, even at full output1,
+with fixed two-coordinate owner bundles and an all-real production domain.
+It does not refute existence of a different incentive-compatible mechanism,
+and it is not an all-mechanism lower bound. The normalized H,J assertions
+are exact row-system statements; their production consequence requires and
+has used SectionG. No unproved preservation of integrality, uniformity under
+own reports, or endpoint reduction is invoked. This family happens to use
+endpoint deletions; no assertion about arbitrary families follows.
+
+REPLAY.
+checks/mass_geometry_qary_verify.py is an independent stdlib Fraction check
+of125 identities/inequalities for Q3,4,5,6,10, including composite alphabets,
+all three uniform Hall inequalities, all-off potential gap, density, balanced
+blocks and the exact squared funding lower bound. Results are in its .json.
+These finite cases diagnose arithmetic only; SectionsA-F prove every Q>=3.

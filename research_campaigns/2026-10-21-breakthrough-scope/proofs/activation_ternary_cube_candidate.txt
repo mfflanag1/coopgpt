@@ -1,0 +1,111 @@
+TERNARY CUBE CANDIDATE — EXACT CONSTRUCTION FOR INDEPENDENT AUDIT
+2026-10-21 06:43 UTC. Candidate only until independent audit.
+
+Definitions. Take d=10000, h=d/5=2000, n=3^d, q=3^(d-1).
+V=(Z/3Z)^d; hyperedges are all axis-parallel triples. Independent means
+containing no entire such triple. The row universe consists of COMPLEMENTS
+of ALL independent sets of size s=d+h+K, where
+m=n-2d-1, K=floor(601*m/1000), beta=K/m, b=1-beta.
+Every row has k=n-s elements. Translations of V preserve this universe.
+
+Proposed focal witness. Distinguished vertex is 0, neighbors are e_j and
+2e_j, j=1,...,d. Construct a distribution of independent s-sets I with:
+P(0 in I)=0; each of 2d neighbors has marginal 3/5; every other vertex
+has marginal beta; each I has exactly d+h neighbors and K outside vertices.
+Its complement row mixture w thus has w_0=1, all neighbor entries a=2/5,
+and all outside entries b. Every supported row contains 0 and has exactly
+d-h neighbors. Its potential is
+ t=1+(d-h)*a+(k-1-d+h)*b
+  =1+2*d*a^2+m*b^2 = ||w||^2.
+Every off-0 row complements an independent set containing 0. At least one
+vertex from each pair {e_j,2e_j} is in that row. Since a>b, its potential
+is >=d*a+(k-d)*b. This minus t equals h*(beta-3/5)-beta >0.
+Thus all off rows have potential>=t, all used own rows have potential t,
+and the normalized KKT witness is valid, theta_0=1. Translate the entire
+construction to each focal vertex. Full v=(k/n)*1 by translation averaging
+and fixed row size; rho=n/k^2; H=n^2/k^2; J=n/k. k<n/2, hence H>4,J>2.
+
+LOCAL AVAILABLE INDEPENDENT SETS.
+Color a vertex by sum coordinates mod3. Choose excluded color c uniformly.
+All subsequent random choices are finite and rational.
+ c=0: begin with colors1 and2, and retain a uniform (d+h)-subset of the
+  2d neighbors; retain every other available vertex. Focal already absent.
+ c=1: begin with colors0 and2. Delete focal0. Choose uniform h-subset S of
+  coordinate indices and add e_j for j in S. For each ordered pair (j,l)
+  with j in S,l!=j independently delete either:
+     e_j+2e_l with probability r=49/100, or
+     e_j+e_l with probability 1-r=51/100.
+  Take union of deletions (one vertex may be selected for deletion twice).
+ c=2: image of c=1 under x -> -x, with independent fresh choices.
+
+Independence: original two-color sets contain no full axis triple. No axis
+triple contains two added e_j (or two added 2e_j). Every axis triple through
+an added e_j is broken: direction j loses0; every other direction l loses
+one of e_j+e_l,e_j+2e_l. All deletions preserve independence. Each available
+set has exactly d+h neighbors, none deleted by repairs, and excludes0.
+A fixed neighbor has conditional inclusion probabilities 3/5,1/5,1
+in the three phases in some order, giving unconditional marginal3/5.
+
+EXCEPTIONAL OUTSIDE VERTICES AND THINNING.
+Let E be all vertices of Hamming weight2, e=|E|=2d(d-1). All outside
+vertices not in E have weight>=3. Put x=h/d=1/5 and y=h(h-1)/(d(d-1)).
+A mixed weight2 vertex e_j+2e_l (j!=l), color0, is available with probability
+ Pmix=(2/3)*(1-x*r)=451/750 >601/1000 >=beta.
+A same-sign vertex e_j+e_l or 2e_j+2e_l (j!=l) is available with probability
+ Psame=2/3-[2*x*(1-r)-y*(1-r)^2]/3 >601/1000 >=beta.
+(The two possible deletions for a same-sign vertex use independent coins,
+with joint selected-index probability y.)
+When an exceptional vertex u is available, retain it independently with
+conditional probability beta/Pavailable(u); otherwise omit it. This leaves
+each exceptional marginal exactly beta and preserves independence. Let P
+be the number retained in this state. Then 0<=P<=e and E[P]=e*beta.
+
+FAR VERTICES.
+Let F_0,F_1,F_2 be weight>=3 vertices of each color. Their sizes are
+ f0=q-1-d(d-1), f1=f2=q-d-binomial(d,2).
+In phase c every vertex of the two classes with color !=c is available,
+and no far vertex of color c is available. Denote a state after the
+exceptional thinning by omega, rational probability p_omega, and phase c.
+We need choose Q_omega=K-P_omega available far vertices, with every far
+vertex's unconditional marginal beta. Q is an integer and
+ E Q=K-e beta=beta*(f0+f1+f2).
+
+FINITE TRANSPORT LEMMA AND PROOF.
+For finite states omega of rational probabilities p_omega, available sets
+A_omega, integer desired sizes Q_omega, and desired common marginals beta,
+such a distribution exists whenever total expected size equals beta*|F|
+and, for every U subset F,
+ beta*|U| <= sum_omega p_omega*min(Q_omega, |U intersect A_omega|).
+Proof: build a rational capacitated bipartite network: source->omega has
+capacity p_omega Q_omega; omega->u has capacity p_omega if u in A_omega;
+u->sink has capacity beta. Maxflow/mincut gives exactly the displayed
+inequalities, by optimizing each state's side of a cut. A rational maxflow
+saturates all source and sink arcs. Divide its omega->u flow by p_omega.
+The resulting conditional marginal vector lies in [0,1]^{A_omega} and has
+integer sum Q_omega. Such a rational vector is a rational convex mixture
+of indicators of Q_omega-subsets: if fractional entries exist, at least
+two do, and shift mass between two until one hits0 or1; write the original
+as the convex mixture of the two endpoint vectors and recurse. Each step
+reduces the number of fractional entries. This proves the lemma.
+
+VERIFYING ALL TRANSPORT CUTS (not merely individual marginals).
+Put u_j=|U intersect F_j|. The cut deficit RHS-beta*sum u_j is a concave
+function on the box 0<=u_j<=f_j: each state's term is the minimum of its
+constant Q and the linear available count. A concave function nonnegative
+at all box corners is nonnegative throughout, by convex interpolation.
+It therefore suffices to check the eight unions of whole color classes.
+We claim the following elementary inequalities for d=10000:
+ (i) K-e >= max(f0,f1,f2);
+ (ii) K <= min(f0+f1,f0+f2,f1+f2);
+ (iii) K-e >= (3*beta-1)*(f_r+f_s) for each distinct r,s;
+ (iv) beta<=2/3.
+For no classes the cut is zero. For one class r, (i) makes the RHS
+(2/3)*f_r >=beta*f_r. For two classes r,s with third color c, (i),(ii)
+make RHS=(f_r+f_s)/3+E[Q*1_{phase=c}], at least
+(f_r+f_s+K-e)/3, which suffices by (iii). For all classes, (ii) makes
+RHS=E Q=beta*sum f_j, equality. This establishes ALL cuts and the desired
+finite rational independent-set distribution.
+
+Remaining freeze task: independently verify inequalities(i)-(iv), Psame,
+the t identity, the off-row gap, fixed row cardinalities, and J>2 using
+exact integer/rational arithmetic; then replace candidate status.

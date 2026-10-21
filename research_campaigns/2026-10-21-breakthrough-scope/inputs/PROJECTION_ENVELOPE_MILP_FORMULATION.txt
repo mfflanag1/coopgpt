@@ -1,0 +1,75 @@
+EXACT FINITE MILP FOR THE CONTINUOUS LOCAL-RELAXATION ENVELOPE
+2026-10-17. Mathematical formulation; numerical implementation is discovery only.
+
+Given nonempty 0/1 coalition rows A_j and demands b_j>=0, let
+ P={q>=0:Aq>=b}, T=min_{q in P}sum_i q_i>0.
+Fix owner i. Retain every row with A_ji=0. For every row containing i, allow
+its right-hand side to be any value in[0,b_j]. We seek the maximum i-coordinate
+of the minimum-Euclidean-norm projection of zero onto any resulting polyhedron.
+
+A vector q is such a projection iff there are lambda_j>=0 satisfying
+ q=A^T lambda,
+ A_j q>=b_j for off-i rows,
+ lambda_j>0 => A_j q=b_j for off-i rows,
+ lambda_j>0 => A_j q<=b_j for own-i rows.
+Necessity is the projection's KKT system. For sufficiency, set every active
+own-i row's relaxed RHS to A_j q and every inactive own-i row's RHS to0.
+Then q is feasible and q=A^T lambda with complementary slackness. The strictly
+convex objective gives the unique projection. Nonnegativity causes no missing
+normal term: q=A^T lambda>=0; at a zero coordinate any nonnegativity multiplier
+must be zero because A and lambda are nonnegative.
+
+Every such projection has norm at most T, since any full L1-minimizer is still
+feasible and has Euclidean norm at most T. Hence q_i<=T, and every lambda_j<=T
+because a nonempty row has a member whose q-coordinate is at least lambda_j.
+Also b_j<=T. With binary z_j, the equivalent MILP is
+ maximize q_i,
+ q=A^T lambda, lambda>=0, lambda_j<=T z_j,
+ A_j q>=b_j for off-i rows,
+ A_j q <= b_j+(|A_j|T-b_j)(1-z_j) for every row,
+ z_j in{0,1}.
+The displayed big-M is sufficient because A_j q<=|A_j|T. Eliminating q gives
+the implementation in projection_envelope_milp.py. The binary flag may equal1
+when lambda=0; this only adds a harmless restriction and does not exclude any
+true optimum because flags can instead be zero.
+
+The balanced-closure and simultaneous-realization lemmas make this MILP's
+coordinate maxima attainable in the true own-report envelope of a fixed-owner
+production instance. Each coordinate may use a different relaxed game, all
+jointly embedded by the star realization. Thus a rational KKT violation of
+sum_i M_i^2<=T^2 or sum_i M_i<=sqrt(n)T would be a genuine architecture
+counterexample, not merely a relaxation artifact.
+
+Search status as of05:42UTC: 995 random/structured finite cover systems tested,
+n=3..12 with heterogeneous RHS, supersets and redundant rows retained. No
+squared-norm or funding counterexample found; observed maximum squared ratio1
+occurs in trivial single-veto constraints. This is not a proof. A separate
+bounded projective-plane/small-row scan is ongoing. Numerical MILP statuses
+and gaps are retained with witnesses; any proposed counter must be rebuilt as
+an exact rational primal/KKT certificate before use.
+
+BOUNDED SEARCH FREEZE05:58UTC.
+The following finite searches are complete:
+*995 sparse random/structured systems(n3..12).
+*198 systems completed with all balanced-closure coalition rows(n3..6).
+*4096 saturated four-owner systems from two fixed efficient-core vectors.
+*16 Fibonacci-path incidence systems, with/without length-scaled demands.
+*62 joint full-RHS/core/own-projection MILP optimizations:21 atn3,22 atn4,
+ 19 atn5. Every n3 solve reports global optimality;9 n4 and10 n5 solves hit
+ their bounded time limit. The maximum observed squared diagonal norm is1
+ up to numerical error4e-11. This is not a global optimization of the squared
+ objective: positive tangent objectives and finitely many restarts were used.
+ A uniform objective atn3 gave sum4/3, proved only by the numerical solver;
+ n4 reachedsum3/2 with a nonzero solver gap. No exact theorem is inferred.
+A final projective-plane family scan has58 saved records so far; it is not
+part of any completeness claim. All inspected records are below the target.
+No rational counterexample has been found. The exact mathematical KKT/MILP
+formulation above is proved; the diagonal squared and funding inequalities
+remain OPEN. Scope is the true envelope architecture, not arbitrary mechanisms.
+
+NEXT BOUNDED TARGET (parent-authorized):05:58–06:18UTC.
+Can maximal own projection coordinate always be attained by setting each own
+row's RHS to either0 or its full value? Compare the continuous-RHS KKT problem
+with deletion-only KKT(active own rows forced to full RHS). Seek a general
+endpoint proof or one exact rational interior-max counterexample. Numerical
+agreement alone does not meet the gate.

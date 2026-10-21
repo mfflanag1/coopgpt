@@ -1,0 +1,303 @@
+INDEPENDENT AUDIT: Q-ARY LOCAL REPAIRS, TRANSPORT, AND TRUE FUNDING
+21 October 2026. Reviewed activation_qary_cube_proof.txt and
+activation_qary_direct_corollary.txt without importing their checkers.
+Author files are unchanged. Independent replay:
+  python3 checks/mass_search_qary_cube_audit.py
+
+VERDICT
+The construction is valid for every integer Q>=3, including composite Q,
+and for every positive multiple of its initial dimension. The finite
+rational distribution exists by the all-cut transport argument below.
+It gives theta_i=1 for every owner and J>Q-1, H>(Q-1)^2. The direct common-
+veto construction, with the previously audited explicit production function,
+gives the quantified conclusion
+
+  for every finite C>0 and integer N0, there exist N>=N0 and a finite
+  nonnegative min-linear production function F on R_+^(2N), with fixed
+  bundles e_i+e_(N+i), full output T=1, and true own-report envelopes M_i,
+  such that sum_i M_i > C sqrt(N) T.
+
+This is a counterexample to a universal constant-times-sqrt(N) funding
+bound for this particular quadratic-projection envelope architecture.
+It is not a lower bound for every possible mechanism, and it does not
+assert the conclusion at every prescribed owner count N.
+
+1. PARAMETERS AND LOCAL INDEPENDENCE
+Let j>=1 be an integer, Q>=3, and set
+ d=16jQ(Q-1)(Q+2), h=8jQ(Q-1), x=h/d=1/[2(Q+2)],
+ n=Q^d, M=Q^(d-1), m=n-(Q-1)d-1,
+ mu=(Q-2+x)/(Q-1), delta=1/[4Q(Q-1)], beta0=mu+delta,
+ K=floor(beta0*m), beta=K/m, b0=1-beta0.
+Vertices are elements of(Z/QZ)^d, colored by coordinate sum modulo Q.
+Every axis line contains every color once even when Q is composite.
+
+For excluded color0, take the nonzero colors and keep a uniform
+((Q-2)d+h)-subset of their (Q-1)d neighbors of0. For excluded color c!=0,
+take all colors except c, remove0, choose a uniform h-subset S of axes,
+add c e_j for j in S, and for every(j,l),j in S,l!=j independently remove
+c e_j+A e_l with A uniform among1,...,Q-1.
+
+Two distinct added points c e_j,c e_l differ in two coordinates; a single
+axis line cannot contain both. Hence a line newly completed by additions
+contains exactly one added point. Through c e_j in direction j,0 is missing.
+In direction l!=j the specified repair removes one of the other Q-1 points.
+Each repair target is initially available: its color is c+A!=c. Targets
+have weight2, so repairs do not change focal exclusion or neighbor counts.
+Repeated deletions are harmless. Every subsequent construction step only
+deletes vertices, so independence is preserved throughout.
+
+Each available set excludes0 and has exactly (Q-2)d+h neighbors. A fixed
+neighbor a e_j has inclusion probabilities mu in phase0, x in phasea, and
+1 in the other Q-2 phases. The mean is(mu+x+Q-2)/Q=mu.
+
+2. EXACT EXCEPTIONAL AVAILABILITY
+Let E be the weight2 points, e=(Q-1)^2*binomial(d,2), and write
+y=h(h-1)/(d(d-1)). A point a e_j+b e_l starts available in Q-1 phases.
+Its only possible deletion phases are a and b, neither equal to its
+excluded phase a+b, since a,b are nonzero modulo Q. This remains true
+when a+b=0 or when nonzero elements have nontrivial additive order.
+
+If a!=b, the phases are distinct and its exact availability is
+  B=(Q-1)/Q-2x/[Q(Q-1)].
+If a=b, the two deletion events occur in the same phase. Their overlap
+probability is y/[Q(Q-1)^2], because the two ordered-pair coins are
+independent but the two axis-selection events have joint probability y.
+Thus its exact availability is
+  B+y/[Q(Q-1)^2].
+No other added point can target this weight2 point. This also explicitly
+checks the potential overlap issue omitted by a mere union-bound argument.
+
+Direct algebra gives B-mu=1/[2Q(Q-1)]=2delta. Every exceptional availability
+is therefore at least beta0+delta>beta. Independently retain an available
+point with probability beta divided by its exact availability. These are
+finite rational probabilities in(0,1), and every exceptional marginal
+becomes beta. If P is the resulting number retained, then0<=P<=e and
+EP=e beta. Its dependence on phase and on all earlier choices is allowed.
+
+3. FAR CLASS COUNTS AND THE COMPLETE TRANSPORT PROOF
+The weight>=3 points are untouched by all local changes. Their class sizes
+are
+ f0=M-1-(Q-1)binomial(d,2),
+ fc=M-d-(Q-2)binomial(d,2), c!=0.
+For each coordinate pair there are Q-1 nonzero coefficient pairs summing
+to0, and Q-2 summing to any prescribed nonzero color. This counting only
+uses the additive group, not field division. Consequently sum f_c=m-e.
+
+A state omega records phase, additions, repair coins, and exceptional
+thinning. It has finite rational probability p_omega. Its available far
+set is precisely all classes except its phase c. Retain T_omega=K-P_omega
+far vertices. The total desired expectation is ET=K-beta e=beta sum f_c.
+
+Here is the finite selection lemma, derived independently. The network
+source->omega has capacity p_omega*T_omega; each available omega->vertex
+arc has capacity p_omega; each vertex->sink arc has capacity beta. For
+a fixed subset U of vertices on the sink side, minimizing each state's
+side gives cut capacity
+  beta(|F|-|U|)+sum p_omega min(T_omega,|U intersect A_omega|).
+Thus all cuts have capacity at least beta|F| if and only if
+  beta|U|<=sum p_omega min(T_omega,|U intersect A_omega|)         (H)
+for every U. Total source and sink capacities both equal beta|F|, so
+rational maxflow saturates all these arcs. States of zero probability
+are discarded. Divide each state's edge flows by its positive probability;
+this gives a conditional vector in[0,1] with integer sum T_omega.
+
+Such a rational vector is a rational convex combination of indicators
+of T_omega-subsets. If it has fractional entries, there are at least two
+because its sum is integral. Move mass between two in both directions to
+their first boundary hits, and express the original as the rational convex
+combination of those endpoints. Every endpoint has fewer fractional entries.
+Recursion terminates. This procedure preserves the original state
+probabilities; it introduces no reweighting of phases or exceptional sets.
+
+For our states let u_c=|U intersect F_c|. The deficit in(H) is concave on
+the whole box0<=u_c<=f_c: each state's contribution is the minimum of a
+constant and a linear function, followed by subtracting a linear demand.
+Every point of the box is a convex combination of its2^Q corners, so it
+suffices to prove nonnegativity at all unions of complete color classes.
+The following three bounds suffice:
+  K-e >=(Q-2)M;                                              (I)
+  K <=sum_{c!=a} f_c for every a;                             (II)
+  K-e >=(Q beta-Q+2)sum_{c!=a} f_c for every a.                (III)
+They also ensure0<T_omega<=|A_omega| for every state.
+
+For a corner with r<=Q-2 colors, its available count in any phase is at
+most(Q-2)M<=T. Hence the expected minimum is its size times(Q-1)/Q,
+at least beta times its size. For r=Q-1, let a be the omitted color and
+f_R the selected size. In phases c in R, bound(I) makes the contribution
+f_R-f_c. Their total expectation is (Q-2)f_R/Q. In phasea, bound(II)
+makes the contribution T, and its expectation is at least(K-e)/Q.
+Bound(III) proves the corner. This lower bound is pointwise in T and
+requires no phase independence. For all Q classes, bound(II) makes the
+contribution T in every state, giving equality ET=beta|F|. The empty cut
+is also equality. These cover EVERY corner and hence EVERY subset cut.
+
+4. UNIFORM SCALAR PROOF FOR EVERY Q AND DIMENSION MULTIPLE
+For integer D>=20, 3^(D-5)>100D^2: it holds at20, and the ratio at D+1
+to D grows by3D^2/(D+1)^2>1. Since d>=480,
+  M=Q^4 Q^(d-5)>100Q^4 d^2.                                 (S1)
+In particular all far class sizes lie in[M-Qd^2,M] and are positive.
+Also e+Qd+2<=Q^2d^2; one sufficient bound is
+e+Qd+2<=((Q-1)^2/2+Q+2)d^2=(Q^2+5)d^2/2<=Q^2d^2.
+Flooring therefore gives
+  K-e >=Q beta0 M-Q^2d^2,       K<=Q beta0 M.                 (S2)
+
+Define gamma=(Q-1)/Q-beta0. From Section2,
+  gamma=delta+2x/[Q(Q-1)]>delta>=1/(4Q^2).
+Thus0<beta0<(Q-1)/Q<1, and
+  b0<1/(Q-1)<=3/(2Q),  Q beta0-Q+2=2-Qb0>1/2.              (S3)
+Since M>d+1, m=QM-(Q-1)d-1>M. Bound(S1) then gives m>h and
+m>1/delta. Hence beta>=beta0-1/m>mu and Q beta-Q+2>0.
+
+For(I), subtract(Q-2)M in(S2); the result exceeds
+  M/2-Q^2d^2>0.
+For(II), use sum_{c!=a}f_c>=(Q-1)(M-Qd^2). Its excess over K
+is at least Q gamma M-Q(Q-1)d^2, strictly larger than
+  M/(4Q)-Q^2d^2>0.
+For(III), the positive coefficient is at most Q beta0-Q+2, and the class
+union is at most(Q-1)M. Subtracting this product from the lower bound(S2)
+leaves
+  (Q-2)Q gamma M-Q^2d^2 >=M/12-Q^2d^2>0.
+Here(Q-2)/(4Q)>=1/12. Bound(S1) makes each displayed last quantity
+positive. This proves all transport inequalities uniformly, not only for
+the finite alphabet values in the checker.
+
+5. FIXED CARDINALITY, OFF-OWNER ROWS, AND KKT
+The completed independent sets have size s=(Q-2)d+h+K and exclude0.
+Let the FULL row family contain complements of ALL independent s-sets;
+its rows have size k=n-s. The distribution proves it is nonempty. Every
+independent set omits at least one point from each line in any fixed
+axis direction, whose lines partition the cube, so k>=n/Q>0. Thus every
+base generator is nonempty, as required by the common-veto theorem.
+
+Set a0=1-mu, b=1-beta. The complement mixture w has coordinates1 at0,
+a0 at each neighbor, b outside. Every supported row contains0, d-h
+neighbors and m-K outside points. Its potential is
+  t=1+(d-h)a0+(m-K)b=1+(Q-1)d a0^2+m b^2=||w||^2.
+Since beta>mu, a0>b. Every OFF-owner row complements an independent set
+containing0. Each axis line through0 must have another omitted point, so
+the row has at least d neighbors. Its potential is at least
+  d a0+(k-d)b=t+h(beta-mu)-beta.
+The gap is positive: h delta=2j>=2 and
+  h(beta-mu)-beta >=h delta-h/m-beta0>2-1-1=0.
+These bounds apply to all off-owner rows in the full universe.
+
+Let alpha be the finite rational complement distribution. Set q=w/t and
+lambda=alpha/t. Retain demand1 on every off-owner row and every supported
+own row; delete all other own rows by giving them demand0. Then q is
+feasible, q=A^T lambda, and every positive multiplier is on a tight row.
+This proves the exact KKT conditions and uniqueness of the minimum-norm
+projection. Its multiplier mass ell=1/t equals its focal coordinate, so
+theta0=1. Translation preserves the complete row family and transfers
+this witness to every owner. No assumed symmetry of an incomplete row
+list or unsupported orbit multiplication is being used.
+
+For the full unit cover, translating any one row gives average(k/n)1.
+The corresponding averaged constraints force sum z_i>=n/k. By Cauchy-
+Schwarz any full cover has squared norm at least n/k^2, attained by the
+uniform cover z_i=1/k. Therefore rho=n/k^2. Finally flooring yields
+  k<=b0 n+delta(Q-1)d+beta0+1 <b0 n+d/(4Q)+2.
+Since1/(Q-1)-b0=x/(Q-1)+delta>delta and(S1) gives
+delta*n>d/(4Q)+2, it follows that k<n/(Q-1). Thus
+  Q-1<J=n/k<=Q,       H=J^2>(Q-1)^2.
+
+6. DIRECT COMMON-VETO REALIZATION AND ALL REAL OWN REPORTS
+Take B=floor(1/rho) copies, N=Bn+1 owners, and add a common veto u to all
+generators. Since k>=n/Q and n>Q^2, rho<=Q^2/n<1, so B>=1. The base rows
+are nonempty, rho finite, and0<ell<=rho. One
+proof of the latter is ell=sum lambda<=z dot q<=||z||||q||<=rho, since
+the full unit cover z is feasible after deletion. The full augmented
+projection has veto price U=B rho/(1+B rho), private prices z/(1+B rho).
+
+For a private owner's selected deletion witness, put
+ R'=(B-1)rho+ell, eta=1/(1+R'), u'=eta R'.
+Use private vectors eta*q in its block and eta*z in all other blocks.
+Scale their KKT multipliers by eta. The veto multiplier mass is eta R'=u'.
+All retained active augmented rows have value u'+eta=1; other retained
+rows are feasible, and deleted rows have demand0 and multiplier0.
+This verifies the binary-demand certificate directly; deleted rows need
+no intermediate fractional demand. The selected private coordinate is
+  p=ell/[1+(B-1)rho+ell].
+
+Use the exact direct production realization previously audited in
+mass_search_direct_realization_audit.txt and
+mass_search_true_envelope_upper_audit.txt. For completeness, its games
+are v(S)=max full generator demands contained in S and w^i(S)=max selected
+binary demands contained in S. For nonempty A, h^(g,A) has coefficients1
+outside A, g(A) at the veto if it lies in A, and0 at other points inside A.
+Define
+ F(X,Z)=min_{A nonempty,i}{h^(v,A) dot X, h^(w^i,A) dot X+Z_i},
+with w^u=v. All coefficients here are0 or1. It is a finite monotone,
+concave, homogeneous function on ALL nonnegative real resource vectors.
+At fixed bundles e_i+e_(N+i), F(full)=1. Lowering only Z_i to0 realizes
+the selected binary demand game, so the true envelope M_i is at least p.
+
+The already proved arbitrary-real-report transfer says a private report
+(X_i,Z_i)=(t,z) in[0,1]^2 gives generator demands1 off i and
+min(1,t,a^i_R+z) on i. Hence every such report lies within the abstract
+incident-RHS domain. The common-veto cap therefore applies to ALL these
+reports, not only the selected Boolean ones:
+  p<=M_i<=rho/(1+B rho) for every private owner,
+  M_u=B rho/(1+B rho).
+The veto identity follows because its entire unilateral game is t*v.
+The earlier audit checked empty and singleton coalitions explicitly.
+No claim is made that simultaneous lowering by several owners preserves
+the original generator representation, or that these caps hold at unrelated
+full bundle profiles. Neither stronger assertion is needed here.
+
+7. EXACT TRUE-ENVELOPE LIMITS AND QUANTIFIERS
+Fix Q and let the dimension multiple j tend to infinity. Polynomial terms
+in d are negligible against n=Q^d, giving
+ beta->beta0, k/n->b0, t/n->b0^2,
+ rho~1/(b0^2 n)->0, ell/rho=k^2/(nt)->1,
+ B rho->1, B~b0^2 n, N~b0^2 n^2.
+The ratio of the lower to upper private envelope bounds is exactly
+  (ell/rho)*(1+B rho)/(1+B rho-rho+ell),
+which tends1. Both bounds are the same for every private owner; no extra
+symmetry of the complete production formula is required. Summation and
+squaring therefore give by squeezing the ACTUAL limits
+  (sum_i M_i)/sqrt(N) ->1/(2b0),
+  sum_i M_i^2 ->(1+b0^(-2))/4.
+These strengthen, and agree with, the author's witness-only lower limits.
+
+The full raw projection's total funding is exactly
+  P_full=B rho/(1+B rho)+Bn/[k(1+B rho)].
+Consequently P_full/sqrt(N)->1/2, and
+  (sum_i M_i)/P_full ->1/b0>Q-1.
+Here the raw limit1/2 is a normalized TOTAL-funding limit, not a claim that
+each raw coordinate tends1/2. The raw squared norm separately tends1/2.
+
+Given C>0 and N0, choose an integer Q>=3 with(Q-1)/2>C. The constant
+1/(2b0) is strictly larger than(Q-1)/2. The fixed-Q convergence provides
+a sufficiently large dimension multiple j with both N>=N0 and actual
+funding>C sqrt(N). Every object at that j is finite and the production
+function is valid on all real reports. Taking T=1 proves the stated
+normalized conclusion; scaling production by any positive T scales every
+projection and envelope by T. This is an explicit diagonal choice of Q
+then dimension, with no exchange of two limits and no union-product step.
+
+8. OPTIONAL JOINT-Q GROWTH RATE
+The author's optional initial-dimension sequence is also consistent.
+At j=1, d~16Q^3 and
+ b0=(4Q^2+5Q-2)/[4Q(Q-1)(Q+2)]~1/Q.
+The errors in k-b0*n and t-b0^2*n are O(Q^2), while n=Q^d dominates
+every polynomial. Thus the same squeeze applies jointly, giving true
+funding/sqrt(N)~Q/2 and true diagonal~Q^2/4. Furthermore
+ log N~32Q^3 log Q and log log N~3 log Q, so
+ Q~[(3/32)log N/log log N]^(1/3).
+The author's displayed constants1/2*(3/32)^(1/3) and
+1/4*(3/32)^(2/3) follow. This refinement is unnecessary for the quantified
+counterexample and is only an asymptotic claim along this explicit sequence.
+
+9. INDEPENDENT CHECKS AND LIMITATIONS
+The checker exhaustively verifies2014 local states:796 at(Q,d,h)=(3,4,2),
+738 at(4,3,2), and480 at(6,3,1). It enumerates axis lines independently of
+the repair rules and checks exact neighbor, exceptional, and far marginals.
+The h=2 cases explicitly exercise overlapping repairs; Q4 andQ6 exercise
+composite alphabets. It then checks exact scalar/KKT identities at initial
+dimensions for Q=3,4,5,6,7,8,10,12,16 and doubled dimensions for Q3,Q4.
+For these finite examples it additionally verifies selected funding>
+(Q-1)sqrt(N)/2 and selected funding>(Q-1)P_full using rational arithmetic.
+The universal result rests on Sections1--7, not extrapolation from these
+finite tests. The enormous transport distribution is proved to exist by
+a finite rational algorithm; it is not explicitly expanded into a support
+file. No numerical optimizer status or floating-point certificate is used.
