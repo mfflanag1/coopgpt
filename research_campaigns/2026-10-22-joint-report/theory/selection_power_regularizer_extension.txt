@@ -1,0 +1,126 @@
+EVERY FIXED POWER r>1 AND FIXED FUNDING CAP C>=1 HAS LINEAR ENVELOPE COST
+22 October 2026. Extension of the frozen quadratic certificate.
+Coordinator supplied the power multiplier calculation; verified below.
+This is a selection-plus-envelope architecture obstruction only.
+
+THEOREM.
+Fix any real power r>1 and any finite constant cap C>=1. At each real
+profile, select the unique nonnegative coalition cover minimizing sum_i x_i^r
+subject to sum_i x_i<=C*T, and take its actual own-report envelope. There
+are arbitrarily large owner counts, along a sequence, and fixed finite
+min-linear production instances at which this envelope has funding factor
+Omega_C(N). The constant in the lower bound can be chosen independently
+of r; the dimension needed to begin the sequence can depend on r. Nothing
+is claimed for a cap or power varying with N, or for arbitrary mechanisms.
+
+1. INHERITED FINITE PRODUCTION INPUT.
+Use the same q-ary family, ONE common-veto block, row deletion witnesses,
+and exact direct production realization as in selection_cap_two_analysis.txt.
+Its inherited source is the previous campaign's
+proofs/FINAL_ENVELOPE_OBSTRUCTION.txt, Parts I, II, and III.B.
+Fix Q>=3 and choose a positive integer j. Put
+ d=16jQ(Q-1)(Q+2), h=8jQ(Q-1), n=Q^d,
+ m=n-(Q-1)d-1, delta=1/[4Q(Q-1)].
+The supported incident-row mixture alpha has focal marginal1, every
+neighbor marginal a0=(d-h)/[(Q-1)d], and every outside marginal b=1-beta.
+The construction uses beta=K/m with K=floor(beta0*m), where
+ beta0=mu_old+delta and a0=1-mu_old.
+Thus
+ a0-b=beta-mu_old>=delta-1/m.
+The inherited estimates give m>h>=8Q(Q-1)=2/delta. Consequently
+                  a0-b>delta/2.                         (A)
+Also 0<b<1. The finite rational row mixture exists for EVERY positive j;
+its transport proof is unchanged along these multiples of d0.
+
+Every supported own row has exactly d-h neighbors, and every off-focal
+row has at least d neighbors. Retained own support rows and all off rows
+have demand1; other own rows are deleted to0. Every translated witness
+is an actual unilateral control-coordinate underreport with grand value1.
+
+2. EVENTUAL MULTIPLIER SIGN FOR AN ARBITRARY FIXED REAL POWER.
+Because h=8jQ(Q-1) tends to infinity, choose j large enough that
+                  h^(r-1)>=2/delta.                     (B)
+Equations(A),(B) imply
+ h^(r-1)*(a0-b)>1>1-b.                                  (C)
+This is an analytic eventual estimate, not an irrational numerical check.
+It persists for every larger j. For r>=2 it already holds at j=1; for
+1<r<2 one may take any positive integer j satisfying
+ [8jQ(Q-1)]^(r-1)>=8Q(Q-1).
+
+3. PRIMAL VECTOR AND POWER CERTIFICATE.
+Put D=d+h, p=h/D, z=1/D, and C_Q=[(Q-1)d+2h]/D.
+Use the SAME primal vector as in the quadratic proof:
+ veto=p, focal=p, all (Q-1)d neighbors=z, all outside coordinates0.
+The total is C_Q. Every retained own row receives
+2p+(d-h)z=1; every off row receives at least p+d*z=1. Deleted rows have
+demand0. This proves feasibility for the entire coalition cover.
+
+Use the objective Phi(x)=(1/r)sum_i x_i^r, which has the same minimizer as
+the stated objective. Let
+ lambda=[p^(r-1)-z^(r-1)]/(1-a0),
+ tau=lambda-p^(r-1).
+Assign row multipliers lambda*alpha_R to the retained support, zero to
+other rows, and tau to the budget constraint sum x<=C_Q.
+Since h>1, lambda>0. The outside stationarity slack is
+ nu=tau-lambda*b.
+Its sign is determined EXACTLY by
+ nu>0
+ iff [p^(r-1)-z^(r-1)]*(1-b)>p^(r-1)*(1-a0)
+ iff p^(r-1)*(a0-b)>z^(r-1)*(1-b)
+ iff h^(r-1)*(a0-b)>1-b.
+This is(C). In particular tau>0, since lambda*b>0.
+Stationarity at the positive coordinates is
+ lambda-tau=p^(r-1)                     (veto and focal),
+ lambda*a0-tau=z^(r-1)                 (every neighbor).
+At outside zero coordinates, the derivative of Phi is zero because r>1,
+and the nonnegativity multiplier is nu>0. Complementarity holds on every
+row and on the budget. Thus the full KKT certificate is valid.
+
+A direct convexity proof avoids any constraint-qualification issue. Let a
+be the generator-incidence mean with weights lambda*alpha_R, including
+the veto. Let nu_vec have value nu on outside coordinates and zero elsewhere.
+Then grad Phi(q)=a-tau*1+nu_vec. For ANY feasible competitor y,
+ grad Phi(q).y >= lambda-tau*C_Q = grad Phi(q).q,
+by row coverage, the upper budget, and nonnegativity. Convexity gives
+Phi(y)>=Phi(q)+grad Phi(q).(y-q)>=Phi(q). Strict convexity for r>1 makes
+q the UNIQUE optimizer. Its focal payment is
+                    p=1/(2Q+5),
+independent of j and of r. This also checks the direction of the outside
+nonnegativity multiplier: it enters grad Phi as +nu_vec.
+
+4. REDUCTION TO AN ARBITRARY FIXED CAP C>1.
+The natural cap is C_Q=Q-1-(Q-3)/(2Q+5), unbounded as Q grows. Given C>1,
+choose ONE fixed Q with C_Q>C and put A=(C_Q-C)/(C-1)>0.
+Append one additive resource Y and one actual owner holding A units of Y;
+extend the technology by F_new=F_old+Y. This is the exact same production
+padding as in the quadratic proof, with binary coefficients preserved.
+At each selected old-owner comparison, coalition covers factor into an
+old-game cover and an additive coordinate >=A. At the optimum the latter
+equals A: lowering excess preserves coverage and the cap and strictly
+decreases its r-power objective. The remaining old budget is
+ C(1+A)-A=C_Q,
+and the remaining objective differs from Phi_old by the constant A^r/r.
+Hence the old coordinates are exactly the optimizer certified above.
+
+Translate the actual focal underreport to all n private owners. At the
+one full profile with total1+A and N=n+2 actual owners, the true envelope
+satisfies
+ sum_i E_i/(1+A) >= n*p/(1+A)
+                   = [(C-1)/(2Q^2-7)]*n.
+Fix Q,A,r and let j tend to infinity subject to(B). This gives the claimed
+linear lower bound along arbitrarily large owner-count instances. No
+exchange of varying-power or varying-alphabet limits is used.
+
+At C=1, every feasible cover is an efficient-core allocation, independently
+of the strictly convex objective. The separate all-efficient-core-selector
+barrier supplies the linear envelope obstruction directly.
+
+5. SCOPE.
+The same fixed owners, bundles, and finite production function realize
+every selected unilateral comparison within each instance. Taking the
+supremum over additional real underreports can only strengthen the lower
+bound. These examples still admit the simple efficient competing rule on
+their fixed-bundle underreport domain: pay old output to the old veto and
+additive output to the additive owner. Thus no lower bound for arbitrary
+eligible mechanisms is claimed. This extension does not pass the original
+research gate requiring a new improved general funding bound.

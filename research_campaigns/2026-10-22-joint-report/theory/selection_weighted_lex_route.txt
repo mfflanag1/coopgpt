@@ -1,0 +1,118 @@
+WEIGHTED LEXICOGRAPHIC COVER SELECTION: VALIDITY AND A CLOSED RATE ROUTE
+22 October2026. Valid selection proof; proposed rate conjecture refuted.
+No efficiency constraint or fairness floor is imposed.
+
+1. DEFINITION.
+For a finite nonnegative coalition game v with v(empty)=0, let
+ C(v)={x>=0: x(S)>=v(S) for every nonempty S}.
+Fix strictly positive weights w, independently of reports. Select the unique
+cover L_w(v) whose nonincreasingly sorted ratios x_i/w_i are lexicographically
+minimal. This can be constructed without an efficiency constraint:
+Initially F=empty and R=N. With frozen coordinates x_F, compute
+ delta=max(0,max_{S:S intersect R nonempty}
+             [v(S)-x(S intersect F)]/w(S intersect R)).
+If delta=0, set every remaining coordinate0 and stop. Otherwise freeze at
+x_i=delta*w_i every i in the union of the residual parts S intersect R of
+maximizing rows. Recurse on the remaining owners.
+All rows with no remaining owners are already satisfied. Uniform residual
+ratios at the preceding level witness feasibility; the new level cannot
+increase. The process freezes at least one coordinate each time. In fact,
+the next positive level is strictly smaller: every previous maximizing row
+has no residual owner, while every remaining row had strictly positive slack
+at the preceding uniform cap. Subtracting frozen contributions preserves
+that strict slack at the same cap.
+
+At any step delta is the smallest possible maximum ratio among unfrozen
+coordinates. Every maximizing row forces all its remaining coordinates to
+have ratio delta in any cover attaining that maximum. Conversely, every
+coordinate outside the maximizing union can be lowered slightly from the
+uniform residual ratio delta, because all its incident residual constraints
+are strictly slack. More explicitly, lower ALL coordinates outside the union
+simultaneously to ratio delta-epsilon, with epsilon positive and no larger
+than the minimum, over rows meeting that complement, of row slack divided
+by the total weight of those complement coordinates. There are finitely many
+such rows, all with positive slack; also choose epsilon<=delta. Thus the
+simultaneous reduction is feasible. This is exactly weighted lexicographic minimax,
+and it determines a unique vector.
+
+2. OWN-INCIDENCE MONOTONICITY LEMMA.
+If v' agrees with v on every coalition omitting i, and v'(S)>=v(S) for
+coalitions containing i, then L_w(v')_i>=L_w(v)_i.
+Proof: compare the two algorithms before i is frozen. If all preceding
+levels and pinning sets agree, the remaining systems differ only in rows
+containing i. The new level delta' cannot be below delta. If delta'>delta,
+a maximizing new row must contain i, since off-i rows are unchanged; hence
+i is frozen at delta'w_i, at least its old eventual payment. If delta'=delta,
+all old maximizing rows remain maximizing. Any newly maximizing row contains
+i. If such a row appears, i is frozen at this level, again at least its old
+eventual payment. Otherwise the frozen sets and coordinates coincide, so
+recurse. If i was already frozen in the common steps, its payment is equal.
+This proves the claim, including ties and zero terminal levels.
+
+Consequently b -> L_w(v_b) is a globally eligible payment rule for EVERY
+monotone production function: increasing owner i's report increases only its
+incident coalition values. Coverage and nonnegativity hold by construction.
+For the present concave homogeneous production model there is always an
+efficient nonnegative cover c with sum c=T, but L_w need not be efficient.
+Every positive selected coordinate belongs to a tight coalition, so x_i<=T.
+The selector is piecewise rational/Borel as a function of positive weights.
+Any report-independent probability mixture over weights gives a deterministic
+expected payment rule, finite, covering, and own-monotone at ALL real profiles.
+This construction is not a supporting-price mask/endpoint rule and does not
+take the own-report envelope of separately selected cover coordinates.
+
+3. THE ORIGINAL RATE TARGET (REFUTED).
+For iid W_i=U_i^(1/alpha), U_i uniform(0,1), investigate a bound of the form
+ E sum_i L_W(v)_i <=C*(1+1/alpha)*n^alpha *min_{c in C(v)}sum_i c_i.
+Taking alpha≈1/log n would give an all-profile O(log n) funding mechanism.
+This inequality is FALSE. The exact petal construction in
+selection_weighted_lex_obstruction.txt gives an Omega(n/log n) obstruction
+for every report-independent positive weight distribution, even correlated,
+asymmetric distributions chosen using the fixed technology. The expression
+above is retained solely to identify the abandoned conjecture.
+
+4. EXACT CALIBRATION FAMILIES AND OBSTRUCTIONS.
+(a) Equal weights can cost n/2 on the unit star rows{veto,j}, while paying
+only the veto1 is an efficient cover. Thus deterministic egalitarianization
+alone is insufficient.
+(b) All k-subset unit rows: order weights W_(1)<=...<=W_(n), put S_k=sum of
+the smallest k weights. The selector pays W_(j)/S_k to the first k owners
+and W_(k)/S_k to every later owner. Total is
+ 1+(n-k)*W_(k)/S_k,
+while the minimum total cover is n/k. These constraints are the full cover
+polyhedron of the realizable game v(S)=0 for|S|<k, v(S)=|S|/k otherwise.
+The formula remains valid with tied weights. All owners tied at W_(k) lie
+in the initial maximizing union and receive W_(k)/S_k. Every larger-weight
+owner is forced to pay at least that amount by its row together with the
+first k-1 owners; the stated vector satisfies all rows and is lex minimal.
+Pure random priority, the alpha->0 limit at fixed n, has funding ratio
+k*(n-k+1)/n, which is Theta(n) when both k and n-k are Theta(n).
+For alpha fixed and k/n bounded away from0, order-statistic heuristics give
+ratio O(1/alpha); this is heuristic until an exact expectation bound is shown.
+(c) Complete-product rows: partition owners into groups G_j and take every
+row selecting one owner per group. Set Z_j=min_{i in G_j}W_i. The selector
+pays EVERY owner of group j the common amount Z_j/(sum_l Z_l). Hence total
+is sum_j |G_j|Z_j/(sum_j Z_j), whereas the minimum cover cost is min_j|G_j|.
+For one singleton veto and k groups of size m, iid exponential weights have
+Z_0~Exp(1), Z_j~Exp(m), independently. With k=m->infinity, total/efficient
+cost is Θ(m), while n=m^2+1. Thus ordinary exponential weights have a genuine
+square-root obstruction. They are not the proposed weight law.
+
+5. AN EXACT BUT INSUFFICIENT CHARGING INEQUALITY.
+Let x=L_w(v), let c be any feasible comparator, and put lambda_i=x_i/w_i.
+Every positive coordinate has a tight witness coalition S_i all of whose
+members have ratios at least lambda_i. Thus
+ x_i<=c_i+sum_{j:lambda_j>=lambda_i}(c_j-x_j)_+
+     <=c_i+sum_j(c_j-lambda_i*w_j)_+.
+The first inequality retains actual deficits and is potentially useful.
+The second loses the pinning dependence: on a star with comparator paying
+the veto only, it allows leaf payment W_i/(W_i+W_v), whose expectation is1/2
+for every iid continuous weight law. Summing that bound gives n/2, so an
+O(log n) proof must preserve the coupling through shared frozen coordinates.
+
+STATUS. Own-incidence monotonicity has a complete elementary proof, independently
+confirmed by the coordinator's first-changed-level argument and cross-model
+review. The fixed-law rate conjecture is refuted. The separate note
+selection_own_local_weights.txt proves validity of own-local adaptive weights
+and an Omega(sqrt n) barrier for that larger architecture. No improved general
+funding theorem or priority claim is made.

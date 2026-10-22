@@ -1,0 +1,124 @@
+A JOINT THRESHOLD RULE FOR UNIT-COEFFICIENT RESOURCE FORMS
+22 October 2026. Independent structural derivation; no priority claim.
+
+1. Statement and scope
+
+Let R be any finite nonempty family of nonempty subsets of [d], and let
+
+  F(B) = min_{D in R} sum_{r in D} B_r,
+  k_min = min_{D in R} |D|.
+
+There are n fixed actual owners. Owner i reports an arbitrary nonnegative
+resource bundle b_i in R_+^d; ownership may overlap in every resource.
+The following ONE deterministic rule is nonnegative, covers every owner
+coalition, is monotone under every real coordinatewise own-report increase,
+and has budget factor d-k_min+1 at EVERY profile. It is homogeneous.
+There is no scalar-ray, endpoint, generic-position, or matroid assumption.
+
+Write B_r=sum_i b_ir and define
+
+  tau(B) = min_{D in R} max_{r in D} B_r,
+  x_i(b) = sum_r min{b_ir, tau(B) b_ir/B_r},
+
+where a summand with B_r=0 is defined to be zero. Equivalently, the total
+payment assigned to resource r is min{B_r,tau}, shared proportionally
+among its actual contributors. One need not choose or report a particular
+minimizing row to define this rule; ties cause no ambiguity.
+
+2. All-real own-report monotonicity
+
+Fix the reports of all owners other than i and put C_r=sum_{j!=i} b_jr.
+The function tau is coordinatewise nondecreasing because every max in its
+definition is coordinatewise nondecreasing and the family is fixed.
+The ratio z/(z+C_r) is nondecreasing in z>=0. When C_r=0, define its value
+at z=0 to be zero; it jumps to one at z>0 and is still nondecreasing.
+Thus both b_ir and tau(B)b_ir/(b_ir+C_r) are nonnegative nondecreasing
+functions of the ENTIRE own-report vector b_i, coordinatewise. Their
+minimum is nondecreasing, and so is their sum. This proves the required
+inequality for arbitrary real vector underreports, including zero entries.
+
+3. Every owner coalition is covered
+
+At the given full profile choose a row D attaining tau. For every r in D,
+B_r<=tau, so resource r pays each contribution b_ir in full. Therefore for
+every owner coalition S (including the empty coalition),
+
+  sum_{i in S} x_i >= sum_{r in D} sum_{i in S} b_ir
+                   >= F(sum_{i in S} b_i).
+
+The last inequality uses D as one candidate in the minimum defining F.
+This proof does not split or reassign owners, and it uses the same full-
+profile threshold for every coalition.
+
+4. Budget and zero output
+
+Summing proportional shares gives the exact identity
+
+  sum_i x_i = sum_r min{B_r,tau}.
+
+Choose a row E minimizing the SUM of full resource totals. This row may
+differ from the row D minimizing the MAX used for coalition coverage.
+Since all coefficients are nonnegative and E is nonempty,
+
+  tau <= max_{r in E} B_r <= sum_{r in E} B_r = F(B).
+
+Consequently
+
+  sum_i x_i <= sum_{r in E} B_r + (d-|E|)tau
+             <= F(B)+(d-k_min)F(B)
+              = (d-k_min+1)F(B).
+
+If F(B)=0, some row has all its totals zero, so tau=0 and all payments
+vanish. Conversely tau=0 implies F(B)=0. This addresses profiles with zero
+output and arbitrary positive reports outside the zero row. An empty
+generator row, excluded in the theorem, would make F identically zero;
+that separate technology simply admits the zero rule.
+
+5. Sum of the k smallest resource totals
+
+For the family of ALL k-subsets, tau is the kth order statistic and
+
+  sum_i x_i = F(B)+(d-k)tau <= (d-k+1)F(B).
+
+Thus fixed codimension d-k gives a constant all-profile guarantee even
+under arbitrary mixed ownership and for any number of owners. At k=d
+the rule is exactly efficient. At k=d-1 it has factor two. This rules out
+using this particular fixed-codimension class to obtain an arbitrary-
+mechanism funding lower bound that diverges with n.
+
+The factor is sharp for THIS RULE: take k-1 totals zero and d-k+1 totals
+one. Then F=tau=1 and the rule's total payment is d-k+1. Positive totals
+approaching this profile give the same limiting ratio. This is NOT a
+lower bound on all mechanisms; competing rules could do better.
+
+6. Comparison and limitations
+
+The campaign contract records the general upper
+min{d, n sqrt(2/(n+1)), 1+2 sqrt(d)}. The displayed mechanism improves the
+d term to d-k_min+1 for this class, and improves the recorded numerical
+guarantee whenever that quantity is smaller than its other terms. It has
+no favorable general-rate consequence when k_min is small. For a fixed
+technology one may choose, in advance, the best available complete rule;
+no profile-dependent switching of payment vectors is claimed safe.
+
+For the recursive four-block technology f_h there are d=n=4^h physical
+resources and each unit form has 2^h resources. This theorem only gives
+n-sqrt(n)+1, weaker than the recorded general upper. Therefore it does
+not bypass the joint-report continuation gate or establish a new
+unrestricted rate. Exact equivalence with a known mechanism or prior
+literature is not asserted; the proof above is self-contained.
+
+The assertion is about literal unit-coefficient forms after any fixed
+resourcewise rescaling common to ALL rows. Arbitrary row-dependent
+coefficients require a separate construction; replacing each coefficient
+by one in this proof is invalid.
+
+7. Verification
+
+composition_threshold_check.py independently evaluates rational payments
+on complete small bundle grids, checks every coalition and every adjacent
+legal own-coordinate edge, checks the exact total-payment identity and
+the claimed budget, and includes zero profiles and ties. It also checks
+that the bottleneck and sum minimizing rows need not agree. These finite
+tests diagnose implementation errors; Sections 2-4 establish the all-real
+theorem and do not depend on a solver or grid extrapolation.

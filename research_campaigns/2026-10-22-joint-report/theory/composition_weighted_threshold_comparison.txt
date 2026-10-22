@@ -1,0 +1,145 @@
+WEIGHTED THRESHOLDS, AND WHY THE RATE ALSO FOLLOWS FROM GRAND MARGINALS
+22 October 2026. Addendum; composition_threshold_mechanism.txt remains frozen.
+
+1. Weighted-row statement
+
+Let A be a fixed finite nonempty family of nonnegative coefficient vectors,
+and F(B)=min_{a in A} a.B. If A contains the zero vector, F is identically
+zero and the zero payment rule settles the problem. Otherwise discard
+resource coordinates r with w_r=max_{a in A} a_r=0, and let d_eff denote
+the number remaining. Define
+
+  kappa = min_{a in A} sum_r a_r/w_r,
+  beta = min{d_eff, 1+d_eff-kappa},
+  tau(B) = min_{a in A} max_r a_r B_r,
+  X_i^tau = sum_r min{w_r b_ir, tau(B)b_ir/B_r},
+  Y_i = sum_r min{w_r b_ir, F(B)b_ir/B_r}.
+
+Terms with B_r=0 are zero. Every formula uses the same fixed actual
+owners, and accepts arbitrary nonnegative real vector reports. Both X^tau
+and Y are nonnegative, cover all owner coalitions, are own-monotone, and
+have total payment at most beta F(B). Moreover X_i^tau<=Y_i pointwise.
+
+The parameter depends on the chosen finite representation. Removing
+redundant coefficient rows before evaluating it can improve the guarantee.
+No assertion that kappa is a technology invariant is made. A common
+positive resourcewise rescaling leaves the coefficient ratios unchanged.
+
+2. Proof for X^tau and Y
+
+Both tau and F are nonnegative and coordinatewise nondecreasing. With all
+other reports fixed, b_ir/B_r is nondecreasing in the own coordinate; its
+0/0 value is zero. Hence the product with either threshold is nondecreasing
+in the entire own vector. Taking a minimum with w_r b_ir and then a sum
+preserves own monotonicity.
+
+For X^tau choose a bottleneck-minimizing row a. For every coordinate r,
+a_r B_r<=tau and a_r<=w_r. Consequently
+
+  min{w_r b_ir,tau b_ir/B_r} >= a_r b_ir.
+
+Summing over an arbitrary owner coalition S proves coverage, since the
+right side is a.(sum_{i in S} b_i)>=F(sum_{i in S} b_i). Coordinates with
+B_r=0 have b_ir=0 and satisfy the same inequality. For Y choose a sum-
+minimizing row a: a_r B_r<=a.B=F(B), so the same argument applies.
+
+Since tau<=max_r a_r B_r<=a.B=F(B) for a sum-minimizing row, X^tau<=Y.
+Total Y payment equals sum_r min{w_r B_r,F(B)}. Set c_r=a_r/w_r in [0,1].
+The elementary inequality min{z,T}<=c z+(1-c)T gives
+
+  sum_i Y_i <= a.B + (d_eff-sum_r a_r/w_r)F(B)
+             <= (1+d_eff-kappa)F(B).
+
+The separate bound sum_i Y_i<=d_eff F(B) gives the stated minimum. At zero
+output all thresholds and payments vanish. Both rules are homogeneous.
+
+3. This same bound applies to the EXISTING grand-marginal rule
+
+Let U_i=F(B)-F(B-b_i), the rule already described under "Baseline, selection
+and remaining gap" in inputs/manuscript.tex. It is nonnegative and own-
+monotone, since its second term is independent of the owner's report.
+For completeness, a minimizing full-profile coefficient row a gives
+
+  F(B-b_i)<=a.(B-b_i)=F(B)-a.b_i,
+
+so U_i>=a.b_i and the payments cover every owner coalition. This is an
+all-profile statement, including all zero and boundary reports.
+
+In fact the following pointwise comparison holds:
+
+  U_i <= Y_i.
+
+To prove it, remove owner i's coordinates one at a time. Immediately
+before removing coordinate r, call the remaining full resource vector C.
+Its rth coordinate is still B_r, and C<=B. If B_r>0 put s=b_ir/B_r in [0,1].
+Concavity, applied to the two vectors C and C-B_r e_r, yields
+
+  F(C)-F(C-b_ir e_r)
+    <= s [F(C)-F(C-B_r e_r)]
+    <= s min{w_r B_r,F(B)}.
+
+For the second line, monotonicity and nonnegativity give a bound F(C)<=F(B).
+Also F is coordinatewise w_r-Lipschitz: a row attaining the minimum at
+C-B_r e_r proves F(C)<=F(C-B_r e_r)+w_r B_r. The case B_r=0 contributes
+zero. Summing the successive losses telescopes to U_i and proves U_i<=Y_i.
+Therefore the same beta bound holds for the manuscript's existing rule U.
+
+No relation X^tau<=U or U<=X^tau is asserted. For example with rows
+{1,2} and {3,4}, totals (1,1,0,3/2), and one owner per coordinate,
+X^tau=(1,1,0,1) while U=(1/2,1/2,0,3/2); neither dominates the other.
+
+This comparison means the structural factor is an analysis refinement of
+an existing mechanism, not evidence that a new mechanism architecture is
+needed or that the unrestricted campaign gate has been passed.
+
+4. Unit forms and the order-statistic example
+
+For unit forms, all nonzero w_r equal one and kappa is the minimum row
+cardinality among the retained resources. The factor reduces to
+d_eff-k_min+1. In particular, sum of the k smallest among d totals has
+factor d-k+1 under U, Y, and X^tau, on ALL real vector-report profiles.
+
+The contract's generic recorded factor is
+
+  min{d, n sqrt(2/(n+1)), 1+2 sqrt(d)},
+
+and the manuscript additionally has a finite-form-count guarantee. The
+deficiency factor can be numerically smaller for a special technology;
+one selects an entire rule in advance using the public technology and n,d.
+Pointwise minima of different complete payment vectors are not claimed
+eligible. There is no unrestricted asymptotic improvement because kappa
+can be arbitrarily small and d-k_min can be of order d.
+
+The constant-codimension example is not simply a linear resource-dimension
+reduction. For 1<=k<d, the k-subset coefficient vectors span R^d: differences
+of two subsets exchanging r,s span the zero-sum subspace, and any subset
+vector has nonzero coordinate sum. Each is uniquely active at some strictly
+positive vector (put totals 1 on that subset and 2 outside). If the function
+factored as G(LB) for a linear map L:R^d->R^m, then every differentiable
+gradient would lie in the row span of L. Equivalently, it is locally
+constant along ker L at those strictly positive points. Thus rank L>=d.
+One cannot explain the bound by a literal lower-dimensional linear
+description of the same technology. This does NOT rule out other known
+structural arguments or establish literature priority.
+
+5. Scope of the useful obstruction
+
+Mixed bundles do preserve a strict joint-report gap (see the separate
+composition_mixed_resources.txt). But for any fixed c, technologies that
+sum the d-c smallest totals admit the constant c+1 guarantee regardless
+of n,d and regardless of overlapping actual ownership. Thus that family
+cannot support a growing arbitrary-mechanism lower bound at fixed c.
+To use growing codimension as a hardness parameter, a lower construction
+must still respect the generic square-root upper and the complete joint-
+report constraints; the present derivation supplies no such construction.
+
+6. Verification and provenance
+
+The theorem uses only elementary finite min-linear geometry and concavity.
+The existing grand-marginal mechanism and its eligibility are explicitly
+present in the supplied inputs/manuscript.tex; no claim that the displayed
+refined bound is absent from prior literature is made. The companion
+composition_weighted_threshold_check.py checks all small rational bundle
+profiles in its listed fixtures, all coalitions and legal own-coordinate
+edges, and U<=Y, X^tau<=Y, and the two budget inequalities. Its complete
+finite diagnostics supplement, rather than establish, the all-real proof.

@@ -1,0 +1,92 @@
+OWN-LOCAL ADAPTIVE WEIGHTS: VALIDITY AND A MATCHING SQUARE-ROOT BARRIER
+22 October 2026. Complete arguments; no improved funding theorem claimed.
+
+1. OWN-WEIGHT MONOTONICITY.
+Fix the coalition game v and every weight except w_i. If w_i increases, then
+the weighted lexicographic minimax cover payment to i weakly increases.
+Proof. Compare the pinning algorithms with old weight t and new weight t'>t.
+Before i first freezes in the old algorithm, all maximizing rows omit i.
+Increasing its weight weakly lowers every incident residual row density and
+does not affect off-i row densities. Therefore all preceding stages are
+identical (including ties), until the old stage first freezing i. Let its
+level be delta, frozen previous set F, and tight witness row S containing i.
+Every new remaining row density is at most delta. Thus all eventual new
+payments to j outside F are at most delta*w_j for j!=i, while payments to F
+are unchanged. Feasibility of S forces
+ x'_i >= v(S)-sum_{j in S\{i}}x'_j
+       >= v(S)-sum_{j in S\{i}}x_j = x_i.
+If the old payment is zero, nonnegativity suffices. This proves the claim.
+
+Together with the own-incidence RHS monotonicity in
+selection_weighted_lex_route.txt, it gives a precise adaptive invariant:
+choose any functions w_i(b_i)>0, finite, componentwise nondecreasing, depending
+only on owner i's own report (and fixed public technology/labels). Then
+ x(b)=L_{w(b)}(v_b)
+is covering and own-monotone on ALL real report profiles. To compare an own
+increase, first increase incident coalition values holding weights fixed,
+then increase only w_i holding the new game fixed. Each step weakly raises
+the same owner's payment. A fixed, report-independent distribution of such
+own-local functions also gives an eligible expected rule.
+
+2. THE FAILURE GATE: OWN-LOCAL ADAPTATION STILL CANNOT BE o(sqrt n).
+For every integer r>=1, set k=2r, n=rk+1=2r^2+1, and M=k^(r-1). There is one
+fixed Leontief technology on d=(k+1)M resources with the following property:
+for EVERY fixed probability mixture of arbitrary positive own-local weight
+functions, there EXISTS a report profile at which its expected total payment
+is at least (r+1)/4, although total production and minimum cover cost equal 1.
+The bad profile may depend on the mixture, while the technology does not.
+Monotonicity of the weight functions is not needed for this lower bound.
+
+Construction. Partition resources into a root set R of size M and an outside
+set Q=[k]^r of size kM. Use the symmetric fixed technology
+ f(X)=min_{q in R union Q} X_q.
+Define n binary report bundles: the root bundle is 1_R; for l=1,...,r and
+j=1,...,k, the petal bundle is
+ b_(l,j)=1_{ {a in [k]^r : a_l=j} }.
+Every bundle has exactly M entries equal to one. A coalition has positive
+production iff it includes the root and an entire petal P_l={(l,j):j in[k]}.
+Indeed, without the root a root resource is missing; if every petal has a
+missing j_l, the outside resource (j_1,...,j_r) is missing; if one full petal
+is present every outside resource is covered. Every positive coalition has
+production exactly 1 because only the root contributes to root resources.
+Thus the complete cover polyhedron is the petal polyhedron from
+selection_weighted_lex_obstruction.txt, and its exact total cost is
+ (w_root+r*m)/(w_root+m), m=min_l sum_{i in P_l}w_i.
+
+Randomize a bijection between actual owner labels and the n roles, and
+independently apply one uniformly random permutation of all d resource
+coordinates to every report. The technology f stays literally unchanged.
+Fix any realized random seed determining all own-local weight functions.
+For a fixed l, the root bundle and the k bundles in P_l partition the d
+resources into k+1 disjoint blocks of equal size M. Under the resource
+permutation they form a uniform ordered equal-block partition. Their owner
+labels are an independent uniform ordered (k+1)-tuple of distinct owners.
+Consequently the resulting k+1 numerical weights are jointly exchangeable,
+even when each owner's local function is different and highly asymmetric
+in resource coordinates. Strict positivity implies
+ {w_root > sum_{i in P_l}w_i} subseteq
+ {w_root > max_{i in P_l}w_i}.
+Exchangeability bounds the latter probability by 1/(k+1); ties only help.
+No independence between different petals is assumed. A union bound gives
+ P(m>=w_root)>=1-r/(k+1)>1/2.
+On this event the exact lexicographic cost is at least (r+1)/2. Thus the
+average over role/resource permutations exceeds (r+1)/4. Integrating over
+the fixed distribution of own-local functions, one fixed report profile
+has expected cost at least (r+1)/4.
+
+Since n=2r^2+1, this is Omega(sqrt n). It excludes an o(sqrt n) guarantee for
+the complete own-local weighted-lex architecture, including randomized
+functions, arbitrary fixed public resource scores, norms, and owner labels.
+
+3. SCOPE AND NEXT CONSTRUCTIVE GATE.
+The construction keeps one fixed f and fixed actual owners throughout. Its
+profile averaging selects a bad full profile and does not pretend that role
+permutations are underreports. No arbitrary-mechanism lower bound follows.
+It does not establish a square-root obstruction in the resource parameter d,
+which is much larger than n here.
+Report-context-dependent weights can evade the exchangeability argument.
+However, their eligibility is not supplied by the own-local invariant. A
+valid constructive extension must prove that contextual changes of OTHER
+owners' relative weights cannot decrease the reporting owner's selected
+payment, and must beat this explicit Leontief petal family. Merely allowing
+all weights to adapt to the profile is not a proof of that property.

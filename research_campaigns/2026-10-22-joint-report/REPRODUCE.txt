@@ -1,0 +1,51 @@
+REPRODUCING THE JOINT-REPORT CAMPAIGN
+
+All mathematical conclusions are stated in CAMPAIGN_REPORT.txt with links
+to plain-text proofs. The frozen contract is CONTRACT.txt. No paper or
+canonical repository files must be edited to reproduce these checks.
+
+From this campaign directory, use Python3 (standard library only) for:
+ python3 theory/selection_cap_two_check.py
+ python3 root/power_certificate_check.py
+ python3 theory/selection_seed_barrier_check.py
+ python3 theory/selection_weighted_lex_check.py
+ python3 theory/selection_contextual_check.py
+ python3 theory/dual_exchangeable_lex_check.py
+ python3 theory/dual_marginal_weight_check.py
+ python3 theory/composition_check.py
+ python3 theory/composition_veto_check.py
+ python3 theory/composition_mixed_check.py
+ python3 theory/composition_threshold_check.py
+ python3 theory/composition_weighted_threshold_check.py
+
+Independent finite-LP certificate replay, also standard library only:
+ python3 computations/verify_joint.py computations/two_pools.json
+ python3 computations/verify_joint.py computations/three_pools.json
+ python3 computations/verify_joint.py computations/triangle.json
+ python3 computations/verify_joint.py computations/veto.json
+ python3 computations/verify_joint.py computations/clutter_best.json
+
+Each finite-LP replay rebuilds actual coalition values and all comparable
+same-others unilateral inequalities from the semantic technology, then
+checks rational primal and dual optimality. A replayed finite optimum is
+not an upper bound valid on the full continuous report domain.
+
+The search scripts joint_lp.py/clutter_scan.py need the versions in
+computations/requirements.txt; the temporary tested runtime is recorded in
+computations/RUNTIME.txt. Discovery used HiGHS dual simplex with presolve
+disabled because an earlier campaign exposed a presolve reliability issue.
+Do not mistake floating search logs for independent proof certificates.
+
+The fixed-cap KKT checker verifies exact row counts and marginal identities
+for huge finite integers. It does not enumerate Q^d owners, every generator,
+or the transport mixture. Existence of that mixture and off-owner coverage
+use the proof in inputs/previous_full_envelope_proof.txt. The all-parameter
+proof, native independent derivation, and cross-model scope are separately
+documented; finite arithmetic alone cannot establish their quantifiers.
+
+Check scripts can refresh their companion result JSONs in this directory.
+FINAL_MANIFEST.json records source hashes at campaign close; ROOT_CHECKS.json
+records actual root executions during this campaign, source/certificate hashes,
+and saved diagnostic-result hashes. Some PASS outputs were observed in the
+terminal without separate stdout capture; those are identified explicitly.
+Creating the index did not rerun already-passed checks.

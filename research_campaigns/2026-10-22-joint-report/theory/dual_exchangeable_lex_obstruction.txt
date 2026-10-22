@@ -1,0 +1,111 @@
+EXCHANGEABLE WEIGHTED-LEXICOGRAPHIC COVERS HAVE AN n/log n OBSTRUCTION
+22 October 2026. Exact architecture obstruction; NOT an arbitrary-rule lower.
+
+THEOREM. Fix integers r>=1 and k>=1, and N=rk+1 owners. Give one owner u the
+role of a veto, and partition the others into r disjoint petals P_1,...,P_r,
+each of cardinality k. Consider the unit cover constraints
+  x_u + sum_{i in P_l}x_i >= 1       (l=1,...,r),   x>=0.
+For ANY exchangeable law of strictly positive finite weights W on these N
+owners, let L_W be weighted lexicographic minimax: lexicographically minimize
+the decreasing list x_i/W_i. Its expected total satisfies
+  E sum_i L_W,i >= (r+1)/2 * p_{r,k},
+  p_{r,k}=integral_0^1 (1-t^k)^r dt
+         =sum_{j=0}^r (-1)^j binom(r,j)/(kj+1).
+The law may depend on N and may have ties or arbitrary dependence. If
+  k=ceil(log_2(4r)),
+then p_{r,k}>=3/8 and
+  E sum_i L_W,i >= 3(r+1)/16.
+Since N=rk+1 and the minimum total cover is 1, this is Omega(N/log N).
+
+PROOF OF THE DETERMINISTIC FORMULA. Put
+  m=min_l W(P_l), a=W_u/(W_u+m).
+The first lex level is 1/(W_u+m): the rows with minimum petal weight are
+tight, forcing the veto and all owners in those petals to this level. In
+particular x_u=a. Every remaining row is disjoint from the others apart from
+the already frozen veto. Therefore its remaining owners have ratios equal
+to (1-a)/W(P_l), and its petal payment sum is 1-a. These levels do not exceed
+the first level because W(P_l)>=m. Hence the entire solution is
+  x_u=a,  x_i=(1-a)W_i/W(P_l) for i in P_l,
+and its total is exactly
+  F(W)=a+r(1-a)=(W_u+r m)/(W_u+m).
+On W_u<=m, F(W)>= (r+1)/2 (for r=1 equality is automatic).
+
+PROOF OF THE LAW-INDEPENDENT EVENT. Give ties independent continuous random
+tie breakers and order by (W_i,tie_i). Exchangeability implies the resulting
+rank permutation is uniform. The rank event
+  rank(u)<=max_{i in P_l}rank(i) for every l
+implies W_u<=max_{i in P_l}W_i<=W(P_l) for every l, and hence W_u<=m.
+Its probability depends only on a uniform permutation. Generate such a
+permutation by independent Uniform(0,1) auxiliaries U_i. Conditional on U_u=t,
+each petal has some U_i>=t with probability 1-t^k, independently across
+petals. This gives p_{r,k}. No coupling between U_i and the actual W_i is
+claimed or needed: only their rank permutations have the same law.
+For the stated k, the sufficient auxiliary event U_u<=1/2 and every petal
+containing some U_i>=1/2 has probability
+  (1/2)(1-2^{-k})^r >= (1/2)(1-r2^{-k}) >= 3/8,
+using the union bound / Bernoulli inequality. This proves the theorem.
+
+EXPLICIT PRODUCTION REALIZATION. Use d=N resources y and z_lj, one for each
+owner, and the single fixed technology
+  f(y,z)=min{y, sum_{l=1}^r min_{1<=j<=k} z_lj}.
+It is finite, nonnegative, monotone, concave, and homogeneous of degree one.
+For example it is the minimum of the y-coordinate linear form and all k^r
+linear forms sum_l z_l,j_l, so it belongs to the exact manuscript class.
+At the all-unit basis profile, owner u reports e_y and owner (l,j) reports
+e_lj. A coalition has value 1 exactly when it contains u and all members of
+at least one petal; otherwise it has value 0. Therefore the full coalition
+cover polyhedron is exactly the displayed r-row cover: all other positive
+coalition constraints are implied by one of its minimal winning rows.
+The grand output is 1. The profile and actual owners are fixed throughout;
+no endpoint extrapolation or reassignment is involved. Weighted lex itself
+is defined on every real profile, and this single profile disproves its
+proposed uniform expected-budget bound under exchangeable weights.
+
+ALL REPORT-INDEPENDENT LAWS, ON ONE FIXED TECHNOLOGY. The exchangeability
+assumption can be removed when testing the mechanism on the full manuscript
+report domain. Fix the displayed f and ANY positive finite weight law indexed
+by the N owners, independent of reports; the law may depend on f. For each
+bijection sigma from resource roles to actual owners, form the basis profile
+in which owner sigma(a) reports the unit vector of resource role a. Average
+expected funding over all sigma. Equivalently, keep the canonical basis
+profile and randomly permute the weights among its roles. This symmetrizes
+the law, so the theorem lower-bounds this average. At least one fixed basis
+profile therefore has expected funding at least 3(r+1)/16. No owners change
+inside a comparison or incentive chain; this is existence of one profile
+among the profiles on which the same rule is required to work. Consequently
+NO report-independent mixture of positive weighted-lex selectors has a
+universal o(N/log N) funding guarantee, even if its weight law is chosen after
+the fixed technology f is known. This applies to deterministic weights too.
+
+Padding makes the rate valid for every N>=8, not just a parameter subsequence.
+Take k=ceil(log_2(4N)), r=floor((N-1)/k), use rk+1 active roles, and add ignored
+resource coordinates/owners to reach N. Such dummy owners always receive 0
+under weighted lex. Average all owner assignments of active and dummy roles;
+the induced weights on active roles are exchangeable. Since r2^{-k}<=1/4,
+the same argument gives a bad fixed profile with expected funding at least
+  3(r+1)/16 >= 3(N-1)/(16 ceil(log_2(4N))).
+The production has d=N, ignoring the dummy coordinates, and unit output.
+
+SCOPE. The comparator e_u is a static efficient nonnegative cover. Paying
+all output to u is also an eligible efficient rule on the pure-coordinate
+fixed-support subdomain, where only u can report y. That statement is NOT
+extended to all of (R_+^d)^N: in the unrestricted manuscript domain other
+owners can report y at other profiles. No arbitrary eligible-rule lower
+bound is established here. On a restricted fixed-support domain with a known
+veto owner, asymmetric weights can evade the canonical-profile lower bound;
+that restricted domain does not contain all the basis profiles used above.
+Report-dependent weights and selectors outside this mixture class remain
+possible escapes, provided they preserve own-report payment monotonicity.
+
+CONSEQUENCE FOR THE LIVE CANDIDATE. The proposed iid law W_i=U_i^(1/alpha)
+is exchangeable for every alpha>0, even when alpha depends on N. Therefore
+no alpha tuning gives an O(log N) universal bound for this selector. The
+failure already holds with k=2 at order sqrt N: using t=(2r)^(-1/2) gives
+p_{r,2}>=t/2, hence expected cost >=(r+1)/(4 sqrt(2r)). Growing k yields the
+stronger N/log N obstruction above. This is a structural rejection of the
+candidate distribution family, not a bounded numerical anomaly.
+
+VERIFICATION / PRIORITY. The proof is elementary and exact. The separate
+stdlib checker verifies small rational instances, the exact rank integral,
+and the weight formula; these checks supplement rather than replace the
+argument for all parameters. No historical novelty claim has been checked.

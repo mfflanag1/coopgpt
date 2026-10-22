@@ -1,0 +1,81 @@
+FIXED WEIGHT MIXTURES HAVE AN OMEGA(n/log n) FUNDING OBSTRUCTION
+22 October 2026. Independent exact audit and fixed-law extension.
+The coordinator/scout supplied the iid petal obstruction. This note verifies
+its formula and extends it to arbitrary fixed joint weight distributions.
+It supersedes the conjectural rate target in selection_weighted_lex_route.txt.
+
+THEOREM. For r>=2, k=ceil(log_2(4r)), and n=rk+1, there is one fixed monotone,
+concave, homogeneous production technology on d=n resources such that every
+report-independent probability distribution on strictly positive, finite
+owner weights has a unit-basis report profile at which its expected weighted
+lexicographic cover costs at least (r+1)/8, while grand production and the
+minimum total cover both equal 1. The distribution may depend on the fixed
+technology and may be asymmetric, correlated, or discrete.
+
+1. FIXED TECHNOLOGY AND FULL COALITION POLYHEDRON.
+Index resources by a root 0 and r disjoint petals P_l, each of size k. Set
+ f(X)=min{X_0, sum_{l=1}^r min_{j in P_l} X_j}.
+Minimums of nonnegative linear functions are concave; sums of concave
+functions are concave, and the minimum of two concave functions is concave
+(its hypograph is their hypograph intersection). Thus f has every stated
+production property and is finite everywhere.
+Assign the n actual owners bijectively to these resources, giving each owner
+the corresponding unit basis vector. A coalition produces 1 exactly when it
+contains the root owner and every owner of at least one petal; otherwise it
+produces 0. Consequently its entire nonnegative coalition-cover polyhedron is
+ x_root + sum_{i in P_l} x_i >= 1, l=1,...,r; x>=0.
+Grand production is 1. Paying the root 1 is an efficient cover.
+
+2. EXACT WEIGHTED LEXICOGRAPHIC SOLUTION.
+For deterministic positive owner weights, write w_0 for the root weight,
+A_l=sum_{i in P_l}w_i, and m=min_l A_l. The first minimax level is
+ delta=1/(w_0+m).
+It freezes the root and all minimum-weight petals. The root payment is
+w_0/(w_0+m). Every other petal must cover residual m/(w_0+m); after the root
+is frozen these petal constraints are disjoint, so lexicographic minimization
+gives exactly that total to each petal. Therefore
+ sum_i L_w(v)_i=(w_0+r*m)/(w_0+m).
+In particular m>=w_0 implies total >=(r+1)/2.
+
+3. RANDOM ROLE ASSIGNMENT, WITH WEIGHTS HELD FIXED.
+Take a uniformly random bijection from owner labels to the fixed resource
+roles. Rank the deterministic weights increasingly, breaking ties by owner
+label. Conditional on root rank t<=floor(n/2), a given petal consists entirely
+of lower-ranked owners with probability
+ binom(t-1,k)/binom(n-1,k) <= ((t-1)/(n-1))^k <= 2^(-k).
+The bound remains valid when t-1<k, interpreting the numerator as zero.
+If a petal has at least one owner ranked above the root, its weight sum is at
+least w_0. By a union bound, with conditional probability at least
+1-r*2^(-k)>=3/4, every petal has that property. Hence
+ P_role(m>=w_0)>=3*floor(n/2)/(4n),
+ E_role sum_i L_w(v_role)_i
+   >=3*(r+1)*floor(n/2)/(8n)>=(r+1)/8.
+The last step uses n>=3 and floor(n/2)/n>=1/3.
+
+4. ARBITRARY FIXED MIXTURES AND QUANTIFIERS.
+The preceding inequality holds pointwise for every positive vector w.
+Integrate with respect to any report-independent joint distribution D of w,
+then interchange the finite average over role assignments and expectation.
+There is a single role assignment pi satisfying
+ E_{W~D} sum_i L_W(v_pi)_i >=(r+1)/8.
+The production function is the same for every assignment in this averaging
+argument. We use different full report profiles only to select one profile
+at which the universal budget guarantee fails. No underreport comparison
+changes owners, endowments, or their ownership roles.
+
+Since n=r*ceil(log_2(4r))+1, the lower bound is Omega(n/log n) on this infinite
+sequence. It excludes every uniform O(sqrt n) funding guarantee within the
+fixed-weight-mixture architecture, and therefore refutes the proposed
+power-law O(log n) cost lemma, including laws tuned to n.
+
+5. EXACT SCOPE.
+This is an architecture lower bound, not an arbitrary-mechanism lower bound.
+For the displayed unit ownership profile, paying the root is efficient.
+Report-dependent weights or a different joint selector can escape this
+argument. They need a separate all-profile own-monotonicity proof. We make
+no assertion here about zero/infinite weights or unproved limiting rules.
+
+Independent audit status: the production realization, full coalition-row
+equivalence, lexicographic formula, rank bound, and law/profile quantifiers
+have each been checked directly. The mathematical proof does not depend on
+simulation. A separate rational checker checks the formula on finite cases.

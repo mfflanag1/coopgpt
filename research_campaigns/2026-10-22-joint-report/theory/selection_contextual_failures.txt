@@ -1,0 +1,67 @@
+TWO CONTEXTUAL SELECTION CANDIDATES: EXACT FAILURE GATES
+22 October 2026. These are architecture obstructions, not universal bounds.
+
+1. SHAPLEY WEIGHTS IN WEIGHTED LEX ARE NOT OWN-MONOTONE.
+Take fixed technology f(y,x,z)=min{y,x+z}. There are three owners: a root
+reporting y=1+epsilon and two unit leaves, where 0<=epsilon<=1/4. Singleton
+values and the leaf-pair value are zero, each root-leaf pair has value 1,
+and grand production is 1+epsilon. The Shapley weights are
+ w_root=(2+epsilon)/3,
+ w_leaf=(1+2epsilon)/6 for each leaf.
+The two pair-row densities are 6/(5+4epsilon), and the grand-row density
+is 1, so the pair rows are maximizing throughout this interval (with a tie
+at its right endpoint). Weighted lex therefore pays the root
+ (4+2epsilon)/(5+4epsilon).
+This strictly decreases from 4/5 to 3/4 as its own report increases. Thus
+using an efficient, own-monotone contextual score vector as the weights is
+not enough: the other owners' changing relative weights can reverse the
+own-payment comparison. There is no supporting-price issue in this example.
+
+2. EFFICIENT-CORE MINIMUM-NORM ENVELOPE HAS LINEAR FUNDING COST.
+Construction supplied by the coordinator and independently verified here.
+For k>=2 use n=2k owners in k disjoint pools, two scalar-capacity owners per
+pool. The fixed production technology is the minimum of the k pool totals.
+For each profile b let q(b) minimize sum_i x_i^2 over the full efficient core
+ {x>=0 : x(N)=T(b), x(S)>=v_b(S) for all S}.
+Its actual own-report envelope is E_i(b)=sup_{0<=a_i<=b_i}q_i(a_i,b_-i).
+
+Full profile: pool0 has capacities (1,1); every other pool has capacities
+(4,1), whose owners are called high and low. Here T=2. A coalition taking
+both pool0 owners and the high owner from each other pool produces 2.
+Efficiency and nonnegativity force every other pool's low owner to receive
+zero in every core allocation. Next, either one pool0 owner together with
+all these low owners forms a worth-1 coalition. Each pool0 owner must
+therefore receive at least 1. Efficiency forces the unique core allocation
+to be (1,1) on pool0 and zero elsewhere.
+
+For any other pool j, let only its high owner underreport from 4 to 1.
+There are now exactly two (1,1) pools, pool0 and poolj, while T remains 2.
+A coalition taking all four owners of these small pools and the high owner
+of each remaining pool produces 2, forcing all remaining low payments to
+zero. Each of the four coalitions consisting of one owner from each small
+pool plus all remaining low owners produces 1. Their pair constraints imply
+the four small-pool owners receive at least 2 in total, so all remaining
+high payments also vanish. With total exactly 2, the four pair constraints
+are equivalent to the allocations
+ (lambda,lambda) on pool0, (1-lambda,1-lambda) on poolj,
+ 0<=lambda<=1.
+These allocations do cover every coalition: any productive coalition
+contains an owner from each small pool, and a worth-2 coalition contains
+both owners from each of them. The unique squared-norm minimizer has
+lambda=1/2. In particular the underreporting high owner receives 1/2.
+
+Consequently, at the original full profile,
+ sum_i E_i >= 2+(k-1)/2,
+ (sum_i E_i)/T >= (k+3)/4 = (n+6)/8.
+All comparisons hold on one fixed technology with the same actual owners,
+and all are constant-production (T=2) underreport comparisons. This rules
+out a universal O(sqrt n) bound for this efficient-core envelope architecture.
+It is stronger than a variable-grand-value issue. It also refutes the
+constant-T pointwise hypothesis E_i<=C*q_i(full) for every finite C, since
+the original high-owner payment is zero. The squared envelope satisfies
+sum_i E_i^2>=2+(k-1)/4, so a bound sum_i E_i^2<=T^2 fails for k>=10.
+
+This does not rule out arbitrary efficient-core selections with different
+tie behavior, or a genuinely joint all-profile construction. The first
+candidate fails eligibility; the second is eligible after enveloping but
+fails funding. Neither yields a general mechanism lower bound.

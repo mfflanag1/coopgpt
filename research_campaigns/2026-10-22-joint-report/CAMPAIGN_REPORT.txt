@@ -1,0 +1,279 @@
+COOPGPT JOINT-REPORT CAMPAIGN: RESULTS AND HANDOFF
+22 October2026. Final completion time and gate decision: CAMPAIGN.json.
+Completed the90-minute gate. The continuation condition was not met.
+The exact closeout time and elapsed duration are recorded in CAMPAIGN.json.
+
+MAIN FINDING
+
+Putting any FIXED funding cap into the minimum-norm optimization does not
+repair its own-report envelope. For every fixed C>=1 there are arbitrarily
+large fixed-owner instances on which that envelope needs funding linear
+in the number of owners. At C=2 the explicit lower bound is (N-1)/11 times
+output. This is a substantial strengthening of the previous envelope-route
+obstruction, and belongs with that theorem rather than in a separate paper
+for every cap.
+
+The linear owner order is sharp for each fixed cap: any seed bounded by
+C*T has each envelope coordinate at most C*T, hence total at most N*C*T.
+The matching lower is along an unbounded sequence of owner counts, with
+growing resource dimension; it is not a lower for each prescribed N or d.
+
+The unrestricted best-mechanism bound was NOT improved. All-profile
+positive results were obtained for dense resource-form classes, including
+mixed ownership and coalition-total incentives, but their funding rates
+follow from elementary refinements of existing mechanisms. No finding
+justified the conditional six-hour extension under the frozen gate; that
+extension was not run. This report distinguishes a useful theorem from a solved frontier.
+
+WHAT THE PROBLEM ACTUALLY REQUIRES
+
+There are n fixed actual owners, each reporting a nonnegative resource
+vector. One fixed monotone concave homogeneous technology f determines
+v_b(S)=f(sum_{i in S}b_i). A single payment rule must work at ALL real
+profiles, cover every coalition, pay nonnegative amounts, and never reduce
+an owner's payment when that owner reports more while others stay fixed.
+The benchmark is total output T=f(sum_i b_i), with total payment<=beta*T.
+These are payment-only individual incentives. There is no efficiency
+equality, fairness floor, private cost, outside-option contract, or assumed
+coalition-proofness. A finite profile test is not an all-profile mechanism.
+
+The recorded general upper remains
+ min{d, n*sqrt(2/(n+1)), 1+2*sqrt(d)}.
+The recorded unrestricted lower rates remain logarithmic/log-logarithmic
+in the relevant growing parameters. The new linear results below apply
+to particular selection architectures and do not contradict that upper.
+
+1. THE STRONGEST NEW THEOREM: EVERY FIXED QUADRATIC SEED CAP FAILS
+
+Let q^C(b) minimize the squared Euclidean norm among nonnegative coalition
+covers with total at most C*T, for a fixed C>=1. Define the ACTUAL envelope
+ E_i(b)=sup_{0<=a_i<=b_i} q_i^C(a_i,b_-i).
+For the finite min-linear instances used here, the seed is well defined
+at all real profiles: an active supporting form provides an efficient
+cover, and strict convexity gives a unique minimizer.
+The envelope is own-monotone and coalition-covering, but its funding is
+Omega_C(N) along a growing sequence of actual owner counts.
+
+For C=2, use the prior ternary row construction with ONE common-veto block,
+N=3^d+1 owners and d a positive multiple of480. At each private owner's
+selected actual control underreport, the capped optimizer pays1/11 to that
+owner and1/11 to the veto,1/(d+h) to each of its2d neighbors, and zero to
+the remaining private owners, where h=d/10. Its total is exactly2.
+Every retained incident row and every off-owner row is covered. An exact
+KKT certificate proves this is the optimizer, not just a feasible vector.
+Translating the witness across owners gives sum E_i>=(N-1)/11 at one full
+profile with T=1. The true supremum includes every real underreport; using
+one legal witness per owner is sufficient for a lower bound.
+
+For general C>1, the Q-ary version has natural cap
+ C_Q=Q-1-(Q-3)/(2Q+5), with focal payment1/(2Q+5).
+Choose fixed Q with C_Q>C and add one owner supplying an additive resource
+of value A=(C_Q-C)/(C-1). The singleton constraint forces a payment of at
+least A, and norm minimization makes it exactly A; the remaining budget
+is C(1+A)-A=C_Q. Thus
+ sum E_i/T >= [(C-1)/(2Q^2-7)]*(N-2).
+Q and A are fixed before N grows. The C=1 endpoint follows from the
+independently proved efficient-core-selector theorem described next.
+
+The same obstruction now holds for EVERY fixed power objective sum_i x_i^r,
+r>1, with the same lower coefficient. Only the starting dimension depends
+on r. The row mixture has a uniform margin a0-b>delta/2; choosing h large
+enough that h^(r-1)>=2/delta makes the power-gradient certificate positive.
+Thus changing the fixed power does not repair this route, even arbitrarily
+close to r=1. At r=1, minimizing total payment selects an efficient core
+for every cap C>=1; the separate all-core-selector theorem below handles
+any deterministic tie-breaking. The power-gradient proof does not cover
+that nonunique endpoint, variable powers, or other objectives.
+
+These results do NOT address a cap growing with N or arbitrary joint
+payment selection. The base construction admits efficient competing
+payments on its fixed-bundle downward report domain. The instances are
+astronomically large but finite; no practical enumeration is claimed.
+
+Proof: theory/selection_cap_two_analysis.txt.
+Dependency copied locally: inputs/previous_full_envelope_proof.txt.
+Independent native audit: theory/composition_cap_audit.txt.
+Exact arithmetic: theory/selection_cap_two_check.py.
+Power extension: theory/selection_power_regularizer_extension.txt.
+Independent scaled-gradient checks: root/power_certificate_check.py.
+
+2. TWO MORE GENERAL SEED-ENVELOPE BARRIERS
+
+Every efficient-core selector, not just a quadratic selector, has linear
+envelope inflation on a simple growing multi-pool family. With k pools
+and two owners per pool, some profile requires factor(k+3)/4=(N+6)/8.
+The proof uses a pair of small pools at an underreport, exact core
+descriptions, and averaging over genuine single-owner report comparisons.
+It needs no symmetry, continuity, or norm objective.
+
+More generally, for every fixed seed funding factor B<2, ANY covering
+seed has linear envelope inflation on an appropriate m-owners-per-pool
+family. Put gamma=1-(B-1)m/(m-1)>0. Some profile has envelope factor at
+least gamma*[1+(k-1)/(2m)], with N=km. Randomization does not escape the
+argument when guarantees are in expectation. Substituting a mechanism
+for its own envelope also gives a constant arbitrary-mechanism lower
+approaching2, but no growing unrestricted-rate improvement.
+
+Proofs: theory/selection_efficient_core_envelope_barrier.txt and
+theory/selection_seed_barrier_below_two.txt.
+
+3. WEIGHTED LEXICOGRAPHIC SELECTION: VALID BUT BLOCKED
+
+The descending normalized-level lexicographic minimizer of a nonnegative
+coalition cover is monotone when demands incident to one owner increase.
+Increasing only that owner's positive weight also cannot lower its
+payment. Therefore positive nondecreasing own-local report weights give
+eligible all-profile rules. The eligibility ingredient has close and now
+verified classical antecedents; it should not be advertised as new.
+
+The proposed power-law random-weight funding guarantee was REFUTED.
+A common-veto/disjoint-petal family forces Omega(n/log n) EXPECTED funding for
+EVERY positive report-independent weight law, including correlated and
+technology-dependent asymmetric laws. The bad full profile may depend
+on the law; actual owners do not change within a report comparison.
+
+Even arbitrary owner-specific own-local weights and their fixed mixtures
+face Omega(sqrt(n)) funding (in expectation for mixtures). This matches the order of the existing owner
+upper; it is not a resource-dimension lower, because the construction has
+many more resource coordinates. A universal weight-change comparison
+forces relative weights of unchanged owners to remain proportional;
+globally safe maps under that stronger comparison factor into own-local
+weights up to a common scale. Contextual weights must therefore exploit
+the actual changing coalition demands, rather than a generic order lemma.
+Marginal-contribution and Shapley-based contextual choices have exact own-
+monotonicity counterexamples in the saved notes.
+
+Proofs: theory/selection_weighted_lex_obstruction.txt,
+theory/selection_own_local_weights.txt,
+theory/dual_weight_comparison_characterization.txt,
+theory/selection_contextual_failures.txt.
+
+4. A USEFUL POSITIVE STRUCTURAL BOUND, WITHOUT A GENERAL RATE CHANGE
+
+For a fixed finite min-linear representation F(B)=min_a a.B, put
+ w_r=max_a a_r, discard unused resources, and let
+ kappa=min_a sum_r a_r/w_r.
+Resource payments capped at total output and shared proportionally among
+actual contributors give factor min{d_eff,1+d_eff-kappa}. A bottleneck
+threshold tau=min_a max_r a_r B_r gives pointwise smaller payments with
+the same guarantee. Both rules work for arbitrary overlapping bundles
+and all nonnegative real reports. They also satisfy coalition-TOTAL
+monotonicity, a stronger property than required by the frozen contract.
+
+For unit-coefficient forms of minimum support size k, the factor becomes
+d-k+1. Hence summing the d-c smallest resource totals admits factor c+1
+for every number of owners and resources, even under mixed ownership.
+This class cannot witness a divergent lower bound at fixed c.
+
+The same funding bound also applies to the manuscript's EXISTING grand-
+marginal rule. It is therefore an analysis refinement and a useful class
+exclusion, not an unrestricted breakthrough. Adding a large common linear
+baseline and subtracting it from threshold payments can destroy own
+monotonicity; an exact parameterized example blocks that shortcut.
+
+Proofs: theory/composition_threshold_mechanism.txt,
+theory/composition_weighted_threshold_comparison.txt,
+theory/composition_threshold_group_scope.txt,
+theory/composition_dense_regularization_obstruction.txt.
+
+5. WHY THE LOWER-BOUND AMPLIFICATION ROUTES STOPPED
+
+Pure tensor report profiles can lose ALL unilateral comparison edges.
+Finite fixed-range scalar boxes admit a range-factor rule, so bounded
+report ranges cannot support indefinite multiplicative amplification.
+Payments to a block do not inherit a hypothetical macro-owner incentive.
+If every child technology has one fixed actual veto owner, substitution
+preserves the outer mechanism's funding factor by paying only that veto.
+Adding helper owners in the tested gadget approaches the original9/8
+finite optimum instead of multiplying it.
+
+Mixed ownership preserves a strict finite lower gap, but an exact linear
+resource compression of the recursive four-block technology into a sum
+of k smallest totals needs exponentially many resources in sqrt(n).
+The proof counts exposed edge directions of the coefficient polytope;
+equality on positive profiles identifies the required EXPOSED FACE, not
+the entire projected polytope. This excludes one exact compression route;
+finite-certificate interpolation and different technologies remain open.
+
+The joint-profile LP and its ownerwise upward-transport dual were written
+down precisely. They are standard tools, not a new theorem about rates.
+Exact finite calibrations9/8,7/6 and17/15 were independently replayed;
+none was promoted into an asymptotic or all-real upper result.
+
+Proofs and checks: theory/composition_*.txt/.py and
+theory/dual_flow_formulation.txt; computations/verify_joint.py.
+
+6. WHAT THE FREE ORIGINAL-SOURCE CHECK CHANGED
+
+The static minimum-norm cover and its projection identity are established
+ingredients. Efficient-core minimum norm is the classical least-squares
+core solution. Kalai--Zemel's fixed-game representation and flow-game
+equivalence are classical; our simultaneous fixed-owner report realization
+requires an additional comparison before any priority claim.
+
+A closer original was obtained during this run: Dietzenbacher's January
+2020 Monotonicity and Egalitarianism. The induction in Lemma3.2 establishes
+coalitional monotonicity of UNADJUSTED egalitarian claims before its final
+efficient-solution identification. This supplies a direct antecedent for
+our unweighted cover-lex monotonicity. Weighted replication/continuity
+are routine extensions. The source addendum records the derivation.
+
+The literature delegate's first assessment required revision. We rejected
+its inference from generic Hoffman constants, separated coalitional from
+fixed-owner resource monotonicity, and checked additional freely available
+originals. Novelty and institutional motivation for the exact envelope
+remain unresolved. No human specialist was contacted; AI audits are not
+external peer review or a novelty certificate.
+
+Source ledgers: sources/root_primary_comparisons.txt,
+theory/dual_priority_comparison.txt, theory/dual_priority_addendum.txt,
+theory/dual_threshold_assessment.txt.
+
+7. VERIFICATION, FILE STATE, AND WHAT TO DO NEXT
+
+Root and native auditors rederived the important new steps; separate
+cross-model snapshot reviews checked the weighted-selection, composition,
+seed-envelope and threshold claims. A final fixed-cap review checked the
+new KKT and additive reduction conditional on the frozen previous proof.
+The C=1 endpoint was reviewed separately. A further cross-model review
+checked the fixed-power extension; root checked its explicit uniform
+margin in the inherited source and ran32 exact scaled-gradient cases,
+including powers approaching1. These checks do not enumerate the row
+distribution. Review findings were verified
+before integration. Exact Fraction checkers supplement the proofs; the
+huge q-ary distribution is established by the written all-cut argument,
+not enumerated or proof-assistant formalized.
+
+See reviews/ROOT_VERIFICATION.txt and REPRODUCE.txt for exact scope.
+The canonical manuscripts, repository and GitHub were not edited. The
+source PDF copies are for this local research review; share their source
+URLs rather than redistributing third-party PDFs in a publication packet.
+
+Recommended next commitment: consolidate the new fixed-cap theorem into
+the existing envelope-obstruction review draft, with the prior all-cut
+construction as a clearly identified dependency and the classical
+ingredients credited. Request specialist assessment of correctness,
+priority and the exact rule's economic relevance before widening this
+paper's claims. No outreach is authorized or performed by this campaign.
+
+For further unrestricted mathematics, require a concrete new cross-profile
+coupling lemma or an actual scalable dual certificate. Fixed random weights,
+own-local weighting, efficient-core envelopes and every fixed cap on every
+fixed power-norm seed are now explicit no-go routes. Rephrasing them is not a new
+campaign. A report-dependent cap or genuinely contextual joint selector
+remains logically open, but this run supplies no positive bound for either.
+
+The exact reopening targets are written in root/UNRESTRICTED_RESUME_GATE.txt:
+a source-preserving transport inequality, a scalable arbitrary-mechanism
+dual, or a contextual selector with a proved funding reduction. That note
+also proves the standard compactness bridge: the best all-profile existence
+factor equals the supremum of exact finite-profile LP factors over ALL
+finite profile sets of the fixed technology. This clarifies the universal
+quantifier; it supplies no new rate, algorithm or measurable selection.
+
+A focused first-party theorem bundle is FIXED_CAP_REVIEW_PACKET.zip. Its
+reading order and exclusions are in REVIEW_PACKET_CONTENTS.txt. The full
+campaign additionally records the unsuccessful general-bound routes.
+root/CONSOLIDATION_PLAN.txt gives the paper's proposed logical order. In
+particular, the fixed-cap result does not subsume the previous uncapped
+quadratic result; neither varying-cap nor inactive-cap limits were proved.

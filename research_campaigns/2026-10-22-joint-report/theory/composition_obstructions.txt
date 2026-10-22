@@ -1,0 +1,187 @@
+EXACT OBSTRUCTIONS TO NAIVE RECURSIVE CERTIFICATE AMPLIFICATION
+22 October2026. Fixed technology, fixed actual scalar-resource owners.
+Contract: CONTRACT.txt. This note concerns arbitrary mechanisms and does
+not use the previous campaign's minimum-norm envelope counterexamples.
+
+SUMMARY OF WHAT IS PROVED
+1. Positive pure tensor profiles have no legal individual-owner comparison
+   edges. Their finite joint-report optimum is exactly1, even though the
+   recursive technology and rectangular-coalition values factor perfectly.
+2. A profile box with scalar report range ratio R has a feasible monotone
+   covering allocation of factor at most R, independently of recursion.
+3. Aggregating a block's leaf payments does not preserve its hypothetical
+   own-report monotonicity. An explicit globally valid17-factor rule for
+   f2 makes a block's output rise2->5 while its payment falls9->42/5.
+4. Replacing an abstract scalar owner by a controlled path with frozen
+   helper owners creates a further exact obstruction: all payments may
+   go to fixed helper owners, giving finite-grid optimum1.
+These statements block specific tensorization arguments. They do NOT prove
+that the unrestricted optimal factor for f_h is bounded as h grows.
+
+1. TECHNOLOGY AND THE BASE CERTIFICATE
+Let f0(t)=t and, on four disjoint blocks,
+ f_h=min(f_(h-1)(B1)+f_(h-1)(B2),
+         f_(h-1)(B3)+f_(h-1)(B4)).
+There are n=4^h actual owners, one fixed scalar coordinate each. This is
+a finite nonnegative min-linear, monotone, concave homogeneous technology.
+Every linear form in its recursive expansion is the indicator of a cut
+with2^h leaves. Indeed a level-h cut chooses one top pair of blocks and
+one level-(h-1) cut in each chosen block. At the all-ones profile f_h=2^h.
+
+Write f1=min(x1+x2,x3+x4), and use zero-based owner indices below. The
+9/8 base lower needs just three profiles:
+ P0=(1,1,1,1), PA=(4,1,1,1), PB=(1,1,1,4).
+Let X_A,X_B be their total payments. At P0 coalition{0,3} requires
+x0(P0)+x3(P0)>=1. Legal own-monotonicity gives
+x0(PA)+x3(PB)>=1. At PA, sum coverage for coalitions
+{1,2},{1,3},{0,2,3} to obtain2X_A-x0(PA)>=4. At PB, sum coverage
+for{0,2},{1,2},{0,1,3} to obtain2X_B-x3(PB)>=4. Hence
+  2X_A+2X_B>=9.
+Both profiles have output2, so a common budget factor beta satisfies
+8beta>=9. The supplied full16-profile primal is independently checked
+by composition_check.py, establishing exact optimum9/8 on{1,4}^4.
+
+2. PERFECT VALUE FACTORIZATION DOES NOT TENSORIZE MONOTONICITY
+For positive vectors a,c in R_+^4, consider the16-leaf profile b=a tensor c,
+whose block j is a_j*c. Homogeneity gives
+  f2(a tensor c)=f1(a)f1(c).
+For a rectangular coalition S times T, likewise
+  f2((a tensor c)_(S times T))=f1(a_S)f1(c_T).
+The analogous h-fold identity follows by induction. Thus neither value
+factorization nor coalition value factorization is the missing step.
+
+LEMMA (no single-coordinate edges in positive tensors).
+Let m,k>=2. Two positive rank-one m-by-k arrays agreeing everywhere except
+possibly entry(i,j) agree there as well. Choose i'!=i,j'!=j. Rank one gives
+ b_ij=b_ij' b_i'j/b_i'j', and the three right-hand entries are unchanged.
+For h>=2, flatten a positive h-fold tensor into a4-by-4^(h-1) array.
+The lemma proves that distinct such leaf profiles never differ in exactly
+one actual owner's report.
+
+COROLLARY (exact finite-grid optimum1).
+Any finite family of these positive pure tensor profiles has no nontrivial
+own-monotonicity constraints. At each profile independently choose one
+active linear form a of f_h and pay x_i=a_i*b_i. This covers every coalition,
+because f_h(b_S)<=a dot b_S, and the total is exactly f_h(b). Thus beta1
+is feasible. The grand-coalition constraint at a positive-output profile
+forces beta>=1. The finite joint-report optimum is exactly1.
+
+In particular the9 products of P0,PA,PB have optimum1, as do the255 distinct
+products of the full16-profile base grid with itself. Changing an outer
+factor changes an entire leaf block; changing an inner factor changes one
+leaf in every block. Neither is an allowed single-owner comparison.
+The tensor product of the base dual therefore does not provide a valid
+lower certificate. A valid repair must introduce non-product hybrid profiles.
+At those profiles the factorization above no longer supplies all values.
+Strict positivity matters: zero-supported degenerate tensors can have
+single-coordinate edges. The calibration uses strictly positive levels.
+
+3. A DYNAMIC-RANGE OBSTRUCTION AT EVERY RECURSION DEPTH
+LEMMA (fixed supporting-form allocation).
+For any finite nonnegative min-linear technology f, fix a positive lower
+profile r and choose an active form a there. The allocation x_i(t)=a_i*t_i
+is nonnegative, own-monotone on all scalar reports, and covers every
+coalition at every profile. On the whole box r_i<=t_i<=R*r_i,
+ sum x_i(t)<=R a dot r=R f(r)<=R f(t).
+Thus every finite joint-report LP using only profiles from that box has
+optimum at most R. The mechanism's factor R is claimed on the box only;
+its global monotonicity and coverage are valid, but its global budget
+factor may be unbounded. This distinction is sufficient for a finite-LP
+upper certificate and is not a claimed all-real factor-R mechanism.
+
+The same argument applies to a general finite monotone concave homogeneous
+scalar technology via a nonnegative supporting supergradient at positive r.
+Homogeneity gives a dot r=f(r), and the supporting inequality gives
+f(t)<=a dot t. More generally fixed owner bundle rays reduce to scalar
+coordinates t_i through f(sum t_i*r_i), without changing actual ownership.
+
+For f_h, one fixed cut has2^h leaves. Its capacity payments give factor4
+on the ENTIRE box[1,4]^(4^h). Therefore the full{1,4} leaf grid cannot prove
+(9/8)^h indefinitely: already(9/8)^12>4. Any proposed growing lower must
+explicitly grow report dynamic range. The box bound does not obstruct a
+construction with levels extending to4^h, but Section2 still obstructs
+pure tensor profiles in that larger box.
+
+4. EXACT LOCALITY REQUIREMENT FOR PAYMENT AGGREGATION
+Consider arbitrary nonnegative functions x_i(b) nondecreasing in their
+OWN coordinate with others held fixed. Fix c_i>=0 and two distinct profiles
+p,q with p coordinatewise>=q. Then the implication
+  sum c_i*x_i(p)>=sum c_i*x_i(q)
+holds for EVERY such collection of functions if and only if, for each
+i with c_i>0, p_-i=q_-i. In particular p,q must differ in just one owner,
+and every nonzero c_i must belong to that owner.
+
+Sufficiency is the stated individual monotonicity. For necessity, if
+p_-i!=q_-i, choose x_i(b)=1_{b_-i=q_-i} and every other function0. This
+function is independent of its own report, hence own-monotone, while its
+weighted contribution drops from c_i to0. No continuity hypothesis is
+part of the contract. The next example establishes failure even for a
+homogeneous, globally covering payment rule with a finite budget bound.
+
+For any technology F on n scalar owners, choose distinct i,r and define
+  x_k(b)=F(b) for k!=r,
+  x_r(b)=F(b)+F(b with coordinate i set to0)*b_r/(b_i+b_r),
+where the ratio is0 when its denominator is0. The rule is nonnegative and
+covers all coalitions: a nonempty coalition receives at least F(b)>=F(b_S).
+It has total at most(n+1)F(b). Every payment is own-monotone. For recipient
+r, both factors in the bonus are nonnegative and nondecreasing in b_r;
+the other payments are just the monotone function F. The rule is also
+homogeneous of degree one.
+
+Apply this to F=f2,n16,i0,r1 and profiles
+ block1=(t,1,4,4), block2=(1,1,1,1),
+ blocks3,4=(1/2,1/2,1/2,1/2), with t=1 or4.
+Block1's output is t+1, increasing2->5. The full output and the output
+after deleting i are both2. Its aggregate payment is8+2/(t+1), falling
+9->42/5. The controlling owner's own payment remains2. Thus even changing
+only ONE actual leaf can raise an internal output while reducing the
+block's total payment. Aggregation preserves coverage for unions of
+whole blocks, but it cannot produce a truthful abstract-owner mechanism.
+
+5. FROZEN-HELPER TRANSITION GADGETS ALSO LOSE THE LOWER BOUND
+Suppose an abstract scalar y_j is implemented by a path group P_j of actual
+owners, one controlling leaf with variable report y_j, all other path
+leaves fixed at R, and all reports outside the chosen path0. Restrict
+0<=y_j<=R. A recursively series-parallel f_h can realize such a chosen
+path: its value on a coalition is y_j if the coalition contains the whole
+path and0 otherwise. This is proved by taking one parallel branch at each
+choice and both factors at each series operation.
+
+Choose a fixed helper anchor r_j in each path (path length at least2).
+At each profile choose any efficient covering allocation z_j for the
+abstract outer technology. Pay z_j only to r_j and pay all other actual
+owners0. For a leaf coalition S, let J(S) be the groups whose complete paths
+are present. Its production equals the outer technology on those groups.
+Its payments include sum_{j in J(S)}z_j, so it is covered. Total payments
+equal total abstract output. The only owners whose reports vary receive0;
+each paid anchor's report is fixed throughout the profile family. Thus
+every same-others own-report inequality in that family holds. Its joint
+optimum is1, for any dynamic range and any number of control profiles.
+
+This is another finite-profile obstruction, not an all-real efficient
+mechanism claim. It shows that replacing macro owners by controllable
+output paths does not repair tensorization: fixed helper owners can absorb
+all payments. A successful transition gadget must prevent that leakage,
+for example through many alternative helper coalitions and an explicit
+charging argument, while preserving legal single-owner comparison edges.
+
+6. REMAINING AMPLIFICATION OBLIGATION
+None of these results settles the optimal all-real factor of f_h. A valid
+growing certificate must simultaneously supply:
+ - a profile family of growing report dynamic range;
+ - legal comparisons changing one fixed actual owner at a time;
+ - sufficient non-product hybrid profiles with their true coalition values;
+ - a bound on payments escaping to unchanged helper owners;
+ - an exact nonnegative dual combination yielding a growing ratio after
+   counting every new owner's payment and every new profile's budget.
+Simply reinterpreting a block as one owner, reusing factored values at
+hybrids, or assuming helper payments vanish fails the contract. These are
+specific missing inequalities, not evidence that multiplication is valid.
+
+REPLAY
+Run python3 theory/composition_check.py. The checker verifies the supplied
+base primal with exact Fractions, the9-profile tensor beta1 certificate
+against every leaf coalition, absence of own-report edges for all255 full
+base tensor products, the globally valid block-payment counterexample at
+its stated profiles, and exact fixed-cut/dynamic-range identities. Its
+finite checks supplement the structural proofs above; no solver is used.
