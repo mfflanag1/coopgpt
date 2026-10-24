@@ -1,0 +1,26 @@
+**Provisional verdict: no consequential findings in reviewed scope.** The most important check — the Lemma 4.3 certificate and its downstream use in Theorem 4.1 — is correct as written; I found only low-severity statement/scope notes.
+
+## Findings
+
+**1. Low — Theorem 4.1 (l.414–416) vs. Introduction l.85 / ledger item 7: cap range.**
+Theorem 4.1 fixes $C>1$; the intro and ledger say "every fixed finite $C\ge1$". The constant $c_C=(C-1)/(2Q^2-7)$ degenerates at $C=1$, and the appended-owner step (l.541, $A=(C_Q-C)/(C-1)$) is undefined there. $C=1$ is covered only via Corollary 3.4 → Theorem 3.1 with a different bound form and owner sequence ($N=2g$, $D=N$). Verification: route $C=1$ explicitly in the theorem statement or restrict the prose to $C>1$.
+
+**2. Low — Lemma 4.3 (l.510–513), margin is small but valid.**
+The KKT correction $\eta-\lambda b_*\ge0$ reduces exactly to (eq:power-condition); I recomputed $\lambda(1-b_*)\ge p^{r-1}\iff h^{r-1}(a-b_*)\ge 1-b_*$ using $z/p=1/h$. At $Q=3,j=1,r=2$ the slack is ≈0.005, so the proof depends on the strict inequality $h(\beta-\mu)-\beta>0$ in (eq:off-margin-proof); that chain ($h\delta=2j\ge2$, $h/m<1$, $\beta_0<1$) holds. No action needed; flagging because any later parameter change could break it.
+
+**3. Low — notation collision (l.651 vs l.507).** $\eta$ denotes the cap multiplier in Lemma 4.3 and the scale factor in (eq:veto-focal). Cosmetic.
+
+## Verified steps (hand-checked, no tools)
+
+- **Fixed owners / all-real reports:** Lemma B.1's form identity (eq:game-forms) holds for all Boolean $S$ (cases $S\not\subseteq A$, $S\subseteq A$ with/without $u$); hiding $Z_j$ yields exactly $v^j$. App. B.1: (eq:real-base-form) and the redundancy of $v^j(S\setminus j)+t+z$ check out; veto report gives $tv$. Hence the class upper bound (Lemma C.2) legitimately covers every real underreport, and all lower bounds use admissible selected reports only.
+- **Least-majorant floor:** Lemma 2.2 and Corollary 4.4 are stated at every profile; no slippage to "one observed profile."
+- **Fixed cap/power before growth:** the $r$-dependence enters only through $j\ge j_0(r)$ via $h^{r-1}\ge2/\delta$; $c_C$ is $r$-free. Appended-owner reduction: residual cap $C(1+A)-A=C_Q$ and $np/(1+A)=(C-1)(N-2)/(2Q^2-7)$ both verified; $C_Q=(2Q^2+2Q-2)/(2Q+5)$ verified, $C_3=2,p=1/11$.
+- **All-cut row mixture:** marginals $\mu$ (neighbors) and $\beta$ (weight-two after thinning); $B_{\rm av}=\beta_0+\delta$ and $\gamma_0=\delta+2\xi/(Q(Q-1))$ recomputed; (eq:hall-small/supply/large) margins follow from $M>100Q^4L^2$; concavity-to-corners argument and the three corner cases ($r_0\le Q-2$, $Q-1$, $Q$) are correct; $k<n/(Q-1)$ and $b_*>1/Q$ verified.
+- **Uncapped vs. capped:** Thm 5.1 arithmetic ($\rho<Q^2/n$, $\ell/\rho>1/2$, $(Q-1)/8\ge Q/12$, $12\cdot36^{1/3}<40$) checks; limits $(1+b_0^{-2})/4$ and $1/b_0$ correct. Full seed total $\approx k/2$ grows, consistent with the claim that an inactive cap must grow.
+- **Sharp fixed-$Q$ class:** Lemma C.1 dual-mass bound, Rayleigh bound $(1+\sqrt{1+Q^2m_*})/2$, maximizer $R_*=Q^2/(Q^2-2)$ with value $Q^4/(4(Q^2-1))$, and the re-parameterized margins ($Q\beta_0-Q+2=1-24Q/L\ge7/8$) all verified.
+- **Thms 3.1/3.3:** core singleton and $(\lambda,\lambda;1-\lambda,1-\lambda)$ characterization, pairing $a_{ij}+a_{ji}=1$, averaging to $(N+6)/8$ and $\gamma(1+(g-1)/2m)$; nonconvexity remark correct.
+
+## Scope limitations
+No numerics run; cited sources (Arin E-24, AKV Def. 1, HPO, DD2025) not inspected — priority not assessable. Contribution text appears appropriately hedged; no overclaim identified beyond Finding 1.
+
+**Verdict:** no consequential findings in reviewed scope; three low-severity notes.

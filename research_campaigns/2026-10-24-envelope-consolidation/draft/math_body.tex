@@ -1,0 +1,1214 @@
+\section{The model and the monotone envelope}
+\label{sec:model}
+
+There are $N$ fixed owners, indexed by $I$, and $D$ production resources.
+A report is a vector $b_i\in\mathbb R_+^D$.  The production function is
+\begin{equation}
+ F(y)=\min_{\ell\in\mathcal L} w^\ell\cdot y,
+ \qquad w^\ell\in\mathbb R_+^D,
+ \label{eq:minlinear}
+\end{equation}
+where $\mathcal L$ is finite and nonempty.  Thus $F$ is nonnegative,
+monotone, concave, and positively homogeneous on the entire nonnegative
+orthant.  At a profile $\mathbf b=(b_i)_{i\in I}$, write
+\[
+ v_{\mathbf b}(S)=F\Bigl(\sum_{i\in S}b_i\Bigr),
+ \qquad T(\mathbf b)=v_{\mathbf b}(I).
+\]
+The coalition-cover polyhedron and efficient core are, respectively,
+\[
+ \mathcal P(v)=\{x\in\mathbb R_+^I:x(S)\ge v(S)\text{ for all }S\subseteq I\},
+ \qquad
+ \mathcal C(v)=\{x\in\mathcal P(v):x(I)=v(I)\}.
+\]
+Here $x(S)=\sum_{i\in S}x_i$.  The core is nonempty: choose a form
+$w^\ell$ attaining the minimum in \eqref{eq:minlinear} at the aggregate
+report and set $x_i=w^\ell\cdot b_i$.  This vector covers every coalition
+and has total $T(\mathbf b)$.  Conversely, every cover has total at least
+$T(\mathbf b)$ by the grand-coalition inequality.
+
+A payment rule is \emph{own-monotone} if
+\[
+ M_i(a_i,b_{-i})\le M_i(b_i,b_{-i})\qquad(0\le a_i\le b_i),
+\]
+where vector inequalities are coordinatewise.  This is the individual
+withholding condition studied here.  In particular, no restriction to
+Boolean reports is part of the model.  An owner's utility is its received
+payment: there is no additional outside value for withheld resources or
+private cost term.  All funding ratios below are total payment divided by
+output; the corresponding net external subsidy ratio is one less.
+
+\begin{definition}[Seed and true envelope]
+A seed $q$ selects a vector in $\mathcal P(v_{\mathbf b})$ at every real
+report profile.  Its true own-report envelope is
+\begin{equation}
+ E_i[q](\mathbf b)=\sup_{0\le a_i\le b_i}q_i(a_i,b_{-i}).
+ \label{eq:envelope}
+\end{equation}
+The supremum initially takes values in $[0,\infty]$.
+\end{definition}
+
+\begin{lemma}[Least monotone majorant]
+\label{lem:least-majorant}
+The envelope $E[q]$ is own-monotone, dominates $q$, and covers every
+coalition.  If an own-monotone payment rule $M$ satisfies
+$M_i(\mathbf a)\ge q_i(\mathbf a)$ for every owner and every profile, then
+$M\ge E[q]$ coordinatewise.  Consequently $E[q]$ is the coordinatewise
+least own-monotone majorant of $q$.
+\end{lemma}
+\begin{proof}
+The set over which the supremum in \eqref{eq:envelope} is taken expands
+when $b_i$ increases, proving own-monotonicity.  The choice $a_i=b_i$
+gives $E\ge q$, which also proves coalition coverage.  For every admissible
+$a_i$, own-monotonicity and the majorant condition give
+$M_i(\mathbf b)\ge M_i(a_i,b_{-i})\ge q_i(a_i,b_{-i})$.
+Taking the supremum proves the last assertion.
+\end{proof}
+
+The majorant condition in Lemma~\ref{lem:least-majorant} is an additional
+baseline-payment floor, imposed at \emph{every} profile.  Our lower bounds
+therefore apply to all monotone repairs that only add to the specified
+seed payments.  They do not impose such a floor on unrestricted mechanisms,
+and they do not establish such growing bounds for every own-monotone cover rule.
+The below-two theorem does have the separate constant-factor consequence
+stated in Remark~\ref{rem:constant-two}.
+
+For $C\ge1$ and $r>1$, define the capped power seed
+\begin{equation}
+ q^{C,r}(\mathbf b)=
+ \mathop{\rm argmin}_{x\in\mathcal P(v_{\mathbf b}),\ x(I)\le C T(\mathbf b)}
+       \sum_{i\in I}x_i^r.
+ \label{eq:capped-seed}
+\end{equation}
+The feasible set is nonempty and compact, and strict convexity makes the
+minimizer unique.  When $T=0$ it is zero.  We also use the uncapped quadratic
+seed
+\begin{equation}
+ q^{\infty,2}(\mathbf b)=\mathop{\rm argmin}_{x\in\mathcal P(v_{\mathbf b})}
+       \|x\|_2^2.
+ \label{eq:uncapped-seed}
+\end{equation}
+It exists and is unique.  An efficient cover $c$ has
+$\|c\|_2\le c(I)=T$, so its projection satisfies
+$q_i^{\infty,2}\le\|q^{\infty,2}\|_2\le T$.
+
+\begin{proposition}[Elementary funding upper bounds]
+\label{prop:trivial-upper}
+If a seed satisfies $q(I;\mathbf b)\le C T(\mathbf b)$ at every profile,
+then
+\[
+ E_i[q](\mathbf b)\le C T(\mathbf b),\qquad
+ E[q](I;\mathbf b)\le NC T(\mathbf b).
+\]
+For the uncapped quadratic seed the same statements hold with $C=1$.
+\end{proposition}
+\begin{proof}
+For every underreport, monotonicity of $F$ gives
+$T(a_i,b_{-i})\le T(\mathbf b)$.  Apply the assumed budget bound, or the
+coordinate bound for \eqref{eq:uncapped-seed}, before taking the supremum.
+\end{proof}
+
+\section{Efficient seeds and seeds with budget below two}
+\label{sec:pool-barriers}
+
+An elementary pool technology already gives a linear envelope obstruction
+for every efficient-core selector.  This statement does not require a
+particular objective, symmetry, or continuity of the selector.
+
+\begin{theorem}[Every efficient-core selector]
+\label{thm:core-barrier}
+For every integer $g\ge2$, there is one production function of the form
+\eqref{eq:minlinear}, with binary coefficients, $N=D=2g$ owners and
+resources, and $g$ designated profiles, such that every seed selecting an
+efficient core vector at these profiles and at their designated unilateral
+underreports has
+\begin{equation}
+ \frac{E[q](I;\mathbf b)}{T(\mathbf b)}
+ \ge \frac{g+3}{4}=\frac{N+6}{8}
+ \label{eq:core-bound}
+\end{equation}
+at at least one designated profile.  The bad profile may depend on the
+selector.
+\end{theorem}
+\begin{proof}
+Partition the owners into $g$ pairs $(h_j,l_j)$, each with its own scalar
+resource, and put
+$F(y)=\min_j(y_{h_j}+y_{l_j})$.
+At profile $F_j$, pool $j$ has capacities $(1,1)$ and every other pool has
+capacities $(4,1)$.  At profile $L_{ij}$, pools $i,j$ have capacities
+$(1,1)$ and the remaining pools have capacities $(4,1)$.  Every such
+profile has output $2$.  The profile $L_{ij}$ is obtained from $F_j$ solely
+by owner $h_i$ reducing its capacity from $4$ to $1$.
+
+At $F_j$, the coalition containing both small-pool owners and every
+large-pool high owner has value $2$.  Efficiency therefore forces all
+large-pool low owners to receive zero.  A coalition consisting of either
+small-pool owner and all large-pool low owners has value $1$, forcing each
+small-pool owner to receive at least $1$.  Thus the core is the singleton
+that pays these two owners $1$ each.
+
+At $L_{ij}$, the same argument first makes all remaining large-pool low
+payments zero.  Each coalition containing one owner from each small pool
+and all those low owners has value $1$.  Two disjoint choices force the
+four small-pool payments to total at least $2$, so all other payments
+vanish.  The four cross-pair inequalities and efficiency then give exactly
+\[
+ (x_{h_i},x_{l_i};x_{h_j},x_{l_j})
+       =(\lambda,\lambda;1-\lambda,1-\lambda),\quad 0\le\lambda\le1.
+\]
+Conversely every displayed vector covers: its payment to a coalition is
+a convex combination of that coalition's owner counts in the two small
+pools, and hence is at least their minimum, which bounds production.
+
+Set $a_{ij}=q_{h_i}(L_{ij})$.  Then $a_{ij}+a_{ji}=1$, and at $F_j$
+the envelope total is at least $2+\sum_{i\ne j}a_{ij}$.  Averaging over
+$j$ gives a lower bound $2+(g-1)/2$ at some $F_j$.  Divide by its output
+$2$ to obtain \eqref{eq:core-bound}.
+\end{proof}
+
+\begin{remark}
+The games used here need not be convex cooperative games.  At $F_j$, let
+$S$ contain $h_j$ and every other high owner, and let $U$ contain $h_j$
+and every other low owner.  Then $v(S)=v(U)=v(S\cup U)=1$ and
+$v(S\cap U)=0$, violating supermodularity.  The construction therefore
+does not conflict with positive selection results restricted to convex
+games.
+\end{remark}
+
+\begin{theorem}[Every seed with budget factor below two]
+\label{thm:seed-barrier}
+Fix $1\le B<2$.  Choose an integer $m\ge2$ with $m>1/(2-B)$ and set
+\[
+ \gamma=1-\frac{(B-1)m}{m-1}>0.
+\]
+For each $g\ge2$ there is a binary finite-minlinear technology with
+$N=D=gm$ and finitely many profiles of common output $m$ such that every
+cover seed whose total is at most $Bm$ on these profiles satisfies, at
+one of the full designated profiles,
+\begin{equation}
+ \frac{E[q](I;\mathbf b)}{T(\mathbf b)}
+ \ge \gamma\left(1+\frac{g-1}{2m}\right).
+ \label{eq:seed-below-two}
+\end{equation}
+In particular, every globally $B$-funded seed has a linear envelope
+obstruction along this sequence of owner counts.
+\end{theorem}
+\begin{proof}
+Use $g$ pools of $m$ scalar owners and let $F$ be the minimum pool total.
+Each pool has a designated high owner and $m-1$ low owners.  A small pool
+has all capacities $1$; a large pool has high capacity $R\ge m$ and all
+low capacities $1$.  Define $F_j$ to have just pool $j$ small, and
+$L_{ij}$ to have just pools $i,j$ small.  These profiles have output $m$,
+and $L_{ij}$ is an own underreport by $h_i$ from $F_j$.
+
+At either type of profile, let $L_*$ denote the sum of seed payments to
+the low owners in all large pools.  The coalition of all small-pool
+owners and all large-pool high owners has value $m$.  Hence the seed's
+budget implies $L_*\le(B-1)m$.  At $F_j$, any one small-pool owner together
+with one chosen low owner from each large pool has value $1$.  Averaging
+over the $m-1$ equally likely low choices in each large pool gives
+$q_a+L_* /(m-1)\ge1$.  Thus the small-pool payments total at least
+$m\gamma$.
+
+At $L_{ij}$, the coalition of $h_i,h_j$ and one low owner from each
+remaining large pool has value $1$.  The same averaging gives
+$q_{h_i}(L_{ij})+q_{h_j}(L_{ij})\ge\gamma$.
+Consequently the envelope at $F_j$ is at least
+$m\gamma+\sum_{i\ne j}q_{h_i}(L_{ij})$.  Summing this inequality over
+$j$ and then averaging proves \eqref{eq:seed-below-two}.  Empty collections
+of large pools cause no change to these inequalities.
+\end{proof}
+
+\begin{remark}[A constant-factor consequence without a baseline floor]
+\label{rem:constant-two}
+For each fixed $1\le B<2$, choose $m$ as in Theorem~\ref{thm:seed-barrier}
+and then $g$ so large that $\gamma[1+(g-1)/(2m)]>B$.  On the resulting one
+fixed technology, no own-monotone covering rule $M$ can satisfy
+$M(I;\mathbf b)\le B T(\mathbf b)$ at every profile.  Indeed,
+$E[M]=M$ by own-monotonicity, so taking $q=M$ contradicts the theorem.
+This excludes a universal funding factor below two for unrestricted rules.
+It does not give a growing owner-count lower bound for unrestricted rules
+whose funding factors may exceed two.  We record it as an immediate
+consequence, not an independent contribution.
+\end{remark}
+
+\begin{corollary}[The linear-objective endpoint]
+\label{cor:r-one}
+For any cap $C\ge1$, every tie selection from the minimizers of
+$\sum_i x_i$ over $\mathcal P(v_{\mathbf b})$ with total at most $CT$
+obeys Theorem~\ref{thm:core-barrier}.  The same is true at cap $C=1$
+for every objective and every feasible selector.
+\end{corollary}
+\begin{proof}
+The minimum possible total is exactly $T$, and its minimizers are precisely
+the efficient core.  A cap of $T$ likewise restricts all feasible vectors
+to that core.
+\end{proof}
+
+\section{Every fixed capped power seed has linear inflation}
+\label{sec:fixed-caps}
+
+The next result includes the quadratic seed with cap $2T$.  The proof uses
+a finite incidence construction; its complete distributional and production
+realization arguments are given in Appendices~\ref{app:qary} and
+\ref{app:realization}.  The integer $L$ below is a local combinatorial
+dimension, whereas $D$ always denotes the number of production resources.
+
+\begin{theorem}[Fixed caps and fixed powers]
+\label{thm:fixed-cap}
+Fix $C>1$ and $r>1$.  There is a constant $c_C>0$ and a sequence of
+binary finite-minlinear production instances with unbounded owner count
+$N$ such that
+\[
+ E[q^{C,r}](I;\mathbf b)\ge c_C(N-2)T(\mathbf b).
+\]
+The constant can be chosen independently of $r$, although the first
+admissible instance may depend on $r$.  More explicitly, for any integer
+$Q\ge3$ with
+\begin{equation}
+ C_Q=\frac{(Q-1)L+2h}{L+h}
+     =\frac{2Q^2+2Q-2}{2Q+5}>C,
+ \qquad \frac hL=\frac1{2(Q+2)},
+ \label{eq:natural-cap}
+\end{equation}
+one may take $c_C=(C-1)/(2Q^2-7)$, with $D=2N-1$.
+For $C=2$, no added owner is needed: along a sequence with $D=2N$,
+\begin{equation}
+ E[q^{2,r}](I;\mathbf b)\ge\frac{N-1}{11}T(\mathbf b).
+ \label{eq:cap-two-eleventh}
+\end{equation}
+For $r=2$ every local dimension in the construction is admissible.
+At the remaining endpoint $C=1$, Corollary~\ref{cor:r-one} and
+Theorem~\ref{thm:core-barrier} give the bound $(N+6)/8$ for every $r>1$
+along the separate sequence $N=D=2g$; the formula for $c_C$ above is
+not used at that endpoint.
+Together with Proposition~\ref{prop:trivial-upper}, these are linear-order
+upper and lower bounds for each fixed capped power architecture.
+\end{theorem}
+
+We first state the combinatorial input with all of its parameters.
+
+\begin{lemma}[A transitive row family with focal mixtures]
+\label{lem:qary-input}
+Fix integers $Q\ge3$, $j\ge1$, and put
+\begin{align*}
+ L&=16jQ(Q-1)(Q+2),& h&=8jQ(Q-1),& \xi&=h/L,\\
+ n&=Q^L,& m&=n-(Q-1)L-1,&
+ \mu&=\frac{Q-2+\xi}{Q-1},\\
+ \delta&=\frac1{4Q(Q-1)},& \beta_0&=\mu+\delta,&
+ K&=\lfloor\beta_0m\rfloor,\quad \beta=K/m,\\
+ s&=(Q-2)L+h+K,& k&=n-s,& a&=1-\mu,\quad b_*=1-\beta.
+\end{align*}
+On $V=(\mathbb Z/Q\mathbb Z)^L$, let $\mathcal R$ consist of the
+complements of all independent $s$-sets for the hypergraph of complete
+axis-parallel $Q$-point lines.  Here independent means containing no
+complete line.  This is a nonempty translation-invariant family of
+$k$-element rows, and
+\begin{equation}
+ \frac nQ\le k<\frac n{Q-1},\quad
+ a-b_*>\frac\delta2,\quad
+ h(a-b_*)>1-b_*,\quad b_*>\frac1Q.
+ \label{eq:qary-margins}
+\end{equation}
+For each focal vertex $i$ there is a finite rational probability mixture
+of rows containing $i$ whose mean $w^i$ has coordinate $1$ at $i$,
+coordinate $a$ at each of its $(Q-1)L$ axis neighbors, and coordinate
+$b_*$ elsewhere.  Every supported row contains exactly $L-h$ neighbors
+and $m-K$ other vertices.  Every row not containing $i$ contains at least
+$L$ neighbors of $i$.
+\end{lemma}
+
+For a focal vertex $i$, retain demand $1$ on every off-$i$ row and on
+the support of its mixture; replace demand by $0$ on all other rows.
+Adjoin one common veto owner $u$ to each row.  The resulting full and
+focal games are precisely realized by one all-real production function
+with $n+1$ owners and $2(n+1)$ resources, by
+Lemma~\ref{lem:realization}.  All designated profiles have output $1$.
+
+\begin{lemma}[The natural-cap certificate]
+\label{lem:power-certificate}
+Use Lemma~\ref{lem:qary-input}.  Suppose $r>1$ and
+\begin{equation}
+ h^{r-1}(a-b_*)\ge1-b_*.
+ \label{eq:power-condition}
+\end{equation}
+At the focal underreport, the unique minimizer for cap $C_Q$ pays
+\[
+ q_u=q_i=p=\frac h{L+h},\qquad
+ q_v=z=\frac1{L+h}\quad(v\text{ an axis neighbor of }i),
+ \qquad q_v=0\quad\text{otherwise}.
+\]
+For each fixed $r>1$, condition \eqref{eq:power-condition} holds for all
+sufficiently large $j$; for $r=2$ it holds for every $j\ge1$.
+\end{lemma}
+\begin{proof}
+Every retained own row has payment $2p+(L-h)z=1$, and every off row has
+payment at least $p+Lz=1$.  Deleted rows have demand zero.  The total
+payment is exactly $C_Q$.
+
+Use the equivalent objective $\Phi(x)=\sum_v x_v^r/r$.  Give the supported
+own rows total multiplier
+\[
+ \lambda=\frac{p^{r-1}-z^{r-1}}{1-a}>0
+\]
+distributed according to their probability mixture, and set
+$\eta=\lambda-p^{r-1}$.  A direct calculation shows
+\[
+ \eta-\lambda b_*\ge0
+ \quad\Longleftrightarrow\quad
+ h^{r-1}(a-b_*)\ge1-b_*.
+\]
+In particular $\eta\ge0$.  The gradient of $\Phi$ at the proposed vector
+is $\lambda$ times the mean augmented row minus $\eta\mathbf1$, with
+the nonnegative correction $\eta-\lambda b_*$ on the zero coordinates.
+For any feasible $y$, nonnegativity, the retained row constraints, and
+$y(I)\le C_Q$ therefore give
+\[
+ \nabla\Phi(q)\cdot y\ge\lambda-\eta C_Q
+                          =\nabla\Phi(q)\cdot q.
+\]
+Convexity proves optimality, and strict convexity proves uniqueness.
+This argument does not require a constraint qualification.
+
+By \eqref{eq:qary-margins}, $a-b_*>\delta/2$, so
+$h^{r-1}\ge2/\delta$ suffices.  This holds eventually for fixed $r>1$.
+For $r=2$, the sharper inequality $h(a-b_*)>1-b_*$ already holds for
+every parameter value.
+\end{proof}
+
+\begin{proof}[Proof of Theorem~\ref{thm:fixed-cap}]
+For $Q=3$, \eqref{eq:natural-cap} gives $C_Q=2$ and $p=1/11$.
+Translate the focal certificate to every one of the $n$ private owners
+and apply the simultaneous realization.  Each owner has an admissible
+own underreport paying $1/11$, proving \eqref{eq:cap-two-eleventh}.
+
+For general $C>1$, choose $Q$ with $C_Q>C$; such $Q$ exist since
+$C_Q$ is unbounded.  Append one resource and one owner with fixed amount
+\[
+ A=\frac{C_Q-C}{C-1}>0,
+\]
+and replace the old technology by $F_{\rm old}+Y$.  Its min-linear forms
+still have binary coefficients.  At the full profile and every selected
+old-owner underreport, total output is $1+A$.  The cover constraints
+factor into the old cover constraints and $x_{\rm new}\ge A$; these
+conditions also suffice for mixed coalitions.  Since the objective is
+strictly increasing in this coordinate above $A$, its minimizer has
+$x_{\rm new}=A$.  The residual old-owner cap is
+$C(1+A)-A=C_Q$, so Lemma~\ref{lem:power-certificate} applies unchanged.
+There are $N=n+2$ owners, and
+\[
+ \frac{np}{1+A}
+ =\frac{C-1}{2Q^2-7}(N-2).
+\]
+The resource count is $2(n+1)+1=2N-1$.  All real reports remain in the
+domain; only the selected reports are used for the lower bound.
+\end{proof}
+
+\begin{corollary}[Repairs preserving the seed]
+\label{cor:majorant-barrier}
+Every own-monotone rule that dominates one of the seeds in
+Theorems~\ref{thm:core-barrier}, \ref{thm:seed-barrier}, or
+\ref{thm:fixed-cap} at every profile inherits that theorem's funding lower
+bound.  For the specified capped seeds this applies to any repair by
+top-ups, independently of how the repair is implemented.
+\end{corollary}
+\begin{proof}
+Apply Lemma~\ref{lem:least-majorant} at the designated bad profile.
+\end{proof}
+
+The parameters $C$ and $r$ in Theorem~\ref{thm:fixed-cap} are fixed before
+the instance grows.  The theorem does not assert a starting dimension
+uniform in $r$, a fixed production-resource dimension, or an obstruction
+to an unrestricted own-monotone mechanism.
+
+\section{The uncapped quadratic seed exceeds every square-root constant}
+\label{sec:uncapped}
+
+The uncapped rule has a separate obstruction: a large collection of
+blocks shares one veto owner.  A fixed cap cannot simply be sent to
+infinity in Theorem~\ref{thm:fixed-cap}, because doing so changes its
+instance and its optimizing vector.
+
+\begin{theorem}[Uncapped quadratic envelope]
+\label{thm:uncapped}
+For every $A>0$ and $N_0$ there is a binary finite-minlinear production
+instance with $N\ge N_0$, $D=2N$, and a fixed full profile of output $1$
+such that
+\[
+ E[q^{\infty,2}](I;\mathbf b)>A\sqrt N.
+\]
+Along an explicit unbounded sequence of owner counts,
+\begin{equation}
+ E[q^{\infty,2}](I;\mathbf b)>
+ \frac1{40}\sqrt N\left(\frac{\log N}{\log\log N}\right)^{1/3}.
+ \label{eq:uncapped-rate}
+\end{equation}
+The squared envelope norm and the ratio of envelope total to the full
+seed total are also unbounded over these production instances.
+\end{theorem}
+
+\begin{lemma}[Full and focal base projections]
+\label{lem:base-projections}
+For the unit-demand row system of Lemma~\ref{lem:qary-input}, the full
+quadratic projection is $z=k^{-1}\mathbf1$, with squared norm
+$\rho=n/k^2$.  At the focal binary deletion, it is $w^i/t$, where
+\begin{equation}
+ t=1+(L-h)a+(m-K)b_*
+  =1+(Q-1)L a^2+m b_*^2=\|w^i\|_2^2.
+ \label{eq:base-t}
+\end{equation}
+Its focal coordinate, squared norm, and total row-multiplier mass are
+all $\ell=1/t$, and $\ell\le\rho$.
+\end{lemma}
+\begin{proof}
+Averaging any row over translations gives $(k/n)\mathbf1$.  Assign this
+orbit distribution total multiplier $\rho$.  Its mean multiplier vector
+is $z$, and every unit row is tight at $z$.  Thus for any feasible $y$,
+$z\cdot y\ge\rho=\|z\|^2$, which proves that $z$ is the unique projection.
+
+For the focal system use the mixture of Lemma~\ref{lem:qary-input}.
+All supported rows have potential $t$ at $w^i$, and its displayed
+coordinates give the second expression in \eqref{eq:base-t}.  Because
+$a>b_*$, every off-focal row has potential at least
+$La+(k-L)b_*$.  Its difference from $t$ is
+\[
+ h(a-b_*)-(1-b_*)>0.
+\]
+Consequently $w^i/t$ is feasible.  Give supported rows multipliers
+$\alpha_R/t$, where $\alpha$ is the mixture.  Their sum is $1/t$ and
+their weighted row vector is $w^i/t$.  The same projection inequality
+proves uniqueness.  Deleting constraints only enlarges the feasible
+set, so its squared minimum norm $\ell$ is at most $\rho$.
+\end{proof}
+
+Take $J$ disjoint copies of the base and adjoin the same owner $u$ to
+every row.  At full demand the projection is
+\begin{equation}
+ x_u=\frac{J\rho}{1+J\rho},\qquad
+ x^{(c)}=\frac{z}{1+J\rho}\quad(1\le c\le J).
+ \label{eq:veto-full}
+\end{equation}
+Indeed, conditional on $x_u\in[0,1]$, each block is its full projection
+scaled by $1-x_u$; minimize $x_u^2+(1-x_u)^2J\rho$.  Values $x_u>1$
+cannot be optimal since $(1,0,\ldots,0)$ is feasible.
+
+Delete the designated own rows in one focal block and leave all other
+blocks unchanged.  With
+$\eta=[1+(J-1)\rho+\ell]^{-1}$, the new projection is
+\begin{equation}
+ x_u=1-\eta,\qquad x^{(\rm focal)}=\eta w^i/t,
+ \qquad x^{(c)}=\eta z\quad(c\ne\mathrm{focal}).
+ \label{eq:veto-focal}
+\end{equation}
+To check this, scale the base row multipliers by $\eta$.  Their total
+is $\eta((J-1)\rho+\ell)=1-\eta$, which is exactly the required veto
+coordinate.  Retained supported rows are tight and all others are
+feasible.  The resulting projection inequality proves optimality and
+uniqueness.  In particular every private owner has selected own-report
+payment
+\begin{equation}
+ p_J=\frac{\ell}{1+(J-1)\rho+\ell}.
+ \label{eq:private-selected}
+\end{equation}
+Lemma~\ref{lem:realization} realizes all these reports with the same
+$N=Jn+1$ actual owners and one production function on $2N$ resources.
+
+\begin{proof}[Proof of Theorem~\ref{thm:uncapped}]
+First take $j=1$ in Lemma~\ref{lem:qary-input} and put
+$J=\lfloor1/\rho\rfloor$.  Every coordinate of $w^i$ is at least
+$b_*>1/Q$, its coordinate sum is $k$, and
+$t\le nb_*^2+QL$.  The exponential size of $n$ gives
+$nb_*^2>QL$.  Hence
+\[
+ \rho<\frac{Q^2}{n}<\frac12,
+ \qquad
+ \frac\ell\rho=\frac{k^2}{nt}
+       \ge\frac{nb_*^2}{nb_*^2+QL}>\frac12.
+\]
+Writing $c=J\rho$, we have $1/2<c\le1$ and $N\le2Jn$.  By
+\eqref{eq:private-selected} and $\ell\le\rho$,
+\begin{align*}
+ \frac{Jn p_J}{\sqrt N}
+ &\ge\frac{\ell\sqrt{Jn}}{2\sqrt2}
+  =\frac{\ell}{\rho}\frac{\sqrt{c n\rho}}{2\sqrt2}
+  >\frac{Q-1}{8},
+\end{align*}
+where $\sqrt{n\rho}=n/k>Q-1$.  Increasing $Q$ proves the first assertion.
+
+For the rate, $L=16Q(Q-1)(Q+2)\le18Q^3$; the difference is
+$2Q(Q-4)^2$.  Since $J\le k^2/n$, we have $n\le N\le k^2+1\le n^2$.
+Therefore
+\[
+ \log N\le36Q^3\log Q,
+ \qquad \log\log N>\log Q.
+\]
+Thus $(\log N/\log\log N)^{1/3}\le36^{1/3}Q$.
+The preceding lower bound is greater than $Q\sqrt N/12$, and
+$12\,36^{1/3}<40$, proving \eqref{eq:uncapped-rate}.
+
+For the last two assertions, fix $Q$ and let $j\to\infty$ instead.
+Put $b_0=1-\beta_0<1/(Q-1)$.  Then
+$k/n\to b_0$, $t/n\to b_0^2$, $\ell/\rho\to1$,
+$J\rho\to1$, and $N\sim b_0^2n^2$.  Equations
+\eqref{eq:veto-full}--\eqref{eq:private-selected} imply
+\[
+ x_u^2+Jn p_J^2\longrightarrow\frac{1+b_0^{-2}}4,
+ \qquad
+ \frac{Jn p_J}{q^{\infty,2}(I;\mathbf b)}\longrightarrow\frac1{b_0}.
+\]
+These are lower bounds for the corresponding actual envelope quantities.
+Letting $Q$ grow makes both unbounded.
+\end{proof}
+
+The first assertion and \eqref{eq:uncapped-rate} concern the true
+all-real envelope, although their proofs only need selected admissible
+underreports.  They also apply to every own-monotone rule preserving
+the uncapped quadratic seed at every profile, by
+Lemma~\ref{lem:least-majorant}.  No statement for every integer $N$ is
+required or asserted.
+
+\appendix
+\section{The complete q-ary mixture construction}
+\label{app:qary}
+
+This appendix proves Lemma~\ref{lem:qary-input}.  No field structure is
+used: the construction works for every integer $Q\ge3$.  Throughout,
+color a vertex $x\in(\mathbb Z/Q\mathbb Z)^L$ by
+$\sum_j x_j\pmod Q$, and write $M=Q^{L-1}$ for the size of each color
+class.  The Hamming weight is the number of nonzero coordinates.
+The focal vertex is $0$.  Its neighbors are all weight-one vertices.
+The weight-two vertices form an exceptional set of size
+\[
+ e=(Q-1)^2\binom L2.
+\]
+Vertices of weight at least three will be called far vertices.  Let
+$\mathcal F_c$ be the far vertices of color $c$, and $f_c=|\mathcal F_c|$.
+Direct counting gives
+\begin{equation}
+ f_0=M-1-(Q-1)\binom L2,
+ \qquad
+ f_c=M-L-(Q-2)\binom L2\quad(c\ne0).
+ \label{eq:far-counts}
+\end{equation}
+For a fixed pair of coordinates there are $Q-1$ nonzero coefficient
+pairs summing to zero and $Q-2$ summing to any specified nonzero color.
+This count also explains why composite $Q$ causes no exception.
+
+\subsection{Uniform scalar inequalities}
+\label{app:scalar}
+
+The parameters of Lemma~\ref{lem:qary-input} satisfy $L\ge480$.
+For every integer $D_0\ge20$,
+\[
+ 3^{D_0-5}>100D_0^2.
+\]
+The assertion holds at $20$ and follows by induction because
+$3D_0^2/(D_0+1)^2>1$.  Consequently
+\begin{equation}
+ M=Q^4 Q^{L-5}>100Q^4L^2.
+ \label{eq:exponential-margin}
+\end{equation}
+In particular all far classes are nonempty, and
+\begin{equation}
+ M-QL^2\le f_c\le M,\qquad
+ e+QL+2\le Q^2L^2,\qquad
+ K-e\ge Q\beta_0 M-Q^2L^2,\qquad K\le Q\beta_0M.
+ \label{eq:elementary-size-bounds}
+\end{equation}
+The last lower bound follows from $K\ge\beta_0m-1$ and
+$m=QM-(Q-1)L-1$.
+
+Define
+\[
+ B_{\rm av}=\frac{Q-1}{Q}-\frac{2\xi}{Q(Q-1)},\qquad
+ \gamma_0=\frac{Q-1}{Q}-\beta_0.
+\]
+Substitution of $\xi=1/[2(Q+2)]$ gives
+\begin{equation}
+ B_{\rm av}=\beta_0+\delta,\qquad
+ \gamma_0=\delta+\frac{2\xi}{Q(Q-1)}>\delta\ge\frac1{4Q^2}.
+ \label{eq:availability-margin}
+\end{equation}
+Also $b_0=1-\beta_0<1/(Q-1)\le3/(2Q)$, so
+$Q\beta_0-Q+2=2-Qb_0>1/2$.
+The exponential bound implies
+$m>h\ge2/\delta$, and hence
+\begin{equation}
+ \beta-\mu\ge\delta-1/m>\delta/2,\qquad
+ h(\beta-\mu)-\beta
+       \ge h\delta-h/m-\beta_0>0.
+ \label{eq:off-margin-proof}
+\end{equation}
+Here $h\delta=2j\ge2$, $h/m<1$, and $\beta_0<1$.
+Moreover $\beta\le\beta_0<(Q-1)/Q$.
+
+For later transport, the following three inequalities hold for every
+color $a_0$:
+\begin{align}
+ K-e&\ge (Q-2)M, \label{eq:hall-small}\\
+ K&\le\sum_{c\ne a_0}f_c, \label{eq:hall-supply}\\
+ K-e&\ge (Q\beta-Q+2)\sum_{c\ne a_0}f_c.
+ \label{eq:hall-large}
+\end{align}
+For \eqref{eq:hall-small}, subtract $(Q-2)M$ in
+\eqref{eq:elementary-size-bounds}; the difference is at least
+$M/2-Q^2L^2>0$.  For \eqref{eq:hall-supply}, the difference between its
+right and left sides is at least
+$Q\gamma_0M-Q(Q-1)L^2>0$.  Finally $Q\beta-Q+2>0$, since
+$\beta>\mu$ and
+$Q\mu-Q+2=(Q-2+Q\xi)/(Q-1)>0$.
+Replace $\beta$ by $\beta_0$ and the sum of far classes by $(Q-1)M$ to
+bound the difference in \eqref{eq:hall-large} from below by
+\[
+ (Q-2)Q\gamma_0M-Q^2L^2>0.
+\]
+All strict inequalities follow from \eqref{eq:exponential-margin}.
+
+\subsection{Local selection and repair}
+\label{app:local-repair}
+
+Choose an excluded color $c$ uniformly among the $Q$ colors.  Initially
+retain all vertices of colors other than $c$; this is independent because
+every complete axis line contains each color exactly once.
+
+If $c=0$, keep a uniformly chosen subset of exactly $(Q-2)L+h$ of the
+$(Q-1)L$ neighbors and leave all other initially retained vertices in
+place.  If $c\ne0$, delete the focal vertex, choose a uniform $h$-subset
+$S$ of coordinate indices, and add the previously excluded neighbors
+$c e_j$ for $j\in S$.  For each added neighbor and each direction
+$\ell\ne j$, independently choose $A$ uniformly from
+$\{1,\ldots,Q-1\}$ and delete $c e_j+A e_\ell$.  Multiple deletions of
+the same vertex have the effect of one deletion.
+
+The resulting set is independent.  A line contains at most one added
+neighbor.  The line through $c e_j$ in direction $j$ has lost the focal
+vertex.  Every other line through it has lost the chosen repair vertex,
+which was initially present because its color is $c+A\ne c$.
+All remaining lines were independent before the additions.  The set
+excludes $0$ and contains exactly $(Q-2)L+h$ neighbors; repairs only
+delete weight-two vertices.
+
+A neighbor $a_0e_j$ has conditional inclusion probability $\mu$ in phase
+$c=0$, probability $\xi$ in phase $c=a_0$, and probability $1$ in the
+other $Q-2$ phases.  Its unconditional marginal is therefore
+$(\mu+\xi+Q-2)/Q=\mu$.
+
+Consider a weight-two vertex $a_0e_j+b_0'e_\ell$, with nonzero
+$a_0,b_0'$.  Its initial availability is $(Q-1)/Q$.  It can be deleted
+from an added $a_0e_j$ in phase $a_0$, or from an added $b_0'e_\ell$ in
+phase $b_0'$, each event having unconditional probability
+$\xi/[Q(Q-1)]$.  Neither phase is its excluded color $a_0+b_0'$.
+If the two phases agree, the union bound remains valid.  Thus its final
+availability probability $P_v$ is rational and at least $B_{\rm av}$.
+By \eqref{eq:availability-margin}, $P_v>\beta$.
+Conditional on availability, retain this vertex with probability
+$\beta/P_v$, independently for the different weight-two vertices.
+Every exceptional vertex now has marginal exactly $\beta$.
+This thinning preserves independence.  If $P$ is the number retained,
+then $0\le P\le e$ and $\mathbb E P=\beta e$.
+
+The remaining task is to select exactly $K-P$ far vertices with common
+marginal $\beta$.  In phase $c$ all far vertices of colors other than
+$c$ are still available, and none of color $c$ is available.  All local
+choices and exceptional thinning have finite rational probabilities.
+Let $\omega$ denote their complete state, of probability $p_\omega$,
+with phase $c(\omega)$ and retained count $P_\omega$.  Set
+\[
+ A_\omega=\bigcup_{a_0\ne c(\omega)}\mathcal F_{a_0},
+ \qquad T_\omega=K-P_\omega.
+\]
+By \eqref{eq:hall-small}--\eqref{eq:hall-supply},
+$0\le T_\omega\le|A_\omega|$.  The total required marginal is correct:
+\begin{equation}
+ \mathbb E T_\omega=K-\beta e
+                  =\beta(m-e)=\beta\Bigl|\bigcup_c\mathcal F_c\Bigr|.
+ \label{eq:expected-supply}
+\end{equation}
+
+\subsection{Finite transport and all subset cuts}
+
+\begin{lemma}[Finite fixed-cardinality transport]
+\label{lem:transport}
+Let $\mathcal F$ be finite.  In each of finitely many states $\omega$,
+of rational probability $p_\omega>0$, let $A_\omega\subseteq\mathcal F$
+be available and let $T_\omega$ be an integer between $0$ and
+$|A_\omega|$.  Let $\beta$ be rational.  There is a finite rational
+conditional distribution on $T_\omega$-subsets of $A_\omega$ giving
+every vertex unconditional marginal $\beta$ if
+\begin{equation}
+ \mathbb E T_\omega=\beta|\mathcal F|,\qquad
+ \beta|U|\le\sum_\omega p_\omega
+             \min\{T_\omega,|U\cap A_\omega|\}\quad(U\subseteq\mathcal F).
+ \label{eq:transport-cuts}
+\end{equation}
+\end{lemma}
+\begin{proof}
+Form a finite flow network with capacities $p_\omega T_\omega$ from
+the source to each state, $p_\omega$ from that state to each available
+vertex, and $\beta$ from each vertex to the sink.  For a fixed subset
+$U$ of vertex nodes on the sink side, optimizing the placement of each
+state gives cut capacity
+\[
+ \beta(|\mathcal F|-|U|)+
+   \sum_\omega p_\omega\min\{T_\omega,|U\cap A_\omega|\}.
+\]
+Thus \eqref{eq:transport-cuts} and the finite max-flow/min-cut theorem
+give a flow saturating every source and sink edge.  Capacities are
+rational, so a rational flow can be chosen.  Dividing a state's outgoing
+flows by $p_\omega$ gives a vector in $[0,1]^{A_\omega}$ with integer
+sum $T_\omega$.
+
+Such a rational vector is a rational convex combination of indicators
+of $T_\omega$-subsets.  Indeed, if it is not integral it has at least
+two fractional coordinates.  Perturb these coordinates in opposite
+directions until one becomes integral at each endpoint.  The original
+vector is a rational convex combination of the two endpoints; recursion
+reduces the number of fractional coordinates.  This constructs the
+required finite conditional distributions.
+\end{proof}
+
+We verify every cut in \eqref{eq:transport-cuts}.  For a subset $U$ of
+far vertices, put $u_c=|U\cap\mathcal F_c|$.  The deficit
+\[
+ \sum_\omega p_\omega
+   \min\left\{T_\omega,\sum_{c\ne c(\omega)}u_c\right\}
+       -\beta\sum_c u_c
+\]
+is concave on the box $0\le u_c\le f_c$.  Every point of the box is a
+convex combination of its corners, so it suffices to verify corners,
+that is, unions of complete far color classes.
+
+Suppose $U$ is the union of $r_0$ classes.  If $r_0\le Q-2$, then its
+available count in every state is at most $(Q-2)M\le K-e\le T_\omega$.
+The minimum is therefore the available count, whose expectation is
+$(Q-1)|U|/Q\ge\beta|U|$.
+If $r_0=Q-1$, let $a_0$ be the missing color.  In any phase belonging
+to $U$, the available count is at most $(Q-2)M\le T_\omega$; averaging
+these phases contributes $(Q-2)|U|/Q$.  In phase $a_0$, all of $U$ is
+available and $T_\omega\le K\le|U|$, so the contribution is at least
+$(K-e)/Q$.  Inequality \eqref{eq:hall-large} makes their sum at least
+$\beta|U|$.  Finally, for all $Q$ classes the minimum is $T_\omega$
+by \eqref{eq:hall-supply}, and equality follows from
+\eqref{eq:expected-supply}.  The empty cut is immediate.
+
+Lemma~\ref{lem:transport} now completes the far selection.  It only
+removes vertices from the available independent set, so independence
+is preserved.  Every realized set excludes $0$, has exactly
+$(Q-2)L+h$ neighbors and exactly $K$ other vertices, and hence has size
+$s$.  The neighbor and outside marginals are exactly $\mu$ and $\beta$.
+Taking complements proves the mixture assertions in
+Lemma~\ref{lem:qary-input}.  A row excluding $0$ is the complement of an
+independent set containing $0$; each of the $L$ focal axis lines then
+requires a neighbor in the row.  These neighbors are distinct.
+
+It remains to check row size.  The lines parallel to one fixed axis
+partition all vertices, and every independent set omits at least one
+vertex from each; thus $k\ge n/Q$.  On the other hand, from the definition
+of $K$,
+\[
+ k\le b_0n+\delta(Q-1)L+\beta_0+1
+       < b_0n+\frac L{4Q}+2.
+\]
+Since $1/(Q-1)-b_0=\xi/(Q-1)+\delta>\delta$, the exponential estimate
+gives $k<n/(Q-1)$.  The remaining inequalities in
+\eqref{eq:qary-margins} are \eqref{eq:off-margin-proof} and
+$\beta<(Q-1)/Q$.  Translating the construction supplies a mixture for
+every focal vertex, completing the proof of
+Lemma~\ref{lem:qary-input}.
+
+\section{Simultaneous realization with fixed actual owners}
+\label{app:realization}
+
+The preceding row systems must be realized simultaneously.  Realizing
+each underreport separately would not prove an envelope lower bound.
+The next construction also shows why the production-resource count
+differs from the local cube dimension.
+
+\begin{lemma}[Binary incident deletions in one production function]
+\label{lem:realization}
+Let $I$ be a finite owner set with a distinguished owner $u$, and let
+$\mathcal G$ be a nonempty finite family of subsets all containing $u$.
+For each $j\in I$, prescribe a binary demand array
+$d_G^j\in\{0,1\}$ satisfying $d_G^j=1$ whenever $j\notin G$;
+take $d_G^u=1$ for every $G$.  Assume each array retains at least one
+unit-demand generator.  There is a single binary finite-minlinear
+production function on $2|I|$ resources and one fixed full bundle per
+owner such that:
+\begin{enumerate}
+\item the full coalition game has the cover constraints
+      $x(G)\ge1$ for $G\in\mathcal G$;
+\item one designated own underreport by owner $j$ produces exactly the
+      cover constraints $x(G)\ge d_G^j$;
+\item the full and all designated underreport profiles have output $1$.
+\end{enumerate}
+The function is defined on all nonnegative real resource profiles, and
+the owner set and full bundles are unchanged across the designated
+underreports.
+\end{lemma}
+\begin{proof}
+For $S\subseteq I$, define
+\[
+ v(S)=\max\bigl(\{1:G\in\mathcal G, G\subseteq S\}\cup\{0\}\bigr),
+ \quad
+ v^j(S)=\max\bigl(\{d_G^j:G\in\mathcal G, G\subseteq S\}\cup\{0\}\bigr).
+\]
+These monotone games take values in $[0,1]$, vanish without $u$, and
+$v^j=v$ on coalitions not containing $j$.  For any such game $g$ and
+nonempty $A\subseteq I$, define the nonnegative vector $h^{g,A}$ by
+\[
+ h_i^{g,A}=1\ (i\notin A),\qquad
+ h_u^{g,A}=g(A)\ (u\in A),\qquad
+ h_i^{g,A}=0\ (i\in A\setminus\{u\}).
+\]
+For every Boolean coalition vector,
+\begin{equation}
+ g(S)=\min_{\varnothing\ne A\subseteq I} h^{g,A}\cdot\mathbf1_S.
+ \label{eq:game-forms}
+\end{equation}
+If $S\not\subseteq A$, the form contributes at least $1\ge g(S)$.
+If $S\subseteq A$ and $u\in S$, it contributes $g(A)\ge g(S)$; if
+$u\notin S$, the target is zero.  Taking $A=S$ gives equality for
+nonempty $S$, and all forms vanish at the empty coalition.
+
+Use resource coordinates $(X,Z)\in\mathbb R_+^I\times\mathbb R_+^I$ and
+put
+\begin{equation}
+ F(X,Z)=\min\left\{
+ h^{v,A}\cdot X,\quad h^{v^j,A}\cdot X+Z_j:
+       \varnothing\ne A\subseteq I, j\in I\right\}.
+ \label{eq:direct-production}
+\end{equation}
+All coefficients are binary.  Owner $j$ has the fixed full bundle
+$(e_j,e_j)$.  At a full coalition, the baseline forms attain $v(S)$.
+A branch $j$ with $j\in S$ has control contribution $1$ and cannot lower
+that value; if $j\notin S$, its branch value is $v^j(S)=v(S)$.
+Thus the full game is $v$.
+
+If only owner $j$ hides its control resource, reporting $(e_j,0)$, its
+branch attains $v^j(S)$.  The baseline and the branches of absent owners
+have value $v(S)$, while all other present-owner branches have value at
+least $1$.  The resulting game is exactly $v^j$.  Every one of these
+games has grand-coalition value $1$ by the retained-generator assumption.
+Finally, nonnegative payments cover a max-of-contained-generators game
+if and only if they cover each generator at its stated demand: the
+generator inequalities imply all coalition inequalities by containment,
+and the converse follows by evaluating the game at a generator.
+\end{proof}
+
+For the q-ary constructions, the generators are $\{u\}\cup R$ in one
+or more disjoint blocks, and the retained focal support is nonempty.
+Lemma~\ref{lem:realization} therefore applies directly to every selected
+binary deletion in the proofs above.  It establishes actual unilateral
+reports, not changes to an abstract owner's identity or to the technology.
+There is no assertion that the finite list of production forms is small
+or efficiently enumerable.
+
+There is also an efficient competing rule on the fixed full bundles'
+downward box.  When $|I|\ge2$, the baseline form with $A=I\setminus\{u\}$
+in \eqref{eq:direct-production} is $X_u$, so $F\le X_u$.  On that box,
+only $u$ supplies this resource; every coalition without $u$ therefore
+has value zero.  Paying the entire output to $u$ covers, is efficient,
+and is own-monotone.  The additive-owner construction additionally pays
+that owner's additive output.  These observations concern this box,
+not arbitrary reallocations of resources among owners.  They reinforce
+the distinction between failure of the specified baseline-preserving
+repair and impossibility of an unrestricted mechanism.
+
+\subsection{Every real own report preserves the generators}
+\label{app:real-reports}
+
+For the sharp class result below, selected reports alone are insufficient;
+an upper bound must cover every real underreport.  We now verify that
+\eqref{eq:direct-production} has exactly the needed property.  This
+argument also works with prescribed arrays in $[0,1]$ instead of binary
+arrays, although binary arrays suffice for our examples.
+
+Fix a private owner $j\ne u$.  Every own underreport at its fixed full
+bundle is $(t e_j,z e_j)$, with $t,z\in[0,1]$.  For a coalition $S$
+containing $j$ and a game $g$ appearing in \eqref{eq:direct-production},
+\begin{equation}
+ \min_A h^{g,A}\cdot X_S
+       =\min\{g(S),g(S\setminus\{j\})+t\}.
+ \label{eq:real-base-form}
+\end{equation}
+If a member of $S\setminus\{j\}$ lies outside $A$, the form contributes
+$1\ge g(S)$.  Otherwise it contains all those members.  Including $j$
+minimizes at $A=S$, while excluding $j$ minimizes at
+$A=S\setminus\{j\}$.  In the relevant positive-value case $u\in S$
+and $u\ne j$, so this latter set is nonempty and is an allowed form.
+If $u\notin S$, both sides have minimum zero, attained at $A=S$.
+This handles singleton and empty boundary cases as well.
+
+The other present owners' control branches cost at least $1$; an absent
+owner's game agrees with $v$ on both sets in \eqref{eq:real-base-form}.
+The exact new coalition value is consequently
+\begin{equation}
+ \min\{v(S),v(S\setminus\{j\})+t,v^j(S)+z\}
+ \label{eq:real-coalition}
+\end{equation}
+when $j\in S$, and remains $v(S)$ otherwise.  To see that the extra
+term $v^j(S\setminus\{j\})+t+z$ from its own branch is redundant, use
+$v^j(S\setminus\{j\})=v(S\setminus\{j\})$ and $z\ge0$.
+If $S$ contains an off-$j$ generator, \eqref{eq:real-coalition} is $1$.
+If it contains no generator it is zero.  Otherwise all its generators
+contain $j$, and finite maxima commute with the increasing truncation
+in \eqref{eq:real-coalition}.  Thus the new game is exactly generated by
+\begin{equation}
+ d_G(t,z)=
+ \begin{cases}
+ 1,&j\notin G,\\
+ \min\{1,t,d_G^j+z\},&j\in G.
+ \end{cases}
+ \label{eq:real-generator-demands}
+\end{equation}
+Its cover polyhedron uses the same generators, with only incident demands
+relaxed in $[0,1]$.
+
+For a veto underreport $(t e_u,z e_u)$, the baseline form minimum on a
+coalition is $t v(S)$.  A nonveto member outside $A$ costs $1$; exclusion
+of $u$ costs $t$; and inclusion of all $S$ attains $t v(S)$.
+Other present-owner branches cannot improve it, absent-owner branches
+agree with $v$, and $v^u=v$.  Thus the whole game is exactly $tv$,
+independently of $z$.  Its quadratic projection scales by $t$.
+
+\section{The sharp fixed-arity common-veto class}
+\label{app:sharp-class}
+
+This appendix gives a matching upper and lower refinement for the
+common-veto construction.  Its parameter $Q$ is the size of an
+independence-forbidden hyperedge, not the production-resource dimension.
+Fixing $Q$ restricts the construction class; the unrestricted inflation
+in Theorem~\ref{thm:uncapped} lets $Q$ grow.
+
+\subsection{A cap valid for all real own reports}
+
+\begin{lemma}[Unit-demand multiplier mass]
+\label{lem:dual-mass}
+Let $A$ be a finite incidence matrix with nonempty rows, and suppose its
+unit-demand cover is feasible.  Let $z$ be its minimum-norm cover and
+$\rho=\|z\|^2$.  For any relaxed demands $d\in[0,1]^{\mathrm{rows}(A)}$,
+the new projection $q$ has nonnegative row multipliers $\lambda$ with
+$q=A^\mathsf T\lambda$.  Every such multiplier vector satisfies
+\[
+ q_i\le\sum_R\lambda_R\le\rho.
+\]
+At unit demand its total multiplier mass is $\rho$.
+\end{lemma}
+\begin{proof}
+The optimality conditions for a quadratic objective on a polyhedron give
+nonnegative row and nonnegativity multipliers.  At a positive coordinate
+the latter vanish; at a zero coordinate nonnegativity of $A$ forces both
+terms in the stationarity equation to vanish.  Thus $q=A^\mathsf T\lambda$.
+Complementarity gives $\|q\|^2=\sum_R\lambda_R d_R\le L_*$, where
+$L_*=\sum_R\lambda_R$.  For the full unit-demand problem these same row
+multipliers have dual objective $2L_*-\|q\|^2\le\rho$.  Consequently
+$L_*\le\rho$, and each coordinate of $q$ is a sum of a subset of the
+multipliers.  At full demand complementarity gives $L_*=\rho$.
+Alternatively, the dual inequality follows directly from
+$\|y\|^2\ge2\lambda\cdot Ay-\|A^\mathsf T\lambda\|^2$ for any full
+feasible $y$; no uniqueness of the multipliers is used.
+\end{proof}
+
+\begin{lemma}[Heterogeneous common-veto envelope bound]
+\label{lem:veto-cap}
+Take disjoint unit-demand base systems indexed by $c$, with $n_c$ owners,
+full projections $z^c$, and $\rho_c=\|z^c\|^2$.  Add a common veto owner
+to every row and let $R_* =\sum_c\rho_c$.  In the explicit production
+realization \eqref{eq:direct-production}, at the fixed full bundles,
+the true uncapped quadratic envelopes satisfy
+\begin{equation}
+ E_u=\frac{R_*}{1+R_*},\qquad
+ E_i\le\frac{\rho_c}{1+R_*}\quad(i\text{ in block }c).
+ \label{eq:class-cap}
+\end{equation}
+These inequalities also hold for the abstract supremum over all
+incident generator-demand relaxations in $[0,1]$.
+\end{lemma}
+\begin{proof}
+At full demand, the same minimization as in \eqref{eq:veto-full} gives
+veto coordinate $R_* /(1+R_*)$ and squared norm $R_* /(1+R_*)$.
+At any generator relaxation, if $\lambda$ are its row multipliers and
+$u$ is its veto coordinate, stationarity gives $u=\sum\lambda$.
+Complementarity and the full dual inequality give
+$\|x\|^2\le u$ and $2u-\|x\|^2\le R_* /(1+R_*)$.
+Hence $u\le R_* /(1+R_*)<1$.  The full demand attains this bound for the
+veto.
+
+For a private owner in block $c$, all other blocks remain unchanged.
+Conditional on the new veto coordinate $u$, their projections are
+$(1-u)z^d$.  Divide the focal block's coordinates and multipliers by
+$1-u$.  This gives its base projection for residual demands
+\[
+ d'_G=\max\{0,(d_G-u)/(1-u)\}\in[0,1].
+\]
+Clipping nonpositive demands does not change the optimality conditions:
+a nonempty row with positive multiplier has positive coordinate sum,
+so cannot be tight at a nonpositive residual demand.  Let $L_*$ be the
+normalized focal multiplier mass and $p_*$ its focal coordinate.
+The veto stationarity equation is
+$u=(1-u)(R_* -\rho_c+L_*)$.  Its actual private coordinate is therefore
+\[
+ \frac{p_*}{1+R_* -\rho_c+L_*}
+ \le\frac{L_*}{1+R_* -\rho_c+L_*}
+ \le\frac{\rho_c}{1+R_*},
+\]
+using Lemma~\ref{lem:dual-mass} and monotonicity in $L_*$.  Finally,
+\eqref{eq:real-generator-demands} shows that every real private
+underreport in the stated production realization is one of these
+relaxations.  Every veto underreport scales the full game, as proved
+in Appendix~\ref{app:real-reports}.  This proves the assertions for the
+true envelope as well as the abstract relaxation envelope.
+\end{proof}
+
+\begin{theorem}[Sharp leading coefficient in the fixed-$Q$ class]
+\label{thm:sharp-class}
+Fix $Q\ge3$.  In each base block let the rows be a nonempty invariant
+family of complements of fixed-cardinality independent sets in a
+nonempty $Q$-uniform hypergraph.  Assume a vertex-transitive group
+preserves both the hypergraph and the row family.  Form disjoint blocks
+with a common veto and the direct production realization
+\eqref{eq:direct-production}.  At its fixed full bundles, with output
+$1$ and $N$ owners,
+\begin{equation}
+ E(I)\le\frac{1+\sqrt{1+Q^2(N-1)}}2,\qquad
+ \sum_i E_i^2\le\frac{Q^4}{4(Q^2-1)}.
+ \label{eq:class-finite-bounds}
+\end{equation}
+The supremum of attainable asymptotic leading funding coefficients is
+$Q/2$.  More precisely, there are instances in this class with $N\to\infty$
+and actual true envelopes satisfying
+\begin{equation}
+ \frac{E(I)}{\sqrt N}\longrightarrow\frac Q2,\qquad
+ \sum_i E_i^2\longrightarrow\frac{Q^2+1}{4}.
+ \label{eq:sharp-c-one}
+\end{equation}
+The squared-norm bound in \eqref{eq:class-finite-bounds} is itself
+attained as a limit on a different sequence of block counts.
+\end{theorem}
+\begin{proof}[Upper bounds]
+In a block of $n_c$ vertices every vertex has the same positive degree
+$\Delta$.  If $W$ is an independent set, every edge contains a vertex
+outside it.  Counting omissions gives
+\[
+ \Delta|V\setminus W|=\sum_{H\text{ an edge}}|H\setminus W|
+                     \ge |\mathcal H|=n_c\Delta/Q.
+\]
+Thus the complement row size $k_c$ is at least $n_c/Q$.
+Transitivity gives the uniform full projection and
+$\rho_c=n_c/k_c^2$, exactly as in Lemma~\ref{lem:base-projections}.
+Hence $n_c\rho_c\le Q^2$.
+
+Put $m_* =\sum_c n_c=N-1$.  From \eqref{eq:class-cap},
+\[
+ E(I)\le\frac{R_*+\sum_c n_c\rho_c}{1+R_*}
+ \le\frac{R_*+Q\sqrt{m_*R_*}}{1+R_*}.
+\]
+The second inequality uses $n_c\rho_c\le Q\sqrt{n_c\rho_c}$ and
+Cauchy--Schwarz.  With $y=\sqrt{R_*}$ the last expression is the
+Rayleigh quotient $(y^2+Q\sqrt{m_*}y)/(1+y^2)$, bounded by
+$(1+\sqrt{1+Q^2m_*})/2$.  Similarly
+\[
+ \sum_i E_i^2\le
+ \frac{R_*^2+\sum_c n_c\rho_c^2}{(1+R_*)^2}
+ \le\frac{R_*^2+Q^2R_*}{(1+R_*)^2}
+ \le\frac{Q^4}{4(Q^2-1)}.
+\]
+The last maximum occurs at $R_*=Q^2/(Q^2-2)$, as direct
+differentiation shows.  This also proves the leading funding upper
+coefficient $Q/2$.
+\end{proof}
+
+\begin{proof}[Construction attaining the limits]
+We use the same local selection and finite transport as in
+Appendix~\ref{app:qary}, with different parameters.  Fix $Q$ and let
+\begin{align*}
+ h&=8Q(Q-1),& L_0&=16Q(Q-1)(Q+3),& L&=jL_0\quad(j\ge1),\\
+ n&=Q^L,& M&=Q^{L-1},&m&=n-(Q-1)L-1,\\
+ \xi&=h/L,&\mu&=(Q-2+\xi)/(Q-1),&
+ \beta_0&=(Q-1)/Q-24/L.
+\end{align*}
+Again put $K=\lfloor\beta_0m\rfloor$, $\beta=K/m$,
+$s=(Q-2)L+h+K$, $k=n-s$, $a=1-\mu$, and $b_*=1-\beta$.
+Take all complements of independent $s$-sets in the same axis-line
+hypergraph.
+
+We check every condition needed for the earlier distributional proof.
+Its exceptional availability bound now is
+\[
+ B_{\rm av}=\frac{Q-1}{Q}-\frac{16}{L}
+            =\beta_0+\frac8L>\beta,
+\]
+and
+\[
+ \beta_0-\mu=\frac1{Q(Q-1)}-\frac{8(Q+3)}L
+             \ge\frac1{2Q(Q-1)}.
+\]
+The weight-two counts and far-class counts in
+\eqref{eq:far-counts}--\eqref{eq:elementary-size-bounds} remain valid.
+For every integer $D_0\ge20$, $3^{D_0-5}>100D_0^3$: check $D_0=20$
+and use $3(D_0/(D_0+1))^3>1$.  Hence
+\[
+ M>100Q^4L^3.
+\]
+In particular $m>h$ and $\beta>\mu$.
+Here $Q\beta_0-Q+2=1-24Q/L\ge7/8$ and
+$Q-1-Q\beta_0=24Q/L$.  The three transport inequalities have the
+following explicit positive margins:
+\begin{align*}
+ K-e-(Q-2)M&\ge(7/8)M-Q^2L^2>0,\\
+ \sum_{c\ne a_0} f_c-K&\ge24QM/L-Q(Q-1)L^2>0,\\
+ K-e-(Q\beta-Q+2)\sum_{c\ne a_0}f_c
+       &\ge24Q(Q-2)M/L-Q^2L^2>0.
+\end{align*}
+The coefficient in the last line is positive since $\beta>\mu$.
+Therefore all corner cuts, and by concavity all subset cuts, pass exactly
+as in the proof of Lemma~\ref{lem:transport}.  Exceptional thinning,
+the rational flow, and conditional fixed-cardinality selection produce
+the same stated focal mixture for these parameters.
+
+Its off-row potential gap is positive:
+\[
+ h(\beta-\mu)-\beta
+       \ge4-h/m-\beta_0>2.
+\]
+Thus Lemma~\ref{lem:base-projections} applies with these new parameters,
+giving the exact full norm $\rho=n/k^2$ and focal norm and multiplier
+mass $\ell=1/t$.  As $j\to\infty$,
+\[
+ k/n\longrightarrow1/Q,\quad t/n\longrightarrow1/Q^2,\quad
+ n\rho\longrightarrow Q^2,\quad \rho\longrightarrow0,\quad
+ \ell/\rho\longrightarrow1.
+\]
+For any fixed $c_*>0$, choose integer block counts $J$ with
+$J\rho\to c_*$.  The selected private payment
+\eqref{eq:private-selected} and the true-envelope cap
+\eqref{eq:class-cap} give, for every private owner,
+\[
+ \frac{\ell}{1+(J-1)\rho+\ell}
+       \le E_i\le\frac{\rho}{1+J\rho}.
+\]
+The ratio of these two bounds tends to one, uniformly over owners.
+The veto envelope is exactly $J\rho/(1+J\rho)$.
+Since $N=Jn+1\sim c_*n^2/Q^2$, squeezing yields the actual limits
+\[
+ \frac{E(I)}{\sqrt N}\longrightarrow
+         \frac{Q\sqrt{c_*}}{1+c_*},\qquad
+ \sum_i E_i^2\longrightarrow
+         \frac{c_*^2+Q^2c_*}{(1+c_*)^2}.
+\]
+Taking $c_*=1$ proves \eqref{eq:sharp-c-one}.  Taking
+$c_*=Q^2/(Q^2-2)$ proves sharpness of the squared-norm bound.
+The two optimizing scalings are different.  The same simultaneous
+binary realization ensures that these limits concern the true
+all-real envelopes for fixed actual owners in each instance.
+\end{proof}
+
+The nonempty-hypergraph assumption in Theorem~\ref{thm:sharp-class} is
+essential for the positive-degree omission count.  Its upper bounds
+also use the explicit generator-preserving realization; they are not
+claims about every production function that happens to agree with a
+given game at finitely many profiles.  Finally, fixing a single base
+and merely sending its block count to infinity does not give the sharp
+funding coefficient: the construction varies the local dimension while
+choosing the block count so that $J\rho$ approaches the specified
+positive constant.
